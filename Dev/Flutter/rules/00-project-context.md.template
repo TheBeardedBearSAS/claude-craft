@@ -1,0 +1,511 @@
+# Contexte du Projet {{PROJECT_NAME}}
+
+## Vue d'ensemble
+
+**Nom du projet** : {{PROJECT_NAME}}
+
+**Stack technologique** : {{TECH_STACK}}
+
+**Description** :
+[Décrire brièvement le projet, ses objectifs et son contexte métier]
+
+---
+
+## Architecture globale
+
+### Structure de dossiers
+
+```
+lib/
+├── core/                   # Fonctionnalités communes
+│   ├── constants/         # Constantes globales
+│   ├── errors/            # Gestion des erreurs
+│   ├── extensions/        # Extensions Dart
+│   ├── network/           # Configuration réseau
+│   ├── theme/             # Thème de l'application
+│   └── utils/             # Utilitaires
+├── features/              # Fonctionnalités métier
+│   └── [feature_name]/    # Une feature = un module métier
+│       ├── data/          # Couche données
+│       │   ├── datasources/
+│       │   ├── models/
+│       │   └── repositories/
+│       ├── domain/        # Couche métier
+│       │   ├── entities/
+│       │   ├── repositories/
+│       │   └── usecases/
+│       └── presentation/  # Couche présentation
+│           ├── bloc/      # State management
+│           ├── pages/     # Écrans
+│           └── widgets/   # Composants UI
+├── dependency_injection.dart  # Configuration DI
+└── main.dart              # Point d'entrée
+```
+
+### Pattern de state management
+
+**Choix** : {{STATE_MANAGEMENT_PATTERN}}
+- Options : Riverpod (recommandé) / BLoC / Provider / GetX
+
+**Justification** :
+[Expliquer pourquoi ce pattern a été choisi pour ce projet]
+
+---
+
+## Spécificités du projet
+
+### Dépendances principales
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  {{STATE_MANAGEMENT_DEPENDENCIES}}
+
+  # Network
+  dio: ^5.4.0
+  retrofit: ^4.0.3
+
+  # Dependency Injection
+  get_it: ^7.6.4
+  injectable: ^2.3.2
+
+  # Storage
+  shared_preferences: ^2.2.2
+  flutter_secure_storage: ^9.0.0
+
+  # Utils
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Code Generation
+  build_runner: ^2.4.7
+  freezed: ^2.4.6
+  json_serializable: ^6.7.1
+  injectable_generator: ^2.4.1
+  retrofit_generator: ^8.0.4
+
+  # Linting
+  flutter_lints: ^3.0.1
+  very_good_analysis: ^5.1.0
+
+  # Testing
+  mocktail: ^1.0.1
+  bloc_test: ^9.1.5
+```
+
+### Variables d'environnement
+
+Créer `.env` pour les configurations :
+
+```env
+# API Configuration
+API_BASE_URL={{API_BASE_URL}}
+API_KEY={{API_KEY}}
+
+# Environment
+ENVIRONMENT={{ENVIRONMENT}}  # dev, staging, prod
+
+# Feature Flags
+FEATURE_X_ENABLED={{FEATURE_FLAG}}
+```
+
+### Thème et Design System
+
+**Design System utilisé** : {{DESIGN_SYSTEM}}
+- Material Design 3
+- Custom Design System
+- Cupertino (iOS)
+
+**Breakpoints responsive** :
+```dart
+// lib/core/theme/breakpoints.dart
+class Breakpoints {
+  static const double mobile = 600;
+  static const double tablet = 900;
+  static const double desktop = 1200;
+}
+```
+
+---
+
+## Règles spécifiques au projet
+
+### 1. Gestion des erreurs
+
+Utiliser le système d'erreurs centralisé :
+
+```dart
+// lib/core/errors/failures.dart
+abstract class Failure {
+  final String message;
+  const Failure(this.message);
+}
+
+class ServerFailure extends Failure {
+  const ServerFailure(super.message);
+}
+
+class CacheFailure extends Failure {
+  const CacheFailure(super.message);
+}
+
+class NetworkFailure extends Failure {
+  const NetworkFailure(super.message);
+}
+```
+
+### 2. Navigation
+
+**Router utilisé** : {{ROUTER}}
+- go_router (recommandé)
+- auto_route
+- Native Navigator 2.0
+
+### 3. Internationalisation (i18n)
+
+**Approche** : {{I18N_APPROACH}}
+- flutter_localizations + ARB files
+- easy_localization
+- intl package
+
+### 4. Analytics et Monitoring
+
+```dart
+// Outils configurés
+- Firebase Analytics
+- Firebase Crashlytics
+- Sentry
+```
+
+---
+
+## Workflow de développement
+
+### 1. Création d'une nouvelle feature
+
+```bash
+# Créer la structure
+make create-feature name=ma_feature
+
+# Ou manuellement
+mkdir -p lib/features/ma_feature/{data,domain,presentation}/{datasources,models,repositories,entities,usecases,bloc,pages,widgets}
+```
+
+### 2. Génération de code
+
+```bash
+# Générer le code (freezed, json_serializable, etc.)
+make generate
+
+# Ou avec Docker
+docker run --rm -v $(pwd):/app -w /app ghcr.io/cirruslabs/flutter:stable flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+### 3. Tests
+
+```bash
+# Tous les tests
+make test
+
+# Tests avec coverage
+make test-coverage
+
+# Widget tests uniquement
+make test-widget
+
+# Integration tests
+make test-integration
+```
+
+### 4. Linting et formatage
+
+```bash
+# Analyse statique
+make analyze
+
+# Formater le code
+make format
+
+# Fixer les problèmes auto-corrigeables
+make fix
+```
+
+---
+
+## Conventions de nommage
+
+### Fichiers
+
+```
+snake_case.dart           # Tous les fichiers Dart
+my_widget.dart
+user_repository.dart
+authentication_bloc.dart
+```
+
+### Classes et Types
+
+```dart
+UpperCamelCase            // Classes, enums, typedefs, extensions
+class UserProfile {}
+enum UserRole {}
+typedef Validator = bool Function(String);
+extension StringExtension on String {}
+```
+
+### Variables, fonctions, paramètres
+
+```dart
+lowerCamelCase            // Variables, méthodes, paramètres
+String userName;
+void fetchUserData() {}
+final isAuthenticated = true;
+```
+
+### Constantes
+
+```dart
+lowerCamelCase            // Même pour les constantes
+const apiBaseUrl = 'https://api.example.com';
+const maxRetryAttempts = 3;
+```
+
+### Fichiers privés
+
+```dart
+_leading_underscore.dart  // Fichiers internes à un package
+_internal_helper.dart
+```
+
+---
+
+## Standards de code
+
+### Widgets
+
+Toujours préférer `const` quand possible :
+
+```dart
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('Hello');  // const quand possible
+  }
+}
+```
+
+### Composition over inheritance
+
+```dart
+// ✅ BON - Composition
+class UserCard extends StatelessWidget {
+  const UserCard({super.key, required this.user});
+
+  final User user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          UserAvatar(user: user),
+          UserName(user: user),
+          UserBio(user: user),
+        ],
+      ),
+    );
+  }
+}
+
+// ❌ MAUVAIS - Héritage profond
+class UserCard extends BaseCard<User> {
+  // Éviter l'héritage profond
+}
+```
+
+### Gestion d'état
+
+Isoler la logique métier de l'UI :
+
+```dart
+// ✅ BON - Séparation claire
+class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  final LoginUseCase _loginUseCase;
+
+  LoginBloc(this._loginUseCase) : super(LoginInitial()) {
+    on<LoginSubmitted>(_onLoginSubmitted);
+  }
+
+  Future<void> _onLoginSubmitted(
+    LoginSubmitted event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(LoginLoading());
+
+    final result = await _loginUseCase(
+      email: event.email,
+      password: event.password,
+    );
+
+    result.fold(
+      (failure) => emit(LoginFailure(failure.message)),
+      (user) => emit(LoginSuccess(user)),
+    );
+  }
+}
+
+// ❌ MAUVAIS - Logique dans l'UI
+class LoginPage extends StatelessWidget {
+  void _login() async {
+    // Ne pas mettre la logique métier ici
+    final response = await http.post(...);
+  }
+}
+```
+
+---
+
+## Performances
+
+### 1. Utiliser const constructors
+
+```dart
+// ✅ BON
+const Text('Hello')
+const SizedBox(height: 16)
+const Icon(Icons.home)
+
+// ❌ MAUVAIS (si le widget ne change pas)
+Text('Hello')
+```
+
+### 2. ListView.builder pour listes longues
+
+```dart
+// ✅ BON - Lazy loading
+ListView.builder(
+  itemCount: items.length,
+  itemBuilder: (context, index) => ItemWidget(items[index]),
+)
+
+// ❌ MAUVAIS - Tous les widgets créés d'un coup
+ListView(
+  children: items.map((item) => ItemWidget(item)).toList(),
+)
+```
+
+### 3. Éviter les rebuilds inutiles
+
+```dart
+// ✅ BON - Séparer les parties qui changent
+class MyPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const StaticHeader(),  // Ne rebuild jamais
+        DynamicContent(),      // Rebuild quand nécessaire
+      ],
+    );
+  }
+}
+```
+
+---
+
+## Sécurité
+
+### 1. Données sensibles
+
+```dart
+// ✅ BON - Utiliser flutter_secure_storage
+final storage = FlutterSecureStorage();
+await storage.write(key: 'token', value: authToken);
+
+// ❌ MAUVAIS - SharedPreferences pour données sensibles
+final prefs = await SharedPreferences.getInstance();
+prefs.setString('token', authToken);  // Non crypté !
+```
+
+### 2. API Keys
+
+```dart
+// ✅ BON - Variables d'environnement
+const apiKey = String.fromEnvironment('API_KEY');
+
+// ❌ MAUVAIS - Hardcodé dans le code
+const apiKey = 'sk_live_12345...';  // Jamais !
+```
+
+---
+
+## Documentation
+
+### dartdoc pour classes publiques
+
+```dart
+/// Gère l'authentification des utilisateurs.
+///
+/// Cette classe fournit des méthodes pour se connecter, se déconnecter
+/// et vérifier l'état de connexion de l'utilisateur.
+///
+/// Exemple :
+/// ```dart
+/// final authService = AuthService();
+/// final result = await authService.login(email, password);
+/// ```
+class AuthService {
+  /// Connecte un utilisateur avec son email et mot de passe.
+  ///
+  /// Retourne [Right<User>] en cas de succès ou [Left<Failure>] en cas d'erreur.
+  ///
+  /// Throws [NetworkException] si aucune connexion réseau n'est disponible.
+  Future<Either<Failure, User>> login({
+    required String email,
+    required String password,
+  }) async {
+    // Implementation
+  }
+}
+```
+
+---
+
+## Ressources
+
+### Documentation officielle
+- [Flutter Documentation](https://docs.flutter.dev/)
+- [Dart Language Tour](https://dart.dev/guides/language/language-tour)
+- [Effective Dart](https://dart.dev/guides/language/effective-dart)
+
+### Architecture
+- [Flutter Clean Architecture](https://github.com/ResoCoder/flutter-clean-architecture)
+- [BLoC Pattern](https://bloclibrary.dev/)
+- [Riverpod Documentation](https://riverpod.dev/)
+
+### Outils
+- [Flutter DevTools](https://docs.flutter.dev/development/tools/devtools/overview)
+- [FVM - Flutter Version Management](https://fvm.app/)
+- [Dart Code Metrics](https://dcm.dev/)
+
+---
+
+## Contacts et Support
+
+**Lead Developer** : {{LEAD_DEVELOPER}}
+**Repository** : {{REPOSITORY_URL}}
+**CI/CD** : {{CI_CD_PLATFORM}}
+**Documentation** : {{DOCS_URL}}
+
+---
+
+*Ce document doit être mis à jour à chaque évolution majeure du projet.*

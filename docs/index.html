@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Craft - AI-Assisted Development Framework</title>
+    <meta name="description" content="A comprehensive framework for AI-assisted development with Claude Code. Standardized rules, agents, and commands.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                            950: '#2e1065',
+                        },
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .code-window {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        .code-header {
+            background: #252526;
+            padding: 8px 12px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            gap: 6px;
+        }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+            background: rgba(30, 41, 59, 0.8);
+        }
+        /* Language Dropdown */
+        select.lang-select {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            outline: none;
+            cursor: pointer;
+        }
+        select.lang-select:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        select.lang-select option {
+            background-color: #1e293b;
+            color: white;
+        }
+
+        /* NEW: Terminal Animation Styles */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: #a78bfa;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 left-0 border-b border-white/10 bg-dark-900/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="box" class="h-8 w-8 text-brand-500"></i>
+                    <span class="font-bold text-xl tracking-tight">Claude Craft</span>
+                </div>
+                <div class="hidden md:flex items-center gap-6">
+                    <div class="flex items-baseline space-x-4">
+                        <a href="#features" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_features">Features</a>
+                        <a href="#tools" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_tools">Tools</a>
+                        <a href="#quickstart" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_quickstart">Quick Start</a>
+                        <a href="#technologies" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_tech">Tech Stack</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <select id="language-selector" class="lang-select" onchange="changeLanguage(this.value)">
+                        <option value="en">🇺🇸 English</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="de">🇩🇪 Deutsch</option>
+                        <option value="pt">🇵🇹 Português</option>
+                    </select>
+
+                    <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" class="hidden sm:inline-flex items-center justify-center gap-2 px-4 py-2 border border-white/10 text-sm font-medium rounded-md text-white hover:bg-white/10 transition-colors">
+                        <i data-lucide="github" class="h-4 w-4"></i>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative pt-32 pb-20 sm:pt-40 sm:pb-24 overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute top-0 left-1/2 w-full -translate-x-1/2 h-full z-[-1]">
+            <div class="absolute top-[10%] left-[20%] w-72 h-72 bg-brand-600/20 rounded-full blur-[100px]"></div>
+            <div class="absolute bottom-[10%] right-[20%] w-96 h-96 bg-blue-600/10 rounded-full blur-[100px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center px-3 py-1 rounded-full border border-brand-500/30 bg-brand-500/10 text-brand-300 text-xs font-medium mb-6">
+                <span class="flex h-2 w-2 rounded-full bg-brand-400 mr-2"></span>
+                <span data-i18n="hero_badge">Now available for Claude Code</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">
+                <span data-i18n="hero_title_1">Supercharge</span> <span class="gradient-text">Claude Code</span><br>
+                <span data-i18n="hero_title_2">with Expert Knowledge</span>
+            </h1>
+            
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-400" data-i18n="hero_desc">
+                A comprehensive framework for AI-assisted development. Install standardized rules, agents, and commands for your projects across multiple technology stacks.
+            </p>
+            
+            <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#quickstart" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-brand-600 hover:bg-brand-700 md:text-lg transition-all shadow-lg shadow-brand-500/20">
+                    <span data-i18n="cta_get_started">Get Started</span>
+                    <i data-lucide="arrow-right" class="ml-2 h-5 w-5"></i>
+                </a>
+                <a href="https://github.com/TheBeardedBearSAS/claude-craft" class="inline-flex items-center justify-center px-8 py-3 border border-white/10 text-base font-medium rounded-lg text-slate-300 bg-white/5 hover:bg-white/10 md:text-lg transition-all backdrop-blur-sm" data-i18n="cta_docs">
+                    View Documentation
+                </a>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="mt-16 grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-6 border-y border-white/5 py-8 bg-white/[0.02]">
+                <div class="flex flex-col items-center">
+                    <dt class="order-2 mt-2 text-sm font-medium text-slate-400" data-i18n="stat_stacks">Tech Stacks</dt>
+                    <dd class="order-1 text-3xl font-extrabold text-white">5</dd>
+                </div>
+                <div class="flex flex-col items-center">
+                    <dt class="order-2 mt-2 text-sm font-medium text-slate-400" data-i18n="stat_agents">AI Agents</dt>
+                    <dd class="order-1 text-3xl font-extrabold text-white">12</dd>
+                </div>
+                <div class="flex flex-col items-center">
+                    <dt class="order-2 mt-2 text-sm font-medium text-slate-400" data-i18n="stat_commands">Slash Commands</dt>
+                    <dd class="order-1 text-3xl font-extrabold text-white">64</dd>
+                </div>
+                <div class="flex flex-col items-center">
+                    <dt class="order-2 mt-2 text-sm font-medium text-slate-400" data-i18n="stat_rules">Best Practice Rules</dt>
+                    <dd class="order-1 text-3xl font-extrabold text-white">67</dd>
+                </div>
+                <div class="flex flex-col items-center">
+                    <dt class="order-2 mt-2 text-sm font-medium text-slate-400" data-i18n="stat_templates">Templates</dt>
+                    <dd class="order-1 text-3xl font-extrabold text-white">25</dd>
+                </div>
+                <div class="flex flex-col items-center">
+                    <dt class="order-2 mt-2 text-sm font-medium text-slate-400" data-i18n="stat_checklists">Checklists</dt>
+                    <dd class="order-1 text-3xl font-extrabold text-white">21</dd>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features / Value Prop -->
+    <section id="features" class="py-20 bg-dark-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl" data-i18n="feat_main_title">Everything you need to scale AI coding</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-400" data-i18n="feat_main_desc">Stop prompting from scratch. Equip Claude with context-aware tools.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="w-12 h-12 bg-brand-500/20 rounded-lg flex items-center justify-center mb-6">
+                        <i data-lucide="shield-check" class="text-brand-400 h-6 w-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-3" data-i18n="feat_1_title">Standardized Rules</h3>
+                    <p class="text-slate-400" data-i18n="feat_1_desc">Enforce best practices for architecture, testing, and security automatically. Ensure every line of code meets your team's standards.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-6">
+                        <i data-lucide="bot" class="text-blue-400 h-6 w-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-3" data-i18n="feat_2_title">Specialized Agents</h3>
+                    <p class="text-slate-400" data-i18n="feat_2_desc">Deploy virtual reviewers, architects, and coaches. From <code>api-designer</code> to <code>tdd-coach</code>, get expert feedback instantly.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="w-12 h-12 bg-pink-500/20 rounded-lg flex items-center justify-center mb-6">
+                        <i data-lucide="zap" class="text-pink-400 h-6 w-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-3" data-i18n="feat_3_title">Automated Workflows</h3>
+                    <p class="text-slate-400" data-i18n="feat_3_desc">Use 64+ slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits with one command.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Developer Tools Section -->
+    <section id="tools" class="py-20 bg-dark-900 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold tracking-tight text-white mb-4" data-i18n="tools_title">Developer Experience Tools</h2>
+                    <p class="text-xl text-slate-400 mb-8" data-i18n="tools_desc">Enhance your terminal workflow with power tools designed for daily use.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-500/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="bar-chart-2" class="text-brand-400 h-5 w-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-white" data-i18n="tool_status_title">Custom Status Line</h3>
+                                <p class="text-slate-400" data-i18n="tool_status_desc">Rich status bar with profile, model, git branch, and context usage tracking.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="users" class="text-blue-400 h-5 w-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-white" data-i18n="tool_account_title">Multi-Account Manager</h3>
+                                <p class="text-slate-400" data-i18n="tool_account_desc">Switch easily between different Claude Code profiles and accounts with a single command.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Visual representation of status line with animation -->
+                <div class="glass-card p-6 rounded-xl border border-white/10">
+                    <div class="font-mono text-xs mb-2 text-slate-500">Terminal Preview</div>
+                    <div class="bg-black/80 rounded-lg p-5 font-mono text-sm leading-relaxed shadow-inner min-h-[220px] flex flex-col relative overflow-hidden">
+                        <!-- Custom Status Line (Always visible) -->
+                        <div class="flex flex-wrap items-center gap-x-3 gap-y-2 mb-4 border-b border-white/10 pb-3">
+                            <span class="text-brand-400 font-bold flex items-center gap-1">
+                                <i data-lucide="zap" class="w-3 h-3"></i> claude-craft
+                            </span>
+                            <span class="bg-blue-900/30 text-blue-300 px-2 py-0.5 rounded text-xs border border-blue-500/20">git:main</span>
+                            <span id="demo-ctx-badge" class="bg-green-900/30 text-green-300 px-2 py-0.5 rounded text-xs border border-green-500/20 transition-all duration-300">ctx: 12%</span>
+                            <span id="demo-account-badge" class="bg-purple-900/30 text-purple-300 px-2 py-0.5 rounded text-xs border border-purple-500/20 transition-all duration-300">acc: personal</span>
+                        </div>
+                        
+                        <!-- Command Interaction Area -->
+                        <div class="flex-1 flex flex-col justify-end">
+                            <div id="demo-history" class="text-slate-400 mb-2 min-h-[4em]"></div>
+                            <div class="text-slate-300 flex items-center">
+                                <span class="text-green-400 mr-2">➜</span>
+                                <span class="text-white mr-1">claude</span>
+                                <span id="demo-typing-text" class="text-slate-200"></span>
+                                <span class="cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technologies -->
+    <section id="technologies" class="py-20 bg-dark-900 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold tracking-tight text-white" data-i18n="tech_title">Supported Technologies</h2>
+                <p class="mt-4 text-slate-400" data-i18n="tech_desc">Tailored rulesets for your favorite stacks.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                <!-- Symfony -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-brand-500/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-black rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-white">Sf</span>
+                    </div>
+                    <h3 class="font-bold text-white">Symfony</h3>
+                    <p class="text-xs text-slate-400 mt-2">Clean Arch, DDD, API Platform</p>
+                </div>
+
+                <!-- Flutter -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-blue-400/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-[#02569B] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <i data-lucide="smartphone" class="text-white h-8 w-8"></i>
+                    </div>
+                    <h3 class="font-bold text-white">Flutter</h3>
+                    <p class="text-xs text-slate-400 mt-2">BLoC, Material, Cupertino</p>
+                </div>
+
+                <!-- Python -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-yellow-400/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-[#3776AB] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-[#FFD43B]">Py</span>
+                    </div>
+                    <h3 class="font-bold text-white">Python</h3>
+                    <p class="text-xs text-slate-400 mt-2">FastAPI, Async, Typing</p>
+                </div>
+
+                <!-- React -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-cyan-400/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-[#20232a] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <i data-lucide="atom" class="text-[#61dafb] h-8 w-8"></i>
+                    </div>
+                    <h3 class="font-bold text-white">React</h3>
+                    <p class="text-xs text-slate-400 mt-2">Hooks, A11y, State Mgmt</p>
+                </div>
+
+                <!-- React Native -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-purple-400/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-[#20232a] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <i data-lucide="smartphone" class="text-[#61dafb] h-8 w-8"></i>
+                    </div>
+                    <h3 class="font-bold text-white">React Native</h3>
+                    <p class="text-xs text-slate-400 mt-2">Navigation, Native Modules</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start -->
+    <section id="quickstart" class="py-24 bg-dark-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold tracking-tight text-white mb-6" data-i18n="qs_title">Up and running in seconds</h2>
+                    
+                    <div class="space-y-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-10 w-10 rounded-full bg-brand-500 text-white font-bold">1</div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-white" data-i18n="qs_step1_title">Clone the repository</h3>
+                                <p class="mt-2 text-slate-400" data-i18n="qs_step1_desc">Get the framework on your local machine.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-10 w-10 rounded-full bg-brand-500 text-white font-bold">2</div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-white" data-i18n="qs_step2_title">Install rules to your project</h3>
+                                <p class="mt-2 text-slate-400" data-i18n="qs_step2_desc">Use the Makefile to inject rules into specific project directories.</p>
+                                <div class="mt-2 inline-flex items-center gap-2 px-3 py-1 bg-white/5 rounded text-xs text-slate-300 border border-white/5">
+                                    <i data-lucide="info" class="w-3 h-3"></i>
+                                    <span data-i18n="qs_method_note">Also supports YAML config & scripts</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-10 w-10 rounded-full bg-brand-500 text-white font-bold">3</div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-white" data-i18n="qs_step3_title">Use in Claude Code</h3>
+                                <p class="mt-2 text-slate-400" data-i18n="qs_step3_desc">Start using slash commands and agents immediately.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terminal Demo -->
+                <div class="relative">
+                    <div class="code-window rounded-lg overflow-hidden font-mono text-sm shadow-2xl">
+                        <div class="code-header">
+                            <div class="dot dot-red"></div>
+                            <div class="dot dot-yellow"></div>
+                            <div class="dot dot-green"></div>
+                        </div>
+                        <div class="p-4 text-slate-300 space-y-4 min-h-[320px] bg-[#1e1e1e] flex flex-col">
+                            <div id="qs-demo-history" class="space-y-4"></div>
+                            
+                            <!-- Typing Line -->
+                            <div class="flex items-center">
+                                <span id="qs-prompt" class="mr-2 text-slate-500">$</span>
+                                <span id="qs-typing-text" class="text-slate-200"></span>
+                                <span class="cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agents Showcase -->
+    <section id="agents" class="py-20 bg-dark-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-white" data-i18n="agents_title">Meet Your New AI Team</h2>
+                <p class="mt-4 text-slate-400" data-i18n="agents_desc">Specialized personas ready to assist you.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="server" class="text-brand-400"></i>
+                        <h3 class="font-bold text-white font-mono">api-designer</h3>
+                    </div>
+                    <p class="text-sm text-slate-400" data-i18n="agent_api_desc">Expert in REST/GraphQL design, ensuring consistency and best practices in API contracts.</p>
+                </div>
+
+                <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="database" class="text-blue-400"></i>
+                        <h3 class="font-bold text-white font-mono">database-architect</h3>
+                    </div>
+                    <p class="text-sm text-slate-400" data-i18n="agent_db_desc">Focuses on schema optimization, indexing strategies, and query performance.</p>
+                </div>
+
+                <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="check-circle" class="text-green-400"></i>
+                        <h3 class="font-bold text-white font-mono">tdd-coach</h3>
+                    </div>
+                    <p class="text-sm text-slate-400" data-i18n="agent_tdd_desc">Guides you through Red-Green-Refactor cycles and helps write robust test cases.</p>
+                </div>
+
+                <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="search" class="text-yellow-400"></i>
+                        <h3 class="font-bold text-white font-mono">refactoring-specialist</h3>
+                    </div>
+                    <p class="text-sm text-slate-400" data-i18n="agent_refactor_desc">Identifies code smells and suggests safe refactoring patterns without breaking logic.</p>
+                </div>
+
+                <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="shield" class="text-red-400"></i>
+                        <h3 class="font-bold text-white font-mono">devops-engineer</h3>
+                    </div>
+                    <p class="text-sm text-slate-400" data-i18n="agent_devops_desc">Assists with Docker configurations, CI/CD pipelines, and deployment strategies.</p>
+                </div>
+
+                <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="code" class="text-purple-400"></i>
+                        <h3 class="font-bold text-white font-mono">*-reviewer</h3>
+                    </div>
+                    <p class="text-sm text-slate-400" data-i18n="agent_reviewer_desc">Dedicated reviewers for Symfony, Flutter, Python, React, and React Native.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark-900 border-t border-white/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="flex items-center gap-2 mb-4 md:mb-0">
+                    <i data-lucide="box" class="h-6 w-6 text-brand-500"></i>
+                    <span class="font-bold text-xl tracking-tight">Claude Craft</span>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://github.com/TheBeardedBearSAS/claude-craft" class="text-slate-400 hover:text-white transition-colors">
+                        <i data-lucide="github" class="h-6 w-6"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
+                <p>&copy; 2025 Claude Craft. MIT License.</p>
+                <p class="mt-2 md:mt-0" data-i18n="footer_built">Built for <a href="https://claude.ai/code" class="text-brand-400 hover:underline">Claude Code</a> by Anthropic</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+
+        // Translation Data
+        const translations = {
+            en: {
+                nav_features: "Features",
+                nav_tools: "Tools",
+                nav_quickstart: "Quick Start",
+                nav_tech: "Tech Stack",
+                nav_agents: "Agents",
+                hero_badge: "Now available for Claude Code",
+                hero_title_1: "Supercharge",
+                hero_title_2: "with Expert Knowledge",
+                hero_desc: "A comprehensive framework for AI-assisted development. Install standardized rules, agents, and commands for your projects across multiple technology stacks.",
+                cta_get_started: "Get Started",
+                cta_docs: "View Documentation",
+                stat_stacks: "Tech Stacks",
+                stat_agents: "AI Agents",
+                stat_commands: "Slash Commands",
+                stat_rules: "Best Practice Rules",
+                stat_templates: "Templates",
+                stat_checklists: "Checklists",
+                feat_main_title: "Everything you need to scale AI coding",
+                feat_main_desc: "Stop prompting from scratch. Equip Claude with context-aware tools.",
+                feat_1_title: "Standardized Rules",
+                feat_1_desc: "Enforce best practices for architecture, testing, and security automatically. Ensure every line of code meets your team's standards.",
+                feat_2_title: "Specialized Agents",
+                feat_2_desc: "Deploy virtual reviewers, architects, and coaches. From <code>api-designer</code> to <code>tdd-coach</code>, get expert feedback instantly.",
+                feat_3_title: "Automated Workflows",
+                feat_3_desc: "Use 64+ slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits with one command.",
+                tools_title: "Developer Experience Tools",
+                tools_desc: "Enhance your terminal workflow with power tools designed for daily use.",
+                tool_status_title: "Custom Status Line",
+                tool_status_desc: "Rich status bar with profile, model, git branch, and context usage tracking.",
+                tool_account_title: "Multi-Account Manager",
+                tool_account_desc: "Switch easily between different Claude Code profiles and accounts with a single command.",
+                tech_title: "Supported Technologies",
+                tech_desc: "Tailored rulesets for your favorite stacks.",
+                qs_title: "Up and running in seconds",
+                qs_step1_title: "Clone the repository",
+                qs_step1_desc: "Get the framework on your local machine.",
+                qs_step2_title: "Install rules to your project",
+                qs_step2_desc: "Use the Makefile to inject rules into specific project directories.",
+                qs_method_note: "Also supports YAML config & scripts",
+                qs_step3_title: "Use in Claude Code",
+                qs_step3_desc: "Start using slash commands and agents immediately.",
+                term_installing: "Installing React rules...",
+                term_install_tools: "Installing StatusLine & MultiAccount...",
+                term_claude_response: "I'll generate a Button component using your project's React standards...",
+                agents_title: "Meet Your New AI Team",
+                agents_desc: "Specialized personas ready to assist you.",
+                agent_api_desc: "Expert in REST/GraphQL design, ensuring consistency and best practices in API contracts.",
+                agent_db_desc: "Focuses on schema optimization, indexing strategies, and query performance.",
+                agent_tdd_desc: "Guides you through Red-Green-Refactor cycles and helps write robust test cases.",
+                agent_refactor_desc: "Identifies code smells and suggests safe refactoring patterns without breaking logic.",
+                agent_devops_desc: "Assists with Docker configurations, CI/CD pipelines, and deployment strategies.",
+                agent_reviewer_desc: "Dedicated reviewers for Symfony, Flutter, Python, React, and React Native.",
+                footer_built: "Built for <a href='https://claude.ai/code' class='text-brand-400 hover:underline'>Claude Code</a> by Anthropic"
+            },
+            fr: {
+                nav_features: "Fonctionnalités",
+                nav_tools: "Outils",
+                nav_quickstart: "Démarrage Rapide",
+                nav_tech: "Technologies",
+                nav_agents: "Agents",
+                hero_badge: "Maintenant disponible pour Claude Code",
+                hero_title_1: "Superchargez",
+                hero_title_2: "d'une Expertise Technique",
+                hero_desc: "Un framework complet pour le développement assisté par IA. Installez des règles, agents et commandes standardisés pour vos projets.",
+                cta_get_started: "Commencer",
+                cta_docs: "Documentation",
+                stat_stacks: "Stacks Tech",
+                stat_agents: "Agents IA",
+                stat_commands: "Commandes Slash",
+                stat_rules: "Règles Bonnes Pratiques",
+                stat_templates: "Modèles",
+                stat_checklists: "Checklists",
+                feat_main_title: "Tout pour passer à l'échelle",
+                feat_main_desc: "Arrêtez de prompter de zéro. Équipez Claude d'outils conscients du contexte.",
+                feat_1_title: "Règles Standardisées",
+                feat_1_desc: "Appliquez automatiquement les bonnes pratiques d'architecture, de test et de sécurité. Assurez-vous que chaque ligne de code respecte vos standards.",
+                feat_2_title: "Agents Spécialisés",
+                feat_2_desc: "Déployez des réviseurs, architectes et coachs virtuels. De l'<code>api-designer</code> au <code>tdd-coach</code>, obtenez un feedback expert instantanément.",
+                feat_3_title: "Flux Automatisés",
+                feat_3_desc: "Utilisez plus de 64 commandes pour automatiser les tâches fastidieuses. Générez des composants, vérifiez l'architecture et lancez des audits en une seule commande.",
+                tools_title: "Outils d'Expérience Développeur",
+                tools_desc: "Améliorez votre flux de travail terminal avec des outils puissants.",
+                tool_status_title: "Barre d'État Personnalisée",
+                tool_status_desc: "Barre d'état riche avec profil, modèle, git et suivi du contexte.",
+                tool_account_title: "Gestionnaire Multi-Comptes",
+                tool_account_desc: "Basculez facilement entre différents profils et comptes Claude Code en une seule commande.",
+                tech_title: "Technologies Supportées",
+                tech_desc: "Des jeux de règles sur mesure pour vos stacks préférées.",
+                qs_title: "Opérationnel en quelques secondes",
+                qs_step1_title: "Cloner le dépôt",
+                qs_step1_desc: "Récupérez le framework sur votre machine locale.",
+                qs_step2_title: "Installer les règles",
+                qs_step2_desc: "Utilisez le Makefile pour injecter les règles dans vos projets.",
+                qs_method_note: "Supporte aussi YAML et scripts",
+                qs_step3_title: "Utiliser dans Claude Code",
+                qs_step3_desc: "Commencez immédiatement à utiliser les commandes slash et les agents.",
+                term_installing: "Installation des règles React...",
+                term_install_tools: "Installation StatusLine & MultiAccount...",
+                term_claude_response: "Je vais générer un composant Button...",
+                agents_title: "Rencontrez votre nouvelle équipe IA",
+                agents_desc: "Des personas spécialisés prêts à vous aider.",
+                agent_api_desc: "Expert en conception REST/GraphQL, assurant la cohérence et les meilleures pratiques.",
+                agent_db_desc: "Se concentre sur l'optimisation des schémas, les stratégies d'indexation et la performance.",
+                agent_tdd_desc: "Vous guide à travers les cycles Red-Green-Refactor et aide à écrire des tests robustes.",
+                agent_refactor_desc: "Identifie les code smells et suggère des refactorisations sûres sans casser la logique.",
+                agent_devops_desc: "Assiste avec les configurations Docker, les pipelines CI/CD et les stratégies de déploiement.",
+                agent_reviewer_desc: "Réviseurs dédiés pour Symfony, Flutter, Python, React et React Native.",
+                footer_built: "Conçu pour <a href='https://claude.ai/code' class='text-brand-400 hover:underline'>Claude Code</a> par Anthropic"
+            },
+            es: {
+                nav_features: "Características",
+                nav_tools: "Herramientas",
+                nav_quickstart: "Inicio Rápido",
+                nav_tech: "Tecnologías",
+                nav_agents: "Agentes",
+                hero_badge: "Ahora disponible para Claude Code",
+                hero_title_1: "Potencia",
+                hero_title_2: "con Conocimiento Experto",
+                hero_desc: "Un marco integral para el desarrollo asistido por IA. Instala reglas, agentes y comandos estandarizados para tus proyectos.",
+                cta_get_started: "Empezar",
+                cta_docs: "Documentación",
+                stat_stacks: "Stacks Tecnológicos",
+                stat_agents: "Agentes IA",
+                stat_commands: "Comandos Slash",
+                stat_rules: "Reglas de Mejores Práticas",
+                stat_templates: "Plantillas",
+                stat_checklists: "Listas de Control",
+                feat_main_title: "Todo lo que necesitas para escalar",
+                feat_main_desc: "Deja de escribir prompts desde cero. Equipa a Claude con herramientas conscientes del contexto.",
+                feat_1_title: "Reglas Estandarizadas",
+                feat_1_desc: "Aplica mejores prácticas de arquitectura, pruebas y seguridad automáticamente. Asegura que cada línea de código cumpla con los estándares.",
+                feat_2_title: "Agentes Especializados",
+                feat_2_desc: "Despliega revisores, arquitectos y entrenadores virtuales. Desde <code>api-designer</code> hasta <code>tdd-coach</code>, obtén feedback experto al instante.",
+                feat_3_title: "Flujos Automatizados",
+                feat_3_desc: "Usa más de 64 comandos para automatizar tareas tediosas. Genera componentes, verifica arquitectura y ejecuta auditorías con un solo comando.",
+                tools_title: "Herramientas de Desarrollador",
+                tools_desc: "Mejora tu flujo de trabajo en la terminal con herramientas potentes.",
+                tool_status_title: "Línea de Estado Personalizada",
+                tool_status_desc: "Barra de estado rica con perfil, modelo, git y seguimiento de contexto.",
+                tool_account_title: "Gestor Multi-Cuenta",
+                tool_account_desc: "Cambia fácilmente entre diferentes perfiles y cuentas de Claude Code.",
+                tech_title: "Tecnologías Soportadas",
+                tech_desc: "Reglas adaptadas para tus stacks favoritos.",
+                qs_title: "Listo en segundos",
+                qs_step1_title: "Clonar el repositorio",
+                qs_step1_desc: "Obtén el framework en tu máquina local.",
+                qs_step2_title: "Instalar reglas en tu proyecto",
+                qs_step2_desc: "Usa el Makefile para inyectar reglas en directorios específicos.",
+                qs_method_note: "También soporta YAML y scripts",
+                qs_step3_title: "Usar en Claude Code",
+                qs_step3_desc: "Comienza a usar comandos slash y agentes inmediatamente.",
+                term_installing: "Instalando reglas de React...",
+                term_install_tools: "Instalando StatusLine & MultiAccount...",
+                term_claude_response: "Generaré un componente Button...",
+                agents_title: "Conoce a tu nuevo equipo de IA",
+                agents_desc: "Personas especializadas listas para ayudarte.",
+                agent_api_desc: "Experto en diseño REST/GraphQL, asegurando consistencia y mejores prácticas.",
+                agent_db_desc: "Se enfoca en optimización de esquemas, estrategias de indexación y rendimiento.",
+                agent_tdd_desc: "Te guía a través de ciclos Red-Green-Refactor y ayuda a escribir pruebas robustas.",
+                agent_refactor_desc: "Identifica 'code smells' y sugiere refactorizaciones seguras sin romper la lógica.",
+                agent_devops_desc: "Asiste con configuraciones Docker, pipelines CI/CD y estrategias de despliegue.",
+                agent_reviewer_desc: "Revisores dedicados para Symfony, Flutter, Python, React y React Native.",
+                footer_built: "Creado para <a href='https://claude.ai/code' class='text-brand-400 hover:underline'>Claude Code</a> por Anthropic"
+            },
+            de: {
+                nav_features: "Funktionen",
+                nav_tools: "Werkzeuge",
+                nav_quickstart: "Schnellstart",
+                nav_tech: "Technologien",
+                nav_agents: "Agenten",
+                hero_badge: "Jetzt verfügbar für Claude Code",
+                hero_title_1: "Laden Sie",
+                hero_title_2: "mit Expertenwissen auf",
+                hero_desc: "Ein umfassendes Framework für KI-gestützte Entwicklung. Installieren Sie standardisierte Regeln, Agenten und Befehle für Ihre Projekte.",
+                cta_get_started: "Loslegen",
+                cta_docs: "Dokumentation",
+                stat_stacks: "Tech Stacks",
+                stat_agents: "KI-Agenten",
+                stat_commands: "Slash-Befehle",
+                stat_rules: "Best Practices",
+                stat_templates: "Vorlagen",
+                stat_checklists: "Checklisten",
+                feat_main_title: "Alles für skalierbare KI-Entwicklung",
+                feat_main_desc: "Hören Sie auf, Prompts von Grund auf neu zu schreiben. Statten Sie Claude mit kontextbezogenen Tools aus.",
+                feat_1_title: "Standardisierte Regeln",
+                feat_1_desc: "Setzen Sie Best Practices für Architektur, Tests und Sicherheit automatisch durch. Stellen Sie sicher, dass jede Codezeile Ihren Standards entspricht.",
+                feat_2_title: "Spezialisierte Agenten",
+                feat_2_desc: "Setzen Sie virtuelle Reviewer, Architekten und Coaches ein. Von <code>api-designer</code> bis <code>tdd-coach</code> erhalten Sie sofortiges Experten-Feedback.",
+                feat_3_title: "Automatisierte Arbeitsabläufe",
+                feat_3_desc: "Nutzen Sie 64+ Befehle, um lästige Aufgaben zu automatisieren. Generieren Sie Komponenten, prüfen Sie die Architektur und führen Sie Audits durch.",
+                tools_title: "Entwickler-Tools",
+                tools_desc: "Verbessern Sie Ihren Terminal-Workflow mit leistungsstarken Tools.",
+                tool_status_title: "Benutzerdefinierte Statuszeile",
+                tool_status_desc: "Reichhaltige Statusleiste mit Profil, Modell, Git und Kontext-Tracking.",
+                tool_account_title: "Multi-Account Manager",
+                tool_account_desc: "Wechseln Sie einfach zwischen verschiedenen Claude Code Profilen und Konten.",
+                tech_title: "Unterstützte Technologien",
+                tech_desc: "Maßgeschneiderte Regelsätze für Ihre Lieblings-Stacks.",
+                qs_title: "In Sekunden einsatzbereit",
+                qs_step1_title: "Repository klonen",
+                qs_step1_desc: "Holen Sie sich das Framework auf Ihren lokalen Rechner.",
+                qs_step2_title: "Regeln installieren",
+                qs_step2_desc: "Verwenden Sie das Makefile, um Regeln in bestimmte Projektverzeichnisse einzufügen.",
+                qs_method_note: "Unterstützt auch YAML & Skripte",
+                qs_step3_title: "In Claude Code verwenden",
+                qs_step3_desc: "Beginnen Sie sofort mit der Nutzung von Slash-Befehlen und Agenten.",
+                term_installing: "Installiere React-Regeln...",
+                term_install_tools: "Installiere StatusLine & MultiAccount...",
+                term_claude_response: "Ich generiere eine Button-Komponente...",
+                agents_title: "Treffen Sie Ihr neues KI-Team",
+                agents_desc: "Spezialisierte Personas, die bereit sind, Ihnen zu helfen.",
+                agent_api_desc: "Experte für REST/GraphQL-Design, sorgt für Konsistenz und Best Practices.",
+                agent_db_desc: "Fokussiert auf Schema-Optimierung, Indexierungsstrategien und Abfrageleistung.",
+                agent_tdd_desc: "Führt Sie durch Red-Green-Refactor-Zyklen und hilft beim Schreiben robuster Tests.",
+                agent_refactor_desc: "Identifiziert Code Smells und schlägt sicheres Refactoring vor, ohne die Logik zu brechen.",
+                agent_devops_desc: "Unterstützt bei Docker-Konfigurationen, CI/CD-Pipelines und Deployment-Strategien.",
+                agent_reviewer_desc: "Dedizierte Reviewer für Symfony, Flutter, Python, React und React Native.",
+                footer_built: "Entwickelt für <a href='https://claude.ai/code' class='text-brand-400 hover:underline'>Claude Code</a> von Anthropic"
+            },
+            pt: {
+                nav_features: "Funcionalidades",
+                nav_tools: "Ferramentas",
+                nav_quickstart: "Início Rápido",
+                nav_tech: "Tecnologias",
+                nav_agents: "Agentes",
+                hero_badge: "Agora disponível para Claude Code",
+                hero_title_1: "Turbine o",
+                hero_title_2: "com Conhecimento Especializado",
+                hero_desc: "Um framework abrangente para desenvolvimento assistido por IA. Instale regras, agentes e comandos padronizados para seus projetos.",
+                cta_get_started: "Começar",
+                cta_docs: "Documentação",
+                stat_stacks: "Stacks Tecnológicos",
+                stat_agents: "Agentes de IA",
+                stat_commands: "Comandos Slash",
+                stat_rules: "Regras de Melhores Práticas",
+                stat_templates: "Modelos",
+                stat_checklists: "Listas de Verificação",
+                feat_main_title: "Tudo o que você precisa para escalar",
+                feat_main_desc: "Pare de criar prompts do zero. Equipe o Claude com ferramentas conscientes do contexto.",
+                feat_1_title: "Regras Padronizadas",
+                feat_1_desc: "Aplique as melhores práticas de arquitetura, testes e segurança automaticamente. Garanta que cada linha de código atenda aos seus padrões.",
+                feat_2_title: "Agentes Especializados",
+                feat_2_desc: "Implante revisores, arquitetos e treinadores virtuais. Do <code>api-designer</code> ao <code>tdd-coach</code>, obtenha feedback especializado instantaneamente.",
+                feat_3_title: "Fluxos Automatizados",
+                feat_3_desc: "Use mais de 64 comandos para automatizar tarefas tediosas. Gere componentes, verifique a arquitetura e execute auditorias com um único comando.",
+                tools_title: "Ferramentas do Desenvolvedor",
+                tools_desc: "Melhore seu fluxo de trabalho no terminal com ferramentas poderosas.",
+                tool_status_title: "Linha de Status Personalizada",
+                tool_status_desc: "Barra de status rica com perfil, modelo, git e rastreamento de contexto.",
+                tool_account_title: "Gerenciador de Múltiplas Contas",
+                tool_account_desc: "Alterne facilmente entre diferentes perfis e contas do Claude Code.",
+                tech_title: "Tecnologias Suportadas",
+                tech_desc: "Regras personalizadas para suas stacks favoritas.",
+                qs_title: "Funcionando em segundos",
+                qs_step1_title: "Clonar o repositório",
+                qs_step1_desc: "Obtenha o framework em sua máquina local.",
+                qs_step2_title: "Instalar regras no projeto",
+                qs_step2_desc: "Use o Makefile para injetar regras em diretórios de projetos específicos.",
+                qs_method_note: "Também suporta YAML e scripts",
+                qs_step3_title: "Usar no Claude Code",
+                qs_step3_desc: "Comece a usar comandos slash e agentes imediatamente.",
+                term_installing: "Instalando regras React...",
+                term_install_tools: "Instalando StatusLine & MultiAccount...",
+                term_claude_response: "Vou gerar um componente Button...",
+                agents_title: "Conheça sua nova equipe de IA",
+                agents_desc: "Personas especializadas prontas para ajudar.",
+                agent_api_desc: "Especialista em design REST/GraphQL, garantindo consistência e melhores práticas.",
+                agent_db_desc: "Foca na otimização de esquemas, estratégias de indexação e desempenho de consultas.",
+                agent_tdd_desc: "Guia você através dos ciclos Red-Green-Refactor e ajuda a escrever testes robustos.",
+                agent_refactor_desc: "Identifica 'code smells' e sugere refatorações seguras sem quebrar a lógica.",
+                agent_devops_desc: "Auxilia com configurações Docker, pipelines CI/CD e estratégias de implantação.",
+                agent_reviewer_desc: "Revisores dedicados para Symfony, Flutter, Python, React e React Native.",
+                footer_built: "Construído para <a href='https://claude.ai/code' class='text-brand-400 hover:underline'>Claude Code</a> por Anthropic"
+            }
+        };
+
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    // Check if the original element contained HTML tags (like <code>)
+                    // If the translation contains HTML, use innerHTML
+                    if (translations[lang][key].includes('<')) {
+                        element.innerHTML = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+            // Persist preference
+            localStorage.setItem('claude_craft_lang', lang);
+        }
+
+        // Initialize language
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('claude_craft_lang');
+            const browserLang = navigator.language.split('-')[0];
+            const availableLangs = ['en', 'fr', 'es', 'de', 'pt'];
+            
+            let initialLang = 'en';
+            if (savedLang && availableLangs.includes(savedLang)) {
+                initialLang = savedLang;
+            } else if (availableLangs.includes(browserLang)) {
+                initialLang = browserLang;
+            }
+
+            document.getElementById('language-selector').value = initialLang;
+            changeLanguage(initialLang);
+
+            // Init Animations
+            initTerminalAnimation();
+            initQuickStartAnimation();
+        });
+
+        // Developer Tools Animation
+        function initTerminalAnimation() {
+            const typingText = document.getElementById('demo-typing-text');
+            const history = document.getElementById('demo-history');
+            const accountBadge = document.getElementById('demo-account-badge');
+            const ctxBadge = document.getElementById('demo-ctx-badge');
+            
+            if (!typingText) return;
+
+            const sequence = [
+                {
+                    text: "account list",
+                    output: `Available accounts:<br>* <span class="text-white">personal</span> (active)<br>&nbsp; <span class="text-slate-500">work-profile</span>`,
+                    action: () => {} 
+                },
+                {
+                    text: "account switch work-profile",
+                    output: `<span class="text-green-400">✓</span> Switched to account: <span class="text-white font-bold">work-profile</span>`,
+                    action: () => {
+                        accountBadge.innerHTML = 'acc: work';
+                        accountBadge.className = 'bg-orange-900/30 text-orange-300 px-2 py-0.5 rounded text-xs border border-orange-500/20 transition-all duration-300';
+                    }
+                },
+                {
+                    text: "/common:audit",
+                    output: `<span class="text-blue-400">ℹ</span> Running pre-flight checks...<br><span class="text-green-400">✓</span> Context usage within limits`,
+                    action: () => {
+                         ctxBadge.innerHTML = 'ctx: 15%';
+                         ctxBadge.classList.add('bg-yellow-900/30', 'text-yellow-300');
+                    }
+                }
+            ];
+
+            runTypingSequence(sequence, typingText, history, 'claude', () => {
+                // Reset badges on loop
+                accountBadge.innerHTML = 'acc: personal';
+                accountBadge.className = 'bg-purple-900/30 text-purple-300 px-2 py-0.5 rounded text-xs border border-purple-500/20 transition-all duration-300';
+                ctxBadge.innerHTML = 'ctx: 12%';
+                ctxBadge.className = 'bg-green-900/30 text-green-300 px-2 py-0.5 rounded text-xs border border-green-500/20 transition-all duration-300';
+            });
+        }
+
+        // Quick Start Animation
+        function initQuickStartAnimation() {
+            const typingText = document.getElementById('qs-typing-text');
+            const history = document.getElementById('qs-demo-history');
+            const prompt = document.getElementById('qs-prompt');
+            
+            if (!typingText) return;
+
+            const sequence = [
+                {
+                    text: "git clone https://github.com/TheBeardedBearSAS/claude-craft.git",
+                    prompt: "$",
+                    output: `<div class="text-green-400 mt-1">Cloning into 'claude-craft'...</div>`,
+                    action: () => {}
+                },
+                {
+                    text: "make install-react TARGET=~/my-awesome-app",
+                    prompt: "$",
+                    output: `<div class="text-slate-400 mt-1">Installing React rules... <span class="text-green-400">Done</span></div><div class="text-slate-400">Installing Templates... <span class="text-green-400">Done</span></div>`,
+                    action: () => {}
+                },
+                {
+                    text: "make install-tools",
+                    prompt: "$",
+                    output: `<div class="text-slate-400 mt-1">Installing StatusLine... <span class="text-green-400">Done</span></div>`,
+                    action: () => {}
+                },
+                {
+                    text: "/react:generate-component Button variant=primary",
+                    prompt: '<span class="text-purple-400">User:</span>',
+                    output: `<div class="bg-dark-900 p-3 rounded border border-white/10 mt-2"><span class="text-blue-400">Claude:</span> I'll generate a Button component using your project's React standards...</div>`,
+                    action: () => {}
+                }
+            ];
+
+            runTypingSequence(sequence, typingText, history, null, () => {});
+        }
+
+        // Generic Typing Engine
+        function runTypingSequence(sequence, typingElement, historyElement, defaultPromptPrefix, onReset) {
+            let stepIndex = 0;
+            let charIndex = 0;
+            let currentText = '';
+
+            function typeWriter() {
+                const currentStep = sequence[stepIndex];
+                
+                // Set prompt if specified, otherwise use default
+                const promptEl = typingElement.previousElementSibling;
+                if (currentStep.prompt) {
+                    promptEl.innerHTML = currentStep.prompt;
+                } else if (defaultPromptPrefix === 'claude') {
+                    promptEl.innerHTML = `<span class="text-green-400">➜</span> <span class="text-white">claude</span>`;
+                }
+
+                if (stepIndex === 0 && charIndex === 0) {
+                     if(onReset) onReset();
+                }
+
+                if (charIndex < currentStep.text.length) {
+                    currentText += currentStep.text.charAt(charIndex);
+                    typingElement.textContent = currentText;
+                    charIndex++;
+                    setTimeout(typeWriter, 30 + Math.random() * 40); // Slightly faster typing
+                } else {
+                    // Finished typing command
+                    setTimeout(() => {
+                        // Construct history entry
+                        let promptHtml = currentStep.prompt;
+                        if (!promptHtml && defaultPromptPrefix === 'claude') {
+                            promptHtml = `<span class="text-green-400">➜</span> <span class="text-white">claude</span>`;
+                        } else if (!promptHtml) {
+                            promptHtml = `<span class="text-slate-500">$</span>`;
+                        }
+
+                        // Add to history
+                        const entry = document.createElement('div');
+                        entry.className = 'animate-fade-in';
+                        entry.innerHTML = `
+                            <div class="flex items-center mb-1">
+                                <span class="mr-2">${promptHtml}</span>
+                                <span class="text-slate-200">${currentStep.text}</span>
+                            </div>
+                            ${currentStep.output}
+                        `;
+                        historyElement.appendChild(entry);
+                        
+                        // Execute actions
+                        if(currentStep.action) currentStep.action();
+                        
+                        // Clear input
+                        currentText = '';
+                        typingElement.textContent = '';
+                        charIndex = 0;
+                        
+                        // Next step
+                        stepIndex++;
+                        
+                        if (stepIndex >= sequence.length) {
+                            // Reset loop after delay
+                            setTimeout(() => {
+                                historyElement.innerHTML = '';
+                                stepIndex = 0;
+                                setTimeout(typeWriter, 500);
+                            }, 4000);
+                        } else {
+                            // Next command delay
+                            setTimeout(typeWriter, 1000); 
+                        }
+                    }, 400);
+                }
+            }
+            
+            // Start
+            setTimeout(typeWriter, 1000);
+        }
+    </script>
+</body>
+</html>
+

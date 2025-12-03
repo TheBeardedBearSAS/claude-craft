@@ -1,0 +1,1223 @@
+# PROMPT CLAUDE CODE - GÉNÉRATION BACKLOG & SPRINTS SCRUM
+
+## CONTEXTE
+Tu es un Product Owner et Scrum Master expérimenté. Tu dois analyser les documents de spécification d'un projet pour créer un backlog produit complet et planifier les sprints.
+
+## FONDAMENTAUX SCRUM (OBLIGATOIRE)
+
+### Les 3 Piliers de Scrum
+Le backlog DOIT respecter ces 3 piliers fondamentaux :
+1. **Transparence** : Tout est visible et compréhensible par tous les acteurs
+2. **Inspection** : Le travail peut être évalué régulièrement (Sprint Review, Daily)
+3. **Adaptation** : Ajustements possibles basés sur les inspections (Rétrospective)
+
+### Le Manifeste Agile - 4 Valeurs
+```
+✓ Les individus et leurs interactions > processus et outils
+✓ Des logiciels opérationnels > documentation exhaustive
+✓ La collaboration avec les clients > négociation contractuelle
+✓ L'adaptation au changement > suivi d'un plan
+```
+
+### Les 12 Principes Agile (à garder en tête)
+1. Livraisons rapides et régulières de valeur client
+2. Accueillir positivement les changements
+3. Livrer fréquemment (quelques semaines max)
+4. Collaboration quotidienne business/développeurs
+5. Personnes motivées + confiance
+6. Face à face = meilleure communication
+7. Logiciel opérationnel = mesure d'avancement
+8. Rythme soutenable
+9. Excellence technique continue
+10. Simplicité (minimiser le travail inutile)
+11. Équipes auto-organisées
+12. Réflexion régulière sur l'amélioration
+
+## STACK TECHNIQUE DU PROJET
+**IMPORTANT** : Consulte `./docs/ARCHITECTURE_TECHNIQUE_JOINA.md` pour tous les détails techniques.
+
+| Couche | Technologie | Détails |
+|--------|-------------|---------|
+| 🌐 Web | Symfony UX + Turbo | Twig, Stimulus, Live Components |
+| 📱 Mobile | Flutter | Dart, iOS 15+, Android 10+ |
+| ⚙️ API | API Platform | REST/GraphQL, OpenAPI auto-généré |
+| 🤖 MCP | symfony/mcp-bundle | Serveur MCP pour intégration IA |
+| 🗄️ DB | PostgreSQL | Doctrine ORM |
+| 🐳 Infra | Docker | Conteneurisation complète |
+
+### Vertical Slicing obligatoire
+Chaque User Story doit traverser :
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      UI Layer                               │
+│  ┌─────────────────────┐   ┌─────────────────────┐         │
+│  │   Symfony UX/Turbo  │   │      Flutter        │         │
+│  │   (Twig + Stimulus) │   │   (Dart Widgets)    │         │
+│  └──────────┬──────────┘   └──────────┬──────────┘         │
+│             │                         │                     │
+│             └────────────┬────────────┘                     │
+│                          ▼                                  │
+│              ┌─────────────────────┐                        │
+│              │    API Platform     │                        │
+│              │  (REST + GraphQL)   │                        │
+│              └──────────┬──────────┘                        │
+│                         ▼                                   │
+│              ┌─────────────────────┐                        │
+│              │    PostgreSQL       │                        │
+│              │   (Doctrine ORM)    │                        │
+│              └─────────────────────┘                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## DOCUMENTS À ANALYSER
+Répertoire : `./docs/`
+- ARCHITECTURE_TECHNIQUE_JOINA.md
+- CAHIER_DES_CHARGES_JOINA.md
+
+## MISSION
+
+### ÉTAPE 1 : Analyse des documents
+1. Lis et analyse en profondeur les deux documents
+2. Identifie :
+   - Les fonctionnalités métier (features)
+   - Les exigences techniques
+   - Les contraintes et dépendances
+   - Les acteurs/personas
+   - Les critères de qualité attendus
+
+### ÉTAPE 1bis : Définition des Personas
+Crée un fichier `personas.md` dans `project-management/` avec tous les personas identifiés.
+
+```markdown
+# Personas - [NOM DU PROJET]
+
+## Vue d'ensemble des personas
+
+| ID | Nom | Rôle | Priorité | Description courte |
+|----|-----|------|----------|-------------------|
+| P-001 | [Prénom fictif] | [Rôle] | Primaire | [Description en 1 ligne] |
+| P-002 | [Prénom fictif] | [Rôle] | Secondaire | [Description en 1 ligne] |
+| P-003 | [Prénom fictif] | [Rôle] | Tertiaire | [Description en 1 ligne] |
+
+---
+
+## P-001 : [Prénom] - [Rôle principal]
+
+### Identité
+- **Nom** : [Prénom Nom fictif]
+- **Âge** : [Tranche d'âge]
+- **Profession** : [Métier/Occupation]
+- **Localisation** : [Ville/Région type]
+- **Niveau technique** : [Novice / Intermédiaire / Expert]
+
+### Photo/Avatar
+[Description visuelle ou placeholder pour image]
+
+### Citation représentative
+> "[Une phrase qui résume sa motivation principale]"
+
+### Contexte et background
+[2-3 paragraphes décrivant qui est cette personne, son contexte de vie, son travail, ses responsabilités]
+
+### Objectifs (Goals)
+#### Objectifs principaux
+1. [Objectif principal lié au produit]
+2. [Objectif secondaire]
+3. [Objectif tertiaire]
+
+#### Objectifs de vie (au-delà du produit)
+- [Objectif personnel/professionnel plus large]
+
+### Frustrations et Pain Points
+1. **[Frustration 1]** : [Description détaillée]
+2. **[Frustration 2]** : [Description détaillée]
+3. **[Frustration 3]** : [Description détaillée]
+
+### Motivations
+- [Ce qui le pousse à utiliser le produit]
+- [Ce qu'il espère accomplir]
+- [Ce qui le rendrait satisfait]
+
+### Comportements et habitudes
+#### Utilisation technologique
+- **Devices principaux** : [Smartphone / Tablette / Desktop]
+- **OS** : [iOS / Android / Windows / Mac]
+- **Temps d'écran quotidien** : [X heures]
+- **Apps favorites** : [Liste d'apps similaires ou complémentaires]
+
+#### Parcours type
+1. [Étape 1 de son parcours utilisateur typique]
+2. [Étape 2]
+3. [Étape 3]
+
+### Scénarios d'utilisation
+#### Scénario principal
+**Contexte** : [Situation dans laquelle il utilise le produit]
+**Besoin** : [Ce qu'il cherche à accomplir]
+**Action** : [Comment il interagit avec le produit]
+**Résultat attendu** : [Ce qu'il espère obtenir]
+
+#### Scénario secondaire
+[Même format...]
+
+### Critères de décision
+Ce qui l'inciterait à :
+- **Adopter le produit** : [Critères]
+- **Continuer à l'utiliser** : [Critères]
+- **Le recommander** : [Critères]
+- **L'abandonner** : [Critères]
+
+### Accessibilité et contraintes
+- [Contraintes physiques si applicable]
+- [Contraintes de temps]
+- [Contraintes techniques]
+- [Contraintes financières]
+
+### Relation avec les autres personas
+- **Interagit avec** : [P-XXX - Comment]
+- **Dépend de** : [P-XXX - Pourquoi]
+
+---
+
+## P-002 : [Prénom] - [Rôle]
+[Même structure...]
+
+---
+
+## P-003 : [Prénom] - [Rôle]
+[Même structure...]
+
+---
+
+## Matrice Personas / Fonctionnalités
+
+| Fonctionnalité | P-001 | P-002 | P-003 | Priorité |
+|----------------|-------|-------|-------|----------|
+| [Feature 1] | ⭐⭐⭐ | ⭐ | - | Must |
+| [Feature 2] | ⭐⭐ | ⭐⭐⭐ | ⭐ | Must |
+| [Feature 3] | ⭐ | ⭐⭐ | ⭐⭐⭐ | Should |
+
+Légende : ⭐⭐⭐ = Critique | ⭐⭐ = Important | ⭐ = Utile | - = Non concerné
+
+## Anti-Personas (qui n'est PAS notre cible)
+
+### AP-001 : [Prénom] - [Rôle]
+- **Pourquoi ce n'est pas notre cible** : [Explication]
+- **Risque si on le cible** : [Impact négatif sur le produit]
+```
+
+### Règles pour les personas
+
+1. **Minimum 3 personas** : 1 primaire, 1-2 secondaires, 1+ tertiaires
+2. **Personas primaires** : Ceux pour qui le produit est principalement conçu
+3. **Personas secondaires** : Utilisateurs importants mais pas la cible principale
+4. **Personas tertiaires** : Utilisateurs occasionnels ou avec des besoins spécifiques
+5. **Anti-personas** : Définir qui N'EST PAS la cible pour éviter le feature creep
+
+### Lien avec les User Stories
+Chaque User Story doit référencer un persona spécifique :
+```
+**En tant que** [P-001 : Marie, utilisatrice régulière]
+**Je veux** [action]
+**Afin de** [bénéfice aligné avec ses objectifs]
+```
+
+### ÉTAPE 2 : Création de la structure de répertoires
+Crée la structure suivante :
+```
+project-management/
+├── README.md
+├── personas.md                     # Définition de tous les personas
+├── definition-of-done.md
+├── dependencies-matrix.md          # Matrice globale des dépendances
+├── backlog/
+│   ├── epics/
+│   │   └── EPIC-XXX-nom.md
+│   └── user-stories/
+│       └── US-XXX-nom.md
+└── sprints/
+    ├── sprint-001-walking-skeleton/
+    │   ├── sprint-goal.md
+    │   ├── sprint-dependencies.md  # Dépendances du sprint
+    │   └── US-XXX-nom.md (liens symboliques ou copies)
+    ├── sprint-002-authentification-base/
+    ├── sprint-003-[but_du_sprint]/
+    └── ...
+```
+
+**Convention de nommage des sprints** : `sprint-XXX-but_du_sprint`
+- XXX : Numéro du sprint sur 3 chiffres (001, 002, 003...)
+- but_du_sprint : Objectif principal en snake_case (ex: walking_skeleton, auth_complete, crud_utilisateurs)
+
+### ÉTAPE 3 : Création de la Definition of Done (DoD)
+Crée le fichier `definition-of-done.md` avec les critères suivants adaptés au projet :
+
+```markdown
+# Definition of Done (DoD)
+
+## Stack technique de référence
+- **Web** : Symfony UX + Turbo + Stimulus
+- **Mobile** : Flutter (Dart)
+- **API** : API Platform + MCP Bundle
+- **DB** : PostgreSQL
+
+## Critères obligatoires pour chaque User Story
+
+### Code
+- [ ] Code écrit et fonctionnel
+- [ ] Code review effectuée et approuvée par au moins 1 développeur
+- [ ] Respect des conventions de codage du projet
+- [ ] Pas de code mort ou commenté
+- [ ] Principes SOLID respectés
+
+### Tests
+- [ ] Tests unitaires écrits (couverture minimum 80%)
+- [ ] Tests d'intégration passants
+- [ ] Tests E2E pour les parcours critiques
+- [ ] Tous les tests automatisés passent (CI verte)
+
+### Couverture Web - Symfony UX + Turbo (OBLIGATOIRE)
+- [ ] Contrôleur Symfony implémenté et testé
+- [ ] Templates Twig créés avec composants Symfony UX
+- [ ] Interactions Turbo (Frames/Streams) fonctionnelles
+- [ ] Contrôleurs Stimulus écrits si nécessaire
+- [ ] Compatible navigateurs : Chrome, Firefox, Safari, Edge (dernières versions)
+- [ ] Responsive design validé (mobile, tablet, desktop)
+- [ ] Accessibilité vérifiée (WCAG 2.1 AA minimum)
+- [ ] Tests fonctionnels Symfony (WebTestCase) passants
+
+### Couverture Mobile - Flutter (OBLIGATOIRE)
+- [ ] Widgets Flutter implémentés et testés
+- [ ] Compatible iOS 15+ et Android 10+
+- [ ] Testé sur émulateurs ET devices physiques
+- [ ] Gestes natifs respectés (Material Design / Cupertino)
+- [ ] Performance validée (60 FPS, pas de jank)
+- [ ] Dart analyzer sans erreur ni warning
+- [ ] Tests unitaires et widget tests passants
+
+### Couverture API - API Platform (OBLIGATOIRE)
+- [ ] Ressource API Platform créée/mise à jour
+- [ ] Endpoints REST fonctionnels (GET/POST/PUT/DELETE)
+- [ ] Serialization groups configurés
+- [ ] Validation constraints appliquées
+- [ ] Documentation OpenAPI générée automatiquement
+- [ ] Tests API (ApiTestCase) passants
+- [ ] Authentification/Autorisation vérifiée
+
+### Couverture MCP (si applicable)
+- [ ] Tools MCP exposés si nécessaire
+- [ ] Resources MCP configurées
+- [ ] Tests d'intégration MCP passants
+
+### Parité Web/Mobile
+- [ ] Même comportement métier sur Web (Symfony) et Mobile (Flutter)
+- [ ] Même API consommée par les deux clients
+- [ ] Données synchronisées correctement via l'API
+- [ ] Pas de régression sur l'autre plateforme
+
+### Documentation
+- [ ] Code documenté (PHPDoc pour PHP, DartDoc pour Dart)
+- [ ] README mis à jour si nécessaire
+- [ ] Documentation API auto-générée par API Platform
+- [ ] Changelog mis à jour
+
+### Qualité
+- [ ] PHPStan niveau max passé (Symfony/API)
+- [ ] Dart analyzer passé (Flutter)
+- [ ] Pas de vulnérabilités de sécurité détectées
+- [ ] Performance validée (temps de réponse API < 200ms)
+
+### Déploiement
+- [ ] Mergé sur la branche develop
+- [ ] Migrations Doctrine exécutées sans erreur
+- [ ] Déployé en environnement de staging (Web + API + Mobile)
+- [ ] Validation fonctionnelle par le PO (sur Web ET Mobile)
+- [ ] Pas de régression détectée
+
+### Acceptance
+- [ ] Critères d'acceptance de la US tous validés (Web + Mobile)
+- [ ] Démonstration effectuée au PO sur les deux plateformes
+- [ ] User Story marquée comme "Done" dans l'outil de suivi
+```
+
+### ÉTAPE 4 : Création des Epics
+Pour chaque epic identifié, crée un fichier `EPIC-XXX-nom.md` :
+
+```markdown
+# EPIC-XXX : [Nom de l'Epic]
+
+## Description
+[Description détaillée de l'epic et de sa valeur métier]
+
+## Objectifs
+- [Objectif 1]
+- [Objectif 2]
+
+## User Stories associées
+| ID | Titre | Points | Priorité | Dépend de |
+|----|-------|--------|----------|-----------|
+| US-XXX | [Titre] | X | Must | - |
+| US-XXX | [Titre] | X | Must | US-XXX |
+
+## Dépendances avec autres Epics
+
+### Epics prérequis (bloquants)
+| Epic | Raison | Criticité |
+|------|--------|-----------|
+| EPIC-XXX | [Pourquoi cet epic doit être terminé avant] | Bloquant/Partiel |
+
+### Epics dépendants (bloqués par celui-ci)
+| Epic | Raison |
+|------|--------|
+| EPIC-XXX | [Ce qui sera débloqué] |
+
+### Matrice de dépendances de l'Epic
+```
+EPIC-001 ──► EPIC-002 ──► EPIC-004
+                │
+                ▼
+            EPIC-003
+```
+
+## Critères de succès
+- [Critère 1]
+- [Critère 2]
+
+## Livrables incrémentaux
+| Incrément | User Stories | Valeur livrée | Testable par PO |
+|-----------|--------------|---------------|-----------------|
+| v0.1 | US-XXX | [Fonctionnalité minimale] | Oui |
+| v0.2 | US-XXX, US-XXX | [Fonctionnalité étendue] | Oui |
+
+## Estimation globale
+- Taille : [S/M/L/XL]
+- Nombre de sprints estimé : [X]
+
+## Minimum Marketable Feature (MMF)
+Le plus petit ensemble de fonctionnalités permettant de fournir une **réelle valeur** à l'utilisateur.
+
+**MMF de cet Epic** : [Description de la plus petite version livrable avec valeur]
+**Valeur livrée par le MMF** : [Bénéfice concret pour l'utilisateur]
+**US incluses dans le MMF** : US-XXX, US-XXX, US-XXX
+**ROI du MMF** : [Retour sur investissement estimé]
+
+> 💡 En déployant le MMF en priorité, on réduit les risques tout en générant 
+> des bénéfices servant à financer le reste du projet.
+```
+
+### ÉTAPE 5 : Création des User Stories
+Pour chaque User Story, crée un fichier `US-XXX-titre.md` :
+
+**Les 3 C d'une User Story (OBLIGATOIRE)** :
+1. **Carte** : Tient sur une carte 10x15 cm, concis, format standard
+2. **Conversation** : Invitation à la discussion, pas une spec exhaustive
+3. **Confirmation** : Critères d'acceptance clairs et testables
+
+**Modèle INVEST (chaque US DOIT respecter)** :
+| Critère | Signification | Validation |
+|---------|---------------|------------|
+| **I**ndependent | Peut être développée seule | Pas de dépendance bloquante dans le même sprint |
+| **N**egotiable | Pas un contrat figé | Le "comment" reste ouvert |
+| **V**aluable | Apporte de la valeur | Le "Afin de" est concret |
+| **E**stimable | L'équipe peut estimer | Assez détaillée pour estimer |
+| **S**ized | Taille appropriée | ≤ 8 points, réalisable en 1 Sprint |
+| **T**estable | Tests possibles | Critères d'acceptance vérifiables |
+
+```markdown
+# US-XXX : [Titre concis]
+
+## Epic parent
+EPIC-XXX : [Nom de l'Epic]
+
+## Persona concerné
+**[P-XXX]** : [Prénom] - [Rôle]
+Référence : [../../personas.md#p-xxx](../../personas.md#p-xxx)
+
+## User Story (Les 3 C)
+
+### Carte (Card)
+**En tant que** [P-XXX : Prénom, rôle]
+**Je veux** [action/fonctionnalité]
+**Afin de** [bénéfice/valeur - aligné avec les objectifs du persona]
+
+### Conversation
+Notes pour guider la discussion avec l'équipe :
+- [Point à clarifier 1]
+- [Question ouverte 2]
+- [Alternative possible 3]
+
+### Confirmation (voir critères d'acceptance ci-dessous)
+
+## Validation INVEST
+- [ ] **I**ndependent : Cette US peut être développée indépendamment
+- [ ] **N**egotiable : Le "comment" reste ouvert à discussion
+- [ ] **V**aluable : Apporte une valeur concrète au persona
+- [ ] **E**stimable : L'équipe peut estimer cette US
+- [ ] **S**ized : ≤ 8 points, réalisable en 1 Sprint
+- [ ] **T**estable : Les critères d'acceptance sont vérifiables
+
+## Alignement avec le persona
+- **Objectif du persona adressé** : [Quel objectif de P-XXX cette US satisfait]
+- **Pain point résolu** : [Quelle frustration de P-XXX cette US soulage]
+- **Scénario d'utilisation** : [Référence au scénario du persona]
+
+## Description détaillée
+[Contexte et détails supplémentaires]
+
+## Critères d'acceptance (OBLIGATOIRE - Format Gherkin + SMART)
+
+**Modèle SMART pour chaque critère** :
+| Critère | Signification | Exemple |
+|---------|---------------|---------|
+| **S**pécifique | Explicitement défini | "Le bouton devient vert" (pas "le bouton change") |
+| **M**esurable | Observable et quantifiable | "< 200ms" (pas "rapide") |
+| **A**tteignable | Réalisable techniquement | Pas de "parfait", "instantané" |
+| **R**éaliste | En rapport avec la Story | Dans le scope de la US |
+| **T**emporel | Quand observer le résultat | "Après clic", "En moins de 2s" |
+
+### Scénario nominal
+```gherkin
+Scenario: [Nom descriptif du scénario principal]
+GIVEN [état initial du système / contexte précis]
+  AND [condition supplémentaire si nécessaire]
+WHEN [acteur identifié] [action spécifique]
+  AND [action complémentaire si nécessaire]
+THEN [résultat observable et mesurable]
+  AND [effet secondaire / notification / mise à jour]
+```
+
+### Scénarios alternatifs
+```gherkin
+Scenario: [Nom du scénario alternatif 1]
+GIVEN [contexte spécifique différent]
+WHEN [P-XXX : Prénom] [action variante]
+THEN [résultat attendu différent mais valide]
+
+Scenario: [Nom du scénario alternatif 2]
+GIVEN [autre contexte]
+WHEN [acteur] [autre action]
+THEN [autre résultat valide]
+```
+
+### Scénarios d'erreur
+```gherkin
+Scenario: [Cas d'erreur 1 - ex: données invalides]
+GIVEN [contexte]
+WHEN [acteur] [action avec données erronées]
+THEN le message d'erreur "[message exact]" s'affiche
+  AND le système reste dans un état cohérent
+  AND [comportement de récupération]
+
+Scenario: [Cas d'erreur 2 - ex: droits insuffisants]
+GIVEN [P-XXX] sans les permissions requises
+WHEN il tente [action]
+THEN l'accès est refusé avec le message "[message exact]"
+  AND l'action est journalisée
+```
+
+### Critères de validation UI/UX (OBLIGATOIRE pour Web ET Mobile)
+
+#### Web (Symfony UX + Turbo)
+- [ ] Template Twig créé avec composants Symfony UX
+- [ ] Turbo Frames/Streams utilisés pour interactions dynamiques
+- [ ] Contrôleur Stimulus écrit si comportement JS nécessaire
+- [ ] Feedback visuel lors de l'action (Turbo loading states)
+- [ ] Temps de réponse < X secondes
+- [ ] Compatible navigateurs : Chrome, Firefox, Safari, Edge
+- [ ] Responsive design (mobile-first)
+
+#### Mobile (Flutter)
+- [ ] Widget Flutter créé (StatelessWidget ou StatefulWidget selon besoin)
+- [ ] Material Design (Android) / Cupertino (iOS) respecté
+- [ ] Comportement adapté tactile (touch targets 48x48 minimum)
+- [ ] Feedback visuel/haptique lors de l'action
+- [ ] Temps de réponse < X secondes
+- [ ] Compatible iOS 15+ et Android 10+
+- [ ] Gestes natifs respectés (swipe, pull-to-refresh...)
+- [ ] État de chargement géré (CircularProgressIndicator, Shimmer...)
+
+#### API Platform
+- [ ] Endpoint REST disponible et documenté
+- [ ] Codes HTTP appropriés (200, 201, 400, 401, 403, 404, 422...)
+- [ ] Pagination implémentée si liste
+- [ ] Filtres disponibles si pertinent
+
+#### Parité Web/Mobile
+- [ ] Même fonctionnalité disponible sur les deux plateformes
+- [ ] Même comportement métier (seule l'UI diffère)
+- [ ] Même API consommée (API Platform)
+- [ ] Données synchronisées entre Web et Mobile
+
+### Critères de validation technique
+- [ ] [Contrainte de performance]
+- [ ] [Contrainte de sécurité]
+- [ ] [Validation des données]
+
+## Règles métier
+- [Règle 1]
+- [Règle 2]
+
+## Maquettes / Wireframes
+[Liens ou descriptions si disponibles]
+
+## Notes techniques
+Référence : `./docs/ARCHITECTURE_TECHNIQUE_JOINA.md`
+
+### Backend (Symfony + API Platform)
+- [ ] Entité Doctrine : [Nom de l'entité]
+- [ ] Ressource API Platform : [Configuration]
+- [ ] Repository : [Méthodes custom si nécessaire]
+- [ ] Service : [Logique métier]
+- [ ] Voter/Security : [Règles d'accès]
+
+### Frontend Web (Symfony UX + Turbo)
+- [ ] Contrôleur Symfony : [Nom]
+- [ ] Template Twig : [Chemin]
+- [ ] Composants UX : [Live Component, Autocomplete, etc.]
+- [ ] Contrôleur Stimulus : [Si nécessaire]
+
+### Frontend Mobile (Flutter)
+- [ ] Screen/Page : [Nom du widget]
+- [ ] State Management : [Provider/Bloc/Riverpod]
+- [ ] Repository : [Appels API]
+- [ ] Modèle : [Classe Dart]
+
+### MCP (si applicable)
+- [ ] Tool MCP : [Nom et description]
+- [ ] Resource MCP : [URI et type]
+
+## Estimation
+- **Story Points** : [1/2/3/5/8/13/21]
+- **Complexité** : [Faible/Moyenne/Haute]
+
+## Priorité
+- **Valeur métier** : [1-5]
+- **MoSCoW** : [Must/Should/Could/Won't]
+
+## Dépendances
+
+### User Stories prérequises (BLOQUANTES)
+| US | Titre | Raison | Statut |
+|----|-------|--------|--------|
+| US-XXX | [Titre] | [Pourquoi cette US doit être terminée avant] | À faire |
+
+### User Stories dépendantes (BLOQUÉES par celle-ci)
+| US | Titre | Ce qui sera débloqué |
+|----|-------|---------------------|
+| US-XXX | [Titre] | [Fonctionnalité rendue possible] |
+
+### Dépendances techniques
+- [ ] [Service/API/Composant requis]
+- [ ] [Configuration/Infrastructure nécessaire]
+
+### Chaîne de dépendances
+```
+US-001 (Auth base) 
+    └──► US-002 (Login) 
+            └──► US-003 (Remember me)
+            └──► US-004 (OAuth)
+```
+
+## Incrément livrable
+Cette US permet de livrer : [Description de la valeur incrémentale testable]
+
+## Sprint assigné
+Sprint [X] (à définir lors du Sprint Planning)
+```
+
+### ÉTAPE 6 : Priorisation du Backlog
+Priorise les User Stories selon :
+1. **Valeur métier** : Impact sur les utilisateurs et le business
+2. **Risques techniques** : Traiter les risques tôt
+3. **Dépendances** : Respecter l'ordre logique
+4. **MoSCoW** : Must Have en premier
+
+### ÉTAPE 7 : Création des Sprints
+Pour chaque sprint, crée un répertoire nommé `sprint-XXX-but_du_sprint/` avec :
+
+**sprint-goal.md** :
+```markdown
+# Sprint XXX : [But du Sprint]
+
+## Informations générales
+- **Nom du sprint** : sprint-XXX-[but_du_sprint]
+- **Dates** : [Date début] → [Date fin]
+- **Durée** : 2 semaines
+
+## Objectif du Sprint (Sprint Goal)
+> [Une phrase qui explique POURQUOI ce Sprint existe et quelle valeur il apporte]
+
+L'équipe garde cet objectif en tête. Si le travail s'avère plus difficile que prévu, 
+l'équipe collabore avec le Product Owner et adapte le scope tout en préservant l'objectif.
+
+**Cet objectif est un sous-ensemble de** : [Objectif de la Release]
+
+## Cérémonies du Sprint
+
+| Cérémonie | Durée | Date/Heure | Participants |
+|-----------|-------|------------|--------------|
+| Sprint Planning Part 1 (Le QUOI) | 2h | [Date] | PO + Équipe + SM |
+| Sprint Planning Part 2 (Le COMMENT) | 2h | [Date] | Équipe + SM |
+| Daily Scrum | 15 min | Chaque jour [Heure] | Équipe |
+| Affinage Backlog | 1h | [Date] (5-10% du Sprint) | PO + Équipe |
+| Sprint Review | 2h | [Date fin] | PO + Équipe + Stakeholders |
+| Rétrospective | 1.5h | [Date fin] | Équipe + SM |
+
+## Capacité de l'équipe
+- Vélocité estimée : [X] story points
+- Disponibilité : [X]%
+
+## User Stories sélectionnées
+
+| ID | Titre | Points | Priorité | Dépend de | Statut |
+|----|-------|--------|----------|-----------|--------|
+| US-XXX | [Titre] | X | Must | - | 🔲 À faire |
+| US-XXX | [Titre] | X | Must | US-XXX | 🔲 À faire |
+| US-XXX | [Titre] | X | Should | US-XXX | 🔲 À faire |
+
+**Total Story Points** : [X]
+
+## Couverture par plateforme
+| US | Web | Mobile | API | DB |
+|----|-----|--------|-----|-----|
+| US-XXX | ✅ | ✅ | ✅ | ✅ |
+| US-XXX | ✅ | ✅ | ✅ | ✅ |
+
+## Ordre d'exécution recommandé
+Basé sur les dépendances :
+1. 🏁 US-XXX (fondation - aucune dépendance)
+2. US-XXX (dépend de US-XXX)
+3. US-XXX (dépend de US-XXX)
+4. US-XXX (peut être parallélisée avec US-XXX)
+
+## Graphe de dépendances du Sprint
+```mermaid
+graph TD
+    US-001[US-001: Titre] --> US-002[US-002: Titre]
+    US-001 --> US-003[US-003: Titre]
+    US-002 --> US-004[US-004: Titre]
+    US-003 --> US-004
+```
+
+## Risques identifiés
+- [Risque 1] - Mitigation : [Action]
+- [Risque 2] - Mitigation : [Action]
+
+## Definition of Done
+Voir : ../../definition-of-done.md
+
+## Critères de succès du Sprint
+- [ ] [Critère 1]
+- [ ] [Critère 2]
+- [ ] Toutes les US respectent la DoD
+- [ ] Toutes les US sont testables sur Web ET Mobile
+- [ ] L'objectif du Sprint est atteint
+
+## Incrément livrable
+À la fin de ce sprint, l'utilisateur pourra (sur Web ET Mobile) : [Description de la valeur livrée]
+
+---
+
+## Rétrospective - Directive Fondamentale
+
+> "Peu importe ce que nous découvrons, nous comprenons et croyons sincèrement 
+> que tout le monde a fait le meilleur travail possible, compte tenu de ce 
+> qu'ils savaient à l'époque, leurs compétences et aptitudes, les ressources 
+> disponibles, et la situation à portée de main."
+
+### Format de rétrospective suggéré : Étoile de Mer (Starfish)
+- 🟢 **Continuer** : Ce qui fonctionne bien
+- 🔴 **Arrêter** : Ce qui ne fonctionne pas
+- 🟡 **Commencer** : Nouvelles pratiques à essayer
+- ⬆️ **Plus de** : Ce qu'on fait bien mais pas assez
+- ⬇️ **Moins de** : Ce qu'on fait trop
+
+### Questions de la rétrospective
+1. Qu'est-ce qui a bien fonctionné ?
+2. Qu'est-ce qui n'a pas fonctionné ?
+3. Quelles actions d'amélioration pour le prochain Sprint ?
+```
+
+**sprint-dependencies.md** (pour chaque sprint) :
+```markdown
+# Dépendances - Sprint XXX : [But du Sprint]
+
+## Dépendances internes au sprint
+
+| US Bloquante | US Bloquée | Type | Ordre |
+|--------------|------------|------|-------|
+| US-XXX | US-XXX | Finish-to-Start | 1→2 |
+| US-XXX | US-XXX, US-XXX | Finish-to-Start | 2→3,4 |
+
+## Dépendances avec sprints précédents
+
+| US Prérequise (Sprint précédent) | US Dépendante (ce sprint) | Statut prérequis |
+|----------------------------------|---------------------------|------------------|
+| US-XXX | US-XXX | ✅ Done |
+| US-XXX | US-XXX | ✅ Done |
+
+## Dépendances vers sprints suivants
+
+| US (ce sprint) | US Dépendante (Sprint suivant) | Impact si non livrée |
+|----------------|-------------------------------|---------------------|
+| US-XXX | US-XXX | Bloque EPIC-XXX |
+
+## US parallélisables
+Ces US n'ont pas de dépendances entre elles et peuvent être développées en parallèle :
+- Groupe A : US-XXX, US-XXX
+- Groupe B : US-XXX, US-XXX
+
+## Chemin critique du sprint
+```
+US-XXX → US-XXX → US-XXX (3 jours estimés)
+```
+⚠️ Ces US sont sur le chemin critique - prioriser leur revue de code.
+```
+
+### ÉTAPE 8 : Récapitulatif
+Crée un fichier `README.md` à la racine de `project-management/` :
+
+```markdown
+# Gestion de Projet - [NOM DU PROJET]
+
+## Vue d'ensemble
+[Description du projet]
+
+## Personas
+
+### Personas primaires
+| ID | Nom | Rôle | User Stories |
+|----|-----|------|--------------|
+| P-001 | [Prénom] | [Rôle] | US-XXX, US-XXX, ... |
+
+### Personas secondaires
+| ID | Nom | Rôle | User Stories |
+|----|-----|------|--------------|
+| P-002 | [Prénom] | [Rôle] | US-XXX, US-XXX, ... |
+
+👉 Détails complets : [personas.md](./personas.md)
+
+## Stack technique
+Référence : `./docs/ARCHITECTURE_TECHNIQUE_JOINA.md`
+
+- 🌐 **Web** : Application responsive (Symfony UX + Turbo)
+- 📱 **Mobile** : Application Flutter (iOS + Android)
+- ⚙️ **API** : Backend REST/GraphQL avec API Platform + Serveur MCP (symfony/mcp-bundle)
+- 🗄️ **Base de données** : PostgreSQL
+
+### Détails techniques
+| Composant | Technologie | Documentation |
+|-----------|-------------|---------------|
+| Frontend Web | Symfony UX, Turbo, Stimulus | symfony.com/ux |
+| Frontend Mobile | Flutter | flutter.dev |
+| Backend API | API Platform 4.x | api-platform.com |
+| Serveur MCP | symfony/mcp-bundle | symfony.com/doc/current/ai/bundles/mcp-bundle.html |
+| Base de données | PostgreSQL 16+ | postgresql.org |
+| Cache | Redis | redis.io |
+| Conteneurisation | Docker | docker.com |
+
+## Structure du backlog
+
+### Epics
+| ID | Nom | Personas | User Stories | Statut |
+|----|-----|----------|--------------|--------|
+| EPIC-001 | [Nom] | P-001, P-002 | X | À faire |
+
+### Métriques
+- Total User Stories : [X]
+- Total Story Points : [X]
+- Sprints planifiés : [X]
+
+## Couverture des personas
+
+### Matrice Personas / Epics
+| Epic | P-001 | P-002 | P-003 |
+|------|-------|-------|-------|
+| EPIC-001 | ⭐⭐⭐ | ⭐ | - |
+| EPIC-002 | ⭐⭐ | ⭐⭐⭐ | ⭐ |
+
+## Roadmap
+
+### sprint-001-walking_skeleton
+- **Objectif** : Infrastructure Docker + API Platform + 1 endpoint CRUD + UI Symfony + écran Flutter
+- **Personas impactés** : [P-XXX]
+- **Points** : [X]
+- **Dates** : [Début] → [Fin]
+
+### sprint-002-[but_du_sprint]
+- **Objectif** : [...]
+- **Personas impactés** : [P-XXX, P-XXX]
+- **Points** : [X]
+- **Dates** : [Début] → [Fin]
+
+### sprint-003-[but_du_sprint]
+- **Objectif** : [...]
+- **Personas impactés** : [P-XXX]
+- **Points** : [X]
+- **Dates** : [Début] → [Fin]
+
+## Équipe et rôles
+- Product Owner : [TBD]
+- Scrum Master : [TBD]
+- Équipe de développement : [TBD]
+
+## Liens utiles
+- [Personas](./personas.md)
+- [Definition of Done](./definition-of-done.md)
+- [Matrice des dépendances](./dependencies-matrix.md)
+- [Backlog](./backlog/)
+- [Sprints](./sprints/)
+- [Architecture technique](../docs/ARCHITECTURE_TECHNIQUE_JOINA.md)
+```
+
+## RÈGLES SCRUM À RESPECTER
+
+1. **Sprint** : Durée fixe de 2 semaines
+2. **Vélocité** : Estimer entre 20-40 story points par sprint (ajuster selon l'équipe)
+3. **User Stories** : Doivent être INVEST (Independent, Negotiable, Valuable, Estimable, Small, Testable)
+4. **Estimation** : Utiliser la suite de Fibonacci (1, 2, 3, 5, 8, 13, 21)
+5. **Priorisation** : Valeur métier vs Effort (méthode MoSCoW)
+6. **Incréments** : Chaque sprint doit livrer un incrément potentiellement livrable
+
+## RÈGLES DE DÉVELOPPEMENT INCRÉMENTAL (OBLIGATOIRE)
+
+### Principe fondamental
+Chaque User Story doit livrer une valeur TESTABLE et DÉMONTRABLE au PO, même minimale.
+
+### Règles de découpage incrémental
+
+1. **Taille maximale des US** :
+   - Maximum 8 story points par US
+   - Si > 8 points, découper en sous-US
+   - Préférer plusieurs petites US (2-3 points) à une grosse
+
+2. **Vertical Slicing** (découpage vertical) :
+   - Chaque US traverse TOUTES les couches : Symfony UX/Turbo + Flutter → API Platform → PostgreSQL
+   - PAS de US "Backend only" ou "Frontend only" sauf exception technique justifiée
+   - PAS de US "Web only" ou "Mobile only" : chaque US doit couvrir Symfony ET Flutter
+   - Chaque US doit être testable de bout en bout sur Web (Symfony) ET Mobile (Flutter)
+   - Exception : US techniques d'infrastructure (Docker, CI/CD, config) peuvent être hors UI
+   - L'API Platform est le point central : Web et Mobile consomment la même API
+
+3. **Walking Skeleton d'abord** :
+   - Sprint 1 : Infrastructure + 1 parcours complet minimal
+   - Livrer un squelette fonctionnel avant d'enrichir
+   - **Walking Skeleton** = Logiciel prenant en charge le plus petit nombre de tâches nécessaires parmi l'ensemble des fonctionnalités
+   - PAS juste du setup technique, mais une fonctionnalité TESTABLE de bout en bout
+
+4. **Story Mapping** :
+   - **Backbone** (Épine dorsale) = Liste des activités essentielles du système (= Epics)
+   - **Walking Skeleton** = Première ligne horizontale de la carte (US minimales)
+   - Ordonner verticalement du plus nécessaire au moins nécessaire
+   - Entourer les groupes d'US pour former les Releases
+
+4. **Stratégie d'incréments** :
+   ```
+   Incrément 1 : Version minimale (happy path uniquement)
+   Incrément 2 : Gestion des erreurs basique
+   Incrément 3 : Cas alternatifs
+   Incrément 4 : Optimisations et edge cases
+   ```
+
+5. **Règle des 3 US maximum par fonctionnalité** :
+   - US 1 : Créer (Create)
+   - US 2 : Lire/Afficher (Read)
+   - US 3 : Modifier/Supprimer (Update/Delete)
+
+### Exemples de découpage incrémental
+
+```
+❌ MAUVAIS : US-001 "Gestion complète des utilisateurs" (21 points)
+
+✅ BON : Découpage incrémental
+US-001 : Créer un compte avec email/password (3 points)
+    └──► US-002 : Se connecter avec email/password (2 points)
+            └──► US-003 : Réinitialiser son mot de passe (3 points)
+            └──► US-004 : Modifier son profil (2 points)
+            └──► US-005 : Se déconnecter (1 point)
+                    └──► US-006 : Supprimer son compte (2 points)
+```
+
+### Checklist de validation incrémentale
+Avant de valider une US, vérifier :
+- [ ] La US est testable isolément ?
+- [ ] Le PO peut faire une démo de cette US seule ?
+- [ ] L'utilisateur final peut utiliser cette fonctionnalité (même limitée) ?
+- [ ] Le code est déployable en production (feature flag si nécessaire) ?
+
+## GESTION DES DÉPENDANCES (OBLIGATOIRE)
+
+### Étape 4bis : Création de la matrice de dépendances globale
+
+Crée un fichier `dependencies-matrix.md` dans `project-management/` :
+
+```markdown
+# Matrice des dépendances - [NOM DU PROJET]
+
+## Vue d'ensemble des dépendances entre Epics
+
+### Graphe de dépendances
+```mermaid
+graph TD
+    EPIC-001[EPIC-001: Infrastructure] --> EPIC-002[EPIC-002: Authentification]
+    EPIC-001 --> EPIC-003[EPIC-003: Base de données]
+    EPIC-002 --> EPIC-004[EPIC-004: Gestion utilisateurs]
+    EPIC-003 --> EPIC-004
+    EPIC-004 --> EPIC-005[EPIC-005: Fonctionnalité métier A]
+    EPIC-004 --> EPIC-006[EPIC-006: Fonctionnalité métier B]
+```
+
+### Tableau des dépendances entre Epics
+| Epic | Dépend de | Bloque | Niveau critique |
+|------|-----------|--------|-----------------|
+| EPIC-001 | - | EPIC-002, EPIC-003 | 🔴 Critique |
+| EPIC-002 | EPIC-001 | EPIC-004 | 🔴 Critique |
+| EPIC-003 | EPIC-001 | EPIC-004 | 🟡 Important |
+
+### Chemin critique
+```
+EPIC-001 → EPIC-002 → EPIC-004 → EPIC-005
+```
+⚠️ Tout retard sur ce chemin impacte la date de livraison finale.
+
+## Vue détaillée des dépendances entre User Stories
+
+### EPIC-001 : [Nom]
+```mermaid
+graph LR
+    US-001 --> US-002
+    US-001 --> US-003
+    US-002 --> US-004
+    US-003 --> US-004
+```
+
+| US Source | US Cible | Type | Raison |
+|-----------|----------|------|--------|
+| US-001 | US-002 | Finish-to-Start | US-002 utilise l'API créée par US-001 |
+| US-001 | US-003 | Finish-to-Start | US-003 nécessite le modèle de données |
+
+### EPIC-002 : [Nom]
+[Même format...]
+
+## Dépendances inter-Epics (US → US)
+
+| US Source (Epic) | US Cible (Epic) | Raison |
+|------------------|-----------------|--------|
+| US-010 (EPIC-001) | US-020 (EPIC-002) | L'authentification utilise l'infra |
+| US-025 (EPIC-002) | US-040 (EPIC-004) | Les rôles sont nécessaires pour les permissions |
+
+## Risques liés aux dépendances
+
+| Risque | Impact | Probabilité | Mitigation |
+|--------|--------|-------------|------------|
+| Retard US-001 | Bloque 5 US | Moyen | Prioriser en début de sprint |
+| API externe indisponible | Bloque EPIC-003 | Faible | Prévoir mock/stub |
+```
+
+### Règles de gestion des dépendances
+
+1. **Dépendances circulaires interdites** :
+   - Si A dépend de B et B dépend de A → Refactorer les US
+   
+2. **Profondeur maximale** :
+   - Maximum 4 niveaux de dépendances (A→B→C→D→E interdit)
+   - Si plus profond, regrouper ou paralléliser
+
+3. **Dépendances dans le même sprint** :
+   - Si US-A bloque US-B, les deux doivent être dans le même sprint
+   - Sinon, US-B passe au sprint suivant
+
+4. **Identifier les US "fondation"** :
+   - US sans dépendance entrante = à faire en premier
+   - Les marquer avec le tag `[FOUNDATION]`
+
+5. **Visualisation obligatoire** :
+   - Chaque sprint doit avoir son graphe de dépendances
+   - Format Mermaid pour intégration Git
+
+## CONSIGNES D'EXÉCUTION
+
+1. Commence par lire intégralement les deux documents
+2. **Identifie tous les personas** (utilisateurs, administrateurs, acteurs externes)
+3. **Crée le fichier personas.md** avec minimum 3 personas détaillés
+4. Découpe en epics logiques (grands blocs fonctionnels)
+5. **Associe chaque epic aux personas concernés**
+6. **Établis les dépendances entre Epics** (qui doit être fait avant quoi)
+7. Décompose chaque epic en user stories atomiques (max 8 points)
+8. **Chaque US doit référencer un persona spécifique (P-XXX)**
+9. **Applique le vertical slicing** : chaque US doit traverser toutes les couches
+10. **Établis les dépendances entre US** avec le graphe et le tableau
+11. Estime chaque user story en story points
+12. **Identifie les US "fondation"** (sans dépendances entrantes)
+13. **Crée la matrice de dépendances globale** (dependencies-matrix.md)
+14. Crée au minimum 3 sprints avec une charge équilibrée
+15. **Sprint 1 = Walking Skeleton** : infrastructure + 1 parcours complet minimal
+16. Vérifie qu'aucune dépendance circulaire n'existe
+17. Vérifie que les US bloquantes sont planifiées AVANT les US bloquées
+18. **Vérifie que tous les personas ont au moins une US dans les premiers sprints**
+
+## CONSIGNES CRITÈRES D'ACCEPTANCE (OBLIGATOIRE)
+
+### Règles pour les critères d'acceptance
+
+1. **Exhaustivité** : Chaque US doit avoir AU MINIMUM :
+   - 1 scénario nominal (happy path)
+   - 2 scénarios alternatifs
+   - 2 scénarios d'erreur
+   
+2. **Modèle SMART** : Chaque critère doit être :
+   - **S**pécifique : Explicitement défini, pas vague
+   - **M**esurable : Observable et quantifiable (valeurs concrètes)
+   - **A**tteignable : Réalisable techniquement
+   - **R**éaliste : En rapport direct avec la Story
+   - **T**emporel : Moment d'observation défini
+
+3. **Format Gherkin strict** :
+   - GIVEN : État initial précis du système
+   - WHEN : Acteur identifié + Action spécifique unique
+   - THEN : Résultat observable et vérifiable
+   - AND : Pour conditions/actions/résultats multiples
+
+4. **Chaque critère DOIT contenir** :
+   - Un acteur identifié (Persona P-XXX ou rôle système)
+   - Un verbe d'action concret
+   - Un résultat OBSERVABLE (pas abstrait)
+   - Des valeurs mesurables si applicable
+
+5. **Couverture** : Les critères doivent couvrir :
+   - Le parcours utilisateur complet
+   - Les cas limites (edge cases)
+   - Les validations de données (avec messages d'erreur exacts)
+   - Les comportements UI Web ET Mobile
+   - Les contraintes de performance (temps < Xms)
+   - Les règles de sécurité
+
+### Exemples de bons critères d'acceptance
+
+```gherkin
+# EXEMPLE CONCRET - Inscription utilisateur
+
+Scenario: Inscription réussie avec email valide
+GIVEN un visiteur non authentifié sur la page d'inscription
+  AND aucun compte n'existe avec l'email "test@example.com"
+WHEN il remplit le formulaire avec :
+  | champ     | valeur            |
+  | email     | test@example.com  |
+  | password  | SecurePass123!    |
+  | confirm   | SecurePass123!    |
+  AND il clique sur "Créer mon compte"
+THEN un compte utilisateur est créé en base de données
+  AND un email de confirmation est envoyé à "test@example.com"
+  AND l'utilisateur est redirigé vers "/confirmation-envoyee"
+  AND un message "Vérifiez votre boîte mail" s'affiche
+
+Scenario: Échec inscription - email déjà utilisé
+GIVEN un visiteur non authentifié sur la page d'inscription
+  AND un compte existe déjà avec l'email "existing@example.com"
+WHEN il remplit le formulaire avec l'email "existing@example.com"
+  AND il clique sur "Créer mon compte"
+THEN aucun nouveau compte n'est créé
+  AND le message d'erreur "Cette adresse email est déjà utilisée" s'affiche
+  AND le champ email est mis en surbrillance rouge
+  AND le formulaire conserve les autres valeurs saisies
+
+Scenario: Échec inscription - mot de passe trop faible
+GIVEN un visiteur sur la page d'inscription
+WHEN il saisit le mot de passe "123456"
+THEN l'indicateur de force affiche "Faible" en rouge
+  AND le message "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial" s'affiche
+  AND le bouton "Créer mon compte" reste désactivé
+```
+
+## FORMAT DE SORTIE ATTENDU
+
+- Fichiers Markdown bien formatés
+- Numérotation cohérente (EPIC-001, US-001, P-001, etc.)
+- Liens entre fichiers fonctionnels
+- Pas de placeholder non rempli
+- Contenu spécifique au projet analysé (pas de générique)
+
+### Checklist SCRUM officielle
+
+#### User Stories
+- [ ] Toutes les US respectent **INVEST** (Independent, Negotiable, Valuable, Estimable, Sized, Testable)
+- [ ] Toutes les US ont les **3 C** (Carte, Conversation, Confirmation)
+- [ ] Format "En tant que [Persona P-XXX]... Je veux... Afin de..."
+- [ ] Chaque US référence un Persona identifié (pas de rôle générique)
+- [ ] Aucune US > 8 points dans les sprints planifiés
+- [ ] Aucune US > 13 points dans le backlog
+
+#### Critères d'Acceptance
+- [ ] Tous les critères respectent **SMART** (Spécifique, Mesurable, Atteignable, Réaliste, Temporel)
+- [ ] Format Gherkin : GIVEN/WHEN/THEN avec acteur identifié
+- [ ] Minimum : 1 nominal + 2 alternatifs + 2 erreurs par US
+- [ ] Chaque critère a un résultat OBSERVABLE et MESURABLE
+
+#### Epics
+- [ ] Chaque Epic a un **MMF** (Minimum Marketable Feature) identifié
+- [ ] Les Epics forment une **Backbone** cohérente
+- [ ] Dépendances entre Epics documentées avec graphe Mermaid
+
+#### Sprints
+- [ ] Sprint 1 = **Walking Skeleton** (fonctionnalité complète testable)
+- [ ] Chaque Sprint a un **Sprint Goal** clair (phrase unique)
+- [ ] Durée fixe (2 semaines)
+- [ ] Vélocité cohérente entre sprints
+- [ ] Cérémonies planifiées (Planning, Daily, Review, Rétro, Affinage)
+- [ ] Directive Fondamentale de la Rétrospective incluse
+
+#### Definition of Done
+- [ ] DoD existe et couvre : Code + Tests + Documentation + Déploiement
+- [ ] DoD progressive (simple → amélioré → complet)
+- [ ] DoD identique pour toutes les US
+
+#### Personas
+- [ ] Minimum 3 personas (1 primaire, 2+ secondaires)
+- [ ] Chaque persona a : nom, objectifs, frustrations, scénarios, niveau technique
+- [ ] Matrice Personas/Fonctionnalités remplie
+- [ ] Anti-personas définis
+
+### Éléments obligatoires
+- **Fichier personas.md complet** avec minimum 3 personas détaillés
+- **Chaque US référence un persona spécifique (P-XXX)**
+- **Matrice Personas/Fonctionnalités complète**
+- **Graphes Mermaid pour toutes les dépendances**
+- **Chaque US a ses dépendances explicitement listées**
+- **Matrice de dépendances globale complète**
+- **Ordre d'exécution défini pour chaque sprint**
+- **US de maximum 8 story points**
+- **Vertical slicing appliqué : Symfony UX/Turbo + Flutter → API Platform → PostgreSQL**
+- **Chaque US testable sur Web (Symfony) ET Mobile (Flutter)**
+- **Sprints nommés : sprint-XXX-but_du_sprint** (ex: sprint-001-walking_skeleton)
+- **Référence à ARCHITECTURE_TECHNIQUE_JOINA.md dans les notes techniques**
+- **MMF identifié pour chaque Epic**
+- **Sprint Goal formulé en une phrase pour chaque Sprint**
+
+### Exemples de nommage de sprints
+```
+sprint-001-walking_skeleton/
+sprint-002-authentification_jwt/
+sprint-003-gestion_profil_utilisateur/
+sprint-004-[fonctionnalite_metier]/
+sprint-005-notifications_temps_reel/
+```
+
+### Checklist technique par US
+Chaque US doit mentionner :
+- [ ] Persona concerné (P-XXX)
+- [ ] Validation INVEST complète
+- [ ] Entité Doctrine concernée
+- [ ] Ressource API Platform
+- [ ] Template Twig / Composants Symfony UX
+- [ ] Widget Flutter correspondant
+- [ ] Migrations DB si nécessaire
+
+### Checklist personas
+- [ ] Minimum 3 personas créés (1 primaire, 2+ secondaires)
+- [ ] Chaque persona a ses objectifs, frustrations, et scénarios
+- [ ] Anti-personas définis
+- [ ] Matrice Personas/Fonctionnalités remplie
+- [ ] Toutes les US référencent un persona
+
+---
+Exécute maintenant cette mission en analysant les documents fournis.

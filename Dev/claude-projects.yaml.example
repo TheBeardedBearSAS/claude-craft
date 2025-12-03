@@ -1,0 +1,165 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Claude Code Projects Configuration
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# Ce fichier définit les projets et leurs configurations pour l'installation
+# automatique des règles Claude Code.
+#
+# Technologies disponibles:
+#   - symfony     : Backend PHP avec Symfony
+#   - flutter     : Application mobile Flutter/Dart
+#   - python      : Backend/API Python
+#   - react       : Frontend React/Next.js
+#   - reactnative : Application mobile React Native
+#
+# Usage:
+#   make config-install PROJECT=mon-projet CONFIG=./claude-projects.yaml
+#   make config-install-all CONFIG=./claude-projects.yaml
+#   make config-list CONFIG=./claude-projects.yaml
+#
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────
+# Configuration globale (optionnelle)
+# ───────────────────────────────────────────────────────────────────────────
+settings:
+  # Répertoire source des règles (défaut: répertoire du script)
+  rules_source: ""
+
+  # Mode par défaut: install, update, force
+  default_mode: "install"
+
+  # Créer une backup avant modification
+  backup: true
+
+# ───────────────────────────────────────────────────────────────────────────
+# Définition des projets
+# ───────────────────────────────────────────────────────────────────────────
+projects:
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Exemple 1: Projet Monorepo Full-Stack
+  # ─────────────────────────────────────────────────────────────────────────
+  - name: "ecommerce-platform"
+    description: "Plateforme e-commerce avec frontend React et backend Symfony"
+    root: "~/Projects/ecommerce"
+
+    # Installer les règles communes (agents, commandes /common:) à la racine
+    common: true
+
+    # Modules avec leurs technologies respectives
+    modules:
+      - path: "frontend"
+        tech: react
+        description: "Application React avec Next.js"
+
+      - path: "backend"
+        tech: symfony
+        description: "API Symfony avec API Platform"
+
+      - path: "mobile-app"
+        tech: reactnative
+        description: "Application mobile React Native"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Exemple 2: Projet Mobile Flutter
+  # ─────────────────────────────────────────────────────────────────────────
+  - name: "fitness-app"
+    description: "Application de fitness mobile"
+    root: "~/Projects/fitness"
+    common: true
+    modules:
+      # path: "." signifie que Flutter est à la racine du projet
+      - path: "."
+        tech: flutter
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Exemple 3: Projet Data Pipeline
+  # ─────────────────────────────────────────────────────────────────────────
+  - name: "data-pipeline"
+    description: "Pipeline de traitement de données"
+    root: "~/Projects/data-pipeline"
+    common: true
+    modules:
+      - path: "api"
+        tech: python
+        description: "API FastAPI"
+
+      - path: "workers"
+        tech: python
+        description: "Workers de traitement async"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Exemple 4: Projet simple sans common
+  # ─────────────────────────────────────────────────────────────────────────
+  - name: "landing-page"
+    description: "Site vitrine simple"
+    root: "~/Projects/landing"
+    # Pas besoin des règles communes pour un petit projet
+    common: false
+    modules:
+      - path: "."
+        tech: react
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Exemple 5: Monorepo avec structure complexe
+  # ─────────────────────────────────────────────────────────────────────────
+  - name: "saas-platform"
+    description: "Plateforme SaaS complète"
+    root: "~/Projects/saas"
+    common: true
+    modules:
+      # Frontend apps
+      - path: "apps/web"
+        tech: react
+        description: "Application web principale"
+
+      - path: "apps/admin"
+        tech: react
+        description: "Dashboard d'administration"
+
+      - path: "apps/mobile"
+        tech: flutter
+        description: "Application mobile"
+
+      # Backend services
+      - path: "services/api"
+        tech: symfony
+        description: "API principale"
+
+      - path: "services/auth"
+        tech: python
+        description: "Service d'authentification"
+
+      - path: "services/notifications"
+        tech: python
+        description: "Service de notifications"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Structure résultante pour "ecommerce-platform":
+#
+# ~/Projects/ecommerce/
+# ├── .claude/
+# │   ├── agents/              ← Agents communs (7 agents)
+# │   └── commands/
+# │       └── common/          ← Commandes /common: (14 commandes)
+# │
+# ├── frontend/
+# │   └── .claude/
+# │       ├── agents/          ← Agent React (1 agent)
+# │       └── commands/
+# │           └── react/       ← Commandes /react: (5 commandes)
+# │
+# ├── backend/
+# │   └── .claude/
+# │       ├── agents/          ← Agent Symfony (1 agent)
+# │       └── commands/
+# │           └── symfony/     ← Commandes /symfony: (5 commandes)
+# │
+# └── mobile-app/
+#     └── .claude/
+#         ├── agents/          ← Agent ReactNative (1 agent)
+#         └── commands/
+#             └── reactnative/ ← Commandes /reactnative: (5 commandes)
+#
+# ═══════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Bash(/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/Symfony/install-symfony-rules.sh:*)",
+      "Bash(for file in rules/08-quality-tools.md rules/09-git-workflow.md rules/10-documentation.md rules/11-security.md rules/12-performance.md rules/13-state-management.md rules/14-navigation.md)",
+      "Bash(do echo \"Creating $file...\")",
+      "Bash(done)",
+      "Bash(tree:*)",
+      "Bash(du:*)",
+      "Bash(find:*)",
+      "Bash(/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/Flutter/install-flutter-rules.sh:*)",
+      "Bash(/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/Python/install-python-rules.sh:*)",
+      "Bash(/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/install-react-rules.sh:*)",
+      "Bash(/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/ReactNative/install-reactnative-rules.sh:*)",
+      "Bash(cat:*)",
+      "Bash(./install-python-rules.sh:*)",
+      "Bash(bash -n:*)",
+      "Bash(bash install-symfony-rules.sh:*)",
+      "Bash(bash:*)",
+      "Bash(make fix-permissions:*)",
+      "Bash(make stats:*)",
+      "Bash(make help:*)",
+      "Bash(/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/install-from-config.sh:*)",
+      "Bash(yq:*)",
+      "Bash(ls:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Initial release of Claude Craft v1.0.0\n\nA comprehensive framework for AI-assisted development with Claude Code.\n\nFeatures:\n- 5 Technology Stacks: Symfony, Flutter, Python, React, React Native\n- 12 AI Agents: Specialized reviewers, architects, and coaches\n- 64+ Slash Commands: Automated workflows and code generation\n- 67 Rules: Best practices for architecture, testing, security\n- 25 Templates: Code generation patterns\n- 21 Checklists: Quality gates for commits, features, releases\n\nProject Management:\n- EPICs, User Stories, and Tasks management\n- Kanban board with 4 statuses (To Do, In Progress, Blocked, Done)\n- Strict workflow validation\n- Sprint tracking and metrics\n\nTools:\n- Multi-Account Manager: Manage multiple Claude Code profiles\n- Custom Status Line: Rich status bar with profile, model, git, context %\n\nInstallation:\n- Makefile-based installation\n- YAML configuration for monorepos\n- Direct script execution\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

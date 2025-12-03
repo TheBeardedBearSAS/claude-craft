@@ -1,0 +1,898 @@
+# PROMPT CLAUDE CODE - DÉCOMPOSITION DES USER STORIES EN TÂCHES
+
+## CONTEXTE
+Tu es un Tech Lead et Scrum Master expérimenté. Tu dois décomposer les User Stories existantes en tâches techniques détaillées pour permettre à l'équipe de développement de travailler efficacement.
+
+Cette étape correspond au **Sprint Planning Part 2 - "Le Comment"** de Scrum.
+
+## STACK TECHNIQUE DU PROJET
+Référence : `./docs/ARCHITECTURE_TECHNIQUE_JOINA.md`
+
+| Couche | Technologie | Tâches typiques |
+|--------|-------------|-----------------|
+| 🌐 Web | Symfony UX + Turbo | Contrôleur, Template Twig, Stimulus, Live Component |
+| 📱 Mobile | Flutter | Widget, Screen, Provider/Bloc, Repository |
+| ⚙️ API | API Platform | Resource, DTO, Processor, Voter |
+| 🤖 MCP | symfony/mcp-bundle | Tool, Resource MCP |
+| 🗄️ DB | PostgreSQL + Doctrine | Entity, Migration, Repository, Fixtures |
+| 🧪 Tests | PHPUnit + Flutter Test | Unit, Integration, Functional, E2E |
+| 🐳 Infra | Docker | Config, CI/CD |
+
+## MISSION
+
+### ÉTAPE 1 : Analyser les User Stories du Sprint
+Lis les fichiers du sprint à décomposer :
+```
+project-management/sprints/sprint-XXX-[nom]/
+├── sprint-goal.md
+├── sprint-dependencies.md
+└── [Liens vers les US]
+```
+
+Et les User Stories associées :
+```
+project-management/backlog/user-stories/US-XXX-*.md
+```
+
+### ÉTAPE 2 : Créer la structure des tâches
+Pour chaque Sprint, crée un répertoire `tasks/` :
+```
+project-management/sprints/sprint-XXX-[nom]/
+├── sprint-goal.md
+├── sprint-dependencies.md
+├── tasks/
+│   ├── README.md                    # Vue d'ensemble des tâches
+│   ├── US-XXX-tasks.md              # Tâches de la US-XXX
+│   ├── US-YYY-tasks.md              # Tâches de la US-YYY
+│   └── technical-tasks.md           # Tâches techniques transverses
+└── task-board.md                    # Tableau Kanban du sprint
+```
+
+### ÉTAPE 3 : Règles de décomposition des tâches
+
+#### Caractéristiques d'une bonne tâche (SMART)
+| Critère | Description | Exemple |
+|---------|-------------|---------|
+| **S**pécifique | Action claire et précise | "Créer l'entité User avec Doctrine" |
+| **M**esurable | On sait quand c'est terminé | "Migration exécutée sans erreur" |
+| **A**ttribuable | Un seul responsable | "Assigné à [Dev Backend]" |
+| **R**éaliste | Faisable dans le temps imparti | "4h estimées" |
+| **T**emporelle | Durée estimée en heures | "Max 8h (1 jour)" |
+
+#### Règles de taille
+- **Minimum** : 30 minutes (sinon trop granulaire)
+- **Maximum** : 8 heures (1 jour de travail)
+- **Idéal** : 2-4 heures
+- Si une tâche > 8h → la découper en sous-tâches
+
+#### Types de tâches
+| Type | Préfixe | Description |
+|------|---------|-------------|
+| Backend | `[BE]` | Symfony, API Platform, Doctrine |
+| Frontend Web | `[FE-WEB]` | Twig, Symfony UX, Turbo, Stimulus |
+| Frontend Mobile | `[FE-MOB]` | Flutter, Dart |
+| Base de données | `[DB]` | Migrations, Seeds, Indexes |
+| Tests | `[TEST]` | Unit, Integration, E2E |
+| Documentation | `[DOC]` | PHPDoc, README, API docs |
+| DevOps | `[OPS]` | Docker, CI/CD, Config |
+| Review | `[REV]` | Code review, QA |
+
+### ÉTAPE 4 : Template de décomposition par US
+
+Pour chaque User Story, crée un fichier `US-XXX-tasks.md` :
+
+```markdown
+# Tâches - US-XXX : [Titre de la US]
+
+## Informations US
+- **Epic** : EPIC-XXX
+- **Persona** : P-XXX - [Prénom]
+- **Story Points** : [X]
+- **Sprint** : sprint-XXX-[nom]
+
+## Résumé de la US
+**En tant que** [persona]
+**Je veux** [action]
+**Afin de** [bénéfice]
+
+## Décomposition en tâches
+
+### Vue d'ensemble
+| ID | Type | Tâche | Estimation | Dépend de | Assigné | Statut |
+|----|------|-------|------------|-----------|---------|--------|
+| T-XXX-01 | [BE] | [Description] | 4h | - | TBD | 🔲 |
+| T-XXX-02 | [DB] | [Description] | 2h | T-XXX-01 | TBD | 🔲 |
+| T-XXX-03 | [FE-WEB] | [Description] | 3h | T-XXX-01 | TBD | 🔲 |
+| T-XXX-04 | [FE-MOB] | [Description] | 3h | T-XXX-01 | TBD | 🔲 |
+| T-XXX-05 | [TEST] | [Description] | 2h | T-XXX-03, T-XXX-04 | TBD | 🔲 |
+
+**Total estimé** : [X]h
+**Ratio estimation/points** : [X]h par point
+
+---
+
+### Couche Base de données [DB]
+
+#### T-XXX-01 : Créer l'entité [Nom] avec Doctrine
+- **Type** : [DB]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : -
+- **Statut** : 🔲 À faire
+
+**Description** :
+[Description détaillée de ce qui doit être fait]
+
+**Fichiers à créer/modifier** :
+- `src/Entity/[Nom].php`
+- `src/Repository/[Nom]Repository.php`
+
+**Critères de validation** :
+- [ ] Entité créée avec tous les champs
+- [ ] Annotations/Attributs Doctrine corrects
+- [ ] Relations configurées
+- [ ] Repository avec méthodes custom si nécessaire
+
+**Commandes à exécuter** :
+```bash
+php bin/console make:entity [Nom]
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:migrate
+```
+
+---
+
+#### T-XXX-02 : Créer la migration pour [Nom]
+- **Type** : [DB]
+- **Estimation** : 1h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-01
+- **Statut** : 🔲 À faire
+
+**Description** :
+Générer et valider la migration Doctrine pour l'entité [Nom].
+
+**Fichiers à créer/modifier** :
+- `migrations/VersionXXXXXXXXXXXX.php`
+
+**Critères de validation** :
+- [ ] Migration générée
+- [ ] Migration testée en local (up/down)
+- [ ] Pas de perte de données
+- [ ] Index créés si nécessaire
+
+---
+
+### Couche API [BE]
+
+#### T-XXX-03 : Créer la ressource API Platform pour [Nom]
+- **Type** : [BE]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-01
+- **Statut** : 🔲 À faire
+
+**Description** :
+Configurer la ressource API Platform avec les opérations CRUD.
+
+**Fichiers à créer/modifier** :
+- `src/Entity/[Nom].php` (attributs ApiResource)
+- `src/Dto/[Nom]Input.php` (si DTO)
+- `src/Dto/[Nom]Output.php` (si DTO)
+- `src/State/[Nom]Processor.php` (si logique custom)
+
+**Configuration API Platform** :
+```php
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(security: "is_granted('ROLE_USER')"),
+        new Put(security: "is_granted('ROLE_USER') and object.owner == user"),
+        new Delete(security: "is_granted('ROLE_ADMIN')"),
+    ],
+    normalizationContext: ['groups' => ['[nom]:read']],
+    denormalizationContext: ['groups' => ['[nom]:write']],
+)]
+```
+
+**Critères de validation** :
+- [ ] Endpoints REST fonctionnels
+- [ ] Serialization groups configurés
+- [ ] Validation constraints appliquées
+- [ ] Security/Voters configurés
+- [ ] Documentation OpenAPI générée
+
+---
+
+#### T-XXX-04 : Implémenter la logique métier [Nom]Service
+- **Type** : [BE]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-03
+- **Statut** : 🔲 À faire
+
+**Description** :
+Créer le service métier avec la logique applicative.
+
+**Fichiers à créer/modifier** :
+- `src/Service/[Nom]Service.php`
+- `src/Message/[Nom]Command.php` (si CQRS)
+- `src/MessageHandler/[Nom]Handler.php` (si CQRS)
+
+**Critères de validation** :
+- [ ] Service créé et injecté
+- [ ] Logique métier implémentée
+- [ ] Exceptions métier définies
+- [ ] Logs ajoutés
+
+---
+
+### Couche Frontend Web [FE-WEB]
+
+#### T-XXX-05 : Créer le contrôleur Symfony pour [Nom]
+- **Type** : [FE-WEB]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-03
+- **Statut** : 🔲 À faire
+
+**Description** :
+Créer le contrôleur Symfony avec les routes et actions.
+
+**Fichiers à créer/modifier** :
+- `src/Controller/[Nom]Controller.php`
+
+**Routes à implémenter** :
+| Route | Méthode | Action | Template |
+|-------|---------|--------|----------|
+| `/[nom]` | GET | index | `[nom]/index.html.twig` |
+| `/[nom]/{id}` | GET | show | `[nom]/show.html.twig` |
+| `/[nom]/new` | GET/POST | new | `[nom]/new.html.twig` |
+| `/[nom]/{id}/edit` | GET/POST | edit | `[nom]/edit.html.twig` |
+
+**Critères de validation** :
+- [ ] Routes fonctionnelles
+- [ ] Contrôleur testé
+- [ ] Sécurité (IsGranted) configurée
+- [ ] Flash messages implémentés
+
+---
+
+#### T-XXX-06 : Créer les templates Twig pour [Nom]
+- **Type** : [FE-WEB]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-05
+- **Statut** : 🔲 À faire
+
+**Description** :
+Créer les templates Twig avec Symfony UX et Turbo.
+
+**Fichiers à créer/modifier** :
+- `templates/[nom]/index.html.twig`
+- `templates/[nom]/show.html.twig`
+- `templates/[nom]/new.html.twig`
+- `templates/[nom]/edit.html.twig`
+- `templates/[nom]/_form.html.twig`
+
+**Composants Symfony UX à utiliser** :
+- [ ] Turbo Frames pour navigation partielle
+- [ ] Turbo Streams pour mises à jour temps réel
+- [ ] Live Components si formulaires dynamiques
+
+**Critères de validation** :
+- [ ] Templates créés et fonctionnels
+- [ ] Responsive design (mobile-first)
+- [ ] Accessibilité WCAG 2.1 AA
+- [ ] Turbo Frames/Streams implémentés
+- [ ] Messages flash affichés
+
+---
+
+#### T-XXX-07 : Créer le contrôleur Stimulus pour [Nom]
+- **Type** : [FE-WEB]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-06
+- **Statut** : 🔲 À faire
+
+**Description** :
+Créer les contrôleurs Stimulus pour les interactions JavaScript.
+
+**Fichiers à créer/modifier** :
+- `assets/controllers/[nom]_controller.js`
+
+**Actions Stimulus à implémenter** :
+- [ ] [action1] : [description]
+- [ ] [action2] : [description]
+
+**Critères de validation** :
+- [ ] Contrôleur Stimulus fonctionnel
+- [ ] Pas de JavaScript inline
+- [ ] Événements bien gérés
+- [ ] UX fluide sans rechargement
+
+---
+
+### Couche Frontend Mobile [FE-MOB]
+
+#### T-XXX-08 : Créer le modèle Dart pour [Nom]
+- **Type** : [FE-MOB]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-03
+- **Statut** : 🔲 À faire
+
+**Description** :
+Créer la classe modèle Dart avec sérialisation JSON.
+
+**Fichiers à créer/modifier** :
+- `lib/models/[nom].dart`
+- `lib/models/[nom].g.dart` (généré)
+
+**Code type** :
+```dart
+@JsonSerializable()
+class [Nom] {
+  final int id;
+  final String [field1];
+  final DateTime [field2];
+  
+  [Nom]({required this.id, required this.[field1], required this.[field2]});
+  
+  factory [Nom].fromJson(Map<String, dynamic> json) => _$[Nom]FromJson(json);
+  Map<String, dynamic> toJson() => _$[Nom]ToJson(this);
+}
+```
+
+**Critères de validation** :
+- [ ] Modèle créé avec tous les champs
+- [ ] Sérialisation JSON fonctionnelle
+- [ ] Types nullables correctement gérés
+- [ ] Équivalence avec l'API (même structure)
+
+---
+
+#### T-XXX-09 : Créer le repository Flutter pour [Nom]
+- **Type** : [FE-MOB]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-08
+- **Statut** : 🔲 À faire
+
+**Description** :
+Créer le repository pour les appels API.
+
+**Fichiers à créer/modifier** :
+- `lib/repositories/[nom]_repository.dart`
+
+**Méthodes à implémenter** :
+```dart
+abstract class [Nom]Repository {
+  Future<List<[Nom]>> getAll();
+  Future<[Nom]> getById(int id);
+  Future<[Nom]> create([Nom] item);
+  Future<[Nom]> update([Nom] item);
+  Future<void> delete(int id);
+}
+```
+
+**Critères de validation** :
+- [ ] Repository abstrait + implémentation
+- [ ] Gestion des erreurs HTTP
+- [ ] Gestion du cache si nécessaire
+- [ ] Headers d'authentification
+
+---
+
+#### T-XXX-10 : Créer le Provider/Bloc pour [Nom]
+- **Type** : [FE-MOB]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-09
+- **Statut** : 🔲 À faire
+
+**Description** :
+Créer le state management (Provider/Riverpod/Bloc).
+
+**Fichiers à créer/modifier** :
+- `lib/providers/[nom]_provider.dart`
+- ou `lib/blocs/[nom]_bloc.dart`
+- ou `lib/blocs/[nom]_state.dart`
+- ou `lib/blocs/[nom]_event.dart`
+
+**États à gérer** :
+- [ ] Initial
+- [ ] Loading
+- [ ] Loaded (avec données)
+- [ ] Error (avec message)
+
+**Critères de validation** :
+- [ ] State management fonctionnel
+- [ ] États bien définis
+- [ ] Actions/Events implémentés
+- [ ] Gestion des erreurs
+
+---
+
+#### T-XXX-11 : Créer l'écran Flutter pour [Nom]
+- **Type** : [FE-MOB]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-10
+- **Statut** : 🔲 À faire
+
+**Description** :
+Créer les widgets et écrans Flutter.
+
+**Fichiers à créer/modifier** :
+- `lib/screens/[nom]/[nom]_list_screen.dart`
+- `lib/screens/[nom]/[nom]_detail_screen.dart`
+- `lib/screens/[nom]/[nom]_form_screen.dart`
+- `lib/widgets/[nom]/[nom]_card.dart`
+- `lib/widgets/[nom]/[nom]_form.dart`
+
+**Critères de validation** :
+- [ ] Écrans créés et fonctionnels
+- [ ] Material Design / Cupertino respecté
+- [ ] Responsive (tablette + téléphone)
+- [ ] Pull-to-refresh implémenté
+- [ ] Loading states affichés
+- [ ] Error handling avec Snackbar/Dialog
+- [ ] Navigation configurée
+
+---
+
+### Couche Tests [TEST]
+
+#### T-XXX-12 : Tests unitaires Backend
+- **Type** : [TEST]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-04
+- **Statut** : 🔲 À faire
+
+**Description** :
+Écrire les tests unitaires pour le backend.
+
+**Fichiers à créer/modifier** :
+- `tests/Unit/Service/[Nom]ServiceTest.php`
+- `tests/Unit/Entity/[Nom]Test.php`
+
+**Scénarios à tester** :
+- [ ] [Scénario 1 depuis les critères d'acceptance]
+- [ ] [Scénario 2]
+- [ ] [Scénario erreur 1]
+
+**Critères de validation** :
+- [ ] Couverture > 80%
+- [ ] Tous les tests passent
+- [ ] Mocks correctement utilisés
+- [ ] Edge cases couverts
+
+---
+
+#### T-XXX-13 : Tests API (fonctionnels)
+- **Type** : [TEST]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-03
+- **Statut** : 🔲 À faire
+
+**Description** :
+Écrire les tests fonctionnels API Platform.
+
+**Fichiers à créer/modifier** :
+- `tests/Functional/Api/[Nom]Test.php`
+
+**Endpoints à tester** :
+| Méthode | Endpoint | Cas nominal | Cas erreur |
+|---------|----------|-------------|------------|
+| GET | /api/[nom] | ✅ Liste | 401 non auth |
+| GET | /api/[nom]/{id} | ✅ Détail | 404 not found |
+| POST | /api/[nom] | ✅ Création | 422 validation |
+| PUT | /api/[nom]/{id} | ✅ Mise à jour | 403 forbidden |
+| DELETE | /api/[nom]/{id} | ✅ Suppression | 404 not found |
+
+**Critères de validation** :
+- [ ] Tous les endpoints testés
+- [ ] Codes HTTP vérifiés
+- [ ] Réponses JSON validées
+- [ ] Authentification testée
+- [ ] Validation testée
+
+---
+
+#### T-XXX-14 : Tests Widget Flutter
+- **Type** : [TEST]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-11
+- **Statut** : 🔲 À faire
+
+**Description** :
+Écrire les widget tests Flutter.
+
+**Fichiers à créer/modifier** :
+- `test/widgets/[nom]_card_test.dart`
+- `test/screens/[nom]_list_screen_test.dart`
+
+**Scénarios à tester** :
+- [ ] Affichage correct des données
+- [ ] Interactions utilisateur (tap, swipe)
+- [ ] États de loading/error
+- [ ] Navigation
+
+**Critères de validation** :
+- [ ] Widgets principaux testés
+- [ ] Pumping correct avec providers
+- [ ] Mocks API configurés
+- [ ] Golden tests si nécessaire
+
+---
+
+#### T-XXX-15 : Tests E2E
+- **Type** : [TEST]
+- **Estimation** : [X]h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-06, T-XXX-11
+- **Statut** : 🔲 À faire
+
+**Description** :
+Écrire les tests end-to-end pour le parcours complet.
+
+**Fichiers à créer/modifier** :
+- `tests/E2E/[Nom]FlowTest.php` (Web)
+- `integration_test/[nom]_flow_test.dart` (Mobile)
+
+**Parcours à tester** :
+Basé sur les critères d'acceptance de la US :
+1. [Scénario nominal complet]
+2. [Scénario alternatif 1]
+3. [Scénario erreur 1]
+
+**Critères de validation** :
+- [ ] Parcours nominal testé de bout en bout
+- [ ] Web ET Mobile testés
+- [ ] Screenshots de validation
+- [ ] Temps d'exécution < 2 min
+
+---
+
+### Couche Documentation [DOC]
+
+#### T-XXX-16 : Documentation technique
+- **Type** : [DOC]
+- **Estimation** : 1h
+- **Assigné à** : TBD
+- **Dépend de** : T-XXX-15
+- **Statut** : 🔲 À faire
+
+**Description** :
+Mettre à jour la documentation technique.
+
+**Fichiers à créer/modifier** :
+- `docs/api/[nom].md`
+- `README.md` (si nécessaire)
+- PHPDoc dans le code
+- DartDoc dans le code Flutter
+
+**Critères de validation** :
+- [ ] API documentée dans OpenAPI
+- [ ] PHPDoc/DartDoc complets
+- [ ] README à jour
+- [ ] Changelog mis à jour
+
+---
+
+### Code Review [REV]
+
+#### T-XXX-17 : Code Review
+- **Type** : [REV]
+- **Estimation** : 2h
+- **Assigné à** : [Reviewer]
+- **Dépend de** : T-XXX-16
+- **Statut** : 🔲 À faire
+
+**Description** :
+Review complète du code avant merge.
+
+**Checklist de review** :
+- [ ] Code lisible et maintenable
+- [ ] Conventions de nommage respectées
+- [ ] Pas de code dupliqué
+- [ ] Tests présents et passants
+- [ ] PHPStan/Dart analyzer sans erreur
+- [ ] Sécurité vérifiée
+- [ ] Performance acceptable
+- [ ] Documentation à jour
+
+**Critères de validation** :
+- [ ] Review approuvée par 1+ développeur
+- [ ] Tous les commentaires traités
+- [ ] CI verte
+- [ ] Prêt à merger
+
+---
+
+## Graphe de dépendances des tâches
+
+```mermaid
+graph TD
+    T01[T-XXX-01: Entity] --> T02[T-XXX-02: Migration]
+    T01 --> T03[T-XXX-03: API Resource]
+    T03 --> T04[T-XXX-04: Service]
+    T03 --> T05[T-XXX-05: Controller]
+    T05 --> T06[T-XXX-06: Templates]
+    T06 --> T07[T-XXX-07: Stimulus]
+    T03 --> T08[T-XXX-08: Model Dart]
+    T08 --> T09[T-XXX-09: Repository Flutter]
+    T09 --> T10[T-XXX-10: Provider/Bloc]
+    T10 --> T11[T-XXX-11: Screen Flutter]
+    T04 --> T12[T-XXX-12: Tests Unit BE]
+    T03 --> T13[T-XXX-13: Tests API]
+    T11 --> T14[T-XXX-14: Tests Widget]
+    T07 --> T15[T-XXX-15: Tests E2E]
+    T11 --> T15
+    T15 --> T16[T-XXX-16: Documentation]
+    T16 --> T17[T-XXX-17: Code Review]
+```
+
+## Résumé des estimations
+
+| Couche | Nb tâches | Heures estimées |
+|--------|-----------|-----------------|
+| [DB] | 2 | Xh |
+| [BE] | 2 | Xh |
+| [FE-WEB] | 3 | Xh |
+| [FE-MOB] | 4 | Xh |
+| [TEST] | 4 | Xh |
+| [DOC] | 1 | Xh |
+| [REV] | 1 | Xh |
+| **TOTAL** | **17** | **XXh** |
+
+## Checklist Definition of Done par tâche
+
+Chaque tâche est terminée quand :
+- [ ] Code écrit et fonctionnel
+- [ ] Tests associés passants
+- [ ] PHPStan/Dart analyzer sans erreur
+- [ ] Code documenté
+- [ ] Pas de régression
+- [ ] Review effectuée (si applicable)
+```
+
+### ÉTAPE 5 : Créer le Task Board du Sprint
+
+Crée un fichier `task-board.md` pour visualiser l'avancement :
+
+```markdown
+# Task Board - Sprint XXX : [But du Sprint]
+
+## Légende des statuts
+- 🔲 À faire (To Do)
+- 🔄 En cours (In Progress)
+- 👀 En review (In Review)
+- ✅ Terminé (Done)
+- 🚫 Bloqué (Blocked)
+
+## Vue Kanban
+
+### 🔲 À Faire
+| ID | US | Tâche | Estimation | Assigné |
+|----|-----|-------|------------|---------|
+| T-001-01 | US-001 | [Tâche] | 4h | - |
+| T-001-02 | US-001 | [Tâche] | 2h | - |
+| T-002-01 | US-002 | [Tâche] | 3h | - |
+
+### 🔄 En Cours
+| ID | US | Tâche | Estimation | Assigné | Démarré |
+|----|-----|-------|------------|---------|---------|
+| | | | | | |
+
+### 👀 En Review
+| ID | US | Tâche | Estimation | Assigné | Reviewer |
+|----|-----|-------|------------|---------|----------|
+| | | | | | |
+
+### ✅ Terminé
+| ID | US | Tâche | Estimation | Réel | Assigné | Terminé |
+|----|-----|-------|------------|------|---------|---------|
+| | | | | | | |
+
+### 🚫 Bloqué
+| ID | US | Tâche | Raison du blocage | Action requise |
+|----|-----|-------|-------------------|----------------|
+| | | | | |
+
+## Métriques du Sprint
+
+### Avancement
+- **Tâches totales** : [X]
+- **Terminées** : [X] ([X]%)
+- **En cours** : [X]
+- **Bloquées** : [X]
+
+### Heures
+- **Estimées** : [X]h
+- **Consommées** : [X]h
+- **Restantes** : [X]h
+
+### Burndown
+```
+Jour 1: ████████████████████████ XXh
+Jour 2: ██████████████████████   XXh
+Jour 3: ████████████████████     XXh
+Jour 4: ██████████████████       XXh
+Jour 5: ████████████████         XXh
+...
+```
+
+## Dépendances critiques
+
+```mermaid
+graph LR
+    subgraph US-001
+        T001_01 --> T001_02
+        T001_02 --> T001_03
+    end
+    subgraph US-002
+        T002_01 --> T002_02
+    end
+    T001_02 --> T002_01
+```
+
+## Blocages et Impediments
+
+| Date | Blocage | Impact | Action | Responsable | Résolu |
+|------|---------|--------|--------|-------------|--------|
+| | | | | | |
+```
+
+### ÉTAPE 6 : Créer le README des tâches
+
+Crée un fichier `tasks/README.md` :
+
+```markdown
+# Tâches du Sprint XXX : [But du Sprint]
+
+## Vue d'ensemble
+
+| US | Titre | Points | Nb Tâches | Heures | Statut |
+|----|-------|--------|-----------|--------|--------|
+| US-XXX | [Titre] | X | X | Xh | 🔲 0% |
+| US-XXX | [Titre] | X | X | Xh | 🔲 0% |
+
+**Total Sprint** : [X] tâches | [X]h estimées
+
+## Répartition par type
+
+| Type | Nb Tâches | Heures | % du Sprint |
+|------|-----------|--------|-------------|
+| [DB] | X | Xh | X% |
+| [BE] | X | Xh | X% |
+| [FE-WEB] | X | Xh | X% |
+| [FE-MOB] | X | Xh | X% |
+| [TEST] | X | Xh | X% |
+| [DOC] | X | Xh | X% |
+| [REV] | X | Xh | X% |
+
+## Fichiers de tâches
+
+- [US-XXX - Titre](./US-XXX-tasks.md)
+- [US-XXX - Titre](./US-XXX-tasks.md)
+- [Tâches techniques transverses](./technical-tasks.md)
+
+## Conventions
+
+### Numérotation
+- Format : `T-[US]-[Numéro séquentiel]`
+- Exemple : `T-001-05` = Tâche 5 de la US-001
+
+### Estimation
+- En heures (pas en points)
+- Minimum : 0.5h
+- Maximum : 8h (sinon découper)
+
+### Statuts
+| Emoji | Statut | Description |
+|-------|--------|-------------|
+| 🔲 | À faire | Non commencée |
+| 🔄 | En cours | En développement |
+| 👀 | En review | En attente de review |
+| ✅ | Terminé | Validé et mergé |
+| 🚫 | Bloqué | En attente de résolution |
+```
+
+### ÉTAPE 7 : Tâches techniques transverses
+
+Crée un fichier `technical-tasks.md` pour les tâches partagées :
+
+```markdown
+# Tâches Techniques Transverses - Sprint XXX
+
+Ces tâches ne sont pas liées à une US spécifique mais sont nécessaires au Sprint.
+
+## Infrastructure & Setup
+
+### T-TECH-01 : Configuration environnement
+- **Type** : [OPS]
+- **Estimation** : 2h
+- **Description** : Configuration Docker, variables d'environnement, etc.
+
+### T-TECH-02 : Mise à jour des dépendances
+- **Type** : [OPS]
+- **Estimation** : 1h
+- **Description** : Mise à jour Composer/Pub packages
+
+## Refactoring
+
+### T-TECH-03 : [Description du refactoring]
+- **Type** : [BE]
+- **Estimation** : Xh
+- **Raison** : Dette technique identifiée
+
+## CI/CD
+
+### T-TECH-04 : Pipeline CI
+- **Type** : [OPS]
+- **Estimation** : 2h
+- **Description** : Ajout/modification des jobs CI
+
+## Documentation
+
+### T-TECH-05 : Mise à jour architecture
+- **Type** : [DOC]
+- **Estimation** : 1h
+- **Description** : Schémas d'architecture à jour
+```
+
+## RÈGLES IMPORTANTES
+
+### Règles d'estimation des tâches
+1. **Unité** : Toujours en heures (pas en points)
+2. **Granularité** : Entre 0.5h et 8h
+3. **Buffer** : Ajouter 20% pour les imprévus
+4. **Révision** : Ré-estimer quotidiennement les tâches restantes
+
+### Règles de dépendances
+1. Une tâche bloquée = Sprint en danger → escalade immédiate
+2. Tâches parallélisables clairement identifiées
+3. Chemin critique visible dans le graphe Mermaid
+
+### Règles d'assignation
+1. Auto-assignation par l'équipe (pas de command & control)
+2. Une seule personne responsable par tâche
+3. Pas plus de 2 tâches en cours par personne
+
+### Correspondance US → Tâches typiques
+
+| Type de US | Tâches Backend | Tâches Frontend | Tâches Tests |
+|------------|----------------|-----------------|--------------|
+| CRUD simple | Entity, API Resource | Controller+Twig, Screen Flutter | Unit + API + Widget |
+| Feature métier | Entity, Service, API | Controller+Twig+Stimulus, Screen+Bloc | Unit + Integration + E2E |
+| Intégration externe | Service, Adapter | - | Integration + Mock |
+| UI only | - | Controller+Twig+Stimulus, Screen | Widget + E2E |
+
+## CONSIGNES D'EXÉCUTION
+
+1. **Lire** le sprint-goal.md et toutes les US du sprint
+2. **Identifier** toutes les couches techniques impactées par chaque US
+3. **Décomposer** chaque US en tâches atomiques (0.5h-8h)
+4. **Créer** le fichier de tâches pour chaque US
+5. **Identifier** les dépendances entre tâches
+6. **Créer** le graphe Mermaid des dépendances
+7. **Créer** le task board initial
+8. **Calculer** les totaux et vérifier la capacité du sprint
+
+## FORMAT DE SORTIE
+
+Pour chaque sprint traité :
+- `tasks/README.md` - Vue d'ensemble
+- `tasks/US-XXX-tasks.md` - Tâches par US
+- `tasks/technical-tasks.md` - Tâches transverses
+- `task-board.md` - Tableau Kanban
+
+---
+Exécute maintenant cette mission de décomposition des tâches.

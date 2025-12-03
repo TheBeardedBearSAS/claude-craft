@@ -1,0 +1,6 @@
+{
+  "statusLine": {
+    "enabled": true,
+    "script": "~/.claude/statusline.sh"
+  }
+}

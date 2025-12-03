@@ -1,0 +1,447 @@
+# Règles de Développement Flutter - {{PROJECT_NAME}}
+
+## Contexte du Projet
+
+Voir le fichier détaillé : [rules/00-project-context.md](rules/00-project-context.md)
+
+**Projet** : {{PROJECT_NAME}}
+**Stack** : {{TECH_STACK}}
+**State Management** : {{STATE_MANAGEMENT_PATTERN}}
+
+---
+
+## Règles Fondamentales
+
+### 1. Méthodologie Obligatoire
+
+⚠️ **IMPÉRATIF** : Toujours suivre le workflow d'analyse avant de coder.
+
+Voir : [rules/01-workflow-analysis.md](rules/01-workflow-analysis.md)
+
+**Étapes obligatoires** :
+1. Comprendre le besoin métier
+2. Explorer le code existant
+3. Identifier les patterns du projet
+4. Concevoir l'architecture
+5. Définir le plan de test
+6. Estimer les tâches
+
+❌ **Ne JAMAIS** :
+- Commencer à coder sans analyse
+- Modifier du code sans comprendre l'impact
+- Dupliquer du code existant
+- Ignorer les conventions du projet
+
+### 2. Architecture
+
+Voir : [rules/02-architecture.md](rules/02-architecture.md)
+
+**Clean Architecture obligatoire** :
+
+```
+lib/
+├── core/                 # Fonctionnalités communes
+├── features/             # Features métier
+│   └── [feature_name]/
+│       ├── data/         # Models, DataSources, Repositories
+│       ├── domain/       # Entities, UseCases, Interfaces
+│       └── presentation/ # BLoC, Pages, Widgets
+└── main.dart
+```
+
+**Règle de dépendance** :
+```
+PRESENTATION → DOMAIN ← DATA
+```
+
+### 3. Standards de Code
+
+Voir : [rules/03-coding-standards.md](rules/03-coding-standards.md)
+
+**Conventions de nommage** :
+- Fichiers/dossiers : `snake_case`
+- Classes/Enums : `UpperCamelCase`
+- Variables/fonctions : `lowerCamelCase`
+- Constantes : `lowerCamelCase` (pas SCREAMING_CASE)
+- Membres privés : `_leadingUnderscore`
+
+**Formatage** :
+- 80 caractères max par ligne
+- 2 espaces d'indentation
+- Virgules trailing pour multi-lignes
+- `const` partout où possible
+
+### 4. Principes SOLID
+
+Voir : [rules/04-solid-principles.md](rules/04-solid-principles.md)
+
+- **S**ingle Responsibility : Une classe = une responsabilité
+- **O**pen/Closed : Extension sans modification
+- **L**iskov Substitution : Substituabilité des sous-classes
+- **I**nterface Segregation : Interfaces spécifiques
+- **D**ependency Inversion : Dépendre d'abstractions
+
+### 5. KISS, DRY, YAGNI
+
+Voir : [rules/05-kiss-dry-yagni.md](rules/05-kiss-dry-yagni.md)
+
+- **KISS** : Solution la plus simple
+- **DRY** : Éviter duplication
+- **YAGNI** : Coder pour besoins actuels
+
+---
+
+## Outils et Workflow
+
+### Tooling
+
+Voir : [rules/06-tooling.md](rules/06-tooling.md)
+
+**Commandes quotidiennes** :
+```bash
+make setup      # Installer dépendances
+make generate   # Générer code
+make test       # Lancer tests
+make analyze    # Analyser code
+make format     # Formater code
+make ci         # Pipeline CI complète
+```
+
+**Docker** : Toujours utiliser Docker pour isolation (selon CLAUDE.md global)
+
+### Testing
+
+Voir : [rules/07-testing.md](rules/07-testing.md)
+
+**Stratégie** :
+- 70% Unit tests
+- 20% Widget tests
+- 10% Integration tests
+
+**Coverage minimum** :
+- Domain : 95%
+- Data : 85%
+- Presentation : 70%
+- Global : 80%
+
+### Qualité
+
+Voir : [rules/08-quality-tools.md](rules/08-quality-tools.md)
+
+**Avant chaque commit** :
+```bash
+flutter analyze --fatal-infos
+dart format --set-exit-if-changed .
+flutter test --coverage
+```
+
+### Git Workflow
+
+Voir : [rules/09-git-workflow.md](rules/09-git-workflow.md)
+
+**Conventional Commits obligatoire** :
+```
+feat(auth): add biometric login
+fix(cart): prevent duplicate items
+docs(readme): update installation steps
+```
+
+**Branches** :
+- `main` : Production
+- `develop` : Développement
+- `feature/xxx` : Nouvelles features
+- `fix/xxx` : Bugfixes
+
+---
+
+## Documentation
+
+Voir : [rules/10-documentation.md](rules/10-documentation.md)
+
+**Dartdoc obligatoire pour** :
+- Toutes les classes publiques
+- Toutes les méthodes publiques
+- API complexes
+
+**Format** :
+```dart
+/// Résumé sur une ligne.
+///
+/// Description détaillée.
+///
+/// Exemple:
+/// ```dart
+/// final user = User(id: '123');
+/// ```
+class User {
+  // ...
+}
+```
+
+---
+
+## Sécurité
+
+Voir : [rules/11-security.md](rules/11-security.md)
+
+**Règles strictes** :
+- Tokens → `flutter_secure_storage` uniquement
+- API keys → Variables d'environnement
+- HTTPS obligatoire
+- Certificate pinning en production
+- Obfuscation activée
+- Validation entrées utilisateur
+
+❌ **INTERDIT** :
+- Secrets hardcodés
+- SharedPreferences pour données sensibles
+- Passwords en clair
+- Logs sensibles en production
+
+---
+
+## Performance
+
+Voir : [rules/12-performance.md](rules/12-performance.md)
+
+**Optimisations obligatoires** :
+- `const` widgets partout
+- `ListView.builder` pour listes
+- Image caching activé
+- Lazy loading
+- Éviter rebuilds inutiles
+
+**Vérification** :
+- Profile mode testé
+- Frame rate > 60 FPS
+- Temps démarrage < 2s
+
+---
+
+## State Management
+
+Voir : [rules/13-state-management.md](rules/13-state-management.md)
+
+**Pattern du projet** : {{STATE_MANAGEMENT_PATTERN}}
+
+**Recommandations** :
+- État local simple → StatefulWidget
+- État partagé → Provider/Riverpod
+- Logique complexe → BLoC
+
+---
+
+## Templates
+
+### Widgets
+
+Voir : [templates/widget.md](templates/widget.md)
+
+### BLoC
+
+Voir : [templates/bloc.md](templates/bloc.md)
+
+### Repository
+
+Voir : [templates/repository.md](templates/repository.md)
+
+### Tests
+
+- Widget tests : [templates/test-widget.md](templates/test-widget.md)
+- Unit tests : [templates/test-unit.md](templates/test-unit.md)
+
+---
+
+## Checklists
+
+### Pre-Commit
+
+Voir : [checklists/pre-commit.md](checklists/pre-commit.md)
+
+- [ ] Code formaté
+- [ ] Analyze clean
+- [ ] Tests passent
+- [ ] Documentation à jour
+- [ ] Commit conventionnel
+
+### Nouvelle Feature
+
+Voir : [checklists/new-feature.md](checklists/new-feature.md)
+
+### Refactoring
+
+Voir : [checklists/refactoring.md](checklists/refactoring.md)
+
+### Audit Sécurité
+
+Voir : [checklists/security.md](checklists/security.md)
+
+---
+
+## Commandes Makefile
+
+```bash
+# Setup
+make setup                # Installer dépendances
+make clean                # Nettoyer projet
+
+# Développement
+make run                  # Lancer app
+make generate             # Générer code (freezed, json_serializable)
+make generate-watch       # Mode watch
+
+# Tests
+make test                 # Tous les tests
+make test-unit            # Tests unitaires
+make test-widget          # Tests widgets
+make test-integration     # Tests intégration
+make test-coverage        # Tests avec coverage
+
+# Qualité
+make analyze              # Analyser code
+make format               # Formater code
+make format-check         # Vérifier formatage
+make fix                  # Appliquer fixes auto
+make quality              # Toutes vérifications
+
+# Build
+make build-apk            # Android APK
+make build-appbundle      # Android App Bundle
+make build-ios            # iOS
+make build-web            # Web
+
+# CI/CD
+make ci                   # Pipeline complète
+```
+
+---
+
+## Stack Technique
+
+### Dépendances principales
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  {{STATE_MANAGEMENT_DEPENDENCIES}}
+
+  # Network
+  dio: ^5.4.0
+  retrofit: ^4.0.3
+
+  # Dependency Injection
+  get_it: ^7.6.4
+  injectable: ^2.3.2
+
+  # Storage
+  shared_preferences: ^2.2.2
+  flutter_secure_storage: ^9.0.0
+
+  # Utils
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  dartz: ^0.10.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Code Generation
+  build_runner: ^2.4.7
+  freezed: ^2.4.6
+  json_serializable: ^6.7.1
+  injectable_generator: ^2.4.1
+  retrofit_generator: ^8.0.4
+
+  # Linting
+  flutter_lints: ^3.0.1
+  very_good_analysis: ^5.1.0
+
+  # Testing
+  mocktail: ^1.0.1
+  bloc_test: ^9.1.5
+```
+
+---
+
+## Ressources
+
+### Documentation officielle
+- [Flutter Documentation](https://docs.flutter.dev/)
+- [Dart Language Tour](https://dart.dev/guides/language/language-tour)
+- [Effective Dart](https://dart.dev/guides/language/effective-dart)
+
+### Architecture
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Flutter Clean Architecture](https://github.com/ResoCoder/flutter-clean-architecture)
+
+### State Management
+- [BLoC Library](https://bloclibrary.dev/)
+- [Riverpod Documentation](https://riverpod.dev/)
+- [Provider Documentation](https://pub.dev/packages/provider)
+
+### Outils
+- [Flutter DevTools](https://docs.flutter.dev/development/tools/devtools/overview)
+- [FVM](https://fvm.app/)
+- [Dart Code Metrics](https://dcm.dev/)
+
+---
+
+## Contacts
+
+**Lead Developer** : {{LEAD_DEVELOPER}}
+**Repository** : {{REPOSITORY_URL}}
+**CI/CD** : {{CI_CD_PLATFORM}}
+**Documentation** : {{DOCS_URL}}
+
+---
+
+## Instructions pour Claude
+
+En tant qu'assistant de développement Flutter, tu dois :
+
+1. **TOUJOURS** lire et appliquer ces règles
+2. **TOUJOURS** commencer par l'analyse (règle 01)
+3. **RESPECTER** l'architecture Clean Architecture
+4. **SUIVRE** les conventions de nommage et formatage
+5. **APPLIQUER** les principes SOLID, KISS, DRY, YAGNI
+6. **ÉCRIRE** les tests en parallèle du code
+7. **DOCUMENTER** avec dartdoc
+8. **UTILISER** Docker pour toutes les commandes
+9. **VÉRIFIER** la sécurité et les performances
+10. **NE JAMAIS** commiter de secrets ou données sensibles
+
+### Workflow type
+
+```
+1. Analyser besoin → rules/01-workflow-analysis.md
+2. Explorer code existant
+3. Concevoir architecture → rules/02-architecture.md
+4. Implémenter avec standards → rules/03-coding-standards.md
+5. Appliquer SOLID → rules/04-solid-principles.md
+6. Écrire tests → rules/07-testing.md
+7. Vérifier qualité → make ci
+8. Documenter → rules/10-documentation.md
+9. Commit conventionnel → rules/09-git-workflow.md
+```
+
+### Avant chaque réponse
+
+- [ ] Ai-je lu les règles pertinentes ?
+- [ ] Ai-je analysé l'impact sur le code existant ?
+- [ ] Mon code respecte-t-il Clean Architecture ?
+- [ ] Ai-je suivi les conventions de nommage ?
+- [ ] Ai-je appliqué les principes SOLID ?
+- [ ] Ai-je prévu les tests ?
+- [ ] Ai-je vérifié la sécurité ?
+- [ ] Ai-je documenté le code ?
+
+---
+
+*Ces règles garantissent la qualité, la maintenabilité et l'évolutivité du projet Flutter.*
+
+**Version** : 1.0
+**Dernière mise à jour** : {{UPDATE_DATE}}
