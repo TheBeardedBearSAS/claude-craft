@@ -29,18 +29,25 @@ The Makefile provides the simplest way to install rules.
 # Navigate to the claude-craft directory
 cd claude-craft
 
-# Install a single technology
+# Install a single technology (default: English)
 make install-symfony TARGET=~/my-project
 make install-flutter TARGET=~/my-project
 make install-python TARGET=~/my-project
 make install-react TARGET=~/my-project
 make install-reactnative TARGET=~/my-project
 
+# Install with specific language
+make install-symfony TARGET=~/my-project LANG=fr
+make install-flutter TARGET=~/my-project LANG=de
+make install-react TARGET=~/my-project LANG=es
+
+# Available languages: en, fr, es, de, pt
+
 # Install common rules only (agents + /common: commands)
 make install-common TARGET=~/my-project
 
 # Install ALL technologies
-make install-all TARGET=~/my-project
+make install-all TARGET=~/my-project LANG=fr
 ```
 
 #### Preset Combinations
@@ -120,10 +127,14 @@ cp claude-projects.yaml.example claude-projects.yaml
 
 ```yaml
 # claude-projects.yaml
+settings:
+  default_lang: "en"  # Default language (en, fr, es, de, pt)
+
 projects:
   - name: "my-monorepo"
     description: "My fullstack application"
     root: "~/Projects/my-monorepo"
+    lang: "fr"    # Override default language for this project
     common: true  # Install common rules at root
     modules:
       - path: "frontend"
@@ -166,26 +177,31 @@ Run installation scripts directly for more control.
 #### Syntax
 
 ```bash
-./Dev/{Technology}/install-{tech}-rules.sh [OPTIONS] TARGET_PATH
+./Dev/scripts/install-{tech}-rules.sh [OPTIONS] TARGET_PATH
 ```
 
 #### Examples
 
 ```bash
-# Install Symfony rules
-./Dev/Symfony/install-symfony-rules.sh --install ~/my-project
+# Install Symfony rules (English by default)
+./Dev/scripts/install-symfony-rules.sh --install ~/my-project
+
+# Install with specific language
+./Dev/scripts/install-symfony-rules.sh --lang=fr ~/my-project
+./Dev/scripts/install-flutter-rules.sh --lang=de ~/my-project
+./Dev/scripts/install-react-rules.sh --lang=es ~/my-project
 
 # Update existing installation
-./Dev/Flutter/install-flutter-rules.sh --update ~/my-project
+./Dev/scripts/install-flutter-rules.sh --update ~/my-project
 
 # Force reinstall with backup
-./Dev/Python/install-python-rules.sh --force --backup ~/my-project
+./Dev/scripts/install-python-rules.sh --force --backup ~/my-project
 
 # Interactive mode
-./Dev/React/install-react-rules.sh --interactive ~/my-project
+./Dev/scripts/install-react-rules.sh --interactive ~/my-project
 
 # Dry run
-./Dev/ReactNative/install-reactnative-rules.sh --dry-run ~/my-project
+./Dev/scripts/install-reactnative-rules.sh --dry-run ~/my-project
 ```
 
 #### Script Options
@@ -198,6 +214,7 @@ Run installation scripts directly for more control.
 | `--dry-run` | Simulate without changes |
 | `--backup` | Create backup before changes |
 | `--interactive` | Guided installation |
+| `--lang=XX` | Set language (en, fr, es, de, pt) |
 | `--agents-only` | Install only agents |
 | `--commands-only` | Install only commands |
 | `--rules-only` | Install only rules |
@@ -212,18 +229,21 @@ Copy files directly for maximum control.
 # Create structure
 mkdir -p ~/my-project/.claude/{agents,commands,rules,templates,checklists}
 
+# Choose language (en, fr, es, de, pt)
+LANG=en
+
 # Copy common agents
-cp -r Dev/Common/claude-agents/* ~/my-project/.claude/agents/
+cp -r Dev/i18n/$LANG/Common/agents/* ~/my-project/.claude/agents/
 
 # Copy common commands
-cp -r Dev/Common/claude-commands/* ~/my-project/.claude/commands/
+cp -r Dev/i18n/$LANG/Common/commands/* ~/my-project/.claude/commands/
 
-# Copy technology-specific files
-cp -r Dev/Symfony/rules/* ~/my-project/.claude/rules/
-cp -r Dev/Symfony/claude-agents/* ~/my-project/.claude/agents/
-cp -r Dev/Symfony/claude-commands/* ~/my-project/.claude/commands/
-cp -r Dev/Symfony/templates/* ~/my-project/.claude/templates/
-cp -r Dev/Symfony/checklists/* ~/my-project/.claude/checklists/
+# Copy technology-specific files (example: Symfony)
+cp -r Dev/i18n/$LANG/Symfony/rules/* ~/my-project/.claude/rules/
+cp -r Dev/i18n/$LANG/Symfony/agents/* ~/my-project/.claude/agents/
+cp -r Dev/i18n/$LANG/Symfony/commands/* ~/my-project/.claude/commands/
+cp -r Dev/i18n/$LANG/Symfony/templates/* ~/my-project/.claude/templates/
+cp -r Dev/i18n/$LANG/Symfony/checklists/* ~/my-project/.claude/checklists/
 ```
 
 ## Installation Result
@@ -318,7 +338,7 @@ rm -rf ~/my-project/.claude/commands/symfony/
 # Make scripts executable
 make fix-permissions
 # Or manually
-chmod +x Dev/*/install-*.sh
+chmod +x Dev/scripts/install-*.sh
 ```
 
 ### yq Not Found

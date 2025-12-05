@@ -144,7 +144,7 @@
                     <div class="flex items-baseline space-x-4">
                         <a href="#features" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_features">Features</a>
                         <a href="#tools" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_tools">Tools</a>
-                        <a href="#quickstart" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_quickstart">Quick Start</a>
+                        <a href="#install" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_install">Install</a>
                         <a href="#technologies" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_tech">Tech Stack</a>
                     </div>
                 </div>
@@ -241,10 +241,10 @@
                 <!-- Card 1 -->
                 <div class="glass-card p-8 rounded-2xl">
                     <div class="w-12 h-12 bg-brand-500/20 rounded-lg flex items-center justify-center mb-6">
-                        <i data-lucide="shield-check" class="text-brand-400 h-6 w-6"></i>
+                        <i data-lucide="globe" class="text-brand-400 h-6 w-6"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-white mb-3" data-i18n="feat_1_title">Standardized Rules</h3>
-                    <p class="text-slate-400" data-i18n="feat_1_desc">Enforce best practices for architecture, testing, and security automatically. Ensure every line of code meets your team's standards.</p>
+                    <h3 class="text-xl font-semibold text-white mb-3" data-i18n="feat_1_title">Multi-Language Support</h3>
+                    <p class="text-slate-400" data-i18n="feat_1_desc">Native support for English, French, Spanish, German, and Portuguese. Install rules in your team's preferred language.</p>
                 </div>
 
                 <!-- Card 2 -->
@@ -262,13 +262,13 @@
                         <i data-lucide="zap" class="text-pink-400 h-6 w-6"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-white mb-3" data-i18n="feat_3_title">Automated Workflows</h3>
-                    <p class="text-slate-400" data-i18n="feat_3_desc">Use 64+ slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits with one command.</p>
+                    <p class="text-slate-400" data-i18n="feat_3_desc">Use 64+ slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- NEW: Developer Tools Section -->
+    <!-- Developer Tools Section -->
     <section id="tools" class="py-20 bg-dark-900 border-y border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -300,7 +300,7 @@
                 </div>
                 <!-- Visual representation of status line with animation -->
                 <div class="glass-card p-6 rounded-xl border border-white/10">
-                    <div class="font-mono text-xs mb-2 text-slate-500">Terminal Preview</div>
+                    <div class="font-mono text-xs mb-2 text-slate-500" data-i18n="term_preview_label">Terminal Preview</div>
                     <div class="bg-black/80 rounded-lg p-5 font-mono text-sm leading-relaxed shadow-inner min-h-[220px] flex flex-col relative overflow-hidden">
                         <!-- Custom Status Line (Always visible) -->
                         <div class="flex flex-wrap items-center gap-x-3 gap-y-2 mb-4 border-b border-white/10 pb-3">
@@ -328,65 +328,8 @@
         </div>
     </section>
 
-    <!-- Technologies -->
-    <section id="technologies" class="py-20 bg-dark-900 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold tracking-tight text-white" data-i18n="tech_title">Supported Technologies</h2>
-                <p class="mt-4 text-slate-400" data-i18n="tech_desc">Tailored rulesets for your favorite stacks.</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                <!-- Symfony -->
-                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-brand-500/50 transition-colors text-center group">
-                    <div class="h-16 w-16 mx-auto bg-black rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                        <span class="text-2xl font-bold text-white">Sf</span>
-                    </div>
-                    <h3 class="font-bold text-white">Symfony</h3>
-                    <p class="text-xs text-slate-400 mt-2">Clean Arch, DDD, API Platform</p>
-                </div>
-
-                <!-- Flutter -->
-                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-blue-400/50 transition-colors text-center group">
-                    <div class="h-16 w-16 mx-auto bg-[#02569B] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                        <i data-lucide="smartphone" class="text-white h-8 w-8"></i>
-                    </div>
-                    <h3 class="font-bold text-white">Flutter</h3>
-                    <p class="text-xs text-slate-400 mt-2">BLoC, Material, Cupertino</p>
-                </div>
-
-                <!-- Python -->
-                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-yellow-400/50 transition-colors text-center group">
-                    <div class="h-16 w-16 mx-auto bg-[#3776AB] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                        <span class="text-2xl font-bold text-[#FFD43B]">Py</span>
-                    </div>
-                    <h3 class="font-bold text-white">Python</h3>
-                    <p class="text-xs text-slate-400 mt-2">FastAPI, Async, Typing</p>
-                </div>
-
-                <!-- React -->
-                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-cyan-400/50 transition-colors text-center group">
-                    <div class="h-16 w-16 mx-auto bg-[#20232a] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                        <i data-lucide="atom" class="text-[#61dafb] h-8 w-8"></i>
-                    </div>
-                    <h3 class="font-bold text-white">React</h3>
-                    <p class="text-xs text-slate-400 mt-2">Hooks, A11y, State Mgmt</p>
-                </div>
-
-                <!-- React Native -->
-                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-purple-400/50 transition-colors text-center group">
-                    <div class="h-16 w-16 mx-auto bg-[#20232a] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                        <i data-lucide="smartphone" class="text-[#61dafb] h-8 w-8"></i>
-                    </div>
-                    <h3 class="font-bold text-white">React Native</h3>
-                    <p class="text-xs text-slate-400 mt-2">Navigation, Native Modules</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Quick Start -->
-    <section id="quickstart" class="py-24 bg-dark-800">
+    <section id="quickstart" class="pt-24 pb-12 bg-dark-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div>
@@ -411,8 +354,8 @@
                                 <h3 class="text-lg font-medium text-white" data-i18n="qs_step2_title">Install rules to your project</h3>
                                 <p class="mt-2 text-slate-400" data-i18n="qs_step2_desc">Use the Makefile to inject rules into specific project directories.</p>
                                 <div class="mt-2 inline-flex items-center gap-2 px-3 py-1 bg-white/5 rounded text-xs text-slate-300 border border-white/5">
-                                    <i data-lucide="info" class="w-3 h-3"></i>
-                                    <span data-i18n="qs_method_note">Also supports YAML config & scripts</span>
+                                    <i data-lucide="globe" class="w-3 h-3"></i>
+                                    <span data-i18n="qs_lang_note">Supports: en, fr, es, de, pt</span>
                                 </div>
                             </div>
                         </div>
@@ -453,6 +396,107 @@
         </div>
     </section>
 
+    <!-- NEW: Installation Methods -->
+    <section id="install" class="py-16 bg-dark-900 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-2xl font-bold text-white mb-8 text-center" data-i18n="install_methods_title">Flexible Installation Methods</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Method 1 -->
+                <div class="p-6 bg-slate-800/50 rounded-xl border border-white/5 hover:border-brand-500/30 transition-colors">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-brand-500/20 rounded-lg"><i data-lucide="terminal" class="w-5 h-5 text-brand-400"></i></div>
+                        <h4 class="font-bold text-white" data-i18n="install_method_1_title">Makefile</h4>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4 h-10" data-i18n="install_method_1_desc">Best for quick setup on single projects.</p>
+                    <div class="bg-black/50 p-3 rounded text-xs font-mono text-slate-300">
+                        make install-symfony TARGET=~/proj
+                    </div>
+                </div>
+
+                <!-- Method 2 -->
+                <div class="p-6 bg-slate-800/50 rounded-xl border border-white/5 hover:border-blue-500/30 transition-colors">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-blue-500/20 rounded-lg"><i data-lucide="file-code" class="w-5 h-5 text-blue-400"></i></div>
+                        <h4 class="font-bold text-white" data-i18n="install_method_2_title">YAML Config</h4>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4 h-10" data-i18n="install_method_2_desc">Perfect for Monorepos and complex setups.</p>
+                    <div class="bg-black/50 p-3 rounded text-xs font-mono text-slate-300">
+                        make config-install PROJECT=mono
+                    </div>
+                </div>
+
+                <!-- Method 3 -->
+                <div class="p-6 bg-slate-800/50 rounded-xl border border-white/5 hover:border-green-500/30 transition-colors">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-green-500/20 rounded-lg"><i data-lucide="play" class="w-5 h-5 text-green-400"></i></div>
+                        <h4 class="font-bold text-white" data-i18n="install_method_3_title">Direct Script</h4>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4 h-10" data-i18n="install_method_3_desc">Granular control without Make dependencies.</p>
+                    <div class="bg-black/50 p-3 rounded text-xs font-mono text-slate-300">
+                        ./scripts/install-rules.sh ...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technologies -->
+    <section id="technologies" class="py-20 bg-dark-800 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold tracking-tight text-white" data-i18n="tech_title">Supported Technologies</h2>
+                <p class="mt-4 text-slate-400" data-i18n="tech_desc">Tailored rulesets for your favorite stacks.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                <!-- Symfony -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-brand-500/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-black rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-white">Sf</span>
+                    </div>
+                    <h3 class="font-bold text-white">Symfony</h3>
+                    <p class="text-xs text-slate-400 mt-2" data-i18n="tech_sf_desc">Clean Arch, DDD, API Platform</p>
+                </div>
+
+                <!-- Flutter -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-blue-400/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-[#02569B] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <i data-lucide="smartphone" class="text-white h-8 w-8"></i>
+                    </div>
+                    <h3 class="font-bold text-white">Flutter</h3>
+                    <p class="text-xs text-slate-400 mt-2" data-i18n="tech_fl_desc">BLoC, Material, Cupertino</p>
+                </div>
+
+                <!-- Python -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-yellow-400/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-[#3776AB] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-[#FFD43B]">Py</span>
+                    </div>
+                    <h3 class="font-bold text-white">Python</h3>
+                    <p class="text-xs text-slate-400 mt-2" data-i18n="tech_py_desc">FastAPI, Async, Typing</p>
+                </div>
+
+                <!-- React -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-cyan-400/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-[#20232a] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <i data-lucide="atom" class="text-[#61dafb] h-8 w-8"></i>
+                    </div>
+                    <h3 class="font-bold text-white">React</h3>
+                    <p class="text-xs text-slate-400 mt-2" data-i18n="tech_react_desc">Hooks, A11y, State Mgmt</p>
+                </div>
+
+                <!-- React Native -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-purple-400/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-[#20232a] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <i data-lucide="smartphone" class="text-[#61dafb] h-8 w-8"></i>
+                    </div>
+                    <h3 class="font-bold text-white">React Native</h3>
+                    <p class="text-xs text-slate-400 mt-2" data-i18n="tech_rn_desc">Navigation, Native Modules</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Agents Showcase -->
     <section id="agents" class="py-20 bg-dark-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -462,12 +506,22 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- NEW Agent -->
                 <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
                     <div class="flex items-center gap-3 mb-3">
-                        <i data-lucide="server" class="text-brand-400"></i>
-                        <h3 class="font-bold text-white font-mono">api-designer</h3>
+                        <i data-lucide="zap" class="text-yellow-400"></i>
+                        <h3 class="font-bold text-white font-mono">performance-auditor</h3>
                     </div>
-                    <p class="text-sm text-slate-400" data-i18n="agent_api_desc">Expert in REST/GraphQL design, ensuring consistency and best practices in API contracts.</p>
+                    <p class="text-sm text-slate-400" data-i18n="agent_perf_desc">Analyzes code for bottlenecks, memory leaks, and optimization opportunities.</p>
+                </div>
+
+                <!-- NEW Agent -->
+                <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="microscope" class="text-purple-400"></i>
+                        <h3 class="font-bold text-white font-mono">research-assistant</h3>
+                    </div>
+                    <p class="text-sm text-slate-400" data-i18n="agent_research_desc">Helps with technical research, library selection, and architectural decisions.</p>
                 </div>
 
                 <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
@@ -488,14 +542,6 @@
 
                 <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
                     <div class="flex items-center gap-3 mb-3">
-                        <i data-lucide="search" class="text-yellow-400"></i>
-                        <h3 class="font-bold text-white font-mono">refactoring-specialist</h3>
-                    </div>
-                    <p class="text-sm text-slate-400" data-i18n="agent_refactor_desc">Identifies code smells and suggests safe refactoring patterns without breaking logic.</p>
-                </div>
-
-                <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
-                    <div class="flex items-center gap-3 mb-3">
                         <i data-lucide="shield" class="text-red-400"></i>
                         <h3 class="font-bold text-white font-mono">devops-engineer</h3>
                     </div>
@@ -504,10 +550,10 @@
 
                 <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
                     <div class="flex items-center gap-3 mb-3">
-                        <i data-lucide="code" class="text-purple-400"></i>
-                        <h3 class="font-bold text-white font-mono">*-reviewer</h3>
+                        <i data-lucide="server" class="text-brand-400"></i>
+                        <h3 class="font-bold text-white font-mono">api-designer</h3>
                     </div>
-                    <p class="text-sm text-slate-400" data-i18n="agent_reviewer_desc">Dedicated reviewers for Symfony, Flutter, Python, React, and React Native.</p>
+                    <p class="text-sm text-slate-400" data-i18n="agent_api_desc">Expert in REST/GraphQL design, ensuring consistency and best practices in API contracts.</p>
                 </div>
             </div>
         </div>
@@ -528,7 +574,7 @@
                 </div>
             </div>
             <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
-                <p>&copy; 2025 Claude Craft. MIT License.</p>
+                <p data-i18n="footer_copyright">&copy; 2025 Claude Craft. MIT License.</p>
                 <p class="mt-2 md:mt-0" data-i18n="footer_built">Built for <a href="https://claude.ai/code" class="text-brand-400 hover:underline">Claude Code</a> by Anthropic</p>
             </div>
         </div>
@@ -543,6 +589,7 @@
             en: {
                 nav_features: "Features",
                 nav_tools: "Tools",
+                nav_install: "Install",
                 nav_quickstart: "Quick Start",
                 nav_tech: "Tech Stack",
                 nav_agents: "Agents",
@@ -560,26 +607,39 @@
                 stat_checklists: "Checklists",
                 feat_main_title: "Everything you need to scale AI coding",
                 feat_main_desc: "Stop prompting from scratch. Equip Claude with context-aware tools.",
-                feat_1_title: "Standardized Rules",
-                feat_1_desc: "Enforce best practices for architecture, testing, and security automatically. Ensure every line of code meets your team's standards.",
+                feat_1_title: "Multi-Language Support",
+                feat_1_desc: "Native support for English, French, Spanish, German, and Portuguese. Install rules in your team's preferred language.",
                 feat_2_title: "Specialized Agents",
                 feat_2_desc: "Deploy virtual reviewers, architects, and coaches. From <code>api-designer</code> to <code>tdd-coach</code>, get expert feedback instantly.",
                 feat_3_title: "Automated Workflows",
-                feat_3_desc: "Use 64+ slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits with one command.",
+                feat_3_desc: "Use 64+ slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits.",
                 tools_title: "Developer Experience Tools",
                 tools_desc: "Enhance your terminal workflow with power tools designed for daily use.",
                 tool_status_title: "Custom Status Line",
                 tool_status_desc: "Rich status bar with profile, model, git branch, and context usage tracking.",
                 tool_account_title: "Multi-Account Manager",
                 tool_account_desc: "Switch easily between different Claude Code profiles and accounts with a single command.",
+                term_preview_label: "Terminal Preview",
+                install_methods_title: "Flexible Installation Methods",
+                install_method_1_title: "Makefile",
+                install_method_1_desc: "Best for quick setup on single projects.",
+                install_method_2_title: "YAML Config",
+                install_method_2_desc: "Perfect for Monorepos and complex setups.",
+                install_method_3_title: "Direct Script",
+                install_method_3_desc: "Granular control without Make dependencies.",
                 tech_title: "Supported Technologies",
                 tech_desc: "Tailored rulesets for your favorite stacks.",
+                tech_sf_desc: "Clean Arch, DDD, API Platform",
+                tech_fl_desc: "BLoC, Material, Cupertino",
+                tech_py_desc: "FastAPI, Async, Typing",
+                tech_react_desc: "Hooks, A11y, State Mgmt",
+                tech_rn_desc: "Navigation, Native Modules",
                 qs_title: "Up and running in seconds",
                 qs_step1_title: "Clone the repository",
                 qs_step1_desc: "Get the framework on your local machine.",
                 qs_step2_title: "Install rules to your project",
                 qs_step2_desc: "Use the Makefile to inject rules into specific project directories.",
-                qs_method_note: "Also supports YAML config & scripts",
+                qs_lang_note: "Supports: en, fr, es, de, pt",
                 qs_step3_title: "Use in Claude Code",
                 qs_step3_desc: "Start using slash commands and agents immediately.",
                 term_installing: "Installing React rules...",
@@ -587,17 +647,21 @@
                 term_claude_response: "I'll generate a Button component using your project's React standards...",
                 agents_title: "Meet Your New AI Team",
                 agents_desc: "Specialized personas ready to assist you.",
+                agent_perf_desc: "Analyzes code for bottlenecks, memory leaks, and optimization opportunities.",
+                agent_research_desc: "Helps with technical research, library selection, and architectural decisions.",
                 agent_api_desc: "Expert in REST/GraphQL design, ensuring consistency and best practices in API contracts.",
                 agent_db_desc: "Focuses on schema optimization, indexing strategies, and query performance.",
                 agent_tdd_desc: "Guides you through Red-Green-Refactor cycles and helps write robust test cases.",
                 agent_refactor_desc: "Identifies code smells and suggests safe refactoring patterns without breaking logic.",
                 agent_devops_desc: "Assists with Docker configurations, CI/CD pipelines, and deployment strategies.",
                 agent_reviewer_desc: "Dedicated reviewers for Symfony, Flutter, Python, React, and React Native.",
+                footer_copyright: "&copy; 2025 Claude Craft. MIT License.",
                 footer_built: "Built for <a href='https://claude.ai/code' class='text-brand-400 hover:underline'>Claude Code</a> by Anthropic"
             },
             fr: {
                 nav_features: "Fonctionnalités",
                 nav_tools: "Outils",
+                nav_install: "Installation",
                 nav_quickstart: "Démarrage Rapide",
                 nav_tech: "Technologies",
                 nav_agents: "Agents",
@@ -615,26 +679,39 @@
                 stat_checklists: "Checklists",
                 feat_main_title: "Tout pour passer à l'échelle",
                 feat_main_desc: "Arrêtez de prompter de zéro. Équipez Claude d'outils conscients du contexte.",
-                feat_1_title: "Règles Standardisées",
-                feat_1_desc: "Appliquez automatiquement les bonnes pratiques d'architecture, de test et de sécurité. Assurez-vous que chaque ligne de code respecte vos standards.",
+                feat_1_title: "Support Multi-Langues",
+                feat_1_desc: "Support natif pour l'anglais, le français, l'espagnol, l'allemand et le portugais. Installez les règles dans la langue de votre équipe.",
                 feat_2_title: "Agents Spécialisés",
                 feat_2_desc: "Déployez des réviseurs, architectes et coachs virtuels. De l'<code>api-designer</code> au <code>tdd-coach</code>, obtenez un feedback expert instantanément.",
                 feat_3_title: "Flux Automatisés",
-                feat_3_desc: "Utilisez plus de 64 commandes pour automatiser les tâches fastidieuses. Générez des composants, vérifiez l'architecture et lancez des audits en une seule commande.",
+                feat_3_desc: "Utilisez plus de 64 commandes pour automatiser les tâches fastidieuses. Générez des composants, vérifiez l'architecture et lancez des audits.",
                 tools_title: "Outils d'Expérience Développeur",
                 tools_desc: "Améliorez votre flux de travail terminal avec des outils puissants.",
                 tool_status_title: "Barre d'État Personnalisée",
                 tool_status_desc: "Barre d'état riche avec profil, modèle, git et suivi du contexte.",
                 tool_account_title: "Gestionnaire Multi-Comptes",
                 tool_account_desc: "Basculez facilement entre différents profils et comptes Claude Code en une seule commande.",
+                term_preview_label: "Aperçu du Terminal",
+                install_methods_title: "Méthodes d'Installation Flexibles",
+                install_method_1_title: "Makefile",
+                install_method_1_desc: "Idéal pour configurer rapidement des projets uniques.",
+                install_method_2_title: "Config YAML",
+                install_method_2_desc: "Parfait pour les Monorepos et les configurations complexes.",
+                install_method_3_title: "Script Direct",
+                install_method_3_desc: "Contrôle granulaire sans dépendance à Make.",
                 tech_title: "Technologies Supportées",
                 tech_desc: "Des jeux de règles sur mesure pour vos stacks préférées.",
+                tech_sf_desc: "Clean Arch, DDD, API Platform",
+                tech_fl_desc: "BLoC, Material, Cupertino",
+                tech_py_desc: "FastAPI, Async, Typing",
+                tech_react_desc: "Hooks, A11y, State Mgmt",
+                tech_rn_desc: "Navigation, Modules Natifs",
                 qs_title: "Opérationnel en quelques secondes",
                 qs_step1_title: "Cloner le dépôt",
                 qs_step1_desc: "Récupérez le framework sur votre machine locale.",
                 qs_step2_title: "Installer les règles",
                 qs_step2_desc: "Utilisez le Makefile pour injecter les règles dans vos projets.",
-                qs_method_note: "Supporte aussi YAML et scripts",
+                qs_lang_note: "Supporte: en, fr, es, de, pt",
                 qs_step3_title: "Utiliser dans Claude Code",
                 qs_step3_desc: "Commencez immédiatement à utiliser les commandes slash et les agents.",
                 term_installing: "Installation des règles React...",
@@ -642,17 +719,21 @@
                 term_claude_response: "Je vais générer un composant Button...",
                 agents_title: "Rencontrez votre nouvelle équipe IA",
                 agents_desc: "Des personas spécialisés prêts à vous aider.",
+                agent_perf_desc: "Analyse le code pour les goulots d'étranglement et fuites mémoire.",
+                agent_research_desc: "Aide à la recherche technique, sélection de bibliothèques et décisions d'architecture.",
                 agent_api_desc: "Expert en conception REST/GraphQL, assurant la cohérence et les meilleures pratiques.",
                 agent_db_desc: "Se concentre sur l'optimisation des schémas, les stratégies d'indexation et la performance.",
                 agent_tdd_desc: "Vous guide à travers les cycles Red-Green-Refactor et aide à écrire des tests robustes.",
                 agent_refactor_desc: "Identifie les code smells et suggère des refactorisations sûres sans casser la logique.",
                 agent_devops_desc: "Assiste avec les configurations Docker, les pipelines CI/CD et les stratégies de déploiement.",
                 agent_reviewer_desc: "Réviseurs dédiés pour Symfony, Flutter, Python, React et React Native.",
+                footer_copyright: "&copy; 2025 Claude Craft. Licence MIT.",
                 footer_built: "Conçu pour <a href='https://claude.ai/code' class='text-brand-400 hover:underline'>Claude Code</a> par Anthropic"
             },
             es: {
                 nav_features: "Características",
                 nav_tools: "Herramientas",
+                nav_install: "Instalación",
                 nav_quickstart: "Inicio Rápido",
                 nav_tech: "Tecnologías",
                 nav_agents: "Agentes",
@@ -670,26 +751,39 @@
                 stat_checklists: "Listas de Control",
                 feat_main_title: "Todo lo que necesitas para escalar",
                 feat_main_desc: "Deja de escribir prompts desde cero. Equipa a Claude con herramientas conscientes del contexto.",
-                feat_1_title: "Reglas Estandarizadas",
-                feat_1_desc: "Aplica mejores prácticas de arquitectura, pruebas y seguridad automáticamente. Asegura que cada línea de código cumpla con los estándares.",
+                feat_1_title: "Soporte Multi-Idioma",
+                feat_1_desc: "Soporte nativo para inglés, francés, español, alemán y portugués. Instala reglas en el idioma de tu equipo.",
                 feat_2_title: "Agentes Especializados",
                 feat_2_desc: "Despliega revisores, arquitectos y entrenadores virtuales. Desde <code>api-designer</code> hasta <code>tdd-coach</code>, obtén feedback experto al instante.",
                 feat_3_title: "Flujos Automatizados",
-                feat_3_desc: "Usa más de 64 comandos para automatizar tareas tediosas. Genera componentes, verifica arquitectura y ejecuta auditorías con un solo comando.",
+                feat_3_desc: "Usa más de 64 comandos para automatizar tareas tediosas. Genera componentes, verifica arquitectura y ejecuta auditorías.",
                 tools_title: "Herramientas de Desarrollador",
                 tools_desc: "Mejora tu flujo de trabajo en la terminal con herramientas potentes.",
                 tool_status_title: "Línea de Estado Personalizada",
                 tool_status_desc: "Barra de estado rica con perfil, modelo, git y seguimiento de contexto.",
                 tool_account_title: "Gestor Multi-Cuenta",
                 tool_account_desc: "Cambia fácilmente entre diferentes perfiles y cuentas de Claude Code.",
+                term_preview_label: "Vista Previa de Terminal",
+                install_methods_title: "Métodos de Instalación Flexibles",
+                install_method_1_title: "Makefile",
+                install_method_1_desc: "Mejor para configuración rápida en proyectos individuales.",
+                install_method_2_title: "Config YAML",
+                install_method_2_desc: "Perfecto para Monorepos y configuraciones complejas.",
+                install_method_3_title: "Script Directo",
+                install_method_3_desc: "Control granular sin dependencias de Make.",
                 tech_title: "Tecnologías Soportadas",
                 tech_desc: "Reglas adaptadas para tus stacks favoritos.",
+                tech_sf_desc: "Clean Arch, DDD, API Platform",
+                tech_fl_desc: "BLoC, Material, Cupertino",
+                tech_py_desc: "FastAPI, Async, Tipado",
+                tech_react_desc: "Hooks, A11y, Gestión de Estado",
+                tech_rn_desc: "Navegación, Módulos Nativos",
                 qs_title: "Listo en segundos",
                 qs_step1_title: "Clonar el repositorio",
                 qs_step1_desc: "Obtén el framework en tu máquina local.",
                 qs_step2_title: "Instalar reglas en tu proyecto",
                 qs_step2_desc: "Usa el Makefile para inyectar reglas en directorios específicos.",
-                qs_method_note: "También soporta YAML y scripts",
+                qs_lang_note: "Soporta: en, fr, es, de, pt",
                 qs_step3_title: "Usar en Claude Code",
                 qs_step3_desc: "Comienza a usar comandos slash y agentes inmediatamente.",
                 term_installing: "Instalando reglas de React...",
@@ -697,17 +791,21 @@
                 term_claude_response: "Generaré un componente Button...",
                 agents_title: "Conoce a tu nuevo equipo de IA",
                 agents_desc: "Personas especializadas listas para ayudarte.",
+                agent_perf_desc: "Analiza código buscando cuellos de botella y fugas de memoria.",
+                agent_research_desc: "Ayuda con investigación técnica, selección de bibliotecas y decisiones de arquitectura.",
                 agent_api_desc: "Experto en diseño REST/GraphQL, asegurando consistencia y mejores prácticas.",
                 agent_db_desc: "Se enfoca en optimización de esquemas, estrategias de indexación y rendimiento.",
                 agent_tdd_desc: "Te guía a través de ciclos Red-Green-Refactor y ayuda a escribir pruebas robustas.",
                 agent_refactor_desc: "Identifica 'code smells' y sugiere refactorizaciones seguras sin romper la lógica.",
                 agent_devops_desc: "Asiste con configuraciones Docker, pipelines CI/CD y estrategias de despliegue.",
                 agent_reviewer_desc: "Revisores dedicados para Symfony, Flutter, Python, React y React Native.",
+                footer_copyright: "&copy; 2025 Claude Craft. Licencia MIT.",
                 footer_built: "Creado para <a href='https://claude.ai/code' class='text-brand-400 hover:underline'>Claude Code</a> por Anthropic"
             },
             de: {
                 nav_features: "Funktionen",
                 nav_tools: "Werkzeuge",
+                nav_install: "Installation",
                 nav_quickstart: "Schnellstart",
                 nav_tech: "Technologien",
                 nav_agents: "Agenten",
@@ -725,8 +823,8 @@
                 stat_checklists: "Checklisten",
                 feat_main_title: "Alles für skalierbare KI-Entwicklung",
                 feat_main_desc: "Hören Sie auf, Prompts von Grund auf neu zu schreiben. Statten Sie Claude mit kontextbezogenen Tools aus.",
-                feat_1_title: "Standardisierte Regeln",
-                feat_1_desc: "Setzen Sie Best Practices für Architektur, Tests und Sicherheit automatisch durch. Stellen Sie sicher, dass jede Codezeile Ihren Standards entspricht.",
+                feat_1_title: "Mehrsprachige Unterstützung",
+                feat_1_desc: "Native Unterstützung für Englisch, Französisch, Spanisch, Deutsch und Portugiesisch. Installieren Sie Regeln in Ihrer bevorzugten Sprache.",
                 feat_2_title: "Spezialisierte Agenten",
                 feat_2_desc: "Setzen Sie virtuelle Reviewer, Architekten und Coaches ein. Von <code>api-designer</code> bis <code>tdd-coach</code> erhalten Sie sofortiges Experten-Feedback.",
                 feat_3_title: "Automatisierte Arbeitsabläufe",
@@ -737,14 +835,27 @@
                 tool_status_desc: "Reichhaltige Statusleiste mit Profil, Modell, Git und Kontext-Tracking.",
                 tool_account_title: "Multi-Account Manager",
                 tool_account_desc: "Wechseln Sie einfach zwischen verschiedenen Claude Code Profilen und Konten.",
+                term_preview_label: "Terminal Vorschau",
+                install_methods_title: "Flexible Installationsmethoden",
+                install_method_1_title: "Makefile",
+                install_method_1_desc: "Am besten für schnelle Einrichtung einzelner Projekte.",
+                install_method_2_title: "YAML Konfig",
+                install_method_2_desc: "Perfekt für Monorepos und komplexe Setups.",
+                install_method_3_title: "Direktes Skript",
+                install_method_3_desc: "Granulare Kontrolle ohne Make-Abhängigkeiten.",
                 tech_title: "Unterstützte Technologien",
                 tech_desc: "Maßgeschneiderte Regelsätze für Ihre Lieblings-Stacks.",
+                tech_sf_desc: "Clean Arch, DDD, API Platform",
+                tech_fl_desc: "BLoC, Material, Cupertino",
+                tech_py_desc: "FastAPI, Async, Typing",
+                tech_react_desc: "Hooks, A11y, State Mgmt",
+                tech_rn_desc: "Navigation, Native Module",
                 qs_title: "In Sekunden einsatzbereit",
                 qs_step1_title: "Repository klonen",
                 qs_step1_desc: "Holen Sie sich das Framework auf Ihren lokalen Rechner.",
                 qs_step2_title: "Regeln installieren",
                 qs_step2_desc: "Verwenden Sie das Makefile, um Regeln in bestimmte Projektverzeichnisse einzufügen.",
-                qs_method_note: "Unterstützt auch YAML & Skripte",
+                qs_lang_note: "Unterstützt: en, fr, es, de, pt",
                 qs_step3_title: "In Claude Code verwenden",
                 qs_step3_desc: "Beginnen Sie sofort mit der Nutzung von Slash-Befehlen und Agenten.",
                 term_installing: "Installiere React-Regeln...",
@@ -752,17 +863,21 @@
                 term_claude_response: "Ich generiere eine Button-Komponente...",
                 agents_title: "Treffen Sie Ihr neues KI-Team",
                 agents_desc: "Spezialisierte Personas, die bereit sind, Ihnen zu helfen.",
+                agent_perf_desc: "Analysiert Code auf Engpässe und Speicherlecks.",
+                agent_research_desc: "Hilft bei technischer Recherche und Architekturentscheidungen.",
                 agent_api_desc: "Experte für REST/GraphQL-Design, sorgt für Konsistenz und Best Practices.",
                 agent_db_desc: "Fokussiert auf Schema-Optimierung, Indexierungsstrategien und Abfrageleistung.",
                 agent_tdd_desc: "Führt Sie durch Red-Green-Refactor-Zyklen und hilft beim Schreiben robuster Tests.",
                 agent_refactor_desc: "Identifiziert Code Smells und schlägt sicheres Refactoring vor, ohne die Logik zu brechen.",
                 agent_devops_desc: "Unterstützt bei Docker-Konfigurationen, CI/CD-Pipelines und Deployment-Strategien.",
                 agent_reviewer_desc: "Dedizierte Reviewer für Symfony, Flutter, Python, React und React Native.",
+                footer_copyright: "&copy; 2025 Claude Craft. MIT Lizenz.",
                 footer_built: "Entwickelt für <a href='https://claude.ai/code' class='text-brand-400 hover:underline'>Claude Code</a> von Anthropic"
             },
             pt: {
                 nav_features: "Funcionalidades",
                 nav_tools: "Ferramentas",
+                nav_install: "Instalação",
                 nav_quickstart: "Início Rápido",
                 nav_tech: "Tecnologias",
                 nav_agents: "Agentes",
@@ -780,26 +895,39 @@
                 stat_checklists: "Listas de Verificação",
                 feat_main_title: "Tudo o que você precisa para escalar",
                 feat_main_desc: "Pare de criar prompts do zero. Equipe o Claude com ferramentas conscientes do contexto.",
-                feat_1_title: "Regras Padronizadas",
-                feat_1_desc: "Aplique as melhores práticas de arquitetura, testes e segurança automaticamente. Garanta que cada linha de código atenda aos seus padrões.",
+                feat_1_title: "Suporte Multi-Idioma",
+                feat_1_desc: "Suporte nativo para inglês, francês, espanhol, alemão e português. Instale regras no idioma da sua equipe.",
                 feat_2_title: "Agentes Especializados",
                 feat_2_desc: "Implante revisores, arquitetos e treinadores virtuais. Do <code>api-designer</code> ao <code>tdd-coach</code>, obtenha feedback especializado instantaneamente.",
                 feat_3_title: "Fluxos Automatizados",
-                feat_3_desc: "Use mais de 64 comandos para automatizar tarefas tediosas. Gere componentes, verifique a arquitetura e execute auditorias com um único comando.",
+                feat_3_desc: "Use mais de 64 comandos para automatizar tarefas tediosas. Gere componentes, verifique a arquitetura e execute auditorias.",
                 tools_title: "Ferramentas do Desenvolvedor",
                 tools_desc: "Melhore seu fluxo de trabalho no terminal com ferramentas poderosas.",
                 tool_status_title: "Linha de Status Personalizada",
                 tool_status_desc: "Barra de status rica com perfil, modelo, git e rastreamento de contexto.",
                 tool_account_title: "Gerenciador de Múltiplas Contas",
                 tool_account_desc: "Alterne facilmente entre diferentes perfis e contas do Claude Code.",
+                term_preview_label: "Visualização do Terminal",
+                install_methods_title: "Métodos de Instalação Flexíveis",
+                install_method_1_title: "Makefile",
+                install_method_1_desc: "Melhor para configuração rápida em projetos únicos.",
+                install_method_2_title: "Config YAML",
+                install_method_2_desc: "Perfeito para Monorepos e configurações complexas.",
+                install_method_3_title: "Script Direto",
+                install_method_3_desc: "Controle granular sem dependências de Make.",
                 tech_title: "Tecnologias Suportadas",
                 tech_desc: "Regras personalizadas para suas stacks favoritas.",
+                tech_sf_desc: "Clean Arch, DDD, API Platform",
+                tech_fl_desc: "BLoC, Material, Cupertino",
+                tech_py_desc: "FastAPI, Async, Tipagem",
+                tech_react_desc: "Hooks, A11y, Gestão de Estado",
+                tech_rn_desc: "Navegação, Módulos Nativos",
                 qs_title: "Funcionando em segundos",
                 qs_step1_title: "Clonar o repositório",
                 qs_step1_desc: "Obtenha o framework em sua máquina local.",
                 qs_step2_title: "Instalar regras no projeto",
                 qs_step2_desc: "Use o Makefile para injetar regras em diretórios de projetos específicos.",
-                qs_method_note: "Também suporta YAML e scripts",
+                qs_lang_note: "Suporta: en, fr, es, de, pt",
                 qs_step3_title: "Usar no Claude Code",
                 qs_step3_desc: "Comece a usar comandos slash e agentes imediatamente.",
                 term_installing: "Instalando regras React...",
@@ -807,12 +935,15 @@
                 term_claude_response: "Vou gerar um componente Button...",
                 agents_title: "Conheça sua nova equipe de IA",
                 agents_desc: "Personas especializadas prontas para ajudar.",
+                agent_perf_desc: "Analisa código em busca de gargalos e vazamentos de memória.",
+                agent_research_desc: "Ajuda com pesquisa técnica, seleção de bibliotecas e decisões de arquitetura.",
                 agent_api_desc: "Especialista em design REST/GraphQL, garantindo consistência e melhores práticas.",
                 agent_db_desc: "Foca na otimização de esquemas, estratégias de indexação e desempenho de consultas.",
                 agent_tdd_desc: "Guia você através dos ciclos Red-Green-Refactor e ajuda a escrever testes robustos.",
                 agent_refactor_desc: "Identifica 'code smells' e sugere refatorações seguras sem quebrar a lógica.",
                 agent_devops_desc: "Auxilia com configurações Docker, pipelines CI/CD e estratégias de implantação.",
                 agent_reviewer_desc: "Revisores dedicados para Symfony, Flutter, Python, React e React Native.",
+                footer_copyright: "&copy; 2025 Claude Craft. Licença MIT.",
                 footer_built: "Construído para <a href='https://claude.ai/code' class='text-brand-400 hover:underline'>Claude Code</a> por Anthropic"
             }
         };
@@ -914,9 +1045,9 @@
                     action: () => {}
                 },
                 {
-                    text: "make install-react TARGET=~/my-awesome-app",
+                    text: "make install-react TARGET=~/app LANG=fr",
                     prompt: "$",
-                    output: `<div class="text-slate-400 mt-1">Installing React rules... <span class="text-green-400">Done</span></div><div class="text-slate-400">Installing Templates... <span class="text-green-400">Done</span></div>`,
+                    output: `<div class="text-slate-400 mt-1">Installing React rules (French)... <span class="text-green-400">Done</span></div><div class="text-slate-400">Installing Templates... <span class="text-green-400">Done</span></div>`,
                     action: () => {}
                 },
                 {

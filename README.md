@@ -5,6 +5,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 ## Features
 
 - **5 Technology Stacks**: Symfony, Flutter, Python, React, React Native
+- **5 Languages**: English, French, Spanish, German, Portuguese
 - **12 AI Agents**: Specialized reviewers, architects, and coaches
 - **64 Slash Commands**: Automated workflows and code generation
 - **67 Rules**: Best practices for architecture, testing, security
@@ -25,14 +26,17 @@ cd claude-craft
 ### 2. Install rules to your project
 
 ```bash
-# Install Symfony rules
+# Install Symfony rules (default: English)
 make install-symfony TARGET=~/my-project
 
-# Install React rules
-make install-react TARGET=~/my-project
+# Install with specific language
+make install-symfony TARGET=~/my-project LANG=fr
+
+# Install React rules in German
+make install-react TARGET=~/my-project LANG=de
 
 # Install all technologies
-make install-all TARGET=~/my-project
+make install-all TARGET=~/my-project LANG=es
 ```
 
 ### 3. Use in Claude Code
@@ -60,19 +64,24 @@ Once installed, use the commands in your project:
 ```
 claude-craft/
 ├── Makefile                    # Main orchestration
+├── claude-projects.yaml        # YAML configuration (user copy)
 ├── Dev/
-│   ├── Common/                 # Shared agents & commands
-│   │   ├── claude-agents/      # 7 transversal agents
-│   │   ├── claude-commands/    # 14 /common: commands
-│   │   ├── templates/          # Generic templates
-│   │   └── checklists/         # Shared checklists
-│   ├── Symfony/                # PHP backend
-│   ├── Flutter/                # Mobile Dart
-│   ├── Python/                 # Backend/API
-│   ├── React/                  # Frontend JS/TS
-│   ├── ReactNative/            # Mobile JS/TS
-│   └── install-from-config.sh  # YAML-based installation
-├── Project/                    # Project management
+│   ├── i18n/                   # Internationalized content
+│   │   ├── en/                 # English
+│   │   ├── fr/                 # French
+│   │   ├── es/                 # Spanish
+│   │   ├── de/                 # German
+│   │   └── pt/                 # Portuguese
+│   │       ├── Common/         # Shared agents & commands
+│   │       ├── Symfony/        # PHP backend
+│   │       ├── Flutter/        # Mobile Dart
+│   │       ├── Python/         # Backend/API
+│   │       ├── React/          # Frontend JS/TS
+│   │       └── ReactNative/    # Mobile JS/TS
+│   └── scripts/                # Installation scripts
+├── Project/                    # Project management commands
+│   ├── i18n/                   # Translated commands
+│   └── install-project-commands.sh
 └── Tools/                      # Claude Code utilities
     ├── MultiAccount/           # Multi-account manager
     ├── StatusLine/             # Custom status line
@@ -106,9 +115,13 @@ make install-projectconfig                # Project config manager
 
 ```yaml
 # claude-projects.yaml
+settings:
+  default_lang: "en"  # Default language for all projects
+
 projects:
   - name: "my-monorepo"
     root: "~/Projects/my-monorepo"
+    lang: "fr"        # Override: French for this project
     common: true
     modules:
       - path: "frontend"
@@ -126,7 +139,12 @@ make config-install PROJECT=my-monorepo
 ### Method 3: Direct Script
 
 ```bash
-./Dev/Symfony/install-symfony-rules.sh --install ~/my-project
+# Default language (English)
+./Dev/scripts/install-symfony-rules.sh --install ~/my-project
+
+# With specific language
+./Dev/scripts/install-symfony-rules.sh --lang=fr ~/my-project
+./Dev/scripts/install-flutter-rules.sh --lang=de ~/my-project
 ```
 
 ## Available Agents

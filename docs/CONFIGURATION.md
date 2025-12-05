@@ -14,14 +14,14 @@ The YAML configuration system allows you to:
 
 ### Location
 
-Create your configuration file at:
+Create your configuration file at the project root:
 ```
-Dev/claude-projects.yaml
+claude-projects.yaml
 ```
 
 A template is provided:
 ```bash
-cp Dev/claude-projects.yaml.example Dev/claude-projects.yaml
+cp claude-projects.yaml.example claude-projects.yaml
 ```
 
 ### Basic Structure
@@ -29,6 +29,7 @@ cp Dev/claude-projects.yaml.example Dev/claude-projects.yaml
 ```yaml
 # Optional global settings
 settings:
+  default_lang: "en"      # Default language (en, fr, es, de, pt)
   rules_source: ""        # Custom rules source directory
   default_mode: "install" # install, update, or force
   backup: true            # Create backups by default
@@ -38,6 +39,7 @@ projects:
   - name: "project-name"
     description: "Project description"
     root: "~/path/to/project"
+    lang: "fr"            # Override default language (optional)
     common: true          # Install common rules at root
     modules:
       - path: "subdir"
@@ -60,6 +62,7 @@ projects:
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `description` | string | - | Project description |
+| `lang` | string | `settings.default_lang` | Language for rules (en, fr, es, de, pt) |
 | `common` | boolean | `true` | Install common rules at root |
 
 ### Module Configuration
@@ -79,6 +82,16 @@ projects:
 | `python` | Python backend/API |
 | `react` | React frontend |
 | `reactnative` | React Native mobile |
+
+### Supported Languages
+
+| Lang ID | Language |
+|---------|----------|
+| `en` | English (default) |
+| `fr` | French |
+| `es` | Spanish |
+| `de` | German |
+| `pt` | Portuguese |
 
 ## Examples
 
@@ -157,10 +170,14 @@ Result:
 ### SaaS Platform with Microservices
 
 ```yaml
+settings:
+  default_lang: "en"
+
 projects:
   - name: "saas-platform"
     description: "Multi-tenant SaaS platform"
     root: "~/Projects/saas"
+    lang: "de"      # German rules for this project
     common: true
     modules:
       # Frontend apps
@@ -234,7 +251,7 @@ projects:
 Always validate before installing:
 
 ```bash
-make config-validate CONFIG=Dev/claude-projects.yaml
+make config-validate CONFIG=claude-projects.yaml
 ```
 
 Output:
@@ -261,29 +278,29 @@ Validation de la configuration
 ### List Projects
 
 ```bash
-make config-list CONFIG=Dev/claude-projects.yaml
+make config-list CONFIG=claude-projects.yaml
 ```
 
 ### Install Specific Project
 
 ```bash
-make config-install PROJECT=ecommerce-platform CONFIG=Dev/claude-projects.yaml
+make config-install PROJECT=ecommerce-platform CONFIG=claude-projects.yaml
 ```
 
 ### Install All Projects
 
 ```bash
-make config-install-all CONFIG=Dev/claude-projects.yaml
+make config-install-all CONFIG=claude-projects.yaml
 ```
 
 ### Dry Run
 
 ```bash
 # Single project
-make config-dry-run PROJECT=ecommerce-platform CONFIG=Dev/claude-projects.yaml
+make config-dry-run PROJECT=ecommerce-platform CONFIG=claude-projects.yaml
 
 # All projects
-make config-dry-run CONFIG=Dev/claude-projects.yaml
+make config-dry-run CONFIG=claude-projects.yaml
 ```
 
 ## Direct Script Usage
@@ -292,19 +309,19 @@ You can also use the script directly:
 
 ```bash
 # List projects
-./Dev/install-from-config.sh --list Dev/claude-projects.yaml
+./Dev/scripts/install-from-config.sh --list claude-projects.yaml
 
 # Validate
-./Dev/install-from-config.sh --validate Dev/claude-projects.yaml
+./Dev/scripts/install-from-config.sh --validate claude-projects.yaml
 
 # Install
-./Dev/install-from-config.sh --project ecommerce-platform Dev/claude-projects.yaml
+./Dev/scripts/install-from-config.sh --project ecommerce-platform claude-projects.yaml
 
 # Dry run
-./Dev/install-from-config.sh --dry-run --project ecommerce-platform Dev/claude-projects.yaml
+./Dev/scripts/install-from-config.sh --dry-run --project ecommerce-platform claude-projects.yaml
 
 # Force with backup
-./Dev/install-from-config.sh --force --backup --project ecommerce-platform Dev/claude-projects.yaml
+./Dev/scripts/install-from-config.sh --force --backup --project ecommerce-platform claude-projects.yaml
 ```
 
 ## Validation Rules
@@ -317,6 +334,7 @@ The configuration is validated for:
 | Required fields | `name`, `root`, `modules` must exist |
 | Unique names | No duplicate project names |
 | Valid technologies | Must be one of: symfony, flutter, python, react, reactnative |
+| Valid languages | Must be one of: en, fr, es, de, pt |
 | Module paths | Must have `path` and `tech` |
 
 ## Best Practices
@@ -346,7 +364,7 @@ modules:
 
 Add your configuration to git:
 ```bash
-git add Dev/claude-projects.yaml
+git add claude-projects.yaml
 git commit -m "Add Claude Code rules configuration"
 ```
 
@@ -372,7 +390,7 @@ brew install yq      # macOS
 
 Check the project name matches exactly:
 ```bash
-make config-list CONFIG=Dev/claude-projects.yaml
+make config-list CONFIG=claude-projects.yaml
 ```
 
 ### "Invalid technology"
