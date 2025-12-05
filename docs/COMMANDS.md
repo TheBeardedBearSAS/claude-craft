@@ -21,7 +21,7 @@ Commands can take arguments:
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 14 |
+| `/common:` | Transversal | 20 |
 | `/symfony:` | PHP/Symfony | 10 |
 | `/flutter:` | Dart/Flutter | 10 |
 | `/python:` | Python | 10 |
@@ -72,6 +72,18 @@ Transversal commands for all projects.
 |---------|-------------|
 | `/common:fix-bug-tdd` | Fix bug using TDD methodology |
 | `/common:research-context7` | Deep technical research |
+
+### UI/UX Commands
+
+| Command | Description |
+|---------|-------------|
+| `/common:uiux-orchestrator` | Orchestrate UI, UX, and A11y experts for a task |
+| `/common:uiux-audit` | Complete UI/UX/Accessibility audit |
+| `/common:uiux-component-spec` | Full component specification (UI + UX + A11y) |
+| `/common:ui-design-tokens` | Define design system tokens |
+| `/common:ux-user-flow` | Design user journey and flow |
+| `/common:a11y-audit` | WCAG 2.2 AAA accessibility audit |
+| `/common:a11y-component` | Accessibility specs for a component |
 
 ---
 

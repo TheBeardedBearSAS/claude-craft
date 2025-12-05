@@ -6,8 +6,8 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 - **5 Technology Stacks**: Symfony, Flutter, Python, React, React Native
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **12 AI Agents**: Specialized reviewers, architects, and coaches
-- **64 Slash Commands**: Automated workflows and code generation
+- **16 AI Agents**: Specialized reviewers, architects, coaches, and UI/UX experts
+- **70 Slash Commands**: Automated workflows and code generation
 - **67 Rules**: Best practices for architecture, testing, security
 - **25 Templates**: Code generation patterns
 - **21 Checklists**: Quality gates for commits, features, releases
@@ -149,6 +149,7 @@ make config-install PROJECT=my-monorepo
 
 ## Available Agents
 
+### Common Agents
 | Agent | Expertise |
 |-------|-----------|
 | `api-designer` | REST/GraphQL API design |
@@ -158,6 +159,18 @@ make config-install PROJECT=my-monorepo
 | `refactoring-specialist` | Safe code refactoring |
 | `research-assistant` | Technical research |
 | `tdd-coach` | Test-Driven Development |
+
+### UI/UX Agents
+| Agent | Expertise |
+|-------|-----------|
+| `uiux-orchestrator` | Coordinates UI, UX, and A11y experts |
+| `ui-designer` | Design systems, tokens, components |
+| `ux-ergonome` | User flows, cognitive ergonomics |
+| `accessibility-expert` | WCAG 2.2 AAA, ARIA, audits |
+
+### Technology Reviewers
+| Agent | Expertise |
+|-------|-----------|
 | `symfony-reviewer` | Symfony code review |
 | `flutter-reviewer` | Flutter code review |
 | `python-reviewer` | Python code review |

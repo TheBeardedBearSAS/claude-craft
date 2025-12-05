@@ -12,7 +12,7 @@ In Claude Code, mention an agent to activate its expertise:
 @symfony-reviewer Review this controller for best practices
 ```
 
-## Common Agents (7)
+## Common Agents (11)
 
 These agents are installed with `install-common` and are useful across all technologies.
 
@@ -152,6 +152,91 @@ Helps with:
 ```
 @tdd-coach Guide me through TDD for this feature
 @tdd-coach Help me write a failing test for this bug
+```
+
+---
+
+### uiux-orchestrator
+
+**Expertise**: UI/UX coordination and orchestration
+
+Coordinates three specialized experts (UI Designer, UX Ergonome, Accessibility Expert) to deliver comprehensive UI/UX solutions. Acts as project manager for interface design tasks.
+
+Helps with:
+- Routing requests to appropriate UI/UX experts
+- Coordinating multi-expert responses
+- Synthesizing recommendations
+- Arbitrating conflicts (A11y > UX > UI)
+- Ensuring Lighthouse 100/100 compliance
+
+```
+@uiux-orchestrator Design a complete login flow
+@uiux-orchestrator Review this component for UI, UX, and accessibility
+```
+
+---
+
+### ui-designer
+
+**Expertise**: Design systems and visual design
+
+Specializes in creating scalable, consistent, and beautiful interfaces through design tokens and component specifications.
+
+Helps with:
+- Design token definition (colors, typography, spacing, shadows)
+- Component specifications (states, variants, responsive)
+- Grid systems and layouts
+- Design system architecture
+- Atomic Design patterns
+- Mobile-first responsive design
+
+```
+@ui-designer Create design tokens for a new project
+@ui-designer Specify a Button component with all variants
+```
+
+---
+
+### ux-ergonome
+
+**Expertise**: User experience and cognitive ergonomics
+
+Focuses on creating intuitive, efficient, and delightful user journeys based on cognitive psychology and UX research.
+
+Helps with:
+- Information architecture
+- User flow design
+- Cognitive load optimization
+- Fitts' Law and Hick's Law application
+- Nielsen's usability heuristics
+- Form design and error handling
+- Micro-interactions
+
+```
+@ux-ergonome Design the checkout flow for an e-commerce site
+@ux-ergonome Analyze this form for usability issues
+```
+
+---
+
+### accessibility-expert
+
+**Expertise**: WCAG 2.2 AAA accessibility
+
+Ensures interfaces are accessible to all users, including those using assistive technologies. Non-negotiable accessibility compliance is the priority.
+
+Helps with:
+- WCAG 2.2 AAA compliance
+- ARIA attributes and patterns (APG)
+- Keyboard navigation
+- Screen reader announcements
+- Color contrast validation
+- Touch target sizing
+- Accessibility audits
+
+```
+@accessibility-expert Audit this page for WCAG 2.2 AAA
+@accessibility-expert Specify ARIA attributes for a modal dialog
 ```
 
 ---
