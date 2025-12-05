@@ -1,0 +1,530 @@
+# Claude Code - Configuration React TypeScript
+
+## Informations du Projet
+
+**Projet** : {{PROJECT_NAME}}
+**Stack** : {{TECH_STACK}}
+**Framework** : React {{REACT_VERSION}} + TypeScript {{TYPESCRIPT_VERSION}}
+**Build Tool** : {{BUILD_TOOL}}
+
+## Règles Fondamentales
+
+### 1. Analyse Obligatoire Avant Codage
+
+**AVANT d'écrire une seule ligne de code, tu DOIS** :
+
+1. **Analyser le code existant**
+   - Rechercher des composants/hooks similaires
+   - Identifier les patterns utilisés
+   - Comprendre l'architecture en place
+
+2. **Comprendre le besoin**
+   - Clarifier les objectifs
+   - Définir les critères d'acceptation
+   - Identifier les contraintes
+
+3. **Concevoir la solution**
+   - Choisir l'approche architecturale
+   - Définir les types TypeScript
+   - Planifier les tests
+
+4. **Documenter les décisions**
+   - Justifier les choix techniques
+   - Documenter les alternatives considérées
+   - Expliquer les trade-offs
+
+**Référence** : `rules/01-workflow-analysis.md`
+
+### 2. Architecture Feature-Based
+
+```
+src/
+├── components/           # Composants réutilisables (Atomic Design)
+│   ├── atoms/           # Boutons, inputs, labels
+│   ├── molecules/       # FormField, SearchBar, Card
+│   ├── organisms/       # Header, DataTable, Form
+│   └── templates/       # DashboardTemplate, AuthTemplate
+│
+├── features/            # Fonctionnalités métier
+│   └── [feature-name]/
+│       ├── components/  # Composants spécifiques
+│       ├── hooks/       # Hooks custom
+│       ├── services/    # Services API
+│       ├── types/       # Types TypeScript
+│       ├── utils/       # Utilitaires
+│       └── store/       # State management local
+│
+├── hooks/               # Hooks globaux réutilisables
+├── services/            # Services partagés (API, storage)
+├── store/               # State management global
+├── types/               # Types globaux
+├── utils/               # Utilitaires globaux
+├── config/              # Configuration
+└── lib/                 # Bibliothèques configurées
+```
+
+**Référence** : `rules/02-architecture.md`
+
+### 3. Standards de Code TypeScript
+
+#### TypeScript Strict Mode
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true
+  }
+}
+```
+
+#### Conventions de Nommage
+
+- **Fichiers Composants** : `PascalCase.tsx` (ex: `UserProfile.tsx`)
+- **Fichiers Hooks** : `camelCase.ts` (ex: `useAuth.ts`)
+- **Fichiers Utils** : `camelCase.ts` (ex: `formatDate.ts`)
+- **Fichiers Types** : `PascalCase.types.ts` (ex: `User.types.ts`)
+- **Fichiers Services** : `camelCase.service.ts` (ex: `user.service.ts`)
+
+**Référence** : `rules/03-coding-standards.md`
+
+### 4. Principes SOLID
+
+- **S** : Single Responsibility - Un composant = une responsabilité
+- **O** : Open/Closed - Ouvert à l'extension, fermé à la modification
+- **L** : Liskov Substitution - Les composants enfants respectent le contrat
+- **I** : Interface Segregation - Props spécifiques, pas d'interface surchargée
+- **D** : Dependency Inversion - Dépendre d'abstractions, pas d'implémentations
+
+**Référence** : `rules/04-solid-principles.md`
+
+### 5. KISS, DRY, YAGNI
+
+- **KISS** : Keep It Simple - Privilégier la simplicité
+- **DRY** : Don't Repeat Yourself - Éviter la duplication (règle des 3)
+- **YAGNI** : You Aren't Gonna Need It - N'implémenter que ce qui est nécessaire
+
+**Référence** : `rules/05-kiss-dry-yagni.md`
+
+## Stack Technique
+
+### Frontend
+
+- **Framework** : React {{REACT_VERSION}}
+- **Language** : TypeScript {{TYPESCRIPT_VERSION}}
+- **Build Tool** : {{BUILD_TOOL}}
+- **Routing** : React Router v6 / Next.js App Router
+- **State Management** : TanStack Query + Zustand
+- **Forms** : React Hook Form + Zod
+- **Styling** : Tailwind CSS + class-variance-authority
+- **UI Components** : Radix UI / shadcn/ui
+
+### Development Tools
+
+- **Package Manager** : pnpm (recommandé) / npm
+- **Linting** : ESLint + TypeScript ESLint
+- **Formatting** : Prettier
+- **Testing** : Vitest + React Testing Library + Playwright
+- **Git Hooks** : Husky + lint-staged
+- **Commit Convention** : Conventional Commits
+
+**Référence** : `rules/06-tooling.md`
+
+## Commandes Principales
+
+### Développement
+
+```bash
+# Installation
+{{PACKAGE_MANAGER}} install
+
+# Serveur de développement
+{{PACKAGE_MANAGER}} run dev
+
+# Build production
+{{PACKAGE_MANAGER}} run build
+
+# Preview du build
+{{PACKAGE_MANAGER}} run preview
+```
+
+### Tests
+
+```bash
+# Tests unitaires
+{{PACKAGE_MANAGER}} run test
+
+# Tests en mode watch
+{{PACKAGE_MANAGER}} run test:watch
+
+# Coverage
+{{PACKAGE_MANAGER}} run test:coverage
+
+# Tests E2E
+{{PACKAGE_MANAGER}} run test:e2e
+```
+
+### Qualité
+
+```bash
+# Linter
+{{PACKAGE_MANAGER}} run lint
+{{PACKAGE_MANAGER}} run lint:fix
+
+# Formatter
+{{PACKAGE_MANAGER}} run format
+
+# Type check
+{{PACKAGE_MANAGER}} run type-check
+
+# Tout vérifier
+{{PACKAGE_MANAGER}} run quality
+```
+
+### Docker (si applicable)
+
+```bash
+# Build l'image
+make docker-build
+
+# Démarrer les containers
+make docker-up
+
+# Arrêter les containers
+make docker-down
+
+# Voir les logs
+make docker-logs
+```
+
+**Référence** : `rules/06-tooling.md`
+
+## Tests - Stratégie Pyramide
+
+```
+         /\
+        /E2E\      10% - Parcours critiques
+       /------\
+      /  Integ \    20% - Features complètes
+     /----------\
+    /  Unitaire  \  70% - Composants, hooks, utils
+   /--------------\
+```
+
+### Tests Obligatoires
+
+1. **Tests Unitaires** : Tous les composants, hooks et utils
+2. **Tests d'Intégration** : Features complètes
+3. **Tests E2E** : Parcours utilisateur critiques
+
+### Coverage Minimum
+
+- **Lignes** : 80%
+- **Fonctions** : 80%
+- **Branches** : 80%
+- **Statements** : 80%
+
+**Référence** : `rules/07-testing.md`
+
+## Qualité de Code
+
+### Outils Obligatoires
+
+- [x] ESLint configuré avec règles strictes
+- [x] Prettier pour le formatage
+- [x] TypeScript en mode strict
+- [x] Husky pour les git hooks
+- [x] Lint-staged pour les pre-commit
+- [x] Commitlint pour Conventional Commits
+
+### Métriques Qualité
+
+- **ESLint Warnings** : 0
+- **TypeScript Errors** : 0
+- **Test Coverage** : > 80%
+- **Build Size** : < 500kb (initial)
+- **Lighthouse Score** : > 90
+
+**Référence** : `rules/08-quality-tools.md`
+
+## Git Workflow
+
+### Branches
+
+```
+main (production)
+  └── develop (intégration)
+      ├── feature/* (nouvelles fonctionnalités)
+      ├── fix/* (corrections)
+      ├── refactor/* (refactoring)
+      └── hotfix/* (corrections urgentes)
+```
+
+### Naming Convention
+
+- **Feature** : `feature/TICKET-description` (ex: `feature/USER-123-add-login`)
+- **Fix** : `fix/TICKET-description` (ex: `fix/BUG-456-validation-error`)
+- **Refactor** : `refactor/description` (ex: `refactor/optimize-hooks`)
+- **Hotfix** : `hotfix/vX.X.X-description` (ex: `hotfix/v1.2.1-security-patch`)
+
+### Commits Convention
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Types** : feat, fix, docs, style, refactor, perf, test, build, ci, chore
+
+**Exemples** :
+```bash
+feat(auth): add OAuth2 authentication
+fix(validation): resolve email regex issue
+docs(readme): update installation instructions
+refactor(hooks): extract common logic
+test(auth): add login component tests
+```
+
+**Référence** : `rules/09-git-workflow.md`
+
+## Documentation
+
+### Code Documentation
+
+- **TSDoc** pour fonctions et hooks
+- **JSDoc** pour composants complexes
+- **Commentaires** pour expliquer le "pourquoi", pas le "quoi"
+
+### Documentation Projet
+
+- **README.md** : Installation, usage, commands
+- **CONTRIBUTING.md** : Guidelines de contribution
+- **CHANGELOG.md** : Historique des versions
+- **docs/** : Documentation technique détaillée
+
+### Storybook
+
+- Stories pour tous les composants réutilisables
+- Documentation interactive des props
+- Exemples d'usage
+
+**Référence** : `rules/10-documentation.md`
+
+## Sécurité
+
+### Checklist Sécurité
+
+- [ ] Validation des inputs (Zod)
+- [ ] Sanitization du HTML (DOMPurify)
+- [ ] Protection XSS
+- [ ] Protection CSRF
+- [ ] HTTPS partout
+- [ ] CSP headers configurés
+- [ ] Secrets dans variables d'environnement
+- [ ] Audit des dépendances
+- [ ] Rate limiting
+- [ ] Logs sécurisés
+
+### Points Critiques
+
+1. **Ne JAMAIS** hardcoder de secrets
+2. **TOUJOURS** valider les inputs côté client ET serveur
+3. **TOUJOURS** sanitizer le HTML utilisateur
+4. **TOUJOURS** utiliser HTTPS
+5. **TOUJOURS** utiliser `rel="noopener noreferrer"` sur liens externes
+
+**Référence** : `rules/11-security.md`
+
+## Performance
+
+### Optimisations Obligatoires
+
+1. **Code Splitting** : Lazy loading des routes
+2. **Memoization** : React.memo, useMemo, useCallback
+3. **Virtual Lists** : Pour listes > 100 items
+4. **Images** : Optimisation et lazy loading
+5. **Bundle** : Analyse et optimisation
+
+### Métriques Performance
+
+- **First Contentful Paint** : < 1.8s
+- **Time to Interactive** : < 3.8s
+- **Largest Contentful Paint** : < 2.5s
+- **Cumulative Layout Shift** : < 0.1
+- **Total Blocking Time** : < 300ms
+
+**Référence** : `rules/12-performance.md`
+
+## State Management
+
+### Stratégie
+
+- **React Query** : Server state (API data)
+- **Zustand** : Client state (global UI state)
+- **React Hook Form** : Form state
+- **Context API** : Shared local state
+- **URL State** : Search params, filters
+
+### Quand Utiliser Quoi
+
+| Type d'État | Solution | Exemple |
+|-------------|----------|---------|
+| Server data | React Query | Users, Products |
+| Global UI | Zustand | Theme, Sidebar |
+| Form data | React Hook Form | Login, Register |
+| Shared local | Context | User preferences |
+| URL params | useSearchParams | Filters, Pagination |
+
+**Référence** : `rules/13-state-management.md`
+
+## Styling
+
+### Approche
+
+- **Tailwind CSS** : Utility-first CSS
+- **class-variance-authority** : Variants de composants
+- **clsx** : Conditional classes
+
+### Organisation
+
+```typescript
+// Utiliser CVA pour les variantes
+const buttonVariants = cva('btn', {
+  variants: {
+    variant: {
+      primary: 'bg-blue-600 text-white',
+      secondary: 'bg-gray-200 text-gray-900'
+    },
+    size: {
+      sm: 'px-3 py-1 text-sm',
+      md: 'px-4 py-2 text-base'
+    }
+  },
+  defaultVariants: {
+    variant: 'primary',
+    size: 'md'
+  }
+});
+```
+
+**Référence** : `rules/14-styling.md`
+
+## Templates de Code
+
+### Composant Fonctionnel
+
+Voir : `templates/component.md`
+
+### Hook Custom
+
+Voir : `templates/hook.md`
+
+### Context Provider
+
+Voir : `templates/context.md`
+
+### Test Composant
+
+Voir : `templates/test-component.md`
+
+### Test Hook
+
+Voir : `templates/test-hook.md`
+
+## Checklists
+
+### Pre-Commit
+
+Voir : `checklists/pre-commit.md`
+
+### Nouvelle Feature
+
+Voir : `checklists/new-feature.md`
+
+### Refactoring
+
+Voir : `checklists/refactoring.md`
+
+### Sécurité
+
+Voir : `checklists/security.md`
+
+## Ressources
+
+### Documentation Officielle
+
+- React : https://react.dev
+- TypeScript : https://www.typescriptlang.org
+- Vite : https://vitejs.dev
+- TanStack Query : https://tanstack.com/query
+- React Router : https://reactrouter.com
+- Tailwind CSS : https://tailwindcss.com
+
+### Règles du Projet
+
+1. `rules/00-project-context.md.template` - Contexte du projet
+2. `rules/01-workflow-analysis.md` - Workflow d'analyse
+3. `rules/02-architecture.md` - Architecture React
+4. `rules/03-coding-standards.md` - Standards de code
+5. `rules/04-solid-principles.md` - Principes SOLID
+6. `rules/05-kiss-dry-yagni.md` - Principes de simplicité
+7. `rules/06-tooling.md` - Outils de développement
+8. `rules/07-testing.md` - Stratégie de tests
+9. `rules/08-quality-tools.md` - Outils de qualité
+10. `rules/09-git-workflow.md` - Workflow Git
+11. `rules/10-documentation.md` - Documentation
+12. `rules/11-security.md` - Sécurité
+13. `rules/12-performance.md` - Performance
+14. `rules/13-state-management.md` - Gestion d'état
+15. `rules/14-styling.md` - Styling
+
+## Règles d'Or
+
+### 1. Toujours Analyser Avant de Coder
+
+Ne JAMAIS commencer à coder sans avoir :
+- Analysé le code existant
+- Compris le besoin
+- Conçu la solution
+- Planifié les tests
+
+### 2. Respecter l'Architecture
+
+- Feature-based organization
+- Atomic Design pour les composants
+- Séparation Container/Presenter
+- Types TypeScript stricts
+
+### 3. Tester Systématiquement
+
+- Tests unitaires pour chaque composant/hook
+- Tests d'intégration pour chaque feature
+- Tests E2E pour les parcours critiques
+- Coverage > 80%
+
+### 4. Code Review Obligatoire
+
+- Pas de merge sans approval
+- Vérifier les tests
+- Vérifier la qualité du code
+- Vérifier la documentation
+
+### 5. Sécurité First
+
+- Validation des inputs
+- Sanitization du HTML
+- Protection XSS/CSRF
+- Secrets sécurisés
+- Audit régulier
+
+---
+
+**Dernière mise à jour** : {{LAST_UPDATE_DATE}}
+**Mainteneur** : {{MAINTAINER_NAME}}

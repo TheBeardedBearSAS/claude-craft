@@ -1,0 +1,442 @@
+# CLAUDE.md - Instructions pour Claude Code
+
+## Projet: {{PROJECT_NAME}}
+
+**Version**: {{PROJECT_VERSION}}
+**Stack**: {{TECH_STACK}}
+**Framework**: {{WEB_FRAMEWORK}}
+**Python**: {{PYTHON_VERSION}}
+
+## Règles Fondamentales
+
+### 1. TOUJOURS Analyser Avant de Coder
+
+**AUCUNE modification de code sans analyse préalable complète.**
+
+Voir `rules/01-workflow-analysis.md` pour la méthodologie complète.
+
+Étapes obligatoires:
+1. Comprendre le besoin et les contraintes
+2. Explorer le code existant (avec rg, tree, etc.)
+3. Identifier les impacts
+4. Concevoir la solution
+5. Planifier l'implémentation
+6. Identifier les risques
+7. Définir les tests
+
+### 2. Architecture Clean/Hexagonale
+
+Ce projet suit une architecture en couches stricte:
+
+```
+{{PROJECT_NAME}}/
+├── domain/         # Logique métier pure (ne dépend de RIEN)
+├── application/    # Use cases (dépend de domain)
+└── infrastructure/ # Adapters (dépend de domain + application)
+```
+
+**Règles de dépendance:**
+- Infrastructure → Application → Domain
+- Domain ne dépend de RIEN
+- Utiliser des Protocols pour l'inversion de dépendances
+
+Voir `rules/02-architecture.md` pour les détails.
+
+### 3. Standards de Code Python
+
+- **PEP 8** pour le style
+- **Type hints** obligatoires sur toutes les fonctions publiques
+- **Docstrings Google style** sur toutes les fonctions/classes publiques
+- **88 caractères** max par ligne (Black)
+- **Imports** organisés: stdlib → third-party → local
+
+Voir `rules/03-coding-standards.md` pour les détails.
+
+### 4. Principes SOLID
+
+Appliquer systématiquement:
+- **S**ingle Responsibility: Une classe = une responsabilité
+- **O**pen/Closed: Ouvert à extension, fermé à modification
+- **L**iskov Substitution: Les sous-types peuvent remplacer les types de base
+- **I**nterface Segregation: Interfaces focalisées
+- **D**ependency Inversion: Dépendre d'abstractions (Protocols)
+
+Voir `rules/04-solid-principles.md` pour des exemples.
+
+### 5. KISS, DRY, YAGNI
+
+- **KISS**: Préférer la simplicité
+- **DRY**: Ne pas dupliquer la logique
+- **YAGNI**: N'implémenter que ce qui est nécessaire MAINTENANT
+
+Voir `rules/05-kiss-dry-yagni.md` pour des exemples.
+
+## Commandes Docker (Makefile)
+
+**IMPORTANT**: Utiliser Docker pour toutes les commandes (pas d'exécution locale).
+
+### Développement
+
+```bash
+# Setup initial
+make setup              # Configuration initiale du projet
+make install            # Installation des dépendances
+make dev                # Lance l'environnement de développement
+
+# Développement quotidien
+make shell              # Ouvre un shell dans le container
+make logs               # Affiche les logs
+make ps                 # État des containers
+```
+
+### Tests
+
+```bash
+make test               # Tous les tests
+make test-unit          # Tests unitaires uniquement
+make test-integration   # Tests d'intégration
+make test-e2e           # Tests end-to-end
+make test-cov           # Tests avec couverture
+make test-watch         # Tests en mode watch
+```
+
+### Qualité de Code
+
+```bash
+make lint               # Linting avec ruff
+make format             # Formatage avec black + isort
+make type-check         # Vérification des types avec mypy
+make security-check     # Analyse de sécurité avec bandit
+make quality            # Tous les checks de qualité
+```
+
+### Base de Données
+
+```bash
+make db-shell           # Shell PostgreSQL
+make db-migrate         # Applique les migrations
+make db-rollback        # Rollback dernière migration
+make db-reset           # Reset complet de la DB
+make db-seed            # Seed data
+```
+
+### Autres
+
+```bash
+make clean              # Nettoyage des fichiers temporaires
+make help               # Affiche toutes les commandes
+```
+
+## Stack Technique
+
+{{TECH_STACK}}
+
+### Frameworks & Libraries
+
+- **Web**: {{WEB_FRAMEWORK}}
+- **ORM**: {{ORM}}
+- **Validation**: Pydantic
+- **Migration**: Alembic
+- **Tasks**: {{TASK_QUEUE}}
+- **Cache**: Redis
+- **Tests**: pytest, pytest-cov, pytest-mock
+- **Qualité**: ruff, mypy, black, isort, bandit
+
+### Outils de Développement
+
+- **Package Manager**: {{PACKAGE_MANAGER}}
+- **Python Version**: pyenv
+- **Container**: Docker + docker-compose
+- **CI/CD**: GitHub Actions
+
+Voir `rules/06-tooling.md` pour la configuration.
+
+## Workflow de Développement
+
+### 1. Nouvelle Feature
+
+```bash
+# 1. Créer une branche
+git checkout -b feature/{{FEATURE_NAME}}
+
+# 2. ANALYSER (voir rules/01-workflow-analysis.md)
+# - Comprendre le besoin
+# - Explorer le code existant avec rg/tree
+# - Identifier les impacts
+# - Concevoir la solution
+# - Planifier l'implémentation
+
+# 3. Implémenter (TDD recommandé)
+# - Écrire le test
+# - Implémenter le code minimum
+# - Refactorer
+
+# 4. Vérifier la qualité
+make quality            # Lint + type-check + security
+make test-cov           # Tests avec couverture
+
+# 5. Commit
+git add .
+git commit -m "feat: {{DESCRIPTION}}"
+
+# 6. Push et PR
+git push origin feature/{{FEATURE_NAME}}
+gh pr create
+```
+
+### 2. Fix de Bug
+
+```bash
+# 1. Créer une branche
+git checkout -b fix/{{BUG_NAME}}
+
+# 2. ANALYSER
+# - Reproduire le bug
+# - Identifier la cause racine
+# - Analyser les impacts du fix
+
+# 3. Écrire un test qui reproduit le bug
+# 4. Fixer le bug
+# 5. Vérifier que le test passe
+# 6. Vérifier la qualité
+# 7. Commit et PR
+```
+
+### 3. Refactoring
+
+```bash
+# 1. ANALYSER l'impact
+# 2. Écrire des tests de non-régression SI manquants
+# 3. Refactorer par petits steps
+# 4. Vérifier les tests après CHAQUE step
+# 5. Commit fréquents
+```
+
+Voir `checklists/refactoring.md` pour le processus complet.
+
+## Tests
+
+### Stratégie de Tests
+
+- **Tests unitaires**: Isolation complète, mocks pour dépendances
+- **Tests d'intégration**: Composants réels (DB, Redis, etc.)
+- **Tests E2E**: Flux complets via API
+
+### Couverture Cible
+
+- **Global**: > 80%
+- **Domain**: > 95%
+- **Application**: > 90%
+- **Infrastructure**: > 75%
+
+### Commandes
+
+```bash
+make test                    # Tous les tests
+make test-unit              # Tests unitaires
+make test path/to/test.py   # Test spécifique
+make test-watch             # Mode watch
+make test-cov               # Avec couverture
+```
+
+Voir `rules/07-testing.md` pour les détails.
+
+## Sécurité
+
+### Principes
+
+- **Jamais** de secrets en dur dans le code
+- **Toujours** valider les inputs (Pydantic)
+- **Toujours** utiliser des parameterized queries
+- **Toujours** hasher les passwords (bcrypt)
+- **Toujours** utiliser HTTPS en production
+
+### Checks
+
+```bash
+make security-check     # Analyse avec bandit
+make deps-audit         # Audit des dépendances
+```
+
+Voir `rules/11-security.md` pour les détails.
+
+## Variables d'Environnement
+
+```bash
+# Application
+APP_NAME={{PROJECT_NAME}}
+APP_ENV={{ENVIRONMENT}}
+DEBUG={{DEBUG}}
+SECRET_KEY={{SECRET_KEY}}
+
+# Database
+DATABASE_URL={{DATABASE_URL}}
+
+# Redis
+REDIS_URL={{REDIS_URL}}
+
+# Celery
+CELERY_BROKER_URL={{CELERY_BROKER_URL}}
+
+# API
+API_PREFIX=/api/v1
+CORS_ORIGINS={{CORS_ORIGINS}}
+
+# Security
+JWT_SECRET_KEY={{JWT_SECRET_KEY}}
+```
+
+Voir `.env.example` pour toutes les variables.
+
+## Structure du Code
+
+### Domain Layer
+
+```python
+# Entités: Objets avec identité
+from dataclasses import dataclass
+from uuid import UUID
+
+@dataclass
+class User:
+    id: UUID
+    email: str
+    name: str
+
+# Value Objects: Immutables, définis par leurs valeurs
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Email:
+    value: str
+
+# Repositories: Interfaces (Protocols)
+from typing import Protocol
+
+class UserRepository(Protocol):
+    def save(self, user: User) -> User: ...
+    def find_by_id(self, id: UUID) -> Optional[User]: ...
+```
+
+### Application Layer
+
+```python
+# Use Cases: Coordonnent la logique métier
+class CreateUserUseCase:
+    def __init__(
+        self,
+        user_repository: UserRepository,
+        email_service: EmailService
+    ):
+        self._repository = user_repository
+        self._email_service = email_service
+
+    def execute(self, command: CreateUserCommand) -> UserDTO:
+        # Validation
+        # Création entité
+        # Persistence
+        # Actions secondaires
+        pass
+
+# DTOs: Transfer de données entre layers
+@dataclass
+class UserDTO:
+    id: UUID
+    email: str
+    name: str
+```
+
+### Infrastructure Layer
+
+```python
+# Repositories: Implémentations
+class UserRepositoryImpl:
+    def __init__(self, session: Session):
+        self._session = session
+
+    def save(self, user: User) -> User:
+        # ORM logic
+        pass
+
+# API: Routes FastAPI/Flask
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/users")
+
+@router.post("/", response_model=UserResponseSchema)
+def create_user(
+    data: UserCreateSchema,
+    use_case: CreateUserUseCase = Depends(get_create_user_use_case)
+):
+    return use_case.execute(data)
+```
+
+## Règles Spécifiques au Projet
+
+{{SPECIFIC_RULES}}
+
+## Ressources
+
+- **Documentation**: `docs/`
+- **ADR**: `docs/adr/` (Architecture Decision Records)
+- **API Docs**: {{API_DOCS_URL}}
+- **Repository**: {{REPO_URL}}
+
+## Contacts
+
+- **Product Owner**: {{PO_NAME}} ({{PO_EMAIL}})
+- **Tech Lead**: {{TECH_LEAD_NAME}} ({{TECH_LEAD_EMAIL}})
+
+## Checklist Avant Chaque Commit
+
+- [ ] Analyse complète effectuée (si nouvelle feature/fix)
+- [ ] Code suit les standards (PEP 8, type hints, docstrings)
+- [ ] Principes SOLID respectés
+- [ ] Tests écrits et passants
+- [ ] Couverture > seuil
+- [ ] `make quality` passe (lint + type-check + security)
+- [ ] Pas de secrets en dur
+- [ ] Documentation mise à jour si nécessaire
+- [ ] Variables d'environnement ajoutées à `.env.example`
+
+## Checklist Avant Chaque PR
+
+- [ ] Tous les commits respectent Conventional Commits
+- [ ] Description claire de la PR
+- [ ] Tests E2E passants
+- [ ] Pas de conflit avec main
+- [ ] Review de son propre code effectuée
+- [ ] Screenshots/démos si changement UI
+- [ ] Migration DB créée si nécessaire
+- [ ] CHANGELOG mis à jour
+
+## Documentation Complète
+
+Consulter les fichiers suivants pour plus de détails:
+
+1. `rules/01-workflow-analysis.md` - Méthodologie d'analyse obligatoire
+2. `rules/02-architecture.md` - Architecture Clean/Hexagonale
+3. `rules/03-coding-standards.md` - Standards de code Python
+4. `rules/04-solid-principles.md` - Principes SOLID avec exemples
+5. `rules/05-kiss-dry-yagni.md` - Principes de simplicité
+6. `rules/06-tooling.md` - Configuration des outils
+7. `rules/07-testing.md` - Stratégie de tests
+8. `rules/08-quality-tools.md` - Outils de qualité
+9. `rules/09-git-workflow.md` - Workflow Git
+10. `rules/10-documentation.md` - Standards de documentation
+11. `rules/11-security.md` - Sécurité
+12. `rules/12-async.md` - Programmation asynchrone
+13. `rules/13-frameworks.md` - Patterns frameworks
+
+**Templates:**
+- `templates/service.md` - Template pour services
+- `templates/repository.md` - Template pour repositories
+- `templates/api-endpoint.md` - Template pour endpoints API
+- `templates/test-unit.md` - Template pour tests unitaires
+- `templates/test-integration.md` - Template pour tests d'intégration
+
+**Checklists:**
+- `checklists/pre-commit.md` - Checklist pre-commit
+- `checklists/new-feature.md` - Checklist nouvelle feature
+- `checklists/refactoring.md` - Checklist refactoring
+- `checklists/security.md` - Checklist sécurité

@@ -1,0 +1,238 @@
+# Configuration Claude Code - {{PROJECT_NAME}}
+
+> Genere le {{GENERATION_DATE}} - Version 1.0.0
+> Script : install-symfony-rules.sh
+
+## Regles Fondamentales OBLIGATOIRES
+
+### 1. Analyse AVANT Action (CRITIQUE)
+
+**AVANT toute modification (feature/bugfix/refactoring) :**
+
+1. **Lire le code existant concerne**
+2. **Identifier impacts et dependances**
+3. **Documenter l'analyse** (template `.claude/templates/analysis.md`)
+4. **Valider avec utilisateur** si impact significatif
+5. **INTERDIT de coder directement sans cette phase**
+
+### 2. Langues OBLIGATOIRES
+
+| Element | Langue |
+|---------|--------|
+| Code (classes, methodes, variables) | ANGLAIS |
+| Commits | ANGLAIS |
+| Commentaires code | ANGLAIS |
+| Documentation (.md, README) | FRANCAIS |
+| Messages UI/logs | FRANCAIS |
+
+### 3. Architecture OBLIGATOIRE
+
+**Clean Architecture + DDD + Hexagonale**
+
+```
+src/
+├── Domain/              # Coeur metier (AUCUNE dependance externe)
+│   ├── Entity/          # Aggregates roots
+│   ├── ValueObject/     # Objects immuables
+│   ├── Event/           # Domain Events
+│   └── Repository/      # Interfaces repositories
+├── Application/         # Use Cases
+│   ├── Command/         # Commands (write)
+│   ├── Query/           # Queries (read)
+│   └── Handler/         # Handlers
+└── Infrastructure/      # Details techniques
+    ├── Persistence/     # Doctrine repositories impl
+    ├── Http/            # Controllers
+    ├── Email/           # Mailer
+    └── Cache/           # Redis
+```
+
+### 4. Principes SOLID + KISS
+
+- **S** : Une classe = une responsabilite
+- **O** : Extension sans modification
+- **L** : Substitution sans rupture contrat
+- **I** : Interfaces specifiques
+- **D** : Dependre des abstractions
+- **KISS** : Solution la plus simple qui fonctionne
+
+Voir `.claude/rules/04-solid-principles.md` et `05-kiss-dry-yagni.md`
+
+### 5. Docker OBLIGATOIRE
+
+**TOUTE commande DOIT passer par Docker via Makefile**
+
+```bash
+# INTERDIT
+php bin/console ...
+composer install
+
+# OBLIGATOIRE
+make console CMD="..."
+make composer CMD="install"
+```
+
+### 6. Hadolint OBLIGATOIRE
+
+Tout Dockerfile DOIT passer Hadolint sans erreur :
+```bash
+make hadolint
+```
+
+### 7. TDD/BDD OBLIGATOIRE
+
+**RED -> GREEN -> REFACTOR**
+1. Ecrire test AVANT implementation
+2. Test echoue (RED)
+3. Implementer minimum (GREEN)
+4. Refactorer (REFACTOR)
+5. `make quality`
+
+### 8. Qualite OBLIGATOIRE
+
+Apres CHAQUE modification :
+```bash
+make quality  # PHPStan + CS-Fixer + Rector + Deptrac + Tests
+```
+
+### 9. Couverture Tests 80%+
+
+```bash
+make test-coverage  # Genere rapport HTML
+```
+
+## Fichiers de Regles
+
+Consulter OBLIGATOIREMENT selon contexte :
+
+| Contexte | Fichier |
+|----------|---------|
+| Avant modification | `.claude/rules/01-workflow-analysis.md` |
+| Architecture | `.claude/rules/02-architecture-clean-ddd.md` |
+| Standards code | `.claude/rules/03-coding-standards.md` |
+| Design classe | `.claude/rules/04-solid-principles.md` |
+| Simplicite | `.claude/rules/05-kiss-dry-yagni.md` |
+| Docker/Shell | `.claude/rules/06-docker-hadolint.md` |
+| Tests | `.claude/rules/07-testing-tdd-bdd.md` |
+| Qualite | `.claude/rules/08-quality-tools.md` |
+| Git/Commits | `.claude/rules/09-git-workflow.md` |
+| Documentation | `.claude/rules/10-documentation.md` |
+| Securite/RGPD | `.claude/rules/11-security-rgpd.md` |
+| Performance | `.claude/rules/12-performance.md` |
+| Patterns DDD | `.claude/rules/13-ddd-patterns.md` |
+| Multitenant | `.claude/rules/14-multitenant.md` |
+| Doctrine Extensions | `.claude/rules/15-doctrine-extensions.md` |
+| i18n | `.claude/rules/16-i18n.md` |
+| Async/Messenger | `.claude/rules/17-async.md` |
+| Value Objects | `.claude/rules/18-value-objects.md` |
+| Aggregates | `.claude/rules/19-aggregates.md` |
+| Domain Events | `.claude/rules/20-domain-events.md` |
+| CQRS | `.claude/rules/21-cqrs.md` |
+
+## Commandes Makefile
+
+### Docker
+```bash
+make help              # Affiche l'aide
+make up                # Demarre la stack
+make down              # Arrete la stack
+make restart           # Redemarre (down + up)
+make logs              # Logs live
+make build             # Build images
+make shell             # Shell dans container PHP
+```
+
+### PHP / Symfony
+```bash
+make console CMD="cache:clear"    # Symfony console
+make composer CMD="require ..."   # Composer
+```
+
+### Tests
+```bash
+make test              # Tous les tests
+make test-unit         # Tests unitaires
+make test-integration  # Tests integration
+make test-behat        # Tests BDD Behat
+make test-e2e          # Tests end-to-end
+make test-coverage     # Couverture HTML
+make test-mutation     # Mutation testing (Infection)
+```
+
+### Qualite
+```bash
+make quality           # ALL: cs-fix + phpstan + rector + deptrac + hadolint + tests
+make phpstan           # Analyse statique (niveau max)
+make cs-check          # Verif code style
+make cs-fix            # Fix code style
+make rector            # Rector dry-run
+make rector-fix        # Rector apply
+make deptrac           # Architecture boundaries
+make hadolint          # Lint Dockerfiles
+```
+
+### Database
+```bash
+make db-create         # Cree DB
+make db-migrate        # Migrations
+make db-fixtures       # Charge fixtures
+make db-reset          # Drop + Create + Migrate + Fixtures
+```
+
+### Installation
+```bash
+make install           # Installation complete (up + vendor + db-create + db-migrate)
+make vendor            # Composer install
+```
+
+## Stack Technique
+
+{{TECH_STACK}}
+
+## Templates et Checklists
+
+### Templates
+- `.claude/templates/analysis.md` - Analyse prealable
+- `.claude/templates/value-object.md` - Value Object immuable
+- `.claude/templates/service.md` - Service metier
+- `.claude/templates/aggregate-root.md` - Aggregate DDD
+- `.claude/templates/domain-event.md` - Domain Event
+- `.claude/templates/test-unit.md` - Test unitaire TDD
+- `.claude/templates/test-integration.md` - Test integration
+- `.claude/templates/test-behat.md` - Contexte Behat
+
+### Checklists
+- `.claude/checklists/pre-commit.md` - Checklist avant commit
+- `.claude/checklists/new-feature.md` - Checklist nouvelle feature TDD
+- `.claude/checklists/refactoring.md` - Checklist refactoring safe
+- `.claude/checklists/security-rgpd.md` - Checklist audit securite RGPD
+
+### Exemples
+- `.claude/examples/clean-architecture-structure.md` - Organisation dossiers Clean Arch
+- `.claude/examples/value-object-examples.md` - Money, Email, DateRange
+- `.claude/examples/aggregate-examples.md` - Aggregate complet
+- `.claude/examples/domain-event-examples.md` - Domain Events
+
+## Workflow de Developpement
+
+1. **Analyse** -> Consulter `.claude/rules/01-workflow-analysis.md`
+2. **TDD** -> RED -> GREEN -> REFACTOR
+3. **Qualite** -> `make quality` apres chaque changement
+4. **Commit** -> Convention Conventional Commits
+5. **Push** -> Tests CI passent
+
+## Regles Critiques
+
+- **JAMAIS** executer de commande PHP/Composer/Symfony directement
+- **TOUJOURS** passer par `make` et Docker
+- **JAMAIS** commiter sans `make quality` OK
+- **TOUJOURS** ecrire tests AVANT implementation (TDD strict)
+- **TOUJOURS** chiffrer donnees sensibles (RGPD)
+
+<!-- PROJECT-SPECIFIC-START -->
+## Configuration Specifique au Projet
+
+<!-- Ajouter ici la configuration specifique au projet -->
+<!-- Cette section est preservee lors des mises a jour -->
+
+<!-- PROJECT-SPECIFIC-END -->

@@ -1,0 +1,435 @@
+# Makefile Example for Python Projects with Docker
+# Copy this to your project root and adapt to your needs
+
+.PHONY: help setup install dev test lint format clean
+
+# Variables
+PROJECT_NAME = myproject
+DOCKER_COMPOSE = docker compose
+DOCKER_EXEC = $(DOCKER_COMPOSE) exec app
+PYTHON = $(DOCKER_EXEC) python
+POETRY = $(DOCKER_EXEC) poetry
+PYTEST = $(DOCKER_EXEC) pytest
+
+# Colors for output
+BLUE = \033[0;34m
+GREEN = \033[0;32m
+RED = \033[0;31m
+NC = \033[0m # No Color
+
+help: ## Display this help
+	@echo "$(BLUE)Available commands:$(NC)"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-20s$(NC) %s\n", $$1, $$2}'
+
+# ============================================================================
+# Setup & Installation
+# ============================================================================
+
+setup: ## Complete initial project setup
+	@echo "$(BLUE)Setting up project $(PROJECT_NAME)...$(NC)"
+	@if [ ! -f .env ]; then \
+		echo "$(GREEN)Creating .env from .env.example$(NC)"; \
+		cp .env.example .env; \
+	fi
+	$(DOCKER_COMPOSE) build
+	$(DOCKER_COMPOSE) up -d
+	@echo "$(GREEN)Waiting for services to start...$(NC)"
+	@sleep 5
+	$(POETRY) install
+	$(DOCKER_COMPOSE) exec app alembic upgrade head
+	@echo "$(GREEN)Setup complete!$(NC)"
+
+install: ## Install dependencies
+	@echo "$(BLUE)Installing dependencies...$(NC)"
+	$(DOCKER_COMPOSE) build
+	$(POETRY) install
+	@echo "$(GREEN)Installation complete!$(NC)"
+
+install-dev: ## Install with dev dependencies
+	@echo "$(BLUE)Installing with dev dependencies...$(NC)"
+	$(DOCKER_COMPOSE) build
+	$(POETRY) install --with dev
+	@echo "$(GREEN)Installation complete!$(NC)"
+
+# ============================================================================
+# Development
+# ============================================================================
+
+dev: ## Launch development environment
+	@echo "$(BLUE)Starting development environment...$(NC)"
+	$(DOCKER_COMPOSE) up
+
+dev-bg: ## Launch environment in background
+	@echo "$(BLUE)Starting in background...$(NC)"
+	$(DOCKER_COMPOSE) up -d
+	@echo "$(GREEN)Services started!$(NC)"
+	@$(MAKE) ps
+
+down: ## Stop all containers
+	@echo "$(BLUE)Stopping containers...$(NC)"
+	$(DOCKER_COMPOSE) down
+	@echo "$(GREEN)Containers stopped!$(NC)"
+
+restart: ## Restart all containers
+	@echo "$(BLUE)Restarting containers...$(NC)"
+	$(DOCKER_COMPOSE) restart
+	@echo "$(GREEN)Containers restarted!$(NC)"
+
+shell: ## Open shell in app container
+	@echo "$(BLUE)Opening shell...$(NC)"
+	$(DOCKER_EXEC) bash
+
+python-shell: ## Open interactive Python shell
+	@echo "$(BLUE)Opening Python shell...$(NC)"
+	$(PYTHON) -i
+
+logs: ## Display logs (app)
+	$(DOCKER_COMPOSE) logs -f app
+
+logs-all: ## Display logs from all services
+	$(DOCKER_COMPOSE) logs -f
+
+ps: ## Container status
+	@echo "$(BLUE)Container status:$(NC)"
+	$(DOCKER_COMPOSE) ps
+
+# ============================================================================
+# Tests
+# ============================================================================
+
+test: ## Run all tests
+	@echo "$(BLUE)Running all tests...$(NC)"
+	$(PYTEST) tests/ -v
+
+test-unit: ## Unit tests only
+	@echo "$(BLUE)Running unit tests...$(NC)"
+	$(PYTEST) tests/unit/ -v -m unit
+
+test-integration: ## Integration tests only
+	@echo "$(BLUE)Running integration tests...$(NC)"
+	$(PYTEST) tests/integration/ -v -m integration
+
+test-e2e: ## End-to-end tests only
+	@echo "$(BLUE)Running E2E tests...$(NC)"
+	$(PYTEST) tests/e2e/ -v -m e2e
+
+test-cov: ## Tests with coverage report
+	@echo "$(BLUE)Running tests with coverage...$(NC)"
+	$(PYTEST) tests/ -v --cov=src --cov-report=html --cov-report=term-missing
+	@echo "$(GREEN)Coverage report: htmlcov/index.html$(NC)"
+
+test-cov-xml: ## Tests with coverage (XML format for CI)
+	@echo "$(BLUE)Running tests with coverage (XML)...$(NC)"
+	$(PYTEST) tests/ -v --cov=src --cov-report=xml
+
+test-watch: ## Tests in watch mode (auto re-run)
+	@echo "$(BLUE)Watch mode enabled...$(NC)"
+	$(PYTEST) tests/ -v --watch
+
+test-failed: ## Re-run only failed tests
+	@echo "$(BLUE)Re-running failed tests...$(NC)"
+	$(PYTEST) tests/ -v --lf
+
+test-parallel: ## Run tests in parallel
+	@echo "$(BLUE)Running tests in parallel...$(NC)"
+	$(PYTEST) tests/ -v -n auto
+
+test-verbose: ## Tests in very verbose mode
+	@echo "$(BLUE)Tests in verbose mode...$(NC)"
+	$(PYTEST) tests/ -vv -s
+
+# ============================================================================
+# Code Quality
+# ============================================================================
+
+lint: ## Check code with ruff
+	@echo "$(BLUE)Linting with ruff...$(NC)"
+	$(DOCKER_EXEC) ruff check src/ tests/
+
+lint-fix: ## Automatically fix linting issues
+	@echo "$(BLUE)Auto-fixing with ruff...$(NC)"
+	$(DOCKER_EXEC) ruff check --fix src/ tests/
+	@echo "$(GREEN)Fixes applied!$(NC)"
+
+format: ## Format code with black and isort
+	@echo "$(BLUE)Formatting with black...$(NC)"
+	$(DOCKER_EXEC) black src/ tests/
+	@echo "$(BLUE)Organizing imports with isort...$(NC)"
+	$(DOCKER_EXEC) isort src/ tests/
+	@echo "$(GREEN)Formatting complete!$(NC)"
+
+format-check: ## Check formatting without modifying
+	@echo "$(BLUE)Checking formatting...$(NC)"
+	$(DOCKER_EXEC) black --check src/ tests/
+	$(DOCKER_EXEC) isort --check-only src/ tests/
+
+type-check: ## Type checking with mypy
+	@echo "$(BLUE)Type checking with mypy...$(NC)"
+	$(DOCKER_EXEC) mypy src/
+
+type-check-report: ## Generate HTML report from mypy
+	@echo "$(BLUE)Generating mypy report...$(NC)"
+	$(DOCKER_EXEC) mypy src/ --html-report mypy-report
+	@echo "$(GREEN)Mypy report: mypy-report/index.html$(NC)"
+
+security-check: ## Security analysis with bandit
+	@echo "$(BLUE)Security analysis with bandit...$(NC)"
+	$(DOCKER_EXEC) bandit -r src/ -ll
+
+security-check-all: ## Complete security analysis
+	@echo "$(BLUE)Complete security analysis...$(NC)"
+	$(DOCKER_EXEC) bandit -r src/ -f json -o bandit-report.json
+	@echo "$(GREEN)Report: bandit-report.json$(NC)"
+
+deps-audit: ## Audit dependencies for vulnerabilities
+	@echo "$(BLUE)Auditing dependencies...$(NC)"
+	$(POETRY) export -f requirements.txt | $(DOCKER_EXEC) safety check --stdin
+
+quality: lint type-check security-check ## All quality checks
+	@echo "$(GREEN)All quality checks passed!$(NC)"
+
+quality-fix: lint-fix format ## Auto-fix all issues
+	@echo "$(GREEN)Auto-fix complete!$(NC)"
+
+pre-commit: quality test ## Complete check before commit
+	@echo "$(GREEN)Ready to commit!$(NC)"
+
+# ============================================================================
+# Database
+# ============================================================================
+
+db-shell: ## Open PostgreSQL shell
+	@echo "$(BLUE)Opening PostgreSQL shell...$(NC)"
+	$(DOCKER_COMPOSE) exec db psql -U $(shell grep POSTGRES_USER .env | cut -d '=' -f2) -d $(shell grep POSTGRES_DB .env | cut -d '=' -f2)
+
+db-migrate: ## Create new Alembic migration
+	@read -p "Migration message: " msg; \
+	echo "$(BLUE)Creating migration: $$msg$(NC)"; \
+	$(DOCKER_EXEC) alembic revision --autogenerate -m "$$msg"
+
+db-upgrade: ## Apply all migrations
+	@echo "$(BLUE)Applying migrations...$(NC)"
+	$(DOCKER_EXEC) alembic upgrade head
+	@echo "$(GREEN)Migrations applied!$(NC)"
+
+db-downgrade: ## Rollback last migration
+	@echo "$(BLUE)Rolling back last migration...$(NC)"
+	$(DOCKER_EXEC) alembic downgrade -1
+	@echo "$(GREEN)Rollback complete!$(NC)"
+
+db-history: ## Display migration history
+	@echo "$(BLUE)Migration history:$(NC)"
+	$(DOCKER_EXEC) alembic history
+
+db-current: ## Display current DB version
+	@echo "$(BLUE)Current version:$(NC)"
+	$(DOCKER_EXEC) alembic current
+
+db-reset: ## Complete database reset
+	@echo "$(RED)⚠️  Warning: This will destroy all data!$(NC)"
+	@read -p "Confirm (y/N): " confirm; \
+	if [ "$$confirm" = "y" ]; then \
+		echo "$(BLUE)Resetting database...$(NC)"; \
+		$(DOCKER_COMPOSE) down -v; \
+		$(DOCKER_COMPOSE) up -d db; \
+		sleep 3; \
+		$(DOCKER_COMPOSE) up -d app; \
+		sleep 2; \
+		$(DOCKER_EXEC) alembic upgrade head; \
+		echo "$(GREEN)Database reset!$(NC)"; \
+	else \
+		echo "$(GREEN)Cancelled.$(NC)"; \
+	fi
+
+db-seed: ## Populate database with test data
+	@echo "$(BLUE)Seeding database...$(NC)"
+	$(PYTHON) scripts/seed_data.py
+	@echo "$(GREEN)Seeding complete!$(NC)"
+
+db-backup: ## Create database backup
+	@echo "$(BLUE)Creating backup...$(NC)"
+	@mkdir -p backups
+	$(DOCKER_COMPOSE) exec -T db pg_dump -U $(shell grep POSTGRES_USER .env | cut -d '=' -f2) $(shell grep POSTGRES_DB .env | cut -d '=' -f2) > backups/backup_$(shell date +%Y%m%d_%H%M%S).sql
+	@echo "$(GREEN)Backup created in backups/$(NC)"
+
+db-restore: ## Restore backup (usage: make db-restore FILE=backup.sql)
+	@if [ -z "$(FILE)" ]; then \
+		echo "$(RED)Error: Specify FILE=backup.sql$(NC)"; \
+		exit 1; \
+	fi
+	@echo "$(BLUE)Restoring backup $(FILE)...$(NC)"
+	$(DOCKER_COMPOSE) exec -T db psql -U $(shell grep POSTGRES_USER .env | cut -d '=' -f2) -d $(shell grep POSTGRES_DB .env | cut -d '=' -f2) < $(FILE)
+	@echo "$(GREEN)Backup restored!$(NC)"
+
+# ============================================================================
+# Cache (Redis)
+# ============================================================================
+
+redis-shell: ## Open Redis shell
+	@echo "$(BLUE)Opening Redis shell...$(NC)"
+	$(DOCKER_COMPOSE) exec redis redis-cli
+
+redis-flush: ## Flush all Redis cache
+	@echo "$(RED)⚠️  Warning: This will flush all cache!$(NC)"
+	@read -p "Confirm (y/N): " confirm; \
+	if [ "$$confirm" = "y" ]; then \
+		echo "$(BLUE)Flushing cache...$(NC)"; \
+		$(DOCKER_COMPOSE) exec redis redis-cli FLUSHALL; \
+		echo "$(GREEN)Cache flushed!$(NC)"; \
+	else \
+		echo "$(GREEN)Cancelled.$(NC)"; \
+	fi
+
+# ============================================================================
+# Celery (Tasks)
+# ============================================================================
+
+celery-logs: ## Display Celery logs
+	$(DOCKER_COMPOSE) logs -f celery
+
+celery-shell: ## Open Celery shell
+	@echo "$(BLUE)Opening Celery shell...$(NC)"
+	$(DOCKER_COMPOSE) exec celery celery -A src.$(PROJECT_NAME).infrastructure.messaging.celery_app shell
+
+celery-status: ## Display Celery workers status
+	@echo "$(BLUE)Celery workers status:$(NC)"
+	$(DOCKER_COMPOSE) exec celery celery -A src.$(PROJECT_NAME).infrastructure.messaging.celery_app inspect active
+
+celery-purge: ## Purge all pending tasks
+	@echo "$(RED)⚠️  Warning: This will delete all pending tasks!$(NC)"
+	@read -p "Confirm (y/N): " confirm; \
+	if [ "$$confirm" = "y" ]; then \
+		echo "$(BLUE)Purging tasks...$(NC)"; \
+		$(DOCKER_COMPOSE) exec celery celery -A src.$(PROJECT_NAME).infrastructure.messaging.celery_app purge -f; \
+		echo "$(GREEN)Tasks purged!$(NC)"; \
+	else \
+		echo "$(GREEN)Cancelled.$(NC)"; \
+	fi
+
+# ============================================================================
+# Build & Deploy
+# ============================================================================
+
+build: ## Build Docker images
+	@echo "$(BLUE)Building Docker images...$(NC)"
+	$(DOCKER_COMPOSE) build
+
+build-no-cache: ## Build images without cache
+	@echo "$(BLUE)Building without cache...$(NC)"
+	$(DOCKER_COMPOSE) build --no-cache
+
+rebuild: build down dev-bg ## Complete rebuild and restart
+	@echo "$(GREEN)Rebuild complete!$(NC)"
+
+# ============================================================================
+# Clean
+# ============================================================================
+
+clean: ## Clean temporary files
+	@echo "$(BLUE)Cleaning...$(NC)"
+	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	find . -type f -name "*.pyc" -delete
+	find . -type f -name "*.pyo" -delete
+	find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name ".mypy_cache" -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name ".ruff_cache" -exec rm -rf {} + 2>/dev/null || true
+	rm -rf htmlcov/
+	rm -rf mypy-report/
+	rm -f .coverage
+	rm -f coverage.xml
+	rm -f bandit-report.json
+	@echo "$(GREEN)Cleaning complete!$(NC)"
+
+clean-all: clean down ## Complete cleanup (containers + volumes + images)
+	@echo "$(RED)⚠️  Warning: This will delete all containers, volumes and images!$(NC)"
+	@read -p "Confirm (y/N): " confirm; \
+	if [ "$$confirm" = "y" ]; then \
+		echo "$(BLUE)Complete cleanup...$(NC)"; \
+		$(DOCKER_COMPOSE) down -v --rmi local; \
+		rm -rf .venv; \
+		echo "$(GREEN)Complete cleanup done!$(NC)"; \
+	else \
+		echo "$(GREEN)Cancelled.$(NC)"; \
+	fi
+
+# ============================================================================
+# Documentation
+# ============================================================================
+
+docs-serve: ## Serve documentation (MkDocs/Sphinx)
+	@echo "$(BLUE)Starting documentation...$(NC)"
+	$(DOCKER_EXEC) mkdocs serve -a 0.0.0.0:8001
+
+docs-build: ## Build documentation
+	@echo "$(BLUE)Building documentation...$(NC)"
+	$(DOCKER_EXEC) mkdocs build
+
+# ============================================================================
+# Utils
+# ============================================================================
+
+check-env: ## Check that .env exists and contains necessary variables
+	@echo "$(BLUE)Checking .env...$(NC)"
+	@if [ ! -f .env ]; then \
+		echo "$(RED)Error: .env does not exist. Copy from .env.example$(NC)"; \
+		exit 1; \
+	fi
+	@echo "$(GREEN).env OK!$(NC)"
+
+version: ## Display project version
+	@echo "$(BLUE)Version:$(NC)"
+	@grep version pyproject.toml | head -1 | cut -d '"' -f 2
+
+deps-update: ## Update all dependencies
+	@echo "$(BLUE)Updating dependencies...$(NC)"
+	$(POETRY) update
+	@echo "$(GREEN)Dependencies updated!$(NC)"
+
+deps-outdated: ## List outdated dependencies
+	@echo "$(BLUE)Outdated dependencies:$(NC)"
+	$(POETRY) show --outdated
+
+deps-tree: ## Display dependency tree
+	@echo "$(BLUE)Dependency tree:$(NC)"
+	$(POETRY) show --tree
+
+run: ## Run Python script (usage: make run SCRIPT=path/to/script.py)
+	@if [ -z "$(SCRIPT)" ]; then \
+		echo "$(RED)Error: Specify SCRIPT=path/to/script.py$(NC)"; \
+		exit 1; \
+	fi
+	@echo "$(BLUE)Running $(SCRIPT)...$(NC)"
+	$(PYTHON) $(SCRIPT)
+
+# ============================================================================
+# CI Helpers
+# ============================================================================
+
+ci-test: ## Tests for CI (with XML coverage)
+	@echo "$(BLUE)CI tests...$(NC)"
+	$(PYTEST) tests/ -v --cov=src --cov-report=xml --cov-report=term
+
+ci-quality: lint type-check security-check ## Quality checks for CI
+	@echo "$(GREEN)Quality checks OK!$(NC)"
+
+ci: ci-quality ci-test ## Complete CI pipeline
+	@echo "$(GREEN)CI pipeline completed successfully!$(NC)"
+
+# ============================================================================
+# Development Shortcuts
+# ============================================================================
+
+full-check: quality test-cov ## Complete check (quality + tests + coverage)
+	@echo "$(GREEN)✓ All checks passed!$(NC)"
+
+quick-test: lint test-unit ## Quick check (lint + unit tests)
+	@echo "$(GREEN)✓ Quick check OK!$(NC)"
+
+watch: ## Development mode with auto-reload
+	@echo "$(BLUE)Watch mode enabled...$(NC)"
+	$(DOCKER_COMPOSE) up app
+
+init: setup db-seed ## Complete initialization for new dev
+	@echo "$(GREEN)✓ Project initialized!$(NC)"
+	@echo "$(BLUE)You can now run: make dev$(NC)"

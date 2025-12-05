@@ -1,0 +1,543 @@
+# CLAUDE.md - {{PROJECT_NAME}}
+
+**Projet React Native / Expo avec TypeScript**
+
+---
+
+## 🎯 Contexte du Projet
+
+**Nom**: {{PROJECT_NAME}}
+**Type**: Application mobile (iOS + Android)
+**Stack**: {{TECH_STACK}}
+
+### Description
+{{PROJECT_DESCRIPTION}}
+
+### Objectifs
+- {{GOAL_1}}
+- {{GOAL_2}}
+- {{GOAL_3}}
+
+---
+
+## 📋 Règles Fondamentales
+
+### RÈGLE #1: ANALYSE OBLIGATOIRE
+**AVANT tout code, une phase d'analyse COMPLÈTE est OBLIGATOIRE.**
+
+Voir: [01-workflow-analysis.md](./rules/01-workflow-analysis.md)
+
+**Processus**:
+1. Comprendre le besoin
+2. Analyser l'architecture existante
+3. Identifier les impacts
+4. Concevoir la solution
+5. Planifier l'implémentation
+6. Valider l'approche
+7. **PUIS** coder
+
+**Ratio minimum**: 1h d'analyse = 1h de code
+
+### RÈGLE #2: ARCHITECTURE FIRST
+**Respecter l'architecture établie.**
+
+Voir: [02-architecture.md](./rules/02-architecture.md)
+
+**Structure**:
+```
+src/
+├── app/                    # Expo Router (file-based routing)
+├── components/             # Composants réutilisables
+├── features/               # Features par domaine métier
+├── hooks/                  # Custom hooks
+├── services/               # API, Storage, etc.
+├── stores/                 # State management global
+├── utils/                  # Utilitaires
+├── types/                  # Types TypeScript
+├── theme/                  # Theme (colors, spacing)
+└── constants/              # Constantes
+```
+
+### RÈGLE #3: STANDARDS DE CODE
+**Code TypeScript strict, ESLint, Prettier.**
+
+Voir: [03-coding-standards.md](./rules/03-coding-standards.md)
+
+**Exigences**:
+- TypeScript strict mode activé
+- ESLint: 0 errors, 0 warnings
+- Prettier: Auto-format
+- Named exports (sauf screens)
+- JSDoc pour APIs publiques
+
+### RÈGLE #4: PRINCIPES SOLID
+**Appliquer SOLID, KISS, DRY, YAGNI.**
+
+Voir: [04-solid-principles.md](./rules/04-solid-principles.md), [05-kiss-dry-yagni.md](./rules/05-kiss-dry-yagni.md)
+
+**Principes**:
+- **S**ingle Responsibility
+- **O**pen/Closed
+- **L**iskov Substitution
+- **I**nterface Segregation
+- **D**ependency Inversion
+
+### RÈGLE #5: TESTS OBLIGATOIRES
+**Tout code doit être testé.**
+
+Voir: [07-testing.md](./rules/07-testing.md)
+
+**Coverage minimum**: 80%
+- Unit tests pour utils/services
+- Component tests pour UI
+- Integration tests pour hooks
+- E2E tests pour flows critiques
+
+### RÈGLE #6: SÉCURITÉ
+**La sécurité n'est pas optionnelle.**
+
+Voir: [11-security.md](./rules/11-security.md)
+
+**Exigences**:
+- Tokens dans SecureStore
+- HTTPS uniquement
+- Input validation (Zod)
+- Pas de secrets dans code
+- Dependencies audit clean
+
+### RÈGLE #7: PERFORMANCE
+**Target: 60 FPS sur toutes interactions.**
+
+Voir: [12-performance.md](./rules/12-performance.md)
+
+**Optimisations**:
+- Hermes engine activé
+- React.memo pour composants
+- FlatList optimisé
+- Images optimisées (expo-image)
+- Animations avec native driver
+
+---
+
+## 🛠 Stack Technique
+
+### Core
+- **React Native**: {{REACT_NATIVE_VERSION}}
+- **Expo SDK**: {{EXPO_SDK_VERSION}}
+- **TypeScript**: {{TYPESCRIPT_VERSION}}
+- **Node.js**: {{NODE_VERSION}}
+
+### Navigation
+- **Expo Router**: File-based routing
+
+### State Management
+- **React Query**: Server state
+- **Zustand**: Global client state
+- **MMKV**: Fast persistence
+
+### UI/Styling
+- **StyleSheet**: Styles natifs
+- **Theme**: Centralisé
+- **Reanimated**: Animations
+
+### Forms & Validation
+- **React Hook Form**: Gestion forms
+- **Zod**: Validation schemas
+
+### Testing
+- **Jest**: Tests unitaires
+- **React Native Testing Library**: Tests composants
+- **Detox**: Tests E2E
+
+### Tools
+- **ESLint**: Linting
+- **Prettier**: Formatting
+- **Husky**: Git hooks
+
+---
+
+## 📦 Commandes Essentielles
+
+### Development
+
+```bash
+# Démarrer dev server
+npx expo start
+
+# Run iOS
+npx expo start --ios
+
+# Run Android
+npx expo start --android
+
+# Clear cache
+npx expo start --clear
+
+# Type check
+npm run type-check
+
+# Lint
+npm run lint
+npm run lint:fix
+
+# Format
+npm run format
+
+# Tests
+npm test
+npm run test:watch
+npm run test:coverage
+```
+
+### Build & Deploy
+
+```bash
+# Build development
+eas build --profile development --platform all
+
+# Build preview
+eas build --profile preview --platform all
+
+# Build production
+eas build --profile production --platform all
+
+# Submit to stores
+eas submit --platform ios
+eas submit --platform android
+
+# OTA Update
+eas update --branch production --message "Bug fixes"
+```
+
+---
+
+## 🏗 Architecture
+
+### Layers
+
+```
+┌─────────────────────────────┐
+│   PRESENTATION (UI)         │  <- app/, components/
+├─────────────────────────────┤
+│   APPLICATION (Logic)       │  <- hooks/, stores/
+├─────────────────────────────┤
+│   DOMAIN (Business)         │  <- types/, utils/
+├─────────────────────────────┤
+│   DATA (Services)           │  <- services/
+└─────────────────────────────┘
+```
+
+### État (State Management)
+
+**Decision Tree**:
+```
+Data serveur? → React Query
+État global? → Zustand
+Persistance? → MMKV
+URL state? → Expo Router params
+Local state? → useState
+```
+
+### Navigation (Expo Router)
+
+**File-based routing**:
+```
+app/
+├── _layout.tsx              # Root layout
+├── (tabs)/                  # Tab navigation
+│   ├── _layout.tsx
+│   ├── index.tsx            # Home (/)
+│   └── profile.tsx          # Profile (/profile)
+├── (auth)/                  # Auth group
+│   ├── login.tsx            # Login (/login)
+│   └── register.tsx         # Register (/register)
+└── article/
+    └── [id].tsx            # Dynamic (/article/123)
+```
+
+---
+
+## 📚 Documentation Complète
+
+### Règles Détaillées
+
+1. [00-project-context.md.template](./rules/00-project-context.md.template) - Template contexte projet
+2. [01-workflow-analysis.md](./rules/01-workflow-analysis.md) - Analyse obligatoire
+3. [02-architecture.md](./rules/02-architecture.md) - Architecture React Native
+4. [03-coding-standards.md](./rules/03-coding-standards.md) - Standards TypeScript
+5. [04-solid-principles.md](./rules/04-solid-principles.md) - Principes SOLID
+6. [05-kiss-dry-yagni.md](./rules/05-kiss-dry-yagni.md) - Simplicité
+7. [06-tooling.md](./rules/06-tooling.md) - Outils (Expo, EAS)
+8. [07-testing.md](./rules/07-testing.md) - Tests
+9. [08-quality-tools.md](./rules/08-quality-tools.md) - ESLint, Prettier
+10. [09-git-workflow.md](./rules/09-git-workflow.md) - Git & Conventional Commits
+11. [10-documentation.md](./rules/10-documentation.md) - Documentation
+12. [11-security.md](./rules/11-security.md) - Sécurité
+13. [12-performance.md](./rules/12-performance.md) - Performance
+14. [13-state-management.md](./rules/13-state-management.md) - State management
+15. [14-navigation.md](./rules/14-navigation.md) - Navigation
+
+### Templates
+
+- [templates/screen.md](./templates/screen.md) - Template screen
+- [templates/component.md](./templates/component.md) - Template composant
+- [templates/hook.md](./templates/hook.md) - Template hook
+- [templates/test-component.md](./templates/test-component.md) - Template test
+
+### Checklists
+
+- [checklists/pre-commit.md](./checklists/pre-commit.md) - Avant commit
+- [checklists/new-feature.md](./checklists/new-feature.md) - Nouvelle feature
+- [checklists/refactoring.md](./checklists/refactoring.md) - Refactoring
+- [checklists/security.md](./checklists/security.md) - Audit sécurité
+
+---
+
+## 🔧 Configuration
+
+### Environment Variables
+
+```bash
+# .env.development
+EXPO_PUBLIC_API_URL={{DEV_API_URL}}
+EXPO_PUBLIC_ENVIRONMENT=development
+
+# .env.production
+EXPO_PUBLIC_API_URL={{PROD_API_URL}}
+EXPO_PUBLIC_ENVIRONMENT=production
+```
+
+### EAS Secrets
+
+```bash
+# Set secret
+eas secret:create --name API_KEY --value "secret" --type string
+
+# List secrets
+eas secret:list
+```
+
+---
+
+## ✅ Checklist Pre-Development
+
+Avant de commencer à coder:
+
+- [ ] CLAUDE.md lu et compris
+- [ ] Règles fondamentales comprises
+- [ ] Architecture du projet comprise
+- [ ] Stack technique maîtrisée
+- [ ] Environment setup complet
+- [ ] Accès aux services (API, etc.)
+- [ ] Git workflow compris
+- [ ] Conventional Commits compris
+
+---
+
+## 🚀 Workflow Type: Nouvelle Feature
+
+### 1. Analyse (OBLIGATOIRE)
+```bash
+# Lire la règle
+cat rules/01-workflow-analysis.md
+```
+
+**Étapes**:
+1. Comprendre besoin
+2. Analyser architecture
+3. Identifier impacts
+4. Concevoir solution
+5. Planifier implémentation
+
+### 2. Setup
+```bash
+# Créer branch
+git checkout -b feature/feature-name
+
+# Créer ticket/issue
+```
+
+### 3. Implementation (Bottom-Up)
+```
+1. Types (types/)
+2. Services (services/)
+3. Hooks (hooks/)
+4. Components (components/)
+5. Screens (app/)
+6. Integration
+```
+
+### 4. Tests
+```bash
+# Unit tests
+npm test
+
+# Coverage
+npm run test:coverage
+
+# E2E
+detox test
+```
+
+### 5. Quality
+```bash
+# Lint
+npm run lint
+
+# Type check
+npm run type-check
+
+# Format
+npm run format
+```
+
+### 6. Review & Merge
+```bash
+# Create PR
+gh pr create
+
+# After approval
+git checkout develop
+git merge feature/feature-name
+```
+
+---
+
+## 📊 Métriques Qualité
+
+### Targets
+
+- **Code Coverage**: > 80%
+- **Bundle Size**: < 10MB
+- **Startup Time**: < 3s
+- **FPS**: 60 FPS constant
+- **ESLint**: 0 errors
+- **TypeScript**: 0 errors (strict)
+- **npm audit**: 0 vulnerabilities
+
+---
+
+## 🐛 Debugging
+
+### React Native Debugger
+
+```bash
+# Install
+brew install --cask react-native-debugger
+
+# Run
+open "rndebugger://set-debugger-loc?host=localhost&port=8081"
+```
+
+### Logs
+
+```bash
+# iOS logs
+npx react-native log-ios
+
+# Android logs
+npx react-native log-android
+
+# Expo logs
+npx expo start
+```
+
+---
+
+## 📞 Support & Resources
+
+### Documentation
+- **Expo**: https://docs.expo.dev
+- **React Native**: https://reactnative.dev
+- **React Navigation**: https://reactnavigation.org
+- **React Query**: https://tanstack.com/query
+
+### Team
+- **Tech Lead**: {{TECH_LEAD}}
+- **Product Owner**: {{PRODUCT_OWNER}}
+- **Backend Lead**: {{BACKEND_LEAD}}
+
+### Communication
+- **Slack**: {{SLACK_CHANNEL}}
+- **JIRA**: {{JIRA_PROJECT}}
+
+---
+
+## 🎓 Pour Claude Code
+
+### Instructions Spéciales
+
+1. **TOUJOURS commencer par l'analyse** (règle #1)
+2. **Respecter l'architecture** établie
+3. **Suivre les standards** de code
+4. **Écrire les tests** en même temps
+5. **Documenter** le code (JSDoc)
+6. **Commit atomiques** avec Conventional Commits
+7. **Performance first** (60 FPS target)
+8. **Sécurité by design**
+
+### Approche Recommandée
+
+```
+Question/Tâche reçue
+    ↓
+Analyser (règle 01)
+    ↓
+Concevoir
+    ↓
+Implémenter (bottom-up)
+    ↓
+Tester
+    ↓
+Documenter
+    ↓
+Commit
+```
+
+### Anti-Patterns à Éviter
+
+❌ Coder sans analyser
+❌ Modifier sans comprendre
+❌ Tests après coup
+❌ Duplication de code
+❌ Inline functions/styles
+❌ any en TypeScript
+❌ console.log oubliés
+❌ Secrets dans code
+
+### Patterns à Suivre
+
+✅ Analyse avant code
+✅ Tests en parallèle
+✅ Code simple (KISS)
+✅ DRY (Don't Repeat Yourself)
+✅ SOLID principles
+✅ Type-safe (TypeScript)
+✅ Performance optimized
+✅ Security first
+
+---
+
+## 📝 Notes Projet
+
+### Décisions Architecture (ADRs)
+
+{{ADR_NOTES}}
+
+### Conventions Spécifiques
+
+{{PROJECT_SPECIFIC_CONVENTIONS}}
+
+### Known Issues
+
+{{KNOWN_ISSUES}}
+
+---
+
+**Version**: 1.0.0
+**Dernière mise à jour**: {{LAST_UPDATE}}
+**Maintenu par**: {{MAINTAINER}}
+
+---
+
+**Remember**: Quality > Speed. Take time to analyze, design, then code properly.

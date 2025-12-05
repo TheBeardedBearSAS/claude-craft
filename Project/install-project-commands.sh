@@ -1,17 +1,56 @@
 #!/bin/bash
-# Installation des commandes et agents Project pour Claude Code
-# Version avec tracking complet (EPIC, US, Tasks)
-# Usage: ./install-project-commands.sh [chemin_projet]
+# Multilingual installation of Project commands and agents for Claude Code
+# Version 2.0.0 - Full tracking (EPIC, US, Tasks) with i18n support
+# Usage: ./install-project-commands.sh [OPTIONS] [PROJECT_DIR]
 
 set -e
 
-PROJECT_DIR="${1:-.}"
-CLAUDE_DIR="$PROJECT_DIR/.claude"
+VERSION="2.0.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+I18N_DIR="$SCRIPT_DIR/i18n"
+lang="en"
 
-echo "🚀 Installation des commandes Project pour Claude Code"
+# Parse arguments
+PROJECT_DIR="."
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --lang=*) lang="${1#--lang=}"; shift ;;
+        --help|-h)
+            echo "Usage: $0 [OPTIONS] [PROJECT_DIR]"
+            echo ""
+            echo "Options:"
+            echo "  --lang=XX   Language (en, fr, es, de, pt) - default: en"
+            echo "  --help      Show this help"
+            echo ""
+            echo "Example:"
+            echo "  $0 --lang=fr ~/my-project"
+            exit 0
+            ;;
+        -*) echo "Unknown option: $1"; exit 1 ;;
+        *) PROJECT_DIR="$1"; shift ;;
+    esac
+done
+
+CLAUDE_DIR="$PROJECT_DIR/.claude"
+
+# Get i18n source directory
+get_source_dir() {
+    local i18n_src="$I18N_DIR/$lang"
+    if [[ -d "$i18n_src" ]]; then
+        echo "$i18n_src"
+    else
+        echo "$SCRIPT_DIR"
+    fi
+}
+
+SRC_DIR=$(get_source_dir)
+
+echo "🚀 Installing Project commands for Claude Code"
 echo "=================================================="
-echo "Répertoire projet: $PROJECT_DIR"
+echo "Version: $VERSION"
+echo "Language: $lang"
+echo "Project directory: $PROJECT_DIR"
+echo "Source: $SRC_DIR"
 echo ""
 
 # Créer la structure .claude
@@ -35,25 +74,37 @@ if ls "$CLAUDE_DIR/commands/"*.md 1>/dev/null 2>&1; then
     echo "✅ Migration effectuée"
 fi
 
-# Copier les commandes
-if [ -d "$SCRIPT_DIR/claude-commands" ]; then
-    cp "$SCRIPT_DIR/claude-commands/"*.md "$CLAUDE_DIR/commands/project/" 2>/dev/null || true
-    COMMANDS_COUNT=$(ls -1 "$SCRIPT_DIR/claude-commands/"*.md 2>/dev/null | wc -l)
-    echo "✅ $COMMANDS_COUNT commandes copiées"
+# Copy commands from i18n source
+CMD_SRC="$SRC_DIR/commands"
+if [ ! -d "$CMD_SRC" ]; then
+    CMD_SRC="$SCRIPT_DIR/claude-commands"
+fi
+if [ -d "$CMD_SRC" ]; then
+    cp "$CMD_SRC/"*.md "$CLAUDE_DIR/commands/project/" 2>/dev/null || true
+    COMMANDS_COUNT=$(ls -1 "$CMD_SRC/"*.md 2>/dev/null | wc -l)
+    echo "✅ $COMMANDS_COUNT commands copied"
 fi
 
-# Copier les agents
-if [ -d "$SCRIPT_DIR/claude-agents" ]; then
-    cp "$SCRIPT_DIR/claude-agents/"*.md "$CLAUDE_DIR/agents/" 2>/dev/null || true
-    AGENTS_COUNT=$(ls -1 "$SCRIPT_DIR/claude-agents/"*.md 2>/dev/null | wc -l)
-    echo "✅ $AGENTS_COUNT agents copiés"
+# Copy agents from i18n source
+AGT_SRC="$SRC_DIR/agents"
+if [ ! -d "$AGT_SRC" ]; then
+    AGT_SRC="$SCRIPT_DIR/claude-agents"
+fi
+if [ -d "$AGT_SRC" ]; then
+    cp "$AGT_SRC/"*.md "$CLAUDE_DIR/agents/" 2>/dev/null || true
+    AGENTS_COUNT=$(ls -1 "$AGT_SRC/"*.md 2>/dev/null | wc -l)
+    echo "✅ $AGENTS_COUNT agents copied"
 fi
 
-# Copier les templates
-if [ -d "$SCRIPT_DIR/templates" ]; then
-    cp "$SCRIPT_DIR/templates/"*.md "$CLAUDE_DIR/templates/project/" 2>/dev/null || true
-    TEMPLATES_COUNT=$(ls -1 "$SCRIPT_DIR/templates/"*.md 2>/dev/null | wc -l)
-    echo "✅ $TEMPLATES_COUNT templates copiés"
+# Copy templates from i18n source
+TPL_SRC="$SRC_DIR/templates"
+if [ ! -d "$TPL_SRC" ]; then
+    TPL_SRC="$SCRIPT_DIR/templates"
+fi
+if [ -d "$TPL_SRC" ]; then
+    cp "$TPL_SRC/"*.md "$CLAUDE_DIR/templates/project/" 2>/dev/null || true
+    TEMPLATES_COUNT=$(ls -1 "$TPL_SRC/"*.md 2>/dev/null | wc -l)
+    echo "✅ $TEMPLATES_COUNT templates copied"
 fi
 
 # Créer l'index initial du backlog
