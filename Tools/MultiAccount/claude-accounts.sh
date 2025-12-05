@@ -1,7 +1,7 @@
 #!/bin/bash
 # =============================================================================
 # Claude Code Multi-Account Manager
-# Gère facilement plusieurs comptes Claude Code
+# Manage multiple Claude Code accounts easily
 # =============================================================================
 
 set -e
@@ -11,7 +11,14 @@ CLAUDE_PROFILES_DIR="$HOME/.claude-profiles"
 SHELL_RC=""
 CLAUDE_BIN="claude"
 
-# Couleurs
+# i18n Configuration
+VALID_LANGS=("en" "fr" "es" "de" "pt")
+DEFAULT_LANG="en"
+LANG_ARG=""
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
+
+# Colors
 C_RESET='\033[0m'
 C_BOLD='\033[1m'
 C_RED='\033[0;31m'
@@ -22,12 +29,66 @@ C_MAGENTA='\033[0;35m'
 C_CYAN='\033[0;36m'
 
 # =============================================================================
-# Utilitaires
+# i18n - Load messages
+# =============================================================================
+
+load_messages() {
+    local lang="${LANG_ARG:-$DEFAULT_LANG}"
+    local msg_file="$I18N_DIR/accounts/${lang}.sh"
+
+    if [[ -f "$msg_file" ]]; then
+        # shellcheck source=/dev/null
+        source "$msg_file"
+    else
+        # Fallback to English
+        local fallback="$I18N_DIR/accounts/en.sh"
+        if [[ -f "$fallback" ]]; then
+            # shellcheck source=/dev/null
+            source "$fallback"
+        else
+            # Minimal embedded defaults
+            MSG_HEADER="Claude Code Multi-Account Manager"
+            MSG_INVALID_CHOICE="Invalid choice"
+            MSG_UNKNOWN_COMMAND="Unknown command:"
+            MSG_GOODBYE="Goodbye!"
+            MSG_INVALID_LANG="Invalid language:"
+            MSG_VALID_LANGS="Valid languages:"
+        fi
+    fi
+}
+
+# Parse --lang early (before other args)
+parse_lang() {
+    for arg in "$@"; do
+        case "$arg" in
+            --lang=*)
+                LANG_ARG="${arg#--lang=}"
+                # Validate language
+                local valid=false
+                for l in "${VALID_LANGS[@]}"; do
+                    [[ "$LANG_ARG" == "$l" ]] && valid=true
+                done
+                if ! $valid; then
+                    echo -e "${C_RED}${MSG_INVALID_LANG:-Invalid language:}${C_RESET} $LANG_ARG"
+                    echo "${MSG_VALID_LANGS:-Valid languages:} ${VALID_LANGS[*]}"
+                    exit 1
+                fi
+                ;;
+        esac
+    done
+}
+
+# Parse language first
+parse_lang "$@"
+load_messages
+
+# =============================================================================
+# Utilities
 # =============================================================================
 
 print_header() {
     echo -e "\n${C_CYAN}╔════════════════════════════════════════════════════════════╗${C_RESET}"
-    echo -e "${C_CYAN}║${C_RESET}     ${C_BOLD}🔐 Claude Code Multi-Account Manager${C_RESET}                  ${C_CYAN}║${C_RESET}"
+    echo -e "${C_CYAN}║${C_RESET}     ${C_BOLD}🔐 ${MSG_HEADER}${C_RESET}                  ${C_CYAN}║${C_RESET}"
     echo -e "${C_CYAN}╚════════════════════════════════════════════════════════════╝${C_RESET}\n"
 }
 
@@ -60,75 +121,75 @@ detect_shell_rc() {
 ensure_profiles_dir() {
     if [[ ! -d "$CLAUDE_PROFILES_DIR" ]]; then
         mkdir -p "$CLAUDE_PROFILES_DIR"
-        print_success "Répertoire des profils créé: $CLAUDE_PROFILES_DIR"
+        print_success "${MSG_PROFILES_DIR_CREATED} $CLAUDE_PROFILES_DIR"
     fi
 }
 
 # =============================================================================
-# Gestion des modes (shared/isolated)
+# Mode management (shared/isolated)
 # =============================================================================
 
-# Lire le mode d'un profil
+# Read profile mode
 get_profile_mode() {
     local profile_name="$1"
     local mode_file="$CLAUDE_PROFILES_DIR/$profile_name/.mode"
     cat "$mode_file" 2>/dev/null || echo "legacy"
 }
 
-# Obtenir le label du mode pour affichage
+# Get mode label for display
 get_mode_label() {
     local mode="$1"
     case "$mode" in
-        shared)   echo "${C_GREEN}[partagé]${C_RESET}" ;;
-        isolated) echo "${C_MAGENTA}[isolé]${C_RESET}" ;;
-        *)        echo "${C_YELLOW}[legacy]${C_RESET}" ;;
+        shared)   echo "${C_GREEN}${MSG_MODE_LABEL_SHARED}${C_RESET}" ;;
+        isolated) echo "${C_MAGENTA}${MSG_MODE_LABEL_ISOLATED}${C_RESET}" ;;
+        *)        echo "${C_YELLOW}${MSG_MODE_LABEL_LEGACY}${C_RESET}" ;;
     esac
 }
 
-# Configurer un profil en mode partagé
+# Configure profile in shared mode
 setup_shared_profile() {
     local profile_path="$1"
     echo "shared" > "$profile_path/.mode"
 
-    # Créer symlink vers ~/.claude pour la config
+    # Create symlink to ~/.claude for config
     if [[ -d "$HOME/.claude" ]]; then
         ln -sf "$HOME/.claude" "$profile_path/config"
-        print_success "Symlink créé vers ~/.claude"
+        print_success "${MSG_SYMLINK_CREATED}"
     else
-        print_warning "~/.claude n'existe pas, le symlink sera créé plus tard"
+        print_warning "${MSG_CLAUDE_DIR_MISSING}"
     fi
 }
 
-# Configurer un profil en mode isolé
+# Configure profile in isolated mode
 setup_isolated_profile() {
     local profile_path="$1"
     echo "isolated" > "$profile_path/.mode"
 
-    # Copier ~/.claude si existe
+    # Copy ~/.claude if exists
     if [[ -d "$HOME/.claude" ]]; then
-        # Copie tout sauf les credentials
+        # Copy everything except credentials
         for item in "$HOME/.claude"/*; do
             [[ -e "$item" ]] || continue
             local basename=$(basename "$item")
-            # Ne pas copier les credentials
+            # Don't copy credentials
             if [[ "$basename" != ".credentials.json" ]]; then
                 cp -r "$item" "$profile_path/" 2>/dev/null || true
             fi
         done
-        print_success "Configuration copiée depuis ~/.claude"
+        print_success "${MSG_CONFIG_COPIED}"
     else
-        print_warning "~/.claude n'existe pas, profil vide créé"
+        print_warning "${MSG_EMPTY_PROFILE}"
     fi
 }
 
-# Demander le mode lors de la création
+# Ask for mode during creation
 ask_profile_mode() {
     echo ""
-    print_info "Choisissez le mode du profil:"
-    echo -e "  ${C_CYAN}1)${C_RESET} Partagé  - Même config que ~/.claude (switch pour limites)"
-    echo -e "  ${C_CYAN}2)${C_RESET} Isolé    - Config indépendante (ex: client)"
+    print_info "${MSG_MODE_CHOOSE}"
+    echo -e "  ${C_CYAN}1)${C_RESET} ${MSG_MODE_SHARED_DESC}"
+    echo -e "  ${C_CYAN}2)${C_RESET} ${MSG_MODE_ISOLATED_DESC}"
     echo ""
-    read -p "Mode [1]: " mode_choice
+    read -p "${MSG_MODE_PROMPT} " mode_choice
     mode_choice=${mode_choice:-1}
 
     case "$mode_choice" in
@@ -138,15 +199,15 @@ ask_profile_mode() {
 }
 
 # =============================================================================
-# Gestion des profils
+# Profile management
 # =============================================================================
 
 list_profiles() {
-    echo -e "\n${C_BOLD}📋 Profils configurés :${C_RESET}\n"
+    echo -e "\n${C_BOLD}📋 ${MSG_PROFILES_TITLE}${C_RESET}\n"
 
     if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
-        print_warning "Aucun profil configuré"
-        echo -e "   Utilise ${C_CYAN}Ajouter un profil${C_RESET} pour commencer\n"
+        print_warning "${MSG_NO_PROFILE}"
+        echo -e "   ${MSG_USE_ADD}\n"
         return
     fi
 
@@ -158,8 +219,8 @@ list_profiles() {
         local credentials_file="$profile_dir/.credentials.json"
         local settings_file="$profile_dir/settings.json"
 
-        # Essaie de lire l'email depuis les credentials
-        local email="(non authentifié)"
+        # Try to read email from credentials
+        local email="(${MSG_STATUS_NOT_AUTH})"
         if [[ -f "$credentials_file" ]]; then
             local stored_email=$(jq -r '.email // empty' "$credentials_file" 2>/dev/null)
             [[ -n "$stored_email" ]] && email="$stored_email"
@@ -171,49 +232,49 @@ list_profiles() {
             status="${C_GREEN}●${C_RESET}"
         fi
 
-        # Mode du profil
+        # Profile mode
         local mode=$(get_profile_mode "$profile_name")
         local mode_label=$(get_mode_label "$mode")
 
         echo -e "   $status ${C_BOLD}$profile_name${C_RESET} $mode_label"
         echo -e "     └─ $email"
-        echo -e "     └─ Alias: ${C_CYAN}claude-$profile_name${C_RESET}"
+        echo -e "     └─ ${MSG_ALIAS_LABEL} ${C_CYAN}claude-$profile_name${C_RESET}"
         echo ""
 
         ((index++))
     done
 
-    echo -e "   ${C_GREEN}●${C_RESET} = authentifié   ${C_YELLOW}○${C_RESET} = non authentifié"
-    echo -e "   ${C_GREEN}[partagé]${C_RESET} = config ~/.claude   ${C_MAGENTA}[isolé]${C_RESET} = config indépendante   ${C_YELLOW}[legacy]${C_RESET} = ancien profil\n"
+    echo -e "   ${C_GREEN}●${C_RESET} ${MSG_STATUS_LEGEND_AUTH}   ${C_YELLOW}○${C_RESET} ${MSG_STATUS_LEGEND_NOT_AUTH}"
+    echo -e "   ${C_GREEN}${MSG_MODE_LABEL_SHARED}${C_RESET} = ${MSG_MODE_LEGEND}   ${C_MAGENTA}${MSG_MODE_LABEL_ISOLATED}${C_RESET} = ${MSG_MODE_LEGEND_ISOLATED}   ${C_YELLOW}${MSG_MODE_LABEL_LEGACY}${C_RESET} = ${MSG_MODE_LEGEND_LEGACY}\n"
 }
 
 add_profile() {
-    echo -e "\n${C_BOLD}➕ Ajouter un nouveau profil${C_RESET}\n"
+    echo -e "\n${C_BOLD}➕ ${MSG_ADD_TITLE}${C_RESET}\n"
 
-    # Demande le nom du profil
-    echo -e "Nom du profil (ex: ${C_CYAN}perso${C_RESET}, ${C_CYAN}pro${C_RESET}, ${C_CYAN}client-acme${C_RESET}):"
+    # Ask for profile name
+    echo -e "${MSG_ADD_NAME_PROMPT}"
     read -p "> " profile_name
 
-    # Validation du nom
+    # Validate name
     if [[ -z "$profile_name" ]]; then
-        print_error "Le nom ne peut pas être vide"
+        print_error "${MSG_ADD_NAME_EMPTY}"
         return 1
     fi
 
-    # Nettoie le nom (lowercase, remplace espaces par tirets)
+    # Clean name (lowercase, replace spaces with dashes)
     profile_name=$(echo "$profile_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
 
     local profile_path="$CLAUDE_PROFILES_DIR/$profile_name"
 
     if [[ -d "$profile_path" ]]; then
-        print_error "Le profil '$profile_name' existe déjà"
+        print_error "${MSG_ADD_PROFILE_EXISTS}: '$profile_name'"
         return 1
     fi
 
-    # Crée le répertoire du profil
+    # Create profile directory
     mkdir -p "$profile_path"
 
-    # Demande le mode
+    # Ask for mode
     local mode=$(ask_profile_mode)
 
     if [[ "$mode" == "isolated" ]]; then
@@ -222,21 +283,21 @@ add_profile() {
         setup_shared_profile "$profile_path"
     fi
 
-    print_success "Profil '$profile_name' créé en mode $mode"
+    print_success "${MSG_ADD_PROFILE_CREATED} '$profile_name' ${MSG_MODE_IN} $mode"
 
-    # Ajoute l'alias au shell RC
+    # Add alias to shell RC
     add_alias_to_shell "$profile_name"
 
-    # Propose de s'authentifier maintenant
+    # Offer to authenticate now
     echo ""
-    read -p "Authentifier ce profil maintenant ? (o/N) " -n 1 -r
+    read -p "${MSG_ADD_AUTH_NOW} ${MSG_CONFIRM_YES_NO} " -n 1 -r
     echo ""
 
-    if [[ $REPLY =~ ^[OoYy]$ ]]; then
+    if [[ $REPLY =~ ^[OoYySs]$ ]]; then
         authenticate_profile "$profile_name"
     else
-        print_info "Pour t'authentifier plus tard: ${C_CYAN}claude-$profile_name${C_RESET}"
-        print_info "Ou relance ce script et choisis 'Authentifier un profil'"
+        print_info "${MSG_ADD_AUTH_LATER} ${C_CYAN}claude-$profile_name${C_RESET}"
+        print_info "${MSG_ADD_AUTH_OR}"
     fi
 }
 
@@ -246,34 +307,34 @@ add_alias_to_shell() {
 
     detect_shell_rc
 
-    # Vérifie si l'alias existe déjà
+    # Check if alias already exists
     if grep -q "alias claude-${profile_name}=" "$SHELL_RC" 2>/dev/null; then
-        print_info "Alias déjà présent dans $SHELL_RC"
+        print_info "${MSG_ALIAS_EXISTS} $SHELL_RC"
         return
     fi
 
-    # Ajoute le marqueur de section si pas présent
+    # Add section marker if not present
     if ! grep -q "# Claude Code Profiles" "$SHELL_RC" 2>/dev/null; then
         echo "" >> "$SHELL_RC"
-        echo "# Claude Code Profiles - Géré par claude-accounts" >> "$SHELL_RC"
+        echo "# Claude Code Profiles - Managed by claude-accounts" >> "$SHELL_RC"
     fi
 
-    # Ajoute l'alias
+    # Add alias
     echo "$alias_line" >> "$SHELL_RC"
-    print_success "Alias ajouté à $SHELL_RC"
-    print_warning "Exécute ${C_CYAN}source $SHELL_RC${C_RESET} ou ouvre un nouveau terminal"
+    print_success "${MSG_ALIAS_ADDED} $SHELL_RC"
+    print_warning "${MSG_SOURCE_OR_NEW}: ${C_CYAN}source $SHELL_RC${C_RESET}"
 }
 
 remove_profile() {
-    echo -e "\n${C_BOLD}🗑️  Supprimer un profil${C_RESET}\n"
+    echo -e "\n${C_BOLD}🗑️  ${MSG_REMOVE_TITLE}${C_RESET}\n"
 
     if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
-        print_warning "Aucun profil à supprimer"
+        print_warning "${MSG_REMOVE_NO_PROFILE}"
         return
     fi
 
-    # Liste les profils disponibles
-    echo "Profils disponibles :"
+    # List available profiles
+    echo "${MSG_PROFILES_AVAILABLE}"
     local profiles=()
     local index=1
     for profile_dir in "$CLAUDE_PROFILES_DIR"/*/; do
@@ -285,11 +346,11 @@ remove_profile() {
     done
 
     echo ""
-    read -p "Numéro du profil à supprimer (ou nom): " choice
+    read -p "${MSG_REMOVE_NUMBER_PROMPT} " choice
 
     local profile_to_delete=""
 
-    # Si c'est un numéro
+    # If it's a number
     if [[ "$choice" =~ ^[0-9]+$ ]] && [[ "$choice" -ge 1 ]] && [[ "$choice" -le "${#profiles[@]}" ]]; then
         profile_to_delete="${profiles[$((choice-1))]}"
     else
@@ -299,44 +360,44 @@ remove_profile() {
     local profile_path="$CLAUDE_PROFILES_DIR/$profile_to_delete"
 
     if [[ ! -d "$profile_path" ]]; then
-        print_error "Profil '$profile_to_delete' non trouvé"
+        print_error "${MSG_REMOVE_NOT_FOUND}: '$profile_to_delete'"
         return 1
     fi
 
     # Confirmation
     echo ""
-    print_warning "Tu vas supprimer le profil '${C_BOLD}$profile_to_delete${C_RESET}'"
-    read -p "Confirmer ? (o/N) " -n 1 -r
+    print_warning "${MSG_REMOVE_CONFIRM} '${C_BOLD}$profile_to_delete${C_RESET}'"
+    read -p "${MSG_CONFIRM_YES_NO} " -n 1 -r
     echo ""
 
-    if [[ ! $REPLY =~ ^[OoYy]$ ]]; then
-        print_info "Suppression annulée"
+    if [[ ! $REPLY =~ ^[OoYySs]$ ]]; then
+        print_info "${MSG_REMOVE_CANCELLED}"
         return
     fi
 
-    # Supprime le répertoire
+    # Delete directory
     rm -rf "$profile_path"
-    print_success "Profil '$profile_to_delete' supprimé"
+    print_success "${MSG_REMOVE_DONE}: '$profile_to_delete'"
 
-    # Supprime l'alias du shell RC
+    # Remove alias from shell RC
     detect_shell_rc
     if [[ -f "$SHELL_RC" ]]; then
-        # Utilise sed pour supprimer la ligne d'alias
+        # Use sed to delete alias line
         sed -i.bak "/alias claude-${profile_to_delete}=/d" "$SHELL_RC"
         rm -f "${SHELL_RC}.bak"
-        print_success "Alias supprimé de $SHELL_RC"
+        print_success "${MSG_ALIAS_REMOVED} $SHELL_RC"
     fi
 }
 
 migrate_profile() {
-    echo -e "\n${C_BOLD}🔄 Migrer un profil legacy${C_RESET}\n"
+    echo -e "\n${C_BOLD}🔄 ${MSG_MIGRATE_TITLE}${C_RESET}\n"
 
     if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
-        print_warning "Aucun profil configuré"
+        print_warning "${MSG_NO_PROFILE}"
         return
     fi
 
-    # Lister les profils legacy (sans fichier .mode)
+    # List legacy profiles (without .mode file)
     local legacy_profiles=()
     for profile_dir in "$CLAUDE_PROFILES_DIR"/*/; do
         [[ -d "$profile_dir" ]] || continue
@@ -348,21 +409,21 @@ migrate_profile() {
     done
 
     if [[ ${#legacy_profiles[@]} -eq 0 ]]; then
-        print_success "Aucun profil legacy à migrer (tous ont déjà un mode)"
+        print_success "${MSG_MIGRATE_NO_LEGACY}"
         return
     fi
 
-    echo "Profils legacy (sans mode) :"
+    echo "${MSG_MIGRATE_LEGACY_LIST}"
     local i=1
     for pname in "${legacy_profiles[@]}"; do
         echo -e "  ${C_CYAN}$i)${C_RESET} $pname"
         ((i++))
     done
     echo ""
-    read -p "Numéro du profil à migrer: " choice
+    read -p "${MSG_MIGRATE_NUMBER_PROMPT} " choice
 
     if [[ -z "$choice" ]] || ! [[ "$choice" =~ ^[0-9]+$ ]] || [[ "$choice" -lt 1 ]] || [[ "$choice" -gt ${#legacy_profiles[@]} ]]; then
-        print_error "Choix invalide"
+        print_error "${MSG_INVALID_CHOICE}"
         return 1
     fi
 
@@ -370,27 +431,27 @@ migrate_profile() {
     local profile_path="$CLAUDE_PROFILES_DIR/$selected"
 
     echo ""
-    print_info "Migrer '$selected' vers quel mode ?"
-    echo -e "  ${C_CYAN}1)${C_RESET} Partagé  - Créer symlink vers ~/.claude"
-    echo -e "  ${C_CYAN}2)${C_RESET} Isolé    - Garder config actuelle isolée"
+    print_info "${MSG_MIGRATE_TO_MODE} '$selected'"
+    echo -e "  ${C_CYAN}1)${C_RESET} ${MSG_MIGRATE_SHARED_DESC}"
+    echo -e "  ${C_CYAN}2)${C_RESET} ${MSG_MIGRATE_ISOLATED_DESC}"
     echo ""
-    read -p "Mode [1]: " mode_choice
+    read -p "${MSG_MODE_PROMPT} " mode_choice
     mode_choice=${mode_choice:-1}
 
     case "$mode_choice" in
         2)
             echo "isolated" > "$profile_path/.mode"
-            print_success "Profil '$selected' migré en mode ISOLÉ"
-            print_info "La configuration existante est conservée"
+            print_success "${MSG_MIGRATE_DONE_ISOLATED}: '$selected'"
+            print_info "${MSG_MIGRATE_CONFIG_KEPT}"
             ;;
         *)
             echo "shared" > "$profile_path/.mode"
-            # Créer symlink config si pas déjà présent
+            # Create symlink config if not already present
             if [[ ! -L "$profile_path/config" ]] && [[ -d "$HOME/.claude" ]]; then
                 ln -sf "$HOME/.claude" "$profile_path/config"
-                print_success "Symlink créé vers ~/.claude"
+                print_success "${MSG_SYMLINK_CREATED}"
             fi
-            print_success "Profil '$selected' migré en mode PARTAGÉ"
+            print_success "${MSG_MIGRATE_DONE_SHARED}: '$selected'"
             ;;
     esac
 }
@@ -399,15 +460,15 @@ authenticate_profile() {
     local profile_name="$1"
 
     if [[ -z "$profile_name" ]]; then
-        echo -e "\n${C_BOLD}🔐 Authentifier un profil${C_RESET}\n"
+        echo -e "\n${C_BOLD}🔐 ${MSG_AUTH_TITLE}${C_RESET}\n"
 
         if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
-            print_warning "Aucun profil configuré. Crée d'abord un profil."
+            print_warning "${MSG_AUTH_CREATE_FIRST}"
             return
         fi
 
-        # Liste les profils
-        echo "Profils disponibles :"
+        # List profiles
+        echo "${MSG_PROFILES_AVAILABLE}"
         local profiles=()
         local index=1
         for profile_dir in "$CLAUDE_PROFILES_DIR"/*/; do
@@ -419,12 +480,12 @@ authenticate_profile() {
         done
 
         echo ""
-        read -p "Numéro du profil à authentifier: " choice
+        read -p "${MSG_AUTH_NUMBER_PROMPT} " choice
 
         if [[ "$choice" =~ ^[0-9]+$ ]] && [[ "$choice" -ge 1 ]] && [[ "$choice" -le "${#profiles[@]}" ]]; then
             profile_name="${profiles[$((choice-1))]}"
         else
-            print_error "Choix invalide"
+            print_error "${MSG_INVALID_CHOICE}"
             return 1
         fi
     fi
@@ -432,24 +493,24 @@ authenticate_profile() {
     local profile_path="$CLAUDE_PROFILES_DIR/$profile_name"
 
     if [[ ! -d "$profile_path" ]]; then
-        print_error "Profil '$profile_name' non trouvé"
+        print_error "${MSG_REMOVE_NOT_FOUND}: '$profile_name'"
         return 1
     fi
 
     echo ""
-    print_info "Lancement de Claude Code pour le profil '${C_BOLD}$profile_name${C_RESET}'..."
-    print_info "Connecte-toi avec le compte souhaité"
+    print_info "${MSG_AUTH_LAUNCHING} '${C_BOLD}$profile_name${C_RESET}'..."
+    print_info "${MSG_AUTH_CONNECT}"
     echo ""
 
-    # Lance Claude Code avec le config dir du profil
+    # Launch Claude Code with profile config dir
     CLAUDE_CONFIG_DIR="$profile_path" $CLAUDE_BIN
 }
 
 launch_profile() {
-    echo -e "\n${C_BOLD}🚀 Lancer Claude Code${C_RESET}\n"
+    echo -e "\n${C_BOLD}🚀 ${MSG_LAUNCH_TITLE}${C_RESET}\n"
 
-    # Option pour le profil par défaut
-    echo -e "  ${C_CYAN}0)${C_RESET} default (config par défaut)"
+    # Option for default profile
+    echo -e "  ${C_CYAN}0)${C_RESET} ${MSG_LAUNCH_DEFAULT}"
 
     if [[ -d "$CLAUDE_PROFILES_DIR" ]] && [[ -n "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
         local profiles=("default")
@@ -463,106 +524,107 @@ launch_profile() {
         done
 
         echo ""
-        read -p "Choix: " choice
+        read -p "${MSG_LAUNCH_PROMPT} " choice
 
         if [[ "$choice" == "0" ]]; then
-            print_info "Lancement avec config par défaut..."
+            print_info "${MSG_LAUNCH_WITH_DEFAULT}"
             $CLAUDE_BIN
         elif [[ "$choice" =~ ^[0-9]+$ ]] && [[ "$choice" -ge 1 ]] && [[ "$choice" -le "$((${#profiles[@]}-1))" ]]; then
             local selected="${profiles[$choice]}"
-            print_info "Lancement du profil '$selected'..."
+            print_info "${MSG_LAUNCH_WITH_PROFILE} '$selected'..."
             CLAUDE_CONFIG_DIR="$CLAUDE_PROFILES_DIR/$selected" $CLAUDE_BIN
         else
-            print_error "Choix invalide"
+            print_error "${MSG_INVALID_CHOICE}"
         fi
     else
-        print_warning "Aucun profil configuré, lancement avec config par défaut"
+        print_warning "${MSG_LAUNCH_NO_PROFILE}"
         $CLAUDE_BIN
     fi
 }
 
 show_usage() {
-    echo -e "\n${C_BOLD}📖 Utilisation${C_RESET}\n"
+    echo -e "\n${C_BOLD}📖 ${MSG_USAGE_TITLE}${C_RESET}\n"
 
-    echo -e "${C_CYAN}Commandes rapides :${C_RESET}"
-    echo -e "  ${C_BOLD}claude-accounts add <nom>${C_RESET}     Ajoute un nouveau profil (partagé ou isolé)"
-    echo -e "  ${C_BOLD}claude-accounts rm <nom>${C_RESET}      Supprime un profil"
-    echo -e "  ${C_BOLD}claude-accounts list${C_RESET}          Liste les profils avec leur mode"
-    echo -e "  ${C_BOLD}claude-accounts auth <nom>${C_RESET}    Authentifie un profil"
-    echo -e "  ${C_BOLD}claude-accounts run <nom>${C_RESET}     Lance Claude Code avec un profil"
-    echo -e "  ${C_BOLD}claude-accounts migrate${C_RESET}       Migre un profil legacy vers shared/isolated"
+    echo -e "${C_CYAN}${MSG_USAGE_QUICK}${C_RESET}"
+    echo -e "  ${C_BOLD}claude-accounts add <name>${C_RESET}     ${MSG_USAGE_ADD_DESC}"
+    echo -e "  ${C_BOLD}claude-accounts rm <name>${C_RESET}      ${MSG_USAGE_RM_DESC}"
+    echo -e "  ${C_BOLD}claude-accounts list${C_RESET}          ${MSG_USAGE_LIST_DESC}"
+    echo -e "  ${C_BOLD}claude-accounts auth <name>${C_RESET}    ${MSG_USAGE_AUTH_DESC}"
+    echo -e "  ${C_BOLD}claude-accounts run <name>${C_RESET}     ${MSG_USAGE_RUN_DESC}"
+    echo -e "  ${C_BOLD}claude-accounts migrate${C_RESET}       ${MSG_USAGE_MIGRATE_DESC}"
+    echo -e "  ${C_BOLD}claude-accounts --lang=XX${C_RESET}     ${MSG_USAGE_LANG_DESC}"
     echo ""
 
-    echo -e "${C_CYAN}Modes de profil :${C_RESET}"
-    echo -e "  ${C_GREEN}[partagé]${C_RESET}   Config commune (~/.claude), switch pour limites"
-    echo -e "  ${C_MAGENTA}[isolé]${C_RESET}     Config indépendante, pour clients"
-    echo -e "  ${C_YELLOW}[legacy]${C_RESET}    Ancien profil, peut être migré"
+    echo -e "${C_CYAN}${MSG_USAGE_MODES}${C_RESET}"
+    echo -e "  ${C_GREEN}${MSG_MODE_LABEL_SHARED}${C_RESET}   ${MSG_USAGE_MODE_SHARED_DESC}"
+    echo -e "  ${C_MAGENTA}${MSG_MODE_LABEL_ISOLATED}${C_RESET}     ${MSG_USAGE_MODE_ISOLATED_DESC}"
+    echo -e "  ${C_YELLOW}${MSG_MODE_LABEL_LEGACY}${C_RESET}    ${MSG_USAGE_MODE_LEGACY_DESC}"
     echo ""
 
-    echo -e "${C_CYAN}Après configuration, utilise les alias :${C_RESET}"
-    echo -e "  ${C_BOLD}claude-perso${C_RESET}      Lance avec le profil 'perso'"
-    echo -e "  ${C_BOLD}claude-pro${C_RESET}        Lance avec le profil 'pro'"
+    echo -e "${C_CYAN}${MSG_USAGE_ALIAS}${C_RESET}"
+    echo -e "  ${C_BOLD}claude-perso${C_RESET}      ${MSG_CC_PROFILE} 'perso'"
+    echo -e "  ${C_BOLD}claude-pro${C_RESET}        ${MSG_CC_PROFILE} 'pro'"
     echo ""
 
-    echo -e "${C_CYAN}Ou la fonction cc() si ajoutée :${C_RESET}"
-    echo -e "  ${C_BOLD}cc perso${C_RESET}          Lance avec le profil 'perso'"
-    echo -e "  ${C_BOLD}cc pro${C_RESET}            Lance avec le profil 'pro'"
+    echo -e "${C_CYAN}${MSG_USAGE_OR_CC}${C_RESET}"
+    echo -e "  ${C_BOLD}cc perso${C_RESET}          ${MSG_CC_PROFILE} 'perso'"
+    echo -e "  ${C_BOLD}cc pro${C_RESET}            ${MSG_CC_PROFILE} 'pro'"
     echo ""
 }
 
 install_cc_function() {
-    echo -e "\n${C_BOLD}⚡ Installer la fonction cc()${C_RESET}\n"
+    echo -e "\n${C_BOLD}⚡ ${MSG_CC_TITLE}${C_RESET}\n"
 
     detect_shell_rc
 
-    local cc_function='
-# Fonction cc() pour lancer Claude Code avec un profil
+    local cc_function="
+# cc() function to launch Claude Code with a profile
 cc() {
-    local profile="${1:-}"
-    local profiles_dir="$HOME/.claude-profiles"
+    local profile=\"\${1:-}\"
+    local profiles_dir=\"\$HOME/.claude-profiles\"
 
-    if [[ -z "$profile" ]]; then
-        # Sans argument, lance le sélecteur interactif
+    if [[ -z \"\$profile\" ]]; then
+        # Without argument, launch interactive selector
         claude-accounts run
-    elif [[ -d "$profiles_dir/$profile" ]]; then
-        CLAUDE_CONFIG_DIR="$profiles_dir/$profile" claude "${@:2}"
+    elif [[ -d \"\$profiles_dir/\$profile\" ]]; then
+        CLAUDE_CONFIG_DIR=\"\$profiles_dir/\$profile\" claude \"\${@:2}\"
     else
-        echo "Profil '\''$profile'\'' non trouvé. Profils disponibles:"
-        ls -1 "$profiles_dir" 2>/dev/null || echo "  (aucun)"
+        echo \"${MSG_CC_PROFILE} '\$profile' ${MSG_CC_NOT_FOUND}\"
+        ls -1 \"\$profiles_dir\" 2>/dev/null || echo \"  ${MSG_CC_NONE}\"
     fi
-}'
+}"
 
     if grep -q "^cc()" "$SHELL_RC" 2>/dev/null; then
-        print_info "La fonction cc() est déjà installée"
+        print_info "${MSG_CC_ALREADY}"
         return
     fi
 
     echo "$cc_function" >> "$SHELL_RC"
-    print_success "Fonction cc() ajoutée à $SHELL_RC"
-    print_warning "Exécute ${C_CYAN}source $SHELL_RC${C_RESET} pour l'activer"
+    print_success "${MSG_CC_ADDED} $SHELL_RC"
+    print_warning "${MSG_SOURCE_OR_NEW}: ${C_CYAN}source $SHELL_RC${C_RESET}"
 
     echo ""
-    echo -e "${C_CYAN}Usage:${C_RESET}"
-    echo -e "  ${C_BOLD}cc${C_RESET}            Menu de sélection"
-    echo -e "  ${C_BOLD}cc perso${C_RESET}      Profil 'perso'"
-    echo -e "  ${C_BOLD}cc pro${C_RESET}        Profil 'pro'"
+    echo -e "${C_CYAN}${MSG_CC_USAGE}${C_RESET}"
+    echo -e "  ${C_BOLD}cc${C_RESET}            ${MSG_CC_MENU}"
+    echo -e "  ${C_BOLD}cc perso${C_RESET}      ${MSG_CC_PROFILE} 'perso'"
+    echo -e "  ${C_BOLD}cc pro${C_RESET}        ${MSG_CC_PROFILE} 'pro'"
 }
 
 # =============================================================================
-# Menu principal
+# Main menu
 # =============================================================================
 
 show_menu() {
-    echo -e "${C_BOLD}Que veux-tu faire ?${C_RESET}\n"
-    echo -e "  ${C_CYAN}1)${C_RESET} 📋 Lister les profils"
-    echo -e "  ${C_CYAN}2)${C_RESET} ➕ Ajouter un profil"
-    echo -e "  ${C_CYAN}3)${C_RESET} 🗑️  Supprimer un profil"
-    echo -e "  ${C_CYAN}4)${C_RESET} 🔐 Authentifier un profil"
-    echo -e "  ${C_CYAN}5)${C_RESET} 🚀 Lancer Claude Code"
-    echo -e "  ${C_CYAN}6)${C_RESET} ⚡ Installer la fonction cc()"
-    echo -e "  ${C_CYAN}7)${C_RESET} 🔄 Migrer un profil legacy"
-    echo -e "  ${C_CYAN}8)${C_RESET} 📖 Aide"
-    echo -e "  ${C_CYAN}q)${C_RESET} Quitter"
+    echo -e "${C_BOLD}${MSG_MENU_TITLE}${C_RESET}\n"
+    echo -e "  ${C_CYAN}1)${C_RESET} 📋 ${MSG_MENU_LIST}"
+    echo -e "  ${C_CYAN}2)${C_RESET} ➕ ${MSG_MENU_ADD}"
+    echo -e "  ${C_CYAN}3)${C_RESET} 🗑️  ${MSG_MENU_REMOVE}"
+    echo -e "  ${C_CYAN}4)${C_RESET} 🔐 ${MSG_MENU_AUTH}"
+    echo -e "  ${C_CYAN}5)${C_RESET} 🚀 ${MSG_MENU_LAUNCH}"
+    echo -e "  ${C_CYAN}6)${C_RESET} ⚡ ${MSG_MENU_CC_FUNC}"
+    echo -e "  ${C_CYAN}7)${C_RESET} 🔄 ${MSG_MENU_MIGRATE}"
+    echo -e "  ${C_CYAN}8)${C_RESET} 📖 ${MSG_MENU_HELP}"
+    echo -e "  ${C_CYAN}q)${C_RESET} ${MSG_MENU_QUIT}"
     echo ""
 }
 
@@ -571,7 +633,7 @@ main_menu() {
         print_header
         show_menu
 
-        read -p "Choix: " -n 1 -r choice
+        read -p "${MSG_LAUNCH_PROMPT} " -n 1 -r choice
         echo ""
 
         case $choice in
@@ -583,56 +645,62 @@ main_menu() {
             6) install_cc_function ;;
             7) migrate_profile ;;
             8) show_usage ;;
-            q|Q) echo -e "\n${C_GREEN}À bientôt !${C_RESET}\n"; exit 0 ;;
-            *) print_error "Choix invalide" ;;
+            q|Q) echo -e "\n${C_GREEN}${MSG_GOODBYE}${C_RESET}\n"; exit 0 ;;
+            *) print_error "${MSG_INVALID_CHOICE}" ;;
         esac
 
         echo ""
-        read -p "Appuie sur Entrée pour continuer..." -r
+        read -p "${MSG_PRESS_ENTER}" -r
     done
 }
 
 # =============================================================================
-# CLI directe
+# CLI mode
 # =============================================================================
 
 cli_mode() {
     local command="$1"
     shift
 
+    # Remove --lang from remaining args
+    local args=()
+    for arg in "$@"; do
+        [[ "$arg" != --lang=* ]] && args+=("$arg")
+    done
+
     ensure_profiles_dir
 
     case "$command" in
         add|a)
-            if [[ -n "$1" ]]; then
-                profile_name="$1"
+            if [[ -n "${args[0]}" ]]; then
+                profile_name="${args[0]}"
                 profile_name=$(echo "$profile_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
                 local profile_path="$CLAUDE_PROFILES_DIR/$profile_name"
 
                 if [[ -d "$profile_path" ]]; then
-                    print_error "Le profil '$profile_name' existe déjà"
+                    print_error "${MSG_ADD_PROFILE_EXISTS}: '$profile_name'"
                     exit 1
                 fi
 
                 mkdir -p "$profile_path"
-                print_success "Profil '$profile_name' créé"
+                print_success "${MSG_ADD_PROFILE_CREATED}: '$profile_name'"
                 add_alias_to_shell "$profile_name"
             else
                 add_profile
             fi
             ;;
         rm|remove|delete)
-            if [[ -n "$1" ]]; then
-                local profile_path="$CLAUDE_PROFILES_DIR/$1"
+            if [[ -n "${args[0]}" ]]; then
+                local profile_path="$CLAUDE_PROFILES_DIR/${args[0]}"
                 if [[ -d "$profile_path" ]]; then
                     rm -rf "$profile_path"
-                    print_success "Profil '$1' supprimé"
+                    print_success "${MSG_REMOVE_DONE}: '${args[0]}'"
 
                     detect_shell_rc
-                    sed -i.bak "/alias claude-${1}=/d" "$SHELL_RC" 2>/dev/null
+                    sed -i.bak "/alias claude-${args[0]}=/d" "$SHELL_RC" 2>/dev/null
                     rm -f "${SHELL_RC}.bak"
                 else
-                    print_error "Profil '$1' non trouvé"
+                    print_error "${MSG_REMOVE_NOT_FOUND}: '${args[0]}'"
                     exit 1
                 fi
             else
@@ -643,15 +711,15 @@ cli_mode() {
             list_profiles
             ;;
         auth|login)
-            authenticate_profile "$1"
+            authenticate_profile "${args[0]}"
             ;;
         run|start|r)
-            if [[ -n "$1" ]]; then
-                local profile_path="$CLAUDE_PROFILES_DIR/$1"
+            if [[ -n "${args[0]}" ]]; then
+                local profile_path="$CLAUDE_PROFILES_DIR/${args[0]}"
                 if [[ -d "$profile_path" ]]; then
-                    CLAUDE_CONFIG_DIR="$profile_path" $CLAUDE_BIN "${@:2}"
+                    CLAUDE_CONFIG_DIR="$profile_path" $CLAUDE_BIN "${args[@]:1}"
                 else
-                    print_error "Profil '$1' non trouvé"
+                    print_error "${MSG_REMOVE_NOT_FOUND}: '${args[0]}'"
                     exit 1
                 fi
             else
@@ -665,7 +733,7 @@ cli_mode() {
             show_usage
             ;;
         *)
-            print_error "Commande inconnue: $command"
+            print_error "${MSG_UNKNOWN_COMMAND} $command"
             show_usage
             exit 1
             ;;
@@ -673,14 +741,20 @@ cli_mode() {
 }
 
 # =============================================================================
-# Point d'entrée
+# Entry point
 # =============================================================================
 
 ensure_profiles_dir
 detect_shell_rc
 
-if [[ $# -gt 0 ]]; then
-    cli_mode "$@"
+# Filter out --lang from args for CLI mode check
+cli_args=()
+for arg in "$@"; do
+    [[ "$arg" != --lang=* ]] && cli_args+=("$arg")
+done
+
+if [[ ${#cli_args[@]} -gt 0 ]]; then
+    cli_mode "${cli_args[@]}"
 else
     main_menu
 fi
