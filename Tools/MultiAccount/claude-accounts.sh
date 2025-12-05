@@ -65,6 +65,79 @@ ensure_profiles_dir() {
 }
 
 # =============================================================================
+# Gestion des modes (shared/isolated)
+# =============================================================================
+
+# Lire le mode d'un profil
+get_profile_mode() {
+    local profile_name="$1"
+    local mode_file="$CLAUDE_PROFILES_DIR/$profile_name/.mode"
+    cat "$mode_file" 2>/dev/null || echo "legacy"
+}
+
+# Obtenir le label du mode pour affichage
+get_mode_label() {
+    local mode="$1"
+    case "$mode" in
+        shared)   echo "${C_GREEN}[partagé]${C_RESET}" ;;
+        isolated) echo "${C_MAGENTA}[isolé]${C_RESET}" ;;
+        *)        echo "${C_YELLOW}[legacy]${C_RESET}" ;;
+    esac
+}
+
+# Configurer un profil en mode partagé
+setup_shared_profile() {
+    local profile_path="$1"
+    echo "shared" > "$profile_path/.mode"
+
+    # Créer symlink vers ~/.claude pour la config
+    if [[ -d "$HOME/.claude" ]]; then
+        ln -sf "$HOME/.claude" "$profile_path/config"
+        print_success "Symlink créé vers ~/.claude"
+    else
+        print_warning "~/.claude n'existe pas, le symlink sera créé plus tard"
+    fi
+}
+
+# Configurer un profil en mode isolé
+setup_isolated_profile() {
+    local profile_path="$1"
+    echo "isolated" > "$profile_path/.mode"
+
+    # Copier ~/.claude si existe
+    if [[ -d "$HOME/.claude" ]]; then
+        # Copie tout sauf les credentials
+        for item in "$HOME/.claude"/*; do
+            [[ -e "$item" ]] || continue
+            local basename=$(basename "$item")
+            # Ne pas copier les credentials
+            if [[ "$basename" != ".credentials.json" ]]; then
+                cp -r "$item" "$profile_path/" 2>/dev/null || true
+            fi
+        done
+        print_success "Configuration copiée depuis ~/.claude"
+    else
+        print_warning "~/.claude n'existe pas, profil vide créé"
+    fi
+}
+
+# Demander le mode lors de la création
+ask_profile_mode() {
+    echo ""
+    print_info "Choisissez le mode du profil:"
+    echo -e "  ${C_CYAN}1)${C_RESET} Partagé  - Même config que ~/.claude (switch pour limites)"
+    echo -e "  ${C_CYAN}2)${C_RESET} Isolé    - Config indépendante (ex: client)"
+    echo ""
+    read -p "Mode [1]: " mode_choice
+    mode_choice=${mode_choice:-1}
+
+    case "$mode_choice" in
+        2) echo "isolated" ;;
+        *) echo "shared" ;;
+    esac
+}
+
+# =============================================================================
 # Gestion des profils
 # =============================================================================
 
@@ -98,7 +171,11 @@ list_profiles() {
             status="${C_GREEN}●${C_RESET}"
         fi
 
-        echo -e "   $status ${C_BOLD}$profile_name${C_RESET}"
+        # Mode du profil
+        local mode=$(get_profile_mode "$profile_name")
+        local mode_label=$(get_mode_label "$mode")
+
+        echo -e "   $status ${C_BOLD}$profile_name${C_RESET} $mode_label"
         echo -e "     └─ $email"
         echo -e "     └─ Alias: ${C_CYAN}claude-$profile_name${C_RESET}"
         echo ""
@@ -106,7 +183,8 @@ list_profiles() {
         ((index++))
     done
 
-    echo -e "${C_DIM}   ● = authentifié   ○ = non authentifié${C_RESET}\n"
+    echo -e "   ${C_GREEN}●${C_RESET} = authentifié   ${C_YELLOW}○${C_RESET} = non authentifié"
+    echo -e "   ${C_GREEN}[partagé]${C_RESET} = config ~/.claude   ${C_MAGENTA}[isolé]${C_RESET} = config indépendante   ${C_YELLOW}[legacy]${C_RESET} = ancien profil\n"
 }
 
 add_profile() {
@@ -134,7 +212,17 @@ add_profile() {
 
     # Crée le répertoire du profil
     mkdir -p "$profile_path"
-    print_success "Profil '$profile_name' créé"
+
+    # Demande le mode
+    local mode=$(ask_profile_mode)
+
+    if [[ "$mode" == "isolated" ]]; then
+        setup_isolated_profile "$profile_path"
+    else
+        setup_shared_profile "$profile_path"
+    fi
+
+    print_success "Profil '$profile_name' créé en mode $mode"
 
     # Ajoute l'alias au shell RC
     add_alias_to_shell "$profile_name"
@@ -240,6 +328,73 @@ remove_profile() {
     fi
 }
 
+migrate_profile() {
+    echo -e "\n${C_BOLD}🔄 Migrer un profil legacy${C_RESET}\n"
+
+    if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
+        print_warning "Aucun profil configuré"
+        return
+    fi
+
+    # Lister les profils legacy (sans fichier .mode)
+    local legacy_profiles=()
+    for profile_dir in "$CLAUDE_PROFILES_DIR"/*/; do
+        [[ -d "$profile_dir" ]] || continue
+        local pname=$(basename "$profile_dir")
+        local mode=$(get_profile_mode "$pname")
+        if [[ "$mode" == "legacy" ]]; then
+            legacy_profiles+=("$pname")
+        fi
+    done
+
+    if [[ ${#legacy_profiles[@]} -eq 0 ]]; then
+        print_success "Aucun profil legacy à migrer (tous ont déjà un mode)"
+        return
+    fi
+
+    echo "Profils legacy (sans mode) :"
+    local i=1
+    for pname in "${legacy_profiles[@]}"; do
+        echo -e "  ${C_CYAN}$i)${C_RESET} $pname"
+        ((i++))
+    done
+    echo ""
+    read -p "Numéro du profil à migrer: " choice
+
+    if [[ -z "$choice" ]] || ! [[ "$choice" =~ ^[0-9]+$ ]] || [[ "$choice" -lt 1 ]] || [[ "$choice" -gt ${#legacy_profiles[@]} ]]; then
+        print_error "Choix invalide"
+        return 1
+    fi
+
+    local selected="${legacy_profiles[$((choice-1))]}"
+    local profile_path="$CLAUDE_PROFILES_DIR/$selected"
+
+    echo ""
+    print_info "Migrer '$selected' vers quel mode ?"
+    echo -e "  ${C_CYAN}1)${C_RESET} Partagé  - Créer symlink vers ~/.claude"
+    echo -e "  ${C_CYAN}2)${C_RESET} Isolé    - Garder config actuelle isolée"
+    echo ""
+    read -p "Mode [1]: " mode_choice
+    mode_choice=${mode_choice:-1}
+
+    case "$mode_choice" in
+        2)
+            echo "isolated" > "$profile_path/.mode"
+            print_success "Profil '$selected' migré en mode ISOLÉ"
+            print_info "La configuration existante est conservée"
+            ;;
+        *)
+            echo "shared" > "$profile_path/.mode"
+            # Créer symlink config si pas déjà présent
+            if [[ ! -L "$profile_path/config" ]] && [[ -d "$HOME/.claude" ]]; then
+                ln -sf "$HOME/.claude" "$profile_path/config"
+                print_success "Symlink créé vers ~/.claude"
+            fi
+            print_success "Profil '$selected' migré en mode PARTAGÉ"
+            ;;
+    esac
+}
+
 authenticate_profile() {
     local profile_name="$1"
 
@@ -330,11 +485,18 @@ show_usage() {
     echo -e "\n${C_BOLD}📖 Utilisation${C_RESET}\n"
 
     echo -e "${C_CYAN}Commandes rapides :${C_RESET}"
-    echo -e "  ${C_BOLD}claude-accounts add <nom>${C_RESET}     Ajoute un nouveau profil"
+    echo -e "  ${C_BOLD}claude-accounts add <nom>${C_RESET}     Ajoute un nouveau profil (partagé ou isolé)"
     echo -e "  ${C_BOLD}claude-accounts rm <nom>${C_RESET}      Supprime un profil"
-    echo -e "  ${C_BOLD}claude-accounts list${C_RESET}          Liste les profils"
+    echo -e "  ${C_BOLD}claude-accounts list${C_RESET}          Liste les profils avec leur mode"
     echo -e "  ${C_BOLD}claude-accounts auth <nom>${C_RESET}    Authentifie un profil"
     echo -e "  ${C_BOLD}claude-accounts run <nom>${C_RESET}     Lance Claude Code avec un profil"
+    echo -e "  ${C_BOLD}claude-accounts migrate${C_RESET}       Migre un profil legacy vers shared/isolated"
+    echo ""
+
+    echo -e "${C_CYAN}Modes de profil :${C_RESET}"
+    echo -e "  ${C_GREEN}[partagé]${C_RESET}   Config commune (~/.claude), switch pour limites"
+    echo -e "  ${C_MAGENTA}[isolé]${C_RESET}     Config indépendante, pour clients"
+    echo -e "  ${C_YELLOW}[legacy]${C_RESET}    Ancien profil, peut être migré"
     echo ""
 
     echo -e "${C_CYAN}Après configuration, utilise les alias :${C_RESET}"
@@ -398,7 +560,8 @@ show_menu() {
     echo -e "  ${C_CYAN}4)${C_RESET} 🔐 Authentifier un profil"
     echo -e "  ${C_CYAN}5)${C_RESET} 🚀 Lancer Claude Code"
     echo -e "  ${C_CYAN}6)${C_RESET} ⚡ Installer la fonction cc()"
-    echo -e "  ${C_CYAN}7)${C_RESET} 📖 Aide"
+    echo -e "  ${C_CYAN}7)${C_RESET} 🔄 Migrer un profil legacy"
+    echo -e "  ${C_CYAN}8)${C_RESET} 📖 Aide"
     echo -e "  ${C_CYAN}q)${C_RESET} Quitter"
     echo ""
 }
@@ -418,7 +581,8 @@ main_menu() {
             4) authenticate_profile ;;
             5) launch_profile ;;
             6) install_cc_function ;;
-            7) show_usage ;;
+            7) migrate_profile ;;
+            8) show_usage ;;
             q|Q) echo -e "\n${C_GREEN}À bientôt !${C_RESET}\n"; exit 0 ;;
             *) print_error "Choix invalide" ;;
         esac
@@ -493,6 +657,9 @@ cli_mode() {
             else
                 launch_profile
             fi
+            ;;
+        migrate|m)
+            migrate_profile
             ;;
         help|h|--help|-h)
             show_usage
