@@ -567,19 +567,19 @@ show_usage() {
     echo ""
 
     echo -e "${C_CYAN}${MSG_USAGE_OR_CC}${C_RESET}"
-    echo -e "  ${C_BOLD}cc perso${C_RESET}          ${MSG_CC_PROFILE} 'perso'"
-    echo -e "  ${C_BOLD}cc pro${C_RESET}            ${MSG_CC_PROFILE} 'pro'"
+    echo -e "  ${C_BOLD}ccsp perso${C_RESET}        ${MSG_CC_PROFILE} 'perso'"
+    echo -e "  ${C_BOLD}ccsp pro${C_RESET}          ${MSG_CC_PROFILE} 'pro'"
     echo ""
 }
 
-install_cc_function() {
+install_ccsp_function() {
     echo -e "\n${C_BOLD}⚡ ${MSG_CC_TITLE}${C_RESET}\n"
 
     detect_shell_rc
 
-    local cc_function="
-# cc() function to launch Claude Code with a profile
-cc() {
+    local ccsp_function="
+# ccsp() function to launch Claude Code with a profile (Claude Code Switch Profile)
+ccsp() {
     local profile=\"\${1:-}\"
     local profiles_dir=\"\$HOME/.claude-profiles\"
 
@@ -594,20 +594,20 @@ cc() {
     fi
 }"
 
-    if grep -q "^cc()" "$SHELL_RC" 2>/dev/null; then
+    if grep -q "^ccsp()" "$SHELL_RC" 2>/dev/null; then
         print_info "${MSG_CC_ALREADY}"
         return
     fi
 
-    echo "$cc_function" >> "$SHELL_RC"
+    echo "$ccsp_function" >> "$SHELL_RC"
     print_success "${MSG_CC_ADDED} $SHELL_RC"
     print_warning "${MSG_SOURCE_OR_NEW}: ${C_CYAN}source $SHELL_RC${C_RESET}"
 
     echo ""
     echo -e "${C_CYAN}${MSG_CC_USAGE}${C_RESET}"
-    echo -e "  ${C_BOLD}cc${C_RESET}            ${MSG_CC_MENU}"
-    echo -e "  ${C_BOLD}cc perso${C_RESET}      ${MSG_CC_PROFILE} 'perso'"
-    echo -e "  ${C_BOLD}cc pro${C_RESET}        ${MSG_CC_PROFILE} 'pro'"
+    echo -e "  ${C_BOLD}ccsp${C_RESET}          ${MSG_CC_MENU}"
+    echo -e "  ${C_BOLD}ccsp perso${C_RESET}    ${MSG_CC_PROFILE} 'perso'"
+    echo -e "  ${C_BOLD}ccsp pro${C_RESET}      ${MSG_CC_PROFILE} 'pro'"
 }
 
 # =============================================================================
@@ -621,7 +621,7 @@ show_menu() {
     echo -e "  ${C_CYAN}3)${C_RESET} 🗑️  ${MSG_MENU_REMOVE}"
     echo -e "  ${C_CYAN}4)${C_RESET} 🔐 ${MSG_MENU_AUTH}"
     echo -e "  ${C_CYAN}5)${C_RESET} 🚀 ${MSG_MENU_LAUNCH}"
-    echo -e "  ${C_CYAN}6)${C_RESET} ⚡ ${MSG_MENU_CC_FUNC}"
+    echo -e "  ${C_CYAN}6)${C_RESET} ⚡ ${MSG_MENU_CCSP_FUNC}"
     echo -e "  ${C_CYAN}7)${C_RESET} 🔄 ${MSG_MENU_MIGRATE}"
     echo -e "  ${C_CYAN}8)${C_RESET} 📖 ${MSG_MENU_HELP}"
     echo -e "  ${C_CYAN}q)${C_RESET} ${MSG_MENU_QUIT}"
@@ -642,7 +642,7 @@ main_menu() {
             3) remove_profile ;;
             4) authenticate_profile ;;
             5) launch_profile ;;
-            6) install_cc_function ;;
+            6) install_ccsp_function ;;
             7) migrate_profile ;;
             8) show_usage ;;
             q|Q) echo -e "\n${C_GREEN}${MSG_GOODBYE}${C_RESET}\n"; exit 0 ;;

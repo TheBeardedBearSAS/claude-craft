@@ -34,8 +34,9 @@ Que veux-tu faire ?
   3) 🗑️  Supprimer un profil
   4) 🔐 Authentifier un profil
   5) 🚀 Lancer Claude Code
-  6) ⚡ Installer la fonction cc()
-  7) 📖 Aide
+  6) ⚡ Installer la fonction ccsp()
+  7) 🔄 Migrer un profil legacy
+  8) 📖 Aide
   q) Quitter
 ```
 
@@ -77,9 +78,9 @@ alias claude-pro="CLAUDE_CONFIG_DIR='~/.claude-profiles/pro' claude"
 claude-perso      # Lance avec le compte perso
 claude-pro        # Lance avec le compte pro
 
-# Ou la fonction cc() (option 6 du menu)
-cc perso
-cc pro
+# Ou la fonction ccsp() (option 6 du menu)
+ccsp perso
+ccsp pro
 ```
 
 ## Structure des fichiers
@@ -113,7 +114,7 @@ cc pro
 
 1. **Setup initial** : `claude-accounts` → Ajouter tes profils
 2. **Auth une fois** : `claude-accounts auth perso` → Login
-3. **Usage quotidien** : `claude-perso` ou `cc perso`
+3. **Usage quotidien** : `claude-perso` ou `ccsp perso`
 
 ### Partager des settings entre profils
 
