@@ -557,8 +557,22 @@ install_project() {
         local target_path
         if [[ "$path" == "." ]]; then
             target_path="$expanded_root"
+        elif [[ "$path" == /* ]]; then
+            # Chemin absolu - utiliser tel quel
+            target_path="$path"
         else
+            # Chemin relatif - concaténer avec root
             target_path="$expanded_root/$path"
+        fi
+
+        # Créer le répertoire cible s'il n'existe pas
+        if [[ ! -d "$target_path" ]]; then
+            if [[ "$dry_run" == "true" ]]; then
+                log_info "[DRY-RUN] Créerait le répertoire: $target_path"
+            else
+                log_warning "Le répertoire n'existe pas, création: $target_path"
+                mkdir -p "$target_path"
+            fi
         fi
 
         install_module "$target_path" "$tech" "$desc" "$project_lang"

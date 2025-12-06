@@ -15,7 +15,8 @@
         install-python install-react install-reactnative install-project install-infra \
         install-tools install-statusline install-multiaccount install-projectconfig \
         list list-agents list-commands dry-run clean \
-        config-install config-install-all config-validate config-list config-dry-run
+        config-install config-install-all config-validate config-list config-dry-run \
+        config-check config-check-fix
 
 # Configuration
 SHELL := /bin/bash
@@ -328,6 +329,20 @@ config-dry-run: ## Simule l'installation depuis la config (PROJECT=nom optionnel
 		$(SCRIPTS_DIR)/install-from-config.sh --dry-run --project $(PROJECT) $(OPTIONS) $(CONFIG); \
 	else \
 		$(SCRIPTS_DIR)/install-from-config.sh --dry-run $(OPTIONS) $(CONFIG); \
+	fi
+
+config-check: ## Vérifie l'installation des projets configurés
+	@if [ -n "$(PROJECT)" ]; then \
+		$(SCRIPTS_DIR)/check-config.sh --project $(PROJECT) $(CONFIG) || true; \
+	else \
+		$(SCRIPTS_DIR)/check-config.sh $(CONFIG) || true; \
+	fi
+
+config-check-fix: ## Vérifie et propose de corriger les problèmes
+	@if [ -n "$(PROJECT)" ]; then \
+		$(SCRIPTS_DIR)/check-config.sh --fix --project $(PROJECT) $(CONFIG); \
+	else \
+		$(SCRIPTS_DIR)/check-config.sh --fix $(CONFIG); \
 	fi
 
 #===============================================================================
