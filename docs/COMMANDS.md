@@ -304,6 +304,45 @@ Available with Project installation.
 | `/project:sprint-status` | Show sprint metrics |
 | `/project:update-epic <Epic>` | Update an EPIC |
 | `/project:update-story <US>` | Update a User Story |
+| `/project:sprint-dev <N\|next>` | **Start TDD/BDD sprint development** |
+
+### Sprint Development (`/project:sprint-dev`)
+
+Orchestrates complete sprint development in TDD/BDD mode:
+
+```bash
+/project:sprint-dev 1        # Sprint 1
+/project:sprint-dev next     # Next incomplete sprint
+/project:sprint-dev current  # Currently active sprint
+```
+
+**Features:**
+- **Mandatory plan mode** before each task implementation
+- **TDD cycle** (RED → GREEN → REFACTOR)
+- **Automatic status updates** (Task → User Story → Sprint)
+- **Progress tracking** with metrics
+
+**Workflow:**
+1. Load sprint and display board
+2. For each User Story (by priority):
+   - Mark US → In Progress
+   - Display acceptance criteria (Gherkin)
+3. For each Task (by type: DB → BE → FE → TEST → DOC → REV):
+   - **Plan Mode** (mandatory): Analyze code, propose implementation
+   - **TDD Cycle**: Write failing tests → Implement → Refactor
+   - **Definition of Done** check
+   - Mark Task → Done with time tracking
+   - Conventional commit
+4. When all tasks done → Mark US → Done
+5. When all US done → Generate sprint review/retro
+
+**Control commands during execution:**
+| Command | Action |
+|---------|--------|
+| `continue` | Validate plan and implement |
+| `skip` | Skip this task |
+| `block [reason]` | Mark as blocked |
+| `stop` | Stop (saves state) |
 
 ---
 
