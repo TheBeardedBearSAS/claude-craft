@@ -37,9 +37,9 @@ make install-react TARGET=~/my-project
 make install-reactnative TARGET=~/my-project
 
 # Install with specific language
-make install-symfony TARGET=~/my-project LANG=fr
-make install-flutter TARGET=~/my-project LANG=de
-make install-react TARGET=~/my-project LANG=es
+make install-symfony TARGET=~/my-project RULES_LANG=fr
+make install-flutter TARGET=~/my-project RULES_LANG=de
+make install-react TARGET=~/my-project RULES_LANG=es
 
 # Available languages: en, fr, es, de, pt
 
@@ -47,7 +47,7 @@ make install-react TARGET=~/my-project LANG=es
 make install-common TARGET=~/my-project
 
 # Install ALL technologies
-make install-all TARGET=~/my-project LANG=fr
+make install-all TARGET=~/my-project RULES_LANG=fr
 ```
 
 #### Preset Combinations
@@ -75,11 +75,15 @@ make install-symfony TARGET=~/my-project OPTIONS="--dry-run"
 # Force overwrite existing files
 make install-symfony TARGET=~/my-project OPTIONS="--force"
 
+# Force but preserve user config (CLAUDE.md, 00-project-context.md)
+make install-symfony TARGET=~/my-project OPTIONS="--force --preserve-config"
+
 # Create backup before installation
 make install-symfony TARGET=~/my-project OPTIONS="--backup"
 
 # Combine options
 make install-symfony TARGET=~/my-project OPTIONS="--force --backup"
+make install-symfony TARGET=~/my-project OPTIONS="--force --backup --preserve-config"
 ```
 
 #### Dry Run Shortcuts
@@ -211,6 +215,7 @@ Run installation scripts directly for more control.
 | `--install` | Fresh installation (default) |
 | `--update` | Update existing files only |
 | `--force` | Overwrite all files |
+| `--preserve-config` | With `--force`, preserve CLAUDE.md and 00-project-context.md |
 | `--dry-run` | Simulate without changes |
 | `--backup` | Create backup before changes |
 | `--interactive` | Guided installation |
@@ -230,20 +235,20 @@ Copy files directly for maximum control.
 mkdir -p ~/my-project/.claude/{agents,commands,rules,templates,checklists}
 
 # Choose language (en, fr, es, de, pt)
-LANG=en
+RULES_LANG=en
 
 # Copy common agents
-cp -r Dev/i18n/$LANG/Common/agents/* ~/my-project/.claude/agents/
+cp -r Dev/i18n/$RULES_LANG/Common/agents/* ~/my-project/.claude/agents/
 
 # Copy common commands
-cp -r Dev/i18n/$LANG/Common/commands/* ~/my-project/.claude/commands/
+cp -r Dev/i18n/$RULES_LANG/Common/commands/* ~/my-project/.claude/commands/
 
 # Copy technology-specific files (example: Symfony)
-cp -r Dev/i18n/$LANG/Symfony/rules/* ~/my-project/.claude/rules/
-cp -r Dev/i18n/$LANG/Symfony/agents/* ~/my-project/.claude/agents/
-cp -r Dev/i18n/$LANG/Symfony/commands/* ~/my-project/.claude/commands/
-cp -r Dev/i18n/$LANG/Symfony/templates/* ~/my-project/.claude/templates/
-cp -r Dev/i18n/$LANG/Symfony/checklists/* ~/my-project/.claude/checklists/
+cp -r Dev/i18n/$RULES_LANG/Symfony/rules/* ~/my-project/.claude/rules/
+cp -r Dev/i18n/$RULES_LANG/Symfony/agents/* ~/my-project/.claude/agents/
+cp -r Dev/i18n/$RULES_LANG/Symfony/commands/* ~/my-project/.claude/commands/
+cp -r Dev/i18n/$RULES_LANG/Symfony/templates/* ~/my-project/.claude/templates/
+cp -r Dev/i18n/$RULES_LANG/Symfony/checklists/* ~/my-project/.claude/checklists/
 ```
 
 ## Installation Result

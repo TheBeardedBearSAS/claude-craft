@@ -6,7 +6,7 @@
 # Installs Clean Architecture + DDD rules for Symfony
 # Best practices fusion from CareLink, Atoll-Tourisme and Nexar
 
-set -e
+set -euo pipefail
 
 # ============================================================================
 # CONSTANTS
@@ -85,6 +85,7 @@ Options:
     --install       Installation complete (nouveaux fichiers)
     --update        Mise a jour des regles communes uniquement
     --force         Ecraser tous les fichiers (backup automatique)
+    --preserve-config  Preserver CLAUDE.md et 00-project-context.md avec --force
     --dry-run       Afficher les actions sans les executer
     --backup        Creer un backup avant modifications
     --interactive   Demander les valeurs du projet
@@ -269,14 +270,48 @@ create_directory_structure() {
     done
 }
 
-# Copie des regles generiques depuis Common/
+# Copie des skills generiques depuis Common/
+copy_generic_skills() {
+    local target_dir="$1"
+    local dry_run="$2"
+    local common_skills_dir="$I18N_DIR/$lang/Common/skills"
+
+    if [[ ! -d "$common_skills_dir" ]]; then
+        log_warning "Common skills not found: $common_skills_dir"
+        return 0
+    fi
+
+    local count=0
+    while IFS= read -r -d '' skill_dir; do
+        local skill_name=$(basename "$skill_dir")
+        local dest_dir="${target_dir}/.claude/skills/${skill_name}"
+
+        if [ "$dry_run" = "true" ]; then
+            log_dry_run "Copy skill: skills/${skill_name}/"
+        else
+            mkdir -p "$dest_dir"
+            cp "$skill_dir"/*.md "$dest_dir/" 2>/dev/null || true
+        fi
+        ((count++)) || true
+    done < <(find "$common_skills_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+
+    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
+        log_success "$count generic skills copied from Common/"
+    fi
+}
+
+# Copie des regles generiques depuis Common/ (backward compatibility)
 copy_generic_rules() {
     local target_dir="$1"
     local dry_run="$2"
+
+    # First install skills (new format)
+    copy_generic_skills "$target_dir" "$dry_run"
+
+    # Then install legacy rules for backward compatibility
     local common_rules_dir="$I18N_DIR/$lang/Common/rules"
 
     if [[ ! -d "$common_rules_dir" ]]; then
-        log_warning "Common rules not found: $common_rules_dir"
         return 0
     fi
 
@@ -297,6 +332,37 @@ copy_generic_rules() {
     fi
 }
 
+# Copie des skills tech-specifiques
+copy_tech_skills() {
+    local target_dir="$1"
+    local dry_run="$2"
+    local src_dir
+    src_dir=$(get_source_dir)
+    local tech_skills_dir="${src_dir}/skills"
+
+    if [[ ! -d "$tech_skills_dir" ]]; then
+        return 0
+    fi
+
+    local count=0
+    while IFS= read -r -d '' skill_dir; do
+        local skill_name=$(basename "$skill_dir")
+        local dest_dir="${target_dir}/.claude/skills/${skill_name}"
+
+        if [ "$dry_run" = "true" ]; then
+            log_dry_run "Copy skill: skills/${skill_name}/"
+        else
+            mkdir -p "$dest_dir"
+            cp "$skill_dir"/*.md "$dest_dir/" 2>/dev/null || true
+        fi
+        ((count++)) || true
+    done < <(find "$tech_skills_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+
+    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
+        log_success "$count Symfony-specific skills copied"
+    fi
+}
+
 # Copie des regles tech-specifiques
 copy_common_rules() {
     local target_dir="$1"
@@ -304,10 +370,13 @@ copy_common_rules() {
     local src_dir
     src_dir=$(get_source_dir)
 
-    # D'abord, installer les regles generiques
+    # D'abord, installer les regles et skills generiques
     copy_generic_rules "$target_dir" "$dry_run"
 
-    # Ensuite, installer les regles tech-specifiques
+    # Installer les skills tech-specifiques
+    copy_tech_skills "$target_dir" "$dry_run"
+
+    # Ensuite, installer les regles tech-specifiques (backward compatibility)
     local count=0
     for rule in "${TECH_RULES[@]}"; do
         local src_file="${src_dir}/rules/${rule}"
@@ -487,8 +556,17 @@ process_claude_md_template() {
     local project_name="$2"
     local tech_stack="$3"
     local dry_run="$4"
+    local preserve_config="${5:-false}"
     local src_dir
     src_dir=$(get_source_dir)
+
+    local dest_file="${target_dir}/.claude/CLAUDE.md"
+
+    # Check preserve_config
+    if [ -f "$dest_file" ] && [ "$preserve_config" = "true" ]; then
+        log_info "Preserved: CLAUDE.md (--preserve-config)"
+        return 0
+    fi
 
     local generation_date=$(date +%Y-%m-%d)
 
@@ -502,7 +580,7 @@ process_claude_md_template() {
             -e "s/{{TECH_STACK}}/${tech_stack}/g" \
             -e "s/{{GENERATION_DATE}}/${generation_date}/g" \
             "${src_dir}/CLAUDE.md.template" \
-            > "${target_dir}/.claude/CLAUDE.md"
+            > "$dest_file"
         log_success "CLAUDE.md genere"
     fi
 }
@@ -513,8 +591,17 @@ process_project_context_template() {
     local project_name="$2"
     local tech_stack="$3"
     local dry_run="$4"
+    local preserve_config="${5:-false}"
     local src_dir
     src_dir=$(get_source_dir)
+
+    local dest_file="${target_dir}/.claude/rules/00-project-context.md"
+
+    # Check preserve_config
+    if [ -f "$dest_file" ] && [ "$preserve_config" = "true" ]; then
+        log_info "Preserved: 00-project-context.md (--preserve-config)"
+        return 0
+    fi
 
     if [ "$dry_run" = "true" ]; then
         log_dry_run "Generer 00-project-context.md"
@@ -522,7 +609,7 @@ process_project_context_template() {
         sed -e "s/{{PROJECT_NAME}}/${project_name}/g" \
             -e "s/{{TECH_STACK}}/${tech_stack}/g" \
             "${src_dir}/rules/00-project-context.md.template" \
-            > "${target_dir}/.claude/rules/00-project-context.md"
+            > "$dest_file"
         log_success "00-project-context.md genere (a personnaliser)"
     fi
 }
@@ -653,6 +740,7 @@ main() {
     local dry_run="false"
     local backup="false"
     local interactive="false"
+    local preserve_config="false"
     local target_dir="."
 
     # Parser les arguments
@@ -668,6 +756,10 @@ main() {
                 ;;
             --force)
                 force="true"
+                shift
+                ;;
+            --preserve-config)
+                preserve_config="true"
                 shift
                 ;;
             --dry-run)
@@ -789,8 +881,8 @@ main() {
             copy_examples "$target_dir" "$dry_run"
             copy_commands "$target_dir" "$dry_run"
             copy_agents "$target_dir" "$dry_run"
-            process_project_context_template "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run"
-            process_claude_md_template "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run"
+            process_project_context_template "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config"
+            process_claude_md_template "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config"
             ;;
         update)
             if [ "$force" = "true" ]; then
@@ -809,8 +901,8 @@ main() {
                 copy_examples "$target_dir" "$dry_run"
                 copy_commands "$target_dir" "$dry_run"
                 copy_agents "$target_dir" "$dry_run"
-                process_project_context_template "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run"
-                process_claude_md_template "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run"
+                process_project_context_template "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config"
+                process_claude_md_template "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config"
             else
                 update_rules "$target_dir" "$force" "$dry_run"
             fi

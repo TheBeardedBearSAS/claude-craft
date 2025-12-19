@@ -50,6 +50,7 @@ dry_run=false
 validate_only=false
 list_only=false
 force_mode=false
+preserve_config=false
 backup_mode=false
 default_lang="en"
 
@@ -113,6 +114,7 @@ Options:
   --validate        Valider la configuration sans installer
   --list            Lister les projets configurés
   --force           Forcer la réinstallation (écrase les fichiers existants)
+  --preserve-config Avec --force, préserver CLAUDE.md et 00-project-context.md
   --backup          Créer une backup avant modification
   --help            Afficher cette aide
 
@@ -156,6 +158,10 @@ parse_args() {
                 ;;
             --force)
                 force_mode=true
+                shift
+                ;;
+            --preserve-config)
+                preserve_config=true
                 shift
                 ;;
             --backup)
@@ -450,6 +456,9 @@ install_module() {
     local opts=("--install")
     if [[ "$force_mode" == "true" ]]; then
         opts=("--force")
+    fi
+    if [[ "$preserve_config" == "true" ]]; then
+        opts+=("--preserve-config")
     fi
     if [[ "$backup_mode" == "true" ]]; then
         opts+=("--backup")

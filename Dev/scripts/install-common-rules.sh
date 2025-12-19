@@ -54,6 +54,7 @@ force=false
 dry_run=false
 backup=false
 interactive=false
+preserve_config=false
 rules_only=false
 agents_only=false
 commands_only=false
@@ -177,6 +178,7 @@ ${MSG_HELP_OPTIONS}
     --install           ${MSG_HELP_INSTALL}
     --update            ${MSG_HELP_UPDATE}
     --force             ${MSG_HELP_FORCE}
+    --preserve-config   Preserve CLAUDE.md when using --force
     --dry-run           ${MSG_HELP_DRY_RUN}
     --backup            ${MSG_HELP_BACKUP}
     --interactive       ${MSG_HELP_INTERACTIVE}
@@ -212,6 +214,10 @@ parse_args() {
                 ;;
             --force)
                 force=true
+                shift
+                ;;
+            --preserve-config)
+                preserve_config=true
                 shift
                 ;;
             --dry-run)
@@ -391,17 +397,25 @@ copy_directory() {
 # Component installation
 #-------------------------------------------------------------------------------
 install_rules() {
-    log_info "${MSG_INSTALLING_RULES:-Installing common rules...}"
+    log_info "${MSG_INSTALLING_RULES:-Installing skills and rules...}"
 
-    # Use i18n directory
+    # Install skills (new format)
+    local src_skills="$I18N_DIR/$lang/Common/skills"
+    local dest_skills="$target_dir/.claude/skills"
+
+    if [[ -d "$src_skills" ]]; then
+        copy_directory "$src_skills" "$dest_skills" "*.md"
+    else
+        log_warning "${MSG_SKILLS_NOT_FOUND:-Common skills directory not found:} $src_skills"
+    fi
+
+    # Also install legacy rules for backward compatibility
     local src_rules="$I18N_DIR/$lang/Common/rules"
     local dest_rules="$target_dir/.claude/rules"
 
     if [[ -d "$src_rules" ]]; then
         copy_directory "$src_rules" "$dest_rules" "*.md"
         copy_directory "$src_rules" "$dest_rules" "*.md.template"
-    else
-        log_warning "${MSG_RULES_NOT_FOUND:-Common rules directory not found:} $src_rules"
     fi
 }
 
@@ -479,6 +493,87 @@ install_checklists() {
     else
         log_warning "${MSG_CHECKLISTS_NOT_FOUND} $src_checklists"
     fi
+}
+
+install_claude_md() {
+    log_info "${MSG_INSTALLING_CLAUDE_MD:-Installing CLAUDE.md...}"
+
+    local src_template="$I18N_DIR/$lang/Common/templates/CLAUDE.md.template"
+    local dest_file="$target_dir/.claude/CLAUDE.md"
+
+    if [[ ! -f "$src_template" ]]; then
+        log_warning "${MSG_CLAUDE_MD_NOT_FOUND:-CLAUDE.md template not found:} $src_template"
+        return 0
+    fi
+
+    # Only create if doesn't exist (never overwrite user customizations)
+    if [[ -f "$dest_file" ]]; then
+        if $preserve_config; then
+            log_info "Preserved: .claude/CLAUDE.md (--preserve-config)"
+            ((++files_skipped))
+            return 0
+        elif ! $force; then
+            log_warning "${MSG_SKIPPING} .claude/CLAUDE.md (use --force to overwrite)"
+            ((++files_skipped))
+            return 0
+        fi
+    fi
+
+    # Build technology list
+    local tech_list="- Common (agents, commands, skills)"
+
+    # Build agents list
+    local agents_list=""
+    local src_agents="$I18N_DIR/$lang/Common/agents"
+    if [[ -d "$src_agents" ]]; then
+        while IFS= read -r agent_file; do
+            local agent_name
+            agent_name=$(grep -m1 "^name:" "$agent_file" 2>/dev/null | sed 's/^name:[[:space:]]*//' | tr -d '"')
+            local agent_desc
+            agent_desc=$(grep -m1 "^description:" "$agent_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60)
+            if [[ -n "$agent_name" ]]; then
+                agents_list="${agents_list}- \`@${agent_name}\` - ${agent_desc}\n"
+            fi
+        done < <(find "$src_agents" -name "*.md" -type f | sort)
+    fi
+
+    # Build commands list
+    local commands_list=""
+    local src_commands="$I18N_DIR/$lang/Common/commands"
+    if [[ -d "$src_commands" ]]; then
+        while IFS= read -r cmd_file; do
+            local cmd_name
+            cmd_name=$(basename "$cmd_file" .md)
+            local cmd_desc
+            cmd_desc=$(grep -m1 "^description:" "$cmd_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60)
+            if [[ -n "$cmd_desc" ]]; then
+                commands_list="${commands_list}- \`/common:${cmd_name}\` - ${cmd_desc}\n"
+            fi
+        done < <(find "$src_commands" -name "*.md" -type f | sort)
+    fi
+
+    # Create destination directory
+    if $dry_run; then
+        log_dry_run "${MSG_CREATING} .claude/CLAUDE.md"
+        ((++files_created))
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$dest_file")"
+
+    # Copy template and replace placeholders using awk (handles multiline better than sed)
+    awk -v tech="$tech_list" -v agents="$agents_list" -v commands="$commands_list" '
+    {
+        gsub(/{TECH_LIST}/, tech)
+        gsub(/{AGENTS_LIST}/, agents)
+        gsub(/{COMMANDS_LIST}/, commands)
+        # Convert literal \n to actual newlines
+        gsub(/\\n/, "\n")
+        print
+    }' "$src_template" > "$dest_file"
+
+    log_success "${MSG_CREATING} .claude/CLAUDE.md"
+    ((++files_created))
 }
 
 #-------------------------------------------------------------------------------
@@ -596,6 +691,11 @@ main() {
 
     if $checklists_only; then
         install_checklists
+    fi
+
+    # Always install CLAUDE.md template (if rules are installed)
+    if $rules_only; then
+        install_claude_md
     fi
 
     print_summary
