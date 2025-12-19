@@ -1,3 +1,7 @@
+---
+description: Security Audit
+---
+
 # Security Audit
 
 Perform a comprehensive security audit of the React application.

@@ -1,3 +1,8 @@
+---
+description: Especificação Completa de Componente UI/UX/A11y
+argument-hint: [arguments]
+---
+
 # Especificação Completa de Componente UI/UX/A11y
 
 Você é o Orquestrador UI/UX. Você deve produzir uma especificação completa de componente envolvendo os 3 especialistas: UX para o comportamento, UI para o visual, A11y para a acessibilidade.

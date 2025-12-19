@@ -1,3 +1,7 @@
+---
+description: Verificación de Testing
+---
+
 # Verificación de Testing
 
 Verifica la cobertura y calidad de los tests en React Native.

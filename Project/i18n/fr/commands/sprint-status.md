@@ -1,3 +1,8 @@
+---
+description: Statut du Sprint
+argument-hint: [arguments]
+---
+
 # Statut du Sprint
 
 Afficher les métriques détaillées et l'état d'avancement du sprint.

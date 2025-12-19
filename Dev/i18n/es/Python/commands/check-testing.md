@@ -1,3 +1,8 @@
+---
+description: Verificar Pruebas Python
+argument-hint: [arguments]
+---
+
 # Verificar Pruebas Python
 
 ## Argumentos

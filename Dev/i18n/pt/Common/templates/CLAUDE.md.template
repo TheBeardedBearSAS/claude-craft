@@ -1,0 +1,58 @@
+# Configuração do Projeto
+
+Este projeto utiliza as regras do **Claude Craft** para desenvolvimento assistido por IA.
+
+## Componentes Instalados
+
+### Tecnologias
+<!-- AUTO-GENERATED -->
+{TECH_LIST}
+
+### Agentes Disponíveis
+
+Use `@nome-agente` para invocar agentes especializados:
+
+{AGENTS_LIST}
+
+### Comandos Disponíveis
+
+Use `/namespace:comando` para executar comandos do projeto:
+
+{COMMANDS_LIST}
+
+### Referência de Skills
+
+Consulte `.claude/skills/` para diretrizes detalhadas sobre:
+- Padrões de arquitetura
+- Estratégias de teste
+- Melhores práticas de segurança
+- Padrões de qualidade de código
+
+## Especificidades do Projeto
+
+<!-- Adicione suas instruções específicas do projeto abaixo -->
+
+### Arquitetura
+
+Descreva a arquitetura do seu projeto aqui.
+
+### Convenções
+
+Liste as convenções específicas do seu projeto aqui.
+
+### Tarefas Comuns
+
+```bash
+# Build
+make build
+
+# Test
+make test
+
+# Deploy
+make deploy
+```
+
+---
+
+*Gerado por [Claude Craft](https://github.com/anthropics/claude-craft)*

@@ -1,3 +1,7 @@
+---
+description: Retrospectiva de Sprint
+---
+
 # Retrospectiva de Sprint
 
 Analiza el sprint pasado e identifica mejoras para el próximo sprint.

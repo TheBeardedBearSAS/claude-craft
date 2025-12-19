@@ -1,3 +1,8 @@
+---
+description: Update a User Story
+argument-hint: [arguments]
+---
+
 # Update a User Story
 
 Modify information of an existing User Story.

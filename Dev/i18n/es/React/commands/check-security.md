@@ -1,3 +1,7 @@
+---
+description: Verificacion de Seguridad
+---
+
 # Verificacion de Seguridad
 
 Realiza un analisis de seguridad exhaustivo de la aplicacion React para identificar vulnerabilidades y problemas de seguridad.

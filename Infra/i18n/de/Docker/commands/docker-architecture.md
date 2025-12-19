@@ -1,3 +1,8 @@
+---
+description: Vollständige Docker-Architektur
+argument-hint: [arguments]
+---
+
 # Vollständige Docker-Architektur
 
 Du bist ein Senior Docker-Architekt. Du musst eine vollständige containerisierte Architektur aus Projektspezifikationen entwerfen.

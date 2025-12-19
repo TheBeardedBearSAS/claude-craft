@@ -1,3 +1,8 @@
+---
+description: Afficher le Tableau Kanban
+argument-hint: [arguments]
+---
+
 # Afficher le Tableau Kanban
 
 Afficher le tableau Kanban du sprint actuel ou d'un sprint spécifique.

@@ -1,3 +1,8 @@
+---
+description: Descomponer User Stories en Tareas
+argument-hint: [arguments]
+---
+
 # Descomponer User Stories en Tareas
 
 Eres un Tech Lead y Scrum Master experimentado. Debes descomponer las User Stories del sprint en tareas técnicas detalladas para el equipo de desarrollo.

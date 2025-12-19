@@ -1,3 +1,8 @@
+---
+description: Génération Backlog SCRUM Complet
+argument-hint: [arguments]
+---
+
 # Génération Backlog SCRUM Complet
 
 Tu es un Product Owner et Scrum Master expérimenté. Tu dois analyser les documents de spécification du projet pour créer un backlog produit complet et planifier les sprints.

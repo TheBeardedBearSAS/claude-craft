@@ -1,3 +1,8 @@
+---
+description: Génération Endpoint FastAPI
+argument-hint: [arguments]
+---
+
 # Génération Endpoint FastAPI
 
 Tu es un développeur Python senior. Tu dois générer un endpoint FastAPI complet avec validation Pydantic, gestion d'erreurs et tests.

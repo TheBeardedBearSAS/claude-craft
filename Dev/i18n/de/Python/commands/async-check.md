@@ -1,3 +1,8 @@
+---
+description: Python Async-Prüfung
+argument-hint: [arguments]
+---
+
 # Python Async-Prüfung
 
 ## Argumente

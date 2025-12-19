@@ -1,3 +1,7 @@
+---
+description: Gerar Nova Funcionalidade Flutter
+---
+
 # Gerar Nova Funcionalidade Flutter
 
 Gere toda a estrutura necessária para uma nova funcionalidade seguindo Clean Architecture.

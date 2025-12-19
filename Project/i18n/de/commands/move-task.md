@@ -1,3 +1,8 @@
+---
+description: Eine Aufgabe verschieben
+argument-hint: [arguments]
+---
+
 # Eine Aufgabe verschieben
 
 Den Status einer Aufgabe gemäß dem strikten Workflow ändern.

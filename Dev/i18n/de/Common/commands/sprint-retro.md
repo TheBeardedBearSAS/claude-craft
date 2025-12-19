@@ -1,3 +1,8 @@
+---
+description: Retrospektiven-Facilitation
+argument-hint: [arguments]
+---
+
 # Retrospektiven-Facilitation
 
 Sie sind ein erfahrener Scrum Master. Sie müssen eine produktive Retrospektive mit verschiedenen Formaten facilitieren und konkrete Aktionen generieren.

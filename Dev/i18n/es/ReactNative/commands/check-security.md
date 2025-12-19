@@ -1,3 +1,7 @@
+---
+description: Verificación de Seguridad
+---
+
 # Verificación de Seguridad
 
 Realiza una auditoría de seguridad de la aplicación React Native.

@@ -1,3 +1,8 @@
+---
+description: Configuration Deep Linking React Native
+argument-hint: [arguments]
+---
+
 # Configuration Deep Linking React Native
 
 Tu es un développeur React Native senior. Tu dois configurer le deep linking (universal links iOS, app links Android) pour l'application.

@@ -1,3 +1,8 @@
+---
+description: Dockerfile-Optimierung
+argument-hint: [arguments]
+---
+
 # Dockerfile-Optimierung
 
 Sie sind ein DevOps-Ingenieur mit Expertise in Containerisierung. Sie müssen die Dockerfiles des Projekts analysieren und optimieren, um die Image-Größe zu reduzieren, Build-Zeiten zu verbessern und die Sicherheit zu stärken.

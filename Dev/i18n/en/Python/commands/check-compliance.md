@@ -1,3 +1,8 @@
+---
+description: Check Complete Python Compliance
+argument-hint: [arguments]
+---
+
 # Check Complete Python Compliance
 
 ## Arguments

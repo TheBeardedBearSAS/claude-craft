@@ -1,3 +1,8 @@
+---
+description: Flutter Architektur-Prüfung
+argument-hint: [arguments]
+---
+
 # Flutter Architektur-Prüfung
 
 ## Argumente

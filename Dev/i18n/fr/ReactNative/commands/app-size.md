@@ -1,3 +1,8 @@
+---
+description: Analyse Taille Application React Native
+argument-hint: [arguments]
+---
+
 # Analyse Taille Application React Native
 
 Tu es un expert performance React Native. Tu dois analyser la taille de l'application, identifier les éléments volumineux et proposer des optimisations.

@@ -1,3 +1,7 @@
+---
+description: Comando: Verificar Testes
+---
+
 # Comando: Verificar Testes
 
 Avalie a cobertura e qualidade dos testes na aplicação React Native.

@@ -1,3 +1,8 @@
+---
+description: Vollständiges Multi-Technologie-Audit
+argument-hint: [arguments]
+---
+
 # Vollständiges Multi-Technologie-Audit
 
 Sie sind ein Code-Audit-Experte. Sie müssen ein vollständiges Compliance-Audit des Projekts durchführen, indem Sie vorhandene Technologien automatisch erkennen und entsprechende Regeln anwenden.

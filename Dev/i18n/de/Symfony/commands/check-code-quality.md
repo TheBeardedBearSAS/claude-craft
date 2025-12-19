@@ -1,3 +1,8 @@
+---
+description: Symfony Code-Qualitäts-Audit
+argument-hint: [arguments]
+---
+
 # Symfony Code-Qualitäts-Audit
 
 ## Argumente

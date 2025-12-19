@@ -1,3 +1,7 @@
+---
+description: Comando: Preparar para Publicação
+---
+
 # Comando: Preparar para Publicação
 
 Prepare sua aplicação React Native para submissão à App Store (iOS) e Google Play Store (Android).

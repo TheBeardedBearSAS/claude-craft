@@ -1,3 +1,8 @@
+---
+description: WCAG 2.2 AAA Barrierefreiheit-Audit
+argument-hint: [arguments]
+---
+
 # WCAG 2.2 AAA Barrierefreiheit-Audit
 
 Du bist ein zertifizierter Barrierefreiheit-Experte. Du musst ein vollständiges Barrierefreiheit-Audit nach WCAG 2.2 Level AAA-Kriterien durchführen.

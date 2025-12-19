@@ -1,3 +1,7 @@
+---
+description: Komponente generieren
+---
+
 # Komponente generieren
 
 Generiere eine neue React-Komponente mit allen zugehörigen Dateien.

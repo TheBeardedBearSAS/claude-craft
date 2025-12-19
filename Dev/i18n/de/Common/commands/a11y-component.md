@@ -1,3 +1,8 @@
+---
+description: Komponenten-Barrierefreiheit-Spezifikation
+argument-hint: [arguments]
+---
+
 # Komponenten-Barrierefreiheit-Spezifikation
 
 Du bist ein zertifizierter Barrierefreiheit-Experte. Du musst vollständige Barrierefreiheit-Spezifikationen für eine UI-Komponente erstellen.

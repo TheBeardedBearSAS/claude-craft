@@ -1,3 +1,8 @@
+---
+description: Docker Compose Setup
+argument-hint: [arguments]
+---
+
 # Docker Compose Setup
 
 You are a Docker Compose orchestration expert. You must generate a complete and optimized configuration for a multi-service environment.

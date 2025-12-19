@@ -1,3 +1,8 @@
+---
+description: Checklist de Release
+argument-hint: [arguments]
+---
+
 # Checklist de Release
 
 Você é um Release Manager especializado. Você deve guiar a equipe através de todas as etapas de um release de qualidade, verificando cada ponto crítico.

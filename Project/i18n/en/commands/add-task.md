@@ -1,3 +1,8 @@
+---
+description: Add a Task
+argument-hint: [arguments]
+---
+
 # Add a Task
 
 Create a new technical task and associate it with a User Story.

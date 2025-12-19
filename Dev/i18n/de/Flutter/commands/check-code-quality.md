@@ -1,3 +1,8 @@
+---
+description: Flutter Codequalitäts-Prüfung
+argument-hint: [arguments]
+---
+
 # Flutter Codequalitäts-Prüfung
 
 ## Argumente

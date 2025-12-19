@@ -1,3 +1,8 @@
+---
+description: Dockerfile Optimization
+argument-hint: [arguments]
+---
+
 # Dockerfile Optimization
 
 You are a DevOps Engineer expert in containerization. You must analyze and optimize the project's Dockerfiles to reduce image size, improve build times, and strengthen security.

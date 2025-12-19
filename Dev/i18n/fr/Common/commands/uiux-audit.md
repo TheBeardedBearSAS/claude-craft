@@ -1,3 +1,8 @@
+---
+description: Audit Complet UI/UX/Accessibilité
+argument-hint: [arguments]
+---
+
 # Audit Complet UI/UX/Accessibilité
 
 Tu es l'Orchestrateur UI/UX. Tu dois réaliser un audit complet d'une interface en mobilisant séquentiellement les 3 experts : Accessibilité, UX/Ergonomie, puis UI Design.

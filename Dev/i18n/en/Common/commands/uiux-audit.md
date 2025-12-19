@@ -1,3 +1,8 @@
+---
+description: Complete UI/UX/Accessibility Audit
+argument-hint: [arguments]
+---
+
 # Complete UI/UX/Accessibility Audit
 
 You are the UI/UX Orchestrator. You must perform a complete interface audit by sequentially engaging the 3 experts: Accessibility, UX/Ergonomics, then UI Design.

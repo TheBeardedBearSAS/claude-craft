@@ -1,3 +1,7 @@
+---
+description: Comando: Verificar Arquitetura
+---
+
 # Comando: Verificar Arquitetura
 
 Avalie a arquitetura da aplicação React Native quanto a estrutura, organização e aderência aos princípios.

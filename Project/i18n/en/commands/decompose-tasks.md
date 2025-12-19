@@ -1,3 +1,8 @@
+---
+description: Decompose User Stories into Tasks
+argument-hint: [arguments]
+---
+
 # Decompose User Stories into Tasks
 
 You are an experienced Tech Lead and Scrum Master. You must decompose sprint User Stories into detailed technical tasks for the development team.

@@ -1,3 +1,8 @@
+---
+description: Docker Compose Einrichtung
+argument-hint: [arguments]
+---
+
 # Docker Compose Einrichtung
 
 Du bist ein Docker Compose Orchestrierungs-Experte. Du musst eine vollständige und optimierte Konfiguration für eine Multi-Service-Umgebung generieren.

@@ -1,3 +1,8 @@
+---
+description: Auditoría de Testing Symfony
+argument-hint: [arguments]
+---
+
 # Auditoría de Testing Symfony
 
 ## Argumentos

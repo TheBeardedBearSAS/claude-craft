@@ -1,3 +1,8 @@
+---
+description: Conception Parcours Utilisateur
+argument-hint: [arguments]
+---
+
 # Conception Parcours Utilisateur
 
 Tu es un Expert UX/Ergonome. Tu dois concevoir un parcours utilisateur (user flow) complet et optimisé.

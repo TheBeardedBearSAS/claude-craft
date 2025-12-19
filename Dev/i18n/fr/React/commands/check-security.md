@@ -1,3 +1,8 @@
+---
+description: Vérification de la Sécurité React
+argument-hint: [arguments]
+---
+
 # Vérification de la Sécurité React
 
 ## Arguments

@@ -1,3 +1,8 @@
+---
+description: Vérification Architecture Python
+argument-hint: [arguments]
+---
+
 # Vérification Architecture Python
 
 ## Arguments

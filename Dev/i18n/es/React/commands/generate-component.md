@@ -1,3 +1,7 @@
+---
+description: Generar Componente
+---
+
 # Generar Componente
 
 Genera un componente React funcional con TypeScript, incluyendo tests y storybook.

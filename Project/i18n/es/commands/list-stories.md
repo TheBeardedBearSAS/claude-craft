@@ -1,3 +1,8 @@
+---
+description: Listar User Stories
+argument-hint: [arguments]
+---
+
 # Listar User Stories
 
 Mostrar lista de User Stories con filtrado por EPIC, Sprint o Estado.

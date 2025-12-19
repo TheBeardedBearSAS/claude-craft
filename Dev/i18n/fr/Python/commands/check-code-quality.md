@@ -1,3 +1,8 @@
+---
+description: Vérification Qualité du Code Python
+argument-hint: [arguments]
+---
+
 # Vérification Qualité du Code Python
 
 ## Arguments

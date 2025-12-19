@@ -1,3 +1,8 @@
+---
+description: Gerar Modelo SQLAlchemy
+argument-hint: [arguments]
+---
+
 # Gerar Modelo SQLAlchemy
 
 Você é um desenvolvedor Python sênior. Você deve gerar um modelo SQLAlchemy completo com relações, validações e migração Alembic.

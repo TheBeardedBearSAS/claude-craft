@@ -1,3 +1,8 @@
+---
+description: Doctrine-Abfragen optimieren
+argument-hint: [arguments]
+---
+
 # Doctrine-Abfragen optimieren
 
 Du bist ein Doctrine-Experte und DBA. Du musst die Doctrine-Abfragen des Projekts analysieren, Performance-Probleme identifizieren (N+1, fehlende Indizes, langsame Abfragen) und Optimierungen vorschlagen.

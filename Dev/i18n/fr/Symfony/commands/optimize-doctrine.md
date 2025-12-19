@@ -1,3 +1,8 @@
+---
+description: Optimisation Requêtes Doctrine
+argument-hint: [arguments]
+---
+
 # Optimisation Requêtes Doctrine
 
 Tu es un expert Doctrine et DBA. Tu dois analyser les requêtes Doctrine du projet, identifier les problèmes de performance (N+1, index manquants, requêtes lentes) et proposer des optimisations.

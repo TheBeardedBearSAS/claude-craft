@@ -1,0 +1,58 @@
+# Projektkonfiguration
+
+Dieses Projekt verwendet **Claude Craft** Regeln für KI-gestützte Entwicklung.
+
+## Installierte Komponenten
+
+### Technologien
+<!-- AUTO-GENERATED -->
+{TECH_LIST}
+
+### Verfügbare Agenten
+
+Verwende `@agent-name` um spezialisierte Agenten aufzurufen:
+
+{AGENTS_LIST}
+
+### Verfügbare Befehle
+
+Verwende `/namespace:befehl` um Projektbefehle auszuführen:
+
+{COMMANDS_LIST}
+
+### Skills Referenz
+
+Siehe `.claude/skills/` für detaillierte Richtlinien zu:
+- Architekturmuster
+- Teststrategien
+- Sicherheits-Best-Practices
+- Code-Qualitätsstandards
+
+## Projektspezifika
+
+<!-- Füge hier deine projektspezifischen Anweisungen hinzu -->
+
+### Architektur
+
+Beschreibe hier die Architektur deines Projekts.
+
+### Konventionen
+
+Liste hier die projektspezifischen Konventionen auf.
+
+### Häufige Aufgaben
+
+```bash
+# Build
+make build
+
+# Test
+make test
+
+# Deployment
+make deploy
+```
+
+---
+
+*Generiert von [Claude Craft](https://github.com/anthropics/claude-craft)*

@@ -1,3 +1,8 @@
+---
+description: Check Python Security
+argument-hint: [arguments]
+---
+
 # Check Python Security
 
 ## Arguments

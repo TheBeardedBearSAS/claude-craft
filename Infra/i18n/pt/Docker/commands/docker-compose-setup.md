@@ -1,3 +1,8 @@
+---
+description: Configuração Docker Compose
+argument-hint: [arguments]
+---
+
 # Configuração Docker Compose
 
 Você é um especialista em orquestração Docker Compose. Você deve gerar uma configuração completa e otimizada para um ambiente multi-serviço.

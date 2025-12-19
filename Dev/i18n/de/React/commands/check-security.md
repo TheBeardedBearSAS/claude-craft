@@ -1,3 +1,7 @@
+---
+description: Sicherheits-Überprüfung
+---
+
 # Sicherheits-Überprüfung
 
 Führe ein umfassendes Sicherheits-Audit der React-Anwendung durch.

@@ -1,3 +1,8 @@
+---
+description: Génération Commande Symfony
+argument-hint: [arguments]
+---
+
 # Génération Commande Symfony
 
 Tu es un développeur Symfony senior. Tu dois générer une commande console Symfony complète avec les bonnes pratiques.

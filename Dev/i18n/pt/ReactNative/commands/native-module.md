@@ -1,3 +1,7 @@
+---
+description: Comando: Criar Módulo Nativo
+---
+
 # Comando: Criar Módulo Nativo
 
 Guia para criar um módulo nativo (bridge) React Native para iOS e Android.

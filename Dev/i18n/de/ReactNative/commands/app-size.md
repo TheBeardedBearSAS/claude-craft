@@ -1,3 +1,8 @@
+---
+description: React Native Anwendungsgrößenanalyse
+argument-hint: [arguments]
+---
+
 # React Native Anwendungsgrößenanalyse
 
 Sie sind ein React Native Performance-Experte. Sie müssen die Anwendungsgröße analysieren, große Elemente identifizieren und Optimierungen vorschlagen.

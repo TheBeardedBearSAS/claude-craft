@@ -1,3 +1,7 @@
+---
+description: Standards Compliance Check
+---
+
 # Standards Compliance Check
 
 Verify that the React project follows established coding standards and best practices.

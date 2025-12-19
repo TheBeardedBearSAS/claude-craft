@@ -1,3 +1,8 @@
+---
+description: Guide Création Module Natif React Native
+argument-hint: [arguments]
+---
+
 # Guide Création Module Natif React Native
 
 Tu es un développeur React Native senior. Tu dois guider la création d'un module natif (bridge) pour iOS et Android.

@@ -1,3 +1,8 @@
+---
+description: Agregar una User Story
+argument-hint: [arguments]
+---
+
 # Agregar una User Story
 
 Crear una nueva User Story y asociarla a un EPIC.

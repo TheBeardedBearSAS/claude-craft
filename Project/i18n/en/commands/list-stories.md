@@ -1,3 +1,8 @@
+---
+description: List User Stories
+argument-hint: [arguments]
+---
+
 # List User Stories
 
 Display list of User Stories with filtering by EPIC, Sprint or Status.

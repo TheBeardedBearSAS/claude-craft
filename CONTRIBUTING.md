@@ -25,47 +25,119 @@ Thank you for your interest in contributing to Claude Craft! This document provi
 ```
 claude-craft/
 ├── Dev/
-│   ├── Common/                 # Shared components
-│   │   ├── claude-agents/      # Transversal agents
-│   │   ├── claude-commands/    # /common: commands
-│   │   ├── templates/          # Generic templates
-│   │   ├── checklists/         # Shared checklists
-│   │   └── install-common-rules.sh
-│   ├── {Technology}/           # Technology-specific
-│   │   ├── rules/              # Rule definitions
-│   │   ├── claude-agents/      # Technology agent
-│   │   ├── claude-commands/    # /{tech}: commands
-│   │   ├── templates/          # Code templates
-│   │   ├── checklists/         # Quality checklists
-│   │   └── install-{tech}-rules.sh
-│   └── install-from-config.sh  # YAML installer
+│   ├── i18n/                   # Internationalized content
+│   │   ├── {lang}/             # Language (en, fr, es, de, pt)
+│   │   │   ├── Common/         # Shared components
+│   │   │   │   ├── agents/     # Transversal agents
+│   │   │   │   ├── commands/   # /common: commands
+│   │   │   │   ├── skills/     # Skills (official format)
+│   │   │   │   ├── templates/  # Generic templates
+│   │   │   │   └── checklists/ # Shared checklists
+│   │   │   └── {Technology}/   # Technology-specific
+│   │   │       ├── agents/     # Technology agent
+│   │   │       ├── commands/   # /{tech}: commands
+│   │   │       ├── skills/     # Technology skills
+│   │   │       ├── templates/  # Code templates
+│   │   │       └── checklists/ # Quality checklists
+│   └── scripts/                # Installation scripts
+│       ├── install-common-rules.sh
+│       ├── install-{tech}-rules.sh
+│       └── install-from-config.sh
+├── Infra/                      # Infrastructure (Docker)
 ├── Project/                    # Project management
+├── Tools/                      # Claude Code utilities
 ├── Makefile                    # Orchestration
 └── docs/                       # Documentation
 ```
 
 ## File Naming Conventions
 
-### Rules
+### Skills (Official Format)
+- Format: Directory with `SKILL.md` + `REFERENCE.md`
+- Directory name: `{topic}` or `{topic}-{technology}`
+- Example: `testing/`, `architecture-clean-ddd/`, `security-react/`
+- Use kebab-case for directory names
+
+### Rules (Legacy)
 - Format: `{number}-{topic}.md`
 - Example: `01-workflow-analysis.md`, `02-architecture.md`
 - Numbers ensure consistent ordering
+- **Note**: Prefer skills format for new contributions
 
 ### Commands
 - Format: `{action}-{target}.md`
 - Example: `generate-crud.md`, `check-architecture.md`
 - Use kebab-case
+- **Requires frontmatter** with `description` field
 
 ### Agents
 - Format: `{role}-{specialty}.md`
 - Example: `database-architect.md`, `tdd-coach.md`
 - Use kebab-case
+- **Requires frontmatter** with `name` and `description` fields
 
 ### Templates
 - Format: `{component-type}.md`
 - Example: `service.md`, `aggregate-root.md`
 
-## Writing Rules
+## Writing Skills (Official Format)
+
+Skills are the preferred format for best practices. Each skill is a directory with two files:
+
+### SKILL.md (Index)
+
+```markdown
+---
+name: my-skill
+description: Brief description. Use when [context].
+---
+
+# Skill Title
+
+This skill provides guidelines and best practices.
+
+See @REFERENCE.md for detailed documentation.
+```
+
+### REFERENCE.md (Documentation)
+
+```markdown
+# Skill Title
+
+## Overview
+Why this skill exists and what it covers.
+
+## Guidelines
+
+### Section 1
+Detailed content with examples...
+
+### Section 2
+More content...
+
+## Checklist
+- [ ] Item 1
+- [ ] Item 2
+
+## Anti-patterns
+What to avoid...
+
+## Resources
+- External links
+```
+
+### Skill Best Practices
+
+1. **Clear `description`**: Include when to use the skill
+2. **Actionable content**: Provide concrete examples
+3. **Use ASCII diagrams**: For architecture and flows
+4. **Add checklists**: Quality gates for the domain
+5. **Document anti-patterns**: What to avoid
+6. **Keep language consistent**: Common (language-agnostic) or tech-specific
+
+---
+
+## Writing Rules (Legacy)
 
 Rules should follow this structure:
 
@@ -85,11 +157,20 @@ Good and bad examples
 When this rule may not apply
 ```
 
+> **Note**: For new contributions, prefer the Skills format.
+
+---
+
 ## Writing Commands
 
-Commands should follow this structure:
+Commands **require YAML frontmatter** for Claude Code discovery:
 
 ```markdown
+---
+description: Brief description of what the command does
+argument-hint: <required-arg> [optional-arg]
+---
+
 # Command Name
 
 Brief description of what the command does.
@@ -109,11 +190,25 @@ Details...
 Expected output structure
 ```
 
+### Frontmatter Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `description` | Yes | Shown in command list |
+| `argument-hint` | No | Expected arguments format |
+
+---
+
 ## Writing Agents
 
-Agents should follow this structure:
+Agents **require YAML frontmatter** for Claude Code discovery:
 
 ```markdown
+---
+name: agent-name
+description: Expert in [domain]. Use when [context].
+---
+
 # Agent Name
 
 ## Identity
@@ -130,6 +225,13 @@ How the agent works
 ## Interactions
 How to interact with this agent
 ```
+
+### Frontmatter Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Agent identifier (for @mention) |
+| `description` | Yes | Shown in agent discovery |
 
 ## Code Style
 

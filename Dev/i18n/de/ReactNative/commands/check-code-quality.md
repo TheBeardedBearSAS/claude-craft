@@ -1,3 +1,8 @@
+---
+description: React Native Code-Qualitätsprüfung
+argument-hint: [arguments]
+---
+
 # React Native Code-Qualitätsprüfung
 
 ## Argumente

@@ -1,3 +1,8 @@
+---
+description: Decompor User Stories em Tarefas
+argument-hint: [arguments]
+---
+
 # Decompor User Stories em Tarefas
 
 Você é um Tech Lead e Scrum Master experiente. Você deve decompor as User Stories do sprint em tarefas técnicas detalhadas para a equipe de desenvolvimento.

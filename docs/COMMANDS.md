@@ -387,11 +387,76 @@ Score: 85/100
 
 ---
 
+## Command Frontmatter Format
+
+All commands include YAML frontmatter for Claude Code discovery:
+
+```markdown
+---
+description: Brief description of what the command does
+argument-hint: <required-arg> [optional-arg]
+---
+
+# Command Title
+
+Command content...
+```
+
+### Frontmatter Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `description` | Yes | Brief description shown in command list |
+| `argument-hint` | No | Shows expected arguments format |
+
+### Examples
+
+**Command with arguments:**
+
+```markdown
+---
+description: Generate CRUD operations for an entity with Clean Architecture
+argument-hint: <EntityName>
+---
+
+# Generate CRUD
+
+Generate complete CRUD operations for $ARGUMENTS...
+```
+
+**Command without arguments:**
+
+```markdown
+---
+description: Run all pre-commit checks (tests, lint, security)
+---
+
+# Pre-Commit Check
+
+Execute all validation checks before committing...
+```
+
+### Variable Substitution
+
+Commands can use these variables:
+
+| Variable | Description |
+|----------|-------------|
+| `$ARGUMENTS` | All arguments passed after command name |
+| `$ARG1`, `$ARG2`... | Individual positional arguments |
+
+---
+
 ## Creating Custom Commands
 
 Add markdown files to `.claude/commands/{namespace}/`:
 
 ```markdown
+---
+description: What this command does
+argument-hint: <arg1> [arg2]
+---
+
 # My Custom Command
 
 Description of what this command does.

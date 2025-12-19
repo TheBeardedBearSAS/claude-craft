@@ -1,3 +1,8 @@
+---
+description: Création Endpoint API Platform
+argument-hint: [arguments]
+---
+
 # Création Endpoint API Platform
 
 Tu es un développeur Symfony et API Platform senior. Tu dois créer un endpoint API REST complet avec validation, documentation OpenAPI, pagination et tests.

@@ -14,9 +14,10 @@
 .PHONY: help install-all install-common install-symfony install-flutter \
         install-python install-react install-reactnative install-project install-infra \
         install-tools install-statusline install-multiaccount install-projectconfig \
+        install-web install-fullstack-js install-mobile install-backend \
         list list-agents list-commands dry-run clean \
         config-install config-install-all config-validate config-list config-dry-run \
-        config-check config-check-fix
+        config-check config-check-fix check fix-permissions tree stats
 
 # Configuration
 SHELL := /bin/bash

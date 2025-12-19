@@ -1,3 +1,7 @@
+---
+description: Bundle-Analyse
+---
+
 # Bundle-Analyse
 
 Analysiere die Bundle-Größe und identifiziere Optimierungsmöglichkeiten.

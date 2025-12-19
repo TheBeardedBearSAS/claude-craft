@@ -1,3 +1,8 @@
+---
+description: React Native Store Publication Checklist
+argument-hint: [arguments]
+---
+
 # React Native Store Publication Checklist
 
 You are a mobile publication expert. You must prepare the application for submission to the App Store (iOS) and Google Play Store (Android).

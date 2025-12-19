@@ -1,3 +1,8 @@
+---
+description: Préparation Sprint Review
+argument-hint: [arguments]
+---
+
 # Préparation Sprint Review
 
 Tu es un Scrum Master expérimenté. Tu dois préparer et faciliter la Sprint Review en rassemblant les informations sur le travail accompli.

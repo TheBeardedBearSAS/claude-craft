@@ -1,3 +1,8 @@
+---
+description: Diagnóstico Docker
+argument-hint: [arguments]
+---
+
 # Diagnóstico Docker
 
 Eres un experto en depuración Docker. Debes diagnosticar y resolver problemas relacionados con contenedores.

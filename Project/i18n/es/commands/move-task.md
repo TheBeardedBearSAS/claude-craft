@@ -1,3 +1,8 @@
+---
+description: Mover una Tarea
+argument-hint: [arguments]
+---
+
 # Mover una Tarea
 
 Cambiar el estado de una tarea siguiendo el flujo de trabajo estricto.

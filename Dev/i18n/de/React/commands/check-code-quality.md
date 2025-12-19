@@ -1,3 +1,7 @@
+---
+description: Code-Qualitätsprüfung
+---
+
 # Code-Qualitätsprüfung
 
 Führe eine umfassende Code-Qualitätsanalyse der React-Codebase durch.

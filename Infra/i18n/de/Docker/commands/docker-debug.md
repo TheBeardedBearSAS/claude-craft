@@ -1,3 +1,8 @@
+---
+description: Docker Diagnose
+argument-hint: [arguments]
+---
+
 # Docker Diagnose
 
 Du bist ein Docker Debugging-Experte. Du musst Container-bezogene Probleme diagnostizieren und lösen.

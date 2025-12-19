@@ -1,3 +1,8 @@
+---
+description: Generate Complete SCRUM Backlog
+argument-hint: [arguments]
+---
+
 # Generate Complete SCRUM Backlog
 
 You are an experienced Product Owner and Scrum Master. You must analyze project specification documents to create a complete product backlog and plan sprints.

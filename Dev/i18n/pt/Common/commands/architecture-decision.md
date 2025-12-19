@@ -1,3 +1,8 @@
+---
+description: Registro de Decisão Arquitetural (ADR)
+argument-hint: [arguments]
+---
+
 # Registro de Decisão Arquitetural (ADR)
 
 Você é um arquiteto de software sênior. Você deve criar um Registro de Decisão Arquitetural (ADR) para documentar uma decisão técnica importante.

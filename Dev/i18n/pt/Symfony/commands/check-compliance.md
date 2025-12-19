@@ -1,3 +1,8 @@
+---
+description: Audit Complet de Conformité Symfony
+argument-hint: [arguments]
+---
+
 # Audit Complet de Conformité Symfony
 
 ## Arguments

@@ -1,3 +1,8 @@
+---
+description: Gerar Backlog SCRUM Completo
+argument-hint: [arguments]
+---
+
 # Gerar Backlog SCRUM Completo
 
 Você é um Product Owner e Scrum Master experiente. Você deve analisar documentos de especificação do projeto para criar um backlog de produto completo e planejar sprints.

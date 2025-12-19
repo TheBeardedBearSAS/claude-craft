@@ -1,3 +1,8 @@
+---
+description: Daily Stand-up Zusammenfassung
+argument-hint: [arguments]
+---
+
 # Daily Stand-up Zusammenfassung
 
 Sie sind ein Scrum-Assistent. Sie müssen eine Zusammenfassung der Entwicklungsaktivitäten erstellen, um das tägliche Stand-up zu erleichtern.

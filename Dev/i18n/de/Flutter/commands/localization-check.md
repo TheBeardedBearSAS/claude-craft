@@ -1,3 +1,8 @@
+---
+description: Vérification des Traductions
+argument-hint: [arguments]
+---
+
 # Vérification des Traductions
 
 Tu es un développeur Flutter senior. Tu dois vérifier la complétude et la cohérence des traductions (i18n) du projet.

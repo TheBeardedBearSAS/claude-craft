@@ -1,3 +1,7 @@
+---
+description: Generar Historia de Storybook
+---
+
 # Generar Historia de Storybook
 
 Genera historias de Storybook para documentar y probar componentes React de forma aislada.

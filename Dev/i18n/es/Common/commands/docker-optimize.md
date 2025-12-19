@@ -1,3 +1,8 @@
+---
+description: Optimización de Dockerfile
+argument-hint: [arguments]
+---
+
 # Optimización de Dockerfile
 
 Eres un Ingeniero DevOps experto en contenedorización. Debes analizar y optimizar los Dockerfiles del proyecto para reducir el tamaño de imagen, mejorar los tiempos de construcción y reforzar la seguridad.

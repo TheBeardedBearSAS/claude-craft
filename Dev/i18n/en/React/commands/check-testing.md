@@ -1,3 +1,7 @@
+---
+description: Testing Strategy Check
+---
+
 # Testing Strategy Check
 
 Verify that the React application has comprehensive test coverage and follows testing best practices.

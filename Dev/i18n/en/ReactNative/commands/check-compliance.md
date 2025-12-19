@@ -1,3 +1,8 @@
+---
+description: Global React Native Project Compliance Check
+argument-hint: [arguments]
+---
+
 # Global React Native Project Compliance Check
 
 ## Arguments

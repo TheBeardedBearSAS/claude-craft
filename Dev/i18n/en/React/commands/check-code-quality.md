@@ -1,3 +1,7 @@
+---
+description: Code Quality Check
+---
+
 # Code Quality Check
 
 Perform a comprehensive code quality analysis of the React application.

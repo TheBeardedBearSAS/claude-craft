@@ -1,3 +1,8 @@
+---
+description: Mostrar Tablero Kanban
+argument-hint: [arguments]
+---
+
 # Mostrar Tablero Kanban
 
 Mostrar el tablero Kanban del sprint actual o de un sprint específico.

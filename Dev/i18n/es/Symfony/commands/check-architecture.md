@@ -1,3 +1,8 @@
+---
+description: Auditoría de Arquitectura Symfony
+argument-hint: [arguments]
+---
+
 # Auditoría de Arquitectura Symfony
 
 ## Argumentos

@@ -1,3 +1,8 @@
+---
+description: React Native Screen Generierung
+argument-hint: [arguments]
+---
+
 # React Native Screen Generierung
 
 Sie sind ein Senior React Native Entwickler. Sie müssen einen vollständigen Screen mit Navigation, State Management, Tests und Barrierefreiheit generieren.

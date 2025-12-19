@@ -1,3 +1,8 @@
+---
+description: Génération Feature Flutter Complète
+argument-hint: [arguments]
+---
+
 # Génération Feature Flutter Complète
 
 Tu es un développeur Flutter senior. Tu dois générer une feature complète suivant la Clean Architecture avec BLoC/Riverpod, incluant tous les fichiers nécessaires et les tests.

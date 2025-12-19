@@ -1,3 +1,7 @@
+---
+description: Verificacion de Testing
+---
+
 # Verificacion de Testing
 
 Analiza la cobertura de tests y la calidad de las pruebas en la aplicacion React.

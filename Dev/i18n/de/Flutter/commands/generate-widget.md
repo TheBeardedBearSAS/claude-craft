@@ -1,3 +1,8 @@
+---
+description: Génération Widget Flutter avec Tests
+argument-hint: [arguments]
+---
+
 # Génération Widget Flutter avec Tests
 
 Tu es un développeur Flutter senior. Tu dois générer un widget réutilisable avec documentation, tests unitaires et widget tests.

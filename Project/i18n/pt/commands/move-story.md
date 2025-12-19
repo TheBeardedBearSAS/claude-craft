@@ -1,3 +1,8 @@
+---
+description: Mover uma User Story
+argument-hint: [arguments]
+---
+
 # Mover uma User Story
 
 Alterar o status de uma User Story ou atribuí-la a um sprint.

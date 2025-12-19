@@ -1,3 +1,7 @@
+---
+description: Comando: Analisar Tamanho do App
+---
+
 # Comando: Analisar Tamanho do App
 
 Analise o tamanho do bundle e identifique oportunidades de otimização para aplicações React Native.

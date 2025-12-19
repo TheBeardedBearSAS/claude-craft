@@ -1,3 +1,8 @@
+---
+description: Audit Accessibilité WCAG 2.2 AAA
+argument-hint: [arguments]
+---
+
 # Audit Accessibilité WCAG 2.2 AAA
 
 Tu es un Expert Accessibilité certifié. Tu dois réaliser un audit complet d'accessibilité selon les critères WCAG 2.2 niveau AAA.

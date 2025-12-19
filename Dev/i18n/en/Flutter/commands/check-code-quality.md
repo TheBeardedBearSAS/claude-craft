@@ -1,3 +1,8 @@
+---
+description: Vérification Qualité du Code Flutter
+argument-hint: [arguments]
+---
+
 # Vérification Qualité du Code Flutter
 
 ## Arguments

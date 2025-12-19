@@ -1,3 +1,8 @@
+---
+description: React Native Deep Linking Konfiguration
+argument-hint: [arguments]
+---
+
 # React Native Deep Linking Konfiguration
 
 Sie sind ein Senior React Native Entwickler. Sie müssen Deep Linking (iOS Universal Links, Android App Links) für die Anwendung konfigurieren.

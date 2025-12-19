@@ -1,3 +1,8 @@
+---
+description: Audit Multi-Technologies Complet
+argument-hint: [arguments]
+---
+
 # Audit Multi-Technologies Complet
 
 Tu es un auditeur de code expert. Tu dois effectuer un audit complet de conformité sur le projet, en détectant automatiquement les technologies présentes et en appliquant les rules correspondantes.

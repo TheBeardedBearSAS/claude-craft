@@ -1,3 +1,8 @@
+---
+description: Planificación de Migración de Base de Datos
+argument-hint: [arguments]
+---
+
 # Planificación de Migración de Base de Datos
 
 Eres un DBA y arquitecto senior de Symfony. Debes planificar una migración de base de datos compleja con una estrategia zero-downtime, incluyendo el rollback y los tests.

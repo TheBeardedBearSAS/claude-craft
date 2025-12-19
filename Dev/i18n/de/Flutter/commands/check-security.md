@@ -1,3 +1,8 @@
+---
+description: Vérification Sécurité Flutter
+argument-hint: [arguments]
+---
+
 # Vérification Sécurité Flutter
 
 ## Argumente

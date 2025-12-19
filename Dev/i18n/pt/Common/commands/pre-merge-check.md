@@ -1,3 +1,8 @@
+---
+description: Verificação Pré-Merge
+argument-hint: [arguments]
+---
+
 # Verificação Pré-Merge
 
 Você é um assistente de qualidade de código. Você deve realizar todas as verificações necessárias ANTES de mesclar um branch, para garantir qualidade e evitar regressões.

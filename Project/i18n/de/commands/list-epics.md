@@ -1,3 +1,8 @@
+---
+description: EPICs auflisten
+argument-hint: [arguments]
+---
+
 # EPICs auflisten
 
 Liste aller EPICs mit ihrem Status und Fortschritt anzeigen.

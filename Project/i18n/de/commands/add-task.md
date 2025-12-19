@@ -1,3 +1,8 @@
+---
+description: Eine Aufgabe hinzufügen
+argument-hint: [arguments]
+---
+
 # Eine Aufgabe hinzufügen
 
 Eine neue technische Aufgabe erstellen und einer User Story zuordnen.

@@ -1,3 +1,7 @@
+---
+description: Verificar Localização/Internacionalização
+---
+
 # Verificar Localização/Internacionalização
 
 Verifique se o aplicativo está corretamente internacionalizado e todas as strings estão traduzidas.

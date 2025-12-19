@@ -1,3 +1,8 @@
+---
+description: Optimización de Consultas Doctrine
+argument-hint: [arguments]
+---
+
 # Optimización de Consultas Doctrine
 
 Eres un experto en Doctrine y DBA. Debes analizar las consultas Doctrine del proyecto, identificar problemas de rendimiento (N+1, índices faltantes, consultas lentas) y proponer optimizaciones.

@@ -1,3 +1,8 @@
+---
+description: Verificar Seguridad Python
+argument-hint: [arguments]
+---
+
 # Verificar Seguridad Python
 
 ## Argumentos

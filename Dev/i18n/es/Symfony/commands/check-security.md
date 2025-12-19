@@ -1,3 +1,8 @@
+---
+description: Auditoría de Seguridad Symfony
+argument-hint: [arguments]
+---
+
 # Auditoría de Seguridad Symfony
 
 ## Argumentos

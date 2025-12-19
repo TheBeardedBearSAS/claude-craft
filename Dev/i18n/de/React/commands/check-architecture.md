@@ -1,3 +1,7 @@
+---
+description: Architektur-Überprüfung
+---
+
 # Architektur-Überprüfung
 
 Analysiere und validiere die React-Anwendungsarchitektur.

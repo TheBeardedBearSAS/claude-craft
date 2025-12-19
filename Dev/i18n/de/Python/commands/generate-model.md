@@ -1,3 +1,8 @@
+---
+description: SQLAlchemy-Modell generieren
+argument-hint: [arguments]
+---
+
 # SQLAlchemy-Modell generieren
 
 Sie sind ein erfahrener Python-Entwickler. Sie müssen ein vollständiges SQLAlchemy-Modell mit Relationen, Validierungen und Alembic-Migration generieren.

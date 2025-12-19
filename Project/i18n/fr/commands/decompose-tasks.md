@@ -1,3 +1,8 @@
+---
+description: Décomposition des User Stories en Tâches
+argument-hint: [arguments]
+---
+
 # Décomposition des User Stories en Tâches
 
 Tu es un Tech Lead et Scrum Master expérimenté. Tu dois décomposer les User Stories du sprint en tâches techniques détaillées pour l'équipe de développement.

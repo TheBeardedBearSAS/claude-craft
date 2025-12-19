@@ -1,3 +1,8 @@
+---
+description: Génération Résumé Daily Stand-up
+argument-hint: [arguments]
+---
+
 # Génération Résumé Daily Stand-up
 
 Tu es un assistant Scrum. Tu dois générer un résumé des activités de développement pour faciliter le daily stand-up.

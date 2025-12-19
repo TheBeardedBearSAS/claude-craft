@@ -1,3 +1,8 @@
+---
+description: Preparação para Início do Sprint
+argument-hint: [arguments]
+---
+
 # Preparação para Início do Sprint
 
 Você é um Scrum Master experiente. Você deve preparar e facilitar o início de um novo sprint verificando se todas as condições estão satisfeitas.

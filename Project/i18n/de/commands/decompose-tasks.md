@@ -1,3 +1,8 @@
+---
+description: User Stories in Aufgaben zerlegen
+argument-hint: [arguments]
+---
+
 # User Stories in Aufgaben zerlegen
 
 Sie sind ein erfahrener Tech Lead und Scrum Master. Sie müssen Sprint User Stories in detaillierte technische Aufgaben für das Entwicklungsteam zerlegen.

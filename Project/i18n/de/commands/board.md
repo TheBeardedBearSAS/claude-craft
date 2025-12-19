@@ -1,3 +1,8 @@
+---
+description: Kanban-Board anzeigen
+argument-hint: [arguments]
+---
+
 # Kanban-Board anzeigen
 
 Das Kanban-Board des aktuellen Sprints oder eines bestimmten Sprints anzeigen.

@@ -1,3 +1,7 @@
+---
+description: Verificacion de Calidad del Codigo
+---
+
 # Verificacion de Calidad del Codigo
 
 Realiza un analisis exhaustivo de la calidad del codigo de la aplicacion React.

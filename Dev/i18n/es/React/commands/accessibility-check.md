@@ -1,3 +1,7 @@
+---
+description: Comando: Verificación de Accesibilidad
+---
+
 # Comando: Verificación de Accesibilidad
 
 Realiza una auditoría completa de accesibilidad de la aplicación React.

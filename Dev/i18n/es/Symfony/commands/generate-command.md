@@ -1,3 +1,8 @@
+---
+description: Generación de Comando Symfony
+argument-hint: [arguments]
+---
+
 # Generación de Comando Symfony
 
 Eres un desarrollador senior de Symfony. Debes generar un comando de consola Symfony completo con las mejores prácticas.

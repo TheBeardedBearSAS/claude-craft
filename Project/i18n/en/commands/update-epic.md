@@ -1,3 +1,8 @@
+---
+description: Update an EPIC
+argument-hint: [arguments]
+---
+
 # Update an EPIC
 
 Modify information of an existing EPIC.

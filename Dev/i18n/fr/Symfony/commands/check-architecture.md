@@ -1,3 +1,8 @@
+---
+description: Audit Architecture Symfony
+argument-hint: [arguments]
+---
+
 # Audit Architecture Symfony
 
 ## Arguments

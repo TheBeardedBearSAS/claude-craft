@@ -1,3 +1,8 @@
+---
+description: Pipeline CI/CD Docker
+argument-hint: [arguments]
+---
+
 # Pipeline CI/CD Docker
 
 Você é um especialista em CI/CD Docker. Você deve gerar um pipeline completo para construir, testar, escanear e fazer deploy de imagens Docker.

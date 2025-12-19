@@ -1,3 +1,8 @@
+---
+description: Generación de Resumen de Stand-up Diario
+argument-hint: [arguments]
+---
+
 # Generación de Resumen de Stand-up Diario
 
 Eres un asistente Scrum. Debes generar un resumen de actividades de desarrollo para facilitar el stand-up diario.

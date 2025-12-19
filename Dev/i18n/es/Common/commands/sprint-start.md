@@ -1,3 +1,7 @@
+---
+description: Inicio de Sprint
+---
+
 # Inicio de Sprint
 
 Planifica el próximo sprint y define los objetivos del equipo.

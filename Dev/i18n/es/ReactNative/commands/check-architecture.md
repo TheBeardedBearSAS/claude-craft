@@ -1,3 +1,8 @@
+---
+description: Verificar Arquitectura de React Native
+argument-hint: [arguments]
+---
+
 # Verificar Arquitectura de React Native
 
 ## Argumentos

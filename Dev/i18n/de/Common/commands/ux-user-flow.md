@@ -1,3 +1,8 @@
+---
+description: User Flow Design
+argument-hint: [arguments]
+---
+
 # User Flow Design
 
 Du bist ein UX/Ergonomie-Experte. Du musst einen vollständigen und optimierten User Flow entwerfen.

@@ -1,3 +1,7 @@
+---
+description: Revisión de Sprint
+---
+
 # Revisión de Sprint
 
 Revisa el trabajo completado durante el sprint y demuestra las funcionalidades implementadas.

@@ -1,3 +1,7 @@
+---
+description: Preparación para las Tiendas
+---
+
 # Preparación para las Tiendas
 
 Prepara la aplicación para publicación en App Store y Google Play.

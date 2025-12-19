@@ -1,3 +1,8 @@
+---
+description: React Native Sicherheit überprüfen
+argument-hint: [arguments]
+---
+
 # React Native Sicherheit überprüfen
 
 ## Argumente

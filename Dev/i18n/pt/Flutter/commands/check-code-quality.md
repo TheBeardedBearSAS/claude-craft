@@ -1,3 +1,7 @@
+---
+description: Verificar Qualidade do Código Flutter
+---
+
 # Verificar Qualidade do Código Flutter
 
 Execute uma análise completa da qualidade do código Flutter incluindo análise estática, formatação, complexidade e boas práticas.

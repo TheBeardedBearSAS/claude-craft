@@ -1,3 +1,8 @@
+---
+description: Datenbankmigrationsplanung
+argument-hint: [arguments]
+---
+
 # Datenbankmigrationsplanung
 
 Du bist ein DBA und erfahrener Symfony-Architekt. Du musst eine komplexe Datenbankmigration mit einer Zero-Downtime-Strategie planen, einschließlich Rollback und Tests.

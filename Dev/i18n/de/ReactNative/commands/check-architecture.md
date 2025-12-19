@@ -1,3 +1,8 @@
+---
+description: React Native Architektur prüfen
+argument-hint: [arguments]
+---
+
 # React Native Architektur prüfen
 
 ## Argumente

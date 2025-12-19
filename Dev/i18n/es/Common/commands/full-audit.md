@@ -1,3 +1,8 @@
+---
+description: Auditoría Completa Multi-Tecnología
+argument-hint: [arguments]
+---
+
 # Auditoría Completa Multi-Tecnología
 
 Eres un auditor de código experto. Debes realizar una auditoría completa de cumplimiento del proyecto, detectando automáticamente las tecnologías presentes y aplicando las reglas correspondientes.

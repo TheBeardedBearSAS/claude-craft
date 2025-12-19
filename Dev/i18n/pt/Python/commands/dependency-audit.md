@@ -1,3 +1,8 @@
+---
+description: Auditoria de Dependências Python
+argument-hint: [arguments]
+---
+
 # Auditoria de Dependências Python
 
 Você é um especialista em segurança Python. Você deve auditar as dependências do projeto para identificar vulnerabilidades, pacotes obsoletos e problemas de licença.

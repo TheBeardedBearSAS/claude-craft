@@ -1,3 +1,8 @@
+---
+description: Adicionar uma Tarefa
+argument-hint: [arguments]
+---
+
 # Adicionar uma Tarefa
 
 Criar uma nova tarefa técnica e associá-la a uma User Story.

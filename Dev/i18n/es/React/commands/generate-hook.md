@@ -1,3 +1,7 @@
+---
+description: Generar Hook Personalizado
+---
+
 # Generar Hook Personalizado
 
 Genera un hook personalizado de React con TypeScript, tests y documentacion.

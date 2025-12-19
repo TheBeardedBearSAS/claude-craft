@@ -1,3 +1,8 @@
+---
+description: Mettre à jour un EPIC
+argument-hint: [arguments]
+---
+
 # Mettre à jour un EPIC
 
 Modifier les informations d'un EPIC existant.

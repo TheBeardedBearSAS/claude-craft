@@ -1,3 +1,7 @@
+---
+description: Verificar Conformidade com Padrões Flutter
+---
+
 # Verificar Conformidade com Padrões Flutter
 
 Verifique se o projeto está em conformidade com os padrões e guidelines oficiais do Flutter e Dart.

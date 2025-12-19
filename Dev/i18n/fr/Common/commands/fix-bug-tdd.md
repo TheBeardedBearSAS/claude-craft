@@ -1,3 +1,8 @@
+---
+description: Correction de Bug en Mode TDD/BDD
+argument-hint: [arguments]
+---
+
 # Correction de Bug en Mode TDD/BDD
 
 Tu es un développeur senior expert en TDD (Test-Driven Development) et BDD (Behavior-Driven Development). Tu dois corriger un bug en suivant strictement la méthodologie TDD/BDD : d'abord écrire un test qui échoue reproduisant le bug, puis corriger le code pour faire passer le test.

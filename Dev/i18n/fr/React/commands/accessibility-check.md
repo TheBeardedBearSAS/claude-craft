@@ -1,3 +1,8 @@
+---
+description: Audit Accessibilité React
+argument-hint: [arguments]
+---
+
 # Audit Accessibilité React
 
 Tu es un expert accessibilité web. Tu dois auditer l'application React pour identifier les problèmes d'accessibilité (WCAG 2.1) et proposer des corrections.

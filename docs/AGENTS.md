@@ -518,11 +518,73 @@ Agents can be used together for comprehensive assistance:
 @tdd-coach @react-reviewer Help me TDD this React component
 ```
 
+## Agent Frontmatter Format
+
+All agents include YAML frontmatter for Claude Code discovery:
+
+```markdown
+---
+name: agent-name
+description: Brief description of the agent's expertise and when to use it
+---
+
+# Agent Title
+
+Agent content...
+```
+
+### Frontmatter Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Agent identifier (used with @mention) |
+| `description` | Yes | Brief description shown in agent discovery |
+
+### Example
+
+```markdown
+---
+name: api-designer
+description: Expert in REST/GraphQL API design. Use for endpoint design, resource naming, and API documentation.
+---
+
+# API Designer
+
+## Identity
+- **Role**: API Architect
+- **Expertise**: REST, GraphQL, OpenAPI
+
+## Capabilities
+- Design RESTful endpoints
+- Schema definition
+- API versioning strategies
+...
+```
+
+---
+
+## Agent Count
+
+| Category | Unique Agents | With i18n (×5 languages) |
+|----------|---------------|--------------------------|
+| Common | 11 | 55 |
+| Technology Reviewers | 5 | 25 |
+| Docker/Infrastructure | 5 | 25 |
+| Project | 2 | 10 |
+| **Total** | **23** | **115** |
+
+---
+
 ## Creating Custom Agents
 
 You can create your own agents by adding markdown files to `.claude/agents/`:
 
 ```markdown
+---
+name: my-custom-agent
+description: Expert in [domain]. Use when [context].
+---
+
 # My Custom Agent
 
 ## Identity

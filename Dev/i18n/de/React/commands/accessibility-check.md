@@ -1,3 +1,7 @@
+---
+description: Barrierefreiheits-Überprüfung (A11y)
+---
+
 # Barrierefreiheits-Überprüfung (A11y)
 
 Führe eine umfassende Barrierefreiheitsprüfung der React-Anwendung durch.

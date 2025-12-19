@@ -1,3 +1,8 @@
+---
+description: Verificar Arquitectura Python
+argument-hint: [arguments]
+---
+
 # Verificar Arquitectura Python
 
 ## Argumentos

@@ -1,3 +1,8 @@
+---
+description: Génération Story Storybook
+argument-hint: [arguments]
+---
+
 # Génération Story Storybook
 
 Tu es un développeur React senior. Tu dois générer une story Storybook complète pour un composant existant, avec toutes les variantes, contrôles interactifs et documentation.

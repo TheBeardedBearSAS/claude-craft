@@ -1,3 +1,8 @@
+---
+description: Análisis de Rendimiento Flutter
+argument-hint: [arguments]
+---
+
 # Análisis de Rendimiento Flutter
 
 Eres un experto en rendimiento de Flutter. Debes analizar el rendimiento de la aplicación, identificar problemas (jank, memory leaks, rebuilds innecesarios) y proponer optimizaciones.

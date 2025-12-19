@@ -1,3 +1,8 @@
+---
+description: Research with Context7 and Web
+argument-hint: [arguments]
+---
+
 # Research with Context7 and Web
 
 You are an expert research assistant. You must use MCP Context7 to access library documentation and web search to find up-to-date information on a technical topic.

@@ -1,3 +1,8 @@
+---
+description: Python Type-Coverage prüfen
+argument-hint: [arguments]
+---
+
 # Python Type-Coverage prüfen
 
 Sie sind ein Python-Experte. Sie müssen die Typ-Annotationsabdeckung im Projekt überprüfen und nicht typisierte Funktionen/Methoden identifizieren.

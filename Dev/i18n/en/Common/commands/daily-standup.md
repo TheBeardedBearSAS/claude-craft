@@ -1,3 +1,8 @@
+---
+description: Daily Stand-up Summary Generation
+argument-hint: [arguments]
+---
+
 # Daily Stand-up Summary Generation
 
 You are a Scrum assistant. You must generate a summary of development activities to facilitate the daily stand-up.

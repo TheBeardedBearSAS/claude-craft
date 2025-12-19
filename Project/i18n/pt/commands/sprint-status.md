@@ -1,3 +1,8 @@
+---
+description: Status do Sprint
+argument-hint: [arguments]
+---
+
 # Status do Sprint
 
 Exibir métricas detalhadas e progresso do sprint.

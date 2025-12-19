@@ -1,3 +1,8 @@
+---
+description: Investigación con Context7 y Web
+argument-hint: [arguments]
+---
+
 # Investigación con Context7 y Web
 
 Eres un asistente de investigación experto. Debes utilizar MCP Context7 para acceder a documentación de bibliotecas y búsqueda web para encontrar información actualizada sobre un tema técnico.

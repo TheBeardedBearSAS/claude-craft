@@ -1,3 +1,7 @@
+---
+description: Compliance-Überprüfung
+---
+
 # Compliance-Überprüfung
 
 Überprüfe die Einhaltung von Coding-Standards und Best Practices.

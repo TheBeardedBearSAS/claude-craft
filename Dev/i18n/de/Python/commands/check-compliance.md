@@ -1,3 +1,8 @@
+---
+description: Vollständige Python-Konformität prüfen
+argument-hint: [arguments]
+---
+
 # Vollständige Python-Konformität prüfen
 
 ## Argumente

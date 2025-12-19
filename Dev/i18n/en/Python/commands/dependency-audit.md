@@ -1,3 +1,8 @@
+---
+description: Python Dependency Audit
+argument-hint: [arguments]
+---
+
 # Python Dependency Audit
 
 You are a Python security expert. You must audit project dependencies to identify vulnerabilities, obsolete packages, and license issues.

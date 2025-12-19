@@ -1,3 +1,8 @@
+---
+description: Display Kanban Board
+argument-hint: [arguments]
+---
+
 # Display Kanban Board
 
 Display the Kanban board of current sprint or a specific sprint.

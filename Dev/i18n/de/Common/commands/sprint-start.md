@@ -1,3 +1,8 @@
+---
+description: Sprint Start Vorbereitung
+argument-hint: [arguments]
+---
+
 # Sprint Start Vorbereitung
 
 Sie sind ein erfahrener Scrum Master. Sie müssen den Start eines neuen Sprints vorbereiten und facilitieren, indem Sie überprüfen, dass alle Bedingungen erfüllt sind.

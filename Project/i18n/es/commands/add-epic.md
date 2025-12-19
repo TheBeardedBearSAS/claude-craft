@@ -1,3 +1,8 @@
+---
+description: Agregar un EPIC
+argument-hint: [arguments]
+---
+
 # Agregar un EPIC
 
 Crear un nuevo EPIC en el backlog.

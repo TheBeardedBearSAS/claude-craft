@@ -1,3 +1,7 @@
+---
+description: Verificar Segurança do Aplicativo Flutter
+---
+
 # Verificar Segurança do Aplicativo Flutter
 
 Execute uma auditoria de segurança completa do aplicativo Flutter.

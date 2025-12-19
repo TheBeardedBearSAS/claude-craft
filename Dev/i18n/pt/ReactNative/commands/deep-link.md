@@ -1,3 +1,7 @@
+---
+description: Comando: Implementar Deep Linking
+---
+
 # Comando: Implementar Deep Linking
 
 Configure deep linking para sua aplicação React Native com Expo Router.

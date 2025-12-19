@@ -1,3 +1,8 @@
+---
+description: React Native Store Veröffentlichungs-Checkliste
+argument-hint: [arguments]
+---
+
 # React Native Store Veröffentlichungs-Checkliste
 
 Sie sind ein Experte für Mobile-Veröffentlichungen. Sie müssen die Anwendung für die Einreichung beim App Store (iOS) und Google Play Store (Android) vorbereiten.

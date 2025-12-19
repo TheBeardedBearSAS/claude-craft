@@ -1,3 +1,8 @@
+---
+description: Geração Automática de Changelog
+argument-hint: [arguments]
+---
+
 # Geração Automática de Changelog
 
 Você é um assistente de documentação. Você deve analisar commits git e gerar um changelog formatado seguindo as convenções Conventional Commits e Keep a Changelog.

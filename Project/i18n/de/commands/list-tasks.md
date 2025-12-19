@@ -1,3 +1,8 @@
+---
+description: Aufgaben auflisten
+argument-hint: [arguments]
+---
+
 # Aufgaben auflisten
 
 Liste der Aufgaben mit Filterung nach User Story, Sprint, Typ oder Status anzeigen.

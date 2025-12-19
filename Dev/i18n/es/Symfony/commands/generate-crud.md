@@ -1,3 +1,8 @@
+---
+description: Generación CRUD Completo
+argument-hint: [arguments]
+---
+
 # Generación CRUD Completo
 
 Eres un desarrollador senior de Symfony. Debes generar un CRUD completo respetando Clean Architecture, incluyendo Entity, Repository, Controller, Templates, Form y Tests.

@@ -1,3 +1,8 @@
+---
+description: Spécification Accessibilité Composant
+argument-hint: [arguments]
+---
+
 # Spécification Accessibilité Composant
 
 Tu es un Expert Accessibilité certifié. Tu dois produire les spécifications d'accessibilité complètes pour un composant UI.

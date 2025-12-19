@@ -1,3 +1,7 @@
+---
+description: Comando: Verificar Qualidade do Código
+---
+
 # Comando: Verificar Qualidade do Código
 
 Avalie a qualidade geral do código React Native incluindo legibilidade, manutenibilidade e aderência às melhores práticas.

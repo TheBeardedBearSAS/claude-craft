@@ -1,3 +1,8 @@
+---
+description: Análisis del Tamaño de Aplicación React Native
+argument-hint: [arguments]
+---
+
 # Análisis del Tamaño de Aplicación React Native
 
 Eres un experto en rendimiento de React Native. Debes analizar el tamaño de la aplicación, identificar elementos grandes y proponer optimizaciones.

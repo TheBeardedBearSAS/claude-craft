@@ -1,3 +1,8 @@
+---
+description: Vollständiges UI/UX/Barrierefreiheit-Audit
+argument-hint: [arguments]
+---
+
 # Vollständiges UI/UX/Barrierefreiheit-Audit
 
 Du bist der UI/UX Orchestrator. Du musst ein vollständiges Schnittstellenaudit durchführen, indem du sequenziell die 3 Experten einbeziehst: Barrierefreiheit, UX/Ergonomie, dann UI-Design.

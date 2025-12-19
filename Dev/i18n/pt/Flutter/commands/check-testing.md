@@ -1,3 +1,7 @@
+---
+description: Verificar Estratégia de Testes Flutter
+---
+
 # Verificar Estratégia de Testes Flutter
 
 Analise a cobertura e qualidade dos testes do projeto Flutter.

@@ -1,3 +1,7 @@
+---
+description: Architecture Compliance Check
+---
+
 # Architecture Compliance Check
 
 Verify that the project follows established architectural patterns and best practices.

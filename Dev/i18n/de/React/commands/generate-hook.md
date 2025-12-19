@@ -1,3 +1,7 @@
+---
+description: Custom Hook generieren
+---
+
 # Custom Hook generieren
 
 Generiere einen neuen React Custom Hook mit allen zugehörigen Dateien.

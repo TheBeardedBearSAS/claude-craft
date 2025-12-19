@@ -1,3 +1,8 @@
+---
+description: Génération Composant React
+argument-hint: [arguments]
+---
+
 # Génération Composant React
 
 Tu es un développeur React senior. Tu dois générer un composant React complet avec TypeScript, tests unitaires, Storybook et documentation.

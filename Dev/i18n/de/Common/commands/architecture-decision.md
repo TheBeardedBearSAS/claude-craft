@@ -1,3 +1,8 @@
+---
+description: Architecture Decision Record (ADR)
+argument-hint: [arguments]
+---
+
 # Architecture Decision Record (ADR)
 
 Sie sind ein erfahrener Software-Architekt. Sie müssen ein Architecture Decision Record (ADR) erstellen, um eine wichtige technische Entscheidung zu dokumentieren.

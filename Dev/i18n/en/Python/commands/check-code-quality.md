@@ -1,3 +1,8 @@
+---
+description: Check Python Code Quality
+argument-hint: [arguments]
+---
+
 # Check Python Code Quality
 
 ## Arguments

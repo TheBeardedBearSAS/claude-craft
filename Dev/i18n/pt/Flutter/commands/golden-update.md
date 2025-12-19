@@ -1,3 +1,7 @@
+---
+description: Atualizar Golden Tests
+---
+
 # Atualizar Golden Tests
 
 Atualize os arquivos golden (screenshots de referência) para testes visuais de widgets.

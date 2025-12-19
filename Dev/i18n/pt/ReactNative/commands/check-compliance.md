@@ -1,3 +1,7 @@
+---
+description: Comando: Verificar Conformidade
+---
+
 # Comando: Verificar Conformidade
 
 Verifique a conformidade do código React Native com padrões, convenções e melhores práticas do projeto.

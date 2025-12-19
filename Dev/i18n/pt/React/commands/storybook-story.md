@@ -1,3 +1,7 @@
+---
+description: Gerar Story Storybook
+---
+
 # Gerar Story Storybook
 
 Gerar uma story Storybook para um componente React existente.

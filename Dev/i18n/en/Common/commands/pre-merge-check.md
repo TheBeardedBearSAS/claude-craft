@@ -1,3 +1,8 @@
+---
+description: Pre-Merge Verification
+argument-hint: [arguments]
+---
+
 # Pre-Merge Verification
 
 You are a code quality assistant. You must perform all necessary checks BEFORE merging a branch, to ensure quality and avoid regressions.

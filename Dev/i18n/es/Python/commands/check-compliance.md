@@ -1,3 +1,8 @@
+---
+description: Verificación Completa de Cumplimiento Python
+argument-hint: [arguments]
+---
+
 # Verificación Completa de Cumplimiento Python
 
 ## Argumentos

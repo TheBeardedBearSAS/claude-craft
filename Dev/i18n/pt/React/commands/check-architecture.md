@@ -1,3 +1,7 @@
+---
+description: Verificacao de Conformidade de Arquitetura
+---
+
 # Verificacao de Conformidade de Arquitetura
 
 Verificar se o projeto segue padroes arquiteturais e melhores praticas estabelecidas.

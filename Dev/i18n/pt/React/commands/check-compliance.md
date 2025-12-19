@@ -1,3 +1,7 @@
+---
+description: Verificacao de Conformidade de Padroes
+---
+
 # Verificacao de Conformidade de Padroes
 
 Verificar se o projeto React segue padroes de codigo e melhores praticas estabelecidas.

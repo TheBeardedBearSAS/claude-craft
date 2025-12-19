@@ -1,3 +1,8 @@
+---
+description: Pre-Merge-Überprüfung
+argument-hint: [arguments]
+---
+
 # Pre-Merge-Überprüfung
 
 Sie sind ein Code-Qualitäts-Assistent. Sie müssen alle notwendigen Überprüfungen VOR dem Mergen eines Branches durchführen, um Qualität sicherzustellen und Regressionen zu vermeiden.

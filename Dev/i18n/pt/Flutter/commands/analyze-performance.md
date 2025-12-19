@@ -1,3 +1,7 @@
+---
+description: Analisar Performance do Aplicativo Flutter
+---
+
 # Analisar Performance do Aplicativo Flutter
 
 Analise a performance do aplicativo Flutter, identifique gargalos de renderização, problemas de memória e oportunidades de otimização.

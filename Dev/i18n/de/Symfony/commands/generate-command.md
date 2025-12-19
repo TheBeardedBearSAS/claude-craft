@@ -1,3 +1,8 @@
+---
+description: Symfony-Befehl generieren
+argument-hint: [arguments]
+---
+
 # Symfony-Befehl generieren
 
 Du bist ein erfahrener Symfony-Entwickler. Du musst einen vollständigen Symfony-Konsolenbefehl mit Best Practices generieren.

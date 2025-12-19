@@ -1,3 +1,7 @@
+---
+description: Gerar Widget Flutter
+---
+
 # Gerar Widget Flutter
 
 Gere um widget Flutter com testes e documentação.

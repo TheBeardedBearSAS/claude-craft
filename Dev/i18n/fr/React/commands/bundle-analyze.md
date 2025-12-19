@@ -1,3 +1,8 @@
+---
+description: Analyse du Bundle React
+argument-hint: [arguments]
+---
+
 # Analyse du Bundle React
 
 Tu es un expert performance React. Tu dois analyser la taille du bundle, identifier les dépendances volumineuses et proposer des optimisations.

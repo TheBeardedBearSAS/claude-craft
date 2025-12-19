@@ -1,3 +1,7 @@
+---
+description: Gerar Componente React
+---
+
 # Gerar Componente React
 
 Gerar um novo componente React com TypeScript, testes e boilerplate de estilo.

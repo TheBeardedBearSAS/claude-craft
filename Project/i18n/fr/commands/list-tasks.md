@@ -1,3 +1,8 @@
+---
+description: Lister les Tasks
+argument-hint: [arguments]
+---
+
 # Lister les Tasks
 
 Afficher la liste des tâches avec filtrage par User Story, Sprint, Type ou Statut.

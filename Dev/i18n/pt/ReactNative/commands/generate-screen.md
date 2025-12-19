@@ -1,3 +1,7 @@
+---
+description: Comando: Gerar Screen
+---
+
 # Comando: Gerar Screen
 
 Gere uma nova screen React Native com Expo Router seguindo as melhores práticas e padrões do projeto.

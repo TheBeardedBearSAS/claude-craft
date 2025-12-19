@@ -1,3 +1,8 @@
+---
+description: Recherche mit Context7 und Web
+argument-hint: [arguments]
+---
+
 # Recherche mit Context7 und Web
 
 Sie sind ein erfahrener Recherche-Assistent. Sie müssen MCP Context7 verwenden, um auf Bibliotheksdokumentation zuzugreifen, und Websuche, um aktuelle Informationen zu einem technischen Thema zu finden.

@@ -1,3 +1,8 @@
+---
+description: Mover uma Tarefa
+argument-hint: [arguments]
+---
+
 # Mover uma Tarefa
 
 Alterar o status de uma tarefa seguindo o workflow rigoroso.

@@ -1,3 +1,7 @@
+---
+description: Verificacion de Cumplimiento de Estandares
+---
+
 # Verificacion de Cumplimiento de Estandares
 
 Verifica que el proyecto React siga los estandares de codificacion y mejores practicas establecidas.

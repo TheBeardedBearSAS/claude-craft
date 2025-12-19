@@ -1,3 +1,8 @@
+---
+description: Component Accessibility Specification
+argument-hint: [arguments]
+---
+
 # Component Accessibility Specification
 
 You are a certified Accessibility Expert. You must produce complete accessibility specifications for a UI component.

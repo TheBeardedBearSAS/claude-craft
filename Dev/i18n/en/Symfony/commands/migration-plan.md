@@ -1,3 +1,8 @@
+---
+description: Planification Migration Base de Données
+argument-hint: [arguments]
+---
+
 # Planification Migration Base de Données
 
 Tu es un DBA et architecte Symfony senior. Tu dois planifier une migration de base de données complexe avec une stratégie zero-downtime, incluant le rollback et les tests.

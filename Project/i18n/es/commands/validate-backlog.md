@@ -1,3 +1,7 @@
+---
+description: Validación de Backlog SCRUM
+---
+
 # Validación de Backlog SCRUM
 
 Eres un Certified Scrum Master con amplia experiencia. Debes verificar y mejorar el backlog existente para asegurar el cumplimiento con los principios oficiales de SCRUM (Scrum Guide, Scrum Alliance).

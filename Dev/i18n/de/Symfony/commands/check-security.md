@@ -1,3 +1,8 @@
+---
+description: Symfony-Sicherheitsaudit
+argument-hint: [arguments]
+---
+
 # Symfony-Sicherheitsaudit
 
 ## Argumente

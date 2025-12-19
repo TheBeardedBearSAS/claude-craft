@@ -7,11 +7,12 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **5 Technology Stacks**: Symfony, Flutter, Python, React, React Native
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **21 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, and Docker experts
-- **74 Slash Commands**: Automated workflows and code generation
-- **67 Rules**: Best practices for architecture, testing, security
-- **25 Templates**: Code generation patterns
+- **23 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, and Docker experts
+- **90+ Slash Commands**: Automated workflows and code generation
+- **249 Skills**: Best practices in official Claude Code format (architecture, testing, security)
+- **30 Templates**: Code generation patterns
 - **21 Checklists**: Quality gates for commits, features, releases
+- **Auto-generated CLAUDE.md**: Project configuration file created at installation
 - **Multi-Account Manager**: Manage multiple Claude Code accounts easily
 - **Custom Status Line**: Rich status bar with profile, model, git, context %
 
@@ -52,13 +53,14 @@ Once installed, use the commands in your project:
 
 ## Supported Technologies
 
-| Technology | Rules | Commands | Agents | Focus |
-|------------|-------|----------|--------|-------|
-| **Symfony** | 21 | 10 | 1 | Clean Architecture, DDD, API Platform |
-| **Flutter** | 13 | 10 | 1 | BLoC pattern, Material/Cupertino |
-| **Python** | 12 | 10 | 1 | FastAPI, async/await, Type hints |
-| **React** | 12 | 8 | 1 | Hooks, State management, A11y |
-| **React Native** | 12 | 7 | 1 | Navigation, Native modules |
+| Technology | Skills | Commands | Agents | Focus |
+|------------|--------|----------|--------|-------|
+| **Common** | 7 | 21 | 11 | Cross-tech best practices, UI/UX |
+| **Symfony** | 16 | 10 | 1 | Clean Architecture, DDD, API Platform |
+| **Flutter** | 10 | 10 | 1 | BLoC pattern, Material/Cupertino |
+| **Python** | 6 | 10 | 1 | FastAPI, async/await, Type hints |
+| **React** | 8 | 8 | 1 | Hooks, State management, A11y |
+| **React Native** | 11 | 7 | 1 | Navigation, Native modules |
 | **Docker** | - | 4 | 5 | Dockerfile, Compose, CI/CD, Debugging |
 
 ## Project Structure
@@ -74,7 +76,7 @@ claude-craft/
 │   │   ├── es/                 # Spanish
 │   │   ├── de/                 # German
 │   │   └── pt/                 # Portuguese
-│   │       ├── Common/         # Shared agents & commands
+│   │       ├── Common/         # Shared agents, commands & skills
 │   │       ├── Symfony/        # PHP backend
 │   │       ├── Flutter/        # Mobile Dart
 │   │       ├── Python/         # Backend/API
@@ -91,6 +93,26 @@ claude-craft/
     ├── MultiAccount/           # Multi-account manager
     ├── StatusLine/             # Custom status line
     └── ProjectConfig/          # YAML project manager
+```
+
+### What Gets Installed
+
+After installation, your project will have:
+
+```
+your-project/
+└── .claude/
+    ├── CLAUDE.md           # Auto-generated project configuration
+    ├── skills/             # Best practices (official format)
+    │   ├── architecture/   # Architecture patterns
+    │   ├── testing/        # Testing strategies
+    │   └── security/       # Security guidelines
+    ├── agents/             # AI specialist definitions
+    ├── commands/           # Slash commands
+    │   ├── common/
+    │   └── {tech}/
+    ├── checklists/         # Quality gates
+    └── rules/              # Legacy rules (backward compat)
 ```
 
 ## Installation Methods
@@ -226,9 +248,11 @@ Complete step-by-step tutorials for getting started, developing features, and fi
 
 - [Installation Guide](docs/INSTALLATION.md)
 - [Configuration](docs/CONFIGURATION.md)
+- [Skills Reference](docs/SKILLS.md) - Best practices in official format
 - [Agents Reference](docs/AGENTS.md)
 - [Commands Reference](docs/COMMANDS.md)
 - [Technologies Guide](docs/TECHNOLOGIES.md)
+- [Migration Guide](docs/MIGRATION.md) - Rules to Skills migration
 
 ## Requirements
 

@@ -1,3 +1,8 @@
+---
+description: Auditoría Completa UI/UX/Accesibilidad
+argument-hint: [arguments]
+---
+
 # Auditoría Completa UI/UX/Accesibilidad
 
 Eres el Orquestador UI/UX. Debes realizar una auditoría completa de la interfaz involucrando secuencialmente a los 3 expertos: Accesibilidad, UX/Ergonomía, luego Diseño UI.

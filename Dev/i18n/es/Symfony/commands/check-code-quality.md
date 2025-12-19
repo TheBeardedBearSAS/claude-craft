@@ -1,3 +1,8 @@
+---
+description: Auditoría de Calidad del Código Symfony
+argument-hint: [arguments]
+---
+
 # Auditoría de Calidad del Código Symfony
 
 ## Argumentos

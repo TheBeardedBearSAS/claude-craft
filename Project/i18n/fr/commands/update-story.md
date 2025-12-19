@@ -1,3 +1,8 @@
+---
+description: Mettre à jour une User Story
+argument-hint: [arguments]
+---
+
 # Mettre à jour une User Story
 
 Modifier les informations d'une User Story existante.

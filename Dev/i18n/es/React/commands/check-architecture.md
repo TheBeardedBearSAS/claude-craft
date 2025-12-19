@@ -1,3 +1,7 @@
+---
+description: Comando: Verificar Arquitectura
+---
+
 # Comando: Verificar Arquitectura
 
 Verifica que la arquitectura del proyecto siga las mejores prácticas de React.

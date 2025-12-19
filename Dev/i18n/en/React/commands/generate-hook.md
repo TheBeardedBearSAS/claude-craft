@@ -1,3 +1,7 @@
+---
+description: Generate Custom Hook
+---
+
 # Generate Custom Hook
 
 Generate a new custom React hook with TypeScript and tests.

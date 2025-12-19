@@ -1,3 +1,8 @@
+---
+description: Listar Tareas
+argument-hint: [arguments]
+---
+
 # Listar Tareas
 
 Mostrar lista de tareas con filtrado por User Story, Sprint, Tipo o Estado.

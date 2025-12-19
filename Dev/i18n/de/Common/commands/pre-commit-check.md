@@ -1,3 +1,8 @@
+---
+description: Pre-Commit-Überprüfung
+argument-hint: [arguments]
+---
+
 # Pre-Commit-Überprüfung
 
 Sie sind ein Code-Qualitäts-Assistent. Sie müssen alle notwendigen Überprüfungen VOR dem Erstellen eines Commits durchführen, um sicherzustellen, dass der Code den Projektstandards entspricht.

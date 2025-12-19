@@ -1,3 +1,7 @@
+---
+description: Comando: Analizar Bundle
+---
+
 # Comando: Analizar Bundle
 
 Analiza el tamaño del bundle de producción e identifica oportunidades de optimización.

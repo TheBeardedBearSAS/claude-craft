@@ -1,3 +1,8 @@
+---
+description: Verificación Pre-Merge
+argument-hint: [arguments]
+---
+
 # Verificación Pre-Merge
 
 Eres un asistente de calidad de código. Debes realizar todas las verificaciones necesarias ANTES de fusionar una rama, para asegurar la calidad y evitar regresiones.

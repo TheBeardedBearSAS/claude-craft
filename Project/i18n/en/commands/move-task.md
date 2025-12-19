@@ -1,3 +1,8 @@
+---
+description: Move a Task
+argument-hint: [arguments]
+---
+
 # Move a Task
 
 Change a task's status following the strict workflow.

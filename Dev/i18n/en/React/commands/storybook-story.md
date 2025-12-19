@@ -1,3 +1,7 @@
+---
+description: Generate Storybook Story
+---
+
 # Generate Storybook Story
 
 Generate a Storybook story for an existing React component.

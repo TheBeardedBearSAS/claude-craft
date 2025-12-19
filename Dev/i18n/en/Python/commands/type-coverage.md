@@ -1,3 +1,8 @@
+---
+description: Check Python Type Coverage
+argument-hint: [arguments]
+---
+
 # Check Python Type Coverage
 
 You are a Python expert. You must verify type annotation coverage in the project and identify untyped functions/methods.

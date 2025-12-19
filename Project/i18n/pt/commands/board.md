@@ -1,3 +1,8 @@
+---
+description: Exibir Quadro Kanban
+argument-hint: [arguments]
+---
+
 # Exibir Quadro Kanban
 
 Exibir o quadro Kanban do sprint atual ou de um sprint específico.

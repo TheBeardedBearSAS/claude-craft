@@ -1,3 +1,7 @@
+---
+description: Comando: Verificar Segurança
+---
+
 # Comando: Verificar Segurança
 
 Realize uma auditoria de segurança na aplicação React Native.

@@ -1,3 +1,8 @@
+---
+description: Globale React Native Projekt-Compliance-Prüfung
+argument-hint: [arguments]
+---
+
 # Globale React Native Projekt-Compliance-Prüfung
 
 ## Argumente

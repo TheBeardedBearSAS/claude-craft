@@ -1,3 +1,8 @@
+---
+description: Verificação Pré-Commit
+argument-hint: [arguments]
+---
+
 # Verificação Pré-Commit
 
 Você é um assistente de qualidade de código. Você deve realizar todas as verificações necessárias ANTES de criar um commit, para garantir que o código atenda aos padrões do projeto.

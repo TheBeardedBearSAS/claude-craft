@@ -1,3 +1,8 @@
+---
+description: Listar EPICs
+argument-hint: [arguments]
+---
+
 # Listar EPICs
 
 Exibir a lista de todos os EPICs com seu status e progresso.

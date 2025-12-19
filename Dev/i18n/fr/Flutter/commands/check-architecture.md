@@ -1,3 +1,8 @@
+---
+description: Vérification Architecture Flutter
+argument-hint: [arguments]
+---
+
 # Vérification Architecture Flutter
 
 ## Arguments

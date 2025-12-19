@@ -1,3 +1,8 @@
+---
+description: Vérification Sécurité Python
+argument-hint: [arguments]
+---
+
 # Vérification Sécurité Python
 
 ## Arguments

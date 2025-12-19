@@ -1,3 +1,7 @@
+---
+description: Verificar Arquitetura do Projeto Flutter
+---
+
 # Verificar Arquitetura do Projeto Flutter
 
 Verifique se o projeto Flutter segue os princípios de Clean Architecture e boas práticas de organização de código.

@@ -1,3 +1,8 @@
+---
+description: Vérification Patterns Async Python
+argument-hint: [arguments]
+---
+
 # Vérification Patterns Async Python
 
 Tu es un expert Python asyncio. Tu dois vérifier l'utilisation correcte des patterns async/await, identifier les anti-patterns et les problèmes de concurrence.

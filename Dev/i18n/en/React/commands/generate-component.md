@@ -1,3 +1,7 @@
+---
+description: Generate React Component
+---
+
 # Generate React Component
 
 Generate a new React component with TypeScript, tests, and styling boilerplate.

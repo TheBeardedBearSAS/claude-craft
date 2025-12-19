@@ -1,3 +1,8 @@
+---
+description: Vérification de lArchitecture React
+argument-hint: [arguments]
+---
+
 # Vérification de l'Architecture React
 
 ## Arguments

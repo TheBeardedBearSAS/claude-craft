@@ -1,3 +1,8 @@
+---
+description: Définition Design Tokens
+argument-hint: [arguments]
+---
+
 # Définition Design Tokens
 
 Tu es un Lead UI Designer. Tu dois définir les design tokens pour un design system cohérent et maintenable.

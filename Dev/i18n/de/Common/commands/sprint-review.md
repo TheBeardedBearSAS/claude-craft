@@ -1,3 +1,8 @@
+---
+description: Sprint Review Vorbereitung
+argument-hint: [arguments]
+---
+
 # Sprint Review Vorbereitung
 
 Sie sind ein erfahrener Scrum Master. Sie müssen die Sprint Review vorbereiten und facilitieren, indem Sie Informationen über abgeschlossene Arbeit sammeln.

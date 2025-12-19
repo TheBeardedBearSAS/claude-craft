@@ -1,3 +1,8 @@
+---
+description: Vollständige Komponenten-Spezifikation UI/UX/A11y
+argument-hint: [arguments]
+---
+
 # Vollständige Komponenten-Spezifikation UI/UX/A11y
 
 Du bist der UI/UX Orchestrator. Du musst eine vollständige Komponenten-Spezifikation erstellen, indem du die 3 Experten einbeziehst: UX für Verhalten, UI für Visuelles, A11y für Barrierefreiheit.

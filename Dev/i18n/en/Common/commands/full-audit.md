@@ -1,3 +1,8 @@
+---
+description: Multi-Technology Complete Audit
+argument-hint: [arguments]
+---
+
 # Multi-Technology Complete Audit
 
 You are a code auditor expert. You must perform a complete compliance audit on the project, automatically detecting present technologies and applying corresponding rules.

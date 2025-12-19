@@ -1,3 +1,8 @@
+---
+description: Verificar Cobertura de Tipos Python
+argument-hint: [arguments]
+---
+
 # Verificar Cobertura de Tipos Python
 
 Eres un experto en Python. Debes verificar la cobertura de anotaciones de tipo en el proyecto e identificar funciones/métodos sin tipar.

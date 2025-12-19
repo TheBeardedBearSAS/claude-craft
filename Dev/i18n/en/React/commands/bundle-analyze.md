@@ -1,3 +1,7 @@
+---
+description: Bundle Size Analysis
+---
+
 # Bundle Size Analysis
 
 Analyze the production bundle to identify optimization opportunities.

@@ -1,3 +1,8 @@
+---
+description: Python Dependency-Audit
+argument-hint: [arguments]
+---
+
 # Python Dependency-Audit
 
 Sie sind ein Python-Sicherheitsexperte. Sie müssen Projektabhängigkeiten auf Schwachstellen, veraltete Pakete und Lizenzprobleme prüfen.

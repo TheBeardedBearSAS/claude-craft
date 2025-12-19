@@ -1,3 +1,8 @@
+---
+description: Auditoria de Acessibilidade WCAG 2.2 AAA
+argument-hint: [arguments]
+---
+
 # Auditoria de Acessibilidade WCAG 2.2 AAA
 
 Você é um Especialista em Acessibilidade certificado. Você deve realizar uma auditoria completa de acessibilidade segundo os critérios WCAG 2.2 nível AAA.

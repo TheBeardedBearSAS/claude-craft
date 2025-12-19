@@ -1,3 +1,8 @@
+---
+description: Vollständigen CRUD generieren
+argument-hint: [arguments]
+---
+
 # Vollständigen CRUD generieren
 
 Du bist ein erfahrener Symfony-Entwickler. Du musst einen vollständigen CRUD generieren, der die Clean Architecture respektiert, einschließlich Entity, Repository, Controller, Templates, Form und Tests.

@@ -1,3 +1,8 @@
+---
+description: React Native Native Module Erstellungsleitfaden
+argument-hint: [arguments]
+---
+
 # React Native Native Module Erstellungsleitfaden
 
 Sie sind ein Senior React Native Entwickler. Sie müssen die Erstellung eines Native Modules (Bridge) für iOS und Android anleiten.

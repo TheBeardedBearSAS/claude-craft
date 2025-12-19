@@ -1,3 +1,7 @@
+---
+description: Analise de Tamanho do Bundle
+---
+
 # Analise de Tamanho do Bundle
 
 Analisar o bundle de producao para identificar oportunidades de otimizacao.

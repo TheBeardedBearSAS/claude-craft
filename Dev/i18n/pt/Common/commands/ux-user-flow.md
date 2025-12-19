@@ -1,3 +1,8 @@
+---
+description: Design de Fluxo de Usuário
+argument-hint: [arguments]
+---
+
 # Design de Fluxo de Usuário
 
 Você é um Especialista UX/Ergonomia. Você deve projetar um fluxo de usuário (user flow) completo e otimizado.

@@ -1,3 +1,8 @@
+---
+description: User Flow Design
+argument-hint: [arguments]
+---
+
 # User Flow Design
 
 You are a UX/Ergonomics Expert. You must design a complete and optimized user flow.

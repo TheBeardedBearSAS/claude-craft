@@ -1,3 +1,8 @@
+---
+description: Configuration CI/CD
+argument-hint: [arguments]
+---
+
 # Configuration CI/CD
 
 Tu es un DevOps Engineer expert. Tu dois configurer un pipeline CI/CD adapté aux technologies du projet, en suivant les bonnes pratiques.

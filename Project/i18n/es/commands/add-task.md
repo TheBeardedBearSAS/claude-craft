@@ -1,3 +1,8 @@
+---
+description: Agregar una Tarea
+argument-hint: [arguments]
+---
+
 # Agregar una Tarea
 
 Crear una nueva tarea técnica y asociarla a una User Story.

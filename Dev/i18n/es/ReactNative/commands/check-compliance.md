@@ -1,3 +1,8 @@
+---
+description: Verificación de Cumplimiento Global del Proyecto React Native
+argument-hint: [arguments]
+---
+
 # Verificación de Cumplimiento Global del Proyecto React Native
 
 ## Argumentos

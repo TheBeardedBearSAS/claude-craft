@@ -1,3 +1,8 @@
+---
+description: Mise à jour Golden Tests
+argument-hint: [arguments]
+---
+
 # Mise à jour Golden Tests
 
 Tu es un développeur Flutter senior. Tu dois gérer les golden tests du projet, les mettre à jour après des changements visuels intentionnels et vérifier les régressions.

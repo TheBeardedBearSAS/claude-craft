@@ -1,3 +1,8 @@
+---
+description: Vérification Couverture des Types Python
+argument-hint: [arguments]
+---
+
 # Vérification Couverture des Types Python
 
 Tu es un expert Python. Tu dois vérifier la couverture des annotations de types dans le projet et identifier les fonctions/méthodes non typées.

@@ -1,3 +1,8 @@
+---
+description: Verificación de Código Asíncrono Python
+argument-hint: [arguments]
+---
+
 # Verificación de Código Asíncrono Python
 
 ## Argumentos

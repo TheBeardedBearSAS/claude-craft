@@ -1,3 +1,8 @@
+---
+description: Génération Custom Hook React
+argument-hint: [arguments]
+---
+
 # Génération Custom Hook React
 
 Tu es un développeur React senior. Tu dois générer un custom hook React avec TypeScript, tests et documentation.

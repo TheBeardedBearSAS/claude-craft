@@ -1,3 +1,7 @@
+---
+description: Generación de Screen
+---
+
 # Generación de Screen
 
 Genera una nueva screen con toda su estructura.
