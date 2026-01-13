@@ -31,7 +31,7 @@ set -euo pipefail
 # ─────────────────────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_CONFIG="${SCRIPT_DIR}/../../claude-projects.yaml"
-VALID_TECHS=("symfony" "flutter" "python" "react" "reactnative")
+VALID_TECHS=("symfony" "flutter" "python" "react" "reactnative" "angular" "csharp" "laravel" "vuejs" "docker")
 VALID_LANGS=("en" "fr" "es" "de" "pt")
 
 # Couleurs
@@ -300,9 +300,10 @@ validate_config() {
 
         # Valider chaque module
         for ((j=0; j<module_count; j++)); do
-            local path tech
+            local path techs
             path=$(yq e ".projects[$i].modules[$j].path" "$config_file")
-            tech=$(yq e ".projects[$i].modules[$j].tech" "$config_file")
+            # Extraire les technologies (supporte string ou array YAML)
+            techs=$(yq e ".projects[$i].modules[$j].tech | [.] | flatten | .[]" "$config_file")
 
             if [[ "$path" == "null" || -z "$path" ]]; then
                 log_error "    Module $((j+1)): champ 'path' manquant"
@@ -310,27 +311,43 @@ validate_config() {
                 continue
             fi
 
-            if [[ "$tech" == "null" || -z "$tech" ]]; then
+            if [[ "$techs" == "null" || -z "$techs" ]]; then
                 log_error "    Module '$path': champ 'tech' manquant"
                 ((errors++))
                 continue
             fi
 
-            # Vérifier que la technologie est valide
-            local valid=false
-            for valid_tech in "${VALID_TECHS[@]}"; do
-                if [[ "$tech" == "$valid_tech" ]]; then
-                    valid=true
-                    break
-                fi
-            done
+            # Valider chaque technologie (supporte multi-tech)
+            local tech_list=""
+            local module_valid=true
+            while IFS= read -r tech; do
+                [[ -z "$tech" || "$tech" == "null" ]] && continue
 
-            if [[ "$valid" == "false" ]]; then
-                log_error "    Module '$path': technologie '$tech' invalide"
-                log_error "    Technologies valides: ${VALID_TECHS[*]}"
-                ((errors++))
-            else
-                log_success "    $path → $tech"
+                # Vérifier que la technologie est valide
+                local valid=false
+                for valid_tech in "${VALID_TECHS[@]}"; do
+                    if [[ "$tech" == "$valid_tech" ]]; then
+                        valid=true
+                        break
+                    fi
+                done
+
+                if [[ "$valid" == "false" ]]; then
+                    log_error "    Module '$path': technologie '$tech' invalide"
+                    log_error "    Technologies valides: ${VALID_TECHS[*]}"
+                    ((errors++))
+                    module_valid=false
+                else
+                    if [[ -z "$tech_list" ]]; then
+                        tech_list="$tech"
+                    else
+                        tech_list="$tech_list, $tech"
+                    fi
+                fi
+            done <<< "$techs"
+
+            if [[ "$module_valid" == "true" ]]; then
+                log_success "    $path → $tech_list"
             fi
         done
     done
@@ -443,6 +460,7 @@ install_module() {
     local tech="$2"
     local description="$3"
     local lang="$4"
+    local skip_common="${5:-}"
 
     local script
     script=$(get_install_script "$tech")
@@ -465,6 +483,10 @@ install_module() {
     fi
     # Ajouter la langue
     opts+=("--lang=$lang")
+    # Skip common si multi-tech (2ème+ technologie)
+    if [[ -n "$skip_common" ]]; then
+        opts+=("$skip_common")
+    fi
 
     local label="$tech"
     if [[ -n "$description" && "$description" != "null" ]]; then
@@ -556,12 +578,9 @@ install_project() {
 
     # Installer chaque module
     for ((j=0; j<module_count; j++)); do
-        local path tech desc
+        local path desc
         path=$(yq e ".projects[$project_index].modules[$j].path" "$config_file")
-        tech=$(yq e ".projects[$project_index].modules[$j].tech" "$config_file")
         desc=$(yq e ".projects[$project_index].modules[$j].description // \"\"" "$config_file")
-
-        print_section "[$step/$total_steps] Installation $tech"
 
         local target_path
         if [[ "$path" == "." ]]; then
@@ -584,8 +603,27 @@ install_project() {
             fi
         fi
 
-        install_module "$target_path" "$tech" "$desc" "$project_lang"
-        ((step++))
+        # Extraire les technologies (supporte string ou array YAML)
+        local techs
+        techs=$(yq e ".projects[$project_index].modules[$j].tech | [.] | flatten | .[]" "$config_file")
+
+        # Installer chaque technologie du module
+        local is_first=true
+        while IFS= read -r tech; do
+            [[ -z "$tech" || "$tech" == "null" ]] && continue
+
+            print_section "[$step/$total_steps] Installation $tech"
+
+            # Skip common pour les technos suivantes (éviter doublons)
+            local skip_common_flag=""
+            if [[ "$is_first" == "false" ]]; then
+                skip_common_flag="--skip-common"
+            fi
+
+            install_module "$target_path" "$tech" "$desc" "$project_lang" "$skip_common_flag"
+            is_first=false
+            ((step++))
+        done <<< "$techs"
     done
 }
 

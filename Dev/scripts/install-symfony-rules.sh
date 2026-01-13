@@ -619,11 +619,16 @@ update_rules() {
     local target_dir="$1"
     local force="$2"
     local dry_run="$3"
+    local skip_common="${4:-false}"
 
     log_info "Mise a jour des regles communes..."
 
     # Copier les regles communes
-    copy_common_rules "$target_dir" "$dry_run"
+    if [ "$skip_common" = "false" ]; then
+        copy_common_rules "$target_dir" "$dry_run"
+    else
+        log_info "Skipping common rules (multi-tech mode)"
+    fi
 
     # Copier templates et checklists
     copy_templates "$target_dir" "$dry_run"
@@ -741,6 +746,7 @@ main() {
     local backup="false"
     local interactive="false"
     local preserve_config="false"
+    local skip_common="false"
     local target_dir="."
 
     # Parser les arguments
@@ -768,6 +774,10 @@ main() {
                 ;;
             --backup)
                 backup="true"
+                shift
+                ;;
+            --skip-common)
+                skip_common="true"
                 shift
                 ;;
             --interactive)
@@ -874,7 +884,11 @@ main() {
 
             log_info "Installation complete..."
             create_directory_structure "$target_dir" "$dry_run"
-            copy_common_rules "$target_dir" "$dry_run"
+            if [ "$skip_common" = "false" ]; then
+                copy_common_rules "$target_dir" "$dry_run"
+            else
+                log_info "Skipping common rules (multi-tech mode)"
+            fi
             copy_templates "$target_dir" "$dry_run"
             copy_checklists "$target_dir" "$dry_run"
             copy_adr "$target_dir" "$dry_run"
@@ -894,7 +908,11 @@ main() {
                     TECH_STACK="${TECH_STACK:-Symfony 7.2, PHP 8.3, PostgreSQL 16}"
                 fi
                 create_directory_structure "$target_dir" "$dry_run"
-                copy_common_rules "$target_dir" "$dry_run"
+                if [ "$skip_common" = "false" ]; then
+                    copy_common_rules "$target_dir" "$dry_run"
+                else
+                    log_info "Skipping common rules (multi-tech mode)"
+                fi
                 copy_templates "$target_dir" "$dry_run"
                 copy_checklists "$target_dir" "$dry_run"
                 copy_adr "$target_dir" "$dry_run"
@@ -904,7 +922,7 @@ main() {
                 process_project_context_template "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config"
                 process_claude_md_template "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config"
             else
-                update_rules "$target_dir" "$force" "$dry_run"
+                update_rules "$target_dir" "$force" "$dry_run" "$skip_common"
             fi
             ;;
     esac

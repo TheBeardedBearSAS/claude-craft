@@ -440,7 +440,7 @@ show_summary() {
 }
 
 main() {
-    local mode="" force="false" dry_run="false" backup="false" interactive="false" preserve_config="false" target_dir="."
+    local mode="" force="false" dry_run="false" backup="false" interactive="false" preserve_config="false" skip_common="false" target_dir="."
 
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -450,6 +450,7 @@ main() {
             --preserve-config) preserve_config="true"; shift ;;
             --dry-run) dry_run="true"; shift ;;
             --backup) backup="true"; shift ;;
+            --skip-common) skip_common="true"; shift ;;
             --interactive) interactive="true"; shift ;;
             --lang=*) lang="${1#--lang=}"; shift ;;
             --version) echo "install-react-rules.sh version ${VERSION}"; exit 0 ;;
@@ -485,7 +486,11 @@ main() {
         install)
             [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MonProjet}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
             create_directory_structure "$target_dir" "$dry_run"
-            copy_common_rules "$target_dir" "$dry_run"
+            if [ "$skip_common" = "false" ]; then
+                copy_common_rules "$target_dir" "$dry_run"
+            else
+                log_info "Skipping common rules (multi-tech mode)"
+            fi
             copy_templates "$target_dir" "$dry_run"
             copy_checklists "$target_dir" "$dry_run"
             copy_commands "$target_dir" "$dry_run"
@@ -497,7 +502,11 @@ main() {
                 log_warning "Mode force: TOUS les fichiers seront ecrases"
                 [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MonProjet}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
                 create_directory_structure "$target_dir" "$dry_run"
-                copy_common_rules "$target_dir" "$dry_run"
+                if [ "$skip_common" = "false" ]; then
+                    copy_common_rules "$target_dir" "$dry_run"
+                else
+                    log_info "Skipping common rules (multi-tech mode)"
+                fi
                 copy_templates "$target_dir" "$dry_run"
                 copy_checklists "$target_dir" "$dry_run"
                 copy_commands "$target_dir" "$dry_run"
@@ -506,7 +515,11 @@ main() {
             else
                 log_info "Mise a jour des regles communes..."
                 create_directory_structure "$target_dir" "$dry_run"
-                copy_common_rules "$target_dir" "$dry_run"
+                if [ "$skip_common" = "false" ]; then
+                    copy_common_rules "$target_dir" "$dry_run"
+                else
+                    log_info "Skipping common rules (multi-tech mode)"
+                fi
                 copy_templates "$target_dir" "$dry_run"
                 copy_checklists "$target_dir" "$dry_run"
                 copy_commands "$target_dir" "$dry_run"

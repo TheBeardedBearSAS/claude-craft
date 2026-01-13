@@ -466,6 +466,7 @@ main() {
     local force="false"
     local preserve_config="false"
     local interactive="false"
+    local skip_common="false"
     local target_dir=""
 
     # Parse arguments
@@ -494,6 +495,10 @@ main() {
                 ;;
             --backup)
                 do_backup="true"
+                shift
+                ;;
+            --skip-common)
+                skip_common="true"
                 shift
                 ;;
             --interactive)
@@ -555,7 +560,11 @@ main() {
 
     # Copy files based on mode
     if [ "$mode" = "install" ] || [ "$mode" = "update" ]; then
-        copy_common_rules "$target_dir" "$dry_run"
+        if [ "$skip_common" = "false" ]; then
+            copy_common_rules "$target_dir" "$dry_run"
+        else
+            log_info "Skipping common rules (multi-tech mode)"
+        fi
         copy_templates "$target_dir" "$dry_run"
         copy_checklists "$target_dir" "$dry_run"
         copy_commands "$target_dir" "$dry_run"
