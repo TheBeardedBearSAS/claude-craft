@@ -12,7 +12,7 @@
 #===============================================================================
 
 .PHONY: help install-all install-common install-symfony install-flutter \
-        install-python install-react install-reactnative install-project install-infra \
+        install-python install-react install-reactnative install-angular install-csharp install-laravel install-vuejs install-project install-infra \
         install-tools install-statusline install-multiaccount install-projectconfig \
         install-web install-fullstack-js install-mobile install-backend \
         list list-agents list-commands dry-run clean \
@@ -97,6 +97,10 @@ install-all: ## Installe TOUTES les règles (common + toutes technos)
 	@$(MAKE) install-python TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
 	@$(MAKE) install-react TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
 	@$(MAKE) install-reactnative TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
+	@$(MAKE) install-angular TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
+	@$(MAKE) install-csharp TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
+	@$(MAKE) install-laravel TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
+	@$(MAKE) install-vuejs TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
 	@echo "$(GREEN)✅ Installation complète terminée !$(NC)"
 
 #===============================================================================
@@ -154,6 +158,42 @@ install-reactnative: ## Installe les règles React Native
 		$(SCRIPTS_DIR)/install-reactnative-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
 	else \
 		echo "$(RED)❌ Script non trouvé: Dev/scripts/install-reactnative-rules.sh$(NC)"; \
+		exit 1; \
+	fi
+
+install-angular: ## Installe les règles Angular
+	@echo "$(CYAN)📦 Installation des règles Angular (lang=$(RULES_LANG))...$(NC)"
+	@if [ -f "$(SCRIPTS_DIR)/install-angular-rules.sh" ]; then \
+		$(SCRIPTS_DIR)/install-angular-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	else \
+		echo "$(RED)❌ Script non trouvé: Dev/scripts/install-angular-rules.sh$(NC)"; \
+		exit 1; \
+	fi
+
+install-csharp: ## Installe les règles C#/.NET
+	@echo "$(CYAN)📦 Installation des règles C#/.NET (lang=$(RULES_LANG))...$(NC)"
+	@if [ -f "$(SCRIPTS_DIR)/install-csharp-rules.sh" ]; then \
+		$(SCRIPTS_DIR)/install-csharp-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	else \
+		echo "$(RED)❌ Script non trouvé: Dev/scripts/install-csharp-rules.sh$(NC)"; \
+		exit 1; \
+	fi
+
+install-laravel: ## Installe les règles Laravel
+	@echo "$(CYAN)📦 Installation des règles Laravel (lang=$(RULES_LANG))...$(NC)"
+	@if [ -f "$(SCRIPTS_DIR)/install-laravel-rules.sh" ]; then \
+		$(SCRIPTS_DIR)/install-laravel-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	else \
+		echo "$(RED)❌ Script non trouvé: Dev/scripts/install-laravel-rules.sh$(NC)"; \
+		exit 1; \
+	fi
+
+install-vuejs: ## Installe les règles Vue.js
+	@echo "$(CYAN)📦 Installation des règles Vue.js (lang=$(RULES_LANG))...$(NC)"
+	@if [ -f "$(SCRIPTS_DIR)/install-vuejs-rules.sh" ]; then \
+		$(SCRIPTS_DIR)/install-vuejs-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	else \
+		echo "$(RED)❌ Script non trouvé: Dev/scripts/install-vuejs-rules.sh$(NC)"; \
 		exit 1; \
 	fi
 

@@ -1,0 +1,494 @@
+# C# Coding Standards
+
+## Naming Conventions
+
+### General Rules
+
+| Element | Convention | Example |
+|---------|-----------|---------|
+| Classes | PascalCase | `OrderService`, `CustomerRepository` |
+| Interfaces | IPascalCase | `IOrderService`, `IRepository<T>` |
+| Methods | PascalCase | `GetOrderByIdAsync`, `CalculateTotal` |
+| Properties | PascalCase | `CustomerId`, `TotalAmount` |
+| Parameters | camelCase | `orderId`, `cancellationToken` |
+| Local variables | camelCase | `orderCount`, `isValid` |
+| Private fields | _camelCase | `_orderRepository`, `_logger` |
+| Constants | PascalCase | `MaxRetryCount`, `DefaultPageSize` |
+| Async methods | Suffix with Async | `GetOrderAsync`, `SaveChangesAsync` |
+
+### Specific Patterns
+
+```csharp
+// DO: Use meaningful, descriptive names
+public class OrderProcessor { }
+public async Task<Order> GetOrderByIdAsync(Guid orderId) { }
+private readonly IOrderRepository _orderRepository;
+public const int MaxPageSize = 100;
+
+// DON'T: Use abbreviations or unclear names
+public class OrdProc { }           // Bad
+public async Task<Order> Get(Guid id) { }  // Bad
+private readonly IOrderRepository _repo;    // Bad
+public const int MPS = 100;        // Bad
+```
+
+## Modern C# Features (C# 12/13)
+
+### Primary Constructors
+
+```csharp
+// Modern approach with primary constructors
+public class OrderService(
+    IOrderRepository orderRepository,
+    ILogger<OrderService> logger)
+{
+    public async Task<Order?> GetOrderAsync(Guid id)
+    {
+        logger.LogInformation("Fetching order {OrderId}", id);
+        return await orderRepository.GetByIdAsync(id);
+    }
+}
+
+// Alternative: Traditional constructor (still valid)
+public class OrderService
+{
+    private readonly IOrderRepository _orderRepository;
+    private readonly ILogger<OrderService> _logger;
+
+    public OrderService(
+        IOrderRepository orderRepository,
+        ILogger<OrderService> logger)
+    {
+        _orderRepository = orderRepository;
+        _logger = logger;
+    }
+}
+```
+
+### Records and Init-Only Properties
+
+```csharp
+// Record for DTOs (immutable by default)
+public record OrderDto(
+    Guid Id,
+    Guid CustomerId,
+    string Status,
+    decimal TotalAmount,
+    IReadOnlyList<OrderItemDto> Items);
+
+// Record with additional logic
+public record CreateOrderRequest
+{
+    public required Guid CustomerId { get; init; }
+    public required List<OrderItemRequest> Items { get; init; }
+
+    public bool HasItems => Items.Count > 0;
+}
+
+// Init-only properties for mutable classes
+public class OrderFilter
+{
+    public required DateOnly StartDate { get; init; }
+    public DateOnly? EndDate { get; init; }
+    public string? Status { get; init; }
+}
+```
+
+### Pattern Matching
+
+```csharp
+// Switch expressions
+public string GetOrderStatusDisplay(OrderStatus status) => status switch
+{
+    OrderStatus.Draft => "Brouillon",
+    OrderStatus.Submitted => "Soumise",
+    OrderStatus.Confirmed => "Confirmée",
+    OrderStatus.Shipped => "Expédiée",
+    OrderStatus.Delivered => "Livrée",
+    OrderStatus.Cancelled => "Annulée",
+    _ => throw new ArgumentOutOfRangeException(nameof(status))
+};
+
+// Property patterns
+public decimal CalculateDiscount(Order order) => order switch
+{
+    { TotalAmount.Amount: > 1000 } => 0.15m,
+    { TotalAmount.Amount: > 500 } => 0.10m,
+    { Items.Count: > 10 } => 0.05m,
+    _ => 0m
+};
+
+// List patterns (C# 11+)
+public string DescribeItems(Order order) => order.Items.ToArray() switch
+{
+    [] => "No items",
+    [var single] => $"Single item: {single.ProductId}",
+    [var first, .. var rest] => $"First: {first.ProductId}, plus {rest.Length} more"
+};
+```
+
+### Collection Expressions (C# 12)
+
+```csharp
+// Collection expressions
+List<string> statuses = ["Draft", "Submitted", "Confirmed"];
+int[] numbers = [1, 2, 3, 4, 5];
+Span<int> span = [1, 2, 3];
+
+// Spread operator
+int[] combined = [..numbers, 6, 7, 8];
+List<OrderDto> allOrders = [..pendingOrders, ..completedOrders];
+```
+
+### Raw String Literals
+
+```csharp
+// Multi-line SQL queries
+var sql = """
+    SELECT o.Id, o.CustomerId, o.TotalAmount
+    FROM Orders o
+    WHERE o.Status = @Status
+      AND o.CreatedAt >= @StartDate
+    ORDER BY o.CreatedAt DESC
+    """;
+
+// JSON templates
+var json = """
+    {
+        "orderId": "{orderId}",
+        "status": "confirmed",
+        "items": []
+    }
+    """;
+```
+
+## Async/Await Best Practices
+
+### Proper Async Implementation
+
+```csharp
+// DO: Use async all the way
+public async Task<OrderDto?> GetOrderAsync(Guid id, CancellationToken cancellationToken)
+{
+    var order = await _orderRepository.GetByIdAsync(id, cancellationToken);
+    if (order is null)
+        return null;
+
+    return _mapper.Map<OrderDto>(order);
+}
+
+// DO: Always pass CancellationToken
+public async Task<IReadOnlyList<OrderDto>> GetOrdersAsync(
+    OrderFilter filter,
+    CancellationToken cancellationToken = default)
+{
+    var orders = await _context.Orders
+        .Where(o => o.CreatedAt >= filter.StartDate.ToDateTime(TimeOnly.MinValue))
+        .ToListAsync(cancellationToken);
+
+    return _mapper.Map<List<OrderDto>>(orders);
+}
+
+// DON'T: Block on async code
+public OrderDto GetOrder(Guid id)
+{
+    // BAD: This can cause deadlocks
+    return GetOrderAsync(id).Result;
+}
+
+// DON'T: Use async void (except for event handlers)
+public async void ProcessOrder(Guid id) // BAD
+{
+    await _orderService.ProcessAsync(id);
+}
+```
+
+### ValueTask for Hot Paths
+
+```csharp
+// Use ValueTask for methods that often complete synchronously
+public ValueTask<Order?> GetCachedOrderAsync(Guid id)
+{
+    if (_cache.TryGetValue(id, out var order))
+        return ValueTask.FromResult<Order?>(order);
+
+    return new ValueTask<Order?>(LoadOrderFromDatabaseAsync(id));
+}
+
+private async Task<Order?> LoadOrderFromDatabaseAsync(Guid id)
+{
+    var order = await _orderRepository.GetByIdAsync(id);
+    if (order is not null)
+        _cache.Set(id, order, TimeSpan.FromMinutes(5));
+    return order;
+}
+```
+
+### Parallel Execution
+
+```csharp
+// Execute independent operations in parallel
+public async Task<OrderSummary> GetOrderSummaryAsync(
+    Guid customerId,
+    CancellationToken cancellationToken)
+{
+    var ordersTask = _orderRepository.GetByCustomerIdAsync(customerId, cancellationToken);
+    var customerTask = _customerRepository.GetByIdAsync(customerId, cancellationToken);
+
+    await Task.WhenAll(ordersTask, customerTask);
+
+    return new OrderSummary
+    {
+        Customer = await customerTask,
+        Orders = await ordersTask,
+        TotalSpent = (await ordersTask).Sum(o => o.TotalAmount.Amount)
+    };
+}
+```
+
+## LINQ Best Practices
+
+### Prefer Method Syntax for Simple Queries
+
+```csharp
+// Method syntax - cleaner for simple operations
+var activeOrders = orders
+    .Where(o => o.Status == OrderStatus.Submitted)
+    .OrderByDescending(o => o.CreatedAt)
+    .Take(10)
+    .ToList();
+
+// Query syntax - better for complex joins
+var orderDetails = from o in orders
+                   join c in customers on o.CustomerId equals c.Id
+                   where o.Status == OrderStatus.Submitted
+                   select new { Order = o, CustomerName = c.Name };
+```
+
+### Optimize for Performance
+
+```csharp
+// DO: Use AsNoTracking for read-only queries
+var orders = await _context.Orders
+    .AsNoTracking()
+    .Where(o => o.CustomerId == customerId)
+    .ToListAsync(cancellationToken);
+
+// DO: Use projections to limit data
+var summaries = await _context.Orders
+    .Where(o => o.Status == OrderStatus.Submitted)
+    .Select(o => new OrderSummaryDto
+    {
+        Id = o.Id,
+        CustomerName = o.Customer.Name,
+        TotalAmount = o.TotalAmount.Amount
+    })
+    .ToListAsync(cancellationToken);
+
+// DON'T: Load entire entities when you need a subset
+var orders = await _context.Orders
+    .Include(o => o.Items)
+    .Include(o => o.Customer)
+    .ThenInclude(c => c.Addresses)  // Avoid deep includes
+    .ToListAsync(cancellationToken);
+```
+
+## Null Handling
+
+### Nullable Reference Types
+
+```csharp
+// Enable nullable reference types project-wide
+// <Nullable>enable</Nullable> in .csproj
+
+// Explicit nullability
+public class OrderService
+{
+    private readonly IOrderRepository _orderRepository;
+    private readonly ILogger<OrderService>? _logger; // Explicitly nullable
+
+    public async Task<Order?> GetOrderAsync(Guid id) // May return null
+    {
+        return await _orderRepository.GetByIdAsync(id);
+    }
+
+    public async Task<Order> GetRequiredOrderAsync(Guid id) // Never returns null
+    {
+        return await _orderRepository.GetByIdAsync(id)
+            ?? throw new OrderNotFoundException(id);
+    }
+}
+```
+
+### Null Operators
+
+```csharp
+// Null-coalescing operators
+var displayName = customer.Name ?? "Unknown";
+customer.Name ??= "Default Name";
+
+// Null-conditional operators
+var itemCount = order?.Items?.Count ?? 0;
+order?.Customer?.Notify();
+
+// Null-forgiving operator (use sparingly)
+var name = customer.Name!; // Only when you're certain it's not null
+```
+
+## Error Handling
+
+### Exception Best Practices
+
+```csharp
+// Custom domain exceptions
+public class OrderNotFoundException : Exception
+{
+    public Guid OrderId { get; }
+
+    public OrderNotFoundException(Guid orderId)
+        : base($"Order with ID {orderId} was not found")
+    {
+        OrderId = orderId;
+    }
+}
+
+// Proper exception handling
+public async Task<Order> ProcessOrderAsync(Guid id, CancellationToken cancellationToken)
+{
+    try
+    {
+        var order = await _orderRepository.GetByIdAsync(id, cancellationToken)
+            ?? throw new OrderNotFoundException(id);
+
+        order.Submit();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return order;
+    }
+    catch (OrderNotFoundException)
+    {
+        throw; // Re-throw domain exceptions
+    }
+    catch (DbUpdateException ex)
+    {
+        _logger.LogError(ex, "Database error while processing order {OrderId}", id);
+        throw new OrderProcessingException("Failed to save order", ex);
+    }
+}
+```
+
+### Result Pattern (Alternative to Exceptions)
+
+```csharp
+// Result type for expected failures
+public record Result<T>
+{
+    public bool IsSuccess { get; }
+    public T? Value { get; }
+    public string? Error { get; }
+
+    private Result(T value)
+    {
+        IsSuccess = true;
+        Value = value;
+    }
+
+    private Result(string error)
+    {
+        IsSuccess = false;
+        Error = error;
+    }
+
+    public static Result<T> Success(T value) => new(value);
+    public static Result<T> Failure(string error) => new(error);
+
+    public TResult Match<TResult>(
+        Func<T, TResult> onSuccess,
+        Func<string, TResult> onFailure)
+        => IsSuccess ? onSuccess(Value!) : onFailure(Error!);
+}
+
+// Usage
+public async Task<Result<Order>> CreateOrderAsync(CreateOrderRequest request)
+{
+    if (!request.Items.Any())
+        return Result<Order>.Failure("Order must have at least one item");
+
+    var order = Order.Create(request.CustomerId);
+    // ... add items
+    return Result<Order>.Success(order);
+}
+```
+
+## Code Organization
+
+### File Structure
+
+```csharp
+// One class per file (with some exceptions)
+// File name matches class name: OrderService.cs
+
+// Group related nested types in same file
+// Order.cs contains Order class and OrderItem if tightly coupled
+
+// Use partial classes for large files
+// Order.cs + Order.Validation.cs + Order.Events.cs
+```
+
+### Region Usage
+
+```csharp
+// Avoid regions - they hide complexity
+// If you need regions, your class is too large
+
+// DON'T
+public class OrderService
+{
+    #region Fields
+    // ...
+    #endregion
+
+    #region Constructors
+    // ...
+    #endregion
+
+    #region Methods
+    // ...
+    #endregion
+}
+
+// DO: Split into multiple classes or use composition
+```
+
+## Documentation
+
+### XML Documentation
+
+```csharp
+/// <summary>
+/// Processes an order and updates its status to Submitted.
+/// </summary>
+/// <param name="orderId">The unique identifier of the order.</param>
+/// <param name="cancellationToken">Token to cancel the operation.</param>
+/// <returns>The processed order.</returns>
+/// <exception cref="OrderNotFoundException">Thrown when the order is not found.</exception>
+/// <exception cref="InvalidOrderStateException">Thrown when the order cannot be submitted.</exception>
+public async Task<Order> ProcessOrderAsync(
+    Guid orderId,
+    CancellationToken cancellationToken = default)
+{
+    // Implementation
+}
+```
+
+## Checklist
+
+- [ ] Naming follows conventions (PascalCase, camelCase, _prefix)
+- [ ] Async methods end with Async suffix
+- [ ] CancellationToken passed to all async operations
+- [ ] Nullable reference types enabled and properly annotated
+- [ ] Modern C# features used where appropriate
+- [ ] LINQ queries optimized with AsNoTracking and projections
+- [ ] Custom exceptions for domain errors
+- [ ] No empty catch blocks or catch-all handlers
+- [ ] XML documentation on public APIs

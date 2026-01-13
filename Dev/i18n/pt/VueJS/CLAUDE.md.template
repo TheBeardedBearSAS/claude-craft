@@ -1,0 +1,102 @@
+# {{PROJECT_NAME}} - Vue.js Project
+
+## Project Context
+
+- **Technology**: Vue.js {{VUE_VERSION}}
+- **TypeScript**: {{TS_VERSION}}
+- **Build Tool**: Vite
+- **Architecture**: {{ARCHITECTURE_PATTERN}}
+
+## Commands
+
+### Development
+```bash
+# Start development server
+pnpm dev
+
+# Build for production
+pnpm build
+
+# Preview production build
+pnpm preview
+```
+
+### Testing
+```bash
+# Run tests in watch mode
+pnpm test
+
+# Run tests with coverage
+pnpm test:coverage
+
+# Run e2e tests
+pnpm test:e2e
+```
+
+### Code Quality
+```bash
+# Lint code
+pnpm lint
+
+# Fix lint errors
+pnpm lint:fix
+
+# Type check
+pnpm type-check
+
+# Format code
+pnpm format
+```
+
+## Architecture
+
+This project follows {{ARCHITECTURE_PATTERN}}:
+
+```
+src/
+├── assets/           # Static assets
+├── components/       # Shared components
+├── composables/      # Composition functions
+├── modules/          # Feature modules
+├── router/           # Vue Router
+├── stores/           # Pinia stores
+├── services/         # API services
+├── types/            # TypeScript types
+└── utils/            # Utilities
+```
+
+## Coding Standards
+
+- **Vue**: Composition API with `<script setup>`
+- **TypeScript**: Strict mode
+- **State**: Pinia stores
+- **Style**: ESLint + Prettier
+
+### Key Conventions
+
+1. **Components**: Multi-word, PascalCase
+2. **Composables**: `use` prefix
+3. **Stores**: `use{Name}Store` pattern
+4. **Props/Emits**: TypeScript interfaces
+
+## Testing
+
+- **Framework**: Vitest
+- **Utils**: Vue Test Utils
+- **E2E**: Playwright
+- **Coverage**: 80% minimum
+
+```bash
+# Run specific test
+pnpm test UserCard
+
+# Run with UI
+pnpm test:ui
+```
+
+## Important Files
+
+- `vite.config.ts` - Vite configuration
+- `tsconfig.json` - TypeScript config
+- `eslint.config.js` - ESLint rules
+- `.prettierrc` - Prettier config

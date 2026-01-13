@@ -28,7 +28,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ## Features
 
-- **5 Technology Stacks**: Symfony, Flutter, Python, React, React Native
+- **9 Technology Stacks**: Symfony, Flutter, Python, React, React Native, Angular, C#/.NET, Laravel, Vue.js
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
 - **25 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, and Ralph Conductor
@@ -145,6 +145,10 @@ Once installed, use the commands in your project:
 | **Python** | 6 | 10 | 1 | FastAPI, async/await, Type hints |
 | **React** | 8 | 8 | 1 | Hooks, State management, A11y |
 | **React Native** | 11 | 7 | 1 | Navigation, Native modules |
+| **Angular** | 6 | 6 | 1 | Standalone, Signals, OnPush, RxJS |
+| **C#/.NET** | 7 | 6 | 1 | Clean Architecture, CQRS, Entity Framework |
+| **Laravel** | 6 | 6 | 1 | Clean Architecture, Pest PHP, Sanctum |
+| **Vue.js** | 6 | 6 | 1 | Composition API, Pinia, Vitest |
 | **Docker** | - | 4 | 5 | Dockerfile, Compose, CI/CD, Debugging |
 
 ## Project Structure
@@ -165,7 +169,11 @@ claude-craft/
 │   │       ├── Flutter/        # Mobile Dart
 │   │       ├── Python/         # Backend/API
 │   │       ├── React/          # Frontend JS/TS
-│   │       └── ReactNative/    # Mobile JS/TS
+│   │       ├── ReactNative/    # Mobile JS/TS
+│   │       ├── Angular/        # Angular frontend
+│   │       ├── CSharp/         # C#/.NET backend
+│   │       ├── Laravel/        # PHP/Laravel backend
+│   │       └── VueJS/          # Vue.js frontend
 │   └── scripts/                # Installation scripts
 ├── Infra/                      # Infrastructure (Docker)
 │   ├── i18n/                   # Translated agents & commands
@@ -347,6 +355,9 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 | `python-reviewer` | Python code review |
 | `react-reviewer` | React code review |
 | `reactnative-reviewer` | React Native code review |
+| `angular-reviewer` | Angular code review |
+| `laravel-reviewer` | Laravel code review |
+| `vuejs-reviewer` | Vue.js code review |
 
 ### Docker/Infrastructure Agents
 | Agent | Expertise |
@@ -367,6 +378,10 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 - `/python:` - Python-specific (endpoints, async, typing)
 - `/react:` - React-specific (components, hooks, a11y)
 - `/reactnative:` - React Native-specific (screens, native modules)
+- `/angular:` - Angular-specific (components, signals, standalone)
+- `/csharp:` - C#/.NET-specific (features, architecture, CQRS)
+- `/laravel:` - Laravel-specific (controllers, Actions, Pest PHP)
+- `/vuejs:` - Vue.js-specific (components, composables, Pinia)
 - `/docker:` - Docker/Infrastructure (compose, debug, pipelines, architecture)
 
 ## Documentation

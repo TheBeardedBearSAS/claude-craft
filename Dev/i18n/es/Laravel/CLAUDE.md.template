@@ -1,0 +1,104 @@
+# {{PROJECT_NAME}} - Laravel Project
+
+## Project Context
+
+- **Technology**: Laravel {{LARAVEL_VERSION}}
+- **PHP Version**: {{PHP_VERSION}}
+- **Architecture**: {{ARCHITECTURE_PATTERN}}
+- **Database**: {{DATABASE_TYPE}}
+
+## Commands
+
+### Development
+```bash
+# Start development server
+php artisan serve
+
+# Run queue worker
+php artisan queue:work
+
+# Run tests
+php artisan test
+
+# Run tests with coverage
+php artisan test --coverage
+```
+
+### Code Quality
+```bash
+# Format code
+./vendor/bin/pint
+
+# Static analysis
+./vendor/bin/phpstan analyse
+
+# Full quality check
+./vendor/bin/pint && ./vendor/bin/phpstan analyse && php artisan test
+```
+
+### Database
+```bash
+# Run migrations
+php artisan migrate
+
+# Fresh database with seeds
+php artisan migrate:fresh --seed
+
+# Rollback last migration
+php artisan migrate:rollback
+```
+
+## Architecture
+
+This project follows {{ARCHITECTURE_PATTERN}}:
+
+```
+app/
+├── Domain/           # Core business logic
+├── Application/      # Use cases, Actions, DTOs
+├── Infrastructure/   # External services, Repositories
+└── Http/             # Controllers, Requests, Resources
+```
+
+## Coding Standards
+
+- **PHP**: 8.3+ with strict types
+- **Style**: Laravel Pint (PSR-12 + Laravel)
+- **Analysis**: PHPStan level 8
+
+### Key Conventions
+
+1. **Controllers**: Thin, delegate to Actions
+2. **Validation**: Always via Form Requests
+3. **Responses**: Always via API Resources
+4. **Authorization**: Via Policies
+5. **Business Logic**: In Domain layer or Actions
+
+## Testing
+
+- **Framework**: Pest PHP
+- **Minimum Coverage**: 80%
+- **Test Types**: Feature, Unit, Architecture
+
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test
+php artisan test --filter=OrderTest
+
+# Run in parallel
+php artisan test --parallel
+```
+
+## Environment
+
+- **Local**: Uses Docker via Laravel Sail
+- **Testing**: SQLite in-memory
+- **Production**: PostgreSQL
+
+## Important Files
+
+- `phpstan.neon` - Static analysis config
+- `pint.json` - Code style config
+- `.env.example` - Environment template

@@ -1,0 +1,65 @@
+# {{PROJECT_NAME}} - C#/.NET Project
+
+## Project Context
+
+This is a C#/.NET {{DOTNET_VERSION}} project following Clean Architecture principles.
+
+**Generated**: {{GENERATION_DATE}}
+**Stack**: {{TECH_STACK}}
+
+## Architecture
+
+This project follows Clean Architecture with the following layer structure:
+
+```
+src/
+├── Domain/           # Core business logic (no external dependencies)
+├── Application/      # Use cases, CQRS (depends on Domain)
+├── Infrastructure/   # External concerns (depends on Domain + Application)
+└── WebAPI/          # Presentation layer (depends on all)
+```
+
+## Key Patterns
+
+- **CQRS**: Commands and Queries separated with MediatR
+- **Domain-Driven Design**: Rich domain models, aggregates, value objects
+- **Repository Pattern**: Abstraction for data access
+- **Unit of Work**: Transaction management
+
+## Technology Stack
+
+- .NET {{DOTNET_VERSION}}
+- C# 13
+- Entity Framework Core
+- MediatR for CQRS
+- FluentValidation
+- AutoMapper
+- xUnit + FluentAssertions + Moq
+
+## Coding Conventions
+
+- Use PascalCase for public members
+- Use _camelCase for private fields
+- Suffix async methods with "Async"
+- Always pass CancellationToken to async methods
+- Use nullable reference types
+
+## Testing Strategy
+
+- Unit tests for Domain and Application layers
+- Integration tests for Infrastructure (with Testcontainers)
+- Functional tests for WebAPI (with WebApplicationFactory)
+- Minimum 80% code coverage
+
+## Available Commands
+
+- `/csharp:check-compliance` - Full compliance audit
+- `/csharp:check-architecture` - Architecture validation
+- `/csharp:check-code-quality` - Code quality analysis
+- `/csharp:check-testing` - Test coverage analysis
+- `/csharp:check-security` - Security audit (OWASP)
+- `/csharp:generate-feature` - Generate CQRS feature
+
+## Rules Applied
+
+See `.claude/rules/` for detailed coding standards and best practices.

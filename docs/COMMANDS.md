@@ -21,12 +21,16 @@ Commands can take arguments:
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 22 |
+| `/common:` | Transversal | 24 |
 | `/symfony:` | PHP/Symfony | 10 |
 | `/flutter:` | Dart/Flutter | 10 |
 | `/python:` | Python | 10 |
 | `/react:` | React/TypeScript | 8 |
 | `/reactnative:` | React Native | 7 |
+| `/angular:` | Angular | 6 |
+| `/csharp:` | C#/.NET | 6 |
+| `/laravel:` | PHP/Laravel | 6 |
+| `/vuejs:` | Vue.js | 6 |
 | `/docker:` | Docker/Infrastructure | 4 |
 
 ---
@@ -111,6 +115,34 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 | `/common:ux-user-flow` | Design user journey and flow |
 | `/common:a11y-audit` | WCAG 2.2 AAA accessibility audit |
 | `/common:a11y-component` | Accessibility specs for a component |
+
+### Technology Commands
+
+| Command | Description |
+|---------|-------------|
+| `/common:add-technology` | Add a new technology to claude-craft |
+
+Add a complete technology stack to claude-craft with best practices:
+
+```bash
+/common:add-technology "nextjs"
+/common:add-technology "golang" backend
+```
+
+**Features:**
+- **Context7 MCP research**: Official documentation, best practices, design patterns
+- **Web search**: 2026 trends, community practices, common pitfalls
+- **Full generation**: Rules, commands, templates, skills, agents (5 languages)
+- **Installation script**: `install-{tech}-rules.sh`
+- **Documentation updates**: README, landing page, Makefile
+
+**Definition of Done:**
+- [ ] Rules (7 files × 5 languages)
+- [ ] Commands (5 files × 5 languages)
+- [ ] Installation script created
+- [ ] README.md updated
+- [ ] docs/index.html updated (stats + tech card)
+- [ ] Makefile target added
 
 ---
 
@@ -286,6 +318,94 @@ Mobile development with React Native.
 | `/reactnative:app-size` | Analyze app bundle size |
 | `/reactnative:deep-link <Route>` | Configure deep linking |
 | `/reactnative:store-prepare` | Prepare for app store |
+
+---
+
+## Angular Commands (`/angular:`)
+
+Frontend development with Angular standalone components and signals.
+
+### Code Generation
+
+| Command | Description |
+|---------|-------------|
+| `/angular:generate-component <Name>` | Generate standalone component with tests |
+
+### Analysis Commands
+
+| Command | Description |
+|---------|-------------|
+| `/angular:check-architecture` | Validate architecture (domain-driven, smart/dumb) |
+| `/angular:check-code-quality` | Run code quality checks (signals, OnPush, RxJS) |
+| `/angular:check-compliance` | Check rule compliance (standalone, modern syntax) |
+| `/angular:check-security` | Security audit (XSS, CSRF, authentication) |
+| `/angular:check-testing` | Test coverage analysis (Vitest/Jest, Cypress) |
+
+---
+
+## C#/.NET Commands (`/csharp:`)
+
+Backend development with C#/.NET, Clean Architecture, and CQRS.
+
+### Code Generation
+
+| Command | Description |
+|---------|-------------|
+| `/csharp:generate-feature <Name>` | Generate complete CQRS feature (entity, commands, queries, endpoints) |
+
+### Analysis Commands
+
+| Command | Description |
+|---------|-------------|
+| `/csharp:check-architecture` | Validate Clean Architecture (layers, dependencies) |
+| `/csharp:check-code-quality` | Run code quality checks (async, LINQ, null safety) |
+| `/csharp:check-compliance` | Check rule compliance (CQRS, DDD, modern C#) |
+| `/csharp:check-security` | Security audit (OWASP Top 10, injection, auth) |
+| `/csharp:check-testing` | Test coverage analysis (xUnit, integration tests) |
+
+---
+
+## Laravel Commands (`/laravel:`)
+
+PHP backend development with Laravel, Clean Architecture, and Pest PHP.
+
+### Code Generation
+
+| Command | Description |
+|---------|-------------|
+| `/laravel:generate-controller <Name>` | Generate API controller with Form Request, Resource, and Policy |
+
+### Analysis Commands
+
+| Command | Description |
+|---------|-------------|
+| `/laravel:check-architecture` | Validate Clean Architecture (layers, dependencies) |
+| `/laravel:check-code-quality` | Run code quality checks (PHPStan, Pint, N+1) |
+| `/laravel:check-compliance` | Check rule compliance (Actions, DTOs, modern PHP) |
+| `/laravel:check-security` | Security audit (OWASP Top 10, Sanctum, validation) |
+| `/laravel:check-testing` | Test coverage analysis (Pest PHP, factories) |
+
+---
+
+## Vue.js Commands (`/vuejs:`)
+
+Frontend development with Vue.js 3, Composition API, and TypeScript.
+
+### Code Generation
+
+| Command | Description |
+|---------|-------------|
+| `/vuejs:generate-component <Name>` | Generate component with test, types, and Storybook story |
+
+### Analysis Commands
+
+| Command | Description |
+|---------|-------------|
+| `/vuejs:check-architecture` | Validate architecture (modules, components, stores) |
+| `/vuejs:check-code-quality` | Run code quality checks (ESLint, TypeScript, Prettier) |
+| `/vuejs:check-compliance` | Check rule compliance (Composition API, Pinia, modern Vue) |
+| `/vuejs:check-security` | Security audit (XSS, CSRF, authentication) |
+| `/vuejs:check-testing` | Test coverage analysis (Vitest, Vue Test Utils) |
 
 ---
 
