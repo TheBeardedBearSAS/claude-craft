@@ -2,6 +2,15 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
+## What's New in v3.2
+
+- **4 New Technology Stacks**: Angular, C#/.NET, Laravel, Vue.js
+- **`/common:add-technology` Command**: Generate new technology stacks with web search + Context7 research
+- **Angular**: Standalone components, Signals, OnPush, Vitest/Jest, Cypress
+- **C#/.NET**: Clean Architecture, CQRS, .NET Aspire, xUnit, EF Core
+- **Laravel**: Clean Arch, Pest PHP, Sanctum, Actions pattern, Livewire
+- **Vue.js**: Composition API, Pinia, Vitest, TypeScript, Vue Router
+
 ## What's New in v3.1
 
 - **Ralph Wiggum**: Continuous AI agent loop - run Claude until task completion
