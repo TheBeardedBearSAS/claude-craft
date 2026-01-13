@@ -75,6 +75,27 @@ MSG_CONTEXT_RETRYING="Wiederholung nach Compact"
 MSG_CONTEXT_MAX_REACHED="Maximale Compacts erreicht"
 MSG_CONTEXT_DISABLED="Auto-Compact deaktiviert"
 
+# Erweiterte Kontext-Verwaltung
+MSG_CONTEXT_NEW_SESSION="Fortsetzungssitzung wird erstellt"
+MSG_CONTEXT_EXTEND="Compact-Limit erweitert"
+MSG_CONTEXT_OVERFLOW_FAIL="Kontextlimit uberschritten, wird gestoppt"
+MSG_CONTEXT_PREVENTIVE="Kontext bei {0}% - praventives Compact"
+MSG_CONTEXT_CONTINUATION_CREATED="Fortsetzungssitzung erstellt"
+MSG_CONTEXT_MAX_CONTINUATIONS="Maximale Fortsetzungssitzungen erreicht"
+MSG_CONTEXT_RECONSTRUCTING="Kontext wird aus Fortschrittsdatei rekonstruiert"
+
+# Sprint-Fortschritt
+MSG_SPRINT_PROGRESS_SAVED="Sprint-Fortschritt gespeichert"
+MSG_SPRINT_PROGRESS_LOADED="Sprint-Fortschritt geladen"
+MSG_SPRINT_CURRENT_TASK="Aktuelle Aufgabe"
+MSG_SPRINT_COMPLETED_TASKS="Abgeschlossene Aufgaben"
+MSG_SPRINT_PHASE="Phase"
+
+# Strategisches Compact
+MSG_CONTEXT_SPRINT_START="Compact bei Sprint-Start fur sauberen Kontext"
+MSG_CONTEXT_TASK_COMPLETE="Aufgabe abgeschlossen - strategisches Compact"
+MSG_CONTEXT_US_COMPLETE="US abgeschlossen - strategisches Compact"
+
 # Checkpointing
 MSG_CHECKPOINT_CREATING="Checkpoint wird erstellt..."
 MSG_CHECKPOINT_CREATED="Checkpoint erstellt"

@@ -1,0 +1,72 @@
+# Sprint Progress
+
+This file tracks the progress of the current sprint across context compacts and session continuations.
+It is automatically maintained by Ralph Wiggum and used for context reconstruction.
+
+## Metadata
+- Session ID: {{SESSION_ID}}
+- Started: {{TIMESTAMP}}
+- Last Update: {{TIMESTAMP}}
+- Compacts: 0
+- Context Resets: 0
+
+## Current State
+- **Sprint**: {{SPRINT_NUMBER}}
+- **Current US**: none
+- **Current Task**: none
+- **Phase**: INIT
+
+## Completed Tasks
+<!-- Tasks will be added here as they complete -->
+<!-- Format: - [x] TASK-XXX [TYPE] Description (Xh) -->
+
+## Key Decisions
+<!-- Important architectural/technical decisions made during the sprint -->
+<!-- Format: - Decision description (rationale) -->
+
+## Files Modified This Session
+<!-- Files changed during this sprint -->
+<!-- Automatically tracked by git integration -->
+
+## Current Test Status
+- Unit: unknown
+- Integration: unknown
+
+## Blockers
+- None
+
+## Next Steps
+1. Initialize sprint
+2. Load tasks from backlog
+3. Begin TDD implementation
+
+---
+
+## Notes
+
+### Context Reconstruction
+
+When context is compacted or a new session is created, Ralph uses this file to:
+1. Restore knowledge of completed work
+2. Understand the current task and phase
+3. Preserve key architectural decisions
+4. Identify files that have been modified
+
+### TDD Workflow
+
+The **Phase** field tracks the current TDD stage:
+- **RED**: Writing failing tests
+- **GREEN**: Implementing code to pass tests
+- **REFACTOR**: Improving code while keeping tests green
+- **IDLE**: Between tasks
+
+### Task Types
+
+Common task types in Completed Tasks:
+- **[DB]**: Database/Entity changes
+- **[BE]**: Backend/Service logic
+- **[FE-WEB]**: Web frontend
+- **[FE-MOBILE]**: Mobile frontend
+- **[TEST]**: Test implementation
+- **[DOC]**: Documentation
+- **[INFRA]**: Infrastructure/DevOps

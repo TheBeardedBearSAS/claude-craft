@@ -155,7 +155,17 @@ check_dependencies() {
 # =============================================================================
 
 load_modules() {
-    local modules=("session" "loop" "dod-validator" "circuit-breaker" "checkpoint" "context-manager")
+    # Order matters: sprint-progress and context-reconstruction must be loaded before context-manager
+    local modules=(
+        "session"
+        "loop"
+        "dod-validator"
+        "circuit-breaker"
+        "checkpoint"
+        "sprint-progress"
+        "context-reconstruction"
+        "context-manager"
+    )
 
     for module in "${modules[@]}"; do
         local module_file="$LIB_DIR/${module}.sh"
@@ -361,10 +371,31 @@ run_ralph() {
             continue
         fi
 
+        # Check for preventive compact (before hitting the limit)
+        if type check_preventive_compact &>/dev/null; then
+            check_preventive_compact "$SESSION_ID"
+        fi
+
+        # Check if we have a continuation prompt (after compact/session handoff)
+        local effective_prompt="$PROMPT"
+        if type get_context_continuation_prompt &>/dev/null; then
+            local continuation_prompt
+            continuation_prompt=$(get_context_continuation_prompt)
+            if [[ -n "$continuation_prompt" ]]; then
+                # Prepend continuation context to the prompt
+                effective_prompt="$continuation_prompt
+
+---
+
+$PROMPT"
+                print_verbose "Using reconstructed context for this iteration"
+            fi
+        fi
+
         # Invoke Claude
         print_info "${MSG_INVOKING_CLAUDE}"
         local response
-        response=$(invoke_claude "$SESSION_ID" "$PROMPT" "$TIMEOUT")
+        response=$(invoke_claude "$SESSION_ID" "$effective_prompt" "$TIMEOUT")
         local invoke_status=$?
 
         if [[ $invoke_status -ne 0 ]]; then
@@ -377,19 +408,72 @@ run_ralph() {
         if type detect_context_limit &>/dev/null && detect_context_limit "$response"; then
             print_warning "${MSG_CONTEXT_LIMIT_DETECTED:-Context limit detected}"
 
-            if type run_auto_compact &>/dev/null && run_auto_compact "$SESSION_ID"; then
-                # Retry invocation after compact
-                print_info "${MSG_CONTEXT_RETRYING:-Retrying after compact}..."
-                response=$(invoke_claude "$SESSION_ID" "$PROMPT" "$TIMEOUT")
-                invoke_status=$?
+            if type run_auto_compact &>/dev/null; then
+                local compact_result
+                compact_result=$(run_auto_compact "$SESSION_ID")
+                local compact_status=$?
 
-                if [[ $invoke_status -ne 0 ]]; then
-                    print_error "${MSG_ERROR}: Claude invocation failed after compact"
-                    update_circuit_breaker "error" "context_limit_retry_failed"
-                    continue
-                fi
+                case $compact_status in
+                    0)
+                        # Compact successful - retry with continuation prompt
+                        print_info "${MSG_CONTEXT_RETRYING:-Retrying after compact}..."
+
+                        # Get reconstructed context
+                        local retry_prompt="$PROMPT"
+                        if type get_context_continuation_prompt &>/dev/null; then
+                            local cont_prompt
+                            cont_prompt=$(get_context_continuation_prompt)
+                            if [[ -n "$cont_prompt" ]]; then
+                                retry_prompt="$cont_prompt
+
+---
+
+$PROMPT"
+                            fi
+                        fi
+
+                        response=$(invoke_claude "$SESSION_ID" "$retry_prompt" "$TIMEOUT")
+                        invoke_status=$?
+
+                        if [[ $invoke_status -ne 0 ]]; then
+                            print_error "${MSG_ERROR}: Claude invocation failed after compact"
+                            update_circuit_breaker "error" "context_limit_retry_failed"
+                            continue
+                        fi
+                        ;;
+                    3)
+                        # Session continuation - new session created
+                        SESSION_ID="$compact_result"
+                        print_info "Switching to continuation session: $SESSION_ID"
+
+                        # Get handoff prompt for new session
+                        local handoff_prompt
+                        if type get_session_handoff_prompt &>/dev/null; then
+                            handoff_prompt=$(get_session_handoff_prompt "$compact_result")
+                        else
+                            handoff_prompt="Continue the implementation from where the previous session left off."
+                        fi
+
+                        # Retry with new session and handoff context
+                        response=$(invoke_claude "$SESSION_ID" "$handoff_prompt
+
+$PROMPT" "$TIMEOUT")
+                        invoke_status=$?
+
+                        if [[ $invoke_status -ne 0 ]]; then
+                            print_error "${MSG_ERROR}: Claude invocation failed in continuation session"
+                            update_circuit_breaker "error" "continuation_session_failed"
+                            continue
+                        fi
+                        ;;
+                    *)
+                        # Auto-compact failed or max reached without continuation
+                        update_circuit_breaker "error" "context_limit"
+                        continue
+                        ;;
+                esac
             else
-                # Auto-compact failed or disabled - treat as error
+                # Auto-compact not available - treat as error
                 update_circuit_breaker "error" "context_limit"
                 continue
             fi
@@ -433,6 +517,11 @@ run_ralph() {
     # Calculate duration
     local end_time=$(date +%s)
     local duration=$((end_time - start_time))
+
+    # Save sprint progress before summary
+    if type save_sprint_progress &>/dev/null; then
+        save_sprint_progress "$SESSION_ID"
+    fi
 
     # Print summary
     print_summary "$SESSION_ID" "$iteration" "$duration" "$dod_passed" "$exit_reason"

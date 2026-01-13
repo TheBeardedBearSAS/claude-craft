@@ -75,6 +75,27 @@ MSG_CONTEXT_RETRYING="Retrying after compact"
 MSG_CONTEXT_MAX_REACHED="Maximum compacts reached"
 MSG_CONTEXT_DISABLED="Auto-compact is disabled"
 
+# Advanced Context Management
+MSG_CONTEXT_NEW_SESSION="Creating continuation session"
+MSG_CONTEXT_EXTEND="Extended max compacts"
+MSG_CONTEXT_OVERFLOW_FAIL="Context limit exceeded, stopping"
+MSG_CONTEXT_PREVENTIVE="Context at {0}% - running preventive compact"
+MSG_CONTEXT_CONTINUATION_CREATED="Continuation session created"
+MSG_CONTEXT_MAX_CONTINUATIONS="Maximum continuation sessions reached"
+MSG_CONTEXT_RECONSTRUCTING="Reconstructing context from progress file"
+
+# Sprint Progress
+MSG_SPRINT_PROGRESS_SAVED="Sprint progress saved"
+MSG_SPRINT_PROGRESS_LOADED="Sprint progress loaded"
+MSG_SPRINT_CURRENT_TASK="Current task"
+MSG_SPRINT_COMPLETED_TASKS="Completed tasks"
+MSG_SPRINT_PHASE="Phase"
+
+# Strategic Compact
+MSG_CONTEXT_SPRINT_START="Compact at sprint start for clean context"
+MSG_CONTEXT_TASK_COMPLETE="Task complete - running strategic compact"
+MSG_CONTEXT_US_COMPLETE="US complete - running strategic compact"
+
 # Checkpointing
 MSG_CHECKPOINT_CREATING="Creating checkpoint..."
 MSG_CHECKPOINT_CREATED="Checkpoint created"

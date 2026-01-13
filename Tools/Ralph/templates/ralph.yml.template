@@ -48,9 +48,10 @@ circuit_breaker:
   output_decline_threshold: 70
 
 # =============================================================================
-# Context Management
+# Context Management (Advanced)
 # =============================================================================
-# Automatic handling of context limits (auto-compaction)
+# Automatic handling of context limits with multi-layer strategy
+# Based on Anthropic's Context Engineering best practices
 context:
   # Enable automatic compaction when context limit is reached
   # When Claude reports "Context limit reached", Ralph will automatically
@@ -58,8 +59,73 @@ context:
   auto_compact: true
 
   # Maximum number of compacts per session (safety limit)
-  # Prevents infinite compact loops if context keeps filling up
   max_compacts: 3
+
+  # Strategy when max_compacts is reached:
+  # - "new_session": Create continuation session (recommended for long sprints)
+  # - "extend": Increase max_compacts by 2 and continue
+  # - "fail": Stop execution (original behavior)
+  overflow_strategy: "new_session"
+
+  # Preventive compaction threshold (percentage 0-100)
+  # Acts as FALLBACK safety net - strategic compacts (see sprint section) are preferred
+  # Set to 90% so it only triggers if strategic compacts miss the window
+  preventive_threshold: 90
+
+  # Enable smart context reconstruction after compact
+  # Rebuilds focused context from sprint-progress.md + git + tests
+  smart_reconstruction: true
+
+  # Maximum chained continuation sessions (safety limit)
+  # Prevents infinite session chains
+  max_continuation_sessions: 5
+
+# =============================================================================
+# Sprint Progress Tracking
+# =============================================================================
+# Persistent progress file that survives context compacts and session changes
+sprint:
+  # Enable sprint progress tracking
+  enabled: true
+
+  # Progress file location (relative to project root)
+  progress_file: ".ralph/sprint-progress.md"
+
+  # Auto-update progress after each completed task
+  auto_update_progress: true
+
+  # Include git diff summary in context reconstruction
+  include_git_diff: true
+
+  # Include test status in context reconstruction
+  include_test_status: true
+
+  # ---------------------------------------------------------------------------
+  # Strategic Compact (preferred over % threshold)
+  # ---------------------------------------------------------------------------
+  # Compacts at natural workflow boundaries preserve context better than
+  # compacting mid-task. The TDD cycle provides ideal compact points:
+  #
+  #   SPRINT START → compact (clean slate)
+  #   │
+  #   ├── TASK: RED → GREEN → REFACTOR
+  #   │   └── compact after REFACTOR (task complete)
+  #   │
+  #   ├── TASK: RED → GREEN → REFACTOR
+  #   │   └── compact after REFACTOR
+  #   │
+  #   └── US COMPLETE → checkpoint (+ optional compact)
+
+  # Compact at sprint start for clean context
+  compact_on_start: true
+
+  # Compact after each task completes (REFACTOR → IDLE/RED transition)
+  # This is the MOST IMPORTANT strategic compact point
+  compact_on_task_complete: true
+
+  # Compact after US completes (optional - checkpoint is usually enough)
+  # Enable for very long US with many tasks
+  compact_on_us_complete: false
 
 # =============================================================================
 # Git Checkpointing

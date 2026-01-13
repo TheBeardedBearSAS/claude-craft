@@ -163,6 +163,81 @@ Safety mechanism to prevent infinite loops:
 | Output decline | 70% | Stops if output shrinks significantly |
 | Max iterations | 25 | Hard limit |
 
+## Context Management
+
+Ralph includes advanced context management to handle long-running sprints without interruption.
+
+### Auto-Compact
+
+When Claude's context limit is reached, Ralph automatically:
+1. Saves sprint progress to `.ralph/sprint-progress.md`
+2. Runs `/compact` to compress conversation history
+3. Reconstructs context from progress file
+4. Continues the task
+
+### Strategic Compact (Recommended)
+
+Rather than waiting for context limits, Ralph can compact at natural workflow boundaries:
+
+```
+SPRINT START --> compact (clean slate)
+|
++-- TASK: RED --> GREEN --> REFACTOR
+|   +-- compact after REFACTOR (task complete)
+|
++-- TASK: RED --> GREEN --> REFACTOR
+|   +-- compact after REFACTOR
+|
++-- US COMPLETE --> checkpoint (+ optional compact)
+```
+
+Configuration:
+
+```yaml
+sprint:
+  # Compact at sprint start for clean context
+  compact_on_start: true
+
+  # Compact after each task completes (REFACTOR -> IDLE transition)
+  # This is the MOST IMPORTANT strategic compact point
+  compact_on_task_complete: true
+
+  # Compact after US completes (optional)
+  compact_on_us_complete: false
+```
+
+### Overflow Strategy
+
+When max compacts (default: 3) is reached:
+
+| Strategy | Behavior |
+|----------|----------|
+| `new_session` | Create continuation session (recommended) |
+| `extend` | Increase max_compacts by 2 |
+| `fail` | Stop execution |
+
+```yaml
+context:
+  auto_compact: true
+  max_compacts: 3
+  overflow_strategy: "new_session"
+  preventive_threshold: 90  # Fallback safety net
+  smart_reconstruction: true
+  max_continuation_sessions: 5
+```
+
+### Sprint Progress File
+
+Ralph maintains `.ralph/sprint-progress.md` to track:
+- Current sprint and US
+- Current task and TDD phase
+- Completed tasks
+- Key architectural decisions
+- Modified files
+- Test status
+
+This file survives context compacts and enables seamless continuation.
+
 ## Git Checkpointing
 
 Automatic git commits after each iteration:
@@ -185,16 +260,20 @@ checkpointing:
 
 ```
 Tools/Ralph/
-├── ralph.sh                    # Main entry point
+├── ralph.sh                        # Main entry point
 ├── lib/
-│   ├── session.sh              # Session management
-│   ├── loop.sh                 # Core iteration loop
-│   ├── dod-validator.sh        # DoD validation
-│   ├── circuit-breaker.sh      # Safety mechanism
-│   └── checkpoint.sh           # Git checkpointing
+│   ├── session.sh                  # Session management
+│   ├── loop.sh                     # Core iteration loop
+│   ├── dod-validator.sh            # DoD validation
+│   ├── circuit-breaker.sh          # Safety mechanism
+│   ├── checkpoint.sh               # Git checkpointing
+│   ├── context-manager.sh          # Context limit handling
+│   ├── sprint-progress.sh          # Sprint progress tracking
+│   └── context-reconstruction.sh   # Context reconstruction
 ├── templates/
-│   └── ralph.yml.template      # Default configuration
-└── README.md                   # This file
+│   ├── ralph.yml.template          # Default configuration
+│   └── sprint-progress.md.template # Sprint progress file template
+└── README.md                       # This file
 
 Tools/i18n/ralph/
 ├── en.sh                       # English messages
