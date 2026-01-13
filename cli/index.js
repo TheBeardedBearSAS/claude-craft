@@ -134,6 +134,7 @@ ${c.bold}Commands:${c.reset}
   ${c.green}install <path>${c.reset}       Install to specific directory
   ${c.green}init${c.reset}                 Initialize workflow in current project
   ${c.green}flatten${c.reset}              Generate flattened codebase summary
+  ${c.green}ralph${c.reset}                Run Ralph Wiggum continuous loop
   ${c.green}help${c.reset}                 Show this help message
 
 ${c.bold}Options:${c.reset}
@@ -156,6 +157,9 @@ ${c.bold}Examples:${c.reset}
 
   ${c.dim}# Flatten codebase for context${c.reset}
   npx @the-bearded-bear/claude-craft flatten --output=context.md
+
+  ${c.dim}# Run Ralph continuous loop${c.reset}
+  npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
 
 ${c.bold}Technologies:${c.reset}
 ${Object.entries(TECHNOLOGIES).map(([key, val]) => `  ${c.cyan}${key.padEnd(12)}${c.reset} ${val.desc}`).join('\n')}
@@ -485,6 +489,10 @@ ${c.bold}Documentation:${c.reset}
         await this.flattenCodebase(options);
         break;
 
+      case 'ralph':
+        await this.runRalph(args.slice(1), options);
+        break;
+
       case 'help':
       case '--help':
       case '-h':
@@ -516,6 +524,88 @@ ${c.bold}Documentation:${c.reset}
     // Import flattener module
     const flattener = require('./flattener');
     await flattener.flatten(targetPath, outputFile, options);
+  }
+
+  // Run Ralph Wiggum continuous loop
+  async runRalph(args, options) {
+    this.printBanner();
+    console.log(`${c.bold}Ralph Wiggum - Continuous AI Agent Loop${c.reset}\n`);
+
+    // Build ralph.sh path
+    const ralphScript = path.join(CLI_ROOT, 'Tools', 'Ralph', 'ralph.sh');
+
+    // Check if script exists
+    if (!fs.existsSync(ralphScript)) {
+      console.log(`${c.red}Error: Ralph script not found at ${ralphScript}${c.reset}`);
+      console.log(`${c.yellow}Make sure you have the full claude-craft installation.${c.reset}`);
+      process.exit(1);
+    }
+
+    // Build command arguments
+    const ralphArgs = [];
+
+    // Add language if specified
+    if (options.lang) {
+      ralphArgs.push(`--lang=${options.lang}`);
+    }
+
+    // Add config if specified
+    if (options.config) {
+      ralphArgs.push(`--config=${options.config}`);
+    }
+
+    // Add continue if specified
+    if (options.continue) {
+      ralphArgs.push(`--continue=${options.continue}`);
+    }
+
+    // Add max-iterations if specified
+    if (options['max-iterations']) {
+      ralphArgs.push(`--max-iterations=${options['max-iterations']}`);
+    }
+
+    // Add verbose if specified
+    if (options.verbose) {
+      ralphArgs.push('--verbose');
+    }
+
+    // Add dry-run if specified
+    if (options['dry-run']) {
+      ralphArgs.push('--dry-run');
+    }
+
+    // Add remaining positional arguments (the prompt)
+    const promptArgs = args.filter(arg => !arg.startsWith('--'));
+    if (promptArgs.length > 0) {
+      ralphArgs.push(promptArgs.join(' '));
+    }
+
+    console.log(`${c.dim}Running: bash ${ralphScript} ${ralphArgs.join(' ')}${c.reset}\n`);
+
+    // Execute ralph.sh
+    try {
+      const ralph = spawn('bash', [ralphScript, ...ralphArgs], {
+        stdio: 'inherit',
+        cwd: this.config.targetPath,
+      });
+
+      ralph.on('close', (code) => {
+        if (code === 0) {
+          console.log(`\n${c.green}Ralph session completed successfully.${c.reset}`);
+        } else {
+          console.log(`\n${c.yellow}Ralph session ended with code ${code}.${c.reset}`);
+        }
+        process.exit(code);
+      });
+
+      ralph.on('error', (err) => {
+        console.error(`${c.red}Failed to start Ralph: ${err.message}${c.reset}`);
+        process.exit(1);
+      });
+    } catch (error) {
+      console.error(`${c.red}Error running Ralph: ${error.message}${c.reset}`);
+      process.exit(1);
+    }
   }
 }
 

@@ -1,0 +1,178 @@
+# =============================================================================
+# Ralph Wiggum Configuration
+# Continuous AI Agent Loop Configuration
+# =============================================================================
+#
+# Copy this file to your project root as `ralph.yml` or `.claude/ralph.yml`
+# and customize according to your needs.
+#
+# Documentation: https://github.com/TheBeardedBearSAS/claude-craft
+# =============================================================================
+
+version: "1.0"
+
+# =============================================================================
+# Session Settings
+# =============================================================================
+session:
+  # Session ID: "auto" generates a unique ID, or specify a fixed ID
+  id: auto
+
+  # Timeout per Claude invocation (milliseconds)
+  # Default: 600000 (10 minutes)
+  timeout: 600000
+
+  # Maximum number of iterations before stopping
+  # Default: 25
+  max_iterations: 25
+
+  # Delay between iterations (milliseconds) - rate limiting
+  # Default: 1000 (1 second)
+  delay_between_iterations: 1000
+
+# =============================================================================
+# Circuit Breaker - Safety Mechanism
+# =============================================================================
+# The circuit breaker prevents infinite loops and detects stalls
+circuit_breaker:
+  # Enable/disable circuit breaker
+  enabled: true
+
+  # Stop if no file changes detected for N iterations
+  no_file_changes_threshold: 3
+
+  # Stop if same error repeats N times
+  repeated_error_threshold: 5
+
+  # Stop if output length declines by N% from peak
+  output_decline_threshold: 70
+
+# =============================================================================
+# Git Checkpointing
+# =============================================================================
+# Automatically creates git commits for recovery and history tracking
+checkpointing:
+  # Enable/disable checkpointing
+  enabled: true
+
+  # Run checkpointing asynchronously (non-blocking)
+  async: true
+
+  # Branch prefix for Ralph sessions
+  branch_prefix: "ralph/"
+
+  # Commit message template
+  # Variables: {iteration}, {session_id}
+  commit_message_template: "checkpoint: Ralph iteration {iteration}"
+
+# =============================================================================
+# Agent Settings
+# =============================================================================
+# Configure which AI agent to use
+agent:
+  # Agent name: claude, kiro, q, gemini
+  name: claude
+
+  # Command to invoke the agent
+  command: claude
+
+  # Additional arguments
+  args:
+    - "--continue"
+    - "${SESSION_ID}"
+    - "-p"
+    - "${PROMPT}"
+
+# =============================================================================
+# Definition of Done (DoD)
+# =============================================================================
+# Criteria that must be met for the task to be considered complete
+definition_of_done:
+  # Simple mode: completion marker string
+  # If Claude outputs this exact string, task is complete
+  completion_marker: "<promise>COMPLETE</promise>"
+
+  # Advanced mode: checklist of validation criteria
+  # Uncomment and customize the checklist below for structured DoD
+  #
+  # checklist:
+  #   # -------------------------------------------------------------------------
+  #   # Validator type: command
+  #   # Runs a shell command and checks exit code (0 = pass)
+  #   # -------------------------------------------------------------------------
+  #   - id: tests
+  #     name: "All tests pass"
+  #     type: command
+  #     command: "docker compose exec app npm test"
+  #     required: true
+  #
+  #   - id: lint
+  #     name: "No lint errors"
+  #     type: command
+  #     command: "docker compose exec app npm run lint"
+  #     required: true
+  #
+  #   - id: typecheck
+  #     name: "TypeScript compiles"
+  #     type: command
+  #     command: "docker compose exec app npx tsc --noEmit"
+  #     required: true
+  #
+  #   - id: build
+  #     name: "Build succeeds"
+  #     type: command
+  #     command: "docker compose exec app npm run build"
+  #     required: false  # Warning only, not blocking
+  #
+  #   # -------------------------------------------------------------------------
+  #   # Validator type: output_contains
+  #   # Checks if Claude's output contains a pattern (regex)
+  #   # -------------------------------------------------------------------------
+  #   - id: completion
+  #     name: "Claude signals completion"
+  #     type: output_contains
+  #     pattern: "<promise>COMPLETE</promise>"
+  #     required: true
+  #
+  #   # -------------------------------------------------------------------------
+  #   # Validator type: file_changed
+  #   # Checks if files matching pattern were modified
+  #   # -------------------------------------------------------------------------
+  #   - id: docs
+  #     name: "Documentation updated"
+  #     type: file_changed
+  #     pattern: "*.md"
+  #     required: false
+  #
+  #   # -------------------------------------------------------------------------
+  #   # Validator type: hook
+  #   # Runs an existing Claude hook script
+  #   # -------------------------------------------------------------------------
+  #   - id: quality_gate
+  #     name: "Quality gate passes"
+  #     type: hook
+  #     script: ".claude/hooks/quality-gate.sh"
+  #     required: true
+  #
+  #   # -------------------------------------------------------------------------
+  #   # Validator type: human
+  #   # Prompts for human confirmation (interactive)
+  #   # -------------------------------------------------------------------------
+  #   - id: manual_review
+  #     name: "Manual review approved"
+  #     type: human
+  #     prompt: "Does the implementation look correct? (y/n):"
+  #     required: false
+
+# =============================================================================
+# Output Settings
+# =============================================================================
+output:
+  # Log file path (relative to session directory)
+  log_file: ".ralph/session.log"
+
+  # Metrics file path (JSON format)
+  metrics_file: ".ralph/metrics.json"
+
+  # Enable verbose output
+  verbose: false
