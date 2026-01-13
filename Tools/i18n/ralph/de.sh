@@ -66,6 +66,15 @@ MSG_CB_PERCENT="Prozent"
 MSG_CB_MAX_REACHED="Maximale Iterationen erreicht"
 MSG_CB_RESET="Sicherungsschalter zuruckgesetzt"
 
+# Kontext-Verwaltung
+MSG_CONTEXT_LIMIT_DETECTED="Kontextlimit erreicht"
+MSG_CONTEXT_COMPACTING="Auto-Compact wird ausgefuhrt"
+MSG_CONTEXT_COMPACTED="Kontext erfolgreich kompaktiert"
+MSG_CONTEXT_COMPACT_FAILED="Auto-Compact fehlgeschlagen"
+MSG_CONTEXT_RETRYING="Wiederholung nach Compact"
+MSG_CONTEXT_MAX_REACHED="Maximale Compacts erreicht"
+MSG_CONTEXT_DISABLED="Auto-Compact deaktiviert"
+
 # Checkpointing
 MSG_CHECKPOINT_CREATING="Checkpoint wird erstellt..."
 MSG_CHECKPOINT_CREATED="Checkpoint erstellt"

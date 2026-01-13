@@ -66,6 +66,15 @@ MSG_CB_PERCENT="porcento"
 MSG_CB_MAX_REACHED="Maximo de iteracoes atingido"
 MSG_CB_RESET="Disjuntor reiniciado"
 
+# Gerenciamento de contexto
+MSG_CONTEXT_LIMIT_DETECTED="Limite de contexto detectado"
+MSG_CONTEXT_COMPACTING="Executando auto-compact"
+MSG_CONTEXT_COMPACTED="Contexto compactado com sucesso"
+MSG_CONTEXT_COMPACT_FAILED="Falha no auto-compact"
+MSG_CONTEXT_RETRYING="Tentando novamente apos compact"
+MSG_CONTEXT_MAX_REACHED="Maximo de compacts atingido"
+MSG_CONTEXT_DISABLED="Auto-compact desativado"
+
 # Checkpointing
 MSG_CHECKPOINT_CREATING="Criando checkpoint..."
 MSG_CHECKPOINT_CREATED="Checkpoint criado"

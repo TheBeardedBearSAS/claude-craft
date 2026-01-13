@@ -163,6 +163,9 @@ detect_errors() {
     local output="$1"
     local errors=()
 
+    # NOTE: Context limit detection is handled by context-manager.sh module
+    # via detect_context_limit() function. Do NOT add context patterns here.
+
     # Common error patterns
     local error_patterns=(
         "Error:"

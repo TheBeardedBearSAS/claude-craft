@@ -66,6 +66,15 @@ MSG_CB_PERCENT="percent"
 MSG_CB_MAX_REACHED="Maximum iterations reached"
 MSG_CB_RESET="Circuit breaker reset"
 
+# Context Management
+MSG_CONTEXT_LIMIT_DETECTED="Context limit detected"
+MSG_CONTEXT_COMPACTING="Running auto-compact"
+MSG_CONTEXT_COMPACTED="Context compacted successfully"
+MSG_CONTEXT_COMPACT_FAILED="Auto-compact failed"
+MSG_CONTEXT_RETRYING="Retrying after compact"
+MSG_CONTEXT_MAX_REACHED="Maximum compacts reached"
+MSG_CONTEXT_DISABLED="Auto-compact is disabled"
+
 # Checkpointing
 MSG_CHECKPOINT_CREATING="Creating checkpoint..."
 MSG_CHECKPOINT_CREATED="Checkpoint created"

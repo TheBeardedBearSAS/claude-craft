@@ -48,6 +48,20 @@ circuit_breaker:
   output_decline_threshold: 70
 
 # =============================================================================
+# Context Management
+# =============================================================================
+# Automatic handling of context limits (auto-compaction)
+context:
+  # Enable automatic compaction when context limit is reached
+  # When Claude reports "Context limit reached", Ralph will automatically
+  # run /compact to compress conversation history and retry
+  auto_compact: true
+
+  # Maximum number of compacts per session (safety limit)
+  # Prevents infinite compact loops if context keeps filling up
+  max_compacts: 3
+
+# =============================================================================
 # Git Checkpointing
 # =============================================================================
 # Automatically creates git commits for recovery and history tracking

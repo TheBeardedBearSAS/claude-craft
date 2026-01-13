@@ -155,7 +155,7 @@ check_dependencies() {
 # =============================================================================
 
 load_modules() {
-    local modules=("session" "loop" "dod-validator" "circuit-breaker" "checkpoint")
+    local modules=("session" "loop" "dod-validator" "circuit-breaker" "checkpoint" "context-manager")
 
     for module in "${modules[@]}"; do
         local module_file="$LIB_DIR/${module}.sh"
@@ -334,6 +334,11 @@ run_ralph() {
     # Initialize circuit breaker
     init_circuit_breaker
 
+    # Initialize context manager (auto-compact)
+    if type init_context_manager &>/dev/null; then
+        init_context_manager
+    fi
+
     print_info "${MSG_STARTING_LOOP}..."
     print_verbose "${MSG_SESSION_ID}: $SESSION_ID"
     print_verbose "Max iterations: $MAX_ITERATIONS"
@@ -366,6 +371,28 @@ run_ralph() {
             print_error "${MSG_ERROR}: Claude invocation failed"
             update_circuit_breaker "error" "$response"
             continue
+        fi
+
+        # Check for context limit and auto-compact if needed
+        if type detect_context_limit &>/dev/null && detect_context_limit "$response"; then
+            print_warning "${MSG_CONTEXT_LIMIT_DETECTED:-Context limit detected}"
+
+            if type run_auto_compact &>/dev/null && run_auto_compact "$SESSION_ID"; then
+                # Retry invocation after compact
+                print_info "${MSG_CONTEXT_RETRYING:-Retrying after compact}..."
+                response=$(invoke_claude "$SESSION_ID" "$PROMPT" "$TIMEOUT")
+                invoke_status=$?
+
+                if [[ $invoke_status -ne 0 ]]; then
+                    print_error "${MSG_ERROR}: Claude invocation failed after compact"
+                    update_circuit_breaker "error" "context_limit_retry_failed"
+                    continue
+                fi
+            else
+                # Auto-compact failed or disabled - treat as error
+                update_circuit_breaker "error" "context_limit"
+                continue
+            fi
         fi
 
         # Update metrics
