@@ -12,7 +12,7 @@ In Claude Code, mention an agent to activate its expertise:
 @symfony-reviewer Review this controller for best practices
 ```
 
-## Common Agents (11)
+## Common Agents (12)
 
 These agents are installed with `install-common` and are useful across all technologies.
 
@@ -238,6 +238,36 @@ Helps with:
 @accessibility-expert Audit this page for WCAG 2.2 AAA
 @accessibility-expert Specify ARIA attributes for a modal dialog
 ```
+
+---
+
+### ralph-conductor
+
+**Expertise**: Continuous AI agent loop orchestration
+
+Orchestrates Ralph Wiggum sessions - running Claude in a continuous loop until task completion with Definition of Done (DoD) validation.
+
+Helps with:
+- Ralph session management
+- Definition of Done configuration
+- Iteration progress tracking
+- Circuit breaker monitoring
+- TDD cycle guidance (RED → GREEN → REFACTOR)
+- Task decomposition for iterative completion
+
+```
+@ralph-conductor Set up a Ralph session with TDD DoD
+@ralph-conductor Configure DoD for this feature implementation
+```
+
+**DoD Validator Types:**
+| Type | Description |
+|------|-------------|
+| `command` | Run shell commands (tests, lint, build) |
+| `output_contains` | Check Claude output for patterns |
+| `file_changed` | Verify files were modified |
+| `hook` | Integrate with existing hooks |
+| `human` | Interactive manual validation |
 
 ---
 

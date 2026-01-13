@@ -21,7 +21,7 @@ Commands can take arguments:
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 21 |
+| `/common:` | Transversal | 22 |
 | `/symfony:` | PHP/Symfony | 10 |
 | `/flutter:` | Dart/Flutter | 10 |
 | `/python:` | Python | 10 |
@@ -65,6 +65,26 @@ Transversal commands for all projects.
 | Command | Description |
 |---------|-------------|
 | `/common:setup-project-context` | Interactive project context configuration |
+
+### Continuous Loop Commands
+
+| Command | Description |
+|---------|-------------|
+| `/common:ralph-run` | Run Claude in continuous loop until DoD passes |
+
+Ralph Wiggum executes Claude iteratively until the task is complete:
+
+```bash
+/common:ralph-run "Implement user authentication"
+/common:ralph-run --full "Fix the login bug"  # With all DoD checks
+```
+
+**Definition of Done validators:**
+- `command`: Run tests, lint, build
+- `output_contains`: Check for completion marker
+- `file_changed`: Verify documentation updated
+- `hook`: Integrate with quality-gate.sh
+- `human`: Manual approval gate
 
 ### DevOps Commands
 

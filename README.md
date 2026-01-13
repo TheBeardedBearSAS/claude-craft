@@ -2,6 +2,14 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
+## What's New in v3.1
+
+- **Ralph Wiggum**: Continuous AI agent loop - run Claude until task completion
+- **Definition of Done (DoD)**: Structured validation with 5 validator types (command, output, file, hook, human)
+- **Circuit Breaker**: Safety mechanism to prevent infinite loops
+- **Git Checkpointing**: Automatic recovery points after each iteration
+- **CLI Command**: `npx @the-bearded-bear/claude-craft ralph "task"`
+
 ## What's New in v3.0
 
 - **Workflow Methodology**: BMAD-inspired 4-phase development (Analysis → Planning → Design → Implementation)
@@ -23,8 +31,9 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **5 Technology Stacks**: Symfony, Flutter, Python, React, React Native
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **24 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, and Workflow Orchestrator
+- **25 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, and Ralph Conductor
 - **90+ Slash Commands**: Automated workflows and code generation
+- **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
 - **249 Skills**: Best practices in official Claude Code format (architecture, testing, security)
 - **30 Templates**: Code generation patterns
 - **21 Checklists**: Quality gates for commits, features, releases
