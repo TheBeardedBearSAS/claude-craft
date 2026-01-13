@@ -94,6 +94,19 @@ make install-python TARGET=. LANG=pt
 
 ### 1. Contexto do Projeto (`rules/00-project-context.md`)
 
+Este é o arquivo mais importante para personalizar.
+
+**Opção A: Configuração Interativa (Recomendada)**
+
+Execute este comando no Claude Code para detectar sua stack e responder perguntas direcionadas:
+```bash
+/common:setup-project-context
+```
+
+**Opção B: Configuração Manual**
+
+Edite o arquivo diretamente com os detalhes do seu projeto:
+
 ```markdown
 # Contexto do Projeto
 

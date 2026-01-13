@@ -149,8 +149,16 @@ Vous devriez voir :
 
 ### Étape 4 : Configurer le Contexte de Votre Projet
 
-Éditez le fichier de contexte projet pour décrire votre projet spécifique :
+Vous pouvez configurer le contexte du projet de manière interactive ou manuelle :
 
+**Option A : Interactive (Recommandée)**
+```bash
+cd ~/mon-api && claude
+# Puis exécutez :
+/common:setup-project-context
+```
+
+**Option B : Manuelle**
 ```bash
 nano ~/mon-api/.claude/rules/00-project-context.md
 ```

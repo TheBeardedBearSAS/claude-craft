@@ -386,7 +386,21 @@ Quais recursos são expostos? Quais padrões são usados?
 
 ### 8.4 Documentar o Contexto
 
-Crie ou atualize o arquivo de contexto do projeto:
+Você tem duas opções para configurar o contexto do projeto:
+
+**Opção A: Configuração Interativa (Recomendada)**
+
+Use o comando integrado para detectar automaticamente sua stack e responder perguntas direcionadas:
+
+```bash
+/common:setup-project-context
+```
+
+O comando analisará sua codebase existente, detectará tecnologias e perguntará apenas sobre informações faltantes.
+
+**Opção B: Configuração Manual**
+
+Crie ou atualize o arquivo de contexto do projeto manualmente:
 
 ```bash
 nano .claude/rules/00-project-context.md

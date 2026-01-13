@@ -408,6 +408,17 @@ Après l'installation, configurez ces fichiers pour votre projet spécifique.
 
 C'est le fichier le plus important à personnaliser. Il informe Claude sur votre projet spécifique.
 
+**Option A : Configuration Interactive (Recommandée)**
+
+Exécutez cette commande dans Claude Code pour détecter votre stack et répondre à des questions ciblées :
+```bash
+/common:setup-project-context
+```
+
+**Option B : Configuration Manuelle**
+
+Éditez le fichier directement avec les détails de votre projet :
+
 ```markdown
 # Contexte Projet
 

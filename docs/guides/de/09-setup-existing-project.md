@@ -386,7 +386,21 @@ Welche Ressourcen werden exponiert? Welche Muster werden verwendet?
 
 ### 8.4 Kontext Dokumentieren
 
-Die Projektkontext-Datei erstellen oder aktualisieren:
+Sie haben zwei Optionen zur Konfiguration des Projektkontexts:
+
+**Option A: Interaktive Einrichtung (Empfohlen)**
+
+Verwenden Sie den integrierten Befehl, um Ihren Stack automatisch zu erkennen und gezielte Fragen zu beantworten:
+
+```bash
+/common:setup-project-context
+```
+
+Der Befehl analysiert Ihre vorhandene Codebase, erkennt Technologien und fragt nur nach fehlenden Informationen.
+
+**Option B: Manuelle Konfiguration**
+
+Die Projektkontext-Datei manuell erstellen oder aktualisieren:
 
 ```bash
 nano .claude/rules/00-project-context.md

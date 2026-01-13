@@ -21,7 +21,7 @@ Commands can take arguments:
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 20 |
+| `/common:` | Transversal | 21 |
 | `/symfony:` | PHP/Symfony | 10 |
 | `/flutter:` | Dart/Flutter | 10 |
 | `/python:` | Python | 10 |
@@ -59,6 +59,12 @@ Transversal commands for all projects.
 | `/common:sprint-review` | Generate sprint review summary |
 | `/common:sprint-retro` | Conduct sprint retrospective |
 | `/common:daily-standup` | Generate standup summary |
+
+### Configuration Commands
+
+| Command | Description |
+|---------|-------------|
+| `/common:setup-project-context` | Interactive project context configuration |
 
 ### DevOps Commands
 

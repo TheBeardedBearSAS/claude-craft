@@ -386,7 +386,21 @@ Quelles ressources sont exposées ? Quels patterns sont utilisés ?
 
 ### 8.4 Documenter le Contexte
 
-Créez ou mettez à jour le fichier de contexte du projet :
+Vous avez deux options pour configurer le contexte du projet :
+
+**Option A : Configuration Interactive (Recommandée)**
+
+Utilisez la commande intégrée pour détecter automatiquement votre stack et répondre à des questions ciblées :
+
+```bash
+/common:setup-project-context
+```
+
+La commande analysera votre codebase existante, détectera les technologies et posera uniquement les questions pour les informations manquantes.
+
+**Option B : Configuration Manuelle**
+
+Créez ou mettez à jour le fichier de contexte du projet manuellement :
 
 ```bash
 nano .claude/rules/00-project-context.md

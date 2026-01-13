@@ -303,7 +303,32 @@ ls .claude/commands/
 
 Le fichier le plus important à personnaliser est le contexte de votre projet. Il indique à Claude les spécificités de VOTRE projet.
 
-### Ouvrir le Fichier de Contexte du Projet
+### Option A : Configuration Interactive (Recommandée)
+
+Utilisez la commande intégrée pour détecter automatiquement votre stack et répondre à des questions ciblées :
+
+```bash
+# Démarrer Claude Code
+claude
+
+# Exécuter la commande de configuration
+/common:setup-project-context
+```
+
+La commande va :
+1. **Auto-détecter** votre stack technique, framework, base de données et CI/CD
+2. **Poser des questions** pour les informations manquantes (type d'app, domaine, utilisateurs, conformité)
+3. **Générer** un fichier `.claude/rules/00-project-context.md` complet
+4. **Suggérer les prochaines étapes** (agents à exécuter, sections à compléter)
+
+**Modes disponibles :**
+- `(défaut)` - Détection équilibrée + questions essentielles
+- `--auto` - Détection maximale, questions minimales
+- `--full` - Questionnaire complet incluant objectifs et glossaire
+
+### Option B : Configuration Manuelle
+
+Si vous préférez configurer manuellement, ouvrez le fichier directement :
 
 ```bash
 # Ouvrir dans votre éditeur (remplacez 'nano' par 'code', 'vim', etc.)

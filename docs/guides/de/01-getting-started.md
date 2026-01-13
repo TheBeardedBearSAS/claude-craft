@@ -90,7 +90,12 @@ make install-symfony TARGET=~/meine-api LANG=de
 # Schritt 3: Installation überprüfen
 ls -la ~/meine-api/.claude/
 
-# Schritt 4: Projektkontext konfigurieren
+# Schritt 4: Projektkontext konfigurieren (wählen Sie eine Option)
+# Option A: Interaktiv (empfohlen)
+cd ~/meine-api && claude
+# Dann ausführen: /common:setup-project-context
+
+# Option B: Manuell
 nano ~/meine-api/.claude/rules/00-project-context.md
 
 # Schritt 5: Claude Code starten

@@ -303,7 +303,32 @@ ls .claude/commands/
 
 Die wichtigste Datei zum Anpassen ist Ihr Projektkontext. Sie teilt Claude die Besonderheiten IHRES Projekts mit.
 
-### Projektkontext-Datei Öffnen
+### Option A: Interaktive Einrichtung (Empfohlen)
+
+Verwenden Sie den integrierten Befehl, um Ihren Stack automatisch zu erkennen und gezielte Fragen zu beantworten:
+
+```bash
+# Claude Code starten
+claude
+
+# Einrichtungsbefehl ausführen
+/common:setup-project-context
+```
+
+Der Befehl wird:
+1. **Auto-erkennen** Ihren Tech-Stack, Framework, Datenbank und CI/CD
+2. **Fragen stellen** für fehlende Informationen (App-Typ, Domäne, Benutzer, Compliance)
+3. **Generieren** einer vollständigen `.claude/rules/00-project-context.md` Datei
+4. **Nächste Schritte vorschlagen** (auszuführende Agenten, zu vervollständigende Abschnitte)
+
+**Verfügbare Modi:**
+- `(Standard)` - Ausgewogene Erkennung + wesentliche Fragen
+- `--auto` - Maximale Auto-Erkennung, minimale Fragen
+- `--full` - Umfassender Fragebogen einschließlich Ziele und Glossar
+
+### Option B: Manuelle Konfiguration
+
+Wenn Sie manuell konfigurieren möchten, öffnen Sie die Datei direkt:
 
 ```bash
 # In Ihrem Editor öffnen (ersetzen Sie 'nano' mit 'code', 'vim', etc.)

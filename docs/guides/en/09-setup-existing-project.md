@@ -386,7 +386,21 @@ What resources are exposed? What patterns are used?
 
 ### 8.4 Documenting Context
 
-Create or update the project context file:
+You have two options to configure the project context:
+
+**Option A: Interactive Setup (Recommended)**
+
+Use the built-in command to auto-detect your stack and answer targeted questions:
+
+```bash
+/common:setup-project-context
+```
+
+The command will analyze your existing codebase, detect technologies, and ask only for missing information.
+
+**Option B: Manual Configuration**
+
+Create or update the project context file manually:
 
 ```bash
 nano .claude/rules/00-project-context.md

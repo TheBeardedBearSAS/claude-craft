@@ -386,7 +386,21 @@ Revisa los endpoints de API de este proyecto.
 
 ### 8.4 Documentar el Contexto
 
-Crea o actualiza el archivo de contexto del proyecto:
+Tienes dos opciones para configurar el contexto del proyecto:
+
+**Opción A: Configuración Interactiva (Recomendada)**
+
+Usa el comando integrado para detectar automáticamente tu stack y responder preguntas específicas:
+
+```bash
+/common:setup-project-context
+```
+
+El comando analizará tu codebase existente, detectará tecnologías y preguntará solo por la información faltante.
+
+**Opción B: Configuración Manual**
+
+Crea o actualiza el archivo de contexto del proyecto manualmente:
 
 ```bash
 nano .claude/rules/00-project-context.md

@@ -94,6 +94,19 @@ make install-python TARGET=. LANG=de
 
 ### 1. Projektkontext (`rules/00-project-context.md`)
 
+Dies ist die wichtigste Datei zum Anpassen.
+
+**Option A: Interaktive Einrichtung (Empfohlen)**
+
+Führen Sie diesen Befehl in Claude Code aus, um Ihren Stack zu erkennen und gezielte Fragen zu beantworten:
+```bash
+/common:setup-project-context
+```
+
+**Option B: Manuelle Konfiguration**
+
+Bearbeiten Sie die Datei direkt mit Ihren Projektdetails:
+
 ```markdown
 # Projektkontext
 

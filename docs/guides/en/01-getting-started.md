@@ -149,8 +149,16 @@ You should see:
 
 ### Step 4: Configure Your Project Context
 
-Edit the project context file to describe your specific project:
+You can configure the project context interactively or manually:
 
+**Option A: Interactive (Recommended)**
+```bash
+cd ~/my-api && claude
+# Then run:
+/common:setup-project-context
+```
+
+**Option B: Manual**
 ```bash
 nano ~/my-api/.claude/rules/00-project-context.md
 ```
