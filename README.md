@@ -37,7 +37,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ## Features
 
-- **9 Technology Stacks**: Symfony, Flutter, Python, React, React Native, Angular, C#/.NET, Laravel, Vue.js
+- **10 Technology Stacks**: Symfony, Flutter, Python, React, React Native, Angular, C#/.NET, Laravel, Vue.js, PHP
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
 - **25 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, and Ralph Conductor
@@ -158,6 +158,7 @@ Once installed, use the commands in your project:
 | **C#/.NET** | 7 | 6 | 1 | Clean Architecture, CQRS, Entity Framework |
 | **Laravel** | 6 | 6 | 1 | Clean Architecture, Pest PHP, Sanctum |
 | **Vue.js** | 6 | 6 | 1 | Composition API, Pinia, Vitest |
+| **PHP** | 6 | 5 | 1 | Clean Architecture, PSR-12, PHPStan, Pest |
 | **Docker** | - | 4 | 5 | Dockerfile, Compose, CI/CD, Debugging |
 
 ## Project Structure
@@ -182,7 +183,8 @@ claude-craft/
 │   │       ├── Angular/        # Angular frontend
 │   │       ├── CSharp/         # C#/.NET backend
 │   │       ├── Laravel/        # PHP/Laravel backend
-│   │       └── VueJS/          # Vue.js frontend
+│   │       ├── VueJS/          # Vue.js frontend
+│   │       └── PHP/            # PHP Clean Architecture
 │   └── scripts/                # Installation scripts
 ├── Infra/                      # Infrastructure (Docker)
 │   ├── i18n/                   # Translated agents & commands
@@ -282,6 +284,35 @@ projects:
 make config-install PROJECT=my-monorepo
 ```
 
+#### Multi-Technology Modules (v3.2+)
+
+You can specify multiple technologies for a single module. This is useful for fullstack folders or projects using multiple frameworks:
+
+```yaml
+projects:
+  - name: "fullstack-app"
+    root: "~/Projects/fullstack"
+    modules:
+      # Single technology (legacy syntax)
+      - path: "api"
+        tech: symfony
+
+      # Multiple technologies - inline array
+      - path: "frontend"
+        tech: [react, laravel]
+
+      # Multiple technologies - YAML list
+      - path: "dashboard"
+        tech:
+          - vuejs
+          - symfony
+```
+
+When multiple technologies are specified:
+- The **first technology** installs common rules (SOLID, TDD, etc.)
+- **Subsequent technologies** skip common rules to avoid duplicates
+- All tech-specific rules, commands, and agents are installed
+
 ### Method 3: Direct Script
 
 ```bash
@@ -367,6 +398,7 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 | `angular-reviewer` | Angular code review |
 | `laravel-reviewer` | Laravel code review |
 | `vuejs-reviewer` | Vue.js code review |
+| `php-reviewer` | PHP code review |
 
 ### Docker/Infrastructure Agents
 | Agent | Expertise |
@@ -391,6 +423,7 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 - `/csharp:` - C#/.NET-specific (features, architecture, CQRS)
 - `/laravel:` - Laravel-specific (controllers, Actions, Pest PHP)
 - `/vuejs:` - Vue.js-specific (components, composables, Pinia)
+- `/php:` - PHP-specific (entities, value objects, use cases, Clean Architecture)
 - `/docker:` - Docker/Infrastructure (compose, debug, pipelines, architecture)
 
 ## Documentation

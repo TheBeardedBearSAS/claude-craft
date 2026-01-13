@@ -1,0 +1,641 @@
+# PHP Coding Standards
+
+## PSR Standards Compliance
+
+### PSR-1: Basic Coding Standard
+
+```php
+<?php
+// Files MUST use only <?php tags
+// Files MUST use UTF-8 without BOM
+// Files should EITHER declare symbols OR execute logic, not both
+
+declare(strict_types=1);
+
+namespace App\Domain\Entity;
+
+// Class names MUST be declared in PascalCase
+class UserAccount
+{
+    // Class constants MUST be declared in UPPER_SNAKE_CASE
+    public const STATUS_ACTIVE = 'active';
+    public const MAX_LOGIN_ATTEMPTS = 5;
+
+    // Method names MUST be declared in camelCase
+    public function getUserById(int $id): ?User
+    {
+        // Implementation
+    }
+}
+```
+
+### PSR-12: Extended Coding Style
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Application\Service;
+
+use App\Domain\Entity\User;
+use App\Domain\Repository\UserRepositoryInterface;
+use App\Domain\ValueObject\Email;
+use Psr\Log\LoggerInterface;
+
+// Opening brace for class on new line
+final class UserService
+{
+    // Constructor property promotion (PHP 8+)
+    public function __construct(
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly LoggerInterface $logger,
+    ) {}
+
+    // Opening brace for method on new line
+    public function findByEmail(string $email): ?User
+    {
+        // 4 spaces indentation
+        return $this->userRepository->findByEmail(
+            Email::fromString($email)
+        );
+    }
+
+    // Control structure braces on same line
+    public function processUsers(array $users): void
+    {
+        if (empty($users)) {
+            return;
+        }
+
+        foreach ($users as $user) {
+            if (!$user->isActive()) {
+                continue;
+            }
+
+            $this->processUser($user);
+        }
+    }
+}
+```
+
+### PSR-4: Autoloading
+
+```json
+// composer.json
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    }
+}
+```
+
+**Namespace to file path mapping:**
+- `App\Domain\Entity\User` → `src/Domain/Entity/User.php`
+- `App\Application\Service\UserService` → `src/Application/Service/UserService.php`
+- `App\Tests\Unit\Domain\Entity\UserTest` → `tests/Unit/Domain/Entity/UserTest.php`
+
+## Modern PHP Features (PHP 8.x)
+
+### Constructor Property Promotion
+
+```php
+<?php
+// ❌ Old way
+class UserService
+{
+    private UserRepositoryInterface $repository;
+    private LoggerInterface $logger;
+
+    public function __construct(
+        UserRepositoryInterface $repository,
+        LoggerInterface $logger
+    ) {
+        $this->repository = $repository;
+        $this->logger = $logger;
+    }
+}
+
+// ✅ PHP 8+ way
+class UserService
+{
+    public function __construct(
+        private readonly UserRepositoryInterface $repository,
+        private readonly LoggerInterface $logger,
+    ) {}
+}
+```
+
+### Readonly Classes & Properties (PHP 8.1+)
+
+```php
+<?php
+// Readonly properties (PHP 8.1)
+class User
+{
+    public function __construct(
+        public readonly string $id,
+        public readonly string $email,
+    ) {}
+}
+
+// Readonly class (PHP 8.2)
+readonly class Email
+{
+    public function __construct(
+        public string $value,
+    ) {}
+}
+```
+
+### Enums (PHP 8.1+)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\Enum;
+
+// Basic enum
+enum UserStatus: string
+{
+    case PENDING = 'pending';
+    case ACTIVE = 'active';
+    case SUSPENDED = 'suspended';
+    case DELETED = 'deleted';
+
+    public function isActive(): bool
+    {
+        return $this === self::ACTIVE;
+    }
+
+    public function canLogin(): bool
+    {
+        return match ($this) {
+            self::ACTIVE => true,
+            default => false,
+        };
+    }
+}
+
+// Usage
+$status = UserStatus::ACTIVE;
+$status->value; // 'active'
+$status->name;  // 'ACTIVE'
+UserStatus::from('active'); // UserStatus::ACTIVE
+UserStatus::tryFrom('invalid'); // null
+```
+
+### Named Arguments
+
+```php
+<?php
+// ✅ Named arguments for clarity
+$user = new User(
+    id: UserId::generate(),
+    email: Email::fromString('john@example.com'),
+    name: 'John Doe',
+    status: UserStatus::PENDING,
+);
+
+// ✅ Skip optional parameters
+function createNotification(
+    string $message,
+    string $type = 'info',
+    bool $persistent = false,
+    ?string $icon = null,
+): Notification {
+    // ...
+}
+
+createNotification(
+    message: 'User created',
+    persistent: true,
+    // type and icon use defaults
+);
+```
+
+### Match Expression
+
+```php
+<?php
+// ❌ Old switch
+function getStatusLabel(UserStatus $status): string
+{
+    switch ($status) {
+        case UserStatus::PENDING:
+            return 'En attente';
+        case UserStatus::ACTIVE:
+            return 'Actif';
+        default:
+            return 'Inconnu';
+    }
+}
+
+// ✅ Match expression (PHP 8+)
+function getStatusLabel(UserStatus $status): string
+{
+    return match ($status) {
+        UserStatus::PENDING => 'En attente',
+        UserStatus::ACTIVE => 'Actif',
+        UserStatus::SUSPENDED => 'Suspendu',
+        UserStatus::DELETED => 'Supprimé',
+    };
+}
+```
+
+### Null Safe Operator
+
+```php
+<?php
+// ❌ Old way
+$country = null;
+if ($user !== null) {
+    $address = $user->getAddress();
+    if ($address !== null) {
+        $country = $address->getCountry();
+    }
+}
+
+// ✅ Null safe operator (PHP 8+)
+$country = $user?->getAddress()?->getCountry();
+```
+
+### Union & Intersection Types
+
+```php
+<?php
+// Union types (PHP 8.0)
+function process(string|int $value): string|null
+{
+    // Can accept string or int, returns string or null
+}
+
+// Intersection types (PHP 8.1)
+function handleRequest(RequestInterface&LoggableInterface $request): void
+{
+    // Must implement both interfaces
+}
+
+// DNF types (PHP 8.2)
+function handle((A&B)|C $value): void
+{
+    // (A and B) or C
+}
+```
+
+### Property Hooks (PHP 8.4)
+
+```php
+<?php
+// PHP 8.4 property hooks
+class User
+{
+    public string $email {
+        set {
+            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                throw new InvalidArgumentException('Invalid email');
+            }
+            $this->email = strtolower($value);
+        }
+        get => $this->email;
+    }
+
+    public string $fullName {
+        get => $this->firstName . ' ' . $this->lastName;
+    }
+}
+```
+
+## Type Declarations
+
+### Strict Types
+
+```php
+<?php
+// ALWAYS declare strict_types at the top of every file
+declare(strict_types=1);
+
+namespace App\Domain\Service;
+
+class PriceCalculator
+{
+    // Full type declarations
+    public function calculate(
+        float $basePrice,
+        int $quantity,
+        ?float $discount = null,
+    ): float {
+        $total = $basePrice * $quantity;
+
+        if ($discount !== null) {
+            $total -= $total * ($discount / 100);
+        }
+
+        return round($total, 2);
+    }
+}
+```
+
+### Return Types
+
+```php
+<?php
+declare(strict_types=1);
+
+class UserRepository
+{
+    // Single type
+    public function find(string $id): ?User
+    {
+        // Returns User or null
+    }
+
+    // Array with PHPDoc for generics
+    /** @return User[] */
+    public function findAll(): array
+    {
+        // Returns array of User
+    }
+
+    // Void
+    public function save(User $user): void
+    {
+        // Returns nothing
+    }
+
+    // Never (PHP 8.1) - function never returns
+    public function throwException(): never
+    {
+        throw new RuntimeException('Error');
+    }
+
+    // Self
+    public function withEmail(Email $email): self
+    {
+        $clone = clone $this;
+        $clone->email = $email;
+        return $clone;
+    }
+}
+```
+
+## Naming Conventions
+
+| Element | Convention | Example |
+|---------|-----------|---------|
+| Classes | PascalCase | `UserRepository`, `OrderService` |
+| Interfaces | PascalCase + Interface suffix | `UserRepositoryInterface` |
+| Methods | camelCase | `findById`, `calculateTotal` |
+| Variables | camelCase | `$userCount`, `$isActive` |
+| Constants | UPPER_SNAKE_CASE | `MAX_ATTEMPTS`, `DEFAULT_LOCALE` |
+| Properties | camelCase | `$createdAt`, `$emailAddress` |
+| Enums | PascalCase | `UserStatus`, `OrderState` |
+| Traits | PascalCase + Trait suffix | `TimestampableTrait` |
+
+## Documentation
+
+### PHPDoc Standards
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Application\Service;
+
+use App\Domain\Entity\User;
+use App\Domain\Exception\UserNotFoundException;
+
+/**
+ * Service for managing user operations.
+ *
+ * This service handles user creation, updates, and retrieval
+ * following domain business rules.
+ */
+final class UserService
+{
+    /**
+     * Find a user by their unique identifier.
+     *
+     * @param string $id The user's UUID
+     *
+     * @throws UserNotFoundException When user is not found
+     *
+     * @return User The found user entity
+     */
+    public function findOrFail(string $id): User
+    {
+        $user = $this->repository->find($id);
+
+        if ($user === null) {
+            throw new UserNotFoundException($id);
+        }
+
+        return $user;
+    }
+
+    /**
+     * Find all active users.
+     *
+     * @param int $limit Maximum number of users to return
+     * @param int $offset Number of users to skip
+     *
+     * @return User[] Array of active user entities
+     */
+    public function findActive(int $limit = 10, int $offset = 0): array
+    {
+        return $this->repository->findByStatus(
+            status: UserStatus::ACTIVE,
+            limit: $limit,
+            offset: $offset,
+        );
+    }
+}
+```
+
+### Generic Types with PHPStan/Psalm
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\Repository;
+
+/**
+ * @template T of object
+ */
+interface RepositoryInterface
+{
+    /**
+     * @param string $id
+     * @return T|null
+     */
+    public function find(string $id): ?object;
+
+    /**
+     * @return array<T>
+     */
+    public function findAll(): array;
+
+    /**
+     * @param T $entity
+     */
+    public function save(object $entity): void;
+}
+
+/**
+ * @implements RepositoryInterface<User>
+ */
+final class UserRepository implements RepositoryInterface
+{
+    // Implementation
+}
+```
+
+## Error Handling
+
+### Exception Hierarchy
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\Exception;
+
+// Base domain exception
+abstract class DomainException extends \Exception
+{
+}
+
+// Specific exceptions
+final class UserNotFoundException extends DomainException
+{
+    public function __construct(string $userId)
+    {
+        parent::__construct(
+            sprintf('User with ID "%s" was not found', $userId)
+        );
+    }
+}
+
+final class InvalidEmailException extends DomainException
+{
+    public function __construct(string $email)
+    {
+        parent::__construct(
+            sprintf('Email "%s" is not valid', $email)
+        );
+    }
+}
+```
+
+### Try-Catch Best Practices
+
+```php
+<?php
+// ✅ Catch specific exceptions
+try {
+    $user = $this->userService->findOrFail($id);
+} catch (UserNotFoundException $e) {
+    return new JsonResponse(['error' => 'User not found'], 404);
+} catch (DomainException $e) {
+    $this->logger->error($e->getMessage());
+    return new JsonResponse(['error' => 'An error occurred'], 400);
+}
+
+// ❌ Avoid catching generic Exception without re-throwing
+try {
+    $this->process();
+} catch (\Exception $e) {
+    // Lost the exception details
+}
+
+// ✅ If catching generic, log and re-throw or handle properly
+try {
+    $this->process();
+} catch (\Exception $e) {
+    $this->logger->critical($e->getMessage(), ['exception' => $e]);
+    throw $e;
+}
+```
+
+## Code Organization
+
+### File Structure
+
+```php
+<?php
+// One class per file
+// File name matches class name: UserService.php
+
+declare(strict_types=1);
+
+namespace App\Application\Service;
+
+// Imports ordered:
+// 1. PHP built-in classes
+use DateTimeImmutable;
+use InvalidArgumentException;
+
+// 2. Third-party packages
+use Psr\Log\LoggerInterface;
+use Doctrine\ORM\EntityManagerInterface;
+
+// 3. Application classes (alphabetical)
+use App\Domain\Entity\User;
+use App\Domain\Repository\UserRepositoryInterface;
+use App\Domain\ValueObject\Email;
+
+final class UserService
+{
+    // Class implementation
+}
+```
+
+### Final Classes by Default
+
+```php
+<?php
+// ✅ Use final by default - composition over inheritance
+final class UserService
+{
+    // Cannot be extended
+}
+
+// ✅ Use abstract when extension is intended
+abstract class AbstractRepository
+{
+    // Meant to be extended
+}
+
+// ✅ Use interfaces for contracts
+interface UserRepositoryInterface
+{
+    public function find(string $id): ?User;
+}
+```
+
+## Coding Standards Checklist
+
+- [ ] `declare(strict_types=1)` at top of every file
+- [ ] PSR-12 formatting applied
+- [ ] PSR-4 autoloading configured
+- [ ] All methods have return type declarations
+- [ ] All parameters have type declarations
+- [ ] Properties use readonly where appropriate
+- [ ] Enums used instead of class constants for states
+- [ ] PHPDoc for complex methods and generics
+- [ ] Final classes by default
+- [ ] Specific exceptions for domain errors
+- [ ] Named arguments for clarity on complex calls

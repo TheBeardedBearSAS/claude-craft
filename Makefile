@@ -12,7 +12,7 @@
 #===============================================================================
 
 .PHONY: help install-all install-common install-symfony install-flutter \
-        install-python install-react install-reactnative install-angular install-csharp install-laravel install-vuejs install-project install-infra \
+        install-python install-react install-reactnative install-angular install-csharp install-laravel install-vuejs install-php install-project install-infra \
         install-tools install-statusline install-multiaccount install-projectconfig \
         install-web install-fullstack-js install-mobile install-backend \
         list list-agents list-commands dry-run clean \
@@ -101,6 +101,7 @@ install-all: ## Installe TOUTES les règles (common + toutes technos)
 	@$(MAKE) install-csharp TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
 	@$(MAKE) install-laravel TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
 	@$(MAKE) install-vuejs TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
+	@$(MAKE) install-php TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
 	@echo "$(GREEN)✅ Installation complète terminée !$(NC)"
 
 #===============================================================================
@@ -194,6 +195,15 @@ install-vuejs: ## Installe les règles Vue.js
 		$(SCRIPTS_DIR)/install-vuejs-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
 	else \
 		echo "$(RED)❌ Script non trouvé: Dev/scripts/install-vuejs-rules.sh$(NC)"; \
+		exit 1; \
+	fi
+
+install-php: ## Installe les règles PHP
+	@echo "$(CYAN)📦 Installation des règles PHP (lang=$(RULES_LANG))...$(NC)"
+	@if [ -f "$(SCRIPTS_DIR)/install-php-rules.sh" ]; then \
+		$(SCRIPTS_DIR)/install-php-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	else \
+		echo "$(RED)❌ Script non trouvé: Dev/scripts/install-php-rules.sh$(NC)"; \
 		exit 1; \
 	fi
 
@@ -338,6 +348,9 @@ dry-run-react: ## Simule l'installation React
 
 dry-run-reactnative: ## Simule l'installation React Native
 	@$(MAKE) install-reactnative TARGET=$(TARGET) OPTIONS="--dry-run"
+
+dry-run-php: ## Simule l'installation PHP
+	@$(MAKE) install-php TARGET=$(TARGET) OPTIONS="--dry-run"
 
 dry-run-infra: ## Simule l'installation Docker/Infrastructure
 	@$(MAKE) install-infra TARGET=$(TARGET) OPTIONS="--dry-run"
