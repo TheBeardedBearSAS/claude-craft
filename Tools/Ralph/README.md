@@ -256,12 +256,27 @@ checkpointing:
   commit_message_template: "checkpoint: Ralph iteration {iteration}"
 ```
 
+## Reliability (v1.1.0)
+
+Ralph v1.1.0 includes 59 reliability improvements for robust long-running sprints:
+
+| Category | Fixes | Description |
+|----------|-------|-------------|
+| **Atomic Operations** | 12 | Temp-file-then-move pattern prevents file corruption |
+| **File Locking** | 8 | mkdir-based locks for safe concurrent access |
+| **Error Handling** | 15 | jq operations with fallback values |
+| **Validation** | 10 | Numeric parameters, config values |
+| **Module Guards** | 6 | Defensive checks for module dependencies |
+| **Idempotence** | 5 | Safe to call functions multiple times |
+| **Portable Random** | 3 | Fallback if xxd not installed |
+
 ## File Structure
 
 ```
 Tools/Ralph/
 ├── ralph.sh                        # Main entry point
 ├── lib/
+│   ├── utils.sh                    # Shared helper functions (locking, atomic ops)
 │   ├── session.sh                  # Session management
 │   ├── loop.sh                     # Core iteration loop
 │   ├── dod-validator.sh            # DoD validation
@@ -376,7 +391,9 @@ Ralph creates a `.ralph/` directory in your project:
 
 ## Credits
 
-Inspired by:
-- [anthropics/claude-code/plugins/ralph-wiggum](https://github.com/anthropics/claude-code)
+The "Ralph Wiggum" technique was created by Geoffrey Huntley. This implementation is inspired by:
+
+- [ghuntley/how-to-ralph-wiggum](https://github.com/ghuntley/how-to-ralph-wiggum) - Original technique by Geoffrey Huntley
+- [anthropics/claude-code/plugins/ralph-wiggum](https://github.com/anthropics/claude-code) - Official Claude Code plugin
 - [frankbria/ralph-claude-code](https://github.com/frankbria/ralph-claude-code)
 - [mikeyobrien/ralph-orchestrator](https://github.com/mikeyobrien/ralph-orchestrator)

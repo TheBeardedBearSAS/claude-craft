@@ -2,6 +2,15 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
+## What's New in v3.3
+
+- **Ralph Reliability**: 59 fixes for robust long-running sprints (2h+)
+- **Auto-Compact**: Automatic context limit detection and session compaction
+- **Strategic Compact**: Compact at natural workflow boundaries (task complete, sprint start)
+- **Atomic Operations**: Temp-file-then-move pattern prevents file corruption
+- **File Locking**: Safe concurrent access with portable mkdir-based locks
+- **New `utils.sh` Module**: Shared helper functions for all Ralph modules
+
 ## What's New in v3.2
 
 - **4 New Technology Stacks**: Angular, C#/.NET, Laravel, Vue.js
