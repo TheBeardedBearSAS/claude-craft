@@ -200,14 +200,27 @@ detect_errors() {
 
 get_loop_state() {
     local session_id="$1"
-    local state=$(get_session_state "$session_id")
+    local state
+    state=$(get_session_state "$session_id")
 
-    echo "$state" | jq '{
-        iteration: .current_iteration,
-        status: .status,
-        circuit_breaker: .circuit_breaker,
-        dod_results: .dod_results
-    }'
+    if [[ -z "$state" || "$state" == "{}" ]]; then
+        echo '{"iteration":0,"status":"unknown","circuit_breaker":{},"dod_results":[]}'
+        return
+    fi
+
+    local result
+    result=$(echo "$state" | jq '{
+        iteration: (.current_iteration // 0),
+        status: (.status // "unknown"),
+        circuit_breaker: (.circuit_breaker // {}),
+        dod_results: (.dod_results // [])
+    }' 2>/dev/null)
+
+    if [[ -n "$result" ]]; then
+        echo "$result"
+    else
+        echo '{"iteration":0,"status":"unknown","circuit_breaker":{},"dod_results":[]}'
+    fi
 }
 
 should_continue_loop() {
@@ -225,8 +238,15 @@ should_continue_loop() {
         return 1
     fi
 
-    # Check session status
-    local status=$(get_session_state "$session_id" | jq -r '.status')
+    # Check session status (with error handling)
+    local state
+    state=$(get_session_state "$session_id")
+
+    local status="running"  # Default to continue
+    if [[ -n "$state" && "$state" != "{}" ]]; then
+        status=$(echo "$state" | jq -r '.status // "running"' 2>/dev/null) || status="running"
+    fi
+
     if [[ "$status" == "completed" || "$status" == "failed" ]]; then
         return 1
     fi

@@ -29,16 +29,25 @@ init_circuit_breaker() {
     CB_TRIGGERED=false
     CB_TRIGGER_REASON=""
 
-    # Load thresholds from config if available
+    # Load thresholds from config if available (with validation)
     if [[ -n "$CONFIG_FILE" && -f "$CONFIG_FILE" ]] && command -v yq &> /dev/null; then
-        local no_changes=$(yq e '.circuit_breaker.no_file_changes_threshold // ""' "$CONFIG_FILE" 2>/dev/null)
-        [[ -n "$no_changes" ]] && CB_NO_CHANGES_THRESHOLD=$no_changes
+        local no_changes
+        no_changes=$(yq e '.circuit_breaker.no_file_changes_threshold // ""' "$CONFIG_FILE" 2>/dev/null)
+        if [[ -n "$no_changes" && "$no_changes" =~ ^[0-9]+$ ]]; then
+            CB_NO_CHANGES_THRESHOLD=$no_changes
+        fi
 
-        local errors=$(yq e '.circuit_breaker.repeated_error_threshold // ""' "$CONFIG_FILE" 2>/dev/null)
-        [[ -n "$errors" ]] && CB_REPEATED_ERROR_THRESHOLD=$errors
+        local errors
+        errors=$(yq e '.circuit_breaker.repeated_error_threshold // ""' "$CONFIG_FILE" 2>/dev/null)
+        if [[ -n "$errors" && "$errors" =~ ^[0-9]+$ ]]; then
+            CB_REPEATED_ERROR_THRESHOLD=$errors
+        fi
 
-        local decline=$(yq e '.circuit_breaker.output_decline_threshold // ""' "$CONFIG_FILE" 2>/dev/null)
-        [[ -n "$decline" ]] && CB_OUTPUT_DECLINE_THRESHOLD=$decline
+        local decline
+        decline=$(yq e '.circuit_breaker.output_decline_threshold // ""' "$CONFIG_FILE" 2>/dev/null)
+        if [[ -n "$decline" && "$decline" =~ ^[0-9]+$ ]]; then
+            CB_OUTPUT_DECLINE_THRESHOLD=$decline
+        fi
     fi
 
     print_verbose "Circuit breaker initialized:"

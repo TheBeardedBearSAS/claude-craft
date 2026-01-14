@@ -20,9 +20,13 @@ CONTEXT_MAX_CONTINUATION_SESSIONS="${CONTEXT_MAX_CONTINUATION_SESSIONS:-5}"  # M
 # Note: Strategic compacts (sprint start, task complete) are preferred over % threshold
 # The 90% threshold acts as a safety net if strategic compacts miss the window
 
+# External command (default to 'claude' if not set)
+CLAUDE_COMMAND="${CLAUDE_COMMAND:-claude}"
+
 # Context state
 CONTEXT_COMPACT_COUNT=0
 CONTEXT_CONTINUATION_COUNT=0
+CONTEXT_CONTINUATION_PROMPT=""
 
 # =============================================================================
 # Context Limit Detection
@@ -133,18 +137,23 @@ run_auto_compact() {
     log_session "$session_id" "INFO" "Running auto-compact #$CONTEXT_COMPACT_COUNT"
 
     # Save sprint progress before compact (critical for context reconstruction)
+    # Guard: check module availability before calling
     if type save_sprint_progress &>/dev/null; then
-        save_sprint_progress "$session_id"
+        if ! save_sprint_progress "$session_id"; then
+            print_warning "Failed to save sprint progress before compact"
+        fi
+    else
+        print_verbose "sprint-progress module not loaded, skipping save"
     fi
 
     # Update sprint progress compact count
     if type update_sprint_progress &>/dev/null; then
-        update_sprint_progress "compact"
+        update_sprint_progress "compact" || print_verbose "Failed to update compact count"
     fi
 
     # Create checkpoint before compact (safety)
     if type create_checkpoint &>/dev/null; then
-        create_checkpoint "$session_id" "pre-compact-$CONTEXT_COMPACT_COUNT"
+        create_checkpoint "$session_id" "pre-compact-$CONTEXT_COMPACT_COUNT" || print_verbose "Failed to create checkpoint"
     fi
 
     # Execute /compact via Claude CLI
@@ -154,6 +163,13 @@ run_auto_compact() {
     if command -v timeout &> /dev/null; then
         compact_output=$(timeout 60s $CLAUDE_COMMAND --continue -p "/compact" 2>&1)
         compact_status=$?
+
+        # Handle timeout specifically (exit code 124)
+        if [[ $compact_status -eq 124 ]]; then
+            print_error "${MSG_CONTEXT_COMPACT_FAILED:-Auto-compact timed out after 60s}"
+            log_session "$session_id" "ERROR" "Auto-compact timed out after 60s"
+            return 1
+        fi
     else
         compact_output=$($CLAUDE_COMMAND --continue -p "/compact" 2>&1)
         compact_status=$?
@@ -163,10 +179,11 @@ run_auto_compact() {
         print_success "${MSG_CONTEXT_COMPACTED:-Context compacted successfully}"
         log_session "$session_id" "INFO" "Auto-compact successful"
 
-        # Update session state
-        if [[ -n "$SESSION_ID" ]]; then
-            update_session_state "$SESSION_ID" "context.compact_count" "$CONTEXT_COMPACT_COUNT"
-            update_session_state "$SESSION_ID" "context.last_compact_at" "$(date -Iseconds)"
+        # Update session state (use passed session_id, fall back to global SESSION_ID)
+        local effective_session_id="${session_id:-${SESSION_ID:-}}"
+        if [[ -n "$effective_session_id" ]] && type update_session_state &>/dev/null; then
+            update_session_state "$effective_session_id" "context.compact_count" "$CONTEXT_COMPACT_COUNT" || true
+            update_session_state "$effective_session_id" "context.last_compact_at" "$(date -Iseconds)" || true
         fi
 
         # Generate continuation prompt with smart reconstruction
@@ -245,19 +262,23 @@ handle_max_compacts_reached() {
 
             print_info "${MSG_CONTEXT_NEW_SESSION:-Creating continuation session}..."
 
-            # Save sprint progress before handoff
+            # Save sprint progress before handoff (with error handling)
             if type save_sprint_progress &>/dev/null; then
-                save_sprint_progress "$session_id"
+                if ! save_sprint_progress "$session_id"; then
+                    print_warning "Failed to save sprint progress before session handoff"
+                fi
+            else
+                print_verbose "sprint-progress module not loaded"
             fi
 
             # Update context reset count in sprint progress
             if type update_sprint_progress &>/dev/null; then
-                update_sprint_progress "context_reset"
+                update_sprint_progress "context_reset" || print_verbose "Failed to update context reset count"
             fi
 
             # Create final checkpoint
             if type create_checkpoint &>/dev/null; then
-                create_checkpoint "$session_id" "session-handoff"
+                create_checkpoint "$session_id" "session-handoff" || print_warning "Failed to create handoff checkpoint"
             fi
 
             # Create continuation session
@@ -301,29 +322,45 @@ handle_max_compacts_reached() {
 create_continuation_session() {
     local previous_session="$1"
 
-    # Generate new session ID
+    # Generate new session ID with portable random suffix generation
     local timestamp=$(date +%Y%m%d_%H%M%S)
-    local random_suffix=$(head -c 4 /dev/urandom | xxd -p)
+    local random_suffix
+
+    # Use utils function if available, otherwise fallback
+    if type generate_random_suffix &>/dev/null; then
+        random_suffix=$(generate_random_suffix 4)
+    elif command -v xxd &>/dev/null; then
+        random_suffix=$(head -c 4 /dev/urandom | xxd -p)
+    elif command -v od &>/dev/null; then
+        random_suffix=$(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n')
+    else
+        # Fallback: use $RANDOM (less entropy but portable)
+        random_suffix=$(printf '%04x%04x' $RANDOM $RANDOM | head -c 8)
+    fi
+
     local new_session_id="ralph-cont-${timestamp}-${random_suffix}"
 
     # Create session directory if create_session is available
     if type create_session &>/dev/null; then
-        create_session "$new_session_id" 2>/dev/null
+        if ! create_session "$new_session_id" 2>/dev/null; then
+            print_warning "Failed to create session directory for $new_session_id"
+        fi
     fi
 
-    # Link sessions in state files
+    # Link sessions in state files (with error handling)
     if type update_session_state &>/dev/null; then
-        update_session_state "$new_session_id" "previous_session" "$previous_session"
-        update_session_state "$previous_session" "next_session" "$new_session_id"
+        update_session_state "$new_session_id" "previous_session" "$previous_session" || true
+        update_session_state "$previous_session" "next_session" "$new_session_id" || true
     fi
 
     # Link to sprint progress
     if type link_session_to_progress &>/dev/null; then
-        link_session_to_progress "$new_session_id"
+        link_session_to_progress "$new_session_id" || print_verbose "Failed to link session to progress"
     fi
 
     # Reset context manager for new session
     CONTEXT_COMPACT_COUNT=0
+    CONTEXT_CONTINUATION_COUNT=$((CONTEXT_CONTINUATION_COUNT))  # Keep continuation count
 
     echo "$new_session_id"
 }

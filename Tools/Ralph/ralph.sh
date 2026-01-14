@@ -155,8 +155,11 @@ check_dependencies() {
 # =============================================================================
 
 load_modules() {
-    # Order matters: sprint-progress and context-reconstruction must be loaded before context-manager
+    # Order matters:
+    # 1. utils must be loaded first (shared helper functions)
+    # 2. sprint-progress and context-reconstruction must be loaded before context-manager
     local modules=(
+        "utils"
         "session"
         "loop"
         "dod-validator"
@@ -174,7 +177,10 @@ load_modules() {
             source "$module_file"
             print_verbose "Loaded module: $module"
         else
-            print_warning "Module not found: $module_file"
+            # utils is optional for backwards compatibility
+            if [[ "$module" != "utils" ]]; then
+                print_warning "Module not found: $module_file"
+            fi
         fi
     done
 }
@@ -199,15 +205,36 @@ load_config() {
 
             # Parse YAML config if yq is available
             if command -v yq &> /dev/null; then
-                # Session settings
-                local max_iter=$(yq e '.session.max_iterations // ""' "$path" 2>/dev/null)
-                [[ -n "$max_iter" ]] && MAX_ITERATIONS=$max_iter
+                # Session settings with validation
+                local max_iter
+                max_iter=$(yq e '.session.max_iterations // ""' "$path" 2>/dev/null)
+                if [[ -n "$max_iter" ]]; then
+                    if [[ "$max_iter" =~ ^[1-9][0-9]*$ ]]; then
+                        MAX_ITERATIONS=$max_iter
+                    else
+                        print_warning "Invalid max_iterations in config: '$max_iter' (using default: $MAX_ITERATIONS)"
+                    fi
+                fi
 
-                local timeout=$(yq e '.session.timeout // ""' "$path" 2>/dev/null)
-                [[ -n "$timeout" ]] && TIMEOUT=$timeout
+                local timeout
+                timeout=$(yq e '.session.timeout // ""' "$path" 2>/dev/null)
+                if [[ -n "$timeout" ]]; then
+                    if [[ "$timeout" =~ ^[0-9]+$ ]]; then
+                        TIMEOUT=$timeout
+                    else
+                        print_warning "Invalid timeout in config: '$timeout' (using default: $TIMEOUT)"
+                    fi
+                fi
 
-                local delay=$(yq e '.session.delay_between_iterations // ""' "$path" 2>/dev/null)
-                [[ -n "$delay" ]] && DELAY=$delay
+                local delay
+                delay=$(yq e '.session.delay_between_iterations // ""' "$path" 2>/dev/null)
+                if [[ -n "$delay" ]]; then
+                    if [[ "$delay" =~ ^[0-9]+$ ]]; then
+                        DELAY=$delay
+                    else
+                        print_warning "Invalid delay_between_iterations in config: '$delay' (using default: $DELAY)"
+                    fi
+                fi
 
                 # Circuit breaker settings are loaded in circuit-breaker.sh
                 # DoD settings are loaded in dod-validator.sh
@@ -286,13 +313,28 @@ parse_args() {
                 CONTINUE_SESSION="${1#--continue=}"
                 ;;
             --max-iterations=*)
-                MAX_ITERATIONS="${1#--max-iterations=}"
+                local value="${1#--max-iterations=}"
+                if ! [[ "$value" =~ ^[1-9][0-9]*$ ]]; then
+                    echo -e "${C_RED}Error: --max-iterations must be a positive integer, got: '$value'${C_RESET}" >&2
+                    exit 1
+                fi
+                MAX_ITERATIONS="$value"
                 ;;
             --timeout=*)
-                TIMEOUT="${1#--timeout=}"
+                local value="${1#--timeout=}"
+                if ! [[ "$value" =~ ^[0-9]+$ ]]; then
+                    echo -e "${C_RED}Error: --timeout must be a non-negative integer, got: '$value'${C_RESET}" >&2
+                    exit 1
+                fi
+                TIMEOUT="$value"
                 ;;
             --delay=*)
-                DELAY="${1#--delay=}"
+                local value="${1#--delay=}"
+                if ! [[ "$value" =~ ^[0-9]+$ ]]; then
+                    echo -e "${C_RED}Error: --delay must be a non-negative integer, got: '$value'${C_RESET}" >&2
+                    exit 1
+                fi
+                DELAY="$value"
                 ;;
             --verbose)
                 VERBOSE=true

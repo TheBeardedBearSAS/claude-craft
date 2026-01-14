@@ -14,7 +14,20 @@ RALPH_SESSION_BASE="${RALPH_SESSION_BASE:-$PWD/.ralph}"
 generate_session_id() {
     # Generate a unique session ID using timestamp and random string
     local timestamp=$(date +%s)
-    local random=$(head -c 4 /dev/urandom | xxd -p)
+    local random
+
+    # Use utils function if available, otherwise fallback chain
+    if type generate_random_suffix &>/dev/null; then
+        random=$(generate_random_suffix 4)
+    elif command -v xxd &>/dev/null; then
+        random=$(head -c 4 /dev/urandom | xxd -p)
+    elif command -v od &>/dev/null; then
+        random=$(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n')
+    else
+        # Fallback: use $RANDOM (less entropy but portable)
+        random=$(printf '%04x%04x' $RANDOM $RANDOM | head -c 8)
+    fi
+
     echo "ralph-${timestamp}-${random}"
 }
 
@@ -76,12 +89,18 @@ resume_session() {
         return 1
     fi
 
-    # Update status to running
-    local tmp_file=$(mktemp)
-    jq '.status = "running" | .resumed_at = "'"$(date -Iseconds)"'"' "$state_file" > "$tmp_file"
-    mv "$tmp_file" "$state_file"
+    # Update status to running (with error handling)
+    local tmp_file="${state_file}.tmp.$$"
+    local resumed_at
+    resumed_at=$(date -Iseconds)
 
-    return 0
+    if jq --arg resumed "$resumed_at" '.status = "running" | .resumed_at = $resumed' "$state_file" > "$tmp_file" 2>/dev/null; then
+        mv "$tmp_file" "$state_file"
+        return 0
+    else
+        rm -f "$tmp_file"
+        return 1
+    fi
 }
 
 # =============================================================================
@@ -107,10 +126,23 @@ update_session_state() {
     local session_dir="$RALPH_SESSION_BASE/sessions/$session_id"
     local state_file="$session_dir/state.json"
 
-    if [[ -f "$state_file" ]]; then
-        local tmp_file=$(mktemp)
-        jq ".$field = $value" "$state_file" > "$tmp_file"
+    if [[ ! -f "$state_file" ]]; then
+        return 1
+    fi
+
+    local tmp_file="${state_file}.tmp.$$"
+
+    # Use --argjson for numeric values, --arg for strings
+    # Try as JSON first (numbers, booleans, objects), fall back to string
+    if jq --argjson val "$value" ".$field = \$val" "$state_file" > "$tmp_file" 2>/dev/null; then
         mv "$tmp_file" "$state_file"
+        return 0
+    elif jq --arg val "$value" ".$field = \$val" "$state_file" > "$tmp_file" 2>/dev/null; then
+        mv "$tmp_file" "$state_file"
+        return 0
+    else
+        rm -f "$tmp_file"
+        return 1
     fi
 }
 
@@ -132,27 +164,40 @@ update_session_metrics() {
 
     # Calculate metrics
     local output_length=${#output}
-    local timestamp=$(date -Iseconds)
+    local timestamp
+    timestamp=$(date -Iseconds)
 
-    # Update state file
-    local tmp_file=$(mktemp)
-    jq --argjson iter "$iteration" --argjson len "$output_length" '
+    # Update state file (with error handling)
+    local tmp_file="${state_file}.tmp.$$"
+    if jq --argjson iter "$iteration" --argjson len "$output_length" '
         .current_iteration = $iter |
         .metrics.total_iterations = $iter |
         .metrics.peak_output_length = (if $len > .metrics.peak_output_length then $len else .metrics.peak_output_length end)
-    ' "$state_file" > "$tmp_file"
-    mv "$tmp_file" "$state_file"
+    ' "$state_file" > "$tmp_file" 2>/dev/null; then
+        mv "$tmp_file" "$state_file"
+    else
+        rm -f "$tmp_file"
+        # Continue to metrics update even if state update fails
+    fi
 
-    # Append to metrics history
-    local metric_entry=$(jq -n \
-        --arg ts "$timestamp" \
-        --argjson iter "$iteration" \
-        --argjson len "$output_length" \
-        '{timestamp: $ts, iteration: $iter, output_length: $len}')
+    # Append to metrics history (if file exists)
+    if [[ -f "$metrics_file" ]]; then
+        local metric_entry
+        metric_entry=$(jq -n \
+            --arg ts "$timestamp" \
+            --argjson iter "$iteration" \
+            --argjson len "$output_length" \
+            '{timestamp: $ts, iteration: $iter, output_length: $len}' 2>/dev/null)
 
-    tmp_file=$(mktemp)
-    jq ". + [$metric_entry]" "$metrics_file" > "$tmp_file"
-    mv "$tmp_file" "$metrics_file"
+        if [[ -n "$metric_entry" ]]; then
+            tmp_file="${metrics_file}.tmp.$$"
+            if jq --argjson entry "$metric_entry" '. + [$entry]' "$metrics_file" > "$tmp_file" 2>/dev/null; then
+                mv "$tmp_file" "$metrics_file"
+            else
+                rm -f "$tmp_file"
+            fi
+        fi
+    fi
 }
 
 # =============================================================================
@@ -165,14 +210,24 @@ save_session() {
     local session_dir="$RALPH_SESSION_BASE/sessions/$session_id"
     local state_file="$session_dir/state.json"
 
-    if [[ -f "$state_file" ]]; then
-        local tmp_file=$(mktemp)
-        jq --arg reason "$exit_reason" '
-            .status = "completed" |
-            .exit_reason = $reason |
-            .completed_at = "'"$(date -Iseconds)"'"
-        ' "$state_file" > "$tmp_file"
+    if [[ ! -f "$state_file" ]]; then
+        return 1
+    fi
+
+    local tmp_file="${state_file}.tmp.$$"
+    local completed_at
+    completed_at=$(date -Iseconds)
+
+    if jq --arg reason "$exit_reason" --arg completed "$completed_at" '
+        .status = "completed" |
+        .exit_reason = $reason |
+        .completed_at = $completed
+    ' "$state_file" > "$tmp_file" 2>/dev/null; then
         mv "$tmp_file" "$state_file"
+        return 0
+    else
+        rm -f "$tmp_file"
+        return 1
     fi
 }
 

@@ -297,10 +297,23 @@ store_dod_results() {
     local session_dir="$RALPH_SESSION_BASE/sessions/$session_id"
     local state_file="$session_dir/state.json"
 
-    if [[ -f "$state_file" ]]; then
-        local tmp_file=$(mktemp)
-        echo "$results" | jq -s '.' > "$session_dir/dod_results.json"
-        jq --slurpfile results "$session_dir/dod_results.json" '.dod_results = $results[0]' "$state_file" > "$tmp_file"
+    if [[ ! -f "$state_file" ]]; then
+        return 1
+    fi
+
+    # Store results to separate JSON file
+    local results_file="$session_dir/dod_results.json"
+    if ! echo "$results" | jq -s '.' > "$results_file" 2>/dev/null; then
+        return 1
+    fi
+
+    # Update state file (with error handling and atomic operation)
+    local tmp_file="${state_file}.tmp.$$"
+    if jq --slurpfile results "$results_file" '.dod_results = $results[0]' "$state_file" > "$tmp_file" 2>/dev/null; then
         mv "$tmp_file" "$state_file"
+        return 0
+    else
+        rm -f "$tmp_file"
+        return 1
     fi
 }

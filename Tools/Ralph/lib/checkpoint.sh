@@ -121,7 +121,12 @@ _create_checkpoint_async() {
     local commit_msg="$3"
 
     # Create a lock file to prevent concurrent checkpoints
-    local lock_file="/tmp/ralph-checkpoint-$session_id.lock"
+    # Use session directory instead of /tmp (per CLAUDE.md restrictions)
+    local session_dir="${RALPH_SESSION_BASE:-$PWD/.ralph}/sessions/$session_id"
+    local lock_file="$session_dir/checkpoint.lock"
+
+    # Ensure session directory exists
+    mkdir -p "$session_dir" 2>/dev/null
 
     # Try to acquire lock
     if ! mkdir "$lock_file" 2>/dev/null; then
@@ -130,24 +135,25 @@ _create_checkpoint_async() {
     fi
 
     # Cleanup function
-    cleanup() {
-        rmdir "$lock_file" 2>/dev/null
+    _checkpoint_cleanup() {
+        rmdir "$lock_file" 2>/dev/null || true
     }
-    trap cleanup EXIT
 
     # Stage all changes
     git add -A 2>/dev/null
 
-    # Create commit
-    git commit -m "$commit_msg" 2>/dev/null
+    # Create commit and capture result
+    local commit_result=0
+    git commit -m "$commit_msg" 2>/dev/null || commit_result=$?
 
     # Log result
-    if [[ $? -eq 0 ]]; then
-        local commit_hash=$(git rev-parse --short HEAD 2>/dev/null)
+    if [[ $commit_result -eq 0 ]]; then
+        local commit_hash
+        commit_hash=$(git rev-parse --short HEAD 2>/dev/null)
         log_session "$session_id" "INFO" "Async checkpoint created: $commit_hash"
     fi
 
-    cleanup
+    _checkpoint_cleanup
 }
 
 # =============================================================================

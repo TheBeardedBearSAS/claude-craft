@@ -87,9 +87,19 @@ build_git_section() {
         return
     fi
 
-    # Get summary of changes
-    echo "### Modified Files (last 5 commits)"
-    git diff --stat HEAD~5 2>/dev/null | tail -15 || echo "No recent changes"
+    # Get summary of changes - check commit count first
+    echo "### Modified Files (recent commits)"
+    local commit_count
+    commit_count=$(git rev-list --count HEAD 2>/dev/null || echo "0")
+
+    if [[ "$commit_count" -ge 5 ]]; then
+        git diff --stat HEAD~5 2>/dev/null | tail -15 || echo "No recent changes"
+    elif [[ "$commit_count" -gt 0 ]]; then
+        # Show diff from initial commit if less than 5 commits
+        git diff --stat "$(git rev-list --max-parents=0 HEAD 2>/dev/null)" 2>/dev/null | tail -15 || echo "No recent changes"
+    else
+        echo "No commits yet"
+    fi
 
     echo ""
     echo "### Recent Commits"
@@ -97,7 +107,8 @@ build_git_section() {
 
     echo ""
     echo "### Uncommitted Changes"
-    local status=$(git status --porcelain 2>/dev/null | head -10)
+    local status
+    status=$(git status --porcelain 2>/dev/null | head -10)
     if [[ -n "$status" ]]; then
         echo "\`\`\`"
         echo "$status"
@@ -111,28 +122,41 @@ build_test_section() {
     echo "## Test Status"
     echo ""
 
-    # Try to detect test framework and run quick check
-    local test_status=""
+    # Try to detect test framework
+    local framework_detected=false
 
-    # Check for common test runners
+    # Check for common test runners (using ls for glob patterns)
     if [[ -f "package.json" ]] && grep -q '"test"' package.json 2>/dev/null; then
-        # Node.js project - check if tests exist
         echo "- Framework: Node.js (npm test)"
-        # Don't actually run tests, just note they exist
+        framework_detected=true
     elif [[ -f "composer.json" ]] && grep -q 'phpunit' composer.json 2>/dev/null; then
         echo "- Framework: PHP (PHPUnit)"
-    elif [[ -f "*.csproj" ]] 2>/dev/null || [[ -f "*.sln" ]] 2>/dev/null; then
+        framework_detected=true
+    elif ls ./*.csproj >/dev/null 2>&1 || ls ./*.sln >/dev/null 2>&1 || ls ./**/*.csproj >/dev/null 2>&1; then
+        # .NET project detection (correct glob expansion)
         echo "- Framework: .NET (dotnet test)"
-    elif [[ -f "requirements.txt" ]] || [[ -f "pyproject.toml" ]]; then
+        framework_detected=true
+    elif [[ -f "requirements.txt" ]] || [[ -f "pyproject.toml" ]] || [[ -f "setup.py" ]]; then
         echo "- Framework: Python (pytest/unittest)"
-    else
+        framework_detected=true
+    elif [[ -f "Cargo.toml" ]]; then
+        echo "- Framework: Rust (cargo test)"
+        framework_detected=true
+    elif [[ -f "go.mod" ]]; then
+        echo "- Framework: Go (go test)"
+        framework_detected=true
+    fi
+
+    if [[ "$framework_detected" == "false" ]]; then
         echo "- Framework: Unknown"
     fi
 
     # Check sprint progress for recorded test status
     if [[ -f "$SPRINT_PROGRESS_FILE" ]]; then
-        local unit_status=$(grep -oP 'Unit: \K.*' "$SPRINT_PROGRESS_FILE" 2>/dev/null || echo "unknown")
-        local integration_status=$(grep -oP 'Integration: \K.*' "$SPRINT_PROGRESS_FILE" 2>/dev/null || echo "unknown")
+        local unit_status
+        unit_status=$(grep -oP 'Unit: \K.*' "$SPRINT_PROGRESS_FILE" 2>/dev/null || echo "unknown")
+        local integration_status
+        integration_status=$(grep -oP 'Integration: \K.*' "$SPRINT_PROGRESS_FILE" 2>/dev/null || echo "unknown")
         echo "- Unit Tests: $unit_status"
         echo "- Integration Tests: $integration_status"
     fi
