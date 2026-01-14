@@ -7,7 +7,7 @@
 set -e
 
 # Version
-RALPH_VERSION="1.0.0"
+RALPH_VERSION="1.1.0"
 
 # Script paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
