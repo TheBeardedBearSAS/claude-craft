@@ -378,6 +378,7 @@ copy_directory() {
     local src_dir="$1"
     local dest_dir="$2"
     local pattern="${3:-*}"
+    local exclude="${4:-}"  # Optional: filename to exclude
 
     if [[ ! -d "$src_dir" ]]; then
         log_error "${MSG_ERR_DIR_NOT_FOUND} $src_dir"
@@ -387,6 +388,12 @@ copy_directory() {
 
     # Process files
     while IFS= read -r -d '' file; do
+        local filename
+        filename=$(basename "$file")
+        # Skip excluded files
+        if [[ -n "$exclude" && "$filename" == "$exclude" ]]; then
+            continue
+        fi
         local relative_path="${file#$src_dir/}"
         local dest_file="$dest_dir/$relative_path"
         copy_file "$file" "$dest_file"
@@ -447,7 +454,8 @@ install_commands() {
     local dest_commands="$target_dir/.claude/commands/common"
 
     if [[ -d "$src_commands" ]]; then
-        copy_directory "$src_commands" "$dest_commands" "*.md"
+        # Exclude add-technology.md (claude-craft internal command)
+        copy_directory "$src_commands" "$dest_commands" "*.md" "add-technology.md"
     else
         log_warning "${MSG_COMMANDS_NOT_FOUND} $src_commands"
     fi
@@ -544,6 +552,10 @@ install_claude_md() {
         while IFS= read -r cmd_file; do
             local cmd_name
             cmd_name=$(basename "$cmd_file" .md)
+            # Exclude add-technology (claude-craft internal command)
+            if [[ "$cmd_name" == "add-technology" ]]; then
+                continue
+            fi
             local cmd_desc
             cmd_desc=$(grep -m1 "^description:" "$cmd_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60)
             if [[ -n "$cmd_desc" ]]; then
