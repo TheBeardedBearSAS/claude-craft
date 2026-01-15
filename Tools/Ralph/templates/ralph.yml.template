@@ -59,7 +59,8 @@ context:
   auto_compact: true
 
   # Maximum number of compacts per session (safety limit)
-  max_compacts: 3
+  # Increased to 5 to allow longer sprints without interruption
+  max_compacts: 5
 
   # Strategy when max_compacts is reached:
   # - "new_session": Create continuation session (recommended for long sprints)
@@ -69,8 +70,14 @@ context:
 
   # Preventive compaction threshold (percentage 0-100)
   # Acts as FALLBACK safety net - strategic compacts (see sprint section) are preferred
-  # Set to 90% so it only triggers if strategic compacts miss the window
-  preventive_threshold: 90
+  # Set to 95% so it only triggers close to the limit
+  preventive_threshold: 95
+
+  # Minimum context usage threshold (percentage 0-100)
+  # Don't trigger reactive compact if context is below this threshold
+  # This prevents unnecessary compacts when context is still low
+  # Set to 0 to disable this check
+  min_threshold: 50
 
   # Enable smart context reconstruction after compact
   # Rebuilds focused context from sprint-progress.md + git + tests

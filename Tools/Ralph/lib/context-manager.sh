@@ -9,16 +9,17 @@
 
 # Configuration defaults
 CONTEXT_AUTO_COMPACT="${CONTEXT_AUTO_COMPACT:-true}"
-CONTEXT_MAX_COMPACTS="${CONTEXT_MAX_COMPACTS:-3}"
+CONTEXT_MAX_COMPACTS="${CONTEXT_MAX_COMPACTS:-5}"
 
 # Advanced context management (new features)
 CONTEXT_OVERFLOW_STRATEGY="${CONTEXT_OVERFLOW_STRATEGY:-new_session}"  # new_session, extend, fail
-CONTEXT_PREVENTIVE_THRESHOLD="${CONTEXT_PREVENTIVE_THRESHOLD:-90}"     # Fallback: Compact at 90% capacity
+CONTEXT_PREVENTIVE_THRESHOLD="${CONTEXT_PREVENTIVE_THRESHOLD:-95}"     # Fallback: Compact at 95% capacity
+CONTEXT_MIN_THRESHOLD="${CONTEXT_MIN_THRESHOLD:-50}"                   # Don't compact if below this %
 CONTEXT_SMART_RECONSTRUCTION="${CONTEXT_SMART_RECONSTRUCTION:-true}"   # Use intelligent reconstruction
 CONTEXT_MAX_CONTINUATION_SESSIONS="${CONTEXT_MAX_CONTINUATION_SESSIONS:-5}"  # Max chained sessions
 
 # Note: Strategic compacts (sprint start, task complete) are preferred over % threshold
-# The 90% threshold acts as a safety net if strategic compacts miss the window
+# The 95% threshold acts as a safety net if strategic compacts miss the window
 
 # External command (default to 'claude' if not set)
 CLAUDE_COMMAND="${CLAUDE_COMMAND:-claude}"
@@ -82,6 +83,9 @@ init_context_manager() {
 
         local max_continuations=$(yq e '.context.max_continuation_sessions // ""' "$CONFIG_FILE" 2>/dev/null)
         [[ -n "$max_continuations" ]] && CONTEXT_MAX_CONTINUATION_SESSIONS=$max_continuations
+
+        local min_threshold=$(yq e '.context.min_threshold // ""' "$CONFIG_FILE" 2>/dev/null)
+        [[ -n "$min_threshold" ]] && CONTEXT_MIN_THRESHOLD=$min_threshold
     fi
 
     # Initialize sprint progress module if available
@@ -94,6 +98,7 @@ init_context_manager() {
     print_verbose "  - Max compacts: $CONTEXT_MAX_COMPACTS"
     print_verbose "  - Overflow strategy: $CONTEXT_OVERFLOW_STRATEGY"
     print_verbose "  - Preventive threshold: $CONTEXT_PREVENTIVE_THRESHOLD%"
+    print_verbose "  - Min threshold: $CONTEXT_MIN_THRESHOLD%"
     print_verbose "  - Smart reconstruction: $CONTEXT_SMART_RECONSTRUCTION"
 }
 
@@ -109,6 +114,24 @@ run_auto_compact() {
         log_session "$session_id" "WARN" "Auto-compact is disabled"
         print_warning "${MSG_CONTEXT_DISABLED:-Auto-compact disabled}"
         return 1
+    fi
+
+    # Check if context is above minimum threshold before compacting
+    if [[ "$CONTEXT_MIN_THRESHOLD" -gt 0 ]]; then
+        local context_info
+        if command -v timeout &> /dev/null; then
+            context_info=$(timeout 10s $CLAUDE_COMMAND -p "/context" 2>/dev/null | head -5)
+        else
+            context_info=$($CLAUDE_COMMAND -p "/context" 2>/dev/null | head -5)
+        fi
+        local current_usage
+        current_usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1)
+
+        if [[ -n "$current_usage" && "$current_usage" -lt "$CONTEXT_MIN_THRESHOLD" ]]; then
+            log_session "$session_id" "INFO" "Context at ${current_usage}% - below minimum threshold (${CONTEXT_MIN_THRESHOLD}%), skipping compact"
+            print_verbose "Context at ${current_usage}% - below min threshold (${CONTEXT_MIN_THRESHOLD}%), skipping compact"
+            return 1
+        fi
     fi
 
     # Check if we've exceeded max compacts
