@@ -15,7 +15,7 @@ SPRINT_MAX_BACKUPS="${SPRINT_MAX_BACKUPS:-3}"
 
 # Strategic compact configuration
 SPRINT_COMPACT_ON_START="${SPRINT_COMPACT_ON_START:-true}"
-SPRINT_COMPACT_ON_TASK_COMPLETE="${SPRINT_COMPACT_ON_TASK_COMPLETE:-true}"
+SPRINT_COMPACT_ON_TASK_COMPLETE="${SPRINT_COMPACT_ON_TASK_COMPLETE:-false}"
 SPRINT_COMPACT_ON_US_COMPLETE="${SPRINT_COMPACT_ON_US_COMPLETE:-false}"  # Optional, checkpoint is usually enough
 
 # Track previous phase for transition detection

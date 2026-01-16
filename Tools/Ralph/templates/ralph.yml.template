@@ -127,8 +127,9 @@ sprint:
   compact_on_start: true
 
   # Compact after each task completes (REFACTOR → IDLE/RED transition)
-  # This is the MOST IMPORTANT strategic compact point
-  compact_on_task_complete: true
+  # Disabled by default: causes too many compacts in typical sprints
+  # Enable only for very large tasks that consume significant context
+  compact_on_task_complete: false
 
   # Compact after US completes (optional - checkpoint is usually enough)
   # Enable for very long US with many tasks
