@@ -1,102 +1,97 @@
-# {{PROJECT_NAME}} - Vue.js Project
+# {{PROJECT_NAME}} - Vue.js
 
-## Project Context
+> Genere: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-- **Technology**: Vue.js {{VUE_VERSION}}
-- **TypeScript**: {{TS_VERSION}}
-- **Build Tool**: Vite
-- **Architecture**: {{ARCHITECTURE_PATTERN}}
+## Quoi (Stack & Structure)
 
-## Commands
+**Stack**: Vue.js {{VUE_VERSION}} + TypeScript {{TS_VERSION}}
+**Build Tool**: Vite
+**Architecture**: {{ARCHITECTURE_PATTERN}}
 
-### Development
-```bash
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-```
-
-### Testing
-```bash
-# Run tests in watch mode
-pnpm test
-
-# Run tests with coverage
-pnpm test:coverage
-
-# Run e2e tests
-pnpm test:e2e
-```
-
-### Code Quality
-```bash
-# Lint code
-pnpm lint
-
-# Fix lint errors
-pnpm lint:fix
-
-# Type check
-pnpm type-check
-
-# Format code
-pnpm format
-```
-
-## Architecture
-
-This project follows {{ARCHITECTURE_PATTERN}}:
-
+### Structure du projet
 ```
 src/
-├── assets/           # Static assets
-├── components/       # Shared components
-├── composables/      # Composition functions
+├── assets/           # Assets statiques
+├── components/       # Composants partages
+├── composables/      # Composition functions (hooks)
 ├── modules/          # Feature modules
+│   └── [module]/
+│       ├── components/
+│       ├── composables/
+│       └── types/
 ├── router/           # Vue Router
 ├── stores/           # Pinia stores
-├── services/         # API services
-├── types/            # TypeScript types
-└── utils/            # Utilities
+├── services/         # Services API
+├── types/            # Types TypeScript
+└── utils/            # Utilitaires
 ```
 
-## Coding Standards
+## Pourquoi (Objectif & Organisation)
 
-- **Vue**: Composition API with `<script setup>`
-- **TypeScript**: Strict mode
-- **State**: Pinia stores
-- **Style**: ESLint + Prettier
+### Architecture: {{ARCHITECTURE_PATTERN}}
+- **Components**: UI reutilisable
+- **Composables**: Logique partagee (use prefix)
+- **Modules**: Features par domaine metier
+- **Stores**: State management (Pinia)
 
-### Key Conventions
+Voir `rules/02-architecture.md` pour les patterns.
 
-1. **Components**: Multi-word, PascalCase
-2. **Composables**: `use` prefix
-3. **Stores**: `use{Name}Store` pattern
-4. **Props/Emits**: TypeScript interfaces
+### Regles critiques
 
-## Testing
+| Regle | Description |
+|-------|-------------|
+| Analyse avant code | Consulter `rules/01-workflow-analysis.md` |
+| Composition API | `<script setup>` obligatoire |
+| TypeScript strict | Mode strict active |
+| Coverage 80%+ | Tests obligatoires |
 
-- **Framework**: Vitest
-- **Utils**: Vue Test Utils
-- **E2E**: Playwright
-- **Coverage**: 80% minimum
+## Comment (Commandes & Workflows)
 
+### Commandes de developpement
 ```bash
-# Run specific test
-pnpm test UserCard
-
-# Run with UI
-pnpm test:ui
+pnpm dev               # Serveur dev
+pnpm build             # Build production
+pnpm preview           # Preview build
 ```
 
-## Important Files
+### Pipeline de qualite
+```bash
+pnpm lint              # ESLint
+pnpm lint:fix          # Fix lint
+pnpm type-check        # Verification types
+pnpm format            # Prettier
+pnpm test              # Tests watch mode
+pnpm test:coverage     # Coverage
+pnpm test:e2e          # Tests E2E (Playwright)
+```
 
-- `vite.config.ts` - Vite configuration
-- `tsconfig.json` - TypeScript config
-- `eslint.config.js` - ESLint rules
-- `.prettierrc` - Prettier config
+### Conventions de nommage
+- **Components**: PascalCase, multi-word
+- **Composables**: `use` prefix (useAuth, useCart)
+- **Stores**: `use{Name}Store` pattern
+- **Props/Emits**: Interfaces TypeScript
+
+### Workflow de developpement
+1. **Analyser** - `rules/01-workflow-analysis.md`
+2. **TDD** - Test first (Vitest)
+3. **Qualite** - `pnpm lint && pnpm type-check && pnpm test`
+4. **Commit** - Conventional Commits
+
+## References
+
+| Contexte | Fichier |
+|----------|---------|
+| Workflow | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture.md` |
+| Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tests | `rules/07-testing.md` |
+| State | `rules/13-state-management.md` |
+| Securite | `rules/11-security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Specificites du projet
+
+<!-- Cette section est preservee lors des mises a jour -->
+
+<!-- PROJECT-SPECIFIC-END -->

@@ -1,65 +1,87 @@
-# {{PROJECT_NAME}} - C#/.NET Project
+# {{PROJECT_NAME}} - C#/.NET
 
-## Project Context
+> Gerado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-This is a C#/.NET {{DOTNET_VERSION}} project following Clean Architecture principles.
+## O Que (Stack & Estrutura)
 
-**Generated**: {{GENERATION_DATE}}
 **Stack**: {{TECH_STACK}}
+**.NET**: {{DOTNET_VERSION}} | **C#**: 13
 
-## Architecture
-
-This project follows Clean Architecture with the following layer structure:
-
+### Estrutura do projeto
 ```
 src/
-├── Domain/           # Core business logic (no external dependencies)
-├── Application/      # Use cases, CQRS (depends on Domain)
-├── Infrastructure/   # External concerns (depends on Domain + Application)
-└── WebAPI/          # Presentation layer (depends on all)
+├── Domain/           # Logica de negocio (sem deps externas)
+│   ├── Entities/     # Modelos de dominio ricos
+│   ├── ValueObjects/ # Tipos imutaveis
+│   └── Events/       # Domain events
+├── Application/      # Use cases, CQRS (depende de Domain)
+│   ├── Commands/     # Operacoes de escrita
+│   └── Queries/      # Operacoes de leitura
+├── Infrastructure/   # Concerns externos (depende de Domain + App)
+│   └── Persistence/  # EF Core, repositories
+└── WebAPI/           # Camada de apresentacao
 ```
 
-## Key Patterns
+## Por Que (Proposito & Organizacao)
 
-- **CQRS**: Commands and Queries separated with MediatR
-- **Domain-Driven Design**: Rich domain models, aggregates, value objects
-- **Repository Pattern**: Abstraction for data access
-- **Unit of Work**: Transaction management
+### Arquitetura: Clean Architecture + CQRS
+- **CQRS**: Commands/Queries separados com MediatR
+- **DDD**: Modelos de dominio ricos, aggregates, value objects
+- **Repository Pattern**: Abstracao para acesso a dados
+- Dependencias fluem para dentro (Domain no centro)
 
-## Technology Stack
+Ver `rules/02-architecture.md` para padroes.
 
-- .NET {{DOTNET_VERSION}}
-- C# 13
-- Entity Framework Core
-- MediatR for CQRS
-- FluentValidation
-- AutoMapper
-- xUnit + FluentAssertions + Moq
+### Regras criticas
 
-## Coding Conventions
+| Regra | Descricao |
+|-------|-----------|
+| Nullable | Nullable reference types habilitado |
+| Async | Sempre passar CancellationToken |
+| Naming | PascalCase publico, _camelCase privado |
+| Testes | 80% cobertura, Domain 90%+ |
 
-- Use PascalCase for public members
-- Use _camelCase for private fields
-- Suffix async methods with "Async"
-- Always pass CancellationToken to async methods
-- Use nullable reference types
+## Como (Comandos & Workflows)
 
-## Testing Strategy
+### Comandos de desenvolvimento
+```bash
+dotnet build                        # Compilar
+dotnet run --project src/WebAPI     # Executar
+dotnet ef migrations add Name       # Criar migration
+```
 
-- Unit tests for Domain and Application layers
-- Integration tests for Infrastructure (with Testcontainers)
-- Functional tests for WebAPI (with WebApplicationFactory)
-- Minimum 80% code coverage
+### Pipeline de qualidade
+```bash
+dotnet build -warnaserror           # Build sem warnings
+dotnet test --collect:"XPlat Code Coverage" # Testes + cobertura
+dotnet format --verify-no-changes   # Verificar formatacao
+```
 
-## Available Commands
+### Comandos Claude Craft
+- `/csharp:check-compliance` - Auditoria completa
+- `/csharp:check-architecture` - Validacao de arquitetura
+- `/csharp:generate-feature` - Gerar feature CQRS
 
-- `/csharp:check-compliance` - Full compliance audit
-- `/csharp:check-architecture` - Architecture validation
-- `/csharp:check-code-quality` - Code quality analysis
-- `/csharp:check-testing` - Test coverage analysis
-- `/csharp:check-security` - Security audit (OWASP)
-- `/csharp:generate-feature` - Generate CQRS feature
+### Workflow de desenvolvimento
+1. **Analisar** - `rules/01-workflow-analysis.md`
+2. **TDD** - xUnit + FluentAssertions + Moq
+3. **Qualidade** - Build limpo + Testes passando
+4. **Commit** - Conventional Commits
 
-## Rules Applied
+## Referencias
 
-See `.claude/rules/` for detailed coding standards and best practices.
+| Contexto | Arquivo |
+|----------|---------|
+| Workflow | `rules/01-workflow-analysis.md` |
+| Arquitetura | `rules/02-architecture.md` |
+| Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Testes | `rules/07-testing.md` |
+| Seguranca | `rules/11-security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Especificidades do projeto
+
+<!-- Adicionar configuracao especifica do projeto aqui -->
+
+<!-- PROJECT-SPECIFIC-END -->

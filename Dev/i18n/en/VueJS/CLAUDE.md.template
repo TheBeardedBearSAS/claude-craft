@@ -1,62 +1,16 @@
-# {{PROJECT_NAME}} - Vue.js Project
+# {{PROJECT_NAME}} - Vue.js
 
-## Project Context
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-- **Technology**: Vue.js {{VUE_VERSION}}
-- **TypeScript**: {{TS_VERSION}}
-- **Build Tool**: Vite
-- **Architecture**: {{ARCHITECTURE_PATTERN}}
+## What (Stack & Structure)
 
-## Commands
+**Stack**: Vue.js {{VUE_VERSION}}, TypeScript {{TS_VERSION}}, Vite, Pinia
 
-### Development
-```bash
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-```
-
-### Testing
-```bash
-# Run tests in watch mode
-pnpm test
-
-# Run tests with coverage
-pnpm test:coverage
-
-# Run e2e tests
-pnpm test:e2e
-```
-
-### Code Quality
-```bash
-# Lint code
-pnpm lint
-
-# Fix lint errors
-pnpm lint:fix
-
-# Type check
-pnpm type-check
-
-# Format code
-pnpm format
-```
-
-## Architecture
-
-This project follows {{ARCHITECTURE_PATTERN}}:
-
+### Project Structure
 ```
 src/
-├── assets/           # Static assets
 ├── components/       # Shared components
-├── composables/      # Composition functions
+├── composables/      # Composition functions (useXxx)
 ├── modules/          # Feature modules
 ├── router/           # Vue Router
 ├── stores/           # Pinia stores
@@ -65,38 +19,60 @@ src/
 └── utils/            # Utilities
 ```
 
-## Coding Standards
+## Why (Purpose & Organization)
 
-- **Vue**: Composition API with `<script setup>`
-- **TypeScript**: Strict mode
-- **State**: Pinia stores
-- **Style**: ESLint + Prettier
+### Architecture: {{ARCHITECTURE_PATTERN}}
+- **Composition API**: `<script setup>` syntax
+- **State**: Pinia stores with `use{Name}Store` pattern
+- **Components**: Multi-word, PascalCase
+- **Composables**: `use` prefix for reusable logic
 
-### Key Conventions
+See `rules/02-architecture.md` for complete patterns.
 
-1. **Components**: Multi-word, PascalCase
-2. **Composables**: `use` prefix
-3. **Stores**: `use{Name}Store` pattern
-4. **Props/Emits**: TypeScript interfaces
+### Critical Rules
+| Rule | Reason |
+|------|--------|
+| TypeScript strict | Type safety |
+| Composition API | Better organization |
+| Pinia for state | Reactive, type-safe |
+| 80%+ coverage | Quality assurance |
 
-## Testing
+## How (Commands & Workflows)
 
-- **Framework**: Vitest
-- **Utils**: Vue Test Utils
-- **E2E**: Playwright
-- **Coverage**: 80% minimum
-
+### Development Commands
 ```bash
-# Run specific test
-pnpm test UserCard
-
-# Run with UI
-pnpm test:ui
+pnpm dev              # Start dev server
+pnpm build            # Production build
+pnpm test             # Run tests (Vitest)
+pnpm lint             # ESLint check
+pnpm type-check       # TypeScript check
 ```
 
-## Important Files
+### Quality Pipeline
+```bash
+pnpm lint && pnpm type-check && pnpm test
+```
 
-- `vite.config.ts` - Vite configuration
-- `tsconfig.json` - TypeScript config
-- `eslint.config.js` - ESLint rules
-- `.prettierrc` - Prettier config
+### Development Workflow
+1. **Analyze** - Understand component hierarchy (`rules/01-workflow-analysis.md`)
+2. **TDD** - Write test -> Implement -> Refactor
+3. **Quality** - Run full quality check
+4. **Commit** - Conventional Commits format
+
+## References
+
+| Topic | Rule File |
+|-------|-----------|
+| Analysis | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture.md` |
+| TypeScript | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| State Management | `rules/06-state-management.md` |
+| Testing | `rules/07-testing.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

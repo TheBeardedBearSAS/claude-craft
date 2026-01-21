@@ -1,49 +1,81 @@
-# Angular Project - Claude Instructions
+# {{PROJECT_NAME}} - Angular
 
-## Overview
+> Erstellt: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-This is an Angular {{ANGULAR_VERSION}} project using standalone components and signals for reactive state management.
+## Was (Stack & Struktur)
 
-## Key Principles
+**Stack**: Angular {{ANGULAR_VERSION}} + TypeScript
+**Architektur**: Standalone Components + Signals
 
-1. **Standalone Components**: All components must be standalone (no NgModules)
-2. **Signals First**: Use Angular Signals for reactive state
-3. **OnPush Strategy**: All components use ChangeDetectionStrategy.OnPush
-4. **Type Safety**: Strict TypeScript mode enabled
-5. **Modern Control Flow**: Use @if, @for, @switch (not *ngIf, *ngFor)
-
-## Project Structure
-
+### Projektstruktur
 ```
 src/app/
-├── core/           # Singleton services, guards, interceptors
-├── shared/         # Reusable components, pipes, directives
-├── features/       # Business features (domain-driven)
-├── layout/         # Layout components (header, sidebar, shell)
-└── app.routes.ts   # Root routing
+├── core/           # Singleton Services, Guards, Interceptors
+├── shared/         # Wiederverwendbare Components, Pipes, Directives
+├── features/       # Business Features (Domain-driven)
+│   └── [feature]/
+│       ├── components/
+│       ├── services/
+│       └── feature.routes.ts
+├── layout/         # Layout Components (Header, Sidebar, Shell)
+└── app.routes.ts   # Root Routing
 ```
 
-## Code Generation
+## Warum (Zweck & Organisation)
 
-When generating components:
+### Architektur: Feature-Based + Standalone
+- **Standalone Components**: Keine NgModules
+- **Signals**: Reaktives State Management
+- **OnPush**: Performance-optimierte Change Detection
+- **Modern Control Flow**: @if, @for, @switch
+
+Siehe `rules/02-architecture.md` fuer Muster.
+
+### Kritische Regeln
+| Regel | Beschreibung |
+|-------|--------------|
+| Components | Standalone + OnPush |
+| State | Signals bevorzugen |
+| Control Flow | @if, @for (nicht *ngIf) |
+| TypeScript | Strict Mode |
+| Tests | 80% Coverage |
+
+## Wie (Befehle & Workflows)
+
+### Entwicklungsbefehle
 ```bash
-ng generate component features/{{feature}}/components/{{name}} --standalone
+ng serve                    # Dev Server
+ng build                    # Production Build
+ng generate component ...   # Komponente generieren
 ```
 
-## Testing
+### Qualitaets-Pipeline
+```bash
+ng lint              # ESLint
+ng test              # Unit Tests (Vitest/Jest)
+ng e2e               # E2E Tests (Cypress)
+npm run type-check   # TypeScript Pruefung
+```
 
-- Unit tests: Vitest or Jest with Angular Testing Library
-- E2E tests: Cypress
-- Minimum coverage: 80%
+### Entwicklungs-Workflow
+1. **Analysieren** - `rules/01-workflow-analysis.md` lesen
+2. **TDD** - Test schreiben, implementieren, refaktorisieren
+3. **Qualitaet** - Lint + Tests ausfuehren
+4. **Commit** - Conventional Commits Format
 
-## Styling
+## Referenzen
+| Kontext | Datei |
+|---------|-------|
+| Vor Aenderungen | `rules/01-workflow-analysis.md` |
+| Architektur | `rules/02-architecture.md` |
+| Code Standards | `rules/03-coding-standards.md` |
+| Testing | `rules/07-testing.md` |
+| State Management | `rules/13-state-management.md` |
 
 {{STYLING_INSTRUCTIONS}}
-
-## State Management
-
 {{STATE_MANAGEMENT_INSTRUCTIONS}}
 
-## Additional Instructions
-
+<!-- PROJECT-SPECIFIC-START -->
+## Projektspezifika
 {{CUSTOM_INSTRUCTIONS}}
+<!-- PROJECT-SPECIFIC-END -->

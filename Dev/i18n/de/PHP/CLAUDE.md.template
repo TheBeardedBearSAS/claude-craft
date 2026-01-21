@@ -1,460 +1,84 @@
-# Claude Code - PHP Clean Architecture Configuration
+# {{PROJECT_NAME}} - PHP Clean Architecture
 
-## Project Information
+> Erstellt: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-**Project** : {{PROJECT_NAME}}
-**Stack** : {{TECH_STACK}}
-**Framework** : {{PHP_FRAMEWORK}} + PHP {{PHP_VERSION}}
-**Architecture** : Clean Architecture with CQRS
+## Was (Stack & Struktur)
 
-## Fundamental Rules
+**Stack**: {{TECH_STACK}}
+**Framework**: {{PHP_FRAMEWORK}} + PHP {{PHP_VERSION}}
 
-### 1. Mandatory Analysis Before Coding
-
-**BEFORE writing a single line of code, you MUST** :
-
-1. **Analyze existing code**
-   - Search for similar classes/services
-   - Identify patterns used
-   - Understand the architecture in place
-
-2. **Understand the need**
-   - Clarify objectives
-   - Define acceptance criteria
-   - Identify constraints
-
-3. **Design the solution**
-   - Choose the architectural approach
-   - Define entities and value objects
-   - Plan the tests (TDD)
-
-4. **Document decisions**
-   - Justify technical choices
-   - Document considered alternatives
-   - Explain trade-offs
-
-**Reference** : `rules/01-workflow-analysis.md`
-
-### 2. Clean Architecture
-
+### Projektstruktur
 ```
 src/
-├── Domain/                    # Core business logic (NO external deps)
-│   ├── Entity/               # Business entities with behavior
-│   ├── ValueObject/          # Immutable value types
-│   ├── Event/                # Domain events
-│   ├── Exception/            # Domain exceptions
-│   └── Repository/           # Repository interfaces (contracts)
-│
-├── Application/               # Use cases & orchestration
-│   ├── UseCase/              # Commands & Queries (CQRS)
+├── Domain/                # Kern-Geschaeftslogik (KEINE externen Abhaengigkeiten)
+│   ├── Entity/           # Business Entities
+│   ├── ValueObject/      # Immutable Types
+│   ├── Event/            # Domain Events
+│   └── Repository/       # Interface-Vertraege
+├── Application/           # Use Cases & CQRS
+│   ├── UseCase/
 │   │   └── [Feature]/
-│   │       ├── Command/      # Write operations
-│   │       └── Query/        # Read operations
-│   ├── DTO/                  # Data Transfer Objects
-│   ├── Service/              # Application services
-│   └── Exception/            # Application exceptions
-│
-├── Infrastructure/            # External concerns
-│   ├── Persistence/          # Database (Doctrine, Eloquent)
-│   │   ├── Repository/       # Repository implementations
-│   │   └── Migration/        # Database migrations
-│   ├── Service/              # External service implementations
-│   ├── Messaging/            # Queue, events
-│   └── Cache/                # Caching implementations
-│
-└── Presentation/              # UI layer (Controllers, API)
-    ├── Controller/           # HTTP controllers
-    ├── Request/              # Request validation
-    ├── Response/             # Response transformers
-    └── Middleware/           # HTTP middleware
+│   │       ├── Command/  # Schreiboperationen
+│   │       └── Query/    # Leseoperationen
+│   └── DTO/              # Data Transfer Objects
+├── Infrastructure/        # Technische Implementierungen
+│   ├── Persistence/      # Doctrine/Eloquent
+│   └── Service/          # Externe Services
+└── Presentation/          # Controller, API
 ```
 
-**Reference** : `rules/02-architecture.md`
+## Warum (Zweck & Organisation)
 
-### 3. PHP Coding Standards
+### Architektur: Clean Architecture + CQRS
+- **Domain**: Geschaeftslogik ohne Framework-Abhaengigkeiten
+- **Application**: Commands/Queries fuer Use Cases
+- **Infrastructure**: Adapter fuer DB, APIs, etc.
 
-#### Strict Types Mandatory
+Siehe `rules/02-architecture.md` fuer Muster.
 
-```php
-<?php
+### Kritische Regeln
+| Regel | Beschreibung |
+|-------|--------------|
+| Strict Types | `declare(strict_types=1);` in jeder Datei |
+| PHPStan | Level 9 ohne Fehler |
+| Tests | 80% Coverage (Domain: 90%) |
+| CQRS | Commands/Queries strikt getrennt |
 
-declare(strict_types=1);
-```
+## Wie (Befehle & Workflows)
 
-#### Naming Conventions
-
-- **Classes** : PascalCase (ex: `OrderService`, `UserRepository`)
-- **Methods** : camelCase (ex: `createOrder`, `findById`)
-- **Properties** : camelCase (ex: `$createdAt`, `$totalAmount`)
-- **Constants** : UPPER_SNAKE_CASE (ex: `MAX_RETRY_COUNT`)
-- **Interfaces** : PascalCase + Interface suffix (ex: `OrderRepositoryInterface`)
-- **Traits** : PascalCase + Trait suffix (ex: `TimestampableTrait`)
-
-**Reference** : `rules/03-coding-standards.md`
-
-### 4. SOLID Principles
-
-- **S** : Single Responsibility - One class = one responsibility
-- **O** : Open/Closed - Open for extension, closed for modification
-- **L** : Liskov Substitution - Subtypes must be substitutable
-- **I** : Interface Segregation - Small, focused interfaces
-- **D** : Dependency Inversion - Depend on abstractions, not implementations
-
-**Reference** : `rules/04-solid-principles.md`
-
-### 5. KISS, DRY, YAGNI
-
-- **KISS** : Keep It Simple - Favor simplicity
-- **DRY** : Don't Repeat Yourself - Avoid duplication (rule of 3)
-- **YAGNI** : You Aren't Gonna Need It - Only implement what's necessary
-
-**Reference** : `rules/05-kiss-dry-yagni.md`
-
-## Tech Stack
-
-### Backend
-
-- **Language** : PHP {{PHP_VERSION}}
-- **Framework** : {{PHP_FRAMEWORK}}
-- **ORM** : Doctrine ORM / Eloquent
-- **Messaging** : Symfony Messenger / Laravel Queues
-- **Caching** : Redis / Memcached
-- **Database** : PostgreSQL / MySQL
-
-### Development Tools
-
-- **Package Manager** : Composer
-- **Static Analysis** : PHPStan (level 9), Psalm
-- **Code Style** : PHP-CS-Fixer (PSR-12)
-- **Testing** : PHPUnit 11+ / Pest 3+
-- **Documentation** : PHPDoc
-- **Git Hooks** : GrumPHP / Husky
-
-**Reference** : `rules/06-tooling.md`
-
-## Main Commands
-
-### Development
-
+### Entwicklungsbefehle
 ```bash
-# Installation
-composer install
-
-# Development server (Symfony)
-symfony server:start
-# or Laravel
-php artisan serve
-
-# Clear cache
-{{CACHE_CLEAR_COMMAND}}
+composer install            # Abhaengigkeiten
+{{CACHE_CLEAR_COMMAND}}     # Cache leeren
+{{MIGRATION_RUN_COMMAND}}   # Migrationen
 ```
 
-### Database
-
+### Qualitaets-Pipeline
 ```bash
-# Create migration
-{{MIGRATION_CREATE_COMMAND}}
-
-# Run migrations
-{{MIGRATION_RUN_COMMAND}}
-
-# Rollback
-{{MIGRATION_ROLLBACK_COMMAND}}
+vendor/bin/phpstan analyse               # Statische Analyse
+vendor/bin/php-cs-fixer fix --dry-run   # Code Style pruefen
+vendor/bin/php-cs-fixer fix             # Code Style fixen
+vendor/bin/phpunit --coverage-html cov/ # Tests mit Coverage
+composer quality                         # Alle Pruefungen
 ```
 
-### Tests
-
-```bash
-# All tests
-vendor/bin/phpunit
-
-# Unit tests only
-vendor/bin/phpunit --testsuite=Unit
-
-# With coverage
-vendor/bin/phpunit --coverage-html coverage/
-
-# Pest (if using)
-vendor/bin/pest
-```
-
-### Quality
-
-```bash
-# Static analysis
-vendor/bin/phpstan analyse
-
-# Code style check
-vendor/bin/php-cs-fixer fix --dry-run --diff
-
-# Code style fix
-vendor/bin/php-cs-fixer fix
-
-# Full quality check
-composer quality
-```
-
-### Docker (if applicable)
-
-```bash
-# Build image
-make docker-build
-
-# Start containers
-make docker-up
-
-# Stop containers
-make docker-down
-
-# View logs
-make docker-logs
-```
-
-**Reference** : `rules/06-tooling.md`
-
-## Tests - Pyramid Strategy
-
-```
-         /\
-        /E2E\      10% - Critical paths (API tests)
-       /------\
-      / Integ. \    20% - Repository, services
-     /----------\
-    /   Unit     \  70% - Entities, VOs, handlers
-   /--------------\
-```
-
-### Mandatory Tests
-
-1. **Unit Tests** : All entities, value objects, handlers
-2. **Integration Tests** : Repositories, external services
-3. **Functional Tests** : API endpoints, full features
-
-### Minimum Coverage
-
-- **Lines** : 80%
-- **Functions** : 80%
-- **Branches** : 80%
-- **Domain layer** : 90%+
-
-**Reference** : `rules/07-testing.md`
-
-## Code Quality
-
-### Mandatory Tools
-
-- [x] PHPStan level 9 configured
-- [x] PHP-CS-Fixer for formatting (PSR-12)
-- [x] Psalm for additional analysis
-- [x] `declare(strict_types=1)` in all files
-- [x] GrumPHP or Husky for git hooks
-- [x] Conventional Commits
-
-### Quality Metrics
-
-- **PHPStan Errors** : 0
-- **PHP-CS-Fixer** : 0 violations
-- **Test Coverage** : > 80%
-- **Cyclomatic Complexity** : < 10 per method
-- **Class Length** : < 250 lines
-- **Method Length** : < 30 lines
-
-**Reference** : `rules/08-quality-tools.md`
-
-## Git Workflow
-
-### Branches
-
-```
-main (production)
-  └── develop (integration)
-      ├── feature/* (new features)
-      ├── fix/* (bug fixes)
-      ├── refactor/* (refactoring)
-      └── hotfix/* (urgent fixes)
-```
-
-### Naming Convention
-
-- **Feature** : `feature/TICKET-description` (ex: `feature/ORDER-123-add-checkout`)
-- **Fix** : `fix/TICKET-description` (ex: `fix/BUG-456-validation-error`)
-- **Refactor** : `refactor/description` (ex: `refactor/optimize-queries`)
-- **Hotfix** : `hotfix/vX.X.X-description` (ex: `hotfix/v1.2.1-security-patch`)
-
-### Commits Convention
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-**Types** : feat, fix, docs, style, refactor, perf, test, build, ci, chore
-
-**Examples** :
-```bash
-feat(order): add order creation endpoint
-fix(validation): resolve email format issue
-docs(readme): update installation instructions
-refactor(repository): extract query builder logic
-test(order): add CreateOrderHandler tests
-```
-
-**Reference** : `rules/09-git-workflow.md`
-
-## Documentation
-
-### Code Documentation
-
-- **PHPDoc** for all public methods
-- **@throws** annotations for exceptions
-- **Comments** to explain "why", not "what"
-
-### Project Documentation
-
-- **README.md** : Installation, usage, commands
-- **CONTRIBUTING.md** : Contribution guidelines
-- **CHANGELOG.md** : Version history
-- **docs/** : Detailed technical documentation
-
-**Reference** : `rules/10-documentation.md`
-
-## Security
-
-### Security Checklist
-
-- [ ] Input validation (at boundaries)
-- [ ] Parameterized queries (no SQL concatenation)
-- [ ] XSS prevention (output encoding)
-- [ ] CSRF protection
-- [ ] HTTPS everywhere
-- [ ] CSP headers configured
-- [ ] Secrets in environment variables
-- [ ] Dependency audit
-- [ ] Rate limiting
-- [ ] Secure logging (no sensitive data)
-
-### Critical Points
-
-1. **NEVER** hardcode secrets
-2. **ALWAYS** validate inputs server-side
-3. **ALWAYS** use parameterized queries
-4. **ALWAYS** hash passwords with bcrypt/Argon2
-5. **ALWAYS** sanitize outputs
-
-**Reference** : `rules/11-security.md`
-
-## Performance
-
-### Mandatory Optimizations
-
-1. **Query Optimization** : No N+1, proper indexes
-2. **Caching** : Redis for expensive operations
-3. **Pagination** : All list endpoints paginated
-4. **Async Processing** : Heavy tasks in queues
-5. **Connection Pooling** : Database connections
-
-### Performance Metrics
-
-- **Response Time** : < 200ms (95th percentile)
-- **Database Queries** : < 10 per request
-- **Memory Usage** : < 128MB per request
-- **Cache Hit Rate** : > 80%
-
-**Reference** : `rules/12-performance.md`
-
-## Code Templates
-
-### Domain Entity
-
-See : `templates/entity.md`
-
-### Value Object
-
-See : `templates/value-object.md`
-
-### Use Case (Command/Query)
-
-See : `templates/use-case.md`
-
-## Checklists
-
-### Pre-Commit
-
-See : `checklists/pre-commit.md`
-
-### New Feature
-
-See : `checklists/new-feature.md`
-
-## Resources
-
-### Official Documentation
-
-- PHP : https://www.php.net/docs.php
-- Symfony : https://symfony.com/doc
-- Laravel : https://laravel.com/docs
-- PHPStan : https://phpstan.org/
-- PHPUnit : https://phpunit.de/
-
-### Project Rules
-
-1. `rules/00-project-context.md` - Project context
-2. `rules/01-workflow-analysis.md` - Analysis workflow
-3. `rules/02-architecture.md` - Clean Architecture
-4. `rules/03-coding-standards.md` - Code standards
-5. `rules/04-solid-principles.md` - SOLID principles
-6. `rules/05-kiss-dry-yagni.md` - Simplicity principles
-7. `rules/06-tooling.md` - Development tools
-8. `rules/07-testing.md` - Test strategy
-9. `rules/08-quality-tools.md` - Quality tools
-10. `rules/09-git-workflow.md` - Git workflow
-11. `rules/10-documentation.md` - Documentation
-12. `rules/11-security.md` - Security
-
-## Golden Rules
-
-### 1. Always Analyze Before Coding
-
-NEVER start coding without having:
-- Analyzed existing code
-- Understood the need
-- Designed the solution
-- Planned the tests (TDD)
-
-### 2. Respect the Architecture
-
-- Clean Architecture layers
-- Domain has NO external dependencies
-- Dependency Inversion (interfaces in Domain)
-- CQRS for use cases
-
-### 3. Test Systematically
-
-- Unit tests for all domain logic
-- Integration tests for repositories
-- Functional tests for endpoints
-- Coverage > 80%
-
-### 4. Mandatory Code Review
-
-- No merge without approval
-- Verify tests pass
-- Verify code quality
-- Verify documentation
-
-### 5. Security First
-
-- Input validation
-- Parameterized queries
-- Password hashing
-- Secure secrets
-- Regular audits
-
----
-
-**Last update** : {{LAST_UPDATE_DATE}}
-**Maintainer** : {{MAINTAINER_NAME}}
+### Entwicklungs-Workflow
+1. **Analysieren** - `rules/01-workflow-analysis.md` lesen
+2. **TDD** - Test schreiben, implementieren, refaktorisieren
+3. **Qualitaet** - `composer quality` ausfuehren
+4. **Commit** - Conventional Commits Format
+
+## Referenzen
+| Kontext | Datei |
+|---------|-------|
+| Vor Aenderungen | `rules/01-workflow-analysis.md` |
+| Architektur | `rules/02-architecture.md` |
+| Code Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Testing | `rules/07-testing.md` |
+| Sicherheit | `rules/11-security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Projektspezifika
+<!-- Projektspezifische Konfiguration hier hinzufuegen -->
+<!-- PROJECT-SPECIFIC-END -->

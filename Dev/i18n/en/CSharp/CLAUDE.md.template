@@ -1,65 +1,79 @@
-# {{PROJECT_NAME}} - C#/.NET Project
+# {{PROJECT_NAME}} - C#/.NET
 
-## Project Context
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-This is a C#/.NET {{DOTNET_VERSION}} project following Clean Architecture principles.
+## What (Stack & Structure)
 
-**Generated**: {{GENERATION_DATE}}
-**Stack**: {{TECH_STACK}}
+**Stack**: .NET {{DOTNET_VERSION}}, C# 13, Clean Architecture, CQRS, MediatR
 
-## Architecture
-
-This project follows Clean Architecture with the following layer structure:
-
+### Project Structure
 ```
 src/
-├── Domain/           # Core business logic (no external dependencies)
-├── Application/      # Use cases, CQRS (depends on Domain)
-├── Infrastructure/   # External concerns (depends on Domain + Application)
-└── WebAPI/          # Presentation layer (depends on all)
+├── Domain/           # Core business logic (no dependencies)
+│   ├── Entities/     # Aggregate roots
+│   ├── ValueObjects/ # Immutable types
+│   └── Interfaces/   # Repository contracts
+├── Application/      # Use cases, CQRS
+│   ├── Commands/     # Write operations
+│   └── Queries/      # Read operations
+├── Infrastructure/   # External concerns
+│   └── Data/         # EF Core, repositories
+└── WebAPI/           # Presentation layer
 ```
 
-## Key Patterns
+## Why (Purpose & Organization)
 
-- **CQRS**: Commands and Queries separated with MediatR
-- **Domain-Driven Design**: Rich domain models, aggregates, value objects
-- **Repository Pattern**: Abstraction for data access
-- **Unit of Work**: Transaction management
+### Architecture: Clean Architecture + DDD + CQRS
+- **Domain** layer has ZERO external dependencies
+- **Application** orchestrates use cases via MediatR
+- **Infrastructure** implements technical details
 
-## Technology Stack
+See `rules/02-architecture-csharp.md` for complete patterns.
 
-- .NET {{DOTNET_VERSION}}
-- C# 13
-- Entity Framework Core
-- MediatR for CQRS
-- FluentValidation
-- AutoMapper
-- xUnit + FluentAssertions + Moq
+### Critical Rules
+| Rule | Reason |
+|------|--------|
+| Nullable reference types | Null safety |
+| CancellationToken always | Async best practices |
+| Repository pattern | Data access abstraction |
+| 80%+ coverage | Quality assurance |
 
-## Coding Conventions
+## How (Commands & Workflows)
 
-- Use PascalCase for public members
-- Use _camelCase for private fields
-- Suffix async methods with "Async"
-- Always pass CancellationToken to async methods
-- Use nullable reference types
+### Development Commands
+```bash
+dotnet build          # Build solution
+dotnet run            # Start API
+dotnet test           # Run tests
+dotnet format         # Format code
+```
 
-## Testing Strategy
+### Quality Pipeline
+```bash
+dotnet format --verify-no-changes  # Check formatting
+dotnet build -warnaserror          # Build with warnings as errors
+dotnet test --collect:"XPlat Code Coverage"
+```
 
-- Unit tests for Domain and Application layers
-- Integration tests for Infrastructure (with Testcontainers)
-- Functional tests for WebAPI (with WebApplicationFactory)
-- Minimum 80% code coverage
-
-## Available Commands
-
+### Available Skills
 - `/csharp:check-compliance` - Full compliance audit
 - `/csharp:check-architecture` - Architecture validation
-- `/csharp:check-code-quality` - Code quality analysis
-- `/csharp:check-testing` - Test coverage analysis
-- `/csharp:check-security` - Security audit (OWASP)
 - `/csharp:generate-feature` - Generate CQRS feature
 
-## Rules Applied
+## References
 
-See `.claude/rules/` for detailed coding standards and best practices.
+| Topic | Rule File |
+|-------|-----------|
+| Architecture | `rules/02-architecture-csharp.md` |
+| Coding Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Testing | `rules/07-testing-csharp.md` |
+| Quality | `rules/08-quality-tools.md` |
+| Security | `rules/11-security-csharp.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
+
+{{TECH_STACK}}
+
+<!-- PROJECT-SPECIFIC-END -->

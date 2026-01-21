@@ -1,65 +1,102 @@
-# {{PROJECT_NAME}} - C#/.NET Project
+# {{PROJECT_NAME}} - C#/.NET
 
-## Project Context
+> Genere: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-This is a C#/.NET {{DOTNET_VERSION}} project following Clean Architecture principles.
+## Quoi (Stack & Structure)
 
-**Generated**: {{GENERATION_DATE}}
 **Stack**: {{TECH_STACK}}
+**Framework**: .NET {{DOTNET_VERSION}}, C# 13
 
-## Architecture
-
-This project follows Clean Architecture with the following layer structure:
-
+### Structure du projet
 ```
 src/
-├── Domain/           # Core business logic (no external dependencies)
-├── Application/      # Use cases, CQRS (depends on Domain)
-├── Infrastructure/   # External concerns (depends on Domain + Application)
-└── WebAPI/          # Presentation layer (depends on all)
+├── Domain/           # Logique metier (aucune dependance externe)
+│   ├── Entities/     # Aggregates roots
+│   ├── ValueObjects/ # Types immuables
+│   ├── Events/       # Domain events
+│   └── Interfaces/   # Contrats repositories
+├── Application/      # Use cases, CQRS
+│   ├── Commands/     # Operations d'ecriture
+│   ├── Queries/      # Operations de lecture
+│   └── Behaviors/    # Pipeline MediatR
+├── Infrastructure/   # Concerns externes
+│   ├── Data/         # EF Core, Repositories
+│   └── Services/     # Services externes
+└── WebAPI/           # Presentation layer
+    └── Endpoints/    # Minimal API endpoints
 ```
 
-## Key Patterns
+## Pourquoi (Objectif & Organisation)
 
-- **CQRS**: Commands and Queries separated with MediatR
-- **Domain-Driven Design**: Rich domain models, aggregates, value objects
-- **Repository Pattern**: Abstraction for data access
-- **Unit of Work**: Transaction management
+### Architecture: Clean Architecture + CQRS + DDD
+- **Domain**: Modeles riches, aggregates, value objects
+- **Application**: Orchestration via MediatR
+- **Infrastructure**: EF Core, services externes
+- **WebAPI**: Minimal API ou Controllers
 
-## Technology Stack
+Voir `rules/02-architecture.md` pour les patterns.
 
-- .NET {{DOTNET_VERSION}}
-- C# 13
-- Entity Framework Core
-- MediatR for CQRS
-- FluentValidation
-- AutoMapper
-- xUnit + FluentAssertions + Moq
+### Regles critiques
 
-## Coding Conventions
+| Regle | Description |
+|-------|-------------|
+| Analyse avant code | Consulter `rules/01-workflow-analysis.md` |
+| Nullable refs | `<Nullable>enable</Nullable>` |
+| CancellationToken | Toujours passer aux methodes async |
+| Coverage 80%+ | Domain et Application prioritaires |
 
-- Use PascalCase for public members
-- Use _camelCase for private fields
-- Suffix async methods with "Async"
-- Always pass CancellationToken to async methods
-- Use nullable reference types
+## Comment (Commandes & Workflows)
 
-## Testing Strategy
+### Commandes de developpement
+```bash
+dotnet build           # Build
+dotnet run             # Run
+dotnet watch run       # Hot reload
+```
 
-- Unit tests for Domain and Application layers
-- Integration tests for Infrastructure (with Testcontainers)
-- Functional tests for WebAPI (with WebApplicationFactory)
-- Minimum 80% code coverage
+### Pipeline de qualite
+```bash
+dotnet test                              # Tests
+dotnet test --collect:"XPlat Code Coverage" # Coverage
+dotnet format --verify-no-changes        # Format check
+```
 
-## Available Commands
+### Base de donnees
+```bash
+dotnet ef migrations add [Name]          # Creer migration
+dotnet ef database update                # Appliquer migrations
+```
 
-- `/csharp:check-compliance` - Full compliance audit
-- `/csharp:check-architecture` - Architecture validation
-- `/csharp:check-code-quality` - Code quality analysis
-- `/csharp:check-testing` - Test coverage analysis
-- `/csharp:check-security` - Security audit (OWASP)
-- `/csharp:generate-feature` - Generate CQRS feature
+### Workflow de developpement
+1. **Analyser** - `rules/01-workflow-analysis.md`
+2. **TDD** - Test first (xUnit + FluentAssertions)
+3. **Qualite** - `dotnet build -warnaserror && dotnet test`
+4. **Commit** - Conventional Commits
 
-## Rules Applied
+## Commandes disponibles
 
-See `.claude/rules/` for detailed coding standards and best practices.
+- `/csharp:check-compliance` - Audit conformite complet
+- `/csharp:check-architecture` - Validation architecture
+- `/csharp:check-code-quality` - Analyse qualite code
+- `/csharp:check-testing` - Analyse couverture tests
+- `/csharp:check-security` - Audit securite (OWASP)
+- `/csharp:generate-feature` - Generer feature CQRS
+
+## References
+
+| Contexte | Fichier |
+|----------|---------|
+| Workflow | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture.md` |
+| Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tests | `rules/07-testing.md` |
+| Securite | `rules/11-security.md` |
+| Aspire | `rules/12-aspire-cloud-native.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Specificites du projet
+
+<!-- Cette section est preservee lors des mises a jour -->
+
+<!-- PROJECT-SPECIFIC-END -->

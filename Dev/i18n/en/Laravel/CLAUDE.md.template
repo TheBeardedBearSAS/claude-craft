@@ -1,104 +1,82 @@
-# {{PROJECT_NAME}} - Laravel Project
+# {{PROJECT_NAME}} - Laravel
 
-## Project Context
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-- **Technology**: Laravel {{LARAVEL_VERSION}}
-- **PHP Version**: {{PHP_VERSION}}
-- **Architecture**: {{ARCHITECTURE_PATTERN}}
-- **Database**: {{DATABASE_TYPE}}
+## What (Stack & Structure)
 
-## Commands
+**Stack**: Laravel {{LARAVEL_VERSION}}, PHP {{PHP_VERSION}}, {{DATABASE_TYPE}}
 
-### Development
-```bash
-# Start development server
-php artisan serve
-
-# Run queue worker
-php artisan queue:work
-
-# Run tests
-php artisan test
-
-# Run tests with coverage
-php artisan test --coverage
-```
-
-### Code Quality
-```bash
-# Format code
-./vendor/bin/pint
-
-# Static analysis
-./vendor/bin/phpstan analyse
-
-# Full quality check
-./vendor/bin/pint && ./vendor/bin/phpstan analyse && php artisan test
-```
-
-### Database
-```bash
-# Run migrations
-php artisan migrate
-
-# Fresh database with seeds
-php artisan migrate:fresh --seed
-
-# Rollback last migration
-php artisan migrate:rollback
-```
-
-## Architecture
-
-This project follows {{ARCHITECTURE_PATTERN}}:
-
+### Project Structure
 ```
 app/
 ├── Domain/           # Core business logic
+│   ├── Models/       # Eloquent models
+│   └── Services/     # Domain services
 ├── Application/      # Use cases, Actions, DTOs
 ├── Infrastructure/   # External services, Repositories
 └── Http/             # Controllers, Requests, Resources
 ```
 
-## Coding Standards
+## Why (Purpose & Organization)
 
-- **PHP**: 8.3+ with strict types
-- **Style**: Laravel Pint (PSR-12 + Laravel)
-- **Analysis**: PHPStan level 8
+### Architecture: {{ARCHITECTURE_PATTERN}}
+- **Controllers**: Thin, delegate to Actions
+- **Validation**: Always via Form Requests
+- **Responses**: Always via API Resources
+- **Business Logic**: In Domain layer or Actions
 
-### Key Conventions
+See `rules/02-architecture.md` for complete patterns.
 
-1. **Controllers**: Thin, delegate to Actions
-2. **Validation**: Always via Form Requests
-3. **Responses**: Always via API Resources
-4. **Authorization**: Via Policies
-5. **Business Logic**: In Domain layer or Actions
+### Critical Rules
+| Rule | Reason |
+|------|--------|
+| PHP 8.3+ strict types | Type safety |
+| Laravel Pint (PSR-12) | Code consistency |
+| PHPStan level 8 | Static analysis |
+| 80%+ coverage | Quality assurance |
 
-## Testing
+## How (Commands & Workflows)
 
-- **Framework**: Pest PHP
-- **Minimum Coverage**: 80%
-- **Test Types**: Feature, Unit, Architecture
-
+### Development Commands
 ```bash
-# Run all tests
-php artisan test
-
-# Run specific test
-php artisan test --filter=OrderTest
-
-# Run in parallel
-php artisan test --parallel
+php artisan serve     # Start server
+php artisan test      # Run tests
+./vendor/bin/pint     # Format code
+./vendor/bin/phpstan analyse  # Static analysis
 ```
 
-## Environment
+### Database Commands
+```bash
+php artisan migrate              # Run migrations
+php artisan migrate:fresh --seed # Fresh with seeds
+php artisan make:migration       # Create migration
+```
 
-- **Local**: Uses Docker via Laravel Sail
-- **Testing**: SQLite in-memory
-- **Production**: PostgreSQL
+### Quality Pipeline
+```bash
+./vendor/bin/pint && ./vendor/bin/phpstan analyse && php artisan test
+```
 
-## Important Files
+### Development Workflow
+1. **Analyze** - Read code, understand domain (`rules/01-workflow-analysis.md`)
+2. **TDD** - Write test -> Implement -> Refactor
+3. **Quality** - Run full quality check
+4. **Commit** - Conventional Commits format
 
-- `phpstan.neon` - Static analysis config
-- `pint.json` - Code style config
-- `.env.example` - Environment template
+## References
+
+| Topic | Rule File |
+|-------|-----------|
+| Analysis | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture.md` |
+| PHP Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Testing | `rules/07-testing.md` |
+| Security | `rules/11-security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

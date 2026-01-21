@@ -1,102 +1,88 @@
-# {{PROJECT_NAME}} - Vue.js Project
+# {{PROJECT_NAME}} - Vue.js
 
-## Project Context
+> Generado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-- **Technology**: Vue.js {{VUE_VERSION}}
-- **TypeScript**: {{TS_VERSION}}
-- **Build Tool**: Vite
-- **Architecture**: {{ARCHITECTURE_PATTERN}}
+## Que (Stack y Estructura)
 
-## Commands
+**Stack**: Vue.js {{VUE_VERSION}} + TypeScript {{TS_VERSION}}
+**Build Tool**: Vite
+**Arquitectura**: {{ARCHITECTURE_PATTERN}}
 
-### Development
-```bash
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-```
-
-### Testing
-```bash
-# Run tests in watch mode
-pnpm test
-
-# Run tests with coverage
-pnpm test:coverage
-
-# Run e2e tests
-pnpm test:e2e
-```
-
-### Code Quality
-```bash
-# Lint code
-pnpm lint
-
-# Fix lint errors
-pnpm lint:fix
-
-# Type check
-pnpm type-check
-
-# Format code
-pnpm format
-```
-
-## Architecture
-
-This project follows {{ARCHITECTURE_PATTERN}}:
-
+### Estructura del proyecto
 ```
 src/
-├── assets/           # Static assets
-├── components/       # Shared components
+├── assets/           # Assets estaticos
+├── components/       # Componentes compartidos
 ├── composables/      # Composition functions
-├── modules/          # Feature modules
+├── modules/          # Modulos de features
+│   └── [module]/
+│       ├── components/
+│       ├── composables/
+│       └── views/
 ├── router/           # Vue Router
 ├── stores/           # Pinia stores
-├── services/         # API services
-├── types/            # TypeScript types
-└── utils/            # Utilities
+├── services/         # Servicios API
+├── types/            # Tipos TypeScript
+└── utils/            # Utilidades
 ```
 
-## Coding Standards
+## Por que (Proposito y Organizacion)
 
-- **Vue**: Composition API with `<script setup>`
-- **TypeScript**: Strict mode
-- **State**: Pinia stores
-- **Style**: ESLint + Prettier
+### Arquitectura: {{ARCHITECTURE_PATTERN}}
+- **Composition API**: `<script setup>` obligatorio
+- **TypeScript**: Modo estricto
+- **Estado**: Pinia stores
+- **Composables**: Prefijo `use`
 
-### Key Conventions
+Ver `rules/02-architecture.md` para patrones detallados.
 
-1. **Components**: Multi-word, PascalCase
-2. **Composables**: `use` prefix
-3. **Stores**: `use{Name}Store` pattern
-4. **Props/Emits**: TypeScript interfaces
+### Reglas criticas
 
-## Testing
+| Regla | Descripcion |
+|-------|-------------|
+| Analisis primero | OBLIGATORIO antes de cualquier codigo |
+| TypeScript strict | Modo estricto habilitado |
+| Componentes | Multi-word, PascalCase |
+| Cobertura | Minimo 80% |
 
-- **Framework**: Vitest
-- **Utils**: Vue Test Utils
-- **E2E**: Playwright
-- **Coverage**: 80% minimum
+## Como (Comandos y Flujos de trabajo)
 
+### Comandos de desarrollo
 ```bash
-# Run specific test
-pnpm test UserCard
-
-# Run with UI
-pnpm test:ui
+pnpm dev             # Servidor desarrollo
+pnpm build           # Build produccion
+pnpm preview         # Preview build produccion
 ```
 
-## Important Files
+### Pipeline de calidad
+```bash
+pnpm lint            # Lint codigo
+pnpm lint:fix        # Fix errores lint
+pnpm type-check      # Verificar tipos
+pnpm test            # Ejecutar tests
+pnpm test:coverage   # Con cobertura
+```
 
-- `vite.config.ts` - Vite configuration
-- `tsconfig.json` - TypeScript config
-- `eslint.config.js` - ESLint rules
-- `.prettierrc` - Prettier config
+### Flujo de desarrollo
+1. **Analizar** - `rules/01-workflow-analysis.md`
+2. **TDD** - Tests en paralelo con codigo
+3. **Calidad** - Lint + type-check + tests
+4. **Commit** - Conventional Commits
+
+## Referencias
+
+| Contexto | Archivo |
+|----------|---------|
+| Antes de modificar | `rules/01-workflow-analysis.md` |
+| Arquitectura | `rules/02-architecture.md` |
+| Estandares codigo | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tests | `rules/07-testing.md` |
+| State Management | `rules/13-state-management.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Especificidades del proyecto
+
+<!-- Agregar configuracion especifica del proyecto aqui -->
+
+<!-- PROJECT-SPECIFIC-END -->

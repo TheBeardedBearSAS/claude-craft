@@ -1,65 +1,89 @@
-# {{PROJECT_NAME}} - C#/.NET Project
+# {{PROJECT_NAME}} - C#/.NET
 
-## Project Context
+> Generado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-This is a C#/.NET {{DOTNET_VERSION}} project following Clean Architecture principles.
+## Que (Stack y Estructura)
 
-**Generated**: {{GENERATION_DATE}}
 **Stack**: {{TECH_STACK}}
+**.NET**: {{DOTNET_VERSION}}
+**C#**: 13
 
-## Architecture
-
-This project follows Clean Architecture with the following layer structure:
-
+### Estructura del proyecto
 ```
 src/
-├── Domain/           # Core business logic (no external dependencies)
-├── Application/      # Use cases, CQRS (depends on Domain)
-├── Infrastructure/   # External concerns (depends on Domain + Application)
-└── WebAPI/          # Presentation layer (depends on all)
+├── Domain/           # Logica de negocio core (sin dependencias externas)
+│   ├── Entities/     # Modelos de dominio ricos
+│   ├── ValueObjects/ # Tipos de valor inmutables
+│   └── Events/       # Domain events
+├── Application/      # Casos de uso, CQRS (depende de Domain)
+│   ├── Commands/     # Operaciones de escritura
+│   ├── Queries/      # Operaciones de lectura
+│   └── Behaviors/    # Pipeline behaviors MediatR
+├── Infrastructure/   # Concerns externos (depende de Domain + Application)
+│   └── Persistence/  # Entity Framework Core
+└── WebAPI/           # Capa presentacion (depende de todos)
 ```
 
-## Key Patterns
+## Por que (Proposito y Organizacion)
 
-- **CQRS**: Commands and Queries separated with MediatR
-- **Domain-Driven Design**: Rich domain models, aggregates, value objects
-- **Repository Pattern**: Abstraction for data access
-- **Unit of Work**: Transaction management
+### Arquitectura: Clean Architecture + CQRS + DDD
+- **Domain**: Logica de negocio sin dependencias externas
+- **Application**: Commands y Queries separados con MediatR
+- **Infrastructure**: Implementaciones tecnicas
 
-## Technology Stack
+Ver `rules/02-architecture.md` para patrones detallados.
 
-- .NET {{DOTNET_VERSION}}
-- C# 13
-- Entity Framework Core
-- MediatR for CQRS
-- FluentValidation
-- AutoMapper
-- xUnit + FluentAssertions + Moq
+### Reglas criticas
 
-## Coding Conventions
+| Regla | Descripcion |
+|-------|-------------|
+| Analisis primero | OBLIGATORIO antes de cualquier codigo |
+| Nullable types | Referencias nullable habilitadas |
+| CancellationToken | Siempre en metodos async |
+| Cobertura | Minimo 80% |
 
-- Use PascalCase for public members
-- Use _camelCase for private fields
-- Suffix async methods with "Async"
-- Always pass CancellationToken to async methods
-- Use nullable reference types
+## Como (Comandos y Flujos de trabajo)
 
-## Testing Strategy
+### Comandos de desarrollo
+```bash
+dotnet build                 # Compilar
+dotnet run --project src/WebAPI # Ejecutar API
+dotnet ef migrations add [Name] # Crear migracion
+```
 
-- Unit tests for Domain and Application layers
-- Integration tests for Infrastructure (with Testcontainers)
-- Functional tests for WebAPI (with WebApplicationFactory)
-- Minimum 80% code coverage
+### Pipeline de calidad
+```bash
+dotnet test                  # Ejecutar tests
+dotnet test --collect:"XPlat Code Coverage" # Con cobertura
+dotnet format                # Formatear codigo
+```
 
-## Available Commands
+### Comandos disponibles
+- `/csharp:check-compliance` - Auditoria completa
+- `/csharp:check-architecture` - Validacion arquitectura
+- `/csharp:check-code-quality` - Analisis calidad codigo
+- `/csharp:generate-feature` - Generar feature CQRS
 
-- `/csharp:check-compliance` - Full compliance audit
-- `/csharp:check-architecture` - Architecture validation
-- `/csharp:check-code-quality` - Code quality analysis
-- `/csharp:check-testing` - Test coverage analysis
-- `/csharp:check-security` - Security audit (OWASP)
-- `/csharp:generate-feature` - Generate CQRS feature
+### Flujo de desarrollo
+1. **Analizar** - `rules/01-workflow-analysis.md`
+2. **TDD** - Escribir test ANTES de implementar
+3. **Calidad** - Tests + format antes de commit
+4. **Commit** - Conventional Commits
 
-## Rules Applied
+## Referencias
 
-See `.claude/rules/` for detailed coding standards and best practices.
+| Contexto | Archivo |
+|----------|---------|
+| Antes de modificar | `rules/01-workflow-analysis.md` |
+| Arquitectura | `rules/02-architecture.md` |
+| Estandares codigo | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tests | `rules/07-testing.md` |
+| Seguridad | `rules/11-security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Especificidades del proyecto
+
+<!-- Agregar configuracion especifica del proyecto aqui -->
+
+<!-- PROJECT-SPECIFIC-END -->

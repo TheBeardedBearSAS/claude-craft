@@ -1,49 +1,94 @@
-# Angular Project - Claude Instructions
+# {{PROJECT_NAME}} - Angular
 
-## Overview
+> Genere: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-This is an Angular {{ANGULAR_VERSION}} project using standalone components and signals for reactive state management.
+## Quoi (Stack & Structure)
 
-## Key Principles
+**Stack**: Angular {{ANGULAR_VERSION}} + TypeScript
+**Architecture**: Standalone Components + Signals
 
-1. **Standalone Components**: All components must be standalone (no NgModules)
-2. **Signals First**: Use Angular Signals for reactive state
-3. **OnPush Strategy**: All components use ChangeDetectionStrategy.OnPush
-4. **Type Safety**: Strict TypeScript mode enabled
-5. **Modern Control Flow**: Use @if, @for, @switch (not *ngIf, *ngFor)
-
-## Project Structure
-
+### Structure du projet
 ```
 src/app/
-├── core/           # Singleton services, guards, interceptors
-├── shared/         # Reusable components, pipes, directives
-├── features/       # Business features (domain-driven)
-├── layout/         # Layout components (header, sidebar, shell)
+├── core/           # Services singleton, guards, interceptors
+├── shared/         # Composants, pipes, directives reutilisables
+├── features/       # Features metier (domain-driven)
+│   └── [feature]/
+│       ├── components/
+│       ├── services/
+│       └── models/
+├── layout/         # Header, sidebar, shell
 └── app.routes.ts   # Root routing
 ```
 
-## Code Generation
+## Pourquoi (Objectif & Organisation)
 
-When generating components:
+### Architecture: Feature-Based + Standalone
+- **Core**: Services globaux, interceptors HTTP
+- **Shared**: Composants UI reutilisables
+- **Features**: Modules metier autonomes
+- **Layout**: Structure de l'application
+
+Voir `rules/02-architecture.md` pour les patterns.
+
+### Regles critiques
+
+| Regle | Description |
+|-------|-------------|
+| Standalone | Tous composants standalone (pas NgModules) |
+| Signals | Utiliser Signals pour state reactif |
+| OnPush | `ChangeDetectionStrategy.OnPush` partout |
+| Modern flow | @if, @for, @switch (pas *ngIf, *ngFor) |
+| Coverage 80%+ | Tests obligatoires |
+
+## Comment (Commandes & Workflows)
+
+### Commandes de developpement
 ```bash
-ng generate component features/{{feature}}/components/{{name}} --standalone
+ng serve               # Serveur dev
+ng build               # Build production
+ng generate component  # Generer composant
 ```
 
-## Testing
+### Pipeline de qualite
+```bash
+ng lint                # ESLint
+ng test                # Tests unitaires
+ng test --coverage     # Avec coverage
+ng e2e                 # Tests E2E
+```
 
-- Unit tests: Vitest or Jest with Angular Testing Library
-- E2E tests: Cypress
-- Minimum coverage: 80%
+### Generation de code
+```bash
+ng generate component features/{{feature}}/components/{{name}} --standalone
+ng generate service features/{{feature}}/services/{{name}}
+```
 
-## Styling
+### Workflow de developpement
+1. **Analyser** - `rules/01-workflow-analysis.md`
+2. **TDD** - Test first (Vitest/Jest)
+3. **Qualite** - `ng lint && ng test`
+4. **Commit** - Conventional Commits
+
+## References
+
+| Contexte | Fichier |
+|----------|---------|
+| Workflow | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture.md` |
+| Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tests | `rules/07-testing.md` |
+| State | `rules/13-state-management.md` |
+| Securite | `rules/11-security.md` |
 
 {{STYLING_INSTRUCTIONS}}
 
-## State Management
-
 {{STATE_MANAGEMENT_INSTRUCTIONS}}
 
-## Additional Instructions
+<!-- PROJECT-SPECIFIC-START -->
+## Specificites du projet
 
 {{CUSTOM_INSTRUCTIONS}}
+
+<!-- PROJECT-SPECIFIC-END -->

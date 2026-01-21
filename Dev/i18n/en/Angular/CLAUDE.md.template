@@ -1,49 +1,79 @@
-# Angular Project - Claude Instructions
+# {{PROJECT_NAME}} - Angular
 
-## Overview
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-This is an Angular {{ANGULAR_VERSION}} project using standalone components and signals for reactive state management.
+## What (Stack & Structure)
 
-## Key Principles
+**Stack**: Angular {{ANGULAR_VERSION}}, TypeScript, Standalone Components, Signals
 
-1. **Standalone Components**: All components must be standalone (no NgModules)
-2. **Signals First**: Use Angular Signals for reactive state
-3. **OnPush Strategy**: All components use ChangeDetectionStrategy.OnPush
-4. **Type Safety**: Strict TypeScript mode enabled
-5. **Modern Control Flow**: Use @if, @for, @switch (not *ngIf, *ngFor)
-
-## Project Structure
-
+### Project Structure
 ```
 src/app/
-├── core/           # Singleton services, guards, interceptors
-├── shared/         # Reusable components, pipes, directives
-├── features/       # Business features (domain-driven)
-├── layout/         # Layout components (header, sidebar, shell)
-└── app.routes.ts   # Root routing
+├── core/             # Singleton services, guards, interceptors
+├── shared/           # Reusable components, pipes, directives
+├── features/         # Feature modules (domain-driven)
+├── layout/           # Layout components (header, sidebar)
+└── app.routes.ts     # Root routing
 ```
 
-## Code Generation
+## Why (Purpose & Organization)
 
-When generating components:
+### Architecture: Standalone + Feature-First
+- **Standalone Components**: No NgModules, tree-shakeable
+- **Signals**: Reactive state management
+- **OnPush**: All components use ChangeDetectionStrategy.OnPush
+- **Modern Control Flow**: @if, @for, @switch syntax
+
+See `rules/02-architecture.md` for complete patterns.
+
+### Critical Rules
+| Rule | Reason |
+|------|--------|
+| Standalone components | Modern Angular, tree-shaking |
+| Signals for state | Reactive, fine-grained updates |
+| TypeScript strict | Type safety |
+| 80%+ coverage | Quality assurance |
+
+## How (Commands & Workflows)
+
+### Development Commands
+```bash
+ng serve              # Start dev server
+ng build              # Production build
+ng test               # Run tests (Vitest/Jest)
+ng lint               # ESLint check
+```
+
+### Code Generation
 ```bash
 ng generate component features/{{feature}}/components/{{name}} --standalone
+ng generate service core/services/{{name}}
 ```
 
-## Testing
+### Development Workflow
+1. **Analyze** - Understand component hierarchy (`rules/01-workflow-analysis.md`)
+2. **TDD** - Write test -> Implement -> Refactor
+3. **Quality** - Run `ng lint && ng test`
+4. **Commit** - Conventional Commits format
 
-- Unit tests: Vitest or Jest with Angular Testing Library
-- E2E tests: Cypress
-- Minimum coverage: 80%
+## References
 
-## Styling
+| Topic | Rule File |
+|-------|-----------|
+| Analysis | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture.md` |
+| TypeScript | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| State Management | `rules/06-state-management.md` |
+| Testing | `rules/07-testing.md` |
 
 {{STYLING_INSTRUCTIONS}}
 
-## State Management
-
 {{STATE_MANAGEMENT_INSTRUCTIONS}}
 
-## Additional Instructions
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
 
 {{CUSTOM_INSTRUCTIONS}}
+
+<!-- PROJECT-SPECIFIC-END -->

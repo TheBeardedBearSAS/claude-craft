@@ -1,104 +1,94 @@
-# {{PROJECT_NAME}} - Laravel Project
+# {{PROJECT_NAME}} - Laravel
 
-## Project Context
+> Genere: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-- **Technology**: Laravel {{LARAVEL_VERSION}}
-- **PHP Version**: {{PHP_VERSION}}
-- **Architecture**: {{ARCHITECTURE_PATTERN}}
-- **Database**: {{DATABASE_TYPE}}
+## Quoi (Stack & Structure)
 
-## Commands
+**Stack**: Laravel {{LARAVEL_VERSION}} + PHP {{PHP_VERSION}}
+**Database**: {{DATABASE_TYPE}}
+**Architecture**: {{ARCHITECTURE_PATTERN}}
 
-### Development
-```bash
-# Start development server
-php artisan serve
-
-# Run queue worker
-php artisan queue:work
-
-# Run tests
-php artisan test
-
-# Run tests with coverage
-php artisan test --coverage
+### Structure du projet
+```
+app/
+├── Domain/           # Logique metier pure
+│   ├── Models/       # Eloquent models avec comportement
+│   └── ValueObjects/ # Types immuables
+├── Application/      # Use cases, Actions, DTOs
+│   ├── Actions/      # Actions metier
+│   └── DTOs/         # Data Transfer Objects
+├── Infrastructure/   # Services externes, Repositories
+└── Http/             # Controllers, Requests, Resources
+    ├── Controllers/  # Thin controllers
+    ├── Requests/     # Form Requests validation
+    └── Resources/    # API Resources
 ```
 
-### Code Quality
+## Pourquoi (Objectif & Organisation)
+
+### Architecture: {{ARCHITECTURE_PATTERN}}
+- **Domain**: Modeles Eloquent avec logique metier
+- **Application**: Actions pour orchestration
+- **Infrastructure**: Services et repositories
+- **Http**: Adaptateur HTTP (thin controllers)
+
+Voir `rules/02-architecture.md` pour les patterns.
+
+### Regles critiques
+
+| Regle | Description |
+|-------|-------------|
+| Analyse avant code | Consulter `rules/01-workflow-analysis.md` |
+| strict_types | Obligatoire dans tous les fichiers |
+| PHPStan level 8 | 0 erreurs |
+| Controllers thin | Deleguer aux Actions |
+| Validation | Toujours via Form Requests |
+
+## Comment (Commandes & Workflows)
+
+### Commandes de developpement
 ```bash
-# Format code
-./vendor/bin/pint
+php artisan serve          # Serveur dev
+php artisan queue:work     # Queue worker
+sail up                    # Docker via Sail
+```
 
-# Static analysis
-./vendor/bin/phpstan analyse
-
-# Full quality check
+### Pipeline de qualite
+```bash
+./vendor/bin/pint                      # Format code
+./vendor/bin/phpstan analyse           # Analyse statique
+php artisan test                       # Tests
+php artisan test --coverage            # Coverage
 ./vendor/bin/pint && ./vendor/bin/phpstan analyse && php artisan test
 ```
 
-### Database
+### Base de donnees
 ```bash
-# Run migrations
-php artisan migrate
-
-# Fresh database with seeds
-php artisan migrate:fresh --seed
-
-# Rollback last migration
-php artisan migrate:rollback
+php artisan migrate                    # Migrations
+php artisan migrate:fresh --seed       # Reset + seed
+php artisan migrate:rollback           # Rollback
 ```
 
-## Architecture
+### Workflow de developpement
+1. **Analyser** - `rules/01-workflow-analysis.md`
+2. **TDD** - Test first (Pest PHP)
+3. **Qualite** - Pint + PHPStan + Tests
+4. **Commit** - Conventional Commits
 
-This project follows {{ARCHITECTURE_PATTERN}}:
+## References
 
-```
-app/
-├── Domain/           # Core business logic
-├── Application/      # Use cases, Actions, DTOs
-├── Infrastructure/   # External services, Repositories
-└── Http/             # Controllers, Requests, Resources
-```
+| Contexte | Fichier |
+|----------|---------|
+| Workflow | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture.md` |
+| Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tests | `rules/07-testing.md` |
+| Securite | `rules/11-security.md` |
 
-## Coding Standards
+<!-- PROJECT-SPECIFIC-START -->
+## Specificites du projet
 
-- **PHP**: 8.3+ with strict types
-- **Style**: Laravel Pint (PSR-12 + Laravel)
-- **Analysis**: PHPStan level 8
+<!-- Cette section est preservee lors des mises a jour -->
 
-### Key Conventions
-
-1. **Controllers**: Thin, delegate to Actions
-2. **Validation**: Always via Form Requests
-3. **Responses**: Always via API Resources
-4. **Authorization**: Via Policies
-5. **Business Logic**: In Domain layer or Actions
-
-## Testing
-
-- **Framework**: Pest PHP
-- **Minimum Coverage**: 80%
-- **Test Types**: Feature, Unit, Architecture
-
-```bash
-# Run all tests
-php artisan test
-
-# Run specific test
-php artisan test --filter=OrderTest
-
-# Run in parallel
-php artisan test --parallel
-```
-
-## Environment
-
-- **Local**: Uses Docker via Laravel Sail
-- **Testing**: SQLite in-memory
-- **Production**: PostgreSQL
-
-## Important Files
-
-- `phpstan.neon` - Static analysis config
-- `pint.json` - Code style config
-- `.env.example` - Environment template
+<!-- PROJECT-SPECIFIC-END -->

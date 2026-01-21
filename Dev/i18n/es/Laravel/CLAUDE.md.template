@@ -1,104 +1,85 @@
-# {{PROJECT_NAME}} - Laravel Project
+# {{PROJECT_NAME}} - Laravel
 
-## Project Context
+> Generado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-- **Technology**: Laravel {{LARAVEL_VERSION}}
-- **PHP Version**: {{PHP_VERSION}}
-- **Architecture**: {{ARCHITECTURE_PATTERN}}
-- **Database**: {{DATABASE_TYPE}}
+## Que (Stack y Estructura)
 
-## Commands
+**Stack**: Laravel {{LARAVEL_VERSION}} + PHP {{PHP_VERSION}}
+**Database**: {{DATABASE_TYPE}}
+**Arquitectura**: {{ARCHITECTURE_PATTERN}}
 
-### Development
-```bash
-# Start development server
-php artisan serve
-
-# Run queue worker
-php artisan queue:work
-
-# Run tests
-php artisan test
-
-# Run tests with coverage
-php artisan test --coverage
-```
-
-### Code Quality
-```bash
-# Format code
-./vendor/bin/pint
-
-# Static analysis
-./vendor/bin/phpstan analyse
-
-# Full quality check
-./vendor/bin/pint && ./vendor/bin/phpstan analyse && php artisan test
-```
-
-### Database
-```bash
-# Run migrations
-php artisan migrate
-
-# Fresh database with seeds
-php artisan migrate:fresh --seed
-
-# Rollback last migration
-php artisan migrate:rollback
-```
-
-## Architecture
-
-This project follows {{ARCHITECTURE_PATTERN}}:
-
+### Estructura del proyecto
 ```
 app/
-├── Domain/           # Core business logic
-├── Application/      # Use cases, Actions, DTOs
-├── Infrastructure/   # External services, Repositories
+├── Domain/           # Logica de negocio core
+│   ├── Models/       # Modelos Eloquent
+│   └── Services/     # Servicios de dominio
+├── Application/      # Casos de uso, Actions, DTOs
+│   └── Actions/      # Single-action classes
+├── Infrastructure/   # Servicios externos, Repositorios
 └── Http/             # Controllers, Requests, Resources
+    ├── Controllers/  # Controllers delgados
+    ├── Requests/     # Form Request validation
+    └── Resources/    # API Resources
 ```
 
-## Coding Standards
+## Por que (Proposito y Organizacion)
 
-- **PHP**: 8.3+ with strict types
-- **Style**: Laravel Pint (PSR-12 + Laravel)
-- **Analysis**: PHPStan level 8
+### Arquitectura: {{ARCHITECTURE_PATTERN}}
+- **Controllers delgados**: Delegan a Actions
+- **Validacion**: Siempre via Form Requests
+- **Respuestas**: Siempre via API Resources
+- **Logica de negocio**: En Domain layer o Actions
 
-### Key Conventions
+Ver `rules/02-architecture.md` para patrones detallados.
 
-1. **Controllers**: Thin, delegate to Actions
-2. **Validation**: Always via Form Requests
-3. **Responses**: Always via API Resources
-4. **Authorization**: Via Policies
-5. **Business Logic**: In Domain layer or Actions
+### Reglas criticas
 
-## Testing
+| Regla | Descripcion |
+|-------|-------------|
+| Analisis primero | OBLIGATORIO antes de cualquier codigo |
+| PHP strict | 8.3+ con strict types |
+| PHPStan nivel 8 | 0 errores |
+| Cobertura | Minimo 80% |
 
-- **Framework**: Pest PHP
-- **Minimum Coverage**: 80%
-- **Test Types**: Feature, Unit, Architecture
+## Como (Comandos y Flujos de trabajo)
 
+### Comandos de desarrollo
 ```bash
-# Run all tests
-php artisan test
-
-# Run specific test
-php artisan test --filter=OrderTest
-
-# Run in parallel
-php artisan test --parallel
+php artisan serve            # Servidor desarrollo
+php artisan queue:work       # Worker de colas
+php artisan migrate          # Ejecutar migraciones
+php artisan migrate:fresh --seed # Reset DB con seeds
 ```
 
-## Environment
+### Pipeline de calidad
+```bash
+./vendor/bin/pint            # Formatear codigo
+./vendor/bin/phpstan analyse # Analisis estatico
+php artisan test             # Ejecutar tests
+php artisan test --coverage  # Con cobertura
+```
 
-- **Local**: Uses Docker via Laravel Sail
-- **Testing**: SQLite in-memory
-- **Production**: PostgreSQL
+### Flujo de desarrollo
+1. **Analizar** - `rules/01-workflow-analysis.md`
+2. **TDD** - Escribir test ANTES de implementar
+3. **Calidad** - Pint + PHPStan + tests
+4. **Commit** - Conventional Commits
 
-## Important Files
+## Referencias
 
-- `phpstan.neon` - Static analysis config
-- `pint.json` - Code style config
-- `.env.example` - Environment template
+| Contexto | Archivo |
+|----------|---------|
+| Antes de modificar | `rules/01-workflow-analysis.md` |
+| Arquitectura | `rules/02-architecture.md` |
+| Estandares codigo | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tests | `rules/07-testing.md` |
+| Seguridad | `rules/11-security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Especificidades del proyecto
+
+<!-- Agregar configuracion especifica del proyecto aqui -->
+
+<!-- PROJECT-SPECIFIC-END -->

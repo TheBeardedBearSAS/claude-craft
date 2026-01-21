@@ -10,23 +10,48 @@
       "Grep",
       "Bash(git:*)",
       "Bash(npm run:*)",
+      "Bash(npm test:*)",
+      "Bash(pnpm:*)",
+      "Bash(yarn:*)",
       "Bash(composer:*)",
-      "Bash(php bin/console:*)"
+      "Bash(php bin/console:*)",
+      "Bash(php artisan:*)",
+      "Bash(dotnet:*)",
+      "Bash(make:*)",
+      "Bash(docker compose:*)",
+      "Bash(flutter:*)",
+      "Bash(ng:*)"
     ],
     "deny": [
       "Bash(rm -rf:*)",
       "Bash(sudo:*)",
+      "Bash(chmod 777:*)",
+      "Bash(curl | sh:*)",
+      "Bash(wget | sh:*)",
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Read(**/secrets/*)",
       "Read(**/*.key)",
-      "Read(**/*.pem)"
+      "Read(**/*.pem)",
+      "Read(**/*credentials*)"
     ]
   },
 
   "model": "claude-sonnet-4-20250514",
 
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-dangerous-commands.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Write|Edit",

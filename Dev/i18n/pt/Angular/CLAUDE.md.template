@@ -1,49 +1,86 @@
-# Angular Project - Claude Instructions
+# {{PROJECT_NAME}} - Angular
 
-## Overview
+> Gerado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-This is an Angular {{ANGULAR_VERSION}} project using standalone components and signals for reactive state management.
+## O Que (Stack & Estrutura)
 
-## Key Principles
+**Stack**: Angular {{ANGULAR_VERSION}} + TypeScript
+**Componentes**: Standalone (sem NgModules)
+**Estado**: Signals para reatividade
 
-1. **Standalone Components**: All components must be standalone (no NgModules)
-2. **Signals First**: Use Angular Signals for reactive state
-3. **OnPush Strategy**: All components use ChangeDetectionStrategy.OnPush
-4. **Type Safety**: Strict TypeScript mode enabled
-5. **Modern Control Flow**: Use @if, @for, @switch (not *ngIf, *ngFor)
-
-## Project Structure
-
+### Estrutura do projeto
 ```
 src/app/
-├── core/           # Singleton services, guards, interceptors
-├── shared/         # Reusable components, pipes, directives
-├── features/       # Business features (domain-driven)
-├── layout/         # Layout components (header, sidebar, shell)
-└── app.routes.ts   # Root routing
+├── core/             # Servicos singleton, guards, interceptors
+├── shared/           # Componentes, pipes, diretivas reutilizaveis
+├── features/         # Features de negocio (domain-driven)
+│   └── [feature]/
+│       ├── components/
+│       ├── services/
+│       └── models/
+├── layout/           # Header, sidebar, shell
+└── app.routes.ts     # Rotas raiz
 ```
 
-## Code Generation
+## Por Que (Proposito & Organizacao)
 
-When generating components:
+### Arquitetura: Feature-Based + Standalone
+- **Standalone Components**: Sem NgModules, imports explicitos
+- **Signals First**: Estado reativo com Angular Signals
+- **OnPush**: Todas componentes com ChangeDetectionStrategy.OnPush
+- **Control Flow**: @if, @for, @switch (nao *ngIf, *ngFor)
+
+Ver `rules/02-architecture.md` para padroes.
+
+### Regras criticas
+
+| Regra | Descricao |
+|-------|-----------|
+| Standalone | Todos componentes devem ser standalone |
+| TypeScript | Strict mode obrigatorio |
+| Analise | OBRIGATORIA antes de qualquer codigo |
+| Testes | 80% cobertura minima |
+
+## Como (Comandos & Workflows)
+
+### Comandos de desenvolvimento
 ```bash
-ng generate component features/{{feature}}/components/{{name}} --standalone
+ng serve                           # Servidor de desenvolvimento
+ng generate component features/... --standalone # Gerar componente
+ng build --configuration=production # Build producao
 ```
 
-## Testing
+### Pipeline de qualidade
+```bash
+ng lint                            # ESLint
+ng test --code-coverage            # Testes com cobertura
+npm run type-check                 # Verificacao TypeScript
+```
 
-- Unit tests: Vitest or Jest with Angular Testing Library
-- E2E tests: Cypress
-- Minimum coverage: 80%
+### Workflow de desenvolvimento
+1. **Analisar** - `rules/01-workflow-analysis.md`
+2. **TDD** - Testes antes do codigo
+3. **Qualidade** - Lint + Testes + Type check
+4. **Commit** - Conventional Commits
 
-## Styling
+## Referencias
+
+| Contexto | Arquivo |
+|----------|---------|
+| Workflow | `rules/01-workflow-analysis.md` |
+| Arquitetura | `rules/02-architecture.md` |
+| Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Testes | `rules/07-testing.md` |
+| Seguranca | `rules/11-security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Especificidades do projeto
 
 {{STYLING_INSTRUCTIONS}}
 
-## State Management
-
 {{STATE_MANAGEMENT_INSTRUCTIONS}}
 
-## Additional Instructions
-
 {{CUSTOM_INSTRUCTIONS}}
+
+<!-- PROJECT-SPECIFIC-END -->

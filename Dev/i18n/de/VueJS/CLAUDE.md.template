@@ -1,102 +1,85 @@
-# {{PROJECT_NAME}} - Vue.js Project
+# {{PROJECT_NAME}} - Vue.js
 
-## Project Context
+> Erstellt: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-- **Technology**: Vue.js {{VUE_VERSION}}
-- **TypeScript**: {{TS_VERSION}}
-- **Build Tool**: Vite
-- **Architecture**: {{ARCHITECTURE_PATTERN}}
+## Was (Stack & Struktur)
 
-## Commands
+**Stack**: Vue.js {{VUE_VERSION}} + TypeScript {{TS_VERSION}}
+**Build Tool**: Vite
+**Architektur**: {{ARCHITECTURE_PATTERN}}
 
-### Development
-```bash
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-```
-
-### Testing
-```bash
-# Run tests in watch mode
-pnpm test
-
-# Run tests with coverage
-pnpm test:coverage
-
-# Run e2e tests
-pnpm test:e2e
-```
-
-### Code Quality
-```bash
-# Lint code
-pnpm lint
-
-# Fix lint errors
-pnpm lint:fix
-
-# Type check
-pnpm type-check
-
-# Format code
-pnpm format
-```
-
-## Architecture
-
-This project follows {{ARCHITECTURE_PATTERN}}:
-
+### Projektstruktur
 ```
 src/
-├── assets/           # Static assets
-├── components/       # Shared components
-├── composables/      # Composition functions
-├── modules/          # Feature modules
+├── assets/           # Statische Assets
+├── components/       # Gemeinsame Komponenten
+├── composables/      # Composition Functions
+├── modules/          # Feature Module
+│   └── [module]/
+│       ├── components/
+│       ├── composables/
+│       └── views/
 ├── router/           # Vue Router
-├── stores/           # Pinia stores
-├── services/         # API services
-├── types/            # TypeScript types
+├── stores/           # Pinia Stores
+├── services/         # API Services
+├── types/            # TypeScript Types
 └── utils/            # Utilities
 ```
 
-## Coding Standards
+## Warum (Zweck & Organisation)
 
-- **Vue**: Composition API with `<script setup>`
-- **TypeScript**: Strict mode
-- **State**: Pinia stores
-- **Style**: ESLint + Prettier
+### Architektur: {{ARCHITECTURE_PATTERN}}
+- **Composition API**: `<script setup>` Syntax
+- **TypeScript**: Strict Mode aktiviert
+- **Pinia**: State Management
+- **Composables**: Wiederverwendbare Logik
 
-### Key Conventions
+Siehe `rules/02-architecture.md` fuer Muster.
 
-1. **Components**: Multi-word, PascalCase
-2. **Composables**: `use` prefix
-3. **Stores**: `use{Name}Store` pattern
-4. **Props/Emits**: TypeScript interfaces
+### Kritische Regeln
+| Regel | Beschreibung |
+|-------|--------------|
+| Components | Multi-word, PascalCase |
+| Composables | `use` Prefix |
+| Stores | `use{Name}Store` Pattern |
+| TypeScript | Interfaces fuer Props/Emits |
+| Tests | 80% Coverage |
 
-## Testing
+## Wie (Befehle & Workflows)
 
-- **Framework**: Vitest
-- **Utils**: Vue Test Utils
-- **E2E**: Playwright
-- **Coverage**: 80% minimum
-
+### Entwicklungsbefehle
 ```bash
-# Run specific test
-pnpm test UserCard
-
-# Run with UI
-pnpm test:ui
+pnpm dev       # Dev Server
+pnpm build     # Production Build
+pnpm preview   # Production Preview
 ```
 
-## Important Files
+### Qualitaets-Pipeline
+```bash
+pnpm lint          # ESLint
+pnpm lint:fix      # ESLint Fix
+pnpm type-check    # TypeScript
+pnpm test          # Vitest
+pnpm test:coverage # Mit Coverage
+pnpm test:e2e      # Playwright E2E
+```
 
-- `vite.config.ts` - Vite configuration
-- `tsconfig.json` - TypeScript config
-- `eslint.config.js` - ESLint rules
-- `.prettierrc` - Prettier config
+### Entwicklungs-Workflow
+1. **Analysieren** - `rules/01-workflow-analysis.md` lesen
+2. **TDD** - Test schreiben, implementieren, refaktorisieren
+3. **Qualitaet** - Lint + Type-Check + Tests
+4. **Commit** - Conventional Commits Format
+
+## Referenzen
+| Kontext | Datei |
+|---------|-------|
+| Vor Aenderungen | `rules/01-workflow-analysis.md` |
+| Architektur | `rules/02-architecture.md` |
+| Code Standards | `rules/03-coding-standards.md` |
+| Testing | `rules/07-testing.md` |
+| State Management | `rules/13-state-management.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Projektspezifika
+<!-- Projektspezifische Konfiguration hier hinzufuegen -->
+<!-- PROJECT-SPECIFIC-END -->

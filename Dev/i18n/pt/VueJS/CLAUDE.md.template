@@ -1,102 +1,83 @@
-# {{PROJECT_NAME}} - Vue.js Project
+# {{PROJECT_NAME}} - Vue.js
 
-## Project Context
+> Gerado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-- **Technology**: Vue.js {{VUE_VERSION}}
-- **TypeScript**: {{TS_VERSION}}
-- **Build Tool**: Vite
-- **Architecture**: {{ARCHITECTURE_PATTERN}}
+## O Que (Stack & Estrutura)
 
-## Commands
+**Stack**: Vue.js {{VUE_VERSION}} + TypeScript {{TS_VERSION}}
+**Build Tool**: Vite
+**Arquitetura**: {{ARCHITECTURE_PATTERN}}
 
-### Development
-```bash
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-```
-
-### Testing
-```bash
-# Run tests in watch mode
-pnpm test
-
-# Run tests with coverage
-pnpm test:coverage
-
-# Run e2e tests
-pnpm test:e2e
-```
-
-### Code Quality
-```bash
-# Lint code
-pnpm lint
-
-# Fix lint errors
-pnpm lint:fix
-
-# Type check
-pnpm type-check
-
-# Format code
-pnpm format
-```
-
-## Architecture
-
-This project follows {{ARCHITECTURE_PATTERN}}:
-
+### Estrutura do projeto
 ```
 src/
-├── assets/           # Static assets
-├── components/       # Shared components
-├── composables/      # Composition functions
-├── modules/          # Feature modules
+├── assets/           # Assets estaticos
+├── components/       # Componentes compartilhados
+├── composables/      # Funcoes de composicao
+├── modules/          # Modulos de features
 ├── router/           # Vue Router
 ├── stores/           # Pinia stores
-├── services/         # API services
-├── types/            # TypeScript types
-└── utils/            # Utilities
+├── services/         # Servicos API
+├── types/            # Tipos TypeScript
+└── utils/            # Utilitarios
 ```
 
-## Coding Standards
+## Por Que (Proposito & Organizacao)
 
-- **Vue**: Composition API with `<script setup>`
+### Arquitetura: {{ARCHITECTURE_PATTERN}}
+- **Composition API**: `<script setup>` obrigatorio
 - **TypeScript**: Strict mode
-- **State**: Pinia stores
-- **Style**: ESLint + Prettier
+- **Estado**: Pinia stores
+- **Componentes**: Multi-word, PascalCase
 
-### Key Conventions
+Ver `rules/02-architecture.md` para padroes.
 
-1. **Components**: Multi-word, PascalCase
-2. **Composables**: `use` prefix
-3. **Stores**: `use{Name}Store` pattern
-4. **Props/Emits**: TypeScript interfaces
+### Regras criticas
 
-## Testing
+| Regra | Descricao |
+|-------|-----------|
+| Composition API | `<script setup>` obrigatorio |
+| TypeScript | Strict mode, interfaces para props |
+| Naming | `use` prefix para composables |
+| Testes | 80% cobertura minima |
 
-- **Framework**: Vitest
-- **Utils**: Vue Test Utils
-- **E2E**: Playwright
-- **Coverage**: 80% minimum
+## Como (Comandos & Workflows)
 
+### Comandos de desenvolvimento
 ```bash
-# Run specific test
-pnpm test UserCard
-
-# Run with UI
-pnpm test:ui
+pnpm dev              # Servidor de desenvolvimento
+pnpm build            # Build producao
+pnpm preview          # Preview do build
 ```
 
-## Important Files
+### Pipeline de qualidade
+```bash
+pnpm lint             # ESLint
+pnpm type-check       # TypeScript
+pnpm test:coverage    # Testes com cobertura
+pnpm format           # Prettier
+```
 
-- `vite.config.ts` - Vite configuration
-- `tsconfig.json` - TypeScript config
-- `eslint.config.js` - ESLint rules
-- `.prettierrc` - Prettier config
+### Workflow de desenvolvimento
+1. **Analisar** - `rules/01-workflow-analysis.md`
+2. **TDD** - Vitest + Vue Test Utils
+3. **Qualidade** - Lint + Type check + Testes
+4. **Commit** - Conventional Commits
+
+## Referencias
+
+| Contexto | Arquivo |
+|----------|---------|
+| Workflow | `rules/01-workflow-analysis.md` |
+| Arquitetura | `rules/02-architecture.md` |
+| Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Testes | `rules/07-testing.md` |
+| Seguranca | `rules/11-security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Especificidades do projeto
+
+<!-- Adicionar configuracao especifica do projeto aqui -->
+
+<!-- PROJECT-SPECIFIC-END -->
