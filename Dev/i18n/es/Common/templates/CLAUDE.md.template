@@ -1,58 +1,75 @@
-# Configuración del Proyecto
+# {{PROJECT_NAME}}
+
+> Generado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## Que (Stack & Estructura)
 
 Este proyecto utiliza las reglas de **Claude Craft** para el desarrollo asistido por IA.
 
-## Componentes Instalados
-
-### Tecnologías
-<!-- AUTO-GENERATED -->
+### Tecnologias
 {TECH_LIST}
 
-### Agentes Disponibles
-
-Usa `@nombre-agente` para invocar agentes especializados:
-
-{AGENTS_LIST}
-
-### Comandos Disponibles
-
-Usa `/namespace:comando` para ejecutar comandos del proyecto:
-
-{COMMANDS_LIST}
-
-### Referencia de Skills
-
-Consulta `.claude/skills/` para guías detalladas sobre:
-- Patrones de arquitectura
-- Estrategias de testing
-- Mejores prácticas de seguridad
-- Estándares de calidad de código
-
-## Especificaciones del Proyecto
-
-<!-- Agrega tus instrucciones específicas del proyecto abajo -->
-
-### Arquitectura
-
-Describe la arquitectura de tu proyecto aquí.
-
-### Convenciones
-
-Lista las convenciones específicas de tu proyecto aquí.
-
-### Tareas Comunes
-
-```bash
-# Build
-make build
-
-# Test
-make test
-
-# Despliegue
-make deploy
+### Estructura del proyecto
+```
+{{PROJECT_ROOT}}/
+├── .claude/
+│   ├── rules/       # Estandares de codigo (auto-cargados)
+│   ├── agents/      # Agentes IA especializados
+│   ├── commands/    # Comandos slash
+│   └── skills/      # Capacidades extendidas
+└── src/             # Codigo fuente de la aplicacion
 ```
 
----
+## Por que (Objetivo & Organizacion)
 
-*Generado por [Claude Craft](https://github.com/anthropics/claude-craft)*
+### Principios fundamentales
+- **Analisis antes de accion**: Siempre entender el codigo antes de modificar (ver `rules/01-workflow-analysis.md`)
+- **SOLID + KISS**: Codigo limpio y mantenible (ver `rules/04-solid-principles.md`)
+- **TDD/BDD**: Desarrollo guiado por pruebas (ver `rules/07-testing.md`)
+- **Seguridad primero**: Conformidad OWASP (ver `rules/11-security.md`)
+
+### Arquitectura
+Consultar `.claude/rules/02-architecture*.md` para patrones detallados.
+
+## Como (Comandos & Workflow)
+
+### Agentes disponibles
+{AGENTS_LIST}
+
+### Comandos disponibles
+{COMMANDS_LIST}
+
+### Comandos esenciales
+```bash
+make help              # Mostrar todos los comandos
+make test              # Ejecutar pruebas
+make quality           # Verificaciones de calidad
+make build             # Build del proyecto
+```
+
+### Flujo de desarrollo
+1. **Analizar** - Leer codigo existente, identificar impactos
+2. **Prueba primero** - Escribir prueba que falla (RED)
+3. **Implementar** - Codigo minimo para pasar (GREEN)
+4. **Refactorizar** - Limpiar mientras las pruebas pasan
+5. **Calidad** - Ejecutar `make quality` antes de commit
+
+## Referencias
+
+| Tema | Archivo |
+|------|---------|
+| Workflow | `rules/01-workflow-analysis.md` |
+| Arquitectura | `rules/02-architecture*.md` |
+| Estandares de codigo | `rules/03-coding-standards.md` |
+| Principios SOLID | `rules/04-solid-principles.md` |
+| KISS/DRY/YAGNI | `rules/05-kiss-dry-yagni.md` |
+| Pruebas | `rules/07-testing.md` |
+| Seguridad | `rules/11-security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Especificidades del proyecto
+
+<!-- Agregue sus instrucciones especificas abajo -->
+<!-- Esta seccion se preserva durante las actualizaciones -->
+
+<!-- PROJECT-SPECIFIC-END -->

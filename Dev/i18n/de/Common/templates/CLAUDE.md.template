@@ -1,58 +1,75 @@
-# Projektkonfiguration
+# {{PROJECT_NAME}}
 
-Dieses Projekt verwendet **Claude Craft** Regeln für KI-gestützte Entwicklung.
+> Erstellt: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
 
-## Installierte Komponenten
+## Was (Stack & Struktur)
+
+Dieses Projekt verwendet **Claude Craft** Regeln fur KI-gestutzte Entwicklung.
 
 ### Technologien
-<!-- AUTO-GENERATED -->
 {TECH_LIST}
 
-### Verfügbare Agenten
-
-Verwende `@agent-name` um spezialisierte Agenten aufzurufen:
-
-{AGENTS_LIST}
-
-### Verfügbare Befehle
-
-Verwende `/namespace:befehl` um Projektbefehle auszuführen:
-
-{COMMANDS_LIST}
-
-### Skills Referenz
-
-Siehe `.claude/skills/` für detaillierte Richtlinien zu:
-- Architekturmuster
-- Teststrategien
-- Sicherheits-Best-Practices
-- Code-Qualitätsstandards
-
-## Projektspezifika
-
-<!-- Füge hier deine projektspezifischen Anweisungen hinzu -->
-
-### Architektur
-
-Beschreibe hier die Architektur deines Projekts.
-
-### Konventionen
-
-Liste hier die projektspezifischen Konventionen auf.
-
-### Häufige Aufgaben
-
-```bash
-# Build
-make build
-
-# Test
-make test
-
-# Deployment
-make deploy
+### Projektstruktur
+```
+{{PROJECT_ROOT}}/
+├── .claude/
+│   ├── rules/       # Code-Standards (automatisch geladen)
+│   ├── agents/      # Spezialisierte KI-Agenten
+│   ├── commands/    # Slash-Befehle
+│   └── skills/      # Erweiterte Fahigkeiten
+└── src/             # Anwendungsquellcode
 ```
 
----
+## Warum (Ziel & Organisation)
 
-*Generiert von [Claude Craft](https://github.com/anthropics/claude-craft)*
+### Grundprinzipien
+- **Analyse vor Aktion**: Code immer verstehen bevor andern (siehe `rules/01-workflow-analysis.md`)
+- **SOLID + KISS**: Sauberer, wartbarer Code (siehe `rules/04-solid-principles.md`)
+- **TDD/BDD**: Testgetriebene Entwicklung (siehe `rules/07-testing.md`)
+- **Sicherheit zuerst**: OWASP-Konformitat (siehe `rules/11-security.md`)
+
+### Architektur
+Siehe `.claude/rules/02-architecture*.md` fur detaillierte Muster.
+
+## Wie (Befehle & Workflow)
+
+### Verfugbare Agenten
+{AGENTS_LIST}
+
+### Verfugbare Befehle
+{COMMANDS_LIST}
+
+### Wesentliche Befehle
+```bash
+make help              # Alle Befehle anzeigen
+make test              # Tests ausfuhren
+make quality           # Qualitatsprufungen
+make build             # Projekt bauen
+```
+
+### Entwicklungs-Workflow
+1. **Analysieren** - Bestehenden Code lesen, Auswirkungen identifizieren
+2. **Test zuerst** - Fehlschlagenden Test schreiben (RED)
+3. **Implementieren** - Minimaler Code zum Bestehen (GREEN)
+4. **Refactoring** - Aufraumen wahrend Tests bestehen
+5. **Qualitat** - `make quality` vor Commit ausfuhren
+
+## Referenzen
+
+| Thema | Datei |
+|-------|-------|
+| Workflow | `rules/01-workflow-analysis.md` |
+| Architektur | `rules/02-architecture*.md` |
+| Code-Standards | `rules/03-coding-standards.md` |
+| SOLID-Prinzipien | `rules/04-solid-principles.md` |
+| KISS/DRY/YAGNI | `rules/05-kiss-dry-yagni.md` |
+| Tests | `rules/07-testing.md` |
+| Sicherheit | `rules/11-security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Projektspezifisches
+
+<!-- Fugen Sie Ihre projektspezifischen Anweisungen unten hinzu -->
+<!-- Dieser Abschnitt wird bei Updates beibehalten -->
+
+<!-- PROJECT-SPECIFIC-END -->

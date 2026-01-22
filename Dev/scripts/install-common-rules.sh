@@ -37,7 +37,7 @@ set -euo pipefail
 #-------------------------------------------------------------------------------
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT_NAME="$(basename "$0")"
-VERSION="2.0.0"
+VERSION="3.4.0"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 
 # Couleurs
@@ -573,9 +573,23 @@ install_claude_md() {
 
     mkdir -p "$(dirname "$dest_file")"
 
+    # Get project info for placeholders
+    local project_name
+    project_name=$(basename "$target_dir")
+    local generation_date
+    generation_date=$(date +%Y-%m-%d)
+    local project_root
+    project_root=$(basename "$target_dir")
+
     # Copy template and replace placeholders using awk (handles multiline better than sed)
-    awk -v tech="$tech_list" -v agents="$agents_list" -v commands="$commands_list" '
+    awk -v tech="$tech_list" -v agents="$agents_list" -v commands="$commands_list" \
+        -v project_name="$project_name" -v gen_date="$generation_date" \
+        -v version="$VERSION" -v project_root="$project_root" '
     {
+        gsub(/\{\{PROJECT_NAME\}\}/, project_name)
+        gsub(/\{\{GENERATION_DATE\}\}/, gen_date)
+        gsub(/\{\{VERSION\}\}/, version)
+        gsub(/\{\{PROJECT_ROOT\}\}/, project_root)
         gsub(/{TECH_LIST}/, tech)
         gsub(/{AGENTS_LIST}/, agents)
         gsub(/{COMMANDS_LIST}/, commands)
