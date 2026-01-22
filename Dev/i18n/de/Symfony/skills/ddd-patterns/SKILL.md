@@ -7,4 +7,4 @@ description: DDD-Patterns - Atoll Tourisme. Use when implementing DDD patterns.
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/13-ddd-patterns.md for detailed documentation.

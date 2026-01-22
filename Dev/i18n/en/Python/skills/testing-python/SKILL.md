@@ -7,4 +7,4 @@ description: Rule 07: Testing. Use when writing tests, reviewing test coverage, 
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/07-testing-python.md for detailed documentation.

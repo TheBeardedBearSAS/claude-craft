@@ -189,7 +189,7 @@ migrate_rules_to_skills() {
         local skill_dir="$skills_dir/$skill_name"
         mkdir -p "$skill_dir"
 
-        # Create SKILL.md with frontmatter
+        # Create SKILL.md with frontmatter - pointing to the rule file directly
         local title=$(head -1 "$rule_file" | sed 's/^# //')
         cat > "$skill_dir/SKILL.md" << EOF
 ---
@@ -201,11 +201,10 @@ description: $title. Use when working with ${skill_name//-/ }.
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/$filename for detailed documentation.
 EOF
 
-        # Copy original content as REFERENCE.md
-        cp "$rule_file" "$skill_dir/REFERENCE.md"
+        # Note: REFERENCE.md is no longer created - SKILL.md points directly to the rule file
 
         log_success "Migrated: $filename -> skills/$skill_name/"
     done

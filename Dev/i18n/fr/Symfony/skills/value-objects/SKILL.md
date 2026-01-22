@@ -7,4 +7,4 @@ description: Règle 04 : Value Objects. Use when implementing DDD patterns.
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/18-value-objects.md for detailed documentation.

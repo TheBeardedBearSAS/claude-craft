@@ -7,4 +7,4 @@ description: Principes SOLID. Use when reviewing code quality or refactoring.
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/04-solid-principles.md for detailed documentation.

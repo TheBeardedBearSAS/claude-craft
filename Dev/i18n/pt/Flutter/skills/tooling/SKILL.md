@@ -7,4 +7,4 @@ description: Ferramentas Flutter - Ferramentas e Comandos. Use when working with
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/06-tooling.md for detailed documentation.

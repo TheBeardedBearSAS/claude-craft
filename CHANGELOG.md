@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.0] - 2026-01-22
+
+### Changed
+- **Token Optimization**: ~200K tokens saved (~19% reduction)
+  - Deleted 249 REFERENCE.md duplicate files from skills directories
+  - Removed 15 duplicate *-examples.md files from templates directories
+  - SKILL.md files now reference rules/ directly via relative path
+- Updated migrate-project.sh to no longer create REFERENCE.md files
+
+### Improved
+- Skills architecture: single source of truth (rules/) instead of duplicated content
+- Reduced installed project size significantly
+
 ## [3.4.0] - 2026-01-22
 
 ### Added
@@ -115,6 +128,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Enhanced npm publishing security via OIDC
 
+[3.5.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.3.3...v3.4.0
 [3.3.3]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.3.2...v3.3.3
 [3.3.2]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.3.1...v3.3.2

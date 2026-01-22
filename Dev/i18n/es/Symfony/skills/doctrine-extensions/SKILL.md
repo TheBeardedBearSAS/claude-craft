@@ -7,4 +7,4 @@ description: Doctrine Extensions (Gedmo). Use when working with doctrine extensi
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/15-doctrine-extensions.md for detailed documentation.

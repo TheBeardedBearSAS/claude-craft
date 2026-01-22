@@ -7,4 +7,4 @@ description: Docker & Hadolint - Atoll Tourisme. Use when working with Docker or
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/06-docker-hadolint.md for detailed documentation.

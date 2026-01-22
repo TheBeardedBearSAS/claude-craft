@@ -7,4 +7,4 @@ description: Tooling React - Configuration et Optimisation. Use when working wit
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/06-tooling.md for detailed documentation.

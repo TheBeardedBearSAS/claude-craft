@@ -7,4 +7,4 @@ description: Sécurité & RGPD - Atoll Tourisme. Use when reviewing security, im
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/11-security-symfony.md for detailed documentation.

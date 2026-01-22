@@ -7,4 +7,4 @@ description: Performance Flutter. Use when optimizing performance or profiling c
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/12-performance.md for detailed documentation.

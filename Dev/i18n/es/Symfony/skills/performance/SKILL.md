@@ -7,4 +7,4 @@ description: Rendimiento & Optimización - Atoll Tourisme. Use when optimizing p
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/12-performance.md for detailed documentation.

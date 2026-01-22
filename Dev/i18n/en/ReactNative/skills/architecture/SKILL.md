@@ -7,4 +7,4 @@ description: React Native Architecture - Principles and Organization. Use when d
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/02-architecture.md for detailed documentation.

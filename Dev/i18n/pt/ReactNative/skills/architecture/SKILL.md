@@ -7,4 +7,4 @@ description: Arquitetura React Native - Princípios e Organização. Use when de
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/02-architecture.md for detailed documentation.

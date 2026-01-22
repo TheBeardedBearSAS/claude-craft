@@ -7,4 +7,4 @@ description: Workflow d'Analyse Obligatoire. Use when working with workflow anal
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/01-workflow-analysis.md for detailed documentation.

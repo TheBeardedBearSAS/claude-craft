@@ -7,4 +7,4 @@ description: Herramientas de Calidad - ESLint, TypeScript, Prettier. Use when se
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/08-quality-tools.md for detailed documentation.

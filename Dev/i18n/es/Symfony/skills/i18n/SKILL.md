@@ -7,4 +7,4 @@ description: Regla 09: Internacionalización (i18n). Use when implementing inter
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/16-i18n.md for detailed documentation.

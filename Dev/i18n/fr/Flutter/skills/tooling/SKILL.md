@@ -7,4 +7,4 @@ description: Tooling Flutter - Outils et Commandes. Use when working with toolin
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/06-tooling.md for detailed documentation.

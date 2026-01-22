@@ -7,4 +7,4 @@ description: Ferramentas de Qualidade de Codigo. Use when setting up quality too
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/08-quality-tools.md for detailed documentation.

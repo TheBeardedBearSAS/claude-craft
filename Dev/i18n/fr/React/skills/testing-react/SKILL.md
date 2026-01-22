@@ -7,4 +7,4 @@ description: Stratégie de Tests React. Use when writing tests, reviewing test c
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/07-testing-react.md for detailed documentation.

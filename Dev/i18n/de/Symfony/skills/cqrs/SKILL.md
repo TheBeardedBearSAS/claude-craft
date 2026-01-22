@@ -7,4 +7,4 @@ description: Regel 07: CQRS - Command Query Responsibility Segregation. Use when
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/21-cqrs.md for detailed documentation.

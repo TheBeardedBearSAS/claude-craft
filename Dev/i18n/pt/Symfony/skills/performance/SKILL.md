@@ -7,4 +7,4 @@ description: Performance & Optimization - Atoll Tourisme. Use when optimizing pe
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/12-performance.md for detailed documentation.

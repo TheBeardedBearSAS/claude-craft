@@ -7,4 +7,4 @@ description: Herramientas React - Configuración y Optimización. Use when worki
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/06-tooling.md for detailed documentation.

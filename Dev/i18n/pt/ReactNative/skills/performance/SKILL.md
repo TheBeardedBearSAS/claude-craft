@@ -7,4 +7,4 @@ description: Otimização de Performance - React Native. Use when optimizing per
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/12-performance.md for detailed documentation.

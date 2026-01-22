@@ -7,4 +7,4 @@ description: Security - React Native Best Practices. Use when reviewing security
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/11-security-reactnative.md for detailed documentation.

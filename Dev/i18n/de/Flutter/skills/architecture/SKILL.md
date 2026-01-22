@@ -7,4 +7,4 @@ description: Flutter-Architektur - Clean Architecture & Best Practices. Use when
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/02-architecture.md for detailed documentation.

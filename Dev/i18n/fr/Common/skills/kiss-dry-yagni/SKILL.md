@@ -7,4 +7,4 @@ description: Principes KISS, DRY, YAGNI. Use when reviewing code quality or refa
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/05-kiss-dry-yagni.md for detailed documentation.

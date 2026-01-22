@@ -7,4 +7,4 @@ description: Standards de Codage React Native - TypeScript. Use when reviewing c
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/03-coding-standards.md for detailed documentation.

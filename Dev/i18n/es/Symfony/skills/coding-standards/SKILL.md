@@ -7,4 +7,4 @@ description: Estándares de Código. Use when reviewing code style or formatting
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/03-coding-standards.md for detailed documentation.

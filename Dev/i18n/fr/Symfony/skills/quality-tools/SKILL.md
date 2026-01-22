@@ -7,4 +7,4 @@ description: Outils de qualité - Atoll Tourisme. Use when setting up quality to
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/08-quality-tools.md for detailed documentation.

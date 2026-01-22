@@ -7,4 +7,4 @@ description: Flutter Tooling - Herramientas y Comandos. Use when working with to
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/06-tooling.md for detailed documentation.

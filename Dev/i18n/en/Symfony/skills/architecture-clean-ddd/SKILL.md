@@ -7,4 +7,4 @@ description: Architecture Clean + DDD + Hexagonal - Atoll Tourisme. Use when des
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/02-architecture-clean-ddd.md for detailed documentation.

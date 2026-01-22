@@ -7,4 +7,4 @@ description: Regla 06: Domain Events. Use when implementing DDD patterns.
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/20-domain-events.md for detailed documentation.

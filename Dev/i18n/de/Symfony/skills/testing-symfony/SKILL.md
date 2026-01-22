@@ -7,4 +7,4 @@ description: Testing TDD & BDD - Atoll Tourisme. Use when writing tests, reviewi
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/07-testing-symfony.md for detailed documentation.

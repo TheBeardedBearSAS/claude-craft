@@ -7,4 +7,4 @@ description: Règle 10 : Async-First avec Symfony Messenger. Use when working wi
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/17-async.md for detailed documentation.

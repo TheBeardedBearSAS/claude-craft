@@ -7,4 +7,4 @@ description: Git Workflow. Use when working with git, branches, or commits.
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/09-git-workflow.md for detailed documentation.

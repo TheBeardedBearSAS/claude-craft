@@ -7,4 +7,4 @@ description: React TypeScript Coding Standards. Use when reviewing code style or
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/03-coding-standards.md for detailed documentation.

@@ -7,4 +7,4 @@ description: Regla 05: Aggregates y Aggregate Roots. Use when implementing DDD p
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/19-aggregates.md for detailed documentation.

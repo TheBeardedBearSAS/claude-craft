@@ -7,4 +7,4 @@ description: Rule 06: Tooling. Use when working with tooling.
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/06-tooling.md for detailed documentation.

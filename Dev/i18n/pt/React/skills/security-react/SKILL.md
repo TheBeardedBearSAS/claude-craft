@@ -7,4 +7,4 @@ description: Seguranca React. Use when reviewing security, implementing auth, or
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/11-security-react.md for detailed documentation.

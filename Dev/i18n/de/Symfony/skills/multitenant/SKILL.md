@@ -7,4 +7,4 @@ description: Regel 08: Multitenant - Isolation und Sicherheit. Use when working 
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/14-multitenant.md for detailed documentation.

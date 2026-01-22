@@ -7,4 +7,4 @@ description: Python-Architektur - Clean Architecture & Hexagonal. Use when desig
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/02-architecture.md for detailed documentation.

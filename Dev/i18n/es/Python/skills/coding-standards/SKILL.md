@@ -7,4 +7,4 @@ description: Regla 03: Estándares de Codificación. Use when reviewing code sty
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/03-coding-standards.md for detailed documentation.

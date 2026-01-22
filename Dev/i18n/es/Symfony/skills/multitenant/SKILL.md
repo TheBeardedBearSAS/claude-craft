@@ -7,4 +7,4 @@ description: Regla 08: Multitenant - Aislamiento y Seguridad. Use when working w
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/14-multitenant.md for detailed documentation.

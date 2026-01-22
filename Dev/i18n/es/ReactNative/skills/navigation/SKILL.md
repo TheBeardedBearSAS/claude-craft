@@ -7,4 +7,4 @@ description: Navegación - Expo Router. Use when implementing navigation.
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/14-navigation.md for detailed documentation.

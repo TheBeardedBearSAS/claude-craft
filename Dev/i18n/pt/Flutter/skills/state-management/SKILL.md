@@ -7,4 +7,4 @@ description: Gerenciamento de Estado Flutter. Use when managing application stat
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/13-state-management.md for detailed documentation.

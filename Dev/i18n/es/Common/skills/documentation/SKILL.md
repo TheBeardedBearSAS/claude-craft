@@ -7,4 +7,4 @@ description: Documentation. Use when writing docs or reviewing documentation.
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/10-documentation.md for detailed documentation.

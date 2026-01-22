@@ -7,4 +7,4 @@ description: Testing Flutter - Stratégie Complète. Use when writing tests, rev
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/07-testing-flutter.md for detailed documentation.

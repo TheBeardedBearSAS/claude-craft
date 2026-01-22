@@ -7,4 +7,4 @@ description: React Testing Strategy. Use when writing tests, reviewing test cove
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/07-testing-react.md for detailed documentation.

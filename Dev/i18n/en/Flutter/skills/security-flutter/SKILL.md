@@ -7,4 +7,4 @@ description: Flutter Security. Use when reviewing security, implementing auth, o
 
 This skill provides guidelines and best practices.
 
-See @REFERENCE.md for detailed documentation.
+See ../../rules/11-security-flutter.md for detailed documentation.
