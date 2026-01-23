@@ -163,7 +163,7 @@ Para cada Epic:
 - **Conversation (Conversación)**: Notas para discusión en equipo
 - **Confirmation (Confirmación)**: Criterios de aceptación
 
-```markdown
+````markdown
 # US-XXX: [Título]
 
 ## Epic Padre
@@ -255,11 +255,11 @@ ENTONCES se muestra el mensaje "[mensaje exacto]"
 
 ## Sprint Asignado
 Sprint [X]
-```
+````
 
 ### PASO 7: Crear dependencies-matrix.md
 
-```markdown
+````markdown
 # Matriz de Dependencias
 
 ## Grafo entre Epics
@@ -277,7 +277,7 @@ EPIC-001 → EPIC-002 → EPIC-004
 
 ## Dependencias inter-US
 | US Origen | US Destino | Razón |
-```
+````
 
 ### PASO 8: Crear Sprints (sprint-XXX-objetivo/)
 
@@ -285,7 +285,7 @@ EPIC-001 → EPIC-002 → EPIC-004
 Ejemplos: sprint-001-walking_skeleton, sprint-002-jwt_authentication
 
 **sprint-goal.md**:
-```markdown
+````markdown
 # Sprint XXX: [Objetivo]
 
 ## Objetivo del Sprint (Sprint Goal)
@@ -330,7 +330,7 @@ Al final, el usuario podrá (Web Y Móvil): [valor]
 - 🟡 Empezar a hacer
 - ⬆️ Más de
 - ⬇️ Menos de
-```
+````
 
 ### PASO 9: Crear README.md
 

@@ -163,7 +163,7 @@ Pour chaque Epic :
 - **Conversation** : Notes pour discussion avec l'équipe
 - **Confirmation** : Critères d'acceptance
 
-```markdown
+````markdown
 # US-XXX : [Titre]
 
 ## Epic parent
@@ -255,11 +255,11 @@ THEN le message "[message exact]" s'affiche
 
 ## Sprint assigné
 Sprint [X]
-```
+````
 
 ### ÉTAPE 7 : Créer dependencies-matrix.md
 
-```markdown
+````markdown
 # Matrice des dépendances
 
 ## Graphe entre Epics
@@ -277,7 +277,7 @@ EPIC-001 → EPIC-002 → EPIC-004
 
 ## Dépendances inter-US
 | US Source | US Cible | Raison |
-```
+````
 
 ### ÉTAPE 8 : Créer les Sprints (sprint-XXX-but/)
 
@@ -285,7 +285,7 @@ EPIC-001 → EPIC-002 → EPIC-004
 Exemples : sprint-001-walking_skeleton, sprint-002-authentification_jwt
 
 **sprint-goal.md** :
-```markdown
+````markdown
 # Sprint XXX : [But]
 
 ## Objectif du Sprint (Sprint Goal)
@@ -321,7 +321,7 @@ graph TD
 À la fin, l'utilisateur pourra (Web ET Mobile) : [valeur]
 
 ## Rétrospective - Directive Fondamentale
-> "Peu importe ce que nous découvrons, nous comprenons et croyons 
+> "Peu importe ce que nous découvrons, nous comprenons et croyons
 > sincèrement que tout le monde a fait le meilleur travail possible."
 
 ### Format : Étoile de Mer (Starfish)
@@ -330,7 +330,7 @@ graph TD
 - 🟡 Commencer
 - ⬆️ Plus de
 - ⬇️ Moins de
-```
+````
 
 ### ÉTAPE 9 : Créer README.md
 

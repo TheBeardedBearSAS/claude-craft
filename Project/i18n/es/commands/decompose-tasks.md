@@ -80,7 +80,7 @@ project-management/sprints/sprint-$ARGUMENTS-[nombre]/
 
 Para cada US, crear `tasks/US-XXX-tasks.md`:
 
-```markdown
+````markdown
 # Tareas - US-XXX: [Título]
 
 ## Información de la US
@@ -474,7 +474,7 @@ graph TD
 | [DOC] | 1 | 1h |
 | [REV] | 1 | 2h |
 | **TOTAL** | **17** | **39h** |
-```
+````
 
 ### PASO 5: Crear Tablero de Tareas
 

@@ -80,7 +80,7 @@ project-management/sprints/sprint-$ARGUMENTS-[name]/
 
 Für jede US, `tasks/US-XXX-tasks.md` erstellen:
 
-```markdown
+````markdown
 # Aufgaben - US-XXX: [Titel]
 
 ## US-Informationen
@@ -474,7 +474,7 @@ graph TD
 | [DOC] | 1 | 1h |
 | [REV] | 1 | 2h |
 | **GESAMT** | **17** | **39h** |
-```
+````
 
 ### SCHRITT 5: Task Board erstellen
 

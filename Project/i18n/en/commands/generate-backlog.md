@@ -163,7 +163,7 @@ For each Epic:
 - **Conversation**: Notes for team discussion
 - **Confirmation**: Acceptance criteria
 
-```markdown
+````markdown
 # US-XXX: [Title]
 
 ## Parent Epic
@@ -255,11 +255,11 @@ THEN the message "[exact message]" is displayed
 
 ## Assigned Sprint
 Sprint [X]
-```
+````
 
 ### STEP 7: Create dependencies-matrix.md
 
-```markdown
+````markdown
 # Dependencies Matrix
 
 ## Graph between Epics
@@ -277,7 +277,7 @@ EPIC-001 → EPIC-002 → EPIC-004
 
 ## Inter-US dependencies
 | Source US | Target US | Reason |
-```
+````
 
 ### STEP 8: Create Sprints (sprint-XXX-goal/)
 
@@ -285,7 +285,7 @@ EPIC-001 → EPIC-002 → EPIC-004
 Examples: sprint-001-walking_skeleton, sprint-002-jwt_authentication
 
 **sprint-goal.md**:
-```markdown
+````markdown
 # Sprint XXX: [Goal]
 
 ## Sprint Objective (Sprint Goal)
@@ -330,7 +330,7 @@ At the end, user will be able to (Web AND Mobile): [value]
 - 🟡 Start doing
 - ⬆️ More of
 - ⬇️ Less of
-```
+````
 
 ### STEP 9: Create README.md
 

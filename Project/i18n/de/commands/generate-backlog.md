@@ -163,7 +163,7 @@ Für jedes Epic:
 - **Conversation**: Notizen für Team-Diskussion
 - **Confirmation**: Abnahmekriterien
 
-```markdown
+````markdown
 # US-XXX: [Titel]
 
 ## Übergeordnetes Epic
@@ -255,11 +255,11 @@ THEN die Nachricht "[exakte Nachricht]" wird angezeigt
 
 ## Zugewiesener Sprint
 Sprint [X]
-```
+````
 
 ### SCHRITT 7: dependencies-matrix.md erstellen
 
-```markdown
+````markdown
 # Abhängigkeitsmatrix
 
 ## Graph zwischen Epics
@@ -277,7 +277,7 @@ EPIC-001 → EPIC-002 → EPIC-004
 
 ## Inter-US-Abhängigkeiten
 | Quell-US | Ziel-US | Grund |
-```
+````
 
 ### SCHRITT 8: Sprints erstellen (sprint-XXX-goal/)
 
@@ -285,7 +285,7 @@ EPIC-001 → EPIC-002 → EPIC-004
 Beispiele: sprint-001-walking_skeleton, sprint-002-jwt_authentication
 
 **sprint-goal.md**:
-```markdown
+````markdown
 # Sprint XXX: [Ziel]
 
 ## Sprint-Ziel (Sprint Goal)
@@ -330,7 +330,7 @@ Am Ende wird der Benutzer in der Lage sein (Web UND Mobile): [Wert]
 - 🟡 Anfangen
 - ⬆️ Mehr davon
 - ⬇️ Weniger davon
-```
+````
 
 ### SCHRITT 9: README.md erstellen
 
