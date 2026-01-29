@@ -2,6 +2,12 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
+## What's New in v4.3
+
+- **Complete i18n for BMAD v6**: All 18 BMAD commands translated to ES, DE, PT
+- **Installation Fixes**: Project commands now properly included in `make install-all`
+- **Dev Translations Complete**: All languages now have equal file coverage (~346 files)
+
 ## What's New in v4.2
 
 - **BMAD v6 Framework**: Complete project management enhancement

@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.0] - 2026-01-29
+
+### Added
+- **Complete i18n Support for BMAD v6 Commands**
+  - Spanish (ES): 18 BMAD v6 commands translated
+  - German (DE): 18 BMAD v6 commands translated
+  - Portuguese (PT): 18 BMAD v6 commands translated
+  - French (FR): 12 missing BMAD v6 commands completed
+- **Dev/i18n Translations Completed**
+  - `Common/commands/sub-agents-patterns.md` (FR, ES, DE, PT)
+  - `Common/templates/mcp.json.template` (FR, ES, DE, PT)
+  - `Python/rules/08-quality-tools.md` (FR, ES, DE, PT)
+  - `Python/rules/11-security-python.md` (FR, ES, DE, PT)
+  - `Flutter/rules/07-testing-flutter.md` (PT)
+  - `Flutter/skills/testing-flutter/SKILL.md` (PT)
+
+### Fixed
+- Project commands now included in `make install-all` target
+- Added "project" as valid technology in `install-from-config.sh`
+- Added `--skip-common` flag support in `install-project-commands.sh`
+
+### Changed
+- All install scripts version updated: 4.0.1 → 4.3.0
+- Project install script version: 2.0.0 → 2.1.0
+- Dev/i18n file count now equal across all 5 languages (~346 files each)
+
 ## [4.2.0] - 2026-01-29
 
 ### Added

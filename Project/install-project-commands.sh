@@ -1,11 +1,11 @@
 #!/bin/bash
 # Multilingual installation of Project commands and agents for Claude Code
-# Version 2.0.0 - Full tracking (EPIC, US, Tasks) with i18n support
+# Version 2.1.0 - Full tracking (EPIC, US, Tasks) with i18n support
 # Usage: ./install-project-commands.sh [OPTIONS] [PROJECT_DIR]
 
 set -e
 
-VERSION="2.0.0"
+VERSION="2.1.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$SCRIPT_DIR/i18n"
 lang="en"
