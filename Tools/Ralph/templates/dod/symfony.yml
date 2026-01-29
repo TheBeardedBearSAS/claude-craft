@@ -1,0 +1,73 @@
+# =============================================================================
+# Ralph Wiggum - DoD Template: Symfony / PHP
+# Best practices for Symfony 6.x / 7.x / 8.x with PHP 8.x
+# =============================================================================
+
+description: "Symfony PHP project with PHPUnit, PHPStan, and CS Fixer"
+
+definition_of_done:
+  completion_marker: "<promise>COMPLETE</promise>"
+
+  checklist:
+    # -------------------------------------------------------------------------
+    # Tests - PHPUnit
+    # -------------------------------------------------------------------------
+    - id: tests
+      name: "All tests pass"
+      type: command
+      command: "docker compose exec app vendor/bin/phpunit"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Static Analysis - PHPStan
+    # -------------------------------------------------------------------------
+    - id: phpstan
+      name: "PHPStan passes (level max)"
+      type: command
+      command: "docker compose exec app vendor/bin/phpstan analyse --memory-limit=512M"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Code Style - PHP CS Fixer
+    # -------------------------------------------------------------------------
+    - id: cs-fixer
+      name: "Code style compliant"
+      type: command
+      command: "docker compose exec app vendor/bin/php-cs-fixer fix --dry-run --diff"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Architecture - Deptrac (optional)
+    # -------------------------------------------------------------------------
+    - id: deptrac
+      name: "Architecture rules pass"
+      type: command
+      command: "docker compose exec app vendor/bin/deptrac --no-progress"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Symfony Linter
+    # -------------------------------------------------------------------------
+    - id: symfony-lint
+      name: "Symfony config valid"
+      type: command
+      command: "docker compose exec app bin/console lint:container"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Doctrine Migrations
+    # -------------------------------------------------------------------------
+    - id: migrations
+      name: "No pending migrations"
+      type: command
+      command: "docker compose exec app bin/console doctrine:migrations:status --no-interaction | grep -q 'Already at the latest version'"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Completion Signal
+    # -------------------------------------------------------------------------
+    - id: completion
+      name: "Claude signals completion"
+      type: output_contains
+      pattern: "<promise>COMPLETE</promise>"
+      required: true

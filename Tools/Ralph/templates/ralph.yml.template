@@ -9,7 +9,7 @@
 # Documentation: https://github.com/TheBeardedBearSAS/claude-craft
 # =============================================================================
 
-version: "1.0"
+version: "2.0"
 
 # =============================================================================
 # Session Settings
@@ -31,21 +31,132 @@ session:
   delay_between_iterations: 1000
 
 # =============================================================================
-# Circuit Breaker - Safety Mechanism
+# Hooks Integration (v2.0 - Claude Code 2.1.23+)
+# =============================================================================
+# Bidirectional integration with Claude Code hooks system
+hooks:
+  # Enable/disable hooks integration
+  enabled: true
+
+  # Hooks mode:
+  # - "simple": Only Stop hook (DoD gate)
+  # - "advanced": Full integration (SessionStart, PreToolUse, Stop)
+  mode: "advanced"
+
+# =============================================================================
+# Auto-Detection (v2.0)
+# =============================================================================
+# Automatic project type detection and DoD configuration
+auto_detect:
+  # Enable auto-detection on startup
+  enabled: true
+
+  # Interactive mode: prompt for confirmation
+  interactive: false
+
+# =============================================================================
+# Metrics & Observability (v2.0)
+# =============================================================================
+# Export session metrics for monitoring and analysis
+metrics:
+  # Enable metrics collection
+  enabled: true
+
+  # Export format: json, prometheus, both
+  format: "both"
+
+  # Real-time metrics (for dashboard)
+  realtime:
+    enabled: true
+    interval_ms: 1000
+
+# =============================================================================
+# Dashboard (v2.0)
+# =============================================================================
+# Real-time terminal display
+dashboard:
+  # Enable dashboard
+  enabled: true
+
+  # Display mode:
+  # - "full": Complete box with progress bar
+  # - "simple": Single line status
+  # - "headless": No display (for CI/CD)
+  mode: "full"
+
+# =============================================================================
+# Health Monitoring (v2.0)
+# =============================================================================
+# Detect degradation patterns and provide early warnings
+health_monitor:
+  # Enable health monitoring
+  enabled: true
+
+  # Pattern detection
+  patterns:
+    # Detect when no progress is made
+    stall_detection: true
+
+    # Detect increasing error rates
+    error_spiral: true
+
+    # Detect rapid context growth
+    context_bloat: true
+
+# =============================================================================
+# Circuit Breaker - Safety Mechanism (v2.0: Adaptive Mode)
 # =============================================================================
 # The circuit breaker prevents infinite loops and detects stalls
+# v2.0 adds adaptive profiles that adjust thresholds based on task type
 circuit_breaker:
   # Enable/disable circuit breaker
   enabled: true
 
+  # ---------------------------------------------------------------------------
+  # Adaptive Mode (v2.0)
+  # ---------------------------------------------------------------------------
+  # When enabled, automatically selects profile based on prompt keywords
+  adaptive: true
+
+  # Default profile when no keywords match
+  # Options: quick_fix, small_feature, medium_feature, large_feature, exploration
+  default_profile: "medium_feature"
+
+  # Learning from history
+  # Adjusts thresholds based on past session outcomes
+  learning:
+    enabled: true
+    min_samples: 5  # Minimum sessions before applying adjustments
+
+  # ---------------------------------------------------------------------------
+  # Manual Thresholds (used when adaptive: false)
+  # ---------------------------------------------------------------------------
   # Stop if no file changes detected for N iterations
-  no_file_changes_threshold: 3
+  no_file_changes_threshold: 4
 
   # Stop if same error repeats N times
-  repeated_error_threshold: 5
+  repeated_error_threshold: 6
 
   # Stop if output length declines by N% from peak
   output_decline_threshold: 70
+
+  # ---------------------------------------------------------------------------
+  # Profile Reference (read-only)
+  # ---------------------------------------------------------------------------
+  # quick_fix:      no_changes=2, errors=3,  max_iterations=10
+  #                 Keywords: fix, bug, typo, hotfix, patch
+  #
+  # small_feature:  no_changes=3, errors=4,  max_iterations=15
+  #                 Keywords: add, implement, small, simple
+  #
+  # medium_feature: no_changes=4, errors=6,  max_iterations=25
+  #                 Keywords: feature, create, with tests
+  #
+  # large_feature:  no_changes=5, errors=8,  max_iterations=50
+  #                 Keywords: refactor, migrate, complex, large
+  #
+  # exploration:    no_changes=10, errors=15, max_iterations=100
+  #                 Keywords: explore, investigate, research, analyze
 
 # =============================================================================
 # Context Management (Advanced)

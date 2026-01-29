@@ -1,0 +1,82 @@
+# =============================================================================
+# Ralph Wiggum - DoD Template: Go
+# Best practices for Go 1.21+ projects
+# =============================================================================
+
+description: "Go project with go test and golangci-lint"
+
+definition_of_done:
+  completion_marker: "<promise>COMPLETE</promise>"
+
+  checklist:
+    # -------------------------------------------------------------------------
+    # Build
+    # -------------------------------------------------------------------------
+    - id: build
+      name: "Code compiles"
+      type: command
+      command: "docker compose exec app go build ./..."
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Tests - go test
+    # -------------------------------------------------------------------------
+    - id: tests
+      name: "All tests pass"
+      type: command
+      command: "docker compose exec app go test -v ./..."
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Linting - golangci-lint
+    # -------------------------------------------------------------------------
+    - id: lint
+      name: "No lint errors"
+      type: command
+      command: "docker compose exec app golangci-lint run"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Vet - go vet
+    # -------------------------------------------------------------------------
+    - id: vet
+      name: "No vet issues"
+      type: command
+      command: "docker compose exec app go vet ./..."
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Format Check - gofmt
+    # -------------------------------------------------------------------------
+    - id: format
+      name: "Code properly formatted"
+      type: command
+      command: "docker compose exec app test -z $(gofmt -l .)"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Security - govulncheck (optional)
+    # -------------------------------------------------------------------------
+    - id: security
+      name: "No vulnerabilities"
+      type: command
+      command: "docker compose exec app govulncheck ./..."
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Coverage Check (optional)
+    # -------------------------------------------------------------------------
+    - id: coverage
+      name: "Test coverage adequate"
+      type: command
+      command: "docker compose exec app go test -cover ./... | grep -v 'no test files'"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Completion Signal
+    # -------------------------------------------------------------------------
+    - id: completion
+      name: "Claude signals completion"
+      type: output_contains
+      pattern: "<promise>COMPLETE</promise>"
+      required: true

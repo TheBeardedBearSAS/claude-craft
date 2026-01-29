@@ -176,3 +176,52 @@ MSG_CONFIRM="Confirmar"
 MSG_WARNING="Advertencia"
 MSG_INFO="Info"
 MSG_SUCCESS="Exito"
+
+# =============================================================================
+# Mensajes v2.0
+# =============================================================================
+
+# Auto-deteccion
+MSG_AUTO_DETECT="Detectando tipo de proyecto automaticamente..."
+MSG_AUTO_DETECT_FOUND="Tipo de proyecto detectado"
+MSG_AUTO_DETECT_CONFIDENCE="Confianza"
+MSG_AUTO_DETECT_NOT_FOUND="No se pudo detectar el tipo de proyecto"
+MSG_HELP_AUTO_DETECT="Detectar auto el tipo de proyecto y configurar DoD"
+MSG_HELP_INIT="Generar config sin ejecutar (solo init)"
+MSG_HELP_INTERACTIVE="Asistente de configuracion interactivo"
+
+# Dashboard
+MSG_DASHBOARD_ENABLED="Dashboard habilitado"
+MSG_DASHBOARD_DISABLED="Dashboard deshabilitado"
+MSG_DASHBOARD_MODE="Modo dashboard"
+
+# Metricas
+MSG_METRICS_ENABLED="Recopilacion de metricas habilitada"
+MSG_METRICS_EXPORTED="Metricas exportadas"
+MSG_METRICS_FORMAT="Formato de metricas"
+
+# Monitor de salud
+MSG_HEALTH_HEALTHY="Salud: OK"
+MSG_HEALTH_WARNING="Advertencia de salud"
+MSG_HEALTH_CRITICAL="Salud critica"
+MSG_HEALTH_STALL="Estancamiento detectado"
+MSG_HEALTH_ERROR_SPIRAL="Espiral de errores detectada"
+MSG_HEALTH_CONTEXT_BLOAT="Inflacion de contexto detectada"
+
+# Hooks
+MSG_HOOKS_ENABLED="Integracion de hooks habilitada"
+MSG_HOOKS_DISABLED="Integracion de hooks deshabilitada"
+MSG_HOOKS_CONFIG_GENERATED="Configuracion de hooks generada"
+MSG_HOOKS_DOD_BLOCKED="DoD no satisfecho - parada bloqueada"
+
+# Disyuntor adaptativo
+MSG_CB_ADAPTIVE_ENABLED="Disyuntor adaptativo habilitado"
+MSG_CB_PROFILE_DETECTED="Perfil detectado"
+MSG_CB_LEARNING_ENABLED="Aprendizaje historico habilitado"
+MSG_CB_LEARNING_ADJUSTED="Umbrales ajustados segun historial"
+
+# Generador de configuracion
+MSG_CONFIG_GENERATED="Configuracion generada"
+MSG_CONFIG_WIZARD_TITLE="Asistente de configuracion"
+MSG_CONFIG_DETECTING="Detectando configuracion del proyecto..."
+MSG_CONFIG_CONFIRM="Es correcto?"

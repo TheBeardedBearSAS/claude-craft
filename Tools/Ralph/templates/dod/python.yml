@@ -1,0 +1,73 @@
+# =============================================================================
+# Ralph Wiggum - DoD Template: Python
+# Best practices for Python 3.x with pytest, ruff, and mypy
+# =============================================================================
+
+description: "Python project with pytest, ruff, and mypy"
+
+definition_of_done:
+  completion_marker: "<promise>COMPLETE</promise>"
+
+  checklist:
+    # -------------------------------------------------------------------------
+    # Tests - pytest
+    # -------------------------------------------------------------------------
+    - id: tests
+      name: "All tests pass"
+      type: command
+      command: "docker compose exec app pytest -v"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Linting - Ruff
+    # -------------------------------------------------------------------------
+    - id: lint
+      name: "No lint errors (ruff)"
+      type: command
+      command: "docker compose exec app ruff check ."
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Type Check - mypy
+    # -------------------------------------------------------------------------
+    - id: typecheck
+      name: "Type checking passes"
+      type: command
+      command: "docker compose exec app mypy ."
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Format Check - Ruff format / Black
+    # -------------------------------------------------------------------------
+    - id: format
+      name: "Code properly formatted"
+      type: command
+      command: "docker compose exec app ruff format --check ."
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Security - Bandit (optional)
+    # -------------------------------------------------------------------------
+    - id: security
+      name: "No security issues"
+      type: command
+      command: "docker compose exec app bandit -r src/"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Coverage Check (optional)
+    # -------------------------------------------------------------------------
+    - id: coverage
+      name: "Test coverage adequate"
+      type: command
+      command: "docker compose exec app pytest --cov=src --cov-fail-under=80"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Completion Signal
+    # -------------------------------------------------------------------------
+    - id: completion
+      name: "Claude signals completion"
+      type: output_contains
+      pattern: "<promise>COMPLETE</promise>"
+      required: true

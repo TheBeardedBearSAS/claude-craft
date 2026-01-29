@@ -7,7 +7,7 @@
 set -e
 
 # Version
-RALPH_VERSION="1.1.0"
+RALPH_VERSION="2.0.0"
 
 # Script paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -49,6 +49,11 @@ DELAY=$DEFAULT_DELAY
 VERBOSE=false
 DRY_RUN=false
 CONTINUE_SESSION=""
+
+# v2.0 New flags
+AUTO_DETECT=false
+INIT_ONLY=false
+INTERACTIVE=false
 
 # =============================================================================
 # i18n - Load messages
@@ -158,16 +163,24 @@ load_modules() {
     # Order matters:
     # 1. utils must be loaded first (shared helper functions)
     # 2. sprint-progress and context-reconstruction must be loaded before context-manager
+    # 3. v2.0 modules loaded after core modules
     local modules=(
         "utils"
         "session"
         "loop"
         "dod-validator"
+        "dod-templates"
         "circuit-breaker"
         "checkpoint"
         "sprint-progress"
         "context-reconstruction"
         "context-manager"
+        "project-detector"
+        "config-generator"
+        "metrics-exporter"
+        "dashboard"
+        "health-monitor"
+        "hooks-generator"
     )
 
     for module in "${modules[@]}"; do
@@ -273,6 +286,11 @@ show_help() {
     echo "  --lang=<code>         ${MSG_HELP_LANG}"
     echo "  --help                ${MSG_HELP_HELP}"
     echo ""
+    echo -e "${C_BOLD}v2.0 Options:${C_RESET}"
+    echo "  --auto-detect         ${MSG_HELP_AUTO_DETECT:-Auto-detect project type and configure DoD}"
+    echo "  --init                ${MSG_HELP_INIT:-Generate config without running (init only)}"
+    echo "  --interactive         ${MSG_HELP_INTERACTIVE:-Interactive configuration wizard}"
+    echo ""
     echo -e "${C_BOLD}${MSG_HELP_EXAMPLES}:${C_RESET}"
     echo ""
     echo "  # ${MSG_HELP_EXAMPLE_BASIC}"
@@ -283,6 +301,12 @@ show_help() {
     echo ""
     echo "  # ${MSG_HELP_EXAMPLE_RESUME}"
     echo "  ralph.sh --continue=abc123"
+    echo ""
+    echo "  # Auto-detect and generate config"
+    echo "  ralph.sh --auto-detect --init"
+    echo ""
+    echo "  # Interactive configuration"
+    echo "  ralph.sh --interactive"
     echo ""
 }
 
@@ -342,6 +366,15 @@ parse_args() {
             --dry-run)
                 DRY_RUN=true
                 ;;
+            --auto-detect)
+                AUTO_DETECT=true
+                ;;
+            --init)
+                INIT_ONLY=true
+                ;;
+            --interactive)
+                INTERACTIVE=true
+                ;;
             --help|-h)
                 load_messages
                 show_help
@@ -370,6 +403,23 @@ run_ralph() {
     local dod_passed=false
     local start_time=$(date +%s)
 
+    # Initialize v2.0 modules
+    if type init_metrics_exporter &>/dev/null; then
+        init_metrics_exporter
+    fi
+
+    if type init_dashboard &>/dev/null; then
+        init_dashboard
+    fi
+
+    if type init_health_monitor &>/dev/null; then
+        init_health_monitor
+    fi
+
+    if type init_hooks &>/dev/null; then
+        init_hooks
+    fi
+
     # Initialize or resume session
     if [[ -n "$CONTINUE_SESSION" ]]; then
         SESSION_ID="$CONTINUE_SESSION"
@@ -396,10 +446,26 @@ run_ralph() {
     print_verbose "Max iterations: $MAX_ITERATIONS"
     print_verbose "Timeout: ${TIMEOUT}ms"
 
+    # Export session context for hooks
+    if type export_session_context_for_hooks &>/dev/null; then
+        export_session_context_for_hooks "$SESSION_ID" "STARTING" "$PROMPT"
+    fi
+
     # Main loop
     while [[ $iteration -lt $MAX_ITERATIONS ]]; do
         iteration=$((iteration + 1))
         print_iteration $iteration $MAX_ITERATIONS
+
+        # Record iteration start for metrics
+        if type record_iteration_start &>/dev/null; then
+            record_iteration_start "$iteration"
+        fi
+
+        # Update dashboard
+        if type update_dashboard_iteration &>/dev/null; then
+            local elapsed=$(($(date +%s) - start_time))
+            update_dashboard_iteration "$SESSION_ID" "$iteration" "$MAX_ITERATIONS"
+        fi
 
         # Check circuit breaker
         if check_circuit_breaker; then
@@ -524,6 +590,27 @@ $PROMPT" "$TIMEOUT")
         # Update metrics
         update_session_metrics "$SESSION_ID" "$iteration" "$response"
 
+        # Record iteration end for metrics
+        if type record_iteration_end &>/dev/null; then
+            record_iteration_end "$iteration"
+        fi
+
+        # Record health data
+        if type record_health_data &>/dev/null; then
+            local had_error="false"
+            [[ $invoke_status -ne 0 ]] && had_error="true"
+            record_health_data "$iteration" "$had_error" "${METRICS_DATA["last_context_usage"]:-0}" "${METRICS_DATA["iteration_${iteration}_duration"]:-0}"
+        fi
+
+        # Check health patterns
+        if type check_health_patterns &>/dev/null; then
+            if ! check_health_patterns; then
+                if type print_health_warnings &>/dev/null; then
+                    print_health_warnings
+                fi
+            fi
+        fi
+
         # Create checkpoint (async if configured)
         create_checkpoint "$SESSION_ID" "$iteration"
 
@@ -533,10 +620,26 @@ $PROMPT" "$TIMEOUT")
             dod_passed=true
             exit_reason="dod_complete"
             print_success "${MSG_DOD_PASSED}"
+
+            # Record DoD check for metrics
+            if type record_dod_check &>/dev/null; then
+                record_dod_check "true"
+            fi
+
             break
         else
             print_warning "${MSG_DOD_FAILED}"
             update_circuit_breaker "no_progress" ""
+
+            # Record DoD check for metrics
+            if type record_dod_check &>/dev/null; then
+                record_dod_check "false"
+            fi
+        fi
+
+        # Record circuit breaker state for metrics
+        if type record_circuit_breaker_state &>/dev/null; then
+            record_circuit_breaker_state "$CB_TRIGGERED" "$CB_ITERATIONS_WITHOUT_CHANGES"
         fi
 
         # Feed response back as prompt for next iteration
@@ -563,6 +666,33 @@ $PROMPT" "$TIMEOUT")
     # Save sprint progress before summary
     if type save_sprint_progress &>/dev/null; then
         save_sprint_progress "$SESSION_ID"
+    fi
+
+    # Save metrics export
+    if type save_metrics_export &>/dev/null; then
+        local final_status="completed"
+        [[ "$dod_passed" != "true" ]] && final_status="failed"
+        save_metrics_export "$SESSION_ID" "$final_status"
+    fi
+
+    # Aggregate metrics for history
+    if type aggregate_session_metrics &>/dev/null; then
+        aggregate_session_metrics "$SESSION_ID"
+    fi
+
+    # Record circuit breaker outcome for learning
+    if type record_circuit_breaker_outcome &>/dev/null && [[ "$CB_ADAPTIVE_ENABLED" == "true" ]]; then
+        local success="false"
+        [[ "$dod_passed" == "true" ]] && success="true"
+        record_circuit_breaker_outcome "$CB_CURRENT_PROFILE" "$success" "$iteration"
+    fi
+
+    # Finalize dashboard
+    if type finalize_dashboard &>/dev/null; then
+        local dash_status="completed"
+        [[ "$dod_passed" != "true" ]] && dash_status="failed"
+        [[ "$exit_reason" == "circuit_breaker" ]] && dash_status="interrupted"
+        finalize_dashboard "$dash_status"
     fi
 
     # Print summary
@@ -627,6 +757,57 @@ main() {
 
     # Load library modules
     load_modules
+
+    # Handle --interactive mode
+    if [[ "$INTERACTIVE" == "true" ]]; then
+        if type interactive_config &>/dev/null; then
+            interactive_config "ralph.yml"
+            exit 0
+        else
+            print_error "Interactive mode not available"
+            exit 1
+        fi
+    fi
+
+    # Handle --auto-detect mode
+    if [[ "$AUTO_DETECT" == "true" ]]; then
+        print_info "${MSG_AUTO_DETECT:-Auto-detecting project type...}"
+
+        if type detect_project_type &>/dev/null; then
+            detect_project_type "."
+            print_success "Detected: $DETECTED_PROJECT_TYPE ($DETECTED_PROJECT_CONFIDENCE confidence)"
+
+            if type get_detection_summary &>/dev/null; then
+                get_detection_summary
+            fi
+        fi
+
+        # Generate config if --init is also set
+        if [[ "$INIT_ONLY" == "true" ]]; then
+            if type generate_config &>/dev/null; then
+                generate_config "ralph.yml"
+            fi
+
+            # Generate hooks config
+            if type generate_hooks_config &>/dev/null; then
+                generate_hooks_config ".claude/settings.json"
+            fi
+
+            exit 0
+        fi
+    fi
+
+    # Handle --init only mode (without auto-detect)
+    if [[ "$INIT_ONLY" == "true" && "$AUTO_DETECT" != "true" ]]; then
+        if type generate_config &>/dev/null; then
+            # Detect project first
+            if type detect_project_type &>/dev/null; then
+                detect_project_type "."
+            fi
+            generate_config "ralph.yml"
+        fi
+        exit 0
+    fi
 
     # Load configuration
     load_config

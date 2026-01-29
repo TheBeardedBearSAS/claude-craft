@@ -287,3 +287,199 @@ log_session() {
         echo "[$(date -Iseconds)] [$level] $message" >> "$log_file"
     fi
 }
+
+# =============================================================================
+# Export Session for Hooks (v2.0)
+# =============================================================================
+
+export_session_for_hooks() {
+    local session_id="$1"
+
+    if [[ -z "$session_id" ]]; then
+        return 1
+    fi
+
+    local session_dir="$RALPH_SESSION_BASE/sessions/$session_id"
+    local state_file="$session_dir/state.json"
+
+    # Export environment variables for hooks
+    export RALPH_SESSION_ID="$session_id"
+    export RALPH_SESSION_DIR="$session_dir"
+    export RALPH_PROJECT_DIR="$PWD"
+
+    # Export state file path
+    if [[ -f "$state_file" ]]; then
+        export RALPH_STATE_FILE="$state_file"
+    fi
+
+    # Export config file path
+    if [[ -n "$CONFIG_FILE" && -f "$CONFIG_FILE" ]]; then
+        export RALPH_CONFIG_FILE="$CONFIG_FILE"
+    fi
+}
+
+# =============================================================================
+# Get Session Context for Hooks
+# =============================================================================
+
+get_session_context() {
+    local session_id="$1"
+
+    if [[ -z "$session_id" ]]; then
+        echo '{"error": "no session"}'
+        return 1
+    fi
+
+    local session_dir="$RALPH_SESSION_BASE/sessions/$session_id"
+    local state_file="$session_dir/state.json"
+
+    if [[ ! -f "$state_file" ]]; then
+        echo '{"error": "state file not found"}'
+        return 1
+    fi
+
+    # Build context JSON
+    local state
+    state=$(cat "$state_file" 2>/dev/null)
+
+    local context
+    context=$(jq -n \
+        --argjson state "$state" \
+        --arg project_dir "$PWD" \
+        --arg config_file "${CONFIG_FILE:-}" \
+        '{
+            session: $state,
+            project_dir: $project_dir,
+            config_file: $config_file
+        }' 2>/dev/null)
+
+    echo "$context"
+}
+
+# =============================================================================
+# Get Session Context String for additionalContext
+# =============================================================================
+
+get_session_context_string() {
+    local session_id="$1"
+    local phase="${2:-UNKNOWN}"
+    local task="${3:-}"
+
+    local context="Ralph Wiggum Session Active"
+    context="$context
+Session ID: $session_id"
+
+    if [[ -n "$phase" ]]; then
+        context="$context
+Phase: $phase"
+    fi
+
+    if [[ -n "$task" ]]; then
+        context="$context
+Current Task: $task"
+    fi
+
+    # Add iteration info from state
+    local session_dir="$RALPH_SESSION_BASE/sessions/$session_id"
+    local state_file="$session_dir/state.json"
+
+    if [[ -f "$state_file" ]]; then
+        local iteration
+        iteration=$(jq -r '.current_iteration // 0' "$state_file" 2>/dev/null)
+        context="$context
+Iteration: $iteration / $MAX_ITERATIONS"
+    fi
+
+    # Add circuit breaker status
+    if [[ -n "$CB_ITERATIONS_WITHOUT_CHANGES" ]]; then
+        context="$context
+Circuit Breaker: $CB_ITERATIONS_WITHOUT_CHANGES / $CB_NO_CHANGES_THRESHOLD"
+    fi
+
+    echo "$context"
+}
+
+# =============================================================================
+# Create Hook Context File
+# =============================================================================
+
+create_hook_context_file() {
+    local session_id="$1"
+    local phase="${2:-UNKNOWN}"
+    local task="${3:-}"
+
+    local session_dir="$RALPH_SESSION_BASE/sessions/$session_id"
+    local context_file="$session_dir/hook-context.json"
+
+    # Ensure directory exists
+    mkdir -p "$session_dir"
+
+    # Create context file
+    cat > "$context_file" <<EOF
+{
+    "session_id": "$session_id",
+    "phase": "$phase",
+    "current_task": "$task",
+    "max_iterations": $MAX_ITERATIONS,
+    "current_iteration": ${CB_ITERATIONS_WITHOUT_CHANGES:-0},
+    "circuit_breaker": {
+        "no_progress_streak": ${CB_ITERATIONS_WITHOUT_CHANGES:-0},
+        "threshold": ${CB_NO_CHANGES_THRESHOLD:-4}
+    },
+    "timestamp": "$(date -Iseconds)",
+    "config_file": "${CONFIG_FILE:-}",
+    "project_dir": "$PWD"
+}
+EOF
+
+    # Export path for hooks
+    export RALPH_HOOK_CONTEXT="$context_file"
+
+    echo "$context_file"
+}
+
+# =============================================================================
+# Session Handoff for Continuation
+# =============================================================================
+
+get_session_handoff_context() {
+    local session_id="$1"
+
+    local session_dir="$RALPH_SESSION_BASE/sessions/$session_id"
+    local state_file="$session_dir/state.json"
+
+    if [[ ! -f "$state_file" ]]; then
+        echo ""
+        return 1
+    fi
+
+    # Build handoff context
+    local handoff=""
+
+    # Get initial prompt
+    local initial_prompt
+    initial_prompt=$(jq -r '.initial_prompt // ""' "$state_file" 2>/dev/null)
+    if [[ -n "$initial_prompt" ]]; then
+        handoff="Original Task: $initial_prompt"
+    fi
+
+    # Get progress
+    local iteration
+    iteration=$(jq -r '.current_iteration // 0' "$state_file" 2>/dev/null)
+    handoff="$handoff
+
+Progress: Completed $iteration iterations"
+
+    # Get DoD results summary
+    local dod_file="$session_dir/dod_results.json"
+    if [[ -f "$dod_file" ]]; then
+        local passed
+        passed=$(jq '[.[] | select(.passed == true)] | length' "$dod_file" 2>/dev/null)
+        local total
+        total=$(jq 'length' "$dod_file" 2>/dev/null)
+        handoff="$handoff
+DoD: $passed / $total checks passing"
+    fi
+
+    echo "$handoff"
+}

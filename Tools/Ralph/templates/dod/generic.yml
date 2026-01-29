@@ -1,0 +1,49 @@
+# =============================================================================
+# Ralph Wiggum - DoD Template: Generic
+# Minimal template for unknown or custom projects
+# =============================================================================
+
+description: "Generic project with minimal checks"
+
+definition_of_done:
+  # Simple mode: completion marker string only
+  completion_marker: "<promise>COMPLETE</promise>"
+
+  # Advanced mode: uncomment and customize the checklist below
+  #
+  # checklist:
+  #   # -------------------------------------------------------------------------
+  #   # Tests
+  #   # -------------------------------------------------------------------------
+  #   - id: tests
+  #     name: "All tests pass"
+  #     type: command
+  #     command: "make test"
+  #     required: true
+  #
+  #   # -------------------------------------------------------------------------
+  #   # Build
+  #   # -------------------------------------------------------------------------
+  #   - id: build
+  #     name: "Build succeeds"
+  #     type: command
+  #     command: "make build"
+  #     required: true
+  #
+  #   # -------------------------------------------------------------------------
+  #   # Linting
+  #   # -------------------------------------------------------------------------
+  #   - id: lint
+  #     name: "No lint errors"
+  #     type: command
+  #     command: "make lint"
+  #     required: false
+  #
+  #   # -------------------------------------------------------------------------
+  #   # Completion Signal
+  #   # -------------------------------------------------------------------------
+  #   - id: completion
+  #     name: "Claude signals completion"
+  #     type: output_contains
+  #     pattern: "<promise>COMPLETE</promise>"
+  #     required: true

@@ -1,0 +1,70 @@
+# =============================================================================
+# Ralph Wiggum - DoD Template: Flutter / Dart
+# Best practices for Flutter 3.x with Dart 3.x
+# =============================================================================
+
+description: "Flutter/Dart project with flutter_test and analyzer"
+
+definition_of_done:
+  completion_marker: "<promise>COMPLETE</promise>"
+
+  checklist:
+    # -------------------------------------------------------------------------
+    # Tests - Flutter Test
+    # -------------------------------------------------------------------------
+    - id: tests
+      name: "All tests pass"
+      type: command
+      command: "flutter test"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Static Analysis - Flutter Analyze
+    # -------------------------------------------------------------------------
+    - id: analyze
+      name: "No analysis issues"
+      type: command
+      command: "flutter analyze"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Format Check
+    # -------------------------------------------------------------------------
+    - id: format
+      name: "Code properly formatted"
+      type: command
+      command: "dart format --set-exit-if-changed ."
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Pub Dependencies
+    # -------------------------------------------------------------------------
+    - id: pub-get
+      name: "Dependencies resolved"
+      type: command
+      command: "flutter pub get"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Build Check (optional)
+    # -------------------------------------------------------------------------
+    - id: build-android
+      name: "Android builds successfully"
+      type: command
+      command: "flutter build apk --debug"
+      required: false
+
+    - id: build-ios
+      name: "iOS builds successfully"
+      type: command
+      command: "flutter build ios --debug --no-codesign"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Completion Signal
+    # -------------------------------------------------------------------------
+    - id: completion
+      name: "Claude signals completion"
+      type: output_contains
+      pattern: "<promise>COMPLETE</promise>"
+      required: true

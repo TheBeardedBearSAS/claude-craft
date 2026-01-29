@@ -176,3 +176,52 @@ MSG_CONFIRM="Confirm"
 MSG_WARNING="Warning"
 MSG_INFO="Info"
 MSG_SUCCESS="Success"
+
+# =============================================================================
+# v2.0 Messages
+# =============================================================================
+
+# Auto-detection
+MSG_AUTO_DETECT="Auto-detecting project type..."
+MSG_AUTO_DETECT_FOUND="Detected project type"
+MSG_AUTO_DETECT_CONFIDENCE="Confidence"
+MSG_AUTO_DETECT_NOT_FOUND="Could not detect project type"
+MSG_HELP_AUTO_DETECT="Auto-detect project type and configure DoD"
+MSG_HELP_INIT="Generate config without running (init only)"
+MSG_HELP_INTERACTIVE="Interactive configuration wizard"
+
+# Dashboard
+MSG_DASHBOARD_ENABLED="Dashboard enabled"
+MSG_DASHBOARD_DISABLED="Dashboard disabled"
+MSG_DASHBOARD_MODE="Dashboard mode"
+
+# Metrics
+MSG_METRICS_ENABLED="Metrics collection enabled"
+MSG_METRICS_EXPORTED="Metrics exported"
+MSG_METRICS_FORMAT="Metrics format"
+
+# Health Monitor
+MSG_HEALTH_HEALTHY="Health: OK"
+MSG_HEALTH_WARNING="Health Warning"
+MSG_HEALTH_CRITICAL="Health Critical"
+MSG_HEALTH_STALL="Stall detected"
+MSG_HEALTH_ERROR_SPIRAL="Error spiral detected"
+MSG_HEALTH_CONTEXT_BLOAT="Context bloat detected"
+
+# Hooks
+MSG_HOOKS_ENABLED="Hooks integration enabled"
+MSG_HOOKS_DISABLED="Hooks integration disabled"
+MSG_HOOKS_CONFIG_GENERATED="Hooks configuration generated"
+MSG_HOOKS_DOD_BLOCKED="DoD not satisfied - stop blocked"
+
+# Circuit Breaker Adaptive
+MSG_CB_ADAPTIVE_ENABLED="Adaptive circuit breaker enabled"
+MSG_CB_PROFILE_DETECTED="Profile detected"
+MSG_CB_LEARNING_ENABLED="Learning from history enabled"
+MSG_CB_LEARNING_ADJUSTED="Thresholds adjusted based on history"
+
+# Configuration Generator
+MSG_CONFIG_GENERATED="Configuration generated"
+MSG_CONFIG_WIZARD_TITLE="Configuration Wizard"
+MSG_CONFIG_DETECTING="Detecting project settings..."
+MSG_CONFIG_CONFIRM="Is this correct?"

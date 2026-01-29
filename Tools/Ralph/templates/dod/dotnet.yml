@@ -1,0 +1,73 @@
+# =============================================================================
+# Ralph Wiggum - DoD Template: .NET / C#
+# Best practices for .NET 8/9/10 with xUnit and analyzers
+# =============================================================================
+
+description: ".NET project with xUnit tests and code analysis"
+
+definition_of_done:
+  completion_marker: "<promise>COMPLETE</promise>"
+
+  checklist:
+    # -------------------------------------------------------------------------
+    # Build - dotnet build
+    # -------------------------------------------------------------------------
+    - id: build
+      name: "Solution builds"
+      type: command
+      command: "docker compose exec app dotnet build --no-restore"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Tests - xUnit / NUnit / MSTest
+    # -------------------------------------------------------------------------
+    - id: tests
+      name: "All tests pass"
+      type: command
+      command: "docker compose exec app dotnet test --no-build --verbosity normal"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Code Analysis
+    # -------------------------------------------------------------------------
+    - id: analyze
+      name: "No analysis warnings"
+      type: command
+      command: "docker compose exec app dotnet build --no-restore /p:TreatWarningsAsErrors=true"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Format Check - dotnet format
+    # -------------------------------------------------------------------------
+    - id: format
+      name: "Code properly formatted"
+      type: command
+      command: "docker compose exec app dotnet format --verify-no-changes"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Security Audit (optional)
+    # -------------------------------------------------------------------------
+    - id: security
+      name: "No vulnerable packages"
+      type: command
+      command: "docker compose exec app dotnet list package --vulnerable --include-transitive"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Migration Check (EF Core)
+    # -------------------------------------------------------------------------
+    - id: migrations
+      name: "No pending migrations"
+      type: command
+      command: "docker compose exec app dotnet ef migrations has-pending-model-changes"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Completion Signal
+    # -------------------------------------------------------------------------
+    - id: completion
+      name: "Claude signals completion"
+      type: output_contains
+      pattern: "<promise>COMPLETE</promise>"
+      required: true

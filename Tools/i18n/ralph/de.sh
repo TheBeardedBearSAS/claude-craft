@@ -176,3 +176,52 @@ MSG_CONFIRM="Bestatigen"
 MSG_WARNING="Warnung"
 MSG_INFO="Info"
 MSG_SUCCESS="Erfolg"
+
+# =============================================================================
+# v2.0 Nachrichten
+# =============================================================================
+
+# Auto-Erkennung
+MSG_AUTO_DETECT="Automatische Erkennung des Projekttyps..."
+MSG_AUTO_DETECT_FOUND="Projekttyp erkannt"
+MSG_AUTO_DETECT_CONFIDENCE="Konfidenz"
+MSG_AUTO_DETECT_NOT_FOUND="Projekttyp konnte nicht erkannt werden"
+MSG_HELP_AUTO_DETECT="Projekttyp automatisch erkennen und DoD konfigurieren"
+MSG_HELP_INIT="Konfiguration generieren ohne auszufuhren (nur init)"
+MSG_HELP_INTERACTIVE="Interaktiver Konfigurationsassistent"
+
+# Dashboard
+MSG_DASHBOARD_ENABLED="Dashboard aktiviert"
+MSG_DASHBOARD_DISABLED="Dashboard deaktiviert"
+MSG_DASHBOARD_MODE="Dashboard-Modus"
+
+# Metriken
+MSG_METRICS_ENABLED="Metrikenerfassung aktiviert"
+MSG_METRICS_EXPORTED="Metriken exportiert"
+MSG_METRICS_FORMAT="Metrikenformat"
+
+# Gesundheitsmonitor
+MSG_HEALTH_HEALTHY="Gesundheit: OK"
+MSG_HEALTH_WARNING="Gesundheitswarnung"
+MSG_HEALTH_CRITICAL="Kritische Gesundheit"
+MSG_HEALTH_STALL="Stillstand erkannt"
+MSG_HEALTH_ERROR_SPIRAL="Fehlerspirale erkannt"
+MSG_HEALTH_CONTEXT_BLOAT="Kontextaufblahung erkannt"
+
+# Hooks
+MSG_HOOKS_ENABLED="Hooks-Integration aktiviert"
+MSG_HOOKS_DISABLED="Hooks-Integration deaktiviert"
+MSG_HOOKS_CONFIG_GENERATED="Hooks-Konfiguration generiert"
+MSG_HOOKS_DOD_BLOCKED="DoD nicht erfullt - Stopp blockiert"
+
+# Adaptiver Schutzschalter
+MSG_CB_ADAPTIVE_ENABLED="Adaptiver Schutzschalter aktiviert"
+MSG_CB_PROFILE_DETECTED="Profil erkannt"
+MSG_CB_LEARNING_ENABLED="Historisches Lernen aktiviert"
+MSG_CB_LEARNING_ADJUSTED="Schwellenwerte basierend auf Historie angepasst"
+
+# Konfigurationsgenerator
+MSG_CONFIG_GENERATED="Konfiguration generiert"
+MSG_CONFIG_WIZARD_TITLE="Konfigurationsassistent"
+MSG_CONFIG_DETECTING="Projekteinstellungen werden erkannt..."
+MSG_CONFIG_CONFIRM="Ist das korrekt?"

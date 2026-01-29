@@ -176,3 +176,52 @@ MSG_CONFIRM="Confirmar"
 MSG_WARNING="Aviso"
 MSG_INFO="Info"
 MSG_SUCCESS="Sucesso"
+
+# =============================================================================
+# Mensagens v2.0
+# =============================================================================
+
+# Auto-deteccao
+MSG_AUTO_DETECT="Detectando tipo de projeto automaticamente..."
+MSG_AUTO_DETECT_FOUND="Tipo de projeto detectado"
+MSG_AUTO_DETECT_CONFIDENCE="Confianca"
+MSG_AUTO_DETECT_NOT_FOUND="Nao foi possivel detectar o tipo de projeto"
+MSG_HELP_AUTO_DETECT="Detectar auto o tipo de projeto e configurar DoD"
+MSG_HELP_INIT="Gerar config sem executar (apenas init)"
+MSG_HELP_INTERACTIVE="Assistente de configuracao interativo"
+
+# Dashboard
+MSG_DASHBOARD_ENABLED="Dashboard habilitado"
+MSG_DASHBOARD_DISABLED="Dashboard desabilitado"
+MSG_DASHBOARD_MODE="Modo dashboard"
+
+# Metricas
+MSG_METRICS_ENABLED="Coleta de metricas habilitada"
+MSG_METRICS_EXPORTED="Metricas exportadas"
+MSG_METRICS_FORMAT="Formato de metricas"
+
+# Monitor de saude
+MSG_HEALTH_HEALTHY="Saude: OK"
+MSG_HEALTH_WARNING="Aviso de saude"
+MSG_HEALTH_CRITICAL="Saude critica"
+MSG_HEALTH_STALL="Estagnacao detectada"
+MSG_HEALTH_ERROR_SPIRAL="Espiral de erros detectada"
+MSG_HEALTH_CONTEXT_BLOAT="Inflacao de contexto detectada"
+
+# Hooks
+MSG_HOOKS_ENABLED="Integracao de hooks habilitada"
+MSG_HOOKS_DISABLED="Integracao de hooks desabilitada"
+MSG_HOOKS_CONFIG_GENERATED="Configuracao de hooks gerada"
+MSG_HOOKS_DOD_BLOCKED="DoD nao satisfeito - parada bloqueada"
+
+# Disjuntor adaptativo
+MSG_CB_ADAPTIVE_ENABLED="Disjuntor adaptativo habilitado"
+MSG_CB_PROFILE_DETECTED="Perfil detectado"
+MSG_CB_LEARNING_ENABLED="Aprendizado historico habilitado"
+MSG_CB_LEARNING_ADJUSTED="Limiares ajustados com base no historico"
+
+# Gerador de configuracao
+MSG_CONFIG_GENERATED="Configuracao gerada"
+MSG_CONFIG_WIZARD_TITLE="Assistente de configuracao"
+MSG_CONFIG_DETECTING="Detectando configuracoes do projeto..."
+MSG_CONFIG_CONFIRM="Esta correto?"

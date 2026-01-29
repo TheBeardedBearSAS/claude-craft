@@ -1,0 +1,73 @@
+# =============================================================================
+# Ralph Wiggum - DoD Template: React / Node.js / TypeScript
+# Best practices for React/Next.js with TypeScript
+# =============================================================================
+
+description: "React/Node.js project with Jest/Vitest, ESLint, and TypeScript"
+
+definition_of_done:
+  completion_marker: "<promise>COMPLETE</promise>"
+
+  checklist:
+    # -------------------------------------------------------------------------
+    # Tests - Jest / Vitest
+    # -------------------------------------------------------------------------
+    - id: tests
+      name: "All tests pass"
+      type: command
+      command: "docker compose exec app npm test -- --watchAll=false"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Linting - ESLint
+    # -------------------------------------------------------------------------
+    - id: lint
+      name: "No lint errors"
+      type: command
+      command: "docker compose exec app npm run lint"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Type Check - TypeScript
+    # -------------------------------------------------------------------------
+    - id: typecheck
+      name: "TypeScript compiles"
+      type: command
+      command: "docker compose exec app npx tsc --noEmit"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Format Check - Prettier (optional)
+    # -------------------------------------------------------------------------
+    - id: format
+      name: "Code properly formatted"
+      type: command
+      command: "docker compose exec app npx prettier --check ."
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Build Check
+    # -------------------------------------------------------------------------
+    - id: build
+      name: "Build succeeds"
+      type: command
+      command: "docker compose exec app npm run build"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Security Audit (optional)
+    # -------------------------------------------------------------------------
+    - id: security
+      name: "No security vulnerabilities"
+      type: command
+      command: "docker compose exec app npm audit --audit-level=high"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Completion Signal
+    # -------------------------------------------------------------------------
+    - id: completion
+      name: "Claude signals completion"
+      type: output_contains
+      pattern: "<promise>COMPLETE</promise>"
+      required: true

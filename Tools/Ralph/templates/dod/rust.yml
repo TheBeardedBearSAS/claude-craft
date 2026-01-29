@@ -1,0 +1,73 @@
+# =============================================================================
+# Ralph Wiggum - DoD Template: Rust
+# Best practices for Rust projects with Cargo
+# =============================================================================
+
+description: "Rust project with cargo test and clippy"
+
+definition_of_done:
+  completion_marker: "<promise>COMPLETE</promise>"
+
+  checklist:
+    # -------------------------------------------------------------------------
+    # Build - cargo build
+    # -------------------------------------------------------------------------
+    - id: build
+      name: "Code compiles"
+      type: command
+      command: "docker compose exec app cargo build"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Tests - cargo test
+    # -------------------------------------------------------------------------
+    - id: tests
+      name: "All tests pass"
+      type: command
+      command: "docker compose exec app cargo test"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Linting - Clippy
+    # -------------------------------------------------------------------------
+    - id: clippy
+      name: "No clippy warnings"
+      type: command
+      command: "docker compose exec app cargo clippy -- -D warnings"
+      required: true
+
+    # -------------------------------------------------------------------------
+    # Format Check - rustfmt
+    # -------------------------------------------------------------------------
+    - id: format
+      name: "Code properly formatted"
+      type: command
+      command: "docker compose exec app cargo fmt --check"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Documentation
+    # -------------------------------------------------------------------------
+    - id: docs
+      name: "Documentation compiles"
+      type: command
+      command: "docker compose exec app cargo doc --no-deps"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Security - cargo audit (optional)
+    # -------------------------------------------------------------------------
+    - id: security
+      name: "No security vulnerabilities"
+      type: command
+      command: "docker compose exec app cargo audit"
+      required: false
+
+    # -------------------------------------------------------------------------
+    # Completion Signal
+    # -------------------------------------------------------------------------
+    - id: completion
+      name: "Claude signals completion"
+      type: output_contains
+      pattern: "<promise>COMPLETE</promise>"
+      required: true

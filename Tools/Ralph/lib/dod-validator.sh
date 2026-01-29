@@ -317,3 +317,119 @@ store_dod_results() {
         return 1
     fi
 }
+
+# =============================================================================
+# DoD Validation for Hooks (v2.0)
+# =============================================================================
+# Returns exit code 2 to block Claude if DoD not satisfied
+
+validate_dod_for_hook() {
+    local output="$1"
+    local config_file="${2:-$CONFIG_FILE}"
+
+    # Perform validation
+    local result
+    result=$(validate_dod "$output" "$config_file" 2>&1)
+    local status=$?
+
+    if [[ $status -eq 0 ]]; then
+        # DoD passed - allow
+        return 0
+    else
+        # DoD not satisfied - block (exit code 2 for hooks)
+        return 2
+    fi
+}
+
+# =============================================================================
+# Export DoD Status for Hooks Context
+# =============================================================================
+
+export_dod_status() {
+    local config_file="${1:-$CONFIG_FILE}"
+    local output=""
+
+    # If no config, return simple status
+    if [[ -z "$config_file" || ! -f "$config_file" ]]; then
+        echo "DoD: Simple completion marker mode"
+        return
+    fi
+
+    # Check if yq is available
+    if ! command -v yq &>/dev/null; then
+        echo "DoD: Config present but yq unavailable"
+        return
+    fi
+
+    # Get checklist
+    local checklist
+    checklist=$(yq e '.definition_of_done.checklist // []' "$config_file" 2>/dev/null)
+
+    if [[ "$checklist" == "[]" || -z "$checklist" ]]; then
+        local marker
+        marker=$(yq e '.definition_of_done.completion_marker // "<promise>COMPLETE</promise>"' "$config_file" 2>/dev/null)
+        echo "DoD: Completion marker ($marker)"
+        return
+    fi
+
+    # Count checks
+    local total
+    total=$(echo "$checklist" | yq e 'length' -)
+
+    local required=0
+    for ((i=0; i<total; i++)); do
+        local is_required
+        is_required=$(yq e ".definition_of_done.checklist[$i].required // true" "$config_file" 2>/dev/null)
+        if [[ "$is_required" == "true" ]]; then
+            required=$((required + 1))
+        fi
+    done
+
+    echo "DoD: $required required checks configured ($total total)"
+}
+
+# =============================================================================
+# Get DoD Checklist Summary
+# =============================================================================
+
+get_dod_summary() {
+    local config_file="${1:-$CONFIG_FILE}"
+
+    if [[ -z "$config_file" || ! -f "$config_file" ]]; then
+        echo '{"mode": "marker", "checks": []}'
+        return
+    fi
+
+    if ! command -v yq &>/dev/null; then
+        echo '{"mode": "marker", "checks": []}'
+        return
+    fi
+
+    local checklist
+    checklist=$(yq e '.definition_of_done.checklist // []' "$config_file" 2>/dev/null)
+
+    if [[ "$checklist" == "[]" || -z "$checklist" ]]; then
+        local marker
+        marker=$(yq e '.definition_of_done.completion_marker // "<promise>COMPLETE</promise>"' "$config_file" 2>/dev/null)
+        echo "{\"mode\": \"marker\", \"marker\": \"$marker\", \"checks\": []}"
+        return
+    fi
+
+    # Build summary
+    local count
+    count=$(echo "$checklist" | yq e 'length' -)
+
+    local checks="["
+    for ((i=0; i<count; i++)); do
+        local id name required
+        id=$(yq e ".definition_of_done.checklist[$i].id" "$config_file" 2>/dev/null)
+        name=$(yq e ".definition_of_done.checklist[$i].name" "$config_file" 2>/dev/null)
+        required=$(yq e ".definition_of_done.checklist[$i].required // true" "$config_file" 2>/dev/null)
+
+        [[ $i -gt 0 ]] && checks="$checks,"
+        checks="$checks{\"id\":\"$id\",\"name\":\"$name\",\"required\":$required}"
+    done
+    checks="$checks]"
+
+    echo "{\"mode\": \"checklist\", \"checks\": $checks}"
+}
