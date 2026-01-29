@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2026-01-29
+
+### Added
+- **2026 Best Practices Update** for all major frameworks
+- `.claude/` directory now tracked in version control
+- Sub-CLAUDE.md quick reference files per technology
+  - `symfony/CLAUDE.md` - Symfony 8 quick reference
+  - `flutter/CLAUDE.md` - Flutter 3.38 quick reference
+- **Symfony 8.0 / PHP 8.5** documentation
+  - `json-streamer.md` - JSON Streamer Component
+  - `object-mapper.md` - ObjectMapper Component
+  - `service-container-2026.md` - Container 2026 features
+- **Flutter 3.38 / Dart 3.10** documentation
+  - `wasm.md` - WebAssembly compilation
+  - `mcp-integration.md` - Model Context Protocol
+  - `web-performance-2026.md` - Web optimization
+- `/common:init` command for bootstrapping new projects
+- Technology Quick Links in INDEX.md
+
+### Changed
+- **PHP**: 8.4 → 8.5 (pipe operator, lazy objects)
+- **Symfony**: 6.4 → 8.0 (JSON Streamer, ObjectMapper)
+- **.NET**: 9 → 10 LTS
+- **C#**: 13 → 14 (Extension Members, Null-Conditional Assignment)
+- **Flutter**: 3.x → 3.38+ (WebAssembly, MCP)
+- **Dart**: 3.x → 3.10+ (dot shorthands)
+- **Rector**: 1.x → 2.3.x
+- **Deptrac**: v1 → v4
+- **PHPStan**: → 2.1.x
+- `.gitignore` updated to track `.claude/` (except settings.local.json)
+- CLAUDE.md updated to multi-technology framework format
+
+### Improved
+- Conformity score: 5.8/10 → 9/10
+- Complete 2026 tooling stack documentation
+
 ## [3.6.0] - 2026-01-29
 
 ### Added
@@ -159,6 +195,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Enhanced npm publishing security via OIDC
 
+[4.0.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.6.0...v4.0.0
+[3.6.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.5.1...v3.6.0
+[3.5.1]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.5.0...v3.5.1
 [3.5.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.3.3...v3.4.0
 [3.3.3]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.3.2...v3.3.3
