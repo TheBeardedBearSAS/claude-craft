@@ -37,7 +37,7 @@ Hooks complement the "should-do" suggestions in CLAUDE.md with "must-do" determi
 
 ## Hook Events
 
-Claude Code supports **10 hook event types**:
+Claude Code supports **11 hook event types**:
 
 | Event | When it fires | Matcher support |
 |-------|---------------|-----------------|
@@ -51,6 +51,7 @@ Claude Code supports **10 hook event types**:
 | `PreCompact` | Before context compaction | Yes (`manual`, `auto`) |
 | `SessionStart` | When session starts/resumes | Yes (`startup`, `resume`, `clear`, `compact`) |
 | `SessionEnd` | When session terminates | No |
+| `Setup` | When `--init`, `--init-only`, `--maintenance` run | No |
 
 ### Event Details
 
@@ -77,6 +78,17 @@ Fires when session starts or resumes. Use for:
 - Loading project context
 - Setting environment variables
 - Initializing tools
+
+#### Setup (v2.1.20+)
+Fires when running initialization/maintenance commands:
+- `--init`: First-time project setup
+- `--init-only`: Run setup without starting session
+- `--maintenance`: Run maintenance tasks
+
+Use for:
+- Project initialization scripts
+- First-time environment configuration
+- Database migrations on setup
 
 ---
 
@@ -143,6 +155,24 @@ Execute a shell command:
   "type": "command",
   "command": "/path/to/script.sh",
   "timeout": 60
+}
+```
+
+#### Hook Configuration Options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `type` | string | `"command"` or `"prompt"` |
+| `command` | string | Shell command to execute |
+| `timeout` | number | Max execution time in seconds (default: 60) |
+| `once` | boolean | Run hook only once per session (v2.1.0+) |
+
+**Example with `once: true`**:
+```json
+{
+  "type": "command",
+  "command": ".claude/hooks/expensive-check.sh",
+  "once": true
 }
 ```
 
@@ -272,10 +302,13 @@ All hooks receive JSON on stdin:
     "hookEventName": "PreToolUse",
     "permissionDecision": "allow|deny|ask",
     "permissionDecisionReason": "Reason",
-    "updatedInput": { "field": "new_value" }
+    "updatedInput": { "field": "new_value" },
+    "additionalContext": "Context message for Claude (v2.1.21+)"
   }
 }
 ```
+
+The `additionalContext` field (v2.1.21+) allows hooks to inject context that Claude will see when processing the tool result. Use for warnings, hints, or additional information.
 
 ---
 

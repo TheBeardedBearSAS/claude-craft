@@ -1,6 +1,15 @@
 {
   "$schema": "https://claude.ai/settings-schema.json",
 
+  "spinnerVerbs": {
+    "default": ["Pensando", "Procesando", "Analizando", "Trabajando"],
+    "Edit": ["Editando", "Modificando", "Actualizando"],
+    "Write": ["Escribiendo", "Creando", "Generando"],
+    "Bash": ["Ejecutando", "Lanzando", "Procesando"],
+    "Read": ["Leyendo", "Cargando", "Escaneando"],
+    "Task": ["Delegando", "Coordinando", "Despachando"]
+  },
+
   "permissions": {
     "allow": [
       "Read",

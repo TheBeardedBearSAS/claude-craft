@@ -25,6 +25,18 @@ This directory contains Claude Code hooks for automated quality control and work
 | `session-init.sh` | Load project context | SessionStart |
 | `notify-slack.sh` | Slack notifications | Notification |
 | `block-dangerous-commands.sh` | Block rm -rf, sudo, etc. | PreToolUse |
+| `setup-init.sh` | Initialize project on first run | Setup |
+
+## Hook Events (11 total)
+
+- **PreToolUse / PostToolUse** - Before/after tool execution
+- **Stop / SubagentStop** - When agent finishes
+- **SessionStart / SessionEnd** - Session lifecycle
+- **Setup** - On `--init`, `--init-only`, `--maintenance` (v2.1.20+)
+- **PermissionRequest** - Permission dialogs
+- **UserPromptSubmit** - User input
+- **Notification** - Notifications
+- **PreCompact** - Before context compaction
 
 ## Quick Enable
 

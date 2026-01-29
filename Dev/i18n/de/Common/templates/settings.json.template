@@ -1,6 +1,15 @@
 {
   "$schema": "https://claude.ai/settings-schema.json",
 
+  "spinnerVerbs": {
+    "default": ["Denken", "Verarbeiten", "Analysieren", "Arbeiten"],
+    "Edit": ["Bearbeiten", "Ändern", "Aktualisieren"],
+    "Write": ["Schreiben", "Erstellen", "Generieren"],
+    "Bash": ["Ausführen", "Starten", "Verarbeiten"],
+    "Read": ["Lesen", "Laden", "Scannen"],
+    "Task": ["Delegieren", "Koordinieren", "Versenden"]
+  },
+
   "permissions": {
     "allow": [
       "Read",

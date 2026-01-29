@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.1] - 2026-01-29
+
+### Changed
+- Updated to Claude Code 2.1.23 best practices
+- Added `Setup` hook event documentation (for `--init`, `--init-only`, `--maintenance`)
+- Added `once: true` hook configuration option
+- Added `additionalContext` PreToolUse output field
+- Added `spinnerVerbs` setting in templates
+- Updated hook events from 10 to 11 (added Setup)
+
 ## [4.0.0] - 2026-01-29
 
 ### Added
@@ -97,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Restructured all CLAUDE.md templates (55 total: 11 per language x 5 languages)
 - Reduced template sizes from 239-544 lines to 79-110 lines
-- Updated to Claude Code 2.1.14 best practices
+- Updated to Claude Code 2.1.23 best practices
 
 ### Improved
 - Context usage optimization for Claude
@@ -195,6 +205,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Enhanced npm publishing security via OIDC
 
+[4.0.1]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.6.0...v4.0.0
 [3.6.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.5.1...v3.6.0
 [3.5.1]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v3.5.0...v3.5.1
