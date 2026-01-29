@@ -1,8 +1,8 @@
 # User configuration (use .example as template)
 claude-projects.yaml
 
-# Claude Code local settings
-.claude/
+# Claude Code local settings (keep .claude/ tracked for claude-craft)
+.claude/settings.local.json
 
 # IDE
 .idea/
@@ -14,7 +14,6 @@ claude-projects.yaml
 # OS
 .DS_Store
 Thumbs.db
-.claude/settings.local.json
 
 docs/training/
 

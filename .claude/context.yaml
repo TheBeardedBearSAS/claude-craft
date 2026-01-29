@@ -1,0 +1,133 @@
+# Claude-Craft Context Configuration
+# This file defines contextual triggers for skills and quick tips
+
+version: "1.0"
+
+# File-based context suggestions
+file_contexts:
+  # C# source files
+  "*.cs":
+    suggest_skills:
+      - solid-principles
+      - kiss-dry-yagni
+    auto_load: false
+    quick_tips: |
+      PascalCase for public, _camelCase for private fields.
+      Pass CancellationToken to async methods.
+
+  # Test files
+  "*Test*.cs":
+    suggest_skills:
+      - testing
+    auto_load: false
+    quick_tips: |
+      TDD: RED → GREEN → REFACTOR
+      AAA pattern, coverage ≥ 80%
+
+  "*.Tests.csproj":
+    suggest_skills:
+      - testing
+    auto_load: false
+
+  "**/tests/**":
+    suggest_skills:
+      - testing
+    auto_load: false
+
+  # Security-related files
+  "*Auth*.cs":
+    suggest_skills:
+      - security
+    auto_load: false
+    quick_tips: |
+      Use policy-based authorization.
+      Never store secrets in code.
+
+  "*Security*.cs":
+    suggest_skills:
+      - security
+    auto_load: false
+
+  "*Identity*.cs":
+    suggest_skills:
+      - security
+    auto_load: false
+
+  # Documentation
+  "*.md":
+    suggest_skills:
+      - documentation
+    auto_load: false
+
+  "README*":
+    suggest_skills:
+      - documentation
+    auto_load: false
+
+  "CHANGELOG*":
+    suggest_skills:
+      - documentation
+    auto_load: false
+
+  # Git
+  ".gitignore":
+    suggest_skills:
+      - git-workflow
+    auto_load: false
+
+  # Domain layer
+  "**/Domain/**/*.cs":
+    suggest_skills:
+      - solid-principles
+    auto_load: false
+    quick_tips: |
+      Domain: NO external dependencies.
+      Private setters, Value Objects for business rules.
+
+  # Application layer
+  "**/Application/**/*.cs":
+    suggest_skills:
+      - solid-principles
+    auto_load: false
+    quick_tips: |
+      CQRS: Separate Commands and Queries.
+      Use FluentValidation for input validation.
+
+  # Infrastructure layer
+  "**/Infrastructure/**/*.cs":
+    suggest_skills:
+      - security
+    auto_load: false
+    quick_tips: |
+      Implement repository interfaces from Domain.
+      Use parameterized queries only.
+
+# Keyword-based triggers (in user messages)
+keyword_triggers:
+  refactor:
+    suggest_skills:
+      - solid-principles
+      - kiss-dry-yagni
+      - workflow-analysis
+
+  test:
+    suggest_skills:
+      - testing
+
+  security:
+    suggest_skills:
+      - security
+
+  commit:
+    suggest_skills:
+      - git-workflow
+
+  documentation:
+    suggest_skills:
+      - documentation
+
+# Default behavior
+defaults:
+  auto_load_skills: false
+  suggest_workflow_analysis: true
+  min_impact_for_validation: "medium"
