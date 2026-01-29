@@ -326,6 +326,121 @@ docs: update README with new features
 - Help others learn and grow
 - Keep discussions professional
 
+## Development Setup
+
+### Prerequisites
+
+```bash
+# Check all prerequisites
+./Dev/scripts/check-prerequisites.sh --fix
+```
+
+Required:
+- Node.js 18+
+- npm 9+
+- yq v4 (Mike Farah's version)
+- Git 2+
+- Bash
+
+Recommended:
+- Docker
+- jq
+- make
+
+### Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/TheBeardedBearSAS/claude-craft.git
+cd claude-craft
+
+# Make scripts executable
+make fix-permissions
+
+# Test installation to temp directory
+make install-symfony TARGET=/tmp/test-project RULES_LANG=en
+
+# View statistics
+make stats
+
+# List available components
+make list
+```
+
+### Running Tests
+
+```bash
+# Test all installations
+for tech in symfony flutter react python angular; do
+  make dry-run-$tech TARGET=/tmp/test-$tech
+done
+
+# Validate YAML config
+make config-validate
+
+# Check prerequisites
+./Dev/scripts/check-prerequisites.sh
+```
+
+### Release Checklist
+
+Before releasing a new version:
+
+1. [ ] Update version in package.json
+2. [ ] Update version in README.md (What's New section)
+3. [ ] Update version in docs/QUICKSTART.md
+4. [ ] Update CHANGELOG.md
+5. [ ] Run full test suite
+6. [ ] Test NPX installation
+7. [ ] Create git tag
+8. [ ] Publish to npm
+
+---
+
+## Adding Translations
+
+All content is available in 5 languages. When adding new content:
+
+1. Create in English first (`Dev/i18n/en/`)
+2. Translate to other languages:
+   - `fr` - French
+   - `es` - Spanish
+   - `de` - German
+   - `pt` - Portuguese
+
+3. Maintain consistent structure across all languages
+
+---
+
+## Documentation
+
+### Adding Documentation
+
+1. Create in `docs/` directory
+2. Add translations in `docs/i18n/{lang}/`
+3. Update links in:
+   - README.md
+   - docs/guides/index.md
+   - .claude/CLAUDE.md
+
+### Documentation Standards
+
+- Use GitHub-flavored Markdown
+- Include code examples
+- Add command output samples
+- Keep language accessible for juniors
+- Include troubleshooting sections
+
+---
+
 ## Questions?
 
 Feel free to open an issue for questions or clarifications.
+
+---
+
+## See Also
+
+- [Architecture Guide](docs/ARCHITECTURE.md)
+- [CLI Reference](docs/CLI-REFERENCE.md)
+- [Scripts Reference](docs/SCRIPTS-REFERENCE.md)
