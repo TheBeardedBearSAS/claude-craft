@@ -33,6 +33,9 @@ const c = colors;
 // CLI package root
 const CLI_ROOT = path.resolve(__dirname, '..');
 
+// Package version
+const { version: VERSION } = require(path.join(CLI_ROOT, 'package.json'));
+
 // Available technologies
 const TECHNOLOGIES = {
   symfony: { name: 'Symfony', desc: 'PHP backend with Clean Architecture, DDD, API Platform' },
@@ -118,7 +121,7 @@ ${c.cyan}${c.bold}║${c.reset}   ${c.blue}${c.bold}╚██████╗█�
 ${c.cyan}${c.bold}║${c.reset}   ${c.blue}${c.bold} ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝${c.reset}                   ${c.cyan}${c.bold}║${c.reset}
 ${c.cyan}${c.bold}║${c.reset}                                                               ${c.cyan}${c.bold}║${c.reset}
 ${c.cyan}${c.bold}║${c.reset}   ${c.dim}AI-Assisted Development Framework for Claude Code${c.reset}          ${c.cyan}${c.bold}║${c.reset}
-${c.cyan}${c.bold}║${c.reset}   ${c.dim}Version 3.0.0${c.reset}                                              ${c.cyan}${c.bold}║${c.reset}
+${c.cyan}${c.bold}║${c.reset}   ${c.dim}Version ${VERSION}${c.reset}${' '.repeat(Math.max(0, 46 - VERSION.length))}${c.cyan}${c.bold}║${c.reset}
 ${c.cyan}${c.bold}║${c.reset}                                                               ${c.cyan}${c.bold}║${c.reset}
 ${c.cyan}${c.bold}╚═══════════════════════════════════════════════════════════════╝${c.reset}
 `);
@@ -461,6 +464,13 @@ ${c.bold}Documentation:${c.reset}
   // Main entry point
   async run() {
     const args = process.argv.slice(2);
+
+    // Handle --version and -v early
+    if (args.includes('--version') || args.includes('-v')) {
+      console.log(VERSION);
+      return;
+    }
+
     const { command, path: targetPath, options } = this.parseArgs(args);
 
     // Apply options
