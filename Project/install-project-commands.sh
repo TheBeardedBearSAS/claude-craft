@@ -12,15 +12,18 @@ lang="en"
 
 # Parse arguments
 PROJECT_DIR="."
+skip_common=false
 while [[ $# -gt 0 ]]; do
     case $1 in
         --lang=*) lang="${1#--lang=}"; shift ;;
+        --skip-common) skip_common=true; shift ;;
         --help|-h)
             echo "Usage: $0 [OPTIONS] [PROJECT_DIR]"
             echo ""
             echo "Options:"
-            echo "  --lang=XX   Language (en, fr, es, de, pt) - default: en"
-            echo "  --help      Show this help"
+            echo "  --lang=XX      Language (en, fr, es, de, pt) - default: en"
+            echo "  --skip-common  Skip common rules installation (for multi-tech modules)"
+            echo "  --help         Show this help"
             echo ""
             echo "Example:"
             echo "  $0 --lang=fr ~/my-project"

@@ -31,7 +31,7 @@ set -euo pipefail
 # ─────────────────────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_CONFIG="${SCRIPT_DIR}/../../claude-projects.yaml"
-VALID_TECHS=("symfony" "flutter" "python" "react" "reactnative" "angular" "csharp" "laravel" "vuejs" "docker")
+VALID_TECHS=("symfony" "flutter" "python" "react" "reactnative" "angular" "csharp" "laravel" "vuejs" "docker" "project")
 VALID_LANGS=("en" "fr" "es" "de" "pt")
 
 # Couleurs
@@ -446,6 +446,9 @@ get_install_script() {
             ;;
         common)
             script="${SCRIPT_DIR}/install-common-rules.sh"
+            ;;
+        project)
+            script="${SCRIPT_DIR}/../../Project/install-project-commands.sh"
             ;;
     esac
 

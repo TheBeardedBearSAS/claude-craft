@@ -1,0 +1,23 @@
+{
+  "$schema": "https://claude.ai/mcp-schema.json",
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/context7-mcp"],
+      "description": "Context7 documentation lookup for frameworks and libraries"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/project"],
+      "description": "Enhanced filesystem access"
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "GitHub integration for issues, PRs, and repositories"
+    }
+  }
+}

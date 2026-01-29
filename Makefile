@@ -89,7 +89,7 @@ help: ## Affiche cette aide
 # Installation Complète
 #===============================================================================
 
-install-all: ## Installe TOUTES les règles (common + toutes technos)
+install-all: ## Installe TOUTES les règles (common + toutes technos + project)
 	@echo "$(CYAN)📦 Installation complète dans $(TARGET) (lang=$(RULES_LANG))...$(NC)"
 	@$(MAKE) install-common TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
 	@$(MAKE) install-symfony TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
@@ -102,6 +102,7 @@ install-all: ## Installe TOUTES les règles (common + toutes technos)
 	@$(MAKE) install-laravel TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
 	@$(MAKE) install-vuejs TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
 	@$(MAKE) install-php TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
+	@$(MAKE) install-project TARGET=$(TARGET) OPTIONS=$(OPTIONS) RULES_LANG=$(RULES_LANG)
 	@echo "$(GREEN)✅ Installation complète terminée !$(NC)"
 
 #===============================================================================
