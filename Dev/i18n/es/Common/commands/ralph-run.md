@@ -1,170 +1,81 @@
 ---
-description: Ejecutar Claude en bucle continuo hasta completar tarea (Ralph Wiggum)
-argument-hint: <descripcion-tarea> [--auto|--full]
+description: Ejecutar Claude en bucle continuo hasta completar la tarea (Ralph Wiggum v2.0)
+argument-hint: <descripcion-tarea> [--auto-detect|--init|--interactive]
 ---
 
-# Ralph Run - Bucle Continuo de Agente IA
+# Ralph Run - Bucle Continuo de Agente IA v2.0
 
-Ejecutar Claude en bucle continuo hasta que la tarea este completa o se cumplan los criterios de Definition of Done (DoD).
+Ejecuta Claude en un bucle continuo hasta que la tarea este completa o se cumplan los criterios de Definition of Done (DoD).
 
 ## Argumentos
 
 **$ARGUMENTS**
 
 - `<descripcion-tarea>`: La tarea para que Claude complete
-- `--auto`: Deteccion automatica maxima, preguntas minimas
-- `--full`: Modo completo con todas las verificaciones DoD
+- `--auto-detect`: Detectar automaticamente el tipo de proyecto y configurar DoD
+- `--init`: Generar configuracion sin ejecutar
+- `--interactive`: Asistente de configuracion interactivo
+
+## Nuevas funcionalidades v2.0
+
+| Funcionalidad | Descripcion |
+|---------------|-------------|
+| **Integracion Hooks** | Integracion bidireccional con Claude Code 2.1.23+ |
+| **Auto-Deteccion** | Deteccion automatica del tipo de proyecto |
+| **Dashboard** | Visualizacion en tiempo real con barra de progreso |
+| **Export Metricas** | Metricas en formato JSON y Prometheus |
+| **Circuit Breaker Adaptativo** | 5 perfiles con aprendizaje historico |
+| **Monitor de Salud** | Deteccion de estancamiento, espiral de errores |
+| **Templates DoD** | Templates preconfigurados para 8 tecnologias |
 
 ## Proceso
 
-### 1. Inicializacion de Sesion
+### 1. Inicializacion de sesion
 
-1. **Verificar prerequisitos**:
-   - Verificar que Claude esta disponible
-   - Buscar configuracion `ralph.yml`
-   - Inicializar directorio de sesion (`.ralph/`)
+1. **Verificar prerequisitos**
+2. **Detectar proyecto** (si `--auto-detect`)
+3. **Cargar configuracion**
 
-2. **Cargar configuracion**:
-   - Leer `ralph.yml` o `.claude/ralph.yml`
-   - Establecer iteraciones max, timeouts, criterios DoD
-
-### 2. Bucle Principal
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  BUCLE RALPH                                                 │
-│                                                              │
-│  while (iteraciones < max && !DoD_aprobado) {                │
-│      1. Verificar disyuntor                                  │
-│      2. Invocar Claude con prompt actual                     │
-│      3. Procesar salida                                      │
-│      4. Validar Definition of Done                           │
-│      5. Crear checkpoint (commit git)                        │
-│      6. Si DoD no cumple, usar respuesta como prompt         │
-│  }                                                           │
-└─────────────────────────────────────────────────────────────┘
-```
+### 2. Bucle principal con Dashboard
 
 ### 3. Validacion Definition of Done
 
-El sistema DoD valida la completitud mediante multiples criterios:
+### 4. Circuit Breaker Adaptativo (v2.0)
 
-| Validador | Descripcion |
-|-----------|-------------|
-| `command` | Ejecutar comando shell (tests, lint, build) |
-| `output_contains` | Verificar patron en salida de Claude |
-| `file_changed` | Verificar que archivos fueron modificados |
-| `hook` | Ejecutar hook Claude existente |
-| `human` | Validacion humana interactiva |
+| Perfil | Palabras clave | Sin Cambios | Errores | Max Iter |
+|--------|----------------|-------------|---------|----------|
+| `quick_fix` | fix, bug, typo | 2 | 3 | 10 |
+| `small_feature` | add, implement | 3 | 4 | 15 |
+| `medium_feature` | feature, create | 4 | 6 | 25 |
+| `large_feature` | refactor, migrate | 5 | 8 | 50 |
+| `exploration` | explore, investigate | 10 | 15 | 100 |
 
-Ejemplo DoD en `ralph.yml`:
+## Ejemplos rapidos
 
-```yaml
-definition_of_done:
-  checklist:
-    - id: tests
-      name: "Todos los tests pasan"
-      type: command
-      command: "docker compose exec app npm test"
-      required: true
+```bash
+# Uso basico
+ralph.sh "Implementar autenticacion de usuario"
 
-    - id: completion
-      name: "Claude senala completitud"
-      type: output_contains
-      pattern: "<promise>COMPLETE</promise>"
-      required: true
+# Detectar y generar config
+ralph.sh --auto-detect --init
+
+# Asistente interactivo
+ralph.sh --interactive
 ```
 
-### 4. Disyuntor (Circuit Breaker)
+## Templates DoD por tecnologia
 
-Mecanismo de seguridad para prevenir bucles infinitos:
+| Tecnologia | Comando Test | Comando Lint |
+|------------|--------------|--------------|
+| Symfony | `vendor/bin/phpunit` | `vendor/bin/phpstan analyse` |
+| Flutter | `flutter test` | `flutter analyze` |
+| React | `npm test` | `npm run lint` |
+| Python | `pytest` | `ruff check .` |
+| .NET | `dotnet test` | `dotnet build /p:TreatWarningsAsErrors=true` |
+| Go | `go test ./...` | `golangci-lint run` |
+| Rust | `cargo test` | `cargo clippy` |
 
-| Disparador | Umbral | Accion |
-|------------|--------|--------|
-| Sin cambios de archivos | 3 iteraciones | Parar |
-| Errores repetidos | 5 iteraciones | Parar |
-| Declive de salida | 70% | Parar |
-| Max iteraciones | 25 (defecto) | Parar |
-
-### 5. Checkpointing
-
-Se crean checkpoints Git despues de cada iteracion para:
-- **Recuperacion**: Restaurar estado anterior si es necesario
-- **Historial**: Seguir progreso a traves de iteraciones
-- **Revision**: Inspeccionar que cambio en cada paso
-
-## Salida
-
-```
-╔════════════════════════════════════════════════════════════╗
-║     🔁 Ralph Wiggum - Bucle Continuo de Agente IA           ║
-╚════════════════════════════════════════════════════════════╝
-
-✓ Sesion creada: ralph-1704067200-a1b2
-
-ℹ Iniciando bucle Ralph...
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Iteracion 1 de 25
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-ℹ Invocando Claude...
-ℹ Verificando criterios DoD...
-  ✓ [tests] Todos los tests pasan - OK
-  ✓ [lint] Sin errores lint - OK
-  ✓ [completion] Claude senala completitud - OK
-
-  Todos los criterios requeridos aprobados!
-
-✓ DoD APROBADO
-
-╔════════════════════════════════════════════════════════════╗
-║     📊 Resumen de Sesion                                    ║
-╚════════════════════════════════════════════════════════════╝
-
-  ID de sesion:        ralph-1704067200-a1b2
-  Iteraciones totales: 3
-  Duracion:            45s
-  Estado DoD:          APROBADO
-  Razon de salida:     dod_complete
-```
-
-## Configuracion
-
-Crear `ralph.yml` en la raiz del proyecto:
-
-```yaml
-version: "1.0"
-
-session:
-  max_iterations: 25
-  timeout: 600000
-
-circuit_breaker:
-  enabled: true
-  no_file_changes_threshold: 3
-
-definition_of_done:
-  checklist:
-    - id: tests
-      type: command
-      command: "npm test"
-      required: true
-    - id: completion
-      type: output_contains
-      pattern: "<promise>COMPLETE</promise>"
-      required: true
-```
-
-## Mejores Practicas
-
-1. **Descripcion clara**: Proporcionar tareas especificas y accionables
-2. **Configurar DoD**: Definir criterios de completitud en `ralph.yml`
-3. **Usar TDD**: Escribir tests primero, dejar que Ralph implemente
-4. **Monitorear progreso**: Observar salidas de iteracion
-5. **Limites razonables**: Ajustar max_iterations segun complejidad
-
-## Ver tambien
+## Relacionado
 
 - `@ralph-conductor` - Agente para orquestacion Ralph
 - `/common:fix-bug-tdd` - Correccion de bugs con TDD

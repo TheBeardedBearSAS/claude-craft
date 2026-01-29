@@ -1,18 +1,30 @@
-# Ralph Wiggum - Continuous AI Agent Loop
+# Ralph Wiggum v2.0 - Continuous AI Agent Loop
 
-Ralph Wiggum is a methodology and tool for running Claude in a continuous loop until a task is complete. It provides structured completion detection through Definition of Done (DoD) validation, safety mechanisms via circuit breakers, and progress tracking through git checkpoints.
+Ralph Wiggum is a methodology and tool for running Claude in a continuous loop until a task is complete. It provides structured completion detection through Definition of Done (DoD) validation, safety mechanisms via adaptive circuit breakers, and progress tracking through git checkpoints.
+
+**v2.0 Features:**
+- 🔌 **Claude Code 2.1.23+ Hooks** - Bidirectional integration
+- 🔍 **Auto-Detection** - Intelligent project type detection
+- 📊 **Observability** - Real-time dashboard, metrics, health monitoring
+- 🎚️ **Adaptive Circuit Breaker** - Profile-based thresholds with learning
 
 ## Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  RALPH LOOP                                                  │
+│  RALPH LOOP v2.0                                             │
+│                                                              │
+│  profile = detectProfile(prompt)  // v2.0 adaptive           │
+│  project = autoDetect()           // v2.0 auto-detection     │
 │                                                              │
 │  while (iterations < max && !complete) {                     │
+│      renderDashboard()            // v2.0 real-time          │
 │      response = claude("--continue", session_id, prompt)     │
 │      complete = checkDoD(response)                           │
+│      checkHealth()                // v2.0 health monitor     │
 │      if (circuitBreaker.triggered()) break                   │
 │      createCheckpoint(iteration)                             │
+│      exportMetrics()              // v2.0 observability      │
 │      prompt = response  // feedback loop                     │
 │  }                                                           │
 └─────────────────────────────────────────────────────────────┘
@@ -25,6 +37,15 @@ Ralph Wiggum is a methodology and tool for running Claude in a continuous loop u
 ```bash
 # Basic usage
 npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
+
+# With auto-detection (v2.0)
+npx @the-bearded-bear/claude-craft ralph --auto-detect "Implement user authentication"
+
+# Interactive configuration (v2.0)
+npx @the-bearded-bear/claude-craft ralph --interactive "Fix the login bug"
+
+# Generate config only (v2.0)
+npx @the-bearded-bear/claude-craft ralph --init "Fix the login bug"
 
 # With configuration
 npx @the-bearded-bear/claude-craft ralph --config=ralph.yml "Fix the login bug"
@@ -43,6 +64,7 @@ npx @the-bearded-bear/claude-craft ralph --continue=ralph-1704067200-a1b2
 
 ```bash
 ./Tools/Ralph/ralph.sh "Implement user authentication"
+./Tools/Ralph/ralph.sh --auto-detect "Implement user authentication"
 ./Tools/Ralph/ralph.sh --lang=fr --verbose "Corriger le bug de connexion"
 ```
 
@@ -51,15 +73,22 @@ npx @the-bearded-bear/claude-craft ralph --continue=ralph-1704067200-a1b2
 Create `ralph.yml` in your project root or `.claude/ralph.yml`:
 
 ```yaml
-version: "1.0"
+version: "2.0"
 
 session:
   max_iterations: 25
   timeout: 600000  # 10 minutes per iteration
   delay_between_iterations: 1000
 
+# v2.0: Adaptive Circuit Breaker
 circuit_breaker:
   enabled: true
+  adaptive: true  # Enable profile-based thresholds
+  default_profile: "medium_feature"
+  learning:
+    enabled: true
+    min_samples: 5
+  # Legacy static thresholds (used when adaptive: false)
   no_file_changes_threshold: 3
   repeated_error_threshold: 5
   output_decline_threshold: 70
@@ -68,6 +97,36 @@ checkpointing:
   enabled: true
   async: true
   branch_prefix: "ralph/"
+
+# v2.0: Claude Code Hooks
+hooks:
+  enabled: true
+  mode: "advanced"  # simple or advanced
+
+# v2.0: Auto-detection
+auto_detect:
+  enabled: true
+  interactive: false
+
+# v2.0: Metrics & Dashboard
+metrics:
+  enabled: true
+  format: "both"  # json, prometheus, both
+  realtime:
+    enabled: true
+    interval_ms: 1000
+
+dashboard:
+  enabled: true
+  mode: "full"  # simple, full, headless
+
+# v2.0: Health Monitoring
+health_monitor:
+  enabled: true
+  patterns:
+    stall_detection: true
+    error_spiral: true
+    context_bloat: true
 
 definition_of_done:
   checklist:
@@ -163,6 +222,195 @@ Safety mechanism to prevent infinite loops:
 | Output decline | 70% | Stops if output shrinks significantly |
 | Max iterations | 25 | Hard limit |
 
+### Adaptive Profiles (v2.0)
+
+Ralph v2.0 introduces adaptive circuit breaker profiles that adjust thresholds based on task complexity:
+
+| Profile | Keywords | no_changes | errors | max_iterations |
+|---------|----------|------------|--------|----------------|
+| `quick_fix` | fix, bug, typo | 2 | 3 | 10 |
+| `small_feature` | add, implement | 3 | 4 | 15 |
+| `medium_feature` | feature, create | 4 | 6 | 25 |
+| `large_feature` | refactor, migrate | 5 | 8 | 50 |
+| `exploration` | explore, investigate | 10 | 15 | 100 |
+
+The profile is automatically detected from the prompt keywords.
+
+### Learning Mode (v2.0)
+
+When learning is enabled, Ralph adjusts thresholds based on historical outcomes:
+- Stores session history in `.ralph/history/circuit-breaker-history.json`
+- Requires minimum 5 samples before making adjustments
+- Tightens thresholds for profiles with high failure rates
+- Relaxes thresholds for profiles with consistent successes
+
+## Auto-Detection (v2.0)
+
+Ralph can automatically detect your project type and load appropriate DoD templates:
+
+| Technology | Detection | Confidence |
+|------------|-----------|------------|
+| Symfony | `composer.json` + symfony/framework-bundle | HIGH |
+| Laravel | `composer.json` + laravel/framework | HIGH |
+| Flutter | `pubspec.yaml` | HIGH |
+| React | `package.json` + react dependency | HIGH |
+| Vue | `package.json` + vue dependency | HIGH |
+| Angular | `angular.json` | HIGH |
+| Next.js | `package.json` + next dependency | HIGH |
+| .NET | `*.csproj` or `*.sln` | HIGH |
+| Python | `pyproject.toml` or `requirements.txt` | MEDIUM |
+| Go | `go.mod` | HIGH |
+| Rust | `Cargo.toml` | HIGH |
+
+Usage:
+
+```bash
+# Auto-detect and apply template
+ralph.sh --auto-detect "Implement user authentication"
+
+# Generate config from detection (dry run)
+ralph.sh --init "Implement user authentication"
+
+# Interactive mode with confirmations
+ralph.sh --interactive "Implement user authentication"
+```
+
+## Claude Code Hooks Integration (v2.0)
+
+Ralph integrates with Claude Code 2.1.23+ hooks for bidirectional communication:
+
+### Hook Types
+
+| Hook | Trigger | Purpose |
+|------|---------|---------|
+| `SessionStart` | Session begins | Inject Ralph context |
+| `PreToolUse` (once) | Before first tool | Inject DoD status |
+| `Stop` | Session end | Gate on DoD satisfaction |
+
+### Exit Codes
+
+| Code | Meaning | Behavior |
+|------|---------|----------|
+| 0 | Allow | Proceed normally |
+| 2 | Block | Prevent action (Stop only) |
+
+### Hook Files
+
+```
+.ralph/hooks/
+├── session-restore.sh     # SessionStart - injects Ralph context
+├── status-injector.sh     # PreToolUse - injects DoD status
+├── pre-tool-context.sh    # PreToolUse - tool-specific context
+└── stop-dod-gate.sh       # Stop - blocks if DoD not satisfied
+```
+
+Configuration:
+
+```yaml
+hooks:
+  enabled: true
+  mode: "advanced"  # simple or advanced
+```
+
+## Dashboard & Metrics (v2.0)
+
+### Real-time Dashboard
+
+Ralph displays a real-time terminal dashboard during execution:
+
+```
+╔═══════════════════════════════════════════════════════════════╗
+║  RALPH WIGGUM v2.0 - Session: ralph-xxx      PHASE: GREEN     ║
+╠═══════════════════════════════════════════════════════════════╣
+║  ITERATION 8/25              ELAPSED: 12:34                   ║
+║  PROGRESS ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░  32%  ║
+║                                                               ║
+║  Circuit Breaker: ░░ (0/4)    Context: ████████░░ 78%        ║
+╚═══════════════════════════════════════════════════════════════╝
+```
+
+Configuration:
+
+```yaml
+dashboard:
+  enabled: true
+  mode: "full"  # simple, full, headless
+```
+
+### Metrics Export
+
+Ralph exports session metrics in JSON and Prometheus formats:
+
+**JSON format** (`.ralph/sessions/<id>/metrics-export.json`):
+
+```json
+{
+  "session": { "id": "...", "duration_seconds": 2700, "status": "completed" },
+  "iterations": { "total": 15, "successful": 14, "average_duration_ms": 42000 },
+  "circuit_breaker": { "triggered": false, "peak_no_progress_streak": 1 },
+  "context": { "compacts_performed": 2, "peak_usage_percent": 87 },
+  "dod": { "passed": true, "checks_performed": 15 },
+  "performance": { "p95_response_time_ms": 55000 }
+}
+```
+
+**Prometheus format** (`.ralph/sessions/<id>/metrics.prom`):
+
+```prometheus
+ralph_session_duration_seconds 2700
+ralph_iterations_total 15
+ralph_iterations_successful 14
+ralph_dod_passed 1
+```
+
+Configuration:
+
+```yaml
+metrics:
+  enabled: true
+  format: "both"  # json, prometheus, both
+  realtime:
+    enabled: true
+    interval_ms: 1000
+```
+
+## Health Monitoring (v2.0)
+
+Ralph monitors session health and detects degradation patterns:
+
+| Pattern | Description | Action |
+|---------|-------------|--------|
+| Stall Detection | No progress for N iterations | Warning + recommendation |
+| Error Spiral | Increasing error rate | Early circuit breaker |
+| Context Bloat | High context usage | Recommend compact |
+
+Configuration:
+
+```yaml
+health_monitor:
+  enabled: true
+  patterns:
+    stall_detection: true
+    error_spiral: true
+    context_bloat: true
+```
+
+## DoD Templates (v2.0)
+
+Ralph includes pre-configured DoD templates for common technologies:
+
+| Technology | Test Framework | Lint Tool |
+|------------|----------------|-----------|
+| Symfony | PHPUnit | PHPStan |
+| Flutter | flutter_test | flutter_lints |
+| React | Jest/Vitest | ESLint |
+| Python | pytest | ruff |
+| .NET | xUnit | Analyzers |
+| Go | go test | golangci-lint |
+| Rust | cargo test | clippy |
+
+Templates are located in `Tools/Ralph/templates/dod/` and automatically applied when using `--auto-detect`.
+
 ## Context Management
 
 Ralph includes advanced context management to handle long-running sprints without interruption.
@@ -256,9 +504,9 @@ checkpointing:
   commit_message_template: "checkpoint: Ralph iteration {iteration}"
 ```
 
-## Reliability (v1.1.0)
+## Reliability
 
-Ralph v1.1.0 includes 59 reliability improvements for robust long-running sprints:
+Ralph includes 59+ reliability improvements for robust long-running sprints:
 
 | Category | Fixes | Description |
 |----------|-------|-------------|
@@ -270,32 +518,58 @@ Ralph v1.1.0 includes 59 reliability improvements for robust long-running sprint
 | **Idempotence** | 5 | Safe to call functions multiple times |
 | **Portable Random** | 3 | Fallback if xxd not installed |
 
+**v2.0 additions:**
+- Health monitoring with pattern detection
+- Adaptive circuit breaker with learning
+- Metrics export for external monitoring
+
 ## File Structure
 
 ```
 Tools/Ralph/
-├── ralph.sh                        # Main entry point
+├── ralph.sh                        # Main entry point (v2.0)
 ├── lib/
 │   ├── utils.sh                    # Shared helper functions (locking, atomic ops)
-│   ├── session.sh                  # Session management
+│   ├── session.sh                  # Session management (v2.0: hooks export)
 │   ├── loop.sh                     # Core iteration loop
-│   ├── dod-validator.sh            # DoD validation
-│   ├── circuit-breaker.sh          # Safety mechanism
+│   ├── dod-validator.sh            # DoD validation (v2.0: hook exit codes)
+│   ├── circuit-breaker.sh          # Safety mechanism (v2.0: adaptive profiles)
 │   ├── checkpoint.sh               # Git checkpointing
 │   ├── context-manager.sh          # Context limit handling
 │   ├── sprint-progress.sh          # Sprint progress tracking
-│   └── context-reconstruction.sh   # Context reconstruction
+│   ├── context-reconstruction.sh   # Context reconstruction
+│   ├── metrics-exporter.sh         # v2.0: Metrics JSON/Prometheus export
+│   ├── project-detector.sh         # v2.0: Auto-detection
+│   ├── dod-templates.sh            # v2.0: DoD template loading
+│   ├── config-generator.sh         # v2.0: Config generation
+│   ├── dashboard.sh                # v2.0: Real-time terminal dashboard
+│   ├── health-monitor.sh           # v2.0: Degradation pattern detection
+│   └── hooks-generator.sh          # v2.0: Claude Code hooks config
+├── .ralph/hooks/
+│   ├── session-restore.sh          # v2.0: SessionStart hook
+│   ├── status-injector.sh          # v2.0: PreToolUse hook
+│   ├── pre-tool-context.sh         # v2.0: PreToolUse context hook
+│   └── stop-dod-gate.sh            # v2.0: Stop gate hook
 ├── templates/
-│   ├── ralph.yml.template          # Default configuration
-│   └── sprint-progress.md.template # Sprint progress file template
+│   ├── ralph.yml.template          # Default configuration (v2.0)
+│   ├── sprint-progress.md.template # Sprint progress file template
+│   └── dod/                        # v2.0: DoD templates by technology
+│       ├── symfony.yml
+│       ├── flutter.yml
+│       ├── react.yml
+│       ├── python.yml
+│       ├── dotnet.yml
+│       ├── go.yml
+│       ├── rust.yml
+│       └── generic.yml
 └── README.md                       # This file
 
 Tools/i18n/ralph/
-├── en.sh                       # English messages
-├── fr.sh                       # French messages
-├── es.sh                       # Spanish messages
-├── de.sh                       # German messages
-└── pt.sh                       # Portuguese messages
+├── en.sh                       # English messages (v2.0)
+├── fr.sh                       # French messages (v2.0)
+├── es.sh                       # Spanish messages (v2.0)
+├── de.sh                       # German messages (v2.0)
+└── pt.sh                       # Portuguese messages (v2.0)
 ```
 
 ## CLI Options
@@ -312,6 +586,11 @@ Options:
   --dry-run             Show what would be done without executing
   --lang=<code>         Language (en, fr, es, de, pt)
   --help                Show help message
+
+v2.0 Options:
+  --auto-detect         Auto-detect project type and load DoD template
+  --init                Generate ralph.yml from detection without running
+  --interactive         Interactive mode with confirmations
 ```
 
 ## Integration
@@ -355,7 +634,17 @@ Ralph creates a `.ralph/` directory in your project:
 │       ├── state.json          # Session state
 │       ├── metrics.json        # Iteration metrics
 │       ├── session.log         # Execution log
-│       └── last_output.txt     # Last Claude response
+│       ├── last_output.txt     # Last Claude response
+│       ├── metrics-export.json # v2.0: Exported metrics (JSON)
+│       ├── metrics.prom        # v2.0: Exported metrics (Prometheus)
+│       └── health-status.json  # v2.0: Health monitoring status
+├── hooks/                      # v2.0: Hook scripts
+│   ├── session-restore.sh
+│   ├── status-injector.sh
+│   ├── pre-tool-context.sh
+│   └── stop-dod-gate.sh
+└── history/                    # v2.0: Learning data
+    └── circuit-breaker-history.json
 ```
 
 ## Best Practices
