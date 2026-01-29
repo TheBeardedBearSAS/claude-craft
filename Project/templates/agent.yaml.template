@@ -1,0 +1,51 @@
+# BMAD v6 - Agent-as-Code Template
+# Use this template to create new BMAD agents
+
+id: {AGENT_ID}
+name: {AGENT_NAME}
+version: 1.0.0
+category: {CATEGORY}  # core | specialist | support
+i18n: true
+
+persona:
+  role: "{ROLE_TITLE}"
+  identity: |
+    {IDENTITY_DESCRIPTION}
+  expertise:
+    - {EXPERTISE_1}
+    - {EXPERTISE_2}
+    - {EXPERTISE_3}
+  principles:
+    - {PRINCIPLE_1}
+    - {PRINCIPLE_2}
+    - {PRINCIPLE_3}
+
+collaborates_with:
+  - {COLLABORATOR_1}
+  - {COLLABORATOR_2}
+
+responsibilities:
+  - {RESPONSIBILITY_1}
+  - {RESPONSIBILITY_2}
+  - {RESPONSIBILITY_3}
+
+menu:
+  - trigger: /{AGENT_ID}:{ACTION_1}
+    description: "{ACTION_1_DESCRIPTION}"
+    workflow: workflows/{AGENT_ID}/{ACTION_1}.yaml
+  - trigger: /{AGENT_ID}:{ACTION_2}
+    description: "{ACTION_2_DESCRIPTION}"
+    workflow: workflows/{AGENT_ID}/{ACTION_2}.yaml
+
+outputs:
+  - type: {OUTPUT_TYPE_1}
+    format: {FORMAT_1}
+  - type: {OUTPUT_TYPE_2}
+    format: {FORMAT_2}
+
+quality_gates:
+  - gate: {GATE_NAME}
+    threshold: {THRESHOLD}
+    validations:
+      - {VALIDATION_1}
+      - {VALIDATION_2}

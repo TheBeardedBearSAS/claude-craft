@@ -1,0 +1,106 @@
+# BMAD v6 - Sprint Ready Gate Configuration
+# Validates sprint readiness before starting
+
+id: sprint_ready_gate
+name: Sprint Ready Gate
+version: 1.0.0
+threshold: 100  # All criteria must pass
+
+description: |
+  Ensures sprint is properly planned and ready to start.
+  All required elements must be in place.
+
+sprint_readiness:
+  - id: sprint_metadata
+    name: Sprint Metadata Complete
+    weight: 20
+    required: true
+    description: Sprint has required metadata
+    checks:
+      - type: has_field
+        field: metadata.sprint_id
+        not_empty: true
+      - type: has_field
+        field: metadata.name
+        not_empty: true
+      - type: has_field
+        field: metadata.start_date
+        not_empty: true
+      - type: has_field
+        field: metadata.end_date
+        not_empty: true
+
+  - id: sprint_goal
+    name: Sprint Goal Defined
+    weight: 15
+    required: true
+    description: Clear sprint goal is defined
+    checks:
+      - type: has_field
+        field: metadata.goal
+        min_length: 10
+
+  - id: stories_ready
+    name: Stories Ready for Dev
+    weight: 25
+    required: true
+    description: Sufficient stories in ready-for-dev status
+    checks:
+      - type: min_stories
+        status: ready-for-dev
+        min_count: 1
+      - type: total_points
+        status: ready-for-dev
+        min_points: 1
+
+  - id: stories_estimated
+    name: All Stories Estimated
+    weight: 20
+    required: true
+    description: All sprint stories have story points
+    checks:
+      - type: all_stories_have_field
+        field: story_points
+        min_value: 1
+        statuses: ["ready-for-dev", "backlog"]
+
+  - id: capacity_check
+    name: Capacity Planning
+    weight: 10
+    required: false
+    description: Sprint capacity has been considered
+    checks:
+      - type: has_field
+        field: metadata.capacity_points
+        optional: true
+      - type: points_within_capacity
+        tolerance: 20  # Allow 20% over capacity
+        optional: true
+
+  - id: dependencies_resolved
+    name: Dependencies Resolved
+    weight: 10
+    required: false
+    description: No unresolved external dependencies
+    checks:
+      - type: no_blocked_stories
+        status: ready-for-dev
+
+sprint_validation:
+  min_duration_days: 5
+  max_duration_days: 30
+  date_format: "YYYY-MM-DD"
+
+story_validation:
+  all_invest_compliant: true
+  no_orphan_tasks: true
+
+failure_actions:
+  - action: list_issues
+    categorize: true
+  - action: suggest_fixes
+
+success_actions:
+  - action: mark_sprint_active
+  - action: notify
+    message: "Sprint ready to start"

@@ -1,0 +1,129 @@
+# BMAD v6 - Sprint Status
+# This file tracks the current sprint state and enables status-based routing
+
+version: "1.0"
+
+metadata:
+  sprint_id: ""
+  name: ""
+  start_date: ""
+  end_date: ""
+  goal: ""
+
+stories: {}
+  # Example structure:
+  # US-001:
+  #   title: "Authentification utilisateur"
+  #   status: "in-progress"
+  #   previous_status: "ready-for-dev"
+  #   assigned_to: ""
+  #   tdd_phase: "red"  # red | green | refactor
+  #   current_task: ""
+  #   tasks:
+  #     total: 0
+  #     completed: 0
+  #     list: []
+  #   history: []
+
+routing:
+  auto_transitions:
+    enabled: true
+    rules:
+      - name: "all_tasks_complete"
+        description: "Transition to review when all tasks are done"
+        when: "tasks.completed == tasks.total && tasks.total > 0"
+        from: "in-progress"
+        to: "review"
+
+      - name: "review_approved"
+        description: "Transition to done when review is approved"
+        when: "review.approved == true"
+        from: "review"
+        to: "done"
+
+      - name: "blocked_detection"
+        description: "Transition to blocked when blocker is detected"
+        when: "blocked_reason != null"
+        from: "*"
+        to: "blocked"
+
+      - name: "unblocked"
+        description: "Return to previous status when unblocked"
+        when: "blocked_reason == null && previous_status != null"
+        from: "blocked"
+        to: "previous_status"
+
+gates:
+  backlog:
+    description: "Story must meet INVEST criteria"
+    checks:
+      - "story_has_title"
+      - "story_has_description"
+
+  ready_for_dev:
+    description: "Story ready to be picked up by developer"
+    checks:
+      - "acceptance_criteria_defined"
+      - "story_points_estimated"
+      - "tasks_decomposed"
+      - "dependencies_resolved"
+
+  in_progress:
+    description: "Story is actively being worked on"
+    checks:
+      - "assigned_to_developer"
+      - "branch_created"
+
+  review:
+    description: "Story ready for code review"
+    checks:
+      - "all_tests_pass"
+      - "code_pushed"
+      - "pr_created"
+
+  done:
+    description: "Story meets Definition of Done"
+    checks:
+      - "code_reviewed"
+      - "tests_pass"
+      - "documentation_updated"
+      - "dod_satisfied"
+
+# State machine definition
+state_machine:
+  states:
+    - backlog
+    - ready-for-dev
+    - in-progress
+    - review
+    - done
+    - blocked
+
+  transitions:
+    - from: backlog
+      to: ready-for-dev
+      gate: ready_for_dev
+
+    - from: ready-for-dev
+      to: in-progress
+      gate: in_progress
+
+    - from: in-progress
+      to: review
+      gate: review
+
+    - from: review
+      to: done
+      gate: done
+
+    - from: review
+      to: in-progress
+      description: "Changes requested"
+
+    - from: "*"
+      to: blocked
+      description: "Story blocked"
+
+    - from: blocked
+      to: previous_status
+      description: "Story unblocked"

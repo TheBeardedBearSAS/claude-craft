@@ -1,0 +1,35 @@
+# BMAD v6 - Batch Queue Template
+# Copy this file to .bmad/batch-queue.yaml and configure for batch operations
+
+version: "1.0"
+
+queue:
+  - story_id: "{STORY_ID}"
+    priority: 1
+    status: "pending"
+    dependencies: []
+    added_at: "{TIMESTAMP}"
+    started_at: ""
+    completed_at: ""
+    error: ""
+
+execution:
+  mode: "{MODE}"  # sequential | parallel
+  parallel_limit: {PARALLEL_LIMIT}
+  resume_on_failure: true
+  checkpoint_interval: 1
+  timeout_per_story: 3600
+
+checkpoints:
+  last_completed: ""
+  timestamp: ""
+  stories_completed: 0
+  stories_failed: 0
+  stories_skipped: 0
+
+settings:
+  auto_retry: true
+  max_retries: 2
+  retry_delay: 60
+  notify_on_completion: true
+  notify_on_failure: true

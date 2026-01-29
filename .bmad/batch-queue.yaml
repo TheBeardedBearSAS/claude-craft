@@ -1,0 +1,36 @@
+# BMAD v6 - Batch Queue
+# This file manages the queue of stories/tasks for batch processing
+
+version: "1.0"
+
+queue: []
+  # Example structure:
+  # - story_id: "US-001"
+  #   priority: 1
+  #   status: "pending"  # pending | running | completed | failed | skipped
+  #   dependencies: []
+  #   added_at: ""
+  #   started_at: ""
+  #   completed_at: ""
+  #   error: ""
+
+execution:
+  mode: "sequential"  # sequential | parallel
+  parallel_limit: 3
+  resume_on_failure: true
+  checkpoint_interval: 1  # Checkpoint after each story
+  timeout_per_story: 3600  # 1 hour in seconds
+
+checkpoints:
+  last_completed: ""
+  timestamp: ""
+  stories_completed: 0
+  stories_failed: 0
+  stories_skipped: 0
+
+settings:
+  auto_retry: true
+  max_retries: 2
+  retry_delay: 60  # seconds
+  notify_on_completion: true
+  notify_on_failure: true

@@ -1,0 +1,127 @@
+# BMAD v6 - Tech Spec Gate Configuration
+# Validates Technical Specifications before Backlog creation
+
+id: techspec_gate
+name: Tech Spec Quality Gate
+version: 1.0.0
+threshold: 90  # Minimum score to pass (%)
+
+description: |
+  Ensures Technical Specification is comprehensive and implementable.
+  A Tech Spec must score at least 90% to proceed to backlog creation.
+
+validations:
+  - id: architecture_overview
+    name: Architecture Overview
+    weight: 12
+    required: true
+    description: High-level system architecture description
+    checks:
+      - type: content_exists
+        keywords: ["architecture", "design", "structure", "system"]
+      - type: min_length
+        section: "Architecture"
+        min_words: 100
+
+  - id: architecture_diagram
+    name: Architecture Diagram
+    weight: 10
+    required: true
+    description: Visual representation of system architecture
+    checks:
+      - type: has_diagram
+        formats: ["mermaid", "plantuml", "png", "svg"]
+
+  - id: components
+    name: Component Definition
+    weight: 12
+    required: true
+    description: Clear definition of system components
+    checks:
+      - type: content_exists
+        keywords: ["component", "module", "service", "layer"]
+      - type: has_section
+        section_patterns: ["Components", "Modules", "Services"]
+
+  - id: data_model
+    name: Data Model
+    weight: 10
+    required: true
+    description: Database schema or data structure definition
+    checks:
+      - type: content_exists
+        keywords: ["data", "model", "entity", "schema", "table", "database"]
+
+  - id: api_contracts
+    name: API Contracts
+    weight: 10
+    required: true
+    description: API endpoint definitions
+    checks:
+      - type: content_exists
+        keywords: ["api", "endpoint", "rest", "graphql", "grpc", "contract"]
+
+  - id: security
+    name: Security Considerations
+    weight: 12
+    required: true
+    description: Security requirements and measures
+    checks:
+      - type: content_exists
+        keywords: ["security", "auth", "authentication", "authorization", "encrypt"]
+
+  - id: performance
+    name: Performance Requirements
+    weight: 8
+    required: false
+    description: Performance targets and optimization strategies
+    checks:
+      - type: content_exists
+        keywords: ["performance", "latency", "throughput", "scalability", "cache"]
+
+  - id: error_handling
+    name: Error Handling
+    weight: 8
+    required: false
+    description: Error handling strategy
+    checks:
+      - type: content_exists
+        keywords: ["error", "exception", "handling", "failure", "retry"]
+
+  - id: testing_strategy
+    name: Testing Strategy
+    weight: 10
+    required: true
+    description: Testing approach and coverage requirements
+    checks:
+      - type: content_exists
+        keywords: ["test", "testing", "coverage", "unit", "integration"]
+
+  - id: deployment
+    name: Deployment Strategy
+    weight: 8
+    required: false
+    description: Deployment and release approach
+    checks:
+      - type: content_exists
+        keywords: ["deploy", "deployment", "release", "ci", "cd", "pipeline"]
+
+scoring:
+  method: weighted_sum
+  pass_threshold: 90
+  warning_threshold: 75
+
+failure_actions:
+  - action: block_transition
+    message: "Tech Spec does not meet quality threshold (need 90%)"
+  - action: generate_report
+    include_missing: true
+    include_suggestions: true
+
+success_actions:
+  - action: allow_transition
+    to_phase: "backlog"
+  - action: create_adr
+    if_architectural_decisions: true
+  - action: notify
+    message: "Tech Spec approved, ready for Backlog creation"

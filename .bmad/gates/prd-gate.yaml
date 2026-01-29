@@ -1,0 +1,111 @@
+# BMAD v6 - PRD Gate Configuration
+# Validates Product Requirements Documents before Tech Spec phase
+
+id: prd_gate
+name: PRD Quality Gate
+version: 1.0.0
+threshold: 80  # Minimum score to pass (%)
+
+description: |
+  Ensures PRD is complete and clear before moving to technical specification.
+  A PRD must score at least 80% to proceed.
+
+validations:
+  - id: problem_statement
+    name: Problem Statement
+    weight: 15
+    required: true
+    description: Clear articulation of the problem being solved
+    checks:
+      - type: content_exists
+        keywords: ["problem", "challenge", "issue", "pain point"]
+      - type: min_length
+        section: "Problem Statement"
+        min_words: 50
+
+  - id: target_users
+    name: Target Users
+    weight: 15
+    required: true
+    description: Clearly defined target audience
+    checks:
+      - type: content_exists
+        keywords: ["user", "persona", "customer", "audience", "target"]
+      - type: has_section
+        section_patterns: ["Target Users", "Personas", "User Segments"]
+
+  - id: goals_objectives
+    name: Goals and Objectives
+    weight: 15
+    required: true
+    description: Measurable goals aligned with business objectives
+    checks:
+      - type: content_exists
+        keywords: ["goal", "objective", "aim", "target"]
+      - type: has_bullets
+        min_items: 2
+
+  - id: success_metrics
+    name: Success Metrics
+    weight: 15
+    required: true
+    description: Quantifiable metrics to measure success
+    checks:
+      - type: content_exists
+        keywords: ["metric", "kpi", "measure", "success"]
+      - type: has_numbers
+        description: Metrics should include numeric targets
+
+  - id: scope_boundaries
+    name: Scope and Boundaries
+    weight: 10
+    required: true
+    description: Clear definition of what's in and out of scope
+    checks:
+      - type: content_exists
+        keywords: ["scope", "boundary", "limitation", "out of scope"]
+
+  - id: user_stories_overview
+    name: User Stories Overview
+    weight: 10
+    required: true
+    description: High-level overview of user stories or epics
+    checks:
+      - type: content_exists
+        keywords: ["user story", "epic", "feature", "US-", "EPIC-"]
+
+  - id: assumptions
+    name: Assumptions
+    weight: 10
+    required: false
+    description: Documented assumptions
+    checks:
+      - type: content_exists
+        keywords: ["assumption", "assume", "assuming"]
+
+  - id: risks
+    name: Risks and Mitigations
+    weight: 10
+    required: false
+    description: Identified risks with mitigation strategies
+    checks:
+      - type: content_exists
+        keywords: ["risk", "mitigation", "contingency"]
+
+scoring:
+  method: weighted_sum
+  pass_threshold: 80
+  warning_threshold: 60
+
+failure_actions:
+  - action: block_transition
+    message: "PRD does not meet quality threshold"
+  - action: generate_report
+    include_missing: true
+    include_suggestions: true
+
+success_actions:
+  - action: allow_transition
+    to_phase: "tech_spec"
+  - action: notify
+    message: "PRD approved, ready for Tech Spec"

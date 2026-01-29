@@ -1,0 +1,82 @@
+# BMAD v6 - Sprint Status Template
+# Copy this file to .bmad/sprint-status.yaml and fill in the values
+
+version: "1.0"
+
+metadata:
+  sprint_id: "{SPRINT_ID}"
+  name: "{SPRINT_NAME}"
+  start_date: "{START_DATE}"
+  end_date: "{END_DATE}"
+  goal: "{SPRINT_GOAL}"
+
+stories:
+  {STORY_ID}:
+    title: "{STORY_TITLE}"
+    status: "backlog"
+    previous_status: ""
+    assigned_to: ""
+    tdd_phase: ""
+    current_task: ""
+    story_points: 0
+    epic_id: "{EPIC_ID}"
+    tasks:
+      total: 0
+      completed: 0
+      list: []
+    acceptance_criteria:
+      total: 0
+      validated: 0
+    history:
+      - timestamp: "{TIMESTAMP}"
+        from: ""
+        to: "backlog"
+        by: "auto"
+        reason: "Story created"
+
+routing:
+  auto_transitions:
+    enabled: true
+    rules:
+      - name: "all_tasks_complete"
+        description: "Transition to review when all tasks are done"
+        when: "tasks.completed == tasks.total && tasks.total > 0"
+        from: "in-progress"
+        to: "review"
+
+      - name: "review_approved"
+        description: "Transition to done when review is approved"
+        when: "review.approved == true"
+        from: "review"
+        to: "done"
+
+      - name: "blocked_detection"
+        description: "Transition to blocked when blocker is detected"
+        when: "blocked_reason != null"
+        from: "*"
+        to: "blocked"
+
+gates:
+  ready_for_dev:
+    checks:
+      - "acceptance_criteria_defined"
+      - "story_points_estimated"
+      - "tasks_decomposed"
+
+  review:
+    checks:
+      - "all_tests_pass"
+      - "code_reviewed"
+
+  done:
+    checks:
+      - "dod_satisfied"
+
+state_machine:
+  states:
+    - backlog
+    - ready-for-dev
+    - in-progress
+    - review
+    - done
+    - blocked

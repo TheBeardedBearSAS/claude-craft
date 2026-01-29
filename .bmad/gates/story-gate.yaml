@@ -1,0 +1,135 @@
+# BMAD v6 - Story Complete Gate Configuration
+# Validates Definition of Done for story completion
+
+id: story_gate
+name: Story Complete Gate (DoD)
+version: 1.0.0
+threshold: 100  # All criteria must pass
+
+description: |
+  Ensures stories meet Definition of Done before marking complete.
+  All criteria must pass for story to transition to 'done'.
+
+definition_of_done:
+  - id: tasks_complete
+    name: All Tasks Completed
+    weight: 20
+    required: true
+    description: All decomposed tasks are marked as done
+    checks:
+      - type: field_equals
+        condition: "tasks.completed == tasks.total"
+      - type: field_greater_than
+        field: tasks.total
+        value: 0
+
+  - id: tests_pass
+    name: All Tests Passing
+    weight: 20
+    required: true
+    description: All unit and integration tests pass
+    checks:
+      - type: tdd_phase
+        allowed: ["green", "refactor", "done"]
+      - type: external_check
+        command: "npm test || dotnet test || flutter test"
+        optional: true
+
+  - id: acceptance_criteria
+    name: Acceptance Criteria Validated
+    weight: 20
+    required: true
+    description: All acceptance criteria have been validated
+    checks:
+      - type: field_equals
+        condition: "acceptance_criteria.validated == acceptance_criteria.total"
+      - type: field_greater_than
+        field: acceptance_criteria.total
+        value: 0
+
+  - id: code_reviewed
+    name: Code Reviewed
+    weight: 15
+    required: true
+    description: Code has been reviewed by peer
+    checks:
+      - type: status_reached
+        status: review
+      - type: has_field
+        field: review.approved
+        value: true
+        optional: true
+
+  - id: no_blockers
+    name: No Blockers
+    weight: 10
+    required: true
+    description: Story is not blocked
+    checks:
+      - type: field_empty
+        field: blocked_reason
+
+  - id: documentation
+    name: Documentation Updated
+    weight: 10
+    required: false
+    description: Relevant documentation has been updated
+    checks:
+      - type: has_field
+        field: documentation_updated
+        optional: true
+
+  - id: security_review
+    name: Security Review
+    weight: 5
+    required: false
+    description: Security implications reviewed
+    checks:
+      - type: has_field
+        field: security_reviewed
+        optional: true
+
+tdd_requirements:
+  enforce_tdd_cycle: true
+  phases:
+    red: "Write failing test"
+    green: "Implement to pass test"
+    refactor: "Clean up code"
+
+  allowed_completion_phases:
+    - refactor
+    - done
+
+task_completion:
+  all_tasks_done: true
+  task_types_required: []  # No specific types required
+  task_types_recommended:
+    - BE  # Backend
+    - FE  # Frontend
+    - TEST  # Test
+
+review_requirements:
+  pr_created: recommended
+  pr_approved: recommended
+  minimum_reviewers: 1
+
+scoring:
+  method: checklist
+  pass_threshold: 100
+  warning_threshold: 80
+
+failure_actions:
+  - action: block_transition
+    from: review
+    to: done
+    message: "Story does not meet Definition of Done"
+  - action: list_failures
+    show_remaining: true
+
+success_actions:
+  - action: allow_transition
+    to: done
+  - action: update_metrics
+    increment: stories_completed
+  - action: notify
+    message: "Story complete - DoD satisfied"

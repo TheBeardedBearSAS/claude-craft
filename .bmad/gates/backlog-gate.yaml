@@ -1,0 +1,113 @@
+# BMAD v6 - Backlog Gate Configuration
+# Validates User Stories using INVEST criteria
+
+id: backlog_gate
+name: Backlog INVEST Gate
+version: 1.0.0
+threshold: 100  # All stories must pass INVEST
+
+description: |
+  Ensures all User Stories meet INVEST criteria before sprint planning.
+  Each story is scored on 6 INVEST criteria.
+
+invest_criteria:
+  - id: independent
+    name: Independent
+    letter: I
+    weight: 1
+    description: Story can be developed independently
+    checks:
+      - type: no_blocking_dependencies
+        field: blocked_by
+        allowed_empty: true
+      - type: no_circular_dependencies
+
+  - id: negotiable
+    name: Negotiable
+    letter: N
+    weight: 1
+    description: Details can be negotiated, not a contract
+    checks:
+      - type: has_description
+        min_length: 20
+      - type: not_over_specified
+        max_tasks: 10
+
+  - id: valuable
+    name: Valuable
+    letter: V
+    weight: 1
+    description: Delivers value to stakeholder
+    checks:
+      - type: has_acceptance_criteria
+        min_count: 1
+      - type: has_benefit_statement
+        keywords: ["so that", "in order to", "benefit", "value"]
+
+  - id: estimable
+    name: Estimable
+    letter: E
+    weight: 1
+    description: Can be estimated with reasonable confidence
+    checks:
+      - type: has_story_points
+        field: story_points
+        min_value: 1
+      - type: not_too_vague
+        has_tasks: true
+
+  - id: small
+    name: Small
+    letter: S
+    weight: 1
+    description: Small enough to complete in one sprint
+    checks:
+      - type: max_story_points
+        max_value: 8
+      - type: max_tasks
+        max_value: 8
+
+  - id: testable
+    name: Testable
+    letter: T
+    weight: 1
+    description: Has clear acceptance criteria for testing
+    checks:
+      - type: has_acceptance_criteria
+        min_count: 1
+      - type: acceptance_criteria_format
+        formats: ["gherkin", "checklist"]
+
+scoring:
+  method: invest_score  # 0-6 score
+  pass_threshold: 6     # Must pass all 6
+  warning_threshold: 4  # Warn if 4-5
+
+story_validation:
+  required_fields:
+    - title
+    - status
+    - acceptance_criteria
+
+  recommended_fields:
+    - story_points
+    - tasks
+    - epic_id
+
+failure_actions:
+  - action: list_failures
+    per_story: true
+    show_missing_criteria: true
+  - action: suggest_improvements
+    include_examples: true
+
+success_actions:
+  - action: mark_ready
+    status: ready-for-dev
+  - action: notify
+    message: "Story meets INVEST criteria"
+
+aggregate_validation:
+  min_stories_passing: 100  # Percentage
+  total_points_estimated: true
+  no_orphan_tasks: true

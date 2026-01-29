@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "_comment": "Copy this to your project's .claude/settings.json to enable BMAD hooks",
+
+  "hooks": {
+    "SessionStart": [
+      {
+        "command": ".bmad/hooks/sprint-context.sh",
+        "timeout": 5000,
+        "_comment": "Injects sprint context at the start of each session"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "command": ".bmad/hooks/story-status.sh",
+        "once": true,
+        "timeout": 3000,
+        "_comment": "Injects current story status before first tool use"
+      }
+    ],
+    "Stop": [
+      {
+        "command": ".bmad/hooks/quality-gate.sh",
+        "timeout": 10000,
+        "_comment": "Validates quality gates before session completion. Exit code 2 blocks completion."
+      }
+    ]
+  },
+
+  "_bmad_config": {
+    "enforce_gates": true,
+    "auto_route": false,
+    "tdd_tracking": true
+  }
+}
