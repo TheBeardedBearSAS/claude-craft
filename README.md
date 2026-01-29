@@ -2,16 +2,16 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
+## What's New in v4.0
+
+- **2026 Best Practices Update** for all major frameworks
+- **Symfony 8.0 / PHP 8.5**: JSON Streamer, ObjectMapper, pipe operator, lazy objects
+- **Flutter 3.38 / Dart 3.10**: WebAssembly compilation, MCP integration
+- **.NET 10 LTS / C# 14**: Extension Members, Null-Conditional Assignment
+- **Updated Tooling**: Rector 2.3.x, Deptrac v4, PHPStan 2.1.x
+- **Sub-CLAUDE.md files**: Quick reference per technology in `.claude/references/`
+
 ## What's New in v3.5
-
-- **TCL (Tiered Context Loading)**: 95% token reduction through optimized context loading
-- **On-Demand References**: Rules loaded only when explicitly requested via `@.claude/references/`
-- **Minimal CLAUDE.md**: ~200 tokens auto-loaded instead of ~70,000
-- **INDEX.md Summaries**: Quick reference checklists (~1,300 tokens)
-- **context.yaml**: File-based contextual triggers for skills
-- **All 10 Technologies**: TCL optimization applied across all stacks
-
-## What's New in v3.4
 
 - **Ralph Reliability**: 59 fixes for robust long-running sprints (2h+)
 - **Auto-Compact**: Automatic context limit detection and session compaction
