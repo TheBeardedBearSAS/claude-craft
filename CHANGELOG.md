@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.0] - 2026-01-29
+
+### Added
+- **Comprehensive Documentation for Junior Developers**
+  - `docs/QUICKSTART.md`: 5-minute getting started guide
+  - `docs/PREREQUISITES.md`: Complete dependency guide with OS-specific instructions
+  - `docs/CLI-REFERENCE.md`: Full NPX CLI and Makefile documentation
+  - `docs/FAQ.md`: 50+ frequently asked questions organized by category
+  - `docs/TROUBLESHOOTING.md`: Common problems and solutions with diagnostic scripts
+  - `docs/BMAD-PRACTICAL-GUIDE.md`: Practical guide for BMAD v6 framework
+  - `docs/RALPH-GUIDE.md`: Ralph Wiggum configuration and DoD validators
+  - `docs/MIGRATION-v4.md`: v3.x to v4.x migration guide
+  - `docs/COMMANDS-FULL-REFERENCE.md`: All 127+ commands documented
+  - `docs/AGENTS-FULL-REFERENCE.md`: All 34 agents documented
+  - `docs/SCRIPTS-REFERENCE.md`: Installation scripts reference
+  - `docs/MAKEFILE-REFERENCE.md`: All Makefile targets documented
+  - `docs/ARCHITECTURE.md`: Internal architecture with diagrams (TCL, BMAD, Ralph)
+- **Complete Workflow Guides** in 5 languages (en, fr, es, de, pt)
+  - `docs/guides/*/10-complete-workflow.md`: Idea → Production workflow
+- **Example Projects**
+  - `docs/examples/symfony-api/`: Complete REST API example
+  - `docs/examples/flutter-app/`: Mobile application example
+  - `docs/examples/fullstack-saas/`: Full SaaS with Symfony + Flutter
+- **Translations** for key documents (fr, es, de, pt)
+  - QUICKSTART, PREREQUISITES, CLI-REFERENCE, FAQ, TROUBLESHOOTING
+- **Prerequisites Check Script**
+  - `Dev/scripts/check-prerequisites.sh`: Verify all Claude Craft dependencies
+  - Supports `--verbose` and `--fix` options
+
+### Changed
+- `.claude/CLAUDE.md` expanded from 37 to 285 lines with all 10 technologies
+- `CONTRIBUTING.md` enhanced with dev setup and release checklist
+- All install scripts updated to version 4.4.0
+
 ## [4.3.0] - 2026-01-29
 
 ### Added
@@ -360,6 +394,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Enhanced npm publishing security via OIDC
 
+[4.4.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.3.0...v4.4.0
+[4.3.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.0.3...v4.1.0
 [4.0.3]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.0.2...v4.0.3
