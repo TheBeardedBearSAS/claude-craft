@@ -837,6 +837,83 @@ What this agent can do...
 How this agent approaches problems...
 ```
 
+## Agent Behavior in Autonomous Mode
+
+When running with the Autonomous Sprint Conductor (ASC), agents adapt their behavior to minimize human intervention while maintaining quality.
+
+### @ralph-conductor in ASC Mode
+
+The `@ralph-conductor` agent operates differently in autonomous mode:
+
+| Behavior | Interactive Mode | Autonomous Mode |
+|----------|-----------------|-----------------|
+| Story claiming | Manual confirmation | Auto-claim next ready |
+| Circuit breaker | Hard stop | Recovery engine attempt |
+| TDD transitions | User validates | Auto-detect phase completion |
+| Error handling | Ask user | Classify → auto-fix or escalate |
+| Progress reporting | Real-time | Logged to metrics file |
+
+**Autonomous-specific capabilities:**
+- Monitors stop conditions (time window, max stories, failures)
+- Creates checkpoints for session recovery
+- Manages parallel session coordination
+- Aggregates metrics across stories
+
+```
+@ralph-conductor Start autonomous sprint for Sprint 3
+```
+
+### BMAD Agents Auto-Escalation
+
+In autonomous mode, BMAD agents follow escalation protocols:
+
+| Agent | Auto-Escalate When | Default Action |
+|-------|-------------------|----------------|
+| `@dev` | Security vulnerabilities, architecture violations | Block + escalate |
+| `@qa` | Critical test failures (>20%), security tests fail | Block + escalate |
+| `@architect` | Breaking changes, API contract violations | Block + escalate |
+| `@po` | Scope creep detected, unclear acceptance criteria | Pause + clarify |
+| `@sm` | Sprint scope exceeded, blockers accumulating | Notify + continue |
+
+**Escalation flow:**
+```
+Agent detects issue → Classify severity → Auto-fix attempt →
+  ├─ Success: Continue
+  └─ Failure: Create escalation → Apply timeout → Default action
+```
+
+### Timeouts and Fallbacks
+
+| Operation | Timeout | Fallback |
+|-----------|---------|----------|
+| Story processing | 30 min | Escalate as blocked |
+| Quality gate retry | 3 attempts | Skip with warning |
+| Auto-fix attempt | 5 min | Escalate to recovery |
+| Escalation resolution | 4 hours | Apply default action |
+| Parallel session sync | 2 min | Continue independently |
+
+**Configuring timeouts:**
+```yaml
+# ralph-autonomous.yml
+autonomous:
+  timeouts:
+    story_processing_minutes: 30
+    gate_retry_attempts: 3
+    autofix_minutes: 5
+    escalation_hours: 4
+```
+
+### Agent Communication in Parallel Mode
+
+When multiple stories process in parallel, agents maintain isolation:
+
+- Each story gets a dedicated agent context
+- No shared state between parallel sessions
+- Dependency conflicts detected by parallel manager
+- Resource contention triggers automatic throttling
+
+---
+
 ## Best Practices
 
 1. **Be specific** - Tell the agent exactly what you need

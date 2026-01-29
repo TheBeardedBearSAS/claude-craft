@@ -296,7 +296,7 @@ Run Claude in a continuous loop until task completion.
 ### Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft ralph "task description"
+npx @the-bearded-bear/claude-craft ralph "task description" [options]
 ```
 
 ### Options
@@ -319,6 +319,119 @@ npx @the-bearded-bear/claude-craft ralph --full "Fix the login bug"
 # Custom iteration limit
 npx @the-bearded-bear/claude-craft ralph --max-iterations=20 "Refactor the payment module"
 ```
+
+---
+
+## Autonomous Sprint Conductor (ASC) CLI
+
+Run entire sprints with minimal human intervention.
+
+### Usage
+
+```bash
+npx @the-bearded-bear/claude-craft ralph-sprint "sprint name" [options]
+```
+
+Or via Claude Code command:
+```bash
+/common:ralph-sprint "Sprint 3" --overnight
+```
+
+### Options
+
+| Option | Short | Description |
+|--------|-------|-------------|
+| `--overnight` | `-o` | Enable overnight mode (stops at configured time window) |
+| `--supervised` | `-s` | Pause before each story for confirmation |
+| `--autonomous` | `-a` | Full autonomous mode (default for overnight) |
+| `--parallel=<n>` | `-p` | Process N stories concurrently (default: 1) |
+| `--story=<id>` | | Process single story only |
+| `--sprint` | | Process entire sprint backlog |
+| `--max-stories=<n>` | | Maximum stories to process (default: 10) |
+| `--timeout=<hours>` | `-t` | Maximum runtime in hours (default: 12) |
+| `--stop-at=<HH:MM>` | | Stop at specific time (e.g., "06:00") |
+| `--config=<file>` | `-c` | Custom ASC configuration file |
+| `--dry-run` | `-d` | Simulate without executing |
+| `--resume=<session>` | | Resume from previous session checkpoint |
+
+### Modes
+
+| Mode | Description | Use Case |
+|------|-------------|----------|
+| `--supervised` | Pause and confirm before each story | First runs, testing configuration |
+| `--autonomous` | Full auto, stops only on critical | Overnight runs, trusted backlog |
+| `--overnight` | Autonomous + stop window at 6am | Night execution |
+
+### Examples
+
+```bash
+# Overnight sprint execution
+npx @the-bearded-bear/claude-craft ralph-sprint "Sprint 3" --overnight
+
+# Supervised first run
+npx @the-bearded-bear/claude-craft ralph-sprint "Sprint 3" --supervised
+
+# Parallel processing (3 stories)
+npx @the-bearded-bear/claude-craft ralph-sprint "Sprint 3" --parallel 3 --overnight
+
+# Limited run: 5 stories max, 4 hour timeout
+npx @the-bearded-bear/claude-craft ralph-sprint "Sprint 3" --max-stories 5 --timeout 4
+
+# Single story processing
+npx @the-bearded-bear/claude-craft ralph-sprint "Sprint 3" --story US-042
+
+# Resume interrupted session
+npx @the-bearded-bear/claude-craft ralph-sprint "Sprint 3" --resume ASC-20240101-120000-12345
+
+# Custom configuration
+npx @the-bearded-bear/claude-craft ralph-sprint "Sprint 3" --config ./my-asc-config.yml --overnight
+
+# Dry run to validate configuration
+npx @the-bearded-bear/claude-craft ralph-sprint "Sprint 3" --dry-run
+```
+
+### Stop Conditions
+
+The ASC stops when any condition is met:
+
+| Condition | CLI Override | Environment Variable |
+|-----------|--------------|---------------------|
+| Max stories reached | `--max-stories=N` | `ASC_MAX_STORIES` |
+| Consecutive failures | - | `ASC_MAX_CONSECUTIVE_FAILURES` |
+| Runtime exceeded | `--timeout=H` | `ASC_MAX_RUNTIME_HOURS` |
+| Stop window reached | `--stop-at=HH:MM` | `ASC_STOP_WINDOW` |
+| Critical escalation | - | - |
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ASC_MAX_STORIES` | Max stories per session | `10` |
+| `ASC_MAX_CONSECUTIVE_FAILURES` | Failures before stop | `3` |
+| `ASC_MAX_RUNTIME_HOURS` | Maximum runtime | `12` |
+| `ASC_STOP_WINDOW` | Time to stop (HH:MM) | `06:00` |
+| `ASC_PARALLEL_MAX` | Max parallel sessions | `3` |
+| `ASC_ESCALATION_TIMEOUT` | Escalation timeout (hours) | `4` |
+
+### Output Files
+
+| File | Location | Description |
+|------|----------|-------------|
+| State | `.ralph/conductor/state-ASC-*.yaml` | Current session state |
+| Metrics | `.ralph/conductor/metrics-ASC-*.json` | Session metrics |
+| Checkpoint | `.ralph/conductor/checkpoint-ASC-*.yaml` | Resume checkpoint |
+| Escalations | `.ralph/escalations/queue/*.yaml` | Pending escalations |
+
+### Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | All stories completed successfully |
+| 1 | Partial completion (some stories failed/skipped) |
+| 2 | Configuration or argument error |
+| 3 | Critical escalation caused abort |
+| 4 | Session interrupted (can resume) |
+| 5 | Maximum failures reached |
 
 ---
 
