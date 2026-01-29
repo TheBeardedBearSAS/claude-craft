@@ -2,6 +2,19 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
+## What's New in v4.2
+
+- **BMAD v6 Framework**: Complete project management enhancement
+  - **9 Agent-as-Code Agents**: bmad-master, pm, ba, architect, po, sm, dev, qa, ux
+  - **Status-based Routing**: Automated state machine for story transitions
+  - **5 Quality Gates**: PRD (≥80%), Tech Spec (≥90%), Backlog (INVEST), Sprint Ready, Story DoD
+  - **Claude Code Hooks**: SessionStart, PreToolUse, Stop hooks for context injection
+  - **Batch Processing**: Queue management for epic/sprint execution with checkpointing
+  - **Backlog Migration**: Convert existing backlogs to BMAD v6 format
+- 20+ new commands: `/sprint:*`, `/gate:*`, `/project:run-*`
+- TDD phase tracking: red → green → refactor cycle per story
+- Auto-routing rules for automatic story transitions
+
 ## What's New in v4.1
 
 - **Ralph Wiggum v2.0**: Major upgrade to continuous AI agent loop
@@ -68,13 +81,14 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **10 Technology Stacks**: Symfony, Flutter, Python, React, React Native, Angular, C#/.NET, Laravel, Vue.js, PHP
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **25 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, and Ralph Conductor
-- **90+ Slash Commands**: Automated workflows and code generation
+- **34 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, Ralph Conductor, and **9 BMAD agents**
+- **110+ Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing**
+- **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
 - **249 Skills**: Best practices in official Claude Code format (architecture, testing, security)
-- **30 Templates**: Code generation patterns
+- **33 Templates**: Code generation patterns + BMAD templates
 - **21 Checklists**: Quality gates for commits, features, releases
-- **Hooks System**: Pre/Post tool execution, quality gates, notifications
+- **Hooks System**: Pre/Post tool execution, quality gates, notifications, **BMAD context injection**
 - **MCP Templates**: Context7, GitHub, PostgreSQL, Slack integration
 - **Auto-generated CLAUDE.md**: Project configuration file created at installation
 - **Multi-Account Manager**: Manage multiple Claude Code accounts easily
@@ -125,6 +139,133 @@ Claude-Craft includes a BMAD-inspired workflow system that adapts to your projec
 
 # Generate Technical Specification
 /project:generate-tech-spec
+```
+
+## BMAD v6 Project Management
+
+BMAD v6 (Build, Measure, Analyze, Deliver) extends the workflow system with comprehensive project management.
+
+### 9 BMAD Agents
+
+| Agent | Role | Key Commands |
+|-------|------|--------------|
+| `bmad-master` | Orchestrator | `/bmad:init`, `/bmad:status`, `/bmad:route` |
+| `pm` | Product Manager | `/pm:prd`, `/pm:vision`, `/pm:roadmap` |
+| `ba` | Business Analyst | `/ba:analyze`, `/ba:requirements`, `/ba:use-cases` |
+| `architect` | System Architect | `/arch:design`, `/arch:techspec`, `/arch:adr` |
+| `po` | Product Owner | `/po:prioritize`, `/po:accept`, `/po:reject` |
+| `sm` | Scrum Master | `/sm:plan-sprint`, `/sm:daily`, `/sm:retro` |
+| `dev` | Developer | `/dev:implement`, `/dev:tdd`, `/dev:refactor` |
+| `qa` | QA Engineer | `/qa:validate`, `/qa:automate`, `/qa:strategy` |
+| `ux` | UX Designer | `/ux:wireframe`, `/ux:journey`, `/ux:accessibility` |
+
+### Status-based Routing
+
+Stories automatically transition through a state machine:
+
+```
+backlog → ready-for-dev → in-progress → review → done
+   ↓          ↓              ↓           ↓
+   └──────────┴──────────────┴───────────┴→ blocked
+```
+
+```bash
+# View sprint status with routing info
+/sprint:bmad-status
+
+# Get next story ready for development
+/sprint:next-story --claim
+
+# Transition story status
+/sprint:transition US-005 review
+
+# Run automatic routing rules
+/sprint:auto-route
+```
+
+### 5 Quality Gates
+
+| Gate | Threshold | When |
+|------|-----------|------|
+| **PRD Gate** | ≥80% | Vision → PRD |
+| **Tech Spec Gate** | ≥90% | PRD → Tech Spec |
+| **Backlog Gate** | INVEST 6/6 | Tech Spec → Backlog |
+| **Sprint Ready** | 100% | Backlog → Sprint |
+| **Story DoD** | 100% | Dev → Done |
+
+```bash
+# Validate PRD quality
+/gate:validate-prd docs/prd.md
+
+# Check INVEST compliance
+/gate:validate-backlog
+
+# Verify story meets Definition of Done
+/gate:validate-story US-005
+
+# Full gates report
+/gate:report
+```
+
+### Batch Processing
+
+Process multiple stories automatically:
+
+```bash
+# Queue all stories from an epic
+/project:run-epic EPIC-002
+
+# Process the queue
+/project:run-queue --parallel 3
+
+# Execute full sprint
+/project:run-sprint --auto
+
+# Check batch status
+/project:batch-status
+```
+
+### Backlog Migration
+
+Convert existing backlogs to BMAD v6:
+
+```bash
+# Analyze current backlog structure
+/project:analyze-backlog
+
+# Migrate to BMAD v6 format
+/project:migrate-backlog --dry-run
+/project:migrate-backlog
+
+# Add missing fields to stories
+/project:update-stories
+
+# Sync files with sprint-status.yaml
+/project:sync-backlog
+```
+
+### Claude Code Hooks Integration
+
+Enable BMAD hooks in `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [{
+      "command": ".bmad/hooks/sprint-context.sh",
+      "timeout": 5000
+    }],
+    "PreToolUse": [{
+      "command": ".bmad/hooks/story-status.sh",
+      "once": true,
+      "timeout": 3000
+    }],
+    "Stop": [{
+      "command": ".bmad/hooks/quality-gate.sh",
+      "timeout": 10000
+    }]
+  }
+}
 ```
 
 ## Quick Start
@@ -454,10 +595,28 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 | `docker-cicd` | CI/CD pipelines, security scanning |
 | `docker-architect` | Complete Docker architecture design |
 
+### BMAD v6 Agents (9)
+| Agent | Role | Key Responsibilities |
+|-------|------|----------------------|
+| `bmad-master` | Orchestrator | Agent coordination, workflow routing, metrics |
+| `pm` | Product Manager | PRD, vision, roadmap, feature prioritization |
+| `ba` | Business Analyst | Requirements, use cases, story mapping |
+| `architect` | System Architect | Tech specs, ADRs, API design, security |
+| `po` | Product Owner | Backlog management, sprint planning, acceptance |
+| `sm` | Scrum Master | Ceremonies, velocity, impediments, retrospectives |
+| `dev` | Developer | TDD implementation, code review, refactoring |
+| `qa` | QA Engineer | Test strategy, automation, validation |
+| `ux` | UX Designer | Wireframes, user journeys, accessibility |
+
 ## Command Namespaces
 
 - `/workflow:` - Development workflow (init, analyze, plan, design, implement, status)
-- `/project:` - Project management (backlog, PRD, tech-spec, sprints)
+- `/project:` - Project management (backlog, PRD, tech-spec, sprints, **batch processing, migration**)
+- `/sprint:` - **BMAD sprint management (status, transitions, routing, TDD)**
+- `/gate:` - **Quality gate validation (PRD, tech-spec, backlog, story, sprint)**
+- `/bmad:` - **BMAD orchestration (init, status, route, handoff)**
+- `/pm:` - **Product Manager commands (prd, vision, roadmap, prioritize)**
+- `/arch:` - **Architect commands (design, techspec, adr, api, security)**
 - `/common:` - Transversal commands (audit, changelog, CI/CD)
 - `/symfony:` - Symfony-specific (CRUD, migrations, Doctrine)
 - `/flutter:` - Flutter-specific (widgets, BLoC, performance)

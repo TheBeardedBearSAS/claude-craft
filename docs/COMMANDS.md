@@ -32,6 +32,9 @@ Commands can take arguments:
 | `/laravel:` | PHP/Laravel | 6 |
 | `/vuejs:` | Vue.js | 6 |
 | `/docker:` | Docker/Infrastructure | 4 |
+| `/project:` | Project Management | 24 |
+| `/sprint:` | Sprint Management (BMAD v6) | 4 |
+| `/gate:` | Quality Gates (BMAD v6) | 6 |
 
 ---
 
@@ -452,6 +455,19 @@ Available with Project installation.
 | `/project:update-story <US>` | Update a User Story |
 | `/project:sprint-dev <N\|next>` | **Start TDD/BDD sprint development** |
 
+### BMAD v6 Commands (NEW)
+
+| Command | Description |
+|---------|-------------|
+| `/project:analyze-backlog` | Analyze current backlog structure |
+| `/project:migrate-backlog` | Convert backlog to BMAD v6 format |
+| `/project:update-stories` | Add missing BMAD fields to stories |
+| `/project:sync-backlog` | Synchronize backlog files ↔ YAML |
+| `/project:run-epic <ID>` | Queue all stories in an epic |
+| `/project:run-queue` | Process queued stories |
+| `/project:run-sprint` | Execute full sprint |
+| `/project:batch-status` | View batch queue status |
+
 ### Sprint Development (`/project:sprint-dev`)
 
 Orchestrates complete sprint development in TDD/BDD mode:
@@ -489,6 +505,59 @@ Orchestrates complete sprint development in TDD/BDD mode:
 | `skip` | Skip this task |
 | `block [reason]` | Mark as blocked |
 | `stop` | Stop (saves state) |
+
+---
+
+## Sprint Management Commands (`/sprint:`)
+
+Available with BMAD v6 installation.
+
+| Command | Description |
+|---------|-------------|
+| `/sprint:bmad-status` | Display sprint status with routing info |
+| `/sprint:next-story` | Get next ready-for-dev story |
+| `/sprint:transition <ID> <status>` | Transition story status |
+| `/sprint:auto-route` | Execute automatic routing rules |
+
+### State Machine
+
+Stories flow through these statuses:
+
+```
+backlog → ready-for-dev → in-progress → review → done
+    ↓         ↓              ↓           ↓
+    └─────────┴──────────────┴───────────┴→ blocked
+```
+
+**TDD Phase Tracking:**
+- 🔴 `red` - Writing failing tests
+- 🟢 `green` - Implementing to pass
+- 🔵 `refactor` - Cleaning up code
+
+---
+
+## Quality Gate Commands (`/gate:`)
+
+Available with BMAD v6 installation.
+
+| Command | Description |
+|---------|-------------|
+| `/gate:validate-prd` | Validate PRD (≥80% threshold) |
+| `/gate:validate-techspec` | Validate Tech Spec (≥90% threshold) |
+| `/gate:validate-backlog` | Validate INVEST compliance |
+| `/gate:validate-story <ID>` | Validate story Definition of Done |
+| `/gate:validate-sprint` | Validate sprint readiness |
+| `/gate:report` | Full quality gates report |
+
+### Quality Gate Thresholds
+
+| Gate | Threshold | Criteria |
+|------|-----------|----------|
+| PRD Gate | ≥80% | Problem, users, goals, metrics, scope |
+| Tech Spec Gate | ≥90% | Architecture, security, testing, deployment |
+| Backlog Gate | 6/6 INVEST | Independent, Negotiable, Valuable, Estimable, Small, Testable |
+| Story DoD | 100% | Tasks, tests, AC, review, no blockers |
+| Sprint Ready | 100% | Metadata, goal, stories ready, estimated |
 
 ---
 

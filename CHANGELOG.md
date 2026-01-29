@@ -5,6 +5,91 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] - 2026-01-29
+
+### Added
+- **BMAD v6 Framework** - Complete project management enhancement
+  - **9 Agent-as-Code Definitions** (`Project/agents/`)
+    - `bmad-master`: Central orchestrator for BMAD methodology
+    - `pm`: Product Manager (PRD, vision, roadmap, prioritization)
+    - `ba`: Business Analyst (requirements, use cases, story mapping)
+    - `architect`: System Architect (tech specs, ADRs, API design)
+    - `po`: Product Owner (backlog management, acceptance)
+    - `sm`: Scrum Master (ceremonies, velocity, impediments)
+    - `dev`: Developer (TDD implementation, refactoring)
+    - `qa`: QA Engineer (test strategy, validation)
+    - `ux`: UX Designer (wireframes, journeys, accessibility)
+  - **Status-based Routing** (`.bmad/lib/routing-engine.sh`)
+    - State machine: backlog → ready-for-dev → in-progress → review → done
+    - Automatic transitions based on task completion
+    - History tracking for all status changes
+    - Support for blocked state from any status
+  - **5 Quality Gates** (`.bmad/gates/`)
+    - PRD Gate (≥80%): Problem, users, goals, metrics, scope validation
+    - Tech Spec Gate (≥90%): Architecture, security, testing, deployment
+    - Backlog Gate: Full INVEST compliance (6/6 criteria)
+    - Sprint Ready Gate: Metadata, goal, stories ready validation
+    - Story DoD Gate: Tasks, tests, AC, review, no blockers
+  - **Claude Code Hooks** (`.bmad/hooks/`)
+    - `sprint-context.sh` (SessionStart): Inject sprint context at session start
+    - `story-status.sh` (PreToolUse, once:true): Inject current story status
+    - `quality-gate.sh` (Stop): Validate quality gates before completion (exit 2 blocks)
+  - **Batch Processing** (`.bmad/lib/batch-executor.sh`)
+    - Queue management for epic/sprint execution
+    - Sequential and parallel execution modes
+    - Checkpointing for resume on failure
+    - Dependency-aware processing
+  - **YAML Configuration Files**
+    - `sprint-status.yaml`: Sprint state tracking with routing rules
+    - `batch-queue.yaml`: Batch processing queue management
+
+- **20+ New Commands**
+  - Sprint Management:
+    - `/sprint:bmad-status`: Display sprint status with routing info
+    - `/sprint:next-story`: Get next story ready for development
+    - `/sprint:transition <ID> <status>`: Transition story status
+    - `/sprint:auto-route`: Execute automatic routing rules
+  - Quality Gates:
+    - `/gate:validate-prd [file]`: Validate PRD (≥80%)
+    - `/gate:validate-techspec [file]`: Validate Tech Spec (≥90%)
+    - `/gate:validate-backlog [story-id]`: Validate INVEST compliance
+    - `/gate:validate-story <story-id>`: Validate story DoD
+    - `/gate:validate-sprint`: Validate sprint readiness
+    - `/gate:report`: Comprehensive quality gates report
+  - Backlog Migration:
+    - `/project:analyze-backlog`: Analyze current backlog structure
+    - `/project:migrate-backlog`: Convert to BMAD v6 format
+    - `/project:update-stories`: Add missing BMAD fields
+    - `/project:sync-backlog`: Bidirectional sync files ↔ YAML
+  - Batch Processing:
+    - `/project:run-epic <epic-id>`: Queue all stories from an epic
+    - `/project:run-queue`: Process batch queue
+    - `/project:run-sprint`: Execute full sprint
+    - `/project:batch-status`: View queue status
+
+- **3 New Templates** (`Project/templates/`)
+  - `sprint-status.yaml.template`: Sprint tracking template
+  - `batch-queue.yaml.template`: Batch queue configuration
+  - `agent.yaml.template`: Agent-as-Code template
+
+- **French Translations** for all new BMAD commands
+  - `analyze-backlog.md`, `migrate-backlog.md`
+  - `sprint-bmad-status.md`
+  - `gate-validate-prd.md`, `gate-validate-backlog.md`, `gate-report.md`
+
+- **TDD Phase Tracking**
+  - Stories track TDD phase: red → green → refactor
+  - Automatic phase guidance in hooks
+  - Phase validation in Story DoD gate
+
+### Changed
+- Agent count: 25 → 34 (9 BMAD agents added)
+- Command count: 90+ → 110+ (20+ BMAD commands added)
+- Template count: 30 → 33 (3 BMAD templates added)
+- README.md updated with BMAD v6 documentation
+- docs/AGENTS.md updated with BMAD agents section
+- docs/COMMANDS.md updated with BMAD commands section
+
 ## [4.1.0] - 2026-01-29
 
 ### Added
@@ -249,6 +334,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Enhanced npm publishing security via OIDC
 
+[4.2.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.0.3...v4.1.0
 [4.0.3]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.0.2...v4.0.3
 [4.0.2]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.0.1...v4.0.2

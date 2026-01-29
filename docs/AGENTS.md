@@ -489,6 +489,214 @@ Helps with:
 
 ---
 
+## BMAD v6 Agents (9)
+
+Available with BMAD v6 framework installation. These agents follow the Agent-as-Code YAML format.
+
+### bmad-master
+
+**Expertise**: BMAD methodology orchestration
+
+Central coordinator for the BMAD (Build, Measure, Analyze, Deliver) methodology. Manages agent interactions, workflow routing, and quality gate enforcement.
+
+Helps with:
+- Orchestrating agent interactions and handoffs
+- Managing sprint lifecycle and transitions
+- Enforcing quality gates at each phase
+- Coordinating batch processing operations
+- Providing project-wide visibility and metrics
+
+```
+@bmad-master Initialize BMAD for this project
+@bmad-master Route this work to the appropriate agent
+```
+
+**Key Commands**: `/bmad:init`, `/bmad:status`, `/bmad:route`, `/bmad:handoff`
+
+---
+
+### pm (Product Manager)
+
+**Expertise**: Product strategy and PRD creation
+
+Experienced product manager focused on delivering value to users. Expert in product discovery, market analysis, and strategic planning.
+
+Helps with:
+- Define product vision and strategy
+- Create Product Requirements Documents (PRD)
+- Prioritize features (RICE, MoSCoW)
+- Conduct market analysis
+- Define success metrics and KPIs
+
+```
+@pm Create a PRD for user authentication
+@pm Prioritize these features for the next quarter
+```
+
+**Key Commands**: `/pm:prd`, `/pm:vision`, `/pm:roadmap`, `/pm:prioritize`, `/pm:okr`
+
+**Quality Gate**: PRD Gate (≥80%)
+
+---
+
+### ba (Business Analyst)
+
+**Expertise**: Requirements engineering and documentation
+
+Expert in requirements gathering, analysis, and documentation. Bridge between business stakeholders and technical teams.
+
+Helps with:
+- Gather and analyze business requirements
+- Document functional specifications
+- Create use cases and user story maps
+- Perform gap analysis
+- Validate requirements with stakeholders
+
+```
+@ba Analyze requirements for the payment module
+@ba Create a user story map for checkout flow
+```
+
+**Key Commands**: `/ba:analyze`, `/ba:use-cases`, `/ba:story-map`, `/ba:gap-analysis`, `/ba:requirements`
+
+---
+
+### architect (System Architect)
+
+**Expertise**: Technical architecture and design
+
+Expert in Clean Architecture, DDD, and API design. Pragmatic approach focused on maintainability and scalability.
+
+Helps with:
+- Design system architecture from PRD
+- Create Technical Specifications
+- Define API contracts
+- Design database schemas
+- Document architectural decisions (ADRs)
+- Review code for architectural compliance
+
+```
+@architect Design the architecture for this feature
+@architect Create an ADR for choosing JWT over sessions
+```
+
+**Key Commands**: `/arch:design`, `/arch:techspec`, `/arch:adr`, `/arch:api`, `/arch:database`, `/arch:security`
+
+**Quality Gate**: Tech Spec Gate (≥90%)
+
+---
+
+### po (Product Owner)
+
+**Expertise**: Backlog management and sprint prioritization
+
+Voice of the customer and guardian of the product backlog. Expert in prioritization and value delivery.
+
+Helps with:
+- Own and prioritize product backlog
+- Write and refine user stories
+- Define acceptance criteria
+- Accept or reject completed work
+- Plan releases
+
+```
+@po Prioritize this backlog for the next sprint
+@po Review and accept US-005
+```
+
+**Key Commands**: `/po:prioritize`, `/po:refine`, `/po:accept`, `/po:reject`, `/po:release`
+
+---
+
+### sm (Scrum Master)
+
+**Expertise**: Agile facilitation and team coordination
+
+Servant leader facilitating agile practices and removing impediments. Expert in Scrum framework and continuous improvement.
+
+Helps with:
+- Facilitate sprint ceremonies
+- Track sprint progress and velocity
+- Remove impediments
+- Coach team on agile practices
+- Drive continuous improvement
+
+```
+@sm Plan sprint 3 with the team
+@sm Run the sprint retrospective
+```
+
+**Key Commands**: `/sm:plan-sprint`, `/sm:daily`, `/sm:review`, `/sm:retro`, `/sm:velocity`, `/sm:burndown`
+
+---
+
+### dev (Developer)
+
+**Expertise**: TDD implementation and clean code
+
+Experienced developer following TDD and Clean Code principles. Expert in multiple technology stacks with focus on quality.
+
+Helps with:
+- Implement features following TDD
+- Write clean, maintainable code
+- Participate in code reviews
+- Refactor for quality
+
+```
+@dev Implement US-005 using TDD
+@dev Refactor this service for better testability
+```
+
+**Key Commands**: `/dev:implement`, `/dev:tdd`, `/dev:test`, `/dev:refactor`, `/dev:review`, `/dev:fix`
+
+**TDD Phases**: 🔴 Red (write failing test) → 🟢 Green (implement) → 🔵 Refactor (clean up)
+
+---
+
+### qa (QA Engineer)
+
+**Expertise**: Quality assurance and test automation
+
+Quality advocate ensuring software meets requirements and standards. Expert in testing strategies and automation.
+
+Helps with:
+- Define test strategy
+- Validate acceptance criteria
+- Automate test suites
+- Perform exploratory testing
+- Track quality metrics
+
+```
+@qa Validate acceptance criteria for US-005
+@qa Create automated tests for the login flow
+```
+
+**Key Commands**: `/qa:strategy`, `/qa:validate`, `/qa:automate`, `/qa:explore`, `/qa:report`, `/qa:bug`
+
+---
+
+### ux (UX Designer)
+
+**Expertise**: User experience and accessibility
+
+User advocate focused on creating intuitive, accessible experiences. Expert in user research and interaction design.
+
+Helps with:
+- Conduct user research
+- Create user personas and journeys
+- Design wireframes and prototypes
+- Ensure accessibility compliance (WCAG 2.1 AA)
+- Validate designs with users
+
+```
+@ux Design the user journey for onboarding
+@ux Audit this page for accessibility
+```
+
+**Key Commands**: `/ux:research`, `/ux:persona`, `/ux:journey`, `/ux:wireframe`, `/ux:flow`, `/ux:accessibility`
+
+---
+
 ## Project Agents (2)
 
 Available with `install-project-commands`.
@@ -600,8 +808,9 @@ description: Expert in REST/GraphQL API design. Use for endpoint design, resourc
 | Common | 11 | 55 |
 | Technology Reviewers | 5 | 25 |
 | Docker/Infrastructure | 5 | 25 |
+| **BMAD v6** | **9** | **9** (YAML format) |
 | Project | 2 | 10 |
-| **Total** | **23** | **115** |
+| **Total** | **32** | **124** |
 
 ---
 
