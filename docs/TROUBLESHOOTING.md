@@ -420,6 +420,192 @@ npm run lint
 
 ---
 
+## Autonomous Sprint Conductor (ASC) Issues
+
+### Sprint doesn't start
+
+**Problem:** `/common:ralph-sprint` fails immediately.
+
+**Diagnosis:**
+```bash
+# Check BMAD is initialized
+ls .bmad/sprint-status.yaml
+
+# Check for ready stories
+yq '.stories | to_entries[] | select(.value.status == "ready-for-dev")' .bmad/sprint-status.yaml
+```
+
+**Solutions:**
+
+1. **Initialize BMAD first**
+   ```bash
+   /bmad:init
+   /sprint:next-story
+   ```
+
+2. **Transition stories to ready-for-dev**
+   ```bash
+   /sprint:transition US-001 ready-for-dev
+   ```
+
+---
+
+### Stories fail immediately
+
+**Problem:** Every story fails without progress.
+
+**Diagnosis:**
+```bash
+# Check recovery log
+cat .ralph/recovery/recovery-log.jsonl
+
+# Check conductor log
+cat .ralph/conductor/log-*.log
+```
+
+**Solutions:**
+
+1. **Check error classification**
+   - Level 3 (blocked) errors require human intervention
+   - Review escalation queue: `ls .ralph/escalations/queue/`
+
+2. **Verify test/lint commands**
+   ```yaml
+   # In ralph-autonomous.yml
+   definition_of_done:
+     validators:
+       - type: command
+         command: "docker compose exec app npm test"  # Use Docker!
+   ```
+
+3. **Increase recovery attempts**
+   ```yaml
+   recovery:
+     max_attempts: 5
+   ```
+
+---
+
+### Too many escalations
+
+**Problem:** Almost every error gets escalated.
+
+**Solutions:**
+
+1. **Adjust error patterns**
+   ```yaml
+   # Add custom patterns for your project
+   recovery:
+     patterns:
+       recoverable:
+         - "your_specific_warning_pattern"
+   ```
+
+2. **Increase auto-fix capabilities**
+   ```yaml
+   recovery:
+     auto_fix_lint: true
+     auto_fix_tests: "retry_tdd"
+     auto_fix_deps: true
+   ```
+
+3. **Review blocked patterns** - they may be too aggressive
+
+---
+
+### Escalations not resolving
+
+**Problem:** Escalations queue up without resolution.
+
+**Diagnosis:**
+```bash
+# Check pending escalations
+ls .ralph/escalations/queue/
+
+# View escalation details
+cat .ralph/escalations/queue/ESC-*.yaml
+```
+
+**Solutions:**
+
+1. **Resolve manually**
+   ```bash
+   ./Tools/Ralph/lib/escalation-service.sh resolve ESC-xxx proceed "Approved"
+   ```
+
+2. **Adjust timeout and default action**
+   ```yaml
+   escalation:
+     timeout_hours: 2     # Shorter timeout
+     default_action: "skip"  # Auto-skip on timeout
+   ```
+
+3. **Configure webhooks for notifications**
+   ```yaml
+   escalation:
+     webhook:
+       url: "https://hooks.slack.com/..."
+       type: "slack"
+   ```
+
+---
+
+### Parallel sessions overwhelm system
+
+**Problem:** System becomes unresponsive during parallel execution.
+
+**Solutions:**
+
+1. **Reduce concurrent sessions**
+   ```yaml
+   parallel:
+     max_concurrent: 2  # Down from 3
+   ```
+
+2. **Adjust resource limits**
+   ```yaml
+   parallel:
+     resource_limits:
+       cpu_percent: 70  # Lower threshold
+       mem_percent: 70
+   ```
+
+3. **Use sequential mode** for complex projects
+   ```bash
+   /common:ralph-sprint "Sprint 3" --overnight  # No --parallel flag
+   ```
+
+---
+
+### Circuit breaker trips too quickly
+
+**Problem:** Recovery doesn't get a chance to work.
+
+**Solutions:**
+
+1. **Use autonomous profile**
+   ```yaml
+   circuit_breaker:
+     default_profile: "autonomous"
+   ```
+
+2. **Enable recovery integration**
+   ```yaml
+   circuit_breaker:
+     profiles:
+       autonomous:
+         recovery_enabled: true
+         errors: 8  # Higher threshold
+   ```
+
+3. **Check recovery is working**
+   ```bash
+   # View recovery attempts
+   cat .ralph/recovery/recovery-log.jsonl | jq -s 'length'
+   ```
+
+---
+
 ## Configuration Issues
 
 ### YAML syntax errors

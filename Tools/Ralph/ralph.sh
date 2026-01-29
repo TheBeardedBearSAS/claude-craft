@@ -55,6 +55,13 @@ AUTO_DETECT=false
 INIT_ONLY=false
 INTERACTIVE=false
 
+# v3.0 ASC (Autonomous Sprint Conductor) flags
+AUTONOMOUS_MODE=false
+SESSION_ISOLATED=false
+STORY_ID=""
+SPRINT_MODE=false
+OVERNIGHT_MODE=false
+
 # =============================================================================
 # i18n - Load messages
 # =============================================================================
@@ -164,6 +171,7 @@ load_modules() {
     # 1. utils must be loaded first (shared helper functions)
     # 2. sprint-progress and context-reconstruction must be loaded before context-manager
     # 3. v2.0 modules loaded after core modules
+    # 4. ASC modules (recovery, escalation, parallel, conductor) loaded last
     local modules=(
         "utils"
         "session"
@@ -181,6 +189,10 @@ load_modules() {
         "dashboard"
         "health-monitor"
         "hooks-generator"
+        "recovery-engine"
+        "escalation-service"
+        "parallel-manager"
+        "sprint-conductor"
     )
 
     for module in "${modules[@]}"; do
@@ -291,6 +303,13 @@ show_help() {
     echo "  --init                ${MSG_HELP_INIT:-Generate config without running (init only)}"
     echo "  --interactive         ${MSG_HELP_INTERACTIVE:-Interactive configuration wizard}"
     echo ""
+    echo -e "${C_BOLD}v3.0 ASC (Autonomous Sprint Conductor) Options:${C_RESET}"
+    echo "  --autonomous          Enable autonomous mode with recovery"
+    echo "  --story=<id>          Process specific story (isolated session)"
+    echo "  --sprint              Run full sprint conductor"
+    echo "  --overnight           Overnight mode (bounded, stops at 6am)"
+    echo "  --parallel=<n>        Run up to N stories in parallel"
+    echo ""
     echo -e "${C_BOLD}${MSG_HELP_EXAMPLES}:${C_RESET}"
     echo ""
     echo "  # ${MSG_HELP_EXAMPLE_BASIC}"
@@ -375,6 +394,24 @@ parse_args() {
             --interactive)
                 INTERACTIVE=true
                 ;;
+            --autonomous)
+                AUTONOMOUS_MODE=true
+                ;;
+            --story=*)
+                STORY_ID="${1#--story=}"
+                SESSION_ISOLATED=true
+                ;;
+            --sprint)
+                SPRINT_MODE=true
+                ;;
+            --overnight)
+                OVERNIGHT_MODE=true
+                AUTONOMOUS_MODE=true
+                ;;
+            --parallel=*)
+                PARALLEL_ENABLED=true
+                PARALLEL_MAX_CONCURRENT="${1#--parallel=}"
+                ;;
             --help|-h)
                 load_messages
                 show_help
@@ -436,6 +473,23 @@ run_ralph() {
     # Initialize circuit breaker
     init_circuit_breaker
 
+    # Enable autonomous mode if requested
+    if [[ "$AUTONOMOUS_MODE" == "true" ]]; then
+        if type enable_autonomous_mode &>/dev/null; then
+            enable_autonomous_mode
+        fi
+
+        # Initialize recovery engine
+        if type init_recovery_engine &>/dev/null; then
+            init_recovery_engine
+        fi
+
+        # Initialize escalation service
+        if type init_escalation_service &>/dev/null; then
+            init_escalation_service
+        fi
+    fi
+
     # Initialize context manager (auto-compact)
     if type init_context_manager &>/dev/null; then
         init_context_manager
@@ -467,8 +521,17 @@ run_ralph() {
             update_dashboard_iteration "$SESSION_ID" "$iteration" "$MAX_ITERATIONS"
         fi
 
-        # Check circuit breaker
-        if check_circuit_breaker; then
+        # Check circuit breaker (with recovery in autonomous mode)
+        if [[ "$AUTONOMOUS_MODE" == "true" ]] && type check_circuit_breaker_with_recovery &>/dev/null; then
+            if check_circuit_breaker_with_recovery "$SESSION_ID" "$response"; then
+                # Recovery failed - check if we should escalate
+                if type create_escalation &>/dev/null; then
+                    create_escalation "$SESSION_ID" "blocked" "$CB_TRIGGER_REASON" "Circuit breaker triggered after recovery attempts"
+                fi
+                exit_reason="circuit_breaker"
+                break
+            fi
+        elif check_circuit_breaker; then
             exit_reason="circuit_breaker"
             break
         fi
@@ -811,6 +874,47 @@ main() {
 
     # Load configuration
     load_config
+
+    # Handle sprint mode
+    if [[ "$SPRINT_MODE" == "true" ]]; then
+        if type cmd_sprint_conductor &>/dev/null; then
+            local sprint_args=()
+            [[ "$OVERNIGHT_MODE" == "true" ]] && sprint_args+=("--overnight")
+            [[ -n "$PARALLEL_MAX_CONCURRENT" ]] && sprint_args+=("--parallel" "$PARALLEL_MAX_CONCURRENT")
+            [[ -n "$PROMPT" ]] && sprint_args+=("$PROMPT")
+
+            cmd_sprint_conductor "${sprint_args[@]}"
+            exit $?
+        else
+            print_error "Sprint conductor module not available"
+            exit 1
+        fi
+    fi
+
+    # Handle story mode (isolated session)
+    if [[ -n "$STORY_ID" ]]; then
+        print_info "Running isolated session for story: $STORY_ID"
+
+        # Build prompt from story if not provided
+        if [[ -z "$PROMPT" ]]; then
+            local bmad_dir="${BMAD_DIR:-.bmad}"
+            local status_file="$bmad_dir/sprint-status.yaml"
+
+            if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
+                local title description
+                title=$(yq ".stories.${STORY_ID}.title" "$status_file" 2>/dev/null)
+                description=$(yq ".stories.${STORY_ID}.description" "$status_file" 2>/dev/null)
+                PROMPT="Implement user story $STORY_ID: $title
+
+$description
+
+Follow TDD approach: write tests first (Red), implement code (Green), then refactor (Blue).
+Ensure all tests pass before marking as complete."
+            else
+                PROMPT="Implement story $STORY_ID following TDD approach."
+            fi
+        fi
+    fi
 
     # Validate we have a prompt or are resuming
     if [[ -z "$PROMPT" && -z "$CONTINUE_SESSION" ]]; then

@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2026-01-29
+
+### Added
+- **Autonomous Sprint Conductor (ASC)** - Run entire sprints overnight with minimal human intervention
+  - `/common:ralph-sprint` command for overnight/unattended sprint execution
+  - `--overnight` mode: Bounded execution with stop window at 6am
+  - `--parallel N` mode: Process up to N stories concurrently
+  - `--supervised` mode: Confirm each story before processing
+  - `--max-stories N` and `--timeout H` options for limits
+- **Recovery Engine** (`Tools/Ralph/lib/recovery-engine.sh`)
+  - 4-level error classification: Transient, Recoverable, Degraded, Blocked
+  - Auto-retry with exponential backoff for transient errors
+  - Auto-fix strategies: lint fix, TDD retry, dependency install
+  - Recovery logging and metrics
+- **Escalation Service** (`Tools/Ralph/lib/escalation-service.sh`)
+  - Queue management for blocking issues
+  - Webhook notifications: Slack, Teams, Discord, generic
+  - Configurable timeout with default actions (skip, proceed, retry, abort)
+  - Audit trail in `.ralph/escalations/audit.jsonl`
+- **Parallel Manager** (`Tools/Ralph/lib/parallel-manager.sh`)
+  - Dependency graph building from stories
+  - Multi-session spawning with isolation
+  - Resource monitoring (CPU, memory limits)
+  - Result aggregation
+- **Sprint Conductor** (`Tools/Ralph/lib/sprint-conductor.sh`)
+  - Main orchestrator for autonomous sprint execution
+  - Auto-claim, progress tracking, transitions
+  - Stop conditions: max stories, consecutive failures, runtime, time window
+- **Autonomous Circuit Breaker Profile**
+  - New `autonomous` profile with recovery_enabled
+  - `check_circuit_breaker_with_recovery()` function
+  - Integration with recovery engine before trip
+- **BMAD Autonomous Mode**
+  - `routing-engine.sh`: enable-autonomous, auto-claim, tdd-phase, tests-status commands
+  - `batch-executor.sh`: autonomous mode with Ralph integration
+  - Auto-transition based on TDD phase and test status
+- **Configuration** (`Tools/Ralph/config/ralph-autonomous.yml`)
+  - Complete autonomous mode configuration template
+  - Schedule, limits, parallel, recovery, escalation settings
+- **Documentation**
+  - `docs/AUTONOMOUS-SPRINT.md`: Complete ASC guide
+  - Updated FAQ, TROUBLESHOOTING, COMMANDS docs
+  - Updated README with v5.0 features
+- **i18n** - `/common:ralph-sprint` command in 5 languages (en, fr, es, de, pt)
+
+### Changed
+- Ralph version: 2.0.0 → 3.0.0
+- Ralph loads 4 new modules: recovery-engine, escalation-service, parallel-manager, sprint-conductor
+- Ralph main script now supports: `--autonomous`, `--story=<id>`, `--sprint`, `--overnight`, `--parallel=<n>`
+- Circuit breaker now includes recovery integration for autonomous profile
+- `.claude/CLAUDE.md` updated with ASC section
+
+### Technical Details
+- New files: 6 shell modules (recovery-engine.sh, escalation-service.sh, parallel-manager.sh, sprint-conductor.sh, config/ralph-autonomous.yml)
+- Updated files: ralph.sh, circuit-breaker.sh, batch-executor.sh, routing-engine.sh
+- New command files: 5 (ralph-sprint.md in en/fr/es/de/pt)
+- Documentation updates: README.md, CHANGELOG.md, docs/COMMANDS.md, docs/FAQ.md, docs/TROUBLESHOOTING.md, docs/AUTONOMOUS-SPRINT.md, .claude/CLAUDE.md, .bmad/README.md, Tools/Ralph/README.md
+
 ## [4.4.0] - 2026-01-29
 
 ### Added

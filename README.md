@@ -2,6 +2,29 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
+**Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
+
+## What's New in v5.0 - Autonomous Sprint Conductor (ASC)
+
+- **Overnight Sprint Execution**: Run sprints unattended with bounded execution
+  - `/common:ralph-sprint "Sprint 3" --overnight` - Stops at 6am
+  - `/common:ralph-sprint "Sprint 3" --parallel 3` - Process 3 stories concurrently
+  - `/common:ralph-sprint "Sprint 3" --supervised` - Confirm each story
+- **Recovery Engine**: 4-level error classification with auto-fix
+  - Level 0 (Transient): Auto-retry with backoff (timeout, rate limit)
+  - Level 1 (Recoverable): Auto-fix then retry (lint, tests, deps)
+  - Level 2 (Degraded): Continue with warning (docs, optional gates)
+  - Level 3 (Blocked): Escalate to human (security, architecture)
+- **Escalation Service**: Queue blocking issues with webhook notifications
+  - Slack, Teams, Discord integration
+  - Configurable timeout with default actions
+  - Audit trail for compliance
+- **Parallel Processing**: Dependency-aware concurrent execution
+  - Resource monitoring (CPU/memory limits)
+  - Automatic session isolation
+- **Enhanced Circuit Breaker**: New `autonomous` profile with recovery integration
+- See [Autonomous Sprint Documentation](docs/AUTONOMOUS-SPRINT.md)
+
 ## What's New in v4.4
 
 - **Comprehensive Documentation for Juniors**: 32 new documentation files

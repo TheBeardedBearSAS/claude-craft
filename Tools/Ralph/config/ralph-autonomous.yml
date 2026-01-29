@@ -1,0 +1,139 @@
+# =============================================================================
+# Ralph Wiggum - Autonomous Sprint Conductor (ASC) Configuration
+# Use this configuration for overnight/unattended sprint runs
+# =============================================================================
+
+# Global autonomous mode settings
+autonomous:
+  enabled: true
+  mode: "bounded"  # bounded, continuous, supervised
+
+  # Schedule constraints
+  schedule:
+    stop_window: "06:00"          # Stop processing at this time (HH:MM)
+    max_runtime_hours: 12         # Maximum total runtime
+    pause_on_critical: true       # Pause on critical escalations
+
+  # Processing limits
+  limits:
+    max_stories_per_session: 10   # Maximum stories to process
+    max_consecutive_failures: 3   # Stop after N consecutive failures
+    story_timeout_seconds: 3600   # Timeout per story (1 hour)
+
+  # Parallel processing
+  parallel:
+    enabled: false                # Enable parallel story processing
+    max_concurrent: 3             # Maximum concurrent sessions
+    resource_limits:
+      cpu_percent: 80             # Max CPU usage before throttling
+      mem_percent: 80             # Max memory usage before throttling
+
+# Recovery engine configuration
+recovery:
+  enabled: true
+  max_attempts: 3                 # Max recovery attempts per error
+
+  # Auto-fix strategies
+  auto_retry_transient: true      # Auto-retry timeout/rate limit errors
+  auto_fix_lint: true             # Auto-run linters on lint errors
+  auto_fix_tests: "retry_tdd"     # retry_tdd, skip, or false
+  auto_fix_deps: true             # Auto-install missing dependencies
+
+  # Error classification overrides
+  # patterns:
+  #   transient:
+  #     - "custom_pattern"
+  #   recoverable:
+  #     - "custom_pattern"
+
+# Escalation service configuration
+escalation:
+  enabled: true
+  timeout_hours: 4                # Hours before auto-resolution
+
+  # Default actions on timeout
+  default_action: "skip"          # skip, proceed, retry, abort
+  critical_action: "pause"        # Action for critical escalations
+
+  # Webhook notifications (optional)
+  webhook:
+    url: ""                       # Webhook URL (Slack, Teams, Discord, generic)
+    type: "slack"                 # slack, teams, discord, generic
+  notify_on_create: true
+  notify_on_resolve: true
+
+# Circuit breaker - autonomous profile
+circuit_breaker:
+  adaptive: true
+  default_profile: "autonomous"
+
+  # Profile-specific thresholds
+  profiles:
+    autonomous:
+      no_changes: 5               # Iterations without file changes
+      errors: 8                   # Consecutive errors
+      max_iterations: 50          # Maximum iterations
+      recovery_enabled: true      # Enable recovery before trip
+
+  # Learning mode
+  learning:
+    enabled: true
+    min_samples: 5                # Minimum samples before adjustments
+
+# Session settings for ASC
+session:
+  max_iterations: 50              # Higher for autonomous runs
+  timeout: 900000                 # 15 minutes per Claude call
+  delay_between_iterations: 2000  # 2 second delay
+
+# Checkpointing
+checkpointing:
+  enabled: true
+  interval: 5                     # Checkpoint every N iterations
+  git_enabled: true               # Create git checkpoints
+  auto_commit: false              # Don't auto-commit, just stage
+
+# Context management
+context:
+  auto_compact: true
+  warning_threshold: 80           # Warn at 80% context usage
+  compact_threshold: 90           # Compact at 90%
+  continuation_enabled: true      # Create continuation sessions
+
+# Health monitoring
+health_monitor:
+  enabled: true
+  check_interval: 10              # Check every N iterations
+
+  # Patterns to detect
+  detect_stall: true
+  detect_error_spiral: true
+  detect_context_bloat: true
+
+  # Thresholds
+  stall_threshold: 5              # Iterations with same response
+  error_spiral_threshold: 3       # Consecutive errors
+  context_bloat_threshold: 85     # Context usage %
+
+# Metrics export
+metrics:
+  enabled: true
+  format: "json"                  # json, prometheus
+  export_interval: 10             # Export every N iterations
+  include_context_usage: true
+  include_dod_progress: true
+  include_recovery_stats: true
+
+# DoD for autonomous runs
+definition_of_done:
+  strict: true                    # Require all validators to pass
+  validators:
+    - type: "output_contains"
+      pattern: "COMPLETE"
+      description: "Task completion marker"
+    - type: "command"
+      command: "npm test"
+      description: "All tests pass"
+    - type: "command"
+      command: "npm run lint"
+      description: "No lint errors"

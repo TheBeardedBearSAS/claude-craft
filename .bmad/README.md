@@ -9,6 +9,7 @@ BMAD v6 is a project management enhancement framework for claude-craft that prov
 - **5 Quality gates** with configurable thresholds
 - **Batch processing** for epic/sprint execution
 - **Claude Code hooks** for context injection and validation
+- **Autonomous Sprint Conductor (ASC)** integration for overnight execution
 
 ## Directory Structure
 
@@ -113,6 +114,14 @@ Add to your project's `.claude/settings.json`:
 | `/project:run-sprint` | Execute full sprint |
 | `/project:batch-status` | View queue status |
 
+### Autonomous Sprint Conductor (ASC)
+| Command | Description |
+|---------|-------------|
+| `/common:ralph-sprint` | Run autonomous sprint overnight |
+| `batch-executor.sh autonomous` | Queue with Ralph integration |
+| `routing-engine.sh auto-claim` | Auto-claim next ready story |
+| `routing-engine.sh tdd-phase` | Update TDD phase with auto-transition |
+
 ## State Machine
 
 ```
@@ -162,6 +171,45 @@ Stories track TDD phase:
 - 🔵 `refactor` - Cleaning up code
 
 Update with: `/sprint:tdd <story-id> <phase>`
+
+## Autonomous Sprint Conductor (ASC) Integration
+
+BMAD v6 integrates with Ralph Wiggum's ASC for overnight execution:
+
+### Autonomous Mode Features
+
+```bash
+# Run sprint overnight
+/common:ralph-sprint "Sprint 1" --overnight
+
+# With parallel processing
+/common:ralph-sprint "Sprint 1" --parallel 3 --overnight
+```
+
+### Routing Engine Autonomous Commands
+
+```bash
+# Enable autonomous routing
+./lib/routing-engine.sh enable-autonomous
+
+# Auto-claim next story
+./lib/routing-engine.sh auto-claim
+
+# Update TDD phase (triggers auto-transition)
+./lib/routing-engine.sh tdd-phase US-001 refactor
+
+# Update test status
+./lib/routing-engine.sh tests-status US-001 true
+```
+
+### Batch Executor Autonomous Mode
+
+```bash
+# Queue stories with Ralph integration
+./lib/batch-executor.sh autonomous --parallel 2
+```
+
+See [Autonomous Sprint Documentation](../docs/AUTONOMOUS-SPRINT.md) for complete guide.
 
 ## Requirements
 

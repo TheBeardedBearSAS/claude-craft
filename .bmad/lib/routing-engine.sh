@@ -27,6 +27,11 @@ TRANSITIONS["review"]="done in-progress blocked"
 TRANSITIONS["done"]=""
 TRANSITIONS["blocked"]="backlog ready-for-dev in-progress review"
 
+# Autonomous mode settings
+ROUTING_AUTONOMOUS_MODE="${ROUTING_AUTONOMOUS_MODE:-false}"
+ROUTING_AUTO_TRANSITION_ENABLED="${ROUTING_AUTO_TRANSITION_ENABLED:-false}"
+ROUTING_AUTO_CLAIM_ENABLED="${ROUTING_AUTO_CLAIM_ENABLED:-false}"
+
 # ============================================
 # Helper Functions
 # ============================================
@@ -289,6 +294,244 @@ cmd_auto_route() {
     fi
 }
 
+# ============================================
+# Autonomous Mode Functions
+# ============================================
+
+# Enable autonomous routing mode
+cmd_enable_autonomous() {
+    ROUTING_AUTONOMOUS_MODE="true"
+    ROUTING_AUTO_TRANSITION_ENABLED="true"
+    ROUTING_AUTO_CLAIM_ENABLED="true"
+
+    log_success "Autonomous routing mode enabled"
+    log_info "  - Auto-transition: enabled"
+    log_info "  - Auto-claim: enabled"
+}
+
+# Disable autonomous routing mode
+cmd_disable_autonomous() {
+    ROUTING_AUTONOMOUS_MODE="false"
+    ROUTING_AUTO_TRANSITION_ENABLED="false"
+    ROUTING_AUTO_CLAIM_ENABLED="false"
+
+    log_success "Autonomous routing mode disabled"
+}
+
+# Auto-claim next available story
+cmd_auto_claim() {
+    local claimed_by="${1:-autonomous}"
+
+    check_sprint_status
+
+    if ! command -v yq &> /dev/null; then
+        log_error "yq required. Install with: brew install yq"
+        return 1
+    fi
+
+    # Find next unclaimed ready-for-dev story
+    local next=$(yq '.stories | to_entries[] | select(.value.status == "ready-for-dev") | select(.value.claimed_by == null or .value.claimed_by == "") | .key' "$SPRINT_STATUS_FILE" 2>/dev/null | head -1)
+
+    if [[ -z "$next" ]]; then
+        log_info "No stories available for claiming"
+        return 1
+    fi
+
+    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+    # Claim the story
+    yq -i ".stories.${next}.claimed_by = \"$claimed_by\"" "$SPRINT_STATUS_FILE"
+    yq -i ".stories.${next}.claimed_at = \"$timestamp\"" "$SPRINT_STATUS_FILE"
+
+    # Auto-transition to in-progress
+    if [[ "$ROUTING_AUTO_TRANSITION_ENABLED" == "true" ]]; then
+        cmd_transition "$next" "in-progress"
+    fi
+
+    local title=$(yq ".stories.${next}.title" "$SPRINT_STATUS_FILE")
+    log_success "Claimed story: $next - $title"
+
+    echo "$next"
+}
+
+# Auto-transition based on story completion state
+cmd_auto_transition_check() {
+    local story_id="$1"
+
+    check_sprint_status
+
+    if ! command -v yq &> /dev/null; then
+        log_error "yq required"
+        return 1
+    fi
+
+    local status=$(get_story_status "$story_id")
+
+    if [[ "$status" != "in-progress" ]]; then
+        return 0  # Only check in-progress stories
+    fi
+
+    # Check completion criteria
+    local tdd_phase=$(yq ".stories.${story_id}.tdd_phase // \"\"" "$SPRINT_STATUS_FILE" 2>/dev/null)
+    local tests_passing=$(yq ".stories.${story_id}.tests_passing // false" "$SPRINT_STATUS_FILE" 2>/dev/null)
+    local tasks_total=$(yq ".stories.${story_id}.tasks.total // 0" "$SPRINT_STATUS_FILE" 2>/dev/null)
+    local tasks_completed=$(yq ".stories.${story_id}.tasks.completed // 0" "$SPRINT_STATUS_FILE" 2>/dev/null)
+
+    # Criteria for auto-transition to review:
+    # 1. TDD phase is "refactor" (blue) or "complete"
+    # 2. Tests are passing
+    # 3. All tasks completed (if tasks are tracked)
+
+    local should_transition="false"
+
+    if [[ "$tdd_phase" == "refactor" || "$tdd_phase" == "complete" || "$tdd_phase" == "blue" ]]; then
+        if [[ "$tests_passing" == "true" ]]; then
+            if [[ $tasks_total -eq 0 || $tasks_completed -ge $tasks_total ]]; then
+                should_transition="true"
+            fi
+        fi
+    fi
+
+    if [[ "$should_transition" == "true" ]]; then
+        log_info "Auto-transitioning $story_id to review (completion criteria met)"
+        cmd_transition "$story_id" "review"
+        return 0
+    fi
+
+    return 1
+}
+
+# Update TDD phase for a story
+cmd_update_tdd_phase() {
+    local story_id="$1"
+    local phase="$2"  # red, green, refactor/blue, complete
+
+    check_sprint_status
+
+    if ! command -v yq &> /dev/null; then
+        log_error "yq required"
+        return 1
+    fi
+
+    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+    yq -i ".stories.${story_id}.tdd_phase = \"$phase\"" "$SPRINT_STATUS_FILE"
+    yq -i ".stories.${story_id}.tdd_updated_at = \"$timestamp\"" "$SPRINT_STATUS_FILE"
+
+    log_info "Updated TDD phase for $story_id: $phase"
+
+    # Check for auto-transition if in autonomous mode
+    if [[ "$ROUTING_AUTO_TRANSITION_ENABLED" == "true" ]]; then
+        cmd_auto_transition_check "$story_id"
+    fi
+}
+
+# Mark tests as passing/failing
+cmd_update_tests_status() {
+    local story_id="$1"
+    local passing="${2:-true}"
+
+    check_sprint_status
+
+    if ! command -v yq &> /dev/null; then
+        log_error "yq required"
+        return 1
+    fi
+
+    yq -i ".stories.${story_id}.tests_passing = $passing" "$SPRINT_STATUS_FILE"
+
+    if [[ "$passing" == "true" ]]; then
+        log_success "Tests passing for $story_id"
+    else
+        log_warning "Tests failing for $story_id"
+    fi
+
+    # Check for auto-transition if in autonomous mode
+    if [[ "$ROUTING_AUTO_TRANSITION_ENABLED" == "true" && "$passing" == "true" ]]; then
+        cmd_auto_transition_check "$story_id"
+    fi
+}
+
+# Get next story with auto-claim (for autonomous mode)
+cmd_next_story_claim() {
+    local claimed_by="${1:-autonomous}"
+
+    check_sprint_status
+
+    if [[ "$ROUTING_AUTO_CLAIM_ENABLED" != "true" ]]; then
+        # Just get next, don't claim
+        cmd_next_story
+        return
+    fi
+
+    # Auto-claim and return
+    cmd_auto_claim "$claimed_by"
+}
+
+# Batch auto-route with autonomous enhancements
+cmd_auto_route_autonomous() {
+    check_sprint_status
+
+    log_info "Running autonomous auto-routing..."
+
+    if ! command -v yq &> /dev/null; then
+        log_error "yq required"
+        return 1
+    fi
+
+    local changes=0
+
+    # Get all stories
+    local stories=$(yq '.stories | keys | .[]' "$SPRINT_STATUS_FILE" 2>/dev/null)
+
+    for story_id in $stories; do
+        local status=$(yq ".stories.${story_id}.status" "$SPRINT_STATUS_FILE")
+
+        # Standard auto-route rules
+        local tasks_total=$(yq ".stories.${story_id}.tasks.total // 0" "$SPRINT_STATUS_FILE")
+        local tasks_completed=$(yq ".stories.${story_id}.tasks.completed // 0" "$SPRINT_STATUS_FILE")
+        local blocked_reason=$(yq ".stories.${story_id}.blocked_reason // \"\"" "$SPRINT_STATUS_FILE")
+
+        # Rule: all_tasks_complete -> review
+        if [[ "$status" == "in-progress" && "$tasks_total" -gt 0 && "$tasks_completed" -eq "$tasks_total" ]]; then
+            log_info "Auto-transitioning $story_id to review (all tasks complete)"
+            cmd_transition "$story_id" "review"
+            ((changes++))
+            continue
+        fi
+
+        # Rule: blocked_detection
+        if [[ "$status" != "blocked" && -n "$blocked_reason" ]]; then
+            log_info "Auto-transitioning $story_id to blocked (blocker detected)"
+            cmd_transition "$story_id" "blocked"
+            ((changes++))
+            continue
+        fi
+
+        # Rule: unblocked
+        if [[ "$status" == "blocked" && -z "$blocked_reason" ]]; then
+            local previous=$(yq ".stories.${story_id}.previous_status // \"backlog\"" "$SPRINT_STATUS_FILE")
+            log_info "Auto-transitioning $story_id to $previous (unblocked)"
+            cmd_transition "$story_id" "$previous"
+            ((changes++))
+            continue
+        fi
+
+        # Autonomous rule: TDD completion check
+        if [[ "$status" == "in-progress" ]]; then
+            if cmd_auto_transition_check "$story_id"; then
+                ((changes++))
+            fi
+        fi
+    done
+
+    if [[ "$changes" -eq 0 ]]; then
+        log_info "No automatic transitions needed"
+    else
+        log_success "$changes stories transitioned"
+    fi
+}
+
 # Show state machine diagram
 cmd_diagram() {
     echo ""
@@ -341,6 +584,15 @@ usage() {
     echo "  auto-route               Run automatic routing rules"
     echo "  diagram                  Show state machine diagram"
     echo ""
+    echo "Autonomous Mode Commands:"
+    echo "  enable-autonomous        Enable autonomous routing mode"
+    echo "  disable-autonomous       Disable autonomous routing mode"
+    echo "  auto-claim [session]     Auto-claim next available story"
+    echo "  next-claim [session]     Get and claim next story"
+    echo "  tdd-phase <id> <phase>   Update TDD phase (red/green/refactor)"
+    echo "  tests-status <id> <bool> Update tests passing status"
+    echo "  auto-route-all           Run autonomous auto-routing"
+    echo ""
     echo "Valid states: ${VALID_STATES[*]}"
 }
 
@@ -367,6 +619,35 @@ main() {
             ;;
         diagram)
             cmd_diagram
+            ;;
+        enable-autonomous)
+            cmd_enable_autonomous
+            ;;
+        disable-autonomous)
+            cmd_disable_autonomous
+            ;;
+        auto-claim)
+            cmd_auto_claim "${1:-autonomous}"
+            ;;
+        next-claim)
+            cmd_next_story_claim "${1:-autonomous}"
+            ;;
+        tdd-phase)
+            if [[ $# -lt 2 ]]; then
+                log_error "Usage: routing-engine.sh tdd-phase <story-id> <phase>"
+                exit 1
+            fi
+            cmd_update_tdd_phase "$1" "$2"
+            ;;
+        tests-status)
+            if [[ $# -lt 2 ]]; then
+                log_error "Usage: routing-engine.sh tests-status <story-id> <true|false>"
+                exit 1
+            fi
+            cmd_update_tests_status "$1" "$2"
+            ;;
+        auto-route-all)
+            cmd_auto_route_autonomous
             ;;
         -h|--help|help|"")
             usage

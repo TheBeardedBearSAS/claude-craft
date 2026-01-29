@@ -231,7 +231,49 @@ npx @the-bearded-bear/claude-craft ralph "Fix the login bug"
 | `hook` | Integrate with quality-gate.sh |
 | `human` | Manual approval |
 
-See [Ralph Guide](RALPH-GUIDE.md).
+### What is the Autonomous Sprint Conductor (ASC)?
+
+ASC (v3.0) enables overnight/unattended sprint execution:
+
+```bash
+/common:ralph-sprint "Sprint 3" --overnight
+```
+
+Features:
+- **Auto-claim**: Automatically claims next ready story
+- **Recovery Engine**: Auto-fix errors before circuit breaker trips
+- **Escalation Service**: Queues blocking issues with timeout
+- **Parallel Processing**: Process multiple stories concurrently
+
+### Can I run sprints overnight?
+
+Yes! Use the ASC with overnight mode:
+
+```bash
+/common:ralph-sprint "Sprint 3" --overnight --max-stories 5
+```
+
+This will:
+1. Process up to 5 stories
+2. Auto-recover from transient errors
+3. Escalate blocking issues
+4. Stop at 6am or when limits are reached
+
+### How do I handle escalations during overnight runs?
+
+Escalations are queued in `.ralph/escalations/queue/`. Configure webhooks for notifications:
+
+```yaml
+# ralph-autonomous.yml
+escalation:
+  webhook:
+    url: "https://hooks.slack.com/services/xxx"
+    type: "slack"
+  timeout_hours: 4
+  default_action: "skip"
+```
+
+See [Autonomous Sprint Guide](AUTONOMOUS-SPRINT.md).
 
 ---
 

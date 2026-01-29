@@ -59,6 +59,11 @@ settings:
   retry_delay: 60
   notify_on_completion: true
   notify_on_failure: true
+autonomous:
+  enabled: false
+  auto_claim: false
+  ralph_integration: false
+  session_id: ""
 EOF
         log_success "Batch queue initialized: $BATCH_QUEUE_FILE"
     fi
@@ -283,6 +288,276 @@ process_queue() {
 }
 
 # ============================================
+# Autonomous Mode Functions
+# ============================================
+
+# Enable autonomous mode with Ralph integration
+enable_autonomous_mode() {
+    init_queue
+
+    if ! command -v yq &> /dev/null; then
+        log_error "yq required"
+        return 1
+    fi
+
+    local session_id="BATCH-$(date +%s)-$$"
+
+    yq -i '.autonomous.enabled = true' "$BATCH_QUEUE_FILE"
+    yq -i '.autonomous.auto_claim = true' "$BATCH_QUEUE_FILE"
+    yq -i '.autonomous.ralph_integration = true' "$BATCH_QUEUE_FILE"
+    yq -i ".autonomous.session_id = \"$session_id\"" "$BATCH_QUEUE_FILE"
+
+    log_success "Autonomous mode enabled (session: $session_id)"
+}
+
+# Auto-claim a story for processing
+auto_claim_story() {
+    local story_id="$1"
+    local session_id="${2:-}"
+
+    if ! command -v yq &> /dev/null; then
+        log_error "yq required"
+        return 1
+    fi
+
+    local timestamp=$(timestamp)
+
+    # Update queue entry
+    yq -i "(.queue[] | select(.story_id == \"$story_id\")).claimed_by = \"$session_id\"" "$BATCH_QUEUE_FILE"
+    yq -i "(.queue[] | select(.story_id == \"$story_id\")).claimed_at = \"$timestamp\"" "$BATCH_QUEUE_FILE"
+
+    # Update sprint status if available
+    if [[ -f "$SPRINT_STATUS_FILE" ]]; then
+        yq -i ".stories.${story_id}.claimed_by = \"$session_id\"" "$SPRINT_STATUS_FILE"
+        yq -i ".stories.${story_id}.claimed_at = \"$timestamp\"" "$SPRINT_STATUS_FILE"
+        yq -i ".stories.${story_id}.status = \"in-progress\"" "$SPRINT_STATUS_FILE"
+    fi
+
+    log_info "Auto-claimed story: $story_id (session: $session_id)"
+    return 0
+}
+
+# Spawn Ralph session for a story
+spawn_ralph_for_story() {
+    local story_id="$1"
+    local ralph_config="${2:-}"
+
+    log_step "Spawning Ralph for story: $story_id"
+
+    # Get story details
+    local title=""
+    local description=""
+
+    if [[ -f "$SPRINT_STATUS_FILE" ]] && command -v yq &> /dev/null; then
+        title=$(yq ".stories.${story_id}.title" "$SPRINT_STATUS_FILE" 2>/dev/null)
+        description=$(yq ".stories.${story_id}.description" "$SPRINT_STATUS_FILE" 2>/dev/null)
+    fi
+
+    # Build prompt
+    local prompt="Implement user story $story_id: $title
+
+$description
+
+Follow TDD approach and ensure all acceptance criteria are met."
+
+    # Find Ralph script
+    local ralph_script=""
+    for path in "Tools/Ralph/ralph.sh" "../Tools/Ralph/ralph.sh" "$(dirname "$SCRIPT_DIR")/../Tools/Ralph/ralph.sh"; do
+        if [[ -f "$path" ]]; then
+            ralph_script="$path"
+            break
+        fi
+    done
+
+    if [[ -z "$ralph_script" ]]; then
+        log_error "Ralph script not found"
+        return 1
+    fi
+
+    # Build Ralph command
+    local ralph_cmd="$ralph_script"
+    [[ -n "$ralph_config" ]] && ralph_cmd="$ralph_cmd --config=$ralph_config"
+
+    # Run Ralph
+    log_info "Running: $ralph_cmd \"$prompt\""
+
+    local output
+    output=$($ralph_cmd "$prompt" 2>&1)
+    local status=$?
+
+    if [[ $status -eq 0 ]]; then
+        log_success "Ralph completed successfully for $story_id"
+        return 0
+    else
+        log_error "Ralph failed for $story_id (exit: $status)"
+        echo "$output" | tail -20
+        return 1
+    fi
+}
+
+# Wait for story completion and transition
+wait_and_transition() {
+    local story_id="$1"
+    local target_status="${2:-review}"
+    local timeout_seconds="${3:-3600}"
+
+    log_info "Waiting for story $story_id completion..."
+
+    local start_time=$(date +%s)
+
+    while true; do
+        # Check timeout
+        local current_time=$(date +%s)
+        local elapsed=$((current_time - start_time))
+
+        if [[ $elapsed -ge $timeout_seconds ]]; then
+            log_warning "Timeout waiting for $story_id"
+            return 1
+        fi
+
+        # Check if story is done in queue
+        if command -v yq &> /dev/null; then
+            local queue_status=$(yq ".queue[] | select(.story_id == \"$story_id\") | .status" "$BATCH_QUEUE_FILE" 2>/dev/null)
+
+            if [[ "$queue_status" == "completed" ]]; then
+                # Transition in sprint status
+                if [[ -f "$SPRINT_STATUS_FILE" ]]; then
+                    yq -i ".stories.${story_id}.status = \"$target_status\"" "$SPRINT_STATUS_FILE"
+                    yq -i ".stories.${story_id}.completed_at = \"$(timestamp)\"" "$SPRINT_STATUS_FILE"
+                fi
+                log_success "Story $story_id transitioned to $target_status"
+                return 0
+            elif [[ "$queue_status" == "failed" ]]; then
+                log_error "Story $story_id failed"
+                return 1
+            fi
+        fi
+
+        sleep 10
+    done
+}
+
+# Process queue with autonomous mode
+process_queue_autonomous() {
+    local max_parallel="${1:-1}"
+    local dry_run="${2:-false}"
+
+    init_queue
+    enable_autonomous_mode
+
+    echo ""
+    echo "════════════════════════════════════════"
+    echo "     Autonomous Queue Processing"
+    echo "════════════════════════════════════════"
+    echo ""
+
+    if ! command -v yq &> /dev/null; then
+        log_error "yq required"
+        return 1
+    fi
+
+    local session_id=$(yq '.autonomous.session_id' "$BATCH_QUEUE_FILE")
+    local pending=$(yq '[.queue[] | select(.status == "pending")] | length' "$BATCH_QUEUE_FILE")
+
+    log_info "Session: $session_id"
+    log_info "Pending stories: $pending"
+    log_info "Parallel limit: $max_parallel"
+    echo ""
+
+    if [[ "$pending" -eq 0 ]]; then
+        log_info "Queue is empty"
+        return 0
+    fi
+
+    # Get pending stories sorted by priority
+    local stories=$(yq '.queue | sort_by(.priority) | .[] | select(.status == "pending") | .story_id' "$BATCH_QUEUE_FILE")
+
+    local active_count=0
+    declare -A active_pids
+
+    for story_id in $stories; do
+        # Check dependencies
+        local deps=$(yq ".queue[] | select(.story_id == \"$story_id\") | .dependencies[]" "$BATCH_QUEUE_FILE" 2>/dev/null || true)
+        local blocked=false
+
+        for dep in $deps; do
+            local dep_status=$(yq ".queue[] | select(.story_id == \"$dep\") | .status" "$BATCH_QUEUE_FILE" 2>/dev/null || echo "")
+            if [[ "$dep_status" != "completed" ]]; then
+                log_warning "$story_id blocked by $dep ($dep_status)"
+                blocked=true
+                break
+            fi
+        done
+
+        [[ "$blocked" == "true" ]] && continue
+
+        # Wait if at parallel limit
+        while [[ $active_count -ge $max_parallel ]]; do
+            for pid in "${!active_pids[@]}"; do
+                if ! kill -0 "$pid" 2>/dev/null; then
+                    unset "active_pids[$pid]"
+                    ((active_count--))
+                fi
+            done
+            sleep 2
+        done
+
+        log_step "Processing: $story_id"
+
+        if [[ "$dry_run" == "true" ]]; then
+            log_info "  DRY RUN - would process $story_id"
+            continue
+        fi
+
+        # Auto-claim
+        auto_claim_story "$story_id" "$session_id"
+
+        # Mark as running
+        yq -i "(.queue[] | select(.story_id == \"$story_id\")).status = \"running\"" "$BATCH_QUEUE_FILE"
+        yq -i "(.queue[] | select(.story_id == \"$story_id\")).started_at = \"$(timestamp)\"" "$BATCH_QUEUE_FILE"
+
+        # Spawn Ralph in background if parallel
+        if [[ $max_parallel -gt 1 ]]; then
+            (
+                if spawn_ralph_for_story "$story_id"; then
+                    yq -i "(.queue[] | select(.story_id == \"$story_id\")).status = \"completed\"" "$BATCH_QUEUE_FILE"
+                else
+                    yq -i "(.queue[] | select(.story_id == \"$story_id\")).status = \"failed\"" "$BATCH_QUEUE_FILE"
+                fi
+                yq -i "(.queue[] | select(.story_id == \"$story_id\")).completed_at = \"$(timestamp)\"" "$BATCH_QUEUE_FILE"
+            ) &
+            active_pids[$!]="$story_id"
+            ((active_count++))
+        else
+            # Sequential processing
+            if spawn_ralph_for_story "$story_id"; then
+                yq -i "(.queue[] | select(.story_id == \"$story_id\")).status = \"completed\"" "$BATCH_QUEUE_FILE"
+                wait_and_transition "$story_id" "review"
+            else
+                yq -i "(.queue[] | select(.story_id == \"$story_id\")).status = \"failed\"" "$BATCH_QUEUE_FILE"
+            fi
+
+            yq -i "(.queue[] | select(.story_id == \"$story_id\")).completed_at = \"$(timestamp)\"" "$BATCH_QUEUE_FILE"
+
+            # Update checkpoint
+            yq -i ".checkpoints.last_completed = \"$story_id\"" "$BATCH_QUEUE_FILE"
+            yq -i ".checkpoints.timestamp = \"$(timestamp)\"" "$BATCH_QUEUE_FILE"
+            yq -i ".checkpoints.stories_completed += 1" "$BATCH_QUEUE_FILE"
+        fi
+
+        echo ""
+    done
+
+    # Wait for remaining parallel jobs
+    if [[ $max_parallel -gt 1 ]]; then
+        log_info "Waiting for remaining jobs..."
+        wait
+    fi
+
+    show_queue
+}
+
+# ============================================
 # Sprint Processing
 # ============================================
 
@@ -425,6 +700,10 @@ usage() {
     echo "  resume                   Resume from checkpoint"
     echo "  clear [--force]          Clear queue"
     echo ""
+    echo "Autonomous Mode Commands:"
+    echo "  autonomous [--parallel N]  Run in autonomous mode with Ralph"
+    echo "  claim <story-id>         Auto-claim a story"
+    echo ""
     echo "Options:"
     echo "  --dry-run               Preview without changes"
     echo "  --auto                  Start processing immediately"
@@ -483,6 +762,16 @@ main() {
             ;;
         clear)
             clear_queue "$force"
+            ;;
+        autonomous)
+            process_queue_autonomous "$parallel" "$dry_run"
+            ;;
+        claim)
+            if [[ -z "${1:-}" ]]; then
+                log_error "Usage: batch-executor.sh claim <story-id>"
+                exit 1
+            fi
+            auto_claim_story "$1" "manual-$(date +%s)"
             ;;
         -h|--help|help|"")
             usage

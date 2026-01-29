@@ -78,6 +78,7 @@ Transversal commands for all projects.
 | Command | Description |
 |---------|-------------|
 | `/common:ralph-run` | Run Claude in continuous loop until DoD passes |
+| `/common:ralph-sprint` | **[NEW]** Run autonomous sprint conductor for overnight execution |
 
 Ralph Wiggum executes Claude iteratively until the task is complete:
 
@@ -92,6 +93,40 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 - `file_changed`: Verify documentation updated
 - `hook`: Integrate with quality-gate.sh
 - `human`: Manual approval gate
+
+### Autonomous Sprint Conductor (ASC) - v3.0
+
+```bash
+# Overnight sprint execution
+/common:ralph-sprint "Sprint 3" --overnight
+
+# Parallel processing (up to 3 stories simultaneously)
+/common:ralph-sprint "Sprint 3" --parallel 3
+
+# Supervised mode (confirm each story)
+/common:ralph-sprint "Sprint 3" --supervised
+
+# Limited run
+/common:ralph-sprint "Sprint 3" --max-stories 5 --timeout 4
+```
+
+**ASC Features:**
+- **Auto-claim**: Automatically claims next ready-for-dev story
+- **Recovery Engine**: Auto-fix transient/recoverable errors before circuit breaker trips
+- **Escalation Service**: Queues blocking issues for human resolution with timeout
+- **Parallel Processing**: Process multiple independent stories concurrently
+- **Bounded Execution**: Time windows, story limits, consecutive failure thresholds
+
+**Error Classification (Recovery Engine):**
+
+| Level | Type | Action |
+|-------|------|--------|
+| 0 | Transient | Auto-retry with backoff (timeout, rate limit) |
+| 1 | Recoverable | Auto-fix + retry (lint, tests, deps) |
+| 2 | Degraded | Continue with warning (docs, optional gates) |
+| 3 | Blocked | Escalate to human (security, architecture) |
+
+See [Autonomous Sprint Documentation](./AUTONOMOUS-SPRINT.md) for complete guide.
 
 ### DevOps Commands
 

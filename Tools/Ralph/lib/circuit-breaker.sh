@@ -64,6 +64,20 @@ declare -A CB_PROFILE_EXPLORATION=(
     ["keywords"]="explore investigate research analyze"
 )
 
+# Autonomous profile for overnight/unattended runs
+declare -A CB_PROFILE_AUTONOMOUS=(
+    ["no_changes"]=5
+    ["errors"]=8
+    ["max_iterations"]=50
+    ["keywords"]="autonomous overnight unattended sprint"
+    ["recovery_enabled"]="true"
+)
+
+# Recovery integration
+CB_RECOVERY_ENABLED="${CB_RECOVERY_ENABLED:-false}"
+CB_RECOVERY_ATTEMPTS=0
+CB_MAX_RECOVERY_ATTEMPTS=3
+
 # =============================================================================
 # Initialization
 # =============================================================================
@@ -150,7 +164,7 @@ detect_task_profile() {
     prompt_lower=$(echo "$prompt" | tr '[:upper:]' '[:lower:]')
 
     # Check each profile's keywords
-    local profiles=("quick_fix" "small_feature" "medium_feature" "large_feature" "exploration")
+    local profiles=("quick_fix" "small_feature" "medium_feature" "large_feature" "exploration" "autonomous")
 
     for profile in "${profiles[@]}"; do
         local keywords
@@ -160,6 +174,7 @@ detect_task_profile() {
             medium_feature) keywords="${CB_PROFILE_MEDIUM_FEATURE["keywords"]}" ;;
             large_feature) keywords="${CB_PROFILE_LARGE_FEATURE["keywords"]}" ;;
             exploration) keywords="${CB_PROFILE_EXPLORATION["keywords"]}" ;;
+            autonomous) keywords="${CB_PROFILE_AUTONOMOUS["keywords"]}" ;;
         esac
 
         for keyword in $keywords; do
@@ -208,6 +223,12 @@ load_profile_thresholds() {
             CB_NO_CHANGES_THRESHOLD=${CB_PROFILE_EXPLORATION["no_changes"]}
             CB_REPEATED_ERROR_THRESHOLD=${CB_PROFILE_EXPLORATION["errors"]}
             MAX_ITERATIONS=${CB_PROFILE_EXPLORATION["max_iterations"]}
+            ;;
+        autonomous)
+            CB_NO_CHANGES_THRESHOLD=${CB_PROFILE_AUTONOMOUS["no_changes"]}
+            CB_REPEATED_ERROR_THRESHOLD=${CB_PROFILE_AUTONOMOUS["errors"]}
+            MAX_ITERATIONS=${CB_PROFILE_AUTONOMOUS["max_iterations"]}
+            CB_RECOVERY_ENABLED="true"
             ;;
         *)
             # Default to medium_feature
@@ -485,4 +506,166 @@ trip_circuit_breaker() {
     CB_TRIGGERED=true
     CB_TRIGGER_REASON="${reason:-manual}"
     print_warning "${MSG_CB_TRIGGERED}: $CB_TRIGGER_REASON"
+}
+
+# =============================================================================
+# Recovery Integration
+# =============================================================================
+
+# Attempt recovery before circuit breaker trips
+# Returns: 0 = recovered (don't trip), 1 = failed (trip)
+attempt_recovery_before_trip() {
+    local session_id="$1"
+    local trigger_reason="$2"
+    local last_output="$3"
+
+    # Check if recovery is enabled
+    if [[ "$CB_RECOVERY_ENABLED" != "true" ]]; then
+        print_verbose "Recovery disabled - circuit breaker will trip"
+        return 1
+    fi
+
+    # Check if recovery engine is available
+    if ! type attempt_recovery &>/dev/null; then
+        print_verbose "Recovery engine not loaded - circuit breaker will trip"
+        return 1
+    fi
+
+    # Check recovery attempts
+    if [[ $CB_RECOVERY_ATTEMPTS -ge $CB_MAX_RECOVERY_ATTEMPTS ]]; then
+        print_warning "Max recovery attempts reached ($CB_MAX_RECOVERY_ATTEMPTS)"
+        return 1
+    fi
+
+    CB_RECOVERY_ATTEMPTS=$((CB_RECOVERY_ATTEMPTS + 1))
+    print_info "Recovery attempt $CB_RECOVERY_ATTEMPTS of $CB_MAX_RECOVERY_ATTEMPTS..."
+
+    # Call recovery engine
+    local recovery_result
+    recovery_result=$(attempt_recovery "$session_id" "$last_output" 2>&1)
+    local recovery_status=$?
+
+    case $recovery_status in
+        0)
+            # Recovery successful
+            print_success "Recovery successful - resetting circuit breaker state"
+            reset_circuit_breaker_for_recovery
+            return 0
+            ;;
+        2)
+            # Needs escalation
+            print_warning "Recovery requires escalation"
+            if type create_escalation &>/dev/null; then
+                create_escalation "$session_id" "blocked" "$trigger_reason" "$last_output"
+            fi
+            return 1
+            ;;
+        *)
+            # Recovery failed
+            print_warning "Recovery failed"
+            return 1
+            ;;
+    esac
+}
+
+# Reset circuit breaker state after successful recovery
+reset_circuit_breaker_for_recovery() {
+    # Partial reset - reduce counters but don't zero them
+    CB_ITERATIONS_WITHOUT_CHANGES=$((CB_ITERATIONS_WITHOUT_CHANGES / 2))
+    CB_CONSECUTIVE_ERRORS=$((CB_CONSECUTIVE_ERRORS / 2))
+    CB_TRIGGERED=false
+    CB_TRIGGER_REASON=""
+
+    print_verbose "Circuit breaker partially reset after recovery"
+}
+
+# Enhanced check that includes recovery attempt
+check_circuit_breaker_with_recovery() {
+    local session_id="${1:-}"
+    local last_output="${2:-}"
+
+    # First do the standard check
+    if ! check_circuit_breaker; then
+        # Not triggered, all good
+        return 1
+    fi
+
+    # Circuit breaker would trip - attempt recovery
+    if attempt_recovery_before_trip "$session_id" "$CB_TRIGGER_REASON" "$last_output"; then
+        # Recovery succeeded - don't trip
+        return 1
+    fi
+
+    # Recovery failed - circuit breaker trips
+    return 0
+}
+
+# Set autonomous mode explicitly
+enable_autonomous_mode() {
+    CB_CURRENT_PROFILE="autonomous"
+    load_profile_thresholds "autonomous"
+    CB_RECOVERY_ENABLED="true"
+
+    print_info "Autonomous mode enabled:"
+    print_info "  - Profile: autonomous"
+    print_info "  - Recovery: enabled"
+    print_info "  - Max iterations: $MAX_ITERATIONS"
+}
+
+# Get recovery status
+get_recovery_integration_status() {
+    cat << EOF
+{
+    "recovery_enabled": $CB_RECOVERY_ENABLED,
+    "recovery_attempts": $CB_RECOVERY_ATTEMPTS,
+    "max_recovery_attempts": $CB_MAX_RECOVERY_ATTEMPTS,
+    "profile": "$CB_CURRENT_PROFILE"
+}
+EOF
+}
+
+# =============================================================================
+# Profile Info Update
+# =============================================================================
+
+list_profiles() {
+    echo "Available Circuit Breaker Profiles:"
+    echo "-----------------------------------"
+    echo ""
+    echo "quick_fix:"
+    echo "  - No changes: ${CB_PROFILE_QUICK_FIX["no_changes"]}"
+    echo "  - Errors: ${CB_PROFILE_QUICK_FIX["errors"]}"
+    echo "  - Max iterations: ${CB_PROFILE_QUICK_FIX["max_iterations"]}"
+    echo "  - Keywords: ${CB_PROFILE_QUICK_FIX["keywords"]}"
+    echo ""
+    echo "small_feature:"
+    echo "  - No changes: ${CB_PROFILE_SMALL_FEATURE["no_changes"]}"
+    echo "  - Errors: ${CB_PROFILE_SMALL_FEATURE["errors"]}"
+    echo "  - Max iterations: ${CB_PROFILE_SMALL_FEATURE["max_iterations"]}"
+    echo "  - Keywords: ${CB_PROFILE_SMALL_FEATURE["keywords"]}"
+    echo ""
+    echo "medium_feature:"
+    echo "  - No changes: ${CB_PROFILE_MEDIUM_FEATURE["no_changes"]}"
+    echo "  - Errors: ${CB_PROFILE_MEDIUM_FEATURE["errors"]}"
+    echo "  - Max iterations: ${CB_PROFILE_MEDIUM_FEATURE["max_iterations"]}"
+    echo "  - Keywords: ${CB_PROFILE_MEDIUM_FEATURE["keywords"]}"
+    echo ""
+    echo "large_feature:"
+    echo "  - No changes: ${CB_PROFILE_LARGE_FEATURE["no_changes"]}"
+    echo "  - Errors: ${CB_PROFILE_LARGE_FEATURE["errors"]}"
+    echo "  - Max iterations: ${CB_PROFILE_LARGE_FEATURE["max_iterations"]}"
+    echo "  - Keywords: ${CB_PROFILE_LARGE_FEATURE["keywords"]}"
+    echo ""
+    echo "exploration:"
+    echo "  - No changes: ${CB_PROFILE_EXPLORATION["no_changes"]}"
+    echo "  - Errors: ${CB_PROFILE_EXPLORATION["errors"]}"
+    echo "  - Max iterations: ${CB_PROFILE_EXPLORATION["max_iterations"]}"
+    echo "  - Keywords: ${CB_PROFILE_EXPLORATION["keywords"]}"
+    echo ""
+    echo "autonomous (for overnight/unattended runs):"
+    echo "  - No changes: ${CB_PROFILE_AUTONOMOUS["no_changes"]}"
+    echo "  - Errors: ${CB_PROFILE_AUTONOMOUS["errors"]}"
+    echo "  - Max iterations: ${CB_PROFILE_AUTONOMOUS["max_iterations"]}"
+    echo "  - Keywords: ${CB_PROFILE_AUTONOMOUS["keywords"]}"
+    echo "  - Recovery: enabled"
 }

@@ -1,6 +1,12 @@
-# Ralph Wiggum v2.0 - Continuous AI Agent Loop
+# Ralph Wiggum v3.0 - Continuous AI Agent Loop
 
 Ralph Wiggum is a methodology and tool for running Claude in a continuous loop until a task is complete. It provides structured completion detection through Definition of Done (DoD) validation, safety mechanisms via adaptive circuit breakers, and progress tracking through git checkpoints.
+
+**v3.0 Features (NEW - Autonomous Sprint Conductor):**
+- 🚀 **Autonomous Sprint Conductor** - Run entire sprints overnight
+- 🔄 **Recovery Engine** - Auto-fix errors before circuit breaker trips
+- 📤 **Escalation Service** - Queue blocking issues with timeout
+- ⚡ **Parallel Processing** - Process multiple stories concurrently
 
 **v2.0 Features:**
 - 🔌 **Claude Code 2.1.23+ Hooks** - Bidirectional integration
@@ -57,7 +63,12 @@ npx @the-bearded-bear/claude-craft ralph --continue=ralph-1704067200-a1b2
 ### Via Command in Claude Code
 
 ```bash
+# Single task loop
 /common:ralph-run "Implement user authentication"
+
+# Autonomous sprint (v3.0)
+/common:ralph-sprint "Sprint 3" --overnight
+/common:ralph-sprint "Sprint 3" --parallel 3 --overnight
 ```
 
 ### Direct Script
@@ -222,19 +233,22 @@ Safety mechanism to prevent infinite loops:
 | Output decline | 70% | Stops if output shrinks significantly |
 | Max iterations | 25 | Hard limit |
 
-### Adaptive Profiles (v2.0)
+### Adaptive Profiles (v2.0+)
 
-Ralph v2.0 introduces adaptive circuit breaker profiles that adjust thresholds based on task complexity:
+Ralph introduces adaptive circuit breaker profiles that adjust thresholds based on task complexity:
 
-| Profile | Keywords | no_changes | errors | max_iterations |
-|---------|----------|------------|--------|----------------|
-| `quick_fix` | fix, bug, typo | 2 | 3 | 10 |
-| `small_feature` | add, implement | 3 | 4 | 15 |
-| `medium_feature` | feature, create | 4 | 6 | 25 |
-| `large_feature` | refactor, migrate | 5 | 8 | 50 |
-| `exploration` | explore, investigate | 10 | 15 | 100 |
+| Profile | Keywords | no_changes | errors | max_iterations | Recovery |
+|---------|----------|------------|--------|----------------|----------|
+| `quick_fix` | fix, bug, typo | 2 | 3 | 10 | No |
+| `small_feature` | add, implement | 3 | 4 | 15 | No |
+| `medium_feature` | feature, create | 4 | 6 | 25 | No |
+| `large_feature` | refactor, migrate | 5 | 8 | 50 | No |
+| `exploration` | explore, investigate | 10 | 15 | 100 | No |
+| `autonomous` | autonomous, overnight, sprint | 5 | 8 | 50 | **Yes** |
 
 The profile is automatically detected from the prompt keywords.
+
+**v3.0 Autonomous Profile:** Includes recovery engine integration for overnight runs.
 
 ### Learning Mode (v2.0)
 
@@ -544,7 +558,11 @@ Tools/Ralph/
 │   ├── config-generator.sh         # v2.0: Config generation
 │   ├── dashboard.sh                # v2.0: Real-time terminal dashboard
 │   ├── health-monitor.sh           # v2.0: Degradation pattern detection
-│   └── hooks-generator.sh          # v2.0: Claude Code hooks config
+│   ├── hooks-generator.sh          # v2.0: Claude Code hooks config
+│   ├── recovery-engine.sh          # v3.0: Error recovery system
+│   ├── escalation-service.sh       # v3.0: Escalation queue management
+│   ├── parallel-manager.sh         # v3.0: Multi-session parallel execution
+│   └── sprint-conductor.sh         # v3.0: Autonomous Sprint Conductor
 ├── .ralph/hooks/
 │   ├── session-restore.sh          # v2.0: SessionStart hook
 │   ├── status-injector.sh          # v2.0: PreToolUse hook
@@ -591,6 +609,13 @@ v2.0 Options:
   --auto-detect         Auto-detect project type and load DoD template
   --init                Generate ralph.yml from detection without running
   --interactive         Interactive mode with confirmations
+
+v3.0 ASC Options:
+  --autonomous          Enable autonomous mode with recovery
+  --story=<id>          Process specific story (isolated session)
+  --sprint              Run full Sprint Conductor
+  --overnight           Overnight mode (bounded, stops at 6am)
+  --parallel=<n>        Process up to N stories in parallel
 ```
 
 ## Integration
@@ -671,9 +696,45 @@ Ralph creates a `.ralph/` directory in your project:
 - Check required vs optional criteria
 - Ensure completion marker is output by Claude
 
+## Autonomous Sprint Conductor (v3.0)
+
+The ASC enables overnight/unattended sprint execution:
+
+```bash
+# Overnight sprint
+/common:ralph-sprint "Sprint 3" --overnight
+
+# Parallel processing
+/common:ralph-sprint "Sprint 3" --parallel 3 --overnight
+
+# Supervised mode
+/common:ralph-sprint "Sprint 3" --supervised
+```
+
+### Components
+
+| Component | Description |
+|-----------|-------------|
+| Recovery Engine | Classifies errors (4 levels) and auto-fixes |
+| Escalation Service | Queues blocking issues with webhook notifications |
+| Parallel Manager | Dependency-aware concurrent execution |
+| Sprint Conductor | Main orchestrator for overnight runs |
+
+### Error Classification
+
+| Level | Type | Action |
+|-------|------|--------|
+| 0 | Transient | Auto-retry with backoff |
+| 1 | Recoverable | Auto-fix then retry |
+| 2 | Degraded | Continue with warning |
+| 3 | Blocked | Escalate to human |
+
+See [Autonomous Sprint Documentation](../../docs/AUTONOMOUS-SPRINT.md).
+
 ## Related
 
 - `/common:ralph-run` - Command to start Ralph from Claude Code
+- `/common:ralph-sprint` - Autonomous Sprint Conductor (v3.0)
 - `@ralph-conductor` - Agent for Ralph orchestration
 - `/common:fix-bug-tdd` - TDD-based bug fixing
 - `/project:sprint-dev` - Sprint development with TDD
