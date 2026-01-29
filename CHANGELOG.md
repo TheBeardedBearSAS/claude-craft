@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2026-01-29
+
+### Added
+- **Ralph Wiggum v2.0** - Major upgrade to continuous AI agent loop
+  - **Claude Code 2.1.23+ Hooks Integration** - Bidirectional communication
+    - `SessionStart` hook injects Ralph context
+    - `PreToolUse` hook (once:true) injects DoD status
+    - `Stop` hook gates on DoD satisfaction (exit code 2 blocks)
+  - **Auto-Detection** - Intelligent project type detection
+    - Supports: Symfony, Laravel, Flutter, React, Vue, Angular, Next.js, .NET, Python, Go, Rust
+    - Confidence levels (HIGH/MEDIUM) for detection accuracy
+  - **Observability** - Real-time monitoring
+    - Terminal dashboard with progress bar, circuit breaker status, context usage
+    - Metrics export in JSON and Prometheus formats
+    - Health monitoring (stall detection, error spiral, context bloat)
+  - **Adaptive Circuit Breaker** - Profile-based thresholds
+    - 5 profiles: `quick_fix`, `small_feature`, `medium_feature`, `large_feature`, `exploration`
+    - Auto-detection from prompt keywords
+    - Learning mode with historical adjustment
+  - **DoD Templates** - Pre-configured for 8 technologies
+    - Symfony (PHPUnit + PHPStan), Flutter (flutter_test + flutter_lints)
+    - React (Jest/Vitest + ESLint), Python (pytest + ruff)
+    - .NET (xUnit + Analyzers), Go (go test + golangci-lint), Rust (cargo test + clippy)
+- New CLI flags: `--auto-detect`, `--init`, `--interactive`
+- New modules: `metrics-exporter.sh`, `project-detector.sh`, `dod-templates.sh`, `config-generator.sh`, `dashboard.sh`, `health-monitor.sh`, `hooks-generator.sh`
+- Hook scripts: `session-restore.sh`, `status-injector.sh`, `pre-tool-context.sh`, `stop-dod-gate.sh`
+
+### Changed
+- Ralph version bumped from 1.1.0 to 2.0.0
+- `ralph.yml.template` updated with v2.0 configuration sections
+- i18n messages updated for all 5 languages with v2.0 strings
+
 ## [4.0.3] - 2026-01-29
 
 ### Fixed
@@ -217,6 +249,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Enhanced npm publishing security via OIDC
 
+[4.1.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.0.3...v4.1.0
 [4.0.3]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.0.2...v4.0.3
 [4.0.2]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.0.0...v4.0.1

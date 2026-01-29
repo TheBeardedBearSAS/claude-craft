@@ -2,6 +2,16 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
+## What's New in v4.1
+
+- **Ralph Wiggum v2.0**: Major upgrade to continuous AI agent loop
+  - **Claude Code 2.1.23+ Hooks**: Bidirectional integration (SessionStart, PreToolUse, Stop)
+  - **Auto-Detection**: Intelligent project type detection (11 technologies)
+  - **Observability**: Real-time dashboard, JSON/Prometheus metrics, health monitoring
+  - **Adaptive Circuit Breaker**: 5 profiles with learning mode
+  - **DoD Templates**: Pre-configured for 8 technologies
+- New CLI flags: `--auto-detect`, `--init`, `--interactive`
+
 ## What's New in v4.0
 
 - **2026 Best Practices Update** for all major frameworks
