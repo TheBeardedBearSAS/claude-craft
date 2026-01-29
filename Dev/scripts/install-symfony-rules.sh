@@ -1,11 +1,11 @@
 #!/bin/bash
 # Installation/Mise a jour des regles Claude Code pour projets Symfony
-# Version: 3.5.0 - TCL (Tiered Context Loading) optimized
+# Version: 4.0.1 - TCL (Tiered Context Loading) optimized
 # Usage: ./install-symfony-rules.sh [OPTIONS] [PROJECT_DIR]
 
 set -euo pipefail
 
-VERSION="3.5.0"
+VERSION="4.0.1"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 TECH_NAME="Symfony"
@@ -35,6 +35,13 @@ TECH_RULE_MAPPINGS=(
     "19-aggregates.md:aggregates.md"
     "20-domain-events.md:domain-events.md"
     "21-cqrs.md:cqrs.md"
+)
+
+# 2026 Features - copied directly from references (not i18n)
+TECH_2026_REFS=(
+    "json-streamer.md"
+    "object-mapper.md"
+    "service-container-2026.md"
 )
 
 # Legacy rules for backward compatibility detection
@@ -351,6 +358,22 @@ install_tcl() {
 
     # 3. Copy tech-specific references
     copy_tech_references "$target_dir" "$src_dir" "$TECH_NAMESPACE" "$dry_run" "${TECH_RULE_MAPPINGS[@]}"
+
+    # 3b. Copy 2026 feature references from claude-craft source
+    if [ "$dry_run" = "false" ]; then
+        local refs_2026_src="${SCRIPT_DIR}/../../.claude/references/symfony"
+        local refs_2026_dst="${target_dir}/.claude/references/${TECH_NAMESPACE}"
+        local count_2026=0
+        for ref_file in "${TECH_2026_REFS[@]}"; do
+            if [ -f "${refs_2026_src}/${ref_file}" ]; then
+                cp "${refs_2026_src}/${ref_file}" "${refs_2026_dst}/"
+                ((count_2026++)) || true
+            fi
+        done
+        if [ $count_2026 -gt 0 ]; then
+            log_success "${count_2026} 2026 feature references copied"
+        fi
+    fi
 
     # 4. Copy project context template
     if [ "$dry_run" = "false" ]; then

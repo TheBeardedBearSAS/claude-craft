@@ -1,11 +1,11 @@
 #!/bin/bash
 # Installation/Mise a jour des regles Claude Code pour projets Angular
-# Version: 3.5.0 - TCL (Tiered Context Loading) optimized
+# Version: 4.0.1 - TCL (Tiered Context Loading) optimized
 # Usage: ./install-angular-rules.sh [OPTIONS] [PROJECT_DIR]
 
 set -euo pipefail
 
-VERSION="3.5.0"
+VERSION="4.0.1"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 TECH_NAME="Angular"
