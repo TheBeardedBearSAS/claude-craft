@@ -228,54 +228,73 @@ Run installation scripts directly for more control.
 
 ### Method 4: Manual Installation
 
-Copy files directly for maximum control.
+> **Note**: As of v3.5, we recommend using the install scripts (Methods 1-3) which automatically configure the TCL (Tiered Context Loading) structure for optimal token usage.
+
+For manual installation with TCL structure:
 
 ```bash
-# Create structure
-mkdir -p ~/my-project/.claude/{agents,commands,rules,templates,checklists}
+# Create TCL structure
+mkdir -p ~/my-project/.claude/{references/base,references/symfony,skills,agents,commands/common,commands/symfony,templates,checklists}
 
 # Choose language (en, fr, es, de, pt)
 RULES_LANG=en
 
-# Copy common agents
+# Copy base references (universal principles)
+cp Dev/i18n/$RULES_LANG/Common/rules/01-workflow-analysis.md ~/my-project/.claude/references/base/workflow-analysis.md
+cp Dev/i18n/$RULES_LANG/Common/rules/04-solid-principles.md ~/my-project/.claude/references/base/solid-principles.md
+cp Dev/i18n/$RULES_LANG/Common/rules/05-kiss-dry-yagni.md ~/my-project/.claude/references/base/kiss-dry-yagni.md
+cp Dev/i18n/$RULES_LANG/Common/rules/09-git-workflow.md ~/my-project/.claude/references/base/git-workflow.md
+cp Dev/i18n/$RULES_LANG/Common/rules/10-documentation.md ~/my-project/.claude/references/base/documentation.md
+
+# Copy technology-specific references (example: Symfony)
+cp Dev/i18n/$RULES_LANG/Symfony/rules/02-architecture-clean-ddd.md ~/my-project/.claude/references/symfony/architecture.md
+cp Dev/i18n/$RULES_LANG/Symfony/rules/03-coding-standards.md ~/my-project/.claude/references/symfony/coding-standards.md
+# ... (see install script for full mappings)
+
+# Copy agents, commands, etc.
 cp -r Dev/i18n/$RULES_LANG/Common/agents/* ~/my-project/.claude/agents/
-
-# Copy common commands
-cp -r Dev/i18n/$RULES_LANG/Common/commands/* ~/my-project/.claude/commands/
-
-# Copy technology-specific files (example: Symfony)
-cp -r Dev/i18n/$RULES_LANG/Symfony/rules/* ~/my-project/.claude/rules/
+cp -r Dev/i18n/$RULES_LANG/Common/commands/* ~/my-project/.claude/commands/common/
 cp -r Dev/i18n/$RULES_LANG/Symfony/agents/* ~/my-project/.claude/agents/
-cp -r Dev/i18n/$RULES_LANG/Symfony/commands/* ~/my-project/.claude/commands/
-cp -r Dev/i18n/$RULES_LANG/Symfony/templates/* ~/my-project/.claude/templates/
-cp -r Dev/i18n/$RULES_LANG/Symfony/checklists/* ~/my-project/.claude/checklists/
+cp -r Dev/i18n/$RULES_LANG/Symfony/commands/* ~/my-project/.claude/commands/symfony/
 ```
+
+The install scripts also generate `CLAUDE.md`, `INDEX.md`, and `context.yaml` automatically.
 
 ## Installation Result
 
-After installation, your project will have:
+After installation with TCL structure (v3.5+), your project will have:
 
 ```
 my-project/
 ├── .claude/
+│   ├── CLAUDE.md              # Minimal config (~200 tokens) - auto-loaded
+│   ├── INDEX.md               # Quick reference summaries (~1,300 tokens)
+│   ├── context.yaml           # File-based skill triggers
+│   ├── references/
+│   │   ├── base/              # Universal principles
+│   │   │   ├── solid-principles.md
+│   │   │   ├── kiss-dry-yagni.md
+│   │   │   ├── workflow-analysis.md
+│   │   │   ├── git-workflow.md
+│   │   │   └── documentation.md
+│   │   └── {technology}/      # Tech-specific rules
+│   │       ├── architecture.md
+│   │       ├── coding-standards.md
+│   │       ├── testing.md
+│   │       ├── tooling.md
+│   │       ├── quality-tools.md
+│   │       └── security.md
+│   ├── skills/                # On-demand loading
+│   │   └── ... (skill directories)
 │   ├── agents/
 │   │   ├── api-designer.md
 │   │   ├── database-architect.md
-│   │   ├── devops-engineer.md
-│   │   ├── performance-auditor.md
-│   │   ├── refactoring-specialist.md
-│   │   ├── research-assistant.md
-│   │   ├── tdd-coach.md
 │   │   └── {technology}-reviewer.md
 │   ├── commands/
 │   │   ├── common/
-│   │   │   ├── architecture-decision.md
-│   │   │   ├── daily-standup.md
-│   │   │   └── ... (14 commands)
+│   │   │   └── ... (common commands)
 │   │   └── {technology}/
 │   │       └── ... (tech-specific commands)
-│   ├── rules/
-│   │   └── ... (technology rules)
 │   ├── templates/
 │   │   └── ... (code templates)
 │   └── checklists/
@@ -283,6 +302,19 @@ my-project/
 └── src/
     └── ... (your code)
 ```
+
+### Token Optimization
+
+The TCL structure reduces context from ~70,000 to ~3,500 tokens (95% reduction):
+
+| Content | Tokens | When Loaded |
+|---------|--------|-------------|
+| CLAUDE.md | ~200 | Always (auto) |
+| INDEX.md | ~1,300 | On reference via `@` |
+| Skills | Variable | Via `/skill-name` |
+| References | 0 | On explicit request |
+
+Access full documentation: `@.claude/references/{tech}/architecture.md`
 
 ## Verification
 

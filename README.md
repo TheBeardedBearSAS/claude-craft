@@ -2,7 +2,16 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v3.3
+## What's New in v3.5
+
+- **TCL (Tiered Context Loading)**: 95% token reduction through optimized context loading
+- **On-Demand References**: Rules loaded only when explicitly requested via `@.claude/references/`
+- **Minimal CLAUDE.md**: ~200 tokens auto-loaded instead of ~70,000
+- **INDEX.md Summaries**: Quick reference checklists (~1,300 tokens)
+- **context.yaml**: File-based contextual triggers for skills
+- **All 10 Technologies**: TCL optimization applied across all stacks
+
+## What's New in v3.4
 
 - **Ralph Reliability**: 59 fixes for robust long-running sprints (2h+)
 - **Auto-Compact**: Automatic context limit detection and session compaction
@@ -217,13 +226,18 @@ claude-craft/
 
 ### What Gets Installed
 
-After installation, your project will have:
+After installation, your project will have the TCL-optimized structure:
 
 ```
 your-project/
 └── .claude/
-    ├── CLAUDE.md           # Auto-generated project configuration
+    ├── CLAUDE.md           # Minimal config (~200 tokens) - auto-loaded
+    ├── INDEX.md            # Quick reference summaries (~1,300 tokens)
+    ├── context.yaml        # File-based skill triggers
     ├── settings.json       # Permissions and tool allowlists
+    ├── references/         # Full documentation (loaded on-demand via @)
+    │   ├── base/           # Universal principles (SOLID, DRY, etc.)
+    │   └── {tech}/         # Technology-specific rules
     ├── skills/             # Best practices (official format)
     │   ├── architecture/   # Architecture patterns
     │   ├── testing/        # Testing strategies
@@ -235,8 +249,20 @@ your-project/
     ├── hooks/              # Pre/Post tool execution scripts
     ├── mcp/                # MCP server templates
     ├── checklists/         # Quality gates
-    └── rules/              # Legacy rules (backward compat)
+    └── templates/          # Code generation templates
 ```
+
+### Token Optimization (TCL)
+
+The TCL structure reduces context from ~70,000 to ~3,500 tokens (95% reduction):
+
+| Level | Content | Tokens | Loading |
+|-------|---------|--------|---------|
+| **Always Loaded** | CLAUDE.md + INDEX.md | ~1,500 | Automatic |
+| **On-Demand** | Skills | ~variable | Via `/skill-name` or triggers |
+| **Reference** | Full rules | ~0 | Via `@.claude/references/...` |
+
+Access full documentation with: `@.claude/references/{tech}/architecture.md`
 
 ## Installation Methods
 

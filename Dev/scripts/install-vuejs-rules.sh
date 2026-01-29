@@ -1,21 +1,33 @@
 #!/bin/bash
-# Installation/Mise a jour des regles Claude Code pour projets Vue.js
-# Version: 1.0.0
+# Installation/Mise a jour des regles Claude Code pour projets VueJS
+# Version: 3.5.0 - TCL (Tiered Context Loading) optimized
 # Usage: ./install-vuejs-rules.sh [OPTIONS] [PROJECT_DIR]
 
 set -euo pipefail
 
-VERSION="3.4.0"
+VERSION="3.5.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 TECH_NAME="VueJS"
+TECH_DISPLAY_NAME="Vue.js"
 TECH_NAMESPACE="vuejs"
-DEFAULT_STACK="Vue.js 3.5, TypeScript, Vite, Pinia, Vue Router"
+DEFAULT_STACK="Vue 3+, TypeScript 5+, Vite, Pinia, Vue Router, TailwindCSS"
 lang="en"
 
-PROJECT_SPECIFIC_FILES=("rules/00-project-context.md")
+# Source TCL common functions
+source "${SCRIPT_DIR}/tcl-common.sh"
 
-# Fichiers tech-specifiques
+# TCL file mappings: "old_name:new_name"
+TECH_RULE_MAPPINGS=(
+    "02-architecture-vuejs.md:architecture.md"
+    "03-coding-standards.md:coding-standards.md"
+    "06-tooling.md:tooling.md"
+    "07-testing-vuejs.md:testing.md"
+    "08-quality-tools.md:quality-tools.md"
+    "11-security-vuejs.md:security.md"
+)
+
+# Legacy rules for backward compatibility detection
 TECH_RULES=(
     "02-architecture-vuejs.md"
     "03-coding-standards.md"
@@ -24,9 +36,6 @@ TECH_RULES=(
     "08-quality-tools.md"
     "11-security-vuejs.md"
 )
-
-# Alias pour compatibilite
-COMMON_RULES=("${TECH_RULES[@]}")
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -40,10 +49,8 @@ NC='\033[0m'
 load_messages() {
     local lang_file="$I18N_DIR/messages/${lang}.sh"
     if [[ -f "$lang_file" ]]; then
-        # shellcheck source=/dev/null
         source "$lang_file"
     elif [[ -f "$I18N_DIR/messages/en.sh" ]]; then
-        # shellcheck source=/dev/null
         source "$I18N_DIR/messages/en.sh"
     fi
 }
@@ -53,26 +60,30 @@ show_help() {
 Usage: install-vuejs-rules.sh [OPTIONS] [PROJECT_DIR]
 
 Installation/Mise a jour des regles Claude Code pour projets Vue.js.
+Utilise l'architecture TCL (Tiered Context Loading) pour optimiser les tokens.
 
 Options:
     --install       Installation complete
     --update        Mise a jour des regles communes uniquement
     --force         Ecraser tous les fichiers (backup automatique)
-    --preserve-config  Preserver CLAUDE.md et 00-project-context.md avec --force
+    --preserve-config  Preserver CLAUDE.md et INDEX.md avec --force
     --dry-run       Afficher les actions sans les executer
     --backup        Creer un backup avant modifications
     --interactive   Demander les valeurs du projet
-    --lang=XX       Langue (en, fr, es, de, pt) - default: en
+    --lang=XX       Language for rules (en, fr, es, de, pt)
     --version       Afficher la version
     --help          Afficher cette aide
 
 Description:
-    Regles couvrant :
-    - Composition API, Script Setup, Pinia
-    - Vue.js 3.5+, TypeScript strict mode
-    - Vitest, Vue Test Utils, Playwright
-    - ESLint, Prettier, vue-tsc
-    - OWASP Security, XSS Prevention
+    Installation TCL optimisee couvrant :
+    - Composition API patterns
+    - TypeScript strict mode
+    - Pinia state management
+    - Vue Router configuration
+    - Vitest + Vue Test Utils + Playwright
+    - ESLint + Prettier + Vue-specific rules
+
+    Reduction tokens: ~95% (de ~70K a ~3.5K)
 EOF
 }
 
@@ -82,7 +93,6 @@ log_warning() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_dry_run() { echo -e "${YELLOW}[DRY-RUN]${NC} $1"; }
 
-# Get source directory (i18n or local fallback)
 get_source_dir() {
     local i18n_src="$I18N_DIR/$lang/$TECH_NAME"
     if [[ -d "$i18n_src" ]]; then
@@ -97,7 +107,7 @@ verify_source_files() {
     local src_dir
     src_dir=$(get_source_dir)
 
-    for rule in "${COMMON_RULES[@]}"; do
+    for rule in "${TECH_RULES[@]}"; do
         if [ ! -f "${src_dir}/rules/${rule}" ]; then
             log_error "Fichier source manquant: rules/${rule}"
             missing=1
@@ -113,8 +123,12 @@ verify_source_files() {
 detect_installation() {
     local target_dir="$1"
     if [ -d "${target_dir}/.claude" ]; then
-        if [ -f "${target_dir}/.claude/rules/00-project-context.md" ]; then
-            echo "existing"
+        # Check for TCL structure
+        if [ -d "${target_dir}/.claude/references/${TECH_NAMESPACE}" ]; then
+            echo "tcl"
+        # Check for legacy structure
+        elif [ -f "${target_dir}/.claude/rules/00-project-context.md" ]; then
+            echo "legacy"
         else
             echo "partial"
         fi
@@ -135,19 +149,6 @@ create_backup() {
             log_success "Backup cree: ${backup_dir}"
         fi
     fi
-}
-
-create_directory_structure() {
-    local target_dir="$1"
-    local dry_run="$2"
-    local dirs=(".claude" ".claude/rules" ".claude/templates" ".claude/checklists" ".claude/examples" ".claude/commands/${TECH_NAMESPACE}" ".claude/agents")
-    for dir in "${dirs[@]}"; do
-        if [ "$dry_run" = "true" ]; then
-            log_dry_run "Creer repertoire: ${target_dir}/${dir}"
-        else
-            mkdir -p "${target_dir}/${dir}"
-        fi
-    done
 }
 
 # Copie des skills generiques depuis Common/
@@ -176,38 +177,6 @@ copy_generic_skills() {
 
     if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
         log_success "$count generic skills copied from Common/"
-    fi
-}
-
-# Copie des regles generiques depuis Common/
-copy_generic_rules() {
-    local target_dir="$1"
-    local dry_run="$2"
-
-    # First install skills (new format)
-    copy_generic_skills "$target_dir" "$dry_run"
-
-    # Then install legacy rules
-    local common_rules_dir="$I18N_DIR/$lang/Common/rules"
-
-    if [[ ! -d "$common_rules_dir" ]]; then
-        return 0
-    fi
-
-    local count=0
-    for file in "$common_rules_dir"/*.md "$common_rules_dir"/*.md.template; do
-        [[ -f "$file" ]] || continue
-        local filename=$(basename "$file")
-        if [ "$dry_run" = "true" ]; then
-            log_dry_run "Copy generic: rules/$filename"
-        else
-            cp "$file" "${target_dir}/.claude/rules/$filename"
-        fi
-        ((count++)) || true
-    done
-
-    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
-        log_success "$count generic rules copied from Common/"
     fi
 }
 
@@ -242,42 +211,6 @@ copy_tech_skills() {
     fi
 }
 
-copy_common_rules() {
-    local target_dir="$1"
-    local dry_run="$2"
-    local src_dir
-    src_dir=$(get_source_dir)
-
-    # D'abord, installer les regles et skills generiques
-    copy_generic_rules "$target_dir" "$dry_run"
-
-    # Installer les skills tech-specifiques
-    copy_tech_skills "$target_dir" "$dry_run"
-
-    # Ensuite, installer les regles tech-specifiques
-    local count=0
-    for rule in "${TECH_RULES[@]}"; do
-        local src_file="${src_dir}/rules/${rule}"
-        # Fallback to local if i18n not available
-        if [ ! -f "$src_file" ]; then
-            src_file="${SCRIPT_DIR}/rules/${rule}"
-        fi
-        if [ ! -f "$src_file" ]; then
-            log_warning "Rule not found: $rule"
-            continue
-        fi
-        if [ "$dry_run" = "true" ]; then
-            log_dry_run "Copier: rules/${rule}"
-        else
-            cp "$src_file" "${target_dir}/.claude/rules/${rule}"
-        fi
-        ((count++)) || true
-    done
-    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
-        log_success "$count Vue.js-specific rules copied"
-    fi
-}
-
 copy_templates() {
     local target_dir="$1"
     local dry_run="$2"
@@ -290,9 +223,9 @@ copy_templates() {
 
     if [ -d "$tmpl_dir" ]; then
         if [ "$dry_run" = "true" ]; then
-            log_dry_run "Copier: templates/*"
+            log_dry_run "Copier: templates/*.md"
         else
-            cp "${tmpl_dir}/"* "${target_dir}/.claude/templates/" 2>/dev/null || true
+            cp "${tmpl_dir}/"*.md "${target_dir}/.claude/templates/" 2>/dev/null || true
             log_success "Templates copies"
         fi
     fi
@@ -354,234 +287,292 @@ copy_agents() {
             log_dry_run "Copier: agents/*.md"
         else
             cp "${agt_dir}/"*.md "${target_dir}/.claude/agents/" 2>/dev/null || true
-            local count=$(ls -1 "${agt_dir}/"*.md 2>/dev/null | wc -l)
-            log_success "${count} agents copies"
+            log_success "Agents copies"
         fi
     fi
 }
 
-generate_claude_md() {
-    local target_dir="$1"
-    local dry_run="$2"
-    local project_name="${3:-$(basename "$(cd "$target_dir" && pwd)")}"
-    local src_dir
-    src_dir=$(get_source_dir)
-
-    if [ "$dry_run" = "true" ]; then
-        log_dry_run "Generer: CLAUDE.md"
-        return
-    fi
-
-    local template="${src_dir}/CLAUDE.md.template"
-    if [ ! -f "$template" ]; then
-        template="${SCRIPT_DIR}/CLAUDE.md.template"
-    fi
-    if [ -f "$template" ]; then
-        sed -e "s/{{PROJECT_NAME}}/${project_name}/g" \
-            -e "s/{{VUE_VERSION}}/3.5/g" \
-            -e "s/{{TS_VERSION}}/5.4/g" \
-            -e "s/{{ARCHITECTURE_PATTERN}}/Modular Architecture/g" \
-            "$template" > "${target_dir}/.claude/CLAUDE.md"
-        log_success "CLAUDE.md genere"
-    fi
-}
-
-generate_project_context() {
-    local target_dir="$1"
-    local dry_run="$2"
-    local project_name="${3:-$(basename "$(cd "$target_dir" && pwd)")}"
-    local src_dir
-    src_dir=$(get_source_dir)
-
-    if [ "$dry_run" = "true" ]; then
-        log_dry_run "Generer: rules/00-project-context.md"
-        return
-    fi
-
-    local template="${src_dir}/rules/00-project-context.md.template"
-    if [ ! -f "$template" ]; then
-        template="${SCRIPT_DIR}/rules/00-project-context.md.template"
-    fi
-    if [ -f "$template" ]; then
-        sed -e "s/{{PROJECT_NAME}}/${project_name}/g" \
-            -e "s/{{PROJECT_DESCRIPTION}}/Vue.js application/g" \
-            -e "s/{{VUE_VERSION}}/3.5/g" \
-            -e "s/{{TS_VERSION}}/5.4/g" \
-            -e "s/{{VITE_VERSION}}/5.4/g" \
-            -e "s/{{PINIA_VERSION}}/2.2/g" \
-            -e "s/{{ROUTER_VERSION}}/4.3/g" \
-            -e "s/{{UI_FRAMEWORK}}/None/g" \
-            -e "s/{{UI_VERSION}}/-/g" \
-            -e "s/{{ARCHITECTURE_PATTERN}}/Modular Architecture/g" \
-            -e "s/{{MODULE}}/feature/g" \
-            -e "s/{{MODULE_1}}/Auth/g" \
-            -e "s/{{MODULE_1_DESCRIPTION}}/User authentication and authorization/g" \
-            -e "s/{{MODULE_2}}/Core/g" \
-            -e "s/{{MODULE_2_DESCRIPTION}}/Core application features/g" \
-            -e "s/{{SERVICE_1}}/API/g" \
-            -e "s/{{PURPOSE_1}}/Backend REST API/g" \
-            -e "s/{{DOC_URL_1}}/#/g" \
-            -e "s/{{SERVICE_2}}/Analytics/g" \
-            -e "s/{{PURPOSE_2}}/Usage tracking/g" \
-            -e "s/{{DOC_URL_2}}/#/g" \
-            "$template" > "${target_dir}/.claude/rules/00-project-context.md"
-        log_success "Project context genere"
-    fi
-}
-
-show_summary() {
-    local target_dir="$1"
+prompt_project_info() {
     echo ""
-    echo -e "${GREEN}═══════════════════════════════════════════════════════════${NC}"
-    echo -e "${GREEN} Vue.js Rules - Installation terminee${NC}"
-    echo -e "${GREEN}═══════════════════════════════════════════════════════════${NC}"
+    echo "Configuration du projet ${TECH_NAME}"
+    echo "=========================================="
+    read -p "Nom du projet [MonProjet]: " PROJECT_NAME
+    PROJECT_NAME="${PROJECT_NAME:-MonProjet}"
+    read -p "Stack technique [${DEFAULT_STACK}]: " TECH_STACK
+    TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"
     echo ""
-    echo -e "Repertoire: ${BLUE}${target_dir}/.claude/${NC}"
-    echo ""
-    echo "Fichiers installes:"
-    ls -la "${target_dir}/.claude/rules/"*.md 2>/dev/null | awk '{print "  - rules/" $NF}' | xargs -I {} basename {}
-    echo ""
-    echo "Commandes disponibles:"
-    echo "  /${TECH_NAMESPACE}:check-compliance"
-    echo "  /${TECH_NAMESPACE}:check-architecture"
-    echo "  /${TECH_NAMESPACE}:check-code-quality"
-    echo "  /${TECH_NAMESPACE}:check-testing"
-    echo "  /${TECH_NAMESPACE}:check-security"
-    echo "  /${TECH_NAMESPACE}:generate-component"
-    echo ""
-    echo -e "${YELLOW}Prochaines etapes:${NC}"
-    echo "  1. Personnaliser .claude/rules/00-project-context.md"
-    echo "  2. Personnaliser .claude/CLAUDE.md"
-    echo "  3. Utiliser les commandes /${TECH_NAMESPACE}:*"
-    echo ""
+    read -p "Confirmer? [Y/n]: " CONFIRM
+    if [[ ! "${CONFIRM:-Y}" =~ ^[Yy]$ ]]; then
+        log_warning "Installation annulee"
+        exit 0
+    fi
 }
 
 # ============================================================================
-# MAIN
+# TCL INSTALLATION
 # ============================================================================
+install_tcl() {
+    local target_dir="$1"
+    local project_name="$2"
+    local tech_stack="$3"
+    local dry_run="$4"
+    local preserve_config="${5:-false}"
+    local skip_common="${6:-false}"
+    local src_dir
+    src_dir=$(get_source_dir)
+
+    # 1. Create TCL directory structure
+    create_tcl_directory_structure "$target_dir" "$TECH_NAMESPACE" "$dry_run"
+
+    # 2. Copy base references (universal principles)
+    if [ "$skip_common" = "false" ]; then
+        copy_base_references "$target_dir" "$I18N_DIR" "$lang" "$dry_run"
+    fi
+
+    # 3. Copy tech-specific references
+    copy_tech_references "$target_dir" "$src_dir" "$TECH_NAMESPACE" "$dry_run" "${TECH_RULE_MAPPINGS[@]}"
+
+    # 4. Copy project context template
+    if [ "$dry_run" = "false" ]; then
+        local ctx_template="${src_dir}/rules/00-project-context.md.template"
+        if [ -f "$ctx_template" ]; then
+            sed -e "s/{{PROJECT_NAME}}/${project_name}/g" \
+                -e "s/{{TECH_STACK}}/${tech_stack}/g" \
+                "$ctx_template" > "${target_dir}/.claude/references/${TECH_NAMESPACE}/project-context.md"
+            log_success "project-context.md generated"
+        fi
+    fi
+
+    # 5. Copy skills
+    if [ "$skip_common" = "false" ]; then
+        copy_generic_skills "$target_dir" "$dry_run"
+    fi
+    copy_tech_skills "$target_dir" "$dry_run"
+
+    # 6. Copy templates, checklists, commands, agents
+    copy_templates "$target_dir" "$dry_run"
+    copy_checklists "$target_dir" "$dry_run"
+    copy_commands "$target_dir" "$dry_run"
+    copy_agents "$target_dir" "$dry_run"
+
+    # 7. Generate minimal CLAUDE.md
+    local available_commands="- \`/${TECH_NAMESPACE}:check-compliance\` - Full compliance audit
+- \`/${TECH_NAMESPACE}:check-architecture\` - Architecture validation
+- \`/${TECH_NAMESPACE}:check-code-quality\` - Code quality analysis
+- \`/${TECH_NAMESPACE}:check-testing\` - Test coverage analysis
+- \`/${TECH_NAMESPACE}:check-security\` - Security audit"
+
+    generate_minimal_claude_md "$target_dir" "$project_name" "$TECH_DISPLAY_NAME" \
+        "$tech_stack" "$TECH_NAMESPACE" "$available_commands" "$dry_run" "$preserve_config"
+
+    # 8. Generate INDEX.md
+    local architecture_summary="\`\`\`
+src/
+\u251c\u2500\u2500 components/       # Reusable Vue components
+\u2502   \u251c\u2500\u2500 common/       # Shared UI components
+\u2502   \u2514\u2500\u2500 features/     # Feature-specific components
+\u251c\u2500\u2500 composables/      # Composition API functions
+\u251c\u2500\u2500 views/            # Page-level components
+\u251c\u2500\u2500 stores/           # Pinia stores
+\u251c\u2500\u2500 router/           # Vue Router config
+\u251c\u2500\u2500 types/            # TypeScript types
+\u251c\u2500\u2500 utils/            # Helper functions
+\u251c\u2500\u2500 services/         # API services
+\u2514\u2500\u2500 assets/           # Static assets
+\`\`\`
+
+**Composition API**: Always use \`<script setup lang=\"ts\">\` with Composition API."
+
+    local coding_standards_summary="| Element | Convention | Example |
+|---------|-----------|---------|
+| Components | PascalCase | \`UserCard.vue\` |
+| Composables | camelCase + use prefix | \`useAuth.ts\` |
+| Stores | camelCase | \`userStore.ts\` |
+| Props | camelCase | \`userName: string\` |
+| Events | kebab-case | \`@update-user\` |
+| CSS Classes | kebab-case / BEM | \`user-card__title\` |
+
+**Always**: TypeScript strict mode, defineProps/defineEmits with types."
+
+    local testing_stack="**Vue.js Stack**: Vitest + Vue Test Utils + Playwright + MSW"
+
+    local tech_references="- \`${TECH_NAMESPACE}/architecture.md\` - Component architecture
+- \`${TECH_NAMESPACE}/coding-standards.md\` - TypeScript & Vue conventions
+- \`${TECH_NAMESPACE}/testing.md\` - Vitest & Playwright patterns
+- \`${TECH_NAMESPACE}/tooling.md\` - Vite, ESLint, Prettier
+- \`${TECH_NAMESPACE}/quality-tools.md\` - Code quality tools
+- \`${TECH_NAMESPACE}/security.md\` - Vue.js security best practices"
+
+    generate_index_md "$target_dir" "$TECH_DISPLAY_NAME" "$tech_stack" "$TECH_NAMESPACE" \
+        "$architecture_summary" "$coding_standards_summary" "$testing_stack" \
+        "$tech_references" "$dry_run" "$preserve_config"
+
+    # 9. Generate context.yaml
+    local file_contexts="  # Vue Single File Components
+  \"*.vue\":
+    suggest_skills:
+      - solid-principles
+      - kiss-dry-yagni
+    auto_load: false
+    quick_tips: |
+      Use <script setup lang=\"ts\"> with Composition API.
+      Props: defineProps<{}>(), Emits: defineEmits<{}>()
+      Keep components small and focused.
+
+  # Composables
+  \"**/composables/**/*.ts\":
+    suggest_skills:
+      - solid-principles
+    auto_load: false
+    quick_tips: |
+      Prefix with 'use': useAuth, useUser
+      Return reactive refs and computed properties.
+      Extract reusable logic from components.
+
+  # Pinia Stores
+  \"**/stores/**/*.ts\":
+    suggest_skills:
+      - solid-principles
+    auto_load: false
+    quick_tips: |
+      Use defineStore() with setup syntax.
+      Keep state minimal, derive with getters.
+      Actions for async operations.
+
+  # Test files
+  \"*.spec.ts\":
+    suggest_skills:
+      - testing
+    auto_load: false
+    quick_tips: |
+      Use @vue/test-utils for component tests.
+      Mock composables and stores.
+      Test user interactions, not implementation.
+
+  \"*.test.ts\":
+    suggest_skills:
+      - testing
+    auto_load: false
+
+  \"**/tests/**\":
+    suggest_skills:
+      - testing
+    auto_load: false
+
+  # Router
+  \"**/router/**/*.ts\":
+    suggest_skills:
+      - security
+    auto_load: false
+    quick_tips: |
+      Use typed routes with vue-router.
+      Implement navigation guards for auth.
+      Lazy load route components.
+
+  # API Services
+  \"**/services/**/*.ts\":
+    suggest_skills:
+      - security
+    auto_load: false
+    quick_tips: |
+      Use typed API responses.
+      Handle errors consistently.
+      Implement request interceptors.
+
+  # TypeScript types
+  \"**/types/**/*.ts\":
+    suggest_skills:
+      - solid-principles
+    auto_load: false
+    quick_tips: |
+      Use interfaces for objects, types for unions.
+      Export shared types from index.ts.
+
+  # Views (Pages)
+  \"**/views/**/*.vue\":
+    suggest_skills:
+      - solid-principles
+    auto_load: false
+    quick_tips: |
+      Views orchestrate components.
+      Fetch data here, pass to children.
+      Use Suspense for async components.
+
+  # Documentation
+  \"*.md\":
+    suggest_skills:
+      - documentation
+    auto_load: false"
+
+    generate_context_yaml "$target_dir" "$file_contexts" "$dry_run" "$preserve_config"
+}
+
 main() {
-    local mode="install"
-    local dry_run="false"
-    local do_backup="false"
-    local force="false"
-    local preserve_config="false"
-    local interactive="false"
-    local skip_common="false"
-    local target_dir=""
+    local mode="" force="false" dry_run="false" backup="false" interactive="false" preserve_config="false" skip_common="false" target_dir="."
 
-    # Parse arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
-            --install)
-                mode="install"
-                shift
-                ;;
-            --update)
-                mode="update"
-                shift
-                ;;
-            --force)
-                force="true"
-                do_backup="true"
-                shift
-                ;;
-            --preserve-config)
-                preserve_config="true"
-                shift
-                ;;
-            --dry-run)
-                dry_run="true"
-                shift
-                ;;
-            --backup)
-                do_backup="true"
-                shift
-                ;;
-            --skip-common)
-                skip_common="true"
-                shift
-                ;;
-            --interactive)
-                interactive="true"
-                shift
-                ;;
-            --lang=*)
-                lang="${1#*=}"
-                shift
-                ;;
-            --version)
-                echo "install-vuejs-rules.sh version $VERSION"
-                exit 0
-                ;;
-            --help|-h)
-                show_help
-                exit 0
-                ;;
-            -*)
-                log_error "Option inconnue: $1"
-                show_help
-                exit 1
-                ;;
-            *)
-                target_dir="$1"
-                shift
-                ;;
+            --install) mode="install"; shift ;;
+            --update) mode="update"; shift ;;
+            --force) force="true"; shift ;;
+            --preserve-config) preserve_config="true"; shift ;;
+            --dry-run) dry_run="true"; shift ;;
+            --backup) backup="true"; shift ;;
+            --skip-common) skip_common="true"; shift ;;
+            --interactive) interactive="true"; shift ;;
+            --lang=*) lang="${1#--lang=}"; shift ;;
+            --version) echo "install-vuejs-rules.sh version ${VERSION}"; exit 0 ;;
+            --help|-h) show_help; exit 0 ;;
+            -*) log_error "Option inconnue: $1"; exit 1 ;;
+            *) target_dir="$1"; shift ;;
         esac
     done
 
-    # Set default target directory
-    if [ -z "$target_dir" ]; then
-        target_dir="."
-    fi
-
-    # Resolve to absolute path
-    target_dir="$(cd "$target_dir" && pwd)"
-
-    # Load i18n messages
     load_messages
 
-    # Verify source files
+    [ "$target_dir" != "." ] && [ -d "$target_dir" ] && target_dir="$(cd "${target_dir}" && pwd)" || target_dir="$(pwd)"
+
+    echo ""
+    echo "Installation des regles Claude Code - ${TECH_NAME} (TCL)"
+    echo "=========================================="
+    echo "Version: ${VERSION}"
+    echo "Repertoire: ${target_dir}"
+
     verify_source_files
 
-    # Detect existing installation
-    local install_status
-    install_status=$(detect_installation "$target_dir")
-
-    log_info "Installation Vue.js rules to: $target_dir"
-    log_info "Mode: $mode | Language: $lang | Status: $install_status"
-
-    # Create backup if needed
-    if [ "$do_backup" = "true" ]; then
-        create_backup "$target_dir" "$dry_run"
+    if [ -z "$mode" ]; then
+        case $(detect_installation "$target_dir") in
+            tcl) log_info "Installation TCL existante -> mode update"; mode="update" ;;
+            legacy) log_info "Installation legacy detectee -> migration TCL"; mode="install" ;;
+            *) log_info "Nouvelle installation TCL"; mode="install" ;;
+        esac
     fi
 
-    # Create directory structure
-    create_directory_structure "$target_dir" "$dry_run"
+    [ "$backup" = "true" ] || [ "$force" = "true" ] && create_backup "$target_dir" "$dry_run"
 
-    # Copy files based on mode
-    if [ "$mode" = "install" ] || [ "$mode" = "update" ]; then
-        if [ "$skip_common" = "false" ]; then
-            copy_common_rules "$target_dir" "$dry_run"
-        else
-            log_info "Skipping common rules (multi-tech mode)"
-        fi
-        copy_templates "$target_dir" "$dry_run"
-        copy_checklists "$target_dir" "$dry_run"
-        copy_commands "$target_dir" "$dry_run"
-        copy_agents "$target_dir" "$dry_run"
-    fi
+    case $mode in
+        install)
+            [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MonProjet}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
+            install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config" "$skip_common"
+            ;;
+        update)
+            if [ "$force" = "true" ]; then
+                log_warning "Mode force: TOUS les fichiers seront ecrases"
+                [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MonProjet}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
+                install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config" "$skip_common"
+            else
+                log_info "Mise a jour des references..."
+                PROJECT_NAME="${PROJECT_NAME:-MonProjet}"
+                TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"
+                install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "true" "$skip_common"
+            fi
+            ;;
+    esac
 
-    # Generate project files (only on fresh install or with force)
-    if [ "$install_status" = "none" ] || ([ "$force" = "true" ] && [ "$preserve_config" = "false" ]); then
-        generate_claude_md "$target_dir" "$dry_run"
-        generate_project_context "$target_dir" "$dry_run"
-    fi
-
-    # Show summary
     if [ "$dry_run" = "false" ]; then
-        show_summary "$target_dir"
+        show_tcl_summary "$target_dir" "$TECH_NAME" "$TECH_NAMESPACE"
     else
-        log_info "Dry run complete. No files were modified."
+        log_dry_run "Fin de la simulation"
     fi
 }
 

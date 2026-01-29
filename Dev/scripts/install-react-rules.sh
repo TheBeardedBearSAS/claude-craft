@@ -1,22 +1,33 @@
 #!/bin/bash
 # Installation/Mise a jour des regles Claude Code pour projets React
-# Version: 2.0.0
+# Version: 3.5.0 - TCL (Tiered Context Loading) optimized
 # Usage: ./install-react-rules.sh [OPTIONS] [PROJECT_DIR]
 
 set -euo pipefail
 
-VERSION="3.4.0"
+VERSION="3.5.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 TECH_NAME="React"
+TECH_DISPLAY_NAME="React"
 TECH_NAMESPACE="react"
 DEFAULT_STACK="React 18+, TypeScript 5+, Vite, TailwindCSS, React Query, Zustand"
 lang="en"
 
-PROJECT_SPECIFIC_FILES=("rules/00-project-context.md")
+# Source TCL common functions
+source "${SCRIPT_DIR}/tcl-common.sh"
 
-# Fichiers tech-specifiques (les generiques sont dans Common/rules/)
-# Rules supprimees (maintenant dans Common/): 01, 04, 05, 09, 10
+# TCL file mappings: "old_name:new_name"
+TECH_RULE_MAPPINGS=(
+    "02-architecture.md:architecture.md"
+    "03-coding-standards.md:coding-standards.md"
+    "06-tooling.md:tooling.md"
+    "07-testing-react.md:testing.md"
+    "08-quality-tools.md:quality-tools.md"
+    "11-security-react.md:security.md"
+)
+
+# Legacy rules for backward compatibility detection
 TECH_RULES=(
     "02-architecture.md"
     "03-coding-standards.md"
@@ -25,9 +36,6 @@ TECH_RULES=(
     "08-quality-tools.md"
     "11-security-react.md"
 )
-
-# Alias pour compatibilite
-COMMON_RULES=("${TECH_RULES[@]}")
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -41,10 +49,8 @@ NC='\033[0m'
 load_messages() {
     local lang_file="$I18N_DIR/messages/${lang}.sh"
     if [[ -f "$lang_file" ]]; then
-        # shellcheck source=/dev/null
         source "$lang_file"
     elif [[ -f "$I18N_DIR/messages/en.sh" ]]; then
-        # shellcheck source=/dev/null
         source "$I18N_DIR/messages/en.sh"
     fi
 }
@@ -53,25 +59,30 @@ show_help() {
     cat << EOF
 Usage: install-react-rules.sh [OPTIONS] [PROJECT_DIR]
 
-Installation/Mise a jour des regles Claude Code pour projets React TypeScript.
+Installation/Mise a jour des regles Claude Code pour projets React.
+Utilise l'architecture TCL (Tiered Context Loading) pour optimiser les tokens.
 
 Options:
     --install       Installation complete
     --update        Mise a jour des regles communes uniquement
     --force         Ecraser tous les fichiers (backup automatique)
-    --preserve-config  Preserver CLAUDE.md et 00-project-context.md avec --force
+    --preserve-config  Preserver CLAUDE.md et INDEX.md avec --force
     --dry-run       Afficher les actions sans les executer
     --backup        Creer un backup avant modifications
     --interactive   Demander les valeurs du projet
+    --lang=XX       Language for rules (en, fr, es, de, pt)
     --version       Afficher la version
     --help          Afficher cette aide
 
 Description:
-    11 fichiers de regles couvrant :
-    - Feature-based Architecture, Atomic Design
-    - TypeScript strict, ESLint, Prettier
-    - Tests Vitest, RTL, Playwright
-    - State Management, Performance, Security
+    Installation TCL optimisee couvrant :
+    - Component-based Architecture
+    - TypeScript strict mode
+    - Testing (Vitest, RTL, Playwright)
+    - Quality tools (ESLint, Prettier, Biome)
+    - State management (Zustand, React Query)
+
+    Reduction tokens: ~95% (de ~70K a ~3.5K)
 EOF
 }
 
@@ -81,7 +92,6 @@ log_warning() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_dry_run() { echo -e "${YELLOW}[DRY-RUN]${NC} $1"; }
 
-# Get source directory (i18n or local fallback)
 get_source_dir() {
     local i18n_src="$I18N_DIR/$lang/$TECH_NAME"
     if [[ -d "$i18n_src" ]]; then
@@ -96,7 +106,7 @@ verify_source_files() {
     local src_dir
     src_dir=$(get_source_dir)
 
-    for rule in "${COMMON_RULES[@]}"; do
+    for rule in "${TECH_RULES[@]}"; do
         if [ ! -f "${src_dir}/rules/${rule}" ]; then
             log_error "Fichier source manquant: rules/${rule}"
             missing=1
@@ -112,8 +122,12 @@ verify_source_files() {
 detect_installation() {
     local target_dir="$1"
     if [ -d "${target_dir}/.claude" ]; then
-        if [ -f "${target_dir}/.claude/rules/00-project-context.md" ]; then
-            echo "existing"
+        # Check for TCL structure
+        if [ -d "${target_dir}/.claude/references/${TECH_NAMESPACE}" ]; then
+            echo "tcl"
+        # Check for legacy structure
+        elif [ -f "${target_dir}/.claude/rules/00-project-context.md" ]; then
+            echo "legacy"
         else
             echo "partial"
         fi
@@ -134,19 +148,6 @@ create_backup() {
             log_success "Backup cree: ${backup_dir}"
         fi
     fi
-}
-
-create_directory_structure() {
-    local target_dir="$1"
-    local dry_run="$2"
-    local dirs=(".claude" ".claude/rules" ".claude/templates" ".claude/checklists" ".claude/examples" ".claude/commands/${TECH_NAMESPACE}" ".claude/agents")
-    for dir in "${dirs[@]}"; do
-        if [ "$dry_run" = "true" ]; then
-            log_dry_run "Creer repertoire: ${target_dir}/${dir}"
-        else
-            mkdir -p "${target_dir}/${dir}"
-        fi
-    done
 }
 
 # Copie des skills generiques depuis Common/
@@ -175,38 +176,6 @@ copy_generic_skills() {
 
     if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
         log_success "$count generic skills copied from Common/"
-    fi
-}
-
-# Copie des regles generiques depuis Common/ (backward compatibility)
-copy_generic_rules() {
-    local target_dir="$1"
-    local dry_run="$2"
-
-    # First install skills (new format)
-    copy_generic_skills "$target_dir" "$dry_run"
-
-    # Then install legacy rules
-    local common_rules_dir="$I18N_DIR/$lang/Common/rules"
-
-    if [[ ! -d "$common_rules_dir" ]]; then
-        return 0
-    fi
-
-    local count=0
-    for file in "$common_rules_dir"/*.md "$common_rules_dir"/*.md.template; do
-        [[ -f "$file" ]] || continue
-        local filename=$(basename "$file")
-        if [ "$dry_run" = "true" ]; then
-            log_dry_run "Copy generic: rules/$filename"
-        else
-            cp "$file" "${target_dir}/.claude/rules/$filename"
-        fi
-        ((count++)) || true
-    done
-
-    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
-        log_success "$count generic rules copied from Common/"
     fi
 }
 
@@ -241,42 +210,6 @@ copy_tech_skills() {
     fi
 }
 
-copy_common_rules() {
-    local target_dir="$1"
-    local dry_run="$2"
-    local src_dir
-    src_dir=$(get_source_dir)
-
-    # D'abord, installer les regles et skills generiques
-    copy_generic_rules "$target_dir" "$dry_run"
-
-    # Installer les skills tech-specifiques
-    copy_tech_skills "$target_dir" "$dry_run"
-
-    # Ensuite, installer les regles tech-specifiques (backward compatibility)
-    local count=0
-    for rule in "${TECH_RULES[@]}"; do
-        local src_file="${src_dir}/rules/${rule}"
-        # Fallback to local if i18n not available
-        if [ ! -f "$src_file" ]; then
-            src_file="${SCRIPT_DIR}/rules/${rule}"
-        fi
-        if [ ! -f "$src_file" ]; then
-            log_warning "Rule not found: $rule"
-            continue
-        fi
-        if [ "$dry_run" = "true" ]; then
-            log_dry_run "Copier: rules/${rule}"
-        else
-            cp "$src_file" "${target_dir}/.claude/rules/${rule}"
-        fi
-        ((count++)) || true
-    done
-    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
-        log_success "$count React-specific rules copied"
-    fi
-}
-
 copy_templates() {
     local target_dir="$1"
     local dry_run="$2"
@@ -287,11 +220,13 @@ copy_templates() {
         tmpl_dir="${SCRIPT_DIR}/templates"
     fi
 
-    if [ "$dry_run" = "true" ]; then
-        log_dry_run "Copier: templates/*.md"
-    else
-        cp "${tmpl_dir}/"*.md "${target_dir}/.claude/templates/" 2>/dev/null || true
-        log_success "Templates copies"
+    if [ -d "$tmpl_dir" ]; then
+        if [ "$dry_run" = "true" ]; then
+            log_dry_run "Copier: templates/*.md"
+        else
+            cp "${tmpl_dir}/"*.md "${target_dir}/.claude/templates/" 2>/dev/null || true
+            log_success "Templates copies"
+        fi
     fi
 }
 
@@ -305,11 +240,13 @@ copy_checklists() {
         chk_dir="${SCRIPT_DIR}/checklists"
     fi
 
-    if [ "$dry_run" = "true" ]; then
-        log_dry_run "Copier: checklists/*.md"
-    else
-        cp "${chk_dir}/"*.md "${target_dir}/.claude/checklists/" 2>/dev/null || true
-        log_success "Checklists copiees"
+    if [ -d "$chk_dir" ]; then
+        if [ "$dry_run" = "true" ]; then
+            log_dry_run "Copier: checklists/*.md"
+        else
+            cp "${chk_dir}/"*.md "${target_dir}/.claude/checklists/" 2>/dev/null || true
+            log_success "Checklists copiees"
+        fi
     fi
 }
 
@@ -349,8 +286,7 @@ copy_agents() {
             log_dry_run "Copier: agents/*.md"
         else
             cp "${agt_dir}/"*.md "${target_dir}/.claude/agents/" 2>/dev/null || true
-            local count=$(ls -1 "${agt_dir}/"*.md 2>/dev/null | wc -l)
-            log_success "${count} agents copies"
+            log_success "Agents copies"
         fi
     fi
 }
@@ -371,72 +307,209 @@ prompt_project_info() {
     fi
 }
 
-process_templates() {
+# ============================================================================
+# TCL INSTALLATION
+# ============================================================================
+install_tcl() {
     local target_dir="$1"
     local project_name="$2"
     local tech_stack="$3"
     local dry_run="$4"
     local preserve_config="${5:-false}"
-    local generation_date=$(date +%Y-%m-%d)
+    local skip_common="${6:-false}"
     local src_dir
     src_dir=$(get_source_dir)
 
-    local claude_md="${target_dir}/.claude/CLAUDE.md"
-    local project_context="${target_dir}/.claude/rules/00-project-context.md"
+    # 1. Create TCL directory structure
+    create_tcl_directory_structure "$target_dir" "$TECH_NAMESPACE" "$dry_run"
 
-    if [ "$dry_run" = "true" ]; then
-        log_dry_run "Generer CLAUDE.md et 00-project-context.md"
-    else
-        if [ -f "$claude_md" ] && [ "$preserve_config" = "true" ]; then
-            log_info "Preserved: CLAUDE.md (--preserve-config)"
-        else
+    # 2. Copy base references (universal principles)
+    if [ "$skip_common" = "false" ]; then
+        copy_base_references "$target_dir" "$I18N_DIR" "$lang" "$dry_run"
+    fi
+
+    # 3. Copy tech-specific references
+    copy_tech_references "$target_dir" "$src_dir" "$TECH_NAMESPACE" "$dry_run" "${TECH_RULE_MAPPINGS[@]}"
+
+    # 4. Copy project context template
+    if [ "$dry_run" = "false" ]; then
+        local ctx_template="${src_dir}/rules/00-project-context.md.template"
+        if [ -f "$ctx_template" ]; then
             sed -e "s/{{PROJECT_NAME}}/${project_name}/g" \
                 -e "s/{{TECH_STACK}}/${tech_stack}/g" \
-                -e "s/{{GENERATION_DATE}}/${generation_date}/g" \
-                "${src_dir}/CLAUDE.md.template" > "$claude_md"
-            log_success "CLAUDE.md genere"
-        fi
-
-        if [ -f "$project_context" ] && [ "$preserve_config" = "true" ]; then
-            log_info "Preserved: 00-project-context.md (--preserve-config)"
-        else
-            sed -e "s/{{PROJECT_NAME}}/${project_name}/g" \
-                -e "s/{{TECH_STACK}}/${tech_stack}/g" \
-                "${src_dir}/rules/00-project-context.md.template" > "$project_context"
-            log_success "00-project-context.md genere"
+                "$ctx_template" > "${target_dir}/.claude/references/${TECH_NAMESPACE}/project-context.md"
+            log_success "project-context.md generated"
         fi
     fi
-}
 
-show_summary() {
-    local target_dir="$1"
-    local src_dir
-    src_dir=$(get_source_dir)
-    local cmd_count=$(ls -1 "${src_dir}/commands/"*.md 2>/dev/null | wc -l)
-    echo ""
-    echo "=========================================="
-    echo "Installation ${TECH_NAME} terminee!"
-    echo "=========================================="
-    echo ""
-    echo "Structure creee: ${target_dir}/.claude/"
-    echo "  - rules/                    (${#COMMON_RULES[@]} fichiers)"
-    echo "  - templates/"
-    echo "  - checklists/"
-    echo "  - commands/${TECH_NAMESPACE}/     (${cmd_count} commandes)"
-    echo "  - agents/"
-    echo ""
-    echo "Commandes disponibles:"
-    echo "  /${TECH_NAMESPACE}:check-compliance     Audit complet (score /100)"
-    echo "  /${TECH_NAMESPACE}:check-architecture   Architecture seule"
-    echo "  /${TECH_NAMESPACE}:check-code-quality   Qualite code"
-    echo "  /${TECH_NAMESPACE}:check-testing        Tests"
-    echo "  /${TECH_NAMESPACE}:check-security       Securite"
-    echo ""
-    echo "Prochaines etapes:"
-    echo "  1. Editer .claude/rules/00-project-context.md"
-    echo "  2. Personnaliser .claude/CLAUDE.md"
-    echo "  3. Redemarrer Claude Code pour charger les commandes"
-    echo ""
+    # 5. Copy skills
+    if [ "$skip_common" = "false" ]; then
+        copy_generic_skills "$target_dir" "$dry_run"
+    fi
+    copy_tech_skills "$target_dir" "$dry_run"
+
+    # 6. Copy templates, checklists, commands, agents
+    copy_templates "$target_dir" "$dry_run"
+    copy_checklists "$target_dir" "$dry_run"
+    copy_commands "$target_dir" "$dry_run"
+    copy_agents "$target_dir" "$dry_run"
+
+    # 7. Generate minimal CLAUDE.md
+    local available_commands="- \`/${TECH_NAMESPACE}:check-compliance\` - Full compliance audit
+- \`/${TECH_NAMESPACE}:check-architecture\` - Architecture validation
+- \`/${TECH_NAMESPACE}:check-code-quality\` - Code quality analysis
+- \`/${TECH_NAMESPACE}:check-testing\` - Test coverage analysis
+- \`/${TECH_NAMESPACE}:check-security\` - Security audit"
+
+    generate_minimal_claude_md "$target_dir" "$project_name" "$TECH_DISPLAY_NAME" \
+        "$tech_stack" "$TECH_NAMESPACE" "$available_commands" "$dry_run" "$preserve_config"
+
+    # 8. Generate INDEX.md
+    local architecture_summary="\`\`\`
+src/
+\u251c\u2500\u2500 components/        # Reusable UI components
+\u2502   \u251c\u2500\u2500 ui/           # Base components (Button, Input)
+\u2502   \u2514\u2500\u2500 features/     # Feature-specific components
+\u251c\u2500\u2500 hooks/            # Custom React hooks
+\u251c\u2500\u2500 pages/            # Page components / routes
+\u251c\u2500\u2500 services/         # API calls, external services
+\u251c\u2500\u2500 stores/           # State management (Zustand)
+\u251c\u2500\u2500 types/            # TypeScript types/interfaces
+\u2514\u2500\u2500 utils/            # Helper functions
+\`\`\`
+
+**Component Rule**: Smart components (pages) -> Feature components -> UI components (INWARD ONLY)"
+
+    local coding_standards_summary="| Element | Convention | Example |
+|---------|-----------|---------|
+| Components | PascalCase | \`UserProfile\` |
+| Hooks | camelCase + use | \`useAuth\` |
+| Utils | camelCase | \`formatDate\` |
+| Constants | UPPER_SNAKE | \`API_BASE_URL\` |
+| Types | PascalCase + suffix | \`UserProps\`, \`AuthState\` |
+
+**Always**: TypeScript strict mode, ESLint + Prettier, named exports."
+
+    local testing_stack="**React Stack**: Vitest + React Testing Library + Playwright + MSW"
+
+    local tech_references="- \`${TECH_NAMESPACE}/architecture.md\` - Component-based Architecture
+- \`${TECH_NAMESPACE}/coding-standards.md\` - TypeScript & React conventions
+- \`${TECH_NAMESPACE}/testing.md\` - Vitest & RTL patterns
+- \`${TECH_NAMESPACE}/tooling.md\` - Vite, ESLint, Prettier
+- \`${TECH_NAMESPACE}/quality-tools.md\` - Biome, Husky, lint-staged
+- \`${TECH_NAMESPACE}/security.md\` - React security best practices"
+
+    generate_index_md "$target_dir" "$TECH_DISPLAY_NAME" "$tech_stack" "$TECH_NAMESPACE" \
+        "$architecture_summary" "$coding_standards_summary" "$testing_stack" \
+        "$tech_references" "$dry_run" "$preserve_config"
+
+    # 9. Generate context.yaml
+    local file_contexts="  # React/TypeScript components
+  \"*.tsx\":
+    suggest_skills:
+      - solid-principles
+      - kiss-dry-yagni
+    auto_load: false
+    quick_tips: |
+      Use functional components with TypeScript.
+      Props interface required. Prefer composition over inheritance.
+
+  # TypeScript files
+  \"*.ts\":
+    suggest_skills:
+      - solid-principles
+      - kiss-dry-yagni
+    auto_load: false
+    quick_tips: |
+      TypeScript strict mode required.
+      Explicit return types for functions.
+
+  # Test files
+  \"*.test.tsx\":
+    suggest_skills:
+      - testing
+    auto_load: false
+    quick_tips: |
+      TDD: RED -> GREEN -> REFACTOR
+      Use RTL queries: getByRole > getByText > getByTestId
+
+  \"*.test.ts\":
+    suggest_skills:
+      - testing
+    auto_load: false
+
+  \"*.spec.tsx\":
+    suggest_skills:
+      - testing
+    auto_load: false
+
+  \"*.spec.ts\":
+    suggest_skills:
+      - testing
+    auto_load: false
+
+  \"**/__tests__/**\":
+    suggest_skills:
+      - testing
+    auto_load: false
+
+  # Component directories
+  \"**/components/**/*.tsx\":
+    suggest_skills:
+      - solid-principles
+    auto_load: false
+    quick_tips: |
+      Components: Single responsibility, props validation.
+      Extract logic to custom hooks.
+
+  # Hooks
+  \"**/hooks/**/*.ts\":
+    suggest_skills:
+      - solid-principles
+    auto_load: false
+    quick_tips: |
+      Hooks: Start with 'use', single purpose.
+      Handle cleanup in useEffect return.
+
+  \"**/hooks/**/*.tsx\":
+    suggest_skills:
+      - solid-principles
+    auto_load: false
+
+  # Pages/Routes
+  \"**/pages/**/*.tsx\":
+    suggest_skills:
+      - security
+    auto_load: false
+    quick_tips: |
+      Pages: Smart components, data fetching here.
+      Handle loading/error states.
+
+  # Services/API
+  \"**/services/**/*.ts\":
+    suggest_skills:
+      - security
+    auto_load: false
+    quick_tips: |
+      Services: Type API responses.
+      Use React Query for server state.
+
+  # State management
+  \"**/stores/**/*.ts\":
+    suggest_skills:
+      - solid-principles
+    auto_load: false
+    quick_tips: |
+      Stores: Keep minimal, derive state when possible.
+      Separate UI state from server state.
+
+  # Documentation
+  \"*.md\":
+    suggest_skills:
+      - documentation
+    auto_load: false"
+
+    generate_context_yaml "$target_dir" "$file_contexts" "$dry_run" "$preserve_config"
 }
 
 main() {
@@ -460,13 +533,12 @@ main() {
         esac
     done
 
-    # Load i18n messages after lang is set
     load_messages
 
     [ "$target_dir" != "." ] && [ -d "$target_dir" ] && target_dir="$(cd "${target_dir}" && pwd)" || target_dir="$(pwd)"
 
     echo ""
-    echo "Installation des regles Claude Code - ${TECH_NAME}"
+    echo "Installation des regles Claude Code - ${TECH_NAME} (TCL)"
     echo "=========================================="
     echo "Version: ${VERSION}"
     echo "Repertoire: ${target_dir}"
@@ -475,8 +547,9 @@ main() {
 
     if [ -z "$mode" ]; then
         case $(detect_installation "$target_dir") in
-            existing) log_info "Installation existante -> mode update"; mode="update" ;;
-            *) log_info "Nouvelle installation"; mode="install" ;;
+            tcl) log_info "Installation TCL existante -> mode update"; mode="update" ;;
+            legacy) log_info "Installation legacy detectee -> migration TCL"; mode="install" ;;
+            *) log_info "Nouvelle installation TCL"; mode="install" ;;
         esac
     fi
 
@@ -485,51 +558,27 @@ main() {
     case $mode in
         install)
             [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MonProjet}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
-            create_directory_structure "$target_dir" "$dry_run"
-            if [ "$skip_common" = "false" ]; then
-                copy_common_rules "$target_dir" "$dry_run"
-            else
-                log_info "Skipping common rules (multi-tech mode)"
-            fi
-            copy_templates "$target_dir" "$dry_run"
-            copy_checklists "$target_dir" "$dry_run"
-            copy_commands "$target_dir" "$dry_run"
-            copy_agents "$target_dir" "$dry_run"
-            process_templates "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config"
+            install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config" "$skip_common"
             ;;
         update)
             if [ "$force" = "true" ]; then
                 log_warning "Mode force: TOUS les fichiers seront ecrases"
                 [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MonProjet}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
-                create_directory_structure "$target_dir" "$dry_run"
-                if [ "$skip_common" = "false" ]; then
-                    copy_common_rules "$target_dir" "$dry_run"
-                else
-                    log_info "Skipping common rules (multi-tech mode)"
-                fi
-                copy_templates "$target_dir" "$dry_run"
-                copy_checklists "$target_dir" "$dry_run"
-                copy_commands "$target_dir" "$dry_run"
-                copy_agents "$target_dir" "$dry_run"
-                process_templates "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config"
+                install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config" "$skip_common"
             else
-                log_info "Mise a jour des regles communes..."
-                create_directory_structure "$target_dir" "$dry_run"
-                if [ "$skip_common" = "false" ]; then
-                    copy_common_rules "$target_dir" "$dry_run"
-                else
-                    log_info "Skipping common rules (multi-tech mode)"
-                fi
-                copy_templates "$target_dir" "$dry_run"
-                copy_checklists "$target_dir" "$dry_run"
-                copy_commands "$target_dir" "$dry_run"
-                copy_agents "$target_dir" "$dry_run"
-                log_info "Fichiers preserves: 00-project-context.md, CLAUDE.md"
+                log_info "Mise a jour des references..."
+                PROJECT_NAME="${PROJECT_NAME:-MonProjet}"
+                TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"
+                install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "true" "$skip_common"
             fi
             ;;
     esac
 
-    if [ "$dry_run" = "false" ]; then show_summary "$target_dir"; else log_dry_run "Fin de la simulation"; fi
+    if [ "$dry_run" = "false" ]; then
+        show_tcl_summary "$target_dir" "$TECH_NAME" "$TECH_NAMESPACE"
+    else
+        log_dry_run "Fin de la simulation"
+    fi
 }
 
 main "$@"
