@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [5.0.0] - 2026-01-29
+## [5.0.0] - 2026-01-30
 
 ### Added
 - **Autonomous Sprint Conductor (ASC)** - Run entire sprints overnight with minimal human intervention
@@ -46,8 +46,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Schedule, limits, parallel, recovery, escalation settings
 - **Documentation**
   - `docs/AUTONOMOUS-SPRINT.md`: Complete ASC guide
+  - `docs/AGENTS.md`: Agent behavior in autonomous mode section
+  - `docs/CLI-REFERENCE.md`: Full ASC CLI options documentation
+  - `.claude/INDEX.md`: ASC quick reference section
+  - `Tools/Ralph/docs/RECOVERY.md`: Recovery engine documentation
+  - `Tools/Ralph/docs/PARALLEL.md`: Parallel processing documentation
+  - `.bmad/docs/AUTONOMOUS.md`: BMAD autonomous mode documentation
   - Updated FAQ, TROUBLESHOOTING, COMMANDS docs
-  - Updated README with v5.0 features
 - **i18n** - `/common:ralph-sprint` command in 5 languages (en, fr, es, de, pt)
 
 ### Changed
@@ -452,6 +457,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Enhanced npm publishing security via OIDC
 
+[5.0.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.4.0...v5.0.0
 [4.4.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.1.0...v4.2.0
