@@ -108,6 +108,61 @@ The conductor stops when any condition is met:
 | Stop window | 06:00 | Time-based stop (for overnight) |
 | Critical escalation | - | Pauses on critical issues |
 
+## Parallel Processing
+
+When `--parallel N` is specified, the ASC processes stories in parallel waves:
+
+### How It Works
+
+1. **Dependency Graph**: The ASC builds a dependency graph from `blocked_by` relationships
+2. **Wave Processing**: Stories are processed in waves based on dependency satisfaction
+3. **Slot Management**: Up to N concurrent sessions, limited by CPU/memory thresholds
+4. **Sequential Merge**: Git branches are merged sequentially to avoid conflicts
+
+```
+Wave 1: [US-001, US-002, US-003]  ← Independent stories (no blockers)
+           ↓        ↓        ↓
+        Session  Session  Session
+           ↓        ↓        ↓
+        Complete Complete Complete
+
+Wave 2: [US-004, US-005]  ← Depend on US-001/US-002 (now done)
+           ↓        ↓
+        Session  Session
+           ↓        ↓
+        Complete Complete
+```
+
+### Dependency Handling
+
+Stories are only scheduled when their dependencies are satisfied:
+
+```yaml
+# sprint-status.yaml
+stories:
+  US-001:
+    status: ready-for-dev
+    blocked_by: []            # ✓ Can start immediately
+  US-002:
+    status: ready-for-dev
+    blocked_by: []            # ✓ Can start immediately
+  US-003:
+    status: ready-for-dev
+    blocked_by: [US-001]      # ✗ Waits for US-001 completion
+```
+
+### Resource Limits
+
+```yaml
+# ralph-autonomous.yml
+parallel:
+  enabled: true
+  max_concurrent: 3
+  resource_limits:
+    cpu_percent: 80      # Don't spawn if CPU > 80%
+    mem_percent: 80      # Don't spawn if memory > 80%
+```
+
 ## Quick Start Examples
 
 ```bash
@@ -116,6 +171,9 @@ The conductor stops when any condition is met:
 
 # Parallel processing with 3 sessions
 /common:ralph-sprint "Sprint 3" --parallel 3
+
+# Combined: parallel overnight
+/common:ralph-sprint "Sprint 3" --parallel 3 --overnight
 
 # Supervised mode (confirm each story)
 /common:ralph-sprint "Sprint 3" --supervised

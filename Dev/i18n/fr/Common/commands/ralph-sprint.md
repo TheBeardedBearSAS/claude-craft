@@ -108,6 +108,61 @@ Le conducteur s'arrete quand une condition est atteinte:
 | Fenetre d'arret | 06:00 | Arret base sur l'heure (overnight) |
 | Escalade critique | - | Pause sur problemes critiques |
 
+## Traitement Parallele
+
+Quand `--parallel N` est specifie, l'ASC traite les stories en vagues paralleles:
+
+### Fonctionnement
+
+1. **Graphe de Dependances**: L'ASC construit un graphe depuis les relations `blocked_by`
+2. **Traitement par Vagues**: Les stories sont traitees par vagues selon les dependances satisfaites
+3. **Gestion des Slots**: Jusqu'a N sessions concurrentes, limitees par CPU/memoire
+4. **Merge Sequentiel**: Les branches Git sont mergees sequentiellement pour eviter les conflits
+
+```
+Vague 1: [US-001, US-002, US-003]  ← Stories independantes (pas de bloqueurs)
+            ↓        ↓        ↓
+         Session  Session  Session
+            ↓        ↓        ↓
+         Termine  Termine  Termine
+
+Vague 2: [US-004, US-005]  ← Dependent de US-001/US-002 (maintenant terminees)
+            ↓        ↓
+         Session  Session
+            ↓        ↓
+         Termine  Termine
+```
+
+### Gestion des Dependances
+
+Les stories ne sont planifiees que quand leurs dependances sont satisfaites:
+
+```yaml
+# sprint-status.yaml
+stories:
+  US-001:
+    status: ready-for-dev
+    blocked_by: []            # ✓ Peut demarrer immediatement
+  US-002:
+    status: ready-for-dev
+    blocked_by: []            # ✓ Peut demarrer immediatement
+  US-003:
+    status: ready-for-dev
+    blocked_by: [US-001]      # ✗ Attend la completion de US-001
+```
+
+### Limites de Ressources
+
+```yaml
+# ralph-autonomous.yml
+parallel:
+  enabled: true
+  max_concurrent: 3
+  resource_limits:
+    cpu_percent: 80      # Ne pas spawner si CPU > 80%
+    mem_percent: 80      # Ne pas spawner si memoire > 80%
+```
+
 ## Exemples Rapides
 
 ```bash
@@ -116,6 +171,9 @@ Le conducteur s'arrete quand une condition est atteinte:
 
 # Traitement parallele avec 3 sessions
 /common:ralph-sprint "Sprint 3" --parallel 3
+
+# Combine: parallele overnight
+/common:ralph-sprint "Sprint 3" --parallel 3 --overnight
 
 # Mode supervise (confirmer chaque story)
 /common:ralph-sprint "Sprint 3" --supervised

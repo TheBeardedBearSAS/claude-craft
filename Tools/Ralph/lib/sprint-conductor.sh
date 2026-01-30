@@ -121,6 +121,18 @@ EOF
         init_escalation_service
     fi
 
+    # Initialize parallel manager if enabled
+    if [[ "$ASC_PARALLEL_ENABLED" == "true" ]]; then
+        if type init_parallel_manager &>/dev/null; then
+            PARALLEL_ENABLED="true"
+            PARALLEL_MAX_CONCURRENT="$ASC_PARALLEL_MAX"
+            init_parallel_manager
+        else
+            print_warning "Parallel manager not available, falling back to sequential"
+            ASC_PARALLEL_ENABLED="false"
+        fi
+    fi
+
     # Enable autonomous mode in circuit breaker
     if type enable_autonomous_mode &>/dev/null; then
         enable_autonomous_mode
@@ -152,6 +164,254 @@ run_sprint_conductor() {
     [[ "$supervised" == "true" ]] && ASC_MODE="supervised"
 
     log_conductor "Starting sprint conductor for: $sprint_name (mode: $ASC_MODE)"
+
+    # Use parallel or sequential execution based on configuration
+    if [[ "$ASC_PARALLEL_ENABLED" == "true" ]] && type process_stories_parallel &>/dev/null; then
+        run_sprint_conductor_parallel "$sprint_name"
+    else
+        run_sprint_conductor_sequential "$sprint_name"
+    fi
+
+    # Finalize
+    finalize_sprint_conductor
+}
+
+# =============================================================================
+# Parallel Sprint Execution
+# =============================================================================
+
+run_sprint_conductor_parallel() {
+    local sprint_name="$1"
+
+    log_conductor "Running in PARALLEL mode (max $ASC_PARALLEL_MAX concurrent)"
+
+    # Get all stories for the sprint
+    local all_stories
+    all_stories=$(get_all_ready_stories)
+
+    if [[ -z "$all_stories" ]]; then
+        log_conductor "No stories available for parallel processing"
+        return 0
+    fi
+
+    local story_count
+    story_count=$(echo "$all_stories" | wc -w | tr -d ' ')
+    log_conductor "Found $story_count stories for parallel processing"
+
+    # Build dependency graph
+    if type build_dependency_graph &>/dev/null; then
+        build_dependency_graph "$all_stories" > /dev/null
+    fi
+
+    # Process in waves based on dependencies
+    local processed=0
+    local wave=1
+
+    while [[ $processed -lt $story_count ]]; do
+        # Check stop conditions
+        if ! check_continue_conditions; then
+            log_conductor "Stop condition met, halting parallel processing"
+            break
+        fi
+
+        log_conductor "=== Wave $wave ==="
+
+        # Collect completed sessions from previous wave
+        if type collect_completed_sessions &>/dev/null; then
+            local completed_stories
+            completed_stories=$(collect_completed_sessions)
+
+            for story_id in $completed_stories; do
+                ASC_STORIES_COMPLETED=$((ASC_STORIES_COMPLETED + 1))
+                ASC_CONSECUTIVE_FAILURES=0
+                transition_story "$story_id" "review"
+                log_conductor "Story completed in parallel: $story_id"
+            done
+        fi
+
+        # Get stories ready for this wave (dependencies satisfied)
+        local ready_stories
+        if type get_ready_stories &>/dev/null; then
+            ready_stories=$(get_ready_stories)
+        else
+            ready_stories=$(get_all_ready_stories)
+        fi
+
+        if [[ -z "$ready_stories" ]]; then
+            # No ready stories - check if any are still running
+            if type get_active_count &>/dev/null; then
+                local active
+                active=$(get_active_count)
+                if [[ $active -gt 0 ]]; then
+                    log_conductor "Waiting for $active active sessions to complete..."
+                    sleep 10
+                    continue
+                fi
+            fi
+
+            # Check for blocked stories
+            local pending_escalations=0
+            if type get_pending_count &>/dev/null; then
+                pending_escalations=$(get_pending_count)
+            fi
+
+            if [[ $pending_escalations -gt 0 ]]; then
+                log_conductor "Waiting for $pending_escalations pending escalations..."
+                sleep 60
+                continue
+            fi
+
+            # Truly done
+            break
+        fi
+
+        # Get available slots
+        local slots
+        if type get_available_slots &>/dev/null; then
+            slots=$(get_available_slots)
+        else
+            slots=$ASC_PARALLEL_MAX
+        fi
+
+        # Spawn sessions for ready stories (up to available slots)
+        local spawned=0
+        for story_id in $ready_stories; do
+            [[ $spawned -ge $slots ]] && break
+
+            # Skip if already processed or in progress
+            if is_story_in_progress "$story_id"; then
+                continue
+            fi
+
+            # Supervised mode - pause for confirmation
+            if [[ "$ASC_MODE" == "supervised" ]]; then
+                if ! confirm_story_start "$story_id"; then
+                    log_conductor "Story skipped by user: $story_id"
+                    ASC_STORIES_SKIPPED=$((ASC_STORIES_SKIPPED + 1))
+                    ((processed++))
+                    continue
+                fi
+            fi
+
+            # Claim the story
+            if ! claim_story "$story_id"; then
+                log_conductor "Failed to claim story: $story_id (may be claimed by another process)"
+                continue
+            fi
+
+            # Build prompt for the story
+            local prompt
+            prompt=$(build_story_prompt "$story_id")
+
+            # Spawn parallel session
+            if type spawn_session &>/dev/null; then
+                local session_id
+                session_id=$(spawn_session "$story_id" "$prompt")
+                if [[ -n "$session_id" ]]; then
+                    log_conductor "Spawned parallel session $session_id for story $story_id"
+                    ((spawned++))
+                    ((processed++))
+                else
+                    log_conductor "Failed to spawn session for $story_id"
+                    unclaim_story "$story_id"
+                    ASC_STORIES_FAILED=$((ASC_STORIES_FAILED + 1))
+                fi
+            else
+                # Fallback: execute sequentially
+                execute_story_with_ralph "$story_id"
+                ((processed++))
+            fi
+        done
+
+        # Update state
+        update_conductor_state "stories" ""
+        update_parallel_conductor_state
+
+        # Create checkpoint
+        create_conductor_checkpoint
+
+        ((wave++))
+
+        # Small delay between waves
+        sleep 2
+    done
+
+    # Wait for remaining sessions
+    if type wait_all_sessions &>/dev/null; then
+        log_conductor "Waiting for all parallel sessions to complete..."
+        wait_all_sessions 0
+
+        # Final collection
+        if type collect_completed_sessions &>/dev/null; then
+            local final_completed
+            final_completed=$(collect_completed_sessions)
+
+            for story_id in $final_completed; do
+                ASC_STORIES_COMPLETED=$((ASC_STORIES_COMPLETED + 1))
+                transition_story "$story_id" "review"
+            done
+        fi
+    fi
+
+    # Print parallel summary
+    if type print_parallel_summary &>/dev/null; then
+        print_parallel_summary
+    fi
+}
+
+# Check if a story is already in progress (parallel tracking)
+is_story_in_progress() {
+    local story_id="$1"
+
+    # Check in parallel sessions
+    if [[ -n "${PARALLEL_SESSIONS[$story_id]:-}" ]]; then
+        return 0
+    fi
+
+    # Check in BMAD status
+    local bmad_dir="${BMAD_DIR:-.bmad}"
+    local status_file="$bmad_dir/sprint-status.yaml"
+
+    if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
+        local status
+        status=$(yq ".stories.${story_id}.status" "$status_file" 2>/dev/null)
+        [[ "$status" == "in-progress" ]] && return 0
+    fi
+
+    return 1
+}
+
+# Update parallel-specific conductor state
+update_parallel_conductor_state() {
+    if [[ ! -f "$ASC_STATE_FILE" ]] || ! command -v yq &>/dev/null; then
+        return
+    fi
+
+    # Update active sessions list
+    if type get_active_count &>/dev/null; then
+        local active_count
+        active_count=$(get_active_count)
+        yq -i ".parallel.active_count = $active_count" "$ASC_STATE_FILE"
+    fi
+
+    # Update parallel stats
+    if [[ -n "$PARALLEL_COMPLETED_COUNT" ]]; then
+        yq -i ".parallel.completed = $PARALLEL_COMPLETED_COUNT" "$ASC_STATE_FILE"
+    fi
+
+    if [[ -n "$PARALLEL_FAILED_COUNT" ]]; then
+        yq -i ".parallel.failed = $PARALLEL_FAILED_COUNT" "$ASC_STATE_FILE"
+    fi
+}
+
+# =============================================================================
+# Sequential Sprint Execution (Original Logic)
+# =============================================================================
+
+run_sprint_conductor_sequential() {
+    local sprint_name="$1"
+
+    log_conductor "Running in SEQUENTIAL mode"
 
     # Main loop
     while true; do
@@ -250,9 +510,6 @@ run_sprint_conductor() {
         # Rate limiting
         sleep 5
     done
-
-    # Finalize
-    finalize_sprint_conductor
 }
 
 # =============================================================================
@@ -320,6 +577,50 @@ get_next_ready_story() {
     if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
         # Get first ready-for-dev story not already claimed
         yq '.stories | to_entries[] | select(.value.status == "ready-for-dev") | select(.value.claimed_by == null or .value.claimed_by == "") | .key' "$status_file" 2>/dev/null | head -1
+    fi
+}
+
+# Get all ready-for-dev stories (for parallel processing)
+get_all_ready_stories() {
+    local bmad_dir="${BMAD_DIR:-.bmad}"
+    local status_file="$bmad_dir/sprint-status.yaml"
+
+    if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
+        # Get all ready-for-dev stories not already claimed
+        # Also check that blocked_by dependencies are all in "done" or "review" status
+        yq -r '
+            .stories as $stories |
+            .stories | to_entries[] |
+            select(.value.status == "ready-for-dev") |
+            select(.value.claimed_by == null or .value.claimed_by == "") |
+            select(
+                (.value.blocked_by // []) | length == 0 or
+                (
+                    (.value.blocked_by // []) | all(
+                        . as $dep |
+                        ($stories[$dep].status == "done" or $stories[$dep].status == "review")
+                    )
+                )
+            ) |
+            .key
+        ' "$status_file" 2>/dev/null | tr '\n' ' '
+    fi
+}
+
+# Get stories that are ready but have no unsatisfied dependencies
+get_independent_ready_stories() {
+    local bmad_dir="${BMAD_DIR:-.bmad}"
+    local status_file="$bmad_dir/sprint-status.yaml"
+
+    if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
+        # Stories with no blocked_by at all (fully independent)
+        yq -r '
+            .stories | to_entries[] |
+            select(.value.status == "ready-for-dev") |
+            select(.value.claimed_by == null or .value.claimed_by == "") |
+            select((.value.blocked_by // []) | length == 0) |
+            .key
+        ' "$status_file" 2>/dev/null | tr '\n' ' '
     fi
 }
 
