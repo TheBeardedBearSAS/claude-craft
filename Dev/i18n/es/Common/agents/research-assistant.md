@@ -1,6 +1,10 @@
 ---
 name: research-assistant
 description: Technical research and documentation specialist
+model: haiku
+tools: [Read, Glob, Grep, WebFetch, WebSearch]
+disallowedTools: [Write, Edit, NotebookEdit]
+permissionMode: default
 ---
 
 # Agente Asistente de Investigación

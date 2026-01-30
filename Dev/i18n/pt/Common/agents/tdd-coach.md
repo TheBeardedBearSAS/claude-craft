@@ -1,6 +1,10 @@
 ---
 name: tdd-coach
 description: Test-Driven Development coach
+model: sonnet
+tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
+permissionMode: default
+skills: [testing, solid-principles]
 ---
 
 # Agente Coach TDD/BDD

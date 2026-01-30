@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-VERSION="5.1.0"
+VERSION="5.2.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 TECH_NAME="ReactNative"

@@ -1,6 +1,19 @@
 ---
 name: database-architect
 description: Database design and optimization expert
+model: sonnet
+tools:
+  - Read
+  - Glob
+  - Grep
+  - Edit
+  - Write
+  - Bash
+  - WebFetch
+  - WebSearch
+permissionMode: default
+skills:
+  - security
 ---
 
 # Database Architect Agent

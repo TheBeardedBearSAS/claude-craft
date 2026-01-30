@@ -1,6 +1,20 @@
 ---
 name: api-designer
 description: Senior API Designer for REST and GraphQL APIs
+model: sonnet
+tools:
+  - Read
+  - Glob
+  - Grep
+  - Edit
+  - Write
+  - Bash
+  - WebFetch
+  - WebSearch
+permissionMode: default
+skills:
+  - documentation
+  - security
 ---
 
 # API Designer Agent

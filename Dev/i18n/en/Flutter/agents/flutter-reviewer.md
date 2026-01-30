@@ -1,6 +1,23 @@
 ---
 name: flutter-reviewer
 description: Flutter and Dart code review specialist
+model: haiku
+tools:
+  - Read
+  - Glob
+  - Grep
+  - WebFetch
+  - WebSearch
+disallowedTools:
+  - Write
+  - Edit
+  - Bash
+  - NotebookEdit
+permissionMode: default
+skills:
+  - solid-principles
+  - testing
+  - security
 ---
 
 # Agent Auditeur de Code Flutter

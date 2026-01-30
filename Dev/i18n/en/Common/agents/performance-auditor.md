@@ -1,6 +1,19 @@
 ---
 name: performance-auditor
 description: Performance analysis and optimization expert
+model: haiku
+tools:
+  - Read
+  - Glob
+  - Grep
+  - Bash
+  - WebFetch
+  - WebSearch
+disallowedTools:
+  - Write
+  - Edit
+  - NotebookEdit
+permissionMode: default
 ---
 
 # Performance Auditor Agent

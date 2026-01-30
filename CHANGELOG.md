@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.0] - 2026-01-30
+
+### Added
+- **Claude Code 2.1.25 Optimization** - Full leverage of Claude Code advanced features
+  - **New Hooks**:
+    - `PostToolUseFailure`: Automatic recovery context after tool failures
+    - `PreCompact`: Backup sprint state before memory compaction
+    - `SessionEnd`: Collect session metrics, cleanup logs, generate daily summaries
+  - **Agent YAML Frontmatter** (~100 agents across 5 languages):
+    - `model`: haiku for reviewers/auditors, sonnet for engineers/architects
+    - `tools`: Explicit tool whitelist per agent role
+    - `disallowedTools`: Security restrictions (no Write/Edit for reviewers)
+    - `skills`: Preloaded skill context (solid-principles, testing, security)
+  - **Skills Frontmatter Enhancement**:
+    - `allowed-tools`: Tool restrictions per skill
+    - `model`: Cost optimization (haiku for simple skills)
+    - Enhanced `triggers`: file patterns + keywords
+  - **Plugin Manifest** (`.claude-plugin/plugin.json`):
+    - Full plugin metadata for marketplace distribution
+    - Capabilities declaration (skills, agents, hooks, mcp)
+    - Technology stack listing
+  - **Settings Enhancement**:
+    - `plansDirectory: .claude/plans` for organized plans
+    - Extended permissions (npm, pnpm, yarn, php, flutter, ng, dotnet)
+    - Extended deny rules (chmod 777, curl|sh, credentials)
+
+### Changed
+- Claude Code feature utilization: ~40% → ~75%
+- Hook coverage: 5/13 → 9/13 events
+- Agent configuration: Added formal YAML frontmatter to all agents
+- Skills configuration: Added tool restrictions and model selection
+
+### Technical Details
+- Hook scripts use jq for JSON parsing
+- Backup rotation: keeps last 10 backups
+- Log retention: 7 days for logs, 30 days for metrics
+- Session metrics in `.claude/metrics/session-YYYYMMDD.json`
+
+---
+
 ## [5.1.0] - 2026-01-30
 
 ### Added

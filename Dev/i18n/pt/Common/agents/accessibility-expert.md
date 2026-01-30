@@ -1,6 +1,10 @@
 ---
 name: accessibility-expert
 description: WCAG 2.2 AAA accessibility specialist
+model: haiku
+tools: [Read, Glob, Grep, WebFetch, WebSearch]
+disallowedTools: [Write, Edit, Bash, NotebookEdit]
+permissionMode: default
 ---
 
 # Agente Especialista em Acessibilidade

@@ -1,6 +1,37 @@
 ---
 name: testing
-description: Testing - Principes TDD/BDD. Use when writing tests, reviewing test coverage, or setting up testing.
+description: TDD/BDD testing principles, test patterns, and coverage strategies
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - Bash
+model: sonnet
+triggers:
+  files:
+    - "*Test.php"
+    - "*_test.py"
+    - "*.spec.ts"
+    - "*.spec.tsx"
+    - "*.test.ts"
+    - "*.test.tsx"
+    - "*_test.dart"
+    - "*_test.go"
+    - "**/__tests__/**"
+    - "**/tests/**"
+  keywords:
+    - test
+    - TDD
+    - BDD
+    - coverage
+    - mock
+    - stub
+    - fixture
+    - assertion
+    - PHPUnit
+    - Jest
+    - pytest
+    - xUnit
 ---
 
 # Testing - Principes TDD/BDD

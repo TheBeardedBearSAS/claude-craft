@@ -1,6 +1,32 @@
 ---
 name: security
-description: Sécurité. Use when reviewing security, implementing auth, or hardening code.
+description: Security best practices, OWASP Top 10, and secure coding guidelines
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - WebSearch
+model: sonnet
+triggers:
+  files:
+    - "**/auth/**"
+    - "**/security/**"
+    - "**/*Auth*"
+    - "**/*Security*"
+    - "**/.env*"
+  keywords:
+    - security
+    - authentication
+    - authorization
+    - OWASP
+    - injection
+    - XSS
+    - CSRF
+    - encryption
+    - password
+    - token
+    - JWT
+    - OAuth
 ---
 
 # Sécurité

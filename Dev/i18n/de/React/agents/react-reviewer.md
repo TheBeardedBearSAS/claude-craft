@@ -1,6 +1,11 @@
 ---
 name: react-reviewer
 description: React and TypeScript code review specialist
+model: haiku
+tools: [Read, Glob, Grep, WebFetch, WebSearch]
+disallowedTools: [Write, Edit, Bash, NotebookEdit]
+permissionMode: default
+skills: [solid-principles, testing, security]
 ---
 
 # React/TypeScript Code-Audit-Agent

@@ -1,6 +1,22 @@
 ---
 name: workflow-analysis
-description: Workflow d'Analyse Obligatoire. Use when working with workflow analysis.
+description: Mandatory analysis workflow for understanding codebase before changes
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - Task
+model: sonnet
+triggers:
+  keywords:
+    - analyze
+    - understand
+    - explore
+    - architecture
+    - codebase
+    - structure
+    - workflow
+    - investigation
 ---
 
 # Workflow d'Analyse Obligatoire

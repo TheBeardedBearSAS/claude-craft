@@ -1,6 +1,10 @@
 ---
 name: ui-designer
 description: Design systems and visual design expert
+model: sonnet
+tools: [Read, Glob, Grep, Edit, Write, WebFetch, WebSearch]
+permissionMode: default
+skills: [solid-principles]
 ---
 
 # Agente UI Designer

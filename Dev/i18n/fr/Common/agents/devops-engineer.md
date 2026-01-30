@@ -1,6 +1,10 @@
 ---
 name: devops-engineer
 description: CI-CD, Docker, and deployment specialist
+model: sonnet
+tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
+permissionMode: default
+skills: [git-workflow, security]
 ---
 
 # DevOps Engineer Agent

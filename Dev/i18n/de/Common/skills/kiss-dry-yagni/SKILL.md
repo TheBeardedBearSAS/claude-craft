@@ -1,6 +1,22 @@
 ---
 name: kiss-dry-yagni
-description: Principes KISS, DRY, YAGNI. Use when reviewing code quality or refactoring.
+description: KISS, DRY, YAGNI principles for simple, maintainable code
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+model: haiku
+triggers:
+  keywords:
+    - KISS
+    - DRY
+    - YAGNI
+    - simplify
+    - duplication
+    - over-engineering
+    - premature optimization
+    - code smell
+    - complexity
 ---
 
 # Principes KISS, DRY, YAGNI

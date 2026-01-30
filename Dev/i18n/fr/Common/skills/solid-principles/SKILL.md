@@ -1,6 +1,29 @@
 ---
 name: solid-principles
-description: Principes SOLID. Use when reviewing code quality or refactoring.
+description: SOLID principles for clean code design and architecture
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+model: haiku
+triggers:
+  files:
+    - "*.php"
+    - "*.ts"
+    - "*.tsx"
+    - "*.cs"
+    - "*.py"
+    - "*.dart"
+    - "*.java"
+  keywords:
+    - SOLID
+    - Single Responsibility
+    - Open Closed
+    - Liskov
+    - Interface Segregation
+    - Dependency Inversion
+    - refactor
+    - clean code
 ---
 
 # Principes SOLID

@@ -1,6 +1,17 @@
 ---
 name: uiux-orchestrator
-description: UI-UX coordination and orchestration
+description: UI/UX coordination and orchestration lead
+model: sonnet
+tools:
+  - Read
+  - Glob
+  - Grep
+  - Edit
+  - Write
+  - Task
+  - WebFetch
+  - WebSearch
+permissionMode: default
 ---
 
 # UIUX Orchestrator Agent

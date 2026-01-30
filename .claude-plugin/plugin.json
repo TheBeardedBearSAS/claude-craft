@@ -1,0 +1,108 @@
+{
+  "$schema": "https://claude.ai/plugin-schema.json",
+  "name": "claude-craft",
+  "displayName": "Claude Craft",
+  "description": "AI-assisted development framework with BMAD v6 project management, 10 technology stacks, 34 agents, and 127+ commands",
+  "version": "5.2.0",
+  "author": {
+    "name": "The Bearded Bear",
+    "url": "https://github.com/TheBeardedBearSAS"
+  },
+  "homepage": "https://github.com/TheBeardedBearSAS/claude-craft",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheBeardedBearSAS/claude-craft.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "bmad",
+    "tdd",
+    "clean-architecture",
+    "multi-tech",
+    "symfony",
+    "react",
+    "flutter",
+    "angular",
+    "laravel",
+    "dotnet",
+    "python",
+    "vue",
+    "react-native",
+    "php"
+  ],
+  "capabilities": {
+    "skills": true,
+    "agents": true,
+    "hooks": true,
+    "mcp": true
+  },
+  "languages": ["en", "fr", "es", "de", "pt"],
+  "technologies": [
+    {
+      "name": "dotnet",
+      "displayName": ".NET / C#",
+      "version": "10 LTS / C# 14"
+    },
+    {
+      "name": "symfony",
+      "displayName": "Symfony / PHP",
+      "version": "8.0 / PHP 8.5"
+    },
+    {
+      "name": "flutter",
+      "displayName": "Flutter / Dart",
+      "version": "3.38 / Dart 3.10"
+    },
+    {
+      "name": "react",
+      "displayName": "React",
+      "version": "19.x"
+    },
+    {
+      "name": "react-native",
+      "displayName": "React Native",
+      "version": "0.76+"
+    },
+    {
+      "name": "angular",
+      "displayName": "Angular",
+      "version": "19.x"
+    },
+    {
+      "name": "vuejs",
+      "displayName": "Vue.js",
+      "version": "3.5+"
+    },
+    {
+      "name": "laravel",
+      "displayName": "Laravel",
+      "version": "12.x / PHP 8.5"
+    },
+    {
+      "name": "python",
+      "displayName": "Python",
+      "version": "3.13+"
+    },
+    {
+      "name": "php",
+      "displayName": "PHP",
+      "version": "8.5"
+    }
+  ],
+  "features": {
+    "bmadV6": {
+      "description": "Full BMAD v6 project management framework",
+      "tracks": ["quick-flow", "standard", "enterprise"]
+    },
+    "autonomousSprint": {
+      "description": "Overnight autonomous sprint execution with error recovery",
+      "parallelProcessing": true
+    },
+    "qaRecette": {
+      "description": "Automated acceptance testing via Chrome browser automation",
+      "goldenRule": "A fixed bug should NEVER reappear"
+    }
+  },
+  "minimumClaudeCodeVersion": "2.1.0",
+  "recommendedClaudeCodeVersion": "2.1.25"
+}

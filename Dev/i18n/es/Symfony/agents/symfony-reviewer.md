@@ -1,6 +1,11 @@
 ---
 name: symfony-reviewer
 description: Symfony and PHP code review specialist
+model: haiku
+tools: [Read, Glob, Grep, WebFetch, WebSearch]
+disallowedTools: [Write, Edit, Bash, NotebookEdit]
+permissionMode: default
+skills: [solid-principles, testing, security]
 ---
 
 # Agente Auditor de Código Symfony

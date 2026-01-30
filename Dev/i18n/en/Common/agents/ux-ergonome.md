@@ -1,6 +1,16 @@
 ---
 name: ux-ergonome
 description: User experience and cognitive ergonomics specialist
+model: sonnet
+tools:
+  - Read
+  - Glob
+  - Grep
+  - Edit
+  - Write
+  - WebFetch
+  - WebSearch
+permissionMode: default
 ---
 
 # UX Ergonomist Agent

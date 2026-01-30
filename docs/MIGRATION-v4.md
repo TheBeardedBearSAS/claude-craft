@@ -145,7 +145,7 @@ npx @the-bearded-bear/claude-craft migrate ~/my-project
 ```markdown
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 5.1.0
+**Version:** 5.2.0
 
 ## Quick Reference
 
