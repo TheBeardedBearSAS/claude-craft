@@ -1,6 +1,6 @@
 # Agents Full Reference
 
-Complete reference for all 34 agents available in Claude Craft.
+Complete reference for all 35 agents available in Claude Craft.
 
 ---
 
@@ -11,7 +11,7 @@ Complete reference for all 34 agents available in Claude Craft.
 | Common | 12 | @api-designer, @tdd-coach, @uiux-orchestrator |
 | Technology Reviewers | 10 | @symfony-reviewer, @react-reviewer |
 | Docker/Infrastructure | 5 | @docker-architect, @docker-debug |
-| BMAD v6 | 9 | @bmad-master, @pm, @dev |
+| BMAD v6 | 10 | @bmad-master, @pm, @dev, @qa-recette |
 | Project | 2 | @product-owner, @tech-lead |
 
 ---
@@ -553,7 +553,35 @@ Complete reference for all 34 agents available in Claude Craft.
 
 ---
 
-## BMAD v6 Agents (9)
+## BMAD v6 Agents (10)
+
+### @qa-recette
+
+**Expertise:** Automated Acceptance Testing with Claude in Chrome
+
+**Use when:**
+- Running acceptance tests (recette) on web applications
+- Validating User Stories, Epics, or Sprints
+- Detecting regressions after bug fixes
+- Generating regression tests from errors
+
+**Chrome Capabilities:**
+- `navigate`, `click`, `type`, `fill_form`, `scroll`
+- `read_console_logs`, `get_network_requests`
+- `read_dom_state`, `take_screenshot`, `record_gif`
+
+**Key Commands:** `/qa:recette`, `/qa:recette-status`, `/qa:recette-regression`
+
+**Golden Rule:** A fixed bug should NEVER reappear - automatic regression suite generation.
+
+**Example prompts:**
+```
+@qa-recette Run acceptance tests for user story US-001
+@qa-recette Check for regressions on the authentication module
+@qa-recette Generate regression tests from the login error
+```
+
+---
 
 ### @bmad-master
 

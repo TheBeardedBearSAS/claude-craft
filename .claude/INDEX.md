@@ -206,6 +206,52 @@ cat .ralph/conductor/metrics-ASC-*.json
 
 ---
 
+## QA Recette Quick Reference
+
+### Essential Commands
+
+```bash
+# Test a story
+/qa:recette --scope=story --id=US-001
+
+# Test with dry run first
+/qa:recette --scope=story --id=US-001 --dry-run
+
+# Resume interrupted session
+/qa:recette --resume=REC-xxx
+
+# Record execution as GIF
+/qa:recette --scope=story --id=US-001 --record-gif
+```
+
+### Prerequisites
+
+1. Chrome extension v1.0.36+
+2. Claude Code with `--chrome` or `/chrome` command
+
+### Golden Rule
+
+> **A fixed bug should NEVER reappear.**
+
+All detected errors auto-generate regression tests:
+- Logic/Validation → Unit test
+- API/Service → Functional test
+- User flow → Behat feature
+
+### Output Structure
+
+```
+.recette/
+├── plans/           # Test plans
+├── sessions/        # Session states (resume)
+├── regression/      # Regression tests
+│   └── registry.yaml
+├── metrics/         # Historical data
+└── reports/         # Generated reports
+```
+
+---
+
 ## Skills
 
 Invoke skills with `/skill-name`:

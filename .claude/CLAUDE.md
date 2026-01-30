@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 5.0.0 | **Languages:** en, fr, es, de, pt
+**Version:** 5.1.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 34 agents, 127+ commands, and BMAD v6 project management.
 
@@ -117,6 +117,14 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/docker:debug` | Diagnose Docker issues |
 | `/docker:cicd-pipeline` | Generate CI/CD pipeline |
 
+### QA Recette (`/qa:`) - NEW
+| Command | Description |
+|---------|-------------|
+| `/qa:recette` | **[NEW]** Automated acceptance tests via Chrome |
+| `/qa:recette-status` | Show recette session status |
+| `/qa:recette-regression` | View regression tests |
+| `/qa:recette-report` | Generate recette report |
+
 ---
 
 ## Available Agents
@@ -149,7 +157,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `@vuejs-reviewer` | Vue.js |
 | `@reactnative-reviewer` | React Native |
 
-### BMAD v6 Agents (9)
+### BMAD v6 Agents (10)
 | Agent | Role |
 |-------|------|
 | `@bmad-master` | Orchestrator |
@@ -160,6 +168,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `@sm` | Scrum Master |
 | `@dev` | Developer (TDD) |
 | `@qa` | QA Engineer |
+| `@qa-recette` | **[NEW]** Browser automation QA |
 | `@ux` | UX Designer |
 
 ### Docker Agents (5)
@@ -253,6 +262,53 @@ Run entire sprints overnight with minimal human intervention.
 | 3 | Blocked | Escalate to human |
 
 See [Autonomous Sprint Guide](../docs/AUTONOMOUS-SPRINT.md) for details.
+
+---
+
+## QA Recette - Automated Acceptance Testing - NEW
+
+Automated acceptance testing via Claude in Chrome with the **Golden Rule**: A fixed bug should NEVER reappear.
+
+```bash
+# Test a specific story
+/qa:recette --scope=story --id=US-001
+
+# Test a full sprint
+/qa:recette --scope=sprint --id=Sprint-3
+
+# Dry run to see test plan
+/qa:recette --scope=story --id=US-001 --dry-run
+
+# Resume interrupted session
+/qa:recette --resume=REC-20260130-143022
+```
+
+**Key Features:**
+| Feature | Description |
+|---------|-------------|
+| **Comprehensive Plans** | Generates tests from acceptance criteria |
+| **Browser Automation** | Uses Claude in Chrome for real testing |
+| **Session Recovery** | Checkpoint-based resume |
+| **Golden Rule** | Auto-generates regression tests for errors |
+| **Regression Detection** | Compares runs to detect regressions |
+
+**Prerequisites:**
+- Chrome extension v1.0.36+
+- Claude Code with `--chrome` or `/chrome`
+
+**Output Structure:**
+```
+.recette/
+├── plans/              # Test plans (YAML)
+├── sessions/           # Session states
+├── regression/         # Regression suite
+│   ├── registry.yaml
+│   └── tests/
+├── metrics/            # Historical data
+└── reports/            # Generated reports
+```
+
+See command help: `/qa:recette --help`
 
 ---
 

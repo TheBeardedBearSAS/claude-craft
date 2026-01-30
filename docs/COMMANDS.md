@@ -35,6 +35,7 @@ Commands can take arguments:
 | `/project:` | Project Management | 24 |
 | `/sprint:` | Sprint Management (BMAD v6) | 4 |
 | `/gate:` | Quality Gates (BMAD v6) | 6 |
+| `/qa:` | QA Recette (Browser Testing) | 4 |
 
 ---
 
@@ -593,6 +594,86 @@ Available with BMAD v6 installation.
 | Backlog Gate | 6/6 INVEST | Independent, Negotiable, Valuable, Estimable, Small, Testable |
 | Story DoD | 100% | Tasks, tests, AC, review, no blockers |
 | Sprint Ready | 100% | Metadata, goal, stories ready, estimated |
+
+---
+
+## QA Recette Commands (`/qa:`) - NEW
+
+Automated acceptance testing with Claude in Chrome.
+
+| Command | Description |
+|---------|-------------|
+| `/qa:recette` | **[NEW]** Execute automated acceptance tests via browser |
+| `/qa:recette-status` | Show recette session status |
+| `/qa:recette-regression` | View regression test registry |
+| `/qa:recette-report` | Generate recette report (MD/HTML/JSON) |
+
+### Golden Rule
+
+> **A fixed bug should NEVER reappear.**
+
+All detected errors automatically generate regression tests.
+
+### Usage Examples
+
+```bash
+# Test a specific story
+/qa:recette --scope=story --id=US-001
+
+# Test all stories in a sprint
+/qa:recette --scope=sprint --id=Sprint-3
+
+# Dry run to see test plan
+/qa:recette --scope=story --id=US-001 --dry-run
+
+# Resume interrupted session
+/qa:recette --resume=REC-20260130-143022
+
+# Record execution as GIF
+/qa:recette --scope=story --id=US-001 --record-gif
+```
+
+### Prerequisites
+
+- Chrome extension Claude in Chrome v1.0.36+
+- Claude Code with `--chrome` flag or `/chrome` command
+
+### Test Categories
+
+| Category | Description |
+|----------|-------------|
+| `acceptance_criteria_validation` | Tests for each AC |
+| `edge_cases` | Boundary conditions |
+| `error_scenarios` | Error handling |
+| `ui_ux_verification` | UI/UX consistency |
+| `performance_checks` | Load times |
+| `security_basics` | XSS, CSRF, injection |
+
+### Error → Test Pipeline
+
+When an error is detected:
+1. **Classify** error type (visual, interaction, validation, logic, security, API)
+2. **Generate** appropriate tests:
+   - Logic/Validation → Unit test
+   - API/Service → Functional test
+   - User flow → Behat feature
+3. **Register** in regression suite with `@regression` tag
+4. **Fix** bug using TDD workflow
+5. **Verify** all regression tests pass
+
+### Output Structure
+
+```
+.recette/
+├── plans/           # Test plans (YAML)
+├── sessions/        # Session states (resume)
+├── regression/      # Regression tests
+│   └── registry.yaml
+├── metrics/         # Historical data
+└── reports/         # Generated reports
+```
+
+See command documentation: `Dev/i18n/{lang}/Common/commands/recette.md`
 
 ---
 

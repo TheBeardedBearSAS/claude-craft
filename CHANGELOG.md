@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.0] - 2026-01-30
+
+### Added
+- **QA Recette** - Automated Acceptance Testing with Claude in Chrome
+  - `/qa:recette` command for browser-based acceptance tests
+  - `/qa:recette-status` to view session progress
+  - `/qa:recette-regression` to run regression tests only
+  - `@qa-recette` agent for QA automation expertise
+  - **Golden Rule Enforcement**: Fixed bugs never reappear
+  - **Session Recovery**: Resume interrupted tests with checkpoints
+  - **Auto Test Generation**: Unit, Functional, Behat tests from errors
+  - **Regression Detection**: Compare historical runs
+  - **6 Test Categories**: AC validation, edge cases, errors, UI/UX, performance, security
+  - **Error Classification**: visual, interaction, validation, logic, security, API
+  - **Chrome MCP Integration**: navigate, click, type, screenshot, record_gif
+- **Recette Library** (`Tools/Recette/lib/`)
+  - `chrome-check.sh`: MCP Chrome verification
+  - `session.sh`: Session management with checkpoints
+  - `plan-generator.sh`: Test plan from acceptance criteria
+  - `browser-executor.sh`: Chrome automation execution
+  - `test-generator.sh`: Regression test generation
+  - `regression-detector.sh`: Historical comparison
+  - `report-generator.sh`: MD/HTML/JSON reports
+- **Templates** (`Tools/Recette/templates/`)
+  - `unit-test.php.template`: PHPUnit template
+  - `functional-test.php.template`: Symfony WebTestCase
+  - `feature.feature.template`: Behat scenarios
+  - `report.md.template`: Report template
+- **i18n**: Full translation for en, fr, es, de, pt
+- **Documentation**: Updated CLAUDE.md, INDEX.md, COMMANDS.md, AGENTS.md
+
+### Changed
+- Agent count: 34 → 35 (qa-recette added)
+- Command count: 127+ → 130+ (3 QA commands added)
+
 ## [5.0.0] - 2026-01-30
 
 ### Added
@@ -457,6 +492,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Enhanced npm publishing security via OIDC
 
+[5.1.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.4.0...v5.0.0
 [4.4.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.2.0...v4.3.0

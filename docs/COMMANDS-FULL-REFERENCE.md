@@ -1,6 +1,6 @@
 # Commands Full Reference
 
-Complete reference for all 127+ commands available in Claude Craft.
+Complete reference for all 130+ commands available in Claude Craft.
 
 ---
 
@@ -27,6 +27,7 @@ Complete reference for all 127+ commands available in Claude Craft.
 | `/vuejs:` | 6 | Vue.js |
 | `/php:` | 5 | PHP |
 | `/docker:` | 4 | Docker |
+| `/qa:` | 3 | QA Recette (Acceptance Testing) |
 
 ---
 
@@ -512,6 +513,76 @@ any → blocked
 /docker:architecture microservices e-commerce
 /docker:cicd-pipeline github-actions
 ```
+
+---
+
+## QA Recette Commands (`/qa:`)
+
+Automated acceptance testing with Claude in Chrome.
+
+### Prerequisites
+
+- Claude in Chrome extension v1.0.36+
+- Claude Code v2.0.73+
+- Launch with `claude --chrome` or run `/chrome`
+
+### Core Commands
+
+| Command | Description |
+|---------|-------------|
+| `/qa:recette` | Run acceptance tests on web application |
+| `/qa:recette-status` | Show current session status |
+| `/qa:recette-regression` | Run regression tests only |
+
+### `/qa:recette` Arguments
+
+| Argument | Description | Values |
+|----------|-------------|--------|
+| `--scope` | Testing scope | `story`, `epic`, `sprint`, `task` |
+| `--id` | Target identifier | e.g., `US-001`, `EPIC-002` |
+| `--dry-run` | Generate plan without execution | - |
+| `--resume` | Resume interrupted session | session-id |
+| `--record-gif` | Record test execution | - |
+
+### Usage Examples
+
+```bash
+# Run acceptance tests for a user story
+/qa:recette --scope=story --id=US-001
+
+# Dry-run to preview test plan
+/qa:recette --scope=story --id=US-001 --dry-run
+
+# Resume interrupted session
+/qa:recette --resume=REC-20260130-143022
+
+# Run with GIF recording
+/qa:recette --scope=sprint --id=SPRINT-03 --record-gif
+
+# Run regression tests only
+/qa:recette-regression
+```
+
+### Test Categories
+
+| Category | Description |
+|----------|-------------|
+| `acceptance_criteria_validation` | Validate story acceptance criteria |
+| `edge_cases` | Test boundary conditions |
+| `error_scenarios` | Error handling verification |
+| `ui_ux_verification` | UI/UX consistency checks |
+| `performance_checks` | Response time validation |
+| `security_basics` | XSS, CSRF, injection checks |
+
+### Golden Rule
+
+**A fixed bug should NEVER reappear.**
+
+When errors are detected:
+1. Error is classified (visual, interaction, validation, logic, security, API)
+2. Appropriate tests are auto-generated (Unit, Functional, Behat)
+3. Tests are added to regression registry
+4. All future runs include regression checks
 
 ---
 

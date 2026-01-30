@@ -4,6 +4,23 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
 
+## What's New in v5.1 - QA Recette (Acceptance Testing)
+
+- **Automated Acceptance Testing**: Browser-based testing with Claude in Chrome
+  - `/qa:recette --scope=story --id=US-001` - Test user stories
+  - `/qa:recette --scope=sprint --id=SPRINT-03` - Test full sprints
+  - `/qa:recette-regression` - Run regression suite
+- **Golden Rule**: A fixed bug should NEVER reappear
+  - Auto-generate regression tests (Unit, Functional, Behat) from errors
+  - Track all bugs in regression registry
+  - Detect regressions by comparing historical runs
+- **Session Recovery**: Resume interrupted tests with checkpoints
+- **6 Test Categories**: AC validation, edge cases, errors, UI/UX, performance, security
+- **Error Classification**: visual, interaction, validation, logic, security, API
+- **Chrome Capabilities**: navigate, click, type, screenshot, record_gif
+- **Full i18n**: English, French, Spanish, German, Portuguese
+- See [Commands Reference](docs/COMMANDS.md) for usage
+
 ## What's New in v5.0 - Autonomous Sprint Conductor (ASC)
 
 - **Overnight Sprint Execution**: Run sprints unattended with bounded execution
@@ -123,8 +140,8 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **10 Technology Stacks**: Symfony, Flutter, Python, React, React Native, Angular, C#/.NET, Laravel, Vue.js, PHP
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **34 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, Ralph Conductor, and **9 BMAD agents**
-- **110+ Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing**
+- **35 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, Ralph Conductor, **10 BMAD agents**, and QA Recette
+- **130+ Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
 - **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
 - **249 Skills**: Best practices in official Claude Code format (architecture, testing, security)
@@ -200,6 +217,7 @@ BMAD v6 (Build, Measure, Analyze, Deliver) extends the workflow system with comp
 | `dev` | Developer | `/dev:implement`, `/dev:tdd`, `/dev:refactor` |
 | `qa` | QA Engineer | `/qa:validate`, `/qa:automate`, `/qa:strategy` |
 | `ux` | UX Designer | `/ux:wireframe`, `/ux:journey`, `/ux:accessibility` |
+| `qa-recette` | QA Recette Engineer | `/qa:recette`, `/qa:recette-status`, `/qa:recette-regression` |
 
 ### Status-based Routing
 
@@ -637,7 +655,7 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 | `docker-cicd` | CI/CD pipelines, security scanning |
 | `docker-architect` | Complete Docker architecture design |
 
-### BMAD v6 Agents (9)
+### BMAD v6 Agents (10)
 | Agent | Role | Key Responsibilities |
 |-------|------|----------------------|
 | `bmad-master` | Orchestrator | Agent coordination, workflow routing, metrics |
@@ -649,6 +667,7 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 | `dev` | Developer | TDD implementation, code review, refactoring |
 | `qa` | QA Engineer | Test strategy, automation, validation |
 | `ux` | UX Designer | Wireframes, user journeys, accessibility |
+| `qa-recette` | QA Recette Engineer | Chrome automation, acceptance testing, regression detection |
 
 ## Command Namespaces
 
@@ -671,6 +690,7 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 - `/vuejs:` - Vue.js-specific (components, composables, Pinia)
 - `/php:` - PHP-specific (entities, value objects, use cases, Clean Architecture)
 - `/docker:` - Docker/Infrastructure (compose, debug, pipelines, architecture)
+- `/qa:` - **QA Recette** (acceptance testing, regression, Chrome automation)
 
 ## Documentation
 

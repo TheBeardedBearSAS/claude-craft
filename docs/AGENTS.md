@@ -489,7 +489,7 @@ Helps with:
 
 ---
 
-## BMAD v6 Agents (9)
+## BMAD v6 Agents (10)
 
 Available with BMAD v6 framework installation. These agents follow the Agent-as-Code YAML format.
 
@@ -675,6 +675,47 @@ Helps with:
 
 ---
 
+### qa-recette (QA Recette Engineer) - NEW
+
+**Expertise**: Automated acceptance testing via Claude in Chrome
+
+Specialized in browser-based acceptance testing with automatic regression test generation. Implements the **Golden Rule**: A fixed bug should NEVER reappear.
+
+Helps with:
+- Execute automated acceptance tests via browser
+- Generate comprehensive test plans from AC
+- Detect and classify errors
+- Generate regression tests from errors (Unit, Functional, Behat)
+- Maintain regression test registry
+- Produce test reports with traceability
+- Enable session recovery for interrupted tests
+
+```
+@qa-recette Run acceptance tests for US-001
+@qa-recette Generate regression tests for detected errors
+```
+
+**Key Commands**: `/qa:recette`, `/qa:recette-status`, `/qa:recette-regression`, `/qa:recette-report`
+
+**Chrome Capabilities**:
+- Navigation: navigate, back, forward, refresh
+- Interaction: click, type, fill_form, scroll, hover
+- Reading: DOM state, element text, attributes
+- Debugging: Console logs, network requests, errors
+- Capture: Screenshot, GIF recording
+
+**Error Classification**:
+| Type | Generated Tests |
+|------|-----------------|
+| Visual/UI | Behat feature |
+| Interaction | Behat + Functional |
+| Validation | Unit + Functional |
+| Logic | Unit test |
+| Security | Functional + Unit |
+| API | Functional test |
+
+---
+
 ### ux (UX Designer)
 
 **Expertise**: User experience and accessibility
@@ -808,9 +849,9 @@ description: Expert in REST/GraphQL API design. Use for endpoint design, resourc
 | Common | 11 | 55 |
 | Technology Reviewers | 5 | 25 |
 | Docker/Infrastructure | 5 | 25 |
-| **BMAD v6** | **9** | **9** (YAML format) |
+| **BMAD v6** | **10** | **10** (YAML format) |
 | Project | 2 | 10 |
-| **Total** | **32** | **124** |
+| **Total** | **33** | **125** |
 
 ---
 
