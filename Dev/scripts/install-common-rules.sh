@@ -37,7 +37,7 @@ set -euo pipefail
 #-------------------------------------------------------------------------------
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT_NAME="$(basename "$0")"
-VERSION="5.0.0"
+VERSION="5.1.0"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 
 # Couleurs
