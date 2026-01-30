@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.1] - 2026-01-30
+
+### Fixed
+- **install-from-config.sh**: Added missing technology mappings (angular, csharp, laravel, vuejs, php) in `get_install_script()`
+- **install-from-config.sh**: Docker tech now correctly routes to `Infra/install-infra-rules.sh` instead of being skipped
+- **install-from-config.sh**: Script options (`--install`, `--force`, `--preserve-config`, `--skip-common`) are now adapted per technology script capabilities
+- **install-common-rules.sh**: Fixed `install_claude_md()` crash when markdown files lack `description:` frontmatter (grep exit code 1 with `set -e`)
+
+### Changed
+- **claude-projects.yaml**: Added Docker module to all SaaS projects (kapitain, CareLink, Joina, SkillProof) for consistent infrastructure tooling across all projects
+
 ## [5.2.0] - 2026-01-30
 
 ### Added

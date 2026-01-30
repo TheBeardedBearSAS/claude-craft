@@ -444,11 +444,29 @@ get_install_script() {
         reactnative)
             script="${SCRIPT_DIR}/install-reactnative-rules.sh"
             ;;
+        angular)
+            script="${SCRIPT_DIR}/install-angular-rules.sh"
+            ;;
+        csharp)
+            script="${SCRIPT_DIR}/install-csharp-rules.sh"
+            ;;
+        laravel)
+            script="${SCRIPT_DIR}/install-laravel-rules.sh"
+            ;;
+        vuejs)
+            script="${SCRIPT_DIR}/install-vuejs-rules.sh"
+            ;;
+        php)
+            script="${SCRIPT_DIR}/install-php-rules.sh"
+            ;;
         common)
             script="${SCRIPT_DIR}/install-common-rules.sh"
             ;;
         project)
             script="${SCRIPT_DIR}/../../Project/install-project-commands.sh"
+            ;;
+        docker)
+            script="${SCRIPT_DIR}/../../Infra/install-infra-rules.sh"
             ;;
     esac
 
@@ -468,26 +486,37 @@ install_module() {
     local script
     script=$(get_install_script "$tech")
 
+    if [[ -z "$script" ]]; then
+        log_warning "Technologie '$tech' n'a pas de script d'installation configuré"
+        return 0
+    fi
+
     if [[ ! -f "$script" ]]; then
         log_error "Script d'installation introuvable: $script"
         return 1
     fi
 
-    # Construire les options
-    local opts=("--install")
-    if [[ "$force_mode" == "true" ]]; then
-        opts=("--force")
-    fi
-    if [[ "$preserve_config" == "true" ]]; then
-        opts+=("--preserve-config")
-    fi
-    if [[ "$backup_mode" == "true" ]]; then
-        opts+=("--backup")
+    # Construire les options selon les capacités de chaque script
+    # - "project" : --lang, --skip-common uniquement
+    # - "docker"  : --install, --force, --backup, --lang (pas --preserve-config ni --skip-common)
+    # - autres    : --install, --force, --preserve-config, --backup, --lang, --skip-common
+    local opts=()
+    if [[ "$tech" != "project" ]]; then
+        opts=("--install")
+        if [[ "$force_mode" == "true" ]]; then
+            opts=("--force")
+        fi
+        if [[ "$preserve_config" == "true" && "$tech" != "docker" ]]; then
+            opts+=("--preserve-config")
+        fi
+        if [[ "$backup_mode" == "true" ]]; then
+            opts+=("--backup")
+        fi
     fi
     # Ajouter la langue
     opts+=("--lang=$lang")
-    # Skip common si multi-tech (2ème+ technologie)
-    if [[ -n "$skip_common" ]]; then
+    # Skip common si multi-tech (2ème+ technologie) - pas supporté par project et docker
+    if [[ -n "$skip_common" && "$tech" != "project" && "$tech" != "docker" ]]; then
         opts+=("$skip_common")
     fi
 

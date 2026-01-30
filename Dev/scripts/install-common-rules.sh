@@ -37,7 +37,7 @@ set -euo pipefail
 #-------------------------------------------------------------------------------
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT_NAME="$(basename "$0")"
-VERSION="5.2.0"
+VERSION="5.2.1"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 
 # Couleurs
@@ -536,9 +536,9 @@ install_claude_md() {
     if [[ -d "$src_agents" ]]; then
         while IFS= read -r agent_file; do
             local agent_name
-            agent_name=$(grep -m1 "^name:" "$agent_file" 2>/dev/null | sed 's/^name:[[:space:]]*//' | tr -d '"')
+            agent_name=$(grep -m1 "^name:" "$agent_file" 2>/dev/null | sed 's/^name:[[:space:]]*//' | tr -d '"' || true)
             local agent_desc
-            agent_desc=$(grep -m1 "^description:" "$agent_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60)
+            agent_desc=$(grep -m1 "^description:" "$agent_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60 || true)
             if [[ -n "$agent_name" ]]; then
                 agents_list="${agents_list}- \`@${agent_name}\` - ${agent_desc}\n"
             fi
@@ -557,7 +557,7 @@ install_claude_md() {
                 continue
             fi
             local cmd_desc
-            cmd_desc=$(grep -m1 "^description:" "$cmd_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60)
+            cmd_desc=$(grep -m1 "^description:" "$cmd_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60 || true)
             if [[ -n "$cmd_desc" ]]; then
                 commands_list="${commands_list}- \`/common:${cmd_name}\` - ${cmd_desc}\n"
             fi
