@@ -10,6 +10,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
   - `/qa:recette --scope=story --id=US-001` - Test user stories
   - `/qa:recette --scope=sprint --id=SPRINT-03` - Test full sprints
   - `/qa:recette-regression` - Run regression suite
+  - `/qa:recette-fix --session=REC-xxx` - Fix bugs from recette sessions (TDD)
 - **Golden Rule**: A fixed bug should NEVER reappear
   - Auto-generate regression tests (Unit, Functional, Behat) from errors
   - Track all bugs in regression registry
@@ -217,7 +218,7 @@ BMAD v6 (Build, Measure, Analyze, Deliver) extends the workflow system with comp
 | `dev` | Developer | `/dev:implement`, `/dev:tdd`, `/dev:refactor` |
 | `qa` | QA Engineer | `/qa:validate`, `/qa:automate`, `/qa:strategy` |
 | `ux` | UX Designer | `/ux:wireframe`, `/ux:journey`, `/ux:accessibility` |
-| `qa-recette` | QA Recette Engineer | `/qa:recette`, `/qa:recette-status`, `/qa:recette-regression` |
+| `qa-recette` | QA Recette Engineer | `/qa:recette`, `/qa:recette-fix`, `/qa:recette-status`, `/qa:recette-regression` |
 
 ### Status-based Routing
 

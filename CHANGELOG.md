@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **QA Recette Fix** (`/qa:recette-fix`) - Automated bug fixing from recette sessions
+  - 7-phase workflow: load → refine → group → BMAD docs → TDD fix → verify → report
+  - Error refinement with severity matrix and root cause analysis
+  - Smart grouping by root cause (deduplication)
+  - BMAD bug story generation from template
+  - TDD workflow (RED → GREEN → REFACTOR) per bug
+  - `--dry-run`, `--skip-fix`, `--severity`, `--auto-commit` flags
+  - fix-state.yaml for progress tracking
+  - Bug story template in 5 languages (fr, en, es, de, pt)
+
 ## [5.2.1] - 2026-01-30
 
 ### Fixed

@@ -27,7 +27,7 @@ Complete reference for all 130+ commands available in Claude Craft.
 | `/vuejs:` | 6 | Vue.js |
 | `/php:` | 5 | PHP |
 | `/docker:` | 4 | Docker |
-| `/qa:` | 3 | QA Recette (Acceptance Testing) |
+| `/qa:` | 5 | QA Recette (Acceptance Testing) |
 
 ---
 
@@ -532,7 +532,9 @@ Automated acceptance testing with Claude in Chrome.
 |---------|-------------|
 | `/qa:recette` | Run acceptance tests on web application |
 | `/qa:recette-status` | Show current session status |
+| `/qa:recette-fix` | Fix bugs from recette session with TDD workflow |
 | `/qa:recette-regression` | Run regression tests only |
+| `/qa:recette-report` | Generate recette report |
 
 ### `/qa:recette` Arguments
 
@@ -543,6 +545,16 @@ Automated acceptance testing with Claude in Chrome.
 | `--dry-run` | Generate plan without execution | - |
 | `--resume` | Resume interrupted session | session-id |
 | `--record-gif` | Record test execution | - |
+
+### `/qa:recette-fix` Arguments
+
+| Argument | Description | Values |
+|----------|-------------|--------|
+| `--session` | Recette session ID | e.g., `REC-20260130-143022` |
+| `--dry-run` | Refine and document without fixing | - |
+| `--severity` | Filter by minimum severity | `critical`, `high`, `medium`, `low` |
+| `--skip-fix` | Generate BMAD documents only | - |
+| `--auto-commit` | Auto-commit after each fix | - |
 
 ### Usage Examples
 
@@ -561,6 +573,12 @@ Automated acceptance testing with Claude in Chrome.
 
 # Run regression tests only
 /qa:recette-regression
+
+# Fix all bugs from a recette session
+/qa:recette-fix --session=REC-20260130-143022
+
+# Dry run
+/qa:recette-fix --session=REC-20260130-143022 --dry-run
 ```
 
 ### Test Categories

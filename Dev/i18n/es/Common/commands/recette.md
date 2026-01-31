@@ -210,6 +210,7 @@ entries:
 
 | Comando | Descripcion |
 |---------|-------------|
+| `/qa:recette-fix` | Corregir bugs de una sesion |
 | `/qa:recette-status` | Mostrar estado de sesion |
 | `/qa:recette-regression` | Ver pruebas de regresion |
 | `/qa:recette-report` | Generar reporte |

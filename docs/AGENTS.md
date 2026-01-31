@@ -695,7 +695,7 @@ Helps with:
 @qa-recette Generate regression tests for detected errors
 ```
 
-**Key Commands**: `/qa:recette`, `/qa:recette-status`, `/qa:recette-regression`, `/qa:recette-report`
+**Key Commands**: `/qa:recette`, `/qa:recette-fix`, `/qa:recette-status`, `/qa:recette-regression`, `/qa:recette-report`
 
 **Chrome Capabilities**:
 - Navigation: navigate, back, forward, refresh

@@ -100,6 +100,27 @@ menu:
     description: Show regression test status
     workflow: workflows/qa/recette-regression.yaml
 
+  - trigger: /qa:recette-fix
+    description: Fix bugs from recette session
+    workflow: workflows/qa/recette-fix.yaml
+    args:
+      - name: session
+        required: true
+        description: Recette session ID
+      - name: dry-run
+        required: false
+        description: Refine and document without fixing
+      - name: severity
+        options: [critical, high, medium, low]
+        required: false
+        description: Filter by minimum severity
+      - name: skip-fix
+        required: false
+        description: Generate documents only, no TDD fixing
+      - name: auto-commit
+        required: false
+        description: Automatic commit after each bug fix
+
   - trigger: /qa:recette-report
     description: Generate recette report
     workflow: workflows/qa/recette-report.yaml
@@ -126,6 +147,14 @@ outputs:
   - type: report
     format: markdown
     location: .recette/reports/
+
+  - type: fix-state
+    format: yaml
+    location: .recette/sessions/{id}/fix-state.yaml
+
+  - type: bug-stories
+    format: markdown
+    location: .bmad/stories/
 
 test_categories:
   acceptance_criteria_validation:

@@ -35,7 +35,7 @@ Commands can take arguments:
 | `/project:` | Project Management | 24 |
 | `/sprint:` | Sprint Management (BMAD v6) | 4 |
 | `/gate:` | Quality Gates (BMAD v6) | 6 |
-| `/qa:` | QA Recette (Browser Testing) | 4 |
+| `/qa:` | QA Recette (Browser Testing) | 5 |
 
 ---
 
@@ -606,6 +606,7 @@ Automated acceptance testing with Claude in Chrome.
 | `/qa:recette` | **[NEW]** Execute automated acceptance tests via browser |
 | `/qa:recette-status` | Show recette session status |
 | `/qa:recette-regression` | View regression test registry |
+| `/qa:recette-fix` | **[NEW]** Fix bugs from recette session (TDD workflow) |
 | `/qa:recette-report` | Generate recette report (MD/HTML/JSON) |
 
 ### Golden Rule
@@ -631,6 +632,15 @@ All detected errors automatically generate regression tests.
 
 # Record execution as GIF
 /qa:recette --scope=story --id=US-001 --record-gif
+
+# Fix all bugs from a recette session
+/qa:recette-fix --session=REC-20260130-143022
+
+# Dry run: refine and document without fixing
+/qa:recette-fix --session=REC-20260130-143022 --dry-run
+
+# Fix critical bugs only
+/qa:recette-fix --session=REC-20260130-143022 --severity=critical
 ```
 
 ### Prerequisites
@@ -674,6 +684,7 @@ When an error is detected:
 ```
 
 See command documentation: `Dev/i18n/{lang}/Common/commands/recette.md`
+See fix command documentation: `Dev/i18n/{lang}/Common/commands/recette-fix.md`
 
 ---
 

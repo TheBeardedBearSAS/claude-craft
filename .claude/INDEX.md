@@ -222,6 +222,15 @@ cat .ralph/conductor/metrics-ASC-*.json
 
 # Record execution as GIF
 /qa:recette --scope=story --id=US-001 --record-gif
+
+# Fix bugs from a recette session
+/qa:recette-fix --session=REC-xxx
+
+# Dry run: refine and document without fixing
+/qa:recette-fix --session=REC-xxx --dry-run
+
+# Fix only critical bugs
+/qa:recette-fix --session=REC-xxx --severity=critical
 ```
 
 ### Prerequisites

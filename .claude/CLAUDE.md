@@ -121,6 +121,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | Command | Description |
 |---------|-------------|
 | `/qa:recette` | **[NEW]** Automated acceptance tests via Chrome |
+| `/qa:recette-fix` | **[NEW]** Fix bugs from a recette session |
 | `/qa:recette-status` | Show recette session status |
 | `/qa:recette-regression` | View regression tests |
 | `/qa:recette-report` | Generate recette report |

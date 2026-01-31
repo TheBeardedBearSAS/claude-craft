@@ -210,6 +210,7 @@ entries:
 
 | Command | Description |
 |---------|-------------|
+| `/qa:recette-fix` | Fix bugs from a recette session |
 | `/qa:recette-status` | Show session status |
 | `/qa:recette-regression` | View regression tests |
 | `/qa:recette-report` | Generate report |
