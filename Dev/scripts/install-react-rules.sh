@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-VERSION="5.2.1"
+VERSION="5.3.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 TECH_NAME="React"

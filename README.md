@@ -51,7 +51,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
   - [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md): Common problems and solutions
   - [BMAD-PRACTICAL-GUIDE.md](docs/BMAD-PRACTICAL-GUIDE.md): BMAD v6 step-by-step
   - [RALPH-GUIDE.md](docs/RALPH-GUIDE.md): Ralph Wiggum configuration
-- **Complete Reference Documentation**: All 127+ commands and 34 agents documented
+- **Complete Reference Documentation**: All 130+ commands and 34 agents documented
 - **Example Projects**: symfony-api, flutter-app, fullstack-saas
 - **Complete Workflow Guides**: Idea → Production in 5 languages
 - **Prerequisites Check Script**: `./Dev/scripts/check-prerequisites.sh`

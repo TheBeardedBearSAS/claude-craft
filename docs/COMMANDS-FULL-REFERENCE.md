@@ -1,6 +1,6 @@
 # Commands Full Reference
 
-Complete reference for all 130+ commands available in Claude Craft.
+Complete reference for all 132+ commands available in Claude Craft.
 
 ---
 
