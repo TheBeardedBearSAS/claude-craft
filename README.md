@@ -4,6 +4,22 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
 
+## What's New in v5.4 - Claude Code 2.1.29 Compatibility
+
+- **PR Integration** (v2.1.27): Resume sessions linked to PRs with `--from-pr`
+  - `claude --from-pr 123` or `claude --from-pr <url>`
+  - Auto-link when creating PRs via `gh pr create`
+  - Status indicators: approved, pending, changes requested, draft, merged
+- **File Tools Preference** (v2.1.21): Claude prefers native tools over bash
+  - Use `Read` instead of `cat/head/tail`
+  - Use `Edit` instead of `sed/awk`
+  - Use `Write` instead of `echo >/cat <<EOF`
+- **spinnerVerbs** (v2.1.23): Customize spinner text in settings.json
+- **Task status `deleted`** (v2.1.20): Permanent task removal via TaskUpdate
+- **Background Agent Permissions** (v2.1.20): Permission prompts before launch
+- **VSCode Python venv** (v2.1.21): Auto-activate virtual environment
+- See [CHANGELOG](CHANGELOG.md) for full details
+
 ## What's New in v5.1 - QA Recette (Acceptance Testing)
 
 - **Automated Acceptance Testing**: Browser-based testing with Claude in Chrome
