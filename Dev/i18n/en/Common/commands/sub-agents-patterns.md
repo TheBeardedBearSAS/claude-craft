@@ -103,6 +103,34 @@ Benefits:
 - Large migrations
 - Quality pipelines
 
+### Permission Prompting (v2.1.20+)
+
+Background agents request permissions **before** launching, preventing mid-execution blocks:
+
+```
+Launching background task: "Analyze and fix code"
+
+This task will need permissions for:
+- Read (all files)
+- Edit (src/**)
+- Bash (npm run lint:fix)
+
+Approve all? [y/N/select]
+```
+
+**Response options:**
+
+| Option | Action |
+|--------|--------|
+| `y` | Approve all requested permissions |
+| `N` | Refuse and cancel launch |
+| `select` | Choose permissions individually |
+
+**Benefits:**
+- No mid-execution permission blocks
+- Full visibility of agent actions before start
+- Granular control over allowed operations
+
 ## Best Practices
 
 ### Do

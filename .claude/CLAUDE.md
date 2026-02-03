@@ -373,3 +373,82 @@ make install-symfony TARGET=. RULES_LANG=en
 # Run audit
 /common:full-audit
 ```
+
+---
+
+## Claude Code Compatibility
+
+**Minimum Version**: 2.1.29
+
+### PR Integration (v2.1.27+)
+
+| Feature | CLI Option | Description |
+|---------|------------|-------------|
+| Resume PR session | `--from-pr 123` or `--from-pr <url>` | Resume session linked to a PR |
+| PR Status | Footer indicator | Shows PR state in status line |
+| Auto-link | via `gh pr create` | Sessions auto-link when creating PR |
+
+**PR Status Indicators:**
+
+| Status | Indicator |
+|--------|-----------|
+| Approved | approved |
+| Pending | pending |
+| Changes Requested | changes requested |
+| Draft | draft |
+| Merged | merged |
+
+### File Operations Best Practice (v2.1.21+)
+
+Claude prefers native file tools over bash equivalents for better reliability:
+
+| Task | Use | Avoid |
+|------|-----|-------|
+| Read files | `Read` tool | `cat`, `head`, `tail` |
+| Edit files | `Edit` tool | `sed`, `awk` |
+| Write files | `Write` tool | `echo >`, `cat <<EOF` |
+
+### spinnerVerbs Configuration (v2.1.23+)
+
+Customize spinner text displayed during tool execution:
+
+```json
+{
+  "spinnerVerbs": {
+    "default": ["Thinking", "Processing"],
+    "Edit": ["Editing", "Modifying"],
+    "Bash": ["Running", "Executing"]
+  }
+}
+```
+
+Linked to `activeForm` field in TaskCreate for custom task spinners.
+
+### Background Agent Permissions (v2.1.20+)
+
+Background agents request permissions **before** launching, avoiding mid-execution blocks:
+
+```
+Launching background task: "Analyze and fix code"
+
+This task will need permissions for:
+- Read (all files)
+- Edit (src/**)
+- Bash (npm run lint:fix)
+
+Approve all? [y/N/select]
+```
+
+### Task Status: deleted (v2.1.20+)
+
+Tasks can now be permanently removed using `deleted` status via TaskUpdate:
+
+```
+pending → in_progress → completed
+              ↓
+           deleted
+```
+
+### VSCode Python venv (v2.1.21+)
+
+Setting `claudeCode.usePythonEnvironment` enables automatic virtual environment activation in VSCode.

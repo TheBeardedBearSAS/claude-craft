@@ -261,6 +261,47 @@ All detected errors auto-generate regression tests:
 
 ---
 
+## Claude Code 2.1.29 Quick Reference
+
+### PR Integration (v2.1.27+)
+
+```bash
+# Resume session linked to PR
+claude --from-pr 123
+claude --from-pr https://github.com/org/repo/pull/123
+```
+
+Footer shows PR status: approved | pending | changes requested | draft | merged
+
+### spinnerVerbs (v2.1.23+)
+
+```json
+{
+  "spinnerVerbs": {
+    "default": ["Thinking", "Processing"],
+    "Edit": ["Editing", "Modifying"]
+  }
+}
+```
+
+### File Tools vs Bash (v2.1.21+)
+
+| Use | Instead of |
+|-----|------------|
+| `Read` | `cat/head/tail` |
+| `Edit` | `sed/awk` |
+| `Write` | `echo >/cat <<EOF` |
+
+### Task Status (v2.1.20+)
+
+```
+pending → in_progress → completed
+              ↓
+           deleted
+```
+
+---
+
 ## Skills
 
 Invoke skills with `/skill-name`:
