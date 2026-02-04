@@ -378,7 +378,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version**: 2.1.29
+**Minimum Version**: 2.1.31
 
 ### PR Integration (v2.1.27+)
 
@@ -452,3 +452,74 @@ pending → in_progress → completed
 ### VSCode Python venv (v2.1.21+)
 
 Setting `claudeCode.usePythonEnvironment` enables automatic virtual environment activation in VSCode.
+
+### PDF Page Range Support (v2.1.30+)
+
+The Read tool now supports a `pages` parameter for PDF files:
+
+| Feature | Description |
+|---------|-------------|
+| `pages` parameter | Specify page range (e.g., `pages: "1-5"`) |
+| Large PDF optimization | PDFs >10 pages return lightweight reference when `@` mentioned |
+
+### OAuth Client Credentials for MCP (v2.1.30+)
+
+For MCP servers that don't support Dynamic Client Registration:
+
+| Flag | Description |
+|------|-------------|
+| `--client-id` | OAuth client ID for the MCP server |
+| `--client-secret` | OAuth client secret for the MCP server |
+
+Usage: `claude mcp add --client-id <id> --client-secret <secret> <server-name>`
+
+### /debug Command (v2.1.30+)
+
+| Command | Description |
+|---------|-------------|
+| `/debug` | Troubleshoot current session issues |
+
+Complements `/doctor` (environment diagnostics) with session-specific debugging.
+
+### Task Tool Metrics (v2.1.30+)
+
+Task tool results now include execution metrics:
+
+| Metric | Description |
+|--------|-------------|
+| Token count | Tokens consumed by the sub-agent |
+| Tool uses | Number of tool invocations |
+| Duration | Elapsed time for task execution |
+
+### Reduced Motion Mode (v2.1.30+)
+
+Configuration option to minimize animations: `"reducedMotion": true` in settings.json.
+
+### Session Resume Hint (v2.1.31+)
+
+On exit, Claude Code now displays a hint showing how to resume the current session.
+
+### PDF Limits Clarification (v2.1.31+)
+
+Improved error messages now show actual PDF limits:
+
+| Limit | Value |
+|-------|-------|
+| Max pages | 100 pages per request |
+| Max file size | 20MB |
+
+### Enhanced File Tools Preference (v2.1.31+)
+
+System prompts improved to more strongly guide Claude toward using dedicated tools (`Read`, `Edit`, `Glob`, `Grep`) instead of bash equivalents (`cat`, `sed`, `grep`, `find`).
+
+### Reduced Layout Jitter (v2.1.31+)
+
+Terminal layout jitter reduced when the spinner appears and disappears during streaming.
+
+### Japanese IME Support (v2.1.31+)
+
+Added support for full-width (zenkaku) space input from Japanese IME in checkbox selection.
+
+### Third-party Provider Pricing (v2.1.31+)
+
+Removed misleading Anthropic API pricing from model selector for third-party provider (Bedrock, Vertex, Foundry) users.

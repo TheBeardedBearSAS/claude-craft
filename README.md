@@ -4,8 +4,19 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
 
-## What's New in v5.4 - Claude Code 2.1.29 Compatibility
+## What's New in v5.4 - Claude Code 2.1.31 Compatibility
 
+- **PDF Page Range** (v2.1.30): Read tool `pages` parameter for PDFs, lightweight ref for large PDFs
+- **OAuth Client Credentials for MCP** (v2.1.30): `--client-id` / `--client-secret` for `claude mcp add`
+- **/debug Command** (v2.1.30): Session-specific troubleshooting (complements `/doctor`)
+- **Task Tool Metrics** (v2.1.30): Token count, tool uses, duration in sub-agent results
+- **Reduced Motion Mode** (v2.1.30): `reducedMotion: true` setting to minimize animations
+- **Session Resume Hint** (v2.1.31): Resume hint displayed on exit
+- **PDF Limits** (v2.1.31): Error messages show actual limits (100 pages, 20MB)
+- **Enhanced File Tools Preference** (v2.1.31): Stronger guidance toward native tools
+- **Reduced Layout Jitter** (v2.1.31): Less terminal jitter during spinner
+- **Japanese IME** (v2.1.31): Full-width space support in checkboxes
+- **Third-party Pricing** (v2.1.31): Corrected pricing for Bedrock/Vertex/Foundry
 - **PR Integration** (v2.1.27): Resume sessions linked to PRs with `--from-pr`
   - `claude --from-pr 123` or `claude --from-pr <url>`
   - Auto-link when creating PRs via `gh pr create`

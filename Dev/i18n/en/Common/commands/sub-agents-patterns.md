@@ -131,6 +131,21 @@ Approve all? [y/N/select]
 - Full visibility of agent actions before start
 - Granular control over allowed operations
 
+### Task Tool Metrics (v2.1.30+)
+
+Task tool results now include execution metrics:
+
+| Metric | Description |
+|--------|-------------|
+| Token count | Total tokens consumed by the sub-agent |
+| Tool uses | Number of tool invocations during execution |
+| Duration | Total elapsed time for task completion |
+
+**Benefits:**
+- Monitor sub-agent cost per task
+- Identify expensive operations
+- Optimize parallel task distribution
+
 ## Best Practices
 
 ### Do

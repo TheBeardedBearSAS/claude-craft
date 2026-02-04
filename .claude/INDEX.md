@@ -261,7 +261,7 @@ All detected errors auto-generate regression tests:
 
 ---
 
-## Claude Code 2.1.29 Quick Reference
+## Claude Code 2.1.31 Quick Reference
 
 ### PR Integration (v2.1.27+)
 
@@ -299,6 +299,30 @@ pending → in_progress → completed
               ↓
            deleted
 ```
+
+### PDF Page Range (v2.1.30+)
+
+Read tool: `pages: "1-5"` pour PDFs. PDFs >10 pages: ref légère avec `@`.
+
+### OAuth MCP (v2.1.30+)
+
+`claude mcp add --client-id <id> --client-secret <secret> <server>`
+
+### /debug (v2.1.30+)
+
+`/debug` : Troubleshoot current session (complète `/doctor`).
+
+### Task Tool Metrics (v2.1.30+)
+
+Résultats Task incluent : token count, tool uses, duration.
+
+### Session Resume Hint (v2.1.31+)
+
+Hint de reprise de session affiché à la sortie de Claude Code.
+
+### PDF Limits (v2.1.31+)
+
+Limites PDF clarifiées : max 100 pages, max 20MB.
 
 ---
 

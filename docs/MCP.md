@@ -6,6 +6,7 @@ MCP is an open standard that enables AI models to connect to external tools and 
 
 - [Overview](#overview)
 - [Configuration](#configuration)
+- [OAuth Client Credentials](#oauth-client-credentials)
 - [Popular MCP Servers](#popular-mcp-servers)
 - [Context7 - Documentation Server](#context7---documentation-server)
 - [Custom MCP Servers](#custom-mcp-servers)
@@ -82,6 +83,21 @@ Reference environment variables with `${VAR_NAME}`:
   }
 }
 ```
+
+### OAuth Client Credentials (v2.1.30+)
+
+For MCP servers that don't support Dynamic Client Registration (e.g., Slack), use the `--client-id` and `--client-secret` flags:
+
+```bash
+claude mcp add --client-id YOUR_CLIENT_ID --client-secret YOUR_CLIENT_SECRET slack -- npx -y @modelcontextprotocol/server-slack
+```
+
+| Flag | Description |
+|------|-------------|
+| `--client-id` | OAuth client ID for the MCP server |
+| `--client-secret` | OAuth client secret for the MCP server |
+
+**When to use:** Servers that require pre-registered OAuth application credentials rather than relying on Dynamic Client Registration.
 
 ---
 

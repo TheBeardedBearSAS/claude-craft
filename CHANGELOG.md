@@ -8,7 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [5.4.0] - 2026-02-03
 
 ### Added
-- **Claude Code 2.1.29 Compatibility** - Documentation update for latest Claude Code features
+- **Claude Code 2.1.31 Compatibility** - Documentation update for latest Claude Code features
+  - **PDF Page Range** (v2.1.30): `pages` parameter for Read tool, lightweight reference for large PDFs
+  - **OAuth Client Credentials for MCP** (v2.1.30): `--client-id` / `--client-secret` flags for `claude mcp add`
+  - **/debug Command** (v2.1.30): Session-specific troubleshooting (complements `/doctor`)
+  - **Task Tool Metrics** (v2.1.30): Token count, tool uses, duration in Task results
+  - **Reduced Motion Mode** (v2.1.30): `reducedMotion: true` setting to minimize animations
+  - **Session Resume Hint** (v2.1.31): Resume hint displayed on exit
+  - **PDF Limits Clarification** (v2.1.31): Error messages show actual limits (100 pages, 20MB)
+  - **Enhanced File Tools Preference** (v2.1.31): Improved system prompts for native tools usage
+  - **Reduced Layout Jitter** (v2.1.31): Less terminal UI jitter during spinner
+  - **Japanese IME Support** (v2.1.31): Full-width space input in checkbox selection
+  - **Third-party Pricing Fix** (v2.1.31): Corrected pricing display for Bedrock/Vertex/Foundry
   - **PR Integration** (v2.1.27): `--from-pr` flag, auto-link sessions to PRs, status indicators
   - **spinnerVerbs** (v2.1.23): Customizable spinner text configuration in settings.json
   - **File Tools Preference** (v2.1.21): Claude prefers Read/Edit/Write over bash equivalents
@@ -17,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **VSCode Python venv** (v2.1.21): `claudeCode.usePythonEnvironment` setting
 
 ### Changed
-- Updated all documentation to reference Claude Code 2.1.29
+- Updated all documentation to reference Claude Code 2.1.31
 - Added Claude Code Compatibility section to `.claude/CLAUDE.md`
 - Enhanced `.claude/INDEX.md` with quick reference for new features
 - Updated training materials and cheatsheets
