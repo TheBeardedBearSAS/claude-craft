@@ -6,7 +6,7 @@ allowed-tools:
   - Glob
   - Grep
   - WebSearch
-model: sonnet
+model: opus
 triggers:
   files:
     - "**/auth/**"

@@ -1,7 +1,7 @@
 ---
 name: ux-ergonome
 description: User experience and cognitive ergonomics specialist
-model: sonnet
+model: opus
 tools: [Read, Glob, Grep, Edit, Write, WebFetch, WebSearch]
 permissionMode: default
 skills: [solid-principles]

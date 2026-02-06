@@ -1,7 +1,7 @@
 ---
 name: database-architect
 description: Database design and optimization expert
-model: sonnet
+model: opus
 tools:
   - Read
   - Glob

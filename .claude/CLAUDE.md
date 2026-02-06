@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 5.4.0 | **Languages:** en, fr, es, de, pt
+**Version:** 5.5.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 34 agents, 130+ commands, and BMAD v6 project management.
 
@@ -378,7 +378,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version**: 2.1.31
+**Minimum Version**: 2.1.32
 
 ### PR Integration (v2.1.27+)
 
@@ -523,3 +523,59 @@ Added support for full-width (zenkaku) space input from Japanese IME in checkbox
 ### Third-party Provider Pricing (v2.1.31+)
 
 Removed misleading Anthropic API pricing from model selector for third-party provider (Bedrock, Vertex, Foundry) users.
+
+### Claude Opus 4.6 Support (v2.1.32+)
+
+New flagship model with enhanced capabilities:
+
+| Feature | Value |
+|---------|-------|
+| Model ID | `claude-opus-4-6` |
+| Context window | 200K standard, 1M beta |
+| Max output | 128K tokens |
+| Adaptive thinking | Effort levels: low, medium, high, max |
+| Context compaction | Beta - automatic context management |
+
+### Agent Teams (v2.1.32+ Research Preview)
+
+Multi-agent coordination with shared task management:
+
+| Feature | Description |
+|---------|-------------|
+| `Teammate` tool | spawnTeam, cleanup operations |
+| `SendMessage` tool | message, broadcast, shutdown_request/response |
+| Shared tasks | TaskCreate/Update/List/Get across team |
+| Display modes | In-process (Shift+Up/Down), split panes (tmux/iTerm2) |
+| Delegate mode | Shift+Tab to switch between teammates |
+
+Enable: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
+
+### Automatic Memory Recording (v2.1.32+)
+
+Claude automatically records session memory for future context:
+
+| Feature | Value |
+|---------|-------|
+| Trigger | After ~10K tokens of conversation |
+| Update frequency | Every ~5K tokens or 3 tool calls |
+| Storage | `~/.claude-profiles/<profile>/projects/<hash>/memory/` |
+
+### Summarize from Here (v2.1.32+)
+
+Partial conversation summarization - summarize from a specific point rather than the entire conversation.
+
+### Auto Skill Loading from --add-dir (v2.1.32+)
+
+Skills in directories added via `--add-dir` are now automatically discovered and available.
+
+### Skill Character Budget Scaling (v2.1.32+)
+
+Skill content budget now scales to 2% of the model's context window size.
+
+### --resume Agent Inheritance (v2.1.32+)
+
+When resuming a session with `--resume`, the `--agent` value is automatically inherited from the original session.
+
+### VSCode Session Loading Spinner (v2.1.32+)
+
+Added loading spinner in VSCode while session is being restored.

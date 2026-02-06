@@ -1,7 +1,7 @@
 ---
 name: refactoring-specialist
 description: Safe code refactoring expert
-model: sonnet
+model: opus
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
 permissionMode: default
 skills: [solid-principles, testing, kiss-dry-yagni]

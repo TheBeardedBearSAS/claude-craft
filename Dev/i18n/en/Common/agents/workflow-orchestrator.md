@@ -1,7 +1,7 @@
 ---
 name: workflow-orchestrator
 description: Intelligently routes to appropriate agents and workflows based on project context
-model: sonnet
+model: opus
 tools:
   - Read
   - Glob

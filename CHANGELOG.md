@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.5.0] - 2026-02-06
+
+### Changed
+- **Claude Code 2.1.32 Compatibility**
+  - **Claude Opus 4.6** (v2.1.32): New flagship model - 200K context (1M beta), 128K output, adaptive thinking
+  - **Agent Teams** (v2.1.32 Research Preview): Multi-agent coordination with Teammate/SendMessage tools
+  - **Automatic Memory Recording** (v2.1.32): Auto-records session context for future use
+  - **Summarize from Here** (v2.1.32): Partial conversation summarization
+  - **Auto Skill Loading** (v2.1.32): Skills from --add-dir auto-discovered
+  - **Skill Budget Scaling** (v2.1.32): Skill content scales to 2% of context window
+  - **--resume Agent Inheritance** (v2.1.32): Auto-inherits --agent value
+  - **VSCode Session Spinner** (v2.1.32): Loading spinner during session restore
+
+### Upgraded
+- All common agents upgraded from `model: sonnet` to `model: opus` (Opus 4.6)
+- Settings templates updated to use `claude-opus-4-6` as default model
+
+---
+
 ## [5.4.0] - 2026-02-03
 
 ### Added
@@ -586,6 +605,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Enhanced npm publishing security via OIDC
 
+[5.5.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.4.0...v5.5.0
+[5.4.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.3.0...v5.4.0
+[5.3.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.2.1...v5.3.0
+[5.2.1]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.2.0...v5.2.1
+[5.2.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.1.0...v5.2.0
 [5.1.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.4.0...v5.0.0
 [4.4.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v4.3.0...v4.4.0

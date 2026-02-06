@@ -6,7 +6,7 @@ allowed-tools:
   - Glob
   - Grep
   - Task
-model: sonnet
+model: opus
 triggers:
   keywords:
     - analyze

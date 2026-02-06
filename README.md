@@ -4,31 +4,27 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
 
+## What's New in v5.5 - Claude Code 2.1.32 & Opus 4.6
+
+- **Claude Opus 4.6** (v2.1.32): New flagship model with 200K context (1M beta), 128K output, adaptive thinking
+- **Agent Teams** (v2.1.32 Research Preview): Multi-agent coordination with shared task management
+- **Automatic Memory** (v2.1.32): Auto-records session memory for future context
+- **Summarize from Here** (v2.1.32): Partial conversation summarization
+- **Auto Skill Loading** (v2.1.32): Skills from --add-dir auto-discovered
+- **Skill Budget Scaling** (v2.1.32): Content scales to 2% of context window
+- **--resume Agent Inheritance** (v2.1.32): Auto-inherits --agent value
+- **VSCode Session Spinner** (v2.1.32): Loading spinner during session restore
+- See [CHANGELOG](CHANGELOG.md) for full details
+
 ## What's New in v5.4 - Claude Code 2.1.31 Compatibility
 
-- **PDF Page Range** (v2.1.30): Read tool `pages` parameter for PDFs, lightweight ref for large PDFs
+- **PDF Page Range** (v2.1.30): Read tool `pages` parameter for PDFs
 - **OAuth Client Credentials for MCP** (v2.1.30): `--client-id` / `--client-secret` for `claude mcp add`
-- **/debug Command** (v2.1.30): Session-specific troubleshooting (complements `/doctor`)
+- **/debug Command** (v2.1.30): Session-specific troubleshooting
 - **Task Tool Metrics** (v2.1.30): Token count, tool uses, duration in sub-agent results
-- **Reduced Motion Mode** (v2.1.30): `reducedMotion: true` setting to minimize animations
 - **Session Resume Hint** (v2.1.31): Resume hint displayed on exit
-- **PDF Limits** (v2.1.31): Error messages show actual limits (100 pages, 20MB)
-- **Enhanced File Tools Preference** (v2.1.31): Stronger guidance toward native tools
-- **Reduced Layout Jitter** (v2.1.31): Less terminal jitter during spinner
-- **Japanese IME** (v2.1.31): Full-width space support in checkboxes
-- **Third-party Pricing** (v2.1.31): Corrected pricing for Bedrock/Vertex/Foundry
 - **PR Integration** (v2.1.27): Resume sessions linked to PRs with `--from-pr`
-  - `claude --from-pr 123` or `claude --from-pr <url>`
-  - Auto-link when creating PRs via `gh pr create`
-  - Status indicators: approved, pending, changes requested, draft, merged
-- **File Tools Preference** (v2.1.21): Claude prefers native tools over bash
-  - Use `Read` instead of `cat/head/tail`
-  - Use `Edit` instead of `sed/awk`
-  - Use `Write` instead of `echo >/cat <<EOF`
 - **spinnerVerbs** (v2.1.23): Customize spinner text in settings.json
-- **Task status `deleted`** (v2.1.20): Permanent task removal via TaskUpdate
-- **Background Agent Permissions** (v2.1.20): Permission prompts before launch
-- **VSCode Python venv** (v2.1.21): Auto-activate virtual environment
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 ## What's New in v5.1 - QA Recette (Acceptance Testing)

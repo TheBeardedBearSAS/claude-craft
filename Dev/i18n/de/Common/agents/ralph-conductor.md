@@ -1,7 +1,7 @@
 ---
 name: ralph-conductor
 description: Orchestriert Ralph Wiggum v2.0 Sessions mit adaptiver DoD-Validierung
-model: sonnet
+model: opus
 tools: [Read, Glob, Grep, Edit, Write, Bash, Task, WebFetch, WebSearch]
 permissionMode: default
 ---

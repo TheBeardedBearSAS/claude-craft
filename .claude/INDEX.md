@@ -261,7 +261,7 @@ All detected errors auto-generate regression tests:
 
 ---
 
-## Claude Code 2.1.31 Quick Reference
+## Claude Code 2.1.32 Quick Reference
 
 ### PR Integration (v2.1.27+)
 
@@ -323,6 +323,22 @@ Hint de reprise de session affiché à la sortie de Claude Code.
 ### PDF Limits (v2.1.31+)
 
 Limites PDF clarifiées : max 100 pages, max 20MB.
+
+### Claude Opus 4.6 (v2.1.32+)
+
+Model ID: `claude-opus-4-6`. 200K context (1M beta), 128K output, adaptive thinking (low/medium/high/max).
+
+### Agent Teams (v2.1.32+ Research Preview)
+
+Multi-agent: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Teammate/SendMessage tools, shared TaskList.
+
+### Automatic Memory (v2.1.32+)
+
+Auto-records session memory after ~10K tokens. Stored in `~/.claude-profiles/`.
+
+### --resume Agent Inheritance (v2.1.32+)
+
+`--resume` auto-inherits `--agent` value from original session.
 
 ---
 

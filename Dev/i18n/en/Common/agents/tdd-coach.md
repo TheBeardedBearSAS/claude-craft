@@ -1,7 +1,7 @@
 ---
 name: tdd-coach
 description: Test-Driven Development coach and mentor
-model: sonnet
+model: opus
 tools:
   - Read
   - Glob

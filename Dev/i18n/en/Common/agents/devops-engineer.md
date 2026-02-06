@@ -1,7 +1,7 @@
 ---
 name: devops-engineer
 description: CI/CD, Docker, and deployment specialist
-model: sonnet
+model: opus
 tools:
   - Read
   - Glob

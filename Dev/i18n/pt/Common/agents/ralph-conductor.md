@@ -1,7 +1,7 @@
 ---
 name: ralph-conductor
 description: Orquestra sessoes Ralph Wiggum v2.0 com validacao DoD adaptativa
-model: sonnet
+model: opus
 tools: [Read, Glob, Grep, Edit, Write, Bash, Task, WebFetch, WebSearch]
 permissionMode: default
 ---
