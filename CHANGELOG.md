@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.5.1] - 2026-02-06
+
+### Fixed
+- Harmonized agent counts from 34/35 to 40 across all documentation (13 Common + 10 Reviewers + 10 BMAD + 5 Docker + 2 Project)
+- Fixed `recommendedClaudeCodeVersion` from 2.1.25 to 2.1.32 in plugin.json
+- Added missing frontmatter: `model: opus` for ralph-conductor (EN/ES), `model: haiku` + tools for vuejs-reviewer and php-reviewer
+- Added @workflow-orchestrator to Common agents, @csharp-reviewer/@php-reviewer to Technology Reviewers, Project Agents (2) section
+- Translated 5 remaining French strings in INDEX.md to English
+- Fixed `claude-projects.yaml` version from 5.3.0 to 5.5.0
+
 ## [5.5.0] - 2026-02-06
 
 ### Changed
@@ -605,6 +615,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Enhanced npm publishing security via OIDC
 
+[5.5.1]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.5.0...v5.5.1
 [5.5.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.4.0...v5.5.0
 [5.4.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.3.0...v5.4.0
 [5.3.0]: https://github.com/TheBeardedBearSAS/claude-craft/compare/v5.2.1...v5.3.0
