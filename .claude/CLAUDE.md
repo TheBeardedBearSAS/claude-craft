@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 5.5.1 | **Languages:** en, fr, es, de, pt
+**Version:** 5.6.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 40 agents, 130+ commands, and BMAD v6 project management.
 
@@ -387,7 +387,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version**: 2.1.32
+**Minimum Version**: 2.1.34
 
 ### PR Integration (v2.1.27+)
 
@@ -588,3 +588,44 @@ When resuming a session with `--resume`, the `--agent` value is automatically in
 ### VSCode Session Loading Spinner (v2.1.32+)
 
 Added loading spinner in VSCode while session is being restored.
+
+### TeammateIdle & TaskCompleted Hook Events (v2.1.33+)
+
+New hook events for multi-agent workflows:
+
+| Event | When it fires | Use case |
+|-------|---------------|----------|
+| `TeammateIdle` | When a teammate goes idle | Assign next task, cleanup |
+| `TaskCompleted` | When a task is marked completed | Trigger next workflow step |
+
+### Agent Type Restrictions (v2.1.33+)
+
+Control which sub-agent types an agent can spawn using `Task(agent_type)` in the `tools` frontmatter:
+
+| Syntax | Description |
+|--------|-------------|
+| `Task(Explore)` | Only allow Explore sub-agents |
+| `Task(Plan)` | Only allow Plan sub-agents |
+| `Task(Bash)` | Only allow Bash sub-agents |
+
+### Agent Memory Frontmatter (v2.1.33+)
+
+Persistent memory for sub-agents with three scope options:
+
+| Scope | Location | Use Case |
+|-------|----------|----------|
+| `user` | `~/.claude/agent-memory/<name>/` | Cross-project learnings (recommended) |
+| `project` | `.claude/agent-memory/<name>/` | Project-specific, shareable via VCS |
+| `local` | `.claude/agent-memory-local/<name>/` | Project-specific, NOT in VCS |
+
+### Plugin Name in Skill Descriptions (v2.1.33+)
+
+Plugin names now appear in skill descriptions and the `/skills` menu.
+
+### VSCode Remote Sessions (v2.1.33+)
+
+OAuth users can browse and resume Claude Code sessions from claude.ai remotely.
+
+### VSCode Session Picker Enhancements (v2.1.33+)
+
+Git branch and message count now displayed in session picker, with search by branch name.

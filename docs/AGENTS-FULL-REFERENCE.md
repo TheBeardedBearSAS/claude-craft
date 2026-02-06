@@ -759,6 +759,62 @@ Complete reference for all 40 agents available in Claude Craft.
 
 ---
 
+## Memory Frontmatter (v2.1.33+)
+
+The `memory` field enables persistent memory for agents across sessions. When enabled, the agent can read and write files in its memory directory, accumulating knowledge over time.
+
+**Syntax:**
+```yaml
+memory: user    # or project, local
+```
+
+**Scope Details:**
+
+| Scope | Directory | In .gitignore | Best For |
+|-------|-----------|---------------|----------|
+| `user` | `~/.claude/agent-memory/<agent-name>/` | N/A (user home) | Personal learnings, cross-project patterns |
+| `project` | `.claude/agent-memory/<agent-name>/` | No (shared) | Team knowledge, project conventions |
+| `local` | `.claude/agent-memory-local/<agent-name>/` | Yes | Local experiments, draft notes |
+
+**Example - Research Agent with Memory:**
+```yaml
+---
+name: research-assistant
+description: Technical research with persistent knowledge
+model: sonnet
+memory: user
+---
+```
+
+The agent will automatically have access to read/write files in `~/.claude/agent-memory/research-assistant/`, allowing it to build up knowledge across sessions.
+
+---
+
+## Agent Type Restrictions (v2.1.33+)
+
+The `tools` frontmatter field now supports `Task(agent_type)` syntax to restrict which sub-agent types an agent can spawn:
+
+```yaml
+---
+name: safe-researcher
+tools:
+  - Task(Explore)    # Can spawn Explore agents
+  - Task(Plan)       # Can spawn Plan agents
+  - Read             # Can read files
+  - Grep             # Can search content
+  - Glob             # Can find files
+  # No Task(Bash) or Task(general-purpose) = cannot spawn those
+---
+```
+
+**Available agent types for restriction:**
+- `Task(Explore)` - Read-only exploration agents
+- `Task(Plan)` - Planning agents (read-only)
+- `Task(Bash)` - Command execution agents
+- `Task(general-purpose)` - Full-capability agents
+
+---
+
 ## Creating Custom Agents
 
 Add to `.claude/agents/`:

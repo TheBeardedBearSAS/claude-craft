@@ -37,7 +37,7 @@ Hooks complement the "should-do" suggestions in CLAUDE.md with "must-do" determi
 
 ## Hook Events
 
-Claude Code supports **11 hook event types**:
+Claude Code supports **13 hook event types**:
 
 | Event | When it fires | Matcher support |
 |-------|---------------|-----------------|
@@ -52,6 +52,8 @@ Claude Code supports **11 hook event types**:
 | `SessionStart` | When session starts/resumes | Yes (`startup`, `resume`, `clear`, `compact`) |
 | `SessionEnd` | When session terminates | No |
 | `Setup` | When `--init`, `--init-only`, `--maintenance` run | No |
+| `TeammateIdle` | When a teammate agent goes idle | Yes (teammate name) |
+| `TaskCompleted` | When a task is marked completed | Yes (task ID) |
 
 ### Event Details
 
@@ -89,6 +91,20 @@ Use for:
 - Project initialization scripts
 - First-time environment configuration
 - Database migrations on setup
+
+#### TeammateIdle (v2.1.33+)
+
+Fires when a teammate agent becomes idle after completing its turn. Use for:
+- Auto-assigning next available task
+- Collecting teammate status updates
+- Triggering coordination logic
+
+#### TaskCompleted (v2.1.33+)
+
+Fires when a task is marked as completed via TaskUpdate. Use for:
+- Triggering dependent workflows
+- Running validation checks
+- Updating external systems (Jira, Slack)
 
 ---
 

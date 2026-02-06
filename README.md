@@ -4,16 +4,14 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
 
-## What's New in v5.5 - Claude Code 2.1.32 & Opus 4.6
+## What's New in v5.6 - Claude Code 2.1.33 / 2.1.34
 
-- **Claude Opus 4.6** (v2.1.32): New flagship model with 200K context (1M beta), 128K output, adaptive thinking
-- **Agent Teams** (v2.1.32 Research Preview): Multi-agent coordination with shared task management
-- **Automatic Memory** (v2.1.32): Auto-records session memory for future context
-- **Summarize from Here** (v2.1.32): Partial conversation summarization
-- **Auto Skill Loading** (v2.1.32): Skills from --add-dir auto-discovered
-- **Skill Budget Scaling** (v2.1.32): Content scales to 2% of context window
-- **--resume Agent Inheritance** (v2.1.32): Auto-inherits --agent value
-- **VSCode Session Spinner** (v2.1.32): Loading spinner during session restore
+- **Agent Memory** (v2.1.33): Persistent `memory` frontmatter for agents (user/project/local scopes)
+- **TeammateIdle & TaskCompleted Hooks** (v2.1.33): New hook events for multi-agent workflows
+- **Agent Type Restrictions** (v2.1.33): Control sub-agent types via `Task(agent_type)` syntax
+- **Plugin Name in Skills** (v2.1.33): Plugin names visible in `/skills` menu
+- **VSCode Remote Sessions** (v2.1.33): Browse/resume sessions from claude.ai
+- **VSCode Session Picker** (v2.1.33): Git branch + message count display
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 ## What's New in v5.4 - Claude Code 2.1.31 Compatibility

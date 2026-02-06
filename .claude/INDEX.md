@@ -261,7 +261,7 @@ All detected errors auto-generate regression tests:
 
 ---
 
-## Claude Code 2.1.32 Quick Reference
+## Claude Code 2.1.34 Quick Reference
 
 ### PR Integration (v2.1.27+)
 
@@ -339,6 +339,22 @@ Auto-records session memory after ~10K tokens. Stored in `~/.claude-profiles/`.
 ### --resume Agent Inheritance (v2.1.32+)
 
 `--resume` auto-inherits `--agent` value from original session.
+
+### TeammateIdle & TaskCompleted Hooks (v2.1.33+)
+
+New hook events: `TeammateIdle` (teammate goes idle), `TaskCompleted` (task marked done).
+
+### Agent Memory Frontmatter (v2.1.33+)
+
+`memory: user|project|local` in agent frontmatter. Scopes: `user` (~/.claude/agent-memory/), `project` (.claude/agent-memory/), `local` (.claude/agent-memory-local/).
+
+### Agent Type Restrictions (v2.1.33+)
+
+`tools: [Task(Explore), Task(Plan)]` restricts which sub-agents an agent can spawn.
+
+### Plugin Name in Skills (v2.1.33+)
+
+Plugin name shown in `/skills` menu and skill descriptions.
 
 ---
 

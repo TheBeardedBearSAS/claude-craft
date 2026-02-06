@@ -931,6 +931,8 @@ Agent content...
 |-------|----------|-------------|
 | `name` | Yes | Agent identifier (used with @mention) |
 | `description` | Yes | Brief description shown in agent discovery |
+| `memory` | No | Memory scope: `user`, `project`, or `local` (v2.1.33+) |
+| `tools` | No | Tool restrictions including `Task(agent_type)` (v2.1.33+) |
 
 ### Example
 
@@ -952,6 +954,46 @@ description: Expert in REST/GraphQL API design. Use for endpoint design, resourc
 - API versioning strategies
 ...
 ```
+
+---
+
+## Agent Memory Frontmatter (v2.1.33+)
+
+Agents can now persist memory across sessions using the `memory` field in frontmatter:
+
+```yaml
+---
+name: my-agent
+description: My specialized agent
+memory: user
+---
+```
+
+### Memory Scopes
+
+| Scope | Location | Shared via VCS | Use Case |
+|-------|----------|----------------|----------|
+| `user` | `~/.claude/agent-memory/<name>/` | No | Cross-project learnings (recommended) |
+| `project` | `.claude/agent-memory/<name>/` | Yes | Project-specific knowledge |
+| `local` | `.claude/agent-memory-local/<name>/` | No | Local-only project knowledge |
+
+## Agent Type Restrictions (v2.1.33+)
+
+Control which sub-agent types an agent can spawn using `Task(agent_type)` syntax in the `tools` frontmatter:
+
+```yaml
+---
+name: research-only-agent
+tools:
+  - Task(Explore)
+  - Task(Plan)
+  - Read
+  - Grep
+  - Glob
+---
+```
+
+This restricts the agent to only spawn `Explore` and `Plan` sub-agents, preventing it from spawning `general-purpose` or `Bash` agents.
 
 ---
 

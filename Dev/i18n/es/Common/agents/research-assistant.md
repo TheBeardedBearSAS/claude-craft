@@ -2,6 +2,7 @@
 name: research-assistant
 description: Technical research and documentation specialist
 model: haiku
+memory: user
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, NotebookEdit]
 permissionMode: default

@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.6.0] - 2026-02-06
+
+### Changed
+- **Claude Code 2.1.33 Compatibility**
+  - **Agent Memory Frontmatter** (v2.1.33): Persistent `memory` field for agents with 3 scopes (user/project/local)
+  - **TeammateIdle & TaskCompleted Hooks** (v2.1.33): New hook events for multi-agent coordination
+  - **Agent Type Restrictions** (v2.1.33): `Task(agent_type)` syntax in tools frontmatter
+  - **Plugin Name in Skills** (v2.1.33): Plugin name shown in /skills menu
+  - **VSCode Remote Sessions** (v2.1.33): Browse/resume from claude.ai
+  - **VSCode Session Picker** (v2.1.33): Git branch and message count display
+  - **Improved API Errors** (v2.1.33): Specific error causes (ECONNREFUSED, SSL)
+  - **Agent Teams Stability** (v2.1.33): tmux fix, plan warnings fix
+
+### Added
+- Added `memory: user` frontmatter to key agents (ralph-conductor, research-assistant, workflow-orchestrator)
+- Documented TeammateIdle and TaskCompleted hook events in HOOKS.md (11 → 13 events)
+- Documented agent type restrictions and memory frontmatter in AGENTS.md
+
+### Upgraded
+- Updated minimum Claude Code version from 2.1.32 to 2.1.34
+- Updated recommendedClaudeCodeVersion to 2.1.34 in plugin.json
+
+---
+
 ## [5.5.1] - 2026-02-06
 
 ### Fixed
