@@ -1,6 +1,6 @@
 # Agents Full Reference
 
-Complete reference for all 35 agents available in Claude Craft.
+Complete reference for all 40 agents available in Claude Craft.
 
 ---
 
@@ -8,7 +8,7 @@ Complete reference for all 35 agents available in Claude Craft.
 
 | Category | Count | Examples |
 |----------|-------|----------|
-| Common | 12 | @api-designer, @tdd-coach, @uiux-orchestrator |
+| Common | 13 | @api-designer, @tdd-coach, @uiux-orchestrator |
 | Technology Reviewers | 10 | @symfony-reviewer, @react-reviewer |
 | Docker/Infrastructure | 5 | @docker-architect, @docker-debug |
 | BMAD v6 | 10 | @bmad-master, @pm, @dev, @qa-recette |
@@ -37,7 +37,7 @@ Complete reference for all 35 agents available in Claude Craft.
 
 ---
 
-## Common Agents (12)
+## Common Agents (13)
 
 ### @api-designer
 
@@ -260,6 +260,24 @@ Complete reference for all 35 agents available in Claude Craft.
 @ralph-conductor Set up a Ralph session with TDD DoD
 @ralph-conductor Configure DoD for this feature implementation
 @ralph-conductor What's the current Ralph iteration status?
+```
+
+---
+
+### @workflow-orchestrator
+
+**Expertise:** Workflow orchestration
+
+**Use when:**
+- Initializing development workflows
+- Coordinating multi-phase projects
+- Managing workflow transitions
+
+**Example prompts:**
+```
+@workflow-orchestrator Initialize a standard workflow for this project
+@workflow-orchestrator What's the current workflow status?
+@workflow-orchestrator Transition to the design phase
 ```
 
 ---

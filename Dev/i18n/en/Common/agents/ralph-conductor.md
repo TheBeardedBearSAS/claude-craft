@@ -1,6 +1,7 @@
 ---
 name: ralph-conductor
 description: Orchestrates Ralph Wiggum v2.0 continuous loop sessions with adaptive DoD validation
+model: opus
 ---
 
 # Ralph Conductor Agent v2.0

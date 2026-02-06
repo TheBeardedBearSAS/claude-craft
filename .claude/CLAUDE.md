@@ -2,7 +2,7 @@
 
 **Version:** 5.5.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 34 agents, 130+ commands, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 40 agents, 130+ commands, and BMAD v6 project management.
 
 ---
 
@@ -130,7 +130,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Agents
 
-### Common Agents (12)
+### Common Agents (13)
 | Agent | Expertise |
 |-------|-----------|
 | `@api-designer` | REST/GraphQL API design |
@@ -145,8 +145,9 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `@accessibility-expert` | WCAG 2.2 AAA compliance |
 | `@research-assistant` | Technical research |
 | `@ralph-conductor` | Continuous loop orchestration |
+| `@workflow-orchestrator` | Workflow orchestration |
 
-### Technology Reviewers
+### Technology Reviewers (10)
 | Agent | Technology |
 |-------|------------|
 | `@symfony-reviewer` | Symfony/PHP |
@@ -157,6 +158,8 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `@laravel-reviewer` | Laravel |
 | `@vuejs-reviewer` | Vue.js |
 | `@reactnative-reviewer` | React Native |
+| `@csharp-reviewer` | C#/.NET |
+| `@php-reviewer` | PHP |
 
 ### BMAD v6 Agents (10)
 | Agent | Role |
@@ -180,6 +183,12 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `@docker-debug` | Container troubleshooting |
 | `@docker-cicd` | CI/CD pipelines |
 | `@docker-architect` | Docker architecture |
+
+### Project Agents (2)
+| Agent | Role |
+|-------|------|
+| `@product-owner` | Product management (CSPO) |
+| `@tech-lead` | Technical leadership |
 
 ---
 

@@ -302,7 +302,7 @@ pending → in_progress → completed
 
 ### PDF Page Range (v2.1.30+)
 
-Read tool: `pages: "1-5"` pour PDFs. PDFs >10 pages: ref légère avec `@`.
+Read tool: `pages: "1-5"` for PDFs. PDFs >10 pages: lightweight ref with `@`.
 
 ### OAuth MCP (v2.1.30+)
 
@@ -310,19 +310,19 @@ Read tool: `pages: "1-5"` pour PDFs. PDFs >10 pages: ref légère avec `@`.
 
 ### /debug (v2.1.30+)
 
-`/debug` : Troubleshoot current session (complète `/doctor`).
+`/debug` : Troubleshoot current session (complements `/doctor`).
 
 ### Task Tool Metrics (v2.1.30+)
 
-Résultats Task incluent : token count, tool uses, duration.
+Task results include: token count, tool uses, duration.
 
 ### Session Resume Hint (v2.1.31+)
 
-Hint de reprise de session affiché à la sortie de Claude Code.
+Session resume hint displayed on Claude Code exit.
 
 ### PDF Limits (v2.1.31+)
 
-Limites PDF clarifiées : max 100 pages, max 20MB.
+PDF limits clarified: max 100 pages, max 20MB.
 
 ### Claude Opus 4.6 (v2.1.32+)
 

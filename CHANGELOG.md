@@ -229,7 +229,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `docs/RALPH-GUIDE.md`: Ralph Wiggum configuration and DoD validators
   - `docs/MIGRATION-v4.md`: v3.x to v4.x migration guide
   - `docs/COMMANDS-FULL-REFERENCE.md`: All 127+ commands documented
-  - `docs/AGENTS-FULL-REFERENCE.md`: All 34 agents documented
+  - `docs/AGENTS-FULL-REFERENCE.md`: All 40 agents documented
   - `docs/SCRIPTS-REFERENCE.md`: Installation scripts reference
   - `docs/MAKEFILE-REFERENCE.md`: All Makefile targets documented
   - `docs/ARCHITECTURE.md`: Internal architecture with diagrams (TCL, BMAD, Ralph)

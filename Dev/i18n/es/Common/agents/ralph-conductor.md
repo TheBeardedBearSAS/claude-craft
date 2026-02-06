@@ -1,6 +1,7 @@
 ---
 name: ralph-conductor
 description: Orquesta sesiones Ralph Wiggum v2.0 con validacion DoD adaptativa
+model: opus
 ---
 
 # Agente Ralph Conductor v2.0

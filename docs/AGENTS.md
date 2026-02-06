@@ -12,7 +12,7 @@ In Claude Code, mention an agent to activate its expertise:
 @symfony-reviewer Review this controller for best practices
 ```
 
-## Common Agents (12)
+## Common Agents (13)
 
 These agents are installed with `install-common` and are useful across all technologies.
 
@@ -271,7 +271,25 @@ Helps with:
 
 ---
 
-## Technology-Specific Agents (5)
+### workflow-orchestrator
+
+**Expertise**: Workflow orchestration
+
+Manages multi-phase development workflows and coordinates transitions between workflow phases.
+
+Helps with:
+- Workflow initialization and configuration
+- Phase transition management
+- Progress tracking across workflow phases
+
+```
+@workflow-orchestrator Initialize a standard workflow for this project
+@workflow-orchestrator What's the current workflow status?
+```
+
+---
+
+## Technology Reviewers (10)
 
 Each technology has a specialized reviewer agent.
 
@@ -371,6 +389,101 @@ Focuses on:
 ```
 @reactnative-reviewer Review this screen component
 @reactnative-reviewer Check this native bridge code
+```
+
+---
+
+### angular-reviewer
+
+**Expertise**: Angular/TypeScript code review
+
+Focuses on:
+- Angular architecture patterns
+- Signals and standalone components
+- RxJS best practices
+- TypeScript strict mode
+- Performance optimization
+- Testing with Jasmine/Karma
+
+```
+@angular-reviewer Review this component for Angular 19 best practices
+@angular-reviewer Check this signal implementation
+```
+
+---
+
+### laravel-reviewer
+
+**Expertise**: Laravel/PHP code review
+
+Focuses on:
+- Laravel architecture patterns
+- Eloquent ORM best practices
+- Actions pattern
+- Security (Sanctum, policies)
+- Testing with Pest PHP
+- Performance optimization
+
+```
+@laravel-reviewer Review this controller for best practices
+@laravel-reviewer Check this Eloquent query for N+1 issues
+```
+
+---
+
+### vuejs-reviewer
+
+**Expertise**: Vue.js/TypeScript code review
+
+Focuses on:
+- Composition API patterns
+- Pinia state management
+- TypeScript integration
+- Performance optimization
+- Security (XSS prevention)
+- Testing with Vitest
+
+```
+@vuejs-reviewer Review this composable
+@vuejs-reviewer Check this component for reactivity issues
+```
+
+---
+
+### csharp-reviewer
+
+**Expertise**: C#/.NET code review
+
+Focuses on:
+- Clean Architecture compliance
+- CQRS/MediatR patterns
+- Entity Framework Core
+- SOLID principles
+- Security (OWASP)
+- Testing with xUnit
+
+```
+@csharp-reviewer Review this handler for Clean Architecture compliance
+@csharp-reviewer Check this EF Core query for performance
+```
+
+---
+
+### php-reviewer
+
+**Expertise**: PHP/Clean Architecture code review
+
+Focuses on:
+- Clean Architecture compliance
+- PSR-12 standards
+- PHPStan level 9
+- Domain-Driven Design
+- Security audit
+- Testing with Pest PHP
+
+```
+@php-reviewer Audit this domain layer
+@php-reviewer Check this code for security vulnerabilities
 ```
 
 ---

@@ -74,7 +74,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
   - [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md): Common problems and solutions
   - [BMAD-PRACTICAL-GUIDE.md](docs/BMAD-PRACTICAL-GUIDE.md): BMAD v6 step-by-step
   - [RALPH-GUIDE.md](docs/RALPH-GUIDE.md): Ralph Wiggum configuration
-- **Complete Reference Documentation**: All 130+ commands and 34 agents documented
+- **Complete Reference Documentation**: All 130+ commands and 40 agents documented
 - **Example Projects**: symfony-api, flutter-app, fullstack-saas
 - **Complete Workflow Guides**: Idea → Production in 5 languages
 - **Prerequisites Check Script**: `./Dev/scripts/check-prerequisites.sh`
@@ -164,7 +164,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **10 Technology Stacks**: Symfony, Flutter, Python, React, React Native, Angular, C#/.NET, Laravel, Vue.js, PHP
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **35 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, Ralph Conductor, **10 BMAD agents**, and QA Recette
+- **40 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, Ralph Conductor, **10 BMAD agents**, and QA Recette
 - **130+ Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
 - **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
