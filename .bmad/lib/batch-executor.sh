@@ -1,6 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # BMAD v6 - Batch Executor
 # Manages batch processing of stories and sprints
+#
+# Single-writer pattern: Only the leader process writes to sprint-status.yaml.
+# Workers report via individual temp files in .bmad/.tmp/worker-{id}.yaml.
+# The leader merges worker reports atomically.
 
 set -euo pipefail
 
@@ -8,6 +12,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BMAD_DIR="$(dirname "$SCRIPT_DIR")"
 SPRINT_STATUS_FILE="${BMAD_DIR}/sprint-status.yaml"
 BATCH_QUEUE_FILE="${BMAD_DIR}/batch-queue.yaml"
+WORKER_TMP_DIR="${BMAD_DIR}/.tmp"
 
 # Colors
 RED='\033[0;31m'
@@ -29,6 +34,131 @@ log_step() { echo -e "${CYAN}[STEP]${NC} $1"; }
 
 timestamp() {
     date -u +"%Y-%m-%dT%H:%M:%SZ"
+}
+
+# ============================================
+# Single-Writer Pattern: Worker Reports
+# ============================================
+
+# Initialize worker temp directory
+init_worker_tmp() {
+    mkdir -p "$WORKER_TMP_DIR"
+}
+
+# Write a worker report (called by workers instead of writing to sprint-status.yaml directly)
+write_worker_report() {
+    local worker_id="$1"
+    local story_id="$2"
+    local status="$3"
+    local extra_field="${4:-}"
+    local extra_value="${5:-}"
+
+    init_worker_tmp
+
+    local report_file="${WORKER_TMP_DIR}/worker-${worker_id}.yaml"
+    local ts
+    ts="$(timestamp)"
+
+    cat > "$report_file" << EOF
+worker_id: "${worker_id}"
+story_id: "${story_id}"
+status: "${status}"
+reported_at: "${ts}"
+EOF
+
+    if [[ -n "$extra_field" && -n "$extra_value" ]]; then
+        echo "${extra_field}: \"${extra_value}\"" >> "$report_file"
+    fi
+}
+
+# Merge all worker reports into sprint-status.yaml and batch-queue.yaml (leader only)
+# This is the ONLY function that writes to the shared YAML files during parallel execution.
+merge_worker_reports() {
+    local dry_run="${1:-false}"
+
+    init_worker_tmp
+
+    if ! command -v yq &> /dev/null; then
+        log_error "yq required for merge"
+        return 1
+    fi
+
+    local report_files=("${WORKER_TMP_DIR}"/worker-*.yaml)
+
+    # Check if glob matched any files
+    if [[ ! -e "${report_files[0]:-}" ]]; then
+        log_info "No worker reports to merge"
+        return 0
+    fi
+
+    local merged_count=0
+
+    for report_file in "${report_files[@]}"; do
+        [[ ! -f "$report_file" ]] && continue
+
+        local worker_id story_id status reported_at
+        worker_id=$(yq '.worker_id' "$report_file" 2>/dev/null || echo "")
+        story_id=$(yq '.story_id' "$report_file" 2>/dev/null || echo "")
+        status=$(yq '.status' "$report_file" 2>/dev/null || echo "")
+        reported_at=$(yq '.reported_at' "$report_file" 2>/dev/null || echo "")
+
+        if [[ -z "$story_id" || -z "$status" ]]; then
+            log_warning "Skipping invalid report: $report_file"
+            continue
+        fi
+
+        if [[ "$dry_run" == "true" ]]; then
+            log_info "DRY RUN - Would merge: worker=$worker_id story=$story_id status=$status"
+            ((merged_count++))
+            continue
+        fi
+
+        # Update batch queue (single writer - no race condition)
+        if [[ -f "$BATCH_QUEUE_FILE" ]]; then
+            yq -i "(.queue[] | select(.story_id == \"$story_id\")).status = \"$status\"" "$BATCH_QUEUE_FILE"
+            yq -i "(.queue[] | select(.story_id == \"$story_id\")).completed_at = \"$reported_at\"" "$BATCH_QUEUE_FILE"
+        fi
+
+        # Update sprint status (single writer - no race condition)
+        if [[ -f "$SPRINT_STATUS_FILE" ]]; then
+            if [[ "$status" == "completed" ]]; then
+                yq -i ".stories.${story_id}.status = \"review\"" "$SPRINT_STATUS_FILE"
+                yq -i ".stories.${story_id}.completed_at = \"$reported_at\"" "$SPRINT_STATUS_FILE"
+            elif [[ "$status" == "failed" ]]; then
+                yq -i ".stories.${story_id}.status = \"blocked\"" "$SPRINT_STATUS_FILE"
+                yq -i ".stories.${story_id}.failed_at = \"$reported_at\"" "$SPRINT_STATUS_FILE"
+            fi
+        fi
+
+        # Update checkpoint
+        if [[ -f "$BATCH_QUEUE_FILE" ]]; then
+            yq -i ".checkpoints.last_completed = \"$story_id\"" "$BATCH_QUEUE_FILE"
+            yq -i ".checkpoints.timestamp = \"$reported_at\"" "$BATCH_QUEUE_FILE"
+            if [[ "$status" == "completed" ]]; then
+                yq -i ".checkpoints.stories_completed += 1" "$BATCH_QUEUE_FILE"
+            elif [[ "$status" == "failed" ]]; then
+                yq -i ".checkpoints.stories_failed += 1" "$BATCH_QUEUE_FILE"
+            fi
+        fi
+
+        # Remove processed report
+        rm -f "$report_file"
+        ((merged_count++))
+    done
+
+    if [[ "$dry_run" == "true" ]]; then
+        log_info "DRY RUN - Would merge $merged_count worker reports"
+    else
+        log_success "Merged $merged_count worker reports into sprint-status.yaml"
+    fi
+}
+
+# Clean up worker temp directory
+cleanup_worker_tmp() {
+    if [[ -d "$WORKER_TMP_DIR" ]]; then
+        rm -rf "$WORKER_TMP_DIR"
+        log_info "Cleaned up worker temp directory"
+    fi
 }
 
 # ============================================
@@ -517,19 +647,20 @@ process_queue_autonomous() {
         yq -i "(.queue[] | select(.story_id == \"$story_id\")).started_at = \"$(timestamp)\"" "$BATCH_QUEUE_FILE"
 
         # Spawn Ralph in background if parallel
+        # Workers write to temp files; leader merges after completion.
         if [[ $max_parallel -gt 1 ]]; then
+            local worker_id="${session_id}-${story_id}"
             (
                 if spawn_ralph_for_story "$story_id"; then
-                    yq -i "(.queue[] | select(.story_id == \"$story_id\")).status = \"completed\"" "$BATCH_QUEUE_FILE"
+                    write_worker_report "$worker_id" "$story_id" "completed"
                 else
-                    yq -i "(.queue[] | select(.story_id == \"$story_id\")).status = \"failed\"" "$BATCH_QUEUE_FILE"
+                    write_worker_report "$worker_id" "$story_id" "failed"
                 fi
-                yq -i "(.queue[] | select(.story_id == \"$story_id\")).completed_at = \"$(timestamp)\"" "$BATCH_QUEUE_FILE"
             ) &
             active_pids[$!]="$story_id"
             ((active_count++))
         else
-            # Sequential processing
+            # Sequential processing - leader writes directly (no race condition)
             if spawn_ralph_for_story "$story_id"; then
                 yq -i "(.queue[] | select(.story_id == \"$story_id\")).status = \"completed\"" "$BATCH_QUEUE_FILE"
                 wait_and_transition "$story_id" "review"
@@ -548,10 +679,15 @@ process_queue_autonomous() {
         echo ""
     done
 
-    # Wait for remaining parallel jobs
+    # Wait for remaining parallel jobs, then merge worker reports
     if [[ $max_parallel -gt 1 ]]; then
         log_info "Waiting for remaining jobs..."
         wait
+
+        # Single-writer merge: only the leader writes to shared YAML files
+        log_step "Merging worker reports (single-writer pattern)..."
+        merge_worker_reports "$dry_run"
+        cleanup_worker_tmp
     fi
 
     show_queue
@@ -699,6 +835,7 @@ usage() {
     echo "  run [--parallel N]       Process queue"
     echo "  resume                   Resume from checkpoint"
     echo "  clear [--force]          Clear queue"
+    echo "  merge-reports            Merge pending worker reports (leader only)"
     echo ""
     echo "Autonomous Mode Commands:"
     echo "  autonomous [--parallel N]  Run in autonomous mode with Ralph"
@@ -708,6 +845,11 @@ usage() {
     echo "  --dry-run               Preview without changes"
     echo "  --auto                  Start processing immediately"
     echo "  --parallel N            Process N stories in parallel"
+    echo ""
+    echo "Single-Writer Pattern:"
+    echo "  In parallel mode, workers report via temp files in .bmad/.tmp/"
+    echo "  Only the leader process writes to sprint-status.yaml and batch-queue.yaml"
+    echo "  Worker reports are merged atomically after all workers complete"
 }
 
 main() {
@@ -762,6 +904,9 @@ main() {
             ;;
         clear)
             clear_queue "$force"
+            ;;
+        merge-reports)
+            merge_worker_reports "$dry_run"
             ;;
         autonomous)
             process_queue_autonomous "$parallel" "$dry_run"

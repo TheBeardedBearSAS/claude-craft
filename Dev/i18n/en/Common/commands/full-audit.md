@@ -30,6 +30,50 @@ For each detected technology:
 1. Load rules from `.claude/rules/`
 2. Apply specific audit
 
+### Step 1.5: Prepare Isolated Output Directories
+
+When **2 or more technologies** are detected, each audit agent MUST write its results to an isolated directory to prevent file write conflicts during parallel execution:
+
+```
+.audit-output/
+  {technology}-{category}/
+    result.json          # Structured audit result
+    tool-output.log      # Raw tool output
+```
+
+For example, a Symfony + React project creates:
+```
+.audit-output/
+  symfony-architecture/result.json
+  symfony-code-quality/result.json
+  symfony-testing/result.json
+  symfony-security/result.json
+  react-architecture/result.json
+  react-code-quality/result.json
+  react-testing/result.json
+  react-security/result.json
+```
+
+Each `result.json` follows this schema:
+```json
+{
+  "tech": "symfony",
+  "category": "architecture",
+  "score": 22,
+  "max": 25,
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "src/Controller/UserController.php",
+      "message": "Direct repository access from controller",
+      "rule": "clean-architecture-layer-violation"
+    }
+  ]
+}
+```
+
+**Single-technology projects**: When only 1 technology is detected, isolation is not required. Results can be written directly without the `.audit-output/` directory structure.
+
 ### Step 2: Audit by Technology
 
 For EACH detected technology, verify:
@@ -83,6 +127,28 @@ docker compose exec app pytest --cov
 docker compose exec node npm run lint
 docker compose exec node npm run test -- --coverage
 ```
+
+### Step 3.5: Merge Audit Results
+
+When using isolated output directories (2+ technologies), collect and merge all results before scoring:
+
+1. **Read all `result.json` files** from `.audit-output/*/result.json`
+2. **Group by technology**: Combine the 4 category results per technology
+3. **Deduplicate findings**: Remove duplicate findings that appear across categories (e.g., a file flagged in both architecture and code quality)
+4. **Resolve conflicts**: If the same file is scored differently by two categories, use the lower (more critical) score
+5. **Produce merged result** for each technology with all 4 category scores
+
+Merge can be done using the result aggregator script if available:
+```bash
+# If result-aggregator.sh is available
+Tools/AgentTeams/lib/result-aggregator.sh \
+  --input-dir .audit-output \
+  --output-file .audit-output/merged-report.json
+```
+
+Or manually by reading each `result.json` and aggregating in memory.
+
+**Single-technology projects**: Skip this step (no merge needed).
 
 ### Step 4: Calculate Scores
 

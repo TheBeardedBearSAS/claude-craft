@@ -332,6 +332,25 @@ Model ID: `claude-opus-4-6`. 200K context (1M beta), 128K output, adaptive think
 
 Multi-agent: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Teammate/SendMessage tools, shared TaskList.
 
+**Guide:** [Agent Teams Guide](../docs/AGENT-TEAMS-GUIDE.md)
+
+**Team Templates:**
+
+| Template | Use Case | Min Stacks/Stories |
+|----------|----------|--------------------|
+| `team-audit` | Parallel `/common:full-audit` across tech stacks | 2+ tech stacks |
+| `team-sprint` | Parallel story processing in sprints | 3+ independent stories |
+| `team-security` | Parallel OWASP security review | 2+ tech stacks |
+
+**Cost Tools:**
+
+| Tool | Purpose |
+|------|---------|
+| `Tools/AgentTeams/lib/cost-estimator.sh` | Token/cost estimates (machine-readable) |
+| `Tools/AgentTeams/lib/cost-dashboard.sh` | Visual cost comparison before launch |
+
+**Quick decision:** Use parallel when 2+ tech stacks AND checks take > 3 min each. Expect 1.5-2.5x speedup (not 5-8x), +20-37% token overhead. Max 4 agents (1 leader + 3 workers).
+
 ### Automatic Memory (v2.1.32+)
 
 Auto-records session memory after ~10K tokens. Stored in `~/.claude-profiles/`.

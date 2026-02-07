@@ -1,7 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # =============================================================================
 # Ralph Wiggum - Parallel Manager Module
 # Manages parallel execution of multiple Ralph sessions
+#
+# Single-writer pattern: Only the leader (main process) writes to shared state
+# files. Background worker sessions report via individual temp files in
+# .ralph/parallel/workers/worker-{id}.yaml. The leader merges reports after
+# workers complete.
 # =============================================================================
 
 # Parallel manager state
@@ -21,6 +26,7 @@ PARALLEL_FAILED_COUNT=0
 PARALLEL_BASE_DIR=""
 PARALLEL_STATE_FILE=""
 PARALLEL_DEPENDENCY_GRAPH=""
+PARALLEL_WORKER_DIR=""
 
 # =============================================================================
 # Initialization
@@ -32,6 +38,8 @@ init_parallel_manager() {
 
     PARALLEL_STATE_FILE="$PARALLEL_BASE_DIR/state.yaml"
     PARALLEL_DEPENDENCY_GRAPH="$PARALLEL_BASE_DIR/dependencies.json"
+    PARALLEL_WORKER_DIR="$PARALLEL_BASE_DIR/workers"
+    mkdir -p "$PARALLEL_WORKER_DIR"
 
     # Initialize state file
     cat > "$PARALLEL_STATE_FILE" << EOF
@@ -282,6 +290,9 @@ EOF
     [[ -n "$config" ]] && cmd="$cmd --config=$config"
 
     # Spawn in background
+    # Workers write to individual temp files (single-writer pattern).
+    # The leader merges results after all workers complete.
+    local worker_id="${story_id}-$$-$(date +%s)"
     (
         cd "$(pwd)" || exit 1
 
@@ -289,15 +300,20 @@ EOF
         output=$($cmd "$prompt" 2>&1)
         local status=$?
 
-        # Save output
+        # Save output (per-session dir, no conflict)
         echo "$output" > "$session_dir/output.log"
 
-        # Update session info
+        # Update per-session info (isolated file, no conflict)
         if command -v yq &>/dev/null; then
             yq -i ".status = \"$([ $status -eq 0 ] && echo completed || echo failed)\"" "$session_dir/info.yaml"
             yq -i ".exit_code = $status" "$session_dir/info.yaml"
             yq -i ".completed_at = \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"" "$session_dir/info.yaml"
         fi
+
+        # Write worker report for leader to merge (avoids concurrent yq writes)
+        local result_status="failed"
+        [[ $status -eq 0 ]] && result_status="completed"
+        write_worker_report "$worker_id" "$session_id" "$story_id" "$result_status"
 
         exit $status
     ) &
@@ -324,14 +340,18 @@ EOF
 # Session Management
 # =============================================================================
 
-# Check and collect completed sessions
+# Check and collect completed sessions.
+# In the single-writer pattern, this function collects finished PIDs
+# and then merges worker reports written by the background processes.
 collect_completed_sessions() {
     local completed=()
     local failed=()
+    local any_finished=false
 
     for pid in "${!PARALLEL_PIDS[@]}"; do
         if ! kill -0 "$pid" 2>/dev/null; then
-            # Process has finished
+            any_finished=true
+
             local session_id="${PARALLEL_PIDS[$pid]}"
             local story_id="${PARALLEL_SESSIONS[$session_id]}"
 
@@ -341,15 +361,11 @@ collect_completed_sessions() {
 
             if [[ $exit_code -eq 0 ]]; then
                 completed+=("$story_id")
-                mark_story_completed "$story_id"
                 PARALLEL_COMPLETED_COUNT=$((PARALLEL_COMPLETED_COUNT + 1))
-                update_parallel_state "complete" "$session_id" "$story_id"
                 print_success "Session completed: $session_id ($story_id)"
             else
                 failed+=("$story_id")
-                mark_story_failed "$story_id"
                 PARALLEL_FAILED_COUNT=$((PARALLEL_FAILED_COUNT + 1))
-                update_parallel_state "fail" "$session_id" "$story_id"
                 print_error "Session failed: $session_id ($story_id)"
             fi
 
@@ -358,6 +374,11 @@ collect_completed_sessions() {
             unset "PARALLEL_SESSIONS[$session_id]"
         fi
     done
+
+    # Merge worker reports (single-writer: only the leader writes to shared state)
+    if [[ "$any_finished" == "true" ]]; then
+        merge_worker_reports
+    fi
 
     # Return completed stories
     echo "${completed[*]}"
@@ -468,9 +489,126 @@ process_stories_parallel() {
 }
 
 # =============================================================================
+# Single-Writer Pattern: Worker Reports
+# =============================================================================
+
+# Write a worker report (called by background workers instead of writing to
+# shared state files directly). This avoids concurrent yq race conditions.
+write_worker_report() {
+    local worker_id="$1"
+    local session_id="$2"
+    local story_id="$3"
+    local status="$4"  # "completed" or "failed"
+
+    local report_file="${PARALLEL_WORKER_DIR}/worker-${worker_id}.yaml"
+    local ts
+    ts="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+    cat > "$report_file" << EOF
+worker_id: "${worker_id}"
+session_id: "${session_id}"
+story_id: "${story_id}"
+status: "${status}"
+reported_at: "${ts}"
+EOF
+}
+
+# Merge all worker reports into the shared state file (leader only).
+# This is the ONLY function that writes to PARALLEL_STATE_FILE and the
+# dependency graph during parallel execution.
+merge_worker_reports() {
+    local dry_run="${1:-false}"
+
+    if ! command -v yq &>/dev/null; then
+        print_error "yq required for merge" 2>/dev/null || echo "[ERROR] yq required"
+        return 1
+    fi
+
+    local report_files=("${PARALLEL_WORKER_DIR}"/worker-*.yaml)
+
+    if [[ ! -e "${report_files[0]:-}" ]]; then
+        print_info "No worker reports to merge" 2>/dev/null || echo "[INFO] No worker reports"
+        return 0
+    fi
+
+    local merged_count=0
+
+    for report_file in "${report_files[@]}"; do
+        [[ ! -f "$report_file" ]] && continue
+
+        local session_id story_id status
+        session_id=$(yq '.session_id' "$report_file" 2>/dev/null || echo "")
+        story_id=$(yq '.story_id' "$report_file" 2>/dev/null || echo "")
+        status=$(yq '.status' "$report_file" 2>/dev/null || echo "")
+
+        if [[ -z "$session_id" || -z "$story_id" || -z "$status" ]]; then
+            continue
+        fi
+
+        if [[ "$dry_run" == "true" ]]; then
+            print_info "DRY RUN - Would merge: session=$session_id story=$story_id status=$status" 2>/dev/null \
+                || echo "[INFO] DRY RUN - Would merge: session=$session_id story=$story_id status=$status"
+            ((merged_count++))
+            continue
+        fi
+
+        # Update state file (single writer - no race condition)
+        if [[ -f "$PARALLEL_STATE_FILE" ]]; then
+            yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+            if [[ "$status" == "completed" ]]; then
+                yq -i ".sessions.completed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                yq -i ".metrics.total_completed += 1" "$PARALLEL_STATE_FILE"
+            else
+                yq -i ".sessions.failed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                yq -i ".metrics.total_failed += 1" "$PARALLEL_STATE_FILE"
+            fi
+        fi
+
+        # Update dependency graph (single writer - no race condition)
+        if [[ -f "$PARALLEL_DEPENDENCY_GRAPH" ]] && command -v jq &>/dev/null; then
+            local updated
+            updated=$(jq --arg id "$story_id" --arg s "$status" '.nodes[$id].status = $s' "$PARALLEL_DEPENDENCY_GRAPH")
+            echo "$updated" > "$PARALLEL_DEPENDENCY_GRAPH"
+        fi
+
+        rm -f "$report_file"
+        ((merged_count++))
+    done
+
+    # Update efficiency after merge
+    if [[ "$dry_run" != "true" && -f "$PARALLEL_STATE_FILE" ]]; then
+        local total_completed total_spawned
+        total_completed=$(yq '.metrics.total_completed' "$PARALLEL_STATE_FILE")
+        total_spawned=$(yq '.metrics.total_spawned' "$PARALLEL_STATE_FILE")
+        if [[ $total_spawned -gt 0 ]]; then
+            local efficiency=$((total_completed * 100 / total_spawned))
+            yq -i ".metrics.efficiency = $efficiency" "$PARALLEL_STATE_FILE"
+        fi
+    fi
+
+    if [[ "$dry_run" == "true" ]]; then
+        print_info "DRY RUN - Would merge $merged_count worker reports" 2>/dev/null \
+            || echo "[INFO] DRY RUN - Would merge $merged_count reports"
+    else
+        print_success "Merged $merged_count worker reports" 2>/dev/null \
+            || echo "[SUCCESS] Merged $merged_count reports"
+    fi
+}
+
+# Clean up worker temp directory
+cleanup_workers() {
+    if [[ -d "$PARALLEL_WORKER_DIR" ]]; then
+        rm -rf "$PARALLEL_WORKER_DIR"
+        mkdir -p "$PARALLEL_WORKER_DIR"
+    fi
+}
+
+# =============================================================================
 # State Management
 # =============================================================================
 
+# update_parallel_state is now used ONLY by the leader process for spawn events.
+# Complete/fail events are handled via worker reports + merge_worker_reports().
 update_parallel_state() {
     local action="$1"
     local session_id="$2"
@@ -482,18 +620,22 @@ update_parallel_state() {
 
     case "$action" in
         spawn)
+            # Spawn is always called from the leader, safe to write directly
             yq -i ".sessions.active += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
             yq -i ".metrics.total_spawned += 1" "$PARALLEL_STATE_FILE"
             ;;
-        complete)
-            yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
-            yq -i ".sessions.completed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
-            yq -i ".metrics.total_completed += 1" "$PARALLEL_STATE_FILE"
-            ;;
-        fail)
-            yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
-            yq -i ".sessions.failed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
-            yq -i ".metrics.total_failed += 1" "$PARALLEL_STATE_FILE"
+        complete|fail)
+            # DEPRECATED for parallel mode: use write_worker_report() + merge_worker_reports()
+            # Kept for backward compatibility with sequential mode
+            if [[ "$action" == "complete" ]]; then
+                yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                yq -i ".sessions.completed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                yq -i ".metrics.total_completed += 1" "$PARALLEL_STATE_FILE"
+            else
+                yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                yq -i ".sessions.failed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                yq -i ".metrics.total_failed += 1" "$PARALLEL_STATE_FILE"
+            fi
             ;;
     esac
 
@@ -552,6 +694,17 @@ cmd_parallel_manager() {
     local command="${1:-status}"
     shift || true
 
+    # Parse flags
+    local dry_run="false"
+    local args=()
+    for arg in "$@"; do
+        case "$arg" in
+            --dry-run) dry_run="true" ;;
+            *) args+=("$arg") ;;
+        esac
+    done
+    set -- "${args[@]+"${args[@]}"}"
+
     case "$command" in
         init)
             init_parallel_manager
@@ -582,6 +735,34 @@ cmd_parallel_manager() {
         collect)
             collect_completed_sessions
             ;;
+        merge-reports)
+            merge_worker_reports "$dry_run"
+            ;;
+        cleanup-workers)
+            cleanup_workers
+            ;;
+        -h|--help|help)
+            echo "Ralph Wiggum - Parallel Manager"
+            echo ""
+            echo "Usage: parallel-manager.sh <command> [args] [--dry-run]"
+            echo ""
+            echo "Commands:"
+            echo "  init                Initialize parallel manager"
+            echo "  status              Show parallel manager status"
+            echo "  process <stories>   Process stories in parallel"
+            echo "  spawn <id> [msg]    Spawn a single session"
+            echo "  wait [timeout]      Wait for all sessions"
+            echo "  collect             Collect completed sessions"
+            echo "  merge-reports       Merge pending worker reports (leader only)"
+            echo "  cleanup-workers     Clean up worker temp directory"
+            echo ""
+            echo "Options:"
+            echo "  --dry-run           Preview without changes"
+            echo ""
+            echo "Single-Writer Pattern:"
+            echo "  Background workers write to .ralph/parallel/workers/worker-{id}.yaml"
+            echo "  Only the leader merges results into shared state files"
+            ;;
         *)
             echo "Usage: parallel-manager.sh <command> [args]"
             echo ""
@@ -592,6 +773,11 @@ cmd_parallel_manager() {
             echo "  spawn <id> [msg]  Spawn a single session"
             echo "  wait [timeout]    Wait for all sessions"
             echo "  collect           Collect completed sessions"
+            echo "  merge-reports     Merge worker reports (leader)"
+            echo "  cleanup-workers   Clean up worker temp files"
+            echo ""
+            echo "Options:"
+            echo "  --dry-run         Preview without changes"
             ;;
     esac
 }

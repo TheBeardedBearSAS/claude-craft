@@ -1,6 +1,6 @@
 ---
 description: Run autonomous sprint conductor for overnight/unattended sprint execution
-argument-hint: <sprint-name> [--overnight|--parallel N|--supervised|--max-stories N]
+argument-hint: <sprint-name> [--overnight|--parallel N|--supervised|--max-stories N|--use-teams]
 ---
 
 # Ralph Sprint - Autonomous Sprint Conductor (ASC)
@@ -17,6 +17,7 @@ Execute an entire sprint autonomously with minimal human intervention. The Auton
 - `--supervised`: Pause before each story for confirmation
 - `--max-stories N`: Maximum stories to process (default: 10)
 - `--timeout H`: Maximum runtime in hours (default: 12)
+- `--use-teams`: Use Agent Teams mode (2-agent prototype: conductor + 1 dev)
 
 ## Key Features
 
@@ -163,6 +164,51 @@ parallel:
     mem_percent: 80      # Don't spawn if memory > 80%
 ```
 
+## Agent Teams Mode
+
+When `--use-teams` is specified, the ASC uses Claude Code Agent Teams (v2.1.32+) instead of bash-based parallel processing. This is a prototype mode limited to a 2-agent team (conductor + 1 dev).
+
+### Prerequisites
+
+- Claude Code v2.1.32 or later
+- Environment variable: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
+- The adapter library: `Tools/AgentTeams/lib/ralph-teams-adapter.sh`
+
+### How It Works
+
+1. **Conductor as Team Lead**: The `@ralph-conductor` agent acts as the team lead, coordinating work via the shared task system
+2. **Dev Teammate**: A single `@dev` agent receives story assignments via `SendMessage` and reports completion via `TaskUpdate`
+3. **Shared Tasks**: Stories are managed through `TaskCreate`/`TaskUpdate` instead of PID-based tracking
+4. **Watchdog Recovery**: If the dev teammate is unresponsive for 5 minutes, the adapter triggers a fallback to sequential processing
+
+```
+Sprint Conductor (Team Lead)
+  |
+  +-- TaskCreate: US-001 story task
+  +-- SendMessage: assign to dev-1
+  |
+  +-- dev-1 implements US-001 (TDD: Red -> Green -> Refactor)
+  +-- dev-1 marks TaskUpdate: completed
+  |
+  +-- Conductor transitions story to review
+  +-- Conductor assigns next story (or shuts down teammate)
+```
+
+### Fallback Behavior
+
+- Without `--use-teams`: behavior is unchanged (bash-based parallel with `--parallel N` or sequential)
+- With `--use-teams` but without `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`: the adapter falls back to sequential processing automatically
+- If the dev teammate stalls (no response for 5 minutes): the watchdog triggers `teams_fallback_sequential()` and the story is reprocessed sequentially
+
+### Limitations (Prototype)
+
+| Constraint | Detail |
+|-----------|--------|
+| Team size | Fixed at 2 agents (conductor + 1 dev) |
+| Stories per run | Processes 1 story at a time through the dev teammate |
+| API stability | Agent Teams is a Research Preview feature |
+| No persistent teams | Teams are per-session only |
+
 ## Quick Start Examples
 
 ```bash
@@ -180,6 +226,12 @@ parallel:
 
 # Limited run (5 stories, 4 hours)
 /common:ralph-sprint "Sprint 3" --max-stories 5 --timeout 4
+
+# Agent Teams mode (2-agent prototype)
+/common:ralph-sprint "Sprint 3" --use-teams
+
+# Agent Teams overnight
+/common:ralph-sprint "Sprint 3" --use-teams --overnight
 ```
 
 ## Configuration

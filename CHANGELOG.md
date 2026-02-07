@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.7.0] - 2026-02-07
+
+### Added
+- **Agent Teams Integration** — 3 team templates, infrastructure scripts, cost framework
+  - `/common:team-audit` — Parallel multi-technology audit (1 opus leader + N haiku auditors, max 4)
+  - `/common:team-sprint` — Sprint Development Team (1 opus conductor + 2-3 sonnet devs)
+  - `/common:team-security` — Security Review Team (1 opus lead + 3 haiku reviewers)
+  - `Tools/AgentTeams/lib/result-aggregator.sh` — Merges isolated audit results
+  - `Tools/AgentTeams/lib/compatibility-check.sh` — Validates agent-role compatibility
+  - `Tools/AgentTeams/lib/ralph-teams-adapter.sh` — Abstraction layer with bash fallback
+  - `Tools/AgentTeams/lib/cost-estimator.sh` — Token cost estimation (parallel vs sequential)
+  - `Tools/AgentTeams/lib/cost-dashboard.sh` — Visual cost comparison before team launch
+  - `docs/AGENT-TEAMS-GUIDE.md` — User guide for Agent Teams integration
+
+### Changed
+- `ralph-sprint.md` — Added `--use-teams` option for Agent Teams mode
+- `ralph-conductor.md` — Added Agent Teams coordination mode
+- `full-audit.md` — Added isolated output directories and result merge step
+- `.claude/INDEX.md` — Added Agent Teams section
+
+### Fixed
+- **sprint-status.yaml race condition** — Single-writer pattern in `.bmad/lib/batch-executor.sh` and `Tools/Ralph/lib/parallel-manager.sh`
+
+---
+
 ## [5.6.0] - 2026-02-06
 
 ### Changed

@@ -171,12 +171,62 @@ Summary:
 - Metrics exported: .ralph/sessions/.../metrics-export.json
 ```
 
+## Agent Teams Coordination Mode
+
+When operating in Agent Teams mode (activated via `--use-teams` on `/common:ralph-sprint`), the conductor takes on the role of **team lead** and coordinates a dev teammate through the Claude Code Agent Teams API instead of bash process management.
+
+### Prerequisites
+
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable
+- Claude Code v2.1.32+
+- Adapter library: `Tools/AgentTeams/lib/ralph-teams-adapter.sh`
+
+### Coordination via Task System
+
+In Agent Teams mode, the conductor replaces PID-based tracking with the shared task system:
+
+| Bash Mode (current) | Agent Teams Mode |
+|---------------------|-----------------|
+| `spawn_ralph_for_story()` with bash `&` | `TaskCreate` + `SendMessage` to dev teammate |
+| `kill -0 $pid` polling | `TaskList` / `TaskCompleted` hook |
+| PID-based completion detection | `TaskUpdate(status=completed)` by dev |
+| `kill -9` for stuck processes | `SendMessage(type=shutdown_request)` + watchdog fallback |
+| `yq` writes to `batch-queue.yaml` | Shared `TaskList` (built-in coordination) |
+
+### Story Processing Flow
+
+1. **Claim story**: Conductor reads `sprint-status.yaml`, claims next `ready-for-dev` story
+2. **Create task**: `TaskCreate` with story details, acceptance criteria, and TDD instructions
+3. **Assign to dev**: `SendMessage(type=message, recipient=dev-1)` with the story prompt
+4. **Monitor progress**: Poll `TaskList` for status updates from the dev teammate
+5. **Handle completion**: When dev marks task as `completed`, conductor transitions story to `review`
+6. **Handle failure**: If dev reports failure or watchdog detects a stall, conductor applies recovery strategy
+7. **Next story**: Assign next ready story or send `shutdown_request` if sprint is complete
+
+### Watchdog Integration
+
+The conductor runs periodic health checks through the adapter's `teams_watchdog()`:
+
+- **Check interval**: Every 60 seconds (configurable via `TEAMS_WATCHDOG_INTERVAL`)
+- **Timeout threshold**: 5 minutes of no activity (configurable via `TEAMS_WATCHDOG_TIMEOUT`)
+- **Stall action**: Mark teammate as stalled, trigger `teams_fallback_sequential()`, reprocess story through existing `execute_story_with_ralph()`
+
+### Keeping Bash Mode Intact
+
+All existing bash-mode orchestration remains unchanged. The Agent Teams mode is activated only when:
+1. The `--use-teams` flag is passed to `/common:ralph-sprint`
+2. The `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` env var is set
+3. The adapter library is available
+
+Without these conditions, the conductor operates exactly as before.
+
 ## Integration Points
 
 - Works with `/common:ralph-run` command
 - Integrates with Claude Code 2.1.23+ hooks
 - Compatible with `/project:sprint-dev` workflow
 - Uses `@tdd-coach` principles
+- Agent Teams mode via `/common:ralph-sprint --use-teams`
 
 ## When to Stop
 

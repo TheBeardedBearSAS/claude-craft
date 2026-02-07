@@ -4,6 +4,16 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
 
+## What's New in v5.7 - Agent Teams Integration
+
+- **Agent Teams** — Multi-agent coordination with shared task management
+  - `/common:team-audit` — Parallel multi-technology audit (1 opus leader + N haiku auditors)
+  - `/common:team-sprint` — Sprint Development Team (1 opus conductor + 2-3 sonnet devs)
+  - `/common:team-security` — Security Review Team (1 opus lead + 3 haiku reviewers)
+- **Cost Framework** — Token cost estimation and visual dashboard before team launch
+- **Race Condition Fix** — Single-writer pattern for sprint-status.yaml
+- See [CHANGELOG](CHANGELOG.md) for full details
+
 ## What's New in v5.6 - Claude Code 2.1.33 / 2.1.34
 
 - **Agent Memory** (v2.1.33): Persistent `memory` frontmatter for agents (user/project/local scopes)
