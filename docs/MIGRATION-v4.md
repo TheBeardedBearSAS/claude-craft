@@ -1,5 +1,7 @@
 # Migration Guide: v3.x to v4.x
 
+**Version:** 5.8.0
+
 Complete guide for migrating Claude Craft projects from version 3.x to 4.x.
 
 ---

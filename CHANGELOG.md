@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.8.0] - 2026-02-07
+
+### Fixed
+- **Documentation Accuracy** — Fixed agent/command counts in documentation (40 agents, 157 commands)
+- **BMAD Agent Cleanup** — Removed ghost menu blocks from all 10 BMAD agent YAMLs
+- **Ghost Commands** — Removed ghost commands `/bmad:init`, `/bmad:status`
+- **QA Commands** — Marked `/qa:recette-status`, `/qa:recette-regression`, `/qa:recette-report` as [PLANNED]
+
+### Added
+- **Documentation** — Added `/common:team-delivery` to documentation
+
+### Changed
+- **Command Harmonization** — Harmonized 8 check-compliance commands to unified delegation pattern
+- **Command Merging**
+  - Merged `sprint-bmad-status` → `sprint-status --bmad`
+  - Merged `validate-backlog` → `gate-validate-backlog --no-gate`
+
+### Deprecated
+- **full-audit** → Use `team-audit --sequential` instead (removal in v6.0)
+- **ralph-sprint** → Use `team-sprint --ralph-mode` instead (removal in v6.0)
+- **workflow-orchestrator agent** → Deprecated (removal in v6.0)
+
+---
+
 ## [5.7.0] - 2026-02-07
 
 ### Added
