@@ -55,6 +55,10 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/common:ralph-sprint` | **[NEW]** Autonomous Sprint Conductor (overnight) |
 | `/common:setup-project-context` | Configure project context |
 | `/common:add-technology` | Add new tech stack |
+| `/common:team-audit` | Parallel multi-tech audit (Agent Teams) |
+| `/common:team-sprint` | Parallel sprint implementation (Agent Teams) |
+| `/common:team-security` | Parallel security review (Agent Teams) |
+| `/common:team-delivery` | **[NEW]** Full sprint lifecycle — writing + implementation (Agent Teams) |
 
 ### Workflow (`/workflow:`)
 | Command | Description |

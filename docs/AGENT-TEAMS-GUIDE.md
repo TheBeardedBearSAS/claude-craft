@@ -28,6 +28,8 @@ Agent Teams adds coordination overhead. Use it only when the parallelization ben
 | Pre-commit check | STAY SEQUENTIAL | Already fast (< 2 min); overhead not justified |
 | Sprint, 3+ independent stories | USE PARALLEL | Stories processed concurrently |
 | Sprint, 1-2 stories | STAY SEQUENTIAL | Coordination cost exceeds benefit |
+| Full lifecycle (write + implement), 3+ stories | USE PARALLEL (team-delivery) | ~2.2x speedup, cross-phase context, file domain mapping |
+| Full lifecycle, < 3 stories | STAY SEQUENTIAL | `@product-owner` + `ralph-sprint` is simpler |
 | BMAD quality gates | STAY SEQUENTIAL | Gates are fast (< 30s each); micro-optimization |
 | Small projects (< 50 files) | STAY SEQUENTIAL | Sequential audit completes in ~2 min |
 
@@ -81,7 +83,7 @@ Each parallel agent incurs overhead from:
 
 ## Team Templates
 
-Claude-craft provides 3 team templates for common parallel workflows.
+Claude-craft provides 4 team templates for common parallel workflows.
 
 ### team-audit: Full Audit Team
 
@@ -145,6 +147,61 @@ Parallelizes security audits across technology stacks with dedicated OWASP check
 |-------|-------|---------------|
 | security-leader | Opus | Coordinate security review, generate consolidated report |
 | {tech}-security-auditor | Sonnet | Run per-stack security checks, dependency audits |
+
+### team-delivery: Delivery Team (Full Lifecycle)
+
+Orchestrates the **complete sprint cycle**: Phase 1 writes EPICs/US/tasks with cross-review, Phase 2 implements them in parallel using the file domain map produced in Phase 1. A single Delivery Lead (opus) orchestrates both phases, preserving full context.
+
+**Architecture:**
+
+```
+Phase 1 (Writing):                    Phase 2 (Implementation):
+
+  delivery-lead (Opus)                  delivery-lead (Opus) — same agent
+       |                                     |
+  +----+----+----+                      +----+----+----+
+  |    |    |    |                      |    |    |    |
+Writer Reviewer Architect           dev-1  dev-2  dev-3
+(Sonnet)(Sonnet) (Sonnet)          (Sonnet)(Sonnet)(Sonnet)
+
+  ~~~ shutdown Phase 1 workers → spawn Phase 2 workers ~~~
+```
+
+**When to use:** Full sprint cycle (writing + implementation) with 3+ stories to write AND implement.
+
+**Agent roles:**
+
+| Agent | Phase | Model | Responsibility |
+|-------|-------|-------|---------------|
+| delivery-lead | Both | Opus | Orchestrate pipeline, validate gates, assign work |
+| writer | 1 | Sonnet | Create EPICs, US (INVEST+3C+Gherkin), tasks |
+| reviewer | 1 | Sonnet | Validate quality (INVEST 6/6, AC coverage, slicing) |
+| architect | 1 | Sonnet | Validate tech feasibility, produce file domain map |
+| dev-worker-N | 2 | Sonnet | Implement a story with TDD cycle |
+
+**Key differentiators vs team-sprint:**
+
+| Feature | team-delivery | team-sprint |
+|---------|--------------|-------------|
+| Story writing | Built-in (Phase 1) | Requires pre-written stories |
+| File domain map | Computed by Architect | Heuristic at runtime |
+| Cross-review | Writer → Reviewer → Architect | None |
+| BMAD gates | PRD + Backlog + Sprint Ready + DoD | DoD only |
+| Parallelization waves | Pre-computed from domain map | Ad-hoc independence check |
+
+**Expected performance (5 stories):**
+
+| Metric | Sequential | Team Delivery |
+|--------|-----------|---------------|
+| Time | ~120 min | ~55 min |
+| Tokens | ~850K | ~1,125K |
+| Cost (Opus lead + Sonnet workers) | ~$28 | ~$17 |
+
+**Constraints:**
+- Maximum 5 agents total (1 lead + 3 writers OR 3 dev workers per phase)
+- Phase transition takes ~30s (shutdown + respawn)
+- Only the delivery-lead writes to `sprint-status.yaml` (single-writer pattern)
+- Stories with file domain overlap are sequenced into waves (not parallelized)
 
 ## Known Limitations
 
@@ -236,9 +293,9 @@ claude --version                             # Should be >= 2.1.32
 
 ## Architecture Decisions
 
-### Why Only 3 Templates
+### Why 4 Templates
 
-The devil's advocate analysis (devils-advocate.md Section 3.1) identified that 9+ templates create unmaintained bloat. Three templates (audit, sprint, security) cover 80% of parallel use cases. Additional templates can be added if empirical usage data justifies them.
+The devil's advocate analysis (devils-advocate.md Section 3.1) identified that 9+ templates create unmaintained bloat. Four templates (audit, sprint, security, delivery) cover 90% of parallel use cases. The delivery template was added because the full sprint lifecycle (writing + implementation) is a distinct workflow that benefits from cross-phase context preservation and file domain mapping — capabilities not achievable by combining team-sprint with sequential writing.
 
 ### Why Cap at 4 Agents
 
