@@ -1001,12 +1001,12 @@ This restricts the agent to only spawn `Explore` and `Plan` sub-agents, preventi
 
 | Category | Unique Agents | With i18n (×5 languages) |
 |----------|---------------|--------------------------|
-| Common | 11 | 55 |
-| Technology Reviewers | 5 | 25 |
+| Common | 13 | 65 |
+| Technology Reviewers | 10 | 50 |
 | Docker/Infrastructure | 5 | 25 |
 | **BMAD v6** | **10** | **10** (YAML format) |
 | Project | 2 | 10 |
-| **Total** | **33** | **125** |
+| **Total** | **40** | **160** |
 
 ---
 

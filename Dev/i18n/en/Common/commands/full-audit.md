@@ -3,6 +3,8 @@ description: Multi-Technology Complete Audit
 argument-hint: [arguments]
 ---
 
+> **DEPRECATED v5.8** — For multi-technology projects, prefer `/common:team-audit` which runs audits in parallel using Agent Teams. This command remains available for single-technology projects or when `--sequential` execution is needed. Use `/common:team-audit --sequential` for sequential execution with the team-audit interface.
+
 # Multi-Technology Complete Audit
 
 You are a code auditor expert. You must perform a complete compliance audit on the project, automatically detecting present technologies and applying corresponding rules.

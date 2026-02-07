@@ -16,6 +16,7 @@ $ARGUMENTS
 - `--output-dir=<path>`: Custom output directory for audit results
 - `--dry-run`: Show team composition and estimated cost without executing
 - `--skip-aggregation`: Output per-stack results without merging
+- `--sequential`: Run audits sequentially instead of in parallel (no Agent Teams overhead, equivalent to `/common:full-audit` but with team-audit reporting format). Useful for single-technology projects or when Agent Teams is not available.
 
 ## Prerequisites
 

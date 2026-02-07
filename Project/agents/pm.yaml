@@ -44,36 +44,6 @@ responsibilities:
   - Define success metrics and KPIs
   - Communicate product decisions to stakeholders
 
-menu:
-  - trigger: /pm:vision
-    description: Create or update product vision
-    workflow: workflows/pm/vision.yaml
-
-  - trigger: /pm:prd
-    description: Create Product Requirements Document
-    workflow: workflows/pm/prd.yaml
-    args:
-      - name: feature_name
-        required: true
-      - name: target_users
-        required: false
-
-  - trigger: /pm:prioritize
-    description: Prioritize features using RICE/MoSCoW
-    workflow: workflows/pm/prioritize.yaml
-
-  - trigger: /pm:roadmap
-    description: Generate or update product roadmap
-    workflow: workflows/pm/roadmap.yaml
-
-  - trigger: /pm:analyze-market
-    description: Conduct market/competitive analysis
-    workflow: workflows/pm/market-analysis.yaml
-
-  - trigger: /pm:okr
-    description: Define OKRs for product
-    workflow: workflows/pm/okr.yaml
-
 outputs:
   - type: product-vision
     format: markdown

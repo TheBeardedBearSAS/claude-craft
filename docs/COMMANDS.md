@@ -183,6 +183,15 @@ Add a complete technology stack to claude-craft with best practices:
 - [ ] docs/index.html updated (stats + tech card)
 - [ ] Makefile target added
 
+### Agent Teams Commands
+
+| Command | Description |
+|---------|-------------|
+| `/common:team-audit` | Parallel multi-tech audit (Agent Teams) |
+| `/common:team-sprint` | Parallel sprint implementation (Agent Teams) |
+| `/common:team-security` | Parallel security review (Agent Teams) |
+| `/common:team-delivery` | **[NEW]** Full sprint lifecycle — writing + implementation (Agent Teams) |
+
 ---
 
 ## Symfony Commands (`/symfony:`)
@@ -604,10 +613,10 @@ Automated acceptance testing with Claude in Chrome.
 | Command | Description |
 |---------|-------------|
 | `/qa:recette` | **[NEW]** Execute automated acceptance tests via browser |
-| `/qa:recette-status` | Show recette session status |
-| `/qa:recette-regression` | View regression test registry |
 | `/qa:recette-fix` | **[NEW]** Fix bugs from recette session (TDD workflow) |
-| `/qa:recette-report` | Generate recette report (MD/HTML/JSON) |
+| `/qa:recette-status` | **[PLANNED]** Show recette session status |
+| `/qa:recette-regression` | **[PLANNED]** View regression test registry |
+| `/qa:recette-report` | **[PLANNED]** Generate recette report (MD/HTML/JSON) |
 
 ### Golden Rule
 

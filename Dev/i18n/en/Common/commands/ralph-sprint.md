@@ -3,6 +3,8 @@ description: Run autonomous sprint conductor for overnight/unattended sprint exe
 argument-hint: <sprint-name> [--overnight|--parallel N|--supervised|--max-stories N|--use-teams]
 ---
 
+> **DEPRECATED v5.8** — Prefer `/common:team-sprint` which uses Agent Teams for parallel story implementation. This command remains available for sequential sprint execution or when Agent Teams is not available. Use `/common:team-sprint --ralph-mode` for Ralph recovery engine with Agent Teams parallelism.
+
 # Ralph Sprint - Autonomous Sprint Conductor (ASC)
 
 Execute an entire sprint autonomously with minimal human intervention. The Autonomous Sprint Conductor (ASC) manages story claiming, execution, transitions, recovery from errors, and escalation of blocking issues.

@@ -2,7 +2,7 @@
 
 **Version:** 5.7.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 40 agents, 130+ commands, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 40 agents, 157 commands, and BMAD v6 project management.
 
 ---
 
@@ -70,11 +70,9 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/workflow:implement` | Sprint development |
 | `/workflow:status` | Show progress |
 
-### BMAD v6 (`/bmad:`, `/sprint:`, `/gate:`, `/project:`)
+### BMAD v6 (`/sprint:`, `/gate:`, `/project:`)
 | Command | Description |
 |---------|-------------|
-| `/bmad:init` | Initialize BMAD framework |
-| `/bmad:status` | Show project status |
 | `/sprint:next-story` | Get next ready story |
 | `/sprint:transition` | Transition story status |
 | `/gate:validate-prd` | PRD quality gate (≥80%) |
@@ -126,9 +124,9 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 |---------|-------------|
 | `/qa:recette` | **[NEW]** Automated acceptance tests via Chrome |
 | `/qa:recette-fix` | **[NEW]** Fix bugs from a recette session |
-| `/qa:recette-status` | Show recette session status |
-| `/qa:recette-regression` | View regression tests |
-| `/qa:recette-report` | Generate recette report |
+| `/qa:recette-status` | **[PLANNED]** Show recette session status |
+| `/qa:recette-regression` | **[PLANNED]** View regression tests |
+| `/qa:recette-report` | **[PLANNED]** Generate recette report |
 
 ---
 

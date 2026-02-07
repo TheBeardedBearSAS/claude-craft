@@ -18,6 +18,8 @@ skills:
   - workflow-analysis
 ---
 
+> **DEPRECATED v5.8** — This agent will be removed in v6.0. Use /workflow:* commands directly instead.
+
 # Workflow Orchestrator
 
 ## Identity

@@ -1,350 +1,249 @@
 ---
-description: Audit Complet de Conformité Flutter
+description: Check Complete Flutter Compliance
 argument-hint: [arguments]
 ---
 
-# Audit Complet de Conformité Flutter
+# Check Complete Flutter Compliance
 
 ## Arguments
 
-$ARGUMENTS
+$ARGUMENTS (optional: path to project to analyze)
 
 ## MISSION
 
-Tu es un expert Flutter chargé de réaliser un audit complet de conformité du projet. Cet audit évalue 4 dimensions critiques : Architecture, Qualité du Code, Tests et Sécurité.
+Perform a complete compliance audit of the Flutter project by orchestrating the 4 major checks: Architecture, Code Quality, Tests, and Security. Produce a consolidated report with an overall score out of 100 points.
 
-### Étape 1 : Préparation de l'audit
+### Step 1: Audit Preparation
 
-- [ ] Identifier la structure complète du projet Flutter
-- [ ] Vérifier la présence de `pubspec.yaml`, `analysis_options.yaml`
-- [ ] Localiser les dossiers : `lib/`, `test/`, `android/`, `ios/`
-- [ ] Référencer TOUTES les règles depuis `/rules/` :
-  - `02-architecture.md` - Clean Architecture
-  - `03-coding-standards.md` - Effective Dart
-  - `04-solid-principles.md` - SOLID
-  - `05-kiss-dry-yagni.md` - Principes de simplicité
-  - `07-testing.md` - Stratégie de tests
-  - `08-quality-tools.md` - Outils qualité
-  - `11-security.md` - Sécurité
+Prepare audit environment:
+- [ ] Identify project path to audit
+- [ ] Verify presence of configuration files (pubspec.yaml, analysis_options.yaml)
+- [ ] List main directories (lib/, test/, android/, ios/, etc.)
+- [ ] Identify project structure and Flutter version
 
-### Étape 2 : Exécution des 4 audits spécialisés (100 points)
+**Note**: If $ARGUMENTS provided, use it as project path, otherwise use current directory.
 
-#### 2.1 🏗️ AUDIT ARCHITECTURE (25 points)
+### Step 2: Architecture Audit (25 points)
 
-Exécuter l'analyse d'architecture complète en vérifiant :
+Execute complete architecture check:
 
-**Organisation Clean Architecture (10 pts)**
-- [ ] Domain Layer : Entités et UseCases isolés
-  - Vérifier `lib/domain/entities/`, `lib/domain/usecases/`
-  - Aucune dépendance vers data/presentation
-- [ ] Data Layer : Repositories, DataSources, Models
-  - Vérifier `lib/data/repositories/`, `lib/data/datasources/`, `lib/data/models/`
-  - Implémentation des interfaces domain
-- [ ] Presentation Layer : UI, BLoCs/Providers
-  - Vérifier `lib/presentation/pages/`, `lib/presentation/widgets/`, `lib/presentation/blocs/`
+**Command**: Use slash command `/flutter:check-architecture` or manually follow steps in `check-architecture.md`
 
-**Injection de dépendances (5 pts)**
-- [ ] Container DI configuré (get_it, injectable, riverpod)
-- [ ] Pas de `new()` direct, tout injecté via constructeur
+**Evaluated Criteria**:
+- Clean Architecture layer organization (6 pts)
+- Domain/Data/Presentation separation (6 pts)
+- Dependency injection (get_it, injectable, riverpod) (4 pts)
+- Feature-based modular structure (4 pts)
+- SOLID principles in architecture (3 pts)
+- Core/Shared utilities (2 pts)
 
-**Séparation des responsabilités SOLID (5 pts)**
-- [ ] Single Responsibility : Une classe = une responsabilité
-- [ ] Interface Segregation : Interfaces spécialisées
-- [ ] Dependency Inversion : Dépend d'abstractions
+**Reference**: `check-architecture.md`
 
-**Structure modulaire (5 pts)**
-- [ ] Features isolées par fonctionnalité
-- [ ] Core/Shared pour utilitaires communs
-- [ ] Pas de couplage entre features
+### Step 3: Code Quality Audit (25 points)
 
-**Score Architecture : XX/25**
+Execute code quality check:
 
----
+**Command**: Use slash command `/flutter:check-code-quality` or manually follow steps in `check-code-quality.md`
 
-#### 2.2 💎 AUDIT QUALITÉ DU CODE (25 points)
+**Evaluated Criteria**:
+- Effective Dart conventions (5 pts)
+- Flutter analyze (zero warnings) (5 pts)
+- Linting and analysis_options strictness (4 pts)
+- KISS/DRY/YAGNI principles (4 pts)
+- Documentation with /// comments (4 pts)
+- Error handling (3 pts)
 
-Exécuter l'analyse de qualité du code :
+**Reference**: `check-code-quality.md`
 
-**Conventions Effective Dart (6 pts)**
-- [ ] Classes/Enums : UpperCamelCase
-- [ ] Variables/Méthodes : lowerCamelCase
-- [ ] Constantes : lowerCamelCase
-- [ ] Fichiers : snake_case
-- [ ] Noms descriptifs, pas d'abréviations cryptiques
+### Step 4: Testing Audit (25 points)
 
-**Linting et analyse statique (7 pts)**
-- [ ] `analysis_options.yaml` configuré strictement
-- [ ] Aucun warning dans `flutter analyze`
-  ```bash
-  docker run --rm -v $(pwd):/app -w /app cirrusci/flutter:stable flutter analyze
-  ```
-- [ ] Règles `prefer_const_constructors`, `avoid_print` respectées
+Execute testing check:
 
-**Principes KISS, DRY, YAGNI (6 pts)**
-- [ ] KISS : Méthodes < 50 lignes, logique simple
-- [ ] DRY : Pas de duplication, utilitaires communs
-- [ ] YAGNI : Pas de sur-ingénierie
+**Command**: Use slash command `/flutter:check-testing` or manually follow steps in `check-testing.md`
 
-**Documentation (3 pts)**
-- [ ] Classes publiques documentées avec `///`
-- [ ] Méthodes complexes commentées
-- [ ] Pas de code commenté en production
+**Evaluated Criteria**:
+- Code coverage (7 pts)
+- Unit tests for domain and data (6 pts)
+- Widget tests for UI (4 pts)
+- Integration tests (3 pts)
+- Test quality and AAA pattern (3 pts)
+- Mocks (mockito/mocktail) and fixtures (2 pts)
 
-**Gestion des erreurs (3 pts)**
-- [ ] Try-catch appropriés avec logging
-- [ ] Types d'erreur spécifiques
-- [ ] Pas de `print()` en production
+**Reference**: `check-testing.md`
 
-**Score Qualité Code : XX/25**
+### Step 5: Security Audit (25 points)
 
----
+Execute security check:
 
-#### 2.3 🧪 AUDIT TESTS (25 points)
+**Command**: Use slash command `/flutter:check-security` or manually follow steps in `check-security.md`
 
-Exécuter l'analyse de la couverture de tests :
+**Evaluated Criteria**:
+- Secrets and hardcoded credentials (6 pts)
+- Network security (HTTPS, SSL/TLS) (5 pts)
+- Sensitive data storage (flutter_secure_storage) (4 pts)
+- Dependency vulnerabilities (4 pts)
+- Platform permissions (Android/iOS) (3 pts)
+- Input validation (2 pts)
+- Obfuscation in release (1 pt)
 
-**Couverture (8 pts)**
-- [ ] Tests unitaires pour domain/data (70% minimum)
-- [ ] Tests de widgets pour UI critique
-- [ ] Couverture globale > 60%
-  ```bash
-  docker run --rm -v $(pwd):/app -w /app cirrusci/flutter:stable flutter test --coverage
-  ```
+**Reference**: `check-security.md`
 
-**Qualité des tests (7 pts)**
-- [ ] Pattern AAA (Arrange-Act-Assert) respecté
-- [ ] Tests isolés avec mocks (mockito/mocktail)
-- [ ] Noms descriptifs explicites
-- [ ] Pas de tests flaky
+### Step 6: Consolidation and Global Scoring
 
-**Types de tests (6 pts)**
-- [ ] Unit tests : Logique pure < 100ms
-- [ ] Widget tests : UI et interactions
-- [ ] Golden tests : Régression visuelle
-- [ ] Integration tests : Flux end-to-end
+Calculate overall score and produce consolidated report:
+- [ ] Sum the 4 scores (max 100 points)
+- [ ] Identify critical categories (<50%)
+- [ ] List all critical cross-cutting issues
+- [ ] Prioritize actions by impact/effort
+- [ ] Produce final consolidated report
 
-**Mocks et fixtures (4 pts)**
-- [ ] Mocks générés avec mockito (`*.mocks.dart`)
-- [ ] Fixtures organisés dans `/test/fixtures/`
+**Grading Scale**:
+- 90-100: Excellent - Reference project
+- 75-89: Very Good - Some minor improvements
+- 60-74: Acceptable - Requires improvements
+- 40-59: Insufficient - Major refactoring required
+- 0-39: Critical - Complete overhaul necessary
 
-**Score Testing : XX/25**
+### Step 7: Recommendations and Action Plan
 
----
+Produce final recommendations:
+- [ ] Identify top 3 priority actions across all categories
+- [ ] Estimate effort (Low/Medium/High) for each action
+- [ ] Estimate impact (Low/Medium/High) for each action
+- [ ] Propose implementation order
+- [ ] Suggest quick wins (high impact/effort ratio)
 
-#### 2.4 🔒 AUDIT SÉCURITÉ (25 points)
-
-Exécuter l'analyse de sécurité :
-
-**Gestion des secrets (8 pts)**
-- [ ] **Aucun secret hardcodé** dans le code
-  ```bash
-  docker run --rm -v $(pwd):/app -w /app alpine/git sh -c "grep -r -E '(api[_-]?key|token|password|secret)' lib/ --include='*.dart'"
-  ```
-- [ ] Variables d'environnement (.env avec flutter_dotenv)
-- [ ] flutter_secure_storage pour tokens/credentials
-
-**Communication réseau (6 pts)**
-- [ ] HTTPS obligatoire (pas de `http://`)
-  ```bash
-  docker run --rm -v $(pwd):/app -w /app alpine/git sh -c "grep -r 'http://' lib/ --include='*.dart'"
-  ```
-- [ ] Validation SSL/TLS, pas de `badCertificateCallback` qui accepte tout
-- [ ] Timeouts configurés
-
-**Données sensibles (5 pts)**
-- [ ] Chiffrement données locales (flutter_secure_storage, encrypted Hive)
-- [ ] Pas de logs sensibles (print, debugPrint)
-- [ ] Obfuscation activée en release
-
-**Permissions (3 pts)**
-- [ ] Permissions minimales Android/iOS
-- [ ] Validation des entrées utilisateur
-
-**Dépendances (3 pts)**
-- [ ] Packages à jour sans vulnérabilités
-  ```bash
-  docker run --rm -v $(pwd):/app -w /app cirrusci/flutter:stable flutter pub outdated
-  ```
-- [ ] Audit des packages tiers
-
-**Score Sécurité : XX/25**
-
----
-
-### Étape 3 : Calcul du score global
+## OUTPUT FORMAT
 
 ```
-SCORE TOTAL = Architecture + Qualité + Tests + Sécurité
+FLUTTER COMPLIANCE AUDIT - COMPLETE REPORT
+=============================================
 
-SCORE TOTAL : XX/100
+OVERALL SCORE: XX/100
 
-Répartition :
-- Architecture : XX/25
-- Qualité Code : XX/25
-- Tests : XX/25
-- Sécurité : XX/25
+COMPLIANCE LEVEL: [Excellent/Very Good/Acceptable/Insufficient/Critical]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SCORES BY CATEGORY:
+
+ARCHITECTURE       : XX/25  [██████████░░░░░░░░░░] XX%
+CODE QUALITY       : XX/25  [██████████░░░░░░░░░░] XX%
+TESTS              : XX/25  [██████████░░░░░░░░░░] XX%
+SECURITY           : XX/25  [██████████░░░░░░░░░░] XX%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OVERALL STRENGTHS:
+1. [Strength identified in multiple categories]
+2. [Other major strength]
+3. [Third strength]
+
+OVERALL IMPROVEMENTS:
+1. [Minor cross-cutting improvement]
+2. [Other recommended improvement]
+3. [Third improvement]
+
+CRITICAL ISSUES:
+1. [Critical issue #1 - affected category]
+2. [Critical issue #2 - affected category]
+3. [Critical issue #3 - affected category]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DETAILS BY CATEGORY:
+
+┌─────────────────────────────────────────────┐
+│ ARCHITECTURE (XX/25)                        │
+└─────────────────────────────────────────────┘
+
+Sub-scores:
+  • Clean Architecture layers    : XX/6
+  • Layer separation             : XX/6
+  • Dependency injection         : XX/4
+  • Feature-based modules        : XX/4
+  • SOLID Principles             : XX/3
+  • Core/Shared utilities        : XX/2
+
+Strengths:
+- [Architecture strengths]
+
+Issues:
+- [Architecture issues]
+
+[Similar sections for Code Quality, Tests, and Security...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP 3 PRIORITY ACTIONS (ALL CATEGORIES):
+
+1. CRITICAL - [Action #1]
+   Category  : [Architecture/Quality/Tests/Security]
+   Impact    : [High/Medium/Low]
+   Effort    : [High/Medium/Low]
+   Priority  : IMMEDIATE
+
+   Detailed description:
+   [Explanation of problem and proposed solution]
+
+   Affected files:
+   - [file:line]
+
+   Correction example:
+   [Code or correction command]
+
+2. IMPORTANT - [Action #2]
+   [Same format...]
+
+3. RECOMMENDED - [Action #3]
+   [Same format...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUICK WINS (High Impact / Low Effort):
+
+- [Quick win #1] - Category: [X] - Impact: [X] - Effort: [X]
+- [Quick win #2] - Category: [X] - Impact: [X] - Effort: [X]
+- [Quick win #3] - Category: [X] - Impact: [X] - Effort: [X]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RECOMMENDED ACTION PLAN:
+
+WEEK 1 (Immediate):
+- [ ] [Critical action #1]
+- [ ] [Priority quick win]
+
+WEEK 2-4 (Short term):
+- [ ] [Important action #2]
+- [ ] [Other quick wins]
+
+MONTH 2-3 (Medium term):
+- [ ] [Recommended action #3]
+- [ ] [Progressive improvements]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXECUTIVE SUMMARY:
+
+[Summary paragraph on overall project state, major strengths,
+major weaknesses, and recommended trajectory to improve
+compliance. Mention if project is production-ready,
+requires corrections, or needs refactoring.]
+
+General Recommendation: [Production-ready / Minor corrections /
+Major refactoring / Overhaul necessary]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**Interprétation :**
-- ✅ 85-100 pts : Projet excellent, prêt pour production
-- ✅ 70-84 pts : Projet solide, quelques améliorations mineures
-- ⚠️ 50-69 pts : Projet correct, améliorations nécessaires
-- ⚠️ 30-49 pts : Projet à risque, refactoring recommandé
-- ❌ 0-29 pts : Projet critique, refonte majeure requise
+## IMPORTANT NOTES
 
-### Étape 4 : Rapport exécutif consolidé
-
-Génère un rapport exécutif avec :
-
----
-
-## 📊 RAPPORT D'AUDIT DE CONFORMITÉ FLUTTER
-
-### Score Global : XX/100
-
-```
-┌─────────────────────────────────────────────────┐
-│ 🏗️  Architecture      : XX/25  [███████░░░]    │
-│ 💎  Qualité du Code   : XX/25  [█████░░░░░]    │
-│ 🧪  Tests             : XX/25  [████░░░░░░]    │
-│ 🔒  Sécurité          : XX/25  [██████░░░░]    │
-├─────────────────────────────────────────────────┤
-│ 🎯  TOTAL             : XX/100 [█████░░░░░]    │
-└─────────────────────────────────────────────────┘
-```
-
-### ✅ Points Forts du Projet
-
-1. **Architecture** : [Décrire les points forts architecturaux]
-2. **Qualité** : [Décrire les bonnes pratiques de code]
-3. **Tests** : [Décrire la couverture et qualité tests]
-4. **Sécurité** : [Décrire les mesures de sécurité en place]
-
-### ⚠️ Axes d'Amélioration
-
-#### Architecture
-- [Lister les problèmes architecturaux avec impact et fichiers concernés]
-
-#### Qualité du Code
-- [Lister les violations de conventions avec exemples]
-
-#### Tests
-- [Lister les manques de couverture avec pourcentages]
-
-#### Sécurité
-- [Lister les vulnérabilités potentielles avec criticité]
-
-### ❌ Violations Critiques (Bloquantes)
-
-**PRIORITÉ MAXIMALE - À corriger immédiatement :**
-
-1. **[SÉCURITÉ]** Secrets hardcodés détectés
-   - `lib/config/api_config.dart:5` : API key en clair
-   - Impact : Exposition de credentials
-   - Action : Migrer vers .env immédiatement
-
-2. **[ARCHITECTURE]** Couplage fort entre layers
-   - Domain dépend de Data
-   - Impact : Impossible de tester, non maintenable
-   - Action : Inverser les dépendances avec interfaces
-
-3. **[TESTS]** Aucun test présent
-   - 0% de couverture
-   - Impact : Aucune garantie de non-régression
-   - Action : Créer tests unitaires pour UseCases
-
-### 📈 Métriques Détaillées
-
-#### Analyse Statique
-```bash
-flutter analyze : XX warnings, XX errors
-flutter pub outdated : XX packages à mettre à jour
-```
-
-#### Couverture de Tests
-```
-Domain Layer : XX%
-Data Layer : XX%
-Presentation Layer : XX%
-TOTAL : XX%
-```
-
-#### Sécurité
-```
-Secrets hardcodés : XX détectés
-Endpoints HTTP : XX détectés
-Packages vulnérables : XX détectés
-```
-
-### 🎯 TOP 3 ACTIONS PRIORITAIRES
-
-#### 1. [PRIORITÉ CRITIQUE] - Impact Sécurité/Architecture
-**Action** : [Description précise de l'action]
-- **Pourquoi** : [Justification avec impact business/technique]
-- **Comment** : [Étapes concrètes de mise en œuvre]
-- **Effort estimé** : [XS/S/M/L/XL]
-- **Impact** : [Critique/Haut/Moyen/Faible]
-- **Fichiers concernés** : [Liste des fichiers]
-
-#### 2. [PRIORITÉ HAUTE] - Impact Qualité/Tests
-**Action** : [Description précise de l'action]
-- **Pourquoi** : [Justification]
-- **Comment** : [Étapes concrètes]
-- **Effort estimé** : [XS/S/M/L/XL]
-- **Impact** : [Critique/Haut/Moyen/Faible]
-- **Fichiers concernés** : [Liste des fichiers]
-
-#### 3. [PRIORITÉ MOYENNE] - Impact Maintenance
-**Action** : [Description précise de l'action]
-- **Pourquoi** : [Justification]
-- **Comment** : [Étapes concrètes]
-- **Effort estimé** : [XS/S/M/L/XL]
-- **Impact** : [Critique/Haut/Moyen/Faible]
-- **Fichiers concernés** : [Liste des fichiers]
-
-### 📋 Plan d'Action Recommandé
-
-**Phase 1 - Urgence (Cette semaine)**
-- [ ] Corriger les violations critiques de sécurité
-- [ ] Résoudre les problèmes architecturaux bloquants
-- [ ] Créer les tests pour la logique critique
-
-**Phase 2 - Court terme (Ce mois)**
-- [ ] Améliorer la couverture de tests à 60%
-- [ ] Refactoriser les violations de qualité de code
-- [ ] Mettre à jour les packages vulnérables
-
-**Phase 3 - Moyen terme (Ce trimestre)**
-- [ ] Finaliser l'architecture Clean complète
-- [ ] Atteindre 80% de couverture de tests
-- [ ] Implémenter toutes les best practices de sécurité
-
----
-
-### 🔍 Commandes Utiles pour Suivi
-
-```bash
-# Vérifier la qualité
-docker run --rm -v $(pwd):/app -w /app cirrusci/flutter:stable flutter analyze
-
-# Lancer les tests avec couverture
-docker run --rm -v $(pwd):/app -w /app cirrusci/flutter:stable flutter test --coverage
-
-# Vérifier les secrets
-docker run --rm -v $(pwd):/app -w /app alpine/git sh -c "grep -r -E '(api[_-]?key|token|password)' lib/"
-
-# Mettre à jour les dépendances
-docker run --rm -v $(pwd):/app -w /app cirrusci/flutter:stable flutter pub upgrade
-```
-
----
-
-**📝 Note** : Pour des audits ciblés, utilisez les commandes spécialisées :
-- `/check-architecture` - Audit architecture uniquement
-- `/check-code-quality` - Audit qualité de code uniquement
-- `/check-testing` - Audit tests uniquement
-- `/check-security` - Audit sécurité uniquement
-
-**Date de l'audit** : [Date du jour]
-**Version Flutter** : [Détecter depuis `flutter --version`]
-**Auditeur** : Claude (Expert Flutter)
+- This command orchestrates the 4 specialized audits
+- Use Docker for all analysis tools
+- Provide concrete examples with file:line for each problem
+- Prioritize actions based on Impact/Effort matrix
+- Security problems are ALWAYS top priority
+- Propose automatable corrections (scripts, pre-commit hooks)
+- Report must be actionable, not just descriptive
+- Adapt recommendations to project business context

@@ -44,39 +44,6 @@ responsibilities:
   - Validate requirements with stakeholders
   - Maintain requirements traceability
 
-menu:
-  - trigger: /ba:analyze
-    description: Analyze business requirements
-    workflow: workflows/ba/analyze.yaml
-    args:
-      - name: domain
-        required: true
-
-  - trigger: /ba:use-cases
-    description: Create use case documentation
-    workflow: workflows/ba/use-cases.yaml
-
-  - trigger: /ba:story-map
-    description: Create user story map
-    workflow: workflows/ba/story-map.yaml
-
-  - trigger: /ba:gap-analysis
-    description: Perform gap analysis
-    workflow: workflows/ba/gap-analysis.yaml
-    args:
-      - name: current_state
-        required: true
-      - name: desired_state
-        required: true
-
-  - trigger: /ba:requirements
-    description: Document detailed requirements
-    workflow: workflows/ba/requirements.yaml
-
-  - trigger: /ba:validate
-    description: Validate requirements with stakeholders
-    workflow: workflows/ba/validate.yaml
-
 outputs:
   - type: requirements-document
     format: markdown

@@ -1,477 +1,249 @@
 ---
-description: Standards Compliance Check
+description: Check Complete PHP Compliance
+argument-hint: [arguments]
 ---
 
-# Standards Compliance Check
-
-Verify that the PHP project follows established coding standards and best practices.
-
-## What This Command Does
-
-1. **Standards Verification**
-   - Check PSR-1/PSR-12 compliance
-   - Verify naming conventions
-   - Validate file organization
-   - Check import order
-   - Verify documentation standards
-
-2. **Compliance Areas**
-   - PHP 8.x best practices
-   - Clean Architecture patterns
-   - Testing standards
-   - Git commit conventions
-   - Security best practices
-
-3. **Generated Report**
-   - Non-compliant files
-   - Severity levels
-   - Remediation recommendations
-   - Compliance score
-
-## Coding Standards
-
-### 1. Naming Conventions
-
-```php
-<?php
-// ✅ Classes: PascalCase
-class UserRepository {}
-class OrderService {}
-
-// ✅ Methods/Functions: camelCase
-public function getUserById(int $id): ?User {}
-public function calculateTotal(): Money {}
-
-// ✅ Variables: camelCase
-$userCount = 0;
-$isActive = true;
-
-// ✅ Constants: UPPER_SNAKE_CASE
-public const MAX_ATTEMPTS = 3;
-public const DEFAULT_LOCALE = 'en_US';
-
-// ✅ Interfaces: PascalCase + Interface suffix
-interface UserRepositoryInterface {}
-interface PaymentGatewayInterface {}
-
-// ✅ Enums: PascalCase
-enum UserStatus: string {}
-enum OrderState: string {}
-```
-
-### 2. File Organization
-
-```
-src/
-├── Domain/
-│   ├── Entity/
-│   │   └── User.php
-│   ├── ValueObject/
-│   │   └── Email.php
-│   ├── Repository/
-│   │   └── UserRepositoryInterface.php
-│   └── Exception/
-│       └── UserNotFoundException.php
-├── Application/
-│   ├── UseCase/
-│   │   └── User/
-│   │       └── CreateUser/
-│   │           ├── CreateUserCommand.php
-│   │           └── CreateUserHandler.php
-│   └── DTO/
-│       └── UserDto.php
-├── Infrastructure/
-│   └── Persistence/
-│       └── Doctrine/
-│           └── DoctrineUserRepository.php
-└── Presentation/
-    └── Controller/
-        └── UserController.php
-```
-
-### 3. Import Order
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Application\Service;
-
-// 1. PHP built-in classes
-use DateTimeImmutable;
-use InvalidArgumentException;
-
-// 2. Third-party packages
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
-
-// 3. Application classes (alphabetical)
-use App\Domain\Entity\User;
-use App\Domain\Repository\UserRepositoryInterface;
-use App\Domain\ValueObject\Email;
-
-final class UserService
-{
-    // Class implementation
-}
-```
-
-### 4. Class Structure
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Domain\Entity;
-
-/**
- * User entity representing a system user.
- */
-final class User
-{
-    // 1. Constants
-    public const STATUS_ACTIVE = 'active';
-    public const STATUS_INACTIVE = 'inactive';
-
-    // 2. Properties (via constructor promotion)
-    public function __construct(
-        private readonly UserId $id,
-        private Email $email,
-        private string $name,
-        private UserStatus $status,
-    ) {}
-
-    // 3. Static factory methods
-    public static function create(UserId $id, Email $email, string $name): self
-    {
-        return new self($id, $email, $name, UserStatus::PENDING);
-    }
-
-    // 4. Public methods
-    public function activate(): void
-    {
-        $this->status = UserStatus::ACTIVE;
-    }
-
-    // 5. Getters
-    public function getId(): UserId
-    {
-        return $this->id;
-    }
-
-    public function getEmail(): Email
-    {
-        return $this->email;
-    }
-
-    // 6. Private methods
-    private function validateState(): void
-    {
-        // Validation logic
-    }
-}
-```
-
-## PHP Standards
-
-### 1. Strict Type Safety
-
-```php
-<?php
-
-declare(strict_types=1);  // ALWAYS at the top of every file
-
-// ❌ Bad - Missing types
-function process($data) {
-    return $data;
-}
-
-// ✅ Good - Full type declarations
-function process(array $data): ProcessResult
-{
-    return new ProcessResult($data);
-}
-
-// ✅ Good - Nullable types when appropriate
-public function find(string $id): ?User
-{
-    return $this->repository->find($id);
-}
-```
-
-### 2. Type Declarations
-
-```php
-<?php
-// ✅ Good - Complete type declarations
-final class OrderService
-{
-    public function __construct(
-        private readonly OrderRepositoryInterface $repository,
-        private readonly LoggerInterface $logger,
-    ) {}
-
-    /** @return Order[] */
-    public function findByCustomer(CustomerId $customerId): array
-    {
-        return $this->repository->findByCustomer($customerId);
-    }
-
-    public function create(CreateOrderCommand $command): OrderId
-    {
-        // Implementation
-    }
-}
-```
-
-### 3. Readonly and Immutability
-
-```php
-<?php
-// ✅ Good - Readonly class for Value Objects
-readonly class Email
-{
-    public function __construct(
-        public string $value,
-    ) {}
-}
-
-// ✅ Good - Readonly properties
-final class User
-{
-    public function __construct(
-        private readonly UserId $id,
-        private readonly DateTimeImmutable $createdAt,
-    ) {}
-}
-```
-
-## Clean Architecture Standards
-
-### 1. Layer Separation
-
-```php
-<?php
-// ❌ Bad - Domain depends on Infrastructure
-namespace App\Domain\Entity;
-
-use Doctrine\ORM\Mapping as ORM;  // BAD!
-use App\Infrastructure\Mailer;     // BAD!
-
-// ✅ Good - Domain has no external dependencies
-namespace App\Domain\Entity;
-
-use App\Domain\Event\UserCreatedEvent;
-use App\Domain\ValueObject\Email;
-use App\Domain\ValueObject\UserId;
-```
-
-### 2. Repository Pattern
-
-```php
-<?php
-// ✅ Good - Interface in Domain
-namespace App\Domain\Repository;
-
-interface UserRepositoryInterface
-{
-    public function find(UserId $id): ?User;
-    public function save(User $user): void;
-}
-
-// ✅ Good - Implementation in Infrastructure
-namespace App\Infrastructure\Persistence\Doctrine;
-
-final class DoctrineUserRepository implements UserRepositoryInterface
-{
-    // Implementation with Doctrine
-}
-```
-
-### 3. Use Cases
-
-```php
-<?php
-// ✅ Good - One use case per class
-final readonly class CreateUserCommand
-{
-    public function __construct(
-        public string $email,
-        public string $name,
-    ) {}
-}
-
-final class CreateUserHandler
-{
-    public function handle(CreateUserCommand $command): UserId
-    {
-        // Single responsibility: create a user
-    }
-}
-```
-
-## Testing Standards
-
-### 1. Test File Naming
+# Check Complete PHP Compliance
+
+## Arguments
+
+$ARGUMENTS (optional: path to project to analyze)
+
+## MISSION
+
+Perform a complete compliance audit of the PHP project by orchestrating the 4 major checks: Architecture, Code Quality, Tests, and Security. Produce a consolidated report with an overall score out of 100 points.
+
+### Step 1: Audit Preparation
+
+Prepare audit environment:
+- [ ] Identify project path to audit
+- [ ] Verify presence of configuration files (composer.json, phpstan.neon, phpunit.xml)
+- [ ] List main directories (src/, tests/, etc.)
+- [ ] Identify project structure and PHP version
+
+**Note**: If $ARGUMENTS provided, use it as project path, otherwise use current directory.
+
+### Step 2: Architecture Audit (25 points)
+
+Execute complete architecture check:
+
+**Command**: Use slash command `/php:check-architecture` or manually follow steps in `check-architecture.md`
+
+**Evaluated Criteria**:
+- Clean Architecture structure (6 pts)
+- Domain/Application/Infrastructure separation (6 pts)
+- Ports and Adapters pattern (4 pts)
+- Domain modeling (Entities, Value Objects) (4 pts)
+- Use Cases and handlers (3 pts)
+- PSR-4 autoloading and dependency rules (2 pts)
+
+**Reference**: `check-architecture.md`
+
+### Step 3: Code Quality Audit (25 points)
+
+Execute code quality check:
+
+**Command**: Use slash command `/php:check-code-quality` or manually follow steps in `check-code-quality.md`
+
+**Evaluated Criteria**:
+- PSR-12 compliance (5 pts)
+- PHPStan level 8+ (5 pts)
+- Strict type hints and declare(strict_types=1) (4 pts)
+- KISS/DRY/YAGNI principles (4 pts)
+- Naming conventions and PHPDoc (4 pts)
+- Error handling (3 pts)
+
+**Reference**: `check-code-quality.md`
+
+### Step 4: Testing Audit (25 points)
+
+Execute testing check:
+
+**Command**: Use slash command `/php:check-testing` or manually follow steps in `check-testing.md`
+
+**Evaluated Criteria**:
+- Code coverage (7 pts)
+- Unit tests for Domain (6 pts)
+- Integration tests for Infrastructure (4 pts)
+- Pest PHP / PHPUnit quality (3 pts)
+- Fixtures and data providers (3 pts)
+- Test isolation and mocking (2 pts)
+
+**Reference**: `check-testing.md`
+
+### Step 5: Security Audit (25 points)
+
+Execute security check:
+
+**Command**: Use slash command `/php:check-security` or manually follow steps in `check-security.md`
+
+**Evaluated Criteria**:
+- OWASP Top 10 protections (6 pts)
+- Secrets and credentials management (5 pts)
+- Input validation and sanitization (4 pts)
+- Dependency vulnerabilities (composer audit) (4 pts)
+- Authentication and authorization (3 pts)
+- Secure configuration (2 pts)
+- SQL injection prevention (1 pt)
+
+**Reference**: `check-security.md`
+
+### Step 6: Consolidation and Global Scoring
+
+Calculate overall score and produce consolidated report:
+- [ ] Sum the 4 scores (max 100 points)
+- [ ] Identify critical categories (<50%)
+- [ ] List all critical cross-cutting issues
+- [ ] Prioritize actions by impact/effort
+- [ ] Produce final consolidated report
+
+**Grading Scale**:
+- 90-100: Excellent - Reference project
+- 75-89: Very Good - Some minor improvements
+- 60-74: Acceptable - Requires improvements
+- 40-59: Insufficient - Major refactoring required
+- 0-39: Critical - Complete overhaul necessary
+
+### Step 7: Recommendations and Action Plan
+
+Produce final recommendations:
+- [ ] Identify top 3 priority actions across all categories
+- [ ] Estimate effort (Low/Medium/High) for each action
+- [ ] Estimate impact (Low/Medium/High) for each action
+- [ ] Propose implementation order
+- [ ] Suggest quick wins (high impact/effort ratio)
+
+## OUTPUT FORMAT
 
 ```
-src/Domain/Entity/User.php
-tests/Unit/Domain/Entity/UserTest.php    ✅
+PHP COMPLIANCE AUDIT - COMPLETE REPORT
+=============================================
+
+OVERALL SCORE: XX/100
+
+COMPLIANCE LEVEL: [Excellent/Very Good/Acceptable/Insufficient/Critical]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SCORES BY CATEGORY:
+
+ARCHITECTURE       : XX/25  [██████████░░░░░░░░░░] XX%
+CODE QUALITY       : XX/25  [██████████░░░░░░░░░░] XX%
+TESTS              : XX/25  [██████████░░░░░░░░░░] XX%
+SECURITY           : XX/25  [██████████░░░░░░░░░░] XX%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OVERALL STRENGTHS:
+1. [Strength identified in multiple categories]
+2. [Other major strength]
+3. [Third strength]
+
+OVERALL IMPROVEMENTS:
+1. [Minor cross-cutting improvement]
+2. [Other recommended improvement]
+3. [Third improvement]
+
+CRITICAL ISSUES:
+1. [Critical issue #1 - affected category]
+2. [Critical issue #2 - affected category]
+3. [Critical issue #3 - affected category]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DETAILS BY CATEGORY:
+
+┌─────────────────────────────────────────────┐
+│ ARCHITECTURE (XX/25)                        │
+└─────────────────────────────────────────────┘
+
+Sub-scores:
+  • Clean Architecture structure  : XX/6
+  • Layer separation              : XX/6
+  • Ports and Adapters            : XX/4
+  • Domain Modeling               : XX/4
+  • Use Cases                     : XX/3
+  • PSR-4 and dependency rules    : XX/2
+
+Strengths:
+- [Architecture strengths]
+
+Issues:
+- [Architecture issues]
+
+[Similar sections for Code Quality, Tests, and Security...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP 3 PRIORITY ACTIONS (ALL CATEGORIES):
+
+1. CRITICAL - [Action #1]
+   Category  : [Architecture/Quality/Tests/Security]
+   Impact    : [High/Medium/Low]
+   Effort    : [High/Medium/Low]
+   Priority  : IMMEDIATE
+
+   Detailed description:
+   [Explanation of problem and proposed solution]
+
+   Affected files:
+   - [file:line]
+
+   Correction example:
+   [Code or correction command]
+
+2. IMPORTANT - [Action #2]
+   [Same format...]
+
+3. RECOMMENDED - [Action #3]
+   [Same format...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUICK WINS (High Impact / Low Effort):
+
+- [Quick win #1] - Category: [X] - Impact: [X] - Effort: [X]
+- [Quick win #2] - Category: [X] - Impact: [X] - Effort: [X]
+- [Quick win #3] - Category: [X] - Impact: [X] - Effort: [X]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RECOMMENDED ACTION PLAN:
+
+WEEK 1 (Immediate):
+- [ ] [Critical action #1]
+- [ ] [Priority quick win]
+
+WEEK 2-4 (Short term):
+- [ ] [Important action #2]
+- [ ] [Other quick wins]
+
+MONTH 2-3 (Medium term):
+- [ ] [Recommended action #3]
+- [ ] [Progressive improvements]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXECUTIVE SUMMARY:
+
+[Summary paragraph on overall project state, major strengths,
+major weaknesses, and recommended trajectory to improve
+compliance. Mention if project is production-ready,
+requires corrections, or needs refactoring.]
+
+General Recommendation: [Production-ready / Minor corrections /
+Major refactoring / Overhaul necessary]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### 2. Test Structure
+## IMPORTANT NOTES
 
-```php
-<?php
-// ✅ Good - AAA Pattern with clear naming
-#[Test]
-public function it_can_be_created_with_valid_data(): void
-{
-    // Arrange
-    $id = UserId::generate();
-    $email = Email::fromString('test@example.com');
-
-    // Act
-    $user = User::create($id, $email, 'Test User');
-
-    // Assert
-    $this->assertTrue($user->getId()->equals($id));
-    $this->assertSame('Test User', $user->getName());
-}
-```
-
-### 3. Test Coverage
-
-```php
-<?php
-// Minimum coverage targets
-// Domain: 90%
-// Application: 85%
-// Infrastructure: 70%
-// Overall: 80%
-```
-
-## Git Standards
-
-### 1. Commit Messages
-
-```bash
-# ✅ Good - Conventional Commits
-feat(user): add user registration endpoint
-fix(auth): resolve JWT token expiration issue
-docs(readme): update installation instructions
-test(order): add integration tests for order creation
-refactor(payment): extract gateway interface
-
-# Format: <type>(<scope>): <subject>
-```
-
-### 2. Branch Naming
-
-```bash
-# ✅ Good - Descriptive names
-feature/user-authentication
-fix/payment-calculation-error
-refactor/clean-architecture-migration
-```
-
-## Documentation Standards
-
-### 1. PHPDoc Comments
-
-```php
-<?php
-/**
- * Creates a new user in the system.
- *
- * @param string $email The user's email address
- * @param string $name The user's display name
- *
- * @throws UserAlreadyExistsException When email is already registered
- * @throws InvalidEmailException When email format is invalid
- *
- * @return UserId The created user's unique identifier
- */
-public function createUser(string $email, string $name): UserId
-{
-    // Implementation
-}
-```
-
-### 2. Class Documentation
-
-```php
-<?php
-/**
- * Service responsible for user lifecycle management.
- *
- * This service handles user creation, updates, and deletion
- * following the domain business rules.
- *
- * @see UserRepositoryInterface For data persistence
- * @see UserCreatedEvent For event dispatching
- */
-final class UserService
-{
-    // Implementation
-}
-```
-
-## Automated Compliance
-
-### PHPStan Configuration
-
-```neon
-parameters:
-    level: 9
-    checkMissingIterableValueType: true
-    checkGenericClassInNonGenericObjectType: true
-```
-
-### PHP-CS-Fixer Configuration
-
-```php
-<?php
-return (new PhpCsFixer\Config())
-    ->setRules([
-        '@PSR12' => true,
-        '@PHP84Migration' => true,
-        'declare_strict_types' => true,
-        'final_class' => true,
-    ]);
-```
-
-## Compliance Checklist
-
-- [ ] `declare(strict_types=1)` in all files
-- [ ] PSR-12 formatting applied
-- [ ] PSR-4 autoloading configured
-- [ ] Naming conventions followed
-- [ ] Files properly organized (Clean Architecture)
-- [ ] Imports properly ordered
-- [ ] All methods have return type declarations
-- [ ] All parameters have type declarations
-- [ ] Readonly properties used where appropriate
-- [ ] No Domain dependencies on Infrastructure
-- [ ] Tests follow AAA pattern
-- [ ] Test coverage > 80%
-- [ ] Commits follow Conventional Commits
-- [ ] PHPDoc on public APIs
-- [ ] PHPStan level 8+ passes
-- [ ] PHP-CS-Fixer passes
-
-## Tools
-
-- PHPStan for static analysis
-- PHP-CS-Fixer for formatting
-- PHPUnit/Pest for testing
-- PHPat for architecture testing
-- Rector for automated refactoring
-
-## Resources
-
-- [PHP-FIG PSR Standards](https://www.php-fig.org/psr/)
-- [PHP The Right Way](https://phptherightway.com/)
-- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- This command orchestrates the 4 specialized audits
+- Use Docker for all analysis tools
+- Provide concrete examples with file:line for each problem
+- Prioritize actions based on Impact/Effort matrix
+- Security problems are ALWAYS top priority
+- Propose automatable corrections (scripts, pre-commit hooks)
+- Report must be actionable, not just descriptive
+- Adapt recommendations to project business context

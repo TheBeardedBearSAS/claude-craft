@@ -45,38 +45,6 @@ responsibilities:
   - Provide project-wide visibility and metrics
   - Route tasks to appropriate agents based on status
 
-menu:
-  - trigger: /bmad:init
-    description: Initialize BMAD structure in project
-    workflow: workflows/bmad/init.yaml
-
-  - trigger: /bmad:status
-    description: Display overall project status
-    workflow: workflows/bmad/status.yaml
-
-  - trigger: /bmad:route
-    description: Route current work to appropriate agent
-    workflow: workflows/bmad/route.yaml
-
-  - trigger: /bmad:handoff
-    description: Handoff work between agents
-    workflow: workflows/bmad/handoff.yaml
-    args:
-      - name: from_agent
-        required: true
-      - name: to_agent
-        required: true
-      - name: artifact_id
-        required: true
-
-  - trigger: /bmad:metrics
-    description: Show project metrics and health
-    workflow: workflows/bmad/metrics.yaml
-
-  - trigger: /bmad:sync
-    description: Synchronize all BMAD artifacts
-    workflow: workflows/bmad/sync.yaml
-
 outputs:
   - type: project-dashboard
     format: markdown

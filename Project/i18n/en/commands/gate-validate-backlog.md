@@ -1,6 +1,6 @@
 ---
 description: Validate backlog stories against INVEST criteria
-argument-hint: [story-id]
+argument-hint: [story-id] [--no-gate]
 ---
 
 # Validate Backlog Gate
@@ -10,8 +10,9 @@ All stories must pass all 6 INVEST criteria.
 
 ## Arguments
 
-$ARGUMENTS (format: [story-id])
+$ARGUMENTS (format: [story-id] [--no-gate])
 - **story-id** (optional): Specific story to validate (e.g., US-001). If omitted, validates all stories.
+- **--no-gate** (optional): Run simple INVEST validation only (skip quality gate enforcement, scoring thresholds, and pass/fail verdict). Useful for quick checks during refinement without blocking on gate criteria.
 
 ## INVEST Criteria
 

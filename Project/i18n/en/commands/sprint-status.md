@@ -1,6 +1,6 @@
 ---
 description: Sprint Status
-argument-hint: [arguments]
+argument-hint: [sprint N] [--bmad] [--verbose]
 ---
 
 # Sprint Status
@@ -9,8 +9,10 @@ Display detailed metrics and sprint progress.
 
 ## Arguments
 
-$ARGUMENTS (optional, format: [sprint N])
+$ARGUMENTS (optional, format: [sprint N] [--bmad] [--verbose])
 - **sprint N** (optional): Sprint number
+- **--bmad** (optional): Include BMAD v6 state machine routing, TDD phase tracking, and auto-routing suggestions (reads from `.bmad/sprint-status.yaml`)
+- **--verbose** (optional): Show detailed task breakdown per story (only with `--bmad`)
 - If not specified, displays current sprint
 
 ## Process
@@ -19,12 +21,14 @@ $ARGUMENTS (optional, format: [sprint N])
 
 1. Find requested sprint or current sprint
 2. Read sprint-goal.md
+3. If `--bmad`: also read `.bmad/sprint-status.yaml` for state machine data
 
 ### Step 2: Collect data
 
 1. Read all sprint User Stories
 2. Read all associated Tasks
 3. Calculate metrics
+4. If `--bmad`: parse BMAD routing rules, TDD phases, and story state transitions
 
 ### Step 3: Generate report
 
@@ -35,6 +39,12 @@ Create detailed report with:
 - Burndown chart (text)
 - Blockers
 - Risks
+
+If `--bmad` is specified, additionally include:
+- BMAD state machine diagram with story counts per state
+- TDD phase indicators per in-progress story
+- Auto-routing suggestions (e.g., stories ready to transition)
+- Acceptance criteria completion status
 
 ## Output Format
 
@@ -141,6 +151,32 @@ Actions:
   /project:list-tasks status blocked # View all blockers
 ```
 
+## BMAD Output (with --bmad)
+
+When `--bmad` is specified, the report additionally includes:
+
+```
+State Machine:
+------------------------------------------------------
+[backlog 2] -> [ready-for-dev 3] -> [in-progress 2] -> [review 1] -> [done 4]
+                                        |
+                                     [blocked 1]
+
+In Progress:
+------------------------------------------------------
+US-005: User authentication
+   TDD: Green | Tasks: 3/5 | AC: 1/3
+   Current: TASK-015 - Implement JWT validation
+
+US-007: Password reset
+   TDD: Red | Tasks: 0/4 | AC: 0/2
+   Current: Writing first test
+
+Auto-routing suggestions:
+------------------------------------------------------
+US-008 has all tasks complete -> /sprint:transition US-008 review
+```
+
 ## Examples
 
 ```
@@ -149,6 +185,12 @@ Actions:
 
 # Sprint 2 status
 /project:sprint-status sprint 2
+
+# Sprint status with BMAD state machine
+/project:sprint-status --bmad
+
+# Verbose BMAD status
+/project:sprint-status --bmad --verbose
 ```
 
 ## Report Generation

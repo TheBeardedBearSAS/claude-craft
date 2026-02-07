@@ -19,6 +19,7 @@ $ARGUMENTS
 - `--timeout=12`: Maximum runtime in hours (default: 12)
 - `--dry-run`: Show team composition and story assignments without executing
 - `--use-teams`: Flag passed from ralph-sprint to indicate Agent Teams mode
+- `--ralph-mode`: Enable Ralph recovery engine (error classification, auto-retry, escalation service) alongside Agent Teams parallelism. Combines the best of both: parallel story execution from team-sprint with the recovery/escalation capabilities from ralph-sprint.
 
 ## Prerequisites
 
