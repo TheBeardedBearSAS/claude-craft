@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.1] - 2026-02-10
+
+### Added
+- **CODE_OF_CONDUCT.md**: Contributor Covenant v2.1
+- **SECURITY.md**: Security policy and vulnerability reporting
+
+### Fixed
+- README badges (npm, CI, license) added
+- Removed 14 stale "What's New" sections from README, kept only v5.9
+- Fixed command count `130+` → `157` and BMAD agent count `9` → `10` in README and `.bmad/README.md`
+- Removed ghost commands `/bmad:init`, `/bmad:status` from README and `.bmad/README.md`
+- Removed `/bmad:` namespace from command list
+- Updated LICENSE copyright to 2024-2026
+- Separated fixes from features in CHANGELOG v5.9.0 (`### Fixed` section)
+
+---
+
 ## [5.9.0] - 2026-02-10
 
 ### Added
