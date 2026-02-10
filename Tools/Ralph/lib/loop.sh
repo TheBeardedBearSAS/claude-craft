@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Main Loop Module
 # Core iteration loop logic and Claude invocation
@@ -6,7 +7,7 @@
 
 # Claude command configuration
 CLAUDE_COMMAND="${CLAUDE_COMMAND:-claude}"
-CLAUDE_ARGS="${CLAUDE_ARGS:---dangerously-skip-permissions}"
+CLAUDE_ARGS="${CLAUDE_ARGS:-}"
 
 # =============================================================================
 # Claude Invocation

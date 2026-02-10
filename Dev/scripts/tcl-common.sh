@@ -4,6 +4,16 @@
 # Shared by all install-*-rules.sh scripts
 
 # ============================================================================
+# VERSION
+# ============================================================================
+
+# Read version from package.json
+get_claude_craft_version() {
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[1]}")" && pwd)"
+    node -p "require('${script_dir}/../../package.json').version" 2>/dev/null || echo "0.0.0"
+}
+
+# ============================================================================
 # DIRECTORY STRUCTURE
 # ============================================================================
 

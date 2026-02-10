@@ -23,7 +23,7 @@ check_secrets() {
     )
 
     for pattern in "${patterns[@]}"; do
-        if git diff --cached --name-only 2>/dev/null | xargs grep -lE "$pattern" 2>/dev/null; then
+        if git diff --cached --name-only 2>/dev/null | xargs -r grep -lE "$pattern" 2>/dev/null; then
             return 1
         fi
     done

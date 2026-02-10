@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Context Manager Module
 # Automatic context limit handling and auto-compaction

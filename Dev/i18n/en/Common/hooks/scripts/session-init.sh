@@ -21,7 +21,7 @@ if [ -n "$CLAUDE_ENV_FILE" ]; then
     # Load .env.local or .env.development if exists (without secrets)
     if [ -f ".env.local" ]; then
         # Only export non-sensitive variables
-        grep -v -E "(PASSWORD|SECRET|KEY|TOKEN)" .env.local >> "$CLAUDE_ENV_FILE" 2>/dev/null || true
+        grep -E "^(NODE_ENV|APP_ENV|APP_DEBUG|DATABASE_URL|LOG_LEVEL|PORT|HOST)=" .env.local >> "$CLAUDE_ENV_FILE" 2>/dev/null || true
     fi
 fi
 

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Hooks Generator Module
 # Generate Claude Code 2.1.23+ hooks configuration
@@ -53,7 +54,7 @@ ensure_hook_scripts() {
 
     for script in "${scripts[@]}"; do
         local script_path="$HOOKS_DIR/$script"
-        if [[ -f "$script_path" ]]; then
+        if [[ -f "$script_path" ]] && head -1 "$script_path" | grep -q "^#!"; then
             chmod +x "$script_path"
         fi
     done
@@ -291,7 +292,11 @@ validate_hooks_setup() {
             errors=$((errors + 1))
         elif [[ ! -x "$script_path" ]]; then
             print_warning "Hook script not executable: $script_path"
-            chmod +x "$script_path" 2>/dev/null && print_info "Made executable: $script_path"
+            if head -1 "$script_path" | grep -q "^#!"; then
+                chmod +x "$script_path" 2>/dev/null && print_info "Made executable: $script_path"
+            else
+                print_warning "Skipped chmod: no shebang in $script_path"
+            fi
         fi
     done
 

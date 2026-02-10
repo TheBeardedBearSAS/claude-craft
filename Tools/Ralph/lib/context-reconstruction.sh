@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Context Reconstruction Module
 # Intelligent context rebuilding after compact or session continuation

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Definition of Done Validator Module
 # Validates completion criteria using configurable checklist
@@ -166,10 +167,15 @@ validate_command() {
 
     echo -e "  ${C_DIM}${MSG_VALIDATOR_COMMAND}: $cmd${C_RESET}"
 
-    # Execute the command
-    if eval "$cmd" > /dev/null 2>&1; then
-        return 0
+    # Execute the command (validated)
+    if [[ "$cmd" =~ ^[a-zA-Z0-9_./" -]+$ ]]; then
+        if bash -c "$cmd" > /dev/null 2>&1; then
+            return 0
+        else
+            return 1
+        fi
     else
+        echo "ERROR: Invalid command: $cmd" >&2
         return 1
     fi
 }

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Configuration Generator Module
 # Generate ralph.yml configuration from project detection

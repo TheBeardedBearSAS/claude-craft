@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Dashboard Module
 # Real-time terminal display for monitoring session progress

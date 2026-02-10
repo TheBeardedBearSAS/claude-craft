@@ -29,8 +29,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: write
-  id-token: write
+  contents: read
 
 jobs:
   validate:
@@ -108,7 +107,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Verify package structure
@@ -140,9 +139,14 @@ jobs:
           TARBALL_SIZE=$(grep -E "^npm notice tarball" pack-output.txt | awk '{print $NF}' || echo "unknown")
           echo "Package size: ${TARBALL_SIZE}"
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Run tests
         run: npm test
-        continue-on-error: true
+
+      - name: Run linter
+        run: npm run lint
 
   publish:
     name: Publish to NPM
@@ -159,8 +163,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          # Pas de registry-url pour éviter NODE_AUTH_TOKEN automatique
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Update version for main branch
         if: ${{ needs.validate.outputs.is_main_push == 'true' }}

@@ -5,7 +5,6 @@
 
 set -euo pipefail
 
-VERSION="5.9.1"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 TECH_NAME="Angular"
@@ -16,6 +15,7 @@ lang="en"
 
 # Source TCL common functions
 source "${SCRIPT_DIR}/tcl-common.sh"
+VERSION=$(get_claude_craft_version)
 
 # TCL file mappings: "old_name:new_name"
 TECH_RULE_MAPPINGS=(

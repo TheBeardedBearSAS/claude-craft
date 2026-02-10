@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Sprint Progress Module
 # Persistent progress tracking across context windows and sessions

@@ -33,7 +33,7 @@ CLAUDE_CRAFT_ROOT="$(dirname "$SCRIPT_DIR")"
 source "$SCRIPT_DIR/lib/install-common.sh"
 
 # Version
-CURRENT_VERSION="3.0.0"
+CURRENT_VERSION=$(node -p "require('$(cd "$CLAUDE_CRAFT_ROOT/.." && pwd)/package.json').version" 2>/dev/null || echo "0.0.0")
 VERSION_FILE=".claude/.claude-craft-version"
 
 # Defaults
@@ -233,7 +233,7 @@ add_hooks() {
     # Copy scripts
     if [[ -d "$src_hooks/scripts" ]]; then
         cp -r "$src_hooks/scripts"/* "$hooks_dir/"
-        chmod +x "$hooks_dir"/*.sh 2>/dev/null || true
+        for f in "$hooks_dir"/*.sh; do [ -f "$f" ] && head -1 "$f" | grep -q "^#!" && chmod +x "$f"; done 2>/dev/null || true
     fi
 
     # Copy quickstart

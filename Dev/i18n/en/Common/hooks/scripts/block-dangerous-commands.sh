@@ -7,23 +7,28 @@ set -e
 INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 
-# Dangerous patterns to block
+# Dangerous patterns to block (regex)
 DANGEROUS_PATTERNS=(
-    "rm -rf /"
-    "rm -rf /*"
-    "rm -rf ~"
-    ":(){:|:&};:"          # Fork bomb
-    "dd if=/dev/zero"
+    "rm\s+-rf\s+/"
+    "rm\s+-rf\s+/\*"
+    "rm\s+-rf\s+~"
+    "dd\s+if=/dev/zero"
     "mkfs"
-    "chmod -R 777 /"
-    "chown -R"
-    "> /dev/sda"
-    "mv /* /dev/null"
+    "chmod\s+-R\s+777\s+/"
+    "chown\s+-R"
+    ">\s*/dev/sda"
+    "mv\s+/\*\s+/dev/null"
 )
 
-# Check for dangerous patterns
+# Check for fork bomb (fixed string, contains regex special chars)
+if echo "$COMMAND" | grep -qF ':(){:|:&};:'; then
+    echo "BLOCKED: Dangerous command detected: fork bomb" >&2
+    exit 2
+fi
+
+# Check for dangerous patterns (regex)
 for pattern in "${DANGEROUS_PATTERNS[@]}"; do
-    if echo "$COMMAND" | grep -qF "$pattern"; then
+    if echo "$COMMAND" | grep -qE "$pattern"; then
         echo "BLOCKED: Dangerous command detected: $pattern" >&2
         exit 2
     fi

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - DoD Templates Module
 # Load and merge Definition of Done templates by technology

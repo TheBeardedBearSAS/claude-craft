@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Health Monitor Module
 # Detect degradation patterns and early warning signs

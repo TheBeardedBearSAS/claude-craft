@@ -14,17 +14,8 @@
 const fs = require('fs');
 const path = require('path');
 
-// ANSI colors
-const c = {
-  reset: '\x1b[0m',
-  bold: '\x1b[1m',
-  dim: '\x1b[2m',
-  red: '\x1b[31m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  cyan: '\x1b[36m',
-};
+// ANSI colors (shared module)
+const c = require('./lib/colors');
 
 // Default ignore patterns
 const DEFAULT_IGNORES = [
@@ -70,10 +61,10 @@ const PRIORITY_EXTENSIONS = {
   low: ['.txt', '.xml', '.ini', '.cfg', '.conf', '.toml'],
 };
 
-// Approximate tokens per character (GPT-4 average)
+// Approximate tokens per character (Claude models average)
 const TOKENS_PER_CHAR = 0.25;
 
-// Max tokens per shard (leaving room for conversation)
+// Max tokens per shard (leaving room for conversation context)
 const MAX_TOKENS_PER_SHARD = 50000;
 
 class CodebaseFlattener {
@@ -81,7 +72,7 @@ class CodebaseFlattener {
     this.rootPath = path.resolve(rootPath);
     this.options = {
       maxTokens: options.maxTokens || MAX_TOKENS_PER_SHARD,
-      maxFileSize: options.maxFileSize || 50000, // 50KB per file
+      maxFileSize: options.maxFileSize || 50000, // 50KB max per file
       ignorePatterns: [...DEFAULT_IGNORES, ...(options.ignore || [])],
       includePatterns: options.include || null,
       sharding: options.sharding !== false,

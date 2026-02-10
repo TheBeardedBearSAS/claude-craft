@@ -410,6 +410,19 @@ All content is available in 5 languages. When adding new content:
 
 3. Maintain consistent structure across all languages
 
+### i18n Verification Checklist
+
+Before submitting translations:
+
+1. **File parity**: Verify all 5 language directories have the same files:
+   ```bash
+   diff <(cd Dev/i18n/en && find . -type f | sort) <(cd Dev/i18n/fr && find . -type f | sort)
+   ```
+2. **No untranslated content**: Check for English text remaining in translated files
+3. **Consistent frontmatter**: Ensure `description` fields are translated in all SKILL.md and command files
+4. **Hook scripts**: Hook scripts in `Common/hooks/scripts/` should be identical across languages (code is not translated)
+5. **Test installation**: Run `make install-{tech} TARGET=/tmp/test RULES_LANG={lang}` for each language
+
 ---
 
 ## Documentation

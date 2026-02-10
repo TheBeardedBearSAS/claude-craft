@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Metrics Exporter Module
 # Export session metrics in JSON and Prometheus formats

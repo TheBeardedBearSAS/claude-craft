@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Git Checkpointing Module
 # Creates git checkpoints for recovery and history tracking

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Escalation Service Module
 # Manages escalation queue, notifications, and human decision points
@@ -405,7 +406,7 @@ send_escalation_notification() {
 
     # Send notification
     if command -v curl &>/dev/null; then
-        curl -s -X POST -H "Content-Type: application/json" -d "$payload" "$ESCALATION_WEBHOOK_URL" &>/dev/null &
+        curl -s -X POST -H "Content-Type: application/json" --data "$payload" "$ESCALATION_WEBHOOK_URL" &>/dev/null &
         print_verbose "Notification sent for $escalation_id"
     fi
 }
@@ -418,22 +419,18 @@ build_slack_payload() {
     [[ "$level" == "medium" ]] && color="#ffaa00"
 
     local title="Ralph Escalation: $event"
+    local truncated_details
+    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ')
 
-    cat << EOF
-{
-    "attachments": [{
-        "color": "$color",
-        "title": "$title",
-        "fields": [
-            {"title": "ID", "value": "$id", "short": true},
-            {"title": "Level", "value": "$level", "short": true},
-            {"title": "Error Type", "value": "$error", "short": true},
-            {"title": "Session", "value": "$session", "short": true}
-        ],
-        "text": "$(echo "$details" | head -c 500 | tr '\n' ' ')"
-    }]
-}
-EOF
+    jq -n \
+        --arg color "$color" \
+        --arg title "$title" \
+        --arg id "$id" \
+        --arg level "$level" \
+        --arg error "$error" \
+        --arg session "$session" \
+        --arg text "$truncated_details" \
+        '{attachments: [{color: $color, title: $title, fields: [{title: "ID", value: $id, short: true}, {title: "Level", value: $level, short: true}, {title: "Error Type", value: $error, short: true}, {title: "Session", value: $session, short: true}], text: $text}]}'
 }
 
 build_teams_payload() {
@@ -442,22 +439,19 @@ build_teams_payload() {
     local color="attention"
     [[ "$event" == "resolved" ]] && color="good"
 
-    cat << EOF
-{
-    "@type": "MessageCard",
-    "themeColor": "$color",
-    "title": "Ralph Escalation: $event",
-    "sections": [{
-        "facts": [
-            {"name": "ID", "value": "$id"},
-            {"name": "Level", "value": "$level"},
-            {"name": "Error Type", "value": "$error"},
-            {"name": "Session", "value": "$session"}
-        ],
-        "text": "$(echo "$details" | head -c 500 | tr '\n' ' ')"
-    }]
-}
-EOF
+    local truncated_details
+    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ')
+
+    jq -n \
+        --arg type "MessageCard" \
+        --arg color "$color" \
+        --arg title "Ralph Escalation: $event" \
+        --arg id "$id" \
+        --arg level "$level" \
+        --arg error "$error" \
+        --arg session "$session" \
+        --arg text "$truncated_details" \
+        '{"@type": $type, themeColor: $color, title: $title, sections: [{facts: [{name: "ID", value: $id}, {name: "Level", value: $level}, {name: "Error Type", value: $error}, {name: "Session", value: $session}], text: $text}]}'
 }
 
 build_discord_payload() {
@@ -466,38 +460,34 @@ build_discord_payload() {
     local color=16711680  # Red
     [[ "$event" == "resolved" ]] && color=65280  # Green
 
-    cat << EOF
-{
-    "embeds": [{
-        "title": "Ralph Escalation: $event",
-        "color": $color,
-        "fields": [
-            {"name": "ID", "value": "$id", "inline": true},
-            {"name": "Level", "value": "$level", "inline": true},
-            {"name": "Error", "value": "$error", "inline": true},
-            {"name": "Session", "value": "$session", "inline": true}
-        ],
-        "description": "$(echo "$details" | head -c 500 | tr '\n' ' ')"
-    }]
-}
-EOF
+    local truncated_details
+    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ')
+
+    jq -n \
+        --arg title "Ralph Escalation: $event" \
+        --argjson color "$color" \
+        --arg id "$id" \
+        --arg level "$level" \
+        --arg error "$error" \
+        --arg session "$session" \
+        --arg desc "$truncated_details" \
+        '{embeds: [{title: $title, color: $color, fields: [{name: "ID", value: $id, inline: true}, {name: "Level", value: $level, inline: true}, {name: "Error", value: $error, inline: true}, {name: "Session", value: $session, inline: true}], description: $desc}]}'
 }
 
 build_generic_payload() {
     local id="$1" event="$2" level="$3" error="$4" details="$5" session="$6"
 
-    cat << EOF
-{
-    "event": "$event",
-    "escalation": {
-        "id": "$id",
-        "level": "$level",
-        "error_type": "$error",
-        "session_id": "$session",
-        "details": "$(echo "$details" | head -c 500 | tr '\n' ' ')"
-    }
-}
-EOF
+    local truncated_details
+    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ')
+
+    jq -n \
+        --arg event "$event" \
+        --arg id "$id" \
+        --arg level "$level" \
+        --arg error "$error" \
+        --arg session "$session" \
+        --arg details "$truncated_details" \
+        '{event: $event, escalation: {id: $id, level: $level, error_type: $error, session_id: $session, details: $details}}'
 }
 
 # =============================================================================
@@ -513,7 +503,8 @@ log_escalation_event() {
     local timestamp
     timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-    echo "{\"timestamp\":\"$timestamp\",\"escalation_id\":\"$escalation_id\",\"event\":\"$event_type\",\"data1\":\"$data1\",\"data2\":\"$data2\"}" >> "$ESCALATION_AUDIT_FILE"
+    jq -n --arg ts "$timestamp" --arg eid "$escalation_id" --arg evt "$event_type" --arg d1 "$data1" --arg d2 "$data2" \
+        '{timestamp: $ts, escalation_id: $eid, event: $evt, data1: $d1, data2: $d2}' >> "$ESCALATION_AUDIT_FILE"
 }
 
 get_escalation_stats() {

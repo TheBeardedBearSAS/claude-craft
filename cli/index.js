@@ -8,26 +8,12 @@
  */
 
 const readline = require('readline');
-const { execSync, spawn } = require('child_process');
+const { spawnSync, spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-// ANSI colors
-const colors = {
-  reset: '\x1b[0m',
-  bold: '\x1b[1m',
-  dim: '\x1b[2m',
-  red: '\x1b[31m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  magenta: '\x1b[35m',
-  cyan: '\x1b[36m',
-  white: '\x1b[37m',
-  bgBlue: '\x1b[44m',
-  bgGreen: '\x1b[42m',
-};
-
+// ANSI colors (shared module)
+const colors = require('./lib/colors');
 const c = colors;
 
 // CLI package root
@@ -42,6 +28,11 @@ const TECHNOLOGIES = {
   flutter: { name: 'Flutter', desc: 'Mobile Dart with BLoC pattern, Material/Cupertino' },
   react: { name: 'React', desc: 'Frontend JS/TS with Hooks, State management, A11y' },
   reactnative: { name: 'React Native', desc: 'Mobile JS/TS with Navigation, Native modules' },
+  angular: { name: 'Angular', desc: 'Frontend TS with Signals, Standalone components, RxJS' },
+  csharp: { name: 'C# / .NET', desc: 'Backend with Clean Architecture, CQRS, MediatR, EF Core' },
+  laravel: { name: 'Laravel', desc: 'PHP backend with Actions, Pest PHP, Sanctum' },
+  vuejs: { name: 'Vue.js', desc: 'Frontend JS/TS with Composition API, Pinia, Vitest' },
+  php: { name: 'PHP', desc: 'Backend PHP 8.5 with PSR-12, PHPStan, Pest PHP' },
   python: { name: 'Python', desc: 'Backend with FastAPI, async/await, Type hints' },
   docker: { name: 'Docker', desc: 'Dockerfile, Compose, CI/CD, Debugging' },
 };
@@ -142,7 +133,7 @@ ${c.bold}Commands:${c.reset}
 
 ${c.bold}Options:${c.reset}
   ${c.yellow}--lang=XX${c.reset}            Language (en, fr, es, de, pt)
-  ${c.yellow}--tech=NAME${c.reset}          Technology (symfony, flutter, react, reactnative, python)
+  ${c.yellow}--tech=NAME${c.reset}          Technology (${Object.keys(TECHNOLOGIES).join(', ')})
   ${c.yellow}--force${c.reset}              Overwrite existing files
   ${c.yellow}--quick${c.reset}              Quick Flow track (bug fixes)
   ${c.yellow}--standard${c.reset}           Standard track (features)
@@ -186,24 +177,42 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
       complexity: 'standard',
     };
 
+    // Check for .claude directory
     try {
-      // Check for .claude directory
       detected.hasClaude = fs.existsSync(path.join(targetPath, '.claude'));
+    } catch (e) {
+      if (process.env.DEBUG) console.error(`${c.dim}Detection error (.claude): ${e.message}${c.reset}`);
+    }
 
-      // Check for git
+    // Check for git
+    try {
       detected.hasGit = fs.existsSync(path.join(targetPath, '.git'));
+    } catch (e) {
+      if (process.env.DEBUG) console.error(`${c.dim}Detection error (.git): ${e.message}${c.reset}`);
+    }
 
-      // Detect technologies
+    // Detect Symfony/PHP (composer.json)
+    try {
       if (fs.existsSync(path.join(targetPath, 'composer.json'))) {
         detected.hasComposer = true;
         detected.suggestedTechs.push('symfony');
       }
+    } catch (e) {
+      if (process.env.DEBUG) console.error(`${c.dim}Detection error (composer): ${e.message}${c.reset}`);
+    }
 
+    // Detect Flutter (pubspec.yaml)
+    try {
       if (fs.existsSync(path.join(targetPath, 'pubspec.yaml'))) {
         detected.hasPubspec = true;
         detected.suggestedTechs.push('flutter');
       }
+    } catch (e) {
+      if (process.env.DEBUG) console.error(`${c.dim}Detection error (pubspec): ${e.message}${c.reset}`);
+    }
 
+    // Detect React/React Native (package.json)
+    try {
       if (fs.existsSync(path.join(targetPath, 'package.json'))) {
         detected.hasPackageJson = true;
         const pkg = JSON.parse(fs.readFileSync(path.join(targetPath, 'package.json'), 'utf8'));
@@ -215,28 +224,37 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
           }
         }
       }
+    } catch (e) {
+      if (process.env.DEBUG) console.error(`${c.dim}Detection error (package.json): ${e.message}${c.reset}`);
+    }
 
+    // Detect Python (requirements.txt / pyproject.toml)
+    try {
       if (fs.existsSync(path.join(targetPath, 'requirements.txt')) ||
           fs.existsSync(path.join(targetPath, 'pyproject.toml'))) {
         detected.hasRequirements = true;
         detected.suggestedTechs.push('python');
       }
+    } catch (e) {
+      if (process.env.DEBUG) console.error(`${c.dim}Detection error (python): ${e.message}${c.reset}`);
+    }
 
+    // Detect Docker (Dockerfile / docker-compose.yml)
+    try {
       if (fs.existsSync(path.join(targetPath, 'Dockerfile')) ||
           fs.existsSync(path.join(targetPath, 'docker-compose.yml'))) {
         detected.hasDockerfile = true;
         detected.suggestedTechs.push('docker');
       }
-
-      // Estimate complexity
-      if (detected.suggestedTechs.length > 2) {
-        detected.complexity = 'enterprise';
-      } else if (detected.suggestedTechs.length === 0) {
-        detected.complexity = 'quick';
-      }
-
     } catch (e) {
-      // Ignore detection errors
+      if (process.env.DEBUG) console.error(`${c.dim}Detection error (docker): ${e.message}${c.reset}`);
+    }
+
+    // Estimate complexity
+    if (detected.suggestedTechs.length > 2) {
+      detected.complexity = 'enterprise';
+    } else if (detected.suggestedTechs.length === 0) {
+      detected.complexity = 'quick';
     }
 
     return detected;
@@ -355,9 +373,12 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
     const langArg = `--lang=${this.config.language}`;
     const forceArg = '--force';
 
+    // 1 base step (common rules) + tech count + optional infra + optional project
+    const totalSteps = this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0);
+
     try {
       // Always install common rules
-      console.log(`${c.cyan}[1/${this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0)}]${c.reset} Installing common rules...`);
+      console.log(`${c.cyan}[1/${totalSteps}]${c.reset} Installing common rules...`);
       this.runScript(path.join(scriptsDir, 'install-common-rules.sh'), [langArg, this.config.targetPath]);
 
       // Install technology-specific rules
@@ -367,7 +388,7 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
         const scriptName = `install-${tech}-rules.sh`;
         const scriptPath = path.join(scriptsDir, scriptName);
         if (fs.existsSync(scriptPath)) {
-          console.log(`${c.cyan}[${step}/${this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0)}]${c.reset} Installing ${tech} rules...`);
+          console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing ${tech} rules...`);
           this.runScript(scriptPath, [langArg, this.config.targetPath]);
           step++;
         }
@@ -375,7 +396,7 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
 
       // Install infrastructure rules
       if (this.config.includeInfra || this.config.technologies.includes('docker')) {
-        console.log(`${c.cyan}[${step}/${this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0)}]${c.reset} Installing infrastructure rules...`);
+        console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing infrastructure rules...`);
         const infraScript = path.join(CLI_ROOT, 'Infra', 'install-infra-rules.sh');
         if (fs.existsSync(infraScript)) {
           this.runScript(infraScript, [langArg, this.config.targetPath]);
@@ -385,7 +406,7 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
 
       // Install project commands
       if (this.config.includeProject) {
-        console.log(`${c.cyan}[${step}/${this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0)}]${c.reset} Installing project commands...`);
+        console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing project commands...`);
         const projectScript = path.join(CLI_ROOT, 'Project', 'install-project-commands.sh');
         if (fs.existsSync(projectScript)) {
           this.runScript(projectScript, [langArg, this.config.targetPath]);
@@ -402,13 +423,15 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
 
   // Run a shell script
   runScript(scriptPath, args) {
-    try {
-      execSync(`bash "${scriptPath}" ${args.join(' ')}`, {
-        stdio: 'inherit',
-        cwd: CLI_ROOT,
-      });
-    } catch (error) {
-      throw new Error(`Script failed: ${scriptPath}`);
+    const result = spawnSync('bash', [scriptPath, ...args], {
+      stdio: 'inherit',
+      cwd: CLI_ROOT,
+    });
+    if (result.error) {
+      throw new Error(`Script failed to start: ${scriptPath} - ${result.error.message}`);
+    }
+    if (result.status !== 0) {
+      throw new Error(`Script failed with exit code ${result.status}: ${scriptPath}`);
     }
   }
 
@@ -473,10 +496,22 @@ ${c.bold}Documentation:${c.reset}
 
     const { command, path: targetPath, options } = this.parseArgs(args);
 
-    // Apply options
-    if (options.lang) this.config.language = options.lang;
-    if (options.tech) this.config.technologies = [options.tech];
-    if (targetPath) this.config.targetPath = path.resolve(targetPath);
+    // Apply and validate options
+    if (options.lang) {
+      if (!LANGUAGES[options.lang]) {
+        console.error(`${c.red}Error: Unknown language '${options.lang}'. Available: ${Object.keys(LANGUAGES).join(', ')}${c.reset}`);
+        process.exit(1);
+      }
+      this.config.language = options.lang;
+    }
+    if (options.tech) {
+      if (!TECHNOLOGIES[options.tech]) {
+        console.error(`${c.red}Error: Unknown technology '${options.tech}'. Available: ${Object.keys(TECHNOLOGIES).join(', ')}${c.reset}`);
+        process.exit(1);
+      }
+      this.config.technologies = [options.tech];
+    }
+    this.config.targetPath = path.resolve(targetPath || this.config.targetPath);
 
     switch (command) {
       case 'install':

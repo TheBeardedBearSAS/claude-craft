@@ -37,8 +37,11 @@ set -euo pipefail
 #-------------------------------------------------------------------------------
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT_NAME="$(basename "$0")"
-VERSION="5.9.1"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
+
+# Source TCL common functions
+source "${SCRIPT_DIR}/tcl-common.sh"
+VERSION=$(get_claude_craft_version)
 
 # Couleurs
 RED='\033[0;31m'

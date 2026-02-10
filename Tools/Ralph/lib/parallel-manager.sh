@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Parallel Manager Module
 # Manages parallel execution of multiple Ralph sessions

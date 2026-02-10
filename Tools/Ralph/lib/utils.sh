@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Utilities Module
 # Common helper functions for file locking, atomic operations, and validation

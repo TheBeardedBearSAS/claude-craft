@@ -1,45 +1,17 @@
-# Source control
-.git/
-.gitignore
-.gitattributes
+# Runtime-generated hooks (not for npm package)
+Tools/Ralph/.ralph/
 
-# CI/CD
-.github/
+# Test files
+tests/
+*.test.js
+*.test.mjs
+*.spec.js
+vitest.config.*
+coverage/
 
-# Documentation (not needed for package consumers)
-docs/
-*.md
-!README.md
-
-# Development files
-Makefile
-claude-projects.yaml
-claude-projects.yaml.example
-bundles/
-
-# Local configuration
-.claude/
-.vscode/
-.idea/
-
-# Editor files
+# Editor/OS files
 *.swp
 *.swo
 *~
 .DS_Store
 Thumbs.db
-
-# Test files
-__tests__/
-*.test.js
-*.spec.js
-coverage/
-.nyc_output/
-
-# Build artifacts
-node_modules/
-*.log
-*.tgz
-
-# Plans and temporary files
-plans/

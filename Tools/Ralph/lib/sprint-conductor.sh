@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Sprint Conductor Module
 # Autonomous Sprint Conductor (ASC) - Main orchestrator for overnight runs

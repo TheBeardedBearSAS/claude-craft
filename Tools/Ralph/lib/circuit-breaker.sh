@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Circuit Breaker Module
 # Safety mechanism to prevent infinite loops and detect stalls
