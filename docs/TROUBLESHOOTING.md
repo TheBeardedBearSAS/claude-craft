@@ -184,6 +184,37 @@ head -20 ~/my-project/.claude/agents/api-designer.md
 
 ---
 
+### Plan mode crash (v2.1.38)
+
+**Problem:** Claude Code crashes when entering plan mode.
+
+**Cause:** Project config in `~/.claude.json` is missing default fields.
+
+**Solution:**
+```bash
+# Ensure ~/.claude.json has valid structure
+# Update Claude Code to v2.1.38+
+npm update -g @anthropic-ai/claude-code
+```
+
+---
+
+### Heredoc "Bad substitution" errors
+
+**Problem:** Bash tool produces "Bad substitution" errors with JavaScript template literals like `${index + 1}` in heredocs.
+
+**Solution:** Update Claude Code to v2.1.38+ which fixes heredoc parsing for JS template literals.
+
+---
+
+### Tab key queues slash commands instead of autocompleting
+
+**Problem:** Pressing Tab queues slash commands instead of triggering autocomplete.
+
+**Solution:** Update Claude Code to v2.1.38+ which fixes Tab key behavior.
+
+---
+
 ### Skills not loading
 
 **Problem:** Skills don't activate when triggered.

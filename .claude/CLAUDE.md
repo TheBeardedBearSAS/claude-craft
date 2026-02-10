@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 5.8.0 | **Languages:** en, fr, es, de, pt
+**Version:** 5.9.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 40 agents, 157 commands, and BMAD v6 project management.
 
@@ -389,7 +389,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version**: 2.1.34
+**Minimum Version**: 2.1.38
 
 ### PR Integration (v2.1.27+)
 
@@ -631,3 +631,52 @@ OAuth users can browse and resume Claude Code sessions from claude.ai remotely.
 ### VSCode Session Picker Enhancements (v2.1.33+)
 
 Git branch and message count now displayed in session picker, with search by branch name.
+
+### Fast Mode (v2.1.36+)
+
+Toggle fast mode for Opus 4.6 with the `/fast` command:
+
+| Feature | Description |
+|---------|-------------|
+| Command | `/fast` to toggle on/off |
+| Speed | Up to 2.5x faster output tokens |
+| Intelligence | Same Opus 4.6 capabilities |
+| Visual indicator | Lightning bolt icon when enabled |
+| Persistence | Setting persists across sessions |
+| Pricing (fast) | $30/M input, $150/M output |
+| Pricing (standard) | $5/M input, $25/M output |
+
+### Security: Skills Directory Protection (v2.1.38+)
+
+Writes to `.claude/skills` directory are now blocked in sandbox mode.
+
+### Heredoc Fix for JS Template Literals (v2.1.38+)
+
+Bash tool no longer produces "Bad substitution" errors with heredocs containing JavaScript template literals like `${index + 1}`.
+
+### Plan Mode Crash Fix (v2.1.38+)
+
+Fixed crash when entering plan mode with project config in `~/.claude.json` missing default fields.
+
+### temperatureOverride Fix (v2.1.38+)
+
+`temperatureOverride` is no longer silently ignored in the streaming API path.
+
+### VSCode Fixes (v2.1.37/v2.1.38)
+
+| Fix | Description |
+|-----|-------------|
+| Terminal scroll | Fixed scroll-to-top regression from v2.1.37 |
+| Tab key | Fixed Tab key queueing slash commands instead of autocompleting |
+| Duplicate sessions | Fixed duplicate sessions when resuming in VSCode |
+
+### LSP Compatibility (v2.1.38+)
+
+Fixed LSP shutdown/exit compatibility with strict language servers that reject null params.
+
+### Text Rendering Fixes (v2.1.38+)
+
+| Fix | Description |
+|-----|-------------|
+| Thai/Lao spacing | Fixed Thai/Lao spacing vowels rendering in input field |
+| Tool use text | Fixed text between tool uses disappearing when not streaming |

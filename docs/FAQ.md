@@ -304,6 +304,25 @@ See [Autonomous Sprint Guide](AUTONOMOUS-SPRINT.md).
 
 ---
 
+## Fast Mode
+
+### What is Fast Mode?
+
+Fast Mode (v2.1.36+) delivers up to 2.5x faster output for Opus 4.6 with the same capabilities. Toggle with `/fast`.
+
+### How much does Fast Mode cost?
+
+| Mode | Input | Output |
+|------|-------|--------|
+| Standard | $5/M | $25/M |
+| Fast | $30/M | $150/M |
+
+### When to use Fast Mode with Claude Craft?
+
+Use for interactive work (code review, debugging). For batch operations (ralph-sprint, team-audit), standard mode is more cost-effective.
+
+---
+
 ## Troubleshooting
 
 ### "yq: command not found"

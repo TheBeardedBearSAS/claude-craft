@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.0] - 2026-02-10
+
+### Added
+- **Claude Code 2.1.36 / 2.1.38 Compatibility**
+  - **Fast Mode** (v2.1.36): `/fast` toggles up to 2.5x faster Opus 4.6 output
+  - **Skills Directory Protection** (v2.1.38): Writes to `.claude/skills` blocked in sandbox
+  - **Heredoc Fix** (v2.1.38): No more "Bad substitution" with JS template literals
+  - **Plan Mode Crash Fix** (v2.1.38): Fixed crash when `~/.claude.json` missing fields
+  - **temperatureOverride Fix** (v2.1.38): No longer ignored in streaming API
+  - **LSP Compatibility** (v2.1.38): Fixed shutdown/exit with strict language servers
+  - **VSCode Fixes** (v2.1.38): Terminal scroll, Tab key, duplicate sessions
+  - **Text Rendering** (v2.1.38): Thai/Lao spacing, text between tool uses
+
+### Changed
+- Updated recommended Claude Code version from 2.1.34 to 2.1.38
+- Updated VERSION in all 11 install scripts from 5.4.0 to 5.9.0
+
+---
+
 ## [5.8.0] - 2026-02-07
 
 ### Fixed

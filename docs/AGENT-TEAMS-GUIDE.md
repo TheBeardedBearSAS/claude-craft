@@ -6,7 +6,7 @@ Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordina
 
 | Requirement | Minimum Version | Check |
 |-------------|-----------------|-------|
-| Claude Code | v2.1.32+ | `claude --version` |
+| Claude Code | v2.1.38+ (recommended) | `claude --version` |
 | Environment variable | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` | `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` |
 | Claude model | Opus 4.6 (recommended for leader) | Model selector in Claude Code |
 
@@ -34,6 +34,8 @@ Agent Teams adds coordination overhead. Use it only when the parallelization ben
 | Small projects (< 50 files) | STAY SEQUENTIAL | Sequential audit completes in ~2 min |
 
 **Rule of thumb:** Use Agent Teams when you have 2+ independent work streams that each take more than 3 minutes.
+
+**Fast Mode note:** Agent Teams with Fast Mode (`/fast`) increases costs significantly ($30/M input, $150/M output per agent). For batch operations like team-audit or team-sprint, standard mode is more cost-effective.
 
 ## Cost Analysis
 

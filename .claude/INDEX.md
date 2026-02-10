@@ -261,7 +261,7 @@ All detected errors auto-generate regression tests:
 
 ---
 
-## Claude Code 2.1.34 Quick Reference
+## Claude Code 2.1.38 Quick Reference
 
 ### PR Integration (v2.1.27+)
 
@@ -374,6 +374,24 @@ New hook events: `TeammateIdle` (teammate goes idle), `TaskCompleted` (task mark
 ### Plugin Name in Skills (v2.1.33+)
 
 Plugin name shown in `/skills` menu and skill descriptions.
+
+### Fast Mode (v2.1.36+)
+
+`/fast` toggles fast mode for Opus 4.6 (up to 2.5x faster output, same intelligence). Persists across sessions.
+
+Pricing: $30/M input, $150/M output (fast) vs $5/M input, $25/M output (standard).
+
+### Security: Skills Sandbox (v2.1.38+)
+
+Writes to `.claude/skills` blocked in sandbox mode.
+
+### Heredoc JS Template Fix (v2.1.38+)
+
+No more "Bad substitution" errors with `${expression}` in heredocs.
+
+### VSCode & Stability Fixes (v2.1.38+)
+
+Plan mode crash fix, temperatureOverride fix, LSP compatibility, VSCode scroll/Tab/sessions fixes.
 
 ---
 

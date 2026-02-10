@@ -4,6 +4,15 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
 
+## What's New in v5.9 - Claude Code 2.1.36 / 2.1.38
+
+- **Fast Mode** (v2.1.36): `/fast` toggles up to 2.5x faster Opus 4.6 output, same intelligence
+- **Skills Sandbox** (v2.1.38): Writes to `.claude/skills` blocked in sandbox mode
+- **Heredoc Fix** (v2.1.38): No more "Bad substitution" with JS template literals `${expr}`
+- **Plan Mode Fix** (v2.1.38): No crash with incomplete `~/.claude.json`
+- **VSCode Fixes** (v2.1.38): Terminal scroll, Tab autocomplete, duplicate sessions
+- See [CHANGELOG](CHANGELOG.md) for full details
+
 ## What's New in v5.7 - Agent Teams Integration
 
 - **Agent Teams** — Multi-agent coordination with shared task management
