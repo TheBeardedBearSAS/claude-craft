@@ -74,6 +74,32 @@ Claude: [Fetches current Symfony 7.2 form documentation]
         Here's how to create forms in Symfony 7.2...
 ```
 
+## Seguridad
+
+### Variables de entorno
+- **Nunca** commitear archivos `.mcp.json` que contengan tokens reales en el control de versiones
+- Agregue `.mcp.json` a su `.gitignore`
+- Use referencias de variables de entorno (`${VAR_NAME}`) en las plantillas
+- Almacene los tokens en su perfil de shell (`~/.bashrc`, `~/.zshrc`) o en un gestor de secretos
+
+### Variables de entorno requeridas
+
+| Plantilla | Variable | Descripcion |
+|-----------|----------|-------------|
+| GitHub | `GITHUB_TOKEN` | Token de acceso personal con alcance repo |
+| PostgreSQL | `DATABASE_URL` | Cadena de conexion (ej: `postgresql://user:pass@host:5432/db`) |
+| Slack | `SLACK_BOT_TOKEN` | Token de bot que comienza con `xoxb-` |
+| Slack | `SLACK_TEAM_ID` | ID de equipo del workspace |
+
+### Permisos
+
+| Servidor | Permisos requeridos |
+|----------|---------------------|
+| GitHub | Alcance `repo` (acceso lectura/escritura al repositorio) |
+| PostgreSQL | Acceso de solo lectura recomendado por seguridad |
+| Filesystem | Limitado al directorio del proyecto unicamente |
+| Context7 | No requiere autenticacion |
+
 ## More Information
 
 See the full documentation: [docs/MCP.md](/docs/MCP.md)

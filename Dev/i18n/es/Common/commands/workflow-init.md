@@ -1,125 +1,127 @@
 ---
 name: workflow-init
-description: Analyze project context and recommend the optimal development workflow track
+description: Analizar el contexto del proyecto y recomendar el flujo de trabajo de desarrollo optimo
 arguments:
   - name: scope
-    description: Optional scope hint (bug, feature, platform, migration)
+    description: Indicacion de alcance opcional (bug, feature, platform, migration)
     required: false
   - name: track
-    description: Force a specific track (--quick, --standard, --enterprise)
+    description: Forzar un track especifico (--quick, --standard, --enterprise)
     required: false
 ---
 
 # /workflow:init
 
-## Mission
+## Mision
 
-Analyze the current project context and recommend the optimal development workflow track. Initialize workflow tracking and guide the user through the appropriate phases.
+Analizar el contexto actual del proyecto y recomendar el flujo de trabajo de desarrollo optimo. Inicializar el seguimiento del flujo de trabajo y guiar al usuario a traves de las fases apropiadas.
 
-## Workflow
+## Flujo de trabajo
 
-### Step 1: Context Discovery
+### Paso 1: Descubrimiento del contexto
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║             WORKFLOW INITIALIZATION                       ║
+║             INICIALIZACION DEL FLUJO DE TRABAJO           ║
 ╠══════════════════════════════════════════════════════════╣
-║ Analyzing project context...                              ║
+║ Analizando contexto del proyecto...                       ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-**Analyze:**
+**Analizar:**
 
-1. **Project Structure**
-   - Check for `.claude/` directory
-   - Detect technology stack from files
-   - Identify framework (Symfony, Flutter, React, etc.)
+1. **Estructura del proyecto**
+   - Verificar directorio `.claude/`
+   - Detectar stack tecnologico desde archivos
+   - Identificar framework (Symfony, Flutter, React, etc.)
 
-2. **Existing Documentation**
-   - `project-management/prd.md` - PRD exists?
-   - `project-management/tech-spec.md` - Tech Spec exists?
-   - `project-management/backlog/` - Backlog exists?
-   - `README.md` - Project description
+2. **Documentacion existente**
+   - `project-management/prd.md` - Existe PRD?
+   - `project-management/tech-spec.md` - Existe Tech Spec?
+   - `project-management/backlog/` - Existe Backlog?
+   - `README.md` - Descripcion del proyecto
 
-3. **Codebase Size**
-   - Count source files
-   - Estimate complexity
-   - Identify components/modules
+3. **Tamano del codebase**
+   - Contar archivos fuente
+   - Estimar complejidad
+   - Identificar componentes/modulos
 
-4. **Git Context**
-   - Current branch
-   - Recent commits
-   - Open changes
+4. **Contexto Git**
+   - Rama actual
+   - Commits recientes
+   - Cambios pendientes
 
-### Step 2: Complexity Assessment
+### Paso 2: Evaluacion de complejidad
 
-**Scoring Matrix:**
+**Matriz de puntuacion:**
 
 | Factor | Quick (1) | Standard (2) | Enterprise (3) |
 |--------|-----------|--------------|----------------|
-| Files to modify | 1-5 | 5-50 | 50+ |
-| New entities/tables | 0 | 1-3 | 4+ |
-| External integrations | 0 | 1 | 2+ |
-| User stories estimated | 1-3 | 3-15 | 15+ |
-| Teams involved | 1 | 1 | 2+ |
-| Security implications | Low | Medium | High |
+| Archivos a modificar | 1-5 | 5-50 | 50+ |
+| Nuevas entidades/tablas | 0 | 1-3 | 4+ |
+| Integraciones externas | 0 | 1 | 2+ |
+| User stories estimadas | 1-3 | 3-15 | 15+ |
+| Equipos involucrados | 1 | 1 | 2+ |
+| Implicaciones de seguridad | Bajo | Medio | Alto |
 
-**Calculate Score:**
-- Score 6-8: Quick Flow
-- Score 9-14: Standard
-- Score 15+: Enterprise
+**Calcular puntuacion:**
+- Puntuacion 6-8: Quick Flow
+- Puntuacion 9-14: Standard
+- Puntuacion 15+: Enterprise
 
-### Step 3: Track Recommendation
+### Paso 3: Recomendacion de track
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║               PROJECT ANALYSIS COMPLETE                   ║
+║               ANALISIS DEL PROYECTO COMPLETADO            ║
 ╠══════════════════════════════════════════════════════════╣
-║ Project: my-awesome-app                                   ║
+║ Proyecto: mi-aplicacion                                   ║
 ║ Stack: Symfony 7.x + React 18                             ║
-║ Status: Existing project with backlog                     ║
+║ Estado: Proyecto existente con backlog                    ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ COMPLEXITY ASSESSMENT:                                    ║
-║ ├── Files impacted:      ~25        [Standard]            ║
-║ ├── New entities:        2          [Standard]            ║
-║ ├── Integrations:        1 (Stripe) [Standard]            ║
-║ ├── Estimated stories:   8          [Standard]            ║
-║ ├── Teams:               1          [Quick]               ║
-║ └── Security:            High       [Enterprise]          ║
+║ EVALUACION DE COMPLEJIDAD:                                ║
+║ ├── Archivos impactados:    ~25        [Standard]         ║
+║ ├── Nuevas entidades:       2          [Standard]         ║
+║ ├── Integraciones:          1 (Stripe) [Standard]         ║
+║ ├── Stories estimadas:      8          [Standard]         ║
+║ ├── Equipos:                1          [Quick]            ║
+║ └── Seguridad:              Alto       [Enterprise]       ║
 ║                                                           ║
 ║ ═══════════════════════════════════════════════════════  ║
-║ RECOMMENDED TRACK: STANDARD                               ║
+║ TRACK RECOMENDADO: STANDARD                               ║
 ║ ═══════════════════════════════════════════════════════  ║
 ║                                                           ║
-║ Reasoning:                                                ║
-║ • Feature scope requires planning (8 stories)             ║
-║ • External integration needs tech design                  ║
-║ • Security implications require careful architecture      ║
-║ • Single team can handle without full enterprise process  ║
+║ Justificacion:                                            ║
+║ • Alcance de la feature requiere planificacion (8 stories)║
+║ • Integracion externa necesita diseno tecnico             ║
+║ • Implicaciones de seguridad requieren arquitectura       ║
+║   cuidadosa                                               ║
+║ • Un solo equipo puede gestionar sin proceso enterprise   ║
+║   completo                                                ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 4: Phase Planning
+### Paso 4: Planificacion de fases
 
-Based on track, show the workflow:
+Segun el track, mostrar el flujo de trabajo:
 
 **Quick Flow:**
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              QUICK FLOW WORKFLOW                          ║
+║              FLUJO QUICK FLOW                             ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
 ║  ┌──────────────────┐                                     ║
-║  │  IMPLEMENTATION  │ ← Start here                        ║
+║  │  IMPLEMENTACION  │ ← Comenzar aqui                     ║
 ║  └──────────────────┘                                     ║
 ║                                                           ║
-║ No documentation required. Direct to coding.              ║
+║ No requiere documentacion. Directo a programar.           ║
 ║                                                           ║
-║ Commands:                                                 ║
-║ • /common:fix-bug-tdd    - Fix with TDD                   ║
-║ • /project:add-task      - Track the work                 ║
+║ Comandos:                                                 ║
+║ • /common:fix-bug-tdd    - Corregir con TDD               ║
+║ • /project:add-task      - Registrar el trabajo            ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
@@ -127,24 +129,24 @@ Based on track, show the workflow:
 **Standard:**
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              STANDARD WORKFLOW                            ║
+║              FLUJO STANDARD                               ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║  ┌──────────┐    ┌──────────┐    ┌──────────────┐        ║
-║  │ PLANNING │ →  │  DESIGN  │ →  │IMPLEMENTATION│        ║
-║  └──────────┘    └──────────┘    └──────────────┘        ║
+║  ┌──────────────┐  ┌──────────┐  ┌──────────────┐        ║
+║  │PLANIFICACION │→ │  DISENO  │→ │IMPLEMENTACION│        ║
+║  └──────────────┘  └──────────┘  └──────────────┘        ║
 ║       ↑                                                   ║
-║   Start here                                              ║
+║   Comenzar aqui                                           ║
 ║                                                           ║
-║ Phase 1 - Planning:                                       ║
-║ • /project:generate-prd    - Create/update PRD            ║
-║ • /project:generate-backlog - Create user stories         ║
+║ Fase 1 - Planificacion:                                   ║
+║ • /project:generate-prd    - Crear/actualizar PRD         ║
+║ • /project:generate-backlog - Crear user stories          ║
 ║                                                           ║
-║ Phase 2 - Design:                                         ║
-║ • /project:generate-tech-spec - Technical design          ║
+║ Fase 2 - Diseno:                                          ║
+║ • /project:generate-tech-spec - Diseno tecnico            ║
 ║                                                           ║
-║ Phase 3 - Implementation:                                 ║
-║ • /project:sprint-dev      - TDD/BDD development          ║
+║ Fase 3 - Implementacion:                                  ║
+║ • /project:sprint-dev      - Desarrollo TDD/BDD           ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
@@ -152,39 +154,39 @@ Based on track, show the workflow:
 **Enterprise:**
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              ENTERPRISE WORKFLOW                          ║
+║              FLUJO ENTERPRISE                             ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║  ┌──────────┐  ┌──────────┐  ┌────────┐  ┌────────────┐  ║
-║  │ ANALYSIS │→ │ PLANNING │→ │ DESIGN │→ │IMPLEMENTATION│ ║
-║  └──────────┘  └──────────┘  └────────┘  └────────────┘  ║
+║  ┌──────────┐ ┌──────────────┐ ┌────────┐ ┌────────────┐ ║
+║  │ ANALISIS │→│PLANIFICACION │→│ DISENO │→│IMPLEMENTAC.│ ║
+║  └──────────┘ └──────────────┘ └────────┘ └────────────┘ ║
 ║       ↑                                                   ║
-║   Start here                                              ║
+║   Comenzar aqui                                           ║
 ║                                                           ║
-║ Phase 1 - Analysis:                                       ║
-║ • /workflow:analyze        - Research & exploration       ║
+║ Fase 1 - Analisis:                                        ║
+║ • /workflow:analyze        - Investigacion y exploracion  ║
 ║                                                           ║
-║ Phase 2 - Planning:                                       ║
-║ • /project:generate-prd    - Full PRD                     ║
-║ • /project:generate-backlog - Complete backlog            ║
+║ Fase 2 - Planificacion:                                   ║
+║ • /project:generate-prd    - PRD completo                 ║
+║ • /project:generate-backlog - Backlog completo            ║
 ║                                                           ║
-║ Phase 3 - Design:                                         ║
-║ • /project:generate-tech-spec - Full tech spec            ║
+║ Fase 3 - Diseno:                                          ║
+║ • /project:generate-tech-spec - Tech spec completo        ║
 ║ • /common:architecture-decision - ADRs                    ║
 ║                                                           ║
-║ Phase 4 - Implementation:                                 ║
-║ • /project:sprint-dev      - Sprint-by-sprint dev         ║
+║ Fase 4 - Implementacion:                                  ║
+║ • /project:sprint-dev      - Desarrollo sprint a sprint   ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 5: Initialize Tracking
+### Paso 5: Inicializar seguimiento
 
-Create workflow status file:
+Crear archivo de estado del flujo de trabajo:
 
 ```yaml
 # project-management/workflow-status.yaml
-project: my-awesome-app
+project: mi-aplicacion
 track: standard
 initialized_at: 2026-01-07T10:00:00Z
 current_phase: planning
@@ -192,7 +194,7 @@ current_phase: planning
 phases:
   analysis:
     status: skipped
-    reason: "Standard track - analysis not required"
+    reason: "Standard track - analisis no requerido"
   planning:
     status: pending
     artifacts:
@@ -207,51 +209,52 @@ phases:
   implementation:
     status: pending
 
-next_action: "Generate or update PRD"
+next_action: "Generar o actualizar PRD"
 next_command: "/project:generate-prd"
 ```
 
-### Step 6: Prompt Next Action
+### Paso 6: Indicar siguiente accion
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║                    READY TO START                         ║
+║                    LISTO PARA COMENZAR                     ║
 ╠══════════════════════════════════════════════════════════╣
-║ Workflow initialized: STANDARD track                      ║
-║ Status file: project-management/workflow-status.yaml      ║
+║ Flujo inicializado: track STANDARD                        ║
+║ Archivo de estado: project-management/workflow-status.yaml║
 ║                                                           ║
 ║ ─────────────────────────────────────────────────────────║
-║ NEXT STEP: Planning Phase                                 ║
+║ SIGUIENTE PASO: Fase de planificacion                     ║
 ║ ─────────────────────────────────────────────────────────║
 ║                                                           ║
-║ Start with: /workflow:plan                                ║
+║ Comenzar con: /workflow:plan                              ║
 ║                                                           ║
-║ Or jump to specific tasks:                                ║
-║ • /project:generate-prd     - Create requirements doc     ║
-║ • /project:generate-backlog - Create user stories         ║
+║ O ir directamente a tareas especificas:                   ║
+║ • /project:generate-prd     - Crear documento de          ║
+║                                requisitos                  ║
+║ • /project:generate-backlog - Crear user stories          ║
 ║                                                           ║
-║ Check progress anytime: /workflow:status                  ║
+║ Verificar progreso en cualquier momento: /workflow:status  ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-## Override Options
+## Opciones de sobreescritura
 
 ```bash
-# Force specific track
-/workflow:init --quick          # Force Quick Flow
-/workflow:init --standard       # Force Standard
-/workflow:init --enterprise     # Force Enterprise
+# Forzar track especifico
+/workflow:init --quick          # Forzar Quick Flow
+/workflow:init --standard       # Forzar Standard
+/workflow:init --enterprise     # Forzar Enterprise
 
-# Provide scope hint
-/workflow:init bug              # Hint: this is a bug fix
-/workflow:init feature          # Hint: new feature
-/workflow:init platform         # Hint: platform work
+# Proporcionar indicacion de alcance
+/workflow:init bug              # Indicacion: es una correccion de bug
+/workflow:init feature          # Indicacion: nueva funcionalidad
+/workflow:init platform         # Indicacion: trabajo de plataforma
 ```
 
-## Related Commands
+## Comandos relacionados
 
-- `/workflow:status` - Check current workflow progress
-- `/workflow:plan` - Start planning phase
-- `/workflow:design` - Start design phase
-- `/workflow:implement` - Start implementation phase
-- `/workflow:analyze` - Start analysis phase (Enterprise only)
+- `/workflow:status` - Verificar progreso actual del flujo de trabajo
+- `/workflow:plan` - Iniciar fase de planificacion
+- `/workflow:design` - Iniciar fase de diseno
+- `/workflow:implement` - Iniciar fase de implementacion
+- `/workflow:analyze` - Iniciar fase de analisis (solo Enterprise)

@@ -1,9 +1,9 @@
 ---
 name: workflow-plan
-description: Execute the Planning phase - PRD creation, personas, and backlog generation
+description: "Exécuter la phase de Planification - création du PRD, personas et génération du backlog"
 arguments:
   - name: continue
-    description: Continue from where left off
+    description: Reprendre là où on s'est arrêté
     required: false
 ---
 
@@ -11,214 +11,216 @@ arguments:
 
 ## Mission
 
-Execute the Planning phase of the development workflow. This phase focuses on creating the Product Requirements Document, defining personas, and generating the initial product backlog.
+Exécuter la phase de Planification du workflow de développement. Cette phase se concentre sur la création du Document d'Exigences Produit (PRD), la définition des personas et la génération du backlog produit initial.
 
-## When to Use
+## Quand utiliser
 
-- **Standard** and **Enterprise** tracks
-- After `/workflow:init` (or `/workflow:analyze` for Enterprise)
-- When starting feature planning
+- Tracks **Standard** et **Enterprise**
+- Après `/workflow:init` (ou `/workflow:analyze` pour Enterprise)
+- Quand on démarre la planification d'une fonctionnalité
 
 ## Workflow
 
-### Step 1: Planning Setup
+### Étape 1 : Mise en place de la planification
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║             PLANNING PHASE - STARTING                     ║
+║             PHASE DE PLANIFICATION - DÉMARRAGE            ║
 ╠══════════════════════════════════════════════════════════╣
 ║ Track: Standard                                           ║
-║ Phase: 2 of 4 - Planning                                  ║
+║ Phase: 2 sur 4 - Planification                            ║
 ║                                                           ║
-║ Objectives:                                               ║
-║ • Create or update Product Requirements Document          ║
-║ • Define user personas                                    ║
-║ • Generate product backlog with prioritized user stories  ║
-║ • Set success metrics and KPIs                            ║
+║ Objectifs :                                               ║
+║ • Créer ou mettre à jour le Document d'Exigences Produit  ║
+║ • Définir les personas utilisateurs                       ║
+║ • Générer le backlog produit avec des user stories        ║
+║   priorisées                                              ║
+║ • Définir les métriques de succès et les KPI              ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 2: Check Existing Artifacts
+### Étape 2 : Vérification des artefacts existants
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              EXISTING ARTIFACTS CHECK                     ║
+║              VÉRIFICATION DES ARTEFACTS EXISTANTS         ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Checking project-management/ ...                          ║
+║ Vérification de project-management/ ...                   ║
 ║                                                           ║
-║ PRD:                                                      ║
-║ ├── ❌ prd.md                    Not found               ║
+║ PRD :                                                    ║
+║ ├── ❌ prd.md                    Non trouvé               ║
 ║                                                           ║
-║ Personas:                                                 ║
-║ ├── ❌ personas.md               Not found               ║
+║ Personas :                                                ║
+║ ├── ❌ personas.md               Non trouvé               ║
 ║                                                           ║
-║ Backlog:                                                  ║
-║ ├── ❌ backlog/                  Not found               ║
+║ Backlog :                                                 ║
+║ ├── ❌ backlog/                  Non trouvé               ║
 ║                                                           ║
-║ Analysis (Enterprise):                                    ║
-║ ├── ✅ analysis/constraints.md   Available               ║
-║ └── ✅ analysis/research.md      Available               ║
+║ Analyse (Enterprise) :                                    ║
+║ ├── ✅ analysis/constraints.md   Disponible               ║
+║ └── ✅ analysis/research.md      Disponible               ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 3: Planning Tasks
+### Étape 3 : Tâches de planification
 
-Execute planning tasks in order:
+Exécuter les tâches de planification dans l'ordre :
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║               PLANNING TASKS                              ║
+║               TÂCHES DE PLANIFICATION                     ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ □ Task 1: Generate PRD                                    ║
-║   Command: /project:generate-prd                          ║
-║   Output: project-management/prd.md                       ║
+║ □ Tâche 1 : Générer le PRD                                ║
+║   Commande : /project:generate-prd                        ║
+║   Résultat : project-management/prd.md                    ║
 ║                                                           ║
-║ □ Task 2: Define Personas                                 ║
-║   (Included in PRD generation)                            ║
-║   Output: project-management/personas.md                  ║
+║ □ Tâche 2 : Définir les personas                          ║
+║   (Inclus dans la génération du PRD)                      ║
+║   Résultat : project-management/personas.md               ║
 ║                                                           ║
-║ □ Task 3: Generate Backlog                                ║
-║   Command: /project:generate-backlog                      ║
-║   Output: project-management/backlog/                     ║
+║ □ Tâche 3 : Générer le backlog                            ║
+║   Commande : /project:generate-backlog                    ║
+║   Résultat : project-management/backlog/                  ║
 ║                                                           ║
-║ □ Task 4: Validate Backlog                                ║
-║   Command: /project:validate-backlog                      ║
-║   Ensures SCRUM compliance                                ║
+║ □ Tâche 4 : Valider le backlog                            ║
+║   Commande : /project:validate-backlog                    ║
+║   Assure la conformité SCRUM                              ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 4: Execute PRD Generation
+### Étape 4 : Exécution de la génération du PRD
 
-Invoke the PRD generation command:
-
-```
-Starting /project:generate-prd...
-
-[PRD generation workflow runs]
-
-✅ PRD created: project-management/prd.md
-✅ Personas extracted: project-management/personas.md
-```
-
-### Step 5: Execute Backlog Generation
-
-After PRD is complete:
+Invoquer la commande de génération du PRD :
 
 ```
-Starting /project:generate-backlog...
+Démarrage de /project:generate-prd...
 
-Using PRD as input:
-• 3 personas identified
-• 12 functional requirements extracted
-• 8 non-functional requirements noted
+[Le workflow de génération du PRD s'exécute]
 
-Generating backlog structure...
+✅ PRD créé : project-management/prd.md
+✅ Personas extraits : project-management/personas.md
+```
 
-[Backlog generation workflow runs]
+### Étape 5 : Exécution de la génération du backlog
 
-✅ Backlog created with:
-   • 4 EPICs
+Après la complétion du PRD :
+
+```
+Démarrage de /project:generate-backlog...
+
+Utilisation du PRD en entrée :
+• 3 personas identifiés
+• 12 exigences fonctionnelles extraites
+• 8 exigences non fonctionnelles notées
+
+Génération de la structure du backlog...
+
+[Le workflow de génération du backlog s'exécute]
+
+✅ Backlog créé avec :
+   • 4 EPIC
    • 18 User Stories
-   • Sprint 1 planned (Walking Skeleton)
+   • Sprint 1 planifié (Walking Skeleton)
 ```
 
-### Step 6: Validation
+### Étape 6 : Validation
 
-Run backlog validation:
+Exécuter la validation du backlog :
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              BACKLOG VALIDATION                           ║
+║              VALIDATION DU BACKLOG                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ INVEST Criteria Check:                                    ║
-║ ├── Independent:    18/18 ✅                              ║
-║ ├── Negotiable:     18/18 ✅                              ║
-║ ├── Valuable:       18/18 ✅                              ║
-║ ├── Estimable:      18/18 ✅                              ║
-║ ├── Sized (≤8pts):  16/18 ⚠️  (2 stories need split)     ║
-║ └── Testable:       18/18 ✅                              ║
+║ Vérification des critères INVEST :                        ║
+║ ├── Indépendant :    18/18 ✅                              ║
+║ ├── Négociable :     18/18 ✅                              ║
+║ ├── De Valeur :      18/18 ✅                              ║
+║ ├── Estimable :      18/18 ✅                              ║
+║ ├── Petite (≤8pts) : 16/18 ⚠️  (2 stories à découper)    ║
+║ └── Testable :       18/18 ✅                              ║
 ║                                                           ║
-║ 3C Criteria Check:                                        ║
-║ ├── Card:           18/18 ✅                              ║
-║ ├── Conversation:   18/18 ✅                              ║
-║ └── Confirmation:   18/18 ✅                              ║
+║ Vérification des critères 3C :                            ║
+║ ├── Carte :          18/18 ✅                              ║
+║ ├── Conversation :   18/18 ✅                              ║
+║ └── Confirmation :   18/18 ✅                              ║
 ║                                                           ║
-║ Acceptance Criteria (Gherkin):                            ║
-║ └── Valid format:   18/18 ✅                              ║
+║ Critères d'acceptation (Gherkin) :                        ║
+║ └── Format valide :  18/18 ✅                              ║
 ║                                                           ║
-║ WARNINGS:                                                 ║
-║ • US-007: 13 points - consider splitting                  ║
-║ • US-012: 21 points - must be split                       ║
+║ AVERTISSEMENTS :                                          ║
+║ • US-007 : 13 points - envisager un découpage             ║
+║ • US-012 : 21 points - doit être découpée                 ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 7: Phase Completion
+### Étape 7 : Fin de phase
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║             PLANNING PHASE COMPLETE                       ║
+║             PHASE DE PLANIFICATION TERMINÉE               ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Artifacts Created:                                        ║
-║ ✅ prd.md              Product Requirements Document      ║
-║ ✅ personas.md         3 user personas                    ║
-║ ✅ backlog/            Complete SCRUM backlog             ║
-║    ├── epics/          4 EPICs                            ║
+║ Artefacts créés :                                        ║
+║ ✅ prd.md              Document d'Exigences Produit       ║
+║ ✅ personas.md         3 personas utilisateurs            ║
+║ ✅ backlog/            Backlog SCRUM complet               ║
+║    ├── epics/          4 EPIC                             ║
 ║    └── user-stories/   18 User Stories                    ║
 ║                                                           ║
-║ Summary:                                                  ║
-║ • Total Story Points: 89                                  ║
-║ • Sprint 1 Scope: 21 points (Walking Skeleton)            ║
-║ • Estimated Sprints: 4-5                                  ║
+║ Résumé :                                                  ║
+║ • Story Points totaux : 89                                ║
+║ • Périmètre Sprint 1 : 21 points (Walking Skeleton)      ║
+║ • Sprints estimés : 4-5                                   ║
 ║                                                           ║
 ║ ─────────────────────────────────────────────────────────║
-║ NEXT PHASE: Design (Solutioning)                          ║
-║ Command: /workflow:design                                 ║
+║ PHASE SUIVANTE : Conception (Solutioning)                 ║
+║ Commande : /workflow:design                               ║
 ║ ─────────────────────────────────────────────────────────║
 ║                                                           ║
-║ The tech spec will be based on PRD requirements.          ║
+║ La spécification technique sera basée sur les exigences   ║
+║ du PRD.                                                   ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-## Agents Involved
+## Agents impliqués
 
-- **product-owner**: PRD creation, persona definition, prioritization
-- **tech-lead**: Technical feasibility review, estimation guidance
+- **product-owner** : Création du PRD, définition des personas, priorisation
+- **tech-lead** : Revue de faisabilité technique, guidance d'estimation
 
-## Output Files
+## Fichiers de sortie
 
-| File | Purpose |
-|------|---------|
-| `prd.md` | Product Requirements Document |
-| `personas.md` | User persona definitions |
-| `backlog/epics/` | EPIC definitions |
-| `backlog/user-stories/` | User Story files |
-| `sprints/sprint-001/` | First sprint structure |
+| Fichier | Objectif |
+|---------|----------|
+| `prd.md` | Document d'Exigences Produit |
+| `personas.md` | Définitions des personas utilisateurs |
+| `backlog/epics/` | Définitions des EPIC |
+| `backlog/user-stories/` | Fichiers User Story |
+| `sprints/sprint-001/` | Structure du premier sprint |
 
-## Continue Option
+## Option de reprise
 
-If interrupted, use `--continue` to resume:
+Si interrompu, utiliser `--continue` pour reprendre :
 
 ```bash
 /workflow:plan --continue
 
-# Detects:
-# ✅ PRD complete
-# ⏳ Backlog in progress (12/18 stories)
-# → Continues from story 13
+# Détecte :
+# ✅ PRD terminé
+# ⏳ Backlog en cours (12/18 stories)
+# → Reprend à la story 13
 ```
 
-## Related Commands
+## Commandes associées
 
-- `/workflow:init` - Initialize workflow
-- `/workflow:analyze` - Previous phase (Enterprise)
-- `/workflow:design` - Next phase
-- `/workflow:status` - Check progress
-- `/project:generate-prd` - Direct PRD generation
-- `/project:generate-backlog` - Direct backlog generation
+- `/workflow:init` - Initialiser le workflow
+- `/workflow:analyze` - Phase précédente (Enterprise)
+- `/workflow:design` - Phase suivante
+- `/workflow:status` - Vérifier la progression
+- `/project:generate-prd` - Génération directe du PRD
+- `/project:generate-backlog` - Génération directe du backlog

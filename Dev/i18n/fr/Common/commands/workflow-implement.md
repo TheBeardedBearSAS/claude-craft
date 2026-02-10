@@ -1,9 +1,9 @@
 ---
 name: workflow-implement
-description: Execute the Implementation phase - sprint development with TDD/BDD
+description: "Exécuter la phase d'Implémentation - développement sprint avec TDD/BDD"
 arguments:
   - name: sprint
-    description: Specific sprint number to work on
+    description: Numéro de sprint spécifique sur lequel travailler
     required: false
 ---
 
@@ -11,231 +11,233 @@ arguments:
 
 ## Mission
 
-Execute the Implementation phase of the development workflow. This phase focuses on sprint-by-sprint development using TDD/BDD practices, following the technical design established in previous phases.
+Exécuter la phase d'Implémentation du workflow de développement. Cette phase se concentre sur le développement sprint par sprint en utilisant les pratiques TDD/BDD, en suivant la conception technique établie dans les phases précédentes.
 
-## When to Use
+## Quand utiliser
 
-- After `/workflow:design` is complete (Standard/Enterprise tracks)
-- After `/workflow:init` for Quick Flow track
-- When ready to start coding
+- Après la complétion de `/workflow:design` (tracks Standard/Enterprise)
+- Après `/workflow:init` pour le track Quick Flow
+- Quand on est prêt à coder
 
-## Prerequisites
+## Prérequis
 
-For Standard/Enterprise tracks:
-- Tech Spec exists at `project-management/tech-spec.md`
-- Backlog exists at `project-management/backlog/`
-- Sprint structure defined in `project-management/sprints/`
+Pour les tracks Standard/Enterprise :
+- La Spécification Technique existe dans `project-management/tech-spec.md`
+- Le backlog existe dans `project-management/backlog/`
+- La structure de sprint est définie dans `project-management/sprints/`
 
-For Quick Flow:
-- Clear understanding of the bug/feature to implement
+Pour le Quick Flow :
+- Compréhension claire du bug/fonctionnalité à implémenter
 
 ## Workflow
 
-### Step 1: Implementation Setup
+### Étape 1 : Mise en place de l'implémentation
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║           IMPLEMENTATION PHASE - STARTING                 ║
+║           PHASE D'IMPLÉMENTATION - DÉMARRAGE              ║
 ╠══════════════════════════════════════════════════════════╣
 ║ Track: Standard                                           ║
-║ Phase: 4 of 4 - Implementation                            ║
+║ Phase: 4 sur 4 - Implémentation                          ║
 ║                                                           ║
-║ Objectives:                                               ║
-║ • Execute sprint development with TDD/BDD                 ║
-║ • Implement user stories following tech spec              ║
-║ • Maintain code quality and test coverage                 ║
-║ • Complete Definition of Done for each story              ║
+║ Objectifs :                                               ║
+║ • Exécuter le développement sprint avec TDD/BDD           ║
+║ • Implémenter les user stories selon la spécification     ║
+║ • Maintenir la qualité du code et la couverture de tests  ║
+║ • Valider la Definition of Done pour chaque story         ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 2: Sprint Selection
+### Étape 2 : Sélection du sprint
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║               SPRINT OVERVIEW                             ║
+║               APERÇU DES SPRINTS                          ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Available Sprints:                                        ║
+║ Sprints disponibles :                                     ║
 ║                                                           ║
 ║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ Sprint 1: Walking Skeleton                           │  ║
-║ │ Status: Ready to start                               │  ║
-║ │ Stories: 5 | Points: 21                              │  ║
-║ │ Focus: Infrastructure + first end-to-end feature     │  ║
+║ │ Sprint 1 : Walking Skeleton                         │  ║
+║ │ Statut : Prêt à démarrer                            │  ║
+║ │ Stories : 5 | Points : 21                           │  ║
+║ │ Focus : Infrastructure + première fonctionnalité    │  ║
+║ │ bout en bout                                        │  ║
 ║ └─────────────────────────────────────────────────────┘  ║
 ║                                                           ║
 ║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ Sprint 2: Core Features                              │  ║
-║ │ Status: Planned                                      │  ║
-║ │ Stories: 6 | Points: 28                              │  ║
-║ │ Focus: User management, authentication               │  ║
+║ │ Sprint 2 : Fonctionnalités principales              │  ║
+║ │ Statut : Planifié                                   │  ║
+║ │ Stories : 6 | Points : 28                           │  ║
+║ │ Focus : Gestion utilisateurs, authentification      │  ║
 ║ └─────────────────────────────────────────────────────┘  ║
 ║                                                           ║
 ║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ Sprint 3: Payment Integration                        │  ║
-║ │ Status: Planned                                      │  ║
-║ │ Stories: 4 | Points: 24                              │  ║
-║ │ Focus: Stripe integration, checkout flow             │  ║
+║ │ Sprint 3 : Intégration paiement                     │  ║
+║ │ Statut : Planifié                                   │  ║
+║ │ Stories : 4 | Points : 24                           │  ║
+║ │ Focus : Intégration Stripe, parcours de paiement    │  ║
 ║ └─────────────────────────────────────────────────────┘  ║
 ║                                                           ║
-║ Select sprint to work on (default: Sprint 1)              ║
+║ Sélectionner le sprint à travailler (défaut : Sprint 1)  ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 3: Redirect to Sprint Development
+### Étape 3 : Redirection vers le développement sprint
 
-For full sprint execution, this command redirects to the specialized sprint-dev command:
+Pour l'exécution complète du sprint, cette commande redirige vers la commande spécialisée sprint-dev :
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║           STARTING SPRINT DEVELOPMENT                     ║
+║           DÉMARRAGE DU DÉVELOPPEMENT SPRINT               ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Invoking: /project:sprint-dev sprint-001-walking-skeleton ║
+║ Invocation : /project:sprint-dev sprint-001-walking-skeleton║
 ║                                                           ║
-║ Sprint Development Mode Features:                         ║
-║ • Mandatory plan mode before each task                    ║
-║ • TDD cycle: RED → GREEN → REFACTOR                       ║
-║ • Automatic status updates                                ║
-║ • Conventional commits with story references              ║
-║ • Definition of Done validation                           ║
+║ Fonctionnalités du mode développement sprint :            ║
+║ • Mode plan obligatoire avant chaque tâche                ║
+║ • Cycle TDD : RED → GREEN → REFACTOR                      ║
+║ • Mises à jour automatiques du statut                     ║
+║ • Commits conventionnels avec références aux stories      ║
+║ • Validation de la Definition of Done                     ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 4: Implementation Guidance
+### Étape 4 : Guide d'implémentation
 
-Provide context from design phase:
+Fournir le contexte depuis la phase de conception :
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║           IMPLEMENTATION CONTEXT                          ║
+║           CONTEXTE D'IMPLÉMENTATION                       ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ From Tech Spec:                                           ║
-║ ├── Architecture: Clean Architecture (Hexagonal)          ║
-║ ├── API Style: REST with JSON:API                         ║
-║ ├── Auth: JWT with refresh tokens                         ║
-║ ├── Database: PostgreSQL with Doctrine ORM                ║
-║ └── Testing: PHPUnit + Jest + Playwright                  ║
+║ Depuis la Spécification Technique :                       ║
+║ ├── Architecture : Clean Architecture (Hexagonal)         ║
+║ ├── Style d'API : REST avec JSON:API                      ║
+║ ├── Auth : JWT avec refresh tokens                        ║
+║ ├── Base de données : PostgreSQL avec Doctrine ORM        ║
+║ └── Tests : PHPUnit + Jest + Playwright                   ║
 ║                                                           ║
-║ Relevant ADRs:                                            ║
-║ ├── ADR-001: Database choice (PostgreSQL)                 ║
-║ ├── ADR-002: API style (REST)                             ║
-║ └── ADR-003: Authentication (JWT)                         ║
+║ ADR pertinents :                                          ║
+║ ├── ADR-001 : Choix de base de données (PostgreSQL)       ║
+║ ├── ADR-002 : Style d'API (REST)                          ║
+║ └── ADR-003 : Authentification (JWT)                      ║
 ║                                                           ║
-║ Code Standards:                                           ║
-║ ├── Follow existing patterns in codebase                  ║
-║ ├── Test coverage target: 80%                             ║
-║ └── Use technology-specific rules:                        ║
+║ Standards de code :                                       ║
+║ ├── Suivre les patterns existants dans le codebase        ║
+║ ├── Objectif de couverture de tests : 80%                 ║
+║ └── Utiliser les rules spécifiques à la technologie :     ║
 ║     /symfony:*, /react:*, etc.                            ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 5: Quick Flow Mode
+### Étape 5 : Mode Quick Flow
 
-For Quick Flow track (bug fixes, small features):
+Pour le track Quick Flow (corrections de bugs, petites fonctionnalités) :
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║           QUICK FLOW - DIRECT IMPLEMENTATION              ║
+║           QUICK FLOW - IMPLÉMENTATION DIRECTE             ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ No sprint structure needed for Quick Flow.                ║
+║ Pas de structure de sprint nécessaire pour Quick Flow.    ║
 ║                                                           ║
-║ Available Commands:                                       ║
+║ Commandes disponibles :                                   ║
 ║                                                           ║
-║ For Bug Fixes:                                            ║
-║ • /common:fix-bug-tdd        - Fix with TDD approach      ║
+║ Pour les corrections de bugs :                            ║
+║ • /common:fix-bug-tdd        - Corriger avec TDD          ║
 ║                                                           ║
-║ For Small Features:                                       ║
-║ • /{tech}:* commands         - Technology-specific        ║
+║ Pour les petites fonctionnalités :                        ║
+║ • /{tech}:* commandes        - Spécifiques à la techno    ║
 ║                                                           ║
-║ Tracking:                                                 ║
-║ • /project:add-task          - Track as task              ║
-║ • /project:move-task done    - Mark complete              ║
+║ Suivi :                                                   ║
+║ • /project:add-task          - Suivre comme tâche         ║
+║ • /project:move-task done    - Marquer comme terminé      ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 6: Sprint Completion
+### Étape 6 : Fin de sprint
 
-After sprint completion:
+Après la complétion du sprint :
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║           SPRINT COMPLETE                                 ║
+║           SPRINT TERMINÉ                                  ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Sprint 1: Walking Skeleton                                ║
-║ Status: ✅ Complete                                       ║
+║ Sprint 1 : Walking Skeleton                               ║
+║ Statut : ✅ Terminé                                       ║
 ║                                                           ║
-║ Metrics:                                                  ║
-║ ├── Stories completed: 5/5                                ║
-║ ├── Points delivered: 21                                  ║
-║ ├── Velocity: 21 pts/sprint                               ║
-║ ├── Test coverage: 82%                                    ║
-║ └── Commits: 23                                           ║
+║ Métriques :                                               ║
+║ ├── Stories complétées : 5/5                              ║
+║ ├── Points livrés : 21                                    ║
+║ ├── Vélocité : 21 pts/sprint                              ║
+║ ├── Couverture de tests : 82%                             ║
+║ └── Commits : 23                                          ║
 ║                                                           ║
-║ Artifacts:                                                ║
-║ ├── sprint-review.md generated                            ║
-║ └── sprint-retro.md template ready                        ║
+║ Artefacts :                                               ║
+║ ├── sprint-review.md généré                               ║
+║ └── sprint-retro.md template prêt                         ║
 ║                                                           ║
 ║ ─────────────────────────────────────────────────────────║
-║ NEXT ACTIONS:                                             ║
+║ PROCHAINES ACTIONS :                                      ║
 ║ ─────────────────────────────────────────────────────────║
 ║                                                           ║
-║ 1. /common:sprint-review     - Conduct sprint review      ║
-║ 2. /common:sprint-retro      - Run retrospective          ║
-║ 3. /workflow:implement 2     - Start Sprint 2             ║
+║ 1. /common:sprint-review     - Conduire la revue sprint   ║
+║ 2. /common:sprint-retro      - Lancer la rétrospective    ║
+║ 3. /workflow:implement 2     - Démarrer le Sprint 2       ║
 ║                                                           ║
-║ Or check overall progress: /workflow:status               ║
+║ Ou vérifier la progression : /workflow:status             ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 7: Workflow Completion
+### Étape 7 : Fin du workflow
 
-When all sprints are done:
+Quand tous les sprints sont terminés :
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║           IMPLEMENTATION PHASE COMPLETE                   ║
+║           PHASE D'IMPLÉMENTATION TERMINÉE                 ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ All planned sprints completed!                            ║
+║ Tous les sprints planifiés sont terminés !                ║
 ║                                                           ║
-║ Project Summary:                                          ║
-║ ├── Total Sprints: 4                                      ║
-║ ├── Total Stories: 18                                     ║
-║ ├── Total Points: 89                                      ║
-║ ├── Average Velocity: 22 pts/sprint                       ║
-║ ├── Test Coverage: 84%                                    ║
-║ └── Total Commits: 87                                     ║
+║ Résumé du projet :                                        ║
+║ ├── Sprints totaux : 4                                    ║
+║ ├── Stories totales : 18                                  ║
+║ ├── Points totaux : 89                                    ║
+║ ├── Vélocité moyenne : 22 pts/sprint                      ║
+║ ├── Couverture de tests : 84%                             ║
+║ └── Commits totaux : 87                                   ║
 ║                                                           ║
-║ Next Steps:                                               ║
-║ • /common:release-checklist  - Prepare for release        ║
-║ • /common:generate-changelog - Generate release notes     ║
-║ • Deploy to staging/production                            ║
+║ Prochaines étapes :                                       ║
+║ • /common:release-checklist  - Préparer la release        ║
+║ • /common:generate-changelog - Générer les notes de       ║
+║   release                                                 ║
+║ • Déployer en staging/production                          ║
 ║                                                           ║
 ║ ═══════════════════════════════════════════════════════  ║
-║           🎉 PROJECT WORKFLOW COMPLETE! 🎉                ║
+║           WORKFLOW DU PROJET TERMINÉ !                    ║
 ║ ═══════════════════════════════════════════════════════  ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-## Agents Involved
+## Agents impliqués
 
-- **tech-lead**: Task decomposition, architecture guidance
-- **tdd-coach**: TDD/BDD methodology guidance
-- **{tech}-reviewer**: Code review (Symfony, Flutter, React, Python, ReactNative)
-- **devops-engineer**: CI/CD and deployment
+- **tech-lead** : Décomposition des tâches, guidance architecturale
+- **tdd-coach** : Guidance méthodologique TDD/BDD
+- **{tech}-reviewer** : Revue de code (Symfony, Flutter, React, Python, ReactNative)
+- **devops-engineer** : CI/CD et déploiement
 
-## Related Commands
+## Commandes associées
 
-- `/workflow:design` - Previous phase
-- `/workflow:status` - Check progress
-- `/project:sprint-dev` - Full sprint development mode
-- `/common:fix-bug-tdd` - Quick bug fixes
-- `/common:sprint-review` - Sprint review ceremony
-- `/common:sprint-retro` - Sprint retrospective
+- `/workflow:design` - Phase précédente
+- `/workflow:status` - Vérifier la progression
+- `/project:sprint-dev` - Mode complet de développement sprint
+- `/common:fix-bug-tdd` - Corrections rapides de bugs
+- `/common:sprint-review` - Cérémonie de revue de sprint
+- `/common:sprint-retro` - Rétrospective de sprint

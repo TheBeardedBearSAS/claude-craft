@@ -1,224 +1,227 @@
 ---
 name: workflow-plan
-description: Execute the Planning phase - PRD creation, personas, and backlog generation
+description: Ejecutar la fase de Planificacion - creacion del PRD, personas y generacion del backlog
 arguments:
   - name: continue
-    description: Continue from where left off
+    description: Continuar desde donde se dejo
     required: false
 ---
 
 # /workflow:plan
 
-## Mission
+## Mision
 
-Execute the Planning phase of the development workflow. This phase focuses on creating the Product Requirements Document, defining personas, and generating the initial product backlog.
+Ejecutar la fase de Planificacion del flujo de trabajo de desarrollo. Esta fase se centra en crear el Documento de Requisitos del Producto, definir personas y generar el backlog inicial del producto.
 
-## When to Use
+## Cuando usar
 
-- **Standard** and **Enterprise** tracks
-- After `/workflow:init` (or `/workflow:analyze` for Enterprise)
-- When starting feature planning
+- Flujos **Standard** y **Enterprise**
+- Despues de `/workflow:init` (o `/workflow:analyze` para Enterprise)
+- Al comenzar la planificacion de funcionalidades
 
-## Workflow
+## Flujo de trabajo
 
-### Step 1: Planning Setup
+### Paso 1: Configuracion de la planificacion
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║             PLANNING PHASE - STARTING                     ║
+║             FASE DE PLANIFICACION - INICIANDO              ║
 ╠══════════════════════════════════════════════════════════╣
 ║ Track: Standard                                           ║
-║ Phase: 2 of 4 - Planning                                  ║
+║ Fase: 2 de 4 - Planificacion                              ║
 ║                                                           ║
-║ Objectives:                                               ║
-║ • Create or update Product Requirements Document          ║
-║ • Define user personas                                    ║
-║ • Generate product backlog with prioritized user stories  ║
-║ • Set success metrics and KPIs                            ║
+║ Objetivos:                                                ║
+║ • Crear o actualizar Documento de Requisitos del Producto ║
+║ • Definir user personas                                   ║
+║ • Generar backlog del producto con user stories            ║
+║   priorizadas                                             ║
+║ • Establecer metricas de exito y KPIs                     ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 2: Check Existing Artifacts
+### Paso 2: Verificar artefactos existentes
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              EXISTING ARTIFACTS CHECK                     ║
+║              VERIFICACION DE ARTEFACTOS EXISTENTES        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Checking project-management/ ...                          ║
+║ Verificando project-management/ ...                       ║
 ║                                                           ║
 ║ PRD:                                                      ║
-║ ├── ❌ prd.md                    Not found               ║
+║ ├── ❌ prd.md                    No encontrado            ║
 ║                                                           ║
 ║ Personas:                                                 ║
-║ ├── ❌ personas.md               Not found               ║
+║ ├── ❌ personas.md               No encontrado            ║
 ║                                                           ║
 ║ Backlog:                                                  ║
-║ ├── ❌ backlog/                  Not found               ║
+║ ├── ❌ backlog/                  No encontrado            ║
 ║                                                           ║
-║ Analysis (Enterprise):                                    ║
-║ ├── ✅ analysis/constraints.md   Available               ║
-║ └── ✅ analysis/research.md      Available               ║
+║ Analisis (Enterprise):                                    ║
+║ ├── ✅ analysis/constraints.md   Disponible               ║
+║ └── ✅ analysis/research.md      Disponible               ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 3: Planning Tasks
+### Paso 3: Tareas de planificacion
 
-Execute planning tasks in order:
+Ejecutar las tareas de planificacion en orden:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║               PLANNING TASKS                              ║
+║               TAREAS DE PLANIFICACION                     ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ □ Task 1: Generate PRD                                    ║
-║   Command: /project:generate-prd                          ║
-║   Output: project-management/prd.md                       ║
+║ □ Tarea 1: Generar PRD                                    ║
+║   Comando: /project:generate-prd                          ║
+║   Salida: project-management/prd.md                       ║
 ║                                                           ║
-║ □ Task 2: Define Personas                                 ║
-║   (Included in PRD generation)                            ║
-║   Output: project-management/personas.md                  ║
+║ □ Tarea 2: Definir personas                               ║
+║   (Incluido en la generacion del PRD)                     ║
+║   Salida: project-management/personas.md                  ║
 ║                                                           ║
-║ □ Task 3: Generate Backlog                                ║
-║   Command: /project:generate-backlog                      ║
-║   Output: project-management/backlog/                     ║
+║ □ Tarea 3: Generar backlog                                ║
+║   Comando: /project:generate-backlog                      ║
+║   Salida: project-management/backlog/                     ║
 ║                                                           ║
-║ □ Task 4: Validate Backlog                                ║
-║   Command: /project:validate-backlog                      ║
-║   Ensures SCRUM compliance                                ║
+║ □ Tarea 4: Validar backlog                                ║
+║   Comando: /project:validate-backlog                      ║
+║   Asegura cumplimiento SCRUM                              ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 4: Execute PRD Generation
+### Paso 4: Ejecutar generacion del PRD
 
-Invoke the PRD generation command:
-
-```
-Starting /project:generate-prd...
-
-[PRD generation workflow runs]
-
-✅ PRD created: project-management/prd.md
-✅ Personas extracted: project-management/personas.md
-```
-
-### Step 5: Execute Backlog Generation
-
-After PRD is complete:
+Invocar el comando de generacion del PRD:
 
 ```
-Starting /project:generate-backlog...
+Iniciando /project:generate-prd...
 
-Using PRD as input:
-• 3 personas identified
-• 12 functional requirements extracted
-• 8 non-functional requirements noted
+[Flujo de generacion del PRD se ejecuta]
 
-Generating backlog structure...
+✅ PRD creado: project-management/prd.md
+✅ Personas extraidas: project-management/personas.md
+```
 
-[Backlog generation workflow runs]
+### Paso 5: Ejecutar generacion del backlog
 
-✅ Backlog created with:
+Despues de completar el PRD:
+
+```
+Iniciando /project:generate-backlog...
+
+Usando PRD como entrada:
+• 3 personas identificadas
+• 12 requisitos funcionales extraidos
+• 8 requisitos no funcionales registrados
+
+Generando estructura del backlog...
+
+[Flujo de generacion del backlog se ejecuta]
+
+✅ Backlog creado con:
    • 4 EPICs
    • 18 User Stories
-   • Sprint 1 planned (Walking Skeleton)
+   • Sprint 1 planificado (Walking Skeleton)
 ```
 
-### Step 6: Validation
+### Paso 6: Validacion
 
-Run backlog validation:
+Ejecutar validacion del backlog:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              BACKLOG VALIDATION                           ║
+║              VALIDACION DEL BACKLOG                       ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ INVEST Criteria Check:                                    ║
+║ Verificacion criterios INVEST:                            ║
 ║ ├── Independent:    18/18 ✅                              ║
 ║ ├── Negotiable:     18/18 ✅                              ║
 ║ ├── Valuable:       18/18 ✅                              ║
 ║ ├── Estimable:      18/18 ✅                              ║
-║ ├── Sized (≤8pts):  16/18 ⚠️  (2 stories need split)     ║
+║ ├── Sized (≤8pts):  16/18 ⚠️  (2 stories necesitan       ║
+║ │                            division)                    ║
 ║ └── Testable:       18/18 ✅                              ║
 ║                                                           ║
-║ 3C Criteria Check:                                        ║
+║ Verificacion criterios 3C:                                ║
 ║ ├── Card:           18/18 ✅                              ║
 ║ ├── Conversation:   18/18 ✅                              ║
 ║ └── Confirmation:   18/18 ✅                              ║
 ║                                                           ║
-║ Acceptance Criteria (Gherkin):                            ║
-║ └── Valid format:   18/18 ✅                              ║
+║ Criterios de aceptacion (Gherkin):                        ║
+║ └── Formato valido:   18/18 ✅                            ║
 ║                                                           ║
-║ WARNINGS:                                                 ║
-║ • US-007: 13 points - consider splitting                  ║
-║ • US-012: 21 points - must be split                       ║
+║ ADVERTENCIAS:                                             ║
+║ • US-007: 13 puntos - considerar dividir                  ║
+║ • US-012: 21 puntos - debe dividirse                      ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 7: Phase Completion
+### Paso 7: Finalizacion de la fase
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║             PLANNING PHASE COMPLETE                       ║
+║             FASE DE PLANIFICACION COMPLETADA               ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Artifacts Created:                                        ║
-║ ✅ prd.md              Product Requirements Document      ║
+║ Artefactos creados:                                       ║
+║ ✅ prd.md              Documento de Requisitos del        ║
+║                         Producto                          ║
 ║ ✅ personas.md         3 user personas                    ║
-║ ✅ backlog/            Complete SCRUM backlog             ║
+║ ✅ backlog/            Backlog SCRUM completo              ║
 ║    ├── epics/          4 EPICs                            ║
 ║    └── user-stories/   18 User Stories                    ║
 ║                                                           ║
-║ Summary:                                                  ║
+║ Resumen:                                                  ║
 ║ • Total Story Points: 89                                  ║
-║ • Sprint 1 Scope: 21 points (Walking Skeleton)            ║
-║ • Estimated Sprints: 4-5                                  ║
+║ • Alcance Sprint 1: 21 puntos (Walking Skeleton)          ║
+║ • Sprints estimados: 4-5                                  ║
 ║                                                           ║
 ║ ─────────────────────────────────────────────────────────║
-║ NEXT PHASE: Design (Solutioning)                          ║
-║ Command: /workflow:design                                 ║
+║ SIGUIENTE FASE: Diseno (Solucion)                         ║
+║ Comando: /workflow:design                                 ║
 ║ ─────────────────────────────────────────────────────────║
 ║                                                           ║
-║ The tech spec will be based on PRD requirements.          ║
+║ El tech spec se basara en los requisitos del PRD.         ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-## Agents Involved
+## Agentes involucrados
 
-- **product-owner**: PRD creation, persona definition, prioritization
-- **tech-lead**: Technical feasibility review, estimation guidance
+- **product-owner**: Creacion del PRD, definicion de personas, priorizacion
+- **tech-lead**: Revision de viabilidad tecnica, guia de estimacion
 
-## Output Files
+## Archivos de salida
 
-| File | Purpose |
-|------|---------|
-| `prd.md` | Product Requirements Document |
-| `personas.md` | User persona definitions |
-| `backlog/epics/` | EPIC definitions |
-| `backlog/user-stories/` | User Story files |
-| `sprints/sprint-001/` | First sprint structure |
+| Archivo | Proposito |
+|---------|-----------|
+| `prd.md` | Documento de Requisitos del Producto |
+| `personas.md` | Definiciones de user personas |
+| `backlog/epics/` | Definiciones de EPICs |
+| `backlog/user-stories/` | Archivos de User Stories |
+| `sprints/sprint-001/` | Estructura del primer sprint |
 
-## Continue Option
+## Opcion de continuacion
 
-If interrupted, use `--continue` to resume:
+Si se interrumpe, usar `--continue` para reanudar:
 
 ```bash
 /workflow:plan --continue
 
-# Detects:
-# ✅ PRD complete
-# ⏳ Backlog in progress (12/18 stories)
-# → Continues from story 13
+# Detecta:
+# ✅ PRD completado
+# ⏳ Backlog en progreso (12/18 stories)
+# → Continua desde la story 13
 ```
 
-## Related Commands
+## Comandos relacionados
 
-- `/workflow:init` - Initialize workflow
-- `/workflow:analyze` - Previous phase (Enterprise)
-- `/workflow:design` - Next phase
-- `/workflow:status` - Check progress
-- `/project:generate-prd` - Direct PRD generation
-- `/project:generate-backlog` - Direct backlog generation
+- `/workflow:init` - Inicializar flujo de trabajo
+- `/workflow:analyze` - Fase anterior (Enterprise)
+- `/workflow:design` - Siguiente fase
+- `/workflow:status` - Verificar progreso
+- `/project:generate-prd` - Generacion directa del PRD
+- `/project:generate-backlog` - Generacion directa del backlog

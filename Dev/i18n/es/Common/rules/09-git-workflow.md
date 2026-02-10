@@ -1,19 +1,19 @@
 # Git Workflow
 
-## Vue d'ensemble
+## Vision general
 
-Le workflow Git est basé sur **GitHub Flow** avec des **Conventional Commits** obligatoires.
+El workflow Git esta basado en **GitHub Flow** con **Conventional Commits** obligatorios.
 
-**Principes:**
-- ✅ Branche `main` toujours déployable
-- ✅ Feature branches courtes (< 3 jours)
-- ✅ Pull Requests obligatoires
-- ✅ Code review avant merge
-- ✅ CI doit passer (tests + qualité)
+**Principios:**
+- ✅ Rama `main` siempre desplegable
+- ✅ Feature branches cortas (< 3 dias)
+- ✅ Pull Requests obligatorios
+- ✅ Code review antes del merge
+- ✅ CI debe pasar (tests + calidad)
 
 ---
 
-## Table des matières
+## Tabla de contenidos
 
 1. [GitHub Flow](#github-flow)
 2. [Conventional Commits](#conventional-commits)
@@ -42,20 +42,20 @@ main (production-ready)
   └─> main (updated)
 ```
 
-### Règles
+### Reglas
 
-1. **`main` est toujours déployable**
-2. **Nouvelle fonctionnalité = nouvelle branche**
-3. **Commits atomiques et testés**
-4. **PR + Review obligatoires**
-5. **CI doit passer avant merge**
-6. **Squash merge pour historique propre**
+1. **`main` siempre esta desplegable**
+2. **Nueva funcionalidad = nueva rama**
+3. **Commits atomicos y testeados**
+4. **PR + Review obligatorios**
+5. **CI debe pasar antes del merge**
+6. **Squash merge para historico limpio**
 
 ---
 
 ## Conventional Commits
 
-### Format
+### Formato
 
 ```
 <type>(<scope>): <description>
@@ -65,34 +65,34 @@ main (production-ready)
 [optional footer(s)]
 ```
 
-### Types obligatoires
+### Tipos obligatorios
 
-| Type | Description | Exemple |
+| Tipo | Descripcion | Ejemplo |
 |------|-------------|---------|
-| `feat` | Nouvelle fonctionnalité | `feat(auth): add login endpoint` |
-| `fix` | Correction de bug | `fix(cart): correct total calculation` |
-| `docs` | Documentation uniquement | `docs(readme): update installation steps` |
-| `style` | Formatage (pas de changement code) | `style: apply formatter` |
+| `feat` | Nueva funcionalidad | `feat(auth): add login endpoint` |
+| `fix` | Correccion de bug | `fix(cart): correct total calculation` |
+| `docs` | Solo documentacion | `docs(readme): update installation steps` |
+| `style` | Formateo (sin cambio de codigo) | `style: apply formatter` |
 | `refactor` | Refactoring (ni feat ni fix) | `refactor(user): extract validation logic` |
-| `perf` | Amélioration performance | `perf(query): add index on created_at` |
-| `test` | Ajout/correction tests | `test(auth): add edge cases` |
-| `build` | Build system, deps externes | `build: upgrade framework to v2.0` |
-| `ci` | CI/CD configuration | `ci: add lint step to pipeline` |
-| `chore` | Autres (pas de code prod) | `chore: update .gitignore` |
+| `perf` | Mejora de rendimiento | `perf(query): add index on created_at` |
+| `test` | Agregar/corregir tests | `test(auth): add edge cases` |
+| `build` | Build system, deps externas | `build: upgrade framework to v2.0` |
+| `ci` | Configuracion CI/CD | `ci: add lint step to pipeline` |
+| `chore` | Otros (sin codigo prod) | `chore: update .gitignore` |
 
-### Scopes recommandés
+### Scopes recomendados
 
-Utilisez les bounded contexts ou modules de votre projet:
-- `auth` - Authentification
-- `user` - Gestion utilisateurs
-- `order` - Commandes
-- `payment` - Paiements
-- `notification` - Notifications
-- `infra` - Infrastructure
+Utiliza los bounded contexts o modulos de tu proyecto:
+- `auth` - Autenticacion
+- `user` - Gestion de usuarios
+- `order` - Pedidos
+- `payment` - Pagos
+- `notification` - Notificaciones
+- `infra` - Infraestructura
 
-### Exemples de commits
+### Ejemplos de commits
 
-#### ✅ BON
+#### ✅ BUENO
 
 ```bash
 # Feature
@@ -132,26 +132,26 @@ following Strategy pattern:
 - BankTransferGateway"
 ```
 
-#### ❌ MAUVAIS
+#### ❌ MALO
 
 ```bash
-# ❌ Trop vague
+# ❌ Demasiado vago
 git commit -m "fix bug"
 
-# ❌ Pas de type
+# ❌ Sin tipo
 git commit -m "add new feature"
 
-# ❌ Pas de scope
+# ❌ Sin scope
 git commit -m "feat: stuff"
 
-# ❌ Trop long (> 72 chars)
+# ❌ Demasiado largo (> 72 chars)
 git commit -m "feat(user): implement the complete user management system with registration, login, password reset and email notifications"
 
-# ❌ Plusieurs changements non liés
+# ❌ Varios cambios no relacionados
 git commit -m "feat: add login + fix email + update docs"
 ```
 
-### Outils de validation
+### Herramientas de validacion
 
 #### Commitlint
 
@@ -181,23 +181,23 @@ npx --no-install commitlint --edit "$1"
 
 ## Branches
 
-### Nomenclature
+### Nomenclatura
 
 ```
-<type>/<description-courte>
+<type>/<description-corta>
 ```
 
-**Types:**
-- `feature/` - Nouvelle fonctionnalité
-- `fix/` - Correction de bug
+**Tipos:**
+- `feature/` - Nueva funcionalidad
+- `fix/` - Correccion de bug
 - `refactor/` - Refactoring
-- `docs/` - Documentation
-- `chore/` - Maintenance
+- `docs/` - Documentacion
+- `chore/` - Mantenimiento
 
-### Exemples
+### Ejemplos
 
 ```bash
-# ✅ BON
+# ✅ BUENO
 feature/add-user-registration
 feature/payment-integration
 fix/login-validation-error
@@ -205,36 +205,36 @@ refactor/extract-auth-service
 docs/update-api-documentation
 chore/upgrade-dependencies
 
-# ❌ MAUVAIS
+# ❌ MALO
 dev-branch
 my-work
 bug-fix
 feature123
 ```
 
-### Création de branche
+### Creacion de rama
 
 ```bash
-# Toujours partir de main à jour
+# Siempre partir de main actualizado
 git checkout main
 git pull origin main
 
-# Créer la feature branch
+# Crear la feature branch
 git checkout -b feature/add-user-registration
 
-# Travailler sur la feature
+# Trabajar en la feature
 # ... commits ...
 
-# Push de la branche
+# Push de la rama
 git push -u origin feature/add-user-registration
 ```
 
-### Durée de vie
+### Duracion de vida
 
-- ⏱️ **Maximum 3 jours** de développement
-- Si > 3 jours → **découper** en plusieurs PRs
-- Merge dès que fonctionnel (même si incomplet)
-- Utiliser **feature flags** si nécessaire
+- Maximo 3 dias de desarrollo
+- Si > 3 dias -> dividir en varias PRs
+- Merge en cuanto sea funcional (aunque este incompleto)
+- Usar feature flags si es necesario
 
 ---
 
@@ -243,231 +243,231 @@ git push -u origin feature/add-user-registration
 ### Template PR
 
 ```markdown
-## Description
+## Descripcion
 
-<!-- Décrivez les changements de cette PR -->
+<!-- Describe los cambios de esta PR -->
 
-Closes #[numéro_issue]
+Closes #[numero_issue]
 
-## Type de changement
+## Tipo de cambio
 
-- [ ] 🚀 Nouvelle fonctionnalité (feat)
-- [ ] 🐛 Correction de bug (fix)
-- [ ] 📝 Documentation (docs)
-- [ ] ♻️ Refactoring (refactor)
-- [ ] ⚡ Performance (perf)
-- [ ] ✅ Tests (test)
+- [ ] Nueva funcionalidad (feat)
+- [ ] Correccion de bug (fix)
+- [ ] Documentacion (docs)
+- [ ] Refactoring (refactor)
+- [ ] Rendimiento (perf)
+- [ ] Tests (test)
 
 ## Checklist
 
-### Code
+### Codigo
 
-- [ ] Le code suit les standards du projet
-- [ ] J'ai effectué une auto-review de mon code
-- [ ] J'ai commenté les parties complexes
-- [ ] Linter passe sans erreur
-- [ ] Formatter appliqué
+- [ ] El codigo sigue los estandares del proyecto
+- [ ] He realizado una auto-review de mi codigo
+- [ ] He comentado las partes complejas
+- [ ] Linter pasa sin errores
+- [ ] Formatter aplicado
 
 ### Tests
 
-- [ ] Tests unitaires ajoutés/mis à jour
-- [ ] Tests d'intégration si nécessaire
-- [ ] Couverture de code ≥ 80%
-- [ ] Tous les tests passent
+- [ ] Tests unitarios agregados/actualizados
+- [ ] Tests de integracion si es necesario
+- [ ] Cobertura de codigo >= 80%
+- [ ] Todos los tests pasan
 
-### Documentation
+### Documentacion
 
-- [ ] README mis à jour si nécessaire
-- [ ] Documentation API à jour
-- [ ] CHANGELOG.md mis à jour
+- [ ] README actualizado si es necesario
+- [ ] Documentacion API al dia
+- [ ] CHANGELOG.md actualizado
 
-### Architecture
+### Arquitectura
 
-- [ ] Principes SOLID appliqués
-- [ ] DRY respecté (pas de duplication)
-- [ ] YAGNI respecté (pas de code inutile)
+- [ ] Principios SOLID aplicados
+- [ ] DRY respetado (sin duplicacion)
+- [ ] YAGNI respetado (sin codigo innecesario)
 
-### Sécurité
+### Seguridad
 
-- [ ] Pas de données sensibles en clair
-- [ ] Validation des inputs
-- [ ] Pas de secrets dans le code
+- [ ] Sin datos sensibles en claro
+- [ ] Validacion de inputs
+- [ ] Sin secretos en el codigo
 
 ## Screenshots
 
-<!-- Si changement UI, ajouter des screenshots -->
+<!-- Si hay cambio UI, agregar screenshots -->
 
-## Notes pour les reviewers
+## Notas para los reviewers
 
-<!-- Indiquer les points à vérifier particulièrement -->
+<!-- Indicar los puntos a verificar particularmente -->
 ```
 
 ### Labels
 
-| Label | Utilisation |
-|-------|-------------|
-| `enhancement` | Nouvelle fonctionnalité |
-| `bug` | Correction de bug |
-| `documentation` | Documentation uniquement |
+| Label | Uso |
+|-------|-----|
+| `enhancement` | Nueva funcionalidad |
+| `bug` | Correccion de bug |
+| `documentation` | Solo documentacion |
 | `refactoring` | Refactoring |
-| `performance` | Amélioration performance |
-| `security` | Sécurité |
-| `breaking-change` | Changement cassant |
-| `needs-review` | En attente de review |
+| `performance` | Mejora de rendimiento |
+| `security` | Seguridad |
+| `breaking-change` | Cambio incompatible |
+| `needs-review` | Esperando review |
 | `work-in-progress` | WIP |
-| `ready-to-merge` | Prêt pour merge |
+| `ready-to-merge` | Listo para merge |
 
 ---
 
 ## Code Review
 
-### Checklist Reviewer
+### Checklist del Reviewer
 
-#### Architecture
-- [ ] Principes SOLID respectés
-- [ ] Couches bien séparées
-- [ ] Pas de dépendances inversées
+#### Arquitectura
+- [ ] Principios SOLID respetados
+- [ ] Capas bien separadas
+- [ ] Sin dependencias invertidas
 
-#### Code Quality
-- [ ] KISS / DRY / YAGNI appliqués
-- [ ] Nommage explicite
-- [ ] Pas de duplication de code
-- [ ] Complexité acceptable (< 10)
-- [ ] Méthodes courtes (< 20 lignes)
+#### Calidad del Codigo
+- [ ] KISS / DRY / YAGNI aplicados
+- [ ] Nombrado explicito
+- [ ] Sin duplicacion de codigo
+- [ ] Complejidad aceptable (< 10)
+- [ ] Metodos cortos (< 20 lineas)
 
 #### Tests
-- [ ] Tests pour la logique métier
-- [ ] Couverture ≥ 80%
-- [ ] Tous les tests passent
-- [ ] Pas de tests commentés
+- [ ] Tests para la logica de negocio
+- [ ] Cobertura >= 80%
+- [ ] Todos los tests pasan
+- [ ] Sin tests comentados
 
-#### Sécurité
-- [ ] Pas de secrets en dur
-- [ ] Validation des inputs
-- [ ] Protection XSS/CSRF
+#### Seguridad
+- [ ] Sin secretos hardcodeados
+- [ ] Validacion de inputs
+- [ ] Proteccion XSS/CSRF
 
-#### Performance
-- [ ] Pas de N+1 queries
-- [ ] Indexes appropriés
-- [ ] Pagination si nécessaire
+#### Rendimiento
+- [ ] Sin N+1 queries
+- [ ] Indices apropiados
+- [ ] Paginacion si es necesario
 
-### Process de review
+### Proceso de review
 
-1. **Auto-review** (auteur)
-   - Relire son propre code
-   - Vérifier la checklist PR
-   - Tester manuellement
+1. **Auto-review** (autor)
+   - Releer su propio codigo
+   - Verificar la checklist PR
+   - Probar manualmente
 
-2. **Première passe** (reviewer)
-   - Architecture globale
-   - Logique métier
+2. **Primera pasada** (reviewer)
+   - Arquitectura global
+   - Logica de negocio
    - Tests
 
-3. **Deuxième passe** (reviewer)
-   - Détails d'implémentation
-   - Nommage
-   - Optimisations
+3. **Segunda pasada** (reviewer)
+   - Detalles de implementacion
+   - Nombrado
+   - Optimizaciones
 
-4. **Commentaires**
-   - Constructifs et bienveillants
-   - Suggérer des solutions
-   - Expliquer le "pourquoi"
+4. **Comentarios**
+   - Constructivos y amables
+   - Sugerir soluciones
+   - Explicar el "por que"
 
-5. **Approbation**
-   - ✅ Approve → Prêt pour merge
-   - 💬 Comment → Suggestions non bloquantes
-   - 🔴 Request changes → Corrections nécessaires
+5. **Aprobacion**
+   - ✅ Approve -> Listo para merge
+   - Comment -> Sugerencias no bloqueantes
+   - Request changes -> Correcciones necesarias
 
-### Exemples de commentaires
+### Ejemplos de comentarios
 
-#### ✅ BON (constructif)
+#### ✅ BUENO (constructivo)
 
 ```
-Suggestion: Cette méthode fait plusieurs choses (calcul + validation).
-Que penses-tu de la découper en deux méthodes distinctes pour respecter SRP ?
+Sugerencia: Este metodo hace varias cosas (calculo + validacion).
+Que opinas de dividirlo en dos metodos distintos para respetar SRP?
 
-Exemple:
+Ejemplo:
 - validate(data)
 - calculate(data)
 ```
 
-#### ❌ MAUVAIS (non constructif)
+#### ❌ MALO (no constructivo)
 
 ```
-Ce code est nul, il faut tout refaire.
+Este codigo es malo, hay que rehacerlo todo.
 ```
 
 ---
 
 ## Checklist PR
 
-### Avant de créer la PR
+### Antes de crear la PR
 
 ```bash
-# 1. Tests passent
+# 1. Tests pasan
 make test
 
-# 2. Couverture OK
+# 2. Cobertura OK
 make test-coverage
-# Vérifier: ≥ 80%
+# Verificar: >= 80%
 
-# 3. Qualité OK
+# 3. Calidad OK
 make quality
-# Linter: 0 erreur
-# Formatter: appliqué
+# Linter: 0 errores
+# Formatter: aplicado
 
 # 4. Self-review
 git diff main...HEAD
 ```
 
-### Pendant la review
+### Durante la review
 
 ```bash
-# Appliquer les suggestions reviewer
+# Aplicar las sugerencias del reviewer
 git add .
 git commit -m "fix: apply code review suggestions"
 git push
 
-# Rebaser si nécessaire
+# Rebasar si es necesario
 git fetch origin
 git rebase origin/main
 git push --force-with-lease
 ```
 
-### Avant le merge
+### Antes del merge
 
 ```bash
-# 1. Branch à jour
+# 1. Branch al dia
 git fetch origin
 git rebase origin/main
 
-# 2. CI passe
-# → Vérifier pipeline CI/CD
+# 2. CI pasa
+# → Verificar pipeline CI/CD
 
-# 3. Review approuvée
-# → Au moins 1 approve
+# 3. Review aprobada
+# → Al menos 1 approve
 
 # 4. Merge
-# → Squash and merge (historique propre)
+# → Squash and merge (historico limpio)
 ```
 
 ---
 
-## Workflow complet
+## Workflow completo
 
 ### Feature
 
 ```bash
-# 1. Créer branche
+# 1. Crear rama
 git checkout main
 git pull
 git checkout -b feature/add-payment-integration
 
-# 2. TDD: Test d'abord (RED)
+# 2. TDD: Test primero (RED)
 git add tests/
 git commit -m "test(payment): add integration tests"
 
-# 3. Implémentation (GREEN)
+# 3. Implementacion (GREEN)
 git add src/
 git commit -m "feat(payment): add Stripe gateway"
 
@@ -475,7 +475,7 @@ git commit -m "feat(payment): add Stripe gateway"
 git add src/
 git commit -m "refactor(payment): extract gateway interface"
 
-# 5. Documentation
+# 5. Documentacion
 git add docs/
 git commit -m "docs(payment): document payment flow"
 
@@ -483,14 +483,14 @@ git commit -m "docs(payment): document payment flow"
 git push -u origin feature/add-payment-integration
 gh pr create --fill
 
-# 7. Review + corrections
+# 7. Review + correcciones
 git add .
 git commit -m "fix: apply review suggestions"
 git push
 
 # 8. Merge via UI (Squash and merge)
 
-# 9. Cleanup
+# 9. Limpieza
 git checkout main
 git pull
 git branch -d feature/add-payment-integration
@@ -499,7 +499,7 @@ git branch -d feature/add-payment-integration
 ### Hotfix
 
 ```bash
-# 1. Créer branche depuis main
+# 1. Crear rama desde main
 git checkout main
 git pull
 git checkout -b fix/critical-auth-bug
@@ -517,9 +517,9 @@ Fixes #789"
 git push -u origin fix/critical-auth-bug
 gh pr create --fill --label "bug,urgent"
 
-# 4. Review rapide + merge
+# 4. Review rapida + merge
 
-# 5. Cleanup
+# 5. Limpieza
 git checkout main
 git pull
 git branch -d fix/critical-auth-bug
@@ -527,7 +527,7 @@ git branch -d fix/critical-auth-bug
 
 ---
 
-## Ressources
+## Recursos
 
 - **GitHub Flow:** [Guide](https://docs.github.com/en/get-started/quickstart/github-flow)
 - **Conventional Commits:** [Specification](https://www.conventionalcommits.org/)
@@ -536,6 +536,6 @@ git branch -d fix/critical-auth-bug
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
+**Fecha de ultima actualizacion:** 2025-01
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Autor:** The Bearded CTO

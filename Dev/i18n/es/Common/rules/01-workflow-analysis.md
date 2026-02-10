@@ -1,90 +1,90 @@
-# Workflow d'Analyse Obligatoire
+# Workflow de Analisis Obligatorio
 
-## Principe Fondamental
+## Principio Fundamental
 
-**AVANT toute modification de code (feature, bugfix, refactoring), une phase d'analyse approfondie est OBLIGATOIRE.**
+**ANTES de cualquier modificacion de codigo (feature, bugfix, refactoring), una fase de analisis profundo es OBLIGATORIA.**
 
-Cette règle est CRITIQUE et NON NÉGOCIABLE. Elle évite :
-- Les régressions
-- Les effets de bord inattendus
-- La dette technique
-- Les bugs en production
+Esta regla es CRITICA y NO NEGOCIABLE. Evita:
+- Las regresiones
+- Los efectos secundarios inesperados
+- La deuda tecnica
+- Los bugs en produccion
 
 ---
 
-## Processus en 4 Étapes
+## Proceso en 4 Pasos
 
-### Étape 1 : Comprendre la Demande
+### Paso 1: Comprender la Solicitud
 
-**Questions à se poser :**
-1. Quel est l'objectif précis ?
-2. Quels sont les critères d'acceptation ?
-3. Y a-t-il des contraintes (performance, sécurité, conformité) ?
-4. Quel est l'impact utilisateur ?
+**Preguntas a hacerse:**
+1. Cual es el objetivo preciso?
+2. Cuales son los criterios de aceptacion?
+3. Existen restricciones (rendimiento, seguridad, conformidad)?
+4. Cual es el impacto para el usuario?
 
-**Actions :**
-- Reformuler la demande pour validation
-- Identifier les use cases concernés
-- Vérifier l'alignement avec les objectifs business
+**Acciones:**
+- Reformular la solicitud para validacion
+- Identificar los use cases involucrados
+- Verificar la alineacion con los objetivos de negocio
 
-### Étape 2 : Analyser le Code Existant
+### Paso 2: Analizar el Codigo Existente
 
-**Fichiers à lire OBLIGATOIREMENT :**
-1. Les fichiers directement concernés par la modification
-2. Les fichiers dépendants (qui utilisent le code modifié)
-3. Les tests existants (pour comprendre le comportement attendu)
-4. Les migrations de schéma (si impact sur la base de données)
+**Archivos a leer OBLIGATORIAMENTE:**
+1. Los archivos directamente afectados por la modificacion
+2. Los archivos dependientes (que utilizan el codigo modificado)
+3. Los tests existentes (para comprender el comportamiento esperado)
+4. Las migraciones de esquema (si hay impacto en la base de datos)
 
-**Points de vigilance :**
-- Y a-t-il des tests qui vont casser ?
-- Y a-t-il d'autres modules qui dépendent de ce code ?
-- Le code respecte-t-il l'architecture du projet ?
-- Y a-t-il des données sensibles ?
+**Puntos de vigilancia:**
+- Hay tests que van a fallar?
+- Hay otros modulos que dependen de este codigo?
+- El codigo respeta la arquitectura del proyecto?
+- Hay datos sensibles?
 
-### Étape 3 : Documenter l'Analyse
+### Paso 3: Documentar el Analisis
 
-**Contenu obligatoire :**
+**Contenido obligatorio:**
 
-1. **Objectif** : Description claire de la modification
-2. **Fichiers impactés** : Liste exhaustive avec justification
-3. **Impacts** :
-   - Breaking changes : oui/non
-   - Migration DB nécessaire : oui/non
-   - Impact performance : oui/non
-   - Données sensibles : oui/non
-4. **Risques** : Liste + mitigations
-5. **Approche** : Stratégie d'implémentation (TDD, refactoring progressif, etc.)
-6. **Tests TDD** : Liste des tests à écrire AVANT implémentation
+1. **Objetivo**: Descripcion clara de la modificacion
+2. **Archivos impactados**: Lista exhaustiva con justificacion
+3. **Impactos**:
+   - Breaking changes: si/no
+   - Migracion DB necesaria: si/no
+   - Impacto en rendimiento: si/no
+   - Datos sensibles: si/no
+4. **Riesgos**: Lista + mitigaciones
+5. **Enfoque**: Estrategia de implementacion (TDD, refactoring progresivo, etc.)
+6. **Tests TDD**: Lista de tests a escribir ANTES de la implementacion
 
-**Exemple :**
+**Ejemplo:**
 
 ```markdown
-## Analyse : Ajout d'une fonctionnalité de notification
+## Analisis: Adicion de una funcionalidad de notificacion
 
-### Objectif
-Envoyer une notification email lors de la création d'une commande.
+### Objetivo
+Enviar una notificacion por email al crear un pedido.
 
-### Fichiers impactés
-- OrderService (ajout dispatch event)
-- NotificationListener (nouveau)
-- EmailService (utilisation existante)
-- Tests unitaires pour le listener
+### Archivos impactados
+- OrderService (agregar dispatch event)
+- NotificationListener (nuevo)
+- EmailService (uso existente)
+- Tests unitarios para el listener
 
-### Impacts
-- Breaking change : NON
-- Migration DB : NON
-- Performance : Faible (async recommandé)
-- Données sensibles : Email utilisateur (déjà géré)
+### Impactos
+- Breaking change: NO
+- Migracion DB: NO
+- Rendimiento: Bajo (async recomendado)
+- Datos sensibles: Email del usuario (ya gestionado)
 
-### Risques
-1. Surcharge email → Mitigation : queue async
-2. Email en spam → Mitigation : configuration DKIM/SPF
+### Riesgos
+1. Sobrecarga de emails -> Mitigacion: cola async
+2. Email en spam -> Mitigacion: configuracion DKIM/SPF
 
-### Approche
-1. TDD : écrire tests du listener
-2. Implémenter le listener
-3. Dispatcher l'event depuis OrderService
-4. Tester intégration
+### Enfoque
+1. TDD: escribir tests del listener
+2. Implementar el listener
+3. Despachar el evento desde OrderService
+4. Probar integracion
 
 ### Tests TDD
 1. test_should_send_email_on_order_created()
@@ -92,135 +92,135 @@ Envoyer une notification email lors de la création d'une commande.
 3. test_should_handle_email_failure_gracefully()
 ```
 
-### Étape 4 : Validation
+### Paso 4: Validacion
 
-**Critères de décision :**
+**Criterios de decision:**
 
-| Impact | Action |
-|--------|--------|
-| **Faible** (1 fichier, pas de breaking change, < 1h) | Procéder directement |
-| **Moyen** (2-5 fichiers, migration DB, < 4h) | Valider avec l'utilisateur |
-| **Fort** (> 5 fichiers, breaking changes, refactoring archi) | Planification détaillée + validation obligatoire |
+| Impacto | Accion |
+|---------|--------|
+| **Bajo** (1 archivo, sin breaking change, < 1h) | Proceder directamente |
+| **Medio** (2-5 archivos, migracion DB, < 4h) | Validar con el usuario |
+| **Alto** (> 5 archivos, breaking changes, refactoring arq.) | Planificacion detallada + validacion obligatoria |
 
-**Questions de validation :**
-- L'approche respecte-t-elle l'architecture du projet ?
-- Les tests TDD sont-ils suffisants ?
-- Y a-t-il une alternative plus simple (KISS) ?
-- Les risques sont-ils acceptables ?
+**Preguntas de validacion:**
+- El enfoque respeta la arquitectura del proyecto?
+- Los tests TDD son suficientes?
+- Existe una alternativa mas simple (KISS)?
+- Los riesgos son aceptables?
 
 ---
 
-## Anti-Patterns à Éviter
+## Anti-Patterns a Evitar
 
-### ❌ Coder sans lire le code existant
+### No codificar sin leer el codigo existente
 
 ```
-// MAUVAIS : modification sans comprendre l'impact
+// MALO: modificacion sin comprender el impacto
 function updateOrder(order) {
-  order.status = "confirmed"  // ⚠️ Impact sur d'autres modules ?
+  order.status = "confirmed"  // Impacto en otros modulos?
 }
 ```
 
-### ❌ Ignorer les dépendances
+### No ignorar las dependencias
 
 ```
-// MAUVAIS : modification sans vérifier qui utilise cette méthode
+// MALO: modificacion sin verificar quien usa este metodo
 function getPrice() {
-  return this.price * 0.8  // ⚠️ Qui appelle getPrice() ?
+  return this.price * 0.8  // Quien llama a getPrice()?
 }
 ```
 
-### ❌ Oublier les tests
+### No olvidar los tests
 
 ```
-// MAUVAIS : pas de vérification des tests existants
-// Si je modifie User, quels tests vont casser ?
+// MALO: sin verificacion de los tests existentes
+// Si modifico User, que tests van a fallar?
 ```
 
-### ❌ Ignorer la sécurité
+### No ignorar la seguridad
 
 ```
-// MAUVAIS : ajouter un champ sensible sans protection
+// MALO: agregar un campo sensible sin proteccion
 class User {
-  socialSecurityNumber: string  // ⚠️ Données sensibles !
+  socialSecurityNumber: string  // Datos sensibles!
 }
 ```
 
 ---
 
-## Checklist Rapide
+## Checklist Rapido
 
-Avant toute modification :
+Antes de cualquier modificacion:
 
-- [ ] J'ai lu et compris la demande
-- [ ] J'ai lu les fichiers concernés
-- [ ] J'ai identifié les dépendances
-- [ ] J'ai documenté l'analyse
-- [ ] J'ai évalué les risques
-- [ ] J'ai défini les tests TDD
-- [ ] J'ai validé l'approche (si impact moyen/fort)
-- [ ] J'ai vérifié la conformité architecture + SOLID
-- [ ] J'ai vérifié sécurité si données sensibles
+- [ ] He leido y comprendido la solicitud
+- [ ] He leido los archivos involucrados
+- [ ] He identificado las dependencias
+- [ ] He documentado el analisis
+- [ ] He evaluado los riesgos
+- [ ] He definido los tests TDD
+- [ ] He validado el enfoque (si impacto medio/alto)
+- [ ] He verificado la conformidad de arquitectura + SOLID
+- [ ] He verificado la seguridad si hay datos sensibles
 
 ---
 
-## Workflow Visuel
+## Workflow Visual
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    DEMANDE REÇUE                            │
+│                    SOLICITUD RECIBIDA                         │
 └─────────────────────────┬───────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│             ÉTAPE 1 : COMPRENDRE                            │
-│  - Objectif précis ?                                        │
-│  - Critères d'acceptation ?                                 │
-│  - Contraintes ?                                            │
+│             PASO 1: COMPRENDER                               │
+│  - Objetivo preciso?                                         │
+│  - Criterios de aceptacion?                                  │
+│  - Restricciones?                                            │
 └─────────────────────────┬───────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│             ÉTAPE 2 : ANALYSER                              │
-│  - Lire les fichiers concernés                              │
-│  - Identifier les dépendances                               │
-│  - Vérifier les tests existants                             │
+│             PASO 2: ANALIZAR                                 │
+│  - Leer los archivos involucrados                            │
+│  - Identificar las dependencias                              │
+│  - Verificar los tests existentes                            │
 └─────────────────────────┬───────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│             ÉTAPE 3 : DOCUMENTER                            │
-│  - Fichiers impactés                                        │
-│  - Risques + mitigations                                    │
-│  - Tests TDD à écrire                                       │
+│             PASO 3: DOCUMENTAR                               │
+│  - Archivos impactados                                       │
+│  - Riesgos + mitigaciones                                    │
+│  - Tests TDD a escribir                                      │
 └─────────────────────────┬───────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│             ÉTAPE 4 : VALIDER                               │
-│  - Impact faible → Procéder                                 │
-│  - Impact moyen/fort → Demander validation                  │
+│             PASO 4: VALIDAR                                  │
+│  - Impacto bajo -> Proceder                                  │
+│  - Impacto medio/alto -> Solicitar validacion                │
 └─────────────────────────┬───────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    IMPLÉMENTER                              │
-│  1. Écrire les tests (RED)                                  │
-│  2. Implémenter le code (GREEN)                             │
-│  3. Refactorer (REFACTOR)                                   │
+│                    IMPLEMENTAR                               │
+│  1. Escribir los tests (RED)                                 │
+│  2. Implementar el codigo (GREEN)                            │
+│  3. Refactorizar (REFACTOR)                                  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Templates Associés
+## Templates Asociados
 
-- `templates/analysis.md` - Template analyse détaillée
-- `checklists/new-feature.md` - Checklist nouvelle feature
+- `templates/analysis.md` - Template de analisis detallado
+- `checklists/new-feature.md` - Checklist nueva feature
 - `checklists/refactoring.md` - Checklist refactoring
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
+**Fecha de ultima actualizacion:** 2025-01
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Autor:** The Bearded CTO

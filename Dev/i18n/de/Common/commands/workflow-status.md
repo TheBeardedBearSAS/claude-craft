@@ -1,9 +1,9 @@
 ---
 name: workflow-status
-description: Display current workflow progress and next recommended actions
+description: Aktuellen Workflow-Fortschritt und empfohlene nächste Aktionen anzeigen
 arguments:
   - name: verbose
-    description: Show detailed status with all artifacts
+    description: Detaillierten Status mit allen Artefakten anzeigen
     required: false
 ---
 
@@ -11,217 +11,217 @@ arguments:
 
 ## Mission
 
-Display the current state of the development workflow, including completed phases, current progress, and recommended next actions.
+Den aktuellen Stand des Entwicklungs-Workflows anzeigen, einschließlich abgeschlossener Phasen, aktuellem Fortschritt und empfohlenen nächsten Aktionen.
 
-## Usage
+## Verwendung
 
 ```bash
-/workflow:status           # Standard status view
-/workflow:status --verbose # Detailed view with all artifacts
+/workflow:status           # Standard-Statusansicht
+/workflow:status --verbose # Detailansicht mit allen Artefakten
 ```
 
-## Output Format
+## Ausgabeformat
 
-### Standard View
+### Standardansicht
 
 ```
 ╔══════════════════════════════════════════════════════════════════╗
-║                       WORKFLOW STATUS                             ║
+║                       WORKFLOW-STATUS                             ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ Project: my-awesome-app                                           ║
+║ Projekt: my-awesome-app                                           ║
 ║ Track: STANDARD                                                   ║
-║ Started: 2026-01-07                                               ║
-║ Current Phase: Design ████████████░░░░ 75%                        ║
+║ Gestartet: 2026-01-07                                             ║
+║ Aktuelle Phase: Design ████████████░░░░ 75%                       ║
 ╠══════════════════════════════════════════════════════════════════╣
 ║                                                                   ║
-║  Phase 1: Analysis                                                ║
-║  └── ⏭️  Skipped (Standard track)                                 ║
+║  Phase 1: Analyse                                                 ║
+║  └── ⏭️  Übersprungen (Standard-Track)                             ║
 ║                                                                   ║
-║  Phase 2: Planning                                                ║
-║  └── ✅ Complete                                                  ║
-║      ├── PRD: ✅ Complete                                         ║
-║      ├── Personas: ✅ 3 defined                                   ║
-║      └── Backlog: ✅ 18 stories (89 pts)                          ║
+║  Phase 2: Planung                                                 ║
+║  └── ✅ Abgeschlossen                                             ║
+║      ├── PRD: ✅ Abgeschlossen                                    ║
+║      ├── Personas: ✅ 3 definiert                                  ║
+║      └── Backlog: ✅ 18 Stories (89 Pkt.)                          ║
 ║                                                                   ║
 ║  Phase 3: Design                                                  ║
-║  └── 🔄 In Progress                                               ║
-║      ├── Tech Spec: ✅ Complete                                   ║
-║      ├── Architecture: ✅ C4 diagrams created                     ║
-║      ├── API Design: 🔄 In Progress (18/24 endpoints)             ║
-║      └── ADRs: ✅ 3 created                                       ║
+║  └── 🔄 In Bearbeitung                                            ║
+║      ├── Tech Spec: ✅ Abgeschlossen                              ║
+║      ├── Architektur: ✅ C4-Diagramme erstellt                    ║
+║      ├── API-Design: 🔄 In Bearbeitung (18/24 Endpoints)          ║
+║      └── ADRs: ✅ 3 erstellt                                      ║
 ║                                                                   ║
-║  Phase 4: Implementation                                          ║
-║  └── ⏳ Pending                                                   ║
-║      └── Sprint 1: Ready to start (21 pts)                        ║
+║  Phase 4: Implementierung                                         ║
+║  └── ⏳ Ausstehend                                                ║
+║      └── Sprint 1: Bereit zum Start (21 Pkt.)                     ║
 ║                                                                   ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ NEXT ACTION: Complete API design                                  ║
-║ COMMAND: /workflow:design --continue                              ║
+║ NÄCHSTE AKTION: API-Design abschließen                            ║
+║ BEFEHL: /workflow:design --continue                               ║
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-### Verbose View (--verbose)
+### Detailansicht (--verbose)
 
 ```
 ╔══════════════════════════════════════════════════════════════════╗
-║                   WORKFLOW STATUS (VERBOSE)                       ║
+║                   WORKFLOW-STATUS (DETAIL)                        ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ Project: my-awesome-app                                           ║
+║ Projekt: my-awesome-app                                           ║
 ║ Track: STANDARD                                                   ║
-║ Started: 2026-01-07T10:00:00Z                                     ║
-║ Last Update: 2026-01-07T15:30:00Z                                 ║
-║ Status File: project-management/workflow-status.yaml              ║
+║ Gestartet: 2026-01-07T10:00:00Z                                  ║
+║ Letzte Aktualisierung: 2026-01-07T15:30:00Z                      ║
+║ Statusdatei: project-management/workflow-status.yaml              ║
 ╠══════════════════════════════════════════════════════════════════╣
 ║                                                                   ║
 ║ ══════════════════════════════════════════════════════════════   ║
-║ PHASE 2: PLANNING (Complete)                                      ║
+║ PHASE 2: PLANUNG (Abgeschlossen)                                 ║
 ║ ══════════════════════════════════════════════════════════════   ║
 ║                                                                   ║
 ║ PRD: project-management/prd.md                                    ║
 ║ ├── Version: 1.0                                                  ║
-║ ├── Functional Requirements: 12                                   ║
-║ ├── Non-Functional Requirements: 8                                ║
-║ ├── Success Metrics: 5 KPIs defined                               ║
-║ └── Last Modified: 2026-01-07T11:00:00Z                           ║
+║ ├── Funktionale Anforderungen: 12                                 ║
+║ ├── Nicht-funktionale Anforderungen: 8                            ║
+║ ├── Erfolgsmetriken: 5 KPIs definiert                             ║
+║ └── Letzte Änderung: 2026-01-07T11:00:00Z                        ║
 ║                                                                   ║
 ║ Personas: project-management/personas.md                          ║
-║ ├── Primary: Business Owner, Freelancer                           ║
-║ └── Secondary: Accountant                                         ║
+║ ├── Primär: Geschäftsinhaber, Freelancer                          ║
+║ └── Sekundär: Buchhalter                                          ║
 ║                                                                   ║
 ║ Backlog: project-management/backlog/                              ║
 ║ ├── EPICs: 4                                                      ║
-║ │   ├── EPIC-001: User Management (21 pts)                        ║
-║ │   ├── EPIC-002: Payment Integration (24 pts)                    ║
-║ │   ├── EPIC-003: Reporting (23 pts)                              ║
-║ │   └── EPIC-004: Notifications (21 pts)                          ║
+║ │   ├── EPIC-001: Benutzerverwaltung (21 Pkt.)                    ║
+║ │   ├── EPIC-002: Zahlungsintegration (24 Pkt.)                   ║
+║ │   ├── EPIC-003: Berichtswesen (23 Pkt.)                         ║
+║ │   └── EPIC-004: Benachrichtigungen (21 Pkt.)                    ║
 ║ ├── User Stories: 18                                              ║
-║ │   ├── P0 (Must Have): 8 stories                                 ║
-║ │   ├── P1 (Should Have): 6 stories                               ║
-║ │   └── P2 (Nice to Have): 4 stories                              ║
-║ └── Total Story Points: 89                                        ║
+║ │   ├── P0 (Muss haben): 8 Stories                                ║
+║ │   ├── P1 (Sollte haben): 6 Stories                              ║
+║ │   └── P2 (Wäre schön): 4 Stories                                ║
+║ └── Gesamte Story Points: 89                                      ║
 ║                                                                   ║
-║ Sprints Planned:                                                  ║
-║ ├── Sprint 1: Walking Skeleton (21 pts) - 5 stories               ║
-║ ├── Sprint 2: Core Features (28 pts) - 6 stories                  ║
-║ ├── Sprint 3: Payments (24 pts) - 4 stories                       ║
-║ └── Sprint 4: Polish (16 pts) - 3 stories                         ║
+║ Geplante Sprints:                                                 ║
+║ ├── Sprint 1: Walking Skeleton (21 Pkt.) - 5 Stories              ║
+║ ├── Sprint 2: Kernfunktionen (28 Pkt.) - 6 Stories               ║
+║ ├── Sprint 3: Zahlungen (24 Pkt.) - 4 Stories                    ║
+║ └── Sprint 4: Feinschliff (16 Pkt.) - 3 Stories                  ║
 ║                                                                   ║
 ║ ══════════════════════════════════════════════════════════════   ║
-║ PHASE 3: DESIGN (In Progress - 75%)                               ║
+║ PHASE 3: DESIGN (In Bearbeitung - 75%)                            ║
 ║ ══════════════════════════════════════════════════════════════   ║
 ║                                                                   ║
 ║ Tech Spec: project-management/tech-spec.md ✅                     ║
 ║ ├── Version: 1.0                                                  ║
-║ ├── Architecture: Clean Architecture (Hexagonal)                  ║
+║ ├── Architektur: Clean Architecture (Hexagonal)                   ║
 ║ ├── Stack: Symfony 7.x + React 18 + PostgreSQL 16                 ║
-║ └── Integrations: Stripe, SendGrid, AWS S3                        ║
+║ └── Integrationen: Stripe, SendGrid, AWS S3                       ║
 ║                                                                   ║
-║ Architecture: project-management/architecture/ ✅                 ║
-║ ├── c4-context.md - System context diagram                        ║
-║ ├── c4-container.md - Container diagram                           ║
-║ ├── c4-component.md - Component diagram                           ║
-║ └── erd.md - Entity Relationship Diagram (8 entities)             ║
+║ Architektur: project-management/architecture/ ✅                  ║
+║ ├── c4-context.md - Systemkontext-Diagramm                        ║
+║ ├── c4-container.md - Container-Diagramm                          ║
+║ ├── c4-component.md - Komponenten-Diagramm                        ║
+║ └── erd.md - Entity-Relationship-Diagramm (8 Entitäten)           ║
 ║                                                                   ║
-║ API Design: project-management/architecture/api.md 🔄             ║
-║ ├── Designed: 18 endpoints                                        ║
-║ ├── Remaining: 6 endpoints                                        ║
-║ └── Auth: JWT with refresh tokens                                 ║
+║ API-Design: project-management/architecture/api.md 🔄             ║
+║ ├── Entworfen: 18 Endpoints                                       ║
+║ ├── Verbleibend: 6 Endpoints                                      ║
+║ └── Auth: JWT mit Refresh-Tokens                                   ║
 ║                                                                   ║
 ║ ADRs: docs/adr/ ✅                                                ║
-║ ├── ADR-001: Database (PostgreSQL)                                ║
-║ ├── ADR-002: API Style (REST)                                     ║
-║ └── ADR-003: Authentication (JWT)                                 ║
+║ ├── ADR-001: Datenbank (PostgreSQL)                               ║
+║ ├── ADR-002: API-Stil (REST)                                      ║
+║ └── ADR-003: Authentifizierung (JWT)                              ║
 ║                                                                   ║
-║ Security: project-management/architecture/security.md ⏳          ║
-║ └── Status: Pending                                               ║
+║ Sicherheit: project-management/architecture/security.md ⏳        ║
+║ └── Status: Ausstehend                                            ║
 ║                                                                   ║
 ║ ══════════════════════════════════════════════════════════════   ║
-║ PHASE 4: IMPLEMENTATION (Pending)                                 ║
+║ PHASE 4: IMPLEMENTIERUNG (Ausstehend)                             ║
 ║ ══════════════════════════════════════════════════════════════   ║
 ║                                                                   ║
 ║ Sprint 1: sprint-001-walking-skeleton                             ║
-║ ├── Status: Ready to start                                        ║
+║ ├── Status: Bereit zum Start                                      ║
 ║ ├── Stories: 5                                                    ║
-║ ├── Points: 21                                                    ║
-║ └── Tasks: 0 (not yet decomposed)                                 ║
+║ ├── Punkte: 21                                                    ║
+║ └── Aufgaben: 0 (noch nicht zerlegt)                              ║
 ║                                                                   ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ WORKFLOW HEALTH                                                   ║
+║ WORKFLOW-GESUNDHEIT                                               ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ ✅ PRD aligns with backlog                                        ║
-║ ✅ Tech spec covers all requirements                              ║
-║ ✅ Architecture documented                                        ║
-║ ⚠️  API design incomplete (6 endpoints remaining)                 ║
-║ ⚠️  Security review pending                                       ║
+║ ✅ PRD stimmt mit Backlog überein                                  ║
+║ ✅ Tech Spec deckt alle Anforderungen ab                          ║
+║ ✅ Architektur dokumentiert                                       ║
+║ ⚠️  API-Design unvollständig (6 Endpoints verbleibend)             ║
+║ ⚠️  Sicherheitsüberprüfung ausstehend                             ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ NEXT ACTIONS                                                      ║
+║ NÄCHSTE AKTIONEN                                                  ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ 1. Complete API design (6 remaining endpoints)                    ║
-║    Command: /workflow:design --continue                           ║
+║ 1. API-Design abschließen (6 verbleibende Endpoints)              ║
+║    Befehl: /workflow:design --continue                            ║
 ║                                                                   ║
-║ 2. Complete security review                                       ║
-║    Command: (included in design phase)                            ║
+║ 2. Sicherheitsüberprüfung abschließen                             ║
+║    Befehl: (in der Designphase enthalten)                         ║
 ║                                                                   ║
-║ 3. Then start implementation                                      ║
-║    Command: /workflow:implement                                   ║
+║ 3. Dann Implementierung starten                                   ║
+║    Befehl: /workflow:implement                                    ║
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-### No Workflow Initialized
+### Kein Workflow initialisiert
 
 ```
 ╔══════════════════════════════════════════════════════════════════╗
-║                       WORKFLOW STATUS                             ║
+║                       WORKFLOW-STATUS                             ║
 ╠══════════════════════════════════════════════════════════════════╣
 ║                                                                   ║
-║  ⚠️  No workflow initialized for this project                     ║
+║  ⚠️  Kein Workflow für dieses Projekt initialisiert               ║
 ║                                                                   ║
-║  To get started, run:                                             ║
+║  Um zu beginnen, ausführen:                                       ║
 ║                                                                   ║
 ║    /workflow:init                                                 ║
 ║                                                                   ║
-║  This will:                                                       ║
-║  • Analyze your project context                                   ║
-║  • Recommend the appropriate track (Quick/Standard/Enterprise)    ║
-║  • Initialize workflow tracking                                   ║
-║  • Guide you through the development phases                       ║
+║  Dies wird:                                                       ║
+║  • Ihren Projektkontext analysieren                               ║
+║  • Den passenden Track empfehlen (Quick/Standard/Enterprise)      ║
+║  • Workflow-Tracking initialisieren                               ║
+║  • Sie durch die Entwicklungsphasen führen                        ║
 ║                                                                   ║
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-### Quick Flow Status
+### Quick-Flow-Status
 
 ```
 ╔══════════════════════════════════════════════════════════════════╗
-║                       WORKFLOW STATUS                             ║
+║                       WORKFLOW-STATUS                             ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ Project: my-awesome-app                                           ║
+║ Projekt: my-awesome-app                                           ║
 ║ Track: QUICK FLOW                                                 ║
-║ Started: 2026-01-07                                               ║
+║ Gestartet: 2026-01-07                                             ║
 ╠══════════════════════════════════════════════════════════════════╣
 ║                                                                   ║
-║  Quick Flow - Direct Implementation                               ║
-║  └── 🔄 In Progress                                               ║
+║  Quick Flow - Direkte Implementierung                             ║
+║  └── 🔄 In Bearbeitung                                            ║
 ║                                                                   ║
-║  No phases required for Quick Flow.                               ║
-║  Working directly on implementation.                              ║
+║  Keine Phasen für Quick Flow erforderlich.                        ║
+║  Direkte Arbeit an der Implementierung.                           ║
 ║                                                                   ║
-║  Current Task (if tracked):                                       ║
-║  └── TASK-042: Fix login validation bug                           ║
-║      Status: In Progress                                          ║
+║  Aktuelle Aufgabe (falls verfolgt):                               ║
+║  └── TASK-042: Login-Validierungsbug beheben                      ║
+║      Status: In Bearbeitung                                       ║
 ║                                                                   ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ COMMANDS AVAILABLE                                                ║
+║ VERFÜGBARE BEFEHLE                                                ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ • /common:fix-bug-tdd     - Continue with TDD approach            ║
-║ • /project:move-task done - Mark task complete                    ║
-║ • /workflow:init          - Start new workflow                    ║
+║ • /common:fix-bug-tdd     - Mit TDD-Ansatz fortfahren             ║
+║ • /project:move-task done - Aufgabe als erledigt markieren        ║
+║ • /workflow:init          - Neuen Workflow starten                ║
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-## Status File Structure
+## Statusdatei-Struktur
 
-The status is read from `project-management/workflow-status.yaml`:
+Der Status wird aus `project-management/workflow-status.yaml` gelesen:
 
 ```yaml
 project: my-awesome-app
@@ -283,10 +283,10 @@ next_action: "Complete API design"
 next_command: "/workflow:design --continue"
 ```
 
-## Related Commands
+## Verwandte Befehle
 
-- `/workflow:init` - Initialize new workflow
-- `/workflow:analyze` - Analysis phase
-- `/workflow:plan` - Planning phase
-- `/workflow:design` - Design phase
-- `/workflow:implement` - Implementation phase
+- `/workflow:init` - Neuen Workflow initialisieren
+- `/workflow:analyze` - Analysephase
+- `/workflow:plan` - Planungsphase
+- `/workflow:design` - Designphase
+- `/workflow:implement` - Implementierungsphase

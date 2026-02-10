@@ -1,26 +1,26 @@
-# Sécurité
+# Seguridad
 
-## Vue d'ensemble
+## Vision general
 
-La sécurité est une **priorité absolue**. Ce document présente les principes généraux de sécurité applicables à tout projet.
+La seguridad es una **prioridad absoluta**. Este documento presenta los principios generales de seguridad aplicables a todo proyecto.
 
-> **Note:** Consultez les règles spécifiques à votre technologie pour les implémentations concrètes.
+> **Nota:** Consulta las reglas especificas de tu tecnologia para las implementaciones concretas.
 
-**Références:**
+**Referencias:**
 - OWASP Top 10
 - CWE/SANS Top 25
 
 ---
 
-## Table des matières
+## Tabla de contenidos
 
 1. [OWASP Top 10](#owasp-top-10)
-2. [Validation des entrées](#validation-des-entrées)
-3. [Authentification](#authentification)
-4. [Autorisation](#autorisation)
-5. [Données sensibles](#données-sensibles)
-6. [Headers de sécurité](#headers-de-sécurité)
-7. [Logging et monitoring](#logging-et-monitoring)
+2. [Validacion de entradas](#validacion-de-entradas)
+3. [Autenticacion](#autenticacion)
+4. [Autorizacion](#autorizacion)
+5. [Datos sensibles](#datos-sensibles)
+6. [Headers de seguridad](#headers-de-seguridad)
+7. [Logging y monitoring](#logging-y-monitoring)
 8. [Checklist](#checklist)
 
 ---
@@ -30,57 +30,57 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 ### 1. Broken Access Control
 
 ```
-❌ RISQUE
-- Accès à des ressources sans vérification
-- URLs prédictibles (/admin, /user/123/edit)
-- Manipulation d'IDs dans les URLs
+❌ RIESGO
+- Acceso a recursos sin verificacion
+- URLs predecibles (/admin, /user/123/edit)
+- Manipulacion de IDs en las URLs
 
-✅ PROTECTION
-- Vérifier les permissions à CHAQUE requête
-- Utiliser des identifiants non prédictibles (UUID)
+✅ PROTECCION
+- Verificar los permisos en CADA peticion
+- Usar identificadores no predecibles (UUID)
 - Deny by default
 ```
 
 ### 2. Cryptographic Failures
 
 ```
-❌ RISQUE
-- Données sensibles en clair
-- Algorithmes obsolètes (MD5, SHA1)
-- Clés dans le code source
+❌ RIESGO
+- Datos sensibles en texto plano
+- Algoritmos obsoletos (MD5, SHA1)
+- Claves en el codigo fuente
 
-✅ PROTECTION
-- Chiffrer les données sensibles au repos
-- Utiliser TLS 1.3 en transit
-- Algorithmes modernes (bcrypt, Argon2, AES-256)
-- Secrets dans un vault (pas dans le code)
+✅ PROTECCION
+- Cifrar los datos sensibles en reposo
+- Usar TLS 1.3 en transito
+- Algoritmos modernos (bcrypt, Argon2, AES-256)
+- Secretos en un vault (no en el codigo)
 ```
 
 ### 3. Injection
 
 ```
-❌ RISQUE
+❌ RIESGO
 - SQL Injection
 - Command Injection
 - LDAP Injection
 
-✅ PROTECTION
-- Requêtes paramétrées (prepared statements)
-- Validation et sanitization des entrées
-- Principe du moindre privilège (DB)
-- Escape des outputs
+✅ PROTECCION
+- Consultas parametrizadas (prepared statements)
+- Validacion y sanitizacion de entradas
+- Principio de minimo privilegio (DB)
+- Escape de outputs
 ```
 
 ### 4. Insecure Design
 
 ```
-❌ RISQUE
-- Pas de threat modeling
-- Fonctionnalités sensibles non protégées
-- Rate limiting absent
+❌ RIESGO
+- Sin threat modeling
+- Funcionalidades sensibles sin proteccion
+- Rate limiting ausente
 
-✅ PROTECTION
-- Threat modeling dès la conception
+✅ PROTECCION
+- Threat modeling desde el diseno
 - Security by design
 - Defense in depth
 - Rate limiting
@@ -89,119 +89,119 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 ### 5. Security Misconfiguration
 
 ```
-❌ RISQUE
-- Configs par défaut non modifiées
-- Fonctionnalités inutiles activées
-- Messages d'erreur verbeux
-- Permissions trop larges
+❌ RIESGO
+- Configuraciones por defecto no modificadas
+- Funcionalidades innecesarias activadas
+- Mensajes de error verbosos
+- Permisos demasiado amplios
 
-✅ PROTECTION
-- Hardening des configurations
-- Désactiver le non nécessaire
-- Messages d'erreur génériques en prod
-- Principe du moindre privilège
+✅ PROTECCION
+- Hardening de las configuraciones
+- Desactivar lo no necesario
+- Mensajes de error genericos en prod
+- Principio de minimo privilegio
 ```
 
 ### 6. Vulnerable Components
 
 ```
-❌ RISQUE
-- Dépendances avec vulnérabilités connues
-- Composants obsolètes
-- Pas de suivi des CVE
+❌ RIESGO
+- Dependencias con vulnerabilidades conocidas
+- Componentes obsoletos
+- Sin seguimiento de CVE
 
-✅ PROTECTION
-- Audit régulier des dépendances
-- Mise à jour automatique (Dependabot)
+✅ PROTECCION
+- Auditoria regular de dependencias
+- Actualizacion automatica (Dependabot)
 - SBOM (Software Bill of Materials)
 ```
 
 ### 7. Authentication Failures
 
 ```
-❌ RISQUE
-- Mots de passe faibles autorisés
-- Pas de MFA
-- Sessions qui n'expirent pas
-- Credential stuffing possible
+❌ RIESGO
+- Contrasenas debiles autorizadas
+- Sin MFA
+- Sesiones que no expiran
+- Credential stuffing posible
 
-✅ PROTECTION
-- Politique de mots de passe forts
-- MFA pour accès sensibles
-- Expiration des sessions
-- Rate limiting sur login
-- Détection de brute force
+✅ PROTECCION
+- Politica de contrasenas fuertes
+- MFA para accesos sensibles
+- Expiracion de sesiones
+- Rate limiting en login
+- Deteccion de fuerza bruta
 ```
 
 ### 8. Data Integrity Failures
 
 ```
-❌ RISQUE
-- Dépendances non vérifiées
-- CI/CD non sécurisé
-- Updates non signés
+❌ RIESGO
+- Dependencias no verificadas
+- CI/CD no securizado
+- Updates no firmados
 
-✅ PROTECTION
-- Vérification des signatures
-- CI/CD sécurisé
+✅ PROTECCION
+- Verificacion de firmas
+- CI/CD securizado
 - Integrity checks (checksums)
 ```
 
 ### 9. Logging & Monitoring Failures
 
 ```
-❌ RISQUE
-- Pas de logs des événements sécurité
-- Logs non protégés
-- Pas d'alerting
+❌ RIESGO
+- Sin logs de eventos de seguridad
+- Logs no protegidos
+- Sin alertas
 
-✅ PROTECTION
-- Logger les événements de sécurité
-- Protéger les logs (accès restreint)
-- Alerting sur anomalies
-- Retention appropriée
+✅ PROTECCION
+- Loguear los eventos de seguridad
+- Proteger los logs (acceso restringido)
+- Alertas sobre anomalias
+- Retencion apropiada
 ```
 
 ### 10. SSRF (Server-Side Request Forgery)
 
 ```
-❌ RISQUE
-- URLs fournies par l'utilisateur non validées
-- Accès à des ressources internes
+❌ RIESGO
+- URLs proporcionadas por el usuario no validadas
+- Acceso a recursos internos
 
-✅ PROTECTION
-- Whitelist des destinations autorisées
-- Validation stricte des URLs
-- Pas d'accès réseau interne depuis les inputs
+✅ PROTECCION
+- Whitelist de destinos autorizados
+- Validacion estricta de URLs
+- Sin acceso a red interna desde los inputs
 ```
 
 ---
 
-## Validation des entrées
+## Validacion de entradas
 
-### Règle d'or
+### Regla de oro
 
-> **Ne jamais faire confiance aux données utilisateur.**
-> Valider côté serveur, TOUJOURS.
+> **Nunca confiar en los datos del usuario.**
+> Validar del lado del servidor, SIEMPRE.
 
-### Types de validation
+### Tipos de validacion
 
-| Type | Description | Exemple |
+| Tipo | Descripcion | Ejemplo |
 |------|-------------|---------|
-| **Whitelist** | Accepter uniquement ce qui est attendu | `status in ["pending", "done"]` |
-| **Type checking** | Vérifier le type | `typeof id === "number"` |
-| **Format** | Vérifier le format | `email.matches(EMAIL_REGEX)` |
-| **Range** | Vérifier les bornes | `1 <= page <= 100` |
-| **Length** | Vérifier la longueur | `name.length <= 255` |
+| **Whitelist** | Aceptar unicamente lo esperado | `status in ["pending", "done"]` |
+| **Type checking** | Verificar el tipo | `typeof id === "number"` |
+| **Formato** | Verificar el formato | `email.matches(EMAIL_REGEX)` |
+| **Rango** | Verificar los limites | `1 <= page <= 100` |
+| **Longitud** | Verificar la longitud | `name.length <= 255` |
 
-### Exemples
+### Ejemplos
 
 ```
-// ❌ MAUVAIS - Pas de validation
+// ❌ MALO - Sin validacion
 function getUser(id):
   return db.query("SELECT * FROM users WHERE id = " + id)
 
-// ✅ BON - Validation + requête paramétrée
+// ✅ BUENO - Validacion + consulta parametrizada
 function getUser(id):
   if not isValidUUID(id):
     throw InvalidInput("Invalid user ID")
@@ -212,71 +212,71 @@ function getUser(id):
   )
 ```
 
-### Sanitization vs Validation
+### Sanitizacion vs Validacion
 
 ```
-Validation: Rejeter les données invalides
-  → "abc" comme ID numérique → ERREUR
+Validacion: Rechazar los datos invalidos
+  → "abc" como ID numerico → ERROR
 
-Sanitization: Nettoyer les données
-  → "<script>" dans un nom → "script"
+Sanitizacion: Limpiar los datos
+  → "<script>" en un nombre → "script"
 
-Préférer VALIDATION (rejeter) à SANITIZATION (transformer)
+Preferir VALIDACION (rechazar) a SANITIZACION (transformar)
 ```
 
 ---
 
-## Authentification
+## Autenticacion
 
-### Mots de passe
+### Contrasenas
 
 ```
-Règles:
-- Minimum 12 caractères
-- Majuscules, minuscules, chiffres, spéciaux
-- Pas dans les listes de mots de passe compromis
-- Hash avec bcrypt/Argon2 (JAMAIS MD5/SHA1)
-- Salt unique par utilisateur
+Reglas:
+- Minimo 12 caracteres
+- Mayusculas, minusculas, numeros, especiales
+- No estar en listas de contrasenas comprometidas
+- Hash con bcrypt/Argon2 (NUNCA MD5/SHA1)
+- Salt unico por usuario
 
-// ✅ BON
+// ✅ BUENO
 hash = bcrypt.hash(password, costFactor=12)
 
-// ❌ MAUVAIS
+// ❌ MALO
 hash = md5(password)
 hash = sha1(password + "static_salt")
 ```
 
-### Sessions
+### Sesiones
 
 ```
-Règles:
-- Token aléatoire cryptographiquement sûr
-- Stockage côté serveur (pas dans cookies)
-- Expiration: 15-30 min d'inactivité
-- Renouvellement après login
-- Invalidation après logout
+Reglas:
+- Token aleatorio criptograficamente seguro
+- Almacenamiento del lado del servidor (no en cookies)
+- Expiracion: 15-30 min de inactividad
+- Renovacion despues del login
+- Invalidacion despues del logout
 
 Session config:
   cookie:
-    httpOnly: true     # Pas accessible en JS
-    secure: true       # HTTPS uniquement
-    sameSite: strict   # Protection CSRF
+    httpOnly: true     # No accesible en JS
+    secure: true       # Solo HTTPS
+    sameSite: strict   # Proteccion CSRF
 ```
 
-### JWT (si utilisé)
+### JWT (si se usa)
 
 ```
-Règles:
-- Algorithme: RS256 ou ES256 (pas HS256 avec secret faible)
-- Expiration courte (15 min)
-- Refresh token long (7 jours) stocké sécurisé
-- Vérifier signature et claims
-- Ne pas stocker de données sensibles dans le payload
+Reglas:
+- Algoritmo: RS256 o ES256 (no HS256 con secreto debil)
+- Expiracion corta (15 min)
+- Refresh token largo (7 dias) almacenado de forma segura
+- Verificar firma y claims
+- No almacenar datos sensibles en el payload
 
-// ❌ MAUVAIS
+// ❌ MALO
 jwt.sign(payload, "secret123", { algorithm: "HS256" })
 
-// ✅ BON
+// ✅ BUENO
 jwt.sign(payload, privateKey, {
   algorithm: "RS256",
   expiresIn: "15m"
@@ -286,60 +286,60 @@ jwt.sign(payload, privateKey, {
 ### Multi-Factor Authentication (MFA)
 
 ```
-Quand activer MFA:
-- Accès admin
-- Opérations sensibles (paiement, suppression)
-- Changement de mot de passe
-- Connexion depuis nouvel appareil
+Cuando activar MFA:
+- Acceso admin
+- Operaciones sensibles (pago, eliminacion)
+- Cambio de contrasena
+- Conexion desde nuevo dispositivo
 
-Méthodes:
+Metodos:
 - TOTP (Google Authenticator)
-- SMS (moins sécurisé)
+- SMS (menos seguro)
 - Hardware keys (FIDO2)
 ```
 
 ---
 
-## Autorisation
+## Autorizacion
 
-### Principe du moindre privilège
+### Principio de minimo privilegio
 
 ```
-Règle: Accorder uniquement les permissions NÉCESSAIRES.
+Regla: Otorgar unicamente los permisos NECESARIOS.
 
-❌ MAUVAIS
-user.role = "admin"  # Accès à tout
+❌ MALO
+user.role = "admin"  # Acceso a todo
 
-✅ BON
+✅ BUENO
 user.permissions = ["read:users", "write:orders"]
 ```
 
 ### RBAC (Role-Based Access Control)
 
 ```
-Rôles:
-- admin: Toutes permissions
-- manager: Gestion utilisateurs, lecture rapports
-- user: Accès à ses propres données
+Roles:
+- admin: Todos los permisos
+- manager: Gestion de usuarios, lectura de reportes
+- user: Acceso a sus propios datos
 
-Vérification:
+Verificacion:
 function deleteUser(userId, currentUser):
   if not currentUser.hasPermission("delete:users"):
     throw Forbidden("Permission denied")
 
-  // ... delete logic
+  // ... logica de eliminacion
 ```
 
 ### Row-Level Security
 
 ```
-Règle: Vérifier que l'utilisateur a accès à LA ressource spécifique.
+Regla: Verificar que el usuario tiene acceso AL recurso especifico.
 
-// ❌ MAUVAIS - Vérifie seulement l'authentification
+// ❌ MALO - Verifica solo la autenticacion
 function getOrder(orderId):
   return db.find("orders", orderId)
 
-// ✅ BON - Vérifie l'appartenance
+// ✅ BUENO - Verifica la pertenencia
 function getOrder(orderId, currentUser):
   order = db.find("orders", orderId)
 
@@ -351,65 +351,65 @@ function getOrder(orderId, currentUser):
 
 ---
 
-## Données sensibles
+## Datos sensibles
 
-### Classification
+### Clasificacion
 
-| Catégorie | Exemples | Protection |
+| Categoria | Ejemplos | Proteccion |
 |-----------|----------|------------|
-| **Public** | Nom produit | Aucune |
-| **Interne** | Emails | Accès restreint |
-| **Confidentiel** | Données client | Chiffrement |
-| **Secret** | Mots de passe, clés | Vault, hash |
+| **Publico** | Nombre del producto | Ninguna |
+| **Interno** | Emails | Acceso restringido |
+| **Confidencial** | Datos de clientes | Cifrado |
+| **Secreto** | Contrasenas, claves | Vault, hash |
 
-### Stockage
+### Almacenamiento
 
 ```
-Mots de passe:
-  → Hash avec bcrypt/Argon2
-  → JAMAIS en clair
+Contrasenas:
+  → Hash con bcrypt/Argon2
+  → NUNCA en texto plano
 
-Données personnelles (RGPD):
-  → Chiffrement au repos
-  → Pseudonymisation si possible
-  → Retention limitée
+Datos personales (RGPD):
+  → Cifrado en reposo
+  → Pseudonimizacion si es posible
+  → Retencion limitada
 
-Secrets (API keys, etc.):
-  → Variables d'environnement
+Secretos (API keys, etc.):
+  → Variables de entorno
   → Vault (HashiCorp, AWS Secrets Manager)
-  → JAMAIS dans le code source
+  → NUNCA en el codigo fuente
 ```
 
-### Transmission
+### Transmision
 
 ```
-Règles:
-- HTTPS obligatoire (TLS 1.3)
-- Certificats valides
-- HSTS activé
-- Pas de données sensibles dans URLs
+Reglas:
+- HTTPS obligatorio (TLS 1.3)
+- Certificados validos
+- HSTS activado
+- Sin datos sensibles en URLs
 
-// ❌ MAUVAIS
+// ❌ MALO
 GET /api/users?password=secret123
 
-// ✅ BON
+// ✅ BUENO
 POST /api/auth
 Body: { "password": "..." }
 ```
 
 ---
 
-## Headers de sécurité
+## Headers de seguridad
 
-### Headers recommandés
+### Headers recomendados
 
 ```http
-# Protection XSS
+# Proteccion XSS
 Content-Security-Policy: default-src 'self'; script-src 'self'
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 
-# Protection clickjacking
+# Proteccion clickjacking
 X-Frame-Options: DENY
 
 # HTTPS
@@ -418,14 +418,14 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains
 # Referrer
 Referrer-Policy: strict-origin-when-cross-origin
 
-# Permissions
+# Permisos
 Permissions-Policy: geolocation=(), camera=()
 ```
 
 ### Content-Security-Policy (CSP)
 
 ```http
-# Restrictif (recommandé)
+# Restrictivo (recomendado)
 Content-Security-Policy:
   default-src 'self';
   script-src 'self';
@@ -438,27 +438,27 @@ Content-Security-Policy:
 
 ---
 
-## Logging et monitoring
+## Logging y monitoring
 
-### Événements à logger
+### Eventos a loguear
 
 ```
-✅ À LOGGER:
-- Tentatives de connexion (succès/échec)
-- Changements de permissions
-- Accès à données sensibles
-- Erreurs d'autorisation
-- Modifications de configuration
-- Exports de données
+✅ A LOGUEAR:
+- Intentos de conexion (exito/fallo)
+- Cambios de permisos
+- Acceso a datos sensibles
+- Errores de autorizacion
+- Modificaciones de configuracion
+- Exportaciones de datos
 
-❌ À NE PAS LOGGER:
-- Mots de passe
+❌ NO LOGUEAR:
+- Contrasenas
 - Tokens
-- Données personnelles complètes
-- Numéros de carte bancaire
+- Datos personales completos
+- Numeros de tarjeta bancaria
 ```
 
-### Format de log
+### Formato de log
 
 ```json
 {
@@ -475,58 +475,58 @@ Content-Security-Policy:
 }
 ```
 
-### Alerting
+### Alertas
 
 ```
-Alertes critiques:
-- 5+ échecs de login sur même compte
-- Accès admin depuis nouvelle IP
-- Modification de permissions
-- Erreurs 500 en série
-- Volume anormal de requêtes
+Alertas criticas:
+- 5+ fallos de login en la misma cuenta
+- Acceso admin desde nueva IP
+- Modificacion de permisos
+- Errores 500 en serie
+- Volumen anormal de peticiones
 ```
 
 ---
 
 ## Checklist
 
-### Développement
+### Desarrollo
 
-- [ ] Validation des entrées côté serveur
-- [ ] Requêtes paramétrées (pas de concaténation SQL)
-- [ ] Escape des outputs (prévention XSS)
-- [ ] Mots de passe hashés (bcrypt/Argon2)
-- [ ] Sessions sécurisées (httpOnly, secure, sameSite)
-- [ ] Vérification des permissions à chaque requête
-- [ ] Secrets dans variables d'environnement
-- [ ] Dépendances auditées
+- [ ] Validacion de entradas del lado del servidor
+- [ ] Consultas parametrizadas (sin concatenacion SQL)
+- [ ] Escape de outputs (prevencion XSS)
+- [ ] Contrasenas hasheadas (bcrypt/Argon2)
+- [ ] Sesiones seguras (httpOnly, secure, sameSite)
+- [ ] Verificacion de permisos en cada peticion
+- [ ] Secretos en variables de entorno
+- [ ] Dependencias auditadas
 
-### Configuration
+### Configuracion
 
-- [ ] HTTPS activé (TLS 1.3)
-- [ ] Headers de sécurité configurés
-- [ ] Messages d'erreur génériques en prod
-- [ ] Debug mode désactivé en prod
-- [ ] Rate limiting activé
-- [ ] CORS configuré strictement
+- [ ] HTTPS activado (TLS 1.3)
+- [ ] Headers de seguridad configurados
+- [ ] Mensajes de error genericos en prod
+- [ ] Modo debug desactivado en prod
+- [ ] Rate limiting activado
+- [ ] CORS configurado estrictamente
 
 ### Monitoring
 
-- [ ] Logging des événements de sécurité
-- [ ] Alerting sur anomalies
-- [ ] Audit régulier des accès
-- [ ] Scan de vulnérabilités périodique
+- [ ] Logging de eventos de seguridad
+- [ ] Alertas sobre anomalias
+- [ ] Auditoria regular de accesos
+- [ ] Escaneo de vulnerabilidades periodico
 
-### Compliance (si applicable)
+### Compliance (si aplica)
 
-- [ ] RGPD: Consentement, droit à l'oubli
-- [ ] PCI-DSS: Données de paiement
-- [ ] HIPAA: Données de santé
-- [ ] SOC2: Contrôles de sécurité
+- [ ] RGPD: Consentimiento, derecho al olvido
+- [ ] PCI-DSS: Datos de pago
+- [ ] HIPAA: Datos de salud
+- [ ] SOC2: Controles de seguridad
 
 ---
 
-## Ressources
+## Recursos
 
 - **OWASP Top 10:** [owasp.org/Top10](https://owasp.org/Top10/)
 - **OWASP Cheat Sheets:** [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/)
@@ -535,6 +535,6 @@ Alertes critiques:
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
+**Fecha de ultima actualizacion:** 2025-01
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Autor:** The Bearded CTO

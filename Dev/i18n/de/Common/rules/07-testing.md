@@ -1,62 +1,62 @@
-# Testing - Principes TDD/BDD
+# Testing - TDD/BDD-Prinzipien
 
-## Vue d'ensemble
+## Überblick
 
-Le **Test-Driven Development (TDD)** et le **Behavior-Driven Development (BDD)** sont des pratiques **obligatoires** pour garantir la qualité et la maintenabilité du code.
+**Test-Driven Development (TDD)** und **Behavior-Driven Development (BDD)** sind **obligatorische** Praktiken, um die Qualität und Wartbarkeit des Codes zu gewährleisten.
 
-> **Note:** Ce document présente les principes généraux. Consultez les règles spécifiques à votre technologie pour les outils et frameworks concrets.
+> **Hinweis:** Dieses Dokument stellt die allgemeinen Prinzipien vor. Konsultieren Sie die technologiespezifischen Regeln für konkrete Tools und Frameworks.
 
-**Objectifs:**
-- ✅ Couverture de code ≥ 80%
-- ✅ Tests rapides (< 10s pour les unitaires)
-- ✅ Tests indépendants et reproductibles
-- ✅ CI/CD qui bloque si tests échouent
+**Ziele:**
+- Codeabdeckung >= 80%
+- Schnelle Tests (< 10s für Unit-Tests)
+- Unabhängige und reproduzierbare Tests
+- CI/CD blockiert bei fehlschlagenden Tests
 
 ---
 
-## Table des matières
+## Inhaltsverzeichnis
 
-1. [Pyramide des tests](#pyramide-des-tests)
+1. [Testpyramide](#testpyramide)
 2. [TDD - Test-Driven Development](#tdd---test-driven-development)
 3. [BDD - Behavior-Driven Development](#bdd---behavior-driven-development)
-4. [Types de tests](#types-de-tests)
-5. [Bonnes pratiques](#bonnes-pratiques)
-6. [Anti-patterns](#anti-patterns)
-7. [Checklist](#checklist)
+4. [Testtypen](#testtypen)
+5. [Best Practices](#best-practices)
+6. [Anti-Patterns](#anti-patterns)
+7. [Checkliste](#checkliste)
 
 ---
 
-## Pyramide des tests
+## Testpyramide
 
 ```
           ┌─────────────┐
-          │    E2E      │  ← Peu nombreux (10%)
-          │  (UI/API)   │    Lents, fragiles
+          │    E2E      │  ← Wenige (10%)
+          │  (UI/API)   │    Langsam, fragil
           ├─────────────┤
-          │ Integration │  ← Modérés (20%)
-          │   Tests     │    Vérifient les connexions
+          │ Integration │  ← Moderat (20%)
+          │   Tests     │    Prüfen die Verbindungen
           ├─────────────┤
-          │   Unit      │  ← Nombreux (70%)
-          │   Tests     │    Rapides, isolés
+          │   Unit      │  ← Zahlreich (70%)
+          │   Tests     │    Schnell, isoliert
           └─────────────┘
 
-Plus on monte, plus c'est lent et coûteux.
-Plus on descend, plus c'est rapide et fiable.
+Je höher, desto langsamer und teurer.
+Je tiefer, desto schneller und zuverlässiger.
 ```
 
-### Répartition recommandée
+### Empfohlene Verteilung
 
-| Type | % | Temps | Quand |
-|------|---|-------|-------|
-| Unit | 70% | < 1s chacun | À chaque commit |
-| Integration | 20% | < 5s chacun | À chaque PR |
-| E2E | 10% | < 30s chacun | Avant deploy |
+| Typ | % | Zeit | Wann |
+|-----|---|------|------|
+| Unit | 70% | < 1s pro Test | Bei jedem Commit |
+| Integration | 20% | < 5s pro Test | Bei jedem PR |
+| E2E | 10% | < 30s pro Test | Vor dem Deployment |
 
 ---
 
 ## TDD - Test-Driven Development
 
-### Le cycle Red-Green-Refactor
+### Der Red-Green-Refactor-Zyklus
 
 ```
      ┌─────────────────────────────────────┐
@@ -64,42 +64,43 @@ Plus on descend, plus c'est rapide et fiable.
      ▼                                     │
 ┌─────────┐    ┌─────────┐    ┌──────────┐│
 │   RED   │───▶│  GREEN  │───▶│ REFACTOR ││
-│  Test   │    │  Code   │    │ Améliorer││
-│ échoue  │    │ passe   │    │          ││
+│  Test   │    │  Code   │    │ Verbessern││
+│ schlägt │    │ besteht │    │          ││
+│  fehl   │    │         │    │          ││
 └─────────┘    └─────────┘    └──────────┘│
                                    │      │
                                    └──────┘
 ```
 
-### Étapes
+### Schritte
 
-1. **RED** - Écrire un test qui échoue
-   - Définir le comportement attendu
-   - Le test DOIT échouer (sinon il ne teste rien)
+1. **RED** - Einen fehlschlagenden Test schreiben
+   - Das erwartete Verhalten definieren
+   - Der Test MUSS fehlschlagen (sonst testet er nichts)
 
-2. **GREEN** - Écrire le minimum de code pour passer
-   - Code le plus simple possible
-   - Pas d'optimisation
-   - Pas de généralisation
+2. **GREEN** - Das Minimum an Code schreiben, um zu bestehen
+   - Einfachster möglicher Code
+   - Keine Optimierung
+   - Keine Generalisierung
 
-3. **REFACTOR** - Améliorer le code
-   - Supprimer la duplication
-   - Améliorer la lisibilité
-   - Les tests doivent toujours passer
+3. **REFACTOR** - Den Code verbessern
+   - Duplikation entfernen
+   - Lesbarkeit verbessern
+   - Tests müssen weiterhin bestehen
 
-### Exemple TDD
+### TDD-Beispiel
 
 ```
-// 1. RED - Test qui échoue
+// 1. RED - Fehlschlagender Test
 test "calculateTotal returns sum of item prices":
   cart = new Cart()
   cart.addItem(Item(price: 10))
   cart.addItem(Item(price: 20))
 
   assert cart.calculateTotal() == 30
-  // ❌ FAIL: method calculateTotal() not defined
+  // FAIL: method calculateTotal() not defined
 
-// 2. GREEN - Code minimal
+// 2. GREEN - Minimaler Code
 class Cart:
   items = []
 
@@ -108,9 +109,9 @@ class Cart:
 
   calculateTotal():
     return items.sum(item => item.price)
-  // ✅ PASS
+  // PASS
 
-// 3. REFACTOR - Améliorer
+// 3. REFACTOR - Verbessern
 class Cart:
   items: List<Item> = []
 
@@ -119,22 +120,22 @@ class Cart:
 
   calculateTotal(): Money
     return Money.sum(items.map(i => i.price))
-  // ✅ PASS (amélioré avec types)
+  // PASS (verbessert mit Typen)
 ```
 
-### Règles TDD
+### TDD-Regeln
 
-1. **Un seul test à la fois**
-2. **Le test définit le comportement** (pas l'implémentation)
-3. **Code minimal pour passer**
-4. **Refactor après chaque GREEN**
-5. **Ne jamais ignorer un test qui échoue**
+1. **Ein Test nach dem anderen**
+2. **Der Test definiert das Verhalten** (nicht die Implementierung)
+3. **Minimaler Code zum Bestehen**
+4. **Refactor nach jedem GREEN**
+5. **Einen fehlschlagenden Test niemals ignorieren**
 
 ---
 
 ## BDD - Behavior-Driven Development
 
-### Format Gherkin
+### Gherkin-Format
 
 ```gherkin
 Feature: Shopping Cart
@@ -154,30 +155,30 @@ Feature: Shopping Cart
     Then the cart total should be 90€
 ```
 
-### Structure Given-When-Then
+### Given-When-Then-Struktur
 
-| Keyword | Purpose | Example |
-|---------|---------|---------|
-| **Given** | Contexte initial | "Given I am logged in" |
-| **When** | Action | "When I click submit" |
-| **Then** | Résultat attendu | "Then I see success message" |
-| **And** | Continuation | "And I receive an email" |
-| **But** | Exception | "But I don't see errors" |
+| Schlüsselwort | Zweck | Beispiel |
+|---------------|-------|---------|
+| **Given** | Anfangskontext | "Given I am logged in" |
+| **When** | Aktion | "When I click submit" |
+| **Then** | Erwartetes Ergebnis | "Then I see success message" |
+| **And** | Fortsetzung | "And I receive an email" |
+| **But** | Ausnahme | "But I don't see errors" |
 
-### Avantages BDD
+### BDD-Vorteile
 
-- ✅ Documentation vivante
-- ✅ Langage commun (dev + métier)
-- ✅ Tests lisibles par non-techniciens
-- ✅ Focus sur le comportement, pas l'implémentation
+- Lebende Dokumentation
+- Gemeinsame Sprache (Entwickler + Fachbereich)
+- Von Nicht-Technikern lesbare Tests
+- Fokus auf Verhalten, nicht auf Implementierung
 
 ---
 
-## Types de tests
+## Testtypen
 
-### Tests Unitaires
+### Unit-Tests
 
-**But:** Tester une unité de code en isolation
+**Zweck:** Eine Codeeinheit isoliert testen
 
 ```
 test "Money can be added":
@@ -190,15 +191,15 @@ test "Money can be added":
   assert result.currency == "EUR"
 ```
 
-**Caractéristiques:**
-- ✅ Rapides (< 1s)
-- ✅ Isolés (pas de dépendances externes)
-- ✅ Déterministes (même résultat à chaque fois)
-- ✅ Indépendants (ordre d'exécution n'importe pas)
+**Eigenschaften:**
+- Schnell (< 1s)
+- Isoliert (keine externen Abhängigkeiten)
+- Deterministisch (jedes Mal gleiches Ergebnis)
+- Unabhängig (Ausführungsreihenfolge spielt keine Rolle)
 
-### Tests d'Intégration
+### Integrationstests
 
-**But:** Tester l'interaction entre composants
+**Zweck:** Die Interaktion zwischen Komponenten testen
 
 ```
 test "UserRepository saves and retrieves user":
@@ -211,14 +212,14 @@ test "UserRepository saves and retrieves user":
   assert retrieved.name == "John"
 ```
 
-**Caractéristiques:**
-- ✅ Testent les connexions (DB, API, files)
-- ✅ Utilisent de vraies dépendances ou testcontainers
-- ✅ Plus lents que unitaires
+**Eigenschaften:**
+- Testen die Verbindungen (DB, API, Dateien)
+- Verwenden echte Abhängigkeiten oder Testcontainers
+- Langsamer als Unit-Tests
 
-### Tests End-to-End (E2E)
+### End-to-End-Tests (E2E)
 
-**But:** Tester le système complet du point de vue utilisateur
+**Zweck:** Das gesamte System aus Benutzersicht testen
 
 ```
 test "User can complete purchase":
@@ -231,14 +232,14 @@ test "User can complete purchase":
   assert browser.text("#confirmation") contains "Order confirmed"
 ```
 
-**Caractéristiques:**
-- ✅ Testent le parcours utilisateur complet
-- ⚠️ Lents et fragiles
-- ⚠️ À utiliser avec parcimonie
+**Eigenschaften:**
+- Testen den vollständigen Benutzerpfad
+- Langsam und fragil
+- Sparsam einsetzen
 
-### Tests de Contrat
+### Vertragstests
 
-**But:** Vérifier les contrats entre services
+**Zweck:** Verträge zwischen Services überprüfen
 
 ```
 test "API returns valid user schema":
@@ -250,133 +251,133 @@ test "API returns valid user schema":
 
 ---
 
-## Bonnes pratiques
+## Best Practices
 
 ### 1. Arrange-Act-Assert (AAA)
 
 ```
 test "user can change email":
-  // Arrange - Préparer
+  // Arrange - Vorbereiten
   user = User(email: "old@test.com")
 
-  // Act - Agir
+  // Act - Ausführen
   user.changeEmail("new@test.com")
 
-  // Assert - Vérifier
+  // Assert - Prüfen
   assert user.email == "new@test.com"
 ```
 
-### 2. Un assert par test (préférence)
+### 2. Ein Assert pro Test (bevorzugt)
 
 ```
-// ❌ Plusieurs assertions non liées
+// Mehrere nicht zusammenhängende Assertions
 test "user is valid":
   assert user.email is valid
   assert user.password is strong
   assert user.age > 18
 
-// ✅ Tests séparés
+// Getrennte Tests
 test "user email is valid": ...
 test "user password is strong": ...
 test "user is adult": ...
 ```
 
-### 3. Nommage explicite
+### 3. Aussagekräftige Benennung
 
 ```
-// ❌ Noms vagues
+// SCHLECHT - Vage Namen
 test "test1": ...
 test "user test": ...
 test "it works": ...
 
-// ✅ Noms descriptifs
+// GUT - Beschreibende Namen
 test "calculateTotal returns zero for empty cart": ...
 test "login fails with invalid credentials": ...
 test "email is sent after order confirmation": ...
 ```
 
-### 4. Tests indépendants
+### 4. Unabhängige Tests
 
 ```
-// ❌ Tests dépendants
-test "create user": ...      // Crée user
-test "update user": ...      // Utilise user du test précédent
-test "delete user": ...      // Utilise user du test précédent
+// SCHLECHT - Abhängige Tests
+test "create user": ...      // Erstellt Benutzer
+test "update user": ...      // Verwendet Benutzer aus vorherigem Test
+test "delete user": ...      // Verwendet Benutzer aus vorherigem Test
 
-// ✅ Tests indépendants
+// GUT - Unabhängige Tests
 test "create user":
   user = createUser()
   assert user.exists
 
 test "update user":
-  user = createUser()        // Chaque test crée ses données
+  user = createUser()        // Jeder Test erstellt seine Daten
   user.update(name: "New")
   assert user.name == "New"
 ```
 
-### 5. Utiliser des fixtures/factories
+### 5. Fixtures/Factories verwenden
 
 ```
-// ❌ Création manuelle répétée
+// SCHLECHT - Wiederholte manuelle Erstellung
 test "test 1":
   user = User(
     name: "John",
     email: "john@test.com",
     password: "hash123",
     role: "admin",
-    // ... 10 autres champs
+    // ... 10 weitere Felder
   )
 
-// ✅ Factory
+// GUT - Factory
 test "test 1":
   user = UserFactory.create(role: "admin")
 ```
 
 ---
 
-## Anti-patterns
+## Anti-Patterns
 
-### 1. Tests qui testent l'implémentation
+### 1. Tests, die die Implementierung testen
 
 ```
-// ❌ Teste HOW (implémentation)
+// SCHLECHT - Testet WIE (Implementierung)
 test "save calls repository.insert":
   mock = mock(Repository)
   service.save(user)
   verify mock.insert was called once
 
-// ✅ Teste WHAT (comportement)
+// GUT - Testet WAS (Verhalten)
 test "user is persisted":
   service.save(user)
   assert repository.findById(user.id) exists
 ```
 
-### 2. Tests trop couplés
+### 2. Zu stark gekoppelte Tests
 
 ```
-// ❌ Test qui connaît trop de détails internes
+// SCHLECHT - Test kennt zu viele interne Details
 test "process order":
   order.process()
   assert order._internalState == "processed"
   assert order._processedAt != null
   assert order._processorId == 123
 
-// ✅ Test via interface publique
+// GUT - Test über öffentliches Interface
 test "process order":
   order.process()
   assert order.isProcessed()
 ```
 
-### 3. Tests flaky (non déterministes)
+### 3. Flaky Tests (nicht deterministisch)
 
 ```
-// ❌ Dépend du temps réel
+// SCHLECHT - Hängt von realer Zeit ab
 test "expires after 1 hour":
   item.setExpiry(now + 1.hour)
-  sleep(1.hour)              // ❌ Lent et fragile
+  sleep(1.hour)              // Langsam und fragil
   assert item.isExpired()
 
-// ✅ Inject time
+// GUT - Zeit injizieren
 test "expires after 1 hour":
   clock = FakeClock()
   item.setExpiry(clock.now + 1.hour)
@@ -384,26 +385,26 @@ test "expires after 1 hour":
   assert item.isExpired()
 ```
 
-### 4. Tests commentés
+### 4. Auskommentierte Tests
 
 ```
-// ❌ JAMAIS
+// SCHLECHT - NIEMALS
 // test "broken test":
 //   ...
 
-// ✅ Corriger ou supprimer
-// Si temporairement désactivé: skip("reason")
+// GUT - Korrigieren oder löschen
+// Falls vorübergehend deaktiviert: skip("reason")
 ```
 
-### 5. Tests sans assertions
+### 5. Tests ohne Assertions
 
 ```
-// ❌ Ne teste rien
+// SCHLECHT - Testet nichts
 test "create user":
   service.createUser(data)
-  // Pas d'assert !
+  // Kein Assert!
 
-// ✅ Vérifier le résultat
+// GUT - Ergebnis prüfen
 test "create user":
   user = service.createUser(data)
   assert user.id != null
@@ -412,52 +413,52 @@ test "create user":
 
 ---
 
-## Checklist
+## Checkliste
 
-### Avant chaque commit
+### Vor jedem Commit
 
-- [ ] Tous les tests passent
-- [ ] Nouveaux tests pour nouveau code
-- [ ] Couverture ≥ 80%
-- [ ] Tests rapides (< 10s total pour unitaires)
-- [ ] Pas de tests commentés
-- [ ] Noms de tests explicites
+- [ ] Alle Tests bestehen
+- [ ] Neue Tests für neuen Code
+- [ ] Abdeckung >= 80%
+- [ ] Schnelle Tests (< 10s gesamt für Unit-Tests)
+- [ ] Keine auskommentierten Tests
+- [ ] Aussagekräftige Testnamen
 
-### Pour chaque nouvelle fonctionnalité
+### Für jedes neue Feature
 
-- [ ] Tests unitaires pour la logique métier
-- [ ] Tests d'intégration pour les connexions externes
-- [ ] Scénarios BDD pour les user stories
-- [ ] Tests de edge cases
+- [ ] Unit-Tests für die Geschäftslogik
+- [ ] Integrationstests für externe Verbindungen
+- [ ] BDD-Szenarien für die User Stories
+- [ ] Tests für Grenzfälle
 
-### Pour chaque bug fix
+### Für jeden Bugfix
 
-- [ ] Test qui reproduit le bug (échoue avant fix)
-- [ ] Fix implémenté
-- [ ] Test passe après fix
-- [ ] Test de régression ajouté
+- [ ] Test, der den Bug reproduziert (schlägt vor dem Fix fehl)
+- [ ] Fix implementiert
+- [ ] Test besteht nach dem Fix
+- [ ] Regressionstest hinzugefügt
 
-### Métriques
+### Metriken
 
-| Métrique | Cible | Minimum |
-|----------|-------|---------|
-| Couverture lignes | > 85% | > 80% |
-| Couverture branches | > 80% | > 75% |
-| Tests unitaires | < 1s chacun | < 2s |
-| Suite complète | < 5min | < 10min |
-| Tests flaky | 0 | < 1% |
-
----
-
-## Ressources
-
-- **Livre:** *Test-Driven Development* - Kent Beck
-- **Livre:** *Growing Object-Oriented Software, Guided by Tests* - Freeman & Pryce
-- **Livre:** *The Art of Unit Testing* - Roy Osherove
-- **Article:** [Testing Trophy](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications)
+| Metrik | Ziel | Minimum |
+|--------|------|---------|
+| Zeilenabdeckung | > 85% | > 80% |
+| Branch-Abdeckung | > 80% | > 75% |
+| Unit-Tests | < 1s pro Test | < 2s |
+| Gesamte Suite | < 5min | < 10min |
+| Flaky Tests | 0 | < 1% |
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
+## Ressourcen
+
+- **Buch:** *Test-Driven Development* - Kent Beck
+- **Buch:** *Growing Object-Oriented Software, Guided by Tests* - Freeman & Pryce
+- **Buch:** *The Art of Unit Testing* - Roy Osherove
+- **Artikel:** [Testing Trophy](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications)
+
+---
+
+**Datum der letzten Aktualisierung:** 2025-01
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Autor:** The Bearded CTO

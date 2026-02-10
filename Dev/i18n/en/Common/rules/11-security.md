@@ -1,26 +1,26 @@
-# Sécurité
+# Security
 
-## Vue d'ensemble
+## Overview
 
-La sécurité est une **priorité absolue**. Ce document présente les principes généraux de sécurité applicables à tout projet.
+Security is an **absolute priority**. This document presents the general security principles applicable to any project.
 
-> **Note:** Consultez les règles spécifiques à votre technologie pour les implémentations concrètes.
+> **Note:** Refer to the rules specific to your technology for concrete implementations.
 
-**Références:**
+**References:**
 - OWASP Top 10
 - CWE/SANS Top 25
 
 ---
 
-## Table des matières
+## Table of Contents
 
 1. [OWASP Top 10](#owasp-top-10)
-2. [Validation des entrées](#validation-des-entrées)
-3. [Authentification](#authentification)
-4. [Autorisation](#autorisation)
-5. [Données sensibles](#données-sensibles)
-6. [Headers de sécurité](#headers-de-sécurité)
-7. [Logging et monitoring](#logging-et-monitoring)
+2. [Input Validation](#input-validation)
+3. [Authentication](#authentication)
+4. [Authorization](#authorization)
+5. [Sensitive Data](#sensitive-data)
+6. [Security Headers](#security-headers)
+7. [Logging and Monitoring](#logging-and-monitoring)
 8. [Checklist](#checklist)
 
 ---
@@ -30,57 +30,57 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 ### 1. Broken Access Control
 
 ```
-❌ RISQUE
-- Accès à des ressources sans vérification
-- URLs prédictibles (/admin, /user/123/edit)
-- Manipulation d'IDs dans les URLs
+RISK
+- Accessing resources without verification
+- Predictable URLs (/admin, /user/123/edit)
+- Manipulating IDs in URLs
 
-✅ PROTECTION
-- Vérifier les permissions à CHAQUE requête
-- Utiliser des identifiants non prédictibles (UUID)
+PROTECTION
+- Verify permissions on EVERY request
+- Use non-predictable identifiers (UUID)
 - Deny by default
 ```
 
 ### 2. Cryptographic Failures
 
 ```
-❌ RISQUE
-- Données sensibles en clair
-- Algorithmes obsolètes (MD5, SHA1)
-- Clés dans le code source
+RISK
+- Sensitive data in plain text
+- Obsolete algorithms (MD5, SHA1)
+- Keys in source code
 
-✅ PROTECTION
-- Chiffrer les données sensibles au repos
-- Utiliser TLS 1.3 en transit
-- Algorithmes modernes (bcrypt, Argon2, AES-256)
-- Secrets dans un vault (pas dans le code)
+PROTECTION
+- Encrypt sensitive data at rest
+- Use TLS 1.3 in transit
+- Modern algorithms (bcrypt, Argon2, AES-256)
+- Secrets in a vault (not in the code)
 ```
 
 ### 3. Injection
 
 ```
-❌ RISQUE
+RISK
 - SQL Injection
 - Command Injection
 - LDAP Injection
 
-✅ PROTECTION
-- Requêtes paramétrées (prepared statements)
-- Validation et sanitization des entrées
-- Principe du moindre privilège (DB)
-- Escape des outputs
+PROTECTION
+- Parameterized queries (prepared statements)
+- Input validation and sanitization
+- Principle of least privilege (DB)
+- Output escaping
 ```
 
 ### 4. Insecure Design
 
 ```
-❌ RISQUE
-- Pas de threat modeling
-- Fonctionnalités sensibles non protégées
+RISK
+- No threat modeling
+- Sensitive features unprotected
 - Rate limiting absent
 
-✅ PROTECTION
-- Threat modeling dès la conception
+PROTECTION
+- Threat modeling from the design phase
 - Security by design
 - Defense in depth
 - Rate limiting
@@ -89,119 +89,119 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 ### 5. Security Misconfiguration
 
 ```
-❌ RISQUE
-- Configs par défaut non modifiées
-- Fonctionnalités inutiles activées
-- Messages d'erreur verbeux
-- Permissions trop larges
+RISK
+- Default configs unchanged
+- Unnecessary features enabled
+- Verbose error messages
+- Permissions too broad
 
-✅ PROTECTION
-- Hardening des configurations
-- Désactiver le non nécessaire
-- Messages d'erreur génériques en prod
-- Principe du moindre privilège
+PROTECTION
+- Configuration hardening
+- Disable what is unnecessary
+- Generic error messages in prod
+- Principle of least privilege
 ```
 
 ### 6. Vulnerable Components
 
 ```
-❌ RISQUE
-- Dépendances avec vulnérabilités connues
-- Composants obsolètes
-- Pas de suivi des CVE
+RISK
+- Dependencies with known vulnerabilities
+- Obsolete components
+- No CVE tracking
 
-✅ PROTECTION
-- Audit régulier des dépendances
-- Mise à jour automatique (Dependabot)
+PROTECTION
+- Regular dependency audits
+- Automatic updates (Dependabot)
 - SBOM (Software Bill of Materials)
 ```
 
 ### 7. Authentication Failures
 
 ```
-❌ RISQUE
-- Mots de passe faibles autorisés
-- Pas de MFA
-- Sessions qui n'expirent pas
+RISK
+- Weak passwords allowed
+- No MFA
+- Sessions that never expire
 - Credential stuffing possible
 
-✅ PROTECTION
-- Politique de mots de passe forts
-- MFA pour accès sensibles
-- Expiration des sessions
-- Rate limiting sur login
-- Détection de brute force
+PROTECTION
+- Strong password policy
+- MFA for sensitive access
+- Session expiration
+- Rate limiting on login
+- Brute force detection
 ```
 
 ### 8. Data Integrity Failures
 
 ```
-❌ RISQUE
-- Dépendances non vérifiées
-- CI/CD non sécurisé
-- Updates non signés
+RISK
+- Unverified dependencies
+- Unsecured CI/CD
+- Unsigned updates
 
-✅ PROTECTION
-- Vérification des signatures
-- CI/CD sécurisé
+PROTECTION
+- Signature verification
+- Secured CI/CD
 - Integrity checks (checksums)
 ```
 
 ### 9. Logging & Monitoring Failures
 
 ```
-❌ RISQUE
-- Pas de logs des événements sécurité
-- Logs non protégés
-- Pas d'alerting
+RISK
+- No security event logs
+- Unprotected logs
+- No alerting
 
-✅ PROTECTION
-- Logger les événements de sécurité
-- Protéger les logs (accès restreint)
-- Alerting sur anomalies
-- Retention appropriée
+PROTECTION
+- Log security events
+- Protect logs (restricted access)
+- Alert on anomalies
+- Appropriate retention
 ```
 
 ### 10. SSRF (Server-Side Request Forgery)
 
 ```
-❌ RISQUE
-- URLs fournies par l'utilisateur non validées
-- Accès à des ressources internes
+RISK
+- User-supplied URLs not validated
+- Access to internal resources
 
-✅ PROTECTION
-- Whitelist des destinations autorisées
-- Validation stricte des URLs
-- Pas d'accès réseau interne depuis les inputs
+PROTECTION
+- Whitelist of authorized destinations
+- Strict URL validation
+- No internal network access from inputs
 ```
 
 ---
 
-## Validation des entrées
+## Input Validation
 
-### Règle d'or
+### Golden Rule
 
-> **Ne jamais faire confiance aux données utilisateur.**
-> Valider côté serveur, TOUJOURS.
+> **Never trust user data.**
+> Validate server-side, ALWAYS.
 
-### Types de validation
+### Types of Validation
 
-| Type | Description | Exemple |
+| Type | Description | Example |
 |------|-------------|---------|
-| **Whitelist** | Accepter uniquement ce qui est attendu | `status in ["pending", "done"]` |
-| **Type checking** | Vérifier le type | `typeof id === "number"` |
-| **Format** | Vérifier le format | `email.matches(EMAIL_REGEX)` |
-| **Range** | Vérifier les bornes | `1 <= page <= 100` |
-| **Length** | Vérifier la longueur | `name.length <= 255` |
+| **Whitelist** | Accept only what is expected | `status in ["pending", "done"]` |
+| **Type checking** | Verify the type | `typeof id === "number"` |
+| **Format** | Verify the format | `email.matches(EMAIL_REGEX)` |
+| **Range** | Verify bounds | `1 <= page <= 100` |
+| **Length** | Verify the length | `name.length <= 255` |
 
-### Exemples
+### Examples
 
 ```
-// ❌ MAUVAIS - Pas de validation
+// BAD - No validation
 function getUser(id):
   return db.query("SELECT * FROM users WHERE id = " + id)
 
-// ✅ BON - Validation + requête paramétrée
+// GOOD - Validation + parameterized query
 function getUser(id):
   if not isValidUUID(id):
     throw InvalidInput("Invalid user ID")
@@ -215,33 +215,33 @@ function getUser(id):
 ### Sanitization vs Validation
 
 ```
-Validation: Rejeter les données invalides
-  → "abc" comme ID numérique → ERREUR
+Validation: Reject invalid data
+  -> "abc" as numeric ID -> ERROR
 
-Sanitization: Nettoyer les données
-  → "<script>" dans un nom → "script"
+Sanitization: Clean the data
+  -> "<script>" in a name -> "script"
 
-Préférer VALIDATION (rejeter) à SANITIZATION (transformer)
+Prefer VALIDATION (reject) over SANITIZATION (transform)
 ```
 
 ---
 
-## Authentification
+## Authentication
 
-### Mots de passe
+### Passwords
 
 ```
-Règles:
-- Minimum 12 caractères
-- Majuscules, minuscules, chiffres, spéciaux
-- Pas dans les listes de mots de passe compromis
-- Hash avec bcrypt/Argon2 (JAMAIS MD5/SHA1)
-- Salt unique par utilisateur
+Rules:
+- Minimum 12 characters
+- Uppercase, lowercase, digits, special characters
+- Not in compromised password lists
+- Hash with bcrypt/Argon2 (NEVER MD5/SHA1)
+- Unique salt per user
 
-// ✅ BON
+// GOOD
 hash = bcrypt.hash(password, costFactor=12)
 
-// ❌ MAUVAIS
+// BAD
 hash = md5(password)
 hash = sha1(password + "static_salt")
 ```
@@ -249,34 +249,34 @@ hash = sha1(password + "static_salt")
 ### Sessions
 
 ```
-Règles:
-- Token aléatoire cryptographiquement sûr
-- Stockage côté serveur (pas dans cookies)
-- Expiration: 15-30 min d'inactivité
-- Renouvellement après login
-- Invalidation après logout
+Rules:
+- Cryptographically secure random token
+- Server-side storage (not in cookies)
+- Expiration: 15-30 min of inactivity
+- Renewal after login
+- Invalidation after logout
 
 Session config:
   cookie:
-    httpOnly: true     # Pas accessible en JS
-    secure: true       # HTTPS uniquement
-    sameSite: strict   # Protection CSRF
+    httpOnly: true     # Not accessible via JS
+    secure: true       # HTTPS only
+    sameSite: strict   # CSRF protection
 ```
 
-### JWT (si utilisé)
+### JWT (if used)
 
 ```
-Règles:
-- Algorithme: RS256 ou ES256 (pas HS256 avec secret faible)
-- Expiration courte (15 min)
-- Refresh token long (7 jours) stocké sécurisé
-- Vérifier signature et claims
-- Ne pas stocker de données sensibles dans le payload
+Rules:
+- Algorithm: RS256 or ES256 (not HS256 with weak secret)
+- Short expiration (15 min)
+- Long refresh token (7 days) stored securely
+- Verify signature and claims
+- Do not store sensitive data in the payload
 
-// ❌ MAUVAIS
+// BAD
 jwt.sign(payload, "secret123", { algorithm: "HS256" })
 
-// ✅ BON
+// GOOD
 jwt.sign(payload, privateKey, {
   algorithm: "RS256",
   expiresIn: "15m"
@@ -286,43 +286,43 @@ jwt.sign(payload, privateKey, {
 ### Multi-Factor Authentication (MFA)
 
 ```
-Quand activer MFA:
-- Accès admin
-- Opérations sensibles (paiement, suppression)
-- Changement de mot de passe
-- Connexion depuis nouvel appareil
+When to enable MFA:
+- Admin access
+- Sensitive operations (payment, deletion)
+- Password change
+- Login from new device
 
-Méthodes:
+Methods:
 - TOTP (Google Authenticator)
-- SMS (moins sécurisé)
+- SMS (less secure)
 - Hardware keys (FIDO2)
 ```
 
 ---
 
-## Autorisation
+## Authorization
 
-### Principe du moindre privilège
+### Principle of Least Privilege
 
 ```
-Règle: Accorder uniquement les permissions NÉCESSAIRES.
+Rule: Grant only the NECESSARY permissions.
 
-❌ MAUVAIS
-user.role = "admin"  # Accès à tout
+BAD
+user.role = "admin"  # Access to everything
 
-✅ BON
+GOOD
 user.permissions = ["read:users", "write:orders"]
 ```
 
 ### RBAC (Role-Based Access Control)
 
 ```
-Rôles:
-- admin: Toutes permissions
-- manager: Gestion utilisateurs, lecture rapports
-- user: Accès à ses propres données
+Roles:
+- admin: All permissions
+- manager: User management, read reports
+- user: Access to own data
 
-Vérification:
+Verification:
 function deleteUser(userId, currentUser):
   if not currentUser.hasPermission("delete:users"):
     throw Forbidden("Permission denied")
@@ -333,13 +333,13 @@ function deleteUser(userId, currentUser):
 ### Row-Level Security
 
 ```
-Règle: Vérifier que l'utilisateur a accès à LA ressource spécifique.
+Rule: Verify that the user has access to THE specific resource.
 
-// ❌ MAUVAIS - Vérifie seulement l'authentification
+// BAD - Only checks authentication
 function getOrder(orderId):
   return db.find("orders", orderId)
 
-// ✅ BON - Vérifie l'appartenance
+// GOOD - Checks ownership
 function getOrder(orderId, currentUser):
   order = db.find("orders", orderId)
 
@@ -351,65 +351,65 @@ function getOrder(orderId, currentUser):
 
 ---
 
-## Données sensibles
+## Sensitive Data
 
 ### Classification
 
-| Catégorie | Exemples | Protection |
-|-----------|----------|------------|
-| **Public** | Nom produit | Aucune |
-| **Interne** | Emails | Accès restreint |
-| **Confidentiel** | Données client | Chiffrement |
-| **Secret** | Mots de passe, clés | Vault, hash |
+| Category | Examples | Protection |
+|----------|----------|------------|
+| **Public** | Product name | None |
+| **Internal** | Emails | Restricted access |
+| **Confidential** | Customer data | Encryption |
+| **Secret** | Passwords, keys | Vault, hash |
 
-### Stockage
+### Storage
 
 ```
-Mots de passe:
-  → Hash avec bcrypt/Argon2
-  → JAMAIS en clair
+Passwords:
+  -> Hash with bcrypt/Argon2
+  -> NEVER in plain text
 
-Données personnelles (RGPD):
-  → Chiffrement au repos
-  → Pseudonymisation si possible
-  → Retention limitée
+Personal data (GDPR):
+  -> Encryption at rest
+  -> Pseudonymization if possible
+  -> Limited retention
 
 Secrets (API keys, etc.):
-  → Variables d'environnement
-  → Vault (HashiCorp, AWS Secrets Manager)
-  → JAMAIS dans le code source
+  -> Environment variables
+  -> Vault (HashiCorp, AWS Secrets Manager)
+  -> NEVER in source code
 ```
 
 ### Transmission
 
 ```
-Règles:
-- HTTPS obligatoire (TLS 1.3)
-- Certificats valides
-- HSTS activé
-- Pas de données sensibles dans URLs
+Rules:
+- HTTPS mandatory (TLS 1.3)
+- Valid certificates
+- HSTS enabled
+- No sensitive data in URLs
 
-// ❌ MAUVAIS
+// BAD
 GET /api/users?password=secret123
 
-// ✅ BON
+// GOOD
 POST /api/auth
 Body: { "password": "..." }
 ```
 
 ---
 
-## Headers de sécurité
+## Security Headers
 
-### Headers recommandés
+### Recommended Headers
 
 ```http
-# Protection XSS
+# XSS Protection
 Content-Security-Policy: default-src 'self'; script-src 'self'
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 
-# Protection clickjacking
+# Clickjacking Protection
 X-Frame-Options: DENY
 
 # HTTPS
@@ -425,7 +425,7 @@ Permissions-Policy: geolocation=(), camera=()
 ### Content-Security-Policy (CSP)
 
 ```http
-# Restrictif (recommandé)
+# Restrictive (recommended)
 Content-Security-Policy:
   default-src 'self';
   script-src 'self';
@@ -438,27 +438,27 @@ Content-Security-Policy:
 
 ---
 
-## Logging et monitoring
+## Logging and Monitoring
 
-### Événements à logger
+### Events to Log
 
 ```
-✅ À LOGGER:
-- Tentatives de connexion (succès/échec)
-- Changements de permissions
-- Accès à données sensibles
-- Erreurs d'autorisation
-- Modifications de configuration
-- Exports de données
+LOG:
+- Login attempts (success/failure)
+- Permission changes
+- Access to sensitive data
+- Authorization errors
+- Configuration changes
+- Data exports
 
-❌ À NE PAS LOGGER:
-- Mots de passe
+DO NOT LOG:
+- Passwords
 - Tokens
-- Données personnelles complètes
-- Numéros de carte bancaire
+- Complete personal data
+- Credit card numbers
 ```
 
-### Format de log
+### Log Format
 
 ```json
 {
@@ -478,55 +478,55 @@ Content-Security-Policy:
 ### Alerting
 
 ```
-Alertes critiques:
-- 5+ échecs de login sur même compte
-- Accès admin depuis nouvelle IP
-- Modification de permissions
-- Erreurs 500 en série
-- Volume anormal de requêtes
+Critical alerts:
+- 5+ login failures on same account
+- Admin access from new IP
+- Permission changes
+- Consecutive 500 errors
+- Abnormal request volume
 ```
 
 ---
 
 ## Checklist
 
-### Développement
+### Development
 
-- [ ] Validation des entrées côté serveur
-- [ ] Requêtes paramétrées (pas de concaténation SQL)
-- [ ] Escape des outputs (prévention XSS)
-- [ ] Mots de passe hashés (bcrypt/Argon2)
-- [ ] Sessions sécurisées (httpOnly, secure, sameSite)
-- [ ] Vérification des permissions à chaque requête
-- [ ] Secrets dans variables d'environnement
-- [ ] Dépendances auditées
+- [ ] Server-side input validation
+- [ ] Parameterized queries (no SQL concatenation)
+- [ ] Output escaping (XSS prevention)
+- [ ] Hashed passwords (bcrypt/Argon2)
+- [ ] Secure sessions (httpOnly, secure, sameSite)
+- [ ] Permission verification on every request
+- [ ] Secrets in environment variables
+- [ ] Dependencies audited
 
 ### Configuration
 
-- [ ] HTTPS activé (TLS 1.3)
-- [ ] Headers de sécurité configurés
-- [ ] Messages d'erreur génériques en prod
-- [ ] Debug mode désactivé en prod
-- [ ] Rate limiting activé
-- [ ] CORS configuré strictement
+- [ ] HTTPS enabled (TLS 1.3)
+- [ ] Security headers configured
+- [ ] Generic error messages in prod
+- [ ] Debug mode disabled in prod
+- [ ] Rate limiting enabled
+- [ ] CORS configured strictly
 
 ### Monitoring
 
-- [ ] Logging des événements de sécurité
-- [ ] Alerting sur anomalies
-- [ ] Audit régulier des accès
-- [ ] Scan de vulnérabilités périodique
+- [ ] Security event logging
+- [ ] Alerting on anomalies
+- [ ] Regular access audits
+- [ ] Periodic vulnerability scans
 
-### Compliance (si applicable)
+### Compliance (if applicable)
 
-- [ ] RGPD: Consentement, droit à l'oubli
-- [ ] PCI-DSS: Données de paiement
-- [ ] HIPAA: Données de santé
-- [ ] SOC2: Contrôles de sécurité
+- [ ] GDPR: Consent, right to erasure
+- [ ] PCI-DSS: Payment data
+- [ ] HIPAA: Health data
+- [ ] SOC2: Security controls
 
 ---
 
-## Ressources
+## Resources
 
 - **OWASP Top 10:** [owasp.org/Top10](https://owasp.org/Top10/)
 - **OWASP Cheat Sheets:** [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/)
@@ -535,6 +535,6 @@ Alertes critiques:
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
+**Last updated:** 2025-01
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Author:** The Bearded CTO

@@ -1,206 +1,206 @@
-# Documentation
+# Dokumentation
 
-## Vue d'ensemble
+## Überblick
 
-Une bonne documentation est **essentielle** pour la maintenabilité du projet. Elle doit être à jour, concise et utile.
+Eine gute Dokumentation ist **essenziell** für die Wartbarkeit des Projekts. Sie muss aktuell, prägnant und nützlich sein.
 
-**Principes:**
-- ✅ Documentation as Code (versionnée avec le code)
-- ✅ Single Source of Truth (pas de duplication)
-- ✅ Mise à jour avec chaque PR
-- ✅ Automatisée quand possible
+**Prinzipien:**
+- Documentation as Code (versioniert mit dem Code)
+- Single Source of Truth (keine Duplikation)
+- Aktualisierung mit jedem PR
+- Automatisiert wo möglich
 
 ---
 
-## Table des matières
+## Inhaltsverzeichnis
 
-1. [Types de documentation](#types-de-documentation)
+1. [Dokumentationstypen](#dokumentationstypen)
 2. [README.md](#readmemd)
-3. [Documentation du code](#documentation-du-code)
+3. [Code-Dokumentation](#code-dokumentation)
 4. [ADR - Architecture Decision Records](#adr---architecture-decision-records)
-5. [API Documentation](#api-documentation)
+5. [API-Dokumentation](#api-dokumentation)
 6. [Changelog](#changelog)
-7. [Bonnes pratiques](#bonnes-pratiques)
-8. [Checklist](#checklist)
+7. [Best Practices](#best-practices)
+8. [Checkliste](#checkliste)
 
 ---
 
-## Types de documentation
+## Dokumentationstypen
 
-| Type | Audience | Contenu | Format |
-|------|----------|---------|--------|
-| README | Nouveaux devs | Démarrage rapide | Markdown |
-| Code comments | Développeurs | Pourquoi, pas quoi | Inline |
-| API docs | Consommateurs | Endpoints, schemas | OpenAPI |
-| ADR | Équipe | Décisions arch. | Markdown |
-| Changelog | Tous | Historique changes | Markdown |
-| User docs | Utilisateurs | Guides, tutoriels | Markdown/HTML |
+| Typ | Zielgruppe | Inhalt | Format |
+|-----|-----------|--------|--------|
+| README | Neue Entwickler | Schnellstart | Markdown |
+| Code-Kommentare | Entwickler | Warum, nicht Was | Inline |
+| API-Docs | Konsumenten | Endpoints, Schemas | OpenAPI |
+| ADR | Team | Architektur-Entscheidungen | Markdown |
+| Changelog | Alle | Änderungshistorie | Markdown |
+| Benutzer-Docs | Benutzer | Anleitungen, Tutorials | Markdown/HTML |
 
 ---
 
 ## README.md
 
-### Structure recommandée
+### Empfohlene Struktur
 
 ```markdown
-# Nom du Projet
+# Projektname
 
-Description courte (1-2 phrases).
+Kurze Beschreibung (1-2 Sätze).
 
-## Prérequis
+## Voraussetzungen
 
-- Tool 1 (version)
-- Tool 2 (version)
+- Tool 1 (Version)
+- Tool 2 (Version)
 
 ## Installation
 
-```bash
-# Commandes d'installation
-```
+\`\`\`bash
+# Installationsbefehle
+\`\`\`
 
-## Démarrage rapide
+## Schnellstart
 
-```bash
-# Commandes pour lancer le projet
-```
+\`\`\`bash
+# Befehle zum Starten des Projekts
+\`\`\`
 
-## Configuration
+## Konfiguration
 
-Variables d'environnement requises:
+Erforderliche Umgebungsvariablen:
 
-| Variable | Description | Défaut |
-|----------|-------------|--------|
-| DATABASE_URL | URL base de données | - |
-| API_KEY | Clé API externe | - |
+| Variable | Beschreibung | Standard |
+|----------|-------------|----------|
+| DATABASE_URL | Datenbank-URL | - |
+| API_KEY | Externer API-Schlüssel | - |
 
 ## Tests
 
-```bash
-# Comment lancer les tests
+\`\`\`bash
+# Wie Tests ausgeführt werden
 make test
-```
+\`\`\`
 
-## Déploiement
+## Deployment
 
-Instructions de déploiement.
+Deployment-Anweisungen.
 
-## Architecture
+## Architektur
 
-Brève description de l'architecture.
-Lien vers documentation détaillée.
+Kurze Beschreibung der Architektur.
+Link zur detaillierten Dokumentation.
 
-## Contribution
+## Beitragen
 
-Instructions pour contribuer.
-Lien vers CONTRIBUTING.md.
+Anweisungen zum Beitragen.
+Link zu CONTRIBUTING.md.
 
-## License
+## Lizenz
 
 MIT License
 ```
 
-### Exemples
+### Beispiele
 
-#### ✅ BON
+#### GUT
 
 ```markdown
 # E-Commerce API
 
-API REST pour la gestion de commandes e-commerce.
+REST-API für die Verwaltung von E-Commerce-Bestellungen.
 
 ## Installation
 
-```bash
+\`\`\`bash
 git clone https://github.com/company/ecommerce-api
 cd ecommerce-api
 make install
-```
+\`\`\`
 
-## Démarrage
+## Start
 
-```bash
+\`\`\`bash
 make dev
-# API disponible sur http://localhost:8080
-```
+# API verfügbar unter http://localhost:8080
+\`\`\`
 ```
 
-#### ❌ MAUVAIS
+#### SCHLECHT
 
 ```markdown
-# Project
+# Projekt
 
-This is a project.
+Das ist ein Projekt.
 
-Run `npm install` then `npm start`.
+Führen Sie `npm install` dann `npm start` aus.
 ```
 
 ---
 
-## Documentation du code
+## Code-Dokumentation
 
-### Règle d'or
+### Goldene Regel
 
-> **Le code doit être auto-documenté.**
-> Les commentaires expliquent le POURQUOI, pas le QUOI.
+> **Der Code muss selbstdokumentierend sein.**
+> Kommentare erklären das WARUM, nicht das WAS.
 
-### Quand commenter
-
-```
-✅ COMMENTER:
-- Décisions non évidentes
-- Workarounds temporaires
-- Références externes (tickets, specs)
-- Algorithmes complexes
-
-❌ NE PAS COMMENTER:
-- Ce que fait le code (lisible)
-- Code évident
-- Code mort
-```
-
-### Exemples
-
-#### ✅ BON - Explique le pourquoi
+### Wann kommentieren
 
 ```
-// Workaround: API externe ne supporte pas UTF-8
-// TODO: Supprimer quand API v2 sera disponible (#1234)
+KOMMENTIEREN:
+- Nicht offensichtliche Entscheidungen
+- Temporäre Workarounds
+- Externe Referenzen (Tickets, Spezifikationen)
+- Komplexe Algorithmen
+
+NICHT KOMMENTIEREN:
+- Was der Code tut (lesbar)
+- Offensichtlicher Code
+- Toter Code
+```
+
+### Beispiele
+
+#### GUT - Erklärt das Warum
+
+```
+// Workaround: Externe API unterstützt kein UTF-8
+// TODO: Entfernen, wenn API v2 verfügbar (#1234)
 function sanitizeInput(text):
   return text.ascii_only()
 
-// Rate limit de 100 req/min imposé par le provider
-// Voir: https://provider.com/docs/rate-limits
+// Rate Limit von 100 Req/Min vom Provider vorgegeben
+// Siehe: https://provider.com/docs/rate-limits
 RATE_LIMIT = 100
 ```
 
-#### ❌ MAUVAIS - Explique le quoi (inutile)
+#### SCHLECHT - Erklärt das Was (unnötig)
 
 ```
-// Incrémente le compteur
+// Zähler inkrementieren
 counter = counter + 1
 
-// Retourne l'utilisateur
+// Benutzer zurückgeben
 return user
 
-// Boucle sur les items
+// Über Items iterieren
 for item in items:
 ```
 
-### Documentation des fonctions
+### Funktionsdokumentation
 
-Documenter:
-- **Public API** - Toujours
-- **Fonctions complexes** - Si non évident
-- **Fonctions privées** - Rarement
+Dokumentieren:
+- **Public API** - Immer
+- **Komplexe Funktionen** - Falls nicht offensichtlich
+- **Private Funktionen** - Selten
 
 ```
 /**
- * Calcule le prix total avec remises applicables.
+ * Berechnet den Gesamtpreis mit anwendbaren Rabatten.
  *
- * @param items - Liste des articles
- * @param discountCode - Code promo optionnel
- * @returns Prix total après remises
- * @throws InvalidDiscountCode si code invalide
+ * @param items - Liste der Artikel
+ * @param discountCode - Optionaler Promo-Code
+ * @returns Gesamtpreis nach Rabatten
+ * @throws InvalidDiscountCode falls Code ungültig
  *
  * @example
  * calculateTotal([item1, item2], "SAVE10")
@@ -217,74 +217,74 @@ function calculateTotal(items, discountCode = null):
 ### Format
 
 ```markdown
-# ADR-001: Choix de la base de données
+# ADR-001: Wahl der Datenbank
 
-## Statut
+## Status
 
-Accepté (2025-01-15)
+Akzeptiert (2025-01-15)
 
-## Contexte
+## Kontext
 
-Nous devons choisir une base de données pour stocker
-les données utilisateurs et commandes.
+Wir müssen eine Datenbank wählen, um Benutzer-
+und Bestellungsdaten zu speichern.
 
-Contraintes:
-- Volume: ~1M utilisateurs, ~10M commandes
-- Requêtes: 80% lectures, 20% écritures
-- Budget: Limité
+Einschränkungen:
+- Volumen: ~1M Benutzer, ~10M Bestellungen
+- Abfragen: 80% Lesezugriffe, 20% Schreibzugriffe
+- Budget: Begrenzt
 
-## Décision
+## Entscheidung
 
-Nous utilisons PostgreSQL.
+Wir verwenden PostgreSQL.
 
-## Alternatives considérées
+## Betrachtete Alternativen
 
 ### MySQL
-- ✅ Familiarité équipe
-- ❌ Moins performant pour requêtes complexes
+- Vertrautheit im Team
+- Weniger performant bei komplexen Abfragen
 
 ### MongoDB
-- ✅ Flexibilité schéma
-- ❌ Pas adapté aux relations fortes
+- Schema-Flexibilität
+- Nicht geeignet für starke Relationen
 
-### PostgreSQL (choisi)
-- ✅ Performance requêtes complexes
-- ✅ JSONB pour flexibilité
-- ✅ Extensions (PostGIS si besoin)
+### PostgreSQL (gewählt)
+- Leistung bei komplexen Abfragen
+- JSONB für Flexibilität
+- Erweiterungen (PostGIS bei Bedarf)
 
-## Conséquences
+## Konsequenzen
 
-### Positives
-- Performances prévisibles
-- Écosystème mature
-- Backup/restore standard
+### Positiv
+- Vorhersehbare Leistung
+- Ausgereiftes Ökosystem
+- Standard Backup/Restore
 
-### Négatives
-- Migration depuis MySQL nécessaire
-- Formation équipe sur spécificités PG
+### Negativ
+- Migration von MySQL erforderlich
+- Teamschulung zu PG-Besonderheiten
 ```
 
-### Quand créer un ADR
+### Wann ein ADR erstellen
 
-- Choix de technologie majeure
-- Changement d'architecture
-- Adoption d'un pattern
-- Décision irréversible ou coûteuse à changer
+- Wahl einer wichtigen Technologie
+- Architekturänderung
+- Einführung eines Patterns
+- Unumkehrbare oder kostspielig zu ändernde Entscheidung
 
-### Structure des fichiers
+### Dateistruktur
 
 ```
 docs/
 └── adr/
-    ├── 0001-choix-base-donnees.md
-    ├── 0002-architecture-microservices.md
-    ├── 0003-strategie-cache.md
+    ├── 0001-wahl-datenbank.md
+    ├── 0002-microservices-architektur.md
+    ├── 0003-cache-strategie.md
     └── index.md
 ```
 
 ---
 
-## API Documentation
+## API-Dokumentation
 
 ### OpenAPI (Swagger)
 
@@ -340,19 +340,19 @@ components:
           type: string
 ```
 
-### Bonnes pratiques API Docs
+### Best Practices API-Docs
 
-1. **Exemples concrets** pour chaque endpoint
-2. **Codes d'erreur** documentés
-3. **Authentification** expliquée
-4. **Rate limits** mentionnés
-5. **Versioning** clair
+1. **Konkrete Beispiele** für jeden Endpoint
+2. **Fehlercodes** dokumentiert
+3. **Authentifizierung** erklärt
+4. **Rate Limits** erwähnt
+5. **Versionierung** klar
 
 ---
 
 ## Changelog
 
-### Format Keep a Changelog
+### Keep-a-Changelog-Format
 
 ```markdown
 # Changelog
@@ -390,73 +390,73 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Initial release
 ```
 
-### Catégories
+### Kategorien
 
-| Catégorie | Contenu |
-|-----------|---------|
-| **Added** | Nouvelles fonctionnalités |
-| **Changed** | Modifications de comportement |
-| **Deprecated** | Fonctionnalités bientôt supprimées |
-| **Removed** | Fonctionnalités supprimées |
-| **Fixed** | Corrections de bugs |
-| **Security** | Corrections de sécurité |
+| Kategorie | Inhalt |
+|-----------|--------|
+| **Added** | Neue Funktionalitäten |
+| **Changed** | Verhaltensänderungen |
+| **Deprecated** | Bald entfernte Funktionalitäten |
+| **Removed** | Entfernte Funktionalitäten |
+| **Fixed** | Bugfixes |
+| **Security** | Sicherheitskorrekturen |
 
 ---
 
-## Bonnes pratiques
+## Best Practices
 
 ### 1. Documentation as Code
 
 ```
-✅ Versionnée avec Git
-✅ Revue dans les PRs
-✅ Tests de documentation (liens, syntaxe)
-✅ CI/CD génère la doc
+Versioniert mit Git
+In PRs überprüft
+Dokumentations-Tests (Links, Syntax)
+CI/CD generiert die Doku
 ```
 
 ### 2. Single Source of Truth
 
 ```
-❌ MAUVAIS
-- README dit "utiliser npm"
-- Wiki dit "utiliser yarn"
-- Slack dit "utiliser pnpm"
+SCHLECHT
+- README sagt "npm verwenden"
+- Wiki sagt "yarn verwenden"
+- Slack sagt "pnpm verwenden"
 
-✅ BON
-- README dit "utiliser npm"
-- Wiki renvoie vers README
-- Slack renvoie vers README
+GUT
+- README sagt "npm verwenden"
+- Wiki verweist auf README
+- Slack verweist auf README
 ```
 
-### 3. Mise à jour continue
+### 3. Kontinuierliche Aktualisierung
 
 ```
-Règle: Chaque PR qui change le comportement
-       doit mettre à jour la documentation.
+Regel: Jeder PR, der das Verhalten ändert,
+       muss die Dokumentation aktualisieren.
 
-Checklist PR:
-- [ ] README mis à jour
-- [ ] API docs mis à jour
-- [ ] CHANGELOG mis à jour
-- [ ] ADR créé si décision architecturale
+PR-Checkliste:
+- [ ] README aktualisiert
+- [ ] API-Docs aktualisiert
+- [ ] CHANGELOG aktualisiert
+- [ ] ADR erstellt bei Architekturentscheidung
 ```
 
-### 4. Automatisation
+### 4. Automatisierung
 
 ```yaml
-# Génération automatique
-- API docs depuis code (annotations)
-- Changelog depuis commits (conventional)
-- Diagrammes depuis code (Mermaid)
+# Automatische Generierung
+- API-Docs aus Code (Annotations)
+- Changelog aus Commits (Conventional)
+- Diagramme aus Code (Mermaid)
 ```
 
 ---
 
-## Diagrammes
+## Diagramme
 
-### Mermaid (intégré GitHub/GitLab)
+### Mermaid (integriert in GitHub/GitLab)
 
-```markdown
+````markdown
 ```mermaid
 graph LR
     A[Client] --> B[API Gateway]
@@ -465,11 +465,11 @@ graph LR
     C --> E[(Database)]
     D --> E
 ```
-```
+````
 
-### Architecture Decision
+### Architekturentscheidung
 
-```markdown
+````markdown
 ```mermaid
 flowchart TD
     subgraph Presentation
@@ -498,58 +498,58 @@ flowchart TD
     F --> D
     G --> C
 ```
-```
+````
 
 ---
 
-## Checklist
+## Checkliste
 
-### Pour chaque PR
+### Für jeden PR
 
-- [ ] README mis à jour si changement de setup
-- [ ] Commentaires ajoutés pour code non évident
-- [ ] CHANGELOG mis à jour
-- [ ] API docs générées/mises à jour
-- [ ] ADR créé si décision architecturale
+- [ ] README aktualisiert bei Setup-Änderung
+- [ ] Kommentare für nicht offensichtlichen Code hinzugefügt
+- [ ] CHANGELOG aktualisiert
+- [ ] API-Docs generiert/aktualisiert
+- [ ] ADR erstellt bei Architekturentscheidung
 
-### Revue trimestrielle
+### Vierteljährliche Überprüfung
 
-- [ ] README toujours exact
-- [ ] Liens fonctionnels
-- [ ] Exemples à jour
-- [ ] Dépendances documentées
+- [ ] README noch korrekt
+- [ ] Links funktionsfähig
+- [ ] Beispiele aktuell
+- [ ] Abhängigkeiten dokumentiert
 
-### Nouveau projet
+### Neues Projekt
 
-- [ ] README avec installation
+- [ ] README mit Installation
 - [ ] CONTRIBUTING.md
-- [ ] CHANGELOG.md initialisé
-- [ ] Structure docs/adr/ créée
-- [ ] Template PR avec checklist doc
+- [ ] CHANGELOG.md initialisiert
+- [ ] docs/adr/-Struktur erstellt
+- [ ] PR-Vorlage mit Doku-Checkliste
 
 ---
 
-## Outils recommandés
+## Empfohlene Tools
 
-| Outil | Usage |
-|-------|-------|
-| **MkDocs** | Documentation site |
-| **Swagger UI** | API documentation |
-| **Mermaid** | Diagrammes |
-| **ADR Tools** | Gestion ADRs |
-| **Vale** | Linting prose |
+| Tool | Verwendung |
+|------|-----------|
+| **MkDocs** | Dokumentations-Website |
+| **Swagger UI** | API-Dokumentation |
+| **Mermaid** | Diagramme |
+| **ADR Tools** | ADR-Verwaltung |
+| **Vale** | Prosa-Linting |
 
 ---
 
-## Ressources
+## Ressourcen
 
 - **Keep a Changelog:** [keepachangelog.com](https://keepachangelog.com/)
 - **ADR:** [adr.github.io](https://adr.github.io/)
 - **OpenAPI:** [swagger.io/specification](https://swagger.io/specification/)
-- **Diátaxis:** [diataxis.fr](https://diataxis.fr/) (framework documentation)
+- **Diataxis:** [diataxis.fr](https://diataxis.fr/) (Dokumentations-Framework)
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
+**Datum der letzten Aktualisierung:** 2025-01
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Autor:** The Bearded CTO

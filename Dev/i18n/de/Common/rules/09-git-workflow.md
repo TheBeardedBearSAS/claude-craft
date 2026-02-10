@@ -1,26 +1,26 @@
 # Git Workflow
 
-## Vue d'ensemble
+## Überblick
 
-Le workflow Git est basé sur **GitHub Flow** avec des **Conventional Commits** obligatoires.
+Der Git-Workflow basiert auf **GitHub Flow** mit **obligatorischen Conventional Commits**.
 
-**Principes:**
-- ✅ Branche `main` toujours déployable
-- ✅ Feature branches courtes (< 3 jours)
-- ✅ Pull Requests obligatoires
-- ✅ Code review avant merge
-- ✅ CI doit passer (tests + qualité)
+**Prinzipien:**
+- Branch `main` immer deploybar
+- Kurze Feature Branches (< 3 Tage)
+- Obligatorische Pull Requests
+- Code Review vor dem Merge
+- CI muss bestehen (Tests + Qualität)
 
 ---
 
-## Table des matières
+## Inhaltsverzeichnis
 
 1. [GitHub Flow](#github-flow)
 2. [Conventional Commits](#conventional-commits)
 3. [Branches](#branches)
 4. [Pull Requests](#pull-requests)
 5. [Code Review](#code-review)
-6. [Checklist PR](#checklist-pr)
+6. [PR-Checkliste](#pr-checkliste)
 
 ---
 
@@ -39,17 +39,17 @@ main (production-ready)
   │   │
   │   └─> Pull Request → Code Review → Merge
   │
-  └─> main (updated)
+  └─> main (aktualisiert)
 ```
 
-### Règles
+### Regeln
 
-1. **`main` est toujours déployable**
-2. **Nouvelle fonctionnalité = nouvelle branche**
-3. **Commits atomiques et testés**
-4. **PR + Review obligatoires**
-5. **CI doit passer avant merge**
-6. **Squash merge pour historique propre**
+1. **`main` ist immer deploybar**
+2. **Neue Funktionalität = neuer Branch**
+3. **Atomare und getestete Commits**
+4. **PR + Review obligatorisch**
+5. **CI muss vor dem Merge bestehen**
+6. **Squash Merge für saubere Historie**
 
 ---
 
@@ -65,34 +65,34 @@ main (production-ready)
 [optional footer(s)]
 ```
 
-### Types obligatoires
+### Obligatorische Typen
 
-| Type | Description | Exemple |
-|------|-------------|---------|
-| `feat` | Nouvelle fonctionnalité | `feat(auth): add login endpoint` |
-| `fix` | Correction de bug | `fix(cart): correct total calculation` |
-| `docs` | Documentation uniquement | `docs(readme): update installation steps` |
-| `style` | Formatage (pas de changement code) | `style: apply formatter` |
-| `refactor` | Refactoring (ni feat ni fix) | `refactor(user): extract validation logic` |
-| `perf` | Amélioration performance | `perf(query): add index on created_at` |
-| `test` | Ajout/correction tests | `test(auth): add edge cases` |
-| `build` | Build system, deps externes | `build: upgrade framework to v2.0` |
-| `ci` | CI/CD configuration | `ci: add lint step to pipeline` |
-| `chore` | Autres (pas de code prod) | `chore: update .gitignore` |
+| Typ | Beschreibung | Beispiel |
+|-----|-------------|---------|
+| `feat` | Neue Funktionalität | `feat(auth): add login endpoint` |
+| `fix` | Bugfix | `fix(cart): correct total calculation` |
+| `docs` | Nur Dokumentation | `docs(readme): update installation steps` |
+| `style` | Formatierung (keine Codeänderung) | `style: apply formatter` |
+| `refactor` | Refactoring (weder feat noch fix) | `refactor(user): extract validation logic` |
+| `perf` | Leistungsverbesserung | `perf(query): add index on created_at` |
+| `test` | Hinzufügen/Korrektur von Tests | `test(auth): add edge cases` |
+| `build` | Build-System, externe Deps | `build: upgrade framework to v2.0` |
+| `ci` | CI/CD-Konfiguration | `ci: add lint step to pipeline` |
+| `chore` | Sonstiges (kein Produktivcode) | `chore: update .gitignore` |
 
-### Scopes recommandés
+### Empfohlene Scopes
 
-Utilisez les bounded contexts ou modules de votre projet:
-- `auth` - Authentification
-- `user` - Gestion utilisateurs
-- `order` - Commandes
-- `payment` - Paiements
-- `notification` - Notifications
-- `infra` - Infrastructure
+Verwenden Sie die Bounded Contexts oder Module Ihres Projekts:
+- `auth` - Authentifizierung
+- `user` - Benutzerverwaltung
+- `order` - Bestellungen
+- `payment` - Zahlungen
+- `notification` - Benachrichtigungen
+- `infra` - Infrastruktur
 
-### Exemples de commits
+### Commit-Beispiele
 
-#### ✅ BON
+#### GUT
 
 ```bash
 # Feature
@@ -132,26 +132,26 @@ following Strategy pattern:
 - BankTransferGateway"
 ```
 
-#### ❌ MAUVAIS
+#### SCHLECHT
 
 ```bash
-# ❌ Trop vague
+# Zu vage
 git commit -m "fix bug"
 
-# ❌ Pas de type
+# Kein Typ
 git commit -m "add new feature"
 
-# ❌ Pas de scope
+# Kein Scope
 git commit -m "feat: stuff"
 
-# ❌ Trop long (> 72 chars)
+# Zu lang (> 72 Zeichen)
 git commit -m "feat(user): implement the complete user management system with registration, login, password reset and email notifications"
 
-# ❌ Plusieurs changements non liés
+# Mehrere nicht zusammenhängende Änderungen
 git commit -m "feat: add login + fix email + update docs"
 ```
 
-### Outils de validation
+### Validierungs-Tools
 
 #### Commitlint
 
@@ -169,7 +169,7 @@ git commit -m "feat: add login + fix email + update docs"
 }
 ```
 
-#### Git hooks
+#### Git Hooks
 
 ```bash
 # .husky/commit-msg
@@ -181,23 +181,23 @@ npx --no-install commitlint --edit "$1"
 
 ## Branches
 
-### Nomenclature
+### Namenskonvention
 
 ```
-<type>/<description-courte>
+<type>/<kurze-beschreibung>
 ```
 
-**Types:**
-- `feature/` - Nouvelle fonctionnalité
-- `fix/` - Correction de bug
+**Typen:**
+- `feature/` - Neue Funktionalität
+- `fix/` - Bugfix
 - `refactor/` - Refactoring
-- `docs/` - Documentation
-- `chore/` - Maintenance
+- `docs/` - Dokumentation
+- `chore/` - Wartung
 
-### Exemples
+### Beispiele
 
 ```bash
-# ✅ BON
+# GUT
 feature/add-user-registration
 feature/payment-integration
 fix/login-validation-error
@@ -205,269 +205,269 @@ refactor/extract-auth-service
 docs/update-api-documentation
 chore/upgrade-dependencies
 
-# ❌ MAUVAIS
+# SCHLECHT
 dev-branch
 my-work
 bug-fix
 feature123
 ```
 
-### Création de branche
+### Branch erstellen
 
 ```bash
-# Toujours partir de main à jour
+# Immer von aktuellem main starten
 git checkout main
 git pull origin main
 
-# Créer la feature branch
+# Feature Branch erstellen
 git checkout -b feature/add-user-registration
 
-# Travailler sur la feature
-# ... commits ...
+# Am Feature arbeiten
+# ... Commits ...
 
-# Push de la branche
+# Branch pushen
 git push -u origin feature/add-user-registration
 ```
 
-### Durée de vie
+### Lebensdauer
 
-- ⏱️ **Maximum 3 jours** de développement
-- Si > 3 jours → **découper** en plusieurs PRs
-- Merge dès que fonctionnel (même si incomplet)
-- Utiliser **feature flags** si nécessaire
+- **Maximal 3 Tage** Entwicklung
+- Wenn > 3 Tage → in mehrere PRs **aufteilen**
+- Mergen, sobald funktional (auch wenn unvollständig)
+- **Feature Flags** verwenden, wenn nötig
 
 ---
 
 ## Pull Requests
 
-### Template PR
+### PR-Vorlage
 
 ```markdown
-## Description
+## Beschreibung
 
-<!-- Décrivez les changements de cette PR -->
+<!-- Beschreiben Sie die Änderungen dieser PR -->
 
-Closes #[numéro_issue]
+Closes #[issue_nummer]
 
-## Type de changement
+## Art der Änderung
 
-- [ ] 🚀 Nouvelle fonctionnalité (feat)
-- [ ] 🐛 Correction de bug (fix)
-- [ ] 📝 Documentation (docs)
-- [ ] ♻️ Refactoring (refactor)
-- [ ] ⚡ Performance (perf)
-- [ ] ✅ Tests (test)
+- [ ] Neue Funktionalität (feat)
+- [ ] Bugfix (fix)
+- [ ] Dokumentation (docs)
+- [ ] Refactoring (refactor)
+- [ ] Leistung (perf)
+- [ ] Tests (test)
 
-## Checklist
+## Checkliste
 
 ### Code
 
-- [ ] Le code suit les standards du projet
-- [ ] J'ai effectué une auto-review de mon code
-- [ ] J'ai commenté les parties complexes
-- [ ] Linter passe sans erreur
-- [ ] Formatter appliqué
+- [ ] Der Code folgt den Projektstandards
+- [ ] Ich habe eine Selbstüberprüfung meines Codes durchgeführt
+- [ ] Ich habe komplexe Teile kommentiert
+- [ ] Linter besteht ohne Fehler
+- [ ] Formatter angewendet
 
 ### Tests
 
-- [ ] Tests unitaires ajoutés/mis à jour
-- [ ] Tests d'intégration si nécessaire
-- [ ] Couverture de code ≥ 80%
-- [ ] Tous les tests passent
+- [ ] Unit-Tests hinzugefügt/aktualisiert
+- [ ] Integrationstests falls nötig
+- [ ] Codeabdeckung >= 80%
+- [ ] Alle Tests bestehen
 
-### Documentation
+### Dokumentation
 
-- [ ] README mis à jour si nécessaire
-- [ ] Documentation API à jour
-- [ ] CHANGELOG.md mis à jour
+- [ ] README aktualisiert falls nötig
+- [ ] API-Dokumentation aktuell
+- [ ] CHANGELOG.md aktualisiert
 
-### Architecture
+### Architektur
 
-- [ ] Principes SOLID appliqués
-- [ ] DRY respecté (pas de duplication)
-- [ ] YAGNI respecté (pas de code inutile)
+- [ ] SOLID-Prinzipien angewendet
+- [ ] DRY eingehalten (keine Duplikation)
+- [ ] YAGNI eingehalten (kein unnötiger Code)
 
-### Sécurité
+### Sicherheit
 
-- [ ] Pas de données sensibles en clair
-- [ ] Validation des inputs
-- [ ] Pas de secrets dans le code
+- [ ] Keine sensiblen Daten im Klartext
+- [ ] Input-Validierung
+- [ ] Keine Secrets im Code
 
 ## Screenshots
 
-<!-- Si changement UI, ajouter des screenshots -->
+<!-- Bei UI-Änderungen Screenshots hinzufügen -->
 
-## Notes pour les reviewers
+## Hinweise für Reviewer
 
-<!-- Indiquer les points à vérifier particulièrement -->
+<!-- Punkte angeben, die besonders geprüft werden sollten -->
 ```
 
 ### Labels
 
-| Label | Utilisation |
-|-------|-------------|
-| `enhancement` | Nouvelle fonctionnalité |
-| `bug` | Correction de bug |
-| `documentation` | Documentation uniquement |
+| Label | Verwendung |
+|-------|------------|
+| `enhancement` | Neue Funktionalität |
+| `bug` | Bugfix |
+| `documentation` | Nur Dokumentation |
 | `refactoring` | Refactoring |
-| `performance` | Amélioration performance |
-| `security` | Sécurité |
-| `breaking-change` | Changement cassant |
-| `needs-review` | En attente de review |
+| `performance` | Leistungsverbesserung |
+| `security` | Sicherheit |
+| `breaking-change` | Breaking Change |
+| `needs-review` | Wartet auf Review |
 | `work-in-progress` | WIP |
-| `ready-to-merge` | Prêt pour merge |
+| `ready-to-merge` | Bereit zum Merge |
 
 ---
 
 ## Code Review
 
-### Checklist Reviewer
+### Reviewer-Checkliste
 
-#### Architecture
-- [ ] Principes SOLID respectés
-- [ ] Couches bien séparées
-- [ ] Pas de dépendances inversées
+#### Architektur
+- [ ] SOLID-Prinzipien eingehalten
+- [ ] Schichten gut getrennt
+- [ ] Keine invertierten Abhängigkeiten
 
-#### Code Quality
-- [ ] KISS / DRY / YAGNI appliqués
-- [ ] Nommage explicite
-- [ ] Pas de duplication de code
-- [ ] Complexité acceptable (< 10)
-- [ ] Méthodes courtes (< 20 lignes)
+#### Codequalität
+- [ ] KISS / DRY / YAGNI angewendet
+- [ ] Aussagekräftige Benennung
+- [ ] Keine Code-Duplikation
+- [ ] Akzeptable Komplexität (< 10)
+- [ ] Kurze Methoden (< 20 Zeilen)
 
 #### Tests
-- [ ] Tests pour la logique métier
-- [ ] Couverture ≥ 80%
-- [ ] Tous les tests passent
-- [ ] Pas de tests commentés
+- [ ] Tests für Geschäftslogik
+- [ ] Abdeckung >= 80%
+- [ ] Alle Tests bestehen
+- [ ] Keine auskommentierten Tests
 
-#### Sécurité
-- [ ] Pas de secrets en dur
-- [ ] Validation des inputs
-- [ ] Protection XSS/CSRF
+#### Sicherheit
+- [ ] Keine fest codierten Secrets
+- [ ] Input-Validierung
+- [ ] XSS/CSRF-Schutz
 
-#### Performance
-- [ ] Pas de N+1 queries
-- [ ] Indexes appropriés
-- [ ] Pagination si nécessaire
+#### Leistung
+- [ ] Keine N+1-Queries
+- [ ] Angemessene Indizes
+- [ ] Paginierung falls nötig
 
-### Process de review
+### Review-Prozess
 
-1. **Auto-review** (auteur)
-   - Relire son propre code
-   - Vérifier la checklist PR
-   - Tester manuellement
+1. **Selbstüberprüfung** (Autor)
+   - Eigenen Code durchlesen
+   - PR-Checkliste prüfen
+   - Manuell testen
 
-2. **Première passe** (reviewer)
-   - Architecture globale
-   - Logique métier
+2. **Erster Durchgang** (Reviewer)
+   - Gesamtarchitektur
+   - Geschäftslogik
    - Tests
 
-3. **Deuxième passe** (reviewer)
-   - Détails d'implémentation
-   - Nommage
-   - Optimisations
+3. **Zweiter Durchgang** (Reviewer)
+   - Implementierungsdetails
+   - Benennung
+   - Optimierungen
 
-4. **Commentaires**
-   - Constructifs et bienveillants
-   - Suggérer des solutions
-   - Expliquer le "pourquoi"
+4. **Kommentare**
+   - Konstruktiv und wohlwollend
+   - Lösungen vorschlagen
+   - Das "Warum" erklären
 
-5. **Approbation**
-   - ✅ Approve → Prêt pour merge
-   - 💬 Comment → Suggestions non bloquantes
-   - 🔴 Request changes → Corrections nécessaires
+5. **Genehmigung**
+   - Approve → Bereit zum Merge
+   - Comment → Nicht blockierende Vorschläge
+   - Request Changes → Korrekturen erforderlich
 
-### Exemples de commentaires
+### Kommentarbeispiele
 
-#### ✅ BON (constructif)
+#### GUT (konstruktiv)
 
 ```
-Suggestion: Cette méthode fait plusieurs choses (calcul + validation).
-Que penses-tu de la découper en deux méthodes distinctes pour respecter SRP ?
+Vorschlag: Diese Methode tut mehrere Dinge (Berechnung + Validierung).
+Was halten Sie davon, sie in zwei separate Methoden aufzuteilen, um SRP einzuhalten?
 
-Exemple:
+Beispiel:
 - validate(data)
 - calculate(data)
 ```
 
-#### ❌ MAUVAIS (non constructif)
+#### SCHLECHT (nicht konstruktiv)
 
 ```
-Ce code est nul, il faut tout refaire.
+Dieser Code ist schlecht, alles muss neu gemacht werden.
 ```
 
 ---
 
-## Checklist PR
+## PR-Checkliste
 
-### Avant de créer la PR
+### Vor dem Erstellen der PR
 
 ```bash
-# 1. Tests passent
+# 1. Tests bestehen
 make test
 
-# 2. Couverture OK
+# 2. Abdeckung OK
 make test-coverage
-# Vérifier: ≥ 80%
+# Prüfen: >= 80%
 
-# 3. Qualité OK
+# 3. Qualität OK
 make quality
-# Linter: 0 erreur
-# Formatter: appliqué
+# Linter: 0 Fehler
+# Formatter: angewendet
 
-# 4. Self-review
+# 4. Selbstüberprüfung
 git diff main...HEAD
 ```
 
-### Pendant la review
+### Während der Review
 
 ```bash
-# Appliquer les suggestions reviewer
+# Reviewer-Vorschläge anwenden
 git add .
 git commit -m "fix: apply code review suggestions"
 git push
 
-# Rebaser si nécessaire
+# Falls nötig rebasen
 git fetch origin
 git rebase origin/main
 git push --force-with-lease
 ```
 
-### Avant le merge
+### Vor dem Merge
 
 ```bash
-# 1. Branch à jour
+# 1. Branch aktuell
 git fetch origin
 git rebase origin/main
 
-# 2. CI passe
-# → Vérifier pipeline CI/CD
+# 2. CI besteht
+# → CI/CD-Pipeline prüfen
 
-# 3. Review approuvée
-# → Au moins 1 approve
+# 3. Review genehmigt
+# → Mindestens 1 Approval
 
 # 4. Merge
-# → Squash and merge (historique propre)
+# → Squash and Merge (saubere Historie)
 ```
 
 ---
 
-## Workflow complet
+## Vollständiger Workflow
 
 ### Feature
 
 ```bash
-# 1. Créer branche
+# 1. Branch erstellen
 git checkout main
 git pull
 git checkout -b feature/add-payment-integration
 
-# 2. TDD: Test d'abord (RED)
+# 2. TDD: Zuerst Tests (RED)
 git add tests/
 git commit -m "test(payment): add integration tests"
 
-# 3. Implémentation (GREEN)
+# 3. Implementierung (GREEN)
 git add src/
 git commit -m "feat(payment): add Stripe gateway"
 
@@ -475,7 +475,7 @@ git commit -m "feat(payment): add Stripe gateway"
 git add src/
 git commit -m "refactor(payment): extract gateway interface"
 
-# 5. Documentation
+# 5. Dokumentation
 git add docs/
 git commit -m "docs(payment): document payment flow"
 
@@ -483,14 +483,14 @@ git commit -m "docs(payment): document payment flow"
 git push -u origin feature/add-payment-integration
 gh pr create --fill
 
-# 7. Review + corrections
+# 7. Review + Korrekturen
 git add .
 git commit -m "fix: apply review suggestions"
 git push
 
-# 8. Merge via UI (Squash and merge)
+# 8. Merge über UI (Squash and Merge)
 
-# 9. Cleanup
+# 9. Aufräumen
 git checkout main
 git pull
 git branch -d feature/add-payment-integration
@@ -499,12 +499,12 @@ git branch -d feature/add-payment-integration
 ### Hotfix
 
 ```bash
-# 1. Créer branche depuis main
+# 1. Branch von main erstellen
 git checkout main
 git pull
 git checkout -b fix/critical-auth-bug
 
-# 2. Fix + test
+# 2. Fix + Test
 git add src/ tests/
 git commit -m "fix(auth): correct token validation
 
@@ -513,13 +513,13 @@ Added test to prevent regression.
 
 Fixes #789"
 
-# 3. Push + PR express
+# 3. Push + Express-PR
 git push -u origin fix/critical-auth-bug
 gh pr create --fill --label "bug,urgent"
 
-# 4. Review rapide + merge
+# 4. Schnelle Review + Merge
 
-# 5. Cleanup
+# 5. Aufräumen
 git checkout main
 git pull
 git branch -d fix/critical-auth-bug
@@ -527,7 +527,7 @@ git branch -d fix/critical-auth-bug
 
 ---
 
-## Ressources
+## Ressourcen
 
 - **GitHub Flow:** [Guide](https://docs.github.com/en/get-started/quickstart/github-flow)
 - **Conventional Commits:** [Specification](https://www.conventionalcommits.org/)
@@ -536,6 +536,6 @@ git branch -d fix/critical-auth-bug
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
+**Datum der letzten Aktualisierung:** 2025-01
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Autor:** The Bearded CTO

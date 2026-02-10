@@ -1,204 +1,205 @@
 ---
 name: workflow-analyze
-description: Execute the Analysis phase - research, exploration, and constraint identification
+description: Ejecutar la fase de Analisis - investigacion, exploracion e identificacion de restricciones
 arguments:
   - name: focus
-    description: Specific area to analyze (market, technical, competitors)
+    description: Area especifica a analizar (mercado, tecnica, competidores)
     required: false
 ---
 
 # /workflow:analyze
 
-## Mission
+## Mision
 
-Execute the Analysis phase of the Enterprise workflow track. This phase focuses on research, exploration, and identifying constraints before detailed planning begins.
+Ejecutar la fase de Analisis del flujo de trabajo Enterprise. Esta fase se centra en la investigacion, exploracion e identificacion de restricciones antes de comenzar la planificacion detallada.
 
-## When to Use
+## Cuando usar
 
-- **Enterprise track** projects
-- New platforms or major initiatives
-- When domain knowledge is limited
-- Before committing to a technical approach
+- Proyectos con flujo **Enterprise**
+- Nuevas plataformas o iniciativas importantes
+- Cuando el conocimiento del dominio es limitado
+- Antes de comprometerse con un enfoque tecnico
 
-## Workflow
+## Flujo de trabajo
 
-### Step 1: Analysis Setup
+### Paso 1: Configuracion del analisis
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║            ANALYSIS PHASE - STARTING                      ║
+║            FASE DE ANALISIS - INICIANDO                    ║
 ╠══════════════════════════════════════════════════════════╣
 ║ Track: Enterprise                                         ║
-║ Phase: 1 of 4 - Analysis                                  ║
+║ Fase: 1 de 4 - Analisis                                   ║
 ║                                                           ║
-║ Objectives:                                               ║
-║ • Understand the problem domain                           ║
-║ • Research existing solutions                             ║
-║ • Identify technical constraints                          ║
-║ • Document risks and opportunities                        ║
+║ Objetivos:                                                ║
+║ • Comprender el dominio del problema                      ║
+║ • Investigar soluciones existentes                        ║
+║ • Identificar restricciones tecnicas                      ║
+║ • Documentar riesgos y oportunidades                      ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 2: Research Areas
+### Paso 2: Areas de investigacion
 
-**Guided Research Questions:**
+**Preguntas guiadas de investigacion:**
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│ DOMAIN RESEARCH                                          │
+│ INVESTIGACION DEL DOMINIO                                │
 ├─────────────────────────────────────────────────────────┤
-│ 1. What problem are we solving?                          │
-│ 2. Who are the key stakeholders?                         │
-│ 3. What are the business drivers?                        │
-│ 4. What does success look like?                          │
+│ 1. Que problema estamos resolviendo?                     │
+│ 2. Quienes son las partes interesadas clave?             │
+│ 3. Cuales son los impulsores del negocio?                │
+│ 4. Como se define el exito?                              │
 └─────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────┐
-│ MARKET RESEARCH                                          │
+│ INVESTIGACION DE MERCADO                                 │
 ├─────────────────────────────────────────────────────────┤
-│ 1. What existing solutions exist?                        │
-│ 2. What are competitors doing?                           │
-│ 3. What are industry best practices?                     │
-│ 4. What are emerging trends?                             │
+│ 1. Que soluciones existentes hay?                        │
+│ 2. Que esta haciendo la competencia?                     │
+│ 3. Cuales son las mejores practicas del sector?          │
+│ 4. Cuales son las tendencias emergentes?                 │
 └─────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────┐
-│ TECHNICAL RESEARCH                                       │
+│ INVESTIGACION TECNICA                                    │
 ├─────────────────────────────────────────────────────────┤
-│ 1. What technologies could we use?                       │
-│ 2. What are the integration requirements?                │
-│ 3. What are the scalability needs?                       │
-│ 4. What security/compliance requirements exist?          │
+│ 1. Que tecnologias podriamos usar?                       │
+│ 2. Cuales son los requisitos de integracion?             │
+│ 3. Cuales son las necesidades de escalabilidad?          │
+│ 4. Que requisitos de seguridad/cumplimiento existen?     │
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Step 3: Context7 Research (Optional)
+### Paso 3: Investigacion Context7 (Opcional)
 
-If MCP Context7 is configured, use it for technical research:
+Si MCP Context7 esta configurado, usarlo para investigacion tecnica:
 
 ```
-Using Context7 MCP for up-to-date documentation...
+Usando Context7 MCP para documentacion actualizada...
 
-Researching:
-• Latest Stripe API best practices
-• Current security standards for payment processing
-• PCI DSS compliance requirements
+Investigando:
+• Mejores practicas actuales de la API de Stripe
+• Estandares de seguridad actuales para procesamiento de pagos
+• Requisitos de cumplimiento PCI DSS
 ```
 
-### Step 4: Constraint Identification
+### Paso 4: Identificacion de restricciones
 
-Document constraints discovered:
+Documentar las restricciones descubiertas:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║               CONSTRAINTS IDENTIFIED                      ║
+║               RESTRICCIONES IDENTIFICADAS                 ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ TECHNICAL CONSTRAINTS:                                    ║
-║ • Must integrate with existing Symfony 7.x backend        ║
-║ • Database: PostgreSQL (existing, cannot change)          ║
-║ • Must support mobile apps via existing API               ║
+║ RESTRICCIONES TECNICAS:                                   ║
+║ • Debe integrarse con el backend Symfony 7.x existente    ║
+║ • Base de datos: PostgreSQL (existente, no se puede       ║
+║   cambiar)                                                ║
+║ • Debe soportar apps moviles via API existente            ║
 ║                                                           ║
-║ BUSINESS CONSTRAINTS:                                     ║
-║ • Budget: Limited to existing team                        ║
-║ • Timeline: MVP needed in Q2 2026                         ║
-║ • Must maintain backward compatibility                    ║
+║ RESTRICCIONES DE NEGOCIO:                                 ║
+║ • Presupuesto: Limitado al equipo existente               ║
+║ • Plazo: MVP necesario en Q2 2026                         ║
+║ • Debe mantener compatibilidad hacia atras                ║
 ║                                                           ║
-║ REGULATORY CONSTRAINTS:                                   ║
-║ • GDPR compliance required (EU users)                     ║
-║ • PCI DSS for payment processing                          ║
+║ RESTRICCIONES REGULATORIAS:                               ║
+║ • Cumplimiento RGPD requerido (usuarios UE)               ║
+║ • PCI DSS para procesamiento de pagos                     ║
 ║                                                           ║
-║ RESOURCE CONSTRAINTS:                                     ║
-║ • Team: 2 backend, 1 frontend developer                   ║
-║ • No dedicated DevOps resource                            ║
+║ RESTRICCIONES DE RECURSOS:                                ║
+║ • Equipo: 2 backend, 1 frontend                           ║
+║ • Sin recurso DevOps dedicado                             ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 5: Risk & Opportunity Analysis
+### Paso 5: Analisis de riesgos y oportunidades
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║            RISKS & OPPORTUNITIES                          ║
+║            RIESGOS Y OPORTUNIDADES                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ RISKS:                                                    ║
+║ RIESGOS:                                                  ║
 ║ ┌─────────┬──────────┬────────────┬───────────────────┐  ║
-║ │ Risk    │ Impact   │ Likelihood │ Mitigation        │  ║
+║ │ Riesgo  │ Impacto  │Probabilidad│ Mitigacion        │  ║
 ║ ├─────────┼──────────┼────────────┼───────────────────┤  ║
-║ │ Stripe  │ High     │ Low        │ Fallback provider │  ║
-║ │ downtime│          │            │                   │  ║
+║ │ Caida   │ Alto     │ Bajo       │ Proveedor de      │  ║
+║ │ Stripe  │          │            │ respaldo          │  ║
 ║ ├─────────┼──────────┼────────────┼───────────────────┤  ║
-║ │ Timeline│ Medium   │ Medium     │ MVP scope         │  ║
-║ │ slip    │          │            │ reduction         │  ║
+║ │ Retraso │ Medio    │ Medio      │ Reduccion de      │  ║
+║ │ plazo   │          │            │ alcance MVP       │  ║
 ║ └─────────┴──────────┴────────────┴───────────────────┘  ║
 ║                                                           ║
-║ OPPORTUNITIES:                                            ║
-║ • Can leverage Stripe's new Payment Elements              ║
-║ • Potential for subscription model expansion              ║
-║ • Mobile payment (Apple Pay, Google Pay) ready            ║
+║ OPORTUNIDADES:                                            ║
+║ • Aprovechar los nuevos Payment Elements de Stripe        ║
+║ • Potencial para expansion del modelo de suscripcion      ║
+║ • Pago movil (Apple Pay, Google Pay) listo                ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 6: Generate Analysis Artifacts
+### Paso 6: Generar artefactos de analisis
 
-Create analysis documents:
+Crear documentos de analisis:
 
 ```
 project-management/
 └── analysis/
-    ├── research-summary.md      # Key findings
-    ├── constraints.md           # All identified constraints
-    ├── risks-opportunities.md   # Risk register & opportunities
-    └── technical-options.md     # Technology evaluation
+    ├── research-summary.md      # Hallazgos clave
+    ├── constraints.md           # Todas las restricciones identificadas
+    ├── risks-opportunities.md   # Registro de riesgos y oportunidades
+    └── technical-options.md     # Evaluacion tecnologica
 ```
 
-### Step 7: Phase Completion
+### Paso 7: Finalizacion de la fase
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║            ANALYSIS PHASE COMPLETE                        ║
+║            FASE DE ANALISIS COMPLETADA                    ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Artifacts Created:                                        ║
+║ Artefactos creados:                                       ║
 ║ ✅ research-summary.md                                    ║
 ║ ✅ constraints.md                                         ║
 ║ ✅ risks-opportunities.md                                 ║
 ║ ✅ technical-options.md                                   ║
 ║                                                           ║
-║ Key Findings:                                             ║
-║ • 4 technical constraints identified                      ║
-║ • 3 business constraints identified                       ║
-║ • 5 risks documented with mitigations                     ║
-║ • 3 opportunities for consideration                       ║
+║ Hallazgos clave:                                          ║
+║ • 4 restricciones tecnicas identificadas                  ║
+║ • 3 restricciones de negocio identificadas                ║
+║ • 5 riesgos documentados con mitigaciones                 ║
+║ • 3 oportunidades a considerar                            ║
 ║                                                           ║
 ║ ─────────────────────────────────────────────────────────║
-║ NEXT PHASE: Planning                                      ║
-║ Command: /workflow:plan                                   ║
+║ SIGUIENTE FASE: Planificacion                             ║
+║ Comando: /workflow:plan                                   ║
 ║ ─────────────────────────────────────────────────────────║
 ║                                                           ║
-║ The analysis will inform PRD creation and architecture.   ║
+║ El analisis informara la creacion del PRD y arquitectura. ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-## Agents Involved
+## Agentes involucrados
 
-- **research-assistant**: Technical research and documentation lookup
-- **product-owner**: Business context and stakeholder analysis
+- **research-assistant**: Investigacion tecnica y busqueda de documentacion
+- **product-owner**: Contexto de negocio y analisis de partes interesadas
 
-## Output Files
+## Archivos de salida
 
-| File | Purpose |
-|------|---------|
-| `analysis/research-summary.md` | Consolidated research findings |
-| `analysis/constraints.md` | Technical, business, regulatory constraints |
-| `analysis/risks-opportunities.md` | Risk register with mitigations |
-| `analysis/technical-options.md` | Technology evaluation and recommendations |
+| Archivo | Proposito |
+|---------|-----------|
+| `analysis/research-summary.md` | Hallazgos de investigacion consolidados |
+| `analysis/constraints.md` | Restricciones tecnicas, de negocio y regulatorias |
+| `analysis/risks-opportunities.md` | Registro de riesgos con mitigaciones |
+| `analysis/technical-options.md` | Evaluacion y recomendaciones tecnologicas |
 
-## Related Commands
+## Comandos relacionados
 
-- `/workflow:init` - Initialize workflow (must run first)
-- `/workflow:plan` - Next phase: Planning
-- `/workflow:status` - Check progress
-- `/common:research-context7` - Deep research with Context7 MCP
+- `/workflow:init` - Inicializar flujo de trabajo (debe ejecutarse primero)
+- `/workflow:plan` - Siguiente fase: Planificacion
+- `/workflow:status` - Verificar progreso
+- `/common:research-context7` - Investigacion profunda con Context7 MCP

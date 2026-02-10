@@ -1,396 +1,396 @@
-# Principes SOLID
+# Principios SOLID
 
-## Vue d'ensemble
+## Visao Geral
 
-Les principes SOLID sont **obligatoires** pour tout le code du projet. Ces principes garantissent un code maintenable, testable et évolutif.
+Os principios SOLID sao **obrigatorios** para todo o codigo do projeto. Esses principios garantem um codigo mantenivel, testavel e evolutivo.
 
-> **Note:** Ce document présente les principes généraux. Consultez les règles spécifiques à votre technologie pour des exemples concrets.
+> **Nota:** Este documento apresenta os principios gerais. Consulte as regras especificas da sua tecnologia para exemplos concretos.
 
 ---
 
-## Table des matières
+## Sumario
 
 1. [SRP - Single Responsibility Principle](#srp---single-responsibility-principle)
 2. [OCP - Open/Closed Principle](#ocp---openclosed-principle)
 3. [LSP - Liskov Substitution Principle](#lsp---liskov-substitution-principle)
 4. [ISP - Interface Segregation Principle](#isp---interface-segregation-principle)
 5. [DIP - Dependency Inversion Principle](#dip---dependency-inversion-principle)
-6. [Checklist de validation](#checklist-de-validation)
+6. [Checklist de validacao](#checklist-de-validacao)
 
 ---
 
 ## SRP - Single Responsibility Principle
 
-### Définition
+### Definicao
 
-**Une classe ne doit avoir qu'une seule raison de changer.**
+**Uma classe deve ter apenas uma unica razao para mudar.**
 
-Chaque classe, méthode ou module doit avoir une responsabilité unique et bien définie.
+Cada classe, metodo ou modulo deve ter uma responsabilidade unica e bem definida.
 
-### Signes de violation
+### Sinais de violacao
 
-- Classe avec "and" ou "or" dans le nom
-- Méthode qui fait plusieurs choses non liées
-- Classe difficile à nommer clairement
-- Tests complexes nécessitant beaucoup de mocks
+- Classe com "and" ou "or" no nome
+- Metodo que faz varias coisas nao relacionadas
+- Classe dificil de nomear claramente
+- Testes complexos necessitando muitos mocks
 
-### Application
+### Aplicacao
 
 ```
-❌ MAUVAIS - Multiple responsabilités
-┌─────────────────────────────────────┐
-│ OrderService                        │
-├─────────────────────────────────────┤
-│ - validateOrder()                   │
-│ - calculatePrice()                  │
-│ - saveToDatabase()                  │
-│ - sendEmail()                       │
-│ - generatePDF()                     │
-└─────────────────────────────────────┘
+RUIM - Multiplas responsabilidades
++-------------------------------------+
+| OrderService                        |
++-------------------------------------+
+| - validateOrder()                   |
+| - calculatePrice()                  |
+| - saveToDatabase()                  |
+| - sendEmail()                       |
+| - generatePDF()                     |
++-------------------------------------+
 
-✅ BON - Responsabilités séparées
-┌─────────────────┐  ┌─────────────────┐
-│ OrderValidator  │  │ PricingService  │
-├─────────────────┤  ├─────────────────┤
-│ - validate()    │  │ - calculate()   │
-└─────────────────┘  └─────────────────┘
+BOM - Responsabilidades separadas
++-----------------+  +-----------------+
+| OrderValidator  |  | PricingService  |
++-----------------+  +-----------------+
+| - validate()    |  | - calculate()   |
++-----------------+  +-----------------+
 
-┌─────────────────┐  ┌─────────────────┐
-│ OrderRepository │  │ EmailNotifier   │
-├─────────────────┤  ├─────────────────┤
-│ - save()        │  │ - notify()      │
-└─────────────────┘  └─────────────────┘
++-----------------+  +-----------------+
+| OrderRepository |  | EmailNotifier   |
++-----------------+  +-----------------+
+| - save()        |  | - notify()      |
++-----------------+  +-----------------+
 ```
 
-### Avantages
+### Vantagens
 
-- ✅ **Testabilité:** Chaque classe peut être testée isolément
-- ✅ **Maintenabilité:** Les changements sont localisés
-- ✅ **Réutilisabilité:** Les composants sont indépendants
-- ✅ **Lisibilité:** Chaque classe a un objectif clair
+- **Testabilidade:** Cada classe pode ser testada isoladamente
+- **Manutencao:** As mudancas sao localizadas
+- **Reutilizacao:** Os componentes sao independentes
+- **Legibilidade:** Cada classe tem um objetivo claro
 
 ---
 
 ## OCP - Open/Closed Principle
 
-### Définition
+### Definicao
 
-**Les entités logicielles doivent être ouvertes à l'extension mais fermées à la modification.**
+**As entidades de software devem ser abertas para extensao mas fechadas para modificacao.**
 
-On doit pouvoir ajouter de nouvelles fonctionnalités sans modifier le code existant.
+Deve ser possivel adicionar novas funcionalidades sem modificar o codigo existente.
 
-### Signes de violation
+### Sinais de violacao
 
-- Switch/case sur des types pour déterminer le comportement
-- Modifications fréquentes d'une même classe
-- Ajout de fonctionnalité = modification de code existant
+- Switch/case sobre tipos para determinar o comportamento
+- Modificacoes frequentes de uma mesma classe
+- Adicao de funcionalidade = modificacao de codigo existente
 
-### Application
+### Aplicacao
 
 ```
-❌ MAUVAIS - Modification du code existant
-┌─────────────────────────────────────┐
-│ DiscountCalculator                  │
-├─────────────────────────────────────┤
-│ calculate(type):                    │
-│   if type == "family":              │
-│     return basePrice * 0.9          │
-│   if type == "student":             │
-│     return basePrice * 0.8          │
-│   // Pour ajouter "senior" →        │
-│   // modifier cette classe          │
-└─────────────────────────────────────┘
+RUIM - Modificacao do codigo existente
++-------------------------------------+
+| DiscountCalculator                  |
++-------------------------------------+
+| calculate(type):                    |
+|   if type == "family":              |
+|     return basePrice * 0.9          |
+|   if type == "student":             |
+|     return basePrice * 0.8          |
+|   // Para adicionar "senior" ->     |
+|   // modificar esta classe          |
++-------------------------------------+
 
-✅ BON - Extension via interfaces
-┌─────────────────────────────────────┐
-│ <<interface>>                       │
-│ DiscountPolicy                      │
-├─────────────────────────────────────┤
-│ + apply(price): Money               │
-│ + isApplicable(order): boolean      │
-└─────────────────────────────────────┘
-         △
-         │
-    ┌────┴────┬────────────┐
-    │         │            │
-┌───┴───┐ ┌───┴───┐ ┌──────┴──────┐
-│Family │ │Student│ │SeniorPolicy │
-│Policy │ │Policy │ │(nouvelle)   │
-└───────┘ └───────┘ └─────────────┘
+BOM - Extensao via interfaces
++-------------------------------------+
+| <<interface>>                       |
+| DiscountPolicy                      |
++-------------------------------------+
+| + apply(price): Money               |
+| + isApplicable(order): boolean      |
++-------------------------------------+
+         ^
+         |
+    +----+----+------------+
+    |         |            |
++-------+ +-------+ +-------------+
+|Family | |Student| |SeniorPolicy |
+|Policy | |Policy | |(nova)       |
++-------+ +-------+ +-------------+
 ```
 
 ### Pattern Strategy
 
-Utilisez le pattern Strategy pour permettre l'extension:
+Utilize o pattern Strategy para permitir a extensao:
 
-1. Définir une interface pour le comportement variable
-2. Implémenter chaque variante dans une classe séparée
-3. Injecter les implémentations via configuration
+1. Definir uma interface para o comportamento variavel
+2. Implementar cada variante em uma classe separada
+3. Injetar as implementacoes via configuracao
 
-### Avantages
+### Vantagens
 
-- ✅ **Extension facile:** Nouvelles fonctionnalités = nouvelles classes
-- ✅ **Stabilité:** Le code existant n'est pas modifié
-- ✅ **Tests:** Pas de régression sur le code existant
-- ✅ **Évolutivité:** Ajout de fonctionnalités sans risque
+- **Extensao facil:** Novas funcionalidades = novas classes
+- **Estabilidade:** O codigo existente nao e modificado
+- **Testes:** Sem regressao no codigo existente
+- **Evolucao:** Adicao de funcionalidades sem risco
 
 ---
 
 ## LSP - Liskov Substitution Principle
 
-### Définition
+### Definicao
 
-**Les objets d'une classe dérivée doivent pouvoir remplacer les objets de la classe de base sans altérer la cohérence du programme.**
+**Os objetos de uma classe derivada devem poder substituir os objetos da classe base sem alterar a coerencia do programa.**
 
-Les sous-types doivent être substituables à leurs types de base.
+Os subtipos devem ser substituiveis pelos seus tipos base.
 
-### Signes de violation
+### Sinais de violacao
 
-- Sous-classe qui lève des exceptions non documentées
-- Méthode qui vérifie le type concret avant d'agir
-- Override qui change le comportement attendu
-- Préconditions renforcées ou postconditions affaiblies
+- Subclasse que lanca excecoes nao documentadas
+- Metodo que verifica o tipo concreto antes de agir
+- Override que muda o comportamento esperado
+- Precondicoes reforcadas ou poscondicoes enfraquecidas
 
-### Règles
+### Regras
 
-1. **Préconditions:** Ne pas renforcer (accepter au moins autant)
-2. **Postconditions:** Ne pas affaiblir (garantir au moins autant)
-3. **Invariants:** Maintenir les invariants du parent
-4. **Contrainte historique:** Ne pas modifier l'état de manière incompatible
+1. **Precondicoes:** Nao reforcar (aceitar ao menos o mesmo)
+2. **Poscondicoes:** Nao enfraquecer (garantir ao menos o mesmo)
+3. **Invariantes:** Manter os invariantes do pai
+4. **Restricao historica:** Nao modificar o estado de maneira incompativel
 
-### Application
+### Aplicacao
 
 ```
-❌ MAUVAIS - Violation du contrat
-┌─────────────────────────────────────┐
-│ class Rectangle                     │
-├─────────────────────────────────────┤
-│ - width, height                     │
-│ + setWidth(w)                       │
-│ + setHeight(h)                      │
-│ + area() = width * height           │
-└─────────────────────────────────────┘
-         △
-         │
-┌─────────────────────────────────────┐
-│ class Square extends Rectangle     │
-├─────────────────────────────────────┤
-│ + setWidth(w):                      │
-│     this.width = w                  │
-│     this.height = w  // ❌ Viole LSP│
-└─────────────────────────────────────┘
+RUIM - Violacao do contrato
++-------------------------------------+
+| class Rectangle                     |
++-------------------------------------+
+| - width, height                     |
+| + setWidth(w)                       |
+| + setHeight(h)                      |
+| + area() = width * height           |
++-------------------------------------+
+         ^
+         |
++-------------------------------------+
+| class Square extends Rectangle     |
++-------------------------------------+
+| + setWidth(w):                      |
+|     this.width = w                  |
+|     this.height = w  // Viola LSP   |
++-------------------------------------+
 
-✅ BON - Contrats respectés
-┌─────────────────────────────────────┐
-│ <<interface>> Shape                 │
-├─────────────────────────────────────┤
-│ + area(): number                    │
-└─────────────────────────────────────┘
-         △
-    ┌────┴────┐
-    │         │
-┌───┴───┐ ┌───┴───┐
-│Rect.  │ │Square │
-│w*h    │ │side²  │
-└───────┘ └───────┘
+BOM - Contratos respeitados
++-------------------------------------+
+| <<interface>> Shape                 |
++-------------------------------------+
+| + area(): number                    |
++-------------------------------------+
+         ^
+    +----+----+
+    |         |
++-------+ +-------+
+|Rect.  | |Square |
+|w*h    | |side^2 |
++-------+ +-------+
 ```
 
-### Avantages
+### Vantagens
 
-- ✅ **Polymorphisme sûr:** Les substitutions fonctionnent toujours
-- ✅ **Contrats clairs:** Interfaces bien documentées
-- ✅ **Prévisibilité:** Pas de surprises avec les sous-types
-- ✅ **Testabilité:** Les mocks respectent les contrats
+- **Polimorfismo seguro:** As substituicoes sempre funcionam
+- **Contratos claros:** Interfaces bem documentadas
+- **Previsibilidade:** Sem surpresas com os subtipos
+- **Testabilidade:** Os mocks respeitam os contratos
 
 ---
 
 ## ISP - Interface Segregation Principle
 
-### Définition
+### Definicao
 
-**Les clients ne doivent pas dépendre d'interfaces qu'ils n'utilisent pas.**
+**Os clientes nao devem depender de interfaces que nao utilizam.**
 
-Il vaut mieux plusieurs interfaces spécifiques qu'une interface générale.
+E melhor ter varias interfaces especificas do que uma interface geral.
 
-### Signes de violation
+### Sinais de violacao
 
-- Interface avec beaucoup de méthodes (> 5)
-- Classes qui implémentent des méthodes vides
-- Méthodes qui lèvent `NotImplementedException`
-- Clients qui n'utilisent qu'une partie de l'interface
+- Interface com muitos metodos (> 5)
+- Classes que implementam metodos vazios
+- Metodos que lancam `NotImplementedException`
+- Clientes que utilizam apenas parte da interface
 
-### Application
+### Aplicacao
 
 ```
-❌ MAUVAIS - Interface trop large
-┌─────────────────────────────────────┐
-│ <<interface>>                       │
-│ UserRepository                      │
-├─────────────────────────────────────┤
-│ + find(id)                          │
-│ + findAll()                         │
-│ + save(user)                        │
-│ + delete(user)                      │
-│ + findByEmail(email)                │
-│ + findByRole(role)                  │
-│ + countByMonth(month)               │
-│ + exportToCsv()                     │
-│ + importFromCsv()                   │
-│ + syncWithLDAP()                    │
-└─────────────────────────────────────┘
+RUIM - Interface muito ampla
++-------------------------------------+
+| <<interface>>                       |
+| UserRepository                      |
++-------------------------------------+
+| + find(id)                          |
+| + findAll()                         |
+| + save(user)                        |
+| + delete(user)                      |
+| + findByEmail(email)                |
+| + findByRole(role)                  |
+| + countByMonth(month)               |
+| + exportToCsv()                     |
+| + importFromCsv()                   |
+| + syncWithLDAP()                    |
++-------------------------------------+
 
-✅ BON - Interfaces ségrégées
-┌─────────────────┐  ┌─────────────────┐
-│ UserFinder      │  │ UserPersister   │
-├─────────────────┤  ├─────────────────┤
-│ + find(id)      │  │ + save(user)    │
-│ + findAll()     │  │ + delete(user)  │
-└─────────────────┘  └─────────────────┘
+BOM - Interfaces segregadas
++-----------------+  +-----------------+
+| UserFinder      |  | UserPersister   |
++-----------------+  +-----------------+
+| + find(id)      |  | + save(user)    |
+| + findAll()     |  | + delete(user)  |
++-----------------+  +-----------------+
 
-┌─────────────────┐  ┌─────────────────┐
-│ UserSearcher    │  │ UserExporter    │
-├─────────────────┤  ├─────────────────┤
-│ + byEmail()     │  │ + toCsv()       │
-│ + byRole()      │  │ + fromCsv()     │
-└─────────────────┘  └─────────────────┘
++-----------------+  +-----------------+
+| UserSearcher    |  | UserExporter    |
++-----------------+  +-----------------+
+| + byEmail()     |  | + toCsv()       |
+| + byRole()      |  | + fromCsv()     |
++-----------------+  +-----------------+
 ```
 
-### Avantages
+### Vantagens
 
-- ✅ **Couplage faible:** Les clients dépendent du minimum nécessaire
-- ✅ **Flexibilité:** Implémentations partielles possibles
-- ✅ **Testabilité:** Mocks plus simples (moins de méthodes)
-- ✅ **Évolutivité:** Ajout d'interfaces sans impacter l'existant
+- **Acoplamento fraco:** Os clientes dependem do minimo necessario
+- **Flexibilidade:** Implementacoes parciais possiveis
+- **Testabilidade:** Mocks mais simples (menos metodos)
+- **Evolucao:** Adicao de interfaces sem impactar o existente
 
 ---
 
 ## DIP - Dependency Inversion Principle
 
-### Définition
+### Definicao
 
-**Les modules de haut niveau ne doivent pas dépendre des modules de bas niveau. Les deux doivent dépendre d'abstractions.**
+**Os modulos de alto nivel nao devem depender dos modulos de baixo nivel. Ambos devem depender de abstracoes.**
 
-**Les abstractions ne doivent pas dépendre des détails. Les détails doivent dépendre des abstractions.**
+**As abstracoes nao devem depender dos detalhes. Os detalhes devem depender das abstracoes.**
 
-### Signes de violation
+### Sinais de violacao
 
-- Instanciation directe de dépendances (`new ConcreteClass()`)
-- Import de classes d'infrastructure dans la couche métier
-- Couplage fort avec un framework ou une bibliothèque
-- Tests difficiles à écrire sans base de données réelle
+- Instanciacao direta de dependencias (`new ConcreteClass()`)
+- Import de classes de infraestrutura na camada de negocio
+- Acoplamento forte com um framework ou uma biblioteca
+- Testes dificeis de escrever sem banco de dados real
 
-### Application
-
-```
-❌ MAUVAIS - Dépendance aux implémentations
-┌─────────────────────────────────────┐
-│ OrderService                        │
-├─────────────────────────────────────┤
-│ - MySQLOrderRepository              │
-│ - SmtpMailer                        │
-│ - StripePaymentGateway              │
-└─────────────────────────────────────┘
-     │
-     ▼ Dépend de
-┌─────────────────────────────────────┐
-│ Infrastructure concrète             │
-└─────────────────────────────────────┘
-
-✅ BON - Dépendance aux abstractions
-┌─────────────────────────────────────┐
-│ OrderService (Application Layer)    │
-├─────────────────────────────────────┤
-│ - OrderRepositoryInterface          │
-│ - MailerInterface                   │
-│ - PaymentGatewayInterface           │
-└─────────────────────────────────────┘
-     │
-     ▼ Dépend de
-┌─────────────────────────────────────┐
-│ Interfaces (Domain Layer)           │
-└─────────────────────────────────────┘
-     △
-     │ Implémenté par
-┌─────────────────────────────────────┐
-│ MySQL, Smtp, Stripe (Infra Layer)   │
-└─────────────────────────────────────┘
-```
-
-### Architecture en couches
+### Aplicacao
 
 ```
-┌─────────────────────────────────────────────┐
-│         PRESENTATION (UI/API)               │
-│   Controllers, Commands, Forms              │
-├─────────────────────────────────────────────┤
-│         APPLICATION (Use Cases)             │
-│   Services orchestrant la logique           │
-│               │                             │
-│       Dépend de (Interfaces)                │
-├─────────────────────────────────────────────┤
-│            DOMAIN (Business)                │
-│   Entités, Value Objects, Interfaces        │
-│               △                             │
-│       Implémenté par (Inversion)            │
-├─────────────────────────────────────────────┤
-│       INFRASTRUCTURE (Technique)            │
-│   Repositories, Mailers, Gateways           │
-└─────────────────────────────────────────────┘
+RUIM - Dependencia das implementacoes
++-------------------------------------+
+| OrderService                        |
++-------------------------------------+
+| - MySQLOrderRepository              |
+| - SmtpMailer                        |
+| - StripePaymentGateway              |
++-------------------------------------+
+     |
+     v Depende de
++-------------------------------------+
+| Infraestrutura concreta             |
++-------------------------------------+
 
-✅ Les couches hautes dépendent d'abstractions
-✅ Les couches basses implémentent ces abstractions
-✅ La logique métier est isolée des détails techniques
+BOM - Dependencia das abstracoes
++-------------------------------------+
+| OrderService (Application Layer)    |
++-------------------------------------+
+| - OrderRepositoryInterface          |
+| - MailerInterface                   |
+| - PaymentGatewayInterface           |
++-------------------------------------+
+     |
+     v Depende de
++-------------------------------------+
+| Interfaces (Domain Layer)           |
++-------------------------------------+
+     ^
+     | Implementado por
++-------------------------------------+
+| MySQL, Smtp, Stripe (Infra Layer)   |
++-------------------------------------+
 ```
 
-### Avantages
+### Arquitetura em camadas
 
-- ✅ **Testabilité:** Mocks et stubs faciles à créer
-- ✅ **Flexibilité:** Changement d'implémentation sans impact
-- ✅ **Isolation:** La logique métier ne dépend pas de l'infrastructure
-- ✅ **Réutilisabilité:** Les abstractions sont réutilisables
+```
++---------------------------------------------+
+|         APRESENTACAO (UI/API)               |
+|   Controllers, Commands, Forms              |
++---------------------------------------------+
+|         APLICACAO (Use Cases)               |
+|   Servicos que orquestram a logica          |
+|               |                             |
+|       Depende de (Interfaces)               |
++---------------------------------------------+
+|            DOMINIO (Business)               |
+|   Entidades, Value Objects, Interfaces      |
+|               ^                             |
+|       Implementado por (Inversao)           |
++---------------------------------------------+
+|       INFRAESTRUTURA (Tecnica)              |
+|   Repositories, Mailers, Gateways           |
++---------------------------------------------+
+
+As camadas superiores dependem de abstracoes
+As camadas inferiores implementam essas abstracoes
+A logica de negocio e isolada dos detalhes tecnicos
+```
+
+### Vantagens
+
+- **Testabilidade:** Mocks e stubs faceis de criar
+- **Flexibilidade:** Mudanca de implementacao sem impacto
+- **Isolamento:** A logica de negocio nao depende da infraestrutura
+- **Reutilizacao:** As abstracoes sao reutilizaveis
 
 ---
 
-## Checklist de validation
+## Checklist de validacao
 
-### Avant chaque commit
+### Antes de cada commit
 
 #### SRP
-- [ ] Chaque classe a une seule responsabilité clairement définie
-- [ ] Les méthodes font une seule chose (< 20 lignes)
-- [ ] Pas de méthodes avec "et" ou "ou" dans le nom
+- [ ] Cada classe tem uma unica responsabilidade claramente definida
+- [ ] Os metodos fazem uma unica coisa (< 20 linhas)
+- [ ] Sem metodos com "e" ou "ou" no nome
 
 #### OCP
-- [ ] Nouvelles fonctionnalités ajoutées par extension, pas modification
-- [ ] Utilisation d'interfaces et de patterns Strategy
-- [ ] Pas de switch/if sur des types pour déterminer le comportement
+- [ ] Novas funcionalidades adicionadas por extensao, nao modificacao
+- [ ] Utilizacao de interfaces e patterns Strategy
+- [ ] Sem switch/if sobre tipos para determinar o comportamento
 
 #### LSP
-- [ ] Les sous-types respectent les contrats de leurs parents
-- [ ] Pas de préconditions renforcées dans les sous-classes
-- [ ] Pas de postconditions affaiblies dans les sous-classes
-- [ ] Pas d'exceptions nouvelles non documentées
+- [ ] Os subtipos respeitam os contratos dos seus pais
+- [ ] Sem precondicoes reforcadas nas subclasses
+- [ ] Sem poscondicoes enfraquecidas nas subclasses
+- [ ] Sem excecoes novas nao documentadas
 
 #### ISP
-- [ ] Les interfaces sont petites et focalisées (< 5 méthodes)
-- [ ] Les clients ne dépendent que des méthodes qu'ils utilisent
-- [ ] Pas de méthodes `throw NotImplementedException()`
+- [ ] As interfaces sao pequenas e focadas (< 5 metodos)
+- [ ] Os clientes dependem apenas dos metodos que utilizam
+- [ ] Sem metodos `throw NotImplementedException()`
 
 #### DIP
-- [ ] Les use cases dépendent d'interfaces, pas d'implémentations
-- [ ] Les interfaces sont dans le domaine, pas l'infrastructure
-- [ ] Injection de dépendances via constructeur
+- [ ] Os use cases dependem de interfaces, nao de implementacoes
+- [ ] As interfaces estao no dominio, nao na infraestrutura
+- [ ] Injecao de dependencias via construtor
 
 ---
 
-## Ressources
+## Recursos
 
-- **Livre:** *Clean Architecture* - Robert C. Martin
-- **Livre:** *SOLID Principles* - Uncle Bob
-- **Vidéo:** [SOLID Principles Explained](https://www.youtube.com/watch?v=pTB30aXS77U)
+- **Livro:** *Clean Architecture* - Robert C. Martin
+- **Livro:** *SOLID Principles* - Uncle Bob
+- **Video:** [SOLID Principles Explained](https://www.youtube.com/watch?v=pTB30aXS77U)
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
-**Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Data da ultima atualizacao:** 2025-01
+**Versao:** 1.0.0
+**Autor:** The Bearded CTO

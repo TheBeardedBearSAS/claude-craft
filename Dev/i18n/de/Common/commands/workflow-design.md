@@ -1,9 +1,9 @@
 ---
 name: workflow-design
-description: Execute the Design (Solutioning) phase - technical specification and architecture
+description: Die Designphase (Lösungsfindung) durchführen - technische Spezifikation und Architektur
 arguments:
   - name: continue
-    description: Continue from where left off
+    description: Dort fortfahren, wo aufgehört wurde
     required: false
 ---
 
@@ -11,133 +11,133 @@ arguments:
 
 ## Mission
 
-Execute the Design (Solutioning) phase of the development workflow. This phase focuses on creating the Technical Specification, designing the architecture, and documenting key technical decisions.
+Die Designphase (Lösungsfindung) des Entwicklungs-Workflows durchführen. Diese Phase konzentriert sich auf die Erstellung der technischen Spezifikation, das Architekturdesign und die Dokumentation wichtiger technischer Entscheidungen.
 
-## When to Use
+## Wann verwenden
 
-- **Standard** and **Enterprise** tracks
-- After `/workflow:plan` is complete
-- When PRD and backlog are ready
+- **Standard**- und **Enterprise**-Tracks
+- Nach Abschluss von `/workflow:plan`
+- Wenn PRD und Backlog bereit sind
 
-## Prerequisites
+## Voraussetzungen
 
-- PRD exists at `project-management/prd.md`
-- Backlog exists at `project-management/backlog/`
+- PRD existiert unter `project-management/prd.md`
+- Backlog existiert unter `project-management/backlog/`
 
 ## Workflow
 
-### Step 1: Design Setup
+### Schritt 1: Design-Setup
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              DESIGN PHASE - STARTING                      ║
+║              DESIGNPHASE - START                          ║
 ╠══════════════════════════════════════════════════════════╣
 ║ Track: Standard                                           ║
-║ Phase: 3 of 4 - Design (Solutioning)                      ║
+║ Phase: 3 von 4 - Design (Lösungsfindung)                  ║
 ║                                                           ║
-║ Objectives:                                               ║
-║ • Create Technical Specification from PRD                 ║
-║ • Design system architecture (C4 diagrams)                ║
-║ • Define data model and API design                        ║
-║ • Document Architecture Decision Records (ADRs)           ║
-║ • Plan testing strategy                                   ║
+║ Ziele:                                                    ║
+║ • Technische Spezifikation aus dem PRD erstellen          ║
+║ • Systemarchitektur entwerfen (C4-Diagramme)              ║
+║ • Datenmodell und API-Design definieren                   ║
+║ • Architecture Decision Records (ADRs) dokumentieren      ║
+║ • Teststrategie planen                                    ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 2: Load Planning Artifacts
+### Schritt 2: Planungsartefakte laden
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              LOADING PLANNING ARTIFACTS                   ║
+║            PLANUNGSARTEFAKTE LADEN                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ PRD Analysis:                                             ║
-║ ├── ✅ prd.md loaded                                      ║
-║ ├── Functional requirements: 12                           ║
-║ ├── Non-functional requirements: 8                        ║
-║ └── Integrations required: 2                              ║
+║ PRD-Analyse:                                              ║
+║ ├── ✅ prd.md geladen                                     ║
+║ ├── Funktionale Anforderungen: 12                         ║
+║ ├── Nicht-funktionale Anforderungen: 8                    ║
+║ └── Erforderliche Integrationen: 2                        ║
 ║                                                           ║
-║ Backlog Summary:                                          ║
-║ ├── ✅ backlog/ loaded                                    ║
+║ Backlog-Zusammenfassung:                                  ║
+║ ├── ✅ backlog/ geladen                                   ║
 ║ ├── EPICs: 4                                              ║
 ║ ├── User Stories: 18                                      ║
-║ └── Total Story Points: 89                                ║
+║ └── Gesamte Story Points: 89                              ║
 ║                                                           ║
-║ Constraints (if Enterprise):                              ║
-║ └── ✅ analysis/constraints.md loaded                     ║
-║                                                           ║
-╚══════════════════════════════════════════════════════════╝
-```
-
-### Step 3: Design Tasks
-
-Execute design tasks in order:
-
-```
-╔══════════════════════════════════════════════════════════╗
-║                 DESIGN TASKS                              ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ □ Task 1: Generate Tech Spec                              ║
-║   Command: /project:generate-tech-spec                    ║
-║   Output: project-management/tech-spec.md                 ║
-║                                                           ║
-║ □ Task 2: Architecture Design                             ║
-║   Create C4 diagrams (context, container, component)      ║
-║   Output: project-management/architecture/                ║
-║                                                           ║
-║ □ Task 3: Data Model Design                               ║
-║   ERD and database schema                                 ║
-║   Output: project-management/architecture/erd.md          ║
-║                                                           ║
-║ □ Task 4: API Design                                      ║
-║   Endpoints, payloads, authentication                     ║
-║   Output: project-management/architecture/api.md          ║
-║                                                           ║
-║ □ Task 5: Create ADRs                                     ║
-║   Document key technical decisions                        ║
-║   Output: docs/adr/                                       ║
-║                                                           ║
-║ □ Task 6: Security Review                                 ║
-║   OWASP checklist, auth strategy                          ║
-║   Output: project-management/architecture/security.md     ║
+║ Einschränkungen (falls Enterprise):                       ║
+║ └── ✅ analysis/constraints.md geladen                    ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 4: Execute Tech Spec Generation
+### Schritt 3: Design-Aufgaben
 
-```
-Starting /project:generate-tech-spec...
-
-Analyzing PRD requirements...
-Detecting existing codebase patterns...
-
-[Tech Spec generation workflow runs with interactive Q&A]
-
-✅ Tech Spec created: project-management/tech-spec.md
-```
-
-### Step 5: Architecture Diagrams
-
-Generate C4 architecture diagrams:
+Design-Aufgaben in Reihenfolge ausführen:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║             ARCHITECTURE DIAGRAMS                         ║
+║                 DESIGN-AUFGABEN                           ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ C4 Level 1 - System Context:                              ║
+║ □ Aufgabe 1: Tech Spec erstellen                          ║
+║   Befehl: /project:generate-tech-spec                     ║
+║   Ausgabe: project-management/tech-spec.md                ║
+║                                                           ║
+║ □ Aufgabe 2: Architektur-Design                           ║
+║   C4-Diagramme erstellen (Kontext, Container, Komponente) ║
+║   Ausgabe: project-management/architecture/               ║
+║                                                           ║
+║ □ Aufgabe 3: Datenmodell-Design                           ║
+║   ERD und Datenbankschema                                 ║
+║   Ausgabe: project-management/architecture/erd.md         ║
+║                                                           ║
+║ □ Aufgabe 4: API-Design                                   ║
+║   Endpoints, Payloads, Authentifizierung                  ║
+║   Ausgabe: project-management/architecture/api.md         ║
+║                                                           ║
+║ □ Aufgabe 5: ADRs erstellen                               ║
+║   Wichtige technische Entscheidungen dokumentieren        ║
+║   Ausgabe: docs/adr/                                      ║
+║                                                           ║
+║ □ Aufgabe 6: Sicherheitsüberprüfung                       ║
+║   OWASP-Checkliste, Authentifizierungsstrategie           ║
+║   Ausgabe: project-management/architecture/security.md    ║
+║                                                           ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+### Schritt 4: Tech-Spec-Generierung ausführen
+
+```
+Starte /project:generate-tech-spec...
+
+PRD-Anforderungen analysieren...
+Bestehende Codebase-Muster erkennen...
+
+[Tech-Spec-Generierungsworkflow läuft mit interaktivem Q&A]
+
+✅ Tech Spec erstellt: project-management/tech-spec.md
+```
+
+### Schritt 5: Architekturdiagramme
+
+C4-Architekturdiagramme erstellen:
+
+```
+╔══════════════════════════════════════════════════════════╗
+║             ARCHITEKTURDIAGRAMME                          ║
+╠══════════════════════════════════════════════════════════╣
+║                                                           ║
+║ C4 Ebene 1 - Systemkontext:                               ║
 ║ ┌─────────────────────────────────────────────────────┐  ║
 ║ │                                                     │  ║
-║ │     [User] ──────► [Our System] ──────► [Stripe]    │  ║
-║ │                         │                           │  ║
-║ │                         ▼                           │  ║
-║ │                    [SendGrid]                       │  ║
+║ │     [Benutzer] ────► [Unser System] ────► [Stripe]  │  ║
+║ │                           │                         │  ║
+║ │                           ▼                         │  ║
+║ │                      [SendGrid]                     │  ║
 ║ │                                                     │  ║
 ║ └─────────────────────────────────────────────────────┘  ║
 ║                                                           ║
-║ C4 Level 2 - Container:                                   ║
+║ C4 Ebene 2 - Container:                                   ║
 ║ ┌─────────────────────────────────────────────────────┐  ║
 ║ │                                                     │  ║
 ║ │  [React SPA] ──► [Symfony API] ──► [PostgreSQL]    │  ║
@@ -147,7 +147,7 @@ Generate C4 architecture diagrams:
 ║ │                                                     │  ║
 ║ └─────────────────────────────────────────────────────┘  ║
 ║                                                           ║
-║ Files created:                                            ║
+║ Erstellte Dateien:                                        ║
 ║ ├── architecture/c4-context.md                            ║
 ║ ├── architecture/c4-container.md                          ║
 ║ └── architecture/c4-component.md                          ║
@@ -155,121 +155,122 @@ Generate C4 architecture diagrams:
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 6: ADR Creation
+### Schritt 6: ADR-Erstellung
 
-Document key architecture decisions:
+Wichtige Architekturentscheidungen dokumentieren:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
 ║        ARCHITECTURE DECISION RECORDS (ADRs)               ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ ADRs Created:                                             ║
+║ Erstellte ADRs:                                           ║
 ║                                                           ║
 ║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ ADR-001: Database Choice                             │  ║
-║ │ Decision: PostgreSQL                                 │  ║
-║ │ Rationale: ACID compliance, JSON support, existing   │  ║
+║ │ ADR-001: Datenbankwahl                               │  ║
+║ │ Entscheidung: PostgreSQL                             │  ║
+║ │ Begründung: ACID-Konformität, JSON-Unterstützung,    │  ║
+║ │             bestehend                                │  ║
 ║ └─────────────────────────────────────────────────────┘  ║
 ║                                                           ║
 ║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ ADR-002: API Style                                   │  ║
-║ │ Decision: REST with JSON:API                         │  ║
-║ │ Rationale: Team expertise, caching, simplicity       │  ║
+║ │ ADR-002: API-Stil                                    │  ║
+║ │ Entscheidung: REST mit JSON:API                      │  ║
+║ │ Begründung: Team-Expertise, Caching, Einfachheit     │  ║
 ║ └─────────────────────────────────────────────────────┘  ║
 ║                                                           ║
 ║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ ADR-003: Authentication                              │  ║
-║ │ Decision: JWT with refresh tokens                    │  ║
-║ │ Rationale: Stateless, mobile-friendly, standard      │  ║
+║ │ ADR-003: Authentifizierung                           │  ║
+║ │ Entscheidung: JWT mit Refresh-Tokens                 │  ║
+║ │ Begründung: Zustandslos, mobilfreundlich, Standard   │  ║
 ║ └─────────────────────────────────────────────────────┘  ║
 ║                                                           ║
-║ Files: docs/adr/ADR-001.md, ADR-002.md, ADR-003.md       ║
+║ Dateien: docs/adr/ADR-001.md, ADR-002.md, ADR-003.md     ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 7: Design Review Gate
+### Schritt 7: Design-Review-Gate
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              DESIGN REVIEW GATE                           ║
+║              DESIGN-REVIEW-GATE                           ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Checklist:                                                ║
-║ ✅ Tech Spec covers all PRD requirements                  ║
-║ ✅ Architecture supports NFRs (performance, security)     ║
-║ ✅ Data model handles all entities                        ║
-║ ✅ API design covers all user stories                     ║
-║ ✅ Security considerations documented                     ║
-║ ✅ Testing strategy defined                               ║
-║ ✅ Deployment approach documented                         ║
+║ Checkliste:                                               ║
+║ ✅ Tech Spec deckt alle PRD-Anforderungen ab              ║
+║ ✅ Architektur unterstützt NFRs (Leistung, Sicherheit)   ║
+║ ✅ Datenmodell behandelt alle Entitäten                   ║
+║ ✅ API-Design deckt alle User Stories ab                  ║
+║ ✅ Sicherheitsaspekte dokumentiert                        ║
+║ ✅ Teststrategie definiert                                ║
+║ ✅ Deployment-Ansatz dokumentiert                         ║
 ║                                                           ║
-║ Review Questions:                                         ║
-║ 1. Is the architecture appropriate for the scale?         ║
-║ 2. Are there any missing integrations?                    ║
-║ 3. Is the security approach sufficient?                   ║
-║ 4. Are ADRs complete and justified?                       ║
+║ Review-Fragen:                                            ║
+║ 1. Ist die Architektur für den Umfang angemessen?         ║
+║ 2. Fehlen Integrationen?                                  ║
+║ 3. Ist der Sicherheitsansatz ausreichend?                 ║
+║ 4. Sind die ADRs vollständig und begründet?               ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 8: Phase Completion
+### Schritt 8: Phasenabschluss
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              DESIGN PHASE COMPLETE                        ║
+║              DESIGNPHASE ABGESCHLOSSEN                    ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Artifacts Created:                                        ║
-║ ✅ tech-spec.md            Technical Specification        ║
+║ Erstellte Artefakte:                                      ║
+║ ✅ tech-spec.md            Technische Spezifikation       ║
 ║ ✅ architecture/                                          ║
-║    ├── c4-context.md       System context diagram         ║
-║    ├── c4-container.md     Container diagram              ║
-║    ├── c4-component.md     Component diagram              ║
-║    ├── erd.md              Entity Relationship Diagram    ║
-║    ├── api.md              API design                     ║
-║    └── security.md         Security considerations        ║
+║    ├── c4-context.md       Systemkontext-Diagramm         ║
+║    ├── c4-container.md     Container-Diagramm             ║
+║    ├── c4-component.md     Komponenten-Diagramm           ║
+║    ├── erd.md              Entity-Relationship-Diagramm   ║
+║    ├── api.md              API-Design                     ║
+║    └── security.md         Sicherheitsaspekte             ║
 ║ ✅ docs/adr/               3 Architecture Decision Records║
 ║                                                           ║
-║ Summary:                                                  ║
-║ • 24 API endpoints designed                               ║
-║ • 8 database entities defined                             ║
-║ • 3 external integrations specified                       ║
-║ • 80% test coverage target set                            ║
+║ Zusammenfassung:                                          ║
+║ • 24 API-Endpoints entworfen                              ║
+║ • 8 Datenbank-Entitäten definiert                         ║
+║ • 3 externe Integrationen spezifiziert                    ║
+║ • 80% Testabdeckungsziel festgelegt                       ║
 ║                                                           ║
 ║ ─────────────────────────────────────────────────────────║
-║ NEXT PHASE: Implementation                                ║
-║ Command: /workflow:implement                              ║
+║ NÄCHSTE PHASE: Implementierung                            ║
+║ Befehl: /workflow:implement                               ║
 ║ ─────────────────────────────────────────────────────────║
 ║                                                           ║
-║ Ready to start Sprint 1 development!                      ║
+║ Bereit für den Start der Sprint-1-Entwicklung!            ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-## Agents Involved
+## Beteiligte Agenten
 
-- **tech-lead**: Overall technical design and ADR creation
-- **api-designer**: REST/GraphQL API design
-- **database-architect**: Data model and schema design
-- **ui-designer**: Frontend architecture (if applicable)
-- **devops-engineer**: Deployment and infrastructure design
+- **tech-lead**: Gesamtes technisches Design und ADR-Erstellung
+- **api-designer**: REST/GraphQL API-Design
+- **database-architect**: Datenmodell- und Schema-Design
+- **ui-designer**: Frontend-Architektur (falls zutreffend)
+- **devops-engineer**: Deployment- und Infrastruktur-Design
 
-## Output Files
+## Ausgabedateien
 
-| File | Purpose |
-|------|---------|
-| `tech-spec.md` | Complete Technical Specification |
-| `architecture/c4-*.md` | C4 architecture diagrams |
-| `architecture/erd.md` | Entity Relationship Diagram |
-| `architecture/api.md` | API endpoint documentation |
-| `architecture/security.md` | Security design |
+| Datei | Zweck |
+|-------|-------|
+| `tech-spec.md` | Vollständige technische Spezifikation |
+| `architecture/c4-*.md` | C4-Architekturdiagramme |
+| `architecture/erd.md` | Entity-Relationship-Diagramm |
+| `architecture/api.md` | API-Endpoint-Dokumentation |
+| `architecture/security.md` | Sicherheitsdesign |
 | `docs/adr/*.md` | Architecture Decision Records |
 
-## Related Commands
+## Verwandte Befehle
 
-- `/workflow:plan` - Previous phase
-- `/workflow:implement` - Next phase
-- `/workflow:status` - Check progress
-- `/project:generate-tech-spec` - Direct tech spec generation
-- `/common:architecture-decision` - Create individual ADRs
+- `/workflow:plan` - Vorherige Phase
+- `/workflow:implement` - Nächste Phase
+- `/workflow:status` - Fortschritt prüfen
+- `/project:generate-tech-spec` - Direkte Tech-Spec-Generierung
+- `/common:architecture-decision` - Einzelne ADRs erstellen

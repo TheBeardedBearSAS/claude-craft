@@ -1,43 +1,43 @@
-# Principes SOLID
+# SOLID-Prinzipien
 
-## Vue d'ensemble
+## Überblick
 
-Les principes SOLID sont **obligatoires** pour tout le code du projet. Ces principes garantissent un code maintenable, testable et évolutif.
+Die SOLID-Prinzipien sind **obligatorisch** für den gesamten Projektcode. Diese Prinzipien garantieren wartbaren, testbaren und erweiterbaren Code.
 
-> **Note:** Ce document présente les principes généraux. Consultez les règles spécifiques à votre technologie pour des exemples concrets.
+> **Hinweis:** Dieses Dokument stellt die allgemeinen Prinzipien vor. Konsultieren Sie die technologiespezifischen Regeln für konkrete Beispiele.
 
 ---
 
-## Table des matières
+## Inhaltsverzeichnis
 
 1. [SRP - Single Responsibility Principle](#srp---single-responsibility-principle)
 2. [OCP - Open/Closed Principle](#ocp---openclosed-principle)
 3. [LSP - Liskov Substitution Principle](#lsp---liskov-substitution-principle)
 4. [ISP - Interface Segregation Principle](#isp---interface-segregation-principle)
 5. [DIP - Dependency Inversion Principle](#dip---dependency-inversion-principle)
-6. [Checklist de validation](#checklist-de-validation)
+6. [Validierungs-Checkliste](#validierungs-checkliste)
 
 ---
 
 ## SRP - Single Responsibility Principle
 
-### Définition
+### Definition
 
-**Une classe ne doit avoir qu'une seule raison de changer.**
+**Eine Klasse darf nur einen einzigen Grund haben, sich zu ändern.**
 
-Chaque classe, méthode ou module doit avoir une responsabilité unique et bien définie.
+Jede Klasse, Methode oder jedes Modul muss eine einzige und klar definierte Verantwortung haben.
 
-### Signes de violation
+### Anzeichen einer Verletzung
 
-- Classe avec "and" ou "or" dans le nom
-- Méthode qui fait plusieurs choses non liées
-- Classe difficile à nommer clairement
-- Tests complexes nécessitant beaucoup de mocks
+- Klasse mit "und" oder "oder" im Namen
+- Methode, die mehrere nicht zusammenhängende Dinge tut
+- Klasse, die schwer klar zu benennen ist
+- Komplexe Tests, die viele Mocks erfordern
 
-### Application
+### Anwendung
 
 ```
-❌ MAUVAIS - Multiple responsabilités
+SCHLECHT - Mehrere Verantwortlichkeiten
 ┌─────────────────────────────────────┐
 │ OrderService                        │
 ├─────────────────────────────────────┤
@@ -48,7 +48,7 @@ Chaque classe, méthode ou module doit avoir une responsabilité unique et bien 
 │ - generatePDF()                     │
 └─────────────────────────────────────┘
 
-✅ BON - Responsabilités séparées
+GUT - Getrennte Verantwortlichkeiten
 ┌─────────────────┐  ┌─────────────────┐
 │ OrderValidator  │  │ PricingService  │
 ├─────────────────┤  ├─────────────────┤
@@ -62,33 +62,33 @@ Chaque classe, méthode ou module doit avoir une responsabilité unique et bien 
 └─────────────────┘  └─────────────────┘
 ```
 
-### Avantages
+### Vorteile
 
-- ✅ **Testabilité:** Chaque classe peut être testée isolément
-- ✅ **Maintenabilité:** Les changements sont localisés
-- ✅ **Réutilisabilité:** Les composants sont indépendants
-- ✅ **Lisibilité:** Chaque classe a un objectif clair
+- **Testbarkeit:** Jede Klasse kann isoliert getestet werden
+- **Wartbarkeit:** Änderungen sind lokalisiert
+- **Wiederverwendbarkeit:** Komponenten sind unabhängig
+- **Lesbarkeit:** Jede Klasse hat ein klares Ziel
 
 ---
 
 ## OCP - Open/Closed Principle
 
-### Définition
+### Definition
 
-**Les entités logicielles doivent être ouvertes à l'extension mais fermées à la modification.**
+**Software-Entitäten müssen offen für Erweiterung, aber geschlossen für Modifikation sein.**
 
-On doit pouvoir ajouter de nouvelles fonctionnalités sans modifier le code existant.
+Man muss neue Funktionalitäten hinzufügen können, ohne bestehenden Code zu ändern.
 
-### Signes de violation
+### Anzeichen einer Verletzung
 
-- Switch/case sur des types pour déterminer le comportement
-- Modifications fréquentes d'une même classe
-- Ajout de fonctionnalité = modification de code existant
+- Switch/Case auf Typen zur Bestimmung des Verhaltens
+- Häufige Änderungen derselben Klasse
+- Hinzufügen von Funktionalität = Änderung bestehenden Codes
 
-### Application
+### Anwendung
 
 ```
-❌ MAUVAIS - Modification du code existant
+SCHLECHT - Änderung bestehenden Codes
 ┌─────────────────────────────────────┐
 │ DiscountCalculator                  │
 ├─────────────────────────────────────┤
@@ -97,11 +97,11 @@ On doit pouvoir ajouter de nouvelles fonctionnalités sans modifier le code exis
 │     return basePrice * 0.9          │
 │   if type == "student":             │
 │     return basePrice * 0.8          │
-│   // Pour ajouter "senior" →        │
-│   // modifier cette classe          │
+│   // Um "senior" hinzuzufügen →     │
+│   // diese Klasse ändern            │
 └─────────────────────────────────────┘
 
-✅ BON - Extension via interfaces
+GUT - Erweiterung über Interfaces
 ┌─────────────────────────────────────┐
 │ <<interface>>                       │
 │ DiscountPolicy                      │
@@ -115,53 +115,53 @@ On doit pouvoir ajouter de nouvelles fonctionnalités sans modifier le code exis
     │         │            │
 ┌───┴───┐ ┌───┴───┐ ┌──────┴──────┐
 │Family │ │Student│ │SeniorPolicy │
-│Policy │ │Policy │ │(nouvelle)   │
+│Policy │ │Policy │ │(neu)        │
 └───────┘ └───────┘ └─────────────┘
 ```
 
-### Pattern Strategy
+### Strategy Pattern
 
-Utilisez le pattern Strategy pour permettre l'extension:
+Verwenden Sie das Strategy Pattern, um Erweiterung zu ermöglichen:
 
-1. Définir une interface pour le comportement variable
-2. Implémenter chaque variante dans une classe séparée
-3. Injecter les implémentations via configuration
+1. Ein Interface für das variable Verhalten definieren
+2. Jede Variante in einer separaten Klasse implementieren
+3. Implementierungen über Konfiguration injizieren
 
-### Avantages
+### Vorteile
 
-- ✅ **Extension facile:** Nouvelles fonctionnalités = nouvelles classes
-- ✅ **Stabilité:** Le code existant n'est pas modifié
-- ✅ **Tests:** Pas de régression sur le code existant
-- ✅ **Évolutivité:** Ajout de fonctionnalités sans risque
+- **Einfache Erweiterung:** Neue Funktionalitäten = neue Klassen
+- **Stabilität:** Bestehender Code wird nicht geändert
+- **Tests:** Keine Regression auf bestehendem Code
+- **Erweiterbarkeit:** Hinzufügen von Funktionalitäten ohne Risiko
 
 ---
 
 ## LSP - Liskov Substitution Principle
 
-### Définition
+### Definition
 
-**Les objets d'une classe dérivée doivent pouvoir remplacer les objets de la classe de base sans altérer la cohérence du programme.**
+**Objekte einer abgeleiteten Klasse müssen die Objekte der Basisklasse ersetzen können, ohne die Konsistenz des Programms zu beeinträchtigen.**
 
-Les sous-types doivent être substituables à leurs types de base.
+Untertypen müssen durch ihre Basistypen substituierbar sein.
 
-### Signes de violation
+### Anzeichen einer Verletzung
 
-- Sous-classe qui lève des exceptions non documentées
-- Méthode qui vérifie le type concret avant d'agir
-- Override qui change le comportement attendu
-- Préconditions renforcées ou postconditions affaiblies
+- Unterklasse, die nicht dokumentierte Exceptions wirft
+- Methode, die den konkreten Typ prüft, bevor sie handelt
+- Override, das das erwartete Verhalten ändert
+- Verstärkte Vorbedingungen oder abgeschwächte Nachbedingungen
 
-### Règles
+### Regeln
 
-1. **Préconditions:** Ne pas renforcer (accepter au moins autant)
-2. **Postconditions:** Ne pas affaiblir (garantir au moins autant)
-3. **Invariants:** Maintenir les invariants du parent
-4. **Contrainte historique:** Ne pas modifier l'état de manière incompatible
+1. **Vorbedingungen:** Nicht verstärken (mindestens genauso viel akzeptieren)
+2. **Nachbedingungen:** Nicht abschwächen (mindestens genauso viel garantieren)
+3. **Invarianten:** Invarianten des Elternteils beibehalten
+4. **Historische Einschränkung:** Zustand nicht inkompatibel ändern
 
-### Application
+### Anwendung
 
 ```
-❌ MAUVAIS - Violation du contrat
+SCHLECHT - Vertragsverletzung
 ┌─────────────────────────────────────┐
 │ class Rectangle                     │
 ├─────────────────────────────────────┤
@@ -177,10 +177,10 @@ Les sous-types doivent être substituables à leurs types de base.
 ├─────────────────────────────────────┤
 │ + setWidth(w):                      │
 │     this.width = w                  │
-│     this.height = w  // ❌ Viole LSP│
+│     this.height = w  // Verletzt LSP│
 └─────────────────────────────────────┘
 
-✅ BON - Contrats respectés
+GUT - Verträge eingehalten
 ┌─────────────────────────────────────┐
 │ <<interface>> Shape                 │
 ├─────────────────────────────────────┤
@@ -195,34 +195,34 @@ Les sous-types doivent être substituables à leurs types de base.
 └───────┘ └───────┘
 ```
 
-### Avantages
+### Vorteile
 
-- ✅ **Polymorphisme sûr:** Les substitutions fonctionnent toujours
-- ✅ **Contrats clairs:** Interfaces bien documentées
-- ✅ **Prévisibilité:** Pas de surprises avec les sous-types
-- ✅ **Testabilité:** Les mocks respectent les contrats
+- **Sicherer Polymorphismus:** Substitutionen funktionieren immer
+- **Klare Verträge:** Gut dokumentierte Interfaces
+- **Vorhersehbarkeit:** Keine Überraschungen mit Untertypen
+- **Testbarkeit:** Mocks respektieren die Verträge
 
 ---
 
 ## ISP - Interface Segregation Principle
 
-### Définition
+### Definition
 
-**Les clients ne doivent pas dépendre d'interfaces qu'ils n'utilisent pas.**
+**Clients dürfen nicht von Interfaces abhängen, die sie nicht verwenden.**
 
-Il vaut mieux plusieurs interfaces spécifiques qu'une interface générale.
+Es ist besser, mehrere spezifische Interfaces zu haben als ein allgemeines Interface.
 
-### Signes de violation
+### Anzeichen einer Verletzung
 
-- Interface avec beaucoup de méthodes (> 5)
-- Classes qui implémentent des méthodes vides
-- Méthodes qui lèvent `NotImplementedException`
-- Clients qui n'utilisent qu'une partie de l'interface
+- Interface mit vielen Methoden (> 5)
+- Klassen, die leere Methoden implementieren
+- Methoden, die `NotImplementedException` werfen
+- Clients, die nur einen Teil des Interfaces verwenden
 
-### Application
+### Anwendung
 
 ```
-❌ MAUVAIS - Interface trop large
+SCHLECHT - Zu breites Interface
 ┌─────────────────────────────────────┐
 │ <<interface>>                       │
 │ UserRepository                      │
@@ -239,7 +239,7 @@ Il vaut mieux plusieurs interfaces spécifiques qu'une interface générale.
 │ + syncWithLDAP()                    │
 └─────────────────────────────────────┘
 
-✅ BON - Interfaces ségrégées
+GUT - Segregierte Interfaces
 ┌─────────────────┐  ┌─────────────────┐
 │ UserFinder      │  │ UserPersister   │
 ├─────────────────┤  ├─────────────────┤
@@ -255,34 +255,34 @@ Il vaut mieux plusieurs interfaces spécifiques qu'une interface générale.
 └─────────────────┘  └─────────────────┘
 ```
 
-### Avantages
+### Vorteile
 
-- ✅ **Couplage faible:** Les clients dépendent du minimum nécessaire
-- ✅ **Flexibilité:** Implémentations partielles possibles
-- ✅ **Testabilité:** Mocks plus simples (moins de méthodes)
-- ✅ **Évolutivité:** Ajout d'interfaces sans impacter l'existant
+- **Geringe Kopplung:** Clients hängen nur vom Minimum ab
+- **Flexibilität:** Teilimplementierungen möglich
+- **Testbarkeit:** Einfachere Mocks (weniger Methoden)
+- **Erweiterbarkeit:** Hinzufügen von Interfaces ohne Auswirkung auf Bestehendes
 
 ---
 
 ## DIP - Dependency Inversion Principle
 
-### Définition
+### Definition
 
-**Les modules de haut niveau ne doivent pas dépendre des modules de bas niveau. Les deux doivent dépendre d'abstractions.**
+**High-Level-Module dürfen nicht von Low-Level-Modulen abhängen. Beide müssen von Abstraktionen abhängen.**
 
-**Les abstractions ne doivent pas dépendre des détails. Les détails doivent dépendre des abstractions.**
+**Abstraktionen dürfen nicht von Details abhängen. Details müssen von Abstraktionen abhängen.**
 
-### Signes de violation
+### Anzeichen einer Verletzung
 
-- Instanciation directe de dépendances (`new ConcreteClass()`)
-- Import de classes d'infrastructure dans la couche métier
-- Couplage fort avec un framework ou une bibliothèque
-- Tests difficiles à écrire sans base de données réelle
+- Direkte Instanziierung von Abhängigkeiten (`new ConcreteClass()`)
+- Import von Infrastructure-Klassen in der Geschäftsschicht
+- Starke Kopplung an ein Framework oder eine Bibliothek
+- Tests, die ohne echte Datenbank schwer zu schreiben sind
 
-### Application
+### Anwendung
 
 ```
-❌ MAUVAIS - Dépendance aux implémentations
+SCHLECHT - Abhängigkeit von Implementierungen
 ┌─────────────────────────────────────┐
 │ OrderService                        │
 ├─────────────────────────────────────┤
@@ -291,12 +291,12 @@ Il vaut mieux plusieurs interfaces spécifiques qu'une interface générale.
 │ - StripePaymentGateway              │
 └─────────────────────────────────────┘
      │
-     ▼ Dépend de
+     ▼ Hängt ab von
 ┌─────────────────────────────────────┐
-│ Infrastructure concrète             │
+│ Konkrete Infrastruktur              │
 └─────────────────────────────────────┘
 
-✅ BON - Dépendance aux abstractions
+GUT - Abhängigkeit von Abstraktionen
 ┌─────────────────────────────────────┐
 │ OrderService (Application Layer)    │
 ├─────────────────────────────────────┤
@@ -305,18 +305,18 @@ Il vaut mieux plusieurs interfaces spécifiques qu'une interface générale.
 │ - PaymentGatewayInterface           │
 └─────────────────────────────────────┘
      │
-     ▼ Dépend de
+     ▼ Hängt ab von
 ┌─────────────────────────────────────┐
 │ Interfaces (Domain Layer)           │
 └─────────────────────────────────────┘
      △
-     │ Implémenté par
+     │ Implementiert von
 ┌─────────────────────────────────────┐
 │ MySQL, Smtp, Stripe (Infra Layer)   │
 └─────────────────────────────────────┘
 ```
 
-### Architecture en couches
+### Schichtenarchitektur
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -324,73 +324,73 @@ Il vaut mieux plusieurs interfaces spécifiques qu'une interface générale.
 │   Controllers, Commands, Forms              │
 ├─────────────────────────────────────────────┤
 │         APPLICATION (Use Cases)             │
-│   Services orchestrant la logique           │
+│   Services, die die Logik orchestrieren     │
 │               │                             │
-│       Dépend de (Interfaces)                │
+│       Hängt ab von (Interfaces)             │
 ├─────────────────────────────────────────────┤
 │            DOMAIN (Business)                │
-│   Entités, Value Objects, Interfaces        │
+│   Entitäten, Value Objects, Interfaces      │
 │               △                             │
-│       Implémenté par (Inversion)            │
+│       Implementiert von (Inversion)         │
 ├─────────────────────────────────────────────┤
-│       INFRASTRUCTURE (Technique)            │
+│       INFRASTRUCTURE (Technik)              │
 │   Repositories, Mailers, Gateways           │
 └─────────────────────────────────────────────┘
 
-✅ Les couches hautes dépendent d'abstractions
-✅ Les couches basses implémentent ces abstractions
-✅ La logique métier est isolée des détails techniques
+Die oberen Schichten hängen von Abstraktionen ab
+Die unteren Schichten implementieren diese Abstraktionen
+Die Geschäftslogik ist von technischen Details isoliert
 ```
 
-### Avantages
+### Vorteile
 
-- ✅ **Testabilité:** Mocks et stubs faciles à créer
-- ✅ **Flexibilité:** Changement d'implémentation sans impact
-- ✅ **Isolation:** La logique métier ne dépend pas de l'infrastructure
-- ✅ **Réutilisabilité:** Les abstractions sont réutilisables
+- **Testbarkeit:** Mocks und Stubs einfach zu erstellen
+- **Flexibilität:** Implementierungswechsel ohne Auswirkung
+- **Isolation:** Geschäftslogik hängt nicht von der Infrastruktur ab
+- **Wiederverwendbarkeit:** Abstraktionen sind wiederverwendbar
 
 ---
 
-## Checklist de validation
+## Validierungs-Checkliste
 
-### Avant chaque commit
+### Vor jedem Commit
 
 #### SRP
-- [ ] Chaque classe a une seule responsabilité clairement définie
-- [ ] Les méthodes font une seule chose (< 20 lignes)
-- [ ] Pas de méthodes avec "et" ou "ou" dans le nom
+- [ ] Jede Klasse hat eine einzige klar definierte Verantwortung
+- [ ] Methoden tun eine einzige Sache (< 20 Zeilen)
+- [ ] Keine Methoden mit "und" oder "oder" im Namen
 
 #### OCP
-- [ ] Nouvelles fonctionnalités ajoutées par extension, pas modification
-- [ ] Utilisation d'interfaces et de patterns Strategy
-- [ ] Pas de switch/if sur des types pour déterminer le comportement
+- [ ] Neue Funktionalitäten durch Erweiterung hinzugefügt, nicht durch Modifikation
+- [ ] Verwendung von Interfaces und Strategy Patterns
+- [ ] Kein Switch/If auf Typen zur Bestimmung des Verhaltens
 
 #### LSP
-- [ ] Les sous-types respectent les contrats de leurs parents
-- [ ] Pas de préconditions renforcées dans les sous-classes
-- [ ] Pas de postconditions affaiblies dans les sous-classes
-- [ ] Pas d'exceptions nouvelles non documentées
+- [ ] Untertypen respektieren die Verträge ihrer Eltern
+- [ ] Keine verstärkten Vorbedingungen in Unterklassen
+- [ ] Keine abgeschwächten Nachbedingungen in Unterklassen
+- [ ] Keine neuen nicht dokumentierten Exceptions
 
 #### ISP
-- [ ] Les interfaces sont petites et focalisées (< 5 méthodes)
-- [ ] Les clients ne dépendent que des méthodes qu'ils utilisent
-- [ ] Pas de méthodes `throw NotImplementedException()`
+- [ ] Interfaces sind klein und fokussiert (< 5 Methoden)
+- [ ] Clients hängen nur von den Methoden ab, die sie verwenden
+- [ ] Keine Methoden `throw NotImplementedException()`
 
 #### DIP
-- [ ] Les use cases dépendent d'interfaces, pas d'implémentations
-- [ ] Les interfaces sont dans le domaine, pas l'infrastructure
-- [ ] Injection de dépendances via constructeur
+- [ ] Use Cases hängen von Interfaces ab, nicht von Implementierungen
+- [ ] Interfaces sind in der Domain, nicht in der Infrastruktur
+- [ ] Dependency Injection über Konstruktor
 
 ---
 
-## Ressources
+## Ressourcen
 
-- **Livre:** *Clean Architecture* - Robert C. Martin
-- **Livre:** *SOLID Principles* - Uncle Bob
-- **Vidéo:** [SOLID Principles Explained](https://www.youtube.com/watch?v=pTB30aXS77U)
+- **Buch:** *Clean Architecture* - Robert C. Martin
+- **Buch:** *SOLID Principles* - Uncle Bob
+- **Video:** [SOLID Principles Explained](https://www.youtube.com/watch?v=pTB30aXS77U)
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
+**Datum der letzten Aktualisierung:** 2025-01
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Autor:** The Bearded CTO

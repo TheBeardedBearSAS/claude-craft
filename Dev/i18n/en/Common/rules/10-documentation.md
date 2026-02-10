@@ -1,53 +1,53 @@
 # Documentation
 
-## Vue d'ensemble
+## Overview
 
-Une bonne documentation est **essentielle** pour la maintenabilité du projet. Elle doit être à jour, concise et utile.
+Good documentation is **essential** for project maintainability. It must be up to date, concise, and useful.
 
-**Principes:**
-- ✅ Documentation as Code (versionnée avec le code)
-- ✅ Single Source of Truth (pas de duplication)
-- ✅ Mise à jour avec chaque PR
-- ✅ Automatisée quand possible
+**Principles:**
+- Documentation as Code (versioned with the code)
+- Single Source of Truth (no duplication)
+- Updated with each PR
+- Automated when possible
 
 ---
 
-## Table des matières
+## Table of Contents
 
-1. [Types de documentation](#types-de-documentation)
+1. [Types of Documentation](#types-of-documentation)
 2. [README.md](#readmemd)
-3. [Documentation du code](#documentation-du-code)
+3. [Code Documentation](#code-documentation)
 4. [ADR - Architecture Decision Records](#adr---architecture-decision-records)
 5. [API Documentation](#api-documentation)
 6. [Changelog](#changelog)
-7. [Bonnes pratiques](#bonnes-pratiques)
+7. [Best Practices](#best-practices)
 8. [Checklist](#checklist)
 
 ---
 
-## Types de documentation
+## Types of Documentation
 
-| Type | Audience | Contenu | Format |
+| Type | Audience | Content | Format |
 |------|----------|---------|--------|
-| README | Nouveaux devs | Démarrage rapide | Markdown |
-| Code comments | Développeurs | Pourquoi, pas quoi | Inline |
-| API docs | Consommateurs | Endpoints, schemas | OpenAPI |
-| ADR | Équipe | Décisions arch. | Markdown |
-| Changelog | Tous | Historique changes | Markdown |
-| User docs | Utilisateurs | Guides, tutoriels | Markdown/HTML |
+| README | New devs | Quick start | Markdown |
+| Code comments | Developers | Why, not what | Inline |
+| API docs | Consumers | Endpoints, schemas | OpenAPI |
+| ADR | Team | Arch. decisions | Markdown |
+| Changelog | Everyone | Change history | Markdown |
+| User docs | Users | Guides, tutorials | Markdown/HTML |
 
 ---
 
 ## README.md
 
-### Structure recommandée
+### Recommended Structure
 
 ```markdown
-# Nom du Projet
+# Project Name
 
-Description courte (1-2 phrases).
+Short description (1-2 sentences).
 
-## Prérequis
+## Prerequisites
 
 - Tool 1 (version)
 - Tool 2 (version)
@@ -55,58 +55,58 @@ Description courte (1-2 phrases).
 ## Installation
 
 ```bash
-# Commandes d'installation
+# Installation commands
 ```
 
-## Démarrage rapide
+## Quick Start
 
 ```bash
-# Commandes pour lancer le projet
+# Commands to launch the project
 ```
 
 ## Configuration
 
-Variables d'environnement requises:
+Required environment variables:
 
-| Variable | Description | Défaut |
-|----------|-------------|--------|
-| DATABASE_URL | URL base de données | - |
-| API_KEY | Clé API externe | - |
+| Variable | Description | Default |
+|----------|-------------|---------|
+| DATABASE_URL | Database URL | - |
+| API_KEY | External API key | - |
 
 ## Tests
 
 ```bash
-# Comment lancer les tests
+# How to run tests
 make test
 ```
 
-## Déploiement
+## Deployment
 
-Instructions de déploiement.
+Deployment instructions.
 
 ## Architecture
 
-Brève description de l'architecture.
-Lien vers documentation détaillée.
+Brief architecture description.
+Link to detailed documentation.
 
-## Contribution
+## Contributing
 
-Instructions pour contribuer.
-Lien vers CONTRIBUTING.md.
+Instructions for contributing.
+Link to CONTRIBUTING.md.
 
 ## License
 
 MIT License
 ```
 
-### Exemples
+### Examples
 
-#### ✅ BON
+#### GOOD
 
 ```markdown
 # E-Commerce API
 
-API REST pour la gestion de commandes e-commerce.
+REST API for e-commerce order management.
 
 ## Installation
 
@@ -116,15 +116,15 @@ cd ecommerce-api
 make install
 ```
 
-## Démarrage
+## Getting Started
 
 ```bash
 make dev
-# API disponible sur http://localhost:8080
+# API available at http://localhost:8080
 ```
 ```
 
-#### ❌ MAUVAIS
+#### BAD
 
 ```markdown
 # Project
@@ -136,71 +136,71 @@ Run `npm install` then `npm start`.
 
 ---
 
-## Documentation du code
+## Code Documentation
 
-### Règle d'or
+### Golden Rule
 
-> **Le code doit être auto-documenté.**
-> Les commentaires expliquent le POURQUOI, pas le QUOI.
+> **Code should be self-documenting.**
+> Comments explain the WHY, not the WHAT.
 
-### Quand commenter
-
-```
-✅ COMMENTER:
-- Décisions non évidentes
-- Workarounds temporaires
-- Références externes (tickets, specs)
-- Algorithmes complexes
-
-❌ NE PAS COMMENTER:
-- Ce que fait le code (lisible)
-- Code évident
-- Code mort
-```
-
-### Exemples
-
-#### ✅ BON - Explique le pourquoi
+### When to Comment
 
 ```
-// Workaround: API externe ne supporte pas UTF-8
-// TODO: Supprimer quand API v2 sera disponible (#1234)
+COMMENT:
+- Non-obvious decisions
+- Temporary workarounds
+- External references (tickets, specs)
+- Complex algorithms
+
+DO NOT COMMENT:
+- What the code does (readable)
+- Obvious code
+- Dead code
+```
+
+### Examples
+
+#### GOOD - Explains the why
+
+```
+// Workaround: External API does not support UTF-8
+// TODO: Remove when API v2 is available (#1234)
 function sanitizeInput(text):
   return text.ascii_only()
 
-// Rate limit de 100 req/min imposé par le provider
-// Voir: https://provider.com/docs/rate-limits
+// Rate limit of 100 req/min imposed by the provider
+// See: https://provider.com/docs/rate-limits
 RATE_LIMIT = 100
 ```
 
-#### ❌ MAUVAIS - Explique le quoi (inutile)
+#### BAD - Explains the what (useless)
 
 ```
-// Incrémente le compteur
+// Increment the counter
 counter = counter + 1
 
-// Retourne l'utilisateur
+// Return the user
 return user
 
-// Boucle sur les items
+// Loop over items
 for item in items:
 ```
 
-### Documentation des fonctions
+### Function Documentation
 
-Documenter:
-- **Public API** - Toujours
-- **Fonctions complexes** - Si non évident
-- **Fonctions privées** - Rarement
+Document:
+- **Public API** - Always
+- **Complex functions** - If not obvious
+- **Private functions** - Rarely
 
 ```
 /**
- * Calcule le prix total avec remises applicables.
+ * Calculates the total price with applicable discounts.
  *
- * @param items - Liste des articles
- * @param discountCode - Code promo optionnel
- * @returns Prix total après remises
- * @throws InvalidDiscountCode si code invalide
+ * @param items - List of items
+ * @param discountCode - Optional promo code
+ * @returns Total price after discounts
+ * @throws InvalidDiscountCode if code is invalid
  *
  * @example
  * calculateTotal([item1, item2], "SAVE10")
@@ -217,68 +217,68 @@ function calculateTotal(items, discountCode = null):
 ### Format
 
 ```markdown
-# ADR-001: Choix de la base de données
+# ADR-001: Database Choice
 
-## Statut
+## Status
 
-Accepté (2025-01-15)
+Accepted (2025-01-15)
 
-## Contexte
+## Context
 
-Nous devons choisir une base de données pour stocker
-les données utilisateurs et commandes.
+We need to choose a database to store
+user and order data.
 
-Contraintes:
-- Volume: ~1M utilisateurs, ~10M commandes
-- Requêtes: 80% lectures, 20% écritures
-- Budget: Limité
+Constraints:
+- Volume: ~1M users, ~10M orders
+- Queries: 80% reads, 20% writes
+- Budget: Limited
 
-## Décision
+## Decision
 
-Nous utilisons PostgreSQL.
+We use PostgreSQL.
 
-## Alternatives considérées
+## Alternatives Considered
 
 ### MySQL
-- ✅ Familiarité équipe
-- ❌ Moins performant pour requêtes complexes
+- Familiar to the team
+- Less performant for complex queries
 
 ### MongoDB
-- ✅ Flexibilité schéma
-- ❌ Pas adapté aux relations fortes
+- Schema flexibility
+- Not suited for strong relationships
 
-### PostgreSQL (choisi)
-- ✅ Performance requêtes complexes
-- ✅ JSONB pour flexibilité
-- ✅ Extensions (PostGIS si besoin)
+### PostgreSQL (chosen)
+- Complex query performance
+- JSONB for flexibility
+- Extensions (PostGIS if needed)
 
-## Conséquences
+## Consequences
 
-### Positives
-- Performances prévisibles
-- Écosystème mature
-- Backup/restore standard
+### Positive
+- Predictable performance
+- Mature ecosystem
+- Standard backup/restore
 
-### Négatives
-- Migration depuis MySQL nécessaire
-- Formation équipe sur spécificités PG
+### Negative
+- Migration from MySQL required
+- Team training on PG specifics
 ```
 
-### Quand créer un ADR
+### When to Create an ADR
 
-- Choix de technologie majeure
-- Changement d'architecture
-- Adoption d'un pattern
-- Décision irréversible ou coûteuse à changer
+- Major technology choice
+- Architecture change
+- Pattern adoption
+- Irreversible or costly-to-change decision
 
-### Structure des fichiers
+### File Structure
 
 ```
 docs/
 └── adr/
-    ├── 0001-choix-base-donnees.md
-    ├── 0002-architecture-microservices.md
-    ├── 0003-strategie-cache.md
+    ├── 0001-database-choice.md
+    ├── 0002-microservices-architecture.md
+    ├── 0003-caching-strategy.md
     └── index.md
 ```
 
@@ -340,19 +340,19 @@ components:
           type: string
 ```
 
-### Bonnes pratiques API Docs
+### API Docs Best Practices
 
-1. **Exemples concrets** pour chaque endpoint
-2. **Codes d'erreur** documentés
-3. **Authentification** expliquée
-4. **Rate limits** mentionnés
-5. **Versioning** clair
+1. **Concrete examples** for each endpoint
+2. **Error codes** documented
+3. **Authentication** explained
+4. **Rate limits** mentioned
+5. **Versioning** clear
 
 ---
 
 ## Changelog
 
-### Format Keep a Changelog
+### Keep a Changelog Format
 
 ```markdown
 # Changelog
@@ -390,71 +390,71 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Initial release
 ```
 
-### Catégories
+### Categories
 
-| Catégorie | Contenu |
-|-----------|---------|
-| **Added** | Nouvelles fonctionnalités |
-| **Changed** | Modifications de comportement |
-| **Deprecated** | Fonctionnalités bientôt supprimées |
-| **Removed** | Fonctionnalités supprimées |
-| **Fixed** | Corrections de bugs |
-| **Security** | Corrections de sécurité |
+| Category | Content |
+|----------|---------|
+| **Added** | New features |
+| **Changed** | Behavior changes |
+| **Deprecated** | Features to be removed soon |
+| **Removed** | Removed features |
+| **Fixed** | Bug fixes |
+| **Security** | Security fixes |
 
 ---
 
-## Bonnes pratiques
+## Best Practices
 
 ### 1. Documentation as Code
 
 ```
-✅ Versionnée avec Git
-✅ Revue dans les PRs
-✅ Tests de documentation (liens, syntaxe)
-✅ CI/CD génère la doc
+Versioned with Git
+Reviewed in PRs
+Documentation tests (links, syntax)
+CI/CD generates the docs
 ```
 
 ### 2. Single Source of Truth
 
 ```
-❌ MAUVAIS
-- README dit "utiliser npm"
-- Wiki dit "utiliser yarn"
-- Slack dit "utiliser pnpm"
+BAD
+- README says "use npm"
+- Wiki says "use yarn"
+- Slack says "use pnpm"
 
-✅ BON
-- README dit "utiliser npm"
-- Wiki renvoie vers README
-- Slack renvoie vers README
+GOOD
+- README says "use npm"
+- Wiki links to README
+- Slack links to README
 ```
 
-### 3. Mise à jour continue
+### 3. Continuous Updates
 
 ```
-Règle: Chaque PR qui change le comportement
-       doit mettre à jour la documentation.
+Rule: Each PR that changes behavior
+      must update the documentation.
 
-Checklist PR:
-- [ ] README mis à jour
-- [ ] API docs mis à jour
-- [ ] CHANGELOG mis à jour
-- [ ] ADR créé si décision architecturale
+PR Checklist:
+- [ ] README updated
+- [ ] API docs updated
+- [ ] CHANGELOG updated
+- [ ] ADR created if architectural decision
 ```
 
-### 4. Automatisation
+### 4. Automation
 
 ```yaml
-# Génération automatique
-- API docs depuis code (annotations)
-- Changelog depuis commits (conventional)
-- Diagrammes depuis code (Mermaid)
+# Automatic generation
+- API docs from code (annotations)
+- Changelog from commits (conventional)
+- Diagrams from code (Mermaid)
 ```
 
 ---
 
-## Diagrammes
+## Diagrams
 
-### Mermaid (intégré GitHub/GitLab)
+### Mermaid (integrated GitHub/GitLab)
 
 ```markdown
 ```mermaid
@@ -504,52 +504,52 @@ flowchart TD
 
 ## Checklist
 
-### Pour chaque PR
+### For each PR
 
-- [ ] README mis à jour si changement de setup
-- [ ] Commentaires ajoutés pour code non évident
-- [ ] CHANGELOG mis à jour
-- [ ] API docs générées/mises à jour
-- [ ] ADR créé si décision architecturale
+- [ ] README updated if setup changed
+- [ ] Comments added for non-obvious code
+- [ ] CHANGELOG updated
+- [ ] API docs generated/updated
+- [ ] ADR created if architectural decision
 
-### Revue trimestrielle
+### Quarterly Review
 
-- [ ] README toujours exact
-- [ ] Liens fonctionnels
-- [ ] Exemples à jour
-- [ ] Dépendances documentées
+- [ ] README still accurate
+- [ ] Links functional
+- [ ] Examples up to date
+- [ ] Dependencies documented
 
-### Nouveau projet
+### New Project
 
-- [ ] README avec installation
+- [ ] README with installation
 - [ ] CONTRIBUTING.md
-- [ ] CHANGELOG.md initialisé
-- [ ] Structure docs/adr/ créée
-- [ ] Template PR avec checklist doc
+- [ ] CHANGELOG.md initialized
+- [ ] docs/adr/ structure created
+- [ ] PR template with doc checklist
 
 ---
 
-## Outils recommandés
+## Recommended Tools
 
-| Outil | Usage |
-|-------|-------|
+| Tool | Usage |
+|------|-------|
 | **MkDocs** | Documentation site |
 | **Swagger UI** | API documentation |
-| **Mermaid** | Diagrammes |
-| **ADR Tools** | Gestion ADRs |
-| **Vale** | Linting prose |
+| **Mermaid** | Diagrams |
+| **ADR Tools** | ADR management |
+| **Vale** | Prose linting |
 
 ---
 
-## Ressources
+## Resources
 
 - **Keep a Changelog:** [keepachangelog.com](https://keepachangelog.com/)
 - **ADR:** [adr.github.io](https://adr.github.io/)
 - **OpenAPI:** [swagger.io/specification](https://swagger.io/specification/)
-- **Diátaxis:** [diataxis.fr](https://diataxis.fr/) (framework documentation)
+- **Diataxis:** [diataxis.fr](https://diataxis.fr/) (documentation framework)
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
+**Last updated:** 2025-01
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Author:** The Bearded CTO

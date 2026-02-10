@@ -29,10 +29,11 @@ case "$NOTIFICATION_TYPE" in
         ;;
 esac
 
-# Send to Slack
+# Send to Slack (safe JSON payload via jq)
+PAYLOAD=$(jq -n --arg text "$SLACK_MESSAGE" '{text: $text}')
 curl -s -X POST \
     -H 'Content-type: application/json' \
-    --data "{\"text\":\"$SLACK_MESSAGE\"}" \
+    --data "$PAYLOAD" \
     "$SLACK_WEBHOOK_URL" > /dev/null 2>&1 || true
 
 exit 0

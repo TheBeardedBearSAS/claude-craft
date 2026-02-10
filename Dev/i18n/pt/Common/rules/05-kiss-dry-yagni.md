@@ -1,105 +1,105 @@
-# Principes KISS, DRY, YAGNI
+# Principios KISS, DRY, YAGNI
 
-## Vue d'ensemble
+## Visao Geral
 
-Les principes **KISS** (Keep It Simple, Stupid), **DRY** (Don't Repeat Yourself) et **YAGNI** (You Aren't Gonna Need It) sont **obligatoires** pour maintenir un code simple, maintenable et évolutif.
+Os principios **KISS** (Keep It Simple, Stupid), **DRY** (Don't Repeat Yourself) e **YAGNI** (You Aren't Gonna Need It) sao **obrigatorios** para manter um codigo simples, mantenivel e evolutivo.
 
-> **Références:**
-> - `04-solid-principles.md` - Principes SOLID complémentaires
+> **Referencias:**
+> - `04-solid-principles.md` - Principios SOLID complementares
 
 ---
 
-## Table des matières
+## Sumario
 
 1. [KISS - Keep It Simple, Stupid](#kiss---keep-it-simple-stupid)
 2. [DRY - Don't Repeat Yourself](#dry---dont-repeat-yourself)
 3. [YAGNI - You Aren't Gonna Need It](#yagni---you-arent-gonna-need-it)
-4. [Anti-patterns courants](#anti-patterns-courants)
-5. [Checklist de validation](#checklist-de-validation)
+4. [Anti-patterns comuns](#anti-patterns-comuns)
+5. [Checklist de validacao](#checklist-de-validacao)
 
 ---
 
 ## KISS - Keep It Simple, Stupid
 
-### Définition
+### Definicao
 
-**La simplicité doit être un objectif clé de la conception. La complexité doit être évitée.**
+**A simplicidade deve ser um objetivo-chave do design. A complexidade deve ser evitada.**
 
-Le code le plus simple est souvent le meilleur code.
+O codigo mais simples e frequentemente o melhor codigo.
 
-### Règles KISS
+### Regras KISS
 
-1. **Méthodes courtes:** Maximum 20 lignes par méthode
-2. **Complexité cyclomatique:** Maximum 10 par méthode
-3. **Profondeur d'indentation:** Maximum 3 niveaux
-4. **Paramètres:** Maximum 4 paramètres par méthode
-5. **Classes:** Maximum 200 lignes par classe
+1. **Metodos curtos:** Maximo 20 linhas por metodo
+2. **Complexidade ciclomatica:** Maximo 10 por metodo
+3. **Profundidade de indentacao:** Maximo 3 niveis
+4. **Parametros:** Maximo 4 parametros por metodo
+5. **Classes:** Maximo 200 linhas por classe
 
-### Signes de violation
+### Sinais de violacao
 
-- Méthodes de plus de 20 lignes
-- Niveaux d'imbrication profonds (> 3)
-- Commentaires expliquant ce que fait le code
-- Difficulté à nommer une fonction (fait trop de choses)
-- Tests complexes avec beaucoup de setup
+- Metodos com mais de 20 linhas
+- Niveis de aninhamento profundos (> 3)
+- Comentarios explicando o que o codigo faz
+- Dificuldade em nomear uma funcao (faz muitas coisas)
+- Testes complexos com muito setup
 
-### Application
+### Aplicacao
 
 ```
-❌ MAUVAIS - Code complexe
-┌─────────────────────────────────────────────┐
-│ calculatePrice(order):                      │
-│   total = 0                                 │
-│   for item in order.items:                  │
-│     price = item.basePrice                  │
-│     if item.category == "food":             │
-│       if item.isOrganic:                    │
-│         if item.weight > 1:                 │
-│           price = price * 0.9               │
-│         else:                               │
-│           price = price * 0.95              │
-│       else:                                 │
-│         // ... 50 lignes de plus            │
-│     // ... encore plus de conditions        │
-│   return total                              │
-└─────────────────────────────────────────────┘
+RUIM - Codigo complexo
++---------------------------------------------+
+| calculatePrice(order):                      |
+|   total = 0                                 |
+|   for item in order.items:                  |
+|     price = item.basePrice                  |
+|     if item.category == "food":             |
+|       if item.isOrganic:                    |
+|         if item.weight > 1:                 |
+|           price = price * 0.9               |
+|         else:                               |
+|           price = price * 0.95              |
+|       else:                                 |
+|         // ... 50 linhas a mais             |
+|     // ... ainda mais condicoes             |
+|   return total                              |
++---------------------------------------------+
 
-✅ BON - Code décomposé et simple
-┌─────────────────────────────────────────────┐
-│ PricingService:                             │
-│   calculateTotal(order):                    │
-│     return sum(                             │
-│       calculateItemPrice(item)              │
-│       for item in order.items               │
-│     )                                       │
-│                                             │
-│ ItemPriceCalculator:                        │
-│   calculate(item):                          │
-│     basePrice = item.basePrice              │
-│     return applyDiscounts(basePrice, item)  │
-│                                             │
-│ DiscountPolicy:                             │
-│   apply(price, item): Money                 │
-└─────────────────────────────────────────────┘
+BOM - Codigo decomposto e simples
++---------------------------------------------+
+| PricingService:                             |
+|   calculateTotal(order):                    |
+|     return sum(                             |
+|       calculateItemPrice(item)              |
+|       for item in order.items               |
+|     )                                       |
+|                                             |
+| ItemPriceCalculator:                        |
+|   calculate(item):                          |
+|     basePrice = item.basePrice              |
+|     return applyDiscounts(basePrice, item)  |
+|                                             |
+| DiscountPolicy:                             |
+|   apply(price, item): Money                 |
++---------------------------------------------+
 ```
 
-### Règles de simplicité
+### Regras de simplicidade
 
-1. **Un seul return par méthode** (sauf early returns pour validation)
-2. **Pas de else** quand possible (early returns, guard clauses)
-3. **Nommage explicite** (pas besoin de commentaires)
-4. **Composition > Héritage**
-5. **Immutabilité par défaut**
+1. **Um unico return por metodo** (exceto early returns para validacao)
+2. **Sem else** quando possivel (early returns, guard clauses)
+3. **Nomenclatura explicita** (sem necessidade de comentarios)
+4. **Composicao > Heranca**
+5. **Imutabilidade por padrao**
 
 ### Early Returns (Guard Clauses)
 
 ```
-❌ MAUVAIS - Else imbriqués
+RUIM - Else aninhados
 function process(user):
   if user != null:
     if user.isActive:
       if user.hasPermission:
-        // logique métier
+        // logica de negocio
       else:
         throw NoPermission
     else:
@@ -107,7 +107,7 @@ function process(user):
   else:
     throw NotFound
 
-✅ BON - Early returns
+BOM - Early returns
 function process(user):
   if user == null:
     throw NotFound
@@ -118,177 +118,177 @@ function process(user):
   if not user.hasPermission:
     throw NoPermission
 
-  // logique métier (pas d'indentation)
+  // logica de negocio (sem indentacao)
 ```
 
 ---
 
 ## DRY - Don't Repeat Yourself
 
-### Définition
+### Definicao
 
-**Chaque connaissance doit avoir une représentation unique, non ambiguë et faisant autorité dans le système.**
+**Cada conhecimento deve ter uma representacao unica, nao ambigua e com autoridade no sistema.**
 
-Ne dupliquez pas la logique métier, les règles de validation ou les algorithmes.
+Nao duplique a logica de negocio, as regras de validacao ou os algoritmos.
 
-### Types de duplication à éviter
+### Tipos de duplicacao a evitar
 
-| Type | Description | Solution |
-|------|-------------|----------|
-| **Logique** | Même code à plusieurs endroits | Extraire dans une fonction/classe |
-| **Connaissance** | Mêmes règles métier redéfinies | Value Objects, Domain Services |
-| **Structurelle** | Mêmes patterns répétés | Abstractions, Templates |
-| **Documentation** | Mêmes infos en plusieurs formats | Single Source of Truth |
+| Tipo | Descricao | Solucao |
+|------|-----------|---------|
+| **Logica** | Mesmo codigo em varios lugares | Extrair em uma funcao/classe |
+| **Conhecimento** | Mesmas regras de negocio redefinidas | Value Objects, Domain Services |
+| **Estrutural** | Mesmos patterns repetidos | Abstracoes, Templates |
+| **Documentacao** | Mesmas informacoes em varios formatos | Single Source of Truth |
 
-### Application
-
-```
-❌ MAUVAIS - Validation dupliquée
-┌─────────────────────────────────────────────┐
-│ // Dans le Controller                       │
-│ if not isValidEmail(email):                 │
-│   throw InvalidEmail                        │
-│                                             │
-│ // Dans le Form                             │
-│ emailField.addConstraint(EmailConstraint)   │
-│                                             │
-│ // Dans l'Entity                            │
-│ @Assert.Email                               │
-│ email: string                               │
-│                                             │
-│ // 3 endroits avec la même règle !          │
-└─────────────────────────────────────────────┘
-
-✅ BON - Validation centralisée (Value Object)
-┌─────────────────────────────────────────────┐
-│ class Email:                                │
-│   constructor(value):                       │
-│     if not isValidEmail(value):             │
-│       throw InvalidEmail(value)             │
-│     this.value = value                      │
-│                                             │
-│ // Utilisé partout:                         │
-│ // - Entity: email: Email                   │
-│ // - Form: transforme en Email              │
-│ // - Controller: reçoit Email               │
-│                                             │
-│ // UNE SEULE source de vérité !             │
-└─────────────────────────────────────────────┘
-```
-
-### Règle des 3
-
-> **Ne pas abstraire avant d'avoir vu le pattern 3 fois.**
+### Aplicacao
 
 ```
-// Vu 1 fois → copier
-// Vu 2 fois → noter
-// Vu 3 fois → abstraire
+RUIM - Validacao duplicada
++---------------------------------------------+
+| // No Controller                            |
+| if not isValidEmail(email):                 |
+|   throw InvalidEmail                        |
+|                                             |
+| // No Form                                 |
+| emailField.addConstraint(EmailConstraint)   |
+|                                             |
+| // Na Entity                               |
+| @Assert.Email                               |
+| email: string                               |
+|                                             |
+| // 3 lugares com a mesma regra!             |
++---------------------------------------------+
+
+BOM - Validacao centralizada (Value Object)
++---------------------------------------------+
+| class Email:                                |
+|   constructor(value):                       |
+|     if not isValidEmail(value):             |
+|       throw InvalidEmail(value)             |
+|     this.value = value                      |
+|                                             |
+| // Utilizado em todos os lugares:           |
+| // - Entity: email: Email                   |
+| // - Form: transforma em Email              |
+| // - Controller: recebe Email               |
+|                                             |
+| // UMA UNICA fonte de verdade!              |
++---------------------------------------------+
+```
+
+### Regra dos 3
+
+> **Nao abstrair antes de ver o pattern 3 vezes.**
+
+```
+// Visto 1 vez -> copiar
+// Visto 2 vezes -> anotar
+// Visto 3 vezes -> abstrair
 ```
 
 ### DRY vs WET (Write Everything Twice)
 
-**Duplication acceptable:**
-- Structure similaire mais types différents (type safety)
-- Code de test (clarté > DRY)
-- Configuration par environnement
+**Duplicacao aceitavel:**
+- Estrutura similar mas tipos diferentes (type safety)
+- Codigo de teste (clareza > DRY)
+- Configuracao por ambiente
 
-**Duplication à éviter:**
-- Règles métier
-- Validation
-- Algorithmes
-- Calculs
+**Duplicacao a evitar:**
+- Regras de negocio
+- Validacao
+- Algoritmos
+- Calculos
 
 ---
 
 ## YAGNI - You Aren't Gonna Need It
 
-### Définition
+### Definicao
 
-**N'implémentez pas de fonctionnalité tant qu'elle n'est pas nécessaire.**
+**Nao implemente uma funcionalidade enquanto ela nao for necessaria.**
 
-Ne codez pas pour des besoins hypothétiques futurs.
+Nao codifique para necessidades hipoteticas futuras.
 
-### Signes de violation
+### Sinais de violacao
 
-- Code "au cas où"
-- Abstractions prématurées
-- Fonctionnalités non demandées
-- Support de cas qui n'existent pas encore
+- Codigo "por precaucao"
+- Abstracoes prematuras
+- Funcionalidades nao solicitadas
+- Suporte a casos que ainda nao existem
 - Over-engineering
 
-### Application
+### Aplicacao
 
 ```
-❌ MAUVAIS - Over-engineering
-┌─────────────────────────────────────────────┐
-│ ExportService:                              │
-│   export(data, format):                     │
-│     if format == "csv":                     │
-│       // implémenté                         │
-│     if format == "xml":                     │
-│       // implémenté (pas demandé)           │
-│     if format == "json":                    │
-│       // implémenté (pas demandé)           │
-│     if format == "pdf":                     │
-│       // implémenté (pas demandé)           │
-│     if format == "xlsx":                    │
-│       // implémenté (pas demandé)           │
-│                                             │
-│ // Seul CSV est requis !                    │
-└─────────────────────────────────────────────┘
+RUIM - Over-engineering
++---------------------------------------------+
+| ExportService:                              |
+|   export(data, format):                     |
+|     if format == "csv":                     |
+|       // implementado                       |
+|     if format == "xml":                     |
+|       // implementado (nao solicitado)      |
+|     if format == "json":                    |
+|       // implementado (nao solicitado)      |
+|     if format == "pdf":                     |
+|       // implementado (nao solicitado)      |
+|     if format == "xlsx":                    |
+|       // implementado (nao solicitado)      |
+|                                             |
+| // Apenas CSV e necessario!                 |
++---------------------------------------------+
 
-✅ BON - Juste ce qui est nécessaire
-┌─────────────────────────────────────────────┐
-│ CsvExporter:                                │
-│   export(data, filename):                   │
-│     // Implémente UNIQUEMENT CSV            │
-│     // (le seul format requis)              │
-│                                             │
-│ // Si besoin futur: nouvelle classe         │
-│ // Sans modifier l'existant (OCP)           │
-└─────────────────────────────────────────────┘
+BOM - Apenas o necessario
++---------------------------------------------+
+| CsvExporter:                                |
+|   export(data, filename):                   |
+|     // Implementa APENAS CSV               |
+|     // (o unico formato necessario)         |
+|                                             |
+| // Se necessidade futura: nova classe       |
+| // Sem modificar o existente (OCP)          |
++---------------------------------------------+
 ```
 
 ### Checklist YAGNI
 
-Avant d'ajouter une fonctionnalité, demandez-vous:
+Antes de adicionar uma funcionalidade, pergunte-se:
 
-- [ ] **Est-ce requis MAINTENANT?** (dans le ticket actuel)
-- [ ] **Est-ce testé?** (test existant qui échoue)
-- [ ] **Est-ce dans le MVP?** (scope défini)
-- [ ] **Le client l'a-t-il demandé explicitement?**
+- [ ] **E necessario AGORA?** (no ticket atual)
+- [ ] **E testado?** (teste existente que falha)
+- [ ] **Esta no MVP?** (escopo definido)
+- [ ] **O cliente solicitou explicitamente?**
 
-Si **NON** à l'une de ces questions → **YAGNI: Ne pas implémenter**
+Se **NAO** a alguma dessas perguntas -> **YAGNI: Nao implementar**
 
-### YAGNI vs Extensibilité
+### YAGNI vs Extensibilidade
 
-**Bon équilibre:** Code simple MAIS extensible
+**Bom equilibrio:** Codigo simples MAS extensivel
 
 ```
-✅ Interface simple, extensible si besoin
-┌─────────────────────────────────────────────┐
-│ interface ExportPolicy:                     │
-│   export(data): bytes                       │
-│                                             │
-│ class CsvExporter implements ExportPolicy:  │
-│   export(data): bytes                       │
-│     // Implémentation CSV                   │
-│                                             │
-│ // Si besoin futur: PdfExporter             │
-│ // Sans modifier CsvExporter (OCP)          │
-└─────────────────────────────────────────────┘
+BOM - Interface simples, extensivel se necessario
++---------------------------------------------+
+| interface ExportPolicy:                     |
+|   export(data): bytes                       |
+|                                             |
+| class CsvExporter implements ExportPolicy:  |
+|   export(data): bytes                       |
+|     // Implementacao CSV                    |
+|                                             |
+| // Se necessidade futura: PdfExporter       |
+| // Sem modificar CsvExporter (OCP)          |
++---------------------------------------------+
 ```
 
 ---
 
-## Anti-patterns courants
+## Anti-patterns comuns
 
 ### 1. Premature Optimization
 
 ```
-❌ MAUVAIS
-// Cache complexe avant même d'avoir un problème de perf
+RUIM
+// Cache complexo antes mesmo de ter um problema de performance
 class Repository:
   cache = {}
   cacheTimestamps = {}
@@ -297,48 +297,48 @@ class Repository:
   find(id):
     if id in cache and not expired(id):
       return cache[id]
-    // ... complexité inutile
+    // ... complexidade desnecessaria
 
-✅ BON
-// Implémentation simple d'abord
+BOM
+// Implementacao simples primeiro
 class Repository:
   find(id):
     return database.find(id)
 
-// Cache ajouté SEULEMENT si profiling montre un problème
+// Cache adicionado SOMENTE se profiling mostrar um problema
 ```
 
 ### 2. Gold Plating
 
 ```
-❌ MAUVAIS - Fonctionnalités non demandées
+RUIM - Funcionalidades nao solicitadas
 class Notifier:
-  sendEmail()      // ✅ Requis
-  sendSms()        // ❌ Pas demandé
-  sendPush()       // ❌ Pas demandé
-  sendWhatsApp()   // ❌ Pas demandé
+  sendEmail()      // Necessario
+  sendSms()        // Nao solicitado
+  sendPush()       // Nao solicitado
+  sendWhatsApp()   // Nao solicitado
 
-✅ BON - Juste ce qui est nécessaire
+BOM - Apenas o necessario
 class EmailNotifier:
-  send()  // ✅ Uniquement email (requis)
+  send()  // Apenas email (necessario)
 ```
 
 ### 3. Speculative Generality
 
 ```
-❌ MAUVAIS - Framework interne générique
+RUIM - Framework interno generico
 abstract class AbstractEntityManager
   abstract getEntityClass()
   findAll()
   findById()
   save()
   delete()
-  // ... 50 méthodes génériques
+  // ... 50 metodos genericos
 
 class UserManager extends AbstractEntityManager
-  // ... pour UN cas d'utilisation
+  // ... para UM caso de uso
 
-✅ BON - Utiliser les outils existants
+BOM - Utilizar as ferramentas existentes
 class UserRepository:
   find(id): User
     return orm.find(User, id)
@@ -347,71 +347,71 @@ class UserRepository:
 ### 4. Lasagna Code
 
 ```
-❌ MAUVAIS - Trop de couches
+RUIM - Muitas camadas
 interface FinderInterface
 interface SearchInterface extends FinderInterface
 interface QueryInterface extends SearchInterface
 abstract class AbstractFinder implements QueryInterface
 class BaseFinder extends AbstractFinder
 class ConcreteFinder extends BaseFinder
-// Pour faire: finder.find(id) 😱
+// Para fazer: finder.find(id)
 
-✅ BON - Couches justifiées uniquement
+BOM - Camadas justificadas apenas
 interface RepositoryInterface    // Domain
 class ConcreteRepository         // Infrastructure
-// 2 couches suffisent
+// 2 camadas sao suficientes
 ```
 
 ---
 
-## Checklist de validation
+## Checklist de validacao
 
-### Avant chaque commit
+### Antes de cada commit
 
 #### KISS
-- [ ] Méthodes < 20 lignes
-- [ ] Complexité cyclomatique < 10
-- [ ] Indentation max 3 niveaux
-- [ ] Paramètres max 4 par méthode
-- [ ] Pas de else imbriqués (early returns)
-- [ ] Nommage explicite (pas de commentaires nécessaires)
+- [ ] Metodos < 20 linhas
+- [ ] Complexidade ciclomatica < 10
+- [ ] Indentacao max 3 niveis
+- [ ] Parametros max 4 por metodo
+- [ ] Sem else aninhados (early returns)
+- [ ] Nomenclatura explicita (sem comentarios necessarios)
 
 #### DRY
-- [ ] Pas de code dupliqué (> 3 lignes identiques)
-- [ ] Validation centralisée (Value Objects)
-- [ ] Règles métier en un seul endroit
-- [ ] Pas de duplication de connaissance
+- [ ] Sem codigo duplicado (> 3 linhas identicas)
+- [ ] Validacao centralizada (Value Objects)
+- [ ] Regras de negocio em um unico lugar
+- [ ] Sem duplicacao de conhecimento
 
 #### YAGNI
-- [ ] Fonctionnalité demandée explicitement
-- [ ] Test qui échoue existe
-- [ ] Dans le scope du ticket actuel
-- [ ] Pas de code "au cas où"
-- [ ] Pas d'abstraction prématurée
+- [ ] Funcionalidade solicitada explicitamente
+- [ ] Teste que falha existe
+- [ ] No escopo do ticket atual
+- [ ] Sem codigo "por precaucao"
+- [ ] Sem abstracao prematura
 
-### Métriques cibles
+### Metricas-alvo
 
-| Métrique | Cible | Limite |
-|----------|-------|--------|
-| Lignes par méthode | < 10 | < 20 |
-| Complexité cyclomatique | < 5 | < 10 |
-| Lignes par classe | < 150 | < 200 |
-| Duplication | 0% | < 3% |
-| Couverture tests | > 80% | > 70% |
-| Dépendances par classe | < 5 | < 7 |
-
----
-
-## Ressources
-
-- **Livre:** *The Pragmatic Programmer* - Andy Hunt & Dave Thomas
-- **Livre:** *Clean Code* - Robert C. Martin
-- **Article:** [KISS Principle](https://en.wikipedia.org/wiki/KISS_principle)
-- **Article:** [DRY Principle](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
-- **Article:** [YAGNI](https://martinfowler.com/bliki/Yagni.html)
+| Metrica | Alvo | Limite |
+|---------|------|--------|
+| Linhas por metodo | < 10 | < 20 |
+| Complexidade ciclomatica | < 5 | < 10 |
+| Linhas por classe | < 150 | < 200 |
+| Duplicacao | 0% | < 3% |
+| Cobertura de testes | > 80% | > 70% |
+| Dependencias por classe | < 5 | < 7 |
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
-**Version:** 1.0.0
-**Auteur:** The Bearded CTO
+## Recursos
+
+- **Livro:** *The Pragmatic Programmer* - Andy Hunt & Dave Thomas
+- **Livro:** *Clean Code* - Robert C. Martin
+- **Artigo:** [KISS Principle](https://en.wikipedia.org/wiki/KISS_principle)
+- **Artigo:** [DRY Principle](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
+- **Artigo:** [YAGNI](https://martinfowler.com/bliki/Yagni.html)
+
+---
+
+**Data da ultima atualizacao:** 2025-01
+**Versao:** 1.0.0
+**Autor:** The Bearded CTO
