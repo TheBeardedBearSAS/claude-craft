@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.3] - 2026-02-10
+
+### Added
+- **Test infrastructure**: vitest config, 14 test files (168+ tests), commitlint
+- **Code quality tooling**: `.editorconfig`, `.prettierrc`, `.github/CODEOWNERS`, `dependabot.yml`
+- **CLI testability**: Extracted `parseArgs`, `detectProject`, constants into `cli/lib/` modules
+- **Vale prose linter**: `.vale.ini` config with project vocabulary for documentation linting
+- **i18n team commands**: `team-audit`, `team-delivery`, `team-security`, `team-sprint` in de/es/fr/pt
+
+### Fixed
+- **i18n parity**: Updated workflow commands, rules, hooks across all 5 languages (de/en/es/fr/pt)
+- **Flattener exports**: Exposed `DEFAULT_IGNORES`, `PRIORITY_EXTENSIONS`, constants for testing
+
+---
+
 ## [5.9.2] - 2026-02-10
 
 ### Fixed
