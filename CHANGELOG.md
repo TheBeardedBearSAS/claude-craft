@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.2] - 2026-02-10
+
+### Fixed
+- **Shell hardening**: `set -euo pipefail` added to all 20 Ralph lib modules
+- **Shell security**: Safe xargs (`-r`), allowlist env filtering, regex normalization in hook scripts
+- **Shell security**: Shebang verification before `chmod +x`, `.npmignore` excludes runtime hooks
+- **CLI quality**: Shared `cli/lib/colors.js` module, separated try/catch in `detectProject()`
+- **CLI quality**: Fixed "GPT-4" → "Claude models", documented magic numbers in flattener
+- **CLI quality**: Dynamic tech list in `--help` (all 11 technologies), fixed `CURRENT_VERSION` in migrate script
+- **CI/CD**: Added `npm ci` + `npm run lint` to build job, `registry-url` in publish job
+- **CI/CD**: Centralized VERSION via `get_claude_craft_version()` — no more hardcoded versions in install scripts
+- **Docs**: Created `.markdownlint.json`, deleted orphan TRANSLATION_STATUS.md files
+- **Docs**: Added i18n verification checklist to CONTRIBUTING.md
+
+---
+
 ## [5.9.1] - 2026-02-10
 
 ### Added
