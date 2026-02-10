@@ -4,7 +4,7 @@
 
 BMAD v6 is a project management enhancement framework for claude-craft that provides:
 
-- **9 Agent-as-Code** definitions following BMAD methodology
+- **10 Agent-as-Code** definitions following BMAD methodology
 - **Status-based routing** with automated state machine
 - **5 Quality gates** with configurable thresholds
 - **Batch processing** for epic/sprint execution
@@ -143,7 +143,7 @@ backlog → ready-for-dev → in-progress → review → done
 
 | Agent | Role | Key Commands |
 |-------|------|--------------|
-| `bmad-master` | Orchestrator | `/bmad:init`, `/bmad:status` |
+| `bmad-master` | Orchestrator | `/bmad:route` |
 | `pm` | Product Manager | `/pm:prd`, `/pm:vision` |
 | `ba` | Business Analyst | `/ba:analyze`, `/ba:requirements` |
 | `architect` | System Architect | `/arch:design`, `/arch:techspec` |

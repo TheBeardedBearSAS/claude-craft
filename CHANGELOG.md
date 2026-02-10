@@ -11,12 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Claude Code 2.1.36 / 2.1.38 Compatibility**
   - **Fast Mode** (v2.1.36): `/fast` toggles up to 2.5x faster Opus 4.6 output
   - **Skills Directory Protection** (v2.1.38): Writes to `.claude/skills` blocked in sandbox
-  - **Heredoc Fix** (v2.1.38): No more "Bad substitution" with JS template literals
-  - **Plan Mode Crash Fix** (v2.1.38): Fixed crash when `~/.claude.json` missing fields
-  - **temperatureOverride Fix** (v2.1.38): No longer ignored in streaming API
-  - **LSP Compatibility** (v2.1.38): Fixed shutdown/exit with strict language servers
-  - **VSCode Fixes** (v2.1.38): Terminal scroll, Tab key, duplicate sessions
-  - **Text Rendering** (v2.1.38): Thai/Lao spacing, text between tool uses
+
+### Fixed
+- **Heredoc Fix** (v2.1.38): No more "Bad substitution" with JS template literals
+- **Plan Mode Crash Fix** (v2.1.38): Fixed crash when `~/.claude.json` missing fields
+- **temperatureOverride Fix** (v2.1.38): No longer ignored in streaming API
+- **LSP Compatibility** (v2.1.38): Fixed shutdown/exit with strict language servers
+- **VSCode Fixes** (v2.1.38): Terminal scroll, Tab key, duplicate sessions
+- **Text Rendering** (v2.1.38): Thai/Lao spacing, text between tool uses
 
 ### Changed
 - Updated recommended Claude Code version from 2.1.34 to 2.1.38

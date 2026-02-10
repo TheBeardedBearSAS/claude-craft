@@ -1,5 +1,9 @@
 # Claude Craft
 
+[![npm version](https://img.shields.io/npm/v/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
+[![CI](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
@@ -13,168 +17,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **VSCode Fixes** (v2.1.38): Terminal scroll, Tab autocomplete, duplicate sessions
 - See [CHANGELOG](CHANGELOG.md) for full details
 
-## What's New in v5.7 - Agent Teams Integration
-
-- **Agent Teams** — Multi-agent coordination with shared task management
-  - `/common:team-audit` — Parallel multi-technology audit (1 opus leader + N haiku auditors)
-  - `/common:team-sprint` — Sprint Development Team (1 opus conductor + 2-3 sonnet devs)
-  - `/common:team-security` — Security Review Team (1 opus lead + 3 haiku reviewers)
-- **Cost Framework** — Token cost estimation and visual dashboard before team launch
-- **Race Condition Fix** — Single-writer pattern for sprint-status.yaml
-- See [CHANGELOG](CHANGELOG.md) for full details
-
-## What's New in v5.6 - Claude Code 2.1.33 / 2.1.34
-
-- **Agent Memory** (v2.1.33): Persistent `memory` frontmatter for agents (user/project/local scopes)
-- **TeammateIdle & TaskCompleted Hooks** (v2.1.33): New hook events for multi-agent workflows
-- **Agent Type Restrictions** (v2.1.33): Control sub-agent types via `Task(agent_type)` syntax
-- **Plugin Name in Skills** (v2.1.33): Plugin names visible in `/skills` menu
-- **VSCode Remote Sessions** (v2.1.33): Browse/resume sessions from claude.ai
-- **VSCode Session Picker** (v2.1.33): Git branch + message count display
-- See [CHANGELOG](CHANGELOG.md) for full details
-
-## What's New in v5.4 - Claude Code 2.1.31 Compatibility
-
-- **PDF Page Range** (v2.1.30): Read tool `pages` parameter for PDFs
-- **OAuth Client Credentials for MCP** (v2.1.30): `--client-id` / `--client-secret` for `claude mcp add`
-- **/debug Command** (v2.1.30): Session-specific troubleshooting
-- **Task Tool Metrics** (v2.1.30): Token count, tool uses, duration in sub-agent results
-- **Session Resume Hint** (v2.1.31): Resume hint displayed on exit
-- **PR Integration** (v2.1.27): Resume sessions linked to PRs with `--from-pr`
-- **spinnerVerbs** (v2.1.23): Customize spinner text in settings.json
-- See [CHANGELOG](CHANGELOG.md) for full details
-
-## What's New in v5.1 - QA Recette (Acceptance Testing)
-
-- **Automated Acceptance Testing**: Browser-based testing with Claude in Chrome
-  - `/qa:recette --scope=story --id=US-001` - Test user stories
-  - `/qa:recette --scope=sprint --id=SPRINT-03` - Test full sprints
-  - `/qa:recette-regression` - Run regression suite
-  - `/qa:recette-fix --session=REC-xxx` - Fix bugs from recette sessions (TDD)
-- **Golden Rule**: A fixed bug should NEVER reappear
-  - Auto-generate regression tests (Unit, Functional, Behat) from errors
-  - Track all bugs in regression registry
-  - Detect regressions by comparing historical runs
-- **Session Recovery**: Resume interrupted tests with checkpoints
-- **6 Test Categories**: AC validation, edge cases, errors, UI/UX, performance, security
-- **Error Classification**: visual, interaction, validation, logic, security, API
-- **Chrome Capabilities**: navigate, click, type, screenshot, record_gif
-- **Full i18n**: English, French, Spanish, German, Portuguese
-- See [Commands Reference](docs/COMMANDS.md) for usage
-
-## What's New in v5.0 - Autonomous Sprint Conductor (ASC)
-
-- **Overnight Sprint Execution**: Run sprints unattended with bounded execution
-  - `/common:ralph-sprint "Sprint 3" --overnight` - Stops at 6am
-  - `/common:ralph-sprint "Sprint 3" --parallel 3` - Process 3 stories concurrently
-  - `/common:ralph-sprint "Sprint 3" --supervised` - Confirm each story
-- **Recovery Engine**: 4-level error classification with auto-fix
-  - Level 0 (Transient): Auto-retry with backoff (timeout, rate limit)
-  - Level 1 (Recoverable): Auto-fix then retry (lint, tests, deps)
-  - Level 2 (Degraded): Continue with warning (docs, optional gates)
-  - Level 3 (Blocked): Escalate to human (security, architecture)
-- **Escalation Service**: Queue blocking issues with webhook notifications
-  - Slack, Teams, Discord integration
-  - Configurable timeout with default actions
-  - Audit trail for compliance
-- **Parallel Processing**: Dependency-aware concurrent execution
-  - Resource monitoring (CPU/memory limits)
-  - Automatic session isolation
-- **Enhanced Circuit Breaker**: New `autonomous` profile with recovery integration
-- See [Autonomous Sprint Documentation](docs/AUTONOMOUS-SPRINT.md)
-
-## What's New in v4.4
-
-- **Comprehensive Documentation for Juniors**: 32 new documentation files
-  - [QUICKSTART.md](docs/QUICKSTART.md): Get started in 5 minutes
-  - [FAQ.md](docs/FAQ.md): 50+ frequently asked questions
-  - [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md): Common problems and solutions
-  - [BMAD-PRACTICAL-GUIDE.md](docs/BMAD-PRACTICAL-GUIDE.md): BMAD v6 step-by-step
-  - [RALPH-GUIDE.md](docs/RALPH-GUIDE.md): Ralph Wiggum configuration
-- **Complete Reference Documentation**: All 130+ commands and 40 agents documented
-- **Example Projects**: symfony-api, flutter-app, fullstack-saas
-- **Complete Workflow Guides**: Idea → Production in 5 languages
-- **Prerequisites Check Script**: `./Dev/scripts/check-prerequisites.sh`
-
-## What's New in v4.3
-
-- **Complete i18n for BMAD v6**: All 18 BMAD commands translated to ES, DE, PT
-- **Installation Fixes**: Project commands now properly included in `make install-all`
-- **Dev Translations Complete**: All languages now have equal file coverage (~346 files)
-
-## What's New in v4.2
-
-- **BMAD v6 Framework**: Complete project management enhancement
-  - **9 Agent-as-Code Agents**: bmad-master, pm, ba, architect, po, sm, dev, qa, ux
-  - **Status-based Routing**: Automated state machine for story transitions
-  - **5 Quality Gates**: PRD (≥80%), Tech Spec (≥90%), Backlog (INVEST), Sprint Ready, Story DoD
-  - **Claude Code Hooks**: SessionStart, PreToolUse, Stop hooks for context injection
-  - **Batch Processing**: Queue management for epic/sprint execution with checkpointing
-  - **Backlog Migration**: Convert existing backlogs to BMAD v6 format
-- 20+ new commands: `/sprint:*`, `/gate:*`, `/project:run-*`
-- TDD phase tracking: red → green → refactor cycle per story
-- Auto-routing rules for automatic story transitions
-
-## What's New in v4.1
-
-- **Ralph Wiggum v2.0**: Major upgrade to continuous AI agent loop
-  - **Claude Code 2.1.23+ Hooks**: Bidirectional integration (SessionStart, PreToolUse, Stop)
-  - **Auto-Detection**: Intelligent project type detection (11 technologies)
-  - **Observability**: Real-time dashboard, JSON/Prometheus metrics, health monitoring
-  - **Adaptive Circuit Breaker**: 5 profiles with learning mode
-  - **DoD Templates**: Pre-configured for 8 technologies
-- New CLI flags: `--auto-detect`, `--init`, `--interactive`
-
-## What's New in v4.0
-
-- **2026 Best Practices Update** for all major frameworks
-- **Symfony 8.0 / PHP 8.5**: JSON Streamer, ObjectMapper, pipe operator, lazy objects
-- **Flutter 3.38 / Dart 3.10**: WebAssembly compilation, MCP integration
-- **.NET 10 LTS / C# 14**: Extension Members, Null-Conditional Assignment
-- **Updated Tooling**: Rector 2.3.x, Deptrac v4, PHPStan 2.1.x
-- **Sub-CLAUDE.md files**: Quick reference per technology in `.claude/references/`
-
-## What's New in v3.5
-
-- **Ralph Reliability**: 59 fixes for robust long-running sprints (2h+)
-- **Auto-Compact**: Automatic context limit detection and session compaction
-- **Strategic Compact**: Compact at natural workflow boundaries (task complete, sprint start)
-- **Atomic Operations**: Temp-file-then-move pattern prevents file corruption
-- **File Locking**: Safe concurrent access with portable mkdir-based locks
-- **New `utils.sh` Module**: Shared helper functions for all Ralph modules
-
-## What's New in v3.2
-
-- **4 New Technology Stacks**: Angular, C#/.NET, Laravel, Vue.js
-- **`/common:add-technology` Command**: Generate new technology stacks with web search + Context7 research
-- **Angular**: Standalone components, Signals, OnPush, Vitest/Jest, Cypress
-- **C#/.NET**: Clean Architecture, CQRS, .NET Aspire, xUnit, EF Core
-- **Laravel**: Clean Arch, Pest PHP, Sanctum, Actions pattern, Livewire
-- **Vue.js**: Composition API, Pinia, Vitest, TypeScript, Vue Router
-
-## What's New in v3.1
-
-- **Ralph Wiggum**: Continuous AI agent loop - run Claude until task completion
-- **Definition of Done (DoD)**: Structured validation with 5 validator types (command, output, file, hook, human)
-- **Circuit Breaker**: Safety mechanism to prevent infinite loops
-- **Git Checkpointing**: Automatic recovery points after each iteration
-- **CLI Command**: `npx @the-bearded-bear/claude-craft ralph "task"`
-
-## What's New in v3.0
-
-- **Workflow Methodology**: BMAD-inspired 4-phase development (Analysis → Planning → Design → Implementation)
-- **Workflow Orchestrator**: Intelligent routing to appropriate agents and tracks
-- **PRD/Tech Spec Generation**: Automated documentation from project context
-- **3 Development Tracks**: Quick Flow, Standard, Enterprise - adapted to complexity
-- **NPX Interactive CLI**: Install with `npx @the-bearded-bear/claude-craft` - interactive wizard
-- **Codebase Flattener**: Generate context-optimized codebase summary for AI
-- **Document Sharding**: Automatic splitting for large codebases (90% token savings)
-- **Web Bundles**: Pre-built instructions for ChatGPT, Claude Projects, Gemini Gems
-- **Hooks System**: Automated quality gates, linting, and notifications
-- **MCP Integration**: Context7 for up-to-date library documentation
-- **Migration Tool**: Upgrade existing projects to v3.0
-- **Plugin Export**: Package for Claude Code marketplace distribution
-- **Enhanced Settings**: Granular permissions and tool allowlists
+> See [CHANGELOG.md](CHANGELOG.md) for previous versions.
 
 ## Features
 
@@ -182,7 +25,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
 - **40 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, Ralph Conductor, **10 BMAD agents**, and QA Recette
-- **130+ Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
+- **157 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
 - **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
 - **249 Skills**: Best practices in official Claude Code format (architecture, testing, security)
@@ -245,11 +88,11 @@ Claude-Craft includes a BMAD-inspired workflow system that adapts to your projec
 
 BMAD v6 (Build, Measure, Analyze, Deliver) extends the workflow system with comprehensive project management.
 
-### 9 BMAD Agents
+### 10 BMAD Agents
 
 | Agent | Role | Key Commands |
 |-------|------|--------------|
-| `bmad-master` | Orchestrator | `/bmad:init`, `/bmad:status`, `/bmad:route` |
+| `bmad-master` | Orchestrator | `/bmad:route` |
 | `pm` | Product Manager | `/pm:prd`, `/pm:vision`, `/pm:roadmap` |
 | `ba` | Business Analyst | `/ba:analyze`, `/ba:requirements`, `/ba:use-cases` |
 | `architect` | System Architect | `/arch:design`, `/arch:techspec`, `/arch:adr` |
@@ -716,7 +559,6 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 - `/project:` - Project management (backlog, PRD, tech-spec, sprints, **batch processing, migration**)
 - `/sprint:` - **BMAD sprint management (status, transitions, routing, TDD)**
 - `/gate:` - **Quality gate validation (PRD, tech-spec, backlog, story, sprint)**
-- `/bmad:` - **BMAD orchestration (init, status, route, handoff)**
 - `/pm:` - **Product Manager commands (prd, vision, roadmap, prioritize)**
 - `/arch:` - **Architect commands (design, techspec, adr, api, security)**
 - `/common:` - Transversal commands (audit, changelog, CI/CD)
