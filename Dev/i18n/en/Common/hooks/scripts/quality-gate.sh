@@ -62,7 +62,8 @@ run_tests() {
         fi
     fi
 
-    # No tests found, pass by default
+    # No tests found — warn but pass by default
+    echo "WARNING: No test framework detected — quality gate passed by default" >&2
     return 0
 }
 

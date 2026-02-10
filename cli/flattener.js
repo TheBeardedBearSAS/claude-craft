@@ -2,13 +2,15 @@
 
 /**
  * Codebase Flattener
- * Generates a context-optimized summary of a codebase for AI assistants
+ * Generates a context-optimized summary of a codebase for AI assistants.
  *
  * Features:
  * - Smart file selection (ignores node_modules, vendor, etc.)
  * - Document sharding for large codebases
  * - Token estimation
  * - Priority-based file ordering
+ *
+ * @module cli/flattener
  */
 
 const fs = require('fs');
