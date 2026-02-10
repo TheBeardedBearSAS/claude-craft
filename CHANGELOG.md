@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.5] - 2026-02-10
+
+### Added
+- **ShellCheck CI**: Added ShellCheck linting step in `npm-publish.yml` workflow, completing 100% of audit Phase 2 items
+- **`.shellcheckrc`**: Project-wide ShellCheck configuration (SC1091, SC1090, SC2034 exclusions)
+- **`lint:shell`**: New npm script for local shell script linting (`--severity=warning`)
+
+---
+
 ## [5.9.4] - 2026-02-10
 
 ### Added

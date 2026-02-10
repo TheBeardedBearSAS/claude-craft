@@ -1,0 +1,11 @@
+# ShellCheck configuration for Claude-Craft
+# https://www.shellcheck.net/wiki/
+
+# SC1091: Not following sourced files (dynamic paths resolved at runtime)
+disable=SC1091
+
+# SC1090: Can't follow non-constant source (dynamic source patterns)
+disable=SC1090
+
+# SC2034: Variable appears unused (i18n message files define vars sourced elsewhere)
+disable=SC2034

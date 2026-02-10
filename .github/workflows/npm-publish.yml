@@ -148,6 +148,9 @@ jobs:
       - name: Run linter
         run: npm run lint
 
+      - name: Run ShellCheck
+        run: npm run lint:shell
+
   publish:
     name: Publish to NPM
     runs-on: ubuntu-latest
