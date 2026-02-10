@@ -474,7 +474,7 @@ check_project() {
 
     # Expand le chemin
     local expanded_root
-    expanded_root=$(eval echo "$root")
+    expanded_root=$(echo "${root/#\~/$HOME}")
 
     echo -e "\n${BOLD}📦 $name${NC}"
 
@@ -515,7 +515,7 @@ check_project() {
         fi
 
         # Expand le chemin
-        target_path=$(eval echo "$target_path")
+        target_path=$(echo "${target_path/#\~/$HOME}")
 
         local module_label="Module $(basename "$target_path") [$tech]"
 

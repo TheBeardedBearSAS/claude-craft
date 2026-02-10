@@ -97,7 +97,7 @@ get_dod_status() {
             command)
                 local cmd
                 cmd=$(echo "$item" | yq e '.command' -)
-                if eval "$cmd" >/dev/null 2>&1; then
+                if [[ "$cmd" =~ ^[a-zA-Z0-9_./" -]+$ ]] && bash -c "$cmd" >/dev/null 2>&1; then
                     check_passed=true
                 fi
                 ;;

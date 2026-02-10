@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+coverage/
+Dev/
+Infra/
+Project/
+Tools/
+video/
+*.md
+*.yaml
+*.yml
+*.json
+*.sh

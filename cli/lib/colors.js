@@ -1,7 +1,21 @@
 /**
- * Shared ANSI color definitions for CLI modules
+ * Shared ANSI color definitions for CLI modules.
+ * @module cli/lib/colors
  */
 
+/**
+ * ANSI escape code map for terminal color output.
+ * @type {Object<string, string>}
+ * @property {string} reset - Reset all formatting
+ * @property {string} bold - Bold text
+ * @property {string} dim - Dimmed text
+ * @property {string} red - Red foreground
+ * @property {string} green - Green foreground
+ * @property {string} yellow - Yellow foreground
+ * @property {string} blue - Blue foreground
+ * @property {string} magenta - Magenta foreground
+ * @property {string} cyan - Cyan foreground
+ */
 const colors = {
   reset: '\x1b[0m',
   bold: '\x1b[1m',

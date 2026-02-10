@@ -87,7 +87,11 @@ validate_dod_for_stop() {
             command)
                 local cmd
                 cmd=$(echo "$item" | yq e '.command' -)
-                if ! eval "$cmd" >/dev/null 2>&1; then
+                if [[ ! "$cmd" =~ ^[a-zA-Z0-9_./" -]+$ ]]; then
+                    all_passed=false
+                    break
+                fi
+                if ! bash -c "$cmd" >/dev/null 2>&1; then
                     all_passed=false
                     break
                 fi

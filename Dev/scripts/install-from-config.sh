@@ -269,7 +269,7 @@ validate_config() {
         else
             # Expand le chemin
             local expanded_root
-            expanded_root=$(eval echo "$root")
+            expanded_root=$(echo "${root/#\~/$HOME}")
             log_step "  Root: $expanded_root"
         fi
 
@@ -385,7 +385,7 @@ list_projects() {
         project_lang=$(yq e ".projects[$i].lang // \"\"" "$config_file")
 
         local expanded_root
-        expanded_root=$(eval echo "$root")
+        expanded_root=$(echo "${root/#\~/$HOME}")
 
         echo -e "${BOLD}$name${NC}"
         if [[ -n "$description" && "$description" != "null" ]]; then
@@ -573,7 +573,7 @@ install_project() {
 
     # Expand le chemin
     local expanded_root
-    expanded_root=$(eval echo "$root")
+    expanded_root=$(echo "${root/#\~/$HOME}")
 
     print_header "📦 Installation: $name"
 
