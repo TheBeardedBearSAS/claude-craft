@@ -16,46 +16,25 @@ const fs = require('fs');
 const colors = require('./lib/colors');
 const c = colors;
 
+// Extracted pure modules
+const { TECHNOLOGIES, LANGUAGES, TRACKS } = require('./lib/constants');
+const { parseArgs } = require('./lib/parse-args');
+const { detectProject } = require('./lib/detect-project');
+
 // CLI package root
 const CLI_ROOT = path.resolve(__dirname, '..');
 
 // Package version
 const { version: VERSION } = require(path.join(CLI_ROOT, 'package.json'));
 
-// Available technologies
-const TECHNOLOGIES = {
-  symfony: { name: 'Symfony', desc: 'PHP backend with Clean Architecture, DDD, API Platform' },
-  flutter: { name: 'Flutter', desc: 'Mobile Dart with BLoC pattern, Material/Cupertino' },
-  react: { name: 'React', desc: 'Frontend JS/TS with Hooks, State management, A11y' },
-  reactnative: { name: 'React Native', desc: 'Mobile JS/TS with Navigation, Native modules' },
-  angular: { name: 'Angular', desc: 'Frontend TS with Signals, Standalone components, RxJS' },
-  csharp: { name: 'C# / .NET', desc: 'Backend with Clean Architecture, CQRS, MediatR, EF Core' },
-  laravel: { name: 'Laravel', desc: 'PHP backend with Actions, Pest PHP, Sanctum' },
-  vuejs: { name: 'Vue.js', desc: 'Frontend JS/TS with Composition API, Pinia, Vitest' },
-  php: { name: 'PHP', desc: 'Backend PHP 8.5 with PSR-12, PHPStan, Pest PHP' },
-  python: { name: 'Python', desc: 'Backend with FastAPI, async/await, Type hints' },
-  docker: { name: 'Docker', desc: 'Dockerfile, Compose, CI/CD, Debugging' },
-};
-
-// Available languages
-const LANGUAGES = {
-  en: 'English',
-  fr: 'Français',
-  es: 'Español',
-  de: 'Deutsch',
-  pt: 'Português',
-};
-
-// Workflow tracks
-const TRACKS = {
-  quick: { name: 'Quick Flow', desc: 'Bug fixes, hotfixes, small tweaks (< 5 min)', phases: 1 },
-  standard: { name: 'Standard', desc: 'New features, refactoring (< 15 min)', phases: 3 },
-  enterprise: { name: 'Enterprise', desc: 'Platforms, migrations, multi-team (< 30 min)', phases: 4 },
-};
-
 class ClaudeCraftCLI {
+  /**
+   * Initialize the CLI with default configuration.
+   */
   constructor() {
+    /** @type {readline.Interface|null} */
     this.rl = null;
+    /** @type {CLIConfig} */
     this.config = {
       targetPath: process.cwd(),
       language: 'en',
@@ -67,7 +46,9 @@ class ClaudeCraftCLI {
     };
   }
 
-  // Create readline interface
+  /**
+   * Create a readline interface for interactive user input.
+   */
   createReadline() {
     this.rl = readline.createInterface({
       input: process.stdin,
@@ -75,7 +56,9 @@ class ClaudeCraftCLI {
     });
   }
 
-  // Close readline
+  /**
+   * Close the readline interface and release resources.
+   */
   closeReadline() {
     if (this.rl) {
       this.rl.close();
@@ -83,7 +66,11 @@ class ClaudeCraftCLI {
     }
   }
 
-  // Prompt user for input
+  /**
+   * Prompt the user for input and return the trimmed response.
+   * @param {string} question - The prompt text displayed to the user
+   * @returns {Promise<string>} The user's trimmed input
+   */
   async prompt(question) {
     return new Promise((resolve) => {
       this.rl.question(question, (answer) => {
@@ -92,7 +79,9 @@ class ClaudeCraftCLI {
     });
   }
 
-  // Print banner
+  /**
+   * Print the ASCII art banner with version information.
+   */
   printBanner() {
     console.log(`
 ${c.cyan}${c.bold}╔═══════════════════════════════════════════════════════════════╗${c.reset}
@@ -118,7 +107,9 @@ ${c.cyan}${c.bold}╚═══════════════════�
 `);
   }
 
-  // Print help
+  /**
+   * Print the CLI usage help with commands, options, and examples.
+   */
   printHelp() {
     console.log(`
 ${c.bold}Usage:${c.reset} npx @the-bearded-bear/claude-craft [command] [options]
@@ -163,104 +154,20 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
 `);
   }
 
-  // Detect project characteristics
+  /**
+   * Detect project characteristics by inspecting files in the target directory.
+   * Delegates to the extracted detectProject module.
+   * @param {string} targetPath - Absolute path to the project directory
+   * @returns {import('./lib/detect-project').DetectedProject}
+   */
   detectProject(targetPath) {
-    const detected = {
-      hasClaude: false,
-      hasGit: false,
-      hasPackageJson: false,
-      hasComposer: false,
-      hasPubspec: false,
-      hasRequirements: false,
-      hasDockerfile: false,
-      suggestedTechs: [],
-      complexity: 'standard',
-    };
-
-    // Check for .claude directory
-    try {
-      detected.hasClaude = fs.existsSync(path.join(targetPath, '.claude'));
-    } catch (e) {
-      if (process.env.DEBUG) console.error(`${c.dim}Detection error (.claude): ${e.message}${c.reset}`);
-    }
-
-    // Check for git
-    try {
-      detected.hasGit = fs.existsSync(path.join(targetPath, '.git'));
-    } catch (e) {
-      if (process.env.DEBUG) console.error(`${c.dim}Detection error (.git): ${e.message}${c.reset}`);
-    }
-
-    // Detect Symfony/PHP (composer.json)
-    try {
-      if (fs.existsSync(path.join(targetPath, 'composer.json'))) {
-        detected.hasComposer = true;
-        detected.suggestedTechs.push('symfony');
-      }
-    } catch (e) {
-      if (process.env.DEBUG) console.error(`${c.dim}Detection error (composer): ${e.message}${c.reset}`);
-    }
-
-    // Detect Flutter (pubspec.yaml)
-    try {
-      if (fs.existsSync(path.join(targetPath, 'pubspec.yaml'))) {
-        detected.hasPubspec = true;
-        detected.suggestedTechs.push('flutter');
-      }
-    } catch (e) {
-      if (process.env.DEBUG) console.error(`${c.dim}Detection error (pubspec): ${e.message}${c.reset}`);
-    }
-
-    // Detect React/React Native (package.json)
-    try {
-      if (fs.existsSync(path.join(targetPath, 'package.json'))) {
-        detected.hasPackageJson = true;
-        const pkg = JSON.parse(fs.readFileSync(path.join(targetPath, 'package.json'), 'utf8'));
-        if (pkg.dependencies?.react || pkg.devDependencies?.react) {
-          if (pkg.dependencies?.['react-native'] || pkg.devDependencies?.['react-native']) {
-            detected.suggestedTechs.push('reactnative');
-          } else {
-            detected.suggestedTechs.push('react');
-          }
-        }
-      }
-    } catch (e) {
-      if (process.env.DEBUG) console.error(`${c.dim}Detection error (package.json): ${e.message}${c.reset}`);
-    }
-
-    // Detect Python (requirements.txt / pyproject.toml)
-    try {
-      if (fs.existsSync(path.join(targetPath, 'requirements.txt')) ||
-          fs.existsSync(path.join(targetPath, 'pyproject.toml'))) {
-        detected.hasRequirements = true;
-        detected.suggestedTechs.push('python');
-      }
-    } catch (e) {
-      if (process.env.DEBUG) console.error(`${c.dim}Detection error (python): ${e.message}${c.reset}`);
-    }
-
-    // Detect Docker (Dockerfile / docker-compose.yml)
-    try {
-      if (fs.existsSync(path.join(targetPath, 'Dockerfile')) ||
-          fs.existsSync(path.join(targetPath, 'docker-compose.yml'))) {
-        detected.hasDockerfile = true;
-        detected.suggestedTechs.push('docker');
-      }
-    } catch (e) {
-      if (process.env.DEBUG) console.error(`${c.dim}Detection error (docker): ${e.message}${c.reset}`);
-    }
-
-    // Estimate complexity
-    if (detected.suggestedTechs.length > 2) {
-      detected.complexity = 'enterprise';
-    } else if (detected.suggestedTechs.length === 0) {
-      detected.complexity = 'quick';
-    }
-
-    return detected;
+    return detectProject(targetPath, { debug: !!process.env.DEBUG });
   }
 
-  // Interactive installation wizard
+  /**
+   * Run the interactive installation wizard with 5-step user prompts.
+   * @returns {Promise<void>}
+   */
   async interactiveInstall() {
     this.createReadline();
     this.printBanner();
@@ -365,7 +272,12 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
     }
   }
 
-  // Run installation scripts
+  /**
+   * Execute the installation scripts based on the current configuration.
+   * Installs common rules, technology-specific rules, infrastructure, and project commands.
+   * @returns {Promise<void>}
+   * @throws {Error} If any installation script fails
+   */
   async runInstallation() {
     console.log(`\n${c.bold}Installing Claude-Craft...${c.reset}\n`);
 
@@ -421,7 +333,12 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
     }
   }
 
-  // Run a shell script
+  /**
+   * Execute a shell script synchronously via bash.
+   * @param {string} scriptPath - Absolute path to the shell script
+   * @param {string[]} args - Arguments to pass to the script
+   * @throws {Error} If the script fails to start or exits with non-zero code
+   */
   runScript(scriptPath, args) {
     const result = spawnSync('bash', [scriptPath, ...args], {
       stdio: 'inherit',
@@ -435,7 +352,9 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
     }
   }
 
-  // Print success message
+  /**
+   * Print the post-installation success message with next steps.
+   */
   printSuccess() {
     console.log(`
 ${c.green}${c.bold}╔═══════════════════════════════════════════════════════════════╗${c.reset}
@@ -462,29 +381,20 @@ ${c.bold}Documentation:${c.reset}
 `);
   }
 
-  // Parse CLI arguments
+  /**
+   * Parse CLI arguments into a structured object.
+   * Delegates to the extracted parseArgs module.
+   * @param {string[]} args - Raw command-line arguments (without node and script path)
+   * @returns {import('./lib/parse-args').ParsedArgs}
+   */
   parseArgs(args) {
-    const parsed = {
-      command: null,
-      path: null,
-      options: {},
-    };
-
-    for (const arg of args) {
-      if (arg.startsWith('--')) {
-        const [key, value] = arg.slice(2).split('=');
-        parsed.options[key] = value ?? true;
-      } else if (!parsed.command) {
-        parsed.command = arg;
-      } else if (!parsed.path) {
-        parsed.path = arg;
-      }
-    }
-
-    return parsed;
+    return parseArgs(args);
   }
 
-  // Main entry point
+  /**
+   * Main entry point that dispatches to the appropriate command handler.
+   * @returns {Promise<void>}
+   */
   async run() {
     const args = process.argv.slice(2);
 
@@ -557,7 +467,12 @@ ${c.bold}Documentation:${c.reset}
     }
   }
 
-  // Flatten codebase for context
+  /**
+   * Flatten the codebase into a context-optimized markdown summary.
+   * @param {Object} options - Flattener options from CLI flags
+   * @param {string} [options.output] - Output filename (defaults to CODEBASE_CONTEXT.md)
+   * @returns {Promise<void>}
+   */
   async flattenCodebase(options) {
     this.printBanner();
     console.log(`${c.bold}Codebase Flattener${c.reset}\n`);
@@ -571,7 +486,18 @@ ${c.bold}Documentation:${c.reset}
     await flattener.flatten(targetPath, outputFile, options);
   }
 
-  // Run Ralph Wiggum continuous loop
+  /**
+   * Launch the Ralph Wiggum continuous AI agent loop.
+   * @param {string[]} args - Positional arguments (prompt text after 'ralph' command)
+   * @param {Object} options - CLI option flags
+   * @param {string} [options.lang] - Language override
+   * @param {string} [options.config] - Path to Ralph configuration file
+   * @param {string} [options.continue] - Session ID to resume
+   * @param {string} [options['max-iterations']] - Maximum iteration count
+   * @param {boolean} [options.verbose] - Enable verbose output
+   * @param {boolean} [options['dry-run']] - Preview without executing
+   * @returns {Promise<void>}
+   */
   async runRalph(args, options) {
     this.printBanner();
     console.log(`${c.bold}Ralph Wiggum - Continuous AI Agent Loop${c.reset}\n`);

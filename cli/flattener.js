@@ -67,7 +67,37 @@ const TOKENS_PER_CHAR = 0.25;
 // Max tokens per shard (leaving room for conversation context)
 const MAX_TOKENS_PER_SHARD = 50000;
 
+/**
+ * @typedef {Object} FlattenerOptions
+ * @property {number} [maxTokens] - Max tokens per shard (default: 50000)
+ * @property {number} [maxFileSize] - Max file size in bytes to include (default: 50000)
+ * @property {string[]} [ignore] - Additional ignore patterns
+ * @property {string[]|null} [include] - Include-only patterns (null means include all)
+ * @property {boolean} [sharding] - Enable automatic sharding for large codebases (default: true)
+ * @property {string} [priority] - Minimum priority level to include (default: 'high')
+ */
+
+/**
+ * @typedef {Object} FileEntry
+ * @property {string} path - Relative path from root
+ * @property {string} fullPath - Absolute filesystem path
+ * @property {number} size - File size in bytes
+ * @property {number} priority - Priority rank (1=high, 2=medium, 3=low, 4=other)
+ * @property {number} tokens - Estimated token count
+ */
+
+/**
+ * @typedef {Object} Shard
+ * @property {FileEntry[]} files - Files included in this shard
+ * @property {number} tokens - Total estimated tokens in this shard
+ */
+
 class CodebaseFlattener {
+  /**
+   * Create a codebase flattener instance.
+   * @param {string} rootPath - Path to the project root directory
+   * @param {FlattenerOptions} [options={}] - Flattener configuration options
+   */
   constructor(rootPath, options = {}) {
     this.rootPath = path.resolve(rootPath);
     this.options = {
@@ -91,7 +121,11 @@ class CodebaseFlattener {
     this.files = [];
   }
 
-  // Check if path should be ignored
+  /**
+   * Check whether a relative path matches any ignore pattern.
+   * @param {string} relativePath - Path relative to the project root
+   * @returns {boolean} True if the path should be excluded
+   */
   shouldIgnore(relativePath) {
     const basename = path.basename(relativePath);
 
@@ -108,7 +142,11 @@ class CodebaseFlattener {
     return false;
   }
 
-  // Get file priority
+  /**
+   * Determine the priority rank of a file based on its extension.
+   * @param {string} filePath - File path to evaluate
+   * @returns {number} Priority rank (1=high, 2=medium, 3=low, 4=other)
+   */
   getFilePriority(filePath) {
     const ext = path.extname(filePath).toLowerCase();
 
@@ -118,7 +156,11 @@ class CodebaseFlattener {
     return 4;
   }
 
-  // Check if file is binary
+  /**
+   * Check whether a file is binary based on its extension.
+   * @param {string} filePath - File path to check
+   * @returns {boolean} True if the file has a known binary extension
+   */
   isBinaryFile(filePath) {
     const binaryExtensions = [
       '.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.webp',
@@ -133,7 +175,11 @@ class CodebaseFlattener {
     return binaryExtensions.includes(ext);
   }
 
-  // Scan directory recursively
+  /**
+   * Recursively scan a directory and populate the files list.
+   * @param {string} dirPath - Absolute path of the directory to scan
+   * @param {string} [relativePath=''] - Current relative path from root
+   */
   scanDirectory(dirPath, relativePath = '') {
     try {
       const entries = fs.readdirSync(dirPath, { withFileTypes: true });
@@ -176,7 +222,10 @@ class CodebaseFlattener {
     }
   }
 
-  // Generate file tree
+  /**
+   * Generate an ASCII tree representation of all included files.
+   * @returns {string} Tree-formatted string with box-drawing characters
+   */
   generateFileTree() {
     const tree = {};
 
@@ -214,7 +263,10 @@ class CodebaseFlattener {
     return renderTree(tree);
   }
 
-  // Generate output content
+  /**
+   * Generate the complete markdown output with statistics, file tree, and contents.
+   * @returns {string} Full markdown document content
+   */
   generateOutput() {
     // Sort files by priority, then by path
     this.files.sort((a, b) => {
@@ -272,7 +324,10 @@ ${fileContent}
     return content;
   }
 
-  // Generate sharded output
+  /**
+   * Split included files into token-bounded shards for large codebases.
+   * @returns {Shard[]} Array of shards, each within the maxTokens limit
+   */
   generateShardedOutput() {
     // Sort files by priority
     this.files.sort((a, b) => {
@@ -308,7 +363,12 @@ ${fileContent}
     return shards;
   }
 
-  // Flatten the codebase
+  /**
+   * Scan the codebase and write the flattened output to file(s).
+   * Automatically shards if total tokens exceed the configured limit.
+   * @param {string} outputFile - Output filename (relative or absolute)
+   * @returns {Promise<void>}
+   */
   async flatten(outputFile) {
     console.log(`${c.cyan}Scanning:${c.reset} ${this.rootPath}\n`);
 
@@ -358,7 +418,13 @@ ${fileContent}
     this.printSummary();
   }
 
-  // Generate shard content
+  /**
+   * Generate the markdown content for a single shard.
+   * @param {Shard} shard - The shard containing files and token count
+   * @param {number} shardNum - 1-based shard index
+   * @param {number} totalShards - Total number of shards
+   * @returns {string} Markdown content for this shard
+   */
   generateShardContent(shard, shardNum, totalShards) {
     let content = `# Codebase Context: ${path.basename(this.rootPath)} (Shard ${shardNum}/${totalShards})
 
@@ -405,7 +471,13 @@ ${fileContent}
     return content;
   }
 
-  // Generate index content
+  /**
+   * Generate the index file that maps all shards and provides usage instructions.
+   * @param {Shard[]} shards - Array of all generated shards
+   * @param {string} baseName - Base filename without extension
+   * @param {string} ext - File extension including the dot (e.g. '.md')
+   * @returns {string} Markdown content for the index file
+   */
   generateIndexContent(shards, baseName, ext) {
     const fileTree = this.generateFileTree();
 
@@ -454,7 +526,9 @@ ${shard.files.map(f => `- ${f.path}`).join('\n')}
 `;
   }
 
-  // Print summary
+  /**
+   * Print a formatted summary of the flattening results to stdout.
+   */
   printSummary() {
     console.log(`
 ${c.bold}Summary:${c.reset}
@@ -469,10 +543,23 @@ ${c.bold}Summary:${c.reset}
   }
 }
 
-// Export flatten function
+/**
+ * Convenience function to flatten a codebase in a single call.
+ * @param {string} rootPath - Path to the project root directory
+ * @param {string} outputFile - Output filename
+ * @param {FlattenerOptions} [options={}] - Flattener configuration options
+ * @returns {Promise<void>}
+ */
 async function flatten(rootPath, outputFile, options = {}) {
   const flattener = new CodebaseFlattener(rootPath, options);
   await flattener.flatten(outputFile);
 }
 
-module.exports = { flatten, CodebaseFlattener };
+module.exports = {
+  flatten,
+  CodebaseFlattener,
+  DEFAULT_IGNORES,
+  PRIORITY_EXTENSIONS,
+  TOKENS_PER_CHAR,
+  MAX_TOKENS_PER_SHARD,
+};

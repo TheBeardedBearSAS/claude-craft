@@ -21,3 +21,18 @@ docs/marketing/
 # Generated reports
 reports/
 
+# Dependencies
+node_modules/
+
+# Vale downloaded packages (keep styles/Vocab/ tracked)
+styles/Google/
+styles/write-good/
+
+# Build & test artifacts
+coverage/
+*.log
+
+# Project directories
+video/
+.agents/
+
