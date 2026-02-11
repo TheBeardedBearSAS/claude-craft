@@ -268,18 +268,21 @@ Before submitting:
 
 ## Adding a New Technology
 
-1. Create directory structure:
+1. Create directory structure (i18n layout):
    ```bash
-   mkdir -p Dev/NewTech/{rules,claude-agents,claude-commands/newtech,templates,checklists}
+   for lang in en fr es de pt; do
+     mkdir -p Dev/i18n/$lang/NewTech/{agents,commands,skills,templates,checklists}
+   done
+   mkdir -p Dev/i18n/base/NewTech/{agents,commands,skills,templates,checklists}
    ```
 
 2. Create installation script based on existing ones
 
-3. Add rules following numbering convention
+3. Add skills in the official format (SKILL.md + REFERENCE.md)
 
 4. Create technology-specific agent
 
-5. Add commands with proper namespace
+5. Add commands with proper namespace and frontmatter
 
 6. Update Makefile with new targets
 

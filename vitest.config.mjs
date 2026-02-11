@@ -10,6 +10,12 @@ export default defineConfig({
       include: ['cli/**/*.js'],
       exclude: ['cli/flattener.js'],
       reporter: ['text', 'json-summary'],
+      thresholds: {
+        lines: 50,
+        branches: 40,
+        functions: 50,
+        statements: 50,
+      },
     },
   },
 });

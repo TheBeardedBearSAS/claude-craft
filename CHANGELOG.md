@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.15.0] - 2026-02-11
+
+### Added
+- **TEST-17**: 8 unit tests for `ClaudeCraftCLI.run()` (version flags, validation errors, command dispatch)
+- **TEST-18**: 3 unit tests for installer.js error handling (spawn failure, non-zero exit, missing script)
+- **CICD-19**: Vale prose linter in CI pipeline
+- **CICD-20**: Coverage thresholds in vitest config (50% lines, 40% branches)
+
+### Fixed
+- **DOC-12**: Fixed COMMANDS.md — namespace count table (7 wrong counts), added `/workflow:` (6), `/php:` (5), 3 missing commands
+- **DOC-13**: Fixed CONTRIBUTING.md stale directory structure (now references `Dev/i18n/{lang}/{Tech}/`)
+- **DOC-14**: Updated README "What's New" from v5.13 to v5.15
+
+---
+
 ## [5.14.0] - 2026-02-11
 
 ### Added

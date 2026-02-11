@@ -8,11 +8,11 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
 
-## What's New in v5.13
+## What's New in v5.15
 
-- **CLI Architecture**: Refactored into focused modules (banner, help, installer, ralph)
-- **Test Coverage**: 340+ tests with coverage reporting in CI
-- **CI Hardening**: Format checks + coverage thresholds enforced
+- **Documentation Accuracy**: Fixed COMMANDS.md counts, added `/workflow:` and `/php:` sections
+- **CI Hardening**: Vale prose linter added to CI pipeline, coverage thresholds
+- **Test Coverage**: CLI run() and installer error paths now tested
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.

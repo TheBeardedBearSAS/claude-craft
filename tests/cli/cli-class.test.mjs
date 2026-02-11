@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -36,5 +36,92 @@ describe('ClaudeCraftCLI class', () => {
     const result = cli.detectProject(__dirname);
     expect(result).toBeDefined();
     expect(typeof result).toBe('object');
+  });
+});
+
+describe('ClaudeCraftCLI.run()', () => {
+  let originalArgv;
+  let logSpy;
+  let errorSpy;
+  let exitSpy;
+
+  beforeEach(() => {
+    originalArgv = process.argv;
+    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit called');
+    });
+  });
+
+  afterEach(() => {
+    process.argv = originalArgv;
+    vi.restoreAllMocks();
+  });
+
+  it('--version prints version and returns', async () => {
+    process.argv = ['node', 'index.js', '--version'];
+    const cli = new ClaudeCraftCLI();
+    await cli.run();
+    const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toMatch(/^\d+\.\d+\.\d+$/);
+  });
+
+  it('-v prints version (short alias)', async () => {
+    process.argv = ['node', 'index.js', '-v'];
+    const cli = new ClaudeCraftCLI();
+    await cli.run();
+    const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toMatch(/^\d+\.\d+\.\d+$/);
+  });
+
+  it('--lang=zz exits with error for invalid language', async () => {
+    process.argv = ['node', 'index.js', 'install', '.', '--lang=zz'];
+    const cli = new ClaudeCraftCLI();
+    await expect(cli.run()).rejects.toThrow('process.exit called');
+    const errOutput = errorSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(errOutput).toContain('Unknown language');
+    expect(exitSpy).toHaveBeenCalledWith(1);
+  });
+
+  it('--tech=cobol exits with error for invalid technology', async () => {
+    process.argv = ['node', 'index.js', 'install', '.', '--tech=cobol'];
+    const cli = new ClaudeCraftCLI();
+    await expect(cli.run()).rejects.toThrow('process.exit called');
+    const errOutput = errorSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(errOutput).toContain('Unknown technology');
+    expect(exitSpy).toHaveBeenCalledWith(1);
+  });
+
+  it('help command prints usage', async () => {
+    process.argv = ['node', 'index.js', 'help'];
+    const cli = new ClaudeCraftCLI();
+    await cli.run();
+    const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('Usage');
+  });
+
+  it('init command prints workflow message', async () => {
+    process.argv = ['node', 'index.js', 'init'];
+    const cli = new ClaudeCraftCLI();
+    await cli.run();
+    const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('workflow');
+  });
+
+  it('unknown command exits with error', async () => {
+    process.argv = ['node', 'index.js', 'foobar'];
+    const cli = new ClaudeCraftCLI();
+    await expect(cli.run()).rejects.toThrow('process.exit called');
+    const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('Unknown command');
+    expect(exitSpy).toHaveBeenCalledWith(1);
+  });
+
+  it('config.targetPath resolves to cwd when no path given', async () => {
+    process.argv = ['node', 'index.js', '--version'];
+    const cli = new ClaudeCraftCLI();
+    await cli.run();
+    expect(cli.config.targetPath).toBe(process.cwd());
   });
 });

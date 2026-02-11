@@ -21,21 +21,23 @@ Commands can take arguments:
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 24 |
+| `/common:` | Transversal | 30 |
+| `/workflow:` | Workflow (BMAD) | 6 |
 | `/symfony:` | PHP/Symfony | 10 |
 | `/flutter:` | Dart/Flutter | 10 |
 | `/python:` | Python | 10 |
-| `/react:` | React/TypeScript | 8 |
-| `/reactnative:` | React Native | 7 |
+| `/react:` | React/TypeScript | 10 |
+| `/reactnative:` | React Native | 10 |
 | `/angular:` | Angular | 6 |
 | `/csharp:` | C#/.NET | 6 |
 | `/laravel:` | PHP/Laravel | 6 |
 | `/vuejs:` | Vue.js | 6 |
+| `/php:` | PHP | 5 |
 | `/docker:` | Docker/Infrastructure | 4 |
-| `/project:` | Project Management | 24 |
+| `/project:` | Project Management | 26 |
 | `/sprint:` | Sprint Management (BMAD v6) | 4 |
 | `/gate:` | Quality Gates (BMAD v6) | 6 |
-| `/qa:` | QA Recette (Browser Testing) | 5 |
+| `/qa:` | QA Recette (Browser Testing) | 2 |
 
 ---
 
@@ -191,6 +193,22 @@ Add a complete technology stack to claude-craft with best practices:
 | `/common:team-sprint` | Parallel sprint implementation (Agent Teams) |
 | `/common:team-security` | Parallel security review (Agent Teams) |
 | `/common:team-delivery` | **[NEW]** Full sprint lifecycle — writing + implementation (Agent Teams) |
+| `/common:sub-agents-patterns` | Sub-agent orchestration patterns for Agent Teams |
+
+---
+
+## Workflow Commands (`/workflow:`)
+
+BMAD-inspired workflow system adapted to project complexity.
+
+| Command | Description |
+|---------|-------------|
+| `/workflow:init` | Initialize workflow (auto-detect track) |
+| `/workflow:analyze` | Research and exploration phase |
+| `/workflow:plan` | Generate PRD, personas, backlog |
+| `/workflow:design` | Tech spec, architecture, ADRs |
+| `/workflow:implement` | Sprint development with TDD/BDD |
+| `/workflow:status` | Show current progress |
 
 ---
 
@@ -457,6 +475,20 @@ Frontend development with Vue.js 3, Composition API, and TypeScript.
 
 ---
 
+## PHP Commands (`/php:`)
+
+Standalone PHP development with PSR-12 and PHPStan.
+
+| Command | Description |
+|---------|-------------|
+| `/php:check-architecture` | Validate architecture (layers, dependencies) |
+| `/php:check-code-quality` | Run code quality checks (PHPStan, PSR-12) |
+| `/php:check-compliance` | Check rule compliance (modern PHP 8.5) |
+| `/php:check-security` | Security audit (OWASP Top 10, injection) |
+| `/php:check-testing` | Test coverage analysis (Pest PHP) |
+
+---
+
 ## Docker Commands (`/docker:`)
 
 Infrastructure and containerization commands.
@@ -508,6 +540,8 @@ Available with Project installation.
 | `/project:migrate-backlog` | Convert backlog to BMAD v6 format |
 | `/project:update-stories` | Add missing BMAD fields to stories |
 | `/project:sync-backlog` | Synchronize backlog files ↔ YAML |
+| `/project:generate-prd` | Generate Product Requirements Document |
+| `/project:generate-tech-spec` | Generate Technical Specification |
 | `/project:run-epic <ID>` | Queue all stories in an epic |
 | `/project:run-queue` | Process queued stories |
 | `/project:run-sprint` | Execute full sprint |

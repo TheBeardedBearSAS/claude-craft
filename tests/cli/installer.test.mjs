@@ -96,4 +96,59 @@ describe('runInstallation', () => {
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('Installation Complete');
   });
+
+  it('reports failure when spawnSync returns an error', async () => {
+    spawnSyncMock.mockReturnValue({ status: null, error: new Error('spawn ENOENT') });
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit called');
+    });
+    const cli = makeCli();
+    await expect(runInstallation(cli, { CLI_ROOT: '/fake/root' })).rejects.toThrow('process.exit called');
+    const errOutput = vi
+      .mocked(console.error)
+      .mock.calls.map((c) => c[0])
+      .join('\n');
+    expect(errOutput).toContain('Installation failed');
+    exitSpy.mockRestore();
+  });
+
+  it('reports failure when spawnSync returns non-zero exit code', async () => {
+    spawnSyncMock.mockReturnValue({ status: 127, error: null });
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit called');
+    });
+    const cli = makeCli();
+    await expect(runInstallation(cli, { CLI_ROOT: '/fake/root' })).rejects.toThrow('process.exit called');
+    const errOutput = vi
+      .mocked(console.error)
+      .mock.calls.map((c) => c[0])
+      .join('\n');
+    expect(errOutput).toContain('Installation failed');
+    exitSpy.mockRestore();
+  });
+
+  it('skips infra script gracefully when file does not exist', async () => {
+    // Override existsSync to return false for infra script
+    const fsModule = await import('fs');
+    const originalMock = fsModule.existsSync;
+    fsModule.existsSync.mockImplementation((p) => {
+      if (typeof p === 'string' && p.includes('install-infra-rules.sh')) return false;
+      if (typeof p === 'string' && p.endsWith('.sh')) return true;
+      return fsModule.default.existsSync(p);
+    });
+    fsModule.default.existsSync.mockImplementation((p) => {
+      if (typeof p === 'string' && p.includes('install-infra-rules.sh')) return false;
+      if (typeof p === 'string' && p.endsWith('.sh')) return true;
+      return true;
+    });
+
+    const cli = makeCli({ includeInfra: true });
+    await runInstallation(cli, { CLI_ROOT: '/fake/root' });
+    // Should not call spawnSync for infra script
+    const scriptPaths = spawnSyncMock.mock.calls.map((c) => c[1][0]);
+    expect(scriptPaths.some((p) => p.includes('install-infra-rules.sh'))).toBe(false);
+
+    // Restore original mock behavior
+    fsModule.existsSync.mockImplementation(originalMock.getMockImplementation());
+  });
 });
