@@ -8,11 +8,11 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
 
-## What's New in v5.16
+## What's New in v5.17
 
-- **Documentation Accuracy**: Fixed SKILLS.md inflated counts (58→50 unique, removed phantom skills)
-- **Makefile Cleanup**: Removed stale migrate targets referencing nonexistent script
-- **Test Coverage**: Ralph.js event handlers now tested
+- **Documentation Cleanup**: Removed all stale migrate references from 6 doc files
+- **CI Hardening**: Coverage thresholds raised (50%→75% lines, 40%→80% branches)
+- **Test Coverage**: Ralph.js now at ~100% coverage
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
@@ -391,9 +391,6 @@ make install-statusline                   # Custom status line
 make install-multiaccount                 # Multi-account manager
 make install-projectconfig                # Project config manager
 
-# Migrate existing projects to v3.0
-make migrate TARGET=~/my-project          # Upgrade project
-make migrate-dry-run TARGET=~/my-project  # Preview changes
 ```
 
 ### Method 2: YAML Configuration (Monorepos)

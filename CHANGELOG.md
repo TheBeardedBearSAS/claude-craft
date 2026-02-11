@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.17.0] - 2026-02-11
+
+### Added
+- **TEST-20**: 1 unit test for ralph.js synchronous spawn error path (lines 92-95)
+- **CICD-21**: Raised coverage thresholds (lines 50→75%, branches 40→80%, functions 50→65%)
+
+### Fixed
+- **DOC-17**: Removed stale `migrate-project.sh` and `make migrate*` references from 10 doc files (README, CLI-REFERENCE, TROUBLESHOOTING, ARCHITECTURE, SCRIPTS-REFERENCE, MIGRATION-v4, FAQ, MAKEFILE-REFERENCE, fr/FAQ, fr/CLI-REFERENCE)
+- **DOC-18**: Updated README "What's New" to v5.17
+
+---
+
 ## [5.16.0] - 2026-02-11
 
 ### Added

@@ -52,19 +52,6 @@ Before migrating:
 
 ## Automatic Migration
 
-### Using Make
-
-```bash
-# Preview changes (dry run)
-make migrate-dry-run TARGET=~/my-project
-
-# Run migration
-make migrate TARGET=~/my-project
-
-# With backup
-make migrate TARGET=~/my-project OPTIONS="--backup"
-```
-
 ### Using NPX
 
 ```bash
@@ -73,12 +60,6 @@ npx @the-bearded-bear/claude-craft migrate ~/my-project --dry-run
 
 # Migrate
 npx @the-bearded-bear/claude-craft migrate ~/my-project
-```
-
-### Using Script
-
-```bash
-./Dev/scripts/migrate-project.sh ~/my-project
 ```
 
 ---

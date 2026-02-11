@@ -176,21 +176,11 @@ make config-dry-run PROJECT=my-monorepo
 
 | Target | Description |
 |--------|-------------|
-| `migrate` | Migrate project to v4 |
-| `migrate-dry-run` | Preview migration |
-| `migrate-all` | Migrate all projects |
 | `migrate-check` | Check migration status |
 
 **Usage:**
 ```bash
-# Preview
-make migrate-dry-run TARGET=~/my-project
-
-# Migrate
-make migrate TARGET=~/my-project
-
-# With backup
-make migrate TARGET=~/my-project OPTIONS="--backup"
+make migrate-check
 ```
 
 ---
@@ -335,13 +325,7 @@ make install-symfony TARGET=~/project OPTIONS="--force --preserve-config"
 
 ```bash
 # Check current state
-make migrate-check TARGET=~/project
-
-# Preview changes
-make migrate-dry-run TARGET=~/project
-
-# Migrate with backup
-make migrate TARGET=~/project OPTIONS="--backup"
+make migrate-check
 ```
 
 ---

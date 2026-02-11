@@ -209,9 +209,6 @@ make fix-permissions                      # Corriger les permissions des scripts
 ### Commandes de Migration
 
 ```bash
-make migrate TARGET=~/projet              # Migrer le projet vers v4
-make migrate-dry-run TARGET=~/projet      # Prévisualiser la migration
-make migrate-all                          # Migrer tous les projets
 make migrate-check                        # Vérifier le statut de migration
 ```
 

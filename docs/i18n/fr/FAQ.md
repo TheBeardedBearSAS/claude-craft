@@ -373,10 +373,6 @@ projects:
 
 ### Comment migrer de v3 vers v4 ?
 
-```bash
-make migrate TARGET=~/projet
-```
-
 Voir [Guide de Migration](MIGRATION-v4.md).
 
 ### Qu'est-ce qui change en v4 ?

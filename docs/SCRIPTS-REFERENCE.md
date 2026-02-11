@@ -256,35 +256,6 @@ Validates YAML configuration file.
 
 ---
 
-## Migration Scripts
-
-### migrate-project.sh
-
-Migrates project from v3.x to v4.x.
-
-```bash
-./Dev/scripts/migrate-project.sh [options] <target>
-
-# Examples
-./Dev/scripts/migrate-project.sh ~/my-project
-./Dev/scripts/migrate-project.sh --dry-run ~/my-project
-./Dev/scripts/migrate-project.sh --backup ~/my-project
-```
-
-**Options:**
-- `--dry-run` - Preview changes
-- `--backup` - Create backup before migration
-- `--force` - Force migration even if already v4
-
-**Actions:**
-1. Analyzes current structure
-2. Creates TCL hierarchy
-3. Moves files to new locations
-4. Updates CLAUDE.md
-5. Generates INDEX.md
-
----
-
 ## Utility Scripts
 
 ### check-prerequisites.sh

@@ -212,9 +212,6 @@ make fix-permissions                       # Fix script permissions
 ### Migration Commands
 
 ```bash
-make migrate TARGET=~/project              # Migrate project to v4
-make migrate-dry-run TARGET=~/project      # Preview migration
-make migrate-all                           # Migrate all projects
 make migrate-check                         # Check migration status
 ```
 

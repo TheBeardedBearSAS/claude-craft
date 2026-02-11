@@ -751,32 +751,6 @@ make config-install PROJECT=my-monorepo
 
 ---
 
-## Migration Issues
-
-### Migration from v3 to v4 fails
-
-**Problem:** `make migrate` fails or produces errors.
-
-**Solution:**
-```bash
-# Run dry-run first
-make migrate-dry-run TARGET=~/project
-
-# Backup before migrating
-make migrate TARGET=~/project OPTIONS="--backup"
-
-# Manual migration if needed
-# 1. Backup .claude directory
-cp -r .claude .claude.backup
-
-# 2. Run fresh install
-make install-symfony TARGET=. OPTIONS="--force"
-
-# 3. Restore customizations from backup
-```
-
----
-
 ### Files overwritten after update
 
 **Problem:** Custom configurations lost after reinstall.

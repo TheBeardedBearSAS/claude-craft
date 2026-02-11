@@ -151,4 +151,17 @@ describe('runRalph', () => {
     const output = errorSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('Failed to start Ralph');
   });
+
+  it('logs error when spawn throws synchronously', async () => {
+    spawnMock.mockImplementation(() => {
+      throw new Error('spawn failed');
+    });
+    try {
+      await runRalph(makeCli(), [], {}, { CLI_ROOT: '/fake/root', VERSION: '1.0.0' });
+    } catch {
+      // vitest intercepts process.exit
+    }
+    const output = errorSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('Error running Ralph');
+  });
 });
