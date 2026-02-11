@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.11.0] - 2026-02-11
+
+### Changed
+- **ARCH-3**: Deduplicated i18n directory — extracted 114 language-agnostic files into `Dev/i18n/base/`
+  - Removed 570 redundant file copies across 5 language directories (~17 MB saved)
+  - Install scripts now use base+overlay resolution: shared files from `base/`, translations from `{lang}/`
+  - New helpers: `copy_i18n_files()`, `copy_i18n_dir()`, `resolve_i18n_file()`, `i18n_dir_exists()` in install-tech-common.sh
+  - Updated `get_source_dir()`, `verify_source_files()`, `copy_tech_references()`, `copy_base_references()` for base fallback
+  - i18n file count: 2,035 → 1,584 (−22%)
+
+### Added
+- 26 new tests for i18n base overlay resolution (shell function unit tests + integration tests)
+
+---
+
 ## [5.10.1] - 2026-02-11
 
 ### Fixed

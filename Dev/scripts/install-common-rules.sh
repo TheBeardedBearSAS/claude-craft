@@ -409,111 +409,137 @@ copy_directory() {
 install_rules() {
     log_info "${MSG_INSTALLING_RULES:-Installing skills and rules...}"
 
-    # Install skills (new format)
-    local src_skills="$I18N_DIR/$lang/Common/skills"
+    # Install skills (base + lang overlay)
+    local base_skills="$I18N_DIR/base/Common/skills"
+    local lang_skills="$I18N_DIR/$lang/Common/skills"
     local dest_skills="$target_dir/.claude/skills"
 
-    if [[ -d "$src_skills" ]]; then
-        copy_directory "$src_skills" "$dest_skills" "*.md"
+    if [[ -d "$base_skills" ]] || [[ -d "$lang_skills" ]]; then
+        [[ -d "$base_skills" ]] && copy_directory "$base_skills" "$dest_skills" "*.md"
+        [[ -d "$lang_skills" ]] && copy_directory "$lang_skills" "$dest_skills" "*.md"
     else
-        log_warning "${MSG_SKILLS_NOT_FOUND:-Common skills directory not found:} $src_skills"
+        log_warning "${MSG_SKILLS_NOT_FOUND:-Common skills directory not found}"
     fi
 
-    # Also install legacy rules for backward compatibility
-    local src_rules="$I18N_DIR/$lang/Common/rules"
+    # Also install legacy rules for backward compatibility (base + lang overlay)
+    local base_rules="$I18N_DIR/base/Common/rules"
+    local lang_rules="$I18N_DIR/$lang/Common/rules"
     local dest_rules="$target_dir/.claude/rules"
 
-    if [[ -d "$src_rules" ]]; then
-        copy_directory "$src_rules" "$dest_rules" "*.md"
-        copy_directory "$src_rules" "$dest_rules" "*.md.template"
-    fi
+    [[ -d "$base_rules" ]] && copy_directory "$base_rules" "$dest_rules" "*.md"
+    [[ -d "$base_rules" ]] && copy_directory "$base_rules" "$dest_rules" "*.md.template"
+    [[ -d "$lang_rules" ]] && copy_directory "$lang_rules" "$dest_rules" "*.md"
+    [[ -d "$lang_rules" ]] && copy_directory "$lang_rules" "$dest_rules" "*.md.template"
 }
 
 install_agents() {
     log_info "${MSG_INSTALLING_AGENTS}"
 
-    # Use i18n directory if available, fallback to local
-    local src_agents="$I18N_DIR/$lang/Common/agents"
-    if [[ ! -d "$src_agents" ]]; then
-        src_agents="$SCRIPT_DIR/claude-agents"
-    fi
+    local base_agents="$I18N_DIR/base/Common/agents"
+    local lang_agents="$I18N_DIR/$lang/Common/agents"
     local dest_agents="$target_dir/.claude/agents"
 
-    if [[ -d "$src_agents" ]]; then
-        copy_directory "$src_agents" "$dest_agents" "*.md"
+    if [[ -d "$base_agents" ]] || [[ -d "$lang_agents" ]]; then
+        [[ -d "$base_agents" ]] && copy_directory "$base_agents" "$dest_agents" "*.md"
+        [[ -d "$lang_agents" ]] && copy_directory "$lang_agents" "$dest_agents" "*.md"
+    elif [[ -d "$SCRIPT_DIR/claude-agents" ]]; then
+        copy_directory "$SCRIPT_DIR/claude-agents" "$dest_agents" "*.md"
     else
-        log_warning "${MSG_AGENTS_NOT_FOUND} $src_agents"
+        log_warning "${MSG_AGENTS_NOT_FOUND}"
     fi
 }
 
 install_commands() {
     log_info "${MSG_INSTALLING_COMMANDS}"
 
-    # Use i18n directory if available, fallback to local
-    local src_commands="$I18N_DIR/$lang/Common/commands"
-    if [[ ! -d "$src_commands" ]]; then
-        src_commands="$SCRIPT_DIR/claude-commands/common"
-    fi
+    local base_commands="$I18N_DIR/base/Common/commands"
+    local lang_commands="$I18N_DIR/$lang/Common/commands"
     local dest_commands="$target_dir/.claude/commands/common"
 
-    if [[ -d "$src_commands" ]]; then
+    if [[ -d "$base_commands" ]] || [[ -d "$lang_commands" ]]; then
         # Exclude add-technology.md (claude-craft internal command)
-        copy_directory "$src_commands" "$dest_commands" "*.md" "add-technology.md"
+        [[ -d "$base_commands" ]] && copy_directory "$base_commands" "$dest_commands" "*.md" "add-technology.md"
+        [[ -d "$lang_commands" ]] && copy_directory "$lang_commands" "$dest_commands" "*.md" "add-technology.md"
+    elif [[ -d "$SCRIPT_DIR/claude-commands/common" ]]; then
+        copy_directory "$SCRIPT_DIR/claude-commands/common" "$dest_commands" "*.md" "add-technology.md"
     else
-        log_warning "${MSG_COMMANDS_NOT_FOUND} $src_commands"
+        log_warning "${MSG_COMMANDS_NOT_FOUND}"
     fi
 }
 
 install_templates() {
     log_info "${MSG_INSTALLING_TEMPLATES}"
 
-    # Use i18n directory if available, fallback to local
-    local src_templates="$I18N_DIR/$lang/Common/templates"
-    if [[ ! -d "$src_templates" ]]; then
-        src_templates="$SCRIPT_DIR/templates"
-    fi
+    local base_templates="$I18N_DIR/base/Common/templates"
+    local lang_templates="$I18N_DIR/$lang/Common/templates"
     local dest_templates="$target_dir/.github"
 
-    if [[ -d "$src_templates" ]]; then
-        # PR Template
-        if [[ -f "$src_templates/pull-request-template.md" ]]; then
-            copy_file "$src_templates/pull-request-template.md" "$dest_templates/PULL_REQUEST_TEMPLATE.md"
+    # Determine effective source (lang > base > local)
+    local src_templates=""
+    if [[ -d "$lang_templates" ]]; then
+        src_templates="$lang_templates"
+    elif [[ -d "$base_templates" ]]; then
+        src_templates="$base_templates"
+    elif [[ -d "$SCRIPT_DIR/templates" ]]; then
+        src_templates="$SCRIPT_DIR/templates"
+    fi
+
+    if [[ -n "$src_templates" ]]; then
+        # PR Template (check lang first, then base)
+        local pr_template=""
+        if [[ -f "$lang_templates/pull-request-template.md" ]]; then
+            pr_template="$lang_templates/pull-request-template.md"
+        elif [[ -f "$base_templates/pull-request-template.md" ]]; then
+            pr_template="$base_templates/pull-request-template.md"
+        fi
+        if [[ -n "$pr_template" ]]; then
+            copy_file "$pr_template" "$dest_templates/PULL_REQUEST_TEMPLATE.md"
         fi
 
-        # Issue Templates
-        if [[ -d "$src_templates/issue-templates" ]]; then
-            copy_directory "$src_templates/issue-templates" "$dest_templates/ISSUE_TEMPLATE" "*.md"
+        # Issue Templates (check lang first, then base)
+        local issue_dir=""
+        if [[ -d "$lang_templates/issue-templates" ]]; then
+            issue_dir="$lang_templates/issue-templates"
+        elif [[ -d "$base_templates/issue-templates" ]]; then
+            issue_dir="$base_templates/issue-templates"
+        fi
+        if [[ -n "$issue_dir" ]]; then
+            copy_directory "$issue_dir" "$dest_templates/ISSUE_TEMPLATE" "*.md"
         fi
     else
-        log_warning "${MSG_TEMPLATES_NOT_FOUND} $src_templates"
+        log_warning "${MSG_TEMPLATES_NOT_FOUND}"
     fi
 }
 
 install_checklists() {
     log_info "${MSG_INSTALLING_CHECKLISTS}"
 
-    # Use i18n directory if available, fallback to local
-    local src_checklists="$I18N_DIR/$lang/Common/checklists"
-    if [[ ! -d "$src_checklists" ]]; then
-        src_checklists="$SCRIPT_DIR/checklists"
-    fi
+    local base_checklists="$I18N_DIR/base/Common/checklists"
+    local lang_checklists="$I18N_DIR/$lang/Common/checklists"
     local dest_checklists="$target_dir/.claude/checklists"
 
-    if [[ -d "$src_checklists" ]]; then
-        copy_directory "$src_checklists" "$dest_checklists" "*.md"
+    if [[ -d "$base_checklists" ]] || [[ -d "$lang_checklists" ]]; then
+        [[ -d "$base_checklists" ]] && copy_directory "$base_checklists" "$dest_checklists" "*.md"
+        [[ -d "$lang_checklists" ]] && copy_directory "$lang_checklists" "$dest_checklists" "*.md"
+    elif [[ -d "$SCRIPT_DIR/checklists" ]]; then
+        copy_directory "$SCRIPT_DIR/checklists" "$dest_checklists" "*.md"
     else
-        log_warning "${MSG_CHECKLISTS_NOT_FOUND} $src_checklists"
+        log_warning "${MSG_CHECKLISTS_NOT_FOUND}"
     fi
 }
 
 install_claude_md() {
     log_info "${MSG_INSTALLING_CLAUDE_MD:-Installing CLAUDE.md...}"
 
+    # Resolve template with base fallback
     local src_template="$I18N_DIR/$lang/Common/templates/CLAUDE.md.template"
+    if [[ ! -f "$src_template" ]]; then
+        src_template="$I18N_DIR/base/Common/templates/CLAUDE.md.template"
+    fi
     local dest_file="$target_dir/.claude/CLAUDE.md"
 
     if [[ ! -f "$src_template" ]]; then
-        log_warning "${MSG_CLAUDE_MD_NOT_FOUND:-CLAUDE.md template not found:} $src_template"
+        log_warning "${MSG_CLAUDE_MD_NOT_FOUND:-CLAUDE.md template not found}"
         return 0
     fi
 
@@ -533,39 +559,51 @@ install_claude_md() {
     # Build technology list
     local tech_list="- Common (agents, commands, skills)"
 
-    # Build agents list
+    # Build agents list (from base + lang overlay, lang takes precedence)
     local agents_list=""
-    local src_agents="$I18N_DIR/$lang/Common/agents"
-    if [[ -d "$src_agents" ]]; then
-        while IFS= read -r agent_file; do
-            local agent_name
-            agent_name=$(grep -m1 "^name:" "$agent_file" 2>/dev/null | sed 's/^name:[[:space:]]*//' | tr -d '"' || true)
-            local agent_desc
-            agent_desc=$(grep -m1 "^description:" "$agent_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60 || true)
-            if [[ -n "$agent_name" ]]; then
-                agents_list="${agents_list}- \`@${agent_name}\` - ${agent_desc}\n"
-            fi
-        done < <(find "$src_agents" -name "*.md" -type f | sort)
-    fi
+    local -A agents_seen=()
+    local agents_dirs=("$I18N_DIR/base/Common/agents" "$I18N_DIR/$lang/Common/agents")
+    for src_agents in "${agents_dirs[@]}"; do
+        if [[ -d "$src_agents" ]]; then
+            while IFS= read -r agent_file; do
+                local agent_name
+                agent_name=$(grep -m1 "^name:" "$agent_file" 2>/dev/null | sed 's/^name:[[:space:]]*//' | tr -d '"' || true)
+                local agent_desc
+                agent_desc=$(grep -m1 "^description:" "$agent_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60 || true)
+                if [[ -n "$agent_name" ]]; then
+                    agents_seen["$agent_name"]="- \`@${agent_name}\` - ${agent_desc}\n"
+                fi
+            done < <(find "$src_agents" -name "*.md" -type f | sort)
+        fi
+    done
+    for key in $(printf '%s\n' "${!agents_seen[@]}" | sort); do
+        agents_list="${agents_list}${agents_seen[$key]}"
+    done
 
-    # Build commands list
+    # Build commands list (from base + lang overlay, lang takes precedence)
     local commands_list=""
-    local src_commands="$I18N_DIR/$lang/Common/commands"
-    if [[ -d "$src_commands" ]]; then
-        while IFS= read -r cmd_file; do
-            local cmd_name
-            cmd_name=$(basename "$cmd_file" .md)
-            # Exclude add-technology (claude-craft internal command)
-            if [[ "$cmd_name" == "add-technology" ]]; then
-                continue
-            fi
-            local cmd_desc
-            cmd_desc=$(grep -m1 "^description:" "$cmd_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60 || true)
-            if [[ -n "$cmd_desc" ]]; then
-                commands_list="${commands_list}- \`/common:${cmd_name}\` - ${cmd_desc}\n"
-            fi
-        done < <(find "$src_commands" -name "*.md" -type f | sort)
-    fi
+    local -A cmds_seen=()
+    local cmd_dirs=("$I18N_DIR/base/Common/commands" "$I18N_DIR/$lang/Common/commands")
+    for src_commands in "${cmd_dirs[@]}"; do
+        if [[ -d "$src_commands" ]]; then
+            while IFS= read -r cmd_file; do
+                local cmd_name
+                cmd_name=$(basename "$cmd_file" .md)
+                # Exclude add-technology (claude-craft internal command)
+                if [[ "$cmd_name" == "add-technology" ]]; then
+                    continue
+                fi
+                local cmd_desc
+                cmd_desc=$(grep -m1 "^description:" "$cmd_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60 || true)
+                if [[ -n "$cmd_desc" ]]; then
+                    cmds_seen["$cmd_name"]="- \`/common:${cmd_name}\` - ${cmd_desc}\n"
+                fi
+            done < <(find "$src_commands" -name "*.md" -type f | sort)
+        fi
+    done
+    for key in $(printf '%s\n' "${!cmds_seen[@]}" | sort); do
+        commands_list="${commands_list}${cmds_seen[$key]}"
+    done
 
     # Create destination directory
     if $dry_run; then

@@ -59,10 +59,11 @@ copy_base_references() {
     local lang="$3"
     local dry_run="$4"
 
-    local common_rules_dir="${i18n_dir}/${lang}/Common/rules"
+    local common_rules_lang="${i18n_dir}/${lang}/Common/rules"
+    local common_rules_base="${i18n_dir}/base/Common/rules"
 
-    if [ ! -d "$common_rules_dir" ]; then
-        log_warning "Common rules directory not found: $common_rules_dir"
+    if [ ! -d "$common_rules_lang" ] && [ ! -d "$common_rules_base" ]; then
+        log_warning "Common rules directory not found in lang or base"
         return 0
     fi
 
@@ -79,10 +80,17 @@ copy_base_references() {
     for mapping in "${base_mappings[@]}"; do
         local old_name="${mapping%%:*}"
         local new_name="${mapping##*:}"
-        local src_file="${common_rules_dir}/${old_name}"
         local dest_file="${target_dir}/.claude/references/base/${new_name}"
 
-        if [ -f "$src_file" ]; then
+        # Resolve: lang takes precedence over base
+        local src_file=""
+        if [ -f "${common_rules_lang}/${old_name}" ]; then
+            src_file="${common_rules_lang}/${old_name}"
+        elif [ -f "${common_rules_base}/${old_name}" ]; then
+            src_file="${common_rules_base}/${old_name}"
+        fi
+
+        if [ -n "$src_file" ]; then
             if [ "$dry_run" = "true" ]; then
                 log_dry_run "Copy: references/base/${new_name}"
             else
@@ -106,9 +114,14 @@ copy_tech_references() {
     local mappings=("$@")
 
     local rules_dir="${src_dir}/rules"
+    # Base fallback rules dir (I18N_DIR and TECH_NAME set by caller)
+    local base_rules_dir=""
+    if [[ -n "${I18N_DIR:-}" ]] && [[ -n "${TECH_NAME:-}" ]]; then
+        base_rules_dir="${I18N_DIR}/base/${TECH_NAME}/rules"
+    fi
     local dest_dir="${target_dir}/.claude/references/${tech_namespace}"
 
-    if [ ! -d "$rules_dir" ]; then
+    if [ ! -d "$rules_dir" ] && [ ! -d "${base_rules_dir:-}" ]; then
         log_warning "Rules directory not found: $rules_dir"
         return 0
     fi
@@ -117,10 +130,17 @@ copy_tech_references() {
     for mapping in "${mappings[@]}"; do
         local old_name="${mapping%%:*}"
         local new_name="${mapping##*:}"
-        local src_file="${rules_dir}/${old_name}"
         local dest_file="${dest_dir}/${new_name}"
 
-        if [ -f "$src_file" ]; then
+        # Resolve: lang dir takes precedence over base
+        local src_file=""
+        if [ -f "${rules_dir}/${old_name}" ]; then
+            src_file="${rules_dir}/${old_name}"
+        elif [ -n "${base_rules_dir:-}" ] && [ -f "${base_rules_dir}/${old_name}" ]; then
+            src_file="${base_rules_dir}/${old_name}"
+        fi
+
+        if [ -n "$src_file" ]; then
             if [ "$dry_run" = "true" ]; then
                 log_dry_run "Copy: references/${tech_namespace}/${new_name}"
             else

@@ -86,11 +86,71 @@ log_dry_run() { echo -e "${YELLOW}[DRY-RUN]${NC} $1"; }
 # ============================================================================
 get_source_dir() {
     local i18n_src="$I18N_DIR/$lang/$TECH_NAME"
+    local base_src="$I18N_DIR/base/$TECH_NAME"
     if [[ -d "$i18n_src" ]]; then
         echo "$i18n_src"
+    elif [[ -d "$base_src" ]]; then
+        echo "$base_src"
     else
         echo "$SCRIPT_DIR"
     fi
+}
+
+# Copy files from i18n with base fallback (base first, then lang overlay)
+# Usage: copy_i18n_files "Common/skills" "$dest_dir" "*.md"
+copy_i18n_files() {
+    local subpath="$1"
+    local dest="$2"
+    local pattern="${3:-*}"
+    local base_dir="$I18N_DIR/base/$subpath"
+    local lang_dir="$I18N_DIR/$lang/$subpath"
+
+    if [[ -d "$base_dir" ]]; then
+        find "$base_dir" -maxdepth 1 -name "$pattern" -type f -exec cp {} "$dest/" \; 2>/dev/null || true
+    fi
+    # Lang overlay: overrides base files if both exist
+    if [[ -d "$lang_dir" ]]; then
+        find "$lang_dir" -maxdepth 1 -name "$pattern" -type f -exec cp {} "$dest/" \; 2>/dev/null || true
+    fi
+}
+
+# Copy directory recursively from i18n with base fallback
+# Usage: copy_i18n_dir "Common/skills" "$dest_dir"
+copy_i18n_dir() {
+    local subpath="$1"
+    local dest="$2"
+    local base_dir="$I18N_DIR/base/$subpath"
+    local lang_dir="$I18N_DIR/$lang/$subpath"
+
+    if [[ -d "$base_dir" ]]; then
+        cp -r "$base_dir/"* "$dest/" 2>/dev/null || true
+    fi
+    if [[ -d "$lang_dir" ]]; then
+        cp -r "$lang_dir/"* "$dest/" 2>/dev/null || true
+    fi
+}
+
+# Resolve i18n file path with base fallback
+# Usage: resolve_i18n_file "Common/templates/CLAUDE.md.template"
+resolve_i18n_file() {
+    local subpath="$1"
+    local lang_file="$I18N_DIR/$lang/$subpath"
+    local base_file="$I18N_DIR/base/$subpath"
+
+    if [[ -f "$lang_file" ]]; then
+        echo "$lang_file"
+    elif [[ -f "$base_file" ]]; then
+        echo "$base_file"
+    else
+        echo ""
+    fi
+}
+
+# Check if i18n directory exists in either lang or base
+# Usage: i18n_dir_exists "Common/skills"
+i18n_dir_exists() {
+    local subpath="$1"
+    [[ -d "$I18N_DIR/$lang/$subpath" ]] || [[ -d "$I18N_DIR/base/$subpath" ]]
 }
 
 verify_source_files() {
@@ -99,12 +159,16 @@ verify_source_files() {
     src_dir=$(get_source_dir)
 
     for rule in "${TECH_RULES[@]}"; do
-        if [ ! -f "${src_dir}/rules/${rule}" ]; then
+        local rule_file="${src_dir}/rules/${rule}"
+        local base_rule_file="$I18N_DIR/base/$TECH_NAME/rules/${rule}"
+        if [ ! -f "$rule_file" ] && [ ! -f "$base_rule_file" ]; then
             log_error "Missing source file: rules/${rule}"
             missing=1
         fi
     done
-    if [ ! -f "${src_dir}/${TECH_VERIFY_FILE}" ]; then
+    local verify_file="${src_dir}/${TECH_VERIFY_FILE}"
+    local base_verify_file="$I18N_DIR/base/$TECH_NAME/${TECH_VERIFY_FILE}"
+    if [ ! -f "$verify_file" ] && [ ! -f "$base_verify_file" ]; then
         log_error "Missing source file: ${TECH_VERIFY_FILE}"
         missing=1
     fi
@@ -147,62 +211,87 @@ create_backup() {
 # COPY FUNCTIONS
 # ============================================================================
 
-# Copy generic skills from Common/
+# Copy generic skills from Common/ (base + lang overlay)
 copy_generic_skills() {
     local target_dir="$1"
     local dry_run="$2"
-    local common_skills_dir="$I18N_DIR/$lang/Common/skills"
+    local base_skills_dir="$I18N_DIR/base/Common/skills"
+    local lang_skills_dir="$I18N_DIR/$lang/Common/skills"
 
-    if [[ ! -d "$common_skills_dir" ]]; then
+    if [[ ! -d "$base_skills_dir" ]] && [[ ! -d "$lang_skills_dir" ]]; then
         return 0
     fi
 
+    # Collect unique skill directory names from both base and lang
+    local -A skill_names=()
+    if [[ -d "$base_skills_dir" ]]; then
+        while IFS= read -r -d '' skill_dir; do
+            skill_names["$(basename "$skill_dir")"]=1
+        done < <(find "$base_skills_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+    fi
+    if [[ -d "$lang_skills_dir" ]]; then
+        while IFS= read -r -d '' skill_dir; do
+            skill_names["$(basename "$skill_dir")"]=1
+        done < <(find "$lang_skills_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+    fi
+
     local count=0
-    while IFS= read -r -d '' skill_dir; do
-        local skill_name
-        skill_name=$(basename "$skill_dir")
+    for skill_name in "${!skill_names[@]}"; do
         local dest_dir="${target_dir}/.claude/skills/${skill_name}"
 
         if [ "$dry_run" = "true" ]; then
             log_dry_run "Copy skill: skills/${skill_name}/"
         else
             mkdir -p "$dest_dir"
-            cp "$skill_dir"/*.md "$dest_dir/" 2>/dev/null || true
+            # Base first, then lang overlay
+            [[ -d "$base_skills_dir/$skill_name" ]] && cp "$base_skills_dir/$skill_name/"*.md "$dest_dir/" 2>/dev/null || true
+            [[ -d "$lang_skills_dir/$skill_name" ]] && cp "$lang_skills_dir/$skill_name/"*.md "$dest_dir/" 2>/dev/null || true
         fi
         ((count++)) || true
-    done < <(find "$common_skills_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+    done
 
     if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
         log_success "$count generic skills copied from Common/"
     fi
 }
 
-# Copy tech-specific skills
+# Copy tech-specific skills (base + lang overlay)
 copy_tech_skills() {
     local target_dir="$1"
     local dry_run="$2"
-    local src_dir
-    src_dir=$(get_source_dir)
-    local tech_skills_dir="${src_dir}/skills"
+    local base_skills_dir="$I18N_DIR/base/$TECH_NAME/skills"
+    local lang_skills_dir="$I18N_DIR/$lang/$TECH_NAME/skills"
 
-    if [[ ! -d "$tech_skills_dir" ]]; then
+    if [[ ! -d "$base_skills_dir" ]] && [[ ! -d "$lang_skills_dir" ]]; then
         return 0
     fi
 
+    # Collect unique skill directory names from both base and lang
+    local -A skill_names=()
+    if [[ -d "$base_skills_dir" ]]; then
+        while IFS= read -r -d '' skill_dir; do
+            skill_names["$(basename "$skill_dir")"]=1
+        done < <(find "$base_skills_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+    fi
+    if [[ -d "$lang_skills_dir" ]]; then
+        while IFS= read -r -d '' skill_dir; do
+            skill_names["$(basename "$skill_dir")"]=1
+        done < <(find "$lang_skills_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+    fi
+
     local count=0
-    while IFS= read -r -d '' skill_dir; do
-        local skill_name
-        skill_name=$(basename "$skill_dir")
+    for skill_name in "${!skill_names[@]}"; do
         local dest_dir="${target_dir}/.claude/skills/${skill_name}"
 
         if [ "$dry_run" = "true" ]; then
             log_dry_run "Copy skill: skills/${skill_name}/"
         else
             mkdir -p "$dest_dir"
-            cp "$skill_dir"/*.md "$dest_dir/" 2>/dev/null || true
+            [[ -d "$base_skills_dir/$skill_name" ]] && cp "$base_skills_dir/$skill_name/"*.md "$dest_dir/" 2>/dev/null || true
+            [[ -d "$lang_skills_dir/$skill_name" ]] && cp "$lang_skills_dir/$skill_name/"*.md "$dest_dir/" 2>/dev/null || true
         fi
         ((count++)) || true
-    done < <(find "$tech_skills_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+    done
 
     if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
         log_success "$count ${TECH_DISPLAY_NAME}-specific skills copied"
@@ -212,18 +301,20 @@ copy_tech_skills() {
 copy_templates() {
     local target_dir="$1"
     local dry_run="$2"
-    local src_dir
-    src_dir=$(get_source_dir)
-    local tmpl_dir="${src_dir}/templates"
-    if [ ! -d "$tmpl_dir" ]; then
-        tmpl_dir="${SCRIPT_DIR}/templates"
-    fi
+    local dest="${target_dir}/.claude/templates"
 
-    if [ -d "$tmpl_dir" ]; then
+    if i18n_dir_exists "$TECH_NAME/templates"; then
         if [ "$dry_run" = "true" ]; then
             log_dry_run "Copy: templates/*.md"
         else
-            cp "${tmpl_dir}/"*.md "${target_dir}/.claude/templates/" 2>/dev/null || true
+            copy_i18n_files "$TECH_NAME/templates" "$dest" "*.md"
+            log_success "Templates copied"
+        fi
+    elif [ -d "${SCRIPT_DIR}/templates" ]; then
+        if [ "$dry_run" = "true" ]; then
+            log_dry_run "Copy: templates/*.md"
+        else
+            cp "${SCRIPT_DIR}/templates/"*.md "$dest/" 2>/dev/null || true
             log_success "Templates copied"
         fi
     fi
@@ -232,18 +323,20 @@ copy_templates() {
 copy_checklists() {
     local target_dir="$1"
     local dry_run="$2"
-    local src_dir
-    src_dir=$(get_source_dir)
-    local chk_dir="${src_dir}/checklists"
-    if [ ! -d "$chk_dir" ]; then
-        chk_dir="${SCRIPT_DIR}/checklists"
-    fi
+    local dest="${target_dir}/.claude/checklists"
 
-    if [ -d "$chk_dir" ]; then
+    if i18n_dir_exists "$TECH_NAME/checklists"; then
         if [ "$dry_run" = "true" ]; then
             log_dry_run "Copy: checklists/*.md"
         else
-            cp "${chk_dir}/"*.md "${target_dir}/.claude/checklists/" 2>/dev/null || true
+            copy_i18n_files "$TECH_NAME/checklists" "$dest" "*.md"
+            log_success "Checklists copied"
+        fi
+    elif [ -d "${SCRIPT_DIR}/checklists" ]; then
+        if [ "$dry_run" = "true" ]; then
+            log_dry_run "Copy: checklists/*.md"
+        else
+            cp "${SCRIPT_DIR}/checklists/"*.md "$dest/" 2>/dev/null || true
             log_success "Checklists copied"
         fi
     fi
@@ -252,20 +345,24 @@ copy_checklists() {
 copy_commands() {
     local target_dir="$1"
     local dry_run="$2"
-    local src_dir
-    src_dir=$(get_source_dir)
-    local cmd_dir="${src_dir}/commands"
-    if [ ! -d "$cmd_dir" ]; then
-        cmd_dir="${SCRIPT_DIR}/claude-commands/${TECH_NAMESPACE}"
-    fi
+    local dest="${target_dir}/.claude/commands/${TECH_NAMESPACE}"
 
-    if [ -d "$cmd_dir" ]; then
+    if i18n_dir_exists "$TECH_NAME/commands"; then
         if [ "$dry_run" = "true" ]; then
             log_dry_run "Copy: commands/${TECH_NAMESPACE}/*.md"
         else
-            cp "${cmd_dir}/"*.md "${target_dir}/.claude/commands/${TECH_NAMESPACE}/" 2>/dev/null || true
+            copy_i18n_files "$TECH_NAME/commands" "$dest" "*.md"
             local count
-            count=$(ls -1 "${cmd_dir}/"*.md 2>/dev/null | wc -l)
+            count=$(find "$dest" -name "*.md" -type f 2>/dev/null | wc -l)
+            log_success "${count} commands copied (/${TECH_NAMESPACE}:*)"
+        fi
+    elif [ -d "${SCRIPT_DIR}/claude-commands/${TECH_NAMESPACE}" ]; then
+        if [ "$dry_run" = "true" ]; then
+            log_dry_run "Copy: commands/${TECH_NAMESPACE}/*.md"
+        else
+            cp "${SCRIPT_DIR}/claude-commands/${TECH_NAMESPACE}/"*.md "$dest/" 2>/dev/null || true
+            local count
+            count=$(ls -1 "${SCRIPT_DIR}/claude-commands/${TECH_NAMESPACE}/"*.md 2>/dev/null | wc -l)
             log_success "${count} commands copied (/${TECH_NAMESPACE}:*)"
         fi
     fi
@@ -274,18 +371,20 @@ copy_commands() {
 copy_agents() {
     local target_dir="$1"
     local dry_run="$2"
-    local src_dir
-    src_dir=$(get_source_dir)
-    local agt_dir="${src_dir}/agents"
-    if [ ! -d "$agt_dir" ]; then
-        agt_dir="${SCRIPT_DIR}/claude-agents"
-    fi
+    local dest="${target_dir}/.claude/agents"
 
-    if [ -d "$agt_dir" ]; then
+    if i18n_dir_exists "$TECH_NAME/agents"; then
         if [ "$dry_run" = "true" ]; then
             log_dry_run "Copy: agents/*.md"
         else
-            cp "${agt_dir}/"*.md "${target_dir}/.claude/agents/" 2>/dev/null || true
+            copy_i18n_files "$TECH_NAME/agents" "$dest" "*.md"
+            log_success "Agents copied"
+        fi
+    elif [ -d "${SCRIPT_DIR}/claude-agents" ]; then
+        if [ "$dry_run" = "true" ]; then
+            log_dry_run "Copy: agents/*.md"
+        else
+            cp "${SCRIPT_DIR}/claude-agents/"*.md "$dest/" 2>/dev/null || true
             log_success "Agents copied"
         fi
     fi
@@ -350,9 +449,13 @@ install_tcl() {
         fi
     fi
 
-    # 4. Copy project context template
+    # 4. Copy project context template (base + lang fallback)
     if [ "$dry_run" = "false" ]; then
-        local ctx_template="${src_dir}/rules/00-project-context.md.template"
+        local ctx_template
+        ctx_template=$(resolve_i18n_file "$TECH_NAME/rules/00-project-context.md.template")
+        if [[ -z "$ctx_template" ]]; then
+            ctx_template="${src_dir}/rules/00-project-context.md.template"
+        fi
         if [ -f "$ctx_template" ]; then
             local sed_args=(-e "s/{{PROJECT_NAME}}/${project_name}/g" -e "s/{{TECH_STACK}}/${tech_stack}/g")
             if [[ ${#TECH_EXTRA_SED_ARGS[@]} -gt 0 ]]; then
