@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.13.0] - 2026-02-11
+
+### Added
+- **TEST-14**: 15 unit tests for Phase 14 extracted CLI modules
+  - banner.js (3), help.js (3), installer.js (4), ralph.js (5)
+- **CICD-18**: Coverage reporting with `@vitest/coverage-v8`
+  - New `test:coverage` script, v8 provider on cli/ modules
+
+### Changed
+- **CICD-17**: CI now enforces Prettier formatting (`format:check`)
+- **CQ-15**: Fixed Prettier formatting violations in 7 CLI files
+- **DOC-8**: Updated README "What's New" from v5.9 to v5.13
+- **DOC-7**: Fixed bundles/README.md version (v3.0 → v5.13.0), removed ghost `bundle` CLI commands
+
+---
+
 ## [5.12.0] - 2026-02-11
 
 ### Changed

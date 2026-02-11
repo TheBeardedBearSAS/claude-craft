@@ -79,7 +79,11 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
 
     // Step 2: Language
     console.log(`\n${c.cyan}[2/5]${c.reset} ${c.bold}Language${c.reset}`);
-    console.log(`  ${Object.entries(LANGUAGES).map(([k, v], i) => `${i + 1}) ${k} - ${v}`).join('\n  ')}`);
+    console.log(
+      `  ${Object.entries(LANGUAGES)
+        .map(([k, v], i) => `${i + 1}) ${k} - ${v}`)
+        .join('\n  ')}`
+    );
     const langInput = await cli.prompt(`  Select (1-5, default: 1): `);
     const langKeys = Object.keys(LANGUAGES);
     const langIndex = parseInt(langInput) - 1;
@@ -88,17 +92,21 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
 
     // Step 3: Technologies
     console.log(`\n${c.cyan}[3/5]${c.reset} ${c.bold}Technologies${c.reset}`);
-    console.log(`  ${Object.entries(TECHNOLOGIES).map(([k, v], i) => `${i + 1}) ${k.padEnd(12)} - ${v.desc}`).join('\n  ')}`);
+    console.log(
+      `  ${Object.entries(TECHNOLOGIES)
+        .map(([k, v], i) => `${i + 1}) ${k.padEnd(12)} - ${v.desc}`)
+        .join('\n  ')}`
+    );
     console.log(`  ${c.dim}Enter numbers separated by spaces (e.g., "1 2" for Symfony + Flutter)${c.reset}`);
 
     // Pre-select detected technologies
     const techKeys = Object.keys(TECHNOLOGIES);
-    const preSelected = detected.suggestedTechs.map(t => techKeys.indexOf(t) + 1).filter(i => i > 0);
+    const preSelected = detected.suggestedTechs.map((t) => techKeys.indexOf(t) + 1).filter((i) => i > 0);
     const defaultTechs = preSelected.length > 0 ? preSelected.join(' ') : '1';
 
     const techInput = await cli.prompt(`  Select (default: ${defaultTechs}): `);
-    const techIndices = (techInput || defaultTechs).split(/\s+/).map(n => parseInt(n) - 1);
-    cli.config.technologies = techIndices.filter(i => i >= 0 && i < techKeys.length).map(i => techKeys[i]);
+    const techIndices = (techInput || defaultTechs).split(/\s+/).map((n) => parseInt(n) - 1);
+    cli.config.technologies = techIndices.filter((i) => i >= 0 && i < techKeys.length).map((i) => techKeys[i]);
     console.log(`  ${c.green}Selected: ${cli.config.technologies.join(', ') || 'common only'}${c.reset}`);
 
     // Step 4: Additional options
@@ -134,7 +142,6 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
 
     // Run installation
     await runInstallation(cli, { CLI_ROOT });
-
   } catch (error) {
     console.error(`${c.red}Error: ${error.message}${c.reset}`);
     cli.closeReadline();
@@ -158,12 +165,13 @@ export async function runInstallation(cli, { CLI_ROOT }) {
   const langArg = `--lang=${cli.config.language}`;
   const hasDocker = cli.config.technologies.includes('docker');
   const includeInfra = cli.config.includeInfra || hasDocker;
-  const techsWithoutDocker = cli.config.technologies.filter(t => t !== 'docker');
+  const techsWithoutDocker = cli.config.technologies.filter((t) => t !== 'docker');
   // 1 base step (common rules) + installable tech scripts + optional infra + optional project
-  const totalSteps = 1
-    + techsWithoutDocker.filter(t => fs.existsSync(path.join(scriptsDir, `install-${t}-rules.sh`))).length
-    + (includeInfra ? 1 : 0)
-    + (cli.config.includeProject ? 1 : 0);
+  const totalSteps =
+    1 +
+    techsWithoutDocker.filter((t) => fs.existsSync(path.join(scriptsDir, `install-${t}-rules.sh`))).length +
+    (includeInfra ? 1 : 0) +
+    (cli.config.includeProject ? 1 : 0);
 
   try {
     // Always install common rules
@@ -203,7 +211,6 @@ export async function runInstallation(cli, { CLI_ROOT }) {
     }
 
     printSuccess(cli.config.targetPath);
-
   } catch (error) {
     console.error(`${c.red}Installation failed: ${error.message}${c.reset}`);
     process.exit(1);

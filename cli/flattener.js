@@ -173,12 +173,39 @@ class CodebaseFlattener {
    */
   isBinaryFile(filePath) {
     const binaryExtensions = [
-      '.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.webp',
-      '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
-      '.zip', '.tar', '.gz', '.rar', '.7z',
-      '.mp3', '.mp4', '.wav', '.avi', '.mov',
-      '.exe', '.dll', '.so', '.dylib',
-      '.ttf', '.otf', '.woff', '.woff2', '.eot',
+      '.png',
+      '.jpg',
+      '.jpeg',
+      '.gif',
+      '.ico',
+      '.svg',
+      '.webp',
+      '.pdf',
+      '.doc',
+      '.docx',
+      '.xls',
+      '.xlsx',
+      '.ppt',
+      '.pptx',
+      '.zip',
+      '.tar',
+      '.gz',
+      '.rar',
+      '.7z',
+      '.mp3',
+      '.mp4',
+      '.wav',
+      '.avi',
+      '.mov',
+      '.exe',
+      '.dll',
+      '.so',
+      '.dylib',
+      '.ttf',
+      '.otf',
+      '.woff',
+      '.woff2',
+      '.eot',
     ];
 
     const ext = path.extname(filePath).toLowerCase();
@@ -221,7 +248,6 @@ class CodebaseFlattener {
 
             this.stats.includedFiles++;
             this.stats.totalSize += stats.size;
-
           } catch (_e) {
             // Skip unreadable files
           }
@@ -408,7 +434,9 @@ ${fileContent}
         const shardFile = `${baseName}_shard${i + 1}${ext}`;
         const content = this.generateShardContent(shards[i], i + 1, shards.length);
         fs.writeFileSync(shardFile, content);
-        console.log(`  ${c.green}Created:${c.reset} ${shardFile} (${shards[i].files.length} files, ~${shards[i].tokens.toLocaleString()} tokens)`);
+        console.log(
+          `  ${c.green}Created:${c.reset} ${shardFile} (${shards[i].files.length} files, ~${shards[i].tokens.toLocaleString()} tokens)`
+        );
       }
 
       // Generate index file
@@ -416,7 +444,6 @@ ${fileContent}
       const indexFile = `${baseName}_index${ext}`;
       fs.writeFileSync(indexFile, indexContent);
       console.log(`  ${c.green}Created:${c.reset} ${indexFile} (index)`);
-
     } else {
       // Generate single output
       const content = this.generateOutput();
@@ -449,7 +476,7 @@ Root: ${this.rootPath}
 
 ## Files in This Shard
 
-${shard.files.map(f => `- ${f.path}`).join('\n')}
+${shard.files.map((f) => `- ${f.path}`).join('\n')}
 
 ## File Contents
 
@@ -521,10 +548,14 @@ ${fileTree}\`\`\`
 
 ### Shard Contents
 
-${shards.map((shard, i) => `
+${shards
+  .map(
+    (shard, i) => `
 #### Shard ${i + 1}
-${shard.files.map(f => `- ${f.path}`).join('\n')}
-`).join('\n')}
+${shard.files.map((f) => `- ${f.path}`).join('\n')}
+`
+  )
+  .join('\n')}
 
 ## Usage Instructions
 
@@ -565,11 +596,4 @@ async function flatten(rootPath, outputFile, options = {}) {
   await flattener.flatten(outputFile);
 }
 
-export {
-  flatten,
-  CodebaseFlattener,
-  DEFAULT_IGNORES,
-  PRIORITY_EXTENSIONS,
-  TOKENS_PER_CHAR,
-  MAX_TOKENS_PER_SHARD,
-};
+export { flatten, CodebaseFlattener, DEFAULT_IGNORES, PRIORITY_EXTENSIONS, TOKENS_PER_CHAR, MAX_TOKENS_PER_SHARD };

@@ -94,8 +94,10 @@ function detectProject(targetPath, options = {}) {
 
   // Detect Python (requirements.txt / pyproject.toml)
   try {
-    if (fs.existsSync(path.join(targetPath, 'requirements.txt')) ||
-        fs.existsSync(path.join(targetPath, 'pyproject.toml'))) {
+    if (
+      fs.existsSync(path.join(targetPath, 'requirements.txt')) ||
+      fs.existsSync(path.join(targetPath, 'pyproject.toml'))
+    ) {
       detected.hasRequirements = true;
       detected.suggestedTechs.push('python');
     }
@@ -105,8 +107,10 @@ function detectProject(targetPath, options = {}) {
 
   // Detect Docker (Dockerfile / docker-compose.yml)
   try {
-    if (fs.existsSync(path.join(targetPath, 'Dockerfile')) ||
-        fs.existsSync(path.join(targetPath, 'docker-compose.yml'))) {
+    if (
+      fs.existsSync(path.join(targetPath, 'Dockerfile')) ||
+      fs.existsSync(path.join(targetPath, 'docker-compose.yml'))
+    ) {
       detected.hasDockerfile = true;
       detected.suggestedTechs.push('docker');
     }

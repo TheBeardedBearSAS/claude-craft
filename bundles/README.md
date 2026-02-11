@@ -61,27 +61,6 @@ All bundles include:
 | Technology Guidelines | - | ✅ | - |
 | Detailed Checklists | ✅ | ✅ | ✅ |
 
-## Customization
-
-To create technology-specific bundles:
-
-```bash
-# Generate bundle for specific tech
-npx @the-bearded-bear/claude-craft bundle --tech=symfony --platform=chatgpt
-
-# Generate bundle in specific language
-npx @the-bearded-bear/claude-craft bundle --lang=fr --platform=claude
-```
-
-## Updating Bundles
-
-When Claude-Craft is updated, regenerate bundles:
-
-```bash
-cd claude-craft
-npx @the-bearded-bear/claude-craft bundle --all
-```
-
 ## Token Considerations
 
 | Platform | Token Limit | Bundle Tokens |
@@ -95,4 +74,4 @@ All bundles are optimized to stay well within platform limits while providing co
 
 ---
 
-Claude-Craft v3.0 | https://github.com/TheBeardedBearSAS/claude-craft
+Claude-Craft v5.13.0 | https://github.com/TheBeardedBearSAS/claude-craft

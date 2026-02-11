@@ -62,7 +62,7 @@ export async function runRalph(cli, args, options, { CLI_ROOT, VERSION }) {
   }
 
   // Add remaining positional arguments (the prompt)
-  const promptArgs = args.filter(arg => !arg.startsWith('--'));
+  const promptArgs = args.filter((arg) => !arg.startsWith('--'));
   if (promptArgs.length > 0) {
     ralphArgs.push(promptArgs.join(' '));
   }

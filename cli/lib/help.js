@@ -46,9 +46,13 @@ ${c.bold}Examples:${c.reset}
   npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
 
 ${c.bold}Technologies:${c.reset}
-${Object.entries(TECHNOLOGIES).map(([key, val]) => `  ${c.cyan}${key.padEnd(12)}${c.reset} ${val.desc}`).join('\n')}
+${Object.entries(TECHNOLOGIES)
+  .map(([key, val]) => `  ${c.cyan}${key.padEnd(12)}${c.reset} ${val.desc}`)
+  .join('\n')}
 
 ${c.bold}Languages:${c.reset}
-${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - ${val}`).join('\n')}
+${Object.entries(LANGUAGES)
+  .map(([key, val]) => `  ${c.cyan}${key}${c.reset} - ${val}`)
+  .join('\n')}
 `);
 }

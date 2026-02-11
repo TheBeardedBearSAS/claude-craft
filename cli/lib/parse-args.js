@@ -26,18 +26,14 @@ function validateOption(key, value) {
     case 'max-iterations': {
       const num = Number(value);
       if (!Number.isInteger(num) || num <= 0) {
-        throw new Error(
-          `Invalid value for --max-iterations: must be a positive integer, got "${value}"`,
-        );
+        throw new Error(`Invalid value for --max-iterations: must be a positive integer, got "${value}"`);
       }
       break;
     }
     case 'output': {
       if (typeof value === 'string') {
         if (value.split('/').includes('..') || value.split('\\').includes('..')) {
-          throw new Error(
-            `Invalid value for --output: path traversal ("..") not allowed`,
-          );
+          throw new Error(`Invalid value for --output: path traversal ("..") not allowed`);
         }
       }
       break;

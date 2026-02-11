@@ -5,5 +5,11 @@ export default defineConfig({
     root: '.',
     testTimeout: 120_000,
     hookTimeout: 120_000,
+    coverage: {
+      provider: 'v8',
+      include: ['cli/**/*.js'],
+      exclude: ['cli/flattener.js'],
+      reporter: ['text', 'json-summary'],
+    },
   },
 });

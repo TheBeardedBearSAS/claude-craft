@@ -135,14 +135,18 @@ class ClaudeCraftCLI {
     // Apply and validate options
     if (options.lang) {
       if (!LANGUAGES[options.lang]) {
-        console.error(`${c.red}Error: Unknown language '${options.lang}'. Available: ${Object.keys(LANGUAGES).join(', ')}${c.reset}`);
+        console.error(
+          `${c.red}Error: Unknown language '${options.lang}'. Available: ${Object.keys(LANGUAGES).join(', ')}${c.reset}`
+        );
         process.exit(1);
       }
       this.config.language = options.lang;
     }
     if (options.tech) {
       if (!TECHNOLOGIES[options.tech]) {
-        console.error(`${c.red}Error: Unknown technology '${options.tech}'. Available: ${Object.keys(TECHNOLOGIES).join(', ')}${c.reset}`);
+        console.error(
+          `${c.red}Error: Unknown technology '${options.tech}'. Available: ${Object.keys(TECHNOLOGIES).join(', ')}${c.reset}`
+        );
         process.exit(1);
       }
       this.config.technologies = [options.tech];
@@ -215,7 +219,7 @@ class ClaudeCraftCLI {
 
 // Run CLI
 const cli = new ClaudeCraftCLI();
-cli.run().catch(error => {
+cli.run().catch((error) => {
   console.error(`${colors.red}Error: ${error.message}${colors.reset}`);
   process.exit(1);
 });
