@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.19.0] - 2026-02-11
+
+### Added
+- **DOC-13**: Automated i18n parity check script (`scripts/verify-i18n-parity.sh`) with `npm run lint:i18n` alias — compares file counts across all 5 languages in `Dev/i18n/` and `docs/guides/`
+
+### Fixed
+- **SEC-16**: Upgraded 5 Ralph scripts from `set -e` to `set -euo pipefail` (ralph.sh, pre-tool-context.sh, session-restore.sh, status-injector.sh, stop-dod-gate.sh) with uninitialized variable fixes
+
+### Changed
+- **DOC-5**: Closed as "by design" — i18n asymmetry is intentional per I18N-STATUS.md (Dev/i18n and docs/guides at full parity, docs/*.md English-only with opt-in community translations)
+
+---
+
 ## [5.18.0] - 2026-02-11
 
 ### Added

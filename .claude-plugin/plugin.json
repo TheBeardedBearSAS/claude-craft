@@ -3,7 +3,7 @@
   "name": "claude-craft",
   "displayName": "Claude Craft",
   "description": "AI-assisted development framework with BMAD v6 project management, 10 technology stacks, 40 agents, and 130+ commands",
-  "version": "5.18.0",
+  "version": "5.19.0",
   "author": {
     "name": "The Bearded Bear",
     "url": "https://github.com/TheBeardedBearSAS"

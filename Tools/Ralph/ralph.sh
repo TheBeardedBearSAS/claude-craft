@@ -4,7 +4,7 @@
 # Run Claude in a continuous loop until task completion
 # =============================================================================
 
-set -e
+set -euo pipefail
 
 # Version
 RALPH_VERSION="2.0.0"
@@ -61,6 +61,8 @@ SESSION_ISOLATED=false
 STORY_ID=""
 SPRINT_MODE=false
 OVERNIGHT_MODE=false
+PARALLEL_ENABLED=false
+PARALLEL_MAX_CONCURRENT=""
 
 # =============================================================================
 # i18n - Load messages
@@ -438,6 +440,7 @@ run_ralph() {
     local iteration=0
     local exit_reason=""
     local dod_passed=false
+    local response=""
     local start_time=$(date +%s)
 
     # Initialize v2.0 modules

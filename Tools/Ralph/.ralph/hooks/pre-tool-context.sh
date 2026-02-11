@@ -9,7 +9,7 @@
 #   2 - Block tool use
 # =============================================================================
 
-set -e
+set -euo pipefail
 
 # Read input from stdin (Claude hook format)
 INPUT=$(cat)
