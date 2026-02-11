@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'fs';
+import fs, { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import {
@@ -231,6 +231,119 @@ describe('generateShardedOutput', () => {
     flattener.files = [];
     const shards = flattener.generateShardedOutput();
     expect(shards).toHaveLength(0);
+  });
+});
+
+// --- generateOutput ---
+
+describe('generateOutput', () => {
+  it('returns markdown with statistics header', () => {
+    const flattener = new CodebaseFlattener('/fake');
+    flattener.files = [
+      { path: 'src/app.js', fullPath: '/dev/null', size: 100, priority: 1, tokens: 25 },
+    ];
+    flattener.stats = { totalFiles: 5, includedFiles: 1, totalSize: 100, estimatedTokens: 0, shards: 0 };
+
+    // Mock fs.readFileSync for file content
+    const origReadFileSync = fs.readFileSync;
+    fs.readFileSync = (p, enc) => {
+      if (p === '/dev/null' && enc === 'utf8') return 'console.log("hello");';
+      return origReadFileSync(p, enc);
+    };
+
+    try {
+      const output = flattener.generateOutput();
+      expect(output).toContain('# Codebase Context:');
+      expect(output).toContain('## Statistics');
+      expect(output).toContain('Files included: 1');
+      expect(output).toContain('## File Tree');
+      expect(output).toContain('## File Contents');
+      expect(output).toContain('### src/app.js');
+      expect(output).toContain('console.log("hello")');
+    } finally {
+      fs.readFileSync = origReadFileSync;
+    }
+  });
+
+  it('sets estimatedTokens after generation', () => {
+    const flattener = new CodebaseFlattener('/fake');
+    flattener.files = [];
+    flattener.stats = { totalFiles: 0, includedFiles: 0, totalSize: 0, estimatedTokens: 0, shards: 0 };
+    flattener.generateOutput();
+    expect(flattener.stats.estimatedTokens).toBeGreaterThan(0);
+  });
+});
+
+// --- generateShardContent ---
+
+describe('generateShardContent', () => {
+  it('includes shard number and file list', () => {
+    const flattener = new CodebaseFlattener('/fake');
+    const shard = {
+      files: [
+        { path: 'a.js', fullPath: '/dev/null', size: 50, priority: 1, tokens: 12 },
+        { path: 'b.js', fullPath: '/dev/null', size: 60, priority: 1, tokens: 15 },
+      ],
+      tokens: 27,
+    };
+
+    const origReadFileSync = fs.readFileSync;
+    fs.readFileSync = (p, enc) => {
+      if (enc === 'utf8') return '// content';
+      return origReadFileSync(p, enc);
+    };
+
+    try {
+      const content = flattener.generateShardContent(shard, 2, 5);
+      expect(content).toContain('Shard 2/5');
+      expect(content).toContain('Shard: 2 of 5');
+      expect(content).toContain('Files in this shard: 2');
+      expect(content).toContain('- a.js');
+      expect(content).toContain('- b.js');
+      expect(content).toContain('### a.js');
+      expect(content).toContain('### b.js');
+    } finally {
+      fs.readFileSync = origReadFileSync;
+    }
+  });
+
+  it('handles read errors gracefully', () => {
+    const flattener = new CodebaseFlattener('/fake');
+    const shard = {
+      files: [{ path: 'missing.js', fullPath: '/nonexistent/path/missing.js', size: 10, priority: 1, tokens: 3 }],
+      tokens: 3,
+    };
+
+    const content = flattener.generateShardContent(shard, 1, 1);
+    expect(content).toContain('Error reading file');
+  });
+});
+
+// --- generateIndexContent ---
+
+describe('generateIndexContent', () => {
+  it('includes shard map and usage instructions', () => {
+    const flattener = new CodebaseFlattener('/fake');
+    flattener.files = [
+      { path: 'a.js' },
+      { path: 'b.js' },
+    ];
+    flattener.stats = { totalFiles: 5, includedFiles: 2, totalSize: 200, estimatedTokens: 50, shards: 2 };
+
+    const shards = [
+      { files: [{ path: 'a.js' }], tokens: 25 },
+      { files: [{ path: 'b.js' }], tokens: 25 },
+    ];
+
+    const content = flattener.generateIndexContent(shards, 'output', '.md');
+    expect(content).toContain('Codebase Context Index');
+    expect(content).toContain('sharded into 2 parts');
+    expect(content).toContain('Shard 1');
+    expect(content).toContain('Shard 2');
+    expect(content).toContain('output_shard1.md');
+    expect(content).toContain('output_shard2.md');
+    expect(content).toContain('Usage Instructions');
+    expect(content).toContain('Complete File Tree');
   });
 });
 

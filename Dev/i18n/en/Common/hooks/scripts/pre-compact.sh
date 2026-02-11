@@ -43,7 +43,7 @@ fi
 # Cleanup old backups (keep last 10)
 for backup_dir in .bmad/backups .recette/backups; do
     if [[ -d "$backup_dir" ]]; then
-        ls -t "$backup_dir"/*.yaml 2>/dev/null | tail -n +11 | xargs rm -f 2>/dev/null || true
+        ls -t "$backup_dir"/*.yaml 2>/dev/null | tail -n +11 | xargs -r rm -f 2>/dev/null || true
     fi
 done
 

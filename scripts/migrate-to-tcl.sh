@@ -8,7 +8,7 @@
 # Usage: ./scripts/migrate-to-tcl.sh [project_directory]
 #
 # Author: The Bearded CTO
-# Version: 1.0.0
+# Script Version: 1.0.0 (TCL migration script version, independent of package version)
 
 set -e
 

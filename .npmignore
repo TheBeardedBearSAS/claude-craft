@@ -1,5 +1,8 @@
-# Runtime-generated hooks (not for npm package)
+# Runtime-generated hooks and state (not for npm package)
 Tools/Ralph/.ralph/
+Tools/Ralph/lib/session-init.sh
+.agents/
+.recette/
 
 # Test files
 tests/

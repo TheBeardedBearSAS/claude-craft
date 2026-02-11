@@ -4,6 +4,74 @@ Technical documentation of Claude Craft's internal architecture and extension po
 
 ---
 
+## System Overview (Mermaid)
+
+```mermaid
+graph TD
+    subgraph CLI["CLI Entry (cli/index.js)"]
+        INSTALL[install command]
+        FLATTEN[flatten command]
+        RALPH[ralph command]
+    end
+
+    subgraph LIB["CLI Lib Modules"]
+        PARSE[parse-args.js]
+        DETECT[detect-project.js]
+        COLORS[colors.js]
+        CONST[constants.js]
+        FLATTENER[flattener.js]
+    end
+
+    subgraph SCRIPTS["Install Scripts (Dev/scripts/)"]
+        TCL[tcl-common.sh]
+        TECHLIB[lib/install-tech-common.sh]
+        TECH_SCRIPTS["install-{tech}-rules.sh<br/>(10 thin wrappers)"]
+    end
+
+    subgraph I18N["i18n Layer (Dev/i18n/)"]
+        EN[en/]
+        FR[fr/]
+        ES[es/]
+        DE[de/]
+        PT[pt/]
+    end
+
+    subgraph TARGET["Target Project (.claude/)"]
+        CLAUDEMD[CLAUDE.md<br/>~200 tokens]
+        INDEXMD[INDEX.md<br/>~1300 tokens]
+        REFS[references/{tech}/]
+        AGENTS_DIR[agents/]
+        CMDS[commands/]
+        SKILLS[skills/]
+    end
+
+    subgraph BMAD[".bmad/ Framework"]
+        ROUTING[routing-engine.sh]
+        GATES[gates/]
+        HOOKS[hooks/]
+        BACKLOG[backlog/]
+    end
+
+    subgraph RALPH_SYS["Ralph Wiggum (Tools/Ralph/)"]
+        RALPH_MAIN[ralph.sh]
+        CIRCUIT[circuit-breaker.sh]
+        RECOVERY[recovery-engine.sh]
+        CONDUCTOR[sprint-conductor.sh]
+    end
+
+    CLI --> LIB
+    INSTALL --> SCRIPTS
+    FLATTEN --> FLATTENER
+    RALPH --> RALPH_SYS
+    TECH_SCRIPTS --> TECHLIB
+    TECH_SCRIPTS --> TCL
+    SCRIPTS --> I18N
+    SCRIPTS --> TARGET
+    RALPH_SYS --> BMAD
+```
+
+---
+
 ## High-Level Architecture
 
 ```

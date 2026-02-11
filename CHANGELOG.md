@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.10.1] - 2026-02-11
+
+### Fixed
+- **SEC-9**: Fixed unsafe `xargs` without `-r` flag in pre-compact.sh
+- **SEC-15**: Added shebang validation before `chmod +x` in hooks-generator.sh
+
+### Added
+- **TEST-12/13**: Additional unit tests for flattener output and CLI argument building
+- **DOC-5**: i18n status documentation (`docs/I18N-STATUS.md`)
+- **DOC-17a**: Architecture diagram (Mermaid) in `docs/ARCHITECTURE.md`
+- **SEC-14**: Documented MCP template placeholder requirements
+
+### Changed
+- **ARCH-4**: Trimmed Makefile — removed CLI-redundant targets, added loop-based install-all (~390 lines)
+- **SEC-17**: Updated `.npmignore` to exclude Ralph state directories from npm package
+- **CICD-16**: Clarified version semantics in migration script
+
+---
+
 ## [5.10.0] - 2026-02-11
 
 ### Changed

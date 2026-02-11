@@ -292,7 +292,7 @@ validate_hooks_setup() {
             errors=$((errors + 1))
         elif [[ ! -x "$script_path" ]]; then
             print_warning "Hook script not executable: $script_path"
-            if head -1 "$script_path" | grep -q "^#!"; then
+            if [[ -f "$script_path" ]] && head -1 "$script_path" | grep -q "^#!"; then
                 chmod +x "$script_path" 2>/dev/null && print_info "Made executable: $script_path"
             else
                 print_warning "Skipped chmod: no shebang in $script_path"

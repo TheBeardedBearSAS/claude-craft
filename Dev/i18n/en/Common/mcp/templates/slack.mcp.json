@@ -1,4 +1,5 @@
 {
+  "_comment": "Required env vars: SLACK_BOT_TOKEN (xoxb-...), SLACK_TEAM_ID (T...). Set these in your shell environment before launching Claude Code.",
   "$schema": "https://claude.ai/mcp-schema.json",
   "mcpServers": {
     "slack": {
