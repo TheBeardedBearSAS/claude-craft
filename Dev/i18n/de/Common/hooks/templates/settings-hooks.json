@@ -13,7 +13,7 @@
         ]
       },
       {
-        "matcher": "Bash(rm -rf:*)",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",

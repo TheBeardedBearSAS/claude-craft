@@ -120,29 +120,30 @@ create_escalation() {
         decision_needed) priority="medium" ;;
     esac
 
-    # Create escalation file
+    # Create escalation file (using yq to safely escape all values — SEC-6)
     local escalation_file="$ESCALATION_QUEUE_DIR/${escalation_id}.yaml"
-    cat > "$escalation_file" << EOF
-id: "$escalation_id"
-session_id: "$session_id"
-story_id: "$story_id"
-level: "$level"
-priority: "$priority"
-error_type: "$error_type"
-status: "pending"
-created_at: "$timestamp"
-timeout_at: "$timeout_at"
-timeout_hours: $ESCALATION_TIMEOUT_HOURS
-default_action: "$ESCALATION_DEFAULT_ACTION"
-details: |
-$(echo "$details" | sed 's/^/  /')
-options: $options
-resolution:
-  action: ""
-  by: ""
-  at: ""
-  notes: ""
-EOF
+    yq -n \
+        --arg id "$escalation_id" \
+        --arg session_id "$session_id" \
+        --arg story_id "$story_id" \
+        --arg level "$level" \
+        --arg priority "$priority" \
+        --arg error_type "$error_type" \
+        --arg status "pending" \
+        --arg created_at "$timestamp" \
+        --arg timeout_at "$timeout_at" \
+        --argjson timeout_hours "$ESCALATION_TIMEOUT_HOURS" \
+        --arg default_action "$ESCALATION_DEFAULT_ACTION" \
+        --arg details "$details" \
+        --arg options "$options" \
+        '.id = $id | .session_id = $session_id | .story_id = $story_id |
+         .level = $level | .priority = $priority | .error_type = $error_type |
+         .status = $status | .created_at = $created_at | .timeout_at = $timeout_at |
+         .timeout_hours = $timeout_hours | .default_action = $default_action |
+         .details = $details | .options = $options |
+         .resolution.action = "" | .resolution.by = "" |
+         .resolution.at = "" | .resolution.notes = ""' \
+        > "$escalation_file"
 
     print_warning "Escalation created: $escalation_id ($level - $error_type)"
 
@@ -175,7 +176,7 @@ list_escalations() {
     echo ""
 
     local count=0
-    for file in "$dir"/*.yaml 2>/dev/null; do
+    for file in "$dir"/*.yaml; do
         [[ ! -f "$file" ]] && continue
 
         if command -v yq &>/dev/null; then
@@ -262,7 +263,7 @@ check_escalation_timeouts() {
     local current_time
     current_time=$(date +%s)
 
-    for file in "$ESCALATION_QUEUE_DIR"/*.yaml 2>/dev/null; do
+    for file in "$ESCALATION_QUEUE_DIR"/*.yaml; do
         [[ ! -f "$file" ]] && continue
 
         if command -v yq &>/dev/null; then
@@ -293,14 +294,14 @@ check_escalation_timeouts() {
 
 get_pending_count() {
     local count=0
-    for file in "$ESCALATION_QUEUE_DIR"/*.yaml 2>/dev/null; do
+    for file in "$ESCALATION_QUEUE_DIR"/*.yaml; do
         [[ -f "$file" ]] && ((count++))
     done
     echo "$count"
 }
 
 has_critical_pending() {
-    for file in "$ESCALATION_QUEUE_DIR"/*.yaml 2>/dev/null; do
+    for file in "$ESCALATION_QUEUE_DIR"/*.yaml; do
         [[ ! -f "$file" ]] && continue
 
         if command -v yq &>/dev/null; then

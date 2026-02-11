@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
-const { parseArgs } = require('../../cli/lib/parse-args');
+const { parseArgs, validateOption } = require('../../cli/lib/parse-args');
 
 describe('parseArgs', () => {
   it('returns defaults when no arguments are given', () => {
@@ -55,5 +55,80 @@ describe('parseArgs', () => {
     expect(result.command).toBe('install');
     expect(result.options.tech).toBe('react');
     expect(result.path).toBe('/my/project');
+  });
+});
+
+describe('parseArgs input validation (SEC-12)', () => {
+  describe('--max-iterations', () => {
+    it('accepts a valid positive integer', () => {
+      const result = parseArgs(['ralph', '--max-iterations=5']);
+      expect(result.options['max-iterations']).toBe('5');
+    });
+
+    it('rejects non-numeric value', () => {
+      expect(() => parseArgs(['ralph', '--max-iterations=abc'])).toThrow(
+        'must be a positive integer',
+      );
+    });
+
+    it('rejects zero', () => {
+      expect(() => parseArgs(['ralph', '--max-iterations=0'])).toThrow(
+        'must be a positive integer',
+      );
+    });
+
+    it('rejects negative numbers', () => {
+      expect(() => parseArgs(['ralph', '--max-iterations=-3'])).toThrow(
+        'must be a positive integer',
+      );
+    });
+
+    it('rejects floating-point numbers', () => {
+      expect(() => parseArgs(['ralph', '--max-iterations=2.5'])).toThrow(
+        'must be a positive integer',
+      );
+    });
+  });
+
+  describe('--output', () => {
+    it('accepts a normal output path', () => {
+      const result = parseArgs(['flatten', '--output=/home/user/out']);
+      expect(result.options.output).toBe('/home/user/out');
+    });
+
+    it('rejects path traversal with ..', () => {
+      expect(() => parseArgs(['flatten', '--output=../../etc/passwd'])).toThrow(
+        'path traversal',
+      );
+    });
+
+    it('rejects path traversal in the middle of path', () => {
+      expect(() =>
+        parseArgs(['flatten', '--output=/home/user/../../../etc/shadow']),
+      ).toThrow('path traversal');
+    });
+
+    it('allows filenames containing dots (not traversal)', () => {
+      const result = parseArgs(['flatten', '--output=file..name.txt']);
+      expect(result.options.output).toBe('file..name.txt');
+    });
+  });
+
+  describe('null bytes', () => {
+    it('rejects null bytes in option values', () => {
+      expect(() => parseArgs(['install', '--tech=sym\0fony'])).toThrow(
+        'null bytes not allowed',
+      );
+    });
+  });
+
+  describe('validateOption', () => {
+    it('allows boolean values without validation', () => {
+      expect(() => validateOption('force', true)).not.toThrow();
+    });
+
+    it('allows unknown options without specific validation', () => {
+      expect(() => validateOption('unknown-flag', 'any-value')).not.toThrow();
+    });
   });
 });

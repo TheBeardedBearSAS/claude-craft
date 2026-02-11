@@ -9,9 +9,15 @@ COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 
 # Dangerous patterns to block (regex)
 DANGEROUS_PATTERNS=(
-    "rm\s+-rf\s+/"
+    # rm with -r and -f combined in one flag (rm -rf, rm -fr, rm -rfi, etc.)
+    "rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|-[a-zA-Z]*f[a-zA-Z]*r)\s+/"
+    "rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|-[a-zA-Z]*f[a-zA-Z]*r)\s+~"
+    # rm with -r and -f as separate flags in any order (rm -r -f /, rm -f -r /)
+    "rm\s+-[a-zA-Z]*r[a-zA-Z]*\s+.*-[a-zA-Z]*f[a-zA-Z]*\s+/"
+    "rm\s+-[a-zA-Z]*f[a-zA-Z]*\s+.*-[a-zA-Z]*r[a-zA-Z]*\s+/"
+    "rm\s+-[a-zA-Z]*r[a-zA-Z]*\s+.*-[a-zA-Z]*f[a-zA-Z]*\s+~"
+    "rm\s+-[a-zA-Z]*f[a-zA-Z]*\s+.*-[a-zA-Z]*r[a-zA-Z]*\s+~"
     "rm\s+-rf\s+/\*"
-    "rm\s+-rf\s+~"
     "dd\s+if=/dev/zero"
     "mkfs"
     "chmod\s+-R\s+777\s+/"
@@ -41,7 +47,7 @@ if echo "$COMMAND" | grep -qE "^(sudo|su)\s"; then
 fi
 
 # Check for commands that could expose secrets
-if echo "$COMMAND" | grep -qE "cat.*\.env|cat.*credentials|cat.*secret"; then
+if echo "$COMMAND" | grep -qE "(cat|less|head|tail|more|strings)\s.*\.(env|credentials|secret|pem|key)\b"; then
     echo "BLOCKED: Command might expose secrets" >&2
     exit 2
 fi

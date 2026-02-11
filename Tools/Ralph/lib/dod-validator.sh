@@ -168,7 +168,8 @@ validate_command() {
     echo -e "  ${C_DIM}${MSG_VALIDATOR_COMMAND}: $cmd${C_RESET}"
 
     # Execute the command (validated)
-    if [[ "$cmd" =~ ^[a-zA-Z0-9_./" -]+$ ]]; then
+    local allowed_pattern='^[a-zA-Z0-9_./"'" '"'-]+$'
+    if [[ "$cmd" =~ $allowed_pattern ]]; then
         if bash -c "$cmd" > /dev/null 2>&1; then
             return 0
         else

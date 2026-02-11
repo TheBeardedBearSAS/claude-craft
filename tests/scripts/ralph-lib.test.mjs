@@ -38,14 +38,7 @@ describe('Ralph lib modules', { timeout: 30000 }, () => {
     }
   });
 
-  // These modules have known syntax errors tracked for remediation
-  const KNOWN_SYNTAX_ISSUES = ['dod-validator.sh', 'escalation-service.sh'];
-
-  const SYNTAX_CHECK_MODULES = EXPECTED_MODULES.filter(
-    (m) => !KNOWN_SYNTAX_ISSUES.includes(m),
-  );
-
-  it.each(SYNTAX_CHECK_MODULES)('%s passes bash syntax check', (mod) => {
+  it.each(EXPECTED_MODULES)('%s passes bash syntax check', (mod) => {
     const fullPath = path.join(RALPH_LIB, mod);
     // bash -n performs a syntax check without executing
     const result = execSync(`bash -n "${fullPath}" 2>&1`, {
@@ -55,14 +48,6 @@ describe('Ralph lib modules', { timeout: 30000 }, () => {
     // bash -n outputs nothing on success; any output indicates a warning/error
     // We just verify it doesn't throw (exit code 0)
     expect(result).toBeDefined();
-  });
-
-  it.each(KNOWN_SYNTAX_ISSUES)('%s has known syntax issues (tracked)', (mod) => {
-    const fullPath = path.join(RALPH_LIB, mod);
-    // Verify these modules do indeed fail syntax check (remove from this list when fixed)
-    expect(() => {
-      execSync(`bash -n "${fullPath}" 2>&1`, { encoding: 'utf8', timeout: 10000 });
-    }).toThrow();
   });
 
   it.each(EXPECTED_MODULES)('%s has proper shebang', (mod) => {
