@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.6] - 2026-02-11
+
+### Added
+- **ESLint config**: Created `eslint.config.mjs` (flat config ESLint 9) for `cli/` JavaScript linting
+
+### Fixed
+- **CQ-10**: Documented magic numbers in `flattener.js` (TOKENS_PER_CHAR, MAX_TOKENS_PER_SHARD) with rationale
+- **DOC-6**: Replaced hardcoded French strings with English in all 11 install scripts
+- **ESLint warnings**: Fixed 5 unused variable warnings in `flattener.js` and `index.js`
+
+### Removed
+- **ARCH-12**: Deleted dead code `Dev/scripts/lib/install-common.sh` (504 lines), obsolete `Dev/scripts/migrate-project.sh` (v3.0 migration script), and associated test
+
+---
+
 ## [5.9.5] - 2026-02-10
 
 ### Added

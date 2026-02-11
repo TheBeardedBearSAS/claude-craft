@@ -63,10 +63,18 @@ const PRIORITY_EXTENSIONS = {
   low: ['.txt', '.xml', '.ini', '.cfg', '.conf', '.toml'],
 };
 
-// Approximate tokens per character (Claude models average)
+/**
+ * Approximate tokens per character ratio for Claude models.
+ * Claude models average ~4 characters per token (1/4 = 0.25).
+ * Conservative estimate for mixed code/text content.
+ */
 const TOKENS_PER_CHAR = 0.25;
 
-// Max tokens per shard (leaving room for conversation context)
+/**
+ * Maximum tokens per shard.
+ * 50K tokens per shard leaves ~150K tokens free in a 200K context window
+ * for conversation history, system prompts, and tool results.
+ */
 const MAX_TOKENS_PER_SHARD = 50000;
 
 /**
@@ -214,12 +222,12 @@ class CodebaseFlattener {
             this.stats.includedFiles++;
             this.stats.totalSize += stats.size;
 
-          } catch (e) {
+          } catch (_e) {
             // Skip unreadable files
           }
         }
       }
-    } catch (e) {
+    } catch (_e) {
       console.error(`${c.yellow}Warning: Cannot read directory ${dirPath}${c.reset}`);
     }
   }
@@ -243,7 +251,7 @@ class CodebaseFlattener {
       current[parts[parts.length - 1]] = null;
     }
 
-    const renderTree = (node, prefix = '', isLast = true) => {
+    const renderTree = (node, prefix = '', _isLast = true) => {
       let result = '';
       const entries = Object.entries(node);
 

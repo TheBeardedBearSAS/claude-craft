@@ -17,7 +17,7 @@ const colors = require('./lib/colors');
 const c = colors;
 
 // Extracted pure modules
-const { TECHNOLOGIES, LANGUAGES, TRACKS } = require('./lib/constants');
+const { TECHNOLOGIES, LANGUAGES } = require('./lib/constants');
 const { parseArgs } = require('./lib/parse-args');
 const { detectProject } = require('./lib/detect-project');
 
@@ -283,8 +283,6 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
 
     const scriptsDir = path.join(CLI_ROOT, 'Dev', 'scripts');
     const langArg = `--lang=${this.config.language}`;
-    const forceArg = '--force';
-
     // 1 base step (common rules) + tech count + optional infra + optional project
     const totalSteps = this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0);
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Installation/Mise a jour des regles Claude Code pour projets React
+# Install/update Claude Code rules for React projects
 # Version: 4.0.1 - TCL (Tiered Context Loading) optimized
 # Usage: ./install-react-rules.sh [OPTIONS] [PROJECT_DIR]
 
@@ -59,30 +59,30 @@ show_help() {
     cat << EOF
 Usage: install-react-rules.sh [OPTIONS] [PROJECT_DIR]
 
-Installation/Mise a jour des regles Claude Code pour projets React.
-Utilise l'architecture TCL (Tiered Context Loading) pour optimiser les tokens.
+Install/update Claude Code rules for React projects.
+Uses TCL (Tiered Context Loading) architecture to optimize tokens.
 
 Options:
-    --install       Installation complete
-    --update        Mise a jour des regles communes uniquement
-    --force         Ecraser tous les fichiers (backup automatique)
-    --preserve-config  Preserver CLAUDE.md et INDEX.md avec --force
-    --dry-run       Afficher les actions sans les executer
-    --backup        Creer un backup avant modifications
-    --interactive   Demander les valeurs du projet
+    --install       Full installation
+    --update        Update common rules only
+    --force         Overwrite all files (automatic backup)
+    --preserve-config  Preserve CLAUDE.md and INDEX.md with --force
+    --dry-run       Show actions without executing them
+    --backup        Create backup before changes
+    --interactive   Prompt for project values
     --lang=XX       Language for rules (en, fr, es, de, pt)
-    --version       Afficher la version
-    --help          Afficher cette aide
+    --version       Show version
+    --help          Show this help
 
 Description:
-    Installation TCL optimisee couvrant :
+    TCL-optimized installation covering:
     - Component-based Architecture
     - TypeScript strict mode
     - Testing (Vitest, RTL, Playwright)
     - Quality tools (ESLint, Prettier, Biome)
     - State management (Zustand, React Query)
 
-    Reduction tokens: ~95% (de ~70K a ~3.5K)
+    Token reduction: ~95% (from ~70K to ~3.5K)
 EOF
 }
 
@@ -108,12 +108,12 @@ verify_source_files() {
 
     for rule in "${TECH_RULES[@]}"; do
         if [ ! -f "${src_dir}/rules/${rule}" ]; then
-            log_error "Fichier source manquant: rules/${rule}"
+            log_error "Missing source file: rules/${rule}"
             missing=1
         fi
     done
     if [ ! -f "${src_dir}/CLAUDE.md.template" ]; then
-        log_error "Fichier source manquant: CLAUDE.md.template"
+        log_error "Missing source file: CLAUDE.md.template"
         missing=1
     fi
     if [ $missing -eq 1 ]; then exit 1; fi
@@ -145,12 +145,12 @@ create_backup() {
             log_dry_run "Backup: ${backup_dir}"
         else
             cp -r "${target_dir}/.claude" "${backup_dir}"
-            log_success "Backup cree: ${backup_dir}"
+            log_success "Backup created: ${backup_dir}"
         fi
     fi
 }
 
-# Copie des skills generiques depuis Common/
+# Copy generic skills from Common/
 copy_generic_skills() {
     local target_dir="$1"
     local dry_run="$2"
@@ -179,7 +179,7 @@ copy_generic_skills() {
     fi
 }
 
-# Copie des skills tech-specifiques
+# Copy tech-specific skills
 copy_tech_skills() {
     local target_dir="$1"
     local dry_run="$2"
@@ -222,10 +222,10 @@ copy_templates() {
 
     if [ -d "$tmpl_dir" ]; then
         if [ "$dry_run" = "true" ]; then
-            log_dry_run "Copier: templates/*.md"
+            log_dry_run "Copy: templates/*.md"
         else
             cp "${tmpl_dir}/"*.md "${target_dir}/.claude/templates/" 2>/dev/null || true
-            log_success "Templates copies"
+            log_success "Templates copied"
         fi
     fi
 }
@@ -242,10 +242,10 @@ copy_checklists() {
 
     if [ -d "$chk_dir" ]; then
         if [ "$dry_run" = "true" ]; then
-            log_dry_run "Copier: checklists/*.md"
+            log_dry_run "Copy: checklists/*.md"
         else
             cp "${chk_dir}/"*.md "${target_dir}/.claude/checklists/" 2>/dev/null || true
-            log_success "Checklists copiees"
+            log_success "Checklists copied"
         fi
     fi
 }
@@ -262,11 +262,11 @@ copy_commands() {
 
     if [ -d "$cmd_dir" ]; then
         if [ "$dry_run" = "true" ]; then
-            log_dry_run "Copier: commands/${TECH_NAMESPACE}/*.md"
+            log_dry_run "Copy: commands/${TECH_NAMESPACE}/*.md"
         else
             cp "${cmd_dir}/"*.md "${target_dir}/.claude/commands/${TECH_NAMESPACE}/" 2>/dev/null || true
             local count=$(ls -1 "${cmd_dir}/"*.md 2>/dev/null | wc -l)
-            log_success "${count} commandes copiees (/${TECH_NAMESPACE}:*)"
+            log_success "${count} commands copied (/${TECH_NAMESPACE}:*)"
         fi
     fi
 }
@@ -283,26 +283,26 @@ copy_agents() {
 
     if [ -d "$agt_dir" ]; then
         if [ "$dry_run" = "true" ]; then
-            log_dry_run "Copier: agents/*.md"
+            log_dry_run "Copy: agents/*.md"
         else
             cp "${agt_dir}/"*.md "${target_dir}/.claude/agents/" 2>/dev/null || true
-            log_success "Agents copies"
+            log_success "Agents copied"
         fi
     fi
 }
 
 prompt_project_info() {
     echo ""
-    echo "Configuration du projet ${TECH_NAME}"
+    echo "Project configuration - ${TECH_NAME}"
     echo "=========================================="
-    read -p "Nom du projet [MonProjet]: " PROJECT_NAME
-    PROJECT_NAME="${PROJECT_NAME:-MonProjet}"
-    read -p "Stack technique [${DEFAULT_STACK}]: " TECH_STACK
+    read -p "Project name [MyProject]: " PROJECT_NAME
+    PROJECT_NAME="${PROJECT_NAME:-MyProject}"
+    read -p "Tech stack [${DEFAULT_STACK}]: " TECH_STACK
     TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"
     echo ""
-    read -p "Confirmer? [Y/n]: " CONFIRM
+    read -p "Confirm? [Y/n]: " CONFIRM
     if [[ ! "${CONFIRM:-Y}" =~ ^[Yy]$ ]]; then
-        log_warning "Installation annulee"
+        log_warning "Installation cancelled"
         exit 0
     fi
 }
@@ -528,7 +528,7 @@ main() {
             --lang=*) lang="${1#--lang=}"; shift ;;
             --version) echo "install-react-rules.sh version ${VERSION}"; exit 0 ;;
             --help|-h) show_help; exit 0 ;;
-            -*) log_error "Option inconnue: $1"; exit 1 ;;
+            -*) log_error "Unknown option: $1"; exit 1 ;;
             *) target_dir="$1"; shift ;;
         esac
     done
@@ -538,18 +538,18 @@ main() {
     [ "$target_dir" != "." ] && [ -d "$target_dir" ] && target_dir="$(cd "${target_dir}" && pwd)" || target_dir="$(pwd)"
 
     echo ""
-    echo "Installation des regles Claude Code - ${TECH_NAME} (TCL)"
+    echo "Installing Claude Code rules - ${TECH_NAME} (TCL)"
     echo "=========================================="
     echo "Version: ${VERSION}"
-    echo "Repertoire: ${target_dir}"
+    echo "Directory: ${target_dir}"
 
     verify_source_files
 
     if [ -z "$mode" ]; then
         case $(detect_installation "$target_dir") in
-            tcl) log_info "Installation TCL existante -> mode update"; mode="update" ;;
-            legacy) log_info "Installation legacy detectee -> migration TCL"; mode="install" ;;
-            *) log_info "Nouvelle installation TCL"; mode="install" ;;
+            tcl) log_info "Existing TCL installation -> update mode"; mode="update" ;;
+            legacy) log_info "Legacy installation detected -> TCL migration"; mode="install" ;;
+            *) log_info "New TCL installation"; mode="install" ;;
         esac
     fi
 
@@ -557,17 +557,17 @@ main() {
 
     case $mode in
         install)
-            [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MonProjet}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
+            [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MyProject}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
             install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config" "$skip_common"
             ;;
         update)
             if [ "$force" = "true" ]; then
-                log_warning "Mode force: TOUS les fichiers seront ecrases"
-                [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MonProjet}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
+                log_warning "Force mode: ALL files will be overwritten"
+                [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MyProject}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
                 install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config" "$skip_common"
             else
-                log_info "Mise a jour des references..."
-                PROJECT_NAME="${PROJECT_NAME:-MonProjet}"
+                log_info "Updating references..."
+                PROJECT_NAME="${PROJECT_NAME:-MyProject}"
                 TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"
                 install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "true" "$skip_common"
             fi
@@ -577,7 +577,7 @@ main() {
     if [ "$dry_run" = "false" ]; then
         show_tcl_summary "$target_dir" "$TECH_NAME" "$TECH_NAMESPACE"
     else
-        log_dry_run "Fin de la simulation"
+        log_dry_run "End of simulation"
     fi
 }
 

@@ -43,7 +43,7 @@ I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 source "${SCRIPT_DIR}/tcl-common.sh"
 VERSION=$(get_claude_craft_version)
 
-# Couleurs
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -51,7 +51,7 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# Options par défaut
+# Default options
 action="install"
 force=false
 dry_run=false
@@ -134,7 +134,7 @@ load_messages() {
     fi
 }
 
-# Compteurs
+# Counters
 files_created=0
 files_updated=0
 files_skipped=0
@@ -606,11 +606,11 @@ install_claude_md() {
 }
 
 #-------------------------------------------------------------------------------
-# Mode interactif
+# Interactive mode
 #-------------------------------------------------------------------------------
 run_interactive() {
     echo ""
-    echo "Mode interactif - Choisissez les composants à installer:"
+    echo "Interactive mode - Choose components to install:"
     echo ""
 
     local install_agents_choice=false
@@ -618,16 +618,16 @@ run_interactive() {
     local install_templates_choice=false
     local install_checklists_choice=false
 
-    read -p "Installer les agents transversaux ? (y/n) [y]: " choice
+    read -p "Install common agents? (y/n) [y]: " choice
     [[ "$choice" != "n" && "$choice" != "N" ]] && install_agents_choice=true
 
-    read -p "Installer les commandes /common: ? (y/n) [y]: " choice
+    read -p "Install /common: commands? (y/n) [y]: " choice
     [[ "$choice" != "n" && "$choice" != "N" ]] && install_commands_choice=true
 
-    read -p "Installer les templates PR/Issues ? (y/n) [y]: " choice
+    read -p "Install PR/Issues templates? (y/n) [y]: " choice
     [[ "$choice" != "n" && "$choice" != "N" ]] && install_templates_choice=true
 
-    read -p "Installer les checklists ? (y/n) [y]: " choice
+    read -p "Install checklists? (y/n) [y]: " choice
     [[ "$choice" != "n" && "$choice" != "N" ]] && install_checklists_choice=true
 
     echo ""
@@ -688,11 +688,11 @@ main() {
     parse_args "$@"
     print_header
 
-    log_info "Répertoire cible: $target_dir"
+    log_info "Target directory: $target_dir"
     log_info "Action: $action"
 
     if $dry_run; then
-        log_info "Mode: Dry-run (aucune modification)"
+        log_info "Mode: Dry-run (no changes)"
     fi
 
     if $interactive; then
@@ -701,7 +701,7 @@ main() {
 
     echo ""
 
-    # Installation des composants sélectionnés
+    # Install selected components
     if $rules_only; then
         install_rules
     fi
@@ -729,7 +729,7 @@ main() {
 
     print_summary
 
-    # Code de sortie
+    # Exit code
     if [[ $errors -gt 0 ]]; then
         exit 1
     fi
@@ -737,5 +737,5 @@ main() {
     exit 0
 }
 
-# Exécuter
+# Execute
 main "$@"
