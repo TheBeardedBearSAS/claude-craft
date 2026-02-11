@@ -1,0 +1,54 @@
+/**
+ * CLI help text display.
+ * @module cli/lib/help
+ */
+
+import c from './colors.js';
+import { TECHNOLOGIES, LANGUAGES } from './constants.js';
+
+/**
+ * Print the CLI usage help with commands, options, and examples.
+ */
+export function printHelp() {
+  console.log(`
+${c.bold}Usage:${c.reset} npx @the-bearded-bear/claude-craft [command] [options]
+
+${c.bold}Commands:${c.reset}
+  ${c.green}install${c.reset}              Interactive installation wizard
+  ${c.green}install <path>${c.reset}       Install to specific directory
+  ${c.green}init${c.reset}                 Initialize workflow in current project
+  ${c.green}flatten${c.reset}              Generate flattened codebase summary
+  ${c.green}ralph${c.reset}                Run Ralph Wiggum continuous loop
+  ${c.green}help${c.reset}                 Show this help message
+
+${c.bold}Options:${c.reset}
+  ${c.yellow}--lang=XX${c.reset}            Language (en, fr, es, de, pt)
+  ${c.yellow}--tech=NAME${c.reset}          Technology (${Object.keys(TECHNOLOGIES).join(', ')})
+  ${c.yellow}--force${c.reset}              Overwrite existing files
+  ${c.yellow}--quick${c.reset}              Quick Flow track (bug fixes)
+  ${c.yellow}--standard${c.reset}           Standard track (features)
+  ${c.yellow}--enterprise${c.reset}         Enterprise track (platforms)
+
+${c.bold}Examples:${c.reset}
+  ${c.dim}# Interactive installation${c.reset}
+  npx @the-bearded-bear/claude-craft install
+
+  ${c.dim}# Install Symfony rules in French${c.reset}
+  npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=fr
+
+  ${c.dim}# Initialize workflow${c.reset}
+  npx @the-bearded-bear/claude-craft init --standard
+
+  ${c.dim}# Flatten codebase for context${c.reset}
+  npx @the-bearded-bear/claude-craft flatten --output=context.md
+
+  ${c.dim}# Run Ralph continuous loop${c.reset}
+  npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
+
+${c.bold}Technologies:${c.reset}
+${Object.entries(TECHNOLOGIES).map(([key, val]) => `  ${c.cyan}${key.padEnd(12)}${c.reset} ${val.desc}`).join('\n')}
+
+${c.bold}Languages:${c.reset}
+${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - ${val}`).join('\n')}
+`);
+}

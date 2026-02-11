@@ -10,6 +10,50 @@ import {
   MAX_TOKENS_PER_SHARD,
 } from '../../cli/flattener.js';
 
+// --- Constructor ---
+
+describe('CodebaseFlattener constructor', () => {
+  it('sets default options when none provided', () => {
+    const flattener = new CodebaseFlattener('/fake');
+    expect(flattener.options.maxTokens).toBe(MAX_TOKENS_PER_SHARD);
+    expect(flattener.options.maxFileSize).toBe(50000);
+    expect(flattener.options.sharding).toBe(true);
+    expect(flattener.options.priority).toBe('high');
+    expect(flattener.options.includePatterns).toBeNull();
+  });
+
+  it('merges custom options with defaults', () => {
+    const flattener = new CodebaseFlattener('/fake', {
+      maxTokens: 10000,
+      maxFileSize: 5000,
+      sharding: false,
+      priority: 'low',
+      ignore: ['custom_dir'],
+    });
+    expect(flattener.options.maxTokens).toBe(10000);
+    expect(flattener.options.maxFileSize).toBe(5000);
+    expect(flattener.options.sharding).toBe(false);
+    expect(flattener.options.priority).toBe('low');
+    expect(flattener.options.ignorePatterns).toContain('custom_dir');
+    expect(flattener.options.ignorePatterns).toContain('node_modules');
+  });
+
+  it('resolves rootPath to absolute', () => {
+    const flattener = new CodebaseFlattener('relative/path');
+    expect(flattener.rootPath).toMatch(/^\//);
+  });
+
+  it('initializes empty stats and files', () => {
+    const flattener = new CodebaseFlattener('/fake');
+    expect(flattener.stats.totalFiles).toBe(0);
+    expect(flattener.stats.includedFiles).toBe(0);
+    expect(flattener.stats.totalSize).toBe(0);
+    expect(flattener.stats.estimatedTokens).toBe(0);
+    expect(flattener.stats.shards).toBe(0);
+    expect(flattener.files).toEqual([]);
+  });
+});
+
 // --- Constants ---
 
 describe('flattener constants', () => {
@@ -404,5 +448,106 @@ describe('scanDirectory', () => {
 
     expect(flattener.files.length).toBe(1);
     expect(flattener.files[0].path).toBe('app.js');
+  });
+
+  it('tracks file metadata correctly', () => {
+    writeFileSync(join(tempDir, 'index.ts'), 'export const x = 1;');
+
+    const flattener = new CodebaseFlattener(tempDir);
+    flattener.scanDirectory(tempDir);
+
+    expect(flattener.files).toHaveLength(1);
+    const file = flattener.files[0];
+    expect(file.path).toBe('index.ts');
+    expect(file.fullPath).toBe(join(tempDir, 'index.ts'));
+    expect(file.size).toBeGreaterThan(0);
+    expect(file.priority).toBe(1); // .ts is high priority
+    expect(file.tokens).toBe(Math.ceil(file.size * TOKENS_PER_CHAR));
+  });
+});
+
+// --- flatten end-to-end ---
+
+describe('flatten (end-to-end)', () => {
+  let tempDir;
+
+  beforeEach(() => {
+    tempDir = mkdtempSync(join(tmpdir(), 'flattener-e2e-'));
+  });
+
+  afterEach(() => {
+    rmSync(tempDir, { recursive: true, force: true });
+  });
+
+  it('writes single output file for small codebase', async () => {
+    mkdirSync(join(tempDir, 'src'));
+    writeFileSync(join(tempDir, 'src', 'app.js'), 'console.log("hello");');
+    writeFileSync(join(tempDir, 'README.md'), '# My Project');
+
+    const outputFile = join(tempDir, 'CONTEXT.md');
+    const flattener = new CodebaseFlattener(tempDir);
+    await flattener.flatten(outputFile);
+
+    expect(fs.existsSync(outputFile)).toBe(true);
+    const content = fs.readFileSync(outputFile, 'utf8');
+    expect(content).toContain('# Codebase Context:');
+    expect(content).toContain('## Statistics');
+    expect(content).toContain('## File Tree');
+    expect(content).toContain('## File Contents');
+    expect(content).toContain('console.log("hello")');
+    expect(content).toContain('# My Project');
+  });
+
+  it('generates sharded output for large token count', async () => {
+    // Create files that together exceed a small token limit
+    writeFileSync(join(tempDir, 'a.js'), 'x'.repeat(2000));
+    writeFileSync(join(tempDir, 'b.js'), 'y'.repeat(2000));
+
+    const outputFile = join(tempDir, 'output.md');
+    const flattener = new CodebaseFlattener(tempDir, { maxTokens: 600 });
+    await flattener.flatten(outputFile);
+
+    // Should create sharded files instead of single output
+    expect(fs.existsSync(join(tempDir, 'output_shard1.md'))).toBe(true);
+    expect(fs.existsSync(join(tempDir, 'output_index.md'))).toBe(true);
+  });
+
+  it('reports no files when directory is empty', async () => {
+    const outputFile = join(tempDir, 'CONTEXT.md');
+    const flattener = new CodebaseFlattener(tempDir);
+    await flattener.flatten(outputFile);
+
+    // No output file should be created
+    expect(fs.existsSync(outputFile)).toBe(false);
+  });
+});
+
+// --- printSummary ---
+
+describe('printSummary', () => {
+  it('outputs formatted summary to console', () => {
+    const flattener = new CodebaseFlattener('/fake');
+    flattener.stats = {
+      totalFiles: 50,
+      includedFiles: 30,
+      totalSize: 102400,
+      estimatedTokens: 25600,
+      shards: 0,
+    };
+
+    const logs = [];
+    const origLog = console.log;
+    console.log = (...args) => logs.push(args.join(' '));
+    try {
+      flattener.printSummary();
+    } finally {
+      console.log = origLog;
+    }
+
+    const output = logs.join('\n');
+    expect(output).toContain('50');
+    expect(output).toContain('30');
+    expect(output).toContain('100.00 KB');
+    expect(output).toContain((25600).toLocaleString());
   });
 });
