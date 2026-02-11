@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.18.0] - 2026-02-11
+
+### Added
+- **SEC-13**: 46 CLI injection security tests (shell metacharacters, command substitution, null bytes, path traversal, prototype pollution, oversized inputs)
+
+### Fixed
+- **SEC-1**: Removed unnecessary `$(echo ...)` subshell from tilde expansion in `install-from-config.sh` (3 occurrences) and `check-config.sh` (1 occurrence) — direct variable assignment `"${root/#\~/$HOME}"` eliminates any residual injection surface
+
+### Changed
+- Confirmed CICD-8, CICD-13, CICD-15/CQ-15 already resolved in prior phases (CI permissions scoped, node_modules gitignored, engines.node >=20.0.0)
+
+---
+
 ## [5.17.0] - 2026-02-11
 
 ### Added

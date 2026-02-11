@@ -472,9 +472,8 @@ check_project() {
     common=$(yq e ".projects[$project_index].common // true" "$config_file")
     module_count=$(yq e ".projects[$project_index].modules | length" "$config_file")
 
-    # Expand le chemin
-    local expanded_root
-    expanded_root=$(echo "${root/#\~/$HOME}")
+    # Expand le chemin (direct assignment, no subshell — SEC-1)
+    local expanded_root="${root/#\~/$HOME}"
 
     echo -e "\n${BOLD}📦 $name${NC}"
 

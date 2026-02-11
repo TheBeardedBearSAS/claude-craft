@@ -267,9 +267,8 @@ validate_config() {
             log_error "  Champ 'root' manquant pour le projet: $name"
             ((errors++))
         else
-            # Expand le chemin
-            local expanded_root
-            expanded_root=$(echo "${root/#\~/$HOME}")
+            # Expand le chemin (direct assignment, no subshell — SEC-1)
+            local expanded_root="${root/#\~/$HOME}"
             log_step "  Root: $expanded_root"
         fi
 
@@ -384,8 +383,7 @@ list_projects() {
         module_count=$(yq e ".projects[$i].modules | length" "$config_file")
         project_lang=$(yq e ".projects[$i].lang // \"\"" "$config_file")
 
-        local expanded_root
-        expanded_root=$(echo "${root/#\~/$HOME}")
+        local expanded_root="${root/#\~/$HOME}"
 
         echo -e "${BOLD}$name${NC}"
         if [[ -n "$description" && "$description" != "null" ]]; then
@@ -571,9 +569,8 @@ install_project() {
     # Langue du projet avec fallback sur default_lang
     project_lang=$(yq e ".projects[$project_index].lang // \"$default_lang\"" "$config_file")
 
-    # Expand le chemin
-    local expanded_root
-    expanded_root=$(echo "${root/#\~/$HOME}")
+    # Expand le chemin (direct assignment, no subshell — SEC-1)
+    local expanded_root="${root/#\~/$HOME}"
 
     print_header "📦 Installation: $name"
 
