@@ -73,4 +73,4 @@ function parseArgs(args) {
   return parsed;
 }
 
-module.exports = { parseArgs, validateOption };
+export { parseArgs, validateOption };

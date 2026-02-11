@@ -28,4 +28,4 @@ const colors = {
   cyan: '\x1b[36m',
 };
 
-module.exports = colors;
+export default colors;

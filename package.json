@@ -1,7 +1,8 @@
 {
   "name": "@the-bearded-bear/claude-craft",
-  "version": "5.9.9",
+  "version": "5.10.0",
   "description": "A comprehensive framework for AI-assisted development with Claude Code. Install standardized rules, agents, and commands for your projects.",
+  "type": "module",
   "main": "cli/index.js",
   "bin": {
     "claude-craft": "./cli/index.js"
@@ -18,7 +19,7 @@
     "vale:check": "vale docs/ .claude/CLAUDE.md README.md CHANGELOG.md",
     "vale:sync": "vale sync",
     "commitlint": "commitlint --edit",
-    "prepublishOnly": "node -e \"const p=require('./package.json'); if(!p.version.match(/^\\d+\\.\\d+\\.\\d+(-[a-z0-9.]+)?$/i)){console.error('Invalid version format');process.exit(1)}\""
+    "prepublishOnly": "node -e \"import{readFileSync}from'node:fs';const p=JSON.parse(readFileSync('./package.json','utf8'));if(!/^\\d+\\.\\d+\\.\\d+(-[a-z0-9.]+)?$/i.test(p.version)){console.error('Invalid version format');process.exit(1)}\""
   },
   "keywords": [
     "claude",

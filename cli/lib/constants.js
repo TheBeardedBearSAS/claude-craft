@@ -34,4 +34,4 @@ const TRACKS = {
   enterprise: { name: 'Enterprise', desc: 'Platforms, migrations, multi-team (< 30 min)', phases: 4 },
 };
 
-module.exports = { TECHNOLOGIES, LANGUAGES, TRACKS };
+export { TECHNOLOGIES, LANGUAGES, TRACKS };

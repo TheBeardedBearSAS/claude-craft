@@ -1,8 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const colors = require('../../cli/lib/colors.js');
+import colors from '../../cli/lib/colors.js';
 
 describe('cli/lib/colors', () => {
   const EXPECTED_KEYS = ['reset', 'bold', 'dim', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan'];

@@ -1,11 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { createRequire } from 'module';
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
-
-const require = createRequire(import.meta.url);
-const { detectProject } = require('../../cli/lib/detect-project');
+import { detectProject } from '../../cli/lib/detect-project.js';
 
 describe('detectProject', () => {
   let tempDir;

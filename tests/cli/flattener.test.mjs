@@ -1,17 +1,14 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { createRequire } from 'module';
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
-
-const require = createRequire(import.meta.url);
-const {
+import {
   CodebaseFlattener,
   DEFAULT_IGNORES,
   PRIORITY_EXTENSIONS,
   TOKENS_PER_CHAR,
   MAX_TOKENS_PER_SHARD,
-} = require('../../cli/flattener');
+} from '../../cli/flattener.js';
 
 // --- Constants ---
 

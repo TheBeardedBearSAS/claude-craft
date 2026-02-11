@@ -1,8 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
-const { TECHNOLOGIES, LANGUAGES, TRACKS } = require('../../cli/lib/constants');
+import { TECHNOLOGIES, LANGUAGES, TRACKS } from '../../cli/lib/constants.js';
 
 describe('TECHNOLOGIES', () => {
   it('contains all 11 supported technologies', () => {

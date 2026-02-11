@@ -13,11 +13,11 @@
  * @module cli/flattener
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 // ANSI colors (shared module)
-const c = require('./lib/colors');
+import c from './lib/colors.js';
 
 // Default ignore patterns
 const DEFAULT_IGNORES = [
@@ -565,7 +565,7 @@ async function flatten(rootPath, outputFile, options = {}) {
   await flattener.flatten(outputFile);
 }
 
-module.exports = {
+export {
   flatten,
   CodebaseFlattener,
   DEFAULT_IGNORES,

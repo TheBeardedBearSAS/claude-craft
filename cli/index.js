@@ -7,25 +7,30 @@
  * Usage: npx @the-bearded-bear/claude-craft [command] [options]
  */
 
-const readline = require('readline');
-const { spawnSync, spawn } = require('child_process');
-const path = require('path');
-const fs = require('fs');
+import readline from 'readline';
+import { spawnSync, spawn } from 'child_process';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 // ANSI colors (shared module)
-const colors = require('./lib/colors');
+import colors from './lib/colors.js';
 const c = colors;
 
 // Extracted pure modules
-const { TECHNOLOGIES, LANGUAGES } = require('./lib/constants');
-const { parseArgs } = require('./lib/parse-args');
-const { detectProject } = require('./lib/detect-project');
+import { TECHNOLOGIES, LANGUAGES } from './lib/constants.js';
+import { parseArgs } from './lib/parse-args.js';
+import { detectProject } from './lib/detect-project.js';
+
+// Flattener module
+import { flatten as flattenCodebaseFn } from './flattener.js';
 
 // CLI package root
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CLI_ROOT = path.resolve(__dirname, '..');
 
 // Package version
-const { version: VERSION } = require(path.join(CLI_ROOT, 'package.json'));
+const { version: VERSION } = JSON.parse(fs.readFileSync(path.join(CLI_ROOT, 'package.json'), 'utf8'));
 
 class ClaudeCraftCLI {
   /**
@@ -485,9 +490,7 @@ ${c.bold}Documentation:${c.reset}
     const targetPath = this.config.targetPath;
     const outputFile = options.output || 'CODEBASE_CONTEXT.md';
 
-    // Import flattener module
-    const flattener = require('./flattener');
-    await flattener.flatten(targetPath, outputFile, options);
+    await flattenCodebaseFn(targetPath, outputFile, options);
   }
 
   /**

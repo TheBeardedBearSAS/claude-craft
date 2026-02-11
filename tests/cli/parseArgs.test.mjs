@@ -1,8 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
-const { parseArgs, validateOption } = require('../../cli/lib/parse-args');
+import { parseArgs, validateOption } from '../../cli/lib/parse-args.js';
 
 describe('parseArgs', () => {
   it('returns defaults when no arguments are given', () => {

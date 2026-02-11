@@ -3,8 +3,8 @@
  * @module cli/lib/detect-project
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 /**
  * @typedef {Object} DetectedProject
@@ -124,4 +124,4 @@ function detectProject(targetPath, options = {}) {
   return detected;
 }
 
-module.exports = { detectProject };
+export { detectProject };
