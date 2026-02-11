@@ -283,8 +283,14 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
 
     const scriptsDir = path.join(CLI_ROOT, 'Dev', 'scripts');
     const langArg = `--lang=${this.config.language}`;
-    // 1 base step (common rules) + tech count + optional infra + optional project
-    const totalSteps = this.config.technologies.length + 1 + (this.config.includeInfra ? 1 : 0) + (this.config.includeProject ? 1 : 0);
+    const hasDocker = this.config.technologies.includes('docker');
+    const includeInfra = this.config.includeInfra || hasDocker;
+    const techsWithoutDocker = this.config.technologies.filter(t => t !== 'docker');
+    // 1 base step (common rules) + installable tech scripts + optional infra + optional project
+    const totalSteps = 1
+      + techsWithoutDocker.filter(t => fs.existsSync(path.join(scriptsDir, `install-${t}-rules.sh`))).length
+      + (includeInfra ? 1 : 0)
+      + (this.config.includeProject ? 1 : 0);
 
     try {
       // Always install common rules
@@ -305,7 +311,7 @@ ${Object.entries(LANGUAGES).map(([key, val]) => `  ${c.cyan}${key}${c.reset} - $
       }
 
       // Install infrastructure rules
-      if (this.config.includeInfra || this.config.technologies.includes('docker')) {
+      if (includeInfra) {
         console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing infrastructure rules...`);
         const infraScript = path.join(CLI_ROOT, 'Infra', 'install-infra-rules.sh');
         if (fs.existsSync(infraScript)) {

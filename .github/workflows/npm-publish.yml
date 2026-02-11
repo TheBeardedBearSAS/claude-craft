@@ -138,9 +138,22 @@ jobs:
           npm pack --dry-run 2>&1 | tee pack-output.txt
           TARBALL_SIZE=$(grep -E "^npm notice tarball" pack-output.txt | awk '{print $NF}' || echo "unknown")
           echo "Package size: ${TARBALL_SIZE}"
+          SIZE_KB=$(npm pack --dry-run 2>&1 | grep 'unpacked size' | grep -oE '[0-9.]+ [kMG]B' | awk '{
+            if ($2 == "kB") print $1;
+            else if ($2 == "MB") print $1 * 1024;
+            else if ($2 == "GB") print $1 * 1048576;
+          }')
+          if [ -n "$SIZE_KB" ] && [ "$(echo "$SIZE_KB > 25600" | bc -l)" = "1" ]; then
+            echo "::error::Package unpacked size exceeds 25 MB threshold"
+            exit 1
+          fi
+          echo "Unpacked size: ${SIZE_KB} kB (threshold: 25600 kB)"
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Security audit
+        run: npm audit --omit=dev --audit-level=high
 
       - name: Run tests
         run: npm test
