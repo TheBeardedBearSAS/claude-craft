@@ -217,9 +217,16 @@ class ClaudeCraftCLI {
   }
 }
 
-// Run CLI
-const cli = new ClaudeCraftCLI();
-cli.run().catch((error) => {
-  console.error(`${colors.red}Error: ${error.message}${colors.reset}`);
-  process.exit(1);
-});
+// Export class for testing
+export { ClaudeCraftCLI };
+
+// Run CLI only when executed directly (not imported by tests)
+const isDirectRun =
+  process.argv[1] && fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url));
+if (isDirectRun) {
+  const cli = new ClaudeCraftCLI();
+  cli.run().catch((error) => {
+    console.error(`${colors.red}Error: ${error.message}${colors.reset}`);
+    process.exit(1);
+  });
+}

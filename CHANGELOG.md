@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.14.0] - 2026-02-11
+
+### Added
+- **TEST-16**: 4 unit tests for `ClaudeCraftCLI` class (constructor, delegates)
+  - `cli/index.js` now exports class + guards auto-run for testability
+
+### Changed
+- **DOC-9**: Updated README project structure to reflect Phase 14 CLI refactoring (cli/lib/)
+- **DOC-10**: Fixed ARCHITECTURE.md Mermaid diagram — added banner.js, help.js, installer.js, ralph.js
+- **DOC-11**: Added missing `init`, `ralph`, `help` commands to CLI-REFERENCE.md
+- **TEST-15**: Removed ~25 redundant tests from index.test.mjs (logic now tested in dedicated module files)
+- **CQ-16**: Tightened ESLint rules (eqeqeq, no-var, prefer-const)
+
+---
+
 ## [5.13.0] - 2026-02-11
 
 ### Added

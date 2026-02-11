@@ -17,7 +17,10 @@ npx @the-bearded-bear/claude-craft [command] [options]
 | Command | Description |
 |---------|-------------|
 | `install` | Install Claude Craft to a project |
+| `init` | Initialize workflow (shows instructions) |
 | `flatten` | Generate flattened codebase context |
+| `ralph` | Run Ralph Wiggum continuous loop |
+| `help` | Show help message |
 | (no command) | Interactive installation wizard |
 
 ---

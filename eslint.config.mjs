@@ -25,6 +25,9 @@ export default [
         "warn",
         { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },
       ],
+      eqeqeq: ["error", "always"],
+      "no-var": "error",
+      "prefer-const": "warn",
     },
   },
   {

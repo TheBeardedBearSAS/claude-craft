@@ -8,18 +8,20 @@ Technical documentation of Claude Craft's internal architecture and extension po
 
 ```mermaid
 graph TD
-    subgraph CLI["CLI Entry (cli/index.js)"]
-        INSTALL[install command]
-        FLATTEN[flatten command]
-        RALPH[ralph command]
+    subgraph CLI["CLI Entry (cli/)"]
+        INDEX[index.js]
+        FLATTENER[flattener.js]
     end
 
-    subgraph LIB["CLI Lib Modules"]
+    subgraph LIB["CLI Lib Modules (cli/lib/)"]
         PARSE[parse-args.js]
         DETECT[detect-project.js]
         COLORS[colors.js]
         CONST[constants.js]
-        FLATTENER[flattener.js]
+        BANNER[banner.js]
+        HELP[help.js]
+        INSTALLER_MOD[installer.js]
+        RALPH_MOD[ralph.js]
     end
 
     subgraph SCRIPTS["Install Scripts (Dev/scripts/)"]
@@ -59,10 +61,10 @@ graph TD
         CONDUCTOR[sprint-conductor.sh]
     end
 
-    CLI --> LIB
-    INSTALL --> SCRIPTS
-    FLATTEN --> FLATTENER
-    RALPH --> RALPH_SYS
+    INDEX --> LIB
+    INDEX --> FLATTENER
+    INSTALLER_MOD --> SCRIPTS
+    RALPH_MOD --> RALPH_SYS
     TECH_SCRIPTS --> TECHLIB
     TECH_SCRIPTS --> TCL
     SCRIPTS --> I18N

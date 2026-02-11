@@ -309,8 +309,17 @@ claude-craft/
 │   ├── ProjectConfig/          # YAML project manager
 │   └── PluginExport/           # Export as Claude Code plugins
 ├── cli/                        # NPX CLI (npx @the-bearded-bear/claude-craft)
-│   ├── index.js                # Interactive installer
-│   └── flattener.js            # Codebase flattener
+│   ├── index.js                # CLI orchestrator (dispatches to lib/ modules)
+│   ├── flattener.js            # Codebase flattener
+│   └── lib/                    # Extracted CLI modules
+│       ├── banner.js           # ASCII art banner & success messages
+│       ├── help.js             # Usage help text
+│       ├── installer.js        # Installation wizard & script runner
+│       ├── ralph.js            # Ralph Wiggum loop launcher
+│       ├── colors.js           # ANSI color definitions
+│       ├── constants.js        # Technologies, languages, tracks
+│       ├── detect-project.js   # Project detection utilities
+│       └── parse-args.js       # CLI argument parser
 └── bundles/                    # Web platform bundles
     ├── chatgpt/                # ChatGPT bundle
     ├── claude/                 # Claude Projects bundle
