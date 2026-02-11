@@ -8,11 +8,11 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
 
-## What's New in v5.15
+## What's New in v5.16
 
-- **Documentation Accuracy**: Fixed COMMANDS.md counts, added `/workflow:` and `/php:` sections
-- **CI Hardening**: Vale prose linter added to CI pipeline, coverage thresholds
-- **Test Coverage**: CLI run() and installer error paths now tested
+- **Documentation Accuracy**: Fixed SKILLS.md inflated counts (58→50 unique, removed phantom skills)
+- **Makefile Cleanup**: Removed stale migrate targets referencing nonexistent script
+- **Test Coverage**: Ralph.js event handlers now tested
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.

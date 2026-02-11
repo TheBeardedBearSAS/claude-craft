@@ -240,7 +240,7 @@ class CodebaseFlattener {
 
             this.files.push({
               path: relPath,
-              fullPath: fullPath,
+              fullPath,
               size: stats.size,
               priority: this.getFilePriority(fullPath),
               tokens: Math.ceil(stats.size * TOKENS_PER_CHAR),
@@ -286,7 +286,7 @@ class CodebaseFlattener {
         const connector = isLastEntry ? '└── ' : '├── ';
         const extension = isLastEntry ? '    ' : '│   ';
 
-        result += prefix + connector + name + '\n';
+        result += `${prefix + connector + name}\n`;
 
         if (children !== null) {
           result += renderTree(children, prefix + extension, isLastEntry);

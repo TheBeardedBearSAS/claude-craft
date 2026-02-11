@@ -29,16 +29,23 @@ import { runRalph } from '../../cli/lib/ralph.js';
 
 describe('runRalph', () => {
   let logSpy;
+  let errorSpy;
   let spawnMock;
   let existsSyncMock;
+  let handlers;
 
   beforeEach(async () => {
     logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    vi.spyOn(console, 'error').mockImplementation(() => {});
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const cp = await import('child_process');
     spawnMock = cp.spawn;
     spawnMock.mockClear();
-    spawnMock.mockReturnValue({ on: vi.fn() });
+    handlers = {};
+    spawnMock.mockReturnValue({
+      on: vi.fn((event, cb) => {
+        handlers[event] = cb;
+      }),
+    });
     const fsMod = await import('fs');
     existsSyncMock = fsMod.default.existsSync;
     existsSyncMock.mockReturnValue(true);
@@ -110,5 +117,38 @@ describe('runRalph', () => {
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('Error');
     expect(output).toContain('Ralph script not found');
+  });
+
+  it('logs success message on close code 0', async () => {
+    await runRalph(makeCli(), [], {}, { CLI_ROOT: '/fake/root', VERSION: '1.0.0' });
+    try {
+      handlers.close(0);
+    } catch {
+      // vitest intercepts process.exit
+    }
+    const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('completed successfully');
+  });
+
+  it('logs warning message on close code 1', async () => {
+    await runRalph(makeCli(), [], {}, { CLI_ROOT: '/fake/root', VERSION: '1.0.0' });
+    try {
+      handlers.close(1);
+    } catch {
+      // vitest intercepts process.exit
+    }
+    const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('ended with code 1');
+  });
+
+  it('logs error message on spawn error', async () => {
+    await runRalph(makeCli(), [], {}, { CLI_ROOT: '/fake/root', VERSION: '1.0.0' });
+    try {
+      handlers.error(new Error('spawn ENOENT'));
+    } catch {
+      // vitest intercepts process.exit
+    }
+    const output = errorSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('Failed to start Ralph');
   });
 });

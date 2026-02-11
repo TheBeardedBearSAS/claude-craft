@@ -111,7 +111,7 @@ Universal skills installed with all technology stacks:
 | `i18n` | Internationalization |
 | `docker-hadolint` | Dockerfile linting |
 
-### Flutter Skills (10)
+### Flutter Skills (8)
 
 | Skill | Description |
 |-------|-------------|
@@ -124,7 +124,7 @@ Universal skills installed with all technology stacks:
 | `performance` | Widget optimization |
 | `tooling` | DevTools, debugging |
 
-### React Skills (8)
+### React Skills (6)
 
 | Skill | Description |
 |-------|-------------|
@@ -135,7 +135,7 @@ Universal skills installed with all technology stacks:
 | `security-react` | XSS prevention, secure state |
 | `tooling` | DevTools, bundlers |
 
-### React Native Skills (11)
+### React Native Skills (9)
 
 | Skill | Description |
 |-------|-------------|
@@ -149,13 +149,12 @@ Universal skills installed with all technology stacks:
 | `performance` | Native optimization |
 | `tooling` | Metro, Flipper |
 
-### Python Skills (6)
+### Python Skills (4)
 
 | Skill | Description |
 |-------|-------------|
 | `architecture` | Clean Architecture, FastAPI patterns |
 | `coding-standards` | PEP 8, type hints |
-| `quality-tools` | Ruff, MyPy, Black |
 | `testing-python` | Pytest, hypothesis |
 | `tooling` | Virtual envs, Poetry |
 
@@ -263,12 +262,12 @@ ls ~/my-project/.claude/skills/
 |-------|--------------|
 | Common | 7 |
 | Symfony | 16 |
-| Flutter | 10 |
-| React | 8 |
-| React Native | 11 |
-| Python | 6 |
-| **Total unique** | **58** |
-| **With i18n (×5)** | **249** |
+| Flutter | 8 |
+| React | 6 |
+| React Native | 9 |
+| Python | 4 |
+| **Total unique** | **50** |
+| **With i18n (×5)** | **250** |
 
 ## Frequently Asked Questions
 

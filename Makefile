@@ -19,7 +19,7 @@
         list list-agents list-commands \
         config-install config-install-all config-validate config-list config-dry-run \
         config-check config-check-fix check fix-permissions stats \
-        migrate migrate-dry-run migrate-all migrate-check \
+        migrate-check \
         plugin-export plugin-export-all
 
 # Configuration
@@ -248,37 +248,8 @@ config-check-fix: ## Verifie et propose de corriger les problemes
 	fi
 
 #===============================================================================
-# Migration de Projets Existants
+# Vérification de Migration
 #===============================================================================
-
-migrate: ## Migre un projet existant vers v3.0 (hooks, MCP, skills)
-	@if [ "$(TARGET)" = "." ]; then \
-		echo "$(RED)Erreur: TARGET non specifie$(NC)"; \
-		echo "Usage: make migrate TARGET=~/mon-projet [RULES_LANG=fr]"; \
-		exit 1; \
-	fi
-	@$(SCRIPTS_DIR)/migrate-project.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-
-migrate-dry-run: ## Simule la migration sans modifier
-	@if [ "$(TARGET)" = "." ]; then \
-		echo "$(RED)Erreur: TARGET non specifie$(NC)"; \
-		echo "Usage: make migrate-dry-run TARGET=~/mon-projet"; \
-		exit 1; \
-	fi
-	@$(SCRIPTS_DIR)/migrate-project.sh --dry-run --lang=$(RULES_LANG) $(TARGET)
-
-migrate-all: ## Migre tous les projets de la config YAML
-	@echo "$(CYAN)Migration de tous les projets configures...$(NC)"
-	@for project in $$($(SCRIPTS_DIR)/install-from-config.sh --list $(CONFIG) 2>/dev/null | grep -E '^\s+-' | sed 's/.*- //'); do \
-		root=$$($(SCRIPTS_DIR)/install-from-config.sh --show-root $$project $(CONFIG) 2>/dev/null); \
-		if [ -n "$$root" ] && [ -d "$$root/.claude" ]; then \
-			echo ""; \
-			echo "$(YELLOW)>>> Migrating: $$project ($$root)$(NC)"; \
-			$(SCRIPTS_DIR)/migrate-project.sh --lang=$(RULES_LANG) $(OPTIONS) "$$root" || true; \
-		fi \
-	done
-	@echo ""
-	@echo "$(GREEN)Migration terminee$(NC)"
 
 migrate-check: ## Verifie le statut de migration des projets
 	@echo "$(CYAN)Verification du statut de migration...$(NC)"

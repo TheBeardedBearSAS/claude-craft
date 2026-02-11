@@ -28,6 +28,9 @@ export default [
       eqeqeq: ["error", "always"],
       "no-var": "error",
       "prefer-const": "warn",
+      "no-shadow": "warn",
+      "object-shorthand": "warn",
+      "prefer-template": "warn",
     },
   },
   {

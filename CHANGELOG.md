@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.16.0] - 2026-02-11
+
+### Added
+- **TEST-19**: 3 unit tests for ralph.js event handlers (close code 0, close code 1, spawn error)
+- **CQ-18**: Convenience scripts `test:watch` and `lint:fix` in package.json
+
+### Fixed
+- **DOC-15**: Fixed SKILLS.md — corrected skill counts (Flutter 10→8, React 8→6, ReactNative 11→9, Python 6→4), removed phantom `quality-tools`, updated total 58→50 unique
+- **DOC-16**: Updated README "What's New" to v5.16
+- **ARCH-17**: Removed 3 stale Makefile migrate targets referencing nonexistent `migrate-project.sh`
+
+### Changed
+- **CQ-17**: ESLint tightened with `no-shadow`, `object-shorthand`, `prefer-template` (warnings)
+
+---
+
 ## [5.15.0] - 2026-02-11
 
 ### Added
