@@ -1,8 +1,8 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 5.19.0 | **Languages:** en, fr, es, de, pt
+**Version:** 6.0.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 40 agents, 157 commands, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 39 agents, 155 commands, and BMAD v6 project management.
 
 ---
 
@@ -50,9 +50,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | Command | Description |
 |---------|-------------|
 | `/common:pre-commit-check` | Validate before commit |
-| `/common:full-audit` | Complete project audit |
 | `/common:ralph-run` | Run Claude in continuous loop |
-| `/common:ralph-sprint` | **[NEW]** Autonomous Sprint Conductor (overnight) |
 | `/common:setup-project-context` | Configure project context |
 | `/common:add-technology` | Add new tech stack |
 | `/common:team-audit` | Parallel multi-tech audit (Agent Teams) |
@@ -132,7 +130,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Agents
 
-### Common Agents (13)
+### Common Agents (12)
 | Agent | Expertise |
 |-------|-----------|
 | `@api-designer` | REST/GraphQL API design |
@@ -147,7 +145,6 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `@accessibility-expert` | WCAG 2.2 AAA compliance |
 | `@research-assistant` | Technical research |
 | `@ralph-conductor` | Continuous loop orchestration |
-| `@workflow-orchestrator` | Workflow orchestration |
 
 ### Technology Reviewers (10)
 | Agent | Technology |
@@ -242,38 +239,6 @@ Continuous AI loop that runs Claude until task completion.
 | `file_changed` | Verify modifications |
 | `hook` | Integrate with quality-gate.sh |
 | `human` | Manual approval |
-
----
-
-## Autonomous Sprint Conductor (ASC) - NEW
-
-Run entire sprints overnight with minimal human intervention.
-
-```bash
-# Overnight sprint execution
-/common:ralph-sprint "Sprint 3" --overnight
-
-# Parallel processing (3 stories simultaneously)
-/common:ralph-sprint "Sprint 3" --parallel 3 --overnight
-```
-
-**Key Features:**
-| Feature | Description |
-|---------|-------------|
-| Auto-claim | Automatically claims next ready story |
-| Recovery Engine | Auto-fix transient/recoverable errors |
-| Escalation Service | Queues blocking issues with timeout |
-| Parallel Processing | Process multiple stories concurrently |
-
-**Error Classification:**
-| Level | Type | Action |
-|-------|------|--------|
-| 0 | Transient | Auto-retry (timeout, rate limit) |
-| 1 | Recoverable | Auto-fix (lint, tests, deps) |
-| 2 | Degraded | Continue with warning |
-| 3 | Blocked | Escalate to human |
-
-See [Autonomous Sprint Guide](../docs/AUTONOMOUS-SPRINT.md) for details.
 
 ---
 
@@ -382,7 +347,7 @@ make install-symfony TARGET=. RULES_LANG=en
 @tdd-coach Guide me through TDD for this feature
 
 # Run audit
-/common:full-audit
+/common:team-audit --sequential
 ```
 
 ---

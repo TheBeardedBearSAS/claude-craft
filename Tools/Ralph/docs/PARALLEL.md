@@ -16,10 +16,7 @@ Located at `Tools/Ralph/lib/parallel-manager.sh`, the parallel manager:
 
 ```bash
 # Process 3 stories in parallel
-/common:ralph-sprint "Sprint 3" --parallel 3 --overnight
-
-# Or via CLI
-npx @the-bearded-bear/claude-craft ralph-sprint "Sprint 3" -p 3 -o
+/common:team-sprint --ralph-mode "Sprint 3" --parallel 3 --overnight
 ```
 
 ## Dependency Graph

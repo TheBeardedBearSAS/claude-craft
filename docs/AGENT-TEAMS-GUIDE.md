@@ -29,7 +29,7 @@ Agent Teams adds coordination overhead. Use it only when the parallelization ben
 | Sprint, 3+ independent stories | USE PARALLEL | Stories processed concurrently |
 | Sprint, 1-2 stories | STAY SEQUENTIAL | Coordination cost exceeds benefit |
 | Full lifecycle (write + implement), 3+ stories | USE PARALLEL (team-delivery) | ~2.2x speedup, cross-phase context, file domain mapping |
-| Full lifecycle, < 3 stories | STAY SEQUENTIAL | `@product-owner` + `ralph-sprint` is simpler |
+| Full lifecycle, < 3 stories | STAY SEQUENTIAL | `@product-owner` + `team-sprint --ralph-mode` is simpler |
 | BMAD quality gates | STAY SEQUENTIAL | Gates are fast (< 30s each); micro-optimization |
 | Small projects (< 50 files) | STAY SEQUENTIAL | Sequential audit completes in ~2 min |
 
@@ -89,7 +89,7 @@ Claude-craft provides 4 team templates for common parallel workflows.
 
 ### team-audit: Full Audit Team
 
-Parallelizes the `/common:full-audit` command across multiple technology stacks.
+Parallelizes the audit across multiple technology stacks.
 
 **Architecture:**
 
@@ -121,7 +121,7 @@ Parallelizes the `/common:full-audit` command across multiple technology stacks.
 
 ### team-sprint: Sprint Development Team
 
-Parallelizes story processing during `/common:ralph-sprint` execution.
+Parallelizes story processing during sprint execution.
 
 **When to use:** Sprints with 3+ independent stories (no blocking dependencies between them).
 

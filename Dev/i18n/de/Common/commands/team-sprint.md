@@ -1,11 +1,11 @@
 ---
 description: Sprint-Entwicklungsteam - Parallele Story-Implementierung mit Agent Teams
-argument-hint: <sprint-name> [--max-workers=3] [--overnight] [--use-teams]
+argument-hint: <sprint-name> [--max-workers=3] [--overnight]
 ---
 
 # Sprint-Entwicklungsteam - Parallele Story-Implementierung
 
-Parallele Sprint-Ausführung mit Claude Code Agent Teams (v2.1.32+) orchestrieren. Startet einen Sprint-Dirigenten (opus) plus 2-3 Entwickler-Worker (sonnet), die jeweils eine unabhängige Story aus dem Backlog übernehmen. Konzipiert für die Integration mit dem bestehenden Ralph-Sprint-Flow (`/common:ralph-sprint --use-teams`).
+Parallele Sprint-Ausführung mit Claude Code Agent Teams (v2.1.32+) orchestrieren. Startet einen Sprint-Dirigenten (opus) plus 2-3 Entwickler-Worker (sonnet), die jeweils eine unabhängige Story aus dem Backlog übernehmen.
 
 ## Argumente
 
@@ -18,8 +18,7 @@ $ARGUMENTS
 - `--max-stories=10`: Maximale Anzahl zu bearbeitender Stories (Standard: 10)
 - `--timeout=12`: Maximale Laufzeit in Stunden (Standard: 12)
 - `--dry-run`: Team-Zusammensetzung und Story-Zuweisungen anzeigen, ohne auszuführen
-- `--use-teams`: Flag, das von ralph-sprint übergeben wird, um Agent-Teams-Modus anzuzeigen
-- `--ralph-mode`: Ralph-Recovery-Engine aktivieren (Fehlerklassifizierung, Auto-Retry, Eskalationsdienst) zusammen mit Agent-Teams-Parallelisierung. Kombiniert das Beste aus beiden: parallele Story-Ausführung von team-sprint mit den Recovery-/Eskalationsfähigkeiten von ralph-sprint.
+- `--ralph-mode`: Ralph-Recovery-Engine aktivieren (Fehlerklassifizierung, Auto-Retry, Eskalationsdienst) zusammen mit Agent-Teams-Parallelisierung.
 
 ## Voraussetzungen
 
@@ -34,8 +33,8 @@ $ARGUMENTS
 
 ## Wann verwenden (vs. sequenzieller Sprint)
 
-| Bedingung | Team-Sprint verwenden | Sequenzielles `/common:ralph-sprint` verwenden |
-|-----------|----------------------|------------------------------------------------|
+| Bedingung | Team-Sprint verwenden (parallel) | `--sequential` oder Einzelstory verwenden |
+|-----------|----------------------------------|-------------------------------------------|
 | 1 Story verbleibend | Nein | Ja |
 | 2+ unabhängige Stories | Ja (~2x Beschleunigung) | Ebenfalls möglich (einfacher) |
 | Stories mit gemeinsamen Dateien | Nein (Schreibkonflikte) | Ja |
@@ -214,12 +213,12 @@ EXECUTION METRICS
 
 **Hinweis**: Die Beschleunigung hängt von der Story-Unabhängigkeit und vergleichbarer Komplexität ab. Wenn eine Story 3x länger dauert als andere, begrenzt die Engpass-Story die Gesamtbeschleunigung.
 
-## Integration mit Ralph-Sprint
+## Integration mit der Ralph-Recovery-Engine
 
-Bei Aufruf über `/common:ralph-sprint --use-teams` übernimmt der Ralph-Teams-Adapter (`Tools/AgentTeams/lib/ralph-teams-adapter.sh`):
+Wenn `--ralph-mode` aktiviert ist, übernimmt der Ralph-Teams-Adapter (`Tools/AgentTeams/lib/ralph-teams-adapter.sh`):
 
-1. Übersetzung der Ralph-Session-Konfiguration in Agent-Teams-Parameter
-2. Überbrückung von Checkpoint/Recovery zwischen Ralph und Agent Teams
+1. Fehlerklassifizierung und automatischer Retry bei vorübergehenden Fehlern
+2. Überbrückung von Checkpoint/Recovery mit Agent Teams
 3. Sicherstellung, dass sprint-status.yaml-Aktualisierungen dem Single-Writer-Muster folgen
 4. Zuordnung der Ralph-Fehlerlevel zu Agent-Teams-Recovery-Aktionen
 

@@ -37,7 +37,7 @@ $ARGUMENTS
 | Bedingung | Team-Delivery verwenden | Alternative |
 |-----------|------------------------|-------------|
 | Vollständiger Zyklus (Plan + Code), 3+ Stories | **Ja (~2,2x Beschleunigung)** | Sequenziell zu langsam |
-| < 3 Stories | Nein | `@product-owner` + `/common:ralph-sprint` |
+| < 3 Stories | Nein | `@product-owner` + `/common:team-sprint --sequential` |
 | Einzelne Story | Nein | `/common:ralph-run` |
 | 5+ unabhängige Stories | **Ja (bester ROI)** | Möglich, aber sequenziell langsam |
 | Nur Implementierung (Stories vorhanden) | `--phase=implementation` verwenden | `/common:team-sprint` |

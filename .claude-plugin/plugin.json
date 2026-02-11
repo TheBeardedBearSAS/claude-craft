@@ -2,8 +2,8 @@
   "$schema": "https://claude.ai/plugin-schema.json",
   "name": "claude-craft",
   "displayName": "Claude Craft",
-  "description": "AI-assisted development framework with BMAD v6 project management, 10 technology stacks, 40 agents, and 130+ commands",
-  "version": "5.19.0",
+  "description": "AI-assisted development framework with BMAD v6 project management, 10 technology stacks, 39 agents, and 130+ commands",
+  "version": "6.0.0",
   "author": {
     "name": "The Bearded Bear",
     "url": "https://github.com/TheBeardedBearSAS"
@@ -94,8 +94,8 @@
       "description": "Full BMAD v6 project management framework",
       "tracks": ["quick-flow", "standard", "enterprise"]
     },
-    "autonomousSprint": {
-      "description": "Overnight autonomous sprint execution with error recovery",
+    "teamSprint": {
+      "description": "Overnight autonomous sprint execution via team-sprint --ralph-mode",
       "parallelProcessing": true
     },
     "qaRecette": {

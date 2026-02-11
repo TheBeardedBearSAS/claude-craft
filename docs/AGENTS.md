@@ -12,7 +12,7 @@ In Claude Code, mention an agent to activate its expertise:
 @symfony-reviewer Review this controller for best practices
 ```
 
-## Common Agents (13)
+## Common Agents (12)
 
 These agents are installed with `install-common` and are useful across all technologies.
 
@@ -268,24 +268,6 @@ Helps with:
 | `file_changed` | Verify files were modified |
 | `hook` | Integrate with existing hooks |
 | `human` | Interactive manual validation |
-
----
-
-### workflow-orchestrator
-
-**Expertise**: Workflow orchestration
-
-Manages multi-phase development workflows and coordinates transitions between workflow phases.
-
-Helps with:
-- Workflow initialization and configuration
-- Phase transition management
-- Progress tracking across workflow phases
-
-```
-@workflow-orchestrator Initialize a standard workflow for this project
-@workflow-orchestrator What's the current workflow status?
-```
 
 ---
 
@@ -1001,12 +983,12 @@ This restricts the agent to only spawn `Explore` and `Plan` sub-agents, preventi
 
 | Category | Unique Agents | With i18n (×5 languages) |
 |----------|---------------|--------------------------|
-| Common | 13 | 65 |
+| Common | 12 | 60 |
 | Technology Reviewers | 10 | 50 |
 | Docker/Infrastructure | 5 | 25 |
 | **BMAD v6** | **10** | **10** (YAML format) |
 | Project | 2 | 10 |
-| **Total** | **40** | **160** |
+| **Total** | **39** | **155** |
 
 ---
 

@@ -231,26 +231,12 @@ npx @the-bearded-bear/claude-craft ralph "Fix the login bug"
 | `hook` | Integrate with quality-gate.sh |
 | `human` | Manual approval |
 
-### What is the Autonomous Sprint Conductor (ASC)?
-
-ASC (v3.0) enables overnight/unattended sprint execution:
-
-```bash
-/common:ralph-sprint "Sprint 3" --overnight
-```
-
-Features:
-- **Auto-claim**: Automatically claims next ready story
-- **Recovery Engine**: Auto-fix errors before circuit breaker trips
-- **Escalation Service**: Queues blocking issues with timeout
-- **Parallel Processing**: Process multiple stories concurrently
-
 ### Can I run sprints overnight?
 
-Yes! Use the ASC with overnight mode:
+Yes! Use the team-sprint command with Ralph mode:
 
 ```bash
-/common:ralph-sprint "Sprint 3" --overnight --max-stories 5
+/common:team-sprint --ralph-mode "Sprint 3" --overnight --max-stories 5
 ```
 
 This will:
@@ -259,21 +245,7 @@ This will:
 3. Escalate blocking issues
 4. Stop at 6am or when limits are reached
 
-### How do I handle escalations during overnight runs?
-
-Escalations are queued in `.ralph/escalations/queue/`. Configure webhooks for notifications:
-
-```yaml
-# ralph-autonomous.yml
-escalation:
-  webhook:
-    url: "https://hooks.slack.com/services/xxx"
-    type: "slack"
-  timeout_hours: 4
-  default_action: "skip"
-```
-
-See [Autonomous Sprint Guide](AUTONOMOUS-SPRINT.md).
+> **Note:** `/common:ralph-sprint` was removed in v6.0. See [Migration Guide](MIGRATION-v6.md).
 
 ---
 
@@ -319,7 +291,7 @@ Fast Mode (v2.1.36+) delivers up to 2.5x faster output for Opus 4.6 with the sam
 
 ### When to use Fast Mode with Claude Craft?
 
-Use for interactive work (code review, debugging). For batch operations (ralph-sprint, team-audit), standard mode is more cost-effective.
+Use for interactive work (code review, debugging). For batch operations (team-sprint, team-audit), standard mode is more cost-effective.
 
 ---
 

@@ -16,21 +16,21 @@ $ARGUMENTS
 - `--output-dir=<path>`: Diretorio de saida personalizado para resultados da auditoria
 - `--dry-run`: Mostrar composicao da equipe e custo estimado sem executar
 - `--skip-aggregation`: Gerar resultados por stack sem consolidar
-- `--sequential`: Executar auditorias sequencialmente em vez de em paralelo (sem overhead de Agent Teams, equivalente a `/common:full-audit` mas com formato de relatorio team-audit). Util para projetos de tecnologia unica ou quando Agent Teams nao esta disponivel.
+- `--sequential`: Executar auditorias sequencialmente em vez de em paralelo (sem overhead de Agent Teams). Util para projetos de tecnologia unica ou quando Agent Teams nao esta disponivel.
 
 ## Pre-requisitos
 
 - Claude Code v2.1.32+ com suporte a Agent Teams
 - Variavel de ambiente `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` definida
-- Projeto com 2+ stacks tecnologicos detectados (projetos de stack unico devem usar `/common:full-audit` sequencial)
+- Projeto com 2+ stacks tecnologicos detectados (projetos de stack unico devem usar o flag `--sequential`)
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponivel
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponivel
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponivel
 
 ## Quando Usar (vs. Auditoria Sequencial)
 
-| Condicao | Usar Team Audit | Usar `/common:full-audit` Sequencial |
-|----------|----------------|--------------------------------------|
+| Condicao | Usar Team Audit | Usar flag `--sequential` |
+|----------|----------------|-------------------------|
 | 1 stack tecnologico | Nao | Sim |
 | 2+ stacks tecnologicos | Sim | Tambem valido (mais simples, mais barato) |
 | Urgencia de tempo | Sim (speedup 2-3x) | Nao |
@@ -61,7 +61,7 @@ Escanear raiz do projeto buscando marcadores de tecnologia:
 
 Se `--techs=auto`, detectar todos. Se explicito, validar que os stacks especificados existem.
 
-**Gate de decisao**: Se apenas 1 tecnologia detectada, voltar para `/common:full-audit` sequencial (sem necessidade de overhead de equipe).
+**Gate de decisao**: Se apenas 1 tecnologia detectada, mudar para modo sequencial via `--sequential` (sem necessidade de overhead de equipe).
 
 ### Etapa 2: Verificacao de Compatibilidade
 
@@ -266,7 +266,7 @@ O lider envia `shutdown_request` para todos os workers e limpa os diretorios de 
 
 ## Regras de Pontuacao
 
-Mesmas que `/common:full-audit`:
+Regras de pontuacao:
 
 | Violacao | Pontos Perdidos |
 |----------|-----------------|
@@ -300,7 +300,7 @@ Mesmas que `/common:full-audit`:
 | Crash do worker | Lider registra erro, exclui stack do relatorio |
 | Docker indisponivel | Worker reporta erro, lider faz fallback para analise somente de codigo |
 | Nenhuma tecnologia detectada | Abortar com mensagem clara |
-| Apenas uma tecnologia | Fallback para `/common:full-audit` sequencial |
+| Apenas uma tecnologia | Fallback para modo `--sequential` |
 | Verificacao de compatibilidade falha | Excluir stack do paralelo, lider trata sequencialmente |
 
 ## Limitacoes

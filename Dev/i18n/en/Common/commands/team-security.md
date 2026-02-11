@@ -44,7 +44,7 @@ $ARGUMENTS
 
 The security lead performs initial reconnaissance:
 
-1. Detect technology stacks (same as full-audit detection)
+1. Detect technology stacks (same as team-audit detection)
 2. Identify entry points: API endpoints, forms, file uploads
 3. Map the attack surface: public routes, authentication boundaries, data flows
 4. Create threat model outline (STRIDE categories)

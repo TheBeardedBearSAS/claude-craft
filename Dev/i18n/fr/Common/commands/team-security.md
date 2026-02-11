@@ -44,7 +44,7 @@ $ARGUMENTS
 
 Le security lead effectue la reconnaissance initiale :
 
-1. Détecter les stacks technologiques (même détection que le full-audit)
+1. Détecter les stacks technologiques (même détection que le team-audit)
 2. Identifier les points d'entrée : endpoints API, formulaires, upload de fichiers
 3. Mapper la surface d'attaque : routes publiques, frontières d'authentification, flux de données
 4. Créer l'ébauche du modèle de menaces (catégories STRIDE)

@@ -136,76 +136,6 @@ Access complete rules via `@.claude/references/`:
 - `flutter/mcp-integration.md` - Model Context Protocol
 - `flutter/web-performance-2026.md` - Web performance
 
-## Autonomous Sprint Conductor (ASC) Quick Reference
-
-### Essential Commands
-
-```bash
-# Overnight sprint
-/common:ralph-sprint "Sprint N" --overnight
-
-# Supervised (first run)
-/common:ralph-sprint "Sprint N" --supervised
-
-# Parallel (3 stories)
-/common:ralph-sprint "Sprint N" --parallel 3 --overnight
-
-# Single story
-/common:ralph-sprint "Sprint N" --story US-042
-
-# Resume session
-/common:ralph-sprint "Sprint N" --resume ASC-xxx
-```
-
-### Quick Configuration
-
-```yaml
-# ralph-autonomous.yml (minimal)
-autonomous:
-  enabled: true
-  mode: "bounded"
-  schedule:
-    stop_window: "06:00"
-recovery:
-  enabled: true
-  auto_fix_lint: true
-escalation:
-  enabled: true
-  timeout_hours: 4
-```
-
-### Error Classification
-
-| Level | Type | Action |
-|-------|------|--------|
-| 0 | Transient | Auto-retry |
-| 1 | Recoverable | Auto-fix |
-| 2 | Degraded | Continue |
-| 3 | Blocked | Escalate |
-
-### Key Metrics
-
-| Metric | Target |
-|--------|--------|
-| Interventions/sprint | <5 |
-| Stories overnight | 3-5 |
-| Auto-recovery rate | >70% |
-
-### Monitoring
-
-```bash
-# Session state
-cat .ralph/conductor/state-ASC-*.yaml
-
-# Escalations
-ls .ralph/escalations/queue/
-
-# Metrics
-cat .ralph/conductor/metrics-ASC-*.json
-```
-
----
-
 ## QA Recette Quick Reference
 
 ### Essential Commands
@@ -338,7 +268,7 @@ Multi-agent: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Teammate/SendMessage tool
 
 | Template | Use Case | Min Stacks/Stories |
 |----------|----------|--------------------|
-| `team-audit` | Parallel `/common:full-audit` across tech stacks | 2+ tech stacks |
+| `team-audit` | Parallel audit across tech stacks | 2+ tech stacks |
 | `team-sprint` | Parallel story processing in sprints | 3+ independent stories |
 | `team-security` | Parallel OWASP security review | 2+ tech stacks |
 

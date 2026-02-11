@@ -114,10 +114,10 @@ Add to your project's `.claude/settings.json`:
 | `/project:run-sprint` | Execute full sprint |
 | `/project:batch-status` | View queue status |
 
-### Autonomous Sprint Conductor (ASC)
+### Team Sprint (Ralph Mode)
 | Command | Description |
 |---------|-------------|
-| `/common:ralph-sprint` | Run autonomous sprint overnight |
+| `/common:team-sprint --ralph-mode` | Run autonomous sprint overnight |
 | `batch-executor.sh autonomous` | Queue with Ralph integration |
 | `routing-engine.sh auto-claim` | Auto-claim next ready story |
 | `routing-engine.sh tdd-phase` | Update TDD phase with auto-transition |
@@ -172,18 +172,18 @@ Stories track TDD phase:
 
 Update with: `/sprint:tdd <story-id> <phase>`
 
-## Autonomous Sprint Conductor (ASC) Integration
+## Team Sprint Integration
 
-BMAD v6 integrates with Ralph Wiggum's ASC for overnight execution:
+BMAD v6 integrates with the team sprint command for overnight execution:
 
-### Autonomous Mode Features
+### Ralph Mode Features
 
 ```bash
 # Run sprint overnight
-/common:ralph-sprint "Sprint 1" --overnight
+/common:team-sprint --ralph-mode "Sprint 1" --overnight
 
 # With parallel processing
-/common:ralph-sprint "Sprint 1" --parallel 3 --overnight
+/common:team-sprint --ralph-mode "Sprint 1" --parallel 3 --overnight
 ```
 
 ### Routing Engine Autonomous Commands

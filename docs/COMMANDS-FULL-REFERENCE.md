@@ -39,7 +39,6 @@ Complete reference for all 132+ commands available in Claude Craft.
 |---------|-------------|
 | `/common:pre-commit-check` | Validate code before commit |
 | `/common:pre-merge-check` | Validate code before merge |
-| `/common:full-audit` | Complete project audit |
 | `/common:release-checklist` | Pre-release validation |
 
 ### Generation Commands

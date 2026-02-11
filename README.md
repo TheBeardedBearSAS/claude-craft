@@ -6,14 +6,12 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-**Autonomous Sprint Ready**: Run entire sprints overnight with `/common:ralph-sprint` - auto-claim, error recovery, parallel processing.
+## What's New in v6.0
 
-## What's New in v5.17
-
-- **Documentation Cleanup**: Removed all stale migrate references from 6 doc files
-- **CI Hardening**: Coverage thresholds raised (50%→75% lines, 40%→80% branches)
-- **Test Coverage**: Ralph.js now at ~100% coverage
-- See [CHANGELOG](CHANGELOG.md) for full details
+- **BREAKING**: Removed `/common:full-audit` (use `/common:team-audit --sequential`)
+- **BREAKING**: Removed `/common:ralph-sprint` (use `/common:team-sprint --ralph-mode`)
+- **BREAKING**: Removed `@workflow-orchestrator` agent (use `/workflow:*` commands)
+- See [Migration Guide](docs/MIGRATION-v6.md) and [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
 
@@ -22,8 +20,8 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **10 Technology Stacks**: Symfony, Flutter, Python, React, React Native, Angular, C#/.NET, Laravel, Vue.js, PHP
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **40 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Workflow Orchestrator, Ralph Conductor, **10 BMAD agents**, and QA Recette
-- **157 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
+- **39 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Ralph Conductor, **10 BMAD agents**, and QA Recette
+- **155 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
 - **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
 - **249 Skills**: Best practices in official Claude Code format (architecture, testing, security)
@@ -496,11 +494,6 @@ claude-craft/bundles/
 Copy the appropriate bundle into your preferred AI platform's custom instructions.
 
 ## Available Agents
-
-### Workflow Agent
-| Agent | Expertise |
-|-------|-----------|
-| `workflow-orchestrator` | Intelligent routing, phase coordination, track selection |
 
 ### Common Agents
 | Agent | Expertise |

@@ -179,7 +179,7 @@ sprints:
 /symfony:check-security
 
 # Full audit
-/common:full-audit
+/common:team-audit --sequential
 ```
 
 ---

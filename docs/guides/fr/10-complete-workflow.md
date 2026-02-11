@@ -342,7 +342,7 @@ Exécuter régulièrement pendant le développement :
 ### Audit Complet Avant Release
 
 ```
-/common:full-audit
+/common:team-audit --sequential
 ```
 
 ### Validation Pré-Commit
@@ -465,7 +465,7 @@ Voici une séquence condensée pour une fonctionnalité typique :
 
 # 6. Réviser (QA)
 @qa Valide les critères d'acceptation
-/common:full-audit
+/common:team-audit --sequential
 
 # 7. Déployer
 /docker:cicd-pipeline github-actions

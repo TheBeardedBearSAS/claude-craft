@@ -16,21 +16,21 @@ $ARGUMENTS
 - `--output-dir=<path>` : Répertoire de sortie personnalisé pour les résultats d'audit
 - `--dry-run` : Afficher la composition de l'équipe et le coût estimé sans exécuter
 - `--skip-aggregation` : Sortir les résultats par stack sans les fusionner
-- `--sequential` : Exécuter les audits séquentiellement au lieu de les paralléliser (pas de surcoût Agent Teams, équivalent à `/common:full-audit` mais avec le format de rapport team-audit). Utile pour les projets mono-technologie ou quand les Agent Teams ne sont pas disponibles.
+- `--sequential` : Exécuter les audits séquentiellement au lieu de les paralléliser (pas de surcoût Agent Teams). Utile pour les projets mono-technologie ou quand les Agent Teams ne sont pas disponibles.
 
 ## Prérequis
 
 - Claude Code v2.1.32+ avec support Agent Teams
 - Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` définie
-- Projet avec 2+ stacks technologiques détectées (les projets mono-stack doivent utiliser `/common:full-audit` séquentiel)
+- Projet avec 2+ stacks technologiques détectées (les projets mono-stack doivent utiliser le flag `--sequential`)
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponible
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponible
 
 ## Quand utiliser (vs. Audit Séquentiel)
 
-| Condition | Utiliser Team Audit | Utiliser `/common:full-audit` séquentiel |
-|-----------|--------------------|-----------------------------------------|
+| Condition | Utiliser Team Audit | Utiliser le flag `--sequential` |
+|-----------|--------------------|---------------------------------|
 | 1 stack technologique | Non | Oui |
 | 2+ stacks technologiques | Oui | Aussi valide (plus simple, moins cher) |
 | Sensible au temps | Oui (accélération 2-3x) | Non |
@@ -61,7 +61,7 @@ Scan du répertoire racine pour les marqueurs technologiques :
 
 Si `--techs=auto`, détecter tout. Si explicite, valider que les stacks spécifiées existent.
 
-**Porte de décision** : Si seulement 1 technologie détectée, basculer sur `/common:full-audit` séquentiel (pas besoin de surcoût d'équipe).
+**Porte de décision** : Si seulement 1 technologie détectée, basculer en mode séquentiel via `--sequential` (pas besoin de surcoût d'équipe).
 
 ### Étape 2 : Vérification de compatibilité
 
@@ -266,7 +266,7 @@ Le leader envoie un `shutdown_request` à tous les workers et nettoie les réper
 
 ## Règles de scoring
 
-Identiques à `/common:full-audit` :
+Règles de scoring :
 
 | Violation | Points perdus |
 |-----------|--------------|
@@ -300,7 +300,7 @@ Identiques à `/common:full-audit` :
 | Crash du worker | Le leader enregistre l'erreur, exclut le stack du rapport |
 | Docker non disponible | Le worker signale l'erreur, le leader bascule sur une analyse du code source uniquement |
 | Aucune technologie détectée | Abandon avec message explicite |
-| Une seule technologie | Basculement sur `/common:full-audit` séquentiel |
+| Une seule technologie | Basculement en mode `--sequential` |
 | Échec de la vérification de compatibilité | Exclusion du stack du parallèle, le leader traite séquentiellement |
 
 ## Limitations

@@ -104,7 +104,7 @@ Funcionalidades principais:
 
 ```bash
 /symfony:check-architecture
-/common:full-audit
+/common:team-audit --sequential
 /common:pre-commit-check
 ```
 
@@ -141,7 +141,7 @@ Funcionalidades principais:
 /sprint:next-story --claim
 @dev Implemente com TDD
 /gate:validate-story US-001
-/common:full-audit
+/common:team-audit --sequential
 /common:release-checklist
 ```
 

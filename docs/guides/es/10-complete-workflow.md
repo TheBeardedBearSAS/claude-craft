@@ -104,7 +104,7 @@ Características clave:
 
 ```bash
 /symfony:check-architecture
-/common:full-audit
+/common:team-audit --sequential
 /common:pre-commit-check
 ```
 
@@ -141,7 +141,7 @@ Características clave:
 /sprint:next-story --claim
 @dev Implementa con TDD
 /gate:validate-story US-001
-/common:full-audit
+/common:team-audit --sequential
 /common:release-checklist
 ```
 

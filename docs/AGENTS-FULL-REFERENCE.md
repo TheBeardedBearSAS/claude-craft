@@ -264,24 +264,6 @@ Complete reference for all 40 agents available in Claude Craft.
 
 ---
 
-### @workflow-orchestrator
-
-**Expertise:** Workflow orchestration
-
-**Use when:**
-- Initializing development workflows
-- Coordinating multi-phase projects
-- Managing workflow transitions
-
-**Example prompts:**
-```
-@workflow-orchestrator Initialize a standard workflow for this project
-@workflow-orchestrator What's the current workflow status?
-@workflow-orchestrator Transition to the design phase
-```
-
----
-
 ## Technology Reviewers (10)
 
 ### @symfony-reviewer

@@ -44,7 +44,7 @@ $ARGUMENTS
 
 O lider de seguranca realiza reconhecimento inicial:
 
-1. Detectar stacks tecnologicos (mesma deteccao que full-audit)
+1. Detectar stacks tecnologicos (mesma deteccao que team-audit)
 2. Identificar pontos de entrada: endpoints de API, formularios, uploads de arquivo
 3. Mapear a superficie de ataque: rotas publicas, fronteiras de autenticacao, fluxos de dados
 4. Criar esboço de threat model (categorias STRIDE)

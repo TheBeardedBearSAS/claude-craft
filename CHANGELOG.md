@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.0.0] - 2026-02-11
+
+### BREAKING
+
+- **Removed** `/common:full-audit` command — use `/common:team-audit --sequential` instead
+- **Removed** `/common:ralph-sprint` command — use `/common:team-sprint --ralph-mode` instead
+- **Removed** `@workflow-orchestrator` agent — use `/workflow:*` commands directly
+
+### Added
+
+- `docs/MIGRATION-v6.md` — upgrade guide from v5.x to v6.0
+
+### Removed
+
+- `docs/AUTONOMOUS-SPRINT.md` — ASC-specific documentation (functionality now in team-sprint)
+- 15 i18n files for removed commands/agent (full-audit, ralph-sprint, workflow-orchestrator)
+
+### Changed
+
+- Agent count: 40 → 39 (removed workflow-orchestrator)
+- Command count: 157 → 155 (removed full-audit and ralph-sprint)
+- Updated all documentation references to use replacement commands
+
+---
+
 ## [5.19.0] - 2026-02-11
 
 ### Added

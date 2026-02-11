@@ -5,7 +5,7 @@ argument-hint: [--techs=auto|tech1,tech2] [--max-workers=4]
 
 # Full Audit Team - Parallel Multi-Technology Audit
 
-Orchestrate a parallel full-audit across multiple technology stacks using Claude Code Agent Teams (v2.1.32+). Spawns a lead agent (opus) plus N stack-auditor workers (haiku), one per detected technology stack, up to a configurable maximum.
+Orchestrate a parallel audit across multiple technology stacks using Claude Code Agent Teams (v2.1.32+). Spawns a lead agent (opus) plus N stack-auditor workers (haiku), one per detected technology stack, up to a configurable maximum.
 
 ## Arguments
 
@@ -16,21 +16,21 @@ $ARGUMENTS
 - `--output-dir=<path>`: Custom output directory for audit results
 - `--dry-run`: Show team composition and estimated cost without executing
 - `--skip-aggregation`: Output per-stack results without merging
-- `--sequential`: Run audits sequentially instead of in parallel (no Agent Teams overhead, equivalent to `/common:full-audit` but with team-audit reporting format). Useful for single-technology projects or when Agent Teams is not available.
+- `--sequential`: Run audits sequentially instead of in parallel (no Agent Teams overhead). Useful for single-technology projects or when Agent Teams is not available.
 
 ## Prerequisites
 
 - Claude Code v2.1.32+ with Agent Teams support
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable set
-- Project with 2+ detected technology stacks (single-stack projects should use sequential `/common:full-audit`)
+- Project with 2+ detected technology stacks (single-stack projects should use `--sequential` flag)
 - `Tools/AgentTeams/lib/compatibility-check.sh` available
 - `Tools/AgentTeams/lib/result-aggregator.sh` available
 - `Tools/AgentTeams/lib/cost-estimator.sh` available
 
 ## When to Use (vs. Sequential Audit)
 
-| Condition | Use Team Audit | Use Sequential `/common:full-audit` |
-|-----------|---------------|--------------------------------------|
+| Condition | Use Team Audit | Use `--sequential` flag |
+|-----------|---------------|------------------------|
 | 1 technology stack | No | Yes |
 | 2+ technology stacks | Yes | Also valid (simpler, cheaper) |
 | Time-sensitive | Yes (2-3x speedup) | No |
@@ -61,7 +61,7 @@ Scan project root for technology markers:
 
 If `--techs=auto`, detect all. If explicit, validate specified stacks exist.
 
-**Decision gate**: If only 1 technology detected, fall back to sequential `/common:full-audit` (no team overhead needed).
+**Decision gate**: If only 1 technology detected, fall back to sequential mode via `--sequential` (no team overhead needed).
 
 ### Step 2: Compatibility Check
 
@@ -266,7 +266,7 @@ Leader sends `shutdown_request` to all workers and cleans up isolated output dir
 
 ## Scoring Rules
 
-Same as `/common:full-audit`:
+Scoring rules:
 
 | Violation | Points Lost |
 |-----------|-------------|
@@ -300,7 +300,7 @@ Same as `/common:full-audit`:
 | Worker crash | Leader logs error, excludes stack from report |
 | Docker not available | Worker reports error, leader falls back to source-only analysis |
 | No technologies detected | Abort with clear message |
-| Single technology only | Fall back to sequential `/common:full-audit` |
+| Single technology only | Fall back to `--sequential` mode |
 | Compatibility check fails | Exclude stack from parallel, leader handles sequentially |
 
 ## Limitations
