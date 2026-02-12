@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Widened `execSync` timeouts in 4 test files to eliminate flaky ETIMEDOUT failures under load
+- Restored OIDC npm publishing (broken since v5.9.2 Phase 2 remediation)
+- Fixed `workflow_dispatch` generating `-next` suffix instead of using package.json version directly
 
 ---
 
