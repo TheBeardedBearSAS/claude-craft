@@ -223,14 +223,15 @@ jobs:
           echo "DRY RUN - Would publish with:"
           echo "  Version: ${{ needs.validate.outputs.version }}"
           echo "  Tag: ${{ steps.npm_tag.outputs.tag }}"
-          unset NODE_AUTH_TOKEN
           npm publish --dry-run --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish to NPM (OIDC)
+      - name: Publish to NPM
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
-        run: |
-          unset NODE_AUTH_TOKEN
-          npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
+        run: npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Verify publication
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
