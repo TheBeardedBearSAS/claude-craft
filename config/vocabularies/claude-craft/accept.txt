@@ -19,6 +19,7 @@ Pydantic
 FastAPI
 Eisvogel
 npx
+npm
 CLI
 TDD
 BDD
@@ -39,6 +40,7 @@ DRY
 YAGNI
 Ralph
 Ralph Wiggum
+Wiggum
 ASC
 QA
 Recette
@@ -57,3 +59,21 @@ monorepo
 pre-commit
 subagent
 i18n
+Symfony
+Laravel
+Flutter
+Dart
+Vue.js
+VueJS
+Angular
+React Native
+ReactNative
+CSharp
+PHP
+Python
+Deptrac
+wasm
+github
+checkpointing
+semver
+backlog

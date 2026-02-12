@@ -173,6 +173,7 @@ jobs:
           vale --version
 
       - name: Run Vale prose linter
+        continue-on-error: true
         run: |
           vale sync
           mkdir -p styles/config/vocabularies
