@@ -20,6 +20,10 @@ npx @the-bearded-bear/claude-craft [command] [options]
 | `init` | Initialize workflow (shows instructions) |
 | `flatten` | Generate flattened codebase context |
 | `ralph` | Run Ralph Wiggum continuous loop |
+| `check` | Verify claude-craft installation structure |
+| `list` | Detailed component inventory |
+| `doctor` | Environment diagnostics & health check |
+| `update` | Refresh existing installation |
 | `help` | Show help message |
 | (no command) | Interactive installation wizard |
 
@@ -105,6 +109,131 @@ npx @the-bearded-bear/claude-craft install . --tech=angular --dry-run
 
 # Install all technologies
 npx @the-bearded-bear/claude-craft install ~/project --tech=all --lang=en
+```
+
+---
+
+## Check Command
+
+Verify the structure of a claude-craft installation.
+
+### Usage
+
+```bash
+npx @the-bearded-bear/claude-craft check [target-directory]
+```
+
+### Description
+
+Scans the `.claude/` directory and reports a summary of installed components: commands (by namespace), agents, references, skills, checklists, and templates.
+
+### Examples
+
+```bash
+# Check current directory
+npx @the-bearded-bear/claude-craft check
+
+# Check a specific project
+npx @the-bearded-bear/claude-craft check ~/my-project
+```
+
+---
+
+## List Command
+
+Display a detailed inventory of all installed claude-craft components.
+
+### Usage
+
+```bash
+npx @the-bearded-bear/claude-craft list [target-directory]
+```
+
+### Description
+
+Lists every installed component grouped by category (commands, agents, skills, references, checklists, templates) with counts and names. Useful for verifying what was installed and comparing across projects.
+
+### Examples
+
+```bash
+# List components in current directory
+npx @the-bearded-bear/claude-craft list
+
+# List components in a project
+npx @the-bearded-bear/claude-craft list ~/my-project
+```
+
+---
+
+## Doctor Command
+
+Run environment diagnostics and installation health checks.
+
+### Usage
+
+```bash
+npx @the-bearded-bear/claude-craft doctor [target-directory]
+```
+
+### Description
+
+Checks the development environment for required and recommended tools:
+
+| Check | Status |
+|-------|--------|
+| Node.js >= 20 | `[OK]` / `[FAIL]` |
+| npm | `[OK]` / `[FAIL]` |
+| Claude Code | `[OK]` / `[WARN]` |
+| git | `[OK]` / `[FAIL]` |
+| yq | `[OK]` / `[WARN]` |
+| `.claude/` structure | `[OK]` / `[WARN]` |
+| Shell script permissions | `[OK]` / `[WARN]` |
+| i18n directories | `[OK]` / `[WARN]` |
+
+### Examples
+
+```bash
+# Check current project
+npx @the-bearded-bear/claude-craft doctor
+
+# Check a specific project
+npx @the-bearded-bear/claude-craft doctor ~/my-project
+```
+
+---
+
+## Update Command
+
+Refresh an existing claude-craft installation by re-running install scripts.
+
+### Usage
+
+```bash
+npx @the-bearded-bear/claude-craft update [target-directory] [options]
+```
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--tech=<technology>` | Specific technology to update (if omitted, auto-detects from installed references) |
+| `--lang=<language>` | Language override (default: `en`) |
+
+### Description
+
+Re-runs install scripts with `--force` to refresh all files. Common rules are always refreshed first, then tech-specific rules. If `--tech` is omitted, the command auto-detects installed technologies from `.claude/references/`.
+
+### Examples
+
+```bash
+# Update all detected technologies
+npx @the-bearded-bear/claude-craft update ~/my-project
+
+# Update only React rules in French
+npx @the-bearded-bear/claude-craft update ~/my-project --tech=react --lang=fr
+
+# Update current directory
+npx @the-bearded-bear/claude-craft update .
 ```
 
 ---

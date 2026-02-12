@@ -138,4 +138,37 @@ describe('runUpdate', () => {
     expect(output).toContain('[FAIL]');
     expect(output).toContain('React');
   });
+
+  it('skips tech when install script not found', () => {
+    mkdirSync(join(tempDir, '.claude', 'references', 'react'), { recursive: true });
+    mkdirSync(join(cliRoot, 'Dev', 'scripts'), { recursive: true });
+    writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
+    // Deliberately NOT creating install-react-rules.sh
+
+    execSync.mockImplementation(() => '');
+
+    runUpdate(tempDir, {}, cliRoot);
+
+    const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('[SKIP]');
+    expect(output).toContain('install script not found');
+  });
+
+  it('reports update failed when all scripts fail', () => {
+    mkdirSync(join(tempDir, '.claude'));
+    mkdirSync(join(cliRoot, 'Dev', 'scripts'), { recursive: true });
+    writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
+    writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-react-rules.sh'), '#!/bin/bash');
+
+    // All scripts fail
+    execSync.mockImplementation(() => {
+      throw new Error('Script failed');
+    });
+
+    runUpdate(tempDir, { tech: 'react' }, cliRoot);
+
+    const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('Update failed');
+    expect(process.exitCode).toBe(1);
+  });
 });

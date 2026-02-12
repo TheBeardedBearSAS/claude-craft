@@ -87,10 +87,19 @@ That's it! You now have access to all Claude Craft features.
 
 ## Verify Installation
 
-Check that everything is properly installed:
+Use the built-in CLI commands to check your installation:
 
 ```bash
-# List installed files
+# Verify installation structure (commands, agents, skills, references)
+npx @the-bearded-bear/claude-craft check ~/my-first-app
+
+# Run environment diagnostics (Node.js, npm, git, yq, Claude Code)
+npx @the-bearded-bear/claude-craft doctor ~/my-first-app
+```
+
+You can also manually inspect the directory:
+
+```bash
 ls -la ~/my-first-app/.claude/
 
 # You should see:

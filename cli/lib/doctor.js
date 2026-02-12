@@ -78,7 +78,17 @@ function runDoctor(targetPath, deps = {}) {
     failed++;
   }
 
-  // 5. .claude/ structure integrity
+  // 5. yq available (Mike Farah version)
+  const yqVer = exec('yq --version');
+  if (yqVer) {
+    console.log(`  ${c.green}[OK]${c.reset} ${yqVer}`);
+    passed++;
+  } else {
+    console.log(`  ${c.yellow}[WARN]${c.reset} yq not found (required for YAML config)`);
+    warned++;
+  }
+
+  // 6. .claude/ structure integrity
   const claudeDir = path.join(targetPath, '.claude');
   if (fs.existsSync(claudeDir)) {
     console.log(`  ${c.green}[OK]${c.reset} .claude/ directory exists`);
@@ -109,7 +119,7 @@ function runDoctor(targetPath, deps = {}) {
     warned++;
   }
 
-  // 6. Shell scripts have execute permissions
+  // 7. Shell scripts have execute permissions
   const scriptsDir = path.join(targetPath, 'Dev', 'scripts');
   if (fs.existsSync(scriptsDir)) {
     try {
@@ -136,7 +146,7 @@ function runDoctor(targetPath, deps = {}) {
     }
   }
 
-  // 7. i18n base dirs
+  // 8. i18n base dirs
   const i18nBase = path.join(targetPath, 'Dev', 'i18n');
   if (fs.existsSync(i18nBase)) {
     const langs = listDirs(i18nBase);

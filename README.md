@@ -6,11 +6,12 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.3
+## What's New in v7.4
 
-- **shell-ui.sh** adopted across all install scripts — zero duplicate color/logging definitions
-- **CLI `check` command** — verify claude-craft installation: `npx @the-bearded-bear/claude-craft check`
-- **Documentation accuracy** — fixed stale version refs and paths in README, FAQ, help output
+- **CLI `list`, `doctor`, `update` commands** — detailed inventory, environment diagnostics, and in-place refresh
+- **help.js** now displays all 20 namespaces with descriptions
+- **fs-utils extraction** — shared `countFiles`/`listDirs` utilities for DRY CLI modules
+- **Documentation accuracy** — removed phantom namespaces, fixed stale paths
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.

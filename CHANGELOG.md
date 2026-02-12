@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.5.0] - 2026-02-12
+
+### Added
+
+- **Doctor yq check** — `doctor` command now verifies `yq` availability (required for YAML config per PREREQUISITES.md)
+- **CLI-REFERENCE.md** — added `check`, `list`, `doctor`, `update` command sections with usage, options, and examples
+- 5 new doctor tests (yq OK/missing, unreadable scripts dir, empty i18n, non-executable scripts, real tryExec)
+- 2 new update tests (skip when install script missing, all-scripts-fail path)
+
+### Changed
+
+- **README.md** — "What's New" updated to v7.4 features (list/doctor/update, 20 namespaces, fs-utils)
+- **QUICKSTART.md** — verification section now recommends `check` and `doctor` commands instead of `ls -la`
+- **CLAUDE.md** — fixed namespace count: "16+" → "19 namespaces"
+- **doctor.js** — renumbered check comments (5→yq, 6→structure, 7→scripts, 8→i18n)
+- Test count: 511 → 519 tests
+- Coverage: doctor.js 86% → 96%, update.js 91% → 100%
+
 ## [7.4.0] - 2026-02-12
 
 ### Added
