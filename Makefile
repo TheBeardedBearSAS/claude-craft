@@ -13,7 +13,7 @@
 #   npx @the-bearded-bear/claude-craft install <path> --tech=<name>
 #===============================================================================
 
-.PHONY: help install-all install-common install-project install-infra \
+.PHONY: help install-all install-common install-project install-infra install-coolify \
         install-tools install-statusline install-multiaccount install-projectconfig \
         install-web install-fullstack-js install-mobile install-backend \
         list list-agents list-commands \
@@ -95,6 +95,9 @@ install-all: ## Installe TOUTES les regles (common + toutes technos + project)
 	@if [ -f "$(CURDIR)/Infra/install-infra-rules.sh" ]; then \
 		$(CURDIR)/Infra/install-infra-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
 	fi
+	@if [ -f "$(CURDIR)/Infra/install-coolify-rules.sh" ]; then \
+		$(CURDIR)/Infra/install-coolify-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	fi
 	@if [ -f "$(CURDIR)/Project/install-project-commands.sh" ]; then \
 		$(CURDIR)/Project/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET); \
 	fi
@@ -108,9 +111,15 @@ install-project: ## Installe les commandes de gestion de projet (EPICs, US, Task
 	@echo "$(CYAN)Installation des commandes Project (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Project/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET)
 
-install-infra: ## Installe les agents et commandes Docker/Infrastructure
+install-infra: ## Installe les agents et commandes Docker + Coolify/Infrastructure
 	@echo "$(CYAN)Installation des regles Docker (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-infra-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+	@echo "$(CYAN)Installation des regles Coolify (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-coolify-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+
+install-coolify: ## Installe les agents et commandes Coolify
+	@echo "$(CYAN)Installation des regles Coolify (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-coolify-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 
 #===============================================================================
 # Combinaisons Courantes
@@ -337,7 +346,8 @@ check: ## Verifie que tous les scripts sont executables
 	@echo "$(CYAN)Verification des scripts...$(NC)"
 	@for script in $(SCRIPTS_DIR)/*.sh \
 		$(CURDIR)/Project/install-project-commands.sh \
-		$(CURDIR)/Infra/install-infra-rules.sh; do \
+		$(CURDIR)/Infra/install-infra-rules.sh \
+		$(CURDIR)/Infra/install-coolify-rules.sh; do \
 		if [ -f "$$script" ]; then \
 			if [ -x "$$script" ]; then \
 				echo "  $(GREEN)Y$(NC) $$script"; \
@@ -353,6 +363,7 @@ fix-permissions: ## Rend tous les scripts executables
 	@find $(SCRIPTS_DIR) -name "*.sh" -exec chmod +x {} \;
 	@chmod +x $(CURDIR)/Project/install-project-commands.sh
 	@chmod +x $(CURDIR)/Infra/install-infra-rules.sh
+	@chmod +x $(CURDIR)/Infra/install-coolify-rules.sh
 	@echo "$(GREEN)Permissions corrigees$(NC)"
 
 #===============================================================================

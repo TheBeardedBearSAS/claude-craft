@@ -1,6 +1,6 @@
 # Commands Full Reference
 
-Complete reference for all 155 commands available in Claude Craft.
+Complete reference for all 160 commands available in Claude Craft.
 
 ---
 
@@ -27,6 +27,7 @@ Complete reference for all 155 commands available in Claude Craft.
 | `/vuejs:` | 6 | Vue.js |
 | `/php:` | 5 | PHP |
 | `/docker:` | 4 | Docker |
+| `/coolify:` | 5 | Coolify/PaaS |
 | `/qa:recette*` | 5 | QA Recette (Acceptance Testing) |
 
 ---
@@ -508,6 +509,30 @@ any → blocked
 /docker:compose-setup symfony postgresql redis
 /docker:architecture microservices e-commerce
 /docker:cicd-pipeline github-actions
+```
+
+---
+
+## Coolify Commands (`/coolify:`)
+
+Infrastructure deployment with Coolify self-hosted PaaS.
+
+| Command | Description |
+|---------|-------------|
+| `/coolify:setup` | Initialize project for Coolify deployment |
+| `/coolify:deploy` | Deploy application to Coolify |
+| `/coolify:debug` | Diagnose Coolify deployment issues |
+| `/coolify:backup` | Configure and manage backups |
+| `/coolify:optimize` | Optimize Coolify deployment |
+
+### Usage Examples
+
+```bash
+/coolify:setup "Node.js API with PostgreSQL"
+/coolify:deploy --branch=main --env=production
+/coolify:debug "502 Bad Gateway after deploy"
+/coolify:backup --provider=s3 --schedule=daily
+/coolify:optimize
 ```
 
 ---

@@ -17,6 +17,7 @@ const NAMESPACES = [
   { prefix: 'gate', desc: 'Quality gates: validate PRD, story, backlog, techspec' },
   { prefix: 'project', desc: 'Project execution: run-sprint, run-epic, batch-status' },
   { prefix: 'docker', desc: 'Docker: compose-setup, architecture, debug, optimize' },
+  { prefix: 'coolify', desc: 'Coolify: setup, deploy, debug, backup, optimize' },
   { prefix: 'csharp', desc: 'C#/.NET: compliance, architecture, code-quality, security' },
   { prefix: 'symfony', desc: 'Symfony: architecture, compliance, CRUD, security' },
   { prefix: 'flutter', desc: 'Flutter: architecture, generate-feature, performance' },

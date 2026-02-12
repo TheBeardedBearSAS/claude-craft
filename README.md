@@ -18,10 +18,10 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 ## Features
 
 - **10 Technology Stacks**: Symfony, Flutter, Python, React, React Native, Angular, C#/.NET, Laravel, Vue.js, PHP
-- **Infrastructure Stack**: Docker agents and commands
+- **Infrastructure Stack**: Docker and Coolify agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **29 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, and Ralph Conductor
-- **155 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
+- **33 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker, Coolify experts, and Ralph Conductor
+- **160 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
 - **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
 - **36 Skills**: Best practices in official Claude Code format (architecture, testing, security)
@@ -258,6 +258,7 @@ Once installed, use the commands in your project:
 | **Vue.js** | 6 | 6 | 1 | Composition API, Pinia, Vitest |
 | **PHP** | 6 | 5 | 1 | Clean Architecture, PSR-12, PHPStan, Pest |
 | **Docker** | - | 5 | 5 | Dockerfile, Compose, CI/CD, Debugging, Optimize |
+| **Coolify** | - | 5 | 4 | Setup, Deploy, Debug, Backup, Optimize |
 
 ## Project Structure
 
@@ -284,9 +285,10 @@ claude-craft/
 │   │       ├── VueJS/          # Vue.js frontend
 │   │       └── PHP/            # PHP Clean Architecture
 │   └── scripts/                # Installation scripts
-├── Infra/                      # Infrastructure (Docker)
+├── Infra/                      # Infrastructure (Docker, Coolify)
 │   ├── i18n/                   # Translated agents & commands
-│   └── install-infra-rules.sh
+│   ├── install-infra-rules.sh
+│   └── install-coolify-rules.sh
 ├── Project/                    # Project management commands
 │   ├── i18n/                   # Translated commands
 │   └── install-project-commands.sh
@@ -369,7 +371,7 @@ make install-web TARGET=~/my-project      # React
 make install-backend TARGET=~/my-project  # Symfony + Python
 make install-mobile TARGET=~/my-project   # Flutter + React Native
 
-# Infrastructure (Docker)
+# Infrastructure (Docker + Coolify)
 make install-infra TARGET=~/my-project
 
 # Install Claude Code tools
@@ -525,6 +527,14 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 | `docker-cicd` | CI/CD pipelines, security scanning |
 | `docker-architect` | Complete Docker architecture design |
 
+### Coolify/Infrastructure Agents
+| Agent | Expertise |
+|-------|-----------|
+| `coolify-architect` | Coolify infrastructure design |
+| `coolify-deployment` | Deploy and manage applications |
+| `coolify-debug` | Troubleshoot Coolify deployments |
+| `coolify-monitoring` | Monitoring and backups |
+
 ## Command Namespaces
 
 - `/workflow:` - Development workflow (init, analyze, plan, design, implement, status)
@@ -545,6 +555,7 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 - `/vuejs:` - Vue.js-specific (components, composables, Pinia)
 - `/php:` - PHP-specific (entities, value objects, use cases, Clean Architecture)
 - `/docker:` - Docker/Infrastructure (compose, debug, pipelines, architecture)
+- `/coolify:` - Coolify/PaaS (setup, deploy, debug, backup, optimize)
 - `/qa:*` - **QA Recette** (acceptance testing, regression, Chrome automation)
 
 ## Documentation

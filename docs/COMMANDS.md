@@ -37,6 +37,7 @@ Commands can take arguments:
 | `/vuejs:` | Vue.js | 6 |
 | `/php:` | PHP | 5 |
 | `/docker:` | Docker/Infrastructure | 5 |
+| `/coolify:` | Coolify/PaaS | 5 |
 | `/project:` | Project Management | 22 |
 | `/sprint:` | Sprint Management (BMAD v6) | 5 |
 | `/gate:` | Quality Gates (BMAD v6) | 6 |
@@ -478,6 +479,20 @@ Infrastructure and containerization commands.
 | `/docker:debug <Symptom>` | Diagnose Docker issues |
 | `/docker:cicd-pipeline <Platform>` | Generate CI/CD pipeline |
 | `/docker:optimize <Target>` | Optimize Docker configuration |
+
+---
+
+## Coolify Commands (`/coolify:`)
+
+Infrastructure deployment with Coolify self-hosted PaaS.
+
+| Command | Description |
+|---------|-------------|
+| `/coolify:setup` | Initialize project for Coolify deployment |
+| `/coolify:deploy` | Deploy application to Coolify |
+| `/coolify:debug` | Diagnose Coolify deployment issues |
+| `/coolify:backup` | Configure and manage backups |
+| `/coolify:optimize` | Optimize Coolify deployment |
 
 ---
 

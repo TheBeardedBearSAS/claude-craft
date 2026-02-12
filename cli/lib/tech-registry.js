@@ -122,10 +122,21 @@ const TECH_REGISTRY = {
     installScript: 'install-infra-rules.sh',
     version: 'latest',
   },
+  coolify: {
+    name: 'coolify',
+    displayName: 'Coolify',
+    desc: 'Self-hosted PaaS: deploy, backup, monitor',
+    namespace: 'coolify',
+    i18nDir: 'Coolify',
+    installScript: 'install-coolify-rules.sh',
+    version: '4.x',
+  },
 };
 
 /** All tech keys (excluding docker which is infra) */
-const INSTALLABLE_TECHS = Object.keys(TECH_REGISTRY).filter((k) => k !== 'docker');
+const INSTALLABLE_TECHS = Object.keys(TECH_REGISTRY).filter(
+  (k) => k !== 'docker' && k !== 'coolify'
+);
 
 /** Get display name for a tech key */
 function getDisplayName(tech) {

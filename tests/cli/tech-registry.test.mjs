@@ -43,7 +43,7 @@ describe('tech-registry', () => {
 
   it('getAllTechKeys returns all keys including docker', () => {
     const keys = getAllTechKeys();
-    expect(keys.length).toBe(11);
+    expect(keys.length).toBe(12);
     expect(keys).toContain('docker');
   });
 });

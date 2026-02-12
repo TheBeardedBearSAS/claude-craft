@@ -2,7 +2,7 @@
 
 **Version:** 7.7.2 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 29 agents, 155 commands across 19 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 33 agents, 160 commands across 20 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -164,6 +164,15 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/docker:cicd-pipeline` | Generate CI/CD pipeline |
 | `/docker:optimize` | Optimize Docker setup |
 
+### Coolify (`/coolify:`)
+| Command | Description |
+|---------|-------------|
+| `/coolify:setup` | Initialize project for Coolify |
+| `/coolify:deploy` | Deploy application |
+| `/coolify:debug` | Diagnose issues |
+| `/coolify:backup` | Configure backups |
+| `/coolify:optimize` | Optimize deployment |
+
 ---
 
 ## Available Agents
@@ -206,6 +215,14 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `@docker-debug` | Container troubleshooting |
 | `@docker-cicd` | CI/CD pipelines |
 | `@docker-architect` | Docker architecture |
+
+### Coolify Agents (4)
+| Agent | Expertise |
+|-------|-----------|
+| `@coolify-architect` | Infrastructure design |
+| `@coolify-deployment` | Deploy and manage apps |
+| `@coolify-debug` | Troubleshoot deployments |
+| `@coolify-monitoring` | Monitoring and backups |
 
 ### Project Agents (2)
 | Agent | Role |

@@ -582,7 +582,92 @@ Helps with:
 @docker-architect Review our microservices container strategy
 ```
 
-> **Note:** Docker agents (5) and Project agents (2) are bundled in the `Infra/` and `Project/` directories respectively. They are installed into `.claude/agents/` by the CLI during `npx @the-bearded-bear/claude-craft install`. They do not appear in the source repository's `.claude/agents/` directory but are available after installation.
+> **Note:** Docker agents (5), Coolify agents (4), and Project agents (2) are bundled in the `Infra/` and `Project/` directories respectively. They are installed into `.claude/agents/` by the CLI during `npx @the-bearded-bear/claude-craft install`. They do not appear in the source repository's `.claude/agents/` directory but are available after installation.
+
+---
+
+## Coolify/Infrastructure Agents (4)
+
+Available with `install-coolify`.
+
+### coolify-architect
+
+**Expertise**: Coolify infrastructure design
+
+Specializes in designing complete Coolify deployment architectures for self-hosted applications.
+
+Helps with:
+- Application topology design
+- Resource planning and allocation
+- Network and domain configuration
+- Multi-environment strategies
+- Service orchestration on Coolify
+
+```
+@coolify-architect Design the Coolify architecture for this SaaS
+@coolify-architect Plan a multi-environment setup with Coolify
+```
+
+---
+
+### coolify-deployment
+
+**Expertise**: Coolify application deployment
+
+Expert in deploying and managing applications on Coolify with zero-downtime strategies.
+
+Helps with:
+- Application deployment configuration
+- Environment variable management
+- Build pack selection and optimization
+- Domain and SSL setup
+- Rollback strategies
+
+```
+@coolify-deployment Deploy this app to Coolify
+@coolify-deployment Configure zero-downtime deployment
+```
+
+---
+
+### coolify-debug
+
+**Expertise**: Coolify troubleshooting
+
+Specializes in diagnosing and resolving Coolify deployment issues.
+
+Helps with:
+- Build failure diagnosis
+- Container startup issues
+- Network connectivity problems
+- Resource exhaustion diagnosis
+- Log analysis and debugging
+
+```
+@coolify-debug Deployment keeps failing, help me diagnose
+@coolify-debug Application not reachable after deploy
+```
+
+---
+
+### coolify-monitoring
+
+**Expertise**: Coolify monitoring and backups
+
+Expert in setting up monitoring, alerting, and backup strategies for Coolify deployments.
+
+Helps with:
+- Health check configuration
+- Backup strategy design
+- Database backup automation
+- Alert configuration
+- Resource monitoring
+- Disaster recovery planning
+
+```
+@coolify-monitoring Set up automated backups for my databases
+@coolify-monitoring Configure health monitoring for production
+```
 
 ---
 
@@ -988,9 +1073,10 @@ This restricts the agent to only spawn `Explore` and `Plan` sub-agents, preventi
 | Common | 12 | 60 |
 | Technology Reviewers | 10 | 50 |
 | Docker/Infrastructure | 5 | 25 |
+| Coolify/Infrastructure | 4 | 20 |
 | **BMAD v6** | **0** (roles, not agents) | **10** (YAML roles) |
 | Project | 2 | 10 |
-| **Total** | **29** | **155** |
+| **Total** | **33** | **175** |
 
 ---
 
