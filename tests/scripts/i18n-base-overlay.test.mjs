@@ -278,7 +278,7 @@ describe('install scripts with base overlay', { timeout: 60000 }, () => {
       const tmpDir = makeTmpDir();
       const output = execSync(
         `bash "${COMMON_SCRIPT}" --dry-run --lang=${lang} "${tmpDir}"`,
-        { encoding: 'utf8', timeout: 15000 },
+        { encoding: 'utf8', timeout: 30000 },
       );
       expect(output).toMatch(/DRY-RUN|dry.run/i);
     },

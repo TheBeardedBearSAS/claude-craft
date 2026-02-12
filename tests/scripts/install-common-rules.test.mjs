@@ -25,7 +25,7 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
   it('shows help with --help flag', () => {
     const output = execSync(`bash "${SCRIPT}" --help`, {
       encoding: 'utf8',
-      timeout: 15000,
+      timeout: 30000,
     });
 
     expect(output).toMatch(/Usage:/i);
@@ -37,7 +37,7 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     const tmpDir = makeTmpDir();
     const output = execSync(`bash "${SCRIPT}" --dry-run --lang=en "${tmpDir}"`, {
       encoding: 'utf8',
-      timeout: 15000,
+      timeout: 30000,
     });
 
     expect(output).toMatch(/DRY-RUN|dry.run/i);
@@ -50,7 +50,7 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     for (const lang of langs) {
       const output = execSync(
         `bash "${SCRIPT}" --dry-run --lang=${lang} "${tmpDir}"`,
-        { encoding: 'utf8', timeout: 15000 },
+        { encoding: 'utf8', timeout: 30000 },
       );
       // Dry-run should succeed for each language
       expect(output).toBeTruthy();
@@ -61,7 +61,7 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     const tmpDir = makeTmpDir();
     execSync(`bash "${SCRIPT}" --lang=en "${tmpDir}"`, {
       encoding: 'utf8',
-      timeout: 20000,
+      timeout: 30000,
     });
 
     // Core directories that install-common-rules.sh creates

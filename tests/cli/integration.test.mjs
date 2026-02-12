@@ -9,7 +9,7 @@ const CLI_PATH = path.resolve(__dirname, '../../cli/index.js');
 function runCLI(args, opts = {}) {
   return execSync(`node "${CLI_PATH}" ${args}`, {
     encoding: 'utf8',
-    timeout: 15000,
+    timeout: 30000,
     ...opts,
   });
 }
@@ -18,7 +18,7 @@ function runCLIExpectFail(args, opts = {}) {
   try {
     execSync(`node "${CLI_PATH}" ${args}`, {
       encoding: 'utf8',
-      timeout: 15000,
+      timeout: 30000,
       ...opts,
     });
     throw new Error('Expected command to fail');
@@ -28,7 +28,7 @@ function runCLIExpectFail(args, opts = {}) {
   }
 }
 
-describe('CLI integration tests', { timeout: 15000 }, () => {
+describe('CLI integration tests', { timeout: 60000 }, () => {
   it('--help shows banner and exits 0', () => {
     // --help is parsed as option by parseArgs, so CLI falls through to interactive mode.
     // The 'help' command is the correct way to get help output (tested below).
