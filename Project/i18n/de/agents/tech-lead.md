@@ -219,7 +219,7 @@ Zerlegt Sprint-US in Aufgaben:
 - Generiert Mermaid-Abhängigkeitsgraph
 - Berechnet Gesamtstunden
 
-### /project:validate-backlog
+### /gate:validate-backlog
 Überprüft technische Konformität:
 - Vertical Slicing eingehalten
 - Konsistente Schätzungen

@@ -144,7 +144,7 @@ Sprint 1:
    Progresso: 6/6 (100%) ██████████
 
 Próxima etapa recomendada:
-  /project:move-story US-001 done
+  /sprint:transition US-001 done
 ```
 
 ### Erro de workflow

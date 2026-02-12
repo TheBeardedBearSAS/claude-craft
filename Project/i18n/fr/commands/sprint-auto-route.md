@@ -144,7 +144,7 @@ Stories vérifiées : 8
 Transitionnées : 3
 Pas de changement nécessaire : 5
 
-Statut sprint mis à jour. Exécuter /sprint:bmad-status pour voir.
+Statut sprint mis à jour. Exécuter /sprint:status --bmad pour voir.
 ═══════════════════════════════════════════════════════
 ```
 

@@ -125,7 +125,7 @@ Vorschlaege:
 3. US-003 entsperren: Wartet auf API-Zugangsdaten
 
 Befehle:
-  /sprint:bmad-status    Vollstaendigen Sprint-Status sehen
+  /sprint:status --bmad  Vollstaendigen Sprint-Status sehen
   /gate:validate-backlog Story-Bereitschaft pruefen
 ═══════════════════════════════════════════════════════
 ```

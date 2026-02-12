@@ -115,7 +115,7 @@ To Do ──→ In Progress ──→ Done
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/project:move-story` | US-Status/Sprint andern |
+| `/sprint:transition` | US-Status/Sprint andern |
 | `/project:move-task` | Aufgabenstatus andern |
 | `/project:update-epic` | EPIC bearbeiten |
 | `/project:update-story` | User Story bearbeiten |
@@ -125,7 +125,7 @@ To Do ──→ In Progress ──→ Done
 | Befehl | Beschreibung |
 |--------|--------------|
 | `/project:decompose-tasks` | US in Aufgaben zerlegen |
-| `/project:validate-backlog` | SCRUM-Qualitat prufen |
+| `/gate:validate-backlog` | SCRUM-Qualitat prufen |
 
 ---
 
@@ -136,7 +136,7 @@ To Do ──→ In Progress ──→ Done
 /project:generate-backlog symfony+flutter
 
 ## Schritt 2: Qualitat validieren
-/project:validate-backlog
+/gate:validate-backlog
 
 ## Schritt 3: Sprint 1 anzeigen
 /project:board 1

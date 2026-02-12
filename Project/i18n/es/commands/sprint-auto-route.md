@@ -144,7 +144,7 @@ Stories verificadas: 8
 Transicionadas: 3
 Sin cambio necesario: 5
 
-Estado sprint actualizado. Ejecutar /sprint:bmad-status para ver.
+Estado sprint actualizado. Ejecutar /sprint:status --bmad para ver.
 ═══════════════════════════════════════════════════════
 ```
 

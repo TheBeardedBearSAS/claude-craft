@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.2.0] - 2026-02-12
+
+### Removed
+
+- `/sprint:bmad-status` command — alias stub for `/sprint:status --bmad` (5 i18n files)
+- `/project:validate-backlog` command — alias stub for `/gate:validate-backlog --no-gate` (5 i18n files)
+- `/project:move-story` command — merged into `/sprint:transition` (5 i18n files)
+- BMAD v6 phantom agents section from documentation — these 10 roles (bmad-master, pm, ba, architect, po, sm, dev, qa, qa-recette, ux) are personas in workflow/sprint commands, not standalone agent files
+
+### Changed
+
+- `/sprint:transition` now supports sprint assignment (`sprint-N`) and task cascade behavior (merged from move-story)
+- Agent count: 39 → 28 (removed 10 phantom BMAD agent entries from docs; php-reviewer has no agent file)
+- Command count: 158 → 155 (removed 3 redundant commands)
+- QA Recette namespace: documented as `/common:recette*` instead of `/qa:recette*` to match actual installation
+- Updated COMMANDS-FULL-REFERENCE.md command count from "132+" to "155"
+
+---
+
 ## [6.1.1] - 2026-02-12
 
 ### Added

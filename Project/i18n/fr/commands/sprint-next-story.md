@@ -125,7 +125,7 @@ Suggestions :
 3. Débloquer US-003 : en attente des credentials API
 
 Commandes :
-  /sprint:bmad-status    Voir le statut complet du sprint
+  /sprint:status --bmad  Voir le statut complet du sprint
   /gate:validate-backlog Vérifier la préparation des stories
 ═══════════════════════════════════════════════════════
 ```

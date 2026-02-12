@@ -128,7 +128,7 @@ Statut Sprint :
 ✅ Done : 8
 
 Commandes :
-  /sprint:bmad-status    Voir le statut mis à jour
+  /sprint:status --bmad    Voir le statut mis à jour
   /gate:report          Rapport qualité
 ═══════════════════════════════════════════════════════
 ```

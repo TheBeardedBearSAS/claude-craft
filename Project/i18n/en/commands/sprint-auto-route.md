@@ -144,7 +144,7 @@ Stories checked: 8
 Transitioned: 3
 No change needed: 5
 
-Sprint status updated. Run /sprint:bmad-status to view.
+Sprint status updated. Run /sprint:status --bmad to view.
 ═══════════════════════════════════════════════════════
 ```
 

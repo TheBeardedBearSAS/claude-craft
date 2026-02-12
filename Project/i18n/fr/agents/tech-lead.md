@@ -219,7 +219,7 @@ Décompose les US d'un sprint en tâches :
 - Génère graphe Mermaid des dépendances
 - Calcule les totaux d'heures
 
-### /project:validate-backlog
+### /gate:validate-backlog
 Vérifie la conformité technique :
 - Vertical slicing respecté
 - Estimations cohérentes

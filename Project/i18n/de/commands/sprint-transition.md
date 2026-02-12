@@ -20,6 +20,7 @@ Gueltige Status:
 - `review` - Code fertig, wartet auf Review
 - `done` - Definition of Done erreicht
 - `blocked` - Durch externen Faktor blockiert
+- `sprint-N` - Story dem Sprint N zuweisen (z.B. `sprint-2`)
 
 ## Prozess
 
@@ -221,3 +222,16 @@ Bei Uebergang von blocked wird zum vorherigen Status zurueckgekehrt.
 /sprint:transition US-005 in-progress
 ```
 Gueltiger Rueckwaerts-Uebergang von review zur Feedback-Bearbeitung.
+
+### Einem Sprint zuweisen
+```
+/sprint:transition US-003 sprint-2
+```
+Weist die Story dem Sprint 2 zu. Erstellt das Sprint-Verzeichnis bei Bedarf. Der Story-Status bleibt erhalten.
+
+### Kaskade zu Aufgaben
+
+Bei der Transition einer Story:
+- **→ in-progress**: Aufgaben bleiben in ihrem aktuellen Status (einzeln gestartet)
+- **→ done**: Prueft ob alle Aufgaben done sind; warnt bei unvollstaendigen Aufgaben
+- **→ blocked**: Markiert alle in-progress Aufgaben als blocked

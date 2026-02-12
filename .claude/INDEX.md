@@ -142,34 +142,34 @@ Access complete rules via `@.claude/references/`:
 
 ```bash
 # Test a story
-/qa:recette --scope=story --id=US-001
+/common:recette --scope=story --id=US-001
 
 # Test with dry run first
-/qa:recette --scope=story --id=US-001 --dry-run
+/common:recette --scope=story --id=US-001 --dry-run
 
 # Resume interrupted session
-/qa:recette --resume=REC-xxx
+/common:recette --resume=REC-xxx
 
 # Record execution as GIF
-/qa:recette --scope=story --id=US-001 --record-gif
+/common:recette --scope=story --id=US-001 --record-gif
 
 # Fix bugs from a recette session
-/qa:recette-fix --session=REC-xxx
+/common:recette-fix --session=REC-xxx
 
 # Dry run: refine and document without fixing
-/qa:recette-fix --session=REC-xxx --dry-run
+/common:recette-fix --session=REC-xxx --dry-run
 
 # Fix only critical bugs
-/qa:recette-fix --session=REC-xxx --severity=critical
+/common:recette-fix --session=REC-xxx --severity=critical
 
 # Show all session statuses
-/qa:recette-status --all
+/common:recette-status --all
 
 # Check regression tests (Golden Rule violations)
-/qa:recette-regression --check
+/common:recette-regression --check
 
 # Generate report from session
-/qa:recette-report --session=REC-xxx
+/common:recette-report --session=REC-xxx
 ```
 
 ### Prerequisites

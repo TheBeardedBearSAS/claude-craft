@@ -144,7 +144,7 @@ Geprufte Stories: 8
 Uebergegangen: 3
 Keine Aenderung noetig: 5
 
-Sprint-Status aktualisiert. /sprint:bmad-status ausfuehren zum Anzeigen.
+Sprint-Status aktualisiert. /sprint:status --bmad ausfuehren zum Anzeigen.
 ═══════════════════════════════════════════════════════
 ```
 

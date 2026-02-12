@@ -409,7 +409,7 @@ Stories automatically transition through statuses:
 
 ```bash
 # View current status
-/sprint:bmad-status
+/sprint:status --bmad
 
 # Get next story ready for development
 /sprint:next-story --claim

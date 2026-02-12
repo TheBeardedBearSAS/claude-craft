@@ -20,6 +20,7 @@ Estados validos:
 - `review` - Codigo terminado, en espera de revision
 - `done` - Definition of Done alcanzada
 - `blocked` - Bloqueada por un factor externo
+- `sprint-N` - Asignar la story al sprint N (ej: `sprint-2`)
 
 ## Proceso
 
@@ -221,3 +222,16 @@ Al transicionar desde blocked, retorna al estado anterior.
 /sprint:transition US-005 in-progress
 ```
 Transicion inversa valida desde review para atender el feedback.
+
+### Asignar a un sprint
+```
+/sprint:transition US-003 sprint-2
+```
+Asigna la story al sprint 2. Crea el directorio del sprint si es necesario. El estado de la story se preserva.
+
+### Cascada hacia las tareas
+
+Al transicionar una story:
+- **→ in-progress**: Las tareas permanecen en su estado actual (iniciadas individualmente)
+- **→ done**: Verifica que todas las tareas esten done; advierte si hay tareas incompletas
+- **→ blocked**: Marca todas las tareas in-progress como blocked

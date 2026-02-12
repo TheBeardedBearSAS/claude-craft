@@ -482,7 +482,6 @@ Available with Project installation.
 | Command | Description |
 |---------|-------------|
 | `/project:generate-backlog <Feature>` | Generate backlog |
-| `/project:validate-backlog` | Validate backlog quality |
 | `/project:decompose-tasks <Epic>` | Break down epic into tasks |
 | `/project:add-epic <Name>` | Create a new EPIC |
 | `/project:add-story <Epic> <Name>` | Create a User Story |
@@ -490,7 +489,6 @@ Available with Project installation.
 | `/project:list-epics` | List all EPICs |
 | `/project:list-stories` | List User Stories |
 | `/project:list-tasks` | List tasks |
-| `/project:move-story <US> <Dest>` | Move story to sprint/status |
 | `/project:move-task <Task> <Status>` | Change task status |
 | `/project:board` | Display Kanban board |
 | `/project:sprint-status` | Show sprint metrics |
@@ -559,7 +557,6 @@ Available with BMAD v6 installation.
 
 | Command | Description |
 |---------|-------------|
-| `/sprint:bmad-status` | Display sprint status with routing info |
 | `/sprint:next-story` | Get next ready-for-dev story |
 | `/sprint:transition <ID> <status>` | Transition story status |
 | `/sprint:auto-route` | Execute automatic routing rules |
@@ -606,17 +603,17 @@ Available with BMAD v6 installation.
 
 ---
 
-## QA Recette Commands (`/qa:`) - NEW
+## QA Recette Commands (`/common:`) - NEW
 
 Automated acceptance testing with Claude in Chrome.
 
 | Command | Description |
 |---------|-------------|
-| `/qa:recette` | Execute automated acceptance tests via browser |
-| `/qa:recette-fix` | Fix bugs from recette session (TDD workflow) |
-| `/qa:recette-status` | Show recette session status and progress |
-| `/qa:recette-regression` | View and manage regression test registry |
-| `/qa:recette-report` | Generate recette report (MD/HTML/JSON) |
+| `/common:recette` | Execute automated acceptance tests via browser |
+| `/common:recette-fix` | Fix bugs from recette session (TDD workflow) |
+| `/common:recette-status` | Show recette session status and progress |
+| `/common:recette-regression` | View and manage regression test registry |
+| `/common:recette-report` | Generate recette report (MD/HTML/JSON) |
 
 ### Golden Rule
 
@@ -628,28 +625,28 @@ All detected errors automatically generate regression tests.
 
 ```bash
 # Test a specific story
-/qa:recette --scope=story --id=US-001
+/common:recette --scope=story --id=US-001
 
 # Test all stories in a sprint
-/qa:recette --scope=sprint --id=Sprint-3
+/common:recette --scope=sprint --id=Sprint-3
 
 # Dry run to see test plan
-/qa:recette --scope=story --id=US-001 --dry-run
+/common:recette --scope=story --id=US-001 --dry-run
 
 # Resume interrupted session
-/qa:recette --resume=REC-20260130-143022
+/common:recette --resume=REC-20260130-143022
 
 # Record execution as GIF
-/qa:recette --scope=story --id=US-001 --record-gif
+/common:recette --scope=story --id=US-001 --record-gif
 
 # Fix all bugs from a recette session
-/qa:recette-fix --session=REC-20260130-143022
+/common:recette-fix --session=REC-20260130-143022
 
 # Dry run: refine and document without fixing
-/qa:recette-fix --session=REC-20260130-143022 --dry-run
+/common:recette-fix --session=REC-20260130-143022 --dry-run
 
 # Fix critical bugs only
-/qa:recette-fix --session=REC-20260130-143022 --severity=critical
+/common:recette-fix --session=REC-20260130-143022 --severity=critical
 ```
 
 ### Prerequisites

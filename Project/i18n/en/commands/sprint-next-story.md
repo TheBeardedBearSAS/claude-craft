@@ -125,7 +125,7 @@ Suggestions:
 3. Unblock US-003: waiting for API credentials
 
 Commands:
-  /sprint:bmad-status    View full sprint status
+  /sprint:status --bmad  View full sprint status
   /gate:validate-backlog Check story readiness
 ═══════════════════════════════════════════════════════
 ```

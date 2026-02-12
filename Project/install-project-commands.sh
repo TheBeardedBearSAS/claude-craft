@@ -196,7 +196,7 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 | Commande | Description |
 |----------|-------------|
 | `/project:generate-backlog` | Génère le backlog complet |
-| `/project:validate-backlog` | Valide la conformité du backlog (score /100) |
+| `/gate:validate-backlog` | Valide la conformité du backlog (score /100) |
 | `/project:decompose-tasks N` | Décompose le sprint N en tâches |
 
 ### Gestion des EPICs
@@ -213,7 +213,6 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 |----------|-------------|
 | `/project:add-story EPIC-XXX "Nom"` | Créer une User Story |
 | `/project:list-stories` | Lister les User Stories |
-| `/project:move-story US-XXX destination` | Changer statut/sprint |
 | `/project:update-story US-XXX` | Modifier une US |
 
 ### Gestion des Tasks
@@ -308,7 +307,7 @@ project-management/
 /project:generate-backlog
 
 # 2. Valider la conformité
-/project:validate-backlog
+/gate:validate-backlog
 
 # 3. Planifier le sprint 1
 /project:decompose-tasks 001
@@ -381,7 +380,7 @@ project-management/
 
 1. `/project:add-epic` - Créer un EPIC
 2. `/project:add-story` - Ajouter des User Stories
-3. `/project:move-story US-XXX sprint-N` - Planifier le sprint
+3. `/sprint:transition US-XXX sprint-N` - Planifier le sprint
 4. `/project:add-task` ou `/project:decompose-tasks` - Créer les tâches
 5. `/project:board` - Suivre l'avancement
 6. `/project:move-task` - Mettre à jour les statuts
@@ -405,7 +404,7 @@ echo "📋 Commandes disponibles :"
 echo ""
 echo "   Génération :"
 echo "   /project:generate-backlog      - Générer le backlog complet"
-echo "   /project:validate-backlog      - Valider la conformité SCRUM"
+echo "   /gate:validate-backlog      - Valider la conformité SCRUM"
 echo "   /project:decompose-tasks [N]   - Décomposer sprint N en tâches"
 echo ""
 echo "   EPICs :"
@@ -416,7 +415,7 @@ echo ""
 echo "   User Stories :"
 echo "   /project:add-story             - Créer une User Story"
 echo "   /project:list-stories          - Lister les US"
-echo "   /project:move-story            - Changer statut/sprint"
+echo "   /sprint:transition             - Changer statut/sprint"
 echo "   /project:update-story          - Modifier une US"
 echo ""
 echo "   Tasks :"

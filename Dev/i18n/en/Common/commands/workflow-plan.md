@@ -85,7 +85,7 @@ Execute planning tasks in order:
 ║   Output: project-management/backlog/                     ║
 ║                                                           ║
 ║ □ Task 4: Validate Backlog                                ║
-║   Command: /project:validate-backlog                      ║
+║   Command: /gate:validate-backlog                      ║
 ║   Ensures SCRUM compliance                                ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝

@@ -85,7 +85,7 @@ Executar tarefas de planejamento em ordem:
 |   Saida: project-management/backlog/                            |
 |                                                                 |
 | [ ] Tarefa 4: Validar Backlog                                   |
-|   Comando: /project:validate-backlog                            |
+|   Comando: /gate:validate-backlog                            |
 |   Garante conformidade SCRUM                                    |
 |                                                                 |
 +================================================================+

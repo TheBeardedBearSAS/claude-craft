@@ -180,7 +180,7 @@ Elements de travail technique dans une User Story :
 
 | Commande | Description |
 |----------|-------------|
-| `/project:move-story [id] [statut/sprint]` | Changer le statut de l'US ou assigner au sprint |
+| `/sprint:transition [id] [statut/sprint]` | Changer le statut de l'US ou assigner au sprint |
 | `/project:move-task [id] [statut]` | Changer le statut de la tache |
 | `/project:update-epic [id]` | Modifier un EPIC existant |
 | `/project:update-story [id]` | Modifier une User Story existante |
@@ -190,7 +190,7 @@ Elements de travail technique dans une User Story :
 | Commande | Description |
 |----------|-------------|
 | `/project:decompose-tasks [sprint]` | Decomposer les US du sprint en taches |
-| `/project:validate-backlog` | Auditer la qualite du backlog (conformite SCRUM) |
+| `/gate:validate-backlog` | Auditer la qualite du backlog (conformite SCRUM) |
 
 ---
 
@@ -206,7 +206,7 @@ Elements de travail technique dans une User Story :
 ### Etape 2 : Valider la Qualite
 
 ```bash
-/project:validate-backlog
+/gate:validate-backlog
 ```
 
 Cela genere `scrum-validation-report.md` avec :
@@ -314,7 +314,7 @@ Pas de User Stories "Backend uniquement", "Frontend uniquement" ou "Mobile uniqu
 - [ ] Stories estimees en points Fibonacci
 - [ ] Sprint 1 = Walking Skeleton
 - [ ] Definition of Done documentee
-- [ ] Backlog valide (`/project:validate-backlog`)
+- [ ] Backlog valide (`/gate:validate-backlog`)
 
 ---
 

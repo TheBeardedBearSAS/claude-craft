@@ -152,7 +152,7 @@ Generates a complete backlog with:
 - Sprints (Walking Skeleton in Sprint 1)
 - Dependency matrix
 
-### /project:validate-backlog
+### /gate:validate-backlog
 Checks SCRUM compliance:
 - INVEST for each US
 - 3C for each US
@@ -211,7 +211,7 @@ When asked to help with the backlog:
 → I propose an order with MoSCoW justification
 
 **"Is my backlog SCRUM compliant?"**
-→ I execute /project:validate-backlog
+→ I execute /gate:validate-backlog
 → I generate a report with score and corrective actions
 
 **"I want to create a backlog for my project"**

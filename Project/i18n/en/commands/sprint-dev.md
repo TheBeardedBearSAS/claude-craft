@@ -442,4 +442,4 @@ Continue from TASK-009? [y/n]
 | `/project:board N` | View Kanban board |
 | `/project:sprint-status N` | View sprint metrics |
 | `/project:move-task` | Manually change task status |
-| `/project:move-story` | Manually change US status |
+| `/sprint:transition` | Manually change US status |

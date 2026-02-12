@@ -115,7 +115,7 @@ To Do ──→ In Progress ──→ Done
 
 | Comando | Descripcion |
 |---------|-------------|
-| `/project:move-story` | Cambiar estado/sprint de US |
+| `/sprint:transition` | Cambiar estado/sprint de US |
 | `/project:move-task` | Cambiar estado de tarea |
 | `/project:update-epic` | Modificar EPIC |
 | `/project:update-story` | Modificar User Story |
@@ -125,7 +125,7 @@ To Do ──→ In Progress ──→ Done
 | Comando | Descripcion |
 |---------|-------------|
 | `/project:decompose-tasks` | Descomponer US en tareas |
-| `/project:validate-backlog` | Auditar calidad SCRUM |
+| `/gate:validate-backlog` | Auditar calidad SCRUM |
 
 ---
 
@@ -136,7 +136,7 @@ To Do ──→ In Progress ──→ Done
 /project:generate-backlog symfony+flutter
 
 ## Paso 2: Validar calidad
-/project:validate-backlog
+/gate:validate-backlog
 
 ## Paso 3: Ver Sprint 1
 /project:board 1

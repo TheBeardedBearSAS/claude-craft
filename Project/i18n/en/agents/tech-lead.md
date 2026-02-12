@@ -219,7 +219,7 @@ Decomposes sprint US into tasks:
 - Generates Mermaid dependency graph
 - Calculates total hours
 
-### /project:validate-backlog
+### /gate:validate-backlog
 Checks technical compliance:
 - Vertical slicing respected
 - Consistent estimations

@@ -1,8 +1,8 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 6.1.1 | **Languages:** en, fr, es, de, pt
+**Version:** 6.2.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 39 agents, 158 commands, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 28 agents, 155 commands, and BMAD v6 project management.
 
 ---
 
@@ -117,14 +117,14 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/docker:debug` | Diagnose Docker issues |
 | `/docker:cicd-pipeline` | Generate CI/CD pipeline |
 
-### QA Recette (`/qa:`) - NEW
+### QA Recette (`/common:`)
 | Command | Description |
 |---------|-------------|
-| `/qa:recette` | Automated acceptance tests via Chrome |
-| `/qa:recette-fix` | Fix bugs from a recette session |
-| `/qa:recette-status` | Show recette session status |
-| `/qa:recette-regression` | View regression tests |
-| `/qa:recette-report` | Generate recette report |
+| `/common:recette` | Automated acceptance tests via Chrome |
+| `/common:recette-fix` | Fix bugs from a recette session |
+| `/common:recette-status` | Show recette session status |
+| `/common:recette-regression` | View regression tests |
+| `/common:recette-report` | Generate recette report |
 
 ---
 
@@ -159,20 +159,6 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `@reactnative-reviewer` | React Native |
 | `@csharp-reviewer` | C#/.NET |
 | `@php-reviewer` | PHP |
-
-### BMAD v6 Agents (10)
-| Agent | Role |
-|-------|------|
-| `@bmad-master` | Orchestrator |
-| `@pm` | Product Manager |
-| `@ba` | Business Analyst |
-| `@architect` | System Architect |
-| `@po` | Product Owner |
-| `@sm` | Scrum Master |
-| `@dev` | Developer (TDD) |
-| `@qa` | QA Engineer |
-| `@qa-recette` | **[NEW]** Browser automation QA |
-| `@ux` | UX Designer |
 
 ### Docker Agents (5)
 | Agent | Expertise |
@@ -248,16 +234,16 @@ Automated acceptance testing via Claude in Chrome with the **Golden Rule**: A fi
 
 ```bash
 # Test a specific story
-/qa:recette --scope=story --id=US-001
+/common:recette --scope=story --id=US-001
 
 # Test a full sprint
-/qa:recette --scope=sprint --id=Sprint-3
+/common:recette --scope=sprint --id=Sprint-3
 
 # Dry run to see test plan
-/qa:recette --scope=story --id=US-001 --dry-run
+/common:recette --scope=story --id=US-001 --dry-run
 
 # Resume interrupted session
-/qa:recette --resume=REC-20260130-143022
+/common:recette --resume=REC-20260130-143022
 ```
 
 **Key Features:**
@@ -285,7 +271,9 @@ Automated acceptance testing via Claude in Chrome with the **Golden Rule**: A fi
 └── reports/            # Generated reports
 ```
 
-See command help: `/qa:recette --help`
+See command help: `/common:recette --help`
+
+> **Note:** BMAD roles (bmad-master, pm, ba, architect, po, sm, dev, qa, qa-recette, ux) are integrated into workflow and sprint commands, not standalone agent files.
 
 ---
 

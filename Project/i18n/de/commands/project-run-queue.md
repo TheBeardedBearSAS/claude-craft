@@ -128,7 +128,7 @@ Sprint-Status:
 ✅ Erledigt: 8
 
 Befehle:
-  /sprint:bmad-status    Aktualisierten Status sehen
+  /sprint:status --bmad    Aktualisierten Status sehen
   /gate:report          Qualitaetsbericht
 ═══════════════════════════════════════════════════════
 ```

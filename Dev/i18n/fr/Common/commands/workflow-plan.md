@@ -86,7 +86,7 @@ Exécuter les tâches de planification dans l'ordre :
 ║   Résultat : project-management/backlog/                  ║
 ║                                                           ║
 ║ □ Tâche 4 : Valider le backlog                            ║
-║   Commande : /project:validate-backlog                    ║
+║   Commande : /gate:validate-backlog                    ║
 ║   Assure la conformité SCRUM                              ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝

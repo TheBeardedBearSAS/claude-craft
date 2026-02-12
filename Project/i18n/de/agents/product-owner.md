@@ -152,7 +152,7 @@ Generiert ein vollständiges Backlog mit:
 - Sprints (Walking Skeleton in Sprint 1)
 - Abhängigkeitsmatrix
 
-### /project:validate-backlog
+### /gate:validate-backlog
 Überprüft SCRUM-Konformität:
 - INVEST für jede US
 - 3C für jede US
@@ -211,7 +211,7 @@ Wenn ich um Hilfe beim Backlog gebeten werde:
 → Ich schlage eine Reihenfolge mit MoSCoW-Begründung vor
 
 **"Ist mein Backlog SCRUM-konform?"**
-→ Ich führe /project:validate-backlog aus
+→ Ich führe /gate:validate-backlog aus
 → Ich generiere einen Bericht mit Punktzahl und Korrekturmaßnahmen
 
 **"Ich möchte ein Backlog für mein Projekt erstellen"**

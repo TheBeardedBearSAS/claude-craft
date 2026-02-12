@@ -191,4 +191,4 @@ A cada cambio de estado:
 | `/project:board N` | Ver Kanban |
 | `/project:sprint-status N` | Ver metricas |
 | `/project:move-task` | Cambiar estado tarea |
-| `/project:move-story` | Cambiar estado US |
+| `/sprint:transition` | Cambiar estado US |

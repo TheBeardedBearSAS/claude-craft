@@ -257,6 +257,6 @@ O checkpoint e salvo apos cada story concluida.
 ## Integracao
 
 Funciona com:
-- `/sprint:bmad-status` - Ver o progresso
+- `/sprint:status --bmad` - Ver o progresso
 - `/gate:report` - Metricas de qualidade
 - Ralph (se configurado) - Orquestracao externa

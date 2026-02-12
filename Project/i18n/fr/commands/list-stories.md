@@ -114,7 +114,7 @@ Backlog: 3 US | 16 points à planifier
 Selon le contexte, suggérer:
 ```
 Actions:
-  /project:move-story US-XXX sprint-2     # Assigner à un sprint
-  /project:move-story US-XXX in-progress  # Changer le statut
+  /sprint:transition US-XXX sprint-2     # Assigner à un sprint
+  /sprint:transition US-XXX in-progress  # Changer le statut
   /project:add-task US-XXX "[BE] ..." 4h  # Ajouter une tâche
 ```

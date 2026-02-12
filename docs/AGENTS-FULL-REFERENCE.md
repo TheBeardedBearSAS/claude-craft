@@ -553,7 +553,9 @@ Complete reference for all 40 agents available in Claude Craft.
 
 ---
 
-## BMAD v6 Agents (10)
+## BMAD v6 Roles (10)
+
+> **Note:** These are personas integrated into workflow and sprint commands, not standalone agent files.
 
 ### @qa-recette
 
@@ -570,7 +572,7 @@ Complete reference for all 40 agents available in Claude Craft.
 - `read_console_logs`, `get_network_requests`
 - `read_dom_state`, `take_screenshot`, `record_gif`
 
-**Key Commands:** `/qa:recette`, `/qa:recette-fix`, `/qa:recette-status`, `/qa:recette-regression`, `/qa:recette-report`
+**Key Commands:** `/common:recette`, `/common:recette-fix`, `/common:recette-status`, `/common:recette-regression`, `/common:recette-report`
 
 **Golden Rule:** A fixed bug should NEVER reappear - automatic regression suite generation.
 

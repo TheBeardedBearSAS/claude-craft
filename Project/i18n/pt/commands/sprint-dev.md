@@ -191,4 +191,4 @@ A cada mudanca de status:
 | `/project:board N` | Ver Kanban |
 | `/project:sprint-status N` | Ver metricas |
 | `/project:move-task` | Alterar status tarefa |
-| `/project:move-story` | Alterar status US |
+| `/sprint:transition` | Alterar status US |

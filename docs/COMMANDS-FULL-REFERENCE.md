@@ -1,6 +1,6 @@
 # Commands Full Reference
 
-Complete reference for all 132+ commands available in Claude Craft.
+Complete reference for all 155 commands available in Claude Craft.
 
 ---
 
@@ -10,8 +10,8 @@ Complete reference for all 132+ commands available in Claude Craft.
 |-----------|-------|-------------|
 | `/common:` | 24 | Transversal commands |
 | `/workflow:` | 6 | Development workflow |
-| `/project:` | 24 | Project management |
-| `/sprint:` | 4 | Sprint management (BMAD) |
+| `/project:` | 22 | Project management |
+| `/sprint:` | 3 | Sprint management (BMAD) |
 | `/gate:` | 6 | Quality gates (BMAD) |
 | `/bmad:` | 4 | BMAD orchestration |
 | `/pm:` | 5 | Product Manager |
@@ -27,7 +27,7 @@ Complete reference for all 132+ commands available in Claude Craft.
 | `/vuejs:` | 6 | Vue.js |
 | `/php:` | 5 | PHP |
 | `/docker:` | 4 | Docker |
-| `/qa:` | 5 | QA Recette (Acceptance Testing) |
+| `/common:recette*` | 5 | QA Recette (Acceptance Testing) |
 
 ---
 
@@ -142,7 +142,6 @@ Complete reference for all 132+ commands available in Claude Craft.
 | Command | Description |
 |---------|-------------|
 | `/project:generate-backlog` | Generate backlog from feature |
-| `/project:validate-backlog` | Validate backlog quality |
 | `/project:decompose-tasks` | Break epic into tasks |
 
 ### Epic/Story/Task
@@ -157,7 +156,6 @@ Complete reference for all 132+ commands available in Claude Craft.
 | `/project:list-tasks` | List tasks |
 | `/project:update-epic` | Update an EPIC |
 | `/project:update-story` | Update a User Story |
-| `/project:move-story` | Move story to sprint/status |
 | `/project:move-task` | Change task status |
 
 ### Sprint
@@ -194,7 +192,6 @@ Complete reference for all 132+ commands available in Claude Craft.
 
 | Command | Description |
 |---------|-------------|
-| `/sprint:bmad-status` | Display sprint status with routing |
 | `/sprint:next-story` | Get next ready-for-dev story |
 | `/sprint:transition` | Transition story status |
 | `/sprint:auto-route` | Execute automatic routing |
@@ -529,13 +526,13 @@ Automated acceptance testing with Claude in Chrome.
 
 | Command | Description |
 |---------|-------------|
-| `/qa:recette` | Run acceptance tests on web application |
-| `/qa:recette-fix` | Fix bugs from recette session with TDD workflow |
-| `/qa:recette-status` | Show session status and progress |
-| `/qa:recette-regression` | View and manage regression test registry |
-| `/qa:recette-report` | Generate recette report (MD/HTML/JSON) |
+| `/common:recette` | Run acceptance tests on web application |
+| `/common:recette-fix` | Fix bugs from recette session with TDD workflow |
+| `/common:recette-status` | Show session status and progress |
+| `/common:recette-regression` | View and manage regression test registry |
+| `/common:recette-report` | Generate recette report (MD/HTML/JSON) |
 
-### `/qa:recette` Arguments
+### `/common:recette` Arguments
 
 | Argument | Description | Values |
 |----------|-------------|--------|
@@ -545,7 +542,7 @@ Automated acceptance testing with Claude in Chrome.
 | `--resume` | Resume interrupted session | session-id |
 | `--record-gif` | Record test execution | - |
 
-### `/qa:recette-fix` Arguments
+### `/common:recette-fix` Arguments
 
 | Argument | Description | Values |
 |----------|-------------|--------|
@@ -555,7 +552,7 @@ Automated acceptance testing with Claude in Chrome.
 | `--skip-fix` | Generate BMAD documents only | - |
 | `--auto-commit` | Auto-commit after each fix | - |
 
-### `/qa:recette-status` Arguments
+### `/common:recette-status` Arguments
 
 | Argument | Description | Values |
 |----------|-------------|--------|
@@ -566,7 +563,7 @@ Automated acceptance testing with Claude in Chrome.
 | `--format` | Output format | `table`, `yaml`, `json` |
 | `--watch` | Live refresh mode | - |
 
-### `/qa:recette-regression` Arguments
+### `/common:recette-regression` Arguments
 
 | Argument | Description | Values |
 |----------|-------------|--------|
@@ -578,7 +575,7 @@ Automated acceptance testing with Claude in Chrome.
 | `--trend` | Show historical trend | - |
 | `--format` | Output format | `table`, `yaml`, `json` |
 
-### `/qa:recette-report` Arguments
+### `/common:recette-report` Arguments
 
 | Argument | Description | Values |
 |----------|-------------|--------|
@@ -592,40 +589,40 @@ Automated acceptance testing with Claude in Chrome.
 
 ```bash
 # Run acceptance tests for a user story
-/qa:recette --scope=story --id=US-001
+/common:recette --scope=story --id=US-001
 
 # Dry-run to preview test plan
-/qa:recette --scope=story --id=US-001 --dry-run
+/common:recette --scope=story --id=US-001 --dry-run
 
 # Resume interrupted session
-/qa:recette --resume=REC-20260130-143022
+/common:recette --resume=REC-20260130-143022
 
 # Run with GIF recording
-/qa:recette --scope=sprint --id=SPRINT-03 --record-gif
+/common:recette --scope=sprint --id=SPRINT-03 --record-gif
 
 # Show all sessions
-/qa:recette-status --all
+/common:recette-status --all
 
 # Show specific session status
-/qa:recette-status --session=REC-20260130-143022
+/common:recette-status --session=REC-20260130-143022
 
 # Check regression tests (Golden Rule)
-/qa:recette-regression --check
+/common:recette-regression --check
 
 # Show regression stability score
-/qa:recette-regression --stats
+/common:recette-regression --stats
 
 # Generate report from session
-/qa:recette-report --session=REC-20260130-143022
+/common:recette-report --session=REC-20260130-143022
 
 # Generate HTML report with screenshots
-/qa:recette-report --session=REC-20260130-143022 --format=html --include-screenshots
+/common:recette-report --session=REC-20260130-143022 --format=html --include-screenshots
 
 # Fix all bugs from a recette session
-/qa:recette-fix --session=REC-20260130-143022
+/common:recette-fix --session=REC-20260130-143022
 
 # Dry run
-/qa:recette-fix --session=REC-20260130-143022 --dry-run
+/common:recette-fix --session=REC-20260130-143022 --dry-run
 ```
 
 ### Test Categories

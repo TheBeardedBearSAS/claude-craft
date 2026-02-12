@@ -20,6 +20,7 @@ Valid statuses:
 - `review` - Code complete, awaiting review
 - `done` - Definition of Done met
 - `blocked` - Blocked by external factor
+- `sprint-N` - Assign story to sprint N (e.g., `sprint-2`)
 
 ## Process
 
@@ -221,3 +222,16 @@ When transitioning from blocked, returns to previous status.
 /sprint:transition US-005 in-progress
 ```
 Valid reverse transition from review to address feedback.
+
+### Assigning to a sprint
+```
+/sprint:transition US-003 sprint-2
+```
+Assigns the story to sprint 2. Creates the sprint directory if necessary. Story status is preserved.
+
+### Cascade to tasks
+
+When transitioning a story:
+- **→ in-progress**: Tasks remain in their current status (started individually)
+- **→ done**: Checks all tasks are done; warns if incomplete tasks remain
+- **→ blocked**: Marks all in-progress tasks as blocked

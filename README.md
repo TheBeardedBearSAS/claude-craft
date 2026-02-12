@@ -20,8 +20,8 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **10 Technology Stacks**: Symfony, Flutter, Python, React, React Native, Angular, C#/.NET, Laravel, Vue.js, PHP
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **39 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Ralph Conductor, **10 BMAD agents**, and QA Recette
-- **158 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
+- **28 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, and Ralph Conductor
+- **155 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
 - **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
 - **249 Skills**: Best practices in official Claude Code format (architecture, testing, security)
@@ -84,20 +84,9 @@ Claude-Craft includes a BMAD-inspired workflow system that adapts to your projec
 
 BMAD v6 (Build, Measure, Analyze, Deliver) extends the workflow system with comprehensive project management.
 
-### 10 BMAD Agents
+### BMAD Roles
 
-| Agent | Role | Key Commands |
-|-------|------|--------------|
-| `bmad-master` | Orchestrator | `/bmad:route` |
-| `pm` | Product Manager | `/pm:prd`, `/pm:vision`, `/pm:roadmap` |
-| `ba` | Business Analyst | `/ba:analyze`, `/ba:requirements`, `/ba:use-cases` |
-| `architect` | System Architect | `/arch:design`, `/arch:techspec`, `/arch:adr` |
-| `po` | Product Owner | `/po:prioritize`, `/po:accept`, `/po:reject` |
-| `sm` | Scrum Master | `/sm:plan-sprint`, `/sm:daily`, `/sm:retro` |
-| `dev` | Developer | `/dev:implement`, `/dev:tdd`, `/dev:refactor` |
-| `qa` | QA Engineer | `/qa:validate`, `/qa:automate`, `/qa:strategy` |
-| `ux` | UX Designer | `/ux:wireframe`, `/ux:journey`, `/ux:accessibility` |
-| `qa-recette` | QA Recette Engineer | `/qa:recette`, `/qa:recette-fix`, `/qa:recette-status`, `/qa:recette-regression` |
+BMAD roles (bmad-master, pm, ba, architect, po, sm, dev, qa, qa-recette, ux) are integrated into workflow and sprint commands as personas, not standalone agent files.
 
 ### Status-based Routing
 
@@ -111,7 +100,7 @@ backlog → ready-for-dev → in-progress → review → done
 
 ```bash
 # View sprint status with routing info
-/sprint:bmad-status
+/sprint:status --bmad
 
 # Get next story ready for development
 /sprint:next-story --claim
@@ -536,20 +525,6 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 | `docker-cicd` | CI/CD pipelines, security scanning |
 | `docker-architect` | Complete Docker architecture design |
 
-### BMAD v6 Agents (10)
-| Agent | Role | Key Responsibilities |
-|-------|------|----------------------|
-| `bmad-master` | Orchestrator | Agent coordination, workflow routing, metrics |
-| `pm` | Product Manager | PRD, vision, roadmap, feature prioritization |
-| `ba` | Business Analyst | Requirements, use cases, story mapping |
-| `architect` | System Architect | Tech specs, ADRs, API design, security |
-| `po` | Product Owner | Backlog management, sprint planning, acceptance |
-| `sm` | Scrum Master | Ceremonies, velocity, impediments, retrospectives |
-| `dev` | Developer | TDD implementation, code review, refactoring |
-| `qa` | QA Engineer | Test strategy, automation, validation |
-| `ux` | UX Designer | Wireframes, user journeys, accessibility |
-| `qa-recette` | QA Recette Engineer | Chrome automation, acceptance testing, regression detection |
-
 ## Command Namespaces
 
 - `/workflow:` - Development workflow (init, analyze, plan, design, implement, status)
@@ -570,7 +545,7 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 - `/vuejs:` - Vue.js-specific (components, composables, Pinia)
 - `/php:` - PHP-specific (entities, value objects, use cases, Clean Architecture)
 - `/docker:` - Docker/Infrastructure (compose, debug, pipelines, architecture)
-- `/qa:` - **QA Recette** (acceptance testing, regression, Chrome automation)
+- `/common:recette*` - **QA Recette** (acceptance testing, regression, Chrome automation)
 
 ## Documentation
 

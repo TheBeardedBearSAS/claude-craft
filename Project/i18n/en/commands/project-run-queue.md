@@ -128,7 +128,7 @@ Sprint Status:
 ✅ Done: 8
 
 Commands:
-  /sprint:bmad-status    View updated status
+  /sprint:status --bmad    View updated status
   /gate:report          Run quality report
 ═══════════════════════════════════════════════════════
 ```

@@ -88,7 +88,7 @@ Ask the user:
    File: project-management/backlog/user-stories/US-{ID}-{slug}.md
 
 Next steps:
-  /project:move-story US-{ID} sprint-X    # Assign to sprint
+  /sprint:transition US-{ID} sprint-X    # Assign to sprint
   /project:add-task US-{ID} "[BE] ..." 4h # Add tasks
 ```
 

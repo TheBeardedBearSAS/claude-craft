@@ -144,7 +144,7 @@ Sprint 1:
    Progreso: 6/6 (100%) ██████████
 
 Próximo paso recomendado:
-  /project:move-story US-001 done
+  /sprint:transition US-001 done
 ```
 
 ### Error de flujo de trabajo

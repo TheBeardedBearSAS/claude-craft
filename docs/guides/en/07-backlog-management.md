@@ -180,7 +180,7 @@ Technical work items within a User Story:
 
 | Command | Description |
 |---------|-------------|
-| `/project:move-story [id] [status/sprint]` | Change US status or assign to sprint |
+| `/sprint:transition [id] [status/sprint]` | Change US status or assign to sprint |
 | `/project:move-task [id] [status]` | Change task status |
 | `/project:update-epic [id]` | Modify an existing EPIC |
 | `/project:update-story [id]` | Modify an existing User Story |
@@ -190,7 +190,7 @@ Technical work items within a User Story:
 | Command | Description |
 |---------|-------------|
 | `/project:decompose-tasks [sprint]` | Break down sprint US into tasks |
-| `/project:validate-backlog` | Audit backlog quality (SCRUM compliance) |
+| `/gate:validate-backlog` | Audit backlog quality (SCRUM compliance) |
 
 ---
 
@@ -206,7 +206,7 @@ Technical work items within a User Story:
 ### Step 2: Validate Quality
 
 ```bash
-/project:validate-backlog
+/gate:validate-backlog
 ```
 
 This generates `scrum-validation-report.md` with:
@@ -314,7 +314,7 @@ No "Backend only", "Frontend only", or "Mobile only" User Stories allowed.
 - [ ] Stories estimated in Fibonacci points
 - [ ] Sprint 1 = Walking Skeleton
 - [ ] Definition of Done documented
-- [ ] Backlog validated (`/project:validate-backlog`)
+- [ ] Backlog validated (`/gate:validate-backlog`)
 
 ---
 

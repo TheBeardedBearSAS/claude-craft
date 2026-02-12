@@ -191,4 +191,4 @@ Bei jeder Statusanderung:
 | `/project:board N` | Kanban anzeigen |
 | `/project:sprint-status N` | Metriken anzeigen |
 | `/project:move-task` | Aufgabenstatus andern |
-| `/project:move-story` | US-Status andern |
+| `/sprint:transition` | US-Status andern |

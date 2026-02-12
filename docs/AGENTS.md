@@ -584,9 +584,9 @@ Helps with:
 
 ---
 
-## BMAD v6 Agents (10)
+## BMAD v6 Roles (10)
 
-Available with BMAD v6 framework installation. These agents follow the Agent-as-Code YAML format.
+> **Note:** These are personas integrated into workflow and sprint commands, not standalone agent files. They are described here for reference.
 
 ### bmad-master
 
@@ -790,7 +790,7 @@ Helps with:
 @qa-recette Generate regression tests for detected errors
 ```
 
-**Key Commands**: `/qa:recette`, `/qa:recette-fix`, `/qa:recette-status`, `/qa:recette-regression`, `/qa:recette-report`
+**Key Commands**: `/common:recette`, `/common:recette-fix`, `/common:recette-status`, `/common:recette-regression`, `/common:recette-report`
 
 **Chrome Capabilities**:
 - Navigation: navigate, back, forward, refresh

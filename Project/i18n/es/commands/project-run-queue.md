@@ -128,7 +128,7 @@ Estado Sprint:
 ✅ Done: 8
 
 Comandos:
-  /sprint:bmad-status    Ver el estado actualizado
+  /sprint:status --bmad    Ver el estado actualizado
   /gate:report          Informe de calidad
 ═══════════════════════════════════════════════════════
 ```
