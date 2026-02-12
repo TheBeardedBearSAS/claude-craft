@@ -30,14 +30,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_CONFIG="${SCRIPT_DIR}/../../claude-projects.yaml"
 INSTALL_SCRIPT="${SCRIPT_DIR}/install-from-config.sh"
 
-# Couleurs
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-BOLD='\033[1m'
-NC='\033[0m'
+# Shared UI (colors + logging)
+# shellcheck source=lib/shell-ui.sh
+source "${SCRIPT_DIR}/lib/shell-ui.sh"
 
 # Variables globales
 config_file=""
@@ -53,17 +48,13 @@ declare -a issues_list=()
 # ─────────────────────────────────────────────────────────────────────────────
 # Fonctions utilitaires
 # ─────────────────────────────────────────────────────────────────────────────
-log_ok() { echo -e "     ${GREEN}✓${NC} $1"; }
-log_warn() { echo -e "     ${YELLOW}⚠${NC} $1"; }
-log_error() { echo -e "     ${RED}✗${NC} $1"; }
-log_info() { echo -e "     ${BLUE}ℹ${NC} $1"; }
+log_ok() { ui_check_ok "$@"; }
+log_warn() { ui_check_warn "$@"; }
+log_error() { ui_check_fail "$@"; }
+log_info() { ui_check_info "$@"; }
 
 print_header() {
-    echo ""
-    echo -e "${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${BOLD}║${NC}  🔍 $1"
-    echo -e "${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
+    ui_header "🔍 $1"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────

@@ -15,6 +15,7 @@ import path from 'path';
  * @property {boolean} hasPubspec - Whether pubspec.yaml exists
  * @property {boolean} hasRequirements - Whether requirements.txt or pyproject.toml exists
  * @property {boolean} hasDockerfile - Whether Dockerfile or docker-compose.yml exists
+ * @property {boolean} hasCsproj - Whether *.csproj or *.sln files exist
  * @property {string[]} suggestedTechs - Technology identifiers detected from project files
  * @property {string} complexity - Estimated complexity (quick, standard, enterprise)
  */
@@ -37,6 +38,7 @@ function detectProject(targetPath, options = {}) {
     hasPubspec: false,
     hasRequirements: false,
     hasDockerfile: false,
+    hasCsproj: false,
     suggestedTechs: [],
     complexity: 'standard',
   };
@@ -55,11 +57,36 @@ function detectProject(targetPath, options = {}) {
     if (debug) console.error(`Detection error (.git): ${e.message}`);
   }
 
-  // Detect Symfony/PHP (composer.json)
+  // Detect C# / .NET (*.csproj or *.sln)
+  try {
+    const files = fs.readdirSync(targetPath);
+    if (files.some((f) => f.endsWith('.csproj') || f.endsWith('.sln'))) {
+      detected.hasCsproj = true;
+      detected.suggestedTechs.push('csharp');
+    }
+  } catch (e) {
+    if (debug) console.error(`Detection error (csproj): ${e.message}`);
+  }
+
+  // Detect PHP frameworks via composer.json
   try {
     if (fs.existsSync(path.join(targetPath, 'composer.json'))) {
       detected.hasComposer = true;
-      detected.suggestedTechs.push('symfony');
+      const composer = JSON.parse(fs.readFileSync(path.join(targetPath, 'composer.json'), 'utf8'));
+      const require = composer.require || {};
+      const requireDev = composer['require-dev'] || {};
+      const allDeps = { ...require, ...requireDev };
+
+      const hasSymfony = Object.keys(allDeps).some((dep) => dep.startsWith('symfony/'));
+      const hasLaravel = 'laravel/framework' in allDeps;
+
+      if (hasLaravel) {
+        detected.suggestedTechs.push('laravel');
+      } else if (hasSymfony) {
+        detected.suggestedTechs.push('symfony');
+      } else {
+        detected.suggestedTechs.push('php');
+      }
     }
   } catch (e) {
     if (debug) console.error(`Detection error (composer): ${e.message}`);
@@ -75,17 +102,23 @@ function detectProject(targetPath, options = {}) {
     if (debug) console.error(`Detection error (pubspec): ${e.message}`);
   }
 
-  // Detect React/React Native (package.json)
+  // Detect JS frameworks via package.json (Angular, Vue.js, React, React Native)
   try {
     if (fs.existsSync(path.join(targetPath, 'package.json'))) {
       detected.hasPackageJson = true;
       const pkg = JSON.parse(fs.readFileSync(path.join(targetPath, 'package.json'), 'utf8'));
-      if (pkg.dependencies?.react || pkg.devDependencies?.react) {
-        if (pkg.dependencies?.['react-native'] || pkg.devDependencies?.['react-native']) {
+      const allDeps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
+
+      if ('@angular/core' in allDeps) {
+        detected.suggestedTechs.push('angular');
+      } else if ('react' in allDeps) {
+        if ('react-native' in allDeps) {
           detected.suggestedTechs.push('reactnative');
         } else {
           detected.suggestedTechs.push('react');
         }
+      } else if ('vue' in allDeps) {
+        detected.suggestedTechs.push('vuejs');
       }
     }
   } catch (e) {

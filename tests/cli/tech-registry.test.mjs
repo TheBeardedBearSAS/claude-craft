@@ -70,6 +70,18 @@ describe('tech-registry consistency with constants.js', () => {
       }
     }
   });
+
+  it('TECHNOLOGIES is derived from TECH_REGISTRY (same keys)', () => {
+    const registryKeys = Object.keys(TECH_REGISTRY).sort();
+    const techKeys = Object.keys(TECHNOLOGIES).sort();
+    expect(techKeys).toEqual(registryKeys);
+  });
+
+  it('TECHNOLOGIES.name matches TECH_REGISTRY.displayName for all entries', () => {
+    for (const [key, entry] of Object.entries(TECH_REGISTRY)) {
+      expect(TECHNOLOGIES[key].name, `${key} name mismatch`).toBe(entry.displayName);
+    }
+  });
 });
 
 describe('tech-registry consistency with i18n directories', () => {

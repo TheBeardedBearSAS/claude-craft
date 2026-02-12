@@ -27,12 +27,9 @@ _CALLER_SCRIPT="$(basename "${BASH_SOURCE[1]}")"
 # --- Default lang ---
 lang="en"
 
-# --- Colors ---
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+# --- Shared UI (colors + logging) ---
+# shellcheck source=shell-ui.sh
+source "$(dirname "${BASH_SOURCE[0]}")/shell-ui.sh"
 
 # ============================================================================
 # LOAD I18N MESSAGES
@@ -73,13 +70,13 @@ EOF
 }
 
 # ============================================================================
-# LOGGING
+# LOGGING (backward-compat aliases → shell-ui.sh)
 # ============================================================================
-log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[OK]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARN]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
-log_dry_run() { echo -e "${YELLOW}[DRY-RUN]${NC} $1"; }
+log_info() { ui_info "$@"; }
+log_success() { ui_success "$@"; }
+log_warning() { ui_warning "$@"; }
+log_error() { ui_error "$@"; }
+log_dry_run() { ui_dry_run "$@"; }
 
 # ============================================================================
 # SOURCE RESOLUTION

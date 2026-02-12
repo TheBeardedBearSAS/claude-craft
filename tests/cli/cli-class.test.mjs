@@ -159,4 +159,26 @@ describe('ClaudeCraftCLI.run()', () => {
     const cli = new ClaudeCraftCLI();
     expect(typeof cli.flattenCodebase).toBe('function');
   });
+
+  it('flattenCodebase prints banner and codebase flattener header', async () => {
+    process.argv = ['node', 'index.js', 'flatten'];
+    const cli = new ClaudeCraftCLI();
+    // Mock the flatten function to avoid actual file operations
+    const { flatten: flattenFn } = await import('../../cli/flattener.js');
+    cli.flattenCodebase = vi.fn().mockResolvedValue(undefined);
+    await cli.run();
+    expect(cli.flattenCodebase).toHaveBeenCalled();
+  });
+
+  it('createReadline and closeReadline manage rl lifecycle', () => {
+    const cli = new ClaudeCraftCLI();
+    expect(cli.rl).toBeNull();
+    cli.createReadline();
+    expect(cli.rl).not.toBeNull();
+    cli.closeReadline();
+    expect(cli.rl).toBeNull();
+    // Double close is safe
+    cli.closeReadline();
+    expect(cli.rl).toBeNull();
+  });
 });

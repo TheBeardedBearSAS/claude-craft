@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.2.0] - 2026-02-12
+
+### Added
+
+- `detect-project.js`: Detection for 5 missing techs — Angular (`@angular/core`), Vue.js (`vue`), C#/.NET (`.csproj`/`.sln`), Laravel (`laravel/framework`), generic PHP (composer.json fallback)
+- `help.js`: "Available Namespaces" section listing all 16 v7.0 namespaces with descriptions
+- `tests/cli/shell-ui.test.mjs` — 16 tests verifying all `ui_*` functions, color variables, and output format
+- `tests/cli/detect-project.test.mjs` — expanded from 14 to 30 tests covering all 10 tech detections, malformed JSON, multi-tech, edge cases
+- `tests/cli/help.test.mjs` — expanded from 3 to 8 tests covering namespaces, options, examples
+- `tests/cli/tech-registry.test.mjs` — 2 additional consistency tests (derived keys, displayName match)
+- `tests/cli/cli-class.test.mjs` — readline lifecycle test
+
+### Changed
+
+- **constants.js**: `TECHNOLOGIES` now derived from `tech-registry.js` SSOT (DRY consolidation)
+- **detect-project.js**: Refined Symfony detection to check for `symfony/` packages; added Laravel/generic PHP distinction
+- **install-tech-common.sh**: Sources `shell-ui.sh` instead of defining local colors/logging; `log_*` are backward-compat aliases
+- **install-common-rules.sh**: Sources `shell-ui.sh` instead of defining local colors/logging; `print_header` uses `ui_box`
+- **check-config.sh**: Sources `shell-ui.sh` instead of defining local colors; `log_*` delegate to `ui_check_*`, `print_header` uses `ui_header`
+- **Makefile `list-commands`**: Now includes Docker, Workflow, Team, QA, UIUX namespaces; checks both lang and base directories
+- Test count: 430+ → 466 tests
+- Coverage: detect-project.js → 93%, help.js → 100%, constants.js → 100%
+
 ## [7.1.0] - 2026-02-12
 
 ### Added

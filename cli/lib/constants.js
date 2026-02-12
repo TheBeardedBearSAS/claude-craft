@@ -3,20 +3,12 @@
  * @module cli/lib/constants
  */
 
-/** Available technologies with display name and description. */
-const TECHNOLOGIES = {
-  symfony: { name: 'Symfony', desc: 'PHP backend with Clean Architecture, DDD, API Platform' },
-  flutter: { name: 'Flutter', desc: 'Mobile Dart with BLoC pattern, Material/Cupertino' },
-  react: { name: 'React', desc: 'Frontend JS/TS with Hooks, State management, A11y' },
-  reactnative: { name: 'React Native', desc: 'Mobile JS/TS with Navigation, Native modules' },
-  angular: { name: 'Angular', desc: 'Frontend TS with Signals, Standalone components, RxJS' },
-  csharp: { name: 'C# / .NET', desc: 'Backend with Clean Architecture, CQRS, MediatR, EF Core' },
-  laravel: { name: 'Laravel', desc: 'PHP backend with Actions, Pest PHP, Sanctum' },
-  vuejs: { name: 'Vue.js', desc: 'Frontend JS/TS with Composition API, Pinia, Vitest' },
-  php: { name: 'PHP', desc: 'Backend PHP 8.5 with PSR-12, PHPStan, Pest PHP' },
-  python: { name: 'Python', desc: 'Backend with FastAPI, async/await, Type hints' },
-  docker: { name: 'Docker', desc: 'Dockerfile, Compose, CI/CD, Debugging' },
-};
+import { TECH_REGISTRY } from './tech-registry.js';
+
+/** Available technologies with display name and description (derived from tech-registry.js SSOT). */
+const TECHNOLOGIES = Object.fromEntries(
+  Object.entries(TECH_REGISTRY).map(([key, entry]) => [key, { name: entry.displayName, desc: entry.desc }])
+);
 
 /** Available UI languages. */
 const LANGUAGES = {

@@ -305,12 +305,13 @@ list-commands: ## Liste les commandes disponibles
 	@echo ""
 	@echo "$(CYAN)COMMANDES DISPONIBLES (lang=$(RULES_LANG))$(NC)"
 	@echo ""
-	@for tech in Common Symfony Flutter Python React ReactNative Angular Laravel Vuejs PHP; do \
+	@for tech in Common Workflow Team QA UIUX Symfony Flutter Python React ReactNative Angular Laravel Vuejs PHP Docker; do \
 		dir="$(I18N_DIR)/$(RULES_LANG)/$$tech/commands"; \
-		if [ -d "$$dir" ]; then \
-			prefix=$$(echo "$$tech" | tr '[:upper:]' '[:lower:]'); \
+		base_dir="$(I18N_DIR)/base/$$tech/commands"; \
+		prefix=$$(echo "$$tech" | tr '[:upper:]' '[:lower:]'); \
+		if [ -d "$$dir" ] || [ -d "$$base_dir" ]; then \
 			echo "$(YELLOW)/$$prefix:$(NC)"; \
-			ls -1 "$$dir"/*.md 2>/dev/null | xargs -r -I {} basename {} .md | sed "s/^/  - \/$$prefix:/"; \
+			{ ls -1 "$$dir"/*.md 2>/dev/null; ls -1 "$$base_dir"/*.md 2>/dev/null; } | xargs -r -I {} basename {} .md | sort -u | sed "s/^/  - \/$$prefix:/"; \
 			echo ""; \
 		fi; \
 	done

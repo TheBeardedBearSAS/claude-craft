@@ -43,13 +43,9 @@ I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 source "${SCRIPT_DIR}/tcl-common.sh"
 VERSION=$(get_claude_craft_version)
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+# Shared UI (colors + logging)
+# shellcheck source=lib/shell-ui.sh
+source "${SCRIPT_DIR}/lib/shell-ui.sh"
 
 # Default options
 action="install"
@@ -143,31 +139,14 @@ errors=0
 #-------------------------------------------------------------------------------
 # Utility functions
 #-------------------------------------------------------------------------------
-log_info() {
-    echo -e "${BLUE}[${MSG_INFO}]${NC} $1"
-}
-
-log_success() {
-    echo -e "${GREEN}[${MSG_SUCCESS}]${NC} $1"
-}
-
-log_warning() {
-    echo -e "${YELLOW}[${MSG_WARNING}]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[${MSG_ERROR}]${NC} $1" >&2
-}
-
-log_dry_run() {
-    echo -e "${CYAN}[${MSG_DRY_RUN}]${NC} $1"
-}
+log_info() { ui_info "$@"; }
+log_success() { ui_success "$@"; }
+log_warning() { ui_warning "$@"; }
+log_error() { ui_error "$@"; }
+log_dry_run() { ui_dry_run "$@"; }
 
 print_header() {
-    echo ""
-    echo -e "${CYAN}╔════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║${NC}  📦 ${MSG_HEADER_COMMON} - v${VERSION}                    ${CYAN}║${NC}"
-    echo -e "${CYAN}╚════════════════════════════════════════════════════════════╝${NC}"
+    ui_box "📦 ${MSG_HEADER_COMMON} - v${VERSION}" "$CYAN"
     echo ""
 }
 
