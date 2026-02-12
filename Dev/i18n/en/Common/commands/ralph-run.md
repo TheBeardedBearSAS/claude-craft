@@ -221,6 +221,42 @@ Iteration 1 of 25 (Profile: medium_feature)
   Metrics exported:  .ralph/sessions/.../metrics-export.json
 ```
 
+## Failure Modes & Recovery
+
+### DoD Validator Failures
+
+When DoD validators fail repeatedly, Ralph applies escalating recovery:
+
+| Consecutive Failures | Action |
+|---------------------|--------|
+| 1-2 | Retry with context — Ralph includes previous error output |
+| 3 | Trigger circuit breaker check — evaluate if task is stuck |
+| 4+ | Circuit breaker trips — session stops with `exit_reason: circuit_breaker` |
+
+### Timeout Handling
+
+| Timeout Type | Default | Configuration |
+|-------------|---------|---------------|
+| Per-iteration | 5 min | `circuit_breaker.iteration_timeout` |
+| Total session | 30 min | `circuit_breaker.session_timeout` |
+| DoD command | 60 sec | `definition_of_done.timeout` |
+
+When a timeout fires:
+1. Current iteration is cancelled
+2. Partial progress is preserved in session state
+3. Circuit breaker counter increments
+4. Resume with `--continue=<session-id>` to retry
+
+### Common Exit Reasons
+
+| Exit Reason | Meaning | Recovery |
+|-------------|---------|----------|
+| `dod_complete` | All DoD criteria passed | Success — no action needed |
+| `circuit_breaker` | Too many failures | Review task scope, simplify DoD |
+| `max_iterations` | Iteration limit reached | Increase limit or break into subtasks |
+| `timeout` | Session timeout expired | Resume or increase timeout |
+| `user_abort` | User cancelled (Ctrl+C) | Resume with `--continue` |
+
 ## Best Practices
 
 1. **Use auto-detect**: Let Ralph configure DoD for your stack
@@ -228,6 +264,8 @@ Iteration 1 of 25 (Profile: medium_feature)
 3. **Use TDD**: Write tests first, let Ralph implement
 4. **Monitor dashboard**: Watch progress in real-time
 5. **Review metrics**: Analyze session metrics for optimization
+6. **Set realistic timeouts**: Match timeouts to task complexity
+7. **Use circuit breaker profiles**: Match profile to task type (quick_fix vs large_feature)
 
 ## Related
 

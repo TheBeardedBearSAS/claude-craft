@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.1.0] - 2026-02-12
+
+### Added
+
+- `cli/lib/tech-registry.js` — Single Source of Truth for all 11 technology stacks (name, namespace, i18n dir, install script, version)
+- `Dev/scripts/lib/shell-ui.sh` — Shared UI library for shell scripts (colors, logging, headers, progress indicators)
+- `tests/cli/installer-interactive.test.mjs` — 10 tests for interactive install wizard (directory creation, language selection, tech selection, cancel flow)
+- `tests/cli/tech-registry.test.mjs` — 11 consistency tests verifying registry matches constants.js, i18n directories, install scripts, and plugin.json
+- `tests/scripts/install-dry-run.test.mjs` — 6 integration tests for install dry-run (file counts, namespace validation, no-side-effects)
+- Ralph DoD failure modes and timeout documentation in `ralph-run.md`
+
+### Changed
+
+- **README.md**: Fixed skills count from 249 to 50 (actual unique skills)
+- **CONTRIBUTING.md**: Added all 10 technologies to test loop (was missing csharp, reactnative, vuejs, laravel, php)
+- **vitest.config.mjs**: Raised coverage thresholds — statements 75→80%, branches 80→85%, functions 65→70%, lines 75→80%
+- **CLAUDE.md.template**: Updated to v7.0 structure — `rules/` → `references/`, `commands/` now namespaced
+- **check-config.sh**: Refactored from 5 hardcoded check functions to data-driven `TECH_REGISTRY` array supporting all 10 technologies
+- **plugin.json**: Version bump from 6.2.0 to 7.1.0
+- **cli-class.test.mjs**: Added 5 tests for language, tech, path options and flatten command
+- Test count: 393 → 430+ tests
+- Coverage: statements 81% → 92%+, installer.js 51% → 97%
+
+---
+
 ## [7.0.0] - 2026-02-12
 
 ### BREAKING CHANGES

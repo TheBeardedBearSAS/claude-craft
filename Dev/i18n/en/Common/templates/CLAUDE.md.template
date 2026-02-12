@@ -13,23 +13,23 @@ This project uses **Claude Craft** rules for AI-assisted development.
 ```
 {{PROJECT_ROOT}}/
 ├── .claude/
-│   ├── rules/       # Coding standards (auto-loaded)
-│   ├── agents/      # Specialized AI agents
-│   ├── commands/    # Slash commands
-│   └── skills/      # Extended capabilities
-└── src/             # Application source code
+│   ├── references/   # Coding standards & architecture (auto-loaded)
+│   ├── agents/       # Specialized AI agents
+│   ├── commands/     # Slash commands (namespaced)
+│   └── skills/       # Extended capabilities
+└── src/              # Application source code
 ```
 
 ## Why (Purpose & Organization)
 
 ### Core Principles
-- **Analysis Before Action**: Always understand code before modifying (see `rules/01-workflow-analysis.md`)
-- **SOLID + KISS**: Clean, maintainable code (see `rules/04-solid-principles.md`)
-- **TDD/BDD**: Test-driven development (see `rules/07-testing.md`)
-- **Security First**: OWASP compliance (see `rules/11-security.md`)
+- **Analysis Before Action**: Always understand code before modifying (see `references/01-workflow-analysis.md`)
+- **SOLID + KISS**: Clean, maintainable code (see `references/04-solid-principles.md`)
+- **TDD/BDD**: Test-driven development (see `references/07-testing.md`)
+- **Security First**: OWASP compliance (see `references/11-security.md`)
 
 ### Architecture
-Refer to `.claude/rules/02-architecture*.md` for detailed patterns.
+Refer to `.claude/references/02-architecture*.md` for detailed patterns.
 
 ## How (Commands & Workflows)
 
@@ -56,15 +56,15 @@ make build             # Build project
 
 ## References
 
-| Topic | Rule File |
-|-------|-----------|
-| Workflow | `rules/01-workflow-analysis.md` |
-| Architecture | `rules/02-architecture*.md` |
-| Coding Standards | `rules/03-coding-standards.md` |
-| SOLID Principles | `rules/04-solid-principles.md` |
-| KISS/DRY/YAGNI | `rules/05-kiss-dry-yagni.md` |
-| Testing | `rules/07-testing.md` |
-| Security | `rules/11-security.md` |
+| Topic | Reference File |
+|-------|----------------|
+| Workflow | `references/01-workflow-analysis.md` |
+| Architecture | `references/02-architecture*.md` |
+| Coding Standards | `references/03-coding-standards.md` |
+| SOLID Principles | `references/04-solid-principles.md` |
+| KISS/DRY/YAGNI | `references/05-kiss-dry-yagni.md` |
+| Testing | `references/07-testing.md` |
+| Security | `references/11-security.md` |
 
 <!-- PROJECT-SPECIFIC-START -->
 ## Project Specifics

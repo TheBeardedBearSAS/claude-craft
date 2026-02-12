@@ -124,4 +124,39 @@ describe('ClaudeCraftCLI.run()', () => {
     await cli.run();
     expect(cli.config.targetPath).toBe(process.cwd());
   });
+
+  it('sets valid language from --lang option', async () => {
+    process.argv = ['node', 'index.js', 'help', '--lang=fr'];
+    const cli = new ClaudeCraftCLI();
+    await cli.run();
+    expect(cli.config.language).toBe('fr');
+  });
+
+  it('sets valid tech from --tech option', async () => {
+    process.argv = ['node', 'index.js', 'help', '--tech=react'];
+    const cli = new ClaudeCraftCLI();
+    await cli.run();
+    expect(cli.config.technologies).toEqual(['react']);
+  });
+
+  it('resolves targetPath from command argument', async () => {
+    process.argv = ['node', 'index.js', 'help', '/tmp/some-path'];
+    const cli = new ClaudeCraftCLI();
+    await cli.run();
+    expect(cli.config.targetPath).toBe('/tmp/some-path');
+  });
+
+  it('flatten command calls flattenCodebase', async () => {
+    process.argv = ['node', 'index.js', 'flatten', '--output=test.md'];
+    const cli = new ClaudeCraftCLI();
+    // Mock flattenCodebase to avoid actual file system operations
+    cli.flattenCodebase = vi.fn().mockResolvedValue(undefined);
+    await cli.run();
+    expect(cli.flattenCodebase).toHaveBeenCalledWith(expect.objectContaining({ output: 'test.md' }));
+  });
+
+  it('flattenCodebase method exists and is callable', () => {
+    const cli = new ClaudeCraftCLI();
+    expect(typeof cli.flattenCodebase).toBe('function');
+  });
 });

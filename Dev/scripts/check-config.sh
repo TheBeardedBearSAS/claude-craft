@@ -244,175 +244,74 @@ check_common_installation() {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Vérification Symfony
+# Technology Registry (data-driven validation)
+# Format: tech_name:cmd_namespace:min_rules:min_commands:min_templates:min_checklists
 # ─────────────────────────────────────────────────────────────────────────────
-check_symfony_installation() {
+TECH_REGISTRY=(
+    "symfony:symfony:18:5:5:3"
+    "flutter:flutter:14:5:3:2"
+    "react:react:12:5:2:2"
+    "reactnative:reactnative:15:5:2:2"
+    "python:python:10:5:2:2"
+    "angular:angular:10:5:2:2"
+    "csharp:csharp:10:5:2:2"
+    "laravel:laravel:10:5:2:2"
+    "vuejs:vuejs:10:5:2:2"
+    "php:php:10:5:2:2"
+)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Generic tech installation checker (data-driven)
+# ─────────────────────────────────────────────────────────────────────────────
+check_tech_installation() {
     local path="$1"
+    local tech="$2"
     local issues=0
+
+    # Look up tech in registry
+    local entry=""
+    for reg in "${TECH_REGISTRY[@]}"; do
+        local reg_tech="${reg%%:*}"
+        if [[ "$reg_tech" == "$tech" ]]; then
+            entry="$reg"
+            break
+        fi
+    done
+
+    if [[ -z "$entry" ]]; then
+        log_warn "Technologie inconnue: $tech"
+        return 1
+    fi
+
+    # Parse registry entry
+    IFS=':' read -r _ cmd_ns min_rules min_cmds min_templates min_checklists <<< "$entry"
 
     if [[ ! -d "$path/.claude" ]]; then
         log_error ".claude/: non trouvé"
         return 1
     fi
 
-    # Rules (obligatoire - generic + Symfony-specific, min 18)
-    # Generic: 7 files from Common/rules/ + Symfony: ~13 tech-specific
-    check_dir_count "$path/.claude/rules" "rules" 18 || ((issues++)) || true
+    # Rules (generic + tech-specific)
+    check_dir_count "$path/.claude/rules" "rules" "$min_rules" || ((issues++)) || true
 
-    # Commands/symfony (obligatoire, min 5)
-    check_dir_count "$path/.claude/commands/symfony" "commands/symfony" 5 || ((issues++)) || true
+    # Commands (tech namespace)
+    check_dir_count "$path/.claude/commands/${cmd_ns}" "commands/${cmd_ns}" "$min_cmds" || ((issues++)) || true
 
-    # Templates (obligatoire, min 5)
-    check_dir_count "$path/.claude/templates" "templates" 5 || ((issues++)) || true
+    # Templates
+    check_dir_count "$path/.claude/templates" "templates" "$min_templates" || ((issues++)) || true
 
-    # Checklists (obligatoire, min 3)
-    check_dir_count "$path/.claude/checklists" "checklists" 3 || ((issues++)) || true
+    # Checklists
+    check_dir_count "$path/.claude/checklists" "checklists" "$min_checklists" || ((issues++)) || true
 
-    # CLAUDE.md (obligatoire)
+    # CLAUDE.md
     check_file_exists "$path/.claude/CLAUDE.md" "CLAUDE.md" || ((issues++)) || true
 
-    # Agents (obligatoire, min 1)
+    # Agents
     check_dir_count "$path/.claude/agents" "agents" 1 || ((issues++)) || true
 
-    # Optionnels
+    # Optional directories
     check_dir_optional "$path/.claude/adr" "adr"
     check_dir_optional "$path/.claude/examples" "examples"
-
-    return $issues
-}
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Vérification Flutter
-# ─────────────────────────────────────────────────────────────────────────────
-check_flutter_installation() {
-    local path="$1"
-    local issues=0
-
-    if [[ ! -d "$path/.claude" ]]; then
-        log_error ".claude/: non trouvé"
-        return 1
-    fi
-
-    # Rules (obligatoire - generic + Flutter-specific, min 14)
-    # Generic: 7 files from Common/rules/ + Flutter: 8 tech-specific
-    check_dir_count "$path/.claude/rules" "rules" 14 || ((issues++)) || true
-
-    # Commands/flutter (obligatoire, min 5)
-    check_dir_count "$path/.claude/commands/flutter" "commands/flutter" 5 || ((issues++)) || true
-
-    # Templates (obligatoire, min 3)
-    check_dir_count "$path/.claude/templates" "templates" 3 || ((issues++)) || true
-
-    # Checklists (obligatoire, min 2)
-    check_dir_count "$path/.claude/checklists" "checklists" 2 || ((issues++)) || true
-
-    # CLAUDE.md (obligatoire)
-    check_file_exists "$path/.claude/CLAUDE.md" "CLAUDE.md" || ((issues++)) || true
-
-    # Agents (obligatoire, min 1)
-    check_dir_count "$path/.claude/agents" "agents" 1 || ((issues++)) || true
-
-    return $issues
-}
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Vérification React
-# ─────────────────────────────────────────────────────────────────────────────
-check_react_installation() {
-    local path="$1"
-    local issues=0
-
-    if [[ ! -d "$path/.claude" ]]; then
-        log_error ".claude/: non trouvé"
-        return 1
-    fi
-
-    # Rules (obligatoire - generic + React-specific, min 12)
-    # Generic: 7 files from Common/rules/ + React: 6 tech-specific
-    check_dir_count "$path/.claude/rules" "rules" 12 || ((issues++)) || true
-
-    # Commands/react (obligatoire, min 5)
-    check_dir_count "$path/.claude/commands/react" "commands/react" 5 || ((issues++)) || true
-
-    # Templates (obligatoire, min 2)
-    check_dir_count "$path/.claude/templates" "templates" 2 || ((issues++)) || true
-
-    # Checklists (obligatoire, min 2)
-    check_dir_count "$path/.claude/checklists" "checklists" 2 || ((issues++)) || true
-
-    # CLAUDE.md (obligatoire)
-    check_file_exists "$path/.claude/CLAUDE.md" "CLAUDE.md" || ((issues++)) || true
-
-    # Agents (obligatoire, min 1)
-    check_dir_count "$path/.claude/agents" "agents" 1 || ((issues++)) || true
-
-    return $issues
-}
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Vérification React Native
-# ─────────────────────────────────────────────────────────────────────────────
-check_reactnative_installation() {
-    local path="$1"
-    local issues=0
-
-    if [[ ! -d "$path/.claude" ]]; then
-        log_error ".claude/: non trouvé"
-        return 1
-    fi
-
-    # Rules (obligatoire - generic + ReactNative-specific, min 15)
-    # Generic: 7 files from Common/rules/ + ReactNative: 9 tech-specific
-    check_dir_count "$path/.claude/rules" "rules" 15 || ((issues++)) || true
-
-    # Commands/reactnative (obligatoire, min 5)
-    check_dir_count "$path/.claude/commands/reactnative" "commands/reactnative" 5 || ((issues++)) || true
-
-    # Templates (obligatoire, min 2)
-    check_dir_count "$path/.claude/templates" "templates" 2 || ((issues++)) || true
-
-    # Checklists (obligatoire, min 2)
-    check_dir_count "$path/.claude/checklists" "checklists" 2 || ((issues++)) || true
-
-    # CLAUDE.md (obligatoire)
-    check_file_exists "$path/.claude/CLAUDE.md" "CLAUDE.md" || ((issues++)) || true
-
-    # Agents (obligatoire, min 1)
-    check_dir_count "$path/.claude/agents" "agents" 1 || ((issues++)) || true
-
-    return $issues
-}
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Vérification Python
-# ─────────────────────────────────────────────────────────────────────────────
-check_python_installation() {
-    local path="$1"
-    local issues=0
-
-    if [[ ! -d "$path/.claude" ]]; then
-        log_error ".claude/: non trouvé"
-        return 1
-    fi
-
-    # Rules (obligatoire - generic + Python-specific, min 10)
-    # Generic: 7 files from Common/rules/ + Python: 4 tech-specific
-    check_dir_count "$path/.claude/rules" "rules" 10 || ((issues++)) || true
-
-    # Commands/python (obligatoire, min 5)
-    check_dir_count "$path/.claude/commands/python" "commands/python" 5 || ((issues++)) || true
-
-    # Templates (obligatoire, min 2)
-    check_dir_count "$path/.claude/templates" "templates" 2 || ((issues++)) || true
-
-    # Checklists (obligatoire, min 2)
-    check_dir_count "$path/.claude/checklists" "checklists" 2 || ((issues++)) || true
-
-    # CLAUDE.md (obligatoire)
-    check_file_exists "$path/.claude/CLAUDE.md" "CLAUDE.md" || ((issues++)) || true
-
-    # Agents (obligatoire, min 1)
-    check_dir_count "$path/.claude/agents" "agents" 1 || ((issues++)) || true
 
     return $issues
 }
@@ -428,32 +327,8 @@ check_module() {
 
     echo -e "   ${BOLD}$label:${NC}"
 
-    case "$tech" in
-        symfony)
-            check_symfony_installation "$path"
-            issues=$?
-            ;;
-        flutter)
-            check_flutter_installation "$path"
-            issues=$?
-            ;;
-        react)
-            check_react_installation "$path"
-            issues=$?
-            ;;
-        reactnative)
-            check_reactnative_installation "$path"
-            issues=$?
-            ;;
-        python)
-            check_python_installation "$path"
-            issues=$?
-            ;;
-        *)
-            log_warn "Technologie inconnue: $tech"
-            issues=1
-            ;;
-    esac
+    check_tech_installation "$path" "$tech"
+    issues=$?
 
     return $issues
 }

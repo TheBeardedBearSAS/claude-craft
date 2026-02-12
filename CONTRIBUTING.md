@@ -374,7 +374,7 @@ make list
 
 ```bash
 # Test all installations
-for tech in symfony flutter react python angular; do
+for tech in symfony flutter react python angular csharp reactnative vuejs laravel php; do
   make dry-run-$tech TARGET=/tmp/test-$tech
 done
 
