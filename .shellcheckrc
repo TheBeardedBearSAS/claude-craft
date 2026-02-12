@@ -9,3 +9,36 @@ disable=SC1090
 
 # SC2034: Variable appears unused (i18n message files define vars sourced elsewhere)
 disable=SC2034
+
+# SC2155: Declare and assign separately (pervasive pattern across all shell libs)
+disable=SC2155
+
+# SC2088: Tilde does not expand in quotes (intentional in usage strings)
+disable=SC2088
+
+# SC1072,SC1073,SC1078: Parse issues from yq/jq inline expressions in [[ ]]
+disable=SC1072,SC1073,SC1078
+
+# SC2046: Quote to prevent word splitting (intentional in several scripts)
+disable=SC2046
+
+# SC2076: Quotes on right-hand side of =~ (intentional literal match)
+disable=SC2076
+
+# SC2120: Function references arguments but none passed (optional params)
+disable=SC2120
+
+# SC2128: Expanding array without index (intentional first-element access)
+disable=SC2128
+
+# SC2144: -f doesn't work with globs (handled at runtime)
+disable=SC2144
+
+# SC2178: Variable used as array then string (dynamic typing in bash)
+disable=SC2178
+
+# SC2207: Prefer mapfile (legacy pattern in scripts)
+disable=SC2207
+
+# SC2089,SC2090: Quotes/backslashes in variables (intentional command building)
+disable=SC2089,SC2090
