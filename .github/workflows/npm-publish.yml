@@ -187,7 +187,6 @@ jobs:
     environment: npm
     permissions:
       contents: read
-      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -196,7 +195,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          # No registry-url: avoids setup-node auto-setting NODE_AUTH_TOKEN which overrides OIDC
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Update version for main branch
         if: ${{ needs.validate.outputs.is_main_push == 'true' }}
@@ -223,14 +222,15 @@ jobs:
           echo "DRY RUN - Would publish with:"
           echo "  Version: ${{ needs.validate.outputs.version }}"
           echo "  Tag: ${{ steps.npm_tag.outputs.tag }}"
-          unset NODE_AUTH_TOKEN
-          npm publish --dry-run --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
+          npm publish --dry-run --access public --tag ${{ steps.npm_tag.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish to NPM (OIDC)
+      - name: Publish to NPM
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
-        run: |
-          unset NODE_AUTH_TOKEN
-          npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
+        run: npm publish --access public --tag ${{ steps.npm_tag.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Verify publication
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
