@@ -134,9 +134,7 @@ const TECH_REGISTRY = {
 };
 
 /** All tech keys (excluding docker which is infra) */
-const INSTALLABLE_TECHS = Object.keys(TECH_REGISTRY).filter(
-  (k) => k !== 'docker' && k !== 'coolify'
-);
+const INSTALLABLE_TECHS = Object.keys(TECH_REGISTRY).filter((k) => k !== 'docker' && k !== 'coolify');
 
 /** Get display name for a tech key */
 function getDisplayName(tech) {
