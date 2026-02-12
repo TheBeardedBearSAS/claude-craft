@@ -434,13 +434,21 @@ install_tcl() {
     if [[ ${#TECH_2026_REFS[@]} -gt 0 ]] && [ "$dry_run" = "false" ]; then
         local refs_2026_src="${TECH_2026_REFS_SRC_DIR:-${SCRIPT_DIR}/../../.claude/references/${TECH_NAMESPACE}}"
         local refs_2026_dst="${target_dir}/.claude/references/${TECH_NAMESPACE}"
+        # Skip if source and destination resolve to the same directory
+        local resolved_src resolved_dst
+        resolved_src="$(cd "$refs_2026_src" 2>/dev/null && pwd)" || resolved_src=""
+        resolved_dst="$(cd "$refs_2026_dst" 2>/dev/null && pwd)" || resolved_dst=""
         local count_2026=0
-        for ref_file in "${TECH_2026_REFS[@]}"; do
-            if [ -f "${refs_2026_src}/${ref_file}" ]; then
-                cp "${refs_2026_src}/${ref_file}" "${refs_2026_dst}/"
-                ((count_2026++)) || true
-            fi
-        done
+        if [ -n "$resolved_src" ] && [ "$resolved_src" = "$resolved_dst" ]; then
+            log_success "2026 feature references already in place (same directory)"
+        else
+            for ref_file in "${TECH_2026_REFS[@]}"; do
+                if [ -f "${refs_2026_src}/${ref_file}" ]; then
+                    cp "${refs_2026_src}/${ref_file}" "${refs_2026_dst}/"
+                    ((count_2026++)) || true
+                fi
+            done
+        fi
         if [ $count_2026 -gt 0 ]; then
             log_success "${count_2026} 2026 feature references copied"
         fi

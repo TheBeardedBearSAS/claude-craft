@@ -61,7 +61,7 @@ function runUpdate(targetPath, options, cliRoot) {
   if (fs.existsSync(commonScript)) {
     console.log(`  ${c.cyan}Refreshing common rules...${c.reset}`);
     try {
-      execSync(`bash "${commonScript}" "${targetPath}" "${lang}" --force`, {
+      execSync(`bash "${commonScript}" --lang="${lang}" --force "${targetPath}"`, {
         encoding: 'utf8',
         timeout: 60_000,
         stdio: 'pipe',
@@ -85,7 +85,7 @@ function runUpdate(targetPath, options, cliRoot) {
 
     console.log(`  ${c.cyan}Refreshing ${entry.displayName}...${c.reset}`);
     try {
-      execSync(`bash "${script}" "${targetPath}" "${lang}" --force`, {
+      execSync(`bash "${script}" --lang="${lang}" --force "${targetPath}"`, {
         encoding: 'utf8',
         timeout: 60_000,
         stdio: 'pipe',
