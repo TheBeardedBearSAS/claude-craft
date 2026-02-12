@@ -147,3 +147,32 @@ MSG_VALID_LANGS="Línguas válidas:"
 
 # Mode in creation
 MSG_MODE_IN="em modo"
+
+# CLI rm i18n
+MSG_CONFIRM_DELETE="Eliminar perfil"
+MSG_BACKUP_CREATED="Cópia de segurança criada"
+
+# Permissions warning
+MSG_WARN_PERMISSIONS="Permissões demasiado abertas"
+
+# Doctor
+MSG_MENU_DOCTOR="Diagnóstico de perfis"
+MSG_DOCTOR_TITLE="Diagnóstico de Perfis"
+MSG_DOCTOR_PERMS_OK="Permissões 0700"
+MSG_DOCTOR_PERMS_BAD="Permissões demasiado abertas (esperado 0700)"
+MSG_DOCTOR_MODE_OK="Modo"
+MSG_DOCTOR_MODE_MISSING="Sem ficheiro .mode (perfil legacy)"
+MSG_DOCTOR_SYMLINK_OK="Symlink válido"
+MSG_DOCTOR_SYMLINK_BROKEN="Symlink partido: config"
+MSG_DOCTOR_CREDS_OK="Credentials JSON válido"
+MSG_DOCTOR_CREDS_BAD="Ficheiro credentials corrompido"
+MSG_DOCTOR_CREDS_MISSING="Não autenticado"
+MSG_DOCTOR_ALIAS_OK="Alias encontrado"
+MSG_DOCTOR_ALIAS_MISSING="Sem alias no shell RC"
+MSG_DOCTOR_ORPHAN_ALIAS="Alias órfão"
+MSG_DOCTOR_ALL_OK="Todos os perfis estão saudáveis"
+MSG_DOCTOR_ISSUES="problema(s) encontrado(s)"
+
+# Usage extras
+MSG_USAGE_DOCTOR_DESC="Diagnóstico de perfis"
+MSG_USAGE_JSON_DESC="Saída JSON para scripting"

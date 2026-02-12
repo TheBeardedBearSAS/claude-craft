@@ -15,11 +15,12 @@
 
 .PHONY: help install-all install-common install-project install-infra install-coolify \
         install-tools install-tools-lib install-statusline install-multiaccount install-projectconfig \
+        install-completions \
         install-web install-fullstack-js install-mobile install-backend \
         list list-agents list-commands \
         config-install config-install-all config-validate config-list config-dry-run \
         config-check config-check-fix check fix-permissions stats \
-        migrate-check \
+        migrate-check test-tools \
         plugin-export plugin-export-all
 
 # Configuration
@@ -212,6 +213,26 @@ install-projectconfig: install-tools-lib ## Installe le gestionnaire de projets 
 		exit 1; \
 	fi
 	@echo "$(GREEN)Project Config Manager installe !$(NC)"
+
+install-completions: ## Installe les completions bash/zsh pour claude-accounts
+	@echo "$(CYAN)Installation des completions...$(NC)"
+	@if [ -f "$(TOOLS_DIR)/MultiAccount/completions/claude-accounts.bash" ]; then \
+		mkdir -p ~/.local/share/bash-completion/completions; \
+		cp "$(TOOLS_DIR)/MultiAccount/completions/claude-accounts.bash" ~/.local/share/bash-completion/completions/claude-accounts; \
+		echo "$(GREEN)Y$(NC) Bash completion installee"; \
+	fi
+	@if [ -f "$(TOOLS_DIR)/MultiAccount/completions/_claude-accounts" ]; then \
+		mkdir -p ~/.zsh/completions; \
+		cp "$(TOOLS_DIR)/MultiAccount/completions/_claude-accounts" ~/.zsh/completions/_claude-accounts; \
+		echo "$(GREEN)Y$(NC) Zsh completion installee"; \
+		echo "$(YELLOW)!$(NC) Ajoute ~/.zsh/completions a ton fpath si necessaire:"; \
+		echo '  fpath=(~/.zsh/completions $$fpath)'; \
+	fi
+	@echo "$(GREEN)Completions installees !$(NC)"
+
+test-tools: ## Lance les tests bats pour les outils (via Docker)
+	@echo "$(CYAN)Lancement des tests bats...$(NC)"
+	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/MultiAccount/tests/
 
 install-tools-lib: ## Installe la librairie partagee tools-ui.sh
 	@mkdir -p ~/.local/lib/claude-craft

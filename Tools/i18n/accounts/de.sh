@@ -147,3 +147,32 @@ MSG_VALID_LANGS="Gültige Sprachen:"
 
 # Mode in creation
 MSG_MODE_IN="im Modus"
+
+# CLI rm i18n
+MSG_CONFIRM_DELETE="Profil löschen"
+MSG_BACKUP_CREATED="Backup erstellt"
+
+# Permissions warning
+MSG_WARN_PERMISSIONS="Berechtigungen zu offen"
+
+# Doctor
+MSG_MENU_DOCTOR="Profildiagnose"
+MSG_DOCTOR_TITLE="Profildiagnose"
+MSG_DOCTOR_PERMS_OK="Berechtigungen 0700"
+MSG_DOCTOR_PERMS_BAD="Berechtigungen zu offen (erwartet 0700)"
+MSG_DOCTOR_MODE_OK="Modus"
+MSG_DOCTOR_MODE_MISSING="Keine .mode-Datei (Legacy-Profil)"
+MSG_DOCTOR_SYMLINK_OK="Symlink gültig"
+MSG_DOCTOR_SYMLINK_BROKEN="Defekter Symlink: config"
+MSG_DOCTOR_CREDS_OK="Credentials JSON gültig"
+MSG_DOCTOR_CREDS_BAD="Credentials-Datei beschädigt"
+MSG_DOCTOR_CREDS_MISSING="Nicht authentifiziert"
+MSG_DOCTOR_ALIAS_OK="Alias gefunden"
+MSG_DOCTOR_ALIAS_MISSING="Kein Alias in Shell RC"
+MSG_DOCTOR_ORPHAN_ALIAS="Verwaister Alias"
+MSG_DOCTOR_ALL_OK="Alle Profile sind gesund"
+MSG_DOCTOR_ISSUES="Problem(e) gefunden"
+
+# Usage extras
+MSG_USAGE_DOCTOR_DESC="Profildiagnose"
+MSG_USAGE_JSON_DESC="JSON-Ausgabe für Skripting"

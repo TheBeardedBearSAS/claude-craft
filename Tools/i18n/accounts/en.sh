@@ -147,3 +147,32 @@ MSG_VALID_LANGS="Valid languages:"
 
 # Mode in creation
 MSG_MODE_IN="in mode"
+
+# CLI rm i18n
+MSG_CONFIRM_DELETE="Delete profile"
+MSG_BACKUP_CREATED="Backup created"
+
+# Permissions warning
+MSG_WARN_PERMISSIONS="Permissions too open"
+
+# Doctor
+MSG_MENU_DOCTOR="Profile health check"
+MSG_DOCTOR_TITLE="Profile Health Check"
+MSG_DOCTOR_PERMS_OK="Permissions 0700"
+MSG_DOCTOR_PERMS_BAD="Permissions too open (expected 0700)"
+MSG_DOCTOR_MODE_OK="Mode"
+MSG_DOCTOR_MODE_MISSING="No .mode file (legacy profile)"
+MSG_DOCTOR_SYMLINK_OK="Symlink valid"
+MSG_DOCTOR_SYMLINK_BROKEN="Broken symlink: config"
+MSG_DOCTOR_CREDS_OK="Credentials valid JSON"
+MSG_DOCTOR_CREDS_BAD="Credentials file corrupt"
+MSG_DOCTOR_CREDS_MISSING="Not authenticated"
+MSG_DOCTOR_ALIAS_OK="Alias found"
+MSG_DOCTOR_ALIAS_MISSING="No alias in shell RC"
+MSG_DOCTOR_ORPHAN_ALIAS="Orphan alias"
+MSG_DOCTOR_ALL_OK="All profiles healthy"
+MSG_DOCTOR_ISSUES="issue(s) found"
+
+# Usage extras
+MSG_USAGE_DOCTOR_DESC="Check profile health"
+MSG_USAGE_JSON_DESC="JSON output for scripting"

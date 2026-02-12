@@ -1,0 +1,61 @@
+#compdef claude-accounts
+# Zsh completion for claude-accounts
+# Copy to a directory in your $fpath (e.g., ~/.zsh/completions/)
+
+_claude_accounts_profiles() {
+    local profiles_dir="$HOME/.claude-profiles"
+    if [[ -d "$profiles_dir" ]]; then
+        local -a profiles
+        profiles=(${(f)"$(ls -1 "$profiles_dir" 2>/dev/null)"})
+        _describe 'profile' profiles
+    fi
+}
+
+_claude_accounts() {
+    local -a commands
+    commands=(
+        'add:Add a new profile'
+        'rm:Delete a profile'
+        'list:List profiles'
+        'auth:Authenticate a profile'
+        'run:Launch Claude Code with a profile'
+        'migrate:Migrate a legacy profile'
+        'doctor:Check profile health'
+        'help:Show usage'
+    )
+
+    local -a global_opts
+    global_opts=(
+        '--version[Show version]'
+        '-V[Show version]'
+        '--json[JSON output for scripting]'
+        '--lang=[Language]:language:(en fr es de pt)'
+    )
+
+    _arguments -C \
+        '1:command:->command' \
+        '*::arg:->args' \
+        $global_opts
+
+    case $state in
+        command)
+            _describe 'command' commands
+            ;;
+        args)
+            case ${words[1]} in
+                rm|remove|delete)
+                    _claude_accounts_profiles
+                    _arguments '--force[Skip confirmation]'
+                    ;;
+                auth|login|run|start|r)
+                    _claude_accounts_profiles
+                    ;;
+                add|a)
+                    # No completion for new names
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_claude_accounts "$@"

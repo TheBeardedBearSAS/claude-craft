@@ -13,6 +13,21 @@ SHELL_RC=""
 CLAUDE_BIN="claude"
 VERSION="1.1.0"
 
+# Exit codes
+EXIT_OK=0
+EXIT_ERROR=1
+EXIT_USAGE=2
+EXIT_NOT_FOUND=3
+EXIT_MISSING_DEP=4
+
+# JSON output mode
+JSON_OUTPUT=false
+
+# Temp files tracking for signal cleanup
+_TMP_FILES=()
+_cleanup() { rm -f "${_TMP_FILES[@]}" 2>/dev/null; }
+trap _cleanup EXIT
+
 # i18n Configuration
 VALID_LANGS=("en" "fr" "es" "de" "pt")
 DEFAULT_LANG="en"
@@ -79,7 +94,7 @@ parse_lang() {
                 if ! $valid; then
                     echo -e "${C_RED}${MSG_INVALID_LANG:-Invalid language:}${C_RESET} $LANG_ARG"
                     echo "${MSG_VALID_LANGS:-Valid languages:} ${VALID_LANGS[*]}"
-                    exit 1
+                    exit $EXIT_USAGE
                 fi
                 ;;
         esac
@@ -113,8 +128,20 @@ detect_shell_rc() {
 ensure_profiles_dir() {
     if [[ ! -d "$CLAUDE_PROFILES_DIR" ]]; then
         mkdir -p "$CLAUDE_PROFILES_DIR"
+        chmod 0700 "$CLAUDE_PROFILES_DIR"
         print_success "${MSG_PROFILES_DIR_CREATED} $CLAUDE_PROFILES_DIR"
     fi
+}
+
+# Validate that a profile directory exists
+validate_profile() {
+    local profile_name="$1"
+    local profile_path="$CLAUDE_PROFILES_DIR/$profile_name"
+    if [[ ! -d "$profile_path" ]]; then
+        print_error "${MSG_REMOVE_NOT_FOUND}: '$profile_name'"
+        return 1
+    fi
+    return 0
 }
 
 sanitize_name() {
@@ -128,7 +155,7 @@ check_jq() {
         echo "Installation:"
         echo "  Ubuntu/Debian: sudo apt install jq"
         echo "  macOS:         brew install jq"
-        exit 1
+        exit $EXIT_MISSING_DEP
     fi
 }
 
@@ -210,6 +237,11 @@ ask_profile_mode() {
 # =============================================================================
 
 list_profiles() {
+    if [[ "$JSON_OUTPUT" == true ]]; then
+        list_profiles_json
+        return
+    fi
+
     echo -e "\n${C_BOLD}📋 ${MSG_PROFILES_TITLE}${C_RESET}\n"
 
     if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
@@ -224,7 +256,6 @@ list_profiles() {
 
         local profile_name=$(basename "$profile_dir")
         local credentials_file="$profile_dir/.credentials.json"
-        local settings_file="$profile_dir/settings.json"
 
         # Try to read email from credentials
         local email="(${MSG_STATUS_NOT_AUTH})"
@@ -246,6 +277,14 @@ list_profiles() {
         echo -e "   $status ${C_BOLD}$profile_name${C_RESET} $mode_label"
         echo -e "     └─ $email"
         echo -e "     └─ ${MSG_ALIAS_LABEL} ${C_CYAN}claude-$profile_name${C_RESET}"
+
+        # Warn if permissions are too open
+        local perms
+        perms=$(stat -c '%a' "$profile_dir" 2>/dev/null || stat -f '%Lp' "$profile_dir" 2>/dev/null)
+        if [[ -n "$perms" && "$perms" != "700" ]]; then
+            print_warning "${MSG_WARN_PERMISSIONS:-Permissions too open ($perms)}: chmod 0700 $profile_dir"
+        fi
+
         echo ""
 
         index=$((index + 1))
@@ -253,6 +292,39 @@ list_profiles() {
 
     echo -e "   ${C_GREEN}●${C_RESET} ${MSG_STATUS_LEGEND_AUTH}   ${C_YELLOW}○${C_RESET} ${MSG_STATUS_LEGEND_NOT_AUTH}"
     echo -e "   ${C_GREEN}${MSG_MODE_LABEL_SHARED}${C_RESET} = ${MSG_MODE_LEGEND}   ${C_MAGENTA}${MSG_MODE_LABEL_ISOLATED}${C_RESET} = ${MSG_MODE_LEGEND_ISOLATED}   ${C_YELLOW}${MSG_MODE_LABEL_LEGACY}${C_RESET} = ${MSG_MODE_LEGEND_LEGACY}\n"
+}
+
+list_profiles_json() {
+    local json_profiles="[]"
+
+    if [[ -d "$CLAUDE_PROFILES_DIR" ]] && [[ -n "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
+        for profile_dir in "$CLAUDE_PROFILES_DIR"/*/; do
+            [[ ! -d "$profile_dir" ]] && continue
+
+            local pname=$(basename "$profile_dir")
+            local cred_file="$profile_dir/.credentials.json"
+            local authenticated=false
+            local email=""
+            local mode=$(get_profile_mode "$pname")
+            local perms
+            perms=$(stat -c '%a' "$profile_dir" 2>/dev/null || stat -f '%Lp' "$profile_dir" 2>/dev/null)
+
+            if [[ -f "$cred_file" ]]; then
+                authenticated=true
+                email=$(jq -r '.email // ""' "$cred_file" 2>/dev/null)
+            fi
+
+            json_profiles=$(echo "$json_profiles" | jq \
+                --arg name "$pname" \
+                --arg mode "$mode" \
+                --argjson auth "$authenticated" \
+                --arg email "$email" \
+                --arg perms "${perms:-unknown}" \
+                '. + [{"name":$name,"mode":$mode,"authenticated":$auth,"email":$email,"permissions":$perms}]')
+        done
+    fi
+
+    jq -n --argjson profiles "$json_profiles" '{"profiles":$profiles}'
 }
 
 add_profile() {
@@ -278,8 +350,9 @@ add_profile() {
         return 1
     fi
 
-    # Create profile directory
+    # Create profile directory with restricted permissions
     mkdir -p "$profile_path"
+    chmod 0700 "$profile_path"
 
     # Ask for mode
     local mode=$(ask_profile_mode)
@@ -446,11 +519,13 @@ migrate_profile() {
     case "$mode_choice" in
         2)
             echo "isolated" > "$profile_path/.mode"
+            chmod 0700 "$profile_path"
             print_success "${MSG_MIGRATE_DONE_ISOLATED}: '$selected'"
             print_info "${MSG_MIGRATE_CONFIG_KEPT}"
             ;;
         *)
             echo "shared" > "$profile_path/.mode"
+            chmod 0700 "$profile_path"
             # Create symlink config if not already present
             if [[ ! -L "$profile_path/config" ]] && [[ -d "$HOME/.claude" ]]; then
                 ln -sf "$HOME/.claude" "$profile_path/config"
@@ -557,6 +632,8 @@ show_usage() {
     echo -e "  ${C_BOLD}claude-accounts auth <name>${C_RESET}    ${MSG_USAGE_AUTH_DESC}"
     echo -e "  ${C_BOLD}claude-accounts run <name>${C_RESET}     ${MSG_USAGE_RUN_DESC}"
     echo -e "  ${C_BOLD}claude-accounts migrate${C_RESET}       ${MSG_USAGE_MIGRATE_DESC}"
+    echo -e "  ${C_BOLD}claude-accounts doctor${C_RESET}        ${MSG_USAGE_DOCTOR_DESC:-Check profile health}"
+    echo -e "  ${C_BOLD}claude-accounts --json list${C_RESET}   ${MSG_USAGE_JSON_DESC:-JSON output for scripting}"
     echo -e "  ${C_BOLD}claude-accounts --lang=XX${C_RESET}     ${MSG_USAGE_LANG_DESC}"
     echo ""
 
@@ -588,10 +665,16 @@ ccsp() {
     local profile=\"\${1:-}\"
     local profiles_dir=\"\$HOME/.claude-profiles\"
 
+    # Auto-detect from .claude-profile if no argument
+    if [[ -z \"\$profile\" && -f .claude-profile ]]; then
+        profile=\$(cat .claude-profile | tr -d '[:space:]')
+    fi
+
     if [[ -z \"\$profile\" ]]; then
         # Without argument, launch interactive selector
         claude-accounts run
     elif [[ -d \"\$profiles_dir/\$profile\" ]]; then
+        export CLAUDE_PROFILE_NAME=\"\$profile\"
         CLAUDE_CONFIG_DIR=\"\$profiles_dir/\$profile\" claude \"\${@:2}\"
     else
         echo \"${MSG_CC_PROFILE} '\$profile' ${MSG_CC_NOT_FOUND}\"
@@ -616,6 +699,113 @@ ccsp() {
 }
 
 # =============================================================================
+# Doctor - Profile health check
+# =============================================================================
+
+cmd_doctor() {
+    echo -e "\n${C_BOLD}🩺 ${MSG_DOCTOR_TITLE:-Profile Health Check}${C_RESET}\n"
+
+    local issues=0
+    local checked=0
+
+    if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
+        print_warning "${MSG_NO_PROFILE}"
+        return
+    fi
+
+    # Check shell RC for orphan aliases
+    detect_shell_rc
+    local aliases_in_rc=()
+    if [[ -f "$SHELL_RC" ]]; then
+        while IFS= read -r line; do
+            local alias_name
+            alias_name=$(echo "$line" | grep -oP 'alias claude-\K[^=]+' 2>/dev/null || true)
+            [[ -n "$alias_name" ]] && aliases_in_rc+=("$alias_name")
+        done < <(grep "^alias claude-" "$SHELL_RC" 2>/dev/null || true)
+    fi
+
+    for profile_dir in "$CLAUDE_PROFILES_DIR"/*/; do
+        [[ ! -d "$profile_dir" ]] && continue
+        checked=$((checked + 1))
+
+        local pname=$(basename "$profile_dir")
+        echo -e "${C_BOLD}  $pname${C_RESET}"
+
+        # 1. Check permissions
+        local perms
+        perms=$(stat -c '%a' "$profile_dir" 2>/dev/null || stat -f '%Lp' "$profile_dir" 2>/dev/null)
+        if [[ "$perms" == "700" ]]; then
+            echo -e "    ${C_GREEN}✓${C_RESET} ${MSG_DOCTOR_PERMS_OK:-Permissions 0700}"
+        else
+            echo -e "    ${C_RED}✗${C_RESET} ${MSG_DOCTOR_PERMS_BAD:-Permissions $perms (expected 0700)}"
+            issues=$((issues + 1))
+        fi
+
+        # 2. Check mode file
+        local pmode
+        pmode=$(get_profile_mode "$pname")
+        if [[ -f "$profile_dir/.mode" ]]; then
+            echo -e "    ${C_GREEN}✓${C_RESET} ${MSG_DOCTOR_MODE_OK:-Mode}: $pmode"
+        else
+            echo -e "    ${C_YELLOW}⚠${C_RESET} ${MSG_DOCTOR_MODE_MISSING:-No .mode file (legacy profile)}"
+            issues=$((issues + 1))
+        fi
+
+        # 3. Check symlinks (shared mode)
+        if [[ "$pmode" == "shared" && -L "$profile_dir/config" ]]; then
+            if [[ -d "$profile_dir/config" ]]; then
+                echo -e "    ${C_GREEN}✓${C_RESET} ${MSG_DOCTOR_SYMLINK_OK:-Symlink valid}"
+            else
+                echo -e "    ${C_RED}✗${C_RESET} ${MSG_DOCTOR_SYMLINK_BROKEN:-Broken symlink: config}"
+                issues=$((issues + 1))
+            fi
+        fi
+
+        # 4. Check credentials parseable
+        local cred_file="$profile_dir/.credentials.json"
+        if [[ -f "$cred_file" ]]; then
+            if jq empty "$cred_file" 2>/dev/null; then
+                echo -e "    ${C_GREEN}✓${C_RESET} ${MSG_DOCTOR_CREDS_OK:-Credentials valid JSON}"
+            else
+                echo -e "    ${C_RED}✗${C_RESET} ${MSG_DOCTOR_CREDS_BAD:-Credentials file corrupt}"
+                issues=$((issues + 1))
+            fi
+        else
+            echo -e "    ${C_YELLOW}⚠${C_RESET} ${MSG_DOCTOR_CREDS_MISSING:-Not authenticated}"
+        fi
+
+        # 5. Check alias exists in shell RC
+        local has_alias=false
+        for a in "${aliases_in_rc[@]}"; do
+            [[ "$a" == "$pname" ]] && has_alias=true
+        done
+        if $has_alias; then
+            echo -e "    ${C_GREEN}✓${C_RESET} ${MSG_DOCTOR_ALIAS_OK:-Alias in $SHELL_RC}"
+        else
+            echo -e "    ${C_YELLOW}⚠${C_RESET} ${MSG_DOCTOR_ALIAS_MISSING:-No alias in $SHELL_RC}"
+            issues=$((issues + 1))
+        fi
+
+        echo ""
+    done
+
+    # Check for orphan aliases (alias exists but profile dir doesn't)
+    for alias_name in "${aliases_in_rc[@]}"; do
+        if [[ ! -d "$CLAUDE_PROFILES_DIR/$alias_name" ]]; then
+            echo -e "  ${C_RED}✗${C_RESET} ${MSG_DOCTOR_ORPHAN_ALIAS:-Orphan alias}: claude-$alias_name"
+            issues=$((issues + 1))
+        fi
+    done
+
+    echo ""
+    if [[ $issues -eq 0 ]]; then
+        print_success "${MSG_DOCTOR_ALL_OK:-All $checked profiles healthy}"
+    else
+        print_warning "${MSG_DOCTOR_ISSUES:-$issues issue(s) found across $checked profile(s)}"
+    fi
+}
+
+# =============================================================================
 # Main menu
 # =============================================================================
 
@@ -628,7 +818,8 @@ show_menu() {
     echo -e "  ${C_CYAN}5)${C_RESET} 🚀 ${MSG_MENU_LAUNCH}"
     echo -e "  ${C_CYAN}6)${C_RESET} ⚡ ${MSG_MENU_CCSP_FUNC}"
     echo -e "  ${C_CYAN}7)${C_RESET} 🔄 ${MSG_MENU_MIGRATE}"
-    echo -e "  ${C_CYAN}8)${C_RESET} 📖 ${MSG_MENU_HELP}"
+    echo -e "  ${C_CYAN}8)${C_RESET} 🩺 ${MSG_MENU_DOCTOR:-Profile health check}"
+    echo -e "  ${C_CYAN}9)${C_RESET} 📖 ${MSG_MENU_HELP}"
     echo -e "  ${C_CYAN}q)${C_RESET} ${MSG_MENU_QUIT}"
     echo ""
 }
@@ -649,8 +840,9 @@ main_menu() {
             5) launch_profile ;;
             6) install_ccsp_function ;;
             7) migrate_profile ;;
-            8) show_usage ;;
-            q|Q) echo -e "\n${C_GREEN}${MSG_GOODBYE}${C_RESET}\n"; exit 0 ;;
+            8) cmd_doctor ;;
+            9) show_usage ;;
+            q|Q) echo -e "\n${C_GREEN}${MSG_GOODBYE}${C_RESET}\n"; exit $EXIT_OK ;;
             *) print_error "${MSG_INVALID_CHOICE}" ;;
         esac
 
@@ -667,10 +859,11 @@ cli_mode() {
     local command="$1"
     shift
 
-    # Remove --lang from remaining args
+    # Remove --lang and --json from remaining args
     local args=()
     for arg in "$@"; do
-        [[ "$arg" != --lang=* ]] && args+=("$arg")
+        [[ "$arg" == --lang=* || "$arg" == "--json" ]] && continue
+        args+=("$arg")
     done
 
     ensure_profiles_dir
@@ -683,10 +876,11 @@ cli_mode() {
 
                 if [[ -d "$profile_path" ]]; then
                     print_error "${MSG_ADD_PROFILE_EXISTS}: '$profile_name'"
-                    exit 1
+                    exit $EXIT_ERROR
                 fi
 
                 mkdir -p "$profile_path"
+                chmod 0700 "$profile_path"
                 print_success "${MSG_ADD_PROFILE_CREATED}: '$profile_name'"
                 add_alias_to_shell "$profile_name"
             else
@@ -705,13 +899,13 @@ cli_mode() {
                         [[ "$a" == "--force" ]] && force=true
                     done
 
-                    # Create backup before deletion
+                    # Create backup before deletion (kept permanently)
                     local backup_file="$CLAUDE_PROFILES_DIR/${name}.backup.tar.gz"
                     tar czf "$backup_file" -C "$CLAUDE_PROFILES_DIR" "$name" 2>/dev/null
-                    print_info "Backup created: $backup_file"
+                    print_info "${MSG_BACKUP_CREATED:-Backup created}: $backup_file"
 
                     if [[ "$force" != true ]]; then
-                        read -p "Delete profile '$name'? [y/N] " -n 1 -r
+                        read -p "${MSG_CONFIRM_DELETE:-Delete profile} '$name'? ${MSG_CONFIRM_YES_NO} " -n 1 -r
                         echo ""
                         if [[ ! $REPLY =~ ^[OoYySs]$ ]]; then
                             print_info "${MSG_REMOVE_CANCELLED}"
@@ -728,7 +922,7 @@ cli_mode() {
                     fi
                 else
                     print_error "${MSG_REMOVE_NOT_FOUND}: '$name'"
-                    exit 1
+                    exit $EXIT_NOT_FOUND
                 fi
             else
                 remove_profile
@@ -738,17 +932,16 @@ cli_mode() {
             list_profiles
             ;;
         auth|login)
-            authenticate_profile "${args[0]}"
+            if [[ -n "${args[0]:-}" ]]; then
+                validate_profile "${args[0]}" || exit $EXIT_NOT_FOUND
+            fi
+            authenticate_profile "${args[0]:-}"
             ;;
         run|start|r)
-            if [[ -n "${args[0]}" ]]; then
+            if [[ -n "${args[0]:-}" ]]; then
+                validate_profile "${args[0]}" || exit $EXIT_NOT_FOUND
                 local profile_path="$CLAUDE_PROFILES_DIR/${args[0]}"
-                if [[ -d "$profile_path" ]]; then
-                    CLAUDE_CONFIG_DIR="$profile_path" $CLAUDE_BIN "${args[@]:1}"
-                else
-                    print_error "${MSG_REMOVE_NOT_FOUND}: '${args[0]}'"
-                    exit 1
-                fi
+                CLAUDE_CONFIG_DIR="$profile_path" $CLAUDE_BIN "${args[@]:1}"
             else
                 launch_profile
             fi
@@ -756,13 +949,16 @@ cli_mode() {
         migrate|m)
             migrate_profile
             ;;
+        doctor|doc)
+            cmd_doctor
+            ;;
         help|h|--help|-h)
             show_usage
             ;;
         *)
             print_error "${MSG_UNKNOWN_COMMAND} $command"
             show_usage
-            exit 1
+            exit $EXIT_USAGE
             ;;
     esac
 }
@@ -775,17 +971,25 @@ ensure_profiles_dir
 detect_shell_rc
 check_jq
 
-# Filter out --lang from args for CLI mode check
+# Filter out --lang and --json from args for CLI mode check
 cli_args=()
 for arg in "$@"; do
-    [[ "$arg" != --lang=* ]] && cli_args+=("$arg")
+    case "$arg" in
+        --lang=*) ;;
+        --json) JSON_OUTPUT=true ;;
+        *) cli_args+=("$arg") ;;
+    esac
 done
 
 # Handle --version / -V
 for arg in "${cli_args[@]}"; do
     if [[ "$arg" == "--version" || "$arg" == "-V" ]]; then
-        echo "claude-accounts $VERSION"
-        exit 0
+        if [[ "$JSON_OUTPUT" == true ]]; then
+            echo "{\"version\":\"$VERSION\"}"
+        else
+            echo "claude-accounts $VERSION"
+        fi
+        exit $EXIT_OK
     fi
 done
 
