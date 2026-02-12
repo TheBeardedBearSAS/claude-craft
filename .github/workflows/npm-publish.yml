@@ -49,7 +49,18 @@ jobs:
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
 
-          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            # Manual dispatch: use package.json version as-is
+            echo "Manual dispatch: version ${PACKAGE_VERSION}"
+            echo "version=${PACKAGE_VERSION}" >> $GITHUB_OUTPUT
+            if [[ "${PACKAGE_VERSION}" == *"-"* ]]; then
+              echo "is_prerelease=true" >> $GITHUB_OUTPUT
+            else
+              echo "is_prerelease=false" >> $GITHUB_OUTPUT
+            fi
+            echo "is_main_push=false" >> $GITHUB_OUTPUT
+
+          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
             # Tag push: validate tag matches package.json
             TAG_VERSION="${{ github.ref_name }}"
             TAG_VERSION="${TAG_VERSION#v}"
@@ -73,7 +84,7 @@ jobs:
             echo "is_main_push=true" >> $GITHUB_OUTPUT
 
           else
-            # Manual dispatch or other
+            # Other
             echo "version=${PACKAGE_VERSION}" >> $GITHUB_OUTPUT
             if [[ "${PACKAGE_VERSION}" == *"-"* ]]; then
               echo "is_prerelease=true" >> $GITHUB_OUTPUT
