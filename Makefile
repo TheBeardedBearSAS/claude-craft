@@ -14,7 +14,7 @@
 #===============================================================================
 
 .PHONY: help install-all install-common install-project install-infra install-coolify \
-        install-tools install-statusline install-multiaccount install-projectconfig \
+        install-tools install-tools-lib install-statusline install-multiaccount install-projectconfig \
         install-web install-fullstack-js install-mobile install-backend \
         list list-agents list-commands \
         config-install config-install-all config-validate config-list config-dry-run \
@@ -175,7 +175,7 @@ install-statusline: ## Installe la status line personnalisee
 	fi
 	@echo "$(GREEN)Status Line installee !$(NC)"
 
-install-multiaccount: ## Installe le gestionnaire multi-comptes
+install-multiaccount: install-tools-lib ## Installe le gestionnaire multi-comptes
 	@echo "$(CYAN)Installation du Multi-Account Manager...$(NC)"
 	@mkdir -p ~/.local/bin
 	@if [ -f "$(TOOLS_DIR)/MultiAccount/claude-accounts.sh" ]; then \
@@ -194,7 +194,7 @@ install-multiaccount: ## Installe le gestionnaire multi-comptes
 	fi
 	@echo "$(GREEN)Multi-Account Manager installe !$(NC)"
 
-install-projectconfig: ## Installe le gestionnaire de projets YAML
+install-projectconfig: install-tools-lib ## Installe le gestionnaire de projets YAML
 	@echo "$(CYAN)Installation du Project Config Manager...$(NC)"
 	@mkdir -p ~/.local/bin
 	@if [ -f "$(TOOLS_DIR)/ProjectConfig/claude-projects.sh" ]; then \
@@ -212,6 +212,13 @@ install-projectconfig: ## Installe le gestionnaire de projets YAML
 		exit 1; \
 	fi
 	@echo "$(GREEN)Project Config Manager installe !$(NC)"
+
+install-tools-lib: ## Installe la librairie partagee tools-ui.sh
+	@mkdir -p ~/.local/lib/claude-craft
+	@if [ -f "$(TOOLS_DIR)/lib/tools-ui.sh" ]; then \
+		cp "$(TOOLS_DIR)/lib/tools-ui.sh" ~/.local/lib/claude-craft/tools-ui.sh; \
+		echo "$(GREEN)✓$(NC) Librairie copiee: ~/.local/lib/claude-craft/tools-ui.sh"; \
+	fi
 
 #===============================================================================
 # Installation depuis Configuration YAML

@@ -5,9 +5,8 @@ Script interactif pour gérer facilement plusieurs comptes Claude Code.
 ## Installation
 
 ```bash
-# Télécharge et installe
-curl -o ~/.local/bin/claude-accounts https://raw.githubusercontent.com/TheBeardedBearSAS/claude-craft/main/Tools/MultiAccount/claude-accounts.sh
-chmod +x ~/.local/bin/claude-accounts
+# Via Makefile (recommandé — copie aussi les dépendances)
+make install-multiaccount
 
 # Ou manuellement
 cp claude-accounts.sh ~/.local/bin/claude-accounts
@@ -26,8 +25,6 @@ claude-accounts
 ╔════════════════════════════════════════════════════════════╗
 ║     🔐 Claude Code Multi-Account Manager                  ║
 ╚════════════════════════════════════════════════════════════╝
-
-Que veux-tu faire ?
 
   1) 📋 Lister les profils
   2) ➕ Ajouter un profil
@@ -57,9 +54,26 @@ claude-accounts auth perso
 # Lancer avec un profil
 claude-accounts run pro
 
-# Supprimer un profil
+# Supprimer un profil (crée un backup automatique)
 claude-accounts rm client-acme
+
+# Migrer un profil legacy vers shared/isolated
+claude-accounts migrate
+
+# Version
+claude-accounts --version
+
+# Changer la langue
+claude-accounts --lang=fr list
 ```
+
+## Modes de profil
+
+| Mode | Description |
+|------|-------------|
+| **shared** | Partage la config `~/.claude` via symlink (défaut) |
+| **isolated** | Copie indépendante de la config (isolation totale) |
+| **legacy** | Ancien format sans mode — migrer avec `migrate` |
 
 ## Après installation
 
@@ -88,8 +102,10 @@ ccsp pro
 ```
 ~/.claude-profiles/
 ├── perso/
-│   ├── .credentials.json    # Token d'authentification
-│   ├── settings.json        # Settings spécifiques
+│   ├── .mode                  # "shared" ou "isolated"
+│   ├── .credentials.json      # Token d'authentification
+│   ├── config -> ~/.claude    # Symlink (mode shared)
+│   ├── settings.json          # Settings spécifiques
 │   └── ...
 ├── pro/
 │   └── ...
@@ -102,11 +118,23 @@ ccsp pro
 | Commande | Alias | Description |
 |----------|-------|-------------|
 | `add <nom>` | `a` | Ajoute un nouveau profil |
-| `rm <nom>` | `remove`, `delete` | Supprime un profil |
+| `rm <nom>` | `remove`, `delete` | Supprime un profil (avec backup) |
 | `list` | `ls`, `l` | Liste tous les profils |
 | `auth <nom>` | `login` | Authentifie un profil |
 | `run <nom>` | `start`, `r` | Lance Claude Code avec un profil |
+| `migrate` | `m` | Migre un profil legacy vers shared/isolated |
 | `help` | `h`, `-h` | Affiche l'aide |
+| `--version` | `-V` | Affiche la version |
+| `--lang=XX` | | Langue (en, fr, es, de, pt) |
+
+## Langues supportées
+
+Le script est disponible en 5 langues : **en** (défaut), **fr**, **es**, **de**, **pt**.
+
+```bash
+claude-accounts --lang=fr        # Menu en français
+claude-accounts --lang=es list   # Liste en espagnol
+```
 
 ## Tips
 
@@ -118,11 +146,12 @@ ccsp pro
 
 ### Partager des settings entre profils
 
-Si tu veux des settings communs, crée un lien symbolique :
+Utilise le mode **shared** (défaut) — il crée un symlink vers `~/.claude`.
+
+Pour le mode **isolated**, tu peux créer des liens manuellement :
 
 ```bash
 ln -s ~/.claude/settings.json ~/.claude-profiles/perso/settings.json
-ln -s ~/.claude/settings.json ~/.claude-profiles/pro/settings.json
 ```
 
 ### Contexte projet

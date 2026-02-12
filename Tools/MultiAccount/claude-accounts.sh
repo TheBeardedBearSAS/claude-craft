@@ -4,12 +4,14 @@
 # Manage multiple Claude Code accounts easily
 # =============================================================================
 
-set -e
+# Note: set -e intentionally not used — the script handles errors explicitly
+# with return codes and print_error, and set -e causes issues with ((var++)).
 
 # Configuration
 CLAUDE_PROFILES_DIR="$HOME/.claude-profiles"
 SHELL_RC=""
 CLAUDE_BIN="claude"
+VERSION="1.1.0"
 
 # i18n Configuration
 VALID_LANGS=("en" "fr" "es" "de" "pt")
@@ -18,15 +20,21 @@ LANG_ARG=""
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 
-# Colors
-C_RESET='\033[0m'
-C_BOLD='\033[1m'
-C_RED='\033[0;31m'
-C_GREEN='\033[0;32m'
-C_YELLOW='\033[0;33m'
-C_BLUE='\033[0;34m'
-C_MAGENTA='\033[0;35m'
-C_CYAN='\033[0;36m'
+# Shared UI library (colors + print helpers)
+TOOLS_LIB_DIR="$(dirname "$SCRIPT_DIR")/lib"
+if [[ -f "$TOOLS_LIB_DIR/tools-ui.sh" ]]; then
+    # shellcheck source=../lib/tools-ui.sh
+    source "$TOOLS_LIB_DIR/tools-ui.sh"
+else
+    # Inline fallback when lib is missing
+    C_RESET='\033[0m' C_BOLD='\033[1m' C_DIM='\033[2m'
+    C_RED='\033[0;31m' C_GREEN='\033[0;32m' C_YELLOW='\033[0;33m'
+    C_BLUE='\033[0;34m' C_MAGENTA='\033[0;35m' C_CYAN='\033[0;36m'
+    print_success() { echo -e "${C_GREEN}✓${C_RESET} $1"; }
+    print_error()   { echo -e "${C_RED}✗${C_RESET} $1"; }
+    print_info()    { echo -e "${C_BLUE}ℹ${C_RESET} $1"; }
+    print_warning() { echo -e "${C_YELLOW}⚠${C_RESET} $1"; }
+fi
 
 # =============================================================================
 # i18n - Load messages
@@ -92,22 +100,6 @@ print_header() {
     echo -e "${C_CYAN}╚════════════════════════════════════════════════════════════╝${C_RESET}\n"
 }
 
-print_success() {
-    echo -e "${C_GREEN}✓${C_RESET} $1"
-}
-
-print_error() {
-    echo -e "${C_RED}✗${C_RESET} $1"
-}
-
-print_info() {
-    echo -e "${C_BLUE}ℹ${C_RESET} $1"
-}
-
-print_warning() {
-    echo -e "${C_YELLOW}⚠${C_RESET} $1"
-}
-
 detect_shell_rc() {
     if [[ -n "$ZSH_VERSION" ]] || [[ "$SHELL" == *"zsh"* ]]; then
         SHELL_RC="$HOME/.zshrc"
@@ -122,6 +114,21 @@ ensure_profiles_dir() {
     if [[ ! -d "$CLAUDE_PROFILES_DIR" ]]; then
         mkdir -p "$CLAUDE_PROFILES_DIR"
         print_success "${MSG_PROFILES_DIR_CREATED} $CLAUDE_PROFILES_DIR"
+    fi
+}
+
+sanitize_name() {
+    echo "$1" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-'
+}
+
+check_jq() {
+    if ! command -v jq &>/dev/null; then
+        print_error "jq is required but not installed"
+        echo ""
+        echo "Installation:"
+        echo "  Ubuntu/Debian: sudo apt install jq"
+        echo "  macOS:         brew install jq"
+        exit 1
     fi
 }
 
@@ -241,7 +248,7 @@ list_profiles() {
         echo -e "     └─ ${MSG_ALIAS_LABEL} ${C_CYAN}claude-$profile_name${C_RESET}"
         echo ""
 
-        ((index++))
+        index=$((index + 1))
     done
 
     echo -e "   ${C_GREEN}●${C_RESET} ${MSG_STATUS_LEGEND_AUTH}   ${C_YELLOW}○${C_RESET} ${MSG_STATUS_LEGEND_NOT_AUTH}"
@@ -262,7 +269,7 @@ add_profile() {
     fi
 
     # Clean name (lowercase, replace spaces with dashes)
-    profile_name=$(echo "$profile_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
+    profile_name=$(sanitize_name "$profile_name")
 
     local profile_path="$CLAUDE_PROFILES_DIR/$profile_name"
 
@@ -342,7 +349,7 @@ remove_profile() {
         local profile_name=$(basename "$profile_dir")
         profiles+=("$profile_name")
         echo -e "  ${C_CYAN}$index)${C_RESET} $profile_name"
-        ((index++))
+        index=$((index + 1))
     done
 
     echo ""
@@ -382,9 +389,7 @@ remove_profile() {
     # Remove alias from shell RC
     detect_shell_rc
     if [[ -f "$SHELL_RC" ]]; then
-        # Use sed to delete alias line
-        sed -i.bak "/alias claude-${profile_to_delete}=/d" "$SHELL_RC"
-        rm -f "${SHELL_RC}.bak"
+        grep -vF "alias claude-${profile_to_delete}=" "$SHELL_RC" > "${SHELL_RC}.tmp" && mv "${SHELL_RC}.tmp" "$SHELL_RC"
         print_success "${MSG_ALIAS_REMOVED} $SHELL_RC"
     fi
 }
@@ -417,7 +422,7 @@ migrate_profile() {
     local i=1
     for pname in "${legacy_profiles[@]}"; do
         echo -e "  ${C_CYAN}$i)${C_RESET} $pname"
-        ((i++))
+        i=$((i + 1))
     done
     echo ""
     read -p "${MSG_MIGRATE_NUMBER_PROMPT} " choice
@@ -476,7 +481,7 @@ authenticate_profile() {
             local pname=$(basename "$profile_dir")
             profiles+=("$pname")
             echo -e "  ${C_CYAN}$index)${C_RESET} $pname"
-            ((index++))
+            index=$((index + 1))
         done
 
         echo ""
@@ -520,7 +525,7 @@ launch_profile() {
             local profile_name=$(basename "$profile_dir")
             profiles+=("$profile_name")
             echo -e "  ${C_CYAN}$index)${C_RESET} $profile_name"
-            ((index++))
+            index=$((index + 1))
         done
 
         echo ""
@@ -673,8 +678,7 @@ cli_mode() {
     case "$command" in
         add|a)
             if [[ -n "${args[0]}" ]]; then
-                profile_name="${args[0]}"
-                profile_name=$(echo "$profile_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
+                profile_name=$(sanitize_name "${args[0]}")
                 local profile_path="$CLAUDE_PROFILES_DIR/$profile_name"
 
                 if [[ -d "$profile_path" ]]; then
@@ -691,16 +695,39 @@ cli_mode() {
             ;;
         rm|remove|delete)
             if [[ -n "${args[0]}" ]]; then
-                local profile_path="$CLAUDE_PROFILES_DIR/${args[0]}"
+                local name
+                name=$(sanitize_name "${args[0]}")
+                local profile_path="$CLAUDE_PROFILES_DIR/$name"
                 if [[ -d "$profile_path" ]]; then
+                    # Check for --force flag
+                    local force=false
+                    for a in "${args[@]:1}"; do
+                        [[ "$a" == "--force" ]] && force=true
+                    done
+
+                    # Create backup before deletion
+                    local backup_file="$CLAUDE_PROFILES_DIR/${name}.backup.tar.gz"
+                    tar czf "$backup_file" -C "$CLAUDE_PROFILES_DIR" "$name" 2>/dev/null
+                    print_info "Backup created: $backup_file"
+
+                    if [[ "$force" != true ]]; then
+                        read -p "Delete profile '$name'? [y/N] " -n 1 -r
+                        echo ""
+                        if [[ ! $REPLY =~ ^[OoYySs]$ ]]; then
+                            print_info "${MSG_REMOVE_CANCELLED}"
+                            return 0
+                        fi
+                    fi
+
                     rm -rf "$profile_path"
-                    print_success "${MSG_REMOVE_DONE}: '${args[0]}'"
+                    print_success "${MSG_REMOVE_DONE}: '$name'"
 
                     detect_shell_rc
-                    sed -i.bak "/alias claude-${args[0]}=/d" "$SHELL_RC" 2>/dev/null
-                    rm -f "${SHELL_RC}.bak"
+                    if [[ -f "$SHELL_RC" ]]; then
+                        grep -vF "alias claude-${name}=" "$SHELL_RC" > "${SHELL_RC}.tmp" && mv "${SHELL_RC}.tmp" "$SHELL_RC"
+                    fi
                 else
-                    print_error "${MSG_REMOVE_NOT_FOUND}: '${args[0]}'"
+                    print_error "${MSG_REMOVE_NOT_FOUND}: '$name'"
                     exit 1
                 fi
             else
@@ -746,11 +773,20 @@ cli_mode() {
 
 ensure_profiles_dir
 detect_shell_rc
+check_jq
 
 # Filter out --lang from args for CLI mode check
 cli_args=()
 for arg in "$@"; do
     [[ "$arg" != --lang=* ]] && cli_args+=("$arg")
+done
+
+# Handle --version / -V
+for arg in "${cli_args[@]}"; do
+    if [[ "$arg" == "--version" || "$arg" == "-V" ]]; then
+        echo "claude-accounts $VERSION"
+        exit 0
+    fi
 done
 
 if [[ ${#cli_args[@]} -gt 0 ]]; then

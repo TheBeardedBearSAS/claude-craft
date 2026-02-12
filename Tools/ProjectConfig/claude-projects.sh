@@ -4,9 +4,11 @@
 # Manage projects in claude-projects.yaml interactively
 # =============================================================================
 
-set -e
+# Note: set -e intentionally omitted — arithmetic like ((var++)) returns 1
+# when incrementing from 0, which would cause premature script exit.
 
 # Configuration
+VERSION="1.1.0"
 DEFAULT_CONFIG="$HOME/.claude/claude-projects.yaml"
 CONFIG_FILE=""
 
@@ -17,19 +19,24 @@ LANG_ARG=""
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 
-# Colors
-C_RESET='\033[0m'
-C_BOLD='\033[1m'
-C_RED='\033[0;31m'
-C_GREEN='\033[0;32m'
-C_YELLOW='\033[0;33m'
-C_BLUE='\033[0;34m'
-C_MAGENTA='\033[0;35m'
-C_CYAN='\033[0;36m'
-C_DIM='\033[2m'
+# Shared UI library (colors + print helpers)
+TOOLS_LIB_DIR="$(dirname "$SCRIPT_DIR")/lib"
+if [[ -f "$TOOLS_LIB_DIR/tools-ui.sh" ]]; then
+    # shellcheck source=../lib/tools-ui.sh
+    source "$TOOLS_LIB_DIR/tools-ui.sh"
+else
+    # Inline fallback when lib is missing
+    C_RESET='\033[0m' C_BOLD='\033[1m' C_DIM='\033[2m'
+    C_RED='\033[0;31m' C_GREEN='\033[0;32m' C_YELLOW='\033[0;33m'
+    C_BLUE='\033[0;34m' C_MAGENTA='\033[0;35m' C_CYAN='\033[0;36m'
+    print_success() { echo -e "${C_GREEN}✓${C_RESET} $1"; }
+    print_error()   { echo -e "${C_RED}✗${C_RESET} $1"; }
+    print_info()    { echo -e "${C_BLUE}ℹ${C_RESET} $1"; }
+    print_warning() { echo -e "${C_YELLOW}⚠${C_RESET} $1"; }
+fi
 
 # Available technologies
-AVAILABLE_TECHS=("symfony" "flutter" "python" "react" "reactnative")
+AVAILABLE_TECHS=("symfony" "flutter" "react" "reactnative" "angular" "csharp" "laravel" "vuejs" "php" "python" "docker" "coolify")
 
 # =============================================================================
 # i18n - Load messages
@@ -97,11 +104,6 @@ print_header() {
     echo -e "${C_CYAN}╚════════════════════════════════════════════════════════════╝${C_RESET}\n"
 }
 
-print_success() { echo -e "${C_GREEN}✓${C_RESET} $1"; }
-print_error() { echo -e "${C_RED}✗${C_RESET} $1"; }
-print_info() { echo -e "${C_BLUE}ℹ${C_RESET} $1"; }
-print_warning() { echo -e "${C_YELLOW}⚠${C_RESET} $1"; }
-
 check_yq() {
     if ! command -v yq &>/dev/null; then
         print_error "${MSG_YQ_REQUIRED}"
@@ -146,7 +148,7 @@ select_config_file() {
         local i=1
         for cfg in "${configs[@]}"; do
             echo -e "  ${C_CYAN}$i)${C_RESET} $cfg"
-            ((i++))
+            i=$((i + 1))
         done
         echo -e "  ${C_CYAN}$i)${C_RESET} ${MSG_CONFIG_OTHER}"
         echo -e "  ${C_CYAN}n)${C_RESET} ${MSG_CONFIG_NEW}"
@@ -223,7 +225,7 @@ add_project() {
     fi
 
     # Check if project already exists
-    local exists=$(yq ".projects[] | select(.name == \"$proj_name\") | .name" "$CONFIG_FILE")
+    local exists=$(proj_name="$proj_name" yq '.projects[] | select(.name == env(proj_name)) | .name' "$CONFIG_FILE")
     if [[ -n "$exists" ]]; then
         print_error "${MSG_ADD_PROJECT_EXISTS}: '$proj_name'"
         return 1
@@ -245,7 +247,8 @@ add_project() {
     [[ "$common_choice" =~ ^[Nn]$ ]] && proj_common="false"
 
     # Add project
-    yq -i ".projects += [{\"name\": \"$proj_name\", \"description\": \"$proj_desc\", \"root\": \"$proj_root\", \"common\": $proj_common, \"modules\": []}]" "$CONFIG_FILE"
+    proj_name="$proj_name" proj_desc="$proj_desc" proj_root="$proj_root" proj_common="$proj_common" \
+      yq -i '.projects += [{"name": env(proj_name), "description": env(proj_desc), "root": env(proj_root), "common": (env(proj_common) == "true"), "modules": []}]' "$CONFIG_FILE"
 
     print_success "${MSG_ADD_PROJECT_CREATED}: '$proj_name'"
 
@@ -285,7 +288,7 @@ add_module_to_project() {
         fi
     fi
 
-    local proj_index=$(yq ".projects | to_entries | .[] | select(.value.name == \"$proj_name\") | .key" "$CONFIG_FILE")
+    local proj_index=$(proj_name="$proj_name" yq '.projects | to_entries | .[] | select(.value.name == env(proj_name)) | .key' "$CONFIG_FILE")
 
     while true; do
         echo ""
@@ -318,9 +321,11 @@ add_module_to_project() {
 
         # Add module
         if [[ -n "$mod_desc" ]]; then
-            yq -i ".projects[$proj_index].modules += [{\"path\": \"$mod_path\", \"tech\": \"$mod_tech\", \"description\": \"$mod_desc\"}]" "$CONFIG_FILE"
+            mod_path="$mod_path" mod_tech="$mod_tech" mod_desc="$mod_desc" idx="$proj_index" \
+              yq -i '.projects[env(idx) | tonumber].modules += [{"path": env(mod_path), "tech": env(mod_tech), "description": env(mod_desc)}]' "$CONFIG_FILE"
         else
-            yq -i ".projects[$proj_index].modules += [{\"path\": \"$mod_path\", \"tech\": \"$mod_tech\"}]" "$CONFIG_FILE"
+            mod_path="$mod_path" mod_tech="$mod_tech" idx="$proj_index" \
+              yq -i '.projects[env(idx) | tonumber].modules += [{"path": env(mod_path), "tech": env(mod_tech)}]' "$CONFIG_FILE"
         fi
 
         print_success "${MSG_MODULES_ADDED}: '$mod_path' ($mod_tech)"
@@ -365,15 +370,15 @@ edit_project() {
 
     # Name
     read -p "${MSG_EDIT_PROJECT_NAME} [$proj_name]: " new_name
-    [[ -n "$new_name" ]] && yq -i ".projects[$proj_index].name = \"$new_name\"" "$CONFIG_FILE"
+    [[ -n "$new_name" ]] && new_name="$new_name" idx="$proj_index" yq -i '.projects[env(idx) | tonumber].name = env(new_name)' "$CONFIG_FILE"
 
     # Description
     read -p "${MSG_EDIT_PROJECT_DESC} [$proj_desc]: " new_desc
-    [[ -n "$new_desc" ]] && yq -i ".projects[$proj_index].description = \"$new_desc\"" "$CONFIG_FILE"
+    [[ -n "$new_desc" ]] && new_desc="$new_desc" idx="$proj_index" yq -i '.projects[env(idx) | tonumber].description = env(new_desc)' "$CONFIG_FILE"
 
     # Root
     read -p "${MSG_EDIT_PROJECT_ROOT} [$proj_root]: " new_root
-    [[ -n "$new_root" ]] && yq -i ".projects[$proj_index].root = \"$new_root\"" "$CONFIG_FILE"
+    [[ -n "$new_root" ]] && new_root="$new_root" idx="$proj_index" yq -i '.projects[env(idx) | tonumber].root = env(new_root)' "$CONFIG_FILE"
 
     # Common
     local common_display=$([ "$proj_common" == "true" ] && echo "Y/n" || echo "y/N")
@@ -503,18 +508,18 @@ validate_config() {
         # Check name
         if [[ -z "$name" || "$name" == "null" ]]; then
             print_error "  ${MSG_VALIDATE_NAME_MISSING}"
-            ((errors++))
+            errors=$((errors + 1))
         fi
 
         # Check root
         if [[ -z "$root" || "$root" == "null" ]]; then
             print_error "  ${MSG_VALIDATE_ROOT_MISSING}"
-            ((errors++))
+            errors=$((errors + 1))
         else
             local expanded_root="${root/#\~/$HOME}"
             if [[ ! -d "$expanded_root" ]]; then
                 print_warning "  ${MSG_VALIDATE_DIR_NOT_FOUND} $root"
-                ((warnings++))
+                warnings=$((warnings + 1))
             else
                 print_success "  ${MSG_VALIDATE_DIR_FOUND} $root"
             fi
@@ -523,7 +528,7 @@ validate_config() {
         # Check modules
         if [[ "$modules_count" == "0" ]]; then
             print_warning "  ${MSG_VALIDATE_NO_MODULE}"
-            ((warnings++))
+            warnings=$((warnings + 1))
         else
             for ((j=0; j<modules_count; j++)); do
                 local mod_path=$(yq ".projects[$i].modules[$j].path" "$CONFIG_FILE")
@@ -537,7 +542,7 @@ validate_config() {
 
                 if [[ "$valid_tech" == "false" ]]; then
                     print_error "  ${MSG_VALIDATE_MODULE} '$mod_path': ${MSG_VALIDATE_INVALID_TECH} '$mod_tech'"
-                    ((errors++))
+                    errors=$((errors + 1))
                 else
                     print_success "  ${MSG_VALIDATE_MODULE} '$mod_path' → $mod_tech"
                 fi
@@ -688,6 +693,10 @@ while [[ $# -gt 0 ]]; do
         --lang=*)
             # Already parsed earlier, skip
             shift
+            ;;
+        --version|-V)
+            echo "claude-projects $VERSION"
+            exit 0
             ;;
         *)
             cli_args+=("$1")
