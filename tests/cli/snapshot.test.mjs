@@ -12,8 +12,12 @@ function stripVersion(str) {
   return str.replace(/\d+\.\d+\.\d+/g, 'X.Y.Z');
 }
 
+function stripPaths(str) {
+  return str.replace(/\/[^\s")]+\/claude-craft/g, '/PATH/claude-craft');
+}
+
 function normalize(str) {
-  return stripVersion(stripAnsi(str)).trim();
+  return stripPaths(stripVersion(stripAnsi(str))).trim();
 }
 
 function runCLI(args) {

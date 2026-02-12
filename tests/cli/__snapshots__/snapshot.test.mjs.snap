@@ -25,7 +25,7 @@ exports[`CLI snapshot tests > --help output matches snapshot 1`] = `
 Welcome to Claude-Craft Interactive Installer
 
 [1/5] Target Directory
-  Enter path (/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/claude-craft):"
+  Enter path (/PATH/claude-craft):"
 `;
 
 exports[`CLI snapshot tests > --version output format matches snapshot 1`] = `"X.Y.Z"`;
