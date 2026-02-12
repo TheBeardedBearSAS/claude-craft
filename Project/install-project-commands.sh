@@ -10,6 +10,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 I18N_DIR="$SCRIPT_DIR/i18n"
 lang="en"
 
+# Shared UI library
+source "${SCRIPT_DIR}/../Dev/scripts/lib/shell-ui.sh"
+
 # Parse arguments
 PROJECT_DIR="."
 skip_common=false
@@ -48,12 +51,11 @@ get_source_dir() {
 
 SRC_DIR=$(get_source_dir)
 
-echo "🚀 Installing Project commands for Claude Code"
-echo "=================================================="
-echo "Version: $VERSION"
-echo "Language: $lang"
-echo "Project directory: $PROJECT_DIR"
-echo "Source: $SRC_DIR"
+ui_box "🚀 Project Commands - v${VERSION}"
+echo ""
+ui_info "Language: $lang"
+ui_info "Project directory: $PROJECT_DIR"
+ui_info "Source: $SRC_DIR"
 echo ""
 
 # Créer la structure .claude
@@ -70,13 +72,13 @@ mkdir -p "$PROJECT_DIR/project-management/backlog/tasks"
 mkdir -p "$PROJECT_DIR/project-management/sprints"
 mkdir -p "$PROJECT_DIR/project-management/metrics"
 
-echo "📁 Création de la structure..."
+ui_info "Création de la structure..."
 
 # Migration : déplacer les anciens fichiers de commands/ vers commands/project/
 if ls "$CLAUDE_DIR/commands/"*.md 1>/dev/null 2>&1; then
-    echo "🔄 Migration des anciennes commandes vers commands/project/..."
+    ui_info "Migration des anciennes commandes vers commands/project/..."
     mv "$CLAUDE_DIR/commands/"*.md "$CLAUDE_DIR/commands/project/" 2>/dev/null || true
-    echo "✅ Migration effectuée"
+    ui_success "Migration effectuée"
 fi
 
 # Copy project commands from i18n source
@@ -87,7 +89,7 @@ fi
 if [ -d "$CMD_SRC" ]; then
     cp "$CMD_SRC/"*.md "$CLAUDE_DIR/commands/project/" 2>/dev/null || true
     COMMANDS_COUNT=$(ls -1 "$CMD_SRC/"*.md 2>/dev/null | wc -l)
-    echo "✅ $COMMANDS_COUNT project commands copied"
+    ui_success "$COMMANDS_COUNT project commands copied"
 fi
 
 # Copy sprint commands from i18n source
@@ -95,7 +97,7 @@ SPRINT_CMD_SRC="$SRC_DIR/Sprint/commands"
 if [ -d "$SPRINT_CMD_SRC" ]; then
     cp "$SPRINT_CMD_SRC/"*.md "$CLAUDE_DIR/commands/sprint/" 2>/dev/null || true
     SPRINT_COUNT=$(ls -1 "$SPRINT_CMD_SRC/"*.md 2>/dev/null | wc -l)
-    echo "✅ $SPRINT_COUNT sprint commands copied"
+    ui_success "$SPRINT_COUNT sprint commands copied"
 fi
 
 # Copy gate commands from i18n source
@@ -103,7 +105,7 @@ GATE_CMD_SRC="$SRC_DIR/Gate/commands"
 if [ -d "$GATE_CMD_SRC" ]; then
     cp "$GATE_CMD_SRC/"*.md "$CLAUDE_DIR/commands/gate/" 2>/dev/null || true
     GATE_COUNT=$(ls -1 "$GATE_CMD_SRC/"*.md 2>/dev/null | wc -l)
-    echo "✅ $GATE_COUNT gate commands copied"
+    ui_success "$GATE_COUNT gate commands copied"
 fi
 
 # Copy agents from i18n source
@@ -114,7 +116,7 @@ fi
 if [ -d "$AGT_SRC" ]; then
     cp "$AGT_SRC/"*.md "$CLAUDE_DIR/agents/" 2>/dev/null || true
     AGENTS_COUNT=$(ls -1 "$AGT_SRC/"*.md 2>/dev/null | wc -l)
-    echo "✅ $AGENTS_COUNT agents copied"
+    ui_success "$AGENTS_COUNT agents copied"
 fi
 
 # Copy templates from i18n source
@@ -125,7 +127,7 @@ fi
 if [ -d "$TPL_SRC" ]; then
     cp "$TPL_SRC/"*.md "$CLAUDE_DIR/templates/project/" 2>/dev/null || true
     TEMPLATES_COUNT=$(ls -1 "$TPL_SRC/"*.md 2>/dev/null | wc -l)
-    echo "✅ $TEMPLATES_COUNT templates copied"
+    ui_success "$TEMPLATES_COUNT templates copied"
 fi
 
 # Créer l'index initial du backlog
@@ -189,7 +191,7 @@ _Aucun sprint actif_
            🟡 In Progress
 ```
 INDEXMD
-echo "✅ Index backlog créé"
+ui_success "Index backlog créé"
 
 # Créer CLAUDE.md
 cat > "$PROJECT_DIR/CLAUDE.md" << 'CLAUDEMD'
@@ -403,7 +405,7 @@ project-management/
 - Security voters
 CLAUDEMD
 
-echo "✅ CLAUDE.md créé"
+ui_success "CLAUDE.md créé"
 
 # Créer un fichier README dans project-management
 cat > "$PROJECT_DIR/project-management/README.md" << 'READMEMD'
@@ -448,7 +450,7 @@ project-management/
 | ⏸️ | Blocked | Bloqué |
 | 🟢 | Done | Terminé |
 READMEMD
-echo "✅ README project-management créé"
+ui_success "README project-management créé"
 
 echo ""
 echo "=================================================="

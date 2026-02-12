@@ -6,12 +6,12 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.0
+## What's New in v7.3
 
-- **BREAKING**: `/common:` split from 38 to 12 commands — 26 commands moved to `/workflow:`, `/team:`, `/qa:`, `/uiux:`
-- **BREAKING**: `/project:` split — 5 commands to `/sprint:`, 6 to `/gate:`, 4 renamed (stripped `project-` prefix)
-- **BREAKING**: `/common:docker-optimize` moved to `/docker:optimize`
-- See [Migration Guide](docs/MIGRATION-v7.md) and [CHANGELOG](CHANGELOG.md) for full details
+- **shell-ui.sh** adopted across all install scripts — zero duplicate color/logging definitions
+- **CLI `check` command** — verify claude-craft installation: `npx @the-bearded-bear/claude-craft check`
+- **Documentation accuracy** — fixed stale version refs and paths in README, FAQ, help output
+- See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
 
@@ -405,7 +405,7 @@ projects:
 make config-install PROJECT=my-monorepo
 ```
 
-#### Multi-Technology Modules (v3.2+)
+#### Multi-Technology Modules
 
 You can specify multiple technologies for a single module. This is useful for fullstack folders or projects using multiple frameworks:
 
@@ -573,7 +573,7 @@ Complete step-by-step tutorials for getting started, developing features, and fi
 - [Agents Reference](docs/AGENTS.md)
 - [Commands Reference](docs/COMMANDS.md)
 - [Technologies Guide](docs/TECHNOLOGIES.md)
-- [Migration Guide](docs/MIGRATION.md) - Upgrade existing projects to v3.0
+- [Migration Guide](docs/MIGRATION-v7.md) - Upgrade existing projects to v7.0
 - [Hooks Guide](docs/HOOKS.md) - Pre/Post tool execution automation
 - [MCP Guide](docs/MCP.md) - Model Context Protocol integration
 

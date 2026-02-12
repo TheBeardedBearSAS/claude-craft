@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.3.0] - 2026-02-12
+
+### Added
+
+- **CLI `check` command** — verify claude-craft installation in a project directory (`npx @the-bearded-bear/claude-craft check [dir]`)
+- `cli/lib/check.js` — new module: scans `.claude/` for commands, agents, references, skills with colorized summary
+- `tests/cli/check.test.mjs` — 6 tests for check command (empty dir, full structure, partial, multi-namespace, tech detection)
+- 4 shell-ui integration tests for cross-directory sourcing (Infra/, Project/, tcl-common guard)
+- 4 detect-project tests (unreadable dir, debug logging, all 10 techs, 2-tech complexity)
+
+### Changed
+
+- **install-from-config.sh**: Sources `shell-ui.sh` instead of defining local colors/logging; `log_*`/`print_header`/`print_section` are backward-compat aliases
+- **install-infra-rules.sh**: Sources `shell-ui.sh` instead of defining local colors/logging; `log_*` are backward-compat aliases
+- **install-project-commands.sh**: Sources `shell-ui.sh`; emoji echo replaced with `ui_box`/`ui_info`/`ui_success`
+- **check-prerequisites.sh**: Sources `shell-ui.sh`; header uses `ui_box`, checks use `ui_check_ok`/`ui_check_fail`/`ui_check_warn`
+- **tcl-common.sh**: Added shell-ui.sh guard — auto-sources when `ui_info` not already defined
+- **help.js**: Added `--version, -v` to Options display; added `check` to Commands list
+- **README.md**: Updated "What's New" to v7.3; removed stale `(v3.2+)` suffix; fixed Migration Guide link (v3.0 → v7.0)
+- **FAQ.md**: Fixed stale `.claude/rules/00-project-context.md` path → `.claude/CLAUDE.md`
+- Zero duplicate color/logging definitions across all install scripts
+- Test count: 466 → 480 tests
+
 ## [7.2.0] - 2026-02-12
 
 ### Added

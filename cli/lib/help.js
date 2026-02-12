@@ -37,11 +37,13 @@ ${c.bold}Commands:${c.reset}
   ${c.green}install${c.reset}              Interactive installation wizard
   ${c.green}install <path>${c.reset}       Install to specific directory
   ${c.green}init${c.reset}                 Initialize workflow in current project
+  ${c.green}check${c.reset}                Verify claude-craft installation
   ${c.green}flatten${c.reset}              Generate flattened codebase summary
   ${c.green}ralph${c.reset}                Run Ralph Wiggum continuous loop
   ${c.green}help${c.reset}                 Show this help message
 
 ${c.bold}Options:${c.reset}
+  ${c.yellow}--version, -v${c.reset}        Show version
   ${c.yellow}--lang=XX${c.reset}            Language (en, fr, es, de, pt)
   ${c.yellow}--tech=NAME${c.reset}          Technology (${Object.keys(TECHNOLOGIES).join(', ')})
   ${c.yellow}--force${c.reset}              Overwrite existing files

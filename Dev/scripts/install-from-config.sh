@@ -34,14 +34,8 @@ DEFAULT_CONFIG="${SCRIPT_DIR}/../../claude-projects.yaml"
 VALID_TECHS=("symfony" "flutter" "python" "react" "reactnative" "angular" "csharp" "laravel" "vuejs" "docker" "project")
 VALID_LANGS=("en" "fr" "es" "de" "pt")
 
-# Couleurs
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-BOLD='\033[1m'
-NC='\033[0m'
+# Shared UI library
+source "${SCRIPT_DIR}/lib/shell-ui.sh"
 
 # Variables globales
 config_file=""
@@ -60,22 +54,14 @@ total_commands=0
 total_modules=0
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Fonctions utilitaires
+# Backward-compat aliases (delegate to shell-ui.sh)
 # ─────────────────────────────────────────────────────────────────────────────
-log_info() { echo -e "${BLUE}ℹ${NC} $1"; }
-log_success() { echo -e "${GREEN}✓${NC} $1"; }
-log_warning() { echo -e "${YELLOW}⚠${NC} $1"; }
-log_error() { echo -e "${RED}✗${NC} $1" >&2; }
-log_step() { echo -e "${CYAN}→${NC} $1"; }
-
-print_header() {
-    echo ""
-    echo -e "${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${BOLD}║${NC}  $1"
-    echo -e "${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
-}
-
+log_info() { ui_info "$@"; }
+log_success() { ui_success "$@"; }
+log_warning() { ui_warning "$@"; }
+log_error() { ui_error "$@"; }
+log_step() { ui_info "→ $*"; }
+print_header() { ui_header "$@"; }
 print_section() {
     echo ""
     echo -e "${BOLD}──────────────────────────────────────────────────────────────${NC}"

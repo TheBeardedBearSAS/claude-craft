@@ -16,12 +16,9 @@
 
 set -e
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-NC='\033[0m'
+# Shared UI library
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib/shell-ui.sh"
 
 # Options
 VERBOSE=false
@@ -34,9 +31,7 @@ for arg in "$@"; do
     esac
 done
 
-echo -e "${CYAN}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${CYAN}║${NC}  Claude Craft Prerequisites Check                          ${CYAN}║${NC}"
-echo -e "${CYAN}╚════════════════════════════════════════════════════════════╝${NC}"
+ui_box "Claude Craft Prerequisites Check"
 echo ""
 
 ERRORS=0
@@ -69,30 +64,30 @@ check() {
     if command -v "$cmd" &> /dev/null; then
         if $VERBOSE; then
             local version=$($cmd --version 2>&1 | head -n1)
-            echo -e "  ${GREEN}[OK]${NC} $cmd: $version"
+            ui_check_ok "$cmd: $version"
         else
-            echo -e "  ${GREEN}[OK]${NC} $cmd"
+            ui_check_ok "$cmd"
         fi
         return 0
     else
         if [[ "$required" == "required" ]]; then
-            echo -e "  ${RED}[MISSING]${NC} $cmd - $description"
+            ui_check_fail "$cmd - $description"
             ((ERRORS++))
             if $FIX; then
                 case $OS in
-                    macos) echo -e "       ${YELLOW}Fix:${NC} $install_macos" ;;
-                    debian) echo -e "       ${YELLOW}Fix:${NC} $install_debian" ;;
-                    arch) echo -e "       ${YELLOW}Fix:${NC} Check Arch Wiki for $cmd" ;;
-                    *) echo -e "       ${YELLOW}Fix:${NC} Install $cmd manually" ;;
+                    macos) ui_check_info "Fix: $install_macos" ;;
+                    debian) ui_check_info "Fix: $install_debian" ;;
+                    arch) ui_check_info "Fix: Check Arch Wiki for $cmd" ;;
+                    *) ui_check_info "Fix: Install $cmd manually" ;;
                 esac
             fi
         else
-            echo -e "  ${YELLOW}[OPTIONAL]${NC} $cmd - $description"
+            ui_check_warn "$cmd - $description"
             if $FIX; then
                 case $OS in
-                    macos) echo -e "       ${YELLOW}Install:${NC} $install_macos" ;;
-                    debian) echo -e "       ${YELLOW}Install:${NC} $install_debian" ;;
-                    *) echo -e "       ${YELLOW}Install:${NC} See documentation for $cmd" ;;
+                    macos) ui_check_info "Install: $install_macos" ;;
+                    debian) ui_check_info "Install: $install_debian" ;;
+                    *) ui_check_info "Install: See documentation for $cmd" ;;
                 esac
             fi
         fi
@@ -107,10 +102,10 @@ check_yq_version() {
         if echo "$version_output" | grep -q "mikefarah"; then
             return 0
         else
-            echo -e "  ${RED}[WRONG VERSION]${NC} yq - You have the Python version, need Mike Farah's yq v4"
+            ui_check_fail "yq - You have the Python version, need Mike Farah's yq v4"
             if $FIX; then
-                echo -e "       ${YELLOW}Fix (macOS):${NC} brew install yq"
-                echo -e "       ${YELLOW}Fix (Linux):${NC} sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq && sudo chmod +x /usr/local/bin/yq"
+                ui_check_info "Fix (macOS): brew install yq"
+                ui_check_info "Fix (Linux): sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq && sudo chmod +x /usr/local/bin/yq"
             fi
             ((ERRORS++))
             return 1
@@ -126,9 +121,9 @@ check_node_version() {
         if [[ $version -ge 18 ]]; then
             return 0
         else
-            echo -e "  ${RED}[OLD VERSION]${NC} node - Found v$version, need v18+"
+            ui_check_fail "node - Found v$version, need v18+"
             if $FIX; then
-                echo -e "       ${YELLOW}Fix:${NC} Use nvm to install Node.js 20: nvm install 20 && nvm use 20"
+                ui_check_info "Fix: Use nvm to install Node.js 20: nvm install 20 && nvm use 20"
             fi
             ((ERRORS++))
             return 1
@@ -137,7 +132,7 @@ check_node_version() {
     return 1
 }
 
-echo -e "${YELLOW}Required Dependencies:${NC}"
+echo -e "${BOLD}Required Dependencies:${NC}"
 echo ""
 
 check "node" "Node.js 18+ for NPX and CLI" \
@@ -168,7 +163,7 @@ check "git" "Version control" \
     "required"
 
 echo ""
-echo -e "${YELLOW}Recommended Dependencies:${NC}"
+echo -e "${BOLD}Recommended Dependencies:${NC}"
 echo ""
 
 check "docker" "Container runtime" \
@@ -191,27 +186,27 @@ echo ""
 # Check Docker running (if installed)
 if command -v docker &> /dev/null; then
     if docker info &> /dev/null; then
-        echo -e "  ${GREEN}[OK]${NC} Docker daemon is running"
+        ui_check_ok "Docker daemon is running"
     else
-        echo -e "  ${YELLOW}[WARNING]${NC} Docker is installed but not running"
+        ui_check_warn "Docker is installed but not running"
         if $FIX; then
-            echo -e "       ${YELLOW}Fix:${NC} Start Docker Desktop or run: sudo systemctl start docker"
+            ui_check_info "Fix: Start Docker Desktop or run: sudo systemctl start docker"
         fi
     fi
 fi
 
 echo ""
-echo -e "${CYAN}────────────────────────────────────────────────────────────${NC}"
+ui_separator
 
 if [[ $ERRORS -eq 0 ]]; then
-    echo -e "${GREEN}All required prerequisites are installed!${NC}"
+    ui_success "All required prerequisites are installed!"
     echo ""
     echo "You can now install Claude Craft:"
     echo "  npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony"
     echo ""
     exit 0
 else
-    echo -e "${RED}Missing $ERRORS required prerequisite(s).${NC}"
+    ui_error "Missing $ERRORS required prerequisite(s)."
     echo ""
     if ! $FIX; then
         echo "Run with --fix to see installation commands:"

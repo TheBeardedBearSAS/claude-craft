@@ -17,14 +17,8 @@ TECH_NAME="Docker"
 TECH_NAMESPACE="docker"
 lang="en"
 
-# ============================================================================
-# COLORS
-# ============================================================================
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# Shared UI library
+source "${SCRIPT_DIR}/../Dev/scripts/lib/shell-ui.sh"
 
 # ============================================================================
 # FUNCTIONS
@@ -78,25 +72,12 @@ show_version() {
     echo "Docker agents and commands for Claude Code"
 }
 
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
-
-log_success() {
-    echo -e "${GREEN}[OK]${NC} $1"
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARN]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-log_dry_run() {
-    echo -e "${YELLOW}[DRY-RUN]${NC} $1"
-}
+# Backward-compat aliases (delegate to shell-ui.sh)
+log_info() { ui_info "$@"; }
+log_success() { ui_success "$@"; }
+log_warning() { ui_warning "$@"; }
+log_error() { ui_error "$@"; }
+log_dry_run() { ui_dry_run "$@"; }
 
 # Get source directory (i18n)
 get_source_dir() {

@@ -1,0 +1,145 @@
+/**
+ * CLI `check` command — verify claude-craft installation in a project directory.
+ * @module cli/lib/check
+ */
+
+import fs from 'fs';
+import path from 'path';
+import c from './colors.js';
+import { detectProject } from './detect-project.js';
+
+/**
+ * Count files matching a glob pattern in a directory (non-recursive).
+ * @param {string} dir - Directory path
+ * @param {string} ext - File extension (e.g. '.md')
+ * @returns {number}
+ */
+function countFiles(dir, ext) {
+  try {
+    return fs.readdirSync(dir).filter((f) => f.endsWith(ext)).length;
+  } catch {
+    return 0;
+  }
+}
+
+/**
+ * List subdirectories of a directory.
+ * @param {string} dir - Directory path
+ * @returns {string[]}
+ */
+function listDirs(dir) {
+  try {
+    return fs
+      .readdirSync(dir, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Run the check command against a target directory.
+ * @param {string} targetPath - Absolute path to the project directory
+ */
+function runCheck(targetPath) {
+  const claudeDir = path.join(targetPath, '.claude');
+  let warnings = 0;
+
+  console.log(`\n${c.bold}Claude Craft Installation Check${c.reset}`);
+  console.log(`${c.dim}Directory: ${targetPath}${c.reset}\n`);
+
+  // 1. .claude/ directory
+  if (fs.existsSync(claudeDir)) {
+    console.log(`  ${c.green}[OK]${c.reset} .claude/ directory exists`);
+  } else {
+    console.log(`  ${c.red}[MISSING]${c.reset} .claude/ directory not found`);
+    console.log(`\n${c.red}No claude-craft installation detected.${c.reset}`);
+    console.log(`Run: npx @the-bearded-bear/claude-craft install ${targetPath}\n`);
+    process.exitCode = 1;
+    return;
+  }
+
+  // 2. CLAUDE.md
+  const claudeMd = path.join(claudeDir, 'CLAUDE.md');
+  if (fs.existsSync(claudeMd)) {
+    console.log(`  ${c.green}[OK]${c.reset} .claude/CLAUDE.md exists`);
+  } else {
+    console.log(`  ${c.yellow}[WARN]${c.reset} .claude/CLAUDE.md not found`);
+    warnings++;
+  }
+
+  // 3. Commands — count namespace dirs and files
+  const commandsDir = path.join(claudeDir, 'commands');
+  const namespaces = listDirs(commandsDir);
+  let totalCommands = 0;
+  if (namespaces.length > 0) {
+    for (const ns of namespaces) {
+      totalCommands += countFiles(path.join(commandsDir, ns), '.md');
+    }
+    console.log(
+      `  ${c.green}[OK]${c.reset} commands/ — ${totalCommands} commands in ${namespaces.length} namespace(s): ${c.cyan}${namespaces.join(', ')}${c.reset}`
+    );
+  } else {
+    console.log(`  ${c.yellow}[WARN]${c.reset} commands/ — no namespaces found`);
+    warnings++;
+  }
+
+  // 4. Agents
+  const agentsDir = path.join(claudeDir, 'agents');
+  const agentCount = countFiles(agentsDir, '.md');
+  if (agentCount > 0) {
+    console.log(`  ${c.green}[OK]${c.reset} agents/ — ${agentCount} agent(s)`);
+  } else {
+    console.log(`  ${c.yellow}[WARN]${c.reset} agents/ — no agents found`);
+    warnings++;
+  }
+
+  // 5. References
+  const refsDir = path.join(claudeDir, 'references');
+  const refDirs = listDirs(refsDir);
+  if (refDirs.length > 0) {
+    console.log(
+      `  ${c.green}[OK]${c.reset} references/ — ${c.cyan}${refDirs.join(', ')}${c.reset}`
+    );
+  } else {
+    console.log(`  ${c.yellow}[WARN]${c.reset} references/ — no tech references found`);
+    warnings++;
+  }
+
+  // 6. Skills
+  const skillsDir = path.join(claudeDir, 'skills');
+  const skillDirs = listDirs(skillsDir);
+  let totalSkills = 0;
+  for (const sd of skillDirs) {
+    totalSkills += countFiles(path.join(skillsDir, sd), '.md');
+  }
+  // Also count top-level skill files
+  totalSkills += countFiles(skillsDir, '.md');
+  if (totalSkills > 0) {
+    console.log(`  ${c.green}[OK]${c.reset} skills/ — ${totalSkills} skill(s)`);
+  } else {
+    console.log(`  ${c.yellow}[WARN]${c.reset} skills/ — no skills found`);
+    warnings++;
+  }
+
+  // 7. Tech detection
+  const detected = detectProject(targetPath);
+  if (detected.suggestedTechs.length > 0) {
+    console.log(
+      `  ${c.green}[OK]${c.reset} Detected tech: ${c.cyan}${detected.suggestedTechs.join(', ')}${c.reset} (complexity: ${detected.complexity})`
+    );
+  } else {
+    console.log(`  ${c.dim}[--]${c.reset} No technology detected from project files`);
+  }
+
+  // Summary
+  console.log('');
+  if (warnings === 0) {
+    console.log(`${c.green}Installation looks good!${c.reset}\n`);
+  } else {
+    console.log(`${c.yellow}${warnings} warning(s) — some components may be missing.${c.reset}\n`);
+  }
+}
+
+export { runCheck };

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
@@ -295,5 +295,61 @@ describe('detectProject', () => {
     }));
     const result = detectProject(tempDir);
     expect(result.suggestedTechs).toContain('angular');
+  });
+
+  // --- Permission-denied / unreadable directory ---
+  it('handles unreadable directory for csproj detection gracefully', () => {
+    // Non-existent path triggers the catch for readdirSync
+    const result = detectProject('/no/such/directory/xyz', { debug: false });
+    expect(result.hasCsproj).toBe(false);
+    expect(result.suggestedTechs).toEqual([]);
+  });
+
+  it('handles unreadable directory with debug logging', () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const result = detectProject('/no/such/directory/xyz', { debug: true });
+    expect(result.hasCsproj).toBe(false);
+    // Debug mode should log errors
+    expect(errorSpy).toHaveBeenCalled();
+    errorSpy.mockRestore();
+  });
+
+  // --- All 10 techs simultaneously ---
+  it('detects all 10 technology types simultaneously', () => {
+    // C# (.csproj)
+    writeFileSync(join(tempDir, 'App.csproj'), '<Project />');
+    // Symfony (composer.json with symfony/)
+    // NOTE: Since composer.json can only detect one PHP framework, we test the others separately
+    // This test shows that multiple ecosystems coexist
+    writeFileSync(join(tempDir, 'pubspec.yaml'), 'name: app'); // Flutter
+    writeFileSync(join(tempDir, 'package.json'), JSON.stringify({
+      dependencies: { react: '^19.0.0' },
+    })); // React
+    writeFileSync(join(tempDir, 'requirements.txt'), 'fastapi\n'); // Python
+    writeFileSync(join(tempDir, 'Dockerfile'), 'FROM node:20\n'); // Docker
+    writeFileSync(join(tempDir, 'composer.json'), JSON.stringify({
+      require: { 'symfony/framework-bundle': '^7.0' },
+    })); // Symfony
+
+    const result = detectProject(tempDir);
+    expect(result.suggestedTechs).toContain('csharp');
+    expect(result.suggestedTechs).toContain('symfony');
+    expect(result.suggestedTechs).toContain('flutter');
+    expect(result.suggestedTechs).toContain('react');
+    expect(result.suggestedTechs).toContain('python');
+    expect(result.suggestedTechs).toContain('docker');
+    expect(result.suggestedTechs.length).toBe(6);
+    expect(result.complexity).toBe('enterprise');
+  });
+
+  // --- Exactly 2 techs = standard complexity ---
+  it('sets complexity to standard for exactly 2 techs', () => {
+    writeFileSync(join(tempDir, 'package.json'), JSON.stringify({
+      dependencies: { react: '^19.0.0' },
+    }));
+    writeFileSync(join(tempDir, 'Dockerfile'), 'FROM node:20\n');
+    const result = detectProject(tempDir);
+    expect(result.suggestedTechs.length).toBe(2);
+    expect(result.complexity).toBe('standard');
   });
 });

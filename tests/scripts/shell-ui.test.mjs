@@ -4,7 +4,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const SHELL_UI = path.resolve(__dirname, '../../Dev/scripts/lib/shell-ui.sh');
+const PROJECT_ROOT = path.resolve(__dirname, '../..');
+const SHELL_UI = path.resolve(PROJECT_ROOT, 'Dev/scripts/lib/shell-ui.sh');
 
 /**
  * Source shell-ui.sh and run a bash snippet, returning stdout.
@@ -106,5 +107,46 @@ describe('shell-ui.sh', () => {
       const output = runShellUI(`type -t ${fn}`);
       expect(output.trim(), `${fn} not a function`).toBe('function');
     }
+  });
+});
+
+describe('shell-ui.sh sourcing from different paths', () => {
+  it('can be sourced from Infra/ script path', () => {
+    const infraScript = path.resolve(PROJECT_ROOT, 'Infra/install-infra-rules.sh');
+    // Verify the relative path used in install-infra-rules.sh resolves correctly
+    const output = execSync(
+      `bash -c 'SCRIPT_DIR="${path.resolve(PROJECT_ROOT, "Infra")}" && source "\${SCRIPT_DIR}/../Dev/scripts/lib/shell-ui.sh" && ui_info "infra-ok"'`,
+      { encoding: 'utf8', timeout: 5000 }
+    );
+    expect(output).toContain('[INFO]');
+    expect(output).toContain('infra-ok');
+  });
+
+  it('can be sourced from Project/ script path', () => {
+    const output = execSync(
+      `bash -c 'SCRIPT_DIR="${path.resolve(PROJECT_ROOT, "Project")}" && source "\${SCRIPT_DIR}/../Dev/scripts/lib/shell-ui.sh" && ui_success "project-ok"'`,
+      { encoding: 'utf8', timeout: 5000 }
+    );
+    expect(output).toContain('[OK]');
+    expect(output).toContain('project-ok');
+  });
+
+  it('tcl-common.sh auto-sources shell-ui.sh when not already loaded', () => {
+    const tclCommon = path.resolve(PROJECT_ROOT, 'Dev/scripts/tcl-common.sh');
+    const output = execSync(
+      `bash -c 'source "${tclCommon}" && type -t ui_info'`,
+      { encoding: 'utf8', timeout: 5000 }
+    );
+    expect(output.trim()).toBe('function');
+  });
+
+  it('tcl-common.sh does not re-source shell-ui.sh if already loaded', () => {
+    const tclCommon = path.resolve(PROJECT_ROOT, 'Dev/scripts/tcl-common.sh');
+    // Source shell-ui first, then tcl-common — should not error
+    const output = execSync(
+      `bash -c 'source "${SHELL_UI}" && source "${tclCommon}" && ui_info "double-source-ok"'`,
+      { encoding: 'utf8', timeout: 5000 }
+    );
+    expect(output).toContain('double-source-ok');
   });
 });

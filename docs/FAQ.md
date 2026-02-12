@@ -71,7 +71,7 @@ make install-symfony TARGET=~/project OPTIONS="--force --backup"
 
 ### How do I customize the project context?
 
-Edit `.claude/rules/00-project-context.md` or run:
+Edit `.claude/CLAUDE.md` or run:
 ```
 /common:setup-project-context
 ```
