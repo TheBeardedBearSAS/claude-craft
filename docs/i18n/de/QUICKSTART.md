@@ -9,7 +9,7 @@ Starten Sie mit Claude Craft in nur 5 Minuten!
 Bevor Sie beginnen, überprüfen Sie, ob diese Tools installiert sind:
 
 ```bash
-# Node.js überprüfen (18+ erforderlich)
+# Node.js überprüfen (20+ erforderlich)
 node --version
 
 # npm überprüfen
@@ -108,10 +108,10 @@ In Claude Code, probieren Sie diese Befehle:
 
 | Aufgabe | Anleitung |
 |---------|-----------|
-| Projektstruktur verstehen | [Architektur-Guide](ARCHITECTURE.md) |
+| Projektstruktur verstehen | [Architektur-Guide](../ARCHITECTURE.md) |
 | Vollständiges Feature erstellen | [Feature-Entwicklung](../guides/de/03-feature-development.md) |
-| BMAD Projektmanagement einrichten | [BMAD Praktischer Guide](BMAD-PRACTICAL-GUIDE.md) |
-| Claude in Dauerschleife ausführen | [Ralph Wiggum Guide](RALPH-GUIDE.md) |
+| BMAD Projektmanagement einrichten | [BMAD Praktischer Guide](../BMAD-PRACTICAL-GUIDE.md) |
+| Claude in Dauerschleife ausführen | [Ralph Wiggum Guide](../RALPH-GUIDE.md) |
 
 ---
 
@@ -134,6 +134,6 @@ In Claude Code, probieren Sie diese Befehle:
 
 ## Brauchen Sie Hilfe?
 
-- **FAQ**: Häufige Fragen → [FAQ.md](FAQ.md)
-- **Fehlerbehebung**: Häufige Fehler → [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+- **FAQ**: Häufige Fragen → [FAQ.md](../FAQ.md)
+- **Fehlerbehebung**: Häufige Fehler → [TROUBLESHOOTING.md](../TROUBLESHOOTING.md)
 - **GitHub Issues**: [Bug melden](https://github.com/TheBeardedBearSAS/claude-craft/issues)

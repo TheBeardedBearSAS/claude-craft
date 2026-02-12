@@ -6,7 +6,7 @@ Vollständige Anleitung zu allen erforderlichen Abhängigkeiten für Claude Craf
 
 ## Erforderliche Abhängigkeiten
 
-### 1. Node.js (18+)
+### 1. Node.js (20+)
 
 Erforderlich für NPX-Installation und CLI-Tools.
 
@@ -101,7 +101,7 @@ Erforderlich für StatusLine und erweiterte Funktionen.
 
 | Tool | Mindestversion |
 |------|----------------|
-| Node.js | 18.0 |
+| Node.js | 20.0 |
 | npm | 9.0 |
 | yq | 4.0 |
 | Git | 2.0 |

@@ -9,7 +9,7 @@
 Antes de comenzar, verifica que tienes estas herramientas instaladas:
 
 ```bash
-# Verificar Node.js (18+ requerido)
+# Verificar Node.js (20+ requerido)
 node --version
 
 # Verificar npm
@@ -108,10 +108,10 @@ En Claude Code, prueba estos comandos:
 
 | Tarea | Guía |
 |-------|------|
-| Entender la estructura del proyecto | [Guía de Arquitectura](ARCHITECTURE.md) |
+| Entender la estructura del proyecto | [Guía de Arquitectura](../ARCHITECTURE.md) |
 | Crear una funcionalidad completa | [Desarrollo de Features](../guides/es/03-feature-development.md) |
-| Configurar gestión de proyecto BMAD | [Guía Práctica BMAD](BMAD-PRACTICAL-GUIDE.md) |
-| Ejecutar Claude en bucle continuo | [Guía Ralph Wiggum](RALPH-GUIDE.md) |
+| Configurar gestión de proyecto BMAD | [Guía Práctica BMAD](../BMAD-PRACTICAL-GUIDE.md) |
+| Ejecutar Claude en bucle continuo | [Guía Ralph Wiggum](../RALPH-GUIDE.md) |
 
 ---
 
@@ -134,6 +134,6 @@ En Claude Code, prueba estos comandos:
 
 ## ¿Necesitas Ayuda?
 
-- **FAQ**: Preguntas frecuentes → [FAQ.md](FAQ.md)
-- **Solución de Problemas**: Errores comunes → [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+- **FAQ**: Preguntas frecuentes → [FAQ.md](../FAQ.md)
+- **Solución de Problemas**: Errores comunes → [TROUBLESHOOTING.md](../TROUBLESHOOTING.md)
 - **GitHub Issues**: [Reportar un bug](https://github.com/TheBeardedBearSAS/claude-craft/issues)

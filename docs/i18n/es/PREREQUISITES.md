@@ -6,7 +6,7 @@ Guía completa de todas las dependencias requeridas para Claude Craft.
 
 ## Dependencias Obligatorias
 
-### 1. Node.js (18+)
+### 1. Node.js (20+)
 
 Requerido para instalación NPX y herramientas CLI.
 
@@ -101,7 +101,7 @@ Requerido para StatusLine y funciones avanzadas.
 
 | Herramienta | Versión Mínima |
 |-------------|----------------|
-| Node.js | 18.0 |
+| Node.js | 20.0 |
 | npm | 9.0 |
 | yq | 4.0 |
 | Git | 2.0 |

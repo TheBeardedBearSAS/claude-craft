@@ -234,7 +234,7 @@ fi
 | Docker Compose | 2.0 | 2.24+ |
 | jq | 1.5 | 1.7+ |
 | Make | 3.0 | 4.x |
-| Claude Code | 2.1.0 | 2.1.38+ |
+| Claude Code | 2.1.38 | 2.1.38+ |
 
 ---
 

@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.7.0] - 2026-02-12
+
+### Changed
+
+- **docs/index.html** — fixed all outdated counters in presentation page: agents 40→29, commands 130+→155, skills 249→36, templates 25→23, checklists 21→9; updated feature cards and all 5 i18n translations (EN/FR/ES/DE/PT)
+- **README.md** — "What's New" updated to v7.6 features; agent count 28→29; skills count 50→36
+- **CLAUDE.md** — agent count 28→29 in header description
+- **docs/AGENTS.md** — added note explaining Docker and Project agent bundling
+- **docs/FAQ.md** — Node.js 18+→20+
+- **docs/PREREQUISITES.md** — Claude Code minimum version 2.1.0→2.1.38
+- **docs/QUICKSTART.md** — Node.js 18+→20+
+- **i18n docs** — PREREQUISITES and QUICKSTART updated for DE/ES/FR/PT (Node.js 20+, Claude Code 2.1.38); FR FAQ Node.js 20+
+
+### Added
+
+- **.github/PULL_REQUEST_TEMPLATE.md** — standardized PR template
+
 ## [7.6.1] - 2026-02-12
 
 ### Fixed

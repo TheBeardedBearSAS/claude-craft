@@ -582,6 +582,8 @@ Helps with:
 @docker-architect Review our microservices container strategy
 ```
 
+> **Note:** Docker agents (5) and Project agents (2) are bundled in the `Infra/` and `Project/` directories respectively. They are installed into `.claude/agents/` by the CLI during `npx @the-bearded-bear/claude-craft install`. They do not appear in the source repository's `.claude/agents/` directory but are available after installation.
+
 ---
 
 ## BMAD v6 Roles (10)

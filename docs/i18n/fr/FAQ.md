@@ -8,7 +8,7 @@ Questions et réponses courantes sur Claude Craft.
 
 ### Quels sont les prérequis minimum ?
 
-- **Node.js 18+** - Pour NPX et CLI
+- **Node.js 20+** - Pour NPX et CLI
 - **Bash** - Pour les scripts d'installation
 - **yq v4+** - Pour la configuration YAML
 - **Git** - Pour le contrôle de version
@@ -200,7 +200,7 @@ BMAD (Build, Measure, Analyze, Deliver) est le framework de gestion de projet de
 | Sprint Ready | 100% | Backlog → Sprint |
 | Story DoD | 100% | Dev → Done |
 
-Voir [Guide Pratique BMAD](BMAD-PRACTICAL-GUIDE.md).
+Voir [Guide Pratique BMAD](../BMAD-PRACTICAL-GUIDE.md).
 
 ---
 
@@ -231,7 +231,7 @@ npx @the-bearded-bear/claude-craft ralph "Corriger le bug de connexion"
 | `hook` | Intégrer avec quality-gate.sh |
 | `human` | Approbation manuelle |
 
-Voir [Guide Ralph](RALPH-GUIDE.md).
+Voir [Guide Ralph](../RALPH-GUIDE.md).
 
 ---
 

@@ -8,7 +8,7 @@ Common questions and answers about Claude Craft.
 
 ### What are the minimum requirements?
 
-- **Node.js 18+** - For NPX and CLI
+- **Node.js 20+** - For NPX and CLI
 - **Bash** - For installation scripts
 - **yq v4+** - For YAML configuration
 - **Git** - For version control

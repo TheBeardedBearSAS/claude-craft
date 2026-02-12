@@ -9,7 +9,7 @@ Soyez opérationnel avec Claude Craft en seulement 5 minutes !
 Avant de commencer, vérifiez que ces outils sont installés :
 
 ```bash
-# Vérifier Node.js (18+ requis)
+# Vérifier Node.js (20+ requis)
 node --version
 
 # Vérifier npm
@@ -125,10 +125,10 @@ Dans Claude Code, essayez ces commandes :
 
 | Tâche | Guide |
 |-------|-------|
-| Comprendre la structure du projet | [Guide d'Architecture](ARCHITECTURE.md) |
+| Comprendre la structure du projet | [Guide d'Architecture](../ARCHITECTURE.md) |
 | Créer une fonctionnalité complète | [Développement de Fonctionnalités](../guides/fr/03-feature-development.md) |
-| Configurer la gestion de projet BMAD | [Guide Pratique BMAD](BMAD-PRACTICAL-GUIDE.md) |
-| Exécuter Claude en boucle continue | [Guide Ralph Wiggum](RALPH-GUIDE.md) |
+| Configurer la gestion de projet BMAD | [Guide Pratique BMAD](../BMAD-PRACTICAL-GUIDE.md) |
+| Exécuter Claude en boucle continue | [Guide Ralph Wiggum](../RALPH-GUIDE.md) |
 | Corriger un bug avec TDD | [Guide de Correction de Bugs](../guides/fr/04-bug-fixing.md) |
 
 ---
@@ -156,7 +156,7 @@ Claude Craft supporte 10 stacks technologiques :
 
 - **FAQ** : Questions et réponses courantes → [FAQ.md](FAQ.md)
 - **Dépannage** : Erreurs courantes et solutions → [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
-- **Documentation Complète** : Toutes les commandes et agents → [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md)
+- **Documentation Complète** : Toutes les commandes et agents → [COMMANDS-FULL-REFERENCE.md](../COMMANDS-FULL-REFERENCE.md)
 - **Issues GitHub** : [Signaler un bug](https://github.com/TheBeardedBearSAS/claude-craft/issues)
 
 ---

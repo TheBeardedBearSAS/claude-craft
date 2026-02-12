@@ -9,7 +9,7 @@ Get up and running with Claude Craft in just 5 minutes!
 Before starting, verify you have these tools installed:
 
 ```bash
-# Check Node.js (18+ required)
+# Check Node.js (20+ required)
 node --version
 
 # Check npm

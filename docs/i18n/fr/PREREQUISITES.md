@@ -6,7 +6,7 @@ Guide complet de toutes les dépendances requises pour Claude Craft.
 
 ## Dépendances Obligatoires
 
-### 1. Node.js (18+)
+### 1. Node.js (20+)
 
 Requis pour l'installation NPX et les outils CLI.
 
@@ -226,7 +226,7 @@ fi
 
 | Outil | Version Minimum | Recommandée |
 |-------|-----------------|-------------|
-| Node.js | 18.0 | 20.x LTS |
+| Node.js | 20.0 | 20.x LTS |
 | npm | 9.0 | 10.x |
 | yq | 4.0 | 4.40+ |
 | Git | 2.0 | 2.40+ |
@@ -234,7 +234,7 @@ fi
 | Docker Compose | 2.0 | 2.24+ |
 | jq | 1.5 | 1.7+ |
 | Make | 3.0 | 4.x |
-| Claude Code | 2.1.0 | 2.1.38+ |
+| Claude Code | 2.1.38 | 2.1.38+ |
 
 ---
 

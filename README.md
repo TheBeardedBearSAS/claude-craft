@@ -6,12 +6,11 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.5
+## What's New in v7.6
 
-- **Doctor `yq` check** — `doctor` command now verifies `yq` availability
-- **CLI-REFERENCE.md** — now documents all 9 CLI commands (`check`, `list`, `doctor`, `update`)
-- **Coverage polish** — doctor.js 96%, update.js 100%
-- **Documentation accuracy** — README, QUICKSTART, namespace count fixes
+- **CLI `update` fix** — argument order corrected (`--lang=XX` not bare positional), same-file copy guard
+- **Coverage thresholds** — raised to 90/90/90/90 (actual: 96/93/96/96)
+- **Documentation accuracy** — PREREQUISITES Node.js 20+, COMMANDS.md Docker section, CONTRIBUTING.md shellcheck
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
@@ -21,11 +20,11 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **10 Technology Stacks**: Symfony, Flutter, Python, React, React Native, Angular, C#/.NET, Laravel, Vue.js, PHP
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
-- **28 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, and Ralph Conductor
+- **29 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, and Ralph Conductor
 - **155 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
 - **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
-- **50 Skills**: Best practices in official Claude Code format (architecture, testing, security)
+- **36 Skills**: Best practices in official Claude Code format (architecture, testing, security)
 - **33 Templates**: Code generation patterns + BMAD templates
 - **21 Checklists**: Quality gates for commits, features, releases
 - **Hooks System**: Pre/Post tool execution, quality gates, notifications, **BMAD context injection**
