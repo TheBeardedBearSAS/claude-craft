@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.7.2] - 2026-02-12
+
+### Fixed
+
+- **Command count** — reverted erroneous 156→155 (verified: 117 Dev + 33 Project + 5 Docker = 155)
+- **docs/index.html** — 9 stale `v5.8.0` version badges updated to `v7.7.1`; template count 23→21; checklist count 9→10
+- **README.md** — "What's New" updated to v7.7; template count 33→21; checklist count 21→10
+- **docs/AGENTS.md** — removed phantom BMAD agent section (39→29 actual); cleaned up ASC mode documentation
+
 ## [7.7.1] - 2026-02-12
 
 ### Fixed
