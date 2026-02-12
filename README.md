@@ -6,11 +6,11 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.6
+## What's New in v7.7
 
-- **CLI `update` fix** — argument order corrected (`--lang=XX` not bare positional), same-file copy guard
-- **Coverage thresholds** — raised to 90/90/90/90 (actual: 96/93/96/96)
-- **Documentation accuracy** — PREREQUISITES Node.js 20+, COMMANDS.md Docker section, CONTRIBUTING.md shellcheck
+- **Doc accuracy + .claude assets** — 247 new files (agents, checklists, commands, rules, skills, templates), PR template
+- **Presentation page counters fixed** — agents/commands/skills/templates/checklists in docs/index.html
+- **Node.js 20+** — PREREQUISITES/QUICKSTART/FAQ updated
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
@@ -25,8 +25,8 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
 - **36 Skills**: Best practices in official Claude Code format (architecture, testing, security)
-- **33 Templates**: Code generation patterns + BMAD templates
-- **21 Checklists**: Quality gates for commits, features, releases
+- **21 Templates**: Code generation patterns + BMAD templates
+- **10 Checklists**: Quality gates for commits, features, releases
 - **Hooks System**: Pre/Post tool execution, quality gates, notifications, **BMAD context injection**
 - **MCP Templates**: Context7, GitHub, PostgreSQL, Slack integration
 - **Auto-generated CLAUDE.md**: Project configuration file created at installation
