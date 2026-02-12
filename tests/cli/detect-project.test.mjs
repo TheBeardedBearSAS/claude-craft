@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import fs from 'fs';
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
@@ -340,6 +341,57 @@ describe('detectProject', () => {
     expect(result.suggestedTechs).toContain('docker');
     expect(result.suggestedTechs.length).toBe(6);
     expect(result.complexity).toBe('enterprise');
+  });
+
+  // --- Error catch paths for Python detection ---
+  it('handles Python detection error with debug logging', () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    // Use a path that causes existsSync to throw via permission issues
+    // We simulate by passing a path with null bytes which triggers an error
+    const badPath = join(tempDir, 'valid');
+    mkdirSync(badPath);
+    // Write a file where requirements.txt would be, but make it a directory
+    // so that existsSync works but subsequent calls could fail
+    // Actually, the catch path triggers if existsSync itself throws
+    // Mock approach: use vi.spyOn on fs.existsSync for targeted failure
+    const originalExistsSync = fs.existsSync;
+    let callCount = 0;
+    vi.spyOn(fs, 'existsSync').mockImplementation((p) => {
+      // Let early calls pass through, throw on requirements.txt
+      if (typeof p === 'string' && (p.includes('requirements.txt') || p.includes('pyproject.toml'))) {
+        throw new Error('Mock permission denied');
+      }
+      return originalExistsSync(p);
+    });
+
+    const result = detectProject(badPath, { debug: true });
+    expect(result.hasRequirements).toBe(false);
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('python'));
+
+    fs.existsSync.mockRestore();
+    errorSpy.mockRestore();
+  });
+
+  // --- Error catch paths for Docker detection ---
+  it('handles Docker detection error with debug logging', () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const badPath = join(tempDir, 'valid2');
+    mkdirSync(badPath);
+
+    const originalExistsSync = fs.existsSync;
+    vi.spyOn(fs, 'existsSync').mockImplementation((p) => {
+      if (typeof p === 'string' && (p.includes('Dockerfile') || p.includes('docker-compose'))) {
+        throw new Error('Mock permission denied');
+      }
+      return originalExistsSync(p);
+    });
+
+    const result = detectProject(badPath, { debug: true });
+    expect(result.hasDockerfile).toBe(false);
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('docker'));
+
+    fs.existsSync.mockRestore();
+    errorSpy.mockRestore();
   });
 
   // --- Exactly 2 techs = standard complexity ---

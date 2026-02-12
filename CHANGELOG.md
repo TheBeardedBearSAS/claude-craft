@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.4.0] - 2026-02-12
+
+### Added
+
+- **CLI `list` command** — detailed listing of installed claude-craft components (`npx @the-bearded-bear/claude-craft list [dir]`)
+- **CLI `doctor` command** — environment diagnostics & installation health check (`npx @the-bearded-bear/claude-craft doctor [dir]`)
+- **CLI `update` command** — re-run install scripts to refresh an existing installation (`npx @the-bearded-bear/claude-craft update [dir] [--lang=XX] [--tech=NAME]`)
+- `cli/lib/fs-utils.js` — shared `countFiles` / `listDirs` utilities extracted from check.js
+- `cli/lib/list.js`, `cli/lib/doctor.js`, `cli/lib/update.js` — new command modules
+- `tests/cli/list.test.mjs` — 4 tests for list command
+- `tests/cli/doctor.test.mjs` — 8 tests for doctor command
+- `tests/cli/update.test.mjs` — 7 tests for update command
+- `tests/cli/fs-utils.test.mjs` — 6 tests for shared fs utilities
+- 2 detect-project tests for Python/Docker catch path coverage
+- 4 index.js tests for flattenCodebase, constructor, detectProject, parseArgs delegation
+
+### Changed
+
+- **check.js**: Refactored to import `countFiles` / `listDirs` from `fs-utils.js` (DRY)
+- **help.js**: Added 3 missing namespace entries (python, reactnative, php) — now 20 namespaces; added list, doctor, update to Commands section
+- **README.md**: Removed phantom `/pm:` and `/arch:` namespaces; replaced stale `/common:recette*` with `/qa:*`
+- **index.js**: Wired 3 new commands (list, doctor, update)
+- Test count: 480 → 511 tests
+
 ## [7.3.0] - 2026-02-12
 
 ### Added

@@ -24,6 +24,9 @@ const NAMESPACES = [
   { prefix: 'angular', desc: 'Angular: architecture, compliance, testing' },
   { prefix: 'laravel', desc: 'Laravel: architecture, compliance, testing' },
   { prefix: 'vuejs', desc: 'Vue.js: architecture, compliance, testing' },
+  { prefix: 'python', desc: 'Python: endpoints, async, typing, FastAPI' },
+  { prefix: 'reactnative', desc: 'React Native: screens, navigation, native modules' },
+  { prefix: 'php', desc: 'PHP: entities, value objects, use cases, Clean Architecture' },
 ];
 
 /**
@@ -38,6 +41,9 @@ ${c.bold}Commands:${c.reset}
   ${c.green}install <path>${c.reset}       Install to specific directory
   ${c.green}init${c.reset}                 Initialize workflow in current project
   ${c.green}check${c.reset}                Verify claude-craft installation
+  ${c.green}list${c.reset}                 List installed components
+  ${c.green}doctor${c.reset}               Environment diagnostics
+  ${c.green}update${c.reset}               Refresh existing installation
   ${c.green}flatten${c.reset}              Generate flattened codebase summary
   ${c.green}ralph${c.reset}                Run Ralph Wiggum continuous loop
   ${c.green}help${c.reset}                 Show this help message
@@ -52,7 +58,7 @@ ${c.bold}Options:${c.reset}
   ${c.yellow}--enterprise${c.reset}         Enterprise track (platforms)
 
 ${c.bold}Available Namespaces:${c.reset}
-${NAMESPACES.map((ns) => `  ${c.cyan}/${ns.prefix}:*${c.reset}`.padEnd(30 + c.cyan.length + c.reset.length) + `${ns.desc}`).join('\n')}
+${NAMESPACES.map((ns) => `  ${c.cyan}/${ns.prefix}:*${c.reset}`.padEnd(30 + c.cyan.length + c.reset.length) + ns.desc).join('\n')}
 
   ${c.dim}Example: /common:pre-commit-check, /workflow:init, /team:sprint${c.reset}
 

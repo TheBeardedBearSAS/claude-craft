@@ -35,6 +35,9 @@ import { printHelp } from './lib/help.js';
 import { interactiveInstall, runInstallation } from './lib/installer.js';
 import { runRalph } from './lib/ralph.js';
 import { runCheck } from './lib/check.js';
+import { runList } from './lib/list.js';
+import { runDoctor } from './lib/doctor.js';
+import { runUpdate } from './lib/update.js';
 
 // Flattener module
 import { flatten as flattenCodebaseFn } from './flattener.js';
@@ -170,6 +173,21 @@ class ClaudeCraftCLI {
       case 'check':
         printBanner(VERSION);
         runCheck(this.config.targetPath);
+        break;
+
+      case 'list':
+        printBanner(VERSION);
+        runList(this.config.targetPath);
+        break;
+
+      case 'doctor':
+        printBanner(VERSION);
+        runDoctor(this.config.targetPath);
+        break;
+
+      case 'update':
+        printBanner(VERSION);
+        runUpdate(this.config.targetPath, options, CLI_ROOT);
         break;
 
       case 'init':

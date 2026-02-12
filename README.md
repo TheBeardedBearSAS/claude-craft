@@ -531,8 +531,6 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 - `/project:` - Project management (backlog, PRD, tech-spec, sprints, **batch processing, migration**)
 - `/sprint:` - **BMAD sprint management (status, transitions, routing, TDD)**
 - `/gate:` - **Quality gate validation (PRD, tech-spec, backlog, story, sprint)**
-- `/pm:` - **Product Manager commands (prd, vision, roadmap, prioritize)**
-- `/arch:` - **Architect commands (design, techspec, adr, api, security)**
 - `/common:` - Transversal commands (audit, changelog, CI/CD)
 - `/symfony:` - Symfony-specific (CRUD, migrations, Doctrine)
 - `/flutter:` - Flutter-specific (widgets, BLoC, performance)
@@ -545,7 +543,7 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 - `/vuejs:` - Vue.js-specific (components, composables, Pinia)
 - `/php:` - PHP-specific (entities, value objects, use cases, Clean Architecture)
 - `/docker:` - Docker/Infrastructure (compose, debug, pipelines, architecture)
-- `/common:recette*` - **QA Recette** (acceptance testing, regression, Chrome automation)
+- `/qa:*` - **QA Recette** (acceptance testing, regression, Chrome automation)
 
 ## Documentation
 

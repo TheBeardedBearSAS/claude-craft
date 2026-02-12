@@ -7,36 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import c from './colors.js';
 import { detectProject } from './detect-project.js';
-
-/**
- * Count files matching a glob pattern in a directory (non-recursive).
- * @param {string} dir - Directory path
- * @param {string} ext - File extension (e.g. '.md')
- * @returns {number}
- */
-function countFiles(dir, ext) {
-  try {
-    return fs.readdirSync(dir).filter((f) => f.endsWith(ext)).length;
-  } catch {
-    return 0;
-  }
-}
-
-/**
- * List subdirectories of a directory.
- * @param {string} dir - Directory path
- * @returns {string[]}
- */
-function listDirs(dir) {
-  try {
-    return fs
-      .readdirSync(dir, { withFileTypes: true })
-      .filter((d) => d.isDirectory())
-      .map((d) => d.name);
-  } catch {
-    return [];
-  }
-}
+import { countFiles, listDirs } from './fs-utils.js';
 
 /**
  * Run the check command against a target directory.
