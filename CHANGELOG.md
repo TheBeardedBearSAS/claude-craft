@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.8.0] - 2026-02-12
+
+### Added
+
+- **Coolify infrastructure technology** — 4 agents (`@coolify-architect`, `@coolify-deployment`, `@coolify-debug`, `@coolify-monitoring`), 5 commands (`/coolify:setup`, `/coolify:deploy`, `/coolify:debug`, `/coolify:backup`, `/coolify:optimize`), install script, full i18n (en/fr/es/de/pt) — 46 new files
+- **`install-coolify` Makefile target** — standalone Coolify installation; `install-infra` now installs both Docker and Coolify
+- **Coolify in tech registry** — CLI namespace, help text, and `INSTALLABLE_TECHS` exclusion (infra, not dev tech)
+
+### Changed
+
+- **Counter updates** — commands 155→160, agents 29→33, namespaces 19→20 across CLAUDE.md, README.md, docs/index.html (stats grid + i18n), COMMANDS.md, COMMANDS-FULL-REFERENCE.md, AGENTS.md
+- **README.md** — added Coolify to AI Agents description
+- **docs/AGENTS.md** — added Coolify/Infrastructure Agents section (4 agents)
+
 ## [7.7.2] - 2026-02-12
 
 ### Fixed

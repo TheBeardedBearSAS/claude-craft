@@ -6,11 +6,10 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.7
+## What's New in v7.8
 
-- **Doc accuracy + .claude assets** — 247 new files (agents, checklists, commands, rules, skills, templates), PR template
-- **Presentation page counters fixed** — agents/commands/skills/templates/checklists in docs/index.html
-- **Node.js 20+** — PREREQUISITES/QUICKSTART/FAQ updated
+- **Coolify infrastructure technology** — 4 agents, 5 commands, install script, full i18n (en/fr/es/de/pt) for self-hosted PaaS deployments
+- **160 commands, 33 agents, 20 namespaces** — counters updated across all docs
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
