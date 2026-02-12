@@ -49,7 +49,18 @@ jobs:
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
 
-          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            # Manual dispatch: use package.json version as-is
+            echo "Manual dispatch: version ${PACKAGE_VERSION}"
+            echo "version=${PACKAGE_VERSION}" >> $GITHUB_OUTPUT
+            if [[ "${PACKAGE_VERSION}" == *"-"* ]]; then
+              echo "is_prerelease=true" >> $GITHUB_OUTPUT
+            else
+              echo "is_prerelease=false" >> $GITHUB_OUTPUT
+            fi
+            echo "is_main_push=false" >> $GITHUB_OUTPUT
+
+          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
             # Tag push: validate tag matches package.json
             TAG_VERSION="${{ github.ref_name }}"
             TAG_VERSION="${TAG_VERSION#v}"
@@ -73,7 +84,7 @@ jobs:
             echo "is_main_push=true" >> $GITHUB_OUTPUT
 
           else
-            # Manual dispatch or other
+            # Other
             echo "version=${PACKAGE_VERSION}" >> $GITHUB_OUTPUT
             if [[ "${PACKAGE_VERSION}" == *"-"* ]]; then
               echo "is_prerelease=true" >> $GITHUB_OUTPUT
@@ -187,6 +198,7 @@ jobs:
     environment: npm
     permissions:
       contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -195,7 +207,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
+          # No registry-url: avoids setup-node auto-setting NODE_AUTH_TOKEN which overrides OIDC
 
       - name: Update version for main branch
         if: ${{ needs.validate.outputs.is_main_push == 'true' }}
@@ -222,15 +234,14 @@ jobs:
           echo "DRY RUN - Would publish with:"
           echo "  Version: ${{ needs.validate.outputs.version }}"
           echo "  Tag: ${{ steps.npm_tag.outputs.tag }}"
-          npm publish --dry-run --access public --tag ${{ steps.npm_tag.outputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          unset NODE_AUTH_TOKEN
+          npm publish --dry-run --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
 
-      - name: Publish to NPM
+      - name: Publish to NPM (OIDC)
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
-        run: npm publish --access public --tag ${{ steps.npm_tag.outputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          unset NODE_AUTH_TOKEN
+          npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
 
       - name: Verify publication
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
