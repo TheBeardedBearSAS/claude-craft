@@ -99,9 +99,7 @@ function runCheck(targetPath) {
   const refsDir = path.join(claudeDir, 'references');
   const refDirs = listDirs(refsDir);
   if (refDirs.length > 0) {
-    console.log(
-      `  ${c.green}[OK]${c.reset} references/ — ${c.cyan}${refDirs.join(', ')}${c.reset}`
-    );
+    console.log(`  ${c.green}[OK]${c.reset} references/ — ${c.cyan}${refDirs.join(', ')}${c.reset}`);
   } else {
     console.log(`  ${c.yellow}[WARN]${c.reset} references/ — no tech references found`);
     warnings++;
