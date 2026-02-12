@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.6.1] - 2026-02-12
+
+### Fixed
+
+- **CLI `update` command** — argument order was wrong (`script TARGET LANG --force` instead of `script --lang=LANG --force TARGET`), causing all install scripts to reject the lang parameter
+- **2026 feature references copy** — added same-directory guard in `install-tech-common.sh` to prevent `cp` errors when source and destination resolve to the same path
+
 ## [7.6.0] - 2026-02-12
 
 ### Changed
