@@ -6,12 +6,12 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.4
+## What's New in v7.5
 
-- **CLI `list`, `doctor`, `update` commands** — detailed inventory, environment diagnostics, and in-place refresh
-- **help.js** now displays all 20 namespaces with descriptions
-- **fs-utils extraction** — shared `countFiles`/`listDirs` utilities for DRY CLI modules
-- **Documentation accuracy** — removed phantom namespaces, fixed stale paths
+- **Doctor `yq` check** — `doctor` command now verifies `yq` availability
+- **CLI-REFERENCE.md** — now documents all 9 CLI commands (`check`, `list`, `doctor`, `update`)
+- **Coverage polish** — doctor.js 96%, update.js 100%
+- **Documentation accuracy** — README, QUICKSTART, namespace count fixes
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
@@ -258,7 +258,7 @@ Once installed, use the commands in your project:
 | **Laravel** | 6 | 6 | 1 | Clean Architecture, Pest PHP, Sanctum |
 | **Vue.js** | 6 | 6 | 1 | Composition API, Pinia, Vitest |
 | **PHP** | 6 | 5 | 1 | Clean Architecture, PSR-12, PHPStan, Pest |
-| **Docker** | - | 4 | 5 | Dockerfile, Compose, CI/CD, Debugging |
+| **Docker** | - | 5 | 5 | Dockerfile, Compose, CI/CD, Debugging, Optimize |
 
 ## Project Structure
 
@@ -532,6 +532,8 @@ Copy the appropriate bundle into your preferred AI platform's custom instruction
 - `/project:` - Project management (backlog, PRD, tech-spec, sprints, **batch processing, migration**)
 - `/sprint:` - **BMAD sprint management (status, transitions, routing, TDD)**
 - `/gate:` - **Quality gate validation (PRD, tech-spec, backlog, story, sprint)**
+- `/team:` - Agent Teams (parallel audit, sprint, security, delivery)
+- `/uiux:` - UI/UX (audit, a11y, component-spec, design-tokens, user-flow)
 - `/common:` - Transversal commands (audit, changelog, CI/CD)
 - `/symfony:` - Symfony-specific (CRUD, migrations, Doctrine)
 - `/flutter:` - Flutter-specific (widgets, BLoC, performance)

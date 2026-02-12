@@ -339,11 +339,12 @@ docs: update README with new features
 ```
 
 Required:
-- Node.js 18+
+- Node.js 20+
 - npm 9+
 - yq v4 (Mike Farah's version)
 - Git 2+
 - Bash
+- shellcheck (for `npm run lint:shell`)
 
 Recommended:
 - Docker
@@ -383,6 +384,12 @@ make config-validate
 
 # Check prerequisites
 ./Dev/scripts/check-prerequisites.sh
+
+# Lint shell scripts
+npm run lint:shell
+
+# Verify i18n parity
+npm run lint:i18n
 ```
 
 ### Release Checklist

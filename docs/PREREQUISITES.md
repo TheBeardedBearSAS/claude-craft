@@ -6,7 +6,7 @@ Complete guide to all dependencies required for Claude Craft.
 
 ## Required Dependencies
 
-### 1. Node.js (18+)
+### 1. Node.js (20+)
 
 Required for NPX installation and CLI tools.
 
@@ -226,7 +226,7 @@ fi
 
 | Tool | Minimum Version | Recommended |
 |------|-----------------|-------------|
-| Node.js | 18.0 | 20.x LTS |
+| Node.js | 20.0 | 20.x LTS |
 | npm | 9.0 | 10.x |
 | yq | 4.0 | 4.40+ |
 | Git | 2.0 | 2.40+ |

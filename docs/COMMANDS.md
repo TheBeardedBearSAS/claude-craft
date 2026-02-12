@@ -477,6 +477,7 @@ Infrastructure and containerization commands.
 |---------|-------------|
 | `/docker:debug <Symptom>` | Diagnose Docker issues |
 | `/docker:cicd-pipeline <Platform>` | Generate CI/CD pipeline |
+| `/docker:optimize <Target>` | Optimize Docker configuration |
 
 ---
 

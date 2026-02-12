@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.6.0] - 2026-02-12
+
+### Changed
+
+- **README.md** — "What's New" updated to v7.5 features; fixed namespace count (20→19); added `/team:` and `/uiux:` to Command Namespaces (17→19); Docker commands 4→5
+- **COMMANDS.md** — added `/docker:optimize` to Docker detailed section (was in summary but missing from details)
+- **CONTRIBUTING.md** — Node.js 18+→20+; added shellcheck to prerequisites; added `lint:shell` and `lint:i18n` to Running Tests
+- **PREREQUISITES.md** — Node.js 18→20 (lines 9 and 229)
+- **vitest.config.mjs** — raised coverage thresholds from 80/85/70/80 to 90/90/90/90 (actual coverage: 96/93/96/96)
+
 ## [7.5.0] - 2026-02-12
 
 ### Added
