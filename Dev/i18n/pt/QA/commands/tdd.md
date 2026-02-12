@@ -14,7 +14,7 @@ Argumentos:
 - Descrição do bug ou link do ticket
 - (Opcional) Arquivo ou módulo afetado
 
-Exemplo: `/common:fix-bug-tdd "Usuário não consegue fazer logout"` ou `/common:fix-bug-tdd #123`
+Exemplo: `/qa:tdd "Usuário não consegue fazer logout"` ou `/qa:tdd #123`
 
 ## MISSÃO
 

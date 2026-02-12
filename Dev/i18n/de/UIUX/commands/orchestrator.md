@@ -14,7 +14,7 @@ Argumente:
 - Art der Anfrage: Komponente, Audit, Flow, Tokens
 - Ziel oder Beschreibung
 
-Beispiel: `/common:uiux-orchestrator Komponente "Datumsauswahl"` oder `/common:uiux-orchestrator Audit "Checkout-Seite"`
+Beispiel: `/uiux:orchestrator Komponente "Datumsauswahl"` oder `/uiux:orchestrator Audit "Checkout-Seite"`
 
 ## MISSION
 

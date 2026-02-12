@@ -118,7 +118,7 @@ Com base no track, mostrar o workflow:
 | Sem documentacao necessaria. Direto para a codificacao.         |
 |                                                                 |
 | Comandos:                                                       |
-| - /common:fix-bug-tdd    - Corrigir com TDD                    |
+| - /qa:tdd    - Corrigir com TDD                    |
 | - /project:add-task      - Registrar o trabalho                |
 |                                                                 |
 +================================================================+
@@ -144,7 +144,7 @@ Com base no track, mostrar o workflow:
 | - /project:generate-tech-spec - Design tecnico                  |
 |                                                                 |
 | Fase 3 - Implementacao:                                         |
-| - /project:sprint-dev      - Desenvolvimento TDD/BDD            |
+| - /sprint:dev      - Desenvolvimento TDD/BDD            |
 |                                                                 |
 +================================================================+
 ```
@@ -173,7 +173,7 @@ Com base no track, mostrar o workflow:
 | - /common:architecture-decision - ADRs                          |
 |                                                                 |
 | Fase 4 - Implementacao:                                         |
-| - /project:sprint-dev      - Desenvolvimento sprint a sprint    |
+| - /sprint:dev      - Desenvolvimento sprint a sprint    |
 |                                                                 |
 +================================================================+
 ```

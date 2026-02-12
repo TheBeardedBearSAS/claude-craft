@@ -14,7 +14,7 @@ Arguments:
 - Component name to specify
 - (Optional) Usage context
 
-Example: `/common:uiux-component-spec Button` or `/common:uiux-component-spec "Trip Card" context:"Tourism SaaS"`
+Example: `/uiux:component-spec Button` or `/uiux:component-spec "Trip Card" context:"Tourism SaaS"`
 
 ## MISSION
 

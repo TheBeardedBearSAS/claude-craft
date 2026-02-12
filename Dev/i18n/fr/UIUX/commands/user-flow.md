@@ -15,7 +15,7 @@ Arguments :
 - (Optionnel) Persona cible
 - (Optionnel) Contraintes spécifiques
 
-Exemple : `/common:ux-user-flow "Inscription utilisateur"` ou `/common:ux-user-flow "Checkout" persona:"Mobile user" contrainte:"< 30 secondes"`
+Exemple : `/uiux:user-flow "Inscription utilisateur"` ou `/uiux:user-flow "Checkout" persona:"Mobile user" contrainte:"< 30 secondes"`
 
 ## MISSION
 

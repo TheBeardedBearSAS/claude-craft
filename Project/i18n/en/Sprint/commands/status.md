@@ -181,16 +181,16 @@ US-008 has all tasks complete -> /sprint:transition US-008 review
 
 ```
 # Current sprint status
-/project:sprint-status
+/sprint:status
 
 # Sprint 2 status
-/project:sprint-status sprint 2
+/sprint:status sprint 2
 
 # Sprint status with BMAD state machine
-/project:sprint-status --bmad
+/sprint:status --bmad
 
 # Verbose BMAD status
-/project:sprint-status --bmad --verbose
+/sprint:status --bmad --verbose
 ```
 
 ## Report Generation

@@ -452,18 +452,37 @@ install_agents() {
 install_commands() {
     log_info "${MSG_INSTALLING_COMMANDS}"
 
-    local base_commands="$I18N_DIR/base/Common/commands"
-    local lang_commands="$I18N_DIR/$lang/Common/commands"
-    local dest_commands="$target_dir/.claude/commands/common"
+    # Namespace mapping: SourceDir:target_dir_name
+    local namespaces="Common:common Workflow:workflow Team:team QA:qa UIUX:uiux"
+    local found_any=false
 
-    if [[ -d "$base_commands" ]] || [[ -d "$lang_commands" ]]; then
-        # Exclude add-technology.md (claude-craft internal command)
-        [[ -d "$base_commands" ]] && copy_directory "$base_commands" "$dest_commands" "*.md" "add-technology.md"
-        [[ -d "$lang_commands" ]] && copy_directory "$lang_commands" "$dest_commands" "*.md" "add-technology.md"
-    elif [[ -d "$SCRIPT_DIR/claude-commands/common" ]]; then
-        copy_directory "$SCRIPT_DIR/claude-commands/common" "$dest_commands" "*.md" "add-technology.md"
-    else
-        log_warning "${MSG_COMMANDS_NOT_FOUND}"
+    for ns_pair in $namespaces; do
+        local ns_source="${ns_pair%%:*}"
+        local ns_target="${ns_pair##*:}"
+
+        local base_commands="$I18N_DIR/base/${ns_source}/commands"
+        local lang_commands="$I18N_DIR/$lang/${ns_source}/commands"
+        local dest_commands="$target_dir/.claude/commands/${ns_target}"
+
+        # Determine exclusion (add-technology.md only for Common)
+        local exclude=""
+        if [[ "$ns_source" == "Common" ]]; then
+            exclude="add-technology.md"
+        fi
+
+        if [[ -d "$base_commands" ]] || [[ -d "$lang_commands" ]]; then
+            found_any=true
+            [[ -d "$base_commands" ]] && copy_directory "$base_commands" "$dest_commands" "*.md" "$exclude"
+            [[ -d "$lang_commands" ]] && copy_directory "$lang_commands" "$dest_commands" "*.md" "$exclude"
+        fi
+    done
+
+    if ! $found_any; then
+        if [[ -d "$SCRIPT_DIR/claude-commands/common" ]]; then
+            copy_directory "$SCRIPT_DIR/claude-commands/common" "$target_dir/.claude/commands/common" "*.md" "add-technology.md"
+        else
+            log_warning "${MSG_COMMANDS_NOT_FOUND}"
+        fi
     fi
 }
 
@@ -580,26 +599,31 @@ install_claude_md() {
         agents_list="${agents_list}${agents_seen[$key]}"
     done
 
-    # Build commands list (from base + lang overlay, lang takes precedence)
+    # Build commands list (from all namespaces, base + lang overlay per namespace)
     local commands_list=""
     local -A cmds_seen=()
-    local cmd_dirs=("$I18N_DIR/base/Common/commands" "$I18N_DIR/$lang/Common/commands")
-    for src_commands in "${cmd_dirs[@]}"; do
-        if [[ -d "$src_commands" ]]; then
-            while IFS= read -r cmd_file; do
-                local cmd_name
-                cmd_name=$(basename "$cmd_file" .md)
-                # Exclude add-technology (claude-craft internal command)
-                if [[ "$cmd_name" == "add-technology" ]]; then
-                    continue
-                fi
-                local cmd_desc
-                cmd_desc=$(grep -m1 "^description:" "$cmd_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60 || true)
-                if [[ -n "$cmd_desc" ]]; then
-                    cmds_seen["$cmd_name"]="- \`/common:${cmd_name}\` - ${cmd_desc}\n"
-                fi
-            done < <(find "$src_commands" -name "*.md" -type f | sort)
-        fi
+    local ns_pair
+    for ns_pair in Common:common Workflow:workflow Team:team QA:qa UIUX:uiux; do
+        local ns_source="${ns_pair%%:*}"
+        local ns_prefix="${ns_pair##*:}"
+        local cmd_dirs=("$I18N_DIR/base/${ns_source}/commands" "$I18N_DIR/$lang/${ns_source}/commands")
+        for src_commands in "${cmd_dirs[@]}"; do
+            if [[ -d "$src_commands" ]]; then
+                while IFS= read -r cmd_file; do
+                    local cmd_name
+                    cmd_name=$(basename "$cmd_file" .md)
+                    # Exclude add-technology (claude-craft internal command, Common only)
+                    if [[ "$ns_source" == "Common" && "$cmd_name" == "add-technology" ]]; then
+                        continue
+                    fi
+                    local cmd_desc
+                    cmd_desc=$(grep -m1 "^description:" "$cmd_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60 || true)
+                    if [[ -n "$cmd_desc" ]]; then
+                        cmds_seen["${ns_prefix}:${cmd_name}"]="- \`/${ns_prefix}:${cmd_name}\` - ${cmd_desc}\n"
+                    fi
+                done < <(find "$src_commands" -name "*.md" -type f | sort)
+            fi
+        done
     done
     for key in $(printf '%s\n' "${!cmds_seen[@]}" | sort); do
         commands_list="${commands_list}${cmds_seen[$key]}"

@@ -120,7 +120,7 @@ Segun el track, mostrar el flujo de trabajo:
 ║ No requiere documentacion. Directo a programar.           ║
 ║                                                           ║
 ║ Comandos:                                                 ║
-║ • /common:fix-bug-tdd    - Corregir con TDD               ║
+║ • /qa:tdd    - Corregir con TDD               ║
 ║ • /project:add-task      - Registrar el trabajo            ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
@@ -146,7 +146,7 @@ Segun el track, mostrar el flujo de trabajo:
 ║ • /project:generate-tech-spec - Diseno tecnico            ║
 ║                                                           ║
 ║ Fase 3 - Implementacion:                                  ║
-║ • /project:sprint-dev      - Desarrollo TDD/BDD           ║
+║ • /sprint:dev      - Desarrollo TDD/BDD           ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
@@ -175,7 +175,7 @@ Segun el track, mostrar el flujo de trabajo:
 ║ • /common:architecture-decision - ADRs                    ║
 ║                                                           ║
 ║ Fase 4 - Implementacion:                                  ║
-║ • /project:sprint-dev      - Desarrollo sprint a sprint   ║
+║ • /sprint:dev      - Desarrollo sprint a sprint   ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```

@@ -297,7 +297,7 @@ cp .claude.backup/rules/00-project-context.md .claude/rules/
 
 | v3.x | v4.x |
 |------|------|
-| `/project:sprint-status` | `/sprint:bmad-status` |
+| `/sprint:status` | `/sprint:bmad-status` |
 | `/project:validate-story` | `/gate:validate-story` |
 
 ### New Commands

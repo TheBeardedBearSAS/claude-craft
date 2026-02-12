@@ -14,7 +14,7 @@ Argumentos:
 - Descripción del bug o enlace al ticket
 - (Opcional) Archivo o módulo afectado
 
-Ejemplo: `/common:fix-bug-tdd "Usuario no puede cerrar sesión"` o `/common:fix-bug-tdd #123`
+Ejemplo: `/qa:tdd "Usuario no puede cerrar sesión"` o `/qa:tdd #123`
 
 ## MISIÓN
 

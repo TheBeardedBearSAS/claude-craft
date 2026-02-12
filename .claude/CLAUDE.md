@@ -1,8 +1,8 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 6.2.0 | **Languages:** en, fr, es, de, pt
+**Version:** 7.0.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 28 agents, 155 commands, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 28 agents, 155 commands across 16+ namespaces, and BMAD v6 project management.
 
 ---
 
@@ -53,10 +53,14 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/common:ralph-run` | Run Claude in continuous loop |
 | `/common:setup-project-context` | Configure project context |
 | `/common:add-technology` | Add new tech stack |
-| `/common:team-audit` | Parallel multi-tech audit (Agent Teams) |
-| `/common:team-sprint` | Parallel sprint implementation (Agent Teams) |
-| `/common:team-security` | Parallel security review (Agent Teams) |
-| `/common:team-delivery` | **[NEW]** Full sprint lifecycle — writing + implementation (Agent Teams) |
+| `/common:architecture-decision` | Document architecture decisions |
+| `/common:daily-standup` | Daily standup summary |
+| `/common:generate-changelog` | Generate changelog |
+| `/common:pre-merge-check` | Pre-merge validation |
+| `/common:release-checklist` | Release preparation |
+| `/common:research-context7` | Research with Context7 |
+| `/common:setup-ci` | Setup CI pipeline |
+| `/common:sub-agents-patterns` | Agent patterns guide |
 
 ### Workflow (`/workflow:`)
 | Command | Description |
@@ -67,15 +71,57 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/workflow:design` | Tech spec, architecture |
 | `/workflow:implement` | Sprint development |
 | `/workflow:status` | Show progress |
+| `/workflow:retro` | Sprint retrospective |
+| `/workflow:review` | Sprint review |
+| `/workflow:start` | Start sprint |
+
+### Team (`/team:`)
+| Command | Description |
+|---------|-------------|
+| `/team:audit` | Parallel multi-tech audit (Agent Teams) |
+| `/team:sprint` | Parallel sprint implementation (Agent Teams) |
+| `/team:security` | Parallel security review (Agent Teams) |
+| `/team:delivery` | Full sprint lifecycle — writing + implementation (Agent Teams) |
+
+### QA (`/qa:`)
+| Command | Description |
+|---------|-------------|
+| `/qa:recette` | Automated acceptance tests via Chrome |
+| `/qa:fix` | Fix bugs from a recette session |
+| `/qa:status` | Show recette session status |
+| `/qa:regression` | View regression tests |
+| `/qa:report` | Generate recette report |
+| `/qa:tdd` | Fix bugs with TDD approach |
+
+### UIUX (`/uiux:`)
+| Command | Description |
+|---------|-------------|
+| `/uiux:audit` | UI/UX audit |
+| `/uiux:a11y-audit` | WCAG accessibility audit |
+| `/uiux:a11y-component` | Accessible component generator |
+| `/uiux:component-spec` | UI component specification |
+| `/uiux:orchestrator` | UI/UX orchestration |
+| `/uiux:user-flow` | User flow design |
+| `/uiux:design-tokens` | Design tokens generator |
 
 ### BMAD v6 (`/sprint:`, `/gate:`, `/project:`)
 | Command | Description |
 |---------|-------------|
 | `/sprint:next-story` | Get next ready story |
 | `/sprint:transition` | Transition story status |
+| `/sprint:status` | Sprint metrics |
+| `/sprint:auto-route` | Auto-route stories |
+| `/sprint:dev` | Sprint TDD development |
 | `/gate:validate-prd` | PRD quality gate (≥80%) |
 | `/gate:validate-story` | Story DoD validation |
+| `/gate:validate-backlog` | Backlog validation |
+| `/gate:validate-techspec` | Tech spec validation |
+| `/gate:validate-sprint` | Sprint validation |
+| `/gate:report` | Gate quality report |
 | `/project:run-sprint` | Execute full sprint |
+| `/project:run-epic` | Execute full epic |
+| `/project:run-queue` | Execute queue |
+| `/project:batch-status` | Batch status report |
 
 ### C# / .NET (`/csharp:`)
 | Command | Description |
@@ -116,15 +162,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/docker:architecture` | Design Docker architecture |
 | `/docker:debug` | Diagnose Docker issues |
 | `/docker:cicd-pipeline` | Generate CI/CD pipeline |
-
-### QA Recette (`/common:`)
-| Command | Description |
-|---------|-------------|
-| `/common:recette` | Automated acceptance tests via Chrome |
-| `/common:recette-fix` | Fix bugs from a recette session |
-| `/common:recette-status` | Show recette session status |
-| `/common:recette-regression` | View regression tests |
-| `/common:recette-report` | Generate recette report |
+| `/docker:optimize` | Optimize Docker setup |
 
 ---
 
@@ -228,22 +266,22 @@ Continuous AI loop that runs Claude until task completion.
 
 ---
 
-## QA Recette - Automated Acceptance Testing - NEW
+## QA Recette - Automated Acceptance Testing
 
 Automated acceptance testing via Claude in Chrome with the **Golden Rule**: A fixed bug should NEVER reappear.
 
 ```bash
 # Test a specific story
-/common:recette --scope=story --id=US-001
+/qa:recette --scope=story --id=US-001
 
 # Test a full sprint
-/common:recette --scope=sprint --id=Sprint-3
+/qa:recette --scope=sprint --id=Sprint-3
 
 # Dry run to see test plan
-/common:recette --scope=story --id=US-001 --dry-run
+/qa:recette --scope=story --id=US-001 --dry-run
 
 # Resume interrupted session
-/common:recette --resume=REC-20260130-143022
+/qa:recette --resume=REC-20260130-143022
 ```
 
 **Key Features:**
@@ -271,7 +309,7 @@ Automated acceptance testing via Claude in Chrome with the **Golden Rule**: A fi
 └── reports/            # Generated reports
 ```
 
-See command help: `/common:recette --help`
+See command help: `/qa:recette --help`
 
 > **Note:** BMAD roles (bmad-master, pm, ba, architect, po, sm, dev, qa, qa-recette, ux) are integrated into workflow and sprint commands, not standalone agent files.
 
@@ -335,7 +373,7 @@ make install-symfony TARGET=. RULES_LANG=en
 @tdd-coach Guide me through TDD for this feature
 
 # Run audit
-/common:team-audit --sequential
+/team:audit --sequential
 ```
 
 ---

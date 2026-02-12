@@ -83,7 +83,7 @@ Vous etes un agent specialise pour orchestrer les sessions de boucle continue Ra
 
 - Fonctionne avec `/common:ralph-run`
 - S'integre avec hooks Claude Code 2.1.23+
-- Compatible avec `/project:sprint-dev`
+- Compatible avec `/sprint:dev`
 - Utilise principes `@tdd-coach`
 
 ## Quand s'arreter

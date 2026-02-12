@@ -572,7 +572,7 @@ Complete reference for all 40 agents available in Claude Craft.
 - `read_console_logs`, `get_network_requests`
 - `read_dom_state`, `take_screenshot`, `record_gif`
 
-**Key Commands:** `/common:recette`, `/common:recette-fix`, `/common:recette-status`, `/common:recette-regression`, `/common:recette-report`
+**Key Commands:** `/qa:recette`, `/qa:fix`, `/qa:status`, `/qa:regression`, `/qa:report`
 
 **Golden Rule:** A fixed bug should NEVER reappear - automatic regression suite generation.
 

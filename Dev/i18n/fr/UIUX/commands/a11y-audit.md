@@ -15,7 +15,7 @@ Arguments :
 - (Optionnel) Niveau : AA ou AAA (défaut: AAA)
 - (Optionnel) Focus : all, keyboard, contrast, aria
 
-Exemple : `/common:a11y-audit src/pages/Home.tsx AAA` ou `/common:a11y-audit src/components/Modal.tsx AA keyboard`
+Exemple : `/uiux:a11y-audit src/pages/Home.tsx AAA` ou `/uiux:a11y-audit src/components/Modal.tsx AA keyboard`
 
 ## MISSION
 

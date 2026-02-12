@@ -14,7 +14,7 @@ Argumentos:
 - (Opcional) URL ou caminho da página/componente a auditar
 - (Opcional) Nível WCAG: AA ou AAA (padrão: AAA)
 
-Exemplo: `/common:uiux-audit src/pages/Dashboard.tsx AAA`
+Exemplo: `/uiux:audit src/pages/Dashboard.tsx AAA`
 
 ## MISSÃO
 

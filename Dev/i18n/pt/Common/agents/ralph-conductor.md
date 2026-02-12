@@ -59,4 +59,4 @@ Voce e um agente especializado para orquestrar sessoes de loop continuo Ralph Wi
 
 - Funciona com `/common:ralph-run`
 - Integra com hooks Claude Code 2.1.23+
-- Compativel com `/project:sprint-dev`
+- Compativel com `/sprint:dev`

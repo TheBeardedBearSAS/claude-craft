@@ -14,7 +14,7 @@ Argumente:
 - Sprint-Nummer
 - (Optional) Retro-Format (starfish, 4L, sailboat, start-stop-continue)
 
-Beispiel: `/common:sprint-retro 5 starfish`
+Beispiel: `/workflow:retro 5 starfish`
 
 ## MISSION
 

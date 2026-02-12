@@ -37,10 +37,10 @@ $ARGUMENTS
 | Bedingung | Team-Delivery verwenden | Alternative |
 |-----------|------------------------|-------------|
 | Vollständiger Zyklus (Plan + Code), 3+ Stories | **Ja (~2,2x Beschleunigung)** | Sequenziell zu langsam |
-| < 3 Stories | Nein | `@product-owner` + `/common:team-sprint --sequential` |
+| < 3 Stories | Nein | `@product-owner` + `/team:sprint --sequential` |
 | Einzelne Story | Nein | `/common:ralph-run` |
 | 5+ unabhängige Stories | **Ja (bester ROI)** | Möglich, aber sequenziell langsam |
-| Nur Implementierung (Stories vorhanden) | `--phase=implementation` verwenden | `/common:team-sprint` |
+| Nur Implementierung (Stories vorhanden) | `--phase=implementation` verwenden | `/team:sprint` |
 | Nur Schreiben (kein Coding nötig) | `--phase=writing` verwenden | `@product-owner` manuell |
 | Sehr budgetbeschränkt | Nein (+30-40% Token-Overhead) | Sequenzieller Workflow |
 | Dateidomänen-Zuordnung benötigt | **Ja (integriert)** | Manuelle Koordination |

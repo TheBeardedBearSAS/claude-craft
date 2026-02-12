@@ -37,10 +37,10 @@ $ARGUMENTS
 | Condicion | Usar Team Delivery | Alternativa |
 |-----------|--------------------|-------------|
 | Ciclo completo (planificar + programar), 3+ stories | **Si (~2.2x aceleracion)** | Demasiado lento secuencialmente |
-| < 3 stories | No | `@product-owner` + `/common:team-sprint --sequential` |
+| < 3 stories | No | `@product-owner` + `/team:sprint --sequential` |
 | Una sola story | No | `/common:ralph-run` |
 | 5+ stories independientes | **Si (mejor ROI)** | Posible pero lento secuencialmente |
-| Solo implementacion (stories existentes) | Usar `--phase=implementation` | `/common:team-sprint` |
+| Solo implementacion (stories existentes) | Usar `--phase=implementation` | `/team:sprint` |
 | Solo redaccion (sin programacion) | Usar `--phase=writing` | `@product-owner` manualmente |
 | Presupuesto muy limitado | No (+30-40% overhead de tokens) | Flujo secuencial |
 | Necesita mapeo de dominios de archivo | **Si (integrado)** | Coordinacion manual |

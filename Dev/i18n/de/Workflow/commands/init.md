@@ -119,7 +119,7 @@ Basierend auf dem Track den Workflow anzeigen:
 ║ Keine Dokumentation erforderlich. Direkt zum Coding.      ║
 ║                                                           ║
 ║ Befehle:                                                  ║
-║ • /common:fix-bug-tdd    - Fix mit TDD                    ║
+║ • /qa:tdd    - Fix mit TDD                    ║
 ║ • /project:add-task      - Arbeit verfolgen               ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
@@ -145,7 +145,7 @@ Basierend auf dem Track den Workflow anzeigen:
 ║ • /project:generate-tech-spec - Technisches Design        ║
 ║                                                           ║
 ║ Phase 3 - Implementierung:                                ║
-║ • /project:sprint-dev      - TDD/BDD-Entwicklung          ║
+║ • /sprint:dev      - TDD/BDD-Entwicklung          ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
@@ -174,7 +174,7 @@ Basierend auf dem Track den Workflow anzeigen:
 ║ • /common:architecture-decision - ADRs                    ║
 ║                                                           ║
 ║ Phase 4 - Implementierung:                                ║
-║ • /project:sprint-dev      - Sprint-weise Entwicklung     ║
+║ • /sprint:dev      - Sprint-weise Entwicklung     ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```

@@ -213,7 +213,7 @@ Display the current state of the development workflow, including completed phase
 ╠══════════════════════════════════════════════════════════════════╣
 ║ COMMANDS AVAILABLE                                                ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ • /common:fix-bug-tdd     - Continue with TDD approach            ║
+║ • /qa:tdd     - Continue with TDD approach            ║
 ║ • /project:move-task done - Mark task complete                    ║
 ║ • /workflow:init          - Start new workflow                    ║
 ╚══════════════════════════════════════════════════════════════════╝

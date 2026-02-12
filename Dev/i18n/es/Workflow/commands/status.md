@@ -213,7 +213,7 @@ Mostrar el estado actual del flujo de trabajo de desarrollo, incluyendo fases co
 ╠══════════════════════════════════════════════════════════════════╣
 ║ COMANDOS DISPONIBLES                                              ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ • /common:fix-bug-tdd     - Continuar con enfoque TDD             ║
+║ • /qa:tdd     - Continuar con enfoque TDD             ║
 ║ • /project:move-task done - Marcar tarea como completada          ║
 ║ • /workflow:init          - Iniciar nuevo flujo de trabajo        ║
 ╚══════════════════════════════════════════════════════════════════╝

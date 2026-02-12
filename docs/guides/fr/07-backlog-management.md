@@ -174,7 +174,7 @@ Elements de travail technique dans une User Story :
 | `/project:list-stories [filtre]` | Lister les User Stories (par EPIC, Sprint, Statut) |
 | `/project:list-tasks [filtre]` | Lister les taches (par US, Sprint, Type, Statut) |
 | `/project:board [sprint]` | Afficher le tableau Kanban |
-| `/project:sprint-status [sprint]` | Rapport detaille de progression du sprint |
+| `/sprint:status [sprint]` | Rapport detaille de progression du sprint |
 
 ### Commandes de Mise a Jour
 
@@ -251,7 +251,7 @@ Cree une decomposition detaillee des taches :
 ### Etape 6 : Suivre la Progression
 
 ```bash
-/project:sprint-status 1
+/sprint:status 1
 ```
 
 Affiche :

@@ -7,7 +7,7 @@ arguments:
     required: true
 ---
 
-# /project:sprint-dev
+# /sprint:dev
 
 ## Purpose
 
@@ -26,9 +26,9 @@ Orchestrate complete sprint development in TDD/BDD mode with:
 ## Arguments
 
 ```bash
-/project:sprint-dev 1        # Sprint 1
-/project:sprint-dev next     # Next incomplete sprint
-/project:sprint-dev current  # Currently active sprint
+/sprint:dev 1        # Sprint 1
+/sprint:dev next     # Next incomplete sprint
+/sprint:dev current  # Currently active sprint
 ```
 
 ---
@@ -285,7 +285,7 @@ When all User Stories are Done:
 📝 Generating sprint-review.md...
 📝 Generating sprint-retro.md template...
 
-Next: Run /project:sprint-dev 2 or /project:sprint-dev next
+Next: Run /sprint:dev 2 or /sprint:dev next
 ```
 
 ---
@@ -358,7 +358,7 @@ At each status change:
 ## Resume After Stop
 
 ```bash
-/project:sprint-dev current
+/sprint:dev current
 
 📋 Resuming Sprint 1: Walking Skeleton
 
@@ -375,7 +375,7 @@ Continue from TASK-009? [y/n]
 ## Example Session
 
 ```bash
-> /project:sprint-dev 1
+> /sprint:dev 1
 
 📋 Sprint 1: Walking Skeleton
    3 US, 17 tasks
@@ -440,6 +440,6 @@ Continue from TASK-009? [y/n]
 |---------|-----|
 | `/project:decompose-tasks N` | Create tasks before sprint-dev |
 | `/project:board N` | View Kanban board |
-| `/project:sprint-status N` | View sprint metrics |
+| `/sprint:status N` | View sprint metrics |
 | `/project:move-task` | Manually change task status |
 | `/sprint:transition` | Manually change US status |

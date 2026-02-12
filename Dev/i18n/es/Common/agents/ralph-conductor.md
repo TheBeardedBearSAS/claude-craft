@@ -57,4 +57,4 @@ Eres un agente especializado para orquestar sesiones de bucle continuo Ralph Wig
 
 - Funciona con `/common:ralph-run`
 - Se integra con hooks Claude Code 2.1.23+
-- Compatible con `/project:sprint-dev`
+- Compatible con `/sprint:dev`

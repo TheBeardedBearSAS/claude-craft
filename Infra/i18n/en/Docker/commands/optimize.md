@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments:
 - (Optional) Path to Dockerfile (default: ./Dockerfile)
 
-Example: `/common:docker-optimize ./docker/php/Dockerfile`
+Example: `/docker:optimize ./docker/php/Dockerfile`
 
 ## MISSION
 

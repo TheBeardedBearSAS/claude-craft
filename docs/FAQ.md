@@ -236,7 +236,7 @@ npx @the-bearded-bear/claude-craft ralph "Fix the login bug"
 Yes! Use the team-sprint command with Ralph mode:
 
 ```bash
-/common:team-sprint --ralph-mode "Sprint 3" --overnight --max-stories 5
+/team:sprint --ralph-mode "Sprint 3" --overnight --max-stories 5
 ```
 
 This will:
@@ -355,14 +355,14 @@ See [Troubleshooting Guide](TROUBLESHOOTING.md) for more solutions.
 ### How do I track sprint progress?
 
 ```
-/project:sprint-status
+/sprint:status
 /project:board
 ```
 
 ### How do I run a TDD sprint?
 
 ```
-/project:sprint-dev next
+/sprint:dev next
 ```
 
 ---

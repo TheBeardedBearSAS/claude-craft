@@ -7,7 +7,7 @@ arguments:
     required: true
 ---
 
-# /project:sprint-dev
+# /sprint:dev
 
 ## Objectif
 
@@ -26,9 +26,9 @@ Orchestrer le développement complet d'un sprint en mode TDD/BDD avec :
 ## Arguments
 
 ```bash
-/project:sprint-dev 1        # Sprint 1
-/project:sprint-dev next     # Prochain sprint incomplet
-/project:sprint-dev current  # Sprint actuellement actif
+/sprint:dev 1        # Sprint 1
+/sprint:dev next     # Prochain sprint incomplet
+/sprint:dev current  # Sprint actuellement actif
 ```
 
 ---
@@ -285,7 +285,7 @@ Quand toutes les User Stories sont Done :
 📝 Génération de sprint-review.md...
 📝 Génération du template sprint-retro.md...
 
-Suivant : Exécuter /project:sprint-dev 2 ou /project:sprint-dev next
+Suivant : Exécuter /sprint:dev 2 ou /sprint:dev next
 ```
 
 ---
@@ -358,7 +358,7 @@ Passage à TASK-004...
 ## Reprise Après Arrêt
 
 ```bash
-/project:sprint-dev current
+/sprint:dev current
 
 📋 Reprise Sprint 1 : Walking Skeleton
 
@@ -375,7 +375,7 @@ Continuer depuis TASK-009 ? [o/n]
 ## Exemple de Session
 
 ```bash
-> /project:sprint-dev 1
+> /sprint:dev 1
 
 📋 Sprint 1 : Walking Skeleton
    3 US, 17 tâches
@@ -440,6 +440,6 @@ Continuer depuis TASK-009 ? [o/n]
 |----------|-------------|
 | `/project:decompose-tasks N` | Créer les tâches avant sprint-dev |
 | `/project:board N` | Voir le tableau Kanban |
-| `/project:sprint-status N` | Voir les métriques du sprint |
+| `/sprint:status N` | Voir les métriques du sprint |
 | `/project:move-task` | Changer manuellement le statut d'une tâche |
 | `/sprint:transition` | Changer manuellement le statut d'une US |

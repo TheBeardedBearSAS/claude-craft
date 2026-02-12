@@ -322,14 +322,14 @@ Voir [Guide de Dépannage](TROUBLESHOOTING.md) pour plus de solutions.
 ### Comment suivre la progression du sprint ?
 
 ```
-/project:sprint-status
+/sprint:status
 /project:board
 ```
 
 ### Comment exécuter un sprint TDD ?
 
 ```
-/project:sprint-dev next
+/sprint:dev next
 ```
 
 ---

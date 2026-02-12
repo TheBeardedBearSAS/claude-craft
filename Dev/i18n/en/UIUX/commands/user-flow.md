@@ -15,7 +15,7 @@ Arguments:
 - (Optional) Target persona
 - (Optional) Specific constraints
 
-Example: `/common:ux-user-flow "User registration"` or `/common:ux-user-flow "Checkout" persona:"Mobile user" constraint:"< 30 seconds"`
+Example: `/uiux:user-flow "User registration"` or `/uiux:user-flow "Checkout" persona:"Mobile user" constraint:"< 30 seconds"`
 
 ## MISSION
 

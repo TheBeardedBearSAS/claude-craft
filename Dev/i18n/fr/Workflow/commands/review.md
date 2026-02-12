@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments :
 - Numéro du sprint
 
-Exemple : `/common:sprint-review 5`
+Exemple : `/workflow:review 5`
 
 ## MISSION
 

@@ -455,7 +455,7 @@ npm run lint
 
 ### Sprint doesn't start
 
-**Problem:** `/common:team-sprint --ralph-mode` fails immediately.
+**Problem:** `/team:sprint --ralph-mode` fails immediately.
 
 **Diagnosis:**
 ```bash
@@ -479,7 +479,7 @@ yq '.stories | to_entries[] | select(.value.status == "ready-for-dev")' .bmad/sp
    /sprint:transition US-001 ready-for-dev
    ```
 
-> **Note:** `/common:ralph-sprint` was removed in v6.0. Use `/common:team-sprint --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).
+> **Note:** `/common:ralph-sprint` was removed in v6.0. Use `/team:sprint --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).
 
 ---
 

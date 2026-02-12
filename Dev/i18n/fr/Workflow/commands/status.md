@@ -213,7 +213,7 @@ Afficher l'état actuel du workflow de développement, incluant les phases termi
 ╠══════════════════════════════════════════════════════════════════╣
 ║ COMMANDES DISPONIBLES                                             ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ • /common:fix-bug-tdd     - Continuer avec l'approche TDD        ║
+║ • /qa:tdd     - Continuer avec l'approche TDD        ║
 ║ • /project:move-task done - Marquer la tâche comme terminée      ║
 ║ • /workflow:init          - Démarrer un nouveau workflow          ║
 ╚══════════════════════════════════════════════════════════════════╝

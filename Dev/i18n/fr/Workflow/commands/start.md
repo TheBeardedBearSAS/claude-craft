@@ -14,7 +14,7 @@ Arguments :
 - Numéro du sprint (ex: `5`)
 - (Optionnel) Durée en jours (défaut: 10 jours = 2 semaines)
 
-Exemple : `/common:sprint-start 5`
+Exemple : `/workflow:start 5`
 
 ## MISSION
 

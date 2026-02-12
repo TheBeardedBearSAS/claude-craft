@@ -219,7 +219,7 @@ Include:
 ### Start Sprint Development
 
 ```
-/project:sprint-dev 1
+/sprint:dev 1
 ```
 
 Or work story by story:
@@ -342,7 +342,7 @@ Run regularly during development:
 ### Full Audit Before Release
 
 ```
-/common:team-audit --sequential
+/team:audit --sequential
 ```
 
 ### Pre-Commit Validation
@@ -465,7 +465,7 @@ Here's a condensed sequence for a typical feature:
 
 # 6. Review (QA)
 @qa Validate acceptance criteria
-/common:team-audit --sequential
+/team:audit --sequential
 
 # 7. Deploy
 /docker:cicd-pipeline github-actions

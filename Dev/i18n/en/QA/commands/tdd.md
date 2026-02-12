@@ -14,7 +14,7 @@ Arguments:
 - Bug description or ticket link
 - (Optional) Affected file or module
 
-Example: `/common:fix-bug-tdd "User cannot log out"` or `/common:fix-bug-tdd #123`
+Example: `/qa:tdd "User cannot log out"` or `/qa:tdd #123`
 
 ## MISSION
 

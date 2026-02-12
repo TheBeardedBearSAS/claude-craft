@@ -59,4 +59,4 @@ Sie sind ein spezialisierter Agent fur die Orchestrierung von Ralph Wiggum v2.0 
 
 - Funktioniert mit `/common:ralph-run`
 - Integriert mit Claude Code 2.1.23+ Hooks
-- Kompatibel mit `/project:sprint-dev`
+- Kompatibel mit `/sprint:dev`

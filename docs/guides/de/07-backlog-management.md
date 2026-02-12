@@ -109,7 +109,7 @@ To Do ──→ In Progress ──→ Done
 | `/project:list-stories` | User Stories auflisten |
 | `/project:list-tasks` | Aufgaben auflisten |
 | `/project:board` | Kanban-Board |
-| `/project:sprint-status` | Sprint-Status |
+| `/sprint:status` | Sprint-Status |
 
 ### Aktualisierungsbefehle
 

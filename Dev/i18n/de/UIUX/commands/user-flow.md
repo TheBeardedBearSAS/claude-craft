@@ -15,7 +15,7 @@ Argumente:
 - (Optional) Ziel-Persona
 - (Optional) Spezifische Einschränkungen
 
-Beispiel: `/common:ux-user-flow "Benutzerregistrierung"` oder `/common:ux-user-flow "Checkout" persona:"Mobile Benutzer" einschraenkung:"< 30 Sekunden"`
+Beispiel: `/uiux:user-flow "Benutzerregistrierung"` oder `/uiux:user-flow "Checkout" persona:"Mobile Benutzer" einschraenkung:"< 30 Sekunden"`
 
 ## MISSION
 

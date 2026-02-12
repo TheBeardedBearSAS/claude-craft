@@ -21,8 +21,11 @@ Commands can take arguments:
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 30 |
-| `/workflow:` | Workflow (BMAD) | 6 |
+| `/common:` | Transversal | 12 |
+| `/workflow:` | Workflow (BMAD) | 9 |
+| `/team:` | Agent Teams | 4 |
+| `/qa:` | QA & Testing | 6 |
+| `/uiux:` | UI/UX & Accessibility | 7 |
 | `/symfony:` | PHP/Symfony | 10 |
 | `/flutter:` | Dart/Flutter | 10 |
 | `/python:` | Python | 10 |
@@ -33,11 +36,10 @@ Commands can take arguments:
 | `/laravel:` | PHP/Laravel | 6 |
 | `/vuejs:` | Vue.js | 6 |
 | `/php:` | PHP | 5 |
-| `/docker:` | Docker/Infrastructure | 4 |
-| `/project:` | Project Management | 26 |
-| `/sprint:` | Sprint Management (BMAD v6) | 4 |
+| `/docker:` | Docker/Infrastructure | 5 |
+| `/project:` | Project Management | 22 |
+| `/sprint:` | Sprint Management (BMAD v6) | 5 |
 | `/gate:` | Quality Gates (BMAD v6) | 6 |
-| `/qa:` | QA Recette (Browser Testing) | 5 |
 
 ---
 
@@ -64,9 +66,9 @@ Transversal commands for all projects.
 
 | Command | Description |
 |---------|-------------|
-| `/common:sprint-start` | Initialize a new sprint |
-| `/common:sprint-review` | Generate sprint review summary |
-| `/common:sprint-retro` | Conduct sprint retrospective |
+| `/workflow:start` | Initialize a new sprint |
+| `/workflow:review` | Generate sprint review summary |
+| `/workflow:retro` | Conduct sprint retrospective |
 | `/common:daily-standup` | Generate standup summary |
 
 ### Configuration Commands
@@ -95,33 +97,33 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 - `hook`: Integrate with quality-gate.sh
 - `human`: Manual approval gate
 
-> **Note:** `/common:full-audit` and `/common:ralph-sprint` were removed in v6.0. Use `/common:team-audit --sequential` and `/common:team-sprint --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).
+> **Note:** `/common:full-audit` and `/common:ralph-sprint` were removed in v6.0. Use `/team:audit --sequential` and `/team:sprint --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).
 
 ### DevOps Commands
 
 | Command | Description |
 |---------|-------------|
 | `/common:setup-ci` | Configure CI/CD pipeline |
-| `/common:docker-optimize` | Optimize Docker configuration |
+| `/docker:optimize` | Optimize Docker configuration |
 
 ### Development Commands
 
 | Command | Description |
 |---------|-------------|
-| `/common:fix-bug-tdd` | Fix bug using TDD methodology |
+| `/qa:tdd` | Fix bug using TDD methodology |
 | `/common:research-context7` | Deep technical research |
 
 ### UI/UX Commands
 
 | Command | Description |
 |---------|-------------|
-| `/common:uiux-orchestrator` | Orchestrate UI, UX, and A11y experts for a task |
-| `/common:uiux-audit` | Complete UI/UX/Accessibility audit |
-| `/common:uiux-component-spec` | Full component specification (UI + UX + A11y) |
-| `/common:ui-design-tokens` | Define design system tokens |
-| `/common:ux-user-flow` | Design user journey and flow |
-| `/common:a11y-audit` | WCAG 2.2 AAA accessibility audit |
-| `/common:a11y-component` | Accessibility specs for a component |
+| `/uiux:orchestrator` | Orchestrate UI, UX, and A11y experts for a task |
+| `/uiux:audit` | Complete UI/UX/Accessibility audit |
+| `/uiux:component-spec` | Full component specification (UI + UX + A11y) |
+| `/uiux:design-tokens` | Define design system tokens |
+| `/uiux:user-flow` | Design user journey and flow |
+| `/uiux:a11y-audit` | WCAG 2.2 AAA accessibility audit |
+| `/uiux:a11y-component` | Accessibility specs for a component |
 
 ### Technology Commands
 
@@ -155,10 +157,10 @@ Add a complete technology stack to claude-craft with best practices:
 
 | Command | Description |
 |---------|-------------|
-| `/common:team-audit` | Parallel multi-tech audit (Agent Teams) |
-| `/common:team-sprint` | Parallel sprint implementation (Agent Teams) |
-| `/common:team-security` | Parallel security review (Agent Teams) |
-| `/common:team-delivery` | **[NEW]** Full sprint lifecycle — writing + implementation (Agent Teams) |
+| `/team:audit` | Parallel multi-tech audit (Agent Teams) |
+| `/team:sprint` | Parallel sprint implementation (Agent Teams) |
+| `/team:security` | Parallel security review (Agent Teams) |
+| `/team:delivery` | Full sprint lifecycle — writing + implementation (Agent Teams) |
 | `/common:sub-agents-patterns` | Sub-agent orchestration patterns for Agent Teams |
 
 ---
@@ -175,6 +177,9 @@ BMAD-inspired workflow system adapted to project complexity.
 | `/workflow:design` | Tech spec, architecture, ADRs |
 | `/workflow:implement` | Sprint development with TDD/BDD |
 | `/workflow:status` | Show current progress |
+| `/workflow:retro` | Sprint retrospective |
+| `/workflow:review` | Sprint review summary |
+| `/workflow:start` | Start a new sprint |
 
 ---
 
@@ -491,10 +496,10 @@ Available with Project installation.
 | `/project:list-tasks` | List tasks |
 | `/project:move-task <Task> <Status>` | Change task status |
 | `/project:board` | Display Kanban board |
-| `/project:sprint-status` | Show sprint metrics |
+| `/sprint:status` | Show sprint metrics |
 | `/project:update-epic <Epic>` | Update an EPIC |
 | `/project:update-story <US>` | Update a User Story |
-| `/project:sprint-dev <N\|next>` | **Start TDD/BDD sprint development** |
+| `/sprint:dev <N\|next>` | **Start TDD/BDD sprint development** |
 
 ### BMAD v6 Commands (NEW)
 
@@ -511,14 +516,14 @@ Available with Project installation.
 | `/project:run-sprint` | Execute full sprint |
 | `/project:batch-status` | View batch queue status |
 
-### Sprint Development (`/project:sprint-dev`)
+### Sprint Development (`/sprint:dev`)
 
 Orchestrates complete sprint development in TDD/BDD mode:
 
 ```bash
-/project:sprint-dev 1        # Sprint 1
-/project:sprint-dev next     # Next incomplete sprint
-/project:sprint-dev current  # Currently active sprint
+/sprint:dev 1        # Sprint 1
+/sprint:dev next     # Next incomplete sprint
+/sprint:dev current  # Currently active sprint
 ```
 
 **Features:**
@@ -609,11 +614,11 @@ Automated acceptance testing with Claude in Chrome.
 
 | Command | Description |
 |---------|-------------|
-| `/common:recette` | Execute automated acceptance tests via browser |
-| `/common:recette-fix` | Fix bugs from recette session (TDD workflow) |
-| `/common:recette-status` | Show recette session status and progress |
-| `/common:recette-regression` | View and manage regression test registry |
-| `/common:recette-report` | Generate recette report (MD/HTML/JSON) |
+| `/qa:recette` | Execute automated acceptance tests via browser |
+| `/qa:fix` | Fix bugs from recette session (TDD workflow) |
+| `/qa:status` | Show recette session status and progress |
+| `/qa:regression` | View and manage regression test registry |
+| `/qa:report` | Generate recette report (MD/HTML/JSON) |
 
 ### Golden Rule
 
@@ -625,28 +630,28 @@ All detected errors automatically generate regression tests.
 
 ```bash
 # Test a specific story
-/common:recette --scope=story --id=US-001
+/qa:recette --scope=story --id=US-001
 
 # Test all stories in a sprint
-/common:recette --scope=sprint --id=Sprint-3
+/qa:recette --scope=sprint --id=Sprint-3
 
 # Dry run to see test plan
-/common:recette --scope=story --id=US-001 --dry-run
+/qa:recette --scope=story --id=US-001 --dry-run
 
 # Resume interrupted session
-/common:recette --resume=REC-20260130-143022
+/qa:recette --resume=REC-20260130-143022
 
 # Record execution as GIF
-/common:recette --scope=story --id=US-001 --record-gif
+/qa:recette --scope=story --id=US-001 --record-gif
 
 # Fix all bugs from a recette session
-/common:recette-fix --session=REC-20260130-143022
+/qa:fix --session=REC-20260130-143022
 
 # Dry run: refine and document without fixing
-/common:recette-fix --session=REC-20260130-143022 --dry-run
+/qa:fix --session=REC-20260130-143022 --dry-run
 
 # Fix critical bugs only
-/common:recette-fix --session=REC-20260130-143022 --severity=critical
+/qa:fix --session=REC-20260130-143022 --severity=critical
 ```
 
 ### Prerequisites

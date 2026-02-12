@@ -109,7 +109,7 @@ To Do ──→ In Progress ──→ Done
 | `/project:list-stories` | Listar User Stories |
 | `/project:list-tasks` | Listar tarefas |
 | `/project:board` | Quadro Kanban |
-| `/project:sprint-status` | Status do sprint |
+| `/sprint:status` | Status do sprint |
 
 ### Comandos de Atualizacao
 

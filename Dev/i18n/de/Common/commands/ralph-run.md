@@ -66,5 +66,5 @@ ralph.sh --interactive
 ## Verwandt
 
 - `@ralph-conductor` - Agent fur Ralph-Orchestrierung
-- `/common:fix-bug-tdd` - TDD-basierte Fehlerbehebung
-- `/project:sprint-dev` - Sprint-Entwicklung mit TDD
+- `/qa:tdd` - TDD-basierte Fehlerbehebung
+- `/sprint:dev` - Sprint-Entwicklung mit TDD

@@ -7,7 +7,7 @@ arguments:
     required: true
 ---
 
-# /project:sprint-dev
+# /sprint:dev
 
 ## Objetivo
 
@@ -26,9 +26,9 @@ Orquestrar o desenvolvimento completo de um sprint em modo TDD/BDD com:
 ## Argumentos
 
 ```bash
-/project:sprint-dev 1        # Sprint 1
-/project:sprint-dev next     # Proximo sprint incompleto
-/project:sprint-dev current  # Sprint atualmente ativo
+/sprint:dev 1        # Sprint 1
+/sprint:dev next     # Proximo sprint incompleto
+/sprint:dev current  # Sprint atualmente ativo
 ```
 
 ---
@@ -155,7 +155,7 @@ A cada mudanca de status:
 ## Exemplo
 
 ```bash
-> /project:sprint-dev 1
+> /sprint:dev 1
 
 📋 Sprint 1: Walking Skeleton
    3 US, 17 tarefas
@@ -189,6 +189,6 @@ A cada mudanca de status:
 |---------|-----|
 | `/project:decompose-tasks N` | Criar tarefas antes |
 | `/project:board N` | Ver Kanban |
-| `/project:sprint-status N` | Ver metricas |
+| `/sprint:status N` | Ver metricas |
 | `/project:move-task` | Alterar status tarefa |
 | `/sprint:transition` | Alterar status US |

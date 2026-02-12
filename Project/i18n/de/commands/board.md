@@ -101,7 +101,7 @@ Sprint: 10 Punkte | Erledigt: 0 Pts
 Aktionen:
   /project:move-task TASK-XXX in-progress  # Aufgabe starten
   /project:move-task TASK-XXX done         # Aufgabe abschließen
-  /project:sprint-status                   # Mehr Metriken anzeigen
+  /sprint:status                   # Mehr Metriken anzeigen
 ```
 
 ## Kompaktformat

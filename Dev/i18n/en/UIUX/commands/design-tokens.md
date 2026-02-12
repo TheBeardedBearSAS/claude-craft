@@ -15,7 +15,7 @@ Arguments:
 - (Optional) Base primary color: #HEXCODE
 - (Optional) Mode: light, dark, both
 
-Example: `/common:ui-design-tokens all #3B82F6 both`
+Example: `/uiux:design-tokens all #3B82F6 both`
 
 ## MISSION
 

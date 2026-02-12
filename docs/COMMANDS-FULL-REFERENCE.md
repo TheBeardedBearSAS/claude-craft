@@ -27,7 +27,7 @@ Complete reference for all 155 commands available in Claude Craft.
 | `/vuejs:` | 6 | Vue.js |
 | `/php:` | 5 | PHP |
 | `/docker:` | 4 | Docker |
-| `/common:recette*` | 5 | QA Recette (Acceptance Testing) |
+| `/qa:recette*` | 5 | QA Recette (Acceptance Testing) |
 
 ---
 
@@ -52,9 +52,9 @@ Complete reference for all 155 commands available in Claude Craft.
 
 | Command | Description |
 |---------|-------------|
-| `/common:sprint-start` | Initialize a new sprint |
-| `/common:sprint-review` | Generate sprint review summary |
-| `/common:sprint-retro` | Conduct sprint retrospective |
+| `/workflow:start` | Initialize a new sprint |
+| `/workflow:review` | Generate sprint review summary |
+| `/workflow:retro` | Conduct sprint retrospective |
 | `/common:daily-standup` | Generate standup summary |
 
 ### Configuration Commands
@@ -80,26 +80,26 @@ Complete reference for all 155 commands available in Claude Craft.
 | Command | Description |
 |---------|-------------|
 | `/common:setup-ci` | Configure CI/CD pipeline |
-| `/common:docker-optimize` | Optimize Docker configuration |
+| `/docker:optimize` | Optimize Docker configuration |
 
 ### Development Commands
 
 | Command | Description |
 |---------|-------------|
-| `/common:fix-bug-tdd` | Fix bug using TDD methodology |
+| `/qa:tdd` | Fix bug using TDD methodology |
 | `/common:research-context7` | Deep technical research |
 
 ### UI/UX Commands
 
 | Command | Description |
 |---------|-------------|
-| `/common:uiux-orchestrator` | Orchestrate UI/UX/A11y experts |
-| `/common:uiux-audit` | Complete UI/UX/A11y audit |
-| `/common:uiux-component-spec` | Full component specification |
-| `/common:ui-design-tokens` | Define design system tokens |
-| `/common:ux-user-flow` | Design user journey |
-| `/common:a11y-audit` | WCAG 2.2 AAA audit |
-| `/common:a11y-component` | Accessibility specs for component |
+| `/uiux:orchestrator` | Orchestrate UI/UX/A11y experts |
+| `/uiux:audit` | Complete UI/UX/A11y audit |
+| `/uiux:component-spec` | Full component specification |
+| `/uiux:design-tokens` | Define design system tokens |
+| `/uiux:user-flow` | Design user journey |
+| `/uiux:a11y-audit` | WCAG 2.2 AAA audit |
+| `/uiux:a11y-component` | Accessibility specs for component |
 
 ### Technology Commands
 
@@ -163,14 +163,14 @@ Complete reference for all 155 commands available in Claude Craft.
 | Command | Description |
 |---------|-------------|
 | `/project:board` | Display Kanban board |
-| `/project:sprint-status` | Show sprint metrics |
-| `/project:sprint-dev` | Start TDD/BDD sprint development |
+| `/sprint:status` | Show sprint metrics |
+| `/sprint:dev` | Start TDD/BDD sprint development |
 
 **Usage:**
 ```
-/project:sprint-dev 1        # Sprint 1
-/project:sprint-dev next     # Next incomplete sprint
-/project:sprint-dev current  # Current sprint
+/sprint:dev 1        # Sprint 1
+/sprint:dev next     # Next incomplete sprint
+/sprint:dev current  # Current sprint
 ```
 
 ### BMAD v6
@@ -526,13 +526,13 @@ Automated acceptance testing with Claude in Chrome.
 
 | Command | Description |
 |---------|-------------|
-| `/common:recette` | Run acceptance tests on web application |
-| `/common:recette-fix` | Fix bugs from recette session with TDD workflow |
-| `/common:recette-status` | Show session status and progress |
-| `/common:recette-regression` | View and manage regression test registry |
-| `/common:recette-report` | Generate recette report (MD/HTML/JSON) |
+| `/qa:recette` | Run acceptance tests on web application |
+| `/qa:fix` | Fix bugs from recette session with TDD workflow |
+| `/qa:status` | Show session status and progress |
+| `/qa:regression` | View and manage regression test registry |
+| `/qa:report` | Generate recette report (MD/HTML/JSON) |
 
-### `/common:recette` Arguments
+### `/qa:recette` Arguments
 
 | Argument | Description | Values |
 |----------|-------------|--------|
@@ -542,7 +542,7 @@ Automated acceptance testing with Claude in Chrome.
 | `--resume` | Resume interrupted session | session-id |
 | `--record-gif` | Record test execution | - |
 
-### `/common:recette-fix` Arguments
+### `/qa:fix` Arguments
 
 | Argument | Description | Values |
 |----------|-------------|--------|
@@ -552,7 +552,7 @@ Automated acceptance testing with Claude in Chrome.
 | `--skip-fix` | Generate BMAD documents only | - |
 | `--auto-commit` | Auto-commit after each fix | - |
 
-### `/common:recette-status` Arguments
+### `/qa:status` Arguments
 
 | Argument | Description | Values |
 |----------|-------------|--------|
@@ -563,7 +563,7 @@ Automated acceptance testing with Claude in Chrome.
 | `--format` | Output format | `table`, `yaml`, `json` |
 | `--watch` | Live refresh mode | - |
 
-### `/common:recette-regression` Arguments
+### `/qa:regression` Arguments
 
 | Argument | Description | Values |
 |----------|-------------|--------|
@@ -575,7 +575,7 @@ Automated acceptance testing with Claude in Chrome.
 | `--trend` | Show historical trend | - |
 | `--format` | Output format | `table`, `yaml`, `json` |
 
-### `/common:recette-report` Arguments
+### `/qa:report` Arguments
 
 | Argument | Description | Values |
 |----------|-------------|--------|
@@ -589,40 +589,40 @@ Automated acceptance testing with Claude in Chrome.
 
 ```bash
 # Run acceptance tests for a user story
-/common:recette --scope=story --id=US-001
+/qa:recette --scope=story --id=US-001
 
 # Dry-run to preview test plan
-/common:recette --scope=story --id=US-001 --dry-run
+/qa:recette --scope=story --id=US-001 --dry-run
 
 # Resume interrupted session
-/common:recette --resume=REC-20260130-143022
+/qa:recette --resume=REC-20260130-143022
 
 # Run with GIF recording
-/common:recette --scope=sprint --id=SPRINT-03 --record-gif
+/qa:recette --scope=sprint --id=SPRINT-03 --record-gif
 
 # Show all sessions
-/common:recette-status --all
+/qa:status --all
 
 # Show specific session status
-/common:recette-status --session=REC-20260130-143022
+/qa:status --session=REC-20260130-143022
 
 # Check regression tests (Golden Rule)
-/common:recette-regression --check
+/qa:regression --check
 
 # Show regression stability score
-/common:recette-regression --stats
+/qa:regression --stats
 
 # Generate report from session
-/common:recette-report --session=REC-20260130-143022
+/qa:report --session=REC-20260130-143022
 
 # Generate HTML report with screenshots
-/common:recette-report --session=REC-20260130-143022 --format=html --include-screenshots
+/qa:report --session=REC-20260130-143022 --format=html --include-screenshots
 
 # Fix all bugs from a recette session
-/common:recette-fix --session=REC-20260130-143022
+/qa:fix --session=REC-20260130-143022
 
 # Dry run
-/common:recette-fix --session=REC-20260130-143022 --dry-run
+/qa:fix --session=REC-20260130-143022 --dry-run
 ```
 
 ### Test Categories

@@ -14,7 +14,7 @@ Argumente:
 - (Optional) URL oder Pfad zur zu auditierenden Seite/Komponente
 - (Optional) WCAG-Stufe: AA oder AAA (Standard: AAA)
 
-Beispiel: `/common:uiux-audit src/pages/Dashboard.tsx AAA`
+Beispiel: `/uiux:audit src/pages/Dashboard.tsx AAA`
 
 ## MISSION
 

@@ -192,5 +192,5 @@ definition_of_done:
 ## Liens
 
 - `@ralph-conductor` - Agent pour orchestration Ralph
-- `/common:fix-bug-tdd` - Correction de bug en TDD
-- `/project:sprint-dev` - Developpement sprint avec TDD
+- `/qa:tdd` - Correction de bug en TDD
+- `/sprint:dev` - Developpement sprint avec TDD

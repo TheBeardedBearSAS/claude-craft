@@ -14,7 +14,7 @@ Arguments:
 - Request type: component, audit, flow, tokens
 - Objective or description
 
-Example: `/common:uiux-orchestrator component "Date picker"` or `/common:uiux-orchestrator audit "Checkout page"`
+Example: `/uiux:orchestrator component "Date picker"` or `/uiux:orchestrator audit "Checkout page"`
 
 ## MISSION
 

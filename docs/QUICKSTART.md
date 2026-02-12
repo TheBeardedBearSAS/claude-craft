@@ -173,7 +173,7 @@ Claude Craft supports 10 technology stacks:
 ├────────────────────────────────────────────────────────────┤
 │ COMMON COMMANDS                                            │
 │   /common:pre-commit-check    Pre-commit validation        │
-│   /common:team-audit          Multi-tech project audit     │
+│   /team:audit          Multi-tech project audit     │
 │   /workflow:init              Start workflow methodology   │
 ├────────────────────────────────────────────────────────────┤
 │ USEFUL AGENTS                                              │

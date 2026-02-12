@@ -58,6 +58,8 @@ echo ""
 
 # Créer la structure .claude
 mkdir -p "$CLAUDE_DIR/commands/project"
+mkdir -p "$CLAUDE_DIR/commands/sprint"
+mkdir -p "$CLAUDE_DIR/commands/gate"
 mkdir -p "$CLAUDE_DIR/agents"
 mkdir -p "$CLAUDE_DIR/templates/project"
 
@@ -77,7 +79,7 @@ if ls "$CLAUDE_DIR/commands/"*.md 1>/dev/null 2>&1; then
     echo "✅ Migration effectuée"
 fi
 
-# Copy commands from i18n source
+# Copy project commands from i18n source
 CMD_SRC="$SRC_DIR/commands"
 if [ ! -d "$CMD_SRC" ]; then
     CMD_SRC="$SCRIPT_DIR/claude-commands"
@@ -85,7 +87,23 @@ fi
 if [ -d "$CMD_SRC" ]; then
     cp "$CMD_SRC/"*.md "$CLAUDE_DIR/commands/project/" 2>/dev/null || true
     COMMANDS_COUNT=$(ls -1 "$CMD_SRC/"*.md 2>/dev/null | wc -l)
-    echo "✅ $COMMANDS_COUNT commands copied"
+    echo "✅ $COMMANDS_COUNT project commands copied"
+fi
+
+# Copy sprint commands from i18n source
+SPRINT_CMD_SRC="$SRC_DIR/Sprint/commands"
+if [ -d "$SPRINT_CMD_SRC" ]; then
+    cp "$SPRINT_CMD_SRC/"*.md "$CLAUDE_DIR/commands/sprint/" 2>/dev/null || true
+    SPRINT_COUNT=$(ls -1 "$SPRINT_CMD_SRC/"*.md 2>/dev/null | wc -l)
+    echo "✅ $SPRINT_COUNT sprint commands copied"
+fi
+
+# Copy gate commands from i18n source
+GATE_CMD_SRC="$SRC_DIR/Gate/commands"
+if [ -d "$GATE_CMD_SRC" ]; then
+    cp "$GATE_CMD_SRC/"*.md "$CLAUDE_DIR/commands/gate/" 2>/dev/null || true
+    GATE_COUNT=$(ls -1 "$GATE_CMD_SRC/"*.md 2>/dev/null | wc -l)
+    echo "✅ $GATE_COUNT gate commands copied"
 fi
 
 # Copy agents from i18n source
@@ -191,15 +209,17 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 
 ## Commandes personnalisées
 
-### Génération & Validation
+### Génération & Gestion de Backlog (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
 | `/project:generate-backlog` | Génère le backlog complet |
-| `/gate:validate-backlog` | Valide la conformité du backlog (score /100) |
 | `/project:decompose-tasks N` | Décompose le sprint N en tâches |
+| `/project:analyze-backlog` | Analyser le backlog existant |
+| `/project:migrate-backlog` | Migrer un backlog existant |
+| `/project:sync-backlog` | Synchroniser l'index du backlog |
 
-### Gestion des EPICs
+### Gestion des EPICs (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
@@ -207,15 +227,16 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 | `/project:list-epics` | Lister tous les EPICs |
 | `/project:update-epic EPIC-XXX` | Modifier un EPIC |
 
-### Gestion des User Stories
+### Gestion des User Stories (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
 | `/project:add-story EPIC-XXX "Nom"` | Créer une User Story |
 | `/project:list-stories` | Lister les User Stories |
 | `/project:update-story US-XXX` | Modifier une US |
+| `/project:update-stories` | Mettre à jour plusieurs US |
 
-### Gestion des Tasks
+### Gestion des Tasks (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
@@ -223,12 +244,38 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 | `/project:list-tasks` | Lister les tâches |
 | `/project:move-task TASK-XXX statut` | Changer le statut |
 
-### Visualisation
+### Visualisation & Exécution (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
 | `/project:board` | Afficher le Kanban du sprint |
-| `/project:sprint-status` | Métriques détaillées du sprint |
+| `/project:batch-status` | Statut par lot des éléments |
+| `/project:run-sprint N` | Exécuter un sprint complet |
+| `/project:run-epic EPIC-XXX` | Exécuter un EPIC complet |
+| `/project:run-queue` | Exécuter la file d'attente |
+| `/project:generate-prd` | Générer le PRD |
+| `/project:generate-tech-spec` | Générer la spécification technique |
+
+### Sprint (`/sprint:`)
+
+| Commande | Description |
+|----------|-------------|
+| `/sprint:status` | Métriques détaillées du sprint |
+| `/sprint:transition US-XXX statut` | Changer statut/sprint d'une US |
+| `/sprint:next-story` | Prochaine story prête pour le dev |
+| `/sprint:auto-route` | Routage automatique des stories |
+| `/sprint:dev US-XXX` | Développer une story |
+
+### Quality Gates (`/gate:`)
+
+| Commande | Description |
+|----------|-------------|
+| `/gate:validate-backlog` | Valide la conformité du backlog (score /100) |
+| `/gate:validate-prd` | Valider le PRD |
+| `/gate:validate-techspec` | Valider la spécification technique |
+| `/gate:validate-story US-XXX` | Valider une User Story (DoD) |
+| `/gate:validate-sprint N` | Valider un sprint |
+| `/gate:report` | Rapport de qualité complet |
 
 ## Stack technique
 
@@ -312,9 +359,16 @@ project-management/
 # 3. Planifier le sprint 1
 /project:decompose-tasks 001
 
-# 4. Développer...
+# 4. Obtenir la prochaine story
+/sprint:next-story
 
-# 5. Préparer le sprint suivant
+# 5. Développer une story
+/sprint:dev US-XXX
+
+# 6. Suivre le sprint
+/sprint:status
+
+# 7. Préparer le sprint suivant
 /project:decompose-tasks 002
 ```
 
@@ -402,30 +456,47 @@ echo "✅ Installation terminée !"
 echo ""
 echo "📋 Commandes disponibles :"
 echo ""
-echo "   Génération :"
+echo "   Génération (/project:) :"
 echo "   /project:generate-backlog      - Générer le backlog complet"
-echo "   /gate:validate-backlog      - Valider la conformité SCRUM"
 echo "   /project:decompose-tasks [N]   - Décomposer sprint N en tâches"
+echo "   /project:generate-prd          - Générer le PRD"
+echo "   /project:generate-tech-spec    - Générer la spécification technique"
 echo ""
-echo "   EPICs :"
+echo "   EPICs (/project:) :"
 echo "   /project:add-epic              - Créer un EPIC"
 echo "   /project:list-epics            - Lister les EPICs"
 echo "   /project:update-epic           - Modifier un EPIC"
 echo ""
-echo "   User Stories :"
+echo "   User Stories (/project:) :"
 echo "   /project:add-story             - Créer une User Story"
 echo "   /project:list-stories          - Lister les US"
-echo "   /sprint:transition             - Changer statut/sprint"
 echo "   /project:update-story          - Modifier une US"
 echo ""
-echo "   Tasks :"
+echo "   Tasks (/project:) :"
 echo "   /project:add-task              - Créer une tâche"
 echo "   /project:list-tasks            - Lister les tâches"
 echo "   /project:move-task             - Changer le statut"
 echo ""
-echo "   Visualisation :"
+echo "   Visualisation (/project:) :"
 echo "   /project:board                 - Kanban du sprint"
-echo "   /project:sprint-status         - Métriques du sprint"
+echo "   /project:run-sprint            - Exécuter un sprint"
+echo "   /project:run-epic              - Exécuter un EPIC"
+echo "   /project:batch-status          - Statut par lot"
+echo ""
+echo "   Sprint (/sprint:) :"
+echo "   /sprint:status                 - Métriques du sprint"
+echo "   /sprint:transition             - Changer statut/sprint"
+echo "   /sprint:next-story             - Prochaine story prête"
+echo "   /sprint:auto-route             - Routage automatique"
+echo "   /sprint:dev                    - Développer une story"
+echo ""
+echo "   Quality Gates (/gate:) :"
+echo "   /gate:validate-backlog         - Valider la conformité SCRUM"
+echo "   /gate:validate-prd             - Valider le PRD"
+echo "   /gate:validate-techspec        - Valider la spécification technique"
+echo "   /gate:validate-story           - Valider une User Story (DoD)"
+echo "   /gate:validate-sprint          - Valider un sprint"
+echo "   /gate:report                   - Rapport de qualité"
 echo ""
 echo "🤖 Agents disponibles :"
 echo "   @po   - Product Owner (backlog, US, priorisation)"
@@ -435,7 +506,9 @@ echo "📁 Structure créée :"
 echo "   $PROJECT_DIR/"
 echo "   ├── CLAUDE.md"
 echo "   ├── .claude/"
-echo "   │   ├── commands/project/    (15 commandes)"
+echo "   │   ├── commands/project/    (22 commandes)"
+echo "   │   ├── commands/sprint/     (5 commandes)"
+echo "   │   ├── commands/gate/       (6 commandes)"
 echo "   │   ├── agents/              (2 agents)"
 echo "   │   └── templates/project/   (5 templates)"
 echo "   └── project-management/"

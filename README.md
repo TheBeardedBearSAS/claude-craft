@@ -6,12 +6,12 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v6.0
+## What's New in v7.0
 
-- **BREAKING**: Removed `/common:full-audit` (use `/common:team-audit --sequential`)
-- **BREAKING**: Removed `/common:ralph-sprint` (use `/common:team-sprint --ralph-mode`)
-- **BREAKING**: Removed `@workflow-orchestrator` agent (use `/workflow:*` commands)
-- See [Migration Guide](docs/MIGRATION-v6.md) and [CHANGELOG](CHANGELOG.md) for full details
+- **BREAKING**: `/common:` split from 38 to 12 commands — 26 commands moved to `/workflow:`, `/team:`, `/qa:`, `/uiux:`
+- **BREAKING**: `/project:` split — 5 commands to `/sprint:`, 6 to `/gate:`, 4 renamed (stripped `project-` prefix)
+- **BREAKING**: `/common:docker-optimize` moved to `/docker:optimize`
+- See [Migration Guide](docs/MIGRATION-v7.md) and [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
 

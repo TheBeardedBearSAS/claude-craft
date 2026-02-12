@@ -232,5 +232,5 @@ Iteration 1 of 25 (Profile: medium_feature)
 ## Related
 
 - `@ralph-conductor` - Agent for Ralph orchestration
-- `/common:fix-bug-tdd` - TDD-based bug fixing
-- `/project:sprint-dev` - Sprint development with TDD
+- `/qa:tdd` - TDD-based bug fixing
+- `/sprint:dev` - Sprint development with TDD

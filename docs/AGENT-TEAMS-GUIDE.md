@@ -228,7 +228,7 @@ Unlike bash subprocesses, there is no way to forcibly terminate a misbehaving ag
 
 ### Single Chrome Browser for Recette
 
-QA Recette (`/common:recette`) uses a single Chrome browser instance. Parallel test execution is not possible -- only test planning can be parallelized. This is a hard constraint of the Chrome integration architecture.
+QA Recette (`/qa:recette`) uses a single Chrome browser instance. Parallel test execution is not possible -- only test planning can be parallelized. This is a hard constraint of the Chrome integration architecture.
 
 ### Sprint-Status YAML Concurrency
 

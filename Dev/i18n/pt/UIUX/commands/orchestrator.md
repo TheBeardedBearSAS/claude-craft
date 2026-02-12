@@ -14,7 +14,7 @@ Argumentos:
 - Tipo de solicitação: componente, auditoria, fluxo, tokens
 - Objetivo ou descrição
 
-Exemplo: `/common:uiux-orchestrator componente "Seletor de data"` ou `/common:uiux-orchestrator auditoria "Página de checkout"`
+Exemplo: `/uiux:orchestrator componente "Seletor de data"` ou `/uiux:orchestrator auditoria "Página de checkout"`
 
 ## MISSÃO
 

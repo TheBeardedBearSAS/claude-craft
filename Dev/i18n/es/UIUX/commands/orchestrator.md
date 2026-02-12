@@ -14,7 +14,7 @@ Argumentos:
 - Tipo de solicitud: componente, auditoría, flujo, tokens
 - Objetivo o descripción
 
-Ejemplo: `/common:uiux-orchestrator componente "Selector de fecha"` o `/common:uiux-orchestrator auditoría "Página de checkout"`
+Ejemplo: `/uiux:orchestrator componente "Selector de fecha"` o `/uiux:orchestrator auditoría "Página de checkout"`
 
 ## MISIÓN
 

@@ -15,7 +15,7 @@ Argumentos:
 - (Opcional) Persona objetivo
 - (Opcional) Restricciones específicas
 
-Ejemplo: `/common:ux-user-flow "Registro de usuario"` o `/common:ux-user-flow "Checkout" persona:"Usuario móvil" restriccion:"< 30 segundos"`
+Ejemplo: `/uiux:user-flow "Registro de usuario"` o `/uiux:user-flow "Checkout" persona:"Usuario móvil" restriccion:"< 30 segundos"`
 
 ## MISIÓN
 

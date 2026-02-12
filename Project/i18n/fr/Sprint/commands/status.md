@@ -145,10 +145,10 @@ Actions:
 
 ```
 # Statut du sprint actuel
-/project:sprint-status
+/sprint:status
 
 # Statut du sprint 2
-/project:sprint-status sprint 2
+/sprint:status sprint 2
 ```
 
 ## Génération de rapport

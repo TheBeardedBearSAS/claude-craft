@@ -14,7 +14,7 @@ Arguments :
 - Description du bug ou lien vers le ticket
 - (Optionnel) Fichier ou module concerné
 
-Exemple : `/common:fix-bug-tdd "L'utilisateur ne peut pas se déconnecter"` ou `/common:fix-bug-tdd #123`
+Exemple : `/qa:tdd "L'utilisateur ne peut pas se déconnecter"` ou `/qa:tdd #123`
 
 ## MISSION
 

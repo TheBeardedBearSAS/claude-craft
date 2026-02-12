@@ -213,7 +213,7 @@ Den aktuellen Stand des Entwicklungs-Workflows anzeigen, einschließlich abgesch
 ╠══════════════════════════════════════════════════════════════════╣
 ║ VERFÜGBARE BEFEHLE                                                ║
 ╠══════════════════════════════════════════════════════════════════╣
-║ • /common:fix-bug-tdd     - Mit TDD-Ansatz fortfahren             ║
+║ • /qa:tdd     - Mit TDD-Ansatz fortfahren             ║
 ║ • /project:move-task done - Aufgabe als erledigt markieren        ║
 ║ • /workflow:init          - Neuen Workflow starten                ║
 ╚══════════════════════════════════════════════════════════════════╝

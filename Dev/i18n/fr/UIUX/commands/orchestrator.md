@@ -14,7 +14,7 @@ Arguments :
 - Type de demande : composant, audit, flux, tokens
 - Objectif ou description
 
-Exemple : `/common:uiux-orchestrator composant "Sélecteur de date"` ou `/common:uiux-orchestrator audit "Page checkout"`
+Exemple : `/uiux:orchestrator composant "Sélecteur de date"` ou `/uiux:orchestrator audit "Page checkout"`
 
 ## MISSION
 

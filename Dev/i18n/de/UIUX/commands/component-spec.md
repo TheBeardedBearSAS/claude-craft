@@ -14,7 +14,7 @@ Argumente:
 - Name der zu spezifizierenden Komponente
 - (Optional) Nutzungskontext
 
-Beispiel: `/common:uiux-component-spec Button` oder `/common:uiux-component-spec "Reisekarte" kontext:"Tourismus SaaS"`
+Beispiel: `/uiux:component-spec Button` oder `/uiux:component-spec "Reisekarte" kontext:"Tourismus SaaS"`
 
 ## MISSION
 

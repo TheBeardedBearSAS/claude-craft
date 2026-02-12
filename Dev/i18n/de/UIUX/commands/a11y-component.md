@@ -14,7 +14,7 @@ Argumente:
 - Komponentenname
 - (Optional) Typ: button, input, modal, dropdown, tabs, accordion, tooltip, etc.
 
-Beispiel: `/common:a11y-component Modal` oder `/common:a11y-component "Datumsauswahl" typ:input`
+Beispiel: `/uiux:a11y-component Modal` oder `/uiux:a11y-component "Datumsauswahl" typ:input`
 
 ## MISSION
 

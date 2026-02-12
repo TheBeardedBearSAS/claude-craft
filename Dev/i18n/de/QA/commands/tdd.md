@@ -14,7 +14,7 @@ Argumente:
 - Bug-Beschreibung oder Ticket-Link
 - (Optional) Betroffene Datei oder Modul
 
-Beispiel: `/common:fix-bug-tdd "Benutzer kann sich nicht abmelden"` oder `/common:fix-bug-tdd #123`
+Beispiel: `/qa:tdd "Benutzer kann sich nicht abmelden"` oder `/qa:tdd #123`
 
 ## MISSION
 

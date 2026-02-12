@@ -14,7 +14,7 @@ Argumentos:
 - Nombre del componente a especificar
 - (Opcional) Contexto de uso
 
-Ejemplo: `/common:uiux-component-spec Button` o `/common:uiux-component-spec "Tarjeta de Viaje" contexto:"SaaS de Turismo"`
+Ejemplo: `/uiux:component-spec Button` o `/uiux:component-spec "Tarjeta de Viaje" contexto:"SaaS de Turismo"`
 
 ## MISIÓN
 

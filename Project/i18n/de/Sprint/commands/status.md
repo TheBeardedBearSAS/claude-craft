@@ -146,10 +146,10 @@ Aktionen:
 
 ```
 # Aktueller Sprint-Status
-/project:sprint-status
+/sprint:status
 
 # Sprint 2-Status
-/project:sprint-status sprint 2
+/sprint:status sprint 2
 ```
 
 ## Berichtsgenerierung

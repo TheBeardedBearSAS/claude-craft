@@ -174,7 +174,7 @@ Technical work items within a User Story:
 | `/project:list-stories [filter]` | List User Stories (by EPIC, Sprint, Status) |
 | `/project:list-tasks [filter]` | List tasks (by US, Sprint, Type, Status) |
 | `/project:board [sprint]` | Show Kanban board |
-| `/project:sprint-status [sprint]` | Detailed sprint progress report |
+| `/sprint:status [sprint]` | Detailed sprint progress report |
 
 ### Update Commands
 
@@ -251,7 +251,7 @@ Creates detailed task breakdown:
 ### Step 6: Track Progress
 
 ```bash
-/project:sprint-status 1
+/sprint:status 1
 ```
 
 Shows:

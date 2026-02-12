@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.0] - 2026-02-12
+
+### BREAKING CHANGES
+
+- `/common:` reduced from 38 to 12 commands — 26 commands moved to dedicated namespaces
+- 9 workflow commands moved: `/common:workflow-*` → `/workflow:*`, `/common:sprint-retro` → `/workflow:retro`, `/common:sprint-review` → `/workflow:review`, `/common:sprint-start` → `/workflow:start`
+- 4 team commands moved: `/common:team-*` → `/team:*`
+- 6 QA commands moved: `/common:recette*` → `/qa:*`, `/common:fix-bug-tdd` → `/qa:tdd`
+- 7 UI/UX commands moved: `/common:uiux-*` → `/uiux:*`, `/common:a11y-*` → `/uiux:a11y-*`, `/common:ui-design-tokens` → `/uiux:design-tokens`, `/common:ux-user-flow` → `/uiux:user-flow`
+- 1 Docker command moved: `/common:docker-optimize` → `/docker:optimize`
+- 5 sprint commands moved: `/project:sprint-*` → `/sprint:*`
+- 6 gate commands moved: `/project:gate-*` → `/gate:*`
+- 4 project commands renamed: `/project:project-run-sprint` → `/project:run-sprint`, `/project:project-run-epic` → `/project:run-epic`, `/project:project-run-queue` → `/project:run-queue`, `/project:project-batch-status` → `/project:batch-status`
+
+### Added
+
+- `docs/MIGRATION-v7.md` — complete migration guide with 41-entry mapping table
+- `tests/scripts/namespace-integrity.test.mjs` — 5 tests for residual patterns, i18n parity, command counts
+- New i18n directories: `Workflow/`, `Team/`, `QA/`, `UIUX/` under `Dev/i18n/{lang}/`
+- New i18n directories: `Sprint/`, `Gate/` under `Project/i18n/{lang}/`
+
+### Changed
+
+- `/common:` namespace: 38 → 12 commands
+- `/project:` namespace: 33 → 22 commands
+- `/workflow:` namespace: 6 → 9 commands (added retro, review, start)
+- `/docker:` namespace: 4 → 5 commands (added optimize)
+- `/sprint:` namespace: 4 → 5 commands (added dev)
+- New namespaces: `/team:` (4), `/qa:` (6), `/uiux:` (7)
+- Total command count unchanged: 155
+- Install scripts updated: `install-common-rules.sh`, `install-project-commands.sh`, `tcl-common.sh`
+- All cross-references updated across Dev/, Project/, Infra/, docs/, .claude/
+
+---
+
 ## [6.2.0] - 2026-02-12
 
 ### Removed

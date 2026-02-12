@@ -14,7 +14,7 @@ Arguments :
 - Nom du composant à spécifier
 - (Optionnel) Contexte d'usage
 
-Exemple : `/common:uiux-component-spec Button` ou `/common:uiux-component-spec "Card Séjour" contexte SaaS tourisme`
+Exemple : `/uiux:component-spec Button` ou `/uiux:component-spec "Card Séjour" contexte SaaS tourisme`
 
 ## MISSION
 

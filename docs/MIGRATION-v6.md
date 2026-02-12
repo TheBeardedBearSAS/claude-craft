@@ -14,7 +14,7 @@ The standalone full-audit command has been replaced by the Agent Teams sequentia
 
 | Before (v5.x) | After (v6.0) |
 |----------------|-------------|
-| `/common:full-audit` | `/common:team-audit --sequential` |
+| `/common:full-audit` | `/team:audit --sequential` |
 
 The `team-audit` command provides the same functionality with better reporting and the option to parallelize across multiple technology stacks.
 
@@ -24,9 +24,9 @@ The Autonomous Sprint Conductor command has been replaced by the Agent Teams spr
 
 | Before (v5.x) | After (v6.0) |
 |----------------|-------------|
-| `/common:ralph-sprint "Sprint 3" --overnight` | `/common:team-sprint --ralph-mode "Sprint 3" --overnight` |
-| `/common:ralph-sprint "Sprint 3" --parallel 3` | `/common:team-sprint --ralph-mode "Sprint 3" --parallel 3` |
-| `/common:ralph-sprint "Sprint 3" --supervised` | `/common:team-sprint --ralph-mode "Sprint 3" --supervised` |
+| `/common:ralph-sprint "Sprint 3" --overnight` | `/team:sprint --ralph-mode "Sprint 3" --overnight` |
+| `/common:ralph-sprint "Sprint 3" --parallel 3` | `/team:sprint --ralph-mode "Sprint 3" --parallel 3` |
+| `/common:ralph-sprint "Sprint 3" --supervised` | `/team:sprint --ralph-mode "Sprint 3" --supervised` |
 
 All `ralph-sprint` CLI options are supported via `team-sprint --ralph-mode`.
 
@@ -81,8 +81,8 @@ If your CI/CD pipelines reference these commands:
 /common:ralph-sprint "Sprint N" --overnight
 
 # After
-/common:team-audit --sequential
-/common:team-sprint --ralph-mode "Sprint N" --overnight
+/team:audit --sequential
+/team:sprint --ralph-mode "Sprint N" --overnight
 ```
 
 ### Step 4: Update Ralph Configuration

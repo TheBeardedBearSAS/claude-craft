@@ -91,7 +91,7 @@ Para ejecucion completa del sprint, este comando redirige al comando especializa
 ║           INICIANDO DESARROLLO DE SPRINT                   ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Invocando: /project:sprint-dev sprint-001-walking-skeleton║
+║ Invocando: /sprint:dev sprint-001-walking-skeleton║
 ║                                                           ║
 ║ Funcionalidades del modo Sprint Development:              ║
 ║ • Modo plan obligatorio antes de cada tarea               ║
@@ -147,7 +147,7 @@ Para flujo Quick Flow (correcciones de bugs, funcionalidades menores):
 ║ Comandos disponibles:                                     ║
 ║                                                           ║
 ║ Para correcciones de bugs:                                ║
-║ • /common:fix-bug-tdd        - Corregir con enfoque TDD   ║
+║ • /qa:tdd        - Corregir con enfoque TDD   ║
 ║                                                           ║
 ║ Para funcionalidades menores:                             ║
 ║ • /{tech}:* commands         - Especificos por tecnologia  ║
@@ -186,8 +186,8 @@ Despues de completar el sprint:
 ║ SIGUIENTES ACCIONES:                                      ║
 ║ ─────────────────────────────────────────────────────────║
 ║                                                           ║
-║ 1. /common:sprint-review     - Realizar revision de sprint║
-║ 2. /common:sprint-retro      - Ejecutar retrospectiva     ║
+║ 1. /workflow:review     - Realizar revision de sprint║
+║ 2. /workflow:retro      - Ejecutar retrospectiva     ║
 ║ 3. /workflow:implement 2     - Iniciar Sprint 2           ║
 ║                                                           ║
 ║ O verificar progreso general: /workflow:status            ║
@@ -235,7 +235,7 @@ Cuando todos los sprints estan completados:
 
 - `/workflow:design` - Fase anterior
 - `/workflow:status` - Verificar progreso
-- `/project:sprint-dev` - Modo completo de desarrollo de sprint
-- `/common:fix-bug-tdd` - Correcciones rapidas de bugs
-- `/common:sprint-review` - Ceremonia de revision de sprint
-- `/common:sprint-retro` - Retrospectiva del sprint
+- `/sprint:dev` - Modo completo de desarrollo de sprint
+- `/qa:tdd` - Correcciones rapidas de bugs
+- `/workflow:review` - Ceremonia de revision de sprint
+- `/workflow:retro` - Retrospectiva del sprint
