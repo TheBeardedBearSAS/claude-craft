@@ -530,10 +530,10 @@ Automated acceptance testing with Claude in Chrome.
 | Command | Description |
 |---------|-------------|
 | `/qa:recette` | Run acceptance tests on web application |
-| `/qa:recette-status` | Show current session status |
 | `/qa:recette-fix` | Fix bugs from recette session with TDD workflow |
-| `/qa:recette-regression` | Run regression tests only |
-| `/qa:recette-report` | Generate recette report |
+| `/qa:recette-status` | Show session status and progress |
+| `/qa:recette-regression` | View and manage regression test registry |
+| `/qa:recette-report` | Generate recette report (MD/HTML/JSON) |
 
 ### `/qa:recette` Arguments
 
@@ -555,6 +555,39 @@ Automated acceptance testing with Claude in Chrome.
 | `--skip-fix` | Generate BMAD documents only | - |
 | `--auto-commit` | Auto-commit after each fix | - |
 
+### `/qa:recette-status` Arguments
+
+| Argument | Description | Values |
+|----------|-------------|--------|
+| `--session` | Show specific session detail | e.g., `REC-20260130-143022` |
+| `--all` | List all sessions | - |
+| `--scope` | Filter by scope | `story`, `sprint` |
+| `--status` | Filter by status | `running`, `completed`, `paused`, `failed` |
+| `--format` | Output format | `table`, `yaml`, `json` |
+| `--watch` | Live refresh mode | - |
+
+### `/qa:recette-regression` Arguments
+
+| Argument | Description | Values |
+|----------|-------------|--------|
+| `--list` | List all regression tests | - |
+| `--stats` | Show stability score and trends | - |
+| `--check` | Run regression tests, detect violations | - |
+| `--status` | Filter by test status | `active`, `verified`, `obsolete` |
+| `--source` | Filter by source story | e.g., `US-001` |
+| `--trend` | Show historical trend | - |
+| `--format` | Output format | `table`, `yaml`, `json` |
+
+### `/qa:recette-report` Arguments
+
+| Argument | Description | Values |
+|----------|-------------|--------|
+| `--session` | Session ID (required) | e.g., `REC-20260130-143022` |
+| `--format` | Output format | `md`, `html`, `json` |
+| `--output` | Custom output path | e.g., `./reports/sprint-3/` |
+| `--include-screenshots` | Embed screenshots in HTML | - |
+| `--compare` | Compare with another session | session-id |
+
 ### Usage Examples
 
 ```bash
@@ -570,8 +603,23 @@ Automated acceptance testing with Claude in Chrome.
 # Run with GIF recording
 /qa:recette --scope=sprint --id=SPRINT-03 --record-gif
 
-# Run regression tests only
-/qa:recette-regression
+# Show all sessions
+/qa:recette-status --all
+
+# Show specific session status
+/qa:recette-status --session=REC-20260130-143022
+
+# Check regression tests (Golden Rule)
+/qa:recette-regression --check
+
+# Show regression stability score
+/qa:recette-regression --stats
+
+# Generate report from session
+/qa:recette-report --session=REC-20260130-143022
+
+# Generate HTML report with screenshots
+/qa:recette-report --session=REC-20260130-143022 --format=html --include-screenshots
 
 # Fix all bugs from a recette session
 /qa:recette-fix --session=REC-20260130-143022

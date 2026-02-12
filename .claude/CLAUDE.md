@@ -1,8 +1,8 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 6.0.0 | **Languages:** en, fr, es, de, pt
+**Version:** 6.1.1 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 39 agents, 155 commands, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 39 agents, 158 commands, and BMAD v6 project management.
 
 ---
 
@@ -120,11 +120,11 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 ### QA Recette (`/qa:`) - NEW
 | Command | Description |
 |---------|-------------|
-| `/qa:recette` | **[NEW]** Automated acceptance tests via Chrome |
-| `/qa:recette-fix` | **[NEW]** Fix bugs from a recette session |
-| `/qa:recette-status` | **[PLANNED]** Show recette session status |
-| `/qa:recette-regression` | **[PLANNED]** View regression tests |
-| `/qa:recette-report` | **[PLANNED]** Generate recette report |
+| `/qa:recette` | Automated acceptance tests via Chrome |
+| `/qa:recette-fix` | Fix bugs from a recette session |
+| `/qa:recette-status` | Show recette session status |
+| `/qa:recette-regression` | View regression tests |
+| `/qa:recette-report` | Generate recette report |
 
 ---
 

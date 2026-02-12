@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.1.1] - 2026-02-12
+
+### Added
+
+- `/qa:recette-status` command — show session status and progress (5 languages)
+- `/qa:recette-regression` command — view and manage regression test registry (5 languages)
+- `/qa:recette-report` command — generate reports from session data in MD/HTML/JSON (5 languages)
+
+### Changed
+
+- Command count: 155 → 158 (3 new QA Recette commands)
+- Removed `[PLANNED]` tags from QA Recette commands in documentation
+- Updated COMMANDS.md, COMMANDS-FULL-REFERENCE.md, INDEX.md with new command details
+
+### Fixed
+
+- Widened `execSync` timeouts in 4 test files to eliminate flaky ETIMEDOUT failures under load
+
+---
+
 ## [6.0.0] - 2026-02-11
 
 ### BREAKING

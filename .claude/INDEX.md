@@ -161,6 +161,15 @@ Access complete rules via `@.claude/references/`:
 
 # Fix only critical bugs
 /qa:recette-fix --session=REC-xxx --severity=critical
+
+# Show all session statuses
+/qa:recette-status --all
+
+# Check regression tests (Golden Rule violations)
+/qa:recette-regression --check
+
+# Generate report from session
+/qa:recette-report --session=REC-xxx
 ```
 
 ### Prerequisites

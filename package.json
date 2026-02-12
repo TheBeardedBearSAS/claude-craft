@@ -1,6 +1,6 @@
 {
   "name": "@the-bearded-bear/claude-craft",
-  "version": "6.0.0",
+  "version": "6.1.1",
   "description": "A comprehensive framework for AI-assisted development with Claude Code. Install standardized rules, agents, and commands for your projects.",
   "type": "module",
   "main": "cli/index.js",

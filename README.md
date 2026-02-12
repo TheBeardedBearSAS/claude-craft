@@ -21,7 +21,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Infrastructure Stack**: Docker agents and commands
 - **5 Languages**: English, French, Spanish, German, Portuguese
 - **39 AI Agents**: Specialized reviewers, architects, coaches, UI/UX, Docker experts, Ralph Conductor, **10 BMAD agents**, and QA Recette
-- **155 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
+- **158 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
 - **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
 - **249 Skills**: Best practices in official Claude Code format (architecture, testing, security)
