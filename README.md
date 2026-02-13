@@ -6,10 +6,10 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.9
+## What's New in v7.10
 
-- **Multi-account tool v2** — chmod 0700 security, `doctor` command, `--json` output, standardized exit codes, `.claude-profile` auto-switch, bash/zsh completions, 23 bats tests
-- **5-language i18n** — 29 new keys across en/fr/es/de/pt for doctor, permissions, JSON output
+- **Status Line v2.0** — fixed `settings.json` format, native `context_window` %, single jq call (7→1), git cache, 13 toggles, agent name, vim mode, burn rate, progress bar styles, compact/detailed modes, `--version`/`--help`, 27 bats tests
+- **Multi-account tool v2** — `doctor` command, `--json` output, exit codes, `.claude-profile` auto-switch, bash/zsh completions, 23 bats tests
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
