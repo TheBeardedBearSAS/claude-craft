@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.9.0] - 2026-02-13
+
+### Added
+
+- **Multi-account `doctor` command** — checks profile permissions, .mode file, symlink validity, credentials JSON, shell aliases, and orphan alias detection
+- **`--json` flag** — machine-readable JSON output for `list` and `--version`, enabling scripting and pipeline integration
+- **Standardized exit codes** — `0` (OK), `1` (error), `2` (usage), `3` (not found), `4` (missing dep)
+- **Shell completions** — bash and zsh tab-completion for commands and profile names (`completions/`)
+- **`.claude-profile` per project** — `ccsp` reads this file for automatic profile switching by directory
+- **`CLAUDE_PROFILE_NAME` export** — `ccsp()` exports the active profile name for shell prompt integration (PS1, Starship)
+- **23 bats tests** — comprehensive test suite for version, CRUD, exit codes, JSON output, doctor (`tests/claude-accounts.bats`)
+- **Makefile targets** — `install-completions` (bash/zsh) and `test-tools` (bats via Docker)
+- **29 i18n keys** across 5 languages (en/fr/es/de/pt) — doctor, permissions warning, backup, delete confirmation, JSON output
+
+### Changed
+
+- **Profile directory permissions** — `chmod 0700` enforced on creation (`add`, `migrate`) and `ensure_profiles_dir`; warning displayed in `list` if permissions are too open
+- **Signal handling** — `trap _cleanup EXIT` with `_TMP_FILES` tracking for safe Ctrl+C cleanup
+- **Profile validation** — `validate_profile()` guard added to `run` and `auth` CLI commands; returns exit code 3 for missing profiles
+- **CLI `rm` i18n** — hardcoded English strings replaced with i18n keys (`MSG_CONFIRM_DELETE`, `MSG_BACKUP_CREATED`)
+- **Interactive menu** — doctor added as option 8, help moved to option 9
+
 ## [7.8.0] - 2026-02-12
 
 ### Added

@@ -6,10 +6,10 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.8
+## What's New in v7.9
 
-- **Coolify infrastructure technology** — 4 agents, 5 commands, install script, full i18n (en/fr/es/de/pt) for self-hosted PaaS deployments
-- **160 commands, 33 agents, 20 namespaces** — counters updated across all docs
+- **Multi-account tool v2** — chmod 0700 security, `doctor` command, `--json` output, standardized exit codes, `.claude-profile` auto-switch, bash/zsh completions, 23 bats tests
+- **5-language i18n** — 29 new keys across en/fr/es/de/pt for doctor, permissions, JSON output
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
