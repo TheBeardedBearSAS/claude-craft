@@ -21,6 +21,7 @@ $ARGUMENTS
 - `--dry-run`: Mostrar composicion del equipo, estimacion de costos y asignacion de stories sin ejecutar
 - `--quality-threshold=6`: Puntuacion INVEST minima para la Fase 1 (por defecto: 6/6)
 - `--max-rewrites=2`: Maximo de ciclos de reescritura por artefacto en la Fase 1 (por defecto: 2)
+- `--max-cost=<dollars>`: Presupuesto maximo en dolares. Si el costo paralelo estimado supera este umbral, la ejecucion se bloquea con un mensaje OVER BUDGET
 
 ## Prerequisitos
 
@@ -31,6 +32,28 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponible
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponible
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible
+
+## Proteccion Fast Mode (Confirmacion Bloqueante)
+
+**OBLIGATORIO**: Antes de lanzar el equipo, el Lider de Entrega DEBE:
+
+1. Detectar si el Fast Mode esta activo (indicador lightning bolt en la terminal)
+2. Si el Fast Mode esta activo:
+   - Mostrar el dashboard comparativo estandar vs fast via `cost-estimator.sh --fast-mode`
+   - **Mostrar una advertencia bloqueante** con los costos comparados:
+     ```
+     ⚠️  FAST MODE DETECTADO — Costos Opus 6x mas altos!
+
+     | Modo     | Input ($/M) | Output ($/M) | Costo estimado esta entrega |
+     |----------|-------------|--------------|------------------------------|
+     | Estandar | $5.00       | $25.00       | ~$X.XX                       |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY                       |
+
+     ¿Desea continuar en Fast Mode? (si/no)
+     Recomendacion: escriba /fast para desactivar antes de continuar.
+     ```
+   - **Esperar la confirmacion explicita** del usuario antes de continuar
+   - Si el usuario rechaza, abortar con un mensaje sugiriendo `/fast` para desactivar
 
 ## Cuando usar (vs. Secuencial u otros equipos)
 
@@ -57,7 +80,7 @@ $ARGUMENTS
 Lider de Entrega (opus) — orquestacion, validacion, contexto compartido
   |
   +-- Redactor (sonnet)    : Crea EPICs, US (INVEST+3C+Gherkin), tareas
-  +-- Revisor (sonnet)     : Valida calidad (INVEST 6/6, cobertura AC, testabilidad, slicing)
+  +-- Revisor (haiku)      : Valida calidad (INVEST 6/6, cobertura AC, testabilidad, slicing)
   +-- Arquitecto (sonnet)  : Valida viabilidad tecnica + mapeo de dominios de archivo
 ```
 
@@ -68,15 +91,33 @@ El Lider de Entrega valida la entrada:
 1. Leer PRD o tech spec desde la ruta proporcionada
 2. Validar el Gate PRD (>=80%) — si la puntuacion esta por debajo del umbral, abortar con mensaje claro
 3. Extraer funcionalidades, requisitos y alcance de criterios de aceptacion
-4. Crear equipo via `TeamCreate`
+4. Estimar los costos via `cost-estimator.sh --task-type delivery --techs <worker_count>`
+5. **Proteccion de presupuesto**: Si se especifica `--max-cost`, verificar que el costo estimado <= max_cost. Si hay exceso: mostrar `OVER BUDGET`, abortar
+6. Crear equipo via `TeamCreate`
 
 #### Paso 1.2: Lanzamiento del equipo (Fase 1)
 
 El Lider lanza 3 workers de Fase 1 via la herramienta `Task`:
 
 1. **Redactor** (sonnet): Instruido para crear EPICs y User Stories siguiendo el formato INVEST+3C+Gherkin
-2. **Revisor** (sonnet): Instruido para validar la calidad contra la tabla de verificaciones a continuacion
+2. **Revisor** (haiku): Instruido para validar la calidad contra la tabla de verificaciones a continuacion — haiku es suficiente para esta tarea de clasificacion (12x mas economico que sonnet en output)
 3. **Arquitecto** (sonnet): Instruido para validar la viabilidad tecnica y producir mapas de dominios de archivo
+
+**Contexto lean por worker Fase 1**: Cada worker solo recibe el PRD/spec tech y la referencia tecnologica del proyecto. NO cargar las referencias de todas las tecnologias.
+
+**Plantilla de spawn estructurada Fase 1 (TaskCreate)**: El Lider DEBE incluir en cada tarea:
+```
+Subject: "Redactar <artifact-type>: <titulo>"
+Description:
+  Proyecto: <nombre-del-proyecto>
+  Tecnologia: <tech-del-proyecto>
+  PRD/Spec: <contenido o referencia>
+  Artefacto esperado: <EPIC|US|Tarea>
+  Formato: INVEST+3C+Gherkin para US
+  Criterios de exito: INVEST 6/6, ACs nominales >= 1, alternativos >= 2, error >= 2
+  Referencia: @.claude/references/<tech>/CLAUDE.md
+activeForm: "Redaccion <artifact-type>"
+```
 
 #### Paso 1.3: Pipeline de artefactos
 
@@ -190,14 +231,62 @@ METRICAS DE CALIDAD
 | Solapamientos de dominio de archivo | 1 |
 ```
 
-### Transicion de fase
+### Transicion de Fase
 
-Si `--phase=all`, el Lider realiza una transicion de equipo:
+Si `--phase=all`, el Lider realiza una transicion de equipo segura:
+
+#### Paso T.1: Escritura del contrato de handoff
+
+El Lider escribe un archivo `phase-handoff.yaml` en el directorio de sesion antes de cerrar la Fase 1:
+
+```yaml
+# .bmad/phase-handoff.yaml — contrato inter-fases
+handoff_version: "1.0"
+timestamp: "2026-02-13T10:30:00Z"
+sprint: "<sprint-name>"
+phase1_status: "completed"
+
+stories_accepted:
+  - id: US-001
+    invest_score: 6
+    file_domains: [src/Domain/User/, src/App/User/, tests/Unit/User/]
+  - id: US-002
+    invest_score: 6
+    file_domains: [src/Domain/Order/, src/App/Order/, tests/Unit/Order/]
+
+stories_needs_review:
+  - id: US-004
+    reason: "INVEST 4/6 tras 2 reescrituras"
+
+parallelization_waves:
+  - wave: 1
+    stories: [US-001, US-002]
+    reason: "0 solapamiento de dominios de archivo"
+  - wave: 2
+    stories: [US-003]
+    reason: "depende de archivos de US-001"
+
+phase1_metrics:
+  artifacts_created: 4
+  rewrites_total: 3
+  avg_invest_score: 5.5
+  duration_minutes: 20
+```
+
+#### Paso T.2: Apagado de Fase 1 y lanzamiento de Fase 2
 
 1. Enviar `shutdown_request` al Redactor, Revisor, Arquitecto
 2. Esperar a que todos los workers se detengan (~30s)
-3. El Lider conserva el contexto completo de la Fase 1 (stories, mapa de dominios, oleadas)
+3. El Lider conserva el contexto completo de la Fase 1 via `phase-handoff.yaml`
 4. Proceder al lanzamiento de la Fase 2
+
+#### Recuperacion tras crash
+
+Si el Lider se reinicia entre las dos fases:
+1. Verificar la existencia de `.bmad/phase-handoff.yaml`
+2. Si esta presente con `phase1_status: completed`, reanudar directamente en Fase 2
+3. Usar las `parallelization_waves` y `file_domains` del handoff para la asignacion
+4. Si esta ausente o `phase1_status != completed`, relanzar la Fase 1
 
 ### Fase 2: Implementacion (Velocidad + Delegacion)
 

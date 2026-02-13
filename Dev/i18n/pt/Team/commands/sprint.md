@@ -18,6 +18,7 @@ $ARGUMENTS
 - `--max-stories=10`: Maximo de stories a processar (padrao: 10)
 - `--timeout=12`: Tempo maximo de execucao em horas (padrao: 12)
 - `--dry-run`: Mostrar composicao da equipe e atribuicoes de stories sem executar
+- `--max-cost=<dollars>`: Orcamento maximo em dolares. Se o custo paralelo estimado ultrapassar este limiar, a execucao e bloqueada com uma mensagem OVER BUDGET
 - `--ralph-mode`: Ativar motor de recuperacao Ralph (classificacao de erros, auto-retry, servico de escalacao) junto com paralelismo Agent Teams.
 
 ## Pre-requisitos
@@ -30,6 +31,28 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/ralph-teams-adapter.sh` disponivel
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponivel
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponivel
+
+## Protecao Fast Mode (Confirmacao Bloqueante)
+
+**OBRIGATORIO**: Antes de lancar a equipe, o condutor DEVE:
+
+1. Detectar se o Fast Mode esta ativo (indicador lightning bolt no terminal)
+2. Se Fast Mode ativo:
+   - Exibir o dashboard comparativo padrao vs fast via `cost-estimator.sh --fast-mode`
+   - **Exibir um aviso bloqueante** com os custos comparados:
+     ```
+     ⚠️  FAST MODE DETECTADO — Custos Opus 6x mais altos!
+
+     | Modo     | Input ($/M) | Output ($/M) | Custo estimado deste sprint |
+     |----------|-------------|--------------|----------------------------|
+     | Padrao   | $5.00       | $25.00       | ~$X.XX                     |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY                     |
+
+     Deseja continuar em Fast Mode? (sim/nao)
+     Recomendacao: digite /fast para desativar antes de continuar.
+     ```
+   - **Aguardar confirmacao explicita** do usuario antes de prosseguir
+   - Se o usuario recusar, abandonar com uma mensagem sugerindo `/fast` para desativar
 
 ## Quando Usar (vs. Sprint Sequencial)
 
@@ -53,8 +76,12 @@ O condutor de sprint carrega o estado do sprint:
 2. Filtrar stories com status `ready-for-dev`
 3. Analisar independencia das stories (verificar sobreposicao de dominio de arquivo)
 4. Particionar stories em grupos paralelizaveis
+5. Estimar custos via `cost-estimator.sh --task-type sprint --techs <worker_count>`
+6. **Protecao de orcamento**: Se `--max-cost` for especificado, verificar que o custo estimado <= max_cost. Se excedente: exibir `OVER BUDGET`, abandonar, sugerir reduzir o numero de stories ou usar `--sequential`
 
 **Verificacao de independencia**: Duas stories sao independentes se seus criterios de aceitacao e escopo de implementacao nao referenciam os mesmos arquivos fonte. O condutor revisa a descricao de cada story e referencias do tech spec para determinar isso.
+
+**Deteccao de arquivos compartilhados (B2)**: Durante a analise de independencia, detectar explicitamente diretorios compartilhados (`**/Shared/**`, `**/Common/**`, `**/Utils/**`, `**/Helpers/**`). Stories tocando arquivos nesses diretorios recebem automaticamente um marcador `overlaps_with` e sao sequenciadas no mesmo worker.
 
 ### Etapa 2: Atribuicao de Stories
 
@@ -74,11 +101,25 @@ Sprint Conductor (opus) — coordena via TaskCreate/SendMessage
   +----------------------------------------+
 ```
 
+**Contexto lean por worker**: Cada worker recebe apenas a referencia tecnologica do projeto (nao todas as tecnologias). O condutor passa unicamente `@.claude/references/<tech-do-projeto>/CLAUDE.md` no contexto.
+
 O condutor cria um `TaskCreate` por story:
 
-- **Subject**: `Implement US-XXX: <titulo da story>`
-- **Description**: Conteudo completo da story, criterios de aceitacao, referencias do tech spec, requisitos TDD
-- **activeForm**: `Implementing US-XXX`
+**Template de spawn estruturado (TaskCreate)**:
+```
+Subject: "Implementar US-XXX: <titulo da story>"
+Description:
+  Projeto: <nome-do-projeto>
+  Tecnologia: <tech-do-projeto>
+  Story: <conteudo completo da story>
+  Criterios de aceitacao: <ACs completos com Gherkin>
+  Dominio de arquivos: <diretorios fonte esperados>
+  Fora dos limites: <diretorios a NAO modificar>
+  Comandos TDD: <comandos docker especificos da tech>
+  Criterios de sucesso: Todos os testes AC passam, lint limpo, cobertura nao reduzida
+  Referencia: @.claude/references/<tech>/CLAUDE.md
+activeForm: "Implementacao de US-XXX"
+```
 
 ### Etapa 3: Execucao do Worker (Por Story)
 
@@ -143,6 +184,12 @@ O condutor classifica erros conforme o motor de recuperacao Ralph:
 | 1 | Recuperavel | Worker auto-corrige + retry | Erros de lint, falhas de teste, deps |
 | 2 | Degradado | Continuar com aviso | Docs, gates opcionais, queda de cobertura |
 | 3 | Bloqueado | Escalar para humano | Seguranca, arquitetura, autenticacao |
+
+**Cadencia de polling (B5)**: O condutor faz polling de `TaskList` a cada 30 segundos. Apos 3 polls consecutivos sem mudanca, reduzir para 60 segundos. Usar os hooks `TeammateIdle`/`TaskCompleted` (v2.1.33+) se disponiveis.
+
+**Verbosidade de mensagens (B4)**: Os workers DEVEM limitar suas mensagens de conclusao a < 50 tokens. Formato: `DONE: US-XXX tests pass, +X files`. Escrever os detalhes no resumo da tarefa, nao na mensagem.
+
+**Recuperacao do contexto do condutor (A6)**: Para mitigar o bug de compactacao de contexto (#23620), o condutor DEVE reler `TaskList` a cada 5 conclusoes de workers para atualizar sua consciencia do estado da equipe.
 
 **Deteccao de worker travado**: Se um worker nao atualizar sua tarefa em 10 minutos, o condutor envia mensagem de verificacao de status. Se sem resposta em 2 minutos, o condutor marca a story como bloqueada e reatribui a outro worker ou coloca na fila para revisao humana.
 

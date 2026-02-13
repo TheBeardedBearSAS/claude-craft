@@ -17,6 +17,7 @@ $ARGUMENTS
 - `--output-dir=<path>`: Benutzerdefiniertes Ausgabeverzeichnis für Sicherheitsergebnisse
 - `--dry-run`: Team-Zusammensetzung und Scan-Plan anzeigen, ohne auszuführen
 - `--sarif`: Ergebnisse im SARIF-Format ausgeben (für CI/CD-Integration)
+- `--max-cost=<dollars>`: Maximales Budget in Dollar. Wenn die geschaetzten Parallelkosten diesen Schwellenwert ueberschreiten, wird die Ausfuehrung mit einer OVER BUDGET Meldung blockiert
 
 ## Voraussetzungen
 
@@ -26,6 +27,28 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/compatibility-check.sh` verfügbar
 - `Tools/AgentTeams/lib/result-aggregator.sh` verfügbar
 - `Tools/AgentTeams/lib/cost-estimator.sh` verfügbar
+
+## Garde-Fou Fast Mode (Blockierende Bestaetigung)
+
+**OBLIGATORISCH**: Vor dem Start des Teams MUSS der Security Lead:
+
+1. Erkennen, ob der Fast Mode aktiv ist (Lightning-Bolt-Indikator im Terminal)
+2. Wenn Fast Mode aktiv:
+   - Vergleichs-Dashboard Standard vs. Fast via `cost-estimator.sh --fast-mode` anzeigen
+   - **Blockierende Warnung** mit verglichenen Kosten anzeigen:
+     ```
+     ⚠️  FAST MODE ERKANNT — Opus-Kosten 6x hoeher!
+
+     | Modus     | Input ($/M) | Output ($/M) | Geschaetzte Kosten dieser Review |
+     |-----------|-------------|--------------|----------------------------------|
+     | Standard  | $5.00       | $25.00       | ~$X.XX                           |
+     | Fast      | $30.00      | $150.00      | ~$Y.YY                           |
+
+     Moechten Sie im Fast Mode fortfahren? (ja/nein)
+     Empfehlung: Tippen Sie /fast, um vor dem Fortfahren zu deaktivieren.
+     ```
+   - **Warten auf explizite Bestaetigung** des Benutzers vor dem Fortfahren
+   - Wenn der Benutzer ablehnt, abbrechen mit Nachricht, die `/fast` zum Deaktivieren vorschlaegt
 
 ## Team-Zusammensetzung
 
@@ -65,6 +88,15 @@ Tools/AgentTeams/lib/compatibility-check.sh \
 
 ### Schritt 3: Team starten (Fan-Out)
 
+**Kostenschaetzung**: Der Security Lead schaetzt die Kosten via `cost-estimator.sh --task-type security --techs <worker_count>`.
+
+**Budgetgarantie**: Wenn `--max-cost` angegeben ist, pruefen dass geschaetzte Kosten <= max_cost. Bei Ueberschreitung: `OVER BUDGET` anzeigen, abbrechen.
+
+**Lean Context pro Worker**: Jeder Reviewer erhaelt nur den fuer seine Dimension notwendigen Kontext:
+- Code Reviewer → `@.claude/references/<tech>/CLAUDE.md` + Liste der Quelldateien
+- Dependency-Auditor → Liste der Lockfiles (composer.lock, package-lock.json, etc.)
+- Infra-Reviewer → Dockerfiles, docker-compose.yml, CI/CD-Configs
+
 ```
 Sicherheits-Lead (opus) — orchestriert über TaskCreate/SendMessage
   |
@@ -80,6 +112,18 @@ Sicherheits-Lead (opus) — orchestriert über TaskCreate/SendMessage
 ```
 
 Der Lead erstellt 3 Aufgaben via `TaskCreate`:
+
+**Strukturiertes Spawn-Template (TaskCreate)**: Der Lead MUSS in jede Aufgabe einfuegen:
+```
+Subject: "Security Review <dimension>"
+Description:
+  Projekt: <projektname>
+  Dimension: <code|deps|infra>
+  Scope: <zu analysierende Dateien/Verzeichnisse>
+  Tools: <zu verwendende Docker-Befehle>
+  Ausgabeformat: Findings im Format { severity, category, file, description }
+activeForm: "Security Review <dimension>"
+```
 
 #### Aufgabe A: Quellcode-Sicherheitsreview
 
@@ -187,7 +231,15 @@ docker compose config --quiet  # Compose-Syntax validieren
 
 ### Schritt 4: Synchronisationsbarriere
 
-Sicherheits-Lead wartet, bis alle 3 Reviewer-Aufgaben abgeschlossen sind. Timeout: 8 Minuten pro Reviewer. Wenn ein Reviewer das Timeout überschreitet, fährt der Lead mit den verfügbaren Ergebnissen fort und vermerkt die Lücke.
+Sicherheits-Lead wartet, bis alle 3 Reviewer-Aufgaben abgeschlossen sind.
+
+**Polling-Kadenz (B5)**: `TaskList` alle 30 Sekunden. Nach 3 aufeinanderfolgenden Polls ohne Aenderung, auf 60 Sekunden reduzieren. Verwenden Sie `TeammateIdle`/`TaskCompleted` Hooks (v2.1.33+), falls verfuegbar.
+
+**Nachrichten-Verbositaet (B4)**: Reviewer MUESSEN ihre Completion-Nachrichten auf < 50 Token begrenzen. Format: `DONE: <dimension> <findings_count> findings (<critical>C/<high>H/<medium>M)`. Details in die Ergebnisdatei schreiben.
+
+**Lead-Kontextwiederherstellung (A6)**: Um den Context-Compaction-Bug (#23620) abzumildern, MUSS der Lead `TaskList` nach jeder Reviewer-Completion neu lesen, um sein Bewusstsein fuer den Team-Status aufzufrischen.
+
+Timeout: 8 Minuten pro Reviewer. Wenn ein Reviewer das Timeout überschreitet, fährt der Lead mit den verfügbaren Ergebnissen fort und vermerkt die Lücke.
 
 ### Schritt 5: Korrelation und Priorisierung
 

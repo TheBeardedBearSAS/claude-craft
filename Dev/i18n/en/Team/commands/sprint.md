@@ -18,6 +18,7 @@ $ARGUMENTS
 - `--max-stories=10`: Maximum stories to process (default: 10)
 - `--timeout=12`: Maximum runtime in hours (default: 12)
 - `--dry-run`: Show team composition and story assignments without executing
+- `--max-cost=<dollars>`: Maximum budget in dollars. If the estimated parallel cost exceeds this threshold, execution is blocked with an OVER BUDGET message
 - `--ralph-mode`: Enable Ralph recovery engine (error classification, auto-retry, escalation service) alongside Agent Teams parallelism.
 
 ## Prerequisites
@@ -30,6 +31,28 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/ralph-teams-adapter.sh` available
 - `Tools/AgentTeams/lib/compatibility-check.sh` available
 - `Tools/AgentTeams/lib/cost-estimator.sh` available
+
+## Fast Mode Guard (Blocking Confirmation)
+
+**MANDATORY**: Before launching the team, the conductor MUST:
+
+1. Detect if Fast Mode is active (lightning bolt indicator in terminal)
+2. If Fast Mode is active:
+   - Display the comparative dashboard standard vs fast via `cost-estimator.sh --fast-mode`
+   - **Display a blocking warning** with cost comparison:
+     ```
+     ⚠️  FAST MODE DETECTED — Opus costs 6x higher!
+
+     | Mode     | Input ($/M) | Output ($/M) | Estimated cost this sprint |
+     |----------|-------------|--------------|---------------------------|
+     | Standard | $5.00       | $25.00       | ~$X.XX                    |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY                    |
+
+     Do you want to continue in Fast Mode? (yes/no)
+     Recommendation: type /fast to disable before continuing.
+     ```
+   - **Wait for explicit user confirmation** before proceeding
+   - If the user refuses, abort with a message suggesting `/fast` to disable
 
 ## When to Use (vs. Sequential Sprint)
 
@@ -53,6 +76,8 @@ The sprint conductor loads sprint state:
 2. Filter stories with status `ready-for-dev`
 3. Analyze story independence (check for file domain overlap)
 4. Partition stories into parallelizable groups
+5. Estimate costs via `cost-estimator.sh --task-type sprint --techs <worker_count>`
+6. **Budget guard**: If `--max-cost` is specified, check that estimated cost <= max_cost. If exceeded: display `OVER BUDGET`, abort, suggest reducing the number of stories or using `--sequential`
 
 **Independence check**: Two stories are independent if their acceptance criteria and implementation scope do not reference the same source files. The conductor reviews each story's description and tech spec references to determine this.
 
@@ -74,11 +99,27 @@ Sprint Conductor (opus) — coordinates via TaskCreate/SendMessage
   +---------------------------------------+
 ```
 
+**Lean context per worker**: Each worker only receives the project's technology reference (not all technologies). The conductor passes only `@.claude/references/<project-tech>/CLAUDE.md` in context.
+
+**Shared file detection (B2)**: During independence analysis, explicitly detect shared directories (`**/Shared/**`, `**/Common/**`, `**/Utils/**`, `**/Helpers/**`). Stories touching files in these directories automatically receive an `overlaps_with` marker and are sequenced in the same worker.
+
 The conductor creates one `TaskCreate` per story:
 
-- **Subject**: `Implement US-XXX: <story title>`
-- **Description**: Full story content, acceptance criteria, tech spec references, TDD requirements
-- **activeForm**: `Implementing US-XXX`
+**Structured spawn template (TaskCreate)**:
+```
+Subject: "Implement US-XXX: <story title>"
+Description:
+  Project: <project-name>
+  Technology: <project-tech>
+  Story: <full story content>
+  Acceptance criteria: <complete ACs with Gherkin>
+  File domain: <expected source directories>
+  Out-of-bounds: <directories NOT to modify>
+  TDD commands: <docker-specific tech commands>
+  Success criteria: All AC tests pass, lint clean, coverage not reduced
+  Reference: @.claude/references/<tech>/CLAUDE.md
+activeForm: "Implementing US-XXX"
+```
 
 ### Step 3: Worker Execution (Per Story)
 
@@ -143,6 +184,12 @@ The conductor classifies errors per the Ralph recovery engine:
 | 1 | Recoverable | Worker auto-fix + retry | Lint errors, test failures, deps |
 | 2 | Degraded | Continue with warning | Docs, optional gates, coverage dip |
 | 3 | Blocked | Escalate to human | Security, architecture, auth |
+
+**Polling cadence (B5)**: The conductor polls `TaskList` every 30 seconds. After 3 consecutive polls without change, reduce to 60 seconds. Use `TeammateIdle`/`TaskCompleted` hooks (v2.1.33+) if available.
+
+**Completion message verbosity (B4)**: Workers MUST limit their completion messages to < 50 tokens. Format: `DONE: US-XXX tests pass, +X files`. Write details in the task summary, not the message.
+
+**Conductor context recovery (A6)**: To mitigate context compaction bug (#23620), the conductor MUST re-read `TaskList` every 5 worker completions to refresh its awareness of team state.
 
 **Worker stuck detection**: If a worker hasn't updated its task in 10 minutes, the conductor sends a status check message. If no response within 2 minutes, the conductor marks the story as blocked and reassigns to another worker or queues for human review.
 

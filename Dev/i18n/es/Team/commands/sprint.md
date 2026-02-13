@@ -18,6 +18,7 @@ $ARGUMENTS
 - `--max-stories=10`: Maximo de stories a procesar (por defecto: 10)
 - `--timeout=12`: Tiempo maximo de ejecucion en horas (por defecto: 12)
 - `--dry-run`: Mostrar composicion del equipo y asignacion de stories sin ejecutar
+- `--max-cost=<dollars>`: Presupuesto maximo en dolares. Si el costo paralelo estimado supera este umbral, la ejecucion se bloquea con un mensaje OVER BUDGET
 - `--ralph-mode`: Habilitar motor de recuperacion Ralph (clasificacion de errores, auto-reintento, servicio de escalamiento) junto con la paralelizacion de Agent Teams.
 
 ## Prerequisitos
@@ -30,6 +31,28 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/ralph-teams-adapter.sh` disponible
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponible
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponible
+
+## Proteccion Fast Mode (Confirmacion Bloqueante)
+
+**OBLIGATORIO**: Antes de lanzar el equipo, el conductor DEBE:
+
+1. Detectar si el Fast Mode esta activo (indicador lightning bolt en la terminal)
+2. Si el Fast Mode esta activo:
+   - Mostrar el dashboard comparativo estandar vs fast via `cost-estimator.sh --fast-mode`
+   - **Mostrar una advertencia bloqueante** con los costos comparados:
+     ```
+     ⚠️  FAST MODE DETECTADO — Costos Opus 6x mas altos!
+
+     | Modo     | Input ($/M) | Output ($/M) | Costo estimado este sprint |
+     |----------|-------------|--------------|----------------------------|
+     | Estandar | $5.00       | $25.00       | ~$X.XX                     |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY                     |
+
+     ¿Desea continuar en Fast Mode? (si/no)
+     Recomendacion: escriba /fast para desactivar antes de continuar.
+     ```
+   - **Esperar la confirmacion explicita** del usuario antes de continuar
+   - Si el usuario rechaza, abortar con un mensaje sugiriendo `/fast` para desactivar
 
 ## Cuando usar (vs. Sprint secuencial)
 
@@ -53,10 +76,16 @@ El conductor de sprint carga el estado del sprint:
 2. Filtrar stories con estado `ready-for-dev`
 3. Analizar la independencia de las stories (verificar solapamiento de dominios de archivo)
 4. Particionar stories en grupos paralelizables
+5. Estimar los costos via `cost-estimator.sh --task-type sprint --techs <worker_count>`
+6. **Proteccion de presupuesto**: Si se especifica `--max-cost`, verificar que el costo estimado <= max_cost. Si hay exceso: mostrar `OVER BUDGET`, abortar, sugerir reducir el numero de stories o usar `--sequential`
 
 **Verificacion de independencia**: Dos stories son independientes si sus criterios de aceptacion y alcance de implementacion no hacen referencia a los mismos archivos fuente. El conductor revisa la descripcion de cada story y las referencias al tech spec para determinarlo.
 
 ### Paso 2: Asignacion de stories
+
+**Contexto lean por worker**: Cada worker solo recibe la referencia tecnologica del proyecto (no todas las tecnologias). El conductor pasa unicamente `@.claude/references/<tech-del-proyecto>/CLAUDE.md` en el contexto.
+
+**Deteccion de archivos compartidos (B2)**: Durante el analisis de independencia, detectar explicitamente los directorios compartidos (`**/Shared/**`, `**/Common/**`, `**/Utils/**`, `**/Helpers/**`). Las stories que tocan archivos en estos directorios reciben automaticamente un marcador `overlaps_with` y se secuencian en el mismo worker.
 
 ```
 Conductor de Sprint (opus) — coordina via TaskCreate/SendMessage
@@ -77,9 +106,21 @@ Conductor de Sprint (opus) — coordina via TaskCreate/SendMessage
 
 El conductor crea un `TaskCreate` por story:
 
-- **Asunto**: `Implementar US-XXX: <titulo de la story>`
-- **Descripcion**: Contenido completo de la story, criterios de aceptacion, referencias al tech spec, requisitos TDD
-- **activeForm**: `Implementando US-XXX`
+**Plantilla de spawn estructurada (TaskCreate)**:
+```
+Subject: "Implementar US-XXX: <titulo de la story>"
+Description:
+  Proyecto: <nombre-del-proyecto>
+  Tecnologia: <tech-del-proyecto>
+  Story: <contenido completo de la story>
+  Criterios de aceptacion: <ACs completos con Gherkin>
+  Dominio de archivos: <directorios fuente esperados>
+  Fuera de limites: <directorios a NO modificar>
+  Comandos TDD: <comandos docker especificos de la tech>
+  Criterios de exito: Todos los tests AC pasan, lint limpio, cobertura no reducida
+  Referencia: @.claude/references/<tech>/CLAUDE.md
+activeForm: "Implementacion de US-XXX"
+```
 
 ### Paso 3: Ejecucion del worker (por story)
 
@@ -144,6 +185,12 @@ El conductor clasifica los errores segun el motor de recuperacion Ralph:
 | 1 | Recuperable | Worker auto-corrige + reintento | Errores de lint, fallos de tests, deps |
 | 2 | Degradado | Continuar con advertencia | Docs, gates opcionales, caida de cobertura |
 | 3 | Bloqueado | Escalar a humano | Seguridad, arquitectura, auth |
+
+**Cadencia de sondeo (B5)**: El conductor sondea `TaskList` cada 30 segundos. Despues de 3 sondeos consecutivos sin cambios, reducir a 60 segundos. Usar los hooks `TeammateIdle`/`TaskCompleted` (v2.1.33+) si estan disponibles.
+
+**Verbosidad de mensajes (B4)**: Los workers DEBEN limitar sus mensajes de finalizacion a < 50 tokens. Formato: `DONE: US-XXX tests pass, +X files`. Escribir los detalles en el resumen de la tarea, no en el mensaje.
+
+**Recuperacion de contexto del conductor (A6)**: Para mitigar el bug de compactacion de contexto (#23620), el conductor DEBE releer `TaskList` cada 5 finalizaciones de workers para refrescar su conocimiento del estado del equipo.
 
 **Deteccion de worker atascado**: Si un worker no ha actualizado su tarea en 10 minutos, el conductor envia un mensaje de verificacion de estado. Si no hay respuesta en 2 minutos, el conductor marca la story como bloqueada y la reasigna a otro worker o la pone en cola para revision humana.
 

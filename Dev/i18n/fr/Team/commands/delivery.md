@@ -21,6 +21,29 @@ $ARGUMENTS
 - `--dry-run` : Afficher la composition de l'équipe, l'estimation de coût et les assignations de stories sans exécuter
 - `--quality-threshold=6` : Score INVEST minimum pour la Phase 1 (par défaut : 6/6)
 - `--max-rewrites=2` : Nombre maximum de boucles de réécriture par artefact en Phase 1 (par défaut : 2)
+- `--max-cost=<dollars>` : Budget maximum en dollars. Si le coût parallèle estimé dépasse ce seuil, l'exécution est bloquée avec un message OVER BUDGET
+
+## Garde-Fou Fast Mode (Confirmation Bloquante)
+
+**OBLIGATOIRE** : Avant de lancer l'équipe, le Delivery Lead DOIT :
+
+1. Détecter si le Fast Mode est actif (indicateur lightning bolt dans le terminal)
+2. Si Fast Mode actif :
+   - Afficher le dashboard comparatif standard vs fast via `cost-estimator.sh --fast-mode`
+   - **Afficher un avertissement bloquant** avec les coûts comparés :
+     ```
+     ⚠️  FAST MODE DÉTECTÉ — Coûts Opus 6x plus élevés !
+
+     | Mode     | Input ($/M) | Output ($/M) | Coût estimé cette livraison |
+     |----------|-------------|--------------|----------------------------|
+     | Standard | $5.00       | $25.00       | ~$X.XX                     |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY                     |
+
+     Voulez-vous continuer en Fast Mode ? (oui/non)
+     Recommandation : tapez /fast pour désactiver avant de continuer.
+     ```
+   - **Attendre la confirmation explicite** de l'utilisateur avant de poursuivre
+   - Si l'utilisateur refuse, abandonner avec un message suggérant `/fast` pour désactiver
 
 ## Prérequis
 
@@ -68,15 +91,33 @@ Le Delivery Lead valide les entrées :
 1. Lire le PRD ou la spécification technique depuis le chemin fourni
 2. Valider la Porte PRD (>=80%) — si le score est en dessous du seuil, abandonner avec un message explicite
 3. Extraire les fonctionnalités, exigences et périmètre des critères d'acceptation
-4. Créer l'équipe via `TeamCreate`
+4. Estimer les coûts via `cost-estimator.sh --task-type delivery --techs <worker_count>`
+5. **Garde-fou budget** : Si `--max-cost` est spécifié, vérifier que le coût estimé <= max_cost. Si dépassement : afficher `OVER BUDGET`, abandonner
+6. Créer l'équipe via `TeamCreate`
 
 #### Étape 1.2 : Lancement de l'équipe (Phase 1)
 
 Le Lead lance 3 workers Phase 1 via l'outil `Task` :
 
 1. **Rédacteur** (sonnet) : Instruire pour créer les EPICs et User Stories au format INVEST+3C+Gherkin
-2. **Relecteur** (sonnet) : Instruire pour valider la qualité selon le tableau de vérifications ci-dessous
+2. **Relecteur** (haiku) : Instruire pour valider la qualité selon le tableau de vérifications ci-dessous — haiku suffit pour cette tâche de classification (12x moins cher que sonnet en output)
 3. **Architecte** (sonnet) : Instruire pour valider la faisabilité technique et produire les maps de domaines fichiers
+
+**Contexte lean par worker Phase 1** : Chaque worker ne reçoit que le PRD/spec tech et la référence technologique du projet. Ne PAS charger les références de toutes les technologies.
+
+**Template de spawn structuré Phase 1 (TaskCreate)** : Le Lead DOIT inclure dans chaque tâche :
+```
+Subject: "Rédiger <artefact-type> : <titre>"
+Description:
+  Projet: <nom-du-projet>
+  Technologie: <tech-du-projet>
+  PRD/Spec: <contenu ou référence>
+  Artefact attendu: <EPIC|US|Tâche>
+  Format: INVEST+3C+Gherkin pour les US
+  Critères de succès: INVEST 6/6, ACs nominaux >= 1, alternatifs >= 2, erreur >= 2
+  Référence: @.claude/references/<tech>/CLAUDE.md
+activeForm: "Rédaction <artefact-type>"
+```
 
 #### Étape 1.3 : Pipeline d'artefacts
 
@@ -108,6 +149,8 @@ Le Lead coordonne via `SendMessage` :
 | Découpage vertical | Oui | Patterns `@tech-lead` |
 | Story points | 1-8 | Critère INVEST "Petit" |
 | Bénéfice explicite | Oui | Critère INVEST "De Valeur" |
+
+**Détection de fichiers partagés (B2)** : L'Architecte DOIT détecter explicitement les répertoires partagés (`**/Shared/**`, `**/Common/**`, `**/Utils/**`, `**/Helpers/**`). Les stories touchant des fichiers dans ces répertoires reçoivent automatiquement un marqueur `overlaps_with` et sont séquencées dans la même vague.
 
 #### Sortie du mapping de domaines fichiers de l'Architecte
 
@@ -192,12 +235,61 @@ MÉTRIQUES DE QUALITÉ
 
 ### Transition de Phase
 
-Si `--phase=all`, le Lead effectue une transition d'équipe :
+Si `--phase=all`, le Lead effectue une transition d'équipe sécurisée :
+
+#### Étape T.1 : Écriture du contrat de handoff
+
+Le Lead écrit un fichier `phase-handoff.yaml` dans le répertoire de session avant de fermer la Phase 1 :
+
+```yaml
+# .bmad/phase-handoff.yaml — contrat inter-phases
+handoff_version: "1.0"
+timestamp: "2026-02-13T10:30:00Z"
+sprint: "<sprint-name>"
+phase1_status: "completed"
+
+stories_accepted:
+  - id: US-001
+    invest_score: 6
+    file_domains: [src/Domain/User/, src/App/User/, tests/Unit/User/]
+  - id: US-002
+    invest_score: 6
+    file_domains: [src/Domain/Order/, src/App/Order/, tests/Unit/Order/]
+
+stories_needs_review:
+  - id: US-004
+    reason: "INVEST 4/6 après 2 réécritures"
+
+parallelization_waves:
+  - wave: 1
+    stories: [US-001, US-002]
+    reason: "0 chevauchement de domaines fichiers"
+  - wave: 2
+    stories: [US-003]
+    reason: "dépend des fichiers de US-001"
+
+phase1_metrics:
+  artifacts_created: 4
+  rewrites_total: 3
+  avg_invest_score: 5.5
+  duration_minutes: 20
+```
+
+#### Étape T.2 : Arrêt Phase 1 et lancement Phase 2
 
 1. Envoyer `shutdown_request` au Rédacteur, Relecteur, Architecte
 2. Attendre que tous les workers s'arrêtent (~30s)
-3. Le Lead conserve le contexte complet de la Phase 1 (stories, map de domaines, vagues)
+3. Le Lead conserve le contexte complet de la Phase 1 via `phase-handoff.yaml`
+3.5. **Récupération du contexte (A6)** : Relire `phase-handoff.yaml` pour rafraîchir l'état avant de lancer la Phase 2. Si le contexte a été compacté (bug #23620), ce re-read garantit la conscience complète des artefacts Phase 1.
 4. Procéder au lancement de la Phase 2
+
+#### Reprise après crash
+
+Si le Lead redémarre entre les deux phases :
+1. Vérifier l'existence de `.bmad/phase-handoff.yaml`
+2. Si présent avec `phase1_status: completed`, reprendre directement en Phase 2
+3. Utiliser les `parallelization_waves` et `file_domains` du handoff pour l'assignation
+4. Si absent ou `phase1_status != completed`, relancer la Phase 1
 
 ### Phase 2 : Implémentation (Vitesse + Délégation)
 
@@ -232,9 +324,23 @@ Le Lead lance les workers dev (jusqu'à `--max-workers`) et assigne les stories 
 
 Le Lead crée un `TaskCreate` par story :
 
-- **Subject** : `Implémenter US-XXX : <titre de la story>`
-- **Description** : Contenu complet de la story, critères d'acceptation, références à la spécification technique, exigences TDD, périmètre de domaine fichiers
-- **activeForm** : `Implémentation de US-XXX`
+**Contexte lean par worker Phase 2** : Chaque worker ne reçoit que la story assignée et la référence technologique du projet. Ne PAS charger les autres stories ou le PRD complet.
+
+**Template de spawn structuré Phase 2 (TaskCreate)** :
+```
+Subject: "Implémenter US-XXX : <titre de la story>"
+Description:
+  Projet: <nom-du-projet>
+  Technologie: <tech-du-projet>
+  Story: <contenu complet de la story>
+  Critères d'acceptation: <ACs complets avec Gherkin>
+  Domaine fichiers: <répertoires depuis phase-handoff.yaml>
+  Hors-limites: <répertoires des AUTRES stories en cours>
+  Commandes TDD: <commandes docker spécifiques>
+  Critères de succès: Tous les tests AC passent, lint propre, couverture non réduite
+  Référence: @.claude/references/<tech>/CLAUDE.md
+activeForm: "Implémentation de US-XXX"
+```
 
 #### Étape 2.2 : Exécution des workers (Par Story)
 
@@ -299,6 +405,12 @@ Le Lead classifie les erreurs selon le moteur de récupération Ralph :
 | 1 | Récupérable | Auto-correction du worker + réessai | Erreurs de lint, échecs de tests, deps |
 | 2 | Dégradé | Continuer avec avertissement | Docs, portes optionnelles, baisse de couverture |
 | 3 | Bloqué | Escalade vers l'humain | Sécurité, architecture, auth |
+
+**Cadence de polling (B5)** : Le Lead poll `TaskList` toutes les 30 secondes. Après 3 polls consécutifs sans changement, réduire à 60 secondes. Utiliser les hooks `TeammateIdle`/`TaskCompleted` (v2.1.33+) si disponibles.
+
+**Verbosité des messages (B4)** : Les workers DOIVENT limiter leurs messages de completion à < 50 tokens. Format : `DONE: US-XXX tests pass, +X files`. Écrire les détails dans le résumé de la tâche.
+
+**Récupération du contexte Lead (A6)** : Pour mitiger le bug de context compaction (#23620), le Lead DOIT relire `TaskList` toutes les 5 completions de workers. Au début de la Phase 2, relire systématiquement `phase-handoff.yaml` pour garantir la conscience complète des artefacts Phase 1.
 
 **Détection de worker bloqué** : Si un worker n'a pas mis à jour sa tâche depuis 10 minutes, le Lead envoie un message de vérification de statut. Si pas de réponse dans les 2 minutes, le Lead marque la story comme bloquée et réassigne à un autre worker ou met en file pour revue humaine.
 

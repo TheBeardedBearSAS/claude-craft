@@ -21,6 +21,7 @@ $ARGUMENTS
 - `--dry-run`: Team-Zusammensetzung, Kostenschätzung und Story-Zuweisungen anzeigen, ohne auszuführen
 - `--quality-threshold=6`: Minimaler INVEST-Score für Phase 1 (Standard: 6/6)
 - `--max-rewrites=2`: Maximale Überarbeitungsschleifen pro Artefakt in Phase 1 (Standard: 2)
+- `--max-cost=<dollars>`: Maximales Budget in Dollar. Wenn die geschaetzten Parallelkosten diesen Schwellenwert ueberschreiten, wird die Ausfuehrung mit einer OVER BUDGET Meldung blockiert
 
 ## Voraussetzungen
 
@@ -31,6 +32,28 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/compatibility-check.sh` verfügbar
 - `Tools/AgentTeams/lib/cost-estimator.sh` verfügbar
 - `Tools/AgentTeams/lib/result-aggregator.sh` verfügbar
+
+## Garde-Fou Fast Mode (Blockierende Bestaetigung)
+
+**OBLIGATORISCH**: Vor dem Start des Teams MUSS der Delivery Lead:
+
+1. Erkennen, ob der Fast Mode aktiv ist (Lightning-Bolt-Indikator im Terminal)
+2. Wenn Fast Mode aktiv:
+   - Vergleichs-Dashboard Standard vs. Fast via `cost-estimator.sh --fast-mode` anzeigen
+   - **Blockierende Warnung** mit verglichenen Kosten anzeigen:
+     ```
+     ⚠️  FAST MODE ERKANNT — Opus-Kosten 6x hoeher!
+
+     | Modus     | Input ($/M) | Output ($/M) | Geschaetzte Kosten dieser Lieferung |
+     |-----------|-------------|--------------|-------------------------------------|
+     | Standard  | $5.00       | $25.00       | ~$X.XX                              |
+     | Fast      | $30.00      | $150.00      | ~$Y.YY                              |
+
+     Moechten Sie im Fast Mode fortfahren? (ja/nein)
+     Empfehlung: Tippen Sie /fast, um vor dem Fortfahren zu deaktivieren.
+     ```
+   - **Warten auf explizite Bestaetigung** des Benutzers vor dem Fortfahren
+   - Wenn der Benutzer ablehnt, abbrechen mit Nachricht, die `/fast` zum Deaktivieren vorschlaegt
 
 ## Wann verwenden (vs. sequenziell oder andere Teams)
 
@@ -57,7 +80,7 @@ $ARGUMENTS
 Delivery-Lead (opus) — Orchestrierung, Validierung, gemeinsamer Kontext
   |
   +-- Writer (sonnet)    : Erstellt EPICs, US (INVEST+3C+Gherkin), Aufgaben
-  +-- Reviewer (sonnet)  : Validiert Qualität (INVEST 6/6, AC-Abdeckung, Testbarkeit, Slicing)
+  +-- Reviewer (haiku)   : Validiert Qualität (INVEST 6/6, AC-Abdeckung, Testbarkeit, Slicing)
   +-- Architect (sonnet) : Validiert technische Machbarkeit + Dateidomänen-Zuordnung
 ```
 
@@ -68,15 +91,33 @@ Der Delivery-Lead validiert die Eingabe:
 1. PRD oder Tech Spec vom angegebenen Pfad lesen
 2. PRD-Gate validieren (>=80%) -- bei Score unter Schwellenwert mit klarer Meldung abbrechen
 3. Features, Anforderungen und Abnahmekriterien-Umfang extrahieren
-4. Team via `TeamCreate` erstellen
+4. Kosten schaetzen via `cost-estimator.sh --task-type delivery --techs <worker_count>`
+5. **Budgetgarantie**: Wenn `--max-cost` angegeben ist, pruefen dass geschaetzte Kosten <= max_cost. Bei Ueberschreitung: `OVER BUDGET` anzeigen, abbrechen
+6. Team via `TeamCreate` erstellen
 
 #### Schritt 1.2: Team starten (Phase 1)
 
 Der Lead startet 3 Phase-1-Worker via `Task`-Tool:
 
 1. **Writer** (sonnet): Angewiesen, EPICs und User Stories im INVEST+3C+Gherkin-Format zu erstellen
-2. **Reviewer** (sonnet): Angewiesen, Qualität gemäß der untenstehenden Prüftabelle zu validieren
+2. **Reviewer** (haiku): Angewiesen, Qualität gemäß der untenstehenden Prüftabelle zu validieren — haiku reicht fuer diese Klassifikationsaufgabe (12x billiger als sonnet im Output)
 3. **Architect** (sonnet): Angewiesen, technische Machbarkeit zu validieren und Dateidomänen-Zuordnungen zu erstellen
+
+**Lean Context pro Phase-1-Worker**: Jeder Worker erhaelt nur das PRD/Tech Spec und die technologische Referenz des Projekts. Laden Sie NICHT die Referenzen aller Technologien.
+
+**Strukturiertes Spawn-Template Phase 1 (TaskCreate)**: Der Lead MUSS in jede Aufgabe einfuegen:
+```
+Subject: "Write <artefact-type>: <titel>"
+Description:
+  Projekt: <projektname>
+  Technologie: <projekt-tech>
+  PRD/Spec: <Inhalt oder Referenz>
+  Erwartetes Artefakt: <EPIC|US|Task>
+  Format: INVEST+3C+Gherkin fuer US
+  Erfolgskriterien: INVEST 6/6, nominale ACs >= 1, alternative >= 2, Fehler >= 2
+  Referenz: @.claude/references/<tech>/CLAUDE.md
+activeForm: "Writing <artefact-type>"
+```
 
 #### Schritt 1.3: Artefakt-Pipeline
 
@@ -108,6 +149,8 @@ Der Lead koordiniert via `SendMessage`:
 | Vertikales Slicing | Ja | `@tech-lead`-Muster |
 | Story Points | 1-8 | INVEST-Kriterium "Small" |
 | Expliziter Nutzen | Ja | INVEST-Kriterium "Valuable" |
+
+**Gemeinsame Dateien-Erkennung (B2)**: Der Architect MUSS explizit gemeinsame Verzeichnisse (`**/Shared/**`, `**/Common/**`, `**/Utils/**`, `**/Helpers/**`) erkennen. Stories, die Dateien in diesen Verzeichnissen beruehren, erhalten automatisch einen `overlaps_with`-Marker und werden in derselben Welle sequenziert.
 
 #### Architect-Dateidomänen-Zuordnung
 
@@ -192,12 +235,61 @@ QUALITY METRICS
 
 ### Phasenübergang
 
-Bei `--phase=all` führt der Lead einen Teamübergang durch:
+Bei `--phase=all` führt der Lead einen sicheren Teamübergang durch:
+
+#### Schritt T.1: Handoff-Vertrag schreiben
+
+Der Lead schreibt eine `phase-handoff.yaml`-Datei im Sitzungsverzeichnis, bevor Phase 1 beendet wird:
+
+```yaml
+# .bmad/phase-handoff.yaml — Interphasen-Vertrag
+handoff_version: "1.0"
+timestamp: "2026-02-13T10:30:00Z"
+sprint: "<sprint-name>"
+phase1_status: "completed"
+
+stories_accepted:
+  - id: US-001
+    invest_score: 6
+    file_domains: [src/Domain/User/, src/App/User/, tests/Unit/User/]
+  - id: US-002
+    invest_score: 6
+    file_domains: [src/Domain/Order/, src/App/Order/, tests/Unit/Order/]
+
+stories_needs_review:
+  - id: US-004
+    reason: "INVEST 4/6 nach 2 Überarbeitungen"
+
+parallelization_waves:
+  - wave: 1
+    stories: [US-001, US-002]
+    reason: "0 Dateidomänen-Überlappung"
+  - wave: 2
+    stories: [US-003]
+    reason: "hängt von Dateien aus US-001 ab"
+
+phase1_metrics:
+  artifacts_created: 4
+  rewrites_total: 3
+  avg_invest_score: 5.5
+  duration_minutes: 20
+```
+
+#### Schritt T.2: Phase 1 herunterfahren und Phase 2 starten
 
 1. `shutdown_request` an Writer, Reviewer, Architect senden
 2. Warten, bis alle Worker heruntergefahren sind (~30s)
-3. Lead behält vollständigen Kontext aus Phase 1 (Stories, Domänenzuordnung, Wellen)
+3. Lead behält vollständigen Kontext aus Phase 1 via `phase-handoff.yaml`
+3.5. **Kontextwiederherstellung (A6)**: `phase-handoff.yaml` neu lesen, um den Status vor Start von Phase 2 aufzufrischen. Wenn der Kontext kompaktiert wurde (Bug #23620), garantiert dieser Re-Read vollstaendiges Bewusstsein fuer Phase-1-Artefakte.
 4. Mit Phase-2-Start fortfahren
+
+#### Wiederherstellung nach Absturz
+
+Wenn der Lead zwischen den beiden Phasen neu startet:
+1. Existenz von `.bmad/phase-handoff.yaml` prüfen
+2. Wenn vorhanden mit `phase1_status: completed`, direkt in Phase 2 fortfahren
+3. `parallelization_waves` und `file_domains` aus dem Handoff für die Zuweisung verwenden
+4. Wenn nicht vorhanden oder `phase1_status != completed`, Phase 1 neu starten
 
 ### Phase 2: Implementierung (Geschwindigkeit + Delegation)
 
@@ -230,11 +322,25 @@ Der Lead startet Entwickler-Worker (bis zu `--max-workers`) und weist Stories na
 2. Wenn Wave 1 abgeschlossen ist, werden Wave-2-Stories zugewiesen
 3. Von abgeschlossenen Stories freigewordene Worker übernehmen die nächste verfügbare Story
 
+**Lean Context pro Phase-2-Worker**: Jeder Worker erhaelt nur die zugewiesene Story und die technologische Referenz des Projekts. Laden Sie NICHT andere Stories oder das vollstaendige PRD.
+
 Der Lead erstellt einen `TaskCreate` pro Story:
 
-- **Betreff**: `Implement US-XXX: <story title>`
-- **Beschreibung**: Vollständiger Story-Inhalt, Abnahmekriterien, Tech-Spec-Referenzen, TDD-Anforderungen, Dateidomänen-Umfang
-- **activeForm**: `Implementing US-XXX`
+**Strukturiertes Spawn-Template Phase 2 (TaskCreate)**:
+```
+Subject: "Implement US-XXX: <story title>"
+Description:
+  Projekt: <projektname>
+  Technologie: <projekt-tech>
+  Story: <vollstaendiger Story-Inhalt>
+  Abnahmekriterien: <vollstaendige ACs mit Gherkin>
+  Dateidomaene: <Verzeichnisse aus phase-handoff.yaml>
+  Ausserhalb Grenzen: <Verzeichnisse von ANDEREN in Bearbeitung befindlichen Stories>
+  TDD-Befehle: <tech-spezifische Docker-Befehle>
+  Erfolgskriterien: Alle AC-Tests bestanden, Lint sauber, Abdeckung nicht reduziert
+  Referenz: @.claude/references/<tech>/CLAUDE.md
+activeForm: "Implementing US-XXX"
+```
 
 #### Schritt 2.2: Worker-Ausführung (pro Story)
 
@@ -299,6 +405,12 @@ Der Lead klassifiziert Fehler gemäß der Ralph-Recovery-Engine:
 | 1 | Behebbar | Worker Auto-Fix + Retry | Lint-Fehler, Testfehler, Deps |
 | 2 | Eingeschränkt | Mit Warnung fortfahren | Docs, optionale Gates, Abdeckungsrückgang |
 | 3 | Blockiert | An Menschen eskalieren | Sicherheit, Architektur, Auth |
+
+**Polling-Kadenz (B5)**: Der Lead pollt `TaskList` alle 30 Sekunden. Nach 3 aufeinanderfolgenden Polls ohne Aenderung, auf 60 Sekunden reduzieren. Verwenden Sie `TeammateIdle`/`TaskCompleted` Hooks (v2.1.33+), falls verfuegbar.
+
+**Nachrichten-Verbositaet (B4)**: Worker MUESSEN ihre Completion-Nachrichten auf < 50 Token begrenzen. Format: `DONE: US-XXX tests pass, +X files`. Details in die Aufgabenzusammenfassung schreiben.
+
+**Lead-Kontextwiederherstellung (A6)**: Um den Context-Compaction-Bug (#23620) abzumildern, MUSS der Lead `TaskList` alle 5 Worker-Completions neu lesen. Zu Beginn von Phase 2 systematisch `phase-handoff.yaml` neu lesen, um vollstaendiges Bewusstsein fuer Phase-1-Artefakte zu garantieren.
 
 **Worker-Blockade-Erkennung**: Wenn ein Worker seine Aufgabe seit 10 Minuten nicht aktualisiert hat, sendet der Lead eine Statusprüfungsnachricht. Wenn innerhalb von 2 Minuten keine Antwort erfolgt, markiert der Lead die Story als blockiert und weist sie einem anderen Worker zu oder reiht sie für menschliche Überprüfung ein.
 

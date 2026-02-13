@@ -21,6 +21,22 @@ TEAMS_WATCHDOG_INTERVAL="${TEAMS_WATCHDOG_INTERVAL:-60}"   # seconds between hea
 TEAMS_WATCHDOG_TIMEOUT="${TEAMS_WATCHDOG_TIMEOUT:-300}"    # 5 min timeout before fallback
 TEAMS_DRY_RUN="${TEAMS_DRY_RUN:-false}"
 
+# B6: Per-task timeout (seconds) — overrides TEAMS_WATCHDOG_TIMEOUT per task type
+# Default: 0 = use TEAMS_WATCHDOG_TIMEOUT; set via --timeout-per-task or task type
+TEAMS_PER_TASK_TIMEOUT="${TEAMS_PER_TASK_TIMEOUT:-0}"
+
+# Per-task timeout baselines (seconds) = 1.5x estimated duration
+declare -A TASK_TYPE_TIMEOUT=(
+    [audit]=135       # 1.5 min * 1.5 = 2.25 min = 135s
+    [sprint]=1350     # 15 min * 1.5 = 22.5 min = 1350s
+    [security]=180    # 2 min * 1.5 = 3 min = 180s
+    [delivery]=1800   # 20 min * 1.5 = 30 min = 1800s
+)
+
+# A6: Context recovery — completions counter for TaskList re-read suggestion
+_TEAMS_COMPLETIONS_SINCE_REREAD=0
+TEAMS_REREAD_INTERVAL=5  # suggest re-read every N completions
+
 # State
 _TEAMS_INITIALIZED=false
 _TEAMS_AVAILABLE=false
@@ -224,6 +240,13 @@ teams_mark_completed() {
     _TEAMS_STORIES_COMPLETED=$((_TEAMS_STORIES_COMPLETED + 1))
     unset "_TEAMS_STORY_ASSIGNMENT[$story_id]"
 
+    # A6: Track completions for context recovery suggestion
+    _TEAMS_COMPLETIONS_SINCE_REREAD=$((_TEAMS_COMPLETIONS_SINCE_REREAD + 1))
+    if [[ $_TEAMS_COMPLETIONS_SINCE_REREAD -ge $TEAMS_REREAD_INTERVAL ]]; then
+        _teams_log "CONTEXT RECOVERY: $TEAMS_REREAD_INTERVAL completions since last re-read. Leader should call TaskList to refresh team awareness."
+        _TEAMS_COMPLETIONS_SINCE_REREAD=0
+    fi
+
     _teams_write_state "story_completed"
     return 0
 }
@@ -342,8 +365,14 @@ teams_watchdog() {
         local last_seen="${_TEAMS_TEAMMATE_LAST_SEEN[$name]:-0}"
         local elapsed=$((now - last_seen))
 
-        if [[ $elapsed -ge $TEAMS_WATCHDOG_TIMEOUT ]]; then
-            _teams_log "WATCHDOG: Teammate '$name' unresponsive for ${elapsed}s (timeout: ${TEAMS_WATCHDOG_TIMEOUT}s)"
+        # B6: Per-task timeout takes precedence over global timeout
+        local effective_timeout=$TEAMS_WATCHDOG_TIMEOUT
+        if [[ $TEAMS_PER_TASK_TIMEOUT -gt 0 ]]; then
+            effective_timeout=$TEAMS_PER_TASK_TIMEOUT
+        fi
+
+        if [[ $elapsed -ge $effective_timeout ]]; then
+            _teams_log "WATCHDOG: Teammate '$name' unresponsive for ${elapsed}s (timeout: ${effective_timeout}s)"
             _TEAMS_TEAMMATE_STATUS["$name"]="stalled"
 
             # Find the story assigned to this teammate
@@ -360,7 +389,9 @@ teams_watchdog() {
                 _teams_log "WATCHDOG: Triggering fallback to sequential for '$stalled_story'"
                 teams_fallback_sequential "$stalled_story" "$name"
             fi
-        elif [[ $elapsed -ge $((TEAMS_WATCHDOG_TIMEOUT / 2)) ]]; then
+        elif [[ $elapsed -ge $((effective_timeout / 2)) ]]; then
+            # A6: If prolonged inactivity, suggest context re-read
+            _teams_log "WATCHDOG: Consider re-reading TaskList to refresh team awareness (context compaction mitigation)"
             _teams_log "WATCHDOG: Warning - teammate '$name' quiet for ${elapsed}s"
         fi
     done
@@ -420,6 +451,23 @@ _teams_shutdown_teammate() {
     # For the adapter, we simply mark it and move on
     _TEAMS_TEAMMATE_STATUS["$teammate_name"]="shutdown"
     _teams_log "Teammate '$teammate_name' marked as shutdown (may be orphaned)"
+}
+
+# =============================================================================
+# B6: Per-Task Timeout Configuration
+# =============================================================================
+
+# Set per-task timeout from task type
+# Usage: teams_set_task_timeout <task_type>
+teams_set_task_timeout() {
+    local task_type="${1:?Task type required (audit|sprint|security|delivery)}"
+
+    if [[ -n "${TASK_TYPE_TIMEOUT[$task_type]+x}" ]]; then
+        TEAMS_PER_TASK_TIMEOUT=${TASK_TYPE_TIMEOUT[$task_type]}
+        _teams_log "Per-task timeout set to ${TEAMS_PER_TASK_TIMEOUT}s for task type: $task_type"
+    else
+        _teams_log "Warning: Unknown task type '$task_type', using default timeout"
+    fi
 }
 
 # =============================================================================

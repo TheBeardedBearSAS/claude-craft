@@ -17,6 +17,7 @@ $ARGUMENTS
 - `--output-dir=<path>`: Diretorio de saida personalizado para resultados de seguranca
 - `--dry-run`: Mostrar composicao da equipe e plano de scan sem executar
 - `--sarif`: Saida em formato SARIF (para integracao CI/CD)
+- `--max-cost=<dollars>`: Orcamento maximo em dolares. Se o custo paralelo estimado ultrapassar este limiar, a execucao e bloqueada com uma mensagem OVER BUDGET
 
 ## Pre-requisitos
 
@@ -26,6 +27,28 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponivel
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponivel
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponivel
+
+## Protecao Fast Mode (Confirmacao Bloqueante)
+
+**OBRIGATORIO**: Antes de lancar a equipe, o lider de seguranca DEVE:
+
+1. Detectar se o Fast Mode esta ativo (indicador lightning bolt no terminal)
+2. Se Fast Mode ativo:
+   - Exibir o dashboard comparativo padrao vs fast via `cost-estimator.sh --fast-mode`
+   - **Exibir um aviso bloqueante** com os custos comparados:
+     ```
+     ⚠️  FAST MODE DETECTADO — Custos Opus 6x mais altos!
+
+     | Modo     | Input ($/M) | Output ($/M) | Custo estimado desta revisao |
+     |----------|-------------|--------------|------------------------------|
+     | Padrao   | $5.00       | $25.00       | ~$X.XX                       |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY                       |
+
+     Deseja continuar em Fast Mode? (sim/nao)
+     Recomendacao: digite /fast para desativar antes de continuar.
+     ```
+   - **Aguardar confirmacao explicita** do usuario antes de prosseguir
+   - Se o usuario recusar, abandonar com uma mensagem sugerindo `/fast` para desativar
 
 ## Composicao da Equipe
 
@@ -65,6 +88,15 @@ Tools/AgentTeams/lib/compatibility-check.sh \
 
 ### Etapa 3: Criacao da Equipe (Fan-Out)
 
+**Estimativa de custos**: O lider de seguranca estima os custos via `cost-estimator.sh --task-type security --techs <worker_count>`.
+
+**Protecao de orcamento**: Se `--max-cost` for especificado, verificar que o custo estimado <= max_cost. Se excedente: exibir `OVER BUDGET`, abandonar.
+
+**Contexto lean por worker**: Cada revisor recebe apenas o contexto necessario para sua dimensao:
+- Code Reviewer → `@.claude/references/<tech>/CLAUDE.md` + lista dos arquivos fonte
+- Dependency Auditor → lista dos arquivos lockfile (composer.lock, package-lock.json, etc.)
+- Infra Reviewer → Dockerfiles, docker-compose.yml, configs CI/CD
+
 ```
 Security Lead (opus) — orquestra via TaskCreate/SendMessage
   |
@@ -80,6 +112,18 @@ Security Lead (opus) — orquestra via TaskCreate/SendMessage
 ```
 
 O lider cria 3 tarefas via `TaskCreate`:
+
+**Template de spawn estruturado (TaskCreate)**: O lider DEVE incluir em cada tarefa:
+```
+Subject: "Revisao de seguranca <dimensao>"
+Description:
+  Projeto: <nome-do-projeto>
+  Dimensao: <code|deps|infra>
+  Scope: <arquivos/diretorios a analisar>
+  Ferramentas: <comandos docker a usar>
+  Formato de saida: findings no formato { severidade, categoria, arquivo, descricao }
+activeForm: "Revisao de seguranca <dimensao>"
+```
 
 #### Tarefa A: Revisao de Seguranca de Codigo Fonte
 
@@ -187,7 +231,15 @@ docker compose config --quiet  # Validar sintaxe do compose
 
 ### Etapa 4: Barreira de Sincronizacao
 
-O lider de seguranca aguarda todas as 3 tarefas de revisores completarem. Timeout: 8 minutos por revisor. Se um revisor exceder o timeout, o lider prossegue com resultados disponiveis e registra a lacuna.
+O lider de seguranca aguarda todas as 3 tarefas de revisores completarem.
+
+**Cadencia de polling (B5)**: `TaskList` a cada 30 segundos. Apos 3 polls consecutivos sem mudanca, reduzir para 60 segundos. Usar os hooks `TeammateIdle`/`TaskCompleted` (v2.1.33+) se disponiveis.
+
+**Verbosidade de mensagens (B4)**: Os revisores DEVEM limitar suas mensagens de conclusao a < 50 tokens. Formato: `DONE: <dimensao> <findings_count> findings (<critical>C/<high>H/<medium>M)`. Escrever os detalhes no arquivo de resultados.
+
+**Recuperacao do contexto do lider (A6)**: Para mitigar o bug de compactacao de contexto (#23620), o lider DEVE reler `TaskList` apos cada conclusao de revisor para atualizar sua consciencia do estado da equipe.
+
+Timeout: 8 minutos por revisor. Se um revisor exceder o timeout, o lider prossegue com resultados disponiveis e registra a lacuna.
 
 ### Etapa 5: Correlacao e Priorizacao
 

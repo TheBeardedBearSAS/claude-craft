@@ -18,7 +18,30 @@ $ARGUMENTS
 - `--max-stories=10` : Nombre maximum de stories à traiter (par défaut : 10)
 - `--timeout=12` : Durée maximale d'exécution en heures (par défaut : 12)
 - `--dry-run` : Afficher la composition de l'équipe et les assignations de stories sans exécuter
+- `--max-cost=<dollars>` : Budget maximum en dollars. Si le coût parallèle estimé dépasse ce seuil, l'exécution est bloquée avec un message OVER BUDGET
 - `--ralph-mode` : Activer le moteur de récupération Ralph (classification des erreurs, réessai automatique, service d'escalade) en parallèle des Agent Teams.
+
+## Garde-Fou Fast Mode (Confirmation Bloquante)
+
+**OBLIGATOIRE** : Avant de lancer l'équipe, le conductor DOIT :
+
+1. Détecter si le Fast Mode est actif (indicateur lightning bolt dans le terminal)
+2. Si Fast Mode actif :
+   - Afficher le dashboard comparatif standard vs fast via `cost-estimator.sh --fast-mode`
+   - **Afficher un avertissement bloquant** avec les coûts comparés :
+     ```
+     ⚠️  FAST MODE DÉTECTÉ — Coûts Opus 6x plus élevés !
+
+     | Mode     | Input ($/M) | Output ($/M) | Coût estimé ce sprint |
+     |----------|-------------|--------------|----------------------|
+     | Standard | $5.00       | $25.00       | ~$X.XX               |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY               |
+
+     Voulez-vous continuer en Fast Mode ? (oui/non)
+     Recommandation : tapez /fast pour désactiver avant de continuer.
+     ```
+   - **Attendre la confirmation explicite** de l'utilisateur avant de poursuivre
+   - Si l'utilisateur refuse, abandonner avec un message suggérant `/fast` pour désactiver
 
 ## Prérequis
 
@@ -53,6 +76,8 @@ Le sprint conductor charge l'état du sprint :
 2. Filtrer les stories avec le statut `ready-for-dev`
 3. Analyser l'indépendance des stories (vérifier les chevauchements de domaines fichiers)
 4. Partitionner les stories en groupes parallélisables
+5. Estimer les coûts via `cost-estimator.sh --task-type sprint --techs <worker_count>`
+6. **Garde-fou budget** : Si `--max-cost` est spécifié, vérifier que le coût estimé <= max_cost. Si dépassement : afficher `OVER BUDGET`, abandonner, suggérer de réduire le nombre de stories ou d'utiliser `--sequential`
 
 **Vérification d'indépendance** : Deux stories sont indépendantes si leurs critères d'acceptation et leur périmètre d'implémentation ne référencent pas les mêmes fichiers source. Le conductor examine la description de chaque story et les références à la spécification technique pour le déterminer.
 
@@ -77,9 +102,23 @@ Sprint Conductor (opus) — coordonne via TaskCreate/SendMessage
 
 Le conductor crée un `TaskCreate` par story :
 
-- **Subject** : `Implémenter US-XXX : <titre de la story>`
-- **Description** : Contenu complet de la story, critères d'acceptation, références à la spécification technique, exigences TDD
-- **activeForm** : `Implémentation de US-XXX`
+**Contexte lean par worker** : Chaque worker ne reçoit que la story assignée et la référence technologique du projet. Ne PAS charger les autres stories ou le PRD complet.
+
+**Template de spawn structuré Phase 2 (TaskCreate)** :
+```
+Subject: "Implémenter US-XXX : <titre de la story>"
+Description:
+  Projet: <nom-du-projet>
+  Technologie: <tech-du-projet>
+  Story: <contenu complet de la story>
+  Critères d'acceptation: <ACs complets avec Gherkin>
+  Domaine fichiers: <répertoires source attendus>
+  Hors-limites: <répertoires à NE PAS modifier>
+  Commandes TDD: <commandes docker spécifiques à la tech>
+  Critères de succès: Tous les tests AC passent, lint propre, couverture non réduite
+  Référence: @.claude/references/<tech>/CLAUDE.md
+activeForm: "Implémentation de US-XXX"
+```
 
 ### Étape 3 : Exécution des workers (Par Story)
 

@@ -27,6 +27,28 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponible
 
+## Garde-Fou Fast Mode (Confirmation Bloquante)
+
+**OBLIGATOIRE** : Avant de lancer l'équipe, le leader DOIT :
+
+1. Détecter si le Fast Mode est actif (indicateur lightning bolt dans le terminal)
+2. Si Fast Mode actif :
+   - Afficher le dashboard comparatif standard vs fast via `cost-estimator.sh --fast-mode`
+   - **Afficher un avertissement bloquant** avec les coûts comparés :
+     ```
+     ⚠️  FAST MODE DÉTECTÉ — Coûts Opus 6x plus élevés !
+
+     | Mode     | Input ($/M) | Output ($/M) | Coût estimé cet audit |
+     |----------|-------------|--------------|----------------------|
+     | Standard | $5.00       | $25.00       | ~$X.XX               |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY               |
+
+     Voulez-vous continuer en Fast Mode ? (oui/non)
+     Recommandation : tapez /fast pour désactiver avant de continuer.
+     ```
+   - **Attendre la confirmation explicite** de l'utilisateur avant de poursuivre
+   - Si l'utilisateur refuse, abandonner avec un message suggérant `/fast` pour désactiver
+
 ## Quand utiliser (vs. Audit Séquentiel)
 
 | Condition | Utiliser Team Audit | Utiliser le flag `--sequential` |
@@ -92,6 +114,11 @@ Tools/AgentTeams/lib/cost-estimator.sh \
 
 Afficher le coût estimé à l'utilisateur. En mode `--dry-run`, s'arrêter ici.
 
+**Garde-fou budget** : Si `--max-cost` est spécifié, vérifier que `PAR_COST <= max_cost`. Si le coût estimé dépasse le budget :
+- Afficher `OVER BUDGET: coût estimé $X.XX > budget $Y.YY`
+- Abandonner l'exécution (ne PAS lancer les workers)
+- Suggérer de réduire le nombre de stacks ou d'utiliser `--sequential`
+
 ### Étape 4 : Lancement de l'équipe (Fan-Out)
 
 ```
@@ -114,6 +141,33 @@ Leader d'Audit (opus) — coordonne via TaskCreate/SendMessage
    - Chaque tâche spécifie son chemin de sortie isolé
 3. Les workers récupèrent les tâches via `TaskUpdate` (status: in_progress)
 4. Les workers écrivent les résultats uniquement dans leur répertoire isolé
+
+**Contexte lean par worker (A4)** : Chaque worker ne reçoit que la référence technologique de son stack. Ne PAS charger le contexte de toutes les technologies.
+- Worker Symfony → `@.claude/references/symfony/CLAUDE.md` uniquement
+- Worker React → `@.claude/references/react/` uniquement
+- Worker Python → `@.claude/references/python/` uniquement
+- etc.
+
+**Template de spawn structuré (TaskCreate)** : Le leader DOIT inclure dans chaque `TaskCreate` :
+
+```
+Subject: "Auditer le stack <TechName>"
+Description:
+  Projet: <nom-du-projet>
+  Technologie: <tech-name>
+  Service Docker: <docker-service-name>
+  Répertoire racine: <tech-root-directory>
+  Référence: @.claude/references/<tech>/CLAUDE.md
+  Checks: [architecture, code-quality, testing, security]
+  Format de sortie: result.json dans <output-dir>/<tech>/
+  Schema output:
+    { "tech": "<tech>", "score": <0-100>,
+      "architecture": { "score": <0-25>, "findings": [...] },
+      "code_quality": { "score": <0-25>, "findings": [...] },
+      "testing": { "score": <0-25>, "findings": [...] },
+      "security": { "score": <0-25>, "findings": [...] } }
+activeForm: "Audit <TechName>"
+```
 
 **Instructions des workers** (par stack) :
 
@@ -164,9 +218,17 @@ Chaque worker écrit un `result.json` dans son répertoire de sortie isolé :
 }
 ```
 
+**Verbosité des messages de completion (B4)** : Les workers DOIVENT limiter leurs messages de completion à < 50 tokens. Écrire les détails dans le fichier `result.json`, pas dans le message. Format : `DONE: <tech> <score>/100 | <findings_count> findings`
+
 ### Étape 5 : Barrière de synchronisation
 
-Le leader attend que toutes les tâches des workers atteignent le statut `completed` via le polling `TaskList`. Si un worker dépasse son timeout (5 minutes par stack), le leader le marque comme échoué et poursuit avec les résultats partiels.
+Le leader attend que toutes les tâches des workers atteignent le statut `completed` via le polling `TaskList`.
+
+**Cadence de polling (B5)** : `TaskList` toutes les 30 secondes. Après 3 polls consécutifs sans changement de statut, réduire à 60 secondes. Utiliser les hooks `TeammateIdle`/`TaskCompleted` (v2.1.33+) pour une notification plus réactive si disponibles.
+
+Si un worker dépasse son timeout (5 minutes par stack), le leader le marque comme échoué et poursuit avec les résultats partiels.
+
+**Récupération du contexte leader (A6)** : Pour mitiger le bug de context compaction (#23620), le leader DOIT relire `TaskList` toutes les 5 completions de workers pour rafraîchir sa conscience de l'état de l'équipe. Si une période d'inactivité prolongée (>3 min sans mise à jour) est détectée, forcer un re-read complet de `TaskList`.
 
 ### Étape 6 : Agrégation des résultats
 

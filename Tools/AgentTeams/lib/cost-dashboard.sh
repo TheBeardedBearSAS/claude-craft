@@ -33,6 +33,7 @@ DASH_MR="╣"
 
 DASHBOARD_WIDTH=60
 DRY_RUN=false
+MAX_COST=""
 
 # =============================================================================
 # Usage
@@ -54,6 +55,8 @@ OPTIONS:
     --worker-model M    Worker agent model: haiku|sonnet|opus (default: sonnet)
     --leader-model M    Leader agent model: haiku|sonnet|opus (default: opus)
     --tokens-per-check N  Override tokens per check estimate (default: 12500)
+    --fast-mode         Use Fast Mode pricing (6x cost for Opus)
+    --max-cost N        Maximum budget in dollars; shows WITHIN_BUDGET status
     --width N           Dashboard width in characters (default: 60)
     --dry-run           Show what would be displayed without color
     --help              Show this help
@@ -106,6 +109,14 @@ dashboard_parse_args() {
                 ;;
             --tokens-per-check)
                 tokens_check="$2"
+                shift 2
+                ;;
+            --fast-mode)
+                FAST_MODE=true
+                shift
+                ;;
+            --max-cost)
+                MAX_COST="$2"
                 shift 2
                 ;;
             --width)
@@ -248,6 +259,10 @@ render_cost_dashboard() {
     dash_line "$DASH_H" "$DASH_ML" "$DASH_MR"
     dash_content "Config: ${N_TECHS} techs x ${N_CHECKS} checks | ${WORKER_MODEL} workers"
     dash_line "$DASH_H" "$DASH_ML" "$DASH_MR"
+    if [[ "$FAST_MODE" == "true" ]]; then
+        dash_content "WARNING: Fast Mode ON - Opus cost 6x higher!"
+        dash_line "$DASH_H" "$DASH_ML" "$DASH_MR"
+    fi
     dash_content "Sequential: ~${seq_tokens_fmt} tokens | ~${seq_time} min | ~${seq_cost_fmt}"
     dash_content "Parallel:   ~${par_tokens_fmt} tokens | ~${par_time} min | ~${par_cost_fmt}"
     dash_line "$DASH_H" "$DASH_ML" "$DASH_MR"
@@ -255,6 +270,16 @@ render_cost_dashboard() {
     dash_content "Extra cost: +${token_overhead_pct}% tokens"
     dash_content "Break-even: ${break_even}"
     dash_line "$DASH_H" "$DASH_ML" "$DASH_MR"
+    # A3: Budget guard display
+    if [[ -n "$MAX_COST" ]]; then
+        local within_budget
+        within_budget=$(awk "BEGIN {
+            if ($par_cost <= $MAX_COST) print \"YES\"
+            else print \"NO - OVER BUDGET\"
+        }")
+        dash_content "Budget: \$${MAX_COST} | Within budget: ${within_budget}"
+        dash_line "$DASH_H" "$DASH_ML" "$DASH_MR"
+    fi
     dash_content "Recommendation: ${recommendation}"
     dash_line "$DASH_H" "$DASH_BL" "$DASH_BR"
     echo ""
@@ -300,6 +325,16 @@ Configuration:
   Worker model:    $WORKER_MODEL
   Leader model:    $LEADER_MODEL
   Agents:          $((N_TECHS + 1)) (1 leader + $N_TECHS workers)
+  Fast Mode:     $FAST_MODE
+EOF
+    if [[ "$FAST_MODE" == "true" ]]; then
+        cat <<EOF
+
+  WARNING: Fast Mode is enabled!
+  Opus pricing: \$${MODEL_INPUT_PRICE_FAST[opus]} / \$${MODEL_OUTPUT_PRICE_FAST[opus]} (6x standard)
+EOF
+    fi
+    cat <<EOF
 
 Sequential Estimate:
   Tokens: ~$(format_tokens "$seq_tokens")
@@ -314,6 +349,21 @@ Parallel Estimate:
 Comparison:
   Time saved:   $(awk "BEGIN { printf \"%.1f\", $seq_time - $par_time }") min (${time_saved_pct}%)
   Extra tokens: +${token_overhead_pct}%
+EOF
+    if [[ -n "$MAX_COST" ]]; then
+        local within_budget
+        within_budget=$(awk "BEGIN {
+            if ($par_cost <= $MAX_COST) print \"YES\"
+            else print \"NO - OVER BUDGET\"
+        }")
+        cat <<EOF
+
+Budget:
+  Max cost:      \$$MAX_COST
+  Within budget: $within_budget
+EOF
+    fi
+    cat <<EOF
 
 Recommendation: $recommendation
 EOF
@@ -329,11 +379,13 @@ display_cost_dashboard() {
     local checks="${2:-$DEFAULT_CHECKS}"
     local worker="${3:-$DEFAULT_WORKER_MODEL}"
     local leader="${4:-$DEFAULT_LEADER_MODEL}"
+    local fast="${5:-false}"
 
     N_TECHS=$techs
     N_CHECKS=$checks
     WORKER_MODEL=$worker
     LEADER_MODEL=$leader
+    FAST_MODE=$fast
 
     render_cost_dashboard
 }

@@ -17,6 +17,29 @@ $ARGUMENTS
 - `--output-dir=<path>` : Répertoire de sortie personnalisé pour les résultats de sécurité
 - `--dry-run` : Afficher la composition de l'équipe et le plan de scan sans exécuter
 - `--sarif` : Sortir les résultats au format SARIF (pour intégration CI/CD)
+- `--max-cost=<dollars>` : Budget maximum en dollars. Si le coût parallèle estimé dépasse ce seuil, l'exécution est bloquée avec un message OVER BUDGET
+
+## Garde-Fou Fast Mode (Confirmation Bloquante)
+
+**OBLIGATOIRE** : Avant de lancer l'équipe, le security lead DOIT :
+
+1. Détecter si le Fast Mode est actif (indicateur lightning bolt dans le terminal)
+2. Si Fast Mode actif :
+   - Afficher le dashboard comparatif standard vs fast via `cost-estimator.sh --fast-mode`
+   - **Afficher un avertissement bloquant** avec les coûts comparés :
+     ```
+     ⚠️  FAST MODE DÉTECTÉ — Coûts Opus 6x plus élevés !
+
+     | Mode     | Input ($/M) | Output ($/M) | Coût estimé cette revue |
+     |----------|-------------|--------------|------------------------|
+     | Standard | $5.00       | $25.00       | ~$X.XX                 |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY                 |
+
+     Voulez-vous continuer en Fast Mode ? (oui/non)
+     Recommandation : tapez /fast pour désactiver avant de continuer.
+     ```
+   - **Attendre la confirmation explicite** de l'utilisateur avant de poursuivre
+   - Si l'utilisateur refuse, abandonner avec un message suggérant `/fast` pour désactiver
 
 ## Prérequis
 
@@ -65,6 +88,15 @@ Tools/AgentTeams/lib/compatibility-check.sh \
 
 ### Étape 3 : Lancement de l'équipe (Fan-Out)
 
+**Estimation des coûts** : Le security lead estime les coûts via `cost-estimator.sh --task-type security --techs <worker_count>`.
+
+**Garde-fou budget** : Si `--max-cost` est spécifié, vérifier que le coût estimé <= max_cost. Si dépassement : afficher `OVER BUDGET`, abandonner.
+
+**Contexte lean par worker** : Chaque reviewer ne reçoit que le contexte nécessaire à sa dimension :
+- Code Reviewer → `@.claude/references/<tech>/CLAUDE.md` + liste des fichiers source
+- Auditeur de Dépendances → liste des fichiers lockfile (composer.lock, package-lock.json, etc.)
+- Reviewer Infra → Dockerfiles, docker-compose.yml, configs CI/CD
+
 ```
 Security Lead (opus) — orchestre via TaskCreate/SendMessage
   |
@@ -81,6 +113,18 @@ Security Lead (opus) — orchestre via TaskCreate/SendMessage
 ```
 
 Le lead crée 3 tâches via `TaskCreate` :
+
+**Template de spawn structuré (TaskCreate)** : Le lead DOIT inclure dans chaque tâche :
+```
+Subject: "Revue sécurité <dimension>"
+Description:
+  Projet: <nom-du-projet>
+  Dimension: <code|deps|infra>
+  Scope: <fichiers/répertoires à analyser>
+  Outils: <commandes docker à utiliser>
+  Format de sortie: findings au format { sévérité, catégorie, fichier, description }
+activeForm: "Revue sécurité <dimension>"
+```
 
 #### Tâche A : Revue de Sécurité du Code Source
 
@@ -188,7 +232,15 @@ docker compose config --quiet  # Valider la syntaxe compose
 
 ### Étape 4 : Barrière de synchronisation
 
-Le security lead attend que les 3 tâches de reviewers soient terminées. Timeout : 8 minutes par reviewer. Si un reviewer dépasse le timeout, le lead poursuit avec les résultats disponibles et note la lacune.
+Le security lead attend que les 3 tâches de reviewers soient terminées.
+
+**Cadence de polling (B5)** : `TaskList` toutes les 30 secondes. Après 3 polls consécutifs sans changement, réduire à 60 secondes. Utiliser les hooks `TeammateIdle`/`TaskCompleted` (v2.1.33+) si disponibles.
+
+**Verbosité des messages (B4)** : Les reviewers DOIVENT limiter leurs messages de completion à < 50 tokens. Format : `DONE: <dimension> <findings_count> findings (<critical>C/<high>H/<medium>M)`. Écrire les détails dans le fichier de résultats.
+
+**Récupération du contexte lead (A6)** : Pour mitiger le bug de context compaction (#23620), le lead DOIT relire `TaskList` après chaque completion de reviewer pour rafraîchir sa conscience de l'état de l'équipe.
+
+Timeout : 8 minutes par reviewer. Si un reviewer dépasse le timeout, le lead poursuit avec les résultats disponibles et note la lacune.
 
 ### Étape 5 : Corrélation et priorisation
 

@@ -17,6 +17,7 @@ $ARGUMENTS
 - `--output-dir=<path>`: Custom output directory for security results
 - `--dry-run`: Show team composition and scan plan without executing
 - `--sarif`: Output results in SARIF format (for CI/CD integration)
+- `--max-cost=<dollars>`: Maximum budget in dollars. If the estimated parallel cost exceeds this threshold, execution is blocked with an OVER BUDGET message
 
 ## Prerequisites
 
@@ -26,6 +27,28 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/compatibility-check.sh` available
 - `Tools/AgentTeams/lib/result-aggregator.sh` available
 - `Tools/AgentTeams/lib/cost-estimator.sh` available
+
+## Fast Mode Guard (Blocking Confirmation)
+
+**MANDATORY**: Before launching the team, the security lead MUST:
+
+1. Detect if Fast Mode is active (lightning bolt indicator in terminal)
+2. If Fast Mode is active:
+   - Display the comparative dashboard standard vs fast via `cost-estimator.sh --fast-mode`
+   - **Display a blocking warning** with cost comparison:
+     ```
+     ⚠️  FAST MODE DETECTED — Opus costs 6x higher!
+
+     | Mode     | Input ($/M) | Output ($/M) | Estimated cost this review |
+     |----------|-------------|--------------|---------------------------|
+     | Standard | $5.00       | $25.00       | ~$X.XX                    |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY                    |
+
+     Do you want to continue in Fast Mode? (yes/no)
+     Recommendation: type /fast to disable before continuing.
+     ```
+   - **Wait for explicit user confirmation** before proceeding
+   - If the user refuses, abort with a message suggesting `/fast` to disable
 
 ## Team Composition
 
@@ -65,6 +88,15 @@ Tools/AgentTeams/lib/compatibility-check.sh \
 
 ### Step 3: Team Spawn (Fan-Out)
 
+**Cost estimation**: The security lead estimates costs via `cost-estimator.sh --task-type security --techs <worker_count>`.
+
+**Budget guard**: If `--max-cost` is specified, check that estimated cost <= max_cost. If exceeded: display `OVER BUDGET`, abort.
+
+**Lean context per worker**: Each reviewer only receives the context necessary for its dimension:
+- Code Reviewer → `@.claude/references/<tech>/CLAUDE.md` + source file list
+- Dependency Auditor → lockfile list (composer.lock, package-lock.json, etc.)
+- Infra Reviewer → Dockerfiles, docker-compose.yml, CI/CD configs
+
 ```
 Security Lead (opus) — orchestrates via TaskCreate/SendMessage
   |
@@ -80,6 +112,18 @@ Security Lead (opus) — orchestrates via TaskCreate/SendMessage
 ```
 
 The lead creates 3 tasks via `TaskCreate`:
+
+**Structured spawn template (TaskCreate)**: The lead MUST include in each task:
+```
+Subject: "Security review <dimension>"
+Description:
+  Project: <project-name>
+  Dimension: <code|deps|infra>
+  Scope: <files/directories to analyze>
+  Tools: <docker commands to use>
+  Output format: findings as { severity, category, file, description }
+activeForm: "Security review <dimension>"
+```
 
 #### Task A: Source Code Security Review
 
@@ -187,7 +231,15 @@ docker compose config --quiet  # Validate compose syntax
 
 ### Step 4: Sync Barrier
 
-Security lead waits for all 3 reviewer tasks to complete. Timeout: 8 minutes per reviewer. If a reviewer exceeds timeout, lead proceeds with available results and notes the gap.
+Security lead waits for all 3 reviewer tasks to complete.
+
+**Polling cadence (B5)**: `TaskList` every 30 seconds. After 3 consecutive polls without change, reduce to 60 seconds. Use `TeammateIdle`/`TaskCompleted` hooks (v2.1.33+) if available.
+
+**Completion message verbosity (B4)**: Reviewers MUST limit their completion messages to < 50 tokens. Format: `DONE: <dimension> <findings_count> findings (<critical>C/<high>H/<medium>M)`. Write details in the results file.
+
+**Lead context recovery (A6)**: To mitigate context compaction bug (#23620), the lead MUST re-read `TaskList` after each reviewer completion to refresh its awareness of team state.
+
+Timeout: 8 minutes per reviewer. If a reviewer exceeds timeout, lead proceeds with available results and notes the gap.
 
 ### Step 5: Correlation and Prioritization
 

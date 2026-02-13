@@ -156,6 +156,92 @@ Pour le travail parallèle avec résultats combinés :
 4. Continuer avec l'état fusionné
 ```
 
+## 5. Agent Teams (Multi-Agent Coordination)
+
+Agent Teams (Claude Code v2.1.41+, Research Preview) permet la coordination multi-agents avec gestion partagée des tâches. Contrairement aux sub-agents classiques (Task tool), Agent Teams offre une communication bidirectionnelle, des tâches partagées, et un shutdown coopératif.
+
+### Comparaison : Task Tool vs Agent Teams
+
+| Critère | Task Tool (Sub-Agents) | Agent Teams |
+|---------|----------------------|-------------|
+| **Communication** | Unidirectionnelle (parent → enfant) | Bidirectionnelle (SendMessage) |
+| **Gestion des tâches** | Isolée par agent | Partagée (TaskCreate/TaskList/TaskUpdate) |
+| **Coordination** | Aucune entre sous-agents | Leader coordonne N workers |
+| **Shutdown** | Automatique à la fin | Coopératif (shutdown_request/response) |
+| **Surcoût** | Faible (~2K tokens/agent) | Modéré (+20-37% tokens) |
+| **Cas d'usage** | Recherche parallèle, tâches isolées | Workflows complexes, sprints, audits |
+| **Nombre d'agents** | Illimité | 1 leader + 3 workers max |
+| **Prérequis** | Aucun | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
+| **Version minimale** | v2.1.20+ | v2.1.41+ |
+
+### Matrice de décision : Sub-Agents vs Agent Teams
+
+| Critère | Sub-Agents (Task tool) | Agent Teams |
+|---------|----------------------|-------------|
+| **Durée de tâche** | < 3 min | > 3 min |
+| **Coordination** | Aucune entre agents | Leader coordonne N workers |
+| **Communication** | Unidirectionnelle | Bidirectionnelle (SendMessage) |
+| **Dépendances inter-tâches** | Non | Oui (vagues, barrières) |
+| **Agrégation de résultats** | Manuelle (parent combine) | Leader agrège automatiquement |
+| **Surcoût tokens** | Faible (~2K/agent) | Modéré (+12-37%) |
+| **Budget maximum** | Non | Oui (`--max-cost`) |
+| **Garde-fou Fast Mode** | Non | Oui (confirmation bloquante) |
+| **Recovery contexte** | Non nécessaire | Oui (re-read TaskList chaque 5 completions) |
+| **Prérequis** | Aucun | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
+| **Nombre d'agents** | Illimité | 1 leader + 3 workers max |
+
+```
+Utiliser Sub-Agents (Task tool) quand :
+  - Tâches indépendantes < 3 min chacune
+  - Recherche parallèle (Explore agents)
+  - Traitement en lot sans dépendances
+  - Budget contraint (moins de surcoût)
+  - Pas besoin de communication inter-agents
+
+Utiliser Agent Teams quand :
+  - 2+ flux de travail interdépendants (> 3 min chacun)
+  - Besoin de communication inter-agents
+  - Workflow multi-phases (écriture → implémentation)
+  - Agrégation de résultats par un leader
+  - Besoin de garde-fous de coût (--max-cost, Fast Mode guard)
+  - Recovery automatique (context compaction, timeout watchdog)
+```
+
+### Exemples concrets
+
+| Scénario | Approche | Justification |
+|----------|----------|---------------|
+| Mettre à jour 5 fichiers i18n | Sub-Agents (parallèle) | Indépendant, < 2 min, pas de coordination |
+| Audit 3 stacks technos | Agent Teams (`/team:audit`) | > 3 min, agrégation scores, rapport unifié |
+| Rechercher un pattern dans le code | Sub-Agent (Explore) | Rapide, lecture seule, pas de coordination |
+| Sprint 5 stories indépendantes | Agent Teams (`/team:sprint`) | > 15 min/story, DoD validation, file domain checks |
+| Linter + tests + sécurité | Sub-Agents (parallèle) | Indépendant, résultats séparés, pas d'agrégation |
+| Écriture + implémentation stories | Agent Teams (`/team:delivery`) | Multi-phase, contexte partagé, file domain mapping |
+
+### Commandes Agent Teams disponibles
+
+| Commande | Description | Pattern |
+|----------|-------------|---------|
+| `/team:audit` | Audit multi-tech parallèle | Fan-out / Barrier |
+| `/team:sprint` | Sprint parallèle | File d'attente dynamique |
+| `/team:security` | Revue sécurité 3 dimensions | Corrélation 3 voies |
+| `/team:delivery` | Cycle complet sprint | Pipeline 2 phases |
+
+### Outils de support
+
+| Outil | Fichier | Rôle |
+|-------|---------|------|
+| Adaptateur Ralph | `Tools/AgentTeams/lib/ralph-teams-adapter.sh` | Abstraction Agent Teams API |
+| Estimateur de coût | `Tools/AgentTeams/lib/cost-estimator.sh` | Estimation tokens/coût |
+| Dashboard de coût | `Tools/AgentTeams/lib/cost-dashboard.sh` | Tableau comparatif visuel |
+| Vérification compatibilité | `Tools/AgentTeams/lib/compatibility-check.sh` | Validation agents/rôles |
+| Agrégateur de résultats | `Tools/AgentTeams/lib/result-aggregator.sh` | Fusion résultats multi-agents |
+
+### Ressources
+
+- [Guide Agent Teams](../../docs/AGENT-TEAMS-GUIDE.md) — Setup, coûts, limitations
+- [CLAUDE.md](../CLAUDE.md) — Compatibilité Claude Code v2.1.41+
+
 ## Références
 
 - Documentation du Task tool de Claude Code

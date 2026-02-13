@@ -14,6 +14,7 @@ $ARGUMENTS
 - `--techs=auto`: Auto-detectar tecnologias (por defecto). O especificar separadas por comas: `--techs=symfony,react`
 - `--max-workers=4`: Maximo de auditores paralelos (por defecto: 4, max: 4)
 - `--output-dir=<path>`: Directorio de salida personalizado para resultados de auditoria
+- `--max-cost=<dollars>`: Presupuesto maximo en dolares. Si el costo paralelo estimado supera este umbral, la ejecucion se bloquea con un mensaje OVER BUDGET
 - `--dry-run`: Mostrar composicion del equipo y costo estimado sin ejecutar
 - `--skip-aggregation`: Emitir resultados por stack sin fusionar
 - `--sequential`: Ejecutar auditorias secuencialmente en lugar de en paralelo (sin overhead de Agent Teams). Util para proyectos de una sola tecnologia o cuando Agent Teams no esta disponible.
@@ -26,6 +27,28 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponible
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponible
+
+## Proteccion Fast Mode (Confirmacion Bloqueante)
+
+**OBLIGATORIO**: Antes de lanzar el equipo, el lider DEBE:
+
+1. Detectar si el Fast Mode esta activo (indicador lightning bolt en la terminal)
+2. Si el Fast Mode esta activo:
+   - Mostrar el dashboard comparativo estandar vs fast via `cost-estimator.sh --fast-mode`
+   - **Mostrar una advertencia bloqueante** con los costos comparados:
+     ```
+     ⚠️  FAST MODE DETECTADO — Costos Opus 6x mas altos!
+
+     | Modo     | Input ($/M) | Output ($/M) | Costo estimado esta auditoria |
+     |----------|-------------|--------------|-------------------------------|
+     | Estandar | $5.00       | $25.00       | ~$X.XX                        |
+     | Fast     | $30.00      | $150.00      | ~$Y.YY                        |
+
+     ¿Desea continuar en Fast Mode? (si/no)
+     Recomendacion: escriba /fast para desactivar antes de continuar.
+     ```
+   - **Esperar la confirmacion explicita** del usuario antes de continuar
+   - Si el usuario rechaza, abortar con un mensaje sugiriendo `/fast` para desactivar
 
 ## Cuando usar (vs. Auditoria secuencial)
 
@@ -92,6 +115,11 @@ Tools/AgentTeams/lib/cost-estimator.sh \
 
 Mostrar el costo estimado al usuario. En modo `--dry-run`, detenerse aqui.
 
+**Proteccion de presupuesto**: Si se especifica `--max-cost`, verificar que `PAR_COST <= max_cost`. Si el costo estimado supera el presupuesto:
+- Mostrar `OVER BUDGET: costo estimado $X.XX > presupuesto $Y.YY`
+- Abortar la ejecucion (NO lanzar los workers)
+- Sugerir reducir el numero de stacks o usar `--sequential`
+
 ### Paso 4: Lanzamiento del equipo (Fan-Out)
 
 ```
@@ -114,6 +142,33 @@ Lider de Auditoria (opus) — coordina via TaskCreate/SendMessage
    - Cada tarea especifica su ruta de salida aislada
 3. Los workers reclaman tareas via `TaskUpdate` (status: in_progress)
 4. Los workers escriben resultados solo en su directorio aislado
+
+**Contexto lean por worker (A4)**: Cada worker solo recibe la referencia tecnologica de su stack. NO cargar el contexto de todas las tecnologias.
+- Worker Symfony → `@.claude/references/symfony/CLAUDE.md` unicamente
+- Worker React → `@.claude/references/react/` unicamente
+- Worker Python → `@.claude/references/python/` unicamente
+- etc.
+
+**Plantilla de spawn estructurada (TaskCreate)**: El lider DEBE incluir en cada `TaskCreate`:
+
+```
+Subject: "Auditar stack <TechName>"
+Description:
+  Proyecto: <nombre-del-proyecto>
+  Tecnologia: <tech-name>
+  Servicio Docker: <docker-service-name>
+  Directorio raiz: <tech-root-directory>
+  Referencia: @.claude/references/<tech>/CLAUDE.md
+  Checks: [architecture, code-quality, testing, security]
+  Formato de salida: result.json en <output-dir>/<tech>/
+  Schema output:
+    { "tech": "<tech>", "score": <0-100>,
+      "architecture": { "score": <0-25>, "findings": [...] },
+      "code_quality": { "score": <0-25>, "findings": [...] },
+      "testing": { "score": <0-25>, "findings": [...] },
+      "security": { "score": <0-25>, "findings": [...] } }
+activeForm: "Auditoria <TechName>"
+```
 
 **Instrucciones del worker** (por stack):
 
@@ -164,9 +219,17 @@ Cada worker escribe `result.json` en su directorio de salida aislado:
 }
 ```
 
+**Verbosidad de mensajes de finalizacion (B4)**: Los workers DEBEN limitar sus mensajes de finalizacion a < 50 tokens. Escribir los detalles en el archivo `result.json`, no en el mensaje. Formato: `DONE: <tech> <score>/100 | <findings_count> findings`
+
 ### Paso 5: Barrera de sincronizacion
 
-El lider espera a que todas las tareas de los workers alcancen el estado `completed` via sondeo de `TaskList`. Si un worker excede su timeout (5 minutos por stack), el lider lo marca como fallido y continua con resultados parciales.
+El lider espera a que todas las tareas de los workers alcancen el estado `completed` via sondeo de `TaskList`.
+
+**Cadencia de sondeo (B5)**: `TaskList` cada 30 segundos. Despues de 3 sondeos consecutivos sin cambio de estado, reducir a 60 segundos. Usar los hooks `TeammateIdle`/`TaskCompleted` (v2.1.33+) para notificacion mas reactiva si estan disponibles.
+
+Si un worker excede su timeout (5 minutos por stack), el lider lo marca como fallido y continua con resultados parciales.
+
+**Recuperacion de contexto del lider (A6)**: Para mitigar el bug de compactacion de contexto (#23620), el lider DEBE releer `TaskList` cada 5 finalizaciones de workers para refrescar su conocimiento del estado del equipo. Si se detecta un periodo de inactividad prolongado (>3 min sin actualizacion), forzar una relectura completa de `TaskList`.
 
 ### Paso 6: Agregacion de resultados
 

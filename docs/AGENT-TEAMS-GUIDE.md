@@ -6,7 +6,7 @@ Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordina
 
 | Requirement | Minimum Version | Check |
 |-------------|-----------------|-------|
-| Claude Code | v2.1.38+ (recommended) | `claude --version` |
+| Claude Code | v2.1.41+ | `claude --version` |
 | Environment variable | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` | `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` |
 | Claude model | Opus 4.6 (recommended for leader) | Model selector in Claude Code |
 
@@ -35,7 +35,34 @@ Agent Teams adds coordination overhead. Use it only when the parallelization ben
 
 **Rule of thumb:** Use Agent Teams when you have 2+ independent work streams that each take more than 3 minutes.
 
-**Fast Mode note:** Agent Teams with Fast Mode (`/fast`) increases costs significantly ($30/M input, $150/M output per agent). For batch operations like team-audit or team-sprint, standard mode is more cost-effective.
+### Fast Mode Guard (Blocking Confirmation)
+
+All `/team:*` commands include a **mandatory blocking guard** when Fast Mode (`/fast`) is active. The leader agent MUST:
+
+1. Detect if Fast Mode is active (lightning bolt indicator)
+2. Display a comparative dashboard (standard vs fast pricing)
+3. Show a blocking warning with estimated costs for both modes
+4. Wait for explicit user confirmation before proceeding
+5. Abort if the user declines, suggesting `/fast` to switch back to standard mode
+
+This prevents accidentally running multi-agent operations at 6x cost ($30/M input, $150/M output per agent).
+
+### Budget Guard (`--max-cost`)
+
+All `/team:*` commands support `--max-cost=<dollars>` to set a maximum budget:
+
+```bash
+# Abort if estimated parallel cost exceeds $2
+/team:audit --max-cost=2.00
+
+# Budget guard with dry-run preview
+/team:sprint Sprint-3 --max-cost=5.00 --dry-run
+```
+
+If the estimated parallel cost exceeds the budget:
+- The leader displays `OVER BUDGET: estimated $X.XX > budget $Y.YY`
+- Execution is **aborted** (workers are NOT launched)
+- The leader suggests reducing the number of stacks/stories or using `--sequential`
 
 ## Cost Analysis
 
@@ -102,6 +129,41 @@ Parallelizes the audit across multiple technology stacks.
        (Sonnet)        (Sonnet)       (Sonnet)
 ```
 
+```mermaid
+sequenceDiagram
+    participant L as audit-leader (Opus)
+    participant A1 as symfony-auditor
+    participant A2 as react-auditor
+    participant A3 as python-auditor
+
+    L->>L: Detect technologies
+    L->>L: Cost estimation
+
+    par Fan-Out
+        L->>A1: TaskCreate: Audit Symfony
+        L->>A2: TaskCreate: Audit React
+        L->>A3: TaskCreate: Audit Python
+    end
+
+    par Parallel Execution
+        A1->>A1: Architecture + Quality + Tests + Security
+        A2->>A2: Architecture + Quality + Tests + Security
+        A3->>A3: Architecture + Quality + Tests + Security
+    end
+
+    A1-->>L: TaskUpdate: completed + result.json
+    A2-->>L: TaskUpdate: completed + result.json
+    A3-->>L: TaskUpdate: completed + result.json
+
+    Note over L: Barrier: wait for all
+
+    L->>L: Aggregate results
+    L->>L: Generate unified report
+    L-->>A1: shutdown_request
+    L-->>A2: shutdown_request
+    L-->>A3: shutdown_request
+```
+
 **When to use:** Projects with 2+ detected technology stacks.
 
 **Agent roles:**
@@ -125,6 +187,37 @@ Parallelizes story processing during sprint execution.
 
 **When to use:** Sprints with 3+ independent stories (no blocking dependencies between them).
 
+```mermaid
+sequenceDiagram
+    participant C as sprint-conductor (Opus)
+    participant D1 as dev-worker-1 (Sonnet)
+    participant D2 as dev-worker-2 (Sonnet)
+
+    C->>C: Load sprint backlog
+    C->>C: Check story independence
+
+    C->>D1: TaskCreate: Implement US-001
+    C->>D2: TaskCreate: Implement US-002
+
+    loop Dynamic Queue
+        D1->>D1: TDD: Red → Green → Refactor
+        D1-->>C: TaskUpdate: completed
+        C->>C: Validate DoD
+        C->>D1: TaskCreate: Implement US-003
+
+        D2->>D2: TDD: Red → Green → Refactor
+        D2-->>C: TaskUpdate: completed
+        C->>C: Validate DoD
+        C->>D2: TaskCreate: Implement US-004
+    end
+
+    Note over C: All stories processed
+
+    C->>C: Generate sprint summary
+    C-->>D1: shutdown_request
+    C-->>D2: shutdown_request
+```
+
 **Agent roles:**
 
 | Agent | Model | Responsibility |
@@ -142,6 +235,43 @@ Parallelizes story processing during sprint execution.
 Parallelizes security audits across technology stacks with dedicated OWASP checkers.
 
 **When to use:** Security-critical projects with 2+ technology stacks requiring comprehensive OWASP review.
+
+```mermaid
+sequenceDiagram
+    participant L as security-lead (Opus)
+    participant CR as Code Reviewer
+    participant DA as Deps Auditor
+    participant IR as Infra Reviewer
+
+    L->>L: Reconnaissance + threat model
+
+    par 3-Way Fan-Out
+        L->>CR: TaskCreate: Code vulnerabilities
+        L->>DA: TaskCreate: Dependency audit
+        L->>IR: TaskCreate: Infra review
+    end
+
+    par Parallel Analysis
+        CR->>CR: OWASP checks, injection, XSS
+        DA->>DA: CVE scan, license compliance
+        IR->>IR: Docker, secrets, config
+    end
+
+    CR-->>L: findings[]
+    DA-->>L: findings[]
+    IR-->>L: findings[]
+
+    Note over L: Barrier: wait for all
+
+    L->>L: Cross-reference findings
+    L->>L: Build attack chains
+    L->>L: Prioritize by severity × exploitability
+    L->>L: Generate remediation plan
+
+    L-->>CR: shutdown_request
+    L-->>DA: shutdown_request
+    L-->>IR: shutdown_request
+```
 
 **Agent roles:**
 
@@ -164,9 +294,59 @@ Phase 1 (Writing):                    Phase 2 (Implementation):
   +----+----+----+                      +----+----+----+
   |    |    |    |                      |    |    |    |
 Writer Reviewer Architect           dev-1  dev-2  dev-3
-(Sonnet)(Sonnet) (Sonnet)          (Sonnet)(Sonnet)(Sonnet)
+(Sonnet)(Haiku) (Sonnet)           (Sonnet)(Sonnet)(Sonnet)
 
   ~~~ shutdown Phase 1 workers → spawn Phase 2 workers ~~~
+```
+
+```mermaid
+sequenceDiagram
+    participant L as delivery-lead (Opus)
+    participant W as Writer (Sonnet)
+    participant R as Reviewer (Haiku)
+    participant A as Architect (Sonnet)
+    participant D1 as dev-1 (Sonnet)
+    participant D2 as dev-2 (Sonnet)
+
+    rect rgb(230, 245, 255)
+        Note over L,A: Phase 1: Writing
+        L->>W: Write EPIC + US
+        W-->>L: artifacts
+        L->>R: Validate quality (INVEST 6/6)
+        R-->>L: approved / rejected
+        L->>A: Validate tech + file domains
+        A-->>L: file domain map
+
+        alt Rejected
+            L->>W: Rewrite with feedback (max 2x)
+        end
+    end
+
+    L->>L: Write phase-handoff.yaml
+    L-->>W: shutdown_request
+    L-->>R: shutdown_request
+    L-->>A: shutdown_request
+
+    rect rgb(230, 255, 230)
+        Note over L,D2: Phase 2: Implementation
+        L->>L: Load waves from handoff
+
+        par Wave 1 (independent stories)
+            L->>D1: TaskCreate: Implement US-001
+            L->>D2: TaskCreate: Implement US-002
+        end
+
+        D1-->>L: completed
+        D2-->>L: completed
+
+        Note over L: Wave 2 (dependent stories)
+        L->>D1: TaskCreate: Implement US-003
+        D1-->>L: completed
+    end
+
+    L->>L: Generate delivery report
+    L-->>D1: shutdown_request
+    L-->>D2: shutdown_request
 ```
 
 **When to use:** Full sprint cycle (writing + implementation) with 3+ stories to write AND implement.
@@ -177,7 +357,7 @@ Writer Reviewer Architect           dev-1  dev-2  dev-3
 |-------|-------|-------|---------------|
 | delivery-lead | Both | Opus | Orchestrate pipeline, validate gates, assign work |
 | writer | 1 | Sonnet | Create EPICs, US (INVEST+3C+Gherkin), tasks |
-| reviewer | 1 | Sonnet | Validate quality (INVEST 6/6, AC coverage, slicing) |
+| reviewer | 1 | Haiku | Validate quality (INVEST 6/6, AC coverage, slicing) — classification task, haiku suffices |
 | architect | 1 | Sonnet | Validate tech feasibility, produce file domain map |
 | dev-worker-N | 2 | Sonnet | Implement a story with TDD cycle |
 
@@ -217,6 +397,37 @@ Agent Teams is a **Research Preview** feature (v2.1.32+). This means:
 | Maximum ~4 agents recommended | Large teams have quadratic coordination cost | Cap teams at 1 leader + 3 workers |
 | No force-kill for agents | Stuck agent blocks pipeline | Timeout watchdog with graceful degradation |
 | Cooperative shutdown only | Teammates can reject shutdown requests | Design workflows that complete naturally |
+
+### Context Compaction Risk (#23620)
+
+Claude Code's context compaction feature can cause the team leader to lose awareness of team state after compaction. All `/team:*` commands include mitigation instructions:
+
+- **Periodic re-read:** The leader re-reads `TaskList` every 5 worker completions to refresh team awareness
+- **Inactivity detection:** If no status updates for >3 minutes, force a full `TaskList` re-read
+- **Phase transition recovery (delivery):** The leader re-reads `phase-handoff.yaml` at the start of Phase 2
+
+### Synchronization Barrier Cadence
+
+Team leaders use an adaptive polling cadence for the synchronization barrier:
+
+| Phase | Poll Interval | Condition |
+|-------|--------------|-----------|
+| Active | 30 seconds | Workers are updating tasks |
+| Idle | 60 seconds | After 3 consecutive polls without status change |
+| Hook-based | Event-driven | Using `TeammateIdle`/`TaskCompleted` hooks (v2.1.33+) |
+
+### Per-Task Timeout Chain
+
+Each task type has a specific timeout based on 1.5x the estimated duration:
+
+| Task Type | Estimated Duration | Timeout |
+|-----------|-------------------|---------|
+| Audit (per stack) | 1.5 min | 2.25 min |
+| Sprint (per story) | 15 min | 22.5 min |
+| Security (per dimension) | 2 min | 3 min |
+| Delivery (per story) | 20 min | 30 min |
+
+When a worker exceeds its timeout, the leader marks the task as failed and continues with partial results.
 
 ### No `kill -9` for Agents
 
@@ -326,10 +537,14 @@ Tools/AgentTeams/lib/cost-estimator.sh --techs 2 --checks 5 --worker-model sonne
 | `--worker-model M` | sonnet | Worker model: haiku, sonnet, opus |
 | `--leader-model M` | opus | Leader model: haiku, sonnet, opus |
 | `--tokens-per-check N` | 12500 | Override per-check token estimate |
+| `--task-type T` | audit | Task type: audit, sprint, security, delivery (affects context tokens) |
+| `--fast-mode` | false | Use Fast Mode pricing (6x cost for Opus) |
+| `--max-cost N` | - | Maximum budget in dollars; output includes `WITHIN_BUDGET` |
+| `--auto-size` | false | Output `RECOMMENDED_WORKERS` based on task type |
 | `--dry-run` | false | Show config without calculating |
 | `--help` | - | Show usage |
 
-**Output:** Key=value pairs (machine-readable) for consumption by other scripts.
+**Output:** Key=value pairs (machine-readable) for consumption by other scripts. Includes `FAST_MODE_WARNING`, `WITHIN_BUDGET`, and `RECOMMENDED_WORKERS` fields when relevant flags are used.
 
 ### cost-dashboard.sh
 
@@ -339,9 +554,11 @@ Displays a visual comparison table before launching a team operation.
 Tools/AgentTeams/lib/cost-dashboard.sh --techs 3 --worker-model haiku
 ```
 
-**Options:** Same as cost-estimator.sh, plus `--width N` for display width.
+**Options:** Same as cost-estimator.sh, plus `--width N` for display width and `--max-cost N` for budget guard display.
 
 **Recommendation logic:** Uses parallel only if `time_saved > 30%` AND `extra_cost < 50%`.
+
+**Budget guard display:** When `--max-cost` is provided, the dashboard shows `Within budget: YES` or `Within budget: NO - OVER BUDGET` alongside the cost estimates.
 
 ## Further Reading
 

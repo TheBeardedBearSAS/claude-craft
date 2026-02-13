@@ -27,6 +27,19 @@ declare -A MODEL_OUTPUT_PRICE=(
     [haiku]=1.25
 )
 
+# Fast Mode pricing ($/M tokens) — 6x standard pricing
+declare -A MODEL_INPUT_PRICE_FAST=(
+    [opus]=30.00
+    [sonnet]=3.00
+    [haiku]=0.25
+)
+
+declare -A MODEL_OUTPUT_PRICE_FAST=(
+    [opus]=150.00
+    [sonnet]=15.00
+    [haiku]=1.25
+)
+
 # =============================================================================
 # Constants: Token Usage Baselines (from audit-pipeline.md Section 6.1)
 # =============================================================================
@@ -39,6 +52,26 @@ TOKENS_DETECTION=2000
 
 # Score calculation + report generation (fixed cost)
 TOKENS_REPORT=8000
+
+# =============================================================================
+# Constants: Task Type Baselines
+# Tokens per unit and minutes per unit vary by task type.
+# audit.md references --task-type audit but the flag was not implemented.
+# =============================================================================
+
+declare -A TASK_TYPE_TOKENS_PER_UNIT=(
+    [audit]=12500      # tokens per check
+    [sprint]=35000     # tokens per story
+    [security]=15000   # tokens per check
+    [delivery]=45000   # tokens per story
+)
+
+declare -A TASK_TYPE_MINUTES_PER_UNIT=(
+    [audit]=1.5
+    [sprint]=15.0
+    [security]=2.0
+    [delivery]=20.0
+)
 
 # =============================================================================
 # Constants: Overhead Factors (from devils-advocate.md Section 4.1)
@@ -64,10 +97,22 @@ declare -A CONTEXT_DUPLICATION_FACTOR=(
 )
 
 # Base context tokens each agent reloads (shared project context)
-TOKENS_CONTEXT_PER_AGENT=6000
+# A4: Dynamic per task-type — audit workers need less context than delivery workers
+TOKENS_CONTEXT_PER_AGENT=6000  # default, overridden by task type
+
+declare -A TASK_TYPE_CONTEXT_TOKENS=(
+    [audit]=4000     # Audit workers only need tech reference + checks
+    [sprint]=5000    # Sprint workers need story + tech spec + TDD commands
+    [security]=3500  # Security workers need OWASP checklist + tech reference
+    [delivery]=5500  # Delivery workers need story + file domains + TDD commands
+)
 
 # Coordination overhead (task creation, messaging, status checks)
-COORDINATION_OVERHEAD_PERCENT=15
+# B1: Adaptive overhead — scales with number of workers
+# Formula: base_pct + (N_workers * per_worker_pct) replaces flat 15%
+COORDINATION_OVERHEAD_PERCENT=15  # default, overridden by adaptive formula
+COORDINATION_BASE_PCT=5
+COORDINATION_PER_WORKER_PCT=3.5
 
 # Input/output token ratio (approx 70% input, 30% output)
 INPUT_RATIO=0.70
@@ -94,7 +139,17 @@ DEFAULT_TECHS=2
 DEFAULT_CHECKS=5
 DEFAULT_WORKER_MODEL="sonnet"
 DEFAULT_LEADER_MODEL="opus"
+DEFAULT_TASK_TYPE=""
 DRY_RUN=false
+FAST_MODE=false
+MAX_COST=""  # A3: Budget guard — empty means no limit
+AUTO_SIZE=false
+
+# =============================================================================
+# Global Variables
+# =============================================================================
+
+TASK_TYPE=""
 
 # =============================================================================
 # Usage
@@ -116,6 +171,15 @@ OPTIONS:
     --worker-model M    Worker agent model: haiku|sonnet|opus (default: sonnet)
     --leader-model M    Leader agent model: haiku|sonnet|opus (default: opus)
     --tokens-per-check N  Override tokens per check estimate (default: 12500)
+    --task-type T       Task type: audit|sprint|security|delivery
+                        Overrides --tokens-per-check with type-specific baselines:
+                          audit:    12,500 tokens/check, 1.5 min
+                          sprint:   35,000 tokens/story, 15 min
+                          security: 15,000 tokens/check, 2 min
+                          delivery: 45,000 tokens/story, 20 min
+    --fast-mode         Use Fast Mode pricing (6x cost for Opus)
+    --max-cost N        Maximum budget in dollars; output WITHIN_BUDGET=true/false
+    --auto-size         Recommend optimal team size based on workload
     --dry-run           Show configuration without calculating
     --help              Show this help
 
@@ -125,6 +189,9 @@ EXAMPLES:
 
     # 3-tech project with Haiku workers (cost-optimized)
     cost-estimator.sh --techs 3 --checks 5 --worker-model haiku
+
+    # Audit task type (uses audit-specific baselines)
+    cost-estimator.sh --techs 2 --checks 5 --task-type audit
 
     # Quick check with dry-run
     cost-estimator.sh --techs 4 --dry-run
@@ -179,6 +246,22 @@ parse_args() {
                 tokens_check="$2"
                 shift 2
                 ;;
+            --task-type)
+                TASK_TYPE="$2"
+                shift 2
+                ;;
+            --fast-mode)
+                FAST_MODE=true
+                shift
+                ;;
+            --max-cost)
+                MAX_COST="$2"
+                shift 2
+                ;;
+            --auto-size)
+                AUTO_SIZE=true
+                shift
+                ;;
             --dry-run)
                 DRY_RUN=true
                 shift
@@ -211,6 +294,15 @@ parse_args() {
     if [[ -z "${MODEL_INPUT_PRICE[$leader_model]+x}" ]]; then
         echo "ERROR: --leader-model must be haiku|sonnet|opus, got: $leader_model" >&2
         exit 1
+    fi
+    if [[ -n "$TASK_TYPE" ]]; then
+        if [[ -z "${TASK_TYPE_TOKENS_PER_UNIT[$TASK_TYPE]+x}" ]]; then
+            echo "ERROR: --task-type must be audit|sprint|security|delivery, got: $TASK_TYPE" >&2
+            exit 1
+        fi
+        # Override tokens-per-check and minutes-per-check with task type baselines
+        tokens_check=${TASK_TYPE_TOKENS_PER_UNIT[$TASK_TYPE]}
+        MINUTES_PER_CHECK=${TASK_TYPE_MINUTES_PER_UNIT[$TASK_TYPE]}
     fi
 
     # Export to globals
@@ -262,18 +354,30 @@ estimate_parallel_tokens() {
     # Agent startup overhead (each agent pays startup cost)
     local startup_overhead=$((n_agents * TOKENS_AGENT_STARTUP))
 
+    # A4: Use task-type-specific context tokens if available
+    local ctx_per_agent=$TOKENS_CONTEXT_PER_AGENT
+    if [[ -n "$TASK_TYPE" ]] && [[ -n "${TASK_TYPE_CONTEXT_TOKENS[$TASK_TYPE]+x}" ]]; then
+        ctx_per_agent=${TASK_TYPE_CONTEXT_TOKENS[$TASK_TYPE]}
+    fi
+
     # Context duplication: each worker reloads shared context
     # Factor scales how much extra context is needed (retries, re-reads)
     local ctx_factor=${CONTEXT_DUPLICATION_FACTOR[$worker_model]}
     local ctx_overhead
-    ctx_overhead=$(awk "BEGIN { printf \"%d\", $n_workers * $TOKENS_CONTEXT_PER_AGENT * (1 + $ctx_factor) }")
+    ctx_overhead=$(awk "BEGIN { printf \"%d\", $n_workers * $ctx_per_agent * (1 + $ctx_factor) }")
 
     # Leader overhead (detection + aggregation + per-worker coordination)
     local leader_overhead=$((TOKENS_DETECTION + TOKENS_REPORT + TOKENS_AGENT_COORDINATION * n_workers))
 
+    # B1: Adaptive coordination overhead — scales with worker count
+    # Formula: base_pct + (N_workers * per_worker_pct)
+    # 2 workers = 12%, 3 = 15.5%, 4 = 19%
+    local effective_coord_pct
+    effective_coord_pct=$(awk "BEGIN { printf \"%.1f\", $COORDINATION_BASE_PCT + ($n_workers * $COORDINATION_PER_WORKER_PCT) }")
+
     # Coordination overhead: percentage of work tokens for messaging/task management
     local coord_pct_overhead
-    coord_pct_overhead=$(awk "BEGIN { printf \"%d\", $work_tokens * $COORDINATION_OVERHEAD_PERCENT / 100 }")
+    coord_pct_overhead=$(awk "BEGIN { printf \"%d\", $work_tokens * $effective_coord_pct / 100 }")
 
     # Total parallel tokens
     local total=$((work_tokens + startup_overhead + ctx_overhead + leader_overhead + coord_pct_overhead))
@@ -311,8 +415,14 @@ calculate_cost() {
     local model=$1
     local total_tokens=$2
 
-    local input_price=${MODEL_INPUT_PRICE[$model]}
-    local output_price=${MODEL_OUTPUT_PRICE[$model]}
+    local input_price output_price
+    if [[ "$FAST_MODE" == "true" ]]; then
+        input_price=${MODEL_INPUT_PRICE_FAST[$model]}
+        output_price=${MODEL_OUTPUT_PRICE_FAST[$model]}
+    else
+        input_price=${MODEL_INPUT_PRICE[$model]}
+        output_price=${MODEL_OUTPUT_PRICE[$model]}
+    fi
 
     # Split tokens into input/output using ratio
     local cost
@@ -384,6 +494,43 @@ calculate_break_even() {
 }
 
 # =============================================================================
+# B3: Team Size Recommendation
+# =============================================================================
+
+# Recommend optimal team size based on workload
+# Sprint/delivery: min(ceil(units/2), 3)
+# Audit/security: min(units, 4) — one worker per tech/dimension
+recommend_team_size() {
+    local n_units=$1
+    local task_type="${2:-audit}"
+
+    case "$task_type" in
+        sprint|delivery)
+            # 2-3 stories = 1 worker, 4-5 = 2, 6+ = 3
+            local size
+            size=$(awk "BEGIN {
+                s = int(($n_units + 1) / 2)
+                if (s < 1) s = 1
+                if (s > 3) s = 3
+                print s
+            }")
+            echo "$size"
+            ;;
+        audit|security|*)
+            # One worker per tech/dimension, capped at 4
+            local size
+            size=$(awk "BEGIN {
+                s = $n_units
+                if (s < 1) s = 1
+                if (s > 4) s = 4
+                print s
+            }")
+            echo "$size"
+            ;;
+    esac
+}
+
+# =============================================================================
 # Output Functions
 # =============================================================================
 
@@ -450,6 +597,39 @@ Model pricing (input/output per M tokens):
   sonnet: \$${MODEL_INPUT_PRICE[sonnet]} / \$${MODEL_OUTPUT_PRICE[sonnet]}
   haiku:  \$${MODEL_INPUT_PRICE[haiku]} / \$${MODEL_OUTPUT_PRICE[haiku]}
 
+Fast Mode:          $FAST_MODE
+EOF
+    if [[ "$FAST_MODE" == "true" ]]; then
+        cat <<EOF
+
+WARNING: Fast Mode is enabled - Opus pricing is 6x higher!
+  opus (fast): \$${MODEL_INPUT_PRICE_FAST[opus]} / \$${MODEL_OUTPUT_PRICE_FAST[opus]}
+EOF
+    fi
+    if [[ -n "$TASK_TYPE" ]]; then
+        cat <<EOF
+
+Task type:          $TASK_TYPE
+  Tokens/unit:      ${TASK_TYPE_TOKENS_PER_UNIT[$TASK_TYPE]}
+  Minutes/unit:     ${TASK_TYPE_MINUTES_PER_UNIT[$TASK_TYPE]}
+EOF
+    fi
+    if [[ -n "$MAX_COST" ]]; then
+        cat <<EOF
+
+Budget limit:       \$$MAX_COST
+EOF
+    fi
+    if [[ "$AUTO_SIZE" == "true" ]]; then
+        local rec_size
+        rec_size=$(recommend_team_size "$N_TECHS" "${TASK_TYPE:-audit}")
+        cat <<EOF
+
+Recommended workers: $rec_size
+EOF
+    fi
+    cat <<EOF
+
 No calculation performed (--dry-run).
 EOF
 }
@@ -492,12 +672,36 @@ output_estimate() {
     local time_saved_min
     time_saved_min=$(awk "BEGIN { printf \"%.1f\", $seq_time - $par_time }")
 
+    # A2: Fast Mode warning field
+    local fast_mode_warning="false"
+    if [[ "$FAST_MODE" == "true" ]]; then
+        fast_mode_warning="true"
+    fi
+
+    # A3: Budget guard
+    local within_budget="true"
+    if [[ -n "$MAX_COST" ]]; then
+        within_budget=$(awk "BEGIN {
+            if ($par_cost <= $MAX_COST) print \"true\"
+            else print \"false\"
+        }")
+    fi
+
+    # B3: Auto-size recommendation
+    local recommended_workers=""
+    if [[ "$AUTO_SIZE" == "true" ]]; then
+        recommended_workers=$(recommend_team_size "$N_TECHS" "${TASK_TYPE:-audit}")
+    fi
+
     # Output key=value pairs (consumable by cost-dashboard.sh)
     cat <<EOF
 TECHS=$N_TECHS
 CHECKS=$N_CHECKS
 WORKER_MODEL=$WORKER_MODEL
 LEADER_MODEL=$LEADER_MODEL
+FAST_MODE=$FAST_MODE
+FAST_MODE_WARNING=$fast_mode_warning
+TASK_TYPE=${TASK_TYPE:-audit}
 SEQ_TOKENS=$seq_tokens
 PAR_TOKENS=$par_tokens
 SEQ_TIME=$seq_time
@@ -510,6 +714,21 @@ TIME_SAVED_MIN=$time_saved_min
 BREAK_EVEN=$break_even
 RECOMMENDATION=$recommendation
 EOF
+
+    # A3: Budget guard fields (only when --max-cost is set)
+    if [[ -n "$MAX_COST" ]]; then
+        cat <<EOF
+MAX_COST=$MAX_COST
+WITHIN_BUDGET=$within_budget
+EOF
+    fi
+
+    # B3: Auto-size recommendation (only when --auto-size is set)
+    if [[ "$AUTO_SIZE" == "true" ]]; then
+        cat <<EOF
+RECOMMENDED_WORKERS=$recommended_workers
+EOF
+    fi
 }
 
 # =============================================================================
