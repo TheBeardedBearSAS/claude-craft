@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.10.0] - 2026-02-13
+
+### Added
+
+- **Status Line v2.0** — fixed critical `settings.json` format (`"type": "command"` instead of `"enabled"`/`"script"`), native `context_window.used_percentage`, single jq call (7→1), cross-platform `stat`, git cache (5s TTL), 13 element toggles, agent name, vim mode, burn rate, lines changed, progress bar styles (`percentage`/`bar`/`both`), compact/detailed modes, `--version`/`--help` flags
+- **27 bats tests** for status line (`Tools/StatusLine/tests/statusline.bats`)
+- **`test-statusline` Makefile target** — runs status line tests via Docker
+
+### Changed
+
+- **Status line README** — rewritten in English with full v2.0 documentation
+- **`statusline.conf.example`** — expanded with all new options (toggles, bar style, display mode, git cache TTL)
+- **Docs** — fixed `settings.json` format in `docs/guides/{en,fr}/05-tools-reference.md` and `06-troubleshooting.md`
+
 ## [7.9.0] - 2026-02-13
 
 ### Added
