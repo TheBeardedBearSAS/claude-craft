@@ -1,75 +1,100 @@
 # =============================================================================
-# Claude Code Status Line - Configuration des limites d'utilisation
+# Claude Code Status Line v2.0 — Configuration
 # =============================================================================
 #
-# Copier ce fichier vers ~/.claude/statusline.conf et ajuster les valeurs
-# selon votre abonnement Claude (Pro, Max, etc.)
+# Copy to ~/.claude/statusline.conf and adjust values for your plan.
 #
-# Installation:
 #   cp statusline.conf.example ~/.claude/statusline.conf
 #
 # =============================================================================
 
 # =============================================================================
-# LIMITES DE SESSION (approximation période 5h)
+# SESSION LIMITS (approximate 5h window)
 # =============================================================================
-# Note: Claude Code n'expose pas les vraies limites, ces valeurs sont des
-# estimations basées sur votre expérience d'utilisation.
+# Claude Code doesn't expose real limits. These are estimates based on usage.
 #
-# Valeurs recommandées par plan (en dollars):
-#   - Pro ($20/mois)     : SESSION=25,   WEEKLY=150
-#   - Max 5x ($100/mois) : SESSION=125,  WEEKLY=750
-#   - Max 20x ($200/mois): SESSION=500,  WEEKLY=3000
+# Recommended values by plan (in USD):
+#   - Pro ($20/month)     : SESSION=25,   WEEKLY=150
+#   - Max 5x ($100/month) : SESSION=125,  WEEKLY=750
+#   - Max 20x ($200/month): SESSION=500,  WEEKLY=3000
 #
-# En dollars (recommandé - plus stable que les tokens)
 SESSION_COST_LIMIT=500.00
 
-# OU en tokens (décommenter si préféré, commenter SESSION_COST_LIMIT)
-# SESSION_TOKEN_LIMIT=500000
-
 # =============================================================================
-# LIMITES HEBDOMADAIRES
+# WEEKLY LIMITS
 # =============================================================================
-# Estimation de votre quota hebdomadaire selon votre plan
-#
-# En dollars
 WEEKLY_COST_LIMIT=3000.00
 
-# OU en tokens
-# WEEKLY_TOKEN_LIMIT=3000000
-
 # =============================================================================
-# SEUILS D'ALERTE (pourcentage)
+# ALERT THRESHOLDS (percentage)
 # =============================================================================
-# Couleur de l'indicateur selon le pourcentage utilisé:
-#   - Vert  : < USAGE_WARN_THRESHOLD
-#   - Jaune : USAGE_WARN_THRESHOLD - USAGE_CRIT_THRESHOLD
-#   - Rouge : > USAGE_CRIT_THRESHOLD
+# Color changes based on percentage used:
+#   - Green  : < WARN threshold
+#   - Yellow : WARN — CRIT
+#   - Red    : > CRIT threshold
 
+# Context window thresholds
+CONTEXT_WARN_THRESHOLD=60
+CONTEXT_CRIT_THRESHOLD=80
+
+# Usage (session/weekly) thresholds
 USAGE_WARN_THRESHOLD=60
 USAGE_CRIT_THRESHOLD=80
 
 # =============================================================================
 # CACHE (performance)
 # =============================================================================
-# Durée du cache en secondes pour éviter les appels répétés à ccusage
-# (ccusage peut être lent à démarrer via npx)
+# TTL in seconds to avoid repeated calls to ccusage
 
-# Cache pour l'usage de session (rafraîchi plus souvent)
+# Session usage cache (refreshed more often)
 SESSION_CACHE_TTL=60
 
-# Cache pour l'usage hebdomadaire (change moins vite)
+# Weekly usage cache (changes less frequently)
 WEEKLY_CACHE_TTL=300
 
-# =============================================================================
-# AFFICHAGE
-# =============================================================================
-# Activer/désactiver l'affichage des limites
-# Mettre à "false" pour masquer un indicateur
+# Git status cache (branch + staged/unstaged counts)
+GIT_CACHE_TTL=5
 
+# =============================================================================
+# ELEMENT TOGGLES
+# =============================================================================
+# Set to "false" to hide an element from the status line
+
+SHOW_PROFILE=true
+SHOW_MODEL=true
+SHOW_GIT=true
+SHOW_PROJECT=true
+SHOW_CONTEXT=true
+SHOW_COST=true
+SHOW_TIME=true
+SHOW_AGENT=true
+SHOW_VIM_MODE=true
 SHOW_SESSION_LIMIT=true
 SHOW_WEEKLY_LIMIT=true
 
-# Labels personnalisés (avec emoji)
+# Opt-in elements (disabled by default)
+SHOW_BURN_RATE=false
+SHOW_LINES_CHANGED=false
+
+# =============================================================================
+# DISPLAY MODE
+# =============================================================================
+# compact  : Single line (default)
+# detailed : Two lines — identity on top, metrics below
+
+STATUSLINE_MODE=compact
+
+# =============================================================================
+# CONTEXT BAR STYLE
+# =============================================================================
+# percentage : "42%"           (default)
+# bar        : "[▓▓▓▓░░░░░░]"
+# both       : "[▓▓▓▓░░░░░░] 42%"
+
+CONTEXT_BAR_STYLE=percentage
+
+# =============================================================================
+# LABELS
+# =============================================================================
 SESSION_LABEL="⏱️ 5h"
 WEEKLY_LABEL="📅 Sem"

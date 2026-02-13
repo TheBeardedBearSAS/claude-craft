@@ -400,8 +400,8 @@ This guide covers common issues and their solutions when using Claude-Craft.
    cat ~/.claude/settings.json | jq '.statusLine'
    # Should show:
    # {
-   #   "enabled": true,
-   #   "script": "~/.claude/statusline.sh"
+   #   "type": "command",
+   #   "command": "~/.claude/statusline.sh"
    # }
    ```
 

@@ -400,8 +400,8 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
    cat ~/.claude/settings.json | jq '.statusLine'
    # Devrait afficher :
    # {
-   #   "enabled": true,
-   #   "script": "~/.claude/statusline.sh"
+   #   "type": "command",
+   #   "command": "~/.claude/statusline.sh"
    # }
    ```
 

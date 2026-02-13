@@ -1,160 +1,199 @@
-# Claude Code Status Line
+# Claude Code Status Line v2.0
 
-Affiche une status line personnalisée dans Claude Code avec des informations contextuelles.
+A customizable status line for Claude Code displaying contextual information.
 
-## Aperçu
+## Preview
 
+**Compact mode** (default, 1 line):
 ```
-🔑 pro | 🧠 Opus | 🌿 main +2~1 | 📁 mon-projet | 📊 45% | ⏱️ 5h: 23% | 📅 Sem: 45% | 💰 $0.42 | 🕐 14:32
+🔑 pro | 🧠 Opus | 🌿 main +2~1 | 📁 my-project | 📊 42% | ⏱️ 5h: 23% | 📅 Sem: 45% | 💰 $0.42 | 🕐 14:32
 ```
 
-### Éléments affichés
+**Detailed mode** (2 lines):
+```
+🔑 pro | 🧠 Opus | 🌿 main +2~1 | 📁 my-project | @agent | NORMAL
+📊 [▓▓▓▓░░░░░░] 42% | 💰 $0.42 ($0.12/min) | +156 -23 | ⏱️ 5h: 23% | 📅 Sem: 45% | 🕐 14:32
+```
 
-| Emoji | Info | Description |
-|-------|------|-------------|
-| 🔑 | Profil | Compte Claude actif (via `CLAUDE_CONFIG_DIR`) |
-| 🧠/🎵/🍃 | Modèle | Opus/Sonnet/Haiku |
-| 🌿 | Git | Branche + status (+staged ~modified ?untracked) |
-| 📁 | Projet | Nom du répertoire projet |
-| 📊 | Contexte | % utilisé (vert < 60%, jaune < 80%, rouge ≥ 80%) |
-| ⏱️ | Session | % limite session 5h utilisée (via ccusage) |
-| 📅 | Hebdo | % limite hebdomadaire utilisée (via ccusage) |
-| 💰 | Coût | Coût session en USD |
-| 🕐 | Heure | Heure actuelle |
+### Elements
+
+| Emoji | Element | Description |
+|-------|---------|-------------|
+| 🔑 | Profile | Active Claude account (via `CLAUDE_CONFIG_DIR`) |
+| 🧠/🎵/🍃 | Model | Opus / Sonnet / Haiku |
+| 🌿 | Git | Branch + status (+staged ~modified ?untracked) |
+| 📁 | Project | Project directory name |
+| @ | Agent | Current agent name (when using agents) |
+| | Vim mode | NORMAL / INSERT (when vim mode enabled) |
+| 📊 | Context | % context window used (percentage, bar, or both) |
+| ⏱️ | Session | % session limit used (via ccusage) |
+| 📅 | Weekly | % weekly limit used (via ccusage) |
+| 💰 | Cost | Session cost in USD (+ optional burn rate $/min) |
+| 🕐 | Time | Current time |
 
 ## Installation
 
-### 1. Copier le script
+### 1. Copy the script
 
 ```bash
 mkdir -p ~/.claude
 cp statusline.sh ~/.claude/statusline.sh
+cp statusline.conf.example ~/.claude/statusline.conf
 chmod +x ~/.claude/statusline.sh
 ```
 
-### 2. Configurer Claude Code
+### 2. Configure Claude Code
 
-Fusionne avec ton `~/.claude/settings.json` existant :
+Merge into your `~/.claude/settings.json`:
 
 ```json
 {
   "statusLine": {
-    "enabled": true,
-    "script": "~/.claude/statusline.sh"
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
   }
 }
 ```
 
-### 3. Installer les dépendances
+### 3. Install dependencies
 
 ```bash
-# jq est requis pour parser le JSON
+# jq is required for JSON parsing
 # macOS
 brew install jq
 
 # Linux (Debian/Ubuntu)
 sudo apt install jq
 
-# ccusage (optionnel, pour tracking avancé des coûts)
+# ccusage (optional — for session/weekly usage tracking)
 npm install -g ccusage
 ```
 
-### 4. Configurer les profils multiples (optionnel)
-
-Voir `Tools/MultiAccount/` pour gérer plusieurs comptes Claude Code.
-
-## Personnalisation
-
-### Configurer les limites d'utilisation
-
-Copie le fichier de configuration exemple et ajuste les valeurs selon ton abonnement :
+### 4. Verify
 
 ```bash
-cp statusline.conf.example ~/.claude/statusline.conf
+# Check version
+bash ~/.claude/statusline.sh --version
+
+# Test with sample JSON
+echo '{"model":{"display_name":"Opus","id":"claude-opus-4-6"},"context_window":{"used_percentage":42},"cost":{"total_cost_usd":0.5},"workspace":{"current_dir":"/tmp/test","project_dir":"/tmp/test"}}' | bash ~/.claude/statusline.sh
 ```
 
-Édite `~/.claude/statusline.conf` :
+## Configuration
+
+Edit `~/.claude/statusline.conf` (copied from `statusline.conf.example`):
+
+### Element Toggles
+
+Every element can be shown or hidden independently:
 
 ```bash
-# Limites de session (approximation 5h)
-SESSION_COST_LIMIT=25.00     # En dollars
-
-# Limites hebdomadaires
-WEEKLY_COST_LIMIT=150.00     # En dollars
-
-# Seuils d'alerte
-USAGE_WARN_THRESHOLD=60      # Jaune à partir de 60%
-USAGE_CRIT_THRESHOLD=80      # Rouge à partir de 80%
-
-# Cache (évite les appels répétés à ccusage)
-SESSION_CACHE_TTL=60         # Rafraîchissement toutes les 60s
-WEEKLY_CACHE_TTL=300         # Rafraîchissement toutes les 5min
-
-# Affichage (true/false)
-SHOW_SESSION_LIMIT=true
-SHOW_WEEKLY_LIMIT=true
-
-# Labels personnalisés
-SESSION_LABEL="⏱️ 5h"
-WEEKLY_LABEL="📅 Sem"
+SHOW_PROFILE=true          # 🔑 Profile name
+SHOW_MODEL=true            # 🧠 Model name
+SHOW_GIT=true              # 🌿 Git branch + status
+SHOW_PROJECT=true          # 📁 Project name
+SHOW_CONTEXT=true          # 📊 Context percentage
+SHOW_COST=true             # 💰 Session cost
+SHOW_TIME=true             # 🕐 Current time
+SHOW_AGENT=true            # @ Agent name (auto)
+SHOW_VIM_MODE=true         # Vim mode (auto)
+SHOW_SESSION_LIMIT=true    # ⏱️ Session usage %
+SHOW_WEEKLY_LIMIT=true     # 📅 Weekly usage %
+SHOW_BURN_RATE=false       # $/min (opt-in)
+SHOW_LINES_CHANGED=false   # +N -M lines (opt-in)
 ```
 
-### Modifier les seuils de contexte
-
-Édite `~/.claude/statusline.sh` :
+### Display Mode
 
 ```bash
-CONTEXT_WARN_THRESHOLD=60   # Jaune à partir de 60%
-CONTEXT_CRIT_THRESHOLD=80   # Rouge à partir de 80%
+STATUSLINE_MODE=compact    # compact (1 line) or detailed (2 lines)
 ```
 
-### Ajouter/retirer des éléments
+### Context Bar Style
 
-Commente ou décommente les sections dans la partie "CONSTRUCTION DE LA STATUS LINE" du script.
+```bash
+CONTEXT_BAR_STYLE=percentage   # "42%"
+# CONTEXT_BAR_STYLE=bar        # "[▓▓▓▓░░░░░░]"
+# CONTEXT_BAR_STYLE=both       # "[▓▓▓▓░░░░░░] 42%"
+```
 
-### Changer les emojis
+### Usage Limits
 
-Modifie la fonction `get_model_emoji()` ou les lignes d'output.
+Adjust for your Claude subscription plan:
+
+```bash
+# Pro ($20/month)
+SESSION_COST_LIMIT=25.00
+WEEKLY_COST_LIMIT=150.00
+
+# Max 5x ($100/month)
+SESSION_COST_LIMIT=125.00
+WEEKLY_COST_LIMIT=750.00
+
+# Max 20x ($200/month) — default
+SESSION_COST_LIMIT=500.00
+WEEKLY_COST_LIMIT=3000.00
+```
+
+### Alert Thresholds
+
+```bash
+CONTEXT_WARN_THRESHOLD=60    # Yellow at 60%
+CONTEXT_CRIT_THRESHOLD=80    # Red at 80%
+USAGE_WARN_THRESHOLD=60
+USAGE_CRIT_THRESHOLD=80
+```
+
+### Cache TTL
+
+```bash
+SESSION_CACHE_TTL=60     # Session usage cache (seconds)
+WEEKLY_CACHE_TTL=300     # Weekly usage cache (seconds)
+GIT_CACHE_TTL=5          # Git status cache (seconds)
+```
 
 ## Troubleshooting
 
-### La status line ne s'affiche pas
+### Status line not showing
 
-1. Vérifie que le script est exécutable : `ls -la ~/.claude/statusline.sh`
-2. Teste manuellement : `echo '{"model":{"display_name":"Test"}}' | ~/.claude/statusline.sh`
-3. Vérifie les logs Claude Code
+1. Verify the script is executable: `ls -la ~/.claude/statusline.sh`
+2. Check settings.json format — must use `"type": "command"`:
+   ```bash
+   cat ~/.claude/settings.json | jq '.statusLine'
+   # Expected: { "type": "command", "command": "~/.claude/statusline.sh" }
+   ```
+3. Test manually: `echo '{"model":{"display_name":"Test"}}' | ~/.claude/statusline.sh`
+4. Verify jq is installed: `which jq`
 
-### Le coût affiche toujours $0.00
+### Cost always shows $0.00
 
-- Installe ccusage : `npm install -g ccusage`
-- Le coût peut mettre quelques secondes à se mettre à jour
+Claude Code provides `cost.total_cost_usd` natively. If it shows 0, the session may have just started.
 
-### Les limites 5h/Hebdo ne s'affichent pas
+### Session/Weekly limits not showing
 
-- ccusage doit être installé : `npm install -g ccusage`
-- Vérifie que npx fonctionne : `npx ccusage daily --json`
-- Les données apparaissent seulement s'il y a de l'usage (> 0%)
-- Le cache peut retarder l'affichage (60s pour session, 5min pour hebdo)
+- Install ccusage globally: `npm install -g ccusage`
+- Verify it works: `ccusage daily --json`
+- Values only appear when usage > 0%
+- Cache may delay display (60s session, 5min weekly)
 
-### Les pourcentages semblent incorrects
+### Context % seems incorrect
 
-Les limites sont des estimations que tu définis dans `statusline.conf`.
-Ajuste `SESSION_COST_LIMIT` et `WEEKLY_COST_LIMIT` selon ton expérience d'utilisation.
+v2.0 reads `context_window.used_percentage` natively from Claude Code.
+Falls back to transcript size estimation only if native value is unavailable.
 
-### Le contexte % semble incorrect
+## What's New in v2.0
 
-L'estimation est basée sur la taille du fichier transcript (~4MB = 100%).
-Ajuste `max_size` dans la fonction `get_context_percent()` si nécessaire.
-
-## Commandes utiles
-
-```bash
-# Voir l'usage du jour avec ccusage
-npx ccusage daily
-
-# Monitoring live
-npx ccusage blocks --live
-
-# Usage par projet
-npx ccusage daily --instances
-```
+- **Fixed settings.json format** — uses correct `"type": "command"` format
+- **Native context window** — reads `context_window.used_percentage` from Claude Code
+- **Single jq call** — 7 separate jq invocations replaced by 1 (performance)
+- **Cross-platform** — `stat` helper works on both Linux and macOS
+- **Git cache** — git status cached for 5s to reduce overhead
+- **Progress bar** — context can display as `[▓▓▓▓░░░░░░]`
+- **Detailed mode** — 2-line layout with identity + metrics
+- **Agent name** — shows `@agent-name` when using agents
+- **Vim mode** — shows NORMAL/INSERT when vim mode is enabled
+- **Burn rate** — optional $/min display
+- **Lines changed** — optional +N -M from Claude Code
+- **Full toggles** — every element individually toggleable
+- **--version / --help** flags
+- **Global ccusage preferred** — avoids slow `npx --yes` downloads

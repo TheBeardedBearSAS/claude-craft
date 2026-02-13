@@ -194,8 +194,8 @@ Ajouter à `~/.claude/settings.json` :
 ```json
 {
   "statusLine": {
-    "enabled": true,
-    "script": "~/.claude/statusline.sh"
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
   }
 }
 ```

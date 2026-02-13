@@ -162,7 +162,7 @@ install-statusline: ## Installe la status line personnalisee
 		if [ -f ~/.claude/settings.json ]; then \
 			if ! grep -q '"statusLine"' ~/.claude/settings.json; then \
 				echo "$(YELLOW)⚠$(NC) Ajoute manuellement a ~/.claude/settings.json:"; \
-				echo '  "statusLine": { "enabled": true, "script": "~/.claude/statusline.sh" }'; \
+				echo '  "statusLine": { "type": "command", "command": "~/.claude/statusline.sh" }'; \
 			else \
 				echo "$(GREEN)✓$(NC) settings.json deja configure"; \
 			fi \
@@ -233,6 +233,10 @@ install-completions: ## Installe les completions bash/zsh pour claude-accounts
 test-tools: ## Lance les tests bats pour les outils (via Docker)
 	@echo "$(CYAN)Lancement des tests bats...$(NC)"
 	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/MultiAccount/tests/
+
+test-statusline: ## Lance les tests bats pour la status line (via Docker)
+	@echo "$(CYAN)Lancement des tests statusline...$(NC)"
+	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/StatusLine/tests/
 
 install-tools-lib: ## Installe la librairie partagee tools-ui.sh
 	@mkdir -p ~/.local/lib/claude-craft
