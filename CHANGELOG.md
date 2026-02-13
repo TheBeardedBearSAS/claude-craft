@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.10.1] - 2026-02-13
+
+### Fixed
+
+- **Status line locale bug** — force `LC_NUMERIC=C` in `statusline.sh` for locale-safe numeric formatting; `printf "%.2f"` failed on non-English locales (e.g. French) where the decimal separator is a comma, causing cost to display as `$0,00` instead of `$0.50`
+
 ## [7.10.0] - 2026-02-13
 
 ### Added
