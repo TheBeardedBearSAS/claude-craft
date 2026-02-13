@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.11.0] - 2026-02-13
+
+### Added
+
+- **Agent Teams optimization** — reduce token overhead from ~30% to ~15-20% via lean context loading (task-type-specific tokens per worker: audit=4K, sprint=5K, security=3.5K, delivery=5.5K) and adaptive coordination overhead (5% + 3.5%/worker replacing flat 15%)
+- **Fast Mode blocking guard** — all 4 team commands display 6x cost comparison dashboard and require explicit confirmation before proceeding in Fast Mode
+- **Budget guard (`--max-cost`)** — abort team execution when estimated parallel cost exceeds user-specified dollar threshold
+- **Structured spawn templates** — rich TaskCreate context per worker type (project, tech, reference, checks, output schema) for higher quality first-pass results
+- **Context compaction mitigation** — leader re-reads TaskList every 5 completions (bug #23620); delivery re-reads phase-handoff.yaml at Phase 2 start
+- **Per-task timeout baselines** — 1.5x estimated duration per task type in ralph-teams-adapter (audit=135s, sprint=1350s, security=180s, delivery=1800s)
+- **Auto-size recommendation** — `recommend_team_size()` in cost-estimator for optimal worker count
+- **Sub-agents vs Agent Teams decision matrix** — comparison table and concrete examples in sub-agents-patterns.md
+- **138 bats tests** — cost-estimator (42), cost-dashboard (24), ralph-teams-adapter (27), compatibility-check (23), result-aggregator (22)
+
+### Changed
+
+- **Delivery Phase 1 Reviewer** — model changed from sonnet to haiku (-15% Phase 1 cost)
+- **Polling cadence** — standardized across all team commands (30s, backoff to 60s after 3 idle polls)
+- **Message verbosity** — worker completion messages capped at <50 tokens across all team commands
+- **i18n** — all changes mirrored across 5 languages (en, fr, es, de, pt) for 4 team commands
+
 ## [7.10.2] - 2026-02-13
 
 ### Changed
