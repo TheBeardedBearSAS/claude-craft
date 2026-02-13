@@ -1,0 +1,14 @@
+{
+  "name": "claude-craft-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "bash scripts/sync-docs.sh && vitepress build",
+    "preview": "vitepress preview",
+    "sync": "bash scripts/sync-docs.sh"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}
