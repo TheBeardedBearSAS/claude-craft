@@ -397,7 +397,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version**: 2.1.38
+**Minimum Version**: 2.1.41
 
 ### PR Integration (v2.1.27+)
 
@@ -688,3 +688,60 @@ Fixed LSP shutdown/exit compatibility with strict language servers that reject n
 |-----|-------------|
 | Thai/Lao spacing | Fixed Thai/Lao spacing vowels rendering in input field |
 | Tool use text | Fixed text between tool uses disappearing when not streaming |
+
+### Nested Session Guard (v2.1.39+)
+
+Claude Code now prevents launching inside another Claude Code session, avoiding accidental session inception.
+
+### Agent Teams Cloud Provider Fix (v2.1.39+)
+
+Fixed Agent Teams using wrong model identifier for Bedrock, Vertex, and Foundry customers.
+
+### Non-Agent Markdown Warning Fix (v2.1.39+)
+
+Fixed spurious warnings for non-agent markdown files in `.claude/agents/` directory. Only files with valid agent frontmatter are now treated as agents.
+
+### OTel Fast Mode Tracing (v2.1.39+)
+
+Added `speed` attribute to OTel events and trace spans for fast mode visibility in observability tools.
+
+### Terminal & Streaming Fixes (v2.1.39+)
+
+| Fix | Description |
+|-----|-------------|
+| MCP image streaming | Fixed crash when MCP tools return image content during streaming |
+| /resume previews | Fixed raw XML tags shown instead of readable command names |
+| Terminal rendering | Improved rendering performance and fixed character loss at screen boundary |
+| Bedrock/Vertex errors | Improved model error messages with fallback suggestions |
+
+### Auth CLI Commands (v2.1.41+)
+
+New CLI subcommands for authentication management:
+
+| Command | Description |
+|---------|-------------|
+| `claude auth login` | Authenticate with Anthropic |
+| `claude auth status` | Check current authentication state |
+| `claude auth logout` | Sign out and clear credentials |
+
+### Windows ARM64 Support (v2.1.41+)
+
+Native binary support for Windows ARM64 (win32-arm64) platform.
+
+### /rename Auto-Generation (v2.1.41+)
+
+`/rename` now auto-generates a descriptive session name from conversation context when called without arguments.
+
+### @-Mention Anchor Fix (v2.1.41+)
+
+Fixed file resolution failing for @-mentions with anchor fragments (e.g., `@README.md#installation`).
+
+### Agent SDK & Plan Mode Fixes (v2.1.41+)
+
+| Fix | Description |
+|-----|-------------|
+| Background tasks | Fixed notifications not delivered in streaming Agent SDK mode |
+| Subagent timing | Permission wait time no longer included in elapsed time display |
+| Plan mode | Fixed proactive ticks firing while in plan mode |
+| Auto-compact | Fixed failure error notifications being shown to users |
+| AWS auth | Added 3-minute timeout to prevent indefinite hanging |
