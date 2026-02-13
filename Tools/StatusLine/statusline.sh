@@ -11,6 +11,9 @@
 
 VERSION="2.0.0"
 
+# Force C locale for numeric formatting (JSON uses '.' as decimal separator)
+export LC_NUMERIC=C
+
 # Handle --version and --help before reading stdin
 case "${1:-}" in
     --version|-v)
