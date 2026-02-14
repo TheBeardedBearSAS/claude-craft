@@ -23,7 +23,7 @@ const agents = [
         <h2 style="font-size: 2.25rem; font-weight: 700; color: white;">{{ title }}</h2>
         <p style="margin-top: 1rem; color: #94a3b8;">{{ desc }}</p>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
+      <div class="agent-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
         <div v-for="agent in agents" :key="agent.name" :style="{ padding: '1.5rem', background: 'rgba(30,41,59,0.8)', borderRadius: '0.5rem', border: '1px solid ' + agent.borderColor, position: 'relative' }">
           <div v-if="agent.badge" :style="{ position: 'absolute', top: '0.5rem', right: '0.5rem', padding: '0.125rem 0.5rem', background: agent.badgeBg, color: agent.color, fontSize: '0.75rem', borderRadius: '9999px' }">
             {{ agent.badge }}
@@ -38,3 +38,16 @@ const agents = [
     </div>
   </section>
 </template>
+
+<style scoped>
+@media (max-width: 768px) {
+  .agent-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 480px) {
+  .agent-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+</style>

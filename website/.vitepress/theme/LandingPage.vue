@@ -8,6 +8,7 @@ import AgentShowcase from './components/AgentShowcase.vue'
 import TerminalAnimation from './components/TerminalAnimation.vue'
 
 const currentLang = ref('en')
+const mobileMenuOpen = ref(false)
 const availableLangs = ['en', 'fr', 'es', 'de', 'pt']
 
 const translations = {
@@ -268,7 +269,7 @@ onMounted(() => {
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
             <span style="font-weight: 700; font-size: 1.25rem; letter-spacing: -0.025em;">Claude Craft</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="nav-links" style="display: flex; align-items: center; gap: 1rem;">
             <a :href="'#features'" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('nav_features') }}</a>
             <a :href="'#tools'" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('nav_tools') }}</a>
             <a :href="'#install'" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('nav_install') }}</a>
@@ -285,9 +286,32 @@ onMounted(() => {
               GitHub
             </a>
           </div>
+          <button class="mobile-menu-btn" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Menu" style="display: none; background: none; border: none; color: white; cursor: pointer; padding: 0.5rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
         </div>
       </div>
     </nav>
+    <!-- Mobile menu -->
+    <div v-if="mobileMenuOpen" class="mobile-menu" style="position: fixed; top: 4rem; left: 0; right: 0; z-index: 49; background: rgba(15,23,42,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem 1.5rem; display: none;">
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <a href="#features" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('nav_features') }}</a>
+        <a href="#tools" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('nav_tools') }}</a>
+        <a href="#install" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('nav_install') }}</a>
+        <a href="#technologies" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('nav_tech') }}</a>
+        <select :value="currentLang" @change="changeLanguage($event.target.value)" style="background: rgba(255,255,255,0.05); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; padding: 0.5rem; font-size: 0.875rem; cursor: pointer; width: 100%;">
+          <option value="en" style="background: #1e293b;">English</option>
+          <option value="fr" style="background: #1e293b;">Français</option>
+          <option value="es" style="background: #1e293b;">Español</option>
+          <option value="de" style="background: #1e293b;">Deutsch</option>
+          <option value="pt" style="background: #1e293b;">Português</option>
+        </select>
+        <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; color: #94a3b8; text-decoration: none; font-size: 0.875rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
 
     <!-- Hero Section -->
     <div style="position: relative; padding: 10rem 0 5rem; overflow: hidden;">
@@ -330,7 +354,7 @@ onMounted(() => {
           <h2 style="font-size: 2.25rem; font-weight: 700; color: white;">{{ t('feat_main_title') }}</h2>
           <p style="margin-top: 1rem; font-size: 1.25rem; color: #94a3b8;">{{ t('feat_main_desc') }}</p>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+        <div class="grid-3col" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
           <FeatureCard icon="git-branch" color="cyan" :badge="'v7.11.0'" :title="t('feat_bmad_title')" :desc="t('feat_bmad_desc')" />
           <FeatureCard icon="repeat" color="orange" :badge="'v7.11.0'" :title="t('feat_ralph_title')" :desc="t('feat_ralph_desc')" />
           <FeatureCard icon="globe" color="brand" :title="t('feat_1_title')" :desc="t('feat_1_desc')" />
@@ -344,7 +368,7 @@ onMounted(() => {
     <!-- Developer Tools Section -->
     <section id="tools" style="padding: 5rem 0; background: #0f172a; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);">
       <div style="max-width: 80rem; margin: 0 auto; padding: 0 1.5rem;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
+        <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
           <div>
             <h2 style="font-size: 2.25rem; font-weight: 700; color: white; margin-bottom: 1rem;">{{ t('tools_title') }}</h2>
             <p style="font-size: 1.25rem; color: #94a3b8; margin-bottom: 2rem;">{{ t('tools_desc') }}</p>
@@ -386,7 +410,7 @@ onMounted(() => {
     <!-- Quick Start -->
     <section id="quickstart" style="padding: 6rem 0 3rem; background: #1e293b;">
       <div style="max-width: 80rem; margin: 0 auto; padding: 0 1.5rem;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+        <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
           <div>
             <h2 style="font-size: 2.25rem; font-weight: 700; color: white; margin-bottom: 1.5rem;">{{ t('qs_title') }}</h2>
             <div style="display: flex; flex-direction: column; gap: 2rem;">
@@ -442,7 +466,7 @@ onMounted(() => {
     <section id="install" style="padding: 4rem 0; background: #0f172a; border-top: 1px solid rgba(255,255,255,0.05);">
       <div style="max-width: 80rem; margin: 0 auto; padding: 0 1.5rem;">
         <h3 style="font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 2rem; text-align: center;">{{ t('install_methods_title') }}</h3>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+        <div class="grid-3col" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
           <div v-for="method in [
             { title: t('install_method_1_title'), desc: t('install_method_1_desc'), cmd: 'make install-symfony TARGET=~/proj', color: '#8b5cf6' },
             { title: t('install_method_2_title'), desc: t('install_method_2_desc'), cmd: 'make config-install PROJECT=mono', color: '#3b82f6' },
@@ -476,7 +500,7 @@ onMounted(() => {
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
           </a>
         </div>
-        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; color: #64748b;">
+        <div class="footer-row" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; color: #64748b;">
           <p>{{ t('footer_copyright') }}</p>
           <p>{{ t('footer_built') }}</p>
         </div>
@@ -499,7 +523,31 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .landing-page h1 {
-    font-size: 2.5rem !important;
+    font-size: 2rem !important;
+  }
+  .landing-page h2 {
+    font-size: 1.75rem !important;
+  }
+  .nav-links {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: block !important;
+  }
+  .mobile-menu {
+    display: block !important;
+  }
+  .grid-3col {
+    grid-template-columns: 1fr !important;
+  }
+  .grid-2col {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+  .footer-row {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    text-align: center !important;
   }
 }
 </style>

@@ -26,7 +26,7 @@ const techs = [
         <h2 style="font-size: 2.25rem; font-weight: 700; color: white;">{{ title }}</h2>
         <p style="margin-top: 1rem; color: #94a3b8;">{{ desc }}</p>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+      <div class="tech-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
         <div v-for="tech in techs" :key="tech.name" style="background: rgba(30,41,59,0.5); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.05); text-align: center; transition: border-color 0.3s;" class="tech-card">
           <div :style="{ height: '4rem', width: '4rem', margin: '0 auto 1rem', background: tech.bg, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 15px rgba(0,0,0,0.3)', transition: 'transform 0.3s' }" class="tech-icon">
             <span :style="{ fontSize: tech.abbr.length > 2 ? '0.875rem' : '1.25rem', fontWeight: 700, color: tech.color }">{{ tech.abbr }}</span>
@@ -45,5 +45,15 @@ const techs = [
 }
 .tech-card:hover .tech-icon {
   transform: scale(1.1);
+}
+@media (max-width: 768px) {
+  .tech-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 480px) {
+  .tech-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 </style>
