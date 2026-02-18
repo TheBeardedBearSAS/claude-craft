@@ -125,10 +125,10 @@ setup() {
         source '$LIB'
         cost=\$(calculate_cost opus 100000)
         echo \"cost=\$cost\"
-        # 70000 input * 15/1M + 30000 output * 75/1M = 1.05 + 2.25 = 3.3000
+        # 70000 input * 5/1M + 30000 output * 25/1M = 0.35 + 0.75 = 1.1000
     "
     [ "$status" -eq 0 ]
-    [[ "$output" == *"cost=3.3000"* ]]
+    [[ "$output" == *"cost=1.1000"* ]]
 }
 
 @test "calculate_cost computes correct cost for sonnet" {
@@ -149,10 +149,10 @@ setup() {
         source '$LIB'
         cost=\$(calculate_cost haiku 100000)
         echo \"cost=\$cost\"
-        # 70000 input * 0.25/1M + 30000 output * 1.25/1M = 0.0175 + 0.0375 = 0.0550
+        # 70000 input * 1/1M + 30000 output * 5/1M = 0.07 + 0.15 = 0.2200
     "
     [ "$status" -eq 0 ]
-    [[ "$output" == *"cost=0.0550"* ]]
+    [[ "$output" == *"cost=0.2200"* ]]
 }
 
 # =============================================================================
@@ -350,10 +350,10 @@ setup() {
         FAST_MODE=true
         cost=\$(calculate_cost haiku 100000)
         echo \"cost=\$cost\"
-        # Haiku fast mode pricing same as standard: 0.25/1.25 -> 0.0550
+        # Haiku fast mode pricing same as standard: 1/5 -> 0.2200
     "
     [ "$status" -eq 0 ]
-    [[ "$output" == *"cost=0.0550"* ]]
+    [[ "$output" == *"cost=0.2200"* ]]
 }
 
 @test "CLI: --fast-mode shows warning in dry-run" {

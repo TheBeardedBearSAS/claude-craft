@@ -15,29 +15,29 @@ set -euo pipefail
 
 # Input pricing ($/M tokens)
 declare -A MODEL_INPUT_PRICE=(
-    [opus]=15.00
+    [opus]=5.00
     [sonnet]=3.00
-    [haiku]=0.25
+    [haiku]=1.00
 )
 
 # Output pricing ($/M tokens)
 declare -A MODEL_OUTPUT_PRICE=(
-    [opus]=75.00
+    [opus]=25.00
     [sonnet]=15.00
-    [haiku]=1.25
+    [haiku]=5.00
 )
 
 # Fast Mode pricing ($/M tokens) — 6x standard pricing
 declare -A MODEL_INPUT_PRICE_FAST=(
     [opus]=30.00
     [sonnet]=3.00
-    [haiku]=0.25
+    [haiku]=1.00
 )
 
 declare -A MODEL_OUTPUT_PRICE_FAST=(
     [opus]=150.00
     [sonnet]=15.00
-    [haiku]=1.25
+    [haiku]=5.00
 )
 
 # =============================================================================

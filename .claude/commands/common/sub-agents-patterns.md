@@ -158,7 +158,7 @@ Pour le travail parallèle avec résultats combinés :
 
 ## 5. Agent Teams (Multi-Agent Coordination)
 
-Agent Teams (Claude Code v2.1.41+, Research Preview) permet la coordination multi-agents avec gestion partagée des tâches. Contrairement aux sub-agents classiques (Task tool), Agent Teams offre une communication bidirectionnelle, des tâches partagées, et un shutdown coopératif.
+Agent Teams (Claude Code v2.1.45+, Research Preview) permet la coordination multi-agents avec gestion partagée des tâches. Contrairement aux sub-agents classiques (Task tool), Agent Teams offre une communication bidirectionnelle, des tâches partagées, et un shutdown coopératif.
 
 ### Comparaison : Task Tool vs Agent Teams
 
@@ -172,7 +172,7 @@ Agent Teams (Claude Code v2.1.41+, Research Preview) permet la coordination mult
 | **Cas d'usage** | Recherche parallèle, tâches isolées | Workflows complexes, sprints, audits |
 | **Nombre d'agents** | Illimité | 1 leader + 3 workers max |
 | **Prérequis** | Aucun | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
-| **Version minimale** | v2.1.20+ | v2.1.41+ |
+| **Version minimale** | v2.1.20+ | v2.1.45+ |
 
 ### Matrice de décision : Sub-Agents vs Agent Teams
 
@@ -240,7 +240,7 @@ Utiliser Agent Teams quand :
 ### Ressources
 
 - [Guide Agent Teams](../../docs/AGENT-TEAMS-GUIDE.md) — Setup, coûts, limitations
-- [CLAUDE.md](../CLAUDE.md) — Compatibilité Claude Code v2.1.41+
+- [CLAUDE.md](../CLAUDE.md) — Compatibilité Claude Code v2.1.45+
 
 ## Références
 

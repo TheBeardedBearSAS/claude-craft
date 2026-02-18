@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 7.12.0 | **Languages:** en, fr, es, de, pt
+**Version:** 7.13.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 33 agents, 160 commands across 20 namespaces, and BMAD v6 project management.
 
@@ -397,7 +397,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version**: 2.1.41
+**Minimum Version**: 2.1.45
 
 ### PR Integration (v2.1.27+)
 
@@ -745,3 +745,82 @@ Fixed file resolution failing for @-mentions with anchor fragments (e.g., `@READ
 | Plan mode | Fixed proactive ticks firing while in plan mode |
 | Auto-compact | Fixed failure error notifications being shown to users |
 | AWS auth | Added 3-minute timeout to prevent indefinite hanging |
+
+### Resume Title Fix (v2.1.42+)
+
+Fixed session resume displaying wrong title when multiple sessions exist.
+
+### Announcement Targeting (v2.1.42+)
+
+Improved announcement targeting to show relevant messages based on user's plan and usage.
+
+### Structured Outputs Header (v2.1.43+)
+
+Added `anthropic-beta: structured-outputs` header support for typed API responses.
+
+### AWS Auth Timeout Improvement (v2.1.43+)
+
+Refined AWS authentication timeout handling (previously added in v2.1.41).
+
+### Auth Token Refresh (v2.1.44+)
+
+Automatic refresh of expired authentication tokens without requiring manual re-login.
+
+### Plugin Hot-Reload (v2.1.44+)
+
+| Feature | Description |
+|---------|-------------|
+| Hot-reload | Plugins reload automatically when files change |
+| Backup files | Automatic backup before plugin updates |
+| Startup perf | Improved plugin initialization speed |
+
+### Memory Improvements (v2.1.44+)
+
+Enhanced auto-memory recording with better deduplication and relevance filtering.
+
+### Claude Sonnet 4.6 Support (v2.1.45+)
+
+New model with near-Opus coding performance at lower cost:
+
+| Feature | Value |
+|---------|-------|
+| Model ID | `claude-sonnet-4-6` |
+| Context window | 200K standard, 1M beta |
+| Max output | 64K tokens |
+| Input pricing | $3/M tokens |
+| Output pricing | $15/M tokens |
+| Key strength | Near-Opus coding, tool use, instruction following |
+
+### spinnerTipsOverride (v2.1.45+)
+
+New setting to customize tips displayed during spinner animations:
+
+```json
+{
+  "spinnerTipsOverride": [
+    "Tip: Use /fast to toggle fast mode",
+    "Tip: Use Shift+Tab for delegate mode"
+  ]
+}
+```
+
+### Plugin Directory Configuration (v2.1.45+)
+
+Configure custom plugin directories via settings:
+
+```json
+{
+  "pluginDirs": ["/path/to/custom/plugins"]
+}
+```
+
+### Agent SDK Rate Limiting (v2.1.45+)
+
+Built-in rate limiting for Agent SDK to prevent API throttling in multi-agent workflows.
+
+### VSCode Fixes (v2.1.45)
+
+| Fix | Description |
+|-----|-------------|
+| Session restore | Fixed session restore failing after VSCode update |
+| Terminal focus | Fixed terminal losing focus during streaming |

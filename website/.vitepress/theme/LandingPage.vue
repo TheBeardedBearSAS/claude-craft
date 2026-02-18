@@ -17,7 +17,7 @@ const translations = {
     nav_tools: "Tools",
     nav_install: "Install",
     nav_tech: "Tech Stack",
-    hero_badge: "v7.12.0 - Claude Code 2.1.41",
+    hero_badge: "v7.13.0 - Claude Code 2.1.45",
     hero_title_1: "Supercharge",
     hero_title_2: "with Expert Knowledge",
     hero_desc: "A comprehensive framework for AI-assisted development. Install standardized rules, agents, and commands for your projects across multiple technology stacks.",
@@ -73,7 +73,7 @@ const translations = {
     nav_tools: "Outils",
     nav_install: "Installation",
     nav_tech: "Technologies",
-    hero_badge: "v7.12.0 - Claude Code 2.1.41",
+    hero_badge: "v7.13.0 - Claude Code 2.1.45",
     hero_title_1: "Superchargez",
     hero_title_2: "d'une Expertise Technique",
     hero_desc: "Un framework complet pour le d\u00e9veloppement assist\u00e9 par IA. Installez des r\u00e8gles, agents et commandes standardis\u00e9s pour vos projets.",
@@ -126,7 +126,7 @@ const translations = {
   },
   es: {
     nav_features: "Caracter\u00edsticas", nav_tools: "Herramientas", nav_install: "Instalaci\u00f3n", nav_tech: "Tecnolog\u00edas",
-    hero_badge: "v7.12.0 - Claude Code 2.1.41", hero_title_1: "Potencia", hero_title_2: "con Conocimiento Experto",
+    hero_badge: "v7.13.0 - Claude Code 2.1.45", hero_title_1: "Potencia", hero_title_2: "con Conocimiento Experto",
     hero_desc: "Un marco integral para el desarrollo asistido por IA.", cta_get_started: "Empezar", cta_docs: "Documentaci\u00f3n",
     feat_main_title: "Todo lo que necesitas para escalar", feat_main_desc: "Equipa a Claude con herramientas conscientes del contexto.",
     feat_bmad_title: "Framework BMAD v6", feat_bmad_desc: "9 agentes Agent-as-Code, 5 Quality Gates.",
@@ -154,7 +154,7 @@ const translations = {
   },
   de: {
     nav_features: "Funktionen", nav_tools: "Werkzeuge", nav_install: "Installation", nav_tech: "Technologien",
-    hero_badge: "v7.12.0 - Claude Code 2.1.41", hero_title_1: "Laden Sie", hero_title_2: "mit Expertenwissen auf",
+    hero_badge: "v7.13.0 - Claude Code 2.1.45", hero_title_1: "Laden Sie", hero_title_2: "mit Expertenwissen auf",
     hero_desc: "Ein umfassendes Framework f\u00fcr KI-gest\u00fctzte Entwicklung.", cta_get_started: "Loslegen", cta_docs: "Dokumentation",
     feat_main_title: "Alles f\u00fcr skalierbare KI-Entwicklung", feat_main_desc: "Statten Sie Claude mit kontextbezogenen Tools aus.",
     feat_bmad_title: "BMAD v6 Framework", feat_bmad_desc: "9 Agent-as-Code Personas, 5 Quality Gates.",
@@ -182,7 +182,7 @@ const translations = {
   },
   pt: {
     nav_features: "Funcionalidades", nav_tools: "Ferramentas", nav_install: "Instala\u00e7\u00e3o", nav_tech: "Tecnologias",
-    hero_badge: "v7.12.0 - Claude Code 2.1.41", hero_title_1: "Turbine o", hero_title_2: "com Conhecimento Especializado",
+    hero_badge: "v7.13.0 - Claude Code 2.1.45", hero_title_1: "Turbine o", hero_title_2: "com Conhecimento Especializado",
     hero_desc: "Um framework abrangente para desenvolvimento assistido por IA.", cta_get_started: "Come\u00e7ar", cta_docs: "Documenta\u00e7\u00e3o",
     feat_main_title: "Tudo para escalar", feat_main_desc: "Equipe o Claude com ferramentas conscientes do contexto.",
     feat_bmad_title: "Framework BMAD v6", feat_bmad_desc: "9 agentes Agent-as-Code, 5 Quality Gates.",
@@ -330,8 +330,8 @@ onMounted(() => {
           <p style="margin-top: 1rem; font-size: 1.25rem; color: #94a3b8;">{{ t('feat_main_desc') }}</p>
         </div>
         <div class="grid-3col" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
-          <FeatureCard icon="git-branch" color="cyan" :badge="'v7.12.0'" :title="t('feat_bmad_title')" :desc="t('feat_bmad_desc')" />
-          <FeatureCard icon="repeat" color="orange" :badge="'v7.12.0'" :title="t('feat_ralph_title')" :desc="t('feat_ralph_desc')" />
+          <FeatureCard icon="git-branch" color="cyan" :badge="'v7.13.0'" :title="t('feat_bmad_title')" :desc="t('feat_bmad_desc')" />
+          <FeatureCard icon="repeat" color="orange" :badge="'v7.13.0'" :title="t('feat_ralph_title')" :desc="t('feat_ralph_desc')" />
           <FeatureCard icon="globe" color="brand" :title="t('feat_1_title')" :desc="t('feat_1_desc')" />
           <FeatureCard icon="bot" color="blue" :title="t('feat_2_title')" :desc="t('feat_2_desc')" />
           <FeatureCard icon="sparkles" color="emerald" :title="t('feat_skills_title')" :desc="t('feat_skills_desc')" />

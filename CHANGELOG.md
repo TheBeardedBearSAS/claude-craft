@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.13.0] - 2026-02-18
+
+### Added
+
+- **Claude Code 2.1.42-2.1.45 compatibility** — resume title fix, structured outputs header, auth token refresh, plugin hot-reload/backup, memory improvements, spinnerTipsOverride, plugin directory config, Agent SDK rate limiting
+- **Claude Sonnet 4.6 support** — new model (`claude-sonnet-4-6`, $3/$15/M, 200K/1M context, near-Opus coding performance)
+
+### Fixed
+
+- **Cost-estimator pricing** — corrected Opus from $15/$75 (Opus 4.1) to $5/$25 (Opus 4.6), Haiku from $0.25/$1.25 (Haiku 3) to $1/$5 (Haiku 4.5)
+
+### Changed
+
+- **Minimum Claude Code version** — bumped from 2.1.41 to 2.1.45
+
 ## [7.12.0] - 2026-02-18
 
 ### Added
