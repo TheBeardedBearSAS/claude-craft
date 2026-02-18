@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Claude Code 2.1.42-2.1.45 compatibility** — resume title fix, structured outputs header, auth token refresh, plugin hot-reload/backup, memory improvements, spinnerTipsOverride, plugin directory config, Agent SDK rate limiting
 - **Claude Sonnet 4.6 support** — new model (`claude-sonnet-4-6`, $3/$15/M, 200K/1M context, near-Opus coding performance)
+- **Plan Mode guidance** — added Plan Mode sections to all 543 command files across 5 languages (en, fr, es, de, pt), classifying each command as MANDATORY (22 commands — code generation, implementation, QA), RECOMMENDED (6 commands — architecture decisions, design, planning), or CONDITIONAL (51 commands — analysis, audits, checks activated automatically based on scope)
 
 ### Fixed
 

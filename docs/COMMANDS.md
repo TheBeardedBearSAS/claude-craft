@@ -17,6 +17,20 @@ Commands can take arguments:
 /command:name argument1 argument2
 ```
 
+## Plan Mode Classification
+
+Every command includes a **Plan Mode** section that indicates when Claude should activate plan mode before executing. This ensures proper analysis and validation for impactful operations.
+
+| Level | Description | Example Commands |
+|-------|-------------|-----------------|
+| **MANDATORY** | Plan mode activates automatically before execution. Claude analyzes impacted code and proposes a plan for your validation. | `/workflow:implement`, `/qa:tdd`, `/qa:recette`, `generate-*` commands |
+| **RECOMMENDED** | Plan mode is recommended for complex scenarios. Activates when scope spans multiple modules. | `/workflow:plan`, `/workflow:design`, `/common:architecture-decision` |
+| **CONDITIONAL** | Plan mode activates automatically when scope is broad (multiple modules, cross-cutting analysis). | `check-*` commands, `/workflow:analyze`, `/common:research-context7` |
+
+> **Tip:** Commands without a Plan Mode section (e.g., `/workflow:status`, `/common:daily-standup`) are lightweight and never require plan mode.
+
+---
+
 ## Command Namespaces
 
 | Namespace | Technology | Count |

@@ -6,10 +6,12 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.10
+## What's New in v7.13
 
-- **Status Line v2.0** — fixed `settings.json` format, native `context_window` %, single jq call (7→1), git cache, 13 toggles, agent name, vim mode, burn rate, progress bar styles, compact/detailed modes, `--version`/`--help`, 27 bats tests
-- **Multi-account tool v2** — `doctor` command, `--json` output, exit codes, `.claude-profile` auto-switch, bash/zsh completions, 23 bats tests
+- **Plan Mode guidance** — all 543 command files now include Plan Mode classification (MANDATORY / RECOMMENDED / CONDITIONAL) across 5 languages
+- **Claude Sonnet 4.6 support** — new model (`claude-sonnet-4-6`, $3/$15/M, near-Opus coding performance)
+- **Claude Code 2.1.42-2.1.45 compatibility** — auth token refresh, plugin hot-reload, memory improvements, Agent SDK rate limiting
+- **Agent Teams optimization** — lean context loading, adaptive coordination overhead, Fast Mode blocking guard, `--max-cost` budget guard
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
