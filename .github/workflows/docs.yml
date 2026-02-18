@@ -46,9 +46,46 @@ jobs:
         with:
           path: website/.vitepress/dist
 
+  test:
+    name: E2E Tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+
+      - name: Install dependencies
+        run: cd website && npm ci
+
+      - name: Install Playwright Chromium
+        run: cd website && npx playwright install --with-deps chromium
+
+      - name: Sync and build
+        run: cd website && bash scripts/sync-docs.sh && npx vitepress build
+
+      - name: Run E2E tests
+        run: cd website && npx playwright test --config tests/e2e/playwright.config.ts
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: website/test-results/
+          retention-days: 7
+
   deploy:
     name: Deploy to GitHub Pages
-    needs: build
+    needs: [build, test]
     runs-on: ubuntu-latest
     environment:
       name: github-pages

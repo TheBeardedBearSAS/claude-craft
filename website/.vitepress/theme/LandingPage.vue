@@ -230,32 +230,6 @@ onMounted(() => {
     currentLang.value = browser
   }
 
-  // Initialize lucide icons
-  if (typeof window !== 'undefined' && window.lucide) {
-    window.lucide.createIcons()
-  }
-
-  // Configure tailwind if needed
-  if (typeof window !== 'undefined' && window.tailwind) {
-    window.tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-          },
-          colors: {
-            brand: {
-              50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd',
-              400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9',
-              800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065',
-            },
-            dark: { 900: '#0f172a', 800: '#1e293b', 700: '#334155' },
-          },
-        },
-      },
-    }
-  }
 })
 </script>
 
@@ -274,14 +248,14 @@ onMounted(() => {
             <a :href="'#tools'" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('nav_tools') }}</a>
             <a :href="'#install'" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('nav_install') }}</a>
             <a :href="'#technologies'" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('nav_tech') }}</a>
-            <select :value="currentLang" @change="changeLanguage($event.target.value)" style="background: rgba(255,255,255,0.05); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; padding: 0.25rem 0.5rem; font-size: 0.875rem; cursor: pointer;">
+            <select :value="currentLang" @change="changeLanguage($event.target.value)" aria-label="Select language" style="background: rgba(255,255,255,0.05); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; padding: 0.25rem 0.5rem; font-size: 0.875rem; cursor: pointer;">
               <option value="en" style="background: #1e293b;">English</option>
               <option value="fr" style="background: #1e293b;">Français</option>
               <option value="es" style="background: #1e293b;">Español</option>
               <option value="de" style="background: #1e293b;">Deutsch</option>
               <option value="pt" style="background: #1e293b;">Português</option>
             </select>
-            <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; color: white; text-decoration: none; font-size: 0.875rem;">
+            <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" aria-label="GitHub repository" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; color: white; text-decoration: none; font-size: 0.875rem;">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
               GitHub
             </a>
@@ -299,7 +273,7 @@ onMounted(() => {
         <a href="#tools" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('nav_tools') }}</a>
         <a href="#install" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('nav_install') }}</a>
         <a href="#technologies" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('nav_tech') }}</a>
-        <select :value="currentLang" @change="changeLanguage($event.target.value)" style="background: rgba(255,255,255,0.05); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; padding: 0.5rem; font-size: 0.875rem; cursor: pointer; width: 100%;">
+        <select :value="currentLang" @change="changeLanguage($event.target.value)" aria-label="Select language" style="background: rgba(255,255,255,0.05); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; padding: 0.5rem; font-size: 0.875rem; cursor: pointer; width: 100%;">
           <option value="en" style="background: #1e293b;">English</option>
           <option value="fr" style="background: #1e293b;">Français</option>
           <option value="es" style="background: #1e293b;">Español</option>
@@ -313,6 +287,7 @@ onMounted(() => {
       </div>
     </div>
 
+    <main>
     <!-- Hero Section -->
     <div style="position: relative; padding: 10rem 0 5rem; overflow: hidden;">
       <div style="position: absolute; top: 10%; left: 20%; width: 18rem; height: 18rem; background: rgba(124,58,237,0.2); border-radius: 50%; filter: blur(100px);"></div>
@@ -488,6 +463,7 @@ onMounted(() => {
     <!-- Agents -->
     <AgentShowcase :title="t('agents_title')" :desc="t('agents_desc')" />
 
+    </main>
     <!-- Footer -->
     <footer style="background: #0f172a; border-top: 1px solid rgba(255,255,255,0.1); padding: 4rem 0 2rem;">
       <div style="max-width: 80rem; margin: 0 auto; padding: 0 1.5rem;">
@@ -496,8 +472,8 @@ onMounted(() => {
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
             <span style="font-weight: 700; font-size: 1.25rem;">Claude Craft</span>
           </div>
-          <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" style="color: #94a3b8; text-decoration: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" aria-label="GitHub repository" style="color: #94a3b8; text-decoration: none;">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
           </a>
         </div>
         <div class="footer-row" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; color: #64748b;">
