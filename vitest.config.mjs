@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     root: '.',
+    exclude: ['website/**', 'video/**', 'node_modules/**'],
     testTimeout: 120_000,
     hookTimeout: 120_000,
     coverage: {

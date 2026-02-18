@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.12.0] - 2026-02-18
+
+### Added
+
+- **Playwright E2E tests** — 119 tests covering all 89 pages (5 locales), landing page, navigation, search, accessibility (axe-core WCAG 2.1 AA), and 404 page
+- **CI E2E test job** — Playwright runs between build and deploy in docs workflow, blocking deploy on test failure
+
+### Fixed
+
+- **Accessibility** — added `<main>` landmark, `aria-label` on language selects and GitHub links, `aria-hidden` on decorative SVGs, semantic `<dl>` for stats grid
+- **Performance** — removed unused Tailwind CDN and Lucide CDN scripts from landing page
+- **Responsive mobile layout** — proper mobile styles for landing page grid and navigation
+
 ## [7.11.0] - 2026-02-13
 
 ### Added
