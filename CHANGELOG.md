@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.14.0] - 2026-02-18
+
+### Added
+
+- **Documentation update** — Plan Mode Classification section in COMMANDS.md, updated README What's New to v7.13, enriched training materials with Plan Mode guidance (MANDATORY/RECOMMENDED/CONDITIONAL), updated all training docs versions to 2.1.45/7.13.0
+
 ## [7.13.0] - 2026-02-18
 
 ### Added
