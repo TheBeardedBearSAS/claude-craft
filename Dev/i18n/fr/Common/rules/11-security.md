@@ -21,7 +21,8 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 5. [Données sensibles](#données-sensibles)
 6. [Headers de sécurité](#headers-de-sécurité)
 7. [Logging et monitoring](#logging-et-monitoring)
-8. [Checklist](#checklist)
+8. [Securite MCP & Plugins](#securite-mcp--plugins)
+9. [Checklist](#checklist)
 
 ---
 
@@ -488,6 +489,65 @@ Alertes critiques:
 
 ---
 
+## Securite MCP & Plugins
+
+### Risques des serveurs MCP tiers
+
+> **Alerte:** Des recherches de securite (Snyk, 2026) ont identifie 76 payloads malicieux dans les registres publics de serveurs MCP. Les serveurs MCP tiers non verifies representent un risque significatif.
+
+```
+RISQUES:
+- Injection de commandes via les parametres MCP
+- Exfiltration de donnees (fichiers, secrets, contexte)
+- Execution de code arbitraire sur la machine hote
+- Escalade de privileges via les outils exposes
+
+PROTECTION:
+- Preferer ecrire ses propres serveurs MCP
+- Auditer le code source avant d'installer un serveur tiers
+- Limiter les permissions (tools allowlist)
+- Utiliser le hook PreToolUse pour bloquer les patterns dangereux
+```
+
+### Checklist de vetting MCP/Plugin
+
+Avant d'installer un serveur MCP tiers:
+
+- [ ] Code source disponible et auditable
+- [ ] Auteur/organisation verifiee
+- [ ] Pas d'acces reseau non justifie
+- [ ] Pas de lecture de fichiers sensibles (.env, secrets)
+- [ ] Permissions minimales (principle of least privilege)
+- [ ] Version pinee (pas de `latest`)
+- [ ] Changelog et historique de securite
+
+### Hook PreToolUse pour la securite
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "command": "echo '$TOOL_INPUT' | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' && exit 1 || exit 0"
+      }
+    ]
+  }
+}
+```
+
+### CLAUDE.md vs Hooks
+
+| Mecanisme | Force | Usage |
+|-----------|-------|-------|
+| **CLAUDE.md** | Suggestion | Guidelines, conventions |
+| **Rules** | Suggestion forte | Regles detaillees |
+| **Hooks** | Enforcement | Blocage effectif, validation automatique |
+
+> **Regle:** CLAUDE.md = suggestions. Hooks = requirements.
+
+---
+
 ## Checklist
 
 ### Développement
@@ -535,6 +595,6 @@ Alertes critiques:
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
-**Version:** 1.0.0
+**Date de derniere mise a jour:** 2026-02
+**Version:** 1.1.0
 **Auteur:** The Bearded CTO

@@ -357,6 +357,7 @@ Skills provide best practices loaded on-demand:
 | `/git-workflow` | Git best practices |
 | `/documentation` | Documentation standards |
 | `/workflow-analysis` | Analysis methodology |
+| `/parallel-worktrees` | Concurrent Claude sessions |
 
 ---
 
@@ -824,3 +825,48 @@ Built-in rate limiting for Agent SDK to prevent API throttling in multi-agent wo
 |-----|-------------|
 | Session restore | Fixed session restore failing after VSCode update |
 | Terminal focus | Fixed terminal losing focus during streaming |
+
+---
+
+## Best Practices (Anthropic Recommended)
+
+### Context Management
+
+> **#1 Best Practice:** The context window is THE critical resource to manage.
+
+See `.claude/rules/12-context-management.md` for detailed guidance.
+
+| Practice | Description |
+|----------|-------------|
+| **CLAUDE.md size** | Keep main CLAUDE.md under 200 lines; use `.claude/rules/` for details |
+| **Use `/clear`** | Between unrelated tasks to reset context |
+| **Sub-agents** | Delegate investigations to keep main context clean |
+| **Verification loops** | Always provide tests/expected outputs (2-3x quality improvement) |
+| **Plan Mode** | Invest in planning for complex tasks (> 3 files) |
+| **Parallel worktrees** | Use `git worktree` for concurrent sessions |
+
+### MCP Tool Search
+
+When >10% of context is consumed by MCP tool descriptions, Claude Code automatically activates Tool Search to reduce MCP context overhead (up to 46.9% reduction, e.g., 51K to 8.5K tokens).
+
+### Adaptive Thinking Guidance
+
+| Effort Level | When to Use |
+|-------------|-------------|
+| `low` | Trivial tasks (typo fixes, simple formatting) |
+| `medium` | Standard tasks (small features, routine bugs) |
+| `high` | Default — most development work |
+| `max` | Complex multi-step tasks (architecture, debugging) |
+
+### Hooks as Enforcement
+
+> **CLAUDE.md = suggestions. Hooks = requirements.**
+
+Use hooks for critical constraints instead of text instructions. See `.claude/templates/hooks/` for ready-to-use templates:
+
+| Template | Purpose |
+|----------|---------|
+| `auto-format.json` | Format code after edits |
+| `protect-files.json` | Block edits on sensitive files |
+| `context-reinject.json` | Re-inject context after compaction |
+| `security-block.json` | Block suspicious network commands |

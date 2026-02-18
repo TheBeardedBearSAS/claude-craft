@@ -21,7 +21,8 @@ Sicherheit hat **absolute Priorität**. Dieses Dokument stellt die allgemeinen S
 5. [Sensible Daten](#sensible-daten)
 6. [Sicherheitsheader](#sicherheitsheader)
 7. [Logging und Monitoring](#logging-und-monitoring)
-8. [Checkliste](#checkliste)
+8. [MCP- & Plugin-Sicherheit](#mcp---plugin-sicherheit)
+9. [Checkliste](#checkliste)
 
 ---
 
@@ -488,6 +489,65 @@ Kritische Warnungen:
 
 ---
 
+## MCP- & Plugin-Sicherheit
+
+### Risiken von Drittanbieter-MCP-Servern
+
+> **Warnung:** Sicherheitsforschung (Snyk, 2026) hat 76 boesartige Payloads in oeffentlichen MCP-Server-Registern identifiziert. Unueberprufte MCP-Server von Drittanbietern stellen ein erhebliches Risiko dar.
+
+```
+RISIKEN:
+- Befehlsinjektion ueber MCP-Parameter
+- Datenexfiltration (Dateien, Geheimnisse, Kontext)
+- Ausfuehrung beliebigen Codes auf dem Host-Rechner
+- Privilegieneskalation ueber freigegebene Tools
+
+SCHUTZ:
+- Eigene MCP-Server bevorzugen
+- Quellcode vor der Installation von Drittanbieter-Servern auditieren
+- Berechtigungen einschraenken (Tools-Allowlist)
+- PreToolUse-Hook verwenden, um gefaehrliche Muster zu blockieren
+```
+
+### MCP/Plugin-Pruefungscheckliste
+
+Vor der Installation eines MCP-Servers von Drittanbietern:
+
+- [ ] Quellcode verfuegbar und auditierbar
+- [ ] Verifizierter Autor/Organisation
+- [ ] Kein unbegruendeter Netzwerkzugriff
+- [ ] Kein Lesen sensibler Dateien (.env, Geheimnisse)
+- [ ] Minimale Berechtigungen (Prinzip der geringsten Privilegien)
+- [ ] Fixierte Version (nicht `latest`)
+- [ ] Changelog und Sicherheitshistorie
+
+### PreToolUse-Hook fuer Sicherheit
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "command": "echo '$TOOL_INPUT' | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' && exit 1 || exit 0"
+      }
+    ]
+  }
+}
+```
+
+### CLAUDE.md vs Hooks
+
+| Mechanismus | Staerke | Verwendung |
+|-------------|---------|------------|
+| **CLAUDE.md** | Vorschlag | Richtlinien, Konventionen |
+| **Rules** | Starker Vorschlag | Detaillierte Regeln |
+| **Hooks** | Durchsetzung | Effektive Blockierung, automatische Validierung |
+
+> **Regel:** CLAUDE.md = Vorschlaege. Hooks = Anforderungen.
+
+---
+
 ## Checkliste
 
 ### Entwicklung
@@ -535,6 +595,6 @@ Kritische Warnungen:
 
 ---
 
-**Datum der letzten Aktualisierung:** 2025-01
-**Version:** 1.0.0
+**Letzte Aktualisierung:** 2026-02
+**Version:** 1.1.0
 **Autor:** The Bearded CTO

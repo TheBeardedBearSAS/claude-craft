@@ -6,12 +6,13 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.13
+## What's New in v7.14
 
-- **Plan Mode guidance** — all 543 command files now include Plan Mode classification (MANDATORY / RECOMMENDED / CONDITIONAL) across 5 languages
-- **Claude Sonnet 4.6 support** — new model (`claude-sonnet-4-6`, $3/$15/M, near-Opus coding performance)
-- **Claude Code 2.1.42-2.1.45 compatibility** — auth token refresh, plugin hot-reload, memory improvements, Agent SDK rate limiting
-- **Agent Teams optimization** — lean context loading, adaptive coordination overhead, Fast Mode blocking guard, `--max-cost` budget guard
+- **Context management best practices** — new rule `12-context-management.md` covering Anthropic's #1 recommendation: context window as THE critical resource
+- **MCP & Plugin security** — security rule updated with MCP vetting checklist, malicious payload warnings (Snyk 2026), hooks enforcement guidance
+- **Hook templates** — 4 ready-to-use templates: auto-format, protect-files, context-reinject, security-block
+- **Parallel worktrees** — new skill documenting Boris Cherny's productivity pattern for concurrent Claude sessions
+- **Verification loops** — guidance on specification-implementation-verification pattern (2-3x quality improvement)
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.

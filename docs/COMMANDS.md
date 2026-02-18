@@ -868,6 +868,48 @@ Place in:
 
 ---
 
+## Context Management Best Practices
+
+Effective context management is the #1 productivity factor with Claude Code (source: Anthropic).
+
+### Key Principles
+
+| Principle | Action |
+|-----------|--------|
+| **Context is finite** | Monitor context % in status line |
+| **Use `/clear`** | Between unrelated tasks |
+| **Delegate investigations** | Use sub-agents (Task tool) for exploration |
+| **Verification loops** | Always provide tests/expected outputs |
+| **Plan before acting** | Use Plan Mode for complex tasks (> 3 files) |
+| **Parallel worktrees** | `git worktree add` for concurrent sessions |
+
+### CLAUDE.md Size
+
+Keep your main CLAUDE.md under 200 lines. Each additional instruction dilutes attention on existing ones. Use `.claude/rules/` for detailed guidelines.
+
+### Hooks vs Instructions
+
+| Mechanism | Strength | Use When |
+|-----------|----------|----------|
+| CLAUDE.md | Suggestion | Guidelines, conventions |
+| Rules (`.claude/rules/`) | Strong suggestion | Detailed best practices |
+| Hooks | Enforcement | Security constraints, formatting |
+
+See `.claude/templates/hooks/` for ready-to-use hook templates.
+
+### Context Thresholds
+
+| Context % | Recommended Action |
+|-----------|--------------------|
+| < 30% | Normal operation |
+| 30-60% | Monitor, avoid unnecessary file reads |
+| 60-80% | Delegate to sub-agents, consider `/clear` |
+| > 80% | Compaction imminent, save critical context |
+
+See rule `12-context-management.md` for full documentation.
+
+---
+
 ## Best Practices
 
 1. **Use check commands** before commits
@@ -875,3 +917,5 @@ Place in:
 3. **Audit regularly** with team-audit
 4. **Document decisions** with architecture-decision
 5. **Track sprints** with sprint commands
+6. **Manage context** — use `/clear` between tasks, delegate investigations
+7. **Use hooks** for security enforcement (not just CLAUDE.md instructions)

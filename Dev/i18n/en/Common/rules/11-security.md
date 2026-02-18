@@ -21,7 +21,8 @@ Security is an **absolute priority**. This document presents the general securit
 5. [Sensitive Data](#sensitive-data)
 6. [Security Headers](#security-headers)
 7. [Logging and Monitoring](#logging-and-monitoring)
-8. [Checklist](#checklist)
+8. [MCP & Plugin Security](#mcp--plugin-security)
+9. [Checklist](#checklist)
 
 ---
 
@@ -488,6 +489,68 @@ Critical alerts:
 
 ---
 
+## MCP & Plugin Security
+
+### Risks of Third-party MCP Servers
+
+> **Alert:** Security research (Snyk, 2026) identified 76 malicious payloads in public MCP server registries. Unvetted third-party MCP servers represent a significant risk.
+
+```
+RISKS:
+- Command injection via MCP parameters
+- Data exfiltration (files, secrets, context)
+- Arbitrary code execution on host machine
+- Privilege escalation via exposed tools
+
+PROTECTION:
+- Prefer writing your own MCP servers
+- Audit source code before installing third-party servers
+- Limit permissions (tools allowlist)
+- Use PreToolUse hook to block dangerous patterns
+```
+
+### MCP/Plugin Vetting Checklist
+
+Before installing a third-party MCP server:
+
+- [ ] Source code available and auditable
+- [ ] Verified author/organization
+- [ ] No unjustified network access
+- [ ] No reading sensitive files (.env, secrets)
+- [ ] Minimal permissions (principle of least privilege)
+- [ ] Pinned version (not `latest`)
+- [ ] Changelog and security history
+
+### PreToolUse Hook for Security
+
+Use Claude Code hooks to block dangerous patterns:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "command": "echo '$TOOL_INPUT' | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' && exit 1 || exit 0"
+      }
+    ]
+  }
+}
+```
+
+### CLAUDE.md vs Hooks
+
+| Mechanism | Strength | Usage |
+|-----------|----------|-------|
+| **CLAUDE.md** | Suggestion | Guidelines, conventions |
+| **Rules** | Strong suggestion | Detailed rules |
+| **Hooks** | Enforcement | Effective blocking, automatic validation |
+
+> **Rule:** CLAUDE.md = suggestions. Hooks = requirements.
+> For critical security constraints, use hooks, not text instructions.
+
+---
+
 ## Checklist
 
 ### Development
@@ -535,6 +598,6 @@ Critical alerts:
 
 ---
 
-**Last updated:** 2025-01
-**Version:** 1.0.0
+**Last updated:** 2026-02
+**Version:** 1.1.0
 **Author:** The Bearded CTO

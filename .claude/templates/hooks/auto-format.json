@@ -1,0 +1,12 @@
+{
+  "description": "Auto-format code after each Edit tool use",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "command": "# Adapt the formatter command to your project:\n# JavaScript/TypeScript: npx prettier --write \"$FILEPATH\"\n# Python: black \"$FILEPATH\"\n# PHP: php-cs-fixer fix \"$FILEPATH\"\n# Go: gofmt -w \"$FILEPATH\"\n# Rust: rustfmt \"$FILEPATH\"\necho 'Configure your formatter in this hook'"
+      }
+    ]
+  },
+  "usage": "Copy this template to .claude/settings.json and adapt the formatter command to your project's toolchain."
+}

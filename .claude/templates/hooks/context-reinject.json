@@ -1,0 +1,22 @@
+{
+  "description": "Re-inject essential context after context compaction",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "command": "if [ -f .claude/context-essentials.md ]; then cat .claude/context-essentials.md; else echo 'No context-essentials.md found. Create .claude/context-essentials.md with key architectural decisions, conventions, and current tasks.'; fi"
+      }
+    ]
+  },
+  "context_essentials_template": {
+    "description": "Create .claude/context-essentials.md with this structure:",
+    "sections": [
+      "# Project Context Essentials",
+      "## Architecture: Key patterns and decisions",
+      "## Conventions: Naming, structure, coding standards",
+      "## Current Tasks: What is being worked on",
+      "## Critical Constraints: Must-know limitations"
+    ]
+  },
+  "usage": "Copy the SessionStart hook to .claude/settings.json. Create .claude/context-essentials.md with your project's critical context that must survive compaction."
+}

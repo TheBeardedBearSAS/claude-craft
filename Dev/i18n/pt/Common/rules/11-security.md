@@ -21,7 +21,8 @@ A seguranca e uma **prioridade absoluta**. Este documento apresenta os principio
 5. [Dados sensiveis](#dados-sensiveis)
 6. [Headers de seguranca](#headers-de-seguranca)
 7. [Logging e monitoring](#logging-e-monitoring)
-8. [Checklist](#checklist)
+8. [Seguranca MCP & Plugins](#seguranca-mcp--plugins)
+9. [Checklist](#checklist)
 
 ---
 
@@ -488,6 +489,65 @@ Alertas criticos:
 
 ---
 
+## Seguranca MCP & Plugins
+
+### Riscos de servidores MCP de terceiros
+
+> **Alerta:** Pesquisas de seguranca (Snyk, 2026) identificaram 76 payloads maliciosos em registros publicos de servidores MCP. Servidores MCP de terceiros nao verificados representam um risco significativo.
+
+```
+RISCOS:
+- Injecao de comandos via parametros MCP
+- Exfiltracao de dados (arquivos, segredos, contexto)
+- Execucao de codigo arbitrario na maquina host
+- Escalada de privilegios via ferramentas expostas
+
+PROTECAO:
+- Preferir escrever seus proprios servidores MCP
+- Auditar o codigo-fonte antes de instalar um servidor de terceiros
+- Limitar permissoes (allowlist de ferramentas)
+- Usar hook PreToolUse para bloquear padroes perigosos
+```
+
+### Checklist de verificacao MCP/Plugin
+
+Antes de instalar um servidor MCP de terceiros:
+
+- [ ] Codigo-fonte disponivel e auditavel
+- [ ] Autor/organizacao verificada
+- [ ] Sem acesso de rede nao justificado
+- [ ] Sem leitura de arquivos sensiveis (.env, segredos)
+- [ ] Permissoes minimas (principio do menor privilegio)
+- [ ] Versao fixada (nao `latest`)
+- [ ] Changelog e historico de seguranca
+
+### Hook PreToolUse para seguranca
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "command": "echo '$TOOL_INPUT' | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' && exit 1 || exit 0"
+      }
+    ]
+  }
+}
+```
+
+### CLAUDE.md vs Hooks
+
+| Mecanismo | Forca | Uso |
+|-----------|-------|-----|
+| **CLAUDE.md** | Sugestao | Diretrizes, convencoes |
+| **Rules** | Sugestao forte | Regras detalhadas |
+| **Hooks** | Aplicacao | Bloqueio efetivo, validacao automatica |
+
+> **Regra:** CLAUDE.md = sugestoes. Hooks = requisitos.
+
+---
+
 ## Checklist
 
 ### Desenvolvimento
@@ -535,6 +595,6 @@ Alertas criticos:
 
 ---
 
-**Data da ultima atualizacao:** 2025-01
-**Versao:** 1.0.0
+**Ultima atualizacao:** 2026-02
+**Versao:** 1.1.0
 **Autor:** The Bearded CTO

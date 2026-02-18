@@ -1,0 +1,16 @@
+{
+  "description": "Block edits on sensitive files (.env, secrets, credentials)",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit",
+        "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+      },
+      {
+        "matcher": "Write",
+        "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+      }
+    ]
+  },
+  "usage": "Copy this template to .claude/settings.json. Adjust the regex pattern to match your project's sensitive files."
+}
