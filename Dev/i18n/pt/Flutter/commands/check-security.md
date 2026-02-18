@@ -48,6 +48,10 @@ grep -r "obfuscate" build.gradle
 grep -r "ProGuard" android/app/build.gradle
 ```
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Vulnerabilidades Comuns
 
 - [ ] Sem secrets hardcoded

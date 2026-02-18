@@ -14,6 +14,10 @@ $ARGUMENTS - Número do sprint (ex: 001, 002)
 
 Se nenhum argumento, perguntar qual sprint decompor.
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## TECH STACK
 
 | Camada | Tecnologia | Tarefas Típicas |

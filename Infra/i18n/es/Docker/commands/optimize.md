@@ -15,6 +15,10 @@ Argumentos:
 
 Ejemplo: `/docker:optimize ./docker/php/Dockerfile`
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 ### Paso 1: Analizar Dockerfile Existente

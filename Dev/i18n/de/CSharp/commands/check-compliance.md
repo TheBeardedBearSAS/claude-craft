@@ -74,6 +74,10 @@ Dependency Rule: Dependencies MUST flow inward only
 - [ ] Proper async/await usage (no .Result or .Wait())
 - [ ] CancellationToken passed to async methods
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Output Format
 
 ```

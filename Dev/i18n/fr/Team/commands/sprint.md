@@ -54,6 +54,10 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponible
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponible
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## Quand utiliser (vs. Sprint Séquentiel)
 
 | Condition | Utiliser Team Sprint (parallèle) | Utiliser `--sequential` ou story unique |

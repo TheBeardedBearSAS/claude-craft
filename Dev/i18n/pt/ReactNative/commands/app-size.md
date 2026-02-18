@@ -14,6 +14,10 @@ Este comando analisa o tamanho do seu aplicativo React Native e fornece recomend
 
 ---
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Etapas de Análise
 
 ### 1. Análise do Bundle

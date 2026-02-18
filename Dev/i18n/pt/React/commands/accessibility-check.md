@@ -37,6 +37,10 @@ npm run a11y:check
 pnpm a11y:check
 ```
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## O Que Verificar
 
 ### 1. HTML Semantico

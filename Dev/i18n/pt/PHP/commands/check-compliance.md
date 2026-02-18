@@ -28,6 +28,10 @@ Verify that the PHP project follows established coding standards and best practi
    - Remediation recommendations
    - Compliance score
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Coding Standards
 
 ### 1. Naming Conventions

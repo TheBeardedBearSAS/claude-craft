@@ -14,6 +14,10 @@ Este comando identifica vulnerabilidades de segurança, verifica conformidade co
 
 ---
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Análise
 
 ### 1. Auditoria de Dependências

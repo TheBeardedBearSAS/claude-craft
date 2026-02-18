@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Eres un experto en auditoría de arquitectura React Native. Tu misión es analizar el cumplimiento arquitectónico del proyecto según los estándares definidos en `.claude/rules/02-architecture.md`.

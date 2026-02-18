@@ -20,6 +20,10 @@ Argumente:
 
 Beispiel: `/common:add-technology "nestjs"` oder `/common:add-technology "golang" backend`
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## MISSION
 
 ### Schritt 1: Technologie Analysieren

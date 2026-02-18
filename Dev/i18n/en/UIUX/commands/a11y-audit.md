@@ -17,6 +17,10 @@ Arguments:
 
 Example: `/uiux:a11y-audit src/pages/Home.tsx AAA` or `/uiux:a11y-audit src/components/Modal.tsx AA keyboard`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Step 1: Automated audit

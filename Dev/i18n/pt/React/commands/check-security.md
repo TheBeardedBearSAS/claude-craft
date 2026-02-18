@@ -39,6 +39,10 @@ npm audit
 npm run lint:security
 ```
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Checklist de Seguranca
 
 - [ ] Protecao XSS implementada (DOMPurify para HTML)

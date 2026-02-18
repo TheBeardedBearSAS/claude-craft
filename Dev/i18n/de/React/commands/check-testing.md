@@ -68,6 +68,10 @@ Analysiere und verbessere die Test-Suite der React-Anwendung.
     - Prüfe Coverage-Gates
     - Bewerte Test-Reporting
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Tests ausführen
 
 ```bash

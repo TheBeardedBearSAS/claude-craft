@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (opcional: ruta a analizar)
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Analizar el uso de código asíncrono en el proyecto Python e identificar problemas con patrones async/await, llamadas bloqueantes y problemas de rendimiento.

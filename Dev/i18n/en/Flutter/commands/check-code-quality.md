@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 Tu es un expert Flutter chargé d'auditer la qualité du code selon Effective Dart et les meilleures pratiques.

@@ -50,6 +50,10 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponible
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## Composition de l'équipe
 
 | Rôle | Modèle | Agent | Responsabilité |

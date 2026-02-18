@@ -16,6 +16,10 @@ Execute Claude en boucle continue jusqu'a ce que la tache soit terminee ou que l
 - `--init`: Generer la configuration sans executer
 - `--interactive`: Assistant de configuration interactif
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## Nouvelles fonctionnalites v2.0
 
 | Fonctionnalite | Description |

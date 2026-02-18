@@ -43,6 +43,10 @@ claude --chrome
 /chrome
 ```
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Process
 
 ### 1. Verification

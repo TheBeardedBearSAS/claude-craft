@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Eres un experto en Flutter encargado de auditar la estrategia y la cobertura de tests del proyecto.

@@ -17,6 +17,10 @@ Argumentos:
 
 Exemplo: `/uiux:user-flow "Registro de usuário"` ou `/uiux:user-flow "Checkout" persona:"Usuário mobile" restricao:"< 30 segundos"`
 
+## Modo Plano
+
+> **O modo plano é recomendado.** Claude ativa o modo plano para estruturar a abordagem, identificar dependências e apresentar uma estratégia de geração antes de criar artefatos.
+
 ## MISSÃO
 
 ### Etapa 1: Definir o contexto

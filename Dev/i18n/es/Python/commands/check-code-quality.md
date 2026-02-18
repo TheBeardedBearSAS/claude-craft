@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (opcional: ruta al proyecto a analizar)
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Realizar una auditoría completa de calidad del código del proyecto Python verificando cumplimiento de PEP8, tipado, legibilidad y mejores prácticas definidas en las reglas del proyecto.

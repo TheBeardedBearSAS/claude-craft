@@ -42,6 +42,10 @@ npm run format:check
 npm run test:coverage
 ```
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Verificaciones de Calidad
 
 ### 1. Linting (ESLint)

@@ -15,6 +15,10 @@ Arguments:
 
 Example: `/python:dependency-audit security` or `/python:dependency-audit all`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Step 1: Identify Configuration

@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS : Chemin du projet Symfony à auditer (optionnel, par défaut : répertoire courant)
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 Tu es un auditeur expert Symfony chargé de réaliser un audit complet de conformité d'un projet Symfony.

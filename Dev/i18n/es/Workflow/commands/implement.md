@@ -13,6 +13,10 @@ arguments:
 
 Ejecutar la fase de Implementacion del flujo de trabajo de desarrollo. Esta fase se centra en el desarrollo sprint a sprint usando practicas TDD/BDD, siguiendo el diseno tecnico establecido en fases anteriores.
 
+## Modo Plan
+
+> **El modo plan es obligatorio.** Antes de ejecutar, Claude activa el modo plan para analizar el código impactado, proponer un plan de implementación y esperar tu validación antes de realizar cualquier cambio.
+
 ## Cuando usar
 
 - Despues de completar `/workflow:design` (flujos Standard/Enterprise)

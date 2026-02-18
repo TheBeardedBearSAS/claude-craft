@@ -15,6 +15,10 @@ Argumentos:
 
 Exemplo: `/python:dependency-audit security` ou `/python:dependency-audit all`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 ### Passo 1: Identificar Configuração

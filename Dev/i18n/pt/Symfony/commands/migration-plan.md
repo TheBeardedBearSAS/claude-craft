@@ -248,6 +248,10 @@ final class Version{TIMESTAMP}_Contract extends AbstractMigration
 - [ ] Fenêtre de maintenance communiquée
 - [ ] Équipe disponible
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## J-1 : Préparation
 
 - [ ] Merger les migrations dans main

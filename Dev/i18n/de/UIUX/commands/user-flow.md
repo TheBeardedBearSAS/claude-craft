@@ -17,6 +17,10 @@ Argumente:
 
 Beispiel: `/uiux:user-flow "Benutzerregistrierung"` oder `/uiux:user-flow "Checkout" persona:"Mobile Benutzer" einschraenkung:"< 30 Sekunden"`
 
+## Plan-Modus
+
+> **Der Plan-Modus wird empfohlen.** Claude aktiviert den Plan-Modus, um den Ansatz zu strukturieren, Abhängigkeiten zu identifizieren und eine Generierungsstrategie vorzustellen, bevor Artefakte erstellt werden.
+
 ## MISSION
 
 ### Schritt 1: Kontext definieren

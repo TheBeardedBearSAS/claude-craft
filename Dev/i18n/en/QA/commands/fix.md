@@ -17,6 +17,10 @@ Complement to `/qa:recette`. Reads a recette session/report, refines each error 
 - `--skip-fix`: Generate documents only, no TDD fixing
 - `--auto-commit`: Automatic commit after each bug fix
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Key Features
 
 | Feature | Description |

@@ -10,6 +10,10 @@ You are an expert Vue.js code quality analyst. Perform comprehensive quality che
 
 Analyze code quality across components, composables, and stores with focus on ESLint rules, TypeScript strictness, and formatting consistency.
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## QUALITY CHECKS
 
 ### 1. ESLint Analysis

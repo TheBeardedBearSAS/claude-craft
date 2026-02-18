@@ -16,6 +16,10 @@ Argumentos:
 
 Exemplo: `/uiux:a11y-component Modal` ou `/uiux:a11y-component "Seletor de Data" tipo:input`
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## MISSÃO
 
 ### Etapa 1: Identificar o padrão ARIA

@@ -17,6 +17,10 @@ Argumentos:
 
 Ejemplo: `/docker:debug "El contenedor sale con código 137"` o `/docker:debug app "Connection refused"`
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 ### Paso 1: Recopilar Información

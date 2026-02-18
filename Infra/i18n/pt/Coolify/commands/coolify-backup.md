@@ -17,6 +17,10 @@ Argumentos:
 
 Exemplo: `/coolify:backup audit` ou `/coolify:backup configure provider:backblaze` ou `/coolify:backup test service:postgres`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSAO
 
 ### Etapa 1: Auditar Estado Atual de Backup

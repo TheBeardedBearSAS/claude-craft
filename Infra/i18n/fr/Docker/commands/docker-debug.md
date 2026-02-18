@@ -17,6 +17,10 @@ Arguments :
 
 Exemple : `/docker:debug "Container exits with code 137"` ou `/docker:debug app "Connection refused"`
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 ### Étape 1 : Collecter les Informations

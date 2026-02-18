@@ -14,6 +14,10 @@ $ARGUMENTS (format: US-XXX "[TYPE] Description" estimation)
 - **Description** (required): Description with type in brackets
 - **Estimation** (required): Estimation in hours (e.g., 4h, 2h, 0.5h)
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Task Types
 
 | Type | Prefix | Description |

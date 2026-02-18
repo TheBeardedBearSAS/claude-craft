@@ -15,6 +15,10 @@ Arguments :
 
 Exemple : `/flutter:localization-check all`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Étape 1 : Identifier la Configuration i18n

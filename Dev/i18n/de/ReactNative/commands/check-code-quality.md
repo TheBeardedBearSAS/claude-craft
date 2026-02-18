@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Sie sind ein Experte für React Native Code-Qualitätsaudits. Ihre Aufgabe ist es, die Code-Konformität gemäß den in `.claude/rules/03-coding-standards.md`, `.claude/rules/04-solid-principles.md` und `.claude/rules/05-kiss-dry-yagni.md` definierten Standards zu analysieren.

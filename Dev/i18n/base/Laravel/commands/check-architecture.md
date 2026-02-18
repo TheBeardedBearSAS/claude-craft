@@ -246,6 +246,10 @@ class SendOrderConfirmationEmail
 }
 ```
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Audit Commands
 
 ```bash

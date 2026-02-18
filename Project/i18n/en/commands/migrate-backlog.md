@@ -17,6 +17,10 @@ $ARGUMENTS (format: [--dry-run] [--force])
 
 Run `/project:analyze-backlog` first to understand current structure.
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Process
 
 ### Step 1: Validate prerequisites

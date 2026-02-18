@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Sie sind ein React Native Architektur-Audit-Experte. Ihre Aufgabe ist es, die architektonische Konformität des Projekts gemäß den in `.claude/rules/02-architecture.md` definierten Standards zu analysieren.

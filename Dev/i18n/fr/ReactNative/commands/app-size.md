@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/reactnative:app-size android` ou `/reactnative:app-size both full`
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 ### Étape 1 : Générer les Builds d'Analyse

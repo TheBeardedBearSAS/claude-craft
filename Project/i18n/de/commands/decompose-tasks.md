@@ -14,6 +14,10 @@ $ARGUMENTS - Sprint-Nummer (z.B. 001, 002)
 
 Falls kein Argument, fragen, welcher Sprint zerlegt werden soll.
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## TECH STACK
 
 | Schicht | Technologie | Typische Aufgaben |

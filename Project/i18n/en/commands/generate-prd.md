@@ -22,6 +22,10 @@ Generate a comprehensive Product Requirements Document (PRD) by analyzing the pr
 - Optional: `./docs/` with existing specifications
 - Optional: `README.md` with project description
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Workflow
 
 ### Phase 1: Context Discovery

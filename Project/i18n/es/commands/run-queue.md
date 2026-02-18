@@ -14,6 +14,10 @@ $ARGUMENTS (format: [--parallel N] [--auto] [--resume])
 - **--auto** (opcional): Iniciar el procesamiento inmediatamente sin confirmacion
 - **--resume** (opcional): Reanudar desde el ultimo checkpoint
 
+## Modo Plan
+
+> **El modo plan es recomendado.** Claude activa el modo plan para estructurar el enfoque, identificar dependencias y presentar una estrategia de generación antes de crear artefactos.
+
 ## Proceso
 
 ### Paso 1: Cargar la cola

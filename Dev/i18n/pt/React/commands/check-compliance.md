@@ -28,6 +28,10 @@ Verificar se o projeto React segue padroes de codigo e melhores praticas estabel
    - Recomendacoes de remediacao
    - Score de conformidade
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Padroes de Codigo
 
 ### 1. Convencoes de Nomenclatura

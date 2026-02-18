@@ -16,6 +16,10 @@ Argumentos:
 
 Ejemplo: `/uiux:a11y-component Modal` o `/uiux:a11y-component "Selector de Fecha" tipo:input`
 
+## Modo Plan
+
+> **El modo plan es obligatorio.** Antes de ejecutar, Claude activa el modo plan para analizar el código impactado, proponer un plan de implementación y esperar tu validación antes de realizar cualquier cambio.
+
 ## MISIÓN
 
 ### Paso 1: Identificar el patrón ARIA

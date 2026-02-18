@@ -36,6 +36,10 @@ npm run build:analyze
 pnpm build:analyze
 ```
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Configuration
 
 ### Vite (rollup-plugin-visualizer)

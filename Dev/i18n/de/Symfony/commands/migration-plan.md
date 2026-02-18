@@ -248,6 +248,10 @@ final class Version{TIMESTAMP}_Contract extends AbstractMigration
 - [ ] Wartungsfenster kommuniziert
 - [ ] Team verfügbar
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## T-1: Vorbereitung
 
 - [ ] Migrationen in main mergen

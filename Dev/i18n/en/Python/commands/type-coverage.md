@@ -16,6 +16,10 @@ Arguments:
 
 Example: `/python:type-coverage app/` or `/python:type-coverage app/api/ 90`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Step 1: MyPy Configuration

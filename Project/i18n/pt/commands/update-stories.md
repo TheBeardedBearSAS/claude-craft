@@ -13,6 +13,10 @@ $ARGUMENTS (formato: [--dry-run] [story-id])
 - **--dry-run** (opcional): Pre-visualizar as mudancas sem aplica-las
 - **story-id** (opcional): Story especifica a atualizar (ex: US-001). Se omitido, atualiza todas.
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Processo
 
 ### Etapa 1: Carregar o estado atual

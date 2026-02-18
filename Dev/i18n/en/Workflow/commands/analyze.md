@@ -20,6 +20,10 @@ Execute the Analysis phase of the Enterprise workflow track. This phase focuses 
 - When domain knowledge is limited
 - Before committing to a technical approach
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Workflow
 
 ### Step 1: Analysis Setup

@@ -24,6 +24,10 @@ Exécuter la phase de Conception (Solutioning) du workflow de développement. Ce
 - Le PRD existe dans `project-management/prd.md`
 - Le backlog existe dans `project-management/backlog/`
 
+## Mode Plan
+
+> **Le mode plan est recommandé.** Claude active le mode plan pour structurer l'approche, identifier les dépendances et présenter une stratégie de génération avant de créer les artefacts.
+
 ## Workflow
 
 ### Étape 1 : Mise en place de la conception

@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (opcional: ruta al proyecto a analizar)
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Realizar una auditoría completa de arquitectura del proyecto Python siguiendo los principios de Clean Architecture y Arquitectura Hexagonal definidos en las reglas del proyecto.

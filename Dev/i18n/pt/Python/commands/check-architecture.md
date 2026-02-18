@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (opcional: caminho para o projeto a analisar)
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 Realizar uma auditoria completa da arquitetura do projeto Python seguindo os princípios de Arquitetura Limpa e Arquitetura Hexagonal definidos nas regras do projeto.

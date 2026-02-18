@@ -16,6 +16,10 @@ Argumente:
 
 Beispiel: `/uiux:audit src/pages/Dashboard.tsx AAA`
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 ### Schritt 1: Barrierefreiheit-Audit (A11y-Experte)

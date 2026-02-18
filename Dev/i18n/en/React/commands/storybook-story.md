@@ -37,6 +37,10 @@ npm run generate:story ComponentName
 npm run generate:story features/users/components/UserCard
 ```
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Story Templates
 
 ### 1. Basic Story

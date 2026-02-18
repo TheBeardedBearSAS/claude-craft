@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/flutter:golden-update update` ou `/flutter:golden-update check test/widgets/button_test.dart`
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## MISSION
 
 ### Étape 1 : Comprendre les Golden Tests

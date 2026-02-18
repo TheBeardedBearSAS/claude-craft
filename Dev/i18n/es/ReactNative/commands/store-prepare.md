@@ -40,6 +40,10 @@ Prepara la aplicación para publicación en App Store y Google Play.
 - Short Description (80 chars)
 - Full Description (4000 chars)
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## 2. Metadatos
 
 ### app.json / app.config.js

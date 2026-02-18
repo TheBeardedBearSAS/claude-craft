@@ -24,6 +24,10 @@ Perform a comprehensive security audit of the Angular application.
    - Vulnerabilities by severity
    - Remediation steps
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Security Checks
 
 ### 1. XSS Protection

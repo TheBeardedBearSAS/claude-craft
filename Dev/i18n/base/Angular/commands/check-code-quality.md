@@ -25,6 +25,10 @@ Analyze code quality and identify areas for improvement in the Angular project.
    - Issues by severity
    - Actionable recommendations
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Quality Criteria
 
 ### 1. TypeScript Quality

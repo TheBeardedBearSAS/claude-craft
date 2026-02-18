@@ -14,6 +14,10 @@ $ARGUMENTS (format: [--parallel N] [--auto] [--resume])
 - **--auto** (optionnel) : Démarrer le traitement immédiatement sans confirmation
 - **--resume** (optionnel) : Reprendre depuis le dernier checkpoint
 
+## Mode Plan
+
+> **Le mode plan est recommandé.** Claude active le mode plan pour structurer l'approche, identifier les dépendances et présenter une stratégie de génération avant de créer les artefacts.
+
 ## Processus
 
 ### Étape 1 : Charger la file

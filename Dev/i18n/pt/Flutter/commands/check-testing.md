@@ -45,6 +45,10 @@ Calcular:
 - Número de testes por tipo
 - Tempo de execução
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Gaps Identificados
 
 Liste áreas com:

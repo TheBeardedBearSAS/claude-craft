@@ -28,6 +28,10 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/result-aggregator.sh` verfügbar
 - `Tools/AgentTeams/lib/cost-estimator.sh` verfügbar
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Garde-Fou Fast Mode (Confirmation Bloquante)
 
 **OBLIGATOIRE** : Vor dem Start des Teams MUSS der Audit-Leader:

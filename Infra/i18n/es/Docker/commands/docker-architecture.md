@@ -18,6 +18,10 @@ Argumentos:
 
 Ejemplo: `/docker:architecture "API REST E-commerce" stack:node services:postgres,redis,elasticsearch`
 
+## Modo Plan
+
+> **El modo plan es recomendado.** Claude activa el modo plan para estructurar el enfoque, identificar dependencias y presentar una estrategia de generación antes de crear artefactos.
+
 ## MISIÓN
 
 ### Paso 1: Descubrimiento

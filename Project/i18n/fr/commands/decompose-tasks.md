@@ -14,6 +14,10 @@ $ARGUMENTS - Numéro du sprint (ex: 001, 002)
 
 Si pas d'argument, demander quel sprint décomposer.
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## STACK TECHNIQUE
 
 | Couche | Technologie | Tâches typiques |

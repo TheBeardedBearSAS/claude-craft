@@ -14,6 +14,10 @@ $ARGUMENTS (formato: EPIC-XXX "Nombre de US" [puntos])
 - **Nombre** (obligatorio): Título de la User Story
 - **Puntos** (opcional): Story points en Fibonacci (1, 2, 3, 5, 8)
 
+## Modo Plan
+
+> **El modo plan es obligatorio.** Antes de ejecutar, Claude activa el modo plan para analizar el código impactado, proponer un plan de implementación y esperar tu validación antes de realizar cualquier cambio.
+
 ## Proceso
 
 ### Paso 1: Analizar argumentos

@@ -17,6 +17,10 @@ Argumentos:
 
 Ejemplo: `/uiux:a11y-audit src/pages/Home.tsx AAA` o `/uiux:a11y-audit src/components/Modal.tsx AA keyboard`
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 ### Paso 1: Auditoría automatizada

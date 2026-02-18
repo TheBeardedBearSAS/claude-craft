@@ -22,6 +22,10 @@ Generate a comprehensive Technical Specification document by analyzing the PRD, 
 - Project directory with codebase (for existing projects)
 - Technology stack identified
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## Workflow
 
 ### Phase 1: PRD Analysis

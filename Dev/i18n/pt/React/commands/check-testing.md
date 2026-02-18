@@ -28,6 +28,10 @@ Verificar se a aplicacao React tem cobertura de testes abrangente e segue melhor
    - Score de qualidade dos testes
    - Recomendacoes
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Metas de Cobertura
 
 ```json

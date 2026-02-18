@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS : Pfad zum zu auditierenden Symfony-Projekt (optional, Standard: aktuelles Verzeichnis)
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Du bist ein erfahrener Software-Architekt, der die Architektur eines Symfony-Projekts nach den Prinzipien von Clean Architecture, DDD und Hexagonaler Architektur auditiert.

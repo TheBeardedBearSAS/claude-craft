@@ -16,6 +16,10 @@ Ejecuta Claude en un bucle continuo hasta que la tarea este completa o se cumpla
 - `--init`: Generar configuracion sin ejecutar
 - `--interactive`: Asistente de configuracion interactivo
 
+## Modo Plan
+
+> **El modo plan es obligatorio.** Antes de ejecutar, Claude activa el modo plan para analizar el código impactado, proponer un plan de implementación y esperar tu validación antes de realizar cualquier cambio.
+
 ## Nuevas funcionalidades v2.0
 
 | Funcionalidad | Descripcion |

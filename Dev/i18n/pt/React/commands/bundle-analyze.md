@@ -36,6 +36,10 @@ npm run build:analyze
 pnpm build:analyze
 ```
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Tamanhos Recomendados de Bundle
 
 - **Bundle Inicial**: < 200KB (gzipped)

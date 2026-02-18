@@ -12,6 +12,10 @@ Realiza una auditoría completa de accesibilidad de la aplicación React.
 npm run accessibility-check
 ```
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Acciones Automáticas
 
 ### 1. Análisis con axe-core

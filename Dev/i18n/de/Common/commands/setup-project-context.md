@@ -149,6 +149,10 @@ Fragen uberspringen, wenn `--auto` Modus verwendet wird und ein vernunftiger Sta
 > Automatisch generiert von `/common:setup-project-context` am {DATUM}
 > Nach Bedarf uberprufen und anpassen.
 
+## Plan-Modus
+
+> **Der Plan-Modus wird empfohlen.** Claude aktiviert den Plan-Modus, um den Ansatz zu strukturieren, Abhängigkeiten zu identifizieren und eine Generierungsstrategie vorzustellen, bevor Artefakte erstellt werden.
+
 ## Ubersicht
 
 **{PROJEKTNAME}** ist eine {TYP}-Anwendung fur die {DOMANE}-Domane.

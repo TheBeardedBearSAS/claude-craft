@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 You are a React Native code quality audit expert. Your mission is to analyze code compliance according to the standards defined in `.claude/rules/03-coding-standards.md`, `.claude/rules/04-solid-principles.md` and `.claude/rules/05-kiss-dry-yagni.md`.

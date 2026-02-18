@@ -16,6 +16,10 @@ Argumentos:
 
 Ejemplo: `/qa:tdd "Usuario no puede cerrar sesión"` o `/qa:tdd #123`
 
+## Modo Plan
+
+> **El modo plan es obligatorio.** Antes de ejecutar, Claude activa el modo plan para analizar el código impactado, proponer un plan de implementación y esperar tu validación antes de realizar cualquier cambio.
+
 ## MISIÓN
 
 ### Filosofía TDD/BDD

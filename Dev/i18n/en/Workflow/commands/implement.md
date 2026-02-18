@@ -29,6 +29,10 @@ For Standard/Enterprise tracks:
 For Quick Flow:
 - Clear understanding of the bug/feature to implement
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Workflow
 
 ### Step 1: Implementation Setup

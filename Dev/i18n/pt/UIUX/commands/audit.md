@@ -16,6 +16,10 @@ Argumentos:
 
 Exemplo: `/uiux:audit src/pages/Dashboard.tsx AAA`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 ### Etapa 1: Auditoria de Acessibilidade (Especialista A11y)

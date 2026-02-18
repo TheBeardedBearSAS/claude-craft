@@ -32,6 +32,10 @@ Analyze test coverage and testing practices in PHP project.
    - Edge cases
    - Error paths
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Coverage Standards
 
 ### Minimum Coverage Targets

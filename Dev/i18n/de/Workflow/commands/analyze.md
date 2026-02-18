@@ -20,6 +20,10 @@ Die Analysephase des Enterprise-Workflow-Tracks durchführen. Diese Phase konzen
 - Wenn das Domänenwissen begrenzt ist
 - Vor der Festlegung auf einen technischen Ansatz
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Workflow
 
 ### Schritt 1: Analyse-Setup

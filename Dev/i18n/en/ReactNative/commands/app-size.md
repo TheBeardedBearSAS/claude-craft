@@ -16,6 +16,10 @@ Arguments:
 
 Example: `/reactnative:app-size android` or `/reactnative:app-size both full`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Step 1: Generate Analysis Builds

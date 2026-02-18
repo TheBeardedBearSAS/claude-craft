@@ -42,6 +42,10 @@ npm run format:check
 npm run test:coverage
 ```
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Metas de Metricas de Qualidade
 
 - **Complexidade Ciclomatica**: < 10 por funcao

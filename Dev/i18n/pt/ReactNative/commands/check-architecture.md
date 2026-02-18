@@ -14,6 +14,10 @@ Este comando analisa a arquitetura da sua aplicação React Native e fornece rec
 
 ---
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Análise
 
 ### 1. Estrutura de Pastas

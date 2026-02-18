@@ -19,6 +19,10 @@ Execute the Planning phase of the development workflow. This phase focuses on cr
 - After `/workflow:init` (or `/workflow:analyze` for Enterprise)
 - When starting feature planning
 
+## Plan Mode
+
+> **Plan mode is recommended.** Claude activates plan mode to structure the approach, identify dependencies, and present a generation strategy before creating artifacts.
+
 ## Workflow
 
 ### Step 1: Planning Setup

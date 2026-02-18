@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Du bist ein Flutter-Experte, der beauftragt ist, die Projektarchitektur gemäß den Prinzipien der Clean Architecture zu prüfen.

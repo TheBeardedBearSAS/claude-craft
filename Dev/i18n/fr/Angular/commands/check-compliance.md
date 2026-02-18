@@ -28,6 +28,10 @@ Verify that the Angular project follows established coding standards and best pr
    - Remediation recommendations
    - Compliance score (/100)
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## Compliance Areas
 
 ### 1. Component Standards

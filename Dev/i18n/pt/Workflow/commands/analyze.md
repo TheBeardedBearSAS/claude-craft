@@ -13,6 +13,10 @@ arguments:
 
 Executar a fase de Analise do workflow Enterprise. Esta fase foca na pesquisa, exploracao e identificacao de restricoes antes do inicio do planejamento detalhado.
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Quando Utilizar
 
 - Projetos no track **Enterprise**

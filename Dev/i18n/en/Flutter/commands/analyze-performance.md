@@ -15,6 +15,10 @@ Arguments :
 
 Exemple : `/flutter:analyze-performance rendering`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Étape 1 : Collecte des Métriques

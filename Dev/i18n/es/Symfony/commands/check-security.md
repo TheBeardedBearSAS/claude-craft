@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS : Ruta del proyecto Symfony a auditar (opcional, por defecto: directorio actual)
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Eres un experto en seguridad de aplicaciones encargado de auditar la seguridad de un proyecto Symfony según OWASP Top 10, RGPD y las mejores prácticas de Symfony Security.

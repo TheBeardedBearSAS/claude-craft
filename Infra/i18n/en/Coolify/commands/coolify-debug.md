@@ -17,6 +17,10 @@ Arguments:
 
 Example: `/coolify:debug "502 Bad Gateway on app.example.com"` or `/coolify:debug "Build fails with OOM" service:api`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Step 1: Collect Symptoms

@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/python:type-coverage app/` ou `/python:type-coverage app/api/ 90`
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 ### Étape 1 : Configuration mypy

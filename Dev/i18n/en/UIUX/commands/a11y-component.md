@@ -16,6 +16,10 @@ Arguments:
 
 Example: `/uiux:a11y-component Modal` or `/uiux:a11y-component "Date Picker" type:input`
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## MISSION
 
 ### Step 1: Identify the ARIA pattern

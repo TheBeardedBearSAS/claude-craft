@@ -68,6 +68,10 @@ Führe ein umfassendes Sicherheits-Audit der React-Anwendung durch.
     - Prüfe Referrer-Policy
     - Teste Permissions-Policy
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Sicherheits-Tests durchführen
 
 ```bash

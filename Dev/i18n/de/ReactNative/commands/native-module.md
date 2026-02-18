@@ -16,6 +16,10 @@ Argumente:
 
 Beispiel: `/reactnative:native-module Biometrics async,events`
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 ### Schritt 1: Modulstruktur

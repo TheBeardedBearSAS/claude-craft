@@ -13,6 +13,10 @@ Crea un módulo nativo para funcionalidad específica de plataforma.
 - Integración con SDKs nativos
 - Características específicas de plataforma
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Con Expo Modules
 
 ### 1. Crear Módulo

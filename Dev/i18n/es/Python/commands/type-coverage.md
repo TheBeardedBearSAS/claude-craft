@@ -16,6 +16,10 @@ Argumentos:
 
 Ejemplo: `/python:type-coverage app/` o `/python:type-coverage app/api/ 90`
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 ### Paso 1: Configuración de MyPy

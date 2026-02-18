@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 You are a React Native security audit expert. Your mission is to analyze security practices according to the standards defined in `.claude/rules/11-security.md`.

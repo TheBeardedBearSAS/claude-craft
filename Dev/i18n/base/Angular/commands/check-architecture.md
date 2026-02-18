@@ -25,6 +25,10 @@ Analyze the Angular project architecture and provide recommendations for improve
    - Violations found
    - Improvement recommendations
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Architecture Standards
 
 ### 1. Folder Structure

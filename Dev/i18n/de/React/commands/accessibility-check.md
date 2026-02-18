@@ -58,6 +58,10 @@ Führe eine umfassende Barrierefreiheitsprüfung der React-Anwendung durch.
     - Erstelle Tickets für jeden Fix
     - Schätze Aufwand
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Zu liefern
 
 1. Detaillierter Bericht zu Barrierefreiheitsproblemen

@@ -17,6 +17,10 @@ Argumentos:
 
 Exemplo: `/docker:debug "Container sai com código 137"` ou `/docker:debug app "Connection refused"`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 ### Passo 1: Coletar Informações

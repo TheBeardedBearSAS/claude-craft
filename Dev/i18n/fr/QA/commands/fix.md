@@ -17,6 +17,10 @@ Complement de `/qa:recette`. Lit un rapport/session de recette, affine chaque er
 - `--skip-fix` : Generer uniquement les documents, pas de correction TDD
 - `--auto-commit` : Commit automatique apres chaque bug corrige
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## Fonctionnalites Cles
 
 | Fonctionnalite | Description |

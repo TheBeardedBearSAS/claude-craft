@@ -15,6 +15,10 @@ Arguments :
 
 Exemple : `/python:dependency-audit security` ou `/python:dependency-audit all`
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 ### Étape 1 : Identifier la Configuration

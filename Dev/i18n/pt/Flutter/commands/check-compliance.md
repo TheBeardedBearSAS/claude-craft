@@ -39,6 +39,10 @@ flutter pub deps --json | jq '.packages[].license'
 - [ ] README.md completo
 - [ ] CHANGELOG.md atualizado
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Relatório
 
 Gere checklist de conformidade indicando status de cada área.

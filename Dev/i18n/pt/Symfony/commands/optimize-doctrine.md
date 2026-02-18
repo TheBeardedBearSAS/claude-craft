@@ -15,6 +15,10 @@ Arguments :
 
 Exemple : `/symfony:optimize-doctrine` ou `/symfony:optimize-doctrine src/Entity/Order.php`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSION
 
 ### Step 1 : Activer le Profiling

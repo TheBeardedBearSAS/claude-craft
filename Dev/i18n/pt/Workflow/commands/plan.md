@@ -13,6 +13,10 @@ arguments:
 
 Executar a fase de Planejamento do workflow de desenvolvimento. Esta fase foca na criacao do Documento de Requisitos do Produto, definicao de personas e geracao do backlog inicial do produto.
 
+## Modo Plano
+
+> **O modo plano é recomendado.** Claude ativa o modo plano para estruturar a abordagem, identificar dependências e apresentar uma estratégia de geração antes de criar artefatos.
+
 ## Quando Utilizar
 
 - Tracks **Standard** e **Enterprise**

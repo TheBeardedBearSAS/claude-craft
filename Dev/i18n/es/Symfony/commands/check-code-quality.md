@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS: Ruta del proyecto Symfony a auditar (opcional, por defecto: directorio actual)
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Eres un experto en calidad de software encargado de auditar la calidad del código de un proyecto Symfony según los estándares PSR-12, PHPStan nivel 9 y las mejores prácticas PHP modernas.

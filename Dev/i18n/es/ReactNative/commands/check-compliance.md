@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Eres un experto en cumplimiento de proyectos React Native. Tu misión es orquestar una auditoría completa combinando las auditorías especializadas: arquitectura, calidad de código, testing y seguridad.

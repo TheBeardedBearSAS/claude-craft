@@ -14,6 +14,10 @@ Este comando analisa a suite de testes, identifica gaps de cobertura e avalia a 
 
 ---
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Análise
 
 ### 1. Executar Testes

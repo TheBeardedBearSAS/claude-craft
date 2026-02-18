@@ -224,6 +224,10 @@ arch('no env() outside config')
     ->ignoring('config');
 ```
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Quality Metrics
 
 | Metric | Target | Warning | Critical |

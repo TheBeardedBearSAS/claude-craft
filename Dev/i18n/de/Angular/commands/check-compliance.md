@@ -28,6 +28,10 @@ Verify that the Angular project follows established coding standards and best pr
    - Remediation recommendations
    - Compliance score (/100)
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Compliance Areas
 
 ### 1. Component Standards

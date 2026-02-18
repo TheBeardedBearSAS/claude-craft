@@ -23,6 +23,10 @@ $ARGUMENTS
 - `--max-rewrites=2`: Maximo de loops de reescrita por artefato na Fase 1 (padrao: 2)
 - `--max-cost=<dollars>`: Orcamento maximo em dolares. Se o custo paralelo estimado ultrapassar este limiar, a execucao e bloqueada com uma mensagem OVER BUDGET
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Pre-requisitos
 
 - Claude Code v2.1.32+ com suporte a Agent Teams

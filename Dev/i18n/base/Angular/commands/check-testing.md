@@ -25,6 +25,10 @@ Analyze test coverage and quality in the Angular project.
    - Missing tests
    - Quality recommendations
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Testing Standards
 
 ### 1. Component Testing

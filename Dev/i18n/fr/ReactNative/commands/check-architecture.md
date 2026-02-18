@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 Tu es un auditeur expert en architecture React Native. Ta mission est d'analyser la conformité architecturale du projet selon les standards définis dans `.claude/rules/02-architecture.md`.

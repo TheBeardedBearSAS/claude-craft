@@ -16,6 +16,10 @@ Argumente:
 
 Beispiel: `/coolify:optimize` oder `/coolify:optimize focus:build service:api` oder `/coolify:optimize focus:cleanup`
 
+## Plan-Modus
+
+> **Der Plan-Modus wird empfohlen.** Claude aktiviert den Plan-Modus, um den Ansatz zu strukturieren, Abhängigkeiten zu identifizieren und eine Generierungsstrategie vorzustellen, bevor Artefakte erstellt werden.
+
 ## MISSION
 
 ### Schritt 1: Aktuelle Ressourcennutzung analysieren

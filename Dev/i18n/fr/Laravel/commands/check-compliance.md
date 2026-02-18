@@ -88,6 +88,10 @@ After analysis, provide:
 4. **Good Practices**: What's done well
 5. **Action Items**: Prioritized list of fixes
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## Commands to Run
 
 ```bash

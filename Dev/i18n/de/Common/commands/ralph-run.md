@@ -16,6 +16,10 @@ Fuhrt Claude in einer kontinuierlichen Schleife aus, bis die Aufgabe abgeschloss
 - `--init`: Konfiguration generieren ohne Ausfuhrung
 - `--interactive`: Interaktiver Konfigurationsassistent
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## Neue Funktionen v2.0
 
 | Funktion | Beschreibung |

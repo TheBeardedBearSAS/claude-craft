@@ -12,6 +12,10 @@ $ARGUMENTS
 
 Falls keine Argumente angegeben, Standard-Stack verwenden: symfony,flutter,api-platform,postgresql
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## SCRUM-GRUNDLAGEN (VERPFLICHTEND)
 
 ### Die 3 Säulen von Scrum

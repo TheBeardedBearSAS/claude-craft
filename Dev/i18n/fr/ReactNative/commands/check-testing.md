@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 Tu es un auditeur expert en testing React Native. Ta mission est d'analyser la stratégie de test et la couverture selon les standards définis dans `.claude/rules/07-testing.md` et `.claude/rules/08-quality-tools.md`.

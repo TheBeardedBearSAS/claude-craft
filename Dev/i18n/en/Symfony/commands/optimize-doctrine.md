@@ -15,6 +15,10 @@ Arguments :
 
 Exemple : `/symfony:optimize-doctrine` ou `/symfony:optimize-doctrine src/Entity/Order.php`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Step 1 : Activer le Profiling

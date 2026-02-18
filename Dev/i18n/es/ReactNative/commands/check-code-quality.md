@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Eres un experto en auditoría de calidad de código React Native. Tu misión es analizar el cumplimiento del código según los estándares definidos en `.claude/rules/03-coding-standards.md`, `.claude/rules/04-solid-principles.md` y `.claude/rules/05-kiss-dry-yagni.md`.

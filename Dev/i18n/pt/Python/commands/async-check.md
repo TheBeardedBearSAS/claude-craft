@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (opcional: caminho para analisar)
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 Analisar o uso de código assíncrono no projeto Python e identificar problemas com padrões async/await, chamadas bloqueantes e problemas de performance.

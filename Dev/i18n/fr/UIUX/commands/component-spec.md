@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/uiux:component-spec Button` ou `/uiux:component-spec "Card Séjour" contexte SaaS tourisme`
 
+## Mode Plan
+
+> **Le mode plan est recommandé.** Claude active le mode plan pour structurer l'approche, identifier les dépendances et présenter une stratégie de génération avant de créer les artefacts.
+
 ## MISSION
 
 ### Étape 1 : Analyse UX (Expert UX)

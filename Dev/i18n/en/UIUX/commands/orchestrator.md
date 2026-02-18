@@ -16,6 +16,10 @@ Arguments:
 
 Example: `/uiux:orchestrator component "Date picker"` or `/uiux:orchestrator audit "Checkout page"`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Step 1: Analyze the request

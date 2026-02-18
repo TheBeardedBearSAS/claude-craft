@@ -14,6 +14,10 @@ $ARGUMENTS (Format: US-XXX "[TYP] Beschreibung" Schätzung)
 - **Beschreibung** (erforderlich): Beschreibung mit Typ in Klammern
 - **Schätzung** (erforderlich): Schätzung in Stunden (z.B. 4h, 2h, 0.5h)
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## Aufgabentypen
 
 | Typ | Präfix | Beschreibung |

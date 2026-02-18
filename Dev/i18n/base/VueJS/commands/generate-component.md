@@ -15,6 +15,10 @@ $ARGUMENTS
 - `--module=<module>`: Target module (optional, defaults to components/)
 - `--base`: Generate as a base component with Base prefix
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## MISSION
 
 Generate a complete Vue.js component following project standards:

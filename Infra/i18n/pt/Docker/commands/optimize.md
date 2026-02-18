@@ -15,6 +15,10 @@ Argumentos:
 
 Exemplo: `/docker:optimize ./docker/php/Dockerfile`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 ### Etapa 1: Analisar Dockerfile Existente

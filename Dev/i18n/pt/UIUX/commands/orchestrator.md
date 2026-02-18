@@ -16,6 +16,10 @@ Argumentos:
 
 Exemplo: `/uiux:orchestrator componente "Seletor de data"` ou `/uiux:orchestrator auditoria "Página de checkout"`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 ### Etapa 1: Analisar a solicitação

@@ -12,6 +12,10 @@ $ARGUMENTS
 
 Se nenhum argumento fornecido, usar stack padrão: symfony,flutter,api-platform,postgresql
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## FUNDAMENTOS SCRUM (OBRIGATÓRIO)
 
 ### Os 3 Pilares do Scrum

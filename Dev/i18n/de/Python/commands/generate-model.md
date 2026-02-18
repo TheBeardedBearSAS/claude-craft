@@ -16,6 +16,10 @@ Argumente:
 
 Beispiel: `/python:generate-model Product name:str price:decimal category_id:uuid:fk`
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## MISSION
 
 ### Schritt 1: Anforderungen analysieren

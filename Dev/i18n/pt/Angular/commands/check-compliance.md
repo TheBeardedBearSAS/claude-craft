@@ -28,6 +28,10 @@ Verify that the Angular project follows established coding standards and best pr
    - Remediation recommendations
    - Compliance score (/100)
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Compliance Areas
 
 ### 1. Component Standards

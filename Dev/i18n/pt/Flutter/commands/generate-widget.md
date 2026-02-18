@@ -12,6 +12,10 @@ Gere um widget Flutter com testes e documentação.
 - Tipo: [stateless, stateful, consumer]
 - Localização: lib/features/{feature}/presentation/widgets/
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Gerar
 
 ### 1. Widget

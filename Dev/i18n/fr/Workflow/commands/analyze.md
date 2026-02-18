@@ -20,6 +20,10 @@ Exécuter la phase d'Analyse du workflow Enterprise. Cette phase se concentre su
 - Quand la connaissance du domaine est limitée
 - Avant de s'engager sur une approche technique
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## Workflow
 
 ### Étape 1 : Mise en place de l'analyse

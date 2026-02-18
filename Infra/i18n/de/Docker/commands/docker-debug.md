@@ -17,6 +17,10 @@ Argumente:
 
 Beispiel: `/docker:debug "Container beendet mit Code 137"` oder `/docker:debug app "Connection refused"`
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 ### Schritt 1: Informationen sammeln

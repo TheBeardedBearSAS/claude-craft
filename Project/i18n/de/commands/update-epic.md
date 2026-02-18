@@ -14,6 +14,10 @@ $ARGUMENTS (Format: EPIC-XXX [Feld] [Wert])
 - **Feld** (optional): Zu änderndes Feld
 - **Wert** (optional): Neuer Wert
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## Änderbare Felder
 
 | Feld | Beschreibung | Beispiel |

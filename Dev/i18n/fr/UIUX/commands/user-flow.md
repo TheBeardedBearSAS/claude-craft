@@ -17,6 +17,10 @@ Arguments :
 
 Exemple : `/uiux:user-flow "Inscription utilisateur"` ou `/uiux:user-flow "Checkout" persona:"Mobile user" contrainte:"< 30 secondes"`
 
+## Mode Plan
+
+> **Le mode plan est recommandé.** Claude active le mode plan pour structurer l'approche, identifier les dépendances et présenter une stratégie de génération avant de créer les artefacts.
+
 ## MISSION
 
 ### Étape 1 : Définir le contexte

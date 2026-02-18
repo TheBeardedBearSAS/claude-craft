@@ -16,6 +16,10 @@ Arguments:
 
 Example: `/uiux:audit src/pages/Dashboard.tsx AAA`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Step 1: Accessibility Audit (A11y Expert)

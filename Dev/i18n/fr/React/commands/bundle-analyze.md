@@ -15,6 +15,10 @@ Arguments :
 
 Exemple : `/react:bundle-analyze` ou `/react:bundle-analyze dependencies`
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 ### Étape 1 : Outils d'Analyse

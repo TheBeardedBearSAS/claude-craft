@@ -45,6 +45,10 @@ npm run generate:component features/users/components/UserCard
 npm run generate:component ComponentName --story --styled
 ```
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Component Templates
 
 ### 1. Basic Component

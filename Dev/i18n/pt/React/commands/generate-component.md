@@ -45,6 +45,10 @@ npm run generate:component features/users/components/UserCard
 npm run generate:component ComponentName --story --styled
 ```
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Template de Componente Basico
 
 ```typescript

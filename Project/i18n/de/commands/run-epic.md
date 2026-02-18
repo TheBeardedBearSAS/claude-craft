@@ -13,6 +13,10 @@ $ARGUMENTS (format: <epic-id> [--dry-run])
 - **epic-id** (erforderlich): Epic-Identifikator (z.B. EPIC-001)
 - **--dry-run** (optional): Vorschau ohne Ausfuehrung
 
+## Plan-Modus
+
+> **Der Plan-Modus wird empfohlen.** Claude aktiviert den Plan-Modus, um den Ansatz zu strukturieren, Abhängigkeiten zu identifizieren und eine Generierungsstrategie vorzustellen, bevor Artefakte erstellt werden.
+
 ## Prozess
 
 ### Schritt 1: Epic-Stories identifizieren

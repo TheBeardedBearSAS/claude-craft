@@ -293,6 +293,10 @@ grep -r "secret" --include="*.php" app/
 grep -r "api_key" --include="*.php" app/
 ```
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Report Format
 
 ```markdown

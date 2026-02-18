@@ -17,6 +17,10 @@ Argumentos:
 
 Exemplo: `/coolify:debug "502 Bad Gateway em app.example.com"` ou `/coolify:debug "Build falha com OOM" service:api`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSAO
 
 ### Etapa 1: Coletar Sintomas

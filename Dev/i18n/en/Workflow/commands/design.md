@@ -24,6 +24,10 @@ Execute the Design (Solutioning) phase of the development workflow. This phase f
 - PRD exists at `project-management/prd.md`
 - Backlog exists at `project-management/backlog/`
 
+## Plan Mode
+
+> **Plan mode is recommended.** Claude activates plan mode to structure the approach, identify dependencies, and present a generation strategy before creating artifacts.
+
 ## Workflow
 
 ### Step 1: Design Setup

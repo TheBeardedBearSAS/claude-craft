@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/uiux:orchestrator composant "Sélecteur de date"` ou `/uiux:orchestrator audit "Page checkout"`
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 ### Étape 1 : Analyser la demande

@@ -324,6 +324,10 @@ class OrderFactory extends Factory
 }
 ```
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Report Format
 
 ```markdown

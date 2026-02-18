@@ -40,6 +40,10 @@ npm run generate:hook features/users/hooks/useUserData
 npm run generate:hook features/auth/hooks/useLogin
 ```
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Hook Templates
 
 ### 1. Simple State Hook

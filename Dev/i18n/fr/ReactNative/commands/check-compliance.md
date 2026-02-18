@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 Tu es un auditeur expert en React Native. Ta mission est de réaliser un audit complet de conformité du projet React Native en orchestrant les 4 audits spécialisés.

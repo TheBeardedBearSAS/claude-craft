@@ -28,6 +28,10 @@ Verify that the PHP project follows established coding standards and best practi
    - Remediation recommendations
    - Compliance score
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## Coding Standards
 
 ### 1. Naming Conventions

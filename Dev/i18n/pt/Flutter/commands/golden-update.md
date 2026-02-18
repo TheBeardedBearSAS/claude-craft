@@ -19,6 +19,10 @@ flutter test test/golden/ --update-goldens
 flutter test --tags=golden
 ```
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Workflow
 
 ### 1. Modificação de UI

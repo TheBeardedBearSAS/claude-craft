@@ -14,6 +14,10 @@ $ARGUMENTS (format: [--parallel N] [--auto] [--resume])
 - **--auto** (optional): Start processing immediately without confirmation
 - **--resume** (optional): Resume from last checkpoint
 
+## Plan Mode
+
+> **Plan mode is recommended.** Claude activates plan mode to structure the approach, identify dependencies, and present a generation strategy before creating artifacts.
+
 ## Process
 
 ### Step 1: Load queue

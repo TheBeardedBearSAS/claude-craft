@@ -17,6 +17,10 @@ Argumentos:
 
 Exemplo: `/docker:compose-setup postgres,redis context:dev stack:symfony`
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## MISSÃO
 
 ### Passo 1: Analisar Requisitos

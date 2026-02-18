@@ -32,6 +32,10 @@ Security audit for PHP applications following OWASP guidelines.
    - PHP configuration
    - Framework security settings
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## OWASP Top 10 Checklist
 
 ### A01: Broken Access Control

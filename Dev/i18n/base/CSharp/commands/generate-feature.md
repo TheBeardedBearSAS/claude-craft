@@ -13,6 +13,10 @@ $ARGUMENTS
 
 - `FeatureName`: Name of the feature to generate (e.g., "Order", "Customer", "Product")
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Generation Process
 
 ### Step 1: Analyze Requirements

@@ -33,6 +33,10 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/cost-estimator.sh` verfügbar
 - `Tools/AgentTeams/lib/result-aggregator.sh` verfügbar
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Garde-Fou Fast Mode (Blockierende Bestaetigung)
 
 **OBLIGATORISCH**: Vor dem Start des Teams MUSS der Delivery Lead:

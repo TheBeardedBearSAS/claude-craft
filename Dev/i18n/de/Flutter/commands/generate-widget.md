@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/flutter:generate-widget UserCard stateless`
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## MISSION
 
 ### Étape 1 : Créer le Widget

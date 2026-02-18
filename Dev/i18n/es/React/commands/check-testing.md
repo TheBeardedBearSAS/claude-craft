@@ -28,6 +28,10 @@ Analiza la cobertura de tests y la calidad de las pruebas en la aplicacion React
    - Recomendaciones
    - Tendencias en el tiempo
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Ejecutar Tests
 
 ### Modo Desarrollo

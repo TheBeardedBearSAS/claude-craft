@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/symfony:generate-command app:users:import "Import users from CSV file"`
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## MISSION
 
 ### Step 1 : Créer la Commande

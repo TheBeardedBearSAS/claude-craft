@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (optionnel : chemin vers le projet à analyser)
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 Réaliser un audit complet de conformité du projet Python en orchestrant les 4 vérifications majeures : Architecture, Qualité du Code, Tests, et Sécurité. Produire un rapport consolidé avec un score global sur 100 points.

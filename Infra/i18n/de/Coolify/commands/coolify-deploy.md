@@ -17,6 +17,10 @@ Argumente:
 
 Beispiel: `/coolify:deploy "my-app" env:production branch:main` oder `/coolify:deploy . env:staging`
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## MISSION
 
 ### Schritt 1: Voraussetzungen prufen

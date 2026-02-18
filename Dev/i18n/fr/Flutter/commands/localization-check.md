@@ -15,6 +15,10 @@ Arguments :
 
 Exemple : `/flutter:localization-check all`
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 ### Étape 1 : Identifier la Configuration i18n

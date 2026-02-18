@@ -14,6 +14,10 @@ Este comando o guia pela implementação de deep linking, permitindo que URLs ab
 
 ---
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Configuração
 
 ### 1. Configurar Scheme do App

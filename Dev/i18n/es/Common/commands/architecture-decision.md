@@ -16,6 +16,10 @@ Argumentos:
 
 Ejemplo: `/common:architecture-decision "Elección de PostgreSQL para base de datos principal"`
 
+## Modo Plan
+
+> **El modo plan es recomendado.** Claude activa el modo plan para estructurar el enfoque, identificar dependencias y presentar una estrategia de generación antes de crear artefactos.
+
 ## MISIÓN
 
 ### Paso 1: Recopilar Información

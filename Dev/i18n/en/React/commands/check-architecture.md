@@ -28,6 +28,10 @@ Verify that the project follows established architectural patterns and best prac
    - Refactoring opportunities
    - Compliance score
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Expected Architecture
 
 ### Folder Structure

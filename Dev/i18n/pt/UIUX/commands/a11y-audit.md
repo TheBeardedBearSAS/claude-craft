@@ -17,6 +17,10 @@ Argumentos:
 
 Exemplo: `/uiux:a11y-audit src/pages/Home.tsx AAA` ou `/uiux:a11y-audit src/components/Modal.tsx AA keyboard`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 ### Etapa 1: Auditoria automatizada

@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/symfony:api-endpoint Product "list,get,post,patch,delete"`
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## MISSION
 
 ### Étape 1 : Configurer la Ressource API Platform

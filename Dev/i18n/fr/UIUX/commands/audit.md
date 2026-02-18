@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/uiux:audit src/pages/Dashboard.tsx AAA`
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 ### Étape 1 : Audit Accessibilité (Expert A11y)

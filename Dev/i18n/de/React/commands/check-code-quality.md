@@ -68,6 +68,10 @@ Führe eine umfassende Code-Qualitätsanalyse der React-Codebase durch.
     - Analysiere Test-Coverage
     - Bewerte technische Schuld
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Tools ausführen
 
 ```bash

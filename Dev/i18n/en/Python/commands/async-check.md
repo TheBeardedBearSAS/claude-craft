@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (optional: path to analyze)
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 Analyze asynchronous code usage in the Python project and identify issues with async/await patterns, blocking calls, and performance problems.

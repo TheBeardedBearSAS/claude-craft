@@ -15,6 +15,10 @@ Arguments :
 
 Exemple : `/flutter:localization-check all`
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 ### Étape 1 : Identifier la Configuration i18n

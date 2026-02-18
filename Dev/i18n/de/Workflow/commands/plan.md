@@ -19,6 +19,10 @@ Die Planungsphase des Entwicklungs-Workflows durchführen. Diese Phase konzentri
 - Nach `/workflow:init` (oder `/workflow:analyze` für Enterprise)
 - Beim Start der Feature-Planung
 
+## Plan-Modus
+
+> **Der Plan-Modus wird empfohlen.** Claude aktiviert den Plan-Modus, um den Ansatz zu strukturieren, Abhängigkeiten zu identifizieren und eine Generierungsstrategie vorzustellen, bevor Artefakte erstellt werden.
+
 ## Workflow
 
 ### Schritt 1: Planungs-Setup

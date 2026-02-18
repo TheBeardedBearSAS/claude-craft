@@ -28,6 +28,10 @@ Verifica que el proyecto React siga los estandares de codificacion y mejores pra
    - Recomendaciones de remediacion
    - Puntuacion de cumplimiento
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Estandares de Codificacion
 
 ### 1. Convenciones de Nomenclatura

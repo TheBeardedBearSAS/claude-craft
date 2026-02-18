@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Eres un experto en Flutter encargado de realizar una auditoría completa de conformidad del proyecto. Esta auditoría evalúa 4 dimensiones críticas: Arquitectura, Calidad del Código, Tests y Seguridad.

@@ -14,6 +14,10 @@ $ARGUMENTS (format: EPIC-XXX [field] [value])
 - **Field** (optional): Field to modify
 - **Value** (optional): New value
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Modifiable Fields
 
 | Field | Description | Example |

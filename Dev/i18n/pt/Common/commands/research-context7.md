@@ -16,6 +16,10 @@ Argumentos:
 
 Exemplo: `/common:research-context7 "Como implementar autenticação OAuth2 com NextAuth.js"` ou `/common:research-context7 "Melhores práticas React 19" react,nextjs`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 ### Etapa 1: Analisar a Solicitação

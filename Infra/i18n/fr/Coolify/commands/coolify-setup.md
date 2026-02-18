@@ -17,6 +17,10 @@ Arguments :
 
 Exemple : `/coolify:setup "API Node.js avec PostgreSQL et Redis"` ou `/coolify:setup . buildpack:dockerfile services:postgres,redis`
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## MISSION
 
 ### Etape 1 : Analyser la Stack du Projet

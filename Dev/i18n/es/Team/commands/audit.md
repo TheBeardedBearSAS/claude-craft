@@ -19,6 +19,10 @@ $ARGUMENTS
 - `--skip-aggregation`: Emitir resultados por stack sin fusionar
 - `--sequential`: Ejecutar auditorias secuencialmente en lugar de en paralelo (sin overhead de Agent Teams). Util para proyectos de una sola tecnologia o cuando Agent Teams no esta disponible.
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Prerequisitos
 
 - Claude Code v2.1.32+ con soporte de Agent Teams

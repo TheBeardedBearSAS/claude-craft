@@ -14,6 +14,10 @@ $ARGUMENTS (formato: US-XXX [campo] [valor])
 - **Campo** (opcional): Campo a modificar
 - **Valor** (opcional): Novo valor
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Campos Modificáveis
 
 | Campo | Descrição | Exemplo |

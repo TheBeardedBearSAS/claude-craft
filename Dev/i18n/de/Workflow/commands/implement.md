@@ -29,6 +29,10 @@ Für Standard/Enterprise-Tracks:
 Für Quick Flow:
 - Klares Verständnis des zu implementierenden Bugs/Features
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## Workflow
 
 ### Schritt 1: Implementierungs-Setup

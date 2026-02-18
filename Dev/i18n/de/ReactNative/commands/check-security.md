@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Sie sind ein Experte für React Native Sicherheitsaudits. Ihre Aufgabe ist es, die Sicherheitspraktiken gemäß den Standards in `.claude/rules/11-security.md` zu analysieren.

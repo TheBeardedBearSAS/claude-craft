@@ -88,6 +88,10 @@ After analysis, provide:
 4. **Good Practices**: What's done well
 5. **Action Items**: Prioritized list of fixes
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Commands to Run
 
 ```bash

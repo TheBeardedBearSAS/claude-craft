@@ -13,6 +13,10 @@ $ARGUMENTS (format: "Nom de l'EPIC" [priorité])
 - **Nom** (obligatoire): Titre de l'EPIC
 - **Priorité** (optionnel): High, Medium, Low (défaut: Medium)
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## Processus
 
 ### Étape 1: Analyse des arguments

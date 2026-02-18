@@ -16,6 +16,10 @@ Arguments:
 
 Example: `/common:architecture-decision "Choice of PostgreSQL for main database"`
 
+## Plan Mode
+
+> **Plan mode is recommended.** Claude activates plan mode to structure the approach, identify dependencies, and present a generation strategy before creating artifacts.
+
 ## MISSION
 
 ### Step 1: Gather Information

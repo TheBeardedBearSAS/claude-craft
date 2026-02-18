@@ -15,6 +15,10 @@ Argumente:
 
 Beispiel: `/flutter:analyze-performance rendering`
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 ### Schritt 1: Metriken Erfassen

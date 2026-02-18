@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (optionnel : chemin vers le projet à analyser)
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 Réaliser un audit complet de la stratégie de test du projet Python en vérifiant la couverture, la qualité des tests, et le respect des bonnes pratiques définies dans les règles du projet.

@@ -68,6 +68,10 @@ Analysiere und validiere die React-Anwendungsarchitektur.
     - Identifiziere Code-Smells
     - Bewerte Wartbarkeit
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Zu liefern
 
 1. Architektur-Analyse-Bericht

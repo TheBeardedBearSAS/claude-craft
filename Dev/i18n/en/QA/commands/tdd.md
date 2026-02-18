@@ -16,6 +16,10 @@ Arguments:
 
 Example: `/qa:tdd "User cannot log out"` or `/qa:tdd #123`
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## MISSION
 
 ### TDD/BDD Philosophy

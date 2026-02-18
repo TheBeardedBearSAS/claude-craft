@@ -17,6 +17,10 @@ Complemento do `/qa:recette`. Le um relatorio/sessao de recette, refina cada err
 - `--skip-fix` : Gerar apenas documentos, sem correcao TDD
 - `--auto-commit` : Commit automatico apos cada bug corrigido
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Funcionalidades Principais
 
 | Funcionalidade | Descricao |

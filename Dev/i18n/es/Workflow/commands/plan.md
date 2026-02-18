@@ -13,6 +13,10 @@ arguments:
 
 Ejecutar la fase de Planificacion del flujo de trabajo de desarrollo. Esta fase se centra en crear el Documento de Requisitos del Producto, definir personas y generar el backlog inicial del producto.
 
+## Modo Plan
+
+> **El modo plan es recomendado.** Claude activa el modo plan para estructurar el enfoque, identificar dependencias y presentar una estrategia de generación antes de crear artefactos.
+
 ## Cuando usar
 
 - Flujos **Standard** y **Enterprise**

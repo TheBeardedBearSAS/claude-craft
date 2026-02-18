@@ -13,6 +13,10 @@ $ARGUMENTS (format: [--auto] [--dry-run])
 - **--auto** (optional): Start processing immediately
 - **--dry-run** (optional): Preview execution plan without changes
 
+## Plan Mode
+
+> **Plan mode is recommended.** Claude activates plan mode to structure the approach, identify dependencies, and present a generation strategy before creating artifacts.
+
 ## Process
 
 ### Step 1: Validate sprint

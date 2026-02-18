@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (opcional: caminho para o projeto a analisar)
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 Realizar uma auditoria completa da qualidade do código do projeto Python verificando conformidade com PEP8, tipagem, legibilidade e melhores práticas definidas nas regras do projeto.

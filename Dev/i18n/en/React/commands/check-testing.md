@@ -44,6 +44,10 @@ npm run test:ui
 npm run test:e2e
 ```
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Test Coverage Analysis
 
 ### Coverage Targets

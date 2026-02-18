@@ -19,6 +19,10 @@ https://myapp.com/screen/id
 https://myapp.com/screen/id
 ```
 
+## Modo Plan
+
+> **El modo plan es obligatorio.** Antes de ejecutar, Claude activa el modo plan para analizar el código impactado, proponer un plan de implementación y esperar tu validación antes de realizar cualquier cambio.
+
 ## 1. Configuración Expo
 
 ```typescript

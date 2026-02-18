@@ -24,6 +24,10 @@ Die Designphase (Lösungsfindung) des Entwicklungs-Workflows durchführen. Diese
 - PRD existiert unter `project-management/prd.md`
 - Backlog existiert unter `project-management/backlog/`
 
+## Plan-Modus
+
+> **Der Plan-Modus wird empfohlen.** Claude aktiviert den Plan-Modus, um den Ansatz zu strukturieren, Abhängigkeiten zu identifizieren und eine Generierungsstrategie vorzustellen, bevor Artefakte erstellt werden.
+
 ## Workflow
 
 ### Schritt 1: Design-Setup

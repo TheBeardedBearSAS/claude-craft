@@ -14,6 +14,10 @@ $ARGUMENTS (formato: EPIC-XXX [campo] [valor])
 - **Campo** (opcional): Campo a modificar
 - **Valor** (opcional): Nuevo valor
 
+## Modo Plan
+
+> **El modo plan es obligatorio.** Antes de ejecutar, Claude activa el modo plan para analizar el código impactado, proponer un plan de implementación y esperar tu validación antes de realizar cualquier cambio.
+
 ## Campos Modificables
 
 | Campo | Descripción | Ejemplo |

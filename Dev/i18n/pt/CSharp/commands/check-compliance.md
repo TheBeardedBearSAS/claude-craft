@@ -74,6 +74,10 @@ Dependency Rule: Dependencies MUST flow inward only
 - [ ] Proper async/await usage (no .Result or .Wait())
 - [ ] CancellationToken passed to async methods
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Output Format
 
 ```

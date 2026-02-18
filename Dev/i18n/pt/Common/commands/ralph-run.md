@@ -16,6 +16,10 @@ Executa Claude em um loop continuo ate que a tarefa esteja completa ou os criter
 - `--init`: Gerar configuracao sem executar
 - `--interactive`: Assistente de configuracao interativo
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Novas funcionalidades v2.0
 
 | Funcionalidade | Descricao |

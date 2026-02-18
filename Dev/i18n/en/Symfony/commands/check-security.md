@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS : Chemin du projet Symfony à auditer (optionnel, par défaut : répertoire courant)
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 Tu es un expert en sécurité applicative chargé d'auditer la sécurité d'un projet Symfony selon OWASP Top 10, RGPD et les meilleures pratiques Symfony Security.

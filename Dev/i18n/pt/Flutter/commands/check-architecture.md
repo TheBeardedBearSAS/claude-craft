@@ -54,6 +54,10 @@ lib/
 - [ ] Entities vs Models separados
 - [ ] Gerenciamento de estado consistente
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Saída
 
 Produza um relatório indicando:

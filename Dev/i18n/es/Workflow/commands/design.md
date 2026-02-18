@@ -13,6 +13,10 @@ arguments:
 
 Ejecutar la fase de Diseno (Solucion) del flujo de trabajo de desarrollo. Esta fase se centra en crear la Especificacion Tecnica, disenar la arquitectura y documentar las decisiones tecnicas clave.
 
+## Modo Plan
+
+> **El modo plan es recomendado.** Claude activa el modo plan para estructurar el enfoque, identificar dependencias y presentar una estrategia de generación antes de crear artefactos.
+
 ## Cuando usar
 
 - Flujos **Standard** y **Enterprise**

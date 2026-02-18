@@ -39,6 +39,10 @@ Erstelle eine vollständige React-Komponente mit:
    - Type Exports
    - Barrel File
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## Parameter
 
 - **Component Name**: [Name der Komponente]

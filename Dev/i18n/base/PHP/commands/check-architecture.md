@@ -26,6 +26,10 @@ Validate Clean Architecture implementation in PHP project.
    - Event-driven architecture check
    - Value Object validation
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Architecture Layers
 
 ### Expected Structure

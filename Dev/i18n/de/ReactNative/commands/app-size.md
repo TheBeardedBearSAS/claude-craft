@@ -16,6 +16,10 @@ Argumente:
 
 Beispiel: `/reactnative:app-size android` oder `/reactnative:app-size both full`
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 ### Schritt 1: Analyse-Builds generieren

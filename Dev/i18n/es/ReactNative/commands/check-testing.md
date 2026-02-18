@@ -22,6 +22,10 @@ npm test -- --coverage
 npm test -- UserProfile
 ```
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## 2. Análisis de Cobertura
 
 ```bash

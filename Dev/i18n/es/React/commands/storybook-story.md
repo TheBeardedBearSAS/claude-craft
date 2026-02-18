@@ -15,6 +15,10 @@ Storybook es una herramienta para desarrollar componentes de UI de forma aislada
 - Desarrollar componentes independientemente
 - Crear una biblioteca de componentes reutilizables
 
+## Modo Plan
+
+> **El modo plan es obligatorio.** Antes de ejecutar, Claude activa el modo plan para analizar el código impactado, proponer un plan de implementación y esperar tu validación antes de realizar cualquier cambio.
+
 ## Instalacion
 
 ```bash

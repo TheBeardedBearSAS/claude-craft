@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/react:accessibility-check AA` ou `/react:accessibility-check AA src/components/`
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 ### Étape 1 : Outils d'Audit

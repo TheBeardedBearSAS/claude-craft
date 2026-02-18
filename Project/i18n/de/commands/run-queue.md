@@ -14,6 +14,10 @@ $ARGUMENTS (format: [--parallel N] [--auto] [--resume])
 - **--auto** (optional): Verarbeitung sofort ohne Bestaetigung starten
 - **--resume** (optional): Vom letzten Checkpoint fortsetzen
 
+## Plan-Modus
+
+> **Der Plan-Modus wird empfohlen.** Claude aktiviert den Plan-Modus, um den Ansatz zu strukturieren, Abhängigkeiten zu identifizieren und eine Generierungsstrategie vorzustellen, bevor Artefakte erstellt werden.
+
 ## Prozess
 
 ### Schritt 1: Warteschlange laden

@@ -14,6 +14,10 @@ $ARGUMENTS (formato: US-XXX "[TIPO] Descrição" estimativa)
 - **Descrição** (obrigatório): Descrição com tipo entre colchetes
 - **Estimativa** (obrigatório): Estimativa em horas (ex: 4h, 2h, 0.5h)
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Tipos de Tarefa
 
 | Tipo | Prefixo | Descrição |

@@ -28,6 +28,10 @@ Verificar se o projeto segue padroes arquiteturais e melhores praticas estabelec
    - Oportunidades de refatoracao
    - Score de conformidade
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Estrutura Esperada
 
 ```

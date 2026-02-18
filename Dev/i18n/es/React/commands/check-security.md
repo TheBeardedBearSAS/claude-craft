@@ -28,6 +28,10 @@ Realiza un analisis de seguridad exhaustivo de la aplicacion React para identifi
    - Almacenamiento seguro de tokens
    - Variables de entorno
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Auditoria de Dependencias
 
 ### NPM Audit

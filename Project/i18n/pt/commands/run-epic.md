@@ -13,6 +13,10 @@ $ARGUMENTS (formato: <epic-id> [--dry-run])
 - **epic-id** (obrigatorio): Identificador do epic (ex: EPIC-001)
 - **--dry-run** (opcional): Pre-visualizar sem executar
 
+## Modo Plano
+
+> **O modo plano é recomendado.** Claude ativa o modo plano para estruturar a abordagem, identificar dependências e apresentar uma estratégia de geração antes de criar artefatos.
+
 ## Processo
 
 ### Etapa 1: Identificar as stories do epic

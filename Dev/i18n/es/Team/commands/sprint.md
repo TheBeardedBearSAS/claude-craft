@@ -21,6 +21,10 @@ $ARGUMENTS
 - `--max-cost=<dollars>`: Presupuesto maximo en dolares. Si el costo paralelo estimado supera este umbral, la ejecucion se bloquea con un mensaje OVER BUDGET
 - `--ralph-mode`: Habilitar motor de recuperacion Ralph (clasificacion de errores, auto-reintento, servicio de escalamiento) junto con la paralelizacion de Agent Teams.
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Prerequisitos
 
 - Claude Code v2.1.32+ con soporte de Agent Teams

@@ -248,6 +248,10 @@ final class Version{TIMESTAMP}_Contract extends AbstractMigration
 - [ ] Fenêtre de maintenance communiquée
 - [ ] Équipe disponible
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## J-1 : Préparation
 
 - [ ] Merger les migrations dans main

@@ -16,6 +16,10 @@ Execute Claude in a continuous loop until the task is complete or the Definition
 - `--init`: Generate configuration without running
 - `--interactive`: Interactive configuration wizard
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## v2.0 New Features
 
 | Feature | Description |

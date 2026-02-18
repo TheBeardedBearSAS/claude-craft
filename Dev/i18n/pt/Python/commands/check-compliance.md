@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (opcional: caminho para o projeto a analisar)
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 Realizar uma auditoria completa de conformidade do projeto Python orquestrando as 4 verificações principais: Arquitetura, Qualidade do Código, Testes e Segurança. Produzir um relatório consolidado com pontuação geral de 100 pontos.

@@ -14,6 +14,10 @@ $ARGUMENTS
 - `component-name`: Name of the component (e.g., "user-card", "data-table")
 - `feature` (optional): Feature folder (e.g., "users", "dashboard")
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## What This Command Generates
 
 1. **Component file** (`{name}.component.ts`)

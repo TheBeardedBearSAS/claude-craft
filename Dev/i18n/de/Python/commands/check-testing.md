@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (optional: Pfad zum zu analysierenden Projekt)
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Führen Sie ein vollständiges Audit der Teststrategie des Python-Projekts durch, indem Sie Coverage, Testqualität und Einhaltung der in den Projektregeln definierten Best Practices überprüfen.

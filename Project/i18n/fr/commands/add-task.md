@@ -14,6 +14,10 @@ $ARGUMENTS (format: US-XXX "[TYPE] Description" estimation)
 - **Description** (obligatoire): Description avec type entre crochets
 - **Estimation** (obligatoire): Estimation en heures (ex: 4h, 2h, 0.5h)
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## Types de Tâches
 
 | Type | Préfixe | Description |

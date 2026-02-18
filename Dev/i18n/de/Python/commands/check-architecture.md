@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (optional: Pfad zum zu analysierenden Projekt)
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Führen Sie ein vollständiges Architektur-Audit des Python-Projekts gemäß den in den Projektregeln definierten Clean Architecture- und Hexagonal Architecture-Prinzipien durch.

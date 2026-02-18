@@ -16,6 +16,10 @@ Argumente:
 
 Beispiel: `/common:architecture-decision "Wahl von PostgreSQL als Hauptdatenbank"`
 
+## Plan-Modus
+
+> **Der Plan-Modus wird empfohlen.** Claude aktiviert den Plan-Modus, um den Ansatz zu strukturieren, Abhängigkeiten zu identifizieren und eine Generierungsstrategie vorzustellen, bevor Artefakte erstellt werden.
+
 ## MISSION
 
 ### Schritt 1: Informationen sammeln

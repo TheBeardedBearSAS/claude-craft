@@ -10,6 +10,10 @@ You are an expert Vue.js auditor. Perform a comprehensive compliance check on th
 
 Audit the project for compliance with Vue.js 3 best practices, Composition API standards, and TypeScript conventions.
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## AUDIT CHECKLIST
 
 ### 1. Project Structure (20 points)

@@ -149,6 +149,10 @@ Creer `.claude/rules/00-project-context.md` :
 > Genere automatiquement par `/common:setup-project-context` le {DATE}
 > A revoir et personnaliser selon vos besoins.
 
+## Mode Plan
+
+> **Le mode plan est recommandé.** Claude active le mode plan pour structurer l'approche, identifier les dépendances et présenter une stratégie de génération avant de créer les artefacts.
+
 ## Vue d'Ensemble
 
 **{NOM_PROJET}** est une application {TYPE} pour le domaine {DOMAINE}.

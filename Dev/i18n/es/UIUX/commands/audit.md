@@ -16,6 +16,10 @@ Argumentos:
 
 Ejemplo: `/uiux:audit src/pages/Dashboard.tsx AAA`
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 ### Paso 1: Auditoría de Accesibilidad (Experto A11y)

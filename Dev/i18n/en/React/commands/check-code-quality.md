@@ -42,6 +42,10 @@ npm run format:check
 npm run test:coverage
 ```
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Quality Checks
 
 ### 1. Linting (ESLint)

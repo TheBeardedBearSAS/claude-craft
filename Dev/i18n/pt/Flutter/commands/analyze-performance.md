@@ -51,6 +51,10 @@ flutter build appbundle --analyze-size
 flutter build web --source-maps
 ```
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Relatório de Saída
 
 Gere um relatório contendo:

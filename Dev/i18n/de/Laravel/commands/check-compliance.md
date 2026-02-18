@@ -88,6 +88,10 @@ After analysis, provide:
 4. **Good Practices**: What's done well
 5. **Action Items**: Prioritized list of fixes
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Commands to Run
 
 ```bash

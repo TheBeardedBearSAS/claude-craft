@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (optional: Pfad zum zu analysierenden Projekt)
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Führen Sie ein vollständiges Codequalitäts-Audit des Python-Projekts durch, indem Sie PEP8-Konformität, Typisierung, Lesbarkeit und in den Projektregeln definierte Best Practices überprüfen.

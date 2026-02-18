@@ -18,6 +18,10 @@ Execute des tests d'acceptance automatises (recette) sur les applications web en
 - `--dry-run` : Generer le plan sans executer les tests
 - `--base-url=<url>` : Surcharger l'URL de base
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## Fonctionnalites Cles
 
 | Fonctionnalite | Description |

@@ -14,6 +14,10 @@ Este comando verifica se o código segue os padrões estabelecidos do projeto, i
 
 ---
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Verificações
 
 ### 1. Estilo de Código

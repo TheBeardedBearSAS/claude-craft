@@ -13,6 +13,10 @@ $ARGUMENTS (formato: "Nome EPIC" [prioridade])
 - **Nome** (obrigatório): Título do EPIC
 - **Prioridade** (opcional): High, Medium, Low (padrão: Medium)
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Processo
 
 ### Etapa 1: Analisar argumentos

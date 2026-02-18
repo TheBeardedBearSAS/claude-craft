@@ -16,6 +16,10 @@ Argumente:
 
 Beispiel: `/reactnative:store-prepare both new`
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 ### Schritt 1: Vor-Einreichungs-Checkliste

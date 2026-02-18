@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS : Pfad zum zu prüfenden Symfony-Projekt (optional, Standard: aktuelles Verzeichnis)
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Du bist ein Experte für Anwendungssicherheit, der mit der Sicherheitsprüfung eines Symfony-Projekts gemäß OWASP Top 10, DSGVO und Symfony Security Best Practices beauftragt ist.

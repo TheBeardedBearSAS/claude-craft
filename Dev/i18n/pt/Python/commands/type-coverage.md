@@ -16,6 +16,10 @@ Argumentos:
 
 Exemplo: `/python:type-coverage app/` ou `/python:type-coverage app/api/ 90`
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSÃO
 
 ### Passo 1: Configuração MyPy

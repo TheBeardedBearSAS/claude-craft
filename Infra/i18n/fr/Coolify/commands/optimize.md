@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/coolify:optimize` ou `/coolify:optimize focus:build service:api` ou `/coolify:optimize focus:cleanup`
 
+## Mode Plan
+
+> **Le mode plan est recommandé.** Claude active le mode plan pour structurer l'approche, identifier les dépendances et présenter une stratégie de génération avant de créer les artefacts.
+
 ## MISSION
 
 ### Etape 1 : Analyser l'Utilisation Actuelle des Ressources

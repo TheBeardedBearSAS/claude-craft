@@ -12,6 +12,10 @@ Gere toda a estrutura necessária para uma nova funcionalidade seguindo Clean Ar
 - Camadas necessárias: [data, domain, presentation]
 - Tipo de gerenciamento de estado: [bloc, riverpod, provider]
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Estrutura a Gerar
 
 ```

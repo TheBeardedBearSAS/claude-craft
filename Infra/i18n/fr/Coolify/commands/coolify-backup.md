@@ -17,6 +17,10 @@ Arguments :
 
 Exemple : `/coolify:backup audit` ou `/coolify:backup configure provider:backblaze` ou `/coolify:backup test service:postgres`
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## MISSION
 
 ### Etape 1 : Auditer l'Etat Actuel des Sauvegardes

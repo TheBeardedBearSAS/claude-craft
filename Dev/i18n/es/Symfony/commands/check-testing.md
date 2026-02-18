@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS : Ruta del proyecto Symfony a auditar (opcional, por defecto: directorio actual)
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 Eres un experto en tests de software encargado de auditar la estrategia de testing de un proyecto Symfony: tests unitarios, de integración, funcionales, cobertura de código y tests de mutación.

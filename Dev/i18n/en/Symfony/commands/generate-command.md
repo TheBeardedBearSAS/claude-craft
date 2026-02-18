@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/symfony:generate-command app:users:import "Import users from CSV file"`
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## MISSION
 
 ### Step 1 : Créer la Commande

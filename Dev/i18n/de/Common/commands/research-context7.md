@@ -16,6 +16,10 @@ Argumente:
 
 Beispiel: `/common:research-context7 "Wie OAuth2-Authentifizierung mit NextAuth.js implementieren"` oder `/common:research-context7 "React 19 Best Practices" react,nextjs`
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 ### Schritt 1: Anfrage analysieren

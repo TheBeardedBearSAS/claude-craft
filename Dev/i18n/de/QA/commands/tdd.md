@@ -16,6 +16,10 @@ Argumente:
 
 Beispiel: `/qa:tdd "Benutzer kann sich nicht abmelden"` oder `/qa:tdd #123`
 
+## Plan-Modus
+
+> **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
+
 ## MISSION
 
 ### TDD/BDD-Philosophie

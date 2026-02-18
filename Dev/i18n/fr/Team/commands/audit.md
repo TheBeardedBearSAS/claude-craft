@@ -27,6 +27,10 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponible
 
+## Mode Plan
+
+> Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
+
 ## Garde-Fou Fast Mode (Confirmation Bloquante)
 
 **OBLIGATOIRE** : Avant de lancer l'équipe, le leader DOIT :

@@ -248,6 +248,10 @@ final class Version{TIMESTAMP}_Contract extends AbstractMigration
 - [ ] Fenêtre de maintenance communiquée
 - [ ] Équipe disponible
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## J-1 : Préparation
 
 - [ ] Merger les migrations dans main

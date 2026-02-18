@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (optional: Pfad zur Analyse)
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Analysieren Sie die Verwendung von asynchronem Code im Python-Projekt und identifizieren Sie Probleme mit async/await-Mustern, blockierenden Aufrufen und Leistungsproblemen.

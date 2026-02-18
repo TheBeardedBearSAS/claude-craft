@@ -50,6 +50,10 @@ flutter pub outdated
 - [ ] Sem magic numbers
 - [ ] Sem print() statements
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Relatório
 
 Produza scores para:

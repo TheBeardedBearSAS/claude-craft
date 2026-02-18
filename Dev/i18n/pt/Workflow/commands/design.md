@@ -13,6 +13,10 @@ arguments:
 
 Executar a fase de Design (Solutioning) do workflow de desenvolvimento. Esta fase foca na criacao da Especificacao Tecnica, no design da arquitetura e na documentacao das principais decisoes tecnicas.
 
+## Modo Plano
+
+> **O modo plano é recomendado.** Claude ativa o modo plano para estruturar a abordagem, identificar dependências e apresentar uma estratégia de geração antes de criar artefatos.
+
 ## Quando Utilizar
 
 - Tracks **Standard** e **Enterprise**

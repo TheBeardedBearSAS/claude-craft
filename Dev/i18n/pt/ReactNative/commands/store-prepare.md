@@ -14,6 +14,10 @@ Este comando guia através do processo completo de preparação para publicaçã
 
 ---
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Checklist Pré-Submissão
 
 ### Configuração Técnica

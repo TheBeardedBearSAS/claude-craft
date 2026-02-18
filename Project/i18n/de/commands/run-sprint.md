@@ -13,6 +13,10 @@ $ARGUMENTS (format: [--auto] [--dry-run])
 - **--auto** (optional): Verarbeitung sofort starten
 - **--dry-run** (optional): Ausfuehrungsplan vorschauen ohne Aenderungen
 
+## Plan-Modus
+
+> **Der Plan-Modus wird empfohlen.** Claude aktiviert den Plan-Modus, um den Ansatz zu strukturieren, Abhängigkeiten zu identifizieren und eine Generierungsstrategie vorzustellen, bevor Artefakte erstellt werden.
+
 ## Prozess
 
 ### Schritt 1: Sprint validieren

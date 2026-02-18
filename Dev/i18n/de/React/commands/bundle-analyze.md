@@ -38,6 +38,10 @@ Analysiere die Bundle-Größe und identifiziere Optimierungsmöglichkeiten.
    - Dokumentiere Implementierungsschritte
    - Erstelle Performance-Budget
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Tools nutzen
 
 ```bash

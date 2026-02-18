@@ -12,6 +12,10 @@ Verifica que la arquitectura del proyecto siga las mejores prácticas de React.
 npm run check-architecture
 ```
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Verificaciones Arquitectónicas
 
 ### 1. Estructura de Carpetas

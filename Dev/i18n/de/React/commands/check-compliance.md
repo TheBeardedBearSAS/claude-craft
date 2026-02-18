@@ -68,6 +68,10 @@ description: Compliance-Überprüfung
     - Prüfe Lizenz-Compliance
     - Bewerte Abhängigkeits-Aktualität
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## Compliance-Checkliste
 
 ```markdown

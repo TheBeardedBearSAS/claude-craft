@@ -261,6 +261,10 @@ public async Task<string> FetchAsync(string url)
 }
 ```
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Output Format
 
 ```

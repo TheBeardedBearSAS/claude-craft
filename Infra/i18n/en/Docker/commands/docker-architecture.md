@@ -18,6 +18,10 @@ Arguments:
 
 Example: `/docker:architecture "E-commerce REST API" stack:node services:postgres,redis,elasticsearch`
 
+## Plan Mode
+
+> **Plan mode is recommended.** Claude activates plan mode to structure the approach, identify dependencies, and present a generation strategy before creating artifacts.
+
 ## MISSION
 
 ### Step 1: Discovery

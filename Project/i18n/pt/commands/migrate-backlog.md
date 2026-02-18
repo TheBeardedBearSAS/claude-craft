@@ -13,6 +13,10 @@ $ARGUMENTS (formato: [--dry-run] [--force])
 - **--dry-run** (opcional): Pre-visualizar as mudancas sem aplica-las
 - **--force** (opcional): Sobrescrever os arquivos BMAD existentes
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Pre-requisitos
 
 Executar `/project:analyze-backlog` primeiro para entender a estrutura atual.

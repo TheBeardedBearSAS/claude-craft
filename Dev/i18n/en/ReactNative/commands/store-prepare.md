@@ -16,6 +16,10 @@ Arguments:
 
 Example: `/reactnative:store-prepare both new`
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 ### Step 1: Pre-Submission Checklist

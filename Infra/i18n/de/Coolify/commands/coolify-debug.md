@@ -17,6 +17,10 @@ Argumente:
 
 Beispiel: `/coolify:debug "502 Bad Gateway auf app.example.com"` oder `/coolify:debug "Build fehlschlagt mit OOM" service:api`
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 ### Schritt 1: Symptome erfassen

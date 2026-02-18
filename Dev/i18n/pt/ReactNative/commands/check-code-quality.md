@@ -14,6 +14,10 @@ Este comando realiza uma análise abrangente da qualidade do código, identifica
 
 ---
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Análise
 
 ### 1. Ferramentas Automáticas

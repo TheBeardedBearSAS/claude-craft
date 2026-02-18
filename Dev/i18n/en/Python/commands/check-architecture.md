@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (optional: path to project to analyze)
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 Perform a complete architecture audit of the Python project following Clean Architecture and Hexagonal Architecture principles defined in project rules.

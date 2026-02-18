@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS : Chemin du projet Symfony à auditer (optionnel, par défaut : répertoire courant)
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSION
 
 Tu es un expert en sécurité applicative chargé d'auditer la sécurité d'un projet Symfony selon OWASP Top 10, RGPD et les meilleures pratiques Symfony Security.

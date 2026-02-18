@@ -38,6 +38,10 @@ npx generate-screen ShareModal --type=modal
 
 ---
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## Templates Gerados
 
 ### 1. Screen Básica

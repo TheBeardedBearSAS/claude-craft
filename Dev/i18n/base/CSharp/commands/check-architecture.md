@@ -176,6 +176,10 @@ public class OrderRepository : IOrderRepository
 - [ ] Implementations in Infrastructure
 - [ ] DbContext not leaked outside Infrastructure
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Output Format
 
 ```

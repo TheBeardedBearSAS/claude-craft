@@ -228,6 +228,10 @@ private ConcurrentBag<Order> _orders = new();
 public void Add(Order order) => _orders.Add(order);
 ```
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Output Format
 
 ```

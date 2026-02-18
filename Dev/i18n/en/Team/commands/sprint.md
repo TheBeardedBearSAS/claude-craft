@@ -32,6 +32,10 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/compatibility-check.sh` available
 - `Tools/AgentTeams/lib/cost-estimator.sh` available
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Fast Mode Guard (Blocking Confirmation)
 
 **MANDATORY**: Before launching the team, the conductor MUST:

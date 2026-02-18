@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS : Chemin du projet Symfony à auditer (optionnel, par défaut : répertoire courant)
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## MISSION
 
 Tu es un architecte logiciel expert Symfony chargé d'auditer l'architecture d'un projet Symfony selon les principes de Clean Architecture, DDD et Architecture Hexagonale.

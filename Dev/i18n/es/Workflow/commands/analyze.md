@@ -13,6 +13,10 @@ arguments:
 
 Ejecutar la fase de Analisis del flujo de trabajo Enterprise. Esta fase se centra en la investigacion, exploracion e identificacion de restricciones antes de comenzar la planificacion detallada.
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Cuando usar
 
 - Proyectos con flujo **Enterprise**

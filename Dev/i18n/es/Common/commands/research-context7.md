@@ -16,6 +16,10 @@ Argumentos:
 
 Ejemplo: `/common:research-context7 "Cómo implementar autenticación OAuth2 con NextAuth.js"` o `/common:research-context7 "Mejores prácticas React 19" react,nextjs`
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 ### Paso 1: Analizar la Solicitud

@@ -66,6 +66,10 @@ Text(AppLocalizations.of(context)!.welcomeMessage)
 Text('Welcome') // String hardcoded
 ```
 
+## Modo Plano
+
+> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+
 ## Relatório
 
 Liste:

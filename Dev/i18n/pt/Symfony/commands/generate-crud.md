@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/symfony:generate-crud Product name:string,price:decimal,description:text`
 
+## Modo Plano
+
+> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+
 ## MISSION
 
 ### Step 1 : Analysis des Besoins

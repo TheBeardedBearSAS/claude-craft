@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS (optional: Pfad zum zu analysierenden Projekt)
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 Führen Sie ein vollständiges Konformitäts-Audit des Python-Projekts durch, indem Sie die 4 Hauptprüfungen orchestrieren: Architektur, Codequalität, Tests und Sicherheit. Erstellen Sie einen konsolidierten Bericht mit einer Gesamtbewertung von 100 Punkten.

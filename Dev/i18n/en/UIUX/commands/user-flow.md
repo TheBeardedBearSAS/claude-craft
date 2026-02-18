@@ -17,6 +17,10 @@ Arguments:
 
 Example: `/uiux:user-flow "User registration"` or `/uiux:user-flow "Checkout" persona:"Mobile user" constraint:"< 30 seconds"`
 
+## Plan Mode
+
+> **Plan mode is recommended.** Claude activates plan mode to structure the approach, identify dependencies, and present a generation strategy before creating artifacts.
+
 ## MISSION
 
 ### Step 1: Define context

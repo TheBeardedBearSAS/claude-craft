@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/react:generate-hook useDebounce` ou `/react:generate-hook useFetch "Hook pour fetch avec cache"`
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## MISSION
 
 ### Étape 1 : Structure du Hook

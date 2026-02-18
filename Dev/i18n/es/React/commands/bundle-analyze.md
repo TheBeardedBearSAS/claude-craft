@@ -12,6 +12,10 @@ Analiza el tamaño del bundle de producción e identifica oportunidades de optim
 npm run bundle-analyze
 ```
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## Configuración
 
 ### Instalar webpack-bundle-analyzer

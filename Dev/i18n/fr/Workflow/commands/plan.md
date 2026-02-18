@@ -19,6 +19,10 @@ Exécuter la phase de Planification du workflow de développement. Cette phase s
 - Après `/workflow:init` (ou `/workflow:analyze` pour Enterprise)
 - Quand on démarre la planification d'une fonctionnalité
 
+## Mode Plan
+
+> **Le mode plan est recommandé.** Claude active le mode plan pour structurer l'approche, identifier les dépendances et présenter une stratégie de génération avant de créer les artefacts.
+
 ## Workflow
 
 ### Étape 1 : Mise en place de la planification

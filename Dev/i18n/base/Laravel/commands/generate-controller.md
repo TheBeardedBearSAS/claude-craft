@@ -16,6 +16,10 @@ $ARGUMENTS
 - `--resource`: Generate resourceful controller with all CRUD methods
 - `--model=ModelName`: Associated model for route model binding
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## Generation Process
 
 ### 1. Analyze Requirements

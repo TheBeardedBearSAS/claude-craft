@@ -15,6 +15,10 @@ Arguments :
 
 Exemple : `/flutter:localization-check all`
 
+## Modo Plan
+
+> El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
+
 ## MISIÓN
 
 ### Étape 1 : Identifier la Configuration i18n

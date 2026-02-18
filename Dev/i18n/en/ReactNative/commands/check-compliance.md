@@ -9,6 +9,10 @@ argument-hint: [arguments]
 
 $ARGUMENTS
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## MISSION
 
 You are a React Native project compliance expert. Your mission is to orchestrate a complete audit by combining the specialized audits: architecture, code quality, testing, and security.

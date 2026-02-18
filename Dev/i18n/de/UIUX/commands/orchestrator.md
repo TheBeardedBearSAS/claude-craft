@@ -16,6 +16,10 @@ Argumente:
 
 Beispiel: `/uiux:orchestrator Komponente "Datumsauswahl"` oder `/uiux:orchestrator Audit "Checkout-Seite"`
 
+## Plan-Modus
+
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+
 ## MISSION
 
 ### Schritt 1: Anfrage analysieren

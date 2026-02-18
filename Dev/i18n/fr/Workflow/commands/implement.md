@@ -29,6 +29,10 @@ Pour les tracks Standard/Enterprise :
 Pour le Quick Flow :
 - Compréhension claire du bug/fonctionnalité à implémenter
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## Workflow
 
 ### Étape 1 : Mise en place de l'implémentation

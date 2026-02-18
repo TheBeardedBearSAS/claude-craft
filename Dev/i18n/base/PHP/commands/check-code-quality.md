@@ -34,6 +34,10 @@ Run comprehensive code quality analysis on PHP project.
    - Too many parameters
    - Unused code
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## Quality Standards
 
 ### PHPStan Configuration

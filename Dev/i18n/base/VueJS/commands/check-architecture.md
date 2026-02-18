@@ -10,6 +10,10 @@ You are an expert Vue.js architect. Analyze the project architecture for scalabi
 
 Evaluate the project's architectural patterns, module organization, and adherence to Vue.js best practices.
 
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
+
 ## AUDIT AREAS
 
 ### 1. Module Organization

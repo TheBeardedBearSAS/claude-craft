@@ -14,6 +14,10 @@ $ARGUMENTS - Sprint number (e.g., 001, 002)
 
 If no argument, ask which sprint to decompose.
 
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
 ## TECH STACK
 
 | Layer | Technology | Typical Tasks |
