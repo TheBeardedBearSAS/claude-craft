@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.15.0] - 2026-02-18
+
+### Added
+
+- **Context management rule** — new `12-context-management.md` (5 languages) covering Anthropic's #1 best practice: context window as THE critical resource, `/clear` usage, sub-agent delegation, verification loops (2-3x quality), Plan Mode guidance, token tracking thresholds
+- **MCP & Plugin security** — updated `11-security.md` (6 files, 5 languages) with Snyk 2026 findings (76 malicious payloads in public MCP registries), vetting checklist, PreToolUse hook enforcement, CLAUDE.md vs Hooks distinction
+- **Hook templates** — 4 ready-to-use templates in `.claude/templates/hooks/`: auto-format (PostToolUse), protect-files (PreToolUse), context-reinject (SessionStart compact), security-block (PreToolUse Bash)
+- **Parallel worktrees skill** — new `/parallel-worktrees` skill documenting Boris Cherny's productivity pattern for concurrent Claude sessions (writer/reviewer workflow)
+- **Best Practices section** — CLAUDE.md updated with MCP Tool Search (46.9% context reduction), adaptive thinking guidance (low/medium/high/max), hooks enforcement references
+- **Context Management Best Practices** — new section in COMMANDS.md with thresholds, hooks vs instructions comparison
+
+### Changed
+
+- **README What's New** — updated to v7.14 highlights
+- **Skill count** — 36 → 37 (added parallel-worktrees)
+
 ## [7.14.0] - 2026-02-18
 
 ### Added

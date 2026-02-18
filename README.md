@@ -26,7 +26,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **160 Slash Commands**: Automated workflows, code generation, **sprint management, quality gates, batch processing, acceptance testing**
 - **BMAD v6 Framework**: Complete project management with status-based routing, quality gates, and batch execution
 - **Ralph Wiggum**: Continuous loop execution with Definition of Done validation
-- **36 Skills**: Best practices in official Claude Code format (architecture, testing, security)
+- **37 Skills**: Best practices in official Claude Code format (architecture, testing, security)
 - **21 Templates**: Code generation patterns + BMAD templates
 - **10 Checklists**: Quality gates for commits, features, releases
 - **Hooks System**: Pre/Post tool execution, quality gates, notifications, **BMAD context injection**

@@ -17,7 +17,7 @@ const translations = {
     nav_tools: "Tools",
     nav_install: "Install",
     nav_tech: "Tech Stack",
-    hero_badge: "v7.14.0 - Claude Code 2.1.45",
+    hero_badge: "v7.15.0 - Claude Code 2.1.45",
     hero_title_1: "Supercharge",
     hero_title_2: "with Expert Knowledge",
     hero_desc: "A comprehensive framework for AI-assisted development. Install standardized rules, agents, and commands for your projects across multiple technology stacks.",
@@ -33,7 +33,7 @@ const translations = {
     feat_1_desc: "Native support for English, French, Spanish, German, and Portuguese. Install rules in your team's preferred language.",
     feat_2_title: "Specialized Agents",
     feat_2_desc: "Deploy virtual reviewers, architects, and coaches. From api-designer to tdd-coach, get expert feedback instantly.",
-    feat_skills_title: "36 Skills",
+    feat_skills_title: "37 Skills",
     feat_skills_desc: "Best practices in official Claude Code format. Architecture, testing, security patterns for all technologies.",
     feat_3_title: "Automated Workflows",
     feat_3_desc: "Use 160 slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits.",
@@ -73,7 +73,7 @@ const translations = {
     nav_tools: "Outils",
     nav_install: "Installation",
     nav_tech: "Technologies",
-    hero_badge: "v7.14.0 - Claude Code 2.1.45",
+    hero_badge: "v7.15.0 - Claude Code 2.1.45",
     hero_title_1: "Superchargez",
     hero_title_2: "d'une Expertise Technique",
     hero_desc: "Un framework complet pour le d\u00e9veloppement assist\u00e9 par IA. Installez des r\u00e8gles, agents et commandes standardis\u00e9s pour vos projets.",
@@ -89,7 +89,7 @@ const translations = {
     feat_1_desc: "Support natif pour l'anglais, le fran\u00e7ais, l'espagnol, l'allemand et le portugais.",
     feat_2_title: "Agents Sp\u00e9cialis\u00e9s",
     feat_2_desc: "D\u00e9ployez des r\u00e9viseurs, architectes et coachs virtuels.",
-    feat_skills_title: "36 Skills",
+    feat_skills_title: "37 Skills",
     feat_skills_desc: "Bonnes pratiques au format officiel Claude Code.",
     feat_3_title: "Flux Automatis\u00e9s",
     feat_3_desc: "Utilisez 160 commandes pour automatiser les t\u00e2ches fastidieuses.",
@@ -126,14 +126,14 @@ const translations = {
   },
   es: {
     nav_features: "Caracter\u00edsticas", nav_tools: "Herramientas", nav_install: "Instalaci\u00f3n", nav_tech: "Tecnolog\u00edas",
-    hero_badge: "v7.14.0 - Claude Code 2.1.45", hero_title_1: "Potencia", hero_title_2: "con Conocimiento Experto",
+    hero_badge: "v7.15.0 - Claude Code 2.1.45", hero_title_1: "Potencia", hero_title_2: "con Conocimiento Experto",
     hero_desc: "Un marco integral para el desarrollo asistido por IA.", cta_get_started: "Empezar", cta_docs: "Documentaci\u00f3n",
     feat_main_title: "Todo lo que necesitas para escalar", feat_main_desc: "Equipa a Claude con herramientas conscientes del contexto.",
     feat_bmad_title: "Framework BMAD v6", feat_bmad_desc: "9 agentes Agent-as-Code, 5 Quality Gates.",
     feat_ralph_title: "Ralph Wiggum v2.0", feat_ralph_desc: "Circuit breaker adaptativo, hooks Claude Code.",
     feat_1_title: "Soporte Multi-Idioma", feat_1_desc: "Soporte nativo para 5 idiomas.",
     feat_2_title: "Agentes Especializados", feat_2_desc: "Despliega revisores, arquitectos y entrenadores virtuales.",
-    feat_skills_title: "36 Skills", feat_skills_desc: "Mejores pr\u00e1cticas en formato oficial de Claude Code.",
+    feat_skills_title: "37 Skills", feat_skills_desc: "Mejores pr\u00e1cticas en formato oficial de Claude Code.",
     feat_3_title: "Flujos Automatizados", feat_3_desc: "Usa 160 comandos para automatizar tareas.",
     tools_title: "Herramientas de Desarrollador", tools_desc: "Mejora tu flujo de trabajo en la terminal.",
     tool_status_title: "L\u00ednea de Estado", tool_status_desc: "Barra de estado rica con perfil, modelo y git.",
@@ -154,14 +154,14 @@ const translations = {
   },
   de: {
     nav_features: "Funktionen", nav_tools: "Werkzeuge", nav_install: "Installation", nav_tech: "Technologien",
-    hero_badge: "v7.14.0 - Claude Code 2.1.45", hero_title_1: "Laden Sie", hero_title_2: "mit Expertenwissen auf",
+    hero_badge: "v7.15.0 - Claude Code 2.1.45", hero_title_1: "Laden Sie", hero_title_2: "mit Expertenwissen auf",
     hero_desc: "Ein umfassendes Framework f\u00fcr KI-gest\u00fctzte Entwicklung.", cta_get_started: "Loslegen", cta_docs: "Dokumentation",
     feat_main_title: "Alles f\u00fcr skalierbare KI-Entwicklung", feat_main_desc: "Statten Sie Claude mit kontextbezogenen Tools aus.",
     feat_bmad_title: "BMAD v6 Framework", feat_bmad_desc: "9 Agent-as-Code Personas, 5 Quality Gates.",
     feat_ralph_title: "Ralph Wiggum v2.0", feat_ralph_desc: "Adaptiver Circuit Breaker, Claude Code Hooks.",
     feat_1_title: "Mehrsprachige Unterst\u00fctzung", feat_1_desc: "Native Unterst\u00fctzung f\u00fcr 5 Sprachen.",
     feat_2_title: "Spezialisierte Agenten", feat_2_desc: "Virtuelle Reviewer, Architekten und Coaches.",
-    feat_skills_title: "36 Skills", feat_skills_desc: "Best Practices im offiziellen Claude Code Format.",
+    feat_skills_title: "37 Skills", feat_skills_desc: "Best Practices im offiziellen Claude Code Format.",
     feat_3_title: "Automatisierte Abl\u00e4ufe", feat_3_desc: "160 Befehle f\u00fcr Automatisierung.",
     tools_title: "Entwickler-Tools", tools_desc: "Leistungsstarke Terminal-Tools.",
     tool_status_title: "Statuszeile", tool_status_desc: "Reichhaltige Statusleiste.",
@@ -182,14 +182,14 @@ const translations = {
   },
   pt: {
     nav_features: "Funcionalidades", nav_tools: "Ferramentas", nav_install: "Instala\u00e7\u00e3o", nav_tech: "Tecnologias",
-    hero_badge: "v7.14.0 - Claude Code 2.1.45", hero_title_1: "Turbine o", hero_title_2: "com Conhecimento Especializado",
+    hero_badge: "v7.15.0 - Claude Code 2.1.45", hero_title_1: "Turbine o", hero_title_2: "com Conhecimento Especializado",
     hero_desc: "Um framework abrangente para desenvolvimento assistido por IA.", cta_get_started: "Come\u00e7ar", cta_docs: "Documenta\u00e7\u00e3o",
     feat_main_title: "Tudo para escalar", feat_main_desc: "Equipe o Claude com ferramentas conscientes do contexto.",
     feat_bmad_title: "Framework BMAD v6", feat_bmad_desc: "9 agentes Agent-as-Code, 5 Quality Gates.",
     feat_ralph_title: "Ralph Wiggum v2.0", feat_ralph_desc: "Circuit breaker adaptativo, hooks Claude Code.",
     feat_1_title: "Suporte Multi-Idioma", feat_1_desc: "Suporte nativo para 5 idiomas.",
     feat_2_title: "Agentes Especializados", feat_2_desc: "Implante revisores, arquitetos e treinadores virtuais.",
-    feat_skills_title: "36 Skills", feat_skills_desc: "Melhores pr\u00e1ticas no formato oficial do Claude Code.",
+    feat_skills_title: "37 Skills", feat_skills_desc: "Melhores pr\u00e1ticas no formato oficial do Claude Code.",
     feat_3_title: "Fluxos Automatizados", feat_3_desc: "Use 160 comandos para automatizar tarefas.",
     tools_title: "Ferramentas do Desenvolvedor", tools_desc: "Melhore seu fluxo de trabalho no terminal.",
     tool_status_title: "Linha de Status", tool_status_desc: "Barra de status rica.",
@@ -330,8 +330,8 @@ onMounted(() => {
           <p style="margin-top: 1rem; font-size: 1.25rem; color: #94a3b8;">{{ t('feat_main_desc') }}</p>
         </div>
         <div class="grid-3col" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
-          <FeatureCard icon="git-branch" color="cyan" :badge="'v7.14.0'" :title="t('feat_bmad_title')" :desc="t('feat_bmad_desc')" />
-          <FeatureCard icon="repeat" color="orange" :badge="'v7.14.0'" :title="t('feat_ralph_title')" :desc="t('feat_ralph_desc')" />
+          <FeatureCard icon="git-branch" color="cyan" :badge="'v7.15.0'" :title="t('feat_bmad_title')" :desc="t('feat_bmad_desc')" />
+          <FeatureCard icon="repeat" color="orange" :badge="'v7.15.0'" :title="t('feat_ralph_title')" :desc="t('feat_ralph_desc')" />
           <FeatureCard icon="globe" color="brand" :title="t('feat_1_title')" :desc="t('feat_1_desc')" />
           <FeatureCard icon="bot" color="blue" :title="t('feat_2_title')" :desc="t('feat_2_desc')" />
           <FeatureCard icon="sparkles" color="emerald" :title="t('feat_skills_title')" :desc="t('feat_skills_desc')" />
