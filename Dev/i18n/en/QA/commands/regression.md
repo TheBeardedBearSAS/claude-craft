@@ -167,3 +167,16 @@ Golden Rule Check: 1 VIOLATION DETECTED
 3. **Fix violations immediately**: Golden Rule violations indicate re-introduced bugs
 4. **Clean obsolete tests**: Mark tests as obsolete when features are removed
 5. **Filter by source**: Review regression tests per story for targeted analysis
+
+## Next Step
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                      NEXT STEP                           ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Launch a new recette session                          ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

@@ -149,3 +149,19 @@ Aucune violation de la Regle d'Or detectee.
 3. **Utilisez JSON pour la CI** : Integrez les rapports JSON dans votre pipeline CI/CD
 4. **Comparez les executions** : Utilisez --compare pour suivre la progression entre iterations
 5. **Archivez les rapports** : Conservez les rapports en controle de version pour la piste d'audit
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /workflow:review                                      ║
+║    Préparer la sprint review                             ║
+║                                                          ║
+║  Voir aussi :                                            ║
+║  • /sprint:status — Consulter les métriques du sprint    ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

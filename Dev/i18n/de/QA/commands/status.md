@@ -157,3 +157,21 @@ Behebungsstatus: completed (2/2 Bugs behoben)
 3. **Pruefen Sie den Behebungsstatus** : Bestaetigen Sie die Fehlerbehebung nach recette-fix
 4. **Verwenden Sie JSON fuer Automatisierung** : Leiten Sie JSON-Ausgabe an andere Tools weiter
 5. **Filtern Sie nach Status** : Konzentrieren Sie sich auf pausierte/fehlgeschlagene Sitzungen
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Wenn die Sitzung Fehler hat:                            ║
+║  → /qa:fix                                               ║
+║    Identifizierte Bugs beheben                           ║
+║                                                          ║
+║  Wenn die Sitzung abgeschlossen ist:                     ║
+║  → /qa:report                                            ║
+║    Recette-Bericht generieren                            ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

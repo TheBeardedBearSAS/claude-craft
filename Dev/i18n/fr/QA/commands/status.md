@@ -157,3 +157,21 @@ Etat de Correction: completed (2/2 bugs corriges)
 3. **Verifiez l'etat de correction** : Confirmez que les bugs ont ete corriges apres recette-fix
 4. **Utilisez JSON pour l'automatisation** : Dirigez la sortie JSON vers d'autres outils
 5. **Filtrez par statut** : Concentrez-vous sur les sessions en pause/echec qui necessitent attention
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Si la session a des échecs :                            ║
+║  → /qa:fix                                               ║
+║    Corriger les bugs identifiés                          ║
+║                                                          ║
+║  Si la session est terminée :                            ║
+║  → /qa:report                                            ║
+║    Générer le rapport de recette                         ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

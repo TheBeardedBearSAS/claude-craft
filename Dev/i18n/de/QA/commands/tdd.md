@@ -381,3 +381,19 @@ Fixes #XXX
 - [ ] Dokumentation aktualisiert
 - [ ] Ticket geschlossen
 ```
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Nach Korrekturen erneut testen                        ║
+║                                                          ║
+║  Siehe auch:                                             ║
+║  • /common:pre-commit-check — Vor dem Commit validieren  ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

@@ -297,3 +297,20 @@ Gesamtdauer: 2h
 - Team demonstriert, nicht nur SM
 - Aktiv Feedback sammeln
 - Backlog in Echtzeit anpassen
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /workflow:retro                                       ║
+║    Sprint-Retrospektive durchführen                      ║
+║                                                          ║
+║  Siehe auch:                                             ║
+║  • /workflow:status  — Gesamtfortschritt prüfen          ║
+║  • /sprint:status    — Sprint-Metriken anzeigen          ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

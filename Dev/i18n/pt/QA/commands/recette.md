@@ -243,3 +243,25 @@ entries:
 3. **Revisar regressoes**: Consultar `.recette/regression/` apos cada execucao
 4. **Ativar gravacao GIF**: Para depurar falhas complexas
 5. **Manter URL base**: Configurar no plano para testes consistentes
+
+## Próximo passo
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    PRÓXIMO PASSO                         ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Se bugs foram encontrados:                              ║
+║  → /qa:fix                                               ║
+║    Correção automatizada de bugs                         ║
+║  → /qa:tdd                                               ║
+║    Correção com abordagem TDD                            ║
+║                                                          ║
+║  Se todos os testes passam:                              ║
+║  → /qa:report                                            ║
+║    Gerar o relatório de recette                          ║
+║  → /sprint:transition done                               ║
+║    Marcar a story como concluída                         ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

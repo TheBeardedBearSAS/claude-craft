@@ -245,3 +245,21 @@ The report can be:
 2. Included in sprint retrospective
 3. Used for project health monitoring
 4. Exported for stakeholder reporting
+
+## Next Step
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                      NEXT STEP                           ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Run the specific gate that needs attention:             ║
+║                                                          ║
+║  • /gate:validate-prd      — PRD quality gate            ║
+║  • /gate:validate-techspec — Tech spec gate              ║
+║  • /gate:validate-backlog  — Backlog gate                ║
+║  • /gate:validate-sprint   — Sprint readiness gate       ║
+║  • /gate:validate-story    — Story DoD gate              ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

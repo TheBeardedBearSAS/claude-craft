@@ -327,3 +327,23 @@ Verbatims:
 - What Went Well / What Didn't / Ideas
 - Speed Car (engine, parachute, abyss)
 - Hot Air Balloon
+
+## Next Step
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                      NEXT STEP                           ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  If more sprints remain:                                 ║
+║  → /workflow:start {N+1}                                 ║
+║    Start the next sprint                                 ║
+║                                                          ║
+║  If project is complete:                                 ║
+║  → /common:release-checklist                             ║
+║    Prepare for release                                   ║
+║  → /common:generate-changelog                            ║
+║    Generate the changelog                                ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

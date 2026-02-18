@@ -283,3 +283,22 @@ Punkte |
 - Anfänger-Team: 50-60%
 - Etabliertes Team: 70-80%
 - Reifes Team: 80-90%
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /sprint:next-story                                    ║
+║    Erste Story aus dem Sprint-Backlog auswählen          ║
+║                                                          ║
+║  → /sprint:dev                                           ║
+║    TDD/BDD-Entwicklung starten                           ║
+║                                                          ║
+║  Siehe auch:                                             ║
+║  • /workflow:status  — Sprint-Fortschritt prüfen         ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

@@ -155,3 +155,22 @@ Acciones:
 
 El reporte también se guarda en:
 `project-management/sprints/sprint-XXX/status-YYYY-MM-DD.md`
+
+## Siguiente paso
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    SIGUIENTE PASO                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /sprint:next-story                                    ║
+║    Tomar la siguiente story                              ║
+║                                                          ║
+║  → /sprint:dev                                           ║
+║    Continuar el desarrollo                               ║
+║                                                          ║
+║  → /workflow:review                                      ║
+║    Sprint review (si el sprint está completo)            ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

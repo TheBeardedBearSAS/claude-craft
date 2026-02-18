@@ -92,3 +92,21 @@ Comandos:
 /gate:report
 /gate:report --detailed
 ```
+
+## Siguiente paso
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    SIGUIENTE PASO                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Ejecutar la gate específica que necesita atención:      ║
+║                                                          ║
+║  • /gate:validate-prd      — Gate calidad PRD            ║
+║  • /gate:validate-techspec — Gate spec técnica           ║
+║  • /gate:validate-backlog  — Gate backlog                ║
+║  • /gate:validate-sprint   — Gate preparación sprint     ║
+║  • /gate:validate-story    — Gate DoD story              ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

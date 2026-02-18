@@ -183,3 +183,21 @@ Erwaegen Sie die Erstellung eines ADR fuer bedeutende Entscheidungen:
 ```
 
 Gate-Konfiguration: `.bmad/gates/techspec-gate.yaml`
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Wenn PASS (≥ Schwellenwert):                            ║
+║  → /gate:validate-backlog                                ║
+║    Backlog validieren                                    ║
+║                                                          ║
+║  Wenn FAIL (< Schwellenwert):                            ║
+║  → Technische Spezifikation korrigieren                  ║
+║  → /gate:validate-techspec (erneut nach Korrekturen)     ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

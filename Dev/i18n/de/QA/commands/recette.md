@@ -243,3 +243,25 @@ entries:
 3. **Regressionen pruefen**: `.recette/regression/` nach jedem Lauf konsultieren
 4. **GIF-Aufnahme aktivieren**: Zum Debuggen komplexer Fehler
 5. **Basis-URL pflegen**: Im Plan fuer konsistente Tests konfigurieren
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Wenn Bugs gefunden wurden:                              ║
+║  → /qa:fix                                               ║
+║    Automatisierte Fehlerbehebung                         ║
+║  → /qa:tdd                                               ║
+║    Fehlerbehebung mit TDD-Ansatz                         ║
+║                                                          ║
+║  Wenn alle Tests bestehen:                               ║
+║  → /qa:report                                            ║
+║    Recette-Bericht generieren                            ║
+║  → /sprint:transition done                               ║
+║    Story als erledigt markieren                          ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

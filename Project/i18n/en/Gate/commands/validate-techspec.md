@@ -183,3 +183,21 @@ Consider creating an ADR for significant decisions:
 ```
 
 Gate configuration: `.bmad/gates/techspec-gate.yaml`
+
+## Next Step
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                      NEXT STEP                           ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  If PASS (≥ threshold):                                  ║
+║  → /gate:validate-backlog                                ║
+║    Validate the backlog                                  ║
+║                                                          ║
+║  If FAIL (< threshold):                                  ║
+║  → Correct the tech spec issues                          ║
+║  → /gate:validate-techspec (re-run after corrections)    ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

@@ -96,3 +96,21 @@ Nach Korrekturen erneut ausfuehren: /gate:validate-backlog
 /gate:validate-backlog
 /gate:validate-backlog US-005
 ```
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Wenn PASS (≥ Schwellenwert):                            ║
+║  → /gate:validate-sprint                                 ║
+║    Sprint-Bereitschaft validieren                        ║
+║                                                          ║
+║  Wenn FAIL (< Schwellenwert):                            ║
+║  → Identifizierte Probleme beheben                       ║
+║  → /gate:validate-backlog (erneut nach Korrekturen)      ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

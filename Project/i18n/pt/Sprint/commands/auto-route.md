@@ -215,3 +215,19 @@ routing:
     run_on_session_start: false
     run_on_task_complete: true
 ```
+
+## Próximo passo
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    PRÓXIMO PASSO                         ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /sprint:next-story                                    ║
+║    Pegar a próxima story roteada                         ║
+║                                                          ║
+║  → /sprint:dev                                           ║
+║    Iniciar o desenvolvimento                             ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

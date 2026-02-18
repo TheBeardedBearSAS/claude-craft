@@ -235,3 +235,29 @@ Lors de la transition d'une story :
 - **→ in-progress** : Les taches restent dans leur statut actuel (demarrees individuellement)
 - **→ done** : Verifie que toutes les taches sont done ; avertit si des taches sont incompletes
 - **→ blocked** : Marque toutes les taches in-progress comme blocked
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Selon le statut cible :                                 ║
+║                                                          ║
+║  → in-progress :                                         ║
+║    /sprint:dev — Développer la story                     ║
+║                                                          ║
+║  → review :                                              ║
+║    /gate:validate-story — Valider la DoD                 ║
+║                                                          ║
+║  → done :                                                ║
+║    /sprint:next-story — Prendre la prochaine story       ║
+║    /workflow:review — Sprint review (si sprint fini)     ║
+║                                                          ║
+║  → blocked :                                             ║
+║    Résoudre le blocage, puis                             ║
+║    /sprint:transition in-progress                        ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

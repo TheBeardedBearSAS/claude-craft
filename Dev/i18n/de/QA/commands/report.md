@@ -148,3 +148,19 @@ Keine Verstoesse gegen die Goldene Regel erkannt.
 3. **JSON fuer CI** : JSON-Berichte in Ihre CI/CD-Pipeline integrieren
 4. **Laeufe vergleichen** : --compare nutzen um Fortschritt zwischen Iterationen zu verfolgen
 5. **Berichte archivieren** : Berichte in Versionskontrolle fuer Audit-Trail aufbewahren
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /workflow:review                                      ║
+║    Sprint-Review vorbereiten                             ║
+║                                                          ║
+║  Siehe auch:                                             ║
+║  • /sprint:status — Sprint-Metriken anzeigen             ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

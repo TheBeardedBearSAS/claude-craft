@@ -96,3 +96,21 @@ Relancer après corrections: /gate:validate-backlog
 /gate:validate-backlog
 /gate:validate-backlog US-005
 ```
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Si PASS (≥ seuil) :                                     ║
+║  → /gate:validate-sprint                                 ║
+║    Valider la readiness du sprint                        ║
+║                                                          ║
+║  Si FAIL (< seuil) :                                     ║
+║  → Corriger les problèmes identifiés                     ║
+║  → /gate:validate-backlog (re-run après corrections)     ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

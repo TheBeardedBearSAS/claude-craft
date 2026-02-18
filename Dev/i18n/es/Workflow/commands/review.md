@@ -40,3 +40,20 @@ Para cada funcionalidad completada:
 - Ambiente colaborativo
 - Feedback constructivo
 - Enfoque en el producto
+
+## Siguiente paso
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    SIGUIENTE PASO                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /workflow:retro                                       ║
+║    Facilitar la retrospectiva del sprint                 ║
+║                                                          ║
+║  Ver también:                                            ║
+║  • /workflow:status  — Verificar el progreso general     ║
+║  • /sprint:status    — Ver métricas del sprint           ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

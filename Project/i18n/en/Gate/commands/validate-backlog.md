@@ -220,3 +220,21 @@ Status: ready-for-dev
 ```
 
 Gate configuration: `.bmad/gates/backlog-gate.yaml`
+
+## Next Step
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                      NEXT STEP                           ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  If PASS (≥ threshold):                                  ║
+║  → /gate:validate-sprint                                 ║
+║    Validate sprint readiness                             ║
+║                                                          ║
+║  If FAIL (< threshold):                                  ║
+║  → Correct the identified issues                         ║
+║  → /gate:validate-backlog (re-run after corrections)     ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

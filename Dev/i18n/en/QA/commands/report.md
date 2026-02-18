@@ -207,3 +207,19 @@ No Golden Rule violations detected.
 3. **Use JSON for CI**: Integrate JSON reports into your CI/CD pipeline
 4. **Compare runs**: Use --compare to track progress between iterations
 5. **Archive reports**: Keep reports in version control for audit trail
+
+## Next Step
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                      NEXT STEP                           ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /workflow:review                                      ║
+║    Prepare the sprint review                             ║
+║                                                          ║
+║  See also:                                               ║
+║  • /sprint:status — View sprint metrics                  ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

@@ -167,3 +167,16 @@ Verificacao Regra de Ouro: 1 VIOLACAO DETECTADA
 3. **Corrija violacoes imediatamente** : Violacoes indicam bugs reintroduzidos
 4. **Limpe testes obsoletos** : Marque como obsoletos testes de funcionalidades removidas
 5. **Filtre por origem** : Examine testes de regressao por story para analise direcionada
+
+## Próximo passo
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    PRÓXIMO PASSO                         ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Lançar uma nova sessão de recette                     ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

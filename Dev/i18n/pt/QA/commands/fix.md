@@ -285,3 +285,19 @@ resume_from:
 3. **Validar agrupamentos** : Verificar que os erros agrupados compartilham a mesma causa
 4. **Revisar stories** : Verificar as bug stories geradas antes de lancar o TDD
 5. **Usar auto-commit** : Para manter um historico limpo de correcoes
+
+## Próximo passo
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    PRÓXIMO PASSO                         ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Re-testar após as correções                           ║
+║                                                          ║
+║  Veja também:                                            ║
+║  • /qa:regression — Verificar testes de regressão        ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

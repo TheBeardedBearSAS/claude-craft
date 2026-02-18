@@ -157,3 +157,21 @@ Estado de Correccion: completed (2/2 bugs corregidos)
 3. **Verifique el estado de correccion** : Confirme que los bugs fueron corregidos tras recette-fix
 4. **Use JSON para automatizacion** : Dirija la salida JSON a otras herramientas
 5. **Filtre por estado** : Concentrese en sesiones pausadas/fallidas que requieren atencion
+
+## Siguiente paso
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    SIGUIENTE PASO                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Si la sesión tiene fallos:                              ║
+║  → /qa:fix                                               ║
+║    Corregir los bugs identificados                       ║
+║                                                          ║
+║  Si la sesión está completa:                             ║
+║  → /qa:report                                            ║
+║    Generar el informe de recette                         ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

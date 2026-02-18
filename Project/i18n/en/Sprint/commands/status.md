@@ -197,3 +197,22 @@ US-008 has all tasks complete -> /sprint:transition US-008 review
 
 Report is also saved in:
 `project-management/sprints/sprint-XXX/status-YYYY-MM-DD.md`
+
+## Next Step
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                      NEXT STEP                           ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /sprint:next-story                                    ║
+║    Pick the next story to work on                        ║
+║                                                          ║
+║  → /sprint:dev                                           ║
+║    Continue development                                  ║
+║                                                          ║
+║  → /workflow:review                                      ║
+║    Sprint review (if sprint is complete)                 ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

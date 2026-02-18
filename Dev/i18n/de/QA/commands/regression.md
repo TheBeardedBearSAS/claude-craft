@@ -167,3 +167,16 @@ Goldene-Regel-Pruefung: 1 VERSTOSS ERKANNT
 3. **Verstoesse sofort beheben** : Verstoesse zeigen wieder eingefuehrte Bugs an
 4. **Veraltete Tests bereinigen** : Tests als veraltet markieren wenn Features entfernt werden
 5. **Nach Quelle filtern** : Regressionstests pro Story fuer gezielte Analyse untersuchen
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Neue Recette-Sitzung starten                          ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

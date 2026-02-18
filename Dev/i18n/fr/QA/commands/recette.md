@@ -243,3 +243,25 @@ entries:
 3. **Examinez les regressions** : Consultez `.recette/regression/` apres chaque execution
 4. **Activez l'enregistrement GIF** : Pour debugger les echecs complexes
 5. **Maintenez l'URL de base** : Configurez dans le plan pour des tests coherents
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Si des bugs ont été trouvés :                           ║
+║  → /qa:fix                                               ║
+║    Correction automatisée des bugs                       ║
+║  → /qa:tdd                                               ║
+║    Correction avec approche TDD                          ║
+║                                                          ║
+║  Si tous les tests passent :                             ║
+║  → /qa:report                                            ║
+║    Générer le rapport de recette                         ║
+║  → /sprint:transition done                               ║
+║    Marquer la story comme terminée                       ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

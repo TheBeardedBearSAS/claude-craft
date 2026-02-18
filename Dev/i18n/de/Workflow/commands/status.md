@@ -290,3 +290,25 @@ next_command: "/workflow:design --continue"
 - `/workflow:plan` - Planungsphase
 - `/workflow:design` - Designphase
 - `/workflow:implement` - Implementierungsphase
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Basierend auf der aktuellen Phase:                      ║
+║                                                          ║
+║  • analyze  → /workflow:plan                             ║
+║  • plan     → /workflow:design                           ║
+║  • design   → /workflow:implement                        ║
+║  • implement→ /workflow:review                           ║
+║  • review   → /workflow:retro                            ║
+║  • retro    → /workflow:start {N+1}                      ║
+║                                                          ║
+║  Siehe auch:                                             ║
+║  • /sprint:status — Sprint-Metriken                      ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

@@ -243,3 +243,25 @@ entries:
 3. **Review regressions**: Check `.recette/regression/` after each run
 4. **Enable GIF recording**: For debugging complex failures
 5. **Maintain base URL**: Configure in plan for consistent testing
+
+## Next Step
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                      NEXT STEP                           ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  If bugs were found:                                     ║
+║  → /qa:fix                                               ║
+║    Automated bug fixing from recette session             ║
+║  → /qa:tdd                                               ║
+║    Fix bugs with TDD approach                            ║
+║                                                          ║
+║  If all tests pass:                                      ║
+║  → /qa:report                                            ║
+║    Generate the recette report                           ║
+║  → /sprint:transition done                               ║
+║    Mark the story as done                                ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

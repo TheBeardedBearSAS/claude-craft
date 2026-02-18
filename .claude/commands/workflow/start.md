@@ -283,3 +283,22 @@ Points |
 - Équipe débutante : 50-60%
 - Équipe rodée : 70-80%
 - Équipe mature : 80-90%
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /sprint:next-story                                    ║
+║    Prendre la première story du sprint backlog           ║
+║                                                          ║
+║  → /sprint:dev                                           ║
+║    Démarrer le développement TDD/BDD                     ║
+║                                                          ║
+║  Voir aussi :                                            ║
+║  • /workflow:status  — Vérifier la progression           ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

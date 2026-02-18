@@ -48,3 +48,23 @@ Para cada punto de mejora:
 ## Conclusión
 
 Resume las acciones clave para el próximo sprint.
+
+## Siguiente paso
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    SIGUIENTE PASO                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Si quedan más sprints:                                  ║
+║  → /workflow:start {N+1}                                 ║
+║    Iniciar el siguiente sprint                           ║
+║                                                          ║
+║  Si el proyecto está completo:                           ║
+║  → /common:release-checklist                             ║
+║    Preparar el lanzamiento                               ║
+║  → /common:generate-changelog                            ║
+║    Generar el changelog                                  ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

@@ -285,3 +285,19 @@ resume_from:
 3. **Gruppierungen validieren** : Pruefen ob gruppierte Fehler wirklich die gleiche Ursache haben
 4. **Stories ueberpruefen** : Generierte Bug Stories vor TDD-Start pruefen
 5. **Auto-Commit verwenden** : Fuer eine saubere Behebungshistorie
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Nach Korrekturen erneut testen                        ║
+║                                                          ║
+║  Siehe auch:                                             ║
+║  • /qa:regression — Regressionstests prüfen              ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

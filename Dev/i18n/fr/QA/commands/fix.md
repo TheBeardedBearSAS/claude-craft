@@ -285,3 +285,19 @@ resume_from:
 3. **Validez les groupements** : Verifiez que les erreurs groupees partagent bien la meme cause
 4. **Revoyez les stories** : Verifiez les bug stories generees avant de lancer le TDD
 5. **Utilisez auto-commit** : Pour garder un historique propre des corrections
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Re-tester après les corrections                       ║
+║                                                          ║
+║  Voir aussi :                                            ║
+║  • /qa:regression — Vérifier les tests de régression     ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

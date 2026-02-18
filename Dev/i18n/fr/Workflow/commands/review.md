@@ -311,3 +311,20 @@ Durée totale : 2h
 - L'équipe démontre, pas seulement le SM
 - Collecter le feedback activement
 - Adapter le backlog en temps réel
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /workflow:retro                                       ║
+║    Faciliter la rétrospective du sprint                  ║
+║                                                          ║
+║  Voir aussi :                                            ║
+║  • /workflow:status  — Vérifier la progression globale   ║
+║  • /sprint:status    — Consulter les métriques sprint    ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

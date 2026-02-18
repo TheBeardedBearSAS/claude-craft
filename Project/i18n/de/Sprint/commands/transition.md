@@ -235,3 +235,29 @@ Bei der Transition einer Story:
 - **→ in-progress**: Aufgaben bleiben in ihrem aktuellen Status (einzeln gestartet)
 - **→ done**: Prueft ob alle Aufgaben done sind; warnt bei unvollstaendigen Aufgaben
 - **→ blocked**: Markiert alle in-progress Aufgaben als blocked
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Basierend auf dem Zielstatus:                           ║
+║                                                          ║
+║  → in-progress:                                          ║
+║    /sprint:dev — Story entwickeln                        ║
+║                                                          ║
+║  → review:                                               ║
+║    /gate:validate-story — DoD validieren                 ║
+║                                                          ║
+║  → done:                                                 ║
+║    /sprint:next-story — Nächste Story auswählen          ║
+║    /workflow:review — Sprint-Review (wenn Sprint fertig) ║
+║                                                          ║
+║  → blocked:                                              ║
+║    Blockade lösen, dann                                  ║
+║    /sprint:transition in-progress                        ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

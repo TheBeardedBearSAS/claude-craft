@@ -286,3 +286,23 @@ Zitate:
 - What Went Well / What Didn't / Ideas
 - Speed Car (Motor, Fallschirm, Abgrund)
 - Heißluftballon
+
+## Nächster Schritt
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   NÄCHSTER SCHRITT                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Wenn weitere Sprints verbleiben:                        ║
+║  → /workflow:start {N+1}                                 ║
+║    Nächsten Sprint starten                               ║
+║                                                          ║
+║  Wenn das Projekt abgeschlossen ist:                     ║
+║  → /common:release-checklist                             ║
+║    Release vorbereiten                                   ║
+║  → /common:generate-changelog                            ║
+║    Changelog generieren                                  ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

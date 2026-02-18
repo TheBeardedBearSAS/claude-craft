@@ -285,3 +285,19 @@ resume_from:
 3. **Validate groupings**: Verify grouped errors truly share the same cause
 4. **Review stories**: Check generated bug stories before launching TDD
 5. **Use auto-commit**: To keep a clean history of fixes
+
+## Next Step
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                      NEXT STEP                           ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Re-test after corrections                             ║
+║                                                          ║
+║  See also:                                               ║
+║  • /qa:regression — Check regression tests               ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

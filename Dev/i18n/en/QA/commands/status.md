@@ -161,3 +161,21 @@ Checkpoint:
 3. **Check fix state**: Verify if bugs were fixed after running recette-fix
 4. **Use JSON for automation**: Pipe JSON output to other tools
 5. **Filter by status**: Focus on paused/failed sessions that need attention
+
+## Next Step
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                      NEXT STEP                           ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  If session has failures:                                ║
+║  → /qa:fix                                               ║
+║    Fix identified bugs                                   ║
+║                                                          ║
+║  If session is complete:                                 ║
+║  → /qa:report                                            ║
+║    Generate the recette report                           ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

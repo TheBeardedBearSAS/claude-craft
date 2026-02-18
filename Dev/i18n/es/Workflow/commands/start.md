@@ -54,3 +54,22 @@ Recordar y validar los criterios de Definition of Done:
 - El equipo se compromete a entregar las historias seleccionadas
 - Objetivo del sprint claro y compartido
 - Impedimentos identificados y plan de mitigación
+
+## Siguiente paso
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    SIGUIENTE PASO                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /sprint:next-story                                    ║
+║    Tomar la primera story del sprint backlog             ║
+║                                                          ║
+║  → /sprint:dev                                           ║
+║    Iniciar el desarrollo TDD/BDD                         ║
+║                                                          ║
+║  Ver también:                                            ║
+║  • /workflow:status  — Verificar el progreso             ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```
