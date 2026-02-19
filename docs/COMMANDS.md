@@ -54,6 +54,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/coolify:` | Coolify/PaaS | 5 |
 | `/kubernetes:` | Kubernetes/Infrastructure | 5 |
 | `/opentofu:` | OpenTofu/IaC | 5 |
+| `/ansible:` | Ansible/Automation | 5 |
 | `/project:` | Project Management | 34 |
 | `/sprint:` | Sprint Management (BMAD v6) | 5 |
 | `/gate:` | Quality Gates (BMAD v6) | 7 |
@@ -551,6 +552,27 @@ Infrastructure as Code with OpenTofu.
 | `/opentofu:debug <Symptom>` | Diagnose OpenTofu state issues and drift |
 | `/opentofu:security-audit [Scope]` | Audit OpenTofu security posture |
 | `/opentofu:optimize [Target]` | Cost optimization and resource analysis |
+
+---
+
+## Ansible Commands (`/ansible:`)
+
+Infrastructure automation with Ansible.
+
+### Architecture Commands
+
+| Command | Description |
+|---------|-------------|
+| `/ansible:architecture <Project>` | Design complete Ansible automation architecture |
+| `/ansible:deploy-setup <Platform>` | Setup CI/CD pipeline for Ansible |
+
+### Operations Commands
+
+| Command | Description |
+|---------|-------------|
+| `/ansible:debug <Symptom>` | Diagnose Ansible playbook issues |
+| `/ansible:security-audit [Scope]` | Audit Ansible security posture |
+| `/ansible:optimize [Target]` | Optimize Ansible performance and quality |
 
 ---
 

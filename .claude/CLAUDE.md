@@ -2,7 +2,7 @@
 
 **Version:** 7.19.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 12 technology stacks, 43 agents, 188 commands across 22 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 13 technology stacks, 48 agents, 193 commands across 23 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -40,7 +40,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (22 namespaces, 188 commands)
+## Available Commands (23 namespaces, 193 commands)
 
 | Namespace | Key Commands | Count |
 |-----------|-------------|-------|
@@ -66,12 +66,13 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/coolify:` | `setup`, `deploy`, `debug`, `backup`, `optimize` | 5 |
 | `/kubernetes:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
 | `/opentofu:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
+| `/ansible:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 
 ---
 
-## Available Agents (43 agents)
+## Available Agents (48 agents)
 
 | Category | Agents | Count |
 |----------|--------|-------|
@@ -81,6 +82,7 @@ Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-RE
 | **Coolify** | `@coolify-architect`, `@coolify-deployment`, `@coolify-debug`, `@coolify-monitoring` | 4 |
 | **Kubernetes** | `@kubernetes-architect`, `@kubernetes-deployment`, `@kubernetes-debug`, `@kubernetes-security`, `@kubernetes-monitoring` | 5 |
 | **OpenTofu** | `@opentofu-architect`, `@opentofu-deployment`, `@opentofu-debug`, `@opentofu-security`, `@opentofu-cost` | 5 |
+| **Ansible** | `@ansible-architect`, `@ansible-deployment`, `@ansible-debug`, `@ansible-security`, `@ansible-quality` | 5 |
 | **Project** | `@product-owner`, `@tech-lead` | 2 |
 
 Full reference: [Agents](../docs/AGENTS.md)
