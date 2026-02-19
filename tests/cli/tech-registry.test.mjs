@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { TECH_REGISTRY, INSTALLABLE_TECHS, getDisplayName, getAllTechKeys } from '../../cli/lib/tech-registry.js';
+import { TECH_REGISTRY, INSTALLABLE_TECHS, getDisplayName, getAllTechKeys, getTechsByTier } from '../../cli/lib/tech-registry.js';
 import { TECHNOLOGIES } from '../../cli/lib/constants.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -45,6 +45,35 @@ describe('tech-registry', () => {
     const keys = getAllTechKeys();
     expect(keys.length).toBe(12);
     expect(keys).toContain('docker');
+  });
+});
+
+describe('tech-registry tiers', () => {
+  it('every installable tech has a tier of 1, 2, or 3', () => {
+    for (const tech of INSTALLABLE_TECHS) {
+      const entry = TECH_REGISTRY[tech];
+      expect([1, 2, 3], `${tech} should have tier 1, 2, or 3`).toContain(entry.tier);
+    }
+  });
+
+  it('docker and coolify have tier null', () => {
+    expect(TECH_REGISTRY.docker.tier).toBeNull();
+    expect(TECH_REGISTRY.coolify.tier).toBeNull();
+  });
+
+  it('getTechsByTier(1) returns core techs', () => {
+    const tier1 = getTechsByTier(1);
+    expect(tier1.sort()).toEqual(['flutter', 'python', 'react', 'symfony']);
+  });
+
+  it('getTechsByTier(2) returns supported techs', () => {
+    const tier2 = getTechsByTier(2);
+    expect(tier2.sort()).toEqual(['php', 'reactnative']);
+  });
+
+  it('getTechsByTier(3) returns community techs', () => {
+    const tier3 = getTechsByTier(3);
+    expect(tier3.sort()).toEqual(['angular', 'csharp', 'laravel', 'vuejs']);
   });
 });
 

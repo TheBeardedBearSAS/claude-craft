@@ -1,15 +1,15 @@
 ---
 name: solid-principles
-description: Principes SOLID. Use when reviewing code quality or refactoring.
+description: SOLID principles for object-oriented design. Use when reviewing code quality, refactoring, designing classes or interfaces, or discussing architecture patterns.
 triggers:
-  files: ["*.cs"]
-  keywords: ["SOLID", "SRP", "OCP", "LSP", "ISP", "DIP", "refactor", "interface", "abstraction"]
+  files: ["*.cs", "*.java", "*.ts", "*.py", "*.php", "*.rb", "*.go", "*.kt", "*.dart", "*.swift"]
+  keywords: ["SOLID", "SRP", "OCP", "LSP", "ISP", "DIP", "refactor", "interface", "abstraction", "single responsibility", "open closed", "liskov", "dependency inversion", "interface segregation", "clean architecture"]
 auto_suggest: true
 ---
 
-# Principes SOLID
+# SOLID Principles
 
-This skill provides SOLID principles guidelines for code quality.
+This skill provides universal SOLID principles guidelines for object-oriented code quality.
 
 See @REFERENCE.md for detailed documentation.
 

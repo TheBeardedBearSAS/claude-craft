@@ -19,6 +19,7 @@
  * @property {string} i18nDir - Directory name under Dev/i18n/{lang}/
  * @property {string} installScript - Install script filename
  * @property {string} version - Current supported version
+ * @property {1|2|3|null} tier - Maturity tier: 1=core, 2=supported, 3=community, null=infra
  */
 
 /** @type {Record<string, TechEntry>} */
@@ -31,6 +32,7 @@ const TECH_REGISTRY = {
     i18nDir: 'Symfony',
     installScript: 'install-symfony-rules.sh',
     version: '8.0 / PHP 8.5',
+    tier: 1,
   },
   flutter: {
     name: 'flutter',
@@ -40,6 +42,7 @@ const TECH_REGISTRY = {
     i18nDir: 'Flutter',
     installScript: 'install-flutter-rules.sh',
     version: '3.38 / Dart 3.10',
+    tier: 1,
   },
   react: {
     name: 'react',
@@ -49,6 +52,7 @@ const TECH_REGISTRY = {
     i18nDir: 'React',
     installScript: 'install-react-rules.sh',
     version: '19.x',
+    tier: 1,
   },
   reactnative: {
     name: 'reactnative',
@@ -58,6 +62,7 @@ const TECH_REGISTRY = {
     i18nDir: 'ReactNative',
     installScript: 'install-reactnative-rules.sh',
     version: '0.76+',
+    tier: 2,
   },
   angular: {
     name: 'angular',
@@ -67,6 +72,7 @@ const TECH_REGISTRY = {
     i18nDir: 'Angular',
     installScript: 'install-angular-rules.sh',
     version: '19.x',
+    tier: 3,
   },
   csharp: {
     name: 'csharp',
@@ -76,6 +82,7 @@ const TECH_REGISTRY = {
     i18nDir: 'CSharp',
     installScript: 'install-csharp-rules.sh',
     version: '10 LTS / C# 14',
+    tier: 3,
   },
   laravel: {
     name: 'laravel',
@@ -85,6 +92,7 @@ const TECH_REGISTRY = {
     i18nDir: 'Laravel',
     installScript: 'install-laravel-rules.sh',
     version: '12.x / PHP 8.5',
+    tier: 3,
   },
   vuejs: {
     name: 'vuejs',
@@ -94,6 +102,7 @@ const TECH_REGISTRY = {
     i18nDir: 'VueJS',
     installScript: 'install-vuejs-rules.sh',
     version: '3.5+',
+    tier: 3,
   },
   php: {
     name: 'php',
@@ -103,6 +112,7 @@ const TECH_REGISTRY = {
     i18nDir: 'PHP',
     installScript: 'install-php-rules.sh',
     version: '8.5',
+    tier: 2,
   },
   python: {
     name: 'python',
@@ -112,6 +122,7 @@ const TECH_REGISTRY = {
     i18nDir: 'Python',
     installScript: 'install-python-rules.sh',
     version: '3.13+',
+    tier: 1,
   },
   docker: {
     name: 'docker',
@@ -121,6 +132,7 @@ const TECH_REGISTRY = {
     i18nDir: 'Docker',
     installScript: 'install-infra-rules.sh',
     version: 'latest',
+    tier: null,
   },
   coolify: {
     name: 'coolify',
@@ -130,6 +142,7 @@ const TECH_REGISTRY = {
     i18nDir: 'Coolify',
     installScript: 'install-coolify-rules.sh',
     version: '4.x',
+    tier: null,
   },
 };
 
@@ -146,4 +159,11 @@ function getAllTechKeys() {
   return Object.keys(TECH_REGISTRY);
 }
 
-export { TECH_REGISTRY, INSTALLABLE_TECHS, getDisplayName, getAllTechKeys };
+/** Get techs by tier */
+function getTechsByTier(tier) {
+  return Object.entries(TECH_REGISTRY)
+    .filter(([_, entry]) => entry.tier === tier)
+    .map(([key]) => key);
+}
+
+export { TECH_REGISTRY, INSTALLABLE_TECHS, getDisplayName, getAllTechKeys, getTechsByTier };

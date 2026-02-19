@@ -2,6 +2,51 @@
 
 Detailed information about rules, patterns, and best practices for each supported technology.
 
+## Maturity Tiers
+
+Claude Craft classifies its 10 application technology stacks into 3 maturity tiers. This reflects the depth of support: i18n coverage, agent specialization, commands, skills, and reference documentation.
+
+### Tier Overview
+
+| Tier | Label | Technologies | What to Expect |
+|------|-------|-------------|----------------|
+| **1** | Core | Symfony, React, Python, Flutter | Production-grade support. Deep agent specialization, extensive i18n (25+ files), 8+ commands, 3+ tech-specific skills, full reference docs with examples. |
+| **2** | Supported | React Native, PHP | Solid support. Customized reviewer agent, 7+ i18n files, 5+ commands, at least 1 tech-specific skill, full reference docs. |
+| **3** | Community | C# / .NET, Angular, Laravel, Vue.js | Basic scaffolding. Generic reviewer template, 2+ i18n files, 3+ commands, shared skills only, basic CLAUDE.md reference. Community contributions welcome. |
+| -- | Infra | Docker, Coolify | Infrastructure tooling, not application stacks. Not tiered. |
+
+### Tier Requirements
+
+| Requirement | Tier 3 (Community) | Tier 2 (Supported) | Tier 1 (Core) |
+|---|---|---|---|
+| i18n files | >= 2 | >= 7 | >= 25 |
+| Agent reviewer | Generic template | Customized | Deep specialization |
+| Agent model | haiku | haiku | sonnet |
+| Commands | >= 3 | >= 5 | >= 8 |
+| Skills | Shared only | 1+ tech-specific | 3+ tech-specific |
+| Reference docs | Basic CLAUDE.md | Full reference | Full + examples |
+
+### All Technologies at a Glance
+
+| Technology | Tier | Version | i18n Files | Commands | Status | To Reach Next Tier |
+|------------|------|---------|-----------|----------|--------|-------------------|
+| Symfony / PHP | 1 (Core) | 8.0 / PHP 8.5 | 58+ | 10+ | Full support | -- |
+| React | 1 (Core) | 19.x | 30+ | 10+ | Full support | -- |
+| Python | 1 (Core) | 3.13+ | 25+ | 10+ | Full support | -- |
+| Flutter / Dart | 1 (Core) | 3.38 / Dart 3.10 | 25+ | 10+ | Full support | -- |
+| React Native | 2 (Supported) | 0.76+ | 39 | 10 | Good coverage | Expand i18n to 25+, deepen agent specialization, add 3+ tech-specific skills |
+| PHP | 2 (Supported) | 8.5 | 7+ | 5 | Solid base | Add more i18n files, expand commands to 8+, add tech-specific skills |
+| C# / .NET | 3 (Community) | 10 LTS / C# 14 | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
+| Angular | 3 (Community) | 19.x | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
+| Laravel | 3 (Community) | 12.x / PHP 8.5 | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
+| Vue.js | 3 (Community) | 3.5+ | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
+
+### Upgrade Path
+
+To promote a stack from one tier to the next, see [CONTRIBUTING.md](../CONTRIBUTING.md#technology-tiers) for detailed requirements and contribution guidelines.
+
+---
+
 ## Overview
 
 | Technology | Rules | Focus Areas |

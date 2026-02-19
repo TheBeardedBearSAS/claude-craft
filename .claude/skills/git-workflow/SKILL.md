@@ -1,15 +1,15 @@
 ---
 name: git-workflow
-description: Git Workflow. Use when working with git, branches, or commits.
+description: Git workflow and conventional commits. Use when working with git, branches, commits, pull requests, code review, or version control strategy.
 triggers:
-  files: [".git/**", ".gitignore"]
-  keywords: ["commit", "branch", "merge", "PR", "pull request", "git", "conventional"]
+  files: [".git/**", ".gitignore", ".commitlintrc*", ".husky/**", "CHANGELOG.md"]
+  keywords: ["commit", "branch", "merge", "PR", "pull request", "git", "conventional commits", "code review", "rebase", "cherry-pick", "squash", "GitHub Flow", "feature branch", "hotfix", "changelog", "version control"]
 auto_suggest: true
 ---
 
 # Git Workflow
 
-This skill provides Git workflow and conventional commits guidelines.
+This skill provides universal Git workflow and conventional commits guidelines.
 
 See @REFERENCE.md for detailed documentation.
 

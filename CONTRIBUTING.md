@@ -50,6 +50,73 @@ claude-craft/
 └── docs/                       # Documentation
 ```
 
+## Technology Tiers
+
+Claude Craft uses a **3-tier maturity model** to classify its technology stacks. This ensures users know what level of support to expect, and gives contributors a clear path for improving stacks.
+
+### Tier Definitions
+
+| Tier | Label | Description |
+|------|-------|-------------|
+| **Tier 1** | Core | Deep, production-grade support. Extensive i18n, specialized agents with deep expertise, many commands and tech-specific skills. |
+| **Tier 2** | Supported | Solid support with good coverage. Customized reviewer agent, multiple commands, growing i18n. |
+| **Tier 3** | Community | Basic scaffolding in place. Generic reviewer template, minimal i18n, shared skills only. Community contributions welcome to grow these stacks. |
+
+### Current Tier Assignments
+
+| Tier | Technologies |
+|------|-------------|
+| **Tier 1 (Core)** | Symfony, React, Python, Flutter |
+| **Tier 2 (Supported)** | React Native, PHP |
+| **Tier 3 (Community)** | C# / .NET, Angular, Laravel, Vue.js |
+| **Infra (no tier)** | Docker, Coolify |
+
+### Tier Requirements
+
+| Requirement | Tier 3 (Community) | Tier 2 (Supported) | Tier 1 (Core) |
+|---|---|---|---|
+| i18n files | >= 2 | >= 7 | >= 25 |
+| Agent reviewer | Generic template | Customized | Deep specialization |
+| Agent model | haiku | haiku | sonnet |
+| Commands | >= 3 | >= 5 | >= 8 |
+| Skills | Shared only | 1+ tech-specific | 3+ tech-specific |
+| Reference docs | Basic CLAUDE.md | Full reference | Full + examples |
+
+### Contributing to Upgrade a Tier 3 Stack
+
+If you want to help promote a Tier 3 stack to Tier 2, here is what to focus on:
+
+1. **Add i18n content**: Create at least 7 i18n files across `Dev/i18n/{lang}/{Technology}/` directories (agents, commands, skills, templates, checklists)
+2. **Customize the reviewer agent**: Replace the generic template with a reviewer that understands the technology's specific patterns, anti-patterns, and best practices
+3. **Add commands**: Implement at least 5 commands in the `/{tech}:` namespace (e.g., `check-architecture`, `check-compliance`, `check-security`, `check-testing`, `check-code-quality`)
+4. **Create a tech-specific skill**: Add at least one skill under `Dev/i18n/{lang}/{Technology}/skills/` with `SKILL.md` + `REFERENCE.md`
+5. **Write reference documentation**: Expand the reference docs in `.claude/references/{tech}/` beyond the basic CLAUDE.md
+
+### New Stack Contribution Template
+
+When adding a new technology stack (starts at Tier 3):
+
+```
+Dev/i18n/en/{NewTech}/
+  agents/{newtech}-reviewer.md      # Reviewer agent (can start from generic template)
+  commands/check-architecture.md    # Architecture validation command
+  commands/check-compliance.md      # Standards compliance command
+  commands/check-security.md        # Security audit command
+  skills/                           # Tech-specific skills (optional for Tier 3)
+  templates/                        # Code templates
+  checklists/                       # Quality checklists
+```
+
+Also required:
+- Entry in `cli/lib/tech-registry.js` with `tier: 3`
+- Install script in `Dev/scripts/install-{newtech}-rules.sh`
+- Reference docs in `.claude/references/{newtech}/CLAUDE.md`
+- Translations for at least English (`en`); other languages are welcome
+
+See [docs/TECHNOLOGIES.md](docs/TECHNOLOGIES.md) for the full tier overview and upgrade paths.
+
+---
+
 ## File Naming Conventions
 
 ### Skills (Official Format)

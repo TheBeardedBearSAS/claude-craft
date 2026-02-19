@@ -1,22 +1,22 @@
 ---
 name: testing
-description: Testing - Principes TDD/BDD. Use when writing tests, reviewing test coverage, or setting up testing.
+description: TDD/BDD testing principles. Use when writing tests, reviewing test coverage, setting up testing, or discussing test strategy and test architecture.
 triggers:
-  files: ["*Test*.cs", "*Tests.cs", "*.Tests.csproj", "**/tests/**"]
-  keywords: ["test", "coverage", "TDD", "BDD", "xUnit", "mock", "assert"]
+  files: ["**/tests/**", "**/test/**", "**/__tests__/**", "**/spec/**", "*.test.*", "*.spec.*", "*Test*.*", "*_test.*"]
+  keywords: ["test", "coverage", "TDD", "BDD", "mock", "assert", "unit test", "integration test", "e2e", "end-to-end", "fixture", "factory", "arrange act assert", "given when then", "red green refactor", "test pyramid"]
 auto_suggest: true
 ---
 
-# Testing - Principes TDD/BDD
+# Testing - TDD/BDD Principles
 
-This skill provides guidelines and best practices for testing.
+This skill provides universal guidelines and best practices for testing across all technology stacks.
 
 See @REFERENCE.md for detailed documentation.
 
 ## Quick Reference
 
 - **TDD Cycle**: RED → GREEN → REFACTOR
-- **Coverage Target**: ≥ 80%
-- **Stack**: xUnit + FluentAssertions + Moq + Bogus + Testcontainers
+- **Coverage Target**: >= 80%
+- **Pyramid**: Unit (70%) > Integration (20%) > E2E (10%)
 - **Pattern**: Arrange-Act-Assert (AAA)
-- **Naming**: `MethodName_StateUnderTest_ExpectedBehavior`
+- **Naming**: Descriptive test names that explain behavior

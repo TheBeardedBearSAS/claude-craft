@@ -1,22 +1,22 @@
 ---
 name: security
-description: Sécurité. Use when reviewing security, implementing auth, or hardening code.
+description: Security guidelines and OWASP Top 10. Use when reviewing security, implementing authentication or authorization, hardening code, or discussing vulnerabilities.
 triggers:
-  files: ["*Auth*.cs", "*Security*.cs", "*Identity*.cs", "**/auth/**", "**/identity/**"]
-  keywords: ["security", "auth", "authentication", "authorization", "OWASP", "injection", "XSS", "CSRF", "JWT", "password"]
+  files: ["**/auth/**", "**/identity/**", "**/security/**", "**/middleware/**", "*.security.*", "*Auth*.*", "*Security*.*"]
+  keywords: ["security", "auth", "authentication", "authorization", "OWASP", "injection", "XSS", "CSRF", "JWT", "password", "vulnerability", "encryption", "hashing", "bcrypt", "token", "session", "RBAC", "permissions", "CORS", "HSTS", "CSP", "SQL injection", "SSRF", "rate limit"]
 auto_suggest: true
 ---
 
-# Sécurité
+# Security
 
-This skill provides security guidelines and OWASP Top 10 best practices.
+This skill provides universal security guidelines and OWASP Top 10 best practices applicable to any technology stack.
 
 See @REFERENCE.md for detailed documentation.
 
 ## Quick Reference
 
-- **Validation**: Always server-side, never trust client
+- **Validation**: Always server-side, never trust client input
 - **Queries**: Parameterized only (no SQL concatenation)
-- **Auth**: Policy-based `[Authorize(Policy = "...")]`
-- **Secrets**: Key Vault in prod, user-secrets in dev
+- **Passwords**: Hash with bcrypt/Argon2 (never MD5/SHA1)
+- **Secrets**: Environment variables or vault (never in code)
 - **Headers**: CSP, X-Frame-Options, HSTS, nosniff
