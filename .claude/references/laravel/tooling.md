@@ -567,6 +567,40 @@ protected function gate(): void
 }
 ```
 
+## Claude Code LSP Plugin
+
+The LSP plugin gives Claude structural code understanding via the Language Server Protocol: automatic diagnostics after each edit, go-to-definition, find references, and type information on hover.
+
+### Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Automatic diagnostics** | Errors and warnings detected after each modification |
+| **Go to Definition** | Navigate to the exact definition of a symbol |
+| **Find References** | All usages of a symbol across the project |
+| **Hover** | Type information and documentation |
+| **Workspace Symbols** | Search symbols across the entire project |
+| **Call Hierarchy** | Trace incoming/outgoing calls |
+
+### Installation
+
+```bash
+# 1. Install the language server
+npm install -g intelephense
+
+# 2. Install the Claude Code plugin (official marketplace)
+/plugins install php-lsp@claude-plugins-official
+```
+
+### Benefits for Laravel
+
+- Real-time detection of type errors, undefined methods, and missing imports
+- Navigation through Eloquent models, facades, and service providers
+- PHPDoc type inference including IDE Helper generated stubs
+- Larastan-compatible diagnostics for Laravel-specific patterns
+
+---
+
 ## Tooling Checklist
 
 - [ ] Laravel Pint configured
@@ -578,3 +612,4 @@ protected function gate(): void
 - [ ] Telescope installed (dev)
 - [ ] VS Code extensions installed
 - [ ] Git hooks configured
+- [ ] Claude Code LSP plugin installed

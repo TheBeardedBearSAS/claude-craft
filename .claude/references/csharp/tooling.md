@@ -480,6 +480,40 @@ jobs:
 }
 ```
 
+## Claude Code LSP Plugin
+
+The LSP plugin gives Claude structural code understanding via the Language Server Protocol: automatic diagnostics after each edit, go-to-definition, find references, and type information on hover.
+
+### Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Automatic diagnostics** | C# compilation errors and warnings detected after each modification |
+| **Go to Definition** | Navigate to the exact definition of a symbol |
+| **Find References** | All usages of a symbol across the project |
+| **Hover** | Type information and documentation |
+| **Workspace Symbols** | Search symbols across the entire project |
+| **Call Hierarchy** | Trace incoming/outgoing calls |
+
+### Installation
+
+```bash
+# 1. Install the language server
+dotnet tool install -g csharp-ls
+
+# 2. Install the Claude Code plugin (official marketplace)
+/plugins install csharp-lsp@claude-plugins-official
+```
+
+### Benefits for C# / .NET
+
+- Real-time Roslyn-based diagnostics after every edit
+- Navigation through CQRS handlers, MediatR pipelines, and EF Core entities
+- NuGet package type resolution across the solution
+- Extension members and C# 14 feature support
+
+---
+
 ## Tooling Checklist
 
 - [ ] .NET 9 SDK installed
@@ -491,3 +525,4 @@ jobs:
 - [ ] CI/CD pipeline configured
 - [ ] VS Code / Visual Studio extensions installed
 - [ ] Git hooks set up (Husky.Net or similar)
+- [ ] Claude Code LSP plugin installed

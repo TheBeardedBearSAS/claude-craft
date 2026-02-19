@@ -334,6 +334,18 @@ Plan mode crash fix, temperatureOverride fix, LSP compatibility, VSCode scroll/T
 
 ---
 
+## LSP Plugins
+
+| Stack | Plugin | Install |
+|-------|--------|---------|
+| PHP | `php-lsp` | `npm install -g intelephense` |
+| Python | `pyright-lsp` | `pip install pyright` |
+| TS/JS | `typescript-lsp` | `npm install -g @vtsls/language-server typescript` |
+| Dart | `dart-analyzer` | Flutter SDK |
+| C# | `csharp-lsp` | `dotnet tool install -g csharp-ls` |
+
+Install: `/plugins install <name>@claude-plugins-official`
+
 ## Skills
 
 Invoke skills with `/skill-name`:

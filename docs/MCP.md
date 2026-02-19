@@ -486,6 +486,27 @@ For large outputs, use pagination or filtering.
 
 ---
 
+## LSP Plugins vs MCP
+
+LSP plugins and MCP servers are complementary but serve different purposes:
+
+| Feature | LSP Plugins | MCP Servers |
+|---------|-------------|-------------|
+| **Purpose** | Code intelligence (diagnostics, navigation, types) | External tool and data access |
+| **Scope** | Your codebase | External services (GitHub, DB, APIs) |
+| **Protocol** | Language Server Protocol | Model Context Protocol |
+| **Runs** | Language server process | MCP server process |
+| **Config** | `/plugins install` | `.mcp.json` |
+| **Example** | Type errors after editing a file | Querying a PostgreSQL database |
+
+**When to use LSP plugins:** You want Claude to understand your code structurally — catch type errors, navigate definitions, find all references to a symbol.
+
+**When to use MCP servers:** You want Claude to interact with external services — fetch GitHub issues, query databases, access documentation.
+
+**Both together:** Use LSP plugins for code intelligence AND MCP servers for external integrations. They don't conflict.
+
+---
+
 ## Related Documentation
 
 - [Hooks](/docs/HOOKS.md) - Automated workflows

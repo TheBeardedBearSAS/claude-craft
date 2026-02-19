@@ -260,7 +260,7 @@ endif
 #!/bin/bash
 set -e
 
-echo "=€ Flutter project setup..."
+echo "=ï¿½ Flutter project setup..."
 
 # Check Flutter
 if ! command -v flutter &> /dev/null; then
@@ -268,7 +268,7 @@ if ! command -v flutter &> /dev/null; then
     exit 1
 fi
 
-echo "=æ Installing dependencies..."
+echo "=ï¿½ Installing dependencies..."
 flutter pub get
 
 echo "=' Generating code..."
@@ -283,18 +283,18 @@ echo " Setup complete!"
 #!/bin/bash
 set -e
 
-echo ">ê Running all tests..."
+echo ">ï¿½ Running all tests..."
 
-echo "1ã Unit tests..."
+echo "1ï¿½ Unit tests..."
 flutter test test/unit/
 
-echo "2ã Widget tests..."
+echo "2ï¿½ Widget tests..."
 flutter test test/widget/
 
-echo "3ã Integration tests..."
+echo "3ï¿½ Integration tests..."
 flutter test integration_test/
 
-echo "=Ê Generating coverage..."
+echo "=ï¿½ Generating coverage..."
 flutter test --coverage
 
 echo " All tests passed!"
@@ -306,12 +306,12 @@ echo " All tests passed!"
 #!/bin/bash
 set -e
 
-echo "<× Building all platforms..."
+echo "<ï¿½ Building all platforms..."
 
-echo "=ñ Android APK..."
+echo "=ï¿½ Android APK..."
 flutter build apk --release
 
-echo "=ñ Android App Bundle..."
+echo "=ï¿½ Android App Bundle..."
 flutter build appbundle --release
 
 echo "<N iOS..."
@@ -321,7 +321,7 @@ echo "< Web..."
 flutter build web --release
 
 echo " Builds complete!"
-echo "=æ Files available in build/"
+echo "=ï¿½ Files available in build/"
 ```
 
 ---
@@ -510,6 +510,40 @@ flutter pub global run devtools
 - **Network**: HTTP requests monitoring
 - **Logging**: Console logs
 - **App size**: App size analysis
+
+---
+
+## Claude Code LSP Plugin
+
+The LSP plugin gives Claude structural code understanding via the Language Server Protocol: automatic diagnostics after each edit, go-to-definition, find references, and type information on hover.
+
+### Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Automatic diagnostics** | Dart analysis errors and warnings detected after each modification |
+| **Go to Definition** | Navigate to the exact definition of a symbol |
+| **Find References** | All usages of a symbol across the project |
+| **Hover** | Type information and documentation |
+| **Workspace Symbols** | Search symbols across the entire project |
+| **Call Hierarchy** | Trace incoming/outgoing calls |
+
+### Installation
+
+```bash
+# 1. Ensure Flutter SDK is installed (includes Dart analyzer)
+flutter doctor
+
+# 2. Install the Claude Code plugin (community - boostvolt)
+/plugins install dart-analyzer@claude-code-lsps
+```
+
+### Benefits for Flutter
+
+- Real-time Dart analysis matching `flutter analyze` output
+- Navigation through widget trees, BLoC events, and Riverpod providers
+- Dot shorthand (Dart 3.10) type inference
+- Build runner generated code awareness
 
 ---
 

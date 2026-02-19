@@ -266,6 +266,40 @@ npx expo install expo-camera@latest
 
 ---
 
+## Claude Code LSP Plugin
+
+The LSP plugin gives Claude structural code understanding via the Language Server Protocol: automatic diagnostics after each edit, go-to-definition, find references, and type information on hover.
+
+### Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Automatic diagnostics** | TypeScript errors and warnings detected after each modification |
+| **Go to Definition** | Navigate to the exact definition of a symbol |
+| **Find References** | All usages of a symbol across the project |
+| **Hover** | Type information and documentation |
+| **Workspace Symbols** | Search symbols across the entire project |
+| **Call Hierarchy** | Trace incoming/outgoing calls |
+
+### Installation
+
+```bash
+# 1. Install the language server
+npm install -g @vtsls/language-server typescript
+
+# 2. Install the Claude Code plugin (official marketplace)
+/plugins install typescript-lsp@claude-plugins-official
+```
+
+### Benefits for React Native
+
+- Real-time TypeScript diagnostics across platform-specific files
+- Navigation through Expo modules and native bridge types
+- React Navigation type parameter inference
+- Reanimated worklet and shared value type tracking
+
+---
+
 ## Checklist Tooling
 
 - [ ] Expo CLI installé
@@ -275,6 +309,7 @@ npx expo install expo-camera@latest
 - [ ] VS Code extensions installées
 - [ ] Package manager cohérent (npm)
 - [ ] Scripts npm configurés
+- [ ] Claude Code LSP plugin installed
 
 ---
 

@@ -826,6 +826,20 @@ Built-in rate limiting for Agent SDK to prevent API throttling in multi-agent wo
 | Session restore | Fixed session restore failing after VSCode update |
 | Terminal focus | Fixed terminal losing focus during streaming |
 
+### LSP Plugins — Code Intelligence (v2.1.46+)
+
+LSP plugins give Claude automatic diagnostics and structural code navigation via the Language Server Protocol.
+
+| Stack | Plugin | Prerequisite |
+|-------|--------|--------------|
+| PHP / Symfony / Laravel | `php-lsp` | `npm install -g intelephense` |
+| Python | `pyright-lsp` | `pip install pyright` |
+| TypeScript / React / Angular / Vue / RN | `typescript-lsp` | `npm install -g @vtsls/language-server typescript` |
+| Flutter / Dart | `dart-analyzer` (boostvolt) | Flutter SDK |
+| C# / .NET | `csharp-lsp` | `dotnet tool install -g csharp-ls` |
+
+Installation: `/plugins install <name>@claude-plugins-official`
+
 ### MCP Connectors from claude.ai (v2.1.46+)
 
 Support for adding MCP connectors directly from claude.ai to Claude Code.

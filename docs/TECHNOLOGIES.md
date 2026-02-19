@@ -429,6 +429,27 @@ const styles = StyleSheet.create({
 
 ---
 
+## LSP Plugins by Stack
+
+Claude Code LSP plugins provide structural code intelligence. Install the recommended plugin for each technology:
+
+| Technology | Plugin | Language Server | Installation |
+|------------|--------|----------------|--------------|
+| Symfony | `php-lsp` | Intelephense | `npm install -g intelephense` |
+| Laravel | `php-lsp` | Intelephense | `npm install -g intelephense` |
+| PHP | `php-lsp` | Intelephense | `npm install -g intelephense` |
+| Python | `pyright-lsp` | Pyright | `pip install pyright` |
+| React | `typescript-lsp` | vtsls | `npm install -g @vtsls/language-server typescript` |
+| Angular | `typescript-lsp` | vtsls | `npm install -g @vtsls/language-server typescript` |
+| Vue.js | `typescript-lsp` | vtsls | `npm install -g @vtsls/language-server typescript` |
+| React Native | `typescript-lsp` | vtsls | `npm install -g @vtsls/language-server typescript` |
+| Flutter | `dart-analyzer` | Dart SDK | Included with Flutter SDK |
+| C# / .NET | `csharp-lsp` | csharp-ls | `dotnet tool install -g csharp-ls` |
+
+Install: `/plugins install <name>@claude-plugins-official` (except Flutter: `@claude-code-lsps`)
+
+---
+
 ## Cross-Technology Patterns
 
 ### Testing

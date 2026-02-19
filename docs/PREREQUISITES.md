@@ -222,6 +222,33 @@ fi
 
 ---
 
+## Optional: LSP Plugins
+
+LSP (Language Server Protocol) plugins give Claude Code structural code understanding — automatic diagnostics, go-to-definition, find references, and type information. Install the language server for your stack:
+
+| Stack | Language Server | Installation |
+|-------|----------------|--------------|
+| **PHP / Symfony / Laravel** | Intelephense | `npm install -g intelephense` |
+| **Python** | Pyright | `pip install pyright` |
+| **TypeScript / React / Angular / Vue / RN** | vtsls | `npm install -g @vtsls/language-server typescript` |
+| **Flutter / Dart** | Dart SDK Analyzer | Included with Flutter SDK |
+| **C# / .NET** | csharp-ls | `dotnet tool install -g csharp-ls` |
+
+Then install the Claude Code plugin:
+
+```bash
+# Official plugins
+/plugins install php-lsp@claude-plugins-official
+/plugins install pyright-lsp@claude-plugins-official
+/plugins install typescript-lsp@claude-plugins-official
+/plugins install csharp-lsp@claude-plugins-official
+
+# Community plugin (Flutter/Dart)
+/plugins install dart-analyzer@claude-code-lsps
+```
+
+---
+
 ## Version Requirements Summary
 
 | Tool | Minimum Version | Recommended |

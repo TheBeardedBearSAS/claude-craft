@@ -533,6 +533,40 @@ volumes:
   postgres_data:
 ```
 
+## Claude Code LSP Plugin
+
+The LSP plugin gives Claude structural code understanding via the Language Server Protocol: automatic diagnostics after each edit, go-to-definition, find references, and type information on hover.
+
+### Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Automatic diagnostics** | Errors and warnings detected after each modification |
+| **Go to Definition** | Navigate to the exact definition of a symbol |
+| **Find References** | All usages of a symbol across the project |
+| **Hover** | Type information and documentation |
+| **Workspace Symbols** | Search symbols across the entire project |
+| **Call Hierarchy** | Trace incoming/outgoing calls |
+
+### Installation
+
+```bash
+# 1. Install the language server
+npm install -g intelephense
+
+# 2. Install the Claude Code plugin (official marketplace)
+/plugins install php-lsp@claude-plugins-official
+```
+
+### Benefits for PHP
+
+- Real-time detection of type errors, undefined methods, and missing imports
+- Accurate navigation through Composer autoloaded classes
+- PHPDoc type inference for better hover information
+- Framework-aware completions (Symfony, Laravel services)
+
+---
+
 ## Tooling Checklist
 
 - [ ] Composer configured with autoload
@@ -544,3 +578,4 @@ volumes:
 - [ ] Pre-commit hooks installed
 - [ ] CI/CD pipeline configured
 - [ ] Docker development environment
+- [ ] Claude Code LSP plugin installed

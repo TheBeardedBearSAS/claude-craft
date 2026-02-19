@@ -338,6 +338,40 @@ clean:
 	rm -f .coverage
 ```
 
+## Claude Code LSP Plugin
+
+The LSP plugin gives Claude structural code understanding via the Language Server Protocol: automatic diagnostics after each edit, go-to-definition, find references, and type information on hover.
+
+### Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Automatic diagnostics** | Type errors and warnings detected after each modification |
+| **Go to Definition** | Navigate to the exact definition of a symbol |
+| **Find References** | All usages of a symbol across the project |
+| **Hover** | Type information and documentation |
+| **Workspace Symbols** | Search symbols across the entire project |
+| **Call Hierarchy** | Trace incoming/outgoing calls |
+
+### Installation
+
+```bash
+# 1. Install the language server
+pip install pyright
+
+# 2. Install the Claude Code plugin (official marketplace)
+/plugins install pyright-lsp@claude-plugins-official
+```
+
+### Benefits for Python
+
+- Real-time type checking complementing MyPy strict mode
+- Accurate navigation through virtual environments and installed packages
+- Pydantic model validation and type inference
+- FastAPI route and dependency injection awareness
+
+---
+
 ## Checklist
 
 - [ ] Package manager configured (uv or poetry)
@@ -349,3 +383,4 @@ clean:
 - [ ] Makefile created
 - [ ] Security tools configured
 - [ ] CI/CD runs all checks
+- [ ] Claude Code LSP plugin installed

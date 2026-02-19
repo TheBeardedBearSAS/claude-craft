@@ -954,6 +954,40 @@ jobs:
 
 ---
 
+## Claude Code LSP Plugin
+
+The LSP plugin gives Claude structural code understanding via the Language Server Protocol: automatic diagnostics after each edit, go-to-definition, find references, and type information on hover.
+
+### Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Automatic diagnostics** | Errors and warnings detected after each modification |
+| **Go to Definition** | Navigate to the exact definition of a symbol |
+| **Find References** | All usages of a symbol across the project |
+| **Hover** | Type information and documentation |
+| **Workspace Symbols** | Search symbols across the entire project |
+| **Call Hierarchy** | Trace incoming/outgoing calls |
+
+### Installation
+
+```bash
+# 1. Install the language server
+npm install -g intelephense
+
+# 2. Install the Claude Code plugin (official marketplace)
+/plugins install php-lsp@claude-plugins-official
+```
+
+### Benefits for Symfony
+
+- Real-time detection of type errors, undefined services, and missing imports
+- Navigation through Symfony container services and Doctrine entities
+- DDD layer boundary awareness (Domain, Application, Infrastructure)
+- API Platform resource and operation type inference
+
+---
+
 ## Checklist de validation
 
 ### Before chaque commit
@@ -965,6 +999,7 @@ jobs:
 - [ ] **PHPCPD:** Duplication < 3%
 - [ ] **Tests:** Coverage > 80%
 - [ ] **Infection:** MSI > 80%
+- [ ] **Claude Code LSP:** plugin installed
 
 ### Commands rapides
 

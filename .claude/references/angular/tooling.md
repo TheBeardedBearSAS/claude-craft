@@ -500,6 +500,40 @@ jobs:
           file: ./coverage/lcov.info
 ```
 
+## Claude Code LSP Plugin
+
+The LSP plugin gives Claude structural code understanding via the Language Server Protocol: automatic diagnostics after each edit, go-to-definition, find references, and type information on hover.
+
+### Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Automatic diagnostics** | TypeScript errors and warnings detected after each modification |
+| **Go to Definition** | Navigate to the exact definition of a symbol |
+| **Find References** | All usages of a symbol across the project |
+| **Hover** | Type information and documentation |
+| **Workspace Symbols** | Search symbols across the entire project |
+| **Call Hierarchy** | Trace incoming/outgoing calls |
+
+### Installation
+
+```bash
+# 1. Install the language server
+npm install -g @vtsls/language-server typescript
+
+# 2. Install the Claude Code plugin (official marketplace)
+/plugins install typescript-lsp@claude-plugins-official
+```
+
+### Benefits for Angular
+
+- Real-time TypeScript diagnostics with Angular template checking
+- Navigation through decorators, dependency injection, and modules
+- Signal and standalone component type inference
+- RxJS operator chain type tracking
+
+---
+
 ## Summary
 
 Essential Angular tooling:
