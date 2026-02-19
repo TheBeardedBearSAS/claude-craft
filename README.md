@@ -37,7 +37,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
 - **33 specialized agents** -- reviewers, architects, coaches that know your stack deeply
-- **160 slash commands** -- repeatable workflows for audits, code generation, sprint management
+- **161 slash commands** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -63,7 +63,7 @@ Infrastructure stacks (Docker, Coolify) are also available. See [Technologies](d
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 33 | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@docker-architect` |
-| **Commands** | 160 | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Commands** | 161 | `/workflow:init`, `/team:audit`, `/react:generate-component` |
 | **Skills** | 37 | Architecture, testing, security best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -105,7 +105,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 160 commands across 20 namespaces.
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 161 commands across 20 namespaces.
 
 ## Installation
 
@@ -170,7 +170,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 160 commands |
+| [Commands](docs/COMMANDS.md) | All 161 commands |
 | [Agents](docs/AGENTS.md) | All 33 agents |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |

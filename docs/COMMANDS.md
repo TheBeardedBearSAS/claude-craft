@@ -35,7 +35,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 12 |
+| `/common:` | Transversal | 13 |
 | `/workflow:` | Workflow (BMAD) | 9 |
 | `/team:` | Agent Teams | 4 |
 | `/qa:` | QA & Testing | 6 |

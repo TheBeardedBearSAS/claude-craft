@@ -1,6 +1,6 @@
 # Commands Full Reference
 
-Complete reference for all 160 commands available in Claude Craft.
+Complete reference for all 161 commands available in Claude Craft.
 
 ---
 
@@ -8,27 +8,26 @@ Complete reference for all 160 commands available in Claude Craft.
 
 | Namespace | Count | Description |
 |-----------|-------|-------------|
-| `/common:` | 24 | Transversal commands |
-| `/workflow:` | 6 | Development workflow |
-| `/project:` | 22 | Project management |
-| `/sprint:` | 3 | Sprint management (BMAD) |
-| `/gate:` | 6 | Quality gates (BMAD) |
-| `/bmad:` | 4 | BMAD orchestration |
-| `/pm:` | 5 | Product Manager |
-| `/arch:` | 6 | Architect |
+| `/common:` | 13 | Transversal commands |
+| `/workflow:` | 9 | Development workflow |
+| `/team:` | 4 | Agent Teams |
+| `/qa:` | 6 | QA & Testing |
+| `/uiux:` | 7 | UI/UX & Accessibility |
 | `/symfony:` | 10 | Symfony/PHP |
 | `/flutter:` | 10 | Flutter/Dart |
 | `/python:` | 10 | Python |
-| `/react:` | 8 | React |
-| `/reactnative:` | 7 | React Native |
+| `/react:` | 10 | React/TypeScript |
+| `/reactnative:` | 10 | React Native |
 | `/angular:` | 6 | Angular |
 | `/csharp:` | 6 | C#/.NET |
 | `/laravel:` | 6 | Laravel |
 | `/vuejs:` | 6 | Vue.js |
 | `/php:` | 5 | PHP |
-| `/docker:` | 4 | Docker |
+| `/docker:` | 5 | Docker/Infrastructure |
 | `/coolify:` | 5 | Coolify/PaaS |
-| `/qa:recette*` | 5 | QA Recette (Acceptance Testing) |
+| `/project:` | 22 | Project Management |
+| `/sprint:` | 5 | Sprint Management (BMAD v6) |
+| `/gate:` | 6 | Quality Gates (BMAD v6) |
 
 ---
 

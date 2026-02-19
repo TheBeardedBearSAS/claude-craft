@@ -61,7 +61,7 @@ Execution continue avec circuit breaker adaptatif, monitoring de sante (detectio
 
 ### W1 : Bibliotheque de prompts, pas framework runtime
 
-93% du codebase est du markdown. Les "33 agents" sont des fichiers markdown avec frontmatter YAML. Les "160 commandes" sont des fichiers markdown. Il n'y a pas de moteur d'orchestration runtime, pas de machine a etats, pas de gestion d'erreurs programmatique. Claude-Flow dispose de 170+ outils MCP reels. CrewAI a un runtime Python qui gere l'execution, la memoire, et la communication inter-agents programmatiquement.
+93% du codebase est du markdown. Les "33 agents" sont des fichiers markdown avec frontmatter YAML. Les "161 commandes" sont des fichiers markdown. Il n'y a pas de moteur d'orchestration runtime, pas de machine a etats, pas de gestion d'erreurs programmatique. Claude-Flow dispose de 170+ outils MCP reels. CrewAI a un runtime Python qui gere l'execution, la memoire, et la communication inter-agents programmatiquement.
 
 ### W2 : Bus factor de 1
 
@@ -84,7 +84,7 @@ Zero support Cursor, Windsurf, Copilot, Aider. Si Anthropic change les conventio
 
 ### W6 : Barriere d'adoption elevee
 
-160 commandes, 20 namespaces, 33 agents, BMAD v6 avec 3 tracks et 5 gates, Ralph Wiggum, QA Recette... Pas de disclosure progressive. Le README fait 611 lignes.
+161 commandes, 20 namespaces, 33 agents, BMAD v6 avec 3 tracks et 5 gates, Ralph Wiggum, QA Recette... Pas de disclosure progressive. Le README fait 611 lignes.
 
 ### W7 : 10 stacks, 1 mainteneur
 
@@ -150,7 +150,7 @@ Le differenciateur le plus fort. Le packager comme module installable independam
 
 ### R3 : Creer une experience "Resultats en 10 minutes"
 
-**Arreter :** Mener avec "10 stacks, 33 agents, 160 commandes".
+**Arreter :** Mener avec "10 stacks, 33 agents, 161 commandes".
 **Commencer :** Un `/workflow:quick-start` qui demontre le cycle complet sur un projet sample en <10 min. Communiquer la valeur, pas la complexite.
 
 ### R4 : Publier les skills sur le Skills Hub

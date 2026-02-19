@@ -4,7 +4,7 @@
 - **Version:** 7.19.0
 - **Type:** Framework multi-technologie pour Claude Code
 - **Stacks:** 10 (Symfony, React, Flutter, Python, Angular, Vue.js, Laravel, React Native, C#/.NET, PHP)
-- **Agents:** 33 | **Commandes:** 160 | **Namespaces:** 20
+- **Agents:** 33 | **Commandes:** 161 | **Namespaces:** 20
 
 ## Structure du Repo
 - `Dev/` — Contenu i18n, scripts d'installation
