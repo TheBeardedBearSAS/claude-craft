@@ -2,7 +2,7 @@
 
 **Version:** 7.19.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 11 technology stacks, 38 agents, 183 commands across 21 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 12 technology stacks, 43 agents, 188 commands across 22 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -40,7 +40,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (21 namespaces, 183 commands)
+## Available Commands (22 namespaces, 188 commands)
 
 | Namespace | Key Commands | Count |
 |-----------|-------------|-------|
@@ -65,12 +65,13 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/docker:` | `compose-setup`, `architecture`, `debug`, `optimize` | 5 |
 | `/coolify:` | `setup`, `deploy`, `debug`, `backup`, `optimize` | 5 |
 | `/kubernetes:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
+| `/opentofu:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 
 ---
 
-## Available Agents (38 agents)
+## Available Agents (43 agents)
 
 | Category | Agents | Count |
 |----------|--------|-------|
@@ -79,6 +80,7 @@ Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-RE
 | **Docker** | `@docker-dockerfile`, `@docker-compose`, `@docker-debug`, `@docker-cicd`, `@docker-architect` | 5 |
 | **Coolify** | `@coolify-architect`, `@coolify-deployment`, `@coolify-debug`, `@coolify-monitoring` | 4 |
 | **Kubernetes** | `@kubernetes-architect`, `@kubernetes-deployment`, `@kubernetes-debug`, `@kubernetes-security`, `@kubernetes-monitoring` | 5 |
+| **OpenTofu** | `@opentofu-architect`, `@opentofu-deployment`, `@opentofu-debug`, `@opentofu-security`, `@opentofu-cost` | 5 |
 | **Project** | `@product-owner`, `@tech-lead` | 2 |
 
 Full reference: [Agents](../docs/AGENTS.md)

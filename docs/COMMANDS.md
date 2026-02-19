@@ -53,6 +53,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/docker:` | Docker/Infrastructure | 5 |
 | `/coolify:` | Coolify/PaaS | 5 |
 | `/kubernetes:` | Kubernetes/Infrastructure | 5 |
+| `/opentofu:` | OpenTofu/IaC | 5 |
 | `/project:` | Project Management | 34 |
 | `/sprint:` | Sprint Management (BMAD v6) | 5 |
 | `/gate:` | Quality Gates (BMAD v6) | 7 |
@@ -529,6 +530,27 @@ Infrastructure orchestration with Kubernetes.
 | `/kubernetes:debug <Symptom>` | Diagnose Kubernetes issues |
 | `/kubernetes:security-audit [Scope]` | Kubernetes security posture audit |
 | `/kubernetes:optimize [Target]` | Optimize Kubernetes resource usage and costs |
+
+---
+
+## OpenTofu Commands (`/opentofu:`)
+
+Infrastructure as Code with OpenTofu.
+
+### Architecture Commands
+
+| Command | Description |
+|---------|-------------|
+| `/opentofu:architecture <Project>` | Design complete OpenTofu IaC architecture |
+| `/opentofu:deploy-setup <Platform>` | Setup CI/CD pipeline for OpenTofu |
+
+### Operations Commands
+
+| Command | Description |
+|---------|-------------|
+| `/opentofu:debug <Symptom>` | Diagnose OpenTofu state issues and drift |
+| `/opentofu:security-audit [Scope]` | Audit OpenTofu security posture |
+| `/opentofu:optimize [Target]` | Cost optimization and resource analysis |
 
 ---
 

@@ -13,7 +13,7 @@
 #   npx @the-bearded-bear/claude-craft install <path> --tech=<name>
 #===============================================================================
 
-.PHONY: help install-all install-common install-project install-infra install-coolify install-kubernetes \
+.PHONY: help install-all install-common install-project install-infra install-coolify install-kubernetes install-opentofu \
         install-tools install-tools-lib install-statusline install-multiaccount install-projectconfig \
         install-completions \
         install-web install-fullstack-js install-mobile install-backend \
@@ -102,6 +102,9 @@ install-all: ## Installe TOUTES les regles (common + toutes technos + project)
 	@if [ -f "$(CURDIR)/Infra/install-kubernetes-rules.sh" ]; then \
 		$(CURDIR)/Infra/install-kubernetes-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
 	fi
+	@if [ -f "$(CURDIR)/Infra/install-opentofu-rules.sh" ]; then \
+		$(CURDIR)/Infra/install-opentofu-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	fi
 	@if [ -f "$(CURDIR)/Project/install-project-commands.sh" ]; then \
 		$(CURDIR)/Project/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET); \
 	fi
@@ -115,13 +118,15 @@ install-project: ## Installe les commandes de gestion de projet (EPICs, US, Task
 	@echo "$(CYAN)Installation des commandes Project (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Project/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET)
 
-install-infra: ## Installe les agents et commandes Docker + Coolify + Kubernetes/Infrastructure
+install-infra: ## Installe les agents et commandes Docker + Coolify + Kubernetes + OpenTofu/Infrastructure
 	@echo "$(CYAN)Installation des regles Docker (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-infra-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 	@echo "$(CYAN)Installation des regles Coolify (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-coolify-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 	@echo "$(CYAN)Installation des regles Kubernetes (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-kubernetes-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+	@echo "$(CYAN)Installation des regles OpenTofu (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-opentofu-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 
 install-coolify: ## Installe les agents et commandes Coolify
 	@echo "$(CYAN)Installation des regles Coolify (lang=$(RULES_LANG))...$(NC)"
@@ -130,6 +135,10 @@ install-coolify: ## Installe les agents et commandes Coolify
 install-kubernetes: ## Installe les agents et commandes Kubernetes
 	@echo "$(CYAN)Installation des regles Kubernetes (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-kubernetes-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+
+install-opentofu: ## Installe les agents et commandes OpenTofu
+	@echo "$(CYAN)Installation des regles OpenTofu (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-opentofu-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 
 #===============================================================================
 # Combinaisons Courantes
@@ -389,7 +398,8 @@ check: ## Verifie que tous les scripts sont executables
 		$(CURDIR)/Project/install-project-commands.sh \
 		$(CURDIR)/Infra/install-infra-rules.sh \
 		$(CURDIR)/Infra/install-coolify-rules.sh \
-		$(CURDIR)/Infra/install-kubernetes-rules.sh; do \
+		$(CURDIR)/Infra/install-kubernetes-rules.sh \
+		$(CURDIR)/Infra/install-opentofu-rules.sh; do \
 		if [ -f "$$script" ]; then \
 			if [ -x "$$script" ]; then \
 				echo "  $(GREEN)Y$(NC) $$script"; \
@@ -407,6 +417,7 @@ fix-permissions: ## Rend tous les scripts executables
 	@chmod +x $(CURDIR)/Infra/install-infra-rules.sh
 	@chmod +x $(CURDIR)/Infra/install-coolify-rules.sh
 	@chmod +x $(CURDIR)/Infra/install-kubernetes-rules.sh
+	@chmod +x $(CURDIR)/Infra/install-opentofu-rules.sh
 	@echo "$(GREEN)Permissions corrigees$(NC)"
 
 #===============================================================================

@@ -36,8 +36,8 @@ That's it. You get an architecture, security, and quality audit of your project 
 Claude Code is powerful on its own. Claude Craft makes it **consistent and team-ready**:
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
-- **38 specialized agents** -- reviewers, architects, coaches that know your stack deeply
-- **166 slash commands** -- repeatable workflows for audits, code generation, sprint management
+- **43 specialized agents** -- reviewers, architects, coaches that know your stack deeply
+- **171 slash commands** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -57,6 +57,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **PHP** | 8.5 | `--tech=php` |
 
 | **Kubernetes** | 1.35+ | `--tech=kubernetes` |
+| **OpenTofu** | 1.7+ | `--tech=opentofu` |
 
 Infrastructure stacks (Docker, Coolify) are also available. See [Technologies](docs/TECHNOLOGIES.md) for full details.
 
@@ -64,8 +65,8 @@ Infrastructure stacks (Docker, Coolify) are also available. See [Technologies](d
 
 | Category | Count | Examples |
 |----------|-------|---------|
-| **Agents** | 38 | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect` |
-| **Commands** | 166 | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Agents** | 43 | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@opentofu-architect` |
+| **Commands** | 171 | `/workflow:init`, `/team:audit`, `/react:generate-component` |
 | **Skills** | 37 | Architecture, testing, security best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -107,7 +108,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 166 commands across 21 namespaces.
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 171 commands across 22 namespaces.
 
 ## Installation
 
@@ -172,8 +173,8 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 166 commands |
-| [Agents](docs/AGENTS.md) | All 38 agents |
+| [Commands](docs/COMMANDS.md) | All 171 commands |
+| [Agents](docs/AGENTS.md) | All 43 agents |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |
 | [BMAD Guide](docs/BMAD-PRACTICAL-GUIDE.md) | Project management framework |
