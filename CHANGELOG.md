@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.17.0] - 2026-02-19
+
+### Added
+
+- **LSP plugin documentation** — documented Claude Code LSP plugins for all 10 technology stacks: PHP/Symfony/Laravel (Intelephense), Python (Pyright), React/Angular/Vue/RN (vtsls), Flutter (Dart analyzer), C#/.NET (csharp-ls). Added sections in tooling references, CLAUDE.md, INDEX.md, PREREQUISITES.md, MCP.md (LSP vs MCP comparison), and TECHNOLOGIES.md
+
 ## [7.16.0] - 2026-02-19
 
 ### Added
