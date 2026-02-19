@@ -6,9 +6,11 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.17
+## What's New in v7.18
 
-- **LSP plugin documentation** for all 10 technology stacks -- gives Claude structural code intelligence (diagnostics, go-to-definition, find references, type info)
+- **Differentiated reviewer agents** -- Tier 1 reviewers (React, Symfony, Python, Flutter) rewritten with deep tech-specific decision trees and upgraded to sonnet
+- **Technology tier system** -- formalized core/supported/community tiers with upgrade paths
+- **Simplified onboarding** -- README cut from 611 to 205 lines, QUICKSTART rewritten as a 10-minute journey
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 ## Install and First Result

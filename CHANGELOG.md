@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.18.0] - 2026-02-19
+
+### Added
+
+- **Technology tier system** — formalized 3-tier model (core/supported/community) in tech-registry with `tier` field and `getTechsByTier()` helper. Tier 1 (core): Symfony, React, Python, Flutter. Tier 2 (supported): React Native, PHP. Tier 3 (community): C#, Angular, Laravel, Vue.js
+- **Content validation tests** — new `tests/content/` suite validating agents (YAML frontmatter, required fields, model whitelist, skill references), commands (frontmatter, namespace consistency), and skills (SKILL.md + REFERENCE.md presence, format). Added `test:content` script
+- **Skills publishing guide** — `docs/SKILLS-PUBLISHING.md` with distribution methods, publishing checklist, and attribution guidelines. Standalone `README.md` added to 4 pilot skills (solid-principles, testing, security, git-workflow)
+- **Technologies documentation** — `docs/TECHNOLOGIES.md` with tier breakdown, maturity criteria, and upgrade paths
+- **Competitive analysis** — `docs/COMPETITIVE-ANALYSIS.md` benchmarking against cursor-rules-cli, 10xrules, awesome-cursorrules, and others
+
+### Changed
+
+- **Reviewer agents differentiated** — 4 Tier 1 reviewers (React, Symfony, Python, Flutter) rewritten with deep tech-specific decision trees, unique scoring breakdowns, and tech-specific skills. Model upgraded from haiku to sonnet
+- **README simplified** — 611 → 205 lines with progressive disclosure (install-first hero, key commands, doc links)
+- **QUICKSTART rewritten** — restructured as a 10-minute journey with checkpoints and expected output at each step
+- **CONTRIBUTING updated** — added Technology Tiers section with tier requirements table, upgrade guide, and community contribution template
+- **Skill frontmatter improved** — broadened triggers and updated descriptions for solid-principles, testing, security, git-workflow
+
+### Fixed
+
+- **Broken symlink handling** — skills test now uses `lstatSync` to skip broken symlinks (e.g. `remotion-best-practices`)
+
 ## [7.17.1] - 2026-02-19
 
 ### Changed
