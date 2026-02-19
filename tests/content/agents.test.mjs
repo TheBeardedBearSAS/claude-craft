@@ -158,13 +158,24 @@ describe('agent content validation', () => {
     }
   });
 
-  it('tier 1 reviewer agents use sonnet model', () => {
-    const tier1Reviewers = ['react-reviewer', 'symfony-reviewer', 'python-reviewer', 'flutter-reviewer'];
+  it('all reviewer agents use sonnet model', () => {
+    const allReviewers = [
+      'angular-reviewer',
+      'csharp-reviewer',
+      'flutter-reviewer',
+      'laravel-reviewer',
+      'php-reviewer',
+      'python-reviewer',
+      'react-reviewer',
+      'reactnative-reviewer',
+      'symfony-reviewer',
+      'vuejs-reviewer',
+    ];
     for (const agent of agents) {
-      if (tier1Reviewers.includes(agent.basename)) {
+      if (allReviewers.includes(agent.basename)) {
         expect(
           agent.frontmatter.model,
-          `Tier 1 agent ${agent.filename} should use 'sonnet' model, got '${agent.frontmatter.model}'`,
+          `Reviewer agent ${agent.filename} should use 'sonnet' model, got '${agent.frontmatter.model}'`,
         ).toBe('sonnet');
       }
     }

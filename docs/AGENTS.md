@@ -271,6 +271,17 @@ Helps with:
 
 ---
 
+## Scoring System v2.0
+
+All 10 reviewer agents now use the **Claude Sonnet** model and share a standardized scoring and review system:
+
+- **Quantitative scoring**: 4 categories scored out of 100 -- Architecture (/25), Code Quality (/25), Testing (/25), Security (/25)
+- **Decision trees**: Automated review decisions based on score thresholds (APPROVE >= 80, REQUEST CHANGES < 50, COMMENT otherwise)
+- **5-phase review process**: Static Analysis, Architecture Review, Code Quality Check, Test Assessment, Security Audit
+- **Structured audit report**: Consistent output format across all stacks with findings, score breakdown, and actionable recommendations
+
+---
+
 ## Technology Reviewers (10)
 
 Each technology has a specialized reviewer agent.

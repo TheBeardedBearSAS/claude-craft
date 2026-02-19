@@ -180,6 +180,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [FAQ](docs/FAQ.md) | Common questions |
 | [Troubleshooting](docs/TROUBLESHOOTING.md) | Problem solving |
 | [Migration v7](docs/MIGRATION-v7.md) | Upgrade from previous versions |
+| [Skills Publishing](docs/SKILLS-PUBLISHING.md) | Guide for publishing skills |
 | [Compatibility](.claude/COMPATIBILITY.md) | Claude Code version compatibility |
 
 ### User Guides (Multilingual)

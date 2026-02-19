@@ -1,6 +1,6 @@
 # Analyse Concurrentielle Claude-Craft
 
-**Version:** 7.17.1 | **Date:** 2026-02-19
+**Version:** 7.19.0 | **Date:** 2026-02-19
 
 ---
 
