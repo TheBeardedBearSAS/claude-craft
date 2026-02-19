@@ -55,6 +55,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/kubernetes:` | Kubernetes/Infrastructure | 5 |
 | `/opentofu:` | OpenTofu/IaC | 5 |
 | `/ansible:` | Ansible/Automation | 5 |
+| `/hcloud:` | Hcloud/Hetzner Cloud | 5 |
 | `/project:` | Project Management | 34 |
 | `/sprint:` | Sprint Management (BMAD v6) | 5 |
 | `/gate:` | Quality Gates (BMAD v6) | 7 |
@@ -573,6 +574,27 @@ Infrastructure automation with Ansible.
 | `/ansible:debug <Symptom>` | Diagnose Ansible playbook issues |
 | `/ansible:security-audit [Scope]` | Audit Ansible security posture |
 | `/ansible:optimize [Target]` | Optimize Ansible performance and quality |
+
+---
+
+## Hcloud Commands (`/hcloud:`)
+
+Hetzner Cloud infrastructure management with hcloud CLI.
+
+### Architecture Commands
+
+| Command | Description |
+|---------|-------------|
+| `/hcloud:architecture <Project>` | Design complete Hetzner Cloud infrastructure architecture |
+| `/hcloud:deploy-setup <Platform>` | Setup CI/CD pipeline for Hetzner Cloud deployments |
+
+### Operations Commands
+
+| Command | Description |
+|---------|-------------|
+| `/hcloud:debug <Symptom>` | Diagnose Hetzner Cloud infrastructure issues |
+| `/hcloud:security-audit [Scope]` | Audit Hetzner Cloud security posture |
+| `/hcloud:optimize [Target]` | Optimize Hetzner Cloud cost and performance |
 
 ---
 

@@ -1085,9 +1085,13 @@ This restricts the agent to only spawn `Explore` and `Plan` sub-agents, preventi
 | Technology Reviewers | 10 | 50 |
 | Docker/Infrastructure | 5 | 25 |
 | Coolify/Infrastructure | 4 | 20 |
+| Kubernetes/Infrastructure | 5 | 25 |
+| OpenTofu/Infrastructure | 5 | 25 |
+| Ansible/Infrastructure | 5 | 25 |
+| Hcloud/Infrastructure | 5 | 25 |
 | **BMAD v6** | **0** (roles, not agents) | **10** (YAML roles) |
 | Project | 2 | 10 |
-| **Total** | **33** | **175** |
+| **Total** | **53** | **265** |
 
 ---
 

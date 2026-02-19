@@ -108,6 +108,9 @@ install-all: ## Installe TOUTES les regles (common + toutes technos + project)
 	@if [ -f "$(CURDIR)/Infra/install-ansible-rules.sh" ]; then \
 		$(CURDIR)/Infra/install-ansible-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
 	fi
+	@if [ -f "$(CURDIR)/Infra/install-hcloud-rules.sh" ]; then \
+		$(CURDIR)/Infra/install-hcloud-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	fi
 	@if [ -f "$(CURDIR)/Project/install-project-commands.sh" ]; then \
 		$(CURDIR)/Project/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET); \
 	fi
@@ -121,7 +124,7 @@ install-project: ## Installe les commandes de gestion de projet (EPICs, US, Task
 	@echo "$(CYAN)Installation des commandes Project (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Project/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET)
 
-install-infra: ## Installe les agents et commandes Docker + Coolify + Kubernetes + OpenTofu + Ansible/Infrastructure
+install-infra: ## Installe les agents et commandes Docker + Coolify + Kubernetes + OpenTofu + Ansible + Hcloud/Infrastructure
 	@echo "$(CYAN)Installation des regles Docker (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-infra-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 	@echo "$(CYAN)Installation des regles Coolify (lang=$(RULES_LANG))...$(NC)"
@@ -132,6 +135,8 @@ install-infra: ## Installe les agents et commandes Docker + Coolify + Kubernetes
 	@$(CURDIR)/Infra/install-opentofu-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 	@echo "$(CYAN)Installation des regles Ansible (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-ansible-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+	@echo "$(CYAN)Installation des regles Hcloud (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-hcloud-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 
 install-coolify: ## Installe les agents et commandes Coolify
 	@echo "$(CYAN)Installation des regles Coolify (lang=$(RULES_LANG))...$(NC)"
@@ -148,6 +153,10 @@ install-opentofu: ## Installe les agents et commandes OpenTofu
 install-ansible: ## Installe les agents et commandes Ansible
 	@echo "$(CYAN)Installation des regles Ansible (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-ansible-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+
+install-hcloud: ## Installe les agents et commandes Hcloud
+	@echo "$(CYAN)Installation des regles Hcloud (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-hcloud-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 
 #===============================================================================
 # Combinaisons Courantes
@@ -409,7 +418,8 @@ check: ## Verifie que tous les scripts sont executables
 		$(CURDIR)/Infra/install-coolify-rules.sh \
 		$(CURDIR)/Infra/install-kubernetes-rules.sh \
 		$(CURDIR)/Infra/install-opentofu-rules.sh \
-		$(CURDIR)/Infra/install-ansible-rules.sh; do \
+		$(CURDIR)/Infra/install-ansible-rules.sh \
+		$(CURDIR)/Infra/install-hcloud-rules.sh; do \
 		if [ -f "$$script" ]; then \
 			if [ -x "$$script" ]; then \
 				echo "  $(GREEN)Y$(NC) $$script"; \
@@ -429,6 +439,7 @@ fix-permissions: ## Rend tous les scripts executables
 	@chmod +x $(CURDIR)/Infra/install-kubernetes-rules.sh
 	@chmod +x $(CURDIR)/Infra/install-opentofu-rules.sh
 	@chmod +x $(CURDIR)/Infra/install-ansible-rules.sh
+	@chmod +x $(CURDIR)/Infra/install-hcloud-rules.sh
 	@echo "$(GREEN)Permissions corrigees$(NC)"
 
 #===============================================================================
