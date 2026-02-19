@@ -2,7 +2,7 @@
 
 **Version:** 7.19.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 14 technology stacks, 53 agents, 198 commands across 24 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 14 technology stacks, 53 agents, 194 commands across 24 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -40,7 +40,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (24 namespaces, 198 commands)
+## Available Commands (24 namespaces, 194 commands)
 
 | Namespace | Key Commands | Count |
 |-----------|-------------|-------|
