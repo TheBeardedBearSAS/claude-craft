@@ -1,7 +1,7 @@
 # Claude Craft - Contexte Essentiel
 
 ## Projet
-- **Version:** 7.18.0
+- **Version:** 7.19.0
 - **Type:** Framework multi-technologie pour Claude Code
 - **Stacks:** 10 (Symfony, React, Flutter, Python, Angular, Vue.js, Laravel, React Native, C#/.NET, PHP)
 - **Agents:** 33 | **Commandes:** 160 | **Namespaces:** 20
