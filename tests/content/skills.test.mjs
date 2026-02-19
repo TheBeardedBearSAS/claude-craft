@@ -16,7 +16,13 @@ function getSkillDirs() {
   return fs
     .readdirSync(SKILLS_DIR)
     .filter((entry) => {
-      return fs.statSync(path.join(SKILLS_DIR, entry)).isDirectory();
+      const full = path.join(SKILLS_DIR, entry);
+      const stat = fs.lstatSync(full);
+      // Skip broken symlinks; follow valid symlinks
+      if (stat.isSymbolicLink()) {
+        try { return fs.statSync(full).isDirectory(); } catch { return false; }
+      }
+      return stat.isDirectory();
     })
     .map((dir) => ({
       dirname: dir,
