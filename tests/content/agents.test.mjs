@@ -25,7 +25,7 @@ const VALID_TOOLS = [
 
 // Agents that are known to not use frontmatter (legacy format).
 // This list should shrink over time as agents are migrated.
-const KNOWN_NO_FRONTMATTER = ['csharp-reviewer.md'];
+const KNOWN_NO_FRONTMATTER = [];
 
 function getAgentFiles() {
   return fs
@@ -141,6 +141,45 @@ describe('agent content validation', () => {
           `${agent.filename} has invalid disallowedTool: ${tool}`,
         ).toContain(tool);
       }
+    }
+  });
+
+  it('all agents have a model field in frontmatter', () => {
+    for (const agent of allAgents) {
+      if (KNOWN_NO_FRONTMATTER.includes(agent.filename)) continue;
+      expect(
+        agent.frontmatter,
+        `${agent.filename} is missing frontmatter entirely`,
+      ).not.toBeNull();
+      expect(
+        agent.frontmatter.model,
+        `${agent.filename} is missing required 'model' field in frontmatter`,
+      ).toBeTruthy();
+    }
+  });
+
+  it('tier 1 reviewer agents use sonnet model', () => {
+    const tier1Reviewers = ['react-reviewer', 'symfony-reviewer', 'python-reviewer', 'flutter-reviewer'];
+    for (const agent of agents) {
+      if (tier1Reviewers.includes(agent.basename)) {
+        expect(
+          agent.frontmatter.model,
+          `Tier 1 agent ${agent.filename} should use 'sonnet' model, got '${agent.frontmatter.model}'`,
+        ).toBe('sonnet');
+      }
+    }
+  });
+
+  it('reviewer agents have scoring system', () => {
+    const reviewerAgents = allAgents.filter((a) => a.filename.endsWith('-reviewer.md'));
+    for (const agent of reviewerAgents) {
+      if (KNOWN_NO_FRONTMATTER.includes(agent.filename)) continue;
+      const content = fs.readFileSync(agent.filepath, 'utf8');
+      const hasScoring = content.includes('/100') || content.includes('points');
+      expect(
+        hasScoring,
+        `Reviewer agent ${agent.filename} should have a scoring system (look for "/100" or "points")`,
+      ).toBe(true);
     }
   });
 });

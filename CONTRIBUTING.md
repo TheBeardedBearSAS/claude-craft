@@ -2,6 +2,20 @@
 
 Thank you for your interest in contributing to Claude Craft! This document provides guidelines and information for contributors.
 
+## Quick Navigation
+
+| I want to... | Go to |
+|--------------|-------|
+| Add a new technology stack | [Adding a New Technology](#adding-a-new-technology) |
+| Improve a reviewer agent | [Contributing to Upgrade a Tier 3 Stack](#contributing-to-upgrade-a-tier-3-stack) |
+| Fix a CLI bug | [Submitting Changes](#submitting-changes) |
+| Add translations | [Adding Translations](#adding-translations) |
+| Write a skill | [Writing Skills](#writing-skills-official-format) |
+| Write a command | [Writing Commands](#writing-commands) |
+| Write an agent | [Writing Agents](#writing-agents) |
+
+---
+
 ## How to Contribute
 
 ### Reporting Issues
@@ -320,17 +334,17 @@ Before submitting:
 
 1. Run dry-run to test installation:
    ```bash
-   make dry-run-{tech} TARGET=/tmp/test-project
+   make dry-run-{tech} TARGET=./test-output/test-project
    ```
 
 2. Test actual installation:
    ```bash
-   make install-{tech} TARGET=/tmp/test-project
+   make install-{tech} TARGET=./test-output/test-project
    ```
 
 3. Verify files are correctly placed:
    ```bash
-   tree /tmp/test-project/.claude
+   tree ./test-output/test-project/.claude
    ```
 
 ## Adding a New Technology
@@ -429,7 +443,7 @@ cd claude-craft
 make fix-permissions
 
 # Test installation to temp directory
-make install-symfony TARGET=/tmp/test-project RULES_LANG=en
+make install-symfony TARGET=./test-output/test-project RULES_LANG=en
 
 # View statistics
 make stats
@@ -443,7 +457,7 @@ make list
 ```bash
 # Test all installations
 for tech in symfony flutter react python angular csharp reactnative vuejs laravel php; do
-  make dry-run-$tech TARGET=/tmp/test-$tech
+  make dry-run-$tech TARGET=./test-output/test-$tech
 done
 
 # Validate YAML config
@@ -498,7 +512,7 @@ Before submitting translations:
 2. **No untranslated content**: Check for English text remaining in translated files
 3. **Consistent frontmatter**: Ensure `description` fields are translated in all SKILL.md and command files
 4. **Hook scripts**: Hook scripts in `Common/hooks/scripts/` should be identical across languages (code is not translated)
-5. **Test installation**: Run `make install-{tech} TARGET=/tmp/test RULES_LANG={lang}` for each language
+5. **Test installation**: Run `make install-{tech} TARGET=./test-output/test RULES_LANG={lang}` for each language
 
 ---
 

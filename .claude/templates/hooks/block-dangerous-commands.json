@@ -1,0 +1,12 @@
+{
+  "description": "Block dangerous shell commands (rm -rf, sudo, chmod 777, etc.)",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "command": "INPUT=$(echo '$TOOL_INPUT' | jq -r '.command // empty'); if echo \"$INPUT\" | grep -qE '(rm\\s+-rf\\s+/|sudo\\s|chmod\\s+777|mkfs\\.|dd\\s+if=|:\\(\\)\\{|fork\\s+bomb)'; then echo \"BLOCKED: Dangerous command detected: $INPUT\" && exit 1; fi; exit 0"
+      }
+    ]
+  },
+  "usage": "Copy the PreToolUse hook to .claude/settings.json. Customize the regex pattern to match your security policy. This blocks rm -rf /, sudo, chmod 777, and known dangerous patterns."
+}

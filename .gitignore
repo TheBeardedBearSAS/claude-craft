@@ -30,6 +30,7 @@ styles/write-good/
 
 # Build & test artifacts
 coverage/
+test-output/
 *.log
 
 # Project directories

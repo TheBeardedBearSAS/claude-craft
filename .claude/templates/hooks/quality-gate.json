@@ -1,0 +1,12 @@
+{
+  "description": "Block git commits if tests fail — run npm test before allowing commit",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "command": "INPUT=$(echo '$TOOL_INPUT' | jq -r '.command // empty'); if echo \"$INPUT\" | grep -qE '^git\\s+commit'; then echo 'Running tests before commit...' && npm test --silent 2>&1; if [ $? -ne 0 ]; then echo 'BLOCKED: Tests failed. Fix tests before committing.' && exit 1; fi; fi; exit 0"
+      }
+    ]
+  },
+  "usage": "Copy the PreToolUse hook to .claude/settings.json. This ensures all tests pass before any git commit is allowed. Customize 'npm test' to your test command."
+}
