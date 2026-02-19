@@ -103,6 +103,7 @@ describe('interactiveInstall', () => {
     const fs = await import('fs');
     // Make existsSync return false for the target path check
     const originalExistsMock = fs.existsSync.getMockImplementation();
+    const originalDefaultExistsMock = fs.default.existsSync.getMockImplementation();
     fs.existsSync.mockImplementation((p) => {
       if (typeof p === 'string' && p.endsWith('.sh')) return true;
       return false;
@@ -117,13 +118,15 @@ describe('interactiveInstall', () => {
     await interactiveInstall(cli, { CLI_ROOT: '/fake/root', VERSION: '7.0.0' });
     expect(fs.default.mkdirSync).toHaveBeenCalled();
 
-    // Restore
+    // Restore both named and default export mocks
     if (originalExistsMock) fs.existsSync.mockImplementation(originalExistsMock);
+    if (originalDefaultExistsMock) fs.default.existsSync.mockImplementation(originalDefaultExistsMock);
   });
 
   it('aborts when user declines directory creation', async () => {
     const fs = await import('fs');
     const originalExistsMock = fs.existsSync.getMockImplementation();
+    const originalDefaultExistsMock = fs.default.existsSync.getMockImplementation();
     fs.existsSync.mockImplementation((p) => {
       if (typeof p === 'string' && p.endsWith('.sh')) return true;
       return false;
@@ -139,7 +142,9 @@ describe('interactiveInstall', () => {
     expect(output).toContain('Aborted');
     expect(cli.closeReadline).toHaveBeenCalled();
 
+    // Restore both named and default export mocks
     if (originalExistsMock) fs.existsSync.mockImplementation(originalExistsMock);
+    if (originalDefaultExistsMock) fs.default.existsSync.mockImplementation(originalDefaultExistsMock);
   });
 
   it('shows detected techs and pre-selects them', async () => {

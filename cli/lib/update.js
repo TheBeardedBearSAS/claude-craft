@@ -34,7 +34,7 @@ function runUpdate(targetPath, options, cliRoot) {
   }
 
   // Determine techs to update
-  let techsToUpdate = [];
+  let techsToUpdate;
 
   if (options.tech) {
     // Explicit --tech flag
