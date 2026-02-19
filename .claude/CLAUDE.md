@@ -2,7 +2,7 @@
 
 **Version:** 7.19.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 33 agents, 161 commands across 20 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 11 technology stacks, 38 agents, 183 commands across 21 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -40,7 +40,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (20 namespaces, 161 commands)
+## Available Commands (21 namespaces, 183 commands)
 
 | Namespace | Key Commands | Count |
 |-----------|-------------|-------|
@@ -60,16 +60,17 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/python:` | `generate-endpoint`, `check-architecture`, `async-check`, `type-coverage` | 10 |
 | `/php:` | `check-architecture`, `check-compliance`, `check-security` | 5 |
 | `/sprint:` | `next-story`, `transition`, `status`, `dev` | 5 |
-| `/gate:` | `validate-prd`, `validate-story`, `validate-backlog`, `validate-techspec` | 6 |
-| `/project:` | `run-sprint`, `run-epic`, `run-queue`, `generate-prd`, `board` | 22 |
+| `/gate:` | `validate-prd`, `validate-story`, `validate-backlog`, `validate-techspec`, `validate-alignment` | 7 |
+| `/project:` | `run-sprint`, `run-epic`, `run-queue`, `generate-prd`, `board`, `trace`, `checkpoint`, `metrics` | 34 |
 | `/docker:` | `compose-setup`, `architecture`, `debug`, `optimize` | 5 |
 | `/coolify:` | `setup`, `deploy`, `debug`, `backup`, `optimize` | 5 |
+| `/kubernetes:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 
 ---
 
-## Available Agents (33 agents)
+## Available Agents (38 agents)
 
 | Category | Agents | Count |
 |----------|--------|-------|
@@ -77,6 +78,7 @@ Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-RE
 | **Tech Reviewers** | `@symfony-reviewer`, `@flutter-reviewer`, `@react-reviewer`, `@python-reviewer`, `@angular-reviewer`, `@laravel-reviewer`, `@vuejs-reviewer`, `@reactnative-reviewer`, `@csharp-reviewer`, `@php-reviewer` | 10 |
 | **Docker** | `@docker-dockerfile`, `@docker-compose`, `@docker-debug`, `@docker-cicd`, `@docker-architect` | 5 |
 | **Coolify** | `@coolify-architect`, `@coolify-deployment`, `@coolify-debug`, `@coolify-monitoring` | 4 |
+| **Kubernetes** | `@kubernetes-architect`, `@kubernetes-deployment`, `@kubernetes-debug`, `@kubernetes-security`, `@kubernetes-monitoring` | 5 |
 | **Project** | `@product-owner`, `@tech-lead` | 2 |
 
 Full reference: [Agents](../docs/AGENTS.md)
@@ -91,7 +93,7 @@ Full reference: [Agents](../docs/AGENTS.md)
 | **Standard** | < 15 min | Plan -> Design -> Implement | New features |
 | **Enterprise** | < 30 min | Analyze -> Plan -> Design -> Implement | Platforms |
 
-**Quality Gates:** PRD >=80% | Tech Spec >=90% | INVEST 6/6 | Sprint Ready 100% | Story DoD 100%
+**Quality Gates:** PRD >=80% | Tech Spec >=90% | INVEST 6/6 | Sprint Ready 100% | Story DoD 100% | Spec Alignment >=85%
 
 **Status Routing:** `backlog -> ready-for-dev -> in-progress -> review -> done` (any -> `blocked`)
 

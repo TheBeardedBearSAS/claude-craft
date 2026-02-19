@@ -52,9 +52,10 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/php:` | PHP | 5 |
 | `/docker:` | Docker/Infrastructure | 5 |
 | `/coolify:` | Coolify/PaaS | 5 |
-| `/project:` | Project Management | 22 |
+| `/kubernetes:` | Kubernetes/Infrastructure | 5 |
+| `/project:` | Project Management | 34 |
 | `/sprint:` | Sprint Management (BMAD v6) | 5 |
-| `/gate:` | Quality Gates (BMAD v6) | 6 |
+| `/gate:` | Quality Gates (BMAD v6) | 7 |
 
 ---
 
@@ -510,6 +511,27 @@ Infrastructure deployment with Coolify self-hosted PaaS.
 
 ---
 
+## Kubernetes Commands (`/kubernetes:`)
+
+Infrastructure orchestration with Kubernetes.
+
+### Architecture Commands
+
+| Command | Description |
+|---------|-------------|
+| `/kubernetes:architecture <Project>` | Design complete Kubernetes architecture |
+| `/kubernetes:deploy-setup <Stack>` | Setup GitOps deployment pipeline |
+
+### Operations Commands
+
+| Command | Description |
+|---------|-------------|
+| `/kubernetes:debug <Symptom>` | Diagnose Kubernetes issues |
+| `/kubernetes:security-audit [Scope]` | Kubernetes security posture audit |
+| `/kubernetes:optimize [Target]` | Optimize Kubernetes resource usage and costs |
+
+---
+
 ## Project Commands (`/project:`)
 
 Available with Project installation.
@@ -545,6 +567,23 @@ Available with Project installation.
 | `/project:run-queue` | Process queued stories |
 | `/project:run-sprint` | Execute full sprint |
 | `/project:batch-status` | View batch queue status |
+
+### SDD v2.0 Commands (NEW)
+
+| Command | Description |
+|---------|-------------|
+| `/project:generate-constitution` | Generate project constitution document |
+| `/project:trace [--scope] [--id]` | Display bidirectional traceability matrix |
+| `/project:coverage-map` | Analyze requirement coverage gaps |
+| `/project:scan [--scope]` | Analyze codebase and generate structured inventory |
+| `/project:reverse-prd` | Generate PRD from existing codebase (brownfield) |
+| `/project:reverse-stories` | Generate user stories from existing features |
+| `/project:gap-analysis` | Compare specifications with actual code |
+| `/project:checkpoint --phase=<phase>` | Run spec verification checkpoints (pre-sprint, pre-impl, post-impl, pre-merge) |
+| `/project:dependencies [--sprint]` | Generate story dependency graph (Mermaid) |
+| `/project:critical-path [--sprint]` | Identify critical path for sprint optimization |
+| `/project:metrics [--sprint]` | Generate project metrics dashboard |
+| `/project:burndown [--sprint]` | Generate sprint burndown chart (Mermaid) |
 
 ### Sprint Development (`/sprint:dev`)
 
@@ -625,6 +664,7 @@ Available with BMAD v6 installation.
 | `/gate:validate-story <ID>` | Validate story Definition of Done |
 | `/gate:validate-sprint` | Validate sprint readiness |
 | `/gate:report` | Full quality gates report |
+| `/gate:validate-alignment [story-id]` | Validate spec-code alignment (≥85% threshold) |
 
 ### Quality Gate Thresholds
 
@@ -635,6 +675,7 @@ Available with BMAD v6 installation.
 | Backlog Gate | 6/6 INVEST | Independent, Negotiable, Valuable, Estimable, Small, Testable |
 | Story DoD | 100% | Tasks, tests, AC, review, no blockers |
 | Sprint Ready | 100% | Metadata, goal, stories ready, estimated |
+| Spec Alignment | ≥85% | Requirement coverage, story-code mapping, AC-test mapping, constitution |
 
 ---
 
