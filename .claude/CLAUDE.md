@@ -2,7 +2,7 @@
 
 **Version:** 7.19.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 33 agents, 160 commands across 20 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 33 agents, 161 commands across 20 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -40,22 +40,28 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (20 namespaces, 160 commands)
+## Available Commands (20 namespaces, 161 commands)
 
 | Namespace | Key Commands | Count |
 |-----------|-------------|-------|
-| `/common:` | `pre-commit-check`, `ralph-run`, `setup-project-context`, `add-technology` | 12 |
+| `/common:` | `pre-commit-check`, `ralph-run`, `setup-project-context`, `add-technology` | 13 |
 | `/workflow:` | `init`, `analyze`, `plan`, `design`, `implement`, `status` | 9 |
 | `/team:` | `audit`, `sprint`, `security`, `delivery` (Agent Teams) | 4 |
 | `/qa:` | `recette`, `fix`, `tdd`, `regression`, `report` | 6 |
 | `/uiux:` | `audit`, `a11y-audit`, `component-spec`, `design-tokens` | 7 |
+| `/csharp:` | `check-compliance`, `check-architecture`, `generate-feature` | 6 |
+| `/symfony:` | `check-architecture`, `check-compliance`, `generate-crud`, `api-endpoint` | 10 |
+| `/flutter:` | `check-architecture`, `generate-feature`, `analyze-performance`, `golden-update` | 10 |
+| `/react:` | `generate-component`, `check-architecture`, `accessibility-check`, `generate-hook` | 10 |
+| `/reactnative:` | `generate-screen`, `check-architecture`, `deep-link`, `store-prepare` | 10 |
+| `/angular:` | `generate-component`, `check-architecture`, `check-compliance` | 6 |
+| `/vuejs:` | `generate-component`, `check-architecture`, `check-compliance` | 6 |
+| `/laravel:` | `generate-controller`, `check-architecture`, `check-compliance` | 6 |
+| `/python:` | `generate-endpoint`, `check-architecture`, `async-check`, `type-coverage` | 10 |
+| `/php:` | `check-architecture`, `check-compliance`, `check-security` | 5 |
 | `/sprint:` | `next-story`, `transition`, `status`, `dev` | 5 |
 | `/gate:` | `validate-prd`, `validate-story`, `validate-backlog`, `validate-techspec` | 6 |
-| `/project:` | `run-sprint`, `run-epic`, `run-queue` | 4 |
-| `/csharp:` | `check-compliance`, `check-architecture`, `generate-feature` | 6 |
-| `/symfony:` | `check-architecture`, `check-compliance`, `generate-crud` | 4 |
-| `/flutter:` | `check-architecture`, `generate-feature`, `analyze-performance` | 3 |
-| `/react:` | `generate-component`, `check-architecture`, `accessibility-check` | 3 |
+| `/project:` | `run-sprint`, `run-epic`, `run-queue`, `generate-prd`, `board` | 22 |
 | `/docker:` | `compose-setup`, `architecture`, `debug`, `optimize` | 5 |
 | `/coolify:` | `setup`, `deploy`, `debug`, `backup`, `optimize` | 5 |
 
