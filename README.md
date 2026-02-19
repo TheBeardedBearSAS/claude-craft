@@ -6,11 +6,9 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.16
+## What's New in v7.17
 
-- **Claude Code 2.1.46-2.1.47 compatibility** — MCP connectors, VS Code Plan Preview auto-updates, multi-line input, `last_assistant_message` hook inputs, statusline `added_dirs`
-- **Performance focus** — ~500ms faster startup, `@` file mention pre-warming, O(n²) memory fix for long sessions, resume picker now shows 50 sessions
-- **45+ bug fixes** — Unicode curly quotes, parallel write resilience, large sessions in /resume, plan mode after compaction, background agents, git worktrees support
+- **LSP plugin documentation** — documented Claude Code LSP plugins for all 10 technology stacks: PHP/Symfony/Laravel (Intelephense), Python (Pyright), React/Angular/Vue/RN (vtsls), Flutter (Dart analyzer), C#/.NET (csharp-ls). Gives Claude structural code intelligence — automatic diagnostics, go-to-definition, find references, and type info on hover
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.
