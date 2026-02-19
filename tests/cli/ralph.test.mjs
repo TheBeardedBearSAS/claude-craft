@@ -7,18 +7,17 @@ vi.mock('child_process', () => ({
   })),
 }));
 
-// Mock fs.existsSync
+// Mock fs — existsSync always returns true
 vi.mock('fs', async (importOriginal) => {
   const actual = await importOriginal();
+  const existsSyncMock = vi.fn(() => true);
   return {
     ...actual,
     default: {
-      ...actual.default,
-      existsSync: vi.fn(() => true),
-      readFileSync: actual.default.readFileSync,
+      ...actual,
+      existsSync: existsSyncMock,
     },
-    existsSync: vi.fn(() => true),
-    readFileSync: actual.readFileSync,
+    existsSync: existsSyncMock,
   };
 });
 

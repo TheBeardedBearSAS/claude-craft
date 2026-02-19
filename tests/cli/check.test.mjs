@@ -29,13 +29,13 @@ describe('runCheck', () => {
   beforeEach(() => {
     tempDir = mkdtempSync(join(tmpdir(), 'claude-craft-check-'));
     consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    process.exitCode = undefined;
+    process.exitCode = 0;
   });
 
   afterEach(() => {
     rmSync(tempDir, { recursive: true, force: true });
     consoleSpy.mockRestore();
-    process.exitCode = undefined;
+    process.exitCode = 0;
   });
 
   it('reports missing .claude/ directory and sets exitCode', () => {
@@ -69,7 +69,7 @@ describe('runCheck', () => {
     expect(output).toContain('symfony');
     expect(output).toContain('1 skill(s)');
     expect(output).toContain('Installation looks good');
-    expect(process.exitCode).toBeUndefined();
+    expect(process.exitCode).toBe(0);
   });
 
   it('reports warnings for partial structure (no CLAUDE.md, no agents)', () => {

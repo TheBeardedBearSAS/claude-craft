@@ -7,26 +7,17 @@ vi.mock('child_process', () => ({
   spawnSync: vi.fn(() => ({ status: 0, error: null })),
 }));
 
-// Mock fs.existsSync to allow script path checks to pass
+// Mock fs — existsSync returns true (script paths always resolve)
 vi.mock('fs', async (importOriginal) => {
   const actual = await importOriginal();
+  const existsSyncMock = vi.fn(() => true);
   return {
     ...actual,
     default: {
-      ...actual.default,
-      existsSync: vi.fn((p) => {
-        // Allow all script path checks to pass
-        if (typeof p === 'string' && p.endsWith('.sh')) return true;
-        return actual.default.existsSync(p);
-      }),
-      readFileSync: actual.default.readFileSync,
-      mkdirSync: actual.default.mkdirSync,
+      ...actual,
+      existsSync: existsSyncMock,
     },
-    existsSync: vi.fn((p) => {
-      if (typeof p === 'string' && p.endsWith('.sh')) return true;
-      return actual.existsSync(p);
-    }),
-    readFileSync: actual.readFileSync,
+    existsSync: existsSyncMock,
   };
 });
 
