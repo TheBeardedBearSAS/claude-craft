@@ -6,13 +6,11 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.14
+## What's New in v7.16
 
-- **Context management best practices** — new rule `12-context-management.md` covering Anthropic's #1 recommendation: context window as THE critical resource
-- **MCP & Plugin security** — security rule updated with MCP vetting checklist, malicious payload warnings (Snyk 2026), hooks enforcement guidance
-- **Hook templates** — 4 ready-to-use templates: auto-format, protect-files, context-reinject, security-block
-- **Parallel worktrees** — new skill documenting Boris Cherny's productivity pattern for concurrent Claude sessions
-- **Verification loops** — guidance on specification-implementation-verification pattern (2-3x quality improvement)
+- **Claude Code 2.1.46-2.1.47 compatibility** — MCP connectors, VS Code Plan Preview auto-updates, multi-line input, `last_assistant_message` hook inputs, statusline `added_dirs`
+- **Performance focus** — ~500ms faster startup, `@` file mention pre-warming, O(n²) memory fix for long sessions, resume picker now shows 50 sessions
+- **45+ bug fixes** — Unicode curly quotes, parallel write resilience, large sessions in /resume, plan mode after compaction, background agents, git worktrees support
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 > See [CHANGELOG.md](CHANGELOG.md) for previous versions.

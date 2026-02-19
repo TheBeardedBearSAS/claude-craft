@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.16.0] - 2026-02-19
+
+### Added
+
+- **Claude Code 2.1.46-2.1.47 compatibility** — MCP connectors from claude.ai, macOS orphan process fix, VS Code Plan Preview auto-updates, `last_assistant_message` in Stop/SubagentStop hooks, `added_dirs` in statusline JSON, `chat:newline` keybinding for multi-line input
+- **Performance improvements** — ~500ms faster startup (deferred SessionStart hooks), `@` file mention pre-warming and session caching, O(n²) memory fix for long sessions
+- **Resume & navigation** — `/rename` updates terminal tab title, resume picker shows 50 sessions (up from 10), Shift+Down wrapping for teammate navigation, custom `/rename` titles preserved
+- **45+ bug fixes** — FileWriteTool trailing blank lines, Unicode curly quotes corruption (#26141), parallel write resilience, large sessions >16KB in /resume (#25721), Windows terminal rendering, background agents final response (#26012), agents/skills in git worktrees (#25816), plan mode after compaction (#26061), PDF compaction, CJK wide character alignment
+
+### Changed
+
+- **Minimum Claude Code version** — bumped from 2.1.45 to 2.1.47
+- **README What's New** — updated to v7.16 highlights
+
 ## [7.15.0] - 2026-02-18
 
 ### Added

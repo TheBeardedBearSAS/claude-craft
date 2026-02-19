@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 7.15.0 | **Languages:** en, fr, es, de, pt
+**Version:** 7.16.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 10 technology stacks, 33 agents, 160 commands across 20 namespaces, and BMAD v6 project management.
 
@@ -398,7 +398,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version**: 2.1.45
+**Minimum Version**: 2.1.47
 
 ### PR Integration (v2.1.27+)
 
@@ -825,6 +825,68 @@ Built-in rate limiting for Agent SDK to prevent API throttling in multi-agent wo
 |-----|-------------|
 | Session restore | Fixed session restore failing after VSCode update |
 | Terminal focus | Fixed terminal losing focus during streaming |
+
+### MCP Connectors from claude.ai (v2.1.46+)
+
+Support for adding MCP connectors directly from claude.ai to Claude Code.
+
+### macOS Terminal Disconnect Fix (v2.1.46+)
+
+Fixed orphan processes persisting on macOS after terminal disconnection.
+
+### VS Code Plan Preview Auto-Updates (v2.1.47+)
+
+| Feature | Description |
+|---------|-------------|
+| Auto-update | Plan preview comments update automatically when ready |
+| Rejection support | Plan preview stays open after rejection for iteration |
+| Smoother flow | Eliminates manual refresh for plan approval workflow |
+
+### Hook Inputs: last_assistant_message (v2.1.47+)
+
+Stop and SubagentStop hook inputs now include `last_assistant_message` for richer post-processing.
+
+### Statusline added_dirs (v2.1.47+)
+
+The statusline JSON now includes `added_dirs` in the workspace section for `--add-dir` visibility.
+
+### Multi-line Input (v2.1.47+)
+
+New `chat:newline` keybinding action enables multi-line input in the chat interface.
+
+### Performance Improvements (v2.1.47+)
+
+| Improvement | Description |
+|-------------|-------------|
+| Startup speed | ~500ms faster via deferred SessionStart hooks |
+| `@` file mention | Pre-warming index and session caching for faster completion |
+| Memory fix | Fixed O(n²) memory growth for long sessions |
+| Resume picker | Now shows 50 sessions (previously 10) |
+
+### Resume & Navigation (v2.1.47+)
+
+| Feature | Description |
+|---------|-------------|
+| `/rename` | Updates terminal tab title |
+| Resume picker | Shows 50 sessions (up from 10) |
+| Teammate nav | Shift+Down wrapping for simplified navigation |
+| Custom titles | `/rename` custom titles preserved across sessions (#23610) |
+
+### Key Bug Fixes (v2.1.47+)
+
+| Fix | Description |
+|-----|-------------|
+| FileWriteTool | Preserves trailing blank lines |
+| Unicode curly quotes | Fixed corruption in Edit tool (#26141) |
+| Parallel writes | Single file error no longer aborts parallel writes |
+| Large sessions | Sessions >16KB no longer disappear from /resume (#25721) |
+| Windows rendering | Correct terminal rendering with os.EOL \r\n |
+| Windows Bash | Fixed output for MSYS2/Cygwin environments |
+| Background agents | Return final response instead of raw transcript (#26012) |
+| Git worktrees | Custom agents/skills discovered in worktrees (#25816) |
+| Plan mode | Preserved after context compaction (#26061) |
+| PDF compaction | Fixed compaction with many PDFs |
+| CJK alignment | Fixed wide character alignment in terminal |
 
 ---
 
