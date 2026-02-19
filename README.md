@@ -6,11 +6,11 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.18
+## What's New in v7.19
 
-- **Differentiated reviewer agents** -- Tier 1 reviewers (React, Symfony, Python, Flutter) rewritten with deep tech-specific decision trees and upgraded to sonnet
-- **Technology tier system** -- formalized core/supported/community tiers with upgrade paths
-- **Simplified onboarding** -- README cut from 611 to 205 lines, QUICKSTART rewritten as a 10-minute journey
+- **All 10 reviewers now v2.0** -- 6 remaining reviewers (Angular, Vue.js, Laravel, React Native, PHP, C#) upgraded with scoring /100, decision trees, and sonnet model
+- **Hooks activated** -- project dogfoods its own hooks: security-block, file protection, auto-format, context re-injection
+- **New hook templates** -- quality-gate (blocks commit if tests fail) and block-dangerous-commands (rm -rf, sudo)
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 ## Install and First Result

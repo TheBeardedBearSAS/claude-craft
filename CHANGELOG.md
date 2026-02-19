@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.19.0] - 2026-02-19
+
+### Added
+
+- **Active hooks (dogfooding)** — `.claude/settings.json` with 6 hooks: security-block (Bash), protect-files (Edit/Write), auto-format (prettier PostToolUse), context-reinject (SessionStart compact). The project now practices what it preaches: "Hooks = requirements"
+- **Context essentials** — `.claude/context-essentials.md` for automatic context re-injection after compaction (version, structure, conventions, test commands)
+- **New hook templates** — `quality-gate.json` (blocks git commit if tests fail) and `block-dangerous-commands.json` (blocks rm -rf /, sudo, chmod 777) in `.claude/templates/hooks/`
+- **Agent validation tests** — 3 new tests: all agents must have `model:` field, Tier 1 reviewers must use sonnet, all reviewers must have scoring system (/100 or points)
+- **CONTRIBUTING quick navigation** — table at top linking to common contributor paths (add stack, improve reviewer, fix bug, add translations, write skill)
+
+### Changed
+
+- **6 reviewer agents upgraded to v2.0** — angular, vuejs, laravel, reactnative, php, csharp reviewers rewritten with: model sonnet, scoring /100 in 4 categories, decision trees (CRITIQUE/MAJEUR/MINEUR), 5-phase audit methodology, structured report template, French language, tech-specific 2026 patterns
+- **csharp-reviewer now has frontmatter** — was the only agent missing YAML frontmatter; now fully compliant with model: sonnet
+- **CONTRIBUTING /tmp/ paths fixed** — all `/tmp/test-project` references replaced with `./test-output/` (project convention: no /tmp/ storage)
+- **KNOWN_NO_FRONTMATTER emptied** — removed csharp-reviewer.md from exclusion list in agent tests
+
 ## [7.18.0] - 2026-02-19
 
 ### Added
