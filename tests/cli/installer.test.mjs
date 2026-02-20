@@ -64,7 +64,10 @@ describe('runInstallation', () => {
     const cli = makeCli({ technologies: ['docker', 'react'] });
     await runInstallation(cli, { CLI_ROOT: '/fake/root' });
     const scriptPaths = spawnSyncMock.mock.calls.map((c) => c[1][0]);
-    expect(scriptPaths.some((p) => p.includes('install-docker-rules.sh'))).toBe(false);
+    // Docker should NOT be installed as a tech script (from Dev/scripts/)
+    expect(scriptPaths.some((p) => p.includes(path.join('Dev', 'scripts', 'install-docker-rules.sh')))).toBe(false);
+    // Docker IS installed via infra (from Infra/)
+    expect(scriptPaths.some((p) => p.includes(path.join('Infra', 'install-docker-rules.sh')))).toBe(true);
     expect(scriptPaths.some((p) => p.includes('install-react-rules.sh'))).toBe(true);
   });
 

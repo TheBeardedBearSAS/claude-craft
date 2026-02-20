@@ -125,14 +125,14 @@ describe('v7.0.0 namespace integrity', () => {
 
   it('correct command counts per namespace', () => {
     const expected = {
-      'Dev/i18n/en/Common/commands': 12,
+      'Dev/i18n/en/Common/commands': 13,
       'Dev/i18n/en/Workflow/commands': 9,
       'Dev/i18n/en/Team/commands': 4,
       'Dev/i18n/en/QA/commands': 6,
       'Dev/i18n/en/UIUX/commands': 7,
-      'Project/i18n/en/commands': 22,
-      'Project/i18n/en/Sprint/commands': 5,
-      'Project/i18n/en/Gate/commands': 6,
+      'Project/i18n/en/commands': 34,
+      'Project/i18n/en/Sprint/commands': 7,
+      'Project/i18n/en/Gate/commands': 7,
       'Infra/i18n/en/Docker/commands': 5,
     };
 
