@@ -31,7 +31,7 @@ set -euo pipefail
 # ─────────────────────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_CONFIG="${SCRIPT_DIR}/../../claude-projects.yaml"
-VALID_TECHS=("symfony" "flutter" "python" "react" "reactnative" "angular" "csharp" "laravel" "vuejs" "docker" "project")
+VALID_TECHS=("symfony" "flutter" "python" "react" "reactnative" "angular" "csharp" "laravel" "vuejs" "php" "docker" "coolify" "kubernetes" "opentofu" "ansible" "hcloud" "pgbouncer" "frankenphp" "project")
 VALID_LANGS=("en" "fr" "es" "de" "pt")
 
 # Shared UI library
@@ -452,6 +452,27 @@ get_install_script() {
         docker)
             script="${SCRIPT_DIR}/../../Infra/install-docker-rules.sh"
             ;;
+        coolify)
+            script="${SCRIPT_DIR}/../../Infra/install-coolify-rules.sh"
+            ;;
+        kubernetes)
+            script="${SCRIPT_DIR}/../../Infra/install-kubernetes-rules.sh"
+            ;;
+        opentofu)
+            script="${SCRIPT_DIR}/../../Infra/install-opentofu-rules.sh"
+            ;;
+        ansible)
+            script="${SCRIPT_DIR}/../../Infra/install-ansible-rules.sh"
+            ;;
+        hcloud)
+            script="${SCRIPT_DIR}/../../Infra/install-hcloud-rules.sh"
+            ;;
+        pgbouncer)
+            script="${SCRIPT_DIR}/../../Infra/install-pgbouncer-rules.sh"
+            ;;
+        frankenphp)
+            script="${SCRIPT_DIR}/../../Infra/install-frankenphp-rules.sh"
+            ;;
     esac
 
     echo "$script"
@@ -482,15 +503,21 @@ install_module() {
 
     # Construire les options selon les capacités de chaque script
     # - "project" : --lang, --skip-common uniquement
-    # - "docker"  : --install, --force, --backup, --lang (pas --preserve-config ni --skip-common)
+    # - infra (docker, coolify, kubernetes, opentofu, ansible, hcloud, pgbouncer, frankenphp) :
+    #   --install, --force, --backup, --lang (pas --preserve-config ni --skip-common)
     # - autres    : --install, --force, --preserve-config, --backup, --lang, --skip-common
+    local is_infra=false
+    case "$tech" in
+        docker|coolify|kubernetes|opentofu|ansible|hcloud|pgbouncer|frankenphp) is_infra=true ;;
+    esac
+
     local opts=()
     if [[ "$tech" != "project" ]]; then
         opts=("--install")
         if [[ "$force_mode" == "true" ]]; then
             opts=("--force")
         fi
-        if [[ "$preserve_config" == "true" && "$tech" != "docker" ]]; then
+        if [[ "$preserve_config" == "true" && "$is_infra" == "false" ]]; then
             opts+=("--preserve-config")
         fi
         if [[ "$backup_mode" == "true" ]]; then
@@ -499,8 +526,8 @@ install_module() {
     fi
     # Ajouter la langue
     opts+=("--lang=$lang")
-    # Skip common si multi-tech (2ème+ technologie) - pas supporté par project et docker
-    if [[ -n "$skip_common" && "$tech" != "project" && "$tech" != "docker" ]]; then
+    # Skip common si multi-tech (2ème+ technologie) - pas supporté par project et infra
+    if [[ -n "$skip_common" && "$tech" != "project" && "$is_infra" == "false" ]]; then
         opts+=("$skip_common")
     fi
 

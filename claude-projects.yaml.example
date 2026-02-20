@@ -6,11 +6,28 @@
 # automatique des règles Claude Code.
 #
 # Technologies disponibles:
+#   App:
 #   - symfony     : Backend PHP avec Symfony
 #   - flutter     : Application mobile Flutter/Dart
 #   - python      : Backend/API Python
 #   - react       : Frontend React/Next.js
 #   - reactnative : Application mobile React Native
+#   - angular     : Frontend Angular
+#   - csharp      : Backend C# / .NET
+#   - laravel     : Backend PHP avec Laravel
+#   - vuejs       : Frontend Vue.js
+#   - php         : Backend PHP générique
+#   Infra:
+#   - docker      : Docker & Docker Compose
+#   - coolify     : PaaS Coolify
+#   - kubernetes  : Orchestration Kubernetes
+#   - opentofu    : Infrastructure as Code OpenTofu
+#   - ansible     : Configuration Management Ansible
+#   - hcloud      : Hetzner Cloud
+#   - pgbouncer   : Connection Pooling PgBouncer
+#   - frankenphp  : Serveur PHP FrankenPHP
+#   Other:
+#   - project     : Gestion de projet (EPICs, US, Tasks)
 #
 # Usage:
 #   make config-install PROJECT=mon-projet CONFIG=./claude-projects.yaml

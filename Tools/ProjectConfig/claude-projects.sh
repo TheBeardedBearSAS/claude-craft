@@ -36,7 +36,7 @@ else
 fi
 
 # Available technologies
-AVAILABLE_TECHS=("symfony" "flutter" "react" "reactnative" "angular" "csharp" "laravel" "vuejs" "php" "python" "docker" "coolify")
+AVAILABLE_TECHS=("symfony" "flutter" "react" "reactnative" "angular" "csharp" "laravel" "vuejs" "php" "python" "docker" "coolify" "kubernetes" "opentofu" "ansible" "hcloud" "pgbouncer" "frankenphp" "project")
 
 # =============================================================================
 # i18n - Load messages
