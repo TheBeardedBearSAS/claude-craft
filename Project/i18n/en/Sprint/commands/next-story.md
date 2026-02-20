@@ -27,13 +27,16 @@ For each ready story, verify:
 - [ ] Story points estimated
 - [ ] Tasks decomposed
 - [ ] Acceptance criteria defined
+5. Verify `Depends on` stories are all in status `done` or `review`
+6. If dependencies are unresolved, show which stories are blocking
 
 ### Step 3: Select next story
 
 Priority order:
-1. Stories with no blocking dependencies
-2. Lower story ID (earlier in backlog)
-3. Lower story points (simpler first)
+1. Stories with all dependencies resolved
+2. Stories with no blocking dependencies
+3. Lower story ID (earlier in backlog)
+4. Lower story points (simpler first)
 
 ### Step 4: Display story details
 
@@ -98,6 +101,11 @@ Prerequisites:
 ✅ Tasks decomposed
 ✅ Acceptance criteria defined
 
+Dependencies:
+──────────────────────────────────────────────────────
+✅ US-001 (Login Page) — done
+✅ US-002 (JWT Tokens) — done
+
 To start working:
 ──────────────────────────────────────────────────────
 /sprint:transition US-012 in-progress
@@ -123,6 +131,7 @@ Suggestions:
 1. Refine backlog stories: /project:update-stories
 2. Help with in-progress stories
 3. Unblock US-003: waiting for API credentials
+4. View dependency graph: /project:dependencies
 
 Commands:
   /sprint:status --bmad  View full sprint status

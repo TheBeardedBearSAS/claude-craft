@@ -89,6 +89,21 @@ definition_of_done:
         field: security_reviewed
         optional: true
 
+  - id: traceability_complete
+    name: Traceability Complete
+    weight: 5
+    required: false
+    description: Story has complete traceability references
+    checks:
+      - type: has_field
+        field: traceability.implements
+        not_empty: true
+        optional: true
+      - type: has_pattern
+        pattern: "FR-\\d{3}"
+        description: Story references PRD requirement IDs
+        optional: true
+
 tdd_requirements:
   enforce_tdd_cycle: true
   phases:

@@ -216,9 +216,33 @@ Phase 6: Launch & Monitor         [Week 10]   ░░░░░░░░░░░�
 
 ---
 
-## 10. Stakeholders & Approval
+## 10. Requirement Traceability
 
-### 10.1 Stakeholders
+### 10.1 Requirement IDs
+
+Every functional requirement in section 5 uses a unique FR-xxx ID. These IDs serve as the primary traceability anchor across user stories, code, and tests.
+
+| FR ID | Requirement | Priority | Stories | Status |
+|-------|-------------|----------|---------|--------|
+| FR-001 | {requirement} | P0/P1/P2 | US-{xxx} | Draft / Covered / Verified |
+
+### 10.2 Coverage Summary
+
+| Metric | Count | Percentage |
+|--------|-------|------------|
+| Total Requirements | {n} | 100% |
+| Covered by Stories | {n} | {%} |
+| Covered by Code | {n} | {%} |
+| Covered by Tests | {n} | {%} |
+
+> Run `/project:coverage-map` to generate an up-to-date coverage report.
+> Run `/project:trace` to view the full bidirectional traceability matrix.
+
+---
+
+## 11. Stakeholders & Approval
+
+### 11.1 Stakeholders
 
 | Name | Role | Responsibility |
 |------|------|----------------|
@@ -227,7 +251,7 @@ Phase 6: Launch & Monitor         [Week 10]   ░░░░░░░░░░░�
 | {name} | Design Lead | UX approval |
 | {name} | QA Lead | Quality sign-off |
 
-### 10.2 Approval Sign-off
+### 11.2 Approval Sign-off
 
 | Role | Name | Date | Signature |
 |------|------|------|-----------|
@@ -237,19 +261,19 @@ Phase 6: Launch & Monitor         [Week 10]   ░░░░░░░░░░░�
 
 ---
 
-## 11. Appendix
+## 12. Appendix
 
-### 11.1 Glossary
+### 12.1 Glossary
 | Term | Definition |
 |------|------------|
 | {term} | {definition} |
 
-### 11.2 References
+### 12.2 References
 - [Link to related document]
 - [Link to research]
 - [Link to competitor analysis]
 
-### 11.3 Revision History
+### 12.3 Revision History
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 0.1 | {date} | {author} | Initial draft |

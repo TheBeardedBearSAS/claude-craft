@@ -27,13 +27,16 @@ Pour chaque story ready, vérifier :
 - [ ] Story points estimés
 - [ ] Tâches décomposées
 - [ ] Critères d'acceptance définis
+5. Vérifier que les stories `Dépend de` sont en statut `done` ou `review`
+6. Si des dépendances ne sont pas résolues, afficher les stories bloquantes
 
 ### Étape 3 : Sélectionner la prochaine story
 
 Ordre de priorité :
-1. Stories sans dépendances bloquantes
-2. ID story plus bas (plus tôt dans le backlog)
-3. Story points plus bas (plus simple en premier)
+1. Stories avec toutes les dépendances résolues
+2. Stories sans dépendances bloquantes
+3. ID story plus bas (plus tôt dans le backlog)
+4. Story points plus bas (plus simple en premier)
 
 ### Étape 4 : Afficher les détails de la story
 
@@ -98,6 +101,11 @@ Prérequis :
 ✅ Tâches décomposées
 ✅ Critères d'acceptance définis
 
+Dépendances :
+──────────────────────────────────────────────────────
+✅ US-001 (Page de connexion) — done
+✅ US-002 (Tokens JWT) — done
+
 Pour commencer à travailler :
 ──────────────────────────────────────────────────────
 /sprint:transition US-012 in-progress
@@ -123,6 +131,7 @@ Suggestions :
 1. Affiner les stories du backlog : /project:update-stories
 2. Aider sur les stories en cours
 3. Débloquer US-003 : en attente des credentials API
+4. Voir le graphe de dépendances : /project:dependencies
 
 Commandes :
   /sprint:status --bmad  Voir le statut complet du sprint

@@ -27,13 +27,16 @@ Fuer jede bereite Story pruefen:
 - [ ] Story Points geschaetzt
 - [ ] Aufgaben heruntergebrochen
 - [ ] Akzeptanzkriterien definiert
+5. Ueberpruefen, dass alle `Haengt ab von`-Stories im Status `done` oder `review` sind
+6. Bei ungeloesten Abhaengigkeiten die blockierenden Stories anzeigen
 
 ### Schritt 3: Naechste Story auswaehlen
 
 Prioritaetsreihenfolge:
-1. Stories ohne blockierende Abhaengigkeiten
-2. Niedrigere Story-ID (frueher im Backlog)
-3. Niedrigere Story Points (einfachere zuerst)
+1. Stories mit allen aufgeloesten Abhaengigkeiten
+2. Stories ohne blockierende Abhaengigkeiten
+3. Niedrigere Story-ID (frueher im Backlog)
+4. Niedrigere Story Points (einfachere zuerst)
 
 ### Schritt 4: Story-Details anzeigen
 
@@ -98,6 +101,11 @@ Voraussetzungen:
 ✅ Aufgaben heruntergebrochen
 ✅ Akzeptanzkriterien definiert
 
+Abhaengigkeiten:
+──────────────────────────────────────────────────────
+✅ US-001 (Login-Seite) — done
+✅ US-002 (JWT-Token) — done
+
 Um mit der Arbeit zu beginnen:
 ──────────────────────────────────────────────────────
 /sprint:transition US-012 in-progress
@@ -123,6 +131,7 @@ Vorschlaege:
 1. Backlog-Stories verfeinern: /project:update-stories
 2. Bei Stories in Bearbeitung unterstuetzen
 3. US-003 entsperren: Wartet auf API-Zugangsdaten
+4. Abhaengigkeitsgraph anzeigen: /project:dependencies
 
 Befehle:
   /sprint:status --bmad  Vollstaendigen Sprint-Status sehen

@@ -10,6 +10,11 @@
 - **Criado em**: {DATE}
 - **Atualizado**: {DATE}
 
+## Rastreabilidade
+- **Implementa**: {FR-001, FR-003} <!-- IDs dos requisitos PRD que esta story implementa -->
+- **Depende de**: {US-xxx} <!-- Stories que devem ser concluídas primeiro -->
+- **Spec Técnica**: {section_reference} <!-- Referência à seção da spec técnica -->
+
 ## User Story
 
 **Como** {PERSONA},

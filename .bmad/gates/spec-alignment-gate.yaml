@@ -1,0 +1,111 @@
+# BMAD v6 - Spec-Code Alignment Gate Configuration
+# Validates that implementation matches specifications
+
+id: spec_alignment_gate
+name: Spec-Code Alignment Gate
+version: 1.0.0
+threshold: 85  # Minimum score to pass (%)
+
+description: |
+  Ensures code implementation aligns with specifications (PRD, user stories, tech spec).
+  Validates bidirectional traceability and constitution compliance.
+
+validations:
+  - id: requirement_coverage
+    name: Requirement Coverage
+    weight: 20
+    required: true
+    description: All PRD requirements (FR-xxx) are covered by user stories
+    checks:
+      - type: traceability_check
+        from: prd_requirements
+        to: user_stories
+        field: "implements"
+        pattern: "FR-\\d{3}"
+      - type: coverage_percentage
+        min_coverage: 100
+
+  - id: story_code_mapping
+    name: Story-Code Mapping
+    weight: 20
+    required: true
+    description: All implemented stories have corresponding code references
+    checks:
+      - type: code_reference_check
+        pattern: "// Story: US-\\d{3}|# Story: US-\\d{3}"
+        scope: "implemented_stories"
+      - type: min_references
+        per_story: 1
+
+  - id: ac_test_mapping
+    name: AC-Test Mapping
+    weight: 20
+    required: true
+    description: All acceptance criteria have corresponding test cases
+    checks:
+      - type: test_coverage_check
+        scope: acceptance_criteria
+        min_coverage: 100
+      - type: test_pattern
+        patterns: ["test_ac_", "AC-\\d+", "acceptance"]
+
+  - id: tech_spec_adherence
+    name: Tech Spec Adherence
+    weight: 15
+    required: true
+    description: Implementation follows the technical specification design
+    checks:
+      - type: architecture_check
+        reference: "project-management/tech-spec.md"
+      - type: component_mapping
+        from: tech_spec_components
+        to: code_modules
+
+  - id: constitution_compliance
+    name: Constitution Compliance
+    weight: 15
+    required: true
+    description: Code respects project constitution constraints
+    checks:
+      - type: content_check
+        reference: "project-management/constitution.md"
+        sections:
+          - "Technical Constraints"
+          - "Design Principles"
+          - "Non-Functional Requirements"
+        optional: true
+
+  - id: scope_drift
+    name: Scope Drift Detection
+    weight: 10
+    required: false
+    description: Detect code changes not referenced by any story
+    checks:
+      - type: unreferenced_changes
+        base_branch: main
+        exclude_patterns:
+          - "*.test.*"
+          - "*.spec.*"
+          - "*.config.*"
+          - "*.md"
+
+scoring:
+  method: weighted_sum
+  pass_threshold: 85
+  warning_threshold: 70
+
+failure_actions:
+  - action: block_transition
+    message: "Spec-code alignment does not meet quality threshold"
+  - action: generate_report
+    include_missing: true
+    include_suggestions: true
+    include_traceability_gaps: true
+
+success_actions:
+  - action: allow_transition
+    to_phase: "merge"
+  - action: update_metrics
+    increment: alignment_checks_passed
+  - action: notify
+    message: "Spec-code alignment verified, ready for merge"

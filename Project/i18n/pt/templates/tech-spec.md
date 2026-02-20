@@ -28,6 +28,15 @@ Brief technical context and existing system overview.
 ### 1.4 Non-Goals
 - What this spec explicitly does NOT cover
 
+### 1.5 Requirement Mapping
+
+| PRD Requirement | Tech Spec Section | Implementation Status |
+|----------------|-------------------|----------------------|
+| FR-001 | 4.1 REST Endpoints | Pending |
+| FR-002 | 3.1 Data Model | Pending |
+
+> This table maps PRD functional requirements (FR-xxx) to the tech spec sections that describe their implementation. Run `/project:trace` to verify coverage.
+
 ---
 
 ## 2. Architecture Overview

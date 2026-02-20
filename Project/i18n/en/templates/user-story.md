@@ -10,6 +10,11 @@
 - **Created on**: {DATE}
 - **Updated**: {DATE}
 
+## Traceability
+- **Implements**: {FR-001, FR-003} <!-- PRD requirement IDs this story implements -->
+- **Depends on**: {US-xxx} <!-- Stories that must be completed first -->
+- **Tech Spec**: {section_reference} <!-- Reference to tech spec section -->
+
 ## User Story
 
 **As a** {PERSONA},

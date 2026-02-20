@@ -86,6 +86,17 @@ sprint_readiness:
       - type: no_blocked_stories
         status: ready-for-dev
 
+  - id: traceability_coverage
+    name: Traceability Coverage
+    weight: 5
+    required: false
+    description: Sprint stories have traceability to PRD requirements
+    checks:
+      - type: all_stories_have_field
+        field: traceability.implements
+        statuses: ["ready-for-dev"]
+        optional: true
+
 sprint_validation:
   min_duration_days: 5
   max_duration_days: 30

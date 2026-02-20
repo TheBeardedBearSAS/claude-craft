@@ -92,6 +92,18 @@ validations:
       - type: content_exists
         keywords: ["risk", "mitigation", "contingency"]
 
+  - id: measurable_criteria
+    name: Measurable Acceptance Criteria
+    weight: 5
+    required: false
+    description: Requirements have measurable acceptance criteria
+    checks:
+      - type: content_exists
+        keywords: ["acceptance criteria", "measurable", "testable", "verifiable"]
+      - type: has_pattern
+        pattern: "FR-\\d{3}"
+        description: Requirements use FR-xxx ID format for traceability
+
 scoring:
   method: weighted_sum
   pass_threshold: 80
@@ -107,5 +119,7 @@ failure_actions:
 success_actions:
   - action: allow_transition
     to_phase: "tech_spec"
+  - action: update_metrics
+    increment: prd_gates_passed
   - action: notify
     message: "PRD approved, ready for Tech Spec"
