@@ -1,7 +1,7 @@
 #!/bin/bash
 # Multilingual installation script for Claude Code Infrastructure rules (Docker)
 # Version: 1.0.0
-# Usage: ./install-infra-rules.sh [OPTIONS] [PROJECT_DIR]
+# Usage: ./install-docker-rules.sh [OPTIONS] [PROJECT_DIR]
 #
 # Installs Docker agents and commands for containerized infrastructure
 
@@ -26,7 +26,7 @@ source "${SCRIPT_DIR}/../Dev/scripts/lib/shell-ui.sh"
 
 show_help() {
     cat << 'EOF'
-Usage: install-infra-rules.sh [OPTIONS] [PROJECT_DIR]
+Usage: install-docker-rules.sh [OPTIONS] [PROJECT_DIR]
 
 Install/Update Docker agents and commands for Claude Code.
 
@@ -44,10 +44,10 @@ Arguments:
     PROJECT_DIR     Project directory (default: current directory)
 
 Examples:
-    ./install-infra-rules.sh --install ./my-project
-    ./install-infra-rules.sh --update
-    ./install-infra-rules.sh --lang=fr --install ./project
-    ./install-infra-rules.sh --dry-run
+    ./install-docker-rules.sh --install ./my-project
+    ./install-docker-rules.sh --update
+    ./install-docker-rules.sh --lang=fr --install ./project
+    ./install-docker-rules.sh --dry-run
 
 Description:
     This script installs Docker agents and commands for Claude Code.
@@ -68,7 +68,7 @@ EOF
 }
 
 show_version() {
-    echo "install-infra-rules.sh version ${VERSION}"
+    echo "install-docker-rules.sh version ${VERSION}"
     echo "Docker agents and commands for Claude Code"
 }
 

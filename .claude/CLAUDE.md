@@ -1,8 +1,8 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 7.19.0 | **Languages:** en, fr, es, de, pt
+**Version:** 7.20.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 14 technology stacks, 53 agents, 194 commands across 24 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 18 technology stacks, 63 agents, 204 commands across 26 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -40,11 +40,11 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (24 namespaces, 194 commands)
+## Available Commands (26 namespaces, 204 commands)
 
 | Namespace | Key Commands | Count |
 |-----------|-------------|-------|
-| `/common:` | `pre-commit-check`, `ralph-run`, `setup-project-context`, `add-technology` | 13 |
+| `/common:` | `pre-commit-check`, `ralph-run`, `setup-project-context`, `add-technology`, `setup-rtk` | 13 |
 | `/workflow:` | `init`, `analyze`, `plan`, `design`, `implement`, `status` | 9 |
 | `/team:` | `audit`, `sprint`, `security`, `delivery` (Agent Teams) | 4 |
 | `/qa:` | `recette`, `fix`, `tdd`, `regression`, `report` | 6 |
@@ -68,12 +68,14 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 | `/opentofu:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
 | `/ansible:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
 | `/hcloud:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
+| `/pgbouncer:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
+| `/frankenphp:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 
 ---
 
-## Available Agents (53 agents)
+## Available Agents (63 agents)
 
 | Category | Agents | Count |
 |----------|--------|-------|
@@ -85,6 +87,8 @@ Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-RE
 | **OpenTofu** | `@opentofu-architect`, `@opentofu-deployment`, `@opentofu-debug`, `@opentofu-security`, `@opentofu-cost` | 5 |
 | **Ansible** | `@ansible-architect`, `@ansible-deployment`, `@ansible-debug`, `@ansible-security`, `@ansible-quality` | 5 |
 | **Hcloud** | `@hcloud-architect`, `@hcloud-deployment`, `@hcloud-debug`, `@hcloud-security`, `@hcloud-cost` | 5 |
+| **PgBouncer** | `@pgbouncer-architect`, `@pgbouncer-deployment`, `@pgbouncer-debug`, `@pgbouncer-security`, `@pgbouncer-monitoring` | 5 |
+| **FrankenPHP** | `@frankenphp-architect`, `@frankenphp-deployment`, `@frankenphp-debug`, `@frankenphp-security`, `@frankenphp-performance` | 5 |
 | **Project** | `@product-owner`, `@tech-lead` | 2 |
 
 Full reference: [Agents](../docs/AGENTS.md)

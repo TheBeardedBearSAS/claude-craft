@@ -123,12 +123,12 @@ describe('runInstallation', () => {
     const fsModule = await import('fs');
     const originalMock = fsModule.existsSync;
     fsModule.existsSync.mockImplementation((p) => {
-      if (typeof p === 'string' && p.includes('install-infra-rules.sh')) return false;
+      if (typeof p === 'string' && p.includes('install-docker-rules.sh')) return false;
       if (typeof p === 'string' && p.endsWith('.sh')) return true;
       return fsModule.default.existsSync(p);
     });
     fsModule.default.existsSync.mockImplementation((p) => {
-      if (typeof p === 'string' && p.includes('install-infra-rules.sh')) return false;
+      if (typeof p === 'string' && p.includes('install-docker-rules.sh')) return false;
       if (typeof p === 'string' && p.endsWith('.sh')) return true;
       return true;
     });
@@ -137,7 +137,7 @@ describe('runInstallation', () => {
     await runInstallation(cli, { CLI_ROOT: '/fake/root' });
     // Should not call spawnSync for infra script
     const scriptPaths = spawnSyncMock.mock.calls.map((c) => c[1][0]);
-    expect(scriptPaths.some((p) => p.includes('install-infra-rules.sh'))).toBe(false);
+    expect(scriptPaths.some((p) => p.includes('install-docker-rules.sh'))).toBe(false);
 
     // Restore original mock behavior
     fsModule.existsSync.mockImplementation(originalMock.getMockImplementation());

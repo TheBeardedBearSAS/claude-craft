@@ -682,6 +682,214 @@ Helps with:
 
 ---
 
+## PgBouncer/Infrastructure Agents (5)
+
+Available with `install-pgbouncer`.
+
+### pgbouncer-architect
+
+**Expertise**: PgBouncer pool topology and sizing design
+
+Specializes in designing optimal PgBouncer connection pooling architectures for PostgreSQL databases.
+
+Helps with:
+- Pool topology design (session, transaction, statement modes)
+- Connection sizing and capacity planning
+- Multi-database pool configuration
+- High availability pool setups
+- Pool hierarchy design
+
+```
+@pgbouncer-architect Design a connection pool topology for this microservices platform
+@pgbouncer-architect Plan pool sizing for 500 concurrent users
+```
+
+---
+
+### pgbouncer-deployment
+
+**Expertise**: PgBouncer deployment and CI/CD pipelines
+
+Expert in deploying and managing PgBouncer across different environments with zero-downtime strategies.
+
+Helps with:
+- Docker and Kubernetes deployment
+- systemd service configuration
+- Configuration management and templating
+- Rolling restart strategies
+- CI/CD pipeline integration
+
+```
+@pgbouncer-deployment Deploy PgBouncer with Kubernetes sidecar pattern
+@pgbouncer-deployment Configure zero-downtime PgBouncer upgrades
+```
+
+---
+
+### pgbouncer-debug
+
+**Expertise**: PgBouncer connection issue diagnostics
+
+Specializes in diagnosing and resolving PgBouncer connection pooling issues.
+
+Helps with:
+- Connection timeout diagnosis
+- Pool saturation troubleshooting
+- Client/server connection mismatches
+- Query routing issues
+- Log analysis and debugging
+
+```
+@pgbouncer-debug Connections timing out, help me diagnose
+@pgbouncer-debug Pool saturation causing 503 errors
+```
+
+---
+
+### pgbouncer-security
+
+**Expertise**: PgBouncer authentication, TLS, and access control
+
+Expert in securing PgBouncer deployments with proper authentication, encryption, and access policies.
+
+Helps with:
+- Authentication methods (md5, scram-sha-256, cert)
+- TLS/SSL configuration
+- Access control and user mapping
+- Network security and firewall rules
+- Audit logging configuration
+
+```
+@pgbouncer-security Configure SCRAM-SHA-256 authentication
+@pgbouncer-security Audit PgBouncer TLS configuration
+```
+
+---
+
+### pgbouncer-monitoring
+
+**Expertise**: PgBouncer metrics, alerting, and performance tuning
+
+Expert in monitoring PgBouncer health, setting up alerting, and tuning pool performance.
+
+Helps with:
+- SHOW commands and admin console usage
+- Prometheus/Grafana integration
+- Connection pool metrics analysis
+- Alert threshold configuration
+- Performance tuning and optimization
+
+```
+@pgbouncer-monitoring Set up Prometheus metrics for PgBouncer
+@pgbouncer-monitoring Configure alerting for pool saturation
+```
+
+---
+
+## FrankenPHP/Infrastructure Agents (5)
+
+Available with `install-frankenphp`.
+
+### frankenphp-architect
+
+**Expertise**: FrankenPHP Caddyfile design, worker topology, and framework integration
+
+Specializes in designing FrankenPHP serving architectures with worker mode, thread sizing, and framework integration.
+
+Helps with:
+- Worker mode vs classic mode decision
+- Thread sizing and autoscaling configuration
+- Caddyfile design and optimization
+- Symfony Runtime / Laravel Octane integration
+- Mercure real-time and Early Hints setup
+
+```
+@frankenphp-architect Design a worker mode architecture for this Symfony app
+@frankenphp-architect Plan thread sizing for 1000 concurrent users
+```
+
+---
+
+### frankenphp-deployment
+
+**Expertise**: FrankenPHP deployment, Docker, Kubernetes, and CI/CD pipelines
+
+Expert in deploying FrankenPHP with Docker, Kubernetes, standalone binary, and zero-downtime reload strategies.
+
+Helps with:
+- Docker and Kubernetes deployment
+- Standalone binary with systemd
+- Multi-stage Docker builds
+- Zero-downtime reload (SIGUSR1)
+- CI/CD pipeline integration
+
+```
+@frankenphp-deployment Deploy FrankenPHP to Kubernetes with HPA
+@frankenphp-deployment Configure zero-downtime worker reload
+```
+
+---
+
+### frankenphp-debug
+
+**Expertise**: FrankenPHP worker crashes, memory leaks, and Caddyfile error diagnostics
+
+Specializes in diagnosing and resolving FrankenPHP issues from symptoms and log analysis.
+
+Helps with:
+- Worker crash diagnosis (segfaults, OOM, fatal errors)
+- Memory leak detection and max_requests tuning
+- Caddyfile parse error resolution
+- Framework compatibility issues
+- TLS/HTTPS configuration problems
+
+```
+@frankenphp-debug Worker memory keeps growing, RSS at 2GB after 1 hour
+@frankenphp-debug Caddyfile syntax error on startup
+```
+
+---
+
+### frankenphp-security
+
+**Expertise**: FrankenPHP auto-TLS, ECH, PQC, and Caddyfile hardening
+
+Expert in securing FrankenPHP deployments with TLS, security headers, and container hardening.
+
+Helps with:
+- Auto-TLS configuration (Let's Encrypt)
+- ECH and PQC (v1.6+) configuration
+- Security headers and CSP
+- Admin API lockdown
+- Non-root container operation
+
+```
+@frankenphp-security Audit TLS configuration and security headers
+@frankenphp-security Harden FrankenPHP for production deployment
+```
+
+---
+
+### frankenphp-performance
+
+**Expertise**: FrankenPHP worker tuning, thread autoscaling, Early Hints, and Mercure performance
+
+Expert in optimizing FrankenPHP performance through worker tuning, OPcache, and benchmarking.
+
+Helps with:
+- Worker mode tuning and thread autoscaling
+- OPcache preloading and JIT optimization
+- Early Hints (103) configuration
+- Mercure hub performance tuning
+- Benchmarking methodology (wrk, k6)
+
+```
+@frankenphp-performance Optimize worker throughput for API workload
+@frankenphp-performance Configure Early Hints for faster page loads
+```
+
+---
+
 ## BMAD v6 Roles (10)
 
 > **Note:** These are personas integrated into workflow and sprint commands, not standalone agent files. They are described here for reference.
@@ -1089,9 +1297,11 @@ This restricts the agent to only spawn `Explore` and `Plan` sub-agents, preventi
 | OpenTofu/Infrastructure | 5 | 25 |
 | Ansible/Infrastructure | 5 | 25 |
 | Hcloud/Infrastructure | 5 | 25 |
+| PgBouncer/Infrastructure | 5 | 25 |
+| FrankenPHP/Infrastructure | 5 | 25 |
 | **BMAD v6** | **0** (roles, not agents) | **10** (YAML roles) |
 | Project | 2 | 10 |
-| **Total** | **53** | **265** |
+| **Total** | **63** | **315** |
 
 ---
 

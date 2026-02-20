@@ -112,8 +112,8 @@ describe('shell-ui.sh', () => {
 
 describe('shell-ui.sh sourcing from different paths', () => {
   it('can be sourced from Infra/ script path', () => {
-    const infraScript = path.resolve(PROJECT_ROOT, 'Infra/install-infra-rules.sh');
-    // Verify the relative path used in install-infra-rules.sh resolves correctly
+    const infraScript = path.resolve(PROJECT_ROOT, 'Infra/install-docker-rules.sh');
+    // Verify the relative path used in install-docker-rules.sh resolves correctly
     const output = execSync(
       `bash -c 'SCRIPT_DIR="${path.resolve(PROJECT_ROOT, "Infra")}" && source "\${SCRIPT_DIR}/../Dev/scripts/lib/shell-ui.sh" && ui_info "infra-ok"'`,
       { encoding: 'utf8', timeout: 5000 }

@@ -130,7 +130,7 @@ const TECH_REGISTRY = {
     desc: 'Dockerfile, Compose, CI/CD, Debugging',
     namespace: 'docker',
     i18nDir: 'Docker',
-    installScript: 'install-infra-rules.sh',
+    installScript: 'install-docker-rules.sh',
     version: 'latest',
     tier: null,
   },

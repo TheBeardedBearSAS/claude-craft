@@ -109,6 +109,7 @@ make install-tools
 make install-statusline      # Custom status line (~/.claude/)
 make install-multiaccount    # Multi-account manager (~/.local/bin/)
 make install-projectconfig   # Project config manager (~/.local/bin/)
+make install-rtk             # RTK token optimizer (~/.claude/)
 ```
 
 **Status Line** displays: Profile | Model | Git | Project | Context % | Cost | Time
@@ -116,6 +117,8 @@ make install-projectconfig   # Project config manager (~/.local/bin/)
 **Multi-Account Manager** lets you manage multiple Claude Code accounts with aliases.
 
 **Project Config Manager** provides an interactive UI to manage `claude-projects.yaml` (add/edit/delete projects and modules).
+
+**RTK (Token Optimizer)** reduces LLM token consumption by 60-90% via smart command output filtering.
 
 ### Method 2: YAML Configuration (Monorepos)
 

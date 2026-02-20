@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.20.0] - 2026-02-20
+
+### Added
+
+- **FrankenPHP infrastructure** — 5 agents, 5 commands, install script, 5 languages
+- **PgBouncer infrastructure** — 5 agents, 5 commands, install script, 5 languages
+- **Kubernetes infrastructure** — 5 agents, 5 commands, install script, 5 languages
+- **OpenTofu infrastructure** — 5 agents, 5 commands, install script, 5 languages
+- **Ansible infrastructure** — 5 agents, 5 commands, install script, 5 languages
+- **Hcloud infrastructure** — 5 agents, 5 commands, install script, 5 languages
+- **12 project management commands** — `/project:burndown`, `/project:checkpoint`, `/project:coverage-map`, `/project:critical-path`, `/project:dependencies`, `/project:gap-analysis`, `/project:generate-constitution`, `/project:metrics`, `/project:reverse-prd`, `/project:reverse-stories`, `/project:scan`, `/project:trace` (5 languages each)
+- **Spec alignment gate** — `/gate:validate-alignment` command + `spec-alignment-gate.yaml` with 85% threshold and 6 weighted criteria (5 languages)
+- **Constitution template** — project governance template `constitution.md` (5 languages)
+- **BMAD metrics** — `.bmad/metrics/` directory for sprint velocity and burndown tracking
+- **RTK integration** — Rust Token Killer install script, i18n, BATS tests, CLI registry, `/common:setup-rtk` command. Reduces LLM token consumption by 60-90%
+- **10 reviewer agents v2.0** — all reviewers (Angular, Vue.js, Laravel, React Native, PHP, C#, Symfony, React, Python, Flutter) propagated to 5 languages with scoring /100 and decision trees
+
+### Changed
+
+- **Infrastructure expanded** — from 2 stacks (Docker, Coolify) to 8 (+ Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP). Total tech stacks: 18
+- **BMAD gates updated** — `prd-gate.yaml`, `sprint-ready-gate.yaml`, `story-gate.yaml` enhanced with improved validation criteria
+- **Project templates updated** — `prd.md`, `tech-spec.md`, `user-story.md` improved across 5 languages
+- **Sprint next-story command** — enhanced across 5 languages
+- **Training materials** — updated to reflect 63 agents, 204 commands, 26 namespaces, 18 stacks
+- **Documentation** — RTK added to INSTALLATION.md, CLI-REFERENCE.md, SCRIPTS-REFERENCE.md, FAQ.md, index.html
+
+### Fixed
+
+- **4 failing test suites** — fs mock and `process.exitCode` issues in installer, check, ralph, and interactive tests
+- **Command counts corrected** — propagated accurate counts across all documentation surfaces
+- **Coolify missing from index.html** — added to landing page with correct i18n translations
+- **Context essentials stale** — updated from 33/161/20 to 63/204/26 (agents/commands/namespaces)
+
 ## [7.19.0] - 2026-02-19
 
 ### Added

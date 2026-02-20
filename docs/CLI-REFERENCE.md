@@ -306,6 +306,7 @@ make install-tools                         # All tools
 make install-statusline                    # Custom status line
 make install-multiaccount                  # Multi-account manager
 make install-projectconfig                 # Project config manager
+make install-rtk                           # RTK token optimizer
 ```
 
 ### Dry Run Commands

@@ -13,7 +13,7 @@ Claude Craft classifies its 10 application technology stacks into 3 maturity tie
 | **1** | Core | Symfony, React, Python, Flutter | Production-grade support. Deep agent specialization, extensive i18n (25+ files), 8+ commands, 3+ tech-specific skills, full reference docs with examples. |
 | **2** | Supported | React Native, PHP | Solid support. Customized reviewer agent, 7+ i18n files, 5+ commands, at least 1 tech-specific skill, full reference docs. |
 | **3** | Community | C# / .NET, Angular, Laravel, Vue.js | Basic scaffolding. Generic reviewer template, 2+ i18n files, 3+ commands, shared skills only, basic CLAUDE.md reference. Community contributions welcome. |
-| -- | Infra | Docker, Coolify | Infrastructure tooling, not application stacks. Not tiered. |
+| -- | Infra | Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP | Infrastructure tooling, not application stacks. Not tiered. |
 
 ### Tier Requirements
 

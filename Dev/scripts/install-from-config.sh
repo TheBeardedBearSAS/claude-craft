@@ -450,7 +450,7 @@ get_install_script() {
             script="${SCRIPT_DIR}/../../Project/install-project-commands.sh"
             ;;
         docker)
-            script="${SCRIPT_DIR}/../../Infra/install-infra-rules.sh"
+            script="${SCRIPT_DIR}/../../Infra/install-docker-rules.sh"
             ;;
     esac
 

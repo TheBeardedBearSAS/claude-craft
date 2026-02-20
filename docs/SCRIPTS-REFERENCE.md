@@ -306,16 +306,16 @@ Common functions used by installation scripts.
 
 Located in `Infra/`.
 
-### install-infra-rules.sh
+### install-docker-rules.sh
 
 Installs Docker/infrastructure rules and agents.
 
 ```bash
-./Infra/install-infra-rules.sh [options] <target>
+./Infra/install-docker-rules.sh [options] <target>
 
 # Examples
-./Infra/install-infra-rules.sh ~/my-project
-./Infra/install-infra-rules.sh --lang=fr ~/my-project
+./Infra/install-docker-rules.sh ~/my-project
+./Infra/install-docker-rules.sh --lang=fr ~/my-project
 ```
 
 **Installs:**
@@ -385,6 +385,24 @@ make install-projectconfig
 ```
 
 Installs interactive project configuration manager.
+
+### RTK Installation
+
+```bash
+./Tools/RTK/install-rtk.sh --lang=en
+
+# Or via make
+make install-rtk
+
+# Check status
+./Tools/RTK/install-rtk.sh --check
+
+# Uninstall
+./Tools/RTK/install-rtk.sh --uninstall
+```
+
+Installs RTK (Rust Token Killer) for LLM token optimization.
+Configures PreToolUse hook in `~/.claude/settings.json`.
 
 ---
 

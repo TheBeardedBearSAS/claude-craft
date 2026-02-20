@@ -6,11 +6,11 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.19
+## What's New in v7.20
 
-- **All 10 reviewers now v2.0** -- 6 remaining reviewers (Angular, Vue.js, Laravel, React Native, PHP, C#) upgraded with scoring /100, decision trees, and sonnet model
-- **Hooks activated** -- project dogfoods its own hooks: security-block, file protection, auto-format, context re-injection
-- **New hook templates** -- quality-gate (blocks commit if tests fail) and block-dangerous-commands (rm -rf, sudo)
+- **6 new infrastructure stacks** -- Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP with dedicated agents, commands, and i18n
+- **12 new project commands** -- burndown, checkpoint, coverage-map, critical-path, dependencies, gap-analysis, generate-constitution, metrics, reverse-prd, reverse-stories, scan, trace
+- **RTK integration** -- new `/common:setup-rtk` command, install script, and full i18n support
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 ## Install and First Result
@@ -36,8 +36,8 @@ That's it. You get an architecture, security, and quality audit of your project 
 Claude Code is powerful on its own. Claude Craft makes it **consistent and team-ready**:
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
-- **53 specialized agents** -- reviewers, architects, coaches that know your stack deeply
-- **194 slash commands** -- repeatable workflows for audits, code generation, sprint management
+- **63 specialized agents** -- reviewers, architects, coaches that know your stack deeply
+- **204 slash commands** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -62,6 +62,8 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **OpenTofu** | 1.7+ | `--tech=opentofu` |
 | **Ansible** | 2.18+ | `--tech=ansible` |
 | **Hcloud** | 1.61+ | `--tech=hcloud` |
+| **PgBouncer** | 1.25+ | `--tech=pgbouncer` |
+| **FrankenPHP** | 1.11+ | `--tech=frankenphp` |
 
 See [Technologies](docs/TECHNOLOGIES.md) for full details.
 
@@ -69,8 +71,8 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 
 | Category | Count | Examples |
 |----------|-------|---------|
-| **Agents** | 53 | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 194 | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Agents** | 63 | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
+| **Commands** | 204 | `/workflow:init`, `/team:audit`, `/react:generate-component` |
 | **Skills** | 37 | Architecture, testing, security best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -112,7 +114,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 194 commands across 24 namespaces.
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 204 commands across 26 namespaces.
 
 ## Installation
 
@@ -177,8 +179,8 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 194 commands |
-| [Agents](docs/AGENTS.md) | All 53 agents |
+| [Commands](docs/COMMANDS.md) | All 204 commands |
+| [Agents](docs/AGENTS.md) | All 63 agents |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |
 | [BMAD Guide](docs/BMAD-PRACTICAL-GUIDE.md) | Project management framework |

@@ -177,7 +177,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="inline-flex items-center px-3 py-1 rounded-full border border-brand-500/30 bg-brand-500/10 text-brand-300 text-xs font-medium mb-6">
                 <span class="flex h-2 w-2 rounded-full bg-brand-400 mr-2 animate-pulse"></span>
-                <span data-i18n="hero_badge">v7.19.0 - Claude Code 2.1.47</span>
+                <span data-i18n="hero_badge">v7.20.0 - Claude Code 2.1.47</span>
             </div>
             
             <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">
@@ -203,15 +203,15 @@
             <div class="mt-16 grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-6 border-y border-white/5 py-8 bg-white/[0.02]">
                 <div class="flex flex-col items-center">
                     <dt class="order-2 mt-2 text-sm font-medium text-slate-400" data-i18n="stat_stacks">Tech Stacks</dt>
-                    <dd class="order-1 text-3xl font-extrabold text-white">14</dd>
+                    <dd class="order-1 text-3xl font-extrabold text-white">18</dd>
                 </div>
                 <div class="flex flex-col items-center">
                     <dt class="order-2 mt-2 text-sm font-medium text-slate-400" data-i18n="stat_agents">AI Agents</dt>
-                    <dd class="order-1 text-3xl font-extrabold text-white">53</dd>
+                    <dd class="order-1 text-3xl font-extrabold text-white">63</dd>
                 </div>
                 <div class="flex flex-col items-center">
                     <dt class="order-2 mt-2 text-sm font-medium text-slate-400" data-i18n="stat_commands">Slash Commands</dt>
-                    <dd class="order-1 text-3xl font-extrabold text-white">194</dd>
+                    <dd class="order-1 text-3xl font-extrabold text-white">204</dd>
                 </div>
                 <div class="flex flex-col items-center">
                     <dt class="order-2 mt-2 text-sm font-medium text-slate-400" data-i18n="stat_skills">Skills</dt>
@@ -240,7 +240,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Card 1 - BMAD v6 (UPDATED) -->
                 <div class="glass-card p-8 rounded-2xl relative overflow-hidden">
-                    <div class="absolute top-2 right-2 px-2 py-0.5 bg-cyan-500/20 text-cyan-300 text-xs rounded-full border border-cyan-500/30">v7.19.0</div>
+                    <div class="absolute top-2 right-2 px-2 py-0.5 bg-cyan-500/20 text-cyan-300 text-xs rounded-full border border-cyan-500/30">v7.20.0</div>
                     <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-6">
                         <i data-lucide="git-branch" class="text-cyan-400 h-6 w-6"></i>
                     </div>
@@ -250,7 +250,7 @@
 
                 <!-- Card 2 - Ralph Wiggum v2.0 -->
                 <div class="glass-card p-8 rounded-2xl relative overflow-hidden">
-                    <div class="absolute top-2 right-2 px-2 py-0.5 bg-orange-500/20 text-orange-300 text-xs rounded-full border border-orange-500/30">v7.19.0</div>
+                    <div class="absolute top-2 right-2 px-2 py-0.5 bg-orange-500/20 text-orange-300 text-xs rounded-full border border-orange-500/30">v7.20.0</div>
                     <div class="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center mb-6">
                         <i data-lucide="repeat" class="text-orange-400 h-6 w-6"></i>
                     </div>
@@ -291,7 +291,7 @@
                         <i data-lucide="zap" class="text-pink-400 h-6 w-6"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-white mb-3" data-i18n="feat_3_title">Automated Workflows</h3>
-                    <p class="text-slate-400" data-i18n="feat_3_desc">Use 194 slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits.</p>
+                    <p class="text-slate-400" data-i18n="feat_3_desc">Use 204 slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits.</p>
                 </div>
             </div>
         </div>
@@ -333,6 +333,16 @@
                             <div>
                                 <h3 class="text-lg font-semibold text-white" data-i18n="tool_ralph_title">Ralph Wiggum</h3>
                                 <p class="text-slate-400" data-i18n="tool_ralph_desc">Continuous AI loop with circuit breaker, git checkpoints, and Definition of Done validation.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="zap" class="text-emerald-400 h-5 w-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-white" data-i18n="tool_rtk_title">RTK Token Optimizer</h3>
+                                <p class="text-slate-400" data-i18n="tool_rtk_desc">Reduce LLM token consumption by 60-90% with smart command output filtering.</p>
                             </div>
                         </div>
                     </div>
@@ -631,6 +641,24 @@
                     <h3 class="font-bold text-white">Hcloud</h3>
                     <p class="text-xs text-slate-400 mt-2" data-i18n="tech_hcloud_desc">Servers, Networks, Firewalls, Load Balancers</p>
                 </div>
+
+                <!-- PgBouncer -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-[#336791]/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-[#336791] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <span class="text-white font-bold text-lg">PgB</span>
+                    </div>
+                    <h3 class="font-bold text-white">PgBouncer</h3>
+                    <p class="text-xs text-slate-400 mt-2" data-i18n="tech_pgbouncer_desc">PostgreSQL connection pooler — pool topology, security hardening, monitoring</p>
+                </div>
+
+                <!-- FrankenPHP -->
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-[#059669]/50 transition-colors text-center group">
+                    <div class="h-16 w-16 mx-auto bg-[#059669] rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                        <span class="text-white font-bold text-lg">FPH</span>
+                    </div>
+                    <h3 class="font-bold text-white">FrankenPHP</h3>
+                    <p class="text-xs text-slate-400 mt-2" data-i18n="tech_frankenphp_desc">Modern PHP app server — worker mode, auto-TLS, Early Hints, Mercure</p>
+                </div>
             </div>
         </div>
     </section>
@@ -656,7 +684,7 @@
 
                 <!-- Agent: Ralph Conductor v2.0 -->
                 <div class="p-6 bg-slate-800 rounded-lg border border-orange-500/30 relative">
-                    <div class="absolute top-2 right-2 px-2 py-0.5 bg-orange-500/20 text-orange-300 text-xs rounded-full">v7.19.0</div>
+                    <div class="absolute top-2 right-2 px-2 py-0.5 bg-orange-500/20 text-orange-300 text-xs rounded-full">v7.20.0</div>
                     <div class="flex items-center gap-3 mb-3">
                         <i data-lucide="repeat" class="text-orange-400"></i>
                         <h3 class="font-bold text-white font-mono">ralph-conductor</h3>
@@ -755,7 +783,7 @@
                 nav_quickstart: "Quick Start",
                 nav_tech: "Tech Stack",
                 nav_agents: "Agents",
-                hero_badge: "v7.19.0 - Claude Code 2.1.47",
+                hero_badge: "v7.20.0 - Claude Code 2.1.47",
                 hero_title_1: "Supercharge",
                 hero_title_2: "with Expert Knowledge",
                 hero_desc: "A comprehensive framework for AI-assisted development. Install standardized rules, agents, and commands for your projects across multiple technology stacks.",
@@ -780,7 +808,7 @@
                 feat_skills_title: "37 Skills",
                 feat_skills_desc: "Best practices in official Claude Code format. Architecture, testing, security patterns for all technologies.",
                 feat_3_title: "Automated Workflows",
-                feat_3_desc: "Use 194 slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits.",
+                feat_3_desc: "Use 204 slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits.",
                 tools_title: "Developer Experience Tools",
                 tools_desc: "Enhance your terminal workflow with power tools designed for daily use.",
                 tool_status_title: "Custom Status Line",
@@ -789,6 +817,8 @@
                 tool_account_desc: "Switch easily between different Claude Code profiles and accounts with a single command.",
                 tool_ralph_title: "Ralph Wiggum v2.0",
                 tool_ralph_desc: "Adaptive circuit breaker, Claude Code hooks, auto-detection, dashboard, and health monitoring.",
+                tool_rtk_title: "RTK Token Optimizer",
+                tool_rtk_desc: "Reduce LLM token consumption by 60-90% with smart command output filtering.",
                 term_preview_label: "Terminal Preview",
                 install_methods_title: "Flexible Installation Methods",
                 install_method_1_title: "Makefile",
@@ -815,6 +845,8 @@
                 tech_opentofu_desc: "State Encryption, IaC, Modules, CI/CD",
                 tech_ansible_desc: "Playbooks, Roles, Vault, Molecule",
                 tech_hcloud_desc: "Servers, Firewalls, Floating IPs, Load Balancers",
+                tech_pgbouncer_desc: "PostgreSQL connection pooler — pool topology, security hardening, monitoring",
+                tech_frankenphp_desc: "Modern PHP app server — worker mode, auto-TLS, Early Hints, Mercure",
                 qs_title: "Up and running in seconds",
                 qs_step1_title: "Clone the repository",
                 qs_step1_desc: "Get the framework on your local machine.",
@@ -846,7 +878,7 @@
                 nav_quickstart: "Démarrage Rapide",
                 nav_tech: "Technologies",
                 nav_agents: "Agents",
-                hero_badge: "v7.19.0 - Claude Code 2.1.47",
+                hero_badge: "v7.20.0 - Claude Code 2.1.47",
                 hero_title_1: "Superchargez",
                 hero_title_2: "d'une Expertise Technique",
                 hero_desc: "Un framework complet pour le développement assisté par IA. Installez des règles, agents et commandes standardisés pour vos projets.",
@@ -871,7 +903,7 @@
                 feat_skills_title: "37 Skills",
                 feat_skills_desc: "Bonnes pratiques au format officiel Claude Code. Patterns d'architecture, testing et sécurité pour toutes les technologies.",
                 feat_3_title: "Flux Automatisés",
-                feat_3_desc: "Utilisez 194 commandes pour automatiser les tâches fastidieuses. Générez des composants, vérifiez l'architecture et lancez des audits.",
+                feat_3_desc: "Utilisez 204 commandes pour automatiser les tâches fastidieuses. Générez des composants, vérifiez l'architecture et lancez des audits.",
                 tools_title: "Outils d'Expérience Développeur",
                 tools_desc: "Améliorez votre flux de travail terminal avec des outils puissants.",
                 tool_status_title: "Barre d'État Personnalisée",
@@ -880,6 +912,8 @@
                 tool_account_desc: "Basculez facilement entre différents profils et comptes Claude Code en une seule commande.",
                 tool_ralph_title: "Ralph Wiggum v2.0",
                 tool_ralph_desc: "Circuit breaker adaptatif, hooks Claude Code, auto-détection, dashboard et monitoring santé.",
+                tool_rtk_title: "RTK Optimiseur de Tokens",
+                tool_rtk_desc: "Réduisez la consommation de tokens LLM de 60-90% avec un filtrage intelligent des sorties de commandes.",
                 term_preview_label: "Aperçu du Terminal",
                 install_methods_title: "Méthodes d'Installation Flexibles",
                 install_method_1_title: "Makefile",
@@ -906,6 +940,8 @@
                 tech_kubernetes_desc: "Helm, GitOps, Securite, Monitoring",
                 tech_opentofu_desc: "Chiffrement d'etat, IaC, Modules, CI/CD",
                 tech_hcloud_desc: "Serveurs, Firewalls, Floating IPs, Load Balancers",
+                tech_pgbouncer_desc: "Pooler de connexions PostgreSQL — topologie de pools, securite, monitoring",
+                tech_frankenphp_desc: "Serveur PHP moderne — worker mode, auto-TLS, Early Hints, Mercure",
                 qs_title: "Opérationnel en quelques secondes",
                 qs_step1_title: "Cloner le dépôt",
                 qs_step1_desc: "Récupérez le framework sur votre machine locale.",
@@ -937,7 +973,7 @@
                 nav_quickstart: "Inicio Rápido",
                 nav_tech: "Tecnologías",
                 nav_agents: "Agentes",
-                hero_badge: "v7.19.0 - Claude Code 2.1.47",
+                hero_badge: "v7.20.0 - Claude Code 2.1.47",
                 hero_title_1: "Potencia",
                 hero_title_2: "con Conocimiento Experto",
                 hero_desc: "Un marco integral para el desarrollo asistido por IA. Instala reglas, agentes y comandos estandarizados para tus proyectos.",
@@ -962,7 +998,7 @@
                 feat_skills_title: "37 Skills",
                 feat_skills_desc: "Mejores prácticas en formato oficial de Claude Code. Patrones de arquitectura, testing y seguridad para todas las tecnologías.",
                 feat_3_title: "Flujos Automatizados",
-                feat_3_desc: "Usa 194 comandos para automatizar tareas tediosas. Genera componentes, verifica arquitectura y ejecuta auditorías.",
+                feat_3_desc: "Usa 204 comandos para automatizar tareas tediosas. Genera componentes, verifica arquitectura y ejecuta auditorías.",
                 tools_title: "Herramientas de Desarrollador",
                 tools_desc: "Mejora tu flujo de trabajo en la terminal con herramientas potentes.",
                 tool_status_title: "Línea de Estado Personalizada",
@@ -971,6 +1007,8 @@
                 tool_account_desc: "Cambia fácilmente entre diferentes perfiles y cuentas de Claude Code.",
                 tool_ralph_title: "Ralph Wiggum v2.0",
                 tool_ralph_desc: "Circuit breaker adaptativo, hooks Claude Code, auto-detección, dashboard y monitoreo de salud.",
+                tool_rtk_title: "RTK Optimizador de Tokens",
+                tool_rtk_desc: "Reduce el consumo de tokens LLM en un 60-90% con filtrado inteligente de salida de comandos.",
                 term_preview_label: "Vista Previa de Terminal",
                 install_methods_title: "Métodos de Instalación Flexibles",
                 install_method_1_title: "Makefile",
@@ -997,6 +1035,8 @@
                 tech_kubernetes_desc: "Helm, GitOps, Seguridad, Monitoreo",
                 tech_opentofu_desc: "Cifrado de Estado, IaC, Modulos, CI/CD",
                 tech_hcloud_desc: "Servidores, Firewalls, Floating IPs, Load Balancers",
+                tech_pgbouncer_desc: "Pooler de conexiones PostgreSQL — topologia de pools, seguridad, monitoreo",
+                tech_frankenphp_desc: "Servidor PHP moderno — worker mode, auto-TLS, Early Hints, Mercure",
                 qs_title: "Listo en segundos",
                 qs_step1_title: "Clonar el repositorio",
                 qs_step1_desc: "Obtén el framework en tu máquina local.",
@@ -1028,7 +1068,7 @@
                 nav_quickstart: "Schnellstart",
                 nav_tech: "Technologien",
                 nav_agents: "Agenten",
-                hero_badge: "v7.19.0 - Claude Code 2.1.47",
+                hero_badge: "v7.20.0 - Claude Code 2.1.47",
                 hero_title_1: "Laden Sie",
                 hero_title_2: "mit Expertenwissen auf",
                 hero_desc: "Ein umfassendes Framework für KI-gestützte Entwicklung. Installieren Sie standardisierte Regeln, Agenten und Befehle für Ihre Projekte.",
@@ -1053,7 +1093,7 @@
                 feat_skills_title: "37 Skills",
                 feat_skills_desc: "Best Practices im offiziellen Claude Code Format. Architektur-, Test- und Sicherheitsmuster für alle Technologien.",
                 feat_3_title: "Automatisierte Arbeitsabläufe",
-                feat_3_desc: "Nutzen Sie 194 Befehle, um lästige Aufgaben zu automatisieren. Generieren Sie Komponenten, prüfen Sie die Architektur und führen Sie Audits durch.",
+                feat_3_desc: "Nutzen Sie 204 Befehle, um lästige Aufgaben zu automatisieren. Generieren Sie Komponenten, prüfen Sie die Architektur und führen Sie Audits durch.",
                 tools_title: "Entwickler-Tools",
                 tools_desc: "Verbessern Sie Ihren Terminal-Workflow mit leistungsstarken Tools.",
                 tool_status_title: "Benutzerdefinierte Statuszeile",
@@ -1062,6 +1102,8 @@
                 tool_account_desc: "Wechseln Sie einfach zwischen verschiedenen Claude Code Profilen und Konten.",
                 tool_ralph_title: "Ralph Wiggum v2.0",
                 tool_ralph_desc: "Adaptiver Circuit Breaker, Claude Code Hooks, Auto-Erkennung, Dashboard und Gesundheitsmonitoring.",
+                tool_rtk_title: "RTK Token-Optimierer",
+                tool_rtk_desc: "Reduzieren Sie den LLM-Token-Verbrauch um 60-90% mit intelligenter Befehlsausgabe-Filterung.",
                 term_preview_label: "Terminal Vorschau",
                 install_methods_title: "Flexible Installationsmethoden",
                 install_method_1_title: "Makefile",
@@ -1088,6 +1130,8 @@
                 tech_kubernetes_desc: "Helm, GitOps, Sicherheit, Monitoring",
                 tech_opentofu_desc: "State-Verschluesselung, IaC, Module, CI/CD",
                 tech_hcloud_desc: "Server, Firewalls, Floating IPs, Load Balancer",
+                tech_pgbouncer_desc: "PostgreSQL Connection Pooler — Pool-Topologie, Sicherheit, Monitoring",
+                tech_frankenphp_desc: "Moderner PHP-Server — Worker Mode, Auto-TLS, Early Hints, Mercure",
                 qs_title: "In Sekunden einsatzbereit",
                 qs_step1_title: "Repository klonen",
                 qs_step1_desc: "Holen Sie sich das Framework auf Ihren lokalen Rechner.",
@@ -1119,7 +1163,7 @@
                 nav_quickstart: "Início Rápido",
                 nav_tech: "Tecnologias",
                 nav_agents: "Agentes",
-                hero_badge: "v7.19.0 - Claude Code 2.1.47",
+                hero_badge: "v7.20.0 - Claude Code 2.1.47",
                 hero_title_1: "Turbine o",
                 hero_title_2: "com Conhecimento Especializado",
                 hero_desc: "Um framework abrangente para desenvolvimento assistido por IA. Instale regras, agentes e comandos padronizados para seus projetos.",
@@ -1144,7 +1188,7 @@
                 feat_skills_title: "37 Skills",
                 feat_skills_desc: "Melhores práticas no formato oficial do Claude Code. Padrões de arquitetura, testes e segurança para todas as tecnologias.",
                 feat_3_title: "Fluxos Automatizados",
-                feat_3_desc: "Use 194 comandos para automatizar tarefas tediosas. Gere componentes, verifique a arquitetura e execute auditorias.",
+                feat_3_desc: "Use 204 comandos para automatizar tarefas tediosas. Gere componentes, verifique a arquitetura e execute auditorias.",
                 tools_title: "Ferramentas do Desenvolvedor",
                 tools_desc: "Melhore seu fluxo de trabalho no terminal com ferramentas poderosas.",
                 tool_status_title: "Linha de Status Personalizada",
@@ -1153,6 +1197,8 @@
                 tool_account_desc: "Alterne facilmente entre diferentes perfis e contas do Claude Code.",
                 tool_ralph_title: "Ralph Wiggum v2.0",
                 tool_ralph_desc: "Circuit breaker adaptativo, hooks Claude Code, auto-detecção, dashboard e monitoramento de saúde.",
+                tool_rtk_title: "RTK Otimizador de Tokens",
+                tool_rtk_desc: "Reduza o consumo de tokens LLM em 60-90% com filtragem inteligente de saída de comandos.",
                 term_preview_label: "Visualização do Terminal",
                 install_methods_title: "Métodos de Instalação Flexíveis",
                 install_method_1_title: "Makefile",
@@ -1179,6 +1225,8 @@
                 tech_kubernetes_desc: "Helm, GitOps, Seguranca, Monitoramento",
                 tech_opentofu_desc: "Criptografia de Estado, IaC, Modulos, CI/CD",
                 tech_hcloud_desc: "Servidores, Firewalls, Floating IPs, Load Balancers",
+                tech_pgbouncer_desc: "Pooler de conexoes PostgreSQL — topologia de pools, seguranca, monitoramento",
+                tech_frankenphp_desc: "Servidor PHP moderno — worker mode, auto-TLS, Early Hints, Mercure",
                 qs_title: "Funcionando em segundos",
                 qs_step1_title: "Clonar o repositório",
                 qs_step1_desc: "Obtenha o framework em sua máquina local.",

@@ -29,6 +29,18 @@ cd claude-craft
 make install-symfony TARGET=~/my-project
 ```
 
+### How do I reduce token consumption?
+
+Install RTK (Rust Token Killer) to reduce token usage by 60-90%:
+
+```bash
+make install-rtk
+# or
+/common:setup-rtk
+```
+
+RTK intercepts terminal commands and compresses their output before it reaches the LLM context window.
+
 ### Can I install multiple technologies?
 
 Yes! Run multiple install commands or use the YAML configuration:
