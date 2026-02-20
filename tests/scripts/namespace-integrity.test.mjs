@@ -131,7 +131,7 @@ describe('v7.0.0 namespace integrity', () => {
       'Dev/i18n/en/QA/commands': 6,
       'Dev/i18n/en/UIUX/commands': 7,
       'Project/i18n/en/commands': 34,
-      'Project/i18n/en/Sprint/commands': 7,
+      'Project/i18n/en/Sprint/commands': 5,
       'Project/i18n/en/Gate/commands': 7,
       'Infra/i18n/en/Docker/commands': 5,
     };
