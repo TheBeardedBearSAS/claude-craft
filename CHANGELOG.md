@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.21.0] - 2026-02-20
+
+### Added
+
+- **Full infrastructure install support** — all 8 infrastructure technologies (Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP) now fully integrated in `install-from-config.sh` with generalized infra handling and `claude-projects.sh` available techs list
+- **Complete technology catalog in example** — `claude-projects.yaml.example` updated with all 18 technologies organized by category (App/Infra/Other)
+
+### Fixed
+
+- **RTK multi-account profiles** — `install-rtk.sh` now respects `CLAUDE_CONFIG_DIR` environment variable, enabling RTK hook installation per profile in multi-account setups
+
 ## [7.20.0] - 2026-02-20
 
 ### Added

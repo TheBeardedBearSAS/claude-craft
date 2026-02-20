@@ -6,11 +6,10 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.20
+## What's New in v7.21
 
-- **6 new infrastructure stacks** -- Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP with dedicated agents, commands, and i18n
-- **12 new project commands** -- burndown, checkpoint, coverage-map, critical-path, dependencies, gap-analysis, generate-constitution, metrics, reverse-prd, reverse-stories, scan, trace
-- **RTK integration** -- new `/common:setup-rtk` command, install script, and full i18n support
+- **Full infra install integration** -- all 8 infrastructure technologies fully supported in install-from-config and project configuration
+- **RTK multi-account** -- install RTK hooks per profile via CLAUDE_CONFIG_DIR
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 ## Install and First Result
