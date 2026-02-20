@@ -1,21 +1,36 @@
 <script setup lang="ts">
+import { useData } from 'vitepress'
+
 defineProps<{
   title: string
   desc: string
 }>()
 
-const techs = [
-  { name: 'Symfony', abbr: 'Sf', bg: '#000', color: '#fff', desc: 'Clean Arch, DDD, API Platform' },
-  { name: 'Flutter', abbr: 'Fl', bg: '#02569B', color: '#fff', desc: 'BLoC, Material, Cupertino' },
-  { name: 'Python', abbr: 'Py', bg: '#3776AB', color: '#FFD43B', desc: 'FastAPI, Async, Typing' },
-  { name: 'React', abbr: 'Re', bg: '#20232a', color: '#61dafb', desc: 'Hooks, A11y, State Mgmt' },
-  { name: 'React Native', abbr: 'RN', bg: '#20232a', color: '#61dafb', desc: 'Navigation, Native Modules' },
-  { name: 'Angular', abbr: 'A', bg: '#DD0031', color: '#fff', desc: 'Standalone, Signals, OnPush' },
-  { name: 'C#/.NET', abbr: 'C#', bg: '#512BD4', color: '#fff', desc: 'Clean Arch, CQRS, EF Core' },
-  { name: 'Laravel', abbr: 'La', bg: '#FF2D20', color: '#fff', desc: 'Clean Arch, Pest PHP, Sanctum' },
-  { name: 'Vue.js', abbr: 'V', bg: '#42B883', color: '#fff', desc: 'Composition API, Pinia, Vitest' },
-  { name: 'PHP', abbr: 'PHP', bg: '#777BB4', color: '#fff', desc: 'Clean Arch, PSR-12, PHPStan' },
-  { name: 'Docker', abbr: 'D', bg: '#2496ED', color: '#fff', desc: 'Dockerfile, Compose, CI/CD' },
+const { site } = useData()
+const base = site.value.base || '/'
+
+const appTechs = [
+  { name: 'Symfony', logo: `${base}logos/symfony.svg`, desc: 'Clean Arch, DDD, API Platform' },
+  { name: 'Flutter', logo: `${base}logos/flutter.svg`, desc: 'BLoC, Material, Cupertino' },
+  { name: 'Python', logo: `${base}logos/python.svg`, desc: 'FastAPI, Async, Typing' },
+  { name: 'React', logo: `${base}logos/react.svg`, desc: 'Hooks, A11y, State Mgmt' },
+  { name: 'React Native', logo: `${base}logos/react.svg`, desc: 'Navigation, Native Modules' },
+  { name: 'Angular', logo: `${base}logos/angular.svg`, desc: 'Standalone, Signals, OnPush' },
+  { name: 'C#/.NET', logo: `${base}logos/dotnet.svg`, desc: 'Clean Arch, CQRS, EF Core' },
+  { name: 'Laravel', logo: `${base}logos/laravel.svg`, desc: 'Clean Arch, Pest PHP, Sanctum' },
+  { name: 'Vue.js', logo: `${base}logos/vuejs.svg`, desc: 'Composition API, Pinia, Vitest' },
+  { name: 'PHP', logo: `${base}logos/php.svg`, desc: 'Clean Arch, PSR-12, PHPStan' },
+]
+
+const infraTechs = [
+  { name: 'Docker', logo: `${base}logos/docker.svg`, desc: 'Dockerfile, Compose, CI/CD' },
+  { name: 'Coolify', logo: `${base}logos/coolify.svg`, desc: 'Self-hosted, Auto-deploy' },
+  { name: 'Kubernetes', logo: `${base}logos/kubernetes.svg`, desc: 'Orchestration, Scaling' },
+  { name: 'OpenTofu', logo: `${base}logos/opentofu.svg`, desc: 'IaC, State, Modules' },
+  { name: 'Ansible', logo: `${base}logos/ansible.svg`, desc: 'Playbooks, Roles, Vault' },
+  { name: 'Hetzner Cloud', logo: `${base}logos/hetzner.svg`, desc: 'Servers, Networks, LB' },
+  { name: 'PgBouncer', logo: `${base}logos/pgbouncer.svg`, desc: 'Connection Pooling' },
+  { name: 'FrankenPHP', logo: `${base}logos/frankenphp.svg`, desc: 'App Server, Worker Mode' },
 ]
 </script>
 
@@ -27,9 +42,21 @@ const techs = [
         <p style="margin-top: 1rem; color: #94a3b8;">{{ desc }}</p>
       </div>
       <div class="tech-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
-        <div v-for="tech in techs" :key="tech.name" style="background: rgba(30,41,59,0.5); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.05); text-align: center; transition: border-color 0.3s;" class="tech-card">
-          <div :style="{ height: '4rem', width: '4rem', margin: '0 auto 1rem', background: tech.bg, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 15px rgba(0,0,0,0.3)', transition: 'transform 0.3s' }" class="tech-icon">
-            <span :style="{ fontSize: tech.abbr.length > 2 ? '0.875rem' : '1.25rem', fontWeight: 700, color: tech.color }">{{ tech.abbr }}</span>
+        <div v-for="tech in appTechs" :key="tech.name" style="background: rgba(30,41,59,0.5); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.05); text-align: center; transition: border-color 0.3s;" class="tech-card">
+          <div style="height: 4rem; width: 4rem; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; transition: transform 0.3s;" class="tech-icon">
+            <img :src="tech.logo" :alt="tech.name" class="tech-logo" />
+          </div>
+          <h3 style="font-weight: 700; color: white;">{{ tech.name }}</h3>
+          <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem;">{{ tech.desc }}</p>
+        </div>
+      </div>
+
+      <h3 style="color: #94a3b8; margin: 3rem 0 1.5rem; font-size: 1.1rem; text-align: center;">Infrastructure</h3>
+
+      <div class="tech-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
+        <div v-for="tech in infraTechs" :key="tech.name" style="background: rgba(30,41,59,0.5); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.05); text-align: center; transition: border-color 0.3s;" class="tech-card">
+          <div style="height: 4rem; width: 4rem; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; transition: transform 0.3s;" class="tech-icon">
+            <img :src="tech.logo" :alt="tech.name" class="tech-logo" />
           </div>
           <h3 style="font-weight: 700; color: white;">{{ tech.name }}</h3>
           <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem;">{{ tech.desc }}</p>
@@ -45,6 +72,11 @@ const techs = [
 }
 .tech-card:hover .tech-icon {
   transform: scale(1.1);
+}
+.tech-logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
 }
 @media (max-width: 768px) {
   .tech-grid {
