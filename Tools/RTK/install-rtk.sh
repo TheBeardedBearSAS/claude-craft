@@ -70,7 +70,8 @@ fi
 # Constants
 # ---------------------------------------------------------------------------
 CLAUDE_DIR="$HOME/.claude"
-SETTINGS_FILE="$CLAUDE_DIR/settings.json"
+CLAUDE_CONFIG="${CLAUDE_CONFIG_DIR:-$CLAUDE_DIR}"
+SETTINGS_FILE="$CLAUDE_CONFIG/settings.json"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 HOOK_SCRIPT="$HOOKS_DIR/rtk-rewrite.sh"
 RTK_MD="$CLAUDE_DIR/RTK.md"
