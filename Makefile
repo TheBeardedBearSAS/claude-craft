@@ -13,14 +13,15 @@
 #   npx @the-bearded-bear/claude-craft install <path> --tech=<name>
 #===============================================================================
 
-.PHONY: help install-all install-common install-project install-infra install-coolify install-kubernetes install-opentofu install-ansible \
-        install-tools install-tools-lib install-statusline install-multiaccount install-projectconfig \
+.PHONY: help install-all install-common install-project install-infra install-docker install-coolify install-kubernetes install-opentofu install-ansible \
+        install-frankenphp \
+        install-tools install-tools-lib install-statusline install-multiaccount install-projectconfig install-rtk \
         install-completions \
         install-web install-fullstack-js install-mobile install-backend \
         list list-agents list-commands \
         config-install config-install-all config-validate config-list config-dry-run \
         config-check config-check-fix check fix-permissions stats \
-        migrate-check test-tools \
+        migrate-check test-tools test-rtk \
         plugin-export plugin-export-all
 
 # Configuration
@@ -93,8 +94,8 @@ install-all: ## Installe TOUTES les regles (common + toutes technos + project)
 			$$script --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
 		fi; \
 	done
-	@if [ -f "$(CURDIR)/Infra/install-infra-rules.sh" ]; then \
-		$(CURDIR)/Infra/install-infra-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	@if [ -f "$(CURDIR)/Infra/install-docker-rules.sh" ]; then \
+		$(CURDIR)/Infra/install-docker-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
 	fi
 	@if [ -f "$(CURDIR)/Infra/install-coolify-rules.sh" ]; then \
 		$(CURDIR)/Infra/install-coolify-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
@@ -111,6 +112,12 @@ install-all: ## Installe TOUTES les regles (common + toutes technos + project)
 	@if [ -f "$(CURDIR)/Infra/install-hcloud-rules.sh" ]; then \
 		$(CURDIR)/Infra/install-hcloud-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
 	fi
+	@if [ -f "$(CURDIR)/Infra/install-pgbouncer-rules.sh" ]; then \
+		$(CURDIR)/Infra/install-pgbouncer-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	fi
+	@if [ -f "$(CURDIR)/Infra/install-frankenphp-rules.sh" ]; then \
+		$(CURDIR)/Infra/install-frankenphp-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
+	fi
 	@if [ -f "$(CURDIR)/Project/install-project-commands.sh" ]; then \
 		$(CURDIR)/Project/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET); \
 	fi
@@ -124,9 +131,9 @@ install-project: ## Installe les commandes de gestion de projet (EPICs, US, Task
 	@echo "$(CYAN)Installation des commandes Project (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Project/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET)
 
-install-infra: ## Installe les agents et commandes Docker + Coolify + Kubernetes + OpenTofu + Ansible + Hcloud/Infrastructure
+install-infra: ## Installe les agents et commandes Docker + Coolify + Kubernetes + OpenTofu + Ansible + Hcloud + PgBouncer + FrankenPHP/Infrastructure
 	@echo "$(CYAN)Installation des regles Docker (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-infra-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+	@$(CURDIR)/Infra/install-docker-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 	@echo "$(CYAN)Installation des regles Coolify (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-coolify-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 	@echo "$(CYAN)Installation des regles Kubernetes (lang=$(RULES_LANG))...$(NC)"
@@ -137,6 +144,14 @@ install-infra: ## Installe les agents et commandes Docker + Coolify + Kubernetes
 	@$(CURDIR)/Infra/install-ansible-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 	@echo "$(CYAN)Installation des regles Hcloud (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-hcloud-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+	@echo "$(CYAN)Installation des regles PgBouncer (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-pgbouncer-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+	@echo "$(CYAN)Installation des regles FrankenPHP (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-frankenphp-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+
+install-docker: ## Installe les agents et commandes Docker
+	@echo "$(CYAN)Installation des regles Docker (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-docker-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 
 install-coolify: ## Installe les agents et commandes Coolify
 	@echo "$(CYAN)Installation des regles Coolify (lang=$(RULES_LANG))...$(NC)"
@@ -157,6 +172,14 @@ install-ansible: ## Installe les agents et commandes Ansible
 install-hcloud: ## Installe les agents et commandes Hcloud
 	@echo "$(CYAN)Installation des regles Hcloud (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-hcloud-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+
+install-pgbouncer: ## Installe les agents et commandes PgBouncer
+	@echo "$(CYAN)Installation des regles PgBouncer (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-pgbouncer-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+
+install-frankenphp: ## Installe les agents et commandes FrankenPHP
+	@echo "$(CYAN)Installation des regles FrankenPHP (lang=$(RULES_LANG))...$(NC)"
+	@$(CURDIR)/Infra/install-frankenphp-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 
 #===============================================================================
 # Combinaisons Courantes
@@ -185,7 +208,7 @@ install-backend: install-common ## Installe Common + Symfony + Python
 # Outils Claude Code
 #===============================================================================
 
-install-tools: install-statusline install-multiaccount install-projectconfig ## Installe tous les outils
+install-tools: install-statusline install-multiaccount install-projectconfig install-rtk ## Installe tous les outils
 	@echo "$(GREEN)Installation des outils terminee !$(NC)"
 
 install-statusline: ## Installe la status line personnalisee
@@ -250,6 +273,10 @@ install-projectconfig: install-tools-lib ## Installe le gestionnaire de projets 
 	fi
 	@echo "$(GREEN)Project Config Manager installe !$(NC)"
 
+install-rtk: ## Installe RTK (Rust Token Killer) pour optimiser les tokens
+	@echo "$(CYAN)Installation de RTK (Token Optimizer)...$(NC)"
+	@bash "$(TOOLS_DIR)/RTK/install-rtk.sh" --lang=$(RULES_LANG)
+
 install-completions: ## Installe les completions bash/zsh pour claude-accounts
 	@echo "$(CYAN)Installation des completions...$(NC)"
 	@if [ -f "$(TOOLS_DIR)/MultiAccount/completions/claude-accounts.bash" ]; then \
@@ -273,6 +300,10 @@ test-tools: ## Lance les tests bats pour les outils (via Docker)
 test-statusline: ## Lance les tests bats pour la status line (via Docker)
 	@echo "$(CYAN)Lancement des tests statusline...$(NC)"
 	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/StatusLine/tests/
+
+test-rtk: ## Lance les tests bats pour RTK (via Docker)
+	@echo "$(CYAN)Lancement des tests RTK...$(NC)"
+	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/RTK/tests/
 
 install-tools-lib: ## Installe la librairie partagee tools-ui.sh
 	@mkdir -p ~/.local/lib/claude-craft
@@ -414,12 +445,14 @@ check: ## Verifie que tous les scripts sont executables
 	@echo "$(CYAN)Verification des scripts...$(NC)"
 	@for script in $(SCRIPTS_DIR)/*.sh \
 		$(CURDIR)/Project/install-project-commands.sh \
-		$(CURDIR)/Infra/install-infra-rules.sh \
+		$(CURDIR)/Infra/install-docker-rules.sh \
 		$(CURDIR)/Infra/install-coolify-rules.sh \
 		$(CURDIR)/Infra/install-kubernetes-rules.sh \
 		$(CURDIR)/Infra/install-opentofu-rules.sh \
 		$(CURDIR)/Infra/install-ansible-rules.sh \
-		$(CURDIR)/Infra/install-hcloud-rules.sh; do \
+		$(CURDIR)/Infra/install-hcloud-rules.sh \
+		$(CURDIR)/Infra/install-pgbouncer-rules.sh \
+		$(CURDIR)/Infra/install-frankenphp-rules.sh; do \
 		if [ -f "$$script" ]; then \
 			if [ -x "$$script" ]; then \
 				echo "  $(GREEN)Y$(NC) $$script"; \
@@ -434,12 +467,14 @@ fix-permissions: ## Rend tous les scripts executables
 	@echo "$(CYAN)Correction des permissions...$(NC)"
 	@find $(SCRIPTS_DIR) -name "*.sh" -exec chmod +x {} \;
 	@chmod +x $(CURDIR)/Project/install-project-commands.sh
-	@chmod +x $(CURDIR)/Infra/install-infra-rules.sh
+	@chmod +x $(CURDIR)/Infra/install-docker-rules.sh
 	@chmod +x $(CURDIR)/Infra/install-coolify-rules.sh
 	@chmod +x $(CURDIR)/Infra/install-kubernetes-rules.sh
 	@chmod +x $(CURDIR)/Infra/install-opentofu-rules.sh
 	@chmod +x $(CURDIR)/Infra/install-ansible-rules.sh
 	@chmod +x $(CURDIR)/Infra/install-hcloud-rules.sh
+	@chmod +x $(CURDIR)/Infra/install-pgbouncer-rules.sh
+	@chmod +x $(CURDIR)/Infra/install-frankenphp-rules.sh
 	@echo "$(GREEN)Permissions corrigees$(NC)"
 
 #===============================================================================

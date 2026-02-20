@@ -118,6 +118,9 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
     const projectInput = await cli.prompt(`  Include Project Management commands? (Y/n): `);
     cli.config.includeProject = projectInput.toLowerCase() !== 'n';
 
+    const rtkInput = await cli.prompt(`  Include Token Optimization (RTK)? (y/N): `);
+    cli.config.includeRtk = rtkInput.toLowerCase() === 'y';
+
     // Step 5: Confirm
     console.log(`\n${c.cyan}[5/5]${c.reset} ${c.bold}Confirmation${c.reset}`);
     console.log(`
@@ -128,6 +131,7 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
   Technologies: ${c.cyan}${cli.config.technologies.length > 0 ? cli.config.technologies.join(', ') : 'Common only'}${c.reset}
   Docker/Infra: ${c.cyan}${cli.config.includeInfra ? 'Yes' : 'No'}${c.reset}
   Project Mgmt: ${c.cyan}${cli.config.includeProject ? 'Yes' : 'No'}${c.reset}
+  Token Optim.: ${c.cyan}${cli.config.includeRtk ? 'Yes' : 'No'}${c.reset}
   ─────────────────────────────────────────
 `);
 
@@ -166,12 +170,13 @@ export async function runInstallation(cli, { CLI_ROOT }) {
   const hasDocker = cli.config.technologies.includes('docker');
   const includeInfra = cli.config.includeInfra || hasDocker;
   const techsWithoutDocker = cli.config.technologies.filter((t) => t !== 'docker');
-  // 1 base step (common rules) + installable tech scripts + optional infra + optional project
+  // 1 base step (common rules) + installable tech scripts + optional infra + optional project + optional rtk
   const totalSteps =
     1 +
     techsWithoutDocker.filter((t) => fs.existsSync(path.join(scriptsDir, `install-${t}-rules.sh`))).length +
     (includeInfra ? 1 : 0) +
-    (cli.config.includeProject ? 1 : 0);
+    (cli.config.includeProject ? 1 : 0) +
+    (cli.config.includeRtk ? 1 : 0);
 
   try {
     // Always install common rules
@@ -194,7 +199,7 @@ export async function runInstallation(cli, { CLI_ROOT }) {
     // Install infrastructure rules
     if (includeInfra) {
       console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing infrastructure rules...`);
-      const infraScript = path.join(CLI_ROOT, 'Infra', 'install-infra-rules.sh');
+      const infraScript = path.join(CLI_ROOT, 'Infra', 'install-docker-rules.sh');
       if (fs.existsSync(infraScript)) {
         runScript(infraScript, [langArg, cli.config.targetPath], CLI_ROOT);
       }
@@ -207,6 +212,16 @@ export async function runInstallation(cli, { CLI_ROOT }) {
       const projectScript = path.join(CLI_ROOT, 'Project', 'install-project-commands.sh');
       if (fs.existsSync(projectScript)) {
         runScript(projectScript, [langArg, cli.config.targetPath], CLI_ROOT);
+      }
+      step++;
+    }
+
+    // Install RTK (Token Optimizer)
+    if (cli.config.includeRtk) {
+      console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing RTK (Token Optimizer)...`);
+      const rtkScript = path.join(CLI_ROOT, 'Tools', 'RTK', 'install-rtk.sh');
+      if (fs.existsSync(rtkScript)) {
+        runScript(rtkScript, [langArg], CLI_ROOT);
       }
     }
 

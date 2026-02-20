@@ -35,7 +35,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 13 |
+| `/common:` | Transversal | 14 |
 | `/workflow:` | Workflow (BMAD) | 9 |
 | `/team:` | Agent Teams | 4 |
 | `/qa:` | QA & Testing | 6 |
@@ -56,6 +56,8 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/opentofu:` | OpenTofu/IaC | 5 |
 | `/ansible:` | Ansible/Automation | 5 |
 | `/hcloud:` | Hcloud/Hetzner Cloud | 5 |
+| `/pgbouncer:` | PgBouncer/Connection Pooling | 5 |
+| `/frankenphp:` | FrankenPHP/PHP Server | 5 |
 | `/project:` | Project Management | 34 |
 | `/sprint:` | Sprint Management (BMAD v6) | 5 |
 | `/gate:` | Quality Gates (BMAD v6) | 7 |
@@ -95,6 +97,7 @@ Transversal commands for all projects.
 | Command | Description |
 |---------|-------------|
 | `/common:setup-project-context` | Interactive project context configuration |
+| `/common:setup-rtk` | Install and configure RTK (token optimization) |
 
 ### Continuous Loop Commands
 
@@ -595,6 +598,48 @@ Hetzner Cloud infrastructure management with hcloud CLI.
 | `/hcloud:debug <Symptom>` | Diagnose Hetzner Cloud infrastructure issues |
 | `/hcloud:security-audit [Scope]` | Audit Hetzner Cloud security posture |
 | `/hcloud:optimize [Target]` | Optimize Hetzner Cloud cost and performance |
+
+---
+
+## PgBouncer Commands (`/pgbouncer:`)
+
+PgBouncer connection pooling management.
+
+### Architecture Commands
+
+| Command | Description |
+|---------|-------------|
+| `/pgbouncer:architecture <Project>` | Design complete PgBouncer connection pooling architecture |
+| `/pgbouncer:deploy-setup <Platform>` | Setup PgBouncer deployment with Docker, Kubernetes, or systemd |
+
+### Operations Commands
+
+| Command | Description |
+|---------|-------------|
+| `/pgbouncer:debug <Symptom>` | Diagnose PgBouncer connection pool issues from symptoms |
+| `/pgbouncer:security-audit [Scope]` | Audit PgBouncer security posture |
+| `/pgbouncer:optimize [Target]` | Optimize PgBouncer pool performance and connection utilization |
+
+---
+
+## FrankenPHP Commands (`/frankenphp:`)
+
+FrankenPHP PHP application server management.
+
+### Architecture Commands
+
+| Command | Description |
+|---------|-------------|
+| `/frankenphp:architecture <Project>` | Design complete FrankenPHP serving architecture |
+| `/frankenphp:deploy-setup <Platform>` | Generate FrankenPHP deployment files for Docker, Kubernetes, or standalone |
+
+### Operations Commands
+
+| Command | Description |
+|---------|-------------|
+| `/frankenphp:debug <Symptom>` | Diagnose FrankenPHP worker and Caddyfile issues from symptoms |
+| `/frankenphp:security-audit [Scope]` | Audit FrankenPHP security posture |
+| `/frankenphp:optimize [Target]` | Optimize FrankenPHP worker performance and throughput |
 
 ---
 
