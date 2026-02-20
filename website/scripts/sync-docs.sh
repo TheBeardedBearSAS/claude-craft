@@ -124,22 +124,6 @@ rewrite_links_in_dir() {
   done
 }
 
-# Create locale index pages (redirect to quickstart)
-create_locale_index() {
-  local locale="$1"
-  local dest="$WEBSITE_DIR/$locale/index.md"
-  mkdir -p "$(dirname "$dest")"
-  cat > "$dest" <<FRONTMATTER
----
-title: Documentation
-head:
-  - - meta
-    - http-equiv: refresh
-      content: "0;url=/claude-craft/$locale/getting-started/quickstart"
----
-FRONTMATTER
-}
-
 echo "=== Syncing docs to VitePress ==="
 
 # --- English docs (main) ---
@@ -239,11 +223,5 @@ for guide in "$DOCS_DIR/guides/pt/"*.md; do
 done
 
 rewrite_links_in_dir "pt" "$WEBSITE_DIR/pt"
-
-# --- Locale index pages ---
-echo "  Creating locale index pages..."
-for locale in en fr es de pt; do
-  create_locale_index "$locale"
-done
 
 echo "=== Sync complete ==="
