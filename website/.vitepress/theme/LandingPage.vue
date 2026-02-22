@@ -248,6 +248,7 @@ onMounted(() => {
             <a :href="'#tools'" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('nav_tools') }}</a>
             <a :href="'#install'" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('nav_install') }}</a>
             <a :href="'#technologies'" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('nav_tech') }}</a>
+            <a :href="withBase('/' + currentLang + '/getting-started/quickstart')" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('cta_docs') }}</a>
             <select :value="currentLang" @change="changeLanguage($event.target.value)" aria-label="Select language" style="background: rgba(255,255,255,0.05); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; padding: 0.25rem 0.5rem; font-size: 0.875rem; cursor: pointer;">
               <option value="en" style="background: #1e293b;">English</option>
               <option value="fr" style="background: #1e293b;">Français</option>
@@ -273,6 +274,7 @@ onMounted(() => {
         <a href="#tools" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('nav_tools') }}</a>
         <a href="#install" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('nav_install') }}</a>
         <a href="#technologies" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('nav_tech') }}</a>
+        <a :href="withBase('/' + currentLang + '/getting-started/quickstart')" @click="mobileMenuOpen = false" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0;">{{ t('cta_docs') }}</a>
         <select :value="currentLang" @change="changeLanguage($event.target.value)" aria-label="Select language" style="background: rgba(255,255,255,0.05); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; padding: 0.5rem; font-size: 0.875rem; cursor: pointer; width: 100%;">
           <option value="en" style="background: #1e293b;">English</option>
           <option value="fr" style="background: #1e293b;">Français</option>
@@ -313,7 +315,7 @@ onMounted(() => {
             {{ t('cta_get_started') }}
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 0.5rem;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
-          <a :href="withBase('/en/getting-started/quickstart')" style="display: inline-flex; align-items: center; padding: 0.75rem 2rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; border-radius: 0.5rem; text-decoration: none; font-weight: 500; font-size: 1.125rem; backdrop-filter: blur(4px);">
+          <a :href="withBase('/' + currentLang + '/getting-started/quickstart')" style="display: inline-flex; align-items: center; padding: 0.75rem 2rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; border-radius: 0.5rem; text-decoration: none; font-weight: 500; font-size: 1.125rem; backdrop-filter: blur(4px);">
             {{ t('cta_docs') }}
           </a>
         </div>

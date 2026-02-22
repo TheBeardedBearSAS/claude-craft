@@ -84,7 +84,7 @@ export default defineConfig({
   ignoreDeadLinks: true,
 
   themeConfig: {
-    logo: '/logo.png',
+    logo: '/logo.svg',
     siteTitle: 'Claude Craft',
 
     search: {
