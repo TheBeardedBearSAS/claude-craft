@@ -158,18 +158,28 @@ make --version
 
 Claude Craft is designed to work with [Claude Code](https://claude.ai/code), Anthropic's official CLI.
 
-**Installation:**
-```bash
-# Install Claude Code CLI
-npm install -g @anthropic-ai/claude-code
+> **Important:** The `npm install -g` method is deprecated. Use native installers below.
 
-# Or use npx
-npx @anthropic-ai/claude-code
+**Installation (recommended):**
+```bash
+# macOS / Linux
+curl https://install.claude.com | bash
+
+# Windows (PowerShell)
+irm https://install.claude.com/windows | iex
+```
+
+**Alternative methods:**
+```bash
+# macOS (Homebrew)
+brew install claude-code
+
+# Windows (winget)
+winget install Anthropic.ClaudeCode
 ```
 
 **First-time setup:**
 ```bash
-# Authenticate with your Anthropic account
 claude login
 ```
 

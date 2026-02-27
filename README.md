@@ -6,10 +6,11 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.21
+## What's New in v7.23
 
-- **Full infra install integration** -- all 8 infrastructure technologies fully supported in install-from-config and project configuration
-- **RTK multi-account** -- install RTK hooks per profile via CLAUDE_CONFIG_DIR
+- **Claude Code v2.1.61 compatibility** -- Windows config corruption fix, native installer recommendation
+- **Deprecated npm install** -- PREREQUISITES updated to recommend native installers (`curl https://install.claude.com | bash`)
+- **Context management enhancements** -- compaction hints, CLAUDE.local.md, subagent model override, anti-patterns
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 ## Install and First Result

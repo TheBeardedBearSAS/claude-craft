@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.23.0] - 2026-02-27
+
+### Added
+
+- **Claude Code v2.1.61 compatibility** — Windows config file corruption fix for concurrent writes
+- **Native installer documentation** — PREREQUISITES (EN, FR) updated: `npm install -g` deprecated, recommend `curl https://install.claude.com | bash`
+- **Context management best practices** — compaction hints in CLAUDE.md, CLAUDE.local.md for personal preferences, `CLAUDE_CODE_SUBAGENT_MODEL` env var, anti-patterns reference table
+- **CVE severity scores** — CVE-2025-59536 (8.7/10 CVSS) and CVE-2026-21852 severity added to MCP.md and security rule
+
+### Changed
+
+- **Recommended Claude Code version** — 2.1.59 → 2.1.61 (minimum stays 2.1.47)
+- **Agent Teams Guide** — `CLAUDE_CODE_SUBAGENT_MODEL` tip for cost optimization, recommended version bumped
+- **SECURITY.md** — supported versions updated to 7.23.x/7.22.x
+
+## [7.22.0] - 2026-02-27
+
+### Added
+
+- **Claude Code v2.1.48-v2.1.59 compatibility** — ConfigChange/WorktreeCreate/WorktreeRemove hooks, remote-control, /memory, /copy, --worktree flag, Opus 4.6 1M context, Ctrl+F bulk agent kill
+- **Security CVE documentation** — CVE-2025-59536 (hook command injection) and CVE-2026-21852 (path traversal) documented in HOOKS.md, MCP.md, and security rule
+- **Context management best practices** — proactive /compact at 70%, PreCompact hooks, /memory command, multi-session strategy (55% token reduction)
+
+### Changed
+
+- **Recommended Claude Code version** — 2.1.59 (minimum stays 2.1.47)
+- **Hook event count** — 13 → 16 in HOOKS.md (added ConfigChange, WorktreeCreate, WorktreeRemove)
+- **Agent Teams pricing corrected** — Opus $5/$25 (was $15/$75), Haiku $1/$5 (was $0.25/$1.25), Sonnet 4.5 → Sonnet 4.6
+- **SECURITY.md** — supported versions updated to 7.22.x/7.21.x, minimum recommended version 2.1.38 → 2.1.51
+
 ## [7.21.0] - 2026-02-20
 
 ### Added

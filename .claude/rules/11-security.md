@@ -538,6 +538,16 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 }
 ```
 
+### Vulnerabilites connues (CVE)
+
+| CVE | Severite | Version corrigee | Impact |
+|-----|----------|-----------------|--------|
+| CVE-2025-59536 | 8.7/10 CVSS | v2.1.51 | Injection de commandes via inputs MCP dans le pipeline de hooks |
+| CVE-2026-21852 | Haute | v2.0.65 | Exfiltration de cles API via traversee de chemin dans la resolution de hooks |
+
+> **Note:** L'installation via `npm install -g` est obsolete. Utilisez les installateurs natifs.
+> **Recommandation:** Toujours utiliser Claude Code v2.1.51+ lorsque des serveurs MCP sont utilises avec des hooks.
+
 ### CLAUDE.md vs Hooks
 
 | Mecanisme | Force | Usage |

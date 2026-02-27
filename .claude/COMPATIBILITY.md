@@ -507,3 +507,90 @@ New `chat:newline` keybinding action enables multi-line input in the chat interf
 | Plan mode | Preserved after context compaction (#26061) |
 | PDF compaction | Fixed compaction with many PDFs |
 | CJK alignment | Fixed wide character alignment in terminal |
+
+### ConfigChange Hook Event (v2.1.49+)
+
+New hook event fires when configuration files are modified:
+
+| Feature | Description |
+|---------|-------------|
+| `ConfigChange` event | Fires when settings.json, CLAUDE.md, or other config files change |
+| Matcher support | Match on specific config keys |
+| Use cases | Auto-reload config, validate settings, sync across tools |
+
+Also in v2.1.49: Plugin scope auto-detection, simple mode file edit improvements, MCP auth failure caching to reduce retry noise.
+
+### WorktreeCreate & WorktreeRemove Hook Events (v2.1.50+)
+
+New hook events for git worktree lifecycle:
+
+| Event | When it fires | Use case |
+|-------|---------------|----------|
+| `WorktreeCreate` | When a worktree is created | Initialize worktree settings, notify team |
+| `WorktreeRemove` | When a worktree is removed | Cleanup resources, archive logs |
+
+Also in v2.1.50: LSP `startupTimeout` setting, Opus 4.6 1M context window (beta), memory leak fixes for agent teams, `CLAUDE_CODE_SIMPLE` environment variable.
+
+### Remote Control & Security Fixes (v2.1.51+)
+
+| Feature | Description |
+|---------|-------------|
+| `claude remote-control` | Remote control protocol for external tool integration |
+| Custom NPM registry | Support for private NPM registries for MCP servers |
+| BashTool login shell | Bash tool now uses login shell for proper env loading |
+| `/model` picker | Interactive model picker via `/model` command |
+
+**Security Advisories (v2.1.51):**
+
+| CVE | Impact | Fix |
+|-----|--------|-----|
+| CVE-2025-59536 | Hook command injection via crafted MCP tool inputs | Input sanitization in hook pipeline |
+| CVE-2026-21852 | Path traversal in hook file resolution | Strict path validation |
+
+**Recommendation:** Always run v2.1.51+ when using MCP servers with hooks.
+
+### VS Code Windows Crash Fix (v2.1.52+)
+
+Fixed VS Code extension crash on Windows when launching Claude Code sessions.
+
+### UI & Worktree Improvements (v2.1.53+)
+
+| Feature | Description |
+|---------|-------------|
+| UI flicker fixes | Eliminated rendering flicker during streaming |
+| Ctrl+F bulk agent kill | Kill multiple background agents at once |
+| Remote control shutdown | Graceful shutdown for remote control sessions |
+| `--worktree` / `-w` flag | Consistent worktree flag for isolated sessions |
+| Windows panic fixes | Resolved panic errors on Windows |
+
+### BashTool EINVAL Fix (v2.1.55+)
+
+Fixed BashTool EINVAL error on Windows that caused bash commands to fail silently.
+
+### VS Code Command Fix (v2.1.56+)
+
+Fixed "command not found" error when launching Claude Code from VS Code command palette.
+
+### Remote Control Expansion (v2.1.58+)
+
+Expanded remote control protocol with additional control commands and improved stability.
+
+### Memory Command & Interactive Copy (v2.1.59+)
+
+| Feature | Description |
+|---------|-------------|
+| `/memory` command | Save persistent session learnings that survive compactions and new sessions |
+| `/copy` interactive | Copy interactive code blocks to clipboard |
+| Bash handling | Improved bash command handling and error recovery |
+| Multi-agent memory | Optimized memory usage across multi-agent sessions |
+
+### Windows Config Corruption Fix (v2.1.61+)
+
+Fixed concurrent writes corrupting config file on Windows. Multiple Claude Code sessions running simultaneously could race on `settings.json` writes, causing file corruption and session errors.
+
+| Fix | Description |
+|-----|-------------|
+| Config file locking | Atomic writes with file locking for settings.json |
+| Platform | Windows only (macOS/Linux unaffected) |
+
+Note: v2.1.60 does not exist (skipped by Anthropic).

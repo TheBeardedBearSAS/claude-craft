@@ -37,7 +37,7 @@ Hooks complement the "should-do" suggestions in CLAUDE.md with "must-do" determi
 
 ## Hook Events
 
-Claude Code supports **13 hook event types**:
+Claude Code supports **16 hook event types**:
 
 | Event | When it fires | Matcher support |
 |-------|---------------|-----------------|
@@ -54,6 +54,9 @@ Claude Code supports **13 hook event types**:
 | `Setup` | When `--init`, `--init-only`, `--maintenance` run | No |
 | `TeammateIdle` | When a teammate agent goes idle | Yes (teammate name) |
 | `TaskCompleted` | When a task is marked completed | Yes (task ID) |
+| `ConfigChange` | When configuration files change | Yes (config key) |
+| `WorktreeCreate` | When a git worktree is created | Yes (worktree path) |
+| `WorktreeRemove` | When a git worktree is removed | Yes (worktree path) |
 
 ### Event Details
 
@@ -105,6 +108,27 @@ Fires when a task is marked as completed via TaskUpdate. Use for:
 - Triggering dependent workflows
 - Running validation checks
 - Updating external systems (Jira, Slack)
+
+#### ConfigChange (v2.1.49+)
+
+Fires when a configuration file (settings.json, .claude/CLAUDE.md, etc.) is modified. Use for:
+- Reloading configuration automatically
+- Validating settings changes
+- Syncing configuration across tools
+
+#### WorktreeCreate (v2.1.50+)
+
+Fires when a git worktree is created via `--worktree` flag or `git worktree add`. Use for:
+- Initializing worktree-specific settings
+- Setting up environment for parallel sessions
+- Notifying team members of new work branches
+
+#### WorktreeRemove (v2.1.50+)
+
+Fires when a git worktree is removed. Use for:
+- Cleaning up worktree-specific resources
+- Archiving session logs
+- Updating project tracking
 
 ---
 

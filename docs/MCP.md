@@ -399,6 +399,15 @@ Configure MCP tool permissions in `settings.json`:
 }
 ```
 
+### Known Security Advisories
+
+| CVE | Severity | Version Fixed | Impact |
+|-----|----------|---------------|--------|
+| CVE-2025-59536 | 8.7/10 CVSS | v2.1.51 | Hook command injection via crafted MCP tool inputs |
+| CVE-2026-21852 | High | v2.0.65 | API key exfiltration via path traversal in hook file resolution |
+
+**Recommendation:** Always run Claude Code v2.1.51+ when using MCP servers with hooks.
+
 ---
 
 ## Troubleshooting

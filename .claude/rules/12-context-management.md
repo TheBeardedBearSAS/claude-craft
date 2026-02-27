@@ -24,6 +24,9 @@ La fenetre de contexte est **LA ressource critique** dans Claude Code. Chaque to
 6. [Plan Mode](#plan-mode)
 7. [Suivi des tokens](#suivi-des-tokens)
 8. [Checklist](#checklist)
+9. [Compaction hints dans CLAUDE.md](#compaction-hints-dans-claudemd)
+10. [CLAUDE.local.md pour preferences personnelles](#claudelocalmd-pour-preferences-personnelles)
+11. [Anti-patterns de contexte](#anti-patterns-de-contexte)
 
 ---
 
@@ -148,6 +151,32 @@ Task(Explore): "Comment fonctionne l'authentification dans ce projet?
 
 Claude Code compacte automatiquement le contexte quand il approche les limites de la fenetre. Les messages anciens sont resumes pour liberer de l'espace.
 
+### Compaction proactive
+
+A partir de 70% de contexte utilise, lancer `/compact` proactivement pour eviter une compaction automatique non maitrisee.
+
+La commande `/memory` (v2.1.59+) permet de sauvegarder des apprentissages persistants de session qui survivent aux compactions et aux nouvelles sessions.
+
+### Hook PreCompact
+
+Utiliser le hook `PreCompact` pour sauvegarder le contexte critique avant une compaction:
+
+```json
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [{
+          "type": "command",
+          "command": "cat .claude/context-essentials.md"
+        }]
+      }
+    ]
+  }
+}
+```
+
 ### Hooks de re-injection
 
 Utiliser le hook `SessionStart` avec le matcher `compact` pour re-injecter le contexte critique apres une compaction:
@@ -158,7 +187,10 @@ Utiliser le hook `SessionStart` avec le matcher `compact` pour re-injecter le co
     "SessionStart": [
       {
         "matcher": "compact",
-        "command": "cat .claude/context-essentials.md"
+        "hooks": [{
+          "type": "command",
+          "command": "cat .claude/context-essentials.md"
+        }]
       }
     ]
   }
@@ -265,6 +297,20 @@ La status line Claude Code affiche le pourcentage de contexte utilise. Surveille
 | 60-80% | Deleguer aux sous-agents, envisager /clear |
 | > 80% | Compaction imminente, sauvegarder le contexte critique |
 
+### Strategie multi-session
+
+Pour les taches complexes, diviser le travail en sessions courtes et focalisees. Chaque session utilise un contexte frais, reduisant la consommation de tokens d'environ 55%:
+
+```
+Session 1: Investigation (lire, analyser, documenter)
+  → /memory pour sauvegarder les conclusions
+  → /clear
+
+Session 2: Implementation (coder, tester)
+  → Le /memory precedent est automatiquement charge
+  → Contexte frais, pas de pollution
+```
+
 ---
 
 ## Worktrees paralleles
@@ -277,14 +323,17 @@ Utiliser `git worktree` pour travailler sur plusieurs branches simultanement ave
 
 ### Setup
 
-```bash
-# Creer un worktree pour une feature
-git worktree add ../feature-auth feature/auth
+Depuis v2.1.53+, Claude Code supporte le flag natif `--worktree` (`-w`) pour creer et travailler dans des worktrees isoles:
 
-# Lancer une session Claude dans le worktree
+```bash
+# Flag natif (v2.1.53+) — cree un worktree isole automatiquement
+claude --worktree "Implementer l'authentification JWT"
+claude -w "Revoir le code d'authentification"
+
+# Methode manuelle (toutes versions)
+git worktree add ../feature-auth feature/auth
 cd ../feature-auth && claude
 
-# Creer un worktree pour la review
 git worktree add ../review-auth feature/auth
 cd ../review-auth && claude
 ```
@@ -342,11 +391,76 @@ git worktree remove ../review-auth
 
 ---
 
+## Compaction hints dans CLAUDE.md
+
+### Principe
+
+> **Indiquer a Claude ce qu'il doit preserver lors d'une compaction.**
+
+Ajouter des instructions de compaction dans CLAUDE.md pour guider le resume lors de la compaction automatique:
+
+```markdown
+# Dans CLAUDE.md:
+Lors de la compaction, toujours preserver:
+- La liste des fichiers modifies
+- Les commandes de test
+- Les decisions d'architecture
+```
+
+### Variables d'environnement utiles
+
+| Variable | Description |
+|----------|-------------|
+| `CLAUDE_CODE_SUBAGENT_MODEL` | Modele pour les sous-agents (ex: `sonnet` pour optimiser les couts) |
+| `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre a `1` pour desactiver la memoire automatique |
+
+---
+
+## CLAUDE.local.md pour preferences personnelles
+
+### Principe
+
+Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les preferences personnelles qui ne doivent pas etre partagees avec l'equipe.
+
+```
+projet/
+  .claude/CLAUDE.md      <- Partage (git)
+  CLAUDE.local.md        <- Personnel (gitignore)
+```
+
+### Contenu typique
+
+- Preferences de style personnel
+- Chemins locaux specifiques
+- Outils personnels preferes
+
+### Configuration
+
+Ajouter dans `.gitignore`:
+```
+CLAUDE.local.md
+```
+
+---
+
+## Anti-patterns de contexte
+
+| Anti-pattern | Description | Solution |
+|-------------|-------------|----------|
+| **Kitchen-sink session** | Tout faire dans une seule session | `/clear` entre taches, sous-agents |
+| **CLAUDE.md surcharge** | > 200 lignes dilue l'attention | Modulariser dans `.claude/rules/` |
+| **Over-correcting** | Corrections successives polluent le contexte | Apres 2 echecs, `/clear` et reformuler |
+| **Trust-then-verify gap** | Implementer sans verifier | Boucles TDD, tests avant code |
+| **Exploration infinie** | Lire trop de fichiers sans objectif | Definir le scope avant d'explorer |
+
+---
+
 ## Ressources
 
 - **Anthropic Best Practices:** [docs.anthropic.com](https://docs.anthropic.com/en/docs/claude-code/overview)
 - **Boris Cherny Workflow:** Parallel worktrees + verification loops
 - **Claude Code Context Management:** Context compaction, `/clear`, sub-agents
+- **`/init`:** Genere automatiquement un CLAUDE.md a partir de l'analyse du projet
 
 ---
 

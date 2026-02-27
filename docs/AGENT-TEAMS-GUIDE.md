@@ -6,7 +6,7 @@ Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordina
 
 | Requirement | Minimum Version | Check |
 |-------------|-----------------|-------|
-| Claude Code | v2.1.47+ | `claude --version` |
+| Claude Code | v2.1.47+ (v2.1.61 recommended) | `claude --version` |
 | Environment variable | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` | `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` |
 | Claude model | Opus 4.6 (recommended for leader) | Model selector in Claude Code |
 
@@ -106,9 +106,24 @@ Each parallel agent incurs overhead from:
 
 | Model | Input ($/M tokens) | Output ($/M tokens) | Best For |
 |-------|--------------------|--------------------|----------|
-| Opus 4.6 | $15.00 | $75.00 | Team leader, complex reasoning |
-| Sonnet 4.5 | $3.00 | $15.00 | Worker agents, balanced cost/quality |
-| Haiku 4.5 | $0.25 | $1.25 | Cost-optimized workers, simple checks |
+| Opus 4.6 | $5.00 | $25.00 | Team leader, complex reasoning |
+| Opus 4.6 (fast) | $30.00 | $150.00 | Fast mode leader (use with caution) |
+| Sonnet 4.6 | $3.00 | $15.00 | Worker agents, balanced cost/quality |
+| Haiku 4.5 | $1.00 | $5.00 | Cost-optimized workers, simple checks |
+
+### Cost Optimization: Subagent Model Override
+
+Use the `CLAUDE_CODE_SUBAGENT_MODEL` environment variable to force worker agents to use a cheaper model:
+
+```bash
+# Force all sub-agents to use Sonnet (saves ~80% vs Opus workers)
+export CLAUDE_CODE_SUBAGENT_MODEL=sonnet
+
+# Use Haiku for simple classification tasks
+export CLAUDE_CODE_SUBAGENT_MODEL=haiku
+```
+
+This applies globally to all sub-agent spawns within the session.
 
 ## Team Templates
 
@@ -397,6 +412,8 @@ Agent Teams is a **Research Preview** feature (v2.1.32+). This means:
 | Maximum ~4 agents recommended | Large teams have quadratic coordination cost | Cap teams at 1 leader + 3 workers |
 | No force-kill for agents | Stuck agent blocks pipeline | Timeout watchdog with graceful degradation |
 | Cooperative shutdown only | Teammates can reject shutdown requests | Design workflows that complete naturally |
+| Memory leak in long sessions | Agent teams consume growing memory | Fixed in v2.1.50+; update Claude Code |
+| No bulk kill UI | Must kill agents one by one | Ctrl+F bulk agent kill available in v2.1.53+ |
 
 ### Context Compaction Risk (#23620)
 
