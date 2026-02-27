@@ -13,7 +13,11 @@ function stripVersion(str) {
 }
 
 function stripPaths(str) {
-  return str.replace(/\/[^\s")]+\/claude-craft/g, '/PATH/claude-craft');
+  const cwd = process.cwd();
+  const escaped = cwd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return str
+    .replace(new RegExp(escaped, 'g'), '/PATH/claude-craft')
+    .replace(/\/[^\s")]+\/claude-craft/g, '/PATH/claude-craft');
 }
 
 function normalize(str) {
