@@ -6,7 +6,7 @@ Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordina
 
 | Requirement | Minimum Version | Check |
 |-------------|-----------------|-------|
-| Claude Code | v2.1.47+ (v2.1.61 recommended) | `claude --version` |
+| Claude Code | v2.1.47+ (v2.1.105 recommended) | `claude --version` |
 | Environment variable | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` | `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` |
 | Claude model | Opus 4.6 (recommended for leader) | Model selector in Claude Code |
 
@@ -90,6 +90,8 @@ Based on empirical analysis (audit-pipeline.md, devils-advocate.md):
 | Dollar cost savings (Haiku workers) | 70% | 40-60% | 20% |
 
 **Do not expect 5-8x speedup.** Amdahl's Law limits practical speedup because ~30% of work is inherently sequential (technology detection, result aggregation, report generation). With realistic coordination overhead, expect 1.5-2.5x speedup for 2-3 technology projects.
+
+> **Cost reality:** When all teammates are simultaneously active, expect approximately **~7x** the token cost of a normal single-agent session due to context duplication and coordination overhead across teammates.
 
 ### Token Overhead Breakdown
 

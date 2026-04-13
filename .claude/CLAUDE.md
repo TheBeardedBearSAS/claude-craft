@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 7.23.0 | **Languages:** en, fr, es, de, pt
+**Version:** 7.25.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 18 technology stacks, 63 agents, 204 commands across 26 namespaces, and BMAD v6 project management.
 
@@ -196,7 +196,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version:** 2.1.47 | **Recommended:** 2.1.61 — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
+**Minimum Version:** 2.1.47 | **Recommended:** 2.1.105 — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
 
 ---
 
@@ -214,5 +214,6 @@ See `.claude/rules/12-context-management.md` for detailed guidance.
 | **Parallel worktrees** | Use `git worktree` for concurrent sessions |
 | **Hooks** | CLAUDE.md = suggestions. Hooks = requirements |
 | **`/memory`** | Persistent session learnings across conversations (v2.1.59+) |
+| **Pointers over copies** | Use `@path` references instead of copying code into CLAUDE.md |
 
 See `.claude/templates/hooks/` for ready-to-use hook templates.

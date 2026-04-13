@@ -543,10 +543,16 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 | CVE | Severite | Version corrigee | Impact |
 |-----|----------|-----------------|--------|
 | CVE-2025-59536 | 8.7/10 CVSS | v2.1.51 | Injection de commandes via inputs MCP dans le pipeline de hooks |
-| CVE-2026-21852 | Haute | v2.0.65 | Exfiltration de cles API via traversee de chemin dans la resolution de hooks |
+| CVE-2026-21852 | 5.3/10 CVSS | v2.0.65 | Exfiltration de cles API via traversee de chemin dans la resolution de hooks |
+| CVE-2026-35020 | High | v2.1.97 | Compound command bypass — permissions not checked on compound bash commands |
+| CVE-2026-35021 | High | v2.1.97 | Network redirect bypass in Bash tool |
+| CVE-2026-35022 | High | v2.1.98 | Env-var prefix injection in Bash tool |
+| N/A | High | v2.1.101 | Command injection via POSIX `which` fallback |
+
+> **Incident (mars 2026):** Le code source complet de Claude Code a ete expose via le package npm v2.1.88 (fichier `.map` de 59.8 MB non exclu par `.npmignore`). Corrige dans v2.1.89.
 
 > **Note:** L'installation via `npm install -g` est obsolete. Utilisez les installateurs natifs.
-> **Recommandation:** Toujours utiliser Claude Code v2.1.51+ lorsque des serveurs MCP sont utilises avec des hooks.
+> **Recommandation:** Toujours utiliser Claude Code v2.1.97+ lorsque des serveurs MCP sont utilises avec des hooks.
 
 ### CLAUDE.md vs Hooks
 
@@ -558,6 +564,38 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 
 > **Regle:** CLAUDE.md = suggestions. Hooks = requirements.
 > Pour les contraintes de securite critiques, utiliser des hooks, pas des instructions textuelles.
+
+### Auto Mode (v2.1.94+)
+
+> **Auto Mode** est un classificateur de permissions propulse par l'IA qui remplace `--dangerously-skip-permissions` de maniere plus sure.
+
+Disponible pour les plans Team (avec approbation admin).
+
+```
+Fonctionnement:
+- Un modele de securite en arriere-plan evalue chaque appel d'outil
+- ✅ Autorise les operations sures (lectures, tests)
+- 🚫 Bloque les actions risquees (suppression massive, exfiltration)
+- ⚠️ Escalade les cas ambigus pour approbation manuelle
+
+Securite progressive:
+- 3 blocages consecutifs → retour en mode manuel
+- 20+ blocages dans une session → revert complet au mode manuel
+```
+
+| Mode | Protection | Vitesse | Usage |
+|------|-----------|---------|-------|
+| Manuel | Maximale | Lente | Workflows audites, haute securite |
+| Auto Mode | Elevee | Rapide | Workflows de dev de confiance |
+| Skip Permissions | Minimale | Maximale | Projets locaux/personnels uniquement |
+
+### Sandboxing des sous-processus (v2.1.98+)
+
+| Mecanisme | Description |
+|-----------|-------------|
+| Isolation PID namespace | Les sous-processus sont isoles dans un namespace PID dedie (Linux) |
+| `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` | Supprime les credentials des variables d'environnement des sous-processus |
+| `sandbox.failIfUnavailable` | Echoue si le sandbox ne peut pas etre initialise (v2.1.83+) |
 
 ---
 
@@ -608,6 +646,6 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 
 ---
 
-**Date de derniere mise a jour:** 2026-02
-**Version:** 1.1.0
+**Date de derniere mise a jour:** 2026-04
+**Version:** 1.2.0
 **Auteur:** The Bearded CTO

@@ -10,6 +10,10 @@ MCP is an open standard that enables AI models to connect to external tools and 
 - [Popular MCP Servers](#popular-mcp-servers)
 - [Context7 - Documentation Server](#context7---documentation-server)
 - [Custom MCP Servers](#custom-mcp-servers)
+- [Tool Search — Lazy Loading](#tool-search--lazy-loading-v2180)
+- [MCP Elicitation](#mcp-elicitation-v2176)
+- [Result Persistence Override](#result-persistence-override-v2191)
+- [OAuth RFC 9728 Support](#oauth-rfc-9728-support-v2185)
 - [Security](#security)
 - [Troubleshooting](#troubleshooting)
 
@@ -357,6 +361,81 @@ For remote servers, use HTTP transport:
 
 ---
 
+## Tool Search — Lazy Loading (v2.1.80+)
+
+MCP Tool Search enables lazy loading of tool schemas, reducing context usage by **up to 95%**:
+
+```
+Without Tool Search:
+  Every MCP tool schema loaded at startup → 500-2000 tokens/tool/turn
+
+With Tool Search:
+  Tools loaded on-demand via ToolSearch → ~50 tokens total
+```
+
+### How It Works
+
+1. MCP servers register tools as "deferred" — only names are loaded initially
+2. When Claude needs a tool, it calls `ToolSearch` with a query
+3. The full schema is loaded just-in-time for that specific call
+4. Multiple MCP servers can run simultaneously without context limits
+
+### Configuration
+
+```json
+{
+  "mcpServers": {
+    "my-server": {
+      "command": "node",
+      "args": ["server.js"],
+      "toolSearch": true
+    }
+  }
+}
+```
+
+## MCP Elicitation (v2.1.76+)
+
+MCP servers can now request interactive input from the user through elicitation forms:
+
+```json
+{
+  "type": "elicitation",
+  "fields": [
+    { "name": "environment", "type": "select", "options": ["staging", "production"] },
+    { "name": "confirm", "type": "boolean", "label": "Deploy?" }
+  ]
+}
+```
+
+### Hooks
+
+| Hook | Description | Version |
+|------|-------------|---------|
+| `Elicitation` | Fires when an MCP tool requests user input | v2.1.76+ |
+| `ElicitationResult` | Fires after user responds to the elicitation | v2.1.76+ |
+
+## Result Persistence Override (v2.1.91+)
+
+MCP servers can override the default result size limit using `_meta` annotations:
+
+```json
+{
+  "_meta": {
+    "anthropic/maxResultSizeChars": 500000
+  },
+  "content": "...large result..."
+}
+```
+
+Default limit: ~25K characters. Override allows up to 500K — useful for large database schemas, documentation dumps, or analysis results.
+
+## OAuth RFC 9728 Support (v2.1.85+)
+
+MCP OAuth now follows RFC 9728 Protected Resource Metadata discovery. The `authServerMetadataUrl` override is honored on token refresh for compatibility with ADFS, custom IdPs, and enterprise OAuth setups.
+
+---
+
 ## Security
 
 ### Best Practices
@@ -404,9 +483,13 @@ Configure MCP tool permissions in `settings.json`:
 | CVE | Severity | Version Fixed | Impact |
 |-----|----------|---------------|--------|
 | CVE-2025-59536 | 8.7/10 CVSS | v2.1.51 | Hook command injection via crafted MCP tool inputs |
-| CVE-2026-21852 | High | v2.0.65 | API key exfiltration via path traversal in hook file resolution |
+| CVE-2026-21852 | 5.3/10 CVSS | v2.0.65 | API key exfiltration via path traversal in hook file resolution |
 
 **Recommendation:** Always run Claude Code v2.1.51+ when using MCP servers with hooks.
+
+### MCP Buffer Leak Fix (v2.1.97+)
+
+Fixed a memory leak in MCP HTTP/SSE connections that caused ~50 MB/hr accumulation. Update to v2.1.97+ if running long-lived MCP sessions.
 
 ---
 

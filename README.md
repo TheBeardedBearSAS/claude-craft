@@ -6,11 +6,14 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.23
+## What's New in v7.25
 
-- **Claude Code v2.1.61 compatibility** -- Windows config corruption fix, native installer recommendation
-- **Deprecated npm install** -- PREREQUISITES updated to recommend native installers (`curl https://install.claude.com | bash`)
-- **Context management enhancements** -- compaction hints, CLAUDE.local.md, subagent model override, anti-patterns
+- **Claude Code v2.1.105 compatibility** -- 43 new versions (v2.1.63-v2.1.105) fully documented
+- **Auto Mode** -- AI-powered permission classifier replacing `--dangerously-skip-permissions`
+- **New commands** -- /loop, /effort, /context, /powerup, /proactive, /team-onboarding
+- **8 new hook events** -- PostCompact, StopFailure, TaskCreated, CwdChanged, FileChanged, PermissionDenied, Elicitation, ElicitationResult
+- **MCP Tool Search** -- lazy loading reduces context usage by 95%
+- **Security hardening** -- 7 CVE fixes, subprocess sandboxing, source code leak incident documented
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 ## Install and First Result

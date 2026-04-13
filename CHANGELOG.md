@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.25.0] - 2026-04-14
+
+### Added
+
+- **Claude Code v2.1.63-v2.1.105 compatibility** -- 43 new versions documented with 12 feature sections
+- **Auto Mode documentation** -- AI-powered permission classifier for Team plans (v2.1.94+)
+- **New slash commands** -- /loop, /effort, /context, /powerup, /proactive, /color, /rename, /team-onboarding
+- **8 new hook events** -- PostCompact, StopFailure, TaskCreated, CwdChanged, FileChanged, PermissionDenied, Elicitation, ElicitationResult
+- **Hook enhancements** -- conditional `if` field (v2.1.85), `defer` permission (v2.1.89), PreCompact blocking (v2.1.105)
+- **MCP enhancements** -- Elicitation, Tool Search lazy loading (95% context reduction), result persistence (500K), OAuth RFC 9728
+- **Agent frontmatter** -- effort, maxTurns, disallowedTools fields for custom agents (v2.1.78+)
+- **Security advisories** -- 7 new CVE fixes documented (v2.1.97-v2.1.101), source code leak incident (v2.1.88)
+- **Subprocess sandboxing** -- PID namespace isolation, CLAUDE_CODE_SUBPROCESS_ENV_SCRUB (v2.1.98+)
+- **Managed settings** -- managed-settings.d/ drop-in directory for enterprise config (v2.1.83+)
+- **Context management updates** -- /context suggestions, /effort levels, idle-return prompt, /loop scheduling, MCP Tool Search, --bare flag, Monitor tool
+
+### Changed
+
+- **Recommended Claude Code version** -- 2.1.62 → 2.1.105 (minimum stays 2.1.47)
+- **Security minimum** -- 2.1.51 → 2.1.97 (critical Bash tool hardening)
+- **SECURITY.md** -- supported versions updated to 7.25.x/7.24.x
+
+## [7.24.0] - 2026-02-27
+
+### Added
+
+- **Claude Code v2.1.62 compatibility** — Prompt suggestion cache regression fix
+- **CLAUDE.md authoring best practices** — pointers over code copies, emphasis for critical rules, file placement hierarchy in context management rule
+- **Performance optimization guide** — CLI tools over MCPs, model switching mid-session, PreToolUse output filtering in context management rule
+- **Communication patterns** — Interview pattern, CIF structure, Writer/Reviewer pattern in context management rule
+
+### Changed
+
+- **Recommended Claude Code version** — 2.1.61 → 2.1.62 (minimum stays 2.1.47)
+- **CVE-2026-21852 severity** — "High" → 5.3/10 CVSS in MCP.md and security rule
+- **Agent Teams Guide** — Added ~7x token cost warning, recommended version bumped to 2.1.62
+- **SECURITY.md** — supported versions updated to 7.24.x/7.23.x
+
 ## [7.23.0] - 2026-02-27
 
 ### Added

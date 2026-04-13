@@ -37,7 +37,7 @@ Hooks complement the "should-do" suggestions in CLAUDE.md with "must-do" determi
 
 ## Hook Events
 
-Claude Code supports **16 hook event types**:
+Claude Code supports **24 hook event types**:
 
 | Event | When it fires | Matcher support |
 |-------|---------------|-----------------|
@@ -57,6 +57,14 @@ Claude Code supports **16 hook event types**:
 | `ConfigChange` | When configuration files change | Yes (config key) |
 | `WorktreeCreate` | When a git worktree is created | Yes (worktree path) |
 | `WorktreeRemove` | When a git worktree is removed | Yes (worktree path) |
+| `PostCompact` | After context compaction completes (v2.1.76+) | No |
+| `StopFailure` | When a stop/termination operation fails (v2.1.78+) | No |
+| `Elicitation` | When MCP tool requests user input (v2.1.76+) | No |
+| `ElicitationResult` | After user responds to elicitation (v2.1.76+) | No |
+| `TaskCreated` | When a new task is created (v2.1.84+) | No |
+| `CwdChanged` | When the working directory changes (v2.1.83+) | No |
+| `FileChanged` | When a watched file changes (v2.1.83+) | No |
+| `PermissionDenied` | After auto mode classifier denies a tool (v2.1.89+) | No |
 
 ### Event Details
 
@@ -129,6 +137,54 @@ Fires when a git worktree is removed. Use for:
 - Cleaning up worktree-specific resources
 - Archiving session logs
 - Updating project tracking
+
+### Hook Conditional Execution (v2.1.85+)
+
+Hooks support an `if` field to conditionally execute based on permission rule syntax:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "if": "tool.input matches 'rm -rf'",
+      "command": "echo 'BLOCKED: dangerous delete' && exit 1"
+    }]
+  }
+}
+```
+
+### Deferred Permission Decision (v2.1.89+)
+
+PreToolUse hooks can return a `"defer"` decision for headless sessions, pausing tool execution until the session is resumed with `--resume`:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "command": "echo '{\"decision\": \"defer\", \"reason\": \"Requires human review\"}'"
+    }]
+  }
+}
+```
+
+### PreCompact Blocking (v2.1.105+)
+
+PreCompact hooks can now block compaction by returning exit code 2:
+
+```json
+{
+  "hooks": {
+    "PreCompact": [{
+      "matcher": "auto",
+      "command": "test -f .claude/no-compact && exit 2 || exit 0"
+    }]
+  }
+}
+```
+
+Exit code 2 prevents the compaction from proceeding, allowing fine-grained control over when context is compacted.
 
 ---
 

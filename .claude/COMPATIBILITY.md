@@ -1,6 +1,7 @@
 # Claude Code Compatibility
 
 **Minimum Version**: 2.1.47
+**Recommended Version**: 2.1.105
 
 This document tracks Claude Code features and version compatibility for claude-craft.
 
@@ -594,3 +595,162 @@ Fixed concurrent writes corrupting config file on Windows. Multiple Claude Code 
 | Platform | Windows only (macOS/Linux unaffected) |
 
 Note: v2.1.60 does not exist (skipped by Anthropic).
+
+### Prompt Suggestion Cache Fix (v2.1.62+)
+
+Fixed prompt suggestion cache regression that reduced cache hit rates, restoring normal prompt caching performance.
+
+### Loop, Effort & Worktree Tools (v2.1.70-v2.1.72)
+
+| Feature | Description |
+|---------|-------------|
+| `ExitWorktree` tool | Exit a worktree session and return to main repo |
+| `/loop` command | Run a prompt or slash command on a recurring interval (cron scheduling) |
+| `/effort` command | Set model thinking effort: `low`, `medium`, `high` |
+| `/plan` description | Optional description parameter for plan mode intent |
+| `w` key in `/copy` | Quick-copy worktree path from copy picker |
+
+### Model Overrides & Context Suggestions (v2.1.73-v2.1.74)
+
+| Feature | Description |
+|---------|-------------|
+| `modelOverrides` setting | Override model selection per task type in settings |
+| `/context` command | Actionable suggestions for optimizing context usage |
+| `autoMemoryDirectory` setting | Configure directory for automatic memory storage |
+| LSP deadlock fixes | Improved Language Server Protocol stability |
+
+### 1M Context Window GA (v2.1.75+)
+
+| Feature | Description |
+|---------|-------------|
+| 1M context window | Generally available for Opus 4.6 (no pricing premium) |
+| `/color` command | Customize session prompt-bar color |
+| `/rename` command | Set session display name |
+| Memory file timestamps | Automatic timestamps on memory files |
+
+### MCP Elicitation & Sandbox Expansion (v2.1.76-v2.1.77)
+
+| Feature | Description |
+|---------|-------------|
+| MCP elicitation | Interactive forms for MCP tool inputs |
+| `Elicitation`/`ElicitationResult` hooks | Hook into the elicitation lifecycle |
+| `-n`/`--name` flag | Name sessions from the command line |
+| `worktree.sparsePaths` setting | Configure sparse checkout paths for large monorepos |
+| `PostCompact` hook | Hook fires after context compaction completes |
+| `allowRead` sandbox setting | Sandbox setting to allow read-only file access |
+| Opus 4.6 output limits | 64K default output tokens, 128K upper limit |
+
+### Plugin State & Agent Frontmatter (v2.1.78-v2.1.80)
+
+| Feature | Description |
+|---------|-------------|
+| `StopFailure` hook | Hook fires when a stop/termination fails |
+| `${CLAUDE_PLUGIN_DATA}` | Persistent state directory for plugins |
+| Agent frontmatter | `effort`, `maxTurns`, `disallowedTools` fields for custom agents |
+| `--console` flag | Authenticate via Anthropic Console |
+| `rate_limits` in statusline | 5-hour and 7-day rate limit windows in statusline scripts |
+| `effort` frontmatter for skills | Set default effort level in skill/slash command files |
+| `source: 'settings'` plugins | Plugin marketplace defined inline in settings.json |
+
+### Scripting & Managed Settings (v2.1.81-v2.1.83)
+
+| Feature | Description |
+|---------|-------------|
+| `--bare` flag | Skip hooks, LSP, and plugin sync for scripted `-p` calls |
+| `--channels` flag | Forward permission approval prompts to mobile/phone |
+| `managed-settings.d/` | Drop-in directory with alphabetical merge for enterprise config |
+| `CwdChanged` hook | Hook fires when working directory changes |
+| `FileChanged` hook | Hook fires when a watched file changes |
+| `sandbox.failIfUnavailable` | Fail if sandbox cannot be initialized |
+| `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` | Strip credentials from subprocess environments |
+| Transcript search | Press `/` in transcript mode to search |
+
+### PowerShell, Hooks & Deep Links (v2.1.84-v2.1.86)
+
+| Feature | Description |
+|---------|-------------|
+| PowerShell tool | Opt-in preview for Windows (replaces Bash on Windows) |
+| `TaskCreated` hook | Hook fires when a new task is created |
+| `WorktreeCreate` HTTP hook | WorktreeCreate hook now supports HTTP handler type |
+| Idle-return prompt | After 75+ minutes idle, Claude nudges `/clear` |
+| Conditional `if` for hooks | Filter hook execution using permission rule syntax |
+| Deep link queries | Support up to 5,000 characters in deep link URLs |
+| MCP OAuth RFC 9728 | Protected Resource Metadata discovery for OAuth |
+| `.jj`/`.sl` VCS exclusion | Jujutsu and Sapling added to VCS exclusion lists |
+| Reduced `@` mention overhead | Lower token cost when using `@file` references |
+
+### Permission Hooks & Rendering (v2.1.87-v2.1.90)
+
+| Feature | Description |
+|---------|-------------|
+| `X-Claude-Code-Session-Id` header | Session ID header for proxy aggregation |
+| `"defer"` permission for PreToolUse | Pause tool execution for headless sessions with `--resume` |
+| `CLAUDE_CODE_NO_FLICKER=1` | Flicker-free alt-screen terminal rendering |
+| `PermissionDenied` hook | Hook fires after auto mode classifier denies a tool |
+| `/powerup` command | Interactive lessons with animated demos |
+| `.husky` protected directory | Husky hooks directory added to protected list |
+
+### MCP Persistence & Cost Breakdown (v2.1.91-v2.1.92)
+
+| Feature | Description |
+|---------|-------------|
+| MCP result persistence override | `_meta["anthropic/maxResultSizeChars"]` up to 500K |
+| `disableSkillShellExecution` | Setting to prevent skills from running shell commands |
+| `forceRemoteSettingsRefresh` | Policy setting for fail-closed remote settings |
+| Per-model `/cost` breakdown | Per-model and cache-hit breakdown in `/cost` command |
+| `/release-notes` interactive | Interactive version picker for release notes |
+
+### Bedrock Mantle & Auto Mode (v2.1.94+)
+
+| Feature | Description |
+|---------|-------------|
+| Amazon Bedrock Mantle | `CLAUDE_CODE_USE_MANTLE=1` for Bedrock Mantle support |
+| Default effort `high` | Default effort level set to `high` for API-key/Bedrock/Vertex/Foundry |
+| **Auto Mode** (March 24, 2026) | AI-powered permission classifier for Team plans |
+| Auto Mode classifier | Background safety model reviews each tool call |
+| Auto Mode escalation | 3 consecutive blocks → manual; 20+ blocks → revert |
+
+### Security Hardening (v2.1.97-v2.1.98)
+
+| Feature | Description |
+|---------|-------------|
+| Bash tool hardened | Env-var prefix injection and network redirect blocking |
+| Compound command bypass fix | Permissions now checked on compound bash commands |
+| MCP HTTP/SSE buffer leak fix | Fixed 50 MB/hr memory accumulation |
+| Focus view toggle | `Ctrl+O` in `NO_FLICKER` mode |
+| Google Vertex AI wizard | Interactive setup wizard for Vertex AI |
+| `CLAUDE_CODE_PERFORCE_MODE` | Environment variable for Perforce read-only file hints |
+| Monitor tool | Stream background events from processes |
+| Subprocess sandboxing | PID namespace isolation on Linux |
+
+### Security Advisories (v2.1.97-v2.1.101)
+
+| Version | Fix | Severity |
+|---------|-----|----------|
+| v2.1.97 | Compound command bypass in Bash tool | High |
+| v2.1.97 | Network redirect bypass | High |
+| v2.1.97 | Prototype pollution in permission rules | High |
+| v2.1.97 | MCP HTTP/SSE buffer leak (50 MB/hr) | Medium |
+| v2.1.98 | Env-var prefix injection in Bash tool | High |
+| v2.1.98 | Subprocess sandboxing with PID namespace | Enhancement |
+| v2.1.101 | POSIX `which` fallback command injection | High |
+
+**Recommendation:** Always run v2.1.97+ for production use. Update immediately if using MCP servers or Bash tool in automated workflows.
+
+### Team Onboarding & Stability (v2.1.101-v2.1.105)
+
+| Feature | Description |
+|---------|-------------|
+| `/team-onboarding` command | Generate teammate ramp-up guides |
+| OS CA certificate trust | Trust system CA certificate store by default |
+| Memory leak fixes | Fixed memory leaks in long-running sessions |
+| `path` parameter for `EnterWorktree` | Switch between existing worktrees |
+| PreCompact hook blocking | Block compaction via exit code 2 |
+| Background monitors for plugins | `monitors` manifest key for plugin background tasks |
+| `/proactive` alias | Alias for `/loop` command |
+| Skill description limit | Increased from 250 to 1,536 characters |
+| Stalled stream handling | 5-minute timeout with automatic retry |
+
+### Source Code Leak Incident (v2.1.88)
+
+On March 31, 2026, the full source code of Claude Code was exposed via the public npm package v2.1.88 due to a missing `.npmignore` exclusion for Bun-generated source maps (59.8 MB `.map` file). Patched in v2.1.89.
