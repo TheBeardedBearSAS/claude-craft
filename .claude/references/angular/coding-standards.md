@@ -1,5 +1,7 @@
 # Angular TypeScript Coding Standards
 
+**Version documentée :** Angular 20 LTS (recommandé production) / Angular 21 (latest)
+
 ## TypeScript Strict Mode
 
 ### tsconfig.json Configuration

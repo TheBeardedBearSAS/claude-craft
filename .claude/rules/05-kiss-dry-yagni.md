@@ -6,10 +6,13 @@ Ces principes sont **obligatoires** pour maintenir un code simple et maintenable
 
 | Metrique | Cible | Limite |
 |----------|-------|--------|
+| **Cognitive Complexity** (primaire 2026) | < 7 | < 10 |
 | Lignes par methode | < 10 | < 20 |
 | Complexite cyclomatique | < 5 | < 10 |
 | Profondeur d'indentation | 2 | 3 max |
 | Parametres par methode | 3 | 4 max |
+
+> **Cognitive Complexity** (SonarQube, ReSharper) est la metrique dominante 2026 : elle mesure la difficulte humaine de comprehension. Elle prevaut sur la stricte limite de 20 lignes. Source : [Cognitive vs Cyclomatic](https://gilles-fabre.medium.com/what-is-the-difference-between-cyclomatic-complexity-and-cognitive-complexity-a87cef0e2851).
 
 **Regles :** Early returns (guard clauses), pas de else imbrique, nommage explicite, composition > heritage.
 

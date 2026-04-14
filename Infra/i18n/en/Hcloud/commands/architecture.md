@@ -5,6 +5,8 @@ argument-hint: <Project> [constraints]
 
 # Hcloud Architecture
 
+> ⚠️ **Mandatory migration before 2026-07-01**: the `datacenter` parameter is deprecated in favor of `location`. Hetzner Cloud Terraform provider >= 1.58.0. Source: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+
 You are a senior Hetzner Cloud architect. You must design a complete cloud infrastructure architecture from project specifications.
 
 ## Arguments
@@ -13,9 +15,9 @@ $ARGUMENTS
 Arguments:
 - Project description
 - Target workload (e.g., web-application, microservices, database-cluster)
-- Constraints (e.g., budget, datacenter, compliance)
+- Constraints (e.g., budget, location, compliance)
 
-Example: `/hcloud:architecture "E-commerce platform" workload:web-application datacenter:fsn1 budget:100eur`
+Example: `/hcloud:architecture "E-commerce platform" workload:web-application location:fsn1 budget:100eur`
 
 ## Plan Mode
 
@@ -47,7 +49,7 @@ REQUIREMENTS ANALYSIS
 ### Target Environment
 | Attribute | Value |
 |-----------|-------|
-| Datacenter | {fsn1/nbg1/hel1/ash/hil/sin} |
+| Location | {fsn1/nbg1/hel1/ash/hil/sin} |
 | Budget | {monthly limit} |
 | HA Required | {yes/no} |
 | Compliance | {GDPR/none} |

@@ -1,5 +1,7 @@
 # Angular Tooling and CLI
 
+**Version documentée :** Angular 20 LTS (recommandé production) / Angular 21 (latest)
+
 ## Angular CLI
 
 ### Installation
@@ -203,7 +205,9 @@ npm install -D stylelint stylelint-config-standard-scss stylelint-order
 
 ## Testing Tools
 
-### Vitest (Recommended for Angular 20+)
+### Vitest (Recommandé pour Angular 20+)
+
+Vitest est l'outil de test recommandé pour Angular 20+ grâce à sa rapidité (~10x plus rapide que Karma) et son support natif des ES modules.
 
 ```bash
 npm install -D vitest @analogjs/vitest-angular jsdom

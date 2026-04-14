@@ -170,6 +170,8 @@ final class User
 
 ### Value Objects
 
+> **Patterns 2026:** Property hooks (PHP 8.4) pour validation inline, asymmetric visibility pour immutabilite.
+
 ```php
 <?php
 
@@ -179,26 +181,26 @@ namespace App\Domain\ValueObject;
 
 use App\Domain\Exception\InvalidEmailException;
 
-final readonly class Email
+// Approche 1: Property hooks (PHP 8.4+)
+final class Email
 {
-    private function __construct(
-        private string $value,
-    ) {}
+    public string $value {
+        set {
+            $normalized = trim(strtolower($value));
+            if (!filter_var($normalized, FILTER_VALIDATE_EMAIL)) {
+                throw new InvalidEmailException($normalized);
+            }
+            $this->value = $normalized;
+        }
+    }
+
+    private function __construct(string $value) {
+        $this->value = $value; // Validation via hook
+    }
 
     public static function fromString(string $email): self
     {
-        $email = trim(strtolower($email));
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidEmailException($email);
-        }
-
         return new self($email);
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
     }
 
     public function equals(self $other): bool
@@ -211,7 +213,48 @@ final readonly class Email
         return $this->value;
     }
 }
+
+// Approche 2: Asymmetric visibility (PHP 8.4+) pour immutabilite stricte
+final class Money
+{
+    public private(set) int $amount;      // Public read, private write
+    public private(set) string $currency;
+
+    private function __construct(int $amount, string $currency) {
+        $this->amount = $amount;
+        $this->currency = $currency;
+    }
+
+    public static function EUR(int $cents): self
+    {
+        return new self($cents, 'EUR');
+    }
+
+    public static function USD(int $cents): self
+    {
+        return new self($cents, 'USD');
+    }
+
+    public function add(self $other): self
+    {
+        if ($this->currency !== $other->currency) {
+            throw new InvalidArgumentException('Currency mismatch');
+        }
+        return new self($this->amount + $other->amount, $this->currency);
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->amount === $other->amount
+            && $this->currency === $other->currency;
+    }
+}
 ```
+
+**Benefices PHP 8.4 :**
+- Property hooks : validation centralisee, moins de boilerplate
+- Asymmetric visibility : immutabilite enforced au niveau du type system (pas juste readonly)
+- Sources : [PHP 8.4 Property Hooks](https://www.php.net/manual/en/language.oop5.property-hooks.php), [Asymmetric Visibility](https://wiki.php.net/rfc/asymmetric-visibility)
 
 ```php
 <?php
@@ -682,15 +725,17 @@ final readonly class BulkPricing implements PricingStrategyInterface
 }
 ```
 
-## Architecture Checklist
+## Architecture Checklist (2026)
 
 - [ ] Domain layer has NO external dependencies
 - [ ] Application layer only depends on Domain
 - [ ] Infrastructure implements interfaces from Domain
 - [ ] Presentation depends on Application (not Domain directly)
 - [ ] Entities have private setters and factory methods
-- [ ] Value Objects are immutable (readonly classes)
+- [ ] Value Objects use **property hooks (PHP 8.4+)** for validation
+- [ ] Value Objects use **asymmetric visibility (PHP 8.4+)** for immutability
 - [ ] Repository interfaces are in Domain layer
 - [ ] DTOs are used for data transfer, not entities
 - [ ] Use Cases follow single responsibility
 - [ ] Dependencies are injected, not created internally
+- [ ] PHPStan level 10 compliance (zero mixed)

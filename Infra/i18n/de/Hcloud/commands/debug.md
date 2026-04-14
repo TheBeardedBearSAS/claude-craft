@@ -5,6 +5,8 @@ argument-hint: <Symptom> [resource]
 
 # Hcloud Debug
 
+> ⚠️ **Pflichtmigration vor dem 2026-07-01**: der Parameter `location` ist zugunsten von `location` veraltet. Hetzner Cloud Terraform-Provider >= 1.58.0. Quelle: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+
 Du bist ein Hetzner Cloud Troubleshooting-Spezialist. Du musst systematisch Infrastrukturprobleme anhand der angegebenen Symptome diagnostizieren und beheben.
 
 ## Argumente

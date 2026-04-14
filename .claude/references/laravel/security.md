@@ -1,4 +1,6 @@
-# Laravel Security Standards
+# Laravel 13 Security Standards
+
+**Source :** https://laravel.com/docs/13.x/security | https://laravel.com/docs/13.x/passkey
 
 ## OWASP Top 10 Protection
 
@@ -247,8 +249,27 @@ composer outdated --direct
 
 ### A07:2021 - Authentication Failures
 
+**Nouveauté Laravel 13 :** Passkey Authentication (WebAuthn) intégré dans Breeze/Jetstream/Fortify (https://laravel.com/docs/13.x/passkey).
+
 ```php
 <?php
+// Passkey Authentication (Laravel 13) - Authentification sans mot de passe
+use Laravel\Fortify\Features;
+
+// config/fortify.php
+'features' => [
+    Features::registration(),
+    Features::resetPasswords(),
+    Features::emailVerification(),
+    Features::updateProfileInformation(),
+    Features::updatePasswords(),
+    Features::twoFactorAuthentication([
+        'confirm' => true,
+        'confirmPassword' => true,
+    ]),
+    Features::passkeys(),  // Nouveauté Laravel 13
+],
+
 // Laravel Sanctum for API authentication
 use Laravel\Sanctum\HasApiTokens;
 
@@ -748,6 +769,7 @@ return [
 
 ### Authentication & Authorization
 - [ ] Laravel Sanctum/Passport configured
+- [ ] Passkey Authentication enabled (Laravel 13 - WebAuthn)
 - [ ] Token expiration set appropriately
 - [ ] Policies defined for all models
 - [ ] Gates defined for non-model authorization

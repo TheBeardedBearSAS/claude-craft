@@ -1,5 +1,7 @@
 # Angular Testing Standards
 
+**Version documentée :** Angular 20 LTS (recommandé production) / Angular 21 (latest)
+
 ## Testing Strategy
 
 ### Testing Pyramid

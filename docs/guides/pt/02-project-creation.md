@@ -19,7 +19,7 @@ Claude-Craft suporta **18 stacks tecnológicos** (10 dev + 8 infra):
 | **Flutter / Dart** | Apps móveis | Feature-based + BLoC | Material/Cupertino, Gestão de estado |
 | **Python** | APIs, Serviços de dados | Clean Architecture | FastAPI, async/await, Pydantic |
 | **React** | SPAs web | Feature-based + Hooks | Zustand, React Query, acessibilidade |
-| **React Native** | Móvel multiplataforma | Feature-based | Navigation 7, Reanimated 3 |
+| **React Native** | Móvel multiplataforma | Feature-based | Navigation 7, Reanimated 4 |
 | **Angular** | Apps empresariais | Domain-driven | Signals, Standalone, RxJS |
 | **Vue.js** | SPAs web | Composition API | Pinia, Vitest, TypeScript |
 

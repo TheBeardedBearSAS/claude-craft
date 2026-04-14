@@ -125,21 +125,44 @@ docs/
     └── index.md
 ```
 
+### Outils ADR recommandés
+
+| Outil | Description | URL |
+|-------|-------------|-----|
+| **Log4brains** | CLI + interface web + diagrammes de dépendances entre ADRs | [github.com/thomvaill/log4brains](https://github.com/thomvaill/log4brains) |
+| **adr-log** | Validation de conformité (policy enforcement) | [adr.github.io](https://adr.github.io/) |
+| **ADR Manager** | Extension VS Code pour créer/éditer ADRs | VS Code Marketplace |
+| **Workik AI** | Générateurs IA pour accélérer la rédaction d'ADRs | [workik.com](https://workik.com) |
+
+**Recommandation :** Log4brains pour projets moyens/grands (graphe de dépendances, web UI), templates manuels pour petits projets.
+
 ---
 
 ## API Documentation
 
 ### Format
 
-Utiliser **OpenAPI 3.0** (Swagger) pour documenter les APIs REST.
+Utiliser **OpenAPI 3.2.0** (Swagger) pour documenter les APIs REST.
+
+### Nouveautés OpenAPI 3.2
+
+| Fonctionnalité | Description |
+|----------------|-------------|
+| **JSON Schema 2020-12** | Alignement avec le dernier draft JSON Schema |
+| **Tag metadata** | Parent tags, grouping par fonctionnalité |
+| **Streaming responses** | Support natif SSE (Server-Sent Events) et JSON Lines |
+| **OAuth 2.0 device flow** | Authorization flow pour devices sans browser |
+| **Unions discriminées** | Meilleur support des polymorphic schemas |
+| **API versioning** | Métadonnées de versioning intégrées |
 
 ### Bonnes pratiques API Docs
 
 1. **Exemples concrets** pour chaque endpoint
-2. **Codes d'erreur** documentés
-3. **Authentification** expliquée
-4. **Rate limits** mentionnés
-5. **Versioning** clair
+2. **Codes d'erreur** documentés (RFC 9457 Problem Details)
+3. **Authentification** expliquée (Bearer, OAuth2, OIDC)
+4. **Rate limits** mentionnés (headers `X-RateLimit-*`)
+5. **Versioning** clair (URI `/v1/`, header `API-Version`)
+6. **Streaming endpoints** avec SSE/JSON Lines si applicable
 
 ---
 
@@ -258,11 +281,12 @@ Checklist PR:
 
 - **Keep a Changelog:** [keepachangelog.com](https://keepachangelog.com/)
 - **ADR:** [adr.github.io](https://adr.github.io/)
-- **OpenAPI:** [swagger.io/specification](https://swagger.io/specification/)
+- **OpenAPI 3.2.0:** [spec.openapis.org/oas/v3.2.0.html](https://spec.openapis.org/oas/v3.2.0.html)
+- **OpenAPI 3.2 vs 3.1 vs 3.0:** [apidog.com/blog/what-changed-openapi-3-2-vs-3-1-vs-3-0](https://apidog.com/blog/what-changed-openapi-3-2-vs-3-1-vs-3-0/)
 - **Diátaxis:** [diataxis.fr](https://diataxis.fr/) (framework documentation)
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
-**Version:** 1.0.0
+**Date de dernière mise à jour:** 2026-04
+**Version:** 1.1.0
 **Auteur:** The Bearded CTO

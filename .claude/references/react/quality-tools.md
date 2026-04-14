@@ -7,6 +7,7 @@
 ```bash
 npm install -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
 npm install -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh
+npm install -D eslint-plugin-react-compiler
 npm install -D eslint-plugin-jsx-a11y
 npm install -D eslint-plugin-import eslint-import-resolver-typescript
 npm install -D eslint-config-prettier
@@ -30,6 +31,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
+    'plugin:react-compiler/recommended',
     'plugin:jsx-a11y/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
@@ -50,6 +52,7 @@ module.exports = {
     'react',
     'react-hooks',
     'react-refresh',
+    'react-compiler',
     '@typescript-eslint',
     'jsx-a11y',
     'import',

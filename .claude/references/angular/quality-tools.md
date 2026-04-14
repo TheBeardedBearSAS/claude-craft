@@ -1,5 +1,7 @@
 # Angular Quality Tools
 
+**Version documentée :** Angular 20 LTS (recommandé production) / Angular 21 (latest)
+
 ## Static Analysis
 
 ### TypeScript Strict Mode

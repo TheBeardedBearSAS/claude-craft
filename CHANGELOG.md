@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.29.0] - 2026-04-14
+
+### Changed
+
+- **Framework versions alignment (2026-04 freshness audit)** -- All 10 technology stacks and transverse rules updated to match April 2026 stable releases
+  - **Symfony** : PHP 8.5 → PHP 8.4+ (corrected prerequisite; added JsonStreamer, JsonPath, ObjectMapper, Wizard Forms patterns)
+  - **Angular** : 19.x → **20 LTS (or 21)** with zoneless by default, `httpResource`, Signal Forms, `afterNextRender`/`PendingTasks`
+  - **React Native** : 0.76+ → **0.85** (New Architecture); Reanimated 3 → **4.x** mandatory; Bridge legacy removed, TurboModules, Shared Animation Backend
+  - **PHP** : Pest 3 → **Pest 4.5** (browser testing), PHPStan Level 9 → **Level 10**, documented Property Hooks and Asymmetric Visibility (PHP 8.4)
+  - **Laravel** : 12.x → **13.x** with AI SDK, Vector Search (pgvector/RAG), Passkey Authentication, Pest 3 Mutation Testing, Arch Presets
+  - **Flutter** : 3.38/Dart 3.10 → **3.41/Dart 3.11** with Riverpod 3 Mutations API, BLoC v9, Impeller by default, `dart:js_interop`
+  - **Python** : 3.13+ → **3.14+** with free-threading, JIT, PEP 649 deferred annotations, pytest-asyncio auto mode, Ruff 0.8
+  - **React** : Documented **React Compiler 1.0** (auto-memoization), Server Components, `use()` Hook, `useOptimistic`
+
+### Added
+
+- **Security -- OWASP Top 10:2025** -- New categories (Software Supply Chain Failures, Mishandling of Exceptional Conditions), SSRF consolidated into Broken Access Control
+- **Supply chain security** -- SLSA 1.0, SBOM (SPDX 3/CycloneDX), Sigstore keyless signing, reproducible builds
+- **Modern auth/crypto patterns** -- EdDSA (Ed25519) preferred for JWT, DPoP (RFC 9449), Argon2id with OWASP 2026 params (128 MiB RAM, t=3-5, p=1), HTTP-only cookies
+- **Cross-origin security headers** -- COOP, COEP, CORP, Permissions-Policy, CSP Level 3
+- **Testing transverse 2026** -- Vitest 4 Browser Mode, Playwright component testing, Pest 4 browser testing, mutation testing (Stryker/Infection/Mutmut), property-based testing (fast-check, Hypothesis)
+- **Docker/K8s 2026** -- Compose Spec v5 "Mont Blanc" (dropped `version:` field), BuildKit cache/secret mounts, distroless/Chainguard images, Kubernetes 1.35, Gateway API v1.4+, sidecar-less architectures (Istio Ambient, Cilium)
+- **OpenAPI 3.0 → 3.2** -- JSON Schema 2020-12, tag metadata, streaming (SSE/JSON Lines), OAuth 2.0 device flow
+- **Architecture principles 2026** -- Cognitive Complexity (< 7-10) as primary metric, Vertical Slice Architecture, Modular Monolith as pragmatic alternatives
+- **ADR tooling** -- Log4brains (CLI + web + diagrams), adr-log (policy enforcement), ADR Manager VS Code, AI generators
+- **Multitenant tiered approach** -- Tier 1 shared schema, Tier 2 dedicated schema, Tier 3 dedicated DB; RBAC/ABAC per tenant; field-level encryption
+- **CQRS** -- "When NOT to use CQRS" section with trade-offs
+- **Async patterns** -- Competing Consumers (Symfony Messenger), Lifecycle Tracking (Laravel), Ecotone framework-agnostic abstraction
+- **Infrastructure versions pinned** -- FrankenPHP 1.12.1 (Worker Mode, HTTP/3), PgBouncer 1.25.1 (prepared statements), OpenTofu 1.11.6, Ansible-core 2.20.4, Coolify v4.0.0-beta.470
+- **Hetzner Cloud migration** -- `datacenter` → `location` across all 30 Hcloud docs (5 languages) with mandatory-migration warning before 2026-07-01
+
+### Fixed
+
+- **Docker Compose** -- Removed obsolete `version: '3.8'` in `.claude/references/symfony/docker.md`
+- **Hadolint** -- Pinned to `hadolint/hadolint:v2.12.0` instead of unpinned image
+
 ## [7.28.0] - 2026-04-14
 
 ### Added

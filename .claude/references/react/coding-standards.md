@@ -153,6 +153,37 @@ const renderState = (state: AsyncState) => {
 };
 ```
 
+## React Compiler 1.0 — Configuration
+
+### Installation
+
+**React Compiler 1.0** (stable depuis octobre 2025, compatible React 17+) optimise automatiquement les composants. **Plus besoin de `useMemo`, `useCallback`, ou `React.memo` dans la majorité des cas.**
+
+```bash
+npm install babel-plugin-react-compiler
+npm install -D eslint-plugin-react-compiler
+```
+
+**Vite (vite.config.ts) :**
+```typescript
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: ['babel-plugin-react-compiler']
+      }
+    })
+  ]
+});
+```
+
+Source : [react.dev/blog/2025/10/07/react-compiler-1](https://react.dev/blog/2025/10/07/react-compiler-1)
+
+---
+
 ## ESLint Configuration
 
 ### Installation
@@ -160,6 +191,7 @@ const renderState = (state: AsyncState) => {
 ```bash
 npm install -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
 npm install -D eslint-plugin-react eslint-plugin-react-hooks
+npm install -D eslint-plugin-react-compiler
 npm install -D eslint-plugin-jsx-a11y eslint-plugin-import
 npm install -D eslint-config-prettier
 ```
@@ -181,6 +213,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
+    'plugin:react-compiler/recommended',
     'plugin:jsx-a11y/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
@@ -195,7 +228,7 @@ module.exports = {
       jsx: true
     }
   },
-  plugins: ['react', 'react-hooks', '@typescript-eslint', 'jsx-a11y', 'import'],
+  plugins: ['react', 'react-hooks', 'react-compiler', '@typescript-eslint', 'jsx-a11y', 'import'],
   settings: {
     react: {
       version: 'detect'

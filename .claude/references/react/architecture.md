@@ -353,6 +353,105 @@ export const FormField: FC<FormFieldProps> = ({
 };
 ```
 
+## React Compiler 1.0 — Auto-Memoization
+
+### Vue d'ensemble
+
+**React Compiler 1.0** (stable depuis octobre 2025, compatible React 17+) optimise automatiquement les composants en memoïsant les valeurs et callbacks. **Plus besoin de `useMemo`, `useCallback`, ou `React.memo` dans la majorité des cas.**
+
+Source : [react.dev/blog/2025/10/07/react-compiler-1](https://react.dev/blog/2025/10/07/react-compiler-1)
+
+### Installation et configuration
+
+```bash
+npm install babel-plugin-react-compiler
+```
+
+**Vite (vite.config.ts) :**
+```typescript
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: ['babel-plugin-react-compiler']
+      }
+    })
+  ]
+});
+```
+
+**Next.js (next.config.mjs) :**
+```javascript
+const nextConfig = {
+  experimental: {
+    reactCompiler: true
+  }
+};
+export default nextConfig;
+```
+
+### Patterns optimisés automatiquement
+
+#### Avant (React 18)
+```tsx
+// ❌ Memoization manuelle obligatoire
+const ExpensiveList = ({ items, filter }) => {
+  const filteredItems = useMemo(
+    () => items.filter(item => item.status === filter),
+    [items, filter]
+  );
+
+  const handleClick = useCallback((id) => {
+    console.log('Clicked:', id);
+  }, []);
+
+  return <ItemList items={filteredItems} onClick={handleClick} />;
+};
+
+const ItemList = React.memo(({ items, onClick }) => {
+  return items.map(item => <Item key={item.id} item={item} onClick={onClick} />);
+});
+```
+
+#### Après (React Compiler 1.0)
+```tsx
+// ✅ Auto-memoization par le compilateur
+const ExpensiveList = ({ items, filter }) => {
+  // filteredItems est automatiquement memoïsé
+  const filteredItems = items.filter(item => item.status === filter);
+
+  // handleClick est automatiquement memoïsé
+  const handleClick = (id) => {
+    console.log('Clicked:', id);
+  };
+
+  return <ItemList items={filteredItems} onClick={handleClick} />;
+};
+
+// Plus besoin de React.memo si le composant reçoit des props stables
+const ItemList = ({ items, onClick }) => {
+  return items.map(item => <Item key={item.id} item={item} onClick={onClick} />);
+};
+```
+
+Source : [dev.to/jay_sarvaiya_reactjs/react-19-best-practices-write-clean-modern-and-efficient-react-code-1beb](https://dev.to/jay_sarvaiya_reactjs/react-19-best-practices-write-clean-modern-and-efficient-react-code-1beb)
+
+### Quand garder la memoization manuelle
+
+Le compilateur n'optimise pas tous les cas. Garder `useMemo` / `useCallback` si :
+1. **Calculs très coûteux** (> 50ms) avec dépendances rares
+2. **Références d'identité critiques** pour des bibliothèques tierces
+3. **Désactivation explicite du compilateur** (voir eslint-plugin-react-compiler)
+
+### Vérification de l'optimisation
+
+Utiliser **React DevTools Profiler** pour valider que les re-renders inutiles sont évités.
+
+---
+
 ## Container/Presentational Pattern
 
 ### Logic/Presentation Separation

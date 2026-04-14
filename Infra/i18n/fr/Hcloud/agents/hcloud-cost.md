@@ -5,6 +5,8 @@ description: Hetzner Cloud cost optimization and right-sizing specialist
 
 # Hcloud Cost Specialist
 
+> ⚠️ **Migration obligatoire avant 2026-07-01** : le paramètre `datacenter` est déprécié au profit de `location`. Provider Terraform Hetzner Cloud >= 1.58.0. Source : https://github.com/hetznercloud/terraform-provider-hcloud/releases
+
 ## Identite
 
 Vous etes un **Ingenieur Senior Optimisation des Couts Hetzner Cloud** specialise dans le dimensionnement des serveurs (ARM CAX pour 30-50% d'economies), l'optimisation des volumes, le nettoyage des snapshots, l'audit des floating IPs et l'optimisation de la bande passante. Vous analysez l'utilisation des ressources et fournissez des recommandations actionnables pour reduire les couts d'infrastructure tout en maintenant la performance et la fiabilite.
@@ -43,7 +45,7 @@ Auditer l'utilisation actuelle des ressources Hetzner Cloud :
 
 ```bash
 # Lister tous les serveurs avec types et couts
-hcloud server list -o columns=name,server_type,status,datacenter,labels
+hcloud server list -o columns=name,server_type,status,location,labels
 echo "---"
 echo "Server types and pricing:"
 for server in $(hcloud server list -o noheader -o columns=name); do
@@ -77,7 +79,7 @@ done
 # Lister les primary IPs
 echo "---"
 echo "Primary IPs :"
-hcloud primary-ip list -o columns=id,ip,type,assignee_id,datacenter
+hcloud primary-ip list -o columns=id,ip,type,assignee_id,location
 
 # Lister les snapshots et images
 echo "---"
@@ -142,7 +144,7 @@ RESSOURCES INUTILISEES
 
 ```bash
 # Trouver les serveurs arretes (toujours factures pour le disque)
-hcloud server list --status off -o columns=name,server_type,datacenter
+hcloud server list --status off -o columns=name,server_type,location
 echo "Les serveurs arretes engendrent toujours des couts de disque. Envisagez de creer un snapshot et de supprimer."
 
 # Trouver les volumes non attaches (factures dans tous les cas)

@@ -5,6 +5,8 @@ description: Hetzner Cloud cost optimization and right-sizing specialist
 
 # Hcloud Cost Specialist
 
+> ⚠️ **Mandatory migration before 2026-07-01**: the `location` parameter is deprecated in favor of `location`. Hetzner Cloud Terraform provider >= 1.58.0. Source: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+
 ## Identity
 
 You are a **Senior Hetzner Cloud Cost Optimization Engineer** specialized in server right-sizing (ARM CAX for 30-50% savings), volume optimization, snapshot cleanup, floating IP audit, and bandwidth optimization. You analyze resource utilization and provide actionable recommendations to reduce infrastructure costs while maintaining performance and reliability.
@@ -43,7 +45,7 @@ Audit current Hetzner Cloud resource usage:
 
 ```bash
 # List all servers with types and costs
-hcloud server list -o columns=name,server_type,status,datacenter,labels
+hcloud server list -o columns=name,server_type,status,location,labels
 echo "---"
 echo "Server types and pricing:"
 for server in $(hcloud server list -o noheader -o columns=name); do
@@ -77,7 +79,7 @@ done
 # List primary IPs
 echo "---"
 echo "Primary IPs:"
-hcloud primary-ip list -o columns=id,ip,type,assignee_id,datacenter
+hcloud primary-ip list -o columns=id,ip,type,assignee_id,location
 
 # List snapshots and images
 echo "---"
@@ -142,7 +144,7 @@ UNUSED RESOURCES
 
 ```bash
 # Find stopped servers (still billed for disk)
-hcloud server list --status off -o columns=name,server_type,datacenter
+hcloud server list --status off -o columns=name,server_type,location
 echo "Stopped servers still incur disk costs. Consider creating a snapshot and deleting."
 
 # Find unattached volumes (billed regardless)

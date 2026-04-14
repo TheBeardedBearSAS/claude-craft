@@ -1,8 +1,10 @@
 # Angular Security Best Practices
 
+**Version documentée :** Angular 20 LTS (recommandé production) / Angular 21 (latest)
+
 ## Overview
 
-Angular provides built-in security features to protect against common vulnerabilities. This guide covers security best practices for Angular applications.
+Angular fournit des fonctionnalités de sécurité intégrées pour protéger contre les vulnérabilités courantes. Ce guide couvre les best practices de sécurité pour les applications Angular.
 
 ## XSS (Cross-Site Scripting) Protection
 

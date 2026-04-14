@@ -1,4 +1,6 @@
-# Laravel Architecture Standards
+# Laravel 13 Architecture Standards
+
+**Source :** https://laravel.com/docs/13.x/architecture
 
 ## Clean Architecture Principles
 
@@ -642,3 +644,6 @@ class OrderResource extends JsonResource
 - [ ] API Resources handle response transformation
 - [ ] Events used for cross-cutting concerns
 - [ ] Service Providers wire up dependencies
+- [ ] AI SDK for LLM integrations (https://laravel.com/docs/13.x/ai-sdk)
+- [ ] Vector Search for semantic search (https://laravel.com/docs/13.x/vector-search)
+- [ ] Passkey for passwordless authentication (https://laravel.com/docs/13.x/passkey)

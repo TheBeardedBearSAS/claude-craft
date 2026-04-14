@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 7.28.0 | **Languages:** en, fr, es, de, pt
+**Version:** 7.29.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 18 technology stacks, 63 agents, 204 commands across 26 namespaces, and BMAD v6 project management.
 
@@ -10,16 +10,16 @@ A comprehensive AI-assisted development framework for Claude Code with 18 techno
 
 | Stack | Version | Architecture | Key Patterns |
 |-------|---------|--------------|--------------|
-| **.NET / C#** | 10 LTS / C# 14 | Clean Architecture | CQRS, MediatR, EF Core |
-| **Symfony / PHP** | 8.0 / PHP 8.5 | Clean Architecture | DDD, Hexagonal, API Platform |
-| **Flutter / Dart** | 3.38 / Dart 3.10 | Clean Architecture | BLoC, Riverpod, Material 3 |
-| **React** | 19.x | Feature-based | Hooks, Zustand, React Query |
-| **React Native** | 0.76+ | Feature-based | Navigation 7, Reanimated 3 |
-| **Angular** | 19.x | Domain-driven | Signals, Standalone, RxJS |
-| **Vue.js** | 3.5+ | Composition API | Pinia, Vitest, TypeScript |
-| **Laravel** | 12.x / PHP 8.5 | Clean Architecture | Actions, Pest PHP, Sanctum |
-| **Python** | 3.13+ | Clean Architecture | FastAPI, async/await, Pydantic |
-| **PHP** | 8.5 | Clean Architecture | PSR-12, PHPStan, Pest PHP |
+| **.NET / C#** | 10 LTS / C# 14 | Clean Architecture | CQRS, MediatR (ou alternative), EF Core |
+| **Symfony / PHP** | 8.0 / PHP 8.4+ | Clean Architecture | DDD, Hexagonal, API Platform, JsonStreamer |
+| **Flutter / Dart** | 3.41 / Dart 3.11 | Clean Architecture | BLoC v9, Riverpod 3, Material 3, Impeller |
+| **React** | 19.2 + Compiler 1.0 | Feature-based | Hooks, Zustand, React Query, Server Components |
+| **React Native** | 0.85 (New Architecture) | Feature-based | Navigation 7, Reanimated 4, TurboModules |
+| **Angular** | 20 LTS (ou 21) | Domain-driven | Signals, Standalone, Zoneless, httpResource |
+| **Vue.js** | 3.5+ (3.6 beta Vapor) | Composition API | Pinia, Vitest, TypeScript, Alien Signals |
+| **Laravel** | 13.x / PHP 8.5 | Clean Architecture | Actions, Pest 4, Sanctum, AI SDK, Passkey |
+| **Python** | 3.14+ | Clean Architecture / Hexagonal | FastAPI, async/await, Pydantic, free-threading, JIT |
+| **PHP** | 8.5 (Property Hooks 8.4+) | Clean Architecture | PSR-12, PHPStan Level 10, Pest 4 |
 
 ### Technology Quick Links
 
@@ -42,7 +42,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Commands (26 namespaces, 204 commands)
 
-Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` | Infra: `/docker:*`, `/coolify:*`, `/kubernetes:*`, `/opentofu:*`, `/ansible:*`, `/hcloud:*`, `/pgbouncer:*`, `/frankenphp:*` | Project: `/sprint:*`, `/gate:*`, `/project:*`
+Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` | Infra (via `@devops-engineer`): Docker 29.4.0, Coolify v4.0.0-beta.470, K8s 1.35.3, OpenTofu 1.11.6, Ansible 2.20.4, FrankenPHP 1.12.1, PgBouncer 1.25.1 | Project: `/sprint:*`, `/gate:*`, `/project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 

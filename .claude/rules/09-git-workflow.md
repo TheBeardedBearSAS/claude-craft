@@ -51,6 +51,31 @@ main (production-ready)
 5. **CI doit passer avant merge**
 6. **Squash merge pour historique propre**
 
+### Pre-Release Strategy (SemVer)
+
+Avant une release en production, utiliser des pre-releases pour validation :
+
+| Version | Quand | Exemple |
+|---------|-------|---------|
+| **alpha** | Développement initial, features incomplètes | `2.0.0-alpha.1` |
+| **beta** | Features complètes, testing interne | `2.0.0-beta.1` |
+| **rc** | Release Candidate, prêt pour production | `2.0.0-rc.1` |
+| **stable** | Production | `2.0.0` |
+
+**Workflow :**
+```
+feature/add-payment
+  ├─ 2.0.0-alpha.1 (branche develop)
+  ├─ 2.0.0-beta.1 (tests QA)
+  ├─ 2.0.0-rc.1 (staging)
+  └─ 2.0.0 (main → production)
+```
+
+**Règles SemVer :**
+- **MAJOR** (X.0.0) : Breaking changes
+- **MINOR** (x.Y.0) : Nouvelles features, backward-compatible
+- **PATCH** (x.y.Z) : Bug fixes uniquement
+
 ---
 
 ## Conventional Commits
@@ -231,6 +256,6 @@ Toujours partir de `main` à jour : `git checkout main && git pull origin main`
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
-**Version:** 1.0.0
+**Date de dernière mise à jour:** 2026-04
+**Version:** 1.1.0
 **Auteur:** The Bearded CTO

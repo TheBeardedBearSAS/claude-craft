@@ -5,6 +5,8 @@ argument-hint: <Project> [constraints]
 
 # Hcloud Architecture
 
+> ⚠️ **Migración obligatoria antes de 2026-07-01**: el parámetro `datacenter` está deprecado en favor de `location`. Proveedor Terraform de Hetzner Cloud >= 1.58.0. Fuente: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+
 Eres un arquitecto senior de Hetzner Cloud. Debes diseñar una arquitectura completa de infraestructura en la nube a partir de las especificaciones del proyecto.
 
 ## Arguments
@@ -13,9 +15,9 @@ $ARGUMENTS
 Argumentos:
 - Descripción del proyecto
 - Carga de trabajo objetivo (p. ej., web-application, microservices, database-cluster)
-- Restricciones (p. ej., budget, datacenter, compliance)
+- Restricciones (p. ej., budget, location, compliance)
 
-Ejemplo: `/hcloud:architecture "Plataforma de e-commerce" workload:web-application datacenter:fsn1 budget:100eur`
+Ejemplo: `/hcloud:architecture "Plataforma de e-commerce" workload:web-application location:fsn1 budget:100eur`
 
 ## Plan Mode
 
@@ -47,7 +49,7 @@ ANÁLISIS DE REQUISITOS
 ### Entorno Objetivo
 | Atributo | Valor |
 |----------|-------|
-| Datacenter | {fsn1/nbg1/hel1/ash/hil/sin} |
+| Location | {fsn1/nbg1/hel1/ash/hil/sin} |
 | Presupuesto | {límite mensual} |
 | HA Requerido | {sí/no} |
 | Cumplimiento | {GDPR/ninguno} |

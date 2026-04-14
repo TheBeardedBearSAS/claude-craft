@@ -1,12 +1,12 @@
-# Outils de qualité - Symfony 8.x / PHP 8.5
+# Outils de qualité - Symfony 8.x / PHP 8.4+
 
 ## Overview
 
 L'utilisation des outils de qualité est **OBLIGATOIRE** pour garantir un code maintenable, sûr et performant.
 
 **Versions 2026:**
-- PHP 8.5.x
-- Symfony 8.0.x (ou 7.4 LTS)
+- PHP 8.4+ (Symfony 8.0 requiert PHP 8.2+, mais 8.4 recommandé pour Property Hooks et Lazy Objects)
+- Symfony 8.0.x stable 8.0.8 (mars 2026) ou 7.4 LTS — https://symfony.com/releases/8.0
 - PHPStan 2.1.x
 - Rector 2.3.x
 - Deptrac v4.x
@@ -430,9 +430,9 @@ return RectorConfig::configure()
         PHPUnitSetList::PHPUNIT_110,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
 
-        // ✅ PHP 8.5
-        LevelSetList::UP_TO_PHP_85,
-        SetList::PHP_85,
+        // ✅ PHP 8.4 (8.5 en beta, ne pas utiliser en prod)
+        LevelSetList::UP_TO_PHP_84,
+        SetList::PHP_84,
     ])
     ->withImportNames(
         importNames: true,

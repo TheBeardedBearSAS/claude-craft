@@ -1,10 +1,12 @@
 # Angular Architecture - Principles and Organization
 
+**Version documentée :** Angular 20 LTS (recommandé production) / Angular 21 (latest)
+
 ## Fundamental Architectural Principles
 
-### 1. Standalone Components (Angular 14+)
+### 1. Standalone Components (Angular 14+, par défaut Angular 17+)
 
-Angular now defaults to **standalone components**, eliminating the need for NgModules in most cases.
+Angular utilise par défaut les **standalone components**, éliminant le besoin de NgModules dans la plupart des cas.
 
 ```typescript
 // ✅ Modern - Standalone Component
@@ -24,9 +26,9 @@ export class UserProfileComponent {}
 export class UserModule {}
 ```
 
-### 2. Signals for Reactive State (Angular 16+)
+### 2. Signals for Reactive State (Angular 16+, mature en v20+)
 
-Use **Signals** as the primary state management primitive:
+Utilisez **Signals** comme primitive de gestion d'état principale (alternative moderne aux BehaviorSubject pour l'état synchrone) :
 
 ```typescript
 import { signal, computed, effect } from '@angular/core';
@@ -461,17 +463,129 @@ Use new control flow syntax (Angular 17+):
 </ng-container>
 ```
 
+## Angular 20 LTS / 21 — Nouvelles Fonctionnalités
+
+### Zoneless Change Detection (v21 par défaut)
+
+Angular 21 active zoneless par défaut, éliminant la dépendance à Zone.js (~33 KB économisés) et améliorant les performances de rendu de 30-40% (source : https://blog.angular.dev/zoneless-change-detection-f1622c3c5c51).
+
+```typescript
+// app.config.ts (Angular 21)
+import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+
+export const appConfig = {
+  providers: [
+    provideExperimentalZonelessChangeDetection()
+  ]
+};
+```
+
+**Migration requise :** tous les états locaux doivent utiliser Signals. Les event bindings continuent de fonctionner automatiquement.
+
+### Resource API (stable v20+)
+
+La **Resource API** simplifie le chargement de données avec états automatiques (loading, error, data).
+
+```typescript
+import { httpResource } from '@angular/core';
+import { inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Component({...})
+export class UserListComponent {
+  private http = inject(HttpClient);
+
+  // Déclaratif : httpResource gère automatiquement loading, error, data
+  users = httpResource({
+    url: '/api/users',
+    loader: () => this.http.get<User[]>('/api/users')
+  });
+
+  // Accès dans le template
+  // @if (users.isLoading()) { <spinner /> }
+  // @if (users.error()) { <error /> }
+  // @for (user of users.value(); track user.id) { ... }
+}
+```
+
+**Streaming resources** (WebSockets, SSE) : `resource()` avec abortable reads pour les flux temps réel.
+
+Source : https://blog.angular.dev/announcing-angular-v20-b5c9c06cf301
+
+### Signal Forms (v21 expérimental)
+
+Alternative aux Reactive Forms avec APIs signales natives.
+
+```typescript
+import { signalForm, signalControl } from '@angular/forms';
+
+@Component({...})
+export class UserFormComponent {
+  form = signalForm({
+    name: signalControl(''),
+    email: signalControl('')
+  });
+
+  // Accès réactif
+  isValid = computed(() => this.form.valid());
+}
+```
+
+Source : https://www.infoq.com/news/2025/11/angular-21-released/
+
+### afterNextRender() stable (v20)
+
+Hook de cycle de vie pour le code browser-only (meilleure intégration SSR que `afterRender()` conditionnel).
+
+```typescript
+import { afterNextRender } from '@angular/core';
+
+constructor() {
+  afterNextRender(() => {
+    // Code exécuté uniquement côté client après le premier rendu
+    console.log('Document width:', document.body.clientWidth);
+  });
+}
+```
+
+### PendingTasks API (v20)
+
+Gestion du state de chargement global. SSR amélioration : bloque l'hydration pendant les tâches critiques.
+
+```typescript
+import { inject } from '@angular/core';
+import { PendingTasks } from '@angular/core';
+
+private pendingTasks = inject(PendingTasks);
+
+async loadData() {
+  const taskId = this.pendingTasks.add();
+  try {
+    await this.fetchData();
+  } finally {
+    this.pendingTasks.remove(taskId);
+  }
+}
+```
+
 ## Conclusion
 
-Angular architecture priorities for 2026:
+Angular architecture priorities for 2026 (v20 LTS / v21):
 
-1. **Standalone Components**: Default for all new components
-2. **Signals**: Primary reactive primitive
-3. **OnPush**: Default change detection strategy
-4. **Domain-Driven Structure**: Organize by feature
-5. **Smart/Dumb Pattern**: Clear separation of concerns
-6. **Lazy Loading**: Routes and components
-7. **Typed Forms**: Full type safety
-8. **Modern Control Flow**: @if, @for, @switch
+1. **Standalone Components**: Par défaut pour tous les nouveaux composants
+2. **Signals**: Primitive réactive principale (état synchrone)
+3. **Zoneless (v21)**: Migration recommandée pour +30-40% performance
+4. **httpResource()**: Chargement déclaratif avec états automatiques
+5. **OnPush**: Stratégie de change detection par défaut
+6. **Domain-Driven Structure**: Organisation par feature
+7. **Smart/Dumb Pattern**: Séparation claire des responsabilités
+8. **Lazy Loading**: Routes et composants
+9. **Typed Forms**: Type safety complète (ou Signal Forms en v21)
+10. **Modern Control Flow**: @if, @for, @switch
 
-**Golden rule**: Components should be small, focused, and easy to test.
+**Golden rule**: Les composants doivent être petits, focalisés et faciles à tester.
+
+**Sources :** 
+- Angular v20 : https://blog.angular.dev/announcing-angular-v20-b5c9c06cf301
+- Angular v21 : https://www.infoq.com/news/2025/11/angular-21-released/
+- Zoneless : https://blog.angular.dev/zoneless-change-detection-f1622c3c5c51

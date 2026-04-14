@@ -1,13 +1,18 @@
-# Laravel Testing Standards
+# Laravel 13 Testing Standards
+
+**Source :** https://laravel.com/docs/13.x/testing | https://pestphp.com/docs/pest3-now-available
 
 ## Testing Frameworks
 
-### Pest PHP (Recommended)
+### Pest 3 (Recommended) avec Mutation Testing
+
+**Pest 3** introduit le Mutation Testing natif pour garantir que les tests tuent réellement les bugs (https://pestphp.com/docs/pest3-now-available).
 
 ```bash
-# Install Pest
+# Install Pest 3
 composer require pestphp/pest --dev --with-all-dependencies
 composer require pestphp/pest-plugin-laravel --dev
+composer require pestphp/pest-plugin-mutate --dev
 php artisan pest:install
 ```
 
@@ -410,12 +415,20 @@ describe('prune:orders command', function () {
 });
 ```
 
-## Architecture Tests
+## Architecture Tests avec Pest Arch Presets
+
+**Laravel 13** introduit des **Arch Presets** préconfigurés pour Laravel (https://laravel.com/docs/13.x/testing#architecture-presets).
 
 ```php
 <?php
 // tests/Architecture/ArchitectureTest.php
 
+use Pest\Arch\Preset;
+
+// Utiliser les presets Laravel (nouveauté Laravel 13)
+uses(Preset::laravel());
+
+// Tests personnalisés supplémentaires
 arch('Domain has no external dependencies')
     ->expect('App\Domain')
     ->toOnlyUse([
@@ -450,6 +463,20 @@ arch('Strict types declared')
     ->expect('App')
     ->toUseStrictTypes();
 ```
+
+## Mutation Testing avec Pest 3
+
+**Nouveauté Pest 3 :** Mutation Testing natif (https://pestphp.com/docs/mutation-testing).
+
+```bash
+# Lancer le mutation testing
+./vendor/bin/pest --mutate
+
+# Avec minimum de mutation score
+./vendor/bin/pest --mutate --min=80
+```
+
+**Principe :** Pest 3 mute le code (change les opérateurs, supprime des lignes) et vérifie que les tests échouent. Si un test passe sur du code muté, le test est insuffisant.
 
 ## Model Factories
 
@@ -517,9 +544,10 @@ class OrderFactory extends Factory
 - [ ] Unit tests for Services with mocked dependencies
 - [ ] Feature tests for all API endpoints
 - [ ] Feature tests for Jobs and Commands
-- [ ] Architecture tests for layer boundaries
+- [ ] Architecture tests for layer boundaries (Pest Arch Presets Laravel 13)
 - [ ] Factories for all models
 - [ ] RefreshDatabase for feature tests
 - [ ] Event/Queue faking where appropriate
 - [ ] Coverage > 80%
 - [ ] No debugging statements in code
+- [ ] Mutation Testing score >= 80% (Pest 3)

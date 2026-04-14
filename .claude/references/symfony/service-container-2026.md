@@ -7,6 +7,12 @@ Le Service Container de Symfony 8.0 apporte des améliorations majeures pour 202
 - **Lazy Objects natifs PHP 8.4**
 - **AsDecorator amélioré**
 - **Attributed Services**
+- **Configuration PHP Pure** (préférée vs YAML/XML pour bundles)
+- **Console Invokables** (attributs PHP)
+
+**Sources:**
+- https://symfony.com/releases/8.0
+- https://symfony.com/blog/new-in-symfony-8-0-wizard-forms
 
 ## Autowiring Secure by Default
 
@@ -468,13 +474,177 @@ php bin/console debug:container --show-private --tag=container.decorator
 php bin/console debug:container --show-private --parameter=lazy
 ```
 
+## Configuration PHP Pure (Recommandé 2026)
+
+### Préférer PHP vs YAML/XML pour Bundles
+
+```php
+<?php
+// config/services.php — Type-safe, autocomplétion IDE
+
+declare(strict_types=1);
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $container): void {
+    $services = $container->services()
+        ->defaults()
+        ->autowire()
+        ->autoconfigure()
+        ->private();  // Secure by default
+
+    // Auto-enregistrement namespaces
+    $services->load('App\\', '../src/')
+        ->exclude([
+            '../src/Domain/Entity/',
+            '../src/Application/Dto/',
+            '../src/Kernel.php',
+        ]);
+
+    // Binding explicite interfaces
+    $services->set(OrderRepositoryInterface::class)
+        ->class(DoctrineOrderRepository::class);
+
+    // Configuration avec types
+    $services->set(MailerService::class)
+        ->arg('$apiKey', '%env(MAILER_API_KEY)%')
+        ->arg('$timeout', 30);
+};
+```
+
+**Avantages:**
+- Vérification types IDE/PHPStan
+- Refactoring sûr
+- Pas de YAML parsing runtime
+
+### Console Commands Invokables
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Infrastructure\Console;
+
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(
+    name: 'app:import-orders',
+    description: 'Import orders from JSON file',
+)]
+final readonly class ImportOrdersCommand
+{
+    public function __construct(
+        private ImportOrdersUseCase $useCase,
+    ) {}
+
+    /**
+     * Pattern invokable — pas besoin extends Command.
+     */
+    public function __invoke(InputInterface $input, OutputInterface $output): int
+    {
+        $result = $this->useCase->execute();
+        
+        $output->writeln(sprintf('Imported %d orders', $result->count));
+        
+        return self::SUCCESS;
+    }
+}
+```
+
+**Avantages:**
+- Pas de couplage à `Command`
+- Testable sans framework
+- Configuration via attributs
+
+## Wizard Forms Component (Symfony 8.0)
+
+### Formulaires Multi-Étapes avec State Management
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Application\Wizard;
+
+use Symfony\Component\Form\Wizard\FormWizard;
+use Symfony\Component\Form\Wizard\Step;
+
+final class OrderWizard extends FormWizard
+{
+    protected function configure(): void
+    {
+        $this
+            ->addStep('customer', new Step(
+                formType: CustomerType::class,
+                label: 'Informations Client',
+            ))
+            ->addStep('products', new Step(
+                formType: ProductSelectionType::class,
+                label: 'Sélection Produits',
+            ))
+            ->addStep('payment', new Step(
+                formType: PaymentType::class,
+                label: 'Paiement',
+            ))
+            ->onComplete(function (array $data) {
+                // Logique finale après toutes les étapes
+                $this->orderService->createOrder($data);
+            });
+    }
+}
+```
+
+### Controller Wizard
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Presentation\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+final class OrderController extends AbstractController
+{
+    #[Route('/order/wizard', name: 'order_wizard')]
+    public function wizard(Request $request): Response
+    {
+        $wizard = $this->createWizard(OrderWizard::class);
+        
+        $wizard->handleRequest($request);
+        
+        if ($wizard->isCompleted()) {
+            $this->addFlash('success', 'Commande créée avec succès');
+            return $this->redirectToRoute('order_confirmation');
+        }
+        
+        return $this->render('order/wizard.html.twig', [
+            'wizard' => $wizard,
+            'current_step' => $wizard->getCurrentStep(),
+            'progress' => $wizard->getProgress(), // 0-100%
+        ]);
+    }
+}
+```
+
+**Source:** https://symfony.com/blog/new-in-symfony-8-0-wizard-forms
+
 ## Ressources
 
 - [Symfony DI Component](https://symfony.com/doc/8.0/components/dependency_injection.html)
 - [PHP 8.4 Lazy Objects](https://wiki.php.net/rfc/lazy-objects)
+- [Symfony 8.0 Wizard Forms](https://symfony.com/blog/new-in-symfony-8-0-wizard-forms)
 - [Decorator Pattern](https://refactoring.guru/design-patterns/decorator)
 
 ---
 
-**Date de dernière mise à jour:** 2026-01-29
-**Version:** 1.0.0
+**Date de dernière mise à jour:** 2026-04-14
+**Version:** 1.1.0

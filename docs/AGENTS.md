@@ -407,7 +407,7 @@ Focuses on:
 - Testing with Jasmine/Karma
 
 ```
-@angular-reviewer Review this component for Angular 19 best practices
+@angular-reviewer Review this component for Angular 20 LTS (ou 21) best practices
 @angular-reviewer Check this signal implementation
 ```
 

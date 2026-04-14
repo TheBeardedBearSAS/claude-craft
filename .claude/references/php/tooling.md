@@ -53,12 +53,13 @@ composer validate
         "psr/container": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.0",
+        "phpunit/phpunit": "^12.0",
         "phpstan/phpstan": "^2.1",
         "friendsofphp/php-cs-fixer": "^3.0",
         "rector/rector": "^2.3",
         "qossmic/deptrac-shim": "^4.0",
-        "pestphp/pest": "^3.0"
+        "pestphp/pest": "^4.5",
+        "pestphp/pest-plugin-browser": "^4.0"
     },
     "autoload": {
         "psr-4": {
@@ -191,7 +192,7 @@ includes:
 
 parameters:
     phpVersion: 80500
-    level: 9
+    level: 10
 
     paths:
         - src
@@ -204,6 +205,8 @@ parameters:
     checkMissingIterableValueType: true
     checkGenericClassInNonGenericObjectType: true
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkImplicitMixed: true
+    checkBenevolentUnionTypes: true
 
     ignoreErrors:
         # Ignore specific patterns if needed
@@ -214,18 +217,21 @@ parameters:
 
 ### Levels Explained
 
-| Level | Checks |
-|-------|--------|
-| 0 | Basic checks, unknown classes, functions |
-| 1 | Variables, properties types |
-| 2 | Unknown methods on expressions |
-| 3 | Return types, parameter types |
-| 4 | Dead code, unreachable statements |
-| 5 | Argument types in function calls |
-| 6 | Report missing typehints |
-| 7 | Union types, partially wrong types |
-| 8 | Report nullable issues |
-| 9 | Mixed type, strictest level |
+| Level | Checks | Source |
+|-------|--------|--------|
+| 0 | Basic checks, unknown classes, functions | — |
+| 1 | Variables, properties types | — |
+| 2 | Unknown methods on expressions | — |
+| 3 | Return types, parameter types | — |
+| 4 | Dead code, unreachable statements | — |
+| 5 | Argument types in function calls | — |
+| 6 | Report missing typehints | — |
+| 7 | Union types, partially wrong types | — |
+| 8 | Report nullable issues | — |
+| 9 | Mixed type, strictest level (legacy) | — |
+| **10** | **Zero mixed, strict generics, strict comparisons** | [PHPStan 2.0 Blog](https://phpstan.org/blog/phpstan-2-0-released-level-10-elephpants) |
+
+**PHPStan Level 10** (PHPStan 2.0+) : zero `mixed` autorise, typage strict sur les generiques, comparaisons strictes enforces.
 
 ### Commands
 
@@ -369,6 +375,9 @@ vendor/bin/phpunit -v
 
 ## Pest - Modern Testing
 
+> **Version 2026:** Pest 4 integre PHPUnit 12 + browser testing natif (Playwright) + architecture tests ameliores.
+> Sources : [Pest 4 Announcement](https://pestphp.com/docs/pest4-announcement), [PHPUnit 12 Release](https://phpunit.de/announcements/phpunit-12.html)
+
 ### Configuration (pest.php in tests/)
 
 ```php
@@ -378,7 +387,7 @@ declare(strict_types=1);
 
 pest()
     ->parallel()
-    ->in('Unit', 'Integration', 'Functional');
+    ->in('Unit', 'Integration', 'Functional', 'Browser');
 
 uses()
     ->group('unit')
@@ -387,6 +396,54 @@ uses()
 uses()
     ->group('integration')
     ->in('Integration');
+
+uses()
+    ->group('browser')
+    ->in('Browser');
+```
+
+### Pest 4 Browser Testing (Playwright natif)
+
+```php
+<?php
+
+use function Pest\Laravel\browse;
+
+test('user can login', function () {
+    browse(function ($browser) {
+        $browser->visit('/login')
+            ->type('email', 'user@example.com')
+            ->type('password', 'secret')
+            ->press('Login')
+            ->assertPathIs('/dashboard')
+            ->assertSee('Welcome');
+    });
+});
+```
+
+### Architecture Tests (Pest 4 presets ameliores)
+
+```php
+<?php
+
+arch('domain layer has no external dependencies')
+    ->expect('App\Domain')
+    ->not->toUse([
+        'Doctrine',
+        'Symfony',
+        'Laravel',
+    ]);
+
+arch('value objects are readonly')
+    ->expect('App\Domain\ValueObject')
+    ->classes()->toBeReadonly();
+```
+
+### Mutation Testing (Pest 4 + Infection)
+
+```bash
+# Pest 4 integre Infection nativement
+vendor/bin/pest --mutate
 ```
 
 ### Commands
@@ -398,11 +455,17 @@ vendor/bin/pest
 # Run with coverage
 vendor/bin/pest --coverage
 
-# Run in parallel
+# Run in parallel (default in Pest 4)
 vendor/bin/pest --parallel
 
 # Watch mode
 vendor/bin/pest --watch
+
+# Browser tests only
+vendor/bin/pest --group=browser
+
+# Architecture tests only
+vendor/bin/pest --arch
 ```
 
 ## Development Workflow
@@ -567,15 +630,15 @@ npm install -g intelephense
 
 ---
 
-## Tooling Checklist
+## Tooling Checklist (2026)
 
 - [ ] Composer configured with autoload
 - [ ] PHP-CS-Fixer configured (PSR-12 + strict)
-- [ ] PHPStan at level 8+ with strict rules
-- [ ] PHPUnit/Pest configured with coverage
-- [ ] Rector configured for upgrades
+- [ ] PHPStan at **level 10** (PHPStan 2.0+) with strict rules
+- [ ] Pest 4 configured (browser testing, architecture tests, mutation)
+- [ ] Rector configured for PHP 8.5 upgrades
 - [ ] Makefile with common commands
 - [ ] Pre-commit hooks installed
 - [ ] CI/CD pipeline configured
-- [ ] Docker development environment
+- [ ] Docker development environment (PHP 8.5)
 - [ ] Claude Code LSP plugin installed

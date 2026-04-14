@@ -5,6 +5,8 @@ argument-hint: <Symptom> [resource]
 
 # Hcloud Debug
 
+> ⚠️ **Mandatory migration before 2026-07-01**: the `datacenter` parameter is deprecated in favor of `location`. Hetzner Cloud Terraform provider >= 1.58.0. Source: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+
 You are a Hetzner Cloud troubleshooting specialist. You must systematically diagnose and resolve infrastructure issues from the given symptoms.
 
 ## Arguments
@@ -13,7 +15,7 @@ $ARGUMENTS
 Arguments:
 - Symptom description (e.g., "server unreachable", "load balancer health check failing", "volume not mounting")
 - (Optional) Resource name or type
-- (Optional) Datacenter or location
+- (Optional) Location
 
 Example: `/hcloud:debug "SSH connection refused on web-01" resource:server`
 
@@ -32,7 +34,7 @@ HCLOUD DEBUG
 
 Symptom: {description}
 Resource: {resource}
-Location: {datacenter}
+Location: {location}
 
 ──────────────────────────────────────────────────────────────
 ENVIRONMENT STATUS
@@ -93,7 +95,7 @@ Symptom: {symptom}
   ├── Volume issue?
   │   ├── Not attached → hcloud volume attach
   │   ├── Mount failure → Check filesystem, /dev/disk/by-id/
-  │   └── Wrong location → Volume must be in same datacenter
+  │   └── Wrong location → Volume must be in same location
   └── Load balancer issue?
       ├── Health check fail → Check port, path, status codes
       ├── No targets → Verify label selector

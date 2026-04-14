@@ -294,26 +294,81 @@ function handle((A&B)|C $value): void
 
 ### Property Hooks (PHP 8.4)
 
+> **Source:** [PHP 8.4 Property Hooks RFC](https://wiki.php.net/rfc/property-hooks), [PHP Manual](https://www.php.net/manual/en/language.oop5.property-hooks.php)
+
+Les property hooks permettent de definir une logique get/set directement sur les proprietes, simplifiant les Value Objects et entites.
+
 ```php
 <?php
-// PHP 8.4 property hooks
-class User
+// PHP 8.4 property hooks - validation inline
+class Email
 {
-    public string $email {
+    public string $value {
         set {
             if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
                 throw new InvalidArgumentException('Invalid email');
             }
-            $this->email = strtolower($value);
+            $this->value = strtolower($value);
         }
-        get => $this->email;
     }
+
+    public function __construct(string $value) {
+        $this->value = $value; // Validation via hook
+    }
+}
+
+// Virtual property (computed)
+class User
+{
+    public function __construct(
+        public string $firstName,
+        public string $lastName,
+    ) {}
 
     public string $fullName {
         get => $this->firstName . ' ' . $this->lastName;
     }
 }
+
+$user = new User('John', 'Doe');
+echo $user->fullName; // "John Doe" — pas de stockage reel
 ```
+
+### Asymmetric Visibility (PHP 8.4)
+
+> **Source:** [PHP 8.4 Asymmetric Visibility RFC](https://wiki.php.net/rfc/asymmetric-visibility), [PHP Manual](https://www.php.net/manual/en/language.oop5.visibility.php#language.oop5.visibility.asymmetric)
+
+Permet de definir une visibilite differente pour la lecture et l'ecriture (public read, private write).
+
+```php
+<?php
+// Asymmetric visibility - immutabilite renforcee
+final class Money
+{
+    public private(set) int $amount;      // Public read, private write
+    public private(set) string $currency;
+
+    public function __construct(int $amount, string $currency) {
+        $this->amount = $amount;
+        $this->currency = $currency;
+    }
+
+    // Methode metier pour modifier (retourne une nouvelle instance)
+    public function add(self $other): self
+    {
+        if ($this->currency !== $other->currency) {
+            throw new InvalidArgumentException('Currency mismatch');
+        }
+        return new self($this->amount + $other->amount, $this->currency);
+    }
+}
+
+$price = new Money(1000, 'EUR');
+echo $price->amount; // ✅ 1000
+$price->amount = 500; // ❌ Error: Cannot modify readonly property Money::$amount
+```
+
+**Usage recommande :** Value Objects immutables, entites avec encapsulation stricte.
 
 ## Type Declarations
 
@@ -626,7 +681,7 @@ interface UserRepositoryInterface
 }
 ```
 
-## Coding Standards Checklist
+## Coding Standards Checklist (2026)
 
 - [ ] `declare(strict_types=1)` at top of every file
 - [ ] PSR-12 formatting applied
@@ -634,6 +689,8 @@ interface UserRepositoryInterface
 - [ ] All methods have return type declarations
 - [ ] All parameters have type declarations
 - [ ] Properties use readonly where appropriate
+- [ ] **Property hooks (PHP 8.4+)** for Value Objects with validation
+- [ ] **Asymmetric visibility (PHP 8.4+)** for immutable properties
 - [ ] Enums used instead of class constants for states
 - [ ] PHPDoc for complex methods and generics
 - [ ] Final classes by default

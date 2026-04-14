@@ -24,6 +24,7 @@
 
 ### Frontend
 - **Framework** : React {{REACT_VERSION}} avec TypeScript {{TYPESCRIPT_VERSION}}
+- **React Compiler** : React Compiler 1.0+ (auto-memoization)
 - **Build Tool** : {{BUILD_TOOL}}
 - **Routing** : {{ROUTING_LIBRARY}}
 - **State Management** : {{STATE_MANAGEMENT}}
@@ -181,6 +182,7 @@ VITE_ANALYTICS_ID={{ANALYTICS_ID}}
 {
   "react": "{{REACT_VERSION}}",
   "react-dom": "{{REACT_VERSION}}",
+  "babel-plugin-react-compiler": "^1.0.0",
   "typescript": "{{TYPESCRIPT_VERSION}}",
   {{DEPENDENCIES}}
 }

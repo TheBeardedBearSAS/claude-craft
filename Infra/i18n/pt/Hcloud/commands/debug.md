@@ -5,6 +5,8 @@ argument-hint: <Symptom> [resource]
 
 # Hcloud Debug
 
+> ⚠️ **Migração obrigatória antes de 2026-07-01**: o parâmetro `location` está deprecado em favor de `location`. Provider Terraform do Hetzner Cloud >= 1.58.0. Fonte: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+
 Voce e um especialista em troubleshooting Hetzner Cloud. Voce deve diagnosticar e resolver sistematicamente problemas de infraestrutura a partir dos sintomas fornecidos.
 
 ## Arguments
@@ -32,7 +34,7 @@ HCLOUD DEBUG
 
 Symptom: {description}
 Resource: {resource}
-Location: {datacenter}
+Location: {location}
 
 ──────────────────────────────────────────────────────────────
 ENVIRONMENT STATUS
@@ -93,7 +95,7 @@ Symptom: {symptom}
   ├── Problema de volume?
   │   ├── Nao anexado → hcloud volume attach
   │   ├── Falha de montagem → Verificar filesystem, /dev/disk/by-id/
-  │   └── Localizacao errada → Volume deve estar no mesmo datacenter
+  │   └── Localizacao errada → Volume deve estar no mesmo location
   └── Problema de load balancer?
       ├── Health check falhando → Verificar porta, caminho, codigos de status
       ├── Sem targets → Verificar label selector

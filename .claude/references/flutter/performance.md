@@ -1,4 +1,25 @@
-# Flutter Performance
+# Flutter Performance (2026)
+
+**Versions :** Flutter 3.41+ | Impeller par défaut | Dart 3.11
+
+## Impeller: Moteur de rendu par défaut
+
+```yaml
+# Activé PAR DÉFAUT sur iOS et Android (Flutter 3.41)
+# −50% temps rastérisation, +30% fluidité animations
+# Désactiver uniquement si problèmes critiques:
+flutter:
+  uses-impeller: false  # Déconseillé
+```
+
+**Bénéfices Impeller :**
+- Compilation shader ahead-of-time (pas de jank première frame)
+- Rastérisation multi-threadée
+- Support Vulkan/Metal natif
+
+**Source :** [Flutter 3.41 Impeller](https://blog.flutter.dev/whats-new-in-flutter-3-41-302ec140e632)
+
+---
 
 ## const Widgets
 
@@ -210,21 +231,29 @@ heavy.showFeature();
 
 ---
 
-## Performance Checklist
+## Performance Checklist 2026
 
 ```
-� const widgets everywhere possible
-� ListView.builder for lists
-� Image caching enabled
-� Lazy loading of images
-� Avoid unnecessary rebuilds
-� RepaintBoundary for complex widgets
-� Code splitting for heavy features
-� Profile mode tested
-� Frame rate > 60 FPS
-� Startup time < 2s
+✅ Impeller activé (par défaut Flutter 3.41)
+✅ const widgets partout où possible
+✅ ListView.builder pour listes
+✅ Image caching activé (cached_network_image)
+✅ Lazy loading images (visibility_detector)
+✅ Éviter rebuilds inutiles (RepaintBoundary, const)
+✅ Code splitting pour features lourdes (deferred)
+✅ Profile mode testé (flutter run --profile)
+✅ Frame rate > 60 FPS (120 FPS sur high-refresh displays)
+✅ Startup time < 2s
+✅ DevTools Timeline: pas de frames > 16ms (60 FPS)
 ```
+
+**Nouveautés 2026 :**
+- **Impeller** réduit les janks de première animation (−50% rastérisation)
+- **Material 3 modulaire** : packages séparés = bundles plus légers
+- **Wasm build** : 2-3x plus rapide sur web
 
 ---
 
-*Optimizing performance improves user experience.*
+**Sources :** [Flutter 3.41 Performance](https://blog.flutter.dev/whats-new-in-flutter-3-41-302ec140e632)
+
+*Optimiser la performance améliore l'expérience utilisateur.*

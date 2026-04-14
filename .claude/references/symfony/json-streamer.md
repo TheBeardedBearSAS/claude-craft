@@ -1,20 +1,158 @@
-# JSON Streamer Component - Symfony 8.0
+# JSON Streamer + JsonPath Components - Symfony 8.0
 
 ## Overview
 
-Le **JSON Streamer Component** de Symfony 8.0 permet le streaming haute performance de données JSON volumineuses sans charger l'intégralité en mémoire.
+Symfony 8.0 introduit deux composants complémentaires pour le traitement JSON haute performance :
+
+1. **JSON Streamer Component** : streaming de données JSON volumineuses sans charger l'intégralité en mémoire
+2. **JsonPath Component** : navigation et requêtes JSON via expressions (RFC 9535)
 
 **Cas d'usage:**
 - Import/export de fichiers JSON volumineux (> 100 Mo)
 - APIs paginées avec streaming
 - Traitement de logs JSON
 - ETL pipelines
+- Extraction sélective de données JSON complexes
+
+**Sources:**
+- https://symfony.com/blog/new-in-symfony-8-0-jsonstreamer-component
+- https://symfony.com/blog/new-in-symfony-8-0-jsonpath-component
 
 ## Installation
 
 ```bash
+# JSON Streamer
 composer require symfony/json-streamer
+
+# JsonPath
+composer require symfony/json-path
 ```
+
+---
+
+## JsonPath Component
+
+### Sélection de Données JSON
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Infrastructure\DataAccess;
+
+use Symfony\Component\JsonPath\JsonPath;
+
+final readonly class JsonDataExtractor
+{
+    /**
+     * Extrait les livres dont le prix est inférieur à 10€.
+     *
+     * Expression JsonPath RFC 9535: $.store.book[?@.price<10]
+     */
+    public function extractCheapBooks(string $jsonData): array
+    {
+        return JsonPath::select($jsonData, '$.store.book[?@.price<10]');
+    }
+
+    /**
+     * Récupère tous les auteurs du catalogue.
+     */
+    public function getAllAuthors(string $jsonData): array
+    {
+        return JsonPath::select($jsonData, '$.store.book[*].author');
+    }
+
+    /**
+     * Filtre les produits en stock uniquement.
+     */
+    public function getInStockProducts(string $jsonData): array
+    {
+        return JsonPath::select($jsonData, '$.products[?@.stock>0]');
+    }
+}
+```
+
+### Requêtes Complexes
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Application\Query;
+
+use Symfony\Component\JsonPath\JsonPath;
+
+final readonly class JsonQueryService
+{
+    /**
+     * Extrait les commandes d'un utilisateur spécifique avec montant > 100€.
+     */
+    public function findHighValueOrders(string $jsonOrders, string $userId): array
+    {
+        return JsonPath::select(
+            $jsonOrders,
+            sprintf('$.orders[?@.userId=="%s" && @.total>100]', $userId)
+        );
+    }
+
+    /**
+     * Récupère les logs d'erreur des 24 dernières heures.
+     */
+    public function getRecentErrors(string $jsonLogs, int $timestamp): array
+    {
+        return JsonPath::select(
+            $jsonLogs,
+            sprintf('$.logs[?@.level=="error" && @.timestamp>%d]', $timestamp)
+        );
+    }
+}
+```
+
+### Intégration avec Streaming
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Infrastructure\Import;
+
+use Symfony\Component\JsonPath\JsonPath;
+use Symfony\Component\JsonStreamer\JsonStreamReader;
+
+final readonly class SelectiveJsonImporter
+{
+    /**
+     * Streame uniquement les éléments qui matchent un critère JsonPath.
+     */
+    public function streamFiltered(string $jsonPath, string $expression): iterable
+    {
+        $stream = fopen($jsonPath, 'rb');
+
+        try {
+            $reader = new JsonStreamReader($stream);
+
+            foreach ($reader->readItems() as $item) {
+                // Applique le filtre JsonPath sur chaque item
+                $itemJson = json_encode($item, JSON_THROW_ON_ERROR);
+                $matches = JsonPath::select($itemJson, $expression);
+
+                if (count($matches) > 0) {
+                    yield $item;
+                }
+            }
+        } finally {
+            fclose($stream);
+        }
+    }
+}
+```
+
+---
+
+## JSON Streamer Component
 
 ## Lecture Streaming
 
@@ -508,11 +646,13 @@ stream_set_write_buffer($stream, 65536); // 64 KB buffer
 
 ## Ressources
 
-- [Symfony JSON Streamer Docs](https://symfony.com/doc/8.0/components/json_streamer.html)
+- [Symfony JSON Streamer Blog](https://symfony.com/blog/new-in-symfony-8-0-jsonstreamer-component)
+- [Symfony JsonPath Blog](https://symfony.com/blog/new-in-symfony-8-0-jsonpath-component)
+- [RFC 9535 - JsonPath](https://www.rfc-editor.org/rfc/rfc9535.html)
 - [PHP Generators](https://www.php.net/manual/en/language.generators.php)
 - [Doctrine Batch Processing](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/batch-processing.html)
 
 ---
 
-**Date de dernière mise à jour:** 2026-01-29
-**Version:** 1.0.0
+**Date de dernière mise à jour:** 2026-04-14
+**Version:** 1.1.0

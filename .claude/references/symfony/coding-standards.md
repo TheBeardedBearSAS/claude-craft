@@ -1,4 +1,4 @@
-# Standards de Code - PHP 8.5 / Symfony 8.0
+# Standards de Code - PHP 8.4+ / Symfony 8.0
 
 ## Principes Generaux
 
@@ -8,32 +8,40 @@ Le projet suit strictement :
 1. **PSR-12** : Standard PHP officiel
 2. **@Symfony** : Conventions Symfony
 3. **@Symfony:risky** : Regles strictes Symfony
-4. **@PHP85Migration** : Modernisation PHP 8.5+
+4. **@PHP84Migration** : Modernisation PHP 8.4+
 
 Configuration : `.php-cs-fixer.dist.php`
 
 ### Versions Requises (2026)
 
-- **PHP**: 8.5.x
-- **Symfony**: 8.0.x (ou 7.4 LTS)
+- **PHP**: 8.4+ (Symfony 8.0 requiert PHP 8.2+, 8.4 recommandé)
+- **Symfony**: 8.0.x (stable 8.0.8 mars 2026) ou 7.4 LTS
 
-### Nouvelles Features PHP 8.5
+**Source:** https://symfony.com/releases/8.0
 
-#### Pipe Operator (|>)
+### Nouvelles Features PHP 8.4
+
+#### Property Hooks (PHP 8.4)
 
 ```php
 <?php
 
-// ✅ PHP 8.5 Pipe operator - chainage fonctionnel lisible
-$result = $input
-    |> trim(...)
-    |> strtolower(...)
-    |> fn($s) => str_replace(' ', '-', $s)
-    |> htmlspecialchars(...);
+// ✅ PHP 8.4 Property Hooks - getters/setters natifs
+class User {
+    public string $name {
+        get => strtoupper($this->name);
+        set => ucfirst($value);
+    }
+    
+    public private(set) string $email; // Asymmetric Visibility
+}
 
-// Equivalent sans pipe (moins lisible)
-$result = htmlspecialchars(str_replace(' ', '-', strtolower(trim($input))));
+$user = new User();
+$user->name = 'john'; // set hook appelé
+echo $user->name;     // "JOHN" (get hook appelé)
 ```
+
+**Source:** https://www.php.net/releases/8.4/en.php
 
 #### Lazy Objects (natifs depuis PHP 8.4)
 
@@ -46,6 +54,45 @@ $lazyService = $reflector->newLazyProxy(function () {
     return new ExpensiveService(); // Créé seulement à l'usage
 });
 ```
+
+#### Asymmetric Visibility (PHP 8.4)
+
+```php
+<?php
+
+// ✅ Visibilité asymétrique - lecture publique, écriture privée
+class Order {
+    public private(set) string $status = 'pending';
+    
+    public function confirm(): void {
+        $this->status = 'confirmed'; // OK en interne
+    }
+}
+
+$order = new Order();
+echo $order->status; // OK
+$order->status = 'x'; // ERREUR : private(set)
+```
+
+### Nouvelles Features PHP 8.5 (beta)
+
+#### Pipe Operator (|>) — Expérimental
+
+```php
+<?php
+
+// ⚠️ PHP 8.5 Pipe operator - chainage fonctionnel lisible (beta)
+$result = $input
+    |> trim(...)
+    |> strtolower(...)
+    |> fn($s) => str_replace(' ', '-', $s)
+    |> htmlspecialchars(...);
+
+// Équivalent sans pipe (moins lisible)
+$result = htmlspecialchars(str_replace(' ', '-', strtolower(trim($input))));
+```
+
+**Note:** PHP 8.5 est en beta, ne pas utiliser en production.
 
 ### Verification Automatique
 

@@ -1,8 +1,12 @@
-# Laravel Quality Tools
+# Laravel 13 Quality Tools
+
+**Source :** https://laravel.com/docs/13.x/testing
 
 ## Static Analysis
 
-### PHPStan/Larastan Configuration
+### PHPStan 2.0 Level 10 / Larastan Configuration
+
+**Nouveauté PHPStan 2.0 :** Support du Level 10 pour une analyse encore plus stricte (https://phpstan.org/blog/phpstan-2-0-is-here).
 
 ```neon
 # phpstan.neon
@@ -15,7 +19,7 @@ parameters:
         - database
         - tests
 
-    level: 8
+    level: 10  # PHPStan 2.0 supporte level 10
 
     ignoreErrors:
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
@@ -531,8 +535,9 @@ exit 0
 
 | Metric | Threshold | Tool |
 |--------|-----------|------|
-| Code Coverage | ≥ 80% | PHPUnit/Pest |
-| PHPStan Level | 8 | PHPStan |
+| Code Coverage | ≥ 80% | PHPUnit/Pest 3 |
+| Mutation Score | ≥ 80% | Pest 3 Mutation Testing |
+| PHPStan Level | 10 | PHPStan 2.0 |
 | Cyclomatic Complexity | ≤ 10 | PHPStan |
 | Method Length | ≤ 20 lines | Pint rules |
 | Class Length | ≤ 200 lines | Review |
@@ -580,12 +585,13 @@ arch('DTOs are readonly')
 
 ## Quality Checklist
 
-- [ ] PHPStan level 8 passing
+- [ ] PHPStan level 10 passing (PHPStan 2.0)
 - [ ] Laravel Pint passing
 - [ ] Code coverage ≥ 80%
+- [ ] Mutation score ≥ 80% (Pest 3)
 - [ ] No debugging statements
 - [ ] Strict types declared
-- [ ] Architecture tests passing
+- [ ] Architecture tests passing (Pest Arch Presets Laravel 13)
 - [ ] No security vulnerabilities (composer audit)
 - [ ] Pre-commit hooks configured
 - [ ] CI/CD pipeline green

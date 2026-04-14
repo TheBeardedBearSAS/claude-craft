@@ -236,6 +236,25 @@ expect(screen.getByRole('dialog')).toBeInTheDocument();
 
 ## 4. Performance et Bundle (25 points)
 
+### React Compiler 1.0 : Auto-memoization
+
+**Vérifier si le projet utilise React Compiler 1.0+ :**
+- `babel-plugin-react-compiler` dans package.json ?
+- Configuration Vite/Next.js avec reactCompiler activé ?
+
+**Si Compiler activé :**
+- `useMemo`, `useCallback`, `React.memo` doivent être **rares** (< 10% des composants)
+- Flaguer les optimisations manuelles redondantes
+- Vérifier les performances avec React DevTools Profiler
+
+**Si Compiler absent :**
+- Recommander l'activation (React 17+ compatible)
+- Auditer les optimisations manuelles existantes
+
+Source : [react.dev/blog/2025/10/07/react-compiler-1](https://react.dev/blog/2025/10/07/react-compiler-1)
+
+---
+
 ### Arbre de decision : Re-renders
 
 ```
@@ -316,7 +335,7 @@ import { format } from 'date-fns';
 
 | Critere | Points |
 |---------|--------|
-| Pas de re-renders inutiles sur composants couteux | 7 |
+| React Compiler 1.0 activé et optimisations manuelles minimales | 7 |
 | Server/Client Components correctement separes | 6 |
 | Code splitting (lazy routes, dynamic imports) | 5 |
 | Bundle < 200KB initial, pas de deps lourdes inutiles | 4 |
@@ -358,11 +377,13 @@ import { format } from 'date-fns';
 
 ### Phase 5 : Performance et bundle (15 min)
 
-1. Identifier les re-renders inutiles (React DevTools Profiler)
-2. Verifier Server/Client Components boundaries
-3. Analyser les imports lourds et le tree-shaking
-4. Verifier le code splitting (lazy loading des routes)
-5. Evaluer Suspense et Error Boundaries
+1. **Vérifier React Compiler 1.0** (babel-plugin-react-compiler installé ?)
+2. Identifier les re-renders inutiles (React DevTools Profiler)
+3. Flaguer les optimisations manuelles redondantes (useMemo/useCallback excessifs)
+4. Verifier Server/Client Components boundaries
+5. Analyser les imports lourds et le tree-shaking
+6. Verifier le code splitting (lazy loading des routes)
+7. Evaluer Suspense et Error Boundaries
 
 ---
 
@@ -452,6 +473,8 @@ import { format } from 'date-fns';
 
 | Outil | Usage |
 |-------|-------|
+| **babel-plugin-react-compiler** | Auto-memoization (React Compiler 1.0) |
+| **eslint-plugin-react-compiler** | Validation règles du compilateur |
 | **ESLint** + `eslint-plugin-react-hooks` | Verification Rules of Hooks |
 | **typescript-eslint** strict config | Qualite TypeScript |
 | **Vitest** + **React Testing Library** | Tests unitaires et composants |

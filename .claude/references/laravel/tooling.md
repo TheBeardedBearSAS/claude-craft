@@ -1,4 +1,6 @@
-# Laravel Tooling and Development Environment
+# Laravel 13 Tooling and Development Environment
+
+**Source :** https://laravel.com/docs/13.x/artisan
 
 ## Essential Tools
 
@@ -253,7 +255,8 @@ return RectorConfig::configure()
         "nunomaduro/collision": "^8.0",
         "pestphp/pest": "^3.0",
         "pestphp/pest-plugin-laravel": "^3.0",
-        "phpstan/phpstan": "^1.10",
+        "pestphp/pest-plugin-mutate": "^3.0",
+        "phpstan/phpstan": "^2.0",
         "rector/rector": "^1.0",
         "spatie/laravel-ignition": "^2.4"
     }
@@ -265,8 +268,8 @@ return RectorConfig::configure()
 ```json
 {
     "require": {
-        "php": "^8.3",
-        "laravel/framework": "^12.0",
+        "php": "^8.5",
+        "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
         "laravel/horizon": "^5.24",
         "laravel/telescope": "^5.0",
@@ -280,6 +283,17 @@ return RectorConfig::configure()
 ```
 
 ## Docker / Laravel Sail
+
+### Versions Infrastructure 2026
+
+| Composant | Version | Usage Laravel |
+|-----------|---------|---------------|
+| Docker Engine | 29.4.0 | BuildKit par défaut, SBOM natif |
+| FrankenPHP | 1.12.1 | Alternative moderne à PHP-FPM (Worker mode Octane) |
+| PgBouncer | 1.25.1 | Transaction pooling + prepared statements natifs |
+
+**FrankenPHP + Laravel Octane** : 2-3× gains performance (Worker mode, HTTP/3, max_requests anti-leak).  
+**Sources** : https://frankenphp.dev/docs/laravel/ | https://laravel.com/docs/octane
 
 ### docker-compose.yml
 
@@ -604,7 +618,8 @@ npm install -g intelephense
 ## Tooling Checklist
 
 - [ ] Laravel Pint configured
-- [ ] PHPStan/Larastan at level 8
+- [ ] PHPStan/Larastan at level 10 (PHPStan 2.0)
+- [ ] Pest 3 + Mutation Testing configured
 - [ ] IDE Helper generated
 - [ ] Docker/Sail configured
 - [ ] CI/CD pipeline set up
@@ -613,3 +628,5 @@ npm install -g intelephense
 - [ ] VS Code extensions installed
 - [ ] Git hooks configured
 - [ ] Claude Code LSP plugin installed
+- [ ] AI SDK configured (Laravel 13)
+- [ ] Vector Search / pgvector configured (si RAG)
