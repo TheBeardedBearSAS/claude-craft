@@ -2,7 +2,7 @@
 
 **Version:** 7.29.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 18 technology stacks, 63 agents, 204 commands across 26 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 63 agents, 212 commands across 27 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -20,6 +20,7 @@ A comprehensive AI-assisted development framework for Claude Code with 18 techno
 | **Laravel** | 13.x / PHP 8.5 | Clean Architecture | Actions, Pest 4, Sanctum, AI SDK, Passkey |
 | **Python** | 3.14+ | Clean Architecture / Hexagonal | FastAPI, async/await, Pydantic, free-threading, JIT |
 | **PHP** | 8.5 (Property Hooks 8.4+) | Clean Architecture | PSR-12, PHPStan Level 10, Pest 4 |
+| **Paperclip** | 2026.403.0 | Two-layer (control plane + adapters) | Node.js 20+, TypeScript, Vitest, PostgreSQL, governance-first |
 
 ### Technology Quick Links
 
@@ -35,6 +36,7 @@ A comprehensive AI-assisted development framework for Claude Code with 18 techno
 | Laravel | `@.claude/references/laravel/` | `/laravel:*` |
 | Python | `@.claude/references/python/` | `/python:*` |
 | PHP | `@.claude/references/php/` | `/php:*` |
+| Paperclip | `@.claude/references/paperclip/` | `/paperclip:*` |
 
 See `@.claude/INDEX.md` for condensed checklists and patterns.
 
@@ -42,7 +44,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Commands (26 namespaces, 204 commands)
 
-Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` | Infra (via `@devops-engineer`): Docker 29.4.0, Coolify v4.0.0-beta.470, K8s 1.35.3, OpenTofu 1.11.6, Ansible 2.20.4, FrankenPHP 1.12.1, PgBouncer 1.25.1 | Project: `/sprint:*`, `/gate:*`, `/project:*`
+Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*`, `/paperclip:*` | Infra (via `@devops-engineer`): Docker 29.4.0, Coolify v4.0.0-beta.470, K8s 1.35.3, OpenTofu 1.11.6, Ansible 2.20.4, FrankenPHP 1.12.1, PgBouncer 1.25.1 | Project: `/sprint:*`, `/gate:*`, `/project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 

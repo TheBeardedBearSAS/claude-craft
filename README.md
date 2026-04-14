@@ -58,6 +58,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **C# / .NET** | 10 LTS / C# 14 | `--tech=csharp` |
 | **Laravel** | 12.x / PHP 8.5 | `--tech=laravel` |
 | **PHP** | 8.5 | `--tech=php` |
+| **Paperclip** | 2026.403.0 | `--tech=paperclip` |
 
 | **Docker** | 27+ | `--tech=docker` |
 | **Coolify** | 4.x | `--tech=coolify` |

@@ -88,7 +88,7 @@ help: ## Affiche cette aide
 install-all: ## Installe TOUTES les regles (common + toutes technos + project)
 	@echo "$(CYAN)Installation complete dans $(TARGET) (lang=$(RULES_LANG))...$(NC)"
 	@$(SCRIPTS_DIR)/install-common-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@for tech in symfony flutter python react reactnative angular csharp laravel vuejs php; do \
+	@for tech in symfony flutter python react reactnative angular csharp laravel vuejs php paperclip; do \
 		script="$(SCRIPTS_DIR)/install-$${tech}-rules.sh"; \
 		if [ -f "$$script" ]; then \
 			$$script --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
@@ -181,6 +181,10 @@ install-frankenphp: ## Installe les agents et commandes FrankenPHP
 	@echo "$(CYAN)Installation des regles FrankenPHP (lang=$(RULES_LANG))...$(NC)"
 	@$(CURDIR)/Infra/install-frankenphp-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 
+install-paperclip: ## Installe les regles Paperclip (orchestration d'agents IA)
+	@echo "$(CYAN)Installation des regles Paperclip (lang=$(RULES_LANG))...$(NC)"
+	@$(SCRIPTS_DIR)/install-paperclip-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+
 #===============================================================================
 # Combinaisons Courantes
 #===============================================================================
@@ -203,6 +207,10 @@ install-backend: install-common ## Installe Common + Symfony + Python
 	@$(SCRIPTS_DIR)/install-symfony-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 	@$(SCRIPTS_DIR)/install-python-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 	@echo "$(GREEN)Installation backend terminee !$(NC)"
+
+install-php: ## Installe les regles PHP natif (PSR-12, PHPStan, Pest 4)
+	@echo "$(CYAN)Installation des regles PHP (lang=$(RULES_LANG))...$(NC)"
+	@$(SCRIPTS_DIR)/install-php-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
 
 #===============================================================================
 # Outils Claude Code

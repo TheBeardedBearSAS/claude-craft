@@ -1,0 +1,95 @@
+# {{PROJECT_NAME}} — Paperclip
+
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## What (Stack & Structure)
+
+**Stack**: Node.js 20+ LTS, TypeScript 5.x (strict), React 18+, Vitest, pnpm 9.15+, PostgreSQL 15+
+**Paperclip**: 2026.403.0+ (MIT) — https://docs.paperclip.ing/
+
+**Paperclip is a two-layer system**: a control plane (server + web + DB) that owns all governance state, and adapters that execute work and report back. Adapters never decide budgets or approvals.
+
+### Project Structure
+```
+paperclip/
+├── server/            # Node.js + TS API (modules: agents, approvals, costs, ...)
+├── ui/                # React UI (dashboard, org chart, approvals)
+├── shared/            # Types shared between server and web
+├── adapters/          # Adapters (claude-local, codex-local, http, process, ...)
+└── tests/             # Cross-cutting / e2e
+```
+
+## Why (Governance Invariants)
+
+| Invariant | Reason |
+|---|---|
+| Adapters never hold governance state | Auditability + consistent policy |
+| Budgets are hard limits | No silent drains |
+| Approvals block execution | Human-in-the-loop is real |
+| Every mutation emits an activity event | Append-only audit trail |
+| `companyId` from session, never from client | Tenant isolation |
+
+See `rules/02-architecture-paperclip.md` and `rules/12-adapter-protocol.md`.
+
+## How (Commands & Workflows)
+
+### Development
+
+```bash
+pnpm install
+pnpm dev                # server + web in watch mode
+pnpm test               # Vitest
+pnpm test --coverage
+pnpm lint
+pnpm typecheck
+pnpm build
+```
+
+### Database
+
+```bash
+pnpm db:migrate
+pnpm db:seed
+pnpm db:reset           # dev only
+```
+
+### Paperclip CLI
+
+```bash
+npx paperclipai onboard --yes
+paperclipai plugin list
+paperclipai agent list
+paperclipai company list
+paperclipai approval list
+```
+
+### Workflow
+
+1. **Analyze** — Identify affected modules, governance impact (`rules/01-workflow-analysis.md`)
+2. **TDD** — Red → Green → Refactor (`rules/07-testing-paperclip.md`)
+3. **Adapter changes** → run the shared contract suite (`rules/12-adapter-protocol.md`)
+4. **Governance check** — Activity log, budget, approvals wired
+5. **Compliance** — Run `/paperclip:check-compliance` before PR
+6. **Commit** — Conventional Commits
+
+## References
+
+| Topic | Rule File |
+|---|---|
+| Analysis | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture-paperclip.md` |
+| Coding Standards | `rules/03-coding-standards.md` |
+| Tooling | `rules/06-tooling.md` |
+| Testing | `rules/07-testing-paperclip.md` |
+| Quality Tools | `rules/08-quality-tools.md` |
+| Security | `rules/11-security-paperclip.md` |
+| Adapter Protocol | `rules/12-adapter-protocol.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
+
+{{TECH_STACK}}
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

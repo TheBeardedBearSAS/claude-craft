@@ -1,0 +1,99 @@
+# {{PROJECT_NAME}} — Paperclip
+
+> Généré le : {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## Quoi (Stack & structure)
+
+**Stack** : Node.js 20+ LTS, TypeScript 5.x (strict), React 18+, Vitest, pnpm 9.15+, PostgreSQL 15+
+**Paperclip** : 2026.403.0+ (MIT) — https://docs.paperclip.ing/
+
+**Paperclip est un système à deux niveaux** : un plan de contrôle (server + ui + base de données) qui détient tout l'état de gouvernance, et des adaptateurs qui exécutent le travail et font remonter l'information. Les adaptateurs ne décident jamais des budgets ni des approbations.
+
+### Structure du projet
+```
+paperclip/
+├── server/            # API Node.js + TS (modules : agents, approvals, costs, ...)
+├── ui/                # UI React (dashboard, org chart, approbations)
+├── cli/               # CLI paperclipai (commander.js)
+├── packages/
+│   ├── shared/        # Types partagés
+│   ├── db/            # Schéma + migrations
+│   ├── adapters/      # Adaptateurs internes (claude-local, codex-local, ...)
+│   └── plugins/       # SDK de plugins + scaffolder + exemples
+└── tests/             # Cross-cutting / e2e
+```
+
+## Pourquoi (invariants de gouvernance)
+
+| Invariant | Raison |
+|---|---|
+| Les adaptateurs ne détiennent jamais d'état de gouvernance | Auditabilité et cohérence de politique |
+| Les budgets sont des limites strictes | Pas de dérives silencieuses |
+| Les approbations bloquent l'exécution | L'humain-dans-la-boucle est réel |
+| Chaque mutation émet un événement d'activité | Journal d'audit append-only |
+| `companyId` vient de la session, jamais du client | Isolation multi-tenant |
+
+Voir `rules/02-architecture-paperclip.md` et `rules/12-adapter-protocol.md`.
+
+## Comment (commandes & workflows)
+
+### Développement
+
+```bash
+pnpm install
+pnpm dev                # server + ui en mode watch
+pnpm test               # Vitest
+pnpm test --coverage
+pnpm lint
+pnpm typecheck
+pnpm build
+```
+
+### Base de données
+
+```bash
+pnpm db:migrate
+pnpm db:seed
+pnpm db:reset           # dev uniquement
+```
+
+### CLI Paperclip
+
+```bash
+npx paperclipai onboard --yes
+paperclipai plugin list
+paperclipai agent list
+paperclipai company list
+paperclipai approval list
+```
+
+### Workflow
+
+1. **Analyser** — identifier les modules impactés et l'impact de gouvernance (`rules/01-workflow-analysis.md`)
+2. **TDD** — Red → Green → Refactor (`rules/07-testing-paperclip.md`)
+3. **Modifications d'adaptateur** → relancer la suite de contrat partagée (`rules/12-adapter-protocol.md`)
+4. **Vérification de gouvernance** — activity log, budget, approbations câblés
+5. **Conformité** — lancer `/paperclip:check-compliance` avant la PR
+6. **Commit** — Conventional Commits
+
+## Références
+
+| Sujet | Fichier de règle |
+|---|---|
+| Analyse | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture-paperclip.md` |
+| Standards de code | `rules/03-coding-standards.md` |
+| Outillage | `rules/06-tooling.md` |
+| Tests | `rules/07-testing-paperclip.md` |
+| Outils qualité | `rules/08-quality-tools.md` |
+| Sécurité | `rules/11-security-paperclip.md` |
+| Protocole adaptateur | `rules/12-adapter-protocol.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Spécificités projet
+
+{{TECH_STACK}}
+
+<!-- Ajouter ci-dessous la configuration spécifique au projet -->
+
+<!-- PROJECT-SPECIFIC-END -->

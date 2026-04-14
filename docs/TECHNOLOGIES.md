@@ -40,6 +40,7 @@ Claude Craft classifies its 10 application technology stacks into 3 maturity tie
 | Angular | 3 (Community) | 20 LTS (ou 21) | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
 | Laravel | 3 (Community) | 13.x / PHP 8.5 | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
 | Vue.js | 3 (Community) | 3.5+ | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
+| Paperclip | 2 (Supported) | 2026.403.0 | 29 × 5 langues (en/fr/es/de/pt) | 8 | Full i18n across 5 langs | Expand tests/skills, add audit commands, promote to Tier 1 |
 
 ### Upgrade Path
 
@@ -56,6 +57,7 @@ To promote a stack from one tier to the next, see [CONTRIBUTING.md](../CONTRIBUT
 | Python | 12 | FastAPI, Async, Type Hints |
 | React | 12 | Hooks, Performance, Accessibility |
 | React Native | 12 | Navigation, Native Modules, Store |
+| Paperclip | 7 | Two-Layer Architecture, Adapter Protocol, Governance (budgets/approvals), Audit Trails |
 
 ---
 
@@ -569,3 +571,53 @@ modules:
   - path: "workers"
     tech: python
 ```
+
+### AI-Workforce Orchestration
+
+```yaml
+modules:
+  - path: "."
+    tech: paperclip   # When the repo IS a Paperclip fork / custom Paperclip adapter
+```
+
+---
+
+## Paperclip
+
+> **Paperclip** is an open-source orchestration platform for AI workforces: Node.js + TypeScript + React UI + Vitest + PostgreSQL. It acts as a control plane over adapters (Claude Code, Codex, Gemini, HTTP, process) with budgets, approvals, and audit trails.
+> Docs: https://docs.paperclip.ing/ — Repo: https://github.com/paperclipai/paperclip — License: MIT
+
+### Architecture
+
+Two-layer:
+
+```
+Control Plane (server + web + DB)   ◄──►   Adapters (claude-local, codex-local, http, process, ...)
+```
+
+Adapters **never** hold governance state. They execute, heartbeat, report cost, and forward approval requests. Budgets are hard limits; approvals block execution; every mutation emits an activity event.
+
+### Key Rules
+
+- `02-architecture-paperclip.md` — Two-layer control plane + adapters, modular monolith, append-only activity log
+- `03-coding-standards.md` — TypeScript strict, kebab files, no `any`, structured logs
+- `06-tooling.md` — pnpm 9.15+, tsx, Vitest, Node 20+, `paperclipai` CLI
+- `07-testing-paperclip.md` — Vitest + adapter contract tests + cross-tenant isolation
+- `08-quality-tools.md` — ESLint flat config strict-type-checked, complexity limits, coverage thresholds
+- `11-security-paperclip.md` — Tenancy, secrets, approval gates, signed adapter channel (ed25519 + TLS 1.3)
+- `12-adapter-protocol.md` — Heartbeat, cost reporting, approvals, task envelope, signatures
+
+### Commands
+
+See [`/paperclip:*`](COMMANDS.md#paperclip-commands-paperclip) — 5 audit commands + `generate-adapter`, `generate-agent-config`, `setup-company`.
+
+### Use this stack when
+
+- You are contributing to a Paperclip codebase (server, web, SDK, or a built-in adapter)
+- You are building a **custom adapter** that connects Paperclip to a proprietary execution backend
+- You are onboarding a company onto Paperclip and want guardrails on agents, budgets, and approvals
+
+### Don't use this stack for
+
+- Generic Node.js / TypeScript apps — use `react` + (`symfony` or `python`) instead
+- Replacing a job queue — Paperclip is governance on top of AI execution, not a queue

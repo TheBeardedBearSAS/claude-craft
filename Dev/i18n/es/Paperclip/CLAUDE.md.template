@@ -1,0 +1,95 @@
+# {{PROJECT_NAME}} — Paperclip
+
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## Qué (Stack y Estructura)
+
+**Stack**: Node.js 20+ LTS, TypeScript 5.x (strict), React 18+, Vitest, pnpm 9.15+, PostgreSQL 15+
+**Paperclip**: 2026.403.0+ (MIT) — https://docs.paperclip.ing/
+
+**Paperclip es un sistema de dos capas**: un plano de control (server + web + DB) que posee todo el estado de gobernanza, y adapters que ejecutan el trabajo y reportan de vuelta. Los adapters nunca deciden presupuestos o aprobaciones.
+
+### Estructura del Proyecto
+```
+paperclip/
+├── server/            # Node.js + TS API (módulos: agents, approvals, costs, ...)
+├── ui/                # React UI (panel, organigrama, aprobaciones)
+├── shared/            # Tipos compartidos entre server y web
+├── adapters/          # Adapters (claude-local, codex-local, http, process, ...)
+└── tests/             # Cross-cutting / e2e
+```
+
+## Por qué (Invariantes de Gobernanza)
+
+| Invariante | Razón |
+|---|---|
+| Los adapters nunca mantienen estado de gobernanza | Auditabilidad + política consistente |
+| Los presupuestos son límites estrictos | Sin fugas silenciosas |
+| Las aprobaciones bloquean la ejecución | Human-in-the-loop es real |
+| Cada mutación emite un evento de actividad | Pista de auditoría append-only |
+| `companyId` desde sesión, nunca desde cliente | Aislamiento de tenant |
+
+Ver `rules/02-architecture-paperclip.md` y `rules/12-adapter-protocol.md`.
+
+## Cómo (Comandos y Flujos)
+
+### Desarrollo
+
+```bash
+pnpm install
+pnpm dev                # server + web en modo watch
+pnpm test               # Vitest
+pnpm test --coverage
+pnpm lint
+pnpm typecheck
+pnpm build
+```
+
+### Base de Datos
+
+```bash
+pnpm db:migrate
+pnpm db:seed
+pnpm db:reset           # solo dev
+```
+
+### Paperclip CLI
+
+```bash
+npx paperclipai onboard --yes
+paperclipai plugin list
+paperclipai agent list
+paperclipai company list
+paperclipai approval list
+```
+
+### Flujo de Trabajo
+
+1. **Analizar** — Identificar módulos afectados, impacto de gobernanza (`rules/01-workflow-analysis.md`)
+2. **TDD** — Red → Green → Refactor (`rules/07-testing-paperclip.md`)
+3. **Cambios en adapters** → ejecutar la suite de contrato compartido (`rules/12-adapter-protocol.md`)
+4. **Verificación de gobernanza** — Log de actividad, presupuesto, aprobaciones conectadas
+5. **Cumplimiento** — Ejecutar `/paperclip:check-compliance` antes de PR
+6. **Commit** — Conventional Commits
+
+## Referencias
+
+| Tema | Archivo de Regla |
+|---|---|
+| Análisis | `rules/01-workflow-analysis.md` |
+| Arquitectura | `rules/02-architecture-paperclip.md` |
+| Estándares de Código | `rules/03-coding-standards.md` |
+| Herramientas | `rules/06-tooling.md` |
+| Testing | `rules/07-testing-paperclip.md` |
+| Herramientas de Calidad | `rules/08-quality-tools.md` |
+| Seguridad | `rules/11-security-paperclip.md` |
+| Protocolo de Adapter | `rules/12-adapter-protocol.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Especificaciones del Proyecto
+
+{{TECH_STACK}}
+
+<!-- Agregar configuración específica del proyecto a continuación -->
+
+<!-- PROJECT-SPECIFIC-END -->

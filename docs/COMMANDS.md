@@ -58,6 +58,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/hcloud:` | Hcloud/Hetzner Cloud | 5 |
 | `/pgbouncer:` | PgBouncer/Connection Pooling | 5 |
 | `/frankenphp:` | FrankenPHP/PHP Server | 5 |
+| `/paperclip:` | Paperclip AI-workforce orchestration | 8 |
 | `/project:` | Project Management | 34 |
 | `/sprint:` | Sprint Management (BMAD v6) | 5 |
 | `/gate:` | Quality Gates (BMAD v6) | 7 |
@@ -640,6 +641,30 @@ FrankenPHP PHP application server management.
 | `/frankenphp:debug <Symptom>` | Diagnose FrankenPHP worker and Caddyfile issues from symptoms |
 | `/frankenphp:security-audit [Scope]` | Audit FrankenPHP security posture |
 | `/frankenphp:optimize [Target]` | Optimize FrankenPHP worker performance and throughput |
+
+---
+
+## Paperclip Commands (`/paperclip:`)
+
+Paperclip is an open-source AI-workforce orchestration platform (Node.js + TypeScript + React UI, MIT, v2026.403.0+). It exposes a control plane that governs AI agents (budgets, approvals, audit trails) and adapters (Claude Code, Codex, Gemini, HTTP, process) that execute work.
+
+### Generation Commands
+
+| Command | Description |
+|---------|-------------|
+| `/paperclip:generate-adapter <name> <kind>` | Scaffold a custom adapter (`local` \| `process` \| `http`) implementing the full `AdapterContract` |
+| `/paperclip:generate-agent-config <name>` | Produce an `agent.yaml` with budget, skills, approvals, adapter binding |
+| `/paperclip:setup-company <name>` | Bootstrap a new Paperclip company end-to-end (install, company, goal, budget, adapter, first agent) |
+
+### Analysis Commands
+
+| Command | Description |
+|---------|-------------|
+| `/paperclip:check-compliance` | Full audit — Architecture + Code Quality + Tests + Security + Adapter protocol, scored /100 |
+| `/paperclip:check-architecture` | Two-layer split, module boundaries, activity log coverage, OpenAPI spec alignment |
+| `/paperclip:check-code-quality` | TypeScript strictness, lint, complexity, logging hygiene, error modeling |
+| `/paperclip:check-testing` | Coverage thresholds, adapter contract tests, integration tests vs real Postgres, cross-tenant isolation |
+| `/paperclip:check-security` | Tenant isolation, secrets, approval gates, hard budgets, signed adapter channel, HTTP headers, supply chain |
 
 ---
 
