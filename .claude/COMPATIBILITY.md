@@ -1,7 +1,7 @@
 # Claude Code Compatibility
 
 **Minimum Version**: 2.1.47
-**Recommended Version**: 2.1.105
+**Recommended Version**: 2.1.107
 
 This document tracks Claude Code features and version compatibility for claude-craft.
 
@@ -750,6 +750,34 @@ Fixed prompt suggestion cache regression that reduced cache hit rates, restoring
 | `/proactive` alias | Alias for `/loop` command |
 | Skill description limit | Increased from 250 to 1,536 characters |
 | Stalled stream handling | 5-minute timeout with automatic retry |
+
+### Enhanced Features (v2.1.105+)
+
+| Feature | Description |
+|---------|-------------|
+| Enhanced `/doctor` layout | Status icons (✓, ✗, ⚠), categorized diagnostics, action hints, press `f` to fix |
+| WebFetch token optimization | Strips `<style>` and `<script>` tag contents (50-80% token reduction on web pages) |
+| MCP large-output truncation | Format-specific recipes for truncating large MCP outputs (e.g., `jq` for JSON) |
+| `/btw` command | Quick questions without context switching, minimal context, low effort |
+| `/hooks` command | Interactive hook management: view, enable/disable, test, debug |
+| `/reload-plugins` command | Manual plugin reload (auto-reload on file changes also available) |
+| Skill `context: fork` | Run skills in isolated subagent context |
+| `disable-model-invocation: true` | Prevent Claude from auto-invoking a skill |
+| `claudeMdExcludes` setting | Exclude specific CLAUDE.md files in monorepos |
+| Auto-compaction skill reload | Skills re-attach after compaction (5K tokens/skill, 25K total max) |
+| Live skill directory detection | Skills auto-reload when directory contents change |
+
+### v2.1.106
+
+Internal improvements and bug fixes. No major public features documented.
+
+### Show Thinking Hints Sooner (v2.1.107+)
+
+| Feature | Description |
+|---------|-------------|
+| Early thinking display | Thinking hints appear sooner during long tool operations |
+| Improved feedback | Better UX during extended executions (file searches, large builds) |
+| Reduced perceived latency | Users see progress indicators earlier in the response cycle |
 
 ### Source Code Leak Incident (v2.1.88)
 

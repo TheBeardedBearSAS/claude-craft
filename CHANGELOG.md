@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.28.0] - 2026-04-14
+
+### Added
+
+- **Claude Code v2.1.106 compatibility** -- Internal improvements and bug fixes
+- **Claude Code v2.1.107 compatibility** -- Show thinking hints sooner during long operations
+- **Enhanced `/doctor` layout documentation** -- Status icons, categorized output, action hints (v2.1.105+)
+- **New commands documentation** -- `/btw`, `/hooks`, `/reload-plugins`, `/proactive` in CLI reference, FAQ, and context management rules
+- **PreCompact blocking documentation** -- Exit code 2 support fully documented in HOOKS.md
+- **Stalled stream handling** -- 5-minute auto-retry documentation in TROUBLESHOOTING.md
+- **WebFetch token optimization** -- Strips `<style>`/`<script>` contents documentation (50-80% token reduction)
+- **New environment variables** -- `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD`, `MAX_THINKING_TOKENS`, `SLASH_COMMAND_TOOL_CHAR_BUDGET`, OTEL tracing vars (beta)
+- **Advanced skills documentation** -- `context: fork`, `disable-model-invocation: true`, `claudeMdExcludes`, auto-compaction skill reload (5K/skill, 25K total)
+
+### Changed
+
+- **Recommended Claude Code version** -- 2.1.105 → 2.1.107 (minimum stays 2.1.47)
+- **Documentation URLs** -- Migrated all references from docs.anthropic.com to code.claude.com (14 files)
+- **Context management rules** -- Added new commands, environment variables, and skills sections (all 5 languages)
+- **Version references** -- 7.27.0 → 7.28.0 across all docs, guides, and configuration files
+
 ## [7.27.0] - 2026-04-14
 
 ### Added
