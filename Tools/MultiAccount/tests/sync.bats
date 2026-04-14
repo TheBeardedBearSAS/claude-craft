@@ -122,8 +122,8 @@ create_profile() {
     run jq -e '.old' "$CLAUDE_PROFILES_DIR/isolated-profile/settings.json"
     [ "$status" -eq 0 ]
 
-    # Merge settings using jq
-    merged=$(jq -s '.[0] * .[1] | .env = ((.[0].env // {}) * (.[1].env // {}))' \
+    # Merge settings using jq (* operator does recursive deep merge of env too)
+    merged=$(jq -s '.[0] * .[1]' \
         "$CLAUDE_PROFILES_DIR/isolated-profile/settings.json" \
         "$HOME/.claude/settings.json" 2>/dev/null)
 

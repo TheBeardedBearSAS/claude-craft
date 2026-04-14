@@ -4,7 +4,16 @@ import path from 'path';
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '../..');
 const SETTINGS_PATH = path.join(PROJECT_ROOT, '.claude', 'settings.json');
-const LOCAL_SETTINGS_PATH = path.join(PROJECT_ROOT, '.claude', 'settings.local.json');
+// settings.local.json is gitignored (per-user file), so tests validate the template instead
+const LOCAL_SETTINGS_PATH = path.join(
+  PROJECT_ROOT,
+  'Dev',
+  'i18n',
+  'base',
+  'Common',
+  'templates',
+  'settings.local.json.template',
+);
 const CLAUDEIGNORE_PATH = path.join(PROJECT_ROOT, '.claudeignore');
 
 describe('project settings.json optimization', () => {
@@ -66,7 +75,7 @@ describe('project settings.json optimization', () => {
   });
 });
 
-describe('project settings.local.json optimization', () => {
+describe('settings.local.json.template optimization', () => {
   it('exists and is valid JSON', () => {
     expect(fs.existsSync(LOCAL_SETTINGS_PATH)).toBe(true);
     expect(() => JSON.parse(fs.readFileSync(LOCAL_SETTINGS_PATH, 'utf8'))).not.toThrow();
