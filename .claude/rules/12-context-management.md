@@ -697,6 +697,56 @@ Les fichiers sont fusionnes par ordre alphabetique, permettant aux equipes de su
 
 ---
 
+## Optimisation des tokens — Quick Setup
+
+> **Commande:** `/common:setup-rtk` pour configurer automatiquement toutes les optimisations.
+
+### 1. RTK (Rust Token Killer)
+
+Proxy CLI qui reduit la consommation de tokens de 60-90% sur les commandes dev:
+
+```bash
+# Installation
+curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | bash
+rtk init -g  # Configure le hook PreToolUse
+
+# Activer ultra-compact mode (dans ~/.claude/hooks/rtk-rewrite.sh)
+REWRITTEN=$(rtk rewrite --ultra-compact "$CMD" 2>/dev/null)
+```
+
+### 2. Modele des sub-agents
+
+```bash
+export CLAUDE_CODE_SUBAGENT_MODEL="sonnet"
+```
+
+Les sub-agents (Explore, Plan, general-purpose) utilisent Sonnet au lieu d'Opus: 40-60% de reduction de cout sans perte de qualite pour les taches d'exploration et d'implementation.
+
+### 3. Hooks d'optimisation
+
+| Hook | Fichier | Impact |
+|------|---------|--------|
+| **PostToolUse** (Bash) | `~/.claude/hooks/post-tool-filter.sh` | Guide Claude a resumer les outputs >10KB |
+| **PreCompact** | `~/.claude/hooks/pre-compact.sh` | Preserve le contexte critique avant compaction |
+| **SessionStart** (compact) | Template `context-reinject.json` | Re-injecte `context-essentials.md` apres compaction |
+
+Templates disponibles dans `.claude/templates/hooks/`:
+- `output-filter.json` — PostToolUse pour filtrer les gros outputs
+- `pre-compact.json` — PreCompact pour preserver le contexte
+- `context-reinject.json` — SessionStart pour la re-injection
+
+### 4. Economies attendues
+
+| Optimisation | Economie |
+|---|---|
+| RTK + ultra-compact | 60-90% sur outputs CLI |
+| SUBAGENT_MODEL=sonnet | 40-60% cout sub-agents |
+| PostToolUse hook | Reduit pollution contexte |
+| PreCompact hook | Evite perte de contexte |
+| **Total combine** | **55-65% reduction globale** |
+
+---
+
 ## Ressources
 
 - **Anthropic Best Practices:** [docs.anthropic.com](https://docs.anthropic.com/en/docs/claude-code/overview)

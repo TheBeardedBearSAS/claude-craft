@@ -1,0 +1,18 @@
+{
+  "description": "Filter large tool outputs to save context window tokens",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); TOOL_NAME=$(echo \"$INPUT\" | jq -r '.tool_name // empty'); TOOL_RESULT=$(echo \"$INPUT\" | jq -r '.tool_result // empty'); RESULT_LEN=${#TOOL_RESULT}; if [ \"$RESULT_LEN\" -gt 50000 ]; then jq -n --arg msg \"Output very large (${RESULT_LEN} chars). Summarize key findings only.\" '{\"systemMessage\": $msg}'; exit 0; fi; if [ \"$TOOL_NAME\" = \"Bash\" ] && [ \"$RESULT_LEN\" -gt 10000 ]; then LINES=$(echo \"$TOOL_RESULT\" | wc -l); jq -n --arg msg \"Output: ${LINES} lines. Extract only relevant information.\" '{\"systemMessage\": $msg}'; exit 0; fi; echo '{}'; exit 0",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  },
+  "usage": "Copy the PostToolUse hook to .claude/settings.json or your profile settings.json. This hook adds a systemMessage when Bash output exceeds 10KB, guiding Claude to summarize rather than repeat verbose output. For outputs >50KB, the guidance is more aggressive. Requires jq."
+}

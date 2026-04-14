@@ -1,0 +1,18 @@
+{
+  "description": "Preserve critical project context before automatic compaction",
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PROJECT_DIR=\"${CLAUDE_PROJECT_DIR:-$(pwd)}\"; OUTPUT=''; if [ -f \"$PROJECT_DIR/.claude/context-essentials.md\" ]; then ESSENTIALS=$(head -100 \"$PROJECT_DIR/.claude/context-essentials.md\"); OUTPUT=\"CRITICAL CONTEXT TO PRESERVE:\\n\\n$ESSENTIALS\"; fi; if [ -n \"$OUTPUT\" ]; then jq -n --arg msg \"$OUTPUT\" '{\"systemMessage\": $msg}'; else echo '{}'; fi; exit 0",
+            "timeout": 10000
+          }
+        ]
+      }
+    ]
+  },
+  "usage": "Copy the PreCompact hook to .claude/settings.json or your profile settings.json. Create .claude/context-essentials.md with your project's critical context (architecture decisions, conventions, current tasks). This content will be re-injected before compaction to prevent loss of critical information. Requires jq."
+}

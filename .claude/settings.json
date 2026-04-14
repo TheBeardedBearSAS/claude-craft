@@ -38,6 +38,28 @@
             "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '\\.(js|ts|jsx|tsx|json|md|mjs|cjs)$'; then npx prettier --write \"$FILEPATH\" 2>/dev/null || true; fi; exit 0"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/post-tool-filter.sh",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-compact.sh",
+            "timeout": 10000
+          }
+        ]
       }
     ],
     "SessionStart": [
