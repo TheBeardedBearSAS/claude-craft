@@ -3,6 +3,8 @@ name: react-reviewer
 description: React 19 and TypeScript code review specialist — hooks, composition, performance, bundle analysis
 model: sonnet
 maxTurns: 6
+effort: medium
+memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

@@ -3,6 +3,8 @@ name: devops-engineer
 description: CI-CD, Docker, and deployment specialist
 model: sonnet
 maxTurns: 8
+effort: medium
+memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
 permissionMode: default
 skills: [git-workflow, security]

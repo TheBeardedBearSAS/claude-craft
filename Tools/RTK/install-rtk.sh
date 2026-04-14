@@ -176,6 +176,21 @@ configure_rtk_hooks() {
             exit 1
         fi
     fi
+
+    # Enable --ultra-compact mode for maximum token savings (+5-10%)
+    if [[ -f "$HOOK_SCRIPT" ]] && ! grep -q -- '--ultra-compact' "$HOOK_SCRIPT"; then
+        sed -i 's/rtk rewrite "\$CMD"/rtk rewrite --ultra-compact "\$CMD"/' "$HOOK_SCRIPT" 2>/dev/null || true
+        # Update RTK integrity hash after patching
+        if command -v sha256sum &>/dev/null; then
+            local hash_file="$HOOKS_DIR/.rtk-hook.sha256"
+            if [[ -f "$hash_file" ]]; then
+                chmod 644 "$hash_file" 2>/dev/null || true
+                sha256sum "$HOOK_SCRIPT" > "$hash_file"
+                chmod 444 "$hash_file" 2>/dev/null || true
+            fi
+        fi
+        print_success "Enabled --ultra-compact mode for RTK hook"
+    fi
 }
 
 # ---------------------------------------------------------------------------

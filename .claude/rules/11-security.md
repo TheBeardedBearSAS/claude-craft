@@ -1,319 +1,38 @@
-# Securite
+# Securite — Quick Reference
 
-## Vue d'ensemble
+La securite est une **priorite absolue**. References : OWASP Top 10 | CWE/SANS Top 25.
 
-La securite est une **priorite absolue**. Ce document presente les principes generaux de securite applicables a tout projet.
+## OWASP Top 10 — Essentiels
 
-> **Note:** Consultez les regles specifiques a votre technologie pour les implementations concretes.
+| # | Menace | Defense |
+|---|--------|---------|
+| 1 | Broken Access Control | Verifier permissions a CHAQUE requete, deny by default |
+| 2 | Cryptographic Failures | TLS 1.3, bcrypt/Argon2, secrets dans vault |
+| 3 | Injection | Requetes parametrees, validation/sanitization |
+| 4 | Insecure Design | Threat modeling, defense in depth, rate limiting |
+| 5 | Security Misconfiguration | Hardening, erreurs generiques en prod |
 
-**References:** OWASP Top 10 | CWE/SANS Top 25
+## Regles non-negociables
 
----
+- **Ne JAMAIS faire confiance aux donnees utilisateur** — valider cote serveur
+- **Requetes parametrees** — JAMAIS de concatenation SQL
+- **Mots de passe** : hash bcrypt/Argon2, JAMAIS MD5/SHA1, minimum 12 caracteres
+- **Sessions** : httpOnly, secure, sameSite strict, expiration 15-30 min
+- **JWT** : RS256/ES256, expiration courte (15 min), refresh token securise
+- **Secrets** : variables d'environnement ou Vault, JAMAIS dans le code
 
-## Table des matieres
+## Headers obligatoires
 
-1. [OWASP Top 10](#owasp-top-10)
-2. [Validation des entrees](#validation-des-entrées)
-3. [Authentification](#authentification)
-4. [Autorisation](#autorisation)
-5. [Donnees sensibles](#données-sensibles)
-6. [Headers de securite](#headers-de-sécurité)
-7. [Logging et monitoring](#logging-et-monitoring)
-8. [Securite MCP & Plugins](#securite-mcp--plugins)
-9. [Checklist](#checklist)
+CSP, X-Content-Type-Options: nosniff, X-Frame-Options: DENY, HSTS, Referrer-Policy strict.
 
----
+## Logging
 
-## OWASP Top 10
+Logger : connexions, changements permissions, acces donnees sensibles, erreurs autorisation.
+Ne PAS logger : mots de passe, tokens, donnees personnelles completes.
 
-### 1. Broken Access Control
+## MCP & Plugins
 
-- Verifier les permissions a CHAQUE requete
-- Utiliser des identifiants non predictibles (UUID)
-- Deny by default
+Avant d'installer un serveur MCP tiers : code source auditable, version pinee, permissions minimales.
+Utiliser Claude Code **v2.1.97+** minimum avec des serveurs MCP + hooks.
 
-### 2. Cryptographic Failures
-
-- Chiffrer les donnees sensibles au repos
-- Utiliser TLS 1.3 en transit
-- Algorithmes modernes (bcrypt, Argon2, AES-256)
-- Secrets dans un vault (pas dans le code)
-
-### 3. Injection
-
-- Requetes parametrees (prepared statements)
-- Validation et sanitization des entrees
-- Principe du moindre privilege (DB)
-- Escape des outputs
-
-### 4. Insecure Design
-
-- Threat modeling des la conception
-- Security by design
-- Defense in depth
-- Rate limiting
-
-### 5. Security Misconfiguration
-
-- Hardening des configurations
-- Desactiver le non necessaire
-- Messages d'erreur generiques en prod
-- Principe du moindre privilege
-
-### 6. Vulnerable Components
-
-- Audit regulier des dependances
-- Mise a jour automatique (Dependabot)
-- SBOM (Software Bill of Materials)
-
-### 7. Authentication Failures
-
-- Politique de mots de passe forts
-- MFA pour acces sensibles
-- Expiration des sessions
-- Rate limiting sur login
-- Detection de brute force
-
-### 8. Data Integrity Failures
-
-- Verification des signatures
-- CI/CD securise
-- Integrity checks (checksums)
-
-### 9. Logging & Monitoring Failures
-
-- Logger les evenements de securite
-- Proteger les logs (acces restreint)
-- Alerting sur anomalies
-- Retention appropriee
-
-### 10. SSRF (Server-Side Request Forgery)
-
-- Whitelist des destinations autorisees
-- Validation stricte des URLs
-- Pas d'acces reseau interne depuis les inputs
-
----
-
-## Validation des entrees
-
-> **Ne jamais faire confiance aux donnees utilisateur.** Valider cote serveur, TOUJOURS.
-
-| Type | Description | Exemple |
-|------|-------------|---------|
-| **Whitelist** | Accepter uniquement ce qui est attendu | `status in ["pending", "done"]` |
-| **Type checking** | Verifier le type | `typeof id === "number"` |
-| **Format** | Verifier le format | `email.matches(EMAIL_REGEX)` |
-| **Range** | Verifier les bornes | `1 <= page <= 100` |
-| **Length** | Verifier la longueur | `name.length <= 255` |
-
-Preferer **VALIDATION** (rejeter les donnees invalides) a **SANITIZATION** (transformer les donnees).
-
----
-
-## Authentification
-
-### Mots de passe
-
-- Minimum 12 caracteres (majuscules, minuscules, chiffres, speciaux)
-- Pas dans les listes de mots de passe compromis
-- Hash avec bcrypt/Argon2 (JAMAIS MD5/SHA1)
-- Salt unique par utilisateur
-
-### Sessions
-
-- Token aleatoire cryptographiquement sur
-- Stockage cote serveur (pas dans cookies)
-- Expiration: 15-30 min d'inactivite
-- Renouvellement apres login, invalidation apres logout
-- Cookie: `httpOnly: true`, `secure: true`, `sameSite: strict`
-
-### JWT (si utilise)
-
-- Algorithme: RS256 ou ES256 (pas HS256 avec secret faible)
-- Expiration courte (15 min)
-- Refresh token long (7 jours) stocke securise
-- Verifier signature et claims
-- Ne pas stocker de donnees sensibles dans le payload
-
-### Multi-Factor Authentication (MFA)
-
-Activer pour: acces admin, operations sensibles, changement de mot de passe, connexion depuis nouvel appareil.
-Methodes: TOTP (Google Authenticator), SMS (moins securise), Hardware keys (FIDO2).
-
----
-
-## Autorisation
-
-- **Principe du moindre privilege:** accorder uniquement les permissions NECESSAIRES
-- **RBAC:** definir des roles (admin, manager, user) avec des permissions granulaires
-- **Row-Level Security:** verifier que l'utilisateur a acces a LA ressource specifique (pas seulement l'authentification)
-
----
-
-## Donnees sensibles
-
-### Classification
-
-| Categorie | Exemples | Protection |
-|-----------|----------|------------|
-| **Public** | Nom produit | Aucune |
-| **Interne** | Emails | Acces restreint |
-| **Confidentiel** | Donnees client | Chiffrement |
-| **Secret** | Mots de passe, cles | Vault, hash |
-
-### Stockage et transmission
-
-- **Mots de passe:** hash avec bcrypt/Argon2, JAMAIS en clair
-- **Donnees personnelles (RGPD):** chiffrement au repos, pseudonymisation, retention limitee
-- **Secrets (API keys):** variables d'environnement ou Vault, JAMAIS dans le code source
-- **Transmission:** HTTPS obligatoire (TLS 1.3), HSTS active, pas de donnees sensibles dans URLs
-
----
-
-## Headers de securite
-
-Headers obligatoires:
-
-- `Content-Security-Policy: default-src 'self'; script-src 'self'`
-- `X-Content-Type-Options: nosniff`
-- `X-XSS-Protection: 1; mode=block`
-- `X-Frame-Options: DENY`
-- `Strict-Transport-Security: max-age=31536000; includeSubDomains`
-- `Referrer-Policy: strict-origin-when-cross-origin`
-- `Permissions-Policy: geolocation=(), camera=()`
-
----
-
-## Logging et monitoring
-
-### Evenements a logger
-
-- Tentatives de connexion (succes/echec)
-- Changements de permissions
-- Acces a donnees sensibles
-- Erreurs d'autorisation
-- Modifications de configuration
-- Exports de donnees
-
-### Ne PAS logger
-
-- Mots de passe, tokens
-- Donnees personnelles completes
-- Numeros de carte bancaire
-
----
-
-## Securite MCP & Plugins
-
-> **Alerte:** Des recherches de securite (Snyk, 2026) ont identifie 76 payloads malicieux dans les registres publics de serveurs MCP.
-
-### Checklist de vetting MCP/Plugin
-
-Avant d'installer un serveur MCP tiers:
-
-- [ ] Code source disponible et auditable
-- [ ] Auteur/organisation verifiee
-- [ ] Pas d'acces reseau non justifie
-- [ ] Pas de lecture de fichiers sensibles (.env, secrets)
-- [ ] Permissions minimales (principle of least privilege)
-- [ ] Version pinee (pas de `latest`)
-- [ ] Changelog et historique de securite
-
-### Vulnerabilites connues (CVE)
-
-| CVE | Severite | Version corrigee | Impact |
-|-----|----------|-----------------|--------|
-| CVE-2025-59536 | 8.7/10 CVSS | v2.1.51 | Injection de commandes via inputs MCP dans le pipeline de hooks |
-| CVE-2026-21852 | 5.3/10 CVSS | v2.0.65 | Exfiltration de cles API via traversee de chemin dans la resolution de hooks |
-| CVE-2026-35020 | High | v2.1.97 | Compound command bypass — permissions not checked on compound bash commands |
-| CVE-2026-35021 | High | v2.1.97 | Network redirect bypass in Bash tool |
-| CVE-2026-35022 | High | v2.1.98 | Env-var prefix injection in Bash tool |
-| N/A | High | v2.1.101 | Command injection via POSIX `which` fallback |
-
-> **Incident (mars 2026):** Le code source complet de Claude Code a ete expose via le package npm v2.1.88 (fichier `.map` de 59.8 MB non exclu par `.npmignore`). Corrige dans v2.1.89.
-
-> **Note:** L'installation via `npm install -g` est obsolete. Utilisez les installateurs natifs.
-> **Recommandation:** Toujours utiliser Claude Code v2.1.97+ lorsque des serveurs MCP sont utilises avec des hooks.
-
-### CLAUDE.md vs Hooks
-
-| Mecanisme | Force | Usage |
-|-----------|-------|-------|
-| **CLAUDE.md** | Suggestion | Guidelines, conventions |
-| **Rules** | Suggestion forte | Regles detaillees |
-| **Hooks** | Enforcement | Blocage effectif, validation automatique |
-
-> **Regle:** CLAUDE.md = suggestions. Hooks = requirements.
-> Pour les contraintes de securite critiques, utiliser des hooks, pas des instructions textuelles.
-
-### Auto Mode (v2.1.94+)
-
-| Mode | Protection | Vitesse | Usage |
-|------|-----------|---------|-------|
-| Manuel | Maximale | Lente | Workflows audites, haute securite |
-| Auto Mode | Elevee | Rapide | Workflows de dev de confiance |
-| Skip Permissions | Minimale | Maximale | Projets locaux/personnels uniquement |
-
-### Sandboxing des sous-processus (v2.1.98+)
-
-| Mecanisme | Description |
-|-----------|-------------|
-| Isolation PID namespace | Les sous-processus sont isoles dans un namespace PID dedie (Linux) |
-| `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` | Supprime les credentials des variables d'environnement des sous-processus |
-| `sandbox.failIfUnavailable` | Echoue si le sandbox ne peut pas etre initialise (v2.1.83+) |
-
----
-
-## Checklist
-
-### Developpement
-
-- [ ] Validation des entrees cote serveur
-- [ ] Requetes parametrees (pas de concatenation SQL)
-- [ ] Escape des outputs (prevention XSS)
-- [ ] Mots de passe hashes (bcrypt/Argon2)
-- [ ] Sessions securisees (httpOnly, secure, sameSite)
-- [ ] Verification des permissions a chaque requete
-- [ ] Secrets dans variables d'environnement
-- [ ] Dependances auditees
-
-### Configuration
-
-- [ ] HTTPS active (TLS 1.3)
-- [ ] Headers de securite configures
-- [ ] Messages d'erreur generiques en prod
-- [ ] Debug mode desactive en prod
-- [ ] Rate limiting active
-- [ ] CORS configure strictement
-
-### Monitoring
-
-- [ ] Logging des evenements de securite
-- [ ] Alerting sur anomalies
-- [ ] Audit regulier des acces
-- [ ] Scan de vulnerabilites periodique
-
-### Compliance (si applicable)
-
-- [ ] RGPD: Consentement, droit a l'oubli
-- [ ] PCI-DSS: Donnees de paiement
-- [ ] HIPAA: Donnees de sante
-- [ ] SOC2: Controles de securite
-
----
-
-> Detailed examples and templates: see @.claude/references/base/security.md
-
-## Ressources
-
-- **OWASP Top 10:** [owasp.org/Top10](https://owasp.org/Top10/)
-- **OWASP Cheat Sheets:** [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/)
-- **CWE Top 25:** [cwe.mitre.org/top25](https://cwe.mitre.org/top25/)
-- **NIST Guidelines:** [nist.gov](https://www.nist.gov/cyberframework)
-
----
-
-**Date de derniere mise a jour:** 2026-04
-**Version:** 1.2.0
-**Auteur:** The Bearded CTO
+> Details complets, checklists et CVE : `@.claude/references/base/security.md`

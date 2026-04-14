@@ -3,6 +3,7 @@ name: accessibility-expert
 description: WCAG 2.2 AAA accessibility specialist
 model: haiku
 maxTurns: 4
+effort: low
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, NotebookEdit]
 permissionMode: default

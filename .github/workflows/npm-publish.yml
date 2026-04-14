@@ -178,6 +178,9 @@ jobs:
       - name: Run ShellCheck
         run: npm run lint:shell
 
+      - name: Check i18n parity
+        run: npm run lint:i18n
+
       - name: Install Vale
         run: |
           wget -qO- https://github.com/errata-ai/vale/releases/download/v3.9.5/vale_3.9.5_Linux_64-bit.tar.gz | tar xz -C /usr/local/bin vale
@@ -191,10 +194,30 @@ jobs:
           cp -r config/vocabularies/claude-craft styles/config/vocabularies/
           npm run vale:check
 
+  bats:
+    name: Shell Script Tests (BATS)
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Run MultiAccount tests
+        run: docker run --rm -v "${{ github.workspace }}/Tools:/mnt" bats/bats:latest /mnt/MultiAccount/tests/
+
+      - name: Run RTK tests
+        run: docker run --rm -v "${{ github.workspace }}/Tools:/mnt" bats/bats:latest /mnt/RTK/tests/
+
+      - name: Run StatusLine tests
+        run: docker run --rm -v "${{ github.workspace }}/Tools:/mnt" bats/bats:latest /mnt/StatusLine/tests/
+
+      - name: Run AgentTeams tests
+        run: docker run --rm -v "${{ github.workspace }}/Tools:/mnt" bats/bats:latest /mnt/AgentTeams/tests/
+
   publish:
     name: Publish to NPM
     runs-on: ubuntu-latest
-    needs: [validate, build]
+    needs: [validate, build, bats]
     environment: npm
     permissions:
       contents: read

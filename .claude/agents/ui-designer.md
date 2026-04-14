@@ -3,6 +3,8 @@ name: ui-designer
 description: Design systems and visual design expert
 model: sonnet
 maxTurns: 6
+effort: medium
+memory: project
 tools: [Read, Glob, Grep, Edit, Write, WebFetch, WebSearch]
 permissionMode: default
 ---

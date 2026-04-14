@@ -21,7 +21,7 @@
         list list-agents list-commands \
         config-install config-install-all config-validate config-list config-dry-run \
         config-check config-check-fix check fix-permissions stats \
-        migrate-check test-tools test-rtk \
+        migrate-check test-tools test-rtk test-statusline test-agent-teams test-bats test-all \
         plugin-export plugin-export-all
 
 # Configuration
@@ -293,8 +293,8 @@ install-completions: ## Installe les completions bash/zsh pour claude-accounts
 	fi
 	@echo "$(GREEN)Completions installees !$(NC)"
 
-test-tools: ## Lance les tests bats pour les outils (via Docker)
-	@echo "$(CYAN)Lancement des tests bats...$(NC)"
+test-tools: ## Lance les tests bats pour les outils MultiAccount (via Docker)
+	@echo "$(CYAN)Lancement des tests MultiAccount...$(NC)"
 	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/MultiAccount/tests/
 
 test-statusline: ## Lance les tests bats pour la status line (via Docker)
@@ -304,6 +304,20 @@ test-statusline: ## Lance les tests bats pour la status line (via Docker)
 test-rtk: ## Lance les tests bats pour RTK (via Docker)
 	@echo "$(CYAN)Lancement des tests RTK...$(NC)"
 	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/RTK/tests/
+
+test-agent-teams: ## Lance les tests bats pour AgentTeams (via Docker)
+	@echo "$(CYAN)Lancement des tests AgentTeams...$(NC)"
+	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/AgentTeams/tests/
+
+test-bats: test-tools test-statusline test-rtk test-agent-teams ## Lance tous les tests bats (via Docker)
+	@echo "$(GREEN)Tous les tests bats passes !$(NC)"
+
+test-all: ## Lance tous les tests (vitest + bats)
+	@echo "$(CYAN)Lancement des tests vitest...$(NC)"
+	@npm test
+	@echo "$(CYAN)Lancement des tests bats...$(NC)"
+	@$(MAKE) test-bats
+	@echo "$(GREEN)Tous les tests passes !$(NC)"
 
 install-tools-lib: ## Installe la librairie partagee tools-ui.sh
 	@mkdir -p ~/.local/lib/claude-craft

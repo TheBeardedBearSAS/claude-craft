@@ -1,0 +1,35 @@
+# Build artifacts and dependencies
+node_modules/
+vendor/
+coverage/
+test-output/
+dist/
+build/
+.next/
+out/
+
+# Large generated files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+composer.lock
+CHANGELOG.md
+
+# IDE and OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+
+# Logs and temporary files
+*.log
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+
+# Binaries and media (if present)
+*.wasm
+*.mp4
+*.mov
+*.avi

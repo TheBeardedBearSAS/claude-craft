@@ -1,7 +1,7 @@
 # Claude Craft - Contexte Essentiel
 
 ## Projet
-- **Version:** 7.26.0
+- **Version:** 7.27.0
 - **Type:** Framework multi-technologie pour Claude Code
 - **Stacks:** 18 (Symfony, React, Flutter, Python, Angular, Vue.js, Laravel, React Native, C#/.NET, PHP, Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP)
 - **Agents:** 63 | **Commandes:** 204 | **Namespaces:** 26
@@ -14,7 +14,7 @@
 - `docs/` — Documentation utilisateur
 
 ## Commandes de Test
-- `npm test` — Suite complete (550+ tests)
+- `npm test` — Suite complete (619+ tests)
 - `npm run test:content` — Validation contenu (agents, commandes, skills)
 - `npm run lint` — Linting (ESLint + shell)
 - `npm run lint:i18n` — Parite i18n

@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-5"
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -78,6 +81,18 @@
             "type": "command",
             "command": "~/.claude/hooks/pre-compact.sh",
             "timeout": 10000
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f .claude/context-essentials.md ]; then jq -n --rawfile c .claude/context-essentials.md '{\"systemMessage\": (\"CONTEXT RESTORED AFTER COMPACTION:\\n\" + $c)}'; else echo '{}'; fi",
+            "timeout": 5000
           }
         ]
       }

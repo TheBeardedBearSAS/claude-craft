@@ -3,6 +3,8 @@ name: symfony-reviewer
 description: Symfony 8 / PHP 8.5 code review specialist — DDD, Doctrine, CQRS, API Platform
 model: sonnet
 maxTurns: 6
+effort: medium
+memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

@@ -3,6 +3,8 @@ name: flutter-reviewer
 description: Flutter 3.38 / Dart 3.10 code review specialist — BLoC, Riverpod, widget optimization, platform-specific code
 model: sonnet
 maxTurns: 6
+effort: medium
+memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

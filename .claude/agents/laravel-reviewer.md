@@ -3,6 +3,8 @@ name: laravel-reviewer
 description: Laravel 12 and PHP 8.5 code review specialist — Actions pattern, Pest PHP, Eloquent, Sanctum, performance optimization
 model: sonnet
 maxTurns: 6
+effort: medium
+memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

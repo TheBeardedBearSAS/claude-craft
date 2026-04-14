@@ -1,0 +1,31 @@
+# Build artifacts and dependencies
+node_modules/
+coverage/
+test-output/
+
+# Large binary/generated content
+video/
+website/
+
+# i18n source (installed on demand via scripts, not browsed during dev)
+Dev/i18n/
+Infra/i18n/
+Project/i18n/
+
+# Historical reports
+reports/
+
+# Large generated files
+package-lock.json
+CHANGELOG.md
+
+# Bundled outputs (regenerated via make)
+bundles/
+
+# Vale prose linter styles (downloaded)
+styles/Google/
+styles/write-good/
+
+# BMAD metrics and generated docs
+.bmad/metrics/
+.bmad/docs/

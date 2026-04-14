@@ -526,6 +526,75 @@ install_checklists() {
     fi
 }
 
+install_config() {
+    log_info "${MSG_INSTALLING_CONFIG:-Installing configuration files...}"
+
+    local base_templates="$I18N_DIR/base/Common/templates"
+    local lang_templates="$I18N_DIR/$lang/Common/templates"
+
+    # Install .claudeignore (only if not exists — never overwrite user customizations)
+    local claudeignore_src="$base_templates/claudeignore.template"
+    local claudeignore_dest="$target_dir/.claudeignore"
+    if [[ -f "$claudeignore_src" && ! -f "$claudeignore_dest" ]]; then
+        if $dry_run; then
+            log_dry_run "${MSG_CREATING:-Creating} .claudeignore"
+        else
+            cp "$claudeignore_src" "$claudeignore_dest"
+            log_success "${MSG_CREATING:-Creating} .claudeignore"
+        fi
+        ((++files_created))
+    fi
+
+    # Install settings.json (only if not exists OR --force)
+    local settings_src="$lang_templates/settings.json.template"
+    [[ ! -f "$settings_src" ]] && settings_src="$base_templates/settings.json.template"
+    local settings_dest="$target_dir/.claude/settings.json"
+    if [[ -f "$settings_src" ]]; then
+        if [[ ! -f "$settings_dest" ]] || $force; then
+            if $dry_run; then
+                log_dry_run "${MSG_CREATING:-Creating} .claude/settings.json"
+            else
+                mkdir -p "$(dirname "$settings_dest")"
+                cp "$settings_src" "$settings_dest"
+                log_success "${MSG_CREATING:-Creating} .claude/settings.json"
+            fi
+            ((++files_created))
+        else
+            log_info "Skipped: .claude/settings.json (already exists, use --force to overwrite)"
+            ((++files_skipped))
+        fi
+    fi
+
+    # Install settings.local.json (only if not exists — never overwrite)
+    local local_settings_src="$base_templates/settings.local.json.template"
+    local local_settings_dest="$target_dir/.claude/settings.local.json"
+    if [[ -f "$local_settings_src" && ! -f "$local_settings_dest" ]]; then
+        if $dry_run; then
+            log_dry_run "${MSG_CREATING:-Creating} .claude/settings.local.json"
+        else
+            mkdir -p "$(dirname "$local_settings_dest")"
+            cp "$local_settings_src" "$local_settings_dest"
+            log_success "${MSG_CREATING:-Creating} .claude/settings.local.json"
+        fi
+        ((++files_created))
+    fi
+
+    # Install context-essentials.md (only if not exists)
+    local context_src="$lang_templates/context-essentials.md"
+    [[ ! -f "$context_src" ]] && context_src="$base_templates/context-essentials.md"
+    local context_dest="$target_dir/.claude/context-essentials.md"
+    if [[ -f "$context_src" && ! -f "$context_dest" ]]; then
+        if $dry_run; then
+            log_dry_run "${MSG_CREATING:-Creating} .claude/context-essentials.md"
+        else
+            mkdir -p "$(dirname "$context_dest")"
+            cp "$context_src" "$context_dest"
+            log_success "${MSG_CREATING:-Creating} .claude/context-essentials.md"
+        fi
+        ((++files_created))
+    fi
+}
+
 install_claude_md() {
     log_info "${MSG_INSTALLING_CLAUDE_MD:-Installing CLAUDE.md...}"
 
@@ -763,8 +832,9 @@ main() {
         install_checklists
     fi
 
-    # Always install CLAUDE.md template (if rules are installed)
+    # Always install config and CLAUDE.md template (if rules are installed)
     if $rules_only; then
+        install_config
         install_claude_md
     fi
 

@@ -3,6 +3,8 @@ name: tdd-coach
 description: Test-Driven Development coach
 model: opus
 maxTurns: 8
+effort: high
+memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
 permissionMode: default
 skills: [testing, solid-principles]

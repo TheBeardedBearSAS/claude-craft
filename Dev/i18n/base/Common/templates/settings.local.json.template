@@ -2,9 +2,42 @@
   "$schema": "https://claude.ai/settings-schema.json",
 
   "permissions": {
-    "allow": [],
+    "allow": [
+      "Bash(git:*)",
+      "Bash(make:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(node:*)",
+      "Bash(bash:*)",
+      "Bash(chmod:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(echo:*)",
+      "Bash(wc:*)",
+      "Bash(tree:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(xargs:*)",
+      "Bash(jq:*)",
+      "Bash(yq:*)",
+      "Bash(sed:*)",
+      "Bash(sort:*)",
+      "Bash(diff:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(touch:*)",
+      "Bash(python3:*)",
+      "Bash(curl:*)",
+      "Bash(gh:*)",
+      "Bash(rtk:*)",
+      "Bash(docker:*)",
+      "Bash(docker compose:*)",
+      "WebSearch",
+      "WebFetch"
+    ],
     "deny": []
-  },
-
-  "hooks": {}
+  }
 }

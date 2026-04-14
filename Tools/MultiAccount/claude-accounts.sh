@@ -631,6 +631,7 @@ show_usage() {
     echo -e "  ${C_BOLD}claude-accounts list${C_RESET}          ${MSG_USAGE_LIST_DESC}"
     echo -e "  ${C_BOLD}claude-accounts auth <name>${C_RESET}    ${MSG_USAGE_AUTH_DESC}"
     echo -e "  ${C_BOLD}claude-accounts run <name>${C_RESET}     ${MSG_USAGE_RUN_DESC}"
+    echo -e "  ${C_BOLD}claude-accounts sync${C_RESET}          ${MSG_USAGE_SYNC_DESC:-Sync isolated profiles with ~/.claude}"
     echo -e "  ${C_BOLD}claude-accounts migrate${C_RESET}       ${MSG_USAGE_MIGRATE_DESC}"
     echo -e "  ${C_BOLD}claude-accounts doctor${C_RESET}        ${MSG_USAGE_DOCTOR_DESC:-Check profile health}"
     echo -e "  ${C_BOLD}claude-accounts --json list${C_RESET}   ${MSG_USAGE_JSON_DESC:-JSON output for scripting}"
@@ -696,6 +697,82 @@ ccsp() {
     echo -e "  ${C_BOLD}ccsp${C_RESET}          ${MSG_CC_MENU}"
     echo -e "  ${C_BOLD}ccsp perso${C_RESET}    ${MSG_CC_PROFILE} 'perso'"
     echo -e "  ${C_BOLD}ccsp pro${C_RESET}      ${MSG_CC_PROFILE} 'pro'"
+}
+
+# =============================================================================
+# Sync - Synchronize isolated profiles with ~/.claude
+# =============================================================================
+
+cmd_sync() {
+    echo -e "\n${C_BOLD}${MSG_SYNC_TITLE:-Sync isolated profiles with ~/.claude}${C_RESET}\n"
+
+    if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
+        print_warning "${MSG_NO_PROFILE}"
+        return
+    fi
+
+    local synced=0
+    local skipped=0
+
+    for profile_dir in "$CLAUDE_PROFILES_DIR"/*/; do
+        [[ ! -d "$profile_dir" ]] && continue
+        local profile_name
+        profile_name=$(basename "$profile_dir")
+        local mode
+        mode=$(get_profile_mode "$profile_name")
+
+        if [[ "$mode" == "shared" ]]; then
+            print_info "$profile_name: ${MSG_SYNC_SHARED_SKIP:-shared mode, already synced via symlink}"
+            skipped=$((skipped + 1))
+            continue
+        fi
+
+        if [[ "$mode" == "isolated" ]]; then
+            print_info "${MSG_SYNC_SYNCING:-Syncing} $profile_name..."
+
+            # Sync hooks directory
+            if [[ -d "$HOME/.claude/hooks" ]]; then
+                mkdir -p "$profile_dir/hooks"
+                for hook_file in "$HOME/.claude/hooks"/*; do
+                    [[ -e "$hook_file" ]] || continue
+                    local hook_name
+                    hook_name=$(basename "$hook_file")
+                    cp "$hook_file" "$profile_dir/hooks/$hook_name"
+                done
+                print_success "  hooks/ -> $profile_name/hooks/"
+            fi
+
+            # Sync settings.json (merge env block, preserve profile-specific settings)
+            if [[ -f "$HOME/.claude/settings.json" && -f "$profile_dir/settings.json" ]]; then
+                # Merge: take env and hooks from source, preserve profile permissions
+                if command -v jq &>/dev/null; then
+                    local merged
+                    merged=$(jq -s '.[0] * .[1] | .env = (.[0].env // {} ) * (.[1].env // {})' \
+                        "$profile_dir/settings.json" "$HOME/.claude/settings.json" 2>/dev/null) || true
+                    if [[ -n "$merged" ]]; then
+                        echo "$merged" > "$profile_dir/settings.json"
+                        print_success "  settings.json merged"
+                    fi
+                else
+                    cp "$HOME/.claude/settings.json" "$profile_dir/settings.json"
+                    print_success "  settings.json copied"
+                fi
+            elif [[ -f "$HOME/.claude/settings.json" ]]; then
+                cp "$HOME/.claude/settings.json" "$profile_dir/settings.json"
+                print_success "  settings.json copied"
+            fi
+
+            # Sync RTK.md
+            if [[ -f "$HOME/.claude/RTK.md" ]]; then
+                cp "$HOME/.claude/RTK.md" "$profile_dir/RTK.md"
+            fi
+
+            synced=$((synced + 1))
+        fi
+    done
+
+    echo ""
+    print_success "${MSG_SYNC_DONE:-Sync complete}: $synced ${MSG_SYNC_SYNCED:-synced}, $skipped ${MSG_SYNC_SKIPPED:-skipped (shared)}"
 }
 
 # =============================================================================
@@ -817,9 +894,10 @@ show_menu() {
     echo -e "  ${C_CYAN}4)${C_RESET} 🔐 ${MSG_MENU_AUTH}"
     echo -e "  ${C_CYAN}5)${C_RESET} 🚀 ${MSG_MENU_LAUNCH}"
     echo -e "  ${C_CYAN}6)${C_RESET} ⚡ ${MSG_MENU_CCSP_FUNC}"
-    echo -e "  ${C_CYAN}7)${C_RESET} 🔄 ${MSG_MENU_MIGRATE}"
-    echo -e "  ${C_CYAN}8)${C_RESET} 🩺 ${MSG_MENU_DOCTOR:-Profile health check}"
-    echo -e "  ${C_CYAN}9)${C_RESET} 📖 ${MSG_MENU_HELP}"
+    echo -e "  ${C_CYAN}7)${C_RESET} 🔁 ${MSG_MENU_SYNC:-Sync isolated profiles}"
+    echo -e "  ${C_CYAN}8)${C_RESET} 🔄 ${MSG_MENU_MIGRATE}"
+    echo -e "  ${C_CYAN}9)${C_RESET} 🩺 ${MSG_MENU_DOCTOR:-Profile health check}"
+    echo -e "  ${C_CYAN}0)${C_RESET} 📖 ${MSG_MENU_HELP}"
     echo -e "  ${C_CYAN}q)${C_RESET} ${MSG_MENU_QUIT}"
     echo ""
 }
@@ -839,9 +917,10 @@ main_menu() {
             4) authenticate_profile ;;
             5) launch_profile ;;
             6) install_ccsp_function ;;
-            7) migrate_profile ;;
-            8) cmd_doctor ;;
-            9) show_usage ;;
+            7) cmd_sync ;;
+            8) migrate_profile ;;
+            9) cmd_doctor ;;
+            0) show_usage ;;
             q|Q) echo -e "\n${C_GREEN}${MSG_GOODBYE}${C_RESET}\n"; exit $EXIT_OK ;;
             *) print_error "${MSG_INVALID_CHOICE}" ;;
         esac
@@ -945,6 +1024,9 @@ cli_mode() {
             else
                 launch_profile
             fi
+            ;;
+        sync|s)
+            cmd_sync
             ;;
         migrate|m)
             migrate_profile

@@ -3,6 +3,8 @@ name: csharp-reviewer
 description: C# 14 / .NET 10 code review specialist — Clean Architecture, CQRS, MediatR, EF Core, security analysis
 model: sonnet
 maxTurns: 6
+effort: medium
+memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default
