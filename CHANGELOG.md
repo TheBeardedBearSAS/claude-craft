@@ -5,6 +5,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.0.0] - 2026-04-15
+
+### 🚨 BREAKING CHANGES
+
+**Alignement strict sur la [spec officielle Anthropic Agent Skills](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md).**
+
+Guide de migration complet : [docs/MIGRATION-v7-to-v8.md](docs/MIGRATION-v7-to-v8.md).
+
+#### Changements bloquants
+
+- **Fusion `remotion-best-practices` → `remotion`**
+  - Le symlink `.claude/skills/remotion-best-practices` (pointant vers `.agents/`, gitignored) a été supprimé
+  - Contenu consolidé dans `.claude/skills/remotion/`
+  - Frontmatter normalisé (retrait de `metadata:`, ajout de `triggers:` + `auto_suggest:`)
+  - **Action utilisateur :** remplacer les références `remotion-best-practices` par `remotion`
+
+- **Validation CI obligatoire**
+  - Nouveau script `Dev/scripts/validate-skills-spec.sh`
+  - Vérifie 5 règles : structure dossier, frontmatter YAML, match name/dir, naming kebab-case, pas de chemins absolus
+  - Script pre-commit / CI GitHub Actions recommandé (voir MIGRATION guide)
+
+#### Conformité atteinte
+
+- 41/41 skills passent le validator (100% conforme)
+- Frontmatter minimal `name` + `description` normalisé sur tous les skills
+- Interopérabilité garantie avec marketplace Anthropic et superpowers-marketplace
+
+### Added
+
+- `docs/MIGRATION-v7-to-v8.md` — guide complet de migration
+- `Dev/scripts/validate-skills-spec.sh` — script de validation CI (exit 1 si non-conforme)
+
+### Changed
+
+- `.claude/skills/remotion/SKILL.md` — frontmatter conforme spec (name: remotion + triggers + auto_suggest)
+
+### Removed
+
+- `.claude/skills/remotion-best-practices` (symlink obsolète)
+- Champ `metadata:` dans frontmatter remotion (non spec)
+
+### Récapitulatif — Mission accomplie
+
+Claude Craft v8.0.0 clôture l'intégration des 12 ressources LinkedIn Claude Code identifiées en début de cycle :
+
+| # | Ressource | Status | Version |
+|---|-----------|--------|---------|
+| 1 | Everything Claude Code | ✅ Équivalent framework | Base |
+| 2 | claude-code-best-practices | ✅ Rules + skills | Base |
+| 3 | Superpowers | ✅ 3 skills | v7.32 |
+| 4 | claude-mem | ✅ Memory lifecycle | v7.35 |
+| 5 | Karpathy Guidelines | ✅ Rule 23 | v7.31 |
+| 6 | Awesome Claude Code | ✅ Veille continue | Base |
+| 7 | Repomix | ✅ /common:pack-repo | v7.33 |
+| 8 | Get Shit Done (GSD) | ✅ atomic-tasks | v7.31 |
+| 9 | Prompt Engineering Guide | ✅ Docs (rule 12) | Base |
+| 10 | Agent Skills Anthropic | ✅ Spec conforme 100% | v8.0.0 |
+| 11 | Awesome Subagents | ✅ 4 agents ajoutés | v7.34 |
+| 12 | Awesome DESIGN.md | ✅ Skill + template + cmd | v7.31 + v7.34 |
+
 ## [7.35.0] - 2026-04-15
 
 ### Added — Phase 5 : Memory lifecycle hooks (claude-mem inspired)
