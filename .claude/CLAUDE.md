@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 7.25.0 | **Languages:** en, fr, es, de, pt
+**Version:** 7.26.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 18 technology stacks, 63 agents, 204 commands across 26 namespaces, and BMAD v6 project management.
 
@@ -42,34 +42,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Commands (26 namespaces, 204 commands)
 
-| Namespace | Key Commands | Count |
-|-----------|-------------|-------|
-| `/common:` | `pre-commit-check`, `ralph-run`, `setup-project-context`, `add-technology`, `setup-rtk` | 13 |
-| `/workflow:` | `init`, `analyze`, `plan`, `design`, `implement`, `status` | 9 |
-| `/team:` | `audit`, `sprint`, `security`, `delivery` (Agent Teams) | 4 |
-| `/qa:` | `recette`, `fix`, `tdd`, `regression`, `report` | 6 |
-| `/uiux:` | `audit`, `a11y-audit`, `component-spec`, `design-tokens` | 7 |
-| `/csharp:` | `check-compliance`, `check-architecture`, `generate-feature` | 6 |
-| `/symfony:` | `check-architecture`, `check-compliance`, `generate-crud`, `api-endpoint` | 10 |
-| `/flutter:` | `check-architecture`, `generate-feature`, `analyze-performance`, `golden-update` | 10 |
-| `/react:` | `generate-component`, `check-architecture`, `accessibility-check`, `generate-hook` | 10 |
-| `/reactnative:` | `generate-screen`, `check-architecture`, `deep-link`, `store-prepare` | 10 |
-| `/angular:` | `generate-component`, `check-architecture`, `check-compliance` | 6 |
-| `/vuejs:` | `generate-component`, `check-architecture`, `check-compliance` | 6 |
-| `/laravel:` | `generate-controller`, `check-architecture`, `check-compliance` | 6 |
-| `/python:` | `generate-endpoint`, `check-architecture`, `async-check`, `type-coverage` | 10 |
-| `/php:` | `check-architecture`, `check-compliance`, `check-security` | 5 |
-| `/sprint:` | `next-story`, `transition`, `status`, `dev` | 5 |
-| `/gate:` | `validate-prd`, `validate-story`, `validate-backlog`, `validate-techspec`, `validate-alignment` | 7 |
-| `/project:` | `run-sprint`, `run-epic`, `run-queue`, `generate-prd`, `board`, `trace`, `checkpoint`, `metrics` | 34 |
-| `/docker:` | `compose-setup`, `architecture`, `debug`, `optimize` | 5 |
-| `/coolify:` | `setup`, `deploy`, `debug`, `backup`, `optimize` | 5 |
-| `/kubernetes:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
-| `/opentofu:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
-| `/ansible:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
-| `/hcloud:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
-| `/pgbouncer:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
-| `/frankenphp:` | `architecture`, `deploy-setup`, `debug`, `security-audit`, `optimize` | 5 |
+Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` | Infra: `/docker:*`, `/coolify:*`, `/kubernetes:*`, `/opentofu:*`, `/ansible:*`, `/hcloud:*`, `/pgbouncer:*`, `/frankenphp:*` | Project: `/sprint:*`, `/gate:*`, `/project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 
@@ -77,19 +50,7 @@ Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-RE
 
 ## Available Agents (63 agents)
 
-| Category | Agents | Count |
-|----------|--------|-------|
-| **Common** | `@api-designer`, `@database-architect`, `@devops-engineer`, `@performance-auditor`, `@refactoring-specialist`, `@tdd-coach`, `@uiux-orchestrator`, `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@research-assistant`, `@ralph-conductor` | 12 |
-| **Tech Reviewers** | `@symfony-reviewer`, `@flutter-reviewer`, `@react-reviewer`, `@python-reviewer`, `@angular-reviewer`, `@laravel-reviewer`, `@vuejs-reviewer`, `@reactnative-reviewer`, `@csharp-reviewer`, `@php-reviewer` | 10 |
-| **Docker** | `@docker-dockerfile`, `@docker-compose`, `@docker-debug`, `@docker-cicd`, `@docker-architect` | 5 |
-| **Coolify** | `@coolify-architect`, `@coolify-deployment`, `@coolify-debug`, `@coolify-monitoring` | 4 |
-| **Kubernetes** | `@kubernetes-architect`, `@kubernetes-deployment`, `@kubernetes-debug`, `@kubernetes-security`, `@kubernetes-monitoring` | 5 |
-| **OpenTofu** | `@opentofu-architect`, `@opentofu-deployment`, `@opentofu-debug`, `@opentofu-security`, `@opentofu-cost` | 5 |
-| **Ansible** | `@ansible-architect`, `@ansible-deployment`, `@ansible-debug`, `@ansible-security`, `@ansible-quality` | 5 |
-| **Hcloud** | `@hcloud-architect`, `@hcloud-deployment`, `@hcloud-debug`, `@hcloud-security`, `@hcloud-cost` | 5 |
-| **PgBouncer** | `@pgbouncer-architect`, `@pgbouncer-deployment`, `@pgbouncer-debug`, `@pgbouncer-security`, `@pgbouncer-monitoring` | 5 |
-| **FrankenPHP** | `@frankenphp-architect`, `@frankenphp-deployment`, `@frankenphp-debug`, `@frankenphp-security`, `@frankenphp-performance` | 5 |
-| **Project** | `@product-owner`, `@tech-lead` | 2 |
+**Common** (12): `@api-designer`, `@database-architect`, `@devops-engineer`, `@performance-auditor`, `@refactoring-specialist`, `@tdd-coach`, `@uiux-orchestrator`, `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@research-assistant`, `@ralph-conductor` | **Tech Reviewers** (10): `@{symfony,flutter,react,python,angular,laravel,vuejs,reactnative,csharp,php}-reviewer` | **Infrastructure** (41): Docker, Coolify, K8s, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP — see [Agents](../docs/AGENTS.md) | **Project** (2): `@product-owner`, `@tech-lead`
 
 Full reference: [Agents](../docs/AGENTS.md)
 
@@ -146,16 +107,7 @@ docker compose exec app ./vendor/bin/phpunit
 
 ## Skills
 
-| Skill | Topic |
-|-------|-------|
-| `/solid-principles` | SOLID patterns |
-| `/kiss-dry-yagni` | Code simplicity |
-| `/testing` | TDD/BDD practices |
-| `/security` | Security guidelines |
-| `/git-workflow` | Git best practices |
-| `/documentation` | Documentation standards |
-| `/workflow-analysis` | Analysis methodology |
-| `/parallel-worktrees` | Concurrent Claude sessions |
+`/solid-principles`, `/testing`, `/security`, `/git-workflow`, `/documentation`, `/kiss-dry-yagni`, `/workflow-analysis`, `/parallel-worktrees` — loaded on demand from `.claude/skills/`
 
 ---
 

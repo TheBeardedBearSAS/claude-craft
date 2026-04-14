@@ -1,7 +1,8 @@
 ---
 name: uiux-orchestrator
 description: UI-UX coordination and orchestration
-model: opus
+model: sonnet
+maxTurns: 10
 tools: [Read, Glob, Grep, Edit, Write, Bash, Task, WebFetch, WebSearch]
 permissionMode: default
 ---

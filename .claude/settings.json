@@ -48,6 +48,26 @@
             "timeout": 5000
           }
         ]
+      },
+      {
+        "matcher": "Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "OUTPUT_SIZE=$(echo '$TOOL_OUTPUT' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Summarize key findings in under 20 lines.'; fi; exit 0",
+            "timeout": 3000
+          }
+        ]
+      },
+      {
+        "matcher": "Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "OUTPUT_SIZE=$(echo '$TOOL_OUTPUT' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Focus on the most relevant matches.'; fi; exit 0",
+            "timeout": 3000
+          }
+        ]
       }
     ],
     "PreCompact": [

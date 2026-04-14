@@ -4,9 +4,9 @@
 
 | Version | Supported          |
 |---------|--------------------|
+| 7.26.x  | :white_check_mark: |
 | 7.25.x  | :white_check_mark: |
-| 7.24.x  | :white_check_mark: |
-| < 7.24  | :x:                |
+| < 7.25  | :x:                |
 
 ## Reporting a Vulnerability
 

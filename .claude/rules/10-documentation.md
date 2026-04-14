@@ -40,99 +40,20 @@ Une bonne documentation est **essentielle** pour la maintenabilité du projet. E
 
 ## README.md
 
-### Structure recommandée
+### Sections requises
 
-```markdown
-# Nom du Projet
+Un bon README contient au minimum :
 
-Description courte (1-2 phrases).
-
-## Prérequis
-
-- Tool 1 (version)
-- Tool 2 (version)
-
-## Installation
-
-```bash
-# Commandes d'installation
-```
-
-## Démarrage rapide
-
-```bash
-# Commandes pour lancer le projet
-```
-
-## Configuration
-
-Variables d'environnement requises:
-
-| Variable | Description | Défaut |
-|----------|-------------|--------|
-| DATABASE_URL | URL base de données | - |
-| API_KEY | Clé API externe | - |
-
-## Tests
-
-```bash
-# Comment lancer les tests
-make test
-```
-
-## Déploiement
-
-Instructions de déploiement.
-
-## Architecture
-
-Brève description de l'architecture.
-Lien vers documentation détaillée.
-
-## Contribution
-
-Instructions pour contribuer.
-Lien vers CONTRIBUTING.md.
-
-## License
-
-MIT License
-```
-
-### Exemples
-
-#### ✅ BON
-
-```markdown
-# E-Commerce API
-
-API REST pour la gestion de commandes e-commerce.
-
-## Installation
-
-```bash
-git clone https://github.com/company/ecommerce-api
-cd ecommerce-api
-make install
-```
-
-## Démarrage
-
-```bash
-make dev
-# API disponible sur http://localhost:8080
-```
-```
-
-#### ❌ MAUVAIS
-
-```markdown
-# Project
-
-This is a project.
-
-Run `npm install` then `npm start`.
-```
+1. **Nom + description** (1-2 phrases)
+2. **Prérequis** (outils, versions)
+3. **Installation** (commandes)
+4. **Démarrage rapide** (commandes)
+5. **Configuration** (variables d'environnement)
+6. **Tests** (comment les lancer)
+7. **Déploiement** (instructions)
+8. **Architecture** (brève description + lien vers docs détaillées)
+9. **Contribution** (lien vers CONTRIBUTING.md)
+10. **License**
 
 ---
 
@@ -158,57 +79,17 @@ Run `npm install` then `npm start`.
 - Code mort
 ```
 
-### Exemples
-
-#### ✅ BON - Explique le pourquoi
-
-```
-// Workaround: API externe ne supporte pas UTF-8
-// TODO: Supprimer quand API v2 sera disponible (#1234)
-function sanitizeInput(text):
-  return text.ascii_only()
-
-// Rate limit de 100 req/min imposé par le provider
-// Voir: https://provider.com/docs/rate-limits
-RATE_LIMIT = 100
-```
-
-#### ❌ MAUVAIS - Explique le quoi (inutile)
-
-```
-// Incrémente le compteur
-counter = counter + 1
-
-// Retourne l'utilisateur
-return user
-
-// Boucle sur les items
-for item in items:
-```
-
 ### Documentation des fonctions
 
-Documenter:
-- **Public API** - Toujours
-- **Fonctions complexes** - Si non évident
-- **Fonctions privées** - Rarement
+Documenter selon la visibilité :
 
-```
-/**
- * Calcule le prix total avec remises applicables.
- *
- * @param items - Liste des articles
- * @param discountCode - Code promo optionnel
- * @returns Prix total après remises
- * @throws InvalidDiscountCode si code invalide
- *
- * @example
- * calculateTotal([item1, item2], "SAVE10")
- * // => Money(90.00)
- */
-function calculateTotal(items, discountCode = null):
-  ...
-```
+| Visibilité | Documenter ? |
+|------------|-------------|
+| **Public API** | Toujours |
+| **Fonctions complexes** | Si non évident |
+| **Fonctions privées** | Rarement |
+
+Format recommandé : description, `@param`, `@returns`, `@throws`, `@example`.
 
 ---
 
@@ -216,53 +97,15 @@ function calculateTotal(items, discountCode = null):
 
 ### Format
 
-```markdown
-# ADR-001: Choix de la base de données
+Un ADR contient les sections suivantes :
 
-## Statut
-
-Accepté (2025-01-15)
-
-## Contexte
-
-Nous devons choisir une base de données pour stocker
-les données utilisateurs et commandes.
-
-Contraintes:
-- Volume: ~1M utilisateurs, ~10M commandes
-- Requêtes: 80% lectures, 20% écritures
-- Budget: Limité
-
-## Décision
-
-Nous utilisons PostgreSQL.
-
-## Alternatives considérées
-
-### MySQL
-- ✅ Familiarité équipe
-- ❌ Moins performant pour requêtes complexes
-
-### MongoDB
-- ✅ Flexibilité schéma
-- ❌ Pas adapté aux relations fortes
-
-### PostgreSQL (choisi)
-- ✅ Performance requêtes complexes
-- ✅ JSONB pour flexibilité
-- ✅ Extensions (PostGIS si besoin)
-
-## Conséquences
-
-### Positives
-- Performances prévisibles
-- Écosystème mature
-- Backup/restore standard
-
-### Négatives
-- Migration depuis MySQL nécessaire
-- Formation équipe sur spécificités PG
-```
+| Section | Contenu |
+|---------|---------|
+| **Statut** | Accepté / Rejeté / Déprécié + date |
+| **Contexte** | Problème à résoudre, contraintes |
+| **Décision** | Solution choisie |
+| **Alternatives considérées** | Options évaluées avec pros/cons |
+| **Conséquences** | Impacts positifs et négatifs |
 
 ### Quand créer un ADR
 
@@ -286,59 +129,9 @@ docs/
 
 ## API Documentation
 
-### OpenAPI (Swagger)
+### Format
 
-```yaml
-openapi: 3.0.0
-info:
-  title: User API
-  version: 1.0.0
-  description: API for user management
-
-paths:
-  /users:
-    get:
-      summary: List all users
-      parameters:
-        - name: page
-          in: query
-          schema:
-            type: integer
-            default: 1
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserList'
-
-    post:
-      summary: Create user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUser'
-      responses:
-        201:
-          description: Created
-
-components:
-  schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        email:
-          type: string
-          format: email
-        name:
-          type: string
-```
+Utiliser **OpenAPI 3.0** (Swagger) pour documenter les APIs REST.
 
 ### Bonnes pratiques API Docs
 
@@ -352,43 +145,9 @@ components:
 
 ## Changelog
 
-### Format Keep a Changelog
+### Format
 
-```markdown
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/).
-
-## [Unreleased]
-
-### Added
-- New payment gateway integration
-
-### Changed
-- Improved error messages
-
-## [1.2.0] - 2025-01-15
-
-### Added
-- User profile pictures
-- Export to PDF
-
-### Changed
-- Updated dependencies
-
-### Fixed
-- Login timeout issue (#123)
-
-### Security
-- Fixed XSS vulnerability in comments
-
-## [1.1.0] - 2025-01-01
-
-### Added
-- Initial release
-```
+Suivre le standard [Keep a Changelog](https://keepachangelog.com/).
 
 ### Catégories
 
@@ -452,56 +211,6 @@ Checklist PR:
 
 ---
 
-## Diagrammes
-
-### Mermaid (intégré GitHub/GitLab)
-
-```markdown
-```mermaid
-graph LR
-    A[Client] --> B[API Gateway]
-    B --> C[User Service]
-    B --> D[Order Service]
-    C --> E[(Database)]
-    D --> E
-```
-```
-
-### Architecture Decision
-
-```markdown
-```mermaid
-flowchart TD
-    subgraph Presentation
-        A[Controllers]
-        B[API]
-    end
-
-    subgraph Application
-        C[Use Cases]
-    end
-
-    subgraph Domain
-        D[Entities]
-        E[Value Objects]
-    end
-
-    subgraph Infrastructure
-        F[Repositories]
-        G[External APIs]
-    end
-
-    A --> C
-    B --> C
-    C --> D
-    C --> E
-    F --> D
-    G --> C
-```
-```
-
----
-
 ## Checklist
 
 ### Pour chaque PR
@@ -538,6 +247,10 @@ flowchart TD
 | **Mermaid** | Diagrammes |
 | **ADR Tools** | Gestion ADRs |
 | **Vale** | Linting prose |
+
+---
+
+> Detailed examples and templates: see @.claude/references/base/documentation.md
 
 ---
 

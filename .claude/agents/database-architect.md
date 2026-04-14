@@ -2,6 +2,7 @@
 name: database-architect
 description: Database design and optimization expert
 model: opus
+maxTurns: 8
 tools: [Read, Glob, Grep, Edit, Write, WebFetch, WebSearch]
 permissionMode: default
 skills: [security]

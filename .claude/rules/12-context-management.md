@@ -30,35 +30,22 @@ La fenetre de contexte est **LA ressource critique** dans Claude Code. Chaque to
 12. [Bonnes pratiques de redaction CLAUDE.md](#bonnes-pratiques-de-redaction-claudemd)
 13. [Optimisation de performance](#optimisation-de-performance)
 14. [Patterns de communication](#patterns-de-communication)
-15. [Nouvelles commandes de contexte](#nouvelles-commandes-de-contexte)
-16. [Agent frontmatter](#agent-frontmatter)
-17. [Managed settings](#managed-settings)
-18. [Monitor et evenements en arriere-plan](#monitor-et-evenements-en-arriere-plan)
+15. [Optimisation des tokens — Quick Setup](#optimisation-des-tokens--quick-setup)
 
 ---
 
 ## Regles de taille CLAUDE.md
 
-### Limite recommandee
-
 > **CLAUDE.md principal: 150-200 lignes maximum.**
 > Chaque instruction supplementaire dilue l'attention sur les instructions existantes.
-
-### Strategie de modularite
 
 ```
 .claude/
   CLAUDE.md              <- Resume (150-200 lignes max)
   rules/                 <- Regles detaillees (chargees a la demande)
-    01-workflow-analysis.md
-    04-solid-principles.md
-    05-kiss-dry-yagni.md
-    ...
   references/            <- Documentation technique
   skills/                <- Competences a la demande
 ```
-
-### Bonnes pratiques
 
 | Pratique | Description |
 |----------|-------------|
@@ -67,14 +54,9 @@ La fenetre de contexte est **LA ressource critique** dans Claude Code. Chaque to
 | **References separees** | Documentation technique dans `.claude/references/` |
 | **Skills a la demande** | Competences chargees uniquement quand necessaires |
 
-### Ce qui va dans CLAUDE.md vs Rules
-
 | Contenu | Emplacement |
 |---------|-------------|
-| Technologies supportees | CLAUDE.md |
-| Commandes disponibles | CLAUDE.md |
-| Agents disponibles | CLAUDE.md |
-| Compatibilite Claude Code | CLAUDE.md |
+| Technologies, commandes, agents, compatibilite | CLAUDE.md |
 | Principes SOLID detailles | `.claude/rules/04-solid-principles.md` |
 | Regles de securite | `.claude/rules/11-security.md` |
 | Workflow d'analyse | `.claude/rules/01-workflow-analysis.md` |
@@ -82,8 +64,6 @@ La fenetre de contexte est **LA ressource critique** dans Claude Code. Chaque to
 ---
 
 ## Nettoyage du contexte
-
-### Quand utiliser `/clear`
 
 ```
 Utiliser /clear:
@@ -98,37 +78,15 @@ NE PAS utiliser /clear:
 - Juste apres avoir charge des fichiers pertinents
 ```
 
-### Signes de pollution du contexte
-
-- Claude repete des informations deja donnees
-- Les reponses deviennent moins precises
-- Claude confond des elements de taches differentes
-- Les erreurs augmentent malgre des instructions claires
-
-### Pattern: Investigation puis implementation
-
-```
-Session 1: Investigation
-  → Lire le code, comprendre l'architecture
-  → Documenter les findings
-  → /clear
-
-Session 2: Implementation
-  → Charger uniquement les fichiers necessaires
-  → Implementer avec un contexte propre
-```
+**Signes de pollution:** Claude repete des informations, les reponses deviennent moins precises, confusion entre taches, erreurs malgre des instructions claires.
 
 ---
 
 ## Sous-agents pour les investigations
 
-### Principe
-
 > **Deleguer les recherches aux sous-agents pour garder le contexte principal propre.**
 
-Les sous-agents (Task tool) ont leur propre fenetre de contexte. Utiliser un sous-agent pour explorer le codebase evite de polluer le contexte principal avec des centaines de lignes de code non pertinentes.
-
-### Quand utiliser un sous-agent
+Les sous-agents (Task tool) ont leur propre fenetre de contexte, evitant de polluer le contexte principal.
 
 | Situation | Action |
 |-----------|--------|
@@ -138,176 +96,34 @@ Les sous-agents (Task tool) ont leur propre fenetre de contexte. Utiliser un sou
 | Planifier une implementation | Sous-agent Plan |
 | Tache independante en parallele | Sous-agent general-purpose |
 
-### Exemple
-
-```
-# Au lieu de lire 20 fichiers dans le contexte principal:
-
-Task(Explore): "Comment fonctionne l'authentification dans ce projet?
-  Liste les fichiers, les patterns, les dependances."
-
-# Le sous-agent explore et retourne un resume
-# Le contexte principal reste propre
-```
-
-### Agent frontmatter (v2.1.78+)
-
-Les agents personnalises supportent des champs frontmatter pour controler leur comportement:
-
-```yaml
----
-effort: low          # Niveau d'effort (low/medium/high)
-maxTurns: 10         # Nombre maximum de tours
-disallowedTools:     # Outils interdits
-  - Edit
-  - Write
----
-```
-
-Ces champs permettent d'optimiser les couts et le scope des sous-agents.
+**Agent frontmatter (v2.1.78+):** Les agents personnalises supportent `effort`, `maxTurns`, `disallowedTools` pour optimiser les couts et le scope.
 
 ---
 
 ## Context compaction
 
-### Fonctionnement
+Claude Code compacte automatiquement le contexte quand il approche les limites. Les messages anciens sont resumes pour liberer de l'espace.
 
-Claude Code compacte automatiquement le contexte quand il approche les limites de la fenetre. Les messages anciens sont resumes pour liberer de l'espace.
+- A partir de **70% de contexte**, lancer `/compact` proactivement
+- `/memory` (v2.1.59+) sauvegarde des apprentissages persistants qui survivent aux compactions
 
-### Compaction proactive
-
-A partir de 70% de contexte utilise, lancer `/compact` proactivement pour eviter une compaction automatique non maitrisee.
-
-La commande `/memory` (v2.1.59+) permet de sauvegarder des apprentissages persistants de session qui survivent aux compactions et aux nouvelles sessions.
-
-### Hook PreCompact
-
-Utiliser le hook `PreCompact` pour sauvegarder le contexte critique avant une compaction:
-
-```json
-{
-  "hooks": {
-    "PreCompact": [
-      {
-        "matcher": "auto",
-        "hooks": [{
-          "type": "command",
-          "command": "cat .claude/context-essentials.md"
-        }]
-      }
-    ]
-  }
-}
-```
-
-### Hook PostCompact
-
-Utiliser le hook `PostCompact` (v2.1.76+) pour re-injecter le contexte critique apres une compaction:
-
-```json
-{
-  "hooks": {
-    "PostCompact": [
-      {
-        "matcher": "auto",
-        "hooks": [{
-          "type": "command",
-          "command": "cat .claude/context-essentials.md"
-        }]
-      }
-    ]
-  }
-}
-```
-
-A partir de v2.1.105, le hook `PreCompact` peut **bloquer** la compaction via le code de sortie 2, permettant de controler quand la compaction se produit.
-
-### Hooks de re-injection
-
-Utiliser le hook `SessionStart` avec le matcher `compact` pour re-injecter le contexte critique apres une compaction:
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "compact",
-        "hooks": [{
-          "type": "command",
-          "command": "cat .claude/context-essentials.md"
-        }]
-      }
-    ]
-  }
-}
-```
-
-### Preparer le contexte essentiel
-
-Creer un fichier `.claude/context-essentials.md` avec:
-- Les decisions architecturales cles
-- Les conventions du projet
-- Les taches en cours
-- Les contraintes critiques
+**Hooks disponibles** pour gerer la compaction:
+- **PreCompact** — Sauvegarder le contexte critique avant compaction (peut bloquer via exit code 2 depuis v2.1.105)
+- **PostCompact** (v2.1.76+) — Re-injecter le contexte critique apres compaction
+- **SessionStart** (matcher `compact`) — Re-injecter `context-essentials.md` apres compaction
 
 ---
 
 ## Boucles de verification
 
-### Principe
-
 > **Toujours fournir des moyens de verification: tests, screenshots, outputs attendus.**
 > Source: "2-3x improvement in final result quality" (Anthropic)
 
-### Pattern: Specification-Implementation-Verification
-
-```
-1. SPECIFICATION
-   → Definir le comportement attendu
-   → Fournir des exemples d'input/output
-   → Ecrire les tests d'abord (TDD)
-
-2. IMPLEMENTATION
-   → Coder la solution
-
-3. VERIFICATION
-   → Executer les tests
-   → Comparer avec les outputs attendus
-   → Corriger si necessaire
-   → Repeter jusqu'a satisfaction
-```
-
-### Exemples de boucles efficaces
-
-```
-Boucle TDD:
-  test (RED) → code (GREEN) → refactor → test (GREEN)
-
-Boucle UI:
-  screenshot avant → modification → screenshot apres → comparer
-
-Boucle API:
-  spec OpenAPI → implementation → test curl → comparer reponse
-
-Boucle CI:
-  modifier code → lancer tests → corriger echecs → relancer
-```
-
-### Anti-patterns
-
-```
-NE PAS faire:
-- Implementer sans tests
-- Supposer que ca fonctionne sans verifier
-- Ignorer les erreurs de tests
-- Passer a la tache suivante sans verification
-```
+**Boucles efficaces:** TDD (red/green/refactor), UI (screenshot avant/apres), API (spec/implementation/test curl), CI (modifier/tester/corriger/relancer).
 
 ---
 
 ## Plan Mode
-
-### Quand investir dans la planification
 
 | Situation | Action |
 |-----------|--------|
@@ -318,22 +134,11 @@ NE PAS faire:
 | Choix technologique | Plan Mode |
 | Impact incertain | Plan Mode |
 
-### Avantages du Plan Mode
-
-- Explorer le codebase avant d'agir
-- Identifier les fichiers impactes
-- Proposer une approche avant d'implementer
-- Eviter le travail a refaire
-
 ---
 
 ## Suivi des tokens
 
-### Status Line
-
-La status line Claude Code affiche le pourcentage de contexte utilise. Surveiller cet indicateur pour anticiper les compactions.
-
-### Seuils d'action
+La status line affiche le pourcentage de contexte utilise.
 
 | Contexte utilise | Action |
 |------------------|--------|
@@ -342,13 +147,7 @@ La status line Claude Code affiche le pourcentage de contexte utilise. Surveille
 | 60-80% | Deleguer aux sous-agents, envisager /clear |
 | > 80% | Compaction imminente, sauvegarder le contexte critique |
 
-### Commande /context (v2.1.74+)
-
-La commande `/context` fournit des suggestions actionnables pour optimiser l'utilisation du contexte. Utiliser regulierement pour identifier les sources de gaspillage.
-
-### Commande /effort (v2.1.72+)
-
-Ajuster le niveau d'effort du modele selon la complexite de la tache:
+**`/context`** (v2.1.74+): Suggestions actionnables pour optimiser l'utilisation du contexte.
 
 | Commande | Effort | Usage |
 |----------|--------|-------|
@@ -356,88 +155,9 @@ Ajuster le niveau d'effort du modele selon la complexite de la tache:
 | `/effort medium` | Standard | Implementation courante |
 | `/effort high` | Maximum | Raisonnement complexe, architecture |
 
-### Alerte d'inactivite (v2.1.84+)
+**Alerte d'inactivite** (v2.1.84+): Apres 75+ minutes, Claude suggere `/clear`.
 
-Apres 75+ minutes d'inactivite, Claude suggere automatiquement `/clear` pour eviter un contexte perime.
-
-### Strategie multi-session
-
-Pour les taches complexes, diviser le travail en sessions courtes et focalisees. Chaque session utilise un contexte frais, reduisant la consommation de tokens d'environ 55%:
-
-```
-Session 1: Investigation (lire, analyser, documenter)
-  → /memory pour sauvegarder les conclusions
-  → /clear
-
-Session 2: Implementation (coder, tester)
-  → Le /memory precedent est automatiquement charge
-  → Contexte frais, pas de pollution
-```
-
-### Taches planifiees /loop (v2.1.71+)
-
-La commande `/loop` permet de planifier des taches recurrentes:
-
-```bash
-/loop 5m /common:pre-commit-check    # Verifier toutes les 5 minutes
-/loop "Surveiller les tests CI"       # Auto-cadence par le modele
-```
-
-Alias: `/proactive` (v2.1.105+).
-
----
-
-## Worktrees paralleles
-
-### Principe
-
-> **"Single biggest productivity unlock"** — Boris Cherny (Anthropic)
-
-Utiliser `git worktree` pour travailler sur plusieurs branches simultanement avec des sessions Claude independantes.
-
-### Setup
-
-Depuis v2.1.53+, Claude Code supporte le flag natif `--worktree` (`-w`) pour creer et travailler dans des worktrees isoles:
-
-```bash
-# Flag natif (v2.1.53+) — cree un worktree isole automatiquement
-claude --worktree "Implementer l'authentification JWT"
-claude -w "Revoir le code d'authentification"
-
-# Methode manuelle (toutes versions)
-git worktree add ../feature-auth feature/auth
-cd ../feature-auth && claude
-
-git worktree add ../review-auth feature/auth
-cd ../review-auth && claude
-```
-
-### Pattern Writer/Reviewer
-
-```
-Terminal 1 (Writer):
-  cd ../feature-auth
-  claude "Implementer l'authentification JWT"
-
-Terminal 2 (Reviewer):
-  cd ../review-auth
-  claude "Revoir le code d'authentification"
-  # Contexte frais, pas de biais d'auteur
-```
-
-### Nettoyage
-
-```bash
-git worktree remove ../feature-auth
-git worktree remove ../review-auth
-```
-
-### Recommandations
-
-- 3-5 worktrees maximum
-- Un worktree = une tache
-- Supprimer les worktrees termines
-- Ne pas partager de sessions entre worktrees
+**Strategie multi-session:** Diviser en sessions courtes. Session 1: investigation + `/memory` + `/clear`. Session 2: implementation avec contexte frais (~55% reduction tokens).
 
 ---
 
@@ -467,21 +187,7 @@ git worktree remove ../review-auth
 
 ## Compaction hints dans CLAUDE.md
 
-### Principe
-
-> **Indiquer a Claude ce qu'il doit preserver lors d'une compaction.**
-
-Ajouter des instructions de compaction dans CLAUDE.md pour guider le resume lors de la compaction automatique:
-
-```markdown
-# Dans CLAUDE.md:
-Lors de la compaction, toujours preserver:
-- La liste des fichiers modifies
-- Les commandes de test
-- Les decisions d'architecture
-```
-
-### Variables d'environnement utiles
+> **Indiquer a Claude ce qu'il doit preserver lors d'une compaction** (fichiers modifies, commandes de test, decisions d'architecture).
 
 | Variable | Description |
 |----------|-------------|
@@ -492,28 +198,13 @@ Lors de la compaction, toujours preserver:
 
 ## CLAUDE.local.md pour preferences personnelles
 
-### Principe
+Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les preferences personnelles (style, chemins locaux, outils personnels).
 
-Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les preferences personnelles qui ne doivent pas etre partagees avec l'equipe.
-
-```
-projet/
-  .claude/CLAUDE.md      <- Partage (git)
-  CLAUDE.local.md        <- Personnel (gitignore)
-```
-
-### Contenu typique
-
-- Preferences de style personnel
-- Chemins locaux specifiques
-- Outils personnels preferes
-
-### Configuration
-
-Ajouter dans `.gitignore`:
-```
-CLAUDE.local.md
-```
+| Fichier | Portee |
+|---------|--------|
+| `~/.claude/CLAUDE.md` | Global (tous les projets) |
+| `.claude/CLAUDE.md` | Projet (git, equipe) |
+| `CLAUDE.local.md` | Projet (gitignore, personnel) |
 
 ---
 
@@ -531,27 +222,9 @@ CLAUDE.local.md
 
 ## Bonnes pratiques de redaction CLAUDE.md
 
-### Preferer les pointeurs aux copies
-
-Ne pas copier du code dans CLAUDE.md — il devient obsolete. Utiliser la syntaxe `@chemin` pour referencer des fichiers:
-
-```markdown
-# Dans CLAUDE.md:
-Voir @.claude/references/symfony/CLAUDE.md pour les conventions Symfony.
-Voir @docs/API.md pour la documentation API.
-```
-
-### Emphase pour les regles critiques
-
-Utiliser `IMPORTANT`, `VOUS DEVEZ`, `JAMAIS` pour les contraintes non-negociables:
-
-```markdown
-IMPORTANT: Ne jamais modifier les migrations existantes.
-VOUS DEVEZ executer les tests avant chaque commit.
-JAMAIS de secrets dans le code source.
-```
-
-### Hierarchie des fichiers CLAUDE.md
+- **Pointeurs > copies:** Utiliser `@chemin` pour referencer des fichiers au lieu de copier du code
+- **Emphase:** `IMPORTANT`, `VOUS DEVEZ`, `JAMAIS` pour les contraintes non-negociables
+- **Maintenance:** Revoir chaque trimestre, traiter comme du code de production
 
 | Fichier | Portee | Usage |
 |---------|--------|-------|
@@ -559,20 +232,11 @@ JAMAIS de secrets dans le code source.
 | `.claude/CLAUDE.md` ou `./CLAUDE.md` | Projet (git) | Conventions d'equipe |
 | `CLAUDE.local.md` | Projet (gitignore) | Preferences personnelles projet |
 
-### Maintenance reguliere
-
-- Revoir CLAUDE.md chaque trimestre
-- Pour chaque ligne, se demander: "Si je supprime cette ligne, Claude fera-t-il des erreurs?"
-- Si non, supprimer la ligne
-- Traiter CLAUDE.md comme du code de production
-
 ---
 
 ## Optimisation de performance
 
 ### CLI natifs plutot que MCPs
-
-Preferer les outils CLI natifs (Glob, Grep, Read, Edit) aux equivalents MCP. Les serveurs MCP ajoutent des definitions d'outils persistantes a chaque tour, consommant du contexte en permanence.
 
 | Approche | Cout contexte |
 |----------|--------------|
@@ -582,32 +246,16 @@ Preferer les outils CLI natifs (Glob, Grep, Read, Edit) aux equivalents MCP. Les
 
 ### MCP Tool Search (v2.1.80+)
 
-Le `ToolSearch` permet le chargement paresseux (lazy loading) des outils MCP, reduisant la consommation de contexte de **95%**:
-
 | Approche | Cout contexte |
 |----------|--------------|
 | MCP classique (tous les outils charges) | ~500-2000 tokens/outil/tour |
 | MCP avec Tool Search (lazy loading) | ~50 tokens au total |
 
-Utiliser `ToolSearch` avec `query: "select:tool_name"` pour charger un outil a la demande.
+### Autres optimisations
 
-### Flag --bare (v2.1.81+)
-
-Pour les appels scriptes avec `-p`, utiliser `--bare` pour ignorer les hooks, LSP et la synchronisation des plugins:
-
-```bash
-claude --bare -p "Analyser ce fichier" < input.txt
-```
-
-Reduction significative du temps de demarrage pour l'automatisation.
-
-### Monitor tool (v2.1.98+)
-
-L'outil `Monitor` permet de streamer les evenements d'un processus en arriere-plan. Chaque ligne stdout est une notification. Utiliser au lieu de `sleep` + poll pour attendre la fin d'un processus.
-
-### Changement de modele en session
-
-Utiliser `/model` pour changer de modele selon la complexite de la tache:
+- **`--bare`** (v2.1.81+): Ignorer hooks/LSP/plugins pour les appels scriptes avec `-p`
+- **Monitor** (v2.1.98+): Streamer les evenements d'un processus en arriere-plan au lieu de sleep + poll
+- **Plugins Code Intelligence:** `php-lsp`, `typescript-lsp`, `pyright-lsp`, `dart-analyzer`, `csharp-lsp` — un appel `go-to-definition` remplace plusieurs grep + lectures
 
 | Commande | Modele | Usage |
 |----------|--------|-------|
@@ -615,53 +263,13 @@ Utiliser `/model` pour changer de modele selon la complexite de la tache:
 | `/model sonnet` | Sonnet 4.6 | Taches standard, implementation |
 | `/model opus` | Opus 4.6 | Raisonnement complexe, architecture |
 
-### Filtrage de sortie via hooks PreToolUse
-
-Utiliser des hooks PostToolUse pour filtrer les sorties verbeuses avant que Claude ne les traite:
-
-```json
-{
-  "hooks": {
-    "PostToolUse": [{
-      "matcher": "Bash",
-      "command": "echo '$TOOL_OUTPUT' | grep -A 5 -E '(FAIL|ERROR|WARN)' || echo 'All clear'"
-    }]
-  }
-}
-```
-
-Reduction potentielle: 90%+ pour les logs verbeux.
-
-### Plugins Code Intelligence
-
-Pour les langages types, un seul appel `go-to-definition` remplace plusieurs grep + lectures de fichiers:
-
-- PHP: `php-lsp` (Intelephense)
-- TypeScript: `typescript-lsp` (vtsls)
-- Python: `pyright-lsp`
-- Dart: `dart-analyzer`
-- C#: `csharp-lsp`
-
 ---
 
 ## Patterns de communication
 
-### Pattern Interview
+**Pattern Interview:** Demander a Claude de vous interviewer avant de coder pour obtenir une specification complete.
 
-Pour les features complexes, demander a Claude de vous interviewer avant de coder:
-
-```
-"Je veux implementer [description]. Interviewe-moi en detail.
-Pose des questions sur l'implementation technique, les edge cases,
-les contraintes et les compromis. Continue jusqu'a avoir une vision
-complete, puis ecris la specification dans SPEC.md."
-```
-
-Resultat: specification complete avant implementation, contexte propre.
-
-### Structure CIF (Context, Intent, Format)
-
-Structurer les prompts pour maximiser la precision:
+**Structure CIF (Context, Intent, Format):**
 
 | Element | Description | Exemple |
 |---------|-------------|---------|
@@ -669,31 +277,7 @@ Structurer les prompts pour maximiser la precision:
 | **Intent** | Objectif precis | "Ajouter le refresh token avec rotation" |
 | **Format** | Format de sortie attendu | "Generer le service + les tests unitaires" |
 
-### Pattern Writer/Reviewer
-
-Utiliser deux sessions pour une meilleure qualite (voir aussi [Worktrees paralleles](#worktrees-paralleles)):
-
-- **Session A (Writer):** Implemente la feature
-- **Session B (Reviewer):** Relit avec un contexte frais (pas de biais d'auteur)
-- **Session A:** Integre les retours
-
----
-
-## Managed settings (v2.1.83+)
-
-### Repertoire managed-settings.d/
-
-Le repertoire `managed-settings.d/` permet une configuration modulaire par fusion alphabetique:
-
-```
-.claude/
-  managed-settings.d/
-    00-base.json          <- Configuration de base
-    10-security.json      <- Regles de securite
-    20-team.json          <- Preferences d'equipe
-```
-
-Les fichiers sont fusionnes par ordre alphabetique, permettant aux equipes de superposer des configurations sans conflits.
+**Pattern Writer/Reviewer:** Session A implemente, Session B relit avec contexte frais, Session A integre les retours.
 
 ---
 
@@ -701,28 +285,11 @@ Les fichiers sont fusionnes par ordre alphabetique, permettant aux equipes de su
 
 > **Commande:** `/common:setup-rtk` pour configurer automatiquement toutes les optimisations.
 
-### 1. RTK (Rust Token Killer)
+**RTK (Rust Token Killer):** Proxy CLI qui reduit la consommation de tokens de 60-90% sur les commandes dev. Installation: `rtk init -g`.
 
-Proxy CLI qui reduit la consommation de tokens de 60-90% sur les commandes dev:
+**Modele sub-agents:** `export CLAUDE_CODE_SUBAGENT_MODEL="sonnet"` — 40-60% de reduction de cout.
 
-```bash
-# Installation
-curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | bash
-rtk init -g  # Configure le hook PreToolUse
-
-# Activer ultra-compact mode (dans ~/.claude/hooks/rtk-rewrite.sh)
-REWRITTEN=$(rtk rewrite --ultra-compact "$CMD" 2>/dev/null)
-```
-
-### 2. Modele des sub-agents
-
-```bash
-export CLAUDE_CODE_SUBAGENT_MODEL="sonnet"
-```
-
-Les sub-agents (Explore, Plan, general-purpose) utilisent Sonnet au lieu d'Opus: 40-60% de reduction de cout sans perte de qualite pour les taches d'exploration et d'implementation.
-
-### 3. Hooks d'optimisation
+**Hooks d'optimisation:**
 
 | Hook | Fichier | Impact |
 |------|---------|--------|
@@ -730,12 +297,7 @@ Les sub-agents (Explore, Plan, general-purpose) utilisent Sonnet au lieu d'Opus:
 | **PreCompact** | `~/.claude/hooks/pre-compact.sh` | Preserve le contexte critique avant compaction |
 | **SessionStart** (compact) | Template `context-reinject.json` | Re-injecte `context-essentials.md` apres compaction |
 
-Templates disponibles dans `.claude/templates/hooks/`:
-- `output-filter.json` — PostToolUse pour filtrer les gros outputs
-- `pre-compact.json` — PreCompact pour preserver le contexte
-- `context-reinject.json` — SessionStart pour la re-injection
-
-### 4. Economies attendues
+Templates disponibles dans `.claude/templates/hooks/`: `output-filter.json`, `pre-compact.json`, `context-reinject.json`.
 
 | Optimisation | Economie |
 |---|---|
@@ -744,6 +306,10 @@ Templates disponibles dans `.claude/templates/hooks/`:
 | PostToolUse hook | Reduit pollution contexte |
 | PreCompact hook | Evite perte de contexte |
 | **Total combine** | **55-65% reduction globale** |
+
+---
+
+> Exemples detailles et templates : voir @.claude/references/base/context-management.md
 
 ---
 

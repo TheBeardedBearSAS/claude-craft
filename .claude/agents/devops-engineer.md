@@ -1,7 +1,8 @@
 ---
 name: devops-engineer
 description: CI-CD, Docker, and deployment specialist
-model: opus
+model: sonnet
+maxTurns: 8
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
 permissionMode: default
 skills: [git-workflow, security]

@@ -1,7 +1,7 @@
 # Claude Craft - Contexte Essentiel
 
 ## Projet
-- **Version:** 7.25.0
+- **Version:** 7.26.0
 - **Type:** Framework multi-technologie pour Claude Code
 - **Stacks:** 18 (Symfony, React, Flutter, Python, Angular, Vue.js, Laravel, React Native, C#/.NET, PHP, Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP)
 - **Agents:** 63 | **Commandes:** 204 | **Namespaces:** 26
@@ -28,3 +28,32 @@
 
 ## Workflow Release
 bump version -> commit -> push -> tag -> push tag -> CI publie
+
+## Architecture Rules
+- **Clean Architecture** with DIP: domain defines interfaces, infrastructure implements
+- **SOLID mandatory** — especially SRP (methods < 20 lines) and DIP (inject interfaces)
+- **KISS**: max 3 indentation levels, max 4 params, early returns over nested if/else
+- **TDD**: Red -> Green -> Refactor. Tests BEFORE implementation. Coverage >= 80%
+
+## Stack Detection
+- `composer.json` -> Symfony/Laravel/PHP -> `@.claude/references/{symfony,laravel,php}/`
+- `package.json` + react -> React -> `@.claude/references/react/`
+- `pubspec.yaml` -> Flutter -> `@.claude/references/flutter/`
+- `pyproject.toml` / `requirements.txt` -> Python -> `@.claude/references/python/`
+- `*.csproj` -> C#/.NET -> `@.claude/references/csharp/`
+
+## Common Test Commands
+- Symfony: `docker compose exec app ./vendor/bin/phpunit`
+- React/Angular/Vue: `npm test` or `npx vitest run`
+- Flutter: `flutter test`
+- Python: `pytest`
+- C#: `dotnet test`
+
+## Active Workflow
+- Check `.bmad/` for sprint state, backlog, current story
+- Status routing: backlog -> ready-for-dev -> in-progress -> review -> done
+
+## Key Index
+- Condensed patterns: `@.claude/INDEX.md`
+- Full rules: `@.claude/rules/`
+- Tech references: `@.claude/references/{stack}/`

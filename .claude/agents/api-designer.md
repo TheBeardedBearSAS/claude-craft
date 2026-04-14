@@ -2,6 +2,7 @@
 name: api-designer
 description: Senior API Designer for REST and GraphQL APIs
 model: opus
+maxTurns: 8
 tools: [Read, Glob, Grep, Edit, Write, WebFetch, WebSearch]
 permissionMode: default
 skills: [documentation, security]

@@ -1,7 +1,8 @@
 ---
 name: ux-ergonome
 description: User experience and cognitive ergonomics specialist
-model: opus
+model: sonnet
+maxTurns: 6
 tools: [Read, Glob, Grep, Edit, Write, WebFetch, WebSearch]
 permissionMode: default
 ---

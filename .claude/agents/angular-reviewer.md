@@ -2,6 +2,7 @@
 name: angular-reviewer
 description: Angular 19 and TypeScript code review specialist — Signals, standalone components, RxJS, performance, zoneless change detection
 model: sonnet
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

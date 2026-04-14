@@ -718,9 +718,9 @@ git checkout backup/before-claude-craft
 
 ---
 
-## v7.25.0 Migration Notes
+## v7.26.0 Migration Notes
 
-If you are upgrading an existing Claude-Craft installation to v7.25.0:
+If you are upgrading an existing Claude-Craft installation to v7.26.0:
 
 ### New Features to Configure
 

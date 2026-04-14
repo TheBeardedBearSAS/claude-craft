@@ -2,6 +2,7 @@
 name: reactnative-reviewer
 description: React Native 0.76+ and Expo code review specialist — New Architecture, navigation, mobile performance, bundle analysis
 model: sonnet
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

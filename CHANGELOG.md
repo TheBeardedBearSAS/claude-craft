@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.26.0] - 2026-04-14
+
+### Added
+
+- **RTK setup command** -- `/common:setup-rtk` configures all token optimizations in one step (RTK proxy, PostToolUse hooks, PreCompact hooks, sub-agent model)
+- **PostToolUse output-filtering hooks** -- Grep and Glob large output notices (>50KB) to guide context-efficient summarization
+- **Enriched context-essentials.md** -- Architecture rules, stack detection, common test commands, active workflow state, key index pointers
+
+### Changed
+
+- **CLAUDE.md trimmed** -- 221 → 173 lines (-22%): commands/agents/skills tables replaced with compact summaries
+- **Rules files condensed** -- 4 largest rules reduced by 54% (2,510 → 1,152 lines), verbose examples moved to `references/base/`
+- **5 agents downgraded Opus → Sonnet** -- devops-engineer, ui-designer, ux-ergonome, uiux-orchestrator, refactoring-specialist (cost reduction, no quality loss for their task profiles)
+- **maxTurns added to all 22 agents** -- Reviewers: 6, Orchestrators: 10, Specialists: 8, Auditors: 4, Designers: 6 (prevents runaway sessions)
+- **Token savings** -- estimated 55-65% reduction per session from combined optimizations
+
+### Fixed
+
+- **Version references** -- 7.25.0 → 7.26.0 across CLAUDE.md, context-essentials.md, docs, and training materials
+
 ## [7.25.0] - 2026-04-14
 
 ### Added

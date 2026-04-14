@@ -2,6 +2,7 @@
 name: python-reviewer
 description: Python 3.13+ code review specialist — async correctness, Pydantic v2, FastAPI, SQLAlchemy, type safety
 model: sonnet
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

@@ -2,6 +2,7 @@
 name: performance-auditor
 description: Performance analysis and optimization expert
 model: haiku
+maxTurns: 4
 tools: [Read, Glob, Grep, Bash, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, NotebookEdit]
 permissionMode: default

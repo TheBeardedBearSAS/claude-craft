@@ -702,7 +702,7 @@ Save as `diagnose.sh` and run with `bash diagnose.sh`.
 
 ---
 
-## Hook Event Issues (v7.25.0+)
+## Hook Event Issues (v7.26.0+)
 
 ### Hook not triggering
 

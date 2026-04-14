@@ -2,6 +2,7 @@
 name: php-reviewer
 description: PHP 8.5 and Clean Architecture code review specialist — DDD, hexagonal, PSR-12, PHPStan, security analysis
 model: sonnet
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default
