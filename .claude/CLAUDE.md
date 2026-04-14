@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 7.30.0 | **Languages:** en, fr, es, de, pt
+**Version:** 7.31.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 63 agents, 212 commands across 27 namespaces, and BMAD v6 project management.
 
@@ -109,7 +109,15 @@ docker compose exec app ./vendor/bin/phpunit
 
 ## Skills
 
-`/solid-principles`, `/testing`, `/security`, `/git-workflow`, `/documentation`, `/kiss-dry-yagni`, `/workflow-analysis`, `/parallel-worktrees` — loaded on demand from `.claude/skills/`
+`/solid-principles`, `/testing`, `/security`, `/git-workflow`, `/documentation`, `/kiss-dry-yagni`, `/workflow-analysis`, `/parallel-worktrees`, `/atomic-tasks`, `/design-md-convention` — loaded on demand from `.claude/skills/`
+
+## AI-First Development (Karpathy)
+
+See `@.claude/rules/23-karpathy-principles.md` — 3 principles: **state assumptions explicitly**, **minimal code (no speculation)**, **surface confusion**. Apply to all LLM-assisted code. Extends rule 05 (KISS/DRY/YAGNI).
+
+## Design System Convention
+
+Projects with UI should include a root `DESIGN.md` file (template: `.claude/templates/DESIGN.md.template`). Skill `design-md-convention` and agents `@ui-designer`/`@ux-ergonome` auto-load it for consistent UI generation.
 
 ---
 

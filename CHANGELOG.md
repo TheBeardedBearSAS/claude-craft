@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.31.0] - 2026-04-15
+
+### Added — Phase 1 : Enrichissement issu de l'analyse des 12 ressources LinkedIn Claude Code
+
+- **Rule 23 — Karpathy Principles** (`.claude/rules/23-karpathy-principles.md`)
+  - 3 principes AI-first : state assumptions explicitly, minimal code (no speculation), surface confusion
+  - Workflow Karpathy 80% agent-driven coding
+  - Anti-bloat checklist
+  - Source : [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills)
+
+- **Skill `atomic-tasks`** (`.claude/skills/atomic-tasks/SKILL.md`)
+  - Pattern GSD (Get Shit Done) : split → small plans → fresh subagent contexts → atomic commits → verify goals
+  - Combat le context rot (dégradation au-delà de 50% de contexte)
+  - Source : [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done)
+
+- **Skill `design-md-convention`** (`.claude/skills/design-md-convention/SKILL.md`)
+  - Convention DESIGN.md pour design systems AI-friendly (7 sections obligatoires)
+  - Template associé : `.claude/templates/DESIGN.md.template`
+  - Source : [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md)
+
+### Changed
+
+- `.claude/CLAUDE.md` : références aux nouveaux skills + section AI-First (Karpathy) + Design System Convention
+- `.claude/rules/05-kiss-dry-yagni.md` : extension AI-Era avec cross-ref vers rule 23
+- `.claude/rules/01-workflow-analysis.md` : intégration pattern GSD atomic tasks
+
+### Roadmap
+
+Phases 2-5 à venir (v7.32 à v8.0.0) :
+- **v7.32.0** : Skills Superpowers (architect, debug-methodical, socratic-brainstorm)
+- **v7.33.0** : Command `/common:pack-repo` (Repomix wrapper + fallback shell)
+- **v7.34.0** : Audit subagents + `/uiux:generate-design-md`
+- **v7.35.0** : Hook lifecycle mémoire inspiré claude-mem
+- **v8.0.0** : Alignement spec officielle Agent Skills (Anthropic) — **breaking change**
+
 ## [7.30.0] - 2026-04-15
 
 ### Added

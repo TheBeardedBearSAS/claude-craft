@@ -10,6 +10,16 @@ Cette règle est CRITIQUE et NON NÉGOCIABLE. Elle évite :
 - La dette technique
 - Les bugs en production
 
+## Pattern GSD — Atomic Tasks
+
+L'analyse doit produire des **tâches atomiques** (pattern [Get Shit Done](https://github.com/gsd-build/get-shit-done)) :
+- Chaque tâche : 1-3 phrases, < 30 min, testable, committable seule
+- Chaque tâche exécutée dans un **subagent à contexte frais** (voir `@.claude/skills/atomic-tasks/SKILL.md`)
+- Commits atomiques (1 tâche = 1 commit)
+- Vérification explicite de l'objectif avant de passer à la suivante
+
+**Signal :** si le contexte > 50%, découper en tâches atomiques + `/clear` entre tâches.
+
 ---
 
 ## Processus en 4 Étapes

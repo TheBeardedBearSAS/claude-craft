@@ -29,4 +29,11 @@ Si NON → **ne pas implementer**.
 
 **Anti-patterns :** Optimisation prematuree, Gold Plating, Speculative Generality, Lasagna Code.
 
+## Extension AI-Era : Principes Karpathy
+
+Pour le code généré/assisté par LLM, appliquer en plus les **3 principes Karpathy** (voir `@.claude/rules/23-karpathy-principles.md`) :
+1. **State assumptions explicitly** — documenter toutes les hypothèses avant de coder
+2. **Minimal code, no speculation** — 100 lignes au lieu de 1000, zéro "au cas où"
+3. **Surface confusion** — poser la question plutôt que générer du code plausible mais faux
+
 > Details complets et exemples : `@.claude/references/base/kiss-dry-yagni.md`
