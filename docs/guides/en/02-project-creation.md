@@ -21,11 +21,16 @@ This guide walks you through setting up a new project with Claude-Craft, from ch
 
 | Technology | Best For | Architecture | Key Features |
 |------------|----------|--------------|--------------|
+| **.NET / C#** | Enterprise APIs | Clean Architecture + CQRS | MediatR, EF Core, C# 14 |
 | **Symfony** | Backend APIs, Web apps | Clean Architecture + DDD | Doctrine, Messenger, API Platform |
 | **Flutter** | Mobile apps | Feature-based + BLoC | Material/Cupertino, State management |
-| **Python** | APIs, Data services | Layered architecture | FastAPI, async/await, type hints |
+| **Python** | APIs, Data services | Clean Architecture | FastAPI, async/await, Pydantic |
 | **React** | Web SPAs | Feature-based + Hooks | State management, accessibility |
 | **React Native** | Cross-platform mobile | Navigation-based | Native modules, platform-specific code |
+| **Angular** | Enterprise Web apps | Domain-driven | Signals, Standalone, RxJS |
+| **Vue.js** | Web SPAs | Composition API | Pinia, Vitest, TypeScript |
+| **Laravel** | PHP APIs, Web apps | Clean Architecture | Actions, Pest PHP, Sanctum |
+| **PHP** | Libraries, Backend | Clean Architecture | PSR-12, PHPStan, Pest PHP |
 
 ### Choosing Based on Project Type
 
@@ -557,6 +562,19 @@ make install-infra TARGET=. LANG=en
 ```bash
 make install-all TARGET=. LANG=fr
 ```
+
+---
+
+### Token Optimization Setup
+
+After installing rules, optionally configure RTK for token savings:
+
+```bash
+# In Claude Code session
+/common:setup-rtk
+```
+
+This sets up RTK proxy, sub-agent model optimization, and hook templates for 55-65% overall token reduction.
 
 ---
 

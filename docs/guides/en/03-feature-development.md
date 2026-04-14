@@ -46,6 +46,16 @@ Claude-Craft enforces a Test-Driven Development workflow:
 
 Before writing any code, understand what needs to be built.
 
+### Set Effort Level
+
+For analysis phases that require deep reasoning, set high effort:
+
+```bash
+/effort high
+```
+
+Use `/effort low` for simple lookups and `/effort medium` for standard implementation work.
+
 ### Using the Analysis Command
 
 ```bash
@@ -638,6 +648,8 @@ ls .claude/checklists/
 3. **Run compliance checks often**: Catch issues early
 4. **Follow the workflow**: Each phase has a purpose
 5. **Document decisions**: Use ADRs for important choices
+6. **Manage context**: Use `/context` to check optimization suggestions, `/clear` between phases
+7. **Adjust effort**: Use `/effort high` for analysis/design, `/effort low` for code generation
 
 ---
 

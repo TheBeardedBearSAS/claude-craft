@@ -100,9 +100,12 @@ yq --version  # Version überprüfen
 3. Netzwerkverbindung überprüfen
 
 ### Hohe Kontextnutzung
-1. Neue Konversation starten
-2. In Anfragen prägnant sein
-3. Agenten für komplexe Aufgaben verwenden
+1. `/compact` verwenden, um den Kontext proaktiv zu komprimieren
+2. `/clear` zwischen nicht zusammenhängenden Aufgaben verwenden
+3. `/effort low` für einfache Aufgaben verwenden (reduziert Token-Verbrauch)
+4. `/context` für Optimierungsvorschläge verwenden
+5. RTK für 60-90% Token-Einsparung konfigurieren (`/common:setup-rtk`)
+6. Untersuchungen an Sub-Agenten delegieren
 
 ---
 

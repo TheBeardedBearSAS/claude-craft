@@ -8,22 +8,35 @@ Willkommen bei Claude-Craft! Diese Anleitung hilft Ihnen zu verstehen, was Claud
 
 Claude-Craft ist ein umfassendes Framework für KI-unterstützte Entwicklung mit Claude Code. Es bietet:
 
-- **67+ Regeln** - Best Practices für Architektur, Tests, Sicherheit und Codequalität
-- **23 KI-Agenten** - Spezialisierte Assistenten für verschiedene Aufgaben
-- **74+ Slash-Befehle** - Schnelle Aktionen für Codegenerierung und Analyse
-- **25+ Vorlagen** - Einsatzbereite Code-Muster
-- **21+ Checklisten** - Qualitätstore für Features und Releases
+- **204+ Slash-Befehle** - Schnelle Aktionen in 26 Namespaces für Codegenerierung, Analyse und Qualitätsprüfungen
+- **63 KI-Agenten** - Spezialisierte Assistenten für verschiedene Aufgaben (API-Design, Architektur, Code-Review, DevOps, etc.)
+- **18 Technologie-Stacks** - Von .NET/C# bis Vue.js, mit eigenen Regeln und Agenten
+- **37 Skills** - Best Practices für Architektur, Tests, Sicherheit und Codequalität
+- **21 Vorlagen** - Einsatzbereite Code-Muster
+- **10 Checklisten** - Qualitätstore für Features und Releases
 
 ### Unterstützte Technologien
 
 | Technologie | Fokus | Anwendungsfälle |
 |-------------|-------|-----------------|
-| **Symfony** | Clean Architecture + DDD | APIs, Web-Apps, Backend-Services |
-| **Flutter** | BLoC-Muster | Mobile Apps (iOS/Android) |
-| **Python** | FastAPI/Django | APIs, Datendienste |
+| **Symfony / PHP** | Clean Architecture + DDD | APIs, Web-Apps, Backend-Services |
 | **React** | Hooks + State Management | Web-SPAs, Dashboards |
-| **React Native** | Plattformübergreifend | Mobile Apps mit JS |
-| **Docker** | Infrastruktur | Containerisierung, CI/CD |
+| **Flutter / Dart** | BLoC-Muster | Mobile Apps (iOS/Android) |
+| **Python** | FastAPI + async/await | APIs, Datendienste, ML |
+| **Angular** | Signals + Standalone | Enterprise-SPAs |
+| **Vue.js** | Composition API + Pinia | Web-SPAs, Dashboards |
+| **React Native** | New Architecture | Plattformübergreifende Mobile Apps |
+| **C# / .NET** | Clean Architecture + CQRS | Enterprise-APIs, Microservices |
+| **Laravel** | Actions Pattern | APIs, CMS, E-Commerce |
+| **PHP** | PSR-12 + PHPStan | Bibliotheken, APIs |
+| **Docker** | Containerisierung | Lokale Entwicklung, CI/CD |
+| **Coolify** | Self-hosted PaaS | Einfache Deployments |
+| **Kubernetes** | Orchestrierung | Microservices, Skalierung |
+| **OpenTofu** | IaC | Multi-Cloud |
+| **Ansible** | Automatisierung | Konfigurationsmanagement |
+| **Hcloud** | Hetzner Cloud | Europäisches Hosting |
+| **PgBouncer** | Connection Pooling | PostgreSQL Hochlast |
+| **FrankenPHP** | PHP/Go-Server | PHP-Performance |
 
 ### Unterstützte Sprachen
 

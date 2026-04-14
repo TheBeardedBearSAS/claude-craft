@@ -307,6 +307,42 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 
 ---
 
+## Token Optimization
+
+### How do I reduce token usage?
+
+Use RTK (Rust Token Killer) for 55-65% savings:
+
+```bash
+/common:setup-rtk
+```
+
+This configures:
+- RTK CLI proxy (60-90% savings on dev commands)
+- Sub-agent model optimization (`CLAUDE_CODE_SUBAGENT_MODEL=sonnet`)
+- PostToolUse output filter hook
+- PreCompact context preservation hook
+
+### What is Auto Mode?
+
+Auto Mode (v2.1.94+, Team plans) is an AI permission classifier that replaces manual confirmations:
+- Automatically approves safe operations (reads, tests)
+- Blocks risky operations (bulk deletions, exfiltration)
+- Falls back to manual mode after 3 consecutive blocks
+
+### Where are hook templates?
+
+Ready-to-use templates in `.claude/templates/hooks/`:
+- `output-filter.json` — PostToolUse for compressing large CLI outputs
+- `pre-compact.json` — PreCompact for preserving context before compaction
+- `context-reinject.json` — SessionStart for re-injecting context after compaction
+
+### What are the new hook events in v7.25.0?
+
+8 new events added (24 total): PostCompact, StopFailure, TaskCreated, CwdChanged, FileChanged, PermissionDenied, Elicitation, ElicitationResult. Plus conditional `if` field (v2.1.85) and PreCompact blocking (v2.1.105).
+
+---
+
 ## Troubleshooting
 
 ### "yq: command not found"

@@ -254,6 +254,20 @@ Creates detailed task breakdown:
 /sprint:status 1
 ```
 
+### Step 7: Set Up Recurring Monitoring (Optional)
+
+Use `/loop` (v2.1.71+) to automatically monitor sprint progress:
+
+```bash
+# Check sprint status every 30 minutes
+/loop 30m /sprint:status 1
+
+# Run pre-commit checks every 5 minutes during development
+/loop 5m /common:pre-commit-check
+```
+
+Alias: `/proactive` (v2.1.105+).
+
 Shows:
 - Overall progress and burndown
 - Metrics by User Story

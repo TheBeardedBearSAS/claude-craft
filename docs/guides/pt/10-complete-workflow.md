@@ -23,7 +23,11 @@ Este guia acompanha você através do ciclo de desenvolvimento completo:
 ### Iniciar com BMAD
 
 ```bash
+# Inicializar BMAD no seu projeto
 /bmad:init
+
+# Ou iniciar um workflow
+/workflow:init
 ```
 
 ### Definir a Visão
@@ -150,10 +154,16 @@ Funcionalidades principais:
 ## Dicas para o Sucesso
 
 1. **Não pule os Quality Gates**
-2. **Use os agentes colaborativamente**
+2. **Use os agentes colaborativamente** - Claude-Craft inclui **63 agentes** especializados
 3. **TDD é não negociável**: 🔴 → 🟢 → 🔵
 4. **Documente as decisões** com ADRs
-5. **Revisões regulares**
+5. **Revisões regulares**: `/common:daily-standup`, `@{tech}-reviewer`
+6. **Gerencie seu contexto**:
+   - `/effort high` para tarefas complexas, `/effort low` para lookups
+   - `/context` para sugestões de otimização do contexto
+   - `/compact` proativamente quando o contexto ultrapassar 70%
+   - `/clear` entre tarefas não relacionadas
+   - `/loop` para tarefas recorrentes (ex: `/loop 5m /common:pre-commit-check`)
 
 ---
 

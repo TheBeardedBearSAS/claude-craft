@@ -90,16 +90,31 @@ public function test_user_service_creates_user_in_database(): void
 /symfony:api-endpoint POST /api/users CreateUserRequest
 
 # Flutter
-/flutter:generate-bloc Authentication
-/flutter:generate-screen LoginScreen
+/flutter:generate-feature Authentication
+/flutter:generate-widget LoginScreen
 
 # Python
 /python:generate-endpoint POST /users CreateUser
-/python:generate-service UserService
+/python:generate-model User
 
 # React
 /react:generate-component UserProfile
 /react:generate-hook useAuth
+
+# Angular
+/angular:generate-component UserProfile
+
+# Vue.js
+/vuejs:generate-component UserProfile
+
+# C# / .NET
+/csharp:generate-feature User
+
+# Laravel
+/laravel:generate-controller UserController
+
+# React Native
+/reactnative:generate-screen LoginScreen
 ```
 
 ---

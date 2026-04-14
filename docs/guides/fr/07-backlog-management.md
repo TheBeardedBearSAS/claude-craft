@@ -6,10 +6,11 @@ Workflow complet pour creer et gerer un backlog SCRUM avec Claude-Craft.
 
 ## Vue d'ensemble
 
-Claude-Craft fournit un ensemble complet de commandes pour gerer votre product backlog selon la methodologie SCRUM :
+Claude-Craft fournit un ensemble complet de commandes pour gerer votre product backlog selon la methodologie SCRUM (parmi les **204+ commandes** et **26 namespaces** disponibles) :
 
-- **15 commandes slash** pour les operations de backlog
-- **5 templates** pour une structure coherente
+- **34 commandes `/project:`** pour les operations de backlog et gestion de projet
+- **5 commandes `/sprint:`** pour le suivi des sprints
+- **7 commandes `/gate:`** pour la validation qualite
 - **Vertical slicing** obligatoire sur toutes les couches tech
 - **Validation INVEST** pour les User Stories
 

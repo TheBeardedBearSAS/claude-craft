@@ -179,11 +179,16 @@ Identifica la tecnología principal de tu proyecto:
 
 | Tu Proyecto Usa | Comando de Instalación |
 |-----------------|------------------------|
+| C#/.NET | `--tech=csharp` |
 | PHP/Symfony | `--tech=symfony` |
+| PHP/Laravel | `--tech=laravel` |
+| PHP (genérico) | `--tech=php` |
 | Dart/Flutter | `--tech=flutter` |
 | Python/FastAPI/Django | `--tech=python` |
 | JavaScript/React | `--tech=react` |
 | JavaScript/React Native | `--tech=reactnative` |
+| TypeScript/Angular | `--tech=angular` |
+| JavaScript/Vue.js | `--tech=vuejs` |
 | Múltiples/Otro | `--tech=common` |
 
 **Para monorepos:** Instala en cada subproyecto por separado (ver abajo).

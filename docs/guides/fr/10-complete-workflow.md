@@ -486,7 +486,7 @@ Chaque gate attrape différents problèmes :
 
 ### 2. Utilisez les Agents de Manière Collaborative
 
-Laissez les agents se passer le relais :
+Claude-Craft inclut **63 agents** spécialisés. Laissez les agents se passer le relais :
 ```
 @bmad-master Route ceci vers l'agent approprié
 ```
@@ -507,6 +507,22 @@ Utilisez les ADRs pour les choix importants :
 - Quotidien : `/common:daily-standup`
 - Fin de Sprint : `@sm Lance la revue de sprint`
 - Continu : `@{tech}-reviewer Passe en revue ce code`
+
+### 6. Gérez Votre Contexte
+
+Utilisez les commandes de gestion de contexte pour rester productif :
+- `/effort high` pour les tâches d'architecture complexes, `/effort low` pour les lookups
+- `/context` pour des suggestions d'optimisation du contexte
+- `/compact` proactivement quand le contexte dépasse 70%
+- `/clear` entre les tâches non liées
+- `/loop` pour les tâches récurrentes (ex: `/loop 5m /common:pre-commit-check`)
+
+### 7. Optimisez Vos Tokens
+
+Configurez RTK pour réduire la consommation de tokens de 55-65% :
+```
+/common:setup-rtk
+```
 
 ---
 

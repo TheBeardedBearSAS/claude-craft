@@ -699,3 +699,65 @@ fi
 ```
 
 Save as `diagnose.sh` and run with `bash diagnose.sh`.
+
+---
+
+## Hook Event Issues (v7.25.0+)
+
+### Hook not triggering
+
+**Problem:** PreToolUse, PostToolUse, or new hook events don't execute.
+
+**Solutions:**
+
+1. Verify hook JSON syntax: `jq empty .claude/settings.json`
+2. Check Claude Code version: v2.1.76+ required for most new hooks
+3. Verify matcher is correct (`auto`, `compact`, `explicit`, `always`)
+4. Check `if` conditional field syntax (v2.1.85+)
+
+### PreCompact hook not blocking
+
+**Problem:** PreCompact hook with exit code 2 doesn't block compaction.
+
+**Solution:** Requires Claude Code v2.1.105+. Check version with `claude --version`.
+
+---
+
+## Subprocess Sandboxing Issues
+
+### "PID namespace not available"
+
+**Problem:** Linux system doesn't support PID namespaces.
+
+**Solution:** Set `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` for standard isolation without PID namespaces.
+
+### "Permission denied" in sandboxed subprocess
+
+**Problem:** Subprocess lacks required permissions.
+
+**Solution:** Check `sandbox.failIfUnavailable` in settings. Set to `false` for graceful degradation.
+
+---
+
+## MCP Tool Search Issues
+
+### Tools not lazy-loading
+
+**Problem:** MCP tools load eagerly instead of via Tool Search.
+
+**Solution:** Update Claude Code to v2.1.80+ which includes Tool Search. Check with `claude --version`.
+
+---
+
+## Managed Settings Issues
+
+### Settings not merging
+
+**Problem:** Files in `managed-settings.d/` aren't being applied.
+
+**Solutions:**
+
+1. Verify files use `NN-name.json` naming pattern
+2. Check JSON syntax: `for f in .claude/managed-settings.d/*.json; do jq empty "$f"; done`
+3. Files merge alphabetically — later files override earlier ones
+4. Requires Claude Code v2.1.83+

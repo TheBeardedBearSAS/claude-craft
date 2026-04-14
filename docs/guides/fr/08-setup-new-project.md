@@ -55,7 +55,7 @@ Sortie attendue : `git version 2.x.x` (ex: `git version 2.43.0`)
 # Vérifier que Claude Code est installé
 claude --version
 ```
-Sortie attendue : Numéro de version (ex: `1.0.x`)
+Sortie attendue : Numéro de version (recommandé: `2.1.105` ou supérieur)
 
 ### Installer les Prérequis Manquants
 
@@ -131,11 +131,16 @@ Claude-Craft supporte plusieurs stacks technologiques. Choisissez celui qui corr
 
 | Stack | Idéal Pour | Flag de Commande |
 |-------|------------|------------------|
+| **C# / .NET** | APIs Enterprise, Microservices | `--tech=csharp` |
 | **Symfony** | APIs PHP, Applications Web, Services Backend | `--tech=symfony` |
+| **Laravel** | Applications Web PHP, APIs rapides | `--tech=laravel` |
+| **PHP** | Architecture PHP générique | `--tech=php` |
 | **Flutter** | Applications mobiles (iOS/Android) | `--tech=flutter` |
 | **Python** | APIs, Services de données, Backends ML | `--tech=python` |
 | **React** | SPAs Web, Tableaux de bord | `--tech=react` |
 | **React Native** | Applications mobiles cross-platform | `--tech=reactnative` |
+| **Angular** | Applications d'entreprise Web | `--tech=angular` |
+| **Vue.js** | SPAs Web, Interfaces réactives | `--tech=vuejs` |
 | **Common uniquement** | Tout projet (règles génériques) | `--tech=common` |
 
 **Choisissez votre langue :**
@@ -282,10 +287,10 @@ drwxr-xr-x  2 user user 4096 Jan 12 10:00 templates
 ### Vérifier Chaque Composant
 
 ```bash
-# Compter les règles (devrait être 15-25 selon le stack)
+# Compter les règles
 ls .claude/rules/*.md | wc -l
 
-# Compter les agents (devrait être 5-12)
+# Compter les agents (jusqu'à 63 agents disponibles selon le stack)
 ls .claude/agents/*.md | wc -l
 
 # Compter les commandes (devrait avoir des sous-répertoires)
@@ -525,9 +530,15 @@ Félicitations ! Votre environnement Claude-Craft est prêt. Voici la suite :
    git commit -m "feat: add Claude-Craft configuration"
    ```
 
-2. **Commencez à construire votre projet** avec l'assistance IA
+2. **Configurez l'optimisation des tokens (recommandé) :**
+   ```bash
+   /common:setup-rtk
+   ```
+   Cela réduit la consommation de tokens de 55-65% en configurant RTK et les hooks d'optimisation.
 
-3. **Lisez le Guide de Développement de Fonctionnalités** pour apprendre le workflow TDD
+3. **Commencez à construire votre projet** avec l'assistance IA
+
+4. **Lisez le Guide de Développement de Fonctionnalités** pour apprendre le workflow TDD
 
 ### Lectures Recommandées
 

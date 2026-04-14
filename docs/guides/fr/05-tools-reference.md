@@ -509,6 +509,59 @@ claude-projects.sh --version
 
 ---
 
+## Optimisation des Tokens avec RTK
+
+### Objectif
+
+RTK (Rust Token Killer) est un proxy CLI qui réduit la consommation de tokens de 60-90% sur les commandes de développement courantes.
+
+### Installation Rapide
+
+Utilisez la commande intégrée pour configurer automatiquement toutes les optimisations :
+
+```bash
+/common:setup-rtk
+```
+
+Cela installe et configure :
+- **RTK** avec le hook PreToolUse (réécriture transparente des commandes)
+- **Ultra-compact mode** pour les sorties CLI
+- **CLAUDE_CODE_SUBAGENT_MODEL=sonnet** pour réduire les coûts des sous-agents
+- **Hooks PostToolUse** pour filtrer les sorties volumineuses
+
+### Utilisation
+
+Une fois configuré, RTK est transparent. Vos commandes sont automatiquement réécrites par le hook :
+
+```bash
+# Vous tapez :
+git status
+
+# RTK réécrit en :
+rtk git status
+# → sortie compacte, 60-90% de tokens en moins
+```
+
+### Commandes RTK Natives
+
+```bash
+rtk gain              # Afficher les économies de tokens
+rtk gain --history    # Historique des commandes avec économies
+rtk discover          # Analyser l'historique Claude Code pour les opportunités manquées
+rtk --version         # Vérifier la version installée
+```
+
+### Économies Attendues
+
+| Optimisation | Économie |
+|---|---|
+| RTK + ultra-compact | 60-90% sur outputs CLI |
+| SUBAGENT_MODEL=sonnet | 40-60% coût sous-agents |
+| PostToolUse hook | Réduit pollution contexte |
+| **Total combiné** | **55-65% réduction globale** |
+
+---
+
 ## Référence Rapide
 
 ### Commandes MultiAccount

@@ -100,9 +100,12 @@ yq --version  # Verificar versão
 3. Verificar conexão de rede
 
 ### Alto Uso de Contexto
-1. Iniciar nova conversa
-2. Ser conciso nas solicitações
-3. Usar agentes para tarefas complexas
+1. Usar `/compact` para compactar o contexto proativamente
+2. Usar `/clear` entre tarefas não relacionadas
+3. Usar `/effort low` para tarefas simples (reduz consumo de tokens)
+4. Usar `/context` para obter sugestões de otimização
+5. Configurar RTK para economia de tokens de 60-90% (`/common:setup-rtk`)
+6. Delegar investigações a sub-agentes
 
 ---
 

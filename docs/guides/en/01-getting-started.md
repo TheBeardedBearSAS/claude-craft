@@ -8,21 +8,27 @@ Welcome to Claude-Craft! This guide will help you understand what Claude-Craft i
 
 Claude-Craft is a comprehensive framework for AI-assisted development with Claude Code. It provides:
 
-- **67+ Rules** - Best practices for architecture, testing, security, and code quality
-- **23 AI Agents** - Specialized assistants for different tasks (API design, database architecture, code review, etc.)
-- **74+ Slash Commands** - Quick actions for code generation, analysis, and quality checks
-- **25+ Templates** - Ready-to-use code patterns for common components
-- **21+ Checklists** - Quality gates for features, releases, and security audits
+- **204+ Slash Commands** - Quick actions across 26 namespaces for code generation, analysis, and quality checks
+- **63 AI Agents** - Specialized assistants for different tasks (API design, database architecture, code review, DevOps, etc.)
+- **18 Technology Stacks** - From .NET/C# to Vue.js, with dedicated rules and agents
+- **37 Skills** - Architecture, testing, security best practices
+- **21 Templates** - Ready-to-use code patterns for common components
+- **10 Checklists** - Quality gates for features, releases, and security audits
 
 ### Supported Technologies
 
 | Technology | Focus | Use Cases |
 |------------|-------|-----------|
+| **.NET / C#** | Clean Architecture + CQRS | APIs, Enterprise apps |
 | **Symfony** | Clean Architecture + DDD | APIs, Web apps, Backend services |
 | **Flutter** | BLoC Pattern | Mobile apps (iOS/Android) |
-| **Python** | FastAPI/Django | APIs, Data services, ML backends |
+| **Python** | FastAPI + async/await | APIs, Data services, ML backends |
 | **React** | Hooks + State Management | Web SPAs, Dashboards |
 | **React Native** | Cross-platform Mobile | Mobile apps with JS |
+| **Angular** | Signals + Standalone | Enterprise Web apps |
+| **Vue.js** | Composition API + Pinia | Web SPAs, Progressive apps |
+| **Laravel** | Clean Architecture + Actions | APIs, Web apps |
+| **PHP** | PSR-12 + PHPStan | Libraries, Backend services |
 | **Docker** | Infrastructure | Containerization, CI/CD |
 
 ### Supported Languages
@@ -42,6 +48,14 @@ All content is available in 5 languages:
 
 - **Bash** - Shell for running installation scripts
 - **Claude Code** - The AI coding assistant from Anthropic
+
+### Claude Code Compatibility
+
+| Version | Status |
+|---------|--------|
+| **2.1.105** | Recommended (full feature support) |
+| **2.1.97+** | Security minimum (required if using MCP servers) |
+| **2.1.47+** | Minimum supported |
 
 ### Optional (Recommended)
 
@@ -283,6 +297,24 @@ Every feature must pass quality gates:
 - Static analysis passing
 - Security audit clear
 - Documentation updated
+
+---
+
+## Token Optimization (Optional)
+
+Claude-Craft includes RTK (Rust Token Killer) integration for significant token savings:
+
+```bash
+# In Claude Code, run the setup command
+/common:setup-rtk
+```
+
+This configures:
+- **RTK proxy** for CLI output reduction (60-90% savings)
+- **Sub-agent model** optimization (`CLAUDE_CODE_SUBAGENT_MODEL=sonnet`)
+- **Hook templates** for output filtering and context preservation
+
+**Expected savings:** 55-65% overall token reduction. See the [Setup Guide](08-setup-new-project.md) for details.
 
 ---
 

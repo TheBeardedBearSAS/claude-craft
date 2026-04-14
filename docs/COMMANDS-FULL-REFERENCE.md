@@ -1,6 +1,6 @@
 # Commands Full Reference
 
-Complete reference for all 161 commands available in Claude Craft.
+Complete reference for all 204+ commands available in Claude Craft.
 
 ---
 
@@ -8,7 +8,7 @@ Complete reference for all 161 commands available in Claude Craft.
 
 | Namespace | Count | Description |
 |-----------|-------|-------------|
-| `/common:` | 13 | Transversal commands |
+| `/common:` | 14 | Transversal commands |
 | `/workflow:` | 9 | Development workflow |
 | `/team:` | 4 | Agent Teams |
 | `/qa:` | 6 | QA & Testing |
@@ -25,9 +25,15 @@ Complete reference for all 161 commands available in Claude Craft.
 | `/php:` | 5 | PHP |
 | `/docker:` | 5 | Docker/Infrastructure |
 | `/coolify:` | 5 | Coolify/PaaS |
-| `/project:` | 22 | Project Management |
+| `/kubernetes:` | 5 | Kubernetes/Infrastructure |
+| `/opentofu:` | 5 | OpenTofu/IaC |
+| `/ansible:` | 5 | Ansible/Automation |
+| `/hcloud:` | 5 | Hcloud/Hetzner Cloud |
+| `/pgbouncer:` | 5 | PgBouncer/Connection Pooling |
+| `/frankenphp:` | 5 | FrankenPHP/PHP Server |
+| `/project:` | 34 | Project Management |
 | `/sprint:` | 5 | Sprint Management (BMAD v6) |
-| `/gate:` | 6 | Quality Gates (BMAD v6) |
+| `/gate:` | 7 | Quality Gates (BMAD v6) |
 
 ---
 
@@ -532,6 +538,80 @@ Infrastructure deployment with Coolify self-hosted PaaS.
 /coolify:debug "502 Bad Gateway after deploy"
 /coolify:backup --provider=s3 --schedule=daily
 /coolify:optimize
+```
+
+---
+
+## Infrastructure Commands
+
+All 6 additional infrastructure namespaces follow the same 5-command pattern:
+
+| Command | Purpose |
+|---------|---------|
+| `/{platform}:architecture` | Design infrastructure architecture |
+| `/{platform}:deploy-setup` | Configure deployment pipelines |
+| `/{platform}:debug` | Troubleshoot infrastructure issues |
+| `/{platform}:security-audit` | Review security configurations |
+| `/{platform}:optimize` | Performance and cost optimization |
+
+### Kubernetes (`/kubernetes:`)
+
+```bash
+/kubernetes:architecture "Microservices e-commerce with 3 services"
+/kubernetes:deploy-setup --env=production --provider=gke
+/kubernetes:debug "Pods in CrashLoopBackOff"
+/kubernetes:security-audit
+/kubernetes:optimize --focus=cost
+```
+
+### OpenTofu (`/opentofu:`)
+
+```bash
+/opentofu:architecture "Multi-cloud AWS + GCP infrastructure"
+/opentofu:deploy-setup --provider=aws --env=staging
+/opentofu:debug "State lock issue"
+/opentofu:security-audit
+/opentofu:optimize --focus=cost
+```
+
+### Ansible (`/ansible:`)
+
+```bash
+/ansible:architecture "Configuration management for 50 servers"
+/ansible:deploy-setup --inventory=production
+/ansible:debug "Playbook failing on target hosts"
+/ansible:security-audit
+/ansible:optimize
+```
+
+### Hcloud (`/hcloud:`)
+
+```bash
+/hcloud:architecture "European hosting for SaaS platform"
+/hcloud:deploy-setup --location=fsn1
+/hcloud:debug "Network connectivity issues"
+/hcloud:security-audit
+/hcloud:optimize --focus=cost
+```
+
+### PgBouncer (`/pgbouncer:`)
+
+```bash
+/pgbouncer:architecture "Connection pooling for 1000+ concurrent users"
+/pgbouncer:deploy-setup --pool-mode=transaction
+/pgbouncer:debug "Connection timeout errors"
+/pgbouncer:security-audit
+/pgbouncer:optimize
+```
+
+### FrankenPHP (`/frankenphp:`)
+
+```bash
+/frankenphp:architecture "Symfony app with worker mode"
+/frankenphp:deploy-setup --framework=symfony
+/frankenphp:debug "Worker process crashes"
+/frankenphp:security-audit
+/frankenphp:optimize --focus=performance
 ```
 
 ---

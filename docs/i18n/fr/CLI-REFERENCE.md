@@ -398,6 +398,39 @@ yq --version
 
 ---
 
+## Optimisation des Tokens (RTK)
+
+### Configuration Automatique
+
+```bash
+# Dans Claude Code, configurez toutes les optimisations en une commande
+/common:setup-rtk
+```
+
+### Commandes RTK
+
+| Commande | Description |
+|----------|-------------|
+| `rtk gain` | Afficher les économies de tokens |
+| `rtk gain --history` | Historique des commandes avec économies |
+| `rtk discover` | Analyser l'historique pour les opportunités manquées |
+| `rtk proxy <cmd>` | Exécuter une commande sans filtrage (debug) |
+| `rtk --version` | Vérifier la version installée |
+
+### Commandes de Contexte Claude Code
+
+| Commande | Description |
+|----------|-------------|
+| `/effort low\|medium\|high` | Ajuster le niveau d'effort du modèle |
+| `/context` | Suggestions d'optimisation du contexte |
+| `/compact` | Compacter proactivement le contexte |
+| `/clear` | Nettoyer entre tâches non liées |
+| `/memory` | Apprentissages persistants (v2.1.59+) |
+| `/loop <intervalle> <cmd>` | Tâches récurrentes (v2.1.71+) |
+| `/model haiku\|sonnet\|opus` | Changer de modèle en session |
+
+---
+
 ## Voir Aussi
 
 - [Guide de Démarrage Rapide](QUICKSTART.md)

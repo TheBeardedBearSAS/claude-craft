@@ -6,13 +6,39 @@ Esta guía te acompaña en la configuración de un nuevo proyecto con Claude-Cra
 
 ## Elegir Tu Tecnología
 
-| Tecnología | Ideal Para | Arquitectura |
-|------------|------------|--------------|
-| **Symfony** | APIs backend, Apps web | Clean Architecture + DDD |
-| **Flutter** | Apps móviles | Feature-based + BLoC |
-| **Python** | APIs, Servicios de datos | Arquitectura en capas |
-| **React** | SPAs web | Feature-based + Hooks |
-| **React Native** | Móvil multiplataforma | Basado en navegación |
+Claude-Craft soporta **18 stacks tecnológicos** (10 dev + 8 infra):
+
+### Stacks de Desarrollo
+
+| Tecnología | Ideal Para | Arquitectura | Características Clave |
+|------------|------------|--------------|----------------------|
+| **C# / .NET** | APIs backend, Enterprise | Clean Architecture | CQRS, MediatR, EF Core |
+| **Symfony / PHP** | APIs backend, Apps web | Clean Architecture + DDD | Doctrine, Messenger, API Platform |
+| **Laravel / PHP** | Apps web, APIs rápidas | Clean Architecture | Actions, Pest PHP, Sanctum |
+| **PHP** | Clean Architecture genérica | Clean Architecture | PSR-12, PHPStan, Pest PHP |
+| **Flutter / Dart** | Apps móviles | Feature-based + BLoC | Material/Cupertino, Gestión de estado |
+| **Python** | APIs, Servicios de datos | Clean Architecture | FastAPI, async/await, Pydantic |
+| **React** | SPAs web | Feature-based + Hooks | Zustand, React Query, accesibilidad |
+| **React Native** | Móvil multiplataforma | Feature-based | Navigation 7, Reanimated 3 |
+| **Angular** | Apps empresariales | Domain-driven | Signals, Standalone, RxJS |
+| **Vue.js** | SPAs web | Composition API | Pinia, Vitest, TypeScript |
+
+### Stacks de Infraestructura
+
+Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hetzner Cloud, PgBouncer, FrankenPHP
+
+### Elección según Tipo de Proyecto
+
+| Tipo de Proyecto | Stack Recomendado |
+|------------------|-------------------|
+| API REST | Symfony, Laravel o Python |
+| App móvil (nativa) | Flutter |
+| App móvil (equipo JS) | React Native |
+| SPA Web | React, Vue.js o Angular |
+| Full-stack web | Symfony + React |
+| Full-stack móvil | Symfony + Flutter |
+| Microservicios | Python (FastAPI) |
+| Enterprise | C# / .NET o Angular |
 
 ---
 

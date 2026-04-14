@@ -8,22 +8,35 @@ Bienvenido a Claude-Craft. Esta guía te ayudará a entender qué es Claude-Craf
 
 Claude-Craft es un framework completo para desarrollo asistido por IA con Claude Code. Proporciona:
 
-- **67+ Reglas** - Mejores prácticas para arquitectura, pruebas, seguridad y calidad de código
-- **23 Agentes IA** - Asistentes especializados para diferentes tareas
-- **74+ Comandos Slash** - Acciones rápidas para generación y análisis de código
-- **25+ Plantillas** - Patrones de código listos para usar
-- **21+ Checklists** - Puertas de calidad para funcionalidades y releases
+- **204+ Comandos Slash** - Acciones rápidas en 26 namespaces para generación, análisis y calidad de código
+- **63 Agentes IA** - Asistentes especializados para diferentes tareas (diseño de API, arquitectura, revisión de código, DevOps, etc.)
+- **18 Stacks Tecnológicos** - De .NET/C# a Vue.js, con reglas y agentes dedicados
+- **37 Skills** - Mejores prácticas para arquitectura, pruebas, seguridad y calidad de código
+- **21 Plantillas** - Patrones de código listos para usar
+- **10 Checklists** - Puertas de calidad para funcionalidades y releases
 
 ### Tecnologías Soportadas
 
 | Tecnología | Enfoque | Casos de Uso |
 |------------|---------|--------------|
-| **Symfony** | Clean Architecture + DDD | APIs, Apps web, Servicios backend |
-| **Flutter** | Patrón BLoC | Apps móviles (iOS/Android) |
-| **Python** | FastAPI/Django | APIs, Servicios de datos |
+| **Symfony / PHP** | Clean Architecture + DDD | APIs, Apps web, Servicios backend |
 | **React** | Hooks + State Management | SPAs web, Dashboards |
-| **React Native** | Móvil multiplataforma | Apps móviles con JS |
-| **Docker** | Infraestructura | Contenedorización, CI/CD |
+| **Flutter / Dart** | Patrón BLoC | Apps móviles (iOS/Android) |
+| **Python** | FastAPI + async/await | APIs, Servicios de datos, ML |
+| **Angular** | Signals + Standalone | SPAs enterprise |
+| **Vue.js** | Composition API + Pinia | SPAs web, Dashboards |
+| **React Native** | New Architecture | Apps móviles multiplataforma |
+| **C# / .NET** | Clean Architecture + CQRS | APIs enterprise, Microservicios |
+| **Laravel** | Actions Pattern | APIs, CMS, E-commerce |
+| **PHP** | PSR-12 + PHPStan | Librerías, APIs |
+| **Docker** | Contenedorización | Dev local, CI/CD |
+| **Coolify** | PaaS auto-hospedado | Despliegues simples |
+| **Kubernetes** | Orquestación | Microservicios, Scale |
+| **OpenTofu** | IaC | Multi-cloud |
+| **Ansible** | Automatización | Gestión de configuración |
+| **Hcloud** | Hetzner Cloud | Hosting europeo |
+| **PgBouncer** | Connection pooling | PostgreSQL alta carga |
+| **FrankenPHP** | Servidor PHP/Go | Rendimiento PHP |
 
 ### Idiomas Soportados
 

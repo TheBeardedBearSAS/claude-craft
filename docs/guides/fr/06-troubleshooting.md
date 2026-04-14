@@ -476,6 +476,78 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 
 ---
 
+## Problèmes de Hooks et Sandboxing
+
+### Les Hooks Ne S'Exécutent Pas
+
+**Symptômes :**
+- Les hooks PreToolUse/PostToolUse ne se déclenchent pas
+- Les hooks PreCompact/PostCompact sont ignorés
+
+**Solutions :**
+
+1. **Vérifier la configuration dans settings.json**
+   ```bash
+   cat .claude/settings.json | jq '.hooks'
+   # Doit afficher la configuration des hooks
+   ```
+
+2. **Vérifier la version de Claude Code**
+   ```bash
+   claude --version
+   # Les hooks nécessitent v2.1.47+ (PreCompact: v2.1.76+, PostCompact: v2.1.76+)
+   # Recommandé : v2.1.105
+   ```
+
+3. **Vérifier que le script hook est exécutable**
+   ```bash
+   ls -la ~/.claude/hooks/
+   chmod +x ~/.claude/hooks/*.sh
+   ```
+
+### Erreur de Sandbox
+
+**Symptômes :**
+- Messages d'erreur liés au sandboxing
+- Les sous-processus échouent avec des erreurs de permission
+
+**Solutions :**
+
+1. **Vérifier le support du sandbox**
+   ```bash
+   # Le sandboxing PID namespace nécessite Linux
+   # Sur macOS, le sandbox utilise une approche différente
+   ```
+
+2. **Désactiver temporairement si nécessaire**
+   - Vérifier `sandbox.failIfUnavailable` dans settings.json
+   - Sur les systèmes sans support PID namespace, le sandbox se dégrade gracieusement
+
+### Les Serveurs MCP Ne Répondent Pas
+
+**Symptômes :**
+- Les outils MCP ne sont pas disponibles
+- Erreurs de connexion MCP
+
+**Solutions :**
+
+1. **Vérifier que le serveur MCP est lancé**
+   ```bash
+   # Vérifier les processus MCP
+   ps aux | grep mcp
+   ```
+
+2. **Utiliser ToolSearch pour le chargement paresseux**
+   - Les outils MCP peuvent être chargés à la demande avec `ToolSearch`
+   - Cela réduit la consommation de contexte de 95%
+
+3. **Vérifier la sécurité MCP**
+   - Auditer le code source des serveurs MCP tiers
+   - Utiliser Claude Code v2.1.97+ avec des serveurs MCP (corrections de sécurité CVE)
+   - Voir `.claude/rules/11-security.md` pour la checklist de vetting MCP
+
+---
+
 ## Problèmes de Performance
 
 ### Exécution de Commande Lente
@@ -510,17 +582,39 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 
 **Solutions :**
 
-1. **Démarrer une nouvelle conversation**
+1. **Utiliser `/context` pour des suggestions d'optimisation**
+   ```
+   /context
+   ```
+
+2. **Compacter proactivement à 70%**
+   ```
+   /compact
+   ```
+
+3. **Ajuster l'effort selon la tâche**
+   ```
+   /effort low     # Pour les tâches simples
+   /effort high    # Pour l'architecture complexe
+   ```
+
+4. **Démarrer une nouvelle conversation**
    ```bash
    exit
    claude
    ```
 
-2. **Être concis dans les demandes**
+5. **Être concis dans les demandes**
    - Éviter de coller de gros blocs de code
    - Référencer les fichiers au lieu de coller
 
-3. **Utiliser les agents pour les tâches complexes**
+6. **Configurer RTK pour réduire les tokens**
+   ```
+   /common:setup-rtk
+   ```
+   RTK réduit la consommation de tokens de 55-65% sur les commandes CLI.
+
+7. **Utiliser les agents pour les tâches complexes**
    ```markdown
    # Au lieu de coller tout le codebase
    @research-assistant Trouve tous les fichiers liés à l'authentification dans src/

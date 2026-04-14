@@ -33,7 +33,7 @@ Before starting, make sure you have the following installed:
 - [ ] **Terminal/Command Line** - Any terminal application
 - [ ] **Node.js 16+** - Required for NPX installation
 - [ ] **Git** - For version control
-- [ ] **Claude Code** - The AI coding assistant
+- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.105, minimum: v2.1.47)
 
 ### Verify Your Prerequisites
 
@@ -55,7 +55,7 @@ Expected output: `git version 2.x.x` (e.g., `git version 2.43.0`)
 # Check Claude Code is installed
 claude --version
 ```
-Expected output: Version number (e.g., `1.0.x`)
+Expected output: Version number (recommended: `2.1.105` or higher)
 
 ### Install Missing Prerequisites
 
@@ -131,11 +131,16 @@ Claude-Craft supports multiple technology stacks. Choose the one that matches yo
 
 | Stack | Best For | Command Flag |
 |-------|----------|--------------|
+| **.NET / C#** | Enterprise APIs, Clean Architecture | `--tech=csharp` |
 | **Symfony** | PHP APIs, Web apps, Backend services | `--tech=symfony` |
 | **Flutter** | Mobile apps (iOS/Android) | `--tech=flutter` |
 | **Python** | APIs, Data services, ML backends | `--tech=python` |
 | **React** | Web SPAs, Dashboards | `--tech=react` |
 | **React Native** | Cross-platform mobile apps | `--tech=reactnative` |
+| **Angular** | Enterprise Web apps | `--tech=angular` |
+| **Vue.js** | Web SPAs, Progressive apps | `--tech=vuejs` |
+| **Laravel** | PHP APIs, Web apps | `--tech=laravel` |
+| **PHP** | Libraries, Backend services | `--tech=php` |
 | **Common only** | Any project (generic rules) | `--tech=common` |
 
 **Choose your language:**
@@ -419,6 +424,37 @@ Claude should respond mentioning:
 - Make sure you're in the project directory (not a subdirectory)
 - Check that `.claude/` directory exists
 - Restart Claude Code
+
+### Optional: Setup Token Optimization (RTK)
+
+For significant token savings (55-65% reduction), run the RTK setup command:
+
+```bash
+# In Claude Code
+/common:setup-rtk
+```
+
+This configures:
+- **RTK proxy** for CLI output reduction (60-90% savings on dev commands)
+- **Sub-agent model** optimization (`CLAUDE_CODE_SUBAGENT_MODEL=sonnet`)
+- **Hook templates** from `.claude/templates/hooks/` for output filtering and context preservation
+
+### Optional: Configure Hook Templates
+
+Claude-Craft provides ready-to-use hook templates:
+
+```bash
+# View available templates
+ls .claude/templates/hooks/
+```
+
+| Template | Purpose |
+|----------|---------|
+| `output-filter.json` | Filter large CLI outputs to reduce context usage |
+| `pre-compact.json` | Preserve critical context before compaction |
+| `context-reinject.json` | Re-inject context essentials after compaction |
+
+Copy relevant templates into your `.claude/settings.json` hooks configuration.
 
 ---
 

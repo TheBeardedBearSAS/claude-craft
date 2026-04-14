@@ -19,25 +19,39 @@ Ce guide vous accompagne dans la configuration d'un nouveau projet avec Claude-C
 
 ### Comparatif des Technologies
 
+Claude-Craft supporte **18 stacks technologiques** (10 dev + 8 infra) :
+
+#### Stacks de Développement
+
 | Technologie | Idéal Pour | Architecture | Caractéristiques Clés |
 |-------------|------------|--------------|----------------------|
-| **Symfony** | APIs backend, Apps web | Clean Architecture + DDD | Doctrine, Messenger, API Platform |
-| **Flutter** | Apps mobiles | Feature-based + BLoC | Material/Cupertino, Gestion d'état |
-| **Python** | APIs, Services data | Architecture en couches | FastAPI, async/await, type hints |
-| **React** | SPAs web | Feature-based + Hooks | Gestion d'état, accessibilité |
-| **React Native** | Mobile cross-platform | Basé navigation | Modules natifs, code spécifique plateforme |
+| **C# / .NET** | APIs backend, Enterprise | Clean Architecture | CQRS, MediatR, EF Core |
+| **Symfony / PHP** | APIs backend, Apps web | Clean Architecture + DDD | Doctrine, Messenger, API Platform |
+| **Laravel / PHP** | Apps web, APIs rapides | Clean Architecture | Actions, Pest PHP, Sanctum |
+| **PHP** | Clean Architecture générique | Clean Architecture | PSR-12, PHPStan, Pest PHP |
+| **Flutter / Dart** | Apps mobiles | Feature-based + BLoC | Material/Cupertino, Gestion d'état |
+| **Python** | APIs, Services data | Clean Architecture | FastAPI, async/await, Pydantic |
+| **React** | SPAs web | Feature-based + Hooks | Zustand, React Query, accessibilité |
+| **React Native** | Mobile cross-platform | Feature-based | Navigation 7, Reanimated 3 |
+| **Angular** | Apps d'entreprise | Domain-driven | Signals, Standalone, RxJS |
+| **Vue.js** | SPAs web | Composition API | Pinia, Vitest, TypeScript |
+
+#### Stacks d'Infrastructure
+
+Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hetzner Cloud, PgBouncer, FrankenPHP
 
 ### Choix selon le Type de Projet
 
 | Type de Projet | Stack Recommandée |
 |----------------|-------------------|
-| API REST | Symfony ou Python |
+| API REST | Symfony, Laravel ou Python |
 | App mobile (feel natif) | Flutter |
 | App mobile (équipe JS) | React Native |
-| SPA Web | React |
+| SPA Web | React, Vue.js ou Angular |
 | Full-stack web | Symfony + React |
 | Full-stack mobile | Symfony + Flutter |
 | Microservices | Python (FastAPI) |
+| Enterprise | C# / .NET ou Angular |
 
 ### Combinaisons Courantes
 
@@ -46,6 +60,8 @@ Application Web:      Symfony (backend) + React (frontend)
 Application Mobile:   Symfony (API) + Flutter (mobile)
 Plateforme Complète:  Symfony (API) + React (web) + Flutter (mobile)
 Plateforme Data:      Python (API) + React (dashboard)
+Enterprise:           C# / .NET (backend) + Angular (frontend)
+API Laravel:          Laravel (backend) + Vue.js (frontend)
 ```
 
 ---

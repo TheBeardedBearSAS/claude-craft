@@ -239,6 +239,24 @@ Fonctionnalité: Authentification Utilisateur
 
 # React
 /react:check-testing
+
+# Angular
+/angular:check-testing
+
+# Vue.js
+/vuejs:check-testing
+
+# C# / .NET
+/csharp:check-testing
+
+# Laravel
+/laravel:check-testing
+
+# React Native
+/reactnative:check-testing
+
+# PHP
+/php:check-testing
 ```
 
 ### Checklist d'Écriture de Tests
@@ -310,6 +328,34 @@ Maintenant implémentez le code pour faire passer les tests.
 /react:generate-context AuthContext
 ```
 
+#### Angular
+
+```bash
+# Générer composant standalone
+/angular:generate-component UserProfile
+```
+
+#### Vue.js
+
+```bash
+# Générer composant avec TypeScript et tests
+/vuejs:generate-component UserProfile
+```
+
+#### C# / .NET
+
+```bash
+# Générer feature complète Clean Architecture
+/csharp:generate-feature User
+```
+
+#### Laravel
+
+```bash
+# Générer contrôleur avec bonnes pratiques
+/laravel:generate-controller UserController
+```
+
 ### Utiliser les Templates
 
 Les templates fournissent des patterns de code prêts à l'emploi. Accédez-y avec :
@@ -353,15 +399,14 @@ Avec les tests qui passent, améliorez la qualité du code.
 ### Commandes de Refactoring
 
 ```bash
-# Vérifier la qualité du code
-/symfony:check-code-quality
-/flutter:check-code-quality
-/python:check-code-quality
-/react:check-code-quality
+# Vérifier la qualité du code (disponible pour les 10 stacks dev)
+/{tech}:check-code-quality
 
 # Vérifier la conformité architecturale
-/symfony:check-architecture
-/flutter:check-architecture
+/{tech}:check-architecture
+
+# Audit de conformité complète (retourne un score /100)
+/{tech}:check-compliance
 ```
 
 ### Utiliser le Spécialiste du Refactoring
@@ -593,7 +638,7 @@ Objectif : Score 90+/100
 
 ## Ressources Disponibles
 
-### Résumé des Agents
+### Résumé des Agents (63 agents disponibles)
 
 | Agent | Utilisation |
 |-------|-------------|
@@ -601,9 +646,12 @@ Objectif : Score 90+/100
 | `@database-architect` | Conception de schémas BDD |
 | `@tdd-coach` | Guidance pour l'écriture de tests |
 | `@refactoring-specialist` | Amélioration du code |
-| `@{tech}-reviewer` | Revue de code |
+| `@performance-auditor` | Audit de performance |
+| `@{tech}-reviewer` | Revue de code (10 reviewers : symfony, flutter, react, python, angular, laravel, vuejs, reactnative, csharp, php) |
 | `@devops-engineer` | Revue d'infrastructure |
 | `@research-assistant` | Recherche de bonnes pratiques |
+| `@docker-*` | 5 agents Docker |
+| `@kubernetes-*` | 5 agents Kubernetes |
 
 ### Résumé des Commandes
 

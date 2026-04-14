@@ -8,22 +8,35 @@ Bienvenue dans Claude-Craft ! Ce guide vous aidera à comprendre ce qu'est Claud
 
 Claude-Craft est un framework complet pour le développement assisté par IA avec Claude Code. Il fournit :
 
-- **67+ Règles** - Bonnes pratiques pour l'architecture, les tests, la sécurité et la qualité du code
-- **23 Agents IA** - Assistants spécialisés pour différentes tâches (conception d'API, architecture BDD, revue de code, etc.)
-- **74+ Commandes Slash** - Actions rapides pour la génération de code, l'analyse et les vérifications qualité
-- **25+ Templates** - Patterns de code prêts à l'emploi pour les composants courants
-- **21+ Checklists** - Portes qualité pour les fonctionnalités, releases et audits de sécurité
+- **204+ Commandes Slash** - Actions rapides sur 26 namespaces pour la génération de code, l'analyse et les vérifications qualité
+- **63 Agents IA** - Assistants spécialisés pour différentes tâches (conception d'API, architecture, revue de code, DevOps, etc.)
+- **18 Stacks Technologiques** - De .NET/C# à Vue.js, avec des règles et agents dédiés
+- **37 Skills** - Bonnes pratiques pour l'architecture, les tests, la sécurité et la qualité du code
+- **21 Templates** - Patterns de code prêts à l'emploi pour les composants courants
+- **10 Checklists** - Portes qualité pour les fonctionnalités, releases et audits de sécurité
 
 ### Technologies Supportées
 
 | Technologie | Focus | Cas d'Usage |
 |-------------|-------|-------------|
-| **Symfony** | Clean Architecture + DDD | APIs, Apps web, Services backend |
-| **Flutter** | Pattern BLoC | Apps mobiles (iOS/Android) |
-| **Python** | FastAPI/Django | APIs, Services data, Backends ML |
+| **Symfony / PHP** | Clean Architecture + DDD | APIs, Apps web, Services backend |
 | **React** | Hooks + State Management | SPAs web, Dashboards |
-| **React Native** | Mobile cross-platform | Apps mobiles en JS |
-| **Docker** | Infrastructure | Conteneurisation, CI/CD |
+| **Flutter / Dart** | Pattern BLoC | Apps mobiles (iOS/Android) |
+| **Python** | FastAPI + async/await | APIs, Services data, Backends ML |
+| **Angular** | Signals + Standalone | SPAs enterprise |
+| **Vue.js** | Composition API + Pinia | SPAs web, Dashboards |
+| **React Native** | New Architecture | Apps mobiles cross-platform |
+| **C# / .NET** | Clean Architecture + CQRS | APIs enterprise, Microservices |
+| **Laravel** | Actions Pattern | APIs, CMS, E-commerce |
+| **PHP** | PSR-12 + PHPStan | Librairies, APIs |
+| **Docker** | Conteneurisation | Dev local, CI/CD |
+| **Coolify** | PaaS auto-hébergé | Déploiements simples |
+| **Kubernetes** | Orchestration | Microservices, Scale |
+| **OpenTofu** | IaC | Multi-cloud |
+| **Ansible** | Automation | Configuration management |
+| **Hcloud** | Hetzner Cloud | Hébergement européen |
+| **PgBouncer** | Connection pooling | PostgreSQL haute charge |
+| **FrankenPHP** | Serveur PHP/Go | Performance PHP |
 
 ### Langues Supportées
 

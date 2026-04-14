@@ -37,7 +37,7 @@ This comprehensive tutorial guides you through adding Claude-Craft to a project 
 - [ ] You have committed all current changes
 - [ ] You have write access to the project directory
 - [ ] Node.js 16+ installed (for NPX method)
-- [ ] Claude Code installed
+- [ ] Claude Code installed (recommended: v2.1.105, minimum: v2.1.47)
 
 ### When NOT to Install
 
@@ -179,11 +179,16 @@ Identify the primary technology of your project:
 
 | Your Project Uses | Install Command |
 |------------------|-----------------|
+| C#/.NET | `--tech=csharp` |
 | PHP/Symfony | `--tech=symfony` |
+| PHP/Laravel | `--tech=laravel` |
+| PHP (generic) | `--tech=php` |
 | Dart/Flutter | `--tech=flutter` |
 | Python/FastAPI/Django | `--tech=python` |
 | JavaScript/React | `--tech=react` |
 | JavaScript/React Native | `--tech=reactnative` |
+| TypeScript/Angular | `--tech=angular` |
+| TypeScript/Vue.js | `--tech=vuejs` |
 | Multiple/Other | `--tech=common` |
 
 **For monorepos:** Install to each subproject separately (see below).
@@ -709,6 +714,44 @@ git checkout backup/before-claude-craft -- .
 
 # Or hard reset
 git checkout backup/before-claude-craft
+```
+
+---
+
+## v7.25.0 Migration Notes
+
+If you are upgrading an existing Claude-Craft installation to v7.25.0:
+
+### New Features to Configure
+
+1. **Token Optimization (RTK):** Run `/common:setup-rtk` in Claude Code to configure 55-65% token savings
+2. **Hook Templates:** New templates available in `.claude/templates/hooks/` for output filtering, context preservation, and re-injection
+3. **Managed Settings:** Use `.claude/managed-settings.d/` for modular team configuration
+4. **Agent Frontmatter:** Add `effort`, `maxTurns`, `disallowedTools` to custom agents for cost control
+
+### Claude Code Version Requirements
+
+| Feature | Minimum Version |
+|---------|----------------|
+| Core Claude-Craft | v2.1.47 |
+| `/effort`, `/model` | v2.1.72 |
+| `/context` | v2.1.74 |
+| Agent frontmatter | v2.1.78 |
+| MCP Tool Search | v2.1.80 |
+| Managed settings | v2.1.83 |
+| Auto Mode | v2.1.94 |
+| MCP security fixes | v2.1.97 |
+| Subprocess sandboxing | v2.1.98 |
+| `/proactive`, PreCompact blocking | v2.1.105 |
+
+### Updating Installation
+
+```bash
+# Update rules (preserves project-specific files)
+npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en --update
+
+# Or via Makefile
+make install-symfony TARGET=. LANG=en OPTIONS="--update"
 ```
 
 ---

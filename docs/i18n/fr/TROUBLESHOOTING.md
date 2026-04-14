@@ -327,6 +327,106 @@ yq eval '.' claude-projects.yaml
 
 ---
 
+## Problèmes de Hooks
+
+### Les hooks PreToolUse/PostToolUse ne se déclenchent pas
+
+**Problème :** Les hooks configurés dans settings.json ne s'exécutent pas.
+
+**Solutions :**
+
+1. **Vérifier la version de Claude Code**
+   ```bash
+   claude --version
+   # Minimum : v2.1.47 | Recommandé : v2.1.105
+   # PreCompact : v2.1.76+ | PostCompact : v2.1.76+
+   ```
+
+2. **Vérifier la syntaxe du hook dans settings.json**
+   ```json
+   {
+     "hooks": {
+       "PreToolUse": [{
+         "matcher": "Bash",
+         "hooks": [{
+           "type": "command",
+           "command": "echo 'hook executed'"
+         }]
+       }]
+     }
+   }
+   ```
+
+3. **Rendre les scripts exécutables**
+   ```bash
+   chmod +x ~/.claude/hooks/*.sh
+   ```
+
+---
+
+## Problèmes de Sandboxing
+
+### Erreurs de sandbox PID namespace
+
+**Problème :** Erreurs liées à l'isolation des sous-processus.
+
+**Solution :**
+- Le sandboxing PID namespace nécessite Linux (v2.1.98+)
+- Sur macOS, le sandbox utilise une approche différente
+- Vérifier `sandbox.failIfUnavailable` dans settings.json si vous voulez ignorer les erreurs
+
+### Variables d'environnement scrubées dans les sous-processus
+
+**Problème :** Les credentials ne sont pas disponibles dans les sous-processus.
+
+**Solution :**
+- C'est un comportement de sécurité intentionnel (`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1`)
+- Les credentials sont supprimées des variables d'environnement des sous-processus
+- Pour désactiver (non recommandé) : `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=0`
+
+---
+
+## Problèmes MCP
+
+### Les outils MCP ne sont pas disponibles
+
+**Problème :** Les serveurs MCP tiers ne répondent pas ou les outils ne sont pas chargés.
+
+**Solutions :**
+
+1. **Utiliser ToolSearch pour le chargement paresseux**
+   - Les outils MCP peuvent être chargés à la demande (réduction de 95% du contexte)
+
+2. **Vérifier la sécurité des serveurs MCP**
+   - Utiliser Claude Code v2.1.97+ avec des serveurs MCP (corrections CVE critiques)
+   - Auditer le code source des serveurs MCP tiers avant installation
+   - Voir la checklist de vetting dans les règles de sécurité
+
+3. **Vérifier que le serveur MCP est lancé**
+   ```bash
+   ps aux | grep mcp
+   ```
+
+### RTK ne fonctionne pas
+
+**Problème :** Les commandes RTK échouent ou ne sont pas reconnues.
+
+**Solution :**
+```bash
+# Vérifier l'installation
+which rtk
+rtk --version
+
+# Si "command not found" : réinstaller
+curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | bash
+rtk init -g
+
+# Si "rtk gain" échoue : vérifier que c'est le bon binaire
+# rtk-ai/rtk (pas reachingforthejack/rtk)
+```
+
+---
+
 ## Obtenir Plus d'Aide
 
 ### Mode Debug

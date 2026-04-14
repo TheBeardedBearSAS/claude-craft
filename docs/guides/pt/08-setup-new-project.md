@@ -131,11 +131,16 @@ Claude-Craft suporta múltiplas stacks tecnológicas. Escolha a que corresponde 
 
 | Stack | Ideal Para | Flag de Comando |
 |-------|------------|-----------------|
-| **Symfony** | APIs PHP, Apps Web, Serviços Backend | `--tech=symfony` |
-| **Flutter** | Apps móveis (iOS/Android) | `--tech=flutter` |
+| **C# / .NET** | APIs Enterprise, Microserviços | `--tech=csharp` |
+| **Symfony / PHP** | APIs PHP, Apps Web, Serviços Backend | `--tech=symfony` |
+| **Laravel / PHP** | Apps Web, APIs rápidas | `--tech=laravel` |
+| **PHP** | Clean Architecture genérica | `--tech=php` |
+| **Flutter / Dart** | Apps móveis (iOS/Android) | `--tech=flutter` |
 | **Python** | APIs, Serviços de dados, Backends ML | `--tech=python` |
 | **React** | SPAs Web, Dashboards | `--tech=react` |
 | **React Native** | Apps móveis multiplataforma | `--tech=reactnative` |
+| **Angular** | Apps empresariais, SPAs | `--tech=angular` |
+| **Vue.js** | SPAs Web, Dashboards | `--tech=vuejs` |
 | **Apenas Common** | Qualquer projeto (regras genéricas) | `--tech=common` |
 
 **Escolha seu idioma:**

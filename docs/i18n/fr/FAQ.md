@@ -174,11 +174,11 @@ description: Expert en X. À utiliser quand Y.
 
 ### Qu'est-ce que BMAD ?
 
-BMAD (Build, Measure, Analyze, Deliver) est le framework de gestion de projet de Claude Craft avec :
-- 9 agents spécialisés (pm, ba, architect, po, sm, dev, qa, ux, bmad-master)
+BMAD v6 est le framework de gestion de projet de Claude Craft avec :
+- Rôles intégrés aux commandes workflow et sprint (pm, ba, architect, po, sm, dev, qa, qa-recette, ux, bmad-master)
 - Routage de stories basé sur le statut
 - 5 quality gates
-- Traitement par lots
+- 3 tracks : Quick Flow, Standard, Enterprise
 
 ### Comment commencer à utiliser BMAD ?
 
@@ -385,6 +385,47 @@ Changements principaux :
 ### Puis-je utiliser v3 et v4 côte à côte ?
 
 Non recommandé. Migrez les projets un par un.
+
+---
+
+## Optimisation des Tokens
+
+### Comment réduire ma consommation de tokens ?
+
+Utilisez la commande intégrée pour configurer automatiquement toutes les optimisations :
+
+```bash
+/common:setup-rtk
+```
+
+Cela installe **RTK** (Rust Token Killer), un proxy CLI qui réduit la consommation de tokens de 60-90% sur les commandes dev. Combiné avec les hooks et `CLAUDE_CODE_SUBAGENT_MODEL=sonnet`, vous obtenez une réduction globale de 55-65%.
+
+### Quelles commandes de gestion de contexte sont disponibles ?
+
+| Commande | Description |
+|----------|-------------|
+| `/effort low\|medium\|high` | Ajuster le niveau d'effort selon la complexité |
+| `/context` | Suggestions d'optimisation du contexte |
+| `/compact` | Compacter proactivement le contexte |
+| `/clear` | Nettoyer le contexte entre tâches non liées |
+| `/memory` | Sauvegarder des apprentissages persistants |
+| `/loop 5m /commande` | Planifier des tâches récurrentes |
+| `/model haiku\|sonnet\|opus` | Changer de modèle selon la complexité |
+
+### RTK ne fonctionne pas, que faire ?
+
+Vérifiez que vous avez le bon binaire :
+
+```bash
+rtk --version    # Doit afficher : rtk X.Y.Z
+rtk gain         # Doit fonctionner
+
+# Si "command not found" : installer RTK
+curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | bash
+rtk init -g
+```
+
+**Attention :** Si `rtk gain` échoue, vous avez peut-être `reachingforthejack/rtk` (Rust Type Kit) installé au lieu de `rtk-ai/rtk`.
 
 ---
 

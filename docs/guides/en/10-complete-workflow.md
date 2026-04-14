@@ -17,13 +17,25 @@ This guide walks you through the complete development lifecycle:
 7. **Deployment** - Ship to production
 
 **Prerequisites:**
-- Claude Craft installed in your project
+- Claude Craft v7.25.0 installed in your project
+- Claude Code v2.1.105 (recommended) or v2.1.47+ (minimum)
 - Basic understanding of your chosen technology stack
-- Claude Code running
 
 ---
 
 ## Phase 1: Ideation (5-10 minutes)
+
+### Setup Your Session
+
+Before diving in, configure your session for optimal performance:
+
+```bash
+# Adjust reasoning effort for planning (high for complex tasks)
+/effort high
+
+# Optionally set up token optimization
+/common:setup-rtk
+```
 
 ### Start with BMAD
 
@@ -321,11 +333,32 @@ Continue with next story until sprint complete.
 
 ## Phase 6: Quality (Throughout)
 
+### Context Management
+
+During development, manage your context window efficiently:
+
+```bash
+# Check context optimization suggestions
+/context
+
+# Switch to lower effort for simple tasks
+/effort low
+
+# Clear context between unrelated tasks
+/clear
+
+# Save important learnings that persist across sessions
+/memory "Key architectural decision: using CQRS for order module"
+```
+
 ### Continuous Quality Checks
 
 Run regularly during development:
 
-```
+```bash
+# Set up recurring quality monitoring
+/loop 5m /common:pre-commit-check
+
 # Architecture check
 /symfony:check-architecture
 
@@ -441,6 +474,10 @@ Ralph will iterate until:
 Here's a condensed sequence for a typical feature:
 
 ```bash
+# 0. Session setup
+/effort high                    # Complex planning
+/common:setup-rtk               # Token optimization (first time only)
+
 # 1. Initialize
 /bmad:init
 
@@ -475,6 +512,15 @@ Here's a condensed sequence for a typical feature:
 ---
 
 ## Tips for Success
+
+### 0. Manage Your Context Window
+
+The context window is your most critical resource:
+- Use `/effort low` for simple tasks, `/effort high` for complex ones
+- Use `/context` regularly to check optimization suggestions
+- Run `/clear` between unrelated tasks
+- Use `/memory` to persist key decisions across sessions
+- Set up `/loop` for recurring checks instead of manual runs
 
 ### 1. Don't Skip Quality Gates
 

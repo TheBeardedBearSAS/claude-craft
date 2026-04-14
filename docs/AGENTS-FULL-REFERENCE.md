@@ -1,6 +1,6 @@
 # Agents Full Reference
 
-Complete reference for all 40 agents available in Claude Craft.
+Complete reference for all 63 agents available in Claude Craft.
 
 ---
 
@@ -8,10 +8,17 @@ Complete reference for all 40 agents available in Claude Craft.
 
 | Category | Count | Examples |
 |----------|-------|----------|
-| Common | 13 | @api-designer, @tdd-coach, @uiux-orchestrator |
+| Common | 12 | @api-designer, @tdd-coach, @uiux-orchestrator |
 | Technology Reviewers | 10 | @symfony-reviewer, @react-reviewer |
 | Docker/Infrastructure | 5 | @docker-architect, @docker-debug |
-| BMAD v6 | 10 | @bmad-master, @pm, @dev, @qa-recette |
+| Coolify/Infrastructure | 4 | @coolify-architect, @coolify-deployment |
+| Kubernetes/Infrastructure | 5 | @kubernetes-architect, @kubernetes-security |
+| OpenTofu/Infrastructure | 5 | @opentofu-architect, @opentofu-cost |
+| Ansible/Infrastructure | 5 | @ansible-architect, @ansible-quality |
+| Hcloud/Infrastructure | 5 | @hcloud-architect, @hcloud-cost |
+| PgBouncer/Infrastructure | 5 | @pgbouncer-architect, @pgbouncer-monitoring |
+| FrankenPHP/Infrastructure | 5 | @frankenphp-architect, @frankenphp-performance |
+| BMAD v6 (roles) | 10 | @bmad-master, @pm, @dev, @qa-recette |
 | Project | 2 | @product-owner, @tech-lead |
 
 ---
@@ -37,7 +44,7 @@ Complete reference for all 40 agents available in Claude Craft.
 
 ---
 
-## Common Agents (13)
+## Common Agents (12)
 
 ### @api-designer
 
@@ -796,6 +803,67 @@ tools:
 - `Task(Plan)` - Planning agents (read-only)
 - `Task(Bash)` - Command execution agents
 - `Task(general-purpose)` - Full-capability agents
+
+---
+
+## Infrastructure Agents
+
+Claude Craft includes specialized agents for 8 infrastructure platforms, each following a consistent pattern with architect, deployment, debug, security, and monitoring/cost/performance roles.
+
+### Agent Pattern
+
+Each infrastructure namespace provides 4-5 specialized agents:
+
+| Role | Purpose | Example |
+|------|---------|---------|
+| `@{platform}-architect` | Design infrastructure architecture | `@kubernetes-architect` |
+| `@{platform}-deployment` | Deploy and configure infrastructure | `@coolify-deployment` |
+| `@{platform}-debug` | Troubleshoot infrastructure issues | `@docker-debug` |
+| `@{platform}-security` | Security audit and hardening | `@opentofu-security` |
+| `@{platform}-{5th}` | Platform-specific (monitoring/cost/performance/quality) | `@hcloud-cost` |
+
+### Platforms
+
+| Platform | Agents | 5th Role |
+|----------|--------|----------|
+| **Docker** | `@docker-dockerfile`, `@docker-compose`, `@docker-debug`, `@docker-cicd`, `@docker-architect` | CI/CD |
+| **Coolify** | `@coolify-architect`, `@coolify-deployment`, `@coolify-debug`, `@coolify-monitoring` | Monitoring (4 agents) |
+| **Kubernetes** | `@kubernetes-architect`, `@kubernetes-deployment`, `@kubernetes-debug`, `@kubernetes-security`, `@kubernetes-monitoring` | Monitoring |
+| **OpenTofu** | `@opentofu-architect`, `@opentofu-deployment`, `@opentofu-debug`, `@opentofu-security`, `@opentofu-cost` | Cost |
+| **Ansible** | `@ansible-architect`, `@ansible-deployment`, `@ansible-debug`, `@ansible-security`, `@ansible-quality` | Quality |
+| **Hcloud** | `@hcloud-architect`, `@hcloud-deployment`, `@hcloud-debug`, `@hcloud-security`, `@hcloud-cost` | Cost |
+| **PgBouncer** | `@pgbouncer-architect`, `@pgbouncer-deployment`, `@pgbouncer-debug`, `@pgbouncer-security`, `@pgbouncer-monitoring` | Monitoring |
+| **FrankenPHP** | `@frankenphp-architect`, `@frankenphp-deployment`, `@frankenphp-debug`, `@frankenphp-security`, `@frankenphp-performance` | Performance |
+
+---
+
+## Agent Frontmatter (v2.1.78+)
+
+Custom agents support frontmatter fields to control their behavior:
+
+```yaml
+---
+name: my-agent
+description: Expert in X. Use when Y.
+effort: low          # Reasoning effort (low/medium/high)
+maxTurns: 10         # Maximum conversation turns
+disallowedTools:     # Tools the agent cannot use
+  - Edit
+  - Write
+---
+```
+
+### Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Agent identifier |
+| `description` | string | When to use this agent |
+| `effort` | `low`/`medium`/`high` | Controls reasoning depth |
+| `maxTurns` | integer | Limits conversation length |
+| `disallowedTools` | string[] | Restricts tool access |
+| `memory` | object | Memory scope configuration (v2.1.33+) |
+| `tools` | string | Task type restriction (e.g., `Task(Explore)`) |
 
 ---
 

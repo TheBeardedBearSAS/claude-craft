@@ -476,6 +476,83 @@ This guide covers common issues and their solutions when using Claude-Craft.
 
 ---
 
+## Hook Issues
+
+### Hook Not Firing
+
+**Symptoms:**
+- PreToolUse/PostToolUse hooks don't execute
+- No output from hook commands
+
+**Solutions:**
+
+1. **Verify hook configuration in settings.json**
+   ```bash
+   cat .claude/settings.json | jq '.hooks'
+   ```
+
+2. **Check matcher syntax**
+   ```json
+   {
+     "hooks": {
+       "PreToolUse": [{
+         "matcher": "Bash",
+         "hooks": [{"type": "command", "command": "echo test"}]
+       }]
+     }
+   }
+   ```
+   The `matcher` must match the tool name exactly (e.g., `Bash`, `Edit`, `Write`).
+
+3. **Test hook command independently**
+   ```bash
+   # Run the hook command manually to verify it works
+   bash -c 'echo test'
+   ```
+
+### PreCompact Hook Blocking
+
+**Symptoms:**
+- Context compaction not happening when expected
+- Compaction seems stuck
+
+**Solution:** PreCompact hooks (v2.1.105+) can block compaction with exit code 2. Check your hooks:
+```bash
+cat .claude/settings.json | jq '.hooks.PreCompact'
+# Ensure hook scripts don't accidentally return exit code 2
+```
+
+### Sandbox Errors
+
+**Symptoms:**
+- "Sandbox unavailable" errors
+- Subprocess permission issues
+
+**Solutions:**
+
+1. **Check Claude Code version** (sandboxing requires v2.1.98+)
+   ```bash
+   claude --version
+   ```
+
+2. **On Linux, verify PID namespace support**
+   ```bash
+   # Check if unshare is available
+   which unshare
+   ```
+
+3. **Disable strict sandbox if needed** (not recommended for security)
+   - Remove `sandbox.failIfUnavailable` from settings if it was added
+
+### Security-Related Hook Failures
+
+If using MCP servers with hooks, ensure Claude Code v2.1.97+ to avoid known CVEs:
+- CVE-2025-59536: Command injection via MCP inputs in hook pipeline
+- CVE-2026-35020: Compound command bypass
+- CVE-2026-35022: Env-var prefix injection
+
+---
+
 ## Performance Issues
 
 ### Slow Command Execution
@@ -505,22 +582,40 @@ This guide covers common issues and their solutions when using Claude-Craft.
 ### Large Context Window Usage
 
 **Symptoms:**
-- 📊 indicator shows high percentage quickly
+- Context indicator shows high percentage quickly
 - "Context limit" warnings
 
 **Solutions:**
 
-1. **Start fresh conversation**
+1. **Use `/context` for optimization suggestions** (v2.1.74+)
    ```bash
-   exit
-   claude
+   /context
    ```
 
-2. **Be concise in requests**
-   - Avoid pasting large code blocks
-   - Reference files instead of pasting
+2. **Adjust effort level** for simple tasks (v2.1.72+)
+   ```bash
+   /effort low    # Simple lookups
+   /effort medium # Standard work
+   ```
 
-3. **Use agents for complex tasks**
+3. **Proactively compact** at ~70% usage
+   ```bash
+   /compact
+   ```
+
+4. **Use `/clear` between unrelated tasks**
+
+5. **Save key learnings** before compaction
+   ```bash
+   /memory "Important: auth uses JWT RS256 with 15min expiry"
+   ```
+
+6. **Set up RTK** for 55-65% token savings
+   ```bash
+   /common:setup-rtk
+   ```
+
+7. **Use agents for complex tasks**
    ```markdown
    # Instead of pasting entire codebase
    @research-assistant Find all authentication-related files in src/

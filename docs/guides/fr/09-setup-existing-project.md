@@ -179,11 +179,16 @@ Identifiez la technologie principale de votre projet :
 
 | Votre Projet Utilise | Commande d'Installation |
 |----------------------|-------------------------|
+| C# / .NET | `--tech=csharp` |
 | PHP/Symfony | `--tech=symfony` |
+| PHP/Laravel | `--tech=laravel` |
+| PHP Clean Architecture | `--tech=php` |
 | Dart/Flutter | `--tech=flutter` |
 | Python/FastAPI/Django | `--tech=python` |
 | JavaScript/React | `--tech=react` |
 | JavaScript/React Native | `--tech=reactnative` |
+| TypeScript/Angular | `--tech=angular` |
+| TypeScript/Vue.js | `--tech=vuejs` |
 | Multiple/Autre | `--tech=common` |
 
 **Pour les monorepos :** Installez dans chaque sous-projet séparément (voir ci-dessous).
@@ -710,6 +715,19 @@ git checkout backup/before-claude-craft -- .
 # Ou hard reset
 git checkout backup/before-claude-craft
 ```
+
+---
+
+### Optimiser les Tokens (Recommandé)
+
+Après l'installation, configurez l'optimisation des tokens pour réduire vos coûts de 55-65% :
+
+```bash
+# Dans Claude Code
+/common:setup-rtk
+```
+
+Cela configure RTK, les hooks de filtrage et le modèle des sous-agents automatiquement.
 
 ---
 

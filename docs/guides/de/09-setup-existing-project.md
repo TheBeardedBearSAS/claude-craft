@@ -179,11 +179,16 @@ Identifizieren Sie die Haupttechnologie Ihres Projekts:
 
 | Ihr Projekt Verwendet | Installationsbefehl |
 |-----------------------|---------------------|
+| C#/.NET | `--tech=csharp` |
 | PHP/Symfony | `--tech=symfony` |
+| PHP/Laravel | `--tech=laravel` |
+| PHP (generisch) | `--tech=php` |
 | Dart/Flutter | `--tech=flutter` |
 | Python/FastAPI/Django | `--tech=python` |
 | JavaScript/React | `--tech=react` |
 | JavaScript/React Native | `--tech=reactnative` |
+| TypeScript/Angular | `--tech=angular` |
+| JavaScript/Vue.js | `--tech=vuejs` |
 | Mehrere/Andere | `--tech=common` |
 
 **Für Monorepos:** Installieren Sie in jedem Unterprojekt separat (siehe unten).

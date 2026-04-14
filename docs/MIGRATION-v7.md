@@ -116,9 +116,40 @@ grep -rn '/project:\(sprint-\|gate-\|project-\)' .claude/
 
 ---
 
+## What's New in v7.25.0
+
+v7.25.0 introduces token optimization and enhanced Claude Code v2.1.63-v2.1.105 compatibility.
+
+### Key Additions
+
+- **RTK Integration** — Rust Token Killer reduces token usage 55-65% via `/common:setup-rtk`
+- **8 New Hook Events** — PostCompact, StopFailure, TaskCreated, CwdChanged, FileChanged, PermissionDenied, Elicitation, ElicitationResult
+- **Hook Enhancements** — Conditional `if` field (v2.1.85), `defer` permission (v2.1.89), PreCompact blocking (v2.1.105)
+- **New Commands** — `/effort`, `/context`, `/loop`, `/proactive`, `/color`, `/rename`, `/powerup`, `/team-onboarding`
+- **Agent Frontmatter** — `effort`, `maxTurns`, `disallowedTools` fields (v2.1.78+)
+- **Auto Mode** — AI permission classifier for Team plans (v2.1.94+)
+- **MCP Tool Search** — Lazy loading reduces context overhead ~95% (v2.1.80+)
+- **Subprocess Sandboxing** — PID namespace isolation + env scrubbing (v2.1.98+)
+- **Hook Templates** — Ready-to-use templates in `.claude/templates/hooks/`
+- **Managed Settings** — `managed-settings.d/` for enterprise config (v2.1.83+)
+
+### Security Updates
+
+7 CVEs documented (see `SECURITY.md`). Minimum security version: **v2.1.97**.
+
+### Setup RTK (Optional)
+
+```bash
+/common:setup-rtk
+```
+
+**No breaking changes** — All v7.x commands remain stable.
+
+---
+
 ## What Has NOT Changed
 
-- Total command count: 155
+- Total command count: 204+
 - All agent names (`@tdd-coach`, `@react-reviewer`, etc.)
 - Tech-specific commands (`/react:*`, `/symfony:*`, etc.)
 - BMAD workflow phases

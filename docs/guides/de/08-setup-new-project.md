@@ -131,11 +131,16 @@ Claude-Craft unterstützt mehrere Technologie-Stacks. Wählen Sie den, der zu Ih
 
 | Stack | Ideal Für | Befehls-Flag |
 |-------|-----------|--------------|
-| **Symfony** | PHP-APIs, Web-Apps, Backend-Services | `--tech=symfony` |
-| **Flutter** | Mobile Apps (iOS/Android) | `--tech=flutter` |
+| **C# / .NET** | Enterprise-APIs, Microservices | `--tech=csharp` |
+| **Symfony / PHP** | PHP-APIs, Web-Apps, Backend-Services | `--tech=symfony` |
+| **Laravel / PHP** | Web-Apps, schnelle APIs | `--tech=laravel` |
+| **PHP** | Generische Clean Architecture | `--tech=php` |
+| **Flutter / Dart** | Mobile Apps (iOS/Android) | `--tech=flutter` |
 | **Python** | APIs, Datendienste, ML-Backends | `--tech=python` |
 | **React** | Web-SPAs, Dashboards | `--tech=react` |
 | **React Native** | Plattformübergreifende Mobile Apps | `--tech=reactnative` |
+| **Angular** | Unternehmensanwendungen, SPAs | `--tech=angular` |
+| **Vue.js** | Web-SPAs, Dashboards | `--tech=vuejs` |
 | **Nur Common** | Jedes Projekt (generische Regeln) | `--tech=common` |
 
 **Wählen Sie Ihre Sprache:**

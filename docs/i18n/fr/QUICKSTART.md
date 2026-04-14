@@ -135,7 +135,7 @@ Dans Claude Code, essayez ces commandes :
 
 ## Technologies Disponibles
 
-Claude Craft supporte 10 stacks technologiques :
+Claude Craft supporte **18 stacks technologiques** (10 dev + 8 infra). Voici les 10 stacks de développement :
 
 | Technologie | Commande d'Installation | Focus |
 |-------------|-------------------------|-------|
@@ -149,6 +149,19 @@ Claude Craft supporte 10 stacks technologiques :
 | Laravel | `make install-laravel` | Clean Architecture, Pest PHP |
 | Vue.js | `make install-vuejs` | Composition API, Pinia, Vitest |
 | PHP | `make install-php` | Clean Architecture, PSR-12, PHPStan |
+
+**Stacks d'infrastructure :** Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hetzner Cloud, PgBouncer, FrankenPHP
+
+---
+
+## Optimisation des Tokens
+
+Après l'installation, configurez l'optimisation des tokens pour réduire vos coûts de 55-65% :
+
+```bash
+# Dans Claude Code
+/common:setup-rtk
+```
 
 ---
 
@@ -171,9 +184,10 @@ Claude Craft supporte 10 stacks technologiques :
 │   npx @the-bearded-bear/claude-craft install . --tech=X   │
 │   make install-{tech} TARGET=~/projet RULES_LANG=fr       │
 ├────────────────────────────────────────────────────────────┤
-│ COMMANDES COURANTES                                        │
+│ COMMANDES COURANTES (204+ disponibles)                     │
 │   /common:pre-commit-check    Validation avant commit      │
-│   /team:audit          Audit multi-tech du projet   │
+│   /common:setup-rtk           Optimisation tokens (RTK)    │
+│   /team:audit                 Audit multi-tech du projet   │
 │   /workflow:init              Démarrer la méthodologie     │
 ├────────────────────────────────────────────────────────────┤
 │ AGENTS UTILES                                              │

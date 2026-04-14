@@ -318,16 +318,23 @@ make test
 ### Vérifications Qualité
 
 ```bash
-# Qualité du code (par technologie)
+# Qualité du code (par technologie, parmi les 204+ commandes disponibles)
 /symfony:check-code-quality
 /flutter:check-code-quality
 /python:check-code-quality
+/react:check-code-quality
+/angular:check-code-quality
+/vuejs:check-code-quality
+/csharp:check-code-quality
+/laravel:check-code-quality
+/reactnative:check-code-quality
+/php:check-code-quality
 
 # Sécurité (si la correction touche du code sensible)
 /common:security-audit
 
 # Conformité complète
-/symfony:check-compliance
+/{tech}:check-compliance
 ```
 
 ### Tests Manuels
