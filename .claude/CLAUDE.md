@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 7.33.0 | **Languages:** en, fr, es, de, pt
+**Version:** 7.34.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 63 agents, 212 commands across 27 namespaces, and BMAD v6 project management.
 
@@ -52,7 +52,7 @@ Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-RE
 
 ## Available Agents (63 agents)
 
-**Common** (12): `@api-designer`, `@database-architect`, `@devops-engineer`, `@performance-auditor`, `@refactoring-specialist`, `@tdd-coach`, `@uiux-orchestrator`, `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@research-assistant`, `@ralph-conductor` | **Tech Reviewers** (10): `@{symfony,flutter,react,python,angular,laravel,vuejs,reactnative,csharp,php}-reviewer` | **Infrastructure** (41): Docker, Coolify, K8s, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP — see [Agents](../docs/AGENTS.md) | **Project** (2): `@product-owner`, `@tech-lead`
+**Common** (16): `@api-designer`, `@database-architect`, `@devops-engineer`, `@performance-auditor`, `@refactoring-specialist`, `@tdd-coach`, `@uiux-orchestrator`, `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@research-assistant`, `@ralph-conductor`, `@security-auditor`, `@data-analyst`, `@migration-specialist`, `@cost-optimizer` | **Tech Reviewers** (10): `@{symfony,flutter,react,python,angular,laravel,vuejs,reactnative,csharp,php}-reviewer` | **Infrastructure** (41): Docker, Coolify, K8s, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP — see [Agents](../docs/AGENTS.md) | **Project** (2): `@product-owner`, `@tech-lead`
 
 Full reference: [Agents](../docs/AGENTS.md)
 

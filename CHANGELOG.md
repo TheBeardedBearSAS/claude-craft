@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.34.0] - 2026-04-15
+
+### Added — Phase 4 : Spec alignment audit + subagents + generate-design-md
+
+- **`.claude/SKILLS-SPEC.md`** — Audit de conformité des 42 skills vs spec officielle Anthropic
+  - 40/42 skills conformes à la spec
+  - 2 écarts mineurs identifiés (`remotion`, `remotion-best-practices`)
+  - Plan de migration stricte prévu en v8.0.0 (breaking)
+  - Tests de conformité CI documentés
+
+- **4 nouveaux agents** (`.claude/agents/`)
+  - `@security-auditor` — OWASP Top 10:2025, SAST, SBOM, supply chain (model: sonnet)
+  - `@data-analyst` — SQL, metrics design, BI, observability (model: sonnet)
+  - `@migration-specialist` — zero-downtime, expand-contract, framework upgrades (model: sonnet)
+  - `@cost-optimizer` — FinOps, LLM cost reduction, prompt caching (model: haiku)
+
+- **Command `/uiux:generate-design-md`** (`.claude/commands/uiux/generate-design-md.md`)
+  - Génère DESIGN.md à la racine depuis template
+  - Options `--from-tailwind`, `--from-tokens`, `--interactive`
+  - Auto-détection des sources UI (Tailwind, W3C tokens, SCSS)
+
+### Changed
+
+- `.claude/CLAUDE.md` : 16 agents Common (au lieu de 12), version 7.34.0
+
 ## [7.33.0] - 2026-04-15
 
 ### Added — Phase 3 : Repomix integration
