@@ -21,6 +21,16 @@ Complete reference for all 63 agents available in Claude Craft.
 | BMAD v6 (roles) | 10 | @bmad-master, @pm, @dev, @qa-recette |
 | Project | 2 | @product-owner, @tech-lead |
 
+### Model Distribution (v7.27.0)
+
+All 22 common and reviewer agents now include optimized frontmatter with `effort:` and `memory:` fields:
+
+| Model | Count | Agents |
+|-------|-------|--------|
+| **Opus 4.6** | 2 | product-owner, tech-lead |
+| **Sonnet 4.6** | 16 | api-designer, database-architect, devops-engineer, performance-auditor, refactoring-specialist, research-assistant, tdd-coach, uiux-orchestrator, ralph-conductor + 10 tech reviewers |
+| **Haiku 4.5** | 3 | ui-designer, ux-ergonome, accessibility-expert |
+
 ---
 
 ## How to Use Agents
@@ -49,6 +59,9 @@ Complete reference for all 63 agents available in Claude Craft.
 ### @api-designer
 
 **Expertise:** REST/GraphQL API design
+**Model:** Sonnet 4.6
+**Effort:** medium
+**Memory:** user
 
 **Use when:**
 - Designing new APIs
@@ -68,6 +81,9 @@ Complete reference for all 63 agents available in Claude Craft.
 ### @database-architect
 
 **Expertise:** Database design and optimization
+**Model:** Sonnet 4.6
+**Effort:** medium
+**Memory:** user
 
 **Use when:**
 - Schema design

@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.27.0] - 2026-04-14
+
+### Added
+
+- **PostCompact hook** -- Context reinjection after compaction via `context-essentials.md` (previously only at session restart)
+- **`.claudeignore` template** -- Generated during install to exclude `node_modules/`, `website/`, `Dev/i18n/`, lock files (40-70% reduction in file search operations)
+- **`install_config()` in install scripts** -- Installs `settings.json`, `settings.local.json`, `.claudeignore`, and `context-essentials.md` during project setup
+- **Agent memory frontmatter** -- 18 agents now have `memory: user` (6 cross-project) or `memory: project` (12 tech reviewers) for cross-session knowledge persistence
+- **`effort:` field on all 22 agents** -- `low` for Haiku auditors, `medium` for Sonnet reviewers, `high` for Opus orchestrators
+- **RTK `--ultra-compact` mode** -- Patched automatically during install for +5-10% additional token savings
+- **MultiAccount `sync` command** -- Synchronizes hooks and settings from `~/.claude` to isolated profiles (`claude-accounts sync`)
+- **BATS tests in CI** -- Shell script tests (MultiAccount, RTK, StatusLine, AgentTeams) now run in GitHub Actions via Docker
+- **i18n parity check in CI** -- `npm run lint:i18n` added to build pipeline
+- **66 new tests** -- `install-config` (11), `agents-optimization` (19), `templates` (19), `project-settings` (17), plus BATS for RTK ultra-compact (3) and MultiAccount sync (5)
+- **`test-bats` and `test-all` Makefile targets** -- Run all BATS tests or combined vitest + BATS
+
+### Changed
+
+- **`settings.local.json` consolidated** -- 49KB (480+ accumulated permissions) → ~1KB (wildcard patterns), 98% reduction per session
+- **`CLAUDE_CODE_SUBAGENT_MODEL` enforced** -- Set to `claude-sonnet-4-5` in `settings.json` (was only documented, not applied)
+- **`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` removed** -- No longer always-on; teams overhead eliminated when not using `/team:*`
+- **`api-designer` and `database-architect` downgraded** -- `opus` → `sonnet`, `maxTurns: 8` → `6` (~5x cost reduction per invocation)
+- **INDEX.md trimmed** -- 358 → 215 lines, removed redundant Claude Code changelog and duplicated skills list
+- **4 rules files condensed** -- `04-solid-principles` (17KB→1KB), `05-kiss-dry-yagni` (14KB→1KB), `07-testing` (11KB→1.3KB), `11-security` (10KB→1.6KB); full content preserved in `references/base/`
+- **`settings.json.template` updated** -- Now includes `env` block, `PostCompact` hook, `SessionStart(compact)`, output filters for Bash/Grep, security hooks for Edit/Write
+- **`settings.local.json.template` updated** -- Consolidated wildcard permissions instead of empty file
+- **CI pipeline** -- `publish` now requires both `build` AND `bats` jobs; i18n parity check added to build
+
+### Fixed
+
+- **RTK integrity hash** -- `install-rtk.sh` now updates `.rtk-hook.sha256` after patching `--ultra-compact`
+- **Version references** -- 7.26.0 → 7.27.0 across all docs, guides, and configuration files
+
 ## [7.26.0] - 2026-04-14
 
 ### Added

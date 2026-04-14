@@ -271,9 +271,17 @@ Helps with:
 
 ---
 
+## Agent Optimization (v7.27.0)
+
+All 22 common and reviewer agents now include optimized frontmatter:
+
+- **Effort control**: Each agent specifies `effort: low|medium|high` to optimize reasoning depth
+- **Persistent memory**: 18 agents use `memory: user` or `memory: project` for cross-session knowledge
+- **Model distribution**: 2 opus (product-owner, tech-lead), 16 sonnet (common + reviewers), 3 haiku (accessibility-expert, ux-ergonome, ui-designer)
+
 ## Scoring System v2.0
 
-All 10 reviewer agents now use the **Claude Sonnet** model and share a standardized scoring and review system:
+All 10 reviewer agents use the **Claude Sonnet** model and share a standardized scoring and review system:
 
 - **Quantitative scoring**: 4 categories scored out of 100 -- Architecture (/25), Code Quality (/25), Testing (/25), Security (/25)
 - **Decision trees**: Automated review decisions based on score thresholds (APPROVE >= 80, REQUEST CHANGES < 50, COMMENT otherwise)

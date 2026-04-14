@@ -185,6 +185,10 @@ Installing Claude-Craft rules...
   ✓ Templates installed
   ✓ Checklists installed
   ✓ CLAUDE.md generated
+  ✓ settings.json configured with optimized defaults
+  ✓ settings.local.json created with wildcard permissions
+  ✓ .claudeignore installed
+  ✓ PostCompact hook configured for context reinjection
 
 Installation complete! Run 'claude' in your project directory to start.
 ```
@@ -253,6 +257,9 @@ Installing Symfony rules to /home/yourname/my-project...
   Copying templates... done
   Copying checklists... done
   Generating CLAUDE.md... done
+  Configuring settings.json... done
+  Creating settings.local.json... done
+  Installing .claudeignore... done
 
 Installation complete!
 ```
@@ -277,10 +284,13 @@ total XX
 drwxr-xr-x  8 user user 4096 Jan 12 10:00 .
 drwxr-xr-x  3 user user 4096 Jan 12 10:00 ..
 -rw-r--r--  1 user user 2048 Jan 12 10:00 CLAUDE.md
+-rw-r--r--  1 user user  512 Jan 12 10:00 .claudeignore
 drwxr-xr-x  2 user user 4096 Jan 12 10:00 agents
 drwxr-xr-x  2 user user 4096 Jan 12 10:00 checklists
 drwxr-xr-x  4 user user 4096 Jan 12 10:00 commands
 drwxr-xr-x  2 user user 4096 Jan 12 10:00 rules
+-rw-r--r--  1 user user 1024 Jan 12 10:00 settings.json
+-rw-r--r--  1 user user  512 Jan 12 10:00 settings.local.json
 drwxr-xr-x  2 user user 4096 Jan 12 10:00 templates
 ```
 
@@ -425,36 +435,27 @@ Claude should respond mentioning:
 - Check that `.claude/` directory exists
 - Restart Claude Code
 
-### Optional: Setup Token Optimization (RTK)
+### Automatic Optimizations (v7.27.0)
 
-For significant token savings (55-65% reduction), run the RTK setup command:
+Claude-Craft now installs optimized defaults automatically during installation:
+
+**Installed by default:**
+- ✓ `.claudeignore` file to reduce context noise
+- ✓ `settings.json` with PostCompact hook for context reinjection
+- ✓ `settings.local.json` with wildcard permissions for common tools
+- ✓ `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` enforced in settings.json env block
+- ✓ RTK `--ultra-compact` mode automatically patched (if RTK is installed)
+
+**Optional: Setup RTK for Additional Savings**
+
+For maximum token savings (60-90% on CLI outputs), install RTK:
 
 ```bash
 # In Claude Code
 /common:setup-rtk
 ```
 
-This configures:
-- **RTK proxy** for CLI output reduction (60-90% savings on dev commands)
-- **Sub-agent model** optimization (`CLAUDE_CODE_SUBAGENT_MODEL=sonnet`)
-- **Hook templates** from `.claude/templates/hooks/` for output filtering and context preservation
-
-### Optional: Configure Hook Templates
-
-Claude-Craft provides ready-to-use hook templates:
-
-```bash
-# View available templates
-ls .claude/templates/hooks/
-```
-
-| Template | Purpose |
-|----------|---------|
-| `output-filter.json` | Filter large CLI outputs to reduce context usage |
-| `pre-compact.json` | Preserve critical context before compaction |
-| `context-reinject.json` | Re-inject context essentials after compaction |
-
-Copy relevant templates into your `.claude/settings.json` hooks configuration.
+This configures RTK proxy integration. See [RTK.md](@RTK.md) for details.
 
 ---
 

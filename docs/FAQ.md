@@ -337,7 +337,7 @@ Ready-to-use templates in `.claude/templates/hooks/`:
 - `pre-compact.json` — PreCompact for preserving context before compaction
 - `context-reinject.json` — SessionStart for re-injecting context after compaction
 
-### What are the new hook events in v7.26.0?
+### What are the new hook events in v7.27.0?
 
 8 new events added (24 total): PostCompact, StopFailure, TaskCreated, CwdChanged, FileChanged, PermissionDenied, Elicitation, ElicitationResult. Plus conditional `if` field (v2.1.85) and PreCompact blocking (v2.1.105).
 

@@ -1,6 +1,6 @@
 # Tools Reference Guide
 
-This guide covers the utility tools included with Claude-Craft for managing profiles, status display, project configuration, and Claude Code commands and features (v7.26.0).
+This guide covers the utility tools included with Claude-Craft for managing profiles, status display, project configuration, and Claude Code commands and features (v7.27.0).
 
 ---
 
@@ -65,7 +65,7 @@ Claude Code provides built-in commands for context and session management. These
 
 ## Hook Events
 
-Claude Code supports 24 hook events (8 new in v7.26.0) for automating workflows:
+Claude Code supports 24 hook events (8 new in v7.27.0) for automating workflows:
 
 ### All Hook Events
 
@@ -86,7 +86,7 @@ Claude Code supports 24 hook events (8 new in v7.26.0) for automating workflows:
 | **ElicitationResult** | After user response | Process elicitation results |
 | **Stop** | On session stop | Cleanup |
 
-### Hook Enhancements (v7.26.0)
+### Hook Enhancements (v7.27.0)
 
 | Feature | Description |
 |---------|-------------|

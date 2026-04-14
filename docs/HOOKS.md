@@ -49,6 +49,7 @@ Claude Code supports **24 hook event types**:
 | `SubagentStop` | When subagent finishes | No |
 | `Notification` | When notification is sent | Yes (notification type) |
 | `PreCompact` | Before context compaction | Yes (`manual`, `auto`) |
+| `PostCompact` | After context compaction completes | No |
 | `SessionStart` | When session starts/resumes | Yes (`startup`, `resume`, `clear`, `compact`) |
 | `SessionEnd` | When session terminates | No |
 | `Setup` | When `--init`, `--init-only`, `--maintenance` run | No |
@@ -57,7 +58,6 @@ Claude Code supports **24 hook event types**:
 | `ConfigChange` | When configuration files change | Yes (config key) |
 | `WorktreeCreate` | When a git worktree is created | Yes (worktree path) |
 | `WorktreeRemove` | When a git worktree is removed | Yes (worktree path) |
-| `PostCompact` | After context compaction completes (v2.1.76+) | No |
 | `StopFailure` | When a stop/termination operation fails (v2.1.78+) | No |
 | `Elicitation` | When MCP tool requests user input (v2.1.76+) | No |
 | `ElicitationResult` | After user responds to elicitation (v2.1.76+) | No |
