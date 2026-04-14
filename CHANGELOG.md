@@ -5,32 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [7.32.0] - 2026-04-15
+## [7.33.0] - 2026-04-15
 
-### Added — Phase 2 : Skills Superpowers
+### Added — Phase 3 : Repomix integration
 
-- **Skill `architect`** (`.claude/skills/architect/SKILL.md`)
-  - Phase d'architecture systématique avant TDD (5 étapes : boundaries → contrats → dépendances → trade-offs → tests d'archi)
-  - Livrables : diagramme, contrats, ADR court, tests d'architecture, découpage atomique
-  - Source : [obra/superpowers](https://github.com/obra/superpowers)
+- **Command `/common:pack-repo`** (`.claude/commands/common/pack-repo.md`)
+  - Pack la codebase en un seul fichier AI-friendly (XML, Markdown, Plain, JSON)
+  - Wrapper [Repomix](https://github.com/yamadashy/repomix) (npm) par défaut
+  - Token counting (encoding o200k_base)
+  - Options : `--format`, `--output`, `--compress`, `--include`, `--exclude`, `--mcp`, `--fallback`
+  - Intégration `/workflow:init`, `/common:setup-project-context`, `/team:audit`
 
-- **Skill `debug-methodical`** (`.claude/skills/debug-methodical/SKILL.md`)
-  - Debugging en 4 phases strictes (reproduce → isolate → fix → verify)
-  - Techniques bisect, binary search, 5 Whys, flaky detection
-  - Test de régression obligatoire (règle d'or QA)
-  - Source : [obra/superpowers](https://github.com/obra/superpowers)
-
-- **Skill `socratic-brainstorm`** (`.claude/skills/socratic-brainstorm/SKILL.md`)
-  - 5 familles de questions (problème, contraintes, alternatives, hypothèses, conséquences)
-  - Variante rapide 5 Whys pour causes racines
-  - Source : [obra/superpowers](https://github.com/obra/superpowers)
-
-### Changed
-
-- `.claude/commands/workflow/analyze.md` : skills recommandés `socratic-brainstorm` + `atomic-tasks`
-- `.claude/commands/workflow/design.md` : skills recommandés `architect` + `atomic-tasks`
-- `.claude/commands/qa/tdd.md` : skills recommandés `debug-methodical` + `atomic-tasks`
-- `.claude/CLAUDE.md` : skills list mise à jour (13 skills exposés au total)
+- **Script fallback shell** (`Dev/scripts/pack-repo-fallback.sh`)
+  - Bash autonome, zéro dépendance npm
+  - Respect automatique de `.gitignore` (via `git ls-files`)
+  - Exclusion binaires + caches (node_modules, vendor, dist, __pycache__, etc.)
+  - Skip fichiers > 500KB (générés/volumineux)
+  - Estimation tokens (4 chars ≈ 1 token, avertissement si > 200k)
+  - Fallback automatique si `repomix` et `npx` absents
 
 ## [7.32.0] - 2026-04-15
 
