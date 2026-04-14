@@ -452,6 +452,118 @@ npx @the-bearded-bear/claude-craft ralph --max-iterations=20 "Refactor the payme
 
 ---
 
+## Claude Code Slash Commands
+
+The following slash commands are available in Claude Code (v2.1.105+).
+
+### /btw
+
+Quick questions without context switching, using minimal context and low effort.
+
+#### Usage
+
+```bash
+/btw <question>
+```
+
+#### Description
+
+Ask a quick question without polluting the main conversation context. Uses minimal context window and low effort mode for fast responses. Ideal for simple lookups, factual questions, or quick clarifications that don't require full conversation history.
+
+#### Examples
+
+```bash
+/btw What's the difference between bcrypt and argon2?
+/btw How do I check my Node.js version?
+/btw What does the --force flag do?
+```
+
+---
+
+### /hooks
+
+Interactive hook management interface.
+
+#### Usage
+
+```bash
+/hooks
+```
+
+#### Description
+
+Launch an interactive TUI for managing Claude Code hooks. Allows you to:
+- View all installed hooks
+- Enable/disable hooks
+- Test hook execution
+- Debug hook issues
+- View hook output and errors
+
+#### Examples
+
+```bash
+# Open hook management interface
+/hooks
+```
+
+---
+
+### /reload-plugins
+
+Manually reload all Claude Code plugins.
+
+#### Usage
+
+```bash
+/reload-plugins
+```
+
+#### Description
+
+Force a reload of all installed plugins without restarting Claude Code. Useful after:
+- Installing new plugins
+- Updating plugin configurations
+- Debugging plugin issues
+- Making changes to plugin files
+
+#### Examples
+
+```bash
+# Reload all plugins
+/reload-plugins
+```
+
+---
+
+### /proactive
+
+Alias for `/loop` - run a command on a recurring interval.
+
+#### Usage
+
+```bash
+/proactive [interval] [command]
+```
+
+#### Description
+
+Execute a command or prompt repeatedly on a specified interval. This is an alias for the `/loop` command. If no interval is provided, the model will self-pace the iterations.
+
+#### Examples
+
+```bash
+# Check deployment status every 5 minutes
+/proactive 5m /status
+
+# Run tests continuously with auto-pacing
+/proactive npm test
+
+# Monitor PR reviews every 10 minutes
+/proactive 10m Check if there are new PR reviews
+```
+
+---
+
 ## Configuration File
 
 ### YAML Configuration

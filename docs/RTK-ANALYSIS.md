@@ -1,6 +1,6 @@
 # Analyse Approfondie : RTK (Rust Token Killer)
 
-**Version:** 7.27.0 | **Date:** 2026-04-14
+**Version:** 7.28.0 | **Date:** 2026-04-14
 
 > **Repo:** github.com/rtk-ai/rtk | **Site:** rtk-ai.app
 > **Auteur:** Patrick Szymkowiak (@gloupish) | **Licence:** MIT

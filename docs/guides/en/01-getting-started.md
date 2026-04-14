@@ -54,7 +54,7 @@ All content is available in 5 languages:
 
 | Version | Status |
 |---------|--------|
-| **2.1.105** | Recommended (full feature support) |
+| **2.1.107** | Recommended (full feature support) |
 | **2.1.97+** | Security minimum (required if using MCP servers) |
 | **2.1.47+** | Minimum supported |
 
@@ -304,7 +304,7 @@ Every feature must pass quality gates:
 
 ---
 
-## Automatic Optimizations (v7.27.0)
+## Automatic Optimizations (v7.28.0)
 
 Claude-Craft now includes optimized defaults out of the box:
 

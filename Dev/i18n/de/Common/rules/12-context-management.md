@@ -697,9 +697,46 @@ Dateien werden in alphabetischer Reihenfolge zusammengefuehrt, sodass Teams Konf
 
 ---
 
+## Neue Befehle (v2.1.105+)
+
+| Befehl | Beschreibung | Verwendung |
+|--------|--------------|------------|
+| `/btw` | Schnelle Fragen ohne Kontextwechsel | Lookups, Syntax, Klarstellungen |
+| `/hooks` | Interaktive Hook-Verwaltung | Aktivieren/Deaktivieren, Testen, Debuggen |
+| `/reload-plugins` | Manuelles Plugin-Neuladen | Nach Plugin-Updates |
+| `/proactive` | Alias fuer `/loop` | Proaktives wiederkehrendes Monitoring |
+
+---
+
+## Zusaetzliche Umgebungsvariablen (v2.1.105+)
+
+| Variable | Beschreibung |
+|----------|--------------|
+| `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | CLAUDE.md aus `--add-dir` laden |
+| `MAX_THINKING_TOKENS=8000` | Denktoken-Limit |
+| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Zeichenbudget fuer Slash-Befehle |
+| `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` | PowerShell statt Bash (Windows, v2.1.84+) |
+| `OTEL_LOG_USER_PROMPTS` | Prompts in Traces loggen (Beta) |
+| `OTEL_LOG_TOOL_DETAILS` | Tool-Details loggen (Beta) |
+| `OTEL_LOG_TOOL_CONTENT` | Tool-Inhalt loggen (Beta, ausfuehrlich) |
+
+---
+
+## Erweiterte Skills (v2.1.105+)
+
+| Frontmatter | Beschreibung |
+|-------------|--------------|
+| `context: fork` | Ausfuehrung in isoliertem Kontext (keine Verschmutzung) |
+| `disable-model-invocation: true` | Automatische Aufrufung durch Claude verhindern |
+| `claudeMdExcludes` (Setting) | Bestimmte CLAUDE.md-Dateien in Monorepos ausschliessen |
+
+**Auto-Kompaktierung und Skills:** Nach der Kompaktierung werden Skills automatisch neu geladen (5K Tokens/Skill, 25K gesamt max).
+
+---
+
 ## Ressourcen
 
-- **Anthropic Best Practices:** [docs.anthropic.com](https://docs.anthropic.com/en/docs/claude-code/overview)
+- **Anthropic Best Practices:** [code.claude.com](https://code.claude.com/docs/en/overview)
 - **Boris Cherny Workflow:** Parallele Worktrees + Verifikationsschleifen
 - **Claude Code Kontextverwaltung:** Context Compaction, `/clear`, Sub-Agents
 - **`/init`:** Generiert automatisch eine CLAUDE.md aus der Projektanalyse

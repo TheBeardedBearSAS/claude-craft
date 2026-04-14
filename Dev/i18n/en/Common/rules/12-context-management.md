@@ -697,9 +697,46 @@ Files are merged in alphabetical order, allowing teams to layer configurations w
 
 ---
 
+## New Commands (v2.1.105+)
+
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| `/btw` | Quick questions without context switching | Lookups, syntax, clarifications |
+| `/hooks` | Interactive hook management | Enable/disable, test, debug |
+| `/reload-plugins` | Manual plugin reload | After plugin updates |
+| `/proactive` | Alias for `/loop` | Proactive recurring monitoring |
+
+---
+
+## Additional Environment Variables (v2.1.105+)
+
+| Variable | Description |
+|----------|-------------|
+| `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | Load CLAUDE.md from `--add-dir` |
+| `MAX_THINKING_TOKENS=8000` | Thinking token limit |
+| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Slash command character budget |
+| `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` | PowerShell instead of Bash (Windows, v2.1.84+) |
+| `OTEL_LOG_USER_PROMPTS` | Log prompts in traces (beta) |
+| `OTEL_LOG_TOOL_DETAILS` | Log tool details (beta) |
+| `OTEL_LOG_TOOL_CONTENT` | Log tool content (beta, verbose) |
+
+---
+
+## Advanced Skills (v2.1.105+)
+
+| Frontmatter | Description |
+|-------------|-------------|
+| `context: fork` | Run in isolated context (no pollution) |
+| `disable-model-invocation: true` | Prevent automatic invocation by Claude |
+| `claudeMdExcludes` (setting) | Exclude specific CLAUDE.md files in monorepos |
+
+**Auto-compaction and skills:** After compaction, skills auto-reload (5K tokens/skill, 25K total max).
+
+---
+
 ## Resources
 
-- **Anthropic Best Practices:** [docs.anthropic.com](https://docs.anthropic.com/en/docs/claude-code/overview)
+- **Anthropic Best Practices:** [code.claude.com](https://code.claude.com/docs/en/overview)
 - **Boris Cherny Workflow:** Parallel worktrees + verification loops
 - **Claude Code Context Management:** Context compaction, `/clear`, sub-agents
 - **`/init`:** Automatically generates a CLAUDE.md from project analysis

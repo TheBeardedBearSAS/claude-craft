@@ -697,9 +697,46 @@ Os arquivos sao fundidos em ordem alfabetica, permitindo que as equipes sobrepon
 
 ---
 
+## Novos comandos (v2.1.105+)
+
+| Comando | Descricao | Uso |
+|---------|-----------|-----|
+| `/btw` | Perguntas rapidas sem troca de contexto | Lookups, sintaxe, esclarecimentos |
+| `/hooks` | Gestao interativa de hooks | Ativar/desativar, testar, depurar |
+| `/reload-plugins` | Recarregamento manual de plugins | Apos atualizacao de plugins |
+| `/proactive` | Alias para `/loop` | Monitoramento proativo recorrente |
+
+---
+
+## Variaveis de ambiente adicionais (v2.1.105+)
+
+| Variavel | Descricao |
+|----------|-----------|
+| `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | Carregar CLAUDE.md de `--add-dir` |
+| `MAX_THINKING_TOKENS=8000` | Limite de tokens de reflexao |
+| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Orcamento de caracteres para slash commands |
+| `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` | PowerShell em vez de Bash (Windows, v2.1.84+) |
+| `OTEL_LOG_USER_PROMPTS` | Log de prompts em traces (beta) |
+| `OTEL_LOG_TOOL_DETAILS` | Log de detalhes de ferramentas (beta) |
+| `OTEL_LOG_TOOL_CONTENT` | Log de conteudo de ferramentas (beta, verboso) |
+
+---
+
+## Skills avancados (v2.1.105+)
+
+| Frontmatter | Descricao |
+|-------------|-----------|
+| `context: fork` | Execucao em contexto isolado (sem poluicao) |
+| `disable-model-invocation: true` | Impede invocacao automatica pelo Claude |
+| `claudeMdExcludes` (setting) | Excluir CLAUDE.md especificos em monorepos |
+
+**Auto-compactacao e skills:** Apos compactacao, os skills recarregam automaticamente (5K tokens/skill, 25K total max).
+
+---
+
 ## Recursos
 
-- **Anthropic Best Practices:** [docs.anthropic.com](https://docs.anthropic.com/en/docs/claude-code/overview)
+- **Anthropic Best Practices:** [code.claude.com](https://code.claude.com/docs/en/overview)
 - **Boris Cherny Workflow:** Worktrees paralelas + loops de verificacao
 - **Claude Code Context Management:** Context compaction, `/clear`, sub-agentes
 - **`/init`:** Gera automaticamente um CLAUDE.md a partir da analise do projeto

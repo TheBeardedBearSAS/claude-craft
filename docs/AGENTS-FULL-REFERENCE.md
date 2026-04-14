@@ -21,7 +21,7 @@ Complete reference for all 63 agents available in Claude Craft.
 | BMAD v6 (roles) | 10 | @bmad-master, @pm, @dev, @qa-recette |
 | Project | 2 | @product-owner, @tech-lead |
 
-### Model Distribution (v7.27.0)
+### Model Distribution (v7.28.0)
 
 All 22 common and reviewer agents now include optimized frontmatter with `effort:` and `memory:` fields:
 

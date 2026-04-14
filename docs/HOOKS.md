@@ -173,18 +173,55 @@ PreToolUse hooks can return a `"defer"` decision for headless sessions, pausing 
 
 PreCompact hooks can now block compaction by returning exit code 2:
 
+| Exit Code | Behavior |
+|-----------|----------|
+| **0** | Continue with compaction |
+| **1** | Log error but continue with compaction |
+| **2** | Block compaction, prevent it from proceeding |
+
+**Use cases:**
+- Preserve critical context during active work
+- Wait for background processes to complete
+- Prevent compaction during specific workflow phases
+- Maintain conversation state for multi-step operations
+
+**Example bash script:**
+
+```bash
+#!/bin/bash
+# .claude/hooks/pre-compact-check.sh
+
+# Block compaction if critical context marker exists
+if [ -f .claude/no-compact ]; then
+  echo "Critical context in use, blocking compaction" >&2
+  exit 2
+fi
+
+# Block if background task is running
+if pgrep -f "my-long-task" > /dev/null; then
+  echo "Background task in progress, deferring compaction" >&2
+  exit 2
+fi
+
+# Allow compaction
+exit 0
+```
+
+**Configuration:**
+
 ```json
 {
   "hooks": {
     "PreCompact": [{
       "matcher": "auto",
-      "command": "test -f .claude/no-compact && exit 2 || exit 0"
+      "hooks": [{
+        "type": "command",
+        "command": ".claude/hooks/pre-compact-check.sh"
+      }]
     }]
   }
 }
 ```
-
-Exit code 2 prevents the compaction from proceeding, allowing fine-grained control over when context is compacted.
 
 ---
 
@@ -616,6 +653,48 @@ echo 'export VAR=value' >> "$CLAUDE_ENV_FILE"
 | Permission denied | `chmod +x script.sh` |
 | JSON parse error | Validate JSON output |
 | Timeout | Increase timeout or optimize script |
+
+---
+
+## Interactive Hook Management
+
+### `/hooks` Command (v2.1.105+)
+
+The `/hooks` command provides interactive hook management and debugging capabilities:
+
+```bash
+/hooks                    # View all active hooks with execution statistics
+/hooks enable <name>      # Enable a specific hook
+/hooks disable <name>     # Disable a hook temporarily
+/hooks test <name>        # Test a hook with sample input
+/hooks debug              # Show detailed hook execution logs
+```
+
+**Features:**
+- **View statistics**: See execution counts, success/failure rates, average execution time
+- **Toggle hooks**: Enable/disable hooks without editing JSON files
+- **Test hooks**: Run hooks with sample data to verify behavior
+- **Debug mode**: Detailed logging for troubleshooting
+
+**Example output:**
+
+```
+Active Hooks:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PreToolUse
+  ├─ block-secrets.sh         ✓  Executed: 23  Success: 100%  Avg: 45ms
+  └─ lint-check.sh            ✓  Executed: 45  Success: 98%   Avg: 120ms
+
+PostToolUse
+  └─ auto-format.sh           ✓  Executed: 67  Success: 100%  Avg: 230ms
+
+Stop
+  └─ quality-gate.sh          ✓  Executed: 5   Success: 80%   Avg: 1.2s
+
+SessionStart
+  └─ init-context.sh          ✓  Executed: 1   Success: 100%  Avg: 350ms
+```
 
 ---
 

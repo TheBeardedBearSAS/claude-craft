@@ -55,7 +55,7 @@ Sortie attendue : `git version 2.x.x` (ex: `git version 2.43.0`)
 # Vérifier que Claude Code est installé
 claude --version
 ```
-Sortie attendue : Numéro de version (recommandé: `2.1.105` ou supérieur)
+Sortie attendue : Numéro de version (recommandé: `2.1.107` ou supérieur)
 
 ### Installer les Prérequis Manquants
 
@@ -79,7 +79,7 @@ brew install git
 sudo apt install git
 ```
 
-**Claude Code :** Suivez le [guide d'installation officiel](https://docs.anthropic.com/claude-code/installation)
+**Claude Code :** Suivez le [guide d'installation officiel](https://code.claude.com/docs/en/installation)
 
 ---
 

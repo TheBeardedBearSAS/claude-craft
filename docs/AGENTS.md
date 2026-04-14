@@ -271,7 +271,7 @@ Helps with:
 
 ---
 
-## Agent Optimization (v7.27.0)
+## Agent Optimization (v7.28.0)
 
 All 22 common and reviewer agents now include optimized frontmatter:
 

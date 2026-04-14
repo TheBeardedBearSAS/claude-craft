@@ -142,6 +142,39 @@ Instructions for Claude...
 2. Check YAML frontmatter is valid
 3. Restart Claude Code session
 
+### What is the `/btw` command?
+
+`/btw` (by the way) is a quick question command for low-effort queries without context switching. It uses minimal context and low thinking effort, making it ideal for:
+- Quick lookups
+- Syntax checks
+- Brief explanations
+- Simple fact checks
+
+Example:
+```
+/btw What's the syntax for async/await in Python?
+```
+
+### What is `/proactive`?
+
+`/proactive` is an alias for `/loop` (added in v2.1.105+). It has the same behavior as `/loop`, running Claude iteratively until task completion.
+
+### How do I manage hooks interactively?
+
+Use the `/hooks` command to:
+- View all active hooks
+- Enable/disable specific hooks
+- Test hook configurations
+- Debug hook execution
+
+### How do I reload plugins?
+
+Use the `/reload-plugins` command. Plugins also auto-reload when their files change, so you typically only need this command when troubleshooting.
+
+### What happens when a stream stalls?
+
+Claude Code v2.1.105+ includes a 5-minute timeout with automatic retry. If a stream stalls, the session automatically resumes without user intervention.
+
 ---
 
 ## Agents

@@ -79,7 +79,7 @@ brew install git
 sudo apt install git
 ```
 
-**Claude Code:** Folgen Sie der [offiziellen Installationsanleitung](https://docs.anthropic.com/claude-code/installation)
+**Claude Code:** Folgen Sie der [offiziellen Installationsanleitung](https://code.claude.com/docs/en/installation)
 
 ---
 

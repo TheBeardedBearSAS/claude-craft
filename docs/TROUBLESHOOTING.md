@@ -244,6 +244,55 @@ cat ~/my-project/.claude/context.yaml
 
 ---
 
+### Stalled Stream Handling (v2.1.105+)
+
+**Problem:** Claude Code appears frozen with no response for 5+ minutes.
+
+**Solution:** Claude Code v2.1.105+ automatically detects stalled streams with a 5-minute timeout and automatic retry mechanism.
+
+**Manual recovery:**
+```bash
+# Resume the stalled session
+claude --resume <session-id>
+
+# Or use debug mode
+/debug
+```
+
+**Common causes:**
+- Network interruptions or unstable connections
+- API rate limiting
+- Large file operations (reading/writing very large files)
+- MCP server hangs or unresponsive external tools
+
+**Prevention:**
+- Keep Claude Code updated to v2.1.105+
+- Monitor network stability during long operations
+- Break down large file operations into smaller chunks
+- Review MCP server logs if using external tools
+
+---
+
+### WebFetch Token Optimization (v2.1.105+)
+
+**Problem:** WebFetch consuming excessive tokens when fetching web pages.
+
+**Solution:** Claude Code v2.1.105+ automatically strips `<style>` and `<script>` tag contents, reducing token consumption by 50-80%.
+
+**Features:**
+- Automatic optimization (no configuration needed)
+- Preserves semantic HTML structure
+- Removes inline CSS and JavaScript
+- Keeps essential page content
+
+**Note:** This optimization is automatic in v2.1.105+. If you're experiencing high token usage from web fetches, update Claude Code:
+```bash
+npm update -g @anthropic-ai/claude-code
+claude --version  # Verify v2.1.105+
+```
+
+---
+
 ## Docker Issues
 
 ### Docker permission denied

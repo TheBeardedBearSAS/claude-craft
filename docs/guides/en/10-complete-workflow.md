@@ -17,8 +17,8 @@ This guide walks you through the complete development lifecycle:
 7. **Deployment** - Ship to production
 
 **Prerequisites:**
-- Claude Craft v7.27.0 installed in your project
-- Claude Code v2.1.105 (recommended) or v2.1.47+ (minimum)
+- Claude Craft v7.28.0 installed in your project
+- Claude Code v2.1.107 (recommended) or v2.1.47+ (minimum)
 - Basic understanding of your chosen technology stack
 
 ---

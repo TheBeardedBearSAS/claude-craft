@@ -116,9 +116,9 @@ grep -rn '/project:\(sprint-\|gate-\|project-\)' .claude/
 
 ---
 
-## What's New in v7.27.0
+## What's New in v7.28.0
 
-v7.27.0 introduces token optimization and enhanced Claude Code v2.1.63-v2.1.105 compatibility.
+v7.28.0 introduces token optimization and enhanced Claude Code v2.1.63-v2.1.107 compatibility.
 
 ### Key Additions
 

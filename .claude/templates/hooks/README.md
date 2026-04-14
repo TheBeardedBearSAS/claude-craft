@@ -93,6 +93,6 @@ Exit codes:
 
 ## Resources
 
-- [Claude Code Hooks Documentation](https://docs.anthropic.com/en/docs/claude-code/hooks)
+- [Claude Code Hooks Documentation](https://code.claude.com/docs/en/hooks)
 - Rule: `.claude/rules/11-security.md` — MCP & Plugins Security section
 - Rule: `.claude/rules/12-context-management.md` — Context Compaction section

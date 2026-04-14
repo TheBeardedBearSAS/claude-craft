@@ -584,7 +584,7 @@ class ApiKeyStorage {
 ## Ressources
 
 - [MCP Specification](https://modelcontextprotocol.io/specification)
-- [Anthropic MCP Docs](https://docs.anthropic.com/mcp)
+- [Anthropic MCP Docs](https://code.claude.com/docs/en/mcp)
 - [Flutter WebSocket](https://pub.dev/packages/web_socket_channel)
 
 ---

@@ -697,9 +697,46 @@ Los archivos se fusionan en orden alfabetico, permitiendo a los equipos superpon
 
 ---
 
+## Nuevos comandos (v2.1.105+)
+
+| Comando | Descripcion | Uso |
+|---------|-------------|-----|
+| `/btw` | Preguntas rapidas sin cambio de contexto | Lookups, sintaxis, aclaraciones |
+| `/hooks` | Gestion interactiva de hooks | Activar/desactivar, probar, depurar |
+| `/reload-plugins` | Recarga manual de plugins | Despues de actualizar plugins |
+| `/proactive` | Alias para `/loop` | Monitoreo proactivo recurrente |
+
+---
+
+## Variables de entorno adicionales (v2.1.105+)
+
+| Variable | Descripcion |
+|----------|-------------|
+| `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | Cargar CLAUDE.md desde `--add-dir` |
+| `MAX_THINKING_TOKENS=8000` | Limite de tokens de reflexion |
+| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Presupuesto de caracteres para slash commands |
+| `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` | PowerShell en lugar de Bash (Windows, v2.1.84+) |
+| `OTEL_LOG_USER_PROMPTS` | Log de prompts en trazas (beta) |
+| `OTEL_LOG_TOOL_DETAILS` | Log de detalles de herramientas (beta) |
+| `OTEL_LOG_TOOL_CONTENT` | Log de contenido de herramientas (beta, verboso) |
+
+---
+
+## Skills avanzados (v2.1.105+)
+
+| Frontmatter | Descripcion |
+|-------------|-------------|
+| `context: fork` | Ejecucion en contexto aislado (sin contaminacion) |
+| `disable-model-invocation: true` | Impide la invocacion automatica por Claude |
+| `claudeMdExcludes` (setting) | Excluir CLAUDE.md especificos en monorepos |
+
+**Auto-compactacion y skills:** Despues de la compactacion, los skills se recargan (5K tokens/skill, 25K total max).
+
+---
+
 ## Recursos
 
-- **Anthropic Best Practices:** [docs.anthropic.com](https://docs.anthropic.com/en/docs/claude-code/overview)
+- **Anthropic Best Practices:** [code.claude.com](https://code.claude.com/docs/en/overview)
 - **Boris Cherny Workflow:** Worktrees paralelos + bucles de verificacion
 - **Claude Code Context Management:** Context compaction, `/clear`, sub-agentes
 - **`/init`:** Genera automaticamente un CLAUDE.md a partir del analisis del proyecto

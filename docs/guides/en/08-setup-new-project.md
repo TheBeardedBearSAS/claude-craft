@@ -33,7 +33,7 @@ Before starting, make sure you have the following installed:
 - [ ] **Terminal/Command Line** - Any terminal application
 - [ ] **Node.js 16+** - Required for NPX installation
 - [ ] **Git** - For version control
-- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.105, minimum: v2.1.47)
+- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.107, minimum: v2.1.47)
 
 ### Verify Your Prerequisites
 
@@ -55,7 +55,7 @@ Expected output: `git version 2.x.x` (e.g., `git version 2.43.0`)
 # Check Claude Code is installed
 claude --version
 ```
-Expected output: Version number (recommended: `2.1.105` or higher)
+Expected output: Version number (recommended: `2.1.107` or higher)
 
 ### Install Missing Prerequisites
 
@@ -79,7 +79,7 @@ brew install git
 sudo apt install git
 ```
 
-**Claude Code:** Follow the [official installation guide](https://docs.anthropic.com/claude-code/installation)
+**Claude Code:** Follow the [official installation guide](https://code.claude.com/docs/en/installation)
 
 ---
 
@@ -435,7 +435,7 @@ Claude should respond mentioning:
 - Check that `.claude/` directory exists
 - Restart Claude Code
 
-### Automatic Optimizations (v7.27.0)
+### Automatic Optimizations (v7.28.0)
 
 Claude-Craft now installs optimized defaults automatically during installation:
 

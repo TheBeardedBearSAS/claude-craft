@@ -37,7 +37,7 @@ This comprehensive tutorial guides you through adding Claude-Craft to a project 
 - [ ] You have committed all current changes
 - [ ] You have write access to the project directory
 - [ ] Node.js 16+ installed (for NPX method)
-- [ ] Claude Code installed (recommended: v2.1.105, minimum: v2.1.47)
+- [ ] Claude Code installed (recommended: v2.1.107, minimum: v2.1.47)
 
 ### When NOT to Install
 
@@ -718,9 +718,9 @@ git checkout backup/before-claude-craft
 
 ---
 
-## v7.27.0 Migration Notes
+## v7.28.0 Migration Notes
 
-If you are upgrading an existing Claude-Craft installation to v7.27.0:
+If you are upgrading an existing Claude-Craft installation to v7.28.0:
 
 ### New Features to Configure
 
