@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.30.0] - 2026-04-15
+
+### Added
+
+- **Paperclip** AI-workforce orchestration stack (v2026.403.0+) as Tier 2 Supported technology across all 5 languages (en, fr, es, de, pt).
+  - Install script `Dev/scripts/install-paperclip-rules.sh` (TCL-optimized)
+  - 29 files per language: 7 rules, 8 commands, 6 skills, 3 checklists, 1 reviewer agent, 2 templates, CLAUDE.md.template, README.md
+  - New slash-command namespace `/paperclip:*` (8 commands: check-compliance, check-architecture, check-code-quality, check-testing, check-security, generate-adapter, generate-agent-config, setup-company)
+  - New agent `@paperclip-reviewer`
+  - Makefile target `install-paperclip` + `install-all` loop updated
+- Documentation updated across `README.md`, `docs/index.html` (Tech Stacks 18→19), `docs/COMMANDS.md`, `docs/TECHNOLOGIES.md`, `.claude/CLAUDE.md`
+
+### Changed
+
+- `.claude/CLAUDE.md` counts: 19 technology stacks (was 18), 212 commands (was 204), 27 namespaces (was 26)
+
 ## [7.29.0] - 2026-04-14
 
 ### Changed
