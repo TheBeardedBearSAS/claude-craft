@@ -274,6 +274,11 @@ Documenter les décisions architecturales clés :
 | `architecture/security.md` | Conception de la sécurité |
 | `docs/adr/*.md` | Architecture Decision Records |
 
+## Skills recommandés (auto-load)
+
+- `architect` — phase d'architecture en 5 étapes (boundaries, contrats, dépendances, trade-offs, tests d'architecture)
+- `atomic-tasks` — découper la spec en tâches atomiques implémentables
+
 ## Commandes associées
 
 - `/workflow:plan` - Phase précédente

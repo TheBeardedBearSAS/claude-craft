@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 7.31.0 | **Languages:** en, fr, es, de, pt
+**Version:** 7.32.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 63 agents, 212 commands across 27 namespaces, and BMAD v6 project management.
 
@@ -109,7 +109,7 @@ docker compose exec app ./vendor/bin/phpunit
 
 ## Skills
 
-`/solid-principles`, `/testing`, `/security`, `/git-workflow`, `/documentation`, `/kiss-dry-yagni`, `/workflow-analysis`, `/parallel-worktrees`, `/atomic-tasks`, `/design-md-convention` — loaded on demand from `.claude/skills/`
+`/solid-principles`, `/testing`, `/security`, `/git-workflow`, `/documentation`, `/kiss-dry-yagni`, `/workflow-analysis`, `/parallel-worktrees`, `/atomic-tasks`, `/design-md-convention`, `/architect`, `/debug-methodical`, `/socratic-brainstorm` — loaded on demand from `.claude/skills/`
 
 ## AI-First Development (Karpathy)
 

@@ -200,6 +200,11 @@ project-management/
 | `analysis/risks-opportunities.md` | Registre des risques avec atténuations |
 | `analysis/technical-options.md` | Évaluation et recommandations technologiques |
 
+## Skills recommandés (auto-load)
+
+- `socratic-brainstorm` — 5 familles de questions pour clarifier le problème avant de coder
+- `atomic-tasks` — découper l'output en tâches atomiques (< 30 min, subagent frais)
+
 ## Commandes associées
 
 - `/workflow:init` - Initialiser le workflow (doit être exécuté en premier)

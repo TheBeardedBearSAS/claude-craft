@@ -381,3 +381,8 @@ Fixes #XXX
 - [ ] Documentation mise à jour
 - [ ] Ticket fermé
 ```
+
+## Skills recommandés (auto-load)
+
+- `debug-methodical` — 4 phases rigoureuses (reproduce → isolate → fix → verify)
+- `atomic-tasks` — un commit par phase debug, pas de mélange fix/refactor

@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.32.0] - 2026-04-15
+
+### Added — Phase 2 : Skills Superpowers
+
+- **Skill `architect`** (`.claude/skills/architect/SKILL.md`)
+  - Phase d'architecture systématique avant TDD (5 étapes : boundaries → contrats → dépendances → trade-offs → tests d'archi)
+  - Livrables : diagramme, contrats, ADR court, tests d'architecture, découpage atomique
+  - Source : [obra/superpowers](https://github.com/obra/superpowers)
+
+- **Skill `debug-methodical`** (`.claude/skills/debug-methodical/SKILL.md`)
+  - Debugging en 4 phases strictes (reproduce → isolate → fix → verify)
+  - Techniques bisect, binary search, 5 Whys, flaky detection
+  - Test de régression obligatoire (règle d'or QA)
+  - Source : [obra/superpowers](https://github.com/obra/superpowers)
+
+- **Skill `socratic-brainstorm`** (`.claude/skills/socratic-brainstorm/SKILL.md`)
+  - 5 familles de questions (problème, contraintes, alternatives, hypothèses, conséquences)
+  - Variante rapide 5 Whys pour causes racines
+  - Source : [obra/superpowers](https://github.com/obra/superpowers)
+
+### Changed
+
+- `.claude/commands/workflow/analyze.md` : skills recommandés `socratic-brainstorm` + `atomic-tasks`
+- `.claude/commands/workflow/design.md` : skills recommandés `architect` + `atomic-tasks`
+- `.claude/commands/qa/tdd.md` : skills recommandés `debug-methodical` + `atomic-tasks`
+- `.claude/CLAUDE.md` : skills list mise à jour (13 skills exposés au total)
+
+## [7.32.0] - 2026-04-15
+
+### Added — Phase 2 : Skills Superpowers
+
+- **Skill `architect`** (`.claude/skills/architect/SKILL.md`)
+  - Phase d'architecture systématique avant TDD (5 étapes : boundaries → contrats → dépendances → trade-offs → tests d'archi)
+  - Livrables : diagramme, contrats, ADR court, tests d'architecture, découpage atomique
+  - Source : [obra/superpowers](https://github.com/obra/superpowers)
+
+- **Skill `debug-methodical`** (`.claude/skills/debug-methodical/SKILL.md`)
+  - Debugging en 4 phases strictes (reproduce → isolate → fix → verify)
+  - Techniques bisect, binary search, 5 Whys, flaky detection
+  - Test de régression obligatoire (règle d'or QA)
+  - Source : [obra/superpowers](https://github.com/obra/superpowers)
+
+- **Skill `socratic-brainstorm`** (`.claude/skills/socratic-brainstorm/SKILL.md`)
+  - 5 familles de questions (problème, contraintes, alternatives, hypothèses, conséquences)
+  - Variante rapide 5 Whys pour causes racines
+  - Source : [obra/superpowers](https://github.com/obra/superpowers)
+
+### Changed
+
+- `.claude/commands/workflow/analyze.md` : skills recommandés `socratic-brainstorm` + `atomic-tasks`
+- `.claude/commands/workflow/design.md` : skills recommandés `architect` + `atomic-tasks`
+- `.claude/commands/qa/tdd.md` : skills recommandés `debug-methodical` + `atomic-tasks`
+- `.claude/CLAUDE.md` : skills list mise à jour (13 skills exposés au total)
+
 ## [7.31.0] - 2026-04-15
 
 ### Added — Phase 1 : Enrichissement issu de l'analyse des 12 ressources LinkedIn Claude Code
