@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.35.0] - 2026-04-15
+
+### Added — Phase 5 : Memory lifecycle hooks (claude-mem inspired)
+
+- **Template hook `memory-lifecycle.json`** (`.claude/templates/hooks/memory-lifecycle.json`)
+  - 5 hooks (SessionStart, UserPromptSubmit, PostToolUse, PreCompact, SessionEnd)
+  - Storage SQLite local dans `.claude/memory.db` (gitignored)
+  - 100% local, zéro télémétrie, zéro network
+  - Inspiré de [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) (49.6k stars)
+
+- **Scripts lifecycle** (`Dev/scripts/memory-lifecycle/`)
+  - `_db.sh` — helpers SQLite (init schema, sessions, prompts, tool_events, compactions)
+  - `session-start.sh` — ouvre session + rappelle résumé session précédente
+  - `prompt-submit.sh` — log previews des prompts (200 chars max)
+  - `post-tool.sh` — log Edit/Write/Bash events (path + summary 300 chars)
+  - `pre-compact.sh` — préserve context essentials + recent events, re-injection
+  - `session-end.sh` — computer résumé session (prompts/tools/top files)
+  - `README.md` — guide d'installation + usage + queries SQL
+
+### Changed
+
+- `.gitignore` — ajout `.claude/memory.db`, `.claude/memory.db-*`, `.claude/scheduled_tasks.lock`
+
+### Récapitulatif des 5 phases (v7.31 → v7.35)
+
+| Version | Phase | Apport |
+|---------|-------|--------|
+| v7.31.0 | Phase 1 | Karpathy principles + GSD atomic-tasks + DESIGN.md convention |
+| v7.32.0 | Phase 2 | Skills Superpowers (architect, debug-methodical, socratic-brainstorm) |
+| v7.33.0 | Phase 3 | Command `/common:pack-repo` (Repomix wrapper + fallback shell) |
+| v7.34.0 | Phase 4 | Audit spec + 4 agents + `/uiux:generate-design-md` |
+| v7.35.0 | Phase 5 | Memory lifecycle hooks (claude-mem inspired, 100% local) |
+
+Prochaine étape majeure : **v8.0.0** — refonte complète alignement spec officielle Agent Skills Anthropic (breaking change).
+
 ## [7.34.0] - 2026-04-15
 
 ### Added — Phase 4 : Spec alignment audit + subagents + generate-design-md

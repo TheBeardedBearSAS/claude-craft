@@ -1,0 +1,69 @@
+{
+  "description": "Persistent memory lifecycle across Claude Code sessions (inspired by claude-mem). Captures sessions, tool usage, and summaries into a local SQLite database for cross-session recall. No cloud, no telemetry, fully local.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR:-$(pwd)}/Dev/scripts/memory-lifecycle/session-start.sh\"",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR:-$(pwd)}/Dev/scripts/memory-lifecycle/prompt-submit.sh\"",
+            "timeout": 3000
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR:-$(pwd)}/Dev/scripts/memory-lifecycle/post-tool.sh\"",
+            "timeout": 2000
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR:-$(pwd)}/Dev/scripts/memory-lifecycle/pre-compact.sh\"",
+            "timeout": 8000
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR:-$(pwd)}/Dev/scripts/memory-lifecycle/session-end.sh\"",
+            "timeout": 10000
+          }
+        ]
+      }
+    ]
+  },
+  "usage": "1) Copy hooks to your .claude/settings.json. 2) Scripts are in Dev/scripts/memory-lifecycle/. 3) Memory stored in .claude/memory.db (SQLite, gitignored). 4) Query with: sqlite3 .claude/memory.db 'SELECT * FROM sessions ORDER BY started_at DESC LIMIT 5'. 5) Inspired by github.com/thedotmack/claude-mem (49.6k stars). Requires sqlite3 and jq.",
+  "requires": ["sqlite3", "jq", "bash"],
+  "storage": ".claude/memory.db",
+  "privacy": "100% local. No network calls. Database stored in gitignored file."
+}

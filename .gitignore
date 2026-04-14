@@ -3,6 +3,9 @@ claude-projects.yaml
 
 # Claude Code local settings (keep .claude/ tracked for claude-craft)
 .claude/settings.local.json
+.claude/memory.db
+.claude/memory.db-*
+.claude/scheduled_tasks.lock
 
 # IDE
 .idea/
