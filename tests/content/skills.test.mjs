@@ -10,7 +10,7 @@ const SKILLS_DIR = path.join(PROJECT_ROOT, '.claude', 'skills');
 
 // Known directory-name mismatches where the SKILL.md name differs from its
 // directory. These should be fixed over time — entries are [dirname, actual name].
-const KNOWN_NAME_MISMATCHES = [['remotion', 'remotion-best-practices']];
+const KNOWN_NAME_MISMATCHES = [];
 
 function getSkillDirs() {
   return fs
