@@ -34,6 +34,34 @@ export default [
     },
   },
   {
-    ignores: ["node_modules/", "Dev/", "Infra/", "Project/", "Tools/"],
+    // Browser-side Svelte runes client : define DOM globals + Svelte runes.
+    files: ["cli/kanban/client/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: {
+        window: "readonly",
+        document: "readonly",
+        fetch: "readonly",
+        EventSource: "readonly",
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        URL: "readonly",
+        $state: "readonly",
+        $derived: "readonly",
+        $effect: "readonly",
+        $props: "readonly",
+      },
+    },
+  },
+  {
+    ignores: [
+      "node_modules/",
+      "Dev/",
+      "Infra/",
+      "Project/",
+      "Tools/",
+      "cli/kanban/client/dist/",
+    ],
   },
 ];

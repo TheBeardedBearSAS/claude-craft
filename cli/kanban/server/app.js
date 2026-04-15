@@ -119,7 +119,7 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
 
     const patch = computeTransitionPatch(story, target, { blocked_reason });
     try {
-      const updated = await updateFrontmatter(filepath, patch, { expectedMtime: story._mtime });
+      await updateFrontmatter(filepath, patch, { expectedMtime: story._mtime });
       await repository.refresh();
       const fresh = repository.getStory(id);
       if (eventBus) eventBus.publish('story:updated', { id, story: fresh });
