@@ -1,6 +1,6 @@
 # Agents Full Reference
 
-Complete reference for all 63 agents available in Claude Craft.
+Complete reference for all 67 agents available in Claude Craft.
 
 ---
 
@@ -8,7 +8,7 @@ Complete reference for all 63 agents available in Claude Craft.
 
 | Category | Count | Examples |
 |----------|-------|----------|
-| Common | 12 | @api-designer, @tdd-coach, @uiux-orchestrator |
+| Common | 16 | @api-designer, @tdd-coach, @uiux-orchestrator, @security-auditor |
 | Technology Reviewers | 10 | @symfony-reviewer, @react-reviewer |
 | Docker/Infrastructure | 5 | @docker-architect, @docker-debug |
 | Coolify/Infrastructure | 4 | @coolify-architect, @coolify-deployment |
@@ -54,7 +54,7 @@ All 22 common and reviewer agents now include optimized frontmatter with `effort
 
 ---
 
-## Common Agents (12)
+## Common Agents (16)
 
 ### @api-designer
 
@@ -283,6 +283,74 @@ All 22 common and reviewer agents now include optimized frontmatter with `effort
 @ralph-conductor Set up a Ralph session with TDD DoD
 @ralph-conductor Configure DoD for this feature implementation
 @ralph-conductor What's the current Ralph iteration status?
+```
+
+---
+
+### @security-auditor (v7.34)
+
+**Expertise:** OWASP Top 10:2025 audit, SAST, dependency scanning, secrets detection, authZ/authN review
+
+**Model:** sonnet | **Effort:** medium | **Tools:** Read, Glob, Grep, Bash, WebFetch, WebSearch (read-only)
+
+Helps with: code audits via Semgrep/CodeQL/Snyk, dependency CVE scanning (Trivy, Grype), secrets detection (gitleaks), JWT/OAuth2/OIDC review, supply chain (SLSA, SBOM, Sigstore), security headers (CSP, HSTS, COOP/COEP/CORP).
+
+**Example prompts:**
+```
+@security-auditor Audit this authentication flow
+@security-auditor Review dependencies for known CVEs
+@security-auditor Check for OWASP A01 (Broken Access Control) issues
+```
+
+---
+
+### @data-analyst (v7.34)
+
+**Expertise:** SQL optimization, metrics design, BI dashboards, observability
+
+**Model:** sonnet | **Effort:** medium | **Tools:** Read, Glob, Grep, Bash, WebFetch, WebSearch
+
+Helps with: query optimization (EXPLAIN ANALYZE), metrics frameworks (AARRR, HEART, North Star), cohort analysis, retention/LTV/churn, dbt/Airflow/Dagster, BI tools (Metabase, Grafana, Superset).
+
+**Example prompts:**
+```
+@data-analyst Design metrics for a SaaS product
+@data-analyst Optimize this slow PostgreSQL query
+@data-analyst Build a cohort retention analysis
+```
+
+---
+
+### @migration-specialist (v7.34)
+
+**Expertise:** Zero-downtime schema changes, framework upgrades, legacy rewrites
+
+**Model:** sonnet | **Effort:** medium | **Tools:** all enabled
+
+Helps with: database migrations (expand-contract), framework upgrades (Symfony/Laravel/React/Angular/Vue), Blue-Green/Canary/Feature flags, checksums + rollback plans, Strangler Fig pattern.
+
+**Example prompts:**
+```
+@migration-specialist Plan a zero-downtime rename of a high-traffic column
+@migration-specialist Design a React 18 → 19 migration
+@migration-specialist Strategy to split a monolith table
+```
+
+---
+
+### @cost-optimizer (v7.34)
+
+**Expertise:** Cloud FinOps, LLM cost reduction, right-sizing
+
+**Model:** haiku | **Effort:** low | **Tools:** Read, Glob, Grep, Bash, WebFetch, WebSearch (read-only)
+
+Helps with: AWS/GCP/Azure right-sizing, LLM cost (Claude prompt caching, model tiering Haiku/Sonnet/Opus, Batch API 50% savings), tagging/showback/budgets/anomaly detection, unit economics.
+
+**Example prompts:**
+```
+@cost-optimizer Audit our LLM spend and recommend savings
+@cost-optimizer Right-size our Kubernetes cluster
+@cost-optimizer Compute cost-per-user for current architecture
 ```
 
 ---

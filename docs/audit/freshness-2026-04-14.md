@@ -367,6 +367,6 @@ Légende des écarts :
 
 ## Limitations de cet audit
 
-- **Skills/commands non ouverts** : l'audit s'appuie sur les noms de fichiers et les versions déclarées dans `CLAUDE.md` + agents reviewers ; il n'a **pas lu le contenu ligne à ligne** de chacun des 204 commandes ou 37 skills. Les paths "impactés" sont des listes de cibles probables, pas une preuve d'obsolescence ligne par ligne.
+- **Skills/commands non ouverts** : l'audit s'appuie sur les noms de fichiers et les versions déclarées dans `CLAUDE.md` + agents reviewers ; il n'a **pas lu le contenu ligne à ligne** de chacun des 204 commandes ou 41 skills. Les paths "impactés" sont des listes de cibles probables, pas une preuve d'obsolescence ligne par ligne.
 - **Dates sources** : certaines URLs citent des articles datés 2025-2026 ; une validation manuelle par les mainteneurs reste souhaitable sur les versions les plus récentes (ex : React Native 0.85, Angular 21.2.8, Laravel 13.4.0).
 - **Pas d'audit des dépendances npm/composer du projet** : cet audit porte sur le **contenu documentaire** de claude-craft, pas sur ses propres dépendances.

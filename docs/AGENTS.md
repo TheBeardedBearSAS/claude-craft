@@ -12,7 +12,7 @@ In Claude Code, mention an agent to activate its expertise:
 @symfony-reviewer Review this controller for best practices
 ```
 
-## Common Agents (12)
+## Common Agents (16)
 
 These agents are installed with `install-common` and are useful across all technologies.
 
@@ -268,6 +268,80 @@ Helps with:
 | `file_changed` | Verify files were modified |
 | `hook` | Integrate with existing hooks |
 | `human` | Interactive manual validation |
+
+---
+
+### security-auditor (v7.34)
+
+**Expertise**: OWASP Top 10:2025, SAST, dependency scanning, secrets detection, authZ/authN review
+
+Helps with:
+- Code audits (Semgrep, CodeQL, Snyk)
+- Dependency CVE scanning (Trivy, Grype)
+- Secrets detection (gitleaks, trufflehog)
+- JWT / OAuth2 / OIDC review
+- Supply chain (SLSA, SBOM, Sigstore)
+- Security headers (CSP, HSTS, COOP/COEP/CORP)
+
+```
+@security-auditor Audit this authentication flow
+@security-auditor Review dependencies for known CVEs
+```
+
+---
+
+### data-analyst (v7.34)
+
+**Expertise**: SQL optimization, metrics design, reporting, observability, BI dashboards
+
+Helps with:
+- SQL query optimization (EXPLAIN ANALYZE)
+- Metrics frameworks (AARRR, HEART, North Star)
+- Cohort analysis, retention, LTV, churn
+- Data quality audits (NULL rate, freshness)
+- dbt / Airflow / Dagster patterns
+- BI tools (Metabase, Grafana, Superset)
+
+```
+@data-analyst Design metrics for a SaaS product
+@data-analyst Optimize this slow query
+```
+
+---
+
+### migration-specialist (v7.34)
+
+**Expertise**: Zero-downtime schema changes, data backfills, framework version upgrades, legacy rewrites
+
+Helps with:
+- Database migrations (expand-contract pattern)
+- Framework upgrades (Symfony, Laravel, React, Angular, Vue)
+- Blue-Green / Canary / Feature flags
+- Checksums & rollback plans
+- Strangler Fig pattern for legacy
+
+```
+@migration-specialist Plan a zero-downtime rename of a high-traffic column
+@migration-specialist Design a React 18 → 19 migration
+```
+
+---
+
+### cost-optimizer (v7.34)
+
+**Expertise**: Cloud FinOps, LLM cost reduction, right-sizing, caching strategies
+
+Helps with:
+- Cloud FinOps (AWS/GCP/Azure right-sizing)
+- LLM cost (Claude prompt caching, model tiering Haiku/Sonnet/Opus)
+- Batch API strategy (50% savings)
+- Tagging, showback, budgets, anomaly detection
+- Unit economics (cost per user/transaction)
+
+```
+@cost-optimizer Audit our LLM spend and recommend savings
+@cost-optimizer Right-size our Kubernetes cluster
+```
 
 ---
 

@@ -2,8 +2,8 @@
 
 > **Audit de conformité** des 42 skills Claude Craft vis-à-vis de la spécification officielle Anthropic [agent-skills-spec.md](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md).
 >
-> **Status v7.34.0 :** audit documentaire uniquement — aucun skill renommé ni cassé.
-> **Migration stricte :** prévue en **v8.0.0** (breaking change).
+> **Status v8.0.0 :** migration stricte réalisée — 41/41 skills conformes à la spec Anthropic.
+> **Validation CI :** `Dev/scripts/validate-skills-spec.sh` (exit 1 si non-conforme).
 
 ## Spec officielle Anthropic — résumé
 

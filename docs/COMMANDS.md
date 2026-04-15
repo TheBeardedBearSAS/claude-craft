@@ -129,6 +129,12 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 | `/common:setup-ci` | Configure CI/CD pipeline |
 | `/docker:optimize` | Optimize Docker configuration |
 
+### Codebase Packing (v7.33+)
+
+| Command | Description |
+|---------|-------------|
+| `/common:pack-repo` | Pack the codebase into a single AI-friendly file (XML/Markdown/Plain/JSON). Wrapper around [Repomix](https://github.com/yamadashy/repomix) with native shell fallback. Token counting included. Options : `--format`, `--output`, `--compress`, `--include`, `--exclude`, `--mcp`, `--fallback`. |
+
 ### Development Commands
 
 | Command | Description |
@@ -147,6 +153,7 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 | `/uiux:user-flow` | Design user journey and flow |
 | `/uiux:a11y-audit` | WCAG 2.2 AAA accessibility audit |
 | `/uiux:a11y-component` | Accessibility specs for a component |
+| `/uiux:generate-design-md` | Generate root `DESIGN.md` from template (auto-detect Tailwind / W3C tokens). Options : `--from-tailwind`, `--from-tokens`, `--interactive`. Convention : `design-md-convention` skill. (v7.34+) |
 
 ### Technology Commands
 

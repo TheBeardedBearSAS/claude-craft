@@ -1,8 +1,8 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.0.0 | **Languages:** en, fr, es, de, pt
+**Version:** 8.0.1 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 63 agents, 212 commands across 27 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 67 agents, 214 commands across 27 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -42,7 +42,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (26 namespaces, 204 commands)
+## Available Commands (27 namespaces, 214 commands)
 
 Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*`, `/paperclip:*` | Infra (via `@devops-engineer`): Docker 29.4.0, Coolify v4.0.0-beta.470, K8s 1.35.3, OpenTofu 1.11.6, Ansible 2.20.4, FrankenPHP 1.12.1, PgBouncer 1.25.1 | Project: `/sprint:*`, `/gate:*`, `/project:*`
 
@@ -50,7 +50,7 @@ Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-RE
 
 ---
 
-## Available Agents (63 agents)
+## Available Agents (67 agents)
 
 **Common** (16): `@api-designer`, `@database-architect`, `@devops-engineer`, `@performance-auditor`, `@refactoring-specialist`, `@tdd-coach`, `@uiux-orchestrator`, `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@research-assistant`, `@ralph-conductor`, `@security-auditor`, `@data-analyst`, `@migration-specialist`, `@cost-optimizer` | **Tech Reviewers** (10): `@{symfony,flutter,react,python,angular,laravel,vuejs,reactnative,csharp,php}-reviewer` | **Infrastructure** (41): Docker, Coolify, K8s, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP — see [Agents](../docs/AGENTS.md) | **Project** (2): `@product-owner`, `@tech-lead`
 

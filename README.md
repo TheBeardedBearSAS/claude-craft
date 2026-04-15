@@ -6,14 +6,16 @@
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v7.28
+## What's New in v8.0 (Breaking — Spec Anthropic)
 
-- **Claude Code v2.1.107 compatibility** -- 45 new versions (v2.1.63-v2.1.107) fully documented
-- **Auto Mode** -- AI-powered permission classifier replacing `--dangerously-skip-permissions`
-- **New commands** -- /loop, /effort, /context, /powerup, /proactive, /team-onboarding
-- **8 new hook events** -- PostCompact, StopFailure, TaskCreated, CwdChanged, FileChanged, PermissionDenied, Elicitation, ElicitationResult
-- **MCP Tool Search** -- lazy loading reduces context usage by 95%
-- **Security hardening** -- 7 CVE fixes, subprocess sandboxing, source code leak incident documented
+- **Strict alignment to Anthropic Agent Skills spec** -- 41/41 skills conformes, validation CI (`Dev/scripts/validate-skills-spec.sh`)
+- **5 new skills** (v7.31-v7.32) -- `atomic-tasks` (GSD), `design-md-convention`, `architect`, `debug-methodical`, `socratic-brainstorm`
+- **4 new agents** (v7.34) -- `@security-auditor`, `@data-analyst`, `@migration-specialist`, `@cost-optimizer`
+- **2 new commands** (v7.33-v7.34) -- `/common:pack-repo` (Repomix wrapper + fallback shell), `/uiux:generate-design-md`
+- **Memory lifecycle hooks** (v7.35) -- 5 hooks + SQLite local, inspired by claude-mem
+- **Rule 23 Karpathy** (v7.31) -- principes AI-first development
+- **Convention DESIGN.md** (v7.31) -- template AI-friendly + `/uiux:generate-design-md`
+- **Migration guide** -- [docs/MIGRATION-v7-to-v8.md](docs/MIGRATION-v7-to-v8.md)
 - See [CHANGELOG](CHANGELOG.md) for full details
 
 ## Install and First Result
@@ -118,7 +120,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 204 commands across 26 namespaces.
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 214 commands across 27 namespaces.
 
 ## Installation
 
@@ -183,8 +185,8 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 204 commands |
-| [Agents](docs/AGENTS.md) | All 63 agents |
+| [Commands](docs/COMMANDS.md) | All 214 commands |
+| [Agents](docs/AGENTS.md) | All 67 agents |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |
 | [BMAD Guide](docs/BMAD-PRACTICAL-GUIDE.md) | Project management framework |

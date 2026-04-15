@@ -112,7 +112,7 @@ Même pattern de prompt que vague 2.
 ```markdown
 # Audit de Fraîcheur claude-craft — <date>
 
-**Version claude-craft** : 7.28.0
+**Version claude-craft** : 8.0.0
 **Agents lancés** : 17 (10 stacks + 4 transverse + 3 infra)
 **MCP utilisé** : context7
 **Sources web** : release notes officielles + CHANGELOG

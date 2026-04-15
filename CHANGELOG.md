@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.0.1] - 2026-04-15
+
+### Documentation sync (post-release v8.0.0)
+
+Mise à jour exhaustive de la documentation, formations et pages web pour refléter l'état réel du framework après le cycle v7.31 → v8.0.0. **38 fichiers mis à jour.**
+
+#### Compteurs synchronisés (partout)
+
+- 63 agents → **67 agents** (16 Common + 10 Tech Reviewers + 41 Infra)
+- 37 Skills → **41 Skills**
+- 204 commands → **214 commands**
+- 26 namespaces → **27 namespaces**
+- 18 stacks → **19 stacks** (+ Paperclip)
+
+#### Versions hardcoded → v8.0.0
+
+- `README.md` : section "What's New" entièrement réécrite pour v8.0
+- `website/.vitepress/theme/LandingPage.vue` : 5 locales (EN, FR, ES, DE, PT) hero_badge + FeatureCards
+- `docs/index.html` : 6 hero_badges + 3 div badges
+- `.claude/context-essentials.md`, `.claude/SKILLS-SPEC.md`, `.claude/commands/common/audit-freshness.md`
+
+#### Nouveau contenu documenté
+
+- `docs/AGENTS.md` : Common Agents (12) → (16), entrées complètes pour `@security-auditor`, `@data-analyst`, `@migration-specialist`, `@cost-optimizer`
+- `docs/AGENTS-FULL-REFERENCE.md` : section Common (16) avec model/effort/tools/exemples pour les 4 nouveaux agents
+- `docs/COMMANDS.md` : entrées détaillées pour `/common:pack-repo` (Codebase Packing) et `/uiux:generate-design-md` (UI/UX Commands)
+
+#### Guides i18n synchronisés (5 langues)
+
+- `docs/guides/{en,fr,es,de,pt}/01-getting-started.md`
+- `docs/guides/{fr,es,pt}/02-project-creation.md`
+- `docs/guides/fr/{03-feature-development,07-backlog-management,08-setup-new-project,10-complete-workflow}.md`
+- `docs/i18n/fr/QUICKSTART.md`
+- `website/{en,fr,es,de,pt}/guides/*.md` (compteurs et version)
+
+### Notes
+
+- Aucun changement de comportement, aucune nouvelle feature
+- Validation `Dev/scripts/validate-skills-spec.sh` continue de passer (41/41 conformes)
+- CHANGELOG historique préservé (feature markers `v7.28.0+` non touchés)
+
 ## [8.0.0] - 2026-04-15
 
 ### 🚨 BREAKING CHANGES

@@ -8,10 +8,10 @@ Willkommen bei Claude-Craft! Diese Anleitung hilft Ihnen zu verstehen, was Claud
 
 Claude-Craft ist ein umfassendes Framework für KI-unterstützte Entwicklung mit Claude Code. Es bietet:
 
-- **204+ Slash-Befehle** - Schnelle Aktionen in 26 Namespaces für Codegenerierung, Analyse und Qualitätsprüfungen
+- **214+ Slash-Befehle** - Schnelle Aktionen in 26 Namespaces für Codegenerierung, Analyse und Qualitätsprüfungen
 - **63 KI-Agenten** - Spezialisierte Assistenten für verschiedene Aufgaben (API-Design, Architektur, Code-Review, DevOps, etc.)
 - **18 Technologie-Stacks** - Von .NET/C# bis Vue.js, mit eigenen Regeln und Agenten
-- **37 Skills** - Best Practices für Architektur, Tests, Sicherheit und Codequalität
+- **41 Skills** - Best Practices für Architektur, Tests, Sicherheit und Codequalität
 - **21 Vorlagen** - Einsatzbereite Code-Muster
 - **10 Checklisten** - Qualitätstore für Features und Releases
 
