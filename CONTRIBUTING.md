@@ -2,6 +2,126 @@
 
 Thank you for your interest in contributing to Claude Craft! This document provides guidelines and information for contributors.
 
+---
+
+## First-Time Contributors — 15 Minute Onboarding
+
+Welcome! We're excited to have you contribute to Claude Craft. Here's how to get started in just 15 minutes:
+
+### Step 1: Fork and Clone (2 minutes)
+
+```bash
+# Fork the repository on GitHub (click "Fork" button)
+# Then clone your fork
+git clone https://github.com/YOUR_USERNAME/claude-craft.git
+cd claude-craft
+```
+
+### Step 2: Install Dependencies (3 minutes)
+
+```bash
+# Install Node.js dependencies
+npm install
+
+# Check prerequisites (and optionally auto-fix)
+./Dev/scripts/check-prerequisites.sh --fix
+
+# Make scripts executable
+make fix-permissions
+```
+
+### Step 3: Run Tests (2 minutes)
+
+```bash
+# Run tests to ensure everything works
+npm test
+
+# Optional: Test an installation
+make dry-run-symfony TARGET=./test-output/test-project
+```
+
+### Step 4: Pick a Good First Issue (3 minutes)
+
+Browse [good-first-issue](https://github.com/TheBeardedBearSAS/claude-craft/labels/good-first-issue) labels to find an issue that interests you.
+
+**Great starter issues**:
+- Fix documentation typos (any language: ES, DE, PT, FR)
+- Add missing translations
+- Write unit tests for existing modules
+- Fix lint warnings (shellcheck, ESLint)
+- Add missing ADRs (Architecture Decision Records)
+
+### Step 5: Create a Branch (1 minute)
+
+```bash
+# Create a feature branch
+git checkout -b fix/issue-XXX
+
+# Or for specific types
+git checkout -b docs/fix-typo-es
+git checkout -b test/add-unit-tests
+git checkout -b refactor/install-scripts
+```
+
+### Step 6: Make Your Changes (time varies)
+
+Edit files, following our conventions:
+- Use conventional commits: `type(scope): description`
+- Follow the coding style in existing files
+- Add tests if applicable
+- Update documentation if needed
+
+### Step 7: Commit and Push (2 minutes)
+
+```bash
+# Stage your changes
+git add .
+
+# Commit with a clear message
+git commit -m "docs(es): fix typo in QUICKSTART.md"
+
+# Push to your fork
+git push origin fix/issue-XXX
+```
+
+### Step 8: Open a Pull Request (2 minutes)
+
+1. Go to the original repository on GitHub
+2. Click "New Pull Request"
+3. Select your branch
+4. Fill in the PR template
+5. **Sign the CLA** (Contributor License Agreement) when the bot prompts you — see [.github/CLA.md](/.github/CLA.md)
+
+### Step 9: Respond to Feedback
+
+Maintainers will review your PR and may suggest changes. Don't worry — this is normal! Just make the requested changes and push again.
+
+```bash
+# Make requested changes
+git add .
+git commit -m "fix: apply code review suggestions"
+git push origin fix/issue-XXX
+```
+
+---
+
+**That's it!** You're now a Claude Craft contributor. Thank you! 🎉
+
+---
+
+## Release Cadence (Maintainers)
+
+To protect maintainer bandwidth and community stability, Claude Craft follows a **maximum cadence of 1 release per week** (audit P1-08 / M-02).
+
+Exceptions:
+- Critical security fixes (CVE, supply-chain): ship immediately.
+- Hotfix for a documented regression: ship within 48h.
+- Any other change: batch into the weekly release.
+
+This rule is non-negotiable and is enforced via the release checklist (`/common:release-checklist`).
+
+---
+
 ## Quick Navigation
 
 | I want to... | Go to |

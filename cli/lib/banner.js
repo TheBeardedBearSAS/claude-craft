@@ -4,6 +4,7 @@
  */
 
 import c from './colors.js';
+import { success as successSymbol } from './symbols.js';
 
 /**
  * Print the ASCII art banner with version information.
@@ -42,7 +43,7 @@ export function printSuccess(targetPath) {
   console.log(`
 ${c.green}${c.bold}╔═══════════════════════════════════════════════════════════════╗${c.reset}
 ${c.green}${c.bold}║${c.reset}                                                               ${c.green}${c.bold}║${c.reset}
-${c.green}${c.bold}║${c.reset}   ${c.green}${c.bold}Installation Complete!${c.reset}                                    ${c.green}${c.bold}║${c.reset}
+${c.green}${c.bold}║${c.reset}   ${successSymbol('Installation Complete!')}                                    ${c.green}${c.bold}║${c.reset}
 ${c.green}${c.bold}║${c.reset}                                                               ${c.green}${c.bold}║${c.reset}
 ${c.green}${c.bold}╚═══════════════════════════════════════════════════════════════╝${c.reset}
 

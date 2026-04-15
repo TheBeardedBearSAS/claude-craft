@@ -4,6 +4,32 @@ This guide takes you from zero to a working audit of your project. Every step in
 
 ---
 
+## First 10 Minutes with Claude Craft
+
+**New to Claude Craft?** Start here for a personalized guided tour that shows you the 3 most valuable commands for YOUR project.
+
+```bash
+# Inside Claude Code
+/getting-started
+```
+
+This interactive wizard will:
+1. **Detect your tech stack** (React, Symfony, Flutter, Python, etc.) in 30 seconds
+2. **Recommend 3 high-impact checks** tailored to your technology (1 minute)
+3. **Run your chosen command** with pedagogical commentary (5 minutes)
+4. **Show you what to do next** with clear paths to explore further (1 minute)
+
+**Time to First Value: Under 10 minutes.** No reading documentation — jump straight to actionable insights.
+
+After completing the wizard, you can either:
+- Continue with the full installation steps below for team setup
+- Jump to [What's Next](#whats-next) to explore workflows and agents
+- Join the community on [Discord](https://discord.gg/claude-craft) to ask questions
+
+> See `.claude/commands/common/getting-started.md` for the full wizard reference.
+
+---
+
 ## Prerequisites (30 seconds)
 
 You need **Node.js 20+**, **npm**, and **Claude Code CLI** installed.

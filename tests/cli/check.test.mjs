@@ -11,6 +11,21 @@ vi.mock('../../cli/lib/colors.js', () => ({
   },
 }));
 
+// Mock symbols to simplify output assertions
+vi.mock('../../cli/lib/symbols.js', () => ({
+  symbols: {
+    success: '✓',
+    error: '✗',
+    warning: '⚠',
+    info: 'ℹ',
+  },
+  useColor: () => false,
+  success: (msg) => `✓ ${msg}`,
+  error: (msg) => `✗ ${msg}`,
+  warning: (msg) => `⚠ ${msg}`,
+  info: (msg) => `ℹ ${msg}`,
+}));
+
 // Mock detectProject to avoid filesystem side-effects
 vi.mock('../../cli/lib/detect-project.js', () => ({
   detectProject: vi.fn(() => ({
@@ -41,7 +56,7 @@ describe('runCheck', () => {
   it('reports missing .claude/ directory and sets exitCode', () => {
     runCheck(tempDir);
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toContain('[MISSING]');
+    expect(output).toContain('✗');
     expect(output).toContain('.claude/ directory not found');
     expect(process.exitCode).toBe(1);
   });
@@ -62,7 +77,7 @@ describe('runCheck', () => {
     runCheck(tempDir);
 
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toContain('[OK]');
+    expect(output).toContain('✓');
     expect(output).toContain('.claude/CLAUDE.md exists');
     expect(output).toContain('1 commands in 1 namespace(s)');
     expect(output).toContain('1 agent(s)');
@@ -79,7 +94,7 @@ describe('runCheck', () => {
     runCheck(tempDir);
 
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toContain('[WARN]');
+    expect(output).toContain('⚠');
     expect(output).toContain('CLAUDE.md not found');
     expect(output).toContain('no agents found');
     expect(output).toContain('warning(s)');

@@ -1,0 +1,110 @@
+name: Testing - Missing Unit Test
+description: Report missing unit tests or suggest new test cases
+labels: [good-first-issue, testing]
+title: "[TEST] Missing unit test: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Welcome! 👋
+
+        Thank you for helping improve test coverage in Claude Craft! This is a great first contribution.
+
+        Please read our [Contributing Guide](../CONTRIBUTING.md) before submitting.
+
+        **Unit tests** should:
+        - Focus on a single function/method
+        - Run in < 1s
+        - Be independent (no external dependencies)
+        - Follow AAA pattern (Arrange-Act-Assert)
+        - Cover ~70% of the test pyramid
+
+  - type: input
+    id: module
+    attributes:
+      label: Module/File Affected
+      description: Which module or file needs unit tests?
+      placeholder: "Dev/scripts/install-base-rules.sh or src/utils/parser.ts"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test-type
+    attributes:
+      label: Test Type
+      description: What kind of unit test is needed?
+      options:
+        - Function/method behavior
+        - Edge cases
+        - Error handling
+        - Input validation
+        - Business logic
+        - Utility function
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What behavior should the test verify?
+      placeholder: |
+        Example:
+        - GIVEN a user with role "admin"
+        - WHEN calling getUserPermissions()
+        - THEN should return ["read", "write", "delete"]
+    validations:
+      required: true
+
+  - type: textarea
+    id: test-cases
+    attributes:
+      label: Suggested Test Cases
+      description: List specific test cases to cover
+      placeholder: |
+        1. test_should_return_permissions_for_admin()
+        2. test_should_return_empty_for_guest()
+        3. test_should_throw_error_for_invalid_role()
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-coverage
+    attributes:
+      label: Current Coverage
+      description: What is the current test coverage for this module? (if known)
+      placeholder: "e.g., 45% line coverage, 30% branch coverage"
+
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Testing Framework
+      description: Which testing framework should be used?
+      options:
+        - Vitest (JavaScript/TypeScript)
+        - Bats (Bash)
+        - pytest (Python)
+        - Pest (PHP)
+        - Jest (legacy JavaScript)
+        - Other (specify in context)
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other information that might be helpful
+      placeholder: "Links to related code, specific edge cases, etc."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor Checklist
+      options:
+        - label: I have read the [Contributing Guide](../CONTRIBUTING.md)
+          required: true
+        - label: I have checked existing tests for this module
+          required: true
+        - label: I am willing to write these unit tests
+          required: false

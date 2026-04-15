@@ -1,0 +1,124 @@
+name: Translation - Partial or Missing
+description: Report partially translated or missing translation files
+labels: [good-first-issue, i18n, documentation]
+title: "[i18n] Missing translation: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Welcome! 👋
+
+        Thank you for helping improve Claude Craft internationalization! This is a great first contribution.
+
+        Please read our [Contributing Guide](../CONTRIBUTING.md) before submitting.
+
+        **Supported languages**: EN (English), FR (French), ES (Spanish), DE (German), PT (Portuguese)
+
+        This template is for reporting **missing** or **partially translated** documentation files.
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Target Language
+      description: Which language is missing or incomplete?
+      options:
+        - ES (Spanish)
+        - DE (German)
+        - PT (Portuguese)
+        - FR (French)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      description: Which module needs translation?
+      options:
+        - Documentation (docs/)
+        - Rules (.claude/rules/)
+        - References (.claude/references/)
+        - Commands (.claude/commands/)
+        - Agents (.claude/agents/)
+        - Skills (.claude/skills/)
+        - Website (website/)
+        - README files
+    validations:
+      required: true
+
+  - type: textarea
+    id: missing-files
+    attributes:
+      label: Missing Files
+      description: List the files that need translation
+      placeholder: |
+        Example:
+        - docs/es/QUICKSTART.md (missing completely)
+        - docs/es/AGENTS.md (partially translated - 30%)
+        - .claude/rules/es/04-solid-principles.md (missing)
+    validations:
+      required: true
+
+  - type: input
+    id: source-file
+    attributes:
+      label: Source File (English)
+      description: Path to the English version that should be translated
+      placeholder: "docs/en/QUICKSTART.md"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this translation?
+      options:
+        - High (core documentation)
+        - Medium (advanced features)
+        - Low (nice to have)
+    validations:
+      required: true
+
+  - type: textarea
+    id: completion-status
+    attributes:
+      label: Current Completion Status
+      description: If partially translated, what percentage is done?
+      placeholder: |
+        Example:
+        - 0% (file doesn't exist)
+        - 30% (first 3 sections translated, 7 remaining)
+        - 80% (mostly complete, missing last section)
+
+  - type: checkboxes
+    id: translation-type
+    attributes:
+      label: Translation Type
+      description: What type of translation is needed?
+      options:
+        - label: New file (0% translated)
+        - label: Complete partial translation (< 100%)
+        - label: Update outdated translation
+        - label: Fix translation quality issues
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other information that might be helpful
+      placeholder: "Links to similar files, specific sections needed, etc."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor Checklist
+      options:
+        - label: I have read the [Contributing Guide](../CONTRIBUTING.md)
+          required: true
+        - label: I have verified this file is missing or incomplete
+          required: true
+        - label: I am willing to translate this file
+          required: false
+        - label: I am a native or fluent speaker of the target language
+          required: false

@@ -169,6 +169,11 @@ curl https://install.claude.com | bash
 irm https://install.claude.com/windows | iex
 ```
 
+> ⚠️ **Security Note:** The official Claude Code installation methods above use `curl | bash` patterns as recommended by Anthropic. While Claude Craft implements checksum verification for RTK installation, these third-party tools (Claude Code, NVM below) follow their publishers' official installation methods. We recommend:
+> - Reviewing the installer script manually before running: `curl https://install.claude.com | less`
+> - Using package managers when available (Homebrew, winget)
+> - Checking the official documentation for security best practices
+
 **Alternative methods:**
 ```bash
 # macOS (Homebrew)
@@ -334,6 +339,75 @@ source ~/.bashrc
 nvm install 20
 nvm use 20
 ```
+
+> ⚠️ **Security Note:** The NVM installation above uses the official method from nvm-sh. Consider reviewing the script before installation or using alternative methods like package managers.
+
+---
+
+---
+
+## RTK Installation Security
+
+When using `/common:setup-rtk` or `Tools/RTK/install-rtk.sh`, the RTK installer is verified with SHA256 checksum before execution.
+
+### Checksum Verification
+
+The installer script automatically verifies the RTK official installer against a pinned SHA256 hash:
+
+```bash
+# Normal installation (with checksum verification)
+bash Tools/RTK/install-rtk.sh
+```
+
+If the checksum doesn't match (installer was updated or compromised):
+
+```
+✗ CHECKSUM MISMATCH!
+Expected: 9989e60e33a353e9e6802fab1fd410b96d1dd228b34e52402c32f3c8c2dd8c66
+Got:      [different-hash]
+
+This could indicate:
+  - The RTK installer was updated (verify manually)
+  - A man-in-the-middle attack
+
+To update the checksum after manual verification:
+  1. Inspect the downloaded script
+  2. Update RTK_INSTALL_SHA256 in Tools/RTK/install-rtk.sh
+```
+
+### Updating the Checksum (Manual Verification Required)
+
+When RTK publishes a new installer version:
+
+1. **Download and inspect the new installer:**
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh -o /tmp/rtk-new.sh
+   less /tmp/rtk-new.sh  # Review the changes
+   ```
+
+2. **Verify it's legitimate** (check RTK GitHub releases, changelog)
+
+3. **Calculate the new SHA256:**
+   ```bash
+   sha256sum /tmp/rtk-new.sh
+   ```
+
+4. **Update the constant in `Tools/RTK/install-rtk.sh`:**
+   ```bash
+   # Edit line ~86
+   RTK_INSTALL_SHA256="[new-hash-here]"
+   # Update the "Last updated" comment
+   ```
+
+### Bypass Checksum (NOT Recommended)
+
+Only for testing or if you've manually verified the installer:
+
+```bash
+RTK_SKIP_CHECKSUM=1 bash Tools/RTK/install-rtk.sh
+```
+
+⚠️ **Warning:** Skipping checksum verification exposes you to potential supply chain attacks.
 
 ---
 

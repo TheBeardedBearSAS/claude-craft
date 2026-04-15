@@ -4,6 +4,12 @@
 [![CI](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## ⚠ Warranty Disclaimer
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. See [LICENSE](LICENSE) for full terms.
+
+---
+
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
 ## What's New in v8.0 (Breaking — Spec Anthropic)
@@ -33,6 +39,8 @@ claude
 ```
 
 That's it. You get an architecture, security, and quality audit of your project in minutes.
+
+**New to Claude Craft?** Run `/getting-started` in Claude Code for a 10-minute guided tour that shows you the 3 most valuable commands for YOUR project.
 
 > See [Quickstart](docs/QUICKSTART.md) for a step-by-step walkthrough with expected output at each stage.
 
@@ -192,6 +200,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [BMAD Guide](docs/BMAD-PRACTICAL-GUIDE.md) | Project management framework |
 | [Hooks](docs/HOOKS.md) | Pre/Post tool execution |
 | [MCP](docs/MCP.md) | Model Context Protocol integration |
+| [Privacy Policy](PRIVACY.md) | Data protection and GDPR compliance |
 | [FAQ](docs/FAQ.md) | Common questions |
 | [Troubleshooting](docs/TROUBLESHOOTING.md) | Problem solving |
 | [Migration v7](docs/MIGRATION-v7.md) | Upgrade from previous versions |

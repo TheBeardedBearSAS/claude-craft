@@ -6,6 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 import c from './colors.js';
+import { success, warning, error } from './symbols.js';
 import { detectProject } from './detect-project.js';
 import { countFiles, listDirs } from './fs-utils.js';
 
@@ -22,10 +23,10 @@ function runCheck(targetPath) {
 
   // 1. .claude/ directory
   if (fs.existsSync(claudeDir)) {
-    console.log(`  ${c.green}[OK]${c.reset} .claude/ directory exists`);
+    console.log(`  ${success('.claude/ directory exists')}`);
   } else {
-    console.log(`  ${c.red}[MISSING]${c.reset} .claude/ directory not found`);
-    console.log(`\n${c.red}No claude-craft installation detected.${c.reset}`);
+    console.log(`  ${error('.claude/ directory not found')}`);
+    console.log(`\n${error('No claude-craft installation detected.')}`);
     console.log(`Run: npx @the-bearded-bear/claude-craft install ${targetPath}\n`);
     process.exitCode = 1;
     return;
@@ -34,9 +35,9 @@ function runCheck(targetPath) {
   // 2. CLAUDE.md
   const claudeMd = path.join(claudeDir, 'CLAUDE.md');
   if (fs.existsSync(claudeMd)) {
-    console.log(`  ${c.green}[OK]${c.reset} .claude/CLAUDE.md exists`);
+    console.log(`  ${success('.claude/CLAUDE.md exists')}`);
   } else {
-    console.log(`  ${c.yellow}[WARN]${c.reset} .claude/CLAUDE.md not found`);
+    console.log(`  ${warning('.claude/CLAUDE.md not found')}`);
     warnings++;
   }
 
@@ -49,10 +50,10 @@ function runCheck(targetPath) {
       totalCommands += countFiles(path.join(commandsDir, ns), '.md');
     }
     console.log(
-      `  ${c.green}[OK]${c.reset} commands/ — ${totalCommands} commands in ${namespaces.length} namespace(s): ${c.cyan}${namespaces.join(', ')}${c.reset}`
+      `  ${success(`commands/ — ${totalCommands} commands in ${namespaces.length} namespace(s): ${c.cyan}${namespaces.join(', ')}${c.reset}`)}`
     );
   } else {
-    console.log(`  ${c.yellow}[WARN]${c.reset} commands/ — no namespaces found`);
+    console.log(`  ${warning('commands/ — no namespaces found')}`);
     warnings++;
   }
 
@@ -105,9 +106,9 @@ function runCheck(targetPath) {
   // Summary
   console.log('');
   if (warnings === 0) {
-    console.log(`${c.green}Installation looks good!${c.reset}\n`);
+    console.log(`${success('Installation looks good!')}\n`);
   } else {
-    console.log(`${c.yellow}${warnings} warning(s) — some components may be missing.${c.reset}\n`);
+    console.log(`${warning(`${warnings} warning(s) — some components may be missing.`)}\n`);
   }
 }
 

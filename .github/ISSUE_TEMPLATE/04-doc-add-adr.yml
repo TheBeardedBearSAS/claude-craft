@@ -1,0 +1,123 @@
+name: Documentation - Add Architecture Decision Record
+description: Propose a new ADR to document an architectural decision
+labels: [good-first-issue, documentation, architecture]
+title: "[ADR] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Welcome! 👋
+
+        Thank you for helping document architectural decisions in Claude Craft!
+
+        Please read our [Contributing Guide](../CONTRIBUTING.md) before submitting.
+
+        **Architecture Decision Records (ADRs)** document significant architectural choices.
+        We use the **Log4brains** format with the following sections:
+        - **Status**: Accepted / Rejected / Deprecated + date
+        - **Context**: Problem to solve, constraints
+        - **Decision**: Chosen solution
+        - **Alternatives Considered**: Options evaluated with pros/cons
+        - **Consequences**: Positive and negative impacts
+
+        ADRs are stored in `docs/adr/` directory.
+
+  - type: input
+    id: decision-title
+    attributes:
+      label: Decision Title
+      description: Short title for this architectural decision
+      placeholder: "e.g., Use Vitest instead of Jest for testing"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      description: Current status of this decision
+      options:
+        - Proposed
+        - Accepted
+        - Rejected
+        - Deprecated
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What is the problem or situation that requires a decision?
+      placeholder: "Describe the context, constraints, and requirements..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: decision
+    attributes:
+      label: Decision
+      description: What solution have you chosen?
+      placeholder: "Describe the chosen solution and why..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other options were evaluated? What are their pros/cons?
+      placeholder: |
+        **Alternative 1**: [Name]
+        - Pros: ...
+        - Cons: ...
+
+        **Alternative 2**: [Name]
+        - Pros: ...
+        - Cons: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: consequences
+    attributes:
+      label: Consequences
+      description: What are the positive and negative impacts of this decision?
+      placeholder: |
+        **Positive**:
+        - ...
+
+        **Negative**:
+        - ...
+
+        **Risks**:
+        - ...
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      description: What area does this ADR affect?
+      options:
+        - Architecture (overall)
+        - Technology stack
+        - Testing strategy
+        - Infrastructure
+        - Security
+        - Performance
+        - Developer experience
+        - Documentation
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor Checklist
+      options:
+        - label: I have read the [Contributing Guide](../CONTRIBUTING.md)
+          required: true
+        - label: I have searched for similar ADRs in `docs/adr/`
+          required: true
+        - label: I am willing to create the ADR file following Log4brains format
+          required: false

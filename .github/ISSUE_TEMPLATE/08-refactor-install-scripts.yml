@@ -1,0 +1,129 @@
+name: Refactoring - Install Scripts
+description: Improve installation scripts architecture and maintainability
+labels: [good-first-issue, refactoring, architecture]
+title: "[REFACTOR] Install script: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Welcome! 👋
+
+        Thank you for helping improve Claude Craft installation scripts!
+
+        Please read our [Contributing Guide](../CONTRIBUTING.md) before submitting.
+
+        **Context**: Installation scripts in `Dev/scripts/install-*-rules.sh` need refactoring to follow architecture best practices.
+
+        **Reference**: See `audit/06-architecture.md` ARCH-003 for current architecture issues.
+
+        **Target directory**: `Dev/scripts/`
+
+  - type: dropdown
+    id: script-name
+    attributes:
+      label: Script to Refactor
+      description: Which installation script needs refactoring?
+      options:
+        - install-base-rules.sh
+        - install-symfony-rules.sh
+        - install-flutter-rules.sh
+        - install-react-rules.sh
+        - install-python-rules.sh
+        - install-angular-rules.sh
+        - install-vuejs-rules.sh
+        - install-laravel-rules.sh
+        - install-reactnative-rules.sh
+        - install-csharp-rules.sh
+        - install-php-rules.sh
+        - install-paperclip-rules.sh
+        - All scripts (common refactoring)
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-issue
+    attributes:
+      label: Current Issue
+      description: What architectural or maintainability issue exists?
+      placeholder: |
+        Example:
+        - Code duplication across install scripts
+        - No error handling
+        - Hard-coded paths
+        - Missing input validation
+        - Poor separation of concerns
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-refactoring
+    attributes:
+      label: Proposed Refactoring
+      description: How would you improve this script?
+      placeholder: |
+        Example:
+        1. Extract common functions to shared library
+        2. Add error handling with set -e
+        3. Use variables for paths
+        4. Add input validation
+        5. Separate concerns (validate/install/verify)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: arch-principle
+    attributes:
+      label: Architecture Principle
+      description: Which architecture principle does this address?
+      options:
+        - DRY (Don't Repeat Yourself)
+        - KISS (Keep It Simple)
+        - SRP (Single Responsibility)
+        - Error handling
+        - Code reusability
+        - Maintainability
+    validations:
+      required: true
+
+  - type: textarea
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      description: Will this refactoring introduce breaking changes?
+      placeholder: |
+        YES/NO
+
+        If yes, describe:
+        - What will break
+        - Migration path
+        - Backward compatibility plan
+
+  - type: textarea
+    id: testing-strategy
+    attributes:
+      label: Testing Strategy
+      description: How will you test this refactoring?
+      placeholder: |
+        1. Unit tests for extracted functions
+        2. Integration tests for full install flow
+        3. Test on clean environment
+        4. Test on existing project
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other information that might be helpful
+      placeholder: "Related to ARCH-003 in audit/06-architecture.md"
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor Checklist
+      options:
+        - label: I have read the [Contributing Guide](../CONTRIBUTING.md)
+          required: true
+        - label: I have reviewed `audit/06-architecture.md` ARCH-003
+          required: true
+        - label: I am willing to implement this refactoring
+          required: false

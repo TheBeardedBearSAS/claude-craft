@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/TheBeardedBearSAS/claude-craft/discussions
+    about: Ask questions, share ideas, and discuss with the community
+  - name: Discord Community
+    url: https://discord.gg/claude-craft
+    about: Join our Discord server for real-time chat and support

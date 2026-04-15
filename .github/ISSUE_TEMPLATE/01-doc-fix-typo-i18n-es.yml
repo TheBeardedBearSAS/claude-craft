@@ -1,0 +1,75 @@
+name: Documentation Fix - Typo/Translation (Spanish)
+description: Report typos or translation issues in Spanish documentation
+labels: [good-first-issue, documentation, i18n, language:es]
+title: "[DOC-ES] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Welcome! 👋
+
+        Thank you for helping improve Claude Craft documentation! This is a great first contribution.
+
+        Please read our [Contributing Guide](../CONTRIBUTING.md) before submitting.
+
+        This template is specifically for **Spanish (ES) documentation** typos and translation issues.
+
+  - type: input
+    id: file-path
+    attributes:
+      label: File Path
+      description: Path to the file with the typo/translation issue
+      placeholder: "docs/es/QUICKSTART.md"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-text
+    attributes:
+      label: Current Text
+      description: Copy-paste the current incorrect text
+      placeholder: "Texto incorrecto actual..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-text
+    attributes:
+      label: Proposed Fix
+      description: Your suggested correction
+      placeholder: "Texto corregido propuesto..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What kind of issue is this?
+      options:
+        - Typo (spelling/grammar)
+        - Translation accuracy
+        - Missing translation
+        - Formatting issue
+        - Broken link
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other information that might be helpful
+      placeholder: "Line number, section title, etc."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor Checklist
+      options:
+        - label: I have read the [Contributing Guide](../CONTRIBUTING.md)
+          required: true
+        - label: I have searched for similar issues
+          required: true
+        - label: I am willing to submit a PR for this fix
+          required: false

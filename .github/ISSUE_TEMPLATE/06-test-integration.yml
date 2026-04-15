@@ -1,0 +1,116 @@
+name: Testing - Integration Test
+description: Propose integration tests for multi-component interactions
+labels: [good-first-issue, testing, integration]
+title: "[TEST-INTEGRATION] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Welcome! 👋
+
+        Thank you for helping improve integration test coverage in Claude Craft!
+
+        Please read our [Contributing Guide](../CONTRIBUTING.md) before submitting.
+
+        **Integration tests** should:
+        - Test interaction between multiple components
+        - Run in < 5s
+        - Cover ~20% of the test pyramid
+        - Use real dependencies when possible (database, filesystem)
+        - Verify end-to-end workflows
+
+  - type: input
+    id: workflow
+    attributes:
+      label: Workflow/Feature to Test
+      description: What workflow or feature needs integration testing?
+      placeholder: "e.g., Installation flow for Symfony rules"
+    validations:
+      required: true
+
+  - type: textarea
+    id: components
+    attributes:
+      label: Components Involved
+      description: List all components that interact in this workflow
+      placeholder: |
+        1. CLI script (install-symfony-rules.sh)
+        2. File system operations
+        3. Template engine
+        4. Validation checks
+    validations:
+      required: true
+
+  - type: textarea
+    id: test-scenario
+    attributes:
+      label: Test Scenario
+      description: Describe the integration test scenario
+      placeholder: |
+        **GIVEN**:
+        - A fresh project directory
+        - Symfony stack selected
+
+        **WHEN**:
+        - Running install script
+        - Installing base + Symfony rules
+
+        **THEN**:
+        - All .claude/rules files are created
+        - CLAUDE.md references are updated
+        - Directory structure is valid
+        - Exit code is 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: External Dependencies
+      description: What external systems/services are needed?
+      placeholder: "e.g., Docker container, test database, filesystem access"
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Test Complexity
+      description: Estimated complexity of this integration test
+      options:
+        - Low (2-3 components)
+        - Medium (4-6 components)
+        - High (7+ components)
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What defines success for this integration test?
+      placeholder: |
+        - [ ] Test runs in < 5s
+        - [ ] Covers happy path
+        - [ ] Covers error cases
+        - [ ] Cleanup after test
+        - [ ] No flaky behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other information that might be helpful
+      placeholder: "Related issues, existing tests, etc."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor Checklist
+      options:
+        - label: I have read the [Contributing Guide](../CONTRIBUTING.md)
+          required: true
+        - label: I have checked existing integration tests
+          required: true
+        - label: I am willing to write this integration test
+          required: false

@@ -1,0 +1,114 @@
+name: Testing - Mutation Testing
+description: Improve mutation testing coverage and scores
+labels: [good-first-issue, testing, mutation-testing]
+title: "[MUTATION] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Welcome! 👋
+
+        Thank you for helping improve mutation testing in Claude Craft!
+
+        Please read our [Contributing Guide](../CONTRIBUTING.md) before submitting.
+
+        **Mutation testing** validates test quality by introducing small changes (mutations) to code and verifying tests catch them.
+
+        **Target**: >= 80% mutation score
+
+        **Tools by stack**:
+        - **JavaScript/TypeScript**: Stryker Mutator
+        - **PHP**: Infection
+        - **Python**: Mutmut
+
+        "Coverage lies, mutation scores tell the truth."
+
+  - type: input
+    id: module
+    attributes:
+      label: Module/File
+      description: Which module needs better mutation coverage?
+      placeholder: "src/utils/validation.ts or Dev/scripts/utils.sh"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: stack
+    attributes:
+      label: Technology Stack
+      description: Which stack does this apply to?
+      options:
+        - JavaScript/TypeScript (Stryker)
+        - PHP (Infection)
+        - Python (Mutmut)
+        - Bash (N/A - suggest alternative)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-score
+    attributes:
+      label: Current Mutation Score
+      description: What is the current mutation score? (if known)
+      placeholder: |
+        Example:
+        - Mutation Score: 65%
+        - Killed: 45/70
+        - Survived: 25/70
+        - Timeout: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: survived-mutants
+    attributes:
+      label: Survived Mutants
+      description: Which mutants survived (were not caught by tests)?
+      placeholder: |
+        Example:
+        1. ConditionalBoundaryMutator: > changed to >=
+        2. EqualToMutator: === changed to !==
+        3. RemoveConditionalMutator: if statement removed
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-tests
+    attributes:
+      label: Proposed Test Improvements
+      description: What tests should be added/improved to kill survived mutants?
+      placeholder: |
+        1. Add boundary test for edge case (length = 0)
+        2. Add negative test for inequality
+        3. Add test for early return condition
+    validations:
+      required: true
+
+  - type: input
+    id: target-score
+    attributes:
+      label: Target Mutation Score
+      description: What mutation score are you targeting?
+      placeholder: "e.g., 80% (minimum) or 90% (ideal)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other information that might be helpful
+      placeholder: "Mutation testing output, specific mutants, etc."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor Checklist
+      options:
+        - label: I have read the [Contributing Guide](../CONTRIBUTING.md)
+          required: true
+        - label: I have run mutation testing on this module
+          required: true
+        - label: I am willing to improve tests to achieve target score
+          required: false

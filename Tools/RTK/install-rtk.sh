@@ -80,6 +80,11 @@ RTK_MD="$CLAUDE_DIR/RTK.md"
 RTK_HOOK_MATCHER="Bash"
 RTK_HOOK_COMMAND="~/.claude/hooks/rtk-rewrite.sh"
 
+# RTK official installer checksum (rtk-ai/rtk @ master/install.sh)
+# To update: curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | sha256sum
+# Last updated: 2026-04-15
+RTK_INSTALL_SHA256="9989e60e33a353e9e6802fab1fd410b96d1dd228b34e52402c32f3c8c2dd8c66"
+
 # ---------------------------------------------------------------------------
 # check_prerequisites — verify jq and curl are available
 # ---------------------------------------------------------------------------
@@ -117,7 +122,7 @@ check_rtk_installed() {
 }
 
 # ---------------------------------------------------------------------------
-# install_rtk_binary — install RTK via official installer
+# install_rtk_binary — install RTK via official installer (with checksum verification)
 # ---------------------------------------------------------------------------
 install_rtk_binary() {
     print_info "$MSG_RTK_CHECK"
@@ -132,7 +137,55 @@ install_rtk_binary() {
     print_warning "$MSG_RTK_NOT_FOUND"
     print_info "$MSG_RTK_INSTALL_START"
 
-    if curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | sh; then
+    # Setup cleanup trap
+    local tmp_install=""
+    cleanup_install() {
+        if [[ -n "$tmp_install" ]] && [[ -f "$tmp_install" ]]; then
+            rm -f "$tmp_install"
+        fi
+    }
+    trap cleanup_install EXIT
+
+    # Create temporary file in $HOME (not /tmp per CLAUDE.md)
+    tmp_install=$(mktemp "$HOME/.rtk-install-XXXXXX.sh")
+
+    # Download installer
+    print_info "Downloading RTK installer..."
+    if ! curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh -o "$tmp_install"; then
+        print_error "Failed to download RTK installer"
+        exit 1
+    fi
+
+    # Verify checksum (unless --skip-checksum flag is set)
+    if [[ "${RTK_SKIP_CHECKSUM:-}" != "1" ]]; then
+        print_info "Verifying installer checksum..."
+        local computed_hash
+        computed_hash=$(sha256sum "$tmp_install" | awk '{print $1}')
+
+        if [[ "$computed_hash" != "$RTK_INSTALL_SHA256" ]]; then
+            print_error "CHECKSUM MISMATCH!"
+            print_error "Expected: $RTK_INSTALL_SHA256"
+            print_error "Got:      $computed_hash"
+            print_error ""
+            print_error "This could indicate:"
+            print_error "  - The RTK installer was updated (verify manually)"
+            print_error "  - A man-in-the-middle attack"
+            print_error ""
+            print_error "To update the checksum after manual verification:"
+            print_error "  1. Inspect the downloaded script: less $tmp_install"
+            print_error "  2. Update RTK_INSTALL_SHA256 in $0"
+            print_error ""
+            print_warning "To bypass this check (NOT recommended):"
+            print_warning "  RTK_SKIP_CHECKSUM=1 bash $0"
+            exit 1
+        fi
+        print_success "Checksum verified"
+    else
+        print_warning "⚠ CHECKSUM VERIFICATION SKIPPED (RTK_SKIP_CHECKSUM=1)"
+    fi
+
+    # Execute installer
+    if sh "$tmp_install"; then
         # Re-check after install (binary might be in a new path)
         export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
         if check_rtk_installed; then

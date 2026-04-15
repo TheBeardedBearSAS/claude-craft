@@ -1,0 +1,118 @@
+name: Refactoring - Lint Warnings
+description: Fix linting warnings from shellcheck or ESLint
+labels: [good-first-issue, refactoring, code-quality]
+title: "[LINT] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Welcome! 👋
+
+        Thank you for helping improve code quality in Claude Craft! This is a great first contribution.
+
+        Please read our [Contributing Guide](../CONTRIBUTING.md) before submitting.
+
+        **Linters**:
+        - **Bash**: shellcheck
+        - **JavaScript/TypeScript**: ESLint
+
+        Fixing lint warnings improves code safety, readability, and maintainability.
+
+  - type: dropdown
+    id: linter
+    attributes:
+      label: Linter
+      description: Which linter reported this warning?
+      options:
+        - shellcheck (Bash)
+        - ESLint (JavaScript/TypeScript)
+    validations:
+      required: true
+
+  - type: input
+    id: file-path
+    attributes:
+      label: File Path
+      description: Which file has lint warnings?
+      placeholder: "Dev/scripts/install-base-rules.sh or src/cli.ts"
+    validations:
+      required: true
+
+  - type: textarea
+    id: warning-output
+    attributes:
+      label: Lint Warning Output
+      description: Copy-paste the exact warning from the linter
+      placeholder: |
+        Example:
+        SC2086: Double quote to prevent globbing and word splitting.
+
+        or
+
+        'foo' is assigned a value but never used  no-unused-vars
+    validations:
+      required: true
+
+  - type: input
+    id: warning-code
+    attributes:
+      label: Warning Code
+      description: What is the warning code? (e.g., SC2086, no-unused-vars)
+      placeholder: "SC2086 or no-unused-vars"
+    validations:
+      required: true
+
+  - type: textarea
+    id: code-snippet
+    attributes:
+      label: Problematic Code Snippet
+      description: Show the code that triggers the warning
+      placeholder: |
+        ```bash
+        cp $SOURCE $DEST  # SC2086: needs quotes
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-fix
+    attributes:
+      label: Proposed Fix
+      description: How would you fix this warning?
+      placeholder: |
+        ```bash
+        cp "$SOURCE" "$DEST"  # Fixed: added quotes
+        ```
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: What is the severity of this warning?
+      options:
+        - Error (blocks CI)
+        - Warning (should fix)
+        - Info (nice to fix)
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other information that might be helpful
+      placeholder: "Multiple instances, related warnings, etc."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor Checklist
+      options:
+        - label: I have read the [Contributing Guide](../CONTRIBUTING.md)
+          required: true
+        - label: I have verified this warning locally
+          required: true
+        - label: I am willing to submit a PR to fix this
+          required: false
