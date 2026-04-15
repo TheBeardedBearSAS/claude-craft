@@ -1,0 +1,52 @@
+name: Mutation Testing (Stryker)
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'  # Nightly-weekly: lundi 3h UTC
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'cli/**'
+      - 'stryker.config.mjs'
+      - '.github/workflows/mutation.yml'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  mutation:
+    name: Stryker mutation score
+    runs-on: ubuntu-latest
+    continue-on-error: true  # non-blocking
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Stryker
+        run: npx stryker run || true
+
+      - name: Upload mutation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-report-${{ github.sha }}
+          path: reports/mutation/
+          retention-days: 30
+
+      - name: PR comment with score
+        if: github.event_name == 'pull_request' && always()
+        run: |
+          if [ -f reports/mutation/mutation.json ]; then
+            score=$(jq -r '.mutationScore // "N/A"' reports/mutation/mutation.json 2>/dev/null || echo "N/A")
+            echo "Mutation score: $score" >> "$GITHUB_STEP_SUMMARY"
+          fi

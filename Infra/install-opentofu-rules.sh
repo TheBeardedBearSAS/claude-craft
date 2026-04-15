@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 # Multilingual installation script for Claude Code Infrastructure rules (OpenTofu)
 # Version: 1.0.0
 # Usage: ./install-opentofu-rules.sh [OPTIONS] [PROJECT_DIR]

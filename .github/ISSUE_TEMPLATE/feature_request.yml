@@ -1,0 +1,90 @@
+name: 💡 Feature request
+description: Proposer une nouvelle fonctionnalité ou une amélioration majeure (vote communautaire via 👍)
+title: "[Feature] "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci pour votre proposition ! Les feature requests sont soumises au **vote communautaire** via reactions 👍.
+
+        Consultez la [roadmap publique](../blob/main/docs/ROADMAP.md) pour voir les items en cours.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problème à résoudre
+      description: Quel point de douleur cette feature adresse ? (user story, scenario concret)
+      placeholder: |
+        En tant que <rôle>, je veux <capacité> pour <bénéfice>.
+
+        Aujourd'hui, je dois <workaround douloureux>.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution proposée
+      description: Comment imaginez-vous la résolution ? (API, commande, comportement attendu)
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives envisagées
+      description: Autres approches testées ou rejetées, et pourquoi.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      description: Quelle partie de Claude Craft ?
+      options:
+        - Framework BMAD (workflow, sprint, gate)
+        - Agents (technical reviewers, ralph, tdd-coach…)
+        - Skills
+        - Technologies (Symfony / React / Flutter / Python / …)
+        - Infrastructure (Docker, K8s, Coolify, …)
+        - CLI / Tooling (statusline, ralph, RTK, kanban)
+        - Documentation
+        - i18n / Translations
+        - Community / Process
+        - Autre
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact attendu
+      description: Nombre d'utilisateurs bénéficiaires estimé.
+      options:
+        - Quelques utilisateurs (niche, < 5%)
+        - Utilisateurs d'une stack (5-30%)
+        - Majorité utilisateurs (> 30%)
+        - Tous
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Exemples d'usage
+      description: Code, commande, ou scenario illustrant la feature.
+      render: shell
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: Je suis prêt·e à soumettre une PR si la feature est acceptée.
+        - label: J'ai signé (ou suis prêt·e à signer) le CLA.
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **🎯 Comment voter** : réagissez avec 👍 sur la **description** de cette issue (pas dans les commentaires). Les items les plus votés passent dans la colonne **Voting** puis **In Progress** de la [roadmap](../blob/main/docs/ROADMAP.md).

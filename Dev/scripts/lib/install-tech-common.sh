@@ -1,4 +1,7 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
 # Shared library for tech install scripts (install-{tech}-rules.sh)
 # Sourced by thin wrappers that define tech-specific variables before sourcing.
 #

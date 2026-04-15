@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 # =============================================================================
 # Claude Projects Manager
 # Manage projects in claude-projects.yaml interactively

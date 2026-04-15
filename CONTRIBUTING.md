@@ -523,6 +523,46 @@ fix(flutter): correct path in installation script
 docs: update README with new features
 ```
 
+## Security & Supply Chain
+
+Claude Craft follows modern software supply chain security practices. For detailed information on our security policies, see [SECURITY.md](SECURITY.md).
+
+### Security Expectations for Contributors
+
+When contributing to Claude Craft:
+
+1. **No secrets in commits**: Never commit API keys, tokens, or credentials
+2. **Dependency hygiene**: Only add well-maintained dependencies with active security patching
+3. **Audit new dependencies**: Check for known CVEs before adding new dependencies
+4. **Report security issues privately**: Email security@thebearded-cto.com instead of opening public issues
+5. **Supply chain awareness**: Understand SLSA provenance and SBOM generation (see SECURITY.md)
+
+### Verifying Package Integrity
+
+Before contributing, you can verify the integrity of the published package:
+
+```bash
+# Verify npm signatures (npm 9+)
+npm audit signatures
+
+# Check SLSA provenance
+npm view @the-bearded-bear/claude-craft dist.attestations
+
+# Download and verify SBOM from GitHub Releases
+# https://github.com/TheBeardedBearSAS/claude-craft/releases
+```
+
+### Dependency Updates
+
+When updating dependencies:
+
+1. Run `npm audit` to check for vulnerabilities
+2. Test the update thoroughly (unit tests, integration tests, dry-run installations)
+3. Update package-lock.json (`npm install` or `npm ci`)
+4. Document breaking changes in the PR description
+
+---
+
 ## Code of Conduct
 
 - Be respectful and inclusive

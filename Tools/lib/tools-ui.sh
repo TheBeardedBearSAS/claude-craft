@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 # =============================================================================
 # tools-ui.sh — Shared UI helpers for Claude Craft CLI tools
 # Source this file from any tool script for consistent colors and helpers.

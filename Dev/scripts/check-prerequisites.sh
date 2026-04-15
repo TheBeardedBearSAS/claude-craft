@@ -14,7 +14,8 @@
 #   1 - Missing required prerequisites
 #===============================================================================
 
-set -e
+set -euo pipefail
+IFS=$'\n\t'
 
 # Shared UI library
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

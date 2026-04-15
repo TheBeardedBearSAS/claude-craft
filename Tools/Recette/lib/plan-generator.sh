@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 # =============================================================================
 # Recette - Test Plan Generator Module
 # Generates comprehensive test plans from acceptance criteria

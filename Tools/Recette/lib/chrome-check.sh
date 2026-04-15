@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 # =============================================================================
 # Recette - Chrome MCP Verification Module
 # Verifies Claude in Chrome MCP is active and configured correctly

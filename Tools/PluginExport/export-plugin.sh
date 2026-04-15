@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 #
 # export-plugin.sh - Export claude-craft as a Claude Code plugin
 #

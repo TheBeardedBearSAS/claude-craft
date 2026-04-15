@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 # =============================================================================
 # Recette - Report Generator Module
 # Generates comprehensive test reports in Markdown and HTML formats

@@ -16,6 +16,12 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 LANGS=("en" "fr" "es" "de" "pt")
 REFERENCE_LANG="en"
 ERRORS=0
+# Size parity threshold: target language file must be >= SIZE_THRESHOLD * en_size
+# Overridable via env var; 0.80 means 80% parity required
+SIZE_THRESHOLD="${I18N_SIZE_THRESHOLD:-0.80}"
+# Set STRICT_SIZE=1 to fail on size gaps (default: warn only)
+STRICT_SIZE="${STRICT_SIZE:-0}"
+SIZE_WARNINGS=0
 
 C_RESET='\033[0m'
 C_RED='\033[0;31m'
@@ -103,6 +109,52 @@ echo "Reference: $REFERENCE_LANG"
 
 check_parity "Dev/i18n" "Dev i18n files"
 check_parity "docs/guides" "Documentation guides"
+[[ -d "$ROOT_DIR/Infra/i18n" ]] && check_parity "Infra/i18n" "Infra i18n files"
+[[ -d "$ROOT_DIR/Project/i18n" ]] && check_parity "Project/i18n" "Project i18n files"
+
+# =============================================================================
+# Size parity check (advisory unless STRICT_SIZE=1)
+# =============================================================================
+echo -e "\n${C_BOLD}Size parity check (threshold: ${SIZE_THRESHOLD}, strict: ${STRICT_SIZE})${C_RESET}"
+
+check_size_parity() {
+    local base="$ROOT_DIR/$1"
+    local label="$2"
+    [[ -d "$base/$REFERENCE_LANG" ]] || return 0
+
+    while IFS= read -r enfile; do
+        local rel="${enfile#$base/$REFERENCE_LANG/}"
+        local en_size
+        en_size=$(wc -c < "$enfile" 2>/dev/null || echo 0)
+        [[ "$en_size" -lt 500 ]] && continue  # skip tiny files
+
+        for lang in "${LANGS[@]}"; do
+            [[ "$lang" == "$REFERENCE_LANG" ]] && continue
+            local target="$base/$lang/$rel"
+            [[ -f "$target" ]] || continue
+            local t_size
+            t_size=$(wc -c < "$target" 2>/dev/null || echo 0)
+            local ratio
+            ratio=$(awk -v a="$t_size" -v b="$en_size" 'BEGIN{printf "%.2f", a/b}')
+            if awk "BEGIN{exit !($ratio < $SIZE_THRESHOLD)}"; then
+                print_warn "$label: $lang/$rel ($ratio vs ref, threshold $SIZE_THRESHOLD)"
+                SIZE_WARNINGS=$((SIZE_WARNINGS + 1))
+            fi
+        done
+    done < <(find "$base/$REFERENCE_LANG" -type f \( -name '*.md' -o -name '*.sh' \) 2>/dev/null)
+}
+
+check_size_parity "Dev/i18n" "Dev"
+check_size_parity "docs/guides" "docs"
+[[ -d "$ROOT_DIR/Infra/i18n" ]] && check_size_parity "Infra/i18n" "Infra"
+[[ -d "$ROOT_DIR/Project/i18n" ]] && check_size_parity "Project/i18n" "Project"
+
+if [[ "$SIZE_WARNINGS" -gt 0 ]]; then
+    print_warn "$SIZE_WARNINGS file(s) below ${SIZE_THRESHOLD} size ratio"
+    if [[ "$STRICT_SIZE" == "1" ]]; then
+        ERRORS=$((ERRORS + SIZE_WARNINGS))
+    fi
+fi
 
 echo ""
 if [[ $ERRORS -gt 0 ]]; then

@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 # TCL (Tiered Context Loading) Common Functions
 # Version: 3.5.0
 # Shared by all install-*-rules.sh scripts

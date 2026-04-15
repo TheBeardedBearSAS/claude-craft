@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 # =============================================================================
 # Claude Code Multi-Account Manager
 # Manage multiple Claude Code accounts easily

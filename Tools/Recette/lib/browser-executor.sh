@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 # =============================================================================
 # Recette - Browser Executor Module
 # Executes test steps via Claude in Chrome MCP

@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 # =============================================================================
 # Recette - Test Generator Module
 # Generates unit, functional, and Behat tests from detected errors

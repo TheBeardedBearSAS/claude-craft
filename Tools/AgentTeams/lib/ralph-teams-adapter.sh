@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
 # =============================================================================
 # Ralph Teams Adapter - Agent Teams Abstraction Layer
 # Encapsulates Agent Teams API behind an interface compatible with
