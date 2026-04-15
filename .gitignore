@@ -40,3 +40,4 @@ test-output/
 video/
 .agents/
 
+cli/kanban/client/dist/

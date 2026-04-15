@@ -1,0 +1,106 @@
+<script>
+  import { onMount, onDestroy } from 'svelte';
+  import { route } from './lib/router.svelte.js';
+  import { store, loadStories, loadSprint, connectEvents, disconnectEvents, dismissToast } from './lib/store.svelte.js';
+  import KanbanView from './views/KanbanView.svelte';
+  import BacklogView from './views/BacklogView.svelte';
+  // Lazy-loaded : pulls heavy viz libs (uPlot, Cytoscape, marked+dompurify).
+  const lazyBurndown = () => import('./views/BurndownView.svelte');
+  const lazyDeps = () => import('./views/DepsView.svelte');
+  const lazyDocs = () => import('./views/DocsView.svelte');
+
+  onMount(async () => {
+    await Promise.all([loadStories(), loadSprint()]);
+    connectEvents();
+  });
+
+  onDestroy(() => disconnectEvents());
+
+  const navItems = [
+    { path: '/kanban', label: 'Kanban' },
+    { path: '/backlog', label: 'Backlog' },
+    { path: '/burndown', label: 'Burndown' },
+    { path: '/deps', label: 'Dependencies' },
+    { path: '/docs', label: 'Docs' },
+  ];
+
+  function currentPath() {
+    return '/' + (route.parts[0] ?? 'kanban');
+  }
+
+  let sprintLabel = $derived(store.sprint ? `${store.sprint.name} (${store.sprint.sprint_id})` : 'no sprint');
+</script>
+
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Navigation">
+    <h1>claude-craft</h1>
+    <nav class="nav" aria-label="Views">
+      {#each navItems as item}
+        <a
+          href={'#' + item.path}
+          aria-current={currentPath() === item.path ? 'page' : undefined}
+        >{item.label}</a>
+      {/each}
+    </nav>
+
+    <h1>Sprint</h1>
+    <div style="font-size:12px; color: var(--fg-dim); padding: 0 10px;">
+      {sprintLabel}
+    </div>
+  </aside>
+
+  <header class="topbar" role="banner">
+    <div class="title">
+      {#if store.sprint}
+        {store.sprint.goal || store.sprint.name}
+      {:else}
+        Kanban
+      {/if}
+    </div>
+    <div class="status {store.connected ? 'connected' : 'disconnected'}" aria-live="polite">
+      {store.connected ? '● live' : '○ offline'}
+    </div>
+  </header>
+
+  <main class="main" id="main">
+    {#if store.error && store.stories.length === 0}
+      <div class="empty">
+        <strong>Cannot reach server.</strong><br/>
+        {store.error}
+      </div>
+    {:else if currentPath() === '/kanban'}
+      <KanbanView />
+    {:else if currentPath() === '/backlog'}
+      <BacklogView />
+    {:else if currentPath() === '/burndown'}
+      {#await lazyBurndown()}
+        <div class="empty">Loading…</div>
+      {:then mod}
+        {@const Comp = mod.default}
+        <Comp />
+      {/await}
+    {:else if currentPath() === '/deps'}
+      {#await lazyDeps()}
+        <div class="empty">Loading…</div>
+      {:then mod}
+        {@const Comp = mod.default}
+        <Comp />
+      {/await}
+    {:else if currentPath() === '/docs'}
+      {#await lazyDocs()}
+        <div class="empty">Loading…</div>
+      {:then mod}
+        {@const Comp = mod.default}
+        <Comp />
+      {/await}
+    {/if}
+  </main>
+</div>
+
+<div class="toast-layer" aria-live="polite">
+  {#each store.toasts as t (t.id)}
+    <div class="toast {t.kind}" role="status" onclick={() => dismissToast(t.id)}>
+      {t.message}
+    </div>
+  {/each}
+</div>

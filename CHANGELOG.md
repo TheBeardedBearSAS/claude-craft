@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added — `claude-craft kanban` (Kanban UI locale pour BMAD v6)
+
+Nouvelle commande CLI qui lance un serveur local (bind `127.0.0.1` exclusivement) et une UI web pour visualiser et piloter le répertoire `project-management/` généré par BMAD v6.
+
+**Usage :**
+
+```bash
+npx @the-bearded-bear/claude-craft kanban [chemin] [--port=3737] [--open] [--readonly] [--no-watch]
+```
+
+**Vues :**
+
+- **Kanban** — 6 colonnes (backlog, ready-for-dev, in-progress, review, done, blocked), drag-and-drop avec validation serveur des transitions (state machine + gates INVEST / tasks-complete / DoD).
+- **Backlog tree** — arbre Epic → Stories avec progression par epic.
+- **Burndown** — courbes ideal vs actual du sprint actif (uPlot), badge on-track / at-risk / behind.
+- **Dependencies graph** — graphe orienté (Cytoscape + Dagre) avec détection de cycles.
+- **Docs viewer** — PRD, tech-spec, personas, architecture/* rendus en markdown (marked + DOMPurify). Liens internes `[US-XXX]` cliquables vers la carte Kanban.
+
+**Backend :**
+
+- Serveur Hono + `@hono/node-server`, API REST + endpoint SSE `/api/events` pour la propagation des mises à jour.
+- Watcher chokidar (debounce 200 ms) qui détecte les éditions externes et pousse aux clients.
+- Cache sprint-status.yaml regénéré au boot (fichiers `.md` = source of truth).
+- Écriture atomique du frontmatter : lock exclusif + backup `.bak` + rollback + contrôle `mtime` ETag-like.
+
+**Sécurité :**
+
+- Bind 127.0.0.1 uniquement, aucune exposition LAN.
+- CSRF same-origin (Origin/Referer) sur chaque PATCH → 403 cross-origin.
+- Path traversal bloqué sur l'endpoint docs.
+- CSP stricte (`script-src 'self'`, `connect-src 'self'`).
+- Mode `--readonly` qui bloque toutes les mutations.
+
+**Bundle client :**
+
+- Main : 52 KB (19.6 KB gzip) — chargé toujours.
+- Vues lourdes (Burndown uPlot, Docs marked+DOMPurify, Deps Cytoscape) en **code-splitting dynamique** : téléchargées seulement à la visite de leur route.
+
+**Tests :** 154 tests unitaires + intégration (schémas Zod, state machine, file-scanner, frontmatter, file-writer atomique, routes API, CSRF, file-watcher, sprint cache, burndown, E2E server boot).
+
+**Nouvelles dépendances :** `hono`, `@hono/node-server`, `gray-matter`, `js-yaml`, `chokidar`, `zod`, `marked`, `dompurify`, `cytoscape`, `cytoscape-dagre`, `uplot` (prod) ; `svelte@^5.37`, `vite@^6`, `@sveltejs/vite-plugin-svelte@^5` (dev).
+
+**Documentation :** section "Kanban Command" ajoutée à `docs/CLI-REFERENCE.md` et ses 4 traductions (fr, es, de, pt).
+
+---
+
 ## [8.0.1] - 2026-04-15
 
 ### Documentation sync (post-release v8.0.0)

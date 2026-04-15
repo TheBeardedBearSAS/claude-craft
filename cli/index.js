@@ -38,6 +38,7 @@ import { runCheck } from './lib/check.js';
 import { runList } from './lib/list.js';
 import { runDoctor } from './lib/doctor.js';
 import { runUpdate } from './lib/update.js';
+import { runKanban } from './lib/kanban.js';
 
 // Flattener module
 import { flatten as flattenCodebaseFn } from './flattener.js';
@@ -202,6 +203,11 @@ class ClaudeCraftCLI {
 
       case 'ralph':
         await runRalph(this, args.slice(1), options, ctx);
+        break;
+
+      case 'kanban':
+        printBanner(VERSION);
+        await runKanban({ targetPath: this.config.targetPath, options });
         break;
 
       case 'help':

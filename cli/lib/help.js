@@ -47,6 +47,7 @@ ${c.bold}Commands:${c.reset}
   ${c.green}update${c.reset}               Refresh existing installation
   ${c.green}flatten${c.reset}              Generate flattened codebase summary
   ${c.green}ralph${c.reset}                Run Ralph Wiggum continuous loop
+  ${c.green}kanban${c.reset}               Launch local Kanban UI for project-management/
   ${c.green}help${c.reset}                 Show this help message
 
 ${c.bold}Options:${c.reset}
@@ -78,6 +79,9 @@ ${c.bold}Examples:${c.reset}
 
   ${c.dim}# Run Ralph continuous loop${c.reset}
   npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
+
+  ${c.dim}# Launch Kanban UI for the current BMAD project${c.reset}
+  npx @the-bearded-bear/claude-craft kanban --open
 
 ${c.bold}Technologies:${c.reset}
 ${Object.entries(TECHNOLOGIES)

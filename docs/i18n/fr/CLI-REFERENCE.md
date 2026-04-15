@@ -319,6 +319,51 @@ npx @the-bearded-bear/claude-craft ralph --max-iterations=20 "Refactorer le modu
 
 ---
 
+## Commande Kanban
+
+Lance une interface web locale qui visualise le répertoire BMAD v6 `project-management/` sous forme de tableau Scrum / Kanban. Le serveur écoute exclusivement sur `127.0.0.1` et ne sollicite jamais Internet.
+
+### Utilisation
+
+```bash
+npx @the-bearded-bear/claude-craft kanban [chemin] [options]
+```
+
+Le `chemin` est par défaut le répertoire courant. La cible doit contenir un sous-dossier `project-management/` (généré par `/workflow:plan` ou `/sprint:start`).
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--port=<n>` | Port HTTP (défaut : 3737) |
+| `--open` | Ouvre automatiquement le navigateur |
+| `--readonly` | Désactive toutes les mutations (403 sur chaque PATCH) |
+| `--no-watch` | Désactive le watcher de fichiers |
+
+### Vues
+
+- **Kanban** — 6 colonnes. Glisser-déposer pour transitionner. Les gates (INVEST 6/6, DoD, tâches complètes) sont validés côté serveur.
+- **Backlog** — arbre Epic (lecture seule) avec progression par epic.
+- **Burndown** — courbes idéale vs réelle du sprint actif, indicateur on-track / at-risk / behind.
+- **Dependencies** — graphe orienté des dépendances inter-stories, cycles en rouge.
+- **Docs** — visualiseur markdown. Les liens `[US-XXX]` ouvrent la carte correspondante.
+
+### Exemples
+
+```bash
+# Lance sur le projet courant et ouvre le navigateur
+npx @the-bearded-bear/claude-craft kanban --open
+
+# Mode lecture seule
+npx @the-bearded-bear/claude-craft kanban --readonly --port=4040
+```
+
+### Sécurité
+
+Bind `127.0.0.1` exclusif, CSRF same-origin, path traversal bloqué, écriture atomique (lock + backup + rollback + mtime check), CSP stricte, zéro appel sortant.
+
+---
+
 ## Fichier de Configuration
 
 ### Configuration YAML
