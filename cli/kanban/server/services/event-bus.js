@@ -15,11 +15,19 @@ export class EventBus {
   publish(event, payload) {
     const msg = { event, payload, ts: Date.now() };
     for (const fn of [...this.subscribers]) {
-      try { fn(msg); } catch { /* isolate subscriber failures */ }
+      try {
+        fn(msg);
+      } catch {
+        /* isolate subscriber failures */
+      }
     }
   }
 
-  get size() { return this.subscribers.size; }
+  get size() {
+    return this.subscribers.size;
+  }
 
-  clear() { this.subscribers.clear(); }
+  clear() {
+    this.subscribers.clear();
+  }
 }

@@ -75,8 +75,11 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     if (!story || !filepath) return c.json({ error: 'not_found' }, 404);
 
     let body;
-    try { body = await c.req.json(); }
-    catch { return c.json({ error: 'invalid_json' }, 400); }
+    try {
+      body = await c.req.json();
+    } catch {
+      return c.json({ error: 'invalid_json' }, 400);
+    }
 
     const parsed = TransitionRequestSchema.safeParse(body);
     if (!parsed.success) {
@@ -91,20 +94,26 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
         return c.json({ error: 'invalid_transition', reason: unblock.reason }, 409);
       }
       if (unblock.status !== target) {
-        return c.json({
-          error: 'invalid_transition',
-          reason: `blocked stories may only be restored to previous_status (${unblock.status})`,
-        }, 409);
+        return c.json(
+          {
+            error: 'invalid_transition',
+            reason: `blocked stories may only be restored to previous_status (${unblock.status})`,
+          },
+          409
+        );
       }
     } else {
       const check = validateTransition(story, target, { blocked_reason });
       if (!check.allowed) {
-        return c.json({
-          error: 'invalid_transition',
-          reason: check.reason,
-          gate: check.gate,
-          missing: check.missing,
-        }, 409);
+        return c.json(
+          {
+            error: 'invalid_transition',
+            reason: check.reason,
+            gate: check.gate,
+            missing: check.missing,
+          },
+          409
+        );
       }
     }
 
@@ -126,10 +135,14 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     if (!eventBus) return c.json({ error: 'events_disabled' }, 501);
     return streamSSE(c, async (stream) => {
       const unsubscribe = eventBus.subscribe((msg) => {
-        stream.writeSSE({
-          event: msg.event,
-          data: JSON.stringify(msg),
-        }).catch(() => { /* client disconnected */ });
+        stream
+          .writeSSE({
+            event: msg.event,
+            data: JSON.stringify(msg),
+          })
+          .catch(() => {
+            /* client disconnected */
+          });
       });
       stream.onAbort(() => unsubscribe());
       // heartbeat toutes les 30s
@@ -138,7 +151,9 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
           await stream.sleep(30_000);
           await stream.writeSSE({ event: 'heartbeat', data: String(Date.now()) });
         }
-      } catch { /* aborted */ }
+      } catch {
+        /* aborted */
+      }
       unsubscribe();
     });
   });
@@ -177,10 +192,9 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     app.use('/assets/*', serveStatic({ root: path.relative(process.cwd(), clientDist) }));
     app.get('/', (c) => c.html(fs.readFileSync(path.join(clientDist, 'index.html'), 'utf8')));
   } else {
-    app.get('/', (c) => c.text(
-      'claude-craft kanban : client not built.\n' +
-      'Run "npm run kanban:build" to build the UI.\n',
-    ));
+    app.get('/', (c) =>
+      c.text('claude-craft kanban : client not built.\n' + 'Run "npm run kanban:build" to build the UI.\n')
+    );
   }
 
   return app;

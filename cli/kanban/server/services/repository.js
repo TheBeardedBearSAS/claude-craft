@@ -11,11 +11,11 @@ import { StoryFrontmatterSchema, EpicFrontmatterSchema, TaskFrontmatterSchema } 
 export class Repository {
   constructor(rootDir) {
     this.rootDir = path.resolve(rootDir);
-    this.stories = new Map();   // id -> { data, body, path, mtime, valid, errors? }
+    this.stories = new Map(); // id -> { data, body, path, mtime, valid, errors? }
     this.epics = new Map();
     this.tasks = new Map();
-    this.docs = new Map();      // category -> [{ path, rel }]
-    this.sprints = new Map();   // sprintId -> { goal?, tasks: string[], files: [] }
+    this.docs = new Map(); // category -> [{ path, rel }]
+    this.sprints = new Map(); // sprintId -> { goal?, tasks: string[], files: [] }
     this.filesByPath = new Map();
   }
 
@@ -106,9 +106,7 @@ export class Repository {
   }
 
   listTasksForStory(usId) {
-    return [...this.tasks.values()]
-      .filter((t) => t.ok && t.data.us_id === usId)
-      .map((t) => t.data);
+    return [...this.tasks.values()].filter((t) => t.ok && t.data.us_id === usId).map((t) => t.data);
   }
 
   listDocs() {
@@ -147,7 +145,9 @@ export function detectCycles(nodes, edges) {
     adj.get(e.from).push(e.to);
   }
   const cycles = [];
-  const WHITE = 0, GRAY = 1, BLACK = 2;
+  const WHITE = 0,
+    GRAY = 1,
+    BLACK = 2;
   const color = new Map();
   const stack = [];
 
@@ -156,8 +156,9 @@ export function detectCycles(nodes, edges) {
     stack.push(u);
     for (const v of adj.get(u) ?? []) {
       const c = color.get(v) ?? WHITE;
-      if (c === WHITE) { dfs(v); }
-      else if (c === GRAY) {
+      if (c === WHITE) {
+        dfs(v);
+      } else if (c === GRAY) {
         const idx = stack.indexOf(v);
         cycles.push(stack.slice(idx).concat(v));
       }

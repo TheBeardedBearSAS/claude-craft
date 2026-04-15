@@ -19,12 +19,12 @@
 export const STATUSES = Object.freeze(['backlog', 'ready-for-dev', 'in-progress', 'review', 'done', 'blocked']);
 
 const TRANSITIONS = Object.freeze({
-  'backlog': ['ready-for-dev', 'blocked'],
+  backlog: ['ready-for-dev', 'blocked'],
   'ready-for-dev': ['in-progress', 'blocked', 'backlog'],
   'in-progress': ['review', 'blocked'],
-  'review': ['done', 'in-progress', 'blocked'],
-  'done': [],
-  'blocked': [],
+  review: ['done', 'in-progress', 'blocked'],
+  done: [],
+  blocked: [],
 });
 
 const GATES = Object.freeze({

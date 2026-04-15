@@ -5,10 +5,7 @@ import path from 'node:path';
  * Only http://127.0.0.1:<port> and http://localhost:<port> are accepted.
  */
 export function csrfGuard(port) {
-  const allowed = new Set([
-    `http://127.0.0.1:${port}`,
-    `http://localhost:${port}`,
-  ]);
+  const allowed = new Set([`http://127.0.0.1:${port}`, `http://localhost:${port}`]);
   return async (c, next) => {
     if (!['POST', 'PATCH', 'PUT', 'DELETE'].includes(c.req.method)) {
       return next();

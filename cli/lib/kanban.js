@@ -24,10 +24,7 @@ function resolvePM(targetPath) {
 }
 
 function openBrowser(url) {
-  const opener =
-    process.platform === 'darwin' ? 'open' :
-    process.platform === 'win32' ? 'start' :
-    'xdg-open';
+  const opener = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open';
   try {
     spawn(opener, [url], { detached: true, stdio: 'ignore' }).unref();
   } catch {
@@ -45,7 +42,7 @@ export async function runKanban({ targetPath, options }) {
   if (!resolved) {
     console.error(
       `${c.red}Error: no 'project-management/' directory found under ${path.resolve(targetPath)}.${c.reset}\n` +
-      `Run ${c.bold}/workflow:plan${c.reset} in Claude Code first, or cd into a BMAD project.`,
+        `Run ${c.bold}/workflow:plan${c.reset} in Claude Code first, or cd into a BMAD project.`
     );
     process.exit(1);
   }

@@ -31,9 +31,13 @@
   }
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body, #app {
+html,
+body,
+#app {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -44,7 +48,9 @@ html, body, #app {
   line-height: 1.45;
 }
 
-button, input, select {
+button,
+input,
+select {
   font: inherit;
   color: inherit;
 }
@@ -59,8 +65,8 @@ a {
   grid-template-columns: 240px 1fr;
   grid-template-rows: 48px 1fr;
   grid-template-areas:
-    "sidebar topbar"
-    "sidebar main";
+    'sidebar topbar'
+    'sidebar main';
   height: 100vh;
 }
 
@@ -94,8 +100,10 @@ a {
   color: var(--fg);
   font-weight: 500;
 }
-.nav a:hover { background: var(--border); }
-.nav a[aria-current="page"] {
+.nav a:hover {
+  background: var(--border);
+}
+.nav a[aria-current='page'] {
   background: var(--accent);
   color: var(--accent-fg);
 }
@@ -120,8 +128,12 @@ a {
   font-size: 12px;
   font-family: var(--mono);
 }
-.topbar .status.connected { color: var(--ok); }
-.topbar .status.disconnected { color: var(--danger); }
+.topbar .status.connected {
+  color: var(--ok);
+}
+.topbar .status.disconnected {
+  color: var(--danger);
+}
 
 .main {
   grid-area: main;
@@ -152,6 +164,12 @@ a {
   box-shadow: var(--shadow);
   max-width: 360px;
 }
-.toast.error { border-left: 3px solid var(--danger); }
-.toast.success { border-left: 3px solid var(--ok); }
-.toast.info { border-left: 3px solid var(--info); }
+.toast.error {
+  border-left: 3px solid var(--danger);
+}
+.toast.success {
+  border-left: 3px solid var(--ok);
+}
+.toast.info {
+  border-left: 3px solid var(--info);
+}

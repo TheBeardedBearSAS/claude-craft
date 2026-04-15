@@ -40,7 +40,11 @@ async function acquireLock(filepath) {
 }
 
 async function releaseLock(lockPath) {
-  try { await unlink(lockPath); } catch { /* ignore */ }
+  try {
+    await unlink(lockPath);
+  } catch {
+    /* ignore */
+  }
 }
 
 /**
@@ -73,15 +77,27 @@ export async function updateFrontmatter(filepath, patch, opts = {}) {
       await rename(tmp, abs);
     } catch (err) {
       // Rollback from backup
-      try { await copyFile(backup, abs); } catch { /* best effort */ }
-      try { await unlink(tmp); } catch { /* ignore */ }
+      try {
+        await copyFile(backup, abs);
+      } catch {
+        /* best effort */
+      }
+      try {
+        await unlink(tmp);
+      } catch {
+        /* ignore */
+      }
       throw err;
     }
     await unlink(backup);
     const st = await stat(abs);
     return { data: merged, body, mtime: st.mtimeMs };
   } catch (err) {
-    try { await unlink(backup); } catch { /* backup may not exist yet */ }
+    try {
+      await unlink(backup);
+    } catch {
+      /* backup may not exist yet */
+    }
     throw err;
   } finally {
     await releaseLock(lockPath);

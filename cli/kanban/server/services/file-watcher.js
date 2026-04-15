@@ -24,26 +24,23 @@ export function startWatcher({ rootDir, eventBus, repository, debounceMs = 200 }
       clearTimeout(debounceTimers.get(filePath));
     }
 
-    debounceTimers.set(filePath, setTimeout(async () => {
-      debounceTimers.delete(filePath);
-      try {
-        await repository.refresh();
-        eventBus.publish('file:changed', { path: filePath, event, category });
-      } catch (err) {
-        console.error('[file-watcher] Error processing change:', err.message);
-      }
-    }, debounceMs));
+    debounceTimers.set(
+      filePath,
+      setTimeout(async () => {
+        debounceTimers.delete(filePath);
+        try {
+          await repository.refresh();
+          eventBus.publish('file:changed', { path: filePath, event, category });
+        } catch (err) {
+          console.error('[file-watcher] Error processing change:', err.message);
+        }
+      }, debounceMs)
+    );
   };
 
   try {
     watcher = chokidar.watch(rootDir, {
-      ignored: [
-        /\.bak$/,
-        /\.lock$/,
-        /\.tmp-/,
-        /(^|[/\\])\../,
-        /node_modules/,
-      ],
+      ignored: [/\.bak$/, /\.lock$/, /\.tmp-/, /(^|[/\\])\../, /node_modules/],
       ignoreInitial: true,
       persistent: true,
     });
@@ -52,7 +49,6 @@ export function startWatcher({ rootDir, eventBus, repository, debounceMs = 200 }
       .on('add', (path) => onEvent('add', path))
       .on('change', (path) => onEvent('change', path))
       .on('unlink', (path) => onEvent('unlink', path));
-
   } catch (err) {
     console.error('[file-watcher] Failed to start watcher:', err.message);
   }

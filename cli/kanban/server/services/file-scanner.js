@@ -61,7 +61,14 @@ function classify(rootDir, absPath) {
 
   if (rel.startsWith('architecture/')) return 'architecture';
 
-  const docs = new Set(['prd.md', 'tech-spec.md', 'personas.md', 'definition-of-done.md', 'dependencies-matrix.md', 'README.md']);
+  const docs = new Set([
+    'prd.md',
+    'tech-spec.md',
+    'personas.md',
+    'definition-of-done.md',
+    'dependencies-matrix.md',
+    'README.md',
+  ]);
   if (docs.has(rel)) return 'doc';
   if (rel === 'workflow-status.yaml') return 'workflow-status';
 

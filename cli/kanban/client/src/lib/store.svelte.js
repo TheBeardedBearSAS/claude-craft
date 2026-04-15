@@ -36,7 +36,11 @@ async function request(url, init = {}) {
   });
   if (!res.ok) {
     let body;
-    try { body = await res.json(); } catch { body = { error: res.statusText }; }
+    try {
+      body = await res.json();
+    } catch {
+      body = { error: res.statusText };
+    }
     const err = new Error(body.error || `HTTP ${res.status}`);
     err.status = res.status;
     err.body = body;
@@ -98,8 +102,12 @@ export async function patchStatus(id, body) {
 export function connectEvents() {
   if (es) return;
   es = new EventSource('/api/events');
-  es.addEventListener('open', () => { store.connected = true; });
-  es.addEventListener('error', () => { store.connected = false; });
+  es.addEventListener('open', () => {
+    store.connected = true;
+  });
+  es.addEventListener('error', () => {
+    store.connected = false;
+  });
   es.addEventListener('story:updated', async () => {
     await loadStories();
   });
@@ -109,10 +117,16 @@ export function connectEvents() {
       if (payload?.category === 'story' || payload?.category === 'task' || payload?.category === 'epic') {
         await loadStories();
       }
-    } catch { await loadStories(); }
+    } catch {
+      await loadStories();
+    }
   });
 }
 
 export function disconnectEvents() {
-  if (es) { es.close(); es = null; store.connected = false; }
+  if (es) {
+    es.close();
+    es = null;
+    store.connected = false;
+  }
 }
