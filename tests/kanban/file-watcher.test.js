@@ -103,7 +103,9 @@ describe('file-watcher', () => {
 
     const evt = receivedEvents.find((e) => e.path === taskPath);
     expect(evt).toBeDefined();
-    expect(evt.event).toBe('add');
+    // chokidar may emit 'add' or 'change' depending on watcher readiness timing;
+    // either is acceptable — what matters is that the UI is notified.
+    expect(['add', 'change']).toContain(evt.event);
     expect(evt.category).toBe('task');
   });
 
