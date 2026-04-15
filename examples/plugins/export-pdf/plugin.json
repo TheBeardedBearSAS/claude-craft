@@ -1,0 +1,23 @@
+{
+  "$schema": "https://claude-craft.dev/schema/plugin-v1.json",
+  "name": "claude-craft-plugin-export-pdf",
+  "version": "0.1.0-draft",
+  "displayName": "PDF Export",
+  "description": "Export audit reports to branded PDF (LaTeX or Weasyprint backend)",
+  "author": "The Bearded Bear SAS",
+  "license": "MIT",
+  "apiVersion": "1.0.0",
+  "hooks": [
+    "onReport",
+    "afterAudit"
+  ],
+  "permissions": {
+    "fs": { "read": ["./reports/**", "./branding/**"], "write": ["./reports/pdf/**"] },
+    "network": { "outbound": [] },
+    "env": [],
+    "exec": true
+  },
+  "config": {
+    "schemaFile": "./src/config.schema.json"
+  }
+}

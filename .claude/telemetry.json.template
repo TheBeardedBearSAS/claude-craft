@@ -1,0 +1,47 @@
+{
+  "$schema": "https://claude-craft.dev/schema/telemetry-v1.json",
+  "_comment": "DRAFT P3-30. Configuration télémétrie opt-in. Jamais activé par défaut.",
+  "enabled": false,
+  "consentedAt": null,
+  "anonymousId": null,
+  "providers": {
+    "analytics": {
+      "type": "posthog",
+      "apiHost": "https://eu.posthog.com",
+      "enabled": false,
+      "events": {
+        "command_executed": true,
+        "agent_invoked": true,
+        "audit_completed": true,
+        "plugin_installed": true
+      },
+      "_note": "Événements anonymisés. Aucun path fichier, aucun contenu prompt, aucun PII."
+    },
+    "errors": {
+      "type": "sentry",
+      "dsn": null,
+      "enabled": false,
+      "environment": "production",
+      "sampleRate": 1.0,
+      "_note": "Source maps + breadcrumbs. PII scrubbing actif par défaut."
+    }
+  },
+  "redaction": {
+    "paths": true,
+    "env": true,
+    "prompts": true,
+    "patterns": [
+      "(?i)(api[_-]?key|token|secret|password)=[^\\s]+",
+      "sk-[A-Za-z0-9]{20,}",
+      "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"
+    ]
+  },
+  "retention": {
+    "analytics": "12months",
+    "errors": "30days"
+  },
+  "override": {
+    "envVar": "CLAUDE_CRAFT_TELEMETRY",
+    "_note": "CLAUDE_CRAFT_TELEMETRY=off désactive globalement, ignorant cette config."
+  }
+}

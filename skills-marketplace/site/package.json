@@ -1,0 +1,18 @@
+{
+  "name": "@claude-craft/skills-marketplace-site",
+  "version": "0.1.0-draft",
+  "private": true,
+  "description": "Static site for Claude Craft skills marketplace (skills.claude-craft.dev)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "index": "node scripts/generate-index.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "@pagefind/default-ui": "^1.1.0",
+    "gray-matter": "^4.0.3"
+  },
+  "license": "MIT"
+}

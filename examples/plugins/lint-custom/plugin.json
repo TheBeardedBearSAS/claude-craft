@@ -1,0 +1,26 @@
+{
+  "$schema": "https://claude-craft.dev/schema/plugin-v1.json",
+  "name": "claude-craft-plugin-lint-custom",
+  "version": "0.1.0-draft",
+  "displayName": "Custom Lint Rules",
+  "description": "Enforce custom lint rules (business-specific) during audit and pre-commit",
+  "author": "The Bearded Bear SAS",
+  "license": "MIT",
+  "apiVersion": "1.0.0",
+  "hooks": [
+    "beforeAudit",
+    "onReport"
+  ],
+  "permissions": {
+    "fs": {
+      "read": ["./**"],
+      "write": ["./reports/lint-custom/**"]
+    },
+    "network": { "outbound": [] },
+    "env": [],
+    "exec": false
+  },
+  "config": {
+    "schemaFile": "./src/config.schema.json"
+  }
+}

@@ -1,0 +1,352 @@
+openapi: 3.2.0
+info:
+  title: QA Recette Cloud API
+  description: |
+    API cloud optionnelle pour QA Recette (sync sessions, dashboards, CI webhooks).
+    DRAFT P3-21 — requires tech-lead review before implementation.
+
+    Local-first : cette API n'est PAS requise pour utiliser le SDK.
+    Activée via `qa-recette config set cloud.enabled=true`.
+  version: 1.0.0-draft
+  contact:
+    name: QA Recette Team
+    url: https://qa-recette.com
+    email: support@qa-recette.com
+  license:
+    name: Proprietary (SaaS)
+    url: https://qa-recette.com/terms
+
+servers:
+  - url: https://api.qa-recette.com/v1
+    description: Production (EU region)
+  - url: https://staging-api.qa-recette.com/v1
+    description: Staging
+
+tags:
+  - name: Sessions
+    description: Gestion des sessions de test
+  - name: Reports
+    description: Rapports et analytics
+  - name: Billing
+    description: Abonnements Stripe
+
+security:
+  - bearerAuth: []
+
+paths:
+  /sessions:
+    post:
+      tags: [Sessions]
+      summary: Créer une session
+      operationId: createSession
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSessionRequest'
+      responses:
+        '201':
+          description: Session créée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '402':
+          $ref: '#/components/responses/QuotaExceeded'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      tags: [Sessions]
+      summary: Lister les sessions
+      operationId: listSessions
+      parameters:
+        - name: scope
+          in: query
+          schema:
+            type: string
+            enum: [story, sprint, regression]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+      responses:
+        '200':
+          description: Liste paginée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Session'
+                  nextCursor:
+                    type: string
+                    nullable: true
+
+  /sessions/{sessionId}:
+    get:
+      tags: [Sessions]
+      summary: Récupérer une session
+      operationId: getSession
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^REC-[0-9]{8}-[0-9]{6}$'
+      responses:
+        '200':
+          description: Session complète
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /sessions/{sessionId}/steps:
+    post:
+      tags: [Sessions]
+      summary: Ajouter un step (streaming via SSE alternatif)
+      operationId: appendStep
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Step'
+      responses:
+        '202':
+          description: Accepté (traitement async)
+
+  /sessions/{sessionId}/stream:
+    get:
+      tags: [Sessions]
+      summary: Streamer les events d'une session (SSE)
+      operationId: streamSession
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stream Server-Sent Events
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                format: binary
+
+  /reports/{sessionId}:
+    get:
+      tags: [Reports]
+      summary: Générer un rapport (Markdown, JSON, JUnit XML)
+      operationId: getReport
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [markdown, json, junit]
+            default: markdown
+      responses:
+        '200':
+          description: Rapport
+          content:
+            text/markdown:
+              schema:
+                type: string
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+            application/xml:
+              schema:
+                type: string
+                format: binary
+
+  /billing/checkout:
+    post:
+      tags: [Billing]
+      summary: Créer une session Stripe Checkout
+      operationId: createCheckout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tier]
+              properties:
+                tier:
+                  type: string
+                  enum: [starter, team, enterprise]
+      responses:
+        '200':
+          description: URL redirect Stripe
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  checkoutUrl:
+                    type: string
+                    format: uri
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    CreateSessionRequest:
+      type: object
+      required: [scope, id]
+      properties:
+        scope:
+          type: string
+          enum: [story, sprint, regression]
+        id:
+          type: string
+          maxLength: 100
+        config:
+          $ref: '#/components/schemas/SessionConfig'
+
+    SessionConfig:
+      type: object
+      properties:
+        baseUrl:
+          type: string
+          format: uri
+        timeout:
+          type: integer
+          default: 30000
+          minimum: 1000
+          maximum: 600000
+
+    Session:
+      type: object
+      required: [id, scope, createdAt, status]
+      properties:
+        id:
+          type: string
+          pattern: '^REC-[0-9]{8}-[0-9]{6}$'
+        scope:
+          type: string
+          enum: [story, sprint, regression]
+        status:
+          type: string
+          enum: [pending, running, passed, failed, aborted]
+        createdAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/Step'
+
+    Step:
+      type: object
+      required: [name, status]
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+          enum: [pending, running, passed, failed, skipped]
+        startedAt:
+          type: string
+          format: date-time
+        durationMs:
+          type: integer
+        screenshot:
+          type: string
+          format: uri
+          nullable: true
+        error:
+          type: object
+          nullable: true
+          properties:
+            message:
+              type: string
+            stack:
+              type: string
+
+    Report:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        total:
+          type: integer
+        passed:
+          type: integer
+        failed:
+          type: integer
+        skipped:
+          type: integer
+        durationMs:
+          type: integer
+        markdownUrl:
+          type: string
+          format: uri
+
+    Problem:
+      description: RFC 9457 Problem Details
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+
+  responses:
+    Unauthorized:
+      description: Authentification requise
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: Ressource introuvable
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    QuotaExceeded:
+      description: Quota free tier atteint
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'

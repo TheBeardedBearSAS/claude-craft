@@ -1,0 +1,28 @@
+---
+const { title = 'Claude Craft Skills' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content="Community marketplace for Claude Code skills." />
+  </head>
+  <body>
+    <header>
+      <h1><a href="/">Claude Craft Skills</a></h1>
+      <nav>
+        <a href="/">Catalogue</a>
+        <a href="/about">About</a>
+        <a href="https://github.com/the-bearded-cto/skills-marketplace">GitHub</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <p>MIT licensed. Community-driven. <a href="/contribute">Contribute a skill</a>.</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://claude-craft.dev/schema/plugin-v1.json",
+  "name": "claude-craft-plugin-notify-slack",
+  "version": "0.1.0-draft",
+  "displayName": "Slack Notifications",
+  "description": "Send Slack notifications on audit completion, release events, and command errors",
+  "author": "The Bearded Bear SAS",
+  "license": "MIT",
+  "apiVersion": "1.0.0",
+  "hooks": [
+    "afterAudit",
+    "afterRelease",
+    "onCommandError"
+  ],
+  "permissions": {
+    "fs": { "read": ["./reports/**"], "write": [] },
+    "network": { "outbound": ["https://hooks.slack.com/**"] },
+    "env": ["SLACK_WEBHOOK_URL"],
+    "exec": false
+  },
+  "config": {
+    "schemaFile": "./src/config.schema.json"
+  }
+}

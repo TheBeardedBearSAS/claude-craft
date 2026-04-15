@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import indexData from '../../../index.json.template';
+
+const skills = indexData.skills ?? [];
+---
+<Base title="Claude Craft Skills Marketplace">
+  <section>
+    <h2>Skills catalogue</h2>
+    <p>{skills.length} skills disponibles.</p>
+    <ul>
+      {skills.map((skill) => (
+        <li>
+          <h3>{skill.name} <small>v{skill.version}</small></h3>
+          <p>{skill.description}</p>
+          <p>
+            <span>Stack: {skill.stack}</span> |
+            <span>Author: {skill.author.name}</span> |
+            <span>License: {skill.license}</span>
+          </p>
+          <code>claude-craft skill install {skill.name}</code>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://skills.claude-craft.dev/schema/v1.json",
+  "generatedAt": "2026-04-15T00:00:00Z",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "name": "example-skill",
+      "description": "Short one-line description",
+      "version": "1.0.0",
+      "author": {
+        "name": "Contributor Name",
+        "github": "username"
+      },
+      "tags": ["symfony", "testing", "official"],
+      "stack": "symfony",
+      "license": "MIT",
+      "downloads": 0,
+      "rating": null,
+      "repository": "https://github.com/the-bearded-cto/skills-marketplace",
+      "path": "skills/example-skill/SKILL.md",
+      "rawUrl": "https://raw.githubusercontent.com/the-bearded-cto/skills-marketplace/main/skills/example-skill/SKILL.md",
+      "publishedAt": "2026-04-15T00:00:00Z",
+      "updatedAt": "2026-04-15T00:00:00Z"
+    }
+  ]
+}

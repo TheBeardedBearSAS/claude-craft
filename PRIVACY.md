@@ -26,14 +26,20 @@ Claude Craft is an open-source framework that runs locally on your machine. We c
 - **What**: Stack traces, error types, runtime environment (OS, Node.js version) when the CLI crashes
 - **Why**: To identify and fix bugs
 - **How Long**: 30 days
-- **Legal Basis**: Explicit consent (you must opt-in via `claude-craft config set telemetry.enabled=true`)
+- **Legal Basis**: Explicit consent (you must opt-in via `claude-craft telemetry on` — first-run 3-button prompt since v8.2)
+- **Provider**: Sentry (EU region)
 
 ### 2.3 CLI Usage Analytics (Opt-in Only)
 
-- **What**: Commands executed (e.g., `/team:audit`), frequency, anonymized project identifiers
+- **What**: Commands executed (e.g., `/team:audit`), frequency, anonymized project identifiers (UUID v4 local)
 - **Why**: To understand feature adoption and prioritize development
 - **How Long**: 12 months
-- **Legal Basis**: Explicit consent (you must opt-in via `claude-craft config set analytics.enabled=true`)
+- **Legal Basis**: Explicit consent (you must opt-in via `claude-craft telemetry on` — first-run 3-button prompt since v8.2)
+- **Provider**: Posthog (EU region: `eu.posthog.com`)
+- **Revocation**: `claude-craft telemetry off` ou variable d'environnement `CLAUDE_CRAFT_TELEMETRY=off`
+- **Purge** (RGPD Art. 17): `claude-craft telemetry purge` envoie une requête d'effacement au provider et supprime les données locales
+- **PII scrubbing**: les paths, emails, tokens API et patterns sensibles sont supprimés avant envoi (voir `.claude/telemetry.json.template` → `redaction.patterns`)
+- **Dashboard public**: [stats.claude-craft.dev](https://stats.claude-craft.dev) affiche les métriques agrégées (WAU, top commandes, taux d'erreur, adoption versions)
 
 ### 2.4 Data We Do NOT Collect
 
