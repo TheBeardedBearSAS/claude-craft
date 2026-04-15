@@ -217,7 +217,7 @@ import { spawnSync } from 'child_process';
 | 19 | Scripts bash sans `set -euo pipefail` systématique | **Sécurité** | Dev/scripts/*.sh | - | MOYENNE | Erreurs silencieuses |
 | 20 | Constantes hardcodées (MAX_TOKENS_PER_SHARD=50000) | **Configuration** | cli/flattener.js | 78 | BASSE | Pas de override |
 | 21 | `ClaudeCraftCLI` classe 230 lignes (God Object) | **SRP** | cli/index.js | 53-249 | HAUTE | Single point of failure |
-| 22 | TODO/FIXME : seulement 2 trouvés (sous-documentation) | **Documentation** | cli/*.js | - | BASSE | Code "magique" |
+| 22 | TODO/FIXME : seulement 2 trouvés dans `cli/*.js` (sous-documentation locale — cf. audit 12 L31 qui compte 1169 sur l'ensemble de la codebase) | **Documentation** | cli/*.js | - | BASSE | Code "magique" |
 | 23 | Pas de gestion des erreurs réseau (spawn) | **Robustesse** | cli/lib/ralph.js | 74-91 | MOYENNE | Crash si réseau KO |
 | 24 | Pas de retry logic pour scripts bash | **Robustesse** | cli/lib/installer.js | 20-31 | MOYENNE | Fail hard |
 | 25 | Copier-coller install-*-rules.sh (26 fichiers) | **DRY** | Dev/scripts/ | - | CRITIQUE | 80% duplication |
