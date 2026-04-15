@@ -11,8 +11,9 @@
 | 2. Stabilisation | 1-3 mois | ~324h | [phase-2-stabilisation.md](phase-2-stabilisation.md) | Automatable scope livré (cf. [human-actions](phase-2-human-actions.md)) |
 | 3. Différenciation | 3-6 mois | ~668h | [phase-3-differenciation.md](phase-3-differenciation.md) | Automatable scope livré (cf. [human-actions](phase-3-human-actions.md)) |
 | 4. Domination | 6-12 mois | ~1380h | [phase-4-domination.md](phase-4-domination.md) | Automatable scope livré (cf. [human-actions](phase-4-human-actions.md)) |
+| 5. Évolution | 12-24 mois | ~2000h | [phase-5-evolution.md](phase-5-evolution.md) | Automatable scope livré (cf. [human-actions](phase-5-human-actions.md)) |
 
-**Total** : 2451h ≈ équipe 3-4 dev temps plein sur 12 mois, budget €155K, ROI 29% an 1.
+**Total** : 4451h ≈ équipe 5-6 FTE sur 24 mois (phases 1-4 = €155K an 1 ROI 29%, phase 5 = budget année 2 €300-500K selon décision capital).
 
 ## Méthodologie de parallélisation
 

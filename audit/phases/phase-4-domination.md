@@ -331,13 +331,13 @@ WebSearch({ query: "Svelte 5 runes SvelteKit 2026 best practices" })
 | Burnout équipe 1380h sur 6 mois | Haute | 4-5 FTE réels, pas 3 ; backlog priorisé strict ; rotation |
 | Cursor Directory rejet | Basse | Alternative : Aider Rules, Cline Rules, propres canaux |
 
-## Post-phase : revue stratégique 12 mois
+## Phase suivante : phase 5 — Évolution (12-24 mois)
 
-À la fin de phase 4, produire `audit/phases/12-month-review.md` avec :
-- Métriques vs cibles (toutes phases).
-- Leçons apprises (post-mortem par phase).
-- Roadmap 12-24 mois (année 2) : expansion internationale (US, APAC), IPO preparation ou acquisition strategy.
-- Décision stratégique : continuer solo open-core vs levée fonds vs acquisition vs fondation (type Apache Foundation).
+À la fin de phase 4, basculer vers `audit/phases/phase-5-evolution.md` qui couvre :
+- Rétrospective 12 mois chiffrée (métriques vs cibles, post-mortem par phase, ROI).
+- Roadmap 12-24 mois (année 2) : expansion internationale (US, APAC), Tier 2 stacks, R&D evals publics.
+- Décision stratégique capital : bootstrap scale vs Series A vs acquisition vs fondation Apache-style.
+- Governance transition : Charter v2, board advisory, trademark policy, succession plan.
 
 ## Références croisées
 
@@ -345,5 +345,6 @@ WebSearch({ query: "Svelte 5 runes SvelteKit 2026 best practices" })
 - `audit/00-SYNTHESIS.md` §"Moats Défendables" — 6 moats à consolider phase 4.
 - `audit/00-SYNTHESIS.md` §"Stratégie Go-to-Market" — phases PLG → CLG → Enterprise.
 - `audit/00-SYNTHESIS.md` §"Budget & Ressources" — €155K budget 12 mois pour équipe 3-4 FTE.
+- `audit/phases/phase-5-evolution.md` — continuation année 2.
 
-**Fin de roadmap audit.** 🏁
+**Transition vers phase 5 → Évolution.** 🏁
