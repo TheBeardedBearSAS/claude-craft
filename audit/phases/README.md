@@ -10,7 +10,7 @@
 | 1. Survie | 0-1 mois | ~79h | [phase-1-survie.md](phase-1-survie.md) | Automatable scope livré (cf. [human-actions](phase-1-human-actions.md)) |
 | 2. Stabilisation | 1-3 mois | ~324h | [phase-2-stabilisation.md](phase-2-stabilisation.md) | Automatable scope livré (cf. [human-actions](phase-2-human-actions.md)) |
 | 3. Différenciation | 3-6 mois | ~668h | [phase-3-differenciation.md](phase-3-differenciation.md) | Automatable scope livré (cf. [human-actions](phase-3-human-actions.md)) |
-| 4. Domination | 6-12 mois | ~1380h | [phase-4-domination.md](phase-4-domination.md) | Bloquée par P3 |
+| 4. Domination | 6-12 mois | ~1380h | [phase-4-domination.md](phase-4-domination.md) | Automatable scope livré (cf. [human-actions](phase-4-human-actions.md)) |
 
 **Total** : 2451h ≈ équipe 3-4 dev temps plein sur 12 mois, budget €155K, ROI 29% an 1.
 
