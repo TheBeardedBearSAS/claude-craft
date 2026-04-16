@@ -1,13 +1,13 @@
 {
-  "$schema": "https://claude.ai/settings-schema.json",
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6"
+  },
 
   "spinnerVerbs": {
-    "default": ["Pensando", "Procesando", "Analizando", "Trabajando"],
-    "Edit": ["Editando", "Modificando", "Actualizando"],
-    "Write": ["Escribiendo", "Creando", "Generando"],
-    "Bash": ["Ejecutando", "Lanzando", "Procesando"],
-    "Read": ["Leyendo", "Cargando", "Escaneando"],
-    "Task": ["Delegando", "Coordinando", "Despachando"]
+    "mode": "replace",
+    "verbs": ["Pensando", "Procesando", "Analizando", "Trabajando", "Editando", "Escribiendo", "Leyendo", "Ejecutando", "Delegando"]
   },
 
   "permissions": {
@@ -53,84 +53,65 @@
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "",
+        "matcher": "compact",
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/session-init.sh",
-            "timeout": 10
+            "command": "if [ -f .claude/context-essentials.md ]; then cat .claude/context-essentials.md; else echo 'No context-essentials.md found.'; fi"
           }
         ]
       }
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Edit",
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/block-dangerous-commands.sh",
-            "timeout": 5
+            "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/post-edit-lint.sh",
-            "timeout": 60
+            "command": "OUTPUT_SIZE=$(echo '$TOOL_OUTPUT' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Extract only the relevant information and summarize in under 20 lines.'; elif [ \"$OUTPUT_SIZE\" -gt 10000 ]; then echo 'NOTICE: Moderate output (>10KB). Focus on errors, warnings, and key results.'; fi; exit 0",
+            "timeout": 3000
+          }
+        ]
+      },
+      {
+        "matcher": "Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "OUTPUT_SIZE=$(echo '$TOOL_OUTPUT' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Summarize key findings in under 20 lines.'; fi; exit 0",
+            "timeout": 3000
           }
         ]
       }
     ],
-    "PostToolUseFailure": [
+    "PostCompact": [
       {
-        "matcher": "",
+        "matcher": "auto",
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/post-tool-failure.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/pre-compact.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/quality-gate.sh",
-            "timeout": 120
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/session-end.sh",
-            "timeout": 30
+            "command": "if [ -f .claude/context-essentials.md ]; then jq -n --rawfile c .claude/context-essentials.md '{\"systemMessage\": (\"CONTEXT RESTORED AFTER COMPACTION:\\n\" + $c)}'; else echo '{}'; fi",
+            "timeout": 5000
           }
         ]
       }

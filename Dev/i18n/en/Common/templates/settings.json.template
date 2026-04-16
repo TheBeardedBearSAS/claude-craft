@@ -1,17 +1,13 @@
 {
-  "$schema": "https://claude.ai/settings-schema.json",
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
 
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-5"
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6"
   },
 
   "spinnerVerbs": {
-    "default": ["Thinking", "Processing", "Analyzing", "Working"],
-    "Edit": ["Editing", "Modifying", "Updating"],
-    "Write": ["Writing", "Creating", "Generating"],
-    "Bash": ["Running", "Executing", "Processing"],
-    "Read": ["Reading", "Loading", "Scanning"],
-    "Task": ["Delegating", "Coordinating", "Dispatching"]
+    "mode": "replace",
+    "verbs": ["Thinking", "Processing", "Analyzing", "Working", "Editing", "Writing", "Reading", "Running", "Delegating"]
   },
 
   "permissions": {
@@ -57,16 +53,6 @@
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/session-init.sh",
-            "timeout": 10
-          }
-        ]
-      },
-      {
         "matcher": "compact",
         "hooks": [
           {
@@ -77,16 +63,6 @@
       }
     ],
     "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/block-dangerous-commands.sh",
-            "timeout": 5
-          }
-        ]
-      },
       {
         "matcher": "Edit",
         "hooks": [
@@ -108,16 +84,6 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/post-edit-lint.sh",
-            "timeout": 60
-          }
-        ]
-      },
-      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -138,30 +104,6 @@
         ]
       }
     ],
-    "PostToolUseFailure": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/post-tool-failure.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/pre-compact.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "PostCompact": [
       {
         "matcher": "auto",
@@ -170,30 +112,6 @@
             "type": "command",
             "command": "if [ -f .claude/context-essentials.md ]; then jq -n --rawfile c .claude/context-essentials.md '{\"systemMessage\": (\"CONTEXT RESTORED AFTER COMPACTION:\\n\" + $c)}'; else echo '{}'; fi",
             "timeout": 5000
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/quality-gate.sh",
-            "timeout": 120
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/session-end.sh",
-            "timeout": 30
           }
         ]
       }
