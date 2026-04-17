@@ -13,10 +13,8 @@
 #   npx @the-bearded-bear/claude-craft install <path> --tech=<name>
 #===============================================================================
 
-.PHONY: help install-all install-common install-project install-infra install-docker install-coolify install-kubernetes install-opentofu install-ansible \
-        install-frankenphp \
-        install-tools install-tools-lib install-statusline install-multiaccount install-projectconfig install-rtk \
-        install-completions \
+.PHONY: help install-all install-common install-project install-infra \
+        install-tools install-tools-lib install-completions \
         install-web install-fullstack-js install-mobile install-backend \
         list list-agents list-commands \
         config-install config-install-all config-validate config-list config-dry-run \
@@ -29,98 +27,46 @@ SHELL := /bin/bash
 SCRIPTS_DIR := $(CURDIR)/Dev/scripts
 I18N_DIR := $(CURDIR)/Dev/i18n
 TOOLS_DIR := $(CURDIR)/Tools
+INFRA_DIR := $(CURDIR)/Infra
+PROJECT_DIR := $(CURDIR)/Project
 TARGET ?= .
 OPTIONS ?=
 CONFIG ?= $(CURDIR)/claude-projects.yaml
 PROJECT ?=
 RULES_LANG ?= en
 
-# Couleurs (utilise printf pour l'interprétation ANSI)
+# Couleurs
 CYAN := $(shell printf '\033[0;36m')
 GREEN := $(shell printf '\033[0;32m')
 YELLOW := $(shell printf '\033[1;33m')
 RED := $(shell printf '\033[0;31m')
 NC := $(shell printf '\033[0m')
 
-#===============================================================================
-# Aide
-#===============================================================================
+# Liste des technologies supportées
+TECHS := symfony flutter python react reactnative angular csharp laravel vuejs php paperclip
+INFRA_TECHS := docker coolify kubernetes opentofu ansible hcloud pgbouncer frankenphp
 
 help: ## Affiche cette aide
-	@echo ""
-	@echo "$(CYAN)╔════════════════════════════════════════════════════════════╗$(NC)"
-	@echo "$(CYAN)║$(NC)  Claude Code Rules - Makefile                               $(CYAN)║$(NC)"
-	@echo "$(CYAN)╚════════════════════════════════════════════════════════════╝$(NC)"
-	@echo ""
-	@echo "$(YELLOW)Usage:$(NC)"
-	@echo "  make <target> TARGET=<chemin_projet> [OPTIONS=<options>]"
-	@echo ""
-	@echo "$(YELLOW)NOTE:$(NC) Individual tech installation is now handled by the CLI:"
-	@echo "  npx @the-bearded-bear/claude-craft install <path> --tech=<name>"
-	@echo ""
-	@echo "$(YELLOW)Targets disponibles:$(NC)"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
-		awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-25s$(NC) %s\n", $$1, $$2}'
-	@echo ""
-	@echo "$(YELLOW)Variables:$(NC)"
-	@echo "  $(GREEN)TARGET$(NC)   Chemin vers le projet cible (defaut: .)"
-	@echo "  $(GREEN)OPTIONS$(NC)  Options supplementaires pour les scripts"
-	@echo "  $(GREEN)CONFIG$(NC)   Fichier de configuration YAML (defaut: claude-projects.yaml)"
-	@echo "  $(GREEN)PROJECT$(NC)  Nom du projet pour config-install"
-	@echo "  $(GREEN)RULES_LANG$(NC)     Langue des regles: en, fr, es, de, pt (defaut: en)"
-	@echo ""
-	@echo "$(YELLOW)Options disponibles:$(NC)"
-	@echo "  --dry-run      Simule sans modifier"
-	@echo "  --force        Ecrase les fichiers existants"
-	@echo "  --backup       Cree une sauvegarde"
-	@echo "  --update       Met a jour les fichiers existants"
-	@echo ""
-	@echo "$(YELLOW)Exemples:$(NC)"
-	@echo "  make install-all TARGET=~/Projects/myapp RULES_LANG=fr"
-	@echo "  make config-install PROJECT=mon-projet"
-	@echo "  make list"
-	@echo ""
+	@echo "$(CYAN)Claude Code Rules - Makefile$(NC)\n" && \
+	echo "$(YELLOW)Usage:$(NC) make <target> TARGET=<path> [RULES_LANG=en]\n" && \
+	grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
+	awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-25s$(NC) %s\n", $$1, $$2}'
 
 #===============================================================================
-# Installation
+# Installation - Pattern Rules
 #===============================================================================
 
-install-all: ## Installe TOUTES les regles (common + toutes technos + project)
-	@echo "$(CYAN)Installation complete dans $(TARGET) (lang=$(RULES_LANG))...$(NC)"
-	@$(SCRIPTS_DIR)/install-common-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@for tech in symfony flutter python react reactnative angular csharp laravel vuejs php paperclip; do \
-		script="$(SCRIPTS_DIR)/install-$${tech}-rules.sh"; \
-		if [ -f "$$script" ]; then \
-			$$script --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
-		fi; \
-	done
-	@if [ -f "$(CURDIR)/Infra/install-docker-rules.sh" ]; then \
-		$(CURDIR)/Infra/install-docker-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
-	fi
-	@if [ -f "$(CURDIR)/Infra/install-coolify-rules.sh" ]; then \
-		$(CURDIR)/Infra/install-coolify-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
-	fi
-	@if [ -f "$(CURDIR)/Infra/install-kubernetes-rules.sh" ]; then \
-		$(CURDIR)/Infra/install-kubernetes-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
-	fi
-	@if [ -f "$(CURDIR)/Infra/install-opentofu-rules.sh" ]; then \
-		$(CURDIR)/Infra/install-opentofu-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
-	fi
-	@if [ -f "$(CURDIR)/Infra/install-ansible-rules.sh" ]; then \
-		$(CURDIR)/Infra/install-ansible-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
-	fi
-	@if [ -f "$(CURDIR)/Infra/install-hcloud-rules.sh" ]; then \
-		$(CURDIR)/Infra/install-hcloud-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
-	fi
-	@if [ -f "$(CURDIR)/Infra/install-pgbouncer-rules.sh" ]; then \
-		$(CURDIR)/Infra/install-pgbouncer-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
-	fi
-	@if [ -f "$(CURDIR)/Infra/install-frankenphp-rules.sh" ]; then \
-		$(CURDIR)/Infra/install-frankenphp-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET); \
-	fi
-	@if [ -f "$(CURDIR)/Project/install-project-commands.sh" ]; then \
-		$(CURDIR)/Project/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET); \
-	fi
+# Installation des technologies via CLI (recommended)
+install-%: ## Installe les regles pour une techno (ex: make install-symfony)
+	@echo "$(CYAN)Installation via CLI: $* (lang=$(RULES_LANG))...$(NC)"
+	@npx @the-bearded-bear/claude-craft install $(TARGET) --tech=$* --lang=$(RULES_LANG)
+
+# Installation infra via pattern rule
+install-infra-%: ## Installe les regles infra (ex: make install-infra-docker)
+	@echo "$(CYAN)Installation des regles $* (lang=$(RULES_LANG))...$(NC)"
+	@$(INFRA_DIR)/install-$*-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+
+install-all: install-common $(addprefix install-,$(TECHS)) $(addprefix install-infra-,$(INFRA_TECHS)) install-project ## Installe TOUTES les regles
 	@echo "$(GREEN)Installation complete terminee !$(NC)"
 
 install-common: ## Installe les regles communes (agents transversaux, /common:)
@@ -129,321 +75,95 @@ install-common: ## Installe les regles communes (agents transversaux, /common:)
 
 install-project: ## Installe les commandes de gestion de projet (EPICs, US, Tasks)
 	@echo "$(CYAN)Installation des commandes Project (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Project/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET)
+	@$(PROJECT_DIR)/install-project-commands.sh --lang=$(RULES_LANG) $(TARGET)
 
-install-infra: ## Installe les agents et commandes Docker + Coolify + Kubernetes + OpenTofu + Ansible + Hcloud + PgBouncer + FrankenPHP/Infrastructure
-	@echo "$(CYAN)Installation des regles Docker (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-docker-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(CYAN)Installation des regles Coolify (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-coolify-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(CYAN)Installation des regles Kubernetes (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-kubernetes-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(CYAN)Installation des regles OpenTofu (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-opentofu-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(CYAN)Installation des regles Ansible (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-ansible-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(CYAN)Installation des regles Hcloud (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-hcloud-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(CYAN)Installation des regles PgBouncer (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-pgbouncer-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(CYAN)Installation des regles FrankenPHP (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-frankenphp-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+install-infra: $(addprefix install-infra-,$(INFRA_TECHS)) ## Installe tous les agents infra
 
-install-docker: ## Installe les agents et commandes Docker
-	@echo "$(CYAN)Installation des regles Docker (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-docker-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-
-install-coolify: ## Installe les agents et commandes Coolify
-	@echo "$(CYAN)Installation des regles Coolify (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-coolify-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-
-install-kubernetes: ## Installe les agents et commandes Kubernetes
-	@echo "$(CYAN)Installation des regles Kubernetes (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-kubernetes-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-
-install-opentofu: ## Installe les agents et commandes OpenTofu
-	@echo "$(CYAN)Installation des regles OpenTofu (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-opentofu-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-
-install-ansible: ## Installe les agents et commandes Ansible
-	@echo "$(CYAN)Installation des regles Ansible (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-ansible-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-
-install-hcloud: ## Installe les agents et commandes Hcloud
-	@echo "$(CYAN)Installation des regles Hcloud (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-hcloud-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-
-install-pgbouncer: ## Installe les agents et commandes PgBouncer
-	@echo "$(CYAN)Installation des regles PgBouncer (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-pgbouncer-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-
-install-frankenphp: ## Installe les agents et commandes FrankenPHP
-	@echo "$(CYAN)Installation des regles FrankenPHP (lang=$(RULES_LANG))...$(NC)"
-	@$(CURDIR)/Infra/install-frankenphp-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-
-install-paperclip: ## Installe les regles Paperclip (orchestration d'agents IA)
-	@echo "$(CYAN)Installation des regles Paperclip (lang=$(RULES_LANG))...$(NC)"
-	@$(SCRIPTS_DIR)/install-paperclip-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-
-#===============================================================================
-# Combinaisons Courantes
-#===============================================================================
-
-install-web: install-common ## Installe Common + React (projet web)
-	@$(SCRIPTS_DIR)/install-react-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(GREEN)Installation web terminee !$(NC)"
-
-install-fullstack-js: install-common ## Installe Common + React + Python (fullstack)
-	@$(SCRIPTS_DIR)/install-react-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@$(SCRIPTS_DIR)/install-python-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(GREEN)Installation fullstack JS terminee !$(NC)"
-
-install-mobile: install-common ## Installe Common + Flutter + React Native
-	@$(SCRIPTS_DIR)/install-flutter-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@$(SCRIPTS_DIR)/install-reactnative-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(GREEN)Installation mobile terminee !$(NC)"
-
-install-backend: install-common ## Installe Common + Symfony + Python
-	@$(SCRIPTS_DIR)/install-symfony-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@$(SCRIPTS_DIR)/install-python-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-	@echo "$(GREEN)Installation backend terminee !$(NC)"
-
-install-php: ## Installe les regles PHP natif (PSR-12, PHPStan, Pest 4)
-	@echo "$(CYAN)Installation des regles PHP (lang=$(RULES_LANG))...$(NC)"
-	@$(SCRIPTS_DIR)/install-php-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+# Combinaisons courantes
+install-web: install-common install-react ## Common + React
+install-fullstack-js: install-common install-react install-python ## Common + React + Python
+install-mobile: install-common install-flutter install-reactnative ## Common + Flutter + RN
+install-backend: install-common install-symfony install-python ## Common + Symfony + Python
 
 #===============================================================================
 # Outils Claude Code
 #===============================================================================
 
+# Generic tool installer
+TOOL_INSTALL = @echo "$(CYAN)Installation de $1...$(NC)" && mkdir -p $2 && cp "$(TOOLS_DIR)/$3" $2/$4 && chmod +x $2/$4 && echo "$(GREEN)$1 installe !$(NC)"
+
 install-tools: install-statusline install-multiaccount install-projectconfig install-rtk ## Installe tous les outils
-	@echo "$(GREEN)Installation des outils terminee !$(NC)"
 
 install-statusline: ## Installe la status line personnalisee
-	@echo "$(CYAN)Installation de la Status Line...$(NC)"
-	@mkdir -p ~/.claude
-	@if [ -f "$(TOOLS_DIR)/StatusLine/statusline.sh" ]; then \
-		cp "$(TOOLS_DIR)/StatusLine/statusline.sh" ~/.claude/statusline.sh; \
-		chmod +x ~/.claude/statusline.sh; \
-		echo "$(GREEN)✓$(NC) Script copie: ~/.claude/statusline.sh"; \
-		if [ -f ~/.claude/settings.json ]; then \
-			if ! grep -q '"statusLine"' ~/.claude/settings.json; then \
-				echo "$(YELLOW)⚠$(NC) Ajoute manuellement a ~/.claude/settings.json:"; \
-				echo '  "statusLine": { "type": "command", "command": "~/.claude/statusline.sh" }'; \
-			else \
-				echo "$(GREEN)✓$(NC) settings.json deja configure"; \
-			fi \
-		else \
-			cp "$(TOOLS_DIR)/StatusLine/settings.json" ~/.claude/settings.json; \
-			echo "$(GREEN)✓$(NC) settings.json cree"; \
-		fi \
-	else \
-		echo "$(RED)Script non trouve: Tools/StatusLine/statusline.sh$(NC)"; \
-		exit 1; \
-	fi
-	@echo "$(GREEN)Status Line installee !$(NC)"
+	$(call TOOL_INSTALL,Status Line,~/.claude,StatusLine/statusline.sh,statusline.sh)
 
 install-multiaccount: install-tools-lib ## Installe le gestionnaire multi-comptes
-	@echo "$(CYAN)Installation du Multi-Account Manager...$(NC)"
-	@mkdir -p ~/.local/bin
-	@if [ -f "$(TOOLS_DIR)/MultiAccount/claude-accounts.sh" ]; then \
-		cp "$(TOOLS_DIR)/MultiAccount/claude-accounts.sh" ~/.local/bin/claude-accounts; \
-		chmod +x ~/.local/bin/claude-accounts; \
-		echo "$(GREEN)✓$(NC) Script copie: ~/.local/bin/claude-accounts"; \
-		if echo "$$PATH" | grep -q "$$HOME/.local/bin"; then \
-			echo "$(GREEN)✓$(NC) ~/.local/bin est dans le PATH"; \
-		else \
-			echo "$(YELLOW)⚠$(NC) Ajoute ~/.local/bin a ton PATH:"; \
-			echo '  export PATH="$$HOME/.local/bin:$$PATH"'; \
-		fi \
-	else \
-		echo "$(RED)Script non trouve: Tools/MultiAccount/claude-accounts.sh$(NC)"; \
-		exit 1; \
-	fi
-	@echo "$(GREEN)Multi-Account Manager installe !$(NC)"
+	$(call TOOL_INSTALL,Multi-Account Manager,~/.local/bin,MultiAccount/claude-accounts.sh,claude-accounts)
 
 install-projectconfig: install-tools-lib ## Installe le gestionnaire de projets YAML
-	@echo "$(CYAN)Installation du Project Config Manager...$(NC)"
-	@mkdir -p ~/.local/bin
-	@if [ -f "$(TOOLS_DIR)/ProjectConfig/claude-projects.sh" ]; then \
-		cp "$(TOOLS_DIR)/ProjectConfig/claude-projects.sh" ~/.local/bin/claude-projects; \
-		chmod +x ~/.local/bin/claude-projects; \
-		echo "$(GREEN)✓$(NC) Script copie: ~/.local/bin/claude-projects"; \
-		if echo "$$PATH" | grep -q "$$HOME/.local/bin"; then \
-			echo "$(GREEN)✓$(NC) ~/.local/bin est dans le PATH"; \
-		else \
-			echo "$(YELLOW)⚠$(NC) Ajoute ~/.local/bin a ton PATH:"; \
-			echo '  export PATH="$$HOME/.local/bin:$$PATH"'; \
-		fi \
-	else \
-		echo "$(RED)Script non trouve: Tools/ProjectConfig/claude-projects.sh$(NC)"; \
-		exit 1; \
-	fi
-	@echo "$(GREEN)Project Config Manager installe !$(NC)"
+	$(call TOOL_INSTALL,Project Config Manager,~/.local/bin,ProjectConfig/claude-projects.sh,claude-projects)
 
-install-rtk: ## Installe RTK (Rust Token Killer) pour optimiser les tokens
-	@echo "$(CYAN)Installation de RTK (Token Optimizer)...$(NC)"
+install-rtk: ## Installe RTK (Rust Token Killer)
 	@bash "$(TOOLS_DIR)/RTK/install-rtk.sh" --lang=$(RULES_LANG)
 
-install-completions: ## Installe les completions bash/zsh pour claude-accounts
-	@echo "$(CYAN)Installation des completions...$(NC)"
-	@if [ -f "$(TOOLS_DIR)/MultiAccount/completions/claude-accounts.bash" ]; then \
-		mkdir -p ~/.local/share/bash-completion/completions; \
-		cp "$(TOOLS_DIR)/MultiAccount/completions/claude-accounts.bash" ~/.local/share/bash-completion/completions/claude-accounts; \
-		echo "$(GREEN)Y$(NC) Bash completion installee"; \
-	fi
-	@if [ -f "$(TOOLS_DIR)/MultiAccount/completions/_claude-accounts" ]; then \
-		mkdir -p ~/.zsh/completions; \
-		cp "$(TOOLS_DIR)/MultiAccount/completions/_claude-accounts" ~/.zsh/completions/_claude-accounts; \
-		echo "$(GREEN)Y$(NC) Zsh completion installee"; \
-		echo "$(YELLOW)!$(NC) Ajoute ~/.zsh/completions a ton fpath si necessaire:"; \
-		echo '  fpath=(~/.zsh/completions $$fpath)'; \
-	fi
-	@echo "$(GREEN)Completions installees !$(NC)"
+install-completions: ## Installe les completions bash/zsh
+	@mkdir -p ~/.local/share/bash-completion/completions ~/.zsh/completions && \
+	cp "$(TOOLS_DIR)/MultiAccount/completions/claude-accounts.bash" ~/.local/share/bash-completion/completions/ && \
+	cp "$(TOOLS_DIR)/MultiAccount/completions/_claude-accounts" ~/.zsh/completions/
 
-test-tools: ## Lance les tests bats pour les outils MultiAccount (via Docker)
-	@echo "$(CYAN)Lancement des tests MultiAccount...$(NC)"
-	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/MultiAccount/tests/
+install-tools-lib: ## Installe la librairie partagee
+	@mkdir -p ~/.local/lib/claude-craft && cp "$(TOOLS_DIR)/lib/tools-ui.sh" ~/.local/lib/claude-craft/
 
-test-statusline: ## Lance les tests bats pour la status line (via Docker)
-	@echo "$(CYAN)Lancement des tests statusline...$(NC)"
-	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/StatusLine/tests/
+#===============================================================================
+# Tests
+#===============================================================================
 
-test-rtk: ## Lance les tests bats pour RTK (via Docker)
-	@echo "$(CYAN)Lancement des tests RTK...$(NC)"
-	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/RTK/tests/
+# Pattern rule pour tests bats
+BATS_RUN = docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/$*/tests/
 
-test-agent-teams: ## Lance les tests bats pour AgentTeams (via Docker)
-	@echo "$(CYAN)Lancement des tests AgentTeams...$(NC)"
-	@docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/AgentTeams/tests/
+test-%: ## Lance les tests bats pour un outil (ex: make test-tools)
+	@$(BATS_RUN)
 
-test-bats: test-tools test-statusline test-rtk test-agent-teams ## Lance tous les tests bats (via Docker)
-	@echo "$(GREEN)Tous les tests bats passes !$(NC)"
+test-bats: test-MultiAccount test-StatusLine test-RTK test-AgentTeams ## Lance tous les tests bats
 
 test-all: ## Lance tous les tests (vitest + bats)
-	@echo "$(CYAN)Lancement des tests vitest...$(NC)"
-	@npm test
-	@echo "$(CYAN)Lancement des tests bats...$(NC)"
-	@$(MAKE) test-bats
-	@echo "$(GREEN)Tous les tests passes !$(NC)"
-
-install-tools-lib: ## Installe la librairie partagee tools-ui.sh
-	@mkdir -p ~/.local/lib/claude-craft
-	@if [ -f "$(TOOLS_DIR)/lib/tools-ui.sh" ]; then \
-		cp "$(TOOLS_DIR)/lib/tools-ui.sh" ~/.local/lib/claude-craft/tools-ui.sh; \
-		echo "$(GREEN)✓$(NC) Librairie copiee: ~/.local/lib/claude-craft/tools-ui.sh"; \
-	fi
+	@npm test && $(MAKE) test-bats
 
 #===============================================================================
-# Installation depuis Configuration YAML
+# Configuration YAML
 #===============================================================================
 
-config-install: ## Installe un projet depuis la config YAML (PROJECT=nom)
-	@if [ -z "$(PROJECT)" ]; then \
-		echo "$(RED)Erreur: PROJECT non specifie$(NC)"; \
-		echo "Usage: make config-install PROJECT=nom-projet [CONFIG=fichier.yaml]"; \
-		$(SCRIPTS_DIR)/install-from-config.sh --list $(CONFIG) 2>/dev/null || true; \
-		exit 1; \
-	fi
-	@$(SCRIPTS_DIR)/install-from-config.sh --project $(PROJECT) $(OPTIONS) $(CONFIG)
+# Pattern rule pour config operations
+CONFIG_SCRIPT = $(SCRIPTS_DIR)/install-from-config.sh
 
-config-install-all: ## Installe TOUS les projets depuis la config YAML
-	@$(SCRIPTS_DIR)/install-from-config.sh $(OPTIONS) $(CONFIG)
-
-config-validate: ## Valide la configuration YAML sans installer
-	@$(SCRIPTS_DIR)/install-from-config.sh --validate $(CONFIG)
-
-config-list: ## Liste les projets definis dans la config YAML
-	@$(SCRIPTS_DIR)/install-from-config.sh --list $(CONFIG)
-
-config-dry-run: ## Simule l'installation depuis la config (PROJECT=nom optionnel)
-	@if [ -n "$(PROJECT)" ]; then \
-		$(SCRIPTS_DIR)/install-from-config.sh --dry-run --project $(PROJECT) $(OPTIONS) $(CONFIG); \
-	else \
-		$(SCRIPTS_DIR)/install-from-config.sh --dry-run $(OPTIONS) $(CONFIG); \
-	fi
-
-config-check: ## Verifie l'installation des projets configures
-	@if [ -n "$(PROJECT)" ]; then \
-		$(SCRIPTS_DIR)/check-config.sh --project $(PROJECT) $(CONFIG) || true; \
-	else \
-		$(SCRIPTS_DIR)/check-config.sh $(CONFIG) || true; \
-	fi
-
-config-check-fix: ## Verifie et propose de corriger les problemes
-	@if [ -n "$(PROJECT)" ]; then \
-		$(SCRIPTS_DIR)/check-config.sh --fix --project $(PROJECT) $(CONFIG); \
-	else \
-		$(SCRIPTS_DIR)/check-config.sh --fix $(CONFIG); \
-	fi
+config-%: ## Operations config YAML (install/install-all/validate/list)
+	@$(CONFIG_SCRIPT) --$* $(if $(PROJECT),--project $(PROJECT)) $(OPTIONS) $(CONFIG)
 
 #===============================================================================
-# Vérification de Migration
-#===============================================================================
-
-migrate-check: ## Verifie le statut de migration des projets
-	@echo "$(CYAN)Verification du statut de migration...$(NC)"
-	@echo ""
-	@for project in $$($(SCRIPTS_DIR)/install-from-config.sh --list $(CONFIG) 2>/dev/null | grep -E '^\s+-' | sed 's/.*- //'); do \
-		root=$$($(SCRIPTS_DIR)/install-from-config.sh --show-root $$project $(CONFIG) 2>/dev/null); \
-		if [ -d "$$root/.claude" ]; then \
-			version=$$(cat "$$root/.claude/.claude-craft-version" 2>/dev/null || echo "unknown"); \
-			has_hooks=$$([ -d "$$root/.claude/hooks" ] && echo "Y" || echo "N"); \
-			has_mcp=$$([ -f "$$root/.mcp.json" ] && echo "Y" || echo "N"); \
-			echo "  $(GREEN)$$project$(NC): v$$version | hooks:$$has_hooks | mcp:$$has_mcp"; \
-		fi \
-	done
-
-#===============================================================================
-# Export Plugin
+# Plugin Export
 #===============================================================================
 
 PLUGIN_OUTPUT ?= ./dist/plugins
-TECH ?=
 
-plugin-export: ## Exporte une technologie comme plugin (TECH=symfony)
-	@if [ -z "$(TECH)" ]; then \
-		echo "$(RED)Erreur: TECH non specifie$(NC)"; \
-		echo "Usage: make plugin-export TECH=symfony [RULES_LANG=fr] [PLUGIN_OUTPUT=./dist]"; \
-		exit 1; \
-	fi
-	@$(TOOLS_DIR)/PluginExport/export-plugin.sh --tech=$(TECH) --lang=$(RULES_LANG) $(PLUGIN_OUTPUT)
+plugin-export-%: ## Exporte une techno comme plugin (ex: make plugin-export-symfony)
+	@$(TOOLS_DIR)/PluginExport/export-plugin.sh --tech=$* --lang=$(RULES_LANG) $(PLUGIN_OUTPUT)
 
-plugin-export-all: ## Exporte toutes les technologies comme plugins
+plugin-export-all: ## Exporte toutes les technologies
 	@$(TOOLS_DIR)/PluginExport/export-plugin.sh --all --lang=$(RULES_LANG) $(PLUGIN_OUTPUT)
 
 #===============================================================================
 # Lister les Composants
 #===============================================================================
 
-list: list-agents list-commands ## Liste les agents et commandes disponibles
-
-list-agents: ## Liste les agents disponibles
-	@echo ""
-	@echo "$(CYAN)AGENTS DISPONIBLES (lang=$(RULES_LANG))$(NC)"
-	@echo ""
-	@for tech in Common Symfony Flutter Python React ReactNative Angular Laravel Vuejs PHP; do \
+list: ## Liste les agents et commandes disponibles
+	@echo "$(CYAN)AGENTS (lang=$(RULES_LANG))$(NC)" && \
+	for tech in Common $(shell echo $(TECHS) | tr ' ' '\n' | sed 's/.*/\u&/'); do \
 		dir="$(I18N_DIR)/$(RULES_LANG)/$$tech/agents"; \
-		if [ -d "$$dir" ]; then \
-			echo "$(YELLOW)$$tech:$(NC)"; \
-			ls -1 "$$dir"/*.md 2>/dev/null | xargs -r -I {} basename {} .md | sed 's/^/  - /'; \
-			echo ""; \
-		fi; \
-	done
-
-list-commands: ## Liste les commandes disponibles
-	@echo ""
-	@echo "$(CYAN)COMMANDES DISPONIBLES (lang=$(RULES_LANG))$(NC)"
-	@echo ""
-	@for tech in Common Workflow Team QA UIUX Symfony Flutter Python React ReactNative Angular Laravel Vuejs PHP Docker; do \
-		dir="$(I18N_DIR)/$(RULES_LANG)/$$tech/commands"; \
-		base_dir="$(I18N_DIR)/base/$$tech/commands"; \
-		prefix=$$(echo "$$tech" | tr '[:upper:]' '[:lower:]'); \
-		if [ -d "$$dir" ] || [ -d "$$base_dir" ]; then \
-			echo "$(YELLOW)/$$prefix:$(NC)"; \
-			{ ls -1 "$$dir"/*.md 2>/dev/null; ls -1 "$$base_dir"/*.md 2>/dev/null; } | xargs -r -I {} basename {} .md | sort -u | sed "s/^/  - \/$$prefix:/"; \
-			echo ""; \
-		fi; \
+		[ -d "$$dir" ] && echo "$(YELLOW)$$tech:$(NC)" && ls -1 "$$dir"/*.md 2>/dev/null | xargs -r -I {} basename {} .md | sed 's/^/  - /' || true; \
+	done && echo "" && echo "$(CYAN)COMMANDES$(NC)" && \
+	for tech in Common Workflow Team QA UIUX $(shell echo $(TECHS) | tr ' ' '\n' | sed 's/.*/\u&/'); do \
+		dir="$(I18N_DIR)/$(RULES_LANG)/$$tech/commands"; prefix=$$(echo "$$tech" | tr '[:upper:]' '[:lower:]'); \
+		[ -d "$$dir" ] && echo "$(YELLOW)/$$prefix:$(NC)" && ls -1 "$$dir"/*.md 2>/dev/null | xargs -r -I {} basename {} .md | sed "s|^|  - /$$prefix:|" || true; \
 	done
 
 #===============================================================================
@@ -451,52 +171,23 @@ list-commands: ## Liste les commandes disponibles
 #===============================================================================
 
 stats: ## Affiche les statistiques des composants
-	@echo ""
 	@echo "$(CYAN)STATISTIQUES (lang=$(RULES_LANG))$(NC)"
-	@echo ""
-	@for tech in Common Symfony Flutter Python React ReactNative Angular Laravel Vuejs PHP; do \
+	@for tech in Common $(shell echo $(TECHS) | tr ' ' '\n' | sed 's/.*/\u&/'); do \
 		agents=$$(ls -1 "$(I18N_DIR)/$(RULES_LANG)/$$tech/agents"/*.md 2>/dev/null | wc -l | tr -d ' '); \
 		cmds=$$(ls -1 "$(I18N_DIR)/$(RULES_LANG)/$$tech/commands"/*.md 2>/dev/null | wc -l | tr -d ' '); \
-		if [ "$$agents" -gt 0 ] || [ "$$cmds" -gt 0 ]; then \
-			printf "  $(GREEN)%-14s$(NC) agents: %s  commands: %s\n" "$$tech" "$$agents" "$$cmds"; \
-		fi; \
+		[ "$$agents" -gt 0 -o "$$cmds" -gt 0 ] && \
+		printf "  $(GREEN)%-14s$(NC) agents: %s  commands: %s\n" "$$tech" "$$agents" "$$cmds" || true; \
 	done
-	@echo ""
 
 check: ## Verifie que tous les scripts sont executables
 	@echo "$(CYAN)Verification des scripts...$(NC)"
-	@for script in $(SCRIPTS_DIR)/*.sh \
-		$(CURDIR)/Project/install-project-commands.sh \
-		$(CURDIR)/Infra/install-docker-rules.sh \
-		$(CURDIR)/Infra/install-coolify-rules.sh \
-		$(CURDIR)/Infra/install-kubernetes-rules.sh \
-		$(CURDIR)/Infra/install-opentofu-rules.sh \
-		$(CURDIR)/Infra/install-ansible-rules.sh \
-		$(CURDIR)/Infra/install-hcloud-rules.sh \
-		$(CURDIR)/Infra/install-pgbouncer-rules.sh \
-		$(CURDIR)/Infra/install-frankenphp-rules.sh; do \
-		if [ -f "$$script" ]; then \
-			if [ -x "$$script" ]; then \
-				echo "  $(GREEN)Y$(NC) $$script"; \
-			else \
-				echo "  $(RED)N$(NC) $$script (non executable)"; \
-			fi \
-		fi \
+	@find $(SCRIPTS_DIR) $(INFRA_DIR) $(PROJECT_DIR) -name "*.sh" -type f | while read script; do \
+		[ -x "$$script" ] && echo "  $(GREEN)✓$(NC) $$script" || echo "  $(RED)✗$(NC) $$script"; \
 	done
-	@echo ""
 
 fix-permissions: ## Rend tous les scripts executables
 	@echo "$(CYAN)Correction des permissions...$(NC)"
-	@find $(SCRIPTS_DIR) -name "*.sh" -exec chmod +x {} \;
-	@chmod +x $(CURDIR)/Project/install-project-commands.sh
-	@chmod +x $(CURDIR)/Infra/install-docker-rules.sh
-	@chmod +x $(CURDIR)/Infra/install-coolify-rules.sh
-	@chmod +x $(CURDIR)/Infra/install-kubernetes-rules.sh
-	@chmod +x $(CURDIR)/Infra/install-opentofu-rules.sh
-	@chmod +x $(CURDIR)/Infra/install-ansible-rules.sh
-	@chmod +x $(CURDIR)/Infra/install-hcloud-rules.sh
-	@chmod +x $(CURDIR)/Infra/install-pgbouncer-rules.sh
-	@chmod +x $(CURDIR)/Infra/install-frankenphp-rules.sh
+	@find $(SCRIPTS_DIR) $(INFRA_DIR) $(PROJECT_DIR) -name "*.sh" -exec chmod +x {} \;
 	@echo "$(GREEN)Permissions corrigees$(NC)"
 
 #===============================================================================
