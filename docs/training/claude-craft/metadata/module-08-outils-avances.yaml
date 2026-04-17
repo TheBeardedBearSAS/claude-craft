@@ -1,0 +1,18 @@
+title: "Module 8 — Outils Avancés"
+subtitle: "Jour 2 — Ralph, sprints autonomes et intégrations"
+author: "The Bearded Bear"
+date: "Février 2026"
+titlepage: true
+titlepage-color: "2D2926"
+titlepage-text-color: "FFFFFF"
+titlepage-rule-color: "D4A574"
+titlepage-rule-height: 0
+titlepage-background: "/data/assets/bg-gold.pdf"
+titlepage-logo: "/data/assets/logo.png"
+logo-width: 70mm
+toc: true
+toc-own-page: true
+lang: fr
+geometry: "margin=2.5cm"
+header-right: "The Bearded Bear"
+footer-left: "Module 8 — Jour 2"

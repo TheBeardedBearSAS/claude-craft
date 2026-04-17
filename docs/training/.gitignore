@@ -1,0 +1,11 @@
+# Pandoc template cache
+.pandoc/
+
+# Generated PDFs (regenerate with generate-pdf.sh)
+claude-craft/pdf/*.pdf
+claude-code/pdf/*.pdf
+
+# Compiled TikZ backgrounds (regenerate with generate-pdf.sh)
+assets/bg-*.pdf
+assets/*.aux
+assets/*.log

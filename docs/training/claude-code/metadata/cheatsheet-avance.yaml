@@ -1,0 +1,19 @@
+title: "Cheatsheet Avancé — Claude Code"
+subtitle: "MCP, Multi-Agent, TDD et Sécurité"
+author: "The Bearded Bear"
+date: "Février 2026"
+titlepage: true
+titlepage-color: "2D2926"
+titlepage-text-color: "FFFFFF"
+titlepage-rule-color: "4A90D9"
+titlepage-rule-height: 0
+titlepage-background: "/data/assets/bg-blue.pdf"
+titlepage-logo: "/data/assets/logo.png"
+logo-width: 70mm
+toc: true
+toc-own-page: true
+lang: fr
+geometry: "margin=2cm"
+fontsize: 10pt
+header-right: "The Bearded Bear"
+footer-left: "Cheatsheet Avancé"
