@@ -41,7 +41,7 @@ jobs:
       is_main_push: ${{ steps.version.outputs.is_main_push }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
 
       - name: Extract and validate version
         id: version
@@ -113,10 +113,10 @@ jobs:
     needs: validate
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@49933ea5288caeca8642195b8c39babe6eb30190 # pinned: v4.4.0
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -200,7 +200,7 @@ jobs:
     needs: validate
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
 
       - name: Run MultiAccount tests
         run: docker run --rm -v "${{ github.workspace }}/Tools:/mnt" bats/bats:latest /mnt/MultiAccount/tests/
@@ -224,10 +224,10 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@49933ea5288caeca8642195b8c39babe6eb30190 # pinned: v4.4.0
         with:
           node-version: '24'
           # No registry-url: avoids setup-node auto-setting NODE_AUTH_TOKEN which overrides OIDC
@@ -287,7 +287,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
         with:
           fetch-depth: 0
 
@@ -309,7 +309,7 @@ jobs:
           echo "${CHANGELOG}" > changelog.txt
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # pinned: v2.3.2
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}

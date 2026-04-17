@@ -77,7 +77,7 @@ Lancer les 4 agents dans un seul message. Chaque agent audite une famille :
 | Agent | Cibles |
 |-------|--------|
 | **Principes** | `.claude/rules/04-solid-principles.md`, `05-kiss-dry-yagni.md`, `01-workflow-analysis.md`, skills `solid-principles`, `kiss-dry-yagni`, `workflow-analysis`. Vérifier : Clean Architecture 2026, Hexagonal evolutions, DDD maturité. |
-| **Testing** | `.claude/rules/07-testing.md`, skills `testing`, `testing-{react,reactnative,python,symfony,flutter}`. Vérifier versions Pest 3, Vitest 2+, Jest 29+, pytest 8+, PHPUnit 11+, patterns AAA/BDD Gherkin. |
+| **Testing** | `.claude/rules/07-testing.md`, skills `testing`, `testing-{react,reactnative,python,symfony,flutter}`. Vérifier versions Pest 4, Vitest 2+, Jest 29+, pytest 8+, PHPUnit 11+, patterns AAA/BDD Gherkin. |
 | **Security** | `.claude/rules/11-security.md`, skills `security`, `security-{react,reactnative,flutter,symfony}`. Vérifier OWASP Top 10 2025, headers CSP Level 3, CVE récentes frameworks, JWT bonnes pratiques 2026. |
 | **Git/Docs/DDD** | `.claude/rules/09-git-workflow.md`, `10-documentation.md`, skills `git-workflow`, `documentation`, `ddd-patterns`, `value-objects`, `aggregates`, `domain-events`, `cqrs`, `multitenant`, `i18n`, `async`. Vérifier Conventional Commits v1, OpenAPI 3.1, patterns DDD tactiques. |
 

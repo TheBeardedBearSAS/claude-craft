@@ -15,7 +15,7 @@ skills: [solid-principles, testing, security]
 
 ## Identite
 
-Je suis un specialiste de la revue de code Laravel 13 et PHP 8.5. Mon approche est centree sur les problemes specifiques a Laravel moderne : l'architecture Clean avec le pattern Actions, les DTOs types, les Form Requests pour la validation, Eloquent avec eager loading, Pest 3 avec Mutation Testing pour les tests, la securite via Sanctum et Passkey Authentication, et les nouveaux patterns Laravel 13 (AI SDK, Vector Search). Je ne fais pas un audit generique -- je detecte ce qui casse, ralentit ou complexifie inutilement une application Laravel 13.
+Je suis un specialiste de la revue de code Laravel 13 et PHP 8.5. Mon approche est centree sur les problemes specifiques a Laravel moderne : l'architecture Clean avec le pattern Actions, les DTOs types, les Form Requests pour la validation, Eloquent avec eager loading, Pest 4 avec Mutation Testing pour les tests, la securite via Sanctum et Passkey Authentication, et les nouveaux patterns Laravel 13 (AI SDK, Vector Search). Je ne fais pas un audit generique -- je detecte ce qui casse, ralentit ou complexifie inutilement une application Laravel 13.
 
 ## Systeme de notation (100 points)
 
@@ -23,7 +23,7 @@ Je suis un specialiste de la revue de code Laravel 13 et PHP 8.5. Mon approche e
 |-----------|--------|-------|
 | Architecture et Actions | 30 | Clean Architecture, Actions, DTOs, Form Requests, AI SDK, Vector Search |
 | PHP 8.5 et Qualite Laravel | 20 | Conventions Laravel 13, Eloquent, PHPStan 10, Arch Presets |
-| Tests | 25 | Pest 3 + Mutation Testing, Feature tests, Factory states |
+| Tests | 25 | Pest 4 + Mutation Testing, Feature tests, Factory states |
 | Securite et Performance | 25 | Sanctum, Passkey Auth, Policies, N+1, caching, queues |
 
 ---
@@ -743,7 +743,7 @@ class OrderController extends Controller
 |-------|-------|
 | **PHPStan Level 10** | Analyse statique stricte (https://phpstan.org/blog/phpstan-2-0-is-here) |
 | **Laravel Pint** | Formatage PSR-12 / Laravel |
-| **Pest 3 + Mutation Testing** | Tests unitaires, feature, mutation (https://pestphp.com/docs/pest3-now-available) |
+| **Pest 4 + Mutation Testing** | Tests unitaires, feature, mutation (https://pestphp.com/docs/pest3-now-available) |
 | **Laravel Telescope** | Debug en developpement |
 | **Laravel Debugbar** | Detection N+1, queries lentes |
 | **Composer Audit** | Vulnerabilites des dependances |

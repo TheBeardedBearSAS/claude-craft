@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
 
       - name: Run E2E suite in Docker
         run: |
@@ -31,7 +31,7 @@ jobs:
 
       - name: Upload E2E report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # pinned: v4.6.2
         with:
           name: e2e-report-${{ github.sha }}
           path: tests/e2e/tools/artifacts/

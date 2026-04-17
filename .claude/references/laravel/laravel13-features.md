@@ -354,11 +354,11 @@ class PasskeyController extends Controller
 
 ---
 
-## Pest 3 Mutation Testing Intégré
+## Pest 4 Mutation Testing Intégré
 
 **Source :** https://pestphp.com/docs/pest3-now-available
 
-Laravel 13 recommande **Pest 3** avec le **Mutation Testing natif** pour garantir la qualité des tests.
+Laravel 13 recommande **Pest 4** avec le **Mutation Testing natif** pour garantir la qualité des tests.
 
 ### Installation
 
@@ -473,7 +473,7 @@ return [
 - [ ] AI SDK configuré pour OpenAI/Anthropic/Gemini
 - [ ] Vector Search avec pgvector pour RAG
 - [ ] Passkey Authentication activé dans Fortify
-- [ ] Pest 3 avec Mutation Testing >= 80%
+- [ ] Pest 4 avec Mutation Testing >= 80%
 - [ ] Arch Presets Laravel appliqués
 - [ ] PHPStan Level 10 (PHPStan 2.0)
 - [ ] Team Management configuré (si Jetstream)

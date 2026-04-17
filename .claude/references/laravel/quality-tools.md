@@ -535,8 +535,8 @@ exit 0
 
 | Metric | Threshold | Tool |
 |--------|-----------|------|
-| Code Coverage | ≥ 80% | PHPUnit/Pest 3 |
-| Mutation Score | ≥ 80% | Pest 3 Mutation Testing |
+| Code Coverage | ≥ 80% | PHPUnit/Pest 4 |
+| Mutation Score | ≥ 80% | Pest 4 Mutation Testing |
 | PHPStan Level | 10 | PHPStan 2.0 |
 | Cyclomatic Complexity | ≤ 10 | PHPStan |
 | Method Length | ≤ 20 lines | Pint rules |
@@ -588,7 +588,7 @@ arch('DTOs are readonly')
 - [ ] PHPStan level 10 passing (PHPStan 2.0)
 - [ ] Laravel Pint passing
 - [ ] Code coverage ≥ 80%
-- [ ] Mutation score ≥ 80% (Pest 3)
+- [ ] Mutation score ≥ 80% (Pest 4)
 - [ ] No debugging statements
 - [ ] Strict types declared
 - [ ] Architecture tests passing (Pest Arch Presets Laravel 13)

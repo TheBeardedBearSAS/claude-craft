@@ -10,6 +10,10 @@
           {
             "type": "command",
             "command": "INPUT=$(echo '$TOOL_INPUT' | jq -r '.command // empty'); if echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb|pl|bat|ps1)'; then echo \"BLOCKED: Downloading executable scripts is not allowed\" && exit 1; fi; if echo \"$INPUT\" | grep -qE '(curl|wget).*(-o|-O|>)'; then echo \"BLOCKED: Downloading files requires explicit approval\" && exit 1; fi; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "INPUT=$(echo '$TOOL_INPUT' | jq -r '.command // empty'); if echo \"$INPUT\" | grep -qE 'rm[[:space:]]+-[^[:space:]]*r[^[:space:]]*f[^[:space:]]*[[:space:]]*(~|/|\\.)'; then echo \"BLOCKED: Destructive rm command detected\" && exit 1; fi; if echo \"$INPUT\" | grep -qE '(mkfs|dd[[:space:]]+if=|:[[:space:]]*\\(\\)[[:space:]]*\\{[[:space:]]*:|chmod[[:space:]]+-?R?[[:space:]]*777|>[[:space:]]*/dev/(sd|null))'; then echo \"BLOCKED: Dangerous system command detected\" && exit 1; fi; exit 0"
           }
         ]
       },

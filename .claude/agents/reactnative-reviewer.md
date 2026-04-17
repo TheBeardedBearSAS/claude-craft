@@ -37,8 +37,8 @@ Je suis un spécialiste de la revue de code React Native 0.85 et Expo. Mon appro
 ```
 Le projet utilise-t-il la New Architecture (0.85+) ?
   NON --> CRITIQUE : migrer vers la New Architecture (obligatoire depuis 0.85)
-  OUI --> Reanimated 4.x est-il utilisé (pas Reanimated 3) ?
-    NON --> CRITIQUE : Reanimated 3 est incompatible avec la New Architecture
+  OUI --> Reanimated 4.x est-il utilisé (pas Reanimated 4) ?
+    NON --> CRITIQUE : Reanimated 4 est incompatible avec la New Architecture
     OUI --> Le projet utilise-t-il Expo Router pour la navigation ?
       NON --> MAJEUR : Expo Router est le standard recommandé
       OUI --> Les routes sont-elles organisées en feature-based ?
@@ -292,7 +292,7 @@ Le code utilise-t-il des bridges legacy ?
     OUI --> Les composants natifs utilisent-ils Fabric ?
       NON --> CRITIQUE si composant custom, MAJEUR si librairie tierce non migrée
       OUI --> Le projet utilise-t-il Reanimated 4.x (pas 3.x) ?
-        NON --> CRITIQUE : Reanimated 3 est incompatible avec la New Architecture
+        NON --> CRITIQUE : Reanimated 4 est incompatible avec la New Architecture
         OUI --> OK
 ```
 
@@ -300,7 +300,7 @@ Le code utilise-t-il des bridges legacy ?
 - **JSI synchrone par défaut** : tous les modules natifs doivent être JSI-compatible
 - **Shared Animation Backend** : un seul moteur d'animation (pas de double rendering)
 - **TurboModules matures** : plus de modules bridge-based tolérés
-- **Reanimated 4.x** : migration depuis Reanimated 3 obligatoire
+- **Reanimated 4.x** : migration depuis Reanimated 4 obligatoire
 
 **Sources :** [RN 0.85 Post-Bridge Era](https://criztec.com/react-native-0-85-defines-the-post-bridge-aeme/)
 
@@ -335,7 +335,7 @@ Animated.timing(opacity, {
   useNativeDriver: false, // PROBLÈME : JS thread
 }).start();
 
-// MAUVAIS : Reanimated 3 (incompatible New Architecture)
+// MAUVAIS : Reanimated 4 (incompatible New Architecture)
 import Animated from 'react-native-reanimated'; // v3.x
 
 // BON : Reanimated 4.x sur le UI thread (obligatoire RN 0.85+)
@@ -352,7 +352,7 @@ const animatedStyle = useAnimatedStyle(() => ({
 ```
 
 **Migrations obligatoires :**
-- **Reanimated 3 → 4.x** : API compatible mais build config différent
+- **Reanimated 4 → 4.x** : API compatible mais build config différent
 - **Shared Animation Backend** : un seul moteur depuis RN 0.85 (pas de rendering double)
 
 **Sources :** [Reanimated 4.x (NPM)](https://www.npmjs.com/package/react-native-reanimated)
@@ -540,7 +540,7 @@ import { format } from 'date-fns';
 
 - **Mobile-first** : chaque décision doit être évaluée du point de vue performance mobile (60 FPS, batterie, mémoire)
 - **New Architecture obligatoire** : adopter JSI synchrone, TurboModules et Fabric -- le bridge legacy est supprimé depuis React Native 0.85 (avril 2026)
-- **Reanimated 4.x obligatoire** : Reanimated 3 est incompatible avec la New Architecture. Migration vers Reanimated 4.x impérative pour les animations natives
+- **Reanimated 4.x obligatoire** : Reanimated 4 est incompatible avec la New Architecture. Migration vers Reanimated 4.x impérative pour les animations natives
 - **Shared Animation Backend** : React Native 0.85 unifie le moteur d'animation (un seul backend JS+native)
 - **Comportement avant implémentation** : tester ce que l'utilisateur voit et fait, pas comment le code fonctionne
 - **Type safety end-to-end** : du schéma API (Zod) jusqu'aux params de navigation
@@ -552,7 +552,7 @@ import { format } from 'date-fns';
 |----------|--------|--------------|
 | **Bridge legacy** | Supprimé officiellement | JSI synchrone par défaut |
 | **Modules natifs bridge-based** | Incompatibles | TurboModules (matures depuis 0.85) |
-| **Reanimated 3** | Incompatible New Architecture | **Reanimated 4.x obligatoire** |
+| **Reanimated 4** | Incompatible New Architecture | **Reanimated 4.x obligatoire** |
 | **React Navigation < 7** | Instable avec Expo Router | React Navigation 7.2.2+ ou Expo Router |
 
 **Sources :** [React Native 0.85 Post-Bridge Era](https://criztec.com/react-native-0-85-defines-the-post-bridge-aeme/), [Reanimated 4.x Release Notes](https://www.npmjs.com/package/react-native-reanimated)

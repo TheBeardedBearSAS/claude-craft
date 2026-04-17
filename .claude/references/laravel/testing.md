@@ -4,12 +4,12 @@
 
 ## Testing Frameworks
 
-### Pest 3 (Recommended) avec Mutation Testing
+### Pest 4 (Recommended) avec Mutation Testing
 
-**Pest 3** introduit le Mutation Testing natif pour garantir que les tests tuent réellement les bugs (https://pestphp.com/docs/pest3-now-available).
+**Pest 4** introduit le Mutation Testing natif pour garantir que les tests tuent réellement les bugs (https://pestphp.com/docs/pest3-now-available).
 
 ```bash
-# Install Pest 3
+# Install Pest 4
 composer require pestphp/pest --dev --with-all-dependencies
 composer require pestphp/pest-plugin-laravel --dev
 composer require pestphp/pest-plugin-mutate --dev
@@ -464,9 +464,9 @@ arch('Strict types declared')
     ->toUseStrictTypes();
 ```
 
-## Mutation Testing avec Pest 3
+## Mutation Testing avec Pest 4
 
-**Nouveauté Pest 3 :** Mutation Testing natif (https://pestphp.com/docs/mutation-testing).
+**Nouveauté Pest 4 :** Mutation Testing natif (https://pestphp.com/docs/mutation-testing).
 
 ```bash
 # Lancer le mutation testing
@@ -476,7 +476,7 @@ arch('Strict types declared')
 ./vendor/bin/pest --mutate --min=80
 ```
 
-**Principe :** Pest 3 mute le code (change les opérateurs, supprime des lignes) et vérifie que les tests échouent. Si un test passe sur du code muté, le test est insuffisant.
+**Principe :** Pest 4 mute le code (change les opérateurs, supprime des lignes) et vérifie que les tests échouent. Si un test passe sur du code muté, le test est insuffisant.
 
 ## Model Factories
 
@@ -550,4 +550,4 @@ class OrderFactory extends Factory
 - [ ] Event/Queue faking where appropriate
 - [ ] Coverage > 80%
 - [ ] No debugging statements in code
-- [ ] Mutation Testing score >= 80% (Pest 3)
+- [ ] Mutation Testing score >= 80% (Pest 4)

@@ -1,5 +1,7 @@
 # Svelte 5.x + SvelteKit 2.x - Quick Reference
 
+> ⚠️ **Experimental** — This stack is community-maintained and may not be up-to-date.
+
 ## Versions Requises (2026)
 
 | Composant | Version | Notes |

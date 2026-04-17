@@ -138,7 +138,7 @@ echo ""
 
 check "node" "Node.js 18+ for NPX and CLI" \
     "brew install node" \
-    "curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install -y nodejs" \
+    "sudo apt install nodejs npm" \
     "required"
 check_node_version
 
@@ -169,7 +169,7 @@ echo ""
 
 check "docker" "Container runtime" \
     "Download Docker Desktop from docker.com" \
-    "curl -fsSL https://get.docker.com | sudo sh" \
+    "sudo apt install docker.io docker-compose-v2" \
     "optional"
 
 check "jq" "JSON processor (for StatusLine)" \

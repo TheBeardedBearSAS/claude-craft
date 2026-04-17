@@ -619,7 +619,7 @@ npm install -g intelephense
 
 - [ ] Laravel Pint configured
 - [ ] PHPStan/Larastan at level 10 (PHPStan 2.0)
-- [ ] Pest 3 + Mutation Testing configured
+- [ ] Pest 4 + Mutation Testing configured
 - [ ] IDE Helper generated
 - [ ] Docker/Sail configured
 - [ ] CI/CD pipeline set up

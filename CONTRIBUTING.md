@@ -109,16 +109,23 @@ git push origin fix/issue-XXX
 
 ---
 
-## Release Cadence (Maintainers)
+## Release Cadence
 
-To protect maintainer bandwidth and community stability, Claude Craft follows a **maximum cadence of 1 release per week** (audit P1-08 / M-02).
+To protect maintainer bandwidth and community stability, Claude Craft follows a **maximum cadence of 1 release per week**.
 
 Exceptions:
-- Critical security fixes (CVE, supply-chain): ship immediately.
-- Hotfix for a documented regression: ship within 48h.
-- Any other change: batch into the weekly release.
+- Critical security fixes (CVE, supply-chain): ship immediately
+- Hotfix for a documented regression: ship within 48h
+- Any other change: batch into the weekly release
 
-This rule is non-negotiable and is enforced via the release checklist (`/common:release-checklist`).
+### Pre-Release Versions
+
+For major changes, use pre-release versions following SemVer:
+- **alpha** - Development initial, features incompletes
+- **beta** - Features completes, testing interne
+- **rc** - Release Candidate, pret pour production
+
+This rule is non-negotiable and is enforced via the release checklist (`/common:release-checklist`). See `docs/RUNBOOK.md` for the complete release process.
 
 ---
 
@@ -647,6 +654,21 @@ Before releasing a new version:
 8. [ ] Publish to npm
 
 ---
+
+## Supported Languages
+
+Claude Craft uses a tiered language support model:
+
+### Tier 1 (Actively Maintained)
+- **English (en)** - Primary language, always up-to-date
+- **French (fr)** - Fully maintained, updated with each release
+
+### Community-Maintained
+- **Spanish (es)** - Community contributions welcome, may not be up-to-date
+- **German (de)** - Community contributions welcome, may not be up-to-date
+- **Portuguese (pt)** - Community contributions welcome, may not be up-to-date
+
+Community-maintained languages are accepted but not guaranteed to be synchronized with the latest features. Contributors are encouraged to help keep these translations current.
 
 ## Adding Translations
 

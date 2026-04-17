@@ -16,10 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@49933ea5288caeca8642195b8c39babe6eb30190 # pinned: v4.4.0
         with:
           node-version: '22'
 
@@ -27,13 +27,13 @@ jobs:
         run: npm ci
 
       - name: Generate CycloneDX SBOM
-        uses: CycloneDX/gh-node-module-generatebom@v2
+        uses: CycloneDX/gh-node-module-generatebom@1ca7f1f39708e51cdcddd0e34e00e2a05b7ea73b # pinned: v2.0.0
         with:
           path: './'
           output: './claude-craft-sbom.json'
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # pinned: v4.6.2
         with:
           name: sbom-cyclonedx
           path: ./claude-craft-sbom.json
@@ -41,7 +41,7 @@ jobs:
 
       - name: Attach SBOM to release
         if: github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # pinned: v2.3.2
         with:
           files: ./claude-craft-sbom.json
         env:

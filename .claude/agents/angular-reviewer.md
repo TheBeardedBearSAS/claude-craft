@@ -46,7 +46,7 @@ L'etat est-il synchrone et utilise pour le rendu ?
 ### Arbre de decision : Standalone vs NgModule
 
 ```
-Le composant est-il dans un nouveau projet Angular 19 ?
+Le composant est-il dans un nouveau projet Angular 20 ?
   OUI --> CRITIQUE si pas standalone (c'est le defaut depuis v19)
   NON --> Le composant est-il dans un NgModule ?
     OUI --> Peut-il migrer vers standalone ?
@@ -285,7 +285,7 @@ Le composant a-t-il des tests ?
         NON --> MINEUR : ajouter des tests d'interaction
 ```
 
-### Principes de test Angular 19
+### Principes de test Angular 20
 
 **Tests avec Signals :**
 ```typescript
@@ -503,7 +503,7 @@ import { signal, computed } from '@angular/core';
 ## Format de rapport d'audit
 
 ```markdown
-# Rapport d'audit Angular 19 / TypeScript
+# Rapport d'audit Angular 20 / TypeScript
 
 ## Projet : [Nom du projet]
 **Date :** [Date]

@@ -27,7 +27,7 @@ jobs:
     name: File count parity (blocking)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
       - name: Check count parity
         run: bash scripts/verify-i18n-parity.sh
 
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
       - name: Check size ratio (threshold 0.80, strict mode)
         env:
           STRICT_SIZE: '1'

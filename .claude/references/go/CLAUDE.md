@@ -1,5 +1,7 @@
 # Go 1.24+ - Quick Reference
 
+> ⚠️ **Experimental** — This stack is community-maintained and may not be up-to-date.
+
 ## Versions Requises (2026)
 
 | Composant | Version | Notes |
