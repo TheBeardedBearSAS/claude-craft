@@ -1,0 +1,27 @@
+{
+  "name": "claude-craft-recommended",
+  "description": "Recommended Auto Mode profile for Claude Craft development",
+  "auto_approve": [
+    "npm test",
+    "npm run lint",
+    "npm run format",
+    "npm run test:coverage",
+    "vitest",
+    "shellcheck",
+    "git status",
+    "git diff",
+    "git log"
+  ],
+  "confirm": [
+    "git push",
+    "git commit",
+    "npm publish",
+    "make deploy"
+  ],
+  "block": [
+    "rm -rf",
+    "git push --force",
+    "git reset --hard",
+    "npm unpublish"
+  ]
+}

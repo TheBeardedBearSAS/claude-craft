@@ -1,0 +1,269 @@
+#compdef claude-craft
+# Claude Craft - Zsh Completion
+# Installation: copy to $fpath directory (e.g., /usr/local/share/zsh/site-functions/)
+
+_claude-craft() {
+    local -a namespaces
+    namespaces=(
+        'angular:Angular commands'
+        'common:Common commands'
+        'csharp:C# commands'
+        'flutter:Flutter commands'
+        'laravel:Laravel commands'
+        'php:PHP commands'
+        'python:Python commands'
+        'qa:QA commands'
+        'react:React commands'
+        'reactnative:React Native commands'
+        'symfony:Symfony commands'
+        'team:Team commands'
+        'uiux:UI/UX commands'
+        'vuejs:Vue.js commands'
+        'workflow:Workflow commands'
+    )
+
+    local -a angular_commands
+    angular_commands=(
+        'check-architecture:Check Angular architecture compliance'
+        'check-code-quality:Check Angular code quality'
+        'check-compliance:Check Angular compliance'
+        'check-security:Check Angular security'
+        'check-testing:Check Angular testing'
+        'generate-component:Generate Angular component'
+    )
+
+    local -a common_commands
+    common_commands=(
+        'add-technology:Add new technology stack'
+        'architecture-decision:Create ADR'
+        'audit-freshness:Audit documentation freshness'
+        'daily-standup:Daily standup report'
+        'generate-changelog:Generate CHANGELOG'
+        'getting-started:Getting started guide'
+        'init:Initialize Claude Craft'
+        'pack-repo:Pack repository for sharing'
+        'pre-commit-check:Pre-commit checks'
+        'pre-merge-check:Pre-merge checks'
+        'ralph-run:Run Ralph continuous loop'
+        'release-checklist:Release checklist'
+        'research-context7:Research with Context7'
+        'setup-ci:Setup CI/CD'
+        'setup-project-context:Setup project context'
+        'setup-rtk:Setup RTK token optimization'
+        'sub-agents-patterns:Sub-agents patterns'
+    )
+
+    local -a csharp_commands
+    csharp_commands=(
+        'check-architecture:Check C# architecture'
+        'check-code-quality:Check C# code quality'
+        'check-compliance:Check C# compliance'
+        'check-security:Check C# security'
+        'check-testing:Check C# testing'
+        'generate-feature:Generate C# feature'
+    )
+
+    local -a flutter_commands
+    flutter_commands=(
+        'analyze-performance:Analyze Flutter performance'
+        'check-architecture:Check Flutter architecture'
+        'check-code-quality:Check Flutter code quality'
+        'check-compliance:Check Flutter compliance'
+        'check-security:Check Flutter security'
+        'check-testing:Check Flutter testing'
+        'generate-feature:Generate Flutter feature'
+        'generate-widget:Generate Flutter widget'
+        'golden-update:Update golden tests'
+        'localization-check:Check localization'
+    )
+
+    local -a laravel_commands
+    laravel_commands=(
+        'check-architecture:Check Laravel architecture'
+        'check-code-quality:Check Laravel code quality'
+        'check-compliance:Check Laravel compliance'
+        'check-security:Check Laravel security'
+        'check-testing:Check Laravel testing'
+        'generate-controller:Generate Laravel controller'
+    )
+
+    local -a php_commands
+    php_commands=(
+        'check-architecture:Check PHP architecture'
+        'check-code-quality:Check PHP code quality'
+        'check-compliance:Check PHP compliance'
+        'check-security:Check PHP security'
+        'check-testing:Check PHP testing'
+    )
+
+    local -a python_commands
+    python_commands=(
+        'async-check:Check async/await usage'
+        'check-architecture:Check Python architecture'
+        'check-code-quality:Check Python code quality'
+        'check-compliance:Check Python compliance'
+        'check-security:Check Python security'
+        'check-testing:Check Python testing'
+        'dependency-audit:Audit dependencies'
+        'generate-endpoint:Generate API endpoint'
+        'generate-model:Generate model'
+        'type-coverage:Check type coverage'
+    )
+
+    local -a qa_commands
+    qa_commands=(
+        'fix:Fix failing test'
+        'recette:Run acceptance testing'
+        'regression:Regression testing'
+        'report:Generate QA report'
+        'status:QA status'
+        'tdd:TDD workflow'
+    )
+
+    local -a react_commands
+    react_commands=(
+        'accessibility-check:Check accessibility'
+        'bundle-analyze:Analyze bundle size'
+        'check-architecture:Check React architecture'
+        'check-code-quality:Check React code quality'
+        'check-compliance:Check React compliance'
+        'check-security:Check React security'
+        'check-testing:Check React testing'
+        'generate-component:Generate React component'
+        'generate-hook:Generate custom hook'
+        'storybook-story:Generate Storybook story'
+    )
+
+    local -a reactnative_commands
+    reactnative_commands=(
+        'app-size:Analyze app size'
+        'check-architecture:Check RN architecture'
+        'check-code-quality:Check RN code quality'
+        'check-compliance:Check RN compliance'
+        'check-security:Check RN security'
+        'check-testing:Check RN testing'
+        'deep-link:Setup deep linking'
+        'generate-screen:Generate screen'
+        'native-module:Generate native module'
+        'store-prepare:Prepare store submission'
+    )
+
+    local -a symfony_commands
+    symfony_commands=(
+        'api-endpoint:Generate API endpoint'
+        'check-architecture:Check Symfony architecture'
+        'check-code-quality:Check Symfony code quality'
+        'check-compliance:Check Symfony compliance'
+        'check-security:Check Symfony security'
+        'check-testing:Check Symfony testing'
+        'generate-command:Generate console command'
+        'generate-crud:Generate CRUD'
+        'migration-plan:Create migration plan'
+        'optimize-doctrine:Optimize Doctrine queries'
+    )
+
+    local -a team_commands
+    team_commands=(
+        'audit:Team audit'
+        'delivery:Delivery workflow'
+        'security:Security audit'
+        'sprint:Sprint planning'
+    )
+
+    local -a uiux_commands
+    uiux_commands=(
+        'a11y-audit:Accessibility audit'
+        'a11y-component:Accessible component'
+        'audit:UI/UX audit'
+        'component-spec:Component specification'
+        'design-tokens:Generate design tokens'
+        'generate-design-md:Generate DESIGN.md'
+        'orchestrator:UI/UX orchestrator'
+        'user-flow:User flow analysis'
+    )
+
+    local -a vuejs_commands
+    vuejs_commands=(
+        'check-architecture:Check Vue.js architecture'
+        'check-code-quality:Check Vue.js code quality'
+        'check-compliance:Check Vue.js compliance'
+        'check-security:Check Vue.js security'
+        'check-testing:Check Vue.js testing'
+        'generate-component:Generate Vue component'
+    )
+
+    local -a workflow_commands
+    workflow_commands=(
+        'analyze:Analyze workflow'
+        'design:Design phase'
+        'implement:Implementation phase'
+        'init:Initialize workflow'
+        'plan:Planning phase'
+        'retro:Retrospective'
+        'review:Review workflow'
+        'start:Start workflow'
+        'status:Workflow status'
+    )
+
+    _arguments -C \
+        '1:namespace:->namespaces' \
+        '2:command:->commands' \
+        '*::arg:->args'
+
+    case $state in
+        namespaces)
+            _describe 'namespaces' namespaces
+            ;;
+        commands)
+            case $words[2] in
+                angular)
+                    _describe 'angular commands' angular_commands
+                    ;;
+                common)
+                    _describe 'common commands' common_commands
+                    ;;
+                csharp)
+                    _describe 'csharp commands' csharp_commands
+                    ;;
+                flutter)
+                    _describe 'flutter commands' flutter_commands
+                    ;;
+                laravel)
+                    _describe 'laravel commands' laravel_commands
+                    ;;
+                php)
+                    _describe 'php commands' php_commands
+                    ;;
+                python)
+                    _describe 'python commands' python_commands
+                    ;;
+                qa)
+                    _describe 'qa commands' qa_commands
+                    ;;
+                react)
+                    _describe 'react commands' react_commands
+                    ;;
+                reactnative)
+                    _describe 'reactnative commands' reactnative_commands
+                    ;;
+                symfony)
+                    _describe 'symfony commands' symfony_commands
+                    ;;
+                team)
+                    _describe 'team commands' team_commands
+                    ;;
+                uiux)
+                    _describe 'uiux commands' uiux_commands
+                    ;;
+                vuejs)
+                    _describe 'vuejs commands' vuejs_commands
+                    ;;
+                workflow)
+                    _describe 'workflow commands' workflow_commands
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_claude-craft "$@"

@@ -1,215 +1,89 @@
 # Claude-Craft Rules Index
 
-## Project Context
+## Stack Overview (2026)
 
-**Stack**: .NET 10 LTS, C# 14, Clean Architecture, CQRS, MediatR, EF Core, xUnit
+.NET 10 LTS / C# 14 | Symfony 8 / PHP 8.5 | Flutter 3.41 / Dart 3.11 | React 19.2 | Laravel 13 | Python 3.14+
 
-**Versions 2026:**
-- .NET 10 LTS / C# 14 (Extension Members, Null-Conditional Assignment)
-- Symfony 8.0 / PHP 8.5 (Pipe operator, JSON Streamer, ObjectMapper)
-- Flutter 3.38 / Dart 3.10 (WebAssembly, MCP, Dot Shorthands)
-
-## Architecture Quick Reference
+## Architecture Layers
 
 ```
-src/
-├── Domain/        # NO external deps, private setters, Value Objects
-├── Application/   # CQRS via MediatR, FluentValidation, DTOs
-├── Infrastructure/# EF Core, external services
-└── WebAPI/        # Minimal APIs or Controllers
+WebAPI/Presentation → Infrastructure → Application → Domain (← INWARD ONLY)
 ```
 
-**Dependency Rule**: WebAPI → Infrastructure → Application → Domain (INWARD ONLY)
+**Domain**: NO external deps, Value Objects, private setters | **Application**: CQRS (MediatR/alternative), DTOs, validation | **Infrastructure**: DB, external services
 
 ## Coding Standards
 
-| Element | Convention | Example |
-|---------|-----------|---------|
-| Public | PascalCase | `GetOrderAsync` |
-| Private fields | _camelCase | `_orderRepository` |
-| Async | Suffix Async | `ProcessAsync` |
-| Params | camelCase | `orderId` |
+| Element | Convention | Always |
+|---------|-----------|--------|
+| Public | PascalCase | Pass `CancellationToken`, enable nullable |
+| Private | _camelCase | Async suffix: `ProcessAsync` |
+| Params | camelCase | Methods < 20 lines, complexity < 10 |
 
-**Always**: Pass `CancellationToken`, enable nullable reference types.
+## SOLID + KISS/DRY/YAGNI
 
-## SOLID Principles
+**SRP**: 1 reason to change | **OCP**: Extend via interfaces | **LSP**: Subtypes substitutable | **ISP**: < 5 methods/interface | **DIP**: Depend on abstractions
 
-- **S**RP: One reason to change per class
-- **O**CP: Open for extension, closed for modification (use interfaces)
-- **L**SP: Subtypes must be substitutable for base types
-- **I**SP: Small, focused interfaces (< 5 methods)
-- **D**IP: Depend on abstractions, not implementations
+**KISS**: < 10 complexity | **DRY**: Extract after 3 occurrences | **YAGNI**: Only what's required
 
-## KISS/DRY/YAGNI
+## Testing Pyramid
 
-- Methods < 20 lines, complexity < 10
-- No code duplication (extract after 3 occurrences)
-- Only implement what's explicitly required
+Unit 70% (< 1s) | Integration 20% (< 5s) | E2E 10% (< 30s) — **TDD**: RED → GREEN → REFACTOR
 
-## Testing Checklist
-
-| Type | Coverage | Speed |
-|------|----------|-------|
-| Unit | 70% | < 1s each |
-| Integration | 20% | < 5s each |
-| E2E | 10% | < 30s each |
-
-**TDD Cycle**: RED (failing test) → GREEN (minimal code) → REFACTOR
-
-**C# Stack**: xUnit + FluentAssertions + Moq + Bogus + Testcontainers
+**Stacks**: xUnit/FluentAssertions (C#), Pest 4 (PHP), Vitest 4 (JS/TS), pytest 8 (Python)
 
 ## Security Essentials
 
-- Validate ALL inputs server-side
-- Use parameterized queries (never concatenate SQL)
-- Policy-based authorization with `[Authorize(Policy = "...")]`
-- Secrets in Key Vault (never in code)
-- Security headers: CSP, X-Frame-Options, HSTS
+Server-side validation | Parameterized queries | Secrets in vault | CSP/HSTS headers | `[Authorize(Policy)]`
 
 ## Git Workflow
 
-**Conventional Commits**:
-```
-<type>(<scope>): <description>
+**Conventional Commits**: `<type>(<scope>): <description>` — Types: feat, fix, docs, refactor, perf, test  
+**Branches**: `feature/`, `fix/`, `refactor/`
 
-Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
-```
+## Analysis Workflow (Mandatory)
 
-**Branch naming**: `feature/`, `fix/`, `refactor/`, `docs/`
+1. Understand request → 2. Read affected files + deps → 3. Document impact/risks → 4. Validate if medium/high impact → 5. TDD first
 
-## Analysis Workflow
+## Technology References
 
-Before ANY code change:
-1. Understand the request
-2. Read affected files + dependencies
-3. Document: files impacted, risks, approach
-4. Validate with user if medium/high impact
-5. Write tests FIRST (TDD)
+| Stack | Path | Key Features |
+|-------|------|--------------|
+| **C# / .NET** | `@.claude/references/csharp/` | Extension Members, Span<T>, Clean Architecture |
+| **Symfony / PHP** | `@.claude/references/symfony/CLAUDE.md` | JSON Streamer, ObjectMapper, DDD |
+| **Flutter / Dart** | `@.claude/references/flutter/CLAUDE.md` | WASM, MCP, BLoC v9, Material 3 |
 
-## Technology Quick Links
+## Base Rules
 
-### C# / .NET 10 LTS
-See: `@.claude/references/csharp/`
-- Extension Members, Null-Conditional Assignment, Span<T>
+`workflow-analysis.md` | `solid-principles.md` | `kiss-dry-yagni.md` | `git-workflow.md` | `security.md` | `testing.md` | `documentation.md`
 
-### Symfony 8 / PHP 8.5
-See: `@.claude/references/symfony/CLAUDE.md`
-- JSON Streamer, ObjectMapper, Pipe operator
+## Tech-Specific Guides
 
-### Flutter 3.38 / Dart 3.10
-See: `@.claude/references/flutter/CLAUDE.md`
-- WebAssembly, MCP, Dot Shorthands
+**C#**: architecture, coding-standards, testing, security, tooling, quality-tools, aspire  
+**Symfony**: architecture, coding-standards, quality-tools, json-streamer, object-mapper  
+**Flutter**: coding-standards, wasm, mcp-integration, web-performance-2026
 
-## Full Documentation
+All in `@.claude/references/<tech>/`
 
-Access complete rules via `@.claude/references/`:
+## QA Recette Essentials
 
-### Base Principles
-- `base/workflow-analysis.md` - Mandatory analysis workflow
-- `base/solid-principles.md` - SOLID in depth
-- `base/kiss-dry-yagni.md` - Simplicity principles
-- `base/git-workflow.md` - Git & conventional commits
-- `base/documentation.md` - Doc standards
-
-### C# / .NET 10
-- `csharp/architecture.md` - Clean Architecture details
-- `csharp/coding-standards.md` - C# 14 conventions
-- `csharp/testing.md` - Testing patterns & frameworks
-- `csharp/security.md` - OWASP & .NET security
-- `csharp/tooling.md` - Dev environment setup
-- `csharp/quality-tools.md` - Analyzers & formatters
-- `csharp/aspire.md` - .NET Aspire cloud-native
-
-### Symfony 8 / PHP 8.5
-- `symfony/CLAUDE.md` - Quick reference
-- `symfony/architecture.md` - Clean Architecture DDD
-- `symfony/coding-standards.md` - PHP 8.5 standards
-- `symfony/quality-tools.md` - PHPStan 2.x, Rector 2.x, Deptrac v4
-- `symfony/json-streamer.md` - JSON Streamer Component
-- `symfony/object-mapper.md` - ObjectMapper Component
-- `symfony/service-container-2026.md` - Container 2026
-
-### Flutter 3.38 / Dart 3.10
-- `flutter/CLAUDE.md` - Quick reference
-- `flutter/coding-standards.md` - Dart 3.10 standards
-- `flutter/wasm.md` - WebAssembly compilation
-- `flutter/mcp-integration.md` - Model Context Protocol
-- `flutter/web-performance-2026.md` - Web performance
-
-## QA Recette Quick Reference
-
-### Essential Commands
+**Prerequisites**: Chrome extension v1.0.36+ | Claude Code `--chrome` or `/chrome`
 
 ```bash
-# Test a story
-/qa:recette --scope=story --id=US-001
-
-# Test with dry run first
-/qa:recette --scope=story --id=US-001 --dry-run
-
-# Resume interrupted session
-/qa:recette --resume=REC-xxx
-
-# Record execution as GIF
-/qa:recette --scope=story --id=US-001 --record-gif
-
-# Fix bugs from a recette session
-/qa:fix --session=REC-xxx
-
-# Dry run: refine and document without fixing
-/qa:fix --session=REC-xxx --dry-run
-
-# Fix only critical bugs
-/qa:fix --session=REC-xxx --severity=critical
-
-# Show all session statuses
-/qa:status --all
-
-# Check regression tests (Golden Rule violations)
-/qa:regression --check
-
-# Generate report from session
-/qa:report --session=REC-xxx
+/qa:recette --scope=story --id=US-001        # Test story
+/qa:recette --resume=REC-xxx                 # Resume session
+/qa:fix --session=REC-xxx --severity=critical # Fix critical bugs
+/qa:regression --check                       # Check Golden Rule
 ```
 
-### Prerequisites
+**Golden Rule**: A fixed bug should NEVER reappear → auto-generates regression tests
 
-1. Chrome extension v1.0.36+
-2. Claude Code with `--chrome` or `/chrome` command
-
-### Golden Rule
-
-> **A fixed bug should NEVER reappear.**
-
-All detected errors auto-generate regression tests:
-- Logic/Validation → Unit test
-- API/Service → Functional test
-- User flow → Behat feature
-
-### Output Structure
-
-```
-.recette/
-├── plans/           # Test plans
-├── sessions/        # Session states (resume)
-├── regression/      # Regression tests
-│   └── registry.yaml
-├── metrics/         # Historical data
-└── reports/         # Generated reports
-```
-
----
+**Output**: `.recette/` (plans, sessions, regression, metrics, reports)
 
 ## LSP Plugins
 
-| Stack | Plugin | Install |
-|-------|--------|---------|
-| PHP | `php-lsp` | `npm install -g intelephense` |
-| Python | `pyright-lsp` | `pip install pyright` |
-| TS/JS | `typescript-lsp` | `npm install -g @vtsls/language-server typescript` |
-| Dart | `dart-analyzer` | Flutter SDK |
-| C# | `csharp-lsp` | `dotnet tool install -g csharp-ls` |
+PHP: `php-lsp` | Python: `pyright-lsp` | TS/JS: `typescript-lsp` | Dart: `dart-analyzer` | C#: `csharp-lsp`
 
 Install: `/plugins install <name>@claude-plugins-official`
 
-> Full Claude Code version changelog: see `@.claude/COMPATIBILITY.md`
+> Full docs: `@.claude/COMPATIBILITY.md` | Technology details: `@.claude/references/<tech>/`
