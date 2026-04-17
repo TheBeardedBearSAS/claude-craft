@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
 
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6"
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-5"
   },
 
   "spinnerVerbs": {
@@ -51,6 +51,18 @@
   "plansDirectory": ".claude/plans",
 
   "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f .claude/context-essentials.md ]; then echo 'Context preserved for restoration after compaction'; else echo 'No context-essentials.md found'; fi",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "matcher": "compact",

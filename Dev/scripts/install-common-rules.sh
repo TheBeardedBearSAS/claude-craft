@@ -435,6 +435,9 @@ install_commands() {
     local namespaces="Common:common Workflow:workflow Team:team QA:qa UIUX:uiux"
     local found_any=false
 
+    # Temporarily set IFS to include space for word splitting
+    local OLD_IFS="$IFS"
+    IFS=' '
     for ns_pair in $namespaces; do
         local ns_source="${ns_pair%%:*}"
         local ns_target="${ns_pair##*:}"
@@ -451,10 +454,15 @@ install_commands() {
 
         if [[ -d "$base_commands" ]] || [[ -d "$lang_commands" ]]; then
             found_any=true
-            [[ -d "$base_commands" ]] && copy_directory "$base_commands" "$dest_commands" "*.md" "$exclude"
-            [[ -d "$lang_commands" ]] && copy_directory "$lang_commands" "$dest_commands" "*.md" "$exclude"
+            if [[ -d "$base_commands" ]]; then
+                copy_directory "$base_commands" "$dest_commands" "*.md" "$exclude"
+            fi
+            if [[ -d "$lang_commands" ]]; then
+                copy_directory "$lang_commands" "$dest_commands" "*.md" "$exclude"
+            fi
         fi
     done
+    IFS="$OLD_IFS"
 
     if ! $found_any; then
         if [[ -d "$SCRIPT_DIR/claude-commands/common" ]]; then
