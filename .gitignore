@@ -20,6 +20,8 @@ Thumbs.db
 
 docs/training/
 docs/marketing/
+docs/audit/
+audit/
 
 # Generated reports
 reports/
