@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.2.0] - 2026-04-17
+
+### Added — Audit Phase Actions (5 phases implemented)
+
+**New Agents (4):** `@chaos-engineer`, `@devex-engineer`, `@mlops-engineer`, `@observability-engineer`.
+
+**New Skills (7):** `api-gateway`, `edge-computing`, `event-driven`, `graphql`, `monorepo`, `observability`, `wasm`.
+
+**New Commands:** `/common:search` (fuzzy search across skills/commands/agents), `/common:aliases` (CLI aliases), `/common:getting-started` (interactive guided tour).
+
+**Shell Completions:** Bash, Zsh, Fish completions for `claude-craft` CLI.
+
+**Documentation:**
+- Shell completions README (`completions/README.md`)
+- Cheat sheet (`docs/CHEAT-SHEET.md`) and learning paths (`docs/LEARNING-PATHS.md`)
+- ISO 27001 gap analysis and SOC 2 gap analysis (`docs/compliance/`)
+- Enterprise features and pricing (`docs/enterprise/`)
+- MCP servers guide (`docs/mcp/MCP-SERVERS.md`)
+- Autonomous sprint guide (`docs/guides/AUTONOMOUS-SPRINT.md`)
+- RFC-001 QA Recette Standalone (`docs/rfc/`)
+- Eval framework for research (`docs/research/EVAL-FRAMEWORK.md`)
+
+**New Technology:** Paperclip reviewer agent added.
+
+### Changed
+
+- **Rules → Skills refactoring:** Moved detailed content from 6 rules into dedicated skills (async, cqrs, multitenant, workflow-analysis, git-workflow, documentation). Rules now contain concise quick references (~2.5K tokens) instead of full content (~20K tokens). Significant context window savings.
+- **Makefile slimmed** (~70% LOC reduction) — extracted infra targets to `Infra/Makefile`.
+- **INDEX.md** refactored for conciseness.
+- GitHub issue templates expanded (i18n, ADR, test types).
+- CI workflows added (e2e-tools, i18n-parity, mutation, sbom, slsa-provenance).
+
+### Fixed
+
+- Settings.json schema, spinnerVerbs and hooks corrected.
+
+### Removed
+
+- Internal audit documents removed from version control (added to `.gitignore`).
+
 ## [8.1.0] - 2026-04-15
 
 ### Added — `claude-craft kanban` (Kanban UI locale pour BMAD v6)

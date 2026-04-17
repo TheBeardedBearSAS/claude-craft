@@ -1,8 +1,8 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.0.1 | **Languages:** en, fr, es, de, pt
+**Version:** 8.2.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 67 agents, 214 commands across 27 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 72 agents, 211 commands across 26 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -50,9 +50,9 @@ Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-RE
 
 ---
 
-## Available Agents (67 agents)
+## Available Agents (72 agents)
 
-**Common** (16): `@api-designer`, `@database-architect`, `@devops-engineer`, `@performance-auditor`, `@refactoring-specialist`, `@tdd-coach`, `@uiux-orchestrator`, `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@research-assistant`, `@ralph-conductor`, `@security-auditor`, `@data-analyst`, `@migration-specialist`, `@cost-optimizer` | **Tech Reviewers** (10): `@{symfony,flutter,react,python,angular,laravel,vuejs,reactnative,csharp,php}-reviewer` | **Infrastructure** (41): Docker, Coolify, K8s, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP — see [Agents](../docs/AGENTS.md) | **Project** (2): `@product-owner`, `@tech-lead`
+**Common** (20): `@api-designer`, `@database-architect`, `@devops-engineer`, `@performance-auditor`, `@refactoring-specialist`, `@tdd-coach`, `@uiux-orchestrator`, `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@research-assistant`, `@ralph-conductor`, `@security-auditor`, `@data-analyst`, `@migration-specialist`, `@cost-optimizer`, `@chaos-engineer`, `@devex-engineer`, `@mlops-engineer`, `@observability-engineer` | **Tech Reviewers** (11): `@{symfony,flutter,react,python,angular,laravel,vuejs,reactnative,csharp,php,paperclip}-reviewer` | **Infrastructure** (39): Docker, Coolify, K8s, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP — see [Agents](../docs/AGENTS.md) | **Project** (2): `@product-owner`, `@tech-lead`
 
 Full reference: [Agents](../docs/AGENTS.md)
 
