@@ -42,7 +42,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (27 namespaces, 214 commands)
+## Available Commands (26 namespaces, 211 commands)
 
 Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*`, `/paperclip:*` | Infra (via `@devops-engineer`): Docker 29.4.0, Coolify v4.0.0-beta.470, K8s 1.35.3, OpenTofu 1.11.6, Ansible 2.20.4, FrankenPHP 1.12.1, PgBouncer 1.25.1 | Project: `/sprint:*`, `/gate:*`, `/project:*`
 

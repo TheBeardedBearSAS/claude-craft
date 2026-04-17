@@ -85,8 +85,8 @@ Total size: **~200-250 lines** (vs. full Claude Craft 10,000+ lines)
 |---------|-------------|-------------------|
 | **Rules** | Full 27 rules | Condensed 5 key rules |
 | **Skills** | 67+ skills | Skills documented (manual copy) |
-| **Commands** | 214 commands | Not available (native IDE commands) |
-| **Agents** | 67 agents | Not available |
+| **Commands** | 211 commands | Not available (native IDE commands) |
+| **Agents** | 72 agents | Not available |
 | **BMAD v6** | Full workflow | Principles documented |
 | **QA Recette** | Automated testing | Not available |
 | **Ralph Wiggum** | AI loop | Not available |

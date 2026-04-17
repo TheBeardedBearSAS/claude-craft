@@ -128,7 +128,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 214 commands across 27 namespaces.
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 211 commands across 26 namespaces.
 
 ## Installation
 
@@ -193,8 +193,8 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 214 commands |
-| [Agents](docs/AGENTS.md) | All 67 agents |
+| [Commands](docs/COMMANDS.md) | All 211 commands |
+| [Agents](docs/AGENTS.md) | All 72 agents |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |
 | [BMAD Guide](docs/BMAD-PRACTICAL-GUIDE.md) | Project management framework |

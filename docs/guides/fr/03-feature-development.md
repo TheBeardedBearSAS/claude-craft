@@ -638,7 +638,7 @@ Objectif : Score 90+/100
 
 ## Ressources Disponibles
 
-### Résumé des Agents (67 agents disponibles)
+### Résumé des Agents (72 agents disponibles)
 
 | Agent | Utilisation |
 |-------|-------------|

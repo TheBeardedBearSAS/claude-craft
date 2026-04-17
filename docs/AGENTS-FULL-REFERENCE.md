@@ -1,6 +1,6 @@
 # Agents Full Reference
 
-Complete reference for all 67 agents available in Claude Craft.
+Complete reference for all 72 agents available in Claude Craft.
 
 ---
 

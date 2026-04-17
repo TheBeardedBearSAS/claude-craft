@@ -5,8 +5,8 @@
 ### Community (MIT, Free)
 
 **Included:**
-- ✅ 214 commands across 27 namespaces
-- ✅ 67 specialized agents (common, tech-specific, infrastructure)
+- ✅ 211 commands across 26 namespaces
+- ✅ 72 specialized agents (common, tech-specific, infrastructure)
 - ✅ All skills (SOLID, TDD, security, git-workflow, atomic-tasks, etc.)
 - ✅ RTK integration (60-90% token savings)
 - ✅ BMAD v6 framework (Quick Flow, Standard, Enterprise tracks)

@@ -290,7 +290,7 @@ drwxr-xr-x  2 user user 4096 Jan 12 10:00 templates
 # Compter les règles
 ls .claude/rules/*.md | wc -l
 
-# Compter les agents (jusqu'à 67 agents disponibles selon le stack)
+# Compter les agents (jusqu'à 72 agents disponibles selon le stack)
 ls .claude/agents/*.md | wc -l
 
 # Compter les commandes (devrait avoir des sous-répertoires)

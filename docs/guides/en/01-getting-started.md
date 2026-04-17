@@ -8,8 +8,8 @@ Welcome to Claude-Craft! This guide will help you understand what Claude-Craft i
 
 Claude-Craft is a comprehensive framework for AI-assisted development with Claude Code. It provides:
 
-- **214+ Slash Commands** - Quick actions across 27 namespaces for code generation, analysis, and quality checks
-- **63 AI Agents** - Specialized assistants with optimized effort levels and persistent memory
+- **211+ Slash Commands** - Quick actions across 26 namespaces for code generation, analysis, and quality checks
+- **72 AI Agents** - Specialized assistants with optimized effort levels and persistent memory
 - **18 Technology Stacks** - From .NET/C# to Vue.js, with dedicated rules and agents
 - **41 Skills** - Architecture, testing, security best practices
 - **21 Templates** - Ready-to-use code patterns for common components
