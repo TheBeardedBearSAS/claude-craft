@@ -231,7 +231,10 @@ check_resource_availability() {
 
 # Get number of available slots
 get_available_slots() {
-    local active_count=${#PARALLEL_PIDS[@]}
+    local active_count=0
+    if [[ -v PARALLEL_PIDS ]]; then
+        active_count=${#PARALLEL_PIDS[@]}
+    fi
     local available=$((PARALLEL_MAX_CONCURRENT - active_count))
 
     # Further limit if resources are constrained
@@ -391,7 +394,12 @@ wait_all_sessions() {
     local start_time
     start_time=$(date +%s)
 
-    while [[ ${#PARALLEL_PIDS[@]} -gt 0 ]]; do
+    local active_count=0
+    if [[ -v PARALLEL_PIDS ]]; then
+        active_count=${#PARALLEL_PIDS[@]}
+    fi
+
+    while [[ $active_count -gt 0 ]]; do
         collect_completed_sessions > /dev/null
 
         # Check timeout
@@ -404,6 +412,12 @@ wait_all_sessions() {
         fi
 
         sleep 5
+
+        # Update active count
+        active_count=0
+        if [[ -v PARALLEL_PIDS ]]; then
+            active_count=${#PARALLEL_PIDS[@]}
+        fi
     done
 
     return 0
@@ -411,7 +425,11 @@ wait_all_sessions() {
 
 # Get active session count
 get_active_count() {
-    echo "${#PARALLEL_PIDS[@]}"
+    local count=0
+    if [[ -v PARALLEL_PIDS ]]; then
+        count=${#PARALLEL_PIDS[@]}
+    fi
+    echo "$count"
 }
 
 # =============================================================================

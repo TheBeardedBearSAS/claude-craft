@@ -155,8 +155,13 @@ teams_create_team() {
         _teams_log "Registered teammate: $dev_name (agent: dev)"
     done
 
+    local teammate_count=0
+    if [[ -v _TEAMS_TEAMMATES ]]; then
+        teammate_count="${#_TEAMS_TEAMMATES[@]}"
+    fi
+
     _teams_write_state "team_created"
-    _teams_log "Team created: $_TEAMS_TEAM_ID (${#_TEAMS_TEAMMATES[@]} teammates)"
+    _teams_log "Team created: $_TEAMS_TEAM_ID ($teammate_count teammates)"
 
     echo "$_TEAMS_TEAM_ID"
 }
@@ -288,8 +293,13 @@ teams_wait_completion() {
 
     _teams_require_init
 
+    local story_count=0
+    if [[ -v _TEAMS_STORY_ASSIGNMENT ]]; then
+        story_count="${#_TEAMS_STORY_ASSIGNMENT[@]}"
+    fi
+
     if [[ "$TEAMS_DRY_RUN" == "true" ]]; then
-        _teams_log "[DRY-RUN] Would wait for ${#_TEAMS_STORY_ASSIGNMENT[@]} active stories"
+        _teams_log "[DRY-RUN] Would wait for $story_count active stories"
         # Simulate instant completion in dry-run
         for story_id in "${!_TEAMS_STORY_ASSIGNMENT[@]}"; do
             teams_mark_completed "$story_id"
@@ -297,9 +307,9 @@ teams_wait_completion() {
         return 0
     fi
 
-    _teams_log "Waiting for ${#_TEAMS_STORY_ASSIGNMENT[@]} active stories..."
+    _teams_log "Waiting for $story_count active stories..."
 
-    while [[ ${#_TEAMS_STORY_ASSIGNMENT[@]} -gt 0 ]]; do
+    while [[ $story_count -gt 0 ]]; do
         # Check timeout
         if [[ $timeout -gt 0 ]]; then
             local elapsed=$(( $(date +%s) - start_time ))
@@ -313,6 +323,12 @@ teams_wait_completion() {
         teams_watchdog
 
         sleep "$TEAMS_WATCHDOG_INTERVAL"
+
+        # Update story count
+        story_count=0
+        if [[ -v _TEAMS_STORY_ASSIGNMENT ]]; then
+            story_count="${#_TEAMS_STORY_ASSIGNMENT[@]}"
+        fi
     done
 
     _teams_log "All stories completed"
@@ -354,8 +370,13 @@ teams_watchdog() {
     local now
     now=$(date +%s)
 
+    local story_count=0
+    if [[ -v _TEAMS_STORY_ASSIGNMENT ]]; then
+        story_count="${#_TEAMS_STORY_ASSIGNMENT[@]}"
+    fi
+
     if [[ "$TEAMS_DRY_RUN" == "true" ]]; then
-        _teams_log "[DRY-RUN] Watchdog check: ${#_TEAMS_STORY_ASSIGNMENT[@]} active assignments"
+        _teams_log "[DRY-RUN] Watchdog check: $story_count active assignments"
         return 0
     fi
 
@@ -520,8 +541,13 @@ teams_get_status() {
     local active_count
     active_count=$(teams_get_active_count 2>/dev/null || echo "0")
 
+    local teammate_count=0
+    if [[ -v _TEAMS_TEAMMATES ]]; then
+        teammate_count="${#_TEAMS_TEAMMATES[@]}"
+    fi
+
     local teammate_list="[]"
-    if [[ ${#_TEAMS_TEAMMATES[@]} -gt 0 ]]; then
+    if [[ $teammate_count -gt 0 ]]; then
         teammate_list="["
         local first=true
         for name in "${!_TEAMS_TEAMMATES[@]}"; do
@@ -530,6 +556,11 @@ teams_get_status() {
             teammate_list+="{\"name\":\"$name\",\"agent\":\"${_TEAMS_TEAMMATES[$name]}\",\"status\":\"${_TEAMS_TEAMMATE_STATUS[$name]:-unknown}\"}"
         done
         teammate_list+="]"
+    fi
+
+    local story_count=0
+    if [[ -v _TEAMS_STORY_ASSIGNMENT ]]; then
+        story_count="${#_TEAMS_STORY_ASSIGNMENT[@]}"
     fi
 
     cat << EOF
@@ -545,7 +576,7 @@ teams_get_status() {
         "assigned": $_TEAMS_STORIES_ASSIGNED,
         "completed": $_TEAMS_STORIES_COMPLETED,
         "failed": $_TEAMS_STORIES_FAILED,
-        "active": ${#_TEAMS_STORY_ASSIGNMENT[@]}
+        "active": $story_count
     },
     "watchdog": {
         "interval_seconds": $TEAMS_WATCHDOG_INTERVAL,
@@ -597,6 +628,10 @@ _teams_write_state() {
     fi
 
     local state_file="$_TEAMS_SESSION_DIR/state.yaml"
+    local active_count=0
+    if [[ -v _TEAMS_STORY_ASSIGNMENT ]]; then
+        active_count="${#_TEAMS_STORY_ASSIGNMENT[@]}"
+    fi
 
     cat > "$state_file" << EOF
 adapter_version: "$TEAMS_ADAPTER_VERSION"
@@ -610,7 +645,7 @@ stories:
   assigned: $_TEAMS_STORIES_ASSIGNED
   completed: $_TEAMS_STORIES_COMPLETED
   failed: $_TEAMS_STORIES_FAILED
-  active: ${#_TEAMS_STORY_ASSIGNMENT[@]}
+  active: $active_count
 watchdog:
   interval: $TEAMS_WATCHDOG_INTERVAL
   timeout: $TEAMS_WATCHDOG_TIMEOUT
