@@ -125,7 +125,7 @@ describe('v7.0.0 namespace integrity', () => {
 
   it('correct command counts per namespace', () => {
     const expected = {
-      'Dev/i18n/en/Common/commands': 13,
+      'Dev/i18n/en/Common/commands': 14,
       'Dev/i18n/en/Workflow/commands': 9,
       'Dev/i18n/en/Team/commands': 4,
       'Dev/i18n/en/QA/commands': 6,
