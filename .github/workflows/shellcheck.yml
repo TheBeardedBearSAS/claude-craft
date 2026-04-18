@@ -29,15 +29,16 @@ jobs:
             -v "$PWD:/mnt" \
             -w /mnt \
             koalaman/shellcheck-alpine:stable \
-            bash -c '
+            sh -c '
               set -e
-              mapfile -t files < <(find Tools Dev/scripts Infra .claude/hooks scripts hooks -name "*.sh" 2>/dev/null | grep -v "Tools/i18n/")
-              if [ ${#files[@]} -eq 0 ]; then
+              files=$(find Tools Dev/scripts Infra .claude/hooks scripts hooks -name "*.sh" 2>/dev/null | grep -v "Tools/i18n/" || true)
+              if [ -z "$files" ]; then
                 echo "No shell scripts to check"
                 exit 0
               fi
-              echo "Checking ${#files[@]} scripts with shellcheck -S error..."
-              shellcheck -S error -x "${files[@]}"
+              count=$(echo "$files" | wc -l)
+              echo "Checking $count scripts with shellcheck -S error..."
+              echo "$files" | xargs shellcheck -S error -x
             '
 
       - name: Harden enforcement (check set -euo pipefail)
