@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642195b8c39babe6eb30190 # pinned: v4.4.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # pinned: v4.4.0
         with:
           node-version: 20
           cache: npm
@@ -42,7 +42,7 @@ jobs:
         run: cd website && npx vitepress build
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@56afc609e74202f3d2f5de35e331c8678766e0d0 # pinned: v3.0.1
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # pinned: v3.0.1
         with:
           path: website/.vitepress/dist
 
@@ -57,7 +57,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642195b8c39babe6eb30190 # pinned: v4.4.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # pinned: v4.4.0
         with:
           node-version: 20
           cache: npm

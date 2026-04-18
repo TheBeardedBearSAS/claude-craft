@@ -29,7 +29,7 @@ jobs:
             -v "$PWD:/mnt" \
             -w /mnt \
             koalaman/shellcheck-alpine:stable \
-            sh -c '
+            bash -c '
               set -e
               mapfile -t files < <(find Tools Dev/scripts Infra .claude/hooks scripts hooks -name "*.sh" 2>/dev/null | grep -v "Tools/i18n/")
               if [ ${#files[@]} -eq 0 ]; then

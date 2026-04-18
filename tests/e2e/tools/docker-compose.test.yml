@@ -12,7 +12,9 @@ services:
       bash -c "
       set -e;
       apt-get update -qq && apt-get install -qq -y --no-install-recommends
-        bash curl jq git ca-certificates bats bc > /dev/null;
+        bash curl jq git ca-certificates bc > /dev/null;
+      git clone --depth 1 https://github.com/bats-core/bats-core.git /tmp/bats-core;
+      /tmp/bats-core/install.sh /usr/local;
       cd /workspace;
       echo '=== Running E2E test suites ===';
       bats tests/e2e/tools/statusline.bats

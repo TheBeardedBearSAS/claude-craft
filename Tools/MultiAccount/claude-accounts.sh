@@ -474,7 +474,7 @@ migrate_profile() {
 
     if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
         print_warning "${MSG_NO_PROFILE}"
-        return
+        return 0
     fi
 
     # List legacy profiles (without .mode file)
@@ -710,7 +710,7 @@ cmd_sync() {
 
     if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
         print_warning "${MSG_NO_PROFILE}"
-        return
+        return 0
     fi
 
     local synced=0
@@ -789,7 +789,7 @@ cmd_doctor() {
 
     if [[ ! -d "$CLAUDE_PROFILES_DIR" ]] || [[ -z "$(ls -A "$CLAUDE_PROFILES_DIR" 2>/dev/null)" ]]; then
         print_warning "${MSG_NO_PROFILE}"
-        return
+        return 0
     fi
 
     # Check shell RC for orphan aliases
