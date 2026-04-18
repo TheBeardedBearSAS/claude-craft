@@ -173,7 +173,7 @@ done
 # 1. PROFILE
 # -----------------------------------------------------------------------------
 get_profile() {
-    if [[ -n "$CLAUDE_CONFIG_DIR" ]]; then
+    if [[ -n "${CLAUDE_CONFIG_DIR:-}" ]]; then
         local profile_name="${CLAUDE_CONFIG_DIR##*/}"
         profile_name="${profile_name#.claude-}"
         profile_name="${profile_name#claude-}"
