@@ -309,7 +309,7 @@ jobs:
           echo "${CHANGELOG}" > changelog.txt
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # pinned: v2.3.2
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # pinned: v2.3.2
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
