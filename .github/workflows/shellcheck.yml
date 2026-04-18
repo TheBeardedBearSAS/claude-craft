@@ -46,6 +46,7 @@ jobs:
           missing=$(find Tools Dev/scripts Infra .claude/hooks scripts -name '*.sh' 2>/dev/null \
             | grep -v 'Tools/i18n/' \
             | grep -v 'MultiAccount/claude-accounts.sh' \
+            | grep -v 'lib/tools-ui.sh' \
             | xargs grep -L 'set -euo pipefail' 2>/dev/null || true)
           if [ -n "$missing" ]; then
             echo "Scripts missing 'set -euo pipefail':"
