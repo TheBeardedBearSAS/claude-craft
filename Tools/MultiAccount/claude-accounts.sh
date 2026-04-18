@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+# shellcheck disable=SC2310
 IFS=$'\n\t'
 # =============================================================================
 # Claude Code Multi-Account Manager
