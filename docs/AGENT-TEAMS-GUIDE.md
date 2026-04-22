@@ -6,9 +6,9 @@ Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordina
 
 | Requirement | Minimum Version | Check |
 |-------------|-----------------|-------|
-| Claude Code | v2.1.47+ (v2.1.107 recommended) | `claude --version` |
+| Claude Code | v2.1.47+ (v2.1.117 recommended) | `claude --version` |
 | Environment variable | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (must be enabled explicitly) | `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` |
-| Claude model | Opus 4.6 (recommended for leader) | Model selector in Claude Code |
+| Claude model | Opus 4.7 (recommended for leader) | Model selector in Claude Code |
 
 **Important:** Agent Teams is no longer always-on. You must explicitly enable it:
 
@@ -108,7 +108,7 @@ Each parallel agent incurs overhead from:
 
 | Model | Input ($/M tokens) | Output ($/M tokens) | Best For |
 |-------|--------------------|--------------------|----------|
-| Opus 4.6 | $5.00 | $25.00 | Team leader, complex reasoning |
+| Opus 4.7 | $5.00 | $25.00 | Team leader, complex reasoning |
 | Opus 4.6 (fast) | $30.00 | $150.00 | Fast mode leader (use with caution) |
 | Sonnet 4.6 | $3.00 | $15.00 | Worker agents, balanced cost/quality |
 | Haiku 4.5 | $1.00 | $5.00 | Cost-optimized workers, simple checks |

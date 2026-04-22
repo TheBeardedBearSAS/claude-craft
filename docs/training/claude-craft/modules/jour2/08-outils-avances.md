@@ -899,16 +899,17 @@ export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 - **Recherche + implementation** : Un agent explore, un autre implemente
 - **Sprint autonome** : Plusieurs stories traitees simultanement
 
-### Claude Opus 4.6 (v2.1.32+)
+### Claude Opus 4.7 (v2.1.111+)
 
-Le nouveau modele flagship avec des capacites etendues :
+Le modele flagship le plus recent avec des capacites etendues :
 
 | Caracteristique | Valeur |
 |-----------------|--------|
-| Model ID | `claude-opus-4-6` |
-| Contexte | 200K standard, 1M beta |
+| Model ID | `claude-opus-4-7` |
+| Contexte | 1M tokens (GA, sans premium) |
 | Output max | 128K tokens |
-| Adaptive thinking | Niveaux : low, medium, high, max |
+| Adaptive thinking | Niveaux : low, medium, high, **xhigh**, max |
+| Fast Mode | NON disponible (reste exclusif a Opus 4.6) |
 
 ---
 

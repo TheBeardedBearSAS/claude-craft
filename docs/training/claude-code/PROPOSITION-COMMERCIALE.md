@@ -54,7 +54,7 @@
 
 | Module | Durée | Contenu |
 |--------|-------|---------|
-| **1. Introduction Claude Code** | 1h30 | L'outil agentique : positionnement, cas d'usage, limites. Installation (CLI, Desktop, Web, IDE). Interface et navigation. Extended Thinking : quand et comment l'activer. Modèles disponibles (Opus 4.6, Sonnet 4.6, Haiku 4.5). Gestion des coûts et optimisation des tokens. |
+| **1. Introduction Claude Code** | 1h30 | L'outil agentique : positionnement, cas d'usage, limites. Installation (CLI, Desktop, Web, IDE). Interface et navigation. Adaptive Thinking : quand et comment l'activer. Modèles disponibles (Opus 4.7, Sonnet 4.6, Haiku 4.5, Opus 4.6 pour Fast Mode). Gestion des coûts et optimisation des tokens. |
 | **2. CLAUDE.md et Configuration** | 1h30 | Mémoire 3 niveaux (~/, projet, .claude/). CLAUDE.local.md pour les préférences individuelles. settings.json et configuration avancée. Permissions 3-tier (allow, deny, ask). .claudeignore : exclure fichiers et dossiers. Références @ : inclure des fichiers dans le contexte. |
 | **3. Patterns de Travail** | 2h | Prompt engineering pour Claude Code : structurer ses demandes. Plan Mode : planifier avant d'agir. Gestion du contexte : /clear, fenêtre de contexte, bonnes pratiques. Sub-agents : déléguer les investigations. Headless mode : exécution sans interaction. Sessions et checkpointing : sauvegarder et reprendre. Images : utiliser des captures d'écran comme contexte. Sandboxing : exécution sécurisée. |
 | **4. Pratique Guidée** | 2h | **Projet existant (1h)** : onboarding sur un codebase inconnu, refactoring guidé par Claude Code, debug et résolution de problèmes. **Projet vierge (1h)** : scaffolding d'un nouveau projet, génération de code et de tests, mise en place CI/CD avec Claude Code. |

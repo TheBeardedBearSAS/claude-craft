@@ -391,8 +391,8 @@ Resultat :
 |--------|-------------|-------------------|
 | **Haiku 4.5** | $ ($1/$5 par M tokens) | Taches simples, hooks prompt-based, formatage |
 | **Sonnet 4.6** | $$ ($3/$15 par M tokens) | Usage quotidien, features standard, debug |
-| **Opus 4.6** | $$$ ($5/$25 par M tokens) | Architecture complexe, agents, refactoring majeur |
-| **Opus 4.6 Fast** | $$$$ ($30/$150 par M tokens) | Urgences, generation rapide (6x le prix) |
+| **Opus 4.7** | $$$ ($5/$25 par M tokens) | Architecture complexe, flagship, effort `xhigh` |
+| **Opus 4.6 Fast** | $$$$ ($30/$150 par M tokens) | Urgences, generation rapide (6x le prix via `/fast`) |
 
 ### Regles d'optimisation
 
@@ -469,7 +469,7 @@ Realisez un cycle TDD complet avec Claude Code :
 6. **Auto Mode** (v2.1.94+) : classificateur IA de permissions pour les plans Team
 7. **Conventional Commits** et `gh pr create` standardisent le workflow Git
 8. **Le cout se gere** : modele adapte, contexte propre, prompts precis
-9. **Haiku 4.5 pour le simple, Sonnet 4.6 pour le quotidien, Opus 4.6 pour le complexe**
+9. **Haiku 4.5 pour le simple, Sonnet 4.6 pour le quotidien, Opus 4.7 pour le complexe**
 10. **Les boucles de verification** (tests, screenshots, outputs attendus) multiplient la qualite par 2-3x
 11. **/cost** pour surveiller la consommation en temps reel
 

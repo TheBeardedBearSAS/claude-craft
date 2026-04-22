@@ -27,7 +27,7 @@ All 22 common and reviewer agents now include optimized frontmatter with `effort
 
 | Model | Count | Agents |
 |-------|-------|--------|
-| **Opus 4.6** | 2 | product-owner, tech-lead |
+| **Opus 4.7** | 2 | product-owner, tech-lead |
 | **Sonnet 4.6** | 16 | api-designer, database-architect, devops-engineer, performance-auditor, refactoring-specialist, research-assistant, tdd-coach, uiux-orchestrator, ralph-conductor + 10 tech reviewers |
 | **Haiku 4.5** | 3 | ui-designer, ux-ergonome, accessibility-expert |
 

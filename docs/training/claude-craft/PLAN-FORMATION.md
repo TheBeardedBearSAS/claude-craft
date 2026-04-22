@@ -42,11 +42,11 @@
 
 **Contenu :**
 
-1. **Presentation de Claude Code 2.1.105** (20min)
+1. **Presentation de Claude Code 2.1.117** (20min)
    - Qu'est-ce que Claude Code ? (CLI officiel Anthropic)
    - Difference avec ChatGPT, GitHub Copilot
-   - Nouveautes 2.1.105 : Extended Thinking, MCP, Sub-agents, Permissions 3-tier, Fast Mode, Agent Teams
-   - Modeles disponibles : Sonnet 4.5 (rapide), Opus 4.6 (flagship), Opus 4.5 (puissant), Haiku (leger)
+   - Nouveautes 2.1.117 : Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Fast Mode (Opus 4.6), Agent Teams, Native CLI binary, Forked subagents
+   - Modeles disponibles : Sonnet 4.6 (rapide), Opus 4.7 (flagship), Opus 4.6 (Fast Mode via `/fast`), Haiku 4.5 (leger)
 
 2. **Installation et configuration** (20min)
    - Installation via npm : `npm install -g @anthropic-ai/claude-code`

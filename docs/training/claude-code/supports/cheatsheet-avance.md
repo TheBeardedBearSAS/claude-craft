@@ -354,7 +354,8 @@ test(user): add email validation tests
 |--------|-------|--------|-----------|
 | Haiku 4.5 | $1/M | $5/M | - |
 | Sonnet 4.6 | $3/M | $15/M | - |
-| Opus 4.6 | $5/M | $25/M | $30/$150/M |
+| Opus 4.7 | $5/M | $25/M | - (Fast Mode non disponible) |
+| Opus 4.6 | $5/M | $25/M | $30/$150/M (via `/fast`) |
 
 ### Commandes de suivi
 

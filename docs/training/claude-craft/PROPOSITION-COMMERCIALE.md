@@ -11,7 +11,7 @@
 
 | Composant | Version | Points forts |
 |-----------|---------|--------------|
-| Claude Code | 2.1.105 | Extended Thinking, MCP, Permissions, Task Management, Opus 4.6, Agent Teams, Auto Mode, 24 Hooks |
+| Claude Code | 2.1.117 | Adaptive Thinking, MCP, Permissions, Task Management, Opus 4.7 (+ Opus 4.6 Fast Mode), Agent Teams, Auto Mode, Native CLI binary, Forked subagents |
 | Claude-Craft | 7.26.0 | BMAD v6, Ralph, QA Recette, 63 agents, 204 commands, RTK token optimization |
 
 ---

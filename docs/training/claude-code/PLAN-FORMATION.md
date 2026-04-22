@@ -95,20 +95,22 @@
 4. **Modèles et coût** (20min)
    - Modèles disponibles et positionnement :
      - **Sonnet 4.6** (défaut) : équilibre vitesse/intelligence, usage quotidien, 200K tokens (1M en beta)
-     - **Opus 4.6** (flagship) : modèle le plus puissant, 1M tokens, raisonnement complexe
+     - **Opus 4.7** (flagship) : modèle le plus puissant, 1M tokens GA, raisonnement complexe, effort `xhigh`
+     - **Opus 4.6** : utilisé exclusivement par Fast Mode (`/fast`), 2.5x plus rapide, 6x le coût
      - **Haiku 4.5** : léger et rapide, tâches simples, prompt-based hooks, 200K tokens
    - Changer de modèle :
-     - `/model` en session interactive
-     - `/fast` pour basculer Opus 4.6 en mode rapide
+     - `/model` en session interactive (defaults to Opus 4.7)
+     - `/fast` pour basculer sur Opus 4.6 Fast Mode
      - `--model` en ligne de commande
-   - Extended Thinking :
-     - Automatique avec Opus 4.6 (adaptive thinking)
+   - Extended Thinking / Adaptive Thinking :
+     - Adaptive thinking automatique avec Opus 4.7 (extended thinking retiré)
+     - Extended Thinking toujours disponible sur Opus 4.6
      - Mots-clés héritage (`think`, `think hard`, etc.) : dépréciés mais fonctionnels
-     - `/effort` (low/medium/high) pour contrôler la profondeur
+     - `/effort` (low/medium/high/**xhigh**/max) pour contrôler la profondeur
      - `/think` pour forcer la réflexion
    - Monitoring et pricing :
      - `/cost` pour le suivi en temps réel
-     - Context window : 200K (Sonnet 4.6/Haiku 4.5) à 1M tokens (Opus 4.6)
+     - Context window : 200K (Sonnet 4.6/Haiku 4.5) à 1M tokens (Opus 4.6/4.7)
      - Statusline affiche le % de contexte utilisé
      - Stratégies d'optimisation des coûts
 
@@ -877,7 +879,7 @@
    - Choix du modèle selon la tâche :
      - Haiku 4.5 pour tâches simples et répétitives ($1/$5 par M tokens)
      - Sonnet 4.6 pour usage quotidien ($3/$15 par M tokens)
-     - Opus 4.6 pour raisonnement complexe ($5/$25 par M tokens)
+     - Opus 4.7 pour raisonnement complexe ($5/$25 par M tokens)
    - Budget d'équipe et monitoring
 
 **Support :** `modules/jour2/08-qualite-securite.md`
@@ -1124,10 +1126,11 @@ Ce plan est adaptable selon :
 | **Slack Integration** | M1 | Mentionnée |
 | **Chrome Extension** | M1 | Mentionnée |
 | **Commandes de base** (`/help`, `/clear`, `/exit`) | M1 | Complète |
-| **Extended Thinking** (automatique Opus 4.6, `/effort`) | M1 | Complète |
+| **Adaptive Thinking** (automatique Opus 4.7, `/effort` low/medium/high/**xhigh**/max) | M1 | Complète |
 | **`/think` pour forcer réflexion** | M1 | Complète |
 | **Modèle Sonnet 4.6** | M1 | Complète |
-| **Modèle Opus 4.6** | M1 | Complète |
+| **Modèle Opus 4.7** (flagship) | M1 | Complète |
+| **Modèle Opus 4.6** (Fast Mode uniquement) | M1 | Complète |
 | **Modèle Haiku 4.5** | M1, M5 | Complète |
 | **`/model` changement modèle** | M1 | Complète |
 | **`/fast` Fast Mode** | M3 | Complète |

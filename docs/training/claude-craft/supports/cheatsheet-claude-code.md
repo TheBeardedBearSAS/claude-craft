@@ -306,23 +306,26 @@ Wildcards: Bash(*-h*), Write(src/**)
 
 | Modele | Caracteristiques | Usage |
 |--------|------------------|-------|
-| **Sonnet 4.5** | Rapide, defaut | Quotidien |
-| **Opus 4.6** | Flagship, 1M ctx (beta) | Complexe |
-| **Haiku** | Leger, economique | Simple |
+| **Sonnet 4.6** | Rapide, defaut | Quotidien |
+| **Opus 4.7** | Flagship actuel, 1M ctx GA, effort `xhigh` | Complexe |
+| **Opus 4.6** | Fast Mode uniquement (/fast) | Urgences |
+| **Haiku 4.5** | Leger, economique | Simple |
 
 ## Limites de contexte
 
-- Sonnet 4.5 / Haiku : ~200K tokens
-- Opus 4.6 : 200K standard, 1M (beta)
-- Opus 4.6 output max : 128K tokens
+- Sonnet 4.6 / Haiku 4.5 : ~200K tokens
+- Opus 4.7 : 1M tokens (GA, sans premium de prix)
+- Opus 4.6 : 1M tokens
+- Output max : 128K tokens (Opus 4.6/4.7)
 
 ## Tarification (2026)
 
 | Modele | Input | Output |
 |--------|-------|--------|
-| Sonnet 4.5 | $3/M | $15/M |
+| Sonnet 4.6 | $3/M | $15/M |
+| Opus 4.7 | $5/M | $25/M |
 | Opus 4.6 | $5/M | $25/M |
-| Haiku | $0.25/M | $1.25/M |
+| Haiku 4.5 | $1/M | $5/M |
 | Opus 4.6 Fast | $30/M | $150/M |
 
 ---

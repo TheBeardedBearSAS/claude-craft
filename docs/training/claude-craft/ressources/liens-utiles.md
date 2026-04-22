@@ -24,7 +24,8 @@
 
 ### Nouvelles fonctionnalités
 
-- **Claude Opus 4.6** : Nouveau modèle flagship - 200K context (1M beta), 128K output, adaptive thinking
+- **Claude Opus 4.7** : Modèle flagship actuel (2026-04-16) - 1M context GA, 128K output, adaptive thinking, effort `xhigh`
+- **Claude Opus 4.6** : Réservé à Fast Mode (`/fast`), 2.5x plus rapide, 6x le coût
 - **Agent Teams** (Research Preview) : Coordination multi-agents avec Teammate/SendMessage tools
 - **Automatic Memory** : Enregistrement auto de la mémoire de session
 - **Extended Thinking** : think / think hard / think harder / ultrathink

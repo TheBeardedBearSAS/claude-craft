@@ -220,7 +220,7 @@ Les skills sont des fichiers markdown avec un frontmatter YAML définissant les 
 ---
 name: testing
 description: Testing - TDD/BDD principles. Use when writing tests.
-model: claude-opus-4-6
+model: claude-opus-4-7
 tools:
   - Read
   - Grep

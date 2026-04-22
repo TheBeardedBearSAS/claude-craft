@@ -129,8 +129,8 @@ claude
 
 - Claude Code est un **agent autonome**, pas un simple chatbot
 - **7 interfaces** disponibles : CLI, VS Code, JetBrains, Desktop, Web, Slack, Chrome
-- **3 modeles** : Sonnet (quotidien), Opus (complexe), Haiku (economique)
-- Extended Thinking est **automatique** avec Opus 4.6
+- **4 modeles** : Sonnet 4.6 (quotidien), Opus 4.7 (complexe, flagship), Opus 4.6 (Fast Mode), Haiku 4.5 (economique)
+- Adaptive Thinking est **automatique** avec Opus 4.7
 - Surveiller ses couts avec `/cost` et `/status`
 
 \newpage

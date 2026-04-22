@@ -1,7 +1,7 @@
 # Claude Code Compatibility
 
 **Minimum Version**: 2.1.47
-**Recommended Version**: 2.1.107
+**Recommended Version**: 2.1.117
 
 This document tracks Claude Code features and version compatibility for claude-craft.
 
@@ -782,3 +782,118 @@ Internal improvements and bug fixes. No major public features documented.
 ### Source Code Leak Incident (v2.1.88)
 
 On March 31, 2026, the full source code of Claude Code was exposed via the public npm package v2.1.88 due to a missing `.npmignore` exclusion for Bun-generated source maps (59.8 MB `.map` file). Patched in v2.1.89.
+
+---
+
+## Claude Opus 4.7 Support (v2.1.111+)
+
+Released 2026-04-16. Latest flagship model, now the default for `/model opus`.
+
+| Capability | Value |
+|------------|-------|
+| Model ID | `claude-opus-4-7` |
+| Context window | 1M tokens (GA, no pricing premium) |
+| Max output | 128K tokens |
+| Pricing | $5 / $25 per M tokens (same rate card as Opus 4.6) |
+| Tokenizer | New tokenizer — 1.0–1.35x tokens vs Opus 4.6 |
+| Effort levels | `low` / `medium` / `high` / **`xhigh`** (new) / `max` |
+| Thinking modes | **Adaptive only** (extended thinking removed) |
+| Sampling params | `temperature`, `top_p`, `top_k` **removed** (400 error if set) |
+| Image resolution | 2576px / 3.75MP (up from 1568px / 1.15MP on Opus 4.6) |
+| Fast Mode | **NOT available** — Fast Mode remains Opus 4.6 exclusive |
+| Knowledge cutoff | January 2026 |
+
+**Default model policy (v2.1.111+):**
+- `/model opus` → Opus 4.7 (default)
+- `/fast` → Opus 4.6 Fast Mode (2.5x speed, 6x cost)
+- Breaking: default effort for Pro/Max subscribers on Opus 4.6/Sonnet 4.6 now `high` (was `medium`)
+
+**Migration notes:**
+- Scripts setting sampling params on Opus 4.7 will get HTTP 400 — remove `temperature`/`top_p`/`top_k` calls
+- Token budgets may need adjustment — new tokenizer can produce up to 35% more tokens for the same input
+- Extended thinking UX changed: summarized output is now opt-in via `display: "summarized"`
+
+Source: [Claude Opus 4.7 announcement](https://www.anthropic.com/news/claude-opus-4-7)
+
+---
+
+## Claude Code v2.1.108 – v2.1.117
+
+### v2.1.108 (2026-04-14)
+
+| Feature | Description |
+|---------|-------------|
+| Prompt caching env vars | `ENABLE_PROMPT_CACHING_1H`, `FORCE_PROMPT_CACHING_5M` |
+| `/recap` | Summarize session progress |
+| `/undo` | Alias for `/rewind` |
+| Skill tool slash commands | Model can invoke built-in slash commands via Skill tool |
+| Agent tool permission fix | Agent tool permission fix in auto mode |
+
+### v2.1.110 (2026-04-15)
+
+| Feature | Description |
+|---------|-------------|
+| `/tui` command | New terminal UI command + `tui` setting |
+| Push notification tool | System-level push notifications |
+| Session recap | For users with telemetry disabled |
+| **Security** | `PermissionRequest` hooks re-checked against `permissions.deny` |
+| **Security** | `setMode:'bypassPermissions'` fixes |
+
+### v2.1.111 (2026-04-16) — **Opus 4.7 Launch**
+
+| Feature | Description |
+|---------|-------------|
+| **Opus 4.7 support** | New `claude-opus-4-7` model ID |
+| **`xhigh` effort level** | New effort tier for Opus 4.7 |
+| `/effort` slider | Interactive effort level picker |
+| `/less-permission-prompts` | Skill to reduce permission prompts |
+| `/ultrareview` | Parallel multi-agent code review |
+| Auto mode on Opus 4.7 | Available for Max subscribers |
+| Windows PowerShell tool | `CLAUDE_CODE_USE_POWERSHELL_TOOL` rollout |
+| Read-only bash with globs | No longer prompt |
+| **Breaking** | Default effort for Pro/Max on Opus 4.6/Sonnet 4.6 → `high` |
+| **Security** | `/dev/tcp` and `/dev/udp` redirects now prompt |
+
+### v2.1.112 (2026-04-16)
+
+Fix "claude-opus-4-7 is temporarily unavailable" in auto mode.
+
+### v2.1.113 (2026-04-17)
+
+| Feature | Description |
+|---------|-------------|
+| **Native CLI binary** | Spawned instead of bundled JavaScript |
+| `sandbox.network.deniedDomains` | New setting for network sandbox |
+| New commands | `/btw`, `/hooks`, `/reload-plugins`, `/proactive` |
+| **Security** | Bash deny rules match `env`/`sudo`/`watch` wrappers |
+| **Security** | `find -exec`/`-delete` protection |
+| **Security** | macOS dangerous paths protection |
+| **Security** | UI-spoofing vector closed |
+
+### v2.1.114 (2026-04-18)
+
+Fix crash in permission dialog for agent teams.
+
+### v2.1.116 (2026-04-20)
+
+| Feature | Description |
+|---------|-------------|
+| `/resume` 67% faster | On sessions > 40MB |
+| Thinking spinner | Inline progress during long operations |
+| `/reload-plugins` auto-install | Automatically installs missing dependencies |
+| **Security** | Sandbox auto-allow no longer bypasses dangerous-path safety check for `rm`/`rmdir` |
+
+### v2.1.117 (2026-04-22)
+
+| Feature | Description |
+|---------|-------------|
+| Forked subagents | `CLAUDE_CODE_FORK_SUBAGENT=1` for isolated subagent contexts |
+| `/resume` stale-session summarization | Offers to summarize very large stale sessions |
+| Concurrent MCP connections | Default now — faster startup |
+| Advisor Tool | Experimental |
+| Retention sweep expansion | Covers `tasks/`, `shell-snapshots/`, `backups/` |
+| Native build `Glob`/`Grep` | Replaced by embedded `bfs`/`ugrep` |
+| Default effort change | Pro/Max on Opus 4.6 and Sonnet 4.6 now `high` (was `medium`) |
+| **Security** | OAuth token refresh on 401, malware warning fix |
+
+Source: [Claude Code Changelog](https://code.claude.com/docs/en/changelog)

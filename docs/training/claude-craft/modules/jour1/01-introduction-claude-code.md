@@ -122,10 +122,10 @@ Nouveautés majeures incluent (par ordre de version) :
 
 | Modèle | Caractéristique | Usage recommandé |
 |--------|-----------------|------------------|
-| **Claude Sonnet 4.5** | Rapide, modèle par défaut | Usage quotidien |
-| **Claude Opus 4.6** | Flagship, 1M context (beta), 128K output, adaptive thinking | Tâches complexes, agents |
-| **Claude Opus 4.5** | Puissant, raisonnement avancé | Tâches complexes (legacy) |
-| **Claude Haiku** | Léger, économique | Tâches simples, background |
+| **Claude Sonnet 4.6** | Rapide, modèle par défaut | Usage quotidien |
+| **Claude Opus 4.7** | Flagship actuel, 1M context GA, 128K output, adaptive thinking, effort `xhigh` | Tâches complexes, agents |
+| **Claude Opus 4.6** | Fast Mode uniquement (`/fast`), 2.5x plus rapide, 6x coût | Urgences, génération rapide |
+| **Claude Haiku 4.5** | Léger, économique | Tâches simples, background |
 
 ---
 
@@ -440,10 +440,10 @@ Les permissions se configurent dans les settings de Claude Code :
 
 | Modèle | Contexte max | Recommandé |
 |--------|--------------|------------|
-| Sonnet 4.5 | 200K tokens | < 150K |
-| Opus 4.6 | 200K (1M beta) | < 150K |
-| Opus 4.5 | 200K tokens | < 150K |
-| Haiku | 200K tokens | < 100K |
+| Sonnet 4.6 | 200K tokens | < 150K |
+| Opus 4.7 | 1M tokens GA | < 800K |
+| Opus 4.6 | 1M tokens GA (Fast Mode) | < 800K |
+| Haiku 4.5 | 200K tokens | < 100K |
 
 ### Stratégies d'optimisation
 
@@ -459,10 +459,10 @@ Les permissions se configurent dans les settings de Claude Code :
 /cost
 
 # Tarification indicative (2026)
-# Sonnet 4.5 : ~$3/million tokens input, ~$15/million tokens output
-# Opus 4.6 : ~$5/million tokens input, ~$25/million tokens output
-# Opus 4.5 : ~$15/million tokens input, ~$75/million tokens output
-# Haiku : ~$0.25/million tokens input, ~$1.25/million tokens output
+# Sonnet 4.6 : ~$3/million tokens input, ~$15/million tokens output
+# Opus 4.7 : ~$5/million tokens input, ~$25/million tokens output
+# Opus 4.6 Fast Mode (/fast) : ~$30/million tokens input, ~$150/million tokens output (6x)
+# Haiku 4.5 : ~$1/million tokens input, ~$5/million tokens output
 ```
 
 ---

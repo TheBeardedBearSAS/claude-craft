@@ -246,9 +246,9 @@ En bas de l'interface, la status line affiche en permanence :
 
 L'Extended Thinking permet a Claude de "reflechir plus longtemps" avant de repondre. Plus le budget de reflexion est eleve, plus Claude analyse en profondeur le probleme.
 
-### 6.2 Fonctionnement automatique (Opus 4.6)
+### 6.2 Fonctionnement automatique (Opus 4.7 / 4.6)
 
-Depuis Opus 4.6, l'Extended Thinking est **automatique**. Le modele ajuste lui-meme la profondeur de sa reflexion en fonction de la complexite de la tache. Il n'est plus necessaire de demander explicitement une reflexion approfondie.
+Depuis Opus 4.6, la reflexion est **automatique**. Opus 4.7 conserve uniquement l'adaptive thinking (l'extended thinking classique a ete retire). Le modele ajuste lui-meme la profondeur de sa reflexion en fonction de la complexite de la tache. Il n'est plus necessaire de demander explicitement une reflexion approfondie.
 
 ### 6.3 Mots-cles heritage (encore fonctionnels)
 
@@ -307,7 +307,8 @@ En mode headless / scripting
 | Modele | ID | Caracteristiques | Prix (input/output) |
 |--------|-----|-----------------|---------------------|
 | **Sonnet 4.6** | `claude-sonnet-4-6` | Rapide, bon rapport qualite/prix | $3 / $15 par M tokens |
-| **Opus 4.6** | `claude-opus-4-6` | Flagship, le plus intelligent | $5 / $25 par M tokens |
+| **Opus 4.7** | `claude-opus-4-7` | Flagship, le plus intelligent | $5 / $25 par M tokens |
+| **Opus 4.6** | `claude-opus-4-6` | Legacy, utilise par Fast Mode (/fast) | $5 / $25 par M tokens |
 | **Haiku 4.5** | `claude-haiku-4-5-20251001` | Leger, tres economique | $1 / $5 par M tokens |
 
 ### 7.2 Sonnet 4.6 (modele par defaut)
@@ -317,13 +318,14 @@ En mode headless / scripting
 - **Context window** : 200K tokens (1M en beta)
 - **Cas d'usage** : Developpement quotidien, generation de code, refactoring
 
-### 7.3 Opus 4.6 (flagship)
+### 7.3 Opus 4.7 (flagship)
 
-- **Vitesse** : Plus lent (sauf en mode /fast)
-- **Intelligence** : Maximum, raisonnement avance
-- **Context window** : 1M tokens
+- **Vitesse** : Standard (Fast Mode non disponible, utilise Opus 4.6 via /fast)
+- **Intelligence** : Maximum, raisonnement avance, effort level `xhigh` disponible
+- **Context window** : 1M tokens (GA, sans premium de prix)
 - **Output max** : 128K tokens
-- **Adaptive thinking** : Ajuste automatiquement sa reflexion
+- **Adaptive thinking** : uniquement (extended thinking retire)
+- **Sampling** : `temperature`/`top_p`/`top_k` retires (erreur 400 si set)
 - **Cas d'usage** : Architecture complexe, debugging difficile, decisions critiques
 
 ### 7.4 Haiku 4.5 (leger)
@@ -509,8 +511,8 @@ Un modele de securite en arriere-plan evalue chaque appel d'outil :
 
 1. **Claude Code est un agent**, pas un simple chatbot : il explore, planifie, execute et verifie
 2. **7 interfaces** disponibles : CLI, VS Code, JetBrains, Desktop, Web, Slack, Chrome
-3. **Extended Thinking** est automatique avec Opus 4.6. Utilisez `/effort` (low/medium/high) pour un controle explicite
-4. **3 modeles** : Sonnet 4.6 (quotidien), Opus 4.6 (complexe), Haiku 4.5 (economique)
+3. **Adaptive Thinking** est automatique avec Opus 4.7. Utilisez `/effort` (low/medium/high/**xhigh**/max) pour un controle explicite
+4. **4 modeles** : Sonnet 4.6 (quotidien), Opus 4.7 (complexe, flagship), Opus 4.6 (Fast Mode via `/fast`), Haiku 4.5 (economique)
 5. **Monitorer ses couts** avec `/cost` et `/status`
 6. **La context window est une ressource finie** : utiliser `/clear` et `/compact` pour la gerer
 7. **Le mode headless** (`claude -p`) permet l'integration dans des scripts et pipelines

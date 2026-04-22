@@ -261,7 +261,7 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 |----------|--------|-------|
 | `/model haiku` | Haiku 4.5 | Taches simples, classification |
 | `/model sonnet` | Sonnet 4.6 | Taches standard, implementation |
-| `/model opus` | Opus 4.6 | Raisonnement complexe, architecture |
+| `/model opus` | Opus 4.7 | Raisonnement complexe, architecture |
 
 ---
 

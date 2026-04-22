@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.2.2] - 2026-04-22
+
+### Changed — Opus 4.7 as Default Model
+
+- **Default Opus references** updated from Opus 4.6 to **Opus 4.7** (released 2026-04-16, model ID `claude-opus-4-7`). Affects `/model opus` recommendation, agent leaders (product-owner, tech-lead), training materials, and StatusLine example.
+- **Recommended Claude Code version** 2.1.107 → **2.1.117** in `.claude/CLAUDE.md`, `.claude/COMPATIBILITY.md`, and `docs/AGENT-TEAMS-GUIDE.md`. Minimum stays `2.1.47`.
+
+### Added — COMPATIBILITY.md Enrichment
+
+- **Claude Opus 4.7 Support** section — model ID, 1M context GA, `xhigh` effort level, new tokenizer (1.0–1.35x tokens), adaptive thinking only, sampling params removed, image resolution 2576px, Fast Mode unavailable.
+- **Claude Code v2.1.108–v2.1.117** entries — prompt caching env vars, `/tui`, `/recap`, `/undo`, `/effort` slider, `/ultrareview`, `/less-permission-prompts`, `/btw`, `/hooks`, `/reload-plugins`, `/proactive`, native CLI binary, forked subagents (`CLAUDE_CODE_FORK_SUBAGENT=1`), embedded `bfs`/`ugrep`, security fixes.
+
+### Preserved — Fast Mode remains on Opus 4.6
+
+Fast Mode (`/fast`) is **not available on Opus 4.7**. All Fast Mode references (COMPATIBILITY.md Fast Mode section, AGENT-TEAMS-GUIDE cost tables, training docs, `.claude/commands/team/*`) continue to reference Opus 4.6.
+
 ## [8.2.1] - 2026-04-22
 
 ### Changed — Node.js 22 LTS Migration
