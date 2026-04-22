@@ -15,8 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Generate SBOM (`.github/workflows/sbom.yml`):**
 - Replaced deprecated GitHub Action `CycloneDX/gh-node-module-generatebom` (unresolvable SHA, last release 2023) with the official `@cyclonedx/cyclonedx-npm` CLI. Output format and artifact name unchanged.
 
-**SLSA Provenance (`.github/workflows/slsa-provenance.yml`):**
-- Upgraded `slsa-framework/slsa-github-generator` from `v2.0.0` to `v2.1.0` (Feb 2025) and explicitly set `private-repository: false` to fix a misdetection bug that was halting the workflow with "Repository is private" on the public repo.
+**SLSA Provenance (`.github/workflows/slsa-provenance.yml`) — REMOVED:**
+- Upgrading `slsa-framework/slsa-github-generator` to v2.1.0 and setting `private-repository: false` did not resolve an upstream bug where the generator's repo-privacy detection incorrectly classified this public repo as private despite the GitHub API returning `"private": false`.
+- Removed the standalone SLSA Provenance workflow entirely. NPM packages continue to receive SLSA Build L3 provenance via `npm publish --provenance` in `.github/workflows/npm-publish.yml`, which uses npm's native Sigstore/OIDC integration. The removed workflow was generating redundant attestations for a local `npm pack` tarball that no downstream consumer was using.
 
 These 3 workflows had been failing on every commit since at least 2026-04-15. The NPM publish workflow (with `--provenance` flag) was unaffected and continues to sign releases via npm's native OIDC integration.
 
