@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.2.3] - 2026-04-22
+
+### Fixed — CI workflows repaired
+
+**Deploy Documentation (`.github/workflows/docs.yml`):**
+- Fixed Playwright E2E strict mode violation in `website/tests/e2e/landing.spec.ts:45` — `a[href*="getting-started/quickstart"]` locator now uses `.first()` to disambiguate between navigation and main content matches (both point to the same href with identical text).
+
+**Generate SBOM (`.github/workflows/sbom.yml`):**
+- Replaced deprecated GitHub Action `CycloneDX/gh-node-module-generatebom` (unresolvable SHA, last release 2023) with the official `@cyclonedx/cyclonedx-npm` CLI. Output format and artifact name unchanged.
+
+**SLSA Provenance (`.github/workflows/slsa-provenance.yml`):**
+- Upgraded `slsa-framework/slsa-github-generator` from `v2.0.0` to `v2.1.0` (Feb 2025) and explicitly set `private-repository: false` to fix a misdetection bug that was halting the workflow with "Repository is private" on the public repo.
+
+These 3 workflows had been failing on every commit since at least 2026-04-15. The NPM publish workflow (with `--provenance` flag) was unaffected and continues to sign releases via npm's native OIDC integration.
+
 ## [8.2.2] - 2026-04-22
 
 ### Changed — Opus 4.7 as Default Model

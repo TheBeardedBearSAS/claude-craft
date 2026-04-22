@@ -26,11 +26,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install CycloneDX CLI
+        run: npm install --no-save @cyclonedx/cyclonedx-npm
+
       - name: Generate CycloneDX SBOM
-        uses: CycloneDX/gh-node-module-generatebom@1ca7f1f39708e51cdcddd0e34e00e2a05b7ea73b # pinned: v2.0.0
-        with:
-          path: './'
-          output: './claude-craft-sbom.json'
+        run: npx @cyclonedx/cyclonedx-npm --output-format JSON --output-file claude-craft-sbom.json
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # pinned: v4.6.2

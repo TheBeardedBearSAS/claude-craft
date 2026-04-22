@@ -42,7 +42,7 @@ test.describe('Landing page', () => {
 
   test('CTA links are present', async ({ page }) => {
     await expect(page.locator('a[href="#quickstart"]')).toBeVisible()
-    await expect(page.locator('a[href*="getting-started/quickstart"]')).toBeVisible()
+    await expect(page.locator('a[href*="getting-started/quickstart"]').first()).toBeVisible()
   })
 
   test('GitHub link has accessible name', async ({ page }) => {
