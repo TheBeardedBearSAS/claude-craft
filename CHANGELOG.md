@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.2.1] - 2026-04-22
+
+### Changed — Node.js 22 LTS Migration
+
+**CI Workflows (eliminates GitHub Actions deprecation warnings):**
+- `.github/workflows/mutation.yml` — `node-version: '20'` → `'22'`
+- `.github/workflows/docs.yml` — `node-version: 20` → `22` (build + e2e test jobs)
+
+**Documentation Examples (33 files updated):**
+- CI examples: `node-version: '20'` → `'22'` in React, Angular, Vue.js references and commands (all i18n variants: de, en, es, fr, pt)
+- Docker examples: `FROM node:20-alpine` → `node:22-alpine` in React tooling and Infra Docker commands (all i18n variants)
+
+**Context:** Node.js 20 reaches EOL on 2026-04-30. Migration to Node.js 22 LTS (EOL 2027-04) eliminates deprecation warnings in GitHub Actions and aligns documentation examples with current best practices.
+
+**Preserved (backward compatibility):**
+- `package.json` engines field kept at `>=20.0.0` to not break existing installations
+- Documentation prerequisites continue to list "Node.js 20+" as minimum requirement
+
 ## [8.2.0] - 2026-04-17
 
 ### Added — Audit Phase Actions (5 phases implemented)

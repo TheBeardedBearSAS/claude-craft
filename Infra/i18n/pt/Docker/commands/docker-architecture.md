@@ -293,7 +293,7 @@ volumes:
 #############################################
 # STAGE 1: Dependências
 #############################################
-FROM node:20-alpine AS deps
+FROM node:22-alpine AS deps
 
 WORKDIR /app
 
@@ -303,7 +303,7 @@ RUN npm ci --only=production
 #############################################
 # STAGE 2: Desenvolvimento
 #############################################
-FROM node:20-alpine AS development
+FROM node:22-alpine AS development
 
 WORKDIR /app
 
@@ -318,7 +318,7 @@ CMD ["npm", "run", "dev"]
 #############################################
 # STAGE 3: Build
 #############################################
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -330,7 +330,7 @@ RUN npm run build
 #############################################
 # STAGE 4: Produção
 #############################################
-FROM node:20-alpine AS production
+FROM node:22-alpine AS production
 
 WORKDIR /app
 

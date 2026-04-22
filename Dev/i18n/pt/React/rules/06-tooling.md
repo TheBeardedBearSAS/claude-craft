@@ -280,7 +280,7 @@ yarn test
 ```dockerfile
 # Dockerfile
 # Estagio 1: Dependencias
-FROM node:20-alpine AS deps
+FROM node:22-alpine AS deps
 WORKDIR /app
 
 # Copiar arquivos de dependencia
@@ -291,7 +291,7 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 RUN pnpm install --frozen-lockfile
 
 # Estagio 2: Builder
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 
 # Copiar dependencias

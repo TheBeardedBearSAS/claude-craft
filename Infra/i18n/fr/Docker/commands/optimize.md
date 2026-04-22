@@ -109,7 +109,7 @@ RUN composer dump-autoload --optimize --classmap-authoritative
 #############################################
 # STAGE 2: Frontend assets (si applicable)
 #############################################
-FROM node:20-alpine AS frontend
+FROM node:22-alpine AS frontend
 
 WORKDIR /app
 
@@ -173,7 +173,7 @@ CMD ["php-fpm"]
 #############################################
 # STAGE 1: Dependencies
 #############################################
-FROM node:20-alpine AS deps
+FROM node:22-alpine AS deps
 
 WORKDIR /app
 
@@ -186,7 +186,7 @@ RUN npm ci
 #############################################
 # STAGE 2: Build
 #############################################
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -202,7 +202,7 @@ RUN npm run build
 #############################################
 # STAGE 3: Production runtime
 #############################################
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 
