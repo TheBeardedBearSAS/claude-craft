@@ -12,7 +12,20 @@ import { TECH_REGISTRY } from './tech-registry.js';
 
 // Security: reject paths into system directories to prevent accidental or malicious
 // installation outside the user's expected workspace.
-const FORBIDDEN_SYSTEM_DIRS = ['/', '/etc', '/usr', '/bin', '/sbin', '/boot', '/lib', '/var', '/root', '/proc', '/sys', '/dev'];
+const FORBIDDEN_SYSTEM_DIRS = [
+  '/',
+  '/etc',
+  '/usr',
+  '/bin',
+  '/sbin',
+  '/boot',
+  '/lib',
+  '/var',
+  '/root',
+  '/proc',
+  '/sys',
+  '/dev',
+];
 
 function assertSafeTarget(targetPath) {
   const resolved = path.resolve(targetPath);
@@ -120,7 +133,9 @@ function runUpdate(targetPath, options, cliRoot) {
       console.log(`  ${c.green}[OK]${c.reset} ${entry.displayName} updated`);
       updated++;
     } else {
-      console.log(`  ${c.red}[FAIL]${c.reset} ${entry.displayName}: ${result.stderr || result.error?.message || 'unknown'}`);
+      console.log(
+        `  ${c.red}[FAIL]${c.reset} ${entry.displayName}: ${result.stderr || result.error?.message || 'unknown'}`
+      );
     }
   }
 
