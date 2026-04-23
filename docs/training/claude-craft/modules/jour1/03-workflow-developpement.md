@@ -439,7 +439,7 @@ Quand une story est `in-progress`, le développement suit le cycle TDD :
 /loop "Surveiller les tests CI"
 ```
 
-> **Alias** : `/proactive` (v2.1.105+) est un alias pour `/loop`.
+> **Alias** : `/proactive` (v2.1.117+) est un alias pour `/loop`.
 
 ### /memory - Apprentissages persistants
 

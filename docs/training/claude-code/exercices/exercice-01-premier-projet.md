@@ -50,7 +50,7 @@ Verifiez l'installation :
 claude --version
 ```
 
-**Resultat attendu :** Le numero de version s'affiche (ex: `2.1.105`).
+**Resultat attendu :** Le numero de version s'affiche (ex: `2.1.117`).
 
 ---
 

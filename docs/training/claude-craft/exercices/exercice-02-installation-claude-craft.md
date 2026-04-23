@@ -1,8 +1,8 @@
-# Exercice 2 : Installation de Claude-Craft 7.26.0
+# Exercice 2 : Installation de Claude-Craft 8.2.3
 
 ## Objectif
 
-Installer Claude-Craft 7.26.0 via npx et explorer la structure TCL (Tiered Context Loading).
+Installer Claude-Craft 8.2.3 via npx et explorer la structure TCL (Tiered Context Loading).
 
 ## Durée estimée
 

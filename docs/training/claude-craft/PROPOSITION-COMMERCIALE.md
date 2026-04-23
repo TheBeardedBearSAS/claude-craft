@@ -1,10 +1,10 @@
-# Proposition Commerciale : Formation Claude Code 2.1.105 + Claude-Craft 7.26.0
+# Proposition Commerciale : Formation Claude Code 2.1.117 + Claude-Craft 8.2.3
 
 ## Contexte Client
 
 - **Équipe** : 8 développeurs (2 groupes de 4)
 - **Stack** : Adaptable (18 technologies supportées)
-- **Objectif** : Maîtrise de Claude Code 2.1.105 avec Claude-Craft 7.26.0
+- **Objectif** : Maîtrise de Claude Code 2.1.117 avec Claude-Craft 8.2.3
 - **Cas d'usage** : Nouveaux projets ET projets existants
 
 ## Versions incluses
@@ -12,7 +12,7 @@
 | Composant | Version | Points forts |
 |-----------|---------|--------------|
 | Claude Code | 2.1.117 | Adaptive Thinking, MCP, Permissions, Task Management, Opus 4.7 (+ Opus 4.6 Fast Mode), Agent Teams, Auto Mode, Native CLI binary, Forked subagents |
-| Claude-Craft | 7.26.0 | BMAD v6, Ralph, QA Recette, 63 agents, 204 commands, RTK token optimization |
+| Claude-Craft | 8.2.3 | BMAD v6, Ralph, QA Recette, 63 agents, 204 commands, RTK token optimization |
 
 ---
 
@@ -55,8 +55,8 @@
 
 | Module | Durée | Contenu |
 |--------|-------|---------|
-| Introduction Claude Code 2.1.105 | 1h30 | Installation, Plan Mode, Background Tasks, Hooks, Auto Mode |
-| Framework Claude-Craft 7.26.0 | 1h30 | TCL, npx install, 18 stacks, RTK, context.yaml |
+| Introduction Claude Code 2.1.117 | 1h30 | Installation, Plan Mode, Background Tasks, Hooks, Auto Mode |
+| Framework Claude-Craft 8.2.3 | 1h30 | TCL, npx install, 18 stacks, RTK, context.yaml |
 | Workflow de développement | 2h | Les 3 tracks, commandes workflow, Plan Mode |
 | Nouveau projet | 2h | Configuration, génération de features, Clean Architecture |
 
@@ -271,5 +271,5 @@ Pour toute question ou personnalisation :
 **Validité de cette proposition :** 30 jours
 **Version :** 3.0.0
 **Date :** Février 2026
-**Claude Code** : 2.1.105
-**Claude-Craft** : 7.26.0
+**Claude Code** : 2.1.117
+**Claude-Craft** : 8.2.3

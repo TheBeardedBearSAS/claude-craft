@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.2.4] - 2026-04-23
+
+### Changed — Documentation and training sync
+
+Comprehensive documentation and training refresh to align with the current Claude ecosystem (Claude Code 2.1.117, Opus 4.7, Sonnet 4.6 default). Covers every documentation file that was lagging on prior model/version references.
+
+**Settings (`.claude/`):**
+- `settings.json` and `settings.local.json.example` — `CLAUDE_CODE_SUBAGENT_MODEL` updated from `claude-sonnet-4-5` to `claude-sonnet-4-6`.
+- `.claude/references/laravel/laravel13-features.md` — Prism AI SDK examples updated from `claude-sonnet-4.5` to `claude-sonnet-4-6` (and to the hyphenated model ID convention).
+
+**Training (`docs/training/claude-code/` and `docs/training/claude-craft/`):**
+- All PLAN-FORMATION, PROPOSITION-COMMERCIALE, README, CAHIER-PARTICIPANT, GUIDE-FORMATEUR files updated: Claude Code 2.1.105 → 2.1.117, Claude-Craft 7.26.0 → 8.2.3.
+- Model references updated: `Sonnet 4.5` → `Sonnet 4.6` (default), `Opus 4.6 flagship` → `Opus 4.7 flagship` (new), `Opus 4.6` kept as Fast Mode model.
+- Cheatsheets (essentiel, avance, claude-code, claude-craft, symfony-commands, bmad-ralph) — model tables, pricing tables, command tables refreshed; new commands `/ultrareview`, `/tui`, `/recap`, `/undo`, `/effort` slider documented; `xhigh` effort level added.
+- Training modules (Jour 1-2) — introductions, workshops, exercises, quiz questions updated to reflect current models and features.
+- Metadata YAML files (`*.yaml` in `metadata/`) — titles and subtitles synchronized.
+
+**Reference docs (`docs/`):**
+- `docs/CLI-REFERENCE.md` — added `/ultrareview` (v2.1.111), `/tui` (v2.1.110), `/recap` (v2.1.108), `/undo` (v2.1.108), `/effort` slider (v2.1.111), Native CLI binary (v2.1.113), `CLAUDE_CODE_FORK_SUBAGENT=1` (v2.1.117), `ENABLE_PROMPT_CACHING_1H`/`FORCE_PROMPT_CACHING_5M` (v2.1.108) env vars.
+
+**Project root:**
+- `README.md` — "What's New in v8.0" section replaced by "What's New in v8.2" highlighting the Opus 4.7 / Claude Code 2.1.117 ecosystem and the v8.2.1-v8.2.3 release cycle.
+
+### Preserved — Historical references unchanged
+
+- `docs/audit/` and `docs/marketing/` — historical snapshots kept as-is.
+- `CHANGELOG.md` prior entries (v5.5.0, v8.0.0, etc.) — not touched.
+- Historical `Nouveautés v2.1.32` sections describing Opus 4.6 as new flagship at the time — kept as historical record.
+- Fast Mode references — remain on Opus 4.6 across all documentation (Fast Mode is unavailable on Opus 4.7).
+
 ## [8.2.3] - 2026-04-22
 
 ### Fixed — CI workflows repaired

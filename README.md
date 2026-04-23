@@ -12,17 +12,15 @@ THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPL
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
 
-## What's New in v8.0 (Breaking — Spec Anthropic)
+## What's New in v8.2 (Claude Code 2.1.117 + Opus 4.7)
 
-- **Strict alignment to Anthropic Agent Skills spec** -- 41/41 skills conformes, validation CI (`Dev/scripts/validate-skills-spec.sh`)
-- **5 new skills** (v7.31-v7.32) -- `atomic-tasks` (GSD), `design-md-convention`, `architect`, `debug-methodical`, `socratic-brainstorm`
-- **4 new agents** (v7.34) -- `@security-auditor`, `@data-analyst`, `@migration-specialist`, `@cost-optimizer`
-- **2 new commands** (v7.33-v7.34) -- `/common:pack-repo` (Repomix wrapper + fallback shell), `/uiux:generate-design-md`
-- **Memory lifecycle hooks** (v7.35) -- 5 hooks + SQLite local, inspired by claude-mem
-- **Rule 23 Karpathy** (v7.31) -- principes AI-first development
-- **Convention DESIGN.md** (v7.31) -- template AI-friendly + `/uiux:generate-design-md`
-- **Migration guide** -- [docs/MIGRATION-v7-to-v8.md](docs/MIGRATION-v7-to-v8.md)
-- See [CHANGELOG](CHANGELOG.md) for full details
+- **Opus 4.7 as default flagship** (v8.2.2) -- model ID `claude-opus-4-7`, 1M context GA (no pricing premium), new `xhigh` effort level, adaptive thinking only (extended thinking removed), same $5/$25 per M tokens as Opus 4.6
+- **Claude Code 2.1.117 recommended** (v8.2.2) -- new commands `/btw`, `/hooks`, `/reload-plugins`, `/proactive`, `/ultrareview`, `/tui`, `/recap`, `/undo`, `/effort` slider, native CLI binary (v2.1.113), forked subagents (`CLAUDE_CODE_FORK_SUBAGENT=1`, v2.1.117), prompt caching env vars (`ENABLE_PROMPT_CACHING_1H`, v2.1.108)
+- **Fast Mode preserved on Opus 4.6** -- `/fast` reste Opus 4.6 exclusif (2.5x speed, 6x cost). Opus 4.7 n'a pas de Fast Mode.
+- **Node.js 22 LTS migration** (v8.2.1) -- CI workflows migrés, élimine les deprecation warnings GitHub Actions (Node 20 EOL avril 2026). Minimum utilisateur reste Node.js 20+.
+- **CI repair** (v8.2.3) -- Deploy Documentation (Playwright strict mode), Generate SBOM (migration vers `@cyclonedx/cyclonedx-npm` CLI), SLSA workflow retiré (redondant avec `npm publish --provenance`).
+- **Documentation sync** (v8.2.4) -- formations claude-code + claude-craft, settings sub-agent model, README, CLI-REFERENCE.md alignés sur l'écosystème actuel.
+- See [CHANGELOG](CHANGELOG.md) and [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md) for full details
 
 ## Install and First Result
 

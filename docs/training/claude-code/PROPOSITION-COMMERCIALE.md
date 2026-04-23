@@ -1,17 +1,17 @@
-# Proposition Commerciale : Formation Claude Code 2.1.105 — Maîtriser l'Agent de Développement
+# Proposition Commerciale : Formation Claude Code 2.1.117 — Maîtriser l'Agent de Développement
 
 ## Contexte Client
 
 - **Équipe** : 8 développeurs (2 groupes de 5 max)
-- **Objectif** : Maîtrise de Claude Code 2.1.105 comme agent de développement
+- **Objectif** : Maîtrise de Claude Code 2.1.117 comme agent de développement
 - **Cas d'usage** : Projets existants ET nouveaux projets
 
 ## Version incluse
 
 | Composant | Version | Points forts |
 |-----------|---------|--------------|
-| Claude Code | 2.1.105 | Extended Thinking, MCP, Hooks, Permissions 3-tier, Agent Teams, Fast Mode, Opus 4.6 |
-| Claude-Craft | 7.21.0 | Mentionné en bonus démo uniquement |
+| Claude Code | 2.1.117 | Adaptive Thinking, MCP, Hooks, Permissions 3-tier, Agent Teams, Fast Mode (Opus 4.6), Opus 4.7 flagship, Native CLI binary, Forked subagents, /ultrareview, /tui, /btw |
+| Claude-Craft | 8.2.3 | Mentionné en bonus démo uniquement |
 
 ---
 
@@ -63,11 +63,11 @@
 
 | Module | Durée | Contenu |
 |--------|-------|---------|
-| **5. Hooks et Automatisation** | 1h30 | Les 23 événements hooks disponibles (v2.1.105). Propriétés avancées : `if` conditionnel, `defer`, PreCompact bloquant. Création de slash commands personnalisées. Hook SessionStart avec matcher compact : réinjecter le contexte après compaction. PreToolUse et PostToolUse : contrôler les actions de Claude. Exemples concrets : linting automatique, validation de commits, blocage de patterns dangereux. |
+| **5. Hooks et Automatisation** | 1h30 | Les 24 événements hooks disponibles (v2.1.117). Propriétés avancées : `if` conditionnel, `defer`, PreCompact bloquant. Création de slash commands personnalisées. Hook SessionStart avec matcher compact : réinjecter le contexte après compaction. PreToolUse et PostToolUse : contrôler les actions de Claude. Exemples concrets : linting automatique, validation de commits, blocage de patterns dangereux. |
 | **6. MCP et Intégrations** | 1h15 | Model Context Protocol : architecture et fonctionnement. Serveurs MCP : installation et configuration. Plugins et extensions. Intégrations IDE (VS Code, JetBrains). CI/CD headless : intégration dans les pipelines. Flag --from-pr : revue de code automatisée. Sécurité MCP : risques et bonnes pratiques de vetting. |
 | **7. Multi-Agent et Coordination** | 1h15 | Agent Teams : orchestrer plusieurs agents Claude. Git worktrees : sessions parallèles sur plusieurs branches. Fan-out patterns : distribuer le travail entre agents. Interview pattern : un agent questionne, l'autre répond. Writer/reviewer : rédaction et relecture par agents distincts. Bonnes pratiques : 3-5 worktrees max, nettoyage. |
 | **8. Qualité et Sécurité** | 1h | TDD/BDD avec Claude Code : cycle Red-Green-Refactor assisté. Audit de code : détection de problèmes et suggestions. OWASP Top 10 : sensibilisation sécurité dans le workflow. Git workflow : Conventional Commits, feature branches, PR. Gestion des coûts : suivi de la consommation, optimisation des prompts. |
-| **9. Bonus — Claude-Craft** | 30min | Démo du framework Claude-Craft 7.21.0. Agents spécialisés (63 agents, 204 commandes). Workflow BMAD v6 : de l'analyse au déploiement. Quand et pourquoi adopter un framework sur Claude Code. |
+| **9. Bonus — Claude-Craft** | 30min | Démo du framework Claude-Craft 8.2.3. Agents spécialisés (63 agents, 204 commandes). Workflow BMAD v6 : de l'analyse au déploiement. Quand et pourquoi adopter un framework sur Claude Code. |
 | **10. Atelier Final** | 1h30 | **Challenge mixte (45min)** : exercice combinant les compétences des 2 jours sur un scénario réaliste. **Restitution (30min)** : présentation des solutions, comparaison des approches. **Q&A et plan d'action (15min)** : questions libres, définition d'un plan d'action équipe pour l'adoption. |
 
 ---
@@ -274,4 +274,4 @@ Pour toute question ou personnalisation :
 **Validité de cette proposition :** 30 jours
 **Version :** 1.0.0
 **Date :** Février 2026
-**Claude Code** : 2.1.105
+**Claude Code** : 2.1.117

@@ -630,6 +630,103 @@ Execute a command or prompt repeatedly on a specified interval. This is an alias
 
 ---
 
+### /ultrareview
+
+Parallel multi-agent code review of the current branch or a GitHub PR (available in Claude Code v2.1.111+).
+
+#### Usage
+
+```bash
+/ultrareview          # Review current branch
+/ultrareview <PR#>    # Review a GitHub PR
+```
+
+#### Description
+
+Spawns multiple reviewer agents (security, architecture, performance, style) in parallel and aggregates findings. Cloud-based, billed separately. Requires a git repository (offer `git init` if not in one).
+
+---
+
+### /tui
+
+Switch the session to the terminal UI mode (available in v2.1.110+).
+
+#### Usage
+
+```bash
+/tui
+```
+
+Toggle via the `tui` setting in `settings.json`.
+
+---
+
+### /recap
+
+Summarize the current session progress (v2.1.108+). Useful before `/clear` to capture state.
+
+#### Usage
+
+```bash
+/recap
+```
+
+---
+
+### /undo
+
+Alias for `/rewind` (v2.1.108+). Reverts the last change in the session.
+
+#### Usage
+
+```bash
+/undo
+```
+
+---
+
+### /effort
+
+Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `medium`, `high`, `xhigh` (Opus 4.7 only), `max`.
+
+#### Usage
+
+```bash
+/effort               # Interactive picker
+/effort high          # Set directly
+```
+
+Default for Pro/Max subscribers on Opus 4.6/Sonnet 4.6 is `high` since v2.1.111 (previously `medium`). Opus 4.7 supports the new `xhigh` tier.
+
+---
+
+## Claude Code Native Features (v2.1.108+)
+
+### Native CLI Binary (v2.1.113+)
+
+Starting in v2.1.113, Claude Code spawns a native compiled binary instead of the bundled JavaScript. Faster startup, lower RAM footprint. No user action required — automatic when you update.
+
+### Forked Subagents (v2.1.117+)
+
+Set `CLAUDE_CODE_FORK_SUBAGENT=1` to run each subagent in an isolated, forked context. Prevents context pollution between parallel investigations.
+
+```bash
+export CLAUDE_CODE_FORK_SUBAGENT=1
+```
+
+### Prompt Caching Env Vars (v2.1.108+)
+
+Fine-tune prompt caching behavior:
+
+| Variable | Effect |
+|----------|--------|
+| `ENABLE_PROMPT_CACHING_1H` | Use the 1-hour cache tier (vs 5-minute default) |
+| `FORCE_PROMPT_CACHING_5M` | Force the 5-minute tier even if 1h is available |
+
+Use `ENABLE_PROMPT_CACHING_1H=1` for long-running sessions with a stable context (e.g., architecture reviews that span hours).
+
+---
+
 ## Configuration File
 
 ### YAML Configuration
@@ -664,6 +761,10 @@ projects:
 | `CLAUDE_CRAFT_LANG` | Default language | `en` |
 | `CLAUDE_CRAFT_TARGET` | Default target directory | `.` |
 | `CLAUDE_CRAFT_CONFIG` | Config file path | `claude-projects.yaml` |
+| `CLAUDE_CODE_FORK_SUBAGENT` | Fork each subagent in isolated context (v2.1.117+) | _unset_ |
+| `ENABLE_PROMPT_CACHING_1H` | Use 1-hour prompt cache tier (v2.1.108+) | _unset_ |
+| `FORCE_PROMPT_CACHING_5M` | Force 5-minute cache tier (v2.1.108+) | _unset_ |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | Model for subagents (e.g. `claude-sonnet-4-6`) | _unset_ |
 
 ---
 

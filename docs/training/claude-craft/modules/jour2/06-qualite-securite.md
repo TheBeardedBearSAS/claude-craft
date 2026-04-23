@@ -348,7 +348,7 @@ Claude Code a fait l'objet de plusieurs vulnerabilites corrigees. Il est importa
 | CVE-2026-35022 | High | v2.1.98 | Env-var prefix injection |
 | N/A | High | v2.1.101 | Command injection via POSIX `which` fallback |
 
-> **Recommandation** : Toujours utiliser Claude Code **v2.1.105+** (version recommandee).
+> **Recommandation** : Toujours utiliser Claude Code **v2.1.117+** (version recommandee).
 
 ### Auto Mode (v2.1.94+)
 
@@ -399,7 +399,7 @@ Avant d'installer un serveur MCP tiers :
 3. **OWASP** : Les 10 principales vulnérabilités à connaître
 4. **Conventional Commits** : Format standardisé pour l'historique Git
 5. **Automatisation** : Hooks Git pour garantir la qualité
-6. **CVEs** : 7 vulnerabilites documentees, toujours utiliser v2.1.105+
+6. **CVEs** : 7 vulnerabilites documentees, toujours utiliser v2.1.117+
 7. **Auto Mode** : Classificateur IA pour les permissions (v2.1.94+)
 8. **Sandboxing** : Isolation des sous-processus (v2.1.98+)
 9. **MCP Securite** : Auditer les serveurs MCP tiers avant installation

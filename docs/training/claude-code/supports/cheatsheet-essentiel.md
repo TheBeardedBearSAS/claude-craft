@@ -20,7 +20,7 @@ winget install Anthropic.ClaudeCode
 npm install -g @anthropic-ai/claude-code
 
 # Verification
-claude --version        # Doit afficher 2.1.105+
+claude --version        # Doit afficher 2.1.117+
 claude                  # Premier lancement
 ```
 

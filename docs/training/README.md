@@ -7,7 +7,7 @@ Ce repertoire contient les packages de formation pour 2 offres distinctes :
 | Formation | Cible | Duree | Contenu |
 |-----------|-------|-------|---------|
 | **[Claude Code](./claude-code/)** | Developpeurs decouvrant Claude Code | 2 jours (14h/groupe) | Claude Code pur, du guide vers l'autonome |
-| **[Claude Code + Claude-Craft](./claude-craft/)** | Equipes adoptant Claude-Craft | 2 jours (14h/groupe) | Claude Code + framework Claude-Craft 7.26.0 |
+| **[Claude Code + Claude-Craft](./claude-craft/)** | Equipes adoptant Claude-Craft | 2 jours (14h/groupe) | Claude Code + framework Claude-Craft 8.2.3 |
 
 ---
 
@@ -15,7 +15,7 @@ Ce repertoire contient les packages de formation pour 2 offres distinctes :
 
 > **Maitriser l'Agent de Developpement**
 
-Formation progressive centree sur Claude Code 2.1.105 : fondamentaux, configuration, patterns de travail, hooks, MCP, multi-agent, qualite. Claude Craft presente en bonus (30 min).
+Formation progressive centree sur Claude Code 2.1.117 : fondamentaux, configuration, patterns de travail, hooks, MCP, multi-agent, qualite, Opus 4.7, Adaptive Thinking. Claude Craft presente en bonus (30 min).
 
 - **Max 5 stagiaires/groupe** (accompagnement individuel)
 - **10 modules** couvrant 100% des fonctionnalites Claude Code

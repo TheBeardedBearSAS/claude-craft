@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.claude.ai/reference/settings-schema.json",
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-5"
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6"
   },
   "hooks": {
     "PreToolUse": [

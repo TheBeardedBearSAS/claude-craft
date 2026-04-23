@@ -1,12 +1,12 @@
-# Guide du Formateur - Claude Code 2.1.105 + Claude-Craft 7.26.0
+# Guide du Formateur - Claude Code 2.1.117 + Claude-Craft 8.2.3
 
 ## Vue d'ensemble
 
-Ce guide fournit les instructions detaillees pour animer la formation de 2 jours sur Claude Code 2.1.105 et Claude-Craft 7.26.0.
+Ce guide fournit les instructions detaillees pour animer la formation de 2 jours sur Claude Code 2.1.117 et Claude-Craft 8.2.3.
 
 **Versions couvertes :**
 - Claude Code : 2.1.47 (hooks, plan mode, background tasks, keybindings, extended thinking, MCP)
-- Claude-Craft : 7.26.0 (TCL, npx install, 18 stacks, BMAD v6, Ralph, QA Recette, 63 agents, 204 commands)
+- Claude-Craft : 8.2.3 (TCL, npx install, 18 stacks, BMAD v6, Ralph, QA Recette, 63 agents, 204 commands)
 
 ---
 
@@ -24,7 +24,7 @@ Ce guide fournit les instructions detaillees pour animer la formation de 2 jours
 
 - [ ] Node.js 20+ installe sur le poste formateur
 - [ ] Claude Code 2.1.47 installe et fonctionnel
-- [ ] Projet de demo prepare avec Claude-Craft 7.26.0
+- [ ] Projet de demo prepare avec Claude-Craft 8.2.3
 - [ ] Compte Anthropic de demo avec credits
 - [ ] Slides exportes en PDF (backup)
 - [ ] Exercices testes sur la derniere version
@@ -56,7 +56,7 @@ Envoyer un email avec :
 | 20 min | Plan Mode et Background Tasks | Demo |
 | 15 min | **Exercice 1** : Premier projet | Exercice |
 
-#### Points cles a insister (2.1.105)
+#### Points cles a insister (2.1.117)
 
 1. **Plan Mode** : Montrer `/plan` pour exploration securisee
 2. **Background Tasks** : Montrer `/tasks` pour operations longues
@@ -95,7 +95,7 @@ Montrer le calcul : ~0.03 par interaction simple. Formation de 2 jours = 5-10 de
 
 ---
 
-### Module 2 : Le Framework Claude-Craft 7.26.0 (1h30)
+### Module 2 : Le Framework Claude-Craft 8.2.3 (1h30)
 
 #### Timing detaille
 
@@ -107,7 +107,7 @@ Montrer le calcul : ~0.03 par interaction simple. Formation de 2 jours = 5-10 de
 | 15 min | Installation via npx | Terminal |
 | 20 min | **Exercice 2** : Installation | Exercice |
 
-#### Points cles a insister (7.26.0)
+#### Points cles a insister (8.2.3)
 
 1. **TCL** = 95% d'economie de tokens (dessiner le schema au tableau)
 2. **NPX** = Plus de git clone + make
@@ -301,7 +301,7 @@ claude
 
 | Duree | Contenu | Support |
 |-------|---------|---------|
-| 20 min | Skills system (2.1.105) | Slides + Demo |
+| 20 min | Skills system (2.1.117) | Slides + Demo |
 | 15 min | Panorama des agents | Slides |
 | 15 min | Agents BMAD v6 (demo) | Terminal |
 | 10 min | Agents Docker (demo) | Terminal |
@@ -615,11 +615,11 @@ cat .claude/settings.json
 2. Quelle commande pour activer le Plan Mode ?
 3. Comment installer Claude-Craft via npx ?
 4. Que contient le fichier context.yaml ?
-5. Combien de stacks et d'agents supporte Claude-Craft 7.26.0 ?
+5. Combien de stacks et d'agents supporte Claude-Craft 8.2.3 ?
 
 ### Hooks et Outils (6-10)
 
-6. Citez les principaux evenements de hooks disponibles dans Claude Code 2.1.105 (24 au total).
+6. Citez les principaux evenements de hooks disponibles dans Claude Code 2.1.117 (24 au total).
 7. Quelle est la difference entre PreToolUse et PostToolUse ?
 8. Comment lancer une tache en background ?
 9. Comment personnaliser les keybindings ?
@@ -752,7 +752,7 @@ cat .claude/settings.json
 ---
 
 **Version formation : 3.0.0**
-**Claude Code : 2.1.105**
-**Claude-Craft : 7.26.0**
+**Claude Code : 2.1.117**
+**Claude-Craft : 8.2.3**
 
 **Bonne formation !**

@@ -1,4 +1,4 @@
-# Module 1 : Introduction à Claude Code 2.1.105
+# Module 1 : Introduction à Claude Code 2.1.117
 
 ## Objectifs
 
@@ -16,7 +16,7 @@
 
 **Claude Code** est l'interface en ligne de commande (CLI) officielle d'Anthropic pour interagir avec Claude, l'assistant IA. C'est un outil de développement assisté par IA conçu pour le pair programming et les tâches de codage.
 
-### Version recommandée : 2.1.105
+### Version recommandée : 2.1.117
 
 Nouveautés majeures incluent (par ordre de version) :
 
@@ -31,7 +31,7 @@ Nouveautés majeures incluent (par ordre de version) :
 - **Commandes** : /compact, /doctor, /mcp, /teleport, /release-notes, /config, /keybindings, /tasks
 - **Raccourcis** : Shift+Enter (newline), Ctrl+B (background), Shift+Tab (plan mode)
 - **Flag `--add-dir`** : Charger des CLAUDE.md depuis des répertoires additionnels
-- **Modèle par défaut** : Sonnet 4.5
+- **Modèle par défaut** : Sonnet 4.6
 
 #### Nouveautés v2.1.20 - v2.1.31
 - **Task status `deleted`** (v2.1.20) : Suppression définitive de tâches via TaskUpdate
@@ -97,7 +97,7 @@ Nouveautés majeures incluent (par ordre de version) :
 - **Monitor tool** (v2.1.98) : Streamer les événements d'un processus en arrière-plan
 - **`/proactive`** (v2.1.105) : Alias pour `/loop`, tâches planifiées récurrentes
 - **PreCompact blocking** (v2.1.105) : `exit 2` pour bloquer la compaction
-- **7 CVEs corrigés** : Toujours utiliser v2.1.105+ pour la sécurité
+- **7 CVEs corrigés** : Toujours utiliser v2.1.117+ pour la sécurité
 
 ### Positionnement
 
@@ -145,7 +145,7 @@ npm install -g @anthropic-ai/claude-code
 
 # Vérification
 claude --version
-# Devrait afficher : 2.1.105 ou supérieur
+# Devrait afficher : 2.1.117 ou supérieur
 ```
 
 ### Configuration de la clé API
@@ -190,7 +190,7 @@ claude --add-dir /chemin/vers/autre-projet
 | `/cost` | Affiche le coût de la session |
 | `/history` | Historique des conversations |
 
-### Nouvelles commandes (2.1.105)
+### Nouvelles commandes (2.1.117)
 
 | Commande | Description |
 |----------|-------------|
@@ -654,8 +654,8 @@ Voir `exercices/exercice-01-premier-projet.md`
 
 ## Points Clés à Retenir
 
-1. **Claude Code 2.1.105** = CLI officiel avec Extended Thinking, MCP, Permissions 3-tier, 24 hooks, plan mode, /debug, Agent Teams, Auto Mode, RTK
-2. **4 modèles** : Sonnet 4.5 (par défaut), Opus 4.6 (flagship), Opus 4.5 (puissant), Haiku (léger)
+1. **Claude Code 2.1.117** = CLI officiel avec Adaptive Thinking, MCP, Permissions 3-tier, 24 hooks, plan mode, /debug, Agent Teams, Auto Mode, RTK, Native CLI binary, Forked subagents
+2. **4 modèles** : Sonnet 4.6 (par défaut), Opus 4.7 (flagship, `xhigh` effort), Opus 4.6 (Fast Mode via `/fast`), Haiku 4.5 (léger)
 3. **Extended Thinking** : 4 niveaux (think < think hard < think harder < ultrathink)
 4. **MCP** : Protocole ouvert pour connecter des outils et ressources externes
 5. **Permissions 3-tier** : Deny > Allow > Ask avec wildcards

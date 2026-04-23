@@ -398,7 +398,7 @@ Prendre un projet existant de l'équipe et :
 
 ---
 
-## 6. Migration vers Claude-Craft 7.26.0
+## 6. Migration vers Claude-Craft 8.2.3
 
 ### Nouvelles commandes disponibles
 
@@ -411,7 +411,7 @@ npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=fr
 # Configurer RTK pour optimiser les tokens
 /common:setup-rtk
 
-# Verifier la version de Claude Code (2.1.105 recommande)
+# Verifier la version de Claude Code (2.1.117 recommande)
 claude --version
 ```
 

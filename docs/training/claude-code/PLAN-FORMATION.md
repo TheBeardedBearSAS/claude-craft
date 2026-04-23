@@ -1,9 +1,9 @@
-# Plan de Formation : Claude Code 2.1.105 — Maîtriser l'Agent de Développement
+# Plan de Formation : Claude Code 2.1.117 — Maîtriser l'Agent de Développement
 
 ## Contexte de Formation
 
 - **Public** : Équipe de développeurs
-- **Objectif** : Maîtrise de Claude Code 2.1.105 comme agent de développement
+- **Objectif** : Maîtrise de Claude Code 2.1.117 comme agent de développement
 - **Cas d'usage** : Tout projet logiciel, toute stack technologique
 - **Format** : 2 jours (14h/groupe), max 5 stagiaires/groupe
 - **Approche** : Progressive — du guidé vers l'autonome
@@ -12,8 +12,8 @@
 
 | Composant | Version | Nouveautés clés |
 |-----------|---------|-----------------|
-| Claude Code | 2.1.105 | Extended Thinking, MCP, Sub-agents, Permissions 3-tier, Sonnet 4.6/Opus 4.6, Agent Teams, Fast Mode, 23 Hooks, Auto Mode, Tool Search, Agent Frontmatter, Subprocess Sandboxing |
-| Formation | 2.0.0 | Mise a jour v2.1.45 -> v2.1.105 |
+| Claude Code | 2.1.117 | Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Sonnet 4.6/Opus 4.7, Opus 4.6 (Fast Mode), Agent Teams, 24 Hooks, Auto Mode, Tool Search, Agent Frontmatter, Subprocess Sandboxing, Native CLI binary, Forked subagents, /ultrareview, /tui, /btw, /hooks, /reload-plugins, /effort slider |
+| Formation | 3.0.0 | Mise a jour v2.1.45 -> v2.1.117 (Opus 4.7) |
 
 ---
 
@@ -61,7 +61,7 @@
 2. **Installation** (20min)
    - Installation native (recommandé) : Homebrew, curl, WinGet
    - CLI via npm (fallback, deprecié) : `npm install -g @anthropic-ai/claude-code`
-   - Vérification : `claude --version` (2.1.105+)
+   - Vérification : `claude --version` (2.1.117+)
    - Desktop app : téléchargement et configuration
    - Web interface : connexion sur claude.ai/code
    - VS Code extension : installation depuis le marketplace
@@ -1114,7 +1114,7 @@ Ce plan est adaptable selon :
 
 ## Matrice de Couverture
 
-### Features Claude Code 2.1.105 et modules correspondants
+### Features Claude Code 2.1.117 et modules correspondants
 
 | Feature | Module | Couverture |
 |---------|--------|------------|
@@ -1190,7 +1190,7 @@ Ce plan est adaptable selon :
 | **ElicitationResult** (v2.1.76+) | M5, M6 | Complète |
 | **Hook `if` conditionnel** (v2.1.85+) | M5 | Complète |
 | **Hook `defer` permission** (v2.1.89+) | M5 | Complète |
-| **PreCompact blocking** (v2.1.105+) | M5 | Complète |
+| **PreCompact blocking** (v2.1.117+) | M5 | Complète |
 | **Prompt-based hooks** (Haiku 4.5) | M5 | Complète |
 | **Matchers hooks** | M5 | Complète |
 | **Exit codes hooks** (0, 2) | M5 | Complète |
@@ -1262,4 +1262,4 @@ Ce plan est adaptable selon :
 **Version** : 2.0.0
 **Date** : Avril 2026
 **Auteur** : The Bearded Bear
-**Claude Code** : 2.1.105
+**Claude Code** : 2.1.117

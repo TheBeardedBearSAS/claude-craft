@@ -1,4 +1,4 @@
-# Cheat Sheet : Claude-Craft 7.26.0
+# Cheat Sheet : Claude-Craft 8.2.3
 
 ## Installation (NPX)
 
@@ -370,5 +370,5 @@ Types : feat, fix, refactor, test, docs, chore, perf, build, ci, style
 
 ---
 
-**Formation Claude Code 2.1.105 + Claude-Craft 7.26.0**
+**Formation Claude Code 2.1.117 + Claude-Craft 8.2.3**
 **The Bearded CTO - 2026**

@@ -121,9 +121,9 @@ En plus des hooks shell classiques, Claude Code supporte les **prompt-based hook
 
 Le LLM Haiku evalue le contexte et decide si l'action doit etre autorisee ou bloquee, offrant une validation plus intelligente qu'un simple script shell.
 
-### Hook scripts et templates Claude-Craft 7.26.0
+### Hook scripts et templates Claude-Craft 8.2.3
 
-Claude-Craft 7.26.0 fournit des scripts de hooks pre-configures et des templates prets a l'emploi :
+Claude-Craft 8.2.3 fournit des scripts de hooks pre-configures et des templates prets a l'emploi :
 
 **Scripts pre-configures :**
 

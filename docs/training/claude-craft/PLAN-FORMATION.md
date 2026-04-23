@@ -1,20 +1,20 @@
-# Plan de Formation : Claude Code 2.1.105 + Claude-Craft 7.26.0
+# Plan de Formation : Claude Code 2.1.117 + Claude-Craft 8.2.3
 
 ## Contexte de Formation
 
 - **Public** : Equipe de developpeurs
-- **Objectif** : Maitrise de Claude Code 2.1.105 avec le framework Claude-Craft 7.26.0
+- **Objectif** : Maitrise de Claude Code 2.1.117 avec le framework Claude-Craft 8.2.3
 - **Cas d'usage** : Nouveaux projets ET projets existants
-- **Stack technologique** : 18 stacks supportees (Symfony, React, Flutter, etc.)
+- **Stack technologique** : 19 stacks supportees (Symfony, React, Flutter, Paperclip, etc.)
 - **Format** : Hybride (presentiel + distanciel)
 
 ## Versions couvertes
 
 | Composant | Version | Nouveautes cles |
 |-----------|---------|-----------------|
-| Claude Code | 2.1.105 | Extended Thinking, MCP, Sub-agents, Permissions 3-tier, Sonnet 4.5/Opus 4.6, Agent Teams, Fast Mode |
-| Claude-Craft | 7.26.0 | BMAD v6, Ralph, QA Recette, 63 agents, 204 commandes across 26 namespaces |
-| Formation | 3.0.0 | Mise a jour complete |
+| Claude Code | 2.1.117 | Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Sonnet 4.6/Opus 4.7, Agent Teams, Fast Mode (Opus 4.6), Native CLI binary, Forked subagents, /ultrareview, /tui, /btw |
+| Claude-Craft | 8.2.3 | BMAD v6, Ralph, QA Recette, 72 agents, 211 commandes across 26 namespaces, Node.js 22 LTS |
+| Formation | 4.0.0 | Mise a jour complete (Opus 4.7 + v2.1.117) |
 
 ---
 
@@ -33,10 +33,10 @@
 
 ---
 
-#### Module 1 : Introduction a Claude Code 2.1.105 (1h30)
+#### Module 1 : Introduction a Claude Code 2.1.117 (1h30)
 
 **Objectifs pedagogiques :**
-- Comprendre ce qu'est Claude Code 2.1.105 et ses nouvelles capacites
+- Comprendre ce qu'est Claude Code 2.1.117 et ses nouvelles capacites
 - Savoir installer et configurer Claude Code
 - Maitriser les commandes de base et avancees (Extended Thinking, MCP, Permissions)
 
@@ -51,7 +51,7 @@
 2. **Installation et configuration** (20min)
    - Installation via npm : `npm install -g @anthropic-ai/claude-code`
    - Configuration de la cle API
-   - Verification : `claude --version` (2.1.105+)
+   - Verification : `claude --version` (2.1.117+)
    - Configuration du modele par defaut
 
 3. **Interface et commandes** (20min)
@@ -68,7 +68,7 @@
    - Couts et facturation
 
 5. **Exercice pratique** (10min)
-   - Installation de Claude Code 2.1.105
+   - Installation de Claude Code 2.1.117
    - Activation de l'Extended Thinking
    - Generation d'un script simple
 
@@ -77,11 +77,11 @@
 
 ---
 
-#### Module 2 : Le Framework Claude-Craft 7.26.0 (1h30)
+#### Module 2 : Le Framework Claude-Craft 8.2.3 (1h30)
 
 **Objectifs pedagogiques :**
 - Comprendre le TCL (Tiered Context Loading) et son economie de 95%
-- Savoir installer Claude-Craft 7.26.0 via npx
+- Savoir installer Claude-Craft 8.2.3 via npx
 - Connaitre les differents composants (skills, commands, agents, references, BMAD, Ralph, QA)
 
 **Contenu :**
@@ -537,7 +537,7 @@
 | Theme | Exemple de question |
 |-------|---------------------|
 | Claude Code | Quelle commande active l'Extended Thinking ? |
-| Claude-Craft | Combien d'agents sont disponibles dans Claude-Craft 7.26.0 ? |
+| Claude-Craft | Combien d'agents sont disponibles dans Claude-Craft 8.2.3 ? |
 | BMAD v6 | Quel est le seuil du PRD Quality Gate ? |
 | Ralph | Quels sont les 5 types de DoD Validators ? |
 | QA Recette | Qu'est-ce que la Golden Rule ? |
@@ -576,5 +576,5 @@ Ce plan est adaptable selon :
 **Version** : 3.0.0
 **Date** : Janvier 2026
 **Auteur** : The Bearded CTO
-**Claude Code** : 2.1.105
-**Claude-Craft** : 7.26.0
+**Claude Code** : 2.1.117
+**Claude-Craft** : 8.2.3

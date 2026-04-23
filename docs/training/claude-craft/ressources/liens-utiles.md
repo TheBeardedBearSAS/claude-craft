@@ -20,7 +20,7 @@
 
 ---
 
-## Claude Code 2.1.105
+## Claude Code 2.1.117
 
 ### Nouvelles fonctionnalités
 
@@ -33,7 +33,7 @@
 - **Hooks** : 24 hooks (PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest, UserPromptSubmit, Stop, SubagentStop, SubagentStart, Notification, PreCompact, PostCompact, SessionStart, SessionEnd, Setup, TeammateIdle, TaskCompleted + 8 additionnels)
 - **Permissions 3-tier** : Deny / Allow / Ask
 - **Sub-agents** : Task tool pour orchestration parallèle
-- **Default model** : Sonnet 4.5
+- **Default model** : Sonnet 4.6
 
 ### Commandes clés
 
@@ -56,7 +56,7 @@
 
 ---
 
-## Claude-Craft 7.26.0
+## Claude-Craft 8.2.3
 
 ### TCL (Tiered Context Loading)
 
@@ -331,5 +331,5 @@ npx @the-bearded-bear/claude-craft install ~/projet --tech=symfony --lang=fr
 ---
 
 **Mis à jour : Janvier 2026**
-**Claude Code : 2.1.105**
-**Claude-Craft : 7.26.0**
+**Claude Code : 2.1.117**
+**Claude-Craft : 8.2.3**

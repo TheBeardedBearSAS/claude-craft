@@ -249,7 +249,7 @@ Les commandes sprint et gate incluent une guidance Plan Mode :
 
 ## Quick Reference
 
-### Claude-Craft 7.26.0
+### Claude-Craft 8.2.3
 
 | Categorie | Nombre |
 |-----------|--------|
@@ -268,5 +268,5 @@ Les commandes sprint et gate incluent une guidance Plan Mode :
 
 ---
 
-**Formation Claude Code 2.1.105 + Claude-Craft 7.26.0**
+**Formation Claude Code 2.1.117 + Claude-Craft 8.2.3**
 **The Bearded CTO - 2026**

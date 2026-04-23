@@ -6,7 +6,7 @@
 - Expliquer l'architecture TCL (Tiered Context Loading) et son économie de tokens
 - Installer Claude-Craft via npx sur un projet
 - Comprendre les différents composants (skills, commands, agents, references)
-- Configurer le contexte projet avec la structure 7.26.0
+- Configurer le contexte projet avec la structure 8.2.3
 - Comprendre le framework BMAD v6 et les 63 agents disponibles
 - Connaitre RTK pour l'optimisation des tokens (55-65% d'economie)
 
@@ -24,16 +24,16 @@ Claude Code est puissant, mais :
 - Pas de gestion de projet intégrée
 - Pas d'automatisation des sprints
 
-### La solution : Claude-Craft 7.26.0
+### La solution : Claude-Craft 8.2.3
 
 Claude-Craft ajoute une **couche de best practices optimisée** avec gestion de projet et automatisation :
 
 ```
 ┌─────────────────────────────────────────┐
-│           CLAUDE CODE 2.1.105           │
+│           CLAUDE CODE 2.1.117           │
 │   (Moteur IA + Extended Thinking + MCP) │
 ├─────────────────────────────────────────┤
-│         CLAUDE-CRAFT 7.26.0             │
+│         CLAUDE-CRAFT 8.2.3             │
 │  TCL + Skills + References + Agents     │
 │  BMAD v6 + Ralph + QA Recette + RTK    │
 ├─────────────────────────────────────────┤
@@ -44,7 +44,7 @@ Claude-Craft ajoute une **couche de best practices optimisée** avec gestion de 
 
 ### Bénéfices
 
-| Aspect | Sans Claude-Craft | Avec Claude-Craft 7.26.0 |
+| Aspect | Sans Claude-Craft | Avec Claude-Craft 8.2.3 |
 |--------|-------------------|------------------------|
 | Tokens | ~70,000 auto-chargés | ~3,500 (économie 95%) |
 | Architecture | Variable | Clean Architecture imposée |
@@ -104,7 +104,7 @@ Le **TCL (Tiered Context Loading)** est l'innovation majeure de Claude-Craft. Il
 
 ---
 
-## 3. Architecture Claude-Craft 7.26.0
+## 3. Architecture Claude-Craft 8.2.3
 
 ### Structure TCL
 
@@ -346,7 +346,7 @@ triggers:
 
 ### Agents (Personas IA)
 
-Les agents sont des experts spécialisés avec un contexte et une personnalité. Claude-Craft 7.26.0 propose **63 agents** répartis en 11 catégories :
+Les agents sont des experts spécialisés avec un contexte et une personnalité. Claude-Craft 8.2.3 propose **63 agents** répartis en 11 catégories :
 
 **Agents communs (12)**
 

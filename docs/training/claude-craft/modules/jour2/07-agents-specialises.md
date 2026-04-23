@@ -1,10 +1,10 @@
-# Module 7 : Agents Specialises, BMAD et Docker (Claude Code 2.1.105 + Claude-Craft 7.26.0)
+# Module 7 : Agents Specialises, BMAD et Docker (Claude Code 2.1.117 + Claude-Craft 8.2.3)
 
 ## Objectifs
 
 A la fin de ce module, vous serez capable de :
-- Connaitre les 63 agents disponibles dans Claude-Craft 7.26.0, organises en 11 catégories
-- Comprendre le systeme de Skills de Claude Code 2.1.105
+- Connaitre les 63 agents disponibles dans Claude-Craft 8.2.3, organises en 11 catégories
+- Comprendre le systeme de Skills de Claude Code 2.1.117
 - Maitriser le workflow BMAD v6 avec ses commandes dediees
 - Utiliser les 5 agents Docker pour l'infrastructure
 - Comprendre le format YAML frontmatter des agents avec les nouvelles proprietes (effort, maxTurns, disallowedTools)
@@ -13,7 +13,7 @@ A la fin de ce module, vous serez capable de :
 
 ---
 
-## 1. Skills System (Claude Code 2.1.105)
+## 1. Skills System (Claude Code 2.1.117)
 
 ### Qu'est-ce qu'un Skill ?
 
@@ -49,7 +49,7 @@ triggers:
     auto_load: true
 ```
 
-### Skills disponibles (Claude-Craft 7.26.0)
+### Skills disponibles (Claude-Craft 8.2.3)
 
 | Skill | Trigger | Contenu |
 |-------|---------|---------|
@@ -65,7 +65,7 @@ triggers:
 
 ## 2. Panorama des 63 Agents (11 Catégories)
 
-Claude-Craft 7.26.0 propose **63 agents** repartis en **11 catégories** distinctes. Chaque agent est un expert dans son domaine, invocable via la syntaxe `@agent-name`.
+Claude-Craft 8.2.3 propose **63 agents** repartis en **11 catégories** distinctes. Chaque agent est un expert dans son domaine, invocable via la syntaxe `@agent-name`.
 
 > **Optimisation des modeles** : Les agents utilisent un modele adapte a leur role. Les reviewers et auditors utilisent **haiku** (economique pour les taches de verification), tandis que les engineers et architects utilisent **sonnet** (puissant pour les taches de conception et implementation).
 
@@ -312,7 +312,7 @@ BMAD v6 utilise des **commandes dediees** qui activent le role BMAD adapte a cha
 
 ### Pourquoi des agents Docker dedies ?
 
-Claude-Craft 7.26.0 inclut 5 agents specialises Docker car l'infrastructure as code est un pilier du developpement moderne. Chaque agent couvre un aspect specifique de l'ecosysteme Docker.
+Claude-Craft 8.2.3 inclut 5 agents specialises Docker car l'infrastructure as code est un pilier du developpement moderne. Chaque agent couvre un aspect specifique de l'ecosysteme Docker.
 
 ### @docker-architect : Conception d'architecture
 
@@ -435,7 +435,7 @@ Claude-Craft 7.26.0 inclut 5 agents specialises Docker car l'infrastructure as c
 
 ### Structure d'un agent
 
-Chaque agent dans Claude-Craft 7.26.0 est defini par un fichier Markdown avec un **frontmatter YAML** qui configure son comportement :
+Chaque agent dans Claude-Craft 8.2.3 est defini par un fichier Markdown avec un **frontmatter YAML** qui configure son comportement :
 
 ```yaml
 ---

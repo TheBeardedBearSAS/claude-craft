@@ -1,10 +1,10 @@
-# Cheat Sheet : Claude Code 2.1.105
+# Cheat Sheet : Claude Code 2.1.117
 
 ## Installation
 
 ```bash
 npm install -g @anthropic-ai/claude-code
-claude --version  # 2.1.105+
+claude --version  # 2.1.117+
 ```
 
 ## Configuration
@@ -32,7 +32,7 @@ claude
 | `/cost` | Afficher cout session |
 | `/history` | Historique conversations |
 
-## Commandes 2.1.105
+## Commandes 2.1.117
 
 | Commande | Description |
 |----------|-------------|
@@ -395,7 +395,7 @@ Stockage : `~/.claude-profiles/<profile>/projects/<hash>/memory/`
 | Claude Sonnet 4.6 | v2.1.45+ |
 | Agent SDK rate limiting | v2.1.45+ |
 
-## Nouveautes v2.1.47-2.1.105
+## Nouveautes v2.1.47-2.1.117
 
 | Feature | Version |
 |---------|---------|
@@ -410,8 +410,8 @@ Stockage : `~/.claude-profiles/<profile>/projects/<hash>/memory/`
 | Auto Mode permissions | v2.1.94+ |
 | Subprocess sandboxing | v2.1.98+ |
 | Monitor tool | v2.1.98+ |
-| `/proactive` alias for `/loop` | v2.1.105+ |
-| PreCompact blocking (exit 2) | v2.1.105+ |
+| `/proactive` alias for `/loop` | v2.1.117+ |
+| PreCompact blocking (exit 2) | v2.1.117+ |
 
 ## Correctifs v2.1.38-2.1.41
 
@@ -435,5 +435,5 @@ Stockage : `~/.claude-profiles/<profile>/projects/<hash>/memory/`
 
 ---
 
-**Formation Claude Code 2.1.105 + Claude-Craft 7.26.0**
+**Formation Claude Code 2.1.117 + Claude-Craft 8.2.3**
 **The Bearded CTO - 2026**
