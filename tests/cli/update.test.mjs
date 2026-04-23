@@ -11,13 +11,15 @@ vi.mock('../../cli/lib/colors.js', () => ({
   },
 }));
 
-// Mock child_process to avoid running real install scripts
+// Mock child_process to avoid running real install scripts.
+// Security audit 2026-04-23 (C-2): update.js now uses spawnSync with argv array
+// instead of execSync with shell string interpolation. Tests mock spawnSync.
 vi.mock('child_process', () => ({
-  execSync: vi.fn(() => ''),
+  spawnSync: vi.fn(() => ({ status: 0, stdout: '', stderr: '' })),
 }));
 
 import { runUpdate } from '../../cli/lib/update.js';
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 
 describe('runUpdate', () => {
   let tempDir;
@@ -29,7 +31,8 @@ describe('runUpdate', () => {
     cliRoot = mkdtempSync(join(tmpdir(), 'claude-craft-cli-'));
     consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     process.exitCode = undefined;
-    execSync.mockClear();
+    spawnSync.mockClear();
+    spawnSync.mockReturnValue({ status: 0, stdout: '', stderr: '' });
   });
 
   afterEach(() => {
@@ -54,6 +57,15 @@ describe('runUpdate', () => {
     expect(process.exitCode).toBe(1);
   });
 
+  it('rejects invalid --lang value (security: argument injection prevention)', () => {
+    mkdirSync(join(tempDir, '.claude'));
+    expect(() => runUpdate(tempDir, { lang: 'en" && touch /tmp/pwned #' }, cliRoot)).toThrow(/Invalid --lang/);
+  });
+
+  it('rejects system directory as target (security: path traversal prevention)', () => {
+    expect(() => runUpdate('/etc', {}, cliRoot)).toThrow(/Refusing to operate on system directory/);
+  });
+
   it('updates with explicit --tech flag', () => {
     mkdirSync(join(tempDir, '.claude'));
     // Create mock install scripts
@@ -61,7 +73,7 @@ describe('runUpdate', () => {
     writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
     writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-react-rules.sh'), '#!/bin/bash');
 
-    execSync.mockImplementation(() => '');
+    spawnSync.mockReturnValue({ status: 0, stdout: '', stderr: '' });
 
     runUpdate(tempDir, { tech: 'react', lang: 'fr' }, cliRoot);
 
@@ -69,9 +81,16 @@ describe('runUpdate', () => {
     expect(output).toContain('Common rules updated');
     expect(output).toContain('React updated');
     expect(output).toContain('Update complete');
-    // Verify --force is passed
-    expect(execSync).toHaveBeenCalledWith(
-      expect.stringContaining('--force'),
+    // Verify --force is passed in the spawnSync argv array
+    expect(spawnSync).toHaveBeenCalledWith(
+      'bash',
+      expect.arrayContaining(['--force']),
+      expect.any(Object),
+    );
+    // Verify --lang is passed as a single argv item (no shell interpolation)
+    expect(spawnSync).toHaveBeenCalledWith(
+      'bash',
+      expect.arrayContaining(['--lang=fr']),
       expect.any(Object),
     );
   });
@@ -85,7 +104,7 @@ describe('runUpdate', () => {
     writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-symfony-rules.sh'), '#!/bin/bash');
     writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-react-rules.sh'), '#!/bin/bash');
 
-    execSync.mockImplementation(() => '');
+    spawnSync.mockReturnValue({ status: 0, stdout: '', stderr: '' });
 
     runUpdate(tempDir, {}, cliRoot);
 
@@ -100,7 +119,7 @@ describe('runUpdate', () => {
     mkdirSync(join(cliRoot, 'Dev', 'scripts'), { recursive: true });
     writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
 
-    execSync.mockImplementation(() => '');
+    spawnSync.mockReturnValue({ status: 0, stdout: '', stderr: '' });
 
     runUpdate(tempDir, {}, cliRoot);
 
@@ -127,9 +146,10 @@ describe('runUpdate', () => {
     writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
     writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-react-rules.sh'), '#!/bin/bash');
 
-    execSync.mockImplementation((cmd) => {
-      if (cmd.includes('install-react')) throw new Error('Script failed');
-      return '';
+    spawnSync.mockImplementation((_cmd, args) => {
+      const argsStr = Array.isArray(args) ? args.join(' ') : '';
+      if (argsStr.includes('install-react')) return { status: 1, stdout: '', stderr: 'Script failed' };
+      return { status: 0, stdout: '', stderr: '' };
     });
 
     runUpdate(tempDir, { tech: 'react' }, cliRoot);
@@ -145,7 +165,7 @@ describe('runUpdate', () => {
     writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
     // Deliberately NOT creating install-react-rules.sh
 
-    execSync.mockImplementation(() => '');
+    spawnSync.mockReturnValue({ status: 0, stdout: '', stderr: '' });
 
     runUpdate(tempDir, {}, cliRoot);
 
@@ -161,9 +181,7 @@ describe('runUpdate', () => {
     writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-react-rules.sh'), '#!/bin/bash');
 
     // All scripts fail
-    execSync.mockImplementation(() => {
-      throw new Error('Script failed');
-    });
+    spawnSync.mockReturnValue({ status: 1, stdout: '', stderr: 'Script failed' });
 
     runUpdate(tempDir, { tech: 'react' }, cliRoot);
 

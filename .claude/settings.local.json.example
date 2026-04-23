@@ -10,13 +10,13 @@
         "hooks": [
           {
             "type": "command",
-            "comment": "Block downloading executable scripts (curl|wget ... | bash)",
-            "command": "INPUT=$(echo '$TOOL_INPUT' | jq -r '.command // empty'); if echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb|pl|bat|ps1)'; then echo \"BLOCKED: Downloading executable scripts is not allowed\" && exit 1; fi; if echo \"$INPUT\" | grep -qE '(curl|wget).*(-o|-O|>)'; then echo \"BLOCKED: Downloading files requires explicit approval\" && exit 1; fi; exit 0"
+            "comment": "Block downloading executable scripts (curl|wget ... | bash). Reads hook input JSON from stdin (safe against shell injection).",
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb|pl|bat|ps1)'; then echo \"BLOCKED: Downloading executable scripts is not allowed\" >&2 && exit 1; fi; if echo \"$INPUT\" | grep -qE '(curl|wget).*(-o|-O|>)'; then echo \"BLOCKED: Downloading files requires explicit approval\" >&2 && exit 1; fi; exit 0"
           },
           {
             "type": "command",
-            "comment": "Block destructive system commands (rm -rf /, mkfs, dd, fork bombs, chmod 777)",
-            "command": "INPUT=$(echo '$TOOL_INPUT' | jq -r '.command // empty'); if echo \"$INPUT\" | grep -qE 'rm[[:space:]]+-[^[:space:]]*r[^[:space:]]*f[^[:space:]]*[[:space:]]*(~|/|\\.)'; then echo \"BLOCKED: Destructive rm command detected\" && exit 1; fi; if echo \"$INPUT\" | grep -qE '(mkfs|dd[[:space:]]+if=|:[[:space:]]*\\(\\)[[:space:]]*\\{[[:space:]]*:|chmod[[:space:]]+-?R?[[:space:]]*777|>[[:space:]]*/dev/(sd|null))'; then echo \"BLOCKED: Dangerous system command detected\" && exit 1; fi; exit 0"
+            "comment": "Block destructive system commands (rm -rf /, mkfs, dd, fork bombs, chmod 777). Reads hook input JSON from stdin.",
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if echo \"$INPUT\" | grep -qE 'rm[[:space:]]+-[^[:space:]]*r[^[:space:]]*f[^[:space:]]*[[:space:]]*(~|/|\\.)'; then echo \"BLOCKED: Destructive rm command detected\" >&2 && exit 1; fi; if echo \"$INPUT\" | grep -qE '(mkfs|dd[[:space:]]+if=|:[[:space:]]*\\(\\)[[:space:]]*\\{[[:space:]]*:|chmod[[:space:]]+-?R?[[:space:]]*777|>[[:space:]]*/dev/(sd|null))'; then echo \"BLOCKED: Dangerous system command detected\" >&2 && exit 1; fi; exit 0"
           }
         ]
       },
@@ -25,8 +25,8 @@
         "hooks": [
           {
             "type": "command",
-            "comment": "Block editing sensitive files (.env, credentials, keys)",
-            "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+            "comment": "Block editing sensitive files (.env, credentials, keys). Reads hook input JSON from stdin.",
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" >&2 && exit 1; fi; exit 0"
           }
         ]
       },
@@ -35,8 +35,8 @@
         "hooks": [
           {
             "type": "command",
-            "comment": "Block writing sensitive files (.env, credentials, keys)",
-            "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+            "comment": "Block writing sensitive files (.env, credentials, keys). Reads hook input JSON from stdin.",
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" >&2 && exit 1; fi; exit 0"
           }
         ]
       }

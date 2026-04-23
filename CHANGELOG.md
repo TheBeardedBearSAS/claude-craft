@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.2.5] - 2026-04-23
+
+### Security
+
+Multi-agent security audit performed on 2026-04-23 identified 2 CRITICAL, 6 HIGH, 7 MEDIUM, 4 LOW findings. This release fixes all CRITICAL and 5 of 6 HIGH findings. Full report: `docs/security/audit-2026-04-23.md`.
+
+**CRITICAL fixes:**
+- **Shell injection via `eval` (CWE-78, `Dev/scripts/pack-repo-fallback.sh:58`)** — Replaced `eval "find ... $FIND_EXCLUDES"` with a `find` argv array. A crafted `--exclude` argument could previously achieve full local code execution.
+- **Command injection via string interpolation (CWE-78, `cli/lib/update.js:64,88`)** — Switched `execSync(\`bash "${script}" --lang="${lang}" --force "${targetPath}"\`)` to `spawnSync('bash', [script, \`--lang=${lang}\`, '--force', safeTarget])`. Added `--lang` allowlist (`/^[a-z]{2}$/`) and target-path validation rejecting system directories (`/`, `/etc`, `/usr`, `/bin`, `/sbin`, `/boot`, `/lib`, `/var`, `/root`, `/proc`, `/sys`, `/dev`).
+
+**HIGH fixes:**
+- **Path traversal / arbitrary write (CWE-22, `pack-repo-fallback.sh`)** — Added validation on `--output` (relative path, no `..`, no shell metacharacters), `--exclude` and `--include` (no shell metacharacters). Added `timeout 5` on `grep -E` against ReDoS via user-supplied regex.
+- **Path traversal to system directories (CWE-22, `cli/lib/update.js`)** — Addressed by the `assertSafeTarget` guard added for the CRITICAL fix.
+- **Hook command injection (CWE-78, `.claude/settings.json` + `settings.local.json.example`)** — Rewrote all 7 hooks from `echo '$TOOL_INPUT' | jq -r '.command // empty'` to `jq -r '.tool_input.command // empty'` (reads hook-input JSON from stdin instead of interpolating a shell variable). This eliminates the CVE-2025-59536 injection class entirely.
+- **GitHub Actions supply chain (CWE-494, `.github/workflows/cla.yml`)** — SHA-pinned `contributor-assistant/github-action` to `ca4a40a7d1004f18d9960b404b97e5f30a505a08` (v2.6.1). Removed `actions: write` permission (not needed for a CLA bot).
+
+**Dependencies:** `npm audit --omit=dev` → 0 vulnerabilities. All production deps (`hono@4.12.14`, `@hono/node-server@1.19.14`, `dompurify@3.4.0`, `marked@14.1.4`, `js-yaml@4.1.1`) are patched against recent CVEs (CVE-2026-29045, CVE-2026-29085, CVE-2026-29087, CVE-2026-0540, CVE-2025-15599). 6 vulnerabilities remain in devDependencies (eslint/vitest transitives: flatted, minimatch, picomatch, rollup, ajv, brace-expansion) — not shipped to users; fixable with `npm audit fix`.
+
+**Tests:** update.test mocks migrated from `execSync` to `spawnSync`. Added 2 new security tests (invalid `--lang` rejection, system-directory target rejection). 787 tests pass total (up from 785).
+
+### Out-of-scope / deferred (tracked in audit report)
+- 7 MEDIUM findings (CLI hardening: `tryExec`, `openBrowser` URL allowlist, `ralph.js` argument passing, `--output` validation in `parse-args.js`, `$BINARY_EXTS` quoting, `post-tool-filter.sh` integrity, RTK `RTK_SKIP_CHECKSUM` bypass).
+- 4 LOW findings (minor defensive hardening, dependabot coverage extension).
+
 ## [8.2.4] - 2026-04-23
 
 ### Changed — Documentation and training sync

@@ -9,11 +9,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(echo '$TOOL_INPUT' | jq -r '.command // empty'); if echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb|pl|bat|ps1)'; then echo \"BLOCKED: Downloading executable scripts is not allowed\" && exit 1; fi; if echo \"$INPUT\" | grep -qE '(curl|wget).*(-o|-O|>)'; then echo \"BLOCKED: Downloading files requires explicit approval\" && exit 1; fi; exit 0"
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb|pl|bat|ps1)'; then echo \"BLOCKED: Downloading executable scripts is not allowed\" >&2 && exit 1; fi; if echo \"$INPUT\" | grep -qE '(curl|wget).*(-o|-O|>)'; then echo \"BLOCKED: Downloading files requires explicit approval\" >&2 && exit 1; fi; exit 0"
           },
           {
             "type": "command",
-            "command": "INPUT=$(echo '$TOOL_INPUT' | jq -r '.command // empty'); if echo \"$INPUT\" | grep -qE 'rm[[:space:]]+-[^[:space:]]*r[^[:space:]]*f[^[:space:]]*[[:space:]]*(~|/|\\.)'; then echo \"BLOCKED: Destructive rm command detected\" && exit 1; fi; if echo \"$INPUT\" | grep -qE '(mkfs|dd[[:space:]]+if=|:[[:space:]]*\\(\\)[[:space:]]*\\{[[:space:]]*:|chmod[[:space:]]+-?R?[[:space:]]*777|>[[:space:]]*/dev/(sd|null))'; then echo \"BLOCKED: Dangerous system command detected\" && exit 1; fi; exit 0"
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if echo \"$INPUT\" | grep -qE 'rm[[:space:]]+-[^[:space:]]*r[^[:space:]]*f[^[:space:]]*[[:space:]]*(~|/|\\.)'; then echo \"BLOCKED: Destructive rm command detected\" >&2 && exit 1; fi; if echo \"$INPUT\" | grep -qE '(mkfs|dd[[:space:]]+if=|:[[:space:]]*\\(\\)[[:space:]]*\\{[[:space:]]*:|chmod[[:space:]]+-?R?[[:space:]]*777|>[[:space:]]*/dev/(sd|null))'; then echo \"BLOCKED: Dangerous system command detected\" >&2 && exit 1; fi; exit 0"
           }
         ]
       },
@@ -22,7 +22,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" >&2 && exit 1; fi; exit 0"
           }
         ]
       },
@@ -31,7 +31,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" >&2 && exit 1; fi; exit 0"
           }
         ]
       }
@@ -42,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '\\.(js|ts|jsx|tsx|json|md|mjs|cjs)$'; then npx prettier --write \"$FILEPATH\" 2>/dev/null || true; fi; exit 0"
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '\\.(js|ts|jsx|tsx|json|md|mjs|cjs)$'; then npx prettier --write \"$FILEPATH\" 2>/dev/null || true; fi; exit 0"
           }
         ]
       },
@@ -61,7 +61,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "OUTPUT_SIZE=$(echo '$TOOL_OUTPUT' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Summarize key findings in under 20 lines.'; fi; exit 0",
+            "command": "OUTPUT_SIZE=$(jq -r '.tool_output // empty' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Summarize key findings in under 20 lines.'; fi; exit 0",
             "timeout": 3000
           }
         ]
@@ -71,7 +71,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "OUTPUT_SIZE=$(echo '$TOOL_OUTPUT' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Focus on the most relevant matches.'; fi; exit 0",
+            "command": "OUTPUT_SIZE=$(jq -r '.tool_output // empty' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Focus on the most relevant matches.'; fi; exit 0",
             "timeout": 3000
           }
         ]

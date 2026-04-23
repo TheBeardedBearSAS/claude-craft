@@ -5,10 +5,32 @@
 
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import c from './colors.js';
 import { listDirs } from './fs-utils.js';
 import { TECH_REGISTRY } from './tech-registry.js';
+
+// Security: reject paths into system directories to prevent accidental or malicious
+// installation outside the user's expected workspace.
+const FORBIDDEN_SYSTEM_DIRS = ['/', '/etc', '/usr', '/bin', '/sbin', '/boot', '/lib', '/var', '/root', '/proc', '/sys', '/dev'];
+
+function assertSafeTarget(targetPath) {
+  const resolved = path.resolve(targetPath);
+  for (const forbidden of FORBIDDEN_SYSTEM_DIRS) {
+    if (resolved === forbidden || resolved.startsWith(forbidden + path.sep)) {
+      throw new Error(`Refusing to operate on system directory: ${resolved}`);
+    }
+  }
+  return resolved;
+}
+
+// Security: enforce allowlist on language code (prevents argument injection via --lang).
+function assertSafeLang(lang) {
+  if (!/^[a-z]{2}$/.test(lang)) {
+    throw new Error(`Invalid --lang value: "${lang}" (expected 2-letter lowercase code)`);
+  }
+  return lang;
+}
 
 /**
  * Run the update command against a target directory.
@@ -19,11 +41,14 @@ import { TECH_REGISTRY } from './tech-registry.js';
  * @param {string} cliRoot - Path to the CLI package root
  */
 function runUpdate(targetPath, options, cliRoot) {
-  const claudeDir = path.join(targetPath, '.claude');
-  const lang = options.lang || 'en';
+  // Security: validate inputs before any side effect (CWE-78, CWE-22).
+  const safeTarget = assertSafeTarget(targetPath);
+  const lang = assertSafeLang(options.lang || 'en');
+
+  const claudeDir = path.join(safeTarget, '.claude');
 
   console.log(`\n${c.bold}Claude Craft Update${c.reset}`);
-  console.log(`${c.dim}Directory: ${targetPath}${c.reset}\n`);
+  console.log(`${c.dim}Directory: ${safeTarget}${c.reset}\n`);
 
   // Verify existing installation
   if (!fs.existsSync(claudeDir)) {
@@ -60,16 +85,17 @@ function runUpdate(targetPath, options, cliRoot) {
 
   if (fs.existsSync(commonScript)) {
     console.log(`  ${c.cyan}Refreshing common rules...${c.reset}`);
-    try {
-      execSync(`bash "${commonScript}" --lang="${lang}" --force "${targetPath}"`, {
-        encoding: 'utf8',
-        timeout: 60_000,
-        stdio: 'pipe',
-      });
+    // Security: spawnSync with argv array — no shell interpretation, no injection.
+    const result = spawnSync('bash', [commonScript, `--lang=${lang}`, '--force', safeTarget], {
+      encoding: 'utf8',
+      timeout: 60_000,
+      stdio: 'pipe',
+    });
+    if (result.status === 0) {
       console.log(`  ${c.green}[OK]${c.reset} Common rules updated`);
       updated++;
-    } catch (e) {
-      console.log(`  ${c.red}[FAIL]${c.reset} Common rules: ${e.message}`);
+    } else {
+      console.log(`  ${c.red}[FAIL]${c.reset} Common rules: ${result.stderr || result.error?.message || 'unknown'}`);
     }
   }
 
@@ -84,16 +110,17 @@ function runUpdate(targetPath, options, cliRoot) {
     }
 
     console.log(`  ${c.cyan}Refreshing ${entry.displayName}...${c.reset}`);
-    try {
-      execSync(`bash "${script}" --lang="${lang}" --force "${targetPath}"`, {
-        encoding: 'utf8',
-        timeout: 60_000,
-        stdio: 'pipe',
-      });
+    // Security: spawnSync with argv array — no shell interpretation, no injection.
+    const result = spawnSync('bash', [script, `--lang=${lang}`, '--force', safeTarget], {
+      encoding: 'utf8',
+      timeout: 60_000,
+      stdio: 'pipe',
+    });
+    if (result.status === 0) {
       console.log(`  ${c.green}[OK]${c.reset} ${entry.displayName} updated`);
       updated++;
-    } catch (e) {
-      console.log(`  ${c.red}[FAIL]${c.reset} ${entry.displayName}: ${e.message}`);
+    } else {
+      console.log(`  ${c.red}[FAIL]${c.reset} ${entry.displayName}: ${result.stderr || result.error?.message || 'unknown'}`);
     }
   }
 

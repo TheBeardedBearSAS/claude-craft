@@ -39,27 +39,44 @@ if [[ "$FORMAT" != "markdown" && "$FORMAT" != "plain" ]]; then
   exit 1
 fi
 
+# Validate --output: relative path only, no traversal, no shell metachars
+if [[ "$OUTPUT" = /* ]] || [[ "$OUTPUT" == *".."* ]] || [[ "$OUTPUT" =~ [[:space:]\;\|\&\$\`\(\)\<\>] ]]; then
+  echo "❌ Invalid --output: must be a relative path without '..' or shell metacharacters" >&2
+  exit 1
+fi
+
+# Validate --exclude and --include: no shell metachars (prevents eval/grep injection)
+if [[ -n "$EXCLUDE_EXTRA" && "$EXCLUDE_EXTRA" =~ [[:space:]\;\|\&\$\`\(\)\<\>] ]]; then
+  echo "❌ Invalid --exclude: shell metacharacters are not allowed" >&2
+  exit 1
+fi
+if [[ -n "$INCLUDE" && "$INCLUDE" =~ [[:space:]\;\|\&\$\`\(\)\<\>] ]]; then
+  echo "❌ Invalid --include: shell metacharacters are not allowed" >&2
+  exit 1
+fi
+
 echo "📦 Pack repo (fallback shell) → $OUTPUT"
 echo "   Format: $FORMAT | Root: $(pwd)"
 
-# Build find excludes
-FIND_EXCLUDES=""
+# Build find args as an array (no eval, no injection)
+FIND_ARGS=()
 for excl in "${DEFAULT_EXCLUDES[@]}"; do
-  FIND_EXCLUDES+=" -not -path '*/$excl/*' -not -path '*/$excl'"
+  FIND_ARGS+=(-not -path "*/$excl/*" -not -path "*/$excl")
 done
 if [[ -n "$EXCLUDE_EXTRA" ]]; then
-  FIND_EXCLUDES+=" -not -path '*$EXCLUDE_EXTRA*'"
+  FIND_ARGS+=(-not -path "*$EXCLUDE_EXTRA*")
 fi
 
 # Collect files — respect .gitignore si disponible
 if command -v git &>/dev/null && git rev-parse --git-dir &>/dev/null; then
   FILES=$(git ls-files --cached --others --exclude-standard 2>/dev/null | grep -Ev "\.($BINARY_EXTS)$" || true)
 else
-  FILES=$(eval "find . -type f $FIND_EXCLUDES" | grep -Ev "\.($BINARY_EXTS)$" | sed 's|^\./||')
+  FILES=$(find . -type f "${FIND_ARGS[@]}" | grep -Ev "\.($BINARY_EXTS)$" | sed 's|^\./||')
 fi
 
 if [[ -n "$INCLUDE" ]]; then
-  FILES=$(echo "$FILES" | grep -E "$INCLUDE" || true)
+  # timeout on grep to prevent ReDoS
+  FILES=$(echo "$FILES" | timeout 5 grep -E "$INCLUDE" || true)
 fi
 
 FILE_COUNT=$(echo "$FILES" | grep -c . || echo 0)
