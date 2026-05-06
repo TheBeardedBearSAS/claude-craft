@@ -6,8 +6,14 @@ import { tmpdir } from 'os';
 // Mock colors to simplify output assertions
 vi.mock('../../cli/lib/colors.js', () => ({
   default: {
-    red: '', green: '', yellow: '', blue: '', cyan: '',
-    bold: '', dim: '', reset: '',
+    red: '',
+    green: '',
+    yellow: '',
+    blue: '',
+    cyan: '',
+    bold: '',
+    dim: '',
+    reset: '',
   },
 }));
 
@@ -82,7 +88,7 @@ describe('runDoctor', () => {
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return '10.0.0';
-      if (cmd.includes('claude')) return '2.1.38';
+      if (cmd.includes('claude')) return '2.1.117';
       if (cmd.includes('git')) return null;
       if (cmd.includes('yq')) return 'yq v4.44.1';
       return null;
@@ -101,7 +107,7 @@ describe('runDoctor', () => {
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return null;
-      if (cmd.includes('claude')) return '2.1.38';
+      if (cmd.includes('claude')) return '2.1.117';
       if (cmd.includes('git')) return 'git version 2.45.0';
       if (cmd.includes('yq')) return 'yq v4.44.1';
       return null;
@@ -175,7 +181,7 @@ describe('runDoctor', () => {
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return '10.0.0';
-      if (cmd.includes('claude')) return '2.1.38';
+      if (cmd.includes('claude')) return '2.1.117';
       if (cmd.includes('git')) return 'git version 2.45.0';
       if (cmd.includes('yq')) return null;
       return null;
