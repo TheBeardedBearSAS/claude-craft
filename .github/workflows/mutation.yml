@@ -32,8 +32,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Stryker
+      - name: Restore incremental cache (PR only)
+        if: github.event_name == 'pull_request'
+        uses: actions/cache@v4
+        with:
+          path: reports/mutation/stryker-incremental.json
+          key: stryker-incremental-${{ github.base_ref }}-${{ github.event.pull_request.head.sha }}
+          restore-keys: |
+            stryker-incremental-${{ github.base_ref }}-
+
+      - name: Run Stryker (nightly full)
+        if: github.event_name != 'pull_request'
         run: npx stryker run || true
+
+      - name: Run Stryker (PR incremental — mute only changed files)
+        if: github.event_name == 'pull_request'
+        run: npx stryker run --incremental || true
 
       - name: Upload mutation report
         if: always()
