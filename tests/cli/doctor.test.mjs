@@ -19,10 +19,14 @@ vi.mock('../../cli/lib/colors.js', () => ({
 
 import { runDoctor } from '../../cli/lib/doctor.js';
 
-/** Helper: exec mock with all tools present (including yq). */
+/** Helper: exec mock with all tools present (including yq).
+ *  Uses Claude Code 2.1.117 (recommended baseline since v8.3.0) so the
+ *  version check added in Sprint 2 (CVE-2025-59536 hardening) does not
+ *  emit [FAIL] in tests that don't expect one.
+ */
 function allToolsExec(cmd) {
   if (cmd.includes('npm')) return '10.0.0';
-  if (cmd.includes('claude')) return '2.1.38';
+  if (cmd.includes('claude')) return '2.1.117';
   if (cmd.includes('git')) return 'git version 2.45.0';
   if (cmd.includes('yq')) return 'yq (https://github.com/mikefarah/yq/) version v4.44.1';
   return null;
