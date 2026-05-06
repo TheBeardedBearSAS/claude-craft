@@ -12,6 +12,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ## What's New in v8.3 (Audit-driven release: tokens + security)
 
+- **Dependabot config fix** (v8.3.1) -- removed two erroneous ecosystems (`/cli/kanban/client` and `docker /`) introduced in v8.3.0 that caused Dependabot run failures
 - **Token optimization via `context: fork`** (v8.3.0) -- 15 heavy skills (>100 lines) now run in isolated contexts (Claude Code v2.1.105+), saving 8-15K tokens per long session
 - **CHANGELOG truncated** (v8.3.0) -- 117 KB → 67 KB shipped, archive moved to `docs/CHANGELOG-archive.md`
 - **Production deps trimmed** (v8.3.0) -- `cytoscape`, `cytoscape-dagre`, `dompurify`, `uplot` moved to `devDependencies` (-3 MB prod install)

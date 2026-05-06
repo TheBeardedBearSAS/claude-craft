@@ -65,7 +65,7 @@ All skills developed by **The Bearded CTO** as part of **Claude Craft** — the 
 - **Author:** The Bearded CTO
 - **License:** MIT
 - **Repository:** https://github.com/TheBeardedCTO/claude-craft
-- **Version:** 8.3.0
+- **Version:** 8.3.1
 - **Marketplace Status:** Ready for submission (2026-Q2)
 
 ---

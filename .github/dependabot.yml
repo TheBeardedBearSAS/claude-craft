@@ -26,17 +26,6 @@ updates:
       - "website"
       - "automated"
 
-  - package-ecosystem: "npm"
-    directory: "/cli/kanban/client"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
-      - "kanban-client"
-      - "automated"
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -44,13 +33,4 @@ updates:
       day: "monday"
     labels:
       - "github-actions"
-      - "automated"
-
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    labels:
-      - "docker"
       - "automated"

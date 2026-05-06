@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.3.1] - 2026-05-06
+
+### Fixed
+
+- **`.github/dependabot.yml`** — Removed two erroneous ecosystems introduced in v8.3.0 that triggered Dependabot run failures: `npm` for `/cli/kanban/client/` (no separate `package.json` — the kanban client inherits from the root) and `docker /` (no Dockerfile at the repository root). Dependabot Updates now succeeds on the standard targets (`/`, `/website/`, GitHub Actions).
+
 ## [8.3.0] - 2026-05-06
 
 Comprehensive multi-agent audit (`audit/2026-05-06-comprehensive/`, 17 reports / 15 957 lines / 341 findings) executed end-to-end. Focus: token optimization, security hardening, plugin schema sync, documentation accuracy.

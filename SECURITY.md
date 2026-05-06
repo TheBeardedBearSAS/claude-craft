@@ -8,6 +8,7 @@
 | 8.2.x   | :white_check_mark: |
 | < 8.2   | :x:                |
 
+
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability in Claude Craft, please report it responsibly.
