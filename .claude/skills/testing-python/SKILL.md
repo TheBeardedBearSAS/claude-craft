@@ -1,6 +1,7 @@
 ---
 name: testing-python
 description: Stratégie de Tests Python 3.14+. Use when writing tests, reviewing test coverage, or setting up testing.
+context: fork
 ---
 
 # Stratégie de Tests Python 3.14+

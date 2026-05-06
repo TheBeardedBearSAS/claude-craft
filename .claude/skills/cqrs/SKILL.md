@@ -1,6 +1,7 @@
 ---
 name: cqrs
 description: CQRS - Command Query Responsibility Segregation. Use when implementing DDD patterns, separating read/write models, event sourcing, or building scalable architectures with heterogeneous performance requirements.
+context: fork
 triggers:
   files: ["**/Command*.php", "**/Query*.php", "**/Handler*.php", "**/Projector*.php", "**/ReadModel*.php", "**/WriteModel*.php"]
   keywords: ["cqrs", "command", "query", "event sourcing", "projection", "read model", "write model", "command handler", "query handler"]

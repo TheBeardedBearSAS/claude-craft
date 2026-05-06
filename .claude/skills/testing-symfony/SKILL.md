@@ -1,6 +1,7 @@
 ---
 name: testing-symfony
 description: Stratégie de Tests Symfony 8.0 / PHP 8.5. Use when writing tests, reviewing test coverage, or setting up testing.
+context: fork
 ---
 
 # Stratégie de Tests Symfony 8.0 / PHP 8.5

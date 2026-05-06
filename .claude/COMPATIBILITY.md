@@ -1,899 +1,306 @@
-# Claude Code Compatibility
+# Claude Code Compatibility — Claude Craft v8.3.0
 
-**Minimum Version**: 2.1.47
-**Recommended Version**: 2.1.117
-
-This document tracks Claude Code features and version compatibility for claude-craft.
+**Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
+**Recommended Version:** 2.1.117
+**Last Updated:** 2026-05-06
 
 ---
 
-### PR Integration (v2.1.27+)
-
-| Feature | CLI Option | Description |
-|---------|------------|-------------|
-| Resume PR session | `--from-pr 123` or `--from-pr <url>` | Resume session linked to a PR |
-| PR Status | Footer indicator | Shows PR state in status line |
-| Auto-link | via `gh pr create` | Sessions auto-link when creating PR |
-
-**PR Status Indicators:**
-
-| Status | Indicator |
-|--------|-----------|
-| Approved | approved |
-| Pending | pending |
-| Changes Requested | changes requested |
-| Draft | draft |
-| Merged | merged |
-
-### File Operations Best Practice (v2.1.21+)
-
-Claude prefers native file tools over bash equivalents for better reliability:
-
-| Task | Use | Avoid |
-|------|-----|-------|
-| Read files | `Read` tool | `cat`, `head`, `tail` |
-| Edit files | `Edit` tool | `sed`, `awk` |
-| Write files | `Write` tool | `echo >`, `cat <<EOF` |
-
-### spinnerVerbs Configuration (v2.1.23+)
-
-Customize spinner text displayed during tool execution:
-
-```json
-{
-  "spinnerVerbs": {
-    "default": ["Thinking", "Processing"],
-    "Edit": ["Editing", "Modifying"],
-    "Bash": ["Running", "Executing"]
-  }
-}
-```
-
-Linked to `activeForm` field in TaskCreate for custom task spinners.
-
-### Background Agent Permissions (v2.1.20+)
-
-Background agents request permissions **before** launching, avoiding mid-execution blocks:
-
-```
-Launching background task: "Analyze and fix code"
-
-This task will need permissions for:
-- Read (all files)
-- Edit (src/**)
-- Bash (npm run lint:fix)
-
-Approve all? [y/N/select]
-```
-
-### Task Status: deleted (v2.1.20+)
-
-Tasks can now be permanently removed using `deleted` status via TaskUpdate:
-
-```
-pending → in_progress → completed
-              ↓
-           deleted
-```
-
-### VSCode Python venv (v2.1.21+)
-
-Setting `claudeCode.usePythonEnvironment` enables automatic virtual environment activation in VSCode.
-
-### PDF Page Range Support (v2.1.30+)
-
-The Read tool now supports a `pages` parameter for PDF files:
-
-| Feature | Description |
-|---------|-------------|
-| `pages` parameter | Specify page range (e.g., `pages: "1-5"`) |
-| Large PDF optimization | PDFs >10 pages return lightweight reference when `@` mentioned |
-
-### OAuth Client Credentials for MCP (v2.1.30+)
-
-For MCP servers that don't support Dynamic Client Registration:
-
-| Flag | Description |
-|------|-------------|
-| `--client-id` | OAuth client ID for the MCP server |
-| `--client-secret` | OAuth client secret for the MCP server |
-
-Usage: `claude mcp add --client-id <id> --client-secret <secret> <server-name>`
-
-### /debug Command (v2.1.30+)
-
-| Command | Description |
-|---------|-------------|
-| `/debug` | Troubleshoot current session issues |
-
-Complements `/doctor` (environment diagnostics) with session-specific debugging.
-
-### Task Tool Metrics (v2.1.30+)
-
-Task tool results now include execution metrics:
-
-| Metric | Description |
-|--------|-------------|
-| Token count | Tokens consumed by the sub-agent |
-| Tool uses | Number of tool invocations |
-| Duration | Elapsed time for task execution |
-
-### Reduced Motion Mode (v2.1.30+)
-
-Configuration option to minimize animations: `"reducedMotion": true` in settings.json.
-
-### Session Resume Hint (v2.1.31+)
-
-On exit, Claude Code now displays a hint showing how to resume the current session.
-
-### PDF Limits Clarification (v2.1.31+)
-
-Improved error messages now show actual PDF limits:
-
-| Limit | Value |
-|-------|-------|
-| Max pages | 100 pages per request |
-| Max file size | 20MB |
-
-### Enhanced File Tools Preference (v2.1.31+)
-
-System prompts improved to more strongly guide Claude toward using dedicated tools (`Read`, `Edit`, `Glob`, `Grep`) instead of bash equivalents (`cat`, `sed`, `grep`, `find`).
-
-### Reduced Layout Jitter (v2.1.31+)
-
-Terminal layout jitter reduced when the spinner appears and disappears during streaming.
-
-### Japanese IME Support (v2.1.31+)
-
-Added support for full-width (zenkaku) space input from Japanese IME in checkbox selection.
-
-### Third-party Provider Pricing (v2.1.31+)
-
-Removed misleading Anthropic API pricing from model selector for third-party provider (Bedrock, Vertex, Foundry) users.
-
-### Claude Opus 4.6 Support (v2.1.32+)
-
-New flagship model with enhanced capabilities:
-
-| Feature | Value |
-|---------|-------|
-| Model ID | `claude-opus-4-6` |
-| Context window | 200K standard, 1M beta |
-| Max output | 128K tokens |
-| Adaptive thinking | Effort levels: low, medium, high, max |
-| Context compaction | Beta - automatic context management |
-
-### Agent Teams (v2.1.32+ Research Preview)
-
-Multi-agent coordination with shared task management:
-
-| Feature | Description |
-|---------|-------------|
-| `Teammate` tool | spawnTeam, cleanup operations |
-| `SendMessage` tool | message, broadcast, shutdown_request/response |
-| Shared tasks | TaskCreate/Update/List/Get across team |
-| Display modes | In-process (Shift+Up/Down), split panes (tmux/iTerm2) |
-| Delegate mode | Shift+Tab to switch between teammates |
-
-Enable: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
-
-### Automatic Memory Recording (v2.1.32+)
-
-Claude automatically records session memory for future context:
-
-| Feature | Value |
-|---------|-------|
-| Trigger | After ~10K tokens of conversation |
-| Update frequency | Every ~5K tokens or 3 tool calls |
-| Storage | `~/.claude-profiles/<profile>/projects/<hash>/memory/` |
-
-### Summarize from Here (v2.1.32+)
-
-Partial conversation summarization - summarize from a specific point rather than the entire conversation.
-
-### Auto Skill Loading from --add-dir (v2.1.32+)
-
-Skills in directories added via `--add-dir` are now automatically discovered and available.
-
-### Skill Character Budget Scaling (v2.1.32+)
-
-Skill content budget now scales to 2% of the model's context window size.
-
-### --resume Agent Inheritance (v2.1.32+)
-
-When resuming a session with `--resume`, the `--agent` value is automatically inherited from the original session.
-
-### VSCode Session Loading Spinner (v2.1.32+)
-
-Added loading spinner in VSCode while session is being restored.
-
-### TeammateIdle & TaskCompleted Hook Events (v2.1.33+)
-
-New hook events for multi-agent workflows:
-
-| Event | When it fires | Use case |
-|-------|---------------|----------|
-| `TeammateIdle` | When a teammate goes idle | Assign next task, cleanup |
-| `TaskCompleted` | When a task is marked completed | Trigger next workflow step |
-
-### Agent Type Restrictions (v2.1.33+)
-
-Control which sub-agent types an agent can spawn using `Task(agent_type)` in the `tools` frontmatter:
-
-| Syntax | Description |
-|--------|-------------|
-| `Task(Explore)` | Only allow Explore sub-agents |
-| `Task(Plan)` | Only allow Plan sub-agents |
-| `Task(Bash)` | Only allow Bash sub-agents |
-
-### Agent Memory Frontmatter (v2.1.33+)
-
-Persistent memory for sub-agents with three scope options:
-
-| Scope | Location | Use Case |
-|-------|----------|----------|
-| `user` | `~/.claude/agent-memory/<name>/` | Cross-project learnings (recommended) |
-| `project` | `.claude/agent-memory/<name>/` | Project-specific, shareable via VCS |
-| `local` | `.claude/agent-memory-local/<name>/` | Project-specific, NOT in VCS |
-
-### Plugin Name in Skill Descriptions (v2.1.33+)
-
-Plugin names now appear in skill descriptions and the `/skills` menu.
-
-### VSCode Remote Sessions (v2.1.33+)
-
-OAuth users can browse and resume Claude Code sessions from claude.ai remotely.
-
-### VSCode Session Picker Enhancements (v2.1.33+)
-
-Git branch and message count now displayed in session picker, with search by branch name.
-
-### Fast Mode (v2.1.36+)
-
-Toggle fast mode for Opus 4.6 with the `/fast` command:
-
-| Feature | Description |
-|---------|-------------|
-| Command | `/fast` to toggle on/off |
-| Speed | Up to 2.5x faster output tokens |
-| Intelligence | Same Opus 4.6 capabilities |
-| Visual indicator | Lightning bolt icon when enabled |
-| Persistence | Setting persists across sessions |
-| Pricing (fast) | $30/M input, $150/M output |
-| Pricing (standard) | $5/M input, $25/M output |
-
-### Security: Skills Directory Protection (v2.1.38+)
-
-Writes to `.claude/skills` directory are now blocked in sandbox mode.
-
-### Heredoc Fix for JS Template Literals (v2.1.38+)
-
-Bash tool no longer produces "Bad substitution" errors with heredocs containing JavaScript template literals like `${index + 1}`.
-
-### Plan Mode Crash Fix (v2.1.38+)
-
-Fixed crash when entering plan mode with project config in `~/.claude.json` missing default fields.
-
-### temperatureOverride Fix (v2.1.38+)
-
-`temperatureOverride` is no longer silently ignored in the streaming API path.
-
-### VSCode Fixes (v2.1.37/v2.1.38)
-
-| Fix | Description |
-|-----|-------------|
-| Terminal scroll | Fixed scroll-to-top regression from v2.1.37 |
-| Tab key | Fixed Tab key queueing slash commands instead of autocompleting |
-| Duplicate sessions | Fixed duplicate sessions when resuming in VSCode |
-
-### LSP Compatibility (v2.1.38+)
-
-Fixed LSP shutdown/exit compatibility with strict language servers that reject null params.
-
-### Text Rendering Fixes (v2.1.38+)
-
-| Fix | Description |
-|-----|-------------|
-| Thai/Lao spacing | Fixed Thai/Lao spacing vowels rendering in input field |
-| Tool use text | Fixed text between tool uses disappearing when not streaming |
-
-### Nested Session Guard (v2.1.39+)
-
-Claude Code now prevents launching inside another Claude Code session, avoiding accidental session inception.
-
-### Agent Teams Cloud Provider Fix (v2.1.39+)
-
-Fixed Agent Teams using wrong model identifier for Bedrock, Vertex, and Foundry customers.
-
-### Non-Agent Markdown Warning Fix (v2.1.39+)
-
-Fixed spurious warnings for non-agent markdown files in `.claude/agents/` directory. Only files with valid agent frontmatter are now treated as agents.
-
-### OTel Fast Mode Tracing (v2.1.39+)
-
-Added `speed` attribute to OTel events and trace spans for fast mode visibility in observability tools.
-
-### Terminal & Streaming Fixes (v2.1.39+)
-
-| Fix | Description |
-|-----|-------------|
-| MCP image streaming | Fixed crash when MCP tools return image content during streaming |
-| /resume previews | Fixed raw XML tags shown instead of readable command names |
-| Terminal rendering | Improved rendering performance and fixed character loss at screen boundary |
-| Bedrock/Vertex errors | Improved model error messages with fallback suggestions |
-
-### Auth CLI Commands (v2.1.41+)
-
-New CLI subcommands for authentication management:
-
-| Command | Description |
-|---------|-------------|
-| `claude auth login` | Authenticate with Anthropic |
-| `claude auth status` | Check current authentication state |
-| `claude auth logout` | Sign out and clear credentials |
-
-### Windows ARM64 Support (v2.1.41+)
-
-Native binary support for Windows ARM64 (win32-arm64) platform.
-
-### /rename Auto-Generation (v2.1.41+)
-
-`/rename` now auto-generates a descriptive session name from conversation context when called without arguments.
-
-### @-Mention Anchor Fix (v2.1.41+)
-
-Fixed file resolution failing for @-mentions with anchor fragments (e.g., `@README.md#installation`).
-
-### Agent SDK & Plan Mode Fixes (v2.1.41+)
-
-| Fix | Description |
-|-----|-------------|
-| Background tasks | Fixed notifications not delivered in streaming Agent SDK mode |
-| Subagent timing | Permission wait time no longer included in elapsed time display |
-| Plan mode | Fixed proactive ticks firing while in plan mode |
-| Auto-compact | Fixed failure error notifications being shown to users |
-| AWS auth | Added 3-minute timeout to prevent indefinite hanging |
-
-### Resume Title Fix (v2.1.42+)
-
-Fixed session resume displaying wrong title when multiple sessions exist.
-
-### Announcement Targeting (v2.1.42+)
-
-Improved announcement targeting to show relevant messages based on user's plan and usage.
-
-### Structured Outputs Header (v2.1.43+)
-
-Added `anthropic-beta: structured-outputs` header support for typed API responses.
-
-### AWS Auth Timeout Improvement (v2.1.43+)
-
-Refined AWS authentication timeout handling (previously added in v2.1.41).
-
-### Auth Token Refresh (v2.1.44+)
-
-Automatic refresh of expired authentication tokens without requiring manual re-login.
-
-### Plugin Hot-Reload (v2.1.44+)
-
-| Feature | Description |
-|---------|-------------|
-| Hot-reload | Plugins reload automatically when files change |
-| Backup files | Automatic backup before plugin updates |
-| Startup perf | Improved plugin initialization speed |
-
-### Memory Improvements (v2.1.44+)
-
-Enhanced auto-memory recording with better deduplication and relevance filtering.
-
-### Claude Sonnet 4.6 Support (v2.1.45+)
-
-New model with near-Opus coding performance at lower cost:
-
-| Feature | Value |
-|---------|-------|
-| Model ID | `claude-sonnet-4-6` |
-| Context window | 200K standard, 1M beta |
-| Max output | 64K tokens |
-| Input pricing | $3/M tokens |
-| Output pricing | $15/M tokens |
-| Key strength | Near-Opus coding, tool use, instruction following |
-
-### spinnerTipsOverride (v2.1.45+)
-
-New setting to customize tips displayed during spinner animations:
-
-```json
-{
-  "spinnerTipsOverride": [
-    "Tip: Use /fast to toggle fast mode",
-    "Tip: Use Shift+Tab for delegate mode"
-  ]
-}
-```
-
-### Plugin Directory Configuration (v2.1.45+)
-
-Configure custom plugin directories via settings:
-
-```json
-{
-  "pluginDirs": ["/path/to/custom/plugins"]
-}
-```
-
-### Agent SDK Rate Limiting (v2.1.45+)
-
-Built-in rate limiting for Agent SDK to prevent API throttling in multi-agent workflows.
-
-### VSCode Fixes (v2.1.45)
-
-| Fix | Description |
-|-----|-------------|
-| Session restore | Fixed session restore failing after VSCode update |
-| Terminal focus | Fixed terminal losing focus during streaming |
-
-### LSP Plugins — Code Intelligence (v2.1.46+)
-
-LSP plugins give Claude automatic diagnostics and structural code navigation via the Language Server Protocol.
-
-| Stack | Plugin | Prerequisite |
-|-------|--------|--------------|
-| PHP / Symfony / Laravel | `php-lsp` | `npm install -g intelephense` |
-| Python | `pyright-lsp` | `pip install pyright` |
-| TypeScript / React / Angular / Vue / RN | `typescript-lsp` | `npm install -g @vtsls/language-server typescript` |
-| Flutter / Dart | `dart-analyzer` (boostvolt) | Flutter SDK |
-| C# / .NET | `csharp-lsp` | `dotnet tool install -g csharp-ls` |
-
-Installation: `/plugins install <name>@claude-plugins-official`
-
-### MCP Connectors from claude.ai (v2.1.46+)
-
-Support for adding MCP connectors directly from claude.ai to Claude Code.
-
-### macOS Terminal Disconnect Fix (v2.1.46+)
-
-Fixed orphan processes persisting on macOS after terminal disconnection.
-
-### VS Code Plan Preview Auto-Updates (v2.1.47+)
-
-| Feature | Description |
-|---------|-------------|
-| Auto-update | Plan preview comments update automatically when ready |
-| Rejection support | Plan preview stays open after rejection for iteration |
-| Smoother flow | Eliminates manual refresh for plan approval workflow |
-
-### Hook Inputs: last_assistant_message (v2.1.47+)
-
-Stop and SubagentStop hook inputs now include `last_assistant_message` for richer post-processing.
-
-### Statusline added_dirs (v2.1.47+)
-
-The statusline JSON now includes `added_dirs` in the workspace section for `--add-dir` visibility.
-
-### Multi-line Input (v2.1.47+)
-
-New `chat:newline` keybinding action enables multi-line input in the chat interface.
-
-### Performance Improvements (v2.1.47+)
-
-| Improvement | Description |
-|-------------|-------------|
-| Startup speed | ~500ms faster via deferred SessionStart hooks |
-| `@` file mention | Pre-warming index and session caching for faster completion |
-| Memory fix | Fixed O(n²) memory growth for long sessions |
-| Resume picker | Now shows 50 sessions (previously 10) |
-
-### Resume & Navigation (v2.1.47+)
-
-| Feature | Description |
-|---------|-------------|
-| `/rename` | Updates terminal tab title |
-| Resume picker | Shows 50 sessions (up from 10) |
-| Teammate nav | Shift+Down wrapping for simplified navigation |
-| Custom titles | `/rename` custom titles preserved across sessions (#23610) |
-
-### Key Bug Fixes (v2.1.47+)
-
-| Fix | Description |
-|-----|-------------|
-| FileWriteTool | Preserves trailing blank lines |
-| Unicode curly quotes | Fixed corruption in Edit tool (#26141) |
-| Parallel writes | Single file error no longer aborts parallel writes |
-| Large sessions | Sessions >16KB no longer disappear from /resume (#25721) |
-| Windows rendering | Correct terminal rendering with os.EOL \r\n |
-| Windows Bash | Fixed output for MSYS2/Cygwin environments |
-| Background agents | Return final response instead of raw transcript (#26012) |
-| Git worktrees | Custom agents/skills discovered in worktrees (#25816) |
-| Plan mode | Preserved after context compaction (#26061) |
-| PDF compaction | Fixed compaction with many PDFs |
-| CJK alignment | Fixed wide character alignment in terminal |
-
-### ConfigChange Hook Event (v2.1.49+)
-
-New hook event fires when configuration files are modified:
-
-| Feature | Description |
-|---------|-------------|
-| `ConfigChange` event | Fires when settings.json, CLAUDE.md, or other config files change |
-| Matcher support | Match on specific config keys |
-| Use cases | Auto-reload config, validate settings, sync across tools |
-
-Also in v2.1.49: Plugin scope auto-detection, simple mode file edit improvements, MCP auth failure caching to reduce retry noise.
-
-### WorktreeCreate & WorktreeRemove Hook Events (v2.1.50+)
-
-New hook events for git worktree lifecycle:
-
-| Event | When it fires | Use case |
-|-------|---------------|----------|
-| `WorktreeCreate` | When a worktree is created | Initialize worktree settings, notify team |
-| `WorktreeRemove` | When a worktree is removed | Cleanup resources, archive logs |
-
-Also in v2.1.50: LSP `startupTimeout` setting, Opus 4.6 1M context window (beta), memory leak fixes for agent teams, `CLAUDE_CODE_SIMPLE` environment variable.
-
-### Remote Control & Security Fixes (v2.1.51+)
-
-| Feature | Description |
-|---------|-------------|
-| `claude remote-control` | Remote control protocol for external tool integration |
-| Custom NPM registry | Support for private NPM registries for MCP servers |
-| BashTool login shell | Bash tool now uses login shell for proper env loading |
-| `/model` picker | Interactive model picker via `/model` command |
-
-**Security Advisories (v2.1.51):**
-
-| CVE | Impact | Fix |
-|-----|--------|-----|
-| CVE-2025-59536 | Hook command injection via crafted MCP tool inputs | Input sanitization in hook pipeline |
-| CVE-2026-21852 | Path traversal in hook file resolution | Strict path validation |
-
-**Recommendation:** Always run v2.1.51+ when using MCP servers with hooks.
-
-### VS Code Windows Crash Fix (v2.1.52+)
-
-Fixed VS Code extension crash on Windows when launching Claude Code sessions.
-
-### UI & Worktree Improvements (v2.1.53+)
-
-| Feature | Description |
-|---------|-------------|
-| UI flicker fixes | Eliminated rendering flicker during streaming |
-| Ctrl+F bulk agent kill | Kill multiple background agents at once |
-| Remote control shutdown | Graceful shutdown for remote control sessions |
-| `--worktree` / `-w` flag | Consistent worktree flag for isolated sessions |
-| Windows panic fixes | Resolved panic errors on Windows |
-
-### BashTool EINVAL Fix (v2.1.55+)
-
-Fixed BashTool EINVAL error on Windows that caused bash commands to fail silently.
-
-### VS Code Command Fix (v2.1.56+)
-
-Fixed "command not found" error when launching Claude Code from VS Code command palette.
-
-### Remote Control Expansion (v2.1.58+)
-
-Expanded remote control protocol with additional control commands and improved stability.
-
-### Memory Command & Interactive Copy (v2.1.59+)
-
-| Feature | Description |
-|---------|-------------|
-| `/memory` command | Save persistent session learnings that survive compactions and new sessions |
-| `/copy` interactive | Copy interactive code blocks to clipboard |
-| Bash handling | Improved bash command handling and error recovery |
-| Multi-agent memory | Optimized memory usage across multi-agent sessions |
-
-### Windows Config Corruption Fix (v2.1.61+)
-
-Fixed concurrent writes corrupting config file on Windows. Multiple Claude Code sessions running simultaneously could race on `settings.json` writes, causing file corruption and session errors.
-
-| Fix | Description |
-|-----|-------------|
-| Config file locking | Atomic writes with file locking for settings.json |
-| Platform | Windows only (macOS/Linux unaffected) |
-
-Note: v2.1.60 does not exist (skipped by Anthropic).
-
-### Prompt Suggestion Cache Fix (v2.1.62+)
-
-Fixed prompt suggestion cache regression that reduced cache hit rates, restoring normal prompt caching performance.
-
-### Loop, Effort & Worktree Tools (v2.1.70-v2.1.72)
-
-| Feature | Description |
-|---------|-------------|
-| `ExitWorktree` tool | Exit a worktree session and return to main repo |
-| `/loop` command | Run a prompt or slash command on a recurring interval (cron scheduling) |
-| `/effort` command | Set model thinking effort: `low`, `medium`, `high` |
-| `/plan` description | Optional description parameter for plan mode intent |
-| `w` key in `/copy` | Quick-copy worktree path from copy picker |
-
-### Model Overrides & Context Suggestions (v2.1.73-v2.1.74)
-
-| Feature | Description |
-|---------|-------------|
-| `modelOverrides` setting | Override model selection per task type in settings |
-| `/context` command | Actionable suggestions for optimizing context usage |
-| `autoMemoryDirectory` setting | Configure directory for automatic memory storage |
-| LSP deadlock fixes | Improved Language Server Protocol stability |
-
-### 1M Context Window GA (v2.1.75+)
-
-| Feature | Description |
-|---------|-------------|
-| 1M context window | Generally available for Opus 4.6 (no pricing premium) |
-| `/color` command | Customize session prompt-bar color |
-| `/rename` command | Set session display name |
-| Memory file timestamps | Automatic timestamps on memory files |
-
-### MCP Elicitation & Sandbox Expansion (v2.1.76-v2.1.77)
-
-| Feature | Description |
-|---------|-------------|
-| MCP elicitation | Interactive forms for MCP tool inputs |
-| `Elicitation`/`ElicitationResult` hooks | Hook into the elicitation lifecycle |
-| `-n`/`--name` flag | Name sessions from the command line |
-| `worktree.sparsePaths` setting | Configure sparse checkout paths for large monorepos |
-| `PostCompact` hook | Hook fires after context compaction completes |
-| `allowRead` sandbox setting | Sandbox setting to allow read-only file access |
-| Opus 4.6 output limits | 64K default output tokens, 128K upper limit |
-
-### Plugin State & Agent Frontmatter (v2.1.78-v2.1.80)
-
-| Feature | Description |
-|---------|-------------|
-| `StopFailure` hook | Hook fires when a stop/termination fails |
-| `${CLAUDE_PLUGIN_DATA}` | Persistent state directory for plugins |
-| Agent frontmatter | `effort`, `maxTurns`, `disallowedTools` fields for custom agents |
-| `--console` flag | Authenticate via Anthropic Console |
-| `rate_limits` in statusline | 5-hour and 7-day rate limit windows in statusline scripts |
-| `effort` frontmatter for skills | Set default effort level in skill/slash command files |
-| `source: 'settings'` plugins | Plugin marketplace defined inline in settings.json |
-
-### Scripting & Managed Settings (v2.1.81-v2.1.83)
-
-| Feature | Description |
-|---------|-------------|
-| `--bare` flag | Skip hooks, LSP, and plugin sync for scripted `-p` calls |
-| `--channels` flag | Forward permission approval prompts to mobile/phone |
-| `managed-settings.d/` | Drop-in directory with alphabetical merge for enterprise config |
-| `CwdChanged` hook | Hook fires when working directory changes |
-| `FileChanged` hook | Hook fires when a watched file changes |
-| `sandbox.failIfUnavailable` | Fail if sandbox cannot be initialized |
-| `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` | Strip credentials from subprocess environments |
-| Transcript search | Press `/` in transcript mode to search |
-
-### PowerShell, Hooks & Deep Links (v2.1.84-v2.1.86)
-
-| Feature | Description |
-|---------|-------------|
-| PowerShell tool | Opt-in preview for Windows (replaces Bash on Windows) |
-| `TaskCreated` hook | Hook fires when a new task is created |
-| `WorktreeCreate` HTTP hook | WorktreeCreate hook now supports HTTP handler type |
-| Idle-return prompt | After 75+ minutes idle, Claude nudges `/clear` |
-| Conditional `if` for hooks | Filter hook execution using permission rule syntax |
-| Deep link queries | Support up to 5,000 characters in deep link URLs |
-| MCP OAuth RFC 9728 | Protected Resource Metadata discovery for OAuth |
-| `.jj`/`.sl` VCS exclusion | Jujutsu and Sapling added to VCS exclusion lists |
-| Reduced `@` mention overhead | Lower token cost when using `@file` references |
-
-### Permission Hooks & Rendering (v2.1.87-v2.1.90)
-
-| Feature | Description |
-|---------|-------------|
-| `X-Claude-Code-Session-Id` header | Session ID header for proxy aggregation |
-| `"defer"` permission for PreToolUse | Pause tool execution for headless sessions with `--resume` |
-| `CLAUDE_CODE_NO_FLICKER=1` | Flicker-free alt-screen terminal rendering |
-| `PermissionDenied` hook | Hook fires after auto mode classifier denies a tool |
-| `/powerup` command | Interactive lessons with animated demos |
-| `.husky` protected directory | Husky hooks directory added to protected list |
-
-### MCP Persistence & Cost Breakdown (v2.1.91-v2.1.92)
-
-| Feature | Description |
-|---------|-------------|
-| MCP result persistence override | `_meta["anthropic/maxResultSizeChars"]` up to 500K |
-| `disableSkillShellExecution` | Setting to prevent skills from running shell commands |
-| `forceRemoteSettingsRefresh` | Policy setting for fail-closed remote settings |
-| Per-model `/cost` breakdown | Per-model and cache-hit breakdown in `/cost` command |
-| `/release-notes` interactive | Interactive version picker for release notes |
-
-### Bedrock Mantle & Auto Mode (v2.1.94+)
-
-| Feature | Description |
-|---------|-------------|
-| Amazon Bedrock Mantle | `CLAUDE_CODE_USE_MANTLE=1` for Bedrock Mantle support |
-| Default effort `high` | Default effort level set to `high` for API-key/Bedrock/Vertex/Foundry |
-| **Auto Mode** (March 24, 2026) | AI-powered permission classifier for Team plans |
-| Auto Mode classifier | Background safety model reviews each tool call |
-| Auto Mode escalation | 3 consecutive blocks → manual; 20+ blocks → revert |
-
-### Security Hardening (v2.1.97-v2.1.98)
-
-| Feature | Description |
-|---------|-------------|
-| Bash tool hardened | Env-var prefix injection and network redirect blocking |
-| Compound command bypass fix | Permissions now checked on compound bash commands |
-| MCP HTTP/SSE buffer leak fix | Fixed 50 MB/hr memory accumulation |
-| Focus view toggle | `Ctrl+O` in `NO_FLICKER` mode |
-| Google Vertex AI wizard | Interactive setup wizard for Vertex AI |
-| `CLAUDE_CODE_PERFORCE_MODE` | Environment variable for Perforce read-only file hints |
-| Monitor tool | Stream background events from processes |
-| Subprocess sandboxing | PID namespace isolation on Linux |
-
-### Security Advisories (v2.1.97-v2.1.101)
-
-| Version | Fix | Severity |
-|---------|-----|----------|
-| v2.1.97 | Compound command bypass in Bash tool | High |
-| v2.1.97 | Network redirect bypass | High |
-| v2.1.97 | Prototype pollution in permission rules | High |
-| v2.1.97 | MCP HTTP/SSE buffer leak (50 MB/hr) | Medium |
-| v2.1.98 | Env-var prefix injection in Bash tool | High |
-| v2.1.98 | Subprocess sandboxing with PID namespace | Enhancement |
-| v2.1.101 | POSIX `which` fallback command injection | High |
-
-**Recommendation:** Always run v2.1.97+ for production use. Update immediately if using MCP servers or Bash tool in automated workflows.
-
-### Team Onboarding & Stability (v2.1.101-v2.1.105)
-
-| Feature | Description |
-|---------|-------------|
-| `/team-onboarding` command | Generate teammate ramp-up guides |
-| OS CA certificate trust | Trust system CA certificate store by default |
-| Memory leak fixes | Fixed memory leaks in long-running sessions |
-| `path` parameter for `EnterWorktree` | Switch between existing worktrees |
-| PreCompact hook blocking | Block compaction via exit code 2 |
-| Background monitors for plugins | `monitors` manifest key for plugin background tasks |
-| `/proactive` alias | Alias for `/loop` command |
-| Skill description limit | Increased from 250 to 1,536 characters |
-| Stalled stream handling | 5-minute timeout with automatic retry |
-
-### Enhanced Features (v2.1.105+)
-
-| Feature | Description |
-|---------|-------------|
-| Enhanced `/doctor` layout | Status icons (✓, ✗, ⚠), categorized diagnostics, action hints, press `f` to fix |
-| WebFetch token optimization | Strips `<style>` and `<script>` tag contents (50-80% token reduction on web pages) |
-| MCP large-output truncation | Format-specific recipes for truncating large MCP outputs (e.g., `jq` for JSON) |
-| `/btw` command | Quick questions without context switching, minimal context, low effort |
-| `/hooks` command | Interactive hook management: view, enable/disable, test, debug |
-| `/reload-plugins` command | Manual plugin reload (auto-reload on file changes also available) |
-| Skill `context: fork` | Run skills in isolated subagent context |
-| `disable-model-invocation: true` | Prevent Claude from auto-invoking a skill |
-| `claudeMdExcludes` setting | Exclude specific CLAUDE.md files in monorepos |
-| Auto-compaction skill reload | Skills re-attach after compaction (5K tokens/skill, 25K total max) |
-| Live skill directory detection | Skills auto-reload when directory contents change |
-
-### v2.1.106
-
-Internal improvements and bug fixes. No major public features documented.
-
-### Show Thinking Hints Sooner (v2.1.107+)
-
-| Feature | Description |
-|---------|-------------|
-| Early thinking display | Thinking hints appear sooner during long tool operations |
-| Improved feedback | Better UX during extended executions (file searches, large builds) |
-| Reduced perceived latency | Users see progress indicators earlier in the response cycle |
-
-### Source Code Leak Incident (v2.1.88)
-
-On March 31, 2026, the full source code of Claude Code was exposed via the public npm package v2.1.88 due to a missing `.npmignore` exclusion for Bun-generated source maps (59.8 MB `.map` file). Patched in v2.1.89.
+## Table des matières
+
+1. [Version Requirements](#version-requirements)
+2. [OS Support](#os-support)
+3. [Node.js Support](#nodejs-support)
+4. [Why We Elevated Minimum from 2.1.47 to 2.1.97](#why-we-elevated-minimum-from-2147-to-2197)
+5. [Feature Adoption Status](#feature-adoption-status)
+6. [Features 2.1.105–2.1.117 Available](#features-21105-21117-available)
+7. [Migration from < 2.1.97](#migration-from--2197)
+8. [Version History Summary](#version-history-summary)
 
 ---
 
-## Claude Opus 4.7 Support (v2.1.111+)
+## Version Requirements
 
-Released 2026-04-16. Latest flagship model, now the default for `/model opus`.
-
-| Capability | Value |
-|------------|-------|
-| Model ID | `claude-opus-4-7` |
-| Context window | 1M tokens (GA, no pricing premium) |
-| Max output | 128K tokens |
-| Pricing | $5 / $25 per M tokens (same rate card as Opus 4.6) |
-| Tokenizer | New tokenizer — 1.0–1.35x tokens vs Opus 4.6 |
-| Effort levels | `low` / `medium` / `high` / **`xhigh`** (new) / `max` |
-| Thinking modes | **Adaptive only** (extended thinking removed) |
-| Sampling params | `temperature`, `top_p`, `top_k` **removed** (400 error if set) |
-| Image resolution | 2576px / 3.75MP (up from 1568px / 1.15MP on Opus 4.6) |
-| Fast Mode | **NOT available** — Fast Mode remains Opus 4.6 exclusive |
-| Knowledge cutoff | January 2026 |
-
-**Default model policy (v2.1.111+):**
-- `/model opus` → Opus 4.7 (default)
-- `/fast` → Opus 4.6 Fast Mode (2.5x speed, 6x cost)
-- Breaking: default effort for Pro/Max subscribers on Opus 4.6/Sonnet 4.6 now `high` (was `medium`)
-
-**Migration notes:**
-- Scripts setting sampling params on Opus 4.7 will get HTTP 400 — remove `temperature`/`top_p`/`top_k` calls
-- Token budgets may need adjustment — new tokenizer can produce up to 35% more tokens for the same input
-- Extended thinking UX changed: summarized output is now opt-in via `display: "summarized"`
-
-Source: [Claude Opus 4.7 announcement](https://www.anthropic.com/news/claude-opus-4-7)
+| Requirement | Version | Notes |
+|-------------|---------|-------|
+| **Minimum** | 2.1.97 | Security baseline — CVE-2025-59536 patched |
+| **Recommended** | 2.1.117 | Full feature set, forked subagents, native CLI binary |
+| **MCP + Hooks production** | 2.1.97+ | Mandatory for secure MCP usage |
+| **Agent Teams** | 2.1.32+ (experimental) | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
+| **Auto Mode** | 2.1.94+ | Team plan required |
+| **Opus 4.7** | 2.1.111+ | xhigh effort, adaptive thinking |
+| **Forked subagents** | 2.1.117 | `CLAUDE_CODE_FORK_SUBAGENT=1` |
 
 ---
 
-## Claude Code v2.1.108 – v2.1.117
+## OS Support
 
-### v2.1.108 (2026-04-14)
+| Operating System | Status | Notes |
+|-----------------|--------|-------|
+| **Linux** (Ubuntu 20.04+, Debian 11+, Fedora 36+) | Supported | Recommended for CI/CD |
+| **macOS** (12 Monterey+) | Supported | Native ARM64 + x86_64 |
+| **Windows** | WSL only | WSL2 + Ubuntu recommended. Native Windows support is experimental and incomplete. PowerShell tool opt-in via `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` (v2.1.84+). |
+| **Windows ARM64** | WSL only | Native win32-arm64 binary exists (v2.1.41+) but Claude Craft scripts require POSIX shell. |
 
-| Feature | Description |
-|---------|-------------|
-| Prompt caching env vars | `ENABLE_PROMPT_CACHING_1H`, `FORCE_PROMPT_CACHING_5M` |
-| `/recap` | Summarize session progress |
-| `/undo` | Alias for `/rewind` |
-| Skill tool slash commands | Model can invoke built-in slash commands via Skill tool |
-| Agent tool permission fix | Agent tool permission fix in auto mode |
+> **Note WSL:** Toutes les commandes shell du framework supposent un environnement POSIX (bash/zsh). Sur Windows natif sans WSL, les scripts `.sh` ne s'exécutent pas correctement.
 
-### v2.1.110 (2026-04-15)
+---
 
-| Feature | Description |
-|---------|-------------|
-| `/tui` command | New terminal UI command + `tui` setting |
-| Push notification tool | System-level push notifications |
-| Session recap | For users with telemetry disabled |
-| **Security** | `PermissionRequest` hooks re-checked against `permissions.deny` |
-| **Security** | `setMode:'bypassPermissions'` fixes |
+## Node.js Support
 
-### v2.1.111 (2026-04-16) — **Opus 4.7 Launch**
+| Version | Status | Notes |
+|---------|--------|-------|
+| **Node.js 18.x** | Not supported | EOL depuis avril 2025 |
+| **Node.js 20.x LTS** | Supported | Version minimale (`engines.node: >=20.0.0`) |
+| **Node.js 22.x LTS** | Recommended | CI/CD cible principale depuis claude-craft v8.2.1 |
+| **Node.js 24.x** | Cutting-edge | Compatible, non testé en CI — peut présenter des breaking changes |
 
-| Feature | Description |
-|---------|-------------|
-| **Opus 4.7 support** | New `claude-opus-4-7` model ID |
-| **`xhigh` effort level** | New effort tier for Opus 4.7 |
-| `/effort` slider | Interactive effort level picker |
-| `/less-permission-prompts` | Skill to reduce permission prompts |
-| `/ultrareview` | Parallel multi-agent code review |
-| Auto mode on Opus 4.7 | Available for Max subscribers |
-| Windows PowerShell tool | `CLAUDE_CODE_USE_POWERSHELL_TOOL` rollout |
-| Read-only bash with globs | No longer prompt |
-| **Breaking** | Default effort for Pro/Max on Opus 4.6/Sonnet 4.6 → `high` |
-| **Security** | `/dev/tcp` and `/dev/udp` redirects now prompt |
+---
 
-### v2.1.112 (2026-04-16)
+## Why We Elevated Minimum from 2.1.47 to 2.1.97
 
-Fix "claude-opus-4-7 is temporarily unavailable" in auto mode.
+### CVE-2025-59536 — RCE via Claude Code Project Files
 
-### v2.1.113 (2026-04-17)
+**Sévérité :** Critique (CVSS 9.1)
+**Source :** [Check Point Research — avril 2026](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/)
+**Patché dans :** v2.1.51 (initial) → v2.1.97 (hardening complet)
 
-| Feature | Description |
-|---------|-------------|
-| **Native CLI binary** | Spawned instead of bundled JavaScript |
-| `sandbox.network.deniedDomains` | New setting for network sandbox |
-| New commands | `/btw`, `/hooks`, `/reload-plugins`, `/proactive` |
-| **Security** | Bash deny rules match `env`/`sudo`/`watch` wrappers |
-| **Security** | `find -exec`/`-delete` protection |
-| **Security** | macOS dangerous paths protection |
-| **Security** | UI-spoofing vector closed |
+#### Description de la vulnérabilité
 
-### v2.1.114 (2026-04-18)
+CVE-2025-59536 permet à un fichier de projet malveillant (CLAUDE.md, `.claude/agents/`, fichiers MCP) d'injecter des commandes arbitraires dans le pipeline de hooks de Claude Code, conduisant à :
 
-Fix crash in permission dialog for agent teams.
+- **Remote Code Execution (RCE)** : exécution de commandes système lors de l'ouverture d'un projet compromis
+- **API Token Exfiltration** : vol du token Anthropic via des redirections réseau dans les hooks PostToolUse
+- **Path Traversal** : accès à des fichiers hors du répertoire de travail via des références de hooks malformées
 
-### v2.1.116 (2026-04-20)
+#### Vecteur d'attaque
 
-| Feature | Description |
-|---------|-------------|
-| `/resume` 67% faster | On sessions > 40MB |
-| Thinking spinner | Inline progress during long operations |
-| `/reload-plugins` auto-install | Automatically installs missing dependencies |
-| **Security** | Sandbox auto-allow no longer bypasses dangerous-path safety check for `rm`/`rmdir` |
+```
+Projet malveillant cloné (GitHub, npm install)
+  → CLAUDE.md contient des instructions d'injection de hook
+  → Hook pipeline exécute commandes sans sanitization
+  → RCE / exfiltration token API
+```
 
-### v2.1.117 (2026-04-22)
+#### Fixes cumulatifs (v2.1.51 → v2.1.97)
 
-| Feature | Description |
-|---------|-------------|
-| Forked subagents | `CLAUDE_CODE_FORK_SUBAGENT=1` for isolated subagent contexts |
-| `/resume` stale-session summarization | Offers to summarize very large stale sessions |
-| Concurrent MCP connections | Default now — faster startup |
-| Advisor Tool | Experimental |
-| Retention sweep expansion | Covers `tasks/`, `shell-snapshots/`, `backups/` |
-| Native build `Glob`/`Grep` | Replaced by embedded `bfs`/`ugrep` |
-| Default effort change | Pro/Max on Opus 4.6 and Sonnet 4.6 now `high` (was `medium`) |
-| **Security** | OAuth token refresh on 401, malware warning fix |
+| Version | Fix |
+|---------|-----|
+| v2.1.51 | Hook command injection initial fix — input sanitization |
+| v2.1.51 | CVE-2026-21852 — Path traversal dans la résolution des fichiers hooks |
+| v2.1.97 | Compound command bypass dans Bash tool (contournait les règles de permission) |
+| v2.1.97 | Network redirect bypass dans Bash tool |
+| v2.1.97 | Prototype pollution dans les règles de permission |
+| v2.1.98 | Env-var prefix injection dans Bash tool |
+| v2.1.98 | Subprocess sandboxing avec PID namespace isolation (Linux) |
+| v2.1.101 | POSIX `which` fallback command injection |
 
-Source: [Claude Code Changelog](https://code.claude.com/docs/en/changelog)
+#### Pourquoi 2.1.97 et non 2.1.51 ?
+
+Le fix initial (v2.1.51) était incomplet : les versions v2.1.52–v2.1.96 présentaient encore des vecteurs de contournement documentés. v2.1.97 représente le point où **l'ensemble du surface d'attaque identifié est couvert** avec des tests de régression en place.
+
+#### Recommandation
+
+**Si vous utilisez MCP servers, hooks, ou chargez des projets tiers : v2.1.97 minimum est non-négociable.**
+
+---
+
+## Feature Adoption Status
+
+Statut d'adoption des 15 principales features Claude Code 2.1.x dans Claude Craft :
+
+| Feature | Version CC | Status | Notes |
+|---------|-----------|--------|-------|
+| LSP Plugins (php-lsp, typescript-lsp, etc.) | 2.1.46+ | **Adopted** | Documenté dans PREREQUISITES.md |
+| Hook Events (TeammateIdle, TaskCompleted) | 2.1.33+ | **Adopted** | Utilisé dans team:delivery |
+| Agent Frontmatter (effort, maxTurns) | 2.1.78+ | **Adopted** | Agents `.claude/agents/*.md` |
+| PostCompact Hook | 2.1.76+ | **Adopted** | Template hooks/pre-compact.sh |
+| `/memory` command | 2.1.59+ | **Adopted** | Documenté dans context-management |
+| `/effort` command | 2.1.70+ | **Adopted** | Référencé dans training docs |
+| Auto Mode | 2.1.94+ | **Adopted** | Référencé dans CLAUDE.md |
+| Monitor Tool | 2.1.97+ | **Adopted** | Background process events |
+| `/btw` command | 2.1.105+ | **Adopted** | Documenté dans context-management |
+| `/hooks` command | 2.1.105+ | **Adopted** | Documenté dans context-management |
+| `/reload-plugins` | 2.1.105+ | **Adopted** | Documenté dans context-management |
+| `/proactive` alias | 2.1.105+ | **Adopted** | Alias pour `/loop` |
+| Push Notifications | 2.1.110+ | **Planned** | Non encore intégré aux agents |
+| Forked Subagents | 2.1.117 | **Planned** | `CLAUDE_CODE_FORK_SUBAGENT=1` — prévu v8.3 |
+| Skill `context: fork` | 2.1.105+ | **N/A** | Évaluation en cours — isolement contexte |
+
+**Légende :**
+- **Adopted** : Intégré et documenté dans Claude Craft
+- **Planned** : Sur la roadmap, pas encore intégré
+- **N/A** : Évalué, non retenu ou sans cas d'usage pertinent
+
+---
+
+## Features 2.1.105–2.1.117 Available
+
+Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les utilisateurs de Claude Craft :
+
+### 2.1.105 — Commandes et skills avancés
+
+| Feature | Commande / Config | Usage Claude Craft |
+|---------|------------------|-------------------|
+| `/btw` | `/btw <question>` | Questions rapides sans changer le contexte (syntaxe, lookups) |
+| `/hooks` | `/hooks` | Gérer et déboguer les hooks interactivement |
+| `/reload-plugins` | `/reload-plugins` | Recharger les plugins après mise à jour |
+| `context: fork` | Frontmatter skill | Exécuter une skill dans un contexte isolé |
+| `disable-model-invocation: true` | Frontmatter skill | Empêcher l'invocation automatique |
+| `claudeMdExcludes` | settings.json | Exclure des CLAUDE.md dans les monorepos |
+| PreCompact hook blocking | Exit code 2 | Bloquer la compaction pour préserver le contexte critique |
+| Auto-compaction skill reload | Automatique | Les skills se rechargent (5K tokens/skill, 25K total max) |
+
+### 2.1.108 — Prompt caching et session
+
+| Feature | Config / Commande | Usage Claude Craft |
+|---------|------------------|-------------------|
+| `ENABLE_PROMPT_CACHING_1H` | Variable d'env | Cache prompt 1 heure — réduction coût token |
+| `FORCE_PROMPT_CACHING_5M` | Variable d'env | Force cache 5 min — sessions courtes |
+| `/recap` | `/recap` | Résumé de progression de session |
+| `/undo` | `/undo` | Alias pour `/rewind` |
+
+### 2.1.110 — Push Notifications et sécurité
+
+| Feature | Description | Usage Claude Craft |
+|---------|-------------|-------------------|
+| Push Notifications Tool | Notifications système natives | Alertes fin de tâche longue (ralph-run) |
+| `/tui` command | Terminal UI configurée | Interface TUI optionnelle |
+| PermissionRequest hook re-check | Sécurité renforcée | Hooks de permission plus fiables |
+
+### 2.1.111 — Opus 4.7 et `xhigh` effort
+
+| Feature | Description | Usage Claude Craft |
+|---------|-------------|-------------------|
+| Opus 4.7 (`claude-opus-4-7`) | Nouveau flagship | Agents architecture, sécurité |
+| `xhigh` effort level | Nouveau palier au-dessus de `high` | Agents complexes (ralph-conductor) |
+| `/effort` slider interactif | Picker effort niveau | Adapté aux tâches complexes |
+| `/ultrareview` | Code review multi-agent parallèle | Complète `/team:audit` |
+| Auto Mode sur Opus 4.7 | Max subscribers | Classifier de permissions |
+
+### 2.1.113 — Native CLI et sécurité renforcée
+
+| Feature | Description | Usage Claude Craft |
+|---------|-------------|-------------------|
+| Native CLI binary | Binaire natif (remplace JS bundle) | Démarrage plus rapide |
+| `/btw`, `/hooks`, `/reload-plugins`, `/proactive` | Nouvelles commandes | Voir 2.1.105 (backport release) |
+| Bash deny rules renforcées | `env`/`sudo`/`watch` wrappers protégés | Sécurité hooks |
+| `sandbox.network.deniedDomains` | Nouveau setting | Filtrage réseau granulaire |
+
+### 2.1.117 — Forked Subagents et optimisations
+
+| Feature | Description | Usage Claude Craft |
+|---------|-------------|-------------------|
+| Forked Subagents | `CLAUDE_CODE_FORK_SUBAGENT=1` — contextes isolés | Prévu pour team:sprint v8.3 |
+| `/resume` 67% faster | Sessions > 40 MB | Reprise sessions longues |
+| Concurrent MCP connections | Par défaut — démarrage plus rapide | Multi-MCP setups |
+| Native `Glob`/`Grep` (bfs/ugrep) | Embedded binaires | Performance recherche fichiers |
+| Forked skill `context: fork` | Combiné avec forked subagents | Isolation complète contexte skill |
+
+---
+
+## Migration from < 2.1.97
+
+### Checklist de migration
+
+Avant de mettre à jour, vérifiez chaque point :
+
+#### Sécurité (critique)
+
+- [ ] Mettre à jour Claude Code vers 2.1.97 minimum : `npm install -g @anthropic-ai/claude-code@latest`
+- [ ] Vérifier la version : `claude --version` → doit afficher `2.1.97` ou supérieur
+- [ ] Si vous utilisez des MCP servers : auditer les serveurs installés (privilégier les sources officielles)
+- [ ] Si vous avez des hooks personnalisés : tester que leur comportement n'a pas changé après la mise à jour
+- [ ] Supprimer les MCP servers tiers non audités (surface d'attaque CVE-2025-59536)
+
+#### Compatibilité hooks
+
+- [ ] Vérifier vos hooks `PostToolUse` : le format d'input a changé en v2.1.47+ (`last_assistant_message`)
+- [ ] Hooks `PreCompact` : tester le comportement exit code 2 (v2.1.105+) si vous utilisez des hooks de compaction
+- [ ] Hooks `ConfigChange` (v2.1.49+) : nouveau event — ajouter si pertinent pour votre workflow
+
+#### Compatibilité agents
+
+- [ ] Agents avec `effort` frontmatter : disponible depuis v2.1.78 — compatible 2.1.97+
+- [ ] Agents avec `context: fork` : disponible depuis v2.1.105 — compatible 2.1.105+
+- [ ] Agents avec `maxTurns` : disponible depuis v2.1.78 — compatible 2.1.97+
+
+#### Modèles
+
+- [ ] Si vous utilisez Opus 4.6 avec `temperature`/`top_p`/`top_k` : ces paramètres fonctionnent toujours sur 4.6
+- [ ] Si vous migrez vers Opus 4.7 (v2.1.111+) : **supprimer** `temperature`/`top_p`/`top_k` de vos appels (HTTP 400 sinon)
+- [ ] Budgets de tokens : Opus 4.7 peut produire jusqu'à 35% de tokens supplémentaires pour le même input
+
+#### Commandes
+
+- [ ] `/memory` : disponible depuis v2.1.59 — compatible 2.1.97+
+- [ ] `/effort` : disponible depuis v2.1.70 — compatible 2.1.97+
+- [ ] `/btw`, `/hooks`, `/reload-plugins`, `/proactive` : disponibles depuis v2.1.105+ — nécessite mise à jour
+
+#### Node.js
+
+- [ ] Vérifier la version Node : `node --version` → doit être >= 20.0.0
+- [ ] Recommandé : migrer vers Node.js 22 LTS (cible CI Claude Craft depuis v8.2.1)
+
+### Commandes de mise à jour
+
+```bash
+# Mettre à jour Claude Code
+npm install -g @anthropic-ai/claude-code@latest
+
+# Vérifier la version
+claude --version
+
+# Mettre à jour Claude Craft
+npx @the-bearded-bear/claude-craft install . --tech=<votre-tech> --lang=<votre-lang>
+
+# Vérifier que les plugins se chargent
+/reload-plugins
+
+# Tester les hooks
+/hooks
+```
+
+---
+
+## Version History Summary
+
+Récapitulatif des versions clés et leurs apports pour les utilisateurs de Claude Craft :
+
+| Version | Date | Impact Claude Craft |
+|---------|------|---------------------|
+| 2.1.20 | 2025-11 | Background agent permissions — base |
+| 2.1.32 | 2026-01 | Agent Teams (expérimental), Opus 4.6, Auto Memory |
+| 2.1.46 | 2026-02 | LSP Plugins — intelligence de code native |
+| **2.1.51** | **2026-03** | **CVE-2025-59536 fix initial** |
+| 2.1.59 | 2026-03 | `/memory` — persistance inter-sessions |
+| 2.1.70 | 2026-03 | `/effort`, `/loop`, ExitWorktree |
+| 2.1.76 | 2026-03 | PostCompact hook, MCP elicitation |
+| 2.1.78 | 2026-03 | Agent frontmatter (effort, maxTurns, disallowedTools) |
+| 2.1.84 | 2026-03 | PowerShell (Windows), TaskCreated hook, idle prompt |
+| 2.1.94 | 2026-03 | Auto Mode (Team plans), default effort `high` |
+| **2.1.97** | **2026-04** | **Security hardening complet — MINIMUM REQUIS** |
+| 2.1.101 | 2026-04 | POSIX `which` injection fix, `/team-onboarding` |
+| **2.1.105** | **2026-04** | **`/btw`, `/hooks`, `/reload-plugins`, `context: fork`** |
+| 2.1.108 | 2026-04 | Prompt caching env vars, `/recap`, `/undo` |
+| 2.1.110 | 2026-04 | Push Notifications, `/tui`, sécurité PermissionRequest |
+| **2.1.111** | **2026-04-16** | **Opus 4.7, `xhigh` effort, `/ultrareview`** |
+| 2.1.113 | 2026-04-17 | Native CLI binary, `/proactive`, sécurité Bash renforcée |
+| 2.1.116 | 2026-04-20 | `/resume` 67% faster, thinking spinner |
+| **2.1.117** | **2026-04-22** | **Forked subagents, concurrent MCP, native bfs/ugrep — RECOMMANDÉ** |
+
+---
+
+## Références
+
+- [CVE-2025-59536 — Check Point Research](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/)
+- [Claude Code Changelog officiel](https://code.claude.com/docs/en/changelog)
+- [Anthropic Claude Opus 4.7 announcement](https://www.anthropic.com/news/claude-opus-4-7)
+- [Claude Code Cost Optimization](https://code.claude.com/docs/en/costs)
+- [CLAUDE.md Authoring Guide](https://www.builder.io/blog/claude-md-guide)
+
+---
+
+**Fichier source :** `.claude/COMPATIBILITY.md` — version de référence du projet
+**Ce fichier :** Template révisé pour le marketplace Anthropic (audit 2026-05-06)
+**Auteur :** The Bearded CTO

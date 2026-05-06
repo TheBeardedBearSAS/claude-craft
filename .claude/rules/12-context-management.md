@@ -98,6 +98,8 @@ Les sous-agents (Task tool) ont leur propre fenetre de contexte, evitant de poll
 
 **Agent frontmatter (v2.1.78+):** Les agents personnalises supportent `effort`, `maxTurns`, `disallowedTools` pour optimiser les couts et le scope.
 
+**Skill `context: fork` (v2.1.105+):** Les 15 skills lourds (>100 lignes) de Claude Craft utilisent `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 8 000-15 000 tokens par session de 4h. Liste : `architect`, `debug-methodical`, `atomic-tasks`, `socratic-brainstorm`, `architecture-clean-ddd`, `parallel-worktrees`, `event-driven`, `cqrs`, `async`, `multitenant`, `testing`, `testing-symfony`, `testing-python`, `testing-react`, `design-md-convention`.
+
 ---
 
 ## Context compaction
@@ -149,11 +151,12 @@ La status line affiche le pourcentage de contexte utilise.
 
 **`/context`** (v2.1.74+): Suggestions actionnables pour optimiser l'utilisation du contexte.
 
-| Commande | Effort | Usage |
+| Commande | Modele | Usage |
 |----------|--------|-------|
-| `/effort low` | Minimal | Taches simples, lookups |
-| `/effort medium` | Standard | Implementation courante |
-| `/effort high` | Maximum | Raisonnement complexe, architecture |
+| `/effort low` | Haiku 4.5 | Taches simples, lookups, classification |
+| `/effort medium` | Sonnet 4.6 | Implementation standard |
+| `/effort high` | Opus 4.7 | Raisonnement complexe, architecture |
+| `/effort xhigh` | Opus 4.7 (extended thinking, v2.1.111+) | Decisions critiques, migrations complexes, ADR |
 
 **Alerte d'inactivite** (v2.1.84+): Apres 75+ minutes, Claude suggere `/clear`.
 

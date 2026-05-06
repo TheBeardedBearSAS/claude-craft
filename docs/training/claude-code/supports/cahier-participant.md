@@ -612,7 +612,7 @@ cd ../feature-test && claude
 ### Points cles a retenir
 
 - Claude-Craft = framework d'extension pour Claude Code
-- 63 agents specialises, 204 commandes, 26 namespaces
+- 72 agents specialises, 211 commandes, 26 namespaces
 - BMAD v6 pour la gestion de projet
 - Installation : `npx @the-bearded-bear/claude-craft install . --tech=react --lang=fr`
 

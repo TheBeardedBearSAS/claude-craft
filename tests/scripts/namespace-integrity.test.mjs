@@ -4,8 +4,8 @@ import path from 'path';
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '../..');
 
-// Files that legitimately reference old patterns (migration guides)
-const EXCLUDED_FILES = ['MIGRATION-v6.md', 'MIGRATION-v7.md'];
+// Files that legitimately reference old patterns (migration guides, historical archives)
+const EXCLUDED_FILES = ['MIGRATION-v6.md', 'MIGRATION-v7.md', 'CHANGELOG-archive.md'];
 
 // Recursively find all .md files in a directory
 function findMdFiles(dir) {
@@ -55,11 +55,7 @@ describe('v7.0.0 namespace integrity', () => {
   });
 
   it('no residual /project: references to moved commands', () => {
-    const movedPatterns = [
-      /\/project:sprint-/,
-      /\/project:gate-/,
-      /\/project:project-/,
-    ];
+    const movedPatterns = [/\/project:sprint-/, /\/project:gate-/, /\/project:project-/];
 
     const dirs = ['Dev', 'Project', 'Infra', 'docs', '.claude'];
     const violations = [];
@@ -138,7 +134,7 @@ describe('v7.0.0 namespace integrity', () => {
 
     for (const [dir, expectedCount] of Object.entries(expected)) {
       const fullDir = path.join(PROJECT_ROOT, dir);
-      const files = fs.readdirSync(fullDir).filter(f => f.endsWith('.md'));
+      const files = fs.readdirSync(fullDir).filter((f) => f.endsWith('.md'));
       expect(files.length, `${dir}: expected ${expectedCount}, got ${files.length}`).toBe(expectedCount);
     }
   });

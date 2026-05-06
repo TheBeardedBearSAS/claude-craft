@@ -54,9 +54,8 @@ All content is available in 5 languages:
 
 | Version | Status |
 |---------|--------|
-| **2.1.107** | Recommended (full feature support) |
-| **2.1.97+** | Security minimum (required if using MCP servers) |
-| **2.1.47+** | Minimum supported |
+| **2.1.117** | Recommended (full feature support) |
+| **2.1.97+** | Minimum supported (CVE-2025-59536 patched) |
 
 ### Optional (Recommended)
 

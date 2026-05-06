@@ -1,6 +1,6 @@
 {
   "name": "@the-bearded-bear/claude-craft",
-  "version": "8.2.5",
+  "version": "8.3.0",
   "description": "A comprehensive framework for AI-assisted development with Claude Code. Install standardized rules, agents, and commands for your projects.",
   "type": "module",
   "main": "cli/index.js",
@@ -64,10 +64,14 @@
     "@eslint/js": "^10.0.0",
     "@sveltejs/vite-plugin-svelte": "^5.1.1",
     "@vitest/coverage-v8": "4.0.0",
+    "cytoscape": "^3.33.2",
+    "cytoscape-dagre": "^2.5.0",
+    "dompurify": "^3.4.0",
     "eslint": "10.0.0",
     "eslint-config-prettier": "^10.0.0",
     "prettier": "3.4.0",
     "svelte": "^5.55.4",
+    "uplot": "^1.6.32",
     "vite": "^6.4.2",
     "vitest": "4.0.0"
   },
@@ -82,14 +86,10 @@
   "dependencies": {
     "@hono/node-server": "^1.19.14",
     "chokidar": "^4.0.3",
-    "cytoscape": "^3.33.2",
-    "cytoscape-dagre": "^2.5.0",
-    "dompurify": "^3.4.0",
     "gray-matter": "^4.0.3",
     "hono": "^4.12.14",
     "js-yaml": "^4.1.1",
     "marked": "^14.1.4",
-    "uplot": "^1.6.32",
     "zod": "^3.25.76"
   }
 }

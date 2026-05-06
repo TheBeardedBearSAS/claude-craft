@@ -120,6 +120,7 @@ jobs:
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
 
       - name: Verify package structure
         run: |
@@ -230,6 +231,7 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # pinned: v4.4.0
         with:
           node-version: '24'
+          cache: 'npm'
           # No registry-url: avoids setup-node auto-setting NODE_AUTH_TOKEN which overrides OIDC
 
       - name: Update version for main branch

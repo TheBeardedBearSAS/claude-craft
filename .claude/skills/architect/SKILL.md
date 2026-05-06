@@ -1,6 +1,7 @@
 ---
 name: architect
 description: Phase d'architecture systématique AVANT le code (TDD). Use when starting a new feature that touches multiple files, designing a new module, or making non-trivial architectural choices.
+context: fork
 triggers:
   keywords: ["architect", "design", "new feature", "structure", "boundaries", "dependencies", "module design"]
 auto_suggest: true

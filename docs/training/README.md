@@ -26,7 +26,7 @@ Formation progressive centree sur Claude Code 2.1.117 : fondamentaux, configurat
 
 > **Accelerer le developpement avec le framework Claude-Craft**
 
-Formation complete couvrant Claude Code et le framework Claude-Craft : BMAD v6, 63 agents, 204 commandes, Ralph Wiggum, QA Recette.
+Formation complete couvrant Claude Code et le framework Claude-Craft : BMAD v6, 72 agents, 211 commandes, Ralph Wiggum, QA Recette.
 
 - **Max 4 stagiaires/groupe**
 - **9 modules** avec focus Symfony/Clean Architecture

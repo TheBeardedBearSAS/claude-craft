@@ -34,8 +34,8 @@ Claude-Craft = Un framework complet qui structure cet assistant
 
 | Aspect | Claude Code natif | Avec Claude-Craft |
 |--------|-------------------|-------------------|
-| **Agents** | Task tool generique | 63 agents specialises par role |
-| **Commandes** | Slash commands custom | 204 commandes preconfigurees |
+| **Agents** | Task tool generique | 72 agents specialises par role |
+| **Commandes** | Slash commands custom | 211 commandes preconfigurees |
 | **Architecture** | Regles dans CLAUDE.md | Clean Architecture enforced |
 | **Qualite** | Audit manuel | Audit automatise multi-dimensions |
 | **Projet** | Gestion libre | BMAD v6 avec quality gates |

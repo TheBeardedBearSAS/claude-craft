@@ -1,108 +1,192 @@
 {
-  "$schema": "https://claude.ai/plugin-schema.json",
+  "$schema": "https://claude.ai/schemas/plugin.json",
   "name": "claude-craft",
   "displayName": "Claude Craft",
-  "description": "AI-assisted development framework with BMAD v6 project management, 10 technology stacks, 28 agents, and 155 commands",
-  "version": "7.6.1",
+  "version": "8.3.0",
+  "description": "Multi-stack framework for Claude Code teams: 19 stacks, BMAD v6 sprint workflow, browser QA automation, and Kanban — for tech leads adopting Claude Code with their team.",
   "author": {
-    "name": "The Bearded Bear",
-    "url": "https://github.com/TheBeardedBearSAS"
+    "name": "Flavien Métivier",
+    "email": "flavien.metivier@gmail.com",
+    "url": "https://thebeardedcto.com"
   },
-  "homepage": "https://github.com/TheBeardedBearSAS/claude-craft",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TheBeardedBearSAS/claude-craft.git"
+    "url": "https://github.com/TheBeardedBearSAS/claude-craft"
   },
+  "homepage": "https://thebeardedcto.com/claude-craft",
   "license": "MIT",
   "keywords": [
+    "framework",
+    "multi-stack",
     "bmad",
-    "tdd",
+    "sprint",
+    "qa-automation",
+    "tech-leads",
+    "ddd",
     "clean-architecture",
-    "multi-tech",
+    "tdd",
+    "claude-code",
     "symfony",
     "react",
     "flutter",
     "angular",
     "laravel",
-    "dotnet",
-    "python",
-    "vue",
+    "vuejs",
     "react-native",
-    "php"
+    "csharp",
+    "python",
+    "php",
+    "paperclip"
   ],
+  "compatibility": {
+    "claudeCode": {
+      "minimum": "2.1.97",
+      "recommended": "2.1.117"
+    },
+    "node": ">=20.0.0"
+  },
   "capabilities": {
     "skills": true,
     "agents": true,
     "hooks": true,
-    "mcp": true
+    "mcp": true,
+    "kanban": true,
+    "qaRecette": true
+  },
+  "agents": {
+    "count": 72,
+    "categories": {
+      "common": 20,
+      "tech-reviewers": 11,
+      "infrastructure": 39,
+      "project": 2
+    },
+    "notable": [
+      "@tdd-coach",
+      "@api-designer",
+      "@security-auditor",
+      "@devops-engineer",
+      "@ralph-conductor",
+      "@uiux-orchestrator"
+    ]
+  },
+  "commands": {
+    "count": 211,
+    "namespaces": 26,
+    "list": [
+      "common",
+      "workflow",
+      "team",
+      "qa",
+      "uiux",
+      "symfony",
+      "react",
+      "flutter",
+      "python",
+      "angular",
+      "vuejs",
+      "laravel",
+      "reactnative",
+      "csharp",
+      "php",
+      "paperclip",
+      "sprint",
+      "gate",
+      "project"
+    ]
+  },
+  "skills": {
+    "count": 48,
+    "categories": [
+      "architecture",
+      "testing",
+      "security",
+      "workflow",
+      "stack-specific"
+    ]
+  },
+  "stacks": {
+    "count": 19,
+    "application": [
+      "symfony",
+      "react",
+      "flutter",
+      "python",
+      "php",
+      "reactnative",
+      "angular",
+      "csharp",
+      "laravel",
+      "vuejs",
+      "paperclip"
+    ],
+    "infrastructure": [
+      "docker",
+      "coolify",
+      "kubernetes",
+      "opentofu",
+      "ansible",
+      "hcloud",
+      "pgbouncer",
+      "frankenphp"
+    ]
   },
   "languages": ["en", "fr", "es", "de", "pt"],
-  "technologies": [
-    {
-      "name": "dotnet",
-      "displayName": ".NET / C#",
-      "version": "10 LTS / C# 14"
-    },
-    {
-      "name": "symfony",
-      "displayName": "Symfony / PHP",
-      "version": "8.0 / PHP 8.5"
-    },
-    {
-      "name": "flutter",
-      "displayName": "Flutter / Dart",
-      "version": "3.38 / Dart 3.10"
-    },
-    {
-      "name": "react",
-      "displayName": "React",
-      "version": "19.x"
-    },
-    {
-      "name": "react-native",
-      "displayName": "React Native",
-      "version": "0.76+"
-    },
-    {
-      "name": "angular",
-      "displayName": "Angular",
-      "version": "19.x"
-    },
-    {
-      "name": "vuejs",
-      "displayName": "Vue.js",
-      "version": "3.5+"
-    },
-    {
-      "name": "laravel",
-      "displayName": "Laravel",
-      "version": "12.x / PHP 8.5"
-    },
-    {
-      "name": "python",
-      "displayName": "Python",
-      "version": "3.13+"
-    },
-    {
-      "name": "php",
-      "displayName": "PHP",
-      "version": "8.5"
-    }
+  "categories": [
+    "development",
+    "productivity",
+    "quality",
+    "team-collaboration"
   ],
+  "installation": {
+    "npm": "@the-bearded-bear/claude-craft",
+    "command": "npx @the-bearded-bear/claude-craft install",
+    "docs": "https://thebeardedcto.com/claude-craft/getting-started"
+  },
   "features": {
-    "bmadV6": {
-      "description": "Full BMAD v6 project management framework",
-      "tracks": ["quick-flow", "standard", "enterprise"]
+    "bmad-v6": {
+      "description": "Complete sprint workflow (Analyze → Plan → Design → Implement → QA Recette)",
+      "tracks": ["quick-flow", "standard", "enterprise"],
+      "qualityGates": {
+        "prd": ">=80%",
+        "techSpec": ">=90%",
+        "invest": "6/6",
+        "sprintReady": "100%",
+        "storyDod": "100%",
+        "specAlignment": ">=85%"
+      }
     },
-    "teamSprint": {
-      "description": "Overnight autonomous sprint execution via team-sprint --ralph-mode",
-      "parallelProcessing": true
+    "qa-recette": {
+      "description": "Browser-based acceptance testing via Chrome with Golden Rule regression enforcement",
+      "goldenRule": "A fixed bug should NEVER reappear",
+      "prerequisite": "Chrome extension v1.0.36+"
     },
-    "qaRecette": {
-      "description": "Automated acceptance testing via Chrome browser automation",
-      "goldenRule": "A fixed bug should NEVER reappear"
+    "kanban-local": {
+      "description": "Local Kanban board without SaaS dependency (Svelte + Hono + chokidar)",
+      "stack": ["svelte", "hono", "chokidar"]
+    },
+    "ralph-wiggum": {
+      "description": "Continuous AI loop with adaptive circuit breaker and DoD validators",
+      "command": "/common:ralph-run",
+      "validators": ["command", "output_contains", "file_changed", "hook", "human"]
+    },
+    "i18n": {
+      "description": "Full internationalization across 5 languages",
+      "languages": ["en", "fr", "es", "de", "pt"]
+    },
+    "lsp-plugins": {
+      "description": "Code intelligence via LSP plugins (PHP, TypeScript, Python, Dart, C#)",
+      "available": ["php-lsp", "typescript-lsp", "pyright-lsp", "dart-analyzer", "csharp-lsp"]
     }
   },
-  "minimumClaudeCodeVersion": "2.1.0",
-  "recommendedClaudeCodeVersion": "2.1.47"
+  "marketplace": {
+    "submitted": "2026-05-06",
+    "tier": "verified-publisher",
+    "categories": ["development-framework", "team-tooling", "quality-assurance"]
+  },
+  "security": {
+    "minimumForProduction": "2.1.97",
+    "cvePatched": ["CVE-2025-59536", "CVE-2026-21852"],
+    "notes": "Run 2.1.97+ when using MCP servers or Bash tool in automated workflows"
+  }
 }

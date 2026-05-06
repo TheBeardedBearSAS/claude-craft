@@ -1,16 +1,23 @@
-# Claude Craft
+# Claude Craft — Sprint workflow, multi-stack reviewers, and browser QA for Claude Code teams
+
+> **The most complete framework for tech leads adopting Claude Code with their team — 19 stacks, 5 languages, BMAD v6 sprint lifecycle, browser-based acceptance testing.**
 
 [![npm version](https://img.shields.io/npm/v/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
+[![npm downloads](https://img.shields.io/npm/dm/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
+[![Claude Code 2.1.97+](https://img.shields.io/badge/Claude%20Code-2.1.97%2B-blue)](https://code.claude.com)
 [![CI](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## ⚠ Warranty Disclaimer
+A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **72 specialized agents, 211 commands, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
-THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. See [LICENSE](LICENSE) for full terms.
+## What's New in v8.3 (Audit-driven release: tokens + security)
 
----
-
-A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks.
+- **Token optimization via `context: fork`** (v8.3.0) -- 15 heavy skills (>100 lines) now run in isolated contexts (Claude Code v2.1.105+), saving 8-15K tokens per long session
+- **CHANGELOG truncated** (v8.3.0) -- 117 KB → 67 KB shipped, archive moved to `docs/CHANGELOG-archive.md`
+- **Production deps trimmed** (v8.3.0) -- `cytoscape`, `cytoscape-dagre`, `dompurify`, `uplot` moved to `devDependencies` (-3 MB prod install)
+- **Min Claude Code raised to 2.1.97** (v8.3.0) -- CVE-2025-59536 (CVSS 8.7, RCE + token exfiltration) cumulative hardening
+- **`plugin.json` schema v8.3** (v8.3.0) -- accurate counts (72/211/48), marketplace-ready, was stale at v7.6.1
+- **Hook templates documentation** (v8.3.0) -- 9 templates documented with Token Optimization Stack recipe (55-65% reduction)
 
 ## What's New in v8.2 (Claude Code 2.1.117 + Opus 4.7)
 
@@ -47,8 +54,8 @@ That's it. You get an architecture, security, and quality audit of your project 
 Claude Code is powerful on its own. Claude Craft makes it **consistent and team-ready**:
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
-- **63 specialized agents** -- reviewers, architects, coaches that know your stack deeply
-- **204 slash commands** -- repeatable workflows for audits, code generation, sprint management
+- **72 specialized agents** -- reviewers, architects, coaches that know your stack deeply
+- **211 slash commands** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -224,6 +231,10 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### Warranty Disclaimer
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. See [LICENSE](LICENSE) for full terms.
 
 ---
 

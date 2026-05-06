@@ -12,12 +12,34 @@ Claude Code hooks allow you to enforce rules programmatically, going beyond CLAU
 | `protect-files.json` | PreToolUse(Edit/Write) | Block edits on sensitive files |
 | `context-reinject.json` | SessionStart(compact) | Re-inject context after compaction |
 | `security-block.json` | PreToolUse(Bash) | Block suspicious network commands |
+| `pre-compact.json` | PreCompact | Sauvegarde le contexte critique avant compaction (token optim) |
+| `output-filter.json` | PostToolUse(Bash) | Filtre les outputs >10KB (RTK ultra-compact, -60-90% tokens CLI) |
+| `block-dangerous-commands.json` | PreToolUse(Bash) | Bloque les commandes destructives (rm -rf /, dd, mkfs) |
+| `quality-gate.json` | PreToolUse(Edit) | Bloque les edits qui violent les SOLID/KISS principes |
+| `memory-lifecycle.json` | SessionStart/SessionEnd | Gestion du fichier MEMORY.md |
 
 ## How to Use
 
 1. Choose a template from this directory
 2. Copy the `hooks` section into your `.claude/settings.json`
 3. Adapt the commands to your project
+
+### Token Optimization Stack (recommended)
+
+For maximum token savings (55-65% reduction global), apply this combo :
+
+```bash
+# 1. Output filter (PostToolUse Bash) - guides Claude to summarize >10KB outputs
+cp .claude/templates/hooks/output-filter.json .claude/settings.local.json
+
+# 2. PreCompact hook - preserves critical context before compaction
+cp .claude/templates/hooks/pre-compact.json .claude/settings.local.json
+
+# 3. SessionStart compact reinject - restores context-essentials.md after compaction
+cp .claude/templates/hooks/context-reinject.json .claude/settings.local.json
+```
+
+Combined with `context: fork` on heavy skills (already enabled by Claude Craft) and `CLAUDE_CODE_SUBAGENT_MODEL=sonnet`, you reach the 55-65% global token reduction documented in `.claude/rules/12-context-management.md` §15.
 
 ### Example: Adding auto-format
 

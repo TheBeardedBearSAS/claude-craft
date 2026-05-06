@@ -899,9 +899,9 @@
 1. **Présentation condensée** (10min)
    - Claude-Craft : framework multi-technologie pour Claude Code
    - Installation : `npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=fr`
-   - 18 stacks technologiques supportées
-   - 63 agents spécialisés
-   - 204 commandes réparties en 26 namespaces
+   - 19 stacks technologiques supportées
+   - 72 agents spécialisés
+   - 211 commandes réparties en 26 namespaces
 
 2. **Points forts** (10min)
    - BMAD v6 : framework de gestion de projet intégré

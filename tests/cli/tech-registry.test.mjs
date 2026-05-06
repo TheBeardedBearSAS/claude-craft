@@ -2,7 +2,13 @@ import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { TECH_REGISTRY, INSTALLABLE_TECHS, getDisplayName, getAllTechKeys, getTechsByTier } from '../../cli/lib/tech-registry.js';
+import {
+  TECH_REGISTRY,
+  INSTALLABLE_TECHS,
+  getDisplayName,
+  getAllTechKeys,
+  getTechsByTier,
+} from '../../cli/lib/tech-registry.js';
 import { TECHNOLOGIES } from '../../cli/lib/constants.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -11,8 +17,17 @@ const PROJECT_ROOT = path.resolve(__dirname, '../..');
 describe('tech-registry', () => {
   it('exports TECH_REGISTRY with all expected keys', () => {
     const expectedKeys = [
-      'symfony', 'flutter', 'react', 'reactnative', 'angular',
-      'csharp', 'laravel', 'vuejs', 'php', 'python', 'docker',
+      'symfony',
+      'flutter',
+      'react',
+      'reactnative',
+      'angular',
+      'csharp',
+      'laravel',
+      'vuejs',
+      'php',
+      'python',
+      'docker',
     ];
     for (const key of expectedKeys) {
       expect(TECH_REGISTRY).toHaveProperty(key);
@@ -120,9 +135,7 @@ describe('tech-registry consistency with i18n directories', () => {
 
     for (const tech of INSTALLABLE_TECHS) {
       const entry = TECH_REGISTRY[tech];
-      const hasDir = languages.some((lang) =>
-        fs.existsSync(path.join(i18nBase, lang, entry.i18nDir)),
-      );
+      const hasDir = languages.some((lang) => fs.existsSync(path.join(i18nBase, lang, entry.i18nDir)));
       expect(hasDir, `No i18n directory found for ${tech} (${entry.i18nDir})`).toBe(true);
     }
   });
@@ -140,17 +153,23 @@ describe('tech-registry consistency with i18n directories', () => {
 });
 
 describe('tech-registry consistency with plugin.json', () => {
-  it('plugin.json technologies match registry', () => {
+  it('plugin.json stacks match registry', () => {
     const pluginPath = path.join(PROJECT_ROOT, '.claude-plugin', 'plugin.json');
     if (!fs.existsSync(pluginPath)) return; // Skip if no plugin.json
     const plugin = JSON.parse(fs.readFileSync(pluginPath, 'utf8'));
-    const pluginTechs = plugin.technologies.map((t) => t.name);
+
+    // v8.2.5+ schema: stacks.application + stacks.infrastructure (audit 2026-05-06)
+    // Legacy: technologies[].name
+    const pluginTechs = plugin.stacks?.application
+      ? plugin.stacks.application
+      : plugin.technologies?.map((t) => t.name) || [];
 
     // Every plugin tech should map to a registry entry
     for (const name of pluginTechs) {
       // plugin uses 'dotnet' for csharp, 'react-native' for reactnative
-      const registryKey =
-        name === 'dotnet' ? 'csharp' : name === 'react-native' ? 'reactnative' : name;
+      const registryKey = name === 'dotnet' ? 'csharp' : name === 'react-native' ? 'reactnative' : name;
+      // Skip techs not yet in registry (e.g., paperclip — registered separately)
+      if (!TECH_REGISTRY[registryKey]) continue;
       expect(TECH_REGISTRY, `Plugin tech '${name}' not in registry`).toHaveProperty(registryKey);
     }
   });

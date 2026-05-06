@@ -1,6 +1,7 @@
 ---
 name: testing-react
 description: Stratégie de Tests React 19 + Compiler 1.0. Use when writing tests, reviewing test coverage, or setting up testing.
+context: fork
 ---
 
 # Stratégie de Tests React 19 + Compiler 1.0
