@@ -9,41 +9,7 @@ import { spawnSync } from 'child_process';
 import c from './colors.js';
 import { listDirs } from './fs-utils.js';
 import { TECH_REGISTRY } from './tech-registry.js';
-
-// Security: reject paths into system directories to prevent accidental or malicious
-// installation outside the user's expected workspace.
-const FORBIDDEN_SYSTEM_DIRS = [
-  '/',
-  '/etc',
-  '/usr',
-  '/bin',
-  '/sbin',
-  '/boot',
-  '/lib',
-  '/var',
-  '/root',
-  '/proc',
-  '/sys',
-  '/dev',
-];
-
-function assertSafeTarget(targetPath) {
-  const resolved = path.resolve(targetPath);
-  for (const forbidden of FORBIDDEN_SYSTEM_DIRS) {
-    if (resolved === forbidden || resolved.startsWith(forbidden + path.sep)) {
-      throw new Error(`Refusing to operate on system directory: ${resolved}`);
-    }
-  }
-  return resolved;
-}
-
-// Security: enforce allowlist on language code (prevents argument injection via --lang).
-function assertSafeLang(lang) {
-  if (!/^[a-z]{2}$/.test(lang)) {
-    throw new Error(`Invalid --lang value: "${lang}" (expected 2-letter lowercase code)`);
-  }
-  return lang;
-}
+import { assertSafeTarget, assertSafeLang } from './path-safety.js';
 
 /**
  * Run the update command against a target directory.

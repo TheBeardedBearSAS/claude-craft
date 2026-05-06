@@ -9,6 +9,7 @@ import { spawnSync } from 'child_process';
 import c from './colors.js';
 import { TECHNOLOGIES, LANGUAGES } from './constants.js';
 import { printBanner, printSuccess } from './banner.js';
+import { assertSafeTarget } from './path-safety.js';
 
 /**
  * Execute a shell script synchronously via bash.
@@ -49,10 +50,16 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
     console.log(`${c.cyan}[1/5]${c.reset} ${c.bold}Target Directory${c.reset}`);
     const defaultPath = process.cwd();
     const targetInput = await cli.prompt(`  Enter path (${c.dim}${defaultPath}${c.reset}): `);
-    cli.config.targetPath = targetInput || defaultPath;
+    const rawTarget = targetInput || defaultPath;
 
-    // Resolve and validate path
-    cli.config.targetPath = path.resolve(cli.config.targetPath);
+    // Security: reject system directories (/, /etc, /usr, /bin, …) before any side effect.
+    try {
+      cli.config.targetPath = assertSafeTarget(rawTarget);
+    } catch (err) {
+      console.log(`  ${c.red}${err.message}${c.reset}`);
+      cli.closeReadline();
+      return;
+    }
     if (!fs.existsSync(cli.config.targetPath)) {
       console.log(`  ${c.yellow}Directory doesn't exist. Create it? (y/n)${c.reset}`);
       const create = await cli.prompt('  ');

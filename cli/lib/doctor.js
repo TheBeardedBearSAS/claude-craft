@@ -5,9 +5,66 @@
 
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { execSync } from 'child_process';
 import c from './colors.js';
 import { listDirs } from './fs-utils.js';
+
+// Single source of truth for the security baseline. Bumped from 2.1.47 in v8.3.0
+// after CVE-2025-59536 (CVSS 8.7) cumulative hardening completed in 2.1.97.
+const MIN_CLAUDE_CODE = '2.1.97';
+const RECOMMENDED_CLAUDE_CODE = '2.1.117';
+
+/**
+ * Compare two semver-ish version strings (`major.minor.patch`).
+ * Returns -1 if a < b, 0 if equal, 1 if a > b.
+ * @param {string} a
+ * @param {string} b
+ * @returns {-1|0|1}
+ */
+function semverCmp(a, b) {
+  const pa = a.split('.').map((n) => parseInt(n, 10));
+  const pb = b.split('.').map((n) => parseInt(n, 10));
+  for (let i = 0; i < 3; i++) {
+    const da = pa[i] || 0;
+    const db = pb[i] || 0;
+    if (da !== db) return da < db ? -1 : 1;
+  }
+  return 0;
+}
+
+/**
+ * Extract the first `X.Y.Z` triple from a free-form `claude --version` output.
+ * @param {string} output
+ * @returns {string|null}
+ */
+function extractSemver(output) {
+  const m = output.match(/(\d+)\.(\d+)\.(\d+)/);
+  return m ? m[0] : null;
+}
+
+/**
+ * OS-specific yq installation hints. Returned as a list of one-liner instructions
+ * that the user can copy/paste.
+ * @returns {string[]}
+ */
+function yqInstallHints() {
+  const platform = os.platform();
+  if (platform === 'darwin') {
+    return ['brew install yq'];
+  }
+  if (platform === 'linux') {
+    return [
+      'sudo apt-get install yq           # Debian/Ubuntu (snap version)',
+      'sudo snap install yq              # Snap (Mike Farah build, recommended)',
+      'wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq && chmod +x /usr/local/bin/yq',
+    ];
+  }
+  if (platform === 'win32') {
+    return ['winget install --id MikeFarah.yq  # Windows native', 'Or use WSL: see Linux instructions above'];
+  }
+  return ['See https://github.com/mikefarah/yq#install for your platform'];
+}
 
 /**
  * Run a shell command and return the trimmed output, or null on failure.
@@ -58,13 +115,28 @@ function runDoctor(targetPath, deps = {}) {
     failed++;
   }
 
-  // 3. Claude Code installed
-  const claudeVer = exec('claude --version');
-  if (claudeVer) {
-    console.log(`  ${c.green}[OK]${c.reset} Claude Code ${claudeVer}`);
-    passed++;
+  // 3. Claude Code installed and >= 2.1.97 (CVE-2025-59536 baseline)
+  const claudeVerRaw = exec('claude --version');
+  if (claudeVerRaw) {
+    const semver = extractSemver(claudeVerRaw);
+    if (semver && semverCmp(semver, MIN_CLAUDE_CODE) < 0) {
+      console.log(
+        `  ${c.red}[FAIL]${c.reset} Claude Code ${semver} — requires >= ${MIN_CLAUDE_CODE} (CVE-2025-59536, CVSS 8.7)`
+      );
+      console.log(`         Upgrade: ${c.cyan}npm install -g @anthropic-ai/claude-code@latest${c.reset}`);
+      failed++;
+    } else if (semver && semverCmp(semver, RECOMMENDED_CLAUDE_CODE) < 0) {
+      console.log(
+        `  ${c.yellow}[WARN]${c.reset} Claude Code ${semver} — recommended ${RECOMMENDED_CLAUDE_CODE} (forked subagents, native CLI)`
+      );
+      warned++;
+    } else {
+      console.log(`  ${c.green}[OK]${c.reset} Claude Code ${semver || claudeVerRaw}`);
+      passed++;
+    }
   } else {
     console.log(`  ${c.yellow}[WARN]${c.reset} Claude Code not found (optional for install, required for usage)`);
+    console.log(`         Install: ${c.cyan}npm install -g @anthropic-ai/claude-code${c.reset}`);
     warned++;
   }
 
@@ -78,13 +150,18 @@ function runDoctor(targetPath, deps = {}) {
     failed++;
   }
 
-  // 5. yq available (Mike Farah version)
+  // 5. yq available (Mike Farah version) — required for monorepo YAML config (claude-projects.yaml)
   const yqVer = exec('yq --version');
   if (yqVer) {
     console.log(`  ${c.green}[OK]${c.reset} ${yqVer}`);
     passed++;
   } else {
-    console.log(`  ${c.yellow}[WARN]${c.reset} yq not found (required for YAML config)`);
+    console.log(
+      `  ${c.yellow}[WARN]${c.reset} yq not found (required for monorepo YAML config — claude-projects.yaml)`
+    );
+    for (const hint of yqInstallHints()) {
+      console.log(`         ${c.cyan}${hint}${c.reset}`);
+    }
     warned++;
   }
 
