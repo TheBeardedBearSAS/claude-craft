@@ -87,6 +87,72 @@ describe('runDoctor', () => {
     expect(output).toContain('Claude Code not found');
   });
 
+  // Sprint 2 — version-check branches (CVE-2025-59536 minimum 2.1.97).
+
+  it('reports outdated Claude Code (< 2.1.97 minimum) as failure with upgrade hint', () => {
+    mkdirSync(join(tempDir, '.claude'));
+
+    const execFn = (cmd) => {
+      if (cmd.includes('npm')) return '10.0.0';
+      // 2.1.50 is below the CVE-2025-59536 baseline ; must produce [FAIL].
+      if (cmd.includes('claude')) return '2.1.50';
+      if (cmd.includes('git')) return 'git version 2.45.0';
+      if (cmd.includes('yq')) return 'yq v4.44.1';
+      return null;
+    };
+
+    runDoctor(tempDir, { execFn });
+
+    const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('[FAIL]');
+    expect(output).toContain('2.1.50');
+    expect(output).toContain('CVE-2025-59536');
+    // Upgrade hint must mention the npm install command.
+    expect(output).toContain('npm install -g @anthropic-ai/claude-code@latest');
+  });
+
+  it('reports Claude Code between min (2.1.97) and recommended (2.1.117) as warning', () => {
+    mkdirSync(join(tempDir, '.claude'));
+
+    const execFn = (cmd) => {
+      if (cmd.includes('npm')) return '10.0.0';
+      // 2.1.105 is >= min (2.1.97) but < recommended (2.1.117) ; must produce [WARN].
+      if (cmd.includes('claude')) return '2.1.105';
+      if (cmd.includes('git')) return 'git version 2.45.0';
+      if (cmd.includes('yq')) return 'yq v4.44.1';
+      return null;
+    };
+
+    runDoctor(tempDir, { execFn });
+
+    const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('[WARN]');
+    expect(output).toContain('2.1.105');
+    expect(output).toContain('recommended 2.1.117');
+  });
+
+  it('reports unparseable Claude Code version output as OK without crashing', () => {
+    // Defensive: if `claude --version` returns garbage, extractSemver returns
+    // null and the version check should fall through to OK rather than crash.
+    mkdirSync(join(tempDir, '.claude'));
+
+    const execFn = (cmd) => {
+      if (cmd.includes('npm')) return '10.0.0';
+      if (cmd.includes('claude')) return 'no version here';
+      if (cmd.includes('git')) return 'git version 2.45.0';
+      if (cmd.includes('yq')) return 'yq v4.44.1';
+      return null;
+    };
+
+    runDoctor(tempDir, { execFn });
+
+    const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('[OK]');
+    expect(output).toContain('Claude Code');
+    // Garbage string itself must appear (the fallback path uses claudeVerRaw).
+    expect(output).toContain('no version here');
+  });
+
   it('reports missing git as failure', () => {
     mkdirSync(join(tempDir, '.claude'));
 
