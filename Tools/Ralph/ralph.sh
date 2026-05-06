@@ -183,6 +183,9 @@ load_modules() {
         "escalation-service"
         "parallel-manager"
         "sprint-conductor"
+        "loop-init"
+        "loop-iteration"
+        "loop-finalizer"
     )
 
     for module in "${modules[@]}"; do
@@ -431,24 +434,12 @@ run_ralph() {
     local response=""
     local start_time=$(date +%s)
 
-    # Initialize v2.0 modules
-    if type init_metrics_exporter &>/dev/null; then
-        init_metrics_exporter
-    fi
+    # Pre-session initialisation (metrics, dashboard, health, hooks).
+    # Implementation extracted to lib/loop-init.sh in Sprint 4.
+    ralph_init_loop_pre_session
 
-    if type init_dashboard &>/dev/null; then
-        init_dashboard
-    fi
-
-    if type init_health_monitor &>/dev/null; then
-        init_health_monitor
-    fi
-
-    if type init_hooks &>/dev/null; then
-        init_hooks
-    fi
-
-    # Initialize or resume session
+    # Initialize or resume session — kept inline because it produces SESSION_ID
+    # (Bloc B per audit cartography), which both Bloc C and the loop body need.
     if [[ -n "$CONTINUE_SESSION" ]]; then
         SESSION_ID="$CONTINUE_SESSION"
         resume_session "$SESSION_ID" || {
@@ -461,40 +452,9 @@ run_ralph() {
         print_success "${MSG_SESSION_CREATED}: $SESSION_ID"
     fi
 
-    # Initialize circuit breaker
-    init_circuit_breaker
-
-    # Enable autonomous mode if requested
-    if [[ "$AUTONOMOUS_MODE" == "true" ]]; then
-        if type enable_autonomous_mode &>/dev/null; then
-            enable_autonomous_mode
-        fi
-
-        # Initialize recovery engine
-        if type init_recovery_engine &>/dev/null; then
-            init_recovery_engine
-        fi
-
-        # Initialize escalation service
-        if type init_escalation_service &>/dev/null; then
-            init_escalation_service
-        fi
-    fi
-
-    # Initialize context manager (auto-compact)
-    if type init_context_manager &>/dev/null; then
-        init_context_manager
-    fi
-
-    print_info "${MSG_STARTING_LOOP}..."
-    print_verbose "${MSG_SESSION_ID}: $SESSION_ID"
-    print_verbose "Max iterations: $MAX_ITERATIONS"
-    print_verbose "Timeout: ${TIMEOUT}ms"
-
-    # Export session context for hooks
-    if type export_session_context_for_hooks &>/dev/null; then
-        export_session_context_for_hooks "$SESSION_ID" "STARTING" "$PROMPT"
-    fi
+    # Post-session initialisation (circuit breaker, autonomous, context manager,
+    # hook context export). Also extracted to lib/loop-init.sh.
+    ralph_init_loop_post_session "$SESSION_ID"
 
     # Main loop
     while [[ $iteration -lt $MAX_ITERATIONS ]]; do
@@ -641,32 +601,9 @@ $PROMPT" "$TIMEOUT")
             fi
         fi
 
-        # Update metrics
-        update_session_metrics "$SESSION_ID" "$iteration" "$response"
-
-        # Record iteration end for metrics
-        if type record_iteration_end &>/dev/null; then
-            record_iteration_end "$iteration"
-        fi
-
-        # Record health data
-        if type record_health_data &>/dev/null; then
-            local had_error="false"
-            [[ $invoke_status -ne 0 ]] && had_error="true"
-            record_health_data "$iteration" "$had_error" "${METRICS_DATA["last_context_usage"]:-0}" "${METRICS_DATA["iteration_${iteration}_duration"]:-0}"
-        fi
-
-        # Check health patterns
-        if type check_health_patterns &>/dev/null; then
-            if ! check_health_patterns; then
-                if type print_health_warnings &>/dev/null; then
-                    print_health_warnings
-                fi
-            fi
-        fi
-
-        # Create checkpoint (async if configured)
-        create_checkpoint "$SESSION_ID" "$iteration"
+        # Per-iteration observability sinks (metrics, health, checkpoint).
+        # Implementation extracted to lib/loop-iteration.sh in Sprint 4.
+        ralph_record_iteration_observability "$SESSION_ID" "$iteration" "$response" "$invoke_status"
 
         # Check Definition of Done
         print_info "${MSG_DOD_CHECKING}"
@@ -707,60 +644,10 @@ $PROMPT" "$TIMEOUT")
         fi
     done
 
-    # Check if max iterations reached
-    if [[ $iteration -ge $MAX_ITERATIONS && "$dod_passed" != "true" ]]; then
-        exit_reason="max_iterations"
-        print_warning "${MSG_CB_MAX_REACHED}"
-    fi
-
-    # Calculate duration
-    local end_time=$(date +%s)
-    local duration=$((end_time - start_time))
-
-    # Save sprint progress before summary
-    if type save_sprint_progress &>/dev/null; then
-        save_sprint_progress "$SESSION_ID"
-    fi
-
-    # Save metrics export
-    if type save_metrics_export &>/dev/null; then
-        local final_status="completed"
-        [[ "$dod_passed" != "true" ]] && final_status="failed"
-        save_metrics_export "$SESSION_ID" "$final_status"
-    fi
-
-    # Aggregate metrics for history
-    if type aggregate_session_metrics &>/dev/null; then
-        aggregate_session_metrics "$SESSION_ID"
-    fi
-
-    # Record circuit breaker outcome for learning
-    if type record_circuit_breaker_outcome &>/dev/null && [[ "$CB_ADAPTIVE_ENABLED" == "true" ]]; then
-        local success="false"
-        [[ "$dod_passed" == "true" ]] && success="true"
-        record_circuit_breaker_outcome "$CB_CURRENT_PROFILE" "$success" "$iteration"
-    fi
-
-    # Finalize dashboard
-    if type finalize_dashboard &>/dev/null; then
-        local dash_status="completed"
-        [[ "$dod_passed" != "true" ]] && dash_status="failed"
-        [[ "$exit_reason" == "circuit_breaker" ]] && dash_status="interrupted"
-        finalize_dashboard "$dash_status"
-    fi
-
-    # Print summary
-    print_summary "$SESSION_ID" "$iteration" "$duration" "$dod_passed" "$exit_reason"
-
-    # Save final state
-    save_session "$SESSION_ID" "$exit_reason"
-
-    # Return appropriate exit code
-    if [[ "$dod_passed" == "true" ]]; then
-        return 0
-    else
-        return 1
-    fi
+    # Post-loop finalisation (sprint progress, metrics, dashboard, session save).
+    # Implementation extracted to lib/loop-finalizer.sh in Sprint 4. The function
+    # returns 0 if DoD passed, 1 otherwise — same exit contract as before.
+    ralph_finalize_loop "$SESSION_ID" "$iteration" "$dod_passed" "$exit_reason" "$start_time"
 }
 
 # =============================================================================

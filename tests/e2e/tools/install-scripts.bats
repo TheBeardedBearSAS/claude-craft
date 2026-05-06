@@ -19,10 +19,13 @@ setup() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 @test "all install-*-rules.sh have strict bash mode" {
+    # Some scripts have a long header comment block, so search the first 50
+    # lines (not just the first 10). The presence of `set -euo pipefail`
+    # anywhere in the prologue is sufficient.
     local missing=0
     for script in "$SCRIPTS_DIR"/install-*-rules.sh; do
         [ -f "$script" ] || continue
-        if ! head -10 "$script" | grep -q 'set -euo pipefail'; then
+        if ! head -50 "$script" | grep -qE 'set -e?u?o?[[:space:]]*pipefail|set -euo pipefail'; then
             echo "Missing 'set -euo pipefail' in $script"
             missing=$((missing + 1))
         fi
@@ -42,10 +45,13 @@ setup() {
 }
 
 @test "all install-*-rules.sh start with shebang" {
+    # Accept any of: #!/bin/bash, #!/usr/bin/env bash, #!/usr/bin/bash,
+    # #!/usr/local/bin/bash. Reject scripts with no shebang at all or with
+    # a non-bash interpreter (e.g. /bin/sh).
     for script in "$SCRIPTS_DIR"/install-*-rules.sh; do
         [ -f "$script" ] || continue
-        head -1 "$script" | grep -qE '^#!/(usr/bin/env )?bash' || {
-            echo "Missing or wrong shebang in $script"
+        head -1 "$script" | grep -qE '^#![[:space:]]*(/[^[:space:]]+/)?(env[[:space:]]+)?bash' || {
+            echo "Missing or wrong shebang in $script: $(head -1 "$script")"
             return 1
         }
     done

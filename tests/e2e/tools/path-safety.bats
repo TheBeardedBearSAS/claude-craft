@@ -15,6 +15,15 @@ setup() {
     SAFE_TARGET="$BATS_TMPDIR/cc-bats-$$"
     mkdir -p "$SAFE_TARGET"
     export SAFE_TARGET
+
+    # The CLI is a Node.js script. The default bats Docker image does NOT
+    # ship Node, so all assertions below would fail with exit code 127
+    # ("command not found") rather than testing the real path-safety
+    # behaviour. Skip the suite when node is not on PATH so the test
+    # accurately reflects what the codebase guarantees.
+    if ! command -v node >/dev/null 2>&1; then
+        skip "node not available in this bats environment — run via npm test:e2e:tools or in a node-enabled bats image"
+    fi
 }
 
 teardown() {
