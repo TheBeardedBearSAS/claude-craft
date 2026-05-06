@@ -19,6 +19,8 @@
     "lint:fix": "eslint cli/ --fix",
     "lint:shell": "find Dev/ Infra/ Project/ Tools/ scripts/ .bmad/ -name '*.sh' -type f | xargs shellcheck --severity=warning",
     "lint:i18n": "bash scripts/verify-i18n-parity.sh",
+    "docs:generate": "node scripts/generate-references.mjs",
+    "docs:check": "node scripts/generate-references.mjs --check",
     "format:check": "prettier --check cli/",
     "format": "prettier --write cli/",
     "kanban:build": "vite build --config cli/kanban/client/vite.config.js",

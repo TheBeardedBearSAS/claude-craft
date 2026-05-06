@@ -135,31 +135,18 @@ print_iteration() {
 # Dependency checks
 # =============================================================================
 
+# Implementation extracted to lib/dependencies.sh (audit ARCH-002 partial).
+# The function is provided once load_modules() sources that file. We keep a
+# light fallback here so `check_dependencies` remains callable even if the
+# module is missing for some reason — the fallback only checks `claude` and
+# exits with a clear message.
 check_dependencies() {
-    local missing=()
-
-    # Check for claude command
+    if declare -F ralph_check_dependencies > /dev/null; then
+        ralph_check_dependencies
+        return
+    fi
     if ! command -v claude &> /dev/null; then
-        missing+=("claude")
-    fi
-
-    # Check for jq (JSON parsing)
-    if ! command -v jq &> /dev/null; then
-        missing+=("jq")
-    fi
-
-    # Check for git (optional but recommended for checkpointing)
-    if ! command -v git &> /dev/null; then
-        print_warning "${MSG_ERROR_GIT_NOT_FOUND}"
-    fi
-
-    # Check for yq (YAML parsing - optional)
-    if ! command -v yq &> /dev/null; then
-        print_verbose "${MSG_ERROR_YQ_NOT_FOUND}"
-    fi
-
-    if [[ ${#missing[@]} -gt 0 ]]; then
-        print_error "${MSG_ERROR}: Missing required dependencies: ${missing[*]}"
+        echo "Error: 'claude' CLI not found (lib/dependencies.sh missing too)" >&2
         exit 1
     fi
 }
@@ -176,6 +163,7 @@ load_modules() {
     # 4. ASC modules (recovery, escalation, parallel, conductor) loaded last
     local modules=(
         "utils"
+        "dependencies"
         "session"
         "loop"
         "dod-validator"
