@@ -12,6 +12,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ## What's New in v8.3 (Audit-driven release: tokens + security)
 
+- **Sprint 1-4 audit-driven improvements** (v8.3.2) -- new `@paperclip-reviewer` agent, `cli/lib/path-safety.js` shared module, `claude-craft doctor` enforces Claude Code 2.1.97+ baseline with OS-specific yq install hints, ralph.sh refactored from 937 → 812 lines (`run_ralph()` -35%), auto-generated `AGENTS-FULL-REFERENCE.md` + `COMMANDS-FULL-REFERENCE.md`, governance + comparison docs. 809 vitest + 37 bats tests verts.
 - **Dependabot config fix** (v8.3.1) -- removed two erroneous ecosystems (`/cli/kanban/client` and `docker /`) introduced in v8.3.0 that caused Dependabot run failures
 - **Token optimization via `context: fork`** (v8.3.0) -- 15 heavy skills (>100 lines) now run in isolated contexts (Claude Code v2.1.105+), saving 8-15K tokens per long session
 - **CHANGELOG truncated** (v8.3.0) -- 117 KB → 67 KB shipped, archive moved to `docs/CHANGELOG-archive.md`
