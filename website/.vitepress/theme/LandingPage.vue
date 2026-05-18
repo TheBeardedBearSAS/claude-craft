@@ -214,7 +214,7 @@ function t(key) {
   return translations[currentLang.value]?.[key] || translations.en[key] || key
 }
 
-const langToLocale: Record<string, string> = {
+const langToLocale = {
   en: 'en-US',
   fr: 'fr-FR',
   es: 'es-ES',

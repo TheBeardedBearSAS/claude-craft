@@ -230,9 +230,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # pinned: v4.4.0
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'npm'
-          # No registry-url: avoids setup-node auto-setting NODE_AUTH_TOKEN which overrides OIDC
+          # Node 24 (npm 11.5.1+) required for OIDC trusted publishing (npm 10 has no OIDC support).
+          # No registry-url: avoids setup-node auto-setting NODE_AUTH_TOKEN which overrides OIDC.
 
       - name: Update version for main branch
         if: ${{ needs.validate.outputs.is_main_push == 'true' }}
