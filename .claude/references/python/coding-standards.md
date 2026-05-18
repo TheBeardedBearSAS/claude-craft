@@ -545,7 +545,7 @@ line_length = 88
 multi_line_output = 3
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 strict = true
 warn_return_any = true
 disallow_untyped_defs = true

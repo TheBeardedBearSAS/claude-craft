@@ -1,13 +1,20 @@
 # Claude Craft — Enterprise Features Matrix
 
+> ⚠️ **DRAFT — NON CONTRACTUEL** : Cette matrice de fonctionnalités est un **brouillon de travail**.
+> Plusieurs fonctionnalités listées (SSO/SAML, audit logs, multi-tenant, SOC 2/ISO 27001 compliance) ne sont **PAS encore implémentées** ;
+> elles sont sous spécification. Ce document **ne constitue pas une promesse de livraison**.
+> Validation produit/légale en attente (P3-26, audit 2026-05-18 QW-18).
+
+---
+
 ## Feature Comparison by Tier
 
 | Feature | Community | Pro | Enterprise |
 |---------|-----------|-----|------------|
 | **Core** | | | |
-| Commands | 214 | 214 | 214 |
-| Agents | 67 | 67 | 67 + custom |
-| Skills | All (60+) | All + marketplace | All + custom |
+| Commands | 125 | 125 | 125 |
+| Agents | 31 (+39 infra) | idem | idem + custom |
+| Skills | All (48) | All + marketplace | All + custom |
 | Technology stacks | 11 | 11 | 11 |
 | RTK integration | ✅ | ✅ | ✅ |
 | BMAD framework | ✅ | ✅ | ✅ + custom tracks |

@@ -144,7 +144,7 @@ Configuration in `pyproject.toml`:
 
 ```toml
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 strict = true
 warn_return_any = true
 warn_unused_configs = true

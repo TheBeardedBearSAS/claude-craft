@@ -60,21 +60,29 @@ Check `~/.config/rtk/filters.toml`. If it only contains template comments, sugge
 - **PHP projects**: Add composer filters
 - **Python projects**: Add pip install filters
 
-### 3. Configure Sub-Agent Model
+### 3. Configure Sub-Agent Model and Forked Subagents
 
-Check if `CLAUDE_CODE_SUBAGENT_MODEL` is set:
+Check if both env vars are set:
 
 ```bash
 echo "CLAUDE_CODE_SUBAGENT_MODEL=${CLAUDE_CODE_SUBAGENT_MODEL:-NOT SET}"
+echo "CLAUDE_CODE_FORK_SUBAGENT=${CLAUDE_CODE_FORK_SUBAGENT:-NOT SET}"
 ```
 
-If not set, recommend adding to `~/.bashrc`:
+If not set, recommend adding to `~/.bashrc` (or `~/.zshrc`):
 
 ```bash
+# Use Sonnet 4.6 for sub-agents (exploration, grep, file reading) instead of Opus
+# → 40-60% cost reduction on sub-agent invocations
 export CLAUDE_CODE_SUBAGENT_MODEL="sonnet"
+
+# Run sub-agents in isolated contexts (Claude Code 2.1.117+, see COMPATIBILITY.md)
+# → Avoids polluting the main context window with sub-agent intermediate state
+# → Compounds with context: fork on skills (~8-15K tokens saved per long session)
+export CLAUDE_CODE_FORK_SUBAGENT=1
 ```
 
-This uses Sonnet for sub-agents (exploration, grep, file reading) instead of Opus, reducing costs by 40-60%.
+After updating, reload your shell: `source ~/.bashrc`.
 
 ### 4. Configure Hooks
 
@@ -103,6 +111,7 @@ Display a summary table of all optimizations with their status:
 | RTK optimized limits | grep 19% -> 40-50% | ? |
 | RTK custom filters | +30-50% on docker/npm | ? |
 | Sub-agent model (Sonnet) | 40-60% cost reduction | ? |
+| Forked sub-agents (`CLAUDE_CODE_FORK_SUBAGENT=1`) | 8-15K tokens/long session | ? |
 | PostToolUse hook | Reduces context pollution | ? |
 | PreCompact hook | Preserves critical context | ? |
 

@@ -542,7 +542,7 @@ flutter doctor
 
 - Real-time Dart analysis matching `flutter analyze` output
 - Navigation through widget trees, BLoC events, and Riverpod providers
-- Dot shorthand (Dart 3.10) type inference
+- Dot shorthand (Dart 3.11) type inference
 - Build runner generated code awareness
 
 ---

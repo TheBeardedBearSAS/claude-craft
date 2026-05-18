@@ -1,14 +1,14 @@
-# Go 1.24+ - Quick Reference
+# Go 1.26+ - Quick Reference
 
-> ⚠️ **Experimental** — This stack is community-maintained and may not be up-to-date.
+> ⚠️ **Experimental** — This stack is community-maintained. For authoritative guidance refer to the official Go documentation: https://go.dev/doc/.
 
 ## Versions Requises (2026)
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Go | 1.24+ | range-over-func stable, enhanced vet, loop var scoping fix |
-| gopls | 0.17+ | LSP officiel Go |
-| golangci-lint | 1.65+ | Meta-linter 2026 |
+| Go | 1.26+ | Improved type inference, telemetry opt-in (1.25), stable iter, slog, math/rand/v2 |
+| gopls | 0.19+ | LSP officiel Go |
+| golangci-lint | 1.67+ | Meta-linter 2026 |
 | govulncheck | latest | Scan CVE intégré stdlib |
 
 ## Architecture Clean + Hexagonal
@@ -92,10 +92,10 @@ func TestCalculate(t *testing.T) {
 - `httptest` (tests HTTP)
 - `testcontainers-go` (integration tests DB/Redis)
 
-## Go 1.24 Features
+## Go 1.24 → 1.26 Features
 
 ```go
-// Range-over-func stable (Go 1.24)
+// Range-over-func stable (Go 1.24+)
 func Items() iter.Seq[string] {
     return func(yield func(string) bool) {
         for _, item := range data {
@@ -121,8 +121,9 @@ func Map[T, U any](s []T, f func(T) U) []U {
 }
 ```
 
-**Go 1.25 (beta)** : Improved type inference, telemetry opt-in
-**Source** : https://go.dev/blog/go1.24
+**Go 1.25** : Improved type inference, telemetry opt-in (stable)
+**Go 1.26** : Encore plus de fixes type-inference, stdlib enrichie
+**Sources** : https://go.dev/blog/go1.24 · https://go.dev/blog/go1.25 · https://go.dev/blog/go1.26
 
 ## Concurrency Patterns
 
@@ -266,7 +267,7 @@ type Repository interface {
 
 ## Checklist Rapide
 
-- [ ] Go 1.24+, modules activés
+- [ ] Go 1.26+, modules activés
 - [ ] `internal/domain/` sans dépendances externes
 - [ ] golangci-lint passe (0 erreur)
 - [ ] Tests coverage > 80%

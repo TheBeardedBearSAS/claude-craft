@@ -77,14 +77,13 @@ Claude Code v2.1.97+ includes critical security fixes:
 
 Claude Craft follows modern supply chain security practices to ensure the integrity and provenance of published packages.
 
-### SLSA Build Level 2 Provenance
+### npm Provenance (SLSA Build Level 2 equivalent for npm)
 
-Starting with version 8.1.0, all releases include **SLSA Build Level 2** provenance attestations:
+Starting with version 8.1.0, all npm releases ship **npm provenance attestations** that satisfy the SLSA Build Level 2 requirements for the published npm tarball:
 
-- **Automated build**: Builds run in GitHub Actions with no manual intervention
-- **Provenance generation**: SLSA provenance is automatically generated via `slsa-framework/slsa-github-generator`
-- **Signed attestations**: Provenance is cryptographically signed using Sigstore keyless signing
-- **NPM provenance**: npm packages are published with `--provenance` flag (requires npm 9+)
+- **Automated build**: Builds run in GitHub Actions with no manual intervention (`.github/workflows/npm-publish.yml`).
+- **Provenance generation**: The `npm publish --provenance` flag (npm 9+) produces a SLSA-compatible provenance attestation tied to the GitHub Actions OIDC token. We **do not** currently run the standalone `slsa-framework/slsa-github-generator` reusable workflow — that work is tracked separately if/when full SLSA L3 attestations on GitHub Release assets become a requirement.
+- **Signed attestations**: Provenance is cryptographically signed via Sigstore keyless signing and recorded in the public Rekor transparency log.
 
 **How to verify provenance:**
 
@@ -93,20 +92,14 @@ Starting with version 8.1.0, all releases include **SLSA Build Level 2** provena
 npm audit signatures
 
 # View provenance for a specific version
-npm view @the-bearded-bear/claude-craft@8.1.0 dist.attestations
+npm view @the-bearded-bear/claude-craft@latest dist.attestations
 ```
 
-**GitHub Release attestations:**
-
-Each tagged release includes a SLSA provenance attestation file attached as a release asset. You can verify it using:
-
-```bash
-# Download the provenance attestation from the release assets
-# Then verify using slsa-verifier
-slsa-verifier verify-artifact \
-  --provenance-path claude-craft.intoto.jsonl \
-  --source-uri github.com/TheBeardedBearSAS/claude-craft
-```
+> **Scope note (audit 2026-05-18 QW-SLSA)** : the previous wording in this section
+> over-claimed "SLSA Build Level 2 via slsa-github-generator". In reality only
+> `npm publish --provenance` is wired today — equivalent to SLSA L2 for the
+> npm tarball but not the full GitHub Release attestation pipeline. If you need
+> the latter for compliance, please contact us and we'll prioritise it.
 
 ### Software Bill of Materials (SBOM)
 
@@ -161,7 +154,7 @@ npm view @the-bearded-bear/claude-craft@latest dist.integrity
 
 Claude Craft supply chain practices align with:
 
-- **SLSA Framework**: Build Level 2 (working toward Level 3)
+- **SLSA Framework**: npm provenance ships SLSA L2-equivalent attestations for the published tarball (via `npm publish --provenance`). Full SLSA L3 via `slsa-github-generator` is **not** integrated yet.
 - **NIS2 Directive**: Software supply chain security requirements (EU)
 - **NIST SSDF**: Secure Software Development Framework
 - **OpenSSF Scorecard**: Continuous security posture monitoring

@@ -1,8 +1,8 @@
-# Web Performance 2026 - Flutter 3.38+
+# Web Performance 2026 - Flutter 3.41+
 
 ## Overview
 
-Flutter 3.38+ apporte des améliorations majeures pour les applications web:
+Flutter 3.41+ apporte des améliorations majeures pour les applications web:
 - **WebAssembly GC stable** (2-3x plus rapide)
 - **Hot Reload web stable**
 - **dart:js_interop** (remplace dart:js)

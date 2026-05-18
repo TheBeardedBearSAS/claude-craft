@@ -1,12 +1,12 @@
-# Rust 1.85+ - Quick Reference
+# Rust 1.95+ - Quick Reference
 
-> ⚠️ **Experimental** — This stack is community-maintained and may not be up-to-date.
+> ⚠️ **Experimental** — This stack is community-maintained. For authoritative guidance refer to the official Rust documentation: https://www.rust-lang.org/.
 
 ## Versions Requises (2026)
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Rust | 1.85+ | Edition 2024, async traits natifs stables |
+| Rust | 1.95+ | Edition 2024, async closures stables (1.85), AFIT généralisé, return position impl trait élargi |
 | rustfmt | stable | Formatage officiel |
 | clippy | stable | Linter officiel |
 | cargo-audit | 0.21+ | Scan CVE RustSec |
@@ -105,7 +105,7 @@ mod tests {
 - `mockall` (mocks)
 - `criterion` (benchmarks)
 
-## Rust 1.85 Features (Edition 2024)
+## Rust 1.85 → 1.95 Features (Edition 2024)
 
 ```rust
 // Async traits natifs (stable 1.75+)
@@ -324,7 +324,7 @@ cargo clippy -- -W clippy::pedantic -W clippy::nursery
 
 ## Checklist Rapide
 
-- [ ] Rust 1.85+, edition 2024
+- [ ] Rust 1.95+, edition 2024
 - [ ] Domain crate sans dependencies externes
 - [ ] cargo clippy 0 warnings
 - [ ] cargo test passe

@@ -13,6 +13,7 @@ Claude Code hooks allow you to enforce rules programmatically, going beyond CLAU
 | `context-reinject.json` | SessionStart(compact) | Re-inject context after compaction |
 | `security-block.json` | PreToolUse(Bash) | Block suspicious network commands |
 | `pre-compact.json` | PreCompact | Sauvegarde le contexte critique avant compaction (token optim) |
+| `post-compact.json` | PostCompact (2.1.76+) | Re-injecte le contexte essentiel immédiatement après compaction |
 | `output-filter.json` | PostToolUse(Bash) | Filtre les outputs >10KB (RTK ultra-compact, -60-90% tokens CLI) |
 | `block-dangerous-commands.json` | PreToolUse(Bash) | Bloque les commandes destructives (rm -rf /, dd, mkfs) |
 | `quality-gate.json` | PreToolUse(Edit) | Bloque les edits qui violent les SOLID/KISS principes |

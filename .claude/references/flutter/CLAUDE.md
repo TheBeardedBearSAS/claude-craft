@@ -158,7 +158,7 @@ dart run build_runner build -d
 ## Documentation Complète
 
 - `project-context.md` - Contexte projet
-- `coding-standards.md` - Standards Dart 3.10+
+- `coding-standards.md` - Standards Dart 3.11+
 - `wasm.md` - WebAssembly
 - `mcp-integration.md` - Model Context Protocol
 - `web-performance-2026.md` - Performance web

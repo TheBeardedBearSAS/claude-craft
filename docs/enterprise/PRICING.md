@@ -1,12 +1,20 @@
 # Claude Craft — Pricing
 
+> ⚠️ **DRAFT — NON CONTRACTUEL** : Ce document est un **brouillon de travail** pour consultation légale.
+> Les prix, conditions et niveaux de service décrits ne constituent **PAS une offre commerciale ferme**
+> et **ne créent aucun droit ni obligation** tant qu'un contrat n'est pas signé.
+> Validation juridique IP en attente (P3-26, audit 2026-05-18 QW-18).
+> Pour toute discussion commerciale réelle, contactez `flavien.metivier@gmail.com`.
+
+---
+
 ## Tiers
 
 ### Community (MIT, Free)
 
 **Included:**
-- ✅ 211 commands across 26 namespaces
-- ✅ 72 specialized agents (common, tech-specific, infrastructure)
+- ✅ 125 commands across 26 namespaces
+- ✅ 31 default agents + 39 infrastructure agents on-demand (70 total)
 - ✅ All skills (SOLID, TDD, security, git-workflow, atomic-tasks, etc.)
 - ✅ RTK integration (60-90% token savings)
 - ✅ BMAD v6 framework (Quick Flow, Standard, Enterprise tracks)
@@ -107,8 +115,8 @@ Yes:
 
 | Feature | Community | Pro | Enterprise |
 |---------|-----------|-----|------------|
-| **Commands** | 214 | 214 | 214 |
-| **Agents** | 67 | 67 | 67 + custom |
+| **Commands** | 125 | 125 | 125 |
+| **Agents** | 31 (+39 infra on-demand) | idem | idem + custom |
 | **Skills** | All | All + marketplace | All + custom |
 | **RTK integration** | ✅ | ✅ | ✅ |
 | **Support** | Community | Email (48h) | Dedicated (4h) |

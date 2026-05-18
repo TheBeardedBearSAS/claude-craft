@@ -8,7 +8,7 @@
 [![CI](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **72 specialized agents, 211 commands, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 26 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
 ## What's New in v8.3 (Audit-driven release: tokens + security)
 
@@ -56,8 +56,8 @@ That's it. You get an architecture, security, and quality audit of your project 
 Claude Code is powerful on its own. Claude Craft makes it **consistent and team-ready**:
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
-- **72 specialized agents** -- reviewers, architects, coaches that know your stack deeply
-- **211 slash commands** -- repeatable workflows for audits, code generation, sprint management
+- **31 default agents + 39 infra agents on-demand** -- reviewers, architects, coaches that know your stack deeply (70 total potentially installable)
+- **125 slash commands across 26 namespaces** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -65,26 +65,26 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 
 | Stack | Version | Install Command |
 |-------|---------|-----------------|
-| **Symfony / PHP** | 8.0 / PHP 8.5 | `--tech=symfony` |
-| **React** | 19.x | `--tech=react` |
-| **Flutter / Dart** | 3.38 / Dart 3.10 | `--tech=flutter` |
-| **Python** | 3.13+ / FastAPI | `--tech=python` |
-| **Angular** | 19.x | `--tech=angular` |
-| **Vue.js** | 3.5+ | `--tech=vuejs` |
-| **React Native** | 0.76+ | `--tech=reactnative` |
+| **Symfony / PHP** | 8.0 / PHP 8.4+ | `--tech=symfony` |
+| **React** | 19.2 + Compiler 1.0 | `--tech=react` |
+| **Flutter / Dart** | 3.41 / Dart 3.11 | `--tech=flutter` |
+| **Python** | 3.14+ / FastAPI | `--tech=python` |
+| **Angular** | 20 LTS (ou 21) | `--tech=angular` |
+| **Vue.js** | 3.5+ (3.6 beta Vapor) | `--tech=vuejs` |
+| **React Native** | 0.85 (New Architecture) | `--tech=reactnative` |
 | **C# / .NET** | 10 LTS / C# 14 | `--tech=csharp` |
-| **Laravel** | 12.x / PHP 8.5 | `--tech=laravel` |
+| **Laravel** | 13.x / PHP 8.5 | `--tech=laravel` |
 | **PHP** | 8.5 | `--tech=php` |
 | **Paperclip** | 2026.403.0 | `--tech=paperclip` |
 
-| **Docker** | 27+ | `--tech=docker` |
-| **Coolify** | 4.x | `--tech=coolify` |
-| **Kubernetes** | 1.35+ | `--tech=kubernetes` |
-| **OpenTofu** | 1.7+ | `--tech=opentofu` |
-| **Ansible** | 2.18+ | `--tech=ansible` |
+| **Docker** | 29.4.0 | `--tech=docker` |
+| **Coolify** | v4.0.0 (stable) | `--tech=coolify` |
+| **Kubernetes** | 1.36.1 | `--tech=kubernetes` |
+| **OpenTofu** | 1.12.0 | `--tech=opentofu` |
+| **Ansible** | 2.20.4 | `--tech=ansible` |
 | **Hcloud** | 1.61+ | `--tech=hcloud` |
-| **PgBouncer** | 1.25+ | `--tech=pgbouncer` |
-| **FrankenPHP** | 1.11+ | `--tech=frankenphp` |
+| **PgBouncer** | 1.25.2 (CVE-2026-6664/6667 patched) | `--tech=pgbouncer` |
+| **FrankenPHP** | 1.12.1 | `--tech=frankenphp` |
 
 See [Technologies](docs/TECHNOLOGIES.md) for full details.
 
@@ -92,9 +92,9 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 
 | Category | Count | Examples |
 |----------|-------|---------|
-| **Agents** | 63 | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 204 | `/workflow:init`, `/team:audit`, `/react:generate-component` |
-| **Skills** | 37 | Architecture, testing, security best practices |
+| **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
+| **Commands** | 125 across 26 namespaces | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Skills** | 48 | Architecture, testing, security best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
 
@@ -135,7 +135,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 211 commands across 26 namespaces.
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 125 commands across 26 namespaces.
 
 ## Installation
 
@@ -200,8 +200,8 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 211 commands |
-| [Agents](docs/AGENTS.md) | All 72 agents |
+| [Commands](docs/COMMANDS.md) | All 125 commands |
+| [Agents](docs/AGENTS.md) | All 31 default agents (+ 39 infra on-demand) |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |
 | [BMAD Guide](docs/BMAD-PRACTICAL-GUIDE.md) | Project management framework |
@@ -251,6 +251,19 @@ If you're considering Claude Craft for a team of 5+ developers and need :
 - **DPA** (Data Processing Agreement) for RGPD compliance
 
 Contact `flavien.metivier@gmail.com` to discuss a Pro support agreement. Pricing is project-based (no per-seat licensing).
+
+## Training & Consulting
+
+**Using Claude Code with your team and hitting friction?** The framework is free and open-source. The expertise behind it is available directly.
+
+| Service | Best for | Format |
+|---------|----------|--------|
+| **Team onboarding** | 5–20 devs adopting Claude Code, conventions diverging | Half-day workshop |
+| **Quality Gates calibration** | Adjusting BMAD thresholds to your stack and risk profile | 1-day audit |
+| **Claude Code team training** | Structured adoption from solo to consistent team workflow | 2-day training |
+| **Architecture consulting** | Migrating an existing codebase to BMAD v6 | 3–5 days |
+
+→ [Contact TheBeardedCTO](mailto:contact@thebeardedcto.dev) to discuss your situation. No commitment.
 
 ## Contributing
 

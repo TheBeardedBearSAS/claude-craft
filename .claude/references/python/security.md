@@ -163,15 +163,31 @@ is_valid = verify_password("my_secure_password", hashed)
 
 ### JWT Token Handling
 
+> **Canonical: EdDSA (Ed25519) — cf. `.claude/rules/11-security.md`.**
+> HS256 (symmetric HMAC) is **discouraged** as the default in 2026 because:
+> 1. Any service holding the secret can forge tokens (no key separation).
+> 2. Secret rotation is operationally expensive (all services must update simultaneously).
+> 3. OWASP 2025 + RFC 9449 (DPoP) recommend asymmetric algorithms with short-lived tokens.
+> Use EdDSA in production, ES256 if EdDSA is not available in your stack, and **never RS256/HS256 in new code without an explicit waiver**.
+
 ```python
 from datetime import datetime, timedelta, timezone
-from typing import Any
+from pathlib import Path
+import os
 import jwt
+from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+    Ed25519PrivateKey,
+    Ed25519PublicKey,
+)
+from cryptography.hazmat.primitives import serialization
 from pydantic import BaseModel
 
-SECRET_KEY = os.environ["JWT_SECRET_KEY"]  # Load from environment
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+# Load EdDSA (Ed25519) keys from secrets vault — never check in.
+# Generate once: `openssl genpkey -algorithm ed25519 -out jwt-private.pem`
+PRIVATE_KEY_PEM = os.environ["JWT_PRIVATE_KEY_PEM"].encode()
+PUBLIC_KEY_PEM = os.environ["JWT_PUBLIC_KEY_PEM"].encode()
+ALGORITHM = "EdDSA"
+ACCESS_TOKEN_EXPIRE_MINUTES = 15  # Short-lived per OWASP 2026
 
 
 class TokenPayload(BaseModel):
@@ -184,9 +200,9 @@ class TokenPayload(BaseModel):
 def create_access_token(
     user_id: str,
     role: str,
-    expires_delta: timedelta | None = None
+    expires_delta: timedelta | None = None,
 ) -> str:
-    """Create a secure JWT token."""
+    """Create a secure JWT token (EdDSA/Ed25519)."""
     now = datetime.now(timezone.utc)
     expire = now + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
 
@@ -197,13 +213,15 @@ def create_access_token(
         "iat": now,
     }
 
-    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    private_key = serialization.load_pem_private_key(PRIVATE_KEY_PEM, password=None)
+    return jwt.encode(payload, private_key, algorithm=ALGORITHM)
 
 
 def decode_token(token: str) -> TokenPayload:
-    """Decode and validate a JWT token."""
+    """Decode and validate a JWT token (EdDSA/Ed25519)."""
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        public_key = serialization.load_pem_public_key(PUBLIC_KEY_PEM)
+        payload = jwt.decode(token, public_key, algorithms=[ALGORITHM])
         return TokenPayload(**payload)
     except jwt.ExpiredSignatureError:
         raise ValueError("Token has expired")
@@ -274,10 +292,11 @@ class Settings(BaseSettings):
     database_url: SecretStr
     database_pool_size: int = 5
 
-    # Authentication
-    jwt_secret_key: SecretStr
-    jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = 30
+    # Authentication (EdDSA / Ed25519 — see rules/11-security.md)
+    jwt_private_key_pem: SecretStr  # PEM-encoded Ed25519 private key
+    jwt_public_key_pem: SecretStr   # PEM-encoded Ed25519 public key
+    jwt_algorithm: str = "EdDSA"
+    access_token_expire_minutes: int = 15  # Short-lived per OWASP 2026
 
     # API keys
     api_key: SecretStr

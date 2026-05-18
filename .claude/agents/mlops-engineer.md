@@ -6,7 +6,21 @@ maxTurns: 6
 effort: medium
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
-disallowedTools: []
+# Audit 2026-05-18 QW-15 — MLOps touches feature stores, model registries
+# and inference endpoints (often production). Block destructive verbs on
+# data/model artefacts and on the underlying infra.
+disallowedTools:
+  - "Bash(rm -rf:*)"
+  - "Bash(dd:*)"
+  - "Bash(mkfs:*)"
+  - "Bash(kubectl delete:*)"
+  - "Bash(helm uninstall:*)"
+  - "Bash(mlflow models delete:*)"
+  - "Bash(mlflow registered-models delete:*)"
+  - "Bash(aws s3 rm:*)"
+  - "Bash(gsutil rm:*)"
+  - "Bash(curl * | sh*)"
+  - "Bash(wget * | sh*)"
 permissionMode: default
 ---
 

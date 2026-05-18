@@ -6,7 +6,21 @@ maxTurns: 6
 effort: medium
 memory: user
 tools: [Read, Glob, Grep, Bash, WebFetch, WebSearch]
-disallowedTools: []
+# Audit 2026-05-18 QW-15 — migrations touch shared/prod databases. Block
+# destructive shell verbs and database drop/truncate. Investigate-then-output
+# is fine; actual destructive execution must require an explicit user opt-in.
+disallowedTools:
+  - "Bash(rm -rf:*)"
+  - "Bash(dd:*)"
+  - "Bash(mkfs:*)"
+  - "Bash(:(){:|:&};:*)"
+  - "Bash(DROP DATABASE:*)"
+  - "Bash(DROP TABLE:*)"
+  - "Bash(TRUNCATE:*)"
+  - "Bash(pg_dump:*)"
+  - "Bash(mysqldump:*)"
+  - "Bash(curl * | sh*)"
+  - "Bash(wget * | sh*)"
 permissionMode: default
 ---
 

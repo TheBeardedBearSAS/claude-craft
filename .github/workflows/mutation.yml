@@ -18,7 +18,10 @@ jobs:
   mutation:
     name: Stryker mutation score
     runs-on: ubuntu-latest
-    continue-on-error: true  # non-blocking
+    # Blocking on PRs (audit 2026-05-18 QW-11). Nightly schedule remains
+    # informational only — if the nightly run fails on transient network /
+    # CI flakiness we don't want to wake anyone up.
+    continue-on-error: ${{ github.event_name == 'schedule' }}
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
@@ -43,11 +46,15 @@ jobs:
 
       - name: Run Stryker (nightly full)
         if: github.event_name != 'pull_request'
+        # Nightly: tolerant — informational signal only.
         run: npx stryker run || true
 
-      - name: Run Stryker (PR incremental — mute only changed files)
+      - name: Run Stryker (PR incremental — mutate only changed files)
         if: github.event_name == 'pull_request'
-        run: npx stryker run --incremental || true
+        # PR: blocking. Threshold (mutationScore.break / .high / .low) is
+        # configured in stryker.config.mjs. CI fails if the score falls
+        # below the `break` threshold.
+        run: npx stryker run --incremental
 
       - name: Upload mutation report
         if: always()

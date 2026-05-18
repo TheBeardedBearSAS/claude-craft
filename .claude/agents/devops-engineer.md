@@ -6,6 +6,24 @@ maxTurns: 8
 effort: medium
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
+# Audit 2026-05-18 QW-15 — DevOps touches shared infra (clusters, secrets,
+# load balancers). Block destructive shell verbs and remote infra-as-code
+# applies. Investigation / generating manifests is fine; executing them
+# against prod must require an explicit user opt-in.
+disallowedTools:
+  - "Bash(rm -rf:*)"
+  - "Bash(dd:*)"
+  - "Bash(mkfs:*)"
+  - "Bash(kubectl delete:*)"
+  - "Bash(helm uninstall:*)"
+  - "Bash(terraform destroy:*)"
+  - "Bash(tofu destroy:*)"
+  - "Bash(docker system prune -a*)"
+  - "Bash(docker volume rm:*)"
+  - "Bash(curl * | sh*)"
+  - "Bash(wget * | sh*)"
+  - "Bash(git push --force*)"
+  - "Bash(git push -f*)"
 permissionMode: default
 skills: [git-workflow, security]
 ---
@@ -51,8 +69,8 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | DigitalOcean | App Platform, Kubernetes, Managed DB |
 | Azure | AKS, App Service, Azure DevOps |
 | Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) |
-| Coolify | Self-hosted PaaS | v4.0.0-beta.470 (avril 2026) |
-| OpenTofu | State encryption, OCI registry backends | 1.11.6 (8 avril 2026) |
+| Coolify | Self-hosted PaaS | v4.0.0 (stable, avril 2026) |
+| OpenTofu | State encryption, OCI registry backends | 1.12.0 (mai 2026) |
 | Ansible | Automation, playbooks, roles | ansible-core 2.20.4 (2.21 beta) |
 
 ### Monitoring & Observability
@@ -189,7 +207,7 @@ max_prepared_statements = 200  # Requis 1.21+
 server_idle_timeout = 600
 ```
 
-**Patterns clés PgBouncer 1.25.1** :
+**Patterns clés PgBouncer 1.25.2** (CVE-2026-6664/6667 patched) :
 - **Prepared statements natifs** : Depuis 1.21 (15-250% gains perf selon charge)
 - **Transaction mode** : `pool_mode=transaction` pour pooling efficace
 - **`max_prepared_statements`** : Limite mémoire préparées (200-500 recommandé)
@@ -221,7 +239,7 @@ terraform {
 tofu plan -refresh-only -out=drift.plan
 ```
 
-**Patterns clés OpenTofu 1.11.6** :
+**Patterns clés OpenTofu 1.12.0** :
 - **State encryption at rest** : Chiffrement natif (SLSA Level 3)
 - **OCI registry backends** : Alternative S3/Azure Blob
 - **Drift detection** : `plan -refresh-only` pour audit infra

@@ -1,8 +1,8 @@
-# Model Context Protocol (MCP) Integration - Flutter 3.38+
+# Model Context Protocol (MCP) Integration - Flutter 3.41+
 
 ## Overview
 
-Le **Model Context Protocol (MCP)** est un standard ouvert pour l'intégration d'assistants AI dans les applications. Flutter 3.38+ offre un support natif pour créer des applications qui interagissent avec des AI assistants comme Claude.
+Le **Model Context Protocol (MCP)** est un standard ouvert pour l'intégration d'assistants AI dans les applications. Flutter 3.41+ offre un support natif pour créer des applications qui interagissent avec des AI assistants comme Claude.
 
 **Cas d'usage:**
 - Assistants conversationnels intégrés

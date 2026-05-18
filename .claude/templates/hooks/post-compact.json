@@ -1,0 +1,18 @@
+{
+  "description": "Re-inject essential project context immediately after context compaction (PostCompact hook, Claude Code 2.1.76+).",
+  "hooks": {
+    "PostCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PROJECT_DIR=\"${CLAUDE_PROJECT_DIR:-$(pwd)}\"; ESSENTIALS_FILE=\"$PROJECT_DIR/.claude/context-essentials.md\"; if [ -f \"$ESSENTIALS_FILE\" ]; then BODY=$(head -150 \"$ESSENTIALS_FILE\"); jq -n --arg msg \"PROJECT CONTEXT RE-INJECTED AFTER COMPACTION:\\n\\n$BODY\" '{\"systemMessage\": $msg}'; else echo '{}'; fi; exit 0",
+            "timeout": 10000
+          }
+        ]
+      }
+    ]
+  },
+  "usage": "Copy this PostCompact hook to .claude/settings.json (or ~/.claude/settings.json for global usage). Maintain .claude/context-essentials.md with the architecture decisions, conventions, current tasks and critical constraints you want Claude to keep top-of-mind right after a compaction event. Pairs well with templates/hooks/pre-compact.json (which preserves context BEFORE compaction) and templates/hooks/context-reinject.json (SessionStart matcher 'compact' fallback for editors that don't fire PostCompact). Requires jq. Audit 2026-05-18 QW-20."
+}

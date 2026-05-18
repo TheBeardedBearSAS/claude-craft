@@ -4,6 +4,13 @@ Tools/Ralph/lib/session-init.sh
 .agents/
 .recette/
 
+# DRAFT legal documents (NEVER ship until IP lawyer review — passif juridique)
+# See audit 2026-05-18 QW-07 and LICENSE-COMMERCIAL.md / LICENSE-ENTERPRISE.md DRAFT banners
+LICENSE-COMMERCIAL.md
+LICENSE-ENTERPRISE.md
+docs/enterprise/
+docs/dual-license/
+
 # Test files
 tests/
 *.test.js

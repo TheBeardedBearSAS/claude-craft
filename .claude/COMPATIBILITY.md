@@ -1,8 +1,8 @@
-# Claude Code Compatibility — Claude Craft v8.3.2
+# Claude Code Compatibility — Claude Craft v8.4.0
 
 **Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
-**Recommended Version:** 2.1.117
-**Last Updated:** 2026-05-06
+**Recommended Version:** 2.1.118
+**Last Updated:** 2026-05-18
 
 ---
 
@@ -24,7 +24,7 @@
 | Requirement | Version | Notes |
 |-------------|---------|-------|
 | **Minimum** | 2.1.97 | Security baseline — CVE-2025-59536 patched |
-| **Recommended** | 2.1.117 | Full feature set, forked subagents, native CLI binary |
+| **Recommended** | 2.1.118 | Full feature set, forked subagents (activated), native CLI binary, 10 new env vars |
 | **MCP + Hooks production** | 2.1.97+ | Mandatory for secure MCP usage |
 | **Agent Teams** | 2.1.32+ (experimental) | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
 | **Auto Mode** | 2.1.94+ | Team plan required |
@@ -124,8 +124,8 @@ Statut d'adoption des 15 principales features Claude Code 2.1.x dans Claude Craf
 | `/reload-plugins` | 2.1.105+ | **Adopted** | Documenté dans context-management |
 | `/proactive` alias | 2.1.105+ | **Adopted** | Alias pour `/loop` |
 | Push Notifications | 2.1.110+ | **Planned** | Non encore intégré aux agents |
-| Forked Subagents | 2.1.117 | **Planned** | `CLAUDE_CODE_FORK_SUBAGENT=1` — prévu v8.3 |
-| Skill `context: fork` | 2.1.105+ | **N/A** | Évaluation en cours — isolement contexte |
+| Forked Subagents | 2.1.117 | **Adopted** | `CLAUDE_CODE_FORK_SUBAGENT=1` activé dans setup-rtk (audit 2026-05-18 QW-06) |
+| Skill `context: fork` | 2.1.105+ | **Adopted** | 15 skills lourds utilisent `context: fork` (cf. rules/12-context-management.md) |
 
 **Légende :**
 - **Adopted** : Intégré et documenté dans Claude Craft
@@ -191,11 +191,26 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 
 | Feature | Description | Usage Claude Craft |
 |---------|-------------|-------------------|
-| Forked Subagents | `CLAUDE_CODE_FORK_SUBAGENT=1` — contextes isolés | Prévu pour team:sprint v8.3 |
+| Forked Subagents | `CLAUDE_CODE_FORK_SUBAGENT=1` — contextes isolés | **Activé** via `/common:setup-rtk` (audit 2026-05-18 QW-06) |
 | `/resume` 67% faster | Sessions > 40 MB | Reprise sessions longues |
 | Concurrent MCP connections | Par défaut — démarrage plus rapide | Multi-MCP setups |
 | Native `Glob`/`Grep` (bfs/ugrep) | Embedded binaires | Performance recherche fichiers |
 | Forked skill `context: fork` | Combiné avec forked subagents | Isolation complète contexte skill |
+
+### 2.1.118 — Env vars complémentaires (avril 2026)
+
+| Variable / Feature | Description | Usage Claude Craft |
+|---------|-------------|-------------------|
+| `CLAUDE_CODE_FORK_SUBAGENT=1` | Active les sous-agents avec contextes isolés (forked) | Recommandé via `/common:setup-rtk` |
+| `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` | Bascule les sous-agents vers Sonnet 4.6 (cost saving) | Recommandé via `/common:setup-rtk` |
+| `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | Charge CLAUDE.md depuis `--add-dir` | Monorepos |
+| `MAX_THINKING_TOKENS=8000` | Limite tokens de reflexion adaptive | Tâches simples → coût réduit |
+| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Budget caractères slash commands | Commands longues (`/team:audit`) |
+| `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` | PowerShell au lieu de Bash (Windows, ajouté v2.1.84+) | WSL2 fallback Windows |
+| `ENABLE_PROMPT_CACHING_1H` | Cache prompt 1 heure | Sessions répétitives, -40% coût |
+| `FORCE_PROMPT_CACHING_5M` | Force cache 5 min | Sessions courtes |
+| `OTEL_LOG_USER_PROMPTS` | Log prompts dans traces (beta) | Observabilité |
+| `OTEL_LOG_TOOL_DETAILS` / `OTEL_LOG_TOOL_CONTENT` | Log détails/contenu outils (beta, verbose) | Audit / debug |
 
 ---
 
@@ -287,7 +302,8 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | **2.1.111** | **2026-04-16** | **Opus 4.7, `xhigh` effort, `/ultrareview`** |
 | 2.1.113 | 2026-04-17 | Native CLI binary, `/proactive`, sécurité Bash renforcée |
 | 2.1.116 | 2026-04-20 | `/resume` 67% faster, thinking spinner |
-| **2.1.117** | **2026-04-22** | **Forked subagents, concurrent MCP, native bfs/ugrep — RECOMMANDÉ** |
+| 2.1.117 | 2026-04-22 | Forked subagents, concurrent MCP, native bfs/ugrep |
+| **2.1.118** | **2026-04-26** | **10 nouvelles env vars (FORK_SUBAGENT, SUBAGENT_MODEL, OTEL_*…) — RECOMMANDÉ** |
 
 ---
 

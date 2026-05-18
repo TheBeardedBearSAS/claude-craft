@@ -5,6 +5,148 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.4.0] - 2026-05-18
+
+Audit 2026-05-18 comprehensive — Phase 1 (credibility). Targets the 20 Quick Wins
+and the highest-impact strategic chantiers (ST-01, ST-02, ST-03, ST-04). MINOR
+release because new public surfaces are added (references/paperclip/,
+references/reactnative/new-architecture.md, references/vuejs/vapor-mode.md,
+new `lint:includes` script, slim SKILL.md + new REFERENCE.md split for async /
+multitenant / cqrs). Backwards compatible.
+
+### Added (summary)
+
+- `references/paperclip/` (CLAUDE.md + project-context.md) — promesse marketing tenue.
+- `references/reactnative/new-architecture.md` — JSI / TurboModules / Fabric.
+- `references/vuejs/vapor-mode.md` — beta compiler, Alien Signals, limites.
+- `references/base/testing.md` — pointeur stable (single source of truth dans skill).
+- `templates/hooks/post-compact.json` — alignement claim COMPATIBILITY.md.
+- `scripts/verify-claude-includes.mjs` + `npm run lint:includes` (CI step).
+- `.github/workflows/ci.yml` — Vitest + lint + format + i18n + docs sync + @-include
+  lint sur PR (matrix Node 20/22). Mutation testing blocking sur PR.
+- `tests/cli/colors.test.mjs` — 31 tests couvrant FORCE_COLOR, NO_COLOR, non-TTY.
+- Skills `async`, `multitenant`, `cqrs` : SKILL.md slim (78/65/69 lignes) + REFERENCE.md complet
+  (491/402/317 lignes). Économie nette en mode auto-fork ≈ 1000 lignes.
+
+### Security
+
+- **References Python — JWT canonical pattern fixed (P0 #1).** `references/python/security.md`
+  no longer prescribes HS256 (symmetric HMAC) as the default — replaced with
+  EdDSA (Ed25519) following `rules/11-security.md` and OWASP 2025 guidance.
+  Short-lived tokens (15 min) by default. Migration of `pydantic_settings`
+  `Settings` to PEM key pair.
+- **Hook template `block-dangerous-commands.json` fixed (P0 #3).** Previous
+  pattern `echo '$TOOL_INPUT' | jq …` was broken (single quotes prevent
+  expansion; `$TOOL_INPUT` is not a shell env var — Claude Code passes hook
+  input on stdin as JSON). Replaced with `jq -r '.tool_input.command' < stdin`,
+  exit code 2 on match, message on stderr.
+- **`disallowedTools` added to 7 agents (P0 #2, QW-15).** Baseline destructive-
+  command deny list (`rm -rf`, `dd`, `mkfs`, fork bombs, `curl | sh`, `sudo`,
+  `chmod 777`) on `migration-specialist`, `devops-engineer`, `mlops-engineer`,
+  `ralph-conductor`, `refactoring-specialist`, `tdd-coach`, `uiux-orchestrator`.
+  Specific extras per agent (e.g. `terraform destroy`, `kubectl delete`,
+  `mlflow models delete`).
+- **`SECURITY.md` SLSA claim corrected (P0 #4).** Previous wording over-claimed
+  "SLSA L2 via `slsa-github-generator`". Only `npm publish --provenance` is
+  wired today (SLSA L2 for the npm tarball). The standalone `slsa-github-generator`
+  workflow remains a future item.
+- **`.npmignore` excludes DRAFT legal docs (QW-07).** `LICENSE-COMMERCIAL.md`,
+  `LICENSE-ENTERPRISE.md`, `docs/enterprise/`, `docs/dual-license/` are now
+  excluded from the npm tarball — avoids shipping DRAFT contracts.
+
+### Fixed — Documentation freshness
+
+- **README versions sync (QW-02, QW-12).** Tech matrix updated to Flutter 3.41 /
+  Dart 3.11, Python 3.14, React 19.2 + Compiler 1.0, Angular 20 LTS, React Native
+  0.85 New Architecture, Vue 3.5+/3.6 Vapor, Laravel 13, Symfony 8 / PHP 8.4+,
+  Docker 29.4.0, K8s 1.36.1, OpenTofu 1.12.0, Coolify v4.0.0 stable, PgBouncer
+  1.25.2, FrankenPHP 1.12.1. **Agents & commands counts corrected: 31 default
+  + 39 infra on-demand (not 72), 125 commands (not 211).** Same correction in
+  `docs/enterprise/PRICING.md` and `docs/enterprise/FEATURES.md`.
+- **`.claude/CLAUDE.md` infra line updated (QW-03, QW-04, QW-16).** Coolify
+  marked stable, PgBouncer 1.25.2 with CVE-2026-6664/6667 patched, K8s 1.36.1,
+  OpenTofu 1.12.0. `devops-engineer.md` aligned.
+- **Flutter refs Flutter 3.41 / Dart 3.11 (QW-09, P0 #7).** Bulk update across
+  `references/flutter/{CLAUDE,coding-standards,project-context,tooling,wasm,mcp-integration,web-performance-2026}.md`
+  and `commands/common/init.md` — 27 occurrences corrected.
+- **Python refs Python 3.14 (QW-10, P0 #10).** `references/python/{quality-tools,
+  coding-standards,tooling}.md` mypy `python_version` 3.12 → 3.14, GitHub Actions
+  `setup-python` 3.12 → 3.14.
+- **Go 1.26 / Rust 1.95 (QW-17, P0 #11, #12).** `references/go/CLAUDE.md` updated
+  to 1.26+ (range-over-func stable since 1.24, telemetry stable 1.25). Both stacks
+  are explicitly community-maintained pointing to official docs.
+
+### Fixed — Compatibility (P0 #23, #24)
+
+- **`COMPATIBILITY.md` bumped to 2.1.118 recommended (QW-08).** New section
+  documents the 10 env vars introduced (`CLAUDE_CODE_FORK_SUBAGENT`,
+  `CLAUDE_CODE_SUBAGENT_MODEL`, `ENABLE_PROMPT_CACHING_1H`, `OTEL_LOG_*`, …).
+- **`context: fork` status corrected (QW-19).** From "N/A — évaluation en cours"
+  to "Adopted — 15 heavy skills use `context: fork`".
+- **Forked Subagents status corrected (QW-06).** From "Planned" to "Adopted —
+  activated via `/common:setup-rtk`".
+- **`setup-rtk` recipe updated.** Recommends both `CLAUDE_CODE_SUBAGENT_MODEL=sonnet`
+  AND `CLAUDE_CODE_FORK_SUBAGENT=1`. Combined gain estimated 8-15K tokens per
+  long session.
+- **PostCompact hook template added (QW-20).** `.claude/templates/hooks/post-compact.json`
+  was claimed "Adopted" in `COMPATIBILITY.md` but the template file did not exist
+  — created and referenced in `templates/hooks/README.md`.
+
+### Fixed — Accessibility (P0 #20)
+
+- **`cli/lib/colors.js` honors `NO_COLOR` and non-TTY stdout (QW-13).** Central
+  fix : when `NO_COLOR` is set (https://no-color.org spec) or stdout is not a
+  TTY (piped to file), every color/style entry resolves to an empty string.
+  Automatically fixes `banner.js`, `help.js` and any future caller.
+- New `colorEnabled` named export, comprehensive `tests/cli/colors.test.mjs`
+  covering FORCE_COLOR, NO_COLOR, non-TTY.
+
+### Fixed — Architecture & link hygiene (P0 #17, ST-01)
+
+- **`@-include` link checker added.** `scripts/verify-claude-includes.mjs` scans
+  every Markdown file under `.claude/`, `docs/`, root for broken `@<path>` refs.
+  Wired as `npm run lint:includes` and as a CI step. Run: `npm run lint:includes`
+  → "✓ 633 files scanned, no broken @-includes."
+- **`references/base/testing.md` created** as a stable redirect (the audit
+  identified it as a phantom link from `skills/testing/SKILL.md` and `rules/07-testing.md`).
+  Single source of truth remains `skills/testing/REFERENCE.md`.
+
+### Added — Paperclip references (ST-03, P0 #13)
+
+- **`references/paperclip/CLAUDE.md` + `project-context.md`.** Minimum viable
+  reference set so the marketing promise of `--tech=paperclip` is held. Covers
+  two-layer architecture (control plane + adapters), idempotency keys, audit
+  trail signing, multi-tenant RLS, Vitest 4 testing strategy.
+
+### Added — React Native 0.85 New Architecture (ST-04, P0 #8)
+
+- **`references/reactnative/new-architecture.md`.** Documents JSI, TurboModules
+  (Codegen TypeScript specs), Fabric (concurrent renderer), Hermes default.
+  Activation, gotchas (view flattening, sync calls, sourcemaps), third-party
+  compatibility matrix, migration checklist 0.74 → 0.85.
+
+### Added — Vue.js 3.6 Vapor Mode (P0 #9)
+
+- **`references/vuejs/vapor-mode.md`.** Documents the beta compiler that
+  removes the Virtual DOM (Alien Signals fine-grained reactivity), activation
+  per component or app-wide, current limitations (no `<Transition>`, no
+  `<KeepAlive>`, no SSR yet), and when NOT to migrate.
+
+### Added — CI/CD (P0 #18, QW-05, QW-11)
+
+- **`.github/workflows/ci.yml`** — Vitest + lint + format + i18n + docs sync +
+  `@-include` lint on every PR, matrix Node 20/22. Closes the gap where tests
+  were only enforced on tag/main push.
+- **`mutation.yml` is now blocking on PR.** Previously `continue-on-error: true`
+  always — Stryker score regressions silently passed. Schedule (nightly) keeps
+  `continue-on-error` for transient flakiness; PRs now fail below `break: 50`.
+
+### Added — DRAFT banners on legal/commercial docs (QW-18)
+
+- `docs/enterprise/PRICING.md` and `docs/enterprise/FEATURES.md` open with a
+  visible "DRAFT — NON CONTRACTUEL" banner so prospects cannot mistake the
+  files for binding commitments. IP lawyer review still pending (P3-26).
+
 ## [8.3.2] - 2026-05-06
 
 Audit-driven Sprint 1 → 4 deep refactor. PATCH release because no public CLI surface changes — internal-only refactor of `Tools/Ralph/ralph.sh` and addition of new agents/tests/docs. Same npm install command as 8.3.1.

@@ -55,7 +55,7 @@ lib/
 **Justification** :
 [Expliquer pourquoi ce pattern a été choisi pour ce projet]
 
-### Nouvelles Features Flutter 3.38+ / Dart 3.10+
+### Nouvelles Features Flutter 3.41+ / Dart 3.11+
 
 #### WebAssembly (Wasm) - 2-3x plus rapide
 ```dart
@@ -70,15 +70,15 @@ lib/
 // Voir .claude/references/flutter/mcp-integration.md
 ```
 
-#### Dart 3.10 Dot Shorthands
+#### Dart 3.11 Dot Shorthands
 ```dart
 // ✅ Dot shorthands - syntaxe simplifiée
 enum Status { pending, active, completed }
 
-// Avant Dart 3.10
+// Avant Dart 3.11
 if (status == Status.active) { }
 
-// Dart 3.10+ avec dot shorthands
+// Dart 3.11+ avec dot shorthands
 if (status == .active) { }  // Inférence automatique
 
 // Fonctionne aussi avec constructors
