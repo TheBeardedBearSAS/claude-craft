@@ -285,11 +285,13 @@ jobs:
           fi
 
       - name: Smoke test installed package
+        # Use npm dist-tag (next/beta/latest) rather than the static package.json version,
+        # because main-branch pushes publish as 8.5.0-next.<sha>, not 8.5.0.
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         run: |
           sleep 30
-          PUBLISHED_VERSION=$(node -p "require('./package.json').version")
-          npx --yes @the-bearded-bear/claude-craft@${PUBLISHED_VERSION} --version
+          NPM_TAG="${{ steps.npm_tag.outputs.tag }}"
+          npx --yes @the-bearded-bear/claude-craft@${NPM_TAG} --version
 
   release:
     name: Create GitHub Release
