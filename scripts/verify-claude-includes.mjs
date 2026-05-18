@@ -16,24 +16,60 @@
  *   node scripts/verify-claude-includes.mjs --warn    # always exit 0
  */
 
-import { readFile, stat } from 'node:fs/promises';
+import { readFile, readdir, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { glob } from 'glob';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WARN_ONLY = process.argv.includes('--warn');
 
-const SCAN_GLOBS = ['.claude/**/*.md', 'README.md', 'CLAUDE.md', 'docs/**/*.md'];
+// Directories to scan (relative to REPO_ROOT). We walk these recursively and
+// pick up Markdown files only. Using fs.readdir({recursive:true}) (Node ≥18.17)
+// instead of pulling in the `glob` package — keeps the script zero-dependency.
+const SCAN_ROOTS = ['.claude', 'docs'];
+const SCAN_FILES = ['README.md', 'CLAUDE.md'];
 
-// Skip generated artefacts and historical audit dumps.
-const IGNORE = [
-  '**/node_modules/**',
-  '.claude/references/**/CHANGELOG-*.md',
-  'docs/audit/**',
+// Substrings (anywhere in the relative path) that disqualify a file. Generated
+// artefacts, historical audit dumps and node_modules.
+const IGNORE_SUBSTRINGS = [
+  `${path.sep}node_modules${path.sep}`,
+  `${path.sep}docs${path.sep}audit${path.sep}`,
+  `${path.sep}audit${path.sep}`,
   'docs/CHANGELOG-archive.md',
-  'audit/**',
 ];
+
+async function collectMarkdownFiles() {
+  const found = [];
+
+  for (const root of SCAN_ROOTS) {
+    const abs = path.join(REPO_ROOT, root);
+    let entries;
+    try {
+      entries = await readdir(abs, { recursive: true, withFileTypes: true });
+    } catch (err) {
+      if (err.code === 'ENOENT') continue;
+      throw err;
+    }
+    for (const entry of entries) {
+      if (!entry.isFile()) continue;
+      if (!entry.name.endsWith('.md')) continue;
+      // `entry.parentPath` exists in Node 22, `entry.path` in 20.12+. Either is
+      // an absolute path to the parent directory.
+      const parent = entry.parentPath ?? entry.path ?? abs;
+      const full = path.join(parent, entry.name);
+      const rel = path.relative(REPO_ROOT, full);
+      if (IGNORE_SUBSTRINGS.some((s) => rel.includes(s))) continue;
+      found.push(full);
+    }
+  }
+
+  for (const file of SCAN_FILES) {
+    const abs = path.join(REPO_ROOT, file);
+    if (await pathExists(abs)) found.push(abs);
+  }
+
+  return found;
+}
 
 // Pattern matches `@something.md` / `@something.json` / `@something.yml` /
 // `@something.yaml` where the path may include slashes, dots, dashes and
@@ -91,9 +127,7 @@ async function scanFile(filePath) {
 }
 
 async function main() {
-  const files = (
-    await Promise.all(SCAN_GLOBS.map((pattern) => glob(pattern, { cwd: REPO_ROOT, ignore: IGNORE, absolute: true })))
-  ).flat();
+  const files = await collectMarkdownFiles();
 
   const results = await Promise.all(files.map(async (file) => ({ file, broken: await scanFile(file) })));
 
