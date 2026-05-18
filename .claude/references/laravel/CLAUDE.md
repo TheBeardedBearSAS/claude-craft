@@ -40,7 +40,7 @@
 
 ### Pest 4 Mutation Testing
 - Mutation Testing natif pour garantir la qualité des tests
-- https://pestphp.com/docs/pest3-now-available
+- https://pestphp.com/docs/pest4-now-available
 
 ### Arch Presets
 - Tests d'architecture préconfigurés pour Laravel
@@ -58,7 +58,7 @@
 |-----------|---------|-------------|
 | **PHP** | 8.5+ | Constructor promotion, readonly, enums, match |
 | **Laravel** | 13.x | Framework fullstack avec AI SDK |
-| **Pest** | 3.x | Tests + Mutation Testing |
+| **Pest** | 4.x | Tests + Mutation Testing |
 | **PHPStan** | 2.0 Level 10 | Analyse statique stricte |
 | **Pint** | 1.x | Formatage PSR-12 / Laravel |
 | **Sanctum** | 4.x | API Token Authentication + Passkey |

@@ -1,6 +1,8 @@
 ---
 description: Vérification de la Qualité du Code React
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification de la Qualité du Code React

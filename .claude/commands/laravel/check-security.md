@@ -1,5 +1,7 @@
 ---
 description: Security audit for Laravel applications following OWASP guidelines
+model: haiku
+
 ---
 
 # Laravel Security Audit

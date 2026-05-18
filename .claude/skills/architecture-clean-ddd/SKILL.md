@@ -2,6 +2,7 @@
 name: architecture-clean-ddd
 description: Architecture Clean + DDD + Hexagonal - Atoll Tourisme. Use when designing architecture or reviewing code structure.
 context: fork
+disable-model-invocation: true
 ---
 
 # Architecture Clean + DDD + Hexagonal - Atoll Tourisme

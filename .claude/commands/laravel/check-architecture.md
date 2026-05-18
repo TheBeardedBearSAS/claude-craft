@@ -1,5 +1,7 @@
 ---
 description: Audit Laravel application architecture and design patterns
+model: haiku
+
 ---
 
 # Laravel Architecture Audit

@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "command": "mkdir -p ~/.claude/logs && jq -r '.prompt | length' >> ~/.claude/logs/prompt-sizes.log 2>/dev/null || true"
+      }
+    ]
+  }
+}

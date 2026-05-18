@@ -1,5 +1,7 @@
 ---
 description: Security audit for Vue.js applications (OWASP, XSS, CSRF)
+model: haiku
+
 ---
 
 # Vue.js Security Audit

@@ -1,5 +1,7 @@
 ---
 description: Standards Compliance Check
+model: haiku
+
 ---
 
 # Standards Compliance Check

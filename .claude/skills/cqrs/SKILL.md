@@ -6,6 +6,7 @@ triggers:
   files: ["**/Command*.php", "**/Query*.php", "**/Handler*.php", "**/Projector*.php", "**/ReadModel*.php", "**/WriteModel*.php"]
   keywords: ["cqrs", "command", "query", "event sourcing", "projection", "read model", "write model", "command handler", "query handler"]
 auto_suggest: true
+disable-model-invocation: true
 ---
 
 # CQRS — Quick Reference

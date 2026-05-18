@@ -1,5 +1,7 @@
 ---
 description: Security Audit
+model: haiku
+
 ---
 
 # Security Audit

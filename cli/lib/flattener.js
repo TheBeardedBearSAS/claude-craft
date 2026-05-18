@@ -17,7 +17,7 @@ import fs from 'fs';
 import path from 'path';
 
 // ANSI colors (shared module)
-import c from './lib/colors.js';
+import c from './colors.js';
 
 // Default ignore patterns
 const DEFAULT_IGNORES = [

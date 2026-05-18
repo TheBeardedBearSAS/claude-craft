@@ -6,6 +6,7 @@ triggers:
   files: ["**/TenantFilter.php", "**/TenantScope.php", "**/middleware/Tenant*"]
   keywords: ["multitenant", "multi-tenant", "tenant", "isolation", "tenant_id", "schema", "RBAC", "ABAC", "field-level encryption"]
 auto_suggest: true
+disable-model-invocation: true
 ---
 
 # Multitenant — Quick Reference

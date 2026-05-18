@@ -7,7 +7,7 @@ description: Docker & Hadolint validation (2026). Use when working with Docker, 
 
 ## Versions (avril 2026)
 
-- **Docker Engine** : 29.4.0  
+- **Docker Engine** : 29.4.3 (patch sécurité, mai 2026)  
   Source : https://www.docker.com/blog/docker-engine-version-29/
 - **Docker Compose** : Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète depuis v2.40+)  
   Source : https://www.compose-spec.io/
@@ -46,10 +46,10 @@ RUN --mount=type=secret,id=composer_token \
 
 ### Multi-Stage Builds
 ```dockerfile
-FROM php:8.2-fpm-alpine AS builder
+FROM php:8.4-fpm-alpine AS builder
 RUN composer install
 
-FROM php:8.2-fpm-alpine AS runtime
+FROM php:8.4-fpm-alpine AS runtime
 COPY --from=builder /app /app
 ```
 **Bénéfice** : Réduction taille image de 60-97%  

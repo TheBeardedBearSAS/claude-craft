@@ -277,7 +277,7 @@ C. Join the community
 📚 Resources:
 - Full quickstart guide: @docs/QUICKSTART.md (section "First 10 Minutes")
 - All 211 commands: /help
-- React-specific guides: @.claude/references/react/
+- React-specific guides: @.claude/references/react/CLAUDE.md
 
 ✓ You've completed your first 10 minutes with Claude Craft!
 

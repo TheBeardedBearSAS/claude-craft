@@ -3,13 +3,6 @@ name: i18n Parity
 on:
   push:
     branches: [main]
-    paths:
-      - 'Dev/i18n/**'
-      - 'docs/guides/**'
-      - 'Infra/i18n/**'
-      - 'Project/i18n/**'
-      - 'scripts/verify-i18n-parity.sh'
-      - '.github/workflows/i18n-parity.yml'
   pull_request:
     paths:
       - 'Dev/i18n/**'
@@ -17,6 +10,7 @@ on:
       - 'Infra/i18n/**'
       - 'Project/i18n/**'
       - 'scripts/verify-i18n-parity.sh'
+      - '.github/workflows/i18n-parity.yml'
   workflow_dispatch:
 
 permissions:

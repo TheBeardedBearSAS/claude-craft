@@ -96,8 +96,21 @@ class Order {
 }
 ```
 
-**PHP 8.5 (beta)** : Pipe operator `|>`, Lazy Objects améliorés  
-**Source:** https://www.php.net/releases/8.4/
+**PHP 8.5 (stable, nov 2025)** — Nouvelles features :
+
+```php
+// Opérateur pipe |> (pipe vers callable)
+$result = $value |> trim(...) |> strtolower(...);
+
+// clone with — clonage partiel immutable
+$updated = clone $order with { status: 'confirmed' };
+
+// Attribut #[\NoDiscard] — avertit si la valeur de retour est ignorée
+#[\NoDiscard]
+public function save(): Result { ... }
+```
+
+**Source:** https://www.php.net/releases/8.5/
 
 ## Commandes Docker
 

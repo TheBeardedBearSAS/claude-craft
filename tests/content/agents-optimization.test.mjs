@@ -27,20 +27,16 @@ describe('agent optimization fields', () => {
   describe('effort field', () => {
     it('every agent has an effort field', () => {
       for (const agent of agents) {
-        expect(
-          agent.frontmatter.effort,
-          `${agent.filename} missing 'effort' field`,
-        ).toBeDefined();
+        expect(agent.frontmatter.effort, `${agent.filename} missing 'effort' field`).toBeDefined();
       }
     });
 
     it('effort values are valid', () => {
       for (const agent of agents) {
         if (agent.frontmatter.effort) {
-          expect(
-            ALLOWED_EFFORTS,
-            `${agent.filename} has invalid effort: ${agent.frontmatter.effort}`,
-          ).toContain(agent.frontmatter.effort);
+          expect(ALLOWED_EFFORTS, `${agent.filename} has invalid effort: ${agent.frontmatter.effort}`).toContain(
+            agent.frontmatter.effort
+          );
         }
       }
     });
@@ -48,30 +44,24 @@ describe('agent optimization fields', () => {
     it('haiku agents use effort: low', () => {
       const haikuAgents = agents.filter((a) => a.frontmatter.model === 'haiku');
       for (const agent of haikuAgents) {
-        expect(
-          agent.frontmatter.effort,
-          `Haiku agent ${agent.filename} should use effort: low`,
-        ).toBe('low');
+        expect(agent.frontmatter.effort, `Haiku agent ${agent.filename} should use effort: low`).toBe('low');
       }
     });
 
     it('opus agents use effort: high', () => {
       const opusAgents = agents.filter((a) => a.frontmatter.model === 'opus');
       for (const agent of opusAgents) {
-        expect(
-          agent.frontmatter.effort,
-          `Opus agent ${agent.filename} should use effort: high`,
-        ).toBe('high');
+        expect(agent.frontmatter.effort, `Opus agent ${agent.filename} should use effort: high`).toBe('high');
       }
     });
 
-    it('reviewer agents use effort: medium', () => {
+    it('reviewer agents use effort: low (cost optimization, audit 2026-05-18 TKN-006)', () => {
       const reviewers = agents.filter((a) => a.filename.endsWith('-reviewer.md'));
       for (const agent of reviewers) {
         expect(
           agent.frontmatter.effort,
-          `Reviewer ${agent.filename} should use effort: medium`,
-        ).toBe('medium');
+          `Reviewer ${agent.filename} should use effort: low (haiku model, read-only)`
+        ).toBe('low');
       }
     });
   });
@@ -80,10 +70,9 @@ describe('agent optimization fields', () => {
     it('memory values are valid when present', () => {
       for (const agent of agents) {
         if (agent.frontmatter.memory) {
-          expect(
-            ALLOWED_MEMORIES,
-            `${agent.filename} has invalid memory: ${agent.frontmatter.memory}`,
-          ).toContain(agent.frontmatter.memory);
+          expect(ALLOWED_MEMORIES, `${agent.filename} has invalid memory: ${agent.frontmatter.memory}`).toContain(
+            agent.frontmatter.memory
+          );
         }
       }
     });
@@ -91,10 +80,7 @@ describe('agent optimization fields', () => {
     it('reviewer agents have memory: project', () => {
       const reviewers = agents.filter((a) => a.filename.endsWith('-reviewer.md'));
       for (const agent of reviewers) {
-        expect(
-          agent.frontmatter.memory,
-          `Reviewer ${agent.filename} should have memory: project`,
-        ).toBe('project');
+        expect(agent.frontmatter.memory, `Reviewer ${agent.filename} should have memory: project`).toBe('project');
       }
     });
 
@@ -133,19 +119,13 @@ describe('agent optimization fields', () => {
     it('api-designer uses sonnet (not opus)', () => {
       const agent = agents.find((a) => a.basename === 'api-designer');
       expect(agent).toBeDefined();
-      expect(
-        agent.frontmatter.model,
-        'api-designer should use sonnet for cost optimization',
-      ).toBe('sonnet');
+      expect(agent.frontmatter.model, 'api-designer should use sonnet for cost optimization').toBe('sonnet');
     });
 
     it('database-architect uses sonnet (not opus)', () => {
       const agent = agents.find((a) => a.basename === 'database-architect');
       expect(agent).toBeDefined();
-      expect(
-        agent.frontmatter.model,
-        'database-architect should use sonnet for cost optimization',
-      ).toBe('sonnet');
+      expect(agent.frontmatter.model, 'database-architect should use sonnet for cost optimization').toBe('sonnet');
     });
 
     it('only ralph-conductor and tdd-coach use opus', () => {
@@ -160,10 +140,7 @@ describe('agent optimization fields', () => {
       const reviewers = agents.filter((a) => a.filename.endsWith('-reviewer.md'));
       for (const agent of reviewers) {
         const maxTurns = parseInt(agent.frontmatter.maxTurns, 10);
-        expect(
-          maxTurns,
-          `${agent.filename} maxTurns (${maxTurns}) should be <= 6`,
-        ).toBeLessThanOrEqual(6);
+        expect(maxTurns, `${agent.filename} maxTurns (${maxTurns}) should be <= 6`).toBeLessThanOrEqual(6);
       }
     });
   });

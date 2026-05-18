@@ -1,6 +1,8 @@
 ---
 description: Audit Architecture Symfony
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Audit Architecture Symfony

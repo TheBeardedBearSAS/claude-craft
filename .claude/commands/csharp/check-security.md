@@ -1,5 +1,7 @@
 ---
 description: Security audit for C#/.NET applications following OWASP guidelines
+model: haiku
+
 ---
 
 # C#/.NET Security Audit

@@ -1,5 +1,7 @@
 ---
 description: Run comprehensive code quality analysis on C#/.NET project
+model: haiku
+
 ---
 
 # C#/.NET Code Quality Check

@@ -18,7 +18,7 @@
 
 Angular 20 LTS (ou 21) and TypeScript code review specialist — Signals, standalone components, RxJS, performance, zoneless change detection, httpResource
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `testing`, `security`
 
@@ -32,7 +32,7 @@ Angular 20 LTS (ou 21) and TypeScript code review specialist — Signals, standa
 
 C# 14 / .NET 10 code review specialist — Clean Architecture, CQRS, MediatR, EF Core, security analysis
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `testing`, `security`
 
@@ -46,7 +46,7 @@ C# 14 / .NET 10 code review specialist — Clean Architecture, CQRS, MediatR, EF
 
 Flutter 3.41 / Dart 3.11 code review specialist — BLoC v9, Riverpod 3, widget optimization, Impeller, platform-specific code
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `testing-flutter`, `security-flutter`
 
@@ -60,7 +60,7 @@ Flutter 3.41 / Dart 3.11 code review specialist — BLoC v9, Riverpod 3, widget 
 
 Laravel 13 and PHP 8.5 code review specialist — Actions pattern, Pest PHP, Eloquent, Sanctum, AI SDK, performance optimization
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `testing`, `security`
 
@@ -74,7 +74,7 @@ Laravel 13 and PHP 8.5 code review specialist — Actions pattern, Pest PHP, Elo
 
 Paperclip 2026.403+ governance-first integration platform code review specialist — control plane + adapters two-layer architecture, Node.js 20+ TypeScript, Vitest, PostgreSQL, idempotency keys, audit trails, multi-tenant adapter isolation
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `testing`, `security`, `multitenant`, `async`, `observability`, `architecture-clean-ddd`
 
@@ -88,7 +88,7 @@ Paperclip 2026.403+ governance-first integration platform code review specialist
 
 PHP 8.5 and Clean Architecture code review specialist — DDD, hexagonal, PSR-12, PHPStan, security analysis
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `testing`, `security`
 
@@ -102,7 +102,7 @@ PHP 8.5 and Clean Architecture code review specialist — DDD, hexagonal, PSR-12
 
 Python 3.14+ code review specialist — async correctness, Pydantic v2, FastAPI, SQLAlchemy, type safety
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `testing-python`, `security`
 
@@ -116,7 +116,7 @@ Python 3.14+ code review specialist — async correctness, Pydantic v2, FastAPI,
 
 React 19 and TypeScript code review specialist — hooks, composition, performance, bundle analysis
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `testing-react`, `security-react`
 
@@ -130,7 +130,7 @@ React 19 and TypeScript code review specialist — hooks, composition, performan
 
 React Native 0.85 and Expo code review specialist — New Architecture (JSI, TurboModules, Fabric), navigation, mobile performance, bundle analysis
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `architecture`, `navigation`
 
@@ -142,9 +142,9 @@ React Native 0.85 and Expo code review specialist — New Architecture (JSI, Tur
 
 ### `@symfony-reviewer`
 
-Symfony 8 / PHP 8.4+ code review specialist — DDD, Doctrine, CQRS, API Platform
+Symfony 8 / PHP 8.5+ code review specialist — DDD, Doctrine, CQRS, API Platform
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `testing-symfony`, `security-symfony`, `architecture-clean-ddd`, `doctrine-extensions`
 
@@ -156,9 +156,9 @@ Symfony 8 / PHP 8.4+ code review specialist — DDD, Doctrine, CQRS, API Platfor
 
 ### `@vuejs-reviewer`
 
-Vue.js 3.5+ and TypeScript code review specialist — Composition API, Pinia, reactivity, performance, composables
+Vue.js 3.5+ / 3.6 Vapor (beta) and TypeScript code review specialist — Composition API, Pinia, reactivity, performance, composables, useTemplateRef, useId, Vapor Mode
 
-**Model:** sonnet · **Effort:** medium · **Memory:** project
+**Model:** haiku · **Effort:** low · **Memory:** project
 
 **Skills:** `solid-principles`, `testing`, `security`
 

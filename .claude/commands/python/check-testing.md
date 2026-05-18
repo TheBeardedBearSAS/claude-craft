@@ -1,6 +1,8 @@
 ---
 description: Vérification Tests Python
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification Tests Python

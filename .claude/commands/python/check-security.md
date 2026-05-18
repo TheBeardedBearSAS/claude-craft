@@ -1,6 +1,8 @@
 ---
 description: Vérification Sécurité Python
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification Sécurité Python

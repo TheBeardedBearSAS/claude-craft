@@ -8,175 +8,39 @@ context: fork
 
 **Versions :** React 19.2+ | React Compiler 1.0 | Vitest 4.1+ | Playwright
 
-## Compatibilité React Compiler 1.0
-
-**React Compiler 1.0** (auto-memoization) est compatible avec tous les outils de tests React :
-- **Vitest** + **React Testing Library / Browser Mode** : aucun changement requis
-- **Playwright** : aucun changement requis
-- **MSW** : aucun changement requis
-
-Les tests restent **comportementaux** (pas d'implémentation testée), donc l'optimisation automatique du compilateur est transparente.
-
-**Note :** Ne pas tester les optimisations du compilateur (memoization). Tester uniquement le comportement visible (UI, interactions, états).
-
-Source : [react.dev/blog/2025/10/07/react-compiler-1](https://react.dev/blog/2025/10/07/react-compiler-1)
-
----
+React Compiler 1.0 (auto-memoization) est transparent pour les tests — tester le comportement visible, jamais les optimisations internes.
 
 ## Stack recommandée 2026
 
 | Type | Outil | Usage |
 |------|-------|-------|
 | **Unit/Composants** | **Vitest 4.1+** Browser Mode | Chromium/Firefox/WebKit natif |
+| **Component Testing** | **Playwright CT** | Alternative à RTL — browser réel |
 | **E2E** | **Playwright** | Flows utilisateur complets |
 | **Mutation** | **Stryker** | Qualité des tests (score >= 80%) |
+| **Property-based** | **fast-check** | Génération de cas de test |
 
-**Abandonner :** JSDOM (lourd, incomplet) et React Testing Library (remplacé par Playwright component testing).
+Abandonner : JSDOM (lourd, incomplet) et React Testing Library (remplacé par Playwright CT).
 
 **Sources :** [Vitest 4](https://vitest.dev/blog/vitest-4), [Playwright Component Testing](https://playwright.dev/docs/test-components), [Stryker Mutator](https://stryker-mutator.io/)
 
-## Configuration Vitest 4 Browser Mode
+## Invariants non-négociables
 
-```typescript
-// vitest.config.ts
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
+- Vitest Browser Mode (provider: playwright) — pas de JSDOM
+- Tester le comportement (ce que voit l'utilisateur), pas l'implémentation
+- Ne jamais tester les optimisations du React Compiler (memoization)
+- Mutation score >= 80% via Stryker avant merge
+- Vitest workspaces pour monorepos (unit / browser séparés)
+- MSW pour mocker les appels API (pas de `fetch` mockée à la main)
 
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    browser: {
-      enabled: true,
-      name: 'chromium', // ou 'firefox', 'webkit'
-      provider: 'playwright',
-    },
-    globals: true,
-  },
-});
-```
+## Checklist par type
 
-## Tests composants avec Vitest Browser Mode
+| Type | Vérification |
+|------|-------------|
+| Composant | Vitest Browser Mode ou Playwright CT, interactions réelles |
+| Hook | Vitest, `renderHook` si nécessaire |
+| RSC | Test du rendu HTML retourné (pas de DOM) |
+| E2E | Playwright, flows complets avec `expect().toHaveURL()` |
+| Mutation | `npx stryker run`, seuil break >= 50, high >= 80 |
 
-```typescript
-// Button.test.tsx
-import { render, screen, userEvent } from '@vitest/browser/context';
-import { Button } from './Button';
-
-test('handles click events', async () => {
-  const handleClick = vi.fn();
-  render(<Button onClick={handleClick}>Click me</Button>);
-  
-  await userEvent.click(screen.getByText('Click me'));
-  
-  expect(handleClick).toHaveBeenCalledOnce();
-});
-```
-
-**Source :** [Vitest Browser Mode Guide](https://vitest.dev/guide/browser.html)
-
-## Playwright Component Testing
-
-Alternative supérieure à React Testing Library — browser réel, debugging visuel.
-
-```typescript
-// Button.test.tsx
-import { test, expect } from '@playwright/experimental-ct-react';
-import { Button } from './Button';
-
-test('handles click events', async ({ mount }) => {
-  let clicked = false;
-  
-  const component = await mount(
-    <Button onClick={() => { clicked = true; }}>
-      Click me
-    </Button>
-  );
-  
-  await component.click();
-  expect(clicked).toBe(true);
-});
-```
-
-**Source :** [Playwright Component Testing](https://playwright.dev/docs/test-components)
-
-## Mutation Testing avec Stryker
-
-```bash
-# Installation
-npm install -D @stryker-mutator/core @stryker-mutator/vitest-runner
-
-# stryker.config.json
-{
-  "testRunner": "vitest",
-  "coverageAnalysis": "perTest",
-  "mutate": ["src/**/*.ts", "src/**/*.tsx"],
-  "thresholds": { "high": 80, "low": 60, "break": 50 }
-}
-
-# Exécution
-npx stryker run
-```
-
-**Philosophie :** "Coverage = quantité de code testé. Mutation score = qualité des tests."
-
-**Source :** [Stryker Mutator](https://stryker-mutator.io/)
-
-## React Server Components — Tests
-
-```typescript
-// ProductList.test.tsx (RSC)
-import { test, expect } from 'vitest';
-import { ProductList } from './ProductList';
-
-test('renders product list server component', async () => {
-  const html = await ProductList({ category: 'books' });
-  
-  expect(html).toContain('Books');
-  // RSC retourne du HTML, pas de DOM
-});
-```
-
-## Vitest Workspaces — Monorepo
-
-```typescript
-// vitest.workspace.ts
-export default defineWorkspace([
-  {
-    test: {
-      name: 'unit',
-      include: ['src/**/*.test.{ts,tsx}'],
-    },
-  },
-  {
-    test: {
-      name: 'browser',
-      browser: { enabled: true, name: 'chromium' },
-      include: ['src/**/*.browser.test.{ts,tsx}'],
-    },
-  },
-]);
-```
-
-**Source :** [Vitest Workspaces](https://vitest.dev/guide/workspace.html)
-
-## Property-based Testing
-
-```typescript
-// fast-check pour générer des cas de test
-import fc from 'fast-check';
-
-test('calculateTotal is always positive', () => {
-  fc.assert(
-    fc.property(fc.array(fc.nat()), (prices) => {
-      const total = calculateTotal(prices);
-      return total >= 0;
-    })
-  );
-});
-```
-
-**Source :** [fast-check](https://fast-check.dev/)
-
----
-
-Voir `@.claude/rules/07-testing.md` pour principes transverses.
+> Détails complets, exemples de code, configs et checklists : voir [REFERENCE.md](./REFERENCE.md)

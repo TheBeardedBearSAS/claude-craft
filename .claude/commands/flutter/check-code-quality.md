@@ -1,6 +1,8 @@
 ---
 description: Vérification Qualité du Code Flutter
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification Qualité du Code Flutter

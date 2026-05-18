@@ -6,6 +6,7 @@ triggers:
   files: ["config/packages/messenger.yaml", "config/queue.php", "app/Jobs/**", "src/Message/**", "src/MessageHandler/**"]
   keywords: ["async", "queue", "worker", "messenger", "job", "background", "message", "handler", "dispatch", "consume"]
 auto_suggest: true
+disable-model-invocation: true
 ---
 
 # Async-First — Quick Reference

@@ -214,10 +214,21 @@ function t(key) {
   return translations[currentLang.value]?.[key] || translations.en[key] || key
 }
 
+const langToLocale: Record<string, string> = {
+  en: 'en-US',
+  fr: 'fr-FR',
+  es: 'es-ES',
+  de: 'de-DE',
+  pt: 'pt-PT',
+}
+
 function changeLanguage(lang) {
   currentLang.value = lang
   if (typeof localStorage !== 'undefined') {
     localStorage.setItem('claude_craft_lang', lang)
+  }
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = langToLocale[lang] || lang
   }
 }
 
@@ -234,6 +245,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <a href="#main" class="skip-link">Skip to main content</a>
   <div class="landing-page" style="background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif;">
     <!-- Navigation -->
     <nav style="position: fixed; width: 100%; z-index: 50; top: 0; left: 0; border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(15,23,42,0.8); backdrop-filter: blur(12px);">
@@ -289,7 +301,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <main>
+    <main id="main">
     <!-- Hero Section -->
     <div style="position: relative; padding: 10rem 0 5rem; overflow: hidden;">
       <div style="position: absolute; top: 10%; left: 20%; width: 18rem; height: 18rem; background: rgba(124,58,237,0.2); border-radius: 50%; filter: blur(100px);"></div>
@@ -488,9 +500,38 @@ onMounted(() => {
 </template>
 
 <style scoped>
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+/* Accessibility: skip link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  background: #7c3aed;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 9999;
+}
+.skip-link:focus {
+  position: fixed;
+  left: 8px;
+  top: 8px;
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+
+/* Animations: only play when the user has no motion preference */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
 }
 
 .landing-page :deep(.VPNav),

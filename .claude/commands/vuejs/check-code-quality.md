@@ -1,5 +1,7 @@
 ---
 description: Analyze Vue.js code quality with ESLint, TypeScript, and Prettier checks
+model: haiku
+
 ---
 
 # Vue.js Code Quality Audit

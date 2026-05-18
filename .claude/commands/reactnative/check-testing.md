@@ -1,6 +1,8 @@
 ---
 description: Check Testing React Native
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Check Testing React Native

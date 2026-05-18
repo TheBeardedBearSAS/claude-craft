@@ -56,6 +56,58 @@ jest.mock('expo-asset');
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 ```
 
+### Setup React Native 0.85+ — @react-native/jest-preset
+
+Depuis React Native 0.73, le preset Jest est livré dans le package dédié `@react-native/jest-preset` (extrait de `react-native`). Il prend en charge la New Architecture et Hermes nativement.
+
+```bash
+# Installation (React Native 0.85+)
+npm install --save-dev @react-native/jest-preset
+```
+
+Configuration minimale recommandée :
+
+```javascript
+// jest.config.js
+module.exports = {
+  preset: '@react-native/jest-preset',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+};
+```
+
+**Mocks réseau — MSW (Mock Service Worker) :**
+
+```bash
+npm install --save-dev msw
+```
+
+MSW intercepte les requêtes HTTP au niveau de l'environnement de test sans modifier le code de production. Préférer MSW à `jest.mock(axios)` pour des tests plus réalistes.
+
+```typescript
+// jest.setup.js — activer MSW
+import { server } from './__mocks__/server';
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+```
+
+**React Native Testing Library 12+ :**
+
+- Utiliser `userEvent` (async) au lieu de `fireEvent` (sync) pour simuler les interactions réelles.
+- `screen` queries remplacent les queries destructurées depuis `render()`.
+
+```typescript
+import { render, screen, userEvent } from '@testing-library/react-native';
+
+it('should submit form', async () => {
+  const user = userEvent.setup();
+  render(<LoginForm />);
+  await user.type(screen.getByLabelText('Email'), 'user@example.com');
+  await user.press(screen.getByRole('button', { name: 'Login' }));
+  expect(screen.getByText('Welcome')).toBeVisible();
+});
+```
+
 ---
 
 ## Unit Tests

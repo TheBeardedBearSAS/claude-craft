@@ -1,5 +1,7 @@
 ---
 description: Audit Laravel test coverage and testing practices
+model: haiku
+
 ---
 
 # Laravel Testing Audit

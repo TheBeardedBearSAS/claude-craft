@@ -1,6 +1,6 @@
 {
   "name": "@the-bearded-bear/claude-craft",
-  "version": "8.4.0",
+  "version": "8.5.0",
   "description": "A comprehensive framework for AI-assisted development with Claude Code. Install standardized rules, agents, and commands for your projects.",
   "type": "module",
   "main": "cli/index.js",
@@ -30,6 +30,7 @@
     "vale:sync": "vale sync",
     "commitlint": "commitlint --edit",
     "prepublishOnly": "node -e \"import{readFileSync}from'node:fs';const p=JSON.parse(readFileSync('./package.json','utf8'));if(!/^\\d+\\.\\d+\\.\\d+(-[a-z0-9.]+)?$/i.test(p.version)){console.error('Invalid version format');process.exit(1)}\"",
+    "metrics:adoption": "node scripts/track-adoption-metrics.mjs",
     "mutation": "stryker run",
     "mutation:ci": "stryker run --reporters progress,json",
     "test:e2e:tools": "cd tests/e2e/tools && docker compose -f docker-compose.test.yml up --abort-on-container-exit --exit-code-from e2e-runner"

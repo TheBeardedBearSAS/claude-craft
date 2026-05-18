@@ -1,6 +1,8 @@
 ---
 description: Vérification Sécurité Flutter
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification Sécurité Flutter

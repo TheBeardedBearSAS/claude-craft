@@ -18,6 +18,8 @@ Claude Code hooks allow you to enforce rules programmatically, going beyond CLAU
 | `block-dangerous-commands.json` | PreToolUse(Bash) | Bloque les commandes destructives (rm -rf /, dd, mkfs) |
 | `quality-gate.json` | PreToolUse(Edit) | Bloque les edits qui violent les SOLID/KISS principes |
 | `memory-lifecycle.json` | SessionStart/SessionEnd | Gestion du fichier MEMORY.md |
+| `stop-hook.json` | Stop | Logue chaque fin de session Claude Code (debug, audit, retrospectives). |
+| `user-prompt-submit.json` | UserPromptSubmit | Logue la taille de chaque prompt utilisateur (analyse de patterns, optimisation contexte). |
 
 ## How to Use
 

@@ -31,6 +31,8 @@
   let sprintLabel = $derived(store.sprint ? `${store.sprint.name} (${store.sprint.sprint_id})` : 'no sprint');
 </script>
 
+<a href="#main" class="skip-link">Skip to main content</a>
+
 <div class="app-shell">
   <aside class="sidebar" aria-label="Navigation">
     <h1>claude-craft</h1>
@@ -104,3 +106,30 @@
     </div>
   {/each}
 </div>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    background: var(--accent, #7c3aed);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 9999;
+  }
+  .skip-link:focus {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    width: auto;
+    height: auto;
+    overflow: visible;
+  }
+</style>

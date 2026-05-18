@@ -1,5 +1,7 @@
 ---
 description: Angular Test Coverage and Quality Analysis
+model: haiku
+
 ---
 
 # Angular Test Coverage and Quality Analysis

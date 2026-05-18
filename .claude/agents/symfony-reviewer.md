@@ -1,9 +1,9 @@
 ---
 name: symfony-reviewer
-description: Symfony 8 / PHP 8.4+ code review specialist — DDD, Doctrine, CQRS, API Platform
-model: sonnet
+description: Symfony 8 / PHP 8.5+ code review specialist — DDD, Doctrine, CQRS, API Platform
+model: haiku
 maxTurns: 6
-effort: medium
+effort: low
 memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
@@ -11,7 +11,7 @@ permissionMode: default
 skills: [solid-principles, testing-symfony, security-symfony, architecture-clean-ddd, doctrine-extensions]
 ---
 
-# Agent Auditeur Symfony 8 / PHP 8.4+
+# Agent Auditeur Symfony 8 / PHP 8.5+
 
 ## Identite
 
@@ -256,7 +256,7 @@ Le code est-il un Controller (Presentation) ?
 | **Behat** | BDD, scenarios metier lisibles |
 | **Infection** | Mutation testing (MSI > 80%) |
 | **Foundry** | Factories/fixtures maintenables |
-| **PHPStan level 9** | Analyse statique, complement aux tests |
+| **PHPStan level max** | Analyse statique, complement aux tests |
 
 ### Anti-patterns de test Symfony
 
@@ -435,7 +435,7 @@ $apiKey = $this->getParameter('stripe_api_key');
 ## Format de rapport d'audit
 
 ```markdown
-# Rapport d'audit Symfony 8 / PHP 8.4+
+# Rapport d'audit Symfony 8 / PHP 8.5+
 
 ## Projet : [Nom du projet]
 **Date :** [Date]
@@ -518,7 +518,7 @@ $apiKey = $this->getParameter('stripe_api_key');
 
 | Outil | Usage |
 |-------|-------|
-| **PHPStan level 9** | Analyse statique stricte |
+| **PHPStan level max** | Analyse statique stricte |
 | **Deptrac** | Validation des dependances entre couches |
 | **PHP-CS-Fixer** (PSR-12) | Formatage automatique |
 | **Pest PHP** / PHPUnit | Tests unitaires et integration |

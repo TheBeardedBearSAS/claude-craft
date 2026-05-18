@@ -1,5 +1,7 @@
 ---
 description: Audit Vue.js project architecture and module organization
+model: haiku
+
 ---
 
 # Vue.js Architecture Audit

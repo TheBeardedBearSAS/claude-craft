@@ -394,6 +394,16 @@ With Tool Search:
 }
 ```
 
+### Templates prets a l'emploi
+
+Trois templates avec `toolSearchEnabled: true` sont disponibles :
+
+- [`with-tool-search.json`](.claude/templates/mcp/with-tool-search.json) — Template generique
+- [`context7-with-tool-search.json`](.claude/templates/mcp/context7-with-tool-search.json) — Context7 (documentation)
+- [`github-with-tool-search.json`](.claude/templates/mcp/github-with-tool-search.json) — GitHub MCP server
+
+Pour activer Tool Search lazy loading : copier un template et l'adapter dans votre `.mcp.json`.
+
 ## MCP Elicitation (v2.1.76+)
 
 MCP servers can now request interactive input from the user through elicitation forms:

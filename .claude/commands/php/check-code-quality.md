@@ -1,5 +1,7 @@
 ---
 description: Code Quality Analysis
+model: haiku
+
 ---
 
 # Code Quality Analysis

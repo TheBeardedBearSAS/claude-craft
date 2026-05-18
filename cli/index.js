@@ -38,10 +38,8 @@ import { runCheck } from './lib/check.js';
 import { runList } from './lib/list.js';
 import { runDoctor } from './lib/doctor.js';
 import { runUpdate } from './lib/update.js';
-import { runKanban } from './lib/kanban.js';
-
 // Flattener module
-import { flatten as flattenCodebaseFn } from './flattener.js';
+import { flatten as flattenCodebaseFn } from './lib/flattener.js';
 
 // CLI package root
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -205,10 +203,12 @@ class ClaudeCraftCLI {
         await runRalph(this, args.slice(1), options, ctx);
         break;
 
-      case 'kanban':
+      case 'kanban': {
         printBanner(VERSION);
+        const { runKanban } = await import('./lib/kanban.js');
         await runKanban({ targetPath: this.config.targetPath, options });
         break;
+      }
 
       case 'help':
       case '--help':

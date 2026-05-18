@@ -557,6 +557,47 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 ```
 
+## Python 3.14 — Nouveautés Clés
+
+### Free-threading (PEP 703)
+
+Interpréteur sans GIL disponible en option. Activer avec `python --disable-gil` ou build `3.14t`.
+Utile pour les workloads CPU-bound multi-threaded. Les extensions C tierces doivent être adaptées.
+
+### Template Strings (PEP 750)
+
+Nouveau type `Template` pour les interpolations structurées (distinct des f-strings).
+
+```python
+from string.templatelib import Template
+
+def sanitize(t: Template) -> str:
+    return "".join(str(v) for v in t.args)
+
+result = t"Hello {user_input}"  # retourne un Template, pas une str
+```
+
+### Évaluation différée des annotations (PEP 649)
+
+Les annotations ne sont plus évaluées à la définition de la classe — résout les imports circulaires
+de type hints sans recourir à `from __future__ import annotations`.
+
+### `concurrent.interpreters` (stdlib)
+
+Interpréteurs Python multiples et isolés dans le même processus, avec canaux de communication.
+
+```python
+import concurrent.interpreters
+interp = concurrent.interpreters.create()
+```
+
+### JIT expérimental (PEP 744)
+
+Compilation JIT activable : `PYTHON_JIT=1 python script.py`. Gains attendus sur boucles intensives.
+Désactivé par défaut — tester avant d'activer en production.
+
+---
+
 ## Checklist
 
 Before committing:

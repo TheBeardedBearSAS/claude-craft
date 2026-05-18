@@ -8,10 +8,10 @@
 
 | Component | Technology | Version |
 |-----------|------------|---------|
-| Framework | Vue.js | {{VUE_VERSION}} |
+| Framework | Vue.js | 3.5.x |
 | Language | TypeScript | {{TS_VERSION}} |
 | Build Tool | Vite | {{VITE_VERSION}} |
-| State Management | Pinia | {{PINIA_VERSION}} |
+| State Management | Pinia | 2.2+ |
 | Router | Vue Router | {{ROUTER_VERSION}} |
 | UI Framework | {{UI_FRAMEWORK}} | {{UI_VERSION}} |
 

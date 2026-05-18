@@ -1,5 +1,7 @@
 ---
 description: Architecture Validation
+model: haiku
+
 ---
 
 # Architecture Validation

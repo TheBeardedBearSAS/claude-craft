@@ -1,5 +1,7 @@
 ---
 description: Analyze test coverage and testing practices in C#/.NET project
+model: haiku
+
 ---
 
 # C#/.NET Testing Check

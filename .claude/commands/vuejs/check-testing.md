@@ -1,5 +1,7 @@
 ---
 description: Audit Vue.js test coverage and quality with Vitest
+model: haiku
+
 ---
 
 # Vue.js Testing Audit

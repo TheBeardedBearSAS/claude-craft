@@ -1,6 +1,8 @@
 ---
 description: Vérification de lArchitecture React
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification de l'Architecture React

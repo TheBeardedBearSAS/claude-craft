@@ -230,6 +230,29 @@ Span<int> ProcessNumbers(Span<int> numbers) => numbers switch
 };
 ```
 
+#### `field` Keyword (C# 14)
+
+Le mot-clé contextuel `field` donne accès au champ de support implicite d'une propriété auto-implémentée,
+sans avoir à déclarer le champ manuellement.
+
+```csharp
+// C# 14: field keyword — accès au backing field implicite
+public class Product
+{
+    public string Name
+    {
+        get;
+        set => field = value?.Trim() ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public decimal Price
+    {
+        get => field;
+        set => field = value >= 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+    }
+}
+```
+
 ## Async/Await Best Practices
 
 ### Proper Async Implementation

@@ -77,9 +77,9 @@ Claude Code v2.1.97+ includes critical security fixes:
 
 Claude Craft follows modern supply chain security practices to ensure the integrity and provenance of published packages.
 
-### npm Provenance (SLSA Build Level 2 equivalent for npm)
+### npm Provenance (SLSA Build Level 1 — npm provenance via `--provenance` flag)
 
-Starting with version 8.1.0, all npm releases ship **npm provenance attestations** that satisfy the SLSA Build Level 2 requirements for the published npm tarball:
+Starting with version 8.1.0, all npm releases ship **npm provenance attestations** via the `--provenance` flag (SLSA Build Level 1 for the published npm tarball):
 
 - **Automated build**: Builds run in GitHub Actions with no manual intervention (`.github/workflows/npm-publish.yml`).
 - **Provenance generation**: The `npm publish --provenance` flag (npm 9+) produces a SLSA-compatible provenance attestation tied to the GitHub Actions OIDC token. We **do not** currently run the standalone `slsa-framework/slsa-github-generator` reusable workflow — that work is tracked separately if/when full SLSA L3 attestations on GitHub Release assets become a requirement.
@@ -154,7 +154,7 @@ npm view @the-bearded-bear/claude-craft@latest dist.integrity
 
 Claude Craft supply chain practices align with:
 
-- **SLSA Framework**: npm provenance ships SLSA L2-equivalent attestations for the published tarball (via `npm publish --provenance`). Full SLSA L3 via `slsa-github-generator` is **not** integrated yet.
+- **SLSA Framework**: npm provenance ships SLSA Build Level 1 attestations for the published tarball (via `npm publish --provenance`). Full SLSA L3 via `slsa-github-generator` is **not** integrated yet.
 - **NIS2 Directive**: Software supply chain security requirements (EU)
 - **NIST SSDF**: Secure Software Development Framework
 - **OpenSSF Scorecard**: Continuous security posture monitoring

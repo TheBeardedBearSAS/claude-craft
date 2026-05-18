@@ -1,6 +1,8 @@
 ---
 description: Vérification Compliance Complète Python
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification Compliance Complète Python

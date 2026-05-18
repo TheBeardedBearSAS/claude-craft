@@ -1,6 +1,8 @@
 ---
 description: Check Security React Native
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Check Security React Native

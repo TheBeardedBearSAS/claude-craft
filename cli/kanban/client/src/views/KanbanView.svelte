@@ -1,6 +1,9 @@
 <script>
   import { store, patchStatus } from '../lib/store.svelte.js';
   import { onMount } from 'svelte';
+  import PromptDialog from '../components/PromptDialog.svelte';
+
+  let promptDialog = $state(null);
 
   const COLUMNS = [
     { key: 'backlog', label: 'Backlog' },
@@ -54,7 +57,7 @@
     if (!story || story.status === targetStatus) return;
     const body = { status: targetStatus };
     if (targetStatus === 'blocked') {
-      const reason = window.prompt('Blocked reason?');
+      const reason = await promptDialog.prompt('Blocked reason?');
       if (!reason) return;
       body.blocked_reason = reason;
     }
@@ -154,7 +157,7 @@
   async function moveCard(card, targetStatus) {
     const body = { status: targetStatus };
     if (targetStatus === 'blocked') {
-      const reason = window.prompt('Blocked reason?');
+      const reason = await promptDialog.prompt('Blocked reason?');
       if (!reason) {
         showMoveMenu = false;
         return;
@@ -238,6 +241,8 @@
     </section>
   {/each}
 </div>
+
+<PromptDialog bind:this={promptDialog} />
 
 <!-- Accessibility: keyboard help & live region -->
 <div id="keyboard-help" class="sr-only">

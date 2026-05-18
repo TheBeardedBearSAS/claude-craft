@@ -1,20 +1,17 @@
 services:
   e2e-runner:
-    image: ubuntu:24.04
+    build:
+      context: .
+      dockerfile: Dockerfile
     working_dir: /workspace
     volumes:
       - ../../..:/workspace:ro
       - ./artifacts:/artifacts
     environment:
-      - DEBIAN_FRONTEND=noninteractive
       - NO_COLOR=1
     command: >
       bash -c "
       set -e;
-      apt-get update -qq;
-      apt-get install -qq -y --no-install-recommends bash curl jq git ca-certificates bc;
-      git clone --depth 1 https://github.com/bats-core/bats-core.git /tmp/bats-core;
-      /tmp/bats-core/install.sh /usr/local;
       which curl && echo 'curl OK' || { echo 'curl NOT found'; exit 1; };
       cd /workspace;
       echo '=== Running E2E test suites ===';

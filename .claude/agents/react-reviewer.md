@@ -1,9 +1,9 @@
 ---
 name: react-reviewer
 description: React 19 and TypeScript code review specialist — hooks, composition, performance, bundle analysis
-model: sonnet
+model: haiku
 maxTurns: 6
-effort: medium
+effort: low
 memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]

@@ -1,6 +1,8 @@
 ---
 description: Audit Complet de Conformité React
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Audit Complet de Conformité React

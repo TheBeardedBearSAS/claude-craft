@@ -1,5 +1,7 @@
 ---
 description: Test Coverage Analysis
+model: haiku
+
 ---
 
 # Test Coverage Analysis

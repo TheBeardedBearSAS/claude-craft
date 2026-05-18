@@ -1,6 +1,8 @@
 ---
 description: Audit Testing Symfony
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Audit Testing Symfony

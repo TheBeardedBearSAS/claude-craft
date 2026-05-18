@@ -1,6 +1,8 @@
 ---
 description: Vérification des Tests React
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification des Tests React

@@ -1,5 +1,7 @@
 ---
 description: Check Laravel project compliance with coding standards
+model: haiku
+
 ---
 
 # Laravel Compliance Check

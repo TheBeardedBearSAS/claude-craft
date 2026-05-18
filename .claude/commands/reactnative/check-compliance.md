@@ -1,6 +1,8 @@
 ---
 description: Check Compliance React Native
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Check Compliance React Native

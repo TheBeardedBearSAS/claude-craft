@@ -500,3 +500,55 @@ const theme = {
 }
 </style>
 ```
+
+## Vue 3.5 — Nouvelles APIs Composition
+
+Vue 3.5 introduit plusieurs APIs qui simplifient les patterns courants et améliorent les performances.
+
+### useTemplateRef
+
+Remplace `ref(null)` pour les template refs. La ref est directement liée à l'attribut `ref` du template sans déclaration redondante.
+
+```typescript
+// ✅ Vue 3.5+ — useTemplateRef
+import { useTemplateRef } from 'vue'
+const inputEl = useTemplateRef('myInput')
+
+// ❌ Avant Vue 3.5
+const inputEl = ref<HTMLInputElement | null>(null)
+```
+
+```html
+<input ref="myInput" />
+```
+
+### useId
+
+Génère des IDs stables et uniques, SSR-safe. Indispensable pour lier `label` et `input` via `aria-labelledby` sans collision côté serveur.
+
+```typescript
+import { useId } from 'vue'
+const fieldId = useId() // 'v-0', 'v-1', ...
+```
+
+```html
+<label :for="fieldId">Nom</label>
+<input :id="fieldId" type="text" />
+```
+
+### onWatcherCleanup
+
+Déclare le cleanup directement à l'intérieur du watcher, au lieu de retourner une fonction ou d'utiliser `onScopeDispose`. Plus lisible et colocalisé avec la logique de l'effet.
+
+```typescript
+import { watch, onWatcherCleanup } from 'vue'
+
+watch(source, (newVal) => {
+  const timer = setTimeout(() => fetchData(newVal), 300)
+  onWatcherCleanup(() => clearTimeout(timer))
+})
+```
+
+### Performance du système réactif
+
+Vue 3.5 réduit la consommation mémoire de **56 % vs 3.4** sur les tableaux larges grâce à la refonte du tracking de dépendances (version-counting reactivity). Les applications manipulant de grandes listes réactives bénéficient de cette amélioration sans changement de code.

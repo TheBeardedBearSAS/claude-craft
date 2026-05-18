@@ -1,6 +1,8 @@
 ---
 description: Vérification de la Sécurité React
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification de la Sécurité React

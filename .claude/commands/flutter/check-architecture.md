@@ -1,6 +1,8 @@
 ---
 description: Vérification Architecture Flutter
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification Architecture Flutter

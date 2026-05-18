@@ -1,5 +1,7 @@
 ---
 description: Verify C#/.NET project compliance with Clean Architecture and coding standards
+model: haiku
+
 ---
 
 # C#/.NET Compliance Check

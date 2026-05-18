@@ -1,6 +1,8 @@
 ---
 description: Vérification Architecture Python
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification Architecture Python

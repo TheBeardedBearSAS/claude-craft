@@ -91,7 +91,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 
 ### Core
 
-- **React Native**: {{REACT_NATIVE_VERSION}}
+- **React Native**: 0.85
 - **Expo SDK**: {{EXPO_SDK_VERSION}}
 - **TypeScript**: {{TYPESCRIPT_VERSION}}
 - **Node.js**: {{NODE_VERSION}}
@@ -99,7 +99,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 ### Navigation
 
 - **Expo Router**: {{EXPO_ROUTER_VERSION}}
-- **React Navigation**: (via Expo Router)
+- **React Navigation**: 7.x (via Expo Router)
 
 ### State Management
 
@@ -111,7 +111,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 
 - **React Native Paper**: {{PAPER_VERSION}} (optionnel)
 - **NativeWind** (Tailwind CSS): {{NATIVEWIND_VERSION}} (optionnel)
-- **React Native Reanimated**: {{REANIMATED_VERSION}}
+- **React Native Reanimated**: 4.x
 - **React Native Gesture Handler**: {{GESTURE_HANDLER_VERSION}}
 
 ### Forms & Validation

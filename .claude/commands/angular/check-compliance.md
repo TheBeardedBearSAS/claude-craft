@@ -1,5 +1,7 @@
 ---
 description: Angular Standards Compliance Check
+model: haiku
+
 ---
 
 # Angular Standards Compliance Check

@@ -1,6 +1,8 @@
 ---
 description: Audit Qualité du Code Symfony
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Audit Qualité du Code Symfony

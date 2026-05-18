@@ -1,9 +1,9 @@
 ---
 name: laravel-reviewer
 description: Laravel 13 and PHP 8.5 code review specialist — Actions pattern, Pest PHP, Eloquent, Sanctum, AI SDK, performance optimization
-model: sonnet
+model: haiku
 maxTurns: 6
-effort: medium
+effort: low
 memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]

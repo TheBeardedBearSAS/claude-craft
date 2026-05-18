@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.5.0] - 2026-05-18
+
+Audit 2026-05-18 comprehensive — Phase 2 (token optimization + a11y + supply chain + features). MINOR release. Backwards compatible.
+
+### Added
+
+- **AGENTS.md template** (ST-06 / CC-FEAT-11) : nouveau template `.claude/templates/AGENTS.md.template` copié automatiquement à la racine du projet cible lors de `npx install` (idempotent — n'écrase pas un AGENTS.md existant).
+- **MCP templates avec `toolSearchEnabled: true`** (ST-07) : `.claude/templates/mcp/{with-tool-search,context7-with-tool-search,github-with-tool-search}.json` + section dédiée dans `docs/MCP.md`.
+- **Hooks templates** (CC-FEAT-21) : `.claude/templates/hooks/stop-hook.json` et `user-prompt-submit.json` + entrées README.
+- **Script tracking adoption** (ST-05) : `scripts/track-adoption-metrics.mjs` collecte npm downloads (last-week) + GitHub stars dans `.bmad/metrics/adoption-YYYY-MM-DD.json`. Nouveau npm script `metrics:adoption`. Tests Vitest (4 cas, mock fetch).
+- **CodeQL SAST** (F-04 / CC-REL-10) : nouveau job `codeql` dans `ci.yml`.
+- **Trivy CVE scan** (F-05) : nouveau job `trivy` dans `ci.yml` (CRITICAL+HIGH, ignore-unfixed).
+- **Smoke test post-publish** (F-06) : `npx ... --version` après `npm publish`.
+- **Bundles AI auto-gen** (CC-FEAT-23) : step `bash scripts/export-multi-ide.sh` avant publish.
+- **CONTRIBUTING.md** (ARCH-07) : naming conventions PascalCase vs lowercase documentées.
+- **REFERENCE.md split** (TKN-012) : `testing-symfony/REFERENCE.md` (221 L), `testing-python/REFERENCE.md` (182 L), `testing-react/REFERENCE.md` (162 L) — mêmes patterns que async/multitenant/cqrs en Phase 1.
+- **Dockerfile précompilé E2E** (CC-REL-19) : `tests/e2e/tools/Dockerfile` embarque bats-core + git en build-time (élimine flakiness apt-get/git-clone runtime).
+- **Tests frontmatter errors** (CC-REL-04) : `tests/kanban/frontmatter-errors.test.mjs` (3 cas chemin `ok:false`).
+- **Skip links + dialog accessible** (A11Y-04, A11Y-07) : `cli/kanban/client/src/components/PromptDialog.svelte` (nouveau composant), skip links dans `App.svelte` + `LandingPage.vue`.
+
+### Changed
+
+- **Reviewers → model: haiku + effort: low** (TKN-006) : 11 agents reviewers passent de `sonnet`/`medium` à `haiku`/`low` (read-only, 60% cost reduction). Tests `agents.test.mjs` et `agents-optimization.test.mjs` alignés.
+- **Check commands → model: haiku** (TKN-010) : 50 commandes `commands/*/check-*.md` passent à `haiku`.
+- **Skills lourdes → `disable-model-invocation: true`** (TKN-011 / CC-FEAT-04) : `async`, `multitenant`, `cqrs`, `event-driven`, `architecture-clean-ddd` ne s'invoquent plus automatiquement (économise tokens contexte).
+- **Output filter threshold** (TKN-008) : 10 240 → 5 120 octets (compresse plus tôt les outputs Bash).
+- **Freshness backend** (BE-01/02/03/04/05) : symfony-reviewer PHP 8.5+/PHPStan level max, symfony/CLAUDE.md PHP 8.5 stable + pipe/clone with/`#[\NoDiscard]`, laravel Pest 4.x, python coding-standards section Python 3.14 (free-threading, t-strings, PEP 649, concurrent.interpreters, JIT), csharp `field` keyword.
+- **Freshness frontend** (FE-RN-03/04/05, FE-V-03/04/05) : RN placeholders substitués + Shared Animation Backend + @react-native/jest-preset, Vue 3.5 (useTemplateRef, useId, onWatcherCleanup), vuejs-reviewer Vapor beta.
+- **Freshness infra** (INF-01/02/03) : alerte Ingress NGINX retiré 2026-03-24 → Gateway API v1.4+, Docker 29.4.0 → 29.4.3, Ansible 2.20.4 → 2.21.0, exemples PHP 8.2 → 8.4.
+- **a11y** (A11Y-03/05/06) : `prefers-reduced-motion` sur `@keyframes pulse` + TerminalAnimation, `html lang` synchronisé au changement de langue, axe-core color-contrast scopé (.VPSwitch, .VPSidebar, button.copy) au lieu de `disableRules`.
+- **CI/CD** (F-02/F-07/F-09) : SECURITY.md SLSA Build Level 1 (cohérence Phase 1), i18n-parity bypass corrigé (push main sans path filter), npm-publish Node 24 → Node 22 LTS aligné.
+- **Architecture** (ARCH-05, ARCH-06) : `cli/kanban.js` chargé en `dynamic import()` (lazy-load), `cli/flattener.js` déplacé vers `cli/lib/flattener.js` + 4 imports mis à jour.
+- **@-includes** (TKN-013) : `getting-started.md` : `@.claude/references/react/` → `@.claude/references/react/CLAUDE.md`.
+
+### Fixed
+
+- **flattener.js import path** : import interne `./lib/colors.js` corrigé en `./colors.js` après le déplacement vers `cli/lib/`.
+
 ## [8.4.0] - 2026-05-18
 
 Audit 2026-05-18 comprehensive — Phase 1 (credibility). Targets the 20 Quick Wins

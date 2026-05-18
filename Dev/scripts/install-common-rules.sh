@@ -846,6 +846,23 @@ main() {
         install_claude_md
     fi
 
+    # Copy AGENTS.md template to target root (idempotent — won't overwrite existing)
+    local agents_template
+    agents_template="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../.claude/templates/AGENTS.md.template"
+    local agents_target="$target_dir/AGENTS.md"
+    if [[ -f "$agents_template" && ! -f "$agents_target" ]]; then
+        if $dry_run; then
+            log_dry_run "Would create $agents_target from AGENTS.md.template"
+        else
+            cp "$agents_template" "$agents_target"
+            log_success "[install-common-rules] Created $agents_target from template"
+            ((++files_created))
+        fi
+    elif [[ -f "$agents_target" ]]; then
+        log_info "[install-common-rules] AGENTS.md exists at $agents_target (not overwritten)"
+        ((++files_skipped))
+    fi
+
     print_summary
 
     # Exit code

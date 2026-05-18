@@ -88,6 +88,10 @@ function runSequence() {
 }
 
 onMounted(() => {
+  // Accessibility: respect prefers-reduced-motion — skip all animations if user prefers no motion
+  if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return
+  }
   runSequence()
   cursorTimer = setInterval(() => {
     showCursor.value = !showCursor.value

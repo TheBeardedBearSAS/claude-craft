@@ -1,5 +1,7 @@
 ---
 description: Audit Vue.js project compliance with coding standards and best practices
+model: haiku
+
 ---
 
 # Vue.js Compliance Audit

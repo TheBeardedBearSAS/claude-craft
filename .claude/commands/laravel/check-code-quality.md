@@ -1,5 +1,7 @@
 ---
 description: Analyze Laravel code quality using static analysis and metrics
+model: haiku
+
 ---
 
 # Laravel Code Quality Check

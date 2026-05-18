@@ -8,7 +8,7 @@ import {
   PRIORITY_EXTENSIONS,
   TOKENS_PER_CHAR,
   MAX_TOKENS_PER_SHARD,
-} from '../../cli/flattener.js';
+} from '../../cli/lib/flattener.js';
 
 // --- Constructor ---
 
@@ -201,11 +201,7 @@ describe('isBinaryFile', () => {
 describe('generateFileTree', () => {
   it('generates tree from flat file list', () => {
     const flattener = new CodebaseFlattener('/fake');
-    flattener.files = [
-      { path: 'src/index.js' },
-      { path: 'src/utils.js' },
-      { path: 'README.md' },
-    ];
+    flattener.files = [{ path: 'src/index.js' }, { path: 'src/utils.js' }, { path: 'README.md' }];
     const tree = flattener.generateFileTree();
     expect(tree).toContain('src');
     expect(tree).toContain('index.js');
@@ -222,9 +218,7 @@ describe('generateFileTree', () => {
 
   it('handles deeply nested files', () => {
     const flattener = new CodebaseFlattener('/fake');
-    flattener.files = [
-      { path: 'a/b/c/deep.js' },
-    ];
+    flattener.files = [{ path: 'a/b/c/deep.js' }];
     const tree = flattener.generateFileTree();
     expect(tree).toContain('a');
     expect(tree).toContain('b');
@@ -283,9 +277,7 @@ describe('generateShardedOutput', () => {
 describe('generateOutput', () => {
   it('returns markdown with statistics header', () => {
     const flattener = new CodebaseFlattener('/fake');
-    flattener.files = [
-      { path: 'src/app.js', fullPath: '/dev/null', size: 100, priority: 1, tokens: 25 },
-    ];
+    flattener.files = [{ path: 'src/app.js', fullPath: '/dev/null', size: 100, priority: 1, tokens: 25 }];
     flattener.stats = { totalFiles: 5, includedFiles: 1, totalSize: 100, estimatedTokens: 0, shards: 0 };
 
     // Mock fs.readFileSync for file content
@@ -368,10 +360,7 @@ describe('generateShardContent', () => {
 describe('generateIndexContent', () => {
   it('includes shard map and usage instructions', () => {
     const flattener = new CodebaseFlattener('/fake');
-    flattener.files = [
-      { path: 'a.js' },
-      { path: 'b.js' },
-    ];
+    flattener.files = [{ path: 'a.js' }, { path: 'b.js' }];
     flattener.stats = { totalFiles: 5, includedFiles: 2, totalSize: 200, estimatedTokens: 50, shards: 2 };
 
     const shards = [

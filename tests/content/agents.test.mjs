@@ -10,18 +10,7 @@ const AGENTS_DIR = path.join(PROJECT_ROOT, '.claude', 'agents');
 const SKILLS_DIR = path.join(PROJECT_ROOT, '.claude', 'skills');
 
 const ALLOWED_MODELS = ['haiku', 'sonnet', 'opus'];
-const VALID_TOOLS = [
-  'Read',
-  'Glob',
-  'Grep',
-  'Write',
-  'Edit',
-  'Bash',
-  'WebFetch',
-  'WebSearch',
-  'NotebookEdit',
-  'Task',
-];
+const VALID_TOOLS = ['Read', 'Glob', 'Grep', 'Write', 'Edit', 'Bash', 'WebFetch', 'WebSearch', 'NotebookEdit', 'Task'];
 
 // Agents that are known to not use frontmatter (legacy format).
 // This list should shrink over time as agents are migrated.
@@ -61,7 +50,7 @@ describe('agent content validation', () => {
       .map((a) => a.filename);
     expect(
       unexpected,
-      `Unexpected agents without frontmatter: ${unexpected.join(', ')}. Add to KNOWN_NO_FRONTMATTER or add frontmatter.`,
+      `Unexpected agents without frontmatter: ${unexpected.join(', ')}. Add to KNOWN_NO_FRONTMATTER or add frontmatter.`
     ).toHaveLength(0);
   });
 
@@ -69,20 +58,16 @@ describe('agent content validation', () => {
     const required = ['name', 'description', 'model', 'tools'];
     for (const agent of agents) {
       for (const field of required) {
-        expect(
-          agent.frontmatter[field],
-          `${agent.filename} missing field: ${field}`,
-        ).toBeTruthy();
+        expect(agent.frontmatter[field], `${agent.filename} missing field: ${field}`).toBeTruthy();
       }
     }
   });
 
   it('agent model is in allowed list', () => {
     for (const agent of agents) {
-      expect(
-        ALLOWED_MODELS,
-        `${agent.filename} has invalid model: ${agent.frontmatter.model}`,
-      ).toContain(agent.frontmatter.model);
+      expect(ALLOWED_MODELS, `${agent.filename} has invalid model: ${agent.frontmatter.model}`).toContain(
+        agent.frontmatter.model
+      );
     }
   });
 
@@ -91,10 +76,7 @@ describe('agent content validation', () => {
       const tools = agent.frontmatter.tools;
       if (!Array.isArray(tools)) continue;
       for (const tool of tools) {
-        expect(
-          VALID_TOOLS,
-          `${agent.filename} has invalid tool: ${tool}`,
-        ).toContain(tool);
+        expect(VALID_TOOLS, `${agent.filename} has invalid tool: ${tool}`).toContain(tool);
       }
     }
   });
@@ -103,7 +85,7 @@ describe('agent content validation', () => {
     for (const agent of agents) {
       expect(
         agent.frontmatter.name,
-        `${agent.filename}: name "${agent.frontmatter.name}" does not match basename "${agent.basename}"`,
+        `${agent.filename}: name "${agent.frontmatter.name}" does not match basename "${agent.basename}"`
       ).toBe(agent.basename);
     }
   });
@@ -114,10 +96,7 @@ describe('agent content validation', () => {
       if (!Array.isArray(skills)) continue;
       for (const skill of skills) {
         const skillDir = path.join(SKILLS_DIR, skill);
-        expect(
-          fs.existsSync(skillDir),
-          `${agent.filename} references non-existent skill: ${skill}`,
-        ).toBe(true);
+        expect(fs.existsSync(skillDir), `${agent.filename} references non-existent skill: ${skill}`).toBe(true);
       }
     }
   });
@@ -127,7 +106,7 @@ describe('agent content validation', () => {
     const uniqueNames = new Set(names);
     expect(
       uniqueNames.size,
-      `Duplicate agent names found: ${names.filter((n, i) => names.indexOf(n) !== i).join(', ')}`,
+      `Duplicate agent names found: ${names.filter((n, i) => names.indexOf(n) !== i).join(', ')}`
     ).toBe(names.length);
   });
 
@@ -136,10 +115,7 @@ describe('agent content validation', () => {
       const disallowed = agent.frontmatter.disallowedTools;
       if (!Array.isArray(disallowed)) continue;
       for (const tool of disallowed) {
-        expect(
-          VALID_TOOLS,
-          `${agent.filename} has invalid disallowedTool: ${tool}`,
-        ).toContain(tool);
+        expect(VALID_TOOLS, `${agent.filename} has invalid disallowedTool: ${tool}`).toContain(tool);
       }
     }
   });
@@ -147,23 +123,21 @@ describe('agent content validation', () => {
   it('all agents have a model field in frontmatter', () => {
     for (const agent of allAgents) {
       if (KNOWN_NO_FRONTMATTER.includes(agent.filename)) continue;
-      expect(
-        agent.frontmatter,
-        `${agent.filename} is missing frontmatter entirely`,
-      ).not.toBeNull();
+      expect(agent.frontmatter, `${agent.filename} is missing frontmatter entirely`).not.toBeNull();
       expect(
         agent.frontmatter.model,
-        `${agent.filename} is missing required 'model' field in frontmatter`,
+        `${agent.filename} is missing required 'model' field in frontmatter`
       ).toBeTruthy();
     }
   });
 
-  it('all reviewer agents use sonnet model', () => {
+  it('all reviewer agents use haiku model (cost optimization, audit 2026-05-18 TKN-006)', () => {
     const allReviewers = [
       'angular-reviewer',
       'csharp-reviewer',
       'flutter-reviewer',
       'laravel-reviewer',
+      'paperclip-reviewer',
       'php-reviewer',
       'python-reviewer',
       'react-reviewer',
@@ -175,8 +149,8 @@ describe('agent content validation', () => {
       if (allReviewers.includes(agent.basename)) {
         expect(
           agent.frontmatter.model,
-          `Reviewer agent ${agent.filename} should use 'sonnet' model, got '${agent.frontmatter.model}'`,
-        ).toBe('sonnet');
+          `Reviewer agent ${agent.filename} should use 'haiku' model, got '${agent.frontmatter.model}'`
+        ).toBe('haiku');
       }
     }
   });
@@ -189,7 +163,7 @@ describe('agent content validation', () => {
       const hasScoring = content.includes('/100') || content.includes('points');
       expect(
         hasScoring,
-        `Reviewer agent ${agent.filename} should have a scoring system (look for "/100" or "points")`,
+        `Reviewer agent ${agent.filename} should have a scoring system (look for "/100" or "points")`
       ).toBe(true);
     }
   });

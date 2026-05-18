@@ -6,6 +6,7 @@ triggers:
   files: ["**/events/**", "**/sagas/**", "**/event-store/**"]
   keywords: ["event sourcing", "event-driven", "saga", "cqrs", "kafka", "rabbitmq", "event bus", "domain events", "event store", "choreography", "orchestration"]
 auto_suggest: true
+disable-model-invocation: true
 ---
 
 # Event-Driven — Event Sourcing, Saga, CQRS

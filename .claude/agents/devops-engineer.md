@@ -47,7 +47,7 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 ### Conteneurisation
 | Technologie | Compétences | Versions 2026 |
 |-------------|-------------|---------------|
-| Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.4.0 (avril 2026) |
+| Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.4.3 (patch sécurité, mai 2026) |
 | Docker Compose | Orchestration locale, profiles, extensions | Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète) |
 | Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, sidecar containers | 1.35.3 stable (1.36 attendu 22 avril) |
 | Helm | Charts, values, templating | Helm 3.18+ |
@@ -55,7 +55,7 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | PgBouncer | Transaction pooling, prepared statements natifs | 1.25.1 (1.21+ requis pour prepared stmts) |
 
 **Sources** :  
-- Docker Engine 29.4.0 : https://www.docker.com/blog/docker-engine-version-29/  
+- Docker Engine 29.4.3 : https://www.docker.com/blog/docker-engine-version-29/  
 - Compose Spec v5.0.0 : https://www.compose-spec.io/  
 - Kubernetes 1.35 : https://kubernetes.io/blog/2025/01/13/kubernetes-v1-35-release/  
 - K8s Gateway API : https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl  
@@ -71,7 +71,7 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) |
 | Coolify | Self-hosted PaaS | v4.0.0 (stable, avril 2026) |
 | OpenTofu | State encryption, OCI registry backends | 1.12.0 (mai 2026) |
-| Ansible | Automation, playbooks, roles | ansible-core 2.20.4 (2.21 beta) |
+| Ansible | Automation, playbooks, roles | ansible-core 2.21.0 (stable mai 2026) |
 
 ### Monitoring & Observability
 | Catégorie | Outils |
@@ -150,7 +150,7 @@ USER 1000
 docker history <image> --no-trunc
 docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 
-# BuildKit activé par défaut (Engine 29.4.0)
+# BuildKit activé par défaut (Engine 29.4.3)
 docker buildx build --cache-to=type=registry,ref=repo:cache .
 
 # Multi-platform build avec SBOM
@@ -254,21 +254,21 @@ tofu plan -refresh-only -out=drift.plan
 ### Ansible (2026)
 
 ```yaml
-# ansible-core 2.20.4 — Breaking changes 2.19→2.20
+# ansible-core 2.21.0 — Breaking changes 2.20→2.21
 - name: Utiliser collections FQCNs
   ansible.builtin.copy:  # Requis 2.20+, plus de noms courts
     src: file.txt
     dest: /tmp/
 ```
 
-**Patterns clés Ansible 2.20.4** :
-- **Migration 2.19→2.20** : FQCNs obligatoires (`ansible.builtin.*`)
+**Patterns clés Ansible 2.21.0** :
+- **Migration 2.20→2.21** : FQCNs obligatoires (`ansible.builtin.*`)
 - **Collections** : `ansible-galaxy collection install` requis
-- **Ansible 2.21 beta** : Optimisations parallélisation, Python 3.13 support
+- **Ansible 2.21.0 stable** : Optimisations parallélisation, Python 3.13 support
 
 **Sources** :  
-- ansible-core 2.20 : https://pypi.org/project/ansible-core/2.20.4/  
-- Migration guide : https://docs.ansible.com/ansible/latest/porting_guides/porting_guide_core_2.20.html
+- ansible-core 2.21 : https://pypi.org/project/ansible-core/2.21.0/  
+- Migration guide : https://docs.ansible.com/ansible/latest/porting_guides/porting_guide_core_2.21.html
 
 ### Kubernetes (2026)
 
@@ -290,6 +290,8 @@ kubectl get gateways
 # Sidecar containers (stable depuis 1.33)
 kubectl get pods -o jsonpath='{.spec.initContainers[?(@.restartPolicy=="Always")]}'
 ```
+
+> **ALERTE (2026-03-24) — Ingress NGINX retiré** : Le projet `ingress-nginx` a été officiellement retiré le 2026-03-24 (annonce officielle Kubernetes). Migrer vers **Gateway API v1.4+** (`gateway.networking.k8s.io/v1`) ou alternatives : Traefik, Contour, Istio Gateway.
 
 **Patterns Kubernetes 2026** :
 - **Gateway API v1.4+** : HTTPRoute/TLSRoute remplacent Ingress (meilleure expressivité, multi-cluster)

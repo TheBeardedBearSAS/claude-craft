@@ -1,6 +1,8 @@
 ---
 description: Vérification Tests Flutter
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Vérification Tests Flutter

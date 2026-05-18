@@ -149,6 +149,38 @@ Si un de ces logs est rouge, votre Pod install / Gradle build n'a pas activé la
 - [ ] Sentry / Crashlytics : sourcemaps Hermes uploadées avec Sentry CLI 2.20+.
 - [ ] Bundle size mesuré : New Arch gagne souvent 10-20 % sur AAB Android.
 
+## Shared Animation Backend (Reanimated 4)
+
+React Native 0.85 + Reanimated 4 introduit un backend d'animation partagé entre JS et le thread natif, sans passer par le Bridge asynchrone.
+
+### Principe
+
+Les animations s'exécutent directement sur le **UI thread** via JSI. Il n'y a plus de sérialisation JSON ni de délai inter-thread — chaque frame est calculée de façon synchrone dans le même cycle que le rendu Fabric.
+
+### Architecture JSI + Shadow Tree synchrone
+
+Reanimated 4 utilise les **Worklets 2** : des fonctions JS compilées par Hermes et exécutées sur le UI thread via JSI. Elles accèdent au Shadow Tree de Fabric de façon synchrone pour modifier les propriétés de layout et de style sans bloquer le JS thread.
+
+```typescript
+// Worklet exécuté sur le UI thread — pas de Bridge
+const animatedStyle = useAnimatedStyle(() => {
+  'worklet';
+  return { transform: [{ translateX: offset.value }] };
+});
+```
+
+### Impact performance
+
+| Métrique | Bridge (ancien) | Reanimated 4 (JSI) |
+|----------|-----------------|---------------------|
+| Latence par frame | 16-32 ms (async) | < 1 ms (sync) |
+| FPS cible | Variable | **60 fps garanti** |
+| Low-end devices | Drops fréquents | Stable grâce au UI thread |
+
+Le **60 fps garanti sur low-end** vient du fait que le JS thread (GC, logique métier) ne bloque plus les animations : les Worklets ont leur propre runtime isolé.
+
+---
+
 ## Ressources
 
 - [React Native 0.85 release notes](https://github.com/facebook/react-native/releases)

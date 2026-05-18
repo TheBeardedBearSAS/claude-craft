@@ -1,9 +1,9 @@
 ---
 name: angular-reviewer
 description: Angular 20 LTS (ou 21) and TypeScript code review specialist — Signals, standalone components, RxJS, performance, zoneless change detection, httpResource
-model: sonnet
+model: haiku
 maxTurns: 6
-effort: medium
+effort: low
 memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]

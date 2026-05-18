@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "example-mcp": {
+      "command": "npx",
+      "args": ["-y", "@example/mcp-server"],
+      "toolSearchEnabled": true
+    }
+  }
+}

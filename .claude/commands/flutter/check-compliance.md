@@ -1,6 +1,8 @@
 ---
 description: Audit Complet de Conformité Flutter
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Audit Complet de Conformité Flutter

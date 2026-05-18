@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.4.0 | **Languages:** en, fr, es, de, pt
+**Version:** 8.5.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 72 agents, 211 commands across 26 namespaces, and BMAD v6 project management.
 
@@ -44,7 +44,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Commands (26 namespaces, 211 commands)
 
-Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*`, `/paperclip:*` | Infra (via `@devops-engineer`): Docker 29.4.0, Coolify v4.0.0 (stable), K8s 1.36.1, OpenTofu 1.12.0, Ansible 2.20.4, FrankenPHP 1.12.1, PgBouncer 1.25.2 (CVE-2026-6664/6667 patched) | Project: `/sprint:*`, `/gate:*`, `/project:*`
+Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*`, `/paperclip:*` | Infra (via `@devops-engineer`): Docker 29.4.3, Coolify v4.0.0 (stable), K8s 1.36.1, OpenTofu 1.12.0, Ansible 2.21.0, FrankenPHP 1.12.1, PgBouncer 1.25.2 (CVE-2026-6664/6667 patched) | Project: `/sprint:*`, `/gate:*`, `/project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 

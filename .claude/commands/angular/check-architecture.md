@@ -1,5 +1,7 @@
 ---
 description: Angular Architecture Review
+model: haiku
+
 ---
 
 # Angular Architecture Review

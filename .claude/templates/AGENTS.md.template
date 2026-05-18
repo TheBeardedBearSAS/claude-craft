@@ -1,0 +1,90 @@
+# Agents disponibles pour ce projet
+
+> Ce fichier liste les agents Claude Code installes via claude-craft.
+> Format compatible avec le standard emergent AGENTS.md (https://agents.md).
+
+## Comment utiliser
+
+- Invoque un agent dans Claude Code : `@nom-agent <ta demande>`
+- Liste complete : voir `.claude/agents/`
+- Documentation : voir `docs/AGENTS.md`
+
+## Agents par categorie
+
+### Architecture et design
+
+- `@api-designer` — Conception API REST/GraphQL, OpenAPI 3.2, GraphQL Federation
+- `@database-architect` — Conception et optimisation BDD (PostgreSQL, MySQL, schemas)
+- `@refactoring-specialist` — Refactoring sur, patterns SOLID, extraction methode
+- `@ui-designer` — Design systems, Tailwind, design tokens
+- `@ux-ergonome` — Ergonomie cognitive, user flows, heuristiques
+
+### Code review (par stack)
+
+- `@symfony-reviewer` — Symfony 8 / PHP 8.5+, DDD, Doctrine, API Platform
+- `@laravel-reviewer` — Laravel 13 / PHP 8.5, Pest 4, Eloquent, Sanctum
+- `@react-reviewer` — React 19 + Compiler 1.0, TypeScript, hooks, bundle analysis
+- `@vuejs-reviewer` — Vue 3.5+, Composition API, Pinia, Vitest 4
+- `@angular-reviewer` — Angular 20 LTS, Signals, Standalone, Zoneless
+- `@flutter-reviewer` — Flutter 3.41 / Dart 3.11, BLoC v9, Riverpod 3
+- `@reactnative-reviewer` — React Native 0.85 New Architecture (JSI, TurboModules)
+- `@python-reviewer` — Python 3.14+, FastAPI, Pydantic v2, async correctness
+- `@csharp-reviewer` — C# 14 / .NET 10, Clean Architecture, CQRS, EF Core
+- `@php-reviewer` — PHP 8.5, Property Hooks, PSR-12, PHPStan level max, Pest 4
+- `@paperclip-reviewer` — Paperclip 2026.x, governance-first, Node.js + PostgreSQL
+
+### Test et qualite
+
+- `@tdd-coach` — Coach TDD/BDD (red/green/refactor), Gherkin
+- `@performance-auditor` — Profilage, optimisation, bundle size, Core Web Vitals
+
+### Securite
+
+- `@security-auditor` — Audit OWASP Top 10:2025, SAST, secrets detection, authZ/N
+
+### Operations
+
+- `@devops-engineer` — Docker, K8s, OpenTofu, Ansible, Coolify, FrankenPHP
+- `@observability-engineer` — OpenTelemetry, traces, structured logs, metrics
+- `@chaos-engineer` — Resilience testing, Litmus, Gremlin, fault injection
+- `@migration-specialist` — Schema migrations zero-downtime, version upgrades
+- `@cost-optimizer` — FinOps, right-sizing, caching, LLM token reduction
+
+### Donnees et ML
+
+- `@data-analyst` — SQL optimization, metrics design, BI dashboards
+- `@mlops-engineer` — ML pipelines, MLflow, Kubeflow, feature stores
+
+### Accessibilite
+
+- `@accessibility-expert` — Audit WCAG 2.2 AAA, ARIA, keyboard navigation
+
+### Developer experience
+
+- `@devex-engineer` — CLI design, onboarding, tooling, DX metrics
+- `@research-assistant` — Recherche technique, documentation, veille
+
+### Orchestration
+
+- `@uiux-orchestrator` — Coordination UI/UX (designer + ergonome + a11y)
+- `@ralph-conductor` — Sessions Ralph Wiggum continues avec DoD adaptative
+
+## Frontmatter recommande
+
+Pour personnaliser un agent local, override via frontmatter dans `.claude/agents/<nom>.md` :
+
+```yaml
+---
+model: claude-haiku-4-5      # economiser tokens pour reviewers read-only
+effort: low                  # ou medium / high
+maxTurns: 20                 # limite anti-runaway
+disallowedTools: [Bash]      # securite : pas d execution shell
+context: fork                # isoler le contexte (skills lourds)
+---
+```
+
+## En savoir plus
+
+- Documentation complete : [docs/AGENTS.md](docs/AGENTS.md)
+- Standard AGENTS.md : https://agents.md
+- claude-craft : https://github.com/the-bearded-cto/claude-craft

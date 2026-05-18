@@ -1,5 +1,7 @@
 ---
 description: Validate Clean Architecture implementation in C#/.NET project
+model: haiku
+
 ---
 
 # C#/.NET Architecture Check

@@ -1,9 +1,9 @@
 ---
 name: flutter-reviewer
 description: Flutter 3.41 / Dart 3.11 code review specialist — BLoC v9, Riverpod 3, widget optimization, Impeller, platform-specific code
-model: sonnet
+model: haiku
 maxTurns: 6
-effort: medium
+effort: low
 memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]

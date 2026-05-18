@@ -1,6 +1,8 @@
 ---
 description: Check Architecture React Native
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Check Architecture React Native

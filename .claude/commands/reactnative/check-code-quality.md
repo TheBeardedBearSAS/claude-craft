@@ -1,6 +1,8 @@
 ---
 description: Check Code Quality React Native
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Check Code Quality React Native

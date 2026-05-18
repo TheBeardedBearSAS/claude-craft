@@ -1,6 +1,8 @@
 ---
 description: Audit Sécurité Symfony
 argument-hint: [arguments]
+model: haiku
+
 ---
 
 # Audit Sécurité Symfony

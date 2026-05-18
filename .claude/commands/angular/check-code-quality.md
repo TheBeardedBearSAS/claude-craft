@@ -1,5 +1,7 @@
 ---
 description: Angular Code Quality Analysis
+model: haiku
+
 ---
 
 # Angular Code Quality Analysis

@@ -164,7 +164,7 @@ describe('ClaudeCraftCLI.run()', () => {
     process.argv = ['node', 'index.js', 'flatten'];
     const cli = new ClaudeCraftCLI();
     // Mock the flatten function to avoid actual file operations
-    const { flatten: flattenFn } = await import('../../cli/flattener.js');
+    const { flatten: flattenFn } = await import('../../cli/lib/flattener.js');
     cli.flattenCodebase = vi.fn().mockResolvedValue(undefined);
     await cli.run();
     expect(cli.flattenCodebase).toHaveBeenCalled();

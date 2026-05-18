@@ -230,7 +230,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # pinned: v4.4.0
         with:
-          node-version: '24'
+          node-version: '22'
           cache: 'npm'
           # No registry-url: avoids setup-node auto-setting NODE_AUTH_TOKEN which overrides OIDC
 
@@ -252,6 +252,9 @@ jobs:
           else
             echo "tag=latest" >> $GITHUB_OUTPUT
           fi
+
+      - name: Generate AI bundles (chatgpt/claude/gemini)
+        run: bash scripts/export-multi-ide.sh
 
       - name: Publish (dry run)
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == true }}
@@ -279,6 +282,13 @@ jobs:
           else
             echo "Successfully published version ${PUBLISHED_VERSION} with tag ${NPM_TAG}"
           fi
+
+      - name: Smoke test installed package
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
+        run: |
+          sleep 30
+          PUBLISHED_VERSION=$(node -p "require('./package.json').version")
+          npx --yes @the-bearded-bear/claude-craft@${PUBLISHED_VERSION} --version
 
   release:
     name: Create GitHub Release

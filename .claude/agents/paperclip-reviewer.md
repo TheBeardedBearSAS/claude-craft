@@ -1,9 +1,9 @@
 ---
 name: paperclip-reviewer
 description: Paperclip 2026.403+ governance-first integration platform code review specialist — control plane + adapters two-layer architecture, Node.js 20+ TypeScript, Vitest, PostgreSQL, idempotency keys, audit trails, multi-tenant adapter isolation
-model: sonnet
+model: haiku
 maxTurns: 6
-effort: medium
+effort: low
 memory: project
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]

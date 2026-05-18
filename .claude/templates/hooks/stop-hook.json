@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "command": "mkdir -p ~/.claude/logs && echo \"[Stop] Session ended at $(date -u +'%Y-%m-%dT%H:%M:%SZ')\" >> ~/.claude/logs/sessions.log"
+      }
+    ]
+  }
+}

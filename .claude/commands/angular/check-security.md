@@ -1,5 +1,7 @@
 ---
 description: Angular Security Audit
+model: haiku
+
 ---
 
 # Angular Security Audit

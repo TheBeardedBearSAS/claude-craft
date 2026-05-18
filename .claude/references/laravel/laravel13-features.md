@@ -356,7 +356,7 @@ class PasskeyController extends Controller
 
 ## Pest 4 Mutation Testing Intégré
 
-**Source :** https://pestphp.com/docs/pest3-now-available
+**Source :** https://pestphp.com/docs/pest4-now-available
 
 Laravel 13 recommande **Pest 4** avec le **Mutation Testing natif** pour garantir la qualité des tests.
 
