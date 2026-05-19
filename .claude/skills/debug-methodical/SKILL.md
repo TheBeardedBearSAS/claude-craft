@@ -2,6 +2,7 @@
 name: debug-methodical
 description: Debugging méthodique en 4 phases (reproduce → isolate → fix → verify). Use when investigating a bug, regression, flaky test, or unexpected behavior.
 context: fork
+disable-model-invocation: true
 triggers:
   keywords: ["bug", "debug", "crash", "error", "regression", "flaky", "broken", "failing test", "not working"]
 auto_suggest: true

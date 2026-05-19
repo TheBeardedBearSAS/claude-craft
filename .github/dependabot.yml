@@ -34,3 +34,13 @@ updates:
     labels:
       - "github-actions"
       - "automated"
+
+  - package-ecosystem: "docker"
+    directory: "/tests/e2e/tools"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "automated"

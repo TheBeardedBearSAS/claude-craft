@@ -421,6 +421,53 @@ let { children } = $props();
 </Card>
 ```
 
+## Migration $app/stores → $app/state (SvelteKit 2.12)
+
+SvelteKit 2.12 remplace les stores Svelte classiques de `$app/stores` par des runes `$app/state`. L'ancien import est **déprécié** et sera supprimé dans SvelteKit 3.
+
+### Avant (déprécié)
+
+```svelte
+<script lang="ts">
+import { page, navigating, updated } from '$app/stores';
+
+// Lecture via auto-subscription $
+$: currentUrl = $page.url.pathname;
+</script>
+
+<p>Chemin : {$page.url.pathname}</p>
+{#if $navigating}
+  <p>Navigation en cours…</p>
+{/if}
+```
+
+### Après (SvelteKit 2.12+)
+
+```svelte
+<script lang="ts">
+import { page, navigating, updated } from '$app/state';
+
+// Accès direct — plus besoin du préfixe $
+const currentUrl = page.url.pathname;
+</script>
+
+<p>Chemin : {page.url.pathname}</p>
+{#if navigating.to}
+  <p>Navigation en cours…</p>
+{/if}
+```
+
+### Tableau de migration rapide
+
+| Ancien (`$app/stores`) | Nouveau (`$app/state`) |
+|------------------------|------------------------|
+| `$page.url` | `page.url` |
+| `$page.params` | `page.params` |
+| `$navigating` | `navigating.to` / `navigating.from` |
+| `$updated` | `updated.current` |
+
+> **Source :** [SvelteKit 2.12 changelog](https://kit.svelte.dev/docs/migrating-to-sveltekit-2#sveltekit-2-12)
+
 ## Documentation Complète
 
 - `rules/01-architecture.md` - Feature-based structure + patterns

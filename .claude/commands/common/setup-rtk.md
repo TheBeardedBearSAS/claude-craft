@@ -99,6 +99,17 @@ For missing hooks, reference the templates in `.claude/templates/hooks/`:
 - `output-filter.json` — PostToolUse for large output filtering
 - `pre-compact.json` — PreCompact for context preservation
 - `context-reinject.json` — SessionStart for post-compaction re-injection
+- `post-compact.json` — PostCompact for context restoration after compaction
+
+#### PostCompact Hook — Context Restoration
+
+The **PostCompact** hook (Claude Code v2.1.76+) re-injects critical context after an auto-compaction event. Without it, Claude may lose track of active tasks, file paths, and decisions made earlier in the session.
+
+Template: `.claude/templates/hooks/post-compact.json`
+
+The hook reads `context-essentials.md` (a file you maintain with current session state) and injects it as a system message after compaction. Pair it with the **PreCompact** hook (`pre-compact.json`) which saves the essentials before compaction occurs.
+
+Estimated savings: avoids 5-15 re-explanation turns per long session (~3-8K tokens).
 
 ### 5. Summary
 
@@ -114,6 +125,7 @@ Display a summary table of all optimizations with their status:
 | Forked sub-agents (`CLAUDE_CODE_FORK_SUBAGENT=1`) | 8-15K tokens/long session | ? |
 | PostToolUse hook | Reduces context pollution | ? |
 | PreCompact hook | Preserves critical context | ? |
+| PostCompact hook | Restores context after compaction | ? |
 
 **Target: 55-65% overall token efficiency**
 

@@ -79,6 +79,29 @@ Total size: **~200-250 lines** (vs. full Claude Craft 10,000+ lines)
 
 ---
 
+## Skill Portability Matrix
+
+Not all Claude Craft skill features are supported on every surface. This matrix shows what works where:
+
+| Skill type | Claude Code | Codex CLI | Gemini CLI | VS Code Ext | Cursor / Windsurf |
+|------------|:-----------:|:---------:|:----------:|:-----------:|:-----------------:|
+| SKILL.md slim (rules only) | ✅ natif | ✅ via bundle | ✅ via bundle | ✅ | ✅ |
+| `context: fork` (isolated context) | ✅ | ❌ non supporté | ❌ non supporté | ✅ | ❌ |
+| `disable-model-invocation` | ✅ | ❌ ignoré | ❌ ignoré | ✅ | ❌ |
+| Slash commands (`/skill:*`) | ✅ natif | ❌ | ❌ | ❌ | ❌ |
+| Sub-agents (`@agent`) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| BMAD v6 full workflow | ✅ | Principes seulement | Principes seulement | Partiel | Principes seulement |
+| QA Recette (Chrome automation) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Ralph Wiggum (AI loop) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Hook system (pre/post tool) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Token optimization (RTK) | ✅ | ❌ | ❌ | ❌ | ❌ |
+
+**Légende :** ✅ = fully supported | ⚠️ = partial / manual adaptation needed | ❌ = not supported
+
+**Recommendation:** For full features, use Claude Craft with **Claude Code**.
+
+---
+
 ## Differences vs. Claude Code
 
 | Feature | Claude Code | Cursor / Windsurf |
@@ -90,8 +113,6 @@ Total size: **~200-250 lines** (vs. full Claude Craft 10,000+ lines)
 | **BMAD v6** | Full workflow | Principles documented |
 | **QA Recette** | Automated testing | Not available |
 | **Ralph Wiggum** | AI loop | Not available |
-
-**Recommendation:** For full features, use Claude Craft with **Claude Code**.
 
 ---
 

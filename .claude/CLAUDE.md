@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.5.0 | **Languages:** en, fr, es, de, pt
+**Version:** 8.6.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 72 agents, 211 commands across 26 namespaces, and BMAD v6 project management.
 
@@ -37,6 +37,9 @@ A comprehensive AI-assisted development framework for Claude Code with 19 techno
 | Python | `@.claude/references/python/` | `/python:*` |
 | PHP | `@.claude/references/php/` | `/php:*` |
 | Paperclip | `@.claude/references/paperclip/` | `/paperclip:*` |
+| **Svelte** _(community)_ | `@.claude/references/svelte/CLAUDE.md` | — |
+
+> **Note:** Svelte/SvelteKit is **community-maintained** and hors-scope officiel. Voir `.claude/references/svelte/CLAUDE.md` pour le disclaimer complet.
 
 See `@.claude/INDEX.md` for condensed checklists and patterns.
 
@@ -158,7 +161,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version:** 2.1.97 (CVE-2025-59536 patched) | **Recommended:** 2.1.117 — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
+**Minimum Version:** 2.1.97 (CVE-2025-59536 patched) | **Recommended:** 2.1.118 — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
 
 ---
 

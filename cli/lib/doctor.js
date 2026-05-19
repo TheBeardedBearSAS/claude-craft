@@ -13,7 +13,7 @@ import { listDirs } from './fs-utils.js';
 // Single source of truth for the security baseline. Bumped from 2.1.47 in v8.3.0
 // after CVE-2025-59536 (CVSS 8.7) cumulative hardening completed in 2.1.97.
 const MIN_CLAUDE_CODE = '2.1.97';
-const RECOMMENDED_CLAUDE_CODE = '2.1.117';
+const RECOMMENDED_CLAUDE_CODE = '2.1.118';
 
 /**
  * Compare two semver-ish version strings (`major.minor.patch`).

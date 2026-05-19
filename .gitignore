@@ -49,3 +49,7 @@ CONTENT_DRAFT_*.md
 SEO_AUDIT_*.md
 USER_RESEARCH_*.md
 WEEKLY_REPORT.md
+
+# Internal ops files moved to docs/internal/
+docs/internal/CONTENT_DRAFT_*.md
+docs/internal/USER_RESEARCH_*.md

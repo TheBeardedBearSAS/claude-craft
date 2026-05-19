@@ -8,7 +8,7 @@ allowed-tools: Read, Glob, Bash, Grep
 
 Welcome! This wizard helps you discover Claude Craft's value in under 10 minutes.
 
-211 commands can feel overwhelming — let's find the 3 that matter most for YOUR project right now.
+200+ commands can feel overwhelming — let's find the 3 that matter most for YOUR project right now.
 
 ## Step 1: Detect Your Project Stack (30 seconds)
 

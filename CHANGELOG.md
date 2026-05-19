@@ -5,6 +5,73 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.6.0] - 2026-05-19
+
+Audit 2026-05-18 comprehensive — Phase 3 (P1 cleanup parallèle multi-vagues). MINOR release. Backwards compatible.
+
+### Added
+
+- **`tsconfig.json` racine** (ARCH-04) : filet de sécurité TypeScript via `checkJs: true` / `allowJs: true` / `noEmit: true`. Aucune migration code, juste le filet pour détection types futurs.
+- **`.claude/rules/16-i18n.md`** (CC-I18N-02) : règle i18n quick reference (50 L) pointant vers `verify-i18n-parity.sh`, `MULTI-IDE.md`, `ADDING-NEW-LOCALE.md`. Corrige le lien fantôme historique.
+- **`docs/guides/en/ADDING-NEW-LOCALE.md`** (CC-I18N-04) : guide checklist 5 étapes pour ajouter une nouvelle locale (~110 L).
+- **`docs/internal/`** (CC-DOC-07) : nouveau répertoire pour les fichiers ops internes (WEEKLY_REPORT, CONTENT_DRAFT, USER_RESEARCH). `.gitignore` et `.npmignore` mis à jour.
+- **`tests/cli/detect-locale.test.mjs`** (CC-I18N-03) : 13 cas testant l'auto-détection de locale depuis `LANG`/`LC_ALL`.
+- **`tests/cli/banner.test.mjs`** étendu (CC-A11Y-08) : test NO_COLOR pour fallback plain-text.
+- **Tests frontmatter étendus** (CC-REL-04) : 4 nouveaux cas dans `tests/kanban/frontmatter-errors.test.mjs` (types invalides, ENOENT, parseString sans frontmatter).
+- **Matrice Surfaces × Hooks** (CC-MIDE-04) : nouvelle section dans `.claude/COMPATIBILITY.md` (CLI vs VS Code Ext vs Desktop vs Web vs JetBrains).
+- **Matrice Skill × Surface** (CC-MIDE-05) : portabilité skills documentée dans `docs/guides/MULTI-IDE.md`.
+- **Section "Use Without Claude Code"** (CC-MIDE-03) : tableau bundles AI (ChatGPT/Claude.ai/Gemini-Cursor/Codex) dans README.
+- **Badge Stryker mutation** (CC-STRAT-12) : badge dans README.
+- **CTA Calendly** (CC-STRAT-10) : lien `https://calendly.com/the-bearded-cto` dans README.
+- **CSV i18n-gap** (CC-I18N-07) : `audit/phases/i18n-gap.csv` généré automatiquement par `verify-i18n-parity.sh`.
+- **6 skills `disable-model-invocation: true`** (CC-FEAT-04) : `architect`, `debug-methodical`, `atomic-tasks`, `socratic-brainstorm`, `design-md-convention`, `parallel-worktrees`.
+- **Hook PostCompact documenté** (TKN-009) : section dans `setup-rtk.md`.
+- **TurboModules pattern** (FE-RN-02) : `native-module.md` refactoré (NativeModules legacy → TurboModuleRegistry + Codegen).
+- **Migration $app/stores → $app/state** (FE-S-02) : documentée dans `references/svelte/CLAUDE.md`.
+- **Dependabot enrichi** (F-08) : ecosystem `docker` ajouté.
+
+### Changed
+
+- **`CLAUDE_CODE_FORK_SUBAGENT=1`** (TKN-005) : ajouté dans `.claude/settings.json` env.
+- **`RECOMMENDED_CLAUDE_CODE`** (CC-DX-07) : `2.1.117` → `2.1.118` dans `cli/lib/doctor.js`.
+- **Help namespaces** (CC-DX-06) : 7 namespaces infra ajoutés dans `cli/lib/help.js` (`kubernetes`, `ansible`, `hcloud`, `pgbouncer`, `frankenphp`, `opentofu`, etc.).
+- **`getting-started.md`** (CC-DX-05) : "211 commands" → "200+ commands" (3 occurrences).
+- **`cli/lib/banner.js`** (CC-A11Y-08) : fallback plain-text `"Claude Craft v${VERSION}"` si `!colorEnabled` (a11y screen readers).
+- **`docs/SECURITY.md`** (CC-DOC-05) : transformé en page-pointeur vers `/SECURITY.md` racine (source de vérité unique).
+- **CONTRIBUTING.md** (ARCH-07) : section "Naming Conventions" ajoutée.
+- **README** (ARCH-09) : mention "Platform: Linux/macOS, Windows untested".
+- **`package.json` engines** : `"os": ["linux", "darwin"]` ajouté.
+- **`docker-compose.test.yml`** (CC-REL-19) : `install-scripts.bats` et `path-safety.bats` ajoutés à la commande bats.
+- **`i18n-parity.yml`** (CC-I18N-06) : `website/**` ajouté aux paths trigger.
+- **`verify-i18n-parity.sh`** (CC-I18N-07) : seuil bloquant configurable (`I18N_PARITY_STRICT`, `BLOCK_SIZE_BYTES`, `BLOCK_RATIO`).
+- **`installer.js`** (CC-I18N-03) : fonction `detectLocale()` lisant `LC_ALL`/`LANG` pour pré-sélectionner la locale du wizard.
+- **`vapor-mode.md`** (CC-STRAT-07) : déjà complet Phase 1 — confirmé exhaustif (Vapor + Alien Signals + script setup vapor).
+- **Python 3.14 features** (CC-STRAT-06) : déjà complet Phase 2 — confirmé exhaustif (free-threading + JIT + t-strings + PEP 649 + concurrent.interpreters).
+- **Push Notifications** (CC-FEAT-03) : statut `Planned` → `Adopted` dans `COMPATIBILITY.md`.
+- **`DISABLE_AUTO_MEMORY`** (CC-DOC-08) : variable d'env documentée dans section 2.1.118 de `COMPATIBILITY.md`.
+- **Snapshot CLI --help** : régénéré pour refléter fallback plain-text NO_COLOR.
+
+### Fixed
+
+- **URL Pest 4** (BE-07) : remplacée dans 4 fichiers Laravel (`CLAUDE.md`, `testing.md`, `laravel13-features.md`, `agents/laravel-reviewer.md`) — `pestphp.com/docs/pest-v4-is-here-now-with-browser-testing`.
+- **Rust Dockerfile** (BE-23) : `FROM rust:1.85-alpine` → `FROM rust:1.95-alpine` dans `rust/rules/03-security.md` (2 occurrences).
+- **Dart version** (FE-F-06) : `Dart 3.10+` → `Dart 3.11+` dans `flutter/wasm.md`.
+- **`dart:js_util` deprecation warning** (FE-F-07) : ajouté dans `flutter/wasm.md`.
+- **Svelte hors-scope** (FE-S-01) : marqué `_(community)_` + disclaimer dans `.claude/CLAUDE.md`.
+- **7 fichiers ops** (CC-DOC-07) : déplacés de la racine vers `docs/internal/` (préservation de l'historique).
+- **Tests doctor 2.1.118** : helper `allToolsExec` aligné sur la nouvelle baseline recommandée.
+
+### Validation
+
+- ✅ **854 tests Vitest verts** (57 fichiers, +18 tests vs Phase 2)
+- ✅ **648 fichiers scannés sans @-include cassé** (`npm run lint:includes`)
+- ✅ `npm run lint` (eslint cli/) OK
+- ✅ Version bump : `8.5.0 → 8.6.0` dans `package.json`, `.claude-plugin/plugin.json`, `.claude/CLAUDE.md`, `.claude/COMPATIBILITY.md`
+
+### Notes
+
+- **Volontairement exclu** (Phase 4 ou backlog v8.7) : D-1 à D-7 décisions stratégiques, ST-08 telemetry Posthog (RGPD), ST-09 TypeScript full migration, ARCH-08 commander migration, CC-REL-14 rollback, CC-REL-18 fast-check property tests, CC-FEAT-15/16 marketplace+cloud sync, CC-STRAT-08 wizard `--quick` mode, CC-REL-03 cli/index.js branches 65→85%, P0 #22/26/28 (telemetry RGPD + i18n 164 fichiers + KPI baselines).
+
 ## [8.5.0] - 2026-05-18
 
 Audit 2026-05-18 comprehensive — Phase 2 (token optimization + a11y + supply chain + features). MINOR release. Backwards compatible.

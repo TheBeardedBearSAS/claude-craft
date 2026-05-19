@@ -64,44 +64,55 @@ export interface {ModuleName}Event {
 ```
 
 ```typescript
-// src/native/{ModuleName}/NativeModule.ts
-import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
+// src/specs/Native{ModuleName}.ts  ← Codegen spec (New Architecture RN 0.85+)
+import type { TurboModule } from 'react-native';
+import { TurboModuleRegistry } from 'react-native';
 
-const LINKING_ERROR =
-  `The package '{ModuleName}' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
-
-// Type du module natif
-interface {ModuleName}NativeModule {
-  // Méthodes synchrones
+// Codegen génère les bindings C++/ObjC/Java à partir de cette spec TypeScript.
+// Exécuter `pod install` (iOS) ou `./gradlew generateCodegenArtifacts` (Android)
+// après toute modification de cette interface.
+export interface Spec extends TurboModule {
+  // Méthode synchrone via JSI (réserver aux opérations < 1 ms)
   getConstant(): string;
 
   // Méthodes asynchrones
-  authenticate(options: {ModuleName}Options): Promise<{ModuleName}Result>;
+  authenticate(options: {[key: string]: unknown}): Promise<{[key: string]: unknown}>;
   isSupported(): Promise<boolean>;
 
-  // Pour les événements
+  // Événements (Fabric EventEmitter)
   addListener(eventType: string): void;
   removeListeners(count: number): void;
 }
 
-const Native{ModuleName} = NativeModules.{ModuleName}
-  ? (NativeModules.{ModuleName} as {ModuleName}NativeModule)
-  : new Proxy(
-      {} as {ModuleName}NativeModule,
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+// TurboModuleRegistry.getEnforcing lève une erreur claire si le module
+// n'est pas lié — remplace l'ancien pattern NativeModules.{ModuleName} + Proxy.
+export default TurboModuleRegistry.getEnforcing<Spec>('{ModuleName}');
+```
 
-export { Native{ModuleName} };
-export const {ModuleName}EventEmitter = new NativeEventEmitter(
-  NativeModules.{ModuleName}
-);
+> **Note historique (legacy bridge):** L'ancien pattern `NativeModules.{ModuleName}` avec un `Proxy` fallback était utilisé avant RN 0.72. Il n'est plus supporté depuis RN 0.85 (bridge supprimé par défaut). Utiliser exclusivement `TurboModuleRegistry.getEnforcing<Spec>('ModuleName')`.
+
+```typescript
+// src/native/{ModuleName}/NativeModule.ts  ← Adaptateur (utilise la spec Codegen)
+import { NativeEventEmitter } from 'react-native';
+import NativeSpec from '../../specs/Native{ModuleName}';
+
+// Le module typé est directement retourné par TurboModuleRegistry
+export const Native{ModuleName} = NativeSpec;
+
+// EventEmitter : passer l'objet TurboModule (pas NativeModules.X)
+export const {ModuleName}EventEmitter = new NativeEventEmitter(NativeSpec as any);
+```
+
+Ajouter dans `package.json` la config Codegen :
+
+```json
+{
+  "codegenConfig": {
+    "name": "{ModuleName}Specs",
+    "type": "modules",
+    "jsSrcsDir": "src/specs"
+  }
+}
 ```
 
 ```typescript

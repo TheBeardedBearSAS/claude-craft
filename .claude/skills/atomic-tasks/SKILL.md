@@ -2,6 +2,7 @@
 name: atomic-tasks
 description: Pattern GSD (Get Shit Done) - découper en tâches atomiques avec contextes subagent frais pour combattre le context rot. Use when planning complex work or working past 50% context usage.
 context: fork
+disable-model-invocation: true
 triggers:
   keywords: ["decompose", "split task", "context rot", "atomic", "GSD", "subagent", "spec-driven"]
 auto_suggest: true

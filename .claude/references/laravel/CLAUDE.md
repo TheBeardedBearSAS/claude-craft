@@ -40,7 +40,7 @@
 
 ### Pest 4 Mutation Testing
 - Mutation Testing natif pour garantir la qualité des tests
-- https://pestphp.com/docs/pest4-now-available
+- https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing
 
 ### Arch Presets
 - Tests d'architecture préconfigurés pour Laravel

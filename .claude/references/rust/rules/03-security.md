@@ -426,7 +426,7 @@ cargo +nightly miri test
 
 ```dockerfile
 # Multi-stage build
-FROM rust:1.85-alpine AS builder
+FROM rust:1.95-alpine AS builder
 WORKDIR /app
 COPY Cargo.toml Cargo.lock ./
 RUN cargo fetch
@@ -443,7 +443,7 @@ ENTRYPOINT ["/app"]
 ### Scratch Image (ultra-minimal)
 
 ```dockerfile
-FROM rust:1.85-alpine AS builder
+FROM rust:1.95-alpine AS builder
 WORKDIR /app
 COPY . .
 RUN cargo build --release --target x86_64-unknown-linux-musl

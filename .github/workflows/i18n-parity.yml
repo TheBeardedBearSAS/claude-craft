@@ -9,6 +9,7 @@ on:
       - 'docs/guides/**'
       - 'Infra/i18n/**'
       - 'Project/i18n/**'
+      - 'website/**'
       - 'scripts/verify-i18n-parity.sh'
       - '.github/workflows/i18n-parity.yml'
   workflow_dispatch:

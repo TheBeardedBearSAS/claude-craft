@@ -1,8 +1,8 @@
-# Claude Code Compatibility — Claude Craft v8.5.0
+# Claude Code Compatibility — Claude Craft v8.6.0
 
 **Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
 **Recommended Version:** 2.1.118
-**Last Updated:** 2026-05-18
+**Last Updated:** 2026-05-19
 
 ---
 
@@ -123,7 +123,7 @@ Statut d'adoption des 15 principales features Claude Code 2.1.x dans Claude Craf
 | `/hooks` command | 2.1.105+ | **Adopted** | Documenté dans context-management |
 | `/reload-plugins` | 2.1.105+ | **Adopted** | Documenté dans context-management |
 | `/proactive` alias | 2.1.105+ | **Adopted** | Alias pour `/loop` |
-| Push Notifications | 2.1.110+ | **Planned** | Non encore intégré aux agents |
+| Push Notifications | 2.1.110+ | **Adopted** | Intégré — alertes fin de tâche longue (ralph-run) ; version exacte confirmée : 2.1.110 |
 | Forked Subagents | 2.1.117 | **Adopted** | `CLAUDE_CODE_FORK_SUBAGENT=1` activé dans setup-rtk (audit 2026-05-18 QW-06) |
 | Skill `context: fork` | 2.1.105+ | **Adopted** | 15 skills lourds utilisent `context: fork` (cf. rules/12-context-management.md) |
 
@@ -203,6 +203,7 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 |---------|-------------|-------------------|
 | `CLAUDE_CODE_FORK_SUBAGENT=1` | Active les sous-agents avec contextes isolés (forked) | Recommandé via `/common:setup-rtk` |
 | `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` | Bascule les sous-agents vers Sonnet 4.6 (cost saving) | Recommandé via `/common:setup-rtk` |
+| `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` | Désactive la mémoire automatique inter-sessions | Utile si `/memory` est géré manuellement |
 | `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | Charge CLAUDE.md depuis `--add-dir` | Monorepos |
 | `MAX_THINKING_TOKENS=8000` | Limite tokens de reflexion adaptive | Tâches simples → coût réduit |
 | `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Budget caractères slash commands | Commands longues (`/team:audit`) |
@@ -320,3 +321,29 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 **Fichier source :** `.claude/COMPATIBILITY.md` — version de référence du projet
 **Ce fichier :** Template révisé pour le marketplace Anthropic (audit 2026-05-06)
 **Auteur :** The Bearded CTO
+
+---
+
+## Surfaces × Hooks compatibility matrix
+
+> À compléter — données partielles basées sur la documentation officielle disponible. Voir https://code.claude.com/docs/en/hooks pour les mises à jour.
+
+**Légende :** ✅ Supporté | ⚠️ Partiel / expérimental | ❌ Non supporté | ? Inconnu
+
+| Hook | CLI | VS Code Extension | JetBrains | Desktop App | Web (Claude.ai) |
+|------|-----|-------------------|-----------|-------------|-----------------|
+| **PreToolUse** | ✅ | ✅ | ? | ✅ | ❌ |
+| **PostToolUse** | ✅ | ✅ | ? | ✅ | ❌ |
+| **PreCompact** | ✅ | ✅ | ? | ✅ | ❌ |
+| **PostCompact** | ✅ | ✅ | ? | ✅ | ❌ |
+| **SessionStart** | ✅ | ✅ | ? | ✅ | ❌ |
+| **SessionEnd** (Stop) | ✅ | ⚠️ | ? | ✅ | ❌ |
+| **UserPromptSubmit** | ✅ | ⚠️ | ? | ✅ | ❌ |
+| **Stop** | ✅ | ⚠️ | ? | ✅ | ❌ |
+
+**Notes :**
+- **CLI** : surface principale — tous les hooks sont pleinement supportés (v2.1.97+).
+- **VS Code Extension** : les hooks `SessionEnd`, `UserPromptSubmit` et `Stop` sont partiellement supportés selon la version de l'extension ; comportement identique à la CLI depuis les versions récentes.
+- **JetBrains** : plugin Claude Code en beta — support des hooks à confirmer sur la documentation officielle.
+- **Desktop App** : support identique à la CLI pour les hooks core ; hooks expérimentaux peuvent varier.
+- **Web (Claude.ai)** : pas de support hooks — Claude Code hooks sont exclusifs aux environnements disposant d'un shell local.

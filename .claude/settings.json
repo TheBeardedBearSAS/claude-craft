@@ -1,6 +1,7 @@
 {
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6"
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6",
+    "CLAUDE_CODE_FORK_SUBAGENT": "1"
   },
   "hooks": {
     "PreToolUse": [

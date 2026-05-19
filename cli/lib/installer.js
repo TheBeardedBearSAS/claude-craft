@@ -12,6 +12,20 @@ import { printBanner, printSuccess } from './banner.js';
 import { assertSafeTarget } from './path-safety.js';
 
 /**
+ * Detect the preferred language from environment locale variables.
+ * Reads process.env.LANG or process.env.LC_ALL and maps to a supported language code.
+ * @returns {string} A supported language code: 'en' | 'fr' | 'es' | 'de' | 'pt'
+ */
+export function detectLocale() {
+  const raw = (process.env.LC_ALL || process.env.LANG || '').toLowerCase();
+  if (raw.startsWith('fr')) return 'fr';
+  if (raw.startsWith('es')) return 'es';
+  if (raw.startsWith('de')) return 'de';
+  if (raw.startsWith('pt')) return 'pt';
+  return 'en';
+}
+
+/**
  * Execute a shell script synchronously via bash.
  * @param {string} scriptPath - Absolute path to the shell script
  * @param {string[]} args - Arguments to pass to the script
@@ -86,15 +100,20 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
 
     // Step 2: Language
     console.log(`\n${c.cyan}[2/5]${c.reset} ${c.bold}Language${c.reset}`);
+    const langKeys = Object.keys(LANGUAGES);
+    const detectedLang = detectLocale();
+    const detectedIndex = langKeys.indexOf(detectedLang) + 1;
     console.log(
       `  ${Object.entries(LANGUAGES)
         .map(([k, v], i) => `${i + 1}) ${k} - ${v}`)
         .join('\n  ')}`
     );
-    const langInput = await cli.prompt(`  Select (1-5, default: 1): `);
-    const langKeys = Object.keys(LANGUAGES);
+    if (detectedLang !== 'en') {
+      console.log(`  ${c.dim}Auto-detected locale: ${detectedLang}${c.reset}`);
+    }
+    const langInput = await cli.prompt(`  Select (1-5, default: ${detectedIndex}): `);
     const langIndex = parseInt(langInput) - 1;
-    cli.config.language = langKeys[langIndex] || 'en';
+    cli.config.language = langKeys[langIndex] !== undefined ? langKeys[langIndex] : detectedLang;
     console.log(`  ${c.green}Selected: ${LANGUAGES[cli.config.language]}${c.reset}`);
 
     // Step 3: Technologies

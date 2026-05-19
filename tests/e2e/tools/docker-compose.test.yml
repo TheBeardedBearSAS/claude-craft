@@ -15,5 +15,5 @@ services:
       which curl && echo 'curl OK' || { echo 'curl NOT found'; exit 1; };
       cd /workspace;
       echo '=== Running E2E test suites ===';
-      bats tests/e2e/tools/statusline.bats tests/e2e/tools/ralph.bats tests/e2e/tools/install-rtk.bats | tee /artifacts/e2e-report.txt;
+      bats tests/e2e/tools/statusline.bats tests/e2e/tools/ralph.bats tests/e2e/tools/install-rtk.bats tests/e2e/tools/install-scripts.bats tests/e2e/tools/path-safety.bats | tee /artifacts/e2e-report.txt;
       "

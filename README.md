@@ -7,6 +7,7 @@
 [![Claude Code 2.1.97+](https://img.shields.io/badge/Claude%20Code-2.1.97%2B-blue)](https://code.claude.com)
 [![CI](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 26 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
@@ -139,6 +140,8 @@ See [CLI Reference](docs/CLI-REFERENCE.md) for all 125 commands across 26 namesp
 
 ## Installation
 
+> **Platform:** Linux and macOS. Windows is not tested and not officially supported.
+
 ### NPX (Recommended)
 
 ```bash
@@ -173,6 +176,19 @@ make config-install PROJECT=my-monorepo
 ```
 
 See [Installation Guide](docs/INSTALLATION.md) | [Configuration](docs/CONFIGURATION.md)
+
+## Use Claude Craft Without Claude Code
+
+Claude Craft's principles and rules are available as pre-built bundles for other AI surfaces. No installation required — paste and go.
+
+| Surface | Bundle | Doc |
+|---------|--------|-----|
+| ChatGPT / GPT-5 | `bundles/chatgpt/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| Claude.ai (Web) / Claude Projects | `bundles/claude/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| Gemini / Cursor / Windsurf | `bundles/gemini/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| Codex CLI / other agents | `bundles/claude/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+
+See [`bundles/README.md`](bundles/README.md) for platform-specific installation instructions and token budgets.
 
 ### What Gets Installed
 
@@ -264,6 +280,8 @@ Contact `flavien.metivier@gmail.com` to discuss a Pro support agreement. Pricing
 | **Architecture consulting** | Migrating an existing codebase to BMAD v6 | 3–5 days |
 
 → [Contact TheBeardedCTO](mailto:contact@thebeardedcto.dev) to discuss your situation. No commitment.
+
+📅 **Need help getting started?** Book a free 30-minute discovery call: [https://calendly.com/the-bearded-cto](https://calendly.com/the-bearded-cto)
 
 ## Contributing
 

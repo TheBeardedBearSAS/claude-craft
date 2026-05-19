@@ -20,13 +20,13 @@ vi.mock('../../cli/lib/colors.js', () => ({
 import { runDoctor } from '../../cli/lib/doctor.js';
 
 /** Helper: exec mock with all tools present (including yq).
- *  Uses Claude Code 2.1.117 (recommended baseline since v8.3.0) so the
+ *  Uses Claude Code 2.1.118 (recommended baseline since v8.3.0) so the
  *  version check added in Sprint 2 (CVE-2025-59536 hardening) does not
  *  emit [FAIL] in tests that don't expect one.
  */
 function allToolsExec(cmd) {
   if (cmd.includes('npm')) return '10.0.0';
-  if (cmd.includes('claude')) return '2.1.117';
+  if (cmd.includes('claude')) return '2.1.118';
   if (cmd.includes('git')) return 'git version 2.45.0';
   if (cmd.includes('yq')) return 'yq (https://github.com/mikefarah/yq/) version v4.44.1';
   return null;
@@ -111,12 +111,12 @@ describe('runDoctor', () => {
     expect(output).toContain('npm install -g @anthropic-ai/claude-code@latest');
   });
 
-  it('reports Claude Code between min (2.1.97) and recommended (2.1.117) as warning', () => {
+  it('reports Claude Code between min (2.1.97) and recommended (2.1.118) as warning', () => {
     mkdirSync(join(tempDir, '.claude'));
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return '10.0.0';
-      // 2.1.105 is >= min (2.1.97) but < recommended (2.1.117) ; must produce [WARN].
+      // 2.1.105 is >= min (2.1.97) but < recommended (2.1.118) ; must produce [WARN].
       if (cmd.includes('claude')) return '2.1.105';
       if (cmd.includes('git')) return 'git version 2.45.0';
       if (cmd.includes('yq')) return 'yq v4.44.1';
@@ -128,7 +128,7 @@ describe('runDoctor', () => {
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('[WARN]');
     expect(output).toContain('2.1.105');
-    expect(output).toContain('recommended 2.1.117');
+    expect(output).toContain('recommended 2.1.118');
   });
 
   it('reports unparseable Claude Code version output as OK without crashing', () => {
@@ -158,7 +158,7 @@ describe('runDoctor', () => {
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return '10.0.0';
-      if (cmd.includes('claude')) return '2.1.117';
+      if (cmd.includes('claude')) return '2.1.118';
       if (cmd.includes('git')) return null;
       if (cmd.includes('yq')) return 'yq v4.44.1';
       return null;
@@ -177,7 +177,7 @@ describe('runDoctor', () => {
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return null;
-      if (cmd.includes('claude')) return '2.1.117';
+      if (cmd.includes('claude')) return '2.1.118';
       if (cmd.includes('git')) return 'git version 2.45.0';
       if (cmd.includes('yq')) return 'yq v4.44.1';
       return null;
@@ -251,7 +251,7 @@ describe('runDoctor', () => {
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return '10.0.0';
-      if (cmd.includes('claude')) return '2.1.117';
+      if (cmd.includes('claude')) return '2.1.118';
       if (cmd.includes('git')) return 'git version 2.45.0';
       if (cmd.includes('yq')) return null;
       return null;

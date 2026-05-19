@@ -1,12 +1,12 @@
 # Laravel 13 Testing Standards
 
-**Source :** https://laravel.com/docs/13.x/testing | https://pestphp.com/docs/pest4-now-available
+**Source :** https://laravel.com/docs/13.x/testing | https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing
 
 ## Testing Frameworks
 
 ### Pest 4 (Recommended) avec Mutation Testing
 
-**Pest 4** introduit le Mutation Testing natif pour garantir que les tests tuent réellement les bugs (https://pestphp.com/docs/pest4-now-available).
+**Pest 4** introduit le Mutation Testing natif pour garantir que les tests tuent réellement les bugs (https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing).
 
 ```bash
 # Install Pest 4

@@ -182,9 +182,23 @@ describe('interactiveInstall', () => {
     expect(cli.config.language).toBe('fr');
   });
 
-  it('defaults to en for invalid language index', async () => {
-    const cli = makeCli(['', '99', '1', 'n', 'Y', 'n', 'y']);
-    await interactiveInstall(cli, { CLI_ROOT: '/fake/root', VERSION: '7.0.0' });
-    expect(cli.config.language).toBe('en');
+  it('defaults to detected locale for invalid language index', async () => {
+    // When the user enters an invalid index (99), the wizard falls back to the
+    // auto-detected locale from process.env.LANG / LC_ALL.
+    // In CI / dev environments LANG may vary, so we force it to a known value.
+    const savedLang = process.env.LANG;
+    const savedLcAll = process.env.LC_ALL;
+    process.env.LANG = 'en_US.UTF-8';
+    delete process.env.LC_ALL;
+    try {
+      const cli = makeCli(['', '99', '1', 'n', 'Y', 'n', 'y']);
+      await interactiveInstall(cli, { CLI_ROOT: '/fake/root', VERSION: '7.0.0' });
+      expect(cli.config.language).toBe('en');
+    } finally {
+      if (savedLang === undefined) delete process.env.LANG;
+      else process.env.LANG = savedLang;
+      if (savedLcAll === undefined) delete process.env.LC_ALL;
+      else process.env.LC_ALL = savedLcAll;
+    }
   });
 });

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { mkdtemp, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { parseAndValidate } from '../../cli/kanban/server/services/frontmatter.js';
+import { parseFile, parseString, parseAndValidate } from '../../cli/kanban/server/services/frontmatter.js';
 import { StoryFrontmatterSchema } from '../../cli/kanban/shared/schemas.js';
 
 async function makeTmpDir() {
@@ -51,5 +51,54 @@ describe('frontmatter.parseAndValidate — ok:false paths', () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
+  });
+
+  it('returns ok:false with raw data exposed when story_points has wrong type (string au lieu de number)', async () => {
+    // Couvre la branche : safeParse échec + retour { ok: false, raw: data }
+    const dir = await makeTmpDir();
+    try {
+      const fp = path.join(dir, 'bad-type.md');
+      // story_points doit être un number — on passe une string
+      await writeFile(fp, '---\nid: US-042\ntitle: Type mismatch\nstory_points: "not-a-number"\n---\nbody');
+      const r = await parseAndValidate(fp, StoryFrontmatterSchema);
+      expect(r.ok).toBe(false);
+      expect(Array.isArray(r.errors)).toBe(true);
+      expect(r.errors.some((e) => e.path.includes('story_points'))).toBe(true);
+      // raw doit exposer la donnée brute parsée
+      expect(r.raw).toBeDefined();
+      expect(r.raw.id).toBe('US-042');
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("expose le body même en cas d'échec de validation", async () => {
+    // Couvre la branche body retourné dans le chemin ok:false
+    const dir = await makeTmpDir();
+    try {
+      const fp = path.join(dir, 'no-title-with-body.md');
+      await writeFile(fp, '---\nid: US-099\n---\n# Mon contenu\n\nTexte important.');
+      const r = await parseAndValidate(fp, StoryFrontmatterSchema);
+      expect(r.ok).toBe(false);
+      expect(typeof r.body).toBe('string');
+      expect(r.body).toContain('Mon contenu');
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("throws si le fichier n'existe pas (branche readFile ENOENT)", async () => {
+    // Couvre la branche d'erreur de parseFile quand le fichier est absent
+    const nonExistentPath = path.join(tmpdir(), 'kb-fm-err-does-not-exist', 'ghost.md');
+    await expect(parseAndValidate(nonExistentPath, StoryFrontmatterSchema)).rejects.toThrow();
+  });
+
+  it('parseString retourne data vide et body complet quand frontmatter absent', () => {
+    // Couvre le chemin "no frontmatter" de parseString — distinct du test existant car vérifie data === {}
+    const raw = '# Titre sans frontmatter\n\nContenu.';
+    const { data, body, raw: rawOut } = parseString(raw);
+    expect(data).toEqual({});
+    expect(body).toContain('Titre sans frontmatter');
+    expect(rawOut).toBe(raw);
   });
 });

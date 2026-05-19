@@ -6,10 +6,10 @@ Welcome to the Claude Craft community! We're building the most comprehensive AI-
 
 ## Community Channels
 
-### Discord (Real-time Chat)
+### Discord (Real-time Chat) *(planifié Q3 2026)*
 Join our Discord server for real-time discussions, help, and collaboration.
 
-**Link**: [https://discord.gg/claude-craft](https://discord.gg/claude-craft)
+**Link**: [https://discord.gg/claude-craft](https://discord.gg/claude-craft) *(URL non encore active — serveur en cours de création)*
 
 - Get help with installation and setup
 - Share your projects and experiences
@@ -28,12 +28,12 @@ For longer-form discussions, feature requests, and Q&A.
 - Discuss architectural decisions
 - Community polls and feedback
 
-### Twitter/X (Updates & Announcements)
+### Twitter/X (Updates & Announcements) *(planifié Q3 2026)*
 Follow us for the latest updates, releases, and community highlights.
 
-**Handle**: [@claudecraft](https://twitter.com/claudecraft) *(coming soon)*
+**Handle**: [@claudecraft](https://twitter.com/claudecraft) *(compte non encore créé — planifié Q3 2026)*
 
-### Newsletter (Monthly Updates)
+### Newsletter (Monthly Updates) *(planifié Q3 2026)*
 Subscribe to receive monthly updates, tutorials, and community highlights.
 
 **Subscribe**: *Coming soon*
@@ -156,9 +156,9 @@ Want to help translate? Check our [translation issues](https://github.com/TheBea
 
 ## Stay Connected
 
-- **Discord**: [https://discord.gg/claude-craft](https://discord.gg/claude-craft)
+- **Discord**: [https://discord.gg/claude-craft](https://discord.gg/claude-craft) *(planifié Q3 2026)*
 - **GitHub**: [https://github.com/TheBeardedBearSAS/claude-craft](https://github.com/TheBeardedBearSAS/claude-craft)
-- **Twitter**: [@claudecraft](https://twitter.com/claudecraft) *(coming soon)*
+- **Twitter**: [@claudecraft](https://twitter.com/claudecraft) *(planifié Q3 2026)*
 - **Website**: *Coming soon*
 
 ---

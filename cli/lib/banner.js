@@ -3,14 +3,19 @@
  * @module cli/lib/banner
  */
 
-import c from './colors.js';
+import c, { colorEnabled } from './colors.js';
 import { success as successSymbol } from './symbols.js';
 
 /**
  * Print the ASCII art banner with version information.
+ * Falls back to plain text when NO_COLOR is set or stdout is not a TTY.
  * @param {string} VERSION - Current package version string
  */
 export function printBanner(VERSION) {
+  if (!colorEnabled) {
+    console.log(`Claude Craft v${VERSION}`);
+    return;
+  }
   console.log(`
 ${c.cyan}${c.bold}╔═══════════════════════════════════════════════════════════════╗${c.reset}
 ${c.cyan}${c.bold}║${c.reset}                                                               ${c.cyan}${c.bold}║${c.reset}

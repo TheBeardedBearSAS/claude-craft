@@ -11,6 +11,9 @@ LICENSE-ENTERPRISE.md
 docs/enterprise/
 docs/dual-license/
 
+# Internal ops files (drafts, research, reports — not for npm consumers)
+docs/internal/
+
 # Test files
 tests/
 *.test.js

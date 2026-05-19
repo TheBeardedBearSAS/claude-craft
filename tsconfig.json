@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["cli/**/*.js", "scripts/**/*.mjs", "tests/**/*.mjs"],
+  "exclude": ["node_modules", "dist", ".claude", "Dev", "docs", "website"]
+}

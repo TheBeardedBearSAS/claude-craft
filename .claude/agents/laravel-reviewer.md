@@ -743,7 +743,7 @@ class OrderController extends Controller
 |-------|-------|
 | **PHPStan Level 10** | Analyse statique stricte (https://phpstan.org/blog/phpstan-2-0-is-here) |
 | **Laravel Pint** | Formatage PSR-12 / Laravel |
-| **Pest 4 + Mutation Testing** | Tests unitaires, feature, mutation (https://pestphp.com/docs/pest3-now-available) |
+| **Pest 4 + Mutation Testing** | Tests unitaires, feature, mutation (https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing) |
 | **Laravel Telescope** | Debug en developpement |
 | **Laravel Debugbar** | Detection N+1, queries lentes |
 | **Composer Audit** | Vulnerabilites des dependances |

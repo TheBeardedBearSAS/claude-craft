@@ -2,6 +2,7 @@
 name: socratic-brainstorm
 description: Brainstorming socratique AVANT de coder - clarifier le problème par questions ciblées plutôt que sauter à la solution. Use when requirements are ambiguous or before starting a non-trivial feature.
 context: fork
+disable-model-invocation: true
 triggers:
   keywords: ["brainstorm", "ideate", "clarify", "requirements", "unclear", "options", "approach"]
 auto_suggest: true

@@ -21,7 +21,18 @@ ERRORS=0
 SIZE_THRESHOLD="${I18N_SIZE_THRESHOLD:-0.80}"
 # Set STRICT_SIZE=1 to fail on size gaps (default: warn only)
 STRICT_SIZE="${STRICT_SIZE:-0}"
+# Hard blocking threshold: files > BLOCK_SIZE_BYTES with ratio < BLOCK_RATIO trigger exit 1
+# regardless of SIZE_THRESHOLD, unless I18N_PARITY_STRICT=0 is set.
+BLOCK_SIZE_BYTES="${I18N_BLOCK_SIZE_BYTES:-5000}"
+BLOCK_RATIO="${I18N_BLOCK_RATIO:-0.40}"
+# Set I18N_PARITY_STRICT=1 to enable hard blocking (default: 0, opt-in until Phase 4)
+# Rationale: 164 i18n files inherited from pre-v8.6.0 are below the 0.40 ratio.
+# Once the i18n cleanup session (P0 #26) lands, flip default to 1.
+I18N_PARITY_STRICT="${I18N_PARITY_STRICT:-0}"
 SIZE_WARNINGS=0
+BLOCK_FAILURES=()
+# CSV output file for gap report
+GAP_CSV="$ROOT_DIR/audit/phases/i18n-gap.csv"
 
 C_RESET='\033[0m'
 C_RED='\033[0;31m'
@@ -113,9 +124,17 @@ check_parity "docs/guides" "Documentation guides"
 [[ -d "$ROOT_DIR/Project/i18n" ]] && check_parity "Project/i18n" "Project i18n files"
 
 # =============================================================================
-# Size parity check (advisory unless STRICT_SIZE=1)
+# Size parity check (advisory unless STRICT_SIZE=1 or hard blocking threshold hit)
+# Hard blocking: file > BLOCK_SIZE_BYTES and ratio < BLOCK_RATIO triggers exit 1
+# unless I18N_PARITY_STRICT=0 (transitional PRs).
 # =============================================================================
-echo -e "\n${C_BOLD}Size parity check (threshold: ${SIZE_THRESHOLD}, strict: ${STRICT_SIZE})${C_RESET}"
+echo -e "\n${C_BOLD}Size parity check (threshold: ${SIZE_THRESHOLD}, strict: ${STRICT_SIZE}, block_ratio: ${BLOCK_RATIO})${C_RESET}"
+[[ "$I18N_PARITY_STRICT" == "0" ]] && print_warn "I18N_PARITY_STRICT=0 — hard blocking disabled (transitional mode)"
+
+# Ensure CSV output directory exists
+mkdir -p "$(dirname "$GAP_CSV")"
+# Write CSV header
+echo "file,locale,size_en,size_locale,ratio" > "$GAP_CSV"
 
 check_size_parity() {
     local base="$ROOT_DIR/$1"
@@ -136,9 +155,19 @@ check_size_parity() {
             t_size=$(wc -c < "$target" 2>/dev/null || echo 0)
             local ratio
             ratio=$(awk -v a="$t_size" -v b="$en_size" 'BEGIN{printf "%.2f", a/b}')
+
+            # Write all below-threshold entries to CSV (advisory threshold)
             if awk "BEGIN{exit !($ratio < $SIZE_THRESHOLD)}"; then
                 print_warn "$label: $lang/$rel ($ratio vs ref, threshold $SIZE_THRESHOLD)"
                 SIZE_WARNINGS=$((SIZE_WARNINGS + 1))
+                # Append to gap CSV (escape commas in path with quotes)
+                echo "\"$1/$rel\",$lang,$en_size,$t_size,$ratio" >> "$GAP_CSV"
+
+                # Hard blocking: large file with critically low ratio
+                if [[ "$en_size" -gt "$BLOCK_SIZE_BYTES" ]] && awk "BEGIN{exit !($ratio < $BLOCK_RATIO)}"; then
+                    print_fail "BLOCKING: $lang/$rel — ratio $ratio < $BLOCK_RATIO (file ${en_size}B > ${BLOCK_SIZE_BYTES}B)"
+                    BLOCK_FAILURES+=("$lang/$1/$rel (ratio=$ratio)")
+                fi
             fi
         done
     done < <(find "$base/$REFERENCE_LANG" -type f \( -name '*.md' -o -name '*.sh' \) 2>/dev/null)
@@ -149,11 +178,28 @@ check_size_parity "docs/guides" "docs"
 [[ -d "$ROOT_DIR/Infra/i18n" ]] && check_size_parity "Infra/i18n" "Infra"
 [[ -d "$ROOT_DIR/Project/i18n" ]] && check_size_parity "Project/i18n" "Project"
 
+# Report CSV location
+if [[ -s "$GAP_CSV" ]] && [[ "$(wc -l < "$GAP_CSV")" -gt 1 ]]; then
+    print_warn "Gap report written to: $GAP_CSV"
+fi
+
 if [[ "$SIZE_WARNINGS" -gt 0 ]]; then
     print_warn "$SIZE_WARNINGS file(s) below ${SIZE_THRESHOLD} size ratio"
     if [[ "$STRICT_SIZE" == "1" ]]; then
         ERRORS=$((ERRORS + SIZE_WARNINGS))
     fi
+fi
+
+# Hard blocking check (activated unless I18N_PARITY_STRICT=0)
+if [[ "${#BLOCK_FAILURES[@]}" -gt 0 ]] && [[ "$I18N_PARITY_STRICT" != "0" ]]; then
+    echo ""
+    print_fail "${C_BOLD}Hard blocking threshold exceeded (ratio < ${BLOCK_RATIO} on files > ${BLOCK_SIZE_BYTES}B):${C_RESET}"
+    for f in "${BLOCK_FAILURES[@]}"; do
+        echo "  - $f"
+    done
+    echo ""
+    print_fail "Set I18N_PARITY_STRICT=0 to allow this PR transitionally."
+    ERRORS=$((ERRORS + ${#BLOCK_FAILURES[@]}))
 fi
 
 echo ""

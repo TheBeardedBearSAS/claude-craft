@@ -496,6 +496,24 @@ Before submitting:
 
 7. Update documentation
 
+## Naming Conventions
+
+The repository uses a two-tier directory naming convention that communicates the role of each top-level directory:
+
+### `PascalCase/` — Installable / Distributed Content
+
+Directories written in PascalCase contain content that is **copied into user projects** during installation. They form the distributable payload of Claude Craft.
+
+Examples: `Dev/`, `Infra/`, `Project/`
+
+### `lowercase/` — Repo Tooling
+
+Directories written in lowercase contain **tooling that belongs to the repository itself** and is never installed in user projects.
+
+Examples: `cli/`, `scripts/`, `tests/`, `docs/`, `website/`
+
+> When adding a new top-level directory, choose `PascalCase` if it will be distributed to end users, or `lowercase` if it is internal tooling.
+
 ## Pull Request Guidelines
 
 - Keep PRs focused on a single change

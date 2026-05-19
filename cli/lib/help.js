@@ -28,6 +28,12 @@ const NAMESPACES = [
   { prefix: 'python', desc: 'Python: endpoints, async, typing, FastAPI' },
   { prefix: 'reactnative', desc: 'React Native: screens, navigation, native modules' },
   { prefix: 'php', desc: 'PHP: entities, value objects, use cases, Clean Architecture' },
+  { prefix: 'kubernetes', desc: 'Kubernetes: manifests, helm, ingress, scaling, monitoring' },
+  { prefix: 'ansible', desc: 'Ansible: playbooks, roles, inventory, automation' },
+  { prefix: 'hcloud', desc: 'Hetzner Cloud: servers, networks, firewalls, load balancers' },
+  { prefix: 'pgbouncer', desc: 'PgBouncer: connection pooling, configuration, monitoring' },
+  { prefix: 'frankenphp', desc: 'FrankenPHP: server setup, workers, TLS, performance' },
+  { prefix: 'opentofu', desc: 'OpenTofu: infrastructure-as-code, modules, state management' },
 ];
 
 /**
