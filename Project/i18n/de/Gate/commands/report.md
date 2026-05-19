@@ -111,3 +111,124 @@ Befehle:
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```
+
+## Schritt-für-Schritt-Validierungen
+
+### PRD-Validierung
+
+```
+Datei: docs/prd.md
+Schwelle: 80%
+Kriterien:
+  ✅ Problemstellung (15%)
+  ✅ Zielbenutzer (15%)
+  ✅ Ziele (15%)
+  ✅ Erfolgsmetriken (15%)
+  ✅ Umfang/Grenzen (10%)
+  ✅ User-Stories-Überblick (10%)
+  ✅ Annahmen (10%)
+  ⚠️ Risiken (10%) - Teilweise
+```
+
+### Tech-Spec-Validierung
+
+```
+Datei: docs/tech-spec.md
+Schwelle: 90%
+Kriterien:
+  ✅ Architekturübersicht (12%)
+  ✅ Architekturdiagramm (10%)
+  ✅ Komponenten (12%)
+  ✅ Datenmodell (10%)
+  ✅ API-Verträge (10%)
+  ✅ Sicherheit (12%)
+  ✅ Performance (8%)
+  ⚠️ Fehlerbehandlung (8%) - Basis
+  ✅ Teststrategie (10%)
+  ✅ Deployment (8%)
+```
+
+### Maßnahmen nach Priorität
+
+```
+Priorität 1 (Blockierend): Keine
+Priorität 2 (Sollte behoben werden):
+  1. US-002: Story-Point-Schätzung hinzufügen
+  2. US-008: In kleinere Stories aufteilen
+Priorität 3 (Wünschenswert):
+  1. Risikomitigationen zum PRD hinzufügen
+  2. Fehlerbehandlung in Tech Spec verbessern
+```
+
+## Gate-Konfiguration
+
+Die Gates werden in `.bmad/gates/` konfiguriert:
+- `prd-gate.yaml`
+- `techspec-gate.yaml`
+- `backlog-gate.yaml`
+- `story-gate.yaml`
+- `sprint-ready-gate.yaml`
+
+## Integration
+
+Der Bericht kann:
+1. Bei Bedarf über diesen Befehl generiert werden
+2. In die Sprint-Retrospektive einbezogen werden
+3. Zur Überwachung der Projektgesundheit verwendet werden
+4. Für Stakeholder-Berichte exportiert werden
+
+## Story-DoD-Gate-Details
+
+```
+US-010: Benutzerregistrierung
+  Status: in-progress | DoD-Score: 45%
+  ❌ Aufgaben: 2/5 | ❌ Tests: rote Phase
+  ⚠️ AK: 1/3     | ❌ Review: nicht begonnen
+
+US-011: Benutzeranmeldung
+  Status: in-progress | DoD-Score: 60%
+  ⚠️ Aufgaben: 3/4 | ✅ Tests: grüne Phase
+  ⚠️ AK: 2/3     | ❌ Review: nicht begonnen
+
+US-012: Profilseite
+  Status: review | DoD-Score: 85%
+  ✅ Aufgaben: 4/4 | ✅ Tests: Refactoring-Phase
+  ✅ AK: 3/3     | ⚠️ Review: Genehmigung ausstehend
+
+US-013: Passwort zurücksetzen
+  Status: done | DoD-Score: 100%
+  ✅ Alle Kriterien erfüllt
+```
+## Bericht pro Gate — Vollständige Details
+
+### Backlog-Stories mit Problemen
+
+| Story | INVEST | Problem | Maßnahme |
+|-------|--------|---------|----------|
+| US-002 | 5/6 | Keine Story Points | Schätzung hinzufügen |
+| US-008 | 5/6 | > 8 Punkte (zu groß) | Aufteilen |
+
+### Sprint-Ready-Status — Details
+
+| Kriterium | Status | Notizen |
+|-----------|--------|---------|
+| Sprint-Metadaten | ✅ | sprint-3 konfiguriert |
+| Sprint-Ziel | ✅ | Benutzerverwaltung |
+| Bereite Stories | ✅ | 5 Stories ready-for-dev |
+| Geschätzte Stories | ✅ | Alle geschätzt |
+| Kapazität (84%) | ✅ | 42/50 verfügbare Punkte |
+| Abhängigkeiten | ✅ | Keine ungelösten |
+
+### Monitoring und Alarme
+
+Das Quality-Gates-System löst Alarme aus, wenn:
+- Ein kritisches Gate fehlschlägt (PRD < 80%, Tech Spec < 90%)
+- Eine Story die geschätzte Zeit ohne Fortschritt überschreitet
+- Zirkuläre Abhängigkeiten zwischen Stories erkannt werden
+- Die Sprint-Kapazität 90% überschreitet
+
+**Empfohlene Häufigkeit:**
+- PRD/TechSpec-Gates: Einmal zu Beginn des Sprints
+- Backlog-Gate: Vor jeder Refinement-Sitzung
+- Sprint-Ready-Gate: 48h vor Sprint-Beginn
+- Story-DoD-Gates: Täglich für laufende Stories

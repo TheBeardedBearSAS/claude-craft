@@ -42,7 +42,13 @@ mypy app/ --html-report type-coverage-html/
 mypy app/ --strict --warn-return-any
 ```
 
-### Schritt 3-5: [Weitere Analyse...]
+### Schritt 3: Coverage-Analyse-Skript
+
+[Python-Skript zur Analyse der Typ-Coverage mittels AST]
+
+### Schritt 4: Typ-Patterns
+
+[Patterns anzeigen: TypeAlias, Generics, Protocols, Callable, Overload, etc.]
 
 ### Schritt 5: Bericht generieren
 
@@ -55,10 +61,63 @@ mypy app/ --strict --warn-return-any
 📈 GLOBALE ZUSAMMENFASSUNG
 ──────────────────────────────────────────────────────────────
 
-| Metrik | Wert | Schwelle | Status |
-|--------|------|----------|--------|
-| Globale Coverage | 78.5% | 80% | ⚠️ |
-| Gesamt-Funktionen | 245 | - | - |
+| Metrik              | Wert   | Schwelle | Status |
+|---------------------|--------|----------|--------|
+| Globale Coverage    | 78.5%  | 80%      | ⚠️     |
+| Gesamt-Funktionen   | 245    | -        | -      |
+| Vollständig typisiert | 192  | -        | -      |
+| Teilweise typisiert | 38     | -        | -      |
+| Nicht typisiert     | 15     | -        | -      |
 
-[...]
+──────────────────────────────────────────────────────────────
+📁 COVERAGE NACH MODUL
+──────────────────────────────────────────────────────────────
+
+| Modul           | Funktionen | Typisiert | Coverage  |
+|-----------------|------------|-----------|-----------|
+| app/api/        | 45         | 45        | 100% ✅   |
+| app/core/       | 32         | 30        | 93.8% ✅  |
+| app/services/   | 58         | 52        | 89.7% ✅  |
+| app/crud/       | 40         | 35        | 87.5% ✅  |
+| app/models/     | 28         | 20        | 71.4% ⚠️  |
+| app/utils/      | 42         | 10        | 23.8% ❌  |
+
+──────────────────────────────────────────────────────────────
+❌ NICHT TYPISIERTE FUNKTIONEN
+──────────────────────────────────────────────────────────────
+
+### app/utils/helpers.py
+
+| Zeile | Funktion           | Fehlend                    |
+|-------|--------------------|-----------------------------|
+| 15    | `parse_date`       | Rückgabetyp                 |
+| 28    | `format_currency`  | Parameter: amount, Rückgabe |
+| 45    | `slugify`          | Rückgabetyp                 |
+| 67    | `calculate_hash`   | Parameter: data             |
+
+──────────────────────────────────────────────────────────────
+🔧 VORGESCHLAGENE KORREKTUREN
+──────────────────────────────────────────────────────────────
+
+### app/utils/helpers.py:15
+
+```python
+# Vorher
+def parse_date(date_str):
+    ...
+
+# Nachher
+def parse_date(date_str: str) -> datetime | None:
+    ...
+```
+
+──────────────────────────────────────────────────────────────
+🎯 PRIORITÄTEN
+──────────────────────────────────────────────────────────────
+
+1. [ ] app/utils/ typisieren (23.8% → 80%+)
+2. [ ] app/models/ vervollständigen (71.4% → 90%+)
+3. [ ] 23 MyPy-Fehler beheben
+4. [ ] MyPy-Plugin für SQLAlchemy hinzufügen
+5. [ ] Pre-commit Hook für MyPy konfigurieren
 ```

@@ -180,6 +180,62 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
 }
 
 /**
+ * Zero-prompt automatic installation. Auto-detects stack and locale, applies sensible defaults,
+ * then runs the installation immediately. Designed to bring TTFV under 10 minutes for new users.
+ * @param {import('../index.js').ClaudeCraftCLI} cli - CLI instance
+ * @param {Object} ctx - Context object
+ * @param {string} ctx.CLI_ROOT - Absolute path to the CLI package root
+ * @param {string} ctx.VERSION - Current package version
+ * @returns {Promise<void>}
+ */
+export async function autoInstall(cli, { CLI_ROOT, VERSION }) {
+  printBanner(VERSION);
+  console.log(`${c.bold}Claude-Craft Auto Installer${c.reset} ${c.dim}(--auto mode)${c.reset}\n`);
+
+  // Target path: already resolved in cli.config.targetPath (defaults to cwd)
+  try {
+    cli.config.targetPath = assertSafeTarget(cli.config.targetPath);
+  } catch (err) {
+    console.error(`${c.red}${err.message}${c.reset}`);
+    process.exit(1);
+  }
+  if (!fs.existsSync(cli.config.targetPath)) {
+    fs.mkdirSync(cli.config.targetPath, { recursive: true });
+    console.log(`  ${c.green}Created target: ${cli.config.targetPath}${c.reset}`);
+  }
+
+  // Language: respect --lang if provided, else detect from locale
+  if (!cli.config.language || cli.config.language === 'en') {
+    cli.config.language = detectLocale();
+  }
+
+  // Technologies: respect --tech if provided, else auto-detect from project files
+  if (!cli.config.technologies || cli.config.technologies.length === 0) {
+    const detected = cli.detectProject(cli.config.targetPath);
+    cli.config.technologies = detected.suggestedTechs;
+    if (detected.hasDockerfile) {
+      cli.config.includeInfra = true;
+    }
+  }
+
+  // Defaults: include project commands; skip RTK unless asked
+  if (cli.config.includeProject === undefined) cli.config.includeProject = true;
+  if (cli.config.includeRtk === undefined) cli.config.includeRtk = false;
+  if (cli.config.includeInfra === undefined) cli.config.includeInfra = false;
+
+  console.log(`  ${c.cyan}Target${c.reset}       ${cli.config.targetPath}`);
+  console.log(`  ${c.cyan}Language${c.reset}     ${LANGUAGES[cli.config.language]}`);
+  console.log(
+    `  ${c.cyan}Technologies${c.reset} ${cli.config.technologies.length > 0 ? cli.config.technologies.join(', ') : 'common only'}`
+  );
+  console.log(`  ${c.cyan}Infra${c.reset}        ${cli.config.includeInfra ? 'yes' : 'no'}`);
+  console.log(`  ${c.cyan}Project${c.reset}      ${cli.config.includeProject ? 'yes' : 'no'}`);
+  console.log(`  ${c.cyan}RTK${c.reset}          ${cli.config.includeRtk ? 'yes' : 'no'}\n`);
+
+  await runInstallation(cli, { CLI_ROOT });
+}
+
+/**
  * Execute the installation scripts based on the current configuration.
  * Installs common rules, technology-specific rules, infrastructure, and project commands.
  * @param {import('../index.js').ClaudeCraftCLI} cli - CLI instance

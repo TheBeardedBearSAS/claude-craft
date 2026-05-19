@@ -1,14 +1,88 @@
 ---
-description: Comando: Verificar Arquitetura
+description: Verificar Arquitetura React Native
+argument-hint: [arguments]
 ---
 
-# Comando: Verificar Arquitetura
+# Verificar Arquitetura React Native
 
-Avalie a arquitetura da aplicação React Native quanto a estrutura, organização e aderência aos princípios.
+## Argumentos
+
+$ARGUMENTS
+
+## Missão
+
+Você é um especialista em auditoria de arquitetura React Native. Sua missão é analisar a conformidade arquitetural do projeto segundo os padrões definidos em `.claude/rules/02-architecture.md`.
+
+### Etapa 1: Explorar a estrutura
+
+1. Analisar a estrutura raiz do projeto
+2. Identificar o tipo de arquitetura (Expo, React Native CLI, Expo Router)
+3. Localizar as pastas principais: `src/`, `app/`, `components/`, etc.
+
+### Etapa 2: Verificar a conformidade arquitetural
+
+Realize as seguintes verificações e anote cada resultado:
+
+#### 📁 Estrutura Baseada em Features (8 pontos)
+
+- [ ] **(2 pts)** Estrutura por features/domínios (ex.: `src/features/auth/`, `src/features/profile/`)
+- [ ] **(2 pts)** Cada feature contém seus próprios componentes, hooks e lógica
+- [ ] **(2 pts)** Separação clara entre `features/` (negócio) e `shared/` (comum)
+- [ ] **(2 pts)** Organização consistente em todas as features
+
+#### 🗂️ Organização de Pastas (5 pontos)
+
+- [ ] **(1 pt)** `components/` para componentes reutilizáveis
+- [ ] **(1 pt)** `hooks/` para hooks customizados
+- [ ] **(1 pt)** `services/` ou `api/` para chamadas de rede
+- [ ] **(1 pt)** `utils/` ou `helpers/` para funções utilitárias
+- [ ] **(1 pt)** `types/` ou `models/` para definições TypeScript
+
+#### 🚦 Expo Router / Navegação (4 pontos)
+
+- [ ] **(1 pt)** Pasta `app/` na raiz com estrutura de roteamento por arquivo
+- [ ] **(1 pt)** Layouts definidos (`_layout.tsx`) para navegação
+- [ ] **(1 pt)** Organização de rotas por grupos `(tabs)`, `(stack)`, etc.
+- [ ] **(1 pt)** Tipagem dos parâmetros de navegação
+
+#### 🔌 Arquitetura em Camadas (4 pontos)
+
+- [ ] **(1 pt)** Separação apresentação / lógica (componentes UI vs containers)
+- [ ] **(1 pt)** Camada de serviço para acesso a dados
+- [ ] **(1 pt)** Hooks customizados para lógica reutilizável
+- [ ] **(1 pt)** Gerenciamento de estado centralizado (Context, Zustand, Redux, etc.)
+
+#### 🎨 Organização de Assets (4 pontos)
+
+- [ ] **(1 pt)** Pasta `assets/` estruturada (imagens, fontes, ícones)
+- [ ] **(1 pt)** Constantes usadas para caminhos de assets
+- [ ] **(1 pt)** Otimização de imagens (WebP, dimensões adequadas)
+- [ ] **(1 pt)** SVG via `react-native-svg` ou equivalente
+
+### Etapa 3: Calcular o score
+
+```
+┌──────────────────────────────────────┬─────────┬────────┐
+│ Critério                             │ Score   │ Status │
+├──────────────────────────────────────┼─────────┼────────┤
+│ Estrutura Baseada em Features        │ XX/8    │ ✅/⚠️/❌│
+│ Organização de Pastas                │ XX/5    │ ✅/⚠️/❌│
+│ Expo Router / Navegação              │ XX/4    │ ✅/⚠️/❌│
+│ Arquitetura em Camadas               │ XX/4    │ ✅/⚠️/❌│
+│ Organização de Assets                │ XX/4    │ ✅/⚠️/❌│
+├──────────────────────────────────────┼─────────┼────────┤
+│ TOTAL ARQUITETURA                    │ XX/25   │ ✅/⚠️/❌│
+└──────────────────────────────────────┴─────────┴────────┘
+```
+
+**Legenda:**
+- ✅ Excelente (≥ 20/25)
+- ⚠️ Atenção (15-19/25)
+- ❌ Crítico (< 15/25)
 
 ---
 
-## Objetivo
+## Objetivo (Análise Detalhada)
 
 Este comando analisa a arquitetura da sua aplicação React Native e fornece recomendações para melhorar organização, manutenibilidade e escalabilidade.
 

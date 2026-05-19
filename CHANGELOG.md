@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.7.0] - 2026-05-19
+
+Audit 2026-05-18 comprehensive — Phase 4 (P1/M effort cleanup parallèle). MINOR release. Backwards compatible.
+
+### Added
+
+- **`fast-check@4.8.0` devDependency + 3 fichiers property-based tests** (CC-REL-18) : `tests/property/path-safety.property.test.mjs` (5 properties), `tests/property/sprint-cache.property.test.mjs` (4 properties), `tests/property/detect-project.property.test.mjs` (2 properties). 12 nouveaux tests, 0 régression. Première propriété a révélé un invariant implicite sur `assertSafeTarget('/')` (intentionnel).
+- **`install --auto`** (CC-STRAT-08) : zero-prompt installer. Auto-détecte stack via `detectProject`, locale via `LANG`/`LC_ALL`, applique defaults sensibles. Réduit le TTFV de 47 min (interactif) à < 2 min. Implémenté dans `cli/lib/installer.js::autoInstall()` + 7 tests dans `tests/cli/installer-auto.test.mjs`.
+- **`install --from=<url>`** (CC-FEAT-16) : sync de config team depuis un endpoint JSON. Schéma v1 minimal (`language`, `technologies[]`, `includeInfra/Project/Rtk`). Validation stricte URL (https obligatoire sauf localhost), schéma versionné, fetch injectable pour tests. Nouveau module `cli/lib/install-from-url.js` + 15 tests dans `tests/cli/install-from-url.test.mjs`.
+- **`skill add|list|remove`** (CC-FEAT-15) : MVP marketplace community skills via npm. Convention `claude-craft-skill-*` (scoped OK), copie `SKILL.md` + `skills/*.md` vers `.claude/skills/community/<name>/`. Pas de registry centralisé (trust = npm trust, pin versions recommandé). Nouveau module `cli/lib/skill.js` + 19 tests dans `tests/cli/skill.test.mjs`.
+- **Coverage tests `cli/index.js`** (CC-REL-03) : 23 nouveaux tests dans `tests/cli/index.test.mjs` couvrant tous les cases du switch (install/check/list/doctor/update/ralph/kanban/help/--help/-h/default), les sous-commandes `skill`, et les branches `install --auto`/`--from`/non-interactif/interactif. Branches `cli/index.js` passent de **65.85% → 96.77%** (cible 85% largement dépassée), global CLI 85.45% → 87.87%. 2 branches non couvrables documentées (`case '--help'` dead code, `.catch()` dans `isDirectRun`).
+
+### Changed
+
+- **`cli/lib/help.js`** : 3 nouvelles commandes documentées (`install --auto`, `install --from`, `skill add|list|remove`), 3 nouveaux flags (`--auto`, `--from=URL`, `--target=PATH`), 3 nouveaux examples.
+- **`cli/index.js`** : nouveau case `skill` (sous-commandes add/list/remove avec parsing positionnel), nouveaux branchements `install --from` et `install --auto` en tête du switch install. Imports élargis sans casser l'API existante.
+
+### Tests
+
+- **930 tests Vitest verts** (+76 vs Phase 3 / v8.6.0)
+  - +12 property-based (fast-check)
+  - +7 autoInstall
+  - +15 install-from-url
+  - +19 skill (validate + add + list + remove)
+  - +23 cli/index.js coverage (CC-REL-03 : 65.85% → **96.77%** branches sur `cli/index.js`, global 87.87%)
+- **`npm run lint`** : 0 erreurs ESLint sur `cli/`.
+- **`npm run lint:includes`** : 652 fichiers scannés, 0 @-include cassé.
+- **`npm run docs:check`** : AGENTS-FULL-REFERENCE et COMMANDS-FULL-REFERENCE up-to-date.
+
+### Volontairement exclu (à arbitrer / backlog v8.8)
+
+- ARCH-08 `commander` migration : risque CLI breaking → design doc requise
+- CC-REL-14 rollback `update.js` : opération destructive → design doc requise
+- P0 #22 telemetry RGPD : hors auto (consentement utilisateur + 5 sprints)
+- P0 #28 KPI baselines : décision produit
+- D-1..D-7 décisions stratégiques : input user requis
+
 ## [8.6.0] - 2026-05-19
 
 Audit 2026-05-18 comprehensive — Phase 3 (P1 cleanup parallèle multi-vagues). MINOR release. Backwards compatible.

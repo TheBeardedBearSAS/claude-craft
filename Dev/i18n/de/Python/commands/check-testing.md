@@ -41,7 +41,74 @@ Test-Coverage messen:
 
 **Referenz**: `rules/07-testing.md` Abschnitt "Code Coverage"
 
-### Schritt 3-9: [Weitere Testprüfungen...]
+### Schritt 3: Unit-Tests
+
+Unit-Testqualität analysieren:
+- [ ] Isolierte Tests (keine externen Abhängigkeiten)
+- [ ] Verwendung von Mocks/Stubs für Abhängigkeiten
+- [ ] Schnelle Tests (<100ms pro Test)
+- [ ] Ein Test = Ein Verhalten
+- [ ] Beschreibende Benennung: `test_should_X_when_Y`
+- [ ] AAA-Pattern (Arrange, Act, Assert)
+
+**Referenz**: `rules/07-testing.md` Abschnitt "Unit Tests"
+
+### Schritt 4: Integrationstests
+
+Integrationstests überprüfen:
+- [ ] Tests der Interaktionen zwischen Komponenten
+- [ ] Tests der Infrastrukturschicht (DB, API, etc.)
+- [ ] Verwendung von Test-Datenbanken (Fixtures)
+- [ ] Bereinigung nach jedem Test (Teardown)
+- [ ] Isolierte und unabhängige Tests
+
+**Referenz**: `rules/07-testing.md` Abschnitt "Integration Tests"
+
+### Schritt 5: Assertions und Testqualität
+
+Assertion-Qualität prüfen:
+- [ ] Explizite und spezifische Assertions
+- [ ] Keine mehrfachen, nicht zusammenhängenden Assertions
+- [ ] Klare Fehlermeldungen
+- [ ] Tests für Randfälle
+- [ ] Tests für Fehler und Ausnahmen
+- [ ] Keine deaktivierten Tests ohne Begründung (skip/xfail)
+
+**Referenz**: `rules/07-testing.md` Abschnitt "Assertions and Test Quality"
+
+### Schritt 6: Fixtures und Parametrisierung
+
+Verwendung von Pytest-Fixtures bewerten:
+- [ ] Fixtures für gemeinsames Setup/Teardown
+- [ ] Angemessener Scope (function, class, module, session)
+- [ ] Parametrisierung mit `@pytest.mark.parametrize`
+- [ ] Factories für komplexe Testobjekte
+- [ ] Keine Duplikation in Fixtures
+
+**Referenz**: `rules/07-testing.md` Abschnitt "Pytest Fixtures"
+
+### Schritt 7: Performance und Ausführung
+
+Test-Performance analysieren:
+- [ ] Gesamtausführungszeit <30 Sekunden (Unit-Tests)
+- [ ] Parallelisierbare Tests (pytest-xdist)
+- [ ] Kein sleep() in Tests
+- [ ] Pytest-Konfiguration in pyproject.toml
+- [ ] CI/CD mit automatischer Testausführung
+
+**Befehl**: `docker run --rm -v $(pwd):/app python:3.11 sh -c "pip install pytest && pytest /app -v --duration=10"`
+
+**Referenz**: `rules/07-testing.md` Abschnitt "Test Performance"
+
+### Schritt 8: Test-Driven Development (TDD)
+
+TDD-Adoption überprüfen:
+- [ ] Tests vor dem Code geschrieben (falls zutreffend)
+- [ ] Red-Green-Refactor-Zyklus
+- [ ] Tests leiten das Design
+- [ ] Kein ungetesteter Code in der Produktion
+
+**Referenz**: `rules/01-workflow-analysis.md` Abschnitt "TDD Workflow"
 
 ### Schritt 9: Bewertung berechnen
 
@@ -70,7 +137,45 @@ VERBESSERUNGEN:
 KRITISCHE PROBLEME:
 - [Liste kritischer Testlücken]
 
-[...]
+DETAILS NACH KATEGORIE:
+
+1. COVERAGE (XX/7)
+   Status: [Coverage-Analyse]
+   Gesamt-Coverage: XX%
+   Domain: XX%
+   Application: XX%
+   Infrastructure: XX%
+
+2. UNIT-TESTS (XX/6)
+   Status: [Unit-Test-Qualität]
+   Anzahl Tests: XX
+   Isolierte Tests: XX%
+   Durchschnittliche Zeit: XXms
+
+3. INTEGRATIONSTESTS (XX/4)
+   Status: [Integrationstests]
+   Anzahl Tests: XX
+   Infrastruktur-Coverage: XX%
+
+4. ASSERTIONS (XX/3)
+   Status: [Assertion-Qualität]
+   Spezifische Assertions: XX%
+   Randfälletests: XX
+
+5. FIXTURES (XX/3)
+   Status: [Organisation und Fixtures]
+   Wiederverwendbare Fixtures: XX
+   Parametrisierte Tests: XX
+
+6. PERFORMANCE (XX/2)
+   Status: [Test-Performance]
+   Gesamtzeit: XXs
+   Tests >1s: XX
+
+TOP 3 PRIORITÄTSMASSNAHMEN:
+1. [Kritischste Maßnahme zur Verbesserung der Tests]
+2. [Zweite Prioritätsmaßnahme]
+3. [Dritte Prioritätsmaßnahme]
 ```
 
 ## HINWEISE

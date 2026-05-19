@@ -32,12 +32,14 @@ import { detectProject } from './lib/detect-project.js';
 // Extracted UI modules
 import { printBanner } from './lib/banner.js';
 import { printHelp } from './lib/help.js';
-import { interactiveInstall, runInstallation } from './lib/installer.js';
+import { interactiveInstall, runInstallation, autoInstall } from './lib/installer.js';
 import { runRalph } from './lib/ralph.js';
 import { runCheck } from './lib/check.js';
 import { runList } from './lib/list.js';
 import { runDoctor } from './lib/doctor.js';
 import { runUpdate } from './lib/update.js';
+import { runInstallFromUrl } from './lib/install-from-url.js';
+import { runSkillAdd, runSkillList, runSkillRemove } from './lib/skill.js';
 // Flattener module
 import { flatten as flattenCodebaseFn } from './lib/flattener.js';
 
@@ -160,7 +162,11 @@ class ClaudeCraftCLI {
 
     switch (command) {
       case 'install':
-        if (targetPath && options.tech) {
+        if (options.from) {
+          await runInstallFromUrl(options.from, this, ctx);
+        } else if (options.auto) {
+          await autoInstall(this, ctx);
+        } else if (targetPath && options.tech) {
           // Non-interactive install
           await runInstallation(this, ctx);
         } else {
@@ -168,6 +174,35 @@ class ClaudeCraftCLI {
           await interactiveInstall(this, ctx);
         }
         break;
+
+      case 'skill': {
+        // Skill subcommands take their args positionally; the parseArgs() above
+        // would otherwise treat the subcommand as the targetPath.
+        const positional = args.filter((a) => !a.startsWith('--')).slice(1);
+        const sub = positional[0];
+        const arg = positional[1];
+        const skillTarget = path.resolve(options.target || process.cwd());
+        if (sub === 'add') {
+          if (!arg) {
+            console.error(`${c.red}Usage: claude-craft skill add <package>${c.reset}`);
+            process.exit(1);
+          }
+          runSkillAdd(arg, skillTarget);
+        } else if (sub === 'list') {
+          runSkillList(skillTarget);
+        } else if (sub === 'remove' || sub === 'rm') {
+          if (!arg) {
+            console.error(`${c.red}Usage: claude-craft skill remove <short-name>${c.reset}`);
+            process.exit(1);
+          }
+          runSkillRemove(arg, skillTarget);
+        } else {
+          console.error(`${c.red}Unknown skill subcommand: ${sub || '(none)'}${c.reset}`);
+          console.error(`Available: add, list, remove`);
+          process.exit(1);
+        }
+        break;
+      }
 
       case 'check':
         printBanner(VERSION);

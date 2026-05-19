@@ -35,7 +35,12 @@ styles/write-good/
 
 # Build & test artifacts
 coverage/
+.coverage-new/
+.coverage-tmp/
+.cov-idx/
 test-output/
+.test-tmp/
+.test-tmp-*/
 *.log
 
 # Project directories

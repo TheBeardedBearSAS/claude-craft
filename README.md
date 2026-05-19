@@ -41,6 +41,15 @@ npx @the-bearded-bear/claude-craft
 # Or install directly
 npx @the-bearded-bear/claude-craft install ~/my-project --tech=react --lang=en
 
+# Zero-prompt install (auto-detects your stack + locale, target < 2 min)
+npx @the-bearded-bear/claude-craft install --auto
+
+# Install from a team config URL (Gist or internal endpoint)
+npx @the-bearded-bear/claude-craft install --from=https://org.example/cc-team.json
+
+# Add a community skill from npm (claude-craft-skill-* convention)
+npx @the-bearded-bear/claude-craft skill add claude-craft-skill-foo
+
 # Open Claude Code and run your first audit
 claude
 /team:audit

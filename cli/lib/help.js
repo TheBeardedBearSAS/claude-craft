@@ -46,6 +46,11 @@ ${c.bold}Usage:${c.reset} npx @the-bearded-bear/claude-craft [command] [options]
 ${c.bold}Commands:${c.reset}
   ${c.green}install${c.reset}              Interactive installation wizard
   ${c.green}install <path>${c.reset}       Install to specific directory
+  ${c.green}install --auto${c.reset}       Zero-prompt install (auto-detect stack + locale)
+  ${c.green}install --from=<url>${c.reset} Install from a remote team config JSON URL
+  ${c.green}skill add <pkg>${c.reset}      Install a community skill from npm (claude-craft-skill-*)
+  ${c.green}skill list${c.reset}           List installed community skills
+  ${c.green}skill remove <name>${c.reset}  Remove a community skill
   ${c.green}init${c.reset}                 Initialize workflow in current project
   ${c.green}check${c.reset}                Verify claude-craft installation
   ${c.green}list${c.reset}                 List installed components
@@ -60,6 +65,9 @@ ${c.bold}Options:${c.reset}
   ${c.yellow}--version, -v${c.reset}        Show version
   ${c.yellow}--lang=XX${c.reset}            Language (en, fr, es, de, pt)
   ${c.yellow}--tech=NAME${c.reset}          Technology (${Object.keys(TECHNOLOGIES).join(', ')})
+  ${c.yellow}--auto${c.reset}               Zero-prompt install (auto-detect stack + locale)
+  ${c.yellow}--from=URL${c.reset}           Install from a remote team config JSON URL
+  ${c.yellow}--target=PATH${c.reset}        Target directory (for skill subcommands)
   ${c.yellow}--force${c.reset}              Overwrite existing files
   ${c.yellow}--quick${c.reset}              Quick Flow track (bug fixes)
   ${c.yellow}--standard${c.reset}           Standard track (features)
@@ -73,6 +81,15 @@ ${NAMESPACES.map((ns) => `  ${c.cyan}/${ns.prefix}:*${c.reset}`.padEnd(30 + c.cy
 ${c.bold}Examples:${c.reset}
   ${c.dim}# Interactive installation${c.reset}
   npx @the-bearded-bear/claude-craft install
+
+  ${c.dim}# Zero-prompt auto-install (TTFV < 10 min)${c.reset}
+  npx @the-bearded-bear/claude-craft install --auto
+
+  ${c.dim}# Install from a team config URL${c.reset}
+  npx @the-bearded-bear/claude-craft install --from=https://org.example/cc-team.json
+
+  ${c.dim}# Add a community skill from npm${c.reset}
+  npx @the-bearded-bear/claude-craft skill add claude-craft-skill-foo
 
   ${c.dim}# Install Symfony rules in French${c.reset}
   npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=fr
