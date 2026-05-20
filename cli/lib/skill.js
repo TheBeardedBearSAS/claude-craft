@@ -73,7 +73,10 @@ function npmInstall(pkg, cwd, { spawn = spawnSync } = {}) {
   if (result.error) throw new Error(`npm install failed: ${result.error.message}`);
   if (result.status !== 0) throw new Error(`npm install exited with code ${result.status}`);
 
-  const stripped = pkg.split('@').slice(0, pkg.startsWith('@') ? 2 : 1).join('@');
+  const stripped = pkg
+    .split('@')
+    .slice(0, pkg.startsWith('@') ? 2 : 1)
+    .join('@');
   return path.join(cwd, 'node_modules', stripped);
 }
 
@@ -118,7 +121,9 @@ export function runSkillAdd(pkg, targetPath, deps = {}) {
   const { shortName } = validateSkillPackageName(pkg);
   const safeTarget = assertSafeTarget(targetPath);
 
-  console.log(`${c.bold}Installing community skill${c.reset} ${c.cyan}${shortName}${c.reset} ${c.dim}(${pkg})${c.reset}`);
+  console.log(
+    `${c.bold}Installing community skill${c.reset} ${c.cyan}${shortName}${c.reset} ${c.dim}(${pkg})${c.reset}`
+  );
 
   const pkgDir = npmInstall(pkg, safeTarget, deps);
   const destDir = path.join(safeTarget, COMMUNITY_DIR, shortName);
