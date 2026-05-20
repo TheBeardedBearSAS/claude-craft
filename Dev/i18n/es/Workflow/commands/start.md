@@ -1,6 +1,9 @@
 ---
 description: Inicio de Sprint
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Workflow/commands/start.md).
 
 # Inicio de Sprint
 

@@ -1,6 +1,9 @@
 ---
 description: Code-Qualitätsprüfung
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/React/commands/check-code-quality.md).
 
 # Code-Qualitätsprüfung
 

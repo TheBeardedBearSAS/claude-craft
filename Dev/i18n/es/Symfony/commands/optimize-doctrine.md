@@ -1,7 +1,10 @@
 ---
 description: Optimización de Consultas Doctrine
 argument-hint: [arguments]
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/commands/optimize-doctrine.md).
 
 # Optimización de Consultas Doctrine
 

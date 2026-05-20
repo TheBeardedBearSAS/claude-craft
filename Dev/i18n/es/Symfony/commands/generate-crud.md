@@ -1,7 +1,10 @@
 ---
 description: Generación CRUD Completo
 argument-hint: [arguments]
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/commands/generate-crud.md).
 
 # Generación CRUD Completo
 

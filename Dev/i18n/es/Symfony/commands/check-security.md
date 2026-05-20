@@ -1,7 +1,10 @@
 ---
 description: Auditoría de Seguridad Symfony
 argument-hint: [arguments]
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/commands/check-security.md).
 
 # Auditoría de Seguridad Symfony
 

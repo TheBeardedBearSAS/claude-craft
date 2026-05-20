@@ -1,6 +1,9 @@
 ---
 description: Generación de Screen
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/ReactNative/commands/generate-screen.md).
 
 # Generación de Screen
 

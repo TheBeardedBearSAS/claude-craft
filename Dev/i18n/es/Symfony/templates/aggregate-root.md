@@ -1,3 +1,9 @@
+---
+translation_status: pending
+---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/templates/aggregate-root.md).
+
 # Plantilla: Aggregate Root (DDD)
 
 > **Patrón DDD** - Raíz de un agregado que garantiza la coherencia de negocio

@@ -1,6 +1,9 @@
 ---
 description: Storybook Story generieren
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/React/commands/storybook-story.md).
 
 # Storybook Story generieren
 

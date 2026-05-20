@@ -9,6 +9,7 @@ import os from 'os';
 import { execSync } from 'child_process';
 import c from './colors.js';
 import { listDirs } from './fs-utils.js';
+import { assertSafeTarget } from './path-safety.js';
 
 // Single source of truth for the security baseline. Bumped from 2.1.47 in v8.3.0
 // after CVE-2025-59536 (CVSS 8.7) cumulative hardening completed in 2.1.97.
@@ -87,12 +88,15 @@ function tryExec(cmd) {
  */
 function runDoctor(targetPath, deps = {}) {
   const exec = deps.execFn || tryExec;
+  // Defense-in-depth: refuse system targets even in read-only commands (CC-REL-05).
+  const safeTarget = assertSafeTarget(targetPath);
   let passed = 0;
   let failed = 0;
   let warned = 0;
 
   console.log(`\n${c.bold}Claude Craft Doctor — Environment Diagnostics${c.reset}`);
-  console.log(`${c.dim}Directory: ${targetPath}${c.reset}\n`);
+  console.log(`${c.dim}Directory: ${safeTarget}${c.reset}\n`);
+  targetPath = safeTarget;
 
   // 1. Node.js version >= 20
   const nodeVer = process.version;

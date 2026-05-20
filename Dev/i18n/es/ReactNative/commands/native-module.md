@@ -1,6 +1,9 @@
 ---
 description: Creación de Módulo Nativo
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/ReactNative/commands/native-module.md).
 
 # Creación de Módulo Nativo
 

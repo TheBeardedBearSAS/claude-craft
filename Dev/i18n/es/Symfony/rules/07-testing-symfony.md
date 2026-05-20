@@ -1,3 +1,9 @@
+---
+translation_status: pending
+---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/rules/07-testing-symfony.md).
+
 # Testing TDD & BDD - Atoll Tourisme
 
 ## Descripción General

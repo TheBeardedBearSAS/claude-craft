@@ -1,6 +1,9 @@
 ---
 description: Revisión de Sprint
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Workflow/commands/review.md).
 
 # Revisión de Sprint
 

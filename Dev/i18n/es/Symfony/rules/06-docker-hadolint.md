@@ -1,3 +1,9 @@
+---
+translation_status: pending
+---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/rules/06-docker-hadolint.md).
+
 # Docker & Hadolint - Atoll Tourisme
 
 ## Descripción General

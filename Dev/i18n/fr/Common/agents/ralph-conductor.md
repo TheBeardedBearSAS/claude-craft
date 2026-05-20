@@ -5,7 +5,10 @@ model: opus
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, Task, WebFetch, WebSearch]
 permissionMode: default
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Common/agents/ralph-conductor.md).
 
 # Agent Ralph Conductor v2.0
 

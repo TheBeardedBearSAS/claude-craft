@@ -1,6 +1,9 @@
 ---
 description: Compliance-Überprüfung
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/React/commands/check-compliance.md).
 
 # Compliance-Überprüfung
 

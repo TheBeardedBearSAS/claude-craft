@@ -1,3 +1,9 @@
+---
+translation_status: pending
+---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/templates/test-unit.md).
+
 # Plantilla: Test Unitario (PHPUnit)
 
 > **Patrón TDD** - Tests unitarios para validar la lógica de negocio en aislamiento

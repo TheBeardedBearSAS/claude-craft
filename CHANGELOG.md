@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.7.1] - 2026-05-20
+
+Audit 2026-05-18 comprehensive — Phase 5 (P1 reliability + sécurité défense en profondeur). PATCH release. Backwards compatible.
+
+### Added
+
+- **Rollback automatique sur échec partiel d'update** (CC-REL-14) : `cli/lib/update.js` snapshote `.claude/` avant les scripts (via `fs.cpSync`), restaure depuis le snapshot si une étape échoue, nettoie le snapshot en cas de succès. Activé par défaut. Opt-out via `--no-rollback` (utile en CI/checkout frais). 3 nouveaux tests dans `tests/cli/update.test.mjs`.
+
+### Changed
+
+- **`runDoctor()` valide le `targetPath` via `assertSafeTarget`** (CC-REL-05) : cohérence défense en profondeur — `runUpdate` validait déjà, `runDoctor` ne validait pas. Refuse maintenant `/`, `/etc`, `/usr`, etc. 1 nouveau test dans `tests/cli/doctor.test.mjs`.
+
+### Tests
+
+- **937 tests Vitest verts** (+7 vs v8.7.0)
+  - +3 rollback (CC-REL-14 : restore on partial failure, drop snapshot on success, --no-rollback opt-out)
+  - +1 doctor refuses system directories (CC-REL-05)
+  - +3 frontmatter edge cases (CC-REL-04 : parseString('') et stringify() sans args / null args — couvre les branches `?? {}` et `?? ''`)
+
+### i18n (P0 #26 — itération 2)
+
+- **40 fichiers BLOCKING marqués `translation_status: pending`** (de=14, es=25, fr=1) avec encart visible `> ⚠️ Translation incomplete.` en tête.
+- Count stable à 141 fichiers sous seuil 0.80 (le marquage documente l'incomplétude pour contributeurs, sans changer le ratio). Tous les fichiers traités sont BLOCKING avec source EN > 300 lignes (hors scope traduction complète automatique).
+- Cumul Phases 4+5 : 27 traductions complètes + 40 marquages pending sur 168 fichiers initiaux.
+
 ## [8.7.0] - 2026-05-19
 
 Audit 2026-05-18 comprehensive — Phase 4 (P1/M effort cleanup parallèle). MINOR release. Backwards compatible.

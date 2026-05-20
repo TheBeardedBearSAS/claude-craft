@@ -1,3 +1,9 @@
+---
+translation_status: pending
+---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/templates/domain-event.md).
+
 # Plantilla: Domain Event (DDD)
 
 > **Patrón DDD** - Evento de negocio que representa un hecho que ha ocurrido

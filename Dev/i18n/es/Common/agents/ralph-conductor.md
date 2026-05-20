@@ -3,7 +3,10 @@ name: ralph-conductor
 description: Orquesta sesiones Ralph Wiggum v2.0 con validacion DoD adaptativa
 model: opus
 memory: user
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Common/agents/ralph-conductor.md).
 
 # Agente Ralph Conductor v2.0
 

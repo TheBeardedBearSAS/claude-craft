@@ -1,6 +1,9 @@
 ---
 description: Custom Hook generieren
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/React/commands/generate-hook.md).
 
 # Custom Hook generieren
 

@@ -1,3 +1,9 @@
+---
+translation_status: pending
+---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/templates/test-integration.md).
+
 # Plantilla: Test de Integración (PHPUnit)
 
 > **Patrón TDD** - Tests de integración para validar la interacción entre componentes

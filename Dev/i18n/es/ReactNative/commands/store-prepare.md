@@ -1,6 +1,9 @@
 ---
 description: Preparación para las Tiendas
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/ReactNative/commands/store-prepare.md).
 
 # Preparación para las Tiendas
 

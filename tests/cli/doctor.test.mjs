@@ -322,4 +322,10 @@ describe('runDoctor', () => {
     expect(output).toContain('[WARN]');
     expect(output).toContain('missing execute permission');
   });
+
+  it('refuses to run against a forbidden system directory (CC-REL-05)', () => {
+    expect(() => runDoctor('/etc', { execFn: allToolsExec })).toThrow(/system directory/);
+    expect(() => runDoctor('/', { execFn: allToolsExec })).toThrow(/system directory/);
+    expect(() => runDoctor('/usr/local', { execFn: allToolsExec })).toThrow(/system directory/);
+  });
 });

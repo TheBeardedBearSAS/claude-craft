@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { mkdtemp, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { parseFile, parseString, parseAndValidate } from '../../cli/kanban/server/services/frontmatter.js';
+import { parseFile, parseString, parseAndValidate, stringify } from '../../cli/kanban/server/services/frontmatter.js';
 import { StoryFrontmatterSchema } from '../../cli/kanban/shared/schemas.js';
 
 async function makeTmpDir() {
@@ -100,5 +100,29 @@ describe('frontmatter.parseAndValidate — ok:false paths', () => {
     expect(data).toEqual({});
     expect(body).toContain('Titre sans frontmatter');
     expect(rawOut).toBe(raw);
+  });
+
+  it('parseString sur chaîne vide retourne data vide et body vide', () => {
+    // Couvre les branches `data ?? {}` et `content ?? ''` quand raw est ''.
+    const { data, body, raw } = parseString('');
+    expect(data).toEqual({});
+    expect(body).toBe('');
+    expect(raw).toBe('');
+  });
+
+  it("stringify accepte data et body undefined (couvre les branches `?? {}` et `?? ''`)", () => {
+    // Couvre les branches de coalescence dans stringify quand on l'appelle sans arguments.
+    const out = stringify();
+    expect(typeof out).toBe('string');
+    // Round-trip : doit reparse en data vide.
+    const parsed = parseString(out);
+    expect(parsed.data).toEqual({});
+  });
+
+  it('stringify accepte data null et body null sans throw', () => {
+    const out = stringify(null, null);
+    expect(typeof out).toBe('string');
+    const parsed = parseString(out);
+    expect(parsed.data).toEqual({});
   });
 });

@@ -1,3 +1,9 @@
+---
+translation_status: pending
+---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/templates/value-object.md).
+
 # Plantilla: Value Object (DDD)
 
 > **Patrón DDD** - Objeto inmutable que representa un valor de negocio

@@ -1,7 +1,10 @@
 ---
 description: Ejecutar Claude en bucle continuo hasta completar la tarea (Ralph Wiggum v2.0)
 argument-hint: <descripcion-tarea> [--auto-detect|--init|--interactive]
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Common/commands/ralph-run.md).
 
 # Ralph Run - Bucle Continuo de Agente IA v2.0
 

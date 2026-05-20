@@ -1,6 +1,9 @@
 ---
 description: Sicherheits-Überprüfung
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/React/commands/check-security.md).
 
 # Sicherheits-Überprüfung
 

@@ -1,3 +1,9 @@
+---
+translation_status: pending
+---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/rules/11-security-symfony.md).
+
 # Sicherheit & DSGVO - Atoll Tourisme
 
 ## Überblick

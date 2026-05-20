@@ -1,6 +1,9 @@
 ---
 description: Verificación de Seguridad
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/ReactNative/commands/check-security.md).
 
 # Verificación de Seguridad
 

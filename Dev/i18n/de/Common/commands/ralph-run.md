@@ -1,7 +1,10 @@
 ---
 description: Claude in kontinuierlicher Schleife ausfuhren bis zur Aufgabenerledigung (Ralph Wiggum v2.0)
 argument-hint: <aufgabenbeschreibung> [--auto-detect|--init|--interactive]
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Common/commands/ralph-run.md).
 
 # Ralph Run - Kontinuierliche KI-Agent-Schleife v2.0
 

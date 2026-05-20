@@ -1,3 +1,9 @@
+---
+translation_status: pending
+---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/rules/02-architecture-clean-ddd.md).
+
 # Arquitectura Clean + DDD + Hexagonal - Atoll Tourisme
 
 ## Descripción General

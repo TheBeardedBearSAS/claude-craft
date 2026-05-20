@@ -1,3 +1,9 @@
+---
+translation_status: pending
+---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/templates/test-behat.md).
+
 # Plantilla: Test BDD Behat (Behavior-Driven Development)
 
 > **Patrón BDD** - Tests funcionales en lenguaje natural (Gherkin)

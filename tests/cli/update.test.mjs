@@ -1,13 +1,19 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'fs';
+import { existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 
 // Mock colors to simplify output assertions
 vi.mock('../../cli/lib/colors.js', () => ({
   default: {
-    red: '', green: '', yellow: '', blue: '', cyan: '',
-    bold: '', dim: '', reset: '',
+    red: '',
+    green: '',
+    yellow: '',
+    blue: '',
+    cyan: '',
+    bold: '',
+    dim: '',
+    reset: '',
   },
 }));
 
@@ -82,17 +88,9 @@ describe('runUpdate', () => {
     expect(output).toContain('React updated');
     expect(output).toContain('Update complete');
     // Verify --force is passed in the spawnSync argv array
-    expect(spawnSync).toHaveBeenCalledWith(
-      'bash',
-      expect.arrayContaining(['--force']),
-      expect.any(Object),
-    );
+    expect(spawnSync).toHaveBeenCalledWith('bash', expect.arrayContaining(['--force']), expect.any(Object));
     // Verify --lang is passed as a single argv item (no shell interpolation)
-    expect(spawnSync).toHaveBeenCalledWith(
-      'bash',
-      expect.arrayContaining(['--lang=fr']),
-      expect.any(Object),
-    );
+    expect(spawnSync).toHaveBeenCalledWith('bash', expect.arrayContaining(['--lang=fr']), expect.any(Object));
   });
 
   it('auto-detects techs from installed references', () => {
@@ -188,5 +186,82 @@ describe('runUpdate', () => {
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('Update failed');
     expect(process.exitCode).toBe(1);
+  });
+
+  // CC-REL-14 — rollback on partial failure
+  describe('rollback (CC-REL-14)', () => {
+    it('restores .claude/ from snapshot when a script fails', () => {
+      // Seed .claude/ with a marker file so we can verify restoration.
+      mkdirSync(join(tempDir, '.claude'));
+      writeFileSync(join(tempDir, '.claude', 'BEFORE.txt'), 'original-content');
+      mkdirSync(join(cliRoot, 'Dev', 'scripts'), { recursive: true });
+      writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
+      writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-react-rules.sh'), '#!/bin/bash');
+
+      // Mock spawnSync to mutate .claude/ then fail on react.
+      spawnSync.mockImplementation((_cmd, args) => {
+        const argsStr = Array.isArray(args) ? args.join(' ') : '';
+        if (argsStr.includes('install-react')) {
+          writeFileSync(join(tempDir, '.claude', 'PARTIAL.txt'), 'should-be-rolled-back');
+          return { status: 1, stdout: '', stderr: 'Boom' };
+        }
+        writeFileSync(join(tempDir, '.claude', 'COMMON.txt'), 'common-updated');
+        return { status: 0, stdout: '', stderr: '' };
+      });
+
+      runUpdate(tempDir, { tech: 'react' }, cliRoot);
+
+      const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
+      expect(output).toContain('[ROLLBACK]');
+      expect(output).toContain('Restored .claude/');
+      expect(process.exitCode).toBe(1);
+
+      // Marker file from before is back, partial mutations are gone.
+      expect(readFileSync(join(tempDir, '.claude', 'BEFORE.txt'), 'utf8')).toBe('original-content');
+      expect(existsSync(join(tempDir, '.claude', 'PARTIAL.txt'))).toBe(false);
+      expect(existsSync(join(tempDir, '.claude', 'COMMON.txt'))).toBe(false);
+
+      // No leftover backup dirs in tempDir.
+      const entries = readdirSync(tempDir);
+      expect(entries.some((e) => e.startsWith('.claude.backup-'))).toBe(false);
+    });
+
+    it('drops the snapshot when every script succeeds', () => {
+      mkdirSync(join(tempDir, '.claude'));
+      mkdirSync(join(cliRoot, 'Dev', 'scripts'), { recursive: true });
+      writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
+
+      spawnSync.mockReturnValue({ status: 0, stdout: '', stderr: '' });
+
+      runUpdate(tempDir, {}, cliRoot);
+
+      // No backup left behind on success.
+      const entries = readdirSync(tempDir);
+      expect(entries.some((e) => e.startsWith('.claude.backup-'))).toBe(false);
+    });
+
+    it('skips snapshot when --no-rollback is set', () => {
+      mkdirSync(join(tempDir, '.claude'));
+      writeFileSync(join(tempDir, '.claude', 'BEFORE.txt'), 'original');
+      mkdirSync(join(cliRoot, 'Dev', 'scripts'), { recursive: true });
+      writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
+      writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-react-rules.sh'), '#!/bin/bash');
+
+      spawnSync.mockImplementation((_cmd, args) => {
+        const argsStr = Array.isArray(args) ? args.join(' ') : '';
+        if (argsStr.includes('install-react')) {
+          writeFileSync(join(tempDir, '.claude', 'PARTIAL.txt'), 'should-NOT-be-rolled-back');
+          return { status: 1, stdout: '', stderr: 'Boom' };
+        }
+        return { status: 0, stdout: '', stderr: '' };
+      });
+
+      runUpdate(tempDir, { tech: 'react', 'no-rollback': true }, cliRoot);
+
+      const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
+      expect(output).not.toContain('[ROLLBACK]');
+      // Partial mutation persists (rollback was disabled).
+      expect(existsSync(join(tempDir, '.claude', 'PARTIAL.txt'))).toBe(true);
+    });
   });
 });

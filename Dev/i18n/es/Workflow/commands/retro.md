@@ -1,6 +1,9 @@
 ---
 description: Retrospectiva de Sprint
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Workflow/commands/retro.md).
 
 # Retrospectiva de Sprint
 

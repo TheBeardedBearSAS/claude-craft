@@ -1,7 +1,10 @@
 ---
 description: WCAG 2.2 AAA Barrierefreiheit-Audit
 argument-hint: [arguments]
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/UIUX/commands/a11y-audit.md).
 
 # WCAG 2.2 AAA Barrierefreiheit-Audit
 

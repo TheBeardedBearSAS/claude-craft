@@ -1,6 +1,9 @@
 ---
 description: Generación de Deep Link
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/ReactNative/commands/deep-link.md).
 
 # Generación de Deep Link
 

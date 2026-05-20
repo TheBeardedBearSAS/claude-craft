@@ -1,7 +1,10 @@
 ---
 description: Auditoría de Accesibilidad WCAG 2.2 AAA
 argument-hint: [arguments]
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/UIUX/commands/a11y-audit.md).
 
 # Auditoría de Accesibilidad WCAG 2.2 AAA
 

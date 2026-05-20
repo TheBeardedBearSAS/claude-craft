@@ -1,6 +1,9 @@
 ---
 description: Bundle-Analyse
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/React/commands/bundle-analyze.md).
 
 # Bundle-Analyse
 

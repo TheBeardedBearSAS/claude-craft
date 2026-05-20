@@ -1,7 +1,10 @@
 ---
 description: Vollständige Python-Konformität prüfen
 argument-hint: [arguments]
+translation_status: pending
 ---
+
+> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Python/commands/check-compliance.md).
 
 # Vollständige Python-Konformität prüfen
 
