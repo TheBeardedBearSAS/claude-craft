@@ -2,12 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import path from 'path';
 import fs from 'fs';
 import os from 'os';
-import {
-  validateSkillPackageName,
-  runSkillAdd,
-  runSkillList,
-  runSkillRemove,
-} from '../../cli/lib/skill.js';
+import { validateSkillPackageName, runSkillAdd, runSkillList, runSkillRemove } from '../../cli/lib/skill.js';
 
 describe('validateSkillPackageName', () => {
   it('accepts unscoped claude-craft-skill-* names', () => {
@@ -50,8 +45,7 @@ describe('runSkillList', () => {
   let logSpy;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir().includes('/tmp') ? path.join(process.cwd(), '.test-tmp') : os.tmpdir(), 'cc-skill-list-'));
-    fs.mkdirSync(tmpDir, { recursive: true });
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-skill-list-'));
     logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   });
 
@@ -77,7 +71,7 @@ describe('runSkillRemove', () => {
   let tmpDir;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(process.cwd(), '.test-tmp-cc-skill-rm-'));
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-skill-rm-'));
     vi.spyOn(console, 'log').mockImplementation(() => {});
   });
 
@@ -108,7 +102,7 @@ describe('runSkillAdd', () => {
   let spawnMock;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(process.cwd(), '.test-tmp-cc-skill-add-'));
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-skill-add-'));
     vi.spyOn(console, 'log').mockImplementation(() => {});
     // Simulate npm install by creating the package layout where it would land.
     spawnMock = vi.fn((cmd, args, opts) => {
