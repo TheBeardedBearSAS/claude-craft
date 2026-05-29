@@ -54,11 +54,11 @@ composer validate
     },
     "require-dev": {
         "phpunit/phpunit": "^12.0",
-        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan": "^2.2",
         "friendsofphp/php-cs-fixer": "^3.0",
-        "rector/rector": "^2.3",
+        "rector/rector": "^2.4",
         "qossmic/deptrac-shim": "^4.0",
-        "pestphp/pest": "^4.5",
+        "pestphp/pest": "^4.7",
         "pestphp/pest-plugin-browser": "^4.0"
     },
     "autoload": {

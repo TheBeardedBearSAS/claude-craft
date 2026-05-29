@@ -6,9 +6,9 @@ L'utilisation des outils de qualité est **OBLIGATOIRE** pour garantir un code m
 
 **Versions 2026:**
 - PHP 8.4+ (Symfony 8.0 requiert PHP 8.2+, mais 8.4 recommandé pour Property Hooks et Lazy Objects)
-- Symfony 8.0.x stable 8.0.8 (mars 2026) ou 7.4 LTS — https://symfony.com/releases/8.0
-- PHPStan 2.1.x
-- Rector 2.3.x
+- Symfony 8.0.x stable 8.0.13 (mai 2026) ou 7.4 LTS — https://symfony.com/releases/8.0
+- PHPStan 2.2.x
+- Rector 2.4.x
 - Deptrac v4.x
 
 **Objectifs:**
@@ -426,8 +426,8 @@ return RectorConfig::configure()
         DoctrineSetList::DOCTRINE_CODE_QUALITY,
         DoctrineSetList::DOCTRINE_ORM_30,
 
-        // ✅ PHPUnit 11
-        PHPUnitSetList::PHPUNIT_110,
+        // ✅ PHPUnit 12 (Pest 4.7 requiert PHPUnit ^12.5)
+        PHPUnitSetList::PHPUNIT_120,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
 
         // ✅ PHP 8.4 (8.5 en beta, ne pas utiliser en prod)
@@ -1035,8 +1035,8 @@ make ci
 | Outil | Version Minimale | Commande Installation |
 |-------|-----------------|----------------------|
 | PHP | 8.5.x | - |
-| PHPStan | 2.1.x | `composer require --dev phpstan/phpstan:^2.1` |
-| Rector | 2.3.x | `composer require --dev rector/rector:^2.3` |
+| PHPStan | 2.2.x | `composer require --dev phpstan/phpstan:^2.2` |
+| Rector | 2.4.x | `composer require --dev rector/rector:^2.4` |
 | Deptrac | 4.x | `composer require --dev qossmic/deptrac-shim:^4.0` |
 | PHP-CS-Fixer | 3.x | `composer require --dev friendsofphp/php-cs-fixer:^3.0` |
 | Infection | 0.29.x | `composer require --dev infection/infection:^0.29` |

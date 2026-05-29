@@ -256,7 +256,7 @@ return RectorConfig::configure()
         "pestphp/pest": "^3.0",
         "pestphp/pest-plugin-laravel": "^3.0",
         "pestphp/pest-plugin-mutate": "^3.0",
-        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan": "^2.2",
         "rector/rector": "^1.0",
         "spatie/laravel-ignition": "^2.4"
     }

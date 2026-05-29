@@ -1,11 +1,11 @@
-# Flutter 3.41+ / Dart 3.11+ - Quick Reference
+# Flutter 3.44+ / Dart 3.12+ - Quick Reference
 
 ## Versions Requises (2026)
 
 | Composant | Version |
 |-----------|---------|
-| Flutter | 3.41.5+ |
-| Dart | 3.11.0+ |
+| Flutter | 3.44+ |
+| Dart | 3.12+ |
 | DevTools | 2.42+ |
 | Android SDK | 35+ |
 | iOS | 15.0+ |

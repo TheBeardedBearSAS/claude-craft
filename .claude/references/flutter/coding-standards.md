@@ -1,12 +1,12 @@
-# Flutter/Dart Coding Standards - Dart 3.11+ / Flutter 3.41+
+# Flutter/Dart Coding Standards - Dart 3.12+ / Flutter 3.44+
 
 ## Core Principle
 
 Follow **Effective Dart**: the official guide for Dart style and best practices.
 
 **Versions 2026:**
-- Dart 3.11.x+ (dot shorthands, enhanced patterns)
-- Flutter 3.41.x+ (WebAssembly, MCP, hot reload web stable)
+- Dart 3.12.x+ (dot shorthands, enhanced patterns)
+- Flutter 3.44.x+ (WebAssembly, MCP, hot reload web stable)
 
 References:
 - [Effective Dart: Style](https://dart.dev/guides/language/effective-dart/style)

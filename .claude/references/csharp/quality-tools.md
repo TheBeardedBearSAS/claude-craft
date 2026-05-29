@@ -8,7 +8,7 @@
 <!-- Directory.Build.props -->
 <ItemGroup>
   <!-- Microsoft's recommended analyzers -->
-  <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.*">
+  <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.*">
     <PrivateAssets>all</PrivateAssets>
     <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
   </PackageReference>
@@ -324,16 +324,16 @@ dotnet outdated
 # .github/dependabot.yml
 version: 2
 updates:
-  - package-ecosystem: "nuget"
-    directory: "/"
+  - package-ecosystem: 'nuget'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     open-pull-requests-limit: 10
     reviewers:
-      - "team-name"
+      - 'team-name'
     labels:
-      - "dependencies"
-      - "nuget"
+      - 'dependencies'
+      - 'nuget'
 ```
 
 ## Performance Analysis

@@ -5,10 +5,10 @@
 | Composant | Version | Notes |
 |-----------|---------|-------|
 | PHP | 8.4+ | Symfony 8.0 requiert PHP 8.2+, mais 8.4 recommandé pour Lazy Objects natifs et Property Hooks |
-| Symfony | 8.0.x (ou 7.4 LTS) | Stable 8.0.8 (mars 2026) — https://symfony.com/releases/8.0 |
+| Symfony | 8.0.x (ou 7.4 LTS) | Stable 8.0.13 (mai 2026) — https://symfony.com/releases/8.0 |
 | Doctrine ORM | 3.x | |
-| PHPStan | 2.1.x | |
-| Rector | 2.3.x | |
+| PHPStan | 2.2.x | |
+| Rector | 2.4.x | |
 | Deptrac | v4.x | |
 
 ## Architecture Clean + DDD

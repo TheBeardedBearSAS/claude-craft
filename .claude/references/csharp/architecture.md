@@ -404,7 +404,7 @@ public class OrderRepository : IOrderRepository
 
 ## WebAPI Layer
 
-### Minimal API Endpoints (Preferred in .NET 9)
+### Minimal API Endpoints (Preferred in .NET 10)
 
 ```csharp
 // WebAPI/Endpoints/OrderEndpoints.cs

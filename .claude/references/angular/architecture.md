@@ -471,11 +471,11 @@ Angular 21 active zoneless par défaut, éliminant la dépendance à Zone.js (~3
 
 ```typescript
 // app.config.ts (Angular 21)
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 export const appConfig = {
   providers: [
-    provideExperimentalZonelessChangeDetection()
+    provideZonelessChangeDetection()
   ]
 };
 ```
