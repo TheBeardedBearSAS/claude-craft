@@ -77,7 +77,7 @@ describe('track-adoption-metrics', () => {
     });
 
     expect(result.github).toEqual({
-      repo: 'the-bearded-cto/claude-craft',
+      repo: 'TheBeardedBearSAS/claude-craft',
       stars: 42,
       forks: 5,
       open_issues: 3,
