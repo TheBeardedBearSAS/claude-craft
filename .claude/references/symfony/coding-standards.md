@@ -15,7 +15,7 @@ Configuration : `.php-cs-fixer.dist.php`
 ### Versions Requises (2026)
 
 - **PHP**: 8.4+ (Symfony 8.0 requiert PHP 8.2+, 8.4 recommandé)
-- **Symfony**: 8.0.x (stable 8.0.8 mars 2026) ou 7.4 LTS
+- **Symfony**: 8.0.x (stable 8.0.13 (mai 2026)) ou 7.4 LTS
 
 **Source:** https://symfony.com/releases/8.0
 

@@ -1,8 +1,9 @@
 # Claude Code Compatibility — Claude Craft v8.7.1
 
 **Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
-**Recommended Version:** 2.1.118
-**Last Updated:** 2026-05-19
+**Recommended Version:** 2.1.154 (Opus 4.8 + Dynamic Workflows, May 28, 2026)
+**Tested up to:** 2.1.154 (May 28, 2026)
+**Last Updated:** 2026-05-29
 
 ---
 
@@ -14,8 +15,9 @@
 4. [Why We Elevated Minimum from 2.1.47 to 2.1.97](#why-we-elevated-minimum-from-2147-to-2197)
 5. [Feature Adoption Status](#feature-adoption-status)
 6. [Features 2.1.105–2.1.117 Available](#features-21105-21117-available)
-7. [Migration from < 2.1.97](#migration-from--2197)
-8. [Version History Summary](#version-history-summary)
+7. [Features 2.1.119 → 2.1.145 (May 2026)](#features-21119--21145-may-2026)
+8. [Migration from < 2.1.97](#migration-from--2197)
+9. [Version History Summary](#version-history-summary)
 
 ---
 
@@ -212,6 +214,154 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 | `FORCE_PROMPT_CACHING_5M` | Force cache 5 min | Sessions courtes |
 | `OTEL_LOG_USER_PROMPTS` | Log prompts dans traces (beta) | Observabilité |
 | `OTEL_LOG_TOOL_DETAILS` / `OTEL_LOG_TOOL_CONTENT` | Log détails/contenu outils (beta, verbose) | Audit / debug |
+
+---
+
+## Features 2.1.119 → 2.1.145 (May 2026)
+
+Features available in Claude Code 2.1.119–2.1.145 and their adoption status in Claude Craft v8.7.1.
+
+### 2.1.119 (April 23, 2026) — Settings persistence & hooks enrichis
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `/config` settings persist | Theme, editor mode, verbose → `~/.claude/settings.json` avec override precedence | **Documented** |
+| `prUrlTemplate` setting | URL custom pour code-review | **Not exploited** |
+| `CLAUDE_CODE_HIDE_CWD` | Masque le répertoire courant | **Not documented** |
+| `--from-pr` étendu | GitLab MR + Bitbucket PR + GitHub Enterprise | **N/A** (feature CLI) |
+| `--print` honors frontmatter | Respecte `tools:` et `disallowedTools:` en mode non-interactif | **Not documented** |
+| Hooks `duration_ms` | Durée d'exécution dans PostToolUse | **Not exploited** |
+| OTel: `stop_reason`, `finish_reasons`, `user_system_prompt` | Enrichissement spans LLM | **Not documented** |
+
+### 2.1.120 (April 28, 2026) — ultrareview CI & skills effort
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `claude ultrareview [target]` | Sous-commande non-interactive pour CI/scripts (`--json`) | **Documented** in COMPATIBILITY.md — not in `/team:*` commands |
+| `${CLAUDE_EFFORT}` dans skills | Skills peuvent référencer le niveau d'effort courant | **Not exploited** — opportunities in adaptive skills |
+| Git for Windows non requis | PowerShell fallback automatique | **N/A** (user env) |
+| `AI_AGENT` env var | Positionné pour les sous-processus | **Not documented** |
+
+### 2.1.121 (April 28, 2026) — MCP `alwaysLoad` & PostToolUse enrichi
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `alwaysLoad` MCP server config | Servers non-différés (chargement immédiat) | **Not documented** |
+| PostToolUse replace tool output | Hooks peuvent remplacer l'output de **tous** les outils | **Not exploited** — powerful for RTK-style filtering |
+| `claude plugin prune` | Nettoyer les dépendances orphelines | **N/A** (user CLI) |
+| Type-to-filter dans `/skills` | Recherche dans le picker de skills | **N/A** (user feature) |
+
+### 2.1.126 (May 1, 2026) — OTEL skill tracking & project purge
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `claude.skill_activated` OTEL event | Event avec `invocation_trigger` attribute | **NOT EXPLOITED** — P1 : `@observability-engineer` devrait le documenter |
+| `claude project purge [path]` | Supprime tout l'état Claude Code d'un projet | **Not documented** |
+| Auto mode spinner rouge | Indicateur visuel sur stall permission | **N/A** (user feature) |
+
+### 2.1.129 (May 6, 2026) — skillOverrides & OTEL metrics
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `skillOverrides` setting | `off` \| `user-invocable-only` \| `name-only` — contrôle visibilité skills | **NOT DOCUMENTED** — P1 : documenter dans rules/12-context-management.md |
+| `--plugin-url <url>` | Installer plugin depuis URL directe | **N/A** (user CLI) |
+| `ENABLE_GATEWAY_MODEL_DISCOVERY=1` | Découverte modèles via gateway `/v1/models` | **Not documented** |
+| `claude_code.pull_request.count` OTel | Comptage PRs via MCP | **Not exploited** |
+
+### 2.1.133 (May 7, 2026) — parentSettingsBehavior & hooks effort
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `parentSettingsBehavior` | Admin key : `'first-wins'` \| `'merge'` pour hiérarchie settings | **NOT DOCUMENTED** — P2 |
+| Hooks `effort.level` JSON + `$CLAUDE_EFFORT` | Hooks reçoivent le niveau d'effort courant | **NOT EXPLOITED** — P2 : permet des hooks adaptatifs selon la complexité |
+| `worktree.baseRef` | `fresh` \| `head` pour stratégie worktree | **Not documented** |
+| `sandbox.bwrapPath` / `sandbox.socatPath` | Chemins binaires custom sandbox | **N/A** |
+
+### 2.1.139 (May 11, 2026) — /goal & Agent View
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| **`/goal` command** | Définir condition de completion — Claude travaille jusqu'à ce qu'elle soit atteinte | **NOT INTEGRATED** — P1 : intégrer dans `ralph-run.md` comme alternative native aux DoD validators |
+| **`claude agents` command** | Agent View : liste unique de toutes les sessions actives | **NOT DOCUMENTED** — P1 : pertinent pour `/team:*` et `/team:sprint` |
+| `/scroll-speed` | Tuning vitesse scroll souris | **N/A** |
+| `claude plugin details <name>` | Inventaire composants + coût token | **N/A** |
+| Hook `args: string[]` field | Exec form sans shell | **Not documented** |
+
+### 2.1.141 (May 13, 2026) — terminalSequence & ANTHROPIC_WORKSPACE_ID
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `terminalSequence` field | Champ dans hook JSON output pour notifications desktop | **NOT DOCUMENTED** — P2 |
+| `ANTHROPIC_WORKSPACE_ID` | Workload identity federation | **Not documented** |
+| `claude agents --cwd <path>` | Filtrer sessions par répertoire | **N/A** |
+| "Summarize up to here" (Rewind) | Compression contexte à un point précis | **N/A** |
+
+### 2.1.143 (May 15, 2026) — worktree.bgIsolation & plugin deps
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `worktree.bgIsolation: "none"` | Sessions background éditent directement le working copy (sans worktree auto) | **NOT DOCUMENTED** — P2 : mentionner dans `parallel-worktrees` skill |
+| Plugin dependency enforcement | `claude plugin disable` refuse si dépendances existent | **N/A** |
+| `/plugin` marketplace avec coûts | Context cost estimates dans marketplace | **N/A** |
+| `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` | Cap de 8 blocs pour les stop hooks | **Not documented** |
+| PowerShell `-ExecutionPolicy Bypass` | Auto-approuve les scripts PS | **N/A** |
+
+### 2.1.145 (May 19, 2026) — JSON agents & OTEL spans
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `claude agents --json` | Lister sessions actives comme JSON | **NOT DOCUMENTED** — P1 : utile pour `/team:*` automation |
+| Agent + parent agent IDs dans spans OTEL | Traçabilité multi-agents | **NOT EXPLOITED** — P2 : `@observability-engineer` |
+| Stop/SubagentStop hooks : `background_tasks`, `session_crons` | Champs additionnels dans hook input | **NOT DOCUMENTED** — P2 |
+| `/plugin` Discover/Browse enrichi | Commandes, agents, skills, hooks, MCP/LSP visibles | **N/A** |
+
+### 2.1.147 (May 22, 2026) — /code-review rename & background sessions
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `/code-review` (rename de `/simplify`) | `/code-review --fix` applique les corrections au working tree ; `/code-review ultra` lance une revue cloud multi-agents | **Documented** — alias `/ultrareview` déprécié, voir README |
+| Sessions background pinned | Les sessions en arrière-plan restent épinglées dans l'UI | **N/A** (user feature) |
+
+### 2.1.149 (May 25, 2026) — /usage
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `/usage` | Affiche la consommation de tokens/coût de la session courante | **Not documented** — utile à citer dans `rules/12-context-management.md` (suivi tokens) |
+
+### 2.1.152 (May 27, 2026) — disallowed-tools frontmatter & /code-review --fix
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| `disallowed-tools` (kebab-case) frontmatter | Variante kebab-case de `disallowedTools` (camelCase) — les deux formes sont acceptées ; les agents Claude Craft utilisent `disallowedTools` | **Documented** — voir docs/AGENTS.md |
+| `/code-review --fix` | Applique automatiquement les findings de la revue | **N/A** (user CLI) |
+
+### 2.1.154 (May 28, 2026) — Opus 4.8 & Dynamic Workflows ⭐
+
+| Feature | Description | Adoption Claude Craft |
+|---------|-------------|----------------------|
+| **Claude Opus 4.8** (`claude-opus-4-8`) | Nouveau modèle flagship, même prix qu'Opus 4.7, **défaut effort `high`** + `/effort xhigh` pour les tâches les plus dures. Disponible API/Bedrock/Vertex/Foundry | **Recommandé** — modèle cible pour agents `effort: xhigh`/`max` (security-auditor, migration-specialist, database-architect, ralph-conductor) |
+| **Dynamic Workflows** | Demander à Claude de créer un workflow qui orchestre **des dizaines à des centaines d'agents** en arrière-plan (cap 1000 subagents). Visible via `/workflows` | **NOT INTEGRATED** — P1 v8.8 : complète/remplace en profondeur les patterns `/team:*` et `ralph-run` (orchestration déterministe fan-out + vérification adversariale) |
+| Fast mode moins cher sur Opus 4.8 | 2× le tarif standard pour 2,5× la vitesse | **N/A** (user pricing) |
+| `effort: max` | 5ᵉ niveau d'effort (au-dessus de `xhigh`), disponible sur Opus 4.8 | **Documented** — voir docs/AGENTS.md tableau effort |
+
+> **Note Opus 4.8 :** L'ID de modèle est `claude-opus-4-8`. Pour les agents critiques (audits sécurité, migrations, décisions schéma, boucles autonomes), `model: opus` + `effort: xhigh` route désormais vers Opus 4.8. Le `model: sonnet` des reviewers tech reste optimal pour le ratio coût/qualité (routing économe).
+
+> **Note Dynamic Workflows vs `/team:*` :** Les commandes `/team:audit`, `/team:sprint`, `/team:security` restent valides (orchestration documentée déclarative). Dynamic Workflows offre en plus une orchestration **programmatique** (boucles, fan-out conditionnel, pipelines, vérification adversariale) pour les tâches dépassant un seul contexte. À évaluer pour v8.8.
+
+---
+
+### Adoption Roadmap for v8.8.0
+
+| Priorité | Feature | Fichier à modifier | Effort |
+|----------|---------|-------------------|--------|
+| **P1** | Intégrer `/goal` dans `ralph-run.md` comme alternative DoD | `.claude/commands/common/ralph-run.md` | 2h |
+| **P1** | Documenter `claude agents` dans `/team:*` commands | `.claude/commands/team/*.md`, `docs/AGENTS.md` | 2h |
+| **P1** | Documenter `claude.skill_activated` OTEL dans `@observability-engineer` | `.claude/agents/observability-engineer.md` | 1h |
+| **P1** | Documenter `skillOverrides` dans context-management | `.claude/rules/12-context-management.md` | 1h |
+| **P2** | Documenter `parentSettingsBehavior` | `docs/` + `rules/12-context-management.md` | 1h |
+| **P2** | Documenter `terminalSequence` dans hooks templates | `.claude/templates/hooks/` + `docs/` | 1h |
+| **P2** | Documenter `worktree.bgIsolation: "none"` dans parallel-worktrees | `.claude/skills/parallel-worktrees/SKILL.md` | 30min |
+| **P2** | Documenter `Hooks effort.level` (hooks adaptatifs) | `.claude/templates/hooks/` | 1h |
 
 ---
 

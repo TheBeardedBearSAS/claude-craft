@@ -1,6 +1,6 @@
 # Laravel 13 - Nouvelles Fonctionnalités Majeures
 
-**Version :** Laravel 13.4.0 (publiée le 17 mars 2026)
+**Version :** Laravel 13.12.0 (série 13 lancée le 17 mars 2026)
 **Source :** https://laravel.com/docs/13.x/releases
 
 ---

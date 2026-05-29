@@ -19,8 +19,11 @@ if command -v rtk &>/dev/null; then
   rtk gain 2>/dev/null || echo "No savings data yet"
 else
   echo "RTK is NOT installed"
-  echo "Install with: curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | bash"
-  echo "Or run: make install-rtk (from claude-craft root)"
+  echo ""
+  echo "Install options (the curl|bash pattern is BLOCKED by Claude Craft hooks):"
+  echo "  1. (Recommended) make install-rtk    # from claude-craft root"
+  echo "  2. cargo install rtk-cli            # if you have Rust toolchain"
+  echo "  3. Download release binary manually: https://github.com/rtk-ai/rtk/releases"
 fi
 ```
 
@@ -80,6 +83,16 @@ export CLAUDE_CODE_SUBAGENT_MODEL="sonnet"
 # → Avoids polluting the main context window with sub-agent intermediate state
 # → Compounds with context: fork on skills (~8-15K tokens saved per long session)
 export CLAUDE_CODE_FORK_SUBAGENT=1
+
+# Enable 1-hour prompt cache TTL (Claude Code 2.1.108+)
+# → -40% cost on repetitive sessions (BMAD sprints, /team:* loops)
+# → Same prompt cache key is reused for up to 1h instead of 5min default
+export ENABLE_PROMPT_CACHING_1H=1
+
+# Force 5-minute cache writes on every turn (Claude Code 2.1.108+)
+# → Useful for short-burst dev loops that hit the cache repeatedly
+# → Trade-off: small write overhead, large hit-rate gains on iterative work
+export FORCE_PROMPT_CACHING_5M=1
 ```
 
 After updating, reload your shell: `source ~/.bashrc`.
@@ -123,11 +136,13 @@ Display a summary table of all optimizations with their status:
 | RTK custom filters | +30-50% on docker/npm | ? |
 | Sub-agent model (Sonnet) | 40-60% cost reduction | ? |
 | Forked sub-agents (`CLAUDE_CODE_FORK_SUBAGENT=1`) | 8-15K tokens/long session | ? |
+| Prompt caching 1h (`ENABLE_PROMPT_CACHING_1H=1`) | -40% cost on repetitive sessions | ? |
+| Force 5m cache writes (`FORCE_PROMPT_CACHING_5M=1`) | Higher hit-rate on iterative loops | ? |
 | PostToolUse hook | Reduces context pollution | ? |
 | PreCompact hook | Preserves critical context | ? |
 | PostCompact hook | Restores context after compaction | ? |
 
-**Target: 55-65% overall token efficiency**
+**Target: 60-75% overall token efficiency (with 1h cache + ultra-compact + forked subagents)**
 
 ## Arguments
 

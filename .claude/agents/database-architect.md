@@ -1,9 +1,9 @@
 ---
 name: database-architect
 description: Database design and optimization expert
-model: sonnet
+model: opus
 maxTurns: 6
-effort: medium
+effort: xhigh
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, WebFetch, WebSearch]
 permissionMode: default

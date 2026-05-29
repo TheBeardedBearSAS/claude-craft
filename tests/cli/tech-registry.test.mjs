@@ -8,6 +8,7 @@ import {
   getDisplayName,
   getAllTechKeys,
   getTechsByTier,
+  getBaseLayerTechsFor,
 } from '../../cli/lib/tech-registry.js';
 import { TECHNOLOGIES } from '../../cli/lib/constants.js';
 
@@ -46,9 +47,10 @@ describe('tech-registry', () => {
     }
   });
 
-  it('INSTALLABLE_TECHS excludes docker', () => {
+  it('INSTALLABLE_TECHS excludes docker and base-layer techs (php)', () => {
     expect(INSTALLABLE_TECHS).not.toContain('docker');
-    expect(INSTALLABLE_TECHS.length).toBe(10);
+    expect(INSTALLABLE_TECHS).not.toContain('php');
+    expect(INSTALLABLE_TECHS.length).toBe(9);
   });
 
   it('getDisplayName returns correct value', () => {
@@ -92,6 +94,34 @@ describe('tech-registry tiers', () => {
   });
 });
 
+describe('base-layer techs (php auto-include — audit DA-PM-03)', () => {
+  it('php is flagged as a base layer for symfony and laravel', () => {
+    expect(TECH_REGISTRY.php.baseLayer).toBe(true);
+    expect(TECH_REGISTRY.php.baseLayerFor).toEqual(['symfony', 'laravel']);
+  });
+
+  it('php is not standalone-selectable', () => {
+    expect(INSTALLABLE_TECHS).not.toContain('php');
+    expect(TECHNOLOGIES).not.toHaveProperty('php');
+  });
+
+  it('selecting symfony pulls in php', () => {
+    expect(getBaseLayerTechsFor(['symfony'])).toEqual(['php']);
+  });
+
+  it('selecting laravel pulls in php', () => {
+    expect(getBaseLayerTechsFor(['laravel'])).toEqual(['php']);
+  });
+
+  it('non-PHP-framework selections do not pull in php', () => {
+    expect(getBaseLayerTechsFor(['react', 'python'])).toEqual([]);
+  });
+
+  it('does not duplicate php when already selected', () => {
+    expect(getBaseLayerTechsFor(['symfony', 'php'])).toEqual([]);
+  });
+});
+
 describe('tech-registry consistency with constants.js', () => {
   it('every TECHNOLOGIES key exists in TECH_REGISTRY', () => {
     for (const key of Object.keys(TECHNOLOGIES)) {
@@ -115,14 +145,18 @@ describe('tech-registry consistency with constants.js', () => {
     }
   });
 
-  it('TECHNOLOGIES is derived from TECH_REGISTRY (same keys)', () => {
-    const registryKeys = Object.keys(TECH_REGISTRY).sort();
+  it('TECHNOLOGIES is derived from TECH_REGISTRY (same keys minus base layers)', () => {
+    // Base-layer techs (php) are excluded from the selectable menu (audit DA-PM-03).
+    const registryKeys = Object.keys(TECH_REGISTRY)
+      .filter((k) => !TECH_REGISTRY[k].baseLayer)
+      .sort();
     const techKeys = Object.keys(TECHNOLOGIES).sort();
     expect(techKeys).toEqual(registryKeys);
   });
 
-  it('TECHNOLOGIES.name matches TECH_REGISTRY.displayName for all entries', () => {
+  it('TECHNOLOGIES.name matches TECH_REGISTRY.displayName for all selectable entries', () => {
     for (const [key, entry] of Object.entries(TECH_REGISTRY)) {
+      if (entry.baseLayer) continue; // not in the selectable menu
       expect(TECHNOLOGIES[key].name, `${key} name mismatch`).toBe(entry.displayName);
     }
   });

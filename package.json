@@ -70,6 +70,8 @@
     "@commitlint/cli": "20.0.0",
     "@commitlint/config-conventional": "20.0.0",
     "@eslint/js": "^10.0.0",
+    "@stryker-mutator/core": "9.6.1",
+    "@stryker-mutator/vitest-runner": "9.6.1",
     "@sveltejs/vite-plugin-svelte": "^5.1.1",
     "@vitest/coverage-v8": "4.0.0",
     "cytoscape": "^3.33.2",

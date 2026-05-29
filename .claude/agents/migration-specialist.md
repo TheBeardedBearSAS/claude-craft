@@ -1,9 +1,9 @@
 ---
 name: migration-specialist
 description: Database and framework migration expert — zero-downtime schema changes, data backfills, version upgrades, legacy-to-modern rewrites
-model: sonnet
+model: opus
 maxTurns: 6
-effort: medium
+effort: xhigh
 memory: user
 tools: [Read, Glob, Grep, Bash, WebFetch, WebSearch]
 # Audit 2026-05-18 QW-15 — migrations touch shared/prod databases. Block

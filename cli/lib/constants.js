@@ -5,9 +5,14 @@
 
 import { TECH_REGISTRY } from './tech-registry.js';
 
-/** Available technologies with display name and description (derived from tech-registry.js SSOT). */
+/**
+ * Selectable technologies with display name and description (derived from tech-registry.js SSOT).
+ * Base-layer techs (e.g. php) are excluded — they are auto-included with their framework.
+ */
 const TECHNOLOGIES = Object.fromEntries(
-  Object.entries(TECH_REGISTRY).map(([key, entry]) => [key, { name: entry.displayName, desc: entry.desc }])
+  Object.entries(TECH_REGISTRY)
+    .filter(([, entry]) => !entry.baseLayer)
+    .map(([key, entry]) => [key, { name: entry.displayName, desc: entry.desc }])
 );
 
 /** Available UI languages. */

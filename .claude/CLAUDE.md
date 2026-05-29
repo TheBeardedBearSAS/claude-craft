@@ -2,7 +2,7 @@
 
 **Version:** 8.7.1 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 72 agents, 211 commands across 26 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 11 technology stacks, 31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -12,7 +12,7 @@ A comprehensive AI-assisted development framework for Claude Code with 19 techno
 |-------|---------|--------------|--------------|
 | **.NET / C#** | 10 LTS / C# 14 | Clean Architecture | CQRS, MediatR (ou alternative), EF Core |
 | **Symfony / PHP** | 8.0 / PHP 8.4+ | Clean Architecture | DDD, Hexagonal, API Platform, JsonStreamer |
-| **Flutter / Dart** | 3.41 / Dart 3.11 | Clean Architecture | BLoC v9, Riverpod 3, Material 3, Impeller |
+| **Flutter / Dart** | 3.44 / Dart 3.12 | Clean Architecture | BLoC v9, Riverpod 3, Material 3, Impeller |
 | **React** | 19.2 + Compiler 1.0 | Feature-based | Hooks, Zustand, React Query, Server Components |
 | **React Native** | 0.85 (New Architecture) | Feature-based | Navigation 7, Reanimated 4, TurboModules |
 | **Angular** | 20 LTS (ou 21) | Domain-driven | Signals, Standalone, Zoneless, httpResource |
@@ -45,7 +45,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (26 namespaces, 211 commands)
+## Available Commands (15 namespaces, 125 commands)
 
 Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*`, `/paperclip:*` | Infra (via `@devops-engineer`): Docker 29.4.3, Coolify v4.0.0 (stable), K8s 1.36.1, OpenTofu 1.12.0, Ansible 2.21.0, FrankenPHP 1.12.1, PgBouncer 1.25.2 (CVE-2026-6664/6667 patched) | Project: `/sprint:*`, `/gate:*`, `/project:*`
 
@@ -53,7 +53,7 @@ Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-RE
 
 ---
 
-## Available Agents (72 agents)
+## Available Agents (31 specialized + 39 infra on-demand)
 
 **Common** (20): `@api-designer`, `@database-architect`, `@devops-engineer`, `@performance-auditor`, `@refactoring-specialist`, `@tdd-coach`, `@uiux-orchestrator`, `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@research-assistant`, `@ralph-conductor`, `@security-auditor`, `@data-analyst`, `@migration-specialist`, `@cost-optimizer`, `@chaos-engineer`, `@devex-engineer`, `@mlops-engineer`, `@observability-engineer` | **Tech Reviewers** (11): `@{symfony,flutter,react,python,angular,laravel,vuejs,reactnative,csharp,php,paperclip}-reviewer` | **Infrastructure** (39): Docker, Coolify, K8s, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP — see [Agents](../docs/AGENTS.md) | **Project** (2): `@product-owner`, `@tech-lead`
 
@@ -161,7 +161,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version:** 2.1.97 (CVE-2025-59536 patched) | **Recommended:** 2.1.118 — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
+**Minimum Version:** 2.1.97 (CVE-2025-59536 patched) | **Recommended:** 2.1.154 (Opus 4.8 + Dynamic Workflows) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
 
 ---
 

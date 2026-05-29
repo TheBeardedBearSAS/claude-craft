@@ -39,12 +39,12 @@ dotnet publish -c Release --self-contained -r linux-x64
 ```xml
 <!-- Clean Architecture essentials -->
 <ItemGroup>
-  <!-- CQRS & Mediator -->
-  <PackageReference Include="MediatR" Version="12.*" />
+  <!-- CQRS & Mediator (MediatR 14.x — latest stable, 2026-03) -->
+  <PackageReference Include="MediatR" Version="14.*" />
 
-  <!-- Validation -->
-  <PackageReference Include="FluentValidation" Version="11.*" />
-  <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.*" />
+  <!-- Validation (FluentValidation 12.x requires .NET 8+, drops netstandard2.0) -->
+  <PackageReference Include="FluentValidation" Version="12.*" />
+  <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.*" />
 
   <!-- Object mapping -->
   <PackageReference Include="AutoMapper" Version="13.*" />
@@ -56,23 +56,26 @@ dotnet publish -c Release --self-contained -r linux-x64
 
 <!-- Entity Framework Core -->
 <ItemGroup>
-  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.*" />
-  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.*" />
-  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.*">
+  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.*" />
+  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.*" />
+  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.*">
     <PrivateAssets>all</PrivateAssets>
     <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
   </PackageReference>
-  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.*" />
+  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.*" />
 </ItemGroup>
 
 <!-- Testing -->
 <ItemGroup>
-  <PackageReference Include="xunit" Version="2.*" />
-  <PackageReference Include="xunit.runner.visualstudio" Version="2.*">
+  <!-- xUnit v3 (3.x) is the recommended runner for .NET 10; v2 is legacy -->
+  <PackageReference Include="xunit.v3" Version="3.*" />
+  <PackageReference Include="xunit.runner.visualstudio" Version="3.*">
     <PrivateAssets>all</PrivateAssets>
   </PackageReference>
   <PackageReference Include="Moq" Version="4.*" />
-  <PackageReference Include="FluentAssertions" Version="6.*" />
+  <!-- FluentAssertions 8.x requires a COMMERCIAL license for commercial use (~$130/dev/yr).
+       Apache-2.0 alternative: AwesomeAssertions (drop-in fork). v7 remains Apache-2.0. -->
+  <PackageReference Include="FluentAssertions" Version="8.*" />
   <PackageReference Include="Bogus" Version="35.*" />
   <PackageReference Include="Testcontainers" Version="3.*" />
 </ItemGroup>
@@ -80,7 +83,7 @@ dotnet publish -c Release --self-contained -r linux-x64
 <!-- API Documentation -->
 <ItemGroup>
   <PackageReference Include="Swashbuckle.AspNetCore" Version="6.*" />
-  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.*" />
+  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.*" />
 </ItemGroup>
 
 <!-- Resilience & Observability -->
@@ -171,7 +174,7 @@ trim_trailing_whitespace = false
 <!-- Place at solution root for shared project settings -->
 <Project>
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -193,7 +196,7 @@ trim_trailing_whitespace = false
 
   <!-- Code analysis -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.*">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -217,27 +220,27 @@ trim_trailing_whitespace = false
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- ASP.NET Core -->
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <!-- ASP.NET Core (.NET 10 LTS — 10.0.8 latest patch) -->
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
 
-    <!-- Entity Framework Core -->
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
+    <!-- Entity Framework Core (10.0.8 — aligned with .NET 10 LTS) -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.8" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.8" />
 
     <!-- Application Layer -->
-    <PackageVersion Include="MediatR" Version="12.4.0" />
-    <PackageVersion Include="FluentValidation" Version="11.9.0" />
-    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
+    <PackageVersion Include="MediatR" Version="14.1.0" />
+    <PackageVersion Include="FluentValidation" Version="12.1.1" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageVersion Include="AutoMapper" Version="13.0.1" />
     <PackageVersion Include="Ardalis.GuardClauses" Version="4.5.0" />
 
-    <!-- Testing -->
-    <PackageVersion Include="xunit" Version="2.7.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.7" />
+    <!-- Testing (xUnit v3 3.2.2 stable; FluentAssertions 8.x = commercial license — see note above) -->
+    <PackageVersion Include="xunit.v3" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.2.2" />
     <PackageVersion Include="Moq" Version="4.20.70" />
-    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="FluentAssertions" Version="8.10.0" />
     <PackageVersion Include="Bogus" Version="35.4.0" />
     <PackageVersion Include="Testcontainers" Version="3.7.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
@@ -248,7 +251,7 @@ trim_trailing_whitespace = false
     <PackageVersion Include="Polly" Version="8.3.1" />
 
     <!-- Analyzers -->
-    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.300" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.21.0.86780" />
   </ItemGroup>
@@ -311,7 +314,7 @@ trim_trailing_whitespace = false
 
 ```dockerfile
 # Dockerfile
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy csproj files and restore
@@ -333,7 +336,7 @@ FROM build AS publish
 RUN dotnet publish "src/WebAPI/WebAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 EXPOSE 8080
 COPY --from=publish /app/publish .
@@ -351,7 +354,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - '8080:8080'
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=myapp;Username=postgres;Password=postgres
@@ -366,11 +369,11 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: myapp
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -378,7 +381,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
 
 volumes:
   postgres_data:
@@ -399,50 +402,50 @@ on:
     branches: [main]
 
 env:
-  DOTNET_VERSION: '9.0.x'
+  DOTNET_VERSION: '10.0.x'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Build
-      run: dotnet build --no-restore -c Release
+      - name: Build
+        run: dotnet build --no-restore -c Release
 
-    - name: Test
-      run: dotnet test --no-build -c Release --logger trx --collect:"XPlat Code Coverage"
+      - name: Test
+        run: dotnet test --no-build -c Release --logger trx --collect:"XPlat Code Coverage"
 
-    - name: Upload coverage
-      uses: codecov/codecov-action@v4
-      with:
-        files: '**/coverage.cobertura.xml'
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: '**/coverage.cobertura.xml'
 
   analyze:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Install dotnet-format
-      run: dotnet tool install -g dotnet-format
+      - name: Install dotnet-format
+        run: dotnet tool install -g dotnet-format
 
-    - name: Check formatting
-      run: dotnet format --verify-no-changes --verbosity diagnostic
+      - name: Check formatting
+        run: dotnet format --verify-no-changes --verbosity diagnostic
 ```
 
 ## Debugging
@@ -459,7 +462,7 @@ jobs:
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/WebAPI/bin/Debug/net9.0/WebAPI.dll",
+      "program": "${workspaceFolder}/src/WebAPI/bin/Debug/net10.0/WebAPI.dll",
       "args": [],
       "cwd": "${workspaceFolder}/src/WebAPI",
       "stopAtEntry": false,
@@ -486,14 +489,14 @@ The LSP plugin gives Claude structural code understanding via the Language Serve
 
 ### Capabilities
 
-| Capability | Description |
-|------------|-------------|
+| Capability                | Description                                                         |
+| ------------------------- | ------------------------------------------------------------------- |
 | **Automatic diagnostics** | C# compilation errors and warnings detected after each modification |
-| **Go to Definition** | Navigate to the exact definition of a symbol |
-| **Find References** | All usages of a symbol across the project |
-| **Hover** | Type information and documentation |
-| **Workspace Symbols** | Search symbols across the entire project |
-| **Call Hierarchy** | Trace incoming/outgoing calls |
+| **Go to Definition**      | Navigate to the exact definition of a symbol                        |
+| **Find References**       | All usages of a symbol across the project                           |
+| **Hover**                 | Type information and documentation                                  |
+| **Workspace Symbols**     | Search symbols across the entire project                            |
+| **Call Hierarchy**        | Trace incoming/outgoing calls                                       |
 
 ### Installation
 
@@ -516,7 +519,7 @@ dotnet tool install -g csharp-ls
 
 ## Tooling Checklist
 
-- [ ] .NET 9 SDK installed
+- [ ] .NET 10 SDK installed (10.0.300+)
 - [ ] EditorConfig configured
 - [ ] Directory.Build.props set up
 - [ ] Central package management enabled

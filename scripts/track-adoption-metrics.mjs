@@ -5,9 +5,8 @@ import { fileURLToPath } from 'node:url';
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const METRICS_DIR = path.join(PROJECT_ROOT, '.bmad', 'metrics');
-const NPM_URL =
-  'https://api.npmjs.org/downloads/point/last-week/@the-bearded-bear/claude-craft';
-const GITHUB_URL = 'https://api.github.com/repos/the-bearded-cto/claude-craft';
+const NPM_URL = 'https://api.npmjs.org/downloads/point/last-week/@the-bearded-bear/claude-craft';
+const GITHUB_URL = 'https://api.github.com/repos/TheBeardedBearSAS/claude-craft';
 
 async function fetchNpm() {
   const res = await fetch(NPM_URL, { headers: { 'User-Agent': 'claude-craft-metrics/1.0' } });
@@ -32,7 +31,7 @@ async function fetchGitHub() {
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
   const data = await res.json();
   return {
-    repo: 'the-bearded-cto/claude-craft',
+    repo: 'TheBeardedBearSAS/claude-craft',
     stars: data.stargazers_count,
     forks: data.forks_count,
     open_issues: data.open_issues_count,

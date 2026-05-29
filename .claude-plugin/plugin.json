@@ -41,7 +41,8 @@
   "compatibility": {
     "claudeCode": {
       "minimum": "2.1.97",
-      "recommended": "2.1.117"
+      "recommended": "2.1.154",
+      "tested": "2.1.154"
     },
     "node": ">=20.0.0"
   },

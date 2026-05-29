@@ -1,9 +1,9 @@
 ---
 name: security-auditor
 description: OWASP Top 10:2025 security audit specialist — SAST, dependency scanning, secrets detection, authZ/authN review
-model: sonnet
+model: opus
 maxTurns: 6
-effort: medium
+effort: xhigh
 memory: user
 tools: [Read, Glob, Grep, Bash, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, NotebookEdit]

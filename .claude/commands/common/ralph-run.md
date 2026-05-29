@@ -72,6 +72,58 @@ Le systeme DoD valide la completion via plusieurs criteres:
 | `hook` | Executer hook Claude existant |
 | `human` | Validation humaine interactive |
 
+### 3bis. Integration `/goal` (Claude Code 2.1.139+) — Alternative native aux DoD
+
+Depuis Claude Code v2.1.139, la commande native `/goal` offre une alternative aux DoD validators manuels. Au lieu de definir des criteres via `ralph.yml` et de les valider apres chaque iteration, vous pouvez exprimer le critere de completion directement comme un objectif Claude Code, et la session s'arrete automatiquement quand l'objectif est atteint.
+
+**Quand utiliser `/goal` plutot que les DoD validators ?**
+
+| Critere | DoD validator | `/goal` natif |
+|---------|---------------|---------------|
+| Test command verifiable | `command: pytest` | `/goal "tous les tests passent"` |
+| Pattern textuel attendu | `output_contains: "✓"` | `/goal "le build affiche 0 erreur"` |
+| Modification de fichier | `file_changed: src/auth.py` | `/goal "src/auth.py implements login"` |
+| Hook Claude | `hook: custom-validator.sh` | Garder DoD validator (plus expressif) |
+| Validation humaine | `human` | Garder DoD validator (interactif) |
+
+> **⚠️ `/goal` est une commande IN-SESSION, pas un flag CLI.** On la tape dans le prompt d'une session Claude Code interactive (ou via `claude -p '/goal "..."'` en mode headless). Il n'existe **pas** d'argument `ralph.sh --goal`. Un Stop hook (exit code 2) bloque l'arret tant que l'objectif n'est pas atteint et s'auto-efface une fois la condition remplie.
+
+**Pattern recommande :**
+
+```text
+# Dans une session Claude Code interactive — taper directement :
+/goal all tests pass and code coverage >= 80%
+
+# Equivalent headless (non-interactif) :
+claude -p '/goal "all tests pass and code coverage >= 80%"'
+```
+
+Pour les criteres complexes (hooks, validation humaine), garder les DoD validators de `ralph.yml` : `/goal` (verification semantique) et DoD validators (criteres deterministes) sont complementaires, pas exclusifs.
+
+**Avantages de `/goal` :**
+- Verification semantique par Claude (pas juste pattern matching)
+- Pas de configuration `ralph.yml` necessaire pour les cas simples
+- Integration native avec le circuit breaker (le `/goal` non atteint est traite comme un signal d'arret)
+- Compatible avec `--auto-detect` (Ralph genere automatiquement un `/goal` adapte au type de projet)
+
+**Migration depuis DoD purs :**
+
+```yaml
+# Avant (ralph.yml) : 12 lignes
+dod:
+  validators:
+    - type: command
+      cmd: "pytest tests/"
+      success: "passed"
+    - type: file_changed
+      path: "src/auth.py"
+    - type: output_contains
+      pattern: "Coverage: 8[0-9]%|9[0-9]%"
+
+# Apres (commande simple)
+ralph.sh --goal "tests pass, src/auth.py implements login, coverage >= 80%"
+```
+
 ### 4. Circuit Breaker Adaptatif (v2.0)
 
 Selection automatique du profil selon mots-cles:
