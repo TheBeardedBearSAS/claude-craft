@@ -6,7 +6,8 @@ import { parseFrontmatter } from './parse-frontmatter.mjs';
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '../..');
 const AGENTS_DIR = path.join(PROJECT_ROOT, '.claude', 'agents');
 
-const ALLOWED_EFFORTS = ['low', 'medium', 'high'];
+// xhigh/max added per Claude Code 2.1.111+/2.1.154 (Opus 4.8): critical agents route to xhigh
+const ALLOWED_EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
 const ALLOWED_MEMORIES = ['user', 'project', 'local'];
 
 function getAgentFrontmatters() {
@@ -48,10 +49,12 @@ describe('agent optimization fields', () => {
       }
     });
 
-    it('opus agents use effort: high', () => {
+    it('opus agents use effort: high or xhigh (critical reasoning)', () => {
       const opusAgents = agents.filter((a) => a.frontmatter.model === 'opus');
       for (const agent of opusAgents) {
-        expect(agent.frontmatter.effort, `Opus agent ${agent.filename} should use effort: high`).toBe('high');
+        expect(['high', 'xhigh', 'max'], `Opus agent ${agent.filename} should use effort: high/xhigh/max`).toContain(
+          agent.frontmatter.effort
+        );
       }
     });
 
@@ -122,18 +125,26 @@ describe('agent optimization fields', () => {
       expect(agent.frontmatter.model, 'api-designer should use sonnet for cost optimization').toBe('sonnet');
     });
 
-    it('database-architect uses sonnet (not opus)', () => {
+    it('database-architect uses opus (critical schema decisions, audit 2026-05-20)', () => {
       const agent = agents.find((a) => a.basename === 'database-architect');
       expect(agent).toBeDefined();
-      expect(agent.frontmatter.model, 'database-architect should use sonnet for cost optimization').toBe('sonnet');
+      expect(agent.frontmatter.model, 'database-architect should use opus for critical schema decisions').toBe('opus');
     });
 
-    it('only ralph-conductor and tdd-coach use opus', () => {
+    it('only critical-reasoning agents use opus (cost optimization)', () => {
+      // Opus reserved for high-stakes work: autonomous loops, migrations, schema, security audits, TDD coaching.
+      // All tech reviewers stay on haiku; standard agents on sonnet. See audit 2026-05-20 + Opus 4.8 routing.
       const opusAgents = agents
         .filter((a) => a.frontmatter.model === 'opus')
         .map((a) => a.basename)
         .sort();
-      expect(opusAgents).toEqual(['ralph-conductor', 'tdd-coach']);
+      expect(opusAgents).toEqual([
+        'database-architect',
+        'migration-specialist',
+        'ralph-conductor',
+        'security-auditor',
+        'tdd-coach',
+      ]);
     });
 
     it('all reviewer agents have maxTurns <= 6', () => {

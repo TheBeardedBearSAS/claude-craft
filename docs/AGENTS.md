@@ -349,9 +349,79 @@ Helps with:
 
 All 22 common and reviewer agents now include optimized frontmatter:
 
-- **Effort control**: Each agent specifies `effort: low|medium|high` to optimize reasoning depth
+- **Effort control**: Each agent specifies `effort: low|medium|high|xhigh|max` to optimize reasoning depth (`xhigh`/`max` since Claude Code 2.1.111+/2.1.154 with Opus 4.8)
 - **Persistent memory**: 18 agents use `memory: user` or `memory: project` for cross-session knowledge
-- **Model distribution**: 2 opus (product-owner, tech-lead), 16 sonnet (common + reviewers), 3 haiku (accessibility-expert, ux-ergonome, ui-designer)
+- **Model distribution** (31 agent files): **5 opus + xhigh** (critical reasoning — database-architect, migration-specialist, ralph-conductor, security-auditor, tdd-coach), **11 sonnet** (standard common agents), **15 haiku + low** (all 11 tech reviewers + accessibility-expert, cost-optimizer, performance-auditor, research-assistant). Opus reserved for high-stakes work; reviewers stay on haiku for cost-efficient read-only review.
+
+## Advanced Frontmatter (Claude Code 2.1.119+)
+
+Two new frontmatter keys are available for agents since Claude Code **v2.1.119+**, enabling per-agent MCP loading and automatic worktree isolation.
+
+### `mcpServers` — Per-Agent MCP Loading
+
+**Requires:** Claude Code 2.1.119+
+
+Agents can now declare their own MCP servers. These servers are loaded **only when the agent is active**, reducing global MCP overhead and enabling agent-specific tooling.
+
+```yaml
+---
+name: security-auditor
+model: opus
+effort: xhigh
+mcpServers:
+  semgrep:
+    command: npx
+    args: ["-y", "@semgrep/mcp-server"]
+  trivy:
+    command: trivy
+    args: ["mcp-server"]
+---
+```
+
+**Claude Craft use cases:**
+
+| Agent | Recommended MCP | Purpose |
+|-------|----------------|---------|
+| `@security-auditor` | `@semgrep/mcp-server`, Trivy MCP | SAST + CVE scanning during audit |
+| `@devops-engineer` | Docker MCP, Kubernetes MCP | Live container/cluster inspection |
+| `@database-architect` | PostgreSQL MCP (`@modelcontextprotocol/server-postgres`) | Direct schema introspection |
+| `@observability-engineer` | Sentry MCP, Grafana MCP | Live metrics/traces during review |
+| `@data-analyst` | PostgreSQL MCP, SQLite MCP | Query execution during analysis |
+
+> **Note:** Per-agent `mcpServers` override global MCP settings for that agent's session only. Requires user approval on first use.
+
+### `isolation: "worktree"` — Automatic Worktree Isolation
+
+**Requires:** Claude Code 2.1.119+
+
+When set, Claude Code automatically creates a temporary git worktree for the agent's session. Changes are isolated until the agent completes; no conflicts with the main working tree.
+
+```yaml
+---
+name: refactoring-specialist
+model: opus
+effort: high
+isolation: "worktree"
+---
+```
+
+**Claude Craft use cases:**
+
+| Agent | Why isolation helps |
+|-------|---------------------|
+| `@refactoring-specialist` | Large refactors can be reviewed before merging back |
+| `@migration-specialist` | Schema migrations in isolation, commit only after validation |
+| `@devops-engineer` | Infrastructure changes tested in isolation from dev work |
+| `@ralph-conductor` | Long autonomous loops don't conflict with ongoing dev |
+
+**Worktree lifecycle:**
+- Created automatically when agent starts
+- Cleaned up automatically if no changes were made
+- On changes: branch and path returned for review/merge
+
+> **See also:** `/parallel-worktrees` skill for manual multi-worktree workflows.
+
+---
 
 ## Scoring System v2.0
 
@@ -1301,8 +1371,19 @@ Agent content...
 |-------|----------|-------------|
 | `name` | Yes | Agent identifier (used with @mention) |
 | `description` | Yes | Brief description shown in agent discovery |
+| `model` | No | `haiku` \| `sonnet` \| `opus` — model routing for cost/quality |
+| `effort` | No | `low` \| `medium` \| `high` \| `xhigh` \| `max` — reasoning depth (`xhigh`/`max` need Opus 4.8) |
 | `memory` | No | Memory scope: `user`, `project`, or `local` (v2.1.33+) |
-| `tools` | No | Tool restrictions including `Task(agent_type)` (v2.1.33+) |
+| `tools` | No | Allowed tools, including `Task(agent_type)` (v2.1.33+) |
+| `disallowedTools` | No | Denied tools (camelCase); `disallowed-tools` kebab-case also accepted (v2.1.152+) |
+| `maxTurns` | No | Cap on agent turns (cost/scope control, v2.1.78+) |
+| `permissionMode` | No | Permission mode for the agent session |
+| `skills` | No | Skills made available to the agent |
+| `mcpServers` | No | Per-agent MCP servers loaded only when the agent is active (v2.1.117+) |
+| `isolation` | No | `"worktree"` runs the agent in an auto-managed git worktree |
+| `hooks` | No | Agent-scoped hooks (ignored for plugin subagents) |
+| `background` | No | Run the agent as a background session |
+| `color` / `initialPrompt` | No | Display color / seed prompt for the agent |
 
 ### Example
 
