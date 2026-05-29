@@ -95,12 +95,12 @@
     "Tools/"
   ],
   "dependencies": {
-    "@hono/node-server": "^1.19.14",
-    "chokidar": "^4.0.3",
+    "@hono/node-server": "^2.0.4",
+    "chokidar": "^5.0.0",
     "gray-matter": "^4.0.3",
     "hono": "^4.12.14",
     "js-yaml": "^4.1.1",
-    "marked": "^14.1.4",
-    "zod": "^3.25.76"
+    "marked": "^18.0.4",
+    "zod": "^4.4.3"
   }
 }
