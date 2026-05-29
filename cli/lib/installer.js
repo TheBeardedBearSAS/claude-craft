@@ -8,6 +8,7 @@ import fs from 'fs';
 import { spawnSync } from 'child_process';
 import c from './colors.js';
 import { TECHNOLOGIES, LANGUAGES } from './constants.js';
+import { getBaseLayerTechsFor } from './tech-registry.js';
 import { printBanner, printSuccess } from './banner.js';
 import { assertSafeTarget } from './path-safety.js';
 
@@ -247,11 +248,19 @@ export async function autoInstall(cli, { CLI_ROOT, VERSION }) {
 export async function runInstallation(cli, { CLI_ROOT }) {
   console.log(`\n${c.bold}Installing Claude-Craft...${c.reset}\n`);
 
+  // Auto-include base-layer techs (e.g. php is pulled in by symfony/laravel — audit DA-PM-03).
+  // Computed into a local list so the user's selection (cli.config.technologies) stays untouched.
+  const baseLayers = getBaseLayerTechsFor(cli.config.technologies);
+  const installTechs = [...new Set([...cli.config.technologies, ...baseLayers])];
+  if (baseLayers.length > 0) {
+    console.log(`  ${c.cyan}Base layer:${c.reset} auto-including ${baseLayers.join(', ')} (PHP framework selected)`);
+  }
+
   const scriptsDir = path.join(CLI_ROOT, 'Dev', 'scripts');
   const langArg = `--lang=${cli.config.language}`;
-  const hasDocker = cli.config.technologies.includes('docker');
+  const hasDocker = installTechs.includes('docker');
   const includeInfra = cli.config.includeInfra || hasDocker;
-  const techsWithoutDocker = cli.config.technologies.filter((t) => t !== 'docker');
+  const techsWithoutDocker = installTechs.filter((t) => t !== 'docker');
   // 1 base step (common rules) + installable tech scripts + optional infra + optional project + optional rtk
   const totalSteps =
     1 +
@@ -265,9 +274,9 @@ export async function runInstallation(cli, { CLI_ROOT }) {
     console.log(`${c.cyan}[1/${totalSteps}]${c.reset} Installing common rules...`);
     runScript(path.join(scriptsDir, 'install-common-rules.sh'), [langArg, cli.config.targetPath], CLI_ROOT);
 
-    // Install technology-specific rules
+    // Install technology-specific rules (incl. auto-included base layers)
     let step = 2;
-    for (const tech of cli.config.technologies) {
+    for (const tech of installTechs) {
       if (tech === 'docker') continue; // Handled by infra
       const scriptName = `install-${tech}-rules.sh`;
       const scriptPath = path.join(scriptsDir, scriptName);

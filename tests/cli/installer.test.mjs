@@ -79,9 +79,10 @@ describe('runInstallation', () => {
     });
     await runInstallation(cli, { CLI_ROOT: '/fake/root' });
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    // 1 common + 2 techs + infra + project = 5 steps
-    expect(output).toContain('[1/5]');
-    expect(output).toContain('[5/5]');
+    // symfony auto-includes the php base layer (audit DA-PM-03):
+    // 1 common + 3 techs (symfony, react, php) + infra + project = 6 steps
+    expect(output).toContain('[1/6]');
+    expect(output).toContain('[6/6]');
   });
 
   it('calls printSuccess on completion', async () => {

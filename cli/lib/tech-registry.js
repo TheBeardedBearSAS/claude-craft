@@ -113,6 +113,10 @@ const TECH_REGISTRY = {
     installScript: 'install-php-rules.sh',
     version: '8.5',
     tier: 2,
+    // Base layer: not offered standalone in the menu; auto-included when a PHP
+    // framework (Symfony/Laravel) is selected. Avoids triple PHP coverage (audit DA-PM-03).
+    baseLayer: true,
+    baseLayerFor: ['symfony', 'laravel'],
   },
   python: {
     name: 'python',
@@ -146,8 +150,10 @@ const TECH_REGISTRY = {
   },
 };
 
-/** All tech keys (excluding docker which is infra) */
-const INSTALLABLE_TECHS = Object.keys(TECH_REGISTRY).filter((k) => k !== 'docker' && k !== 'coolify');
+/** Standalone-selectable tech keys (excludes infra and base-layer techs like php). */
+const INSTALLABLE_TECHS = Object.keys(TECH_REGISTRY).filter(
+  (k) => k !== 'docker' && k !== 'coolify' && !TECH_REGISTRY[k].baseLayer
+);
 
 /** Get display name for a tech key */
 function getDisplayName(tech) {
@@ -166,4 +172,19 @@ function getTechsByTier(tier) {
     .map(([key]) => key);
 }
 
-export { TECH_REGISTRY, INSTALLABLE_TECHS, getDisplayName, getAllTechKeys, getTechsByTier };
+/**
+ * Base-layer techs that must be auto-included given a list of selected techs.
+ * E.g. selecting `symfony` or `laravel` pulls in `php`.
+ * @param {string[]} selectedTechs
+ * @returns {string[]} base-layer tech keys to add (not already in selectedTechs)
+ */
+function getBaseLayerTechsFor(selectedTechs) {
+  const selected = new Set(selectedTechs);
+  return Object.entries(TECH_REGISTRY)
+    .filter(
+      ([key, entry]) => entry.baseLayer && !selected.has(key) && (entry.baseLayerFor || []).some((t) => selected.has(t))
+    )
+    .map(([key]) => key);
+}
+
+export { TECH_REGISTRY, INSTALLABLE_TECHS, getDisplayName, getAllTechKeys, getTechsByTier, getBaseLayerTechsFor };
