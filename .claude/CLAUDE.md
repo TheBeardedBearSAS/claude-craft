@@ -2,7 +2,7 @@
 
 **Version:** 8.7.1 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 19 technology stacks, 31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 11 technology stacks, 31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, and BMAD v6 project management.
 
 ---
 

@@ -1,15 +1,21 @@
 # Claude Craft — Sprint workflow, multi-stack reviewers, and browser QA for Claude Code teams
 
-> **The AI framework where bugs don't come back.** Sprint workflow, multi-stack reviewers, and browser-based acceptance testing for tech leads adopting Claude Code with their team. **19 stacks, 5 languages, BMAD v6.**
+> **The AI framework where bugs don't come back.** Sprint workflow, a continuous build loop, browser-based acceptance testing, and token-optimized multi-stack reviewers for tech leads adopting Claude Code with their team. **11 stacks, 5 languages, BMAD v6.**
 
 ## Why teams pick Claude Craft
 
-| Outcome | How |
-|---------|-----|
-| 🏆 **Bugs don't come back** | `/qa:recette` auto-generates a regression test for every bug you fix (Golden Rule). Browser-based, no other framework offers this. |
-| 🤖 **Conventions on autopilot** | 11 stack-specific reviewers (@symfony-reviewer, @react-reviewer, @python-reviewer...) enforce SOLID/TDD/Clean Architecture without you re-typing the rules every sprint. |
-| 🚀 **Sprint workflow integrated** | BMAD v6 (Analyze → Plan → Design → Implement → QA) executed by Claude Code directly. Quick Flow < 5 min, Standard < 15 min, Enterprise < 30 min. |
-| 💰 **Token-optimized by default** | Forked sub-agents, `context: fork` on 15 heavy skills, 1h prompt caching, sub-agent Sonnet routing. Target 55-65% token savings vs raw Claude Code. |
+Four things Claude Code + an Anthropic cookbook **won't** give you — they're workflow and orchestration, not prompts:
+
+| Differentiator | What it does |
+|----------------|--------------|
+| 🏆 **QA Recette** (browser-based) | `/qa:recette` drives Chrome to run acceptance tests and auto-generates a regression test for every bug you fix — the Golden Rule: a fixed bug never comes back. No other Claude Code framework does this. |
+| 🚀 **BMAD v6 sprint workflow** | Analyze → Plan → Design → Implement → QA, executed by Claude Code directly with quality gates. Quick Flow < 5 min, Standard < 15 min, Enterprise < 30 min. |
+| 🔁 **Ralph Wiggum loop** | `/common:ralph-run` runs Claude in a continuous loop until your Definition of Done holds — adaptive circuit breaker, native `/goal` integration, DoD validators. |
+| ⚡ **RTK token optimization** | Forked sub-agents, `context: fork` on heavy skills, 1h prompt caching, Haiku/Sonnet/Opus routing per task. Target 55-65% token savings vs raw Claude Code. |
+
+Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @python-reviewer…) that enforce SOLID/TDD/Clean Architecture so you don't re-type your conventions every sprint.
+
+> **Why not just Claude Code + a cookbook?** Claude already knows React, Symfony, and Flutter patterns — so Claude Craft's value isn't the prompts, it's the **workflow and orchestration around them**: a sprint lifecycle with gates, a continuous loop with a real DoD, browser-based regression capture, and per-task token routing. Those are the parts a per-stack cookbook doesn't cover.
 
 
 
