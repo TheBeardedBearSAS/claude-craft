@@ -24,7 +24,10 @@ jobs:
         with:
           path-to-signatures: '.github/cla-signatures/v1/signatures.json'
           path-to-document: 'https://github.com/TheBeardedBearSAS/claude-craft/blob/main/.github/CLA.md'
-          branch: 'main'
+          # Store signatures on a dedicated UNPROTECTED branch: main is protected
+          # ("changes must be made through a PR"), so GITHUB_TOKEN cannot commit the
+          # signatures file there. cla-signatures has no protection rule.
+          branch: 'cla-signatures'
           allowlist: 'dependabot,dependabot[bot],renovate,renovate[bot],github-actions[bot]'
           # Signatures are stored in THIS repo (.github/cla-signatures/...) via GITHUB_TOKEN
           # (contents: write above). Setting remote-organization/repository-name forces the
