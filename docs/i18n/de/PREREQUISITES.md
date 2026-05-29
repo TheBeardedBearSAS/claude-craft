@@ -19,7 +19,7 @@ Erforderlich für NPX-Installation und CLI-Tools.
 
 **Überprüfen:**
 ```bash
-node --version   # Sollte v18.x oder höher sein
+node --version   # Sollte v20.x oder höher sein
 npm --version    # Sollte v9.x oder höher sein
 ```
 

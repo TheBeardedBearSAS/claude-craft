@@ -13,7 +13,7 @@
 ### Community (MIT, Free)
 
 **Included:**
-- ✅ 125 commands across 26 namespaces
+- ✅ 125 commands across 15 namespaces
 - ✅ 31 default agents + 39 infrastructure agents on-demand (70 total)
 - ✅ All skills (SOLID, TDD, security, git-workflow, atomic-tasks, etc.)
 - ✅ RTK integration (60-90% token savings)

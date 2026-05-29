@@ -33,7 +33,7 @@ Claude Craft classifies its 10 application technology stacks into 3 maturity tie
 | Symfony / PHP | 1 (Core) | 8.0 / PHP 8.5 | 58+ | 10+ | Full support | -- |
 | React | 1 (Core) | 19.2 + Compiler 1.0 | 30+ | 10+ | Full support | -- |
 | Python | 1 (Core) | 3.14+ | 25+ | 10+ | Full support | -- |
-| Flutter / Dart | 1 (Core) | 3.41 / Dart 3.11 | 25+ | 10+ | Full support | -- |
+| Flutter / Dart | 1 (Core) | 3.44 / Dart 3.12 | 25+ | 10+ | Full support | -- |
 | React Native | 2 (Supported) | 0.85 | 39 | 10 | Good coverage | Expand i18n to 25+, deepen agent specialization, add 3+ tech-specific skills |
 | PHP | 2 (Supported) | 8.5 | 7+ | 5 | Solid base | Add more i18n files, expand commands to 8+, add tech-specific skills |
 | C# / .NET | 3 (Community) | 10 LTS / C# 14 | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |

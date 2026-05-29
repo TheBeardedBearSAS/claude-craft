@@ -154,7 +154,7 @@ Características clave:
 ## Consejos para el Éxito
 
 1. **No saltes los Quality Gates**
-2. **Usa los agentes colaborativamente** - Claude-Craft incluye **63 agentes** especializados
+2. **Usa los agentes colaborativamente** - Claude-Craft incluye **70 agentes** especializados
 3. **TDD es no negociable**: 🔴 → 🟢 → 🔵
 4. **Documenta las decisiones** con ADRs
 5. **Revisiones regulares**: `/common:daily-standup`, `@{tech}-reviewer`

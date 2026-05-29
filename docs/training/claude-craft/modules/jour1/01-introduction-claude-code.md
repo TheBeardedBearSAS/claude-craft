@@ -1,4 +1,4 @@
-# Module 1 : Introduction à Claude Code 2.1.117
+# Module 1 : Introduction à Claude Code 2.1.154
 
 ## Objectifs
 
@@ -16,7 +16,7 @@
 
 **Claude Code** est l'interface en ligne de commande (CLI) officielle d'Anthropic pour interagir avec Claude, l'assistant IA. C'est un outil de développement assisté par IA conçu pour le pair programming et les tâches de codage.
 
-### Version recommandée : 2.1.117
+### Version recommandée : 2.1.154
 
 Nouveautés majeures incluent (par ordre de version) :
 
@@ -97,7 +97,7 @@ Nouveautés majeures incluent (par ordre de version) :
 - **Monitor tool** (v2.1.98) : Streamer les événements d'un processus en arrière-plan
 - **`/proactive`** (v2.1.105) : Alias pour `/loop`, tâches planifiées récurrentes
 - **PreCompact blocking** (v2.1.105) : `exit 2` pour bloquer la compaction
-- **7 CVEs corrigés** : Toujours utiliser v2.1.117+ pour la sécurité
+- **7 CVEs corrigés** : Toujours utiliser v2.1.154+ pour la sécurité
 
 ### Positionnement
 
@@ -123,7 +123,7 @@ Nouveautés majeures incluent (par ordre de version) :
 | Modèle | Caractéristique | Usage recommandé |
 |--------|-----------------|------------------|
 | **Claude Sonnet 4.6** | Rapide, modèle par défaut | Usage quotidien |
-| **Claude Opus 4.7** | Flagship actuel, 1M context GA, 128K output, adaptive thinking, effort `xhigh` | Tâches complexes, agents |
+| **Claude Opus 4.8** | Flagship actuel, 1M context GA, 128K output, adaptive thinking, effort `xhigh` | Tâches complexes, agents |
 | **Claude Opus 4.6** | Fast Mode uniquement (`/fast`), 2.5x plus rapide, 6x coût | Urgences, génération rapide |
 | **Claude Haiku 4.5** | Léger, économique | Tâches simples, background |
 
@@ -145,7 +145,7 @@ npm install -g @anthropic-ai/claude-code
 
 # Vérification
 claude --version
-# Devrait afficher : 2.1.117 ou supérieur
+# Devrait afficher : 2.1.154 ou supérieur
 ```
 
 ### Configuration de la clé API
@@ -190,7 +190,7 @@ claude --add-dir /chemin/vers/autre-projet
 | `/cost` | Affiche le coût de la session |
 | `/history` | Historique des conversations |
 
-### Nouvelles commandes (2.1.117)
+### Nouvelles commandes (2.1.154)
 
 | Commande | Description |
 |----------|-------------|
@@ -441,7 +441,7 @@ Les permissions se configurent dans les settings de Claude Code :
 | Modèle | Contexte max | Recommandé |
 |--------|--------------|------------|
 | Sonnet 4.6 | 200K tokens | < 150K |
-| Opus 4.7 | 1M tokens GA | < 800K |
+| Opus 4.8 | 1M tokens GA | < 800K |
 | Opus 4.6 | 1M tokens GA (Fast Mode) | < 800K |
 | Haiku 4.5 | 200K tokens | < 100K |
 
@@ -460,7 +460,7 @@ Les permissions se configurent dans les settings de Claude Code :
 
 # Tarification indicative (2026)
 # Sonnet 4.6 : ~$3/million tokens input, ~$15/million tokens output
-# Opus 4.7 : ~$5/million tokens input, ~$25/million tokens output
+# Opus 4.8 : ~$5/million tokens input, ~$25/million tokens output
 # Opus 4.6 Fast Mode (/fast) : ~$30/million tokens input, ~$150/million tokens output (6x)
 # Haiku 4.5 : ~$1/million tokens input, ~$5/million tokens output
 ```
@@ -654,8 +654,8 @@ Voir `exercices/exercice-01-premier-projet.md`
 
 ## Points Clés à Retenir
 
-1. **Claude Code 2.1.117** = CLI officiel avec Adaptive Thinking, MCP, Permissions 3-tier, 24 hooks, plan mode, /debug, Agent Teams, Auto Mode, RTK, Native CLI binary, Forked subagents
-2. **4 modèles** : Sonnet 4.6 (par défaut), Opus 4.7 (flagship, `xhigh` effort), Opus 4.6 (Fast Mode via `/fast`), Haiku 4.5 (léger)
+1. **Claude Code 2.1.154** = CLI officiel avec Adaptive Thinking, MCP, Permissions 3-tier, 24 hooks, plan mode, /debug, Agent Teams, Auto Mode, RTK, Native CLI binary, Forked subagents
+2. **4 modèles** : Sonnet 4.6 (par défaut), Opus 4.8 (flagship, `xhigh` effort), Opus 4.6 (Fast Mode via `/fast`), Haiku 4.5 (léger)
 3. **Extended Thinking** : 4 niveaux (think < think hard < think harder < ultrathink)
 4. **MCP** : Protocole ouvert pour connecter des outils et ressources externes
 5. **Permissions 3-tier** : Deny > Allow > Ask avec wildcards

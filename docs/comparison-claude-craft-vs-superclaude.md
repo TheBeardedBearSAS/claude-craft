@@ -46,7 +46,7 @@ If you're undecided, **start with SuperClaude** to learn how Claude Code persona
 | React 19.2 + Compiler 1.0 | Generic | Dedicated: Hooks, Server Components, Zustand, React Query, bundle analysis |
 | Vue.js 3.5+ (3.6 Vapor beta) | Generic | Dedicated: Composition API, Pinia, Alien Signals |
 | Angular 20 LTS | Generic | Dedicated: Signals, Standalone, Zoneless, httpResource |
-| Flutter 3.41 / Dart 3.11 | Generic | Dedicated: BLoC v9, Riverpod 3, Material 3, Impeller |
+| Flutter 3.44 / Dart 3.12 | Generic | Dedicated: BLoC v9, Riverpod 3, Material 3, Impeller |
 | React Native 0.85 New Arch | Generic | Dedicated: JSI, TurboModules, Fabric, Reanimated 4 |
 | C# / .NET 10 LTS | Generic | Dedicated: Clean Architecture, CQRS, MediatR, EF Core |
 | Python 3.14+ | Generic | Dedicated: FastAPI, Pydantic, free-threading, JIT |
@@ -60,7 +60,7 @@ If you're undecided, **start with SuperClaude** to learn how Claude Code persona
 | Installation | `npx superclaude install` | `npx @the-bearded-bear/claude-craft install . --tech=react --lang=fr` |
 | Config update | Manual or re-run installer | `npx ... update` with diff preview |
 | Languages supported | English (full), partial others | en, fr, es, de, pt (full parity, automated CI check) |
-| Slash commands | ~30 | 211 across 26 namespaces |
+| Slash commands | ~30 | 125 across 15 namespaces |
 | Skills (Claude Code v2.1.105+) | A few | 48 skills, 15 with `context: fork` for token isolation |
 | Hooks templates | None | 9 templates (auto-format, security-block, pre-compact, output-filter, etc.) |
 | Token optimisation guide | Generic | RTK integration + `context: fork` + sub-agent model routing (55-65% reduction stack) |
@@ -92,7 +92,7 @@ If you're a single developer wanting to upgrade your Claude Code experience in 5
 
 ### 3. Lighter footprint
 
-SuperClaude's bundle is smaller. It does less. If you don't need 19 stacks and 211 commands, that simplicity is a feature.
+SuperClaude's bundle is smaller. It does less. If you don't need 11 stacks and 125 commands, that simplicity is a feature.
 
 ---
 

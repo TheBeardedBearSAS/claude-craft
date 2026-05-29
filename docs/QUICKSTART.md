@@ -58,7 +58,7 @@ Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`,
 **What you should see:**
 
 ```
-  Claude Craft v7.x - AI Development Framework
+  Claude Craft v8.7.1 - AI Development Framework
 
   Installing react rules to /home/user/my-project...
   [OK] Common rules installed
@@ -155,7 +155,7 @@ You can also ask the TDD coach agent directly:
 | Topic | Guide |
 |-------|-------|
 | Full command reference | [CLI Reference](CLI-REFERENCE.md) |
-| All 33 agents | [Agents](AGENTS.md) |
+| All 31 specialized agents (+39 infra on-demand) | [Agents](AGENTS.md) |
 | Project management (BMAD) | [BMAD Practical Guide](BMAD-PRACTICAL-GUIDE.md) |
 | Continuous loop execution | [Ralph Wiggum Guide](RALPH-GUIDE.md) |
 | Feature development walkthrough | [Feature Guide](guides/en/03-feature-development.md) |

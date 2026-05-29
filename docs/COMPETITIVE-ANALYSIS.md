@@ -8,7 +8,7 @@
 
 | Concurrent | Type | Agents | Multi-tech | Sprint/PM | QA Auto |
 |-----------|------|--------|-----------|-----------|---------|
-| **claude-craft** | Framework integre | 22 agents | 10 stacks | BMAD v6 | Recette |
+| **claude-craft** | Framework integre | 31 agents | 11 stacks | BMAD v6 | Recette |
 | **Claude-Flow** | Orchestration | 60+ agents | Generique | Non | Non |
 | **SuperClaude** | Meta-framework | 16 personas | Generique | Non | Non |
 | **BMAD-METHOD** | Methodologie | 12+ roles | Generique | Oui | Oui |
@@ -61,7 +61,7 @@ Execution continue avec circuit breaker adaptatif, monitoring de sante (detectio
 
 ### W1 : Bibliotheque de prompts, pas framework runtime
 
-93% du codebase est du markdown. Les "33 agents" sont des fichiers markdown avec frontmatter YAML. Les "161 commandes" sont des fichiers markdown. Il n'y a pas de moteur d'orchestration runtime, pas de machine a etats, pas de gestion d'erreurs programmatique. Claude-Flow dispose de 170+ outils MCP reels. CrewAI a un runtime Python qui gere l'execution, la memoire, et la communication inter-agents programmatiquement.
+93% du codebase est du markdown. Les "70 agents" sont des fichiers markdown avec frontmatter YAML. Les "125 commandes" sont des fichiers markdown. Il n'y a pas de moteur d'orchestration runtime, pas de machine a etats, pas de gestion d'erreurs programmatique. Claude-Flow dispose de 170+ outils MCP reels. CrewAI a un runtime Python qui gere l'execution, la memoire, et la communication inter-agents programmatiquement.
 
 ### W2 : Bus factor de 1
 
@@ -84,11 +84,11 @@ Zero support Cursor, Windsurf, Copilot, Aider. Si Anthropic change les conventio
 
 ### W6 : Barriere d'adoption elevee
 
-161 commandes, 20 namespaces, 33 agents, BMAD v6 avec 3 tracks et 5 gates, Ralph Wiggum, QA Recette... Pas de disclosure progressive. Le README fait 611 lignes.
+125 commandes, 15 namespaces, 70 agents, BMAD v6 avec 3 tracks et 5 gates, Ralph Wiggum, QA Recette... Pas de disclosure progressive. Le README fait 611 lignes.
 
-### W7 : 10 stacks, 1 mainteneur
+### W7 : 11 stacks, 1 mainteneur
 
-10 stacks maintenus par 1 personne = couverture potentiellement superficielle. Les references sont des guides de bonnes pratiques generiques que Claude connait deja. La vraie valeur devrait etre dans les conventions specifiques au projet.
+11 stacks maintenus par 1 personne = couverture potentiellement superficielle. Les references sont des guides de bonnes pratiques generiques que Claude connait deja. La vraie valeur devrait etre dans les conventions specifiques au projet.
 
 ### W8 : Fardeau i18n insoutenable
 
@@ -101,13 +101,13 @@ Zero support Cursor, Windsurf, Copilot, Aider. Si Anthropic change les conventio
 ```
 FORCES                              | FAIBLESSES
 ------------------------------------|------------------------------------
-- Profondeur multi-tech (10 stacks) | - Prompt library, pas framework
+- Profondeur multi-tech (11 stacks) | - Prompt library, pas framework
 - Cycle sprint complet (BMAD v6)    | - Bus factor = 1
 - QA Recette (unique)               | - Non-conformite regles internes
 - TCL 95% reduction contexte        | - Agents template-identiques
 - i18n 5 langues                    | - Lock-in Claude Code
 - Ralph Wiggum sophistique          | - Barriere adoption elevee
-- CLI mature (NPM)                  | - 10 stacks x 1 mainteneur
+- CLI mature (NPM)                  | - 11 stacks x 1 mainteneur
 ------------------------------------|------------------------------------
 OPPORTUNITES                        | MENACES
 ------------------------------------|------------------------------------
@@ -140,7 +140,7 @@ OPPORTUNITES                        | MENACES
 
 ### R1 : Reduire le scope a 3-4 stacks Tier 1
 
-**Arreter :** Maintenir 10 stacks a pareil niveau.
+**Arreter :** Maintenir 11 stacks a pareil niveau.
 **Commencer :** Designer 3-4 stacks "Tier 1" maintenus par le core (Symfony, React, Python, Flutter). Les 6 autres passent en community-contributed avec templates dans CONTRIBUTING.md.
 **Impact :** -60% de maintenance, profondeur accrue pour les stacks core.
 
@@ -150,7 +150,7 @@ Le differenciateur le plus fort. Le packager comme module installable independam
 
 ### R3 : Creer une experience "Resultats en 10 minutes"
 
-**Arreter :** Mener avec "10 stacks, 33 agents, 161 commandes".
+**Arreter :** Mener avec "11 stacks, 70 agents, 125 commandes".
 **Commencer :** Un `/workflow:quick-start` qui demontre le cycle complet sur un projet sample en <10 min. Communiquer la valeur, pas la complexite.
 
 ### R4 : Publier les skills sur le Skills Hub

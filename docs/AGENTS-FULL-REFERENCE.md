@@ -44,7 +44,7 @@ C# 14 / .NET 10 code review specialist — Clean Architecture, CQRS, MediatR, EF
 
 ### `@flutter-reviewer`
 
-Flutter 3.41 / Dart 3.11 code review specialist — BLoC v9, Riverpod 3, widget optimization, Impeller, platform-specific code
+Flutter 3.44 / Dart 3.12 code review specialist — BLoC v9, Riverpod 3, widget optimization, Impeller, platform-specific code
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 

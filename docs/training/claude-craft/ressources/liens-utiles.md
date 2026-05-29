@@ -20,11 +20,11 @@
 
 ---
 
-## Claude Code 2.1.117
+## Claude Code 2.1.154
 
 ### Nouvelles fonctionnalités
 
-- **Claude Opus 4.7** : Modèle flagship actuel (2026-04-16) - 1M context GA, 128K output, adaptive thinking, effort `xhigh`
+- **Claude Opus 4.8** : Modèle flagship actuel - 1M context GA, 128K output, adaptive thinking, effort `xhigh`
 - **Claude Opus 4.6** : Réservé à Fast Mode (`/fast`), 2.5x plus rapide, 6x le coût
 - **Agent Teams** (Research Preview) : Coordination multi-agents avec Teammate/SendMessage tools
 - **Automatic Memory** : Enregistrement auto de la mémoire de session
@@ -56,7 +56,7 @@
 
 ---
 
-## Claude-Craft 8.2.3
+## Claude-Craft 8.7.1
 
 ### TCL (Tiered Context Loading)
 
@@ -72,7 +72,7 @@
 - **Ralph Wiggum** : AI loop continu, DoD validators (command, output_contains, file_changed, hook, human)
 - **QA Recette** : Tests d'acceptance automatisés via Chrome, Golden Rule (un bug fixe ne doit JAMAIS reapparaitre)
 - **Docker agents** : 5 agents spécialisés (dockerfile, compose, debug, cicd, architect)
-- **63 agents** au total, **204 commandes** across 26 namespaces
+- **70 agents** au total (31 spécialisés + 39 infra), **125 commandes** / 15 namespaces
 
 ### Installation
 
@@ -84,10 +84,10 @@ npx @the-bearded-bear/claude-craft install
 npx @the-bearded-bear/claude-craft install ~/projet --tech=symfony --lang=fr
 ```
 
-### Technologies supportées (18 stacks)
+### Technologies supportées (11 stacks)
 
 - symfony, laravel, react, angular, vuejs
-- flutter, reactnative, python, php, csharp
+- flutter, reactnative, python, php, csharp, paperclip
 
 ---
 
@@ -331,5 +331,5 @@ npx @the-bearded-bear/claude-craft install ~/projet --tech=symfony --lang=fr
 ---
 
 **Mis à jour : Janvier 2026**
-**Claude Code : 2.1.117**
-**Claude-Craft : 8.2.3**
+**Claude Code : 2.1.154**
+**Claude-Craft : 8.7.1**

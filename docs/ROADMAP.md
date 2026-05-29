@@ -22,9 +22,11 @@
 
 ## Milestones
 
-### v8.2 — Stabilisation (Q2 2026)
+> **État actuel (2026-05) : v8.7.1 livrée.** Les Phases 1→5 de l'audit 2026-05-18 ont été livrées dans les versions v8.4.0 → v8.7.1 (références paperclip/RN/Vue Vapor, CI durcie CodeQL+Trivy, mutation testing bloquant, `install --auto`/`--from`, marketplace skills, rollback auto, 937 tests). Voir le [CHANGELOG](../CHANGELOG.md). Les milestones ci-dessous reflètent le board de vote communautaire restant.
 
-**Issus de `audit/phases/phase-2-stabilisation.md`** :
+### v8.x — Stabilisation (livrée — Phases 1→5)
+
+**Issus de `audit/phases/phase-2-stabilisation.md`** (livré majoritairement en v8.5.0) :
 
 - [ ] P2-11 : E2E tests Tools/ dockerisés
 - [ ] P2-12 : Bash hardening + shellcheck strict CI ✅

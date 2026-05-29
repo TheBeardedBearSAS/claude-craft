@@ -1,6 +1,6 @@
 # Claude Craft — Positioning & Differentiation
 
-**Lead:** AI-first TDD methodology framework for Claude Code — production-ready across 19 tech stacks.
+**Lead:** AI-first TDD methodology framework for Claude Code — production-ready across 11 tech stacks.
 
 ---
 
@@ -9,7 +9,7 @@
 Claude Craft is the **only comprehensive AI development framework** that combines:
 1. **Methodology** (BMAD v6 — Analyze, Plan, Design, Implement)
 2. **Quality enforcement** (TDD, SOLID, OWASP 2025, testing automation)
-3. **Multi-stack production readiness** (19 stacks, 67 agents, 214 commands)
+3. **Multi-stack production readiness** (11 stacks, 70 agents, 125 commands)
 4. **Token optimization** (RTK — 60-90% savings on CLI outputs)
 
 **Target audience:** Teams shipping production code with Claude Code, not hobbyists or single-stack projects.
@@ -62,7 +62,7 @@ Claude Craft is the **only comprehensive AI development framework** that combine
 **What:** 67 domain experts (@api-designer, @database-architect, @security-auditor, @symfony-reviewer, @flutter-reviewer, etc.) + 41 infra agents (Docker, K8s, Coolify, Ansible, OpenTofu).
 
 **Why unique:**
-- Cross-stack expertise (one framework, 19 stacks)
+- Cross-stack expertise (one framework, 11 stacks)
 - Infra agents for full DevOps lifecycle
 - Agent frontmatter with `effort`, `maxTurns`, `disallowedTools` (v2.1.78+)
 
@@ -110,7 +110,7 @@ Full BMAD v6 workflow, QA Recette, 100% skill coverage, battle-tested 2024-2026.
 |-------|---------|--------------|--------|
 | **Symfony / PHP** | 8.0 / PHP 8.4+ | DDD, Hexagonal, API Platform, JsonStreamer | ✅ Production |
 | **React** | 19.2 + Compiler 1.0 | Hooks, Zustand, React Query, Server Components | ✅ Production |
-| **Flutter / Dart** | 3.41 / Dart 3.11 | BLoC v9, Riverpod 3, Material 3, Impeller | ✅ Production |
+| **Flutter / Dart** | 3.44 / Dart 3.12 | BLoC v9, Riverpod 3, Material 3, Impeller | ✅ Production |
 | **Python** | 3.14+ | FastAPI, async/await, Pydantic, free-threading, JIT | ✅ Production |
 
 **Confidence level:** Ship to production without review.

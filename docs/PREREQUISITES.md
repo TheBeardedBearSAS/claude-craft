@@ -19,7 +19,7 @@ Required for NPX installation and CLI tools.
 
 **Verify:**
 ```bash
-node --version   # Should be v18.x or higher
+node --version   # Should be v20.x or higher
 npm --version    # Should be v9.x or higher
 ```
 
@@ -276,7 +276,7 @@ Then install the Claude Code plugin:
 | Docker Compose | 2.0 | 2.24+ |
 | jq | 1.5 | 1.7+ |
 | Make | 3.0 | 4.x |
-| Claude Code | 2.1.97 (CVE-2025-59536 patched) | 2.1.117 |
+| Claude Code | 2.1.97 (CVE-2025-59536 patched) | 2.1.154 |
 
 ---
 

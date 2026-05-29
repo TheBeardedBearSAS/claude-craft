@@ -10,7 +10,7 @@
 
 \vspace{1cm}
 
-> **Formation :** Claude Code 2.1.117 — Maitriser l'Agent de Developpement
+> **Formation :** Claude Code 2.1.154 — Maitriser l'Agent de Developpement
 >
 > **Duree :** 2 jours (14h)
 >
@@ -49,7 +49,7 @@ curl -fsSL https://cli.anthropic.com/install.sh | sh  # Linux
 winget install Anthropic.ClaudeCode  # Windows
 
 # Verification
-claude --version   # Doit afficher 2.1.117+
+claude --version   # Doit afficher 2.1.154+
 ```
 
 - [ ] Claude Code installe et fonctionnel
@@ -129,8 +129,8 @@ claude
 
 - Claude Code est un **agent autonome**, pas un simple chatbot
 - **7 interfaces** disponibles : CLI, VS Code, JetBrains, Desktop, Web, Slack, Chrome
-- **4 modeles** : Sonnet 4.6 (quotidien), Opus 4.7 (complexe, flagship), Opus 4.6 (Fast Mode), Haiku 4.5 (economique)
-- Adaptive Thinking est **automatique** avec Opus 4.7
+- **4 modeles** : Sonnet 4.6 (quotidien), Opus 4.8 (complexe, flagship), Opus 4.6 (Fast Mode), Haiku 4.5 (economique)
+- Adaptive Thinking est **automatique** avec Opus 4.8
 - Surveiller ses couts avec `/cost` et `/status`
 
 \newpage
@@ -612,7 +612,7 @@ cd ../feature-test && claude
 ### Points cles a retenir
 
 - Claude-Craft = framework d'extension pour Claude Code
-- 72 agents specialises, 211 commandes, 26 namespaces
+- 70 agents (31 spécialisés + 39 infra), 125 commandes, 15 namespaces
 - BMAD v6 pour la gestion de projet
 - Installation : `npx @the-bearded-bear/claude-craft install . --tech=react --lang=fr`
 

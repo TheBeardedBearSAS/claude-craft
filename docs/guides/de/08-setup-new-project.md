@@ -31,7 +31,7 @@ Stellen Sie vor dem Start sicher, dass Folgendes installiert ist:
 ### Erforderlich
 
 - [ ] **Terminal/Kommandozeile** - Beliebige Terminal-Anwendung
-- [ ] **Node.js 16+** - Erforderlich für NPX-Installation
+- [ ] **Node.js 20+** - Erforderlich für NPX-Installation
 - [ ] **Git** - Für Versionskontrolle
 - [ ] **Claude Code** - Der KI-Coding-Assistent
 
@@ -43,7 +43,7 @@ Stellen Sie vor dem Start sicher, dass Folgendes installiert ist:
 # Node.js-Version prüfen (sollte 16 oder höher sein)
 node --version
 ```
-Erwartete Ausgabe: `v16.x.x` oder höher (z.B. `v20.10.0`)
+Erwartete Ausgabe: `v20.x.x` oder höher (z.B. `v20.10.0`)
 
 ```bash
 # Git-Version prüfen

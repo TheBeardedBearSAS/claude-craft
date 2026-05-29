@@ -486,7 +486,7 @@ Chaque gate attrape différents problèmes :
 
 ### 2. Utilisez les Agents de Manière Collaborative
 
-Claude-Craft inclut **72 agents** spécialisés. Laissez les agents se passer le relais :
+Claude-Craft inclut **70 agents** spécialisés. Laissez les agents se passer le relais :
 ```
 @bmad-master Route ceci vers l'agent approprié
 ```

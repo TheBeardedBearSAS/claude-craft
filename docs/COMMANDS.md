@@ -33,13 +33,15 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
+> Les **15 namespaces cœur + technologies** (`/common`, `/workflow`, `/team`, `/qa`, `/uiux` + les 10 stacks) totalisent **125 commandes** — c'est le chiffre d'en-tête de Claude Craft. Le tableau ci-dessous inclut en plus les namespaces d'infrastructure et de gestion de projet (BMAD), pour un total installable de **185 commandes sur 26 namespaces**. Référence détaillée auto-générée : [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 14 |
+| `/common:` | Transversal | 19 |
 | `/workflow:` | Workflow (BMAD) | 9 |
 | `/team:` | Agent Teams | 4 |
 | `/qa:` | QA & Testing | 6 |
-| `/uiux:` | UI/UX & Accessibility | 7 |
+| `/uiux:` | UI/UX & Accessibility | 8 |
 | `/symfony:` | PHP/Symfony | 10 |
 | `/flutter:` | Dart/Flutter | 10 |
 | `/python:` | Python | 10 |
@@ -59,7 +61,6 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/pgbouncer:` | PgBouncer/Connection Pooling | 5 |
 | `/frankenphp:` | FrankenPHP/PHP Server | 5 |
 | `/paperclip:` | Paperclip AI-workforce orchestration | 8 |
-| `/project:` | Project Management | 34 |
 | `/sprint:` | Sprint Management (BMAD v6) | 5 |
 | `/gate:` | Quality Gates (BMAD v6) | 7 |
 

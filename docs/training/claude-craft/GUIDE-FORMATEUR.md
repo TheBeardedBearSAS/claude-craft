@@ -1,12 +1,12 @@
-# Guide du Formateur - Claude Code 2.1.117 + Claude-Craft 8.2.3
+# Guide du Formateur - Claude Code 2.1.154 + Claude-Craft 8.7.1
 
 ## Vue d'ensemble
 
-Ce guide fournit les instructions detaillees pour animer la formation de 2 jours sur Claude Code 2.1.117 et Claude-Craft 8.2.3.
+Ce guide fournit les instructions detaillees pour animer la formation de 2 jours sur Claude Code 2.1.154 et Claude-Craft 8.7.1.
 
 **Versions couvertes :**
-- Claude Code : 2.1.47 (hooks, plan mode, background tasks, keybindings, extended thinking, MCP)
-- Claude-Craft : 8.2.3 (TCL, npx install, 18 stacks, BMAD v6, Ralph, QA Recette, 63 agents, 204 commands)
+- Claude Code : 2.1.154 (hooks, plan mode, background tasks, keybindings, extended thinking, MCP)
+- Claude-Craft : 8.7.1 (TCL, npx install, 11 stacks, BMAD v6, Ralph, QA Recette, 70 agents (31 spécialisés + 39 infra), 125 commandes / 15 namespaces)
 
 ---
 
@@ -23,8 +23,8 @@ Ce guide fournit les instructions detaillees pour animer la formation de 2 jours
 ### Checklist technique
 
 - [ ] Node.js 20+ installe sur le poste formateur
-- [ ] Claude Code 2.1.47 installe et fonctionnel
-- [ ] Projet de demo prepare avec Claude-Craft 8.2.3
+- [ ] Claude Code 2.1.154 installe et fonctionnel
+- [ ] Projet de demo prepare avec Claude-Craft 8.7.1
 - [ ] Compte Anthropic de demo avec credits
 - [ ] Slides exportes en PDF (backup)
 - [ ] Exercices testes sur la derniere version
@@ -43,20 +43,20 @@ Envoyer un email avec :
 
 ## Jour 1 : Fondamentaux & Nouveaux Projets
 
-### Module 1 : Introduction a Claude Code 2.1.47 (1h30)
+### Module 1 : Introduction a Claude Code 2.1.154 (1h30)
 
 #### Timing detaille
 
 | Duree | Contenu | Support |
 |-------|---------|---------|
 | 5 min | Accueil, tour de table | - |
-| 15 min | Presentation Claude Code 2.1.47 | Slides |
+| 15 min | Presentation Claude Code 2.1.154 | Slides |
 | 20 min | Demo installation live | Terminal |
 | 15 min | Commandes de base + nouvelles | Demo |
 | 20 min | Plan Mode et Background Tasks | Demo |
 | 15 min | **Exercice 1** : Premier projet | Exercice |
 
-#### Points cles a insister (2.1.117)
+#### Points cles a insister (2.1.154)
 
 1. **Plan Mode** : Montrer `/plan` pour exploration securisee
 2. **Background Tasks** : Montrer `/tasks` pour operations longues
@@ -95,23 +95,23 @@ Montrer le calcul : ~0.03 par interaction simple. Formation de 2 jours = 5-10 de
 
 ---
 
-### Module 2 : Le Framework Claude-Craft 8.2.3 (1h30)
+### Module 2 : Le Framework Claude-Craft 8.7.1 (1h30)
 
 #### Timing detaille
 
 | Duree | Contenu | Support |
 |-------|---------|---------|
 | 20 min | TCL (Tiered Context Loading) | Slides + Schema |
-| 20 min | Nouvelle structure et 18 stacks | Slides |
+| 20 min | Nouvelle structure et 11 stacks | Slides |
 | 15 min | Skills et References | Demo |
 | 15 min | Installation via npx | Terminal |
 | 20 min | **Exercice 2** : Installation | Exercice |
 
-#### Points cles a insister (8.2.3)
+#### Points cles a insister (8.7.1)
 
 1. **TCL** = 95% d'economie de tokens (dessiner le schema au tableau)
 2. **NPX** = Plus de git clone + make
-3. **18 stacks** = Multi-technologie
+3. **11 stacks** = Multi-technologie
 4. **context.yaml** = Chargement automatique
 5. **BMAD v6** = Gestion de projet integree
 6. **Ralph** = Boucle continue autonome
@@ -301,7 +301,7 @@ claude
 
 | Duree | Contenu | Support |
 |-------|---------|---------|
-| 20 min | Skills system (2.1.117) | Slides + Demo |
+| 20 min | Skills system (2.1.154) | Slides + Demo |
 | 15 min | Panorama des agents | Slides |
 | 15 min | Agents BMAD v6 (demo) | Terminal |
 | 10 min | Agents Docker (demo) | Terminal |
@@ -615,11 +615,11 @@ cat .claude/settings.json
 2. Quelle commande pour activer le Plan Mode ?
 3. Comment installer Claude-Craft via npx ?
 4. Que contient le fichier context.yaml ?
-5. Combien de stacks et d'agents supporte Claude-Craft 8.2.3 ?
+5. Combien de stacks et d'agents supporte Claude-Craft 8.7.1 ?
 
 ### Hooks et Outils (6-10)
 
-6. Citez les principaux evenements de hooks disponibles dans Claude Code 2.1.117 (24 au total).
+6. Citez les principaux evenements de hooks disponibles dans Claude Code 2.1.154 (24 au total).
 7. Quelle est la difference entre PreToolUse et PostToolUse ?
 8. Comment lancer une tache en background ?
 9. Comment personnaliser les keybindings ?
@@ -660,7 +660,7 @@ cat .claude/settings.json
 2. `/plan`
 3. `npx @the-bearded-bear/claude-craft install`
 4. Les references a charger selon le contexte du projet
-5. 18 stacks, 63 agents
+5. 11 stacks, 70 agents (31 spécialisés + 39 infra)
 6. PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest, UserPromptSubmit, Stop, SubagentStop, SubagentStart, Notification, PreCompact, SessionStart, SessionEnd, Setup
 7. PreToolUse se declenche avant l'execution d'un outil (peut bloquer), PostToolUse apres (peut formatter/valider)
 8. `/tasks run "description"`
@@ -752,7 +752,7 @@ cat .claude/settings.json
 ---
 
 **Version formation : 3.0.0**
-**Claude Code : 2.1.117**
-**Claude-Craft : 8.2.3**
+**Claude Code : 2.1.154**
+**Claude-Craft : 8.7.1**
 
 **Bonne formation !**

@@ -111,7 +111,7 @@ cd projet-demo && claude
 **Exercice : Premier pas avec Claude Code**
 
 *Solution attendue :*
-- Le participant a installe Claude Code (`claude --version` → 2.1.117+)
+- Le participant a installe Claude Code (`claude --version` → 2.1.154+)
 - Il a lance une session et teste `/help`, `/status`, `/cost`
 - Il a execute un premier prompt et obtenu une reponse
 - Il a teste Extended Thinking et observe la difference de profondeur

@@ -288,7 +288,7 @@ Esquissez ensemble le contenu du CLAUDE.md de votre equipe :
 | Aspect | Convention |
 |--------|-----------|
 | **Modele par defaut** | Sonnet 4.6 pour le quotidien |
-| **Modele complexe** | Opus 4.7 pour architecture et refactoring majeur |
+| **Modele complexe** | Opus 4.8 pour architecture et refactoring majeur |
 | **Hooks obligatoires** | PreToolUse:Bash (securite), PostToolUse:Write (lint) |
 | **Workflow Git** | Conventional Commits + PR via `gh` |
 | **TDD** | Obligatoire pour toute nouvelle feature |
@@ -439,7 +439,7 @@ Repondez a chaque question. Score minimum pour valider : 7/10.
 
 - A) Haiku 4.5
 - B) Sonnet 4.6
-- C) Opus 4.7
+- C) Opus 4.8
 - D) Opus 4.6 (Fast Mode)
 
 ---

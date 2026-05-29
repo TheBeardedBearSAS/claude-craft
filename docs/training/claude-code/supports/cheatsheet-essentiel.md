@@ -20,7 +20,7 @@ winget install Anthropic.ClaudeCode
 npm install -g @anthropic-ai/claude-code
 
 # Verification
-claude --version        # Doit afficher 2.1.117+
+claude --version        # Doit afficher 2.1.154+
 claude                  # Premier lancement
 ```
 
@@ -75,7 +75,7 @@ claude                  # Premier lancement
 | Modele | ID | Usage | Prix (in/out) | Context |
 |--------|-----|-------|---------------|---------|
 | **Sonnet 4.6** | `claude-sonnet-4-6` | Quotidien (defaut) | $3 / $15 par M tokens | 200K |
-| **Opus 4.7** | `claude-opus-4-7` | Raisonnement complexe | $5 / $25 par M tokens | 1M |
+| **Opus 4.8** | `claude-opus-4-8` | Raisonnement complexe | $5 / $25 par M tokens | 1M |
 | **Opus 4.6** | `claude-opus-4-6` | Fast Mode uniquement (/fast) | $5 / $25 (x6 en fast) | 1M |
 | **Haiku 4.5** | `claude-haiku-4-5` | Taches simples, economique | $1 / $5 par M tokens | 200K |
 
@@ -109,11 +109,11 @@ claude --model opus "prompt"  # En ligne de commande
 
 | Methode | Description |
 |---------|-------------|
-| Automatique | Opus 4.7 ajuste sa reflexion (adaptive thinking) |
+| Automatique | Opus 4.8 ajuste sa reflexion (adaptive thinking) |
 | `/effort low` | Taches simples, rapides, economiques |
 | `/effort medium` | Taches courantes (defaut) |
 | `/effort high` | Problemes complexes, architecture |
-| `/effort xhigh` | Raisonnement extreme (Opus 4.7 uniquement) |
+| `/effort xhigh` | Raisonnement extreme (Opus 4.8 uniquement) |
 | `/think` | Forcer la reflexion approfondie |
 
 > Les mots-cles `think`, `think hard`, `ultrathink` sont deprecies mais fonctionnels.

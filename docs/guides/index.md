@@ -52,8 +52,8 @@ Comprehensive guide for adding Claude-Craft to a project with existing code. Inc
 - [Main README](../../README.md) - Project overview
 - [Installation Guide](../INSTALLATION.md) - Detailed installation
 - [Configuration Guide](../CONFIGURATION.md) - YAML configuration
-- [Agents Reference](../AGENTS.md) - All 23 AI agents
-- [Commands Reference](../COMMANDS.md) - 74+ slash commands
+- [Agents Reference](../AGENTS.md) - All 70 AI agents
+- [Commands Reference](../COMMANDS.md) - 125 slash commands
 - [Technologies Guide](../TECHNOLOGIES.md) - Stack-specific guides
 
 ---

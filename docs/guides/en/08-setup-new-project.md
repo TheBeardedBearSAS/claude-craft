@@ -31,9 +31,9 @@ Before starting, make sure you have the following installed:
 ### Required
 
 - [ ] **Terminal/Command Line** - Any terminal application
-- [ ] **Node.js 16+** - Required for NPX installation
+- [ ] **Node.js 20+** - Required for NPX installation
 - [ ] **Git** - For version control
-- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.117, minimum: v2.1.97 — CVE-2025-59536 patched)
+- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.154, minimum: v2.1.97 — CVE-2025-59536 patched)
 
 ### Verify Your Prerequisites
 
@@ -43,7 +43,7 @@ Open your terminal and run these commands:
 # Check Node.js version (should be 16 or higher)
 node --version
 ```
-Expected output: `v16.x.x` or higher (e.g., `v20.10.0`)
+Expected output: `v20.x.x` or higher (e.g., `v20.10.0`)
 
 ```bash
 # Check Git version
@@ -435,7 +435,7 @@ Claude should respond mentioning:
 - Check that `.claude/` directory exists
 - Restart Claude Code
 
-### Automatic Optimizations (v7.28.0)
+### Automatic Optimizations (v8.7)
 
 Claude-Craft now installs optimized defaults automatically during installation:
 

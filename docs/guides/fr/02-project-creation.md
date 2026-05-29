@@ -19,7 +19,7 @@ Ce guide vous accompagne dans la configuration d'un nouveau projet avec Claude-C
 
 ### Comparatif des Technologies
 
-Claude-Craft supporte **19 stacks technologiques** (10 dev + 8 infra) :
+Claude-Craft supporte **11 stacks applicatifs** (+ 8 d'infrastructure) :
 
 #### Stacks de Développement
 

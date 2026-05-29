@@ -1,10 +1,10 @@
-# Module 7 : Agents Specialises, BMAD et Docker (Claude Code 2.1.117 + Claude-Craft 8.2.3)
+# Module 7 : Agents Specialises, BMAD et Docker (Claude Code 2.1.154 + Claude-Craft 8.7.1)
 
 ## Objectifs
 
 A la fin de ce module, vous serez capable de :
-- Connaitre les 63 agents disponibles dans Claude-Craft 8.2.3, organises en 11 catégories
-- Comprendre le systeme de Skills de Claude Code 2.1.117
+- Connaitre les 70 agents disponibles dans Claude-Craft 8.7.1 : 31 spécialisés + 39 infra à la demande
+- Comprendre le systeme de Skills de Claude Code 2.1.154
 - Maitriser le workflow BMAD v6 avec ses commandes dediees
 - Utiliser les 5 agents Docker pour l'infrastructure
 - Comprendre le format YAML frontmatter des agents avec les nouvelles proprietes (effort, maxTurns, disallowedTools)
@@ -13,7 +13,7 @@ A la fin de ce module, vous serez capable de :
 
 ---
 
-## 1. Skills System (Claude Code 2.1.117)
+## 1. Skills System (Claude Code 2.1.154)
 
 ### Qu'est-ce qu'un Skill ?
 
@@ -49,7 +49,7 @@ triggers:
     auto_load: true
 ```
 
-### Skills disponibles (Claude-Craft 8.2.3)
+### Skills disponibles (Claude-Craft 8.7.1)
 
 | Skill | Trigger | Contenu |
 |-------|---------|---------|
@@ -63,15 +63,15 @@ triggers:
 
 ---
 
-## 2. Panorama des 63 Agents (11 Catégories)
+## 2. Panorama des 70 Agents (11 Catégories)
 
-Claude-Craft 8.2.3 propose **63 agents** repartis en **11 catégories** distinctes. Chaque agent est un expert dans son domaine, invocable via la syntaxe `@agent-name`.
+Claude-Craft 8.7.1 propose **70 agents** : **31 spécialisés** (Common 20 + Tech Reviewers 11) invocables directement, et **39 agents infra** (Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP) disponibles à la demande via `@devops-engineer` ou les commandes infra dédiées.
 
 > **Optimisation des modeles** : Les agents utilisent un modele adapte a leur role. Les reviewers et auditors utilisent **haiku** (economique pour les taches de verification), tandis que les engineers et architects utilisent **sonnet** (puissant pour les taches de conception et implementation).
 
-### Common Agents (12)
+### Common Agents (20)
 
-Les agents transversaux utilisables quel que soit le stack technologique.
+Les agents transversaux utilisables quel que soit le stack technologique (voir `docs/AGENTS-FULL-REFERENCE.md` pour la liste complète des 20).
 
 | Agent | Expertise |
 |-------|-----------|
@@ -104,7 +104,7 @@ Les agents transversaux utilisables quel que soit le stack technologique.
 @accessibility-expert "Verifie la conformite WCAG 2.2 AAA de ce formulaire"
 ```
 
-### Technology Reviewers (10)
+### Technology Reviewers (11)
 
 Un reviewer dedie pour chaque stack technologique supporte.
 
@@ -120,6 +120,7 @@ Un reviewer dedie pour chaque stack technologique supporte.
 | `@reactnative-reviewer` | React Native |
 | `@csharp-reviewer` | C#/.NET |
 | `@php-reviewer` | PHP |
+| `@paperclip-reviewer` | Paperclip |
 
 **Exemples d'utilisation :**
 
@@ -312,7 +313,7 @@ BMAD v6 utilise des **commandes dediees** qui activent le role BMAD adapte a cha
 
 ### Pourquoi des agents Docker dedies ?
 
-Claude-Craft 8.2.3 inclut 5 agents specialises Docker car l'infrastructure as code est un pilier du developpement moderne. Chaque agent couvre un aspect specifique de l'ecosysteme Docker.
+Claude-Craft 8.7.1 inclut 5 agents specialises Docker car l'infrastructure as code est un pilier du developpement moderne. Chaque agent couvre un aspect specifique de l'ecosysteme Docker.
 
 ### @docker-architect : Conception d'architecture
 
@@ -435,7 +436,7 @@ Claude-Craft 8.2.3 inclut 5 agents specialises Docker car l'infrastructure as co
 
 ### Structure d'un agent
 
-Chaque agent dans Claude-Craft 8.2.3 est defini par un fichier Markdown avec un **frontmatter YAML** qui configure son comportement :
+Chaque agent dans Claude-Craft 8.7.1 est defini par un fichier Markdown avec un **frontmatter YAML** qui configure son comportement :
 
 ```yaml
 ---
@@ -896,7 +897,7 @@ class PaymentController extends AbstractController
 
 ## Points Cles a Retenir
 
-1. **63 agents** organises en **11 catégories** : Common (12), Technology Reviewers (10), Docker (5), Coolify (4), Kubernetes (5), OpenTofu (5), Ansible (5), Hcloud (5), PgBouncer (5), FrankenPHP (5), Project (2)
+1. **70 agents** : 31 spécialisés (Common 20, Technology Reviewers 11, Project 2) + 39 infra à la demande (Docker 5, Coolify 4, Kubernetes 5, OpenTofu 5, Ansible 5, Hcloud 5, PgBouncer 5, FrankenPHP 5)
 2. **Skills** = Guidelines chargees on-demand (`/skill-name`)
 3. **Agents** = Experts specialises pour dialogue et actions (`@agent-name`)
 4. **BMAD workflow** = /workflow:plan -> /workflow:design -> /sprint:next-story -> /workflow:implement avec quality gates

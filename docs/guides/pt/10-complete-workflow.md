@@ -154,7 +154,7 @@ Funcionalidades principais:
 ## Dicas para o Sucesso
 
 1. **Não pule os Quality Gates**
-2. **Use os agentes colaborativamente** - Claude-Craft inclui **63 agentes** especializados
+2. **Use os agentes colaborativamente** - Claude-Craft inclui **70 agentes** especializados
 3. **TDD é não negociável**: 🔴 → 🟢 → 🔵
 4. **Documente as decisões** com ADRs
 5. **Revisões regulares**: `/common:daily-standup`, `@{tech}-reviewer`

@@ -154,7 +154,7 @@ Hauptfunktionen:
 ## Tipps für den Erfolg
 
 1. **Quality Gates nicht überspringen**
-2. **Agenten kollaborativ nutzen** - Claude-Craft enthält **63 Agenten** spezialisiert
+2. **Agenten kollaborativ nutzen** - Claude-Craft enthält **70 Agenten** spezialisiert
 3. **TDD ist nicht verhandelbar**: 🔴 → 🟢 → 🔵
 4. **Entscheidungen dokumentieren** mit ADRs
 5. **Regelmäßige Reviews**: `/common:daily-standup`, `@{tech}-reviewer`
