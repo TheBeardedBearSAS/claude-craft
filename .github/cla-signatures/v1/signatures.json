@@ -1,3 +1,12 @@
 {
-   "signedContributors": []
+  "signedContributors": [
+    {
+      "name": "flavien-metivier",
+      "id": 3929854,
+      "comment_id": 4576348660,
+      "created_at": "2026-05-29T14:35:04Z",
+      "repoId": 1109103275,
+      "pullRequestNo": 38
+    }
+  ]
 }
