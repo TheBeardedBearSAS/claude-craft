@@ -1,6 +1,17 @@
 # Claude Craft — Sprint workflow, multi-stack reviewers, and browser QA for Claude Code teams
 
-> **The most complete framework for tech leads adopting Claude Code with their team — 19 stacks, 5 languages, BMAD v6 sprint lifecycle, browser-based acceptance testing.**
+> **The AI framework where bugs don't come back.** Sprint workflow, multi-stack reviewers, and browser-based acceptance testing for tech leads adopting Claude Code with their team. **19 stacks, 5 languages, BMAD v6.**
+
+## Why teams pick Claude Craft
+
+| Outcome | How |
+|---------|-----|
+| 🏆 **Bugs don't come back** | `/qa:recette` auto-generates a regression test for every bug you fix (Golden Rule). Browser-based, no other framework offers this. |
+| 🤖 **Conventions on autopilot** | 11 stack-specific reviewers (@symfony-reviewer, @react-reviewer, @python-reviewer...) enforce SOLID/TDD/Clean Architecture without you re-typing the rules every sprint. |
+| 🚀 **Sprint workflow integrated** | BMAD v6 (Analyze → Plan → Design → Implement → QA) executed by Claude Code directly. Quick Flow < 5 min, Standard < 15 min, Enterprise < 30 min. |
+| 💰 **Token-optimized by default** | Forked sub-agents, `context: fork` on 15 heavy skills, 1h prompt caching, sub-agent Sonnet routing. Target 55-65% token savings vs raw Claude Code. |
+
+
 
 [![npm version](https://img.shields.io/npm/v/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
 [![npm downloads](https://img.shields.io/npm/dm/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
@@ -9,7 +20,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
 
-A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 26 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
 ## What's New in v8.3 (Audit-driven release: tokens + security)
 
@@ -25,7 +36,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 ## What's New in v8.2 (Claude Code 2.1.117 + Opus 4.7)
 
 - **Opus 4.7 as default flagship** (v8.2.2) -- model ID `claude-opus-4-7`, 1M context GA (no pricing premium), new `xhigh` effort level, adaptive thinking only (extended thinking removed), same $5/$25 per M tokens as Opus 4.6
-- **Claude Code 2.1.117 recommended** (v8.2.2) -- new commands `/btw`, `/hooks`, `/reload-plugins`, `/proactive`, `/ultrareview`, `/tui`, `/recap`, `/undo`, `/effort` slider, native CLI binary (v2.1.113), forked subagents (`CLAUDE_CODE_FORK_SUBAGENT=1`, v2.1.117), prompt caching env vars (`ENABLE_PROMPT_CACHING_1H`, v2.1.108)
+- **Claude Code 2.1.154 recommended** -- Opus 4.8 (`claude-opus-4-8`, defaults to high effort + `/effort xhigh`), Dynamic Workflows (orchestrate tens-to-hundreds of background agents, capped at 1000), `/goal`, `claude agents` view, forked subagents (`CLAUDE_CODE_FORK_SUBAGENT=1`, v2.1.117), prompt caching env vars (`ENABLE_PROMPT_CACHING_1H`, v2.1.108)
 - **Fast Mode preserved on Opus 4.6** -- `/fast` reste Opus 4.6 exclusif (2.5x speed, 6x cost). Opus 4.7 n'a pas de Fast Mode.
 - **Node.js 22 LTS migration** (v8.2.1) -- CI workflows migrés, élimine les deprecation warnings GitHub Actions (Node 20 EOL avril 2026). Minimum utilisateur reste Node.js 20+.
 - **CI repair** (v8.2.3) -- Deploy Documentation (Playwright strict mode), Generate SBOM (migration vers `@cyclonedx/cyclonedx-npm` CLI), SLSA workflow retiré (redondant avec `npm publish --provenance`).
@@ -67,7 +78,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
 - **31 default agents + 39 infra agents on-demand** -- reviewers, architects, coaches that know your stack deeply (70 total potentially installable)
-- **125 slash commands across 26 namespaces** -- repeatable workflows for audits, code generation, sprint management
+- **125 slash commands across 15 namespaces** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -103,7 +114,7 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 125 across 26 namespaces | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Commands** | 125 across 15 namespaces | `/workflow:init`, `/team:audit`, `/react:generate-component` |
 | **Skills** | 48 | Architecture, testing, security best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -145,7 +156,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 125 commands across 26 namespaces.
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 125 commands across 15 namespaces.
 
 ## Installation
 
