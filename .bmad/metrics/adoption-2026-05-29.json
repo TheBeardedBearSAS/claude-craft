@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-05-29T11:49:18.725Z",
+  "date": "2026-05-29",
+  "npm": {
+    "package": "@the-bearded-bear/claude-craft",
+    "downloads_last_week": 259,
+    "period": {
+      "start": "2026-05-22",
+      "end": "2026-05-28"
+    }
+  },
+  "github": null,
+  "github_error": "Failed to fetch GitHub metrics: 404 Not Found"
+}

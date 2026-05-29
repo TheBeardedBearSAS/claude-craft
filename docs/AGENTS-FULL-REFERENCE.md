@@ -236,7 +236,7 @@ Data analysis specialist — SQL optimization, metrics design, reporting, observ
 
 Database design and optimization expert
 
-**Model:** sonnet · **Effort:** medium · **Memory:** user
+**Model:** opus · **Effort:** xhigh · **Memory:** user
 
 **Skills:** `security`
 
@@ -276,7 +276,7 @@ CI-CD, Docker, and deployment specialist
 
 Database and framework migration expert — zero-downtime schema changes, data backfills, version upgrades, legacy-to-modern rewrites
 
-**Model:** sonnet · **Effort:** medium · **Memory:** user
+**Model:** opus · **Effort:** xhigh · **Memory:** user
 
 **Tools:** `Read`, `Glob`, `Grep`, `Bash`, `WebFetch`, `WebSearch`
 
@@ -324,7 +324,7 @@ Performance analysis and optimization expert
 
 Orchestre les sessions Ralph Wiggum v2.0 avec validation DoD adaptative
 
-**Model:** opus · **Effort:** high · **Memory:** user
+**Model:** opus · **Effort:** xhigh · **Memory:** user
 
 **Tools:** `Read`, `Glob`, `Grep`, `Edit`, `Write`, `Bash`, `Task`, `WebFetch`, `WebSearch`
 
@@ -362,7 +362,7 @@ Technical research and documentation specialist
 
 OWASP Top 10:2025 security audit specialist — SAST, dependency scanning, secrets detection, authZ/authN review
 
-**Model:** sonnet · **Effort:** medium · **Memory:** user
+**Model:** opus · **Effort:** xhigh · **Memory:** user
 
 **Tools:** `Read`, `Glob`, `Grep`, `Bash`, `WebFetch`, `WebSearch`
 
