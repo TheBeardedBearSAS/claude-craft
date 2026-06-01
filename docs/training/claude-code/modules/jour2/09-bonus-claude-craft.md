@@ -34,8 +34,8 @@ Claude-Craft = Un framework complet qui structure cet assistant
 
 | Aspect | Claude Code natif | Avec Claude-Craft |
 |--------|-------------------|-------------------|
-| **Agents** | Task tool generique | 72 agents specialises par role |
-| **Commandes** | Slash commands custom | 211 commandes preconfigurees |
+| **Agents** | Task tool generique | 70 agents (31 spécialisés + 39 infra) par role |
+| **Commandes** | Slash commands custom | 125 commandes / 15 namespaces |
 | **Architecture** | Regles dans CLAUDE.md | Clean Architecture enforced |
 | **Qualite** | Audit manuel | Audit automatise multi-dimensions |
 | **Projet** | Gestion libre | BMAD v6 avec quality gates |
@@ -96,16 +96,16 @@ npx @the-bearded-bear/claude-craft install . --tech=react --lang=fr
 
 ---
 
-## 3. Les 63 Agents Specialises
+## 3. Les 70 Agents (31 spécialisés + 39 infra)
 
 ### Categories d'agents
 
 | Categorie | Agents | Nombre |
 |-----------|--------|--------|
-| **Common** | api-designer, database-architect, devops-engineer, performance-auditor, refactoring-specialist, tdd-coach, uiux-orchestrator, ui-designer, ux-ergonome, accessibility-expert, research-assistant, ralph-conductor | 12 |
-| **Tech Reviewers** | symfony-reviewer, flutter-reviewer, react-reviewer, python-reviewer, angular-reviewer, laravel-reviewer, vuejs-reviewer, reactnative-reviewer, csharp-reviewer, php-reviewer | 10 |
-| **Infrastructure** | docker (5), coolify (4), kubernetes (5), opentofu (5), ansible (5), hcloud (5), pgbouncer (5), frankenphp (5) | 39 |
+| **Common** | api-designer, database-architect, devops-engineer, performance-auditor, refactoring-specialist, tdd-coach, uiux-orchestrator, ui-designer, ux-ergonome, accessibility-expert, research-assistant, ralph-conductor + 8 autres | 20 |
+| **Tech Reviewers** | symfony-reviewer, flutter-reviewer, react-reviewer, python-reviewer, angular-reviewer, laravel-reviewer, vuejs-reviewer, reactnative-reviewer, csharp-reviewer, php-reviewer, paperclip-reviewer | 11 |
 | **Project** | product-owner, tech-lead | 2 |
+| **Infrastructure (à la demande)** | docker (5), coolify (4), kubernetes (5), opentofu (5), ansible (5), hcloud (5), pgbouncer (5), frankenphp (5) | 39 |
 
 ### Utilisation d'un agent
 
@@ -130,7 +130,7 @@ L'agent React Reviewer effectue une code review specifique React : hooks, re-ren
 
 ---
 
-## 4. Les 204 Commandes (26 Namespaces)
+## 4. Les 125 Commandes (15 Namespaces)
 
 ### Namespaces principaux
 
@@ -295,8 +295,8 @@ Si Claude-Craft vous interesse :
 ## Points Cles a Retenir
 
 1. **Claude-Craft** etend Claude Code avec des agents, commandes et workflows structures
-2. **63 agents** specialises couvrent tous les roles du developpement
-3. **204 commandes** dans 26 namespaces pour des taches recurrentes
+2. **70 agents** : 31 spécialisés (Common 20 + Tech Reviewers 11) + 39 infra à la demande
+3. **125 commandes** dans 15 namespaces pour des taches recurrentes
 4. **BMAD v6** structure la gestion de projet avec des quality gates
 5. **Ralph Wiggum** automatise les taches jusqu'a completion
 6. **QA Recette** valide les fonctionnalites dans un vrai navigateur

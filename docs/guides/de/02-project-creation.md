@@ -6,7 +6,7 @@ Diese Anleitung begleitet Sie bei der Einrichtung eines neuen Projekts mit Claud
 
 ## Technologie wählen
 
-Claude-Craft unterstützt **18 Technologie-Stacks** (10 Entwicklung + 8 Infrastruktur):
+Claude-Craft unterstützt **11 Technologie-Stacks** (Anwendungen) + 8 Infrastruktur-Stacks:
 
 ### Entwicklungs-Stacks
 

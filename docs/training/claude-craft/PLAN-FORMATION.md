@@ -1,20 +1,20 @@
-# Plan de Formation : Claude Code 2.1.117 + Claude-Craft 8.2.3
+# Plan de Formation : Claude Code 2.1.154 + Claude-Craft 8.7.1
 
 ## Contexte de Formation
 
 - **Public** : Equipe de developpeurs
-- **Objectif** : Maitrise de Claude Code 2.1.117 avec le framework Claude-Craft 8.2.3
+- **Objectif** : Maitrise de Claude Code 2.1.154 avec le framework Claude-Craft 8.7.1
 - **Cas d'usage** : Nouveaux projets ET projets existants
-- **Stack technologique** : 19 stacks supportees (Symfony, React, Flutter, Paperclip, etc.)
+- **Stack technologique** : 11 stacks supportees (Symfony, React, Flutter, Paperclip, etc.)
 - **Format** : Hybride (presentiel + distanciel)
 
 ## Versions couvertes
 
 | Composant | Version | Nouveautes cles |
 |-----------|---------|-----------------|
-| Claude Code | 2.1.117 | Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Sonnet 4.6/Opus 4.7, Agent Teams, Fast Mode (Opus 4.6), Native CLI binary, Forked subagents, /ultrareview, /tui, /btw |
-| Claude-Craft | 8.2.3 | BMAD v6, Ralph, QA Recette, 72 agents, 211 commandes across 26 namespaces, Node.js 22 LTS |
-| Formation | 4.0.0 | Mise a jour complete (Opus 4.7 + v2.1.117) |
+| Claude Code | 2.1.154 | Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Sonnet 4.6/Opus 4.8, Agent Teams, Fast Mode (Opus 4.6), Native CLI binary, Forked subagents, /ultrareview, /tui, /btw |
+| Claude-Craft | 8.7.1 | BMAD v6, Ralph, QA Recette, 70 agents (31 spécialisés + 39 infra), 125 commandes / 15 namespaces, Node.js 22 LTS |
+| Formation | 4.0.0 | Mise a jour complete (Opus 4.8 + v2.1.154) |
 
 ---
 
@@ -33,25 +33,25 @@
 
 ---
 
-#### Module 1 : Introduction a Claude Code 2.1.117 (1h30)
+#### Module 1 : Introduction a Claude Code 2.1.154 (1h30)
 
 **Objectifs pedagogiques :**
-- Comprendre ce qu'est Claude Code 2.1.117 et ses nouvelles capacites
+- Comprendre ce qu'est Claude Code 2.1.154 et ses nouvelles capacites
 - Savoir installer et configurer Claude Code
 - Maitriser les commandes de base et avancees (Extended Thinking, MCP, Permissions)
 
 **Contenu :**
 
-1. **Presentation de Claude Code 2.1.117** (20min)
+1. **Presentation de Claude Code 2.1.154** (20min)
    - Qu'est-ce que Claude Code ? (CLI officiel Anthropic)
    - Difference avec ChatGPT, GitHub Copilot
-   - Nouveautes 2.1.117 : Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Fast Mode (Opus 4.6), Agent Teams, Native CLI binary, Forked subagents
-   - Modeles disponibles : Sonnet 4.6 (rapide), Opus 4.7 (flagship), Opus 4.6 (Fast Mode via `/fast`), Haiku 4.5 (leger)
+   - Nouveautes 2.1.154 : Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Fast Mode (Opus 4.6), Agent Teams, Native CLI binary, Forked subagents
+   - Modeles disponibles : Sonnet 4.6 (rapide), Opus 4.8 (flagship), Opus 4.6 (Fast Mode via `/fast`), Haiku 4.5 (leger)
 
 2. **Installation et configuration** (20min)
    - Installation via npm : `npm install -g @anthropic-ai/claude-code`
    - Configuration de la cle API
-   - Verification : `claude --version` (2.1.117+)
+   - Verification : `claude --version` (2.1.154+)
    - Configuration du modele par defaut
 
 3. **Interface et commandes** (20min)
@@ -68,7 +68,7 @@
    - Couts et facturation
 
 5. **Exercice pratique** (10min)
-   - Installation de Claude Code 2.1.117
+   - Installation de Claude Code 2.1.154
    - Activation de l'Extended Thinking
    - Generation d'un script simple
 
@@ -77,11 +77,11 @@
 
 ---
 
-#### Module 2 : Le Framework Claude-Craft 8.2.3 (1h30)
+#### Module 2 : Le Framework Claude-Craft 8.7.1 (1h30)
 
 **Objectifs pedagogiques :**
 - Comprendre le TCL (Tiered Context Loading) et son economie de 95%
-- Savoir installer Claude-Craft 8.2.3 via npx
+- Savoir installer Claude-Craft 8.7.1 via npx
 - Connaitre les differents composants (skills, commands, agents, references, BMAD, Ralph, QA)
 
 **Contenu :**
@@ -92,11 +92,11 @@
    - CLAUDE.md minimal (~700 bytes) vs v3.x (~15,000)
    - context.yaml pour triggers automatiques
 
-2. **Architecture et 18 stacks supportees** (20min)
+2. **Architecture et 11 stacks supportees** (20min)
    - Structure TCL : CLAUDE.md, INDEX.md, context.yaml, references/, skills/
-   - Technologies : symfony, laravel, react, angular, vuejs, flutter, reactnative, python, php, csharp + 8 infra stacks
+   - Technologies : symfony, laravel, react, angular, vuejs, flutter, reactnative, python, php, csharp, paperclip
    - Composants majeurs : BMAD v6, Ralph Wiggum, QA Recette
-   - 63 agents, 204 commandes across 26 namespaces
+   - 70 agents (31 spécialisés + 39 infra), 125 commandes / 15 namespaces
 
 3. **Systeme de Skills** (15min)
    - Invocation : `/testing`, `/security`, `/git-workflow`
@@ -328,15 +328,15 @@
 #### Module 7 : Agents Specialises, BMAD et Docker (1h30)
 
 **Objectifs pedagogiques :**
-- Connaitre les 63 agents repartis en 11 categories
+- Connaitre les 70 agents (31 spécialisés + 39 infra) disponibles dans Claude-Craft
 - Savoir invoquer le bon agent selon le contexte
 - Personnaliser les agents
 
 **Contenu :**
 
-1. **Panorama des 63 agents en 11 categories** (30min)
+1. **Panorama des 31 agents spécialisés** (30min)
 
-   **Common Agents (12) :**
+   **Common Agents (20) :**
 
    | Agent | Specialite | Quand l'utiliser |
    |-------|------------|------------------|
@@ -353,11 +353,11 @@
    | `@research-assistant` | Recherche technique | Documentation externe |
    | `@ralph-conductor` | Orchestration loop | Automatisation |
 
-   **Technology Reviewers (10) :** `@symfony-reviewer`, `@flutter-reviewer`, `@react-reviewer`, `@python-reviewer`, `@angular-reviewer`, `@laravel-reviewer`, `@vuejs-reviewer`, `@reactnative-reviewer`, `@csharp-reviewer`, `@php-reviewer`
-
-   **Docker Agents (5) :** `@docker-dockerfile`, `@docker-compose`, `@docker-debug`, `@docker-cicd`, `@docker-architect`
+   **Technology Reviewers (11) :** `@symfony-reviewer`, `@flutter-reviewer`, `@react-reviewer`, `@python-reviewer`, `@angular-reviewer`, `@laravel-reviewer`, `@vuejs-reviewer`, `@reactnative-reviewer`, `@csharp-reviewer`, `@php-reviewer`, `@paperclip-reviewer`
 
    **Project Agents (2) :** `@product-owner`, `@tech-lead`
+
+   **39 agents infra (à la demande) :** Docker (5), Coolify (4), Kubernetes (5), OpenTofu (5), Ansible (5), Hcloud (5), PgBouncer (5), FrankenPHP (5)
 
    > **Note :** Les roles BMAD (pm, ba, architect, po, sm, dev, qa, ux) sont integres dans les commandes workflow et sprint, pas en tant qu'agents standalone.
 
@@ -537,7 +537,7 @@
 | Theme | Exemple de question |
 |-------|---------------------|
 | Claude Code | Quelle commande active l'Extended Thinking ? |
-| Claude-Craft | Combien d'agents sont disponibles dans Claude-Craft 8.2.3 ? |
+| Claude-Craft | Combien d'agents sont disponibles dans Claude-Craft 8.7.1 ? |
 | BMAD v6 | Quel est le seuil du PRD Quality Gate ? |
 | Ralph | Quels sont les 5 types de DoD Validators ? |
 | QA Recette | Qu'est-ce que la Golden Rule ? |
@@ -576,5 +576,5 @@ Ce plan est adaptable selon :
 **Version** : 3.0.0
 **Date** : Janvier 2026
 **Auteur** : The Bearded CTO
-**Claude Code** : 2.1.117
-**Claude-Craft** : 8.2.3
+**Claude Code** : 2.1.154
+**Claude-Craft** : 8.7.1

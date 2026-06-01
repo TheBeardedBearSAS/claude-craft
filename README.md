@@ -28,26 +28,25 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
-## What's New in v8.3 (Audit-driven release: tokens + security)
+## What's New in v8.7 (Audit 2026-05-18 — Phases 1→5 + refresh 2026-05-29)
 
-- **Sprint 1-4 audit-driven improvements** (v8.3.2) -- new `@paperclip-reviewer` agent, `cli/lib/path-safety.js` shared module, `claude-craft doctor` enforces Claude Code 2.1.97+ baseline with OS-specific yq install hints, ralph.sh refactored from 937 → 812 lines (`run_ralph()` -35%), auto-generated `AGENTS-FULL-REFERENCE.md` + `COMMANDS-FULL-REFERENCE.md`, governance + comparison docs. 809 vitest + 37 bats tests verts.
-- **Dependabot config fix** (v8.3.1) -- removed two erroneous ecosystems (`/cli/kanban/client` and `docker /`) introduced in v8.3.0 that caused Dependabot run failures
-- **Token optimization via `context: fork`** (v8.3.0) -- 15 heavy skills (>100 lines) now run in isolated contexts (Claude Code v2.1.105+), saving 8-15K tokens per long session
-- **CHANGELOG truncated** (v8.3.0) -- 117 KB → 67 KB shipped, archive moved to `docs/CHANGELOG-archive.md`
-- **Production deps trimmed** (v8.3.0) -- `cytoscape`, `cytoscape-dagre`, `dompurify`, `uplot` moved to `devDependencies` (-3 MB prod install)
-- **Min Claude Code raised to 2.1.97** (v8.3.0) -- CVE-2025-59536 (CVSS 8.7, RCE + token exfiltration) cumulative hardening
-- **`plugin.json` schema v8.3** (v8.3.0) -- accurate counts (72/211/48), marketplace-ready, was stale at v7.6.1
-- **Hook templates documentation** (v8.3.0) -- 9 templates documented with Token Optimization Stack recipe (55-65% reduction)
+**Reliability & security (Phases 1→5, v8.4.0 → v8.7.1):**
 
-## What's New in v8.2 (Claude Code 2.1.117 + Opus 4.7)
+- **Automatic rollback on update failure** (v8.7.1) -- `claude-craft update` snapshots `.claude/` before running scripts and restores it on any partial failure (`--no-rollback` opt-out for CI)
+- **Zero-prompt & team installs** (v8.7.0) -- `install --auto` auto-detects stack + locale (TTFV < 2 min), `install --from=<url>` syncs a team config from a Gist/internal endpoint, `skill add|list|remove` adds community skills from npm
+- **Hardened CI** (v8.4.0 → v8.5.0) -- CodeQL SAST + Trivy CVE scan, mutation testing now **blocking** on PRs, `@`-include linter (`lint:includes`), post-publish smoke test, 12 property-based tests via `fast-check`. **937 Vitest tests** green.
+- **Cost-optimized agents** (v8.5.0) -- 11 reviewer agents routed to `haiku`/`low` effort (-60% cost), 50 `check-*` commands to `haiku`, output filter threshold halved
+- **Security baseline** (v8.4.0) -- Python JWT pattern switched HS256 → **EdDSA (Ed25519)** with 15-min tokens, `disallowedTools` deny-list on 7 destructive-capable agents, fixed dangerous-command hook template
+- **New references** (v8.4.0) -- `paperclip/`, React Native New Architecture (JSI/TurboModules/Fabric), Vue Vapor Mode (beta)
 
-- **Opus 4.7 as default flagship** (v8.2.2) -- model ID `claude-opus-4-7`, 1M context GA (no pricing premium), new `xhigh` effort level, adaptive thinking only (extended thinking removed), same $5/$25 per M tokens as Opus 4.6
-- **Claude Code 2.1.154 recommended** -- Opus 4.8 (`claude-opus-4-8`, defaults to high effort + `/effort xhigh`), Dynamic Workflows (orchestrate tens-to-hundreds of background agents, capped at 1000), `/goal`, `claude agents` view, forked subagents (`CLAUDE_CODE_FORK_SUBAGENT=1`, v2.1.117), prompt caching env vars (`ENABLE_PROMPT_CACHING_1H`, v2.1.108)
-- **Fast Mode preserved on Opus 4.6** -- `/fast` reste Opus 4.6 exclusif (2.5x speed, 6x cost). Opus 4.7 n'a pas de Fast Mode.
-- **Node.js 22 LTS migration** (v8.2.1) -- CI workflows migrés, élimine les deprecation warnings GitHub Actions (Node 20 EOL avril 2026). Minimum utilisateur reste Node.js 20+.
-- **CI repair** (v8.2.3) -- Deploy Documentation (Playwright strict mode), Generate SBOM (migration vers `@cyclonedx/cyclonedx-npm` CLI), SLSA workflow retiré (redondant avec `npm publish --provenance`).
-- **Documentation sync** (v8.2.4) -- formations claude-code + claude-craft, settings sub-agent model, README, CLI-REFERENCE.md alignés sur l'écosystème actuel.
-- See [CHANGELOG](CHANGELOG.md) and [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md) for full details
+**Refresh 2026-05-29:**
+
+- **Claude Code 2.1.154 + Opus 4.8** -- recommended runtime, Dynamic Workflows (orchestrate tens-to-hundreds of background agents), `effort: max`; critical agents (`security-auditor`, `migration-specialist`, `database-architect`, `ralph-conductor`) routed to `opus`/`xhigh`, reviewers stay `haiku`/`low`
+- **Repositioned around 4 defensible differentiators** -- QA Recette (browser regression capture), BMAD v6 sprint workflow, Ralph Wiggum loop, RTK token optimization (the workflow/orchestration a per-stack cookbook doesn't cover)
+- **Honest stack count (19 → 11)** -- removed orphan Go/Rust reference stacks (no commands, no reviewers); **PHP is now a base layer** auto-included with Symfony/Laravel rather than a standalone selectable stack
+- **Stack versions refreshed** -- Flutter 3.44/Dart 3.12, .NET 10 LTS/EF Core 10, Symfony 8.0.13, Laravel 13.12, Angular zoneless stable, Docker 29.4.3, Ansible 2.21.0
+
+> ← Versions antérieures (v8.0 → v8.3) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
 
 ## Install and First Result
 
@@ -94,7 +93,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 |-------|---------|-----------------|
 | **Symfony / PHP** | 8.0 / PHP 8.4+ | `--tech=symfony` |
 | **React** | 19.2 + Compiler 1.0 | `--tech=react` |
-| **Flutter / Dart** | 3.41 / Dart 3.11 | `--tech=flutter` |
+| **Flutter / Dart** | 3.44 / Dart 3.12 | `--tech=flutter` |
 | **Python** | 3.14+ / FastAPI | `--tech=python` |
 | **Angular** | 20 LTS (ou 21) | `--tech=angular` |
 | **Vue.js** | 3.5+ (3.6 beta Vapor) | `--tech=vuejs` |
@@ -104,11 +103,11 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **PHP** | 8.5 | `--tech=php` |
 | **Paperclip** | 2026.403.0 | `--tech=paperclip` |
 
-| **Docker** | 29.4.0 | `--tech=docker` |
+| **Docker** | 29.4.3 | `--tech=docker` |
 | **Coolify** | v4.0.0 (stable) | `--tech=coolify` |
 | **Kubernetes** | 1.36.1 | `--tech=kubernetes` |
 | **OpenTofu** | 1.12.0 | `--tech=opentofu` |
-| **Ansible** | 2.20.4 | `--tech=ansible` |
+| **Ansible** | 2.21.0 | `--tech=ansible` |
 | **Hcloud** | 1.61+ | `--tech=hcloud` |
 | **PgBouncer** | 1.25.2 (CVE-2026-6664/6667 patched) | `--tech=pgbouncer` |
 | **FrankenPHP** | 1.12.1 | `--tech=frankenphp` |

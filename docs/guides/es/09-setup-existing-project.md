@@ -36,7 +36,7 @@ Este tutorial completo te guía a través de añadir Claude-Craft a un proyecto 
 - [ ] Tu proyecto está rastreado en Git
 - [ ] Has commiteado todos los cambios actuales
 - [ ] Tienes acceso de escritura al directorio del proyecto
-- [ ] Node.js 16+ instalado (para el método NPX)
+- [ ] Node.js 20+ instalado (para el método NPX)
 - [ ] Claude Code instalado
 
 ### Cuándo NO Instalar

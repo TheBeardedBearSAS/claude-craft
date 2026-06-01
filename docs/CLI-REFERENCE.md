@@ -696,7 +696,7 @@ Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `me
 /effort high          # Set directly
 ```
 
-Default for Pro/Max subscribers on Opus 4.6/Sonnet 4.6 is `high` since v2.1.111 (previously `medium`). Opus 4.7 supports the new `xhigh` tier.
+Default for Pro/Max subscribers on Opus 4.6/Sonnet 4.6 is `high` since v2.1.111 (previously `medium`). Opus 4.8 supports the `xhigh` tier.
 
 ---
 

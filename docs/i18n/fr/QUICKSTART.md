@@ -135,7 +135,7 @@ Dans Claude Code, essayez ces commandes :
 
 ## Technologies Disponibles
 
-Claude Craft supporte **19 stacks technologiques** (10 dev + 8 infra). Voici les 10 stacks de développement :
+Claude Craft supporte **11 stacks applicatifs** (+ 8 stacks d'infrastructure). Voici les principaux stacks de développement :
 
 | Technologie | Commande d'Installation | Focus |
 |-------------|-------------------------|-------|

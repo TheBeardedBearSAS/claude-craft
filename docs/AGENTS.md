@@ -12,7 +12,7 @@ In Claude Code, mention an agent to activate its expertise:
 @symfony-reviewer Review this controller for best practices
 ```
 
-## Common Agents (16)
+## Common Agents (20)
 
 These agents are installed with `install-common` and are useful across all technologies.
 
@@ -345,7 +345,7 @@ Helps with:
 
 ---
 
-## Agent Optimization (v7.28.0)
+## Agent Optimization (v8.7)
 
 All 22 common and reviewer agents now include optimized frontmatter:
 
@@ -434,7 +434,7 @@ All 10 reviewer agents use the **Claude Sonnet** model and share a standardized 
 
 ---
 
-## Technology Reviewers (10)
+## Technology Reviewers (11)
 
 Each technology has a specialized reviewer agent.
 
@@ -1452,8 +1452,8 @@ This restricts the agent to only spawn `Explore` and `Plan` sub-agents, preventi
 
 | Category | Unique Agents | With i18n (×5 languages) |
 |----------|---------------|--------------------------|
-| Common | 12 | 60 |
-| Technology Reviewers | 10 | 50 |
+| Common | 20 | 100 |
+| Technology Reviewers | 11 | 55 |
 | Docker/Infrastructure | 5 | 25 |
 | Coolify/Infrastructure | 4 | 20 |
 | Kubernetes/Infrastructure | 5 | 25 |
@@ -1463,8 +1463,9 @@ This restricts the agent to only spawn `Explore` and `Plan` sub-agents, preventi
 | PgBouncer/Infrastructure | 5 | 25 |
 | FrankenPHP/Infrastructure | 5 | 25 |
 | **BMAD v6** | **0** (roles, not agents) | **10** (YAML roles) |
-| Project | 2 | 10 |
-| **Total** | **63** | **315** |
+| **Total** | **70** (31 specialized + 39 infra) | **350** |
+
+> Les rôles projet `@product-owner` et `@tech-lead` sont des rôles BMAD intégrés aux commandes `/sprint:*` et `/workflow:*`, pas des fichiers d'agent autonomes — ils ne sont donc pas comptés dans les 70.
 
 ---
 

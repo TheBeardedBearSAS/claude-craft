@@ -8,7 +8,7 @@
 
 Claude Craft adopte une architecture **open-core** avec deux dépôts distincts :
 
-- **`claude-craft`** (public, MIT) : Framework complet avec BMAD, 10 stacks, skills, agents, CLI, QA Recette, plugin system.
+- **`claude-craft`** (public, MIT) : Framework complet avec BMAD, 11 stacks, skills, agents, CLI, QA Recette, plugin system.
 - **`claude-craft-enterprise`** (privé, licence commerciale) : Extensions propriétaires (SSO, audit log, multi-tenant dashboard, SLA).
 
 **Principe clé :** Le core MIT est **complet et autonome**. Enterprise apporte des fonctionnalités optionnelles pour les grandes organisations, mais n'est pas requis pour un usage en production.

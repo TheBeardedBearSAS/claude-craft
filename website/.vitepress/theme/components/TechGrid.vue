@@ -20,6 +20,7 @@ const appTechs = [
   { name: 'Laravel', logo: `${base}logos/laravel.svg`, desc: 'Clean Arch, Pest PHP, Sanctum' },
   { name: 'Vue.js', logo: `${base}logos/vuejs.svg`, desc: 'Composition API, Pinia, Vitest' },
   { name: 'PHP', logo: `${base}logos/php.svg`, desc: 'Clean Arch, PSR-12, PHPStan' },
+  { name: 'Paperclip', logo: `${base}logos/paperclip.svg`, desc: 'Control plane + adapters, governance-first' },
 ]
 
 const infraTechs = [

@@ -1,10 +1,10 @@
-# Cheat Sheet : Claude Code 2.1.117
+# Cheat Sheet : Claude Code 2.1.154
 
 ## Installation
 
 ```bash
 npm install -g @anthropic-ai/claude-code
-claude --version  # 2.1.117+
+claude --version  # 2.1.154+
 ```
 
 ## Configuration
@@ -32,7 +32,7 @@ claude
 | `/cost` | Afficher cout session |
 | `/history` | Historique conversations |
 
-## Commandes 2.1.117
+## Commandes 2.1.154
 
 | Commande | Description |
 |----------|-------------|
@@ -307,14 +307,14 @@ Wildcards: Bash(*-h*), Write(src/**)
 | Modele | Caracteristiques | Usage |
 |--------|------------------|-------|
 | **Sonnet 4.6** | Rapide, defaut | Quotidien |
-| **Opus 4.7** | Flagship actuel, 1M ctx GA, effort `xhigh` | Complexe |
+| **Opus 4.8** | Flagship actuel, 1M ctx GA, effort `xhigh` | Complexe |
 | **Opus 4.6** | Fast Mode uniquement (/fast) | Urgences |
 | **Haiku 4.5** | Leger, economique | Simple |
 
 ## Limites de contexte
 
 - Sonnet 4.6 / Haiku 4.5 : ~200K tokens
-- Opus 4.7 : 1M tokens (GA, sans premium de prix)
+- Opus 4.8 : 1M tokens (GA, sans premium de prix)
 - Opus 4.6 : 1M tokens
 - Output max : 128K tokens (Opus 4.6/4.7)
 
@@ -323,7 +323,7 @@ Wildcards: Bash(*-h*), Write(src/**)
 | Modele | Input | Output |
 |--------|-------|--------|
 | Sonnet 4.6 | $3/M | $15/M |
-| Opus 4.7 | $5/M | $25/M |
+| Opus 4.8 | $5/M | $25/M |
 | Opus 4.6 | $5/M | $25/M |
 | Haiku 4.5 | $1/M | $5/M |
 | Opus 4.6 Fast | $30/M | $150/M |
@@ -395,7 +395,7 @@ Stockage : `~/.claude-profiles/<profile>/projects/<hash>/memory/`
 | Claude Sonnet 4.6 | v2.1.45+ |
 | Agent SDK rate limiting | v2.1.45+ |
 
-## Nouveautes v2.1.47-2.1.117
+## Nouveautes v2.1.47-2.1.154
 
 | Feature | Version |
 |---------|---------|
@@ -410,8 +410,8 @@ Stockage : `~/.claude-profiles/<profile>/projects/<hash>/memory/`
 | Auto Mode permissions | v2.1.94+ |
 | Subprocess sandboxing | v2.1.98+ |
 | Monitor tool | v2.1.98+ |
-| `/proactive` alias for `/loop` | v2.1.117+ |
-| PreCompact blocking (exit 2) | v2.1.117+ |
+| `/proactive` alias for `/loop` | v2.1.154+ |
+| PreCompact blocking (exit 2) | v2.1.154+ |
 
 ## Correctifs v2.1.38-2.1.41
 
@@ -435,5 +435,5 @@ Stockage : `~/.claude-profiles/<profile>/projects/<hash>/memory/`
 
 ---
 
-**Formation Claude Code 2.1.117 + Claude-Craft 8.2.3**
+**Formation Claude Code 2.1.154 + Claude-Craft 8.7.1**
 **The Bearded CTO - 2026**

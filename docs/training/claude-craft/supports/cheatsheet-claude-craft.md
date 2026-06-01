@@ -1,4 +1,4 @@
-# Cheat Sheet : Claude-Craft 8.2.3
+# Cheat Sheet : Claude-Craft 8.7.1
 
 ## Installation (NPX)
 
@@ -48,7 +48,7 @@ npx @the-bearded-bear/claude-craft install ~/projet \
 
 ---
 
-## Skills (36)
+## Skills (48)
 
 ```bash
 /testing            # TDD/BDD
@@ -73,7 +73,7 @@ Chaque commande inclut une guidance Plan Mode integree :
 
 ---
 
-## Commandes (204+ across 26 namespaces)
+## Commandes (125 across 15 namespaces)
 
 ### Common (14)
 
@@ -190,9 +190,11 @@ Chaque techno a ses commandes :
 
 ---
 
-## Agents (63 across 11 categories)
+## Agents (70 = 31 spécialisés + 39 infra)
 
-### Common (12)
+### Common (20)
+
+Voir `docs/AGENTS-FULL-REFERENCE.md` pour la liste complète. Principaux agents :
 
 | Agent | Expertise |
 |-------|-----------|
@@ -209,25 +211,17 @@ Chaque techno a ses commandes :
 | `@research-assistant` | Recherche technique |
 | `@ralph-conductor` | Orchestration boucle |
 
-### Tech Reviewers (10)
+### Tech Reviewers (11)
 
-`@symfony-reviewer`, `@flutter-reviewer`, `@react-reviewer`, `@python-reviewer`, `@angular-reviewer`, `@laravel-reviewer`, `@vuejs-reviewer`, `@reactnative-reviewer`, `@csharp-reviewer`, `@php-reviewer`
-
-### Docker (5)
-
-`@docker-dockerfile`, `@docker-compose`, `@docker-debug`, `@docker-cicd`, `@docker-architect`
-
-### Coolify (4)
-
-`@coolify-architect`, `@coolify-deployment`, `@coolify-debug`, `@coolify-monitoring`
-
-### Infrastructure (30)
-
-Kubernetes (5), OpenTofu (5), Ansible (5), Hcloud (5), PgBouncer (5), FrankenPHP (5)
+`@symfony-reviewer`, `@flutter-reviewer`, `@react-reviewer`, `@python-reviewer`, `@angular-reviewer`, `@laravel-reviewer`, `@vuejs-reviewer`, `@reactnative-reviewer`, `@csharp-reviewer`, `@php-reviewer`, `@paperclip-reviewer`
 
 ### Project (2)
 
 `@product-owner` (CSPO), `@tech-lead`
+
+### 39 agents infra (à la demande)
+
+Docker (5), Coolify (4), Kubernetes (5), OpenTofu (5), Ansible (5), Hcloud (5), PgBouncer (5), FrankenPHP (5)
 
 ---
 
@@ -241,7 +235,7 @@ Kubernetes (5), OpenTofu (5), Ansible (5), Hcloud (5), PgBouncer (5), FrankenPHP
 
 ---
 
-## Technologies (10)
+## Technologies (11)
 
 | Stack | Version 2026 | Focus |
 |-------|--------------|-------|
@@ -351,10 +345,10 @@ Types : feat, fix, refactor, test, docs, chore, perf, build, ci, style
 | Installation | `git clone` + `make` | `npx` |
 | Tokens auto | ~70,000 | ~3,500 |
 | Structure | rules/ + skills/ | TCL (3 niveaux) |
-| Technologies | 5 | 10 |
-| Agents | ~10 | 63 |
-| Commands | ~30 | 204+ |
-| Namespaces | - | 26 |
+| Technologies | 5 | 11 |
+| Agents | ~10 | 70 (31 spécialisés + 39 infra) |
+| Commands | ~30 | 125 |
+| Namespaces | - | 15 |
 | Gestion projet | - | BMAD v6 |
 | QA Browser | - | QA Recette |
 
@@ -364,11 +358,11 @@ Types : feat, fix, refactor, test, docs, chore, perf, build, ci, style
 
 | | |
 |---|---|
-| **63** agents | **204+** commands |
-| **10** stacks | **5** langues |
-| **26** namespaces | **36** skills |
+| **70** agents | **125** commands |
+| **11** stacks | **5** langues |
+| **15** namespaces | **48** skills |
 
 ---
 
-**Formation Claude Code 2.1.117 + Claude-Craft 8.2.3**
+**Formation Claude Code 2.1.154 + Claude-Craft 8.7.1**
 **The Bearded CTO - 2026**

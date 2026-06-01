@@ -31,7 +31,7 @@ Antes de comenzar, asegúrate de tener lo siguiente instalado:
 ### Requerido
 
 - [ ] **Terminal/Línea de Comandos** - Cualquier aplicación de terminal
-- [ ] **Node.js 16+** - Requerido para instalación NPX
+- [ ] **Node.js 20+** - Requerido para instalación NPX
 - [ ] **Git** - Para control de versiones
 - [ ] **Claude Code** - El asistente de codificación con IA
 
@@ -43,7 +43,7 @@ Abre tu terminal y ejecuta estos comandos:
 # Verificar versión de Node.js (debe ser 16 o superior)
 node --version
 ```
-Salida esperada: `v16.x.x` o superior (ej: `v20.10.0`)
+Salida esperada: `v20.x.x` o superior (ej: `v20.10.0`)
 
 ```bash
 # Verificar versión de Git

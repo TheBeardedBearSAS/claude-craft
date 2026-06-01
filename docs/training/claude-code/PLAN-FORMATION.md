@@ -1,9 +1,9 @@
-# Plan de Formation : Claude Code 2.1.117 — Maîtriser l'Agent de Développement
+# Plan de Formation : Claude Code 2.1.154 — Maîtriser l'Agent de Développement
 
 ## Contexte de Formation
 
 - **Public** : Équipe de développeurs
-- **Objectif** : Maîtrise de Claude Code 2.1.117 comme agent de développement
+- **Objectif** : Maîtrise de Claude Code 2.1.154 comme agent de développement
 - **Cas d'usage** : Tout projet logiciel, toute stack technologique
 - **Format** : 2 jours (14h/groupe), max 5 stagiaires/groupe
 - **Approche** : Progressive — du guidé vers l'autonome
@@ -12,8 +12,8 @@
 
 | Composant | Version | Nouveautés clés |
 |-----------|---------|-----------------|
-| Claude Code | 2.1.117 | Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Sonnet 4.6/Opus 4.7, Opus 4.6 (Fast Mode), Agent Teams, 24 Hooks, Auto Mode, Tool Search, Agent Frontmatter, Subprocess Sandboxing, Native CLI binary, Forked subagents, /ultrareview, /tui, /btw, /hooks, /reload-plugins, /effort slider |
-| Formation | 3.0.0 | Mise a jour v2.1.45 -> v2.1.117 (Opus 4.7) |
+| Claude Code | 2.1.154 | Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Sonnet 4.6/Opus 4.8, Opus 4.6 (Fast Mode), Agent Teams, 24 Hooks, Auto Mode, Tool Search, Agent Frontmatter, Subprocess Sandboxing, Native CLI binary, Forked subagents, /ultrareview, /tui, /btw, /hooks, /reload-plugins, /effort slider |
+| Formation | 3.0.0 | Mise a jour v2.1.45 -> v2.1.154 (Opus 4.8) |
 
 ---
 
@@ -61,7 +61,7 @@
 2. **Installation** (20min)
    - Installation native (recommandé) : Homebrew, curl, WinGet
    - CLI via npm (fallback, deprecié) : `npm install -g @anthropic-ai/claude-code`
-   - Vérification : `claude --version` (2.1.117+)
+   - Vérification : `claude --version` (2.1.154+)
    - Desktop app : téléchargement et configuration
    - Web interface : connexion sur claude.ai/code
    - VS Code extension : installation depuis le marketplace
@@ -95,15 +95,15 @@
 4. **Modèles et coût** (20min)
    - Modèles disponibles et positionnement :
      - **Sonnet 4.6** (défaut) : équilibre vitesse/intelligence, usage quotidien, 200K tokens (1M en beta)
-     - **Opus 4.7** (flagship) : modèle le plus puissant, 1M tokens GA, raisonnement complexe, effort `xhigh`
+     - **Opus 4.8** (flagship) : modèle le plus puissant, 1M tokens GA, raisonnement complexe, effort `xhigh`
      - **Opus 4.6** : utilisé exclusivement par Fast Mode (`/fast`), 2.5x plus rapide, 6x le coût
      - **Haiku 4.5** : léger et rapide, tâches simples, prompt-based hooks, 200K tokens
    - Changer de modèle :
-     - `/model` en session interactive (defaults to Opus 4.7)
+     - `/model` en session interactive (defaults to Opus 4.8)
      - `/fast` pour basculer sur Opus 4.6 Fast Mode
      - `--model` en ligne de commande
    - Extended Thinking / Adaptive Thinking :
-     - Adaptive thinking automatique avec Opus 4.7 (extended thinking retiré)
+     - Adaptive thinking automatique avec Opus 4.8 (extended thinking retiré)
      - Extended Thinking toujours disponible sur Opus 4.6
      - Mots-clés héritage (`think`, `think hard`, etc.) : dépréciés mais fonctionnels
      - `/effort` (low/medium/high/**xhigh**/max) pour contrôler la profondeur
@@ -879,7 +879,7 @@
    - Choix du modèle selon la tâche :
      - Haiku 4.5 pour tâches simples et répétitives ($1/$5 par M tokens)
      - Sonnet 4.6 pour usage quotidien ($3/$15 par M tokens)
-     - Opus 4.7 pour raisonnement complexe ($5/$25 par M tokens)
+     - Opus 4.8 pour raisonnement complexe ($5/$25 par M tokens)
    - Budget d'équipe et monitoring
 
 **Support :** `modules/jour2/08-qualite-securite.md`
@@ -899,9 +899,9 @@
 1. **Présentation condensée** (10min)
    - Claude-Craft : framework multi-technologie pour Claude Code
    - Installation : `npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=fr`
-   - 19 stacks technologiques supportées
-   - 72 agents spécialisés
-   - 211 commandes réparties en 26 namespaces
+   - 11 stacks technologiques supportées
+   - 70 agents (31 spécialisés + 39 infra)
+   - 125 commandes réparties en 15 namespaces
 
 2. **Points forts** (10min)
    - BMAD v6 : framework de gestion de projet intégré
@@ -1114,7 +1114,7 @@ Ce plan est adaptable selon :
 
 ## Matrice de Couverture
 
-### Features Claude Code 2.1.117 et modules correspondants
+### Features Claude Code 2.1.154 et modules correspondants
 
 | Feature | Module | Couverture |
 |---------|--------|------------|
@@ -1126,10 +1126,10 @@ Ce plan est adaptable selon :
 | **Slack Integration** | M1 | Mentionnée |
 | **Chrome Extension** | M1 | Mentionnée |
 | **Commandes de base** (`/help`, `/clear`, `/exit`) | M1 | Complète |
-| **Adaptive Thinking** (automatique Opus 4.7, `/effort` low/medium/high/**xhigh**/max) | M1 | Complète |
+| **Adaptive Thinking** (automatique Opus 4.8, `/effort` low/medium/high/**xhigh**/max) | M1 | Complète |
 | **`/think` pour forcer réflexion** | M1 | Complète |
 | **Modèle Sonnet 4.6** | M1 | Complète |
-| **Modèle Opus 4.7** (flagship) | M1 | Complète |
+| **Modèle Opus 4.8** (flagship) | M1 | Complète |
 | **Modèle Opus 4.6** (Fast Mode uniquement) | M1 | Complète |
 | **Modèle Haiku 4.5** | M1, M5 | Complète |
 | **`/model` changement modèle** | M1 | Complète |
@@ -1190,7 +1190,7 @@ Ce plan est adaptable selon :
 | **ElicitationResult** (v2.1.76+) | M5, M6 | Complète |
 | **Hook `if` conditionnel** (v2.1.85+) | M5 | Complète |
 | **Hook `defer` permission** (v2.1.89+) | M5 | Complète |
-| **PreCompact blocking** (v2.1.117+) | M5 | Complète |
+| **PreCompact blocking** (v2.1.154+) | M5 | Complète |
 | **Prompt-based hooks** (Haiku 4.5) | M5 | Complète |
 | **Matchers hooks** | M5 | Complète |
 | **Exit codes hooks** (0, 2) | M5 | Complète |
@@ -1262,4 +1262,4 @@ Ce plan est adaptable selon :
 **Version** : 2.0.0
 **Date** : Avril 2026
 **Auteur** : The Bearded Bear
-**Claude Code** : 2.1.117
+**Claude Code** : 2.1.154

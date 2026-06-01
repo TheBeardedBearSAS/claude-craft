@@ -6,7 +6,7 @@ Esta guía te acompaña en la configuración de un nuevo proyecto con Claude-Cra
 
 ## Elegir Tu Tecnología
 
-Claude-Craft soporta **19 stacks tecnológicos** (10 dev + 8 infra):
+Claude-Craft soporta **11 stacks de aplicación** (+ 8 de infraestructura):
 
 ### Stacks de Desarrollo
 

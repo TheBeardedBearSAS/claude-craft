@@ -398,7 +398,7 @@ Prendre un projet existant de l'équipe et :
 
 ---
 
-## 6. Migration vers Claude-Craft 8.2.3
+## 6. Migration vers Claude-Craft 8.7.1
 
 ### Nouvelles commandes disponibles
 
@@ -411,7 +411,7 @@ npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=fr
 # Configurer RTK pour optimiser les tokens
 /common:setup-rtk
 
-# Verifier la version de Claude Code (2.1.117 recommande)
+# Verifier la version de Claude Code (2.1.154 recommande)
 claude --version
 ```
 
@@ -420,8 +420,8 @@ claude --version
 | Nouveaute | Impact |
 |-----------|--------|
 | RTK integration | 55-65% d'economie de tokens |
-| 204+ commandes, 26 namespaces | Couverture elargie (infra, DevOps) |
-| 63 agents avec frontmatter etendu | effort, maxTurns, disallowedTools |
+| 125 commandes, 15 namespaces | Couverture elargie (infra, DevOps) |
+| 70 agents (31 spécialisés + 39 infra) avec frontmatter etendu | effort, maxTurns, disallowedTools |
 | Hook templates | `.claude/templates/hooks/` prets a l'emploi |
 | Managed settings | Configuration modulaire via `managed-settings.d/` |
 | MCP Tool Search | Lazy loading des outils MCP (95% reduction) |

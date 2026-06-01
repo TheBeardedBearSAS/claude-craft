@@ -144,7 +144,7 @@ head -20 ~/my-project/.claude/commands/common/pre-commit-check.md
 4. **Check Claude Code version**
    ```bash
    claude --version
-   # Requires Claude Code 2.1.23+
+   # Requires Claude Code 2.1.97+
    ```
 
 ---
@@ -751,7 +751,7 @@ Save as `diagnose.sh` and run with `bash diagnose.sh`.
 
 ---
 
-## Hook Event Issues (v7.27.0+)
+## Hook Event Issues (v8.x)
 
 ### Hook not triggering
 

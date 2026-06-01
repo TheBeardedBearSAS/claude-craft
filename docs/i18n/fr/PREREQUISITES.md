@@ -19,7 +19,7 @@ Requis pour l'installation NPX et les outils CLI.
 
 **Vérification :**
 ```bash
-node --version   # Doit être v18.x ou supérieur
+node --version   # Doit être v20.x ou supérieur
 npm --version    # Doit être v9.x ou supérieur
 ```
 
@@ -244,7 +244,7 @@ fi
 | Docker Compose | 2.0 | 2.24+ |
 | jq | 1.5 | 1.7+ |
 | Make | 3.0 | 4.x |
-| Claude Code | 2.1.97 (CVE-2025-59536 patché) | 2.1.117 |
+| Claude Code | 2.1.97 (CVE-2025-59536 patché) | 2.1.154 |
 
 ---
 

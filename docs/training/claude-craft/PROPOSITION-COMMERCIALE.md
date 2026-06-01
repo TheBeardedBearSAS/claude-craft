@@ -1,18 +1,18 @@
-# Proposition Commerciale : Formation Claude Code 2.1.117 + Claude-Craft 8.2.3
+# Proposition Commerciale : Formation Claude Code 2.1.154 + Claude-Craft 8.7.1
 
 ## Contexte Client
 
 - **Équipe** : 8 développeurs (2 groupes de 4)
-- **Stack** : Adaptable (18 technologies supportées)
-- **Objectif** : Maîtrise de Claude Code 2.1.117 avec Claude-Craft 8.2.3
+- **Stack** : Adaptable (11 technologies supportées)
+- **Objectif** : Maîtrise de Claude Code 2.1.154 avec Claude-Craft 8.7.1
 - **Cas d'usage** : Nouveaux projets ET projets existants
 
 ## Versions incluses
 
 | Composant | Version | Points forts |
 |-----------|---------|--------------|
-| Claude Code | 2.1.117 | Adaptive Thinking, MCP, Permissions, Task Management, Opus 4.7 (+ Opus 4.6 Fast Mode), Agent Teams, Auto Mode, Native CLI binary, Forked subagents |
-| Claude-Craft | 8.2.3 | BMAD v6, Ralph, QA Recette, 63 agents, 204 commands, RTK token optimization |
+| Claude Code | 2.1.154 | Adaptive Thinking, MCP, Permissions, Task Management, Opus 4.8 (+ Opus 4.6 Fast Mode), Agent Teams, Auto Mode, Native CLI binary, Forked subagents |
+| Claude-Craft | 8.7.1 | BMAD v6, Ralph, QA Recette, 70 agents (31 spécialisés + 39 infra), 125 commandes / 15 namespaces, RTK token optimization |
 
 ---
 
@@ -55,8 +55,8 @@
 
 | Module | Durée | Contenu |
 |--------|-------|---------|
-| Introduction Claude Code 2.1.117 | 1h30 | Installation, Plan Mode, Background Tasks, Hooks, Auto Mode |
-| Framework Claude-Craft 8.2.3 | 1h30 | TCL, npx install, 18 stacks, RTK, context.yaml |
+| Introduction Claude Code 2.1.154 | 1h30 | Installation, Plan Mode, Background Tasks, Hooks, Auto Mode |
+| Framework Claude-Craft 8.7.1 | 1h30 | TCL, npx install, 11 stacks, RTK, context.yaml |
 | Workflow de développement | 2h | Les 3 tracks, commandes workflow, Plan Mode |
 | Nouveau projet | 2h | Configuration, génération de features, Clean Architecture |
 
@@ -66,7 +66,7 @@
 |--------|-------|---------|
 | Intégration projet existant | 1h30 | Audit, stratégie d'adoption |
 | Qualité et Sécurité | 1h | TDD/BDD, OWASP |
-| Agents spécialisés, BMAD et Docker | 1h30 | 63 agents, BMAD, Docker |
+| Agents spécialisés, BMAD et infra | 1h30 | 70 agents (31 spécialisés + 39 infra), BMAD |
 | Outils avancés, Ralph et Autonomie | 1h30 | Ralph, QA Recette, Extended Thinking, MCP |
 | Atelier pratique | 1h30 | Challenge + démos BMAD/QA |
 
@@ -271,5 +271,5 @@ Pour toute question ou personnalisation :
 **Validité de cette proposition :** 30 jours
 **Version :** 3.0.0
 **Date :** Février 2026
-**Claude Code** : 2.1.117
-**Claude-Craft** : 8.2.3
+**Claude Code** : 2.1.154
+**Claude-Craft** : 8.7.1

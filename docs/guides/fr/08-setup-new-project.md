@@ -31,7 +31,7 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés :
 ### Requis
 
 - [ ] **Terminal/Ligne de Commande** - N'importe quelle application terminal
-- [ ] **Node.js 16+** - Requis pour l'installation NPX
+- [ ] **Node.js 20+** - Requis pour l'installation NPX
 - [ ] **Git** - Pour le contrôle de version
 - [ ] **Claude Code** - L'assistant de codage IA
 
@@ -43,7 +43,7 @@ Ouvrez votre terminal et exécutez ces commandes :
 # Vérifier la version de Node.js (doit être 16 ou supérieure)
 node --version
 ```
-Sortie attendue : `v16.x.x` ou supérieure (ex: `v20.10.0`)
+Sortie attendue : `v20.x.x` ou supérieure (ex: `v20.10.0`)
 
 ```bash
 # Vérifier la version de Git
@@ -290,7 +290,7 @@ drwxr-xr-x  2 user user 4096 Jan 12 10:00 templates
 # Compter les règles
 ls .claude/rules/*.md | wc -l
 
-# Compter les agents (jusqu'à 72 agents disponibles selon le stack)
+# Compter les agents (jusqu'à 70 agents disponibles selon le stack)
 ls .claude/agents/*.md | wc -l
 
 # Compter les commandes (devrait avoir des sous-répertoires)

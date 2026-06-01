@@ -2,7 +2,7 @@
 
 ## Stack Overview (2026)
 
-.NET 10 LTS / C# 14 | Symfony 8 / PHP 8.5 | Flutter 3.41 / Dart 3.11 | React 19.2 | Laravel 13 | Python 3.14+
+.NET 10 LTS / C# 14 | Symfony 8 / PHP 8.5 | Flutter 3.44 / Dart 3.12 | React 19.2 | Laravel 13 | Python 3.14+
 
 ## Architecture Layers
 

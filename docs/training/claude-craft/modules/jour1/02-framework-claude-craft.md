@@ -6,8 +6,8 @@
 - Expliquer l'architecture TCL (Tiered Context Loading) et son économie de tokens
 - Installer Claude-Craft via npx sur un projet
 - Comprendre les différents composants (skills, commands, agents, references)
-- Configurer le contexte projet avec la structure 8.2.3
-- Comprendre le framework BMAD v6 et les 63 agents disponibles
+- Configurer le contexte projet avec la structure 8.7.1
+- Comprendre le framework BMAD v6 et les 70 agents disponibles
 - Connaitre RTK pour l'optimisation des tokens (55-65% d'economie)
 
 ---
@@ -24,16 +24,16 @@ Claude Code est puissant, mais :
 - Pas de gestion de projet intégrée
 - Pas d'automatisation des sprints
 
-### La solution : Claude-Craft 8.2.3
+### La solution : Claude-Craft 8.7.1
 
 Claude-Craft ajoute une **couche de best practices optimisée** avec gestion de projet et automatisation :
 
 ```
 ┌─────────────────────────────────────────┐
-│           CLAUDE CODE 2.1.117           │
+│           CLAUDE CODE 2.1.154           │
 │   (Moteur IA + Extended Thinking + MCP) │
 ├─────────────────────────────────────────┤
-│         CLAUDE-CRAFT 8.2.3             │
+│         CLAUDE-CRAFT 8.7.1             │
 │  TCL + Skills + References + Agents     │
 │  BMAD v6 + Ralph + QA Recette + RTK    │
 ├─────────────────────────────────────────┤
@@ -44,16 +44,16 @@ Claude-Craft ajoute une **couche de best practices optimisée** avec gestion de 
 
 ### Bénéfices
 
-| Aspect | Sans Claude-Craft | Avec Claude-Craft 8.2.3 |
+| Aspect | Sans Claude-Craft | Avec Claude-Craft 8.7.1 |
 |--------|-------------------|------------------------|
 | Tokens | ~70,000 auto-chargés | ~3,500 (économie 95%) |
 | Architecture | Variable | Clean Architecture imposée |
 | Tests | Optionnels | TDD obligatoire |
 | Sécurité | À la demande | OWASP intégré |
-| Technologies | 1 seule | 18 stacks supportées |
+| Technologies | 1 seule | 11 stacks supportées |
 | Gestion projet | Variable | BMAD v6 (6 quality gates) |
 | Automatisation | Manuelle | Ralph (boucle IA continue) |
-| Agents | 0 | 63 agents (11 catégories) |
+| Agents | 0 | 70 agents (31 spécialisés + 39 infra) |
 | Tokens CLI | Non optimisé | RTK : 55-65% d'économie |
 
 ---
@@ -104,7 +104,7 @@ Le **TCL (Tiered Context Loading)** est l'innovation majeure de Claude-Craft. Il
 
 ---
 
-## 3. Architecture Claude-Craft 8.2.3
+## 3. Architecture Claude-Craft 8.7.1
 
 ### Structure TCL
 
@@ -139,7 +139,7 @@ Le **TCL (Tiered Context Loading)** est l'innovation majeure de Claude-Craft. Il
 └── .recette/           # QA Recette test plans & sessions
 ```
 
-### Technologies supportées (18 stacks)
+### Technologies supportées (11 stacks)
 
 | Stack | Catégorie | Focus principal |
 |-------|-----------|-----------------|
@@ -220,7 +220,7 @@ Les skills sont des fichiers markdown avec un frontmatter YAML définissant les 
 ---
 name: testing
 description: Testing - TDD/BDD principles. Use when writing tests.
-model: claude-opus-4-7
+model: claude-opus-4-8
 tools:
   - Read
   - Grep
@@ -346,7 +346,7 @@ triggers:
 
 ### Agents (Personas IA)
 
-Les agents sont des experts spécialisés avec un contexte et une personnalité. Claude-Craft 8.2.3 propose **63 agents** répartis en 11 catégories :
+Les agents sont des experts spécialisés avec un contexte et une personnalité. Claude-Craft 8.7.1 propose **70 agents** : 31 spécialisés (Common 20 + Tech Reviewers 11) + 39 infra à la demande :
 
 **Agents communs (12)**
 
@@ -365,7 +365,7 @@ Les agents sont des experts spécialisés avec un contexte et une personnalité.
 | `@research-assistant` | Technical research |
 | `@ralph-conductor` | Continuous loop orchestration |
 
-**Reviewers technologie (10)**
+**Reviewers technologie (11)**
 
 | Agent | Technologie |
 |-------|-------------|
@@ -379,6 +379,7 @@ Les agents sont des experts spécialisés avec un contexte et une personnalité.
 | `@reactnative-reviewer` | React Native |
 | `@csharp-reviewer` | C#/.NET |
 | `@php-reviewer` | PHP |
+| `@paperclip-reviewer` | Paperclip |
 
 **Agents Docker (5)**
 
@@ -604,10 +605,10 @@ Voir `exercices/exercice-02-installation-claude-craft.md`
 4. **Skills** = Chargés on-demand ou via triggers (format YAML frontmatter)
 5. **References** = Documentation complète via `@.claude/references/`
 6. **NPX** = Installation moderne en une commande
-7. **18 stacks** = Support multi-technologie
+7. **11 stacks** = Support multi-technologie (dont Paperclip)
 8. **BMAD v6** = Gestion de projet intégrée avec 6 quality gates
-9. **63 agents** = Experts spécialisés en 11 catégories
-10. **204+ commandes** = Couverture complète du workflow de développement (26 namespaces)
+9. **70 agents** = 31 spécialisés (Common + Tech Reviewers + Project) + 39 infra à la demande
+10. **125 commandes** = Couverture complète du workflow de développement (15 namespaces)
 11. **RTK** = `/common:setup-rtk` pour 55-65% d'économie de tokens sur les commandes CLI
 12. **Hook templates** = Templates prêts à l'emploi dans `.claude/templates/hooks/`
 
