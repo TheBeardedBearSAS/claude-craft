@@ -19,16 +19,18 @@ ERRORS=0
 # Size parity threshold: target language file must be >= SIZE_THRESHOLD * en_size
 # Overridable via env var; 0.80 means 80% parity required
 SIZE_THRESHOLD="${I18N_SIZE_THRESHOLD:-0.80}"
-# Set STRICT_SIZE=1 to fail on size gaps (default: warn only)
-STRICT_SIZE="${STRICT_SIZE:-0}"
+# Set STRICT_SIZE=0 to downgrade size gaps to warnings (default: fail on gaps).
+# Flipped to 1 in v8.8.2: the i18n translation debt (101 files < 0.80) is fully
+# resorbed, so any new sub-threshold file is now a regression and must block.
+STRICT_SIZE="${STRICT_SIZE:-1}"
 # Hard blocking threshold: files > BLOCK_SIZE_BYTES with ratio < BLOCK_RATIO trigger exit 1
 # regardless of SIZE_THRESHOLD, unless I18N_PARITY_STRICT=0 is set.
 BLOCK_SIZE_BYTES="${I18N_BLOCK_SIZE_BYTES:-5000}"
 BLOCK_RATIO="${I18N_BLOCK_RATIO:-0.40}"
-# Set I18N_PARITY_STRICT=1 to enable hard blocking (default: 0, opt-in until Phase 4)
-# Rationale: 164 i18n files inherited from pre-v8.6.0 are below the 0.40 ratio.
-# Once the i18n cleanup session (P0 #26) lands, flip default to 1.
-I18N_PARITY_STRICT="${I18N_PARITY_STRICT:-0}"
+# Set I18N_PARITY_STRICT=0 to allow transitional PRs (default: hard blocking on).
+# Flipped to 1 in v8.8.2: the inherited i18n debt is fully resorbed (gap report
+# empty), so a large file dropping below BLOCK_RATIO is now a regression to block.
+I18N_PARITY_STRICT="${I18N_PARITY_STRICT:-1}"
 SIZE_WARNINGS=0
 BLOCK_FAILURES=()
 # CSV output file for gap report

@@ -19,20 +19,22 @@ permissions:
 
 jobs:
   parity:
-    name: File count parity (blocking)
+    name: File count + size parity (blocking)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
-      - name: Check count parity
+      # Since v8.8.2 the script defaults to STRICT_SIZE=1 + I18N_PARITY_STRICT=1,
+      # so this job now blocks on both file-count AND size-ratio (< 0.80) gaps.
+      - name: Check count + strict size parity
         run: bash scripts/verify-i18n-parity.sh
 
-  size-advisory:
-    name: Size parity advisory (non-blocking)
+  size-report:
+    name: Size gap snapshot (reporting only)
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pinned: v4.2.2
-      - name: Check size ratio (threshold 0.80, strict mode)
+      - name: Generate size gap report (threshold 0.80)
         env:
           STRICT_SIZE: '1'
           I18N_SIZE_THRESHOLD: '0.80'
