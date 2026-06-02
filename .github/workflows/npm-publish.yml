@@ -272,26 +272,39 @@ jobs:
           unset NODE_AUTH_TOKEN
           npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
 
-      - name: Verify publication
+      - name: Verify publication (wait for NPM propagation)
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
+        # Poll the registry until the just-published version appears at the dist-tag,
+        # instead of a single check after a fixed sleep. The NPM CDN can take >30s to
+        # propagate, which previously made this (and the smoke test) flake red even
+        # though the publish succeeded.
         run: |
-          sleep 10
           NPM_TAG="${{ steps.npm_tag.outputs.tag }}"
-          PUBLISHED_VERSION=$(npm view @the-bearded-bear/claude-craft@${NPM_TAG} version 2>/dev/null || echo "")
-          if [[ "${PUBLISHED_VERSION}" != "${{ needs.validate.outputs.version }}" ]]; then
-            echo "::warning::Version may not have propagated yet. Expected: ${{ needs.validate.outputs.version }}, Found: ${PUBLISHED_VERSION}"
-          else
-            echo "Successfully published version ${PUBLISHED_VERSION} with tag ${NPM_TAG}"
+          EXPECTED="${{ needs.validate.outputs.version }}"
+          PUBLISHED_VERSION=""
+          for i in $(seq 1 18); do
+            PUBLISHED_VERSION=$(npm view "@the-bearded-bear/claude-craft@${NPM_TAG}" version 2>/dev/null || echo "")
+            if [[ "${PUBLISHED_VERSION}" == "${EXPECTED}" ]]; then
+              echo "✓ Propagated: ${PUBLISHED_VERSION} (tag ${NPM_TAG}) after ~$(( (i - 1) * 10 ))s"
+              break
+            fi
+            echo "Attempt ${i}/18: registry has '${PUBLISHED_VERSION:-<none>}', expected '${EXPECTED}' — waiting 10s for NPM propagation…"
+            sleep 10
+          done
+          if [[ "${PUBLISHED_VERSION}" != "${EXPECTED}" ]]; then
+            echo "::error::Version ${EXPECTED} (tag ${NPM_TAG}) did not propagate to NPM within 180s (last seen: '${PUBLISHED_VERSION:-<none>}')"
+            exit 1
           fi
 
       - name: Smoke test installed package
         # Use npm dist-tag (next/beta/latest) rather than the static package.json version,
         # because main-branch pushes publish as 8.5.0-next.<sha>, not 8.5.0.
+        # Propagation is already confirmed by the previous step; --prefer-online forces npx
+        # to refetch metadata so it never resolves a stale cached version.
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         run: |
-          sleep 30
           NPM_TAG="${{ steps.npm_tag.outputs.tag }}"
-          npx --yes @the-bearded-bear/claude-craft@${NPM_TAG} --version
+          npx --yes --prefer-online "@the-bearded-bear/claude-craft@${NPM_TAG}" --version
 
   release:
     name: Create GitHub Release
