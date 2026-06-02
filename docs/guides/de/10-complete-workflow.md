@@ -17,7 +17,7 @@ Dieser Leitfaden führt Sie durch den vollständigen Entwicklungslebenszyklus:
 7. **Deployment** – In die Produktion deployen
 
 **Voraussetzungen:**
-- Claude Craft v8.8.1 in Ihrem Projekt installiert
+- Claude Craft v8.8.2 in Ihrem Projekt installiert
 - Claude Code v2.1.159 (empfohlen) oder v2.1.97+ (Minimum, CVE-2025-59536 gepatcht)
 - Grundlegendes Verständnis Ihres gewählten Technologie-Stacks
 
