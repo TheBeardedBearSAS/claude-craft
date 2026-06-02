@@ -23,6 +23,7 @@
 | `/paperclip:*` | 8 |
 | `/pgbouncer:*` | 5 |
 | `/php:*` | 5 |
+| `/project:*` | 34 |
 | `/python:*` | 10 |
 | `/qa:*` | 6 |
 | `/react:*` | 10 |
@@ -33,7 +34,7 @@
 | `/uiux:*` | 8 |
 | `/vuejs:*` | 6 |
 | `/workflow:*` | 9 |
-| **Total** | **185** |
+| **Total** | **219** |
 
 ## `/angular:*`
 
@@ -221,6 +222,45 @@
 | [`/php:check-compliance`](../.claude/commands/php/check-compliance.md) | Standards Compliance Check |
 | [`/php:check-security`](../.claude/commands/php/check-security.md) | Security Audit |
 | [`/php:check-testing`](../.claude/commands/php/check-testing.md) | Test Coverage Analysis |
+
+## `/project:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/project:add-epic`](../Project/i18n/en/commands/add-epic.md) | Add an EPIC |
+| [`/project:add-story`](../Project/i18n/en/commands/add-story.md) | Add a User Story |
+| [`/project:add-task`](../Project/i18n/en/commands/add-task.md) | Add a Task |
+| [`/project:analyze-backlog`](../Project/i18n/en/commands/analyze-backlog.md) | Analyze existing backlog structure for BMAD migration |
+| [`/project:batch-status`](../Project/i18n/en/commands/batch-status.md) | Show batch processing queue status |
+| [`/project:board`](../Project/i18n/en/commands/board.md) | Display Kanban Board |
+| [`/project:burndown`](../Project/i18n/en/commands/burndown.md) | Generate sprint burndown chart in Mermaid format showing daily progress |
+| [`/project:checkpoint`](../Project/i18n/en/commands/checkpoint.md) | Run spec verification checkpoints before and after implementation phases |
+| [`/project:coverage-map`](../Project/i18n/en/commands/coverage-map.md) | Identify requirements not covered by stories, code, or tests |
+| [`/project:critical-path`](../Project/i18n/en/commands/critical-path.md) | Identify the critical path through story dependencies to optimize sprint execution |
+| [`/project:decompose-tasks`](../Project/i18n/en/commands/decompose-tasks.md) | Decompose User Stories into Tasks |
+| [`/project:dependencies`](../Project/i18n/en/commands/dependencies.md) | Generate a visual dependency graph between user stories using Mermaid |
+| [`/project:gap-analysis`](../Project/i18n/en/commands/gap-analysis.md) | Compare existing specifications with actual codebase to identify gaps and inconsistencies |
+| [`/project:generate-backlog`](../Project/i18n/en/commands/generate-backlog.md) | Generate Complete SCRUM Backlog |
+| [`/project:generate-constitution`](../Project/i18n/en/commands/generate-constitution.md) | Generate a Project Constitution capturing immutable project decisions and principles |
+| [`/project:generate-prd`](../Project/i18n/en/commands/generate-prd.md) | Generate a Product Requirements Document from project context and specifications |
+| [`/project:generate-tech-spec`](../Project/i18n/en/commands/generate-tech-spec.md) | Generate a Technical Specification from PRD and architecture analysis |
+| [`/project:list-epics`](../Project/i18n/en/commands/list-epics.md) | List EPICs |
+| [`/project:list-stories`](../Project/i18n/en/commands/list-stories.md) | List User Stories |
+| [`/project:list-tasks`](../Project/i18n/en/commands/list-tasks.md) | List Tasks |
+| [`/project:metrics`](../Project/i18n/en/commands/metrics.md) | Generate project metrics dashboard with sprint velocity, spec coverage, and quality indicators |
+| [`/project:migrate-backlog`](../Project/i18n/en/commands/migrate-backlog.md) | _no description_ |
+| [`/project:move-task`](../Project/i18n/en/commands/move-task.md) | Move a Task |
+| [`/project:reverse-prd`](../Project/i18n/en/commands/reverse-prd.md) | Generate a PRD from an existing codebase by analyzing implemented features and business logic |
+| [`/project:reverse-stories`](../Project/i18n/en/commands/reverse-stories.md) | Generate user stories from existing codebase features and endpoints |
+| [`/project:run-epic`](../Project/i18n/en/commands/run-epic.md) | Run all stories from an epic in batch |
+| [`/project:run-queue`](../Project/i18n/en/commands/run-queue.md) | _no description_ |
+| [`/project:run-sprint`](../Project/i18n/en/commands/run-sprint.md) | _no description_ |
+| [`/project:scan`](../Project/i18n/en/commands/scan.md) | Analyze existing codebase and generate a structured inventory of modules, endpoints, models, and tests |
+| [`/project:sync-backlog`](../Project/i18n/en/commands/sync-backlog.md) | _no description_ |
+| [`/project:trace`](../Project/i18n/en/commands/trace.md) | Display bidirectional traceability matrix from requirements to code and tests |
+| [`/project:update-epic`](../Project/i18n/en/commands/update-epic.md) | Update an EPIC |
+| [`/project:update-stories`](../Project/i18n/en/commands/update-stories.md) | _no description_ |
+| [`/project:update-story`](../Project/i18n/en/commands/update-story.md) | Update a User Story |
 
 ## `/python:*`
 
