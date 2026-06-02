@@ -151,6 +151,15 @@ function scanI18nCommands(rootDir) {
   const entries = fs.readdirSync(rootDir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
+    if (entry.name === 'commands') {
+      // Flat layout `<RootDir>/commands/*.md` (e.g. `Project/i18n/en/commands/`):
+      // namespace is the top segment of the root (`Project` -> `project`).
+      const namespace = path.basename(path.dirname(path.dirname(rootDir))).toLowerCase();
+      for (const f of listMdFiles(path.join(rootDir, 'commands'), false)) {
+        out.push({ filePath: f, namespace });
+      }
+      continue;
+    }
     const cmdDir = path.join(rootDir, entry.name, 'commands');
     if (!fs.existsSync(cmdDir)) continue;
     const namespace = entry.name.toLowerCase();

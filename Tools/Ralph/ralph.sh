@@ -392,6 +392,10 @@ parse_args() {
                 ;;
             --story=*)
                 STORY_ID="${1#--story=}"
+                if [[ ! "$STORY_ID" =~ ^[A-Za-z0-9_-]+$ ]]; then
+                    echo "Error: invalid --story id '$STORY_ID' (allowed: letters, digits, '-', '_')" >&2
+                    exit 1
+                fi
                 SESSION_ISOLATED=true
                 ;;
             --sprint)
@@ -780,8 +784,10 @@ main() {
 
             if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
                 local title description
-                title=$(yq ".stories.${STORY_ID}.title" "$status_file" 2>/dev/null)
-                description=$(yq ".stories.${STORY_ID}.description" "$status_file" 2>/dev/null)
+                # Pass STORY_ID via env() so it is treated as a string key, never interpolated
+                # into the yq expression (prevents query injection through the story id).
+                title=$(STORY_ID="$STORY_ID" yq '.stories[env(STORY_ID)].title' "$status_file" 2>/dev/null)
+                description=$(STORY_ID="$STORY_ID" yq '.stories[env(STORY_ID)].description' "$status_file" 2>/dev/null)
                 PROMPT="Implement user story $STORY_ID: $title
 
 $description

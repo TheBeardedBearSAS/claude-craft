@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdtemp, cp, writeFile, unlink, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -8,7 +8,10 @@ import { startWatcher } from '../../cli/kanban/server/services/file-watcher.js';
 
 const FIXTURE_PATH = path.resolve(import.meta.dirname, '../fixtures/project-management');
 const DEBOUNCE = 200;
-const WAIT_AFTER_DEBOUNCE = 400;
+// Negative assertions (no event expected) wait this long before confirming absence.
+const WAIT_NO_EVENT = 400;
+// Polling budget for positive assertions — generous so shared CI runners don't flake.
+const WAIT_OPTS = { timeout: 2000, interval: 50 };
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -61,11 +64,11 @@ describe('file-watcher', () => {
     const storyPath = path.join(tmpDir, 'backlog/user-stories/US-001-login.md');
     await writeFile(storyPath, '---\nid: US-001\ntitle: Modified login\n---\nUpdated content', 'utf8');
 
-    await sleep(WAIT_AFTER_DEBOUNCE);
+    await vi.waitFor(() => {
+      expect(receivedEvents.find((e) => e.path === storyPath)).toBeDefined();
+    }, WAIT_OPTS);
 
-    expect(receivedEvents.length).toBeGreaterThan(0);
     const evt = receivedEvents.find((e) => e.path === storyPath);
-    expect(evt).toBeDefined();
     expect(evt.event).toBe('change');
     expect(evt.category).toBe('story');
   });
@@ -79,17 +82,17 @@ describe('file-watcher', () => {
     await sleep(50);
     await writeFile(storyPath, '---\nid: US-001\ntitle: Change 3\n---\nContent 3', 'utf8');
 
-    await sleep(WAIT_AFTER_DEBOUNCE);
-
-    const events = receivedEvents.filter((e) => e.path === storyPath);
-    expect(events.length).toBe(1);
+    // Debounce coalesces the 3 rapid writes into a single event.
+    await vi.waitFor(() => {
+      expect(receivedEvents.filter((e) => e.path === storyPath).length).toBe(1);
+    }, WAIT_OPTS);
   });
 
   it('should ignore non-relevant files', async () => {
     const randomFile = path.join(tmpDir, 'random.txt');
     await writeFile(randomFile, 'Random content', 'utf8');
 
-    await sleep(WAIT_AFTER_DEBOUNCE);
+    await sleep(WAIT_NO_EVENT);
 
     const evt = receivedEvents.find((e) => e.path === randomFile);
     expect(evt).toBeUndefined();
@@ -99,10 +102,11 @@ describe('file-watcher', () => {
     const taskPath = path.join(tmpDir, 'sprints/sprint-001-skeleton/tasks/TASK-999.md');
     await writeFile(taskPath, '---\nid: TASK-999\nus_id: US-001\ntitle: New task\n---\nTask body', 'utf8');
 
-    await sleep(WAIT_AFTER_DEBOUNCE);
+    await vi.waitFor(() => {
+      expect(receivedEvents.find((e) => e.path === taskPath)).toBeDefined();
+    }, WAIT_OPTS);
 
     const evt = receivedEvents.find((e) => e.path === taskPath);
-    expect(evt).toBeDefined();
     // chokidar may emit 'add' or 'change' depending on watcher readiness timing;
     // either is acceptable — what matters is that the UI is notified.
     expect(['add', 'change']).toContain(evt.event);
@@ -113,10 +117,11 @@ describe('file-watcher', () => {
     const taskPath = path.join(tmpDir, 'sprints/sprint-001-skeleton/tasks/TASK-001.md');
     await unlink(taskPath);
 
-    await sleep(WAIT_AFTER_DEBOUNCE);
+    await vi.waitFor(() => {
+      expect(receivedEvents.find((e) => e.path === taskPath)).toBeDefined();
+    }, WAIT_OPTS);
 
     const evt = receivedEvents.find((e) => e.path === taskPath);
-    expect(evt).toBeDefined();
     expect(evt.event).toBe('unlink');
     expect(evt.category).toBe('task');
   });
@@ -127,7 +132,7 @@ describe('file-watcher', () => {
     const storyPath = path.join(tmpDir, 'backlog/user-stories/US-001-login.md');
     await writeFile(storyPath, '---\nid: US-001\ntitle: After stop\n---\nShould not trigger', 'utf8');
 
-    await sleep(WAIT_AFTER_DEBOUNCE);
+    await sleep(WAIT_NO_EVENT);
 
     expect(receivedEvents.length).toBe(0);
   });

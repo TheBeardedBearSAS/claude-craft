@@ -4,9 +4,9 @@
 
 | Version | Supported          |
 |---------|--------------------|
-| 8.3.x   | :white_check_mark: |
-| 8.2.x   | :white_check_mark: |
-| < 8.2   | :x:                |
+| 8.8.x   | :white_check_mark: |
+| 8.7.x   | :white_check_mark: |
+| < 8.7   | :x:                |
 
 
 ## Reporting a Vulnerability
@@ -45,7 +45,7 @@ If you discover a security vulnerability in Claude Craft, please report it respo
 
 When using Claude Craft:
 
-- Keep Claude Code updated to the minimum recommended version (2.1.97+).
+- Keep Claude Code updated to the minimum recommended version (2.1.159+).
 - Review agent permissions in `.claude/settings.json` before granting access.
 - Never commit sensitive data (API keys, tokens) in BMAD configuration files.
 - Use the sandbox mode to restrict skill directory writes.

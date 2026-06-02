@@ -1,8 +1,5 @@
 ---
-translation_status: pending
 ---
-
-> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/Symfony/rules/11-security-symfony.md).
 
 # Sicherheit & DSGVO - Atoll Tourisme
 
@@ -15,7 +12,7 @@ translation_status: pending
 - ✅ Strikte DSGVO-Konformität
 - ✅ Verschlüsselung sensibler Daten (Allergien, medizinische Behandlungen)
 - ✅ Systematische Validierung und Sanitization
-- ✅ CSP Headers
+- ✅ CSP-Header
 - ✅ Audit Trail für personenbezogene Daten
 
 > **DSGVO-Erinnerung:**
@@ -23,28 +20,28 @@ translation_status: pending
 > die **Verschlüsselung** und **verstärkte Schutzmaßnahmen** erfordern.
 
 > **Referenzen:**
-> - `03-coding-standards.md` - Input-Validierung
+> - `03-coding-standards.md` - Eingabevalidierung
 > - `01-symfony-best-practices.md` - Symfony Security
 
 ---
 
 ## Inhaltsverzeichnis
 
-1. [OWASP Top 10 Protections](#owasp-top-10-protections)
-2. [DSGVO Compliance](#dsgvo-compliance)
+1. [OWASP Top 10 Schutzmaßnahmen](#owasp-top-10-schutzmaßnahmen)
+2. [DSGVO-Konformität](#dsgvo-konformität)
 3. [Verschlüsselung sensibler Daten](#verschlüsselung-sensibler-daten)
 4. [Validierung und Sanitization](#validierung-und-sanitization)
-5. [Security Headers](#security-headers)
+5. [Sicherheits-Header](#sicherheits-header)
 6. [Audit Trail](#audit-trail)
-7. [Sicherheits-Checklist](#sicherheits-checklist)
+7. [Sicherheits-Checkliste](#sicherheits-checkliste)
 
 ---
 
-## OWASP Top 10 Protections
+## OWASP Top 10 Schutzmaßnahmen
 
 ### 1. Injection (SQL, XSS, Command)
 
-#### SQL Injection
+#### SQL-Injection
 
 ```php
 <?php
@@ -105,7 +102,7 @@ return $this->render('reservation/show.html.twig', [
 ]);
 ```
 
-#### Command Injection
+#### Command-Injection
 
 ```php
 <?php
@@ -124,11 +121,293 @@ $process = new Process([
 $process->run();
 ```
 
-[Der Rest des OWASP-Abschnitts würde alle 10 Punkte abdecken - aus Platzgründen gekürzt]
+### 2. Broken Authentication
+
+```php
+<?php
+
+// ❌ GEFÄHRLICH: Einfacher Passwortvergleich
+if ($inputPassword === $storedPassword) {
+    // Anmeldung
+}
+
+// ✅ SICHER: Symfony PasswordHasher verwenden
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
+final readonly class AuthenticationService
+{
+    public function __construct(
+        private UserPasswordHasherInterface $passwordHasher,
+    ) {}
+
+    public function verifyPassword(User $user, string $plainPassword): bool
+    {
+        // ✅ Verwendet bcrypt/argon2 (timing-attack-sicher)
+        return $this->passwordHasher->isPasswordValid($user, $plainPassword);
+    }
+
+    public function hashPassword(User $user, string $plainPassword): string
+    {
+        // ✅ Sicheres Hashing mit automatischem Salt
+        return $this->passwordHasher->hashPassword($user, $plainPassword);
+    }
+}
+```
+
+### 3. Sensitive Data Exposure
+
+```php
+<?php
+
+// ❌ GEFÄHRLICH: Sensible Daten im Klartext
+#[ORM\Column(type: 'text')]
+private string $allergies; // ❌ DSGVO-Verletzung!
+
+// ✅ SICHER: Doctrine-Verschlüsselung (siehe Verschlüsselungsabschnitt)
+#[ORM\Column(type: 'encrypted_text')]
+private ?EncryptedData $allergies = null;
+
+// ❌ GEFÄHRLICH: Logs mit sensiblen Daten
+$this->logger->info('Benutzeranmeldung', [
+    'email' => $user->getEmail(),
+    'password' => $password, // ❌ NIEMALS Passwörter loggen!
+]);
+
+// ✅ SICHER: Logs ohne sensible Daten
+$this->logger->info('Anmeldeversuch', [
+    'user_id' => $user->getId(),
+    // Keine E-Mail, kein Passwort
+]);
+```
+
+### 4. XML External Entities (XXE)
+
+```php
+<?php
+
+// ❌ GEFÄHRLICH: XML-Parsing ohne Schutz
+$xml = simplexml_load_string($userInput);
+
+// ✅ SICHER: External Entities deaktivieren
+libxml_disable_entity_loader(true);
+$xml = simplexml_load_string($userInput, 'SimpleXMLElement', LIBXML_NOENT | LIBXML_DTDLOAD);
+```
+
+### 5. Broken Access Control
+
+```php
+<?php
+
+// ❌ GEFÄHRLICH: Keine Rechteprüfung
+public function show(int $id): Response
+{
+    $reservation = $this->repository->find($id);
+
+    return $this->render('reservation/show.html.twig', [
+        'reservation' => $reservation, // ❌ Jeder kann es sehen!
+    ]);
+}
+
+// ✅ SICHER: Überprüfung über Symfony Voter
+#[Route('/reservations/{id}', name: 'reservation_show')]
+public function show(Reservation $reservation): Response
+{
+    // ✅ Prüft, ob der Benutzer diese Reservierung sehen darf
+    $this->denyAccessUnlessGranted('VIEW', $reservation);
+
+    return $this->render('reservation/show.html.twig', [
+        'reservation' => $reservation,
+    ]);
+}
+```
+
+```php
+<?php
+
+// Voter zur Rechteprüfung
+namespace App\Security\Voter;
+
+use App\Entity\Reservation;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+final class ReservationVoter extends Voter
+{
+    public const VIEW = 'VIEW';
+    public const EDIT = 'EDIT';
+
+    protected function supports(string $attribute, mixed $subject): bool
+    {
+        return in_array($attribute, [self::VIEW, self::EDIT])
+            && $subject instanceof Reservation;
+    }
+
+    protected function voteOnAttribute(
+        string $attribute,
+        mixed $subject,
+        TokenInterface $token
+    ): bool {
+        $user = $token->getUser();
+
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        /** @var Reservation $reservation */
+        $reservation = $subject;
+
+        return match ($attribute) {
+            self::VIEW => $this->canView($reservation, $user),
+            self::EDIT => $this->canEdit($reservation, $user),
+            default => false,
+        };
+    }
+
+    private function canView(Reservation $reservation, UserInterface $user): bool
+    {
+        // ✅ Benutzer kann eigene Reservierungen sehen
+        return $reservation->getClient()->getEmail() === $user->getUserIdentifier()
+            || in_array('ROLE_ADMIN', $user->getRoles());
+    }
+
+    private function canEdit(Reservation $reservation, UserInterface $user): bool
+    {
+        // ✅ Nur Eigentümer oder Admin kann bearbeiten
+        return $reservation->getClient()->getEmail() === $user->getUserIdentifier()
+            || in_array('ROLE_ADMIN', $user->getRoles());
+    }
+}
+```
+
+### 6. Security Misconfiguration
+
+```yaml
+# config/packages/security.yaml
+
+security:
+    # ✅ Sicherer Password-Hasher
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+            algorithm: auto # Verwendet besten Algorithmus (bcrypt/argon2)
+            cost: 12       # Hohe Kosten (Schutz vor Brute-Force)
+
+    # ✅ Firewalls konfiguriert
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: login
+                check_path: login
+                enable_csrf: true # ✅ CSRF-Schutz
+
+            logout:
+                path: logout
+                target: home
+
+            # ✅ Sicheres Remember-Me
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 7 Tage
+                secure: true     # Nur HTTPS
+                httponly: true   # Nicht per JS zugänglich
+                samesite: lax    # CSRF-Schutz
+
+    # ✅ Zugriffskontrolle
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/reservations, roles: ROLE_USER }
+```
+
+### 7. XSS (bereits in Injection behandelt)
+
+### 8. Insecure Deserialization
+
+```php
+<?php
+
+// ❌ GEFÄHRLICH: Benutzer-Input deserialisieren
+$data = unserialize($_POST['data']); // ❌ Remote Code Execution!
+
+// ✅ SICHER: JSON verwenden
+$data = json_decode($_POST['data'], true, 512, JSON_THROW_ON_ERROR);
+
+// ✅ Nach Deserialisierung validieren
+if (!isset($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+    throw new InvalidArgumentException('Ungültige Daten');
+}
+```
+
+### 9. Using Components with Known Vulnerabilities
+
+```bash
+# ✅ Abhängigkeiten regelmäßig scannen
+make security-check
+
+# composer audit
+docker-compose exec php composer audit
+
+# Ausgabe:
+# Found 2 security vulnerability advisories affecting 1 package:
+# symfony/http-kernel (v6.4.0)
+#   CVE-2024-XXXX: Potential XSS vulnerability
+#   Upgrade to 6.4.3
+
+# ✅ Aktualisieren
+make composer-update
+```
+
+### 10. Insufficient Logging & Monitoring
+
+```php
+<?php
+
+namespace App\Security\EventListener;
+
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
+use Symfony\Component\Security\Http\Event\LoginFailureEvent;
+use Psr\Log\LoggerInterface;
+
+#[AsEventListener]
+final readonly class SecurityEventLogger
+{
+    public function __construct(
+        private LoggerInterface $securityLogger,
+    ) {}
+
+    public function __invoke(LoginSuccessEvent|LoginFailureEvent $event): void
+    {
+        $request = $event->getRequest();
+
+        if ($event instanceof LoginSuccessEvent) {
+            // ✅ Erfolgreiche Anmeldung loggen
+            $this->securityLogger->info('Benutzeranmeldung erfolgreich', [
+                'user_id' => $event->getUser()->getUserIdentifier(),
+                'ip' => $request->getClientIp(),
+                'user_agent' => $request->headers->get('User-Agent'),
+            ]);
+        } else {
+            // ✅ Fehlgeschlagene Anmeldung loggen (Brute-Force erkennen)
+            $this->securityLogger->warning('Benutzeranmeldung fehlgeschlagen', [
+                'username' => $request->request->get('_username'),
+                'ip' => $request->getClientIp(),
+                'user_agent' => $request->headers->get('User-Agent'),
+                'error' => $event->getException()->getMessage(),
+            ]);
+        }
+    }
+}
+```
 
 ---
 
-## DSGVO Compliance
+## DSGVO-Konformität
 
 ### Gesammelte personenbezogene Daten
 
@@ -168,7 +447,7 @@ final readonly class ExportClientDataUseCase
     ) {}
 
     /**
-     * Export all personal data for a client (GDPR right to portability).
+     * Alle personenbezogenen Daten eines Kunden exportieren (DSGVO-Recht auf Datenübertragbarkeit).
      */
     public function execute(ExportClientDataCommand $command): array
     {
@@ -226,7 +505,47 @@ final readonly class ExportClientDataUseCase
 }
 ```
 
-[Der Rest der DSGVO- und Sicherheitsabschnitte würde alle Details enthalten]
+```php
+<?php
+
+namespace App\Application\RGPD\UseCase;
+
+final readonly class DeleteClientDataUseCase
+{
+    /**
+     * Alle personenbezogenen Daten eines Kunden löschen (DSGVO-Recht auf Löschung).
+     */
+    public function execute(DeleteClientDataCommand $command): void
+    {
+        $client = $this->clientRepository->findById($command->clientId);
+
+        // ✅ Prüfen, ob Buchungen abgeschlossen sind
+        if ($client->hasActiveReservations()) {
+            throw new CannotDeleteClientException(
+                'Kunde hat aktive Buchungen. Daten können nicht gelöscht werden.'
+            );
+        }
+
+        // ✅ Daten anonymisieren statt löschen (buchhalterische Nachverfolgbarkeit)
+        $client->anonymize();
+
+        // ✅ Sensible Daten löschen (Allergien, Behandlungen)
+        foreach ($client->getReservations() as $reservation) {
+            foreach ($reservation->getParticipants() as $participant) {
+                $participant->deleteSensitiveData();
+            }
+        }
+
+        $this->clientRepository->save($client);
+
+        // ✅ Audit-Log
+        $this->auditLogger->info('Kundendaten gelöscht', [
+            'client_id' => (string) $command->clientId,
+            'deleted_at' => new \DateTimeImmutable(),
+        ]);
+    }
+}
+```
 
 ---
 
@@ -250,7 +569,7 @@ services:
 ```bash
 # .env
 # ⚠️ Starken Schlüssel generieren (32 Bytes hex = 64 Zeichen)
-ENCRYPTION_KEY=your-64-character-hex-encryption-key-here
+ENCRYPTION_KEY=ihr-64-zeichen-hex-verschlüsselungsschlüssel-hier
 ```
 
 ```bash
@@ -296,37 +615,417 @@ final readonly class EncryptionService
 }
 ```
 
-[Weitere Verschlüsselungsbeispiele und -implementierungen würden folgen]
+### Value Object für verschlüsselte Daten
+
+```php
+<?php
+
+namespace App\Domain\Shared\ValueObject;
+
+/**
+ * Verschlüsseltes Daten-Value-Object (für DSGVO-sensible Daten).
+ */
+final readonly class EncryptedData
+{
+    private function __construct(
+        private string $encryptedValue,
+    ) {}
+
+    public static function fromPlaintext(
+        string $plaintext,
+        EncryptionService $encryptionService
+    ): self {
+        return new self($encryptionService->encrypt($plaintext));
+    }
+
+    public static function fromEncrypted(string $encrypted): self
+    {
+        return new self($encrypted);
+    }
+
+    public function getEncrypted(): string
+    {
+        return $this->encryptedValue;
+    }
+
+    public function getDecrypted(EncryptionService $encryptionService): string
+    {
+        return $encryptionService->decrypt($this->encryptedValue);
+    }
+}
+```
+
+### Entity mit verschlüsselten Daten
+
+```php
+<?php
+
+namespace App\Domain\Reservation\Entity;
+
+use App\Domain\Shared\ValueObject\EncryptedData;
+
+final class Participant
+{
+    private ?EncryptedData $allergies = null;
+    private ?EncryptedData $traitementsMedicaux = null;
+
+    public function setAllergies(
+        ?string $plaintext,
+        EncryptionService $encryptionService
+    ): void {
+        $this->allergies = $plaintext !== null
+            ? EncryptedData::fromPlaintext($plaintext, $encryptionService)
+            : null;
+    }
+
+    public function getAllergies(): ?EncryptedData
+    {
+        return $this->allergies;
+    }
+
+    public function getAllergiesDecrypted(EncryptionService $encryptionService): ?string
+    {
+        return $this->allergies?->getDecrypted($encryptionService);
+    }
+
+    /**
+     * Sensible Daten löschen (DSGVO-Recht auf Löschung).
+     */
+    public function deleteSensitiveData(): void
+    {
+        $this->allergies = null;
+        $this->traitementsMedicaux = null;
+    }
+}
+```
+
+### Doctrine-Typ für automatische Verschlüsselung
+
+```php
+<?php
+
+namespace App\Infrastructure\Doctrine\Type;
+
+use App\Domain\Shared\ValueObject\EncryptedData;
+use App\Infrastructure\Encryption\EncryptionService;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Type;
+
+final class EncryptedTextType extends Type
+{
+    private static ?EncryptionService $encryptionService = null;
+
+    public static function setEncryptionService(EncryptionService $service): void
+    {
+        self::$encryptionService = $service;
+    }
+
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if (!$value instanceof EncryptedData) {
+            throw new \InvalidArgumentException('EncryptedData erwartet');
+        }
+
+        // ✅ VERSCHLÜSSELTEN Wert in der DB speichern
+        return $value->getEncrypted();
+    }
+
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?EncryptedData
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        // ✅ EncryptedData-Objekt zurückgeben (NICHT automatisch entschlüsselt)
+        return EncryptedData::fromEncrypted($value);
+    }
+
+    public function getName(): string
+    {
+        return 'encrypted_text';
+    }
+
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getClobTypeDeclarationSQL($column);
+    }
+}
+```
+
+### Doctrine-Mapping
+
+```xml
+<!-- Infrastructure/Persistence/Doctrine/Mapping/Participant.orm.xml -->
+<entity name="App\Domain\Reservation\Entity\Participant" table="participant">
+    <id name="id" type="participant_id"/>
+
+    <!-- ✅ Sensible Daten verschlüsselt -->
+    <field name="allergies" type="encrypted_text" nullable="true" column="allergies_encrypted"/>
+    <field name="traitementsMedicaux" type="encrypted_text" nullable="true" column="traitements_medicaux_encrypted"/>
+</entity>
+```
 
 ---
 
 ## Validierung und Sanitization
 
-[Validierungs- und Sanitization-Beispiele]
+### Symfony-Validierung
+
+```php
+<?php
+
+namespace App\Presentation\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints as Assert;
+
+final class ReservationFormType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('email', EmailType::class, [
+                'label' => 'E-Mail',
+                'constraints' => [
+                    // ✅ E-Mail-Validierung
+                    new Assert\NotBlank(),
+                    new Assert\Email(mode: Assert\Email::VALIDATION_MODE_STRICT),
+                    new Assert\Length(max: 255),
+                ],
+            ])
+            ->add('nom', TextType::class, [
+                'label' => 'Name',
+                'constraints' => [
+                    // ✅ Text-Validierung
+                    new Assert\NotBlank(),
+                    new Assert\Length(min: 2, max: 100),
+                    new Assert\Regex(
+                        pattern: '/^[a-zA-ZÀ-ÿ\s\-\']+$/',
+                        message: 'Der Name enthält ungültige Zeichen'
+                    ),
+                ],
+            ]);
+    }
+}
+```
+
+### Sanitization
+
+```php
+<?php
+
+namespace App\Application\Reservation\UseCase;
+
+final readonly class CreateReservationUseCase
+{
+    public function execute(CreateReservationCommand $command): ReservationId
+    {
+        // ✅ Eingabe bereinigen
+        $sanitizedEmail = filter_var(
+            trim($command->clientEmail),
+            FILTER_SANITIZE_EMAIL
+        );
+
+        // ✅ Nach Sanitization validieren
+        if (!filter_var($sanitizedEmail, FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidEmailException('Ungültige E-Mail-Adresse');
+        }
+
+        $email = Email::fromString($sanitizedEmail);
+
+        // ...
+    }
+}
+```
 
 ---
 
-## Security Headers
+## Sicherheits-Header
 
-[Security Headers Konfiguration]
+### Symfony-Konfiguration
+
+```yaml
+# config/packages/nelmio_security.yaml
+
+nelmio_security:
+    # ✅ Signierte Cookies
+    signed_cookie:
+        names: ['*']
+
+    # ✅ Verschlüsselte Cookies
+    encrypted_cookie:
+        names: ['*']
+
+    # ✅ Content Security Policy
+    csp:
+        enabled: true
+        hosts: []
+        content_types: []
+        enforce:
+            level1_fallback: false
+            browser_adaptive:
+                enabled: false
+            default-src: ['self']
+            script-src: ['self', 'unsafe-inline']
+            style-src: ['self', 'unsafe-inline']
+            img-src: ['self', 'data:']
+            font-src: ['self']
+            connect-src: ['self']
+            frame-ancestors: ['none']
+            base-uri: ['self']
+            form-action: ['self']
+
+    # ✅ Clickjacking-Schutz
+    clickjacking:
+        paths:
+            '^/.*': DENY
+
+    # ✅ HTTPS erzwingen
+    forced_ssl:
+        enabled: true
+        hsts_max_age: 31536000
+        hsts_subdomains: true
+        hsts_preload: true
+
+    # ✅ XSS-Schutz
+    xss_protection:
+        enabled: true
+        mode_block: true
+
+    # ✅ Content-Type-Sniffing verhindern
+    content_type:
+        nosniff: true
+```
 
 ---
 
 ## Audit Trail
 
-[Audit Trail Implementierung]
+### AuditLog-Entity
+
+```php
+<?php
+
+namespace App\Domain\Audit\Entity;
+
+final class AuditLog
+{
+    private string $id;
+    private \DateTimeImmutable $occurredAt;
+    private string $userId;
+    private string $action;
+    private string $entityType;
+    private string $entityId;
+    private array $changes;
+    private string $ipAddress;
+
+    public static function create(
+        string $userId,
+        string $action,
+        string $entityType,
+        string $entityId,
+        array $changes,
+        string $ipAddress
+    ): self {
+        $log = new self();
+        $log->id = Uuid::v4()->toRfc4122();
+        $log->occurredAt = new \DateTimeImmutable();
+        $log->userId = $userId;
+        $log->action = $action; // CREATE, UPDATE, DELETE, VIEW
+        $log->entityType = $entityType;
+        $log->entityId = $entityId;
+        $log->changes = $changes;
+        $log->ipAddress = $ipAddress;
+
+        return $log;
+    }
+}
+```
+
+### Event-Listener für Audit
+
+```php
+<?php
+
+namespace App\Infrastructure\Audit\EventListener;
+
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Events;
+
+#[AsDoctrineListener(event: Events::preUpdate)]
+final readonly class AuditListener
+{
+    public function __construct(
+        private AuditLogRepository $auditRepository,
+        private RequestStack $requestStack,
+    ) {}
+
+    public function preUpdate(PreUpdateEventArgs $args): void
+    {
+        $entity = $args->getObject();
+
+        // ✅ Nur bestimmte Entitäten auditieren
+        if (!$this->shouldAudit($entity)) {
+            return;
+        }
+
+        $changes = [];
+
+        foreach ($args->getEntityChangeSet() as $field => $values) {
+            // ✅ Sensible Daten NICHT im Klartext loggen!
+            if ($this->isSensitiveField($field)) {
+                $changes[$field] = ['old' => '[VERSCHLÜSSELT]', 'new' => '[VERSCHLÜSSELT]'];
+            } else {
+                $changes[$field] = ['old' => $values[0], 'new' => $values[1]];
+            }
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+
+        $auditLog = AuditLog::create(
+            userId: $this->getUser()?->getId() ?? 'anonym',
+            action: 'UPDATE',
+            entityType: get_class($entity),
+            entityId: (string) $entity->getId(),
+            changes: $changes,
+            ipAddress: $request?->getClientIp() ?? 'unbekannt'
+        );
+
+        $this->auditRepository->save($auditLog);
+    }
+
+    private function shouldAudit(object $entity): bool
+    {
+        return $entity instanceof Reservation
+            || $entity instanceof Participant
+            || $entity instanceof Client;
+    }
+
+    private function isSensitiveField(string $field): bool
+    {
+        return in_array($field, ['allergies', 'traitementsMedicaux', 'password']);
+    }
+}
+```
 
 ---
 
-## Sicherheits-Checklist
+## Sicherheits-Checkliste
 
 ### Vor jedem Commit
 
-- [ ] **SQL Injection:** Prepared Statements (Doctrine ORM)
+- [ ] **SQL-Injection:** Prepared Statements (Doctrine ORM)
 - [ ] **XSS:** Twig Auto-Escape aktiviert
 - [ ] **CSRF:** CSRF-Tokens bei Formularen
 - [ ] **Authentifizierung:** Symfony PasswordHasher
-- [ ] **Access Control:** Voters zur Rechteprüfung
+- [ ] **Zugriffskontrolle:** Voters zur Rechteprüfung
 - [ ] **Sensible Daten:** Verschlüsselt (Allergien, Behandlungen)
 - [ ] **Validierung:** Symfony Validator Constraints
 - [ ] **Sanitization:** filter_var() bei Eingaben
@@ -338,7 +1037,7 @@ final readonly class EncryptionService
 - [ ] **OWASP Top 10:** Alle Schutzmaßnahmen implementiert
 - [ ] **DSGVO:** Benutzerrechte implementiert
 - [ ] **Verschlüsselung:** Medizinische Daten verschlüsselt
-- [ ] **Security Headers:** CSP, HSTS, X-Frame-Options
+- [ ] **Sicherheits-Header:** CSP, HSTS, X-Frame-Options
 - [ ] **Audit Trail:** Logs für personenbezogene Daten
 - [ ] **Penetration Testing:** Sicherheitstests durchgeführt
 - [ ] **Einwilligung:** DSGVO-Einwilligung gesammelt und gespeichert
