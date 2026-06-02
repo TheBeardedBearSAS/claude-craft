@@ -3,7 +3,11 @@ import path from 'node:path';
 import { mkdtemp, rm, writeFile, mkdir, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import yaml from 'js-yaml';
-import { loadSprintStatus, rebuildSprintStatus, computeBurndown } from '../../cli/kanban/server/services/sprint-cache.js';
+import {
+  loadSprintStatus,
+  rebuildSprintStatus,
+  computeBurndown,
+} from '../../cli/kanban/server/services/sprint-cache.js';
 import { Repository } from '../../cli/kanban/server/services/repository.js';
 
 describe('sprint-cache', () => {
@@ -49,16 +53,19 @@ describe('sprint-cache', () => {
       };
 
       await mkdir(path.join(projectRoot, '.bmad'), { recursive: true });
-      await writeFile(
-        path.join(projectRoot, '.bmad', 'sprint-status.yaml'),
-        yaml.dump(yamlContent),
-        'utf8'
-      );
+      await writeFile(path.join(projectRoot, '.bmad', 'sprint-status.yaml'), yaml.dump(yamlContent), 'utf8');
 
       const result = await loadSprintStatus(projectRoot);
       expect(result).toBeDefined();
       expect(result.metadata.sprint_id).toBe('sprint-001');
       expect(result.stories['US-001'].title).toBe('Login');
+    });
+
+    it('propagates non-ENOENT read errors', async () => {
+      // Make sprint-status.yaml a directory so readFile throws EISDIR (not ENOENT).
+      await mkdir(path.join(projectRoot, '.bmad', 'sprint-status.yaml'), { recursive: true });
+
+      await expect(loadSprintStatus(projectRoot)).rejects.toThrow();
     });
 
     it('returns object with _invalid flag if yaml schema is invalid', async () => {
@@ -71,11 +78,7 @@ describe('sprint-cache', () => {
       };
 
       await mkdir(path.join(projectRoot, '.bmad'), { recursive: true });
-      await writeFile(
-        path.join(projectRoot, '.bmad', 'sprint-status.yaml'),
-        yaml.dump(invalidYaml),
-        'utf8'
-      );
+      await writeFile(path.join(projectRoot, '.bmad', 'sprint-status.yaml'), yaml.dump(invalidYaml), 'utf8');
 
       const result = await loadSprintStatus(projectRoot);
       expect(result._invalid).toBe(true);
@@ -105,11 +108,7 @@ As a user, I want to login.
 
       const sprintDir = path.join(pmDir, 'sprints', 'sprint-001-auth');
       await mkdir(sprintDir, { recursive: true });
-      await writeFile(
-        path.join(sprintDir, 'sprint-goal.md'),
-        '# Sprint 001\n\nDeliver authentication.',
-        'utf8'
-      );
+      await writeFile(path.join(sprintDir, 'sprint-goal.md'), '# Sprint 001\n\nDeliver authentication.', 'utf8');
 
       const repository = new Repository(pmDir);
       await repository.refresh();
@@ -173,11 +172,7 @@ sprint_id: sprint-001-auth
       };
 
       await mkdir(path.join(projectRoot, '.bmad'), { recursive: true });
-      await writeFile(
-        path.join(projectRoot, '.bmad', 'sprint-status.yaml'),
-        yaml.dump(existingYaml),
-        'utf8'
-      );
+      await writeFile(path.join(projectRoot, '.bmad', 'sprint-status.yaml'), yaml.dump(existingYaml), 'utf8');
 
       const repository = new Repository(pmDir);
       await repository.refresh();
@@ -277,9 +272,7 @@ sprint_id: sprint-001-new
         stories: {},
       };
 
-      const stories = [
-        { id: 'US-001', story_points: 10 },
-      ];
+      const stories = [{ id: 'US-001', story_points: 10 }];
 
       const result = computeBurndown(sprintStatus, stories);
 
@@ -304,17 +297,13 @@ sprint_id: sprint-001-new
             title: 'Story 1',
             status: 'done',
             story_points: 5,
-            history: [
-              { timestamp: '2026-04-03T10:00:00Z', from: 'in-progress', to: 'done', by: 'alice', reason: '' },
-            ],
+            history: [{ timestamp: '2026-04-03T10:00:00Z', from: 'in-progress', to: 'done', by: 'alice', reason: '' }],
           },
           'US-002': {
             title: 'Story 2',
             status: 'done',
             story_points: 3,
-            history: [
-              { timestamp: '2026-04-05T14:00:00Z', from: 'review', to: 'done', by: 'bob', reason: '' },
-            ],
+            history: [{ timestamp: '2026-04-05T14:00:00Z', from: 'review', to: 'done', by: 'bob', reason: '' }],
           },
         },
       };
@@ -350,9 +339,7 @@ sprint_id: sprint-001-new
             title: 'Story 1',
             status: 'done',
             story_points: 8,
-            history: [
-              { timestamp: '2026-04-05T10:00:00Z', from: 'in-progress', to: 'done', by: 'alice', reason: '' },
-            ],
+            history: [{ timestamp: '2026-04-05T10:00:00Z', from: 'in-progress', to: 'done', by: 'alice', reason: '' }],
           },
         },
       };
@@ -379,9 +366,7 @@ sprint_id: sprint-001-new
             title: 'Story 1',
             status: 'done',
             story_points: 3,
-            history: [
-              { timestamp: '2026-04-05T10:00:00Z', from: 'in-progress', to: 'done', by: 'alice', reason: '' },
-            ],
+            history: [{ timestamp: '2026-04-05T10:00:00Z', from: 'in-progress', to: 'done', by: 'alice', reason: '' }],
           },
           'US-002': {
             title: 'Story 2',
@@ -417,9 +402,7 @@ sprint_id: sprint-001-new
             title: 'Story 1',
             status: 'done',
             story_points: 1,
-            history: [
-              { timestamp: '2026-04-05T10:00:00Z', from: 'in-progress', to: 'done', by: 'alice', reason: '' },
-            ],
+            history: [{ timestamp: '2026-04-05T10:00:00Z', from: 'in-progress', to: 'done', by: 'alice', reason: '' }],
           },
           'US-002': {
             title: 'Story 2',
@@ -501,11 +484,7 @@ tasks:
       };
 
       await mkdir(path.join(projectRoot, '.bmad'), { recursive: true });
-      await writeFile(
-        path.join(projectRoot, '.bmad', 'sprint-status.yaml'),
-        yaml.dump(yamlContent),
-        'utf8'
-      );
+      await writeFile(path.join(projectRoot, '.bmad', 'sprint-status.yaml'), yaml.dump(yamlContent), 'utf8');
 
       const repository = new Repository(pmDir);
       await repository.refresh();
@@ -532,11 +511,7 @@ tasks:
       };
 
       await mkdir(path.join(projectRoot, '.bmad'), { recursive: true });
-      await writeFile(
-        path.join(projectRoot, '.bmad', 'sprint-status.yaml'),
-        yaml.dump(invalidYaml),
-        'utf8'
-      );
+      await writeFile(path.join(projectRoot, '.bmad', 'sprint-status.yaml'), yaml.dump(invalidYaml), 'utf8');
 
       const repository = new Repository(pmDir);
       await repository.refresh();

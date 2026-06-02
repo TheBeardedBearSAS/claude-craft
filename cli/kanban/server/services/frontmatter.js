@@ -20,8 +20,9 @@ export async function parseFile(filepath) {
  * Parse a Markdown string with YAML frontmatter.
  */
 export function parseString(raw) {
+  // gray-matter v4 always returns { data: {}, content: '' } even for empty/no-frontmatter input.
   const { data, content } = matter(raw);
-  return { data: data ?? {}, body: content ?? '', raw };
+  return { data, body: content, raw };
 }
 
 /**
@@ -33,7 +34,7 @@ export function parseString(raw) {
  * @returns {string}
  */
 export function stringify(data, body) {
-  return matter.stringify(body ?? '', data ?? {});
+  return matter.stringify(body, data);
 }
 
 /**
