@@ -9,6 +9,9 @@
 
 ---
 
+> **Voir aussi :** d'autres outils d'optimisation de tokens/contexte (caveman, code-review-graph,
+> token-savior…) sont catalogués dans [`docs/ECOSYSTEM.md`](ECOSYSTEM.md).
+
 ## 1. Qu'est-ce que RTK ?
 
 RTK est un **proxy CLI** ecrit en Rust qui reduit la consommation de tokens LLM de **60-90%** sur les commandes developpeur courantes. Il s'intercale entre l'assistant IA (Claude Code, Cursor, Aider, Gemini CLI...) et le terminal, filtrant/compressant les sorties avant qu'elles n'atteignent la fenetre de contexte du LLM.

@@ -354,6 +354,23 @@ Templates disponibles dans `.claude/templates/hooks/`: `output-filter.json`, `pr
 
 ---
 
+## Outils tiers de l'écosystème (tokens & contexte)
+
+En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit des outils couvrant des angles non traités nativement. Aucun n'est embarqué dans Claude Craft : ils sont documentés et recommandés.
+
+| Outil | Licence | Angle | Reco |
+|-------|---------|-------|------|
+| **caveman** | MIT | Compression des réponses (output) ~65 % | ✅ Intégrer |
+| **code-review-graph** | MIT | Graphe AST, lecture du blast radius (−38× à −528×) | ✅ Intégrer |
+| **token-savior** | MIT | Index symbolique + compaction Bash (−80 %) | ✅ Intégrer |
+| **claude-token-efficient** | MIT | Règles CLAUDE.md anti-verbosité (~63 % output) | ✅ Intégrer |
+| **context-mode** | ELv2 | Sandbox des outputs, continuité post-compaction | 🔶 Référencer (licence) |
+| **claude-context** | MIT | Recherche sémantique (vector DB requise) | 🔶 Référencer (infra) |
+
+> Catalogue complet, licences et recettes d'activation : `@docs/ECOSYSTEM.md`. Auditer et pinner tout outil tiers avant installation (règle 11).
+
+---
+
 ## Ressources
 
 - **Anthropic Best Practices:** [code.claude.com](https://code.claude.com/docs/en/overview)

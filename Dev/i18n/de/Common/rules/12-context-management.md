@@ -734,6 +734,23 @@ Dateien werden in alphabetischer Reihenfolge zusammengefuehrt, sodass Teams Konf
 
 ---
 
+## Drittanbieter-Tools des Ökosystems (Tokens & Kontext)
+
+Ergänzend zu RTK und nativen Hooks bietet das Claude-Code-Ökosystem Tools, die nativ nicht abgedeckte Aspekte adressieren. Keines ist in Claude Craft eingebettet – sie werden dokumentiert und empfohlen.
+
+| Tool | Lizenz | Aspekt | Empf. |
+|------|--------|--------|-------|
+| **caveman** | MIT | Komprimierung der Antworten (Output) ~65 % | ✅ Integrieren |
+| **code-review-graph** | MIT | AST-Graph, Blast-Radius-Lesen (−38× bis −528×) | ✅ Integrieren |
+| **token-savior** | MIT | Symbolindex + Bash-Komprimierung (−80 %) | ✅ Integrieren |
+| **claude-token-efficient** | MIT | CLAUDE.md-Regeln gegen Geschwätzigkeit (~63 % Output) | ✅ Integrieren |
+| **context-mode** | ELv2 | Output-Sandbox, Kontinuität nach Kompaktierung | 🔶 Referenzieren (Lizenz) |
+| **claude-context** | MIT | Semantische Suche (Vektor-DB erforderlich) | 🔶 Referenzieren (Infra) |
+
+> Vollständiger Katalog, Lizenzen und Aktivierungsrezepte: `@docs/ECOSYSTEM.md`. Jedes Drittanbieter-Tool vor der Installation prüfen und auf eine Version pinnen (Regel 11).
+
+---
+
 ## Ressourcen
 
 - **Anthropic Best Practices:** [code.claude.com](https://code.claude.com/docs/en/overview)

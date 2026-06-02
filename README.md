@@ -248,6 +248,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [BMAD Guide](docs/BMAD-PRACTICAL-GUIDE.md) | Project management framework |
 | [Hooks](docs/HOOKS.md) | Pre/Post tool execution |
 | [MCP](docs/MCP.md) | Model Context Protocol integration |
+| [Ecosystem](docs/ECOSYSTEM.md) | Curated third-party token/context/review tools |
 | [Privacy Policy](PRIVACY.md) | Data protection and GDPR compliance |
 | [FAQ](docs/FAQ.md) | Common questions |
 | [Troubleshooting](docs/TROUBLESHOOTING.md) | Problem solving |
