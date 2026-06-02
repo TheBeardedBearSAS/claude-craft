@@ -1,500 +1,716 @@
-# Coding-Standards für React
+# React TypeScript Coding Standards
 
-## Namenskonventionen
+## TypeScript Strict Mode
 
-### Komponenten
-
-```typescript
-// ✅ GUT - PascalCase für Komponenten
-export const UserProfile: FC = () => { };
-export const LoginForm: FC = () => { };
-
-// ❌ SCHLECHT
-export const userProfile: FC = () => { };
-export const login_form: FC = () => { };
-```
-
-### Hooks
-
-```typescript
-// ✅ GUT - camelCase mit "use"-Präfix
-export const useAuth = () => { };
-export const useLocalStorage = () => { };
-
-// ❌ SCHLECHT
-export const Auth = () => { };
-export const localStorage = () => { };
-```
-
-### Constants
-
-```typescript
-// ✅ GUT - SCREAMING_SNAKE_CASE
-export const API_BASE_URL = 'https://api.example.com';
-export const MAX_RETRY_ATTEMPTS = 3;
-
-// ❌ SCHLECHT
-export const apiBaseUrl = 'https://api.example.com';
-export const maxRetryAttempts = 3;
-```
-
-### Files und Ordner
-
-```typescript
-// Komponenten: PascalCase
-Button.tsx
-UserProfile.tsx
-
-// Hooks: camelCase
-useAuth.ts
-useLocalStorage.ts
-
-// Utils: camelCase
-formatDate.ts
-validators.ts
-
-// Konstanten: camelCase oder kebab-case
-constants.ts
-api-config.ts
-```
-
-## TypeScript Best Practices
-
-### Strikte Typisierung
-
-```typescript
-// ✅ GUT - Explizite Typen
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'user';
-}
-
-const fetchUser = async (id: string): Promise<User> => {
-  const response = await fetch(\`/api/users/\${id}\`);
-  return response.json();
-};
-
-// ❌ SCHLECHT - any oder fehlende Typen
-const fetchUser = async (id) => {
-  const response = await fetch(\`/api/users/\${id}\`);
-  return response.json();
-};
-```
-
-### Type vs Interface
-
-```typescript
-// ✅ Interface für Objekt-Shapes (erweiterbar)
-interface User {
-  id: string;
-  name: string;
-}
-
-interface Employee extends User {
-  department: string;
-}
-
-// ✅ Type für Unions, Intersections, Primitives
-type Status = 'pending' | 'approved' | 'rejected';
-type ID = string | number;
-type UserWithRole = User & { role: string };
-
-// ❌ SCHLECHT - Inkonsistente Nutzung
-type User = {  // Sollte interface sein
-  id: string;
-};
-```
-
-### Generics
-
-```typescript
-// ✅ GUT - Wiederverwendbare generische Funktionen
-function useAsync<T>(
-  asyncFn: () => Promise<T>
-): {
-  data: T | null;
-  error: Error | null;
-  isLoading: boolean;
-} {
-  // Implementation
-}
-
-// Nutzung
-const { data, error, isLoading } = useAsync<User[]>(fetchUsers);
-```
-
-## Komponenten-Standards
-
-### Props-Definitionen
-
-```typescript
-// ✅ GUT - Interface mit Dokumentation
-/**
- * User-Karten-Komponente zur Anzeige von Benutzerinformationen
- */
-interface UserCardProps {
-  /**
-   * Anzuzeigender Benutzer
-   */
-  user: User;
-
-  /**
-   * Callback bei Klick auf Bearbeiten
-   */
-  onEdit?: (user: User) => void;
-
-  /**
-   * Zusätzliche CSS-Klassen
-   */
-  className?: string;
-}
-
-export const UserCard: FC<UserCardProps> = ({ user, onEdit, className }) => {
-  // Implementation
-};
-```
-
-### Default Props
-
-```typescript
-// ✅ GUT - Default-Werte in Destrukturierung
-export const Button: FC<ButtonProps> = ({
-  variant = 'default',
-  size = 'md',
-  disabled = false,
-  children
-}) => {
-  // Implementation
-};
-
-// ❌ VERMEIDEN - defaultProps (veraltet)
-Button.defaultProps = {
-  variant: 'default',
-  size: 'md'
-};
-```
-
-### Event Handler
-
-```typescript
-// ✅ GUT - Konsistente Benennung
-const handleClick = () => { };
-const handleSubmit = () => { };
-const handleChange = () => { };
-
-// Props
-interface Props {
-  onClick?: () => void;
-  onSubmit?: (data: FormData) => void;
-  onChange?: (value: string) => void;
-}
-```
-
-## Hooks-Standards
-
-### Hook-Reihenfolge
-
-```typescript
-export const MyComponent: FC = () => {
-  // 1. State Hooks
-  const [count, setCount] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
-
-  // 2. Context Hooks
-  const { user } = useAuth();
-  const theme = useTheme();
-
-  // 3. Custom Hooks
-  const { data, isLoading } = useUsers();
-
-  // 4. Refs
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // 5. useMemo / useCallback
-  const expensiveValue = useMemo(() => computeExpensiveValue(count), [count]);
-  const handleClick = useCallback(() => {}, []);
-
-  // 6. useEffect
-  useEffect(() => {
-    // Side effects
-  }, []);
-
-  // Render
-  return <div>{count}</div>;
-};
-```
-
-### Custom Hooks
-
-```typescript
-// ✅ GUT - Klare API, mit TypeScript
-export const useLocalStorage = <T>(
-  key: string,
-  initialValue: T
-): [T, (value: T) => void] => {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch {
-      return initialValue;
-    }
-  });
-
-  const setValue = (value: T) => {
-    setStoredValue(value);
-    window.localStorage.setItem(key, JSON.stringify(value));
-  };
-
-  return [storedValue, setValue];
-};
-
-// Nutzung
-const [user, setUser] = useLocalStorage<User>('user', null);
-```
-
-## Code-Organisation
-
-### Imports-Reihenfolge
-
-```typescript
-// 1. React imports
-import { FC, useState, useEffect } from 'react';
-
-// 2. External libraries
-import { useQuery } from '@tanstack/react-query';
-import { z } from 'zod';
-
-// 3. Interne absolute imports
-import { Button } from '@/components/atoms/Button';
-import { useAuth } from '@/hooks/useAuth';
-
-// 4. Relative imports
-import { helper } from './utils';
-
-// 5. Types
-import type { User } from '@/types/user.types';
-
-// 6. Styles (falls nötig)
-import styles from './Component.module.css';
-```
-
-### Exports
-
-```typescript
-// ✅ GUT - Named exports (bevorzugt)
-export const Button: FC = () => { };
-export const Input: FC = () => { };
-
-// ✅ Barrel exports
-// components/atoms/index.ts
-export { Button } from './Button';
-export { Input } from './Input';
-
-// ❌ VERMEIDEN - Default exports (außer für Pages)
-export default Button;
-```
-
-## Code-Formatierung
-
-### Prettier-Konfiguration
+### tsconfig.json-Konfiguration
 
 ```json
 {
-  "semi": true,
-  "singleQuote": true,
-  "tabWidth": 2,
-  "useTabs": false,
-  "printWidth": 90,
-  "trailingComma": "none",
-  "arrowParens": "avoid"
+  "compilerOptions": {
+    // Strikte Typprüfungsoptionen
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    // Zusätzliche Prüfungen
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    // Modulauflösung
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+
+    // Ausgabe
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": false,
+
+    // React
+    "jsx": "react-jsx",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "target": "ES2020",
+    "module": "ESNext",
+
+    // Pfade
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "build"]
 }
 ```
 
-### ESLint-Regeln
+### Strikte TypeScript-Regeln
+
+#### 1. Explizite Typen
+
+```typescript
+// ❌ Schlecht – Impliziter 'any'-Typ
+const handleClick = (event) => {
+  console.log(event.target);
+};
+
+// ✅ Gut – Expliziter Typ
+const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+  console.log(event.currentTarget);
+};
+
+// ❌ Schlecht – Impliziter Rückgabetyp
+function calculateTotal(items) {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+
+// ✅ Gut – Explizite Typen
+function calculateTotal(items: Product[]): number {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+```
+
+#### 2. Null-Sicherheit
+
+```typescript
+// ❌ Schlecht – Keine Null-Prüfung
+function getUserName(user: User) {
+  return user.profile.name; // Fehler wenn profile null ist
+}
+
+// ✅ Gut – Optionales Verketten
+function getUserName(user: User): string {
+  return user.profile?.name ?? 'Anonym';
+}
+
+// ✅ Gut – Guard-Klausel
+function getUserName(user: User): string {
+  if (!user.profile) {
+    return 'Anonym';
+  }
+  return user.profile.name;
+}
+```
+
+#### 3. Union-Typen und Type Guards
+
+```typescript
+// Union-Typen definieren
+type Status = 'idle' | 'loading' | 'success' | 'error';
+
+interface IdleState {
+  status: 'idle';
+}
+
+interface LoadingState {
+  status: 'loading';
+}
+
+interface SuccessState {
+  status: 'success';
+  data: User;
+}
+
+interface ErrorState {
+  status: 'error';
+  error: Error;
+}
+
+type AsyncState = IdleState | LoadingState | SuccessState | ErrorState;
+
+// Type Guards
+function isSuccessState(state: AsyncState): state is SuccessState {
+  return state.status === 'success';
+}
+
+function isErrorState(state: AsyncState): state is ErrorState {
+  return state.status === 'error';
+}
+
+// Verwendung
+const renderState = (state: AsyncState) => {
+  if (isSuccessState(state)) {
+    return <div>{state.data.name}</div>; // TypeScript weiß, dass data existiert
+  }
+
+  if (isErrorState(state)) {
+    return <div>{state.error.message}</div>; // TypeScript weiß, dass error existiert
+  }
+
+  return <Spinner />;
+};
+```
+
+## ESLint-Konfiguration
+
+### Installation
+
+```bash
+npm install -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
+npm install -D eslint-plugin-react eslint-plugin-react-hooks
+npm install -D eslint-plugin-jsx-a11y eslint-plugin-import
+npm install -D eslint-config-prettier
+```
+
+### .eslintrc.cjs-Konfiguration
 
 ```javascript
 module.exports = {
+  root: true,
+  env: {
+    browser: true,
+    es2020: true,
+    node: true
+  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react/recommended',
-    'plugin:react-hooks/recommended'
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
+    'plugin:jsx-a11y/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+    'prettier'
   ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json'],
+    ecmaFeatures: {
+      jsx: true
+    }
+  },
+  plugins: ['react', 'react-hooks', '@typescript-eslint', 'jsx-a11y', 'import'],
+  settings: {
+    react: {
+      version: 'detect'
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: './tsconfig.json'
+      }
+    }
+  },
   rules: {
+    // TypeScript
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_'
+      }
+    ],
     '@typescript-eslint/no-explicit-any': 'error',
-    '@typescript-eslint/explicit-function-return-type': 'warn',
+    '@typescript-eslint/explicit-function-return-type': [
+      'warn',
+      {
+        allowExpressions: true,
+        allowTypedFunctionExpressions: true
+      }
+    ],
+    '@typescript-eslint/no-non-null-assertion': 'error',
+    '@typescript-eslint/prefer-nullish-coalescing': 'error',
+    '@typescript-eslint/prefer-optional-chain': 'error',
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      {
+        prefer: 'type-imports'
+      }
+    ],
+
+    // React
     'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-no-target-blank': 'error',
+    'react/jsx-curly-brace-presence': [
+      'error',
+      {
+        props: 'never',
+        children: 'never'
+      }
+    ],
+    'react/self-closing-comp': 'error',
+    'react/jsx-boolean-value': ['error', 'never'],
+    'react/jsx-fragments': ['error', 'syntax'],
+
+    // React Hooks
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn'
+    'react-hooks/exhaustive-deps': 'warn',
+
+    // Import
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+          'type'
+        ],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true
+        }
+      }
+    ],
+    'import/no-duplicates': 'error',
+    'import/no-unresolved': 'error',
+
+    // Allgemein
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'prefer-const': 'error',
+    'no-var': 'error'
   }
 };
 ```
 
-## Kommentare und Dokumentation
+## Prettier-Konfiguration
 
-### JSDoc für Public APIs
+### Installation
 
-```typescript
-/**
- * Berechnet das Alter basierend auf dem Geburtsdatum
- *
- * @param birthDate - Geburtsdatum des Benutzers
- * @returns Alter in Jahren
- *
- * @example
- * \`\`\`ts
- * const age = calculateAge(new Date('1990-01-01'));
- * console.log(age); // 34
- * \`\`\`
- */
-export const calculateAge = (birthDate: Date): number => {
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
-
-  return age;
-};
+```bash
+npm install -D prettier
 ```
 
-### Inline-Kommentare
+### .prettierrc-Konfiguration
 
-```typescript
-// ✅ GUT - Erklärt das "Warum"
-// Verwende requestAnimationFrame um Layout-Thrashing zu vermeiden
-const optimizedScroll = () => {
-  requestAnimationFrame(() => {
-    updateScrollPosition();
-  });
-};
-
-// ❌ SCHLECHT - Erklärt das "Was" (offensichtlich)
-// Inkrementiere den Zähler um 1
-count++;
+```json
+{
+  "printWidth": 90,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "quoteProps": "as-needed",
+  "jsxSingleQuote": false,
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "avoid",
+  "endOfLine": "lf",
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
 ```
 
-## Best Practices
+### .prettierignore
 
-### 1. Komponenten klein halten
-
-```typescript
-// ✅ GUT - Einzelne Verantwortlichkeit
-export const UserAvatar: FC<{ user: User }> = ({ user }) => (
-  <img src={user.avatar} alt={user.name} />
-);
-
-export const UserInfo: FC<{ user: User }> = ({ user }) => (
-  <div>
-    <h3>{user.name}</h3>
-    <p>{user.email}</p>
-  </div>
-);
-
-// ❌ SCHLECHT - Zu viel in einer Komponente
-export const UserCard: FC<{ user: User }> = ({ user }) => (
-  <div>
-    <img src={user.avatar} alt={user.name} />
-    <h3>{user.name}</h3>
-    <p>{user.email}</p>
-    {/* Noch 100 weitere Zeilen... */}
-  </div>
-);
+```
+node_modules
+dist
+build
+.next
+coverage
+*.min.js
+*.min.css
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 ```
 
-### 2. Early Returns
+## Namenskonventionen
+
+### 1. Dateien
+
+```
+✅ React-Komponenten: PascalCase
+- UserProfile.tsx
+- LoginForm.tsx
+- DataTable.tsx
+
+✅ Hooks: camelCase mit 'use'-Präfix
+- useAuth.ts
+- useLocalStorage.ts
+- useDebounce.ts
+
+✅ Hilfsfunktionen: camelCase
+- formatDate.ts
+- validateEmail.ts
+- calculateTotal.ts
+
+✅ Konstanten: UPPER_SNAKE_CASE
+- API_ENDPOINTS.ts
+- VALIDATION_RULES.ts
+- ERROR_MESSAGES.ts
+
+✅ Typen: PascalCase mit '.types'-Suffix
+- User.types.ts
+- Product.types.ts
+- api.types.ts
+
+✅ Services: camelCase mit '.service'-Suffix
+- auth.service.ts
+- user.service.ts
+- api.service.ts
+
+✅ Tests: gleicher Name + '.test' oder '.spec'
+- UserProfile.test.tsx
+- useAuth.test.ts
+- formatDate.spec.ts
+```
+
+### 2. Variablen und Funktionen
 
 ```typescript
-// ✅ GUT - Guard Clauses
-export const UserProfile: FC<{ userId: string }> = ({ userId }) => {
-  const { data: user, isLoading, error } = useUser(userId);
+// ✅ Variablen: camelCase
+const userName = 'John';
+const isAuthenticated = true;
+const userProfile = { name: 'John' };
 
-  if (isLoading) return <Spinner />;
-  if (error) return <ErrorMessage error={error} />;
-  if (!user) return <NotFound />;
+// ✅ Konstanten: UPPER_SNAKE_CASE
+const API_BASE_URL = 'https://api.example.com';
+const MAX_RETRY_ATTEMPTS = 3;
+const DEFAULT_PAGE_SIZE = 10;
 
-  return <div>{user.name}</div>;
+// ✅ Funktionen: camelCase, Aktionsverb
+function getUserById(id: string): User {}
+function calculateTotal(items: Product[]): number {}
+function validateEmail(email: string): boolean {}
+
+// ✅ Handler: 'handle'-Präfix
+const handleClick = () => {};
+const handleSubmit = (e: FormEvent) => {};
+const handleChange = (value: string) => {};
+
+// ✅ Boolesche Werte: 'is'-, 'has'-, 'should'-, 'can'-Präfix
+const isLoading = false;
+const hasError = false;
+const shouldRender = true;
+const canEdit = false;
+```
+
+### 3. Komponenten
+
+```typescript
+// ✅ Komponenten: PascalCase
+export const UserProfile: FC<UserProfileProps> = (props) => {};
+
+// ✅ Props-Interface: Komponentenname + 'Props'
+interface UserProfileProps {
+  userId: string;
+  onUpdate?: (user: User) => void;
+}
+
+// ✅ Hooks: camelCase mit 'use'-Präfix
+export const useUserProfile = (userId: string) => {};
+
+// ✅ Typen: PascalCase
+type User = {
+  id: string;
+  name: string;
 };
 
-// ❌ SCHLECHT - Verschachtelte Conditionals
-export const UserProfile: FC<{ userId: string }> = ({ userId }) => {
-  const { data: user, isLoading, error } = useUser(userId);
+// ✅ Interfaces: PascalCase (optionales 'I'-Präfix)
+interface IUser {
+  id: string;
+  name: string;
+}
 
+// ✅ Enums: PascalCase
+enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+  GUEST = 'guest'
+}
+```
+
+## Komponentenmuster
+
+### 1. Funktionale Komponente mit TypeScript
+
+```typescript
+import { FC } from 'react';
+
+// Props-Interface
+interface ButtonProps {
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+
+// Funktionale Komponente mit FC
+export const Button: FC<ButtonProps> = ({
+  variant = 'primary',
+  size = 'md',
+  disabled = false,
+  onClick,
+  children
+}) => {
   return (
-    <div>
-      {isLoading ? (
-        <Spinner />
-      ) : error ? (
-        <ErrorMessage error={error} />
-      ) : user ? (
-        <div>{user.name}</div>
-      ) : (
-        <NotFound />
-      )}
-    </div>
-  );
-};
-```
-
-### 3. Destructuring
-
-```typescript
-// ✅ GUT - Props destrukturieren
-export const Button: FC<ButtonProps> = ({ variant, size, children }) => {
-  return <button className={\`btn-\${variant} btn-\${size}\`}>{children}</button>;
-};
-
-// ❌ SCHLECHT
-export const Button: FC<ButtonProps> = (props) => {
-  return (
-    <button className={\`btn-\${props.variant} btn-\${props.size}\`}>
-      {props.children}
+    <button
+      className={`btn btn-${variant} btn-${size}`}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
     </button>
   );
 };
+
+// Export mit displayName zum Debuggen
+Button.displayName = 'Button';
 ```
 
-## Checkliste
+### 2. React.memo für Performance
 
-```markdown
-## Code-Qualität
-- [ ] Keine ESLint-Fehler oder -Warnungen
-- [ ] Alle Dateien mit Prettier formatiert
-- [ ] TypeScript strict mode aktiviert
-- [ ] Keine `any`-Types
+```typescript
+import { FC, memo } from 'react';
 
-## Namenskonventionen
-- [ ] Komponenten in PascalCase
-- [ ] Hooks mit "use"-Präfix in camelCase
-- [ ] Konstanten in SCREAMING_SNAKE_CASE
-- [ ] Dateien konsistent benannt
+interface UserCardProps {
+  user: User;
+  onSelect: (userId: string) => void;
+}
 
-## Dokumentation
-- [ ] JSDoc für öffentliche APIs
-- [ ] Props dokumentiert
-- [ ] Komplexe Logik kommentiert
-- [ ] README aktuell
+// Memoisierte Komponente
+export const UserCard: FC<UserCardProps> = memo(({ user, onSelect }) => {
+  return (
+    <div onClick={() => onSelect(user.id)}>
+      <h3>{user.name}</h3>
+      <p>{user.email}</p>
+    </div>
+  );
+});
 
-## Best Practices
-- [ ] Komponenten klein und fokussiert
-- [ ] Early returns verwendet
-- [ ] Props destrukturiert
-- [ ] Imports organisiert
+UserCard.displayName = 'UserCard';
+
+// Mit benutzerdefiniertem Vergleich
+export const UserCardCustom: FC<UserCardProps> = memo(
+  ({ user, onSelect }) => {
+    return (
+      <div onClick={() => onSelect(user.id)}>
+        <h3>{user.name}</h3>
+      </div>
+    );
+  },
+  (prevProps, nextProps) => {
+    // true zurückgeben, wenn Props gleich sind (kein Re-Render)
+    return prevProps.user.id === nextProps.user.id;
+  }
+);
+```
+
+### 3. forwardRef für Refs
+
+```typescript
+import { forwardRef, InputHTMLAttributes } from 'react';
+
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+}
+
+// Komponente mit forwardRef
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, error, ...props }, ref) => {
+    return (
+      <div>
+        {label && <label>{label}</label>}
+        <input ref={ref} {...props} />
+        {error && <span>{error}</span>}
+      </div>
+    );
+  }
+);
+
+Input.displayName = 'Input';
+
+// Verwendung
+const MyForm = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const focusInput = () => {
+    inputRef.current?.focus();
+  };
+
+  return <Input ref={inputRef} label="Name" />;
+};
+```
+
+## Dateistruktur von Komponenten
+
+### Einfache Komponente
+
+```
+Button/
+├── Button.tsx          # Hauptkomponente
+├── Button.test.tsx     # Tests
+├── Button.stories.tsx  # Storybook
+└── index.ts            # Exporte
+```
+
+```typescript
+// Button.tsx
+import { FC, ButtonHTMLAttributes } from 'react';
+import { cn } from '@/utils/classnames';
+
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary';
+}
+
+export const Button: FC<ButtonProps> = ({ variant = 'primary', ...props }) => {
+  return <button className={cn('btn', `btn-${variant}`)} {...props} />;
+};
+```
+
+```typescript
+// index.ts
+export { Button } from './Button';
+export type { ButtonProps } from './Button';
+```
+
+## JSDoc/TSDoc-Dokumentation
+
+### Komponenten dokumentieren
+
+```typescript
+/**
+ * Benutzerdefinierter Button mit verschiedenen visuellen Varianten.
+ *
+ * @remarks
+ * Diese Komponente erweitert die nativen HTMLButtonElement-Props,
+ * sodass alle Standard-HTML-Attribute verwendet werden können.
+ *
+ * @example
+ * ```tsx
+ * // Primärer Button
+ * <Button variant="primary" onClick={handleClick}>
+ *   Klick mich
+ * </Button>
+ *
+ * // Deaktivierter Button
+ * <Button variant="secondary" disabled>
+ *   Deaktiviert
+ * </Button>
+ * ```
+ */
+export const Button: FC<ButtonProps> = ({ variant, children, ...rest }) => {
+  return <button className={`btn-${variant}`} {...rest}>{children}</button>;
+};
+```
+
+## Allgemeine bewährte Praktiken
+
+### 1. Eine Komponente = Eine Datei
+
+```typescript
+// ❌ Schlecht – Mehrere Komponenten in einer Datei
+export const Button = () => {};
+export const Input = () => {};
+export const Form = () => {};
+
+// ✅ Gut – Eine Komponente pro Datei
+// Button.tsx
+export const Button = () => {};
+
+// Input.tsx
+export const Input = () => {};
+```
+
+### 2. Any vermeiden
+
+```typescript
+// ❌ Schlecht
+const handleData = (data: any) => {
+  console.log(data.name);
+};
+
+// ✅ Gut
+interface Data {
+  name: string;
+}
+
+const handleData = (data: Data) => {
+  console.log(data.name);
+};
+
+// ✅ Gut – Falls wirklich nötig, dokumentieren
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const handleUnknown = (data: any) => {
+  // Grund für die Verwendung von any...
+};
+```
+
+### 3. Benannte Exporte vs. Default
+
+```typescript
+// ✅ Benannte Exporte bevorzugen
+export const Button = () => {};
+export const Input = () => {};
+
+// ❌ Default-Exporte vermeiden (außer bei Seiten/Routen)
+export default Button;
+```
+
+### 4. Gruppierte und geordnete Imports
+
+```typescript
+// 1. React und externe Bibliotheken
+import { FC, useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+
+// 2. Absolute interne Imports
+import { Button } from '@/components/atoms/Button';
+import { useAuth } from '@/hooks/useAuth';
+
+// 3. Relative Imports
+import { UserCard } from './UserCard';
+
+// 4. Typen
+import type { User } from '@/types/user.types';
+
+// 5. Stile und Assets
+import './styles.css';
+```
+
+## NPM-Skripte
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,json,css,md}\"",
+    "type-check": "tsc --noEmit",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
+  }
+}
 ```
 
 ## Fazit
 
-Konsistente Coding-Standards ermöglichen:
+Coding Standards gewährleisten:
 
-1. ✅ **Lesbarkeit**: Code ist leicht zu verstehen
-2. ✅ **Wartbarkeit**: Änderungen sind einfach
-3. ✅ **Teamwork**: Einheitlicher Code-Stil
-4. ✅ **Qualität**: Weniger Bugs
-5. ✅ **Onboarding**: Neue Entwickler schneller produktiv
+1. ✅ Code-Konsistenz im gesamten Team
+2. ✅ Bessere Wartbarkeit
+3. ✅ Weniger Fehler
+4. ✅ Einfachere Code-Reviews
+5. ✅ Schnelleres Onboarding für neue Entwickler
 
-**Goldene Regel**: Code wird öfter gelesen als geschrieben.
+**Goldene Regel**: Code sollte so geschrieben werden, dass er von Menschen gelesen werden kann – nicht nur von Maschinen ausgeführt.

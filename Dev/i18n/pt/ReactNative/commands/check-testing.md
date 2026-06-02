@@ -1,130 +1,320 @@
 ---
-description: Comando: Verificar Testes
+description: Verificar Testes React Native
+argument-hint: [arguments]
 ---
 
-# Comando: Verificar Testes
+# Verificar Testes React Native
 
-Avalie a cobertura e qualidade dos testes na aplicação React Native.
+## Argumentos
 
----
+$ARGUMENTS
 
-## Objetivo
+## Modo de Planejamento
 
-Este comando analisa a suite de testes, identifica gaps de cobertura e avalia a qualidade dos testes existentes.
+> O modo de planejamento é ativado automaticamente quando o escopo abrange múltiplos módulos ou requer uma investigação transversal.
 
----
+## MISSÃO
 
-## Modo Plano
+Você é um especialista em auditoria de testes React Native. Sua missão é analisar a estratégia de testes e a cobertura de acordo com os padrões definidos em `.claude/rules/07-testing.md` e `.claude/rules/08-quality-tools.md`.
 
-> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+### Etapa 1: Análise da configuração de testes
 
-## Análise
+1. Verificar a presença e configuração do Jest
+2. Verificar a presença e configuração da React Native Testing Library (RNTL)
+3. Verificar a presença e configuração do Detox (testes E2E)
+4. Analisar os scripts de teste no package.json
 
-### 1. Executar Testes
+### Etapa 2: Configuração do Jest (5 pontos)
 
-**Comandos:**
+#### 🧪 Arquivos de configuração
+
+- [ ] **(1 pt)** `jest.config.js` ou configuração no package.json presente
+- [ ] **(1 pt)** Preset do React Native configurado (`@react-native/jest-preset` ou equivalente)
+- [ ] **(1 pt)** Arquivos de setup configurados (`setupFilesAfterEnv`)
+- [ ] **(1 pt)** Cobertura de código habilitada (coverage)
+- [ ] **(1 pt)** Transformações configuradas para TypeScript e React Native
+
+**Arquivos a verificar:**
+```bash
+jest.config.js
+jest.setup.js
+package.json
+```
+
+#### 📊 Configuração de cobertura
+
+Verificar em `jest.config.js`:
+```javascript
+coverageThreshold: {
+  global: {
+    branches: 80,
+    functions: 80,
+    lines: 80,
+    statements: 80
+  }
+}
+```
+
+- [ ] Limites de cobertura definidos (≥ 80% recomendado)
+- [ ] Coleta a partir das pastas corretas (src/, app/)
+- [ ] Exclusões apropriadas (node_modules, __tests__, etc.)
+
+### Etapa 3: Testes Unitários com RNTL (8 pontos)
+
+Referência: `.claude/rules/07-testing.md`
+
+#### 📁 Organização dos testes
+
+- [ ] **(1 pt)** Testes colocalizados com componentes ou em `__tests__/`
+- [ ] **(1 pt)** Convenção de nomenclatura: `*.test.tsx` ou `*.spec.tsx`
+- [ ] **(1 pt)** Estrutura AAA (Arrange, Act, Assert) respeitada
+
+**Arquivos a verificar:**
+```bash
+src/**/__tests__/
+src/**/*.test.tsx
+src/**/*.spec.tsx
+```
+
+#### 🧩 Qualidade dos testes unitários
+
+Analisar de 5 a 10 arquivos de teste:
+
+- [ ] **(1 pt)** Uso de `@testing-library/react-native` (render, fireEvent, waitFor)
+- [ ] **(1 pt)** Testes de componentes isolados com props mockados
+- [ ] **(1 pt)** Testes de hooks customizados com `@testing-library/react-hooks`
+- [ ] **(1 pt)** Mocks apropriados para módulos nativos (AsyncStorage, etc.)
+- [ ] **(1 pt)** Testes de casos extremos e de erro
+
+**Exemplo de bom teste:**
+```typescript
+describe('LoginButton', () => {
+  it('should call onPress when pressed', () => {
+    const onPress = jest.fn();
+    const { getByText } = render(<LoginButton onPress={onPress} />);
+
+    fireEvent.press(getByText('Login'));
+
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+### Etapa 4: Testes de Integração (4 pontos)
+
+- [ ] **(1 pt)** Testes de fluxo completo do usuário
+- [ ] **(1 pt)** Testes de navegação entre telas
+- [ ] **(1 pt)** Testes de chamadas de API mockadas
+- [ ] **(1 pt)** Testes de gerenciamento de estado (Context, Redux, Zustand)
+
+**Arquivos a verificar:**
+```bash
+src/**/*.integration.test.tsx
+__tests__/integration/
+```
+
+### Etapa 5: Testes E2E com Detox (4 pontos)
+
+#### 🤖 Configuração do Detox
+
+- [ ] **(1 pt)** `.detoxrc.js` ou configuração do Detox presente
+- [ ] **(1 pt)** Configuração para iOS e Android
+- [ ] **(1 pt)** Scripts de testes E2E no package.json (`test:e2e`)
+
+**Arquivos a verificar:**
+```bash
+.detoxrc.js
+.detoxrc.json
+e2e/
+package.json
+```
+
+#### 🎬 Testes E2E
+
+- [ ] **(1 pt)** Pelo menos 3 cenários E2E críticos testados (login, navegação principal, ação-chave)
+
+**Arquivos a verificar:**
+```bash
+e2e/**/*.e2e.ts
+e2e/**/*.e2e.js
+```
+
+### Etapa 6: Cobertura de Testes (4 pontos)
+
+Executar o comando de cobertura:
 
 ```bash
-# Executar todos os testes
-npm test
-
-# Com cobertura
-npm test -- --coverage
-
-# Modo watch
-npm test -- --watch
+npm run test -- --coverage
+# ou
+yarn test --coverage
 ```
 
-### 2. Cobertura de Testes
+Analisar o relatório de cobertura:
 
-**Verificar:**
+- [ ] **(1 pt)** Cobertura global ≥ 80%
+- [ ] **(1 pt)** Cobertura de branches ≥ 75%
+- [ ] **(1 pt)** Componentes críticos cobertos a 100%
+- [ ] **(1 pt)** Relatório de cobertura gerado (coverage/lcov-report/)
 
+**Arquivos a verificar:**
 ```bash
-# Gerar relatório de cobertura
-npm test -- --coverage --coverageReporters=text --coverageReporters=html
-
-# Abrir relatório
-open coverage/index.html
+coverage/lcov-report/index.html
+coverage/coverage-summary.json
 ```
 
-**Avaliar:**
+### Etapa 7: Calcular pontuação
 
-- [ ] Cobertura de statements > 80%
-- [ ] Cobertura de branches > 80%
-- [ ] Cobertura de functions > 80%
-- [ ] Cobertura de lines > 80%
-- [ ] Componentes críticos 100% cobertos
-
-### 3. Qualidade dos Testes
-
-**Verificar:**
-
-- [ ] Testes são significativos (não apenas para cobertura)
-- [ ] Testes isolados (sem dependências entre testes)
-- [ ] Testes rápidos (< 1s por teste)
-- [ ] Asserções claras e específicas
-- [ ] Mocks apropriados
-- [ ] Setup e teardown adequados
-
-### 4. Tipos de Testes
-
-**Avaliar cobertura:**
-
-- [ ] **Testes Unitários**: Hooks, utils, serviços
-- [ ] **Testes de Componentes**: UI components
-- [ ] **Testes de Integração**: Fluxos de usuário
-- [ ] **Testes E2E**: Jornadas críticas (se aplicável)
-
-### 5. Gaps de Cobertura
-
-**Identificar:**
-
-```bash
-# Arquivos sem testes
-find src -name "*.tsx" -o -name "*.ts" | while read file; do
-  test_file="${file%.tsx}.test.tsx"
-  test_file="${test_file%.ts}.test.ts"
-  if [ ! -f "$test_file" ]; then
-    echo "Missing test: $file"
-  fi
-done
 ```
+┌──────────────────────────────────┬─────────┬────────┐
+│ Critério                         │ Pontos  │ Status │
+├──────────────────────────────────┼─────────┼────────┤
+│ Configuração do Jest             │ XX/5    │ ✅/⚠️/❌│
+│ Testes Unitários (RNTL)          │ XX/8    │ ✅/⚠️/❌│
+│ Testes de Integração             │ XX/4    │ ✅/⚠️/❌│
+│ Testes E2E (Detox)               │ XX/4    │ ✅/⚠️/❌│
+│ Cobertura de Código              │ XX/4    │ ✅/⚠️/❌│
+├──────────────────────────────────┼─────────┼────────┤
+│ TOTAL TESTES                     │ XX/25   │ ✅/⚠️/❌│
+└──────────────────────────────────┴─────────┴────────┘
+```
+
+**Legenda:**
+- ✅ Excelente (≥ 20/25)
+- ⚠️ Atenção (15-19/25)
+- ❌ Crítico (< 15/25)
+
+### Etapa 8: Relatório detalhado
+
+## 📊 RESULTADOS DA AUDITORIA DE TESTES
+
+### ✅ Pontos Fortes
+
+Liste as boas práticas identificadas:
+- [Prática 1 com exemplo de teste]
+- [Prática 2 com exemplo de teste]
+
+### ⚠️ Pontos de Melhoria
+
+Liste os problemas identificados por prioridade:
+
+1. **[Problema 1]**
+   - **Severidade:** Crítica/Alta/Média
+   - **Localização:** [Arquivos/componentes não testados]
+   - **Impacto:** [Risco de regressão]
+   - **Recomendação:** [Ações a tomar]
+
+2. **[Problema 2]**
+   - **Severidade:** Crítica/Alta/Média
+   - **Localização:** [Arquivos/componentes não testados]
+   - **Impacto:** [Risco de regressão]
+   - **Recomendação:** [Ações a tomar]
+
+### 📈 Métricas de Testes
+
+#### Cobertura de código
+
+```
+┌─────────────────┬──────────┬──────────┬──────────┬──────────┐
+│ Tipo            │ Linhas   │ Branches │ Funções  │ Statements│
+├─────────────────┼──────────┼──────────┼──────────┼──────────┤
+│ Global          │ XX.XX%   │ XX.XX%   │ XX.XX%   │ XX.XX%   │
+│ Componentes     │ XX.XX%   │ XX.XX%   │ XX.XX%   │ XX.XX%   │
+│ Hooks           │ XX.XX%   │ XX.XX%   │ XX.XX%   │ XX.XX%   │
+│ Utils           │ XX.XX%   │ XX.XX%   │ XX.XX%   │ XX.XX%   │
+│ Serviços        │ XX.XX%   │ XX.XX%   │ XX.XX%   │ XX.XX%   │
+└─────────────────┴──────────┴──────────┴──────────┴──────────┘
+```
+
+#### Estatísticas de testes
+
+- **Número total de testes:** XX
+  - Testes unitários: XX
+  - Testes de integração: XX
+  - Testes E2E: XX
+- **Testes aprovados:** XX
+- **Testes reprovados:** XX
+- **Tempo total de execução:** XX segundos
+- **Proporção testes/código:** XX testes para YY linhas de código
+
+#### Componentes sem testes
+
+Liste os componentes críticos não testados:
+1. `[Caminho/Componente]` - [Razão de criticidade]
+2. `[Caminho/Componente]` - [Razão de criticidade]
+3. `[Caminho/Componente]` - [Razão de criticidade]
+
+#### Funcionalidades críticas testadas
+
+- [ ] Autenticação (login, logout, refresh token)
+- [ ] Navegação principal
+- [ ] Formulários críticos
+- [ ] Principais chamadas de API
+- [ ] Tratamento de erros
+- [ ] Estados de carregamento
+- [ ] Gerenciamento offline
+
+### 🎯 TOP 3 AÇÕES PRIORITÁRIAS
+
+#### 1. [AÇÃO #1]
+- **Esforço:** Baixo/Médio/Alto
+- **Impacto:** Crítico/Alto/Médio
+- **Descrição:** [Componentes/funcionalidades a testar com prioridade]
+- **Cobertura atual:** XX%
+- **Cobertura alvo:** YY%
+- **Arquivos afetados:**
+  - `[arquivo1]` (cobertura: XX%)
+  - `[arquivo2]` (cobertura: XX%)
+- **Exemplos de testes a adicionar:**
+```typescript
+describe('[Componente]', () => {
+  it('should [comportamento]', () => {
+    // Teste a implementar
+  });
+});
+```
+
+#### 2. [AÇÃO #2]
+- **Esforço:** Baixo/Médio/Alto
+- **Impacto:** Crítico/Alto/Médio
+- **Descrição:** [Configuração ou melhoria de testes]
+- **Arquivos afetados:** [Lista]
+
+#### 3. [AÇÃO #3]
+- **Esforço:** Baixo/Médio/Alto
+- **Impacto:** Crítico/Alto/Médio
+- **Descrição:** [Testes E2E ou de integração a adicionar]
+- **Cenários a cobrir:**
+  - [Cenário 1]
+  - [Cenário 2]
 
 ---
 
-## Relatório
+## 🚀 Recomendações
 
-```markdown
-## Análise de Testes
+### Ganhos Rápidos (Baixo esforço, alto impacto)
+- [Melhoria rápida 1]
+- [Melhoria rápida 2]
 
-### Métricas de Cobertura
-- Statements: [X]%
-- Branches: [X]%
-- Functions: [X]%
-- Lines: [X]%
+### Investimentos (Esforço médio/alto, alto impacto)
+- [Melhoria estrutural 1]
+- [Melhoria estrutural 2]
 
-### Arquivos sem Testes
-- [lista de arquivos]
-
-### Testes Frágeis
-- [testes que falham intermitentemente]
-
-### Recomendações
-1. [Adicionar testes para componentes críticos]
-2. [Melhorar qualidade de testes existentes]
-3. [Implementar testes E2E para fluxos principais]
-```
+### Boas práticas a adotar
+- Escrever testes junto com o código (TDD)
+- Almejar cobertura mínima de 80%
+- Testar casos extremos e erros
+- Manter os testes atualizados com o código
+- Usar snapshots com parcimônia
 
 ---
 
-## Ações
+## 📚 Referências
 
-- [ ] Adicionar testes para arquivos sem cobertura
-- [ ] Melhorar testes frágeis
-- [ ] Atingir meta de cobertura de 80%
-- [ ] Implementar testes de integração
-- [ ] Configurar CI/CD para falhar se cobertura cair
+- `.claude/rules/07-testing.md` - Padrões de testes
+- `.claude/rules/08-quality-tools.md` - Ferramentas de qualidade
+- [React Native Testing Library](https://callstack.github.io/react-native-testing-library/)
+- [Detox Documentation](https://wix.github.io/Detox/)
 
 ---
 
-**Testes não são custo, são investimento em confiança e velocidade de desenvolvimento.**
+**Pontuação final: XX/25**

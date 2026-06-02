@@ -1,15 +1,222 @@
 # Guide de Référence des Outils
 
-Ce guide couvre les outils utilitaires inclus avec Claude-Craft pour gérer les profils, l'affichage du statut et la configuration des projets.
+Ce guide couvre les outils utilitaires inclus avec Claude-Craft pour gérer les profils, l'affichage du statut, la configuration des projets, ainsi que les commandes et fonctionnalités de Claude Code (v8.7).
 
 ---
 
 ## Table des Matières
 
-1. [Gestionnaire MultiAccount](#gestionnaire-multiaccount)
-2. [StatusLine](#statusline)
-3. [Gestionnaire ProjectConfig](#gestionnaire-projectconfig)
-4. [Installation](#installation)
+1. [Commandes Claude Code](#commandes-claude-code)
+2. [Événements de Hook](#événements-de-hook)
+3. [Frontmatter des Agents](#frontmatter-des-agents)
+4. [MCP Tool Search](#mcp-tool-search)
+5. [Mode Auto](#mode-auto)
+6. [Templates de Hooks](#templates-de-hooks)
+7. [Paramètres Gérés](#paramètres-gérés)
+8. [Gestionnaire MultiAccount](#gestionnaire-multiaccount)
+9. [StatusLine](#statusline)
+10. [Gestionnaire ProjectConfig](#gestionnaire-projectconfig)
+11. [Installation](#installation)
+
+---
+
+## Commandes Claude Code
+
+Claude Code fournit des commandes intégrées pour la gestion du contexte et des sessions. Elles sont disponibles dans toute session Claude Code (v2.1.47+).
+
+### Commandes de Gestion du Contexte
+
+| Commande | Version | Description |
+|---------|---------|-------------|
+| `/clear` | Toutes | Effacer le contexte entre tâches sans lien |
+| `/compact` | Toutes | Compacter le contexte de manière proactive (lancer à ~70% d'utilisation) |
+| `/context` | v2.1.74+ | Obtenir des suggestions actionnables pour optimiser le contexte |
+| `/effort low\|medium\|high` | v2.1.72+ | Ajuster l'effort de raisonnement du modèle selon la complexité de la tâche |
+| `/memory` | v2.1.59+ | Sauvegarder des apprentissages persistants entre sessions et compactions |
+| `/model haiku\|sonnet\|opus` | v2.1.72+ | Changer de modèle en cours de session selon la complexité de la tâche |
+
+### Commandes de Session
+
+| Commande | Version | Description |
+|---------|---------|-------------|
+| `/loop [intervalle] [commande]` | v2.1.71+ | Exécuter des tâches récurrentes (ex. `/loop 5m /common:pre-commit-check`) |
+| `/proactive` | v2.1.105+ | Alias de `/loop` |
+| `/color` | v2.1.94+ | Changer le schéma de couleurs du terminal |
+| `/rename` | v2.1.94+ | Renommer la session courante |
+| `/powerup` | v2.1.94+ | Activer les fonctionnalités power-up |
+
+### Exemples d'Utilisation
+
+```bash
+# Ajuster l'effort pour une simple recherche
+/effort low
+
+# Basculer vers un modèle moins coûteux pour l'exploration
+/model sonnet
+
+# Configurer une surveillance CI récurrente
+/loop 5m "Check if CI pipeline passed"
+
+# Sauvegarder le contexte important avant une compaction
+/memory "L'authentification utilise JWT avec RS256, refresh tokens dans des cookies HttpOnly"
+```
+
+---
+
+## Événements de Hook
+
+Claude Code supporte 24 événements de hook (8 ajoutés dans les versions récentes de Claude Code) pour automatiser les workflows :
+
+### Tous les Événements de Hook
+
+| Événement | Moment | Cas d'Usage |
+|-------|--------|----------|
+| **PreToolUse** | Avant l'exécution de l'outil | Bloquer les commandes dangereuses, réécrire avec RTK |
+| **PostToolUse** | Après l'exécution de l'outil | Filtrer les sorties verbeuses, résumer les résultats |
+| **PreCompact** | Avant la compaction du contexte | Sauvegarder le contexte critique ; le code de sortie 2 bloque la compaction (v2.1.105+) |
+| **PostCompact** | Après la compaction du contexte | Réinjecter le contexte essentiel |
+| **SessionStart** | Au démarrage d'une session | Charger les essentiels du contexte, configurer l'environnement |
+| **StopFailure** | Lors d'un arrêt inattendu | Sauvegarder l'état, alerter sur les échecs |
+| **Notification** | Sur les événements de notification | Alertes personnalisées |
+| **TaskCreated** | Lors de la création d'une tâche sous-agent | Suivre le travail des sous-agents |
+| **CwdChanged** | Changement de répertoire de travail | Mettre à jour l'environnement par répertoire |
+| **FileChanged** | Modification de fichier détectée | Déclencher des rebuilds, du linting |
+| **PermissionDenied** | Échec de vérification de permission | Journaliser les événements de sécurité |
+| **Elicitation** | Avant le prompt utilisateur | Personnaliser le flux d'élicitation |
+| **ElicitationResult** | Après la réponse utilisateur | Traiter les résultats d'élicitation |
+| **Stop** | Lors de l'arrêt de la session | Nettoyage |
+
+### Améliorations des Hooks (v8.7)
+
+| Fonctionnalité | Description |
+|---------|-------------|
+| **`if` conditionnel** | Exécuter les hooks uniquement lorsqu'une condition est remplie |
+| **`defer`** | Différer l'exécution du hook pour éviter le blocage |
+| **Blocage PreCompact** | Le code de sortie 2 dans le hook PreCompact bloque la compaction (v2.1.105+) |
+
+### Exemple : Filtre de Sortie PostToolUse
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": "echo '$TOOL_OUTPUT' | head -100"
+      }]
+    }]
+  }
+}
+```
+
+---
+
+## Frontmatter des Agents
+
+Les agents personnalisés (v2.1.78+) supportent des champs de frontmatter pour contrôler le comportement et les coûts :
+
+```yaml
+---
+effort: low          # Effort de raisonnement (low/medium/high)
+maxTurns: 10         # Nombre maximum de tours de conversation
+disallowedTools:     # Outils que l'agent ne peut pas utiliser
+  - Edit
+  - Write
+---
+```
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `effort` | string | Effort de raisonnement : `low`, `medium` ou `high` |
+| `maxTurns` | number | Nombre maximum de tours avant l'arrêt |
+| `disallowedTools` | liste | Outils que l'agent n'est pas autorisé à utiliser |
+
+Utile pour créer des agents d'exploration économiques qui peuvent lire sans modifier le code.
+
+---
+
+## MCP Tool Search
+
+MCP Tool Search (v2.1.80+) permet le chargement paresseux des outils MCP, réduisant la consommation de contexte de 95% :
+
+| Approche | Coût Contexte |
+|----------|-------------|
+| MCP classique (tous les outils chargés) | ~500-2000 tokens/outil/tour |
+| MCP avec Tool Search (chargement paresseux) | ~50 tokens au total |
+
+### Utilisation
+
+```bash
+# Charger un outil spécifique à la demande
+ToolSearch with query: "select:tool_name"
+
+# Rechercher par mot-clé
+ToolSearch with query: "slack send"
+```
+
+Au lieu de charger tous les outils du serveur MCP au démarrage, Tool Search les charge uniquement lorsque nécessaire.
+
+---
+
+## Mode Auto
+
+Le Mode Auto (v2.1.94+) est un classificateur de permissions basé sur l'IA qui remplace `--dangerously-skip-permissions` de manière plus sûre :
+
+| Mode | Protection | Vitesse | Cas d'Usage |
+|------|-----------|-------|----------|
+| Manuel | Maximum | Lente | Workflows audités, haute sécurité |
+| Mode Auto | Élevée | Rapide | Workflows de développement de confiance |
+| Skip Permissions | Minimale | Maximum | Projets locaux/personnels uniquement |
+
+**Fonctionnalités de sécurité :**
+- Un modèle de sécurité en arrière-plan évalue chaque appel d'outil
+- Les opérations sûres (lectures, tests) sont auto-approuvées
+- Les actions risquées (suppression massive, exfiltration) sont bloquées
+- 3 blocages consécutifs reviennent au mode manuel
+- 20+ blocages dans une session reviennent au mode manuel complet
+
+Disponible pour les plans Team avec approbation administrative.
+
+---
+
+## Templates de Hooks
+
+Claude-Craft fournit des templates de hooks prêts à l'emploi dans `.claude/templates/hooks/` :
+
+| Template | Objectif |
+|----------|---------|
+| `output-filter.json` | Filtre PostToolUse pour les sorties CLI volumineuses |
+| `pre-compact.json` | Hook PreCompact pour préserver le contexte critique |
+| `context-reinject.json` | Hook SessionStart pour la réinjection du contexte après compaction |
+
+### Installation
+
+Copier les templates dans le `.claude/settings.json` de votre projet ou fusionner dans votre configuration de hooks :
+
+```bash
+# Voir les templates disponibles
+ls .claude/templates/hooks/
+
+# Appliquer à votre projet (fusionner manuellement dans settings.json)
+cat .claude/templates/hooks/output-filter.json
+```
+
+---
+
+## Paramètres Gérés
+
+Le répertoire `managed-settings.d/` (v2.1.83+) permet une configuration modulaire via fusion alphabétique :
+
+```
+.claude/
+  managed-settings.d/
+    00-base.json          # Configuration de base
+    10-security.json      # Règles de sécurité
+    20-team.json          # Préférences d'équipe
+```
+
+Les fichiers sont fusionnés dans l'ordre alphabétique, permettant aux équipes de superposer des configurations sans conflits.
 
 ---
 
@@ -343,8 +550,8 @@ brew install yq
 sudo snap install yq
 
 # Linux (binaire)
-sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
-sudo chmod +x /usr/local/bin/yq
+wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+chmod +x /usr/local/bin/yq
 ```
 
 ### Utilisation
@@ -402,9 +609,9 @@ settings:
   default_lang: "fr"
 
 projects:
-  - name: "mon-saas"
-    description: "Plateforme SaaS"
-    path: "~/Projets/mon-saas"
+  - name: "my-saas"
+    description: "SaaS platform"
+    path: "~/Projects/my-saas"
     modules:
       - name: "api"
         path: "backend"
@@ -416,8 +623,8 @@ projects:
         path: "app"
         technologies: ["flutter"]
 
-  - name: "outil-interne"
-    path: "~/Projets/interne"
+  - name: "internal-tool"
+    path: "~/Projects/internal"
     technologies: ["python"]
     lang: "en"
 ```
@@ -443,16 +650,16 @@ Vérifications de validation :
 
 ```bash
 # Installer un projet unique
-./claude-projects.sh install mon-saas
+./claude-projects.sh install my-saas
 
 # Ou via Makefile
-make config-install CONFIG=claude-projects.yaml PROJECT=mon-saas
+make config-install CONFIG=claude-projects.yaml PROJECT=my-saas
 
 # Installer tous les projets
 make config-install-all CONFIG=claude-projects.yaml
 
 # Dry run
-make config-install CONFIG=claude-projects.yaml PROJECT=mon-saas OPTIONS="--dry-run"
+make config-install CONFIG=claude-projects.yaml PROJECT=my-saas OPTIONS="--dry-run"
 ```
 
 ### Support Multilingue
@@ -509,65 +716,12 @@ claude-projects.sh --version
 
 ---
 
-## Optimisation des Tokens avec RTK
-
-### Objectif
-
-RTK (Rust Token Killer) est un proxy CLI qui réduit la consommation de tokens de 60-90% sur les commandes de développement courantes.
-
-### Installation Rapide
-
-Utilisez la commande intégrée pour configurer automatiquement toutes les optimisations :
-
-```bash
-/common:setup-rtk
-```
-
-Cela installe et configure :
-- **RTK** avec le hook PreToolUse (réécriture transparente des commandes)
-- **Ultra-compact mode** pour les sorties CLI
-- **CLAUDE_CODE_SUBAGENT_MODEL=sonnet** pour réduire les coûts des sous-agents
-- **Hooks PostToolUse** pour filtrer les sorties volumineuses
-
-### Utilisation
-
-Une fois configuré, RTK est transparent. Vos commandes sont automatiquement réécrites par le hook :
-
-```bash
-# Vous tapez :
-git status
-
-# RTK réécrit en :
-rtk git status
-# → sortie compacte, 60-90% de tokens en moins
-```
-
-### Commandes RTK Natives
-
-```bash
-rtk gain              # Afficher les économies de tokens
-rtk gain --history    # Historique des commandes avec économies
-rtk discover          # Analyser l'historique Claude Code pour les opportunités manquées
-rtk --version         # Vérifier la version installée
-```
-
-### Économies Attendues
-
-| Optimisation | Économie |
-|---|---|
-| RTK + ultra-compact | 60-90% sur outputs CLI |
-| SUBAGENT_MODEL=sonnet | 40-60% coût sous-agents |
-| PostToolUse hook | Réduit pollution contexte |
-| **Total combiné** | **55-65% réduction globale** |
-
----
-
 ## Référence Rapide
 
 ### Commandes MultiAccount
 
 | Commande | Description |
-|----------|-------------|
+|---------|-------------|
 | `list` | Afficher tous les profils |
 | `add <nom>` | Créer un nouveau profil |
 | `remove <nom>` | Supprimer un profil |
@@ -594,7 +748,7 @@ rtk --version         # Vérifier la version installée
 ### Commandes ProjectConfig
 
 | Commande | Description |
-|----------|-------------|
+|---------|-------------|
 | `list` | Afficher tous les projets |
 | `validate` | Vérifier la validité de la config |
 | `install <nom>` | Installer les règles du projet |

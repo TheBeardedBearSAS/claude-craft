@@ -1,13 +1,13 @@
 ---
-description: Audit Complet de Conformité Symfony
+description: Vérification Complète de la Conformité Symfony
 argument-hint: [arguments]
 ---
 
-# Audit Complet de Conformité Symfony
+# Vérification Complète de la Conformité Symfony
 
 ## Arguments
 
-$ARGUMENTS : Chemin du projet Symfony à auditer (optionnel, par défaut : répertoire courant)
+$ARGUMENTS (optionnel : chemin du projet à analyser)
 
 ## Mode Plan
 
@@ -15,167 +15,239 @@ $ARGUMENTS : Chemin du projet Symfony à auditer (optionnel, par défaut : répe
 
 ## MISSION
 
-Tu es un auditeur expert Symfony chargé de réaliser un audit complet de conformité d'un projet Symfony.
+Réaliser un audit complet de conformité du projet Symfony en orchestrant les 4 grandes vérifications : Architecture, Qualité du Code, Tests et Sécurité. Produire un rapport consolidé avec un score global sur 100 points.
 
-### Étape 1 : Vérification du projet
+### Étape 1 : Préparation de l'audit
 
-1. Identifie le répertoire du projet à auditer
-2. Vérifie qu'il s'agit bien d'un projet Symfony (présence de composer.json avec symfony/*)
-3. Vérifie la version de Symfony utilisée
+Préparer l'environnement d'audit :
+- [ ] Identifier le chemin du projet à auditer
+- [ ] Vérifier la présence des fichiers de configuration (composer.json avec symfony/*, .env)
+- [ ] Lister les répertoires principaux (src/, tests/, config/, etc.)
+- [ ] Identifier la structure du projet et la version Symfony
+
+**Note** : Si $ARGUMENTS est fourni, l'utiliser comme chemin du projet, sinon utiliser le répertoire courant.
 
 ### Étape 2 : Audit Architecture (25 points)
 
-Exécute l'audit d'architecture en vérifiant :
+Exécuter la vérification complète de l'architecture :
 
-**Référence aux règles** : `.claude/rules/symfony-architecture.md`
+**Commande** : Utiliser la commande slash `/symfony:check-architecture` ou suivre manuellement les étapes dans `check-architecture.md`
 
-- [ ] Structure des dossiers respecte Clean Architecture
-- [ ] Séparation Domain / Application / Infrastructure
-- [ ] Respect des principes DDD (Entities, Value Objects, Aggregates)
-- [ ] Architecture Hexagonale (Ports & Adapters)
-- [ ] Utilisation de Deptrac pour vérifier les dépendances
-- [ ] Absence de couplage entre les couches
-- [ ] Interfaces correctement définies pour les ports
-- [ ] Use Cases / Application Services bien définis
-- [ ] Repositories avec interfaces dans le domain
-- [ ] DTOs pour les transferts de données
+**Critères évalués** :
+- Structure Clean Architecture (6 pts)
+- Séparation Domain/Application/Infrastructure (6 pts)
+- Architecture Hexagonale / Ports & Adapters (4 pts)
+- Modélisation DDD (Entités, Value Objects, Agrégats) (4 pts)
+- Use Cases et Application Services (3 pts)
+- Règles de dépendances et Deptrac (2 pts)
 
-**Score Architecture** : ___/25 points
+**Référence** : `check-architecture.md`
 
 ### Étape 3 : Audit Qualité du Code (25 points)
 
-Exécute l'audit de qualité du code en vérifiant :
+Exécuter la vérification de la qualité du code :
 
-**Référence aux règles** : `.claude/rules/symfony-code-quality.md`
+**Commande** : Utiliser la commande slash `/symfony:check-code-quality` ou suivre manuellement les étapes dans `check-code-quality.md`
 
-- [ ] Respect de PSR-12
-- [ ] PHPStan niveau 9 sans erreur
-- [ ] Type hints strict sur tous les paramètres et retours
-- [ ] Déclaration `declare(strict_types=1)` dans tous les fichiers
-- [ ] Pas de code mort (détecté par PHPStan)
-- [ ] Pas de dépendances inutilisées
-- [ ] Complexité cyclomatique < 10 par méthode
-- [ ] Longueur des méthodes < 20 lignes
-- [ ] Classes single responsibility
-- [ ] Documentation PHPDoc complète et à jour
+**Critères évalués** :
+- Conformité PSR-12 (5 pts)
+- PHPStan niveau 9 (5 pts)
+- Type hints stricts et declare(strict_types=1) (4 pts)
+- Principes KISS/DRY/YAGNI (4 pts)
+- Documentation et PHPDoc (4 pts)
+- Gestion des erreurs (3 pts)
 
-**Score Qualité du Code** : ___/25 points
+**Référence** : `check-code-quality.md`
 
-### Étape 4 : Audit Testing (25 points)
+### Étape 4 : Audit Tests (25 points)
 
-Exécute l'audit des tests en vérifiant :
+Exécuter la vérification des tests :
 
-**Référence aux règles** : `.claude/rules/symfony-testing.md`
+**Commande** : Utiliser la commande slash `/symfony:check-testing` ou suivre manuellement les étapes dans `check-testing.md`
 
-- [ ] Couverture de code ≥ 80%
-- [ ] Tests unitaires pour le Domain
-- [ ] Tests d'intégration pour l'Infrastructure
-- [ ] Tests fonctionnels avec Behat ou Symfony WebTestCase
-- [ ] Tests de mutation avec Infection (MSI ≥ 70%)
-- [ ] Fixtures pour les tests
-- [ ] Tests isolés (pas de dépendances entre tests)
-- [ ] Base de données de test séparée
-- [ ] Mocks et Stubs appropriés
-- [ ] CI/CD avec exécution automatique des tests
+**Critères évalués** :
+- Couverture du code (7 pts)
+- Tests unitaires pour le Domain (6 pts)
+- Tests d'intégration pour l'Infrastructure (4 pts)
+- Tests fonctionnels (WebTestCase/Behat) (3 pts)
+- Tests de mutation avec Infection (3 pts)
+- Isolation des tests et fixtures (2 pts)
 
-**Score Testing** : ___/25 points
+**Référence** : `check-testing.md`
 
 ### Étape 5 : Audit Sécurité (25 points)
 
-Exécute l'audit de sécurité en vérifiant :
+Exécuter la vérification de sécurité :
 
-**Référence aux règles** : `.claude/rules/symfony-security.md`
+**Commande** : Utiliser la commande slash `/symfony:check-security` ou suivre manuellement les étapes dans `check-security.md`
 
-- [ ] Symfony Security Bundle correctement configuré
-- [ ] OWASP Top 10 : Protection contre injection SQL
-- [ ] OWASP Top 10 : Protection XSS
-- [ ] OWASP Top 10 : Protection CSRF
-- [ ] OWASP Top 10 : Authentification sécurisée
-- [ ] OWASP Top 10 : Contrôle d'accès (Voters, ACL)
-- [ ] RGPD : Consentement utilisateur
-- [ ] RGPD : Droit à l'oubli implémenté
-- [ ] RGPD : Export des données personnelles
-- [ ] Secrets externalisés (pas dans le code)
+**Critères évalués** :
+- Configuration du Symfony Security Bundle (6 pts)
+- Protections OWASP Top 10 (5 pts)
+- Gestion des secrets et des identifiants (4 pts)
+- Validation des entrées et CSRF (4 pts)
+- Authentification et Autorisation (Voters) (3 pts)
+- Vulnérabilités des dépendances (2 pts)
+- Conformité RGPD (1 pt)
 
-**Score Sécurité** : ___/25 points
+**Référence** : `check-security.md`
 
-### Étape 6 : Calcul du Score Global
+### Étape 6 : Consolidation et Score Global
 
-**SCORE GLOBAL** : ___/100 points
+Calculer le score global et produire le rapport consolidé :
+- [ ] Additionner les 4 scores (max 100 points)
+- [ ] Identifier les catégories critiques (<50%)
+- [ ] Lister tous les problèmes transversaux critiques
+- [ ] Prioriser les actions par impact/effort
+- [ ] Produire le rapport final consolidé
 
-Interprétation :
-- ✅ 90-100 : Excellent - Conformité exemplaire
-- ✅ 75-89 : Bon - Quelques améliorations mineures
-- ⚠️ 60-74 : Moyen - Améliorations nécessaires
-- ⚠️ 40-59 : Insuffisant - Refactoring important requis
-- ❌ 0-39 : Critique - Refonte complète nécessaire
+**Échelle de notation** :
+- 90-100 : Excellent - Projet de référence
+- 75-89 : Très bien - Quelques améliorations mineures
+- 60-74 : Acceptable - Des améliorations sont nécessaires
+- 40-59 : Insuffisant - Refactoring majeur requis
+- 0-39 : Critique - Refonte complète nécessaire
 
-### Étape 7 : Rapport Détaillé
+### Étape 7 : Recommandations et Plan d'Action
 
-Génère un rapport structuré avec :
+Produire les recommandations finales :
+- [ ] Identifier les 3 actions prioritaires dans toutes les catégories
+- [ ] Estimer l'effort (Faible/Moyen/Élevé) pour chaque action
+- [ ] Estimer l'impact (Faible/Moyen/Élevé) pour chaque action
+- [ ] Proposer un ordre d'implémentation
+- [ ] Suggérer des gains rapides (ratio impact/effort élevé)
+
+## FORMAT DE SORTIE
 
 ```
-=================================================
-   AUDIT DE CONFORMITÉ SYMFONY
-=================================================
+AUDIT DE CONFORMITÉ SYMFONY - RAPPORT COMPLET
+=============================================
 
-📊 SCORE GLOBAL : ___/100
+SCORE GLOBAL : XX/100
 
-📐 Architecture        : ___/25 [✅|⚠️|❌]
-🎯 Qualité du Code    : ___/25 [✅|⚠️|❌]
-🧪 Testing            : ___/25 [✅|⚠️|❌]
-🔒 Sécurité           : ___/25 [✅|⚠️|❌]
+NIVEAU DE CONFORMITÉ : [Excellent/Très bien/Acceptable/Insuffisant/Critique]
 
-=================================================
-   DÉTAILS PAR CATÉGORIE
-=================================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[Insérer les détails de chaque audit]
+SCORES PAR CATÉGORIE :
 
-=================================================
-   TOP 3 ACTIONS PRIORITAIRES
-=================================================
+ARCHITECTURE       : XX/25  [██████████░░░░░░░░░░] XX%
+QUALITÉ DU CODE    : XX/25  [██████████░░░░░░░░░░] XX%
+TESTS              : XX/25  [██████████░░░░░░░░░░] XX%
+SÉCURITÉ           : XX/25  [██████████░░░░░░░░░░] XX%
 
-1. [Action prioritaire #1 avec impact estimé]
-2. [Action prioritaire #2 avec impact estimé]
-3. [Action prioritaire #3 avec impact estimé]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-=================================================
-   RECOMMANDATIONS TECHNIQUES
-=================================================
+POINTS FORTS GLOBAUX :
+1. [Point fort identifié dans plusieurs catégories]
+2. [Autre point fort majeur]
+3. [Troisième point fort]
 
-- [Recommandation technique spécifique]
-- [Recommandation technique spécifique]
-- [Recommandation technique spécifique]
+AMÉLIORATIONS GLOBALES :
+1. [Amélioration transversale mineure]
+2. [Autre amélioration recommandée]
+3. [Troisième amélioration]
 
-=================================================
+PROBLÈMES CRITIQUES :
+1. [Problème critique #1 - catégorie concernée]
+2. [Problème critique #2 - catégorie concernée]
+3. [Problème critique #3 - catégorie concernée]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DÉTAILS PAR CATÉGORIE :
+
+┌─────────────────────────────────────────────┐
+│ ARCHITECTURE (XX/25)                        │
+└─────────────────────────────────────────────┘
+
+Sous-scores :
+  • Structure Clean Architecture      : XX/6
+  • Séparation des couches            : XX/6
+  • Hexagonal / Ports & Adapters      : XX/4
+  • Modélisation DDD                  : XX/4
+  • Use Cases                         : XX/3
+  • Règles de dépendances             : XX/2
+
+Points forts :
+- [Points forts d'architecture]
+
+Problèmes :
+- [Problèmes d'architecture]
+
+[Sections similaires pour Qualité du Code, Tests et Sécurité...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP 3 DES ACTIONS PRIORITAIRES (TOUTES CATÉGORIES) :
+
+1. CRITIQUE - [Action #1]
+   Catégorie  : [Architecture/Qualité/Tests/Sécurité]
+   Impact     : [Élevé/Moyen/Faible]
+   Effort     : [Élevé/Moyen/Faible]
+   Priorité   : IMMÉDIATE
+
+   Description détaillée :
+   [Explication du problème et solution proposée]
+
+   Fichiers concernés :
+   - [fichier:ligne]
+
+   Exemple de correction :
+   [Code ou commande de correction]
+
+2. IMPORTANT - [Action #2]
+   [Même format...]
+
+3. RECOMMANDÉ - [Action #3]
+   [Même format...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GAINS RAPIDES (Impact Élevé / Effort Faible) :
+
+- [Gain rapide #1] - Catégorie : [X] - Impact : [X] - Effort : [X]
+- [Gain rapide #2] - Catégorie : [X] - Impact : [X] - Effort : [X]
+- [Gain rapide #3] - Catégorie : [X] - Impact : [X] - Effort : [X]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PLAN D'ACTION RECOMMANDÉ :
+
+SEMAINE 1 (Immédiat) :
+- [ ] [Action critique #1]
+- [ ] [Gain rapide prioritaire]
+
+SEMAINES 2-4 (Court terme) :
+- [ ] [Action importante #2]
+- [ ] [Autres gains rapides]
+
+MOIS 2-3 (Moyen terme) :
+- [ ] [Action recommandée #3]
+- [ ] [Améliorations progressives]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RÉSUMÉ EXÉCUTIF :
+
+[Paragraphe de synthèse sur l'état global du projet, les principaux
+points forts, les principales faiblesses et la trajectoire recommandée
+pour améliorer la conformité. Mentionner si le projet est prêt pour
+la production, nécessite des corrections ou un refactoring.]
+
+Recommandation générale : [Prêt pour la production / Corrections mineures /
+Refactoring majeur / Refonte nécessaire]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### Étape 8 : Commandes Docker pour Vérifications
+## NOTES IMPORTANTES
 
-Pour chaque vérification, utilise Docker pour s'abstraire de l'environnement local :
-
-```bash
-# PHPStan
-docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=9
-
-# PHP_CodeSniffer (PSR-12)
-docker run --rm -v $(pwd):/project php:8.2-cli vendor/bin/phpcs --standard=PSR12 src/
-
-# PHPUnit avec couverture
-docker run --rm -v $(pwd):/app php:8.2-cli vendor/bin/phpunit --coverage-text --coverage-html=coverage
-
-# Infection (mutation testing)
-docker run --rm -v $(pwd):/app infection/infection --min-msi=70
-
-# Deptrac
-docker run --rm -v $(pwd):/app qossmic/deptrac analyse
-```
-
-## IMPORTANT
-
-- Utilise TOUJOURS Docker pour les commandes afin de s'abstraire de l'environnement local
-- Ne stocke JAMAIS de fichiers dans /tmp
-- Fournis des exemples concrets de problèmes détectés
-- Priorise les actions selon l'impact et l'effort
-- Sois factuel et objectif dans l'évaluation
+- Cette commande orchestre les 4 audits spécialisés
+- Utiliser Docker pour tous les outils d'analyse
+- Fournir des exemples concrets avec fichier:ligne pour chaque problème
+- Prioriser les actions selon la matrice Impact/Effort
+- Les problèmes de sécurité sont TOUJOURS prioritaires
+- Proposer des corrections automatisables (scripts, hooks pre-commit)
+- Le rapport doit être actionnable, pas seulement descriptif
+- Adapter les recommandations au contexte métier du projet

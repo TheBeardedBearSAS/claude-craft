@@ -1,70 +1,58 @@
 ---
-description: Verificacion de Testing
+description: Verificación de la estrategia de pruebas
 ---
 
-# Verificacion de Testing
+# Verificación de la Estrategia de Pruebas
 
-Analiza la cobertura de tests y la calidad de las pruebas en la aplicacion React.
+Verifica que la aplicación React tenga una cobertura de pruebas completa y siga las mejores prácticas de testing.
 
-## Que Hace Este Comando
+## Qué Hace Este Comando
 
-1. **Analisis de Cobertura**
-   - Medir cobertura de lineas
-   - Medir cobertura de funciones
-   - Medir cobertura de ramas
-   - Medir cobertura de sentencias
-   - Identificar codigo no cubierto
+1. **Análisis de Pruebas**
+   - Verificar la cobertura de pruebas
+   - Comprobar la calidad de las pruebas
+   - Validar los patrones de testing
+   - Verificar la organización de las pruebas
+   - Analizar el rendimiento de las pruebas
 
-2. **Calidad de Tests**
-   - Validar estructura de tests
-   - Verificar patron AAA
-   - Detectar tests flakey
-   - Verificar assertions
-   - Analizar tiempo de ejecucion
+2. **Métricas Medidas**
+   - Cobertura de código (líneas, funciones, ramas)
+   - Recuento de pruebas por tipo (unitarias, integración, e2e)
+   - Tiempo de ejecución de las pruebas
+   - Detección de pruebas inestables (flaky tests)
+   - Rutas críticas sin pruebas
 
-3. **Reporte Generado**
-   - Cobertura por archivo
-   - Archivos sin tests
+3. **Informe Generado**
+   - Informe de cobertura
+   - Pruebas faltantes
+   - Puntuación de calidad de pruebas
    - Recomendaciones
-   - Tendencias en el tiempo
+
+## Cómo Usar
+
+```bash
+# Ejecutar todas las pruebas con cobertura
+npm run test:coverage
+
+# Modo observación
+npm run test:watch
+
+# Modo UI
+npm run test:ui
+
+# Pruebas E2E
+npm run test:e2e
+```
 
 ## Modo Plan
 
 > El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
 
-## Ejecutar Tests
+## Análisis de Cobertura de Pruebas
 
-### Modo Desarrollo
+### Objetivos de Cobertura
 
-```bash
-# Modo watch
-npm run test
-
-# Ejecutar todos los tests
-npm run test:run
-
-# Con UI
-npm run test:ui
-```
-
-### Generar Cobertura
-
-```bash
-# Cobertura basica
-npm run test:coverage
-
-# Cobertura con HTML
-npm run test:coverage -- --reporter=html
-
-# Cobertura solo para archivos modificados
-npm run test:coverage -- --changed
-```
-
-## Objetivos de Cobertura
-
-### Niveles Minimos
-
-```typescript
+```json
 // vitest.config.ts
 export default defineConfig({
   test: {
@@ -80,24 +68,30 @@ export default defineConfig({
         'src/test/',
         '**/*.test.{ts,tsx}',
         '**/*.spec.{ts,tsx}',
-        '**/types.ts'
+        '**/*.d.ts',
+        'vite.config.ts'
       ]
     }
   }
 });
 ```
 
-### Por Categoria
+### Verificar la Cobertura
 
-- **Utilidades**: 95%+
-- **Hooks**: 90%+
-- **Componentes**: 85%+
-- **Paginas**: 70%+
-- **Configuracion**: 50%+
+```bash
+# Generar informe de cobertura
+npm run test:coverage
 
-## Tipos de Tests
+# Ver informe HTML
+open coverage/index.html
 
-### Tests Unitarios
+# Verificar umbral específico
+npm run test:coverage -- --coverage.lines=90
+```
+
+## Tipos de Pruebas
+
+### 1. Pruebas Unitarias (70% de las pruebas)
 
 ```typescript
 // Button.test.tsx
@@ -108,22 +102,27 @@ import { Button } from './Button';
 describe('Button', () => {
   it('should render with text', () => {
     render(<Button>Click me</Button>);
-    expect(screen.getByText('Click me')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toHaveTextContent('Click me');
   });
 
   it('should call onClick when clicked', async () => {
     const handleClick = vi.fn();
     const user = userEvent.setup();
 
-    render(<Button onClick={handleClick}>Click</Button>);
+    render(<Button onClick={handleClick}>Click me</Button>);
     await user.click(screen.getByRole('button'));
 
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
+
+  it('should be disabled when disabled prop is true', () => {
+    render(<Button disabled>Click me</Button>);
+    expect(screen.getByRole('button')).toBeDisabled();
+  });
 });
 ```
 
-### Tests de Integracion
+### 2. Pruebas de Integración (20% de las pruebas)
 
 ```typescript
 // UserManagement.integration.test.tsx
@@ -136,22 +135,22 @@ describe('UserManagement Integration', () => {
     const user = userEvent.setup();
     render(<UserManagement />);
 
-    // Esperar carga inicial
+    // Esperar la carga
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Hacer clic en agregar usuario
+    // Hacer clic en el botón agregar
     await user.click(screen.getByRole('button', { name: /add user/i }));
 
-    // Llenar formulario
+    // Rellenar el formulario
     await user.type(screen.getByLabelText(/name/i), 'New User');
     await user.type(screen.getByLabelText(/email/i), 'new@example.com');
 
     // Enviar
     await user.click(screen.getByRole('button', { name: /save/i }));
 
-    // Verificar que se agrego el usuario
+    // Verificar
     await waitFor(() => {
       expect(screen.getByText('New User')).toBeInTheDocument();
     });
@@ -159,154 +158,214 @@ describe('UserManagement Integration', () => {
 });
 ```
 
-### Tests E2E
+### 3. Pruebas E2E (10% de las pruebas)
 
 ```typescript
-// e2e/auth.spec.ts
+// auth.spec.ts (Playwright)
 import { test, expect } from '@playwright/test';
 
 test.describe('Authentication', () => {
   test('should login successfully', async ({ page }) => {
     await page.goto('/');
-
     await page.click('text=Login');
+
     await page.fill('input[name="email"]', 'user@example.com');
     await page.fill('input[name="password"]', 'password123');
     await page.click('button[type="submit"]');
 
     await expect(page).toHaveURL('/dashboard');
-    await expect(page.locator('text=Welcome back')).toBeVisible();
+    await expect(page.locator('text=Welcome')).toBeVisible();
   });
 });
 ```
 
-## Mejores Practicas
+## Verificaciones de Calidad de Pruebas
 
-### Patron AAA
+### 1. Patrón AAA
 
 ```typescript
-// Arrange (Preparar), Act (Actuar), Assert (Afirmar)
+// ✅ BIEN - Arrange, Act, Assert (Preparar, Actuar, Verificar)
 it('should increment counter', async () => {
-  // Arrange
+  // Arrange (Preparar)
   const user = userEvent.setup();
   render(<Counter initialCount={0} />);
 
-  // Act
+  // Act (Actuar)
   await user.click(screen.getByRole('button', { name: /increment/i }));
 
-  // Assert
+  // Assert (Verificar)
   expect(screen.getByText('Count: 1')).toBeInTheDocument();
 });
 ```
 
-### Prioridad de Queries
+### 2. Probar el Comportamiento, No la Implementación
 
 ```typescript
-// 1. Queries accesibles (mejores)
+// ❌ MAL - Probar la implementación
+it('should call setState', () => {
+  const setStateSpy = vi.spyOn(React, 'useState');
+  // ...
+});
+
+// ✅ BIEN - Probar el comportamiento
+it('should display incremented count', async () => {
+  const user = userEvent.setup();
+  render(<Counter />);
+
+  await user.click(screen.getByRole('button', { name: /increment/i }));
+
+  expect(screen.getByText('Count: 1')).toBeInTheDocument();
+});
+```
+
+### 3. Nombres de Prueba Descriptivos
+
+```typescript
+// ❌ MAL - Nombres vagos
+it('works');
+it('test 1');
+it('should render');
+
+// ✅ BIEN - Nombres descriptivos
+it('should display user name when user data is loaded');
+it('should show error message when email is invalid');
+it('should disable submit button while form is submitting');
+```
+
+### 4. Prioridad de Consultas
+
+```typescript
+// ✅ BIEN - Consultas accesibles (las mejores)
 screen.getByRole('button', { name: /submit/i });
 screen.getByLabelText(/email/i);
-screen.getByPlaceholderText(/search/i);
 screen.getByText(/welcome/i);
 
-// 2. Queries semanticas
-screen.getByAltText(/profile picture/i);
+// ⚠️ ACEPTABLE - Consultas semánticas
+screen.getByAltText(/profile/i);
 screen.getByTitle(/close/i);
 
-// 3. Test IDs (ultimo recurso)
+// ❌ EVITAR - IDs de prueba (último recurso)
 screen.getByTestId('custom-element');
 ```
 
-### Mocking
+## Organización de Pruebas
 
-```typescript
-// Mockear servicios
-vi.mock('@/services/user.service');
+### Estructura de Carpetas
 
-// Mockear hooks
-vi.mock('@/hooks/useAuth', () => ({
-  useAuth: () => ({
-    user: { id: '1', name: 'Test User' },
-    isAuthenticated: true
-  })
-}));
-
-// Mockear componentes
-vi.mock('@/components/ComplexComponent', () => ({
-  ComplexComponent: () => <div>Mocked Component</div>
-}));
+```
+src/
+├── components/
+│   └── Button/
+│       ├── Button.tsx
+│       ├── Button.test.tsx       # Pruebas unitarias
+│       └── Button.stories.tsx    # Storybook
+│
+├── features/
+│   └── users/
+│       ├── components/
+│       │   └── UserList/
+│       │       ├── UserList.tsx
+│       │       └── UserList.test.tsx
+│       ├── hooks/
+│       │   └── useUsers.test.ts
+│       └── UserManagement.integration.test.tsx  # Integración
+│
+├── test/
+│   ├── setup.ts                  # Configuración de pruebas
+│   ├── mocks/
+│   │   └── handlers.ts           # Manejadores MSW
+│   └── utils/
+│       └── test-utils.tsx        # Utilidades de prueba
+│
+└── e2e/                          # Pruebas E2E
+    ├── auth.spec.ts
+    └── users.spec.ts
 ```
 
-## Analisis de Calidad
-
-### Tests Flakey
+### Utilidades de Prueba
 
 ```typescript
-// ❌ MAL - Test flakey
+// test/utils/test-utils.tsx
+import { render, RenderOptions } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrowserRouter } from 'react-router-dom';
+
+const AllProviders = ({ children }: { children: React.ReactNode }) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false }
+    }
+  });
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>{children}</BrowserRouter>
+    </QueryClientProvider>
+  );
+};
+
+export const renderWithProviders = (
+  ui: React.ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>
+) => render(ui, { wrapper: AllProviders, ...options });
+
+export * from '@testing-library/react';
+```
+
+## Problemas Comunes de Pruebas
+
+### Problema 1: Pruebas Inestables (Flaky Tests)
+
+```typescript
+// ❌ MAL - Condición de carrera
 it('should load data', () => {
   render(<DataComponent />);
-
-  // No espera la carga asincrona
   expect(screen.getByText('Data loaded')).toBeInTheDocument();
+  // Falla aleatoriamente si los datos tardan en cargar
 });
 
-// ✅ BIEN - Test estable
+// ✅ BIEN - Esperar los datos
 it('should load data', async () => {
   render(<DataComponent />);
-
-  // Espera la carga asincrona
   await waitFor(() => {
     expect(screen.getByText('Data loaded')).toBeInTheDocument();
   });
 });
 ```
 
-### Tests Lentos
+### Problema 2: Advertencias de Act Faltante
 
 ```typescript
-// ❌ MAL - Multiples re-renders
-it('should update state', () => {
-  const { rerender } = render(<Component value={1} />);
-  rerender(<Component value={2} />);
-  rerender(<Component value={3} />);
-  rerender(<Component value={4} />);
+// ❌ MAL - Actualización de estado fuera de act
+it('should update count', () => {
+  const { result } = renderHook(() => useCounter());
+  result.current.increment(); // ¡Advertencia!
 });
 
-// ✅ BIEN - Test directo
-it('should update state', async () => {
-  render(<Component />);
-
-  await userEvent.click(screen.getByRole('button'));
-
-  expect(screen.getByText('Updated')).toBeInTheDocument();
-});
-```
-
-## Tests de Hooks
-
-```typescript
-// useCounter.test.ts
-import { renderHook, act } from '@testing-library/react';
-import { useCounter } from './useCounter';
-
-describe('useCounter', () => {
-  it('should initialize with default value', () => {
-    const { result } = renderHook(() => useCounter());
-    expect(result.current.count).toBe(0);
-  });
-
-  it('should increment count', () => {
-    const { result } = renderHook(() => useCounter());
-
-    act(() => {
-      result.current.increment();
-    });
-
-    expect(result.current.count).toBe(1);
+// ✅ BIEN - Envolver en act
+it('should update count', () => {
+  const { result } = renderHook(() => useCounter());
+  act(() => {
+    result.current.increment();
   });
 });
 ```
 
-## Tests con MSW
+### Problema 3: No Limpiar Después de las Pruebas
+
+```typescript
+// ✅ BIEN - Limpieza automática
+import { cleanup } from '@testing-library/react';
+
+afterEach(() => {
+  cleanup();
+});
+```
+
+## MSW (Mock Service Worker)
+
+### Configuración
 
 ```typescript
 // test/mocks/handlers.ts
@@ -318,6 +377,11 @@ export const handlers = [
       { id: '1', name: 'John Doe' },
       { id: '2', name: 'Jane Smith' }
     ]);
+  }),
+
+  http.post('/api/users', async ({ request }) => {
+    const newUser = await request.json();
+    return HttpResponse.json({ id: '3', ...newUser }, { status: 201 });
   })
 ];
 
@@ -326,20 +390,50 @@ import { setupServer } from 'msw/node';
 import { handlers } from './handlers';
 
 export const server = setupServer(...handlers);
+```
 
-// Uso en tests
-describe('UserList', () => {
-  it('should display users', async () => {
-    render(<UserList />);
+### Uso
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-  });
+```typescript
+// test/setup.ts
+import { beforeAll, afterEach, afterAll } from 'vitest';
+import { server } from './mocks/server';
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+```
+
+## Pruebas de Rendimiento
+
+```typescript
+// Verificar el rendimiento de renderizado
+it('should render list efficiently', () => {
+  const start = performance.now();
+
+  render(<LargeList items={items} />);
+
+  const duration = performance.now() - start;
+  expect(duration).toBeLessThan(100); // ms
 });
 ```
 
-## Integracion CI/CD
+## Informes de Pruebas
+
+### Informe de Cobertura
+
+```bash
+# Generar informe HTML
+npm run test:coverage
+
+# Ver informe
+open coverage/index.html
+
+# CI: Subir a Codecov
+bash <(curl -s https://codecov.io/bash)
+```
+
+### Resultados de Pruebas en CI
 
 ```yaml
 # .github/workflows/test.yml
@@ -350,12 +444,9 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-        with:
-          node-version: '22'
 
       - name: Install dependencies
         run: npm ci
@@ -365,34 +456,37 @@ jobs:
 
       - name: Upload coverage
         uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage/lcov.info
 ```
 
-## Lista de Verificacion
+## Lista de Verificación de Pruebas
 
-- [ ] Cobertura > 80% para codigo critico
-- [ ] Tests siguen patron AAA
-- [ ] Sin tests flakey
-- [ ] Mocks apropiados para APIs
-- [ ] Tests rapidos (< 5s por suite)
-- [ ] Queries accesibles usadas
-- [ ] Tests de integracion para flujos criticos
-- [ ] Tests E2E para journeys de usuario
-- [ ] CI/CD ejecuta tests automaticamente
-- [ ] Cobertura monitoreada en el tiempo
+- [ ] Pruebas unitarias para todos los componentes
+- [ ] Pruebas unitarias para todos los hooks
+- [ ] Pruebas unitarias para todas las utilidades
+- [ ] Pruebas de integración para las funcionalidades
+- [ ] Pruebas E2E para los flujos críticos
+- [ ] Cobertura > 80%
+- [ ] Sin pruebas inestables (flaky tests)
+- [ ] Las pruebas son rápidas (< 1s cada una)
+- [ ] MSW para el mocking de API
+- [ ] Utilidades de prueba extraídas
+- [ ] Las pruebas siguen el patrón AAA
+- [ ] Las pruebas tienen nombres descriptivos
+- [ ] Las pruebas usan consultas accesibles
 
 ## Herramientas
 
-- **Vitest** - Framework de testing
-- **React Testing Library** - Testing de componentes
-- **Playwright** - Tests E2E
-- **MSW** - Mocking de API
-- **Codecov** - Reporte de cobertura
+- **Vitest**: Ejecutor de pruebas unitarias
+- **React Testing Library**: Pruebas de componentes
+- **Playwright**: Pruebas E2E
+- **MSW**: Mocking de API
+- **Testing Library User Event**: Interacciones de usuario
+- **Codecov**: Reportes de cobertura
 
 ## Recursos
 
-- [Documentacion Vitest](https://vitest.dev/)
 - [React Testing Library](https://testing-library.com/react)
-- [Documentacion Playwright](https://playwright.dev/)
-- [Guia de Testing de Kent C. Dodds](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
+- [Documentación de Vitest](https://vitest.dev/)
+- [Documentación de Playwright](https://playwright.dev/)
+- [Documentación de MSW](https://mswjs.io/)
+- [Mejores Prácticas de Testing](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)

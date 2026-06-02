@@ -1,498 +1,469 @@
 ---
-description: Comando: Analisar Tamanho do App
+description: Análise do Tamanho da Aplicação React Native
+argument-hint: [arguments]
 ---
 
-# Comando: Analisar Tamanho do App
+# Análise do Tamanho da Aplicação React Native
 
-Analise o tamanho do bundle e identifique oportunidades de otimização para aplicações React Native.
+Você é um especialista em performance React Native. Você deve analisar o tamanho da aplicação, identificar elementos volumosos e propor otimizações.
 
----
+## Argumentos
+$ARGUMENTS
 
-## Objetivo
+Argumentos:
+- (Opcional) Plataforma: ios, android, both
+- (Opcional) Modo: full, assets, code, native
 
-Este comando analisa o tamanho do seu aplicativo React Native e fornece recomendações para reduzir o tamanho do bundle, melhorando tempos de download e instalação.
+Exemplo: `/reactnative:app-size android` ou `/reactnative:app-size both full`
 
----
+## Modo de Planejamento
 
-## Modo Plano
+> O modo de planejamento é ativado automaticamente quando o escopo abrange múltiplos módulos ou requer uma investigação transversal.
 
-> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+## MISSÃO
 
-## Etapas de Análise
-
-### 1. Análise do Bundle
-
-**Execute a análise do bundle:**
+### Etapa 1: Gerar Builds de Análise
 
 ```bash
-# Para Expo
-npx expo export --platform ios --output-dir dist/ios
-npx expo export --platform android --output-dir dist/android
+# Android - APK de Release
+cd android
+./gradlew assembleRelease
 
-# Analizar tamanho
-du -sh dist/ios
-du -sh dist/android
+# Android - Bundle AAB
+./gradlew bundleRelease
 
-# Para análise detalhada com webpack-bundle-analyzer (se usando)
+# iOS - Archive
+cd ios
+xcodebuild -workspace {App}.xcworkspace \
+  -scheme {App} \
+  -configuration Release \
+  -archivePath build/{App}.xcarchive \
+  archive
+
+# Tamanho do bundle JS
+npx react-native bundle \
+  --platform android \
+  --dev false \
+  --entry-file index.js \
+  --bundle-output /tmp/bundle.js \
+  --sourcemap-output /tmp/bundle.js.map
+```
+
+### Etapa 2: Ferramentas de Análise
+
+#### Android
+
+```bash
+# APK Analyzer (Android Studio)
+# Build > Analyze APK...
+
+# Linha de comando
+bundletool build-apks --bundle=app.aab --output=app.apks
+bundletool get-size total --apks=app.apks
+
+# Detalhe por ABI
+bundletool get-size total --apks=app.apks --dimensions=ABI
+
+# Analisar com apkanalyzer
+apkanalyzer apk summary app-release.apk
+apkanalyzer dex list app-release.apk
+apkanalyzer files list app-release.apk | sort -k2 -n -r | head -20
+```
+
+#### iOS
+
+```bash
+# Tamanho estimado na App Store
+xcrun altool --validate-app -f {App}.ipa -t ios
+
+# Com app-size-report
+npx react-native-bundle-visualizer
+
+# Tamanho do .ipa
+ls -lh build/{App}.ipa
+```
+
+#### Bundle JavaScript
+
+```bash
+# Analisar bundle
+npx source-map-explorer /tmp/bundle.js /tmp/bundle.js.map
+
+# Ou com react-native-bundle-visualizer
 npx react-native-bundle-visualizer
 ```
 
-**Coisas a verificar:**
+### Etapa 3: Pontos de Atenção
 
-- [ ] Tamanho total do bundle iOS
-- [ ] Tamanho total do bundle Android
-- [ ] Tamanho dos assets (imagens, fontes, etc.)
-- [ ] Tamanho do código JavaScript
-- [ ] Dependências mais pesadas
-
-### 2. Análise de Dependências
-
-**Verificar tamanhos de dependências:**
+#### Assets (Imagens, Fontes, etc.)
 
 ```bash
-# Instalar ferramenta de análise
-npm install -g cost-of-modules
+# Listar imagens por tamanho
+find android/app/src/main/res -name "*.png" -o -name "*.jpg" | \
+  xargs ls -la | sort -k5 -n -r | head -20
 
-# Analisar node_modules
-cost-of-modules
+find ios/{App}/Images.xcassets -name "*.png" | \
+  xargs ls -la | sort -k5 -n -r | head -20
 
-# Ou usar
-npx package-size
-
-# Verificar dependências não utilizadas
-npx depcheck
+# Verificar assets no bundle
+find assets -type f | xargs ls -la | sort -k5 -n -r | head -20
 ```
 
-**Reportar:**
-
-```markdown
-## Análise de Dependências
-
-### Top 10 Maiores Dependências
-1. [nome] - [tamanho] - [justificada? sim/não]
-2. [nome] - [tamanho] - [justificada? sim/não]
-...
-
-### Dependências não Utilizadas
-- [lista de dependências que podem ser removidas]
-
-### Duplicatas
-- [pacotes com múltiplas versões instaladas]
-```
-
-### 3. Análise de Assets
-
-**Verificar assets:**
+#### Dependências NPM
 
 ```bash
-# Listar assets por tamanho
-find src/assets -type f -exec du -h {} + | sort -rh | head -20
+# Tamanho do node_modules
+du -sh node_modules/* | sort -h -r | head -20
 
-# Verificar imagens grandes
-find src/assets/images -type f -size +500k -exec ls -lh {} \;
+# Analisar com npm
+npm ls --depth=0
+
+# Custo dos módulos (aproximado)
+npx bundlephobia-cli react-native-maps
 ```
 
-**Verificar:**
-
-- [ ] Imagens não otimizadas
-- [ ] Imagens não usadas
-- [ ] Imagens muito grandes
-- [ ] Fontes não usadas
-- [ ] Assets duplicados
-- [ ] Vídeos ou animações pesados
-
-### 4. Análise de Código
-
-**Verificar código não utilizado:**
+#### Código Nativo
 
 ```bash
-# Usar ferramenta de análise
-npx unimported
+# Android - Bibliotecas nativas
+find android -name "*.so" | xargs ls -la | sort -k5 -n -r
 
-# Verificar imports não utilizados
-npx eslint . --ext .ts,.tsx --no-eslintrc --plugin unused-imports
+# iOS - Frameworks
+find ios/Pods -name "*.a" -o -name "*.framework" | \
+  xargs du -sh 2>/dev/null | sort -h -r | head -20
 ```
 
-**Identificar:**
+### Etapa 4: Otimizações
 
-- [ ] Arquivos não importados
-- [ ] Exports não utilizados
-- [ ] Componentes não utilizados
-- [ ] Hooks não utilizados
-- [ ] Utils não utilizados
-
----
-
-## Relatório de Análise
-
-### Métricas Atuais
-
-```markdown
-## Tamanho do App
-
-### iOS
-- Bundle JavaScript: [X] MB
-- Assets: [X] MB
-- Total: [X] MB
-- Tamanho de instalação estimado: [X] MB
-
-### Android
-- Bundle JavaScript: [X] MB
-- Assets: [X] MB
-- Total APK: [X] MB
-- AAB: [X] MB
-
-### Comparação com Limites Recomendados
-- iOS: [X] MB / 4 MB (alerta se > 4MB)
-- Android: [X] MB / 15 MB (alerta se > 15MB)
-```
-
-### Problemas Identificados
-
-```markdown
-## Problemas Encontrados
-
-### 🔴 Críticos
-1. **[Nome do problema]**
-   - Impacto: [+X] MB
-   - Descrição: [detalhes]
-   - Ação recomendada: [ação]
-
-### 🟡 Avisos
-1. **[Nome do problema]**
-   - Impacto: [+X] KB
-   - Descrição: [detalhes]
-   - Ação recomendada: [ação]
-
-### 🟢 Otimizações Sugeridas
-1. **[Sugestão]**
-   - Economia potencial: [~X] KB
-   - Esforço: [Baixo/Médio/Alto]
-   - Prioridade: [Alta/Média/Baixa]
-```
-
----
-
-## Recomendações de Otimização
-
-### 1. Dependências
-
-**Ações:**
-
-- [ ] **Remover dependências não utilizadas**
-  ```bash
-  npm uninstall [pacote-não-usado]
-  ```
-
-- [ ] **Substituir dependências pesadas por alternativas leves**
-  ```
-  Exemplo:
-  - moment.js (232KB) → date-fns (13KB) ou Day.js (2KB)
-  - lodash (530KB) → lodash-es com tree-shaking
-  - axios (52KB) → fetch nativo
-  ```
-
-- [ ] **Usar imports nomeados para tree-shaking**
-  ```typescript
-  // ❌ Importa tudo
-  import _ from 'lodash';
-
-  // ✅ Importa apenas o necessário
-  import { debounce } from 'lodash-es';
-  ```
-
-- [ ] **Lazy load de dependências pesadas**
-  ```typescript
-  // Carregar apenas quando necessário
-  const HeavyComponent = lazy(() => import('./HeavyComponent'));
-  ```
-
-### 2. Imagens e Assets
-
-**Ações:**
-
-- [ ] **Otimizar imagens**
-  ```bash
-  # Instalar ferramenta
-  npm install -g sharp-cli
-
-  # Otimizar PNGs
-  npx sharp-cli -i input.png -o output.png --quality 85
-
-  # Converter para WebP (melhor compressão)
-  npx sharp-cli -i input.png -o output.webp
-  ```
-
-- [ ] **Usar formato apropriado**
-  ```
-  - Ícones: SVG (escala infinita, pequeno)
-  - Fotos: WebP ou JPG otimizado
-  - Transparência: PNG ou WebP
-  - Animações: Lottie ao invés de GIF/vídeo
-  ```
-
-- [ ] **Implementar lazy loading de imagens**
-  ```typescript
-  import { Image } from 'expo-image';
-
-  <Image
-    source={{ uri: imageUrl }}
-    placeholder={placeholderImage}
-    contentFit="cover"
-    transition={200}
-  />
-  ```
-
-- [ ] **Usar CDN para assets grandes**
-  ```typescript
-  // ❌ Assets locais pesados
-  import largeImage from './assets/large-image.png';
-
-  // ✅ Servir de CDN
-  const imageUrl = 'https://cdn.example.com/large-image.webp';
-  ```
-
-### 3. Code Splitting
-
-**Ações:**
-
-- [ ] **Lazy load de telas**
-  ```typescript
-  // app/(tabs)/settings.tsx
-  import { lazy } from 'react';
-
-  const SettingsScreen = lazy(() => import('@/features/settings/SettingsScreen'));
-
-  export default function Settings() {
-    return (
-      <Suspense fallback={<LoadingScreen />}>
-        <SettingsScreen />
-      </Suspense>
-    );
-  }
-  ```
-
-- [ ] **Separar vendor chunks**
-  ```javascript
-  // metro.config.js
-  module.exports = {
-    transformer: {
-      getTransformOptions: async () => ({
-        transform: {
-          experimentalImportSupport: false,
-          inlineRequires: true, // Reduz tamanho inicial
-        },
-      }),
-    },
-  };
-  ```
-
-### 4. Hermes Engine
-
-**Habilitar Hermes (se ainda não habilitado):**
+#### 1. Otimizar Imagens
 
 ```javascript
-// android/app/build.gradle
-project.ext.react = [
-    enableHermes: true  // Reduz bundle size em ~30%
-]
+// metro.config.js - Compressão automática
+const { getDefaultConfig } = require('metro-config');
 
-// ios/Podfile
-use_react_native!(
-  :hermes_enabled => true
-)
+module.exports = (async () => {
+  const {
+    resolver: { sourceExts, assetExts },
+  } = await getDefaultConfig();
+
+  return {
+    transformer: {
+      // Compressão de imagens
+      assetPlugins: ['react-native-asset-optimizer/plugin'],
+    },
+  };
+})();
 ```
 
-**Benefícios:**
-- Menor tamanho do bundle (~30% de redução)
-- Startup mais rápido
-- Menor uso de memória
+```bash
+# Converter PNG para WebP (Android)
+cwebp image.png -o image.webp -q 80
 
-### 5. ProGuard / R8 (Android)
+# Otimizar PNG
+pngquant --quality=65-80 --ext=.png --force image.png
 
-**Habilitar minificação:**
+# Remover metadados
+exiftool -all= image.jpg
+```
 
-```gradle
+#### 2. Reduzir o Bundle JS
+
+```javascript
+// babel.config.js
+module.exports = {
+  presets: ['module:@react-native/babel-preset'],
+  plugins: [
+    // Tree shaking para lodash
+    ['lodash', { id: ['lodash'] }],
+    // Remover console.log em produção
+    'transform-remove-console',
+  ],
+  env: {
+    production: {
+      plugins: ['transform-remove-console'],
+    },
+  },
+};
+```
+
+```typescript
+// Carregamento preguiçoso de telas
+const HeavyScreen = React.lazy(() => import('./screens/HeavyScreen'));
+
+// Importação seletiva
+// ❌
+import _ from 'lodash';
+// ✅
+import debounce from 'lodash/debounce';
+```
+
+#### 3. Otimizar Código Nativo
+
+```groovy
 // android/app/build.gradle
+
 android {
     buildTypes {
         release {
+            // Habilitar Proguard/R8
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    // Divisão por ABI
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            universalApk false
+        }
+    }
+
+    // Remover recursos não utilizados
+    defaultConfig {
+        resConfigs "en", "fr"  // Manter apenas esses idiomas
+    }
 }
 ```
 
-### 6. Remove Dead Code
-
-**Configurar:**
-
-```json
-// tsconfig.json
-{
-  "compilerOptions": {
-    "removeComments": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
-  }
-}
+```ruby
+# ios/Podfile
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      # Remover símbolos de debug na versão release
+      config.build_settings['STRIP_STYLE'] = 'non-global'
+      config.build_settings['DEPLOYMENT_POSTPROCESSING'] = 'YES'
+    end
+  end
+end
 ```
+
+#### 4. Remover Dependências Não Utilizadas
+
+```bash
+# Encontrar dependências não utilizadas
+npx depcheck
+
+# Analisar importações
+npx madge --circular --extensions ts,tsx src/
+
+# Remover uma dependência
+npm uninstall package-name
+cd ios && pod install
+```
+
+### Etapa 5: Gerar Relatório
+
+```
+══════════════════════════════════════════════════════════════
+📱 RELATÓRIO DE TAMANHO DA APLICAÇÃO
+══════════════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────────────
+📊 TAMANHO GERAL
+──────────────────────────────────────────────────────────────
+
+| Plataforma     | Download | Instalado | Limite   | Status |
+|----------------|----------|-----------|----------|--------|
+| Android (APK)  | 45 MB    | 120 MB    | < 50 MB  | ✅     |
+| Android (AAB)  | 35 MB    | 95 MB     | < 40 MB  | ✅     |
+| iOS            | 55 MB    | 150 MB    | < 60 MB  | ✅     |
+
+──────────────────────────────────────────────────────────────
+📦 DETALHAMENTO ANDROID
+──────────────────────────────────────────────────────────────
+
+| Componente        | Tamanho | % Total |
+|-------------------|---------|---------|
+| classes.dex       | 15 MB   | 33%     |
+| lib/ (nativo)     | 12 MB   | 27%     |
+| res/ (recursos)   | 8 MB    | 18%     |
+| assets/           | 6 MB    | 13%     |
+| META-INF/         | 2 MB    | 4%      |
+| outros            | 2 MB    | 5%      |
+
+### Detalhe de lib/ (bibliotecas nativas)
+| Arquivo                       | Tamanho |
+|-------------------------------|---------|
+| libhermes.so                  | 4,2 MB  |
+| libreact_nativemodule.so      | 3,1 MB  |
+| libmaps.so                    | 2,8 MB  |
+| libreactnativejni.so          | 1,5 MB  |
+
+### Detalhe de assets/
+| Pasta    | Tamanho | Arquivos |
+|----------|---------|----------|
+| fonts/   | 2,5 MB  | 8        |
+| images/  | 2,0 MB  | 45       |
+| lottie/  | 1,5 MB  | 12       |
+
+──────────────────────────────────────────────────────────────
+🍎 DETALHAMENTO iOS
+──────────────────────────────────────────────────────────────
+
+| Componente      | Tamanho | % Total |
+|-----------------|---------|---------|
+| Frameworks/     | 28 MB   | 51%     |
+| main.jsbundle   | 8 MB    | 15%     |
+| Assets.car      | 12 MB   | 22%     |
+| outros          | 7 MB    | 12%     |
+
+### Principais Frameworks
+| Framework              | Tamanho |
+|------------------------|---------|
+| Hermes.framework       | 8,5 MB  |
+| React.framework        | 6,2 MB  |
+| GoogleMaps.framework   | 5,8 MB  |
+| Firebase.framework     | 3,2 MB  |
+
+──────────────────────────────────────────────────────────────
+📜 BUNDLE JAVASCRIPT
+──────────────────────────────────────────────────────────────
+
+Tamanho total: 4,2 MB (minificado)
+Tamanho gzipado: 1,1 MB
+
+### Principais Dependências
+| Pacote              | Tamanho | % Bundle |
+|---------------------|---------|----------|
+| react-native        | 1,2 MB  | 29%      |
+| @react-navigation   | 450 KB  | 11%      |
+| moment              | 320 KB  | 8%       |
+| lodash              | 280 KB  | 7%       |
+| axios               | 95 KB   | 2%       |
+| código da app       | 850 KB  | 20%      |
+| outros              | 1,0 MB  | 23%      |
+
+──────────────────────────────────────────────────────────────
+⚠️ PROBLEMAS DETECTADOS
+──────────────────────────────────────────────────────────────
+
+### 1. Moment.js incluído com todos os locales
+
+**Impacto:** +280 KB
+**Solução:** Substituir por date-fns ou dayjs
 
 ```javascript
-// .eslintrc.js
-{
-  "rules": {
-    "no-unused-vars": "error",
-    "@typescript-eslint/no-unused-vars": "error"
-  }
-}
+// Antes
+import moment from 'moment';
+
+// Depois
+import { format, parseISO } from 'date-fns';
+import { fr } from 'date-fns/locale';
 ```
 
----
+### 2. Imagens PNG não otimizadas
 
-## Plano de Ação
+**Arquivos afetados:**
+| Imagem            | Tamanho atual | Tamanho otimizado |
+|-------------------|---------------|-------------------|
+| hero-banner.png   | 850 KB        | ~200 KB           |
+| background.png    | 620 KB        | ~150 KB           |
+| splash.png        | 480 KB        | ~120 KB           |
 
-### Prioridade Alta (Economia > 500KB)
+**Impacto total:** -1,5 MB possível
 
-1. **[Ação 1]**
-   - Economia: [X] MB
-   - Esforço: [horas]
-   - Owner: [pessoa]
-   - Prazo: [data]
+### 3. Bibliotecas nativas não utilizadas
 
-2. **[Ação 2]**
-   - Economia: [X] KB
-   - Esforço: [horas]
-   - Owner: [pessoa]
-   - Prazo: [data]
+**Detectadas:**
+- react-native-camera (não utilizado): +2,1 MB
+- react-native-video (não utilizado): +1,8 MB
 
-### Prioridade Média (Economia 100KB - 500KB)
+### 4. Sem divisão por ABI para Android
 
-1. **[Ação]**
-   - Economia: [X] KB
-   - Esforço: [horas]
-   - Owner: [pessoa]
-   - Prazo: [data]
+**Impacto:** APK universal de 45 MB vs ~25 MB por ABI
 
-### Prioridade Baixa (Economia < 100KB)
+──────────────────────────────────────────────────────────────
+💡 OTIMIZAÇÕES RECOMENDADAS
+──────────────────────────────────────────────────────────────
 
-1. **[Ação]**
-   - Economia: [X] KB
-   - Esforço: [horas]
-   - Owner: [pessoa]
-   - Prazo: [data]
+### Impacto ALTO
 
----
-
-## Metas de Otimização
-
-```markdown
-## Objetivos
-
-### Metas de Curto Prazo (1 semana)
-- Reduzir bundle de [X] MB para [Y] MB
-- Remover [N] dependências não utilizadas
-- Otimizar [N] imagens
-
-### Metas de Médio Prazo (1 mês)
-- Implementar code splitting para rotas principais
-- Migrar assets grandes para CDN
-- Atingir tamanho de bundle < [X] MB
-
-### Metas de Longo Prazo (3 meses)
-- Bundle size otimizado consistentemente
-- Processo de CI/CD verificando tamanho de bundle
-- Budget de performance configurado
-```
-
----
-
-## Monitoramento Contínuo
-
-### Configurar Budget de Bundle
-
-```javascript
-// app.json
-{
-  "expo": {
-    "packagerOpts": {
-      "config": "metro.config.js"
+1. **Habilitar divisão por ABI** (-15-20 MB Android)
+```groovy
+splits {
+    abi {
+        enable true
+        universalApk false
     }
-  }
-}
-
-// Adicionar ao CI/CD
-"scripts": {
-  "check-size": "bundlesize"
-}
-
-// .bundlesizerc
-{
-  "files": [
-    {
-      "path": "./dist/**/*.js",
-      "maxSize": "4 MB"
-    }
-  ]
 }
 ```
 
-### Alertas Automáticos
-
-```yaml
-# .github/workflows/bundle-size.yml
-name: Bundle Size Check
-
-on: [pull_request]
-
-jobs:
-  check-size:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Check bundle size
-        run: npm run check-size
-      - name: Comment on PR
-        if: failure()
-        uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '⚠️ Bundle size exceeded! Please optimize.'
-            })
+2. **Remover dependências não utilizadas** (-4 MB)
+```bash
+npm uninstall react-native-camera react-native-video
+cd ios && pod install
 ```
 
----
+3. **Migrar de Moment.js para date-fns** (-280 KB no bundle)
 
-## Ferramentas Úteis
+### Impacto MÉDIO
 
-- **Análise de Bundle**: webpack-bundle-analyzer, source-map-explorer
-- **Análise de Dependências**: cost-of-modules, package-size, bundlephobia.com
-- **Otimização de Imagens**: sharp, imagemin, squoosh
-- **Dead Code**: unimported, depcheck, knip
-- **Monitoramento**: bundlesize, size-limit
+4. **Otimizar imagens PNG** (-1,5 MB)
+```bash
+# Converter para WebP no Android
+cwebp image.png -o image.webp -q 80
+```
 
----
+5. **Habilitar Hermes para iOS** (-1-2 MB, +performance)
+```ruby
+# Podfile
+:hermes_enabled => true
+```
 
-## Checklist Final
+6. **Limitar locales** (-500 KB)
+```groovy
+resConfigs "en", "fr"
+```
 
-- [ ] Bundle size analisado
-- [ ] Dependências otimizadas
-- [ ] Assets otimizados
-- [ ] Code splitting implementado
-- [ ] Hermes habilitado
-- [ ] ProGuard/R8 configurado
-- [ ] Dead code removido
-- [ ] Monitoramento contínuo configurado
-- [ ] Metas definidas
-- [ ] Plano de ação criado
-- [ ] CI/CD verificando bundle size
+### Impacto BAIXO
 
----
+7. **Tree-shaking do lodash** (-150 KB)
+8. **Remover console.log em produção** (-50 KB)
 
-**O tamanho do app impacta diretamente a taxa de download e retenção de usuários. Monitore constantemente!**
+──────────────────────────────────────────────────────────────
+📈 IMPACTO ESTIMADO
+──────────────────────────────────────────────────────────────
+
+| Otimização          | Antes   | Depois  | Ganho  |
+|---------------------|---------|---------|--------|
+| Divisão por ABI     | 45 MB   | 28 MB   | -38%   |
+| Deps não utilizadas | 45 MB   | 41 MB   | -9%    |
+| Imagens             | 45 MB   | 43,5 MB | -3%    |
+| Bundle JS           | 4,2 MB  | 3,5 MB  | -17%   |
+| **Total Android**   | **45 MB** | **~25 MB** | **-44%** |
+
+──────────────────────────────────────────────────────────────
+🔧 COMANDOS
+──────────────────────────────────────────────────────────────
+
+# Gerar APK de release
+cd android && ./gradlew assembleRelease
+
+# Analisar APK
+apkanalyzer apk summary app-release.apk
+
+# Analisar bundle JS
+npx react-native-bundle-visualizer
+
+# Encontrar dependências não utilizadas
+npx depcheck
+
+# Otimizar imagens
+find . -name "*.png" -exec pngquant --ext=.png --force {} \;
+
+──────────────────────────────────────────────────────────────
+🎯 PRIORIDADES
+──────────────────────────────────────────────────────────────
+
+1. [ ] Habilitar divisão por ABI (Ganho rápido)
+2. [ ] Remover react-native-camera e react-native-video
+3. [ ] Otimizar as 3 maiores imagens
+4. [ ] Migrar Moment.js → date-fns
+5. [ ] Habilitar Hermes no iOS
+6. [ ] Limitar locales no Android
+```

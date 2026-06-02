@@ -1,208 +1,209 @@
 ---
 name: workflow-analyze
-description: Executar a fase de Analise - pesquisa, exploracao e identificacao de restricoes
+description: Executar a fase de Análise - pesquisa, exploração e identificação de restrições
 arguments:
   - name: focus
-    description: Area especifica a analisar (mercado, tecnica, concorrentes)
+    description: Área específica a analisar (mercado, técnica, concorrentes)
     required: false
 ---
 
 # /workflow:analyze
 
-## Missao
+## Missão
 
-Executar a fase de Analise do workflow Enterprise. Esta fase foca na pesquisa, exploracao e identificacao de restricoes antes do inicio do planejamento detalhado.
+Executar a fase de Análise do fluxo de trabalho Enterprise. Esta fase foca-se em pesquisa, exploração e identificação de restrições antes de que o planejamento detalhado seja iniciado.
 
-## Modo Plano
+## Quando Usar
 
-> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
-
-## Quando Utilizar
-
-- Projetos no track **Enterprise**
+- Projetos do **track Enterprise**
 - Novas plataformas ou iniciativas de grande porte
-- Quando o conhecimento do dominio e limitado
-- Antes de se comprometer com uma abordagem tecnica
+- Quando o conhecimento do domínio é limitado
+- Antes de se comprometer com uma abordagem técnica
 
-## Workflow
+## Modo de Planejamento
 
-### Etapa 1: Configuracao da Analise
+> O modo de planejamento é ativado automaticamente quando o escopo abrange múltiplos módulos ou exige investigação transversal.
 
-```
-+==============================================================+
-|            FASE DE ANALISE - INICIANDO                          |
-+================================================================+
-| Track: Enterprise                                               |
-| Fase: 1 de 4 - Analise                                         |
-|                                                                 |
-| Objetivos:                                                      |
-| - Compreender o dominio do problema                             |
-| - Pesquisar solucoes existentes                                 |
-| - Identificar restricoes tecnicas                               |
-| - Documentar riscos e oportunidades                             |
-+================================================================+
-```
+## Fluxo de Trabalho
 
-### Etapa 2: Areas de Pesquisa
-
-**Perguntas de pesquisa guiadas:**
+### Etapa 1: Configuração da Análise
 
 ```
-+-------------------------------------------------------------+
-| PESQUISA DE DOMINIO                                           |
-+-------------------------------------------------------------+
-| 1. Qual problema estamos resolvendo?                          |
-| 2. Quem sao os principais stakeholders?                       |
-| 3. Quais sao os motivadores de negocio?                       |
-| 4. Como se define o sucesso?                                  |
-+-------------------------------------------------------------+
-
-+-------------------------------------------------------------+
-| PESQUISA DE MERCADO                                           |
-+-------------------------------------------------------------+
-| 1. Quais solucoes existentes ha?                              |
-| 2. O que os concorrentes estao fazendo?                       |
-| 3. Quais sao as melhores praticas do setor?                   |
-| 4. Quais sao as tendencias emergentes?                        |
-+-------------------------------------------------------------+
-
-+-------------------------------------------------------------+
-| PESQUISA TECNICA                                              |
-+-------------------------------------------------------------+
-| 1. Quais tecnologias poderiamos utilizar?                     |
-| 2. Quais sao os requisitos de integracao?                     |
-| 3. Quais sao as necessidades de escalabilidade?               |
-| 4. Quais requisitos de seguranca/conformidade existem?        |
-+-------------------------------------------------------------+
+╔══════════════════════════════════════════════════════════╗
+║            FASE DE ANÁLISE - INICIANDO                    ║
+╠══════════════════════════════════════════════════════════╣
+║ Track: Enterprise                                         ║
+║ Fase: 1 de 4 - Análise                                    ║
+║                                                           ║
+║ Objetivos:                                                ║
+║ • Compreender o domínio do problema                       ║
+║ • Pesquisar soluções existentes                           ║
+║ • Identificar restrições técnicas                         ║
+║ • Documentar riscos e oportunidades                       ║
+╚══════════════════════════════════════════════════════════╝
 ```
 
-### Etapa 3: Pesquisa Context7 (Opcional)
+### Etapa 2: Áreas de Pesquisa
 
-Se o MCP Context7 estiver configurado, utilize-o para pesquisa tecnica:
+**Perguntas-Guia de Pesquisa:**
 
 ```
-Utilizando MCP Context7 para documentacao atualizada...
+┌─────────────────────────────────────────────────────────┐
+│ PESQUISA DE DOMÍNIO                                      │
+├─────────────────────────────────────────────────────────┤
+│ 1. Qual problema estamos resolvendo?                     │
+│ 2. Quais são os principais stakeholders?                 │
+│ 3. Quais são os motivadores do negócio?                  │
+│ 4. Como é definido o sucesso esperado?                   │
+└─────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│ PESQUISA DE MERCADO                                      │
+├─────────────────────────────────────────────────────────┤
+│ 1. Quais soluções existentes estão disponíveis?          │
+│ 2. O que os concorrentes estão fazendo?                  │
+│ 3. Quais são as melhores práticas do setor?              │
+│ 4. Quais são as tendências emergentes?                   │
+└─────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│ PESQUISA TÉCNICA                                         │
+├─────────────────────────────────────────────────────────┤
+│ 1. Quais tecnologias poderíamos utilizar?                │
+│ 2. Quais são os requisitos de integração?                │
+│ 3. Quais são as necessidades de escalabilidade?          │
+│ 4. Quais requisitos de segurança/conformidade existem?   │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Etapa 3: Pesquisa com Context7 (Opcional)
+
+Se o MCP Context7 estiver configurado, utilize-o para pesquisa técnica:
+
+```
+Usando Context7 MCP para documentação atualizada...
 
 Pesquisando:
-- Melhores praticas atuais da API Stripe
-- Padroes de seguranca atuais para processamento de pagamentos
-- Requisitos de conformidade PCI DSS
+• Melhores práticas atuais da API Stripe
+• Padrões de segurança vigentes para processamento de pagamentos
+• Requisitos de conformidade PCI DSS
 ```
 
-### Etapa 4: Identificacao de Restricoes
+### Etapa 4: Identificação de Restrições
 
-Documentar as restricoes descobertas:
-
-```
-+==============================================================+
-|               RESTRICOES IDENTIFICADAS                          |
-+================================================================+
-|                                                                 |
-| RESTRICOES TECNICAS:                                            |
-| - Deve integrar com backend Symfony 7.x existente               |
-| - Banco de dados: PostgreSQL (existente, nao pode mudar)        |
-| - Deve suportar apps moveis via API existente                   |
-|                                                                 |
-| RESTRICOES DE NEGOCIO:                                          |
-| - Orcamento: Limitado a equipe existente                        |
-| - Prazo: MVP necessario no Q2 2026                              |
-| - Deve manter compatibilidade retroativa                        |
-|                                                                 |
-| RESTRICOES REGULATORIAS:                                        |
-| - Conformidade LGPD necessaria (usuarios BR)                    |
-| - PCI DSS para processamento de pagamentos                     |
-|                                                                 |
-| RESTRICOES DE RECURSOS:                                         |
-| - Equipe: 2 backend, 1 frontend developer                      |
-| - Sem recurso dedicado de DevOps                                |
-|                                                                 |
-+================================================================+
-```
-
-### Etapa 5: Analise de Riscos e Oportunidades
+Documente as restrições descobertas:
 
 ```
-+==============================================================+
-|            RISCOS E OPORTUNIDADES                               |
-+================================================================+
-|                                                                 |
-| RISCOS:                                                         |
-| +---------+----------+------------+-------------------+         |
-| | Risco   | Impacto  | Prob.      | Mitigacao          |        |
-| +---------+----------+------------+-------------------+         |
-| | Stripe  | Alto     | Baixa      | Provedor fallback  |        |
-| | fora ar |          |            |                    |        |
-| +---------+----------+------------+-------------------+         |
-| | Atraso  | Medio    | Media      | Reducao do escopo  |        |
-| | prazo   |          |            | do MVP             |        |
-| +---------+----------+------------+-------------------+         |
-|                                                                 |
-| OPORTUNIDADES:                                                  |
-| - Possibilidade de usar novos Payment Elements do Stripe        |
-| - Potencial para expansao do modelo de assinatura               |
-| - Pagamento mobile (Apple Pay, Google Pay) pronto               |
-|                                                                 |
-+================================================================+
+╔══════════════════════════════════════════════════════════╗
+║               RESTRIÇÕES IDENTIFICADAS                    ║
+╠══════════════════════════════════════════════════════════╣
+║                                                           ║
+║ RESTRIÇÕES TÉCNICAS:                                      ║
+║ • Deve integrar com o backend Symfony 7.x existente       ║
+║ • Banco de dados: PostgreSQL (existente, não pode mudar)  ║
+║ • Deve suportar apps mobile via API existente             ║
+║                                                           ║
+║ RESTRIÇÕES DE NEGÓCIO:                                    ║
+║ • Orçamento: Limitado à equipe atual                      ║
+║ • Prazo: MVP necessário no Q2 2026                        ║
+║ • Deve manter compatibilidade retroativa                  ║
+║                                                           ║
+║ RESTRIÇÕES REGULATÓRIAS:                                  ║
+║ • Conformidade com LGPD/GDPR obrigatória (usuários UE)    ║
+║ • PCI DSS para processamento de pagamentos                ║
+║                                                           ║
+║ RESTRIÇÕES DE RECURSOS:                                   ║
+║ • Equipe: 2 backend, 1 desenvolvedor frontend             ║
+║ • Sem recurso dedicado de DevOps                          ║
+║                                                           ║
+╚══════════════════════════════════════════════════════════╝
 ```
 
-### Etapa 6: Gerar Artefatos da Analise
+### Etapa 5: Análise de Riscos e Oportunidades
 
-Criar documentos de analise:
+```
+╔══════════════════════════════════════════════════════════╗
+║            RISCOS E OPORTUNIDADES                         ║
+╠══════════════════════════════════════════════════════════╣
+║                                                           ║
+║ RISCOS:                                                   ║
+║ ┌─────────┬──────────┬────────────┬───────────────────┐  ║
+║ │ Risco   │ Impacto  │ Probab.    │ Mitigação         │  ║
+║ ├─────────┼──────────┼────────────┼───────────────────┤  ║
+║ │ Stripe  │ Alto     │ Baixa      │ Provedor de       │  ║
+║ │ fora do │          │            │ contingência      │  ║
+║ │ ar      │          │            │                   │  ║
+║ ├─────────┼──────────┼────────────┼───────────────────┤  ║
+║ │ Atraso  │ Médio    │ Média      │ Redução de        │  ║
+║ │ no prazo│          │            │ escopo do MVP     │  ║
+║ └─────────┴──────────┴────────────┴───────────────────┘  ║
+║                                                           ║
+║ OPORTUNIDADES:                                            ║
+║ • Pode aproveitar os novos Payment Elements do Stripe     ║
+║ • Potencial para expansão do modelo de assinatura         ║
+║ • Pronto para pagamento mobile (Apple Pay, Google Pay)    ║
+║                                                           ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+### Etapa 6: Geração de Artefatos de Análise
+
+Crie os documentos de análise:
 
 ```
 project-management/
 └── analysis/
     ├── research-summary.md      # Principais descobertas
-    ├── constraints.md           # Todas as restricoes identificadas
+    ├── constraints.md           # Todas as restrições identificadas
     ├── risks-opportunities.md   # Registro de riscos e oportunidades
-    └── technical-options.md     # Avaliacao de tecnologias
+    └── technical-options.md     # Avaliação de tecnologias
 ```
 
-### Etapa 7: Conclusao da Fase
+### Etapa 7: Conclusão da Fase
 
 ```
-+==============================================================+
-|            FASE DE ANALISE CONCLUIDA                            |
-+================================================================+
-|                                                                 |
-| Artefatos Criados:                                              |
-| - research-summary.md                                           |
-| - constraints.md                                                |
-| - risks-opportunities.md                                        |
-| - technical-options.md                                          |
-|                                                                 |
-| Principais Descobertas:                                         |
-| - 4 restricoes tecnicas identificadas                           |
-| - 3 restricoes de negocio identificadas                         |
-| - 5 riscos documentados com mitigacoes                          |
-| - 3 oportunidades para consideracao                             |
-|                                                                 |
-| ------------------------------------------------------------- |
-| PROXIMA FASE: Planejamento                                      |
-| Comando: /workflow:plan                                         |
-| ------------------------------------------------------------- |
-|                                                                 |
-| A analise ira informar a criacao do PRD e a arquitetura.        |
-+================================================================+
+╔══════════════════════════════════════════════════════════╗
+║            FASE DE ANÁLISE CONCLUÍDA                      ║
+╠══════════════════════════════════════════════════════════╣
+║                                                           ║
+║ Artefatos Criados:                                        ║
+║ ✅ research-summary.md                                    ║
+║ ✅ constraints.md                                         ║
+║ ✅ risks-opportunities.md                                 ║
+║ ✅ technical-options.md                                   ║
+║                                                           ║
+║ Principais Descobertas:                                   ║
+║ • 4 restrições técnicas identificadas                     ║
+║ • 3 restrições de negócio identificadas                   ║
+║ • 5 riscos documentados com mitigações                    ║
+║ • 3 oportunidades para consideração                       ║
+║                                                           ║
+║ ─────────────────────────────────────────────────────────║
+║ PRÓXIMA FASE: Planejamento                                ║
+║ Comando: /workflow:plan                                   ║
+║ ─────────────────────────────────────────────────────────║
+║                                                           ║
+║ A análise embasará a criação do PRD e a arquitetura.      ║
+╚══════════════════════════════════════════════════════════╝
 ```
 
 ## Agentes Envolvidos
 
-- **research-assistant**: Pesquisa tecnica e consulta de documentacao
-- **product-owner**: Contexto de negocio e analise de stakeholders
+- **research-assistant**: Pesquisa técnica e consulta de documentação
+- **product-owner**: Contexto de negócio e análise de stakeholders
 
-## Arquivos de Saida
+## Arquivos de Saída
 
 | Arquivo | Finalidade |
-|---------|------------|
-| `analysis/research-summary.md` | Descobertas de pesquisa consolidadas |
-| `analysis/constraints.md` | Restricoes tecnicas, de negocio, regulatorias |
-| `analysis/risks-opportunities.md` | Registro de riscos com mitigacoes |
-| `analysis/technical-options.md` | Avaliacao e recomendacoes de tecnologias |
+|---------|-----------|
+| `analysis/research-summary.md` | Descobertas consolidadas da pesquisa |
+| `analysis/constraints.md` | Restrições técnicas, de negócio e regulatórias |
+| `analysis/risks-opportunities.md` | Registro de riscos com mitigações |
+| `analysis/technical-options.md` | Avaliação e recomendações de tecnologias |
 
 ## Comandos Relacionados
 
-- `/workflow:init` - Inicializar workflow (deve ser executado primeiro)
-- `/workflow:plan` - Proxima fase: Planejamento
-- `/workflow:status` - Verificar progresso
-- `/common:research-context7` - Pesquisa aprofundada com MCP Context7
+- `/workflow:init` - Inicializar o fluxo de trabalho (deve ser executado primeiro)
+- `/workflow:plan` - Próxima fase: Planejamento
+- `/workflow:status` - Verificar o progresso
+- `/common:research-context7` - Pesquisa aprofundada com Context7 MCP

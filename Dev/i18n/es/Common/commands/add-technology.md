@@ -1,21 +1,21 @@
 ---
-description: Añadir una nueva tecnología a claude-craft con best practices de Context7 y búsqueda web
-argument-hint: <nombre-tecnología>
+description: Agregar una nueva tecnología a claude-craft con las mejores prácticas de Context7 y búsqueda web
+argument-hint: <nombre-de-tecnología>
 ---
 
-# Añadir Tecnología
+# Agregar Tecnología
 
-Eres un experto integrador de tecnologías para claude-craft. Tu misión es añadir una nueva stack tecnológica:
-1. Investigando best practices usando Context7 MCP y búsqueda web
-2. Generando todos los archivos necesarios (rules, commands, templates, skills, agents)
-3. Creando el script de instalación
-4. Actualizando documentación y página de presentación
+Eres un experto integrador de tecnología para claude-craft. Tu misión es agregar un nuevo stack tecnológico mediante:
+1. Investigar las mejores prácticas usando Context7 MCP y búsqueda web
+2. Generar todos los archivos necesarios (reglas, comandos, plantillas, habilidades, agentes)
+3. Crear el script de instalación
+4. Actualizar la documentación y la página de aterrizaje
 
 ## Argumentos
 $ARGUMENTS
 
 Argumentos:
-- `nombre-tecnología`: Nombre de la tecnología a añadir (ej: "nextjs", "nestjs", "golang", "laravel")
+- `nombre-de-tecnología`: Nombre de la tecnología a agregar (p. ej., "nextjs", "nestjs", "golang", "laravel")
 - (Opcional) `categoría`: Categoría de la tecnología (frontend, backend, mobile, devops, fullstack)
 
 Ejemplo: `/common:add-technology "nestjs"` o `/common:add-technology "golang" backend`
@@ -30,36 +30,36 @@ Ejemplo: `/common:add-technology "nestjs"` o `/common:add-technology "golang" ba
 
 Identificar:
 - Nombre oficial y alias comunes
-- Tipo: framework, biblioteca, lenguaje, herramienta
+- Tipo: framework, librería, lenguaje, herramienta
 - Categoría: frontend, backend, mobile, devops, fullstack
-- Ecosistema: herramientas relacionadas, frameworks de testing, opciones de despliegue
-- Público objetivo: web, mobile, API, CLI, etc.
+- Ecosistema: herramientas relacionadas, frameworks de pruebas, opciones de despliegue
+- Público objetivo: web, móvil, API, CLI, etc.
 
 ### Paso 2: Investigar con Context7 (MCP)
 
-**Usar Context7 para acceder a documentación oficial:**
+**Usar Context7 para acceder a la documentación oficial:**
 
 ```
 Consultar Context7 para:
-1. Guía oficial de inicio
+1. Guía oficial de inicio rápido
 2. Estructura de proyecto recomendada
-3. Best practices y design patterns
-4. Estrategias de testing (unitario, integración, e2e)
-5. Best practices de seguridad
-6. Consejos de optimización de rendimiento
+3. Mejores prácticas y patrones de diseño
+4. Estrategias de pruebas (unitarias, integración, e2e)
+5. Mejores prácticas de seguridad
+6. Consejos de optimización del rendimiento
 7. Recomendaciones de despliegue
 ```
 
 #### Información a Extraer
 
 | Tema | Detalles a Encontrar |
-|------|---------------------|
+|------|----------------------|
 | Arquitectura | Patrones recomendados (MVC, Clean, Hexagonal, etc.) |
 | Estándares de Código | Guía de estilo, convenciones de nomenclatura, estructura de archivos |
-| Herramientas | Herramientas CLI, formateadores, linters, bundlers |
-| Testing | Frameworks de test, herramientas de cobertura, estrategias de mock |
+| Herramientas | Herramientas CLI, formateadores, linters, empaquetadores |
+| Pruebas | Frameworks de pruebas, herramientas de cobertura, estrategias de mocking |
 | Seguridad | Autenticación, autorización, vulnerabilidades comunes |
-| Calidad | Análisis estático, verificación de tipos, prácticas de review |
+| Calidad | Análisis estático, verificación de tipos, prácticas de revisión de código |
 
 ### Paso 3: Complementar con Búsqueda Web
 
@@ -67,15 +67,15 @@ Consultar Context7 para:
 
 1. **Últimas Tendencias**
    - Versión estable actual
-   - Características próximas
-   - Avisos de deprecación
+   - Próximas funcionalidades
+   - Advertencias de deprecación
    - Guías de migración
 
-2. **Best Practices de la Comunidad**
+2. **Mejores Prácticas de la Comunidad**
    - Boilerplates populares
    - Configuraciones de producción
    - Benchmarks de rendimiento
-   - Arquitecturas reales
+   - Arquitecturas del mundo real
 
 3. **Errores Comunes**
    - Errores frecuentes
@@ -84,14 +84,14 @@ Consultar Context7 para:
    - Cuellos de botella de rendimiento
 
 4. **Ecosistema**
-   - Bibliotecas recomendadas
-   - Herramientas de testing
+   - Librerías recomendadas
+   - Herramientas de pruebas
    - Integraciones DevOps
    - Soluciones de monitoreo
 
-### Paso 4: Generar Archivos de Tecnología
+### Paso 4: Generar Archivos de la Tecnología
 
-**Crear la estructura completa en los 5 idiomas (en, fr, es, de, pt):**
+**Crear la estructura de archivos completa en los 5 idiomas (en, fr, es, de, pt):**
 
 ```
 Dev/i18n/{lang}/{TECHNOLOGY}/
@@ -112,88 +112,186 @@ Dev/i18n/{lang}/{TECHNOLOGY}/
 │   ├── check-security.md
 │   └── [generate-*.md si aplica]
 ├── templates/
-│   └── [templates específicos de la tecnología]
+│   └── [plantillas específicas de la tecnología]
 ├── checklists/
 │   ├── pre-commit.md
 │   └── new-feature.md
 ├── agents/
 │   └── {tech}-reviewer.md
 └── skills/
-    └── [skills específicos de la tecnología]
+    └── [habilidades específicas de la tecnología]
 ```
 
-### Paso 5: Crear Script de Instalación
+#### Reglas a Generar
+
+| Archivo | Contenido |
+|---------|-----------|
+| `02-architecture-{tech}.md` | Patrones de arquitectura, estructura de carpetas, principios de arquitectura limpia |
+| `03-coding-standards.md` | Guía de estilo, convenciones de nomenclatura, organización de archivos |
+| `06-tooling.md` | Comandos CLI, formateadores, linters, herramientas de compilación |
+| `07-testing-{tech}.md` | Estrategias de pruebas, frameworks, requisitos de cobertura |
+| `08-quality-tools.md` | Análisis estático, verificación de tipos, integración CI/CD |
+| `11-security-{tech}.md` | Prácticas de seguridad, vulnerabilidades comunes, autenticación |
+
+#### Comandos a Generar
+
+| Comando | Propósito |
+|---------|-----------|
+| `check-compliance.md` | Auditoría de cumplimiento completa (puntuación /100) |
+| `check-architecture.md` | Revisión de arquitectura |
+| `check-code-quality.md` | Análisis de calidad del código |
+| `check-testing.md` | Cobertura y calidad de pruebas |
+| `check-security.md` | Auditoría de seguridad |
+
+### Paso 5: Crear el Script de Instalación
 
 **Generar `Dev/scripts/install-{tech}-rules.sh`:**
 
-Seguir el patrón de scripts existentes:
-- Soporte de opciones `--lang`, `--force`, `--update`, `--dry-run`, `--backup`
+Seguir el patrón de los scripts existentes:
+- Soportar las opciones `--lang`, `--force`, `--update`, `--dry-run`, `--backup`
 - Copiar reglas genéricas desde Common/
 - Copiar reglas específicas de la tecnología
 - Generar CLAUDE.md y 00-project-context.md
-- Mostrar resumen de instalación
+- Mostrar el resumen de instalación
 
-### Paso 6: Actualizar Documentación
+### Paso 6: Actualizar la Documentación
 
 **Archivos a actualizar:**
 
 | Archivo | Cambios |
 |---------|---------|
-| `README.md` | Añadir tecnología a la lista de stacks soportadas |
-| `docs/index.html` | Incrementar stats, añadir tarjeta de tecnología |
-| `docs/COMMANDS.md` | Documentar nuevos comandos |
-| `Makefile` | Añadir target `install-{tech}` |
+| `README.md` | Agregar tecnología a la lista de stacks soportados |
+| `docs/index.html` | Incrementar estadísticas, agregar tarjeta de tecnología |
+| `docs/COMMANDS.md` | Documentar los nuevos comandos |
+| `Makefile` | Agregar objetivo `install-{tech}` |
+
+#### Actualizaciones de la Página de Aterrizaje (docs/index.html)
+
+1. **Sección de Estadísticas**: Incrementar el contador de "Stacks Tecnológicos"
+2. **Cuadrícula de Tecnologías**: Agregar nueva tarjeta de tecnología:
+
+```html
+<div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-brand-500/50 transition-colors text-center group">
+    <div class="h-16 w-16 mx-auto bg-black rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+        <span class="text-2xl font-bold text-white">{ICON}</span>
+    </div>
+    <h3 class="font-bold text-white">{TECH_NAME}</h3>
+    <p class="text-xs text-slate-400 mt-2" data-i18n="tech_{tech}_desc">{DESCRIPTION}</p>
+</div>
+```
+
+3. **Traducciones**: Agregar claves i18n para los 5 idiomas
+
+#### Objetivo de Makefile
+
+```makefile
+install-{tech}:
+	./Dev/scripts/install-{tech}-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
+```
 
 ### Paso 7: Validación
 
-#### Checklist Definition of Done
+#### Lista de Verificación de Definición de Hecho
 
 ```
 ══════════════════════════════════════════════════════════════
-✅ DEFINITION OF DONE: Añadir Tecnología [{NOMBRE_TECH}]
+✅ DEFINICIÓN DE HECHO: Agregar Tecnología [{TECH_NAME}]
 ══════════════════════════════════════════════════════════════
 
 📁 ARCHIVOS CREADOS
 ──────────────────────────────────────────────────────────────
-- [ ] Rules (7 archivos × 5 idiomas = 35 archivos)
-- [ ] Commands (5 archivos × 5 idiomas = 25 archivos)
-- [ ] Templates (al menos 2 por idioma)
+- [ ] Reglas (7 archivos × 5 idiomas = 35 archivos)
+- [ ] Comandos (5 archivos × 5 idiomas = 25 archivos)
+- [ ] Plantillas (al menos 2 por idioma)
 - [ ] Checklists (2 archivos × 5 idiomas = 10 archivos)
-- [ ] Agent {tech}-reviewer (1 archivo × 5 idiomas = 5 archivos)
+- [ ] Agente {tech}-reviewer (1 archivo × 5 idiomas = 5 archivos)
 - [ ] CLAUDE.md.template (× 5 idiomas)
 - [ ] Script de instalación (Dev/scripts/install-{tech}-rules.sh)
 
 📄 DOCUMENTACIÓN ACTUALIZADA
 ──────────────────────────────────────────────────────────────
-- [ ] README.md: Tecnología añadida a stacks soportadas
-- [ ] docs/index.html: Stats incrementadas
-- [ ] docs/index.html: Tarjeta de tecnología añadida
-- [ ] docs/index.html: Traducciones i18n añadidas (5 idiomas)
+- [ ] README.md: Tecnología agregada a los stacks soportados
+- [ ] docs/index.html: Estadísticas incrementadas
+- [ ] docs/index.html: Tarjeta de tecnología agregada
+- [ ] docs/index.html: Traducciones i18n agregadas (5 idiomas)
 - [ ] docs/COMMANDS.md: Nuevos comandos documentados
-- [ ] Makefile: Target install-{tech} añadido
+- [ ] Makefile: Objetivo install-{tech} agregado
 
 🧪 VERIFICACIÓN
 ──────────────────────────────────────────────────────────────
 - [ ] El script de instalación se ejecuta sin errores
-- [ ] Todos los archivos están correctamente formateados
+- [ ] Todos los archivos tienen el formato correcto
 - [ ] Los comandos son funcionales
 - [ ] La documentación es precisa
 
 ══════════════════════════════════════════════════════════════
 ```
 
+### Formato de Salida
+
+Después de completar todos los pasos, proporcionar:
+
+```
+══════════════════════════════════════════════════════════════
+🎉 TECNOLOGÍA AGREGADA: {TECH_NAME}
+══════════════════════════════════════════════════════════════
+
+📊 RESUMEN
+──────────────────────────────────────────────────────────────
+Tecnología: {TECH_NAME}
+Categoría: {CATEGORY}
+Versión: {CURRENT_VERSION}
+
+Archivos creados: {COUNT}
+- Reglas: 35 archivos
+- Comandos: 25 archivos
+- Plantillas: {COUNT}
+- Checklists: 10 archivos
+- Agentes: 5 archivos
+
+📁 ESTRUCTURA
+──────────────────────────────────────────────────────────────
+Dev/i18n/
+├── en/{TECH}/
+├── fr/{TECH}/
+├── es/{TECH}/
+├── de/{TECH}/
+└── pt/{TECH}/
+
+Dev/scripts/
+└── install-{tech}-rules.sh
+
+🔧 INSTALACIÓN
+──────────────────────────────────────────────────────────────
+# Vía Makefile
+make install-{tech} TARGET=~/mi-proyecto RULES_LANG=en
+
+# Script directo
+./Dev/scripts/install-{tech}-rules.sh ~/mi-proyecto
+
+📚 DOCUMENTACIÓN
+──────────────────────────────────────────────────────────────
+- README.md ✅ Actualizado
+- docs/index.html ✅ Actualizado
+- docs/COMMANDS.md ✅ Actualizado
+- Makefile ✅ Actualizado
+
+✅ DEFINICIÓN DE HECHO: COMPLETA
+══════════════════════════════════════════════════════════════
+```
+
 ### Directrices Importantes
 
-1. **Investigar primero** - Siempre usar Context7 y búsqueda web antes de generar archivos
-2. **Seguir patrones** - Usar tecnologías existentes (React, Symfony, Flutter) como plantillas
-3. **Los 5 idiomas** - Generar contenido para en, fr, es, de, pt
-4. **Calidad sobre velocidad** - Asegurar que todos los archivos estén correctamente formateados
-5. **Actualizar todo** - No olvidar documentación y página de inicio
+1. **Investigar Primero** — Siempre usar Context7 y búsqueda web antes de generar archivos
+2. **Seguir Patrones** — Usar tecnologías existentes (React, Symfony, Flutter) como plantillas
+3. **Los 5 Idiomas** — Generar contenido para en, fr, es, de, pt
+4. **Calidad sobre Velocidad** — Asegurarse de que todos los archivos estén correctamente formateados y sean funcionales
+5. **Actualizar Todo** — No olvidar la documentación y la página de aterrizaje
 
 ### Manejo de Errores
 
 Si la investigación falla:
 - Indicar claramente qué información falta
 - Proponer fuentes alternativas
-- Pedir aclaraciones al usuario si es necesario
-- NUNCA generar archivos con contenido placeholder o inventado
+- Pedir aclaración al usuario si es necesario
+- NUNCA generar archivos con contenido provisional o inventado
