@@ -37,6 +37,16 @@ describe('GET /api/health', () => {
   });
 });
 
+describe('security headers', () => {
+  it('sets baseline hardening headers on responses', async () => {
+    const r = await req('GET', '/api/health');
+    expect(r.headers.get('x-content-type-options')).toBe('nosniff');
+    expect(r.headers.get('x-frame-options')).toBe('SAMEORIGIN');
+    expect(r.headers.get('cross-origin-opener-policy')).toBe('same-origin');
+    expect(r.headers.get('referrer-policy')).toBeTruthy();
+  });
+});
+
 describe('GET /api/stories', () => {
   it('lists all stories + epics', async () => {
     const r = await req('GET', '/api/stories');

@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { streamSSE } from 'hono/streaming';
+import { secureHeaders } from 'hono/secure-headers';
 import { serveStatic } from '@hono/node-server/serve-static';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,6 +26,9 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
   const resolvedProjectRoot = projectRoot ?? path.dirname(repository.rootDir);
   const app = new Hono();
 
+  // Baseline response hardening (X-Content-Type-Options, X-Frame-Options, Referrer-Policy,
+  // COOP, CORP…). No custom CSP: the bundled dashboard relies on inline assets served locally.
+  app.use('*', secureHeaders());
   app.use('*', csrfGuard(port));
   app.use('*', readonlyGuard(readonly));
 
