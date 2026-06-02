@@ -132,7 +132,38 @@
       </div>
     </header>
 
-    <div class="chart-wrapper" bind:this={chartContainer}></div>
+    <!--
+      role=img + aria-label : alternative accessible pour le canvas uPlot (WCAG SC 1.1.1, 1.4.5).
+      Le tableau sr-only fournit les données brutes aux lecteurs d'écran.
+    -->
+    <div
+      class="chart-wrapper"
+      bind:this={chartContainer}
+      role="img"
+      aria-label="Graphique de burndown du sprint {store.sprint?.name || 'courant'} : idéal vs réel"
+      aria-describedby="burndown-data-table"
+    ></div>
+
+    <!-- Tableau de données sr-only : accès aux valeurs numériques sans graphique -->
+    <table class="sr-only" id="burndown-data-table" aria-label="Données du burndown">
+      <caption>Burndown — idéal vs réel</caption>
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Points idéal</th>
+          <th scope="col">Points réel</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each store.burndown?.ideal ?? [] as point, i}
+          <tr>
+            <td>{point.date}</td>
+            <td>{point.points}</td>
+            <td>{store.burndown?.actual?.[i]?.points ?? '—'}</td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
   {/if}
 </div>
 
@@ -168,7 +199,7 @@
     font-weight: 700;
     padding: 4px 10px;
     border-radius: 12px;
-    color: var(--accent-fg);
+    color: var(--badge-fg);
   }
 
   .total-points {
@@ -185,5 +216,18 @@
     padding: 20px;
     box-shadow: var(--shadow);
     min-height: 340px;
+  }
+
+  /* Accessible uniquement aux lecteurs d'écran */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 </style>

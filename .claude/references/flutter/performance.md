@@ -1,6 +1,6 @@
 # Flutter Performance (2026)
 
-**Versions :** Flutter 3.41+ | Impeller par défaut | Dart 3.11
+**Versions :** Flutter 3.44+ | Impeller par défaut | Dart 3.12
 
 ## Impeller: Moteur de rendu par défaut
 

@@ -4,14 +4,19 @@
   --bg-elev: #ffffff;
   --bg-sidebar: #f3f3f5;
   --fg: #1a1a1a;
-  --fg-dim: #6b7280;
+  /* #595f6a sur #f3f3f5 → ratio ~5.1:1 (passe AA) ; sur blanc → ~6.0:1 */
+  --fg-dim: #595f6a;
   --border: #e4e4e7;
   --accent: #7c3aed;
   --accent-fg: #ffffff;
   --danger: #dc2626;
-  --warn: #d97706;
-  --ok: #16a34a;
-  --info: #0284c7;
+  /* Couleurs sémantiques light : ≥ 4.5:1 sur --bg-elev (#ffffff) */
+  --warn: #b45309;
+  --ok: #15803d;
+  --info: #0369a1;
+  /* Texte des badges posés SUR une couleur sémantique (fond plein). En light les
+     sémantiques sont foncées → texte blanc ; en dark elles sont claires → texte sombre. */
+  --badge-fg: #ffffff;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   --radius: 6px;
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -26,7 +31,15 @@
     --fg: #f4f4f5;
     --fg-dim: #a1a1aa;
     --border: #27272a;
-    --accent: #a78bfa;
+    /* #7c3aed sur #141417 → ratio ~5.70 (passe AA/AAA avec texte blanc #ffffff) */
+    --accent: #7c3aed;
+    /* Couleurs sémantiques dark : chacune ≥ 4.5:1 sur --bg-elev (#1a1a1d) */
+    --danger: #f87171;
+    --warn: #fbbf24;
+    --ok: #4ade80;
+    --info: #38bdf8;
+    /* sémantiques claires en dark → texte de badge sombre pour garder le contraste */
+    --badge-fg: #1a1a1d;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   }
 }
@@ -102,6 +115,12 @@ a {
 }
 .nav a:hover {
   background: var(--border);
+}
+/* Indicateur de focus visible explicite (WCAG 2.2 SC 2.4.11) */
+.nav a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius);
 }
 .nav a[aria-current='page'] {
   background: var(--accent);

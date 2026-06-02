@@ -253,11 +253,11 @@ return RectorConfig::configure()
         "larastan/larastan": "^2.9",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
-        "pestphp/pest": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0",
-        "pestphp/pest-plugin-mutate": "^3.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "pestphp/pest-plugin-mutate": "^4.0",
         "phpstan/phpstan": "^2.2",
-        "rector/rector": "^1.0",
+        "rector/rector": "^2.4",
         "spatie/laravel-ignition": "^2.4"
     }
 }
@@ -288,9 +288,9 @@ return RectorConfig::configure()
 
 | Composant | Version | Usage Laravel |
 |-----------|---------|---------------|
-| Docker Engine | 29.4.0 | BuildKit par défaut, SBOM natif |
+| Docker Engine | 29.4.3 | BuildKit par défaut, SBOM natif |
 | FrankenPHP | 1.12.1 | Alternative moderne à PHP-FPM (Worker mode Octane) |
-| PgBouncer | 1.25.1 | Transaction pooling + prepared statements natifs |
+| PgBouncer | 1.25.2 | Transaction pooling + prepared statements natifs (CVE-2026-6664/6667 patchées) |
 
 **FrankenPHP + Laravel Octane** : 2-3× gains performance (Worker mode, HTTP/3, max_requests anti-leak).  
 **Sources** : https://frankenphp.dev/docs/laravel/ | https://laravel.com/docs/octane
@@ -380,7 +380,7 @@ volumes:
 ### Dockerfile
 
 ```dockerfile
-FROM php:8.3-fpm
+FROM php:8.5-fpm
 
 # Arguments
 ARG user=www

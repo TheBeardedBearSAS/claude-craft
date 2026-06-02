@@ -417,7 +417,7 @@ if not API_KEY:
 Always validate user inputs with Pydantic.
 
 ```python
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 class CreateUserDTO(BaseModel):
     """DTO for creating a user."""
@@ -426,15 +426,17 @@ class CreateUserDTO(BaseModel):
     password: str = Field(..., min_length=8)
     age: int = Field(..., ge=18, le=150)
 
-    @validator('email')
-    def validate_email(cls, v):
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, v: str) -> str:
         """Validate email format."""
         if '@' not in v:
             raise ValueError('Invalid email format')
         return v.lower()
 
-    @validator('password')
-    def validate_password(cls, v):
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, v: str) -> str:
         """Validate password strength."""
         if not any(char.isdigit() for char in v):
             raise ValueError('Password must contain at least one digit')
@@ -536,7 +538,7 @@ class TestUser:
 ```toml
 [tool.black]
 line-length = 88
-target-version = ['py312']
+target-version = ['py314']
 include = '\.pyi?$'
 
 [tool.isort]

@@ -1,4 +1,4 @@
-# Cheat Sheet : Claude-Craft 8.7.1
+# Cheat Sheet : Claude-Craft 8.8.0
 
 ## Installation (NPX)
 
@@ -244,7 +244,7 @@ Docker (5), Coolify (4), Kubernetes (5), OpenTofu (5), Ansible (5), Hcloud (5), 
 | **react** | 19 / TS 5.7 | Hooks + State |
 | **angular** | 19.x / TS 5.7 | Standalone |
 | **vuejs** | 3.5+ / TS 5.7 | Composition API |
-| **flutter** | 3.38 / Dart 3.10 | BLoC/Riverpod |
+| **flutter 3.44 / Dart 3.12 | BLoC/Riverpod |
 | **reactnative** | 0.76+ | Native Modules |
 | **python** | 3.13+ | FastAPI |
 | **php** | 8.5 | PSR Standards |
@@ -364,5 +364,5 @@ Types : feat, fix, refactor, test, docs, chore, perf, build, ci, style
 
 ---
 
-**Formation Claude Code 2.1.154 + Claude-Craft 8.7.1**
+**Formation Claude Code 2.1.159 + Claude-Craft 8.8.0**
 **The Bearded CTO - 2026**

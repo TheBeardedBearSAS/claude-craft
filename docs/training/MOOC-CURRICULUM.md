@@ -133,7 +133,7 @@ Cette formation certifiante enseigne le développement piloté par IA (AI-First 
 ### Contenu
 
 1. **Agents spécialisés** (1h)
-   - 67 agents disponibles : API, DB, DevOps, Security, TDD, UX
+   - 70 agents disponibles : API, DB, DevOps, Security, TDD, UX
    - Comment invoquer : `@agent-name prompt`
    - Frontmatter : `effort`, `maxTurns`, `disallowedTools`
 
@@ -203,7 +203,7 @@ Cette formation certifiante enseigne le développement piloté par IA (AI-First 
    - `@devops-engineer` pour générer Dockerfile + docker-compose.yml
 
 2. **Déploiement Coolify** (45min)
-   - Self-hosted PaaS : Coolify v4.0.0-beta.470+
+   - Self-hosted PaaS : Coolify v4.0.0 (stable)
    - Git push → auto-deploy
    - Zero-downtime avec health checks
 

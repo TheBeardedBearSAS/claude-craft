@@ -1,7 +1,9 @@
 ---
 name: refactoring-specialist
 description: Safe code refactoring expert
-model: opus
+model: sonnet
+effort: medium
+maxTurns: 8
 tools:
   - Read
   - Glob

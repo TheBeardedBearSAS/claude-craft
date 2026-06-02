@@ -49,15 +49,15 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 |-------------|-------------|---------------|
 | Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.4.3 (patch sécurité, mai 2026) |
 | Docker Compose | Orchestration locale, profiles, extensions | Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète) |
-| Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, sidecar containers | 1.35.3 stable (1.36 attendu 22 avril) |
+| Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, User Namespaces, Mutating Admission Policies | 1.36.1 stable (sortie 13 mai 2026) |
 | Helm | Charts, values, templating | Helm 3.18+ |
 | FrankenPHP | Worker mode (Laravel Octane/Symfony), HTTP/3, max_requests | 1.12.1 (PHP 8.5, Caddy 2.11.2) |
-| PgBouncer | Transaction pooling, prepared statements natifs | 1.25.1 (1.21+ requis pour prepared stmts) |
+| PgBouncer | Transaction pooling, prepared statements natifs | 1.25.2 (1.21+ requis pour prepared stmts ; CVE-2026-6664/6667 patchées) |
 
 **Sources** :  
 - Docker Engine 29.4.3 : https://www.docker.com/blog/docker-engine-version-29/  
 - Compose Spec v5.0.0 : https://www.compose-spec.io/  
-- Kubernetes 1.35 : https://kubernetes.io/blog/2025/01/13/kubernetes-v1-35-release/  
+- Kubernetes 1.36 : https://kubernetes.io/blog/2026/04/22/kubernetes-v1-36-release/  
 - K8s Gateway API : https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl  
 - K8s Support Policy : https://endoflife.date/kubernetes
 
@@ -299,15 +299,15 @@ kubectl get pods -o jsonpath='{.spec.initContainers[?(@.restartPolicy=="Always")
 - **Sidecar containers stables** : `restartPolicy: Always` dans `initContainers` (1.33+)
 - **Dynamic Resource Allocation (DRA)** : GPU/FPGA scheduling natif (1.30+)
 
-**Support Policy** : K8s supporte N-2 versions. En avril 2026 :
-- ✅ Supportées : 1.35, 1.34, 1.33
-- ❌ Non supportées : 1.30, 1.31, 1.32
+**Support Policy** : K8s supporte N-2 versions. En juin 2026 :
+- ✅ Supportées : 1.36, 1.35, 1.34
+- ❌ Non supportées : 1.31, 1.32, 1.33
 
 **Sources** :  
 - Gateway API : https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl  
 - Sidecar-less : https://istio.io/latest/blog/2024/ambient-reaches-beta/  
 - Support Policy : https://endoflife.date/kubernetes  
-- K8s 1.35 : https://kubernetes.io/blog/2025/01/13/kubernetes-v1-35-release/
+- K8s 1.36 : https://kubernetes.io/blog/2026/04/22/kubernetes-v1-36-release/
 
 ### GitHub Actions
 ```yaml

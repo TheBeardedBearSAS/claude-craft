@@ -1,4 +1,4 @@
-# Cahier du Participant - Formation Claude Code 2.1.154 + Claude-Craft 8.7.1
+# Cahier du Participant - Formation Claude Code 2.1.159 + Claude-Craft 8.8.0
 
 ## Informations
 
@@ -14,9 +14,9 @@
 
 À la fin de cette formation, vous serez capable de :
 
-- [ ] Installer et configurer Claude Code 2.1.154
+- [ ] Installer et configurer Claude Code 2.1.159
 - [ ] Utiliser les nouvelles fonctionnalités (Plan Mode, Hooks, Background Tasks)
-- [ ] Installer Claude-Craft 8.7.1 via npx (structure TCL)
+- [ ] Installer Claude-Craft 8.8.0 via npx (structure TCL)
 - [ ] Suivre les workflows de développement (Quick, Standard, Enterprise)
 - [ ] Charger et utiliser les skills et agents
 - [ ] Auditer un projet existant et corriger les issues
@@ -28,7 +28,7 @@
 
 ## Jour 1 : Fondamentaux & Nouveaux Projets
 
-### Module 1 : Introduction à Claude Code 2.1.154
+### Module 1 : Introduction à Claude Code 2.1.159
 
 #### Notes personnelles
 
@@ -46,7 +46,7 @@ _________________________________
 | `/cost` | |
 | `/exit` | |
 
-#### Nouvelles commandes (2.1.154)
+#### Nouvelles commandes (2.1.159)
 
 | Commande | Description |
 |----------|-------------|
@@ -67,7 +67,7 @@ _________________________________
 
 ---
 
-### Module 2 : Le Framework Claude-Craft 8.7.1
+### Module 2 : Le Framework Claude-Craft 8.8.0
 
 #### TCL (Tiered Context Loading)
 
@@ -440,9 +440,9 @@ _________________________________
 
 | Compétence | 1 | 2 | 3 | 4 | 5 |
 |------------|---|---|---|---|---|
-| Installation Claude Code 2.1.154 | | | | | |
+| Installation Claude Code 2.1.159 | | | | | |
 | Utilisation Plan Mode | | | | | |
-| Installation Claude-Craft 8.7.1 (npx) | | | | | |
+| Installation Claude-Craft 8.8.0 (npx) | | | | | |
 | Compréhension TCL | | | | | |
 | Utilisation des workflows | | | | | |
 | Chargement et utilisation des skills | | | | | |
@@ -475,7 +475,7 @@ _________________________________
 
 ### Semaine 1 (après la formation)
 
-- [ ] Installer Claude-Craft 8.7.1 sur mon projet
+- [ ] Installer Claude-Craft 8.8.0 sur mon projet
 - [ ] Configurer les hooks de base
 - [ ] _________________________________
 
@@ -593,6 +593,6 @@ _________________________________
 
 **Merci pour votre participation !**
 
-**Formation Claude Code 2.1.154 + Claude-Craft 8.7.1**
+**Formation Claude Code 2.1.159 + Claude-Craft 8.8.0**
 **Version 3.0.0 - 2026**
 **The Bearded CTO**

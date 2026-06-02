@@ -80,10 +80,10 @@ dotnet publish -c Release --self-contained -r linux-x64
   <PackageReference Include="Testcontainers" Version="3.*" />
 </ItemGroup>
 
-<!-- API Documentation -->
+<!-- API Documentation (.NET 10 : OpenAPI natif + Scalar UI) -->
 <ItemGroup>
-  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.*" />
   <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.*" />
+  <PackageReference Include="Scalar.AspNetCore" Version="2.*" />
 </ItemGroup>
 
 <!-- Resilience & Observability -->

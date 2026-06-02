@@ -201,7 +201,7 @@ export default nextConfig;
 npm install
 
 # Add a dependency
-npm install react-query
+npm install @tanstack/react-query
 
 # Add a dev dependency
 npm install -D @types/node
@@ -235,7 +235,7 @@ pnpm create vite my-app -- --template react-ts
 pnpm install
 
 # Add a dependency
-pnpm add react-query
+pnpm add @tanstack/react-query
 
 # Add a dev dependency
 pnpm add -D @types/node
@@ -262,7 +262,7 @@ auto-install-peers=true
 yarn install
 
 # Add a dependency
-yarn add react-query
+yarn add @tanstack/react-query
 
 # Add a dev dependency
 yarn add -D @types/node

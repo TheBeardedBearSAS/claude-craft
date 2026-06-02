@@ -2,6 +2,8 @@
 name: ralph-conductor
 description: Orquestra sessoes Ralph Wiggum v2.0 com validacao DoD adaptativa
 model: opus
+effort: xhigh
+maxTurns: 10
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, Task, WebFetch, WebSearch]
 permissionMode: default

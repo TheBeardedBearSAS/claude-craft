@@ -15,7 +15,7 @@ pipx install ruff
 ```toml
 [tool.ruff]
 # Target Python version
-target-version = "py312"
+target-version = "py314"
 
 # Line length
 line-length = 88

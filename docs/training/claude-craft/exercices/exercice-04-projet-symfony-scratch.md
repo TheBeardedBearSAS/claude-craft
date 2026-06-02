@@ -25,7 +25,7 @@ Vous devez créer une API REST pour gérer des tâches (TODO list) avec :
 ### Étape 1.1 : Créer le projet Symfony
 
 ```bash
-# Créer le projet (Symfony 8.0 / PHP 8.5)
+# Créer le projet (Symfony 8.1 / PHP 8.5)
 symfony new task-manager --webapp
 cd task-manager
 
@@ -57,7 +57,7 @@ claude
 
 Répondez aux questions :
 - **Nom** : TaskManager
-- **Stack** : Symfony 8.0, PHP 8.5, SQLite
+- **Stack** : Symfony 8.1, PHP 8.5, SQLite
 - **Entités** : Task
 - **Architecture** : Clean Architecture
 
@@ -69,7 +69,7 @@ Répondez aux questions :
 ## Project Context
 
 - **Project Name**: TaskManager
-- **Technology Stack**: Symfony 8.0, PHP 8.5, SQLite
+- **Technology Stack**: Symfony 8.1, PHP 8.5, SQLite
 - **Architecture**: Clean Architecture + Hexagonal
 
 ## Domain Entities
@@ -385,7 +385,7 @@ task-manager/
 
 ## Critères de réussite
 
-- [ ] Projet Symfony 8.0 créé et fonctionnel
+- [ ] Projet Symfony 8.1 créé et fonctionnel
 - [ ] Claude-Craft installé et configuré
 - [ ] Architecture Clean respectée (Domain → Application → Infrastructure)
 - [ ] Au moins 5 tests unitaires qui passent

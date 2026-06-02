@@ -1,8 +1,8 @@
-# Service Container 2026 - Symfony 8.0
+# Service Container 2026 - Symfony 8.1
 
 ## Overview
 
-Le Service Container de Symfony 8.0 apporte des améliorations majeures pour 2026:
+Le Service Container de Symfony 8.1 apporte des améliorations majeures pour 2026:
 - **Autowiring "Secure by Default"**
 - **Lazy Objects natifs PHP 8.4**
 - **AsDecorator amélioré**
@@ -11,14 +11,14 @@ Le Service Container de Symfony 8.0 apporte des améliorations majeures pour 202
 - **Console Invokables** (attributs PHP)
 
 **Sources:**
-- https://symfony.com/releases/8.0
+- https://symfony.com/releases/8.1
 - https://symfony.com/blog/new-in-symfony-8-0-wizard-forms
 
 ## Autowiring Secure by Default
 
 ### Principe
 
-Symfony 8.0 applique le principe du moindre privilège: les services ne sont plus publics par défaut et l'autowiring est plus strict.
+Symfony 8.1 applique le principe du moindre privilège: les services ne sont plus publics par défaut et l'autowiring est plus strict.
 
 ```yaml
 # config/services.yaml
@@ -26,7 +26,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false  # Par défaut dans Symfony 8
+        public: false  # Par défaut dans Symfony 8.1
 
     App\:
         resource: '../src/'
@@ -44,7 +44,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Repository;
 
-// ✅ Symfony 8: Interface obligatoire pour autowiring
+// ✅ Symfony 8.1: Interface obligatoire pour autowiring
 interface OrderRepositoryInterface
 {
     public function findById(OrderId $id): ?Order;
@@ -89,7 +89,7 @@ final readonly class DoctrineOrderRepository implements OrderRepositoryInterface
 
 ### Configuration Automatique
 
-Symfony 8.0 utilise les lazy objects natifs de PHP 8.4 pour les services coûteux.
+Symfony 8.1 utilise les lazy objects natifs de PHP 8.4 pour les services coûteux.
 
 ```php
 <?php
@@ -157,7 +157,7 @@ final class ArrayCache implements CacheInterface
 // Avant PHP 8.4 (Symfony 6.x/7.x) - Proxies générés
 // vendor/symfony/.../Proxy/ExpensiveApiClientProxy.php
 
-// PHP 8.4+ / Symfony 8.0 - Lazy natif
+// PHP 8.4+ / Symfony 8.1 - Lazy natif
 $reflector = new ReflectionClass(ExpensiveApiClient::class);
 $proxy = $reflector->newLazyProxy(function () {
     return new ExpensiveApiClient(); // Créé à la demande
@@ -559,7 +559,7 @@ final readonly class ImportOrdersCommand
 - Testable sans framework
 - Configuration via attributs
 
-## Wizard Forms Component (Symfony 8.0)
+## Wizard Forms Component (Symfony 8.0+)
 
 ### Formulaires Multi-Étapes avec State Management
 
@@ -639,7 +639,7 @@ final class OrderController extends AbstractController
 
 ## Ressources
 
-- [Symfony DI Component](https://symfony.com/doc/8.0/components/dependency_injection.html)
+- [Symfony DI Component](https://symfony.com/doc/current/components/dependency_injection.html)
 - [PHP 8.4 Lazy Objects](https://wiki.php.net/rfc/lazy-objects)
 - [Symfony 8.0 Wizard Forms](https://symfony.com/blog/new-in-symfony-8-0-wizard-forms)
 - [Decorator Pattern](https://refactoring.guru/design-patterns/decorator)

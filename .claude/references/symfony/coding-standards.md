@@ -1,4 +1,4 @@
-# Standards de Code - PHP 8.4+ / Symfony 8.0
+# Standards de Code - PHP 8.4+ / Symfony 8.1
 
 ## Principes Generaux
 
@@ -14,10 +14,10 @@ Configuration : `.php-cs-fixer.dist.php`
 
 ### Versions Requises (2026)
 
-- **PHP**: 8.4+ (Symfony 8.0 requiert PHP 8.2+, 8.4 recommandé)
-- **Symfony**: 8.0.x (stable 8.0.13 (mai 2026)) ou 7.4 LTS
+- **PHP**: 8.4+ (Symfony 8.1 requiert PHP 8.4+, recommandé pour Lazy Objects natifs et Property Hooks)
+- **Symfony**: 8.1.x (stable 8.1 (mai 2026, recommandée)) ou 7.4 LTS
 
-**Source:** https://symfony.com/releases/8.0
+**Source:** https://symfony.com/releases/8.1
 
 ### Nouvelles Features PHP 8.4
 

@@ -1,12 +1,18 @@
 {
-  "description": "Block suspicious network commands (curl/wget to scripts, unauthorized hosts)",
+  "description": "Block suspicious network commands (curl/wget to scripts, unauthorized downloads) before they hit Bash. Audit 2026-06-01 P0 — replaced broken `echo '$TOOL_INPUT'` pattern (single quotes prevent expansion; $TOOL_INPUT is not a shell env var — Claude Code passes hook input on stdin as JSON) and flat structure; now uses stdin jq + nested hooks + exit 2 (the blocking exit code).",
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "command": "INPUT=$(echo '$TOOL_INPUT' | jq -r '.command // empty'); if echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb|pl|bat|ps1)'; then echo \"BLOCKED: Downloading executable scripts is not allowed\" && exit 1; fi; if echo \"$INPUT\" | grep -qE '(curl|wget).*(-o|-O|>)'; then echo \"BLOCKED: Downloading files requires explicit approval\" && exit 1; fi; exit 0"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if printf '%s' \"$INPUT\" | grep -qE '(curl|wget)([[:space:]]|.)*\\.(sh|py|rb|pl|bat|ps1)([[:space:]]|$|\\?|\")'; then printf 'BLOCKED: Downloading executable scripts is not allowed:\\n%s\\n' \"$INPUT\" >&2; exit 2; fi; if printf '%s' \"$INPUT\" | grep -qE '(curl|wget)([[:space:]]|.)*(-o|-O|>)'; then printf 'BLOCKED: Downloading files requires explicit approval:\\n%s\\n' \"$INPUT\" >&2; exit 2; fi; exit 0",
+            "timeout": 5000
+          }
+        ]
       }
     ]
   },
-  "usage": "Copy this template to .claude/settings.json. Customize the patterns to match your security policy. Add a whitelist of allowed domains if needed."
+  "usage": "Copy the PreToolUse hook to .claude/settings.json. The command reads the tool input JSON from stdin (Claude Code passes the hook payload there), extracts .tool_input.command via jq, then runs a deny-list regex. Exit code 2 prevents the Bash invocation and shows the stderr message to Claude. Add a whitelist of allowed domains if needed. Requires jq."
 }

@@ -24,11 +24,11 @@ export default defineConfig({
         // Tests added in hotfixes c871fd67 and 12801341 brought branch coverage
         // from 79.36% (doctor) and 90% (path-safety) up to 87.3% and 100%
         // respectively, but the global stayed at 84.97% because of pre-existing
-        // gaps in cli/kanban/server/services/ (frontmatter.js 60%, sprint-cache.js
-        // 74.24%) and cli/index.js (65.85%) — out of scope for this release.
-        // Track tightening back to 85 in a dedicated PR.
+        // gaps in cli/kanban/server/services/ (frontmatter.js, sprint-cache.js) and
+        // cli/index.js. Audit 2026-06-01: real branch coverage is 85.79% — threshold
+        // raised 84 → 85. Track tightening to 90 (those 4 files) in a dedicated PR.
         lines: 90,
-        branches: 84,
+        branches: 85,
         functions: 90,
         statements: 90,
       },

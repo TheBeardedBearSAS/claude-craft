@@ -1,7 +1,9 @@
 ---
 name: paperclip-reviewer
 description: Especialista en revisión de código Paperclip — arquitectura de dos capas, contrato de adaptador, integridad de gobernanza, strictness TypeScript
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

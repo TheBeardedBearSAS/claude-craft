@@ -44,7 +44,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Claude Code 2.1.154 + Opus 4.8** -- recommended runtime, Dynamic Workflows (orchestrate tens-to-hundreds of background agents), `effort: max`; critical agents (`security-auditor`, `migration-specialist`, `database-architect`, `ralph-conductor`) routed to `opus`/`xhigh`, reviewers stay `haiku`/`low`
 - **Repositioned around 4 defensible differentiators** -- QA Recette (browser regression capture), BMAD v6 sprint workflow, Ralph Wiggum loop, RTK token optimization (the workflow/orchestration a per-stack cookbook doesn't cover)
 - **Honest stack count (19 → 11)** -- removed orphan Go/Rust reference stacks (no commands, no reviewers); **PHP is now a base layer** auto-included with Symfony/Laravel rather than a standalone selectable stack
-- **Stack versions refreshed** -- Flutter 3.44/Dart 3.12, .NET 10 LTS/EF Core 10, Symfony 8.0.13, Laravel 13.12, Angular zoneless stable, Docker 29.4.3, Ansible 2.21.0
+- **Stack versions refreshed** -- Flutter 3.44/Dart 3.12, .NET 10 LTS/EF Core 10, Symfony 8.1, Laravel 13.12, Angular 21 (zoneless default), Docker 29.4.3, Ansible 2.21.0
 
 > ← Versions antérieures (v8.0 → v8.3) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
 

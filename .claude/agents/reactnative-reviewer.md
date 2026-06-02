@@ -11,7 +11,7 @@ permissionMode: default
 skills: [solid-principles, architecture, navigation]
 ---
 
-# Agent Auditeur React Native 0.85 / Expo SDK 55
+# Agent Auditeur React Native 0.85 / Expo SDK 56
 
 ## Identité
 
@@ -438,7 +438,7 @@ import { format } from 'date-fns';
 ## Format de rapport d'audit
 
 ```markdown
-# Rapport d'audit React Native 0.85 / Expo SDK 55
+# Rapport d'audit React Native 0.85 / Expo SDK 56
 
 ## Projet : [Nom du projet]
 **Date :** [Date]

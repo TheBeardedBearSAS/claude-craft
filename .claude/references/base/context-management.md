@@ -613,7 +613,7 @@ Utiliser `/model` pour changer de modele selon la complexite de la tache:
 |----------|--------|-------|
 | `/model haiku` | Haiku 4.5 | Taches simples, classification |
 | `/model sonnet` | Sonnet 4.6 | Taches standard, implementation |
-| `/model opus` | Opus 4.7 | Raisonnement complexe, architecture |
+| `/model opus` | Opus 4.8 | Raisonnement complexe, architecture |
 
 ### Filtrage de sortie via hooks PreToolUse
 

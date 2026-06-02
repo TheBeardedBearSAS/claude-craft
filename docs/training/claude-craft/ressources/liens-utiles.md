@@ -20,7 +20,7 @@
 
 ---
 
-## Claude Code 2.1.154
+## Claude Code 2.1.159
 
 ### Nouvelles fonctionnalités
 
@@ -56,7 +56,7 @@
 
 ---
 
-## Claude-Craft 8.7.1
+## Claude-Craft 8.8.0
 
 ### TCL (Tiered Context Loading)
 
@@ -331,5 +331,5 @@ npx @the-bearded-bear/claude-craft install ~/projet --tech=symfony --lang=fr
 ---
 
 **Mis à jour : Janvier 2026**
-**Claude Code : 2.1.154**
-**Claude-Craft : 8.7.1**
+**Claude Code : 2.1.159**
+**Claude-Craft : 8.8.0**

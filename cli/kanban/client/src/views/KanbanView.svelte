@@ -4,6 +4,10 @@
   import PromptDialog from '../components/PromptDialog.svelte';
 
   let promptDialog = $state(null);
+  /** Référence au <dialog> natif du menu de déplacement */
+  let moveMenuDialog = $state(null);
+  /** Élément de carte ayant déclenché l'ouverture du menu (pour retour de focus) */
+  let moveMenuTriggerEl = $state(null);
 
   const COLUMNS = [
     { key: 'backlog', label: 'Backlog' },
@@ -73,7 +77,12 @@
     if (!enabled) return;
 
     function handleKeyboard(e) {
-      // Arrow navigation between cards
+      // Guard : n'agir que si le focus est dans le board ou le menu ouvert
+      const inBoard = document.activeElement?.closest('.board');
+      const menuOpen = showMoveMenu;
+      if (!inBoard && !menuOpen) return;
+
+      // Navigation verticale entre cartes
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         const currentColumn = COLUMNS[focusedColumnIndex];
@@ -104,13 +113,17 @@
         }
       }
 
-      // Open move menu with Alt+M
+      // Ouvrir le menu de déplacement avec Alt+M
       if (e.altKey && e.key === 'm') {
         e.preventDefault();
         const currentColumn = COLUMNS[focusedColumnIndex];
         const cards = storiesByStatus[currentColumn.key];
         if (focusedCardIndex >= 0 && cards[focusedCardIndex]) {
-          showMoveMenu = !showMoveMenu;
+          if (showMoveMenu) {
+            closeMoveMenu();
+          } else {
+            openMoveMenu();
+          }
         }
       }
 
@@ -128,9 +141,9 @@
         }
       }
 
-      // Close move menu with Escape
-      if (e.key === 'Escape') {
-        showMoveMenu = false;
+      // Fermer le menu de déplacement avec Escape
+      if (e.key === 'Escape' && showMoveMenu) {
+        closeMoveMenu();
       }
 
       // Enter to focus card details (could be extended)
@@ -159,17 +172,17 @@
     if (targetStatus === 'blocked') {
       const reason = await promptDialog.prompt('Blocked reason?');
       if (!reason) {
-        showMoveMenu = false;
+        closeMoveMenu();
         return;
       }
       body.blocked_reason = reason;
     }
     try {
       await patchStatus(card.id, body);
-      showMoveMenu = false;
+      closeMoveMenu();
       announceMove(card.id, targetStatus);
     } catch {
-      showMoveMenu = false;
+      closeMoveMenu();
     }
   }
 
@@ -183,80 +196,140 @@
     liveRegion = `Card ${card.id}: ${card.title}. Status: ${card.status}. Priority: ${card.priority}. ${card.story_points} story points.`;
     setTimeout(() => liveRegion = '', 3000);
   }
+
+  /** Ouvre le menu de déplacement via l'élément <dialog> natif. */
+  function openMoveMenu() {
+    // Mémorise l'élément déclencheur pour y retourner le focus à la fermeture
+    moveMenuTriggerEl = document.activeElement;
+    showMoveMenu = true;
+    // Attend le prochain tick Svelte pour que le dialog soit dans le DOM
+    Promise.resolve().then(() => moveMenuDialog?.showModal());
+  }
+
+  /** Ferme le menu de déplacement et retourne le focus à la carte source. */
+  function closeMoveMenu() {
+    showMoveMenu = false;
+    moveMenuDialog?.close();
+    // Retour de focus à la carte ayant déclenché l'ouverture (WCAG SC 2.4.3)
+    if (moveMenuTriggerEl) {
+      moveMenuTriggerEl.focus();
+      moveMenuTriggerEl = null;
+    }
+  }
 </script>
 
 <div class="board">
   {#each COLUMNS as col}
     <section
       class="column"
-      aria-label={col.label}
+      aria-labelledby="col-{col.key}"
       ondragover={onDragOver}
       ondrop={(e) => onDrop(e, col.key)}
     >
       <header class="column-header">
-        <span>{col.label}</span>
-        <span class="count">{storiesByStatus[col.key].length}</span>
+        <!-- h2 pour une navigation par titres (touche H dans NVDA/JAWS) -->
+        <h2 class="column-label" id="col-{col.key}">{col.label}</h2>
+        <span class="count" aria-label="{storiesByStatus[col.key].length} cartes">{storiesByStatus[col.key].length}</span>
       </header>
-      <div class="column-body">
+      <!-- ul/li remplace article role=button (conflit sémantique) -->
+      <ul class="column-body" role="list">
         {#each storiesByStatus[col.key] as s (s.id)}
           {@const tdd = tddBadge(s.tdd_phase)}
-          <article
+          <li
             class="card"
             draggable="true"
             ondragstart={(e) => onDragStart(e, s.id)}
             aria-label="{s.id} {s.title}"
             data-card-id={s.id}
             tabindex="0"
-            role="button"
+            role="listitem"
             aria-describedby="keyboard-help"
           >
-            <header class="card-top">
+            <div class="card-top">
               <span class="id">{s.id}</span>
               <span class="priority" style="color: {priorityColor(s.priority)}">{s.priority}</span>
               <span class="points">{s.story_points}p</span>
-              {#if tdd}<span class="tdd" style="color: {tdd.color}" title="TDD: {tdd.label}">{tdd.char}</span>{/if}
-            </header>
+              {#if tdd}
+                <!-- aria-label remplace title (title non annoncé par NVDA/VoiceOver) -->
+                <span class="tdd" style="color: {tdd.color}" aria-label="TDD phase : {tdd.label}" role="img">{tdd.char}</span>
+              {/if}
+            </div>
             <div class="title">{s.title}</div>
             <div class="meta">
               {#if s.epic_id}<span class="epic">{s.epic_id}</span>{/if}
               {#if s.persona}<span class="persona">{s.persona}</span>{/if}
             </div>
             {#if s.tasks?.total > 0}
-              <div class="progress" aria-label="tasks progress">
+              <!-- role=progressbar + aria-valuenow/min/max (WCAG SC 4.1.2) -->
+              <div
+                class="progress"
+                role="progressbar"
+                aria-label="Tâches : {s.tasks.completed} sur {s.tasks.total} complétées"
+                aria-valuenow={s.tasks.completed}
+                aria-valuemin={0}
+                aria-valuemax={s.tasks.total}
+              >
                 <div class="bar" style="width: {(s.tasks.completed / s.tasks.total) * 100}%"></div>
-                <span class="progress-label">{s.tasks.completed}/{s.tasks.total}</span>
+                <span class="progress-label" aria-hidden="true">{s.tasks.completed}/{s.tasks.total}</span>
               </div>
             {/if}
             <footer class="card-foot">
               {#if s.assigned_to}
-                <span class="assignee" title={s.assigned_to}>{s.assigned_to.slice(0, 2).toUpperCase()}</span>
+                <!-- aria-label expose le nom complet (WCAG SC 1.3.1, SC 4.1.2) -->
+                <span class="assignee" aria-label="Assigné à : {s.assigned_to}">{s.assigned_to.slice(0, 2).toUpperCase()}</span>
               {/if}
               {#if s.status === 'blocked' && s.blocked_reason}
-                <span class="blocked" title={s.blocked_reason}>⚠ blocked</span>
+                <span class="blocked" aria-label="Bloqué : {s.blocked_reason}">⚠ blocked</span>
               {/if}
             </footer>
-          </article>
+          </li>
         {/each}
-      </div>
+      </ul>
     </section>
   {/each}
 </div>
 
 <PromptDialog bind:this={promptDialog} />
 
-<!-- Accessibility: keyboard help & live region -->
+<!-- Aide clavier : sr-only pour les lecteurs d'écran, accessible au clavier -->
 <div id="keyboard-help" class="sr-only">
-  Use arrow keys to navigate. Alt+M to open move menu. Numbers 1-6 to move to column. Escape to close menu. Enter for details.
+  Flèches pour naviguer. Alt+M pour ouvrir le menu de déplacement. Chiffres 1 à 6 pour déplacer dans une colonne. Échap pour fermer. Entrée pour les détails.
 </div>
 
+<!-- Région live pour les annonces d'accessibilité -->
 <div aria-live="polite" aria-atomic="true" class="sr-only">
   {liveRegion}
 </div>
 
+<!-- Aide clavier visible pour les utilisateurs voyants au clavier (WCAG SC 3.3.2) -->
+<details class="keyboard-help-visible">
+  <summary aria-label="Raccourcis clavier du tableau Kanban">⌨ Raccourcis</summary>
+  <div class="keyboard-help-content">
+    <kbd>↑↓</kbd> Naviguer les cartes &ensp;
+    <kbd>←→</kbd> Changer de colonne &ensp;
+    <kbd>Alt+M</kbd> Menu déplacement &ensp;
+    <kbd>1–6</kbd> Déplacer vers colonne &ensp;
+    <kbd>Échap</kbd> Fermer &ensp;
+    <kbd>Entrée</kbd> Détails
+  </div>
+</details>
+
+<!--
+  Menu de déplacement : élément <dialog> natif pour :
+  - Piège de focus automatique (Tab/Shift+Tab confinés au dialog)
+  - aria-modal géré nativement par le navigateur
+  - Retour de focus géré dans closeMoveMenu()
+  (WCAG SC 1.3.2, 2.1.2, 4.1.2)
+-->
 {#if showMoveMenu}
-  <div class="move-menu" role="dialog" aria-label="Move card to column">
+  <dialog
+    bind:this={moveMenuDialog}
+    class="move-menu-dialog"
+    aria-labelledby="move-menu-title"
+    onclose={() => { if (showMoveMenu) closeMoveMenu(); }}
+  >
     <div class="move-menu-content">
-      <h3>Move card to:</h3>
+      <h3 id="move-menu-title">Déplacer la carte vers :</h3>
       {#each COLUMNS as col, idx}
         <button onclick={() => {
           const currentColumn = COLUMNS[focusedColumnIndex];
@@ -267,9 +340,9 @@
           {idx + 1}. {col.label}
         </button>
       {/each}
-      <button onclick={() => showMoveMenu = false}>Cancel (Esc)</button>
+      <button onclick={() => closeMoveMenu()}>Annuler (Échap)</button>
     </div>
-  </div>
+  </dialog>
 {/if}
 
 <style>
@@ -292,12 +365,16 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  /* h2 en colonne : reset pour conserver le style visuel précédent */
+  .column-label {
+    margin: 0;
     font-weight: 600;
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--fg-dim);
-    border-bottom: 1px solid var(--border);
   }
   .count {
     background: var(--bg-elev);
@@ -305,13 +382,17 @@
     padding: 2px 8px;
     font-size: 11px;
   }
+  /* ul reset (remplace la div column-body) */
   .column-body {
+    list-style: none;
+    margin: 0;
     padding: 8px;
     display: flex;
     flex-direction: column;
     gap: 8px;
     min-height: 120px;
   }
+  /* li reset — même apparence que l'ancien article */
   .card {
     background: var(--bg-elev);
     border: 1px solid var(--border);
@@ -321,7 +402,12 @@
     box-shadow: var(--shadow);
   }
   .card:active { cursor: grabbing; }
-  .card:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  /* Focus visible explicite (WCAG 2.2 SC 2.4.11) */
+  .card:focus,
+  .card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
   .card-top {
     display: flex;
     align-items: center;
@@ -389,7 +475,7 @@
     margin-left: auto;
   }
 
-  /* Accessibility: screen reader only */
+  /* Accessible uniquement aux lecteurs d'écran */
   .sr-only {
     position: absolute;
     width: 1px;
@@ -402,27 +488,60 @@
     border-width: 0;
   }
 
-  /* Accessibility: move menu */
-  .move-menu {
+  /* Aide clavier visible pour les utilisateurs voyants au clavier (WCAG SC 3.3.2) */
+  .keyboard-help-visible {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-
-  .move-menu-content {
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
     background: var(--bg-elev);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 20px;
+    font-size: 11px;
+    color: var(--fg-dim);
+    box-shadow: var(--shadow);
+  }
+  .keyboard-help-visible summary {
+    padding: 4px 10px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+  }
+  .keyboard-help-visible summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .keyboard-help-content {
+    padding: 6px 10px 8px;
+    white-space: nowrap;
+  }
+  kbd {
+    display: inline-block;
+    padding: 1px 4px;
+    font-size: 10px;
+    font-family: var(--mono);
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+
+  /* Dialog natif pour le menu de déplacement (piège de focus automatique) */
+  .move-menu-dialog {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0;
     min-width: 300px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    color: var(--fg);
+  }
+  .move-menu-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .move-menu-content {
+    padding: 20px;
   }
 
   .move-menu-content h3 {
@@ -445,16 +564,10 @@
   }
 
   .move-menu-content button:hover,
-  .move-menu-content button:focus {
+  .move-menu-content button:focus-visible {
     background: var(--accent);
     color: var(--accent-fg);
     outline: 2px solid var(--accent);
     outline-offset: 1px;
-  }
-
-  /* Focus visible styles */
-  .card:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
   }
 </style>

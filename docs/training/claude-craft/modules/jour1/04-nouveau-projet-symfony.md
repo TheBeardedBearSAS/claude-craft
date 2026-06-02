@@ -83,7 +83,7 @@ Ou manuellement éditer `.claude/rules/00-project-context.md` :
 ## Project Context
 
 - **Project Name**: MonAPI
-- **Technology Stack**: Symfony 8.0, PHP 8.5, PostgreSQL
+- **Technology Stack**: Symfony 8.1, PHP 8.5, PostgreSQL
 - **Architecture**: Clean Architecture + Hexagonal + DDD
 
 ## Domain Entities
@@ -343,7 +343,7 @@ Créer un micro-projet "Gestion de Tâches" avec :
    ```bash
    /common:setup-project-context
    # Nom: TaskManager
-   # Stack: Symfony 8.0, PHP 8.5, SQLite (dev)
+   # Stack: Symfony 8.1, PHP 8.5, SQLite (dev)
    # Entités: Task, User
    ```
 

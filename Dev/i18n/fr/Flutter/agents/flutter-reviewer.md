@@ -1,7 +1,9 @@
 ---
 name: flutter-reviewer
 description: Spécialiste de la revue de code Flutter 3.44 / Dart 3.12 — BLoC, Riverpod, optimisation des widgets, code platform-specific
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

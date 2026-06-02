@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.7.1 | **Languages:** en, fr, es, de, pt
+**Version:** 8.8.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 11 technology stacks, 31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, and BMAD v6 project management.
 
@@ -11,11 +11,11 @@ A comprehensive AI-assisted development framework for Claude Code with 11 techno
 | Stack | Version | Architecture | Key Patterns |
 |-------|---------|--------------|--------------|
 | **.NET / C#** | 10 LTS / C# 14 | Clean Architecture | CQRS, MediatR (ou alternative), EF Core |
-| **Symfony / PHP** | 8.0 / PHP 8.4+ | Clean Architecture | DDD, Hexagonal, API Platform, JsonStreamer |
+| **Symfony / PHP** | 8.1 / PHP 8.4+ | Clean Architecture | DDD, Hexagonal, API Platform, HTTP-less apps, JsonStreamer |
 | **Flutter / Dart** | 3.44 / Dart 3.12 | Clean Architecture | BLoC v9, Riverpod 3, Material 3, Impeller |
 | **React** | 19.2 + Compiler 1.0 | Feature-based | Hooks, Zustand, React Query, Server Components |
 | **React Native** | 0.85 (New Architecture) | Feature-based | Navigation 7, Reanimated 4, TurboModules |
-| **Angular** | 20 LTS (ou 21) | Domain-driven | Signals, Standalone, Zoneless, httpResource |
+| **Angular** | 21 (22 en RC) | Domain-driven | Signals, Standalone, Zoneless par défaut, httpResource |
 | **Vue.js** | 3.5+ (3.6 beta Vapor) | Composition API | Pinia, Vitest, TypeScript, Alien Signals |
 | **Laravel** | 13.x / PHP 8.5 | Clean Architecture | Actions, Pest 4, Sanctum, AI SDK, Passkey |
 | **Python** | 3.14+ | Clean Architecture / Hexagonal | FastAPI, async/await, Pydantic, free-threading, JIT |
@@ -161,7 +161,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version:** 2.1.97 (CVE-2025-59536 patched) | **Recommended:** 2.1.154 (Opus 4.8 + Dynamic Workflows) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
+**Minimum Version:** 2.1.97 (CVE-2025-59536 patched) | **Recommended:** 2.1.159 (Opus 4.8 + Dynamic Workflows) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
 
 ---
 

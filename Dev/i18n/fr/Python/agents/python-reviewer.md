@@ -1,7 +1,9 @@
 ---
 name: python-reviewer
 description: Spécialiste de la revue de code Python 3.14+ — async correctness, Pydantic v2, FastAPI, SQLAlchemy, type safety
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

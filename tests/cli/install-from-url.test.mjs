@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { validateUrl, validateConfig, runInstallFromUrl } from '../../cli/lib/install-from-url.js';
+import { validateUrl, validateConfig, runInstallFromUrl, isBlockedHost } from '../../cli/lib/install-from-url.js';
 
 vi.mock('../../cli/lib/installer.js', () => ({
   runInstallation: vi.fn(async () => {}),
@@ -26,6 +26,62 @@ describe('validateUrl', () => {
   it('rejects non-http schemes', () => {
     expect(() => validateUrl('file:///etc/passwd')).toThrow(/only https/);
     expect(() => validateUrl('ftp://example.com/x')).toThrow(/only https/);
+  });
+
+  // Audit 2026-06-01 P1 — SSRF: https to private/link-local/metadata addresses
+  it('rejects https to cloud-metadata and private/link-local addresses (SSRF)', () => {
+    expect(() => validateUrl('https://169.254.169.254/latest/meta-data/')).toThrow(/SSRF|private|link-local|metadata/i);
+    expect(() => validateUrl('https://10.0.0.5/cc.json')).toThrow(/SSRF/i);
+    expect(() => validateUrl('https://192.168.1.10/cc.json')).toThrow(/SSRF/i);
+    expect(() => validateUrl('https://172.16.0.1/cc.json')).toThrow(/SSRF/i);
+    expect(() => validateUrl('https://127.0.0.1/cc.json')).toThrow(/SSRF/i);
+    expect(() => validateUrl('https://[::1]/cc.json')).toThrow(/SSRF/i);
+    expect(() => validateUrl('https://[fd00::1]/cc.json')).toThrow(/SSRF/i);
+  });
+
+  it('still accepts https to regular public hosts', () => {
+    expect(validateUrl('https://raw.githubusercontent.com/org/repo/main/cc.json').protocol).toBe('https:');
+  });
+});
+
+describe('isBlockedHost (SSRF guard)', () => {
+  it('blocks private, loopback, link-local and metadata ranges', () => {
+    for (const h of [
+      '10.1.2.3',
+      '127.0.0.1',
+      '169.254.169.254',
+      '172.20.0.1',
+      '192.168.0.1',
+      '100.100.100.200',
+      '0.0.0.0',
+      '::1',
+      'fe80::1',
+      'fc00::1',
+      'fd00:ec2::254',
+    ]) {
+      expect(isBlockedHost(h), h).toBe(true);
+    }
+  });
+  it('allows public IPs and hostnames', () => {
+    for (const h of ['8.8.8.8', '1.1.1.1', '172.32.0.1', 'example.com', 'raw.githubusercontent.com']) {
+      expect(isBlockedHost(h), h).toBe(false);
+    }
+  });
+});
+
+describe('runInstallFromUrl — redirect re-validation (SSRF)', () => {
+  const cli = {
+    config: { language: 'en', technologies: [], includeInfra: false, includeProject: false, includeRtk: false },
+  };
+  it('re-validates redirect targets and refuses a redirect to a metadata address', async () => {
+    const fetchFn = vi.fn(async () => ({
+      status: 302,
+      ok: false,
+      headers: { get: (k) => (k.toLowerCase() === 'location' ? 'https://169.254.169.254/latest/' : null) },
+    }));
+    await expect(runInstallFromUrl('https://x.example/cc.json', cli, { CLI_ROOT: '/cli' }, fetchFn)).rejects.toThrow(
+      /SSRF|private|link-local|metadata/i
+    );
   });
 });
 

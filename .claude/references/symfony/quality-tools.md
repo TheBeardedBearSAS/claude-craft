@@ -5,8 +5,8 @@
 L'utilisation des outils de qualité est **OBLIGATOIRE** pour garantir un code maintenable, sûr et performant.
 
 **Versions 2026:**
-- PHP 8.4+ (Symfony 8.0 requiert PHP 8.2+, mais 8.4 recommandé pour Property Hooks et Lazy Objects)
-- Symfony 8.0.x stable 8.0.13 (mai 2026) ou 7.4 LTS — https://symfony.com/releases/8.0
+- PHP 8.4+ (Symfony 8.1 requiert PHP 8.4+, recommandé pour Property Hooks et Lazy Objects)
+- Symfony 8.1.x stable 8.1 (mai 2026, recommandée) ou 7.4 LTS — https://symfony.com/releases/8.1
 - PHPStan 2.2.x
 - Rector 2.4.x
 - Deptrac v4.x
@@ -417,8 +417,8 @@ return RectorConfig::configure()
         strictBooleans: true,
     )
     ->withSets([
-        // ✅ Symfony 8.0
-        SymfonyLevelSetList::UP_TO_SYMFONY_80,
+        // ✅ Symfony 8.1
+        SymfonyLevelSetList::UP_TO_SYMFONY_81,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
 

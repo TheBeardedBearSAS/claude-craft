@@ -1,11 +1,11 @@
-# Symfony 8.0 / PHP 8.4+ - Quick Reference
+# Symfony 8.1 / PHP 8.4+ - Quick Reference
 
 ## Versions Requises (2026)
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| PHP | 8.4+ | Symfony 8.0 requiert PHP 8.2+, mais 8.4 recommandé pour Lazy Objects natifs et Property Hooks |
-| Symfony | 8.0.x (ou 7.4 LTS) | Stable 8.0.13 (mai 2026) — https://symfony.com/releases/8.0 |
+| PHP | 8.4+ | Symfony 8.1 requiert PHP 8.4+ (minimum), recommandé pour Lazy Objects natifs et Property Hooks |
+| Symfony | 8.1.x (ou 7.4 LTS) | Stable 8.1 (mai 2026, recommandée) — https://symfony.com/releases/8.1 |
 | Doctrine ORM | 3.x | |
 | PHPStan | 2.2.x | |
 | Rector | 2.4.x | |
@@ -24,6 +24,17 @@ src/
 **Règle d'or**: Domain ne dépend de RIEN d'externe.
 
 ## Nouvelles Features Symfony 8
+
+### HTTP-Less Applications (8.1+)
+```php
+// Kernel/Bundle infrastructure extraite dans DependencyInjection :
+// commandes console, message consumers et workers sans couche HTTP.
+// Nouveaux : ServicesBundle, ConsoleBundle, attribut #[RequiredBundle].
+// Commandes groupées : plusieurs méthodes d'une classe = autant de commandes,
+// dépendances partagées injectées une seule fois.
+```
+**Source:** https://symfony.com/blog/new-in-symfony-8-1-http-less-symfony-applications
+Voir aussi : nouveau composant **TUI** (Terminal UI) en 8.1.
 
 ### JSON Streamer Component (8.0+)
 ```php
@@ -194,7 +205,7 @@ framework:
 
 ## Checklist Rapide
 
-- [ ] PHP 8.4+, Symfony 8.0.x
+- [ ] PHP 8.4+, Symfony 8.1.x
 - [ ] Domain sans dépendances framework
 - [ ] PHPStan niveau max, 0 erreur
 - [ ] Deptrac v4 passe

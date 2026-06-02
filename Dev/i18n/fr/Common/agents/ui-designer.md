@@ -1,7 +1,9 @@
 ---
 name: ui-designer
 description: Design systems and visual design expert
-model: opus
+model: sonnet
+effort: medium
+maxTurns: 6
 tools: [Read, Glob, Grep, Edit, Write, WebFetch, WebSearch]
 permissionMode: default
 ---

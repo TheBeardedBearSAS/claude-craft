@@ -117,7 +117,7 @@ Based on your stack, these 3 commands will give you immediate insights:
 3. ✓ /[command-3] — [2-sentence explanation of value]
    Why now? [1 sentence on TTFV benefit]
 
-Choose one to run (type the number 1-3), or skip to explore all 211 commands with /help
+Choose one to run (type the number 1-3), or skip to explore all 125 commands with /help
 ```
 
 ## Step 3: Execute with Pedagogical Commentary (5 minutes)
@@ -185,7 +185,7 @@ C. Join the community
 
 📚 Resources:
 - Full quickstart guide: @docs/QUICKSTART.md (section "First 10 Minutes")
-- All 211 commands: /help
+- All 125 commands: /help
 - Technology-specific guides: @.claude/references/[your-tech]/
 
 ✓ You've completed your first 10 minutes with Claude Craft!
@@ -221,7 +221,7 @@ Based on your stack, these 3 commands will give you immediate insights:
 3. ✓ /react:bundle-analyze — Identify large dependencies bloating your bundle
    Why now? Every 100KB costs users money and slows load time — quick wins here.
 
-Choose one to run (type the number 1-3), or skip to explore all 211 commands with /help
+Choose one to run (type the number 1-3), or skip to explore all 125 commands with /help
 ```
 
 **User Types: 1**
@@ -276,7 +276,7 @@ C. Join the community
 
 📚 Resources:
 - Full quickstart guide: @docs/QUICKSTART.md (section "First 10 Minutes")
-- All 211 commands: /help
+- All 125 commands: /help
 - React-specific guides: @.claude/references/react/CLAUDE.md
 
 ✓ You've completed your first 10 minutes with Claude Craft!

@@ -2,7 +2,7 @@ name: Mutation Testing (Stryker)
 
 on:
   schedule:
-    - cron: '0 3 * * 1'  # Nightly-weekly: lundi 3h UTC
+    - cron: '0 3 * * 1'  # Weekly: lundi 3h UTC
   workflow_dispatch:
   pull_request:
     paths:
@@ -18,8 +18,8 @@ jobs:
   mutation:
     name: Stryker mutation score
     runs-on: ubuntu-latest
-    # Blocking on PRs (audit 2026-05-18 QW-11). Nightly schedule remains
-    # informational only — if the nightly run fails on transient network /
+    # Blocking on PRs (audit 2026-05-18 QW-11). The weekly (Monday) schedule remains
+    # informational only — if the weekly run fails on transient network /
     # CI flakiness we don't want to wake anyone up.
     continue-on-error: ${{ github.event_name == 'schedule' }}
     timeout-minutes: 45
@@ -44,9 +44,9 @@ jobs:
           restore-keys: |
             stryker-incremental-${{ github.base_ref }}-
 
-      - name: Run Stryker (nightly full)
+      - name: Run Stryker (weekly full)
         if: github.event_name != 'pull_request'
-        # Nightly: tolerant — informational signal only.
+        # Weekly: tolerant — informational signal only.
         run: npx stryker run || true
 
       - name: Run Stryker (PR incremental — mutate only changed files)
@@ -68,6 +68,9 @@ jobs:
         if: github.event_name == 'pull_request' && always()
         run: |
           if [ -f reports/mutation/mutation.json ]; then
-            score=$(jq -r '.mutationScore // "N/A"' reports/mutation/mutation.json 2>/dev/null || echo "N/A")
+            # Stryker v9 JSON report has no top-level `.mutationScore` — compute it from
+            # mutant statuses (audit 2026-06-01 P1). Score = detected / valid * 100, where
+            # detected = Killed+Timeout and valid = detected + Survived + NoCoverage.
+            score=$(node -e "const r=require('./reports/mutation/mutation.json');const m=Object.values(r.files||{}).flatMap(f=>f.mutants||[]);const d=m.filter(x=>['Killed','Timeout'].includes(x.status)).length;const u=m.filter(x=>['Survived','NoCoverage'].includes(x.status)).length;const v=d+u;console.log(v?(d/v*100).toFixed(2)+'%':'N/A');" 2>/dev/null || echo "N/A")
             echo "Mutation score: $score" >> "$GITHUB_STEP_SUMMARY"
           fi

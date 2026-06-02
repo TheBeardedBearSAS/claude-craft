@@ -121,9 +121,9 @@ En plus des hooks shell classiques, Claude Code supporte les **prompt-based hook
 
 Le LLM Haiku evalue le contexte et decide si l'action doit etre autorisee ou bloquee, offrant une validation plus intelligente qu'un simple script shell.
 
-### Hook scripts et templates Claude-Craft 8.7.1
+### Hook scripts et templates Claude-Craft 8.8.0
 
-Claude-Craft 8.7.1 fournit des scripts de hooks pre-configures et des templates prets a l'emploi :
+Claude-Craft 8.8.0 fournit des scripts de hooks pre-configures et des templates prets a l'emploi :
 
 **Scripts pre-configures :**
 
@@ -899,7 +899,7 @@ export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 - **Recherche + implementation** : Un agent explore, un autre implemente
 - **Sprint autonome** : Plusieurs stories traitees simultanement
 
-### Claude Opus 4.8 (v2.1.154+)
+### Claude Opus 4.8 (v2.1.159+)
 
 Le modele flagship le plus recent avec des capacites etendues :
 

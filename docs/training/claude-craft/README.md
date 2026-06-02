@@ -1,12 +1,12 @@
-# Formation Claude Code 2.1.154 + Claude-Craft 8.7.1
+# Formation Claude Code 2.1.159 + Claude-Craft 8.8.0
 
 ## Vue d'ensemble
 
-Package de formation pour accompagner des equipes de developpement dans l'adoption de Claude Code 2.1.154 avec le framework Claude-Craft 8.7.1.
+Package de formation pour accompagner des equipes de developpement dans l'adoption de Claude Code 2.1.159 avec le framework Claude-Craft 8.8.0.
 
 **Versions couvertes :**
-- Claude Code : 2.1.154 (Extended Thinking, MCP, sub-agents, permissions, Opus 4.6, Agent Teams, Fast Mode, Auto Mode, Tool Search, 24 hooks)
-- Claude-Craft : 8.7.1 (BMAD v6, Ralph, QA Recette, 70 agents (31 spécialisés + 39 infra), 125 commandes / 15 namespaces, RTK, 5 languages)
+- Claude Code : 2.1.159 (Extended Thinking, MCP, sub-agents, permissions, Opus 4.6, Agent Teams, Fast Mode, Auto Mode, Tool Search, 24 hooks)
+- Claude-Craft : 8.8.0 (BMAD v6, Ralph, QA Recette, 70 agents (31 spécialisés + 39 infra), 125 commandes / 15 namespaces, RTK, 5 languages)
 
 ## Contenu du Package
 
@@ -70,5 +70,5 @@ claude-craft/
 
 **Version** : 4.0.0
 **Date** : Avril 2026
-**Claude Code** : 2.1.154
-**Claude-Craft** : 8.7.1
+**Claude Code** : 2.1.159
+**Claude-Craft** : 8.8.0

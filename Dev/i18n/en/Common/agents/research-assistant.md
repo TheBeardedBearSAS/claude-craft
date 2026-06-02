@@ -2,6 +2,8 @@
 name: research-assistant
 description: Technical research and documentation specialist
 model: haiku
+effort: low
+maxTurns: 4
 memory: user
 tools:
   - Read

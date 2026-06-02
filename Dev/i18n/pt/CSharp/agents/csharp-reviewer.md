@@ -1,7 +1,9 @@
 ---
 name: csharp-reviewer
 description: Especialista em revisao de codigo C# 14 / .NET 10 — Clean Architecture, CQRS, MediatR, EF Core, analise de seguranca
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

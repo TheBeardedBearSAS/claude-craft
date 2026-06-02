@@ -1,7 +1,9 @@
 ---
 name: api-designer
 description: Senior API Designer for REST and GraphQL APIs
-model: opus
+model: sonnet
+effort: medium
+maxTurns: 6
 tools:
   - Read
   - Glob

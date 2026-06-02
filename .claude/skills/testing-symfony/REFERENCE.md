@@ -1,6 +1,6 @@
-# Stratégie de Tests Symfony 8.0 / PHP 8.5 — Référence Complète
+# Stratégie de Tests Symfony 8.1 / PHP 8.5 — Référence Complète
 
-**Versions :** Symfony 8.0+ | PHP 8.5 | Pest 4.5+ | PHPUnit 13+ | Playwright
+**Versions :** Symfony 8.1+ | PHP 8.5 | Pest 4.5+ | PHPUnit 12 | Playwright
 
 ## Configuration Pest 4
 

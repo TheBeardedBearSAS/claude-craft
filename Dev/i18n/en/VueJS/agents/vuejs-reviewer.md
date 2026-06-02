@@ -1,7 +1,9 @@
 ---
 name: vuejs-reviewer
 description: Vue.js 3.5+ and TypeScript code review specialist — Composition API, Pinia, reactivity, performance, composables
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

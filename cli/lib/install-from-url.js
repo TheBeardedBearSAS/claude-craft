@@ -23,6 +23,45 @@ import { runInstallation } from './installer.js';
 
 const SUPPORTED_SCHEMA_VERSIONS = [1];
 
+/** Max number of HTTP redirects to follow (each re-validated against validateUrl). */
+const MAX_REDIRECTS = 5;
+
+/**
+ * SSRF guard: reject hostnames that resolve to private, loopback, link-local or
+ * cloud-metadata addresses. Applied to the https path (the http+localhost dev
+ * escape hatch in validateUrl is handled before this is reached).
+ * Audit 2026-06-01 P1 — `https://169.254.169.254/…` previously passed validateUrl
+ * (it only enforced the scheme), so a redirect or direct URL could hit the cloud
+ * metadata endpoint.
+ * @param {string} hostname
+ * @returns {boolean} true if the host must be blocked
+ */
+export function isBlockedHost(hostname) {
+  const h = hostname.replace(/^\[|\]$/g, '').toLowerCase();
+  // IPv4 literal?
+  const m = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(h);
+  if (m) {
+    const [a, b] = [Number(m[1]), Number(m[2])];
+    if (a === 10) return true; // 10.0.0.0/8 private
+    if (a === 127) return true; // 127.0.0.0/8 loopback
+    if (a === 0) return true; // 0.0.0.0/8
+    if (a === 169 && b === 254) return true; // 169.254.0.0/16 link-local (AWS/GCP/Azure metadata)
+    if (a === 172 && b >= 16 && b <= 31) return true; // 172.16.0.0/12 private
+    if (a === 192 && b === 168) return true; // 192.168.0.0/16 private
+    if (a === 100 && b >= 64 && b <= 127) return true; // 100.64.0.0/10 CGNAT (Alibaba metadata 100.100.100.200)
+    return false;
+  }
+  // IPv6 literal?
+  if (h.includes(':')) {
+    if (h === '::1' || h === '::') return true; // loopback / unspecified
+    if (h.startsWith('fe80')) return true; // link-local
+    if (h.startsWith('fc') || h.startsWith('fd')) return true; // fc00::/7 unique-local
+    if (h.startsWith('fd00:ec2')) return true; // AWS IMDS over IPv6
+    return false;
+  }
+  return false; // regular hostname — DNS rebinding is out of scope here
+}
+
 /**
  * Validate that a URL is well-formed and uses https (http allowed for localhost only).
  * @param {string} url
@@ -36,10 +75,19 @@ export function validateUrl(url) {
   } catch {
     throw new Error(`--from: invalid URL "${url}"`);
   }
-  if (parsed.protocol === 'https:') return parsed;
   const isLocal = parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1' || parsed.hostname === '::1';
+  // Explicit dev escape hatch: plain http only for loopback.
   if (parsed.protocol === 'http:' && isLocal) return parsed;
-  throw new Error(`--from: only https URLs are allowed (got ${parsed.protocol})`);
+  if (parsed.protocol !== 'https:') {
+    throw new Error(`--from: only https URLs are allowed (got ${parsed.protocol})`);
+  }
+  // https path: block SSRF targets (private/loopback/link-local/metadata).
+  if (isBlockedHost(parsed.hostname)) {
+    throw new Error(
+      `--from: refusing to fetch from private/link-local/metadata address "${parsed.hostname}" (SSRF protection)`
+    );
+  }
+  return parsed;
 }
 
 /**
@@ -106,7 +154,26 @@ export async function runInstallFromUrl(url, cli, { CLI_ROOT }, fetchFn = global
 
   let body;
   try {
-    const res = await fetchFn(url, { redirect: 'follow' });
+    // Follow redirects manually, re-validating each hop against validateUrl so a
+    // 3xx Location pointing at a private/metadata address cannot bypass the SSRF
+    // guard (audit 2026-06-01 P1). `redirect: 'manual'` returns the 3xx response.
+    let currentUrl = url;
+    let res;
+    for (let hop = 0; ; hop++) {
+      validateUrl(currentUrl);
+      res = await fetchFn(currentUrl, { redirect: 'manual' });
+      const status = res.status ?? 200;
+      if (status >= 300 && status < 400 && typeof res.headers?.get === 'function') {
+        const loc = res.headers.get('location');
+        if (!loc) break;
+        if (hop >= MAX_REDIRECTS) {
+          throw new Error(`too many redirects (>${MAX_REDIRECTS})`);
+        }
+        currentUrl = new URL(loc, currentUrl).toString();
+        continue;
+      }
+      break;
+    }
     if (!res.ok) {
       throw new Error(`HTTP ${res.status} ${res.statusText}`);
     }

@@ -54,7 +54,7 @@ All content is available in 5 languages:
 
 | Version | Status |
 |---------|--------|
-| **2.1.154** | Recommended (full feature support) |
+| **2.1.159** | Recommended (full feature support) |
 | **2.1.97+** | Minimum supported (CVE-2025-59536 patched) |
 
 ### Optional (Recommended)

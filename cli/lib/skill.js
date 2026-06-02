@@ -66,7 +66,9 @@ export function validateSkillPackageName(pkg) {
  * @returns {string} Absolute path to the installed package root
  */
 function npmInstall(pkg, cwd, { spawn = spawnSync } = {}) {
-  const result = spawn('npm', ['install', '--no-save', '--no-audit', '--no-fund', pkg], {
+  // Audit 2026-06-01 P1 — keep `npm audit` enabled (do NOT pass --no-audit) so CVE
+  // scanning runs on the community package and its transitive dependencies.
+  const result = spawn('npm', ['install', '--no-save', '--no-fund', pkg], {
     cwd,
     stdio: 'inherit',
   });
@@ -124,15 +126,30 @@ export function runSkillAdd(pkg, targetPath, deps = {}) {
   console.log(
     `${c.bold}Installing community skill${c.reset} ${c.cyan}${shortName}${c.reset} ${c.dim}(${pkg})${c.reset}`
   );
+  // Audit 2026-06-01 P1 — community skills are neither signed nor centrally vetted,
+  // and the npm package may run postinstall scripts. Warn the operator explicitly.
+  console.log(
+    `  ${c.yellow}⚠${c.reset}  Les skills communautaires ne sont ni signés ni audités centralement et peuvent exécuter des scripts npm (postinstall). Vérifiez le contenu du package avant de l'utiliser.`
+  );
 
-  const pkgDir = npmInstall(pkg, safeTarget, deps);
-  const destDir = path.join(safeTarget, COMMUNITY_DIR, shortName);
-  const files = copySkillFiles(pkgDir, destDir);
+  // Audit 2026-06-01 P1 — install into a dedicated temp dir under .claude/skills/ (NOT
+  // the project root) so npm never pollutes the user's own node_modules, then clean it
+  // up. We avoid /tmp per project convention.
+  const tmpDir = path.join(safeTarget, COMMUNITY_DIR, `.tmp-install-${shortName}`);
+  fs.mkdirSync(tmpDir, { recursive: true });
+  try {
+    const pkgDir = npmInstall(pkg, tmpDir, deps);
+    const destDir = path.join(safeTarget, COMMUNITY_DIR, shortName);
+    const files = copySkillFiles(pkgDir, destDir);
 
-  console.log(`  ${c.green}✓${c.reset} Installed ${files.length} file(s) into ${c.dim}${destDir}${c.reset}`);
-  console.log(`  ${c.dim}Use in Claude Code: /community-${shortName}${c.reset}\n`);
+    console.log(`  ${c.green}✓${c.reset} Installed ${files.length} file(s) into ${c.dim}${destDir}${c.reset}`);
+    console.log(`  ${c.dim}Use in Claude Code: /community-${shortName}${c.reset}\n`);
 
-  return { shortName, files, destDir };
+    return { shortName, files, destDir };
+  } finally {
+    // Remove the transient install dir (node_modules + downloaded package) regardless of outcome.
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
 }
 
 /**

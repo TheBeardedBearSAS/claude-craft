@@ -17,7 +17,7 @@ Apply multiple layers of security:
 ### Pydantic for Data Validation
 
 ```python
-from pydantic import BaseModel, Field, EmailStr, SecretStr, validator
+from pydantic import BaseModel, Field, EmailStr, SecretStr, field_validator
 from typing import Annotated
 import re
 
@@ -31,7 +31,8 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: SecretStr = Field(min_length=8, max_length=128)
 
-    @validator("password")
+    @field_validator("password")
+    @classmethod
     def validate_password_strength(cls, v: SecretStr) -> SecretStr:
         password = v.get_secret_value()
         if not re.search(r"[A-Z]", password):
@@ -52,7 +53,8 @@ class SearchQuery(BaseModel):
     page: Annotated[int, Field(ge=1, le=1000)] = 1
     limit: Annotated[int, Field(ge=1, le=100)] = 20
 
-    @validator("query")
+    @field_validator("query")
+    @classmethod
     def sanitize_query(cls, v: str) -> str:
         # Remove potentially dangerous characters
         return re.sub(r"[<>\"';]", "", v).strip()

@@ -231,7 +231,7 @@ Run installation scripts directly for more control.
 
 ### Method 4: Manual Installation
 
-> **Note**: As of v3.5, we recommend using the install scripts (Methods 1-3) which automatically configure the TCL (Tiered Context Loading) structure for optimal token usage.
+> **Note**: As of v8.7.1, we recommend using the install scripts (Methods 1-3) which automatically configure the TCL (Tiered Context Loading) structure for optimal token usage.
 
 For manual installation with TCL structure:
 
@@ -265,7 +265,7 @@ The install scripts also generate `CLAUDE.md`, `INDEX.md`, and `context.yaml` au
 
 ## Installation Result
 
-After installation with TCL structure (v3.5+), your project will have:
+After installation with TCL structure (v8.7.1+), your project will have:
 
 ```
 my-project/

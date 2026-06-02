@@ -22,7 +22,7 @@ L'utilisation de **Docker est OBLIGATOIRE** pour tout le projet Atoll Tourisme. 
 | Docker Engine | 29.4.0 | BuildKit par défaut, SBOM natif |
 | Docker Compose | v5.0.0 "Mont Blanc" | Champ `version:` obsolète |
 | FrankenPHP | 1.12.1 | PHP 8.5, Caddy 2.11.2, Worker mode (2-3× gains) |
-| PgBouncer | 1.25.1 | Prepared statements natifs (1.21+ requis) |
+| PgBouncer | 1.25.2 | Prepared statements natifs (1.21+ requis ; CVE-2026-6664/6667 patchées) |
 
 **FrankenPHP** : Alternative moderne à PHP-FPM pour Symfony (Worker mode, HTTP/3, max_requests anti-leak).  
 **Sources** : https://frankenphp.dev/docs/worker/ | https://www.postgresql.org/about/news/pgbouncer-1210-released-now-with-prepared-statements-2735/
@@ -412,7 +412,7 @@ docker run --rm -i hadolint/hadolint:v2.12.0 < Dockerfile
 
 # Métadonnées obligatoires
 # hadolint ignore=DL3006
-FROM php:8.2-fpm-alpine AS base
+FROM php:8.5-fpm-alpine AS base
 
 LABEL author="The Bearded CTO"
 LABEL version="1.0.0"
@@ -491,7 +491,7 @@ CMD ["php-fpm"]
 ```dockerfile
 # Dockerfile.dev - Développement - Atoll Tourisme
 
-FROM php:8.2-fpm-alpine
+FROM php:8.5-fpm-alpine
 
 LABEL author="The Bearded CTO"
 LABEL version="1.0.0-dev"
@@ -569,7 +569,7 @@ CMD ["php-fpm"]
 
 | Règle | Description | Application |
 |-------|-------------|-------------|
-| **DL3006** | Always tag image version | `php:8.2-fpm-alpine` |
+| **DL3006** | Always tag image version | `php:8.5-fpm-alpine` |
 | **DL3008** | Pin apt/apk packages | Extensions PHP versionnées |
 | **DL3009** | Delete apt cache | `rm -rf /tmp/pear` |
 | **DL3013** | Pin pip versions | N/A (pas Python) |

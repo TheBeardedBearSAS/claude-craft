@@ -69,7 +69,7 @@ Always use Docker for commands to abstract from local environment.
 ```markdown
 # Claude-Craft - {{PROJECT_NAME}}
 
-**Stack**: PHP 8.5, Symfony 8.0, Clean Architecture, DDD, Doctrine ORM
+**Stack**: PHP 8.5, Symfony 8.1, Clean Architecture, DDD, Doctrine ORM
 
 ## Quick Reference
 
@@ -96,7 +96,7 @@ Always use Docker for commands to abstract from local environment.
 ```markdown
 # Claude-Craft - {{PROJECT_NAME}}
 
-**Stack**: Flutter 3.41+, Dart 3.11+, Clean Architecture, Riverpod/BLoC
+**Stack**: Flutter 3.44+, Dart 3.12+, Clean Architecture, Riverpod/BLoC
 
 ## Quick Reference
 

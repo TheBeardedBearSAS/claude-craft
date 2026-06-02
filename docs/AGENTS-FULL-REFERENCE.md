@@ -16,7 +16,7 @@
 
 ### `@angular-reviewer`
 
-Angular 20 LTS (ou 21) and TypeScript code review specialist — Signals, standalone components, RxJS, performance, zoneless change detection, httpResource
+Angular 21 (ou 22 en RC) and TypeScript code review specialist — Signals, standalone components, RxJS, performance, zoneless change detection, httpResource
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 
