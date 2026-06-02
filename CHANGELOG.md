@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.8.1] - 2026-06-02
+
+Clôture des items P2 différés de l'audit 2026-06-01 + complétion de la distribution i18n. PATCH release. Backwards compatible.
+
+### Fixed
+
+- **Reliability — `sprint-cache`** : la branche de propagation d'erreur non-ENOENT (`throw err`) est désormais couverte par un test (lecture d'un répertoire → `EISDIR`).
+- **Reliability — `file-watcher`** : remplacement des `sleep` + assertion par `vi.waitFor` sur les assertions positives (élimine la flakiness sur les runners CI partagés).
+- **Build — générateur de références** : `scanI18nCommands` prend désormais en charge le layout plat `<root>/commands/*.md` (cas `Project/i18n/en/commands/`), ajoutant le namespace `/project:` à `COMMANDS-FULL-REFERENCE.md` (185 → 219 commandes recensées).
+
+### Security
+
+- **Kanban — headers HTTP** : ajout du middleware Hono `secureHeaders()` (X-Content-Type-Options, X-Frame-Options, Cross-Origin-Opener-Policy, Referrer-Policy) sur toutes les réponses du serveur Kanban local.
+- **Ralph — `--story` / `yq`** : validation du charset de l'identifiant de story + passage de `STORY_ID` via `yq env()` au lieu d'une interpolation shell (prévention d'injection dans la requête yq).
+- **`SECURITY.md`** : table des versions supportées rafraîchie (8.8.x / 8.7.x) et version minimale de Claude Code recommandée portée à 2.1.159+.
+
+### Added
+
+- **Distribution i18n des agents** : les 8 agents transverses (`security-auditor`, `data-analyst`, `chaos-engineer`, `cost-optimizer`, `devex-engineer`, `migration-specialist`, `mlops-engineer`, `observability-engineer`) — déjà comptés dans les 70 agents documentés mais absents de `Dev/i18n/` — sont désormais livrés dans les 5 langues (en, fr, es, de, pt), rétablissant la parité de distribution.
+
+### Changed
+
+- **Dette de traduction i18n** : complétion de traductions partielles (fichiers `translation_status: pending` et fichiers sous le seuil de parité de taille) dans es, de, fr, pt.
+
 ## [8.8.0] - 2026-06-01
 
 Audit adversarial 2026-06-01 (équipe multi-agents + devil's advocates, validation Context7/web) — 65 findings confirmés (5 P0, 32 P1, 28 P2). MINOR release. Backwards compatible. Détails : `audit/2026-06-01/`.
