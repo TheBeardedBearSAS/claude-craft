@@ -17,7 +17,7 @@ Este guia acompanha você ao longo de todo o ciclo de desenvolvimento:
 7. **Deploy** - Entregar em produção
 
 **Pré-requisitos:**
-- Claude Craft v8.8.2 instalado no seu projeto
+- Claude Craft v8.9.0 instalado no seu projeto
 - Claude Code v2.1.159 (recomendado) ou v2.1.97+ (mínimo, CVE-2025-59536 corrigido)
 - Conhecimento básico da stack de tecnologia escolhida
 

@@ -8,6 +8,7 @@ MCP is an open standard that enables AI models to connect to external tools and 
 - [Configuration](#configuration)
 - [OAuth Client Credentials](#oauth-client-credentials)
 - [Popular MCP Servers](#popular-mcp-servers)
+- [Token-Optimization MCP Servers](#token-optimization-mcp-servers)
 - [Context7 - Documentation Server](#context7---documentation-server)
 - [Custom MCP Servers](#custom-mcp-servers)
 - [Tool Search — Lazy Loading](#tool-search--lazy-loading-v2180)
@@ -208,6 +209,49 @@ Browser automation and web scraping.
   }
 }
 ```
+
+---
+
+## Token-Optimization MCP Servers
+
+These community MCP servers reduce token usage on large codebases and reviews. They complement Claude
+Craft's native stack (RTK, `context: fork` skills) rather than replacing it. Full evaluation, licenses,
+and the rest of the ecosystem: [`docs/ECOSYSTEM.md`](ECOSYSTEM.md).
+
+### code-review-graph
+
+Tree-sitter/AST code graph (in SQLite) that lets the model read only the blast radius of a change —
+reported 38×–528× token reductions on large repos. Pairs with `/qa:*`, `@security-auditor` and the
+`@{tech}-reviewer` agents.
+
+```json
+{
+  "mcpServers": {
+    "code-review-graph": {
+      "command": "npx",
+      "args": ["-y", "code-review-graph"]
+    }
+  }
+}
+```
+
+### token-savior
+
+Symbol indexing (functions, classes, imports, call graph) plus Bash output compaction up to −80% via
+hooks. A good RTK alternative when you prefer an MCP server to a Rust binary (MIT-licensed).
+
+```json
+{
+  "mcpServers": {
+    "token-savior": {
+      "command": "npx",
+      "args": ["-y", "token-savior"]
+    }
+  }
+}
+```
+
+> Audit and pin any third-party MCP server before enabling it — see [Security](#security).
 
 ---
 

@@ -734,6 +734,23 @@ Los archivos se fusionan en orden alfabetico, permitiendo a los equipos superpon
 
 ---
 
+## Herramientas de terceros del ecosistema (tokens y contexto)
+
+Además de RTK y los hooks nativos, el ecosistema de Claude Code ofrece herramientas que cubren ángulos no tratados de forma nativa. Ninguna se incluye en Claude Craft: se documentan y se recomiendan.
+
+| Herramienta | Licencia | Ángulo | Rec |
+|-------------|----------|--------|-----|
+| **caveman** | MIT | Compresión de respuestas (output) ~65 % | ✅ Integrar |
+| **code-review-graph** | MIT | Grafo AST, lectura del blast radius (−38× a −528×) | ✅ Integrar |
+| **token-savior** | MIT | Índice simbólico + compactación de Bash (−80 %) | ✅ Integrar |
+| **claude-token-efficient** | MIT | Reglas CLAUDE.md anti-verbosidad (~63 % output) | ✅ Integrar |
+| **context-mode** | ELv2 | Sandbox de outputs, continuidad tras compactación | 🔶 Referenciar (licencia) |
+| **claude-context** | MIT | Búsqueda semántica (requiere base vectorial) | 🔶 Referenciar (infra) |
+
+> Catálogo completo, licencias y recetas de activación: `@docs/ECOSYSTEM.md`. Auditar y fijar la versión de cualquier herramienta de terceros antes de instalarla (regla 11).
+
+---
+
 ## Recursos
 
 - **Anthropic Best Practices:** [code.claude.com](https://code.claude.com/docs/en/overview)

@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.8.2 | **Languages:** en, fr, es, de, pt
+**Version:** 8.9.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 11 technology stacks, 31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, and BMAD v6 project management.
 
@@ -112,7 +112,7 @@ docker compose exec app ./vendor/bin/phpunit
 
 ## Skills
 
-`/solid-principles`, `/testing`, `/security`, `/git-workflow`, `/documentation`, `/kiss-dry-yagni`, `/workflow-analysis`, `/parallel-worktrees`, `/atomic-tasks`, `/design-md-convention`, `/architect`, `/debug-methodical`, `/socratic-brainstorm` — loaded on demand from `.claude/skills/`
+`/solid-principles`, `/testing`, `/security`, `/git-workflow`, `/documentation`, `/kiss-dry-yagni`, `/workflow-analysis`, `/parallel-worktrees`, `/atomic-tasks`, `/design-md-convention`, `/architect`, `/debug-methodical`, `/socratic-brainstorm`, `/ecosystem-tools` — loaded on demand from `.claude/skills/`
 
 ## AI-First Development (Karpathy)
 
@@ -135,6 +135,7 @@ Projects with UI should include a root `DESIGN.md` file (template: `.claude/temp
 | [Agents](../docs/AGENTS.md) | All agents |
 | [FAQ](../docs/FAQ.md) | Common questions |
 | [Troubleshooting](../docs/TROUBLESHOOTING.md) | Problem solving |
+| [Ecosystem](../docs/ECOSYSTEM.md) | Third-party token/context/review tools |
 
 ---
 

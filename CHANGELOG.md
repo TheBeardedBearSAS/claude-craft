@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.9.0] - 2026-06-02
+
+Intégration curatoriale de l'écosystème d'outils tiers Claude Code (optimisation de tokens, gestion de contexte, code review). MINOR release. Backwards compatible. Aucun code tiers n'est embarqué : les outils sont documentés, recommandés et accompagnés de leurs recettes d'activation et de leurs contraintes de licence.
+
+### Added
+
+- **Catalogue `docs/ECOSYSTEM.md`** : évaluation de 9 dépôts + 1 roundup (camilleroux.com 2026) avec recommandation INTÉGRER / RÉFÉRENCER / IGNORER, licences, type (skill/MCP/CLI/CLAUDE.md) et recettes d'activation. Retenus (MIT) : **caveman** (compression output ~65 %), **code-review-graph** (graphe AST, lecture du blast radius), **token-savior** (index symbolique + compaction Bash, alternative RTK), **claude-token-efficient** (CLAUDE.md anti-verbosité). Référencés avec disclaimer de licence : **context-mode** (ELv2), **token-optimizer**/alexgreensh (PolyForm Noncommercial), **claude-context**/zilliztech (MIT mais dépendance Milvus/Zilliz). Écartés : **claude-token-optimizer**/nadimtuhin, **token-optimizer-mcp**/ooples.
+- **`docs/MCP.md` — section « Token-Optimization MCP Servers »** : configuration `.mcp.json` prête à l'emploi pour `code-review-graph` et `token-savior`, avec rappel d'audit/pinning (lien vers la section Security).
+- **Skill `ecosystem-tools`** : skill commun (`.claude/skills/` + distribution `Dev/i18n/base/Common/skills/`) pointant vers le catalogue, déclenché lors du choix d'un outil tiers token/contexte/review.
+- **Règle 12 (`context-management`) — section « Outils tiers de l'écosystème »** : mini-tableau + pointeur vers `docs/ECOSYSTEM.md`, distribué dans les 5 langues (`.claude/rules/` + `Dev/i18n/{en,fr,es,de,pt}`).
+- **Liens de découverte** : `README.md`, `.claude/CLAUDE.md` (table Documentation) et `docs/RTK-ANALYSIS.md` (« Voir aussi ») pointent désormais vers le catalogue.
+
 ## [8.8.2] - 2026-06-02
 
 Résorption complète de la dette de traduction i18n résiduelle de l'audit 2026-06-01. PATCH release. Backwards compatible.
