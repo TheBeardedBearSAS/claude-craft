@@ -1,17 +1,17 @@
 # Project Context
 
-**Version Angular recommandée :** Angular 20 LTS (production) / Angular 21 (latest)
+**Version Angular recommandée :** Angular 21 (latest stable, LTS) / Angular 22 (en RC)
 
 ## Project Information
 
 - **Name**: {{PROJECT_NAME}}
 - **Type**: Angular Application
-- **Angular Version**: {{ANGULAR_VERSION}} (recommandé : 20 LTS ou 21)
+- **Angular Version**: {{ANGULAR_VERSION}} (recommandé : 21 LTS ou 22)
 - **Description**: {{PROJECT_DESCRIPTION}}
 
 ## Tech Stack
 
-- **Framework**: Angular {{ANGULAR_VERSION}} (20 LTS ou 21)
+- **Framework**: Angular {{ANGULAR_VERSION}} (21 LTS ou 22)
 - **Language**: TypeScript 5.x
 - **Styling**: {{STYLING}} (SCSS/Tailwind/Angular Material)
 - **State Management**: {{STATE_MANAGEMENT}} (Signals/NgRx/NGXS)

@@ -171,5 +171,5 @@ docker compose exec app \
 
 ---
 
-**Formation Claude Code 2.1.154 + Claude-Craft 8.7.1**
+**Formation Claude Code 2.1.159 + Claude-Craft 8.8.0**
 **The Bearded CTO - 2026**

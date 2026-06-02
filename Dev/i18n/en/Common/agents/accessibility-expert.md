@@ -2,6 +2,8 @@
 name: accessibility-expert
 description: WCAG 2.2 AAA accessibility specialist
 model: haiku
+effort: low
+maxTurns: 4
 tools:
   - Read
   - Glob

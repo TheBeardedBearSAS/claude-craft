@@ -1,9 +1,9 @@
-# Claude Code Compatibility — Claude Craft v8.7.1
+# Claude Code Compatibility — Claude Craft v8.8.0
 
 **Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
-**Recommended Version:** 2.1.154 (Opus 4.8 + Dynamic Workflows, May 28, 2026)
-**Tested up to:** 2.1.154 (May 28, 2026)
-**Last Updated:** 2026-05-29
+**Recommended Version:** 2.1.159 (Opus 4.8 + Dynamic Workflows, May 31, 2026)
+**Tested up to:** 2.1.159 (May 31, 2026)
+**Last Updated:** 2026-06-01
 
 ---
 
@@ -26,11 +26,12 @@
 | Requirement | Version | Notes |
 |-------------|---------|-------|
 | **Minimum** | 2.1.97 | Security baseline — CVE-2025-59536 patched |
-| **Recommended** | 2.1.118 | Full feature set, forked subagents (activated), native CLI binary, 10 new env vars |
+| **Recommended** | 2.1.159 | Full feature set, Opus 4.8 + Dynamic Workflows, forked subagents (activated), native CLI binary |
 | **MCP + Hooks production** | 2.1.97+ | Mandatory for secure MCP usage |
 | **Agent Teams** | 2.1.32+ (experimental) | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
 | **Auto Mode** | 2.1.94+ | Team plan required |
 | **Opus 4.7** | 2.1.111+ | xhigh effort, adaptive thinking |
+| **Opus 4.8** | 2.1.154+ | Flagship (28 mai 2026), high effort par défaut, fast mode, Dynamic Workflows |
 | **Forked subagents** | 2.1.117 | `CLAUDE_CODE_FORK_SUBAGENT=1` |
 
 ---
@@ -127,7 +128,7 @@ Statut d'adoption des 15 principales features Claude Code 2.1.x dans Claude Craf
 | `/proactive` alias | 2.1.105+ | **Adopted** | Alias pour `/loop` |
 | Push Notifications | 2.1.110+ | **Adopted** | Intégré — alertes fin de tâche longue (ralph-run) ; version exacte confirmée : 2.1.110 |
 | Forked Subagents | 2.1.117 | **Adopted** | `CLAUDE_CODE_FORK_SUBAGENT=1` activé dans setup-rtk (audit 2026-05-18 QW-06) |
-| Skill `context: fork` | 2.1.105+ | **Adopted** | 15 skills lourds utilisent `context: fork` (cf. rules/12-context-management.md) |
+| Skill `context: fork` | 2.1.105+ | **Adopted** | 17 skills lourds utilisent `context: fork` (cf. rules/12-context-management.md) |
 
 **Légende :**
 - **Adopted** : Intégré et documenté dans Claude Craft
@@ -343,6 +344,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | **Dynamic Workflows** | Demander à Claude de créer un workflow qui orchestre **des dizaines à des centaines d'agents** en arrière-plan (cap 1000 subagents). Visible via `/workflows` | **NOT INTEGRATED** — P1 v8.8 : complète/remplace en profondeur les patterns `/team:*` et `ralph-run` (orchestration déterministe fan-out + vérification adversariale) |
 | Fast mode moins cher sur Opus 4.8 | 2× le tarif standard pour 2,5× la vitesse | **N/A** (user pricing) |
 | `effort: max` | 5ᵉ niveau d'effort (au-dessus de `xhigh`), disponible sur Opus 4.8 | **Documented** — voir docs/AGENTS.md tableau effort |
+| `/effort ultracode` | Nouveau palier effort introduit avec Dynamic Workflows / Opus 4.8 — mode optimisé débit code (vitesse maximale, idéal pipelines automatisés) ; équivalent `effort: max` en CLI | **Documented** — documenter dans `rules/12-context-management.md` tableau efforts |
 
 > **Note Opus 4.8 :** L'ID de modèle est `claude-opus-4-8`. Pour les agents critiques (audits sécurité, migrations, décisions schéma, boucles autonomes), `model: opus` + `effort: xhigh` route désormais vers Opus 4.8. Le `model: sonnet` des reviewers tech reste optimal pour le ratio coût/qualité (routing économe).
 
@@ -455,6 +457,15 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | 2.1.116 | 2026-04-20 | `/resume` 67% faster, thinking spinner |
 | 2.1.117 | 2026-04-22 | Forked subagents, concurrent MCP, native bfs/ugrep |
 | **2.1.118** | **2026-04-26** | **10 nouvelles env vars (FORK_SUBAGENT, SUBAGENT_MODEL, OTEL_*…) — RECOMMANDÉ** |
+| 2.1.145 | 2026-05-19 | `claude agents --json`, spans OTEL agent+parent, Stop hooks enrichis |
+| 2.1.147 | 2026-05-22 | `/code-review` (rename `/simplify`), `/code-review --fix`, sessions background |
+| 2.1.149 | 2026-05-25 | `/usage` — consommation tokens/coût session courante |
+| 2.1.152 | 2026-05-27 | `disallowed-tools` kebab-case frontmatter, `/code-review --fix` GA |
+| **2.1.154** | **2026-05-28** | **Opus 4.8 (`claude-opus-4-8`), Dynamic Workflows, `effort: max`, `/effort ultracode`** |
+| 2.1.155 | 2026-05-29 | Correctifs stabilité Dynamic Workflows |
+| 2.1.157 | 2026-05-30 | Auto-load des plugins `.claude/skills/` sans marketplace — `EnterWorktree` (switch worktree en cours de session) |
+| 2.1.158 | 2026-05-30 | `CLAUDE_CODE_ENABLE_AUTO_MODE=1` — Auto Mode sur Bedrock/Vertex/Foundry |
+| **2.1.159** | **2026-05-31** | **Correctifs finaux + version stable recommandée** |
 
 ---
 

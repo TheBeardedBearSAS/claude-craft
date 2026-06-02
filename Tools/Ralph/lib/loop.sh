@@ -18,19 +18,23 @@ invoke_claude() {
     local prompt="$2"
     local timeout="$3"
 
-    # Build the command
-    local cmd="$CLAUDE_COMMAND"
+    # Build the command as an array (audit 2026-06-01 P1, CWE-78): an unquoted
+    # string-valued $cmd would re-word-split and glob-expand CLAUDE_COMMAND on every
+    # invocation. Split CLAUDE_COMMAND into argv tokens ONCE here, then always expand
+    # with "${cmd[@]}".
+    local -a cmd
+    IFS=' ' read -r -a cmd <<< "${CLAUDE_COMMAND:-claude}"
 
     # Add continue flag if we have a session
     if [[ -n "$session_id" ]]; then
-        cmd="$cmd --continue"
+        cmd+=(--continue)
     fi
 
     # Add prompt
-    cmd="$cmd -p"
+    cmd+=(-p)
 
     # Log the invocation
-    log_session "$session_id" "INFO" "Invoking Claude: $cmd \"${prompt:0:100}...\""
+    log_session "$session_id" "INFO" "Invoking Claude: ${cmd[*]} \"${prompt:0:100}...\""
 
     # Execute with timeout
     local timeout_sec=$((timeout / 1000))
@@ -39,7 +43,7 @@ invoke_claude() {
 
     # Use timeout command if available
     if command -v timeout &> /dev/null; then
-        output=$(timeout "${timeout_sec}s" $cmd "$prompt" 2>&1)
+        output=$(timeout "${timeout_sec}s" "${cmd[@]}" "$prompt" 2>&1)
         exit_code=$?
 
         # Check for timeout (exit code 124)
@@ -49,7 +53,7 @@ invoke_claude() {
         fi
     else
         # Fallback without timeout
-        output=$($cmd "$prompt" 2>&1)
+        output=$("${cmd[@]}" "$prompt" 2>&1)
         exit_code=$?
     fi
 

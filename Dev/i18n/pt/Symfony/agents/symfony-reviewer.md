@@ -1,7 +1,9 @@
 ---
 name: symfony-reviewer
-description: Especialista em revisao de codigo Symfony 8 / PHP 8.5 — DDD, Doctrine, CQRS, API Platform
-model: sonnet
+description: Especialista em revisao de codigo Symfony 8.1 / PHP 8.5 — DDD, Doctrine, CQRS, API Platform
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

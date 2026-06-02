@@ -235,7 +235,7 @@ PHPStan level >= 8 ?
         NON --> MAJEUR : typage incomplet
 ```
 
-### Violations specifiques PHP 8.5 / Laravel 12
+### Violations specifiques PHP 8.5 / Laravel 13
 
 ```php
 // MAUVAIS : pas de constructor property promotion
@@ -343,7 +343,7 @@ L'Action/Feature a-t-elle des tests ?
         OUI --> OK si Actions testees unitairement
 ```
 
-### Principes de test Laravel 12 avec Pest PHP
+### Principes de test Laravel 13 avec Pest PHP
 
 **Feature test (HTTP) :**
 ```php

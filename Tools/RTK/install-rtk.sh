@@ -80,10 +80,15 @@ RTK_MD="$CLAUDE_DIR/RTK.md"
 RTK_HOOK_MATCHER="Bash"
 RTK_HOOK_COMMAND="~/.claude/hooks/rtk-rewrite.sh"
 
-# RTK official installer checksum (rtk-ai/rtk @ master/install.sh)
-# To update: curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | sha256sum
-# Last updated: 2026-04-15
-RTK_INSTALL_SHA256="9989e60e33a353e9e6802fab1fd410b96d1dd228b34e52402c32f3c8c2dd8c66"
+# RTK official installer — PINNED to an immutable commit (audit 2026-06-01 P1).
+# Pinning to a mutable branch (master) guaranteed checksum drift, which pushed users to
+# RTK_SKIP_CHECKSUM=1 and neutralised supply-chain protection. The URL below is pinned to
+# a commit so the SHA can never drift; bump both together when intentionally upgrading.
+# To update: set RTK_INSTALL_COMMIT to the new commit, then
+#   curl -fsSL "https://raw.githubusercontent.com/rtk-ai/rtk/$RTK_INSTALL_COMMIT/install.sh" | sha256sum
+# Last updated: 2026-06-01
+RTK_INSTALL_COMMIT="e8271848d7d6b0d34c2ba5c2c3783ddc48247546"
+RTK_INSTALL_SHA256="ab22d109f920db7d931ef6aa97d9460d93f41d296981db8446afed96ea9661e5"
 
 # ---------------------------------------------------------------------------
 # check_prerequisites — verify jq and curl are available
@@ -151,7 +156,7 @@ install_rtk_binary() {
 
     # Download installer
     print_info "Downloading RTK installer..."
-    if ! curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh -o "$tmp_install"; then
+    if ! curl -fsSL "https://raw.githubusercontent.com/rtk-ai/rtk/${RTK_INSTALL_COMMIT}/install.sh" -o "$tmp_install"; then
         print_error "Failed to download RTK installer"
         exit 1
     fi

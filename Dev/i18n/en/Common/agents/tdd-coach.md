@@ -2,6 +2,8 @@
 name: tdd-coach
 description: Test-Driven Development coach and mentor
 model: opus
+effort: high
+maxTurns: 8
 tools:
   - Read
   - Glob

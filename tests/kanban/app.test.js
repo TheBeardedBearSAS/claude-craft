@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, vi } from 'vitest';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Repository } from '../../cli/kanban/server/services/repository.js';
 import { createApp } from '../../cli/kanban/server/app.js';
+import { EventBus } from '../../cli/kanban/server/services/event-bus.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FIXTURE = path.resolve(__dirname, '../fixtures/project-management');
@@ -64,6 +65,40 @@ describe('GET /api/stories', () => {
     const { stories } = await r.json();
     expect(stories.length).toBe(1);
     expect(stories[0].id).toBe('US-001');
+  });
+});
+
+describe('GET /api/events (SSE)', () => {
+  it('returns 501 when no eventBus is wired', async () => {
+    // default `app` is built without an eventBus
+    const r = await req('GET', '/api/events');
+    expect(r.status).toBe(501);
+    const j = await r.json();
+    expect(j.error).toBe('events_disabled');
+  });
+
+  it('streams a published event over SSE when an eventBus is wired', async () => {
+    const bus = new EventBus();
+    const appWithBus = createApp({ repository: repo, port: PORT + 1, eventBus: bus });
+    const r = await appWithBus.request('/api/events');
+    expect(r.status).toBe(200);
+    expect(r.headers.get('content-type')).toContain('text/event-stream');
+
+    const reader = r.body.getReader();
+    const decoder = new TextDecoder();
+    // Pulling the stream runs the SSE callback, which registers the subscriber.
+    const firstChunk = reader.read();
+    // Robust wiring check (no fixed sleep — audit 2026-06-01 anti-flaky): wait until
+    // the subscriber is registered, then publish.
+    await vi.waitFor(() => expect(bus.size).toBeGreaterThan(0), { timeout: 2000, interval: 20 });
+    bus.publish('story.updated', { id: 'US-001' });
+
+    const { value } = await firstChunk;
+    const text = decoder.decode(value);
+    expect(text).toContain('story.updated');
+    expect(text).toContain('US-001');
+
+    await reader.cancel();
   });
 });
 

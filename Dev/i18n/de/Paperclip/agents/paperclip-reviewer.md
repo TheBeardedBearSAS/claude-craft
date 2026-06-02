@@ -1,7 +1,9 @@
 ---
 name: paperclip-reviewer
 description: Paperclip-Code-Review-Spezialist — Two-Layer-Architektur, Adapter-Vertrag, Governance-Integrität, TypeScript-Strenge
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

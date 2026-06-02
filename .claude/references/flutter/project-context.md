@@ -7,8 +7,8 @@
 **Stack technologique** : {{TECH_STACK}}
 
 **Versions requises (2026)** :
-- **Flutter**: 3.38.x+ (WebAssembly stable, hot reload web)
-- **Dart**: 3.10.x+ (dot shorthands, enhanced patterns)
+- **Flutter**: 3.44.x+ (WebAssembly stable, hot reload web)
+- **Dart**: 3.12.x+ (dot shorthands, enhanced patterns)
 - **DevTools**: 2.40.x+
 
 **Description** :
@@ -55,7 +55,7 @@ lib/
 **Justification** :
 [Expliquer pourquoi ce pattern a été choisi pour ce projet]
 
-### Nouvelles Features Flutter 3.41+ / Dart 3.11+
+### Nouvelles Features Flutter 3.44+ / Dart 3.12+
 
 #### WebAssembly (Wasm) - 2-3x plus rapide
 ```dart
@@ -551,8 +551,8 @@ class AuthService {
 
 | Composant | Version Minimale | Notes |
 |-----------|-----------------|-------|
-| Flutter | 3.38.6+ | WebAssembly stable, MCP |
-| Dart | 3.10+ | Dot shorthands |
+| Flutter | 3.44+ | WebAssembly stable, MCP |
+| Dart | 3.12+ | Dot shorthands |
 | Android SDK | 34+ | Android 14 |
 | iOS | 15.0+ | Swift 6.0 interop |
 | macOS | 12.0+ | Apple Silicon natif |

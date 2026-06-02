@@ -98,7 +98,7 @@ Les sous-agents (Task tool) ont leur propre fenetre de contexte, evitant de poll
 
 **Agent frontmatter (v2.1.78+):** Les agents personnalises supportent `effort`, `maxTurns`, `disallowedTools` pour optimiser les couts et le scope.
 
-**Skill `context: fork` (v2.1.105+):** Les 15 skills lourds (>100 lignes) de Claude Craft utilisent `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 8 000-15 000 tokens par session de 4h. Liste : `architect`, `debug-methodical`, `atomic-tasks`, `socratic-brainstorm`, `architecture-clean-ddd`, `parallel-worktrees`, `event-driven`, `cqrs`, `async`, `multitenant`, `testing`, `testing-symfony`, `testing-python`, `testing-react`, `design-md-convention`.
+**Skill `context: fork` (v2.1.105+):** Les 17 skills lourds (>100 lignes) de Claude Craft utilisent `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 8 000-15 000 tokens par session de 4h. Liste : `architect`, `debug-methodical`, `atomic-tasks`, `socratic-brainstorm`, `architecture-clean-ddd`, `parallel-worktrees`, `event-driven`, `cqrs`, `async`, `multitenant`, `testing`, `testing-symfony`, `testing-python`, `testing-react`, `testing-flutter`, `testing-reactnative`, `design-md-convention`.
 
 ---
 
@@ -155,8 +155,9 @@ La status line affiche le pourcentage de contexte utilise.
 |----------|--------|-------|
 | `/effort low` | Haiku 4.5 | Taches simples, lookups, classification |
 | `/effort medium` | Sonnet 4.6 | Implementation standard |
-| `/effort high` | Opus 4.7 | Raisonnement complexe, architecture |
-| `/effort xhigh` | Opus 4.7 (extended thinking, v2.1.111+) | Decisions critiques, migrations complexes, ADR |
+| `/effort high` | Opus 4.8 | Raisonnement complexe, architecture |
+| `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | Decisions critiques, migrations complexes, ADR |
+| `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | Mode debit code maximal — pipelines automatises, generation massive |
 
 **Alerte d'inactivite** (v2.1.84+): Apres 75+ minutes, Claude suggere `/clear`.
 
@@ -264,7 +265,7 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 |----------|--------|-------|
 | `/model haiku` | Haiku 4.5 | Taches simples, classification |
 | `/model sonnet` | Sonnet 4.6 | Taches standard, implementation |
-| `/model opus` | Opus 4.7 | Raisonnement complexe, architecture |
+| `/model opus` | Opus 4.8 | Raisonnement complexe, architecture |
 
 ---
 

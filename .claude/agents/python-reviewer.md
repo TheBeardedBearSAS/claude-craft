@@ -518,7 +518,7 @@ async def handle_error(request, exc):
 ## Format de rapport d'audit
 
 ```markdown
-# Rapport d'audit Python 3.13+ / FastAPI
+# Rapport d'audit Python 3.14+ / FastAPI
 
 ## Projet : [Nom du projet]
 **Date :** [Date]

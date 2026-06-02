@@ -2,6 +2,8 @@
 name: ralph-conductor
 description: Orquesta sesiones Ralph Wiggum v2.0 con validacion DoD adaptativa
 model: opus
+effort: xhigh
+maxTurns: 10
 memory: user
 translation_status: pending
 ---

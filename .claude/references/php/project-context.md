@@ -224,7 +224,7 @@ MESSENGER_TRANSPORT_DSN={{MESSENGER_DSN}}
 ### Production
 ```json
 {
-  "php": ">=8.4",
+  "php": ">=8.5",
   "{{FRAMEWORK_PACKAGE}}": "{{FRAMEWORK_VERSION}}",
   {{DEPENDENCIES}}
 }
@@ -234,7 +234,7 @@ MESSENGER_TRANSPORT_DSN={{MESSENGER_DSN}}
 ```json
 {
   "phpstan/phpstan": "^2.0",
-  "phpunit/phpunit": "^11.0",
+  "phpunit/phpunit": "^12.0",
   "friendsofphp/php-cs-fixer": "^3.0",
   {{DEV_DEPENDENCIES}}
 }

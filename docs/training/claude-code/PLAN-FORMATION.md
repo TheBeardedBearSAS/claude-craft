@@ -1,9 +1,9 @@
-# Plan de Formation : Claude Code 2.1.154 — Maîtriser l'Agent de Développement
+# Plan de Formation : Claude Code 2.1.159 — Maîtriser l'Agent de Développement
 
 ## Contexte de Formation
 
 - **Public** : Équipe de développeurs
-- **Objectif** : Maîtrise de Claude Code 2.1.154 comme agent de développement
+- **Objectif** : Maîtrise de Claude Code 2.1.159 comme agent de développement
 - **Cas d'usage** : Tout projet logiciel, toute stack technologique
 - **Format** : 2 jours (14h/groupe), max 5 stagiaires/groupe
 - **Approche** : Progressive — du guidé vers l'autonome
@@ -12,8 +12,8 @@
 
 | Composant | Version | Nouveautés clés |
 |-----------|---------|-----------------|
-| Claude Code | 2.1.154 | Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Sonnet 4.6/Opus 4.8, Opus 4.6 (Fast Mode), Agent Teams, 24 Hooks, Auto Mode, Tool Search, Agent Frontmatter, Subprocess Sandboxing, Native CLI binary, Forked subagents, /ultrareview, /tui, /btw, /hooks, /reload-plugins, /effort slider |
-| Formation | 3.0.0 | Mise a jour v2.1.45 -> v2.1.154 (Opus 4.8) |
+| Claude Code | 2.1.159 | Adaptive Thinking, MCP, Sub-agents, Permissions 3-tier, Sonnet 4.6/Opus 4.8, Opus 4.6 (Fast Mode), Agent Teams, 24 Hooks, Auto Mode, Tool Search, Agent Frontmatter, Subprocess Sandboxing, Native CLI binary, Forked subagents, /ultrareview, /tui, /btw, /hooks, /reload-plugins, /effort slider |
+| Formation | 3.0.0 | Mise a jour v2.1.45 -> v2.1.159 (Opus 4.8) |
 
 ---
 
@@ -61,7 +61,7 @@
 2. **Installation** (20min)
    - Installation native (recommandé) : Homebrew, curl, WinGet
    - CLI via npm (fallback, deprecié) : `npm install -g @anthropic-ai/claude-code`
-   - Vérification : `claude --version` (2.1.154+)
+   - Vérification : `claude --version` (2.1.159+)
    - Desktop app : téléchargement et configuration
    - Web interface : connexion sur claude.ai/code
    - VS Code extension : installation depuis le marketplace
@@ -145,7 +145,7 @@
      - Instructions d'équipe, commitées dans Git
      - Stack technologique, conventions de commit
      - Architecture du projet
-     - Exemple : `Stack: Symfony 8.0 / PHP 8.5, Conventional Commits obligatoires`
+     - Exemple : `Stack: Symfony 8.1 / PHP 8.5, Conventional Commits obligatoires`
    - **Niveau 3 : Projet (détaillé)** `.claude/CLAUDE.md`
      - Instructions détaillées, règles, références
      - Modularisation via `.claude/rules/` et `.claude/references/`
@@ -1114,7 +1114,7 @@ Ce plan est adaptable selon :
 
 ## Matrice de Couverture
 
-### Features Claude Code 2.1.154 et modules correspondants
+### Features Claude Code 2.1.159 et modules correspondants
 
 | Feature | Module | Couverture |
 |---------|--------|------------|
@@ -1190,7 +1190,7 @@ Ce plan est adaptable selon :
 | **ElicitationResult** (v2.1.76+) | M5, M6 | Complète |
 | **Hook `if` conditionnel** (v2.1.85+) | M5 | Complète |
 | **Hook `defer` permission** (v2.1.89+) | M5 | Complète |
-| **PreCompact blocking** (v2.1.154+) | M5 | Complète |
+| **PreCompact blocking** (v2.1.159+) | M5 | Complète |
 | **Prompt-based hooks** (Haiku 4.5) | M5 | Complète |
 | **Matchers hooks** | M5 | Complète |
 | **Exit codes hooks** (0, 2) | M5 | Complète |
@@ -1262,4 +1262,4 @@ Ce plan est adaptable selon :
 **Version** : 2.0.0
 **Date** : Avril 2026
 **Auteur** : The Bearded Bear
-**Claude Code** : 2.1.154
+**Claude Code** : 2.1.159

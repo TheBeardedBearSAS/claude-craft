@@ -220,8 +220,8 @@ fvm install stable
 fvm use stable
 
 # Specific versions
-fvm install 3.16.0
-fvm use 3.16.0
+fvm install 3.44.0
+fvm use 3.44.0
 
 # List versions
 fvm list
@@ -232,7 +232,7 @@ fvm releases
 
 ```json
 {
-  "flutter": "3.16.0"
+  "flutter": "3.44.0"
 }
 ```
 
@@ -350,7 +350,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'
+          flutter-version: '3.44.0'
           channel: 'stable'
 
       - name: Get dependencies
@@ -380,7 +380,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'
+          flutter-version: '3.44.0'
 
       - name: Build APK
         run: flutter build apk --release

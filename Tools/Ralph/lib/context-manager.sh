@@ -24,6 +24,9 @@ CONTEXT_MAX_CONTINUATION_SESSIONS="${CONTEXT_MAX_CONTINUATION_SESSIONS:-5}"  # M
 
 # External command (default to 'claude' if not set)
 CLAUDE_COMMAND="${CLAUDE_COMMAND:-claude}"
+# Audit 2026-06-01 P1 (CWE-78): split CLAUDE_COMMAND into argv tokens ONCE and always
+# expand with "${CLAUDE_CMD[@]}" to avoid re-word-splitting / glob expansion at each call.
+IFS=' ' read -r -a CLAUDE_CMD <<< "$CLAUDE_COMMAND"
 
 # Context state
 CONTEXT_COMPACT_COUNT=0
@@ -121,9 +124,9 @@ run_auto_compact() {
     if [[ "$CONTEXT_MIN_THRESHOLD" -gt 0 ]]; then
         local context_info
         if command -v timeout &> /dev/null; then
-            context_info=$(timeout 10s $CLAUDE_COMMAND -p "/context" 2>/dev/null | head -5)
+            context_info=$(timeout 10s "${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
         else
-            context_info=$($CLAUDE_COMMAND -p "/context" 2>/dev/null | head -5)
+            context_info=$("${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
         fi
         local current_usage
         current_usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1)
@@ -185,7 +188,7 @@ run_auto_compact() {
     local compact_status
 
     if command -v timeout &> /dev/null; then
-        compact_output=$(timeout 60s $CLAUDE_COMMAND --continue -p "/compact" 2>&1)
+        compact_output=$(timeout 60s "${CLAUDE_CMD[@]}" --continue -p "/compact" 2>&1)
         compact_status=$?
 
         # Handle timeout specifically (exit code 124)
@@ -195,7 +198,7 @@ run_auto_compact() {
             return 1
         fi
     else
-        compact_output=$($CLAUDE_COMMAND --continue -p "/compact" 2>&1)
+        compact_output=$("${CLAUDE_CMD[@]}" --continue -p "/compact" 2>&1)
         compact_status=$?
     fi
 
@@ -405,9 +408,9 @@ check_preventive_compact() {
     # Note: This is a best-effort check, Claude may not always report usage
     local context_info
     if command -v timeout &> /dev/null; then
-        context_info=$(timeout 10s $CLAUDE_COMMAND -p "/context" 2>/dev/null | head -5)
+        context_info=$(timeout 10s "${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
     else
-        context_info=$($CLAUDE_COMMAND -p "/context" 2>/dev/null | head -5)
+        context_info=$("${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
     fi
 
     # Try to extract percentage from output

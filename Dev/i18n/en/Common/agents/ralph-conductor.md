@@ -2,6 +2,8 @@
 name: ralph-conductor
 description: Orchestrates Ralph Wiggum v2.0 continuous loop sessions with adaptive DoD validation
 model: opus
+effort: xhigh
+maxTurns: 10
 memory: user
 ---
 

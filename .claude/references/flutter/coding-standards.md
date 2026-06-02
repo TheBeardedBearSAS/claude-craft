@@ -248,14 +248,14 @@ final colors = [
 
 ---
 
-## Dart 3.11+ Features
+## Dart 3.12+ Features
 
 ### 1. Dot Shorthands (Nouveau)
 
 **Rule**: Utiliser dot shorthands quand le type est inféré.
 
 ```dart
-✅ GOOD - Dart 3.11+
+✅ GOOD - Dart 3.12+
 enum OrderStatus { pending, active, completed, cancelled }
 
 // Dans un switch
@@ -319,7 +319,7 @@ import 'dart:js';  // Deprecated depuis Dart 3.3
 
 ---
 
-## Flutter 3.41+ Features
+## Flutter 3.44+ Features
 
 ### 1. WebAssembly Compilation
 

@@ -1,6 +1,6 @@
 # Angular Architecture - Principles and Organization
 
-**Version documentée :** Angular 20 LTS (recommandé production) / Angular 21 (latest)
+**Version documentée :** Angular 21 (latest stable, LTS) / Angular 22 (en RC)
 
 ## Fundamental Architectural Principles
 
@@ -463,14 +463,14 @@ Use new control flow syntax (Angular 17+):
 </ng-container>
 ```
 
-## Angular 20 LTS / 21 — Nouvelles Fonctionnalités
+## Angular 21 / 22 — Nouvelles Fonctionnalités
 
-### Zoneless Change Detection (v21 par défaut)
+### Zoneless Change Detection (par défaut depuis Angular 21)
 
-Angular 21 active zoneless par défaut, éliminant la dépendance à Zone.js (~33 KB économisés) et améliorant les performances de rendu de 30-40% (source : https://blog.angular.dev/zoneless-change-detection-f1622c3c5c51).
+Angular 21 active zoneless par défaut pour les nouveaux projets, éliminant la dépendance à Zone.js (~33 KB économisés) et améliorant les performances de rendu de 30-40% (source : https://blog.angular.dev/zoneless-change-detection-f1622c3c5c51).
 
 ```typescript
-// app.config.ts (Angular 21)
+// app.config.ts (Angular 21 — zoneless par défaut)
 import { provideZonelessChangeDetection } from '@angular/core';
 
 export const appConfig = {
@@ -487,7 +487,7 @@ export const appConfig = {
 La **Resource API** simplifie le chargement de données avec états automatiques (loading, error, data).
 
 ```typescript
-import { httpResource } from '@angular/core';
+import { httpResource } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -512,7 +512,7 @@ export class UserListComponent {
 
 Source : https://blog.angular.dev/announcing-angular-v20-b5c9c06cf301
 
-### Signal Forms (v21 expérimental)
+### Signal Forms (v21 expérimental → v22 stable)
 
 Alternative aux Reactive Forms avec APIs signales natives.
 
@@ -570,17 +570,17 @@ async loadData() {
 
 ## Conclusion
 
-Angular architecture priorities for 2026 (v20 LTS / v21):
+Angular architecture priorities for 2026 (v21 LTS / v22 RC) :
 
 1. **Standalone Components**: Par défaut pour tous les nouveaux composants
 2. **Signals**: Primitive réactive principale (état synchrone)
-3. **Zoneless (v21)**: Migration recommandée pour +30-40% performance
+3. **Zoneless (par défaut v21)**: Migration recommandée pour +30-40% performance
 4. **httpResource()**: Chargement déclaratif avec états automatiques
 5. **OnPush**: Stratégie de change detection par défaut
 6. **Domain-Driven Structure**: Organisation par feature
 7. **Smart/Dumb Pattern**: Séparation claire des responsabilités
 8. **Lazy Loading**: Routes et composants
-9. **Typed Forms**: Type safety complète (ou Signal Forms en v21)
+9. **Typed Forms**: Type safety complète (ou Signal Forms stable en v22)
 10. **Modern Control Flow**: @if, @for, @switch
 
 **Golden rule**: Les composants doivent être petits, focalisés et faciles à tester.
@@ -588,4 +588,5 @@ Angular architecture priorities for 2026 (v20 LTS / v21):
 **Sources :** 
 - Angular v20 : https://blog.angular.dev/announcing-angular-v20-b5c9c06cf301
 - Angular v21 : https://www.infoq.com/news/2025/11/angular-21-released/
+- Angular v22 RC : https://blog.angular.dev/ (GA prévue juin 2026)
 - Zoneless : https://blog.angular.dev/zoneless-change-detection-f1622c3c5c51

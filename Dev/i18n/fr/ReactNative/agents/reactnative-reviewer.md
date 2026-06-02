@@ -1,7 +1,9 @@
 ---
 name: reactnative-reviewer
 description: Spécialiste de la revue de code React Native 0.85 et Expo — New Architecture, navigation, performance mobile, analyse de bundle
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

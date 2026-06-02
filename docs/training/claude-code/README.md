@@ -1,11 +1,11 @@
-# Formation Claude Code 2.1.154 — Maîtriser l'Agent de Développement
+# Formation Claude Code 2.1.159 — Maîtriser l'Agent de Développement
 
 ## Vue d'ensemble
 
-Package de formation centré sur Claude Code 2.1.154, couvrant 100% des fonctionnalités de l'outil. Approche progressive : du guidé vers l'autonome.
+Package de formation centré sur Claude Code 2.1.159, couvrant 100% des fonctionnalités de l'outil. Approche progressive : du guidé vers l'autonome.
 
 **Version couverte :**
-- Claude Code : 2.1.154 (Adaptive Thinking, MCP, Hooks, Permissions 3-tier, Agent Teams, Fast Mode (Opus 4.6), Opus 4.8 flagship, Native CLI binary, Forked subagents, /ultrareview, /tui, /btw)
+- Claude Code : 2.1.159 (Adaptive Thinking, MCP, Hooks, Permissions 3-tier, Agent Teams, Fast Mode (Opus 4.6), Opus 4.8 flagship, Native CLI binary, Forked subagents, /ultrareview, /tui, /btw)
 - Claude-Craft : mentionné en bonus démo (30 min)
 
 ## Contenu du Package
@@ -69,7 +69,7 @@ claude-code/
 
 ## Couverture des fonctionnalités Claude Code
 
-Tous les modules couvrent exhaustivement les fonctionnalités de Claude Code 2.1.154 :
+Tous les modules couvrent exhaustivement les fonctionnalités de Claude Code 2.1.159 :
 
 - Installation (CLI, Desktop, Web, IDE)
 - CLAUDE.md (3 niveaux), CLAUDE.local.md
@@ -103,4 +103,4 @@ Tous les modules couvrent exhaustivement les fonctionnalités de Claude Code 2.1
 
 **Version** : 3.0.0
 **Date** : Avril 2026
-**Claude Code** : 2.1.154
+**Claude Code** : 2.1.159

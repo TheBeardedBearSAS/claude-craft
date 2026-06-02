@@ -69,7 +69,7 @@ Configuration in `pyproject.toml`:
 ```toml
 [tool.ruff]
 line-length = 88
-target-version = "py312"
+target-version = "py314"
 
 select = [
     "E",  # pycodestyle errors

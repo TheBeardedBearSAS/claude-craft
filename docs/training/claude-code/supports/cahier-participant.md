@@ -10,7 +10,7 @@
 
 \vspace{1cm}
 
-> **Formation :** Claude Code 2.1.154 — Maitriser l'Agent de Developpement
+> **Formation :** Claude Code 2.1.159 — Maitriser l'Agent de Developpement
 >
 > **Duree :** 2 jours (14h)
 >
@@ -49,7 +49,7 @@ curl -fsSL https://cli.anthropic.com/install.sh | sh  # Linux
 winget install Anthropic.ClaudeCode  # Windows
 
 # Verification
-claude --version   # Doit afficher 2.1.154+
+claude --version   # Doit afficher 2.1.159+
 ```
 
 - [ ] Claude Code installe et fonctionnel

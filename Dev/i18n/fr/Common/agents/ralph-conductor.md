@@ -2,6 +2,8 @@
 name: ralph-conductor
 description: Orchestre les sessions Ralph Wiggum v2.0 avec validation DoD adaptative
 model: opus
+effort: xhigh
+maxTurns: 10
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, Task, WebFetch, WebSearch]
 permissionMode: default

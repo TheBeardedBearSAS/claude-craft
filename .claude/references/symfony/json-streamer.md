@@ -1,8 +1,8 @@
-# JSON Streamer + JsonPath Components - Symfony 8.0
+# JSON Streamer + JsonPath Components - Symfony 8.0+
 
 ## Overview
 
-Symfony 8.0 introduit deux composants complémentaires pour le traitement JSON haute performance :
+Symfony 8.0+ introduit deux composants complémentaires pour le traitement JSON haute performance :
 
 1. **JSON Streamer Component** : streaming de données JSON volumineuses sans charger l'intégralité en mémoire
 2. **JsonPath Component** : navigation et requêtes JSON via expressions (RFC 9535)

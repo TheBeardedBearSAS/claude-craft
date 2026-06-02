@@ -25,8 +25,8 @@
 - `@laravel-reviewer` — Laravel 13 / PHP 8.5, Pest 4, Eloquent, Sanctum
 - `@react-reviewer` — React 19 + Compiler 1.0, TypeScript, hooks, bundle analysis
 - `@vuejs-reviewer` — Vue 3.5+, Composition API, Pinia, Vitest 4
-- `@angular-reviewer` — Angular 20 LTS, Signals, Standalone, Zoneless
-- `@flutter-reviewer` — Flutter 3.41 / Dart 3.11, BLoC v9, Riverpod 3
+- `@angular-reviewer` — Angular 21 (22 en RC), Signals, Standalone, Zoneless par défaut
+- `@flutter-reviewer` — Flutter 3.44 / Dart 3.12, BLoC v9, Riverpod 3
 - `@reactnative-reviewer` — React Native 0.85 New Architecture (JSI, TurboModules)
 - `@python-reviewer` — Python 3.14+, FastAPI, Pydantic v2, async correctness
 - `@csharp-reviewer` — C# 14 / .NET 10, Clean Architecture, CQRS, EF Core

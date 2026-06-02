@@ -45,7 +45,8 @@
       {/each}
     </nav>
 
-    <h1>Sprint</h1>
+    <!-- h2 : un seul h1 par page (WCAG SC 1.3.1, SC 2.4.6) -->
+    <h2 class="sidebar-section-title">Sprint</h2>
     <div style="font-size:12px; color: var(--fg-dim); padding: 0 10px;">
       {sprintLabel}
     </div>
@@ -108,6 +109,16 @@
 </div>
 
 <style>
+  /* Titre de section sidebar : même apparence que l'ancien h1 (via app.css .sidebar h1) */
+  .sidebar-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 16px 0 8px;
+    color: var(--fg-dim);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
   .skip-link {
     position: absolute;
     left: -9999px;

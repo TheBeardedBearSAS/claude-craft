@@ -1,8 +1,8 @@
-# ObjectMapper Component - Symfony 8.0
+# ObjectMapper Component - Symfony 8.0+
 
 ## Overview
 
-Le **ObjectMapper Component** de Symfony 8.0 fournit un mapping type-safe entre objets, parfait pour les transformations Entity ↔ DTO dans une architecture Clean.
+Le **ObjectMapper Component** de Symfony 8.0+ fournit un mapping type-safe entre objets, parfait pour les transformations Entity ↔ DTO dans une architecture Clean.
 
 **Avantages:**
 - Type-safe avec attributs PHP
@@ -516,7 +516,7 @@ class UpdateOrderCommand { } // Écriture (DTO → Entity)
 
 ## Ressources
 
-- [Symfony ObjectMapper Docs](https://symfony.com/doc/8.0/components/object_mapper.html)
+- [Symfony ObjectMapper Docs](https://symfony.com/doc/current/components/object_mapper.html)
 - [Clean Architecture Mapping](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
 ---

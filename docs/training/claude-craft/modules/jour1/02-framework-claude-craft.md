@@ -6,7 +6,7 @@
 - Expliquer l'architecture TCL (Tiered Context Loading) et son économie de tokens
 - Installer Claude-Craft via npx sur un projet
 - Comprendre les différents composants (skills, commands, agents, references)
-- Configurer le contexte projet avec la structure 8.7.1
+- Configurer le contexte projet avec la structure 8.8.0
 - Comprendre le framework BMAD v6 et les 70 agents disponibles
 - Connaitre RTK pour l'optimisation des tokens (55-65% d'economie)
 
@@ -24,16 +24,16 @@ Claude Code est puissant, mais :
 - Pas de gestion de projet intégrée
 - Pas d'automatisation des sprints
 
-### La solution : Claude-Craft 8.7.1
+### La solution : Claude-Craft 8.8.0
 
 Claude-Craft ajoute une **couche de best practices optimisée** avec gestion de projet et automatisation :
 
 ```
 ┌─────────────────────────────────────────┐
-│           CLAUDE CODE 2.1.154           │
+│           CLAUDE CODE 2.1.159           │
 │   (Moteur IA + Extended Thinking + MCP) │
 ├─────────────────────────────────────────┤
-│         CLAUDE-CRAFT 8.7.1             │
+│         CLAUDE-CRAFT 8.8.0             │
 │  TCL + Skills + References + Agents     │
 │  BMAD v6 + Ralph + QA Recette + RTK    │
 ├─────────────────────────────────────────┤
@@ -44,7 +44,7 @@ Claude-Craft ajoute une **couche de best practices optimisée** avec gestion de 
 
 ### Bénéfices
 
-| Aspect | Sans Claude-Craft | Avec Claude-Craft 8.7.1 |
+| Aspect | Sans Claude-Craft | Avec Claude-Craft 8.8.0 |
 |--------|-------------------|------------------------|
 | Tokens | ~70,000 auto-chargés | ~3,500 (économie 95%) |
 | Architecture | Variable | Clean Architecture imposée |
@@ -104,7 +104,7 @@ Le **TCL (Tiered Context Loading)** est l'innovation majeure de Claude-Craft. Il
 
 ---
 
-## 3. Architecture Claude-Craft 8.7.1
+## 3. Architecture Claude-Craft 8.8.0
 
 ### Structure TCL
 
@@ -189,14 +189,14 @@ npx @the-bearded-bear/claude-craft install ~/mobile-app --tech=flutter --lang=fr
 npx @the-bearded-bear/claude-craft --help
 
 # Technologies disponibles
---tech=symfony      # Symfony 8.0 / PHP 8.5
---tech=laravel      # Laravel 12 / PHP 8.5
+--tech=symfony      # Symfony 8.1 / PHP 8.5
+--tech=laravel      # Laravel 13 / PHP 8.5
 --tech=react        # React 19 / TypeScript 5.7
 --tech=angular      # Angular 19.x / TypeScript 5.7
 --tech=vuejs        # Vue 3.5+ / TypeScript 5.7
---tech=flutter      # Flutter 3.38 / Dart 3.10
+--tech=flutter      # Flutter 3.44 / Dart 3.12
 --tech=reactnative  # React Native 0.76+
---tech=python       # Python 3.13+ / FastAPI
+--tech=python       # Python 3.14+ / FastAPI
 --tech=php          # PHP 8.5 standards
 --tech=csharp       # .NET 10 / C# 14
 
@@ -346,7 +346,7 @@ triggers:
 
 ### Agents (Personas IA)
 
-Les agents sont des experts spécialisés avec un contexte et une personnalité. Claude-Craft 8.7.1 propose **70 agents** : 31 spécialisés (Common 20 + Tech Reviewers 11) + 39 infra à la demande :
+Les agents sont des experts spécialisés avec un contexte et une personnalité. Claude-Craft 8.8.0 propose **70 agents** : 31 spécialisés (Common 20 + Tech Reviewers 11) + 39 infra à la demande :
 
 **Agents communs (12)**
 
@@ -451,7 +451,7 @@ Le manifeste déclare les capabilities du plugin (skills, agents, hooks, MCP) po
 Le fichier `CLAUDE.md` est maintenant minimaliste (~700 bytes) :
 
 ```markdown
-# MonProjet - Symfony 8.0
+# MonProjet - Symfony 8.1
 
 ## Quick Reference
 See `@.claude/INDEX.md` for patterns and commands.

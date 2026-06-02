@@ -62,14 +62,14 @@ npx @the-bearded-bear/claude-craft install . --tech=react --lang=fr
 | Stack | Version | Architecture |
 |-------|---------|--------------|
 | .NET / C# | 10 LTS / C# 14 | Clean Architecture |
-| Symfony / PHP | 8.0 / PHP 8.5 | Clean Architecture |
-| Flutter / Dart | 3.38 / Dart 3.10 | Clean Architecture |
+| Symfony / PHP | 8.1 / PHP 8.5 | Clean Architecture |
+| Flutter / Dart | 3.44 / Dart 3.12 | Clean Architecture |
 | React | 19.x | Feature-based |
 | React Native | 0.76+ | Feature-based |
 | Angular | 19.x | Domain-driven |
 | Vue.js | 3.5+ | Composition API |
-| Laravel | 12.x / PHP 8.5 | Clean Architecture |
-| Python | 3.13+ | Clean Architecture |
+| Laravel | 13.x / PHP 8.5 | Clean Architecture |
+| Python | 3.14+ | Clean Architecture |
 | PHP | 8.5 | Clean Architecture |
 
 ### Ce qui est installe

@@ -325,8 +325,8 @@ pnpm test
     "prettier": "^3.0.0",
     "typescript": "~5.4.0",
     "vite": "^5.4.0",
-    "vitest": "^2.0.0",
-    "vue-tsc": "^2.0.0"
+    "vitest": "^4.0.0",
+    "vue-tsc": "^2.2.0"
   }
 }
 ```

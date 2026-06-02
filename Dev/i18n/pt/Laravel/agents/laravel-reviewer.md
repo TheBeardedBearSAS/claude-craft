@@ -1,7 +1,9 @@
 ---
 name: laravel-reviewer
 description: Especialista em revisao de codigo Laravel 13 e PHP 8.5 — padrao Actions, Pest PHP, Eloquent, Sanctum, otimizacao de performance
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

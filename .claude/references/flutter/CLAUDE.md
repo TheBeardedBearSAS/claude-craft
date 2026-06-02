@@ -158,14 +158,14 @@ dart run build_runner build -d
 ## Documentation Complète
 
 - `project-context.md` - Contexte projet
-- `coding-standards.md` - Standards Dart 3.11+
+- `coding-standards.md` - Standards Dart 3.12+
 - `wasm.md` - WebAssembly
 - `mcp-integration.md` - Model Context Protocol
 - `web-performance-2026.md` - Performance web
 
 ## Checklist Rapide
 
-- [ ] Flutter 3.41+, Dart 3.11+
+- [ ] Flutter 3.44+, Dart 3.12+
 - [ ] Dot shorthands utilisés (Dart 3.11)
 - [ ] Impeller activé (par défaut)
 - [ ] dart:js_interop pour Wasm (pas dart:js_util)

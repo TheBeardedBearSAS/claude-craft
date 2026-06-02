@@ -266,8 +266,10 @@ ls ~/my-project/.claude/skills/
 | React | 6 |
 | React Native | 9 |
 | Python | 4 |
-| **Total unique** | **50** |
-| **With i18n (×5)** | **250** |
+| **Total unique** | **48** |
+| **With i18n (×5)** | **240** |
+
+> **Note :** 14 skills présents dans `.claude/skills/` ne sont pas encore documentés dans ce tableau par stack : `api-gateway`, `architect`, `atomic-tasks`, `debug-methodical`, `design-md-convention`, `edge-computing`, `event-driven`, `graphql`, `monorepo`, `observability`, `parallel-worktrees`, `remotion`, `socratic-brainstorm`, `wasm`. Ils sont disponibles et invocables normalement.
 
 ## Frequently Asked Questions
 

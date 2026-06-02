@@ -180,13 +180,14 @@
     {/if}
   </aside>
 
-  <main class="docs-content">
+  <!-- div+role=region remplace <main> imbriqué (interdit par HTML : un seul <main> visible, WCAG SC 1.3.6) -->
+  <div class="docs-content" role="region" aria-label="Contenu du document">
     {#if !selectedDoc}
       <div class="empty">Select a document</div>
     {:else}
       <header class="content-header">
         <h1>{selectedDoc.rel}</h1>
-        <button class="copy-btn" onclick={copyContent} aria-label="Copy content">
+        <button class="copy-btn" onclick={copyContent} aria-label="Copier le contenu">
           Copy
         </button>
       </header>
@@ -199,7 +200,7 @@
         </div>
       {/if}
     {/if}
-  </main>
+  </div>
 </div>
 
 <style>
@@ -332,6 +333,12 @@
 
   .copy-btn:hover {
     background: var(--border);
+  }
+
+  /* Indicateur de focus visible explicite (WCAG 2.2 SC 2.4.11) */
+  .copy-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .copy-btn:active {

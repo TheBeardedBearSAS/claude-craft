@@ -1,7 +1,9 @@
 ---
 name: uiux-orchestrator
 description: UI/UX coordination and orchestration lead
-model: opus
+model: sonnet
+effort: medium
+maxTurns: 10
 tools:
   - Read
   - Glob

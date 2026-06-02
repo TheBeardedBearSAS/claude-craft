@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.8.0] - 2026-06-01
+
+Audit adversarial 2026-06-01 (équipe multi-agents + devil's advocates, validation Context7/web) — 65 findings confirmés (5 P0, 32 P1, 28 P2). MINOR release. Backwards compatible. Détails : `audit/2026-06-01/`.
+
+### Security
+
+- **P0 — Hook `security-block.json` inerte corrigé** : le template utilisait `echo '$TOOL_INPUT'` (quotes simples empêchant l'expansion) + structure plate + `exit 1`. Réécrit sur le modèle de `block-dangerous-commands.json` : lecture stdin via `jq`, structure `hooks:[{type:command}]`, `exit 2` (code bloquant).
+- **P1 — SSRF dans `--from` (`cli/lib/install-from-url.js`)** : `validateUrl` n'imposait que le schéma https → une URL/redirect vers `https://169.254.169.254` (métadonnées cloud) passait. Garde `isBlockedHost` (IP privées/loopback/link-local/métadonnées) + redirects en `manual` re-validés à chaque hop. 11 tests.
+- **P1 — Injection de commande Ralph (CWE-78)** : `$CLAUDE_COMMAND`/`$cmd` non quotés dans `Tools/Ralph/lib/loop.sh` et `context-manager.sh` → tableau bash (`read -ra` + `"${cmd[@]}"`).
+- **P1 — Install skill communautaire (`cli/lib/skill.js`)** : `--no-audit` retiré (scan CVE) ; install dans un dossier temporaire isolé + nettoyage (plus de pollution du `node_modules` du projet) ; avertissement explicite.
+- **P1 — RTK installer (`Tools/RTK/install-rtk.sh`)** : SHA256 périmé + URL sur branche mutable `master` → URL **pinnée sur un commit immuable** + SHA recalculé/vérifié.
+
+### Changed — versions des stacks (juin 2026)
+
+- **Angular 20 → 21** (latest stable LTS, 22 en RC, zoneless par défaut) ; **Symfony 8.0 → 8.1** (+ HTTP-less apps) ; **Claude Code recommandé 2.1.154 → 2.1.159** ; **Opus 4.7 → 4.8** (`/effort`, `/model`) ; K8s 1.35.3 → **1.36.1** ; PgBouncer 1.25.1 → **1.25.2** (CVE-2026-6664/6667).
+- **Cohérence interne** des références profondes : Flutter (3.41/3.38/3.16 → 3.44, Dart → 3.12) ; Laravel (Pest ^3→^4, Rector ^1→^2.4, `php:8.3`→8.5, Laravel ^12→13) ; Vue (Vitest ^2→^4) ; PHP (8.4→8.5, PHPUnit 11→12).
+- **Exemples de code** : C# CI dotnet 9→10 + Swashbuckle déprécié → Scalar/OpenAPI natif ; React `react-query` → `@tanstack/react-query` ; Python ruff `py312`→`py314`, `@validator` → `@field_validator` (Pydantic v2).
+- **Docs/formations** : ~116 mentions de version mises à jour dans 36 fichiers de `docs/training/` et `docs/guides/`.
+
+### Changed — optimisation tokens/modèles
+
+- **Propagation de l'optimisation à la distribution `Dev/i18n/`** (5 langues) : les 23 agents distribués aux utilisateurs n'avaient **aucun `effort`** et des modèles coûteux (`opus`/`sonnet`). Alignés sur la config canonique `.claude/agents` (reviewers → `haiku`, design/impl → `sonnet`, critiques → `opus` ; `effort`+`maxTurns` ajoutés). L'optimisation existait en dogfood mais ne parvenait pas aux utilisateurs.
+- `testing-flutter` et `testing-reactnative` passés en `context: fork` (17 skills lourds au total).
+
+### Accessibility — Kanban UI (Svelte)
+
+- 15 corrections WCAG 2.2 AA : tokens de contraste (AA/AAA), `role=progressbar`, `<dialog>` natif avec piège de focus, headings de colonnes, alternative textuelle du burndown, badges `aria-label`, `<main>` imbriqué supprimé, double `<h1>` corrigé, `:focus-visible`, aide clavier visible. Token `--badge-fg` inversé clair/sombre.
+
+### Fixed — fiabilité & exactitude
+
+- **CI mutation (`mutation.yml`)** : clé `.mutationScore` inexistante (Stryker v9) → calcul depuis les statuts des mutants ; « Nightly » → « Weekly » (cron hebdomadaire) ; seuil branches 84 → 85.
+- **Endpoint SSE `/api/events`** désormais couvert (2 tests).
+- **Comptes corrigés** : `plugin.json` (211→125 commandes, 26→15 namespaces, 72→70 agents, 2.1.159), `SKILLS.md` (50→48), `MOOC-CURRICULUM.md` (67→70 agents), formations, `getting-started` (211→125).
+
+### Tests
+
+- **956 tests verts** (vs 937) — +19 (SSRF, SSE, `isBlockedHost`). ESLint / Prettier / ShellCheck / parité i18n : verts.
+
 ## [8.7.1] - 2026-05-20
 
 Audit 2026-05-18 comprehensive — Phase 5 (P1 reliability + sécurité défense en profondeur). PATCH release. Backwards compatible.

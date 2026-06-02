@@ -1,7 +1,9 @@
 ---
 name: laravel-reviewer
 description: Spécialiste de la revue de code Laravel 13 et PHP 8.5 — Pattern Actions, Pest PHP, Eloquent, Sanctum, AI SDK, optimisation de performance
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default
@@ -232,7 +234,7 @@ PHPStan level >= 8 ?
         NON --> MAJEUR : typage incomplet
 ```
 
-### Violations spécifiques PHP 8.5 / Laravel 12
+### Violations spécifiques PHP 8.5 / Laravel 13
 
 ```php
 // MAUVAIS : pas de constructor property promotion
@@ -340,7 +342,7 @@ L'Action/Feature a-t-elle des tests ?
         OUI --> OK si Actions testées unitairement
 ```
 
-### Principes de test Laravel 12 avec Pest PHP
+### Principes de test Laravel 13 avec Pest PHP
 
 **Feature test (HTTP) :**
 ```php
@@ -655,7 +657,7 @@ class OrderController extends Controller
 ## Format de rapport d'audit
 
 ```markdown
-# Rapport d'audit Laravel 12 / PHP 8.5
+# Rapport d'audit Laravel 13 / PHP 8.5
 
 ## Projet : [Nom du projet]
 **Date :** [Date]

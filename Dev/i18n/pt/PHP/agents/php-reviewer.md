@@ -1,7 +1,9 @@
 ---
 name: php-reviewer
 description: Especialista em revisao de codigo PHP 8.5 e Clean Architecture — DDD, hexagonal, PSR-12, PHPStan, analise de seguranca
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default

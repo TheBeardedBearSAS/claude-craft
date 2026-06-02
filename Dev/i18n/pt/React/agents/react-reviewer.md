@@ -1,7 +1,9 @@
 ---
 name: react-reviewer
 description: Especialista em revisao de codigo React 19.2 + Compiler 1.0 e TypeScript — hooks, composicao, performance, analise de bundle
-model: sonnet
+model: haiku
+effort: low
+maxTurns: 6
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, Bash, NotebookEdit]
 permissionMode: default
