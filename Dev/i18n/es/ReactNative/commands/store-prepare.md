@@ -1,261 +1,487 @@
 ---
-description: Preparación para las Tiendas
-translation_status: pending
+description: Lista de Verificación para Publicación en Tiendas de React Native
+argument-hint: [argumentos]
 ---
 
-> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/ReactNative/commands/store-prepare.md).
+# Lista de Verificación para Publicación en Tiendas de React Native
 
-# Preparación para las Tiendas
+Eres un experto en publicación de aplicaciones móviles. Debes preparar la aplicación para su envío a la App Store (iOS) y Google Play Store (Android).
 
-Prepara la aplicación para publicación en App Store y Google Play.
+## Argumentos
+$ARGUMENTS
 
-## 1. Assets Requeridos
+Argumentos:
+- (Opcional) Tienda: ios, android, both
+- (Opcional) Tipo: new, update
 
-### iOS App Store
-
-**Iconos:**
-- App Icon: 1024x1024px (sin alpha)
-
-**Capturas de Pantalla:**
-- iPhone 6.7": 1290x2796px
-- iPhone 6.5": 1284x2778px
-- iPhone 5.5": 1242x2208px
-- iPad Pro 12.9": 2048x2732px
-
-**Otros:**
-- Privacy Policy URL
-- Support URL
-- Marketing URL (opcional)
-
-### Google Play Store
-
-**Iconos:**
-- App Icon: 512x512px (PNG, 32-bit)
-- Feature Graphic: 1024x500px
-
-**Capturas de Pantalla:**
-- Phone: 16:9 o 9:16, mín 320px
-- Tablet 7": min 1024px
-- Tablet 10": min 1920px
-
-**Otros:**
-- Privacy Policy URL
-- Short Description (80 chars)
-- Full Description (4000 chars)
+Ejemplo: `/reactnative:store-prepare both new`
 
 ## Modo Plan
 
 > El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
 
-## 2. Metadatos
+## MISIÓN
 
-### app.json / app.config.js
+### Paso 1: Lista de Verificación Pre-Envío
 
-```json
-{
-  "expo": {
-    "name": "My App",
-    "slug": "my-app",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.company.myapp",
-      "buildNumber": "1",
-      "infoPlist": {
-        "NSCameraUsageDescription": "Permite tomar fotos",
-        "NSPhotoLibraryUsageDescription": "Permite acceder a fotos"
-      }
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.company.myapp",
-      "versionCode": 1,
-      "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE"
-      ]
+```
+══════════════════════════════════════════════════════════════
+📱 LISTA DE VERIFICACIÓN PARA PUBLICACIÓN EN TIENDAS
+══════════════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────────────
+🔧 CONFIGURACIÓN TÉCNICA
+──────────────────────────────────────────────────────────────
+
+### Versión y Build
+
+[ ] Versión incrementada (semver)
+    - iOS: CFBundleShortVersionString
+    - Android: versionName
+
+[ ] Número de build incrementado
+    - iOS: CFBundleVersion (entero)
+    - Android: versionCode (entero)
+
+[ ] Changelog preparado para esta versión
+
+### Build de Release
+
+[ ] Modo release configurado (sin modo dev)
+[ ] Bundle JS optimizado
+[ ] ProGuard/R8 habilitado (Android)
+[ ] Bitcode deshabilitado si es necesario (iOS)
+[ ] Hermes habilitado (recomendado)
+
+### Seguridad
+
+[ ] Claves API en variables de entorno
+[ ] Sin secretos en el código
+[ ] Certificate pinning si es necesario
+[ ] Keystore firmado correctamente (Android)
+[ ] Perfil de aprovisionamiento válido (iOS)
+```
+
+### Paso 2: Configuración iOS
+
+```xml
+<!-- ios/{App}/Info.plist -->
+
+<!-- Versión -->
+<key>CFBundleShortVersionString</key>
+<string>1.2.0</string>
+<key>CFBundleVersion</key>
+<string>45</string>
+
+<!-- Permisos (con descripciones para el usuario) -->
+<key>NSCameraUsageDescription</key>
+<string>Esta aplicación usa la cámara para escanear códigos QR.</string>
+
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Esta aplicación accede a tus fotos para permitirte subir imágenes.</string>
+
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Esta aplicación usa tu ubicación para mostrar tiendas cercanas.</string>
+
+<key>NSFaceIDUsageDescription</key>
+<string>Esta aplicación usa Face ID para asegurar el acceso a tu cuenta.</string>
+
+<key>NSMicrophoneUsageDescription</key>
+<string>Esta aplicación usa el micrófono para mensajes de voz.</string>
+
+<!-- App Transport Security -->
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <false/>
+    <!-- Excepciones si es necesario -->
+</dict>
+
+<!-- Capacidades requeridas -->
+<key>UIRequiredDeviceCapabilities</key>
+<array>
+    <string>armv7</string>
+</array>
+
+<!-- Orientaciones soportadas -->
+<key>UISupportedInterfaceOrientations</key>
+<array>
+    <string>UIInterfaceOrientationPortrait</string>
+</array>
+<key>UISupportedInterfaceOrientations~ipad</key>
+<array>
+    <string>UIInterfaceOrientationPortrait</string>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
+    <string>UIInterfaceOrientationLandscapeRight</string>
+</array>
+```
+
+```ruby
+# ios/Podfile - Configuración de Release
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      # iOS mínimo
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+
+      # Bitcode
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+
+      # Arquitectura
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+    end
+  end
+end
+```
+
+### Paso 3: Configuración Android
+
+```groovy
+// android/app/build.gradle
+
+android {
+    compileSdkVersion 34
+    buildToolsVersion "34.0.0"
+
+    defaultConfig {
+        applicationId "com.example.myapp"
+        minSdkVersion 24
+        targetSdkVersion 34
+        versionCode 45
+        versionName "1.2.0"
     }
-  }
+
+    signingConfigs {
+        release {
+            storeFile file(MYAPP_UPLOAD_STORE_FILE)
+            storePassword MYAPP_UPLOAD_STORE_PASSWORD
+            keyAlias MYAPP_UPLOAD_KEY_ALIAS
+            keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    // App Bundle (recomendado)
+    bundle {
+        language {
+            enableSplit = false // Mantener todos los idiomas
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
+        }
+    }
 }
 ```
 
-## 3. Build de Producción
+```properties
+# android/gradle.properties
+MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
+MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
+MYAPP_UPLOAD_STORE_PASSWORD=***
+MYAPP_UPLOAD_KEY_PASSWORD=***
 
-### Con EAS Build
-
-```bash
-# Instalar EAS CLI
-npm install -g eas-cli
-
-# Login
-eas login
-
-# Configurar proyecto
-eas build:configure
-
-# Build iOS
-eas build --platform ios --profile production
-
-# Build Android
-eas build --platform android --profile production
+# Optimización de build
+org.gradle.jvmargs=-Xmx4g
+org.gradle.daemon=true
+org.gradle.parallel=true
 ```
 
-### eas.json
+### Paso 4: Recursos de Marketing
 
-```json
-{
-  "build": {
-    "production": {
-      "releaseChannel": "production",
-      "env": {
-        "APP_ENV": "production"
-      },
-      "ios": {
-        "resourceClass": "m-medium"
-      },
-      "android": {
-        "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease"
-      }
-    }
-  },
-  "submit": {
-    "production": {
-      "ios": {
-        "appleId": "your-apple-id@email.com",
-        "ascAppId": "1234567890",
-        "appleTeamId": "ABCD1234"
-      },
-      "android": {
-        "serviceAccountKeyPath": "./pc-api-key.json",
-        "track": "internal"
-      }
-    }
-  }
-}
+```
+══════════════════════════════════════════════════════════════
+🎨 RECURSOS REQUERIDOS
+══════════════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────────────
+🍎 APP STORE (iOS)
+──────────────────────────────────────────────────────────────
+
+### Ícono de la App
+- 1024x1024 px (PNG, sin transparencia, sin esquinas redondeadas)
+
+### Capturas de Pantalla iPhone
+Tamaños requeridos (al menos uno):
+- iPhone 6.7" (1290 × 2796 px) - iPhone 15 Pro Max
+- iPhone 6.5" (1242 × 2688 px) - iPhone 11 Pro Max
+- iPhone 5.5" (1242 × 2208 px) - iPhone 8 Plus
+
+### Capturas de Pantalla iPad
+Tamaños requeridos (si se soporta iPad):
+- iPad Pro 12.9" (2048 × 2732 px)
+- iPad Pro 11" (1668 × 2388 px)
+
+### Vista Previa de la App (video opcional)
+- 15-30 segundos
+- Formato .mov o .mp4
+- Mismas resoluciones que las capturas de pantalla
+
+### Textos
+- Nombre de la app (máximo 30 caracteres)
+- Subtítulo (máximo 30 caracteres)
+- Descripción (máximo 4000 caracteres)
+- Palabras clave (máximo 100 caracteres, separadas por comas)
+- URL de soporte
+- URL de política de privacidad
+- Notas de la versión (máximo 4000 caracteres)
+
+──────────────────────────────────────────────────────────────
+🤖 GOOGLE PLAY (Android)
+──────────────────────────────────────────────────────────────
+
+### Ícono de la App
+- 512x512 px (PNG 32-bit con alpha)
+
+### Gráfico Destacado
+- 1024x500 px (PNG o JPG)
+
+### Capturas de Pantalla de Teléfono
+- Mínimo 2, máximo 8
+- 16:9 o 9:16
+- Mínimo 320px, máximo 3840px
+- PNG o JPG
+
+### Capturas de Pantalla de Tablet 7"
+- Opcional pero recomendado
+- Mismas especificaciones que teléfono
+
+### Capturas de Pantalla de Tablet 10"
+- Opcional pero recomendado
+
+### Video promocional (opcional)
+- URL de YouTube
+- No listado o público
+
+### Textos
+- Título (máximo 50 caracteres)
+- Descripción corta (máximo 80 caracteres)
+- Descripción completa (máximo 4000 caracteres)
+- Notas de la versión (máximo 500 caracteres)
+- URL de política de privacidad
+- Email del desarrollador
 ```
 
-## 4. Configuración iOS
-
-### Certificates y Provisioning
+### Paso 5: Build y Firma
 
 ```bash
-# Con EAS
-eas credentials
+#!/bin/bash
+# scripts/build-release.sh
 
-# Manual
-# 1. Crear App ID en Apple Developer
-# 2. Crear Certificates
-# 3. Crear Provisioning Profiles
-# 4. Configurar en Xcode
-```
+set -e
 
-### App Store Connect
+echo "📱 Construyendo Release..."
 
-1. Crear nueva app
-2. Llenar información
-3. Cargar screenshots
-4. Configurar precio
-5. Agregar build
-6. Submit para revisión
+# Variables
+VERSION=$(node -p "require('./package.json').version")
+BUILD_NUMBER=$(date +%Y%m%d%H%M)
 
-## 5. Configuración Android
+echo "Versión: $VERSION"
+echo "Build: $BUILD_NUMBER"
 
-### Signing Key
-
-```bash
-# Generar keystore
-keytool -genkeypair -v -storetype PKCS12 \
-  -keystore my-app.keystore \
-  -alias my-app-alias \
-  -keyalg RSA \
-  -keysize 2048 \
-  -validity 10000
-
-# Guardar en secrets
-```
-
-### Google Play Console
-
-1. Crear nueva app
-2. Llenar información
-3. Cargar screenshots
-4. Configurar precios
-5. Crear release
-6. Cargar AAB/APK
-7. Roll out
-
-## 6. Checklist Pre-Launch
-
-### Técnico
-- [ ] App testada en dispositivos reales
-- [ ] No hay console.logs
-- [ ] Environment variables correctas
-- [ ] Analytics configurado
-- [ ] Crash reporting activado
-- [ ] Deep links funcionando
-- [ ] Push notifications probadas
-- [ ] Performance optimizado
-- [ ] Bundle size aceptable
-
-### Contenido
-- [ ] Iconos de todas las sizes
-- [ ] Screenshots actualizadas
-- [ ] Descripción completa
-- [ ] Keywords optimizadas
-- [ ] Privacy policy publicada
-- [ ] Support URL funcional
-- [ ] Términos de servicio
-
-### Legal
-- [ ] Privacy policy completa
-- [ ] GDPR compliance
-- [ ] Términos de uso
-- [ ] Permisos justificados
-- [ ] Copyright correcto
-
-## 7. Submission
-
-```bash
 # iOS
-eas submit --platform ios --profile production
+echo "🍎 Construyendo iOS..."
+cd ios
+
+# Actualizar número de build
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" {App}/Info.plist
+
+# Archivar
+xcodebuild -workspace {App}.xcworkspace \
+  -scheme {App} \
+  -configuration Release \
+  -archivePath build/{App}.xcarchive \
+  archive
+
+# Exportar IPA
+xcodebuild -exportArchive \
+  -archivePath build/{App}.xcarchive \
+  -exportPath build \
+  -exportOptionsPlist ExportOptions.plist
+
+cd ..
 
 # Android
-eas submit --platform android --profile production
+echo "🤖 Construyendo Android..."
+cd android
+
+# Actualizar versionCode en build.gradle o mediante variable
+./gradlew bundleRelease
+
+# Opcional: también generar APK
+./gradlew assembleRelease
+
+cd ..
+
+echo "✅ ¡Build completado!"
+echo "iOS: ios/build/{App}.ipa"
+echo "Android: android/app/build/outputs/bundle/release/app-release.aab"
 ```
 
-## 8. Post-Launch
+```plist
+<!-- ios/ExportOptions.plist -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>app-store</string>
+    <key>teamID</key>
+    <string>XXXXXXXXXX</string>
+    <key>uploadBitcode</key>
+    <false/>
+    <key>uploadSymbols</key>
+    <true/>
+</dict>
+</plist>
+```
 
-- Monitorear crashes
-- Responder reviews
-- Analizar métricas
-- Preparar updates
-- Planear siguiente versión
+### Paso 6: Envío
 
-## Timeline Estimado
+#### iOS - App Store Connect
 
-- **iOS Review**: 1-7 días
-- **Android Review**: 1-3 días
-- **Preparación total**: 1-2 semanas
+```bash
+# Mediante Xcode
+# Xcode > Product > Archive > Distribute App
 
-## Recursos
+# Mediante línea de comandos (Transporter)
+xcrun altool --upload-app \
+  -f build/{App}.ipa \
+  -t ios \
+  -u "apple-id@example.com" \
+  -p "@keychain:AC_PASSWORD"
 
-- [Apple App Store Guidelines](https://developer.apple.com/app-store/review/guidelines/)
-- [Google Play Policies](https://play.google.com/about/developer-content-policy/)
-- [Expo EAS Build](https://docs.expo.dev/build/introduction/)
+# O mediante Fastlane
+fastlane ios release
+```
+
+#### Android - Google Play Console
+
+```bash
+# Mediante Play Console web
+# https://play.google.com/console
+
+# O mediante Fastlane
+fastlane android release
+
+# O mediante bundletool
+bundletool build-apks --bundle=app-release.aab --output=app.apks
+
+# Mediante Google Play Developer API
+# (requiere cuenta de servicio)
+```
+
+### Paso 7: Lista de Verificación Final
+
+```
+══════════════════════════════════════════════════════════════
+✅ LISTA DE VERIFICACIÓN FINAL PRE-ENVÍO
+══════════════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────────────
+📱 TESTS
+──────────────────────────────────────────────────────────────
+
+[ ] App probada en dispositivo iOS físico
+[ ] App probada en dispositivo Android físico
+[ ] Tests en versiones antiguas de SO (iOS 13, Android 7)
+[ ] Tests en diferentes tamaños de pantalla
+[ ] Tests de modo oscuro
+[ ] Tests sin conexión
+[ ] Tests con datos reales
+[ ] Tests de rendimiento
+[ ] Tests de crashes/ANR
+[ ] Tests de accesibilidad (VoiceOver, TalkBack)
+
+──────────────────────────────────────────────────────────────
+🔒 CUMPLIMIENTO
+──────────────────────────────────────────────────────────────
+
+[ ] Política de privacidad accesible
+[ ] Términos de servicio
+[ ] Cumplimiento GDPR (si aplica en Europa)
+    - Consentimiento de cookies
+    - Derecho a eliminación
+    - Exportación de datos
+[ ] Cumplimiento COPPA (si es para niños)
+[ ] Declaraciones de permisos
+[ ] Sin contenido prohibido
+
+──────────────────────────────────────────────────────────────
+🍎 ESPECÍFICO iOS
+──────────────────────────────────────────────────────────────
+
+[ ] App Review Guidelines cumplidas
+[ ] Sin enlaces a tiendas externas
+[ ] In-App Purchase si hay contenido digital
+[ ] Sign in with Apple si hay otras autenticaciones sociales
+[ ] App Tracking Transparency si hay seguimiento
+[ ] Perfil de aprovisionamiento válido
+[ ] Notificaciones push configuradas (si aplica)
+[ ] TestFlight probado
+
+──────────────────────────────────────────────────────────────
+🤖 ESPECÍFICO ANDROID
+──────────────────────────────────────────────────────────────
+
+[ ] Nivel de API objetivo reciente (34+)
+[ ] Políticas de Play Store cumplidas
+[ ] Formulario de seguridad de datos completado
+[ ] Cuestionario de clasificación de contenido
+[ ] Firma de app por Google Play
+[ ] Pruebas internas/cerradas realizadas
+[ ] Lanzamiento gradual planificado
+
+──────────────────────────────────────────────────────────────
+📄 DOCUMENTOS LISTOS
+──────────────────────────────────────────────────────────────
+
+[ ] Capturas de pantalla en todos los idiomas soportados
+[ ] Gráfico destacado (Android)
+[ ] Ícono de la app en alta resolución
+[ ] Descripciones en todos los idiomas
+[ ] Notas de la versión
+[ ] Video promocional (opcional)
+
+──────────────────────────────────────────────────────────────
+🚀 ENVÍO
+──────────────────────────────────────────────────────────────
+
+[ ] Build subido a App Store Connect
+[ ] Build subido a Play Console
+[ ] Metadatos completos
+[ ] Precio y disponibilidad configurados
+[ ] Fecha de lanzamiento elegida (inmediata o programada)
+[ ] Preguntas de revisión preparadas
+```
+
+### Paso 8: Post-Publicación
+
+```
+══════════════════════════════════════════════════════════════
+📊 DESPUÉS DE LA PUBLICACIÓN
+══════════════════════════════════════════════════════════════
+
+[ ] Monitoreo de crashes (Sentry, Crashlytics)
+[ ] Analytics configurado
+[ ] Alertas de reseñas negativas
+[ ] Plan de respuesta a reseñas
+[ ] Seguimiento de KPIs:
+    - Descargas
+    - Retención D1, D7, D30
+    - Tasa libre de crashes (> 99%)
+    - Tasa de ANR (< 0.47%)
+    - Valoración media
+[ ] Preparación de hotfix si es necesario
+[ ] Comunicación con usuarios (in-app, email)
+```

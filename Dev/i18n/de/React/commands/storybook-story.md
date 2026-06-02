@@ -1,158 +1,622 @@
 ---
 description: Storybook Story generieren
-translation_status: pending
 ---
-
-> ⚠️ **Translation incomplete.** Please contribute via GitHub PR or refer to the [English version](../../en/React/commands/storybook-story.md).
 
 # Storybook Story generieren
 
-Generiere eine umfassende Storybook Story für eine React-Komponente.
+Eine Storybook-Story für eine bestehende React-Komponente generieren.
 
-## Aufgabe
+## Was dieser Befehl tut
 
-Erstelle eine vollständige Storybook Story mit:
+1. **Story-Generierung**
+   - Story-Datei für Komponente erstellen
+   - Alle Komponentenvarianten generieren
+   - Interaktive Steuerungen (Args) hinzufügen
+   - Story-Parameter konfigurieren
+   - Dokumentation hinzufügen
 
-1. **Meta-Konfiguration**
-   - Title und Component
-   - Parameters und Decorators
-   - Tags (autodocs)
-   - ArgTypes-Definitionen
+2. **Verwendete Templates**
+   - CSF 3.0-Format (Component Story Format)
+   - TypeScript-Typen
+   - Args und ArgTypes
+   - Story-Varianten
 
-2. **Haupt-Stories**
-   - Default/Primary Story
-   - Alle Variants
-   - Alle States (normal, hover, active, disabled)
-   - Verschiedene Sizes
+3. **Generierte Datei**
+   ```
+   src/components/ComponentName/
+   └── ComponentName.stories.tsx
+   ```
 
-3. **Interactive Stories**
-   - Mit Actions
-   - Mit Controls
-   - Mit State Management
-   - User Interaction Examples
+## Verwendung
 
-4. **Edge Cases**
-   - Empty States
-   - Loading States
-   - Error States
-   - Extreme Values (sehr lange Texte, etc.)
+```bash
+# Story für bestehende Komponente generieren
+npm run generate:story ComponentName
 
-5. **Accessibility**
-   - A11y Addon aktiviert
-   - Contrast Checks
-   - Keyboard Navigation
-   - Screen Reader Tests
-
-6. **Responsive**
-   - Mobile Viewport
-   - Tablet Viewport
-   - Desktop Viewport
-   - Verschiedene Breakpoints
-
-7. **Themes**
-   - Light Mode
-   - Dark Mode
-   - Verschiedene Color Schemes
-
-8. **Dokumentation**
-   - Description für jede Story
-   - Code Snippets
-   - Best Practices
-   - Do's and Don'ts
+# Mit benutzerdefiniertem Pfad
+npm run generate:story features/users/components/UserCard
+```
 
 ## Plan-Modus
 
 > **Der Plan-Modus ist obligatorisch.** Vor der Ausführung aktiviert Claude den Plan-Modus, um betroffenen Code zu analysieren, einen Implementierungsplan vorzuschlagen und auf Ihre Validierung zu warten, bevor Änderungen vorgenommen werden.
 
-## Parameter
+## Story-Templates
 
-- **Component Name**: [Name der Komponente]
-- **Component Path**: [Pfad zur Komponente]
-- **Variants**: [Liste der Variants]
-- **Props**: [Wichtige Props]
-- **Special Features**: [Besondere Features]
-
-## Story-Struktur
+### 1. Grundlegende Story
 
 ```typescript
-// ComponentName.stories.tsx
+// Button.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
-import { ComponentName } from './ComponentName';
+import { Button } from './Button';
 
-const meta = {
-  title: 'Path/To/ComponentName',
-  component: ComponentName,
-  // ... configuration
-} satisfies Meta<typeof ComponentName>;
+const meta: Meta<typeof Button> = {
+  title: 'Components/Button',
+  component: Button,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'danger'],
+      description: 'Button-Varianten-Stil',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Button-Größe',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Button deaktivieren',
+    },
+  },
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Button>;
 
-// Stories...
+// Standard-Story
+export const Default: Story = {
+  args: {
+    children: 'Button',
+    variant: 'primary',
+    size: 'md',
+  },
+};
+
+// Alle Varianten
+export const Primary: Story = {
+  args: {
+    children: 'Primärer Button',
+    variant: 'primary',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    children: 'Sekundärer Button',
+    variant: 'secondary',
+  },
+};
+
+export const Danger: Story = {
+  args: {
+    children: 'Gefährlicher Button',
+    variant: 'danger',
+  },
+};
+
+// Größenvarianten
+export const Small: Story = {
+  args: {
+    children: 'Kleiner Button',
+    size: 'sm',
+  },
+};
+
+export const Large: Story = {
+  args: {
+    children: 'Großer Button',
+    size: 'lg',
+  },
+};
+
+// Zustandsvarianten
+export const Disabled: Story = {
+  args: {
+    children: 'Deaktivierter Button',
+    disabled: true,
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    children: 'Ladender Button',
+    isLoading: true,
+  },
+};
 ```
 
-## Anforderungen
+### 2. Formular-Komponenten-Story
 
-1. **Organisation**
-   - Logische Gruppierung
-   - Klare Naming
-   - Kategorisierung
-   - Hierarchie
+```typescript
+// Input.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { Input } from './Input';
 
-2. **Interaktivität**
-   - Actions für Events
-   - Controls für Props
-   - State Management
-   - Dynamic Updates
+const meta: Meta<typeof Input> = {
+  title: 'Forms/Input',
+  component: Input,
+  parameters: {
+    layout: 'padded',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    type: {
+      control: 'select',
+      options: ['text', 'email', 'password', 'number'],
+    },
+    error: {
+      control: 'text',
+    },
+  },
+};
 
-3. **Dokumentation**
-   - Description für Meta
-   - Description für Stories
-   - Code Examples
-   - Usage Guidelines
+export default meta;
+type Story = StoryObj<typeof Input>;
 
-4. **Visual Testing**
-   - Alle Variants sichtbar
-   - Vergleichbare Layouts
-   - Konsistente Abstände
-   - Klar erkennbare Unterschiede
+export const Default: Story = {
+  args: {
+    label: 'E-Mail',
+    placeholder: 'E-Mail-Adresse eingeben',
+  },
+};
 
-5. **Accessibility**
-   - A11y Checks aktiviert
-   - ARIA Labels dokumentiert
-   - Keyboard Nav getestet
-   - Color Contrast geprüft
+export const WithError: Story = {
+  args: {
+    label: 'E-Mail',
+    value: 'ungueltige-email',
+    error: 'Ungültiges E-Mail-Format',
+  },
+};
 
-6. **Performance**
-   - Lazy Loading wenn nötig
-   - Optimierte Re-Renders
-   - Schnelle Load Times
-   - Effiziente Updates
+export const Password: Story = {
+  args: {
+    label: 'Passwort',
+    type: 'password',
+    placeholder: 'Passwort eingeben',
+  },
+};
 
-## Beispiel-Aufruf
-
+export const Disabled: Story = {
+  args: {
+    label: 'E-Mail',
+    disabled: true,
+    value: 'deaktiviert@example.com',
+  },
+};
 ```
-Component Name: Button
-Component Path: components/atoms/Button
-Variants: primary, secondary, outline, ghost, danger
-Props:
-- size: 'sm' | 'md' | 'lg'
-- disabled: boolean
-- isLoading: boolean
-- leftIcon?: ReactNode
-- rightIcon?: ReactNode
-Special Features:
-- Loading state mit Spinner
-- Icon support links und rechts
-- Full width option
-- Custom className
+
+### 3. Komplexe Komponente mit Actions
+
+```typescript
+// UserCard.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
+import { UserCard } from './UserCard';
+
+const meta: Meta<typeof UserCard> = {
+  title: 'Features/UserCard',
+  component: UserCard,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <div style={{ maxWidth: '400px' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+export default meta;
+type Story = StoryObj<typeof UserCard>;
+
+const mockUser = {
+  id: '1',
+  name: 'Max Mustermann',
+  email: 'max@example.com',
+  avatar: 'https://i.pravatar.cc/150?img=1',
+  role: 'admin' as const,
+};
+
+export const Default: Story = {
+  args: {
+    user: mockUser,
+    onEdit: action('onEdit'),
+    onDelete: action('onDelete'),
+  },
+};
+
+export const WithoutAvatar: Story = {
+  args: {
+    user: { ...mockUser, avatar: undefined },
+    onEdit: action('onEdit'),
+    onDelete: action('onDelete'),
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    isLoading: true,
+  },
+};
 ```
 
-## Zu liefern
+### 4. Story mit mehreren Kompositionen
 
-1. Vollständige Story-Datei
-2. Alle Variants dokumentiert
-3. Interactive Examples
-4. Accessibility Notes
-5. Usage Guidelines
-6. Code Snippets
+```typescript
+// Card.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { Card } from './Card';
+
+const meta: Meta<typeof Card> = {
+  title: 'Components/Card',
+  component: Card,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+};
+
+export default meta;
+type Story = StoryObj<typeof Card>;
+
+export const Default: Story = {
+  args: {
+    children: 'Karteninhalt',
+  },
+};
+
+export const WithHeader: Story = {
+  render: () => (
+    <Card>
+      <Card.Header>Kartentitel</Card.Header>
+      <Card.Body>Karteninhalt hier</Card.Body>
+    </Card>
+  ),
+};
+
+export const Complete: Story = {
+  render: () => (
+    <Card>
+      <Card.Header>
+        <h3>Benutzerprofil</h3>
+      </Card.Header>
+      <Card.Body>
+        <p>Name: Max Mustermann</p>
+        <p>E-Mail: max@example.com</p>
+      </Card.Body>
+      <Card.Footer>
+        <button>Bearbeiten</button>
+        <button>Löschen</button>
+      </Card.Footer>
+    </Card>
+  ),
+};
+```
+
+### 5. Story mit MSW (API-Mocking)
+
+```typescript
+// UserList.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { http, HttpResponse } from 'msw';
+import { UserList } from './UserList';
+
+const meta: Meta<typeof UserList> = {
+  title: 'Features/UserList',
+  component: UserList,
+  parameters: {
+    layout: 'fullscreen',
+  },
+  tags: ['autodocs'],
+};
+
+export default meta;
+type Story = StoryObj<typeof UserList>;
+
+export const Default: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/users', () => {
+          return HttpResponse.json([
+            { id: '1', name: 'Max Mustermann', email: 'max@example.com' },
+            { id: '2', name: 'Anna Schmidt', email: 'anna@example.com' },
+          ]);
+        }),
+      ],
+    },
+  },
+};
+
+export const Empty: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/users', () => {
+          return HttpResponse.json([]);
+        }),
+      ],
+    },
+  },
+};
+
+export const Error: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/users', () => {
+          return new HttpResponse(null, { status: 500 });
+        }),
+      ],
+    },
+  },
+};
+```
+
+## Story-Konfiguration
+
+### Globale Parameter
+
+```typescript
+// .storybook/preview.ts
+import type { Preview } from '@storybook/react';
+import '../src/index.css';
+
+const preview: Preview = {
+  parameters: {
+    actions: { argTypesRegex: '^on[A-Z].*' },
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/,
+      },
+    },
+    backgrounds: {
+      default: 'light',
+      values: [
+        { name: 'hell', value: '#ffffff' },
+        { name: 'dunkel', value: '#1a1a1a' },
+      ],
+    },
+  },
+};
+
+export default preview;
+```
+
+### Dekoratoren
+
+```typescript
+// Globaler Dekorator
+export const decorators = [
+  (Story) => (
+    <div style={{ padding: '3rem' }}>
+      <Story />
+    </div>
+  ),
+];
+
+// Story-spezifischer Dekorator
+export const WithPadding: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ padding: '2rem', backgroundColor: '#f0f0f0' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  args: {
+    children: 'Inhalt mit Abstand',
+  },
+};
+```
+
+## Interaktive Steuerungen
+
+### ArgTypes-Konfiguration
+
+```typescript
+const meta: Meta<typeof Component> = {
+  argTypes: {
+    // Auswahl
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary'],
+      description: 'Komponentenvariante',
+      table: {
+        defaultValue: { summary: 'primary' },
+      },
+    },
+
+    // Radio
+    size: {
+      control: 'radio',
+      options: ['sm', 'md', 'lg'],
+    },
+
+    // Boolean
+    disabled: {
+      control: 'boolean',
+    },
+
+    // Zahl
+    count: {
+      control: { type: 'number', min: 0, max: 100, step: 1 },
+    },
+
+    // Bereich
+    opacity: {
+      control: { type: 'range', min: 0, max: 1, step: 0.1 },
+    },
+
+    // Farbe
+    color: {
+      control: 'color',
+    },
+
+    // Datum
+    date: {
+      control: 'date',
+    },
+
+    // Text
+    label: {
+      control: 'text',
+    },
+
+    // Objekt
+    user: {
+      control: 'object',
+    },
+
+    // Funktion (Steuerung deaktivieren)
+    onClick: {
+      action: 'geklickt',
+      table: {
+        category: 'Ereignisse',
+      },
+    },
+  },
+};
+```
+
+## Dokumentation
+
+### MDX-Dokumentation
+
+```mdx
+<!-- Button.stories.mdx -->
+import { Canvas, Meta, Story } from '@storybook/blocks';
+import * as ButtonStories from './Button.stories';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+Button-Komponente mit mehreren Varianten und Größen.
+
+## Verwendung
+
+```tsx
+import { Button } from '@/components/Button';
+
+<Button variant="primary" onClick={handleClick}>
+  Klick mich
+</Button>
+```
+
+## Varianten
+
+<Canvas of={ButtonStories.Primary} />
+<Canvas of={ButtonStories.Secondary} />
+<Canvas of={ButtonStories.Danger} />
+
+## Größen
+
+<Canvas of={ButtonStories.Small} />
+<Canvas of={ButtonStories.Large} />
+```
+
+## Best Practices
+
+1. **Story-Benennung**: Aussagekräftige Namen verwenden (Default, Primary, WithError)
+2. **Args**: Sinnvolle Standardwerte bereitstellen
+3. **ArgTypes**: Alle Props dokumentieren
+4. **Actions**: Für Event-Handler verwenden
+5. **Dekoratoren**: Kontext hinzufügen, wenn nötig
+6. **MSW**: API-Aufrufe mocken
+7. **Barrierefreiheit**: Mit a11y-Addon testen
+8. **Dokumentation**: MDX für komplexe Komponenten hinzufügen
+9. **Varianten**: Alle visuellen Zustände abdecken
+10. **Edge Cases**: Fehler-, Lade- und Leerzustände einschließen
+
+## Tests mit Storybook
+
+### Interaktionstests
+
+```typescript
+// Button.stories.tsx
+import { expect } from '@storybook/jest';
+import { userEvent, within } from '@storybook/testing-library';
+
+export const ClickTest: Story = {
+  args: {
+    children: 'Klick mich',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole('button');
+
+    await userEvent.click(button);
+    await expect(button).toHaveAttribute('aria-pressed', 'true');
+  },
+};
+```
+
+### Visuelle Tests
+
+```typescript
+// Chromatic konfigurieren
+export const parameters = {
+  chromatic: {
+    viewports: [320, 768, 1200],
+    delay: 300,
+  },
+};
+```
+
+## Generator-Skript
+
+```typescript
+// scripts/generate-story.ts
+import fs from 'fs/promises';
+import path from 'path';
+
+async function generateStory(componentName: string, componentPath: string) {
+  const storyPath = path.join(componentPath, `${componentName}.stories.tsx`);
+
+  await fs.writeFile(storyPath, getStoryTemplate(componentName));
+
+  console.log(`✅ Story erstellt: ${storyPath}`);
+}
+
+// Ausführen
+const [,, name, pathArg] = process.argv;
+generateStory(name, pathArg || `src/components/${name}`);
+```
+
+## Storybook-Addons
+
+Zu installierende wesentliche Addons:
+
+```bash
+npm install -D @storybook/addon-essentials
+npm install -D @storybook/addon-interactions
+npm install -D @storybook/addon-a11y
+npm install -D msw-storybook-addon
+```
+
+## Ressourcen
+
+- [Storybook-Dokumentation](https://storybook.js.org/docs/react/get-started/introduction)
+- [CSF 3.0](https://storybook.js.org/docs/react/api/csf)
+- [Interaktionstests](https://storybook.js.org/docs/react/writing-tests/interaction-testing)
+- [MSW-Addon](https://storybook.js.org/addons/msw-storybook-addon)
