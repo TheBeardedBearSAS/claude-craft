@@ -1,203 +1,253 @@
 ---
-description: Angular Standards Compliance Check
+description: Vollständige Angular-Compliance-Prüfung durchführen
+argument-hint: [arguments]
 ---
 
-# Angular Standards Compliance Check
+# Vollständige Angular-Compliance-Prüfung
 
-Verify that the Angular project follows established coding standards and best practices.
+## Argumente
 
-## What This Command Does
-
-1. **Standards Verification**
-   - Check coding conventions
-   - Verify naming conventions
-   - Validate file organization
-   - Check import order
-   - Verify documentation standards
-
-2. **Angular-Specific Checks**
-   - Standalone components usage
-   - Signals implementation
-   - OnPush change detection
-   - Modern control flow (@if, @for)
-   - Typed forms
-
-3. **Generated Report**
-   - Non-compliant files
-   - Severity levels
-   - Remediation recommendations
-   - Compliance score (/100)
+$ARGUMENTS (optional: Pfad zum zu analysierenden Projekt)
 
 ## Plan-Modus
 
-> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
+> Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine übergreifende Untersuchung erfordert.
 
-## Compliance Areas
+## AUFTRAG
 
-### 1. Component Standards
+Führen Sie ein vollständiges Compliance-Audit des Angular-Projekts durch, indem Sie die 4 Hauptprüfungen orchestrieren: Architektur, Code-Qualität, Tests und Sicherheit. Erstellen Sie einen konsolidierten Bericht mit einer Gesamtpunktzahl von 100 Punkten.
 
-```typescript
-// ✅ Compliant
-@Component({
-  selector: 'app-user-profile',
-  standalone: true,
-  imports: [CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `...`
-})
-export class UserProfileComponent {}
+### Schritt 1: Audit-Vorbereitung
 
-// ❌ Non-compliant
-@Component({
-  selector: 'user-profile',     // Missing app- prefix
-  // standalone: missing       // Not standalone
-  // changeDetection: missing  // Not OnPush
-})
-export class UserProfile {}    // Missing Component suffix
+Audit-Umgebung vorbereiten:
+- [ ] Zu prüfenden Projektpfad identifizieren
+- [ ] Vorhandensein von Konfigurationsdateien prüfen (angular.json, tsconfig.json, package.json)
+- [ ] Hauptverzeichnisse auflisten (src/app/, e2e/, usw.)
+- [ ] Projektstruktur und Angular-Version identifizieren
+
+**Hinweis**: Wenn $ARGUMENTS angegeben ist, diesen als Projektpfad verwenden, andernfalls das aktuelle Verzeichnis verwenden.
+
+### Schritt 2: Architektur-Audit (25 Punkte)
+
+Vollständige Architekturprüfung durchführen:
+
+**Befehl**: Slash-Befehl `/angular:check-architecture` verwenden oder die Schritte in `check-architecture.md` manuell befolgen
+
+**Bewertete Kriterien**:
+- Domain-getriebene Modulstruktur (6 Pkt.)
+- Verwendung von Standalone-Komponenten (6 Pkt.)
+- Lazy Loading und Routing (4 Pkt.)
+- Core/Shared/Feature-Trennung (4 Pkt.)
+- Organisation der Service-Schicht (3 Pkt.)
+- Dependency-Injection-Muster (2 Pkt.)
+
+**Referenz**: `check-architecture.md`
+
+### Schritt 3: Code-Qualitäts-Audit (25 Punkte)
+
+Code-Qualitätsprüfung durchführen:
+
+**Befehl**: Slash-Befehl `/angular:check-code-quality` verwenden oder die Schritte in `check-code-quality.md` manuell befolgen
+
+**Bewertete Kriterien**:
+- TypeScript-Strict-Modus und Typsicherheit (5 Pkt.)
+- ESLint-Konformität (5 Pkt.)
+- Signals und moderne Angular-Muster (4 Pkt.)
+- KISS/DRY/YAGNI-Prinzipien (4 Pkt.)
+- Namenskonventionen und Dateistruktur (4 Pkt.)
+- OnPush-Change-Detection (3 Pkt.)
+
+**Referenz**: `check-code-quality.md`
+
+### Schritt 4: Test-Audit (25 Punkte)
+
+Testprüfung durchführen:
+
+**Befehl**: Slash-Befehl `/angular:check-testing` verwenden oder die Schritte in `check-testing.md` manuell befolgen
+
+**Bewertete Kriterien**:
+- Code-Abdeckung (7 Pkt.)
+- Unit-Tests für Services und Pipes (6 Pkt.)
+- Komponenten-Tests mit TestBed (4 Pkt.)
+- Integrationstests (3 Pkt.)
+- E2E-Tests (3 Pkt.)
+- Test-Isolation und Mocks (2 Pkt.)
+
+**Referenz**: `check-testing.md`
+
+### Schritt 5: Sicherheits-Audit (25 Punkte)
+
+Sicherheitsprüfung durchführen:
+
+**Befehl**: Slash-Befehl `/angular:check-security` verwenden oder die Schritte in `check-security.md` manuell befolgen
+
+**Bewertete Kriterien**:
+- XSS-Prävention und DomSanitizer (6 Pkt.)
+- Verwaltung von Geheimnissen und Anmeldedaten (5 Pkt.)
+- Eingabevalidierung und -bereinigung (4 Pkt.)
+- Schwachstellen in Abhängigkeiten (4 Pkt.)
+- Authentifizierung und Route Guards (3 Pkt.)
+- CSRF und HTTP-Interceptors (2 Pkt.)
+- Content Security Policy (1 Pkt.)
+
+**Referenz**: `check-security.md`
+
+### Schritt 6: Konsolidierung und Gesamtbewertung
+
+Gesamtpunktzahl berechnen und konsolidierten Bericht erstellen:
+- [ ] Die 4 Punktzahlen addieren (max. 100 Punkte)
+- [ ] Kritische Kategorien identifizieren (<50%)
+- [ ] Alle kritischen übergreifenden Probleme auflisten
+- [ ] Maßnahmen nach Auswirkung/Aufwand priorisieren
+- [ ] Abschließenden konsolidierten Bericht erstellen
+
+**Bewertungsskala**:
+- 90-100: Ausgezeichnet — Referenzprojekt
+- 75-89: Sehr gut — Einige geringfügige Verbesserungen
+- 60-74: Akzeptabel — Verbesserungen erforderlich
+- 40-59: Unzureichend — Größeres Refactoring erforderlich
+- 0-39: Kritisch — Vollständige Überarbeitung notwendig
+
+### Schritt 7: Empfehlungen und Aktionsplan
+
+Abschließende Empfehlungen erstellen:
+- [ ] Top-3-Prioritätsmaßnahmen über alle Kategorien hinweg identifizieren
+- [ ] Aufwand (Gering/Mittel/Hoch) für jede Maßnahme schätzen
+- [ ] Auswirkung (Gering/Mittel/Hoch) für jede Maßnahme schätzen
+- [ ] Umsetzungsreihenfolge vorschlagen
+- [ ] Quick Wins vorschlagen (hohes Auswirkungs-/Aufwandsverhältnis)
+
+## AUSGABEFORMAT
+
+```
+ANGULAR COMPLIANCE AUDIT - VOLLSTÄNDIGER BERICHT
+=================================================
+
+GESAMTPUNKTZAHL: XX/100
+
+COMPLIANCE-NIVEAU: [Ausgezeichnet/Sehr gut/Akzeptabel/Unzureichend/Kritisch]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PUNKTE NACH KATEGORIE:
+
+ARCHITEKTUR       : XX/25  [██████████░░░░░░░░░░] XX%
+CODE-QUALITÄT     : XX/25  [██████████░░░░░░░░░░] XX%
+TESTS             : XX/25  [██████████░░░░░░░░░░] XX%
+SICHERHEIT        : XX/25  [██████████░░░░░░░░░░] XX%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GESAMTSTÄRKEN:
+1. [In mehreren Kategorien identifizierte Stärke]
+2. [Weitere wichtige Stärke]
+3. [Dritte Stärke]
+
+GESAMTVERBESSERUNGEN:
+1. [Geringfügige übergreifende Verbesserung]
+2. [Weitere empfohlene Verbesserung]
+3. [Dritte Verbesserung]
+
+KRITISCHE PROBLEME:
+1. [Kritisches Problem Nr. 1 — betroffene Kategorie]
+2. [Kritisches Problem Nr. 2 — betroffene Kategorie]
+3. [Kritisches Problem Nr. 3 — betroffene Kategorie]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DETAILS NACH KATEGORIE:
+
+┌─────────────────────────────────────────────┐
+│ ARCHITEKTUR (XX/25)                         │
+└─────────────────────────────────────────────┘
+
+Teilpunkte:
+  • Domain-getriebene Module        : XX/6
+  • Standalone-Komponenten          : XX/6
+  • Lazy Loading und Routing        : XX/4
+  • Core/Shared/Feature             : XX/4
+  • Service-Schicht                 : XX/3
+  • Dependency Injection            : XX/2
+
+Stärken:
+- [Architekturstärken]
+
+Probleme:
+- [Architekturprobleme]
+
+[Ähnliche Abschnitte für Code-Qualität, Tests und Sicherheit...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP 3 PRIORITÄTSMASSNAHMEN (ALLE KATEGORIEN):
+
+1. KRITISCH - [Maßnahme Nr. 1]
+   Kategorie  : [Architektur/Qualität/Tests/Sicherheit]
+   Auswirkung : [Hoch/Mittel/Gering]
+   Aufwand    : [Hoch/Mittel/Gering]
+   Priorität  : SOFORT
+
+   Detaillierte Beschreibung:
+   [Erläuterung des Problems und vorgeschlagene Lösung]
+
+   Betroffene Dateien:
+   - [datei:zeile]
+
+   Korrekturbeispiel:
+   [Code oder Korrekturbefehl]
+
+2. WICHTIG - [Maßnahme Nr. 2]
+   [Gleiches Format...]
+
+3. EMPFOHLEN - [Maßnahme Nr. 3]
+   [Gleiches Format...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUICK WINS (Hohe Auswirkung / Geringer Aufwand):
+
+- [Quick Win Nr. 1] - Kategorie: [X] - Auswirkung: [X] - Aufwand: [X]
+- [Quick Win Nr. 2] - Kategorie: [X] - Auswirkung: [X] - Aufwand: [X]
+- [Quick Win Nr. 3] - Kategorie: [X] - Auswirkung: [X] - Aufwand: [X]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EMPFOHLENER AKTIONSPLAN:
+
+WOCHE 1 (Sofort):
+- [ ] [Kritische Maßnahme Nr. 1]
+- [ ] [Prioritäts-Quick-Win]
+
+WOCHE 2-4 (Kurzfristig):
+- [ ] [Wichtige Maßnahme Nr. 2]
+- [ ] [Weitere Quick Wins]
+
+MONAT 2-3 (Mittelfristig):
+- [ ] [Empfohlene Maßnahme Nr. 3]
+- [ ] [Schrittweise Verbesserungen]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ZUSAMMENFASSUNG FÜR DIE GESCHÄFTSLEITUNG:
+
+[Zusammenfassender Absatz zum Gesamtzustand des Projekts, zu den wichtigsten Stärken,
+den wichtigsten Schwächen und zur empfohlenen Entwicklung zur Verbesserung
+der Compliance. Angeben, ob das Projekt produktionsreif ist,
+Korrekturen erfordert oder refaktoriert werden muss.]
+
+Allgemeine Empfehlung: [Produktionsreif / Geringfügige Korrekturen /
+Größeres Refactoring / Überarbeitung notwendig]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### 2. Signal Usage
+## WICHTIGE HINWEISE
 
-```typescript
-// ✅ Compliant - Using signals
-export class CounterComponent {
-  count = signal(0);
-  doubleCount = computed(() => this.count() * 2);
-}
-
-// ❌ Non-compliant - Using observables for local state
-export class CounterComponent {
-  count$ = new BehaviorSubject(0);
-}
-```
-
-### 3. Template Syntax
-
-```html
-<!-- ✅ Compliant - Modern control flow -->
-@if (loading()) {
-  <app-spinner />
-}
-
-@for (item of items(); track item.id) {
-  <app-item [data]="item" />
-}
-
-<!-- ❌ Non-compliant - Legacy syntax -->
-<app-spinner *ngIf="loading"></app-spinner>
-<app-item *ngFor="let item of items" [data]="item"></app-item>
-```
-
-### 4. Dependency Injection
-
-```typescript
-// ✅ Compliant - inject() function
-export class MyComponent {
-  private readonly userService = inject(UserService);
-}
-
-// ⚠️ Warning - Constructor injection (valid but verbose)
-export class MyComponent {
-  constructor(private userService: UserService) {}
-}
-```
-
-### 5. File Naming
-
-```
-✅ Compliant:
-- user-profile.component.ts
-- auth.service.ts
-- auth.guard.ts
-- date-format.pipe.ts
-
-❌ Non-compliant:
-- UserProfile.component.ts (PascalCase)
-- authService.ts (missing suffix)
-- AuthGuard.ts (PascalCase)
-```
-
-## Scoring Criteria
-
-| Category | Weight | Criteria |
-|----------|--------|----------|
-| Standalone Components | 20% | All components are standalone |
-| Signals Usage | 15% | Local state uses signals |
-| OnPush Strategy | 15% | All components use OnPush |
-| Modern Control Flow | 10% | @if/@for instead of *ngIf/*ngFor |
-| Typed Forms | 10% | Forms are strongly typed |
-| Naming Conventions | 10% | Correct file/class naming |
-| Import Organization | 10% | Imports properly ordered |
-| Documentation | 10% | Key components documented |
-
-## Output Format
-
-```
-══════════════════════════════════════════════════════════════
-ANGULAR COMPLIANCE REPORT
-══════════════════════════════════════════════════════════════
-
-📊 SCORE: 85/100
-
-✅ PASSING (6)
-──────────────────────────────────────────────────────────────
-• Standalone components: 100% (24/24 components)
-• OnPush strategy: 100% (24/24 components)
-• Typed forms: 100% (8/8 forms)
-• Import organization: 100%
-• File naming: 100%
-• Documentation: 90%
-
-⚠️ WARNINGS (2)
-──────────────────────────────────────────────────────────────
-• Modern control flow: 75% (18/24 templates)
-  - src/app/features/users/user-list.component.html:15 - Uses *ngFor
-  - src/app/shared/modal/modal.component.html:8 - Uses *ngIf
-
-• Signals usage: 80% (16/20 components with local state)
-  - src/app/features/auth/login.component.ts - Uses BehaviorSubject
-
-❌ ERRORS (1)
-──────────────────────────────────────────────────────────────
-• Constructor injection detected (prefer inject()):
-  - src/app/core/services/api.service.ts:15
-
-📋 RECOMMENDATIONS
-──────────────────────────────────────────────────────────────
-1. Migrate remaining *ngFor to @for with track
-2. Replace BehaviorSubject with signal() for local state
-3. Use inject() function instead of constructor injection
-
-══════════════════════════════════════════════════════════════
-```
-
-## Automated Checks
-
-Run these commands to verify compliance:
-
-```bash
-# Lint check
-ng lint
-
-# Type check
-npx tsc --noEmit
-
-# Test coverage
-npm run test:ci
-
-# Build check
-ng build --configuration=production
-```
-
-## Checklist
-
-- [ ] All components are standalone
-- [ ] All components use OnPush change detection
-- [ ] Local state uses signals (not BehaviorSubject)
-- [ ] Templates use @if/@for/@switch
-- [ ] Forms are typed (FormGroup<T>)
-- [ ] inject() used for dependency injection
-- [ ] File naming follows conventions
-- [ ] Imports are organized
-- [ ] Public API documented
-- [ ] Tests pass with >80% coverage
+- Dieser Befehl orchestriert die 4 spezialisierten Audits
+- Docker für alle Analysewerkzeuge verwenden
+- Konkrete Beispiele mit datei:zeile für jedes Problem bereitstellen
+- Maßnahmen auf der Grundlage der Auswirkungs-/Aufwandsmatrix priorisieren
+- Sicherheitsprobleme haben IMMER höchste Priorität
+- Automatisierbare Korrekturen vorschlagen (Skripte, Pre-Commit-Hooks)
+- Der Bericht muss umsetzbar sein, nicht nur beschreibend
+- Empfehlungen an den geschäftlichen Kontext des Projekts anpassen

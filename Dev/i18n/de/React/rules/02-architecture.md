@@ -1,75 +1,218 @@
-# React-Architektur
+# React-Architektur – Prinzipien und Organisation
 
-## Projekt-Struktur
+## Grundlegende Architekturprinzipien
 
-### Feature-basierte Organisation
+### 1. Trennung der Zuständigkeiten
+
+Jeder Teil des Codes sollte eine einzige, klar definierte Verantwortung haben:
+
+- **Komponenten**: Anzeige und Benutzerinteraktion
+- **Hooks**: Geschäftslogik und Zustandsverwaltung
+- **Services**: API-Kommunikation
+- **Utils**: Reine Hilfsfunktionen
+- **Types**: TypeScript-Definitionen
+
+### 2. Modularität
+
+Der Code sollte in unabhängige und wiederverwendbare Module gegliedert werden.
+
+### 3. Skalierbarkeit
+
+Die Architektur sollte das Projektwachstum ohne größeres Refactoring unterstützen.
+
+## Feature-basierte Ordnerstruktur
+
+### Allgemeine Organisation
 
 ```
 src/
-├── components/           # Wiederverwendbare Komponenten (Atomic Design)
-│   ├── atoms/           # Grundlegende Bausteine
-│   │   ├── Button/
-│   │   ├── Input/
-│   │   ├── Badge/
-│   │   └── Spinner/
-│   ├── molecules/       # Kombinationen von Atoms
-│   │   ├── FormField/
-│   │   ├── SearchBar/
-│   │   └── Card/
-│   └── organisms/       # Komplexe Komponenten
-│       ├── Header/
-│       ├── Sidebar/
-│       └── DataTable/
+├── app/                          # Anwendungskonfiguration
+│   ├── App.tsx                   # Root-Komponente
+│   ├── AppProviders.tsx          # Globale Provider
+│   └── router.tsx                # Routing-Konfiguration
 │
-├── features/            # Business-Features
+├── components/                   # Gemeinsame Komponenten (Atomic Design)
+│   ├── atoms/                    # Atomare Komponenten
+│   │   ├── Button/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Button.test.tsx
+│   │   │   ├── Button.stories.tsx
+│   │   │   └── index.ts
+│   │   ├── Input/
+│   │   ├── Label/
+│   │   ├── Icon/
+│   │   └── Spinner/
+│   │
+│   ├── molecules/                # Molekulare Komponenten
+│   │   ├── FormField/
+│   │   │   ├── FormField.tsx
+│   │   │   ├── FormField.test.tsx
+│   │   │   └── index.ts
+│   │   ├── SearchBar/
+│   │   ├── Card/
+│   │   └── Modal/
+│   │
+│   ├── organisms/                # Organismus-Komponenten
+│   │   ├── Header/
+│   │   │   ├── Header.tsx
+│   │   │   ├── Header.test.tsx
+│   │   │   ├── components/      # Spezifische Unterkomponenten
+│   │   │   │   ├── HeaderNav.tsx
+│   │   │   │   └── UserMenu.tsx
+│   │   │   └── index.ts
+│   │   ├── Sidebar/
+│   │   ├── DataTable/
+│   │   └── Form/
+│   │
+│   └── templates/                # Seiten-Templates
+│       ├── DashboardTemplate/
+│       ├── AuthTemplate/
+│       └── SettingsTemplate/
+│
+├── features/                     # Geschäftliche Features
 │   ├── auth/
-│   │   ├── components/  # Feature-spezifische Komponenten
-│   │   ├── hooks/       # Feature-spezifische Hooks
-│   │   ├── services/    # API-Calls
-│   │   ├── types/       # TypeScript-Types
-│   │   └── utils/       # Utilities
+│   │   ├── components/          # Authentifizierungsspezifische Komponenten
+│   │   │   ├── LoginForm/
+│   │   │   │   ├── LoginForm.tsx
+│   │   │   │   ├── LoginForm.test.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── RegisterForm/
+│   │   │   └── PasswordReset/
+│   │   │
+│   │   ├── hooks/               # Custom Hooks für Auth
+│   │   │   ├── useAuth.ts
+│   │   │   ├── useAuth.test.ts
+│   │   │   ├── useLogin.ts
+│   │   │   └── useRegister.ts
+│   │   │
+│   │   ├── services/            # API-Services für Auth
+│   │   │   ├── auth.service.ts
+│   │   │   ├── auth.service.test.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── types/               # TypeScript-Typen
+│   │   │   ├── auth.types.ts
+│   │   │   ├── user.types.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── utils/               # Spezifische Hilfsfunktionen
+│   │   │   ├── tokenStorage.ts
+│   │   │   ├── validators.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── store/               # Lokale Zustandsverwaltung
+│   │   │   ├── authStore.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── constants/           # Konstanten
+│   │   │   └── auth.constants.ts
+│   │   │
+│   │   └── index.ts             # Feature-Einstiegspunkt
+│   │
 │   ├── users/
+│   │   ├── components/
+│   │   │   ├── UserList/
+│   │   │   ├── UserProfile/
+│   │   │   └── UserForm/
+│   │   ├── hooks/
+│   │   │   ├── useUsers.ts
+│   │   │   ├── useUserMutations.ts
+│   │   │   └── useUserFilters.ts
+│   │   ├── services/
+│   │   ├── types/
+│   │   ├── utils/
+│   │   └── index.ts
+│   │
+│   ├── products/
+│   ├── orders/
 │   └── dashboard/
 │
-├── hooks/               # Geteilte Custom Hooks
-│   ├── useAuth.ts
+├── hooks/                        # Globale wiederverwendbare Hooks
+│   ├── useDebounce.ts
 │   ├── useLocalStorage.ts
-│   └── useDebounce.ts
+│   ├── useMediaQuery.ts
+│   ├── useOnClickOutside.ts
+│   ├── usePagination.ts
+│   └── index.ts
 │
-├── services/            # Geteilte API-Services
-│   ├── api.service.ts
-│   ├── auth.service.ts
-│   └── storage.service.ts
+├── services/                     # Globale Services
+│   ├── api/
+│   │   ├── axios.config.ts      # Axios-Konfiguration
+│   │   ├── apiClient.ts         # API-Client
+│   │   └── interceptors.ts      # Interceptors
+│   ├── storage/
+│   │   ├── localStorage.service.ts
+│   │   └── sessionStorage.service.ts
+│   ├── analytics/
+│   │   └── analytics.service.ts
+│   └── index.ts
 │
-├── utils/               # Geteilte Utilities
-│   ├── formatters.ts
-│   ├── validators.ts
-│   └── helpers.ts
+├── store/                        # Globale Zustandsverwaltung
+│   ├── slices/                  # Zustand-Slices
+│   │   ├── uiStore.ts
+│   │   ├── themeStore.ts
+│   │   └── notificationStore.ts
+│   ├── index.ts
+│   └── types.ts
 │
-├── types/               # Geteilte TypeScript-Types
+├── types/                        # Globale Typen
+│   ├── global.types.ts
 │   ├── api.types.ts
-│   ├── user.types.ts
-│   └── common.types.ts
+│   ├── common.types.ts
+│   └── index.ts
 │
-├── config/              # Konfigurationsdateien
-│   ├── constants.ts
-│   ├── routes.ts
-│   └── api.config.ts
+├── utils/                        # Globale Hilfsfunktionen
+│   ├── formatters/
+│   │   ├── date.ts
+│   │   ├── currency.ts
+│   │   └── number.ts
+│   ├── validators/
+│   │   ├── email.ts
+│   │   └── phone.ts
+│   ├── helpers/
+│   │   ├── array.ts
+│   │   ├── object.ts
+│   │   └── string.ts
+│   └── index.ts
 │
-├── styles/              # Globale Styles
+├── styles/                       # Globale Stile
 │   ├── globals.css
-│   └── tailwind.css
+│   ├── variables.css
+│   ├── theme.ts
+│   └── tailwind.config.ts
 │
-├── App.tsx              # Root-Komponente
-├── main.tsx             # Entry-Point
-└── routes.tsx           # Routing-Konfiguration
+├── config/                       # Konfiguration
+│   ├── env.ts                   # Umgebungsvariablen
+│   ├── constants.ts             # Globale Konstanten
+│   ├── routes.ts                # Routen-Definitionen
+│   └── features.ts              # Feature-Flags
+│
+├── assets/                       # Statische Assets
+│   ├── images/
+│   ├── icons/
+│   └── fonts/
+│
+├── lib/                          # Konfigurierte Drittanbieter-Bibliotheken
+│   ├── react-query/
+│   │   └── queryClient.ts
+│   ├── router/
+│   │   └── router.config.ts
+│   └── i18n/
+│       └── i18n.config.ts
+│
+└── pages/                        # Seiten (bei dateibasiertem Routing)
+    ├── HomePage.tsx
+    ├── DashboardPage.tsx
+    └── NotFoundPage.tsx
 ```
 
-## Atomic Design-Prinzipien
+## Atomic-Design-Pattern
 
-### Atoms (Atome)
+### Komponentenhierarchie
 
-Grundlegende UI-Bausteine, nicht weiter zerlegbar.
+#### 1. Atoms (Atome)
+
+**Grundlegendste Komponenten, nicht weiter zerlegbar.**
 
 ```typescript
 // components/atoms/Button/Button.tsx
@@ -81,410 +224,428 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-white hover:bg-primary/90',
-        secondary: 'bg-secondary text-white hover:bg-secondary/90',
-        outline: 'border border-input hover:bg-accent'
+        primary: 'bg-blue-600 text-white hover:bg-blue-700',
+        secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
+        outline: 'border border-gray-300 bg-transparent hover:bg-gray-100',
+        ghost: 'hover:bg-gray-100',
+        danger: 'bg-red-600 text-white hover:bg-red-700'
       },
       size: {
         sm: 'h-9 px-3 text-sm',
-        md: 'h-10 px-4',
+        md: 'h-10 px-4 text-base',
         lg: 'h-11 px-8 text-lg'
       }
     },
     defaultVariants: {
-      variant: 'default',
+      variant: 'primary',
       size: 'md'
     }
   }
 );
 
-interface ButtonProps
+export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+    VariantProps<typeof buttonVariants> {
+  isLoading?: boolean;
+}
 
 export const Button: FC<ButtonProps> = ({
   variant,
   size,
+  isLoading,
+  disabled,
+  children,
   className,
   ...props
 }) => {
   return (
     <button
       className={buttonVariants({ variant, size, className })}
+      disabled={disabled || isLoading}
       {...props}
-    />
+    >
+      {isLoading ? <Spinner size="sm" /> : children}
+    </button>
   );
 };
 ```
 
-### Molecules (Moleküle)
+```typescript
+// components/atoms/Input/Input.tsx
+import { FC, InputHTMLAttributes, forwardRef } from 'react';
+import { cn } from '@/utils/classnames';
 
-Kombinationen von mehreren Atoms.
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  error?: boolean;
+  fullWidth?: boolean;
+}
+
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ error, fullWidth, className, ...props }, ref) => {
+    return (
+      <input
+        ref={ref}
+        className={cn(
+          'px-3 py-2 border rounded-md outline-none transition-colors',
+          'focus:ring-2 focus:ring-blue-500',
+          error && 'border-red-500 focus:ring-red-500',
+          fullWidth && 'w-full',
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
+
+Input.displayName = 'Input';
+```
+
+#### 2. Molecules (Moleküle)
+
+**Kombination mehrerer Atome.**
 
 ```typescript
 // components/molecules/FormField/FormField.tsx
-import { FC, InputHTMLAttributes } from 'react';
-import { Input } from '@/components/atoms/Input';
+import { FC, ReactNode } from 'react';
+import { Input, InputProps } from '@/components/atoms/Input';
 import { Label } from '@/components/atoms/Label';
 
-interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface FormFieldProps extends InputProps {
   label: string;
   error?: string;
   helperText?: string;
+  required?: boolean;
 }
 
 export const FormField: FC<FormFieldProps> = ({
   label,
   error,
   helperText,
+  required,
   id,
   ...inputProps
 }) => {
+  const inputId = id || `field-${label.toLowerCase().replace(/\s/g, '-')}`;
+
   return (
-    <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
+    <div className="space-y-1">
+      <Label htmlFor={inputId} required={required}>
+        {label}
+      </Label>
       <Input
-        id={id}
+        id={inputId}
+        error={!!error}
         aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={error ? `${inputId}-error` : undefined}
         {...inputProps}
       />
       {error && (
-        <p id={`${id}-error`} className="text-sm text-destructive">
+        <p id={`${inputId}-error`} className="text-sm text-red-600">
           {error}
         </p>
       )}
       {helperText && !error && (
-        <p className="text-sm text-muted-foreground">{helperText}</p>
+        <p className="text-sm text-gray-500">{helperText}</p>
       )}
     </div>
   );
 };
 ```
 
-### Organisms (Organismen)
+## Container/Presenter-Pattern
 
-Komplexe Komponenten aus Molecules und Atoms.
+### Trennung von Logik und Präsentation
 
-```typescript
-// components/organisms/LoginForm/LoginForm.tsx
-import { FC } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { FormField } from '@/components/molecules/FormField';
-import { Button } from '@/components/atoms/Button';
+#### Container (Smart Component)
 
-const loginSchema = z.object({
-  email: z.string().email('Ungültige E-Mail'),
-  password: z.string().min(8, 'Passwort muss mindestens 8 Zeichen haben')
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
-
-interface LoginFormProps {
-  onSubmit: (data: LoginFormData) => Promise<void>;
-  isLoading?: boolean;
-}
-
-export const LoginForm: FC<LoginFormProps> = ({ onSubmit, isLoading }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema)
-  });
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <FormField
-        label="E-Mail"
-        type="email"
-        error={errors.email?.message}
-        {...register('email')}
-      />
-
-      <FormField
-        label="Passwort"
-        type="password"
-        error={errors.password?.message}
-        {...register('password')}
-      />
-
-      <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? 'Anmeldung läuft...' : 'Anmelden'}
-      </Button>
-    </form>
-  );
-};
-```
-
-## Feature-basierte Architektur
-
-### Feature-Organisation
-
-Jedes Feature ist selbständig mit eigenen Komponenten, Hooks und Services.
-
-```typescript
-// features/users/index.ts
-export { UserList } from './components/UserList';
-export { UserForm } from './components/UserForm';
-export { useUsers, useCreateUser } from './hooks/useUsers';
-export type { User, CreateUserInput } from './types';
-```
-
-### Feature-Komponente mit Container/Presenter
+**Verwaltet Logik, Nebeneffekte und Zustand.**
 
 ```typescript
 // features/users/components/UserList/UserListContainer.tsx
 import { FC } from 'react';
-import { useUsers } from '../../hooks/useUsers';
+import { useUsers } from '@/features/users/hooks/useUsers';
 import { UserListPresenter } from './UserListPresenter';
-import { Spinner } from '@/components/atoms/Spinner';
-import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 
 export const UserListContainer: FC = () => {
-  const { data: users, isLoading, error } = useUsers();
+  const {
+    users,
+    isLoading,
+    error,
+    pagination,
+    handlePageChange,
+    handleSearch,
+    handleSort
+  } = useUsers();
 
-  if (isLoading) return <Spinner />;
-  if (error) return <ErrorMessage error={error} />;
-  if (!users) return null;
+  if (error) {
+    return <ErrorMessage error={error} />;
+  }
 
-  return <UserListPresenter users={users} />;
+  return (
+    <UserListPresenter
+      users={users}
+      isLoading={isLoading}
+      pagination={pagination}
+      onPageChange={handlePageChange}
+      onSearch={handleSearch}
+      onSort={handleSort}
+    />
+  );
 };
+```
 
+#### Presenter (Dumb Component)
+
+**Nur Anzeige, empfängt alles über Props.**
+
+```typescript
 // features/users/components/UserList/UserListPresenter.tsx
 import { FC } from 'react';
-import type { User } from '../../types';
-import { Card } from '@/components/molecules/Card';
+import { User } from '@/features/users/types';
+import { DataTable } from '@/components/organisms/DataTable';
+import { SearchBar } from '@/components/molecules/SearchBar';
+import { Pagination } from '@/components/molecules/Pagination';
 
-interface UserListPresenterProps {
+export interface UserListPresenterProps {
   users: User[];
+  isLoading: boolean;
+  pagination: PaginationState;
+  onPageChange: (page: number) => void;
+  onSearch: (query: string) => void;
+  onSort: (field: string) => void;
 }
 
-export const UserListPresenter: FC<UserListPresenterProps> = ({ users }) => {
+export const UserListPresenter: FC<UserListPresenterProps> = ({
+  users,
+  isLoading,
+  pagination,
+  onPageChange,
+  onSearch,
+  onSort
+}) => {
+  const columns = useMemo(() => [
+    {
+      accessorKey: 'name',
+      header: 'Name'
+    },
+    {
+      accessorKey: 'email',
+      header: 'E-Mail'
+    },
+    {
+      accessorKey: 'role',
+      header: 'Rolle'
+    }
+  ], []);
+
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {users.map((user) => (
-        <Card key={user.id}>
-          <h3>{user.name}</h3>
-          <p>{user.email}</p>
-        </Card>
-      ))}
+    <div className="space-y-4">
+      <SearchBar onSearch={onSearch} placeholder="Benutzer suchen..." />
+
+      {isLoading ? (
+        <Skeleton />
+      ) : (
+        <DataTable data={users} columns={columns} />
+      )}
+
+      <Pagination
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 };
 ```
 
-## State Management
+## Organisation von Custom Hooks
 
-### Lokaler State (useState)
-
-Für Komponenten-spezifischen State.
+### Hook-Struktur
 
 ```typescript
-const [isOpen, setIsOpen] = useState(false);
-const [count, setCount] = useState(0);
-```
+// hooks/useExample/useExample.ts
+import { useState, useEffect, useCallback } from 'react';
 
-### Server State (TanStack Query)
-
-Für API-Daten und Caching.
-
-```typescript
-// hooks/useUsers.ts
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { userService } from '@/services/user.service';
-
-export const useUsers = () => {
-  return useQuery({
-    queryKey: ['users'],
-    queryFn: () => userService.getAll()
-  });
-};
-
-export const useCreateUser = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: userService.create,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-    }
-  });
-};
-```
-
-### Globaler State (Zustand)
-
-Für App-weiten State (Theme, Auth, etc.).
-
-```typescript
-// stores/useAuthStore.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-
-interface AuthState {
-  user: User | null;
-  token: string | null;
-  login: (user: User, token: string) => void;
-  logout: () => void;
+export interface UseExampleOptions {
+  initialValue?: string;
+  onSuccess?: (data: string) => void;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      token: null,
-      login: (user, token) => set({ user, token }),
-      logout: () => set({ user: null, token: null })
-    }),
-    {
-      name: 'auth-storage'
-    }
-  )
-);
-```
+export interface UseExampleReturn {
+  value: string;
+  isLoading: boolean;
+  error: Error | null;
+  update: (newValue: string) => void;
+  reset: () => void;
+}
 
-## Routing-Architektur
+/**
+ * Custom Hook zur Verwaltung von [Beschreibung]
+ *
+ * @param options - Konfigurationsoptionen
+ * @returns Zustand und Methoden zur Verwaltung von [Funktionalität]
+ *
+ * @example
+ * ```tsx
+ * const { value, update } = useExample({ initialValue: 'test' });
+ * ```
+ */
+export const useExample = (
+  options: UseExampleOptions = {}
+): UseExampleReturn => {
+  const { initialValue = '', onSuccess } = options;
 
-### Route-Konfiguration
+  const [value, setValue] = useState(initialValue);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
-```typescript
-// routes.tsx
-import { lazy } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { Layout } from './components/Layout';
+  const update = useCallback(
+    async (newValue: string) => {
+      setIsLoading(true);
+      setError(null);
 
-// Lazy Loading für Code-Splitting
-const HomePage = lazy(() => import('./pages/HomePage'));
-const DashboardPage = lazy(() => import('./pages/DashboardPage'));
-const UsersPage = lazy(() => import('./features/users/pages/UsersPage'));
-
-export const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <HomePage />
-      },
-      {
-        path: 'dashboard',
-        element: (
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
-        )
-      },
-      {
-        path: 'users',
-        element: (
-          <ProtectedRoute>
-            <UsersPage />
-          </ProtectedRoute>
-        )
+      try {
+        // Geschäftslogik
+        setValue(newValue);
+        onSuccess?.(newValue);
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setIsLoading(false);
       }
-    ]
-  }
-]);
+    },
+    [onSuccess]
+  );
+
+  const reset = useCallback(() => {
+    setValue(initialValue);
+    setError(null);
+  }, [initialValue]);
+
+  return {
+    value,
+    isLoading,
+    error,
+    update,
+    reset
+  };
+};
 ```
 
-## Dependency Injection Pattern
+## Bewährte Architekturpraktiken
 
-### Service Layer
+### 1. Index-Barrel-Dateien
+
+**Imports mit Index-Dateien vereinfachen.**
 
 ```typescript
-// services/api.service.ts
-import axios, { AxiosInstance } from 'axios';
+// features/users/components/index.ts
+export { UserList } from './UserList';
+export { UserProfile } from './UserProfile';
+export { UserForm } from './UserForm';
 
-export class ApiService {
-  private client: AxiosInstance;
+// features/users/hooks/index.ts
+export { useUsers, useUser } from './useUsers';
+export { useCreateUser, useUpdateUser, useDeleteUser } from './useUserMutations';
+export { useUserFilters } from './useUserFilters';
 
-  constructor(baseURL: string) {
-    this.client = axios.create({
-      baseURL,
-      timeout: 10000
-    });
-  }
-
-  async get<T>(url: string): Promise<T> {
-    const response = await this.client.get<T>(url);
-    return response.data;
-  }
-
-  async post<T>(url: string, data: unknown): Promise<T> {
-    const response = await this.client.post<T>(url, data);
-    return response.data;
-  }
-}
-
-export const apiService = new ApiService(
-  import.meta.env.VITE_API_BASE_URL
-);
+// features/users/index.ts
+export * from './components';
+export * from './hooks';
+export * from './types';
 ```
 
-## Best Practices
-
-### 1. Komponenten-Aufteilung
-
+**Verwendung**:
 ```typescript
-// ✅ Gut - Kleine, fokussierte Komponenten
-export const UserCard: FC<{ user: User }> = ({ user }) => {
-  return (
-    <Card>
-      <UserAvatar user={user} />
-      <UserInfo user={user} />
-      <UserActions user={user} />
-    </Card>
-  );
-};
+// Statt mehrerer Imports
+import { UserList } from '@/features/users/components/UserList';
+import { UserProfile } from '@/features/users/components/UserProfile';
 
-// ❌ Schlecht - Monolithische Komponente
-export const UserCard: FC<{ user: User }> = ({ user }) => {
-  return (
-    <Card>
-      {/* 200 Zeilen Code... */}
-    </Card>
-  );
-};
+// Ein einzelner Import
+import { UserList, UserProfile } from '@/features/users/components';
 ```
 
 ### 2. Absolute Imports
 
-```typescript
-// ✅ Gut - Absolute Imports
-import { Button } from '@/components/atoms/Button';
-import { useAuth } from '@/hooks/useAuth';
+**tsconfig.json-Konfiguration**:
 
-// ❌ Schlecht - Relative Imports
-import { Button } from '../../../components/atoms/Button';
-import { useAuth } from '../../hooks/useAuth';
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/types/*": ["./src/types/*"]
+    }
+  }
+}
 ```
 
-### 3. Barrel Exports
+**Verwendung**:
+```typescript
+// ❌ Schlecht – relative Imports
+import { Button } from '../../../components/atoms/Button';
+
+// ✅ Gut – absolute Imports
+import { Button } from '@/components/atoms/Button';
+```
+
+### 3. Lazy Loading
+
+**Code-Splitting nach Route**:
 
 ```typescript
-// components/atoms/index.ts
-export { Button } from './Button';
-export { Input } from './Input';
-export { Badge } from './Badge';
+// app/router.tsx
+import { lazy, Suspense } from 'react';
+import { createBrowserRouter } from 'react-router-dom';
+import { Spinner } from '@/components/atoms/Spinner';
 
-// Nutzung
-import { Button, Input, Badge } from '@/components/atoms';
+// Seiten lazy laden
+const HomePage = lazy(() => import('@/pages/HomePage'));
+const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
+const UsersPage = lazy(() => import('@/features/users/pages/UsersPage'));
+
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <HomePage />
+      </Suspense>
+    )
+  },
+  {
+    path: '/dashboard',
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <DashboardPage />
+      </Suspense>
+    )
+  },
+  {
+    path: '/users',
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <UsersPage />
+      </Suspense>
+    )
+  }
+]);
 ```
 
 ## Fazit
 
-Eine gute Architektur ermöglicht:
+Eine gut durchdachte Architektur ist die Grundlage einer wartbaren und skalierbaren React-Anwendung. Wichtigste Prinzipien:
 
-1. ✅ **Wartbarkeit**: Leicht zu verstehen und zu ändern
-2. ✅ **Skalierbarkeit**: Wächst mit dem Projekt
-3. ✅ **Wiederverwendbarkeit**: DRY-Prinzip
-4. ✅ **Testbarkeit**: Einfach zu testen
-5. ✅ **Team-Kollaboration**: Klare Struktur für alle
+1. ✅ **Feature-basiert**: Organisation nach geschäftlichen Funktionalitäten
+2. ✅ **Atomic Design**: Klare Komponentenhierarchie
+3. ✅ **Trennung der Zuständigkeiten**: Container/Presenter, Hooks, Services
+4. ✅ **Modularität**: Wiederverwendbare Komponenten und Hooks
+5. ✅ **Skalierbarkeit**: Struktur, die mit dem Projekt wächst
 
-**Goldene Regel**: Architektur sollte dem Team dienen, nicht umgekehrt.
+**Goldene Regel**: Jede Datei, jeder Ordner und jede Komponente sollte eine einzige, klare Verantwortung haben.

@@ -1,128 +1,253 @@
 ---
-description: Audit Vue.js project compliance with coding standards and best practices
+description: Verificar Conformidade Completa do Vue.js
+argument-hint: [arguments]
 ---
 
-# Vue.js Compliance Audit
+# Verificar Conformidade Completa do Vue.js
 
-You are an expert Vue.js auditor. Perform a comprehensive compliance check on this project.
+## Argumentos
 
-## MISSION
+$ARGUMENTS (opcional: caminho para o projeto a analisar)
 
-Audit the project for compliance with Vue.js 3 best practices, Composition API standards, and TypeScript conventions.
+## Modo de Planejamento
 
-## Modo Plano
+> O modo de planejamento é ativado automaticamente quando o escopo abrange múltiplos módulos ou requer investigação transversal.
 
-> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+## MISSÃO
 
-## AUDIT CHECKLIST
+Realizar uma auditoria de conformidade completa do projeto Vue.js orquestrando as 4 verificações principais: Arquitetura, Qualidade de Código, Testes e Segurança. Produzir um relatório consolidado com uma pontuação geral de 100 pontos.
 
-### 1. Project Structure (20 points)
+### Etapa 1: Preparação da Auditoria
+
+Preparar o ambiente de auditoria:
+- [ ] Identificar o caminho do projeto a auditar
+- [ ] Verificar a presença de arquivos de configuração (package.json, tsconfig.json, vite.config.ts)
+- [ ] Listar os diretórios principais (src/, tests/, public/, etc.)
+- [ ] Identificar a estrutura do projeto e a versão do Vue.js
+
+**Nota**: Se $ARGUMENTS for fornecido, utilizá-lo como caminho do projeto; caso contrário, usar o diretório atual.
+
+### Etapa 2: Auditoria de Arquitetura (25 pontos)
+
+Executar a verificação completa de arquitetura:
+
+**Comando**: Usar o slash command `/vuejs:check-architecture` ou seguir manualmente os passos em `check-architecture.md`
+
+**Critérios Avaliados**:
+- Organização de componentes e funcionalidades (6 pts)
+- Estrutura e reutilização de composables (6 pts)
+- Arquitetura da store Pinia (4 pts)
+- Configuração do router e lazy loading (4 pts)
+- Separação do módulo Shared/common (3 pts)
+- Regras de dependência e barrel exports (2 pts)
+
+**Referência**: `check-architecture.md`
+
+### Etapa 3: Auditoria de Qualidade de Código (25 pontos)
+
+Executar a verificação de qualidade de código:
+
+**Comando**: Usar o slash command `/vuejs:check-code-quality` ou seguir manualmente os passos em `check-code-quality.md`
+
+**Critérios Avaliados**:
+- Modo estrito do TypeScript e segurança de tipos (5 pts)
+- Conformidade com ESLint e Prettier (5 pts)
+- Uso da Composition API e script setup (4 pts)
+- Princípios KISS/DRY/YAGNI (4 pts)
+- Convenções de nomenclatura (4 pts)
+- Tratamento de erros (3 pts)
+
+**Referência**: `check-code-quality.md`
+
+### Etapa 4: Auditoria de Testes (25 pontos)
+
+Executar a verificação de testes:
+
+**Comando**: Usar o slash command `/vuejs:check-testing` ou seguir manualmente os passos em `check-testing.md`
+
+**Critérios Avaliados**:
+- Cobertura de código (7 pts)
+- Testes unitários para composables e stores (6 pts)
+- Testes de componentes com Vue Test Utils (4 pts)
+- Testes de integração (3 pts)
+- Qualidade dos testes e padrão AAA (3 pts)
+- Organização de mocks e fixtures (2 pts)
+
+**Referência**: `check-testing.md`
+
+### Etapa 5: Auditoria de Segurança (25 pontos)
+
+Executar a verificação de segurança:
+
+**Comando**: Usar o slash command `/vuejs:check-security` ou seguir manualmente os passos em `check-security.md`
+
+**Critérios Avaliados**:
+- Prevenção de XSS (uso de v-html) (6 pts)
+- Gestão de segredos e credenciais (5 pts)
+- Validação e sanitização de entradas (4 pts)
+- Vulnerabilidades de dependências (4 pts)
+- Autenticação e guardas de rota (3 pts)
+- Comunicação segura com APIs (2 pts)
+- Proteção CSRF (1 pt)
+
+**Referência**: `check-security.md`
+
+### Etapa 6: Consolidação e Pontuação Global
+
+Calcular a pontuação geral e produzir o relatório consolidado:
+- [ ] Somar as 4 pontuações (máximo de 100 pontos)
+- [ ] Identificar categorias críticas (<50%)
+- [ ] Listar todos os problemas transversais críticos
+- [ ] Priorizar ações por impacto/esforço
+- [ ] Produzir o relatório consolidado final
+
+**Escala de Avaliação**:
+- 90-100: Excelente — Projeto de referência
+- 75-89: Muito Bom — Algumas melhorias menores
+- 60-74: Aceitável — Requer melhorias
+- 40-59: Insuficiente — Refatoração significativa necessária
+- 0-39: Crítico — Revisão completa necessária
+
+### Etapa 7: Recomendações e Plano de Ação
+
+Produzir as recomendações finais:
+- [ ] Identificar as 3 ações prioritárias em todas as categorias
+- [ ] Estimar o esforço (Baixo/Médio/Alto) para cada ação
+- [ ] Estimar o impacto (Baixo/Médio/Alto) para cada ação
+- [ ] Propor a ordem de implementação
+- [ ] Sugerir ganhos rápidos (alta relação impacto/esforço)
+
+## FORMATO DE SAÍDA
 
 ```
-[ ] src/components/ - Shared components organized
-[ ] src/composables/ - Composition functions present
-[ ] src/stores/ - Pinia stores properly structured
-[ ] src/router/ - Vue Router configuration
-[ ] src/types/ - TypeScript types defined
-[ ] src/services/ - API services separated
+AUDITORIA DE CONFORMIDADE VUE.JS - RELATÓRIO COMPLETO
+======================================================
+
+PONTUAÇÃO GERAL: XX/100
+
+NÍVEL DE CONFORMIDADE: [Excelente/Muito Bom/Aceitável/Insuficiente/Crítico]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PONTUAÇÕES POR CATEGORIA:
+
+ARQUITETURA        : XX/25  [██████████░░░░░░░░░░] XX%
+QUALIDADE DE CÓDIGO: XX/25  [██████████░░░░░░░░░░] XX%
+TESTES             : XX/25  [██████████░░░░░░░░░░] XX%
+SEGURANÇA          : XX/25  [██████████░░░░░░░░░░] XX%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PONTOS FORTES GERAIS:
+1. [Ponto forte identificado em múltiplas categorias]
+2. [Outro ponto forte principal]
+3. [Terceiro ponto forte]
+
+MELHORIAS GERAIS:
+1. [Melhoria transversal menor]
+2. [Outra melhoria recomendada]
+3. [Terceira melhoria]
+
+PROBLEMAS CRÍTICOS:
+1. [Problema crítico nº 1 - categoria afetada]
+2. [Problema crítico nº 2 - categoria afetada]
+3. [Problema crítico nº 3 - categoria afetada]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DETALHES POR CATEGORIA:
+
+┌─────────────────────────────────────────────┐
+│ ARQUITETURA (XX/25)                         │
+└─────────────────────────────────────────────┘
+
+Sub-pontuações:
+  • Organização de componentes/funcionalidades: XX/6
+  • Estrutura de composables               : XX/6
+  • Arquitetura da store Pinia             : XX/4
+  • Router e lazy loading                  : XX/4
+  • Separação do módulo shared             : XX/3
+  • Regras de dependência                  : XX/2
+
+Pontos Fortes:
+- [Pontos fortes de arquitetura]
+
+Problemas:
+- [Problemas de arquitetura]
+
+[Seções semelhantes para Qualidade de Código, Testes e Segurança...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP 3 AÇÕES PRIORITÁRIAS (TODAS AS CATEGORIAS):
+
+1. CRÍTICO - [Ação nº 1]
+   Categoria : [Arquitetura/Qualidade/Testes/Segurança]
+   Impacto   : [Alto/Médio/Baixo]
+   Esforço   : [Alto/Médio/Baixo]
+   Prioridade: IMEDIATA
+
+   Descrição detalhada:
+   [Explicação do problema e solução proposta]
+
+   Arquivos afetados:
+   - [arquivo:linha]
+
+   Exemplo de correção:
+   [Código ou comando de correção]
+
+2. IMPORTANTE - [Ação nº 2]
+   [Mesmo formato...]
+
+3. RECOMENDADO - [Ação nº 3]
+   [Mesmo formato...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GANHOS RÁPIDOS (Alto Impacto / Baixo Esforço):
+
+- [Ganho rápido nº 1] - Categoria: [X] - Impacto: [X] - Esforço: [X]
+- [Ganho rápido nº 2] - Categoria: [X] - Impacto: [X] - Esforço: [X]
+- [Ganho rápido nº 3] - Categoria: [X] - Impacto: [X] - Esforço: [X]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PLANO DE AÇÃO RECOMENDADO:
+
+SEMANA 1 (Imediato):
+- [ ] [Ação crítica nº 1]
+- [ ] [Ganho rápido prioritário]
+
+SEMANAS 2-4 (Curto prazo):
+- [ ] [Ação importante nº 2]
+- [ ] [Outros ganhos rápidos]
+
+MESES 2-3 (Médio prazo):
+- [ ] [Ação recomendada nº 3]
+- [ ] [Melhorias progressivas]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RESUMO EXECUTIVO:
+
+[Parágrafo de síntese sobre o estado geral do projeto, principais pontos
+fortes, principais pontos fracos e a trajetória recomendada para melhorar
+a conformidade. Indicar se o projeto está pronto para produção,
+requer correções ou necessita de refatoração.]
+
+Recomendação Geral: [Pronto para produção / Correções menores /
+Refatoração significativa / Revisão completa necessária]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### 2. Component Standards (25 points)
+## NOTAS IMPORTANTES
 
-```
-[ ] Using <script setup> syntax
-[ ] TypeScript with lang="ts"
-[ ] Props defined with defineProps<T>()
-[ ] Emits defined with defineEmits<T>()
-[ ] Components are multi-word named
-[ ] Base components use Base prefix
-```
-
-### 3. Composition API (20 points)
-
-```
-[ ] No Options API in new components
-[ ] Composables follow use* naming
-[ ] Reactive state properly typed
-[ ] Computed properties used correctly
-[ ] Watchers cleaned up
-```
-
-### 4. Pinia Stores (15 points)
-
-```
-[ ] Setup syntax stores (composition style)
-[ ] Proper TypeScript typing
-[ ] Actions are async when needed
-[ ] Getters use computed
-[ ] No direct state mutation from components
-```
-
-### 5. TypeScript Integration (20 points)
-
-```
-[ ] Strict mode enabled
-[ ] No implicit any
-[ ] Props and emits fully typed
-[ ] Interfaces for complex types
-[ ] Type-only imports used
-```
-
-## OUTPUT FORMAT
-
-```
-══════════════════════════════════════════════════════════════
-VUE.JS COMPLIANCE AUDIT
-══════════════════════════════════════════════════════════════
-
-📊 SUMMARY
-──────────────────────────────────────────────────────────────
-Total Score: XX/100
-Status: ✅ COMPLIANT | ⚠️ NEEDS WORK | ❌ NON-COMPLIANT
-
-📁 PROJECT STRUCTURE: XX/20
-──────────────────────────────────────────────────────────────
-[✓] Organized component structure
-[✗] Missing composables directory
-    → Create src/composables/ for reusable logic
-
-🧩 COMPONENT STANDARDS: XX/25
-──────────────────────────────────────────────────────────────
-[✓] Using <script setup>
-[✗] Some components use Options API
-    Files: src/components/OldComponent.vue
-    → Migrate to Composition API
-
-🔧 COMPOSITION API: XX/20
-──────────────────────────────────────────────────────────────
-[✓] Composables properly named
-[✗] Missing cleanup in watchers
-    File: src/composables/useData.ts:45
-
-🏪 PINIA STORES: XX/15
-──────────────────────────────────────────────────────────────
-[✓] Setup syntax used
-[✓] Proper typing
-
-📝 TYPESCRIPT: XX/20
-──────────────────────────────────────────────────────────────
-[✓] Strict mode enabled
-[✗] Implicit any found
-    File: src/utils/helpers.ts:12
-
-📋 RECOMMENDATIONS
-──────────────────────────────────────────────────────────────
-1. [HIGH] Migrate remaining Options API components
-2. [MEDIUM] Add missing type definitions
-3. [LOW] Organize composables by feature
-
-══════════════════════════════════════════════════════════════
-```
-
-## PROCESS
-
-1. Scan project structure
-2. Analyze component files for standards
-3. Check composables and stores
-4. Verify TypeScript configuration
-5. Generate compliance report with score
+- Este comando orquestra as 4 auditorias especializadas
+- Usar Docker para todas as ferramentas de análise
+- Fornecer exemplos concretos com arquivo:linha para cada problema
+- Priorizar ações com base na matriz Impacto/Esforço
+- Problemas de segurança são SEMPRE a prioridade máxima
+- Propor correções automatizáveis (scripts, hooks de pré-commit)
+- O relatório deve ser acionável, não apenas descritivo
+- Adaptar as recomendações ao contexto de negócio do projeto

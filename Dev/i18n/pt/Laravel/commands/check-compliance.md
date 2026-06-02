@@ -1,145 +1,253 @@
 ---
-description: Check Laravel project compliance with coding standards
+description: Verificar Conformidade Completa do Laravel
+argument-hint: [arguments]
 ---
 
-# Laravel Compliance Check
+# Verificar Conformidade Completa do Laravel
 
-You are a Laravel expert auditor. Your mission is to verify that the project follows Laravel best practices and coding standards.
+## Argumentos
 
-## Audit Process
+$ARGUMENTS (opcional: caminho para o projeto a analisar)
 
-### 1. Project Structure Analysis
+## Modo de Planejamento
 
-Check if the project follows the recommended architecture:
+> O modo de planejamento é ativado automaticamente quando o escopo abrange múltiplos módulos ou requer investigação transversal.
+
+## MISSÃO
+
+Realizar uma auditoria de conformidade completa do projeto Laravel orquestrando as 4 verificações principais: Arquitetura, Qualidade de Código, Testes e Segurança. Produzir um relatório consolidado com uma pontuação geral de 100 pontos.
+
+### Etapa 1: Preparação da Auditoria
+
+Preparar o ambiente de auditoria:
+- [ ] Identificar o caminho do projeto a auditar
+- [ ] Verificar a presença de arquivos de configuração (composer.json com laravel/*, .env.example)
+- [ ] Listar os diretórios principais (app/, tests/, config/, routes/, etc.)
+- [ ] Identificar a estrutura do projeto e a versão do Laravel
+
+**Nota**: Se $ARGUMENTS for fornecido, utilizá-lo como caminho do projeto; caso contrário, usar o diretório atual.
+
+### Etapa 2: Auditoria de Arquitetura (25 pontos)
+
+Executar a verificação completa de arquitetura:
+
+**Comando**: Usar o slash command `/laravel:check-architecture` ou seguir manualmente os passos em `check-architecture.md`
+
+**Critérios Avaliados**:
+- Separação de camadas em Clean Architecture (6 pts)
+- Estrutura Domain/Application/Infrastructure (6 pts)
+- Padrão de Actions e controllers enxutos (4 pts)
+- Bindings de Service Providers (4 pts)
+- Padrão Repository e interfaces (3 pts)
+- Regras de dependência (2 pts)
+
+**Referência**: `check-architecture.md`
+
+### Etapa 3: Auditoria de Qualidade de Código (25 pontos)
+
+Executar a verificação de qualidade de código:
+
+**Comando**: Usar o slash command `/laravel:check-code-quality` ou seguir manualmente os passos em `check-code-quality.md`
+
+**Critérios Avaliados**:
+- Conformidade com PSR-12 e Laravel Pint (5 pts)
+- Análise estática com PHPStan (5 pts)
+- Funcionalidades modernas do PHP (enums, readonly, typed properties) (4 pts)
+- Princípios KISS/DRY/YAGNI (4 pts)
+- Convenções de nomenclatura (padrões Laravel) (4 pts)
+- Tratamento de erros e logging (3 pts)
+
+**Referência**: `check-code-quality.md`
+
+### Etapa 4: Auditoria de Testes (25 pontos)
+
+Executar a verificação de testes:
+
+**Comando**: Usar o slash command `/laravel:check-testing` ou seguir manualmente os passos em `check-testing.md`
+
+**Critérios Avaliados**:
+- Cobertura de código (7 pts)
+- Testes unitários para lógica de Domínio (6 pts)
+- Testes de funcionalidade para endpoints HTTP (4 pts)
+- Uso do Pest PHP e qualidade dos testes (3 pts)
+- Factories e seeders de banco de dados (3 pts)
+- Isolamento de testes e mocking (2 pts)
+
+**Referência**: `check-testing.md`
+
+### Etapa 5: Auditoria de Segurança (25 pontos)
+
+Executar a verificação de segurança:
+
+**Comando**: Usar o slash command `/laravel:check-security` ou seguir manualmente os passos em `check-security.md`
+
+**Critérios Avaliados**:
+- Proteções OWASP Top 10 (6 pts)
+- Gestão de segredos e credenciais (5 pts)
+- Validação com Form Request (4 pts)
+- Vulnerabilidades de dependências (composer audit) (4 pts)
+- Autenticação e Autorização (Policies) (3 pts)
+- CSRF e configuração de middlewares (2 pts)
+- Prevenção de injeção SQL (1 pt)
+
+**Referência**: `check-security.md`
+
+### Etapa 6: Consolidação e Pontuação Global
+
+Calcular a pontuação geral e produzir o relatório consolidado:
+- [ ] Somar as 4 pontuações (máximo de 100 pontos)
+- [ ] Identificar categorias críticas (<50%)
+- [ ] Listar todos os problemas transversais críticos
+- [ ] Priorizar ações por impacto/esforço
+- [ ] Produzir o relatório consolidado final
+
+**Escala de Avaliação**:
+- 90-100: Excelente — Projeto de referência
+- 75-89: Muito Bom — Algumas melhorias menores
+- 60-74: Aceitável — Requer melhorias
+- 40-59: Insuficiente — Refatoração significativa necessária
+- 0-39: Crítico — Revisão completa necessária
+
+### Etapa 7: Recomendações e Plano de Ação
+
+Produzir as recomendações finais:
+- [ ] Identificar as 3 ações prioritárias em todas as categorias
+- [ ] Estimar o esforço (Baixo/Médio/Alto) para cada ação
+- [ ] Estimar o impacto (Baixo/Médio/Alto) para cada ação
+- [ ] Propor a ordem de implementação
+- [ ] Sugerir ganhos rápidos (alta relação impacto/esforço)
+
+## FORMATO DE SAÍDA
 
 ```
-app/
-├── Domain/           # Business logic (if using Clean Architecture)
-├── Application/      # Use cases, Actions, DTOs
-├── Infrastructure/   # External services, Repositories
-├── Http/
-│   ├── Controllers/  # Thin controllers
-│   ├── Requests/     # Form Requests for validation
-│   ├── Resources/    # API Resources
-│   └── Middleware/
-├── Models/           # Eloquent models
-├── Services/         # Business services
-├── Jobs/             # Queue jobs
-├── Events/           # Domain events
-├── Listeners/        # Event listeners
-├── Policies/         # Authorization policies
-└── Providers/        # Service providers
+AUDITORIA DE CONFORMIDADE LARAVEL - RELATÓRIO COMPLETO
+=======================================================
+
+PONTUAÇÃO GERAL: XX/100
+
+NÍVEL DE CONFORMIDADE: [Excelente/Muito Bom/Aceitável/Insuficiente/Crítico]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PONTUAÇÕES POR CATEGORIA:
+
+ARQUITETURA        : XX/25  [██████████░░░░░░░░░░] XX%
+QUALIDADE DE CÓDIGO: XX/25  [██████████░░░░░░░░░░] XX%
+TESTES             : XX/25  [██████████░░░░░░░░░░] XX%
+SEGURANÇA          : XX/25  [██████████░░░░░░░░░░] XX%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PONTOS FORTES GERAIS:
+1. [Ponto forte identificado em múltiplas categorias]
+2. [Outro ponto forte principal]
+3. [Terceiro ponto forte]
+
+MELHORIAS GERAIS:
+1. [Melhoria transversal menor]
+2. [Outra melhoria recomendada]
+3. [Terceira melhoria]
+
+PROBLEMAS CRÍTICOS:
+1. [Problema crítico nº 1 - categoria afetada]
+2. [Problema crítico nº 2 - categoria afetada]
+3. [Problema crítico nº 3 - categoria afetada]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DETALHES POR CATEGORIA:
+
+┌─────────────────────────────────────────────┐
+│ ARQUITETURA (XX/25)                         │
+└─────────────────────────────────────────────┘
+
+Sub-pontuações:
+  • Camadas de Clean Architecture : XX/6
+  • Estrutura Domain/App/Infra    : XX/6
+  • Actions e controllers enxutos : XX/4
+  • Bindings de Service Provider  : XX/4
+  • Padrão Repository             : XX/3
+  • Regras de dependência         : XX/2
+
+Pontos Fortes:
+- [Pontos fortes de arquitetura]
+
+Problemas:
+- [Problemas de arquitetura]
+
+[Seções semelhantes para Qualidade de Código, Testes e Segurança...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP 3 AÇÕES PRIORITÁRIAS (TODAS AS CATEGORIAS):
+
+1. CRÍTICO - [Ação nº 1]
+   Categoria : [Arquitetura/Qualidade/Testes/Segurança]
+   Impacto   : [Alto/Médio/Baixo]
+   Esforço   : [Alto/Médio/Baixo]
+   Prioridade: IMEDIATA
+
+   Descrição detalhada:
+   [Explicação do problema e solução proposta]
+
+   Arquivos afetados:
+   - [arquivo:linha]
+
+   Exemplo de correção:
+   [Código ou comando de correção]
+
+2. IMPORTANTE - [Ação nº 2]
+   [Mesmo formato...]
+
+3. RECOMENDADO - [Ação nº 3]
+   [Mesmo formato...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GANHOS RÁPIDOS (Alto Impacto / Baixo Esforço):
+
+- [Ganho rápido nº 1] - Categoria: [X] - Impacto: [X] - Esforço: [X]
+- [Ganho rápido nº 2] - Categoria: [X] - Impacto: [X] - Esforço: [X]
+- [Ganho rápido nº 3] - Categoria: [X] - Impacto: [X] - Esforço: [X]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PLANO DE AÇÃO RECOMENDADO:
+
+SEMANA 1 (Imediato):
+- [ ] [Ação crítica nº 1]
+- [ ] [Ganho rápido prioritário]
+
+SEMANAS 2-4 (Curto prazo):
+- [ ] [Ação importante nº 2]
+- [ ] [Outros ganhos rápidos]
+
+MESES 2-3 (Médio prazo):
+- [ ] [Ação recomendada nº 3]
+- [ ] [Melhorias progressivas]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RESUMO EXECUTIVO:
+
+[Parágrafo de síntese sobre o estado geral do projeto, principais pontos
+fortes, principais pontos fracos e a trajetória recomendada para melhorar
+a conformidade. Indicar se o projeto está pronto para produção,
+requer correções ou necessita de refatoração.]
+
+Recomendação Geral: [Pronto para produção / Correções menores /
+Refatoração significativa / Revisão completa necessária]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### 2. Code Standards Verification
+## NOTAS IMPORTANTES
 
-#### Naming Conventions
-- [ ] Controllers: Singular, PascalCase (`OrderController`)
-- [ ] Models: Singular, PascalCase (`Order`, `OrderItem`)
-- [ ] Tables: Plural, snake_case (`orders`, `order_items`)
-- [ ] Columns: snake_case (`created_at`, `customer_id`)
-- [ ] Methods: camelCase (`getUserOrders()`)
-- [ ] Variables: camelCase (`$orderTotal`)
-
-#### Modern PHP Features (8.3+)
-- [ ] Constructor property promotion used
-- [ ] Readonly properties/classes where appropriate
-- [ ] Enums for status/type fields
-- [ ] Match expressions instead of switch
-- [ ] Named arguments for clarity
-- [ ] Type declarations on all methods
-- [ ] Return types specified
-
-#### Laravel Conventions
-- [ ] Form Requests for validation (not validation in controllers)
-- [ ] API Resources for response transformation
-- [ ] Policies for authorization
-- [ ] Eloquent casts for type conversion
-- [ ] Scopes for reusable queries
-- [ ] Events for cross-cutting concerns
-
-### 3. Architecture Compliance
-
-#### Layer Dependencies
-- Domain layer has NO external dependencies
-- Application layer only depends on Domain
-- Infrastructure implements Domain interfaces
-- Controllers are thin (delegate to Actions/Services)
-
-#### Repository Pattern (if applicable)
-- [ ] Interfaces defined in Domain/Contracts
-- [ ] Implementations in Infrastructure
-- [ ] Bindings in Service Providers
-
-### 4. Configuration Check
-
-- [ ] No hardcoded values (use config files)
-- [ ] Environment variables via config(), not env()
-- [ ] Sensitive data in .env (not committed)
-- [ ] Config caching compatible
-
-### 5. Generate Report
-
-After analysis, provide:
-
-1. **Compliance Score**: X/100
-2. **Critical Issues**: Must-fix problems
-3. **Warnings**: Recommended improvements
-4. **Good Practices**: What's done well
-5. **Action Items**: Prioritized list of fixes
-
-## Modo Plano
-
-> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
-
-## Commands to Run
-
-```bash
-# Check code style
-./vendor/bin/pint --test
-
-# Static analysis
-./vendor/bin/phpstan analyse
-
-# Run tests
-php artisan test
-
-# Check for security vulnerabilities
-composer audit
-```
-
-## Output Format
-
-```markdown
-# Laravel Compliance Report
-
-## Summary
-- **Score**: 85/100
-- **Critical Issues**: 2
-- **Warnings**: 5
-- **Files Analyzed**: 150
-
-## Critical Issues
-
-### 1. Missing Form Request Validation
-**File**: `app/Http/Controllers/OrderController.php:45`
-**Issue**: Validation done in controller instead of Form Request
-**Fix**: Create `StoreOrderRequest` and move validation rules
-
-### 2. [Issue description]
-
-## Warnings
-
-### 1. [Warning description]
-
-## Recommendations
-
-1. [Recommendation 1]
-2. [Recommendation 2]
-
-## Good Practices Observed
-
-- Using Eloquent casts for type conversion
-- Proper use of API Resources
-- Events for decoupling
-```
+- Este comando orquestra as 4 auditorias especializadas
+- Usar Docker para todas as ferramentas de análise
+- Fornecer exemplos concretos com arquivo:linha para cada problema
+- Priorizar ações com base na matriz Impacto/Esforço
+- Problemas de segurança são SEMPRE a prioridade máxima
+- Propor correções automatizáveis (scripts, hooks de pré-commit)
+- O relatório deve ser acionável, não apenas descritivo
+- Adaptar as recomendações ao contexto de negócio do projeto

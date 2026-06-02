@@ -1,74 +1,352 @@
 ---
-description: Vérification de lArchitecture React
-argument-hint: [arguments]
+description: Vérification de la Conformité Architecturale
 ---
 
-# Vérification de l'Architecture React
+# Vérification de la Conformité Architecturale
 
-## Arguments
+Vérifie que le projet suit les patterns architecturaux établis et les meilleures pratiques.
 
-$ARGUMENTS
+## Ce que fait cette commande
+
+1. **Analyse Architecturale**
+   - Vérifier la structure des dossiers
+   - Contrôler la séparation des responsabilités
+   - Valider l'organisation des composants
+   - Vérifier les directions de dépendance
+   - Vérifier les patterns de conception
+
+2. **Points de Vérification**
+   - Structure orientée fonctionnalités (feature-based)
+   - Hiérarchie des composants
+   - Gestion d'état
+   - Séparation de la couche API
+   - Définitions de types
+
+3. **Rapport Généré**
+   - Violations architecturales
+   - Recommandations
+   - Opportunités de refactoring
+   - Score de conformité
 
 ## Mode Plan
 
 > Le mode plan est activé automatiquement lorsque le périmètre couvre plusieurs modules ou nécessite une investigation transversale.
 
-## MISSION
+## Architecture Attendue
 
-Tu es un expert en architecture React chargé d'auditer la conformité architecturale d'un projet React.
+### Structure des Dossiers
 
-### Étape 1 : Analyse du contexte
-- Identifier le répertoire du projet à auditer ($ARGUMENTS ou répertoire courant)
-- Lire les règles architecturales depuis `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/02-architecture.md`
-- Comprendre la structure attendue (Feature-based, Atomic Design)
+```
+src/
+├── app/                    # Configuration de l'application
+│   ├── App.tsx
+│   ├── routes.tsx
+│   └── providers.tsx
+│
+├── features/              # Fonctionnalités (logique métier)
+│   └── users/
+│       ├── components/    # Composants spécifiques à la feature
+│       ├── hooks/         # Hooks spécifiques à la feature
+│       ├── services/      # Appels API
+│       ├── stores/        # Gestion d'état
+│       ├── types/         # Types TypeScript
+│       └── utils/         # Fonctions utilitaires
+│
+├── components/            # Composants partagés
+│   ├── ui/               # Primitives UI (Button, Input)
+│   ├── layout/           # Composants de mise en page
+│   └── common/           # Composants communs
+│
+├── hooks/                 # Hooks partagés
+├── services/             # Services partagés
+├── stores/               # État global
+├── types/                # Types globaux
+├── utils/                # Fonctions utilitaires
+├── constants/            # Constantes
+└── config/               # Configuration
+```
 
-### Étape 2 : Vérification de la structure du projet
+## Ce qu'il faut Vérifier
 
-Examiner et vérifier :
+### 1. Organisation des Composants
 
-**Organisation des dossiers (8 points)**
-- [ ] Structure feature-based ou modulaire présente
-- [ ] Séparation claire features/shared/core
-- [ ] Dossiers par domaine métier identifiables
-- [ ] Pas de code métier dans `/src/components` racine
+```typescript
+// ❌ Mauvais - Tout dans un seul fichier
+src/components/UserList.tsx (1000 lignes)
 
-**Atomic Design (7 points)**
-- [ ] Hiérarchie atoms/molecules/organisms/templates/pages
-- [ ] Composants atomiques réutilisables
-- [ ] Composition progressive respectée
-- [ ] Pas de logique métier dans les atoms
+// ✅ Bon - Organisation appropriée
+src/features/users/
+  ├── components/
+  │   ├── UserList/
+  │   │   ├── UserList.tsx
+  │   │   ├── UserList.test.tsx
+  │   │   ├── UserListItem.tsx
+  │   │   └── index.ts
+  │   └── UserForm/
+  │       ├── UserForm.tsx
+  │       └── UserForm.test.tsx
+  ├── hooks/
+  │   └── useUsers.ts
+  └── services/
+      └── user.service.ts
+```
 
-**Structure des features (5 points)**
-- [ ] Chaque feature contient : components, hooks, services, types
-- [ ] Index.ts avec exports publics
-- [ ] API interne encapsulée
-- [ ] Tests co-localisés avec le code
+### 2. Séparation des Responsabilités
 
-**Gestion d'état (5 points)**
-- [ ] State management centralisé (Context/Zustand/Redux)
-- [ ] Pas de prop drilling excessif (>3 niveaux)
-- [ ] State local vs global clairement séparé
-- [ ] Hooks personnalisés pour la logique réutilisable
+```typescript
+// ❌ Mauvais - Responsabilités mélangées
+export const UserList: FC = () => {
+  const [users, setUsers] = useState([]);
 
-### Étape 3 : Analyse approfondie
+  useEffect(() => {
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(setUsers);
+  }, []);
 
-Pour chaque feature/module identifié :
-- Vérifier la cohésion interne
-- Identifier les dépendances circulaires
-- Vérifier l'encapsulation des API
-- Mesurer le couplage inter-features
+  return (
+    <div>
+      {users.map(user => (
+        <div key={user.id}>
+          <h3>{user.name}</h3>
+          <p>{user.email}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
 
-### Étape 4 : Calcul du score
+// ✅ Bon - Responsabilités séparées
+// hooks/useUsers.ts
+export const useUsers = () => {
+  return useQuery({
+    queryKey: ['users'],
+    queryFn: () => userService.getAll()
+  });
+};
 
-**Score sur 25 points :**
-- Organisation des dossiers : 8 points
-- Atomic Design : 7 points
-- Structure des features : 5 points
-- Gestion d'état : 5 points
+// services/user.service.ts
+export const userService = {
+  getAll: () => apiClient.get<User[]>('/users')
+};
 
-### Étape 5 : Rapport de conformité
+// components/UserList.tsx
+export const UserList: FC = () => {
+  const { data: users, isLoading } = useUsers();
 
-Générer un rapport structuré :
+  if (isLoading) return <Spinner />;
+
+  return (
+    <ul>
+      {users?.map(user => (
+        <UserListItem key={user.id} user={user} />
+      ))}
+    </ul>
+  );
+};
+```
+
+### 3. Direction des Dépendances
+
+```typescript
+// ✅ Bon - Les dépendances vont vers l'intérieur
+features/users/
+  └── components/     → Peut utiliser hooks/
+      └── hooks/      → Peut utiliser services/
+          └── services/ → Peut utiliser utils/
+
+// ❌ Mauvais - Dépendances circulaires
+services/user.service.ts importe depuis components/
+```
+
+### 4. Types de Composants
+
+```typescript
+// Composants de Présentation (UI uniquement)
+export const Button: FC<ButtonProps> = ({ children, ...props }) => {
+  return <button {...props}>{children}</button>;
+};
+
+// Composants Conteneurs (logique)
+export const UserListContainer: FC = () => {
+  const { data: users } = useUsers();
+  const deleteUser = useDeleteUser();
+
+  return <UserListPresenter users={users} onDelete={deleteUser} />;
+};
+
+// Composants de Page (routage)
+export const UsersPage: FC = () => {
+  return (
+    <MainLayout>
+      <PageHeader title="Users" />
+      <UserListContainer />
+    </MainLayout>
+  );
+};
+```
+
+### 5. Gestion d'État
+
+```typescript
+// ❌ Mauvais - État dupliqué en plusieurs endroits
+const [users, setUsers] = useState([]);
+// Mêmes données dans 5 composants différents
+
+// ✅ Bon - État centralisé
+// stores/userStore.ts
+export const useUserStore = create<UserStore>((set) => ({
+  users: [],
+  setUsers: (users) => set({ users })
+}));
+
+// Ou React Query pour l'état serveur
+export const useUsers = () => {
+  return useQuery({
+    queryKey: ['users'],
+    queryFn: () => userService.getAll()
+  });
+};
+```
+
+## Patterns Architecturaux
+
+### 1. Structure Orientée Fonctionnalités
+
+```
+src/features/
+├── auth/
+│   ├── components/
+│   ├── hooks/
+│   ├── services/
+│   └── stores/
+├── users/
+└── products/
+```
+
+### 2. Couches de Clean Architecture
+
+```
+Couche Présentation (Composants)
+    ↓
+Couche Logique Métier (Hooks, Services)
+    ↓
+Couche Données (API, Store)
+```
+
+### 3. Atomic Design
+
+```
+src/components/
+├── atoms/        # Button, Input, Label
+├── molecules/    # FormField, SearchBar
+├── organisms/    # UserForm, Header
+├── templates/    # PageLayout, DashboardLayout
+└── pages/        # HomePage, UsersPage
+```
+
+## Règles de Validation
+
+### Règle 1 : Pas de Logique Métier dans les Composants
+
+```typescript
+// ❌ Mauvais
+export const UserForm: FC = () => {
+  const [email, setEmail] = useState('');
+
+  const validate = () => {
+    return email.includes('@') && email.length > 5;
+  };
+
+  // ... logique de validation complexe
+};
+
+// ✅ Bon
+export const UserForm: FC = () => {
+  const form = useForm({
+    resolver: zodResolver(userSchema)
+  });
+
+  // Validation dans le schéma, logique dans le hook
+};
+```
+
+### Règle 2 : Appels API via les Services
+
+```typescript
+// ❌ Mauvais - fetch direct dans le composant
+const response = await fetch('/api/users');
+
+// ✅ Bon - Via le service
+const users = await userService.getAll();
+```
+
+### Règle 3 : Types Centralisés
+
+```typescript
+// ✅ Bonne structure
+src/features/users/types/
+  ├── user.types.ts
+  ├── dto.types.ts
+  └── index.ts
+```
+
+## Vérifications Automatisées
+
+### Règles ESLint pour l'Architecture
+
+```json
+// .eslintrc.json
+{
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["../**/features/*"],
+            "message": "Les features ne doivent pas importer d'autres features"
+          },
+          {
+            "group": ["**/components/**/services/*"],
+            "message": "Les composants ne doivent pas importer les services directement"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Script Personnalisé
+
+```typescript
+// scripts/check-architecture.ts
+import { glob } from 'glob';
+import { readFile } from 'fs/promises';
+
+const checkImports = async () => {
+  const files = await glob('src/**/*.{ts,tsx}');
+  const violations = [];
+
+  for (const file of files) {
+    const content = await readFile(file, 'utf-8');
+
+    // Vérifier les violations
+    if (file.includes('/components/') && content.includes('fetch(')) {
+      violations.push({
+        file,
+        rule: 'Pas d\'appels API directs dans les composants',
+        line: content.split('\n').findIndex(l => l.includes('fetch('))
+      });
+    }
+  }
+
+  return violations;
+};
+```
+
+## Rapport de Conformité
 
 ```
 ═══════════════════════════════════════════════════
@@ -125,10 +403,49 @@ Générer un rapport structuré :
 • rules/03-coding-standards.md - Conventions de code
 ```
 
-### Étape 6 : Recommandations détaillées
+## Bonnes Pratiques
 
-Pour chaque problème identifié :
-- Expliquer l'impact
-- Proposer une solution concrète
-- Fournir un exemple de code si pertinent
-- Indiquer le niveau d'effort (Low/Medium/High)
+1. **Isolation des features** : Chaque feature est autonome
+2. **Frontières claires** : Couches présentation, logique, données
+3. **Injection de dépendances** : Services via hooks/context
+4. **Sécurité des types** : TypeScript partout
+5. **Nommage cohérent** : Respecter les conventions
+6. **Responsabilité unique** : Un composant, une tâche
+7. **Composition plutôt qu'héritage** : Utiliser la composition
+8. **Documentation** : Documenter les décisions architecturales
+
+## Violations Courantes
+
+### Violation 1 : Composants Dieux
+
+**Problème** : Le composant fait trop de choses
+**Solution** : Décomposer en composants plus petits
+
+### Violation 2 : Dépendances Circulaires
+
+**Problème** : A importe B, B importe A
+**Solution** : Extraire le code commun ou repenser la structure
+
+### Violation 3 : Prop Drilling
+
+**Problème** : Passage de props à travers de nombreux niveaux
+**Solution** : Utiliser le Context ou la gestion d'état
+
+### Violation 4 : Responsabilités Mélangées
+
+**Problème** : UI et logique métier mélangées
+**Solution** : Séparer en composant présentateur et conteneur
+
+## Outils
+
+- ESLint avec règles personnalisées
+- Dependency cruiser
+- Madge (graphe de dépendances)
+- SonarQube
+- Scripts personnalisés
+
+## Ressources
+
+- [React Architecture Best Practices](https://react.dev/learn/thinking-in-react)
+- [Feature-Sliced Design](https://feature-sliced.design/)
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)

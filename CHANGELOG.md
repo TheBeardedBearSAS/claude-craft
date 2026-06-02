@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.8.2] - 2026-06-02
+
+Résorption complète de la dette de traduction i18n résiduelle de l'audit 2026-06-01. PATCH release. Backwards compatible.
+
+### Changed
+
+- **Dette de traduction i18n résorbée (101 → 0)** : les 101 fichiers qui restaient sous le seuil de parité de taille 0.80 sont désormais traduits intégralement depuis la référence `Dev/i18n/en/<...>` (frontmatter conservé, accents/caractères natifs respectés). Répartition : **pt** (48), **de** (23), **es** (21), **fr** (9), couvrant commandes, règles, agents (`Dev/i18n` + `Project/i18n`) et guides utilisateur (`docs/guides`). Le portugais, le plus dégradé (ratios ~0.10 sur les commandes Flutter), est entièrement reconstitué.
+- **Parité de taille i18n désormais bloquante** : la dette historique étant résorbée, `scripts/verify-i18n-parity.sh` bascule ses défauts en mode strict (`STRICT_SIZE=1`, `I18N_PARITY_STRICT=1`). Le job CI `parity` bloque maintenant sur le count **et** la taille (< 0.80) ; tout nouveau fichier sous-traduit est traité comme une régression. Documentation mise à jour dans `.claude/rules/16-i18n.md`.
+
 ## [8.8.1] - 2026-06-02
 
 Clôture des items P2 différés de l'audit 2026-06-01 + complétion de la distribution i18n. PATCH release. Backwards compatible.

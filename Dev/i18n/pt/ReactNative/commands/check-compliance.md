@@ -1,133 +1,239 @@
 ---
-description: Comando: Verificar Conformidade
+description: Verificação Global de Conformidade do Projeto React Native
+argument-hint: [arguments]
 ---
 
-# Comando: Verificar Conformidade
+# Verificação Global de Conformidade do Projeto React Native
 
-Verifique a conformidade do código React Native com padrões, convenções e melhores práticas do projeto.
+## Argumentos
 
----
+$ARGUMENTS
 
-## Objetivo
+## Modo de Planejamento
 
-Este comando verifica se o código segue os padrões estabelecidos do projeto, incluindo estilo de código, convenções de nomenclatura e princípios de design.
+> O modo de planejamento é ativado automaticamente quando o escopo abrange múltiplos módulos ou requer uma investigação transversal.
 
----
+## MISSÃO
 
-## Modo Plano
+Você é um especialista em conformidade de projetos React Native. Sua missão é orquestrar uma auditoria completa combinando as auditorias especializadas: arquitetura, qualidade de código, testes e segurança.
 
-> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
+Este comando agrega os resultados de:
+1. `/reactnative:check-architecture` (25 pontos)
+2. `/reactnative:check-code-quality` (25 pontos)
+3. `/reactnative:check-testing` (25 pontos)
+4. `/reactnative:check-security` (25 pontos)
 
-## Verificações
+### Etapa 1: Executar as 4 auditorias especializadas
 
-### 1. Estilo de Código
-
-**Executar ferramentas:**
+Executar sequencialmente (ou exibir os comandos a executar):
 
 ```bash
-# Prettier
-npx prettier --check "src/**/*.{ts,tsx}"
+# 1. Auditoria de Arquitetura
+/reactnative:check-architecture
 
-# ESLint
-npx eslint "src/**/*.{ts,tsx}"
+# 2. Auditoria de Qualidade de Código
+/reactnative:check-code-quality
 
-# TypeScript
-npx tsc --noEmit
+# 3. Auditoria de Testes
+/reactnative:check-testing
+
+# 4. Auditoria de Segurança
+/reactnative:check-security
 ```
 
-**Verificar:**
+### Etapa 2: Agregar resultados
 
-- [ ] Código formatado com Prettier
-- [ ] Sem erros de ESLint
-- [ ] Sem erros de TypeScript
-- [ ] Convenções de nomenclatura seguidas
-- [ ] Imports organizados
+Coletar as pontuações de cada auditoria:
 
-### 2. Convenções de Nomenclatura
-
-**Verificar:**
-
-- [ ] Componentes: PascalCase (UserProfile.tsx)
-- [ ] Hooks: camelCase com prefixo use (useAuth.ts)
-- [ ] Arquivos utils: camelCase (formatDate.ts)
-- [ ] Constantes: UPPER_SNAKE_CASE
-- [ ] Variáveis/funções: camelCase
-- [ ] Interfaces: PascalCase com sufixo Props/State (ButtonProps)
-- [ ] Types: PascalCase
-
-### 3. Estrutura de Arquivos
-
-**Verificar:**
-
-- [ ] Um componente por arquivo
-- [ ] Arquivos nomeados como o componente exportado
-- [ ] Barrel exports (index.ts) em pastas de componentes
-- [ ] Arquivos de teste co-localizados (.test.tsx)
-- [ ] Arquivos de estilo co-localizados (.styles.ts)
-
-### 4. Princípios SOLID
-
-**Avaliar:**
-
-- [ ] Single Responsibility: um componente, uma responsabilidade
-- [ ] Open/Closed: extensível sem modificação
-- [ ] Liskov Substitution: contratos respeitados
-- [ ] Interface Segregation: sem props não utilizadas
-- [ ] Dependency Inversion: depende de abstrações
-
-### 5. Testes
-
-**Verificar:**
-
-- [ ] Cobertura de testes > 80%
-- [ ] Testes unitários para hooks e utils
-- [ ] Testes de componentes para UI
-- [ ] Testes de integração para fluxos críticos
-- [ ] Convenções de nomenclatura de testes
-
-### 6. Documentação
-
-**Verificar:**
-
-- [ ] JSDoc para funções públicas
-- [ ] README atualizado
-- [ ] Comentários para lógica complexa
-- [ ] Props de componentes documentadas
-- [ ] CHANGELOG atualizado
-
----
-
-## Relatório
-
-```markdown
-## Relatório de Conformidade
-
-### Métricas
-- Conformidade com Prettier: [%]
-- Conformidade com ESLint: [%]
-- Conformidade com TypeScript: [%]
-- Conformidade com convenções: [%]
-- Cobertura de testes: [%]
-
-### Violações
-1. **[Tipo de violação]**
-   - Arquivo: [path]
-   - Descrição: [detalhes]
-   - Ação: [correção]
-
-### Recomendações
-- [Lista de ações para melhorar conformidade]
+```
+┌─────────────────────────┬─────────┬─────────┬────────┐
+│ Auditoria               │ Pontos  │ Máximo  │ Status │
+├─────────────────────────┼─────────┼─────────┼────────┤
+│ Arquitetura             │ XX/25   │ 25      │ ✅/⚠️/❌│
+│ Qualidade de Código     │ XX/25   │ 25      │ ✅/⚠️/❌│
+│ Testes                  │ XX/25   │ 25      │ ✅/⚠️/❌│
+│ Segurança               │ XX/25   │ 25      │ ✅/⚠️/❌│
+├─────────────────────────┼─────────┼─────────┼────────┤
+│ TOTAL GLOBAL            │ XX/100  │ 100     │ ✅/⚠️/❌│
+└─────────────────────────┴─────────┴─────────┴────────┘
 ```
 
+**Legenda:**
+- ✅ Excelente (≥ 80/100)
+- ⚠️ Atenção (60-79/100)
+- ❌ Crítico (< 60/100)
+
+### Etapa 3: Avaliação Global
+
+## 📊 RELATÓRIO GLOBAL DE CONFORMIDADE
+
+### 🎯 Pontuação Global: XX/100
+
+**Avaliação:**
+- 90-100: Projeto pronto para produção ✅
+- 80-89: Bom projeto, melhorias menores ⚠️
+- 70-79: Projeto aceitável, melhorias significativas necessárias ⚠️
+- 60-69: Projeto problemático, grandes melhorias exigidas ❌
+- < 60: Projeto crítico, refatoração necessária ❌
+
+### 📈 Pontuações Detalhadas
+
+#### 1. Arquitetura (XX/25)
+- Estrutura Feature-Based: XX/8
+- Organização de Pastas: XX/5
+- Navegação: XX/4
+- Arquitetura em Camadas: XX/4
+- Assets: XX/4
+
+**Status:** [✅/⚠️/❌]
+**Ações Prioritárias:** [Top 2-3]
+
+#### 2. Qualidade de Código (XX/25)
+- TypeScript: XX/7
+- ESLint: XX/6
+- Prettier: XX/3
+- SOLID: XX/4
+- KISS/DRY/YAGNI: XX/5
+
+**Status:** [✅/⚠️/❌]
+**Ações Prioritárias:** [Top 2-3]
+
+#### 3. Testes (XX/25)
+- Configuração do Jest: XX/5
+- Testes Unitários: XX/6
+- Testes de Componentes: XX/6
+- Testes de Integração: XX/4
+- Testes E2E: XX/4
+
+**Status:** [✅/⚠️/❌]
+**Ações Prioritárias:** [Top 2-3]
+
+#### 4. Segurança (XX/25)
+- Dados Sensíveis: XX/6
+- Segurança de API: XX/5
+- Segurança de Código: XX/5
+- Autenticação: XX/5
+- Segurança da Plataforma: XX/4
+
+**Status:** [✅/⚠️/❌]
+**Ações Prioritárias:** [Top 2-3]
+
+### 🚨 Problemas Críticos (Todas as Auditorias)
+
+Liste todos os problemas críticos identificados nas 4 auditorias:
+
+1. **[Problema Crítico #1]**
+   - **Auditoria:** Arquitetura/Qualidade de Código/Testes/Segurança
+   - **Impacto:** Crítico
+   - **Localização:** [Arquivos]
+   - **Ação:** [Ação imediata]
+
+2. **[Problema Crítico #2]**
+   - **Auditoria:** Arquitetura/Qualidade de Código/Testes/Segurança
+   - **Impacto:** Crítico
+   - **Localização:** [Arquivos]
+   - **Ação:** [Ação imediata]
+
+### ⚠️ Problemas de Alta Prioridade
+
+Liste todos os problemas de alta prioridade:
+
+1. **[Problema #1]**
+   - **Auditoria:** [Nome]
+   - **Impacto:** Alto
+   - **Ação:** [Ação necessária]
+
+2. **[Problema #2]**
+   - **Auditoria:** [Nome]
+   - **Impacto:** Alto
+   - **Ação:** [Ação necessária]
+
+### 🎯 PLANO DE AÇÃO GLOBAL
+
+#### Fase 1: Imediata (Semana 1)
+- [ ] [Ação Crítica #1]
+- [ ] [Ação Crítica #2]
+- [ ] [Ação Crítica #3]
+
+#### Fase 2: Curto Prazo (Semanas 2-4)
+- [ ] [Ação de Alta Prioridade #1]
+- [ ] [Ação de Alta Prioridade #2]
+- [ ] [Ação de Alta Prioridade #3]
+
+#### Fase 3: Médio Prazo (Mês 2)
+- [ ] [Ação de Média Prioridade #1]
+- [ ] [Ação de Média Prioridade #2]
+- [ ] [Ação de Média Prioridade #3]
+
+### 📊 Métricas-Chave
+
+```
+Painel de Saúde do Projeto
+════════════════════════════
+
+Qualidade de Código
+├─ Erros ESLint: XX
+├─ Erros TypeScript: XX
+├─ Duplicação de Código: XX%
+└─ Dívida Técnica: XX horas
+
+Testes
+├─ Cobertura Total: XX%
+├─ Testes Unitários: XX aprovados / XX total
+├─ Testes de Componentes: XX aprovados / XX total
+└─ Testes E2E: XX aprovados / XX total
+
+Segurança
+├─ Vulnerabilidades em Dependências: XX
+├─ Segredos Expostos: XX
+├─ Avisos de Segurança: XX
+└─ Problemas OWASP: XX
+
+Arquitetura
+├─ Features: XX
+├─ Componentes Compartilhados: XX
+├─ Hooks Customizados: XX
+└─ Profundidade de Pastas: XX níveis
+```
+
+### 🏆 Pontos Fortes
+
+Liste de 5 a 10 pontos fortes gerais do projeto:
+- [Ponto Forte 1]
+- [Ponto Forte 2]
+- [Ponto Forte 3]
+
+### 🎓 Recomendações de Aprendizado
+
+Com base nas lacunas identificadas, recomendar treinamentos/aprendizados para a equipe:
+- [Recomendação 1: ex. treinamento em TypeScript strict mode]
+- [Recomendação 2: ex. workshop de performance React Native]
+- [Recomendação 3: ex. curso de boas práticas de segurança]
+
+### 📚 Referências
+
+- `.claude/rules/` - Todas as regras do projeto
+- [React Native Documentation](https://reactnative.dev/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [OWASP Mobile Security](https://owasp.org/www-project-mobile-top-10/)
+
 ---
 
-## Ações
+## ✅ Checklist de Conformidade
 
-- [ ] Corrigir todas as violações críticas
-- [ ] Configurar pre-commit hooks (Husky)
-- [ ] Documentar padrões do projeto
-- [ ] Treinar equipe em convenções
+Use este checklist para futuras verificações de conformidade:
+
+### Antes do Deploy em Produção
+- [ ] Pontuação global ≥ 80/100
+- [ ] Sem problemas críticos
+- [ ] Cobertura de testes ≥ 70%
+- [ ] 0 vulnerabilidades de segurança (alta/crítica)
+- [ ] 0 erros ESLint
+- [ ] 0 erros TypeScript
+- [ ] Todos os testes aprovados
+- [ ] Documentação atualizada
 
 ---
 
-**Conformidade consistente resulta em código mais manutenível e colaboração mais eficiente.**
+**Pontuação Global: XX/100**
+**Recomendação: [Pronto para Produção / Precisa de Melhorias / Requer Refatoração]**
