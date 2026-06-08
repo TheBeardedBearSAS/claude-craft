@@ -11,7 +11,7 @@ argument-hint: [nom-agent]
 
 ## MISSION
 
-Produire un payload bien formé pour embaucher un agent Paperclip. Paperclip (v2026.403.0) n'embauche **pas** d'agents depuis un fichier `.yaml` via CLI — l'embauche se fait via le tableau de bord ou `POST /companies/:companyId/agents`. Cette commande rédige le payload JSON et guide l'opérateur pour le remplir.
+Produire un payload bien formé pour embaucher un agent Paperclip. Paperclip (v2026.529.0) n'embauche **pas** d'agents depuis un fichier `.yaml` via CLI — l'embauche se fait via le tableau de bord ou `POST /companies/:companyId/agents`. Cette commande rédige le payload JSON et guide l'opérateur pour le remplir.
 
 ## Procédure
 
@@ -54,7 +54,7 @@ Demander dans l'ordre :
 }
 ```
 
-> **Vérifier la forme réelle.** Avant de POSTer, ouvrir `server/src/routes/agents.ts` (ou la spec OpenAPI servie par l'instance) pour confirmer le schéma exact — ce qui précède reflète ce qui a été observé à la v2026.403.0 mais les noms de champs peuvent évoluer.
+> **Vérifier la forme réelle.** Avant de POSTer, ouvrir `server/src/routes/agents.ts` (ou la spec OpenAPI servie par l'instance) pour confirmer le schéma exact — ce qui précède reflète ce qui a été observé à la v2026.529.0 mais les noms de champs peuvent évoluer.
 
 ### 3. Soumettre
 

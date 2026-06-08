@@ -11,7 +11,7 @@ argument-hint: [nombre-agente]
 
 ## MISIÓN
 
-Producir un payload bien formado para contratar un agente Paperclip. Paperclip (v2026.403.0) **no** contrata agentes desde un archivo `.yaml` vía CLI — la contratación ocurre a través del dashboard o `POST /companies/:companyId/agents`. Este comando redacta el payload JSON y guía al operador a llenarlo.
+Producir un payload bien formado para contratar un agente Paperclip. Paperclip (v2026.529.0) **no** contrata agentes desde un archivo `.yaml` vía CLI — la contratación ocurre a través del dashboard o `POST /companies/:companyId/agents`. Este comando redacta el payload JSON y guía al operador a llenarlo.
 
 ## Procedimiento
 
@@ -54,7 +54,7 @@ Preguntar en orden:
 }
 ```
 
-> **Verificar la forma real.** Antes de POSTear, abrir `server/src/routes/agents.ts` (o la especificación OpenAPI servida por la instancia) para confirmar el esquema exacto — lo anterior refleja lo observado en v2026.403.0 pero los nombres de campos pueden evolucionar.
+> **Verificar la forma real.** Antes de POSTear, abrir `server/src/routes/agents.ts` (o la especificación OpenAPI servida por la instancia) para confirmar el esquema exacto — lo anterior refleja lo observado en v2026.529.0 pero los nombres de campos pueden evolucionar.
 
 ### 3. Enviar
 

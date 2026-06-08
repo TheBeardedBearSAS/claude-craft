@@ -13,7 +13,7 @@ argument-hint: [nombre-compañía]
 
 Guiar a un operador a través del onboarding: instalar, crear la instancia, bootstrapear la cuenta de operador inicial, crear la compañía vía la UI, y ejecutar el primer agente con el adaptador `claude-local`.
 
-> El CLI `paperclipai` real (v2026.403.0) **no** expone un comando `companies create`. La creación de compañía ocurre a través del dashboard o importando un paquete con `paperclipai company import`. No inventar flags que no existen — abrir `paperclipai company --help` y seguir lo que hay ahí.
+> El CLI `paperclipai` real (v2026.529.0) **no** expone un comando `companies create`. La creación de compañía ocurre a través del dashboard o importando un paquete con `paperclipai company import`. No inventar flags que no existen — abrir `paperclipai company --help` y seguir lo que hay ahí.
 
 ## Procedimiento
 
@@ -84,14 +84,14 @@ paperclipai company get --id <companyId>
 
 ### 7. Verificar disponibilidad de adaptador
 
-Paperclip envía con adaptadores built-in (observado v2026.403.0):
+Paperclip envía con adaptadores built-in (observado v2026.529.0):
 `claude_local`, `codex_local`, `cursor_local`, `gemini_local`, `opencode_local`, `openclaw_gateway`, `pi_local`.
 
 Se registran a sí mismos en el registro de adaptadores del servidor al arranque. Usar el dashboard (o las rutas `/companies/:companyId/adapters/:type/...`) para confirmar que el que quieres está presente y respondiendo.
 
 ### 8. Contratar el primer agente
 
-Paperclip **no** contrata agentes desde un archivo YAML vía CLI (en v2026.403.0). Contratar un agente:
+Paperclip **no** contrata agentes desde un archivo YAML vía CLI (en v2026.529.0). Contratar un agente:
 
 - **Vía el dashboard**: **Agents → Hire** con adaptador `claude_local`, elegir un modelo, establecer un presupuesto, asignar un goal.
 - **Vía la API HTTP**: `POST /companies/:companyId/agents` (autenticado). Campos: `adapterType`, config específico del adaptador, metadatos del agente. Ver `server/src/routes/agents.ts` para la forma autoritativa.

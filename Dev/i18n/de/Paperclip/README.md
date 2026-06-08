@@ -15,7 +15,7 @@ Dieses Verzeichnis enthält die Claude-Craft-Regeln, -Befehle, -Skills und -Temp
 | React | 18+ (web UI) |
 | Vitest | latest |
 | PostgreSQL | 15+ (oder embedded für dev) |
-| Paperclip | 2026.403.0+ |
+| Paperclip | 2026.529.0+ |
 
 ## Inhalt
 

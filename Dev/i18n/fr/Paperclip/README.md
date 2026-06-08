@@ -15,7 +15,7 @@ Ce répertoire contient les règles, commandes, skills et templates Claude-Craft
 | React | 18+ (UI) |
 | Vitest | dernière |
 | PostgreSQL | 15+ (ou embarqué pour le dev) |
-| Paperclip | 2026.403.0+ |
+| Paperclip | 2026.529.0+ |
 
 ## Contenu
 

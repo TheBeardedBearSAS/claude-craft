@@ -64,7 +64,7 @@ AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check-compliance\` - Full compliance 
 - \`/${TECH_NAMESPACE}:setup-company\` - Bootstrap a new Paperclip company"
 
 ARCHITECTURE_SUMMARY="\`\`\`
-Paperclip monorepo (v2026.403.0+)
+Paperclip monorepo (v2026.529.0+)
 
 server/                Node.js + TypeScript API (companies, agents, approvals, activity)
 ui/                    React dashboard

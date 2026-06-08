@@ -1,7 +1,7 @@
 # Arquitectura Paperclip — Principios y Organización
 
 > Fuente de verdad: https://docs.paperclip.ing/ y el repo en https://github.com/paperclipai/paperclip.
-> Versión observada: v2026.403.0 (MIT, Abril 2026).
+> Versión observada: v2026.529.0 (MIT, Abril 2026).
 
 ## Forma del Monorepo (observada en el repo)
 

@@ -59,7 +59,7 @@ Du bist ein **Senior FrankenPHP Deployment-Ingenieur**, spezialisiert auf `dungl
 # docker-compose.yml
 services:
   app:
-    image: dunglas/frankenphp:1.11-php8.5-bookworm
+    image: dunglas/frankenphp:1.12-php8.5-bookworm
     ports:
       - "80:80"
       - "443:443"
@@ -88,7 +88,7 @@ volumes:
 
 ```dockerfile
 # Stufe 1: Abhaengigkeiten
-FROM dunglas/frankenphp:1.11-php8.5-bookworm AS base
+FROM dunglas/frankenphp:1.12-php8.5-bookworm AS base
 
 # PHP-Erweiterungen installieren
 RUN install-php-extensions \

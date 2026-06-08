@@ -5,7 +5,7 @@
 ## O Que (Stack & Estrutura)
 
 **Stack**: Node.js 20+ LTS, TypeScript 5.x (strict), React 18+, Vitest, pnpm 9.15+, PostgreSQL 15+
-**Paperclip**: 2026.403.0+ (MIT) — https://docs.paperclip.ing/
+**Paperclip**: 2026.529.0+ (MIT) — https://docs.paperclip.ing/
 
 **Paperclip é um sistema de duas camadas**: um plano de controle (server + web + DB) que possui todo o estado de governança, e adaptadores que executam trabalho e reportam de volta. Adaptadores nunca decidem orçamentos ou aprovações.
 

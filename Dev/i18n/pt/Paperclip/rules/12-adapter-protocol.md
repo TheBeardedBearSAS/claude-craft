@@ -5,7 +5,7 @@
 > - Pacotes adapter em `packages/adapters/*` — ex. `@paperclipai/adapter-claude-local`
 > - Docs: https://docs.paperclip.ing/
 >
-> **Observado no repo em** https://github.com/paperclipai/paperclip **(v2026.403.0).** APIs evoluem — quando em duvida, abra o `.d.ts` do pacote e os docs oficiais.
+> **Observado no repo em** https://github.com/paperclipai/paperclip **(v2026.529.0).** APIs evoluem — quando em duvida, abra o `.d.ts` do pacote e os docs oficiais.
 
 Paperclip expoe **dois pontos de extensao**. Nao os misture.
 

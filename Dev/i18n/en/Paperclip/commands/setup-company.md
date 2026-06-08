@@ -13,7 +13,7 @@ argument-hint: [company-name]
 
 Walk an operator through onboarding: install, create the instance, bootstrap the initial operator account, create the company via the UI, and run the first agent with the `claude-local` adapter.
 
-> The real `paperclipai` CLI (v2026.403.0) does **not** expose a `companies create` command. Company creation happens either through the dashboard or by importing a package with `paperclipai company import`. Don't invent flags that don't exist — open `paperclipai company --help` and follow what's there.
+> The real `paperclipai` CLI (v2026.529.0) does **not** expose a `companies create` command. Company creation happens either through the dashboard or by importing a package with `paperclipai company import`. Don't invent flags that don't exist — open `paperclipai company --help` and follow what's there.
 
 ## Procedure
 
@@ -84,14 +84,14 @@ paperclipai company get --id <companyId>
 
 ### 7. Verify adapter availability
 
-Paperclip ships with built-in adapters (observed v2026.403.0):
+Paperclip ships with built-in adapters (observed v2026.529.0):
 `claude_local`, `codex_local`, `cursor_local`, `gemini_local`, `opencode_local`, `openclaw_gateway`, `pi_local`.
 
 They register themselves into the server adapter registry at boot. Use the dashboard (or the `/companies/:companyId/adapters/:type/...` routes) to confirm the one you want is present and responding.
 
 ### 8. Hire the first agent
 
-Paperclip does **not** hire agents from a YAML file via CLI (at v2026.403.0). Hire an agent:
+Paperclip does **not** hire agents from a YAML file via CLI (at v2026.529.0). Hire an agent:
 
 - **Via the dashboard**: **Agents → Hire** with adapter `claude_local`, choose a model, set a budget, assign a goal.
 - **Via the HTTP API**: `POST /companies/:companyId/agents` (authenticated). Fields: `adapterType`, adapter-specific config, agent metadata. See `server/src/routes/agents.ts` for the authoritative shape.

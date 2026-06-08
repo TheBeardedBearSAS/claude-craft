@@ -11,7 +11,7 @@ argument-hint: [agent-name]
 
 ## MISSION
 
-Einen wohlgeformten Payload für das Einstellen eines Paperclip-Agents produzieren. Paperclip (v2026.403.0) stellt Agents **nicht** aus einer `.yaml`-Datei via CLI ein — Hiring geschieht über das Dashboard oder `POST /companies/:companyId/agents`. Dieser Befehl entwirft den JSON-Payload und führt den Operator durch das Ausfüllen.
+Einen wohlgeformten Payload für das Einstellen eines Paperclip-Agents produzieren. Paperclip (v2026.529.0) stellt Agents **nicht** aus einer `.yaml`-Datei via CLI ein — Hiring geschieht über das Dashboard oder `POST /companies/:companyId/agents`. Dieser Befehl entwirft den JSON-Payload und führt den Operator durch das Ausfüllen.
 
 ## Vorgehen
 
@@ -54,7 +54,7 @@ In Reihenfolge fragen:
 }
 ```
 
-> **Die reale Form prüfen.** Vor dem POSTen `server/src/routes/agents.ts` (oder die OpenAPI-Spec, die von der Instanz bereitgestellt wird) öffnen, um das exakte Schema zu bestätigen — das Obige spiegelt wider, was bei v2026.403.0 beobachtet wurde, aber Feldnamen können sich entwickeln.
+> **Die reale Form prüfen.** Vor dem POSTen `server/src/routes/agents.ts` (oder die OpenAPI-Spec, die von der Instanz bereitgestellt wird) öffnen, um das exakte Schema zu bestätigen — das Obige spiegelt wider, was bei v2026.529.0 beobachtet wurde, aber Feldnamen können sich entwickeln.
 
 ### 3. Einreichen
 
