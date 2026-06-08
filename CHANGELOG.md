@@ -31,6 +31,8 @@ Audit de fraîcheur exhaustif 2026-06-08 (workflow multi-agents 36 agents + vér
 - **Hooks des templates distribués corrigés** : lecture du JSON depuis stdin via `jq` (étaient non fonctionnels — `echo '$TOOL_INPUT'`).
 - **`X-XSS-Protection` (header déprécié) retiré** des recommandations (remplacé par CSP Level 3) dans toutes les références et templates de sécurité.
 - **Scope ShellCheck étendu** à `.bmad/` et `Project/` (`set -euo pipefail` ajouté à `install-project-commands.sh`).
+- **`install --from=<url>` : cap de 50 KB** sur le body distant (Content-Length + lecture) pour durcir contre un endpoint malveillant (+ 2 tests).
+- **Job CI `content-validation`** dédié (tests de contenu `.claude/` comme check de PR distinct) ; `mutation.yml` fiabilisé via `scripts/stryker-score.mjs` (ESM, gestion d'erreur explicite).
 
 ### Enrichissements P2 (best-practices par stack)
 
