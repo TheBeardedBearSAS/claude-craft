@@ -7,39 +7,47 @@ La seguridad es una **prioridad absoluta**. Este documento presenta los principi
 > **Nota:** Consulta las reglas especificas de tu tecnologia para las implementaciones concretas.
 
 **Referencias:**
-- OWASP Top 10
+- **OWASP Top 10:2025** (publicado noviembre 2025)
 - CWE/SANS Top 25
+- SLSA 1.0
 
 ---
 
 ## Tabla de contenidos
 
-1. [OWASP Top 10](#owasp-top-10)
+1. [OWASP Top 10:2025](#owasp-top-102025)
 2. [Validacion de entradas](#validacion-de-entradas)
 3. [Autenticacion](#autenticacion)
 4. [Autorizacion](#autorizacion)
 5. [Datos sensibles](#datos-sensibles)
 6. [Headers de seguridad](#headers-de-seguridad)
-7. [Logging y monitoring](#logging-y-monitoring)
-8. [Seguridad MCP & Plugins](#seguridad-mcp--plugins)
-9. [Checklist](#checklist)
+7. [Supply Chain](#supply-chain)
+8. [Logging y monitoring](#logging-y-monitoring)
+9. [Seguridad MCP & Plugins](#seguridad-mcp--plugins)
+10. [Checklist](#checklist)
 
 ---
 
-## OWASP Top 10
+## OWASP Top 10:2025
 
-### 1. Broken Access Control
+> **Fuente:** [OWASP Top 10:2025](https://owasp.org/Top10/2025/) — publicado noviembre 2025.
+> Cambios principales vs 2021: SSRF consolidado en #1, Supply Chain Failures nuevo en #6, Mishandling Exceptional Conditions nuevo en #7.
+
+### 1. Broken Access Control (incluye SSRF consolidado)
 
 ```
 ❌ RIESGO
 - Acceso a recursos sin verificacion
 - URLs predecibles (/admin, /user/123/edit)
 - Manipulacion de IDs en las URLs
+- SSRF: URLs proporcionadas por el usuario no validadas, acceso a recursos internos
 
 ✅ PROTECCION
 - Verificar los permisos en CADA peticion
 - Usar identificadores no predecibles (UUID)
 - Deny by default
+- SSRF: Whitelist de destinos autorizados, validacion estricta de URLs
+- Sin acceso a red interna desde los inputs del usuario
 ```
 
 ### 2. Cryptographic Failures
@@ -47,13 +55,15 @@ La seguridad es una **prioridad absoluta**. Este documento presenta los principi
 ```
 ❌ RIESGO
 - Datos sensibles en texto plano
-- Algoritmos obsoletos (MD5, SHA1)
+- Algoritmos obsoletos (MD5, SHA1, bcrypt en nuevo codigo)
 - Claves en el codigo fuente
+- JWT con algoritmo debil (HS256, RS256)
 
 ✅ PROTECCION
 - Cifrar los datos sensibles en reposo
 - Usar TLS 1.3 en transito
-- Algoritmos modernos (bcrypt, Argon2, AES-256)
+- Hash de contrasenas: Argon2id (128 MiB RAM, t=3-5, p=1) — NUNCA MD5/SHA1/bcrypt
+- JWT: EdDSA (Ed25519) preferido > ES256 > RS256
 - Secretos en un vault (no en el codigo)
 ```
 
@@ -103,21 +113,39 @@ La seguridad es una **prioridad absoluta**. Este documento presenta los principi
 - Principio de minimo privilegio
 ```
 
-### 6. Vulnerable Components
+### 6. Software Supply Chain Failures (nuevo en 2025)
 
 ```
 ❌ RIESGO
 - Dependencias con vulnerabilidades conocidas
-- Componentes obsoletos
-- Sin seguimiento de CVE
+- Componentes sin procedencia verificable
+- CI/CD no securizado
+- Artefactos no firmados
 
 ✅ PROTECCION
-- Auditoria regular de dependencias
-- Actualizacion automatica (Dependabot)
-- SBOM (Software Bill of Materials)
+- SLSA 1.0 niveles 1-3 (fuentes verificables, builds reproducibles, procedencia)
+- SBOM automatico (SPDX 3 o CycloneDX) en cada build
+- Sigstore keyless signing (cosign) para artefactos e imagenes
+- Dependabot / Renovate con escaneo de CVE (Trivy, Grype)
+- Version fijada en todas las dependencias (no "latest")
 ```
 
-### 7. Authentication Failures
+### 7. Mishandling of Exceptional Conditions (nuevo en 2025)
+
+```
+❌ RIESGO
+- Stack traces expuestos en produccion
+- Excepciones no gestionadas que filtran datos internos
+- Comportamiento indefinido en inputs mal formados
+
+✅ PROTECCION
+- Registrar errores, nunca exponer stack traces en prod
+- Gestores de excepciones globales (error boundaries)
+- Mensajes de error genericos en el cliente
+- Fail fast con errores de negocio claros
+```
+
+### 8. Authentication Failures
 
 ```
 ❌ RIESGO
@@ -127,25 +155,11 @@ La seguridad es una **prioridad absoluta**. Este documento presenta los principi
 - Credential stuffing posible
 
 ✅ PROTECCION
-- Politica de contrasenas fuertes
+- Politica de contrasenas fuertes (min 12 caracteres)
 - MFA para accesos sensibles
 - Expiracion de sesiones
 - Rate limiting en login
 - Deteccion de fuerza bruta
-```
-
-### 8. Data Integrity Failures
-
-```
-❌ RIESGO
-- Dependencias no verificadas
-- CI/CD no securizado
-- Updates no firmados
-
-✅ PROTECCION
-- Verificacion de firmas
-- CI/CD securizado
-- Integrity checks (checksums)
 ```
 
 ### 9. Logging & Monitoring Failures
@@ -163,17 +177,18 @@ La seguridad es una **prioridad absoluta**. Este documento presenta los principi
 - Retencion apropiada
 ```
 
-### 10. SSRF (Server-Side Request Forgery)
+### 10. Data Integrity Failures
 
 ```
 ❌ RIESGO
-- URLs proporcionadas por el usuario no validadas
-- Acceso a recursos internos
+- Dependencias no verificadas
+- CI/CD no securizado
+- Updates no firmados
 
 ✅ PROTECCION
-- Whitelist de destinos autorizados
-- Validacion estricta de URLs
-- Sin acceso a red interna desde los inputs
+- Verificacion de firmas
+- CI/CD securizado
+- Integrity checks (checksums)
 ```
 
 ---
@@ -232,20 +247,24 @@ Preferir VALIDACION (rechazar) a SANITIZACION (transformar)
 ### Contrasenas
 
 ```
-Reglas:
+Reglas OWASP 2026:
 - Minimo 12 caracteres
 - Mayusculas, minusculas, numeros, especiales
 - No estar en listas de contrasenas comprometidas
-- Hash con bcrypt/Argon2 (NUNCA MD5/SHA1)
-- Salt unico por usuario
+- Hash con Argon2id (128 MiB RAM, t=3-5, p=1)
+- NUNCA MD5/SHA1/bcrypt en nuevo codigo
+- Salt unico por usuario (gestionado por Argon2id)
 
 // ✅ BUENO
-hash = bcrypt.hash(password, costFactor=12)
+hash = argon2id.hash(password, memory=131072, iterations=3, parallelism=1)
 
 // ❌ MALO
 hash = md5(password)
 hash = sha1(password + "static_salt")
+hash = bcrypt.hash(password, costFactor=12)  // No usar en nuevo codigo
 ```
+
+Fuentes: [Argon2id OWASP 2026](https://guptadeepak.com/the-complete-guide-to-password-hashing-argon2-vs-bcrypt-vs-scrypt-vs-pbkdf2-2026/)
 
 ### Sesiones
 
@@ -267,10 +286,12 @@ Session config:
 ### JWT (si se usa)
 
 ```
-Reglas:
-- Algoritmo: RS256 o ES256 (no HS256 con secreto debil)
+Reglas OWASP 2026:
+- Algoritmo: EdDSA (Ed25519) preferido > ES256 > RS256
+- NUNCA HS256 con secreto debil
 - Expiracion corta (15 min)
 - Refresh token largo (7 dias) almacenado de forma segura
+- DPoP (RFC 9449) para tokens sensibles
 - Verificar firma y claims
 - No almacenar datos sensibles en el payload
 
@@ -278,11 +299,13 @@ Reglas:
 jwt.sign(payload, "secret123", { algorithm: "HS256" })
 
 // ✅ BUENO
-jwt.sign(payload, privateKey, {
-  algorithm: "RS256",
+jwt.sign(payload, ed25519PrivateKey, {
+  algorithm: "EdDSA",
   expiresIn: "15m"
 })
 ```
+
+Fuentes: [JWT Best Practices 2026](https://duendesoftware.com/learn/best-practices-using-jwts-with-web-and-mobile-apps), [RFC 9449 DPoP](https://datatracker.ietf.org/doc/html/rfc9449)
 
 ### Multi-Factor Authentication (MFA)
 
@@ -293,10 +316,10 @@ Cuando activar MFA:
 - Cambio de contrasena
 - Conexion desde nuevo dispositivo
 
-Metodos:
-- TOTP (Google Authenticator)
-- SMS (menos seguro)
-- Hardware keys (FIDO2)
+Metodos (por nivel de seguridad):
+- Hardware keys (FIDO2/WebAuthn) — el mas seguro
+- TOTP (Google Authenticator, Authy)
+- SMS (menos seguro — evitar si es posible)
 ```
 
 ---
@@ -361,17 +384,18 @@ function getOrder(orderId, currentUser):
 | **Publico** | Nombre del producto | Ninguna |
 | **Interno** | Emails | Acceso restringido |
 | **Confidencial** | Datos de clientes | Cifrado |
-| **Secreto** | Contrasenas, claves | Vault, hash |
+| **Secreto** | Contrasenas, claves | Vault, hash Argon2id |
 
 ### Almacenamiento
 
 ```
 Contrasenas:
-  → Hash con bcrypt/Argon2
+  → Hash con Argon2id (128 MiB RAM, t=3-5, p=1)
   → NUNCA en texto plano
+  → NUNCA bcrypt/MD5/SHA1 en nuevo codigo
 
 Datos personales (RGPD):
-  → Cifrado en reposo
+  → Cifrado en reposo (AES-256-GCM)
   → Pseudonimizacion si es posible
   → Retencion limitada
 
@@ -402,28 +426,34 @@ Body: { "password": "..." }
 
 ## Headers de seguridad
 
-### Headers recomendados
+### Headers obligatorios 2026
 
 ```http
-# Proteccion XSS
-Content-Security-Policy: default-src 'self'; script-src 'self'
+# Proteccion XSS + CSP Level 3
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'
 X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
 
 # Proteccion clickjacking
 X-Frame-Options: DENY
 
 # HTTPS
-Strict-Transport-Security: max-age=31536000; includeSubDomains
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 
 # Referrer
 Referrer-Policy: strict-origin-when-cross-origin
 
-# Permisos
-Permissions-Policy: geolocation=(), camera=()
+# Permisos granulares
+Permissions-Policy: geolocation=(), camera=(), microphone=()
+
+# Cross-Origin Isolation (2026 — obligatorios)
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Resource-Policy: same-origin
 ```
 
-### Content-Security-Policy (CSP)
+Fuente: [HTTP Security Headers 2026](https://thibautprobst.fr/en/posts/http-security-headers/)
+
+### Content-Security-Policy (CSP) Level 3
 
 ```http
 # Restrictivo (recomendado)
@@ -435,7 +465,65 @@ Content-Security-Policy:
   font-src 'self';
   connect-src 'self' api.example.com;
   frame-ancestors 'none';
+  upgrade-insecure-requests;
 ```
+
+### Cross-Origin Headers (nuevos en 2026)
+
+| Header | Valor recomendado | Proteccion |
+|--------|-------------------|------------|
+| **COOP** | `same-origin` | Aisla el contexto de navegacion (Spectre) |
+| **COEP** | `require-corp` | Activa Cross-Origin Isolation |
+| **CORP** | `same-origin` | Protege los recursos contra inclusiones cross-origin |
+| **Permissions-Policy** | Granular por feature | Controla el acceso a las APIs del navegador |
+
+---
+
+## Supply Chain
+
+> **Referencia:** [Supply Chain Security 2026](https://kawaldeepsingh.medium.com/practical-software-supply-chain-security-2026-sboms-signing-slsa-reproducible-builds-a-0416cfac32dc)
+
+### SLSA 1.0 (Supply-chain Levels for Software Artifacts)
+
+| Nivel | Requisitos | Impacto |
+|-------|------------|---------|
+| **Nivel 1** | Procedencia del build documentada | Trazabilidad basica |
+| **Nivel 2** | Build en plataforma verificable, firmado | Resistencia a compromisos internos |
+| **Nivel 3** | Build reproducible, infraestructura reforzada | Resistencia a compromisos de la plataforma |
+
+### SBOM (Software Bill of Materials)
+
+```
+Generar automaticamente en cada build:
+- Formato SPDX 3 o CycloneDX
+- Listar todas las dependencias directas y transitivas
+- Incluir versiones, licencias, CVEs conocidos
+- Publicar en el registro de artefactos
+
+Herramientas: syft, cdxgen, trivy --format cyclonedx
+```
+
+### Sigstore / cosign
+
+```
+Firmar artefactos e imagenes Docker:
+cosign sign --key cosign.key ghcr.io/org/image:tag
+cosign verify --key cosign.pub ghcr.io/org/image:tag
+
+Keyless signing (recomendado en CI/CD):
+cosign sign --identity-token=$(cat $ACTIONS_ID_TOKEN_REQUEST_TOKEN) \
+  ghcr.io/org/image:tag
+```
+
+### Checklist Supply Chain
+
+- [ ] SBOM generado automaticamente (SPDX 3 o CycloneDX)
+- [ ] Artefactos firmados con Sigstore/cosign
+- [ ] Procedencia SLSA 1+ documentada
+- [ ] Dependencias con versiones fijadas (hash o version exacta)
+- [ ] Escaneo CVE automatizado (Trivy, Grype) en cada build
+- [ ] Dependabot / Renovate configurado
+- [ ] Revision de dependencias antes del merge
 
 ---
 
@@ -457,6 +545,7 @@ Content-Security-Policy:
 - Tokens
 - Datos personales completos
 - Numeros de tarjeta bancaria
+- Stack traces completos en prod
 ```
 
 ### Formato de log
@@ -545,6 +634,7 @@ Antes de instalar un servidor MCP de terceros:
 | **Hooks** | Aplicacion | Bloqueo efectivo, validacion automatica |
 
 > **Regla:** CLAUDE.md = sugerencias. Hooks = requisitos.
+> Para las restricciones de seguridad criticas, usar hooks, no instrucciones textuales.
 
 ---
 
@@ -555,20 +645,29 @@ Antes de instalar un servidor MCP de terceros:
 - [ ] Validacion de entradas del lado del servidor
 - [ ] Consultas parametrizadas (sin concatenacion SQL)
 - [ ] Escape de outputs (prevencion XSS)
-- [ ] Contrasenas hasheadas (bcrypt/Argon2)
+- [ ] Contrasenas hasheadas con **Argon2id** (128 MiB, t=3-5, p=1)
 - [ ] Sesiones seguras (httpOnly, secure, sameSite)
 - [ ] Verificacion de permisos en cada peticion
-- [ ] Secretos en variables de entorno
-- [ ] Dependencias auditadas
+- [ ] Secretos en variables de entorno o Vault
+- [ ] Dependencias auditadas (escaneo CVE)
+- [ ] JWT con EdDSA o ES256 (nunca HS256)
+- [ ] DPoP (RFC 9449) para tokens sensibles
 
 ### Configuracion
 
 - [ ] HTTPS activado (TLS 1.3)
-- [ ] Headers de seguridad configurados
+- [ ] Headers de seguridad 2026 (CSP L3, HSTS, COOP, COEP, CORP, Permissions-Policy)
 - [ ] Mensajes de error genericos en prod
 - [ ] Modo debug desactivado en prod
 - [ ] Rate limiting activado
 - [ ] CORS configurado estrictamente
+
+### Supply Chain
+
+- [ ] SBOM generado (SPDX 3 o CycloneDX)
+- [ ] Artefactos firmados (Sigstore/cosign)
+- [ ] Procedencia SLSA 1+ documentada
+- [ ] Dependencias fijadas en version exacta
 
 ### Monitoring
 
@@ -588,13 +687,18 @@ Antes de instalar un servidor MCP de terceros:
 
 ## Recursos
 
-- **OWASP Top 10:** [owasp.org/Top10](https://owasp.org/Top10/)
+- **OWASP Top 10:2025:** [owasp.org/Top10/2025/](https://owasp.org/Top10/2025/)
 - **OWASP Cheat Sheets:** [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/)
 - **CWE Top 25:** [cwe.mitre.org/top25](https://cwe.mitre.org/top25/)
 - **NIST Guidelines:** [nist.gov](https://www.nist.gov/cyberframework)
+- **Argon2id 2026:** [Guia completa](https://guptadeepak.com/the-complete-guide-to-password-hashing-argon2-vs-bcrypt-vs-scrypt-vs-pbkdf2-2026/)
+- **RFC 9449 DPoP:** [datatracker.ietf.org](https://datatracker.ietf.org/doc/html/rfc9449)
+- **JWT Best Practices 2026:** [duendesoftware.com](https://duendesoftware.com/learn/best-practices-using-jwts-with-web-and-mobile-apps)
+- **HTTP Security Headers 2026:** [thibautprobst.fr](https://thibautprobst.fr/en/posts/http-security-headers/)
+- **Supply Chain 2026:** [kawaldeepsingh.medium.com](https://kawaldeepsingh.medium.com/practical-software-supply-chain-security-2026-sboms-signing-slsa-reproducible-builds-a-0416cfac32dc)
 
 ---
 
-**Ultima actualizacion:** 2026-02
-**Version:** 1.1.0
+**Ultima actualizacion:** 2026-06
+**Version:** 1.2.0
 **Autor:** The Bearded CTO
