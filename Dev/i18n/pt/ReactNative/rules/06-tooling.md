@@ -200,7 +200,7 @@ brew install --cask react-native-debugger
 # https://github.com/jhen0409/react-native-debugger
 ```
 
-### Flipper
+### Flipper (deprecated since RN 0.73 — prefer React Native DevTools)
 
 ```bash
 # Instalar

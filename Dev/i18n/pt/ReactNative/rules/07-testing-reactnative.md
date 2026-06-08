@@ -161,7 +161,7 @@ describe('Button', () => {
 
 ```typescript
 // hooks/useCounter.test.ts
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react-native';
 import { useCounter } from './useCounter';
 
 describe('useCounter', () => {
