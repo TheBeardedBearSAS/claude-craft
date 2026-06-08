@@ -1,6 +1,6 @@
 # Angular Quality Tools
 
-**Version documentée :** Angular 21 (latest stable, LTS) / Angular 22 (en RC)
+**Version documentée :** Angular 22 (stable, sorti le 03/06/2026)
 
 ## Static Analysis
 

@@ -11,6 +11,19 @@
 | Rector | 2.4.x | |
 | Deptrac | v4.x | |
 
+## Support Timeline Symfony
+
+| Version | Type | Fin de maintenance | Fin de sécurité | Recommandation |
+|---------|------|--------------------|-----------------|----------------|
+| **7.4** | LTS | Nov. 2028 | Nov. 2029 | ✅ Recommandée (LTS) |
+| **8.0** | Standard | Juil. 2026 | Juil. 2026 | ❌ EOS imminent — ne pas démarrer |
+| **8.1** | Standard | Jan. 2027 | Jan. 2027 | ✅ Recommandée (dernière stable) |
+| **8.4** | LTS (attendue) | ~Nov. 2030 | ~Nov. 2031 | ⏳ Sortie prévue nov. 2027 |
+
+**Règle :** démarrer un nouveau projet sur **7.4 LTS** (support jusqu'à 2029) ou **8.1** (dernière stable). Ne jamais choisir **8.0** (EOS juillet 2026).
+
+**Source:** https://symfony.com/releases
+
 ## Architecture Clean + DDD
 
 ```

@@ -1,18 +1,18 @@
 # Project Context
 
-**Version Angular recommandée :** Angular 21 (latest stable, LTS) / Angular 22 (en RC)
+**Version Angular recommandée :** Angular 22 (stable, sorti le 03/06/2026)
 
 ## Project Information
 
 - **Name**: {{PROJECT_NAME}}
 - **Type**: Angular Application
-- **Angular Version**: {{ANGULAR_VERSION}} (recommandé : 21 LTS ou 22)
+- **Angular Version**: {{ANGULAR_VERSION}} (recommandé : 22)
 - **Description**: {{PROJECT_DESCRIPTION}}
 
 ## Tech Stack
 
-- **Framework**: Angular {{ANGULAR_VERSION}} (21 LTS ou 22)
-- **Language**: TypeScript 5.x
+- **Framework**: Angular {{ANGULAR_VERSION}} (22)
+- **Language**: TypeScript 6
 - **Styling**: {{STYLING}} (SCSS/Tailwind/Angular Material)
 - **State Management**: {{STATE_MANAGEMENT}} (Signals/NgRx/NGXS)
 - **Testing**: {{TESTING}} (Vitest/Jest + Cypress)

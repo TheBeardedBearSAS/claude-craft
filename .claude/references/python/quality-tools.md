@@ -116,7 +116,26 @@ ruff check --watch .
 pip install mypy
 # With common stubs
 pip install types-requests types-python-dateutil types-redis
+# Ou via uv (recommandé)
+uv add --dev mypy types-requests
 ```
+
+### mypy 2.0 — Breaking Changes
+
+mypy 2.0 (mai 2026) introduit des changements de défauts et le parallélisme expérimental :
+
+| Changement | Avant 2.0 | Depuis 2.0 |
+|------------|-----------|------------|
+| `--local-partial-types` | opt-in | **activé par défaut** |
+| `--strict-bytes` | opt-in | **activé par défaut** |
+| `--allow-redefinition-new` | nom temporaire | renommé `--allow-redefinition` |
+| Support Python 3.9 | supporté | **supprimé** — minimum `--python-version 3.10` |
+| Parallélisme | non disponible | `--num-workers N` (jusqu'à 5x sur gros projets) |
+
+**Migration depuis mypy 1.x :**
+1. Mettre à jour `mirrors-mypy` en `v2.1.0` dans `.pre-commit-config.yaml`
+2. Lancer `mypy --num-workers 4 src/` et corriger les nouvelles erreurs
+3. Si besoin de l'ancien comportement de redéfinition : utiliser `--allow-redefinition-old`
 
 ### pyproject.toml Configuration
 
@@ -137,6 +156,9 @@ warn_no_return = true
 warn_unreachable = true
 show_error_codes = true
 show_column_numbers = true
+# mypy 2.0+ : ces options sont désormais activées par défaut
+# local_partial_types = true   # default depuis 2.0
+# strict_bytes = true          # default depuis 2.0
 
 # Plugins
 plugins = [
@@ -160,6 +182,9 @@ ignore_errors = true
 ```bash
 # Run type checking
 mypy src/
+
+# Parallel type checking (mypy 2.0+, recommandé sur gros projets)
+mypy --num-workers 4 src/
 
 # Generate report
 mypy src/ --html-report mypy-report
@@ -247,16 +272,18 @@ pre-commit install
 ### .pre-commit-config.yaml
 
 ```yaml
+# Lancer: pre-commit autoupdate pour rafraîchir les versions
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.0
+    # ruff lint (remplace flake8 + isort) + ruff format (remplace black)
+    rev: v0.15.16
     hooks:
       - id: ruff
         args: [--fix]
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
+    rev: v2.1.0
     hooks:
       - id: mypy
         additional_dependencies:

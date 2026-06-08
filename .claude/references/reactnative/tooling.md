@@ -200,18 +200,27 @@ brew install --cask react-native-debugger
 # https://github.com/jhen0409/react-native-debugger
 ```
 
-### Flipper
+### React Native DevTools (recommandé — RN 0.73+)
+
+Flipper est déprécié depuis React Native 0.73. Le remplacement officiel est **React Native DevTools**, intégré nativement dans Metro.
 
 ```bash
-# Install
-brew install --cask flipper
+# Démarrer avec le debugger expérimental (RN 0.73+)
+npx react-native start --experimental-debugger
 
-# Plugins
-# - Network
-# - AsyncStorage
-# - React DevTools
-# - Hermes Debugger
+# Ouvrir depuis l'app via le dev menu
+# iOS : Cmd+D (simulateur) ou secouer le device
+# Android : Cmd+M (émulateur) ou secouer le device
+# Sélectionner "Open DevTools" dans le menu
 ```
+
+Fonctionnalités disponibles :
+- Inspection réseau (remplace Flipper Network plugin)
+- React DevTools intégrés
+- Hermes debugger (sources, breakpoints)
+- Console et profiler
+
+> **Note historique :** Flipper (`brew install --cask flipper`) fonctionnait avec les versions < 0.73. Il n'est plus maintenu pour la New Architecture et ne doit pas être utilisé sur RN 0.73+.
 
 ### VS Code Extensions
 
@@ -305,7 +314,7 @@ npm install -g @vtsls/language-server typescript
 - [ ] Expo CLI installé
 - [ ] EAS CLI configuré
 - [ ] Metro config optimisé
-- [ ] Debugger choisi (RN Debugger / Flipper)
+- [ ] Debugger configuré (React Native DevTools via `--experimental-debugger`)
 - [ ] VS Code extensions installées
 - [ ] Package manager cohérent (npm)
 - [ ] Scripts npm configurés

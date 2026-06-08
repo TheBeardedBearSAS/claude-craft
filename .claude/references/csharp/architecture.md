@@ -20,7 +20,7 @@ Solution/
 │   │   │   ├── Behaviors/         # MediatR pipeline behaviors
 │   │   │   ├── Exceptions/        # Application exceptions
 │   │   │   ├── Interfaces/        # Service interfaces
-│   │   │   ├── Mappings/          # AutoMapper profiles
+│   │   │   ├── Mappings/          # Mapping profiles (Mapperly/AutoMapper/Mapster)
 │   │   │   └── Models/            # DTOs
 │   │   ├── Features/              # CQRS commands & queries
 │   │   │   └── {Feature}/
@@ -200,6 +200,8 @@ public interface IOrderRepository
 ## Application Layer
 
 ### CQRS Pattern with MediatR
+
+> **Licensing note:** MediatR 13+ is commercial (RPL-1.5, Lucky Penny Software, July 2025). Community Edition is free for organisations with < $5M gross annual revenue. Open-source alternatives: **Wolverine** (source generators, high-perf), **Brighter**, **ConduitR**, **LiteBus**. The patterns below apply equally to any mediator library.
 
 ```csharp
 // Application/Features/Orders/Commands/CreateOrder/CreateOrderCommand.cs

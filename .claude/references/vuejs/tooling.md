@@ -1,5 +1,20 @@
 # Vue.js Tooling
 
+## Migrations majeures
+
+### Vue Router 4 → 5
+
+Vue Router 5 est **composition-API-first** : les navigation guards (`beforeEach`, `beforeRouteEnter`, etc.) sont désormais des composables de premier rang utilisables directement dans `<script setup>`. Le hook `onBeforeRouteLeave` / `onBeforeRouteUpdate` remplace les guards d'options. La création du router reste identique (`createRouter` / `createWebHistory`), mais les types internes ont été révisés — les imports depuis `vue-router` sont inchangés côté usage courant.
+
+Référence : https://router.vuejs.org/guide/migration/
+
+### Vite 5 → 8
+
+- **Vite 6 (Environment API)** : nouvelle API multi-environment (`createEnvironment`) pour orchestrer client, SSR et edge dans un seul `vite.config`. Optionnel et rétrocompatible.
+- **Vite 8 (Rolldown bundler par défaut)** : Rolldown (port Rust de Rollup) remplace esbuild en bundler prod. Build 3-5× plus rapide, sortie identique. `rollupOptions` restent supportés.
+
+Référence : https://vite.dev/blog/
+
 ## Build Tool: Vite
 
 ### Configuration
@@ -12,12 +27,8 @@ import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
   plugins: [
-    vue({
-      script: {
-        defineModel: true,
-        propsDestructure: true,
-      },
-    }),
+    vue(),
+    // Vue 3.4+ : defineModel et props destructuring stables, plus besoin de flag
   ],
   resolve: {
     alias: {
@@ -117,6 +128,9 @@ export default [
       }],
       'vue/define-emits-declaration': ['error', 'type-based'],
       'vue/define-props-declaration': ['error', 'type-based'],
+      // eslint-plugin-vue v10 — nouvelles règles pertinentes
+      'vue/no-deprecated-model-definition': 'error',     // enforce defineModel (Vue 3.4+)
+      'vue/vapor-component': 'off',                       // Vapor Mode (beta, opt-in seulement)
 
       // TypeScript
       '@typescript-eslint/explicit-function-return-type': 'off',
@@ -226,7 +240,6 @@ pnpm-lock.yaml
 {
   "recommendations": [
     "Vue.volar",
-    "Vue.vscode-typescript-vue-plugin",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
@@ -313,18 +326,18 @@ pnpm test
   },
   "dependencies": {
     "vue": "^3.5.0",
-    "vue-router": "^4.3.0",
-    "pinia": "^2.2.0"
+    "vue-router": "^5.0.0",
+    "pinia": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "@vitejs/plugin-vue": "^5.0.0",
+    "@vitejs/plugin-vue": "^6.0.0",
     "@vue/test-utils": "^2.4.0",
     "eslint": "^9.0.0",
-    "eslint-plugin-vue": "^9.0.0",
+    "eslint-plugin-vue": "^10.0.0",
     "prettier": "^3.0.0",
     "typescript": "~5.4.0",
-    "vite": "^5.4.0",
+    "vite": "^8.0.0",
     "vitest": "^4.0.0",
     "vue-tsc": "^2.2.0"
   }
@@ -375,14 +388,6 @@ pnpm test:unit
 ```
 
 ## Volar Configuration
-
-### Take Over Mode (Recommended)
-
-For best performance, enable Volar's Take Over Mode:
-
-1. Disable built-in TypeScript extension
-2. Enable Vue - Official extension
-3. Reload VS Code window
 
 ### Explicit Component Types
 

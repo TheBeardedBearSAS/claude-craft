@@ -20,7 +20,7 @@
 - **Cache** : {{CACHE}} (Redis/Memcached)
 - **Queue/Tasks** : {{TASK_QUEUE}} (Celery/RQ/arq)
 - **Testing** : pytest, pytest-cov, pytest-mock
-- **Linting/Formatting** : ruff, mypy, black, isort
+- **Linting/Formatting** : ruff (lint + format), mypy
 
 ## Architecture
 
@@ -132,7 +132,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES={{TOKEN_EXPIRE}}
 # Voir le Makefile du projet pour la liste complète des commandes
 make help              # Affiche toutes les commandes disponibles
 make setup             # Configuration initiale du projet
-make install           # Installation des dépendances
+make install           # Installation des dépendances (uv sync)
 make dev               # Lance l'environnement de développement
 make test              # Execute les tests
 make lint              # Vérifie le code avec ruff

@@ -169,6 +169,7 @@ describe('UsersService', () => {
 ### Testing Library Setup
 
 ```bash
+# @testing-library/react-native v12+ inclut renderHook et act — pas besoin de @testing-library/react-hooks
 npm install --save-dev @testing-library/react-native @testing-library/jest-native
 ```
 
@@ -211,9 +212,13 @@ describe('Button', () => {
 
 ### Testing Hooks
 
+> **Depuis `@testing-library/react-native` v12+**, `renderHook` et `act` sont directement exportés par `@testing-library/react-native`. Le package `@testing-library/react-hooks` est **obsolète** et ne doit plus être installé.
+
 ```typescript
 // hooks/useCounter.test.ts
-import { renderHook, act } from '@testing-library/react-hooks';
+// ✅ Utiliser @testing-library/react-native v12+ (renderHook intégré)
+import { renderHook, act } from '@testing-library/react-native';
+// ❌ Ne plus utiliser : import { renderHook, act } from '@testing-library/react-hooks';
 import { useCounter } from './useCounter';
 
 describe('useCounter', () => {

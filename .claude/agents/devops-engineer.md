@@ -47,15 +47,15 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 ### Conteneurisation
 | Technologie | Compétences | Versions 2026 |
 |-------------|-------------|---------------|
-| Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.4.3 (patch sécurité, mai 2026) |
+| Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.5.2 (patch sécurité, juin 2026) |
 | Docker Compose | Orchestration locale, profiles, extensions | Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète) |
 | Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, User Namespaces, Mutating Admission Policies | 1.36.1 stable (sortie 13 mai 2026) |
 | Helm | Charts, values, templating | Helm 3.18+ |
 | FrankenPHP | Worker mode (Laravel Octane/Symfony), HTTP/3, max_requests | 1.12.1 (PHP 8.5, Caddy 2.11.2) |
-| PgBouncer | Transaction pooling, prepared statements natifs | 1.25.2 (1.21+ requis pour prepared stmts ; CVE-2026-6664/6667 patchées) |
+| PgBouncer | Transaction pooling, prepared statements natifs | 1.25.2 (1.21+ requis pour prepared stmts ; CVE-2026-6664/6665/6666/6667 patchées) |
 
 **Sources** :  
-- Docker Engine 29.4.3 : https://www.docker.com/blog/docker-engine-version-29/  
+- Docker Engine 29.5.2 : https://docs.docker.com/engine/release-notes/29/  
 - Compose Spec v5.0.0 : https://www.compose-spec.io/  
 - Kubernetes 1.36 : https://kubernetes.io/blog/2026/04/22/kubernetes-v1-36-release/  
 - K8s Gateway API : https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl  
@@ -69,7 +69,7 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | DigitalOcean | App Platform, Kubernetes, Managed DB |
 | Azure | AKS, App Service, Azure DevOps |
 | Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) |
-| Coolify | Self-hosted PaaS | v4.0.0 (stable, avril 2026) |
+| Coolify | Self-hosted PaaS, MCP server natif (read-only), audit logging structuré | v4.1.1 (juin 2026) |
 | OpenTofu | State encryption, OCI registry backends | 1.12.0 (mai 2026) |
 | Ansible | Automation, playbooks, roles | ansible-core 2.21.0 (stable mai 2026) |
 
@@ -150,7 +150,7 @@ USER 1000
 docker history <image> --no-trunc
 docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 
-# BuildKit activé par défaut (Engine 29.4.3)
+# BuildKit activé par défaut (Engine 29.5.2)
 docker buildx build --cache-to=type=registry,ref=repo:cache .
 
 # Multi-platform build avec SBOM
@@ -164,13 +164,16 @@ trivy image <image>
 grype <image>  # Alternative Anchore
 ```
 
-**Nouveautés Docker Engine 29.4.0** :  
+**Nouveautés Docker Engine 29.5.2** :  
 - BuildKit activé par défaut (cache persistant natif)
 - SBOM generation native (`--sbom=true`)
 - Provenance attestations (`--provenance=mode=max`)
 - Support multi-platform amélioré
+- **CVE-2026-41567/41568/42306** : vulnérabilités `docker cp` (exec arbitraire + TOCTOU) — patchées
+- **CVE-2026-32288** : DoS daemon (mémoire non bornée via tar sparse) — patché
+- **CVE-2026-34040** : contournement AuthZ plugins — patché
 
-**Source** : https://www.docker.com/blog/docker-engine-version-29/
+**Source** : https://docs.docker.com/engine/release-notes/29/
 
 ### FrankenPHP (2026)
 
@@ -207,7 +210,9 @@ max_prepared_statements = 200  # Requis 1.21+
 server_idle_timeout = 600
 ```
 
-**Patterns clés PgBouncer 1.25.2** (CVE-2026-6664/6667 patched) :
+**Patterns clés PgBouncer 1.25.2** (CVE-2026-6664/6665/6666/6667 patchées) :
+- **CVE-2026-6665** : stack overflow dans le parseur SCRAM (auth), exploitable sans authentification préalable
+- **CVE-2026-6666** : null pointer dereference lors de la propagation SQLSTATE depuis le serveur backend
 - **Prepared statements natifs** : Depuis 1.21 (15-250% gains perf selon charge)
 - **Transaction mode** : `pool_mode=transaction` pour pooling efficace
 - **`max_prepared_statements`** : Limite mémoire préparées (200-500 recommandé)
@@ -216,6 +221,14 @@ server_idle_timeout = 600
 **Sources** :  
 - Release 1.21 : https://www.postgresql.org/about/news/pgbouncer-1210-released-now-with-prepared-statements-2735/  
 - Benchmarks : https://www.percona.com/blog/pgbouncer-prepared-statements/
+
+### Coolify (2026)
+
+**Nouveautés v4.1.1** :
+- **MCP server natif** (instance-level, read-only) : expose les ressources Coolify comme outils MCP pour les agents IA ; activer/désactiver via POST (endpoint changé de GET en v4.1). Activer dans *Settings → Integrations → MCP*. Écriture prévue dans une version future.
+- **Audit logging structuré** : mutations API, événements webhook, authentification et autorisations loggués (queryable depuis le panel admin) — compliance-ready.
+
+**Source** : https://coolify.io/docs/integrations/mcp
 
 ### OpenTofu (2026)
 

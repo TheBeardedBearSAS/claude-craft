@@ -39,16 +39,27 @@ dotnet publish -c Release --self-contained -r linux-x64
 ```xml
 <!-- Clean Architecture essentials -->
 <ItemGroup>
-  <!-- CQRS & Mediator (MediatR 14.x — latest stable, 2026-03) -->
+  <!-- CQRS & Mediator
+       MediatR 13+ is commercial (RPL-1.5, Lucky Penny Software, July 2025).
+       Community Edition free for <$5M revenue; commercial license required otherwise.
+       Open-source alternatives: Wolverine (source generators, high-perf), Brighter, ConduitR, LiteBus.
+       Current stable: MediatR 14.x -->
   <PackageReference Include="MediatR" Version="14.*" />
 
   <!-- Validation (FluentValidation 12.x requires .NET 8+, drops netstandard2.0) -->
   <PackageReference Include="FluentValidation" Version="12.*" />
   <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.*" />
 
-  <!-- Object mapping -->
+  <!-- Object mapping
+       AutoMapper v15+ is commercial (RPL-1.5, Lucky Penny Software, July 2025). Current: 16.1.1.
+       v13.0.1 is the last MIT-licensed release — pin to 13.* only if you require MIT compatibility.
+       Recommended open-source alternatives: Riok.Mapperly (source generator, Apache-2.0, adopted by ABP)
+       or Mapster (MIT). Mapperly generates zero-reflection code at build time with superior performance.
+       Pin below uses v13 for MIT compatibility; replace with Riok.Mapperly for new projects. -->
   <PackageReference Include="AutoMapper" Version="13.*" />
   <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.*" />
+  <!-- Preferred open-source alternative (uncomment to use instead of AutoMapper): -->
+  <!-- <PackageReference Include="Riok.Mapperly" Version="3.*" /> -->
 
   <!-- Guard clauses -->
   <PackageReference Include="Ardalis.GuardClauses" Version="4.*" />
@@ -77,7 +88,7 @@ dotnet publish -c Release --self-contained -r linux-x64
        Apache-2.0 alternative: AwesomeAssertions (drop-in fork). v7 remains Apache-2.0. -->
   <PackageReference Include="FluentAssertions" Version="8.*" />
   <PackageReference Include="Bogus" Version="35.*" />
-  <PackageReference Include="Testcontainers" Version="3.*" />
+  <PackageReference Include="Testcontainers" Version="4.*" />
 </ItemGroup>
 
 <!-- API Documentation (.NET 10 : OpenAPI natif + Scalar UI) -->
@@ -230,10 +241,13 @@ trim_trailing_whitespace = false
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.8" />
 
     <!-- Application Layer -->
+    <!-- MediatR 13+ = commercial (RPL-1.5). Community Edition free <$5M revenue. -->
     <PackageVersion Include="MediatR" Version="14.1.0" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <!-- AutoMapper 15+ = commercial (RPL-1.5). v13.0.1 = last MIT release. Prefer Riok.Mapperly for new projects. -->
     <PackageVersion Include="AutoMapper" Version="13.0.1" />
+    <!-- <PackageVersion Include="Riok.Mapperly" Version="3.*" /> -->
     <PackageVersion Include="Ardalis.GuardClauses" Version="4.5.0" />
 
     <!-- Testing (xUnit v3 3.2.2 stable; FluentAssertions 8.x = commercial license — see note above) -->
@@ -242,7 +256,8 @@ trim_trailing_whitespace = false
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="FluentAssertions" Version="8.10.0" />
     <PackageVersion Include="Bogus" Version="35.4.0" />
-    <PackageVersion Include="Testcontainers" Version="3.7.0" />
+    <!-- Testcontainers 4.x (4.12.0 latest stable). 4.0 drops default image versions: always specify .WithImage(). -->
+    <PackageVersion Include="Testcontainers" Version="4.12.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
 

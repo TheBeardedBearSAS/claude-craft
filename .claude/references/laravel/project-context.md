@@ -9,7 +9,7 @@
 | Component | Technology | Version |
 |-----------|------------|---------|
 | Framework | Laravel | 13.x |
-| Language | PHP | 8.5+ |
+| Language | PHP | 8.3+ (8.5 recommandé) |
 | Database | {{DATABASE_TYPE}} | {{DATABASE_VERSION}} |
 | Cache | Redis | {{REDIS_VERSION}} |
 | Queue | {{QUEUE_DRIVER}} | - |

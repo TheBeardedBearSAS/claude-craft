@@ -240,7 +240,7 @@ composer outdated --direct
 // composer.json - Pin versions and use version constraints
 {
     "require": {
-        "php": "^8.5",
+        "php": "^8.3",
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0"
     }

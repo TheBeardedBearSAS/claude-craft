@@ -111,7 +111,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 
 - **React Native Paper**: {{PAPER_VERSION}} (optionnel)
 - **NativeWind** (Tailwind CSS): {{NATIVEWIND_VERSION}} (optionnel)
-- **React Native Reanimated**: 4.x
+- **React Native Reanimated**: `^4.0.0`
 - **React Native Gesture Handler**: {{GESTURE_HANDLER_VERSION}}
 
 ### Forms & Validation
@@ -147,7 +147,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 
 - **Expo CLI**: {{EXPO_CLI_VERSION}}
 - **EAS CLI**: {{EAS_CLI_VERSION}}
-- **React Native Debugger** / **Flipper**
+- **React Native DevTools** (`npx react-native start --experimental-debugger`) — remplace Flipper (déprécié depuis RN 0.73)
 
 ---
 

@@ -85,7 +85,7 @@ public class OrderOwnerAuthorizationHandler
 **Protection:**
 - Encrypt sensitive data at rest
 - Use TLS 1.3 in transit
-- Modern algorithms (bcrypt, Argon2, AES-256)
+- Modern algorithms (**Argon2id** primary, bcrypt secondary, AES-256 for symmetric encryption)
 - Secrets in vault (not in code)
 
 ```csharp
@@ -117,21 +117,49 @@ public class EncryptionService
     }
 }
 
-// DO: Use proper password hashing
+// DO: Use Argon2id for password hashing (OWASP 2026 recommendation)
+// NuGet: Konscious.Security.Cryptography.Argon2 (v1.3.1, MIT)
+// Parameters: m=19456 KiB, t=2 iterations, p=1 parallelism (OWASP 2026 minimum)
 public class PasswordHasher
 {
+    // Salt must be unique per password, 16 bytes minimum
+    private const int SaltSize = 16;
+    private const int HashSize = 32;
+
     public string HashPassword(string password)
     {
-        return new PasswordHasher<object>().HashPassword(null!, password);
+        var salt = RandomNumberGenerator.GetBytes(SaltSize);
+        var hash = ComputeArgon2id(Encoding.UTF8.GetBytes(password), salt);
+        // Store as "salt:hash" (both Base64-encoded)
+        return $"{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
     }
 
-    public bool VerifyPassword(string hashedPassword, string providedPassword)
+    public bool VerifyPassword(string storedHash, string providedPassword)
     {
-        var result = new PasswordHasher<object>()
-            .VerifyHashedPassword(null!, hashedPassword, providedPassword);
-        return result != PasswordVerificationResult.Failed;
+        var parts = storedHash.Split(':');
+        if (parts.Length != 2) return false;
+        var salt = Convert.FromBase64String(parts[0]);
+        var expectedHash = Convert.FromBase64String(parts[1]);
+        var actualHash = ComputeArgon2id(Encoding.UTF8.GetBytes(providedPassword), salt);
+        return CryptographicOperations.FixedTimeEquals(actualHash, expectedHash);
+    }
+
+    private static byte[] ComputeArgon2id(byte[] password, byte[] salt)
+    {
+        using var argon2 = new Argon2id(password)
+        {
+            Salt = salt,
+            MemorySize = 19456,   // 19 MiB (OWASP 2026 minimum: 19456 KiB)
+            Iterations = 2,        // t=2 (OWASP 2026 minimum)
+            DegreeOfParallelism = 1 // p=1
+        };
+        return argon2.GetBytes(HashSize);
     }
 }
+// Required usings: Konscious.Security.Cryptography, System.Security.Cryptography, System.Text
+//
+// Bcrypt (secondary option, legacy migration): BCrypt.Net-Next, cost factor >= 12.
+// NEVER use MD5, SHA-1, SHA-256 or unsalted hashes for passwords.
 ```
 
 ### A03: Injection
@@ -451,8 +479,10 @@ public class SafeHttpClient
 - Minimum 12 characters
 - Uppercase, lowercase, digits, special chars
 - Not in compromised password lists
-- Hash with bcrypt/Argon2 (NEVER MD5/SHA1)
-- Unique salt per user
+- Hash with **Argon2id** (OWASP 2026 primary — `Konscious.Security.Cryptography.Argon2`, m=19456 KiB, t=2, p=1 minimum)
+- bcrypt (cost ≥ 12) acceptable as secondary/legacy option
+- NEVER MD5, SHA-1, SHA-256, or unsalted hashes
+- Unique random salt per user (16 bytes minimum)
 
 ### Sessions
 
@@ -605,7 +635,7 @@ builder.Configuration.AddAzureKeyVault(
 - [ ] Server-side input validation
 - [ ] Parameterized queries (no SQL concatenation)
 - [ ] Output escaping (XSS prevention)
-- [ ] Passwords hashed (bcrypt/Argon2)
+- [ ] Passwords hashed with Argon2id (Konscious.Security.Cryptography.Argon2, m=19456, t=2, p=1)
 - [ ] Secure sessions (httpOnly, secure, sameSite)
 - [ ] Permission checks on every request
 - [ ] Secrets in environment variables

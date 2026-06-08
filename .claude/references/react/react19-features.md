@@ -25,8 +25,33 @@ npm install babel-plugin-react-compiler
 npm install -D eslint-plugin-react-compiler
 ```
 
-**Vite (vite.config.ts) :**
+**Vite avec `@vitejs/plugin-react` v6+ (Vite 8) :**
+
+> ⚠️ **Rupture depuis `@vitejs/plugin-react` v6 / Vite 8 :** la config `babel.plugins` dans `react({ babel: ... })` ne fonctionne plus pour le React Compiler. Il faut utiliser `@rolldown/plugin-babel` avec `reactCompilerPreset` (recommandé) ou `babel-plugin-react-compiler` directement.
+
+```bash
+npm install -D @rolldown/plugin-babel
+```
+
 ```typescript
+// vite.config.ts — @vitejs/plugin-react v6+ (Vite 8)
+import { defineConfig } from 'vite';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    babel({
+      presets: [reactCompilerPreset()]
+    }),
+  ],
+});
+```
+
+**Vite avec `@vitejs/plugin-react` < v6 (Vite 7 et antérieur) :**
+```typescript
+// vite.config.ts — @vitejs/plugin-react < v6
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -488,6 +513,116 @@ const App = () => (
 ```
 
 **Source :** [react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary)
+
+---
+
+## `<Activity>` — Préservation d'état des onglets
+
+Disponible depuis **React 19.2** (octobre 2025). `<Activity>` permet de garder un sous-arbre monté mais masqué (mode `"hidden"`), preserving l'état DOM et le state React entre les navigations.
+
+### API
+
+```tsx
+import { Activity } from 'react';
+
+<Activity mode="visible" | "hidden">
+  {children}
+</Activity>
+```
+
+| Mode | Comportement |
+|------|-------------|
+| `"visible"` | Enfants rendus normalement, effets montés |
+| `"hidden"` | Enfants masqués (CSS), effets **démontés**, mises à jour différées |
+
+### Cas d'usage : UI à onglets sans perte d'état
+
+```tsx
+import { Activity, useState } from 'react';
+
+const TabView = () => {
+  const [activeTab, setActiveTab] = useState<'home' | 'settings'>('home');
+
+  return (
+    <>
+      <button onClick={() => setActiveTab('home')}>Home</button>
+      <button onClick={() => setActiveTab('settings')}>Settings</button>
+
+      {/* Les onglets inactifs restent montés mais masqués */}
+      <Activity mode={activeTab === 'home' ? 'visible' : 'hidden'}>
+        <HomeTab />
+      </Activity>
+      <Activity mode={activeTab === 'settings' ? 'visible' : 'hidden'}>
+        <SettingsTab />
+      </Activity>
+    </>
+  );
+};
+```
+
+**Avantages :**
+- Pas de perte d'état (champs de formulaire, scroll position, etc.)
+- Pré-rendu des onglets masqués (data fetching en arrière-plan avec Suspense)
+- Back-navigation sans re-fetch
+
+**Limitation importante :**
+- En mode `"hidden"`, les effets (`useEffect`) sont **démontés** (cleanup exécuté). Les abonnements, intervals et connexions sont coupés. À considérer dans la conception des composants.
+
+**Source :** [react.dev/reference/react/Activity](https://react.dev/reference/react/Activity)
+
+---
+
+## Hook `useEffectEvent` — Dépendances de useEffect
+
+Disponible depuis **React 19.2** (stable, octobre 2025). `useEffectEvent` permet d'extraire la logique « événement » d'un `useEffect` pour éviter les re-synchronisations inutiles.
+
+### Problème résolu
+
+```tsx
+// ❌ AVANT : theme dans les deps → reconnexion à chaque changement de thème
+function ChatRoom({ roomId, theme }) {
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.on('connected', () => {
+      showNotification('Connected!', theme); // theme lu ici
+    });
+    connection.connect();
+    return () => connection.disconnect();
+  }, [roomId, theme]); // theme force une reconnexion inutile
+}
+```
+
+### Pattern AUTODEPS avec `useEffectEvent`
+
+```tsx
+import { useEffect, useEffectEvent } from 'react';
+
+// ✅ APRÈS : onConnected lit toujours le theme à jour sans être une dépendance
+function ChatRoom({ roomId, theme }) {
+  // useEffectEvent wrapping = logique "event", jamais une dépendance
+  const onConnected = useEffectEvent(() => {
+    showNotification('Connected!', theme);
+  });
+
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.on('connected', () => {
+      onConnected(); // toujours le theme à jour
+    });
+    connection.connect();
+    return () => connection.disconnect();
+  }, [roomId]); // ✅ theme n'est plus une dépendance
+}
+```
+
+### Règles d'utilisation
+
+- `useEffectEvent` n'est **pas réactif** : il lit toujours les valeurs les plus récentes
+- Ne pas l'appeler en dehors du `useEffect` où il est utilisé
+- Ne pas le passer comme dépendance à d'autres hooks
+- Alternative aux dépendances manuelles dans les `useEffect` complexes
+
+**Source :** [react.dev/reference/react/useEffectEvent](https://react.dev/reference/react/useEffectEvent)
 
 ---
 

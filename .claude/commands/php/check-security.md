@@ -417,6 +417,6 @@ security:
     - name: Security Scan
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.4'
+        php-version: '8.5'
         tools: security-checker
 ```

@@ -49,6 +49,33 @@ Le composant utilise-t-il des hooks ?
         NON --> MAJEUR : composant monolithique
 ```
 
+### `useEffectEvent` — Dépendances de useEffect (React 19.2+)
+
+`useEffectEvent` est stable depuis React 19.2. Recommander son usage quand des dépendances sont ajoutées à `useEffect` uniquement pour lire une valeur à jour (pattern "latest ref without re-sync").
+
+```tsx
+// MAUVAIS : theme dans les deps → reconnexion inutile
+useEffect(() => {
+  const conn = createConnection(roomId);
+  conn.on('connected', () => showNotification(theme));
+  conn.connect();
+  return () => conn.disconnect();
+}, [roomId, theme]); // theme force un re-run
+
+// BON : useEffectEvent extrait la logique event
+const onConnected = useEffectEvent(() => {
+  showNotification(theme); // lit toujours la valeur courante
+});
+useEffect(() => {
+  const conn = createConnection(roomId);
+  conn.on('connected', () => onConnected());
+  conn.connect();
+  return () => conn.disconnect();
+}, [roomId]); // ✅ theme n'est plus une dépendance
+```
+
+**Flaguer systématiquement :** les `useEffect` avec des dépendances de type "callback", "thème", "notification count" qui ne déclenchent pas le comportement central de l'effet.
+
 ### Violations critiques
 
 **Rules of Hooks :**
@@ -241,6 +268,7 @@ expect(screen.getByRole('dialog')).toBeInTheDocument();
 **Vérifier si le projet utilise React Compiler 1.0+ :**
 - `babel-plugin-react-compiler` dans package.json ?
 - Configuration Vite/Next.js avec reactCompiler activé ?
+- ⚠️ **Vite 8 / `@vitejs/plugin-react` v6+ :** la config `react({ babel: { plugins: [...] } })` ne fonctionne plus pour le compiler. La config correcte utilise `@rolldown/plugin-babel` + `reactCompilerPreset`. Flaguer les projets encore sur l'ancienne config.
 
 **Si Compiler activé :**
 - `useMemo`, `useCallback`, `React.memo` doivent être **rares** (< 10% des composants)

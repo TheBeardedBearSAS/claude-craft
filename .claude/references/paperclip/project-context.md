@@ -8,7 +8,7 @@
 |-------|-----------|
 | Runtime | Node.js 20+ LTS |
 | Language | TypeScript 5.5+ (strict) |
-| Framework | Paperclip 2026.403+ |
+| Framework | Paperclip 2026.529+ |
 | Database | PostgreSQL 15+ (RLS, JSONB) |
 | Cache / Queue | Redis 7+, BullMQ |
 | Tests | Vitest 4.1+, testcontainers |

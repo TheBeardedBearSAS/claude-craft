@@ -5,7 +5,7 @@
 ## Impeller: Moteur de rendu par défaut
 
 ```yaml
-# Activé PAR DÉFAUT sur iOS et Android (Flutter 3.41)
+# Activé PAR DÉFAUT sur iOS et Android (Flutter 3.44)
 # −50% temps rastérisation, +30% fluidité animations
 # Désactiver uniquement si problèmes critiques:
 flutter:
@@ -17,7 +17,7 @@ flutter:
 - Rastérisation multi-threadée
 - Support Vulkan/Metal natif
 
-**Source :** [Flutter 3.41 Impeller](https://blog.flutter.dev/whats-new-in-flutter-3-41-302ec140e632)
+**Source :** [Flutter 3.44 Impeller](https://blog.flutter.dev/whats-new-in-flutter-3-44-b0cc1ad3c527)
 
 ---
 
@@ -234,7 +234,7 @@ heavy.showFeature();
 ## Performance Checklist 2026
 
 ```
-✅ Impeller activé (par défaut Flutter 3.41)
+✅ Impeller activé (par défaut Flutter 3.44)
 ✅ const widgets partout où possible
 ✅ ListView.builder pour listes
 ✅ Image caching activé (cached_network_image)
@@ -254,6 +254,6 @@ heavy.showFeature();
 
 ---
 
-**Sources :** [Flutter 3.41 Performance](https://blog.flutter.dev/whats-new-in-flutter-3-41-302ec140e632)
+**Sources :** [Flutter 3.44 Performance](https://blog.flutter.dev/whats-new-in-flutter-3-44-b0cc1ad3c527)
 
 *Optimiser la performance améliore l'expérience utilisateur.*

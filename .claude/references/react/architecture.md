@@ -272,31 +272,31 @@ export const Button: FC<ButtonProps> = ({
 
 ```typescript
 // components/atoms/Input/Input.tsx
-import { FC, InputHTMLAttributes, forwardRef } from 'react';
+import { InputHTMLAttributes, Ref } from 'react';
 import { cn } from '@/utils/classnames';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
   fullWidth?: boolean;
+  ref?: Ref<HTMLInputElement>; // React 19 — ref comme prop directe
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ error, fullWidth, className, ...props }, ref) => {
-    return (
-      <input
-        ref={ref}
-        className={cn(
-          'px-3 py-2 border rounded-md outline-none transition-colors',
-          'focus:ring-2 focus:ring-blue-500',
-          error && 'border-red-500 focus:ring-red-500',
-          fullWidth && 'w-full',
-          className
-        )}
-        {...props}
-      />
-    );
-  }
-);
+// ✅ React 19 — ref comme prop directe, forwardRef déprécié
+export const Input = ({ error, fullWidth, className, ref, ...props }: InputProps) => {
+  return (
+    <input
+      ref={ref}
+      className={cn(
+        'px-3 py-2 border rounded-md outline-none transition-colors',
+        'focus:ring-2 focus:ring-blue-500',
+        error && 'border-red-500 focus:ring-red-500',
+        fullWidth && 'w-full',
+        className
+      )}
+      {...props}
+    />
+  );
+};
 
 Input.displayName = 'Input';
 ```
@@ -367,7 +367,31 @@ Source : [react.dev/blog/2025/10/07/react-compiler-1](https://react.dev/blog/202
 npm install babel-plugin-react-compiler
 ```
 
-**Vite (vite.config.ts) :**
+**Vite avec `@vitejs/plugin-react` v6+ (Vite 8) :**
+
+> ⚠️ **Rupture depuis `@vitejs/plugin-react` v6 / Vite 8 :** la config `babel.plugins` dans `react({ babel: ... })` ne fonctionne plus. Utiliser `@rolldown/plugin-babel` avec `reactCompilerPreset`.
+
+```bash
+npm install -D @rolldown/plugin-babel
+```
+
+```typescript
+// vite.config.ts — @vitejs/plugin-react v6+ (Vite 8)
+import { defineConfig } from 'vite';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    babel({
+      presets: [reactCompilerPreset()]
+    }),
+  ],
+});
+```
+
+**Vite avec `@vitejs/plugin-react` < v6 :**
 ```typescript
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';

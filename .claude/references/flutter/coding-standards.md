@@ -248,14 +248,14 @@ final colors = [
 
 ---
 
-## Dart 3.12+ Features
+## Dart 3.11+ Features
 
 ### 1. Dot Shorthands (Nouveau)
 
 **Rule**: Utiliser dot shorthands quand le type est inféré.
 
 ```dart
-✅ GOOD - Dart 3.12+
+✅ GOOD - Dart 3.11+
 enum OrderStatus { pending, active, completed, cancelled }
 
 // Dans un switch
@@ -316,6 +316,76 @@ extension type JSConsole(JSObject _) implements JSObject {
 ❌ BAD - dart:js (deprecated)
 import 'dart:js';  // Deprecated depuis Dart 3.3
 ```
+
+---
+
+## Dart 3.12+ Features
+
+### 1. Primary Constructors (Expérimental)
+
+Dart 3.12 introduit les primary constructors (expérimental) : déclarer les paramètres directement dans l'en-tête de classe, éliminant le corps de constructeur boilerplate.
+
+```dart
+✅ GOOD - Primary constructors (expérimental, activer avec --enable-experiment=primary-constructors)
+class Point(final int x, final int y);
+
+// Équivalent à :
+class Point {
+  final int x;
+  final int y;
+  Point(this.x, this.y);
+}
+
+// Avec valeurs par défaut et méthodes
+class Circle(final double radius) {
+  double get area => 3.14159 * radius * radius;
+}
+```
+
+> **Note :** Fonctionnalité expérimentale en Dart 3.12. Activer avec le flag `--enable-experiment=primary-constructors`.
+
+### 2. Private Named Parameters
+
+Les named parameters peuvent désormais initialiser directement des champs privés, sans liste d'initialisation.
+
+```dart
+✅ GOOD - Private named parameters (Dart 3.12)
+class Hummingbird {
+  final String _petName;
+  final int _wingbeatsPerSecond;
+
+  // Les paramètres nommés avec _ initialisent les champs privés
+  Hummingbird({required this._petName, required this._wingbeatsPerSecond});
+}
+
+// À l'appel : les noms publics sont utilisés (sans _)
+final bird = Hummingbird(petName: 'Dash', wingbeatsPerSecond: 75);
+
+❌ AVANT (Dart < 3.12) - Boilerplate nécessaire
+class Hummingbird {
+  final String _petName;
+  final int _wingbeatsPerSecond;
+
+  Hummingbird({required String petName, required int wingbeatsPerSecond})
+      : _petName = petName,
+        _wingbeatsPerSecond = wingbeatsPerSecond;
+}
+```
+
+### 3. Agentic Hot Reload
+
+Dart 3.12 introduit l'**Agentic Hot Reload** via le Dart & Flutter MCP Server : les agents IA (Claude Code, Cursor, Copilot) peuvent déclencher un hot reload automatique lors de modifications de code, sans copie manuelle d'URI.
+
+```bash
+# Activer le Dart & Flutter MCP Server
+dart pub global activate dart_mcp_server
+
+# Configurer dans Claude Code / Cursor :
+# Le MCP Server expose les outils hot_reload, get_diagnostics, etc.
+# L'agent déclenche automatiquement le hot reload après chaque édition.
+```
+
+**Source :** [Dart 3.12 Blog](https://dart.dev/blog/announcing-dart-3-12)
 
 ---
 

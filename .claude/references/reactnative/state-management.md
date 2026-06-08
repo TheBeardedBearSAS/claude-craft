@@ -16,21 +16,23 @@ Stratégie multi-niveau pour gérer l'état dans React Native:
 ### Installation
 
 ```bash
-npm install @tanstack/react-query
+npm install @tanstack/react-query  # v5
 ```
+
+> **Migration v4 → v5 :** `cacheTime` a été renommé `gcTime` (garbage-collection time) dans `@tanstack/react-query` v5. Remplacer toutes les occurrences de `cacheTime` par `gcTime` dans vos `QueryClient` et options de requêtes.
 
 ### Setup
 
 ```typescript
 // providers/QueryProvider.tsx
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // v5
 import { ReactNode } from 'react';
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minutes
+      gcTime: 10 * 60 * 1000,   // 10 minutes (anciennement cacheTime en v4)
       retry: 3,
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     },

@@ -662,4 +662,4 @@ context.pushRoute(UserRoute(id: user.id)); // auto_route
 
 **Version :** 2.1
 **Dernière mise à jour :** 2026-04
-**Sources :** [Flutter 3.41 Blog](https://blog.flutter.dev/whats-new-in-flutter-3-41-302ec140e632), [Dart 3.11 Blog](https://blog.dart.dev/announcing-dart-3-11-b6529be4203a)
+**Sources :** [Flutter 3.44 Blog](https://blog.flutter.dev/whats-new-in-flutter-3-44-b0cc1ad3c527), [Dart 3.12 Blog](https://dart.dev/blog/announcing-dart-3-12)

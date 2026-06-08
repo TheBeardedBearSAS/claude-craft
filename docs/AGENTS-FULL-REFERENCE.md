@@ -16,7 +16,7 @@
 
 ### `@angular-reviewer`
 
-Angular 21 (ou 22 en RC) and TypeScript code review specialist — Signals, standalone components, RxJS, performance, zoneless change detection, httpResource
+Angular 22 and TypeScript code review specialist — Signals, Signal Forms (stable), standalone components, RxJS, performance, zoneless change detection, httpResource
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 
@@ -58,7 +58,7 @@ Flutter 3.44 / Dart 3.12 code review specialist — BLoC v9, Riverpod 3, widget 
 
 ### `@laravel-reviewer`
 
-Laravel 13 and PHP 8.5 code review specialist — Actions pattern, Pest PHP, Eloquent, Sanctum, AI SDK, performance optimization
+Laravel 13 and PHP 8.3+ (8.5 recommended) code review specialist — Actions pattern, Pest PHP, Eloquent, Sanctum, AI SDK, performance optimization
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 
@@ -72,7 +72,7 @@ Laravel 13 and PHP 8.5 code review specialist — Actions pattern, Pest PHP, Elo
 
 ### `@paperclip-reviewer`
 
-Paperclip 2026.403+ governance-first integration platform code review specialist — control plane + adapters two-layer architecture, Node.js 20+ TypeScript, Vitest, PostgreSQL, idempotency keys, audit trails, multi-tenant adapter isolation
+Paperclip 2026.529+ governance-first integration platform code review specialist — control plane + adapters two-layer architecture, Node.js 20+ TypeScript, Vitest, PostgreSQL, idempotency keys, audit trails, multi-tenant adapter isolation
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 

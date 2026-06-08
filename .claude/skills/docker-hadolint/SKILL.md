@@ -7,8 +7,8 @@ description: Docker & Hadolint validation (2026). Use when working with Docker, 
 
 ## Versions (avril 2026)
 
-- **Docker Engine** : 29.4.3 (patch sécurité, mai 2026)  
-  Source : https://www.docker.com/blog/docker-engine-version-29/
+- **Docker Engine** : 29.5.2 (patch sécurité, juin 2026)  
+  Source : https://docs.docker.com/engine/release-notes/29/
 - **Docker Compose** : Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète depuis v2.40+)  
   Source : https://www.compose-spec.io/
 - **Hadolint** : v2.12.0 (version stable pinnée)  
@@ -57,7 +57,7 @@ COPY --from=builder /app /app
 
 ### Images Distroless
 ```dockerfile
-FROM gcr.io/distroless/php8.2-fpm
+FROM gcr.io/distroless/php8.4-fpm
 COPY --from=builder /app /app
 ```
 **Bénéfice** : Surface d'attaque minimale, CVE réduites de 90%  

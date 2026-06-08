@@ -468,6 +468,192 @@ return [
 
 ---
 
+## PHP Native Attributes Eloquent (Laravel 13)
+
+**Source :** https://laravel.com/docs/13.x/eloquent
+
+Laravel 13 étend massivement le support des **PHP native attributes** pour les modèles Eloquent. Ils constituent une alternative déclarative non-breaking aux propriétés de classe traditionnelles.
+
+### Attributs Eloquent disponibles
+
+| Attribut | Description |
+|----------|-------------|
+| `#[Table('orders')]` | Nom de table personnalisé |
+| `#[Fillable(['name', 'email'])]` | Champs mass-assignable |
+| `#[Guarded(['id'])]` | Champs protégés du mass-assignment |
+| `#[Hidden(['password'])]` | Champs cachés à la sérialisation |
+| `#[Visible(['name'])]` | Champs visibles à la sérialisation |
+| `#[Appends(['full_name'])]` | Accesseurs inclus dans la sérialisation |
+| `#[ObservedBy(UserObserver::class)]` | Attacher un ou plusieurs observers |
+| `#[ScopedBy(ActiveScope::class)]` | Appliquer un global scope |
+| `#[UseFactory(UserFactory::class)]` | Lier une factory explicite |
+| `#[UsePolicy(UserPolicy::class)]` | Lier une policy au modèle |
+| `#[UseResource(UserResource::class)]` | Lier une API Resource au modèle |
+| `#[UseEloquentBuilder(UserBuilder::class)]` | Builder Eloquent personnalisé |
+| `#[WithoutTimestamps]` | Désactiver la gestion des timestamps |
+| `#[WithoutIncrementing]` | Désactiver l'auto-increment |
+
+### Exemple avant / après
+
+```php
+// AVANT : propriétés de classe (toujours valide en Laravel 13)
+class User extends Authenticatable
+{
+    protected $table = 'users';
+    protected $fillable = ['name', 'email', 'password'];
+    protected $hidden = ['password', 'remember_token'];
+
+    protected static function booted(): void
+    {
+        static::observe(UserObserver::class);
+        static::addGlobalScope(new ActiveScope());
+    }
+}
+
+// APRÈS : PHP native attributes (Laravel 13, alternative non-breaking)
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Attributes\Table;
+
+#[Table('users')]
+#[Fillable(['name', 'email', 'password'])]
+#[Hidden(['password', 'remember_token'])]
+#[ObservedBy(UserObserver::class)]
+#[ScopedBy(ActiveScope::class)]
+class User extends Authenticatable
+{
+    // Configuration déclarative, aucune propriété ni booted() nécessaire
+}
+```
+
+> **Note :** Les deux styles sont valides et peuvent coexister. Les propriétés de classe ont priorité si les deux sont définis. Préférer la cohérence au sein d'un projet.
+
+---
+
+## JSON:API Resources (Laravel 13)
+
+**Source :** https://laravel.com/docs/13.x/eloquent-resources#jsonapi-resources
+
+Laravel 13 inclut `JsonApiResource`, une classe de ressource conforme à la [spécification JSON:API](https://jsonapi.org/), en natif dans le framework (pas de package tiers requis).
+
+### Caractéristiques vs JsonResource classique
+
+| Fonctionnalité | `JsonResource` | `JsonApiResource` |
+|----------------|---------------|-------------------|
+| Format | Libre | JSON:API strict |
+| Content-Type | `application/json` | `application/vnd.api+json` |
+| Structure réponse | Libre | `{ data: { id, type, attributes, relationships } }` |
+| Sparse fieldsets | Manuel | Automatique (`?fields[posts]=title,body`) |
+| Includes (relations) | Manuel | Automatique (`?include=author,comments`) |
+| Lazy evaluation | Non | Oui (closures dans `toAttributes`) |
+
+### Génération via Artisan
+
+```bash
+php artisan make:resource PostResource --json-api
+```
+
+### Structure générée
+
+```php
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\JsonApi\JsonApiResource;
+
+class PostResource extends JsonApiResource
+{
+    /**
+     * The resource's attributes.
+     */
+    public $attributes = [
+        'title',
+        'body',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
+     * The resource's relationships.
+     */
+    public $relationships = [
+        'author',
+        'comments',
+    ];
+}
+```
+
+### Exemple d'utilisation
+
+```php
+// Dans un controller
+use App\Http\Resources\PostResource;
+use App\Models\Post;
+
+class PostController extends Controller
+{
+    public function show(Post $post): PostResource
+    {
+        return new PostResource($post);
+    }
+
+    public function index(): JsonResponse
+    {
+        return PostResource::collection(Post::all())->response();
+    }
+}
+```
+
+Réponse JSON:API produite :
+
+```json
+{
+    "data": {
+        "id": "1",
+        "type": "posts",
+        "attributes": {
+            "title": "Hello World",
+            "body": "This is my first post."
+        }
+    }
+}
+```
+
+### Attributs avancés (lazy evaluation)
+
+```php
+// Contrôle total via toAttributes()
+public function toAttributes(Request $request): array
+{
+    return [
+        'title' => $this->title,
+        'body' => $this->body,
+        'is_published' => fn () => $this->published_at !== null,
+        'created_at' => $this->created_at,
+    ];
+}
+```
+
+### Relations explicites
+
+```php
+use App\Http\Resources\UserResource;
+use App\Http\Resources\CommentResource;
+
+public $relationships = [
+    'author' => UserResource::class,
+    'comments' => CommentResource::class,
+];
+```
+
+> **Note :** Pour parser les query parameters JSON:API entrants (filtres, sorts), utiliser [Spatie Laravel Query Builder](https://spatie.be/docs/laravel-query-builder) en complément.
+
+---
+
 ## Checklist Laravel 13
 
 - [ ] AI SDK configuré pour OpenAI/Anthropic/Gemini
@@ -477,6 +663,8 @@ return [
 - [ ] Arch Presets Laravel appliqués
 - [ ] PHPStan Level 10 (PHPStan 2.0)
 - [ ] Team Management configuré (si Jetstream)
+- [ ] PHP native attributes Eloquent utilisés (si projet greenfield)
+- [ ] JsonApiResource si API JSON:API requise
 
 ---
 

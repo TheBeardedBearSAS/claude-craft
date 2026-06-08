@@ -11,7 +11,7 @@
 | iOS | 15.0+ |
 | Xcode | 16.0+ |
 
-**Sources :** [Flutter 3.41 Blog](https://blog.flutter.dev/whats-new-in-flutter-3-41-302ec140e632), [Dart 3.11 Blog](https://blog.dart.dev/announcing-dart-3-11-b6529be4203a)
+**Sources :** [Flutter 3.44 Blog](https://blog.flutter.dev/whats-new-in-flutter-3-44-b0cc1ad3c527), [Dart 3.12 Blog](https://dart.dev/blog/announcing-dart-3-12)
 
 ## Architecture Clean
 
@@ -49,14 +49,14 @@ final label = status switch {
 // Après: switch(value) { case _: ... }
 ```
 
-### Impeller par défaut (Flutter 3.41)
+### Impeller par défaut (Flutter 3.44)
 ```yaml
 # Activé par défaut sur iOS et Android (−50% rastérisation)
 # Désactiver uniquement si nécessaire:
 flutter:
   uses-impeller: false  # Déconseillé
 ```
-**Source :** [Impeller performance gains](https://blog.flutter.dev/whats-new-in-flutter-3-41-302ec140e632)
+**Source :** [Impeller performance gains](https://blog.flutter.dev/whats-new-in-flutter-3-44-b0cc1ad3c527)
 
 ### WebAssembly (Wasm) & dart:js_interop
 ```bash
@@ -75,7 +75,7 @@ import 'dart:js_interop';
 @JS()
 external void myJsFunction();
 ```
-**Source :** [Dart 3.11 Wasm](https://blog.dart.dev/announcing-dart-3-11-b6529be4203a)
+**Source :** [Dart 3.12 Wasm](https://dart.dev/blog/announcing-dart-3-12)
 
 ### Material 3 Modulaire
 ```dart
@@ -90,7 +90,7 @@ workspace:
   - packages/*
   - tools/**  # Glob support
 ```
-**Source :** [Dart 3.11 Blog](https://blog.dart.dev/announcing-dart-3-11-b6529be4203a)
+**Source :** [Dart 3.11 Blog](https://dart.dev/blog/announcing-dart-3-11)
 
 ### Unix Domain Sockets (Windows, Dart 3.11)
 ```dart
@@ -100,6 +100,25 @@ final socket = await Socket.connect(
   0,
 );
 ```
+
+### Dart 3.12 Features
+```dart
+// (a) Primary constructors (expérimental)
+class Point(final int x, final int y);
+// Activer : --enable-experiment=primary-constructors
+
+// (b) Private named parameters
+class Hummingbird {
+  final String _petName;
+  final int _wingbeatsPerSecond;
+  Hummingbird({required this._petName, required this._wingbeatsPerSecond});
+}
+// Appel : Hummingbird(petName: 'Dash', wingbeatsPerSecond: 75)
+// Le _ dans le champ → paramètre nommé public à l'appel
+```
+
+**Agentic Hot Reload (Dart 3.12):** Le Dart & Flutter MCP Server permet aux agents IA (Claude Code, Cursor) de déclencher automatiquement le hot reload après chaque modification, sans copie manuelle d'URI.
+**Source :** [Dart 3.12 Blog](https://dart.dev/blog/announcing-dart-3-12)
 
 ## State Management
 

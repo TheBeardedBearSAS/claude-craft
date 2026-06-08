@@ -536,15 +536,17 @@ class TestUser:
 ### pyproject.toml
 
 ```toml
-[tool.black]
-line-length = 88
-target-version = ['py314']
-include = '\.pyi?$'
+# [tool.black] — legacy, remplacé par [tool.ruff.format]
+# [tool.isort] — legacy, remplacé par [tool.ruff.lint.isort]
 
-[tool.isort]
-profile = "black"
-line_length = 88
-multi_line_output = 3
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.ruff.lint.isort]
+known-first-party = ["src", "app"]
+combine-as-imports = true
 
 [tool.mypy]
 python_version = "3.14"
@@ -563,20 +565,50 @@ python_functions = ["test_*"]
 
 ### Free-threading (PEP 703)
 
-Interpréteur sans GIL disponible en option. Activer avec `python --disable-gil` ou build `3.14t`.
+Interpréteur sans GIL **officiellement supporté (opt-in)** depuis Python 3.14. Le flag
+`--disable-gil` est un flag de **compilation** de CPython — il ne s'utilise pas à l'invocation.
+
+```bash
+# Installer l'interpréteur free-threaded via uv (recommandé)
+uv python install 3.14t
+uv venv --python 3.14t
+source .venv/bin/activate
+
+# Ou via le binaire dédié (si installé séparément)
+python3.14t script.py
+```
+
 Utile pour les workloads CPU-bound multi-threaded. Les extensions C tierces doivent être adaptées.
 
 ### Template Strings (PEP 750)
 
 Nouveau type `Template` pour les interpolations structurées (distinct des f-strings).
+Le module est `string.templatelib` ; les parties d'un Template sont accessibles par itération
+(chaque élément est soit un `str` statique, soit un `Interpolation`).
 
 ```python
-from string.templatelib import Template
+from string.templatelib import Template, Interpolation
 
-def sanitize(t: Template) -> str:
-    return "".join(str(v) for v in t.args)
+def html_escape(t: Template) -> str:
+    """Rend un t-string en HTML en échappant les interpolations."""
+    import html
+    parts = []
+    for part in t:
+        if isinstance(part, Interpolation):
+            parts.append(html.escape(str(part.value)))
+        else:
+            parts.append(part)
+    return "".join(parts)
 
-result = t"Hello {user_input}"  # retourne un Template, pas une str
+user_input = "<script>alert('xss')</script>"
+result = html_escape(t"<p>Bonjour {user_input}</p>")
+# → "<p>Bonjour &lt;script&gt;alert(&#x27;xss&#x27;)&lt;/script&gt;</p>"
+
+# Accès aux parties du Template
+tmpl = t"Hello {user_input!s}!"
+# tmpl.strings      → ('Hello ', '!')            — parties statiques
+# tmpl.interpolations → (Interpolation(...),)    — parties dynamiques
+# for part in tmpl: ...                          — itère str et Interpolation
 ```
 
 ### Évaluation différée des annotations (PEP 649)
@@ -610,6 +642,6 @@ Before committing:
 - [ ] No hardcoded secrets
 - [ ] Exceptions are specific and well-handled
 - [ ] Imports are organized
-- [ ] `black` and `isort` applied
-- [ ] `ruff` passes without errors
-- [ ] `mypy` passes in strict mode
+- [ ] `ruff format` applied (remplace black + isort)
+- [ ] `ruff check` passes without errors
+- [ ] `mypy` passes in strict mode (v2.0+)
