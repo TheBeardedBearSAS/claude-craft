@@ -27,6 +27,14 @@ Audit de fraîcheur exhaustif 2026-06-08 (workflow multi-agents 36 agents + vér
 
 - **GitHub Actions SHA-pinnées** : `codeql-action`, `aquasecurity/trivy-action` (ex-`@master`), `actions/cache` épinglées à un commit SHA.
 - **Gate CI étendu** aux modifications de contenu (`.claude/**`, `Dev/i18n/**`, `config/**`) — les tests de contenu se déclenchent désormais sur les PR de contenu.
+- **Hook `rm` durci** (`settings.json`) : couvre `-fr`, `--recursive --force` et les flags longs (l'ancien pattern ne bloquait que `-rf` groupé).
+- **Hooks des templates distribués corrigés** : lecture du JSON depuis stdin via `jq` (étaient non fonctionnels — `echo '$TOOL_INPUT'`).
+- **`X-XSS-Protection` (header déprécié) retiré** des recommandations (remplacé par CSP Level 3) dans toutes les références et templates de sécurité.
+- **Scope ShellCheck étendu** à `.bmad/` et `Project/` (`set -euo pipefail` ajouté à `install-project-commands.sh`).
+
+### Enrichissements P2 (best-practices par stack)
+
+- C# (file-based apps, EF Core 10, Native AOT, JWT EdDSA), React (ViewTransition, cacheSignal, Performance Tracks), React Native (Expo SDK 56, jest-preset, DevTools 0.85), Python (typing PEP 695, FastAPI 0.136/Pydantic 2.13), PHP (features/dépréciations 8.5, PHPStan 10), Symfony (8.1 features, json-streamer DI), Laravel (Pest 4 Browser), Flutter (DCM), Angular (OnPush/Fetch défaut), Vue (Vitest Browser Mode). Cascade i18n 5 langues. ROADMAP v9.0 (items concurrentiels).
 
 > Rapport d'audit complet (local, non versionné) : `docs/audit/2026-06-08-comprehensive/`.
 
