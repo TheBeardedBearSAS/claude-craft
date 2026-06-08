@@ -54,9 +54,17 @@ Corriger tout ce qui est rapporté comme échec dur avant de continuer.
 
 ### 4. Initialiser le premier opérateur (CEO)
 
+Deux chemins sont possibles selon le contexte de déploiement :
+
+**A — Revendication via navigateur (instance privée / auto-hébergée non revendiquée) :** Si l'instance n'a pas encore été revendiquée, ouvrir `http://localhost:3100` dans un navigateur. Un écran de premier démarrage devrait apparaître, permettant de configurer le compte administrateur initial directement. Utiliser ce chemin si l'instance vient d'être déployée et n'a pas d'opérateur existant.
+
+**B — Bootstrap CLI :** Exécuter la commande CLI pour créer le compte opérateur initial de façon programmatique :
+
 ```bash
 paperclipai auth-bootstrap-ceo
 ```
+
+> **Quel chemin utiliser ?** Si le tableau de bord redirige vers une page de revendication/configuration au premier chargement, utiliser le chemin A. S'il affiche un formulaire de connexion, utiliser le chemin B (ou l'instance possède déjà un opérateur). Consulter `docs.paperclip.ing` pour le comportement exact de votre version.
 
 Cela crée le compte opérateur initial utilisé pour se connecter au tableau de bord. **Révoquer ou faire tourner** après que l'onboarding soit terminé.
 

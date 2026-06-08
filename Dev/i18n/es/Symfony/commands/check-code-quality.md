@@ -15,7 +15,7 @@ $ARGUMENTS: Ruta del proyecto Symfony a auditar (opcional, por defecto: director
 
 ## MISIÓN
 
-Eres un experto en calidad de software encargado de auditar la calidad del código de un proyecto Symfony según los estándares PSR-12, PHPStan nivel 9 y las mejores prácticas PHP modernas.
+Eres un experto en calidad de software encargado de auditar la calidad del código de un proyecto Symfony según los estándares PSR-12, PHPStan nivel 10 y las mejores prácticas PHP modernas.
 
 ### Paso 1: Verificación del Entorno
 
@@ -54,19 +54,19 @@ docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpcs --standard=PSR1
 
 ### Paso 3: Análisis Estático con PHPStan
 
-Ejecuta PHPStan al nivel 9:
+Ejecuta PHPStan al nivel 10:
 
 ```bash
 # Verificar si PHPStan está instalado
 docker run --rm -v $(pwd):/app php:8.2-cli test -f /app/vendor/bin/phpstan && echo "✅ PHPStan encontrado" || echo "❌ PHPStan faltante"
 
-# Ejecutar PHPStan nivel 9
-docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=9 --error-format=table
+# Ejecutar PHPStan nivel 10
+docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=10 --error-format=table
 ```
 
-#### PHPStan Nivel 9 (10 puntos)
+#### PHPStan Nivel 10 (10 puntos)
 
-- [ ] Ningún error PHPStan nivel 9
+- [ ] Ningún error PHPStan nivel 10
 - [ ] Todos los tipos de retorno declarados
 - [ ] Todos los parámetros tipados
 - [ ] No hay tipos mixed
@@ -83,7 +83,8 @@ Configuración PHPStan esperada en `phpstan.neon`:
 
 ```neon
 parameters:
-    level: 9
+    level: 10
+    phpVersion: 80500
     paths:
         - src
     excludePaths:
@@ -156,7 +157,7 @@ Verifica la calidad de la documentación:
 
 ```bash
 # Verificar los PHPDoc faltantes
-docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=9 | grep -i "phpdoc"
+docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=10 | grep -i "phpdoc"
 ```
 
 #### Documentación (2 puntos)
@@ -180,7 +181,7 @@ docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=9 | grep -i "
 
 Detalles:
 - Estándares PSR-12: ___/5
-- PHPStan Nivel 9: ___/10
+- PHPStan Nivel 10: ___/10
 - Type Hints Estrictos: ___/5
 - Métricas de Código: ___/3
 - Documentación: ___/2
@@ -195,7 +196,7 @@ Detalles:
 📊 PUNTUACIÓN: ___/25
 
 📏 Estándares PSR-12     : ___/5  [✅|⚠️|❌]
-🔍 PHPStan Nivel 9       : ___/10 [✅|⚠️|❌]
+🔍 PHPStan Nivel 10       : ___/10 [✅|⚠️|❌]
 🏷️  Type Hints Estrictos  : ___/5  [✅|⚠️|❌]
 📊 Métricas de Código    : ___/3  [✅|⚠️|❌]
 📝 Documentación         : ___/2  [✅|⚠️|❌]
@@ -251,9 +252,9 @@ Ejemplos:
    TOP 3 ACCIONES PRIORITARIAS
 =================================================
 
-1. 🎯 [ACCIÓN CRÍTICA] - Corregir los errores PHPStan nivel 9
+1. 🎯 [ACCIÓN CRÍTICA] - Corregir los errores PHPStan nivel 10
    Impacto: ⭐⭐⭐⭐⭐ | Esfuerzo: 🔥🔥🔥
-   Comando: docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=9
+   Comando: docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=10
 
 2. 🎯 [ACCIÓN IMPORTANTE] - Añadir declare(strict_types=1) en todos los archivos
    Impacto: ⭐⭐⭐⭐ | Esfuerzo: 🔥
@@ -309,11 +310,11 @@ docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpcs --standard=PSR1
 # Corregir automáticamente PSR-12
 docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpcbf --standard=PSR12 src/
 
-# PHPStan nivel 9
-docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=9 --error-format=table
+# PHPStan nivel 10
+docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=10 --error-format=table
 
 # Generar una baseline PHPStan (para proyectos legacy)
-docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=9 --generate-baseline
+docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=10 --generate-baseline
 
 # PHP CS Fixer
 docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/php-cs-fixer fix src --dry-run --diff

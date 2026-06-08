@@ -141,12 +141,13 @@ if ($user->getFailedLoginAttempts() >= 5) {
 
 ```php
 <?php
-// ✅ Secure - Security headers
+// ✅ Secure - Security headers — X-XSS-Protection est déprécié, s'appuyer sur CSP Level 3
 $response->headers->set('X-Content-Type-Options', 'nosniff');
 $response->headers->set('X-Frame-Options', 'DENY');
-$response->headers->set('X-XSS-Protection', '1; mode=block');
-$response->headers->set('Content-Security-Policy', "default-src 'self'");
-$response->headers->set('Strict-Transport-Security', 'max-age=31536000');
+$response->headers->set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests");
+$response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+$response->headers->set('Cross-Origin-Opener-Policy', 'same-origin');
+$response->headers->set('Cross-Origin-Resource-Policy', 'same-origin');
 ```
 
 **Checklist:**

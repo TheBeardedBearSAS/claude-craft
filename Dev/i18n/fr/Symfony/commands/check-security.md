@@ -283,11 +283,14 @@ docker run --rm -v $(pwd):/app php:8.2-cli cat /app/config/packages/framework.ya
 
 - [ ] X-Content-Type-Options: nosniff
 - [ ] X-Frame-Options: DENY ou SAMEORIGIN
-- [ ] X-XSS-Protection: 1; mode=block
-- [ ] Strict-Transport-Security (HSTS)
-- [ ] Content-Security-Policy (CSP)
+- [ ] ~~X-XSS-Protection~~ — **déprécié**, ne pas utiliser ; s'appuyer sur CSP Level 3
+- [ ] Content-Security-Policy (CSP Level 3) avec `frame-ancestors 'none'` et `upgrade-insecure-requests`
+- [ ] Strict-Transport-Security (HSTS) avec `preload`
 - [ ] Referrer-Policy: no-referrer ou strict-origin
 - [ ] Permissions-Policy
+- [ ] Cross-Origin-Opener-Policy: same-origin
+- [ ] Cross-Origin-Embedder-Policy: require-corp
+- [ ] Cross-Origin-Resource-Policy: same-origin
 - [ ] Cache-Control pour données sensibles
 - [ ] SameSite cookies
 - [ ] Removal de headers révélant la stack technique

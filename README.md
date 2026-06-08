@@ -73,7 +73,7 @@ claude
 
 That's it. You get an architecture, security, and quality audit of your project in minutes.
 
-**New to Claude Craft?** Run `/getting-started` in Claude Code for a 10-minute guided tour that shows you the 3 most valuable commands for YOUR project.
+**New to Claude Craft?** Run `/common:getting-started` in Claude Code for a 10-minute guided tour that shows you the 3 most valuable commands for YOUR project.
 
 > See [Quickstart](docs/QUICKSTART.md) for a step-by-step walkthrough with expected output at each stage.
 

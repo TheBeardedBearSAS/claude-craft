@@ -2,7 +2,9 @@
   "$schema": "https://docs.claude.ai/reference/settings-schema.json",
   "env": {
     "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6",
-    "CLAUDE_CODE_FORK_SUBAGENT": "1"
+    "CLAUDE_CODE_FORK_SUBAGENT": "1",
+    "ENABLE_PROMPT_CACHING_1H": "1",
+    "FORCE_PROMPT_CACHING_5M": "1"
   },
   "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5"],
   "hooks": {

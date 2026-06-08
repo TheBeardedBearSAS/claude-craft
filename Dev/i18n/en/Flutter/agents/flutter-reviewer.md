@@ -639,7 +639,7 @@ context.pushRoute(UserRoute(id: user.id)); // auto_route
 |------|-------|
 | **dart analyze** | Static analysis (0 errors, 0 warnings) |
 | **flutter_lints** | Recommended lint rules |
-| **DCM** (Dart Code Metrics) | Complexity, metrics |
+| **DCM** (dcm.dev, optional) | Complexity, metrics — commercial tool, native binary (not pub.dev) |
 | **bloc_test** | BLoC/Cubit tests |
 | **mocktail** | Mocks without code generation |
 | **flutter test --coverage** | Code coverage |
@@ -659,5 +659,6 @@ context.pushRoute(UserRoute(id: user.id)); // auto_route
 
 ---
 
-**Version:** 2.0
-**Last updated:** 2026-02
+**Version:** 2.1
+**Last updated:** 2026-06
+**Sources:** [Flutter 3.44 Blog](https://blog.flutter.dev/whats-new-in-flutter-3-44-b0cc1ad3c527), [Dart 3.12 Blog](https://dart.dev/blog/announcing-dart-3-12), [DCM](https://dcm.dev/)

@@ -80,7 +80,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" >&2 && exit 1; fi; exit 0"
           }
         ]
       },
@@ -89,7 +89,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" >&2 && exit 1; fi; exit 0"
           }
         ]
       }
@@ -100,7 +100,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "OUTPUT_SIZE=$(echo '$TOOL_OUTPUT' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Extract only the relevant information and summarize in under 20 lines.'; elif [ \"$OUTPUT_SIZE\" -gt 10000 ]; then echo 'NOTICE: Moderate output (>10KB). Focus on errors, warnings, and key results.'; fi; exit 0",
+            "command": "OUTPUT_SIZE=$(jq -r '.tool_output // empty' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Extract only the relevant information and summarize in under 20 lines.'; elif [ \"$OUTPUT_SIZE\" -gt 10000 ]; then echo 'NOTICE: Moderate output (>10KB). Focus on errors, warnings, and key results.'; fi; exit 0",
             "timeout": 3000
           }
         ]
@@ -110,7 +110,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "OUTPUT_SIZE=$(echo '$TOOL_OUTPUT' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Summarize key findings in under 20 lines.'; fi; exit 0",
+            "command": "OUTPUT_SIZE=$(jq -r '.tool_output // empty' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Summarize key findings in under 20 lines.'; fi; exit 0",
             "timeout": 3000
           }
         ]

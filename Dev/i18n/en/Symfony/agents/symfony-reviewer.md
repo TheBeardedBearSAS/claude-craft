@@ -255,7 +255,7 @@ Is the code a Controller (Presentation)?
 | **Behat** | BDD, readable business scenarios |
 | **Infection** | Mutation testing (MSI > 80%) |
 | **Foundry** | Maintainable factories/fixtures |
-| **PHPStan level 9** | Static analysis, complements tests |
+| **PHPStan level 10** | Static analysis, complements tests |
 
 ### Symfony Test Anti-patterns
 
@@ -517,7 +517,7 @@ $apiKey = $this->getParameter('stripe_api_key');
 
 | Tool | Usage |
 |------|-------|
-| **PHPStan level 9** | Strict static analysis |
+| **PHPStan level 10** | Strict static analysis |
 | **Deptrac** | Layer dependency validation |
 | **PHP-CS-Fixer** (PSR-12) | Automatic formatting |
 | **Pest PHP** / PHPUnit | Unit and integration tests |

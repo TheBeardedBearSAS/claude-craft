@@ -54,9 +54,17 @@ Fix anything reported as a hard failure before proceeding.
 
 ### 4. Bootstrap the first operator (CEO)
 
+Two paths are available depending on your deployment context:
+
+**A — Browser claim (private / self-hosted unclaimed instance):** If the instance has not yet been claimed, navigate to `http://localhost:3100` in a browser. A first-run claim screen should appear, allowing you to set up the initial admin account directly. Use this path when the instance is freshly deployed and has no existing operator.
+
+**B — CLI bootstrap:** Run the CLI command to create the initial operator account programmatically:
+
 ```bash
 paperclipai auth-bootstrap-ceo
 ```
+
+> **Which path applies?** If the dashboard redirects to a claim/setup page on first load, use path A. If it shows a login form, use path B (or the instance already has an operator). Consult `docs.paperclip.ing` for the exact behavior of your version.
 
 This creates the initial operator account used to sign into the dashboard. **Revoke or rotate** after onboarding is complete.
 

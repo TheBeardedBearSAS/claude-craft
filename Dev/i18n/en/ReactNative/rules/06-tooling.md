@@ -6,6 +6,26 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 
 ---
 
+## System Requirements
+
+### Node.js >= 20 LTS (required for RN 0.85)
+
+React Native 0.85 **drops support for Node versions < 20**. The minimum required version is **Node.js 20.19.4 LTS**.
+
+```bash
+# Check version
+node --version  # Must be >= 20.19.4
+
+# Install via nvm (recommended)
+nvm install 20
+nvm use 20
+nvm alias default 20
+```
+
+> Node 16 and 18 are no longer supported with RN 0.85. Upgrade before migrating.
+
+---
+
 ## Expo CLI
 
 ### Installation
@@ -200,18 +220,31 @@ brew install --cask react-native-debugger
 # https://github.com/jhen0409/react-native-debugger
 ```
 
-### Flipper (deprecated since RN 0.73 — prefer React Native DevTools)
+### React Native DevTools (0.85+)
+
+Flipper is deprecated since React Native 0.73. The official replacement is **React Native DevTools**, natively integrated in Metro. RN 0.85 makes it the default debugger and stabilizes key features.
 
 ```bash
-# Install
-brew install --cask flipper
+# Start with debugger (RN 0.73+)
+npx react-native start --experimental-debugger
 
-# Plugins
-# - Network
-# - AsyncStorage
-# - React DevTools
-# - Hermes Debugger
+# Open from app via dev menu
+# iOS: Cmd+D (simulator) or shake device
+# Android: Cmd+M (emulator) or shake device
+# Select "Open DevTools" in the menu
 ```
+
+#### React Native DevTools 0.85+ Features
+
+| Tool | Description |
+|------|-------------|
+| **Network Inspector** | Inspect HTTP/WebSocket requests — replaces Flipper Network plugin |
+| **React Component Inspector** | Component tree, props, state — integrated React DevTools |
+| **Hermes CDP Debugger** | Breakpoints, step-through, watch expressions via Chrome DevTools Protocol |
+| **Console & Profiler** | Logs, JS thread profiling, flamegraphs |
+| **Source maps** | Navigate TypeScript source code (Hermes + sourcemaps) |
+
+> **Historical note:** Flipper (`brew install --cask flipper`) worked with versions < 0.73. It is no longer maintained for the New Architecture and must not be used on RN 0.73+.
 
 ### VS Code Extensions
 
@@ -268,10 +301,11 @@ npx expo install expo-camera@latest
 
 ## Checklist Tooling
 
+- [ ] Node.js >= 20.19.4 LTS installed
 - [ ] Expo CLI installé
 - [ ] EAS CLI configuré
 - [ ] Metro config optimisé
-- [ ] Debugger choisi (RN Debugger / Flipper)
+- [ ] Debugger configured (React Native DevTools 0.85+ via `--experimental-debugger`)
 - [ ] VS Code extensions installées
 - [ ] Package manager cohérent (npm)
 - [ ] Scripts npm configurés

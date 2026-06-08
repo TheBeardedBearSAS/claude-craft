@@ -12,8 +12,8 @@ Dieses Verzeichnis enthält die Claude-Craft-Regeln, -Befehle, -Skills und -Temp
 | Node.js | 20+ (LTS) |
 | TypeScript | 5.x (strict) |
 | pnpm | 9.15+ |
-| React | 18+ (web UI) |
-| Vitest | latest |
+| React | 19+ (web UI) |
+| Vitest | 4.1+ |
 | PostgreSQL | 15+ (oder embedded für dev) |
 | Paperclip | 2026.529.0+ |
 

@@ -48,6 +48,11 @@
 - [ ] **DIFF-03 — Orchestration multi-modèle** : les Dynamic Workflows (CC 2.1.154+, trigger `ultracode`) couvrent déjà le fan-out multi-agents avec tiering Haiku/Sonnet/Opus. Documenter explicitement le pattern « routing par complexité » dans `rules/12` + comparer à oh-my-claudecode (Claude+Gemini+Codex) dans `docs/ECOSYSTEM.md`.
 - [ ] **DIFF-04 — Mémoire persistante inter-sessions** : évaluer un MCP de mémoire vectorielle légère (SQLite + embeddings) pour la persistance des décisions architecturales entre sessions BMAD ; positionner Ruflo comme moteur complémentaire. Référencer dans `docs/ECOSYSTEM.md`.
 - [ ] **DIFF-05 — Différenciation BMAD & visibilité** : article comparatif « Claude Craft (BMAD intégré + 11 stacks + RTK) vs BMAD standalone vs oh-my-claudecode », tableau comparatif dans le README, soumissions awesome-claude-code / claudemarketplaces.com, démo vidéo Symfony+Flutter.
+- [ ] **DIFF-06 — Coûts tokens BMAD documentés** : table des coûts token estimés par track (Quick/Standard/Enterprise) avec/sans RTK dans `docs/FAQ.md` ; envisager un mode `--lean` (templates BMAD allégés) pour les petites features.
+- [ ] **DIFF-07 — i18n 5 langues comme argument commercial** : section « Global Teams » dans le README, landing localisée, ciblage ESN européennes (FR/ES/DE/PT) — différenciateur qu'aucun concurrent n'a.
+- [ ] **DIFF-08 — Suite d'évaluation des skills en CI** (inspiré wshobson/agents) : lint statique des `SKILL.md` (longueur, sections requises, liens valides), test de prompt-injection par skill, scoring qualité. Fichiers : `.github/workflows/`, `scripts/`.
+- [ ] **DIFF-09 — Démos par stack** : page « Générer un endpoint Symfony DDD en 3 commandes » (+ GIF/vidéo) pour chacun des 11 stacks ; benchmarks comparatifs — renforce le moat « 11 stacks ».
+- [ ] **DIFF-10 — Anthropic Skills Marketplace** (mai 2026) : soumettre les 15-20 skills les plus utiles (coding-standards, security, testing, git-workflow, solid-principles…) — distribution gratuite + revenue share 15 %.
 
 > Source détaillée et sévérités : `docs/audit/2026-06-08-comprehensive/02-domaines.md` (Domaine: Concurrentiel).
 

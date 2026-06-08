@@ -270,8 +270,8 @@ final class SecurityHeadersMiddleware
         // Prévenir le clickjacking
         $response->headers->set('X-Frame-Options', 'DENY');
 
-        // Activer le filtre XSS (hérité, mais toujours utile)
-        $response->headers->set('X-XSS-Protection', '1; mode=block');
+        // X-XSS-Protection est déprécié — peut introduire des vulnérabilités ; s'appuyer sur CSP Level 3
+        // $response->headers->set('X-XSS-Protection', '1; mode=block'); // NE PAS utiliser
 
         // Content Security Policy
         $response->headers->set(

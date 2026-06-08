@@ -612,7 +612,9 @@ Before installing a third-party MCP server:
 
 ### PreToolUse Hook for Security
 
-Use Claude Code hooks to block dangerous patterns:
+Use Claude Code hooks to block dangerous patterns.
+
+> **Best practice:** Hooks receive tool input as JSON on **stdin** — always use `jq -r '.tool_input.<field>'` (not `echo '$TOOL_INPUT'`) to read values safely and avoid shell injection.
 
 ```json
 {
@@ -620,7 +622,12 @@ Use Claude Code hooks to block dangerous patterns:
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "command": "echo '$TOOL_INPUT' | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' && exit 1 || exit 0"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' >&2 && exit 1 || exit 0"
+          }
+        ]
       }
     ]
   }

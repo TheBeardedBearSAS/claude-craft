@@ -10,7 +10,105 @@
 | **Playwright/Cypress** | End-to-end testing |
 | **MSW** | API mocking |
 
-## Vitest Configuration
+## Vitest Browser Mode (recommandé 2026)
+
+Depuis Vitest 4, le **Browser Mode** est stable et recommandé pour les tests de composants Vue — il exécute les tests dans un vrai navigateur (Chromium/Firefox/WebKit via Playwright) au lieu de simuler le DOM avec jsdom. Résultat : comportement réel du navigateur, pas de faux positifs jsdom.
+
+**Stratégie 2026 :**
+- Tests de **composants Vue** → Browser Mode (vrai DOM)
+- Tests de **composables purs** (sans lifecycle ou DOM) → jsdom (plus rapide, pas de browser nécessaire)
+
+### Installation
+
+```bash
+npm install -D @vitest/browser playwright
+npx playwright install chromium
+```
+
+### Configuration avec workspaces
+
+```typescript
+// vitest.config.ts — workspace séparant browser et node
+import { defineConfig } from 'vitest/config'
+import vue from '@vitejs/plugin-vue'
+import { fileURLToPath } from 'node:url'
+
+export default defineConfig({
+  plugins: [vue()],
+  test: {
+    workspace: [
+      {
+        // Tests de composants Vue — vrai navigateur
+        extends: true,
+        test: {
+          name: 'browser',
+          include: ['src/**/*.component.{test,spec}.ts'],
+          browser: {
+            enabled: true,
+            name: 'chromium',
+            provider: 'playwright',
+            headless: true,
+          },
+        },
+      },
+      {
+        // Composables purs et stores — jsdom (rapide)
+        extends: true,
+        test: {
+          name: 'unit',
+          include: ['src/**/*.{test,spec}.ts'],
+          exclude: ['src/**/*.component.{test,spec}.ts'],
+          environment: 'jsdom',
+        },
+      },
+    ],
+    globals: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      thresholds: {
+        statements: 80,
+        branches: 80,
+        functions: 80,
+        lines: 80,
+      },
+    },
+    setupFiles: ['./src/test/setup.ts'],
+  },
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+})
+```
+
+### Exemple de test de composant en Browser Mode
+
+```typescript
+// components/UserCard.component.test.ts
+import { describe, it, expect } from 'vitest'
+import { mount } from '@vue/test-utils'
+import UserCard from './UserCard.vue'
+
+// Ce test s'exécute dans Chromium — accès réel à document, window, etc.
+describe('UserCard (browser)', () => {
+  it('renders user name in real DOM', () => {
+    const wrapper = mount(UserCard, {
+      props: { user: { id: '1', name: 'Jane', email: 'jane@example.com' } },
+      attachTo: document.body, // possible car vrai navigateur
+    })
+
+    expect(wrapper.text()).toContain('Jane')
+  })
+})
+```
+
+> **Migration jsdom → Browser Mode :** remplacer `environment: 'jsdom'` par la config workspace ci-dessus. Les tests `@vue/test-utils` (mount/shallowMount) fonctionnent sans modification. Supprimer `jsdom` des dépendances si tous les tests composants migrent en Browser Mode.
+
+## Vitest Configuration (jsdom simple — projets sans Browser Mode)
+
+> Utiliser cette config uniquement si le projet ne nécessite pas Browser Mode (ex : lib de composables, pas de tests de composants). Pour les apps Vue standard, préférer la config workspace ci-dessus.
 
 ```typescript
 // vitest.config.ts

@@ -612,13 +612,20 @@ Vor der Installation eines MCP-Servers von Drittanbietern:
 
 ### PreToolUse-Hook für Sicherheit
 
+> **Best Practice:** Hooks empfangen den Tool-Input als JSON auf **stdin** — immer `jq -r '.tool_input.<feld>'` verwenden (nicht `echo '$TOOL_INPUT'`), um Werte sicher zu lesen und Shell-Injection zu vermeiden.
+
 ```json
 {
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "command": "echo '$TOOL_INPUT' | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' && exit 1 || exit 0"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' >&2 && exit 1 || exit 0"
+          }
+        ]
       }
     ]
   }

@@ -69,7 +69,7 @@ Root `package.json` / `pnpm-workspace.yaml` defines the workspaces. Every packag
 - **Agents** (`/agents`, `/companies/:companyId/agents`, `/agent-hires`) — registered workers
 - **Approvals** (`/approvals/...`) — human-in-the-loop gates
 - **Activity** — append-only audit
-- **Issues / Projects / Goals** — product-level constructs
+- **Issues / Projects / Goals** — product-level constructs. Issues are the unit of work dispatched to agents; the `workMode` field on an agent hire payload controls how the agent processes them (execution mode — consult the instance docs for supported values).
 - **Plugin** — plugin management via CLI (`paperclipai plugin ...`)
 
 ## Dependency Direction

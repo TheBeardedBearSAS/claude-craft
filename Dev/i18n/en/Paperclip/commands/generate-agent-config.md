@@ -26,6 +26,7 @@ Ask in order:
 - Model id (must be in the adapter's `models` list)
 - Budget (tokens, optional; set a **hard** limit if you want enforcement)
 - Adapter-specific configuration: `cwd`, `model`, `extraArgs`, `env`, `workspaceStrategy`, `timeoutSec`, `graceSec`, and any adapter-specific flags (e.g. `dangerouslySkipPermissions` for `claude_local`)
+- `workMode` (optional) — execution mode controlling how the agent processes assigned issues (e.g. autonomous vs. supervised). Supported values depend on the instance; consult the `agentConfigurationDoc` of the chosen adapter or the instance docs before setting this field.
 
 ### 2. Emit the payload
 
@@ -86,6 +87,7 @@ paperclipai activity list       # look for 'agent.hired'
 - [ ] Budget set as a positive integer when enforcement is desired
 - [ ] Adapter-specific config passes the adapter's own validator (the dashboard will reject if not)
 - [ ] No secret values inlined — use secret refs where the adapter supports them
+- [ ] `workMode` value (if set) is one of the modes listed in the adapter's `agentConfigurationDoc`, not invented
 
 ## Output
 

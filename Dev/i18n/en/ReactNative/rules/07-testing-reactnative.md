@@ -17,15 +17,20 @@ Les tests garantissent la qualité et la stabilité de l'application React Nativ
 
 ## Jest Configuration
 
-### jest.config.js
+### Default preset: `@react-native/jest-preset`
+
+Since React Native 0.73, the official Jest preset ships in the dedicated `@react-native/jest-preset` package (extracted from `react-native`). It becomes **mandatory** in 0.85 and natively supports the New Architecture and Hermes.
+
+```bash
+# Install (React Native 0.85+)
+npm install --save-dev @react-native/jest-preset
+```
 
 ```javascript
+// jest.config.js — React Native 0.85+ (bare or Expo bare workflow)
 module.exports = {
-  preset: 'jest-expo',
+  preset: '@react-native/jest-preset',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)',
-  ],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
@@ -42,6 +47,19 @@ module.exports = {
   },
 };
 ```
+
+> **Expo managed workflow projects:** use `jest-expo` instead of `@react-native/jest-preset`. `jest-expo` handles Expo transforms and remains the recommended preset for Expo SDK 56+.
+>
+> ```javascript
+> // jest.config.js — Expo managed workflow
+> module.exports = {
+>   preset: 'jest-expo',
+>   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+>   transformIgnorePatterns: [
+>     'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)',
+>   ],
+> };
+> ```
 
 ### jest.setup.js
 

@@ -54,9 +54,17 @@ Beheben Sie alles, was als Hard-Failure gemeldet wird, bevor Sie fortfahren.
 
 ### 4. Bootstrap des ersten Operators (CEO)
 
+Zwei Pfade stehen je nach Deployment-Kontext zur Verfügung:
+
+**A — Browser-Claim (private / self-hosted, nicht beanspruchte Instanz):** Wenn die Instanz noch nicht beansprucht wurde, navigieren Sie zu `http://localhost:3100` im Browser. Ein Erststart-Bildschirm sollte erscheinen, der die direkte Einrichtung des initialen Admin-Kontos ermöglicht. Verwenden Sie diesen Pfad bei einer frisch deployten Instanz ohne bestehenden Operator.
+
+**B — CLI-Bootstrap:** Führen Sie den CLI-Befehl aus, um das initiale Operator-Konto programmatisch zu erstellen:
+
 ```bash
 paperclipai auth-bootstrap-ceo
 ```
+
+> **Welcher Pfad gilt?** Leitet das Dashboard beim ersten Laden auf eine Claim-/Setup-Seite weiter, verwenden Sie Pfad A. Zeigt es ein Login-Formular, verwenden Sie Pfad B (oder die Instanz hat bereits einen Operator). Konsultieren Sie `docs.paperclip.ing` für das genaue Verhalten Ihrer Version.
 
 Dies erstellt das initiale Operator-Konto, das zum Anmelden im Dashboard verwendet wird. **Widerrufen oder rotieren** Sie es nach Abschluss des Onboardings.
 

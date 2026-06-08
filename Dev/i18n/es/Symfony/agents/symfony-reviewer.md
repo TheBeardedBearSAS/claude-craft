@@ -255,7 +255,7 @@ class OrderRepository {
 | **Behat** | BDD, escenarios de negocio legibles |
 | **Infection** | Mutation testing (MSI > 80%) |
 | **Foundry** | Factories/fixtures mantenibles |
-| **PHPStan level 9** | Análisis estático, complemento a los tests |
+| **PHPStan level 10** | Análisis estático, complemento a los tests |
 
 ### Anti-patterns de test Symfony
 
@@ -517,7 +517,7 @@ $apiKey = $this->getParameter('stripe_api_key');
 
 | Herramienta | Uso |
 |-------------|-----|
-| **PHPStan level 9** | Análisis estático estricto |
+| **PHPStan level 10** | Análisis estático estricto |
 | **Deptrac** | Validación de dependencias entre capas |
 | **PHP-CS-Fixer** (PSR-12) | Formateo automático |
 | **Pest PHP** / PHPUnit | Tests unitarios e integración |

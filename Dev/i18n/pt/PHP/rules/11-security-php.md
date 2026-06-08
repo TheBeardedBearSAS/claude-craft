@@ -401,16 +401,18 @@ final class SecurityHeadersMiddleware
     ): ResponseInterface {
         $response = $handler->handle($request);
 
+        // X-XSS-Protection está obsoleto — basear-se em CSP Level 3
         return $response
             ->withHeader('X-Content-Type-Options', 'nosniff')
             ->withHeader('X-Frame-Options', 'DENY')
-            ->withHeader('X-XSS-Protection', '1; mode=block')
             ->withHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
             ->withHeader('Permissions-Policy', 'geolocation=(), camera=()')
             ->withHeader(
                 'Content-Security-Policy',
-                "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+                "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; upgrade-insecure-requests"
             )
+            ->withHeader('Cross-Origin-Opener-Policy', 'same-origin')
+            ->withHeader('Cross-Origin-Embedder-Policy', 'require-corp')
             ->withHeader(
                 'Strict-Transport-Security',
                 'max-age=31536000; includeSubDomains'

@@ -54,9 +54,17 @@ Corrija qualquer coisa reportada como falha rigorosa antes de prosseguir.
 
 ### 4. Fazer bootstrap do primeiro operador (CEO)
 
+Dois caminhos estao disponiveis dependendo do contexto de implantacao:
+
+**A — Reivindicacao via navegador (instancia privada / auto-hospedada nao reivindicada):** Se a instancia ainda nao foi reivindicada, navegue para `http://localhost:3100` em um navegador. Uma tela de primeira execucao deve aparecer, permitindo configurar a conta de administrador inicial diretamente. Use este caminho quando a instancia foi recentemente implantada e nao tem operador existente.
+
+**B — Bootstrap CLI:** Execute o comando CLI para criar a conta operador inicial de forma programatica:
+
 ```bash
 paperclipai auth-bootstrap-ceo
 ```
+
+> **Qual caminho se aplica?** Se o dashboard redireciona para uma pagina de reivindicacao/configuracao no primeiro carregamento, use o caminho A. Se mostrar um formulario de login, use o caminho B (ou a instancia ja tem um operador). Consulte `docs.paperclip.ing` para o comportamento exato da sua versao.
 
 Isso cria a conta operador inicial usada para entrar no dashboard. **Revogue ou rotacione** apos onboarding estar completo.
 

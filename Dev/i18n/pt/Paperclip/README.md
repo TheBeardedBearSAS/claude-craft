@@ -12,8 +12,8 @@ Este diretório contém as regras, comandos, skills e templates do Claude-Craft 
 | Node.js | 20+ (LTS) |
 | TypeScript | 5.x (strict) |
 | pnpm | 9.15+ |
-| React | 18+ (web UI) |
-| Vitest | latest |
+| React | 19+ (web UI) |
+| Vitest | 4.1+ |
 | PostgreSQL | 15+ (or embedded for dev) |
 | Paperclip | 2026.529.0+ |
 

@@ -14,7 +14,7 @@
           },
           {
             "type": "command",
-            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if echo \"$INPUT\" | grep -qE 'rm[[:space:]]+-[^[:space:]]*r[^[:space:]]*f[^[:space:]]*[[:space:]]*(~|/|\\.)'; then echo \"BLOCKED: Destructive rm command detected\" >&2 && exit 1; fi; if echo \"$INPUT\" | grep -qE '(mkfs|dd[[:space:]]+if=|:[[:space:]]*\\(\\)[[:space:]]*\\{[[:space:]]*:|chmod[[:space:]]+-?R?[[:space:]]*777|>[[:space:]]*/dev/(sd|null))'; then echo \"BLOCKED: Dangerous system command detected\" >&2 && exit 1; fi; exit 0"
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); HAS_RECURSIVE=$(echo \"$INPUT\" | grep -cE 'rm[[:space:]].*(-[a-zA-Z]*r[a-zA-Z]*|--recursive)' || true); HAS_FORCE=$(echo \"$INPUT\" | grep -cE 'rm[[:space:]].*(-[a-zA-Z]*f[a-zA-Z]*|--force)' || true); if [ \"$HAS_RECURSIVE\" -gt 0 ] && [ \"$HAS_FORCE\" -gt 0 ]; then echo \"BLOCKED: Destructive rm command detected (recursive+force)\" >&2 && exit 1; fi; if echo \"$INPUT\" | grep -qE '(mkfs|dd[[:space:]]+if=|:[[:space:]]*\\(\\)[[:space:]]*\\{[[:space:]]*:|chmod[[:space:]]+-?R?[[:space:]]*777|>[[:space:]]*/dev/(sd|null))'; then echo \"BLOCKED: Dangerous system command detected\" >&2 && exit 1; fi; exit 0"
           }
         ]
       },

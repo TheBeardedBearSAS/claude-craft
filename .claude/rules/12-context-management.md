@@ -195,8 +195,12 @@ La status line affiche le pourcentage de contexte utilise.
 
 | Variable | Description |
 |----------|-------------|
-| `CLAUDE_CODE_SUBAGENT_MODEL` | Modele pour les sous-agents (ex: `sonnet` pour optimiser les couts) |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | Modele **par defaut** des sous-agents non types (ex: `sonnet`). **Le frontmatter `model:` d'un agent prevaut** : les 11 reviewers `model: haiku` restent sur haiku meme avec cette variable a `sonnet`. |
+| `CLAUDE_CODE_FORK_SUBAGENT` | `1` pour isoler le contexte des sous-agents (forked subagents, v2.1.117+) |
+| `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Etendre/forcer le prompt caching (−40 % sur sessions repetitives) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre a `1` pour desactiver la memoire automatique |
+
+> **Precedence modele (clarification audit 2026-06-08) :** `model:` dans le frontmatter d'un agent > `CLAUDE_CODE_SUBAGENT_MODEL` > modele de la session. La variable `SUBAGENT_MODEL=sonnet` n'ecrase donc PAS les agents explicitement `model: haiku` — elle ne s'applique qu'aux sous-agents sans `model:` defini.
 
 ---
 
