@@ -41,6 +41,18 @@
 
 ### v9.0 — Différenciation (Q3 2026)
 
+**Items issus de l'audit concurrentiel 2026-06-08** (`docs/audit/2026-06-08-comprehensive/`). Ces chantiers stratégiques sont volontairement sur la roadmap (pas implémentés à la hâte) car ils engagent le positionnement produit :
+
+- [ ] **DIFF-01 — Marketplace officielle Anthropic** : `.claude-plugin/marketplace.json` créé (permet `/plugin marketplace add TheBeardedBearSAS/claude-craft`). Reste : valider via `claude plugin validate`, soumettre à `claude-community` via le formulaire in-app ([claude.ai/settings/plugins/submit](https://claude.ai/settings/plugins/submit)). Objectif : voie d'entrée `/plugin install claude-craft`.
+- [ ] **DIFF-02 — Multi-harness élargi** : `bundles/{cursor,gemini,chatgpt,claude}` existent déjà (via `scripts/export-multi-ide.sh`). Étendre à OpenCode et GitHub Copilot ; garder les CLAUDE.md comme source de vérité et générer les formats cibles. Prioriser Cursor (part de marché IDE) et Gemini CLI (free tier).
+- [ ] **DIFF-03 — Orchestration multi-modèle** : les Dynamic Workflows (CC 2.1.154+, trigger `ultracode`) couvrent déjà le fan-out multi-agents avec tiering Haiku/Sonnet/Opus. Documenter explicitement le pattern « routing par complexité » dans `rules/12` + comparer à oh-my-claudecode (Claude+Gemini+Codex) dans `docs/ECOSYSTEM.md`.
+- [ ] **DIFF-04 — Mémoire persistante inter-sessions** : évaluer un MCP de mémoire vectorielle légère (SQLite + embeddings) pour la persistance des décisions architecturales entre sessions BMAD ; positionner Ruflo comme moteur complémentaire. Référencer dans `docs/ECOSYSTEM.md`.
+- [ ] **DIFF-05 — Différenciation BMAD & visibilité** : article comparatif « Claude Craft (BMAD intégré + 11 stacks + RTK) vs BMAD standalone vs oh-my-claudecode », tableau comparatif dans le README, soumissions awesome-claude-code / claudemarketplaces.com, démo vidéo Symfony+Flutter.
+
+> Source détaillée et sévérités : `docs/audit/2026-06-08-comprehensive/02-domaines.md` (Domaine: Concurrentiel).
+
+### v9.0 (legacy) — Différenciation
+
 Issue de `audit/phases/phase-3-differenciation.md` — à détailler.
 
 ### v10.0 — Domination (Q4 2026)

@@ -3,7 +3,7 @@
   "name": "claude-craft",
   "displayName": "Claude Craft",
   "version": "8.9.0",
-  "description": "Multi-stack framework for Claude Code teams: 19 stacks, BMAD v6 sprint workflow, browser QA automation, and Kanban — for tech leads adopting Claude Code with their team.",
+  "description": "Multi-stack framework for Claude Code teams: 11 stacks, BMAD v6 sprint workflow, browser QA automation, and Kanban — for tech leads adopting Claude Code with their team.",
   "author": {
     "name": "Flavien Métivier",
     "email": "flavien.metivier@gmail.com",
@@ -41,8 +41,8 @@
   "compatibility": {
     "claudeCode": {
       "minimum": "2.1.97",
-      "recommended": "2.1.159",
-      "tested": "2.1.159"
+      "recommended": "2.1.168",
+      "tested": "2.1.168"
     },
     "node": ">=20.0.0"
   },
