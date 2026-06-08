@@ -68,9 +68,8 @@ jobs:
         if: github.event_name == 'pull_request' && always()
         run: |
           if [ -f reports/mutation/mutation.json ]; then
-            # Stryker v9 JSON report has no top-level `.mutationScore` — compute it from
-            # mutant statuses (audit 2026-06-01 P1). Score = detected / valid * 100, where
-            # detected = Killed+Timeout and valid = detected + Survived + NoCoverage.
-            score=$(node -e "const r=require('./reports/mutation/mutation.json');const m=Object.values(r.files||{}).flatMap(f=>f.mutants||[]);const d=m.filter(x=>['Killed','Timeout'].includes(x.status)).length;const u=m.filter(x=>['Survived','NoCoverage'].includes(x.status)).length;const v=d+u;console.log(v?(d/v*100).toFixed(2)+'%':'N/A');" 2>/dev/null || echo "N/A")
+            # Score computed by scripts/stryker-score.mjs (ESM, explicit error handling —
+            # audit 2026-06-08 P3, replaces the inline node -e that silently masked errors).
+            score=$(node scripts/stryker-score.mjs reports/mutation/mutation.json)
             echo "Mutation score: $score" >> "$GITHUB_STEP_SUMMARY"
           fi

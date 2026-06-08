@@ -27,6 +27,13 @@ const SUPPORTED_SCHEMA_VERSIONS = [1];
 const MAX_REDIRECTS = 5;
 
 /**
+ * Max size of the remote config body. A team config is a tiny JSON object (~1 KB);
+ * 50 KB is a generous ceiling that prevents a malicious/compromised endpoint from
+ * streaming an unbounded body into memory (audit 2026-06-08 P3 — DoS hardening).
+ */
+const MAX_CONFIG_BYTES = 50 * 1024;
+
+/**
  * SSRF guard: reject hostnames that resolve to private, loopback, link-local or
  * cloud-metadata addresses. Applied to the https path (the http+localhost dev
  * escape hatch in validateUrl is handled before this is reached).
@@ -177,7 +184,16 @@ export async function runInstallFromUrl(url, cli, { CLI_ROOT }, fetchFn = global
     if (!res.ok) {
       throw new Error(`HTTP ${res.status} ${res.statusText}`);
     }
+    // Reject oversized payloads up front when the server advertises a length…
+    const declaredLen = Number(res.headers?.get?.('content-length'));
+    if (Number.isFinite(declaredLen) && declaredLen > MAX_CONFIG_BYTES) {
+      throw new Error(`config too large (${declaredLen} bytes > ${MAX_CONFIG_BYTES} limit)`);
+    }
     body = await res.text();
+    // …and after reading, in case Content-Length was absent or understated.
+    if (body.length > MAX_CONFIG_BYTES) {
+      throw new Error(`config too large (${body.length} bytes > ${MAX_CONFIG_BYTES} limit)`);
+    }
   } catch (err) {
     throw new Error(`--from: fetch failed (${err.message})`, { cause: err });
   }

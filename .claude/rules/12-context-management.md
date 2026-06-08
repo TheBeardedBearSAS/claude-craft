@@ -270,6 +270,7 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 | `/model haiku` | Haiku 4.5 | Taches simples, classification |
 | `/model sonnet` | Sonnet 4.6 | Taches standard, implementation |
 | `/model opus` | Opus 4.8 | Raisonnement complexe, architecture |
+| `/model opusplan` | Opus 4.8 (plan) / Sonnet 4.6 (execute) | **Tiering dynamique** : Opus pour le Plan Mode, Sonnet pour l'execution — optimise le ratio cout/qualite sur les taches longues |
 
 ---
 

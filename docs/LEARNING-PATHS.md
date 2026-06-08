@@ -21,7 +21,7 @@ Progressive learning paths to master Claude-Craft. Start with Beginner and progr
 ### Prerequisites
 
 ```bash
-claude --version  # >= 2.1.47
+claude --version  # >= 2.1.97
 ```
 
 ### Step 1: Installation (10 min)

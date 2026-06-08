@@ -193,6 +193,27 @@ describe('runInstallFromUrl', () => {
     );
   });
 
+  it('rejects an oversized body read (DoS hardening)', async () => {
+    const huge = 'x'.repeat(50 * 1024 + 1);
+    const fetchFn = vi.fn(async () => ({ ok: true, status: 200, statusText: 'OK', text: async () => huge }));
+    await expect(runInstallFromUrl('https://x.example/cc.json', cli, { CLI_ROOT: '/cli' }, fetchFn)).rejects.toThrow(
+      /config too large/
+    );
+  });
+
+  it('rejects an oversized declared Content-Length up front', async () => {
+    const fetchFn = vi.fn(async () => ({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      headers: { get: (k) => (k.toLowerCase() === 'content-length' ? String(50 * 1024 + 1) : null) },
+      text: async () => '{}',
+    }));
+    await expect(runInstallFromUrl('https://x.example/cc.json', cli, { CLI_ROOT: '/cli' }, fetchFn)).rejects.toThrow(
+      /config too large/
+    );
+  });
+
   it('rejects http URLs to remote hosts before fetching', async () => {
     const fetchFn = vi.fn();
     await expect(runInstallFromUrl('http://evil.example/cc.json', cli, { CLI_ROOT: '/cli' }, fetchFn)).rejects.toThrow(
