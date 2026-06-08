@@ -128,6 +128,13 @@ Feature: Shopping Cart
 
 ### xUnit (Recommended for .NET)
 
+> **xUnit v3 (3.2.2+) :** Les classes de test peuvent désormais déclarer un constructeur avec
+> injection de dépendances native (`ITestOutputHelper`, `ITestContextAccessor`, services
+> enregistrés via `[Collection]`). Différences vs v2 : pas de `IClassFixture<T>` sur chaque
+> test — utiliser `ITestContext` ; `[Fact(Skip)]` accepte les expressions constantes ; meilleur
+> support des tests async avec `ConfigureAwait`. La v2 reste supportée, mais les nouveaux
+> projets .NET 10 devraient cibler **xUnit 3**.
+
 ```csharp
 public class OrderServiceTests
 {
@@ -725,6 +732,6 @@ user.Id.Should().NotBeEmpty();
 
 ---
 
-**Last updated:** 2025-01
-**Version:** 2.0.0 (merged base + C#)
+**Last updated:** 2026-06
+**Version:** 2.1.0 (xUnit v3 note)
 **Author:** The Bearded CTO

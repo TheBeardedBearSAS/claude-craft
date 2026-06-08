@@ -135,7 +135,7 @@ class OrderNotifier extends _$OrderNotifier {
   });
 }
 ```
-**Source :** [Riverpod 3.0 Mutations](https://medium.com/@lee645521797/flutter-riverpod-3-0-released-a-major-redesign-of-the-state-management-framework-f7e31f19b179)
+**Sources :** [Riverpod — What's New](https://riverpod.dev/docs/whats_new) | [pub.dev/packages/flutter_riverpod](https://pub.dev/packages/flutter_riverpod)
 
 ```dart
 // BLoC v9: mounted safety checks

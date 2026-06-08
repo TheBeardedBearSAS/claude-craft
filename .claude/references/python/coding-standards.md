@@ -630,10 +630,20 @@ tmpl = t"Hello {user_input!s}!"
 # for part in tmpl: ...                          — itère str et Interpolation
 ```
 
-### Évaluation différée des annotations (PEP 649)
+### Évaluation différée des annotations (PEP 649 / PEP 749)
 
 Les annotations ne sont plus évaluées à la définition de la classe — résout les imports circulaires
 de type hints sans recourir à `from __future__ import annotations`.
+
+> **`from __future__ import annotations` (PEP 563) reste fonctionnel en Python 3.14.**
+> Son retrait définitif est planifié après 2029 (PEP 749 remplace PEP 563 mais la transition
+> est progressive). Il est donc sûr de continuer à l'utiliser pour la compatibilité ≤ 3.9.
+> En Python 3.14+, préférer la nouvelle sémantique native (PEP 649) ; `from __future__ import
+> annotations` n'est plus nécessaire dans les nouveaux modules ciblant 3.10+.
+
+> **Python 3.15 beta 2 (feature-freeze, release oct. 2026) :** anticiper la migration.
+> Surveiller les breaking changes potentiels : `__future__.annotations` obsolescence progressive,
+> `concurrent.interpreters` API stabilisée, et renforcement du free-threading opt-in → opt-out.
 
 ### `concurrent.interpreters` (stdlib)
 

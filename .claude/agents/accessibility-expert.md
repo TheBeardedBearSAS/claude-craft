@@ -7,6 +7,7 @@ effort: low
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, NotebookEdit]
 permissionMode: default
+memory: project
 ---
 
 # Accessibility Expert Agent

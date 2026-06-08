@@ -695,5 +695,5 @@ O elemento muda frequentemente de visibilidade?
 
 ---
 
-**Versao:** 2.0
-**Ultima atualizacao:** 2026-02
+**Versao:** 2.2
+**Ultima atualizacao:** 2026-06

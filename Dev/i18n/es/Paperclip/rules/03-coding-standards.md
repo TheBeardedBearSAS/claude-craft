@@ -5,7 +5,7 @@
 | Ítem | Estándar |
 |---|---|
 | Node.js | 20+ (LTS) |
-| TypeScript | 5.x |
+| TypeScript | 5.7+ |
 | Gestor de paquetes | pnpm 9.15+ (monorepo workspace) |
 | Sistema de módulos | Solo ESM (`"type": "module"`) |
 

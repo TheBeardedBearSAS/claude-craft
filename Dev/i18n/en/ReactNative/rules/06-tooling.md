@@ -208,6 +208,70 @@ rm -rf node_modules/.cache
 
 ---
 
+## Metro TLS (0.85+)
+
+Since RN 0.85, Metro accepts a `server.tls` object in `metro.config.js`, enabling HTTPS and WSS (secure WebSocket for Fast Refresh) during local development.
+
+### Use Cases
+
+| Use case | Why Metro TLS |
+|----------|---------------|
+| HTTPS deep links | Test `applinks:` and Universal Links without a remote server |
+| Secure-origin APIs | Some APIs reject non-HTTPS origins (CSP, strict CORS) |
+| Corporate networks | Proxies that block unencrypted HTTP traffic |
+| Service Workers / PWA web | Requires HTTPS even in development |
+
+### Configuration
+
+```javascript
+// metro.config.js (bare RN 0.85+)
+const { getDefaultConfig } = require('@react-native/metro-config');
+const fs = require('fs');
+
+const config = getDefaultConfig(__dirname);
+
+// Enable TLS for Metro dev server
+config.server = {
+  ...config.server,
+  tls: {
+    // Generate with: mkcert localhost 127.0.0.1
+    key: fs.readFileSync('./certs/localhost-key.pem'),
+    cert: fs.readFileSync('./certs/localhost.pem'),
+  },
+};
+
+module.exports = config;
+```
+
+### Generate a locally-trusted certificate
+
+```bash
+# Install mkcert (macOS)
+brew install mkcert
+mkcert -install  # Install local CA into system keystore
+
+# Generate certificate
+mkdir -p certs
+mkcert -key-file certs/localhost-key.pem -cert-file certs/localhost.pem localhost 127.0.0.1
+
+# .gitignore: never commit certificates
+echo "certs/" >> .gitignore
+```
+
+### Start Metro with HTTPS
+
+```bash
+# Bare RN
+npx react-native start
+
+# Expo (passes metro.config.js config automatically)
+npx expo start
+```
+
+> **Note:** The `server.tls` configuration is available for both bare RN (`@react-native/metro-config`) and Expo (`expo/metro-config`) — Metro reads the same `server.tls` key in both cases.
+
+---
+
 ## Development Tools
 
 ### React Native Debugger
@@ -306,9 +370,10 @@ npx expo install expo-camera@latest
 - [ ] EAS CLI configuré
 - [ ] Metro config optimisé
 - [ ] Debugger configured (React Native DevTools 0.85+ via `--experimental-debugger`)
-- [ ] VS Code extensions installées
-- [ ] Package manager cohérent (npm)
-- [ ] Scripts npm configurés
+- [ ] Metro TLS configured if local HTTPS required (deep links, secure origins)
+- [ ] VS Code extensions installed
+- [ ] Consistent package manager (npm)
+- [ ] npm scripts configured
 
 ---
 

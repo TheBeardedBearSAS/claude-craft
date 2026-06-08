@@ -208,6 +208,70 @@ rm -rf node_modules/.cache
 
 ---
 
+## Metro TLS (0.85+)
+
+Desde RN 0.85, Metro acepta un objeto `server.tls` en `metro.config.js`, habilitando HTTPS y WSS (WebSocket seguro para Fast Refresh) durante el desarrollo local.
+
+### Casos de Uso
+
+| Caso | Por qué Metro TLS |
+|------|-------------------|
+| Deep links HTTPS | Probar `applinks:` y Universal Links sin servidor remoto |
+| APIs de origen seguro | Algunas APIs rechazan orígenes no-HTTPS (CSP, CORS estricto) |
+| Redes corporativas | Proxies que bloquean el tráfico HTTP no cifrado |
+| Service Workers / PWA web | Requiere HTTPS incluso en desarrollo |
+
+### Configuración
+
+```javascript
+// metro.config.js (bare RN 0.85+)
+const { getDefaultConfig } = require('@react-native/metro-config');
+const fs = require('fs');
+
+const config = getDefaultConfig(__dirname);
+
+// Habilitar TLS para Metro dev server
+config.server = {
+  ...config.server,
+  tls: {
+    // Generar con: mkcert localhost 127.0.0.1
+    key: fs.readFileSync('./certs/localhost-key.pem'),
+    cert: fs.readFileSync('./certs/localhost.pem'),
+  },
+};
+
+module.exports = config;
+```
+
+### Generar un Certificado Local de Confianza
+
+```bash
+# Instalar mkcert (macOS)
+brew install mkcert
+mkcert -install  # Instala la CA local en el keystore del sistema
+
+# Generar certificado
+mkdir -p certs
+mkcert -key-file certs/localhost-key.pem -cert-file certs/localhost.pem localhost 127.0.0.1
+
+# .gitignore: nunca subir certificados al repositorio
+echo "certs/" >> .gitignore
+```
+
+### Iniciar Metro con HTTPS
+
+```bash
+# Bare RN
+npx react-native start
+
+# Expo (pasa la configuración metro.config.js automáticamente)
+npx expo start
+```
+
+> **Nota:** La configuración `server.tls` está disponible tanto para bare RN (`@react-native/metro-config`) como para Expo (`expo/metro-config`) — Metro lee la misma clave `server.tls` en ambos casos.
+
+---
+
 ## Herramientas de Desarrollo
 
 ### React Native Debugger
@@ -306,6 +370,7 @@ npx expo install expo-camera@latest
 - [ ] EAS CLI configurado
 - [ ] Metro config optimizado
 - [ ] Depurador configurado (React Native DevTools 0.85+ via `--experimental-debugger`)
+- [ ] Metro TLS configurado si se requiere HTTPS local (deep links, orígenes seguros)
 - [ ] Extensiones VS Code instaladas
 - [ ] Package manager consistente (npm)
 - [ ] Scripts npm configurados

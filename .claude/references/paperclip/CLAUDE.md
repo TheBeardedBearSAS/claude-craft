@@ -7,8 +7,8 @@
 | Composant | Version | Notes |
 |-----------|---------|-------|
 | Paperclip | 2026.529.0+ | Two-layer architecture (control plane + adapters) |
-| Node.js | 20+ LTS | TypeScript natif |
-| TypeScript | 5.5+ | Strict mode obligatoire |
+| Node.js | 20+ LTS (22 LTS recommandé, testé en CI) | TypeScript natif |
+| TypeScript | 5.7+ | Strict mode obligatoire |
 | Vitest | 4.1+ | Tests unit + intégration |
 | PostgreSQL | 15+ | RLS pour multi-tenant, JSONB pour audit trail |
 

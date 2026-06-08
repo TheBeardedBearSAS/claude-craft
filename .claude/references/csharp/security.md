@@ -5,7 +5,7 @@
 Security is an **absolute priority**. This document covers general security principles with C#/.NET implementation examples.
 
 **References:**
-- OWASP Top 10
+- [OWASP Top 10:2025](https://owasp.org/Top10/2025/)
 - CWE/SANS Top 25
 
 ---
@@ -735,7 +735,7 @@ builder.Configuration.AddAzureKeyVault(
 
 ## Resources
 
-- **OWASP Top 10:** [owasp.org/Top10](https://owasp.org/Top10/)
+- **OWASP Top 10:2025:** [owasp.org/Top10/2025/](https://owasp.org/Top10/2025/)
 - **OWASP Cheat Sheets:** [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/)
 - **CWE Top 25:** [cwe.mitre.org/top25](https://cwe.mitre.org/top25/)
 - **NIST Guidelines:** [nist.gov](https://www.nist.gov/cyberframework)

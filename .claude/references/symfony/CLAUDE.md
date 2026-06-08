@@ -113,7 +113,7 @@ $app->run(fn() => new Text('Hello, TUI!'));
 **Source:** https://symfony.com/blog/new-in-symfony-8-1-http-less-symfony-applications
 Voir aussi : nouveau composant **TUI** (Terminal UI) en 8.1.
 
-### JSON Streamer Component (8.0+)
+### JSON Streamer Component (7.3+, amélioré en 8.0/8.1)
 ```php
 use Symfony\Component\JsonStreamer\Read\StreamReaderInterface;
 

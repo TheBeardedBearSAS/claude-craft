@@ -208,6 +208,70 @@ rm -rf node_modules/.cache
 
 ---
 
+## Metro TLS (0.85+)
+
+Seit RN 0.85 akzeptiert Metro ein `server.tls`-Objekt in `metro.config.js` und ermöglicht damit HTTPS und WSS (sicheres WebSocket für Fast Refresh) während der lokalen Entwicklung.
+
+### Anwendungsfälle
+
+| Fall | Warum Metro TLS |
+|------|----------------|
+| HTTPS Deep Links | `applinks:` und Universal Links ohne Remote-Server testen |
+| APIs mit sicherem Ursprung | Manche APIs lehnen non-HTTPS-Ursprünge ab (CSP, striktes CORS) |
+| Unternehmensnetzwerke | Proxys, die unverschlüsselten HTTP-Verkehr blockieren |
+| Service Workers / PWA Web | HTTPS auch in der Entwicklung erforderlich |
+
+### Konfiguration
+
+```javascript
+// metro.config.js (bare RN 0.85+)
+const { getDefaultConfig } = require('@react-native/metro-config');
+const fs = require('fs');
+
+const config = getDefaultConfig(__dirname);
+
+// TLS für Metro Dev Server aktivieren
+config.server = {
+  ...config.server,
+  tls: {
+    // Generieren mit: mkcert localhost 127.0.0.1
+    key: fs.readFileSync('./certs/localhost-key.pem'),
+    cert: fs.readFileSync('./certs/localhost.pem'),
+  },
+};
+
+module.exports = config;
+```
+
+### Lokal vertrauenswürdiges Zertifikat erstellen
+
+```bash
+# mkcert installieren (macOS)
+brew install mkcert
+mkcert -install  # Lokale CA im System-Keystore installieren
+
+# Zertifikat generieren
+mkdir -p certs
+mkcert -key-file certs/localhost-key.pem -cert-file certs/localhost.pem localhost 127.0.0.1
+
+# .gitignore: Zertifikate niemals ins Repository einchecken
+echo "certs/" >> .gitignore
+```
+
+### Metro mit HTTPS starten
+
+```bash
+# Bare RN
+npx react-native start
+
+# Expo (übergibt metro.config.js automatisch)
+npx expo start
+```
+
+> **Hinweis:** Die `server.tls`-Konfiguration ist sowohl für bare RN (`@react-native/metro-config`) als auch für Expo (`expo/metro-config`) verfügbar — Metro liest denselben `server.tls`-Schlüssel in beiden Fällen.
+
+---
+
 ## Entwicklungswerkzeuge
 
 ### React Native Debugger
@@ -306,6 +370,7 @@ npx expo install expo-camera@latest
 - [ ] EAS CLI konfiguriert
 - [ ] Metro-Konfiguration optimiert
 - [ ] Debugger konfiguriert (React Native DevTools 0.85+ via `--experimental-debugger`)
+- [ ] Metro TLS konfiguriert, wenn lokales HTTPS erforderlich (Deep Links, sichere Ursprünge)
 - [ ] VS Code-Erweiterungen installiert
 - [ ] Einheitlicher Package Manager (npm)
 - [ ] npm-Skripte konfiguriert

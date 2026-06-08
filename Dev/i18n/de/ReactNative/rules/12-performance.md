@@ -8,29 +8,74 @@ Les performances sont critiques pour l'expérience utilisateur mobile. Target: *
 
 ## Hermes Engine
 
-### Activer Hermes
+> **Hermes ist die STANDARDMÄSSIGE JavaScript-Engine seit RN 0.70.** Es muss nichts aktiviert werden. Seit RN 0.84 wird Hermes V1 (neu geschriebene Engine) standardmäßig mitgeliefert. Jede veraltete `enableHermes`- oder `jsEngine: "hermes"`-Konfiguration entfernen — sie ist obsolet.
+
+### Hermes ist der Standard — keine Konfiguration erforderlich
+
+| RN-Version | Hermes-Status |
+|------------|---------------|
+| < 0.64 | Nicht verfügbar |
+| 0.64–0.69 | Opt-in (manuelles Flag) |
+| **0.70–0.83** | **Hermes standardmäßig** (klassische Engine) |
+| **0.84+** | **Hermes V1 standardmäßig** (neu geschriebene Engine) |
+
+```bash
+# Prüfen ob Hermes aktiv ist (JS-Konsole der App)
+console.log(HermesInternal?.getRuntimeProperties?.()?.['OSS Release Version']);
+# Gibt z.B. "for RN 0.85.0" aus, wenn Hermes aktiv ist
+```
+
+### Was Hermes V1 bringt (RN 0.84+)
+
+Hermes V1 ist eine vollständig neu geschriebene Engine im Vergleich zur klassischen Hermes-Engine:
+
+| Verbesserung | Klassisches Hermes | Hermes V1 |
+|---|---|---|
+| App-Start | Referenz | **−29%** |
+| Speichernutzung | Referenz | **−38%** |
+| Bundle-Größe | Referenz | **−25%** |
+| GC-Pausen (Hades GC) | Referenz | **−73%** |
+
+**Hermes V1 Funktionen:**
+- Neu geschriebener Bytecode-Compiler mit neuem Format
+- Verbesserter JIT für moderne JavaScript-Muster (React 19+)
+- **Hades GC**: Concurrent Garbage Collector (kein UI-Einfrieren während GC)
+- Grundlegende WebAssembly-Unterstützung (experimentell)
+- Bessere Unterstützung für intensive `async/await`-Muster
+
+### Bereinigung veralteter Konfigurationen
 
 ```json
-// app.json
+// ❌ VERALTET — entfernen (RN 0.70+)
 {
   "expo": {
     "jsEngine": "hermes",
-    "android": {
-      "enableHermes": true
-    },
-    "ios": {
-      "jsEngine": "hermes"
-    }
+    "android": { "enableHermes": true },
+    "ios": { "jsEngine": "hermes" }
+  }
+}
+
+// ✅ KORREKT — nichts zu konfigurieren, Hermes V1 ist standardmäßig aktiv
+{
+  "expo": {
+    "name": "my-app"
   }
 }
 ```
 
-### Bénéfices Hermes
+### Wann JSC explizit angeben (selten)
 
-- **Startup time**: 50% plus rapide
-- **Memory usage**: 30% moins de RAM
-- **App size**: Bundle plus petit
-- **Performance**: Bytecode optimisé
+```json
+// Ausnahmefall: JavaScriptCore erzwingen (nicht empfohlen)
+// Gültiger Grund: native Abhängigkeit inkompatibel mit Hermes V1
+{
+  "expo": {
+    "jsEngine": "jsc"
+  }
+}
+```
+
+> **Regel:** JSC niemals standardmäßig wählen. Nur verwenden, wenn eine native Abhängigkeit Hermes V1 noch nicht unterstützt und keine gepatchte Version existiert.
 
 ---
 
@@ -689,9 +734,10 @@ if (__DEV__ && Platform.OS !== 'web') {
 - [ ] Retry logic
 
 ### Bundle
-- [ ] Hermes activé
-- [ ] Code splitting
-- [ ] Dependencies minimales
+- [ ] Hermes V1 standardmäßig aktiv (RN 0.84+) — keine Konfiguration erforderlich
+- [ ] Kein veraltetes `enableHermes`- oder `jsEngine: "hermes"`-Flag
+- [ ] Code Splitting
+- [ ] Minimale Abhängigkeiten
 - [ ] Bundle < 10MB
 
 ---

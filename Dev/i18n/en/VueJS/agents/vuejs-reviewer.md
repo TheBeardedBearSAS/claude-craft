@@ -695,5 +695,5 @@ Does the element frequently change visibility?
 
 ---
 
-**Version:** 2.0
-**Last updated:** 2026-02
+**Version:** 2.2
+**Last updated:** 2026-06

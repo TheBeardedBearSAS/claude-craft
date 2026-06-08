@@ -6,7 +6,7 @@
 
 | Tool | Version | Why |
 |---|---|---|
-| Node.js | 20+ LTS | Minimo Paperclip (README) |
+| Node.js | 20+ LTS (22 LTS tambem suportado e recomendado) | Minimo Paperclip; Node.js 22 LTS testado em CI |
 | pnpm | 9.15+ | Gerenciador oficial de workspaces |
 | tsx | latest | Executar arquivos TS durante dev |
 | PostgreSQL | 15+ (or embedded) | Store primario |

@@ -196,19 +196,83 @@ config.resolver.sourceExts.push('cjs');
 module.exports = config;
 ```
 
-### Clear Cache
+### Vider le Cache
 
 ```bash
-# Clear Metro cache
+# Vider le cache Metro
 npx expo start --clear
 
-# Or manually
+# Ou manuellement
 rm -rf node_modules/.cache
 ```
 
 ---
 
-## Development Tools
+## Metro TLS (0.85+)
+
+Depuis RN 0.85, Metro accepte un objet `server.tls` dans `metro.config.js`, activant HTTPS et WSS (WebSocket sécurisé pour Fast Refresh) pendant le développement local.
+
+### Cas d'usage
+
+| Cas | Pourquoi Metro TLS |
+|-----|--------------------|
+| Deep links HTTPS | Tester `applinks:` et Universal Links sans serveur distant |
+| APIs à origine sécurisée | Certaines APIs refusent les origines non-HTTPS (CSP, CORS strict) |
+| Réseaux d'entreprise | Proxys qui bloquent le trafic HTTP non chiffré |
+| Service Workers / PWA web | Requiert HTTPS même en développement |
+
+### Configuration
+
+```javascript
+// metro.config.js (bare RN 0.85+)
+const { getDefaultConfig } = require('@react-native/metro-config');
+const fs = require('fs');
+
+const config = getDefaultConfig(__dirname);
+
+// Activer TLS pour Metro dev server
+config.server = {
+  ...config.server,
+  tls: {
+    // Générer avec : mkcert localhost 127.0.0.1
+    key: fs.readFileSync('./certs/localhost-key.pem'),
+    cert: fs.readFileSync('./certs/localhost.pem'),
+  },
+};
+
+module.exports = config;
+```
+
+### Générer un certificat local de confiance
+
+```bash
+# Installer mkcert (macOS)
+brew install mkcert
+mkcert -install  # Installe la CA locale dans le keystore système
+
+# Générer le certificat
+mkdir -p certs
+mkcert -key-file certs/localhost-key.pem -cert-file certs/localhost.pem localhost 127.0.0.1
+
+# .gitignore : ne jamais commiter les certificats
+echo "certs/" >> .gitignore
+```
+
+### Démarrer Metro en HTTPS
+
+```bash
+# Bare RN
+npx react-native start
+
+# Expo (passe la config metro.config.js automatiquement)
+npx expo start
+```
+
+> **Note :** La configuration `server.tls` est disponible aussi bien pour bare RN (`@react-native/metro-config`) que pour Expo (`expo/metro-config`) — Metro lit la même clé `server.tls` dans les deux cas.
+
+---
+
+## Outils de Développement
 
 ### React Native Debugger
 
@@ -306,6 +370,7 @@ npx expo install expo-camera@latest
 - [ ] EAS CLI configuré
 - [ ] Metro config optimisé
 - [ ] Débogueur configuré (React Native DevTools 0.85+ via `--experimental-debugger`)
+- [ ] Metro TLS configuré si HTTPS local requis (deep links, origines sécurisées)
 - [ ] VS Code extensions installées
 - [ ] Package manager cohérent (npm)
 - [ ] Scripts npm configurés
