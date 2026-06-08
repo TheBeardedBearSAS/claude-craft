@@ -28,7 +28,7 @@ cd ~/my-project
 claude
 
 # Initialize BMAD
-/bmad:init
+/workflow:init
 ```
 
 This creates:
@@ -48,7 +48,7 @@ This creates:
 ### Check Status
 
 ```bash
-/bmad:status
+/workflow:status
 ```
 
 ---
@@ -72,10 +72,12 @@ This creates:
 ```
 
 **Key Commands:**
-- `/bmad:init` - Initialize BMAD
-- `/bmad:status` - Show status
-- `/bmad:route` - Route to agent
-- `/bmad:handoff` - Handoff between agents
+- `/workflow:init` - Initialize BMAD and recommend the optimal track (routing)
+- `/workflow:status` - Show workflow progress and next actions
+- `/workflow:start` - Start a sprint phase
+- `/workflow:review` - Sprint review and phase handoff
+
+> Note: BMAD roles (pm, ba, architect, po, sm, dev, qa) are integrated into the `/workflow:*` and `/sprint:*` commands — there is no standalone `/bmad:*` namespace.
 
 ---
 
@@ -487,7 +489,7 @@ Process multiple stories automatically.
 ### 1. Initialize Project
 
 ```bash
-/bmad:init
+/workflow:init
 @bmad-master Set up BMAD for a new e-commerce platform
 ```
 
@@ -589,7 +591,7 @@ Update `tdd_phase` in story frontmatter to track progress.
 ```bash
 /sm:velocity
 /sm:burndown
-/bmad:status
+/workflow:status
 ```
 
 ---
@@ -638,7 +640,7 @@ tdd:
 ### "No sprint-status.yaml found"
 
 ```bash
-/bmad:init
+/workflow:init
 ```
 
 ### Quality gate always fails
