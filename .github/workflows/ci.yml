@@ -12,6 +12,12 @@ on:
       - 'cli/**'
       - 'tests/**'
       - 'scripts/**'
+      - 'config/**'
+      - '.claude/**'
+      - 'Dev/i18n/**'
+      - 'Infra/i18n/**'
+      - 'docs/**'
+      - 'README.md'
       - '.github/workflows/ci.yml'
       - 'package.json'
       - 'package-lock.json'
@@ -128,6 +134,9 @@ jobs:
       - name: Verify Claude `@-include` links resolve
         run: npm run lint:includes
 
+      - name: Verify version consistency (single source of truth)
+        run: npm run lint:versions
+
   codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
@@ -140,12 +149,12 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # pinned: v6.0.3
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@411bbbe57033eedfc1a82d68c01345aa96c737d7 # pinned: v4
         with:
           languages: javascript
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@411bbbe57033eedfc1a82d68c01345aa96c737d7 # pinned: v4
 
   trivy:
     name: Trivy CVE Scan
@@ -155,7 +164,7 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # pinned: v6.0.3
 
       - name: Run Trivy vulnerability scanner (filesystem)
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@bfa4b33a029b9aa80ddb784b45574c30e072c59e # pinned: master @ 2026-06-08
         with:
           scan-type: 'fs'
           severity: 'CRITICAL,HIGH'

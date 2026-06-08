@@ -31,7 +31,7 @@ const TECH_REGISTRY = {
     namespace: 'symfony',
     i18nDir: 'Symfony',
     installScript: 'install-symfony-rules.sh',
-    version: '8.0 / PHP 8.5',
+    version: '8.1 / PHP 8.4+',
     tier: 1,
   },
   flutter: {
@@ -41,7 +41,7 @@ const TECH_REGISTRY = {
     namespace: 'flutter',
     i18nDir: 'Flutter',
     installScript: 'install-flutter-rules.sh',
-    version: '3.41 / Dart 3.11',
+    version: '3.44 / Dart 3.12',
     tier: 1,
   },
   react: {
@@ -67,11 +67,11 @@ const TECH_REGISTRY = {
   angular: {
     name: 'angular',
     displayName: 'Angular',
-    desc: 'Frontend TS with Signals, Zoneless, httpResource',
+    desc: 'Frontend TS with Signals, Zoneless, httpResource, Signal Forms',
     namespace: 'angular',
     i18nDir: 'Angular',
     installScript: 'install-angular-rules.sh',
-    version: '20 LTS',
+    version: '22',
     tier: 3,
   },
   csharp: {
@@ -91,7 +91,7 @@ const TECH_REGISTRY = {
     namespace: 'laravel',
     i18nDir: 'Laravel',
     installScript: 'install-laravel-rules.sh',
-    version: '13.x / PHP 8.5',
+    version: '13.x / PHP 8.3+',
     tier: 3,
   },
   vuejs: {
@@ -128,6 +128,16 @@ const TECH_REGISTRY = {
     version: '3.14+',
     tier: 1,
   },
+  paperclip: {
+    name: 'paperclip',
+    displayName: 'Paperclip',
+    desc: 'Governance-first integration platform (control plane + adapters)',
+    namespace: 'paperclip',
+    i18nDir: 'Paperclip',
+    installScript: 'install-paperclip-rules.sh',
+    version: '2026.529.0',
+    tier: 2,
+  },
   docker: {
     name: 'docker',
     displayName: 'Docker',
@@ -135,7 +145,7 @@ const TECH_REGISTRY = {
     namespace: 'docker',
     i18nDir: 'Docker',
     installScript: 'install-docker-rules.sh',
-    version: 'latest',
+    version: '29.5.2',
     tier: null,
   },
   coolify: {
@@ -145,7 +155,7 @@ const TECH_REGISTRY = {
     namespace: 'coolify',
     i18nDir: 'Coolify',
     installScript: 'install-coolify-rules.sh',
-    version: '4.x',
+    version: '4.1.1',
     tier: null,
   },
 };

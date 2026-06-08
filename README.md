@@ -44,7 +44,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Claude Code 2.1.154 + Opus 4.8** -- recommended runtime, Dynamic Workflows (orchestrate tens-to-hundreds of background agents), `effort: max`; critical agents (`security-auditor`, `migration-specialist`, `database-architect`, `ralph-conductor`) routed to `opus`/`xhigh`, reviewers stay `haiku`/`low`
 - **Repositioned around 4 defensible differentiators** -- QA Recette (browser regression capture), BMAD v6 sprint workflow, Ralph Wiggum loop, RTK token optimization (the workflow/orchestration a per-stack cookbook doesn't cover)
 - **Honest stack count (19 → 11)** -- removed orphan Go/Rust reference stacks (no commands, no reviewers); **PHP is now a base layer** auto-included with Symfony/Laravel rather than a standalone selectable stack
-- **Stack versions refreshed** -- Flutter 3.44/Dart 3.12, .NET 10 LTS/EF Core 10, Symfony 8.1, Laravel 13.12, Angular 21 (zoneless default), Docker 29.4.3, Ansible 2.21.0
+- **Stack versions refreshed** -- Flutter 3.44/Dart 3.12, .NET 10 LTS/EF Core 10, Symfony 8.1, Laravel 13.12, Angular 22 (Signal Forms stable, zoneless + OnPush default, TS 6), Docker 29.5.2, Ansible 2.21.0
 
 > ← Versions antérieures (v8.0 → v8.3) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
 
@@ -91,26 +91,26 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 
 | Stack | Version | Install Command |
 |-------|---------|-----------------|
-| **Symfony / PHP** | 8.0 / PHP 8.4+ | `--tech=symfony` |
+| **Symfony / PHP** | 8.1 / PHP 8.4+ | `--tech=symfony` |
 | **React** | 19.2 + Compiler 1.0 | `--tech=react` |
 | **Flutter / Dart** | 3.44 / Dart 3.12 | `--tech=flutter` |
 | **Python** | 3.14+ / FastAPI | `--tech=python` |
-| **Angular** | 20 LTS (ou 21) | `--tech=angular` |
+| **Angular** | 22 | `--tech=angular` |
 | **Vue.js** | 3.5+ (3.6 beta Vapor) | `--tech=vuejs` |
 | **React Native** | 0.85 (New Architecture) | `--tech=reactnative` |
 | **C# / .NET** | 10 LTS / C# 14 | `--tech=csharp` |
-| **Laravel** | 13.x / PHP 8.5 | `--tech=laravel` |
+| **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | `--tech=laravel` |
 | **PHP** | 8.5 | `--tech=php` |
-| **Paperclip** | 2026.403.0 | `--tech=paperclip` |
+| **Paperclip** | 2026.529.0 | `--tech=paperclip` |
 
-| **Docker** | 29.4.3 | `--tech=docker` |
-| **Coolify** | v4.0.0 (stable) | `--tech=coolify` |
+| **Docker** | 29.5.2 | `--tech=docker` |
+| **Coolify** | v4.1.1 (MCP natif, audit logging) | `--tech=coolify` |
 | **Kubernetes** | 1.36.1 | `--tech=kubernetes` |
 | **OpenTofu** | 1.12.0 | `--tech=opentofu` |
 | **Ansible** | 2.21.0 | `--tech=ansible` |
 | **Hcloud** | 1.61+ | `--tech=hcloud` |
-| **PgBouncer** | 1.25.2 (CVE-2026-6664/6667 patched) | `--tech=pgbouncer` |
-| **FrankenPHP** | 1.12.1 | `--tech=frankenphp` |
+| **PgBouncer** | 1.25.2 (CVE-2026-6664/6665/6666/6667 patched) | `--tech=pgbouncer` |
+| **FrankenPHP** | 1.12.1 (CVE-2026-24894/24895 patched) | `--tech=frankenphp` |
 
 See [Technologies](docs/TECHNOLOGIES.md) for full details.
 
