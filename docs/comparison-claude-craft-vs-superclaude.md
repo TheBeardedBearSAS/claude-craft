@@ -45,12 +45,12 @@ If you're undecided, **start with SuperClaude** to learn how Claude Code persona
 | Pure PHP 8.5 | Generic | Dedicated: PSR-12, PHPStan Level 10, DDD |
 | React 19.2 + Compiler 1.0 | Generic | Dedicated: Hooks, Server Components, Zustand, React Query, bundle analysis |
 | Vue.js 3.5+ (3.6 Vapor beta) | Generic | Dedicated: Composition API, Pinia, Alien Signals |
-| Angular 20 LTS | Generic | Dedicated: Signals, Standalone, Zoneless, httpResource |
+| Angular 22 | Generic | Dedicated: Signals, Standalone, Zoneless, httpResource |
 | Flutter 3.44 / Dart 3.12 | Generic | Dedicated: BLoC v9, Riverpod 3, Material 3, Impeller |
 | React Native 0.85 New Arch | Generic | Dedicated: JSI, TurboModules, Fabric, Reanimated 4 |
 | C# / .NET 10 LTS | Generic | Dedicated: Clean Architecture, CQRS, MediatR, EF Core |
 | Python 3.14+ | Generic | Dedicated: FastAPI, Pydantic, free-threading, JIT |
-| Paperclip 2026.403 | None | Dedicated: control plane + adapters |
+| Paperclip 2026.529 | None | Dedicated: control plane + adapters |
 | Docker / K8s / OpenTofu / Ansible | None | Dedicated infra agents (39 agents) |
 
 ### Operational Features

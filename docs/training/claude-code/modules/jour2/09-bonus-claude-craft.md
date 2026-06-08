@@ -68,7 +68,7 @@ npx @the-bearded-bear/claude-craft install . --tech=react --lang=fr
 | React Native | 0.76+ | Feature-based |
 | Angular | 19.x | Domain-driven |
 | Vue.js | 3.5+ | Composition API |
-| Laravel | 13.x / PHP 8.5 | Clean Architecture |
+| Laravel | 13.x / PHP 8.3+ | Clean Architecture |
 | Python | 3.14+ | Clean Architecture |
 | PHP | 8.5 | Clean Architecture |
 

@@ -14,11 +14,11 @@ Guide opérationnel pour la gestion de la communauté Claude Craft : Discord, en
 |-------|-------------|----------------------|
 | `#symfony` | Questions, discussions Symfony 8.0+ | @symfony-dev |
 | `#react` | React 19.2, Server Components, Compiler | @react-dev |
-| `#flutter` | Flutter 3.41, Dart 3.11, BLoC v9 | @flutter-dev |
+| `#flutter` | Flutter 3.44, Dart 3.12, BLoC v9 | @flutter-dev |
 | `#python` | Python 3.14+, FastAPI, async | @python-dev |
 | `#php` | PHP 8.5, Property Hooks, Pest 4 | @php-dev |
 | `#laravel` | Laravel 13.x, Actions, Sanctum | @laravel-dev |
-| `#angular` | Angular 20+ LTS, Signals, Zoneless | @angular-dev |
+| `#angular` | Angular 22, Signals, Zoneless | @angular-dev |
 | `#vuejs` | Vue 3.5+, Composition API, Pinia | @vuejs-dev |
 | `#csharp` | C# 14, .NET 10 LTS, Clean Architecture | @csharp-dev |
 | `#reactnative` | React Native 0.85, New Architecture | @reactnative-dev |

@@ -121,9 +121,9 @@ Full skill coverage, limited battle-testing, may require review on edge cases.
 
 | Stack | Version | Key Features | Status |
 |-------|---------|--------------|--------|
-| **Angular** | 20 LTS (21 latest) | Signals, Standalone, Zoneless, httpResource | ✅ Stable |
+| **Angular** | 22 | Signals, Standalone, Zoneless, httpResource | ✅ Stable |
 | **Vue.js** | 3.5+ (3.6 beta Vapor) | Composition API, Pinia, Vitest, Alien Signals | ✅ Stable |
-| **Laravel** | 13.x / PHP 8.5 | Actions, Pest 4, Sanctum, AI SDK, Passkey | ✅ Stable |
+| **Laravel** | 13.x / PHP 8.3+ | Actions, Pest 4, Sanctum, AI SDK, Passkey | ✅ Stable |
 | **React Native** | 0.85 (New Architecture) | Navigation 7, Reanimated 4, TurboModules | ✅ Stable |
 | **C# / .NET** | 10 LTS / C# 14 | CQRS, MediatR (or alternative), EF Core | ✅ Stable |
 | **PHP** | 8.5 (Property Hooks 8.4+) | PSR-12, PHPStan Level 10, Pest 4 | ✅ Stable |
@@ -139,7 +139,7 @@ Partial coverage, early adopters, evolving references.
 | **Go** | 1.24+ | ⚠️ Experimental |
 | **Rust** | 1.85+ | ⚠️ Experimental |
 | **Svelte** | 5.0+ (Runes) | ⚠️ Experimental |
-| **Paperclip** | 2026.403.0 | ⚠️ Experimental |
+| **Paperclip** | 2026.529.0 | ⚠️ Experimental |
 | **Astro** | 5.0+ | ⚠️ Experimental |
 | **Elixir / Phoenix** | 1.17 / Phoenix 1.7 | ⚠️ Experimental |
 | **Spring Boot** | 3.4+ / Java 21+ | ⚠️ Experimental |
