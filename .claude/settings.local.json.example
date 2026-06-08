@@ -1,8 +1,10 @@
 {
   "$schema": "https://docs.claude.ai/reference/settings-schema.json",
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6"
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6",
+    "CLAUDE_CODE_FORK_SUBAGENT": "1"
   },
+  "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5"],
   "hooks": {
     "PreToolUse": [
       {

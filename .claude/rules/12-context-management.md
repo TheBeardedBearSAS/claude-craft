@@ -324,7 +324,12 @@ Templates disponibles dans `.claude/templates/hooks/`: `output-filter.json`, `pr
 | `/btw` | Questions rapides sans changement de contexte | Lookups, syntaxe, clarifications |
 | `/hooks` | Gestion interactive des hooks | Activer/desactiver, tester, debugger |
 | `/reload-plugins` | Rechargement manuel des plugins | Apres mise a jour de plugins |
+| `/reload-skills` (v2.1.157+) | Re-scan des skills sans redemarrage (distinct de `/reload-plugins`) | Apres ajout/modif d'un skill |
 | `/proactive` | Alias pour `/loop` | Monitoring proactif recurrent |
+
+> **⚠️ Trigger Dynamic Workflows renomme (v2.1.160) :** le mot-cle declencheur est passe de `workflow` a **`ultracode`**. Demander un workflow « avec ses propres mots » fonctionne toujours. Le palier `/effort ultracode` (ci-dessus) reste valide.
+
+> **Hook `MessageDisplay` (v2.1.157+) :** nouvel evenement permettant de transformer/masquer le texte assistant a l'affichage — utile pour un filtrage RTK-style cote sortie. `SessionStart` peut retourner `reloadSkills: true` pour rendre disponibles les skills qu'il installe dans la meme session.
 
 ---
 
@@ -339,6 +344,16 @@ Templates disponibles dans `.claude/templates/hooks/`: `output-filter.json`, `pr
 | `OTEL_LOG_USER_PROMPTS` | Log prompts dans traces (beta) |
 | `OTEL_LOG_TOOL_DETAILS` | Log details outils (beta) |
 | `OTEL_LOG_TOOL_CONTENT` | Log contenu outils (beta, verbose) |
+
+### `fallbackModel` — repli automatique (settings.json, v2.1.166+)
+
+Reglage **fiabilite + cout** : jusqu'a 3 modeles de repli essayes dans l'ordre quand le primaire est surcharge/indisponible (flag equivalent `--fallback-model`, applique aussi aux sessions interactives).
+
+```json
+{ "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5"] }
+```
+
+Pour les 5 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), ce repli `opus → sonnet → haiku` evite les interruptions en pic de charge Opus sans degrader le travail courant. Exemple pret a l'emploi dans `.claude/settings.local.json.example`.
 
 ---
 
