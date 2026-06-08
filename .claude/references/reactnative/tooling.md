@@ -6,6 +6,26 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 
 ---
 
+## Prérequis système
+
+### Node.js >= 20 LTS (obligatoire pour RN 0.85)
+
+React Native 0.85 **supprime le support des versions de Node < 20**. La version minimale requise est **Node.js 20.19.4 LTS**.
+
+```bash
+# Vérifier la version
+node --version  # Doit être >= 20.19.4
+
+# Installer via nvm (recommandé)
+nvm install 20
+nvm use 20
+nvm alias default 20
+```
+
+> Les versions Node 16 et 18 ne sont plus supportées avec RN 0.85. Mettre à jour avant migration.
+
+---
+
 ## Expo CLI
 
 ### Installation
@@ -200,12 +220,12 @@ brew install --cask react-native-debugger
 # https://github.com/jhen0409/react-native-debugger
 ```
 
-### React Native DevTools (recommandé — RN 0.73+)
+### React Native DevTools (0.85+)
 
-Flipper est déprécié depuis React Native 0.73. Le remplacement officiel est **React Native DevTools**, intégré nativement dans Metro.
+Flipper est déprécié depuis React Native 0.73. Le remplacement officiel est **React Native DevTools**, intégré nativement dans Metro. RN 0.85 en fait le debugger par défaut et stabilise plusieurs fonctionnalités.
 
 ```bash
-# Démarrer avec le debugger expérimental (RN 0.73+)
+# Démarrer avec le debugger (RN 0.73+)
 npx react-native start --experimental-debugger
 
 # Ouvrir depuis l'app via le dev menu
@@ -214,11 +234,15 @@ npx react-native start --experimental-debugger
 # Sélectionner "Open DevTools" dans le menu
 ```
 
-Fonctionnalités disponibles :
-- Inspection réseau (remplace Flipper Network plugin)
-- React DevTools intégrés
-- Hermes debugger (sources, breakpoints)
-- Console et profiler
+#### Fonctionnalités React Native DevTools 0.85+
+
+| Outil | Description |
+|-------|-------------|
+| **Network Inspector** | Inspecter requêtes HTTP/WebSocket — remplace Flipper Network plugin |
+| **React Component Inspector** | Arborescence des composants, props, state — React DevTools intégrés |
+| **Hermes CDP Debugger** | Breakpoints, step-through, watch expressions via Chrome DevTools Protocol |
+| **Console & Profiler** | Logs, profiling JS thread, flamegraphs |
+| **Source maps** | Navigation dans le code TypeScript source (Hermes + sourcemaps) |
 
 > **Note historique :** Flipper (`brew install --cask flipper`) fonctionnait avec les versions < 0.73. Il n'est plus maintenu pour la New Architecture et ne doit pas être utilisé sur RN 0.73+.
 
@@ -311,10 +335,11 @@ npm install -g @vtsls/language-server typescript
 
 ## Checklist Tooling
 
+- [ ] Node.js >= 20.19.4 LTS installé
 - [ ] Expo CLI installé
 - [ ] EAS CLI configuré
 - [ ] Metro config optimisé
-- [ ] Debugger configuré (React Native DevTools via `--experimental-debugger`)
+- [ ] Debugger configuré (React Native DevTools 0.85+ via `--experimental-debugger`)
 - [ ] VS Code extensions installées
 - [ ] Package manager cohérent (npm)
 - [ ] Scripts npm configurés

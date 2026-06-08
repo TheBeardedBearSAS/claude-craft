@@ -249,11 +249,14 @@ app.Use(async (context, next) =>
 {
     context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
     context.Response.Headers.Append("X-Frame-Options", "DENY");
-    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    // X-XSS-Protection est déprécié — s'appuyer sur CSP Level 3
     context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
     context.Response.Headers.Append(
         "Content-Security-Policy",
-        "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'");
+        "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; upgrade-insecure-requests");
+    context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
+    context.Response.Headers.Append("Cross-Origin-Embedder-Policy", "require-corp");
+    context.Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
     await next();
 });
 
@@ -294,6 +297,8 @@ updates:
 
 ```csharp
 // DO: Configure secure authentication
+// Voir section JWT ci-dessous pour la config EdDSA (OWASP 2026 prioritaire)
+// Exemple minimal avec ES256 (ECDSA P-256) — remplacer SymmetricSecurityKey par ECDsaSecurityKey
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -305,6 +310,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
+            // NOTE: Remplacer SymmetricSecurityKey par ECDsaSecurityKey (ES256/EdDSA) en production
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
             ClockSkew = TimeSpan.Zero
@@ -496,11 +502,58 @@ Session config:
 
 ### JWT
 
-- Algorithm: RS256 or ES256 (not HS256 with weak secret)
-- Short expiration (15 min)
-- Long refresh token (7 days) stored securely
-- Verify signature and claims
-- Don't store sensitive data in payload
+- **Algorithme (priorité OWASP 2026) : EdDSA (Ed25519) > ES256 (ECDSA P-256) > RS256 (RSA-2048)**
+- Ne jamais utiliser HS256 avec un secret faible (clé symétrique partagée)
+- Expiration courte (15 min), refresh token sécurisé (7 jours, rotation obligatoire)
+- Vérifier signature ET claims (iss, aud, exp) à chaque requête
+- Ne jamais stocker de données sensibles dans le payload (lisible sans clé)
+
+```csharp
+// DO: JWT Bearer avec EdDSA (Ed25519) — OWASP 2026 prioritaire
+// NuGet: Microsoft.IdentityModel.Tokens (inclus dans Microsoft.AspNetCore.Authentication.JwtBearer)
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        // Charger la clé publique Ed25519 (PEM ou depuis Key Vault)
+        var edDsaKey = ECDsa.Create();
+        // edDsaKey.ImportFromPem(File.ReadAllText("public.pem")); // production: Key Vault
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            // EdDSA : utiliser ECDsaSecurityKey avec la courbe Ed25519
+            IssuerSigningKey = new ECDsaSecurityKey(edDsaKey),
+            // RS256 / ES256 fallback (migration) :
+            // IssuerSigningKey = new RsaSecurityKey(rsa) / new ECDsaSecurityKey(ecdsa),
+            ClockSkew = TimeSpan.Zero  // Pas de marge sur l'expiration
+        };
+    });
+
+// Génération de token EdDSA (côté Identity Provider)
+public string GenerateToken(string userId, string issuer, string audience)
+{
+    using var ecdsa = ECDsa.Create(ECCurve.NamedCurves.nistP256); // ES256
+    // Pour Ed25519, utiliser OKP key (nécessite BouncyCastle ou .NET 9+ preview)
+    var signingCredentials = new SigningCredentials(
+        new ECDsaSecurityKey(ecdsa), SecurityAlgorithms.EcdsaSha256);
+
+    var token = new JwtSecurityToken(
+        issuer: issuer,
+        audience: audience,
+        claims: [new Claim(JwtRegisteredClaimNames.Sub, userId)],
+        expires: DateTime.UtcNow.AddMinutes(15),
+        signingCredentials: signingCredentials);
+
+    return new JwtSecurityTokenHandler().WriteToken(token);
+}
+```
+
+> **Note :** Ed25519 natif arrive avec `System.Security.Cryptography` depuis .NET 9+. Pour les projets .NET 8, utiliser **ES256** (ECDSA P-256) comme alternative immédiate à RS256. La bibliothèque `Microsoft.IdentityModel.Tokens` supporte `SecurityAlgorithms.EcdsaSha256` (ES256) nativement.
 
 ### MFA
 
@@ -564,19 +617,23 @@ public async Task<Order> GetOrder(Guid orderId, Guid currentUserId)
 ## Security Headers
 
 ```http
-# XSS protection
-Content-Security-Policy: default-src 'self'; script-src 'self'
+# XSS protection via CSP Level 3 — X-XSS-Protection est déprécié, ne pas l'utiliser
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests
 X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
 
 # Clickjacking protection
 X-Frame-Options: DENY
 
 # HTTPS
-Strict-Transport-Security: max-age=31536000; includeSubDomains
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 
 # Referrer
 Referrer-Policy: strict-origin-when-cross-origin
+
+# Cross-Origin Isolation (2026)
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Resource-Policy: same-origin
 ```
 
 ---
@@ -658,6 +715,7 @@ builder.Configuration.AddAzureKeyVault(
 - [ ] SSRF protection implemented
 - [ ] Azure Key Vault for production secrets
 - [ ] Serilog for structured logging
+- [ ] JWT signé avec EdDSA (Ed25519) ou ES256 — jamais HS256 avec secret faible
 
 ### Monitoring
 
@@ -684,6 +742,6 @@ builder.Configuration.AddAzureKeyVault(
 
 ---
 
-**Last updated:** 2025-01
-**Version:** 2.0.0 (merged base + C#)
+**Last updated:** 2026-06
+**Version:** 2.1.0 (JWT EdDSA OWASP 2026 alignment)
 **Author:** The Bearded CTO

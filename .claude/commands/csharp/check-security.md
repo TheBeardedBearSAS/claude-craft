@@ -152,12 +152,14 @@ else
     app.UseHsts();
 }
 
-// ✅ Security headers
+// ✅ Security headers — X-XSS-Protection est déprécié, s'appuyer sur CSP Level 3
 app.Use(async (context, next) =>
 {
     context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
     context.Response.Headers.Append("X-Frame-Options", "DENY");
-    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    context.Response.Headers.Append("Content-Security-Policy",
+        "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests");
+    context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
     await next();
 });
 ```

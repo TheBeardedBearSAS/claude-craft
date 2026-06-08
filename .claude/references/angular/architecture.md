@@ -411,16 +411,28 @@ export const routes: Routes = [
 
 ## Architecture Best Practices
 
-### 1. Change Detection Strategy
+### 1. Change Detection Strategy (OnPush par défaut depuis Angular 22)
 
-Always use OnPush for performance:
+Depuis Angular 22, **OnPush est la stratégie par défaut** pour tout composant généré via le CLI. Les composants qui ne déclarent pas explicitement `changeDetection` utilisent désormais OnPush au lieu d'Eager. Specifier `ChangeDetectionStrategy.Default` pour revenir à l'ancien comportement si nécessaire.
 
 ```typescript
+// Angular 22 — OnPush implicite (le CLI ne génère plus la ligne)
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-my-component',
+  standalone: true,
+  template: `...`
+  // changeDetection omis → OnPush par défaut
 })
 export class MyComponent {}
+
+// Fallback explicite si Eager requis (rare)
+@Component({
+  changeDetection: ChangeDetectionStrategy.Default
+})
+export class LegacyComponent {}
 ```
+
+**Impact migration :** les composants existants sans `changeDetection` conservent leur comportement actuel jusqu'à Angular 22 ; seuls les nouveaux composants CLI héritent du défaut OnPush.
 
 ### 2. Typed Forms
 
@@ -601,14 +613,15 @@ Angular architecture priorities for 2026 (v22 stable) :
 2. **Signals**: Primitive réactive principale (état synchrone)
 3. **Zoneless (par défaut v21+)**: `provideZonelessChangeDetection()` — +30-40% performance
 4. **httpResource()**: Chargement déclaratif avec états automatiques (stable v20+)
-5. **OnPush par défaut (v22)**: Stratégie de change detection par défaut pour tous les composants
-6. **Signal Forms (stable v22)**: `form(model, schemaFn)` depuis `@angular/forms/signals`
+5. **OnPush par défaut (v22)**: Stratégie de change detection par défaut pour les composants CLI — plus besoin de le spécifier
+6. **HttpClient Fetch par défaut (v22)**: `HttpClient` utilise désormais l'API `fetch` native au lieu de `XMLHttpRequest` — meilleure intégration SSR et streaming
+7. **Signal Forms (stable v22)**: `form(model, schemaFn)` depuis `@angular/forms/signals`
 7. **Domain-Driven Structure**: Organisation par feature
 8. **Smart/Dumb Pattern**: Séparation claire des responsabilités
 9. **Lazy Loading**: Routes et composants
 10. **Modern Control Flow**: @if, @for, @switch
 
-**Angular 22 nouveautés clés :** Signal Forms stables (`@angular/forms/signals`), OnPush par défaut, HttpClient Fetch par défaut, TypeScript 6 requis, Resource API stable.
+**Angular 22 nouveautés clés :** Signal Forms stables (`@angular/forms/signals`), **OnPush par défaut** (composants CLI), **HttpClient utilise Fetch par défaut** (plus XHR), TypeScript 6 requis, Resource API stable, Node.js 22.x ou 24.x requis (Node 20 supprimé).
 
 **Golden rule**: Les composants doivent être petits, focalisés et faciles à tester.
 

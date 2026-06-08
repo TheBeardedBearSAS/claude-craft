@@ -1,5 +1,7 @@
 # Rule 06: Tooling
 
+> **Version de référence :** Python **3.14 (stable, 3.14.5+)** — Python 3.15 en beta (release oct. 2026).
+
 Python tooling for code quality, testing, and development workflow.
 
 ## Package Management
@@ -223,6 +225,9 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-ra -q --strict-markers"
+# asyncio_mode : "auto" pour projets full-async/FastAPI (pas de @pytest.mark.asyncio requis)
+#                "strict" (défaut depuis pytest-asyncio 0.21) pour projets mixtes sync/async
+asyncio_mode = "strict"  # changer en "auto" pour projets FastAPI full-async
 markers = [
     "unit: Unit tests",
     "integration: Integration tests",

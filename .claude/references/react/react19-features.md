@@ -1,6 +1,6 @@
 # React 19 — Nouvelles Fonctionnalités
 
-**Version :** React 19.2.5+ | React Compiler 1.0 (octobre 2025)
+**Version :** React 19.2.x (latest: 19.2.7) | React Compiler 1.0 (octobre 2025)
 
 ## Vue d'ensemble
 
@@ -333,6 +333,66 @@ const UserForm = () => {
 
 **Source :** [react.dev/reference/rsc/server-actions](https://react.dev/reference/rsc/server-actions)
 
+### `cacheSignal` — Fetch annulable dans un Server Component
+
+Disponible depuis **React 19.2** (octobre 2025). `cacheSignal()` retourne un `AbortSignal` lié à la durée de vie du cache d'un Server Component. Lorsque le rendu est abandonné (navigation concurrente, Transition annulée), le signal déclenche l'annulation des requêtes réseau en vol.
+
+```tsx
+// server-component.tsx (Server Component)
+import { cache, cacheSignal } from 'react';
+
+// cache() déduplique les appels identiques dans un même rendu
+const fetchProduct = cache(async (id: string) => {
+  const res = await fetch(`/api/products/${id}`, {
+    // Le signal est automatiquement aborted quand le cache expire
+    signal: cacheSignal(),
+  });
+  return res.json();
+});
+
+const ProductDetail = async ({ id }: { id: string }) => {
+  const product = await fetchProduct(id);
+  return <h1>{product.name}</h1>;
+};
+```
+
+**Gestion des erreurs d'annulation :**
+
+```tsx
+import { cache, cacheSignal } from 'react';
+import { logError } from '@/lib/logger';
+
+const fetchData = cache(async (id: string) => {
+  try {
+    const res = await fetch(`/api/data/${id}`, { signal: cacheSignal() });
+    return await res.json();
+  } catch (err) {
+    // Ne pas logger les erreurs dues à l'annulation
+    if (!cacheSignal()?.aborted) {
+      logError(err);
+    }
+    return null;
+  }
+});
+```
+
+**Règle importante :** `cacheSignal()` doit être appelé **à l'intérieur** de la fonction async (pas en dehors), sinon la requête ne sera pas annulée à la fin du rendu.
+
+```tsx
+// 🚩 MAUVAIS : la requête ne sera pas annulée
+const promise = fetch(url, { signal: cacheSignal() });
+async function Component() {
+  await promise; // signal déjà résolu à l'extérieur
+}
+
+// ✅ BON : cacheSignal() appelé dans la fonction async
+async function Component() {
+  await fetch(url, { signal: cacheSignal() });
+}
+```
+
+**Source :** [react.dev/reference/react/cacheSignal](https://react.dev/reference/react/cacheSignal)
+
 ---
 
 ## Hook `useFormStatus` — Statut de soumission
@@ -572,6 +632,107 @@ const TabView = () => {
 
 ---
 
+## `<ViewTransition>` — Animations de navigation
+
+Disponible depuis **React 19.2** (octobre 2025). `<ViewTransition>` permet de déclarer des animations de page (enter, exit, shared elements) en s'appuyant sur la View Transitions API du navigateur, sans CSS impératif.
+
+### API
+
+```tsx
+import { ViewTransition } from 'react';
+
+<ViewTransition
+  name?: string           // Nom pour les shared element transitions
+  enter?: string          // Classe CSS à l'apparition (défaut: "auto")
+  exit?: string           // Classe CSS à la disparition
+  update?: string         // Classe CSS lors d'une mutation DOM
+  share?: string          // Classe CSS pour les shared elements
+  default?: string        // Classe CSS par défaut si non spécifié ci-dessus
+  onEnter?: (instance, types) => cleanup
+  onExit?: (instance, types) => cleanup
+  onUpdate?: (instance, types) => cleanup
+  onShare?: (instance, types) => cleanup
+>
+  {children}
+</ViewTransition>
+```
+
+**Valeurs de classe :** `"auto"` (comportement navigateur par défaut), `"none"` (désactivé), ou un nom de classe CSS personnalisé.
+
+> `<ViewTransition>` ne s'active **que** lors de mises à jour enveloppées dans `startTransition()`, une boundary `<Suspense>`, ou `useDeferredValue()`.
+
+### Exemple : navigation avec React Router 7
+
+```tsx
+// App.tsx — ViewTransition + React Router 7 (Framework/Data mode)
+import { ViewTransition } from 'react';
+import { Link, Outlet } from 'react-router';
+
+// ① Sur le <Link> : le prop `viewTransition` enveloppe la navigation
+//   dans document.startViewTransition() → active <ViewTransition>
+const Nav = () => (
+  <nav>
+    <Link to="/" viewTransition>Accueil</Link>
+    <Link to="/about" viewTransition>À propos</Link>
+  </nav>
+);
+
+// ② Envelopper le contenu changeant dans <ViewTransition>
+const Layout = () => (
+  <>
+    <Nav />
+    <ViewTransition>
+      <Outlet />
+    </ViewTransition>
+  </>
+);
+```
+
+**Shared element transition** (même élément animé entre deux pages) :
+
+```tsx
+// Page liste : ViewTransition avec un name unique par item
+<ViewTransition name={`product-${product.id}`}>
+  <img src={product.image} alt={product.name} />
+</ViewTransition>
+
+// Page détail : même name → React interpole l'élément entre les deux pages
+<ViewTransition name={`product-${product.id}`}>
+  <img src={product.image} alt={product.name} className="hero" />
+</ViewTransition>
+```
+
+### Accessibilité — `prefers-reduced-motion`
+
+React **ne désactive pas** automatiquement les animations selon les préférences utilisateur. Il faut le gérer explicitement.
+
+**Option 1 — CSS (recommandée) :**
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+```
+
+**Option 2 — JS (désactivation conditionnelle du prop) :**
+
+```tsx
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+<ViewTransition default={prefersReduced ? 'none' : 'auto'}>
+  <Outlet />
+</ViewTransition>
+```
+
+**Sources :**
+- [react.dev/reference/react/ViewTransition](https://react.dev/reference/react/ViewTransition)
+- [reactrouter.com/how-to/view-transitions](https://reactrouter.com/how-to/view-transitions)
+
+---
+
 ## Hook `useEffectEvent` — Dépendances de useEffect
 
 Disponible depuis **React 19.2** (stable, octobre 2025). `useEffectEvent` permet d'extraire la logique « événement » d'un `useEffect` pour éviter les re-synchronisations inutiles.
@@ -630,7 +791,7 @@ function ChatRoom({ roomId, theme }) {
 
 | Bibliothèque | Version | Usage |
 |--------------|---------|-------|
-| **React** | 19.2.5 | Core |
+| **React** | 19.2.x (latest: 19.2.7) | Core |
 | **React Compiler** | 1.0+ | Auto-memoization |
 | **Zustand** | 5.0.12 | State management |
 | **TanStack Query** | 5.99.0 | Server state (cache, revalidation) |
@@ -640,6 +801,51 @@ function ChatRoom({ roomId, theme }) {
 | **Playwright** | 1.52.0 | Tests E2E |
 
 **Source :** [TanStack Query v5](https://tanstack.com/query/latest), [Zustand v5](https://zustand-demo.pmnd.rs/)
+
+---
+
+## React Performance Tracks — Chrome DevTools
+
+Disponible depuis **React 19.2**. Les Performance Tracks sont des entrées personnalisées dans le panneau **Performance** de Chrome DevTools qui visualisent les événements React sur la même timeline que le réseau, le JS et l'event loop.
+
+> Disponibles uniquement en **builds de développement** (automatique) et **profiling** (`react-dom/profiling`). Désactivées en production.
+
+### Pistes disponibles
+
+| Piste | Contenu |
+|-------|---------|
+| **Scheduler › Blocking** | Mises à jour synchrones (interactions utilisateur) |
+| **Scheduler › Transition** | Travail non-bloquant via `startTransition()` |
+| **Scheduler › Suspense** | Travail lié aux boundaries Suspense |
+| **Scheduler › Idle** | Travail de priorité la plus basse |
+| **Components** | Flamegraph des durées de rendu et d'effets par composant |
+| **Server Requests** | Promises fetch / I/O dans les Server Components (dev uniquement) |
+| **Server Components** | Durées de rendu serveur et Promises attendues (dev uniquement) |
+
+### Comment utiliser
+
+1. Ouvrir Chrome DevTools → onglet **Performance**
+2. Cliquer **Record**, interagir avec l'application, puis **Stop**
+3. Les pistes React apparaissent dans la timeline sous les pistes navigateur standard
+
+**Cascading updates** : détecter les mises à jour déclenchées pendant un rendu (React abandonne et relance — régression de performance visible dans la piste Scheduler).
+
+**Profiling build** (pour la CI ou le staging) :
+
+```ts
+// Activer react-dom/profiling au lieu de react-dom/client
+import ReactDOM from 'react-dom/profiling';
+```
+
+Ou via alias bundler :
+```ts
+// vite.config.ts
+resolve: {
+  alias: { 'react-dom/client': 'react-dom/profiling' }
+}
+```
+
+**Source :** [react.dev/reference/dev-tools/react-performance-tracks](https://react.dev/reference/dev-tools/react-performance-tracks)
 
 ---
 
@@ -656,11 +862,11 @@ function ChatRoom({ roomId, theme }) {
 
 - [ ] Supprimer `useMemo` / `useCallback` / `React.memo` redondants
 - [ ] Remplacer `useEffect` async par `use(promise)`
-- [ ] Vérifier les performances avec React DevTools Profiler
+- [ ] Vérifier les performances avec React DevTools Profiler et Chrome Performance Tracks
 - [ ] Tester les Server Components avec bundle analyzer (< 200KB initial)
 
 ---
 
-**Dernière mise à jour :** 2026-04-14
-**Version :** 1.0.0
+**Dernière mise à jour :** 2026-06-08
+**Version :** 1.1.0
 **Auteur :** The Bearded CTO

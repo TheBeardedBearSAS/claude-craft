@@ -1,5 +1,9 @@
 # Code Quality Tools - Python
 
+> **Version de référence :** Python **3.14 (stable, 3.14.5+)** — Python 3.15 en beta (release oct. 2026).
+> FastAPI **~0.136.x** — Python 3.10+ minimum, Pydantic v2 obligatoire.
+> Pydantic **>=2.9, 2.13.x recommandé**.
+
 ## Ruff - Fast Python Linter & Formatter
 
 ### Installation
@@ -204,6 +208,17 @@ mypy --strict src/
 pip install pytest pytest-cov pytest-asyncio pytest-xdist httpx
 ```
 
+### asyncio_mode — choisir le bon mode
+
+`pytest-asyncio` propose deux modes principaux, à choisir selon le profil du projet :
+
+| Mode | Valeur | Quand l'utiliser |
+|------|--------|-----------------|
+| **`auto`** | `asyncio_mode = "auto"` | Projets **full-async** (FastAPI, SQLAlchemy async) : toutes les coroutines sont automatiquement détectées comme tests async — aucun `@pytest.mark.asyncio` requis. |
+| **`strict`** | `asyncio_mode = "strict"` (défaut depuis pytest-asyncio 0.21) | Équipes **mixtes sync/async** : seuls les tests explicitement marqués `@pytest.mark.asyncio` sont traités comme async — évite les effets de bord sur les tests sync. |
+
+> **Recommandation :** utiliser `auto` pour les projets FastAPI/full-async, `strict` (défaut) pour tout autre projet.
+
 ### pyproject.toml Configuration
 
 ```toml
@@ -212,7 +227,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_functions = ["test_*"]
 python_classes = ["Test*"]
-asyncio_mode = "auto"
+asyncio_mode = "auto"  # "strict" pour projets mixtes sync/async
 addopts = [
     "-v",
     "--strict-markers",

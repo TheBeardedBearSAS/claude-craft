@@ -65,7 +65,10 @@ dotnet publish -c Release --self-contained -r linux-x64
   <PackageReference Include="Ardalis.GuardClauses" Version="4.*" />
 </ItemGroup>
 
-<!-- Entity Framework Core -->
+<!-- Entity Framework Core 10 (LTS, nov. 2025)
+     Nouveautés EF 10 : LeftJoin/RightJoin LINQ natifs, JSON amélioré (filtrage + ExecuteUpdate),
+     bulk ExecuteUpdate/ExecuteDelete avec delegate setters, vector search (SQL Server 2025 / Azure SQL).
+     Native AOT : expérimental — voir architecture.md § Native AOT. -->
 <ItemGroup>
   <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.*" />
   <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.*" />
@@ -74,6 +77,8 @@ dotnet publish -c Release --self-contained -r linux-x64
     <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
   </PackageReference>
   <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.*" />
+  <!-- Vector search PostgreSQL (pgvector) -->
+  <!-- <PackageReference Include="Pgvector.EntityFrameworkCore" Version="0.*" /> -->
 </ItemGroup>
 
 <!-- Testing -->

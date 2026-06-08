@@ -73,18 +73,35 @@ flutter analyze --no-pub --fatal-infos
 
 ## DCM (Dart Code Metrics)
 
-### Installation
+> **Important :** `dart_code_metrics` sur pub.dev est le package **legacy** (open-source, non maintenu activement).
+> DCM est désormais un **outil commercial séparé** distribué via [dcm.dev](https://dcm.dev/) (binaire natif, licence requise).
+> La base gratuite recommandée est `dart analyze` + `flutter analyze` + les lints officiels (`flutter_lints` / `very_good_analysis`).
 
-```yaml
-# pubspec.yaml
-dev_dependencies:
-  dart_code_metrics: ^5.7.0
+### Base gratuite (recommandée)
+
+`dart analyze` et `flutter analyze` couvrent l'analyse statique sans aucune dépendance externe.
+Compléter avec `flutter_lints` ou `very_good_analysis` pour des règles de lint strictes (voir sections dédiées).
+
+### DCM commercial (optionnel)
+
+Si votre équipe dispose d'une licence DCM ([dcm.dev/pricing](https://dcm.dev/pricing/)) :
+
+```bash
+# Installation du binaire DCM (pas via pub.dev)
+# Voir https://dcm.dev/docs/getting-started/installation/
+
+# Analyser le code
+dcm analyze lib
+
+# Vérifier les fichiers inutilisés
+dcm check-unused-files lib
+
+# Vérifier le code inutilisé
+dcm check-unused-code lib
 ```
 
-### Configuration
-
 ```yaml
-# analysis_options.yaml
+# analysis_options.yaml (avec licence DCM)
 dart_code_metrics:
   anti-patterns:
     - long-method
@@ -105,18 +122,8 @@ dart_code_metrics:
     - prefer-extracting-callbacks
 ```
 
-### Commands
-
-```bash
-# Analyze
-dart run dart_code_metrics:metrics analyze lib
-
-# Check unused files
-dart run dart_code_metrics:metrics check-unused-files lib
-
-# Check unused code
-dart run dart_code_metrics:metrics check-unused-code lib
-```
+> **Ne pas ajouter** `dart_code_metrics` dans `pubspec.yaml` comme dépendance pub — le package pub.dev legacy est abandonné.
+> Utiliser le binaire officiel `dcm` disponible sur [dcm.dev](https://dcm.dev/).
 
 ---
 
@@ -207,8 +214,9 @@ jobs:
       - name: Analyze
         run: flutter analyze --fatal-infos
 
-      - name: DCM
-        run: dart run dart_code_metrics:metrics analyze lib
+      # DCM est optionnel et commercial (dcm.dev) — retirer si pas de licence
+      # - name: DCM
+      #   run: dcm analyze lib
 
       - name: Format check
         run: dart format --output=none --set-exit-if-changed .
@@ -219,13 +227,13 @@ jobs:
 ## Makefile
 
 ```makefile
-quality: analyze format-check dcm ## All quality checks
+quality: analyze format-check ## All quality checks (add dcm if licensed)
 
 analyze: ## Analyze code
 	flutter analyze --fatal-infos
 
-dcm: ## Dart Code Metrics
-	dart run dart_code_metrics:metrics analyze lib
+# dcm: ## DCM (optionnel, licence commerciale requise — dcm.dev)
+# 	dcm analyze lib
 
 format-check: ## Check formatting
 	dart format --output=none --set-exit-if-changed lib/ test/

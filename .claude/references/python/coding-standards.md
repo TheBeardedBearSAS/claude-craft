@@ -1,5 +1,9 @@
 # Rule 03: Coding Standards
 
+> **Version de référence :** Python **3.14 (stable, 3.14.5+)** — Python 3.15 en beta (release oct. 2026).
+> FastAPI **~0.136.x** (0.136.3 au 2026-05) — Python 3.10+ minimum, Pydantic v2 obligatoire.
+> Pydantic **>=2.9, 2.13.x recommandé** — Pydantic v1 incompatible avec Python 3.14.
+
 ## PEP 8 Compliance
 
 Follow Python Enhancement Proposal 8 (PEP 8) for code style.
@@ -67,7 +71,7 @@ Use Google style docstrings for all public modules, classes, and functions.
 def calculate_order_total(
     items: list[OrderItem],
     tax_rate: Decimal,
-    discount: Optional[Decimal] = None
+    discount: Decimal | None = None  # 3.14+ : préférer X | None à Optional[X]
 ) -> Money:
     """
     Calculate the total amount of an order.
@@ -102,8 +106,14 @@ Type all function parameters and return values.
 
 ### Basic Types
 
+> **Python 3.14+ — syntaxe recommandée :**
+> - `X | None` à la place de `Optional[X]` (plus concis, aucun import nécessaire)
+> - `X | Y` à la place de `Union[X, Y]`
+> - Ces deux formes sont équivalentes à l'exécution depuis Python 3.10 ; la syntaxe `|` est le standard 3.14+.
+> - `from typing import Optional, Union` reste valide pour la compatibilité 3.9 et en code legacy.
+
 ```python
-from typing import Optional, Union
+# Python 3.14+ — syntaxe recommandée (pas d'import Optional/Union)
 from decimal import Decimal
 from datetime import datetime
 
@@ -113,23 +123,22 @@ def process_user(
     balance: Decimal,
     created_at: datetime,
     is_active: bool = True
-) -> dict[str, any]:
+) -> dict[str, object]:
     """Process a user."""
     pass
 
-# Optional (nullable)
-def find_user(user_id: str) -> Optional[User]:
+# Optional (nullable) — 3.14+
+def find_user(user_id: str) -> User | None:
     """Returns User or None if not found."""
     pass
 
-# Union (multiple possible types)
-def parse_id(value: Union[str, int]) -> str:
+# Union — 3.14+
+def parse_id(value: str | int) -> str:
     """Accepts str or int, returns str."""
     return str(value)
 
-# Modern Python 3.10+ syntax
-def parse_id(value: str | int) -> str:
-    return str(value)
+# Compat note : si le projet doit supporter Python 3.9, conserver
+# from typing import Optional, Union  et utiliser Optional[X] / Union[X, Y]
 ```
 
 ### Collections
@@ -184,23 +193,33 @@ def cleanup_resource(resource: Closeable) -> None:
 
 ### Generics
 
+> **Python 3.14+ — syntaxe PEP 695 (recommandée) :** `class Foo[T]:` et `type Alias = ...`
+> sans importer `TypeVar` ni `Generic`. La syntaxe `TypeVar`/`Generic` reste valide pour
+> la compatibilité ≤ 3.11.
+
 ```python
-from typing import TypeVar, Generic
-
-T = TypeVar('T')
-
-class Repository(Generic[T]):
+# Python 3.14+ — PEP 695 (sans TypeVar / Generic)
+class Repository[T]:
     """Generic repository."""
 
-    def find_by_id(self, entity_id: str) -> Optional[T]:
+    def find_by_id(self, entity_id: str) -> T | None:
         pass
 
     def save(self, entity: T) -> T:
         pass
 
+# Alias de type PEP 695
+type UserId = str
+type EntityId = str | int
+
 # Usage
 user_repo: Repository[User] = UserRepository()
 product_repo: Repository[Product] = ProductRepository()
+
+# --- Compat Python ≤ 3.11 : conserver l'ancienne syntaxe ---
+# from typing import TypeVar, Generic
+# T = TypeVar('T')
+# class Repository(Generic[T]): ...
 ```
 
 ## Error Handling
@@ -618,9 +637,14 @@ de type hints sans recourir à `from __future__ import annotations`.
 
 ### `concurrent.interpreters` (stdlib)
 
-Interpréteurs Python multiples et isolés dans le même processus, avec canaux de communication.
+> **⚠️ API early-stage en Python 3.14 — ne pas utiliser en production.**
+> `concurrent.interpreters` est une API expérimentale en 3.14 : l'interface publique, les canaux
+> de communication et la sémantique de sérialisation sont susceptibles de changer dans 3.15/3.16.
+> **En production, préférer `threading` (I/O-bound) ou `multiprocessing` (CPU-bound).**
+> Réserver `concurrent.interpreters` aux prototypes et à l'exploration des sous-interpréteurs.
 
 ```python
+# Prototype uniquement — API instable en 3.14
 import concurrent.interpreters
 interp = concurrent.interpreters.create()
 ```

@@ -38,6 +38,8 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 }
 ```
 
+> **Default:** `EXPO_SDK_VERSION = 56` (Expo SDK 56+, New Architecture on by default).
+
 ### Supported Platforms
 ```json
 {
@@ -94,7 +96,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 - **React Native**: 0.85
 - **Expo SDK**: {{EXPO_SDK_VERSION}}
 - **TypeScript**: {{TYPESCRIPT_VERSION}}
-- **Node.js**: {{NODE_VERSION}}
+- **Node.js**: {{NODE_VERSION}} (**>= 20.19.4 LTS required** — RN 0.85 drops support for Node < 20)
 
 ### Navigation
 

@@ -415,6 +415,110 @@ describe('prune:orders command', function () {
 });
 ```
 
+## Browser Testing avec Pest 4
+
+**Source :** https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing
+
+Pest 4 intègre le **Browser Testing natif** propulsé par Playwright (Chromium, Firefox, WebKit), sans dépendance Dusk ni driver Selenium.
+
+### Installation
+
+```bash
+composer require pestphp/pest --dev --with-all-dependencies
+composer require pestphp/pest-plugin-browser --dev
+php artisan pest:install
+```
+
+Puis installer les navigateurs Playwright :
+
+```bash
+./vendor/bin/pest browser:install
+# Installe Chromium, Firefox et WebKit
+```
+
+### Configuration
+
+```php
+// tests/Pest.php
+uses(Pest\Browser\BrowserTestCase::class)->in('Browser');
+```
+
+```
+tests/
+└── Browser/
+    └── OrderFlowTest.php
+```
+
+### Exemple de test navigateur
+
+```php
+<?php
+// tests/Browser/OrderFlowTest.php
+
+use function Pest\Browser\browse;
+
+it('completes the checkout flow', function () {
+    browse(function ($browser) {
+        $browser->visit('/shop')
+            ->assertSee('Products')
+            ->click('[data-testid="add-to-cart"]')
+            ->waitFor('[data-testid="cart-count"]')
+            ->assertSeeIn('[data-testid="cart-count"]', '1')
+            ->click('[data-testid="checkout-btn"]')
+            ->assertPathIs('/checkout')
+            ->fill('[name="email"]', 'user@example.com')
+            ->press('Place Order')
+            ->waitForText('Order confirmed')
+            ->assertSee('Order confirmed');
+    });
+});
+
+it('shows validation errors on empty checkout', function () {
+    browse(function ($browser) {
+        $browser->visit('/checkout')
+            ->press('Place Order')
+            ->waitFor('.error-message')
+            ->assertSee('The email field is required.');
+    });
+});
+```
+
+### Navigateurs disponibles
+
+```php
+// Chromium (défaut)
+browse(function ($browser) { ... });
+
+// Firefox
+browse(function ($browser) { ... }, browser: 'firefox');
+
+// WebKit (Safari engine)
+browse(function ($browser) { ... }, browser: 'webkit');
+```
+
+### Lancer les tests navigateur
+
+```bash
+# Headless (défaut, pour CI)
+./vendor/bin/pest tests/Browser
+
+# Avec interface visible
+./vendor/bin/pest tests/Browser --headed
+
+# Navigateur spécifique
+./vendor/bin/pest tests/Browser --browser=firefox
+```
+
+### Checklist Browser Testing
+
+- [ ] `pestphp/pest-plugin-browser` installé
+- [ ] Navigateurs Playwright installés via `pest browser:install`
+- [ ] Tests dans `tests/Browser/`
+- [ ] CI configurée pour le mode headless
+- [ ] Pas de `sleep()` — utiliser `waitFor()` / `waitForText()`
+
+---
+
 ## Architecture Tests avec Pest Arch Presets
 
 **Laravel 13** introduit des **Arch Presets** préconfigurés pour Laravel (https://laravel.com/docs/13.x/testing#architecture-presets).

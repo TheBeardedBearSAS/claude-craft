@@ -22,7 +22,7 @@ La New Architecture remplace trois couches historiques :
 
 | Project type | Activation |
 |--------------|-----------|
-| **New project (Expo SDK 51+)** | New Architecture **on** by default. |
+| **New project (Expo SDK 56+)** | New Architecture **on** by default. |
 | **Existing project (bare RN 0.85)** | Set `newArchEnabled=true` in `android/gradle.properties` AND `RCT_NEW_ARCH_ENABLED=1` env on iOS pod install. |
 | **Disable temporarily** | `newArchEnabled=false` + `RCT_NEW_ARCH_ENABLED=0`. Deprecated path — sunset in 0.86. |
 
@@ -89,7 +89,7 @@ export default codegenNativeComponent<NativeProps>('NativeMap') as HostComponent
 | React Navigation 7 | ✅ |
 | Reanimated 4 (`^4.0.0`, Worklets 2) | ✅ |
 | Gesture Handler 2.20+ | ✅ |
-| Expo SDK 51+ | ✅ (default) |
+| Expo SDK 56+ | ✅ (default) |
 | react-native-mmkv 4 | ✅ |
 | react-native-vision-camera 4 | ✅ |
 | react-native-screens 4 | ✅ |

@@ -427,7 +427,8 @@ final class UserService
 
 ```neon
 parameters:
-    level: 9
+    level: 10
+    phpVersion: 80500
     checkMissingIterableValueType: true
     checkGenericClassInNonGenericObjectType: true
 ```
@@ -461,7 +462,7 @@ return (new PhpCsFixer\Config())
 - [ ] Test coverage > 80%
 - [ ] Commits follow Conventional Commits
 - [ ] PHPDoc on public APIs
-- [ ] PHPStan level 8+ passes
+- [ ] PHPStan level 10 (PHPStan 2.x) passes
 - [ ] PHP-CS-Fixer passes
 
 ## Tools

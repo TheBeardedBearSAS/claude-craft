@@ -404,10 +404,9 @@ Body: { "password": "..." }
 ### Headers recommandés
 
 ```http
-# Protection XSS
-Content-Security-Policy: default-src 'self'; script-src 'self'
+# Protection XSS — s'appuyer sur CSP Level 3 (X-XSS-Protection est déprécié et peut introduire des vulnérabilités)
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests
 X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
 
 # Protection clickjacking
 X-Frame-Options: DENY

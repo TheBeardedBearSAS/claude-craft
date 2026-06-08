@@ -524,6 +524,161 @@ builder.AddProject<Projects.MigrationService>("migrations")
 builder.Build().Run();
 ```
 
+## EF Core 10 (2025)
+
+EF Core 10 est sorti en novembre 2025 avec .NET 10 LTS. Principales nouveautés :
+
+### `LeftJoin` et `RightJoin` LINQ Natifs
+
+Avant EF Core 10, les left joins nécessitaient un pattern `GroupJoin` + `SelectMany` + `DefaultIfEmpty` verbeux. EF 10 introduit des opérateurs LINQ de première classe.
+
+```csharp
+// LeftJoin natif EF Core 10 — remplace GroupJoin/SelectMany/DefaultIfEmpty
+var query = context.Students
+    .LeftJoin(
+        context.Departments,
+        student => student.DepartmentID,
+        department => department.ID,
+        (student, department) => new
+        {
+            student.FirstName,
+            student.LastName,
+            Department = department != null ? department.Name : "[NONE]"
+        });
+
+// RightJoin natif EF Core 10
+var query2 = context.Departments
+    .RightJoin(
+        context.Students,
+        department => department.ID,
+        student => student.DepartmentID,
+        (department, student) => new
+        {
+            student.FirstName,
+            DepartmentName = department != null ? department.Name : "[NONE]"
+        });
+```
+
+### JSON Natif Amélioré
+
+EF Core 10 améliore le support des colonnes JSON avec le filtrage et la mise à jour via LINQ, traduits en `JSON_VALUE()` / `JSON_MODIFY()` côté SQL.
+
+```csharp
+// Filtrage sur propriété JSON — traduit en JSON_VALUE() SQL
+var highlyViewed = await context.Blogs
+    .Where(b => b.Details.Viewers > 3)
+    .ToListAsync();
+
+// ExecuteUpdate sur propriétés JSON — mise à jour bulk sans charger en mémoire
+await context.Blogs.ExecuteUpdateAsync(s =>
+    s.SetProperty(b => b.Details.Views, b => b.Details.Views + 1));
+```
+
+### Bulk `ExecuteUpdate` / `ExecuteDelete` Améliorés
+
+EF 10 étend les opérations bulk introduites en EF 7 avec support des setters delegate et des colonnes JSON dans `ExecuteUpdate`.
+
+```csharp
+// ExecuteDelete bulk — une seule requête SQL DELETE
+await context.Orders
+    .Where(o => o.Status == OrderStatus.Cancelled && o.CreatedAt < cutoff)
+    .ExecuteDeleteAsync(cancellationToken);
+
+// ExecuteUpdate bulk avec setters
+await context.Orders
+    .Where(o => o.Status == OrderStatus.Submitted)
+    .ExecuteUpdateAsync(s => s
+        .SetProperty(o => o.Status, OrderStatus.Confirmed)
+        .SetProperty(o => o.UpdatedAt, DateTime.UtcNow),
+        cancellationToken);
+```
+
+### Vector Search (SQL Server 2025 / Azure SQL)
+
+EF Core 10 intègre la recherche vectorielle pour SQL Server 2025 et Azure SQL via `EF.Functions.VectorDistance()`. Support pgvector via `Npgsql.EntityFrameworkCore.PostgreSQL`.
+
+```csharp
+// Similarity search — SQL Server 2025 / Azure SQL
+float[] queryVector = /* générer depuis text/image via embedding model */;
+
+var results = await context.Documents
+    .OrderBy(d => EF.Functions.VectorDistance("cosine", d.Embedding, queryVector))
+    .Take(10)
+    .ToListAsync();
+
+// Hybrid search avec Reciprocal Rank Fusion (RRF)
+var hybrid = await context.Blogs
+    .OrderBy(x => EF.Functions.Rrf(
+        EF.Functions.FullTextScore(x.Contents, "architecture"),
+        EF.Functions.VectorDistance(x.Vector, queryVector)))
+    .Take(10)
+    .ToListAsync();
+```
+
+> **Note :** La recherche vectorielle EF Core 10 cible SQL Server 2025 et Azure SQL. Pour PostgreSQL + pgvector, utiliser `Npgsql.EntityFrameworkCore.PostgreSQL` avec `HasPostgresExtension("vector")`.
+
+## Native AOT
+
+### Quand l'Utiliser
+
+Native AOT compile l'application en code natif à la publication (pas de JIT à l'exécution). Avantages : démarrage ultra-rapide, empreinte mémoire réduite, pas de runtime .NET requis sur la cible.
+
+| Cas d'usage | Pertinence AOT |
+|-------------|---------------|
+| **Fonctions serverless** (Azure Functions, AWS Lambda) | ✅ Idéal (cold start < 100ms) |
+| **Containers haute densité** (K8s, microservices) | ✅ Image plus petite, démarrage rapide |
+| **Outils CLI / scripts** | ✅ Binaire autonome, pas de runtime |
+| **APIs à fort taux de déploiement** | ✅ Faible empreinte mémoire |
+| **Applications CRUD / backoffice** | ⚠️ Bénéfice limité, complexité accrue |
+| **Applications MVC complexes** | ❌ MVC non compatible AOT |
+
+### Activation
+
+```xml
+<!-- WebAPI.csproj -->
+<PropertyGroup>
+  <PublishAot>true</PublishAot>
+  <!-- CreateSlimBuilder() requis pour AOT — évite les composants non compatibles -->
+</PropertyGroup>
+```
+
+```csharp
+// Program.cs — utiliser CreateSlimBuilder, pas CreateBuilder
+var builder = WebApplication.CreateSlimBuilder(args);
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+});
+
+var app = builder.Build();
+app.MapGet("/orders/{id}", (Guid id) => new OrderDto(id, "Draft"));
+app.Run();
+
+// Source generator pour la sérialisation JSON (requis avec AOT)
+[JsonSerializable(typeof(OrderDto))]
+internal partial class AppJsonSerializerContext : JsonSerializerContext { }
+```
+
+### Contraintes et Incompatibilités
+
+| Fonctionnalité | Statut AOT | Alternative |
+|----------------|-----------|-------------|
+| **Réflexion dynamique** (`Type.GetType`, `Emit`) | ❌ Non supporté | Source generators |
+| **EF Core** | ⚠️ Expérimental (requêtes pré-compilées) | EF precompiled queries |
+| **AutoMapper (réflexion)** | ❌ Non compatible | **Riok.Mapperly** (source generator) |
+| **MVC Controllers** | ❌ Non compatible | Minimal APIs |
+| **`System.Text.Json`** | ✅ Supporté avec source generators | — |
+| **Dapper** | ✅ Compatible (pas de réflexion dynamique) | — |
+
+```bash
+# Publication AOT
+dotnet publish -c Release -r linux-x64 --self-contained
+# Produit un binaire natif autonome (~20-40 MB pour une Minimal API)
+```
+
+> **Référence :** [ASP.NET Core Native AOT](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/native-aot) | [EF Core Native AOT (expérimental)](https://learn.microsoft.com/en-us/ef/core/performance/nativeaot-and-precompiled-queries)
+
 ## Architecture Checklist
 
 - [ ] Domain layer has NO external dependencies

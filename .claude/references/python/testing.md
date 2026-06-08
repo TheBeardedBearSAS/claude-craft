@@ -362,13 +362,30 @@ def test_email_validation(email: str, expected_valid: bool):
 
 ## Async Tests
 
+### pytest-asyncio — choisir le mode adapté
+
+| Mode | Config | Comportement |
+|------|--------|-------------|
+| **`auto`** | `asyncio_mode = "auto"` dans `pyproject.toml` | Projets **full-async** (FastAPI, SQLAlchemy async) : toutes les coroutines détectées automatiquement — pas de `@pytest.mark.asyncio` requis. |
+| **`strict`** | `asyncio_mode = "strict"` (défaut depuis 0.21) | Projets **mixtes sync/async** : seuls les tests marqués `@pytest.mark.asyncio` sont traités comme async. |
+
+> **Recommandation :** `auto` pour projets FastAPI/full-async, `strict` (défaut) pour le reste.
+
 ```python
+# Mode "strict" (défaut) — marquer explicitement chaque test async
 import pytest
 
 
 @pytest.mark.asyncio
 async def test_async_function():
-    """Test async function."""
+    """Test async function — mode strict."""
+    result = await some_async_function()
+    assert result == expected
+
+
+# Mode "auto" (projets full-async) — aucun marqueur requis
+async def test_async_function_auto_mode():
+    """Test async function — mode auto (asyncio_mode = 'auto' dans pyproject.toml)."""
     result = await some_async_function()
     assert result == expected
 ```

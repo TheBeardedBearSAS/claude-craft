@@ -17,15 +17,20 @@ Les tests garantissent la qualité et la stabilité de l'application React Nativ
 
 ## Jest Configuration
 
-### jest.config.js
+### Preset par défaut : `@react-native/jest-preset`
+
+Depuis React Native 0.73, le preset Jest officiel est livré dans le package dédié `@react-native/jest-preset` (extrait de `react-native`). Il devient **obligatoire** en 0.85. Il prend en charge la New Architecture et Hermes nativement.
+
+```bash
+# Installation (React Native 0.85+)
+npm install --save-dev @react-native/jest-preset
+```
 
 ```javascript
+// jest.config.js — React Native 0.85+ (bare ou Expo bare workflow)
 module.exports = {
-  preset: 'jest-expo',
+  preset: '@react-native/jest-preset',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)',
-  ],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
@@ -43,6 +48,19 @@ module.exports = {
 };
 ```
 
+> **Projets Expo (managed workflow) :** utiliser `jest-expo` à la place de `@react-native/jest-preset`. `jest-expo` gère les transforms Expo et reste le preset recommandé pour Expo SDK 56+.
+>
+> ```javascript
+> // jest.config.js — Expo managed workflow
+> module.exports = {
+>   preset: 'jest-expo',
+>   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+>   transformIgnorePatterns: [
+>     'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)',
+>   ],
+> };
+> ```
+
 ### jest.setup.js
 
 ```javascript
@@ -54,25 +72,6 @@ jest.mock('expo-asset');
 
 // Mock react-native modules
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
-```
-
-### Setup React Native 0.85+ — @react-native/jest-preset
-
-Depuis React Native 0.73, le preset Jest est livré dans le package dédié `@react-native/jest-preset` (extrait de `react-native`). Il prend en charge la New Architecture et Hermes nativement.
-
-```bash
-# Installation (React Native 0.85+)
-npm install --save-dev @react-native/jest-preset
-```
-
-Configuration minimale recommandée :
-
-```javascript
-// jest.config.js
-module.exports = {
-  preset: '@react-native/jest-preset',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-};
 ```
 
 **Mocks réseau — MSW (Mock Service Worker) :**

@@ -133,14 +133,17 @@ const apiKey = import.meta.env.VITE_API_KEY // DON'T DO THIS
 #### Security Headers (Vite Dev Server)
 
 ```typescript
-// vite.config.ts
+// vite.config.ts — X-XSS-Protection est déprécié ; s'appuyer sur CSP Level 3
 export default defineConfig({
   server: {
     headers: {
+      'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'DENY',
-      'X-XSS-Protection': '1; mode=block',
       'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Resource-Policy': 'same-origin',
     },
   },
 })

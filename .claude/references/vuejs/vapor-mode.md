@@ -1,6 +1,6 @@
 # Vue.js 3.6 — Vapor Mode (beta)
 
-> **Status :** documentation bootstrapped 2026-05-18 (audit P0 #9). Vapor Mode is **beta** in Vue 3.6 — not yet recommended for new greenfield apps unless you understand the trade-offs. Production-grade Vue 3 stays on 3.5+ Virtual DOM rendering.
+> **Status :** **Vue 3.6.0-beta.14** (juin 2026) — Vapor Mode est **feature-complete** mais toujours marqué **unstable**. Stable 3.6.0 attendue courant 2026. Production-grade Vue 3 reste sur 3.5+ Virtual DOM. Suivre la progression : [github.com/vuejs/core/releases](https://github.com/vuejs/core/releases).
 
 ## Pourquoi Vapor Mode ?
 
@@ -63,7 +63,7 @@ const items = ref<Item[]>([]);
 const total = computed(() => items.value.reduce((n, i) => n + i.qty, 0));
 ```
 
-## Limitations beta (mai 2026)
+## Limitations beta (3.6.0-beta.14, juin 2026)
 
 - **Pas de transitions** Vue (`<Transition>`, `<TransitionGroup>`) dans un composant Vapor → utiliser CSS pur ou GSAP.
 - **Pas de `<KeepAlive>`** : le runtime Vapor ne sait pas mettre en cache un sous-tree (suivi WG-1432).
