@@ -171,6 +171,7 @@ jobs:
         uses: github/codeql-action/init@411bbbe57033eedfc1a82d68c01345aa96c737d7 # pinned: v4
         with:
           languages: javascript
+          config-file: ./.github/codeql/codeql-config.yml
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@411bbbe57033eedfc1a82d68c01345aa96c737d7 # pinned: v4

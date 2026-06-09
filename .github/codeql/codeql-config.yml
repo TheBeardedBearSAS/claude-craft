@@ -1,0 +1,16 @@
+name: "Claude Craft CodeQL config"
+
+# Scaffolding templates contain Handlebars-style placeholders (e.g. `{{ComponentName}}`)
+# and are NOT valid standalone TypeScript/JavaScript. They are consumed by the CLI
+# generator, never executed. Excluding them removes ~180 spurious parse-error warnings
+# while keeping all real first-party code (cli/, scripts/, website/, tests/) under analysis.
+paths-ignore:
+  - '**/templates/**'
+  - '**/*.template.ts'
+  - '**/*.template.tsx'
+  - '**/*.template.js'
+  - '**/*.template.jsx'
+  - '**/*.template.mjs'
+  - '**/*.template.cjs'
+  - '**/*.template.vue'
+  - '**/*.template.svelte'
