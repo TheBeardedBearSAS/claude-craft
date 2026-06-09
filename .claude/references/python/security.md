@@ -1,5 +1,9 @@
 # Python Security
 
+> **Version de référence :** Python **3.14 (stable, 3.14.5+)** — Python 3.15 en beta (release oct. 2026).
+> FastAPI **~0.136.x** — Python **3.10+ minimum**, Pydantic v2 obligatoire.
+> Pydantic **>=2.9, 2.13.x recommandé** — Pydantic v1 incompatible avec Python 3.14.
+
 ## Fundamental Security Principles
 
 ### Defense in Depth
@@ -407,19 +411,23 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
 
         # Security headers
+        # X-XSS-Protection est déprécié — s'appuyer sur CSP Level 3
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
-        response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Strict-Transport-Security"] = (
-            "max-age=31536000; includeSubDomains"
+            "max-age=31536000; includeSubDomains; preload"
         )
         response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; script-src 'self'"
+            "default-src 'self'; script-src 'self'; style-src 'self';"
+            " frame-ancestors 'none'; upgrade-insecure-requests"
         )
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Permissions-Policy"] = (
             "geolocation=(), microphone=(), camera=()"
         )
+        response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+        response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
+        response.headers["Cross-Origin-Resource-Policy"] = "same-origin"
 
         return response
 
@@ -552,8 +560,8 @@ pip-audit --fix
 # pyproject.toml - Pin versions for security
 [project]
 dependencies = [
-    "fastapi>=0.115.0,<0.116.0",
-    "pydantic>=2.10.0,<3.0.0",
+    "fastapi>=0.136.0,<0.137.0",   # ~0.136.x stable (2026-05) — Python 3.10+ min
+    "pydantic>=2.9.0,<3.0.0",      # v2.13.x recommandé ; v1 incompatible Python 3.14
     "sqlalchemy>=2.0.0,<3.0.0",
 ]
 ```

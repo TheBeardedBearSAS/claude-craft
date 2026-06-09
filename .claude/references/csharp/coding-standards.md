@@ -253,6 +253,106 @@ public class Product
 }
 ```
 
+### C# 14 — Autres Features
+
+#### File-Based Apps (`dotnet run app.cs`)
+
+C# 14 + .NET 10 permet d'exécuter un fichier `.cs` directement sans projet `.csproj`. Idéal pour scripts, outils internes et prototypes rapides.
+
+```bash
+# Exécuter un script sans projet
+dotnet run app.cs
+
+# Shebang Unix (exécutable cross-platform)
+#!/usr/bin/dotnet-script
+```
+
+```csharp
+// app.cs — programme complet sans .csproj
+#:package Humanizer@2.*
+
+using Humanizer;
+
+var name = args.FirstOrDefault() ?? "world";
+Console.WriteLine($"Hello, {name.Humanize()}!");
+```
+
+Directives disponibles dans les file-based apps :
+
+| Directive | Usage |
+|-----------|-------|
+| `#:package <pkg>@<ver>` | Ajouter une dépendance NuGet |
+| `#:sdk <Sdk>` | Changer le SDK (ex : `Microsoft.NET.Sdk.Web`) |
+| `#!` (shebang) | Script exécutable Unix |
+
+#### Partial Constructors & Partial Events
+
+C# 14 étend les membres partiels (`partial`) aux constructeurs d'instance et aux événements.
+
+```csharp
+partial class OrderProcessor
+{
+    // Déclarations définissantes (souvent dans un fichier généré)
+    partial OrderProcessor();
+    partial OrderProcessor(Guid customerId);
+    partial event Action<Order> OrderCreated, OrderSubmitted;
+
+    // Déclarations implémentantes (dans le fichier de logique métier)
+    partial OrderProcessor() { /* init par défaut */ }
+    partial OrderProcessor(Guid customerId) : this() { CustomerId = customerId; }
+
+    partial event Action<Order> OrderCreated
+    {
+        add => _orderCreated += value;
+        remove => _orderCreated -= value;
+    }
+    partial event Action<Order> OrderSubmitted
+    {
+        add => _orderSubmitted += value;
+        remove => _orderSubmitted -= value;
+    }
+}
+```
+
+Cas d'usage typique : génération de code (source generators) où la déclaration définissante est générée et l'implémentation est fournie manuellement.
+
+#### `nameof` sur Generics Non-Liés (Unbound Generics)
+
+```csharp
+// C# 14 : nameof sur un type générique sans argument de type
+var name = nameof(List<>);            // "List"
+var name2 = nameof(Dictionary<,>);   // "Dictionary"
+
+// Accès aux membres d'un type générique non-lié
+var propName = nameof(Repository<>.Entity);    // "Entity"
+var countName = nameof(IReadOnlyList<>.Count); // "Count"
+
+// Utile dans les messages d'erreur, logs, attributs
+[Display(Name = nameof(IRepository<>))]
+public class GenericRepositoryBase { }
+```
+
+#### Modificateurs `ref`/`in`/`out` sur Paramètres Lambda
+
+C# 14 autorise les modificateurs `ref`, `in`, `out`, `ref readonly` et `scoped ref` sur les paramètres simples de lambda (sans type explicite obligatoire).
+
+```csharp
+// ref — modification par référence
+var increment = (ref int x) => x++;
+
+// in — passage en lecture seule par référence (évite la copie)
+var display = (in decimal amount) => Console.WriteLine(amount);
+
+// out — paramètre de sortie
+var tryParse = (string s, out int result) => int.TryParse(s, out result);
+
+// ref readonly — lecture seule sans copie (C# 14)
+var readSpan = (ref readonly ReadOnlySpan<char> span) => span.Length;
+
+// scoped ref — durée de vie limitée au scope
+ProcessBuffer((scoped ref Span<byte> buffer) => buffer.Fill(0));
+```
+
 ## Async/Await Best Practices
 
 ### Proper Async Implementation

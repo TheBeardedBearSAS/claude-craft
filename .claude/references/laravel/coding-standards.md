@@ -57,7 +57,7 @@ resources/views/
         └── shipped.blade.php
 ```
 
-## Modern PHP Features (PHP 8.3+)
+## Modern PHP Features (PHP 8.3+ requis, 8.5 recommandé)
 
 ### Constructor Property Promotion
 
@@ -204,6 +204,77 @@ $orders->map($this->formatOrder(...));
 // Alternative: Traditional closure
 $orders->map(fn ($order) => $this->formatOrder($order));
 ```
+
+### PHP 8.5 Enhancements
+
+Ces fonctionnalités nécessitent PHP 8.5 et sont optionnelles (PHP 8.3+ suffit pour Laravel 13) :
+
+```php
+// Property hooks (PHP 8.4+) — getters/setters sans boilerplate
+class Order extends Model
+{
+    public string $formattedTotal {
+        get => number_format($this->total_amount, 2) . ' €';
+    }
+}
+
+// Asymmetric visibility (PHP 8.4+)
+class User extends Model
+{
+    public private(set) int $loginCount = 0;
+}
+```
+
+## Native PHP Attributes Eloquent (Laravel 13)
+
+Laravel 13 introduit les **PHP native attributes** pour configurer les modèles Eloquent de façon déclarative, en alternative non-breaking aux propriétés de classe.
+
+**Source :** https://laravel.com/docs/13.x/eloquent
+
+### Attributs disponibles
+
+| Attribut | Équivalent propriété | Description |
+|----------|---------------------|-------------|
+| `#[Table('orders')]` | `$table = 'orders'` | Nom de table personnalisé |
+| `#[Fillable(['name', 'email'])]` | `$fillable = [...]` | Champs mass-assignable |
+| `#[Guarded(['id'])]` | `$guarded = [...]` | Champs protégés du mass-assignment |
+| `#[Hidden(['password'])]` | `$hidden = [...]` | Champs cachés à la sérialisation |
+| `#[Visible(['name'])]` | `$visible = [...]` | Champs visibles à la sérialisation |
+| `#[Appends(['full_name'])]` | `$appends = [...]` | Accesseurs ajoutés à la sérialisation |
+| `#[ObservedBy(UserObserver::class)]` | `observe()` dans boot | Attacher un observer |
+| `#[ScopedBy(ActiveScope::class)]` | `booted()` + addGlobalScope | Appliquer un global scope |
+| `#[UseFactory(UserFactory::class)]` | Résolution automatique | Lier une factory explicite |
+
+### Exemple avant / après
+
+```php
+// AVANT : propriétés de classe (toujours valide)
+class User extends Authenticatable
+{
+    protected $table = 'users';
+
+    protected $fillable = ['name', 'email', 'password'];
+
+    protected $hidden = ['password', 'remember_token'];
+}
+
+// APRÈS : PHP native attributes (Laravel 13, alternative non-breaking)
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Table;
+
+#[Table('users')]
+#[Fillable(['name', 'email', 'password'])]
+#[Hidden(['password', 'remember_token'])]
+#[ObservedBy(UserObserver::class)]
+class User extends Authenticatable
+{
+    // Plus de propriétés $fillable / $hidden nécessaires
+}
+```
+
+> **Note :** Les deux styles sont compatibles et peuvent coexister. Préférer la cohérence au sein d'un projet. Les propriétés de classe ont priorité si les deux sont définis.
 
 ## Laravel Conventions
 
@@ -564,7 +635,7 @@ use App\Services\OrderService;
 ## Coding Standards Checklist
 
 - [ ] Naming follows Laravel conventions
-- [ ] Modern PHP features used (8.3+)
+- [ ] Modern PHP features used (8.3+ requis, 8.5 recommandé)
 - [ ] Enums for status/type fields
 - [ ] Type declarations on all methods
 - [ ] Return types specified

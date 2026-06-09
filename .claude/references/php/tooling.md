@@ -1,6 +1,6 @@
 # PHP Development Tools - PHP 8.5
 
-> **Version 2026**: PHP 8.5.x avec pipe operator, lazy objects natifs, et améliorations de performance.
+> **Version 2026**: PHP 8.5.x avec pipe operator `|>`, extension URI native, `clone with` (property overrides), `array_first()`/`array_last()`, et attribut `#[\NoDiscard]`.
 
 ## Composer - Dependency Management
 

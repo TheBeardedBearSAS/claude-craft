@@ -1,29 +1,54 @@
 # Rule 06: Tooling
 
+> **Version de référence :** Python **3.14 (stable, 3.14.5+)** — Python 3.15 en beta (release oct. 2026).
+
 Python tooling for code quality, testing, and development workflow.
 
 ## Package Management
 
-### UV (Recommended)
+### UV (Recommended) — Gestionnaire de projet complet
 
-Fast Python package installer and resolver.
+uv est le gestionnaire de projet Python recommandé : gestion des dépendances, environnement virtuel,
+lockfile, et exécution des commandes — tout en un.
 
 ```bash
 # Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Create virtual environment
-uv venv
+# --- Workflow projet complet ---
 
-# Install dependencies
-uv pip install -r requirements.txt
+# Initialiser un nouveau projet (crée pyproject.toml, .python-version, .venv, uv.lock)
+uv init my-project
+cd my-project
 
-# Add dependency
-uv pip install fastapi
+# Ajouter une dépendance (met à jour pyproject.toml + uv.lock + .venv)
+uv add fastapi
 
-# Update dependencies
-uv pip install --upgrade package-name
+# Ajouter une dépendance de développement
+uv add --dev pytest ruff mypy
+
+# Synchroniser l'environnement depuis uv.lock (après un clone ou un pull)
+uv sync
+
+# Exécuter une commande dans l'environnement du projet (vérifie uv.lock avant)
+uv run python src/main.py
+uv run pytest
+uv run mypy src/
+
+# Installer une version Python spécifique
+uv python install 3.14
+uv python install 3.14t   # version free-threaded (sans GIL)
+
+# Mettre à jour une dépendance
+uv add fastapi@latest
+
+# Voir les dépendances
+uv tree
 ```
+
+> **Note :** `uv pip install` reste disponible pour une interface compatible pip, mais `uv add` est
+> l'approche recommandée pour la gestion de projet car elle maintient `pyproject.toml` et `uv.lock`
+> en synchronisation automatique.
 
 ### Poetry (Alternative)
 
@@ -90,37 +115,30 @@ ignore = ["E501"]  # line too long
 "tests/*" = ["S101"]  # assert allowed in tests
 ```
 
-### Black (Code Formatter)
+### Formatage avec ruff format
+
+`ruff format` remplace Black. La configuration se fait dans `[tool.ruff.format]` dans `pyproject.toml`.
 
 ```bash
-# Install
-pip install black
+# Format code (remplace: black src/ tests/)
+ruff format src/ tests/
 
-# Format code
-black src/ tests/
-
-# Check without modifying
-black --check src/
-
-# Configuration
-black --line-length 88 src/
+# Check without modifying (remplace: black --check src/)
+ruff format --check src/ tests/
 ```
 
-### isort (Import Sorter)
+> **Migration depuis Black/isort :** Black et isort sont désormais **legacy** — remplacés par
+> `ruff format` (formatage) et `ruff check --select I` (tri des imports via `[tool.ruff.lint.isort]`).
+> Supprimer `black` et `isort` des dépendances et du pre-commit lors de la migration.
 
-```bash
-# Install
-pip install isort
+### Black (legacy — remplacé par ruff format)
 
-# Sort imports
-isort src/ tests/
+Black reste fonctionnel mais n'est plus recommandé pour les nouveaux projets. La configuration
+`[tool.black]` dans `pyproject.toml` peut être migrée vers `[tool.ruff.format]`.
 
-# Check only
-isort --check src/
+### isort (legacy — remplacé par ruff lint isort)
 
-# Configuration with Black
-isort --profile black src/
-```
+isort est remplacé par la règle `I` de ruff avec la section `[tool.ruff.lint.isort]`.
 
 ## Type Checking
 
@@ -150,11 +168,29 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
+# mypy 2.0+ : ces options sont désormais activées par défaut
+# local_partial_types = true   # default depuis 2.0
+# strict_bytes = true          # default depuis 2.0
 
 [[tool.mypy.overrides]]
 module = "tests.*"
 disallow_untyped_defs = false
 ```
+
+### mypy 2.0 — Breaking Changes
+
+mypy 2.0 (mai 2026) introduit des changements de défauts importants et le parallélisme :
+
+| Changement | Avant 2.0 | Depuis 2.0 |
+|------------|-----------|------------|
+| `--local-partial-types` | opt-in | **activé par défaut** |
+| `--strict-bytes` | opt-in | **activé par défaut** |
+| `--allow-redefinition-new` | nom temporaire | renommé `--allow-redefinition` |
+| Support Python 3.9 | supporté | **supprimé** — minimum 3.10 |
+| Parallélisme | non disponible | `--num-workers N` (jusqu'à 5x plus rapide) |
+
+**Migration :** lancer `uv run mypy --num-workers 4 src/` sur un checkout propre et corriger les
+erreurs dues aux nouveaux défauts. Utiliser `--allow-redefinition-old` si besoin de l'ancien comportement.
 
 ## Testing
 
@@ -189,6 +225,9 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-ra -q --strict-markers"
+# asyncio_mode : "auto" pour projets full-async/FastAPI (pas de @pytest.mark.asyncio requis)
+#                "strict" (défaut depuis pytest-asyncio 0.21) pour projets mixtes sync/async
+asyncio_mode = "strict"  # changer en "auto" pour projets FastAPI full-async
 markers = [
     "unit: Unit tests",
     "integration: Integration tests",
@@ -232,9 +271,10 @@ safety check -r requirements.txt
 
 ```yaml
 # .pre-commit-config.yaml
+# Lancer: pre-commit autoupdate pour rafraîchir les versions
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -242,21 +282,18 @@ repos:
       - id: check-added-large-files
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.9
+    # ruff lint (remplace flake8 + isort) + ruff format (remplace black)
+    rev: v0.15.16
     hooks:
       - id: ruff
         args: [--fix]
-
-  - repo: https://github.com/psf/black
-    rev: 23.12.1
-    hooks:
-      - id: black
+      - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
+    rev: v2.1.0
     hooks:
       - id: mypy
-        additional_dependencies: [types-all]
+        additional_dependencies: [types-requests, pydantic]
 ```
 
 Install:
@@ -286,8 +323,7 @@ help:
 	@echo "  clean         Clean generated files"
 
 install:
-	uv pip install -r requirements.txt
-	uv pip install -r requirements-dev.txt
+	uv sync
 
 lint:
 	ruff check src/ tests/
@@ -296,12 +332,12 @@ lint-fix:
 	ruff check --fix src/ tests/
 
 format:
-	black src/ tests/
-	isort src/ tests/
+	ruff format src/ tests/
+	ruff check --fix --select I src/ tests/
 
 format-check:
-	black --check src/ tests/
-	isort --check src/ tests/
+	ruff format --check src/ tests/
+	ruff check --select I src/ tests/
 
 type-check:
 	mypy src/
@@ -375,9 +411,9 @@ pip install pyright
 ## Checklist
 
 - [ ] Package manager configured (uv or poetry)
-- [ ] Ruff configured and integrated
-- [ ] Black configured
-- [ ] MyPy in strict mode
+- [ ] Ruff configured and integrated (lint + format)
+- [ ] ruff format configured (remplace Black)
+- [ ] MyPy in strict mode (v2.0+)
 - [ ] Pytest with coverage
 - [ ] Pre-commit hooks installed
 - [ ] Makefile created

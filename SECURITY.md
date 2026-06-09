@@ -4,6 +4,7 @@
 
 | Version | Supported          |
 |---------|--------------------|
+| 8.9.x   | :white_check_mark: |
 | 8.8.x   | :white_check_mark: |
 | 8.7.x   | :white_check_mark: |
 | < 8.7   | :x:                |

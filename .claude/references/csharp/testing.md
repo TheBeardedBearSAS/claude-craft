@@ -128,6 +128,13 @@ Feature: Shopping Cart
 
 ### xUnit (Recommended for .NET)
 
+> **xUnit v3 (3.2.2+) :** Les classes de test peuvent désormais déclarer un constructeur avec
+> injection de dépendances native (`ITestOutputHelper`, `ITestContextAccessor`, services
+> enregistrés via `[Collection]`). Différences vs v2 : pas de `IClassFixture<T>` sur chaque
+> test — utiliser `ITestContext` ; `[Fact(Skip)]` accepte les expressions constantes ; meilleur
+> support des tests async avec `ConfigureAwait`. La v2 reste supportée, mais les nouveaux
+> projets .NET 10 devraient cibler **xUnit 3**.
+
 ```csharp
 public class OrderServiceTests
 {
@@ -487,6 +494,9 @@ public class OrdersApiTests : IClassFixture<CustomWebApplicationFactory>
 
 ### Testcontainers for Real Database Testing
 
+> **Version note:** Use Testcontainers **4.x** (4.12.0 latest stable). Starting with 4.0, default image versions
+> are no longer provided — always call `.WithImage(...)` explicitly to avoid a runtime exception.
+
 ```csharp
 public class DatabaseIntegrationTests : IAsyncLifetime
 {
@@ -496,7 +506,7 @@ public class DatabaseIntegrationTests : IAsyncLifetime
     public async Task InitializeAsync()
     {
         _postgres = new PostgreSqlBuilder()
-            .WithImage("postgres:16-alpine")
+            .WithImage("postgres:16-alpine")  // Required in 4.x — no default image
             .WithDatabase("testdb")
             .WithUsername("test")
             .WithPassword("test")
@@ -722,6 +732,6 @@ user.Id.Should().NotBeEmpty();
 
 ---
 
-**Last updated:** 2025-01
-**Version:** 2.0.0 (merged base + C#)
+**Last updated:** 2026-06
+**Version:** 2.1.0 (xUnit v3 note)
 **Author:** The Bearded CTO

@@ -654,7 +654,7 @@ FrankenPHP PHP application server management.
 
 ## Paperclip Commands (`/paperclip:`)
 
-Paperclip is an open-source AI-workforce orchestration platform (Node.js + TypeScript + React UI, MIT, v2026.403.0+). It exposes a control plane that governs AI agents (budgets, approvals, audit trails) and adapters (Claude Code, Codex, Gemini, HTTP, process) that execute work.
+Paperclip is an open-source AI-workforce orchestration platform (Node.js + TypeScript + React UI, MIT, v2026.529.0+). It exposes a control plane that governs AI agents (budgets, approvals, audit trails) and adapters (Claude Code, Codex, Gemini, HTTP, process) that execute work.
 
 ### Generation Commands
 

@@ -237,8 +237,8 @@ return RectorConfig::configure()
         __DIR__ . '/app/Http/Kernel.php',
     ])
     ->withSets([
-        LevelSetList::UP_TO_PHP_83,
-        LaravelSetList::LARAVEL_110,
+        LevelSetList::UP_TO_PHP_85,  // PHP 8.3 minimum requis, 8.5 recommandé
+        LaravelSetList::LARAVEL_130,
         LaravelSetList::LARAVEL_CODE_QUALITY,
         LaravelSetList::LARAVEL_FACADE_ALIASES_TO_FULL_NAMES,
     ])

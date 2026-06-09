@@ -584,17 +584,256 @@ const { id } = useLocalSearchParams<{ id: string }>();
 
 ---
 
+## React Navigation 7 (bare RN)
+
+> Cette section couvre les projets **sans Expo Router** : bare React Native (RN CLI), ou projets Expo qui ont opté pour une navigation manuelle. Expo Router reste recommandé pour les nouveaux projets Expo. React Navigation 7 est la bibliothèque standard pour la navigation bare RN.
+
+### Installation (bare RN)
+
+```bash
+# Dépendances core
+npm install @react-navigation/native react-native-screens react-native-safe-area-context
+
+# Navigateurs
+npm install @react-navigation/native-stack          # Stack natif (recommandé)
+npm install @react-navigation/bottom-tabs           # Bottom tabs
+npm install @react-navigation/drawer                # Drawer
+npm install react-native-gesture-handler react-native-reanimated  # requis par Drawer
+
+# iOS
+cd ios && pod install
+```
+
+### Setup Android (MainActivity)
+
+```kotlin
+// android/app/src/main/java/.../MainActivity.kt
+import android.os.Bundle
+import com.facebook.react.ReactActivity
+import com.facebook.react.ReactActivityDelegate
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
+import com.facebook.react.defaults.DefaultReactActivityDelegate
+
+class MainActivity : ReactActivity() {
+  override fun getMainComponentName(): String = "MyApp"
+
+  override fun createReactActivityDelegate(): ReactActivityDelegate =
+    DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
+}
+```
+
+```java
+// Si Java : ajouter dans onCreate AVANT super.onCreate()
+import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
+// requis pour react-native-gesture-handler (Drawer)
+```
+
+### Stack Navigator (natif)
+
+```typescript
+// navigation/AppNavigator.tsx
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { HomeScreen } from '../screens/HomeScreen';
+import { DetailScreen } from '../screens/DetailScreen';
+
+export type RootStackParamList = {
+  Home: undefined;
+  Detail: { id: string; title: string };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+export function AppNavigator() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerStyle: { backgroundColor: '#007AFF' },
+          headerTintColor: '#fff',
+          headerTitleStyle: { fontWeight: 'bold' },
+          animation: 'slide_from_right', // iOS-style par défaut
+        }}
+      >
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Accueil' }}
+        />
+        <Stack.Screen
+          name="Detail"
+          component={DetailScreen}
+          options={({ route }) => ({ title: route.params.title })}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+```
+
+### Naviguer depuis un écran
+
+```typescript
+// screens/HomeScreen.tsx
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+export function HomeScreen({ navigation }: Props) {
+  return (
+    <View>
+      <Button
+        title="Voir le détail"
+        onPress={() =>
+          navigation.navigate('Detail', { id: '42', title: 'Mon article' })
+        }
+      />
+    </View>
+  );
+}
+```
+
+### Bottom Tab Navigator
+
+```typescript
+// navigation/TabNavigator.tsx
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+export type TabParamList = {
+  Home: undefined;
+  Search: undefined;
+  Profile: undefined;
+};
+
+const Tab = createBottomTabNavigator<TabParamList>();
+
+export function TabNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          const icons: Record<string, string> = {
+            Home: 'home',
+            Search: 'search',
+            Profile: 'person',
+          };
+          return <Ionicons name={icons[route.name]} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#007AFF',
+        tabBarInactiveTintColor: 'gray',
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+}
+```
+
+### Drawer Navigator
+
+```typescript
+// navigation/DrawerNavigator.tsx
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+export type DrawerParamList = {
+  Home: undefined;
+  Settings: undefined;
+  About: undefined;
+};
+
+const Drawer = createDrawerNavigator<DrawerParamList>();
+
+export function DrawerNavigator() {
+  return (
+    // GestureHandlerRootView est obligatoire pour le Drawer
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Drawer.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          drawerStyle: { backgroundColor: '#f9f9f9', width: 240 },
+          drawerActiveTintColor: '#007AFF',
+        }}
+      >
+        <Drawer.Screen name="Home" component={HomeScreen} options={{ title: 'Accueil' }} />
+        <Drawer.Screen name="Settings" component={SettingsScreen} options={{ title: 'Paramètres' }} />
+        <Drawer.Screen name="About" component={AboutScreen} options={{ title: 'À propos' }} />
+      </Drawer.Navigator>
+    </GestureHandlerRootView>
+  );
+}
+```
+
+### Stack + Tabs imbriqués (pattern courant)
+
+```typescript
+// navigation/RootNavigator.tsx
+const RootStack = createNativeStackNavigator();
+
+export function RootNavigator() {
+  return (
+    <NavigationContainer>
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        {/* Tabs comme écran principal */}
+        <RootStack.Screen name="MainTabs" component={TabNavigator} />
+        {/* Écrans modaux ou détails hors tabs */}
+        <RootStack.Screen
+          name="Detail"
+          component={DetailScreen}
+          options={{ headerShown: true, presentation: 'modal' }}
+        />
+      </RootStack.Navigator>
+    </NavigationContainer>
+  );
+}
+```
+
+### Nouveautés React Navigation 7
+
+| Feature | Description |
+|---------|-------------|
+| **Static API** | Configuration déclarative des navigateurs (alternative aux JSX navigators) |
+| **TypeScript amélioré** | Inférence automatique des types depuis `createStaticNavigation` |
+| **Native Bottom Tabs** | Wrapping natif TabView/BottomNavigationView (moins de bridge) |
+| **Hooks simplifiés** | `useNavigation`, `useRoute`, `useFocusEffect` — API stable et allégée |
+
+```typescript
+// Static API (React Navigation 7) — alternative au JSX
+import { createStaticNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const RootStack = createNativeStackNavigator({
+  screens: {
+    Home: HomeScreen,
+    Detail: DetailScreen,
+  },
+});
+
+export const Navigation = createStaticNavigation(RootStack);
+// Dans App.tsx : <Navigation />
+```
+
+---
+
 ## Checklist Navigation
 
-- [ ] Expo Router configuré
-- [ ] File-based routing utilisé
+- [ ] Expo Router configuré (projets Expo)
+- [ ] React Navigation 7 installé (projets bare RN)
+- [ ] File-based routing utilisé (Expo Router)
 - [ ] Route groups organisés
 - [ ] Deep linking configuré
 - [ ] Protected routes implémentés
-- [ ] Types navigation définis
+- [ ] Types navigation définis (`RootStackParamList`)
 - [ ] Modal screens configurés
 - [ ] Tab navigation
 - [ ] Back navigation gérée
+- [ ] `GestureHandlerRootView` au root si Drawer utilisé
 
 ---
 

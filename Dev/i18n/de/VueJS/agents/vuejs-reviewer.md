@@ -695,5 +695,5 @@ const routes = [
 
 ---
 
-**Version:** 2.0
-**Letzte Aktualisierung:** 2026-02
+**Version:** 2.2
+**Letzte Aktualisierung:** 2026-06

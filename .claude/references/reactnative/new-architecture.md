@@ -22,7 +22,7 @@ La New Architecture remplace trois couches historiques :
 
 | Project type | Activation |
 |--------------|-----------|
-| **New project (Expo SDK 51+)** | New Architecture **on** by default. |
+| **New project (Expo SDK 56+)** | New Architecture **on** by default. |
 | **Existing project (bare RN 0.85)** | Set `newArchEnabled=true` in `android/gradle.properties` AND `RCT_NEW_ARCH_ENABLED=1` env on iOS pod install. |
 | **Disable temporarily** | `newArchEnabled=false` + `RCT_NEW_ARCH_ENABLED=0`. Deprecated path — sunset in 0.86. |
 
@@ -87,9 +87,9 @@ export default codegenNativeComponent<NativeProps>('NativeMap') as HostComponent
 | Library | New Architecture |
 |---------|------------------|
 | React Navigation 7 | ✅ |
-| Reanimated 4 (Worklets 2) | ✅ |
+| Reanimated 4 (`^4.0.0`, Worklets 2) | ✅ |
 | Gesture Handler 2.20+ | ✅ |
-| Expo SDK 51+ | ✅ (default) |
+| Expo SDK 56+ | ✅ (default) |
 | react-native-mmkv 4 | ✅ |
 | react-native-vision-camera 4 | ✅ |
 | react-native-screens 4 | ✅ |
@@ -145,13 +145,13 @@ Si un de ces logs est rouge, votre Pod install / Gradle build n'a pas activé la
 - [ ] Toutes les bibliothèques tierces marquées New-Arch-compatible (reactnative.directory).
 - [ ] Modules natifs custom : spec TS ajouté dans `src/specs/`, build Codegen vert.
 - [ ] Tests E2E (Detox) passent — Fabric change parfois la timing des animations.
-- [ ] Reanimated v4 (Worklets 2) installé si Reanimated v3.
+- [ ] Reanimated 4 (`^4.0.0`, Worklets 2) installé si Reanimated 3.x.
 - [ ] Sentry / Crashlytics : sourcemaps Hermes uploadées avec Sentry CLI 2.20+.
 - [ ] Bundle size mesuré : New Arch gagne souvent 10-20 % sur AAB Android.
 
-## Shared Animation Backend (Reanimated 4)
+## Shared Animation Backend (Reanimated 4 `^4.0.0`)
 
-React Native 0.85 + Reanimated 4 introduit un backend d'animation partagé entre JS et le thread natif, sans passer par le Bridge asynchrone.
+React Native 0.85 + Reanimated 4 (`^4.0.0`) introduit un backend d'animation partagé entre JS et le thread natif, sans passer par le Bridge asynchrone.
 
 ### Principe
 
@@ -159,7 +159,7 @@ Les animations s'exécutent directement sur le **UI thread** via JSI. Il n'y a p
 
 ### Architecture JSI + Shadow Tree synchrone
 
-Reanimated 4 utilise les **Worklets 2** : des fonctions JS compilées par Hermes et exécutées sur le UI thread via JSI. Elles accèdent au Shadow Tree de Fabric de façon synchrone pour modifier les propriétés de layout et de style sans bloquer le JS thread.
+Reanimated 4 (`^4.0.0`) utilise les **Worklets 2** : des fonctions JS compilées par Hermes et exécutées sur le UI thread via JSI. Elles accèdent au Shadow Tree de Fabric de façon synchrone pour modifier les propriétés de layout et de style sans bloquer le JS thread.
 
 ```typescript
 // Worklet exécuté sur le UI thread — pas de Bridge
@@ -178,6 +178,53 @@ const animatedStyle = useAnimatedStyle(() => {
 | Low-end devices | Drops fréquents | Stable grâce au UI thread |
 
 Le **60 fps garanti sur low-end** vient du fait que le JS thread (GC, logique métier) ne bloque plus les animations : les Worklets ont leur propre runtime isolé.
+
+---
+
+## Breaking Changes 0.85
+
+### (a) `StyleSheet.absoluteFillObject` supprimé
+
+`StyleSheet.absoluteFillObject` a été supprimé dans RN 0.85. Utiliser `StyleSheet.absoluteFill` (valeur CSS) ou l'objet inline équivalent :
+
+```typescript
+// ❌ Supprimé dans RN 0.85
+import { StyleSheet } from 'react-native';
+style={StyleSheet.absoluteFillObject}
+
+// ✅ Utiliser StyleSheet.absoluteFill (spread-able)
+style={StyleSheet.absoluteFill}
+
+// ✅ Ou l'objet littéral équivalent
+style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}
+```
+
+### (b) Preset Jest déplacé vers `@react-native/jest-preset`
+
+Le preset Jest historique `react-native/jest-preset` a été extrait dans le package dédié `@react-native/jest-preset` (depuis RN 0.73, rendu obligatoire en 0.85) :
+
+```bash
+npm install --save-dev @react-native/jest-preset
+```
+
+```javascript
+// jest.config.js — avant (< 0.73)
+// preset: 'react-native'   ← déprécié
+
+// jest.config.js — depuis 0.73/0.85
+module.exports = {
+  preset: '@react-native/jest-preset',
+};
+```
+
+### (c) Hermes V1 par défaut
+
+React Native 0.85 active **Hermes V1** comme moteur JS par défaut sur Android et iOS. Hermes V1 apporte :
+- Parsing et compilation plus rapides (bytecode pré-compilé à chaque build)
+- Démarrage réduit (~50 % vs JavaScriptCore)
+- GC amélioré pour la mémoire
+
+**Impact sur les sourcemaps** : les sourcemaps Hermes doivent être uploadées séparément pour Sentry/Bugsnag (voir section "Hermes + sourcemaps" plus haut).
 
 ---
 

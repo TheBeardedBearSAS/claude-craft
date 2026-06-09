@@ -80,7 +80,15 @@ final class UserTest extends TestCase
 }
 ```
 
-### Pest (Modern, Expressive)
+### Pest 4 (PHPUnit 12, Modern, Expressive)
+
+> **Pest 4 (2026) :** Basé sur **PHPUnit 12**. Nouveautés clés :
+> - **Browser Testing natif** via `pest-plugin-browser` (Playwright sous le capot) — `->browser()` dans les tests Pest, plus besoin de Dusk séparé.
+> - **Test sharding** : `--shard=1/4` pour distribuer la suite sur plusieurs runners CI.
+> - **Visual regression** : comparaison de screenshots via `->assertMatchesSnapshot()` dans les browser tests.
+> - PHPUnit 12 : attributs PHP natifs pour les data providers (pas de `@dataProvider` annot.) déjà supportés depuis PHPUnit 11, consolidés en 12.
+>
+> Source : [Pest 4 Blog](https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing)
 
 ```php
 <?php

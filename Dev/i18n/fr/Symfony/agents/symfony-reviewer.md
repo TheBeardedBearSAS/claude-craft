@@ -255,7 +255,7 @@ Le code est-il un Controller (Presentation) ?
 | **Behat** | BDD, scénarios métier lisibles |
 | **Infection** | Mutation testing (MSI > 80%) |
 | **Foundry** | Factories/fixtures maintenables |
-| **PHPStan level 9** | Analyse statique, complément aux tests |
+| **PHPStan level 10** | Analyse statique, complément aux tests |
 
 ### Anti-patterns de test Symfony
 
@@ -517,7 +517,7 @@ $apiKey = $this->getParameter('stripe_api_key');
 
 | Outil | Usage |
 |-------|-------|
-| **PHPStan level 9** | Analyse statique stricte |
+| **PHPStan level 10** | Analyse statique stricte |
 | **Deptrac** | Validation des dépendances entre couches |
 | **PHP-CS-Fixer** (PSR-12) | Formatage automatique |
 | **Pest PHP** / PHPUnit | Tests unitaires et intégration |

@@ -7,65 +7,75 @@ La securite est une **priorite absolue**. Ce document presente les principes gen
 > **Note:** Consultez les regles specifiques a votre technologie pour les implementations concretes.
 
 **References:**
-- OWASP Top 10
+- **OWASP Top 10:2025** (publie novembre 2025)
 - CWE/SANS Top 25
+- SLSA 1.0
 
 ---
 
 ## Table des matieres
 
-1. [OWASP Top 10](#owasp-top-10)
-2. [Validation des entrees](#validation-des-entrées)
+1. [OWASP Top 10:2025](#owasp-top-102025)
+2. [Validation des entrees](#validation-des-entrees)
 3. [Authentification](#authentification)
 4. [Autorisation](#autorisation)
-5. [Donnees sensibles](#données-sensibles)
-6. [Headers de securite](#headers-de-sécurité)
-7. [Logging et monitoring](#logging-et-monitoring)
-8. [Securite MCP & Plugins](#securite-mcp--plugins)
-9. [Checklist](#checklist)
+5. [Donnees sensibles](#donnees-sensibles)
+6. [Headers de securite](#headers-de-securite)
+7. [Supply Chain](#supply-chain)
+8. [Logging et monitoring](#logging-et-monitoring)
+9. [Securite MCP & Plugins](#securite-mcp--plugins)
+10. [Checklist](#checklist)
 
 ---
 
-## OWASP Top 10
+## OWASP Top 10:2025
 
-### 1. Broken Access Control
+> **Source:** [OWASP Top 10:2025](https://owasp.org/Top10/2025/) — publie novembre 2025.
+> Changements majeurs vs 2021 : SSRF consolide dans #1, Supply Chain Failures nouveau en #6, Mishandling Exceptional Conditions nouveau en #7.
+
+### 1. Broken Access Control (inclut SSRF consolide)
 
 ```
-❌ RISQUE
+RISQUE
 - Acces a des ressources sans verification
 - URLs predictibles (/admin, /user/123/edit)
 - Manipulation d'IDs dans les URLs
+- SSRF : URLs fournies par l'utilisateur non validees, acces a des ressources internes
 
-✅ PROTECTION
+PROTECTION
 - Verifier les permissions a CHAQUE requete
 - Utiliser des identifiants non predictibles (UUID)
 - Deny by default
+- SSRF : Whitelist des destinations autorisees, validation stricte des URLs
+- Pas d'acces reseau interne depuis les inputs utilisateur
 ```
 
 ### 2. Cryptographic Failures
 
 ```
-❌ RISQUE
+RISQUE
 - Donnees sensibles en clair
-- Algorithmes obsoletes (MD5, SHA1)
+- Algorithmes obsoletes (MD5, SHA1, bcrypt en nouveau code)
 - Cles dans le code source
+- JWT avec algorithme faible (HS256, RS256)
 
-✅ PROTECTION
+PROTECTION
 - Chiffrer les donnees sensibles au repos
 - Utiliser TLS 1.3 en transit
-- Algorithmes modernes (bcrypt, Argon2, AES-256)
+- Hachage mots de passe : Argon2id (128 MiB RAM, t=3-5, p=1) — JAMAIS MD5/SHA1/bcrypt
+- JWT : EdDSA (Ed25519) prioritaire > ES256 > RS256
 - Secrets dans un vault (pas dans le code)
 ```
 
 ### 3. Injection
 
 ```
-❌ RISQUE
+RISQUE
 - SQL Injection
 - Command Injection
 - LDAP Injection
 
-✅ PROTECTION
+PROTECTION
 - Requetes parametrees (prepared statements)
 - Validation et sanitization des entrees
 - Principe du moindre privilege (DB)
@@ -75,12 +85,12 @@ La securite est une **priorite absolue**. Ce document presente les principes gen
 ### 4. Insecure Design
 
 ```
-❌ RISQUE
+RISQUE
 - Pas de threat modeling
 - Fonctionnalites sensibles non protegees
 - Rate limiting absent
 
-✅ PROTECTION
+PROTECTION
 - Threat modeling des la conception
 - Security by design
 - Defense in depth
@@ -90,90 +100,95 @@ La securite est une **priorite absolue**. Ce document presente les principes gen
 ### 5. Security Misconfiguration
 
 ```
-❌ RISQUE
+RISQUE
 - Configs par defaut non modifiees
 - Fonctionnalites inutiles activees
 - Messages d'erreur verbeux
 - Permissions trop larges
 
-✅ PROTECTION
+PROTECTION
 - Hardening des configurations
 - Desactiver le non necessaire
 - Messages d'erreur generiques en prod
 - Principe du moindre privilege
 ```
 
-### 6. Vulnerable Components
+### 6. Software Supply Chain Failures (nouveau 2025)
 
 ```
-❌ RISQUE
+RISQUE
 - Dependances avec vulnerabilites connues
-- Composants obsoletes
-- Pas de suivi des CVE
+- Composants sans provenance verifiable
+- CI/CD non securise
+- Artefacts non signes
 
-✅ PROTECTION
-- Audit regulier des dependances
-- Mise a jour automatique (Dependabot)
-- SBOM (Software Bill of Materials)
+PROTECTION
+- SLSA 1.0 niveaux 1-3 (sources verifiables, builds reproductibles, provenance)
+- SBOM automatique (SPDX 3 ou CycloneDX) a chaque build
+- Sigstore keyless signing (cosign) pour artefacts et images
+- Dependabot / Renovate avec scan CVE (Trivy, Grype)
+- Version pinee sur toutes les dependances (pas de "latest")
 ```
 
-### 7. Authentication Failures
+### 7. Mishandling of Exceptional Conditions (nouveau 2025)
 
 ```
-❌ RISQUE
+RISQUE
+- Stack traces exposees en production
+- Exceptions non gerees qui leakent des donnees internes
+- Comportement undefined sur inputs mal formes
+
+PROTECTION
+- Logger les erreurs, ne jamais exposer la stack trace en prod
+- Gestionnaires d'exceptions globaux (error boundaries)
+- Messages d'erreur generiques cote client
+- Fail fast avec des erreurs metier claires
+```
+
+### 8. Authentication Failures
+
+```
+RISQUE
 - Mots de passe faibles autorises
 - Pas de MFA
 - Sessions qui n'expirent pas
 - Credential stuffing possible
 
-✅ PROTECTION
-- Politique de mots de passe forts
+PROTECTION
+- Politique de mots de passe forts (min 12 caracteres)
 - MFA pour acces sensibles
 - Expiration des sessions
 - Rate limiting sur login
 - Detection de brute force
 ```
 
-### 8. Data Integrity Failures
-
-```
-❌ RISQUE
-- Dependances non verifiees
-- CI/CD non securise
-- Updates non signes
-
-✅ PROTECTION
-- Verification des signatures
-- CI/CD securise
-- Integrity checks (checksums)
-```
-
 ### 9. Logging & Monitoring Failures
 
 ```
-❌ RISQUE
+RISQUE
 - Pas de logs des evenements securite
 - Logs non proteges
 - Pas d'alerting
 
-✅ PROTECTION
+PROTECTION
 - Logger les evenements de securite
 - Proteger les logs (acces restreint)
 - Alerting sur anomalies
 - Retention appropriee
 ```
 
-### 10. SSRF (Server-Side Request Forgery)
+### 10. Data Integrity Failures
 
 ```
-❌ RISQUE
-- URLs fournies par l'utilisateur non validees
-- Acces a des ressources internes
+RISQUE
+- Dependances non verifiees
+- CI/CD non securise
+- Updates non signes
 
-✅ PROTECTION
-- Whitelist des destinations autorisees
-- Validation stricte des URLs
-- Pas d'acces reseau interne depuis les inputs
+PROTECTION
+- Verification des signatures
+- CI/CD securise
+- Integrity checks (checksums)
 ```
 
 ---
@@ -198,11 +213,11 @@ La securite est une **priorite absolue**. Ce document presente les principes gen
 ### Exemples
 
 ```
-// ❌ MAUVAIS - Pas de validation
+// MAUVAIS - Pas de validation
 function getUser(id):
   return db.query("SELECT * FROM users WHERE id = " + id)
 
-// ✅ BON - Validation + requete parametree
+// BON - Validation + requete parametree
 function getUser(id):
   if not isValidUUID(id):
     throw InvalidInput("Invalid user ID")
@@ -217,10 +232,10 @@ function getUser(id):
 
 ```
 Validation: Rejeter les donnees invalides
-  → "abc" comme ID numerique → ERREUR
+  -> "abc" comme ID numerique -> ERREUR
 
 Sanitization: Nettoyer les donnees
-  → "<script>" dans un nom → "script"
+  -> "<script>" dans un nom -> "script"
 
 Preferer VALIDATION (rejeter) a SANITIZATION (transformer)
 ```
@@ -232,20 +247,24 @@ Preferer VALIDATION (rejeter) a SANITIZATION (transformer)
 ### Mots de passe
 
 ```
-Regles:
+Regles OWASP 2026:
 - Minimum 12 caracteres
 - Majuscules, minuscules, chiffres, speciaux
 - Pas dans les listes de mots de passe compromis
-- Hash avec bcrypt/Argon2 (JAMAIS MD5/SHA1)
-- Salt unique par utilisateur
+- Hash avec Argon2id (128 MiB RAM, t=3-5, p=1)
+- JAMAIS MD5/SHA1/bcrypt en nouveau code
+- Salt unique par utilisateur (gere par Argon2id)
 
-// ✅ BON
-hash = bcrypt.hash(password, costFactor=12)
+// BON
+hash = argon2id.hash(password, memory=131072, iterations=3, parallelism=1)
 
-// ❌ MAUVAIS
+// MAUVAIS
 hash = md5(password)
 hash = sha1(password + "static_salt")
+hash = bcrypt.hash(password, costFactor=12)  // Ne pas utiliser en nouveau code
 ```
+
+Sources : [Argon2id OWASP 2026](https://guptadeepak.com/the-complete-guide-to-password-hashing-argon2-vs-bcrypt-vs-scrypt-vs-pbkdf2-2026/)
 
 ### Sessions
 
@@ -267,22 +286,27 @@ Session config:
 ### JWT (si utilise)
 
 ```
-Regles:
-- Algorithme: RS256 ou ES256 (pas HS256 avec secret faible)
+Regles OWASP 2026:
+- Algorithme : EdDSA (Ed25519) prioritaire > ES256 > RS256
+- JAMAIS HS256 avec secret faible
 - Expiration courte (15 min)
 - Refresh token long (7 jours) stocke securise
+- DPoP (RFC 9449) pour tokens sensibles
 - Verifier signature et claims
 - Ne pas stocker de donnees sensibles dans le payload
 
-// ❌ MAUVAIS
+// MAUVAIS
 jwt.sign(payload, "secret123", { algorithm: "HS256" })
+jwt.sign(payload, privateKey, { algorithm: "RS256" })  // Acceptable mais pas ideal
 
-// ✅ BON
-jwt.sign(payload, privateKey, {
-  algorithm: "RS256",
+// BON
+jwt.sign(payload, ed25519PrivateKey, {
+  algorithm: "EdDSA",
   expiresIn: "15m"
 })
 ```
+
+Sources : [JWT Best Practices 2026](https://duendesoftware.com/learn/best-practices-using-jwts-with-web-and-mobile-apps), [RFC 9449 DPoP](https://datatracker.ietf.org/doc/html/rfc9449)
 
 ### Multi-Factor Authentication (MFA)
 
@@ -293,10 +317,10 @@ Quand activer MFA:
 - Changement de mot de passe
 - Connexion depuis nouvel appareil
 
-Methodes:
-- TOTP (Google Authenticator)
-- SMS (moins securise)
-- Hardware keys (FIDO2)
+Methodes (ordre de securite):
+- Hardware keys (FIDO2/WebAuthn) — le plus sur
+- TOTP (Google Authenticator, Authy)
+- SMS (moins securise — eviter si possible)
 ```
 
 ---
@@ -308,10 +332,10 @@ Methodes:
 ```
 Regle: Accorder uniquement les permissions NECESSAIRES.
 
-❌ MAUVAIS
+MAUVAIS
 user.role = "admin"  # Acces a tout
 
-✅ BON
+BON
 user.permissions = ["read:users", "write:orders"]
 ```
 
@@ -336,11 +360,11 @@ function deleteUser(userId, currentUser):
 ```
 Regle: Verifier que l'utilisateur a acces a LA ressource specifique.
 
-// ❌ MAUVAIS - Verifie seulement l'authentification
+// MAUVAIS - Verifie seulement l'authentification
 function getOrder(orderId):
   return db.find("orders", orderId)
 
-// ✅ BON - Verifie l'appartenance
+// BON - Verifie l'appartenance
 function getOrder(orderId, currentUser):
   order = db.find("orders", orderId)
 
@@ -361,24 +385,25 @@ function getOrder(orderId, currentUser):
 | **Public** | Nom produit | Aucune |
 | **Interne** | Emails | Acces restreint |
 | **Confidentiel** | Donnees client | Chiffrement |
-| **Secret** | Mots de passe, cles | Vault, hash |
+| **Secret** | Mots de passe, cles | Vault, hash Argon2id |
 
 ### Stockage
 
 ```
 Mots de passe:
-  → Hash avec bcrypt/Argon2
-  → JAMAIS en clair
+  -> Hash avec Argon2id (128 MiB RAM, t=3-5, p=1)
+  -> JAMAIS en clair
+  -> JAMAIS bcrypt/MD5/SHA1 en nouveau code
 
 Donnees personnelles (RGPD):
-  → Chiffrement au repos
-  → Pseudonymisation si possible
-  → Retention limitee
+  -> Chiffrement au repos (AES-256-GCM)
+  -> Pseudonymisation si possible
+  -> Retention limitee
 
 Secrets (API keys, etc.):
-  → Variables d'environnement
-  → Vault (HashiCorp, AWS Secrets Manager)
-  → JAMAIS dans le code source
+  -> Variables d'environnement
+  -> Vault (HashiCorp, AWS Secrets Manager)
+  -> JAMAIS dans le code source
 ```
 
 ### Transmission
@@ -390,10 +415,10 @@ Regles:
 - HSTS active
 - Pas de donnees sensibles dans URLs
 
-// ❌ MAUVAIS
+// MAUVAIS
 GET /api/users?password=secret123
 
-// ✅ BON
+// BON
 POST /api/auth
 Body: { "password": "..." }
 ```
@@ -402,28 +427,34 @@ Body: { "password": "..." }
 
 ## Headers de securite
 
-### Headers recommandes
+### Headers obligatoires 2026
 
 ```http
-# Protection XSS
-Content-Security-Policy: default-src 'self'; script-src 'self'
+# Protection XSS + CSP Level 3
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'
 X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
 
 # Protection clickjacking
 X-Frame-Options: DENY
 
 # HTTPS
-Strict-Transport-Security: max-age=31536000; includeSubDomains
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 
 # Referrer
 Referrer-Policy: strict-origin-when-cross-origin
 
-# Permissions
-Permissions-Policy: geolocation=(), camera=()
+# Permissions granulaires
+Permissions-Policy: geolocation=(), camera=(), microphone=()
+
+# Cross-Origin Isolation (2026 — obligatoires)
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Resource-Policy: same-origin
 ```
 
-### Content-Security-Policy (CSP)
+Source : [HTTP Security Headers 2026](https://thibautprobst.fr/en/posts/http-security-headers/)
+
+### Content-Security-Policy (CSP) Level 3
 
 ```http
 # Restrictif (recommande)
@@ -435,7 +466,65 @@ Content-Security-Policy:
   font-src 'self';
   connect-src 'self' api.example.com;
   frame-ancestors 'none';
+  upgrade-insecure-requests;
 ```
+
+### Cross-Origin Headers (nouveaux en 2026)
+
+| Header | Valeur recommandee | Protection |
+|--------|-------------------|------------|
+| **COOP** | `same-origin` | Isole le contexte de navigation (Spectre) |
+| **COEP** | `require-corp` | Active Cross-Origin Isolation |
+| **CORP** | `same-origin` | Protege les ressources contre les inclusions cross-origin |
+| **Permissions-Policy** | Granulaire par feature | Controle l'acces aux APIs du navigateur |
+
+---
+
+## Supply Chain
+
+> **Reference :** [Supply Chain Security 2026](https://kawaldeepsingh.medium.com/practical-software-supply-chain-security-2026-sboms-signing-slsa-reproducible-builds-a-0416cfac32dc)
+
+### SLSA 1.0 (Supply-chain Levels for Software Artifacts)
+
+| Niveau | Exigences | Impact |
+|--------|-----------|--------|
+| **Niveau 1** | Provenance documentee du build | Tracabilite basique |
+| **Niveau 2** | Build sur plateforme verifiable, signe | Resistance aux compromissions internes |
+| **Niveau 3** | Build reproductible, infrastructure durcie | Resistance aux compromissions de la plateforme |
+
+### SBOM (Software Bill of Materials)
+
+```
+Generer automatiquement a chaque build :
+- Format SPDX 3 ou CycloneDX
+- Liste toutes les dependances directes et transitives
+- Inclure les versions, licences, CVE connus
+- Publier dans le registre artefact
+
+Outils : syft, cdxgen, trivy --format cyclonedx
+```
+
+### Sigstore / cosign
+
+```
+Signer les artefacts et images Docker :
+cosign sign --key cosign.key ghcr.io/org/image:tag
+cosign verify --key cosign.pub ghcr.io/org/image:tag
+
+Keyless signing (recommande en CI/CD) :
+cosign sign --identity-token=$(cat $ACTIONS_ID_TOKEN_REQUEST_TOKEN) \
+  ghcr.io/org/image:tag
+```
+
+### Checklist Supply Chain
+
+- [ ] SBOM genere automatiquement (SPDX 3 ou CycloneDX)
+- [ ] Artefacts signes avec Sigstore/cosign
+- [ ] Provenance SLSA 1+ documentee
+- [ ] Dependances avec versions pinnes (hash ou version exacte)
+- [ ] Scan CVE automatise (Trivy, Grype) sur chaque build
+- [ ] Dependabot / Renovate configure
+- [ ] Revue des dependances avant merge
 
 ---
 
@@ -444,7 +533,7 @@ Content-Security-Policy:
 ### Evenements a logger
 
 ```
-✅ A LOGGER:
+A LOGGER:
 - Tentatives de connexion (succes/echec)
 - Changements de permissions
 - Acces a donnees sensibles
@@ -452,11 +541,12 @@ Content-Security-Policy:
 - Modifications de configuration
 - Exports de donnees
 
-❌ A NE PAS LOGGER:
+A NE PAS LOGGER:
 - Mots de passe
 - Tokens
 - Donnees personnelles completes
 - Numeros de carte bancaire
+- Stack traces completes en prod
 ```
 
 ### Format de log
@@ -549,9 +639,6 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 | CVE-2026-35022 | High | v2.1.98 | Env-var prefix injection in Bash tool |
 | N/A | High | v2.1.101 | Command injection via POSIX `which` fallback |
 
-> **Incident (mars 2026):** Le code source complet de Claude Code a ete expose via le package npm v2.1.88 (fichier `.map` de 59.8 MB non exclu par `.npmignore`). Corrige dans v2.1.89.
-
-> **Note:** L'installation via `npm install -g` est obsolete. Utilisez les installateurs natifs.
 > **Recommandation:** Toujours utiliser Claude Code v2.1.97+ lorsque des serveurs MCP sont utilises avec des hooks.
 
 ### CLAUDE.md vs Hooks
@@ -565,38 +652,6 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 > **Regle:** CLAUDE.md = suggestions. Hooks = requirements.
 > Pour les contraintes de securite critiques, utiliser des hooks, pas des instructions textuelles.
 
-### Auto Mode (v2.1.94+)
-
-> **Auto Mode** est un classificateur de permissions propulse par l'IA qui remplace `--dangerously-skip-permissions` de maniere plus sure.
-
-Disponible pour les plans Team (avec approbation admin).
-
-```
-Fonctionnement:
-- Un modele de securite en arriere-plan evalue chaque appel d'outil
-- ✅ Autorise les operations sures (lectures, tests)
-- 🚫 Bloque les actions risquees (suppression massive, exfiltration)
-- ⚠️ Escalade les cas ambigus pour approbation manuelle
-
-Securite progressive:
-- 3 blocages consecutifs → retour en mode manuel
-- 20+ blocages dans une session → revert complet au mode manuel
-```
-
-| Mode | Protection | Vitesse | Usage |
-|------|-----------|---------|-------|
-| Manuel | Maximale | Lente | Workflows audites, haute securite |
-| Auto Mode | Elevee | Rapide | Workflows de dev de confiance |
-| Skip Permissions | Minimale | Maximale | Projets locaux/personnels uniquement |
-
-### Sandboxing des sous-processus (v2.1.98+)
-
-| Mecanisme | Description |
-|-----------|-------------|
-| Isolation PID namespace | Les sous-processus sont isoles dans un namespace PID dedie (Linux) |
-| `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` | Supprime les credentials des variables d'environnement des sous-processus |
-| `sandbox.failIfUnavailable` | Echoue si le sandbox ne peut pas etre initialise (v2.1.83+) |
-
 ---
 
 ## Checklist
@@ -606,20 +661,29 @@ Securite progressive:
 - [ ] Validation des entrees cote serveur
 - [ ] Requetes parametrees (pas de concatenation SQL)
 - [ ] Escape des outputs (prevention XSS)
-- [ ] Mots de passe hashes (bcrypt/Argon2)
+- [ ] Mots de passe hashes avec **Argon2id** (128 MiB, t=3-5, p=1)
 - [ ] Sessions securisees (httpOnly, secure, sameSite)
 - [ ] Verification des permissions a chaque requete
-- [ ] Secrets dans variables d'environnement
-- [ ] Dependances auditees
+- [ ] Secrets dans variables d'environnement ou Vault
+- [ ] Dependances auditees (scan CVE)
+- [ ] JWT avec EdDSA ou ES256 (jamais HS256)
+- [ ] DPoP (RFC 9449) pour tokens sensibles
 
 ### Configuration
 
 - [ ] HTTPS active (TLS 1.3)
-- [ ] Headers de securite configures
+- [ ] Headers de securite 2026 (CSP L3, HSTS, COOP, COEP, CORP, Permissions-Policy)
 - [ ] Messages d'erreur generiques en prod
 - [ ] Debug mode desactive en prod
 - [ ] Rate limiting active
 - [ ] CORS configure strictement
+
+### Supply Chain
+
+- [ ] SBOM genere (SPDX 3 ou CycloneDX)
+- [ ] Artefacts signes (Sigstore/cosign)
+- [ ] Provenance SLSA 1+ documentee
+- [ ] Dependances pinnes sur version exacte
 
 ### Monitoring
 
@@ -639,13 +703,18 @@ Securite progressive:
 
 ## Ressources
 
-- **OWASP Top 10:** [owasp.org/Top10](https://owasp.org/Top10/)
+- **OWASP Top 10:2025:** [owasp.org/Top10/2025/](https://owasp.org/Top10/2025/)
 - **OWASP Cheat Sheets:** [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/)
 - **CWE Top 25:** [cwe.mitre.org/top25](https://cwe.mitre.org/top25/)
 - **NIST Guidelines:** [nist.gov](https://www.nist.gov/cyberframework)
+- **Argon2id 2026:** [Guide complet](https://guptadeepak.com/the-complete-guide-to-password-hashing-argon2-vs-bcrypt-vs-scrypt-vs-pbkdf2-2026/)
+- **RFC 9449 DPoP:** [datatracker.ietf.org](https://datatracker.ietf.org/doc/html/rfc9449)
+- **JWT Best Practices 2026:** [duendesoftware.com](https://duendesoftware.com/learn/best-practices-using-jwts-with-web-and-mobile-apps)
+- **HTTP Security Headers 2026:** [thibautprobst.fr](https://thibautprobst.fr/en/posts/http-security-headers/)
+- **Supply Chain 2026:** [kawaldeepsingh.medium.com](https://kawaldeepsingh.medium.com/practical-software-supply-chain-security-2026-sboms-signing-slsa-reproducible-builds-a-0416cfac32dc)
 
 ---
 
-**Date de derniere mise a jour:** 2026-04
-**Version:** 1.2.0
+**Date de derniere mise a jour:** 2026-06
+**Version:** 1.3.0
 **Auteur:** The Bearded CTO

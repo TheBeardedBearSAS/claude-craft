@@ -313,18 +313,18 @@ pnpm test
   },
   "dependencies": {
     "vue": "^3.5.0",
-    "vue-router": "^4.3.0",
-    "pinia": "^2.2.0"
+    "vue-router": "^5.0.0",
+    "pinia": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "@vitejs/plugin-vue": "^5.0.0",
+    "@vitejs/plugin-vue": "^6.0.0",
     "@vue/test-utils": "^2.4.0",
     "eslint": "^9.0.0",
-    "eslint-plugin-vue": "^9.0.0",
+    "eslint-plugin-vue": "^10.0.0",
     "prettier": "^3.0.0",
     "typescript": "~5.4.0",
-    "vite": "^5.4.0",
+    "vite": "^8.0.0",
     "vitest": "^2.0.0",
     "vue-tsc": "^2.0.0"
   }

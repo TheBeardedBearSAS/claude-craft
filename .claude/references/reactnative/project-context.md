@@ -38,6 +38,8 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 }
 ```
 
+> **Default:** `EXPO_SDK_VERSION = 56` (Expo SDK 56+, New Architecture on by default).
+
 ### Supported Platforms
 ```json
 {
@@ -94,7 +96,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 - **React Native**: 0.85
 - **Expo SDK**: {{EXPO_SDK_VERSION}}
 - **TypeScript**: {{TYPESCRIPT_VERSION}}
-- **Node.js**: {{NODE_VERSION}}
+- **Node.js**: {{NODE_VERSION}} (**>= 20.19.4 LTS required** — RN 0.85 drops support for Node < 20)
 
 ### Navigation
 
@@ -111,7 +113,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 
 - **React Native Paper**: {{PAPER_VERSION}} (optionnel)
 - **NativeWind** (Tailwind CSS): {{NATIVEWIND_VERSION}} (optionnel)
-- **React Native Reanimated**: 4.x
+- **React Native Reanimated**: `^4.0.0`
 - **React Native Gesture Handler**: {{GESTURE_HANDLER_VERSION}}
 
 ### Forms & Validation
@@ -147,7 +149,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 
 - **Expo CLI**: {{EXPO_CLI_VERSION}}
 - **EAS CLI**: {{EAS_CLI_VERSION}}
-- **React Native Debugger** / **Flipper**
+- **React Native DevTools** (`npx react-native start --experimental-debugger`) — remplace Flipper (déprécié depuis RN 0.73)
 
 ---
 

@@ -228,8 +228,8 @@ return RectorConfig::configure()
         __DIR__ . '/tests',
     ])
     ->withSets([
-        LevelSetList::UP_TO_PHP_83,
-        LaravelSetList::LARAVEL_110,
+        LevelSetList::UP_TO_PHP_85,  // PHP 8.3 minimum requis, 8.5 recommandé
+        LaravelSetList::LARAVEL_130,
     ])
     ->withPreparedSets(
         deadCode: true,
@@ -268,7 +268,7 @@ return RectorConfig::configure()
 ```json
 {
     "require": {
-        "php": "^8.5",
+        "php": "^8.3",
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
         "laravel/horizon": "^5.24",

@@ -1,7 +1,7 @@
 # Laravel 13 — Framework Reference
 
-**Version :** Laravel 13.12.0 (série 13 lancée le 17 mars 2026)
-**PHP :** 8.5+
+**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière stable : 13.14.0)
+**PHP :** 8.3+ (8.5 recommandé)
 **Sources :** https://laravel.com/docs/13.x/releases
 
 ---
@@ -11,7 +11,7 @@
 | Fichier | Sujet |
 |---------|-------|
 | `@architecture.md` | Clean Architecture, Actions, DTOs, Repositories |
-| `@coding-standards.md` | PHP 8.5, Conventions Laravel, Enums, Match |
+| `@coding-standards.md` | PHP 8.3+ (8.5 recommandé), Conventions Laravel, Enums, Match |
 | `@testing.md` | Pest 4 + Mutation Testing, Arch Presets |
 | `@quality-tools.md` | PHPStan 2.0 Level 10, Pint, Rector |
 | `@security.md` | OWASP Top 10, Sanctum, Passkey Auth |
@@ -56,7 +56,7 @@
 
 | Composant | Version | Description |
 |-----------|---------|-------------|
-| **PHP** | 8.5+ | Constructor promotion, readonly, enums, match |
+| **PHP** | 8.3+ (8.5 recommandé) | Constructor promotion, readonly, enums, match |
 | **Laravel** | 13.x | Framework fullstack avec AI SDK |
 | **Pest** | 4.x | Tests + Mutation Testing |
 | **PHPStan** | 2.0 Level 10 | Analyse statique stricte |
@@ -82,7 +82,7 @@ app/
 ### Principes
 
 - **Actions** : une Action = une opération métier
-- **DTOs readonly** : typage strict PHP 8.5
+- **DTOs readonly** : typage strict PHP 8.3+
 - **Form Requests** : validation externalisée
 - **API Resources** : transformation des réponses
 - **Policies** : autorisation déclarative
@@ -216,7 +216,7 @@ parameters:
 
 - [ ] Clean Architecture (Domain/Application/Infrastructure/Http)
 - [ ] Actions pour logique métier
-- [ ] DTOs readonly PHP 8.5
+- [ ] DTOs readonly PHP 8.3+
 - [ ] Form Requests + Policies
 - [ ] PHPStan Level 10 (PHPStan 2.0)
 - [ ] Pest 4 + Mutation Testing >= 80%

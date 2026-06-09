@@ -6,6 +6,26 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 
 ---
 
+## Prérequis Système
+
+### Node.js >= 20 LTS (requis pour RN 0.85)
+
+React Native 0.85 **supprime le support des versions Node < 20**. La version minimale requise est **Node.js 20.19.4 LTS**.
+
+```bash
+# Vérifier la version
+node --version  # Doit être >= 20.19.4
+
+# Installer via nvm (recommandé)
+nvm install 20
+nvm use 20
+nvm alias default 20
+```
+
+> Node 16 et 18 ne sont plus supportés avec RN 0.85. Mettre à jour avant de migrer.
+
+---
+
 ## Expo CLI
 
 ### Installation
@@ -176,19 +196,83 @@ config.resolver.sourceExts.push('cjs');
 module.exports = config;
 ```
 
-### Clear Cache
+### Vider le Cache
 
 ```bash
-# Clear Metro cache
+# Vider le cache Metro
 npx expo start --clear
 
-# Or manually
+# Ou manuellement
 rm -rf node_modules/.cache
 ```
 
 ---
 
-## Development Tools
+## Metro TLS (0.85+)
+
+Depuis RN 0.85, Metro accepte un objet `server.tls` dans `metro.config.js`, activant HTTPS et WSS (WebSocket sécurisé pour Fast Refresh) pendant le développement local.
+
+### Cas d'usage
+
+| Cas | Pourquoi Metro TLS |
+|-----|--------------------|
+| Deep links HTTPS | Tester `applinks:` et Universal Links sans serveur distant |
+| APIs à origine sécurisée | Certaines APIs refusent les origines non-HTTPS (CSP, CORS strict) |
+| Réseaux d'entreprise | Proxys qui bloquent le trafic HTTP non chiffré |
+| Service Workers / PWA web | Requiert HTTPS même en développement |
+
+### Configuration
+
+```javascript
+// metro.config.js (bare RN 0.85+)
+const { getDefaultConfig } = require('@react-native/metro-config');
+const fs = require('fs');
+
+const config = getDefaultConfig(__dirname);
+
+// Activer TLS pour Metro dev server
+config.server = {
+  ...config.server,
+  tls: {
+    // Générer avec : mkcert localhost 127.0.0.1
+    key: fs.readFileSync('./certs/localhost-key.pem'),
+    cert: fs.readFileSync('./certs/localhost.pem'),
+  },
+};
+
+module.exports = config;
+```
+
+### Générer un certificat local de confiance
+
+```bash
+# Installer mkcert (macOS)
+brew install mkcert
+mkcert -install  # Installe la CA locale dans le keystore système
+
+# Générer le certificat
+mkdir -p certs
+mkcert -key-file certs/localhost-key.pem -cert-file certs/localhost.pem localhost 127.0.0.1
+
+# .gitignore : ne jamais commiter les certificats
+echo "certs/" >> .gitignore
+```
+
+### Démarrer Metro en HTTPS
+
+```bash
+# Bare RN
+npx react-native start
+
+# Expo (passe la config metro.config.js automatiquement)
+npx expo start
+```
+
+> **Note :** La configuration `server.tls` est disponible aussi bien pour bare RN (`@react-native/metro-config`) que pour Expo (`expo/metro-config`) — Metro lit la même clé `server.tls` dans les deux cas.
+
+---
+
+## Outils de Développement
 
 ### React Native Debugger
 
@@ -200,18 +284,31 @@ brew install --cask react-native-debugger
 # https://github.com/jhen0409/react-native-debugger
 ```
 
-### Flipper
+### React Native DevTools (0.85+)
+
+Flipper est déprécié depuis React Native 0.73. Le remplacement officiel est **React Native DevTools**, intégré nativement dans Metro. RN 0.85 en fait le débogueur par défaut et stabilise les fonctionnalités clés.
 
 ```bash
-# Install
-brew install --cask flipper
+# Démarrer avec le débogueur (RN 0.73+)
+npx react-native start --experimental-debugger
 
-# Plugins
-# - Network
-# - AsyncStorage
-# - React DevTools
-# - Hermes Debugger
+# Ouvrir depuis l'app via le menu dev
+# iOS : Cmd+D (simulateur) ou secouer l'appareil
+# Android : Cmd+M (émulateur) ou secouer l'appareil
+# Sélectionner "Open DevTools" dans le menu
 ```
+
+#### Fonctionnalités React Native DevTools 0.85+
+
+| Outil | Description |
+|-------|-------------|
+| **Network Inspector** | Inspecter les requêtes HTTP/WebSocket — remplace le plugin Flipper Network |
+| **React Component Inspector** | Arbre de composants, props, state — React DevTools intégré |
+| **Hermes CDP Debugger** | Points d'arrêt, exécution pas à pas, expressions de surveillance via Chrome DevTools Protocol |
+| **Console & Profiler** | Logs, profilage du thread JS, flamegraphs |
+| **Source maps** | Naviguer dans le code source TypeScript (Hermes + sourcemaps) |
+
+> **Note historique :** Flipper (`brew install --cask flipper`) fonctionnait avec les versions < 0.73. Il n'est plus maintenu pour la Nouvelle Architecture et ne doit pas être utilisé sur RN 0.73+.
 
 ### VS Code Extensions
 
@@ -268,10 +365,12 @@ npx expo install expo-camera@latest
 
 ## Checklist Tooling
 
+- [ ] Node.js >= 20.19.4 LTS installé
 - [ ] Expo CLI installé
 - [ ] EAS CLI configuré
 - [ ] Metro config optimisé
-- [ ] Debugger choisi (RN Debugger / Flipper)
+- [ ] Débogueur configuré (React Native DevTools 0.85+ via `--experimental-debugger`)
+- [ ] Metro TLS configuré si HTTPS local requis (deep links, origines sécurisées)
 - [ ] VS Code extensions installées
 - [ ] Package manager cohérent (npm)
 - [ ] Scripts npm configurés

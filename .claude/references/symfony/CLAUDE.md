@@ -11,6 +11,19 @@
 | Rector | 2.4.x | |
 | Deptrac | v4.x | |
 
+## Support Timeline Symfony
+
+| Version | Type | Fin de maintenance | Fin de sécurité | Recommandation |
+|---------|------|--------------------|-----------------|----------------|
+| **7.4** | LTS | Nov. 2028 | Nov. 2029 | ✅ Recommandée (LTS) |
+| **8.0** | Standard | Juil. 2026 | Juil. 2026 | ❌ EOS imminent — ne pas démarrer |
+| **8.1** | Standard | Jan. 2027 | Jan. 2027 | ✅ Recommandée (dernière stable) |
+| **8.4** | LTS (attendue) | ~Nov. 2030 | ~Nov. 2031 | ⏳ Sortie prévue nov. 2027 |
+
+**Règle :** démarrer un nouveau projet sur **7.4 LTS** (support jusqu'à 2029) ou **8.1** (dernière stable). Ne jamais choisir **8.0** (EOS juillet 2026).
+
+**Source:** https://symfony.com/releases
+
 ## Architecture Clean + DDD
 
 ```
@@ -22,6 +35,70 @@ src/
 ```
 
 **Règle d'or**: Domain ne dépend de RIEN d'externe.
+
+## Nouvelles Features Symfony 8.1
+
+> **Source:** [Symfony 8.1 curated new features](https://symfony.com/blog/symfony-8-1-curated-new-features)
+
+### DeepCloner
+
+Composant de clonage profond rapide et économe en mémoire pour les graphes d'objets PHP complexes.
+4× plus rapide sur les graphes typiques, jusqu'à 15× sur les graphes denses en propriétés. Utilisé en interne par DependencyInjection, FrameworkBundle, Form et Cache.
+
+```php
+use Symfony\Component\DeepClone\DeepCloner;
+
+$cloner = new DeepCloner();
+$copy = $cloner->deepClone($original); // Graphe cloné sans sérialisation
+```
+
+**Source:** https://symfony.com/blog/new-in-symfony-8-1-deep-cloner
+
+### Console Argument Resolvers
+
+Résolution automatique des arguments CLI vers des types PHP fortement typés (enums, UUIDs, ULIDs, Value Objects, services), identique au pattern des argument resolvers HTTP.
+
+```php
+#[AsCommand(name: 'app:process')]
+final class ProcessCommand
+{
+    public function __invoke(
+        #[Autowire] OrderId $orderId,    // Résolu depuis l'argument CLI
+        UserStatus $status,              // Enum résolu automatiquement
+        OrderRepositoryInterface $repo,  // Service injecté
+    ): int {
+        // Plus besoin de $input->getArgument('order-id')
+        return Command::SUCCESS;
+    }
+}
+```
+
+**Source:** https://symfony.com/blog/new-in-symfony-8-1-console-argument-resolvers
+
+### Composant TUI (Terminal UI)
+
+Nouveau composant pour construire des interfaces utilisateur interactives dans le terminal : widgets, layouts, gestion des inputs, support de la souris, rendu temps réel. Basé sur PHP Fibers et la boucle d'événements Revolt (pure PHP 8.4+, sans extensions).
+
+```php
+use Symfony\Component\Tui\Application;
+use Symfony\Component\Tui\Widget\Text;
+
+$app = new Application();
+$app->run(fn() => new Text('Hello, TUI!'));
+```
+
+**Source:** https://symfony.com/blog/introducing-the-symfony-tui-component
+
+### Améliorations Console 8.1
+
+- Image pasting dans les inputs interactifs
+- Questions à choix avec validation de réponse
+- Raw input forwarding
+- Améliorations progress bar et tests
+
+**Source:** https://symfony.com/blog/new-in-symfony-8-1-console-progress-and-testing-improvements
+
+---
 
 ## Nouvelles Features Symfony 8
 
@@ -36,14 +113,19 @@ src/
 **Source:** https://symfony.com/blog/new-in-symfony-8-1-http-less-symfony-applications
 Voir aussi : nouveau composant **TUI** (Terminal UI) en 8.1.
 
-### JSON Streamer Component (8.0+)
+### JSON Streamer Component (7.3+, amélioré en 8.0/8.1)
 ```php
-use Symfony\Component\JsonStreamer\JsonStreamReader;
+use Symfony\Component\JsonStreamer\Read\StreamReaderInterface;
 
 // Streaming haute performance pour gros JSON (>100MB)
-$reader = new JsonStreamReader($stream);
-foreach ($reader->readItems() as $item) {
-    yield $item; // Consommation mémoire constante
+// Injecter StreamReaderInterface par DI (service: json_streamer.stream_reader)
+final readonly class MyImporter {
+    public function __construct(private StreamReaderInterface $reader) {}
+    public function stream(mixed $stream): iterable {
+        foreach ($this->reader->read($stream) as $item) {
+            yield $item; // Consommation mémoire constante
+        }
+    }
 }
 ```
 **Source:** https://symfony.com/blog/new-in-symfony-8-0-jsonstreamer-component  

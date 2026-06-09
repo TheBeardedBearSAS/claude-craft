@@ -20,6 +20,7 @@
     "lint:shell": "find Dev/ Infra/ Project/ Tools/ scripts/ .bmad/ -name '*.sh' -type f | xargs shellcheck --severity=warning",
     "lint:i18n": "bash scripts/verify-i18n-parity.sh",
     "lint:includes": "node scripts/verify-claude-includes.mjs",
+    "lint:versions": "node scripts/verify-versions.mjs",
     "docs:generate": "node scripts/generate-references.mjs",
     "docs:check": "node scripts/generate-references.mjs --check",
     "format:check": "prettier --check cli/",

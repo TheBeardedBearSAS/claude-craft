@@ -1,7 +1,7 @@
 # Paperclip Architecture — Principles and Organization
 
 > Source of truth: https://docs.paperclip.ing/ and the repo at https://github.com/paperclipai/paperclip.
-> Observed version: v2026.403.0 (MIT, April 2026).
+> Observed version: v2026.529.0 (MIT, April 2026).
 
 ## Monorepo Shape (observed in repo)
 
@@ -69,7 +69,7 @@ Root `package.json` / `pnpm-workspace.yaml` defines the workspaces. Every packag
 - **Agents** (`/agents`, `/companies/:companyId/agents`, `/agent-hires`) — registered workers
 - **Approvals** (`/approvals/...`) — human-in-the-loop gates
 - **Activity** — append-only audit
-- **Issues / Projects / Goals** — product-level constructs
+- **Issues / Projects / Goals** — product-level constructs. Issues are the unit of work dispatched to agents; the `workMode` field on an agent hire payload controls how the agent processes them (execution mode — consult the instance docs for supported values).
 - **Plugin** — plugin management via CLI (`paperclipai plugin ...`)
 
 ## Dependency Direction

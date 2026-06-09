@@ -1,8 +1,9 @@
-# JSON Streamer + JsonPath Components - Symfony 8.0+
+# JSON Streamer + JsonPath Components - Symfony 7.3+
 
 ## Overview
 
-Symfony 8.0+ introduit deux composants complémentaires pour le traitement JSON haute performance :
+Symfony introduit deux composants complémentaires pour le traitement JSON haute performance
+(JSON Streamer disponible depuis **7.3**, stabilisé et amélioré en **8.0/8.1**) :
 
 1. **JSON Streamer Component** : streaming de données JSON volumineuses sans charger l'intégralité en mémoire
 2. **JsonPath Component** : navigation et requêtes JSON via expressions (RFC 9535)
@@ -27,6 +28,10 @@ composer require symfony/json-streamer
 # JsonPath
 composer require symfony/json-path
 ```
+
+> **Pattern d'injection recommandé :** ne pas instancier `JsonStreamReader`/`JsonStreamWriter` directement. Injecter `StreamReaderInterface` (service id `json_streamer.stream_reader`) et `StreamWriterInterface` (`json_streamer.stream_writer`) par autowiring. Symfony résout automatiquement l'implémentation.
+
+**Source:** [Symfony Docs — Streaming JSON](https://symfony.com/doc/current/serializer/streaming_json.html)
 
 ---
 
@@ -120,10 +125,14 @@ declare(strict_types=1);
 namespace App\Infrastructure\Import;
 
 use Symfony\Component\JsonPath\JsonPath;
-use Symfony\Component\JsonStreamer\JsonStreamReader;
+use Symfony\Component\JsonStreamer\Read\StreamReaderInterface;
 
 final readonly class SelectiveJsonImporter
 {
+    public function __construct(
+        private StreamReaderInterface $streamReader,
+    ) {}
+
     /**
      * Streame uniquement les éléments qui matchent un critère JsonPath.
      */
@@ -132,9 +141,7 @@ final readonly class SelectiveJsonImporter
         $stream = fopen($jsonPath, 'rb');
 
         try {
-            $reader = new JsonStreamReader($stream);
-
-            foreach ($reader->readItems() as $item) {
+            foreach ($this->streamReader->read($stream) as $item) {
                 // Applique le filtre JsonPath sur chaque item
                 $itemJson = json_encode($item, JSON_THROW_ON_ERROR);
                 $matches = JsonPath::select($itemJson, $expression);
@@ -165,12 +172,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Import;
 
-use Symfony\Component\JsonStreamer\JsonStreamReader;
-use Symfony\Component\JsonStreamer\Read\LazyObjectReader;
+use Symfony\Component\JsonStreamer\Read\StreamReaderInterface;
 
 final readonly class LargeJsonImporter
 {
     public function __construct(
+        private StreamReaderInterface $streamReader,
         private string $uploadDirectory,
     ) {}
 
@@ -189,10 +196,8 @@ final readonly class LargeJsonImporter
         }
 
         try {
-            $reader = new JsonStreamReader($stream);
-
             // Stream chaque élément du tableau JSON
-            foreach ($reader->readItems() as $item) {
+            foreach ($this->streamReader->read($stream) as $item) {
                 yield $item;
             }
         } finally {
@@ -212,12 +217,13 @@ declare(strict_types=1);
 namespace App\Infrastructure\Import;
 
 use App\Application\Dto\ProductImportDto;
-use Symfony\Component\JsonStreamer\JsonStreamReader;
+use Symfony\Component\JsonStreamer\Read\StreamReaderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final readonly class ProductStreamImporter
 {
     public function __construct(
+        private StreamReaderInterface $streamReader,
         private SerializerInterface $serializer,
     ) {}
 
@@ -229,9 +235,7 @@ final readonly class ProductStreamImporter
         $stream = fopen($jsonPath, 'rb');
 
         try {
-            $reader = new JsonStreamReader($stream);
-
-            foreach ($reader->readItems() as $rawItem) {
+            foreach ($this->streamReader->read($stream) as $rawItem) {
                 // Désérialisation avec type safety
                 yield $this->serializer->denormalize(
                     $rawItem,
@@ -256,11 +260,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Export;
 
-use Symfony\Component\JsonStreamer\JsonStreamWriter;
+use Symfony\Component\JsonStreamer\Write\StreamWriterInterface;
 
 final readonly class LargeJsonExporter
 {
     public function __construct(
+        private StreamWriterInterface $streamWriter,
         private string $exportDirectory,
     ) {}
 
@@ -279,14 +284,7 @@ final readonly class LargeJsonExporter
         }
 
         try {
-            $writer = new JsonStreamWriter($stream);
-            $writer->beginArray();
-
-            foreach ($items as $item) {
-                $writer->writeItem($item);
-            }
-
-            $writer->endArray();
+            $this->streamWriter->write($items, $stream);
         } finally {
             fclose($stream);
         }
@@ -304,41 +302,38 @@ declare(strict_types=1);
 namespace App\Infrastructure\Export;
 
 use App\Domain\Entity\Order;
-use Symfony\Component\JsonStreamer\JsonStreamWriter;
+use Symfony\Component\JsonStreamer\Write\StreamWriterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final readonly class OrderExporter
 {
     public function __construct(
+        private StreamWriterInterface $streamWriter,
         private SerializerInterface $serializer,
     ) {}
 
     /**
+     * Exporte les commandes en streaming avec métadonnées.
+     * Utilise le serializer pour normaliser chaque Order avant écriture.
+     *
      * @param iterable<Order> $orders
      */
-    public function exportOrders(iterable $orders, resource $stream): void
+    public function exportOrders(iterable $orders, mixed $stream): void
     {
-        $writer = new JsonStreamWriter($stream);
-        $writer->beginObject();
+        $payload = (function () use ($orders): iterable {
+            yield ['metadata' => [
+                'exported_at' => (new \DateTimeImmutable())->format(\DATE_ATOM),
+                'version' => '1.0',
+            ]];
 
-        $writer->writeKey('metadata');
-        $writer->writeValue([
-            'exported_at' => (new \DateTimeImmutable())->format(\DATE_ATOM),
-            'version' => '1.0',
-        ]);
+            foreach ($orders as $order) {
+                yield $this->serializer->normalize($order, 'json', [
+                    'groups' => ['export'],
+                ]);
+            }
+        })();
 
-        $writer->writeKey('orders');
-        $writer->beginArray();
-
-        foreach ($orders as $order) {
-            $serialized = $this->serializer->normalize($order, 'json', [
-                'groups' => ['export'],
-            ]);
-            $writer->writeItem($serialized);
-        }
-
-        $writer->endArray();
-        $writer->endObject();
+        $this->streamWriter->write($payload, $stream);
     }
 }
 ```
@@ -534,12 +529,13 @@ declare(strict_types=1);
 namespace App\Infrastructure\Import;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\JsonStreamer\JsonStreamReader;
+use Symfony\Component\JsonStreamer\Read\StreamReaderInterface;
 use Symfony\Component\JsonStreamer\Exception\StreamException;
 
 final readonly class RobustJsonImporter
 {
     public function __construct(
+        private StreamReaderInterface $streamReader,
         private LoggerInterface $logger,
     ) {}
 
@@ -552,9 +548,7 @@ final readonly class RobustJsonImporter
         $position = 0;
 
         try {
-            $reader = new JsonStreamReader($stream);
-
-            foreach ($reader->readItems() as $index => $item) {
+            foreach ($this->streamReader->read($stream) as $index => $item) {
                 $position = ftell($stream);
 
                 try {
@@ -644,9 +638,20 @@ stream_set_write_buffer($stream, 65536); // 64 KB buffer
 | 1 Go JSON | OOM | ~10 Mo RAM |
 | 10k objets/sec | N/A | Stable |
 
+## Améliorations Symfony 8.1
+
+> **Source:** [New in Symfony 8.1: Improved JSON Streaming and Querying](https://symfony.com/blog/new-in-symfony-8-1-improved-json-streaming-and-querying)
+
+- Support natif des **Value Objects génériques** (mécanisme `ValueObjectInterface`)
+- **DateInterval** et **DateTimeZone** supportés nativement comme value objects dans les streams
+- `StreamReaderInterface` et `StreamWriterInterface` stables (non-expérimental depuis Symfony 7.4)
+- Meilleure intégration avec le composant **ObjectMapper** pour le mapping typé
+
 ## Ressources
 
 - [Symfony JSON Streamer Blog](https://symfony.com/blog/new-in-symfony-8-0-jsonstreamer-component)
+- [Symfony Streaming JSON Docs](https://symfony.com/doc/current/serializer/streaming_json.html)
+- [Symfony 8.1 Improved JSON Streaming](https://symfony.com/blog/new-in-symfony-8-1-improved-json-streaming-and-querying)
 - [Symfony JsonPath Blog](https://symfony.com/blog/new-in-symfony-8-0-jsonpath-component)
 - [RFC 9535 - JsonPath](https://www.rfc-editor.org/rfc/rfc9535.html)
 - [PHP Generators](https://www.php.net/manual/en/language.generators.php)
@@ -654,5 +659,5 @@ stream_set_write_buffer($stream, 65536); // 64 KB buffer
 
 ---
 
-**Date de dernière mise à jour:** 2026-04-14
-**Version:** 1.1.0
+**Date de dernière mise à jour:** 2026-06-08
+**Version:** 1.2.0

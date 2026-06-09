@@ -131,14 +131,17 @@ Vulnerabilities Found: X
 
 🌐 SECURITY HEADERS
 ──────────────────────────────────────────────────────────────
-[ ] Content-Security-Policy
+[ ] Content-Security-Policy (Level 3 — prioritaire pour XSS)
 [✓] X-Content-Type-Options
 [ ] X-Frame-Options
-[✓] X-XSS-Protection
+[⚠] X-XSS-Protection — DEPRECATED, remove it; replace with CSP Level 3
+[ ] Cross-Origin-Opener-Policy
+[ ] Cross-Origin-Embedder-Policy
 
 Missing Headers:
-- Add CSP meta tag or configure server
+- Add CSP Level 3 meta tag or configure server (frame-ancestors 'none'; upgrade-insecure-requests)
 - Add X-Frame-Options: DENY
+- Remove X-XSS-Protection (deprecated, can introduce vulnerabilities)
 
 📋 ACTION ITEMS
 ──────────────────────────────────────────────────────────────

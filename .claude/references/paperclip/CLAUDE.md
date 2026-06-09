@@ -1,4 +1,4 @@
-# Paperclip 2026.403+ — Quick Reference
+# Paperclip 2026.529+ — Quick Reference
 
 > **Status :** Reference set bootstrapped 2026-05-18 (audit ST-03). Promesse marketing de la table `--tech=paperclip` désormais tenue avec un minimum vital. Pull requests bienvenues pour enrichir.
 
@@ -6,9 +6,9 @@
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Paperclip | 2026.403.0+ | Two-layer architecture (control plane + adapters) |
-| Node.js | 20+ LTS | TypeScript natif |
-| TypeScript | 5.5+ | Strict mode obligatoire |
+| Paperclip | 2026.529.0+ | Two-layer architecture (control plane + adapters) |
+| Node.js | 20+ LTS (22 LTS recommandé, testé en CI) | TypeScript natif |
+| TypeScript | 5.7+ | Strict mode obligatoire |
 | Vitest | 4.1+ | Tests unit + intégration |
 | PostgreSQL | 15+ | RLS pour multi-tenant, JSONB pour audit trail |
 
@@ -137,6 +137,45 @@ npm run test:mutation        # Stryker (Vitest 4 + control-plane scope)
 - [ ] Mutation score Stryker ≥ 70 % sur control-plane
 - [ ] Secrets dans Vault, rotation < 90 jours
 - [ ] OpenTelemetry traces sur chaque adapter call
+
+## Company Skills (v2026.529+)
+
+Paperclip v529 introduit un catalogue de **Company Skills** : des capacités d'agent packagées et distribuables, alignées avec la philosophie governance-first.
+
+### Concept
+
+Un *skill* est une unité de compétence encapsulée qu'un agent peut acquérir au `hire`. Deux catégories :
+
+| Catégorie | Description |
+|-----------|-------------|
+| **Bundled** | Inclus par défaut dans chaque agent (ex : audit trail writer, idempotency enforcer) |
+| **Optional** | Activés explicitement selon le rôle de l'agent (ex : stripe-adapter-skill, salesforce-connector-skill) |
+
+### Assignation via `desiredSkills`
+
+Les skills sont déclarés lors du hire d'un agent, dans la configuration du control plane :
+
+```typescript
+const agent = await controlPlane.hire({
+  role: 'payment-processor',
+  tenantId,
+  desiredSkills: [
+    'idempotency-enforcer',   // bundled — activé explicitement
+    'stripe-adapter-skill',   // optional — spécifique au provider
+    'audit-trail-writer',     // bundled — toujours recommandé
+  ],
+});
+```
+
+Les skills bundled non déclarés dans `desiredSkills` restent désactivés pour limiter la surface d'attaque (principe du moindre privilège).
+
+### Gouvernance
+
+- Les skills disponibles dans le catalogue sont listés via la CLI Paperclip (commandes de gestion de l'instance, à consulter dans la documentation officielle de votre version).
+- Les skills optionnels doivent être audités avant activation (cf. checklist sécurité ci-dessous).
+- Chaque skill activé est tracé dans l'audit trail au moment du hire.
+
+> **Note :** Les détails d'API CLI peuvent varier selon la build de votre instance Paperclip. Référez-vous à la documentation interne ou à votre vendor Paperclip pour les commandes exactes.
 
 ## Documentation complémentaire
 

@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+Audit de fraîcheur exhaustif 2026-06-08 (workflow multi-agents 36 agents + vérification adversariale par devil's advocates ; 169 constats retenus sur 172). Mise à jour des technologies, de la compatibilité Claude Code et des bonnes pratiques. Backwards compatible.
+
+### Added
+
+- **Source unique de versions** : `config/versions.yaml` + script `scripts/verify-versions.mjs` (`npm run lint:versions`) branché en CI — détecte toute dérive entre `cli/lib/tech-registry.js`, `.claude/CLAUDE.md` et `README.md` (cause-racine des incohérences de versions).
+- **`.claude-plugin/marketplace.json`** : manifeste de marketplace (permet `/plugin marketplace add TheBeardedBearSAS/claude-craft`).
+- **Paperclip** ajouté au registre CLI (`tech-registry.js`) comme stack installable (`--tech=paperclip`) + 5 commandes communes distribuées (`pack-repo`, `search`, `aliases`, `audit-freshness`, `init`) via `Dev/i18n/base/Common/commands/`.
+- **`fallbackModel`** (Claude Code 2.1.166) documenté + exemple dans `settings.local.json.example` (repli opus → sonnet → haiku pour les agents critiques) et rule 12.
+
+### Changed
+
+- **Versions des stacks** harmonisées sur 3 sources : Angular **22** (Signal Forms stables, OnPush/Fetch par défaut, TypeScript 6), Symfony **8.1 / PHP 8.4+**, Laravel **PHP 8.3+**, Flutter 3.44/Dart 3.12 (résiduels 3.41/3.11 nettoyés), Paperclip **2026.529.0**, Docker **29.5.2**, Coolify **v4.1.1**, FrankenPHP **1.12** (CVE-2026-24894/24895), PgBouncer CVE-2026-6664/6665/6666/6667.
+- **Bonnes pratiques par stack** (références + agents + i18n 5 langues) : C# (MediatR/AutoMapper commercial + alternatives OSS, Testcontainers 4, Argon2id), React (Compiler/Vite 8, Activity, useEffectEvent, ref-as-prop), React Native (Reanimated 4, React Native DevTools, gcTime, FlashList, breaking 0.85), Vue (Pinia 3/Router 5/Vite 8), Python (Ruff, mypy 2, uv, free-threading, t-strings), PHP (PHPStan 10, features 8.5).
+- **Sécurité OWASP Top 10:2025** propagée aux 5 langues + base (SSRF dans #1, Supply Chain #6, Exceptional Conditions #7 ; Argon2id, JWT EdDSA/DPoP, headers COOP/COEP/CORP, SLSA/SBOM/Sigstore).
+- **Claude Code compat** : `COMPATIBILITY.md` étendu à 2.1.168 (recommandée), breaking `workflow`→`ultracode` (2.1.160), `fallbackModel`, `MessageDisplay`, `/reload-skills` documentés.
+
+### Security
+
+- **GitHub Actions SHA-pinnées** : `codeql-action`, `aquasecurity/trivy-action` (ex-`@master`), `actions/cache` épinglées à un commit SHA.
+- **Gate CI étendu** aux modifications de contenu (`.claude/**`, `Dev/i18n/**`, `config/**`) — les tests de contenu se déclenchent désormais sur les PR de contenu.
+- **Hook `rm` durci** (`settings.json`) : couvre `-fr`, `--recursive --force` et les flags longs (l'ancien pattern ne bloquait que `-rf` groupé).
+- **Hooks des templates distribués corrigés** : lecture du JSON depuis stdin via `jq` (étaient non fonctionnels — `echo '$TOOL_INPUT'`).
+- **`X-XSS-Protection` (header déprécié) retiré** des recommandations (remplacé par CSP Level 3) dans toutes les références et templates de sécurité.
+- **Scope ShellCheck étendu** à `.bmad/` et `Project/` (`set -euo pipefail` ajouté à `install-project-commands.sh`).
+- **`install --from=<url>` : cap de 50 KB** sur le body distant (Content-Length + lecture) pour durcir contre un endpoint malveillant (+ 2 tests).
+- **Job CI `content-validation`** dédié (tests de contenu `.claude/` comme check de PR distinct) ; `mutation.yml` fiabilisé via `scripts/stryker-score.mjs` (ESM, gestion d'erreur explicite).
+
+### Enrichissements P2 (best-practices par stack)
+
+- C# (file-based apps, EF Core 10, Native AOT, JWT EdDSA), React (ViewTransition, cacheSignal, Performance Tracks), React Native (Expo SDK 56, jest-preset, DevTools 0.85), Python (typing PEP 695, FastAPI 0.136/Pydantic 2.13), PHP (features/dépréciations 8.5, PHPStan 10), Symfony (8.1 features, json-streamer DI), Laravel (Pest 4 Browser), Flutter (DCM), Angular (OnPush/Fetch défaut), Vue (Vitest Browser Mode). Cascade i18n 5 langues. ROADMAP v9.0 (items concurrentiels).
+
+> Rapport d'audit complet (local, non versionné) : `docs/audit/2026-06-08-comprehensive/`.
+
 ## [8.9.0] - 2026-06-02
 
 Intégration curatoriale de l'écosystème d'outils tiers Claude Code (optimisation de tokens, gestion de contexte, code review). MINOR release. Backwards compatible. Aucun code tiers n'est embarqué : les outils sont documentés, recommandés et accompagnés de leurs recettes d'activation et de leurs contraintes de licence.

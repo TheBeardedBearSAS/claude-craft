@@ -13,7 +13,7 @@ argument-hint: [company-name]
 
 Führen Sie einen Operator durch das Onboarding: installieren, die Instanz erstellen, das initiale Operator-Konto bootstrappen, die Company via UI erstellen und den ersten Agent mit dem `claude-local`-Adapter ausführen.
 
-> Die echte `paperclipai` CLI (v2026.403.0) exponiert **keinen** `companies create`-Befehl. Company-Erstellung erfolgt entweder über das Dashboard oder durch Import eines Pakets mit `paperclipai company import`. Erfinden Sie keine Flags, die nicht existieren — öffnen Sie `paperclipai company --help` und folgen Sie dem, was dort steht.
+> Die echte `paperclipai` CLI (v2026.529.0) exponiert **keinen** `companies create`-Befehl. Company-Erstellung erfolgt entweder über das Dashboard oder durch Import eines Pakets mit `paperclipai company import`. Erfinden Sie keine Flags, die nicht existieren — öffnen Sie `paperclipai company --help` und folgen Sie dem, was dort steht.
 
 ## Vorgehensweise
 
@@ -54,9 +54,17 @@ Beheben Sie alles, was als Hard-Failure gemeldet wird, bevor Sie fortfahren.
 
 ### 4. Bootstrap des ersten Operators (CEO)
 
+Zwei Pfade stehen je nach Deployment-Kontext zur Verfügung:
+
+**A — Browser-Claim (private / self-hosted, nicht beanspruchte Instanz):** Wenn die Instanz noch nicht beansprucht wurde, navigieren Sie zu `http://localhost:3100` im Browser. Ein Erststart-Bildschirm sollte erscheinen, der die direkte Einrichtung des initialen Admin-Kontos ermöglicht. Verwenden Sie diesen Pfad bei einer frisch deployten Instanz ohne bestehenden Operator.
+
+**B — CLI-Bootstrap:** Führen Sie den CLI-Befehl aus, um das initiale Operator-Konto programmatisch zu erstellen:
+
 ```bash
 paperclipai auth-bootstrap-ceo
 ```
+
+> **Welcher Pfad gilt?** Leitet das Dashboard beim ersten Laden auf eine Claim-/Setup-Seite weiter, verwenden Sie Pfad A. Zeigt es ein Login-Formular, verwenden Sie Pfad B (oder die Instanz hat bereits einen Operator). Konsultieren Sie `docs.paperclip.ing` für das genaue Verhalten Ihrer Version.
 
 Dies erstellt das initiale Operator-Konto, das zum Anmelden im Dashboard verwendet wird. **Widerrufen oder rotieren** Sie es nach Abschluss des Onboardings.
 
@@ -84,14 +92,14 @@ paperclipai company get --id <companyId>
 
 ### 7. Adapter-Verfügbarkeit prüfen
 
-Paperclip liefert Built-in-Adapter (beobachtet v2026.403.0):
+Paperclip liefert Built-in-Adapter (beobachtet v2026.529.0):
 `claude_local`, `codex_local`, `cursor_local`, `gemini_local`, `opencode_local`, `openclaw_gateway`, `pi_local`.
 
 Sie registrieren sich beim Boot selbst in der Server-Adapter-Registry. Verwenden Sie das Dashboard (oder die `/companies/:companyId/adapters/:type/...`-Routen), um zu bestätigen, dass der gewünschte vorhanden ist und antwortet.
 
 ### 8. Ersten Agent einstellen
 
-Paperclip stellt Agents **nicht** aus einer YAML-Datei via CLI ein (bei v2026.403.0). Agent einstellen:
+Paperclip stellt Agents **nicht** aus einer YAML-Datei via CLI ein (bei v2026.529.0). Agent einstellen:
 
 - **Via Dashboard**: **Agents → Hire** mit Adapter `claude_local`, wählen Sie ein Modell, setzen Sie ein Budget, weisen Sie ein Ziel zu.
 - **Via HTTP-API**: `POST /companies/:companyId/agents` (authentifiziert). Felder: `adapterType`, adapterspezifische Config, Agent-Metadaten. Siehe `server/src/routes/agents.ts` für die maßgebliche Form.

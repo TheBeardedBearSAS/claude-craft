@@ -13,7 +13,7 @@ argument-hint: [nom-entreprise]
 
 Guider un opérateur à travers l'onboarding : installer, créer l'instance, initialiser le compte opérateur initial, créer l'entreprise via l'UI, et exécuter le premier agent avec l'adaptateur `claude-local`.
 
-> Le vrai CLI `paperclipai` (v2026.403.0) n'expose **pas** de commande `companies create`. La création d'entreprise se fait soit via le tableau de bord, soit en important un package avec `paperclipai company import`. Ne pas inventer de flags qui n'existent pas — ouvrir `paperclipai company --help` et suivre ce qui est là.
+> Le vrai CLI `paperclipai` (v2026.529.0) n'expose **pas** de commande `companies create`. La création d'entreprise se fait soit via le tableau de bord, soit en important un package avec `paperclipai company import`. Ne pas inventer de flags qui n'existent pas — ouvrir `paperclipai company --help` et suivre ce qui est là.
 
 ## Procédure
 
@@ -54,9 +54,17 @@ Corriger tout ce qui est rapporté comme échec dur avant de continuer.
 
 ### 4. Initialiser le premier opérateur (CEO)
 
+Deux chemins sont possibles selon le contexte de déploiement :
+
+**A — Revendication via navigateur (instance privée / auto-hébergée non revendiquée) :** Si l'instance n'a pas encore été revendiquée, ouvrir `http://localhost:3100` dans un navigateur. Un écran de premier démarrage devrait apparaître, permettant de configurer le compte administrateur initial directement. Utiliser ce chemin si l'instance vient d'être déployée et n'a pas d'opérateur existant.
+
+**B — Bootstrap CLI :** Exécuter la commande CLI pour créer le compte opérateur initial de façon programmatique :
+
 ```bash
 paperclipai auth-bootstrap-ceo
 ```
+
+> **Quel chemin utiliser ?** Si le tableau de bord redirige vers une page de revendication/configuration au premier chargement, utiliser le chemin A. S'il affiche un formulaire de connexion, utiliser le chemin B (ou l'instance possède déjà un opérateur). Consulter `docs.paperclip.ing` pour le comportement exact de votre version.
 
 Cela crée le compte opérateur initial utilisé pour se connecter au tableau de bord. **Révoquer ou faire tourner** après que l'onboarding soit terminé.
 
@@ -84,14 +92,14 @@ paperclipai company get --id <companyId>
 
 ### 7. Vérifier la disponibilité de l'adaptateur
 
-Paperclip est livré avec des adaptateurs intégrés (observés v2026.403.0) :
+Paperclip est livré avec des adaptateurs intégrés (observés v2026.529.0) :
 `claude_local`, `codex_local`, `cursor_local`, `gemini_local`, `opencode_local`, `openclaw_gateway`, `pi_local`.
 
 Ils s'enregistrent eux-mêmes dans le registre d'adaptateurs du serveur au démarrage. Utiliser le tableau de bord (ou les routes `/companies/:companyId/adapters/:type/...`) pour confirmer que celui que vous voulez est présent et répond.
 
 ### 8. Embaucher le premier agent
 
-Paperclip n'embauche **pas** d'agents depuis un fichier YAML via CLI (à la v2026.403.0). Embaucher un agent :
+Paperclip n'embauche **pas** d'agents depuis un fichier YAML via CLI (à la v2026.529.0). Embaucher un agent :
 
 - **Via le tableau de bord** : **Agents → Embaucher** avec l'adaptateur `claude_local`, choisir un modèle, définir un budget, assigner un objectif.
 - **Via l'API HTTP** : `POST /companies/:companyId/agents` (authentifié). Champs : `adapterType`, config spécifique à l'adaptateur, métadonnées de l'agent. Voir `server/src/routes/agents.ts` pour la forme autoritaire.

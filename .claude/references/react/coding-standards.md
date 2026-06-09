@@ -164,7 +164,31 @@ npm install babel-plugin-react-compiler
 npm install -D eslint-plugin-react-compiler
 ```
 
-**Vite (vite.config.ts) :**
+**Vite avec `@vitejs/plugin-react` v6+ (Vite 8) :**
+
+> ⚠️ **Rupture depuis `@vitejs/plugin-react` v6 / Vite 8 :** la config `babel.plugins` dans `react({ babel: ... })` ne fonctionne plus pour le React Compiler. Utiliser `@rolldown/plugin-babel` avec `reactCompilerPreset`.
+
+```bash
+npm install -D @rolldown/plugin-babel
+```
+
+```typescript
+// vite.config.ts — @vitejs/plugin-react v6+ (Vite 8)
+import { defineConfig } from 'vite';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    babel({
+      presets: [reactCompilerPreset()]
+    }),
+  ],
+});
+```
+
+**Vite avec `@vitejs/plugin-react` < v6 :**
 ```typescript
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -180,7 +204,7 @@ export default defineConfig({
 });
 ```
 
-Source : [react.dev/blog/2025/10/07/react-compiler-1](https://react.dev/blog/2025/10/07/react-compiler-1)
+Source : [react.dev/learn/react-compiler/installation](https://react.dev/learn/react-compiler/installation)
 
 ---
 
@@ -543,7 +567,34 @@ export const UserCardCustom: FC<UserCardProps> = memo(
 );
 ```
 
-### 3. forwardRef for Refs
+### 3. `ref` comme prop directe (React 19+)
+
+En **React 19**, `forwardRef` est **déprécié**. Passer `ref` directement comme prop.
+
+```typescript
+import { InputHTMLAttributes, Ref } from 'react';
+
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+  ref?: Ref<HTMLInputElement>;
+}
+
+// ✅ React 19 — ref comme prop directe (recommandé)
+export const Input = ({ label, error, ref, ...props }: InputProps) => {
+  return (
+    <div>
+      {label && <label>{label}</label>}
+      <input ref={ref} {...props} />
+      {error && <span>{error}</span>}
+    </div>
+  );
+};
+
+Input.displayName = 'Input';
+```
+
+**Pattern legacy `forwardRef` (déprécié en React 19, conserver pour compatibilité React 17/18) :**
 
 ```typescript
 import { forwardRef, InputHTMLAttributes } from 'react';
@@ -553,7 +604,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-// Component with forwardRef
+// ⚠️ Déprécié en React 19 — utiliser ref comme prop directe
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, ...props }, ref) => {
     return (
@@ -567,18 +618,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = 'Input';
+```
 
-// Usage
+**Usage (identique dans les deux cas) :**
+```typescript
 const MyForm = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const focusInput = () => {
-    inputRef.current?.focus();
-  };
 
   return <Input ref={inputRef} label="Name" />;
 };
 ```
+
+**Source :** [react.dev/blog/2024/12/05/react-19 — ref as a prop](https://react.dev/blog/2024/12/05/react-19#ref-as-a-prop)
 
 ## Component File Structure
 

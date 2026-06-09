@@ -48,6 +48,8 @@ Claude Code <---> MCP Protocol <---> MCP Server <---> External Service
 
 Configure MCP servers in `.mcp.json` at your project root:
 
+> **Security — pin versions.** The `npx -y` examples below omit the version for readability. In real configs, **pin every third-party MCP server to an explicit version** (e.g. `["-y", "@modelcontextprotocol/server-github@2025.4.0"]`) and audit it before use — see [Security § MCP & Plugins](../.claude/rules/11-security.md). An unpinned `npx -y` always fetches the latest publish, which is a supply-chain risk.
+
 ```json
 {
   "mcpServers": {

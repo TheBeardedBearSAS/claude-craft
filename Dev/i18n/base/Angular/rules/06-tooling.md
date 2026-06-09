@@ -203,7 +203,7 @@ npm install -D stylelint stylelint-config-standard-scss stylelint-order
 
 ## Testing Tools
 
-### Vitest (Recommended for Angular 21+)
+### Vitest (Recommended for Angular 22+)
 
 ```bash
 npm install -D vitest @analogjs/vitest-angular jsdom

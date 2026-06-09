@@ -1,6 +1,20 @@
 # Angular Tooling and CLI
 
-**Version documentée :** Angular 21 (latest stable, LTS) / Angular 22 (en RC)
+**Version documentée :** Angular 22 (stable, sorti le 03/06/2026)
+
+## Prérequis système
+
+| Dépendance | Version requise | Notes |
+|------------|----------------|-------|
+| **Node.js** | **22.x ou 24.x** | Node 20 non supporté depuis Angular 22 (EOL + supprimé) |
+| **npm** | 10.x+ (inclus avec Node 22/24) | — |
+| **TypeScript** | **6.x** | TypeScript 5.x non supporté depuis Angular 22 |
+
+> **Note :** `node --version` doit retourner `v22.x.x` ou `v24.x.x`. Si vous utilisez nvm : `nvm install 22 && nvm use 22`.
+
+Source : [Angular version compatibility](https://angular.dev/reference/versions) | [Angular 22 release notes](https://blog.ninja-squad.com/2026/06/03/what-is-new-angular-22.0)
+
+---
 
 ## Angular CLI
 
@@ -57,7 +71,6 @@ ng update @angular/core @angular/cli
             "outputPath": "dist/my-app",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
@@ -99,6 +112,8 @@ ng update @angular/core @angular/cli
   }
 }
 ```
+
+> **Angular 22 zoneless :** la clé `"polyfills": ["zone.js"]` est **supprimée** dans les nouveaux projets générés par le CLI. Zone.js (~33 KB) n'est plus nécessaire grâce à `provideZonelessChangeDetection()` activé par défaut. Si vous migrez un projet existant, retirez `zone.js` de `polyfills` dans `angular.json` **et** de `package.json`.
 
 ## Formatting and Linting
 

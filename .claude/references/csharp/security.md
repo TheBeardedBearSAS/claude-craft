@@ -5,7 +5,7 @@
 Security is an **absolute priority**. This document covers general security principles with C#/.NET implementation examples.
 
 **References:**
-- OWASP Top 10
+- [OWASP Top 10:2025](https://owasp.org/Top10/2025/)
 - CWE/SANS Top 25
 
 ---
@@ -85,7 +85,7 @@ public class OrderOwnerAuthorizationHandler
 **Protection:**
 - Encrypt sensitive data at rest
 - Use TLS 1.3 in transit
-- Modern algorithms (bcrypt, Argon2, AES-256)
+- Modern algorithms (**Argon2id** primary, bcrypt secondary, AES-256 for symmetric encryption)
 - Secrets in vault (not in code)
 
 ```csharp
@@ -117,21 +117,49 @@ public class EncryptionService
     }
 }
 
-// DO: Use proper password hashing
+// DO: Use Argon2id for password hashing (OWASP 2026 recommendation)
+// NuGet: Konscious.Security.Cryptography.Argon2 (v1.3.1, MIT)
+// Parameters: m=19456 KiB, t=2 iterations, p=1 parallelism (OWASP 2026 minimum)
 public class PasswordHasher
 {
+    // Salt must be unique per password, 16 bytes minimum
+    private const int SaltSize = 16;
+    private const int HashSize = 32;
+
     public string HashPassword(string password)
     {
-        return new PasswordHasher<object>().HashPassword(null!, password);
+        var salt = RandomNumberGenerator.GetBytes(SaltSize);
+        var hash = ComputeArgon2id(Encoding.UTF8.GetBytes(password), salt);
+        // Store as "salt:hash" (both Base64-encoded)
+        return $"{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
     }
 
-    public bool VerifyPassword(string hashedPassword, string providedPassword)
+    public bool VerifyPassword(string storedHash, string providedPassword)
     {
-        var result = new PasswordHasher<object>()
-            .VerifyHashedPassword(null!, hashedPassword, providedPassword);
-        return result != PasswordVerificationResult.Failed;
+        var parts = storedHash.Split(':');
+        if (parts.Length != 2) return false;
+        var salt = Convert.FromBase64String(parts[0]);
+        var expectedHash = Convert.FromBase64String(parts[1]);
+        var actualHash = ComputeArgon2id(Encoding.UTF8.GetBytes(providedPassword), salt);
+        return CryptographicOperations.FixedTimeEquals(actualHash, expectedHash);
+    }
+
+    private static byte[] ComputeArgon2id(byte[] password, byte[] salt)
+    {
+        using var argon2 = new Argon2id(password)
+        {
+            Salt = salt,
+            MemorySize = 19456,   // 19 MiB (OWASP 2026 minimum: 19456 KiB)
+            Iterations = 2,        // t=2 (OWASP 2026 minimum)
+            DegreeOfParallelism = 1 // p=1
+        };
+        return argon2.GetBytes(HashSize);
     }
 }
+// Required usings: Konscious.Security.Cryptography, System.Security.Cryptography, System.Text
+//
+// Bcrypt (secondary option, legacy migration): BCrypt.Net-Next, cost factor >= 12.
+// NEVER use MD5, SHA-1, SHA-256 or unsalted hashes for passwords.
 ```
 
 ### A03: Injection
@@ -221,11 +249,14 @@ app.Use(async (context, next) =>
 {
     context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
     context.Response.Headers.Append("X-Frame-Options", "DENY");
-    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    // X-XSS-Protection est déprécié — s'appuyer sur CSP Level 3
     context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
     context.Response.Headers.Append(
         "Content-Security-Policy",
-        "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'");
+        "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; upgrade-insecure-requests");
+    context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
+    context.Response.Headers.Append("Cross-Origin-Embedder-Policy", "require-corp");
+    context.Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
     await next();
 });
 
@@ -266,6 +297,8 @@ updates:
 
 ```csharp
 // DO: Configure secure authentication
+// Voir section JWT ci-dessous pour la config EdDSA (OWASP 2026 prioritaire)
+// Exemple minimal avec ES256 (ECDSA P-256) — remplacer SymmetricSecurityKey par ECDsaSecurityKey
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -277,6 +310,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
+            // NOTE: Remplacer SymmetricSecurityKey par ECDsaSecurityKey (ES256/EdDSA) en production
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
             ClockSkew = TimeSpan.Zero
@@ -451,8 +485,10 @@ public class SafeHttpClient
 - Minimum 12 characters
 - Uppercase, lowercase, digits, special chars
 - Not in compromised password lists
-- Hash with bcrypt/Argon2 (NEVER MD5/SHA1)
-- Unique salt per user
+- Hash with **Argon2id** (OWASP 2026 primary — `Konscious.Security.Cryptography.Argon2`, m=19456 KiB, t=2, p=1 minimum)
+- bcrypt (cost ≥ 12) acceptable as secondary/legacy option
+- NEVER MD5, SHA-1, SHA-256, or unsalted hashes
+- Unique random salt per user (16 bytes minimum)
 
 ### Sessions
 
@@ -466,11 +502,58 @@ Session config:
 
 ### JWT
 
-- Algorithm: RS256 or ES256 (not HS256 with weak secret)
-- Short expiration (15 min)
-- Long refresh token (7 days) stored securely
-- Verify signature and claims
-- Don't store sensitive data in payload
+- **Algorithme (priorité OWASP 2026) : EdDSA (Ed25519) > ES256 (ECDSA P-256) > RS256 (RSA-2048)**
+- Ne jamais utiliser HS256 avec un secret faible (clé symétrique partagée)
+- Expiration courte (15 min), refresh token sécurisé (7 jours, rotation obligatoire)
+- Vérifier signature ET claims (iss, aud, exp) à chaque requête
+- Ne jamais stocker de données sensibles dans le payload (lisible sans clé)
+
+```csharp
+// DO: JWT Bearer avec EdDSA (Ed25519) — OWASP 2026 prioritaire
+// NuGet: Microsoft.IdentityModel.Tokens (inclus dans Microsoft.AspNetCore.Authentication.JwtBearer)
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        // Charger la clé publique Ed25519 (PEM ou depuis Key Vault)
+        var edDsaKey = ECDsa.Create();
+        // edDsaKey.ImportFromPem(File.ReadAllText("public.pem")); // production: Key Vault
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            // EdDSA : utiliser ECDsaSecurityKey avec la courbe Ed25519
+            IssuerSigningKey = new ECDsaSecurityKey(edDsaKey),
+            // RS256 / ES256 fallback (migration) :
+            // IssuerSigningKey = new RsaSecurityKey(rsa) / new ECDsaSecurityKey(ecdsa),
+            ClockSkew = TimeSpan.Zero  // Pas de marge sur l'expiration
+        };
+    });
+
+// Génération de token EdDSA (côté Identity Provider)
+public string GenerateToken(string userId, string issuer, string audience)
+{
+    using var ecdsa = ECDsa.Create(ECCurve.NamedCurves.nistP256); // ES256
+    // Pour Ed25519, utiliser OKP key (nécessite BouncyCastle ou .NET 9+ preview)
+    var signingCredentials = new SigningCredentials(
+        new ECDsaSecurityKey(ecdsa), SecurityAlgorithms.EcdsaSha256);
+
+    var token = new JwtSecurityToken(
+        issuer: issuer,
+        audience: audience,
+        claims: [new Claim(JwtRegisteredClaimNames.Sub, userId)],
+        expires: DateTime.UtcNow.AddMinutes(15),
+        signingCredentials: signingCredentials);
+
+    return new JwtSecurityTokenHandler().WriteToken(token);
+}
+```
+
+> **Note :** Ed25519 natif arrive avec `System.Security.Cryptography` depuis .NET 9+. Pour les projets .NET 8, utiliser **ES256** (ECDSA P-256) comme alternative immédiate à RS256. La bibliothèque `Microsoft.IdentityModel.Tokens` supporte `SecurityAlgorithms.EcdsaSha256` (ES256) nativement.
 
 ### MFA
 
@@ -534,19 +617,23 @@ public async Task<Order> GetOrder(Guid orderId, Guid currentUserId)
 ## Security Headers
 
 ```http
-# XSS protection
-Content-Security-Policy: default-src 'self'; script-src 'self'
+# XSS protection via CSP Level 3 — X-XSS-Protection est déprécié, ne pas l'utiliser
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests
 X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
 
 # Clickjacking protection
 X-Frame-Options: DENY
 
 # HTTPS
-Strict-Transport-Security: max-age=31536000; includeSubDomains
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 
 # Referrer
 Referrer-Policy: strict-origin-when-cross-origin
+
+# Cross-Origin Isolation (2026)
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Resource-Policy: same-origin
 ```
 
 ---
@@ -605,7 +692,7 @@ builder.Configuration.AddAzureKeyVault(
 - [ ] Server-side input validation
 - [ ] Parameterized queries (no SQL concatenation)
 - [ ] Output escaping (XSS prevention)
-- [ ] Passwords hashed (bcrypt/Argon2)
+- [ ] Passwords hashed with Argon2id (Konscious.Security.Cryptography.Argon2, m=19456, t=2, p=1)
 - [ ] Secure sessions (httpOnly, secure, sameSite)
 - [ ] Permission checks on every request
 - [ ] Secrets in environment variables
@@ -628,6 +715,7 @@ builder.Configuration.AddAzureKeyVault(
 - [ ] SSRF protection implemented
 - [ ] Azure Key Vault for production secrets
 - [ ] Serilog for structured logging
+- [ ] JWT signé avec EdDSA (Ed25519) ou ES256 — jamais HS256 avec secret faible
 
 ### Monitoring
 
@@ -647,13 +735,13 @@ builder.Configuration.AddAzureKeyVault(
 
 ## Resources
 
-- **OWASP Top 10:** [owasp.org/Top10](https://owasp.org/Top10/)
+- **OWASP Top 10:2025:** [owasp.org/Top10/2025/](https://owasp.org/Top10/2025/)
 - **OWASP Cheat Sheets:** [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/)
 - **CWE Top 25:** [cwe.mitre.org/top25](https://cwe.mitre.org/top25/)
 - **NIST Guidelines:** [nist.gov](https://www.nist.gov/cyberframework)
 
 ---
 
-**Last updated:** 2025-01
-**Version:** 2.0.0 (merged base + C#)
+**Last updated:** 2026-06
+**Version:** 2.1.0 (JWT EdDSA OWASP 2026 alignment)
 **Author:** The Bearded CTO

@@ -19,6 +19,19 @@ Configuration : `.php-cs-fixer.dist.php`
 
 **Source:** https://symfony.com/releases/8.1
 
+### Support Timeline Symfony
+
+| Version | Type | Fin de maintenance | Fin de sécurité | Recommandation |
+|---------|------|--------------------|-----------------|----------------|
+| **7.4** | LTS | Nov. 2028 | Nov. 2029 | ✅ Recommandée (LTS) |
+| **8.0** | Standard | Juil. 2026 | Juil. 2026 | ❌ EOS imminent — ne pas démarrer |
+| **8.1** | Standard | Jan. 2027 | Jan. 2027 | ✅ Recommandée (dernière stable) |
+| **8.4** | LTS (attendue) | ~Nov. 2030 | ~Nov. 2031 | ⏳ Sortie prévue nov. 2027 |
+
+**Règle :** démarrer un nouveau projet sur **7.4 LTS** (support jusqu'à 2029) ou **8.1** (dernière stable). Ne jamais choisir **8.0** (EOS juillet 2026).
+
+**Source:** https://symfony.com/releases
+
 ### Nouvelles Features PHP 8.4
 
 #### Property Hooks (PHP 8.4)
@@ -74,14 +87,18 @@ echo $order->status; // OK
 $order->status = 'x'; // ERREUR : private(set)
 ```
 
-### Nouvelles Features PHP 8.5 (beta)
+### Nouvelles Features PHP 8.5 (stable, nov. 2025)
 
-#### Pipe Operator (|>) — Expérimental
+PHP 8.5 est sorti le 20 novembre 2025 (dernière patch : 8.5.7, avril 2026) — **production-ready**.
+
+**Source:** https://www.php.net/releases/8.5/en.php
+
+#### Pipe Operator (|>)
 
 ```php
 <?php
 
-// ⚠️ PHP 8.5 Pipe operator - chainage fonctionnel lisible (beta)
+// ✅ PHP 8.5 Pipe operator - chainage fonctionnel lisible
 $result = $input
     |> trim(...)
     |> strtolower(...)
@@ -92,7 +109,27 @@ $result = $input
 $result = htmlspecialchars(str_replace(' ', '-', strtolower(trim($input))));
 ```
 
-**Note:** PHP 8.5 est en beta, ne pas utiliser en production.
+#### clone with — Clonage partiel immutable
+
+```php
+<?php
+
+// ✅ PHP 8.5 clone with - modifier des propriétés à la création d'un clone
+$updated = clone $order with { status: 'confirmed', updatedAt: new \DateTimeImmutable() };
+```
+
+#### Attribut #[\NoDiscard]
+
+```php
+<?php
+
+// ✅ PHP 8.5 #[\NoDiscard] - avertissement si la valeur de retour est ignorée
+#[\NoDiscard]
+public function save(): Result { ... }
+
+// Déclenche un warning si appelé sans utiliser la valeur retournée
+$this->save(); // Warning : valeur de retour ignorée
+```
 
 ### Verification Automatique
 

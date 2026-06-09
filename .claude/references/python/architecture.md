@@ -1,5 +1,9 @@
 # Python Architecture - Clean Architecture & Hexagonal
 
+> **Version de référence :** Python **3.14 (stable, 3.14.5+)** — Python 3.15 en beta (release oct. 2026).
+> FastAPI **~0.136.x** (0.136.3 au 2026-05) — Python **3.10+ minimum**, Pydantic v2 obligatoire (v1 dépréciée, incompatible Python 3.14).
+> Pydantic **>=2.9, 2.13.x recommandé** — Pydantic v1 non supportée avec Python 3.14.
+
 ## Fundamental Principles
 
 ### Clean Architecture (Uncle Bob)

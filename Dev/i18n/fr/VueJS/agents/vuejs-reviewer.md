@@ -695,5 +695,5 @@ L'élément change-t-il fréquemment de visibilité ?
 
 ---
 
-**Version :** 2.0
-**Dernière mise à jour :** 2026-02
+**Version :** 2.2
+**Dernière mise à jour :** 2026-06

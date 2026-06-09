@@ -1,5 +1,9 @@
 # Code Quality Tools - Python
 
+> **Version de référence :** Python **3.14 (stable, 3.14.5+)** — Python 3.15 en beta (release oct. 2026).
+> FastAPI **~0.136.x** — Python 3.10+ minimum, Pydantic v2 obligatoire.
+> Pydantic **>=2.9, 2.13.x recommandé**.
+
 ## Ruff - Fast Python Linter & Formatter
 
 ### Installation
@@ -116,7 +120,26 @@ ruff check --watch .
 pip install mypy
 # With common stubs
 pip install types-requests types-python-dateutil types-redis
+# Ou via uv (recommandé)
+uv add --dev mypy types-requests
 ```
+
+### mypy 2.0 — Breaking Changes
+
+mypy 2.0 (mai 2026) introduit des changements de défauts et le parallélisme expérimental :
+
+| Changement | Avant 2.0 | Depuis 2.0 |
+|------------|-----------|------------|
+| `--local-partial-types` | opt-in | **activé par défaut** |
+| `--strict-bytes` | opt-in | **activé par défaut** |
+| `--allow-redefinition-new` | nom temporaire | renommé `--allow-redefinition` |
+| Support Python 3.9 | supporté | **supprimé** — minimum `--python-version 3.10` |
+| Parallélisme | non disponible | `--num-workers N` (jusqu'à 5x sur gros projets) |
+
+**Migration depuis mypy 1.x :**
+1. Mettre à jour `mirrors-mypy` en `v2.1.0` dans `.pre-commit-config.yaml`
+2. Lancer `mypy --num-workers 4 src/` et corriger les nouvelles erreurs
+3. Si besoin de l'ancien comportement de redéfinition : utiliser `--allow-redefinition-old`
 
 ### pyproject.toml Configuration
 
@@ -137,6 +160,9 @@ warn_no_return = true
 warn_unreachable = true
 show_error_codes = true
 show_column_numbers = true
+# mypy 2.0+ : ces options sont désormais activées par défaut
+# local_partial_types = true   # default depuis 2.0
+# strict_bytes = true          # default depuis 2.0
 
 # Plugins
 plugins = [
@@ -161,6 +187,9 @@ ignore_errors = true
 # Run type checking
 mypy src/
 
+# Parallel type checking (mypy 2.0+, recommandé sur gros projets)
+mypy --num-workers 4 src/
+
 # Generate report
 mypy src/ --html-report mypy-report
 
@@ -179,6 +208,17 @@ mypy --strict src/
 pip install pytest pytest-cov pytest-asyncio pytest-xdist httpx
 ```
 
+### asyncio_mode — choisir le bon mode
+
+`pytest-asyncio` propose deux modes principaux, à choisir selon le profil du projet :
+
+| Mode | Valeur | Quand l'utiliser |
+|------|--------|-----------------|
+| **`auto`** | `asyncio_mode = "auto"` | Projets **full-async** (FastAPI, SQLAlchemy async) : toutes les coroutines sont automatiquement détectées comme tests async — aucun `@pytest.mark.asyncio` requis. |
+| **`strict`** | `asyncio_mode = "strict"` (défaut depuis pytest-asyncio 0.21) | Équipes **mixtes sync/async** : seuls les tests explicitement marqués `@pytest.mark.asyncio` sont traités comme async — évite les effets de bord sur les tests sync. |
+
+> **Recommandation :** utiliser `auto` pour les projets FastAPI/full-async, `strict` (défaut) pour tout autre projet.
+
 ### pyproject.toml Configuration
 
 ```toml
@@ -187,7 +227,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_functions = ["test_*"]
 python_classes = ["Test*"]
-asyncio_mode = "auto"
+asyncio_mode = "auto"  # "strict" pour projets mixtes sync/async
 addopts = [
     "-v",
     "--strict-markers",
@@ -247,16 +287,18 @@ pre-commit install
 ### .pre-commit-config.yaml
 
 ```yaml
+# Lancer: pre-commit autoupdate pour rafraîchir les versions
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.0
+    # ruff lint (remplace flake8 + isort) + ruff format (remplace black)
+    rev: v0.15.16
     hooks:
       - id: ruff
         args: [--fix]
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
+    rev: v2.1.0
     hooks:
       - id: mypy
         additional_dependencies:

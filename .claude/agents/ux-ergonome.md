@@ -6,6 +6,7 @@ maxTurns: 6
 effort: medium
 tools: [Read, Glob, Grep, Edit, Write, WebFetch, WebSearch]
 permissionMode: default
+memory: project
 ---
 
 # UX Ergonome Agent

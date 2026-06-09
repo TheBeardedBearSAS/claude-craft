@@ -13,7 +13,7 @@ argument-hint: [nombre-compañía]
 
 Guiar a un operador a través del onboarding: instalar, crear la instancia, bootstrapear la cuenta de operador inicial, crear la compañía vía la UI, y ejecutar el primer agente con el adaptador `claude-local`.
 
-> El CLI `paperclipai` real (v2026.403.0) **no** expone un comando `companies create`. La creación de compañía ocurre a través del dashboard o importando un paquete con `paperclipai company import`. No inventar flags que no existen — abrir `paperclipai company --help` y seguir lo que hay ahí.
+> El CLI `paperclipai` real (v2026.529.0) **no** expone un comando `companies create`. La creación de compañía ocurre a través del dashboard o importando un paquete con `paperclipai company import`. No inventar flags que no existen — abrir `paperclipai company --help` y seguir lo que hay ahí.
 
 ## Procedimiento
 
@@ -54,9 +54,17 @@ Corregir cualquier cosa reportada como fallo duro antes de proceder.
 
 ### 4. Bootstrapear el primer operador (CEO)
 
+Hay dos rutas disponibles según el contexto de despliegue:
+
+**A — Reclamación en el navegador (instancia privada / auto-alojada no reclamada):** Si la instancia aún no ha sido reclamada, navegar a `http://localhost:3100` en un navegador. Debería aparecer una pantalla de primera ejecución que permite configurar la cuenta de administrador inicial directamente. Usar esta ruta cuando la instancia acaba de desplegarse y no tiene operador existente.
+
+**B — Bootstrap CLI:** Ejecutar el comando CLI para crear la cuenta de operador inicial de forma programática:
+
 ```bash
 paperclipai auth-bootstrap-ceo
 ```
+
+> **¿Qué ruta aplica?** Si el dashboard redirige a una página de reclamación/configuración en la primera carga, usar la ruta A. Si muestra un formulario de inicio de sesión, usar la ruta B (o la instancia ya tiene un operador). Consultar `docs.paperclip.ing` para el comportamiento exacto de tu versión.
 
 Esto crea la cuenta de operador inicial usada para ingresar al dashboard. **Revocar o rotar** después de que el onboarding esté completo.
 
@@ -84,14 +92,14 @@ paperclipai company get --id <companyId>
 
 ### 7. Verificar disponibilidad de adaptador
 
-Paperclip envía con adaptadores built-in (observado v2026.403.0):
+Paperclip envía con adaptadores built-in (observado v2026.529.0):
 `claude_local`, `codex_local`, `cursor_local`, `gemini_local`, `opencode_local`, `openclaw_gateway`, `pi_local`.
 
 Se registran a sí mismos en el registro de adaptadores del servidor al arranque. Usar el dashboard (o las rutas `/companies/:companyId/adapters/:type/...`) para confirmar que el que quieres está presente y respondiendo.
 
 ### 8. Contratar el primer agente
 
-Paperclip **no** contrata agentes desde un archivo YAML vía CLI (en v2026.403.0). Contratar un agente:
+Paperclip **no** contrata agentes desde un archivo YAML vía CLI (en v2026.529.0). Contratar un agente:
 
 - **Vía el dashboard**: **Agents → Hire** con adaptador `claude_local`, elegir un modelo, establecer un presupuesto, asignar un goal.
 - **Vía la API HTTP**: `POST /companies/:companyId/agents` (autenticado). Campos: `adapterType`, config específico del adaptador, metadatos del agente. Ver `server/src/routes/agents.ts` para la forma autoritativa.

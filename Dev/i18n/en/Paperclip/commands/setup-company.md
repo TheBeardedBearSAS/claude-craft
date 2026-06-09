@@ -13,7 +13,7 @@ argument-hint: [company-name]
 
 Walk an operator through onboarding: install, create the instance, bootstrap the initial operator account, create the company via the UI, and run the first agent with the `claude-local` adapter.
 
-> The real `paperclipai` CLI (v2026.403.0) does **not** expose a `companies create` command. Company creation happens either through the dashboard or by importing a package with `paperclipai company import`. Don't invent flags that don't exist — open `paperclipai company --help` and follow what's there.
+> The real `paperclipai` CLI (v2026.529.0) does **not** expose a `companies create` command. Company creation happens either through the dashboard or by importing a package with `paperclipai company import`. Don't invent flags that don't exist — open `paperclipai company --help` and follow what's there.
 
 ## Procedure
 
@@ -54,9 +54,17 @@ Fix anything reported as a hard failure before proceeding.
 
 ### 4. Bootstrap the first operator (CEO)
 
+Two paths are available depending on your deployment context:
+
+**A — Browser claim (private / self-hosted unclaimed instance):** If the instance has not yet been claimed, navigate to `http://localhost:3100` in a browser. A first-run claim screen should appear, allowing you to set up the initial admin account directly. Use this path when the instance is freshly deployed and has no existing operator.
+
+**B — CLI bootstrap:** Run the CLI command to create the initial operator account programmatically:
+
 ```bash
 paperclipai auth-bootstrap-ceo
 ```
+
+> **Which path applies?** If the dashboard redirects to a claim/setup page on first load, use path A. If it shows a login form, use path B (or the instance already has an operator). Consult `docs.paperclip.ing` for the exact behavior of your version.
 
 This creates the initial operator account used to sign into the dashboard. **Revoke or rotate** after onboarding is complete.
 
@@ -84,14 +92,14 @@ paperclipai company get --id <companyId>
 
 ### 7. Verify adapter availability
 
-Paperclip ships with built-in adapters (observed v2026.403.0):
+Paperclip ships with built-in adapters (observed v2026.529.0):
 `claude_local`, `codex_local`, `cursor_local`, `gemini_local`, `opencode_local`, `openclaw_gateway`, `pi_local`.
 
 They register themselves into the server adapter registry at boot. Use the dashboard (or the `/companies/:companyId/adapters/:type/...` routes) to confirm the one you want is present and responding.
 
 ### 8. Hire the first agent
 
-Paperclip does **not** hire agents from a YAML file via CLI (at v2026.403.0). Hire an agent:
+Paperclip does **not** hire agents from a YAML file via CLI (at v2026.529.0). Hire an agent:
 
 - **Via the dashboard**: **Agents → Hire** with adapter `claude_local`, choose a model, set a budget, assign a goal.
 - **Via the HTTP API**: `POST /companies/:companyId/agents` (authenticated). Fields: `adapterType`, adapter-specific config, agent metadata. See `server/src/routes/agents.ts` for the authoritative shape.

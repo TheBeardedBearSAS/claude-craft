@@ -5,7 +5,7 @@
 | Kategorie | Standard |
 |---|---|
 | Node.js | 20+ (LTS) |
-| TypeScript | 5.x |
+| TypeScript | 5.7+ |
 | Package-Manager | pnpm 9.15+ (Workspace-Monorepo) |
 | Modulsystem | Nur ESM (`"type": "module"`) |
 

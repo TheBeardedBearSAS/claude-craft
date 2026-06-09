@@ -3,7 +3,7 @@
 # Version 2.1.0 - Full tracking (EPIC, US, Tasks) with i18n support
 # Usage: ./install-project-commands.sh [OPTIONS] [PROJECT_DIR]
 
-set -e
+set -euo pipefail
 
 VERSION="2.1.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

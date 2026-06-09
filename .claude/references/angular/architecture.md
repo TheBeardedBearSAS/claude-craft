@@ -1,6 +1,6 @@
 # Angular Architecture - Principles and Organization
 
-**Version documentée :** Angular 21 (latest stable, LTS) / Angular 22 (en RC)
+**Version documentée :** Angular 22 (stable, sorti le 03/06/2026)
 
 ## Fundamental Architectural Principles
 
@@ -411,16 +411,28 @@ export const routes: Routes = [
 
 ## Architecture Best Practices
 
-### 1. Change Detection Strategy
+### 1. Change Detection Strategy (OnPush par défaut depuis Angular 22)
 
-Always use OnPush for performance:
+Depuis Angular 22, **OnPush est la stratégie par défaut** pour tout composant généré via le CLI. Les composants qui ne déclarent pas explicitement `changeDetection` utilisent désormais OnPush au lieu d'Eager. Specifier `ChangeDetectionStrategy.Default` pour revenir à l'ancien comportement si nécessaire.
 
 ```typescript
+// Angular 22 — OnPush implicite (le CLI ne génère plus la ligne)
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-my-component',
+  standalone: true,
+  template: `...`
+  // changeDetection omis → OnPush par défaut
 })
 export class MyComponent {}
+
+// Fallback explicite si Eager requis (rare)
+@Component({
+  changeDetection: ChangeDetectionStrategy.Default
+})
+export class LegacyComponent {}
 ```
+
+**Impact migration :** les composants existants sans `changeDetection` conservent leur comportement actuel jusqu'à Angular 22 ; seuls les nouveaux composants CLI héritent du défaut OnPush.
 
 ### 2. Typed Forms
 
@@ -463,14 +475,14 @@ Use new control flow syntax (Angular 17+):
 </ng-container>
 ```
 
-## Angular 21 / 22 — Nouvelles Fonctionnalités
+## Angular 22 — Nouvelles Fonctionnalités
 
-### Zoneless Change Detection (par défaut depuis Angular 21)
+### Zoneless Change Detection (par défaut depuis Angular 21+)
 
-Angular 21 active zoneless par défaut pour les nouveaux projets, éliminant la dépendance à Zone.js (~33 KB économisés) et améliorant les performances de rendu de 30-40% (source : https://blog.angular.dev/zoneless-change-detection-f1622c3c5c51).
+Angular 21+ active zoneless par défaut pour les nouveaux projets, éliminant la dépendance à Zone.js (~33 KB économisés) et améliorant les performances de rendu de 30-40% (source : https://blog.angular.dev/zoneless-change-detection-f1622c3c5c51).
 
 ```typescript
-// app.config.ts (Angular 21 — zoneless par défaut)
+// app.config.ts (Angular 22 — zoneless par défaut)
 import { provideZonelessChangeDetection } from '@angular/core';
 
 export const appConfig = {
@@ -512,26 +524,51 @@ export class UserListComponent {
 
 Source : https://blog.angular.dev/announcing-angular-v20-b5c9c06cf301
 
-### Signal Forms (v21 expérimental → v22 stable)
+### Signal Forms (stable v22)
 
-Alternative aux Reactive Forms avec APIs signales natives.
+Alternative aux Reactive Forms avec APIs signales natives. Disponible dans `@angular/forms/signals`.
 
 ```typescript
-import { signalForm, signalControl } from '@angular/forms';
+import { Component, signal, computed } from '@angular/core';
+import { form, FormField, required, email } from '@angular/forms/signals';
 
-@Component({...})
-export class UserFormComponent {
-  form = signalForm({
-    name: signalControl(''),
-    email: signalControl('')
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [FormField],
+  template: `
+    <form novalidate (submit)="onSubmit($event)">
+      <input type="email" [formField]="loginForm.email" />
+      <input type="password" [formField]="loginForm.password" />
+      <button type="submit">Connexion</button>
+    </form>
+  `
+})
+export class LoginComponent {
+  loginModel = signal<LoginData>({ email: '', password: '' });
+
+  loginForm = form(this.loginModel, (schemaPath) => {
+    required(schemaPath.email, { message: 'Email requis' });
+    email(schemaPath.email, { message: 'Email invalide' });
+    required(schemaPath.password, { message: 'Mot de passe requis' });
   });
 
-  // Accès réactif
-  isValid = computed(() => this.form.valid());
+  onSubmit(event: Event) {
+    event.preventDefault();
+    const credentials = this.loginModel();
+    // traitement...
+  }
 }
 ```
 
-Source : https://www.infoq.com/news/2025/11/angular-21-released/
+**API Signal Forms v22 :** `form(model, schemaFn)` + directive `FormField` + validators (`required`, `email`, `debounce`, etc.) depuis `@angular/forms/signals`. Interopérabilité avec les Reactive Forms existantes via `SignalFormControl` bridge.
+
+Source : https://angular.dev/essentials/signal-forms
 
 ### afterNextRender() stable (v20)
 
@@ -570,23 +607,26 @@ async loadData() {
 
 ## Conclusion
 
-Angular architecture priorities for 2026 (v21 LTS / v22 RC) :
+Angular architecture priorities for 2026 (v22 stable) :
 
 1. **Standalone Components**: Par défaut pour tous les nouveaux composants
 2. **Signals**: Primitive réactive principale (état synchrone)
-3. **Zoneless (par défaut v21)**: Migration recommandée pour +30-40% performance
-4. **httpResource()**: Chargement déclaratif avec états automatiques
-5. **OnPush**: Stratégie de change detection par défaut
-6. **Domain-Driven Structure**: Organisation par feature
-7. **Smart/Dumb Pattern**: Séparation claire des responsabilités
-8. **Lazy Loading**: Routes et composants
-9. **Typed Forms**: Type safety complète (ou Signal Forms stable en v22)
+3. **Zoneless (par défaut v21+)**: `provideZonelessChangeDetection()` — +30-40% performance
+4. **httpResource()**: Chargement déclaratif avec états automatiques (stable v20+)
+5. **OnPush par défaut (v22)**: Stratégie de change detection par défaut pour les composants CLI — plus besoin de le spécifier
+6. **HttpClient Fetch par défaut (v22)**: `HttpClient` utilise désormais l'API `fetch` native au lieu de `XMLHttpRequest` — meilleure intégration SSR et streaming
+7. **Signal Forms (stable v22)**: `form(model, schemaFn)` depuis `@angular/forms/signals`
+7. **Domain-Driven Structure**: Organisation par feature
+8. **Smart/Dumb Pattern**: Séparation claire des responsabilités
+9. **Lazy Loading**: Routes et composants
 10. **Modern Control Flow**: @if, @for, @switch
+
+**Angular 22 nouveautés clés :** Signal Forms stables (`@angular/forms/signals`), **OnPush par défaut** (composants CLI), **HttpClient utilise Fetch par défaut** (plus XHR), TypeScript 6 requis, Resource API stable, Node.js 22.x ou 24.x requis (Node 20 supprimé).
 
 **Golden rule**: Les composants doivent être petits, focalisés et faciles à tester.
 
 **Sources :** 
 - Angular v20 : https://blog.angular.dev/announcing-angular-v20-b5c9c06cf301
-- Angular v21 : https://www.infoq.com/news/2025/11/angular-21-released/
-- Angular v22 RC : https://blog.angular.dev/ (GA prévue juin 2026)
+- Angular v22 : https://blog.ninja-squad.com/2026/06/03/what-is-new-angular-22.0
+- Signal Forms : https://angular.dev/essentials/signal-forms
 - Zoneless : https://blog.angular.dev/zoneless-change-detection-f1622c3c5c51

@@ -10,7 +10,7 @@ This guide takes you from zero to a working audit of your project. Every step in
 
 ```bash
 # Inside Claude Code
-/getting-started
+/common:getting-started
 ```
 
 This interactive wizard will:

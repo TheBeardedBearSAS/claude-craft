@@ -11,7 +11,7 @@ argument-hint: [agent-name]
 
 ## MISSION
 
-Produce a well-formed payload for hiring a Paperclip agent. Paperclip (v2026.403.0) does **not** hire agents from a `.yaml` file via CLI — hiring happens through the dashboard or `POST /companies/:companyId/agents`. This command drafts the JSON payload and walks the operator through filling it in.
+Produce a well-formed payload for hiring a Paperclip agent. Paperclip (v2026.529.0) does **not** hire agents from a `.yaml` file via CLI — hiring happens through the dashboard or `POST /companies/:companyId/agents`. This command drafts the JSON payload and walks the operator through filling it in.
 
 ## Procedure
 
@@ -26,6 +26,7 @@ Ask in order:
 - Model id (must be in the adapter's `models` list)
 - Budget (tokens, optional; set a **hard** limit if you want enforcement)
 - Adapter-specific configuration: `cwd`, `model`, `extraArgs`, `env`, `workspaceStrategy`, `timeoutSec`, `graceSec`, and any adapter-specific flags (e.g. `dangerouslySkipPermissions` for `claude_local`)
+- `workMode` (optional) — execution mode controlling how the agent processes assigned issues (e.g. autonomous vs. supervised). Supported values depend on the instance; consult the `agentConfigurationDoc` of the chosen adapter or the instance docs before setting this field.
 
 ### 2. Emit the payload
 
@@ -54,7 +55,7 @@ Ask in order:
 }
 ```
 
-> **Check the real shape.** Before POSTing, open `server/src/routes/agents.ts` (or the OpenAPI spec served by the instance) to confirm the exact schema — the above reflects what was observed at v2026.403.0 but field names can evolve.
+> **Check the real shape.** Before POSTing, open `server/src/routes/agents.ts` (or the OpenAPI spec served by the instance) to confirm the exact schema — the above reflects what was observed at v2026.529.0 but field names can evolve.
 
 ### 3. Submit
 
@@ -86,6 +87,7 @@ paperclipai activity list       # look for 'agent.hired'
 - [ ] Budget set as a positive integer when enforcement is desired
 - [ ] Adapter-specific config passes the adapter's own validator (the dashboard will reject if not)
 - [ ] No secret values inlined — use secret refs where the adapter supports them
+- [ ] `workMode` value (if set) is one of the modes listed in the adapter's `agentConfigurationDoc`, not invented
 
 ## Output
 

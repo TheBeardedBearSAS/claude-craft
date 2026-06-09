@@ -1,9 +1,9 @@
 # Claude Code Compatibility — Claude Craft v8.9.0
 
 **Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
-**Recommended Version:** 2.1.159 (Opus 4.8 + Dynamic Workflows, May 31, 2026)
-**Tested up to:** 2.1.159 (May 31, 2026)
-**Last Updated:** 2026-06-01
+**Recommended Version:** 2.1.168 (Opus 4.8, `fallbackModel`, `ultracode` trigger, June 6, 2026)
+**Tested up to:** 2.1.168 (June 6, 2026)
+**Last Updated:** 2026-06-08
 
 ---
 
@@ -26,7 +26,10 @@
 | Requirement | Version | Notes |
 |-------------|---------|-------|
 | **Minimum** | 2.1.97 | Security baseline — CVE-2025-59536 patched |
-| **Recommended** | 2.1.159 | Full feature set, Opus 4.8 + Dynamic Workflows, forked subagents (activated), native CLI binary |
+| **Recommended** | 2.1.168 | Full feature set, Opus 4.8, `fallbackModel` (up to 3), `ultracode` trigger, forked subagents, native CLI binary |
+| **`fallbackModel`** | 2.1.166+ | Up to 3 fallback models when primary overloaded/unavailable |
+| **`ultracode` trigger** | 2.1.160+ | ⚠️ BREAKING — renamed from `workflow` (Dynamic Workflows) |
+| **Managed `requiredMinimum/MaximumVersion`** | 2.1.163+ | Enterprise version enforcement |
 | **MCP + Hooks production** | 2.1.97+ | Mandatory for secure MCP usage |
 | **Agent Teams** | 2.1.32+ (experimental) | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
 | **Auto Mode** | 2.1.94+ | Team plan required |
@@ -110,7 +113,7 @@ Le fix initial (v2.1.51) était incomplet : les versions v2.1.52–v2.1.96 prés
 
 ## Feature Adoption Status
 
-Statut d'adoption des 15 principales features Claude Code 2.1.x dans Claude Craft :
+Statut d'adoption des principales features Claude Code 2.1.x dans Claude Craft :
 
 | Feature | Version CC | Status | Notes |
 |---------|-----------|--------|-------|
@@ -129,9 +132,18 @@ Statut d'adoption des 15 principales features Claude Code 2.1.x dans Claude Craf
 | Push Notifications | 2.1.110+ | **Adopted** | Intégré — alertes fin de tâche longue (ralph-run) ; version exacte confirmée : 2.1.110 |
 | Forked Subagents | 2.1.117 | **Adopted** | `CLAUDE_CODE_FORK_SUBAGENT=1` activé dans setup-rtk (audit 2026-05-18 QW-06) |
 | Skill `context: fork` | 2.1.105+ | **Adopted** | 17 skills lourds utilisent `context: fork` (cf. rules/12-context-management.md) |
+| Auto-load plugins `.claude/skills/` | 2.1.157+ | **Partially Adopted** | Le framework installe dans `.claude/skills/` ; auto-load à documenter (CLI-REFERENCE) |
+| `/reload-skills` + `reloadSkills:true` | 2.1.157+ | **Not Adopted** | Distinct de `/reload-plugins` ; documenter (rule 12, templates hooks) |
+| Hook `MessageDisplay` | 2.1.157+ | **Not Documented** | Filtrage/transformation output assistant (cas RTK-style) |
+| Trigger `ultracode` (ex-`workflow`) | 2.1.160+ | **Action** | ⚠️ BREAKING — renommage du déclencheur Dynamic Workflows |
+| `requiredMinimum/MaximumVersion` | 2.1.163+ | **Not Documented** | Enforcement de version (enterprise) |
+| **`fallbackModel`** | 2.1.166+ | **Adopted** | Jusqu'à 3 modèles de repli — `settings.local.json.example` + rule 12 |
 
 **Légende :**
 - **Adopted** : Intégré et documenté dans Claude Craft
+- **Partially Adopted** : Mécanisme présent mais pas pleinement documenté
+- **Not Documented / Not Adopted** : Disponible côté CC, pas encore repris ici
+- **Action** : Changement (souvent breaking) nécessitant une mise à jour du contenu
 - **Planned** : Sur la roadmap, pas encore intégré
 - **N/A** : Évalué, non retenu ou sans cas d'usage pertinent
 
@@ -352,6 +364,26 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ---
 
+### 2.1.157 → 2.1.168 (June 2026)
+
+| Version | Feature | Description | Adoption Claude Craft |
+|---------|---------|-------------|----------------------|
+| **2.1.157** | Auto-load plugins `.claude/skills/` | Les plugins déposés dans `.claude/skills/` sont chargés automatiquement (sans marketplace) ; `claude plugin init <name>` scaffolde un plugin | **Partially Adopted** — le framework installe déjà dans `.claude/skills/` ; documenter l'auto-load dans CLI-REFERENCE |
+| **2.1.157** | `/reload-skills` + `SessionStart reloadSkills:true` | Re-scan des skills sans redémarrage ; un hook SessionStart peut rendre disponibles les skills qu'il installe dans la même session | **Not Adopted** — distinct de `/reload-plugins` ; documenter dans rule 12 + templates hooks |
+| **2.1.157** | Hook `MessageDisplay` | Nouvel événement permettant de transformer/masquer le texte assistant à l'affichage | **Not Documented** — pertinent pour un filtrage RTK-style ; ajouter à la matrice Hooks × Surfaces |
+| **2.1.160** ⚠️ | **BREAKING : trigger `workflow` → `ultracode`** | Le mot-clé déclencheur des Dynamic Workflows passe de `workflow` à **`ultracode`**. Demander un workflow « avec ses propres mots » fonctionne toujours. `/effort ultracode` corrigé (ne blâme plus le réglage Dynamic Workflows quand le modèle ne supporte pas xhigh) | **Action** — toute doc/skill mentionnant le trigger `workflow` doit utiliser `ultracode` |
+| **2.1.160** | grep satisfait read-before-edit | Les fichiers vus via grep/egrep/fgrep satisfont le contrôle read-before-edit (édition directe après confirmation de la section) | **N/A** (comportement runtime) |
+| **2.1.160** | Confirmation écriture shell startup | Prompt de confirmation avant d'écrire dans les fichiers d'init shell (`.bashrc`, etc.) | **Sécurité** — cohérent avec les hooks PreToolUse du framework |
+| **2.1.163** | `requiredMinimumVersion` / `requiredMaximumVersion` | Managed settings d'enforcement de version (déploiements enterprise/équipe) | **Not Documented** — alternative au minimum manuel ; mentionner en Version Requirements |
+| **2.1.166** | **`fallbackModel`** | Configurer jusqu'à **3 modèles de repli** essayés dans l'ordre quand le primaire est surchargé/indisponible ; `--fallback-model` s'applique aussi aux sessions interactives ; retry une fois sur le fallback en cas d'erreur non-retryable inattendue | **Adopted** — voir `settings.local.json.example` + rule 12 (repli `opus → sonnet → haiku` recommandé pour les agents critiques) |
+| **2.1.168** | Stable recommandée | Durcissement sécurité des messages cross-session (les messages relayés via `SendMessage` ne portent plus l'autorité utilisateur), retries améliorés, filtrage agents | **Recommended** — version cible Claude Craft v8.9.x |
+
+> **⚠️ Migration `workflow` → `ultracode` (2.1.160) :** le déclencheur des Dynamic Workflows a été renommé. Claude Craft mentionne `/effort ultracode` (palier effort) — cohérent. Tout contenu invitant à « lancer un workflow » par le mot-clé `workflow` doit être mis à jour vers `ultracode`.
+
+> **Note `fallbackModel` :** réglage de fiabilité ET de coût. Pour les 5 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), un repli `["claude-sonnet-4-6", "claude-haiku-4-5"]` évite les interruptions en cas de surcharge Opus sans dégrader le travail courant. Voir `rules/12-context-management.md`.
+
+---
+
 ### Adoption Roadmap for v8.9.0
 
 | Priorité | Feature | Fichier à modifier | Effort |
@@ -463,9 +495,13 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | 2.1.152 | 2026-05-27 | `disallowed-tools` kebab-case frontmatter, `/code-review --fix` GA |
 | **2.1.154** | **2026-05-28** | **Opus 4.8 (`claude-opus-4-8`), Dynamic Workflows, `effort: max`, `/effort ultracode`** |
 | 2.1.155 | 2026-05-29 | Correctifs stabilité Dynamic Workflows |
-| 2.1.157 | 2026-05-30 | Auto-load des plugins `.claude/skills/` sans marketplace — `EnterWorktree` (switch worktree en cours de session) |
+| 2.1.157 | 2026-05-30 | Auto-load des plugins `.claude/skills/` sans marketplace — `EnterWorktree`, `/reload-skills`, `SessionStart reloadSkills:true`, hook `MessageDisplay` |
 | 2.1.158 | 2026-05-30 | `CLAUDE_CODE_ENABLE_AUTO_MODE=1` — Auto Mode sur Bedrock/Vertex/Foundry |
-| **2.1.159** | **2026-05-31** | **Correctifs finaux + version stable recommandée** |
+| 2.1.159 | 2026-05-31 | Correctifs finaux |
+| **2.1.160** | **2026-06-02** | **⚠️ BREAKING : trigger Dynamic Workflows `workflow` → `ultracode` ; grep satisfait read-before-edit ; confirmation écriture shell startup** |
+| 2.1.163 | 2026-06-04 | Managed settings `requiredMinimumVersion` / `requiredMaximumVersion` |
+| **2.1.166** | **2026-06-06** | **`fallbackModel` (jusqu'à 3 modèles de repli), `--fallback-model` interactif, retry sur fallback** |
+| **2.1.168** | **2026-06-06** | **Durcissement messages cross-session (SendMessage), retries — version stable RECOMMANDÉE** |
 
 ---
 

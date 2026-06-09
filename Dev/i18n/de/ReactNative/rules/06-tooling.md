@@ -1,8 +1,28 @@
 # Tooling React Native - Expo & EAS
 
-## Introduction
+## Einführung
 
-Ce document couvre les outils essentiels pour le développement React Native avec Expo.
+Dieses Dokument behandelt die wesentlichen Werkzeuge für die React Native Entwicklung mit Expo.
+
+---
+
+## Systemvoraussetzungen
+
+### Node.js >= 20 LTS (erforderlich für RN 0.85)
+
+React Native 0.85 **stellt die Unterstützung für Node-Versionen < 20 ein**. Die minimal erforderliche Version ist **Node.js 20.19.4 LTS**.
+
+```bash
+# Version prüfen
+node --version  # Muss >= 20.19.4 sein
+
+# Installation via nvm (empfohlen)
+nvm install 20
+nvm use 20
+nvm alias default 20
+```
+
+> Node 16 und 18 werden mit RN 0.85 nicht mehr unterstützt. Vor der Migration aktualisieren.
 
 ---
 
@@ -14,39 +34,39 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 # Global
 npm install -g expo-cli
 
-# Ou utiliser npx (recommandé)
+# Oder npx verwenden (empfohlen)
 npx expo
 ```
 
-### Commandes Essentielles
+### Wichtige Befehle
 
 ```bash
-# Créer nouveau projet
+# Neues Projekt erstellen
 npx create-expo-app my-app --template
 npx create-expo-app my-app --template blank-typescript
 
-# Démarrer dev server
+# Dev-Server starten
 npx expo start
-npx expo start --clear  # Clear cache
-npx expo start --tunnel # Expose via tunnel (LAN)
+npx expo start --clear  # Cache leeren
+npx expo start --tunnel # Via Tunnel freigeben (LAN)
 
-# Run on specific platform
+# Auf bestimmter Plattform ausführen
 npx expo start --ios
 npx expo start --android
 npx expo start --web
 
-# Prebuild (generate native folders)
+# Prebuild (native Ordner generieren)
 npx expo prebuild
 npx expo prebuild --clean
 
-# Install packages
+# Pakete installieren
 npx expo install expo-camera
-npx expo install --fix  # Fix version mismatches
+npx expo install --fix  # Versionsinkonsistenzen beheben
 
-# Doctor (check setup)
+# Doctor (Setup prüfen)
 npx expo-doctor
 
-# Upgrade project
+# Projekt aktualisieren
 npx expo install expo@latest
 npx expo install --fix
 ```
@@ -65,25 +85,25 @@ eas login
 ### EAS Build
 
 ```bash
-# Configure
+# Konfigurieren
 eas build:configure
 
-# Build iOS
+# iOS Build
 eas build --platform ios
 eas build --platform ios --profile preview
 
-# Build Android
+# Android Build
 eas build --platform android
 eas build --platform android --profile preview
 
-# Build both
+# Beide Plattformen
 eas build --platform all
 
-# Local build
+# Lokaler Build
 eas build --platform ios --local
 ```
 
-### eas.json Configuration
+### eas.json Konfiguration
 
 ```json
 {
@@ -138,13 +158,13 @@ eas build --platform ios --local
 ### EAS Update
 
 ```bash
-# Configure
+# Konfigurieren
 eas update:configure
 
-# Publish update
+# Update veröffentlichen
 eas update --branch production --message "Bug fixes"
 
-# View updates
+# Updates anzeigen
 eas update:list
 ```
 
@@ -155,12 +175,12 @@ eas update:list
 ### metro.config.js
 
 ```javascript
-// Learn more: https://docs.expo.dev/guides/customizing-metro
+// Mehr erfahren: https://docs.expo.dev/guides/customizing-metro
 const { getDefaultConfig } = require('expo/metro-config');
 
 const config = getDefaultConfig(__dirname);
 
-// Add support for additional file types
+// Unterstützung für zusätzliche Dateitypen hinzufügen
 config.resolver.assetExts.push(
   'db',
   'mp3',
@@ -170,50 +190,127 @@ config.resolver.assetExts.push(
   'jpg'
 );
 
-// Add support for .cjs files
+// Unterstützung für .cjs-Dateien hinzufügen
 config.resolver.sourceExts.push('cjs');
 
 module.exports = config;
 ```
 
-### Clear Cache
+### Cache leeren
 
 ```bash
-# Clear Metro cache
+# Metro-Cache leeren
 npx expo start --clear
 
-# Or manually
+# Oder manuell
 rm -rf node_modules/.cache
 ```
 
 ---
 
-## Development Tools
+## Metro TLS (0.85+)
+
+Seit RN 0.85 akzeptiert Metro ein `server.tls`-Objekt in `metro.config.js` und ermöglicht damit HTTPS und WSS (sicheres WebSocket für Fast Refresh) während der lokalen Entwicklung.
+
+### Anwendungsfälle
+
+| Fall | Warum Metro TLS |
+|------|----------------|
+| HTTPS Deep Links | `applinks:` und Universal Links ohne Remote-Server testen |
+| APIs mit sicherem Ursprung | Manche APIs lehnen non-HTTPS-Ursprünge ab (CSP, striktes CORS) |
+| Unternehmensnetzwerke | Proxys, die unverschlüsselten HTTP-Verkehr blockieren |
+| Service Workers / PWA Web | HTTPS auch in der Entwicklung erforderlich |
+
+### Konfiguration
+
+```javascript
+// metro.config.js (bare RN 0.85+)
+const { getDefaultConfig } = require('@react-native/metro-config');
+const fs = require('fs');
+
+const config = getDefaultConfig(__dirname);
+
+// TLS für Metro Dev Server aktivieren
+config.server = {
+  ...config.server,
+  tls: {
+    // Generieren mit: mkcert localhost 127.0.0.1
+    key: fs.readFileSync('./certs/localhost-key.pem'),
+    cert: fs.readFileSync('./certs/localhost.pem'),
+  },
+};
+
+module.exports = config;
+```
+
+### Lokal vertrauenswürdiges Zertifikat erstellen
+
+```bash
+# mkcert installieren (macOS)
+brew install mkcert
+mkcert -install  # Lokale CA im System-Keystore installieren
+
+# Zertifikat generieren
+mkdir -p certs
+mkcert -key-file certs/localhost-key.pem -cert-file certs/localhost.pem localhost 127.0.0.1
+
+# .gitignore: Zertifikate niemals ins Repository einchecken
+echo "certs/" >> .gitignore
+```
+
+### Metro mit HTTPS starten
+
+```bash
+# Bare RN
+npx react-native start
+
+# Expo (übergibt metro.config.js automatisch)
+npx expo start
+```
+
+> **Hinweis:** Die `server.tls`-Konfiguration ist sowohl für bare RN (`@react-native/metro-config`) als auch für Expo (`expo/metro-config`) verfügbar — Metro liest denselben `server.tls`-Schlüssel in beiden Fällen.
+
+---
+
+## Entwicklungswerkzeuge
 
 ### React Native Debugger
 
 ```bash
-# Install
+# Installieren
 brew install --cask react-native-debugger
 
-# Or download from GitHub
+# Oder von GitHub herunterladen
 # https://github.com/jhen0409/react-native-debugger
 ```
 
-### Flipper
+### React Native DevTools (0.85+)
+
+Flipper ist seit React Native 0.73 veraltet. Der offizielle Ersatz sind die **React Native DevTools**, nativ in Metro integriert. RN 0.85 macht sie zum Standard-Debugger und stabilisiert zentrale Funktionen.
 
 ```bash
-# Install
-brew install --cask flipper
+# Mit Debugger starten (RN 0.73+)
+npx react-native start --experimental-debugger
 
-# Plugins
-# - Network
-# - AsyncStorage
-# - React DevTools
-# - Hermes Debugger
+# Aus der App über das Dev-Menü öffnen
+# iOS: Cmd+D (Simulator) oder Gerät schütteln
+# Android: Cmd+M (Emulator) oder Gerät schütteln
+# Im Menü "Open DevTools" auswählen
 ```
 
-### VS Code Extensions
+#### React Native DevTools 0.85+ — Funktionen
+
+| Werkzeug | Beschreibung |
+|---------|--------------|
+| **Network Inspector** | HTTP/WebSocket-Anfragen inspizieren — ersetzt das Flipper Network Plugin |
+| **React Component Inspector** | Komponentenbaum, Props, State — integrierte React DevTools |
+| **Hermes CDP Debugger** | Breakpoints, Einzelschrittausführung, Watch-Ausdrücke via Chrome DevTools Protocol |
+| **Console & Profiler** | Logs, JS-Thread-Profiling, Flamegraphs |
+| **Source maps** | TypeScript-Quellcode navigieren (Hermes + Sourcemaps) |
+
+> **Historischer Hinweis:** Flipper (`brew install --cask flipper`) funktionierte mit Versionen < 0.73. Es wird für die Neue Architektur nicht mehr gewartet und darf bei RN 0.73+ nicht verwendet werden.
+
+### VS Code Erweiterungen
 
 ```json
 {
@@ -231,7 +328,7 @@ brew install --cask flipper
 
 ---
 
-## Package Management
+## Paketverwaltung
 
 ### npm vs yarn
 
@@ -248,34 +345,36 @@ yarn add package-name
 yarn add -D package-name
 yarn script-name
 
-# Prefer npm for Expo projects (better compatibility)
+# npm für Expo-Projekte bevorzugen (bessere Kompatibilität)
 ```
 
-### Version Management
+### Versionsverwaltung
 
 ```bash
-# Check outdated
+# Veraltete Pakete prüfen
 npm outdated
 
-# Update packages
+# Pakete aktualisieren
 npx expo install --fix
 
-# Update specific package
+# Einzelnes Paket aktualisieren
 npx expo install expo-camera@latest
 ```
 
 ---
 
-## Checklist Tooling
+## Tooling-Checkliste
 
-- [ ] Expo CLI installé
-- [ ] EAS CLI configuré
-- [ ] Metro config optimisé
-- [ ] Debugger choisi (RN Debugger / Flipper)
-- [ ] VS Code extensions installées
-- [ ] Package manager cohérent (npm)
-- [ ] Scripts npm configurés
+- [ ] Node.js >= 20.19.4 LTS installiert
+- [ ] Expo CLI installiert
+- [ ] EAS CLI konfiguriert
+- [ ] Metro-Konfiguration optimiert
+- [ ] Debugger konfiguriert (React Native DevTools 0.85+ via `--experimental-debugger`)
+- [ ] Metro TLS konfiguriert, wenn lokales HTTPS erforderlich (Deep Links, sichere Ursprünge)
+- [ ] VS Code-Erweiterungen installiert
+- [ ] Einheitlicher Package Manager (npm)
+- [ ] npm-Skripte konfiguriert
 
 ---
 
-**Les bons outils rendent le développement plus efficace et agréable.**
+**Gute Werkzeuge machen die Entwicklung effizienter und angenehmer.**

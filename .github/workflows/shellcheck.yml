@@ -31,7 +31,7 @@ jobs:
             koalaman/shellcheck-alpine:stable \
             sh -c '
               set -e
-              files=$(find Tools Dev/scripts Infra .claude/hooks scripts hooks -name "*.sh" 2>/dev/null | grep -v "Tools/i18n/" || true)
+              files=$(find Tools Dev/scripts Infra .claude/hooks scripts hooks .bmad Project -name "*.sh" 2>/dev/null | grep -v "Tools/i18n/" || true)
               if [ -z "$files" ]; then
                 echo "No shell scripts to check"
                 exit 0
@@ -43,7 +43,7 @@ jobs:
 
       - name: Harden enforcement (check set -euo pipefail)
         run: |
-          missing=$(find Tools Dev/scripts Infra .claude/hooks scripts -name '*.sh' 2>/dev/null \
+          missing=$(find Tools Dev/scripts Infra .claude/hooks scripts .bmad Project -name '*.sh' 2>/dev/null \
             | grep -v 'Tools/i18n/' \
             | grep -v 'MultiAccount/claude-accounts.sh' \
             | grep -v 'lib/tools-ui.sh' \

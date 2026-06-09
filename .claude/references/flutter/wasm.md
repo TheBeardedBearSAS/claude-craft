@@ -129,7 +129,7 @@ dev_dependencies:
 
 ## Interopérabilité JavaScript
 
-> **⚠️ Avertissement — `dart:js_util` déprécié :** La bibliothèque `dart:js_util` est dépréciée depuis Dart 3.3 et **incompatible avec la compilation Wasm**. Tout code utilisant `dart:js_util` (ex : `js_util.callMethod`, `js_util.getProperty`) doit être migré vers `dart:js_interop` avant de cibler la plateforme Wasm. `dart:js_interop` offre une API statiquement typée via les extension types (`@JS`, `JSObject`, `JSPromise`, etc.) et est l'unique chemin supporté à long terme. Source : [Dart 3.11 Wasm](https://blog.dart.dev/announcing-dart-3-11-b6529be4203a).
+> **⚠️ Avertissement — `dart:js_util` déprécié :** La bibliothèque `dart:js_util` est dépréciée depuis Dart 3.3 et **incompatible avec la compilation Wasm**. Tout code utilisant `dart:js_util` (ex : `js_util.callMethod`, `js_util.getProperty`) doit être migré vers `dart:js_interop` avant de cibler la plateforme Wasm. `dart:js_interop` offre une API statiquement typée via les extension types (`@JS`, `JSObject`, `JSPromise`, etc.) et est l'unique chemin supporté à long terme. Source : [Dart 3.12 Wasm](https://dart.dev/blog/announcing-dart-3-12).
 
 ### dart:js_interop (Recommandé)
 

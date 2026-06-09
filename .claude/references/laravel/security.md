@@ -206,14 +206,17 @@ class SecureHeaders
     {
         $response = $next($request);
 
+        // X-XSS-Protection est déprécié — s'appuyer sur CSP Level 3
         return $response
             ->header('X-Content-Type-Options', 'nosniff')
             ->header('X-Frame-Options', 'DENY')
-            ->header('X-XSS-Protection', '1; mode=block')
-            ->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
-            ->header('Content-Security-Policy', "default-src 'self'")
+            ->header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests")
+            ->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
             ->header('Referrer-Policy', 'strict-origin-when-cross-origin')
-            ->header('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+            ->header('Permissions-Policy', 'geolocation=(), microphone=(), camera=()')
+            ->header('Cross-Origin-Opener-Policy', 'same-origin')
+            ->header('Cross-Origin-Embedder-Policy', 'require-corp')
+            ->header('Cross-Origin-Resource-Policy', 'same-origin');
     }
 }
 
@@ -240,7 +243,7 @@ composer outdated --direct
 // composer.json - Pin versions and use version constraints
 {
     "require": {
-        "php": "^8.5",
+        "php": "^8.3",
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0"
     }

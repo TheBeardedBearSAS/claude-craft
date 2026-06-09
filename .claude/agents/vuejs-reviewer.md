@@ -674,7 +674,7 @@ L'element change-t-il frequemment de visibilite ?
 
 | Outil | Usage |
 |-------|-------|
-| **ESLint** + `eslint-plugin-vue` | Verification des regles Vue.js |
+| **ESLint** + `eslint-plugin-vue` v10 | Verification des regles Vue.js (inclut `vue/no-deprecated-model-definition`, regles Vapor) |
 | **vue-tsc** | Verification TypeScript dans les templates |
 | **Vitest** + **Vue Test Utils** | Tests unitaires et composants |
 | **Playwright** | Tests E2E |
@@ -722,5 +722,5 @@ Vue 3.6 introduit le **Vapor Mode** en beta : un mode de compilation alternatif 
 
 ---
 
-**Version :** 2.1
-**Derniere mise a jour :** 2026-02
+**Version :** 2.2
+**Derniere mise a jour :** 2026-06

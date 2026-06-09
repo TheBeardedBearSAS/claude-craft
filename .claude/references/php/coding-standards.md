@@ -681,6 +681,178 @@ interface UserRepositoryInterface
 }
 ```
 
+### PHP 8.5 Features
+
+> **Source:** [PHP 8.5 Release](https://www.php.net/releases/8.5/en.php) | [stitcher.io](https://stitcher.io/blog/new-in-php-85) — Stable depuis novembre 2025.
+
+#### Opérateur Pipe `|>`
+
+Chaîner des appels de fonctions de gauche à droite, sans variables intermédiaires.
+
+```php
+<?php
+// ❌ Avant PHP 8.5 — lecture de l'intérieur vers l'extérieur
+$result = array_filter(
+    array_map('strtolower', explode(',', $input)),
+    fn(string $s) => strlen($s) > 2
+);
+
+// ✅ PHP 8.5 — lecture de gauche à droite
+$result = $input
+    |> explode(',', ...)
+    |> array_map(strtolower(...), ...)
+    |> array_filter(fn(string $s) => strlen($s) > 2);
+```
+
+#### `clone` avec surcharge de propriétés (wither pattern)
+
+Cloner un objet en remplaçant des propriétés en une seule expression. Idéal pour les Value Objects `readonly`.
+
+```php
+<?php
+// ❌ Avant PHP 8.5 — méthode wither manuelle
+readonly class Money
+{
+    public function __construct(
+        public int $amount,
+        public string $currency,
+    ) {}
+
+    public function withAmount(int $amount): self
+    {
+        return new self($amount, $this->currency);
+    }
+}
+
+// ✅ PHP 8.5 — clone with
+readonly class Money
+{
+    public function __construct(
+        public int $amount,
+        public string $currency,
+    ) {}
+}
+
+$price = new Money(1000, 'EUR');
+$discounted = clone $price with { amount: 800 };
+// $discounted->amount === 800, $discounted->currency === 'EUR'
+```
+
+#### `array_first()` et `array_last()`
+
+Fonctions pures qui n'altèrent pas le pointeur interne du tableau (contrairement à `reset()`/`end()`).
+
+```php
+<?php
+$items = [3 => 'a', 7 => 'b', 1 => 'c'];
+
+// ✅ PHP 8.5
+$first = array_first($items); // 'a' — clé 3
+$last  = array_last($items);  // 'c' — clé 1
+
+// Avec prédicat (optionnel)
+$firstEven = array_first($items, fn(string $v, int $k) => $k % 2 === 0); // 'a' (clé 3+... non pair)
+```
+
+#### Attribut `#[\NoDiscard]`
+
+Émet un avertissement si la valeur de retour d'une méthode n'est pas utilisée. Utile pour les méthodes qui retournent un résultat critique.
+
+```php
+<?php
+final class Result
+{
+    #[\NoDiscard('Le résultat doit être inspecté')]
+    public function save(): bool
+    {
+        // ...
+        return $success;
+    }
+}
+
+$result = new Result();
+$result->save(); // ⚠️ Deprecated: Le résultat doit être inspecté
+$ok = $result->save(); // ✅ OK
+```
+
+#### Extension URI (intégrée)
+
+Parseur URI standards-conformes (RFC 3986 + WHATWG), toujours disponible, objets immutables avec withers.
+
+```php
+<?php
+use Uri\Rfc3986\Uri;
+use Uri\WhatWg\Url;
+
+// RFC 3986
+$uri = Uri::parse('https://example.com/path?q=1#frag');
+$updated = $uri->withHost('other.com')->withPath('/new');
+
+// WHATWG (résolution relative, normalisation)
+$url = Url::parse('https://example.com/base/');
+$resolved = $url->withHref('../page');
+// Lève une exception sur input invalide
+```
+
+---
+
+## PHP 8.5 Deprecations
+
+> **Source:** [PHP RFC: Deprecations for PHP 8.5](https://wiki.php.net/rfc/deprecations_php_8_5)
+
+Ces constructions émettent une `E_DEPRECATED` en PHP 8.5 et seront supprimées en PHP 9.
+
+### 1. Opérateur backtick (alias de `shell_exec`)
+
+```php
+<?php
+// ❌ Déprécié PHP 8.5
+$output = `ls -la`;
+
+// ✅ Remplacement
+$output = shell_exec('ls -la');
+```
+
+### 2. Casts non-canoniques
+
+Les alias de types (`boolean`, `integer`, `double`, `binary`) sont dépréciés. Utiliser les noms canoniques.
+
+```php
+<?php
+// ❌ Déprécié PHP 8.5
+$a = (boolean) $value;  // → utiliser (bool)
+$b = (integer) $value;  // → utiliser (int)
+$c = (double)  $value;  // → utiliser (float)
+$d = (binary)  $value;  // → utiliser (string)
+
+// ✅ Canoniques
+$a = (bool)   $value;
+$b = (int)    $value;
+$c = (float)  $value;
+$d = (string) $value;
+```
+
+### 3. Point-virgule en fin de `case`
+
+```php
+<?php
+// ❌ Déprécié PHP 8.5 — case terminé par ;
+switch ($status) {
+    case 'active';   // point-virgule !
+        doSomething();
+        break;
+}
+
+// ✅ Correct — case terminé par :
+switch ($status) {
+    case 'active':
+        doSomething();
+        break;
+}
+```
+
+---
+
 ## Coding Standards Checklist (2026)
 
 - [ ] `declare(strict_types=1)` at top of every file
@@ -691,6 +863,10 @@ interface UserRepositoryInterface
 - [ ] Properties use readonly where appropriate
 - [ ] **Property hooks (PHP 8.4+)** for Value Objects with validation
 - [ ] **Asymmetric visibility (PHP 8.4+)** for immutable properties
+- [ ] **Pipe operator `|>` (PHP 8.5+)** for function chains instead of nested calls
+- [ ] **`clone with` (PHP 8.5+)** for wither pattern on readonly classes
+- [ ] **`#[\NoDiscard]` (PHP 8.5+)** on methods whose return value must be checked
+- [ ] No deprecated backtick operator, non-canonical casts `(boolean)/(integer)/(double)`, or `case;` syntax
 - [ ] Enums used instead of class constants for states
 - [ ] PHPDoc for complex methods and generics
 - [ ] Final classes by default

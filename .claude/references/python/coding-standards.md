@@ -1,5 +1,9 @@
 # Rule 03: Coding Standards
 
+> **Version de référence :** Python **3.14 (stable, 3.14.5+)** — Python 3.15 en beta (release oct. 2026).
+> FastAPI **~0.136.x** (0.136.3 au 2026-05) — Python 3.10+ minimum, Pydantic v2 obligatoire.
+> Pydantic **>=2.9, 2.13.x recommandé** — Pydantic v1 incompatible avec Python 3.14.
+
 ## PEP 8 Compliance
 
 Follow Python Enhancement Proposal 8 (PEP 8) for code style.
@@ -67,7 +71,7 @@ Use Google style docstrings for all public modules, classes, and functions.
 def calculate_order_total(
     items: list[OrderItem],
     tax_rate: Decimal,
-    discount: Optional[Decimal] = None
+    discount: Decimal | None = None  # 3.14+ : préférer X | None à Optional[X]
 ) -> Money:
     """
     Calculate the total amount of an order.
@@ -102,8 +106,14 @@ Type all function parameters and return values.
 
 ### Basic Types
 
+> **Python 3.14+ — syntaxe recommandée :**
+> - `X | None` à la place de `Optional[X]` (plus concis, aucun import nécessaire)
+> - `X | Y` à la place de `Union[X, Y]`
+> - Ces deux formes sont équivalentes à l'exécution depuis Python 3.10 ; la syntaxe `|` est le standard 3.14+.
+> - `from typing import Optional, Union` reste valide pour la compatibilité 3.9 et en code legacy.
+
 ```python
-from typing import Optional, Union
+# Python 3.14+ — syntaxe recommandée (pas d'import Optional/Union)
 from decimal import Decimal
 from datetime import datetime
 
@@ -113,23 +123,22 @@ def process_user(
     balance: Decimal,
     created_at: datetime,
     is_active: bool = True
-) -> dict[str, any]:
+) -> dict[str, object]:
     """Process a user."""
     pass
 
-# Optional (nullable)
-def find_user(user_id: str) -> Optional[User]:
+# Optional (nullable) — 3.14+
+def find_user(user_id: str) -> User | None:
     """Returns User or None if not found."""
     pass
 
-# Union (multiple possible types)
-def parse_id(value: Union[str, int]) -> str:
+# Union — 3.14+
+def parse_id(value: str | int) -> str:
     """Accepts str or int, returns str."""
     return str(value)
 
-# Modern Python 3.10+ syntax
-def parse_id(value: str | int) -> str:
-    return str(value)
+# Compat note : si le projet doit supporter Python 3.9, conserver
+# from typing import Optional, Union  et utiliser Optional[X] / Union[X, Y]
 ```
 
 ### Collections
@@ -184,23 +193,33 @@ def cleanup_resource(resource: Closeable) -> None:
 
 ### Generics
 
+> **Python 3.14+ — syntaxe PEP 695 (recommandée) :** `class Foo[T]:` et `type Alias = ...`
+> sans importer `TypeVar` ni `Generic`. La syntaxe `TypeVar`/`Generic` reste valide pour
+> la compatibilité ≤ 3.11.
+
 ```python
-from typing import TypeVar, Generic
-
-T = TypeVar('T')
-
-class Repository(Generic[T]):
+# Python 3.14+ — PEP 695 (sans TypeVar / Generic)
+class Repository[T]:
     """Generic repository."""
 
-    def find_by_id(self, entity_id: str) -> Optional[T]:
+    def find_by_id(self, entity_id: str) -> T | None:
         pass
 
     def save(self, entity: T) -> T:
         pass
 
+# Alias de type PEP 695
+type UserId = str
+type EntityId = str | int
+
 # Usage
 user_repo: Repository[User] = UserRepository()
 product_repo: Repository[Product] = ProductRepository()
+
+# --- Compat Python ≤ 3.11 : conserver l'ancienne syntaxe ---
+# from typing import TypeVar, Generic
+# T = TypeVar('T')
+# class Repository(Generic[T]): ...
 ```
 
 ## Error Handling
@@ -536,15 +555,17 @@ class TestUser:
 ### pyproject.toml
 
 ```toml
-[tool.black]
-line-length = 88
-target-version = ['py314']
-include = '\.pyi?$'
+# [tool.black] — legacy, remplacé par [tool.ruff.format]
+# [tool.isort] — legacy, remplacé par [tool.ruff.lint.isort]
 
-[tool.isort]
-profile = "black"
-line_length = 88
-multi_line_output = 3
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.ruff.lint.isort]
+known-first-party = ["src", "app"]
+combine-as-imports = true
 
 [tool.mypy]
 python_version = "3.14"
@@ -563,32 +584,77 @@ python_functions = ["test_*"]
 
 ### Free-threading (PEP 703)
 
-Interpréteur sans GIL disponible en option. Activer avec `python --disable-gil` ou build `3.14t`.
+Interpréteur sans GIL **officiellement supporté (opt-in)** depuis Python 3.14. Le flag
+`--disable-gil` est un flag de **compilation** de CPython — il ne s'utilise pas à l'invocation.
+
+```bash
+# Installer l'interpréteur free-threaded via uv (recommandé)
+uv python install 3.14t
+uv venv --python 3.14t
+source .venv/bin/activate
+
+# Ou via le binaire dédié (si installé séparément)
+python3.14t script.py
+```
+
 Utile pour les workloads CPU-bound multi-threaded. Les extensions C tierces doivent être adaptées.
 
 ### Template Strings (PEP 750)
 
 Nouveau type `Template` pour les interpolations structurées (distinct des f-strings).
+Le module est `string.templatelib` ; les parties d'un Template sont accessibles par itération
+(chaque élément est soit un `str` statique, soit un `Interpolation`).
 
 ```python
-from string.templatelib import Template
+from string.templatelib import Template, Interpolation
 
-def sanitize(t: Template) -> str:
-    return "".join(str(v) for v in t.args)
+def html_escape(t: Template) -> str:
+    """Rend un t-string en HTML en échappant les interpolations."""
+    import html
+    parts = []
+    for part in t:
+        if isinstance(part, Interpolation):
+            parts.append(html.escape(str(part.value)))
+        else:
+            parts.append(part)
+    return "".join(parts)
 
-result = t"Hello {user_input}"  # retourne un Template, pas une str
+user_input = "<script>alert('xss')</script>"
+result = html_escape(t"<p>Bonjour {user_input}</p>")
+# → "<p>Bonjour &lt;script&gt;alert(&#x27;xss&#x27;)&lt;/script&gt;</p>"
+
+# Accès aux parties du Template
+tmpl = t"Hello {user_input!s}!"
+# tmpl.strings      → ('Hello ', '!')            — parties statiques
+# tmpl.interpolations → (Interpolation(...),)    — parties dynamiques
+# for part in tmpl: ...                          — itère str et Interpolation
 ```
 
-### Évaluation différée des annotations (PEP 649)
+### Évaluation différée des annotations (PEP 649 / PEP 749)
 
 Les annotations ne sont plus évaluées à la définition de la classe — résout les imports circulaires
 de type hints sans recourir à `from __future__ import annotations`.
 
+> **`from __future__ import annotations` (PEP 563) reste fonctionnel en Python 3.14.**
+> Son retrait définitif est planifié après 2029 (PEP 749 remplace PEP 563 mais la transition
+> est progressive). Il est donc sûr de continuer à l'utiliser pour la compatibilité ≤ 3.9.
+> En Python 3.14+, préférer la nouvelle sémantique native (PEP 649) ; `from __future__ import
+> annotations` n'est plus nécessaire dans les nouveaux modules ciblant 3.10+.
+
+> **Python 3.15 beta 2 (feature-freeze, release oct. 2026) :** anticiper la migration.
+> Surveiller les breaking changes potentiels : `__future__.annotations` obsolescence progressive,
+> `concurrent.interpreters` API stabilisée, et renforcement du free-threading opt-in → opt-out.
+
 ### `concurrent.interpreters` (stdlib)
 
-Interpréteurs Python multiples et isolés dans le même processus, avec canaux de communication.
+> **⚠️ API early-stage en Python 3.14 — ne pas utiliser en production.**
+> `concurrent.interpreters` est une API expérimentale en 3.14 : l'interface publique, les canaux
+> de communication et la sémantique de sérialisation sont susceptibles de changer dans 3.15/3.16.
+> **En production, préférer `threading` (I/O-bound) ou `multiprocessing` (CPU-bound).**
+> Réserver `concurrent.interpreters` aux prototypes et à l'exploration des sous-interpréteurs.
 
 ```python
+# Prototype uniquement — API instable en 3.14
 import concurrent.interpreters
 interp = concurrent.interpreters.create()
 ```
@@ -610,6 +676,6 @@ Before committing:
 - [ ] No hardcoded secrets
 - [ ] Exceptions are specific and well-handled
 - [ ] Imports are organized
-- [ ] `black` and `isort` applied
-- [ ] `ruff` passes without errors
-- [ ] `mypy` passes in strict mode
+- [ ] `ruff format` applied (remplace black + isort)
+- [ ] `ruff check` passes without errors
+- [ ] `mypy` passes in strict mode (v2.0+)

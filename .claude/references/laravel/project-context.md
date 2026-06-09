@@ -9,7 +9,7 @@
 | Component | Technology | Version |
 |-----------|------------|---------|
 | Framework | Laravel | 13.x |
-| Language | PHP | 8.5+ |
+| Language | PHP | 8.3+ (8.5 recommandé) |
 | Database | {{DATABASE_TYPE}} | {{DATABASE_VERSION}} |
 | Cache | Redis | {{REDIS_VERSION}} |
 | Queue | {{QUEUE_DRIVER}} | - |
@@ -59,7 +59,7 @@ app/
 
 ### Code Quality
 - **Formatter**: Laravel Pint
-- **Static Analysis**: PHPStan level 8
+- **Static Analysis**: PHPStan level 10 (PHPStan 2.0)
 - **Coverage**: Minimum 80%
 
 ## Key Modules
@@ -87,7 +87,7 @@ app/
 
 ### Pull Request Requirements
 - [ ] All tests pass
-- [ ] PHPStan level 8 passes
+- [ ] PHPStan level 10 (PHPStan 2.0) passes
 - [ ] Pint formatting passes
 - [ ] Coverage >= 80%
 - [ ] Documentation updated

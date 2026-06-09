@@ -53,7 +53,7 @@ DEPLOYMENT-STRATEGIE
 ──────────────────────────────────────────────────────────────
 
 Methode: {Docker Compose / Kubernetes / Standalone Binary}
-Image: dunglas/frankenphp:1.11-php8.5-bookworm
+Image: dunglas/frankenphp:1.12-php8.5-bookworm
 Worker Mode: {ja/nein}
 
 | Entscheidung | Wahl | Begruendung |

@@ -185,7 +185,7 @@ example.com {
 
 ```dockerfile
 # Dockerfile - FrankenPHP nao-root
-FROM dunglas/frankenphp:1.11-php8.5-bookworm
+FROM dunglas/frankenphp:1.12-php8.5-bookworm
 
 # Instalar extensoes
 RUN install-php-extensions pdo_pgsql intl opcache

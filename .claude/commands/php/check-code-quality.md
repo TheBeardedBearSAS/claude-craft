@@ -11,7 +11,7 @@ Run comprehensive code quality analysis on PHP project.
 ## What This Command Does
 
 1. **Static Analysis**
-   - PHPStan level 9 analysis
+   - PHPStan level 10 analysis
    - Psalm strict mode check
    - Type coverage verification
    - Dead code detection
@@ -47,8 +47,8 @@ includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
 
 parameters:
-    phpVersion: 80400
-    level: 9
+    phpVersion: 80500
+    level: 10
 
     paths:
         - src
@@ -372,7 +372,7 @@ final class UserRepository implements RepositoryInterface
 ## Quality Gate Checklist
 
 ### Static Analysis
-- [ ] PHPStan level 9 passes
+- [ ] PHPStan level 10 passes
 - [ ] No Psalm errors at level 1
 - [ ] No type errors
 - [ ] No dead code detected
@@ -434,7 +434,7 @@ quality:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.4'
+        php-version: '8.5'
 
     - name: Install dependencies
       run: composer install

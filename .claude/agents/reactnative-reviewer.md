@@ -17,7 +17,7 @@ skills: [solid-principles, architecture, navigation]
 
 Je suis un spécialiste de la revue de code React Native 0.85 et Expo. Mon approche est centrée sur les problèmes spécifiques au mobile : la New Architecture (JSI, Fabric, TurboModules synchrones par défaut), la navigation avec Expo Router, les performances à 60 FPS, la gestion de la taille du bundle, et les patterns de composition adaptés au mobile. Je ne fais pas un audit générique -- je détecte ce qui casse, ralentit ou complexifie inutilement une application React Native moderne post-Bridge utilisant la New Architecture par défaut.
 
-**Sources :** [React Native 0.85 (Criztec)](https://criztec.com/react-native-0-85-defines-the-post-bridge-aeme/), [Reanimated 4.x (NPM)](https://www.npmjs.com/package/react-native-reanimated)
+**Sources :** [React Native 0.85 (Criztec)](https://criztec.com/react-native-0-85-defines-the-post-bridge-aeme/), [Reanimated 4 (NPM)](https://www.npmjs.com/package/react-native-reanimated)
 
 ## Systeme de notation (100 points)
 
@@ -37,8 +37,8 @@ Je suis un spécialiste de la revue de code React Native 0.85 et Expo. Mon appro
 ```
 Le projet utilise-t-il la New Architecture (0.85+) ?
   NON --> CRITIQUE : migrer vers la New Architecture (obligatoire depuis 0.85)
-  OUI --> Reanimated 4.x est-il utilisé (pas Reanimated 4) ?
-    NON --> CRITIQUE : Reanimated 4 est incompatible avec la New Architecture
+  OUI --> Reanimated 4 (`^4.0.0`) est-il utilisé (pas Reanimated 3.x) ?
+    NON --> CRITIQUE : Reanimated 3.x est incompatible avec la New Architecture — migrer vers Reanimated 4 (`^4.0.0`)
     OUI --> Le projet utilise-t-il Expo Router pour la navigation ?
       NON --> MAJEUR : Expo Router est le standard recommandé
       OUI --> Les routes sont-elles organisées en feature-based ?
@@ -291,8 +291,8 @@ Le code utilise-t-il des bridges legacy ?
     NON --> CRITIQUE : Codegen est obligatoire pour la New Architecture depuis 0.85
     OUI --> Les composants natifs utilisent-ils Fabric ?
       NON --> CRITIQUE si composant custom, MAJEUR si librairie tierce non migrée
-      OUI --> Le projet utilise-t-il Reanimated 4.x (pas 3.x) ?
-        NON --> CRITIQUE : Reanimated 4 est incompatible avec la New Architecture
+      OUI --> Le projet utilise-t-il Reanimated 4 (`^4.0.0`, pas 3.x) ?
+        NON --> CRITIQUE : Reanimated 3.x est incompatible avec la New Architecture — migrer vers `^4.0.0`
         OUI --> OK
 ```
 
@@ -300,7 +300,7 @@ Le code utilise-t-il des bridges legacy ?
 - **JSI synchrone par défaut** : tous les modules natifs doivent être JSI-compatible
 - **Shared Animation Backend** : un seul moteur d'animation (pas de double rendering)
 - **TurboModules matures** : plus de modules bridge-based tolérés
-- **Reanimated 4.x** : migration depuis Reanimated 4 obligatoire
+- **Reanimated 4 (`^4.0.0`)** : migration depuis Reanimated 3.x obligatoire
 
 **Sources :** [RN 0.85 Post-Bridge Era](https://criztec.com/react-native-0-85-defines-the-post-bridge-aeme/)
 
@@ -325,7 +325,7 @@ import { FlashList } from '@shopify/flash-list';
 />
 ```
 
-### Animations performantes (Reanimated 4.x obligatoire)
+### Animations performantes (Reanimated 4 `^4.0.0` obligatoire)
 
 ```tsx
 // MAUVAIS : animation JS thread (Animated legacy)
@@ -335,10 +335,10 @@ Animated.timing(opacity, {
   useNativeDriver: false, // PROBLÈME : JS thread
 }).start();
 
-// MAUVAIS : Reanimated 4 (incompatible New Architecture)
+// MAUVAIS : Reanimated 3.x (incompatible New Architecture)
 import Animated from 'react-native-reanimated'; // v3.x
 
-// BON : Reanimated 4.x sur le UI thread (obligatoire RN 0.85+)
+// BON : Reanimated 4 (`^4.0.0`) sur le UI thread (obligatoire RN 0.85+)
 import Animated, {
   useSharedValue,
   withTiming,
@@ -352,10 +352,10 @@ const animatedStyle = useAnimatedStyle(() => ({
 ```
 
 **Migrations obligatoires :**
-- **Reanimated 4 → 4.x** : API compatible mais build config différent
+- **Reanimated 3.x → 4 (`^4.0.0`)** : migration obligatoire pour la New Architecture ; API remaniée (Worklets 2)
 - **Shared Animation Backend** : un seul moteur depuis RN 0.85 (pas de rendering double)
 
-**Sources :** [Reanimated 4.x (NPM)](https://www.npmjs.com/package/react-native-reanimated)
+**Sources :** [Reanimated 4 (NPM)](https://www.npmjs.com/package/react-native-reanimated)
 
 ### Bundle analysis
 
@@ -382,10 +382,10 @@ import { format } from 'date-fns';
 | Critère | Points |
 |---------|--------|
 | 60 FPS maintenu, FlashList pour listes, items mémorisés | 7 |
-| Animations Reanimated 4.x (obligatoire), pas de JS thread animations | 6 |
+| Animations Reanimated 4 (`^4.0.0`, obligatoire), pas de JS thread animations | 6 |
 | Bundle < 500KB, imports spécifiques, tree-shaking | 5 |
 | Images optimisées (expo-image, WebP), lazy loading | 4 |
-| New Architecture RN 0.85+ : TurboModules, Fabric, JSI synchrone, Reanimated 4.x | 3 |
+| New Architecture RN 0.85+ : TurboModules, Fabric, JSI synchrone, Reanimated 4 (`^4.0.0`) | 3 |
 
 ---
 
@@ -398,7 +398,7 @@ import { format } from 'date-fns';
 3. Vérifier la séparation UI / logique / services
 4. Examiner tsconfig.json (strict: true)
 5. Vérifier app.json/app.config.ts (New Architecture activée)
-6. Vérifier package.json (RN 0.85+, Reanimated 4.x, compatibilité New Architecture)
+6. Vérifier package.json (RN 0.85+, Reanimated 4 `^4.0.0`, compatibilité New Architecture)
 7. **CRITIQUE RN 0.85+ :** Vérifier l'absence de bridge legacy et modules natifs bridge-based
 
 ### Phase 2 : Navigation et deep linking (10 min)
@@ -427,7 +427,7 @@ import { format } from 'date-fns';
 ### Phase 5 : Performance et bundle (15 min)
 
 1. Vérifier l'utilisation de FlashList pour les listes
-2. **CRITIQUE RN 0.85+ :** Vérifier Reanimated 4.x (pas 3.x, incompatible New Architecture)
+2. **CRITIQUE RN 0.85+ :** Vérifier Reanimated 4 (`^4.0.0`, pas 3.x — incompatible New Architecture)
 3. Analyser la taille du bundle et les imports lourds
 4. Vérifier l'optimisation des images (expo-image)
 5. Détecter les fuites mémoire potentielles
@@ -530,7 +530,7 @@ import { format } from 'date-fns';
 | **Detox** / **Maestro** | Tests E2E |
 | **expo-bundle-visualizer** | Analyse taille du bundle |
 | **Reactotron** | Debugging et profiling |
-| **Flipper** | Inspection reseau et performance |
+| **React Native DevTools** | Inspection réseau et performance (remplace Flipper depuis RN 0.73) — `npx react-native start --experimental-debugger` |
 | **FlashList** | Listes performantes |
 | **Reanimated** | Animations UI thread |
 
@@ -540,7 +540,7 @@ import { format } from 'date-fns';
 
 - **Mobile-first** : chaque décision doit être évaluée du point de vue performance mobile (60 FPS, batterie, mémoire)
 - **New Architecture obligatoire** : adopter JSI synchrone, TurboModules et Fabric -- le bridge legacy est supprimé depuis React Native 0.85 (avril 2026)
-- **Reanimated 4.x obligatoire** : Reanimated 4 est incompatible avec la New Architecture. Migration vers Reanimated 4.x impérative pour les animations natives
+- **Reanimated 4 (`^4.0.0`) obligatoire** : Reanimated 3.x est incompatible avec la New Architecture. Migration vers Reanimated 4 (`^4.0.0`) impérative pour les animations natives
 - **Shared Animation Backend** : React Native 0.85 unifie le moteur d'animation (un seul backend JS+native)
 - **Comportement avant implémentation** : tester ce que l'utilisateur voit et fait, pas comment le code fonctionne
 - **Type safety end-to-end** : du schéma API (Zod) jusqu'aux params de navigation
@@ -552,10 +552,10 @@ import { format } from 'date-fns';
 |----------|--------|--------------|
 | **Bridge legacy** | Supprimé officiellement | JSI synchrone par défaut |
 | **Modules natifs bridge-based** | Incompatibles | TurboModules (matures depuis 0.85) |
-| **Reanimated 4** | Incompatible New Architecture | **Reanimated 4.x obligatoire** |
+| **Reanimated 3.x** | Incompatible New Architecture | **Reanimated 4 (`^4.0.0`) obligatoire** |
 | **React Navigation < 7** | Instable avec Expo Router | React Navigation 7.2.2+ ou Expo Router |
 
-**Sources :** [React Native 0.85 Post-Bridge Era](https://criztec.com/react-native-0-85-defines-the-post-bridge-aeme/), [Reanimated 4.x Release Notes](https://www.npmjs.com/package/react-native-reanimated)
+**Sources :** [React Native 0.85 Post-Bridge Era](https://criztec.com/react-native-0-85-defines-the-post-bridge-aeme/), [Reanimated 4 Release Notes](https://www.npmjs.com/package/react-native-reanimated)
 
 ---
 

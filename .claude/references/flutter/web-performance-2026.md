@@ -15,7 +15,7 @@ Flutter 3.44+ apporte des améliorations majeures pour les applications web:
 | Métrique | Cible | Bon | À améliorer |
 |----------|-------|-----|-------------|
 | LCP | < 2.5s | < 2.5s | > 4s |
-| FID | < 100ms | < 100ms | > 300ms |
+| INP | < 200ms | < 200ms | > 500ms |
 | CLS | < 0.1 | < 0.1 | > 0.25 |
 | FCP | < 1.8s | < 1.8s | > 3s |
 | TTI | < 3.8s | < 3.8s | > 7.3s |
