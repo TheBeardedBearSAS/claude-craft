@@ -125,7 +125,6 @@ Fast Mode (`/fast`) is **not available on Opus 4.7**. All Fast Mode references (
 - Shell completions README (`completions/README.md`)
 - Cheat sheet (`docs/CHEAT-SHEET.md`) and learning paths (`docs/LEARNING-PATHS.md`)
 - ISO 27001 gap analysis and SOC 2 gap analysis (`docs/compliance/`)
-- Enterprise features and pricing (`docs/enterprise/`)
 - MCP servers guide (`docs/mcp/MCP-SERVERS.md`)
 - Autonomous sprint guide (`docs/guides/AUTONOMOUS-SPRINT.md`)
 - RFC-001 QA Recette Standalone (`docs/rfc/`)

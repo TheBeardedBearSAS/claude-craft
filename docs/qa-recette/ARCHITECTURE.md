@@ -1,14 +1,13 @@
 # QA Recette — Architecture Standalone
 
-> **Status** : DRAFT (P3-21, phase 3 différenciation). Requiert review `@tech-lead` avant extraction repo séparé.
-> **Source audit** : `audit/00-SYNTHESIS.md` §Moats + rapports 03 (concurrentiel), 04 (features).
-> **Objectif** : extraire QA Recette en produit indépendant (open-source SDK + extension Chrome propriétaire) — moat défendable + revenue stream.
+> **Status** : DRAFT (P3-21). Requiert review `@tech-lead` avant extraction repo séparé.
+> **Objectif** : extraire QA Recette en outil indépendant **entièrement open-source MIT** (SDK + extension Chrome + backend optionnel) — adoption large et auditable par la communauté.
 
 ## Hypothèses explicites (Karpathy §1)
 
 1. **QA Recette actuel** : implémenté dans `.claude/commands/qa/` (recette.md, fix.md, tdd.md, status.md, report.md, regression.md) + Chrome extension v1.0.36+ externe (non versionnée dans ce repo).
 2. **Workflow cible** : local-first (aucun backend obligatoire), cloud optionnel pour sync multi-devices et stockage sessions longues.
-3. **Modèle de distribution** : SDK open-source MIT (`@claude-craft/qa-recette-sdk` sur NPM) + extension Chrome payante ($9/mois Starter, $29/mois Team).
+3. **Modèle de distribution** : tout open-source MIT — SDK (`@claude-craft/qa-recette-sdk` sur NPM) + extension Chrome (Chrome Web Store) + backend optionnel self-hostable.
 4. **Repo cible** : `github.com/the-bearded-cto/qa-recette` (séparé de claude-craft pour positionnement produit).
 5. **Stack** : Node.js 20+, TypeScript 5.9, Vitest 4 (browser mode), Playwright (tests).
 6. **Audience** : dev QA, tech leads, PM ayant besoin de tests d'acceptance reproductibles sans Selenium/Cypress setup complexe.
@@ -34,29 +33,28 @@
 │    ├─ resume(sessionId)                           │
 │    └─ storage adapter (local FS ou cloud API)     │
 │           ↓                                       │
-│  Chrome Extension QA Recette (PROPRIÉTAIRE)       │
+│  Chrome Extension QA Recette (OPEN SOURCE MIT)    │
 │    ├─ Exécution tests navigateur (Playwright-like)│
 │    ├─ Screenshots, traces, assertions DOM         │
-│    ├─ License gate (Stripe Customer ID)           │
 │    └─ Cloud sync optionnel                        │
 │           ↓                                       │
-│  [OPTIONNEL] Backend cloud qa-recette.com         │
-│    ├─ Auth (magic link + Stripe)                  │
+│  [OPTIONNEL] Backend self-hostable (MIT)          │
+│    ├─ Auth (magic link)                           │
 │    ├─ Stockage sessions (PostgreSQL EU)           │
 │    └─ Webhooks CI (POST /v1/sessions)             │
 └───────────────────────────────────────────────────┘
 ```
 
-## Séparation open-source / propriétaire
+## Licences des composants (tout MIT)
 
 | Composant | Licence | Raison |
 |---|---|---|
 | SDK Node (`qa-recette-sdk`) | MIT | Adoption large, audit communautaire, intégration Claude Code |
 | CLI (`qa-recette run`) | MIT | Outil dev, scriptable CI |
 | Schéma session JSON | MIT (spec publique) | Interopérabilité |
-| Extension Chrome | Propriétaire (EULA) | Moat, revenue |
-| Backend cloud API | Propriétaire (SaaS) | Revenue, SLA |
-| Dashboards reporting | Propriétaire | Valeur ajoutée payante |
+| Extension Chrome | MIT | Auditable, fork-friendly |
+| Backend cloud API | MIT (self-hostable) | Pas de lock-in, déployable par chacun |
+| Dashboards reporting | MIT | Valeur communautaire |
 
 ## API publique SDK (v1.0.0)
 
@@ -94,23 +92,13 @@ const resumed: Session = await resume('REC-20260430-143022');
 └── registry.json   # index regression
 ```
 
-Sync cloud opt-in : `qa-recette config set cloud.enabled=true` → POST sur `/v1/sessions` à chaque step.
-
-## Modèle de tarification (draft)
-
-| Tier | Prix | Quotas | Cible |
-|---|---|---|---|
-| **Free** | €0 | 5 sessions/mois, local only | Solo dev, eval |
-| **Starter** | €9/mois | Illimité local, cloud sync 1 device | Freelance |
-| **Team** | €29/mois | Cloud sync multi-device, sessions partagées | Équipes <10 |
-| **Enterprise** | Sur devis | SLA 99.9%, SSO, audit log, self-hosted option | >10 devs |
+Sync cloud opt-in (backend self-hosté) : `qa-recette config set cloud.enabled=true` → POST sur `/v1/sessions` à chaque step.
 
 ## RFC communautaire
 
 Avant publication NPM SDK v1.0.0, publier un RFC via GitHub Discussions `qa-recette` pour recueillir feedback sur :
 - API `createSession` / `runTests` (breaking changes avant v1 acceptés)
 - Format session JSON (stabilité long-terme après v1)
-- Modèle SaaS (accepté par communauté ? cannibalisation free tier ?)
 
 Cf. `RFC.md`.
 
@@ -119,8 +107,8 @@ Cf. `RFC.md`.
 1. **Sprint 1 (2 semaines)** : scaffolding repo `qa-recette/`, migration `.claude/commands/qa/` → package `cli/`.
 2. **Sprint 2 (2 semaines)** : SDK API publique + tests Vitest 4.
 3. **Sprint 3 (2 semaines)** : Chrome extension refactor avec SDK.
-4. **Sprint 4 (2 semaines)** : backend cloud minimal (Hono + Postgres EU) + Stripe integration.
-5. **Release v1.0.0** : publication NPM + Chrome Web Store + qa-recette.com.
+4. **Sprint 4 (2 semaines)** : backend self-hostable minimal (Hono + Postgres EU), optionnel.
+5. **Release v1.0.0** : publication NPM + Chrome Web Store + image Docker self-host.
 
 ## Risques
 
@@ -132,7 +120,7 @@ Cf. `RFC.md`.
 
 ## DoD extraction
 
-- [ ] Repo `github.com/the-bearded-cto/qa-recette` créé, README clair OSS/propriétaire
+- [ ] Repo `github.com/the-bearded-cto/qa-recette` créé, README clair (tout MIT)
 - [ ] SDK publié NPM `@claude-craft/qa-recette-sdk@1.0.0`
 - [ ] OpenAPI spec `api-spec.yaml` validée via Redocly CLI
 - [ ] RFC publié GitHub Discussions, ≥5 commentaires communauté

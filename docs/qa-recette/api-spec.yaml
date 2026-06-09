@@ -13,8 +13,8 @@ info:
     url: https://qa-recette.com
     email: support@qa-recette.com
   license:
-    name: Proprietary (SaaS)
-    url: https://qa-recette.com/terms
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 
 servers:
   - url: https://api.qa-recette.com/v1
@@ -27,8 +27,6 @@ tags:
     description: Gestion des sessions de test
   - name: Reports
     description: Rapports et analytics
-  - name: Billing
-    description: Abonnements Stripe
 
 security:
   - bearerAuth: []
@@ -52,8 +50,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
-        '402':
-          $ref: '#/components/responses/QuotaExceeded'
         '401':
           $ref: '#/components/responses/Unauthorized'
     get:
@@ -182,34 +178,6 @@ paths:
               schema:
                 type: string
                 format: binary
-
-  /billing/checkout:
-    post:
-      tags: [Billing]
-      summary: Créer une session Stripe Checkout
-      operationId: createCheckout
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [tier]
-              properties:
-                tier:
-                  type: string
-                  enum: [starter, team, enterprise]
-      responses:
-        '200':
-          description: URL redirect Stripe
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  checkoutUrl:
-                    type: string
-                    format: uri
 
 components:
   securitySchemes:
@@ -340,12 +308,6 @@ components:
             $ref: '#/components/schemas/Problem'
     NotFound:
       description: Ressource introuvable
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-    QuotaExceeded:
-      description: Quota free tier atteint
       content:
         application/problem+json:
           schema:

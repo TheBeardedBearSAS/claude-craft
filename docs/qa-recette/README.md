@@ -326,10 +326,10 @@ Test Execution + Screenshot Capture
 
 ### Future Standalone Architecture
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the planned standalone product:
-- **SDK open-source MIT** (`@claude-craft/qa-recette-sdk`)
-- **Chrome extension proprietary**
-- **Cloud backend optional** (sync + dashboards)
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the planned standalone tool — **fully open-source MIT**:
+- **SDK MIT** (`@claude-craft/qa-recette-sdk`)
+- **Chrome extension MIT**
+- **Self-hostable backend optional** (sync + dashboards)
 
 ---
 
@@ -368,12 +368,12 @@ QA Recette is part of Claude Craft. To contribute:
 
 ## License
 
-Currently part of Claude Craft (see root LICENSE).
+Part of Claude Craft — **MIT License** (see root LICENSE).
 
-Future standalone product will use dual licensing:
+A future standalone tool would remain **fully MIT**:
 - **SDK** — MIT License
-- **Chrome Extension** — Proprietary EULA
-- **Cloud Backend** — Proprietary SaaS
+- **Chrome Extension** — MIT License
+- **Self-hostable Backend** — MIT License
 
 ---
 

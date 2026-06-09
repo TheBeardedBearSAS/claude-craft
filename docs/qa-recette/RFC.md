@@ -7,36 +7,33 @@
 
 ## TL;DR
 
-QA Recette (actuellement intégré à Claude Craft) devient un produit autonome :
-- **SDK open-source MIT** (`@claude-craft/qa-recette-sdk`, NPM)
-- **Extension Chrome payante** ($9/mois Starter, $29/mois Team)
-- **Backend cloud optionnel** (sync multi-devices, dashboards, CI webhooks)
+QA Recette (actuellement intégré à Claude Craft) devient un outil autonome **entièrement open-source MIT** :
+- **SDK MIT** (`@claude-craft/qa-recette-sdk`, NPM)
+- **Extension Chrome MIT** (Chrome Web Store)
+- **Backend self-hostable MIT optionnel** (sync multi-devices, dashboards, CI webhooks)
 
 Claude Craft reste l'orchestrateur principal (command `/qa:recette` inchangé), mais délègue l'exécution au SDK.
 
 ## Motivation
 
-1. **Moat défendable** : Anthropic peut commoditiser l'AI agent généraliste, pas un outil QA spécialisé avec Chrome extension.
-2. **Revenue stream** : cible €5-10K MRR à 12 mois.
-3. **Adoption élargie** : équipes QA non-Claude-Code-users peuvent bénéficier de l'outil.
-4. **Focus produit** : extraire permet d'itérer sans frictions vs repo Claude Craft multi-stack.
+1. **Adoption élargie** : équipes QA non-Claude-Code-users peuvent bénéficier de l'outil.
+2. **Auditabilité** : tout le code est ouvert et fork-friendly, dans l'esprit MIT de Claude Craft.
+3. **Focus produit** : extraire permet d'itérer sans frictions vs repo Claude Craft multi-stack.
 
 ## Questions soumises à la communauté
 
 1. **API publique** : est-ce que `createSession / runTests / resume` couvre 90% des cas ? Manque-t-il des primitives (pause/stop, fork session) ?
 2. **Format session JSON** : quelle stabilité attendue (semver major break ou jamais) ?
-3. **Modèle freemium** : 5 sessions/mois free tier, acceptable ou trop restrictif ?
-4. **Chrome propriétaire** : cannibalise-t-elle l'esprit OSS de Claude Craft ? Alternative : extension MIT + cloud payant uniquement ?
-5. **CI integration** : GitHub Actions / GitLab CI / Jenkins — quelle priorité ?
+3. **Backend** : self-host Docker suffisant, ou besoin d'un service hébergé communautaire ?
+4. **CI integration** : GitHub Actions / GitLab CI / Jenkins — quelle priorité ?
 
 ## Alternatives considérées
 
 | Alternative | Pros | Cons | Verdict |
 |---|---|---|---|
-| Tout dans Claude Craft | Un seul repo, contributeurs unifiés | Pas de produit autonome, pas de revenue | ❌ |
-| Tout open-source MIT | Valeurs OSS pures | Aucun moat, pas de revenue direct | ❌ (se positionner sur services) |
-| Tout propriétaire | Protection maximale | Adoption lente, perte crédibilité | ❌ |
-| **Dual : SDK OSS + Ext propriétaire** | Adoption + revenue | Complexité licensing | ✅ retenu |
+| Tout dans Claude Craft | Un seul repo, contributeurs unifiés | Pas d'outil autonome réutilisable hors Claude Craft | ❌ |
+| **Tout open-source MIT (SDK + extension + backend)** | Valeurs OSS pures, adoption large, auditable, fork-friendly | Pas de revenue direct (financé par dons/communauté) | ✅ retenu |
+| Modèle propriétaire/payant | Protection, revenue | Contraire à l'engagement MIT-only de Claude Craft | ❌ |
 
 ## Impact breaking
 

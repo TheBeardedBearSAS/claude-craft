@@ -1,5 +1,7 @@
 # Synthèse recherche — Audit exécuté, funnel de conversion activé (2026-05-19)
 
+> _Note historique (2026-06-09) : ce document est un instantané de recherche daté. La stratégie de monétisation qui y est évoquée (licences Commercial/Enterprise, modules « proprietary ») a depuis été **abandonnée** : Claude Craft est **100 % open-source MIT**, sans aucune édition payante ni composant propriétaire._
+
 ## Vue d'ensemble exécutive
 
 Entre 2026-05-18 et 2026-05-19, un **audit compréhensif de 113 findings** a été exécuté et **65+ actions ont été délivrées en 4 releases majeures** (v8.4.0 à v8.7.1). 
@@ -236,13 +238,13 @@ Entre 2026-05-18 et 2026-05-19, un **audit compréhensif de 113 findings** a ét
 | 3. TypeScript migration now or later? | Low (internal, not customer-facing) | ⏳ DEFER to Q3 (not blocking conversion) |
 | 4. Telemetry Posthog EU (DoD P3-30)? | Medium (needed for metrics) | ✅ DEFER (Plausible sufficient for J0-60) |
 | 5. Kanban as standalone package? | Low (nice-to-have, not blockers) | ⏳ DEFER to Phase 4 |
-| 6. Ralph as shared SKILL.md? | Medium (removes differentiator if exposed) | ❌ NO (keep proprietary) |
+| 6. Ralph as shared SKILL.md? | Medium | ✅ MIT (comme tout le projet — décision « keep proprietary » de l'époque caduque) |
 | 7. Subagent model Haiku globally? | Low (cost optimization, not conversion) | ✅ YES (already implemented v8.5+) |
 
 **Recommended decisions for board:**
 - ✅ YES on #1 (BMAD), #2 (delete orphans), #7 (Haiku optimization)
-- ❌ NO on #6 (keep Ralph proprietary)
-- ⏳ DEFER on #3, #4, #5 (not blocking J0-90 revenue funnel)
+- #6 : Ralph reste MIT comme tout le projet (décision « keep proprietary » de l'époque caduque)
+- ⏳ DEFER on #3, #4, #5
 
 ---
 
