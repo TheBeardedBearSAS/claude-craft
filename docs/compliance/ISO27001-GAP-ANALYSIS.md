@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0  
 **Date:** 2026-04-17  
-**Scope:** Claude Craft SaaS + NPM package (open-core model)  
+**Scope:** Claude Craft NPM package (100% open-source MIT)  
 **Target Certification:** ISO 27001:2022 (Information Security Management System)
 
 ---

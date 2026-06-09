@@ -274,40 +274,14 @@ Claude Craft is maintained by [The Bearded CTO](https://thebeardedcto.com), a so
 
 | Item | Status |
 |------|--------|
-| **Funding model** | Bootstrapped — no VC, no sponsorships. Sustainability via consulting + future Pro support tier. |
+| **Funding model** | Bootstrapped, community-driven — no VC. 100% open-source MIT, sustained by community contributions. |
 | **Maintenance commitment** | Active development since 2026-01. Targeting weekly minor releases, monthly minor versions. |
 | **Bus factor** | Currently 1 (solo maintainer). [Co-maintainer search open](CHARTER.md) — looking for one tech lead from the AFUP / Symfony / Flutter / React community. |
 | **Succession plan** | Documented in [CHARTER.md](CHARTER.md). MIT license guarantees indefinite community fork rights if maintainer disappears. |
 | **Roadmap visibility** | [GitHub Issues](https://github.com/TheBeardedBearSAS/claude-craft/issues) + [CHANGELOG.md](CHANGELOG.md) + recurring `audit/YYYY-MM-DD-*` reports |
 | **Decision process** | RFC via GitHub Discussions for breaking changes. ADRs in `docs/adr/` for architectural choices. |
 | **Security disclosure** | See [SECURITY.md](SECURITY.md). 90-day disclosure timeline, GPG-signed advisories. |
-| **License upgrade path** | MIT (free, perpetual). A future Commercial license is documented in `LICENSE-COMMERCIAL.md` (DRAFT) for support contracts; never restrictive of MIT rights. |
-
-### For Enterprise Adopters
-
-If you're considering Claude Craft for a team of 5+ developers and need :
-
-- **SLA-backed support** with response times
-- **Custom integration** for your stack
-- **Onboarding consulting** for your team
-- **DPA** (Data Processing Agreement) for RGPD compliance
-
-Contact `flavien.metivier@gmail.com` to discuss a Pro support agreement. Pricing is project-based (no per-seat licensing).
-
-## Training & Consulting
-
-**Using Claude Code with your team and hitting friction?** The framework is free and open-source. The expertise behind it is available directly.
-
-| Service | Best for | Format |
-|---------|----------|--------|
-| **Team onboarding** | 5–20 devs adopting Claude Code, conventions diverging | Half-day workshop |
-| **Quality Gates calibration** | Adjusting BMAD thresholds to your stack and risk profile | 1-day audit |
-| **Claude Code team training** | Structured adoption from solo to consistent team workflow | 2-day training |
-| **Architecture consulting** | Migrating an existing codebase to BMAD v6 | 3–5 days |
-
-→ [Contact TheBeardedCTO](mailto:contact@thebeardedcto.dev) to discuss your situation. No commitment.
-
-📅 **Need help getting started?** Book a free 30-minute discovery call: [https://calendly.com/the-bearded-cto](https://calendly.com/the-bearded-cto)
+| **License** | MIT (free, perpetual). Claude Craft is and remains 100% open-source — no commercial, enterprise, or proprietary tier. See [CHARTER.md](CHARTER.md). |
 
 ## Contributing
 

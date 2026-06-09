@@ -6,22 +6,22 @@
 
 ## 1. Préambule
 
-La présente Charte de Gouvernance définit les principes et engagements qui garantissent la pérennité du projet Claude Craft en tant que logiciel libre et la confiance de sa communauté. Elle protège contre toute dérive de type "bait-and-switch" où un projet open-source serait progressivement vidé de ses fonctionnalités au profit d'une version commerciale.
+La présente Charte de Gouvernance définit les principes et engagements qui garantissent la pérennité du projet Claude Craft en tant que logiciel libre et la confiance de sa communauté. Elle protège contre toute dérive de type "bait-and-switch" où un projet open-source serait progressivement vidé de ses fonctionnalités au profit d'une version fermée.
 
 ## 2. Garantie MIT Perpétuelle
 
-Le core `claude-craft` restera sous **licence MIT à perpétuité**. Cette licence ne sera **jamais révoquée ni remplacée** par une licence plus restrictive. Les contributions passées et futures au dépôt public `claude-craft` sont et resteront sous MIT.
+Claude Craft restera sous **licence MIT à perpétuité**. Cette licence ne sera **jamais révoquée ni remplacée** par une licence plus restrictive. Les contributions passées et futures au dépôt public `claude-craft` sont et resteront sous MIT.
 
-**Engagement ferme :** Aucune fonctionnalité actuellement disponible dans le core open-source ne sera déplacée vers la version Enterprise propriétaire.
+**Engagement ferme :** L'intégralité du projet est et demeurera open-source MIT. Il n'existe **aucune** édition commerciale, enterprise ou propriétaire, et aucune fonctionnalité ne sera jamais retirée de l'open-source au profit d'une telle édition.
 
-## 3. Séparation Core vs Enterprise
+## 3. Périmètre 100 % Open-Source
 
-Claude Craft adopte un modèle **open-core** :
+Claude Craft est un projet **entièrement open-source MIT**, sans modèle open-core ni édition fermée :
 
-- **`claude-craft` (MIT, public)** : Framework complet, BMAD, 10 stacks, skills, agents, CLI, QA Recette, plugin system, marketplace public.
-- **`claude-craft-enterprise` (licence commerciale propriétaire, privé)** : Fonctionnalités exclusives pour entreprises (SSO SAML/OIDC, audit log immuable, multi-tenant dashboard, SLA contractuel, support prioritaire).
+- **`claude-craft` (MIT, public)** : Framework complet — BMAD, 10 stacks, skills, agents, CLI, QA Recette, plugin system, marketplace public. Tout est inclus.
+- **Aucune édition propriétaire** : pas de version Enterprise payante, pas de fonctionnalités exclusives derrière une licence commerciale. Toute fonctionnalité développée pour le projet est publiée sous MIT.
 
-**Principe de démarcation :** Les fonctionnalités Enterprise sont des **extensions optionnelles** qui ne font pas partie du workflow de développement standard. Un développeur ou une petite équipe peut utiliser Claude Craft en production sans jamais avoir besoin d'Enterprise.
+**Principe :** un développeur, une équipe ou une entreprise peut utiliser, modifier et redistribuer Claude Craft en production sans aucune restriction ni coût de licence.
 
 ## 4. Gouvernance du Projet
 
@@ -38,7 +38,7 @@ Après atteinte de **10 contributeurs core** (≥ 10 PR acceptées chacun), un *
 
 **Décisions ordinaires** (features, bugfixes, refactoring) : consensus des maintainers via GitHub Issues ou Discussions. En cas de désaccord, vote majoritaire des maintainers.
 
-**Décisions stratégiques** (changement de licence, modification de la Charte, fusion de repos, partenariat commercial majeur) : requièrent :
+**Décisions stratégiques** (changement de licence, modification de la Charte, fusion de repos) : requièrent :
 - Approbation de **2/3 des maintainers**
 - RFC (Request for Comments) publié 30 jours avant la décision finale
 - Consultation du Comité Consultatif (s'il existe)
@@ -57,7 +57,7 @@ Toute décision majeure impactant l'architecture, la roadmap ou la gouvernance d
 
 ### 5.1 Transparence Totale
 
-Toute modification de la frontière core/enterprise sera annoncée publiquement avec un RFC 30 jours avant implémentation. Les raisons doivent être justifiées (ex. : complexité technique, coût de maintenance prohibitif pour le bénévole).
+Toute évolution susceptible d'affecter le caractère 100 % open-source du projet sera annoncée publiquement avec un RFC 30 jours avant implémentation, et reste soumise à la garantie MIT perpétuelle (§2) et à la clause de non-relicenciement (§10).
 
 ### 5.2 Fork-Friendly
 
@@ -67,21 +67,22 @@ Le projet MIT reste **fork-friendly** : architecture modulaire, documentation ex
 
 Chaque année, un rapport public `GOVERNANCE-REPORT.md` sera publié, incluant :
 
-- Liste des fonctionnalités ajoutées au core vs Enterprise
+- Liste des fonctionnalités ajoutées au projet
 - Nombre de contributeurs core et externes
-- Budget du projet (dons, revenus commerciaux)
+- Budget du projet (dons, sponsoring open-source)
 - Décisions stratégiques prises l'année écoulée
 
-## 6. Financement et Revenus Commerciaux
+## 6. Financement
 
-Les revenus générés par `claude-craft-enterprise` et les formations/certifications serviront à :
+Le projet est financé exclusivement par des **dons et du sponsoring open-source** (ex. : GitHub Sponsors, Open Collective). Aucune fonctionnalité n'est monétisée et il n'existe aucune édition payante.
 
-1. Payer les mainteneurs pour leur travail sur le core MIT (transparence salaires dans GOVERNANCE-REPORT.md)
-2. Financer l'infrastructure (CI/CD, serveurs de test, hosting marketplace)
-3. Sponsoriser des événements et hackathons communautaires
-4. Financer des audits de sécurité tiers du core MIT
+Les fonds collectés servent à :
 
-**Engagement :** Minimum 60% des revenus commerciaux nets seront réinvestis dans le core open-source.
+1. Financer l'infrastructure (CI/CD, serveurs de test, hosting marketplace)
+2. Sponsoriser des événements et hackathons communautaires
+3. Financer des audits de sécurité tiers
+
+**Engagement :** la totalité des fonds est réinvestie dans le projet open-source ; leur usage est documenté dans `GOVERNANCE-REPORT.md`.
 
 ## 7. Droit de Fork et Succession
 

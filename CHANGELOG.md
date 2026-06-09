@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.10.0] - 2026-06-09
+
+Passage à un projet **100 % open-source MIT** (suppression de toute la structure de licence commerciale/enterprise) + lot d'audit de fraîcheur 2026-06-08. MINOR release. Backwards compatible.
+
 Audit de fraîcheur exhaustif 2026-06-08 (workflow multi-agents 36 agents + vérification adversariale par devil's advocates ; 169 constats retenus sur 172). Mise à jour des technologies, de la compatibilité Claude Code et des bonnes pratiques. Backwards compatible.
 
 ### Added
@@ -37,6 +41,10 @@ Audit de fraîcheur exhaustif 2026-06-08 (workflow multi-agents 36 agents + vér
 ### Enrichissements P2 (best-practices par stack)
 
 - C# (file-based apps, EF Core 10, Native AOT, JWT EdDSA), React (ViewTransition, cacheSignal, Performance Tracks), React Native (Expo SDK 56, jest-preset, DevTools 0.85), Python (typing PEP 695, FastAPI 0.136/Pydantic 2.13), PHP (features/dépréciations 8.5, PHPStan 10), Symfony (8.1 features, json-streamer DI), Laravel (Pest 4 Browser), Flutter (DCM), Angular (OnPush/Fetch défaut), Vue (Vitest Browser Mode). Cascade i18n 5 langues. ROADMAP v9.0 (items concurrentiels).
+
+### Removed
+
+- **Toute la structure de licence commerciale/enterprise** : Claude Craft est désormais **100 % open-source MIT, sans aucune édition payante**. Supprimés : `LICENSE-COMMERCIAL.md`, `LICENSE-ENTERPRISE.md`, `docs/dual-license/` (dual licensing + SLA template), `docs/enterprise/` (pricing, features, open-core architecture). `CHARTER.md` réécrite (fin du modèle open-core, plus de produit `claude-craft-enterprise` propriétaire). README purgé des offres payantes (Pro support tier, enterprise adopters, training/consulting monétisés). QA Recette repassé entièrement MIT (extension Chrome, backend et SDK ; suppression de l'EULA propriétaire, du SaaS propriétaire, du license gate Stripe et des tiers payants). `.npmignore` nettoyé en conséquence.
 
 > Rapport d'audit complet (local, non versionné) : `docs/audit/2026-06-08-comprehensive/`.
 
@@ -335,9 +343,10 @@ multitenant / cqrs). Backwards compatible.
   "SLSA L2 via `slsa-github-generator`". Only `npm publish --provenance` is
   wired today (SLSA L2 for the npm tarball). The standalone `slsa-github-generator`
   workflow remains a future item.
-- **`.npmignore` excludes DRAFT legal docs (QW-07).** `LICENSE-COMMERCIAL.md`,
-  `LICENSE-ENTERPRISE.md`, `docs/enterprise/`, `docs/dual-license/` are now
-  excluded from the npm tarball — avoids shipping DRAFT contracts.
+- **`.npmignore` excludes DRAFT legal docs (QW-07).** DRAFT commercial/enterprise
+  license documents were excluded from the npm tarball. _(Historical: these
+  documents were removed entirely when the project became MIT-only — see the
+  `Removed` entry under `[Unreleased]`.)_
 
 ### Fixed — Documentation freshness
 
@@ -346,8 +355,7 @@ multitenant / cqrs). Backwards compatible.
   0.85 New Architecture, Vue 3.5+/3.6 Vapor, Laravel 13, Symfony 8 / PHP 8.4+,
   Docker 29.4.0, K8s 1.36.1, OpenTofu 1.12.0, Coolify v4.0.0 stable, PgBouncer
   1.25.2, FrankenPHP 1.12.1. **Agents & commands counts corrected: 31 default
-  + 39 infra on-demand (not 72), 125 commands (not 211).** Same correction in
-  `docs/enterprise/PRICING.md` and `docs/enterprise/FEATURES.md`.
+  + 39 infra on-demand (not 72), 125 commands (not 211).**
 - **`.claude/CLAUDE.md` infra line updated (QW-03, QW-04, QW-16).** Coolify
   marked stable, PgBouncer 1.25.2 with CVE-2026-6664/6667 patched, K8s 1.36.1,
   OpenTofu 1.12.0. `devops-engineer.md` aligned.
@@ -428,9 +436,9 @@ multitenant / cqrs). Backwards compatible.
 
 ### Added — DRAFT banners on legal/commercial docs (QW-18)
 
-- `docs/enterprise/PRICING.md` and `docs/enterprise/FEATURES.md` open with a
-  visible "DRAFT — NON CONTRACTUEL" banner so prospects cannot mistake the
-  files for binding commitments. IP lawyer review still pending (P3-26).
+- DRAFT commercial/enterprise docs received a visible "DRAFT — NON CONTRACTUEL"
+  banner. _(Historical: these documents were removed entirely when the project
+  became MIT-only — see the `Removed` entry under `[Unreleased]`.)_
 
 ## [8.3.2] - 2026-05-06
 
@@ -439,7 +447,7 @@ Audit-driven Sprint 1 → 4 deep refactor. PATCH release because no public CLI s
 ### Added — Sprint 1 (community foundations)
 
 - **GitHub topics × 10** — `claude-code`, `ai-tools`, `developer-tools`, `multi-language`, `bmad`, `tdd`, `ddd`, `clean-architecture`, `framework`, `agents` (discoverabilité SEO).
-- **README — Project Governance & Sustainability section** — funding model, bus factor, succession plan (`CHARTER.md`), license upgrade path, enterprise contact.
+- **README — Project Governance & Sustainability section** — funding model, bus factor, succession plan (`CHARTER.md`).
 - **`docs/comparison-claude-craft-vs-superclaude.md`** — 230-line honest comparison (feature-by-feature, when each tool wins, migration paths, cohabitation, public disclosure).
 - 6 new GitHub labels (`code`, `i18n`, `testing`, `accessibility`, `developer-experience`, `maintenance`) for future bulk issue creation from the audit template.
 
@@ -642,7 +650,6 @@ Fast Mode (`/fast`) is **not available on Opus 4.7**. All Fast Mode references (
 - Shell completions README (`completions/README.md`)
 - Cheat sheet (`docs/CHEAT-SHEET.md`) and learning paths (`docs/LEARNING-PATHS.md`)
 - ISO 27001 gap analysis and SOC 2 gap analysis (`docs/compliance/`)
-- Enterprise features and pricing (`docs/enterprise/`)
 - MCP servers guide (`docs/mcp/MCP-SERVERS.md`)
 - Autonomous sprint guide (`docs/guides/AUTONOMOUS-SPRINT.md`)
 - RFC-001 QA Recette Standalone (`docs/rfc/`)
