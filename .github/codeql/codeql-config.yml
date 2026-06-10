@@ -3,9 +3,14 @@ name: "Claude Craft CodeQL config"
 # Scaffolding templates contain Handlebars-style placeholders (e.g. `{{ComponentName}}`)
 # and are NOT valid standalone TypeScript/JavaScript. They are consumed by the CLI
 # generator, never executed. Excluding them removes ~180 spurious parse-error warnings
-# while keeping all real first-party code (cli/, scripts/, website/, tests/) under analysis.
+# while keeping all real first-party code (cli/, scripts/, website/) under analysis.
+#
+# tests/** is excluded too: test harnesses legitimately use patterns CodeQL flags
+# (fetch-mock dispatch via url.includes(), `bash -c` with project-controlled absolute
+# paths) that are false positives in non-production, non-shipped test code.
 paths-ignore:
   - '**/templates/**'
+  - 'tests/**'
   - '**/*.template.ts'
   - '**/*.template.tsx'
   - '**/*.template.js'
