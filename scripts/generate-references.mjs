@@ -291,7 +291,11 @@ function renderCommandsBody(commands) {
     lines.push('| Command | Description |');
     lines.push('|---------|-------------|');
     for (const c of byNs[ns]) {
-      const desc = c.description.trim().replace(/\n/g, ' ').replace(/\|/g, '\\|');
+      const desc = c.description
+        .trim()
+        .replace(/\n/g, ' ')
+        .replace(/\\/g, '\\\\') // escape backslashes first, before other escapes
+        .replace(/\|/g, '\\|');
       lines.push(`| [\`/${ns}:${c.name}\`](../${c.sourcePath}) | ${desc || '_no description_'} |`);
     }
     lines.push('');
