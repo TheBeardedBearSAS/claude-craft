@@ -1,0 +1,40 @@
+# BMAD v6 - Sprint Status (test fixture)
+# Reproduces the Wrandly case: stories tracked only in this YAML, no individual
+# markdown story files. US-100 also exists as markdown -> markdown must win.
+
+version: "1.0"
+
+metadata:
+  sprint_id: "sprint-x"
+  name: "Sprint X — Infrastructure"
+  start_date: "2026-06-11"
+  end_date: "2026-06-21"
+  goal: "Demonstrate YAML-only story ingestion."
+  epic: "E1"
+
+stories:
+  US-100:
+    title: "From YAML (should be overridden by markdown)"
+    status: "backlog"
+    previous_status: "backlog"
+    story_points: 1
+    priority: "P0"
+
+  US-E1-01:
+    title: "YAML-only story one"
+    status: "ready-for-dev"
+    previous_status: "backlog"
+    assigned_to: ""
+    story_points: 3
+    tasks:
+      total: 2
+      completed: 0
+      list:
+        - "First task"
+        - "Second task"
+
+  US-E1-02:
+    title: "YAML-only story two"
+    status: "ready-for-dev"
+    previous_status: "backlog"
+    story_points: 5

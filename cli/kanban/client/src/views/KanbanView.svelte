@@ -59,6 +59,7 @@
     if (!id) return;
     const story = store.stories.find((s) => s.id === id);
     if (!story || story.status === targetStatus) return;
+    if (story._writable === false) { announceReadOnly(story.id); return; }
     const body = { status: targetStatus };
     if (targetStatus === 'blocked') {
       const reason = await promptDialog.prompt('Blocked reason?');
@@ -168,6 +169,11 @@
   }
 
   async function moveCard(card, targetStatus) {
+    if (card._writable === false) {
+      announceReadOnly(card.id);
+      closeMoveMenu();
+      return;
+    }
     const body = { status: targetStatus };
     if (targetStatus === 'blocked') {
       const reason = await promptDialog.prompt('Blocked reason?');
@@ -190,6 +196,12 @@
     const targetCol = COLUMNS.find(c => c.key === targetStatus);
     liveRegion = `Card ${cardId} moved to ${targetCol?.label || targetStatus}`;
     setTimeout(() => liveRegion = '', 2000);
+  }
+
+  /** Story issue de .bmad/sprint-status.yaml : statut non modifiable depuis le board. */
+  function announceReadOnly(cardId) {
+    liveRegion = `Card ${cardId} is read-only (managed by .bmad/sprint-status.yaml — use team:/qa: commands)`;
+    setTimeout(() => liveRegion = '', 3000);
   }
 
   function announceCardDetails(card) {
@@ -237,9 +249,10 @@
           {@const tdd = tddBadge(s.tdd_phase)}
           <li
             class="card"
-            draggable="true"
+            class:read-only={s._writable === false}
+            draggable={s._writable !== false}
             ondragstart={(e) => onDragStart(e, s.id)}
-            aria-label="{s.id} {s.title}"
+            aria-label="{s.id} {s.title}{s._writable === false ? ' (lecture seule)' : ''}"
             data-card-id={s.id}
             tabindex="0"
             role="listitem"
@@ -247,6 +260,9 @@
           >
             <div class="card-top">
               <span class="id">{s.id}</span>
+              {#if s._writable === false}
+                <span class="readonly" aria-label="Lecture seule — gérée par .bmad/sprint-status.yaml" role="img">🔒</span>
+              {/if}
               <span class="priority" style="color: {priorityColor(s.priority)}">{s.priority}</span>
               <span class="points">{s.story_points}p</span>
               {#if tdd}
@@ -402,6 +418,10 @@
     box-shadow: var(--shadow);
   }
   .card:active { cursor: grabbing; }
+  /* Story issue de .bmad/sprint-status.yaml : non déplaçable depuis le board */
+  .card.read-only { cursor: default; opacity: 0.85; }
+  .card.read-only:active { cursor: default; }
+  .card-top .readonly { font-size: 12px; }
   /* Focus visible explicite (WCAG 2.2 SC 2.4.11) */
   .card:focus,
   .card:focus-visible {

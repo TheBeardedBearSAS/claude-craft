@@ -86,6 +86,7 @@ export const SprintStatusSchema = z
       start_date: z.string(),
       end_date: z.string(),
       goal: z.string().default(''),
+      epic: z.string().optional().default(''),
     }),
     stories: z
       .record(

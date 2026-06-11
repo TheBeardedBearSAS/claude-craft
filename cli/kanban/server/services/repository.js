@@ -2,6 +2,7 @@ import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { scan, groupByCategory } from './file-scanner.js';
 import { parseAndValidate } from './frontmatter.js';
+import { loadSprintStatus } from './sprint-cache.js';
 import { StoryFrontmatterSchema, EpicFrontmatterSchema, TaskFrontmatterSchema } from '../../shared/schemas.js';
 
 /**
@@ -75,6 +76,57 @@ export class Repository {
       if (f.category === 'sprint-goal') s.goalPath = f.path;
       this.sprints.set(f.sprintId, s);
     }
+
+    // BMAD v6 single-writer track stores stories only in .bmad/sprint-status.yaml
+    // (no individual markdown files). Surface them so the board isn't empty.
+    await this.#ingestSprintStatusStories();
+  }
+
+  /**
+   * Overlay stories declared in <projectRoot>/.bmad/sprint-status.yaml that have
+   * no backing markdown file. Markdown-backed stories (already in this.stories)
+   * always win — the YAML entry is ignored for a colliding id so there is no
+   * double source of truth. Synthetic stories are read-only (path === null).
+   */
+  async #ingestSprintStatusStories() {
+    const projectRoot = path.dirname(this.rootDir);
+    let ss;
+    try {
+      ss = await loadSprintStatus(projectRoot);
+    } catch {
+      // A broken sprint-status.yaml must not break the whole board scan.
+      return;
+    }
+    if (!ss || ss._invalid || !ss.stories) return;
+
+    const sprintId = ss.metadata?.sprint_id ?? null;
+    const epicFromMeta = ss.metadata?.epic ?? null;
+
+    for (const [id, s] of Object.entries(ss.stories)) {
+      if (this.stories.has(id)) continue; // markdown-backed story wins
+      this.stories.set(id, {
+        path: null, // no backing file -> read-only
+        mtime: 0,
+        ok: true,
+        source: 'sprint-status',
+        data: {
+          id,
+          title: s.title ?? id,
+          status: s.status,
+          previous_status: s.previous_status ?? '',
+          assigned_to: s.assigned_to ?? '',
+          tdd_phase: s.tdd_phase ?? '',
+          story_points: s.story_points ?? 0,
+          epic_id: s.epic_id || epicFromMeta || null,
+          // BMAD priorities are P0..P3 (outside the must/should/could/wont enum),
+          // so we don't map them; the board just needs a valid default.
+          priority: 'should',
+          sprint_id: sprintId,
+          tasks: s.tasks ?? { total: 0, completed: 0, list: [] },
+          dependencies: [],
+        },
+      });
+    }
   }
 
   listStories({ sprintId, status, epicId } = {}) {
@@ -85,7 +137,7 @@ export class Repository {
       if (sprintId && d.sprint_id !== sprintId) continue;
       if (status && d.status !== status) continue;
       if (epicId && d.epic_id !== epicId) continue;
-      out.push({ ...d, _mtime: entry.mtime });
+      out.push({ ...d, _mtime: entry.mtime, _source: entry.source ?? 'markdown', _writable: entry.path !== null });
     }
     return out.sort((a, b) => a.id.localeCompare(b.id));
   }
@@ -97,7 +149,7 @@ export class Repository {
   getStory(id) {
     const entry = this.stories.get(id);
     if (!entry || !entry.ok) return null;
-    return { ...entry.data, _mtime: entry.mtime };
+    return { ...entry.data, _mtime: entry.mtime, _source: entry.source ?? 'markdown', _writable: entry.path !== null };
   }
 
   getStoryFile(id) {
