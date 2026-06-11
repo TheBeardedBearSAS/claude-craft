@@ -6,7 +6,7 @@ version: 1.0.0
 tags: [workflow, productivity, context-management, gsd, atomic, subagent]
 category: workflow
 license: MIT
-repository: https://github.com/TheBeardedCTO/claude-craft
+repository: https://github.com/TheBeardedBearSAS/claude-craft
 ---
 
 # Atomic Tasks — GSD Pattern (Get Shit Done)

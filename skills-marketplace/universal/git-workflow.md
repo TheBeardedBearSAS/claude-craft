@@ -6,7 +6,7 @@ version: 1.0.0
 tags: [git, workflow, commits, pr, review, conventional-commits, github-flow]
 category: devops
 license: MIT
-repository: https://github.com/TheBeardedCTO/claude-craft
+repository: https://github.com/TheBeardedBearSAS/claude-craft
 ---
 
 # Git Workflow — GitHub Flow + Conventional Commits

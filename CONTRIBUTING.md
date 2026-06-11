@@ -559,7 +559,7 @@ When contributing to Claude Craft:
 1. **No secrets in commits**: Never commit API keys, tokens, or credentials
 2. **Dependency hygiene**: Only add well-maintained dependencies with active security patching
 3. **Audit new dependencies**: Check for known CVEs before adding new dependencies
-4. **Report security issues privately**: Email security@thebearded-cto.com instead of opening public issues
+4. **Report security issues privately**: Email security@the-bearded-bear.com instead of opening public issues
 5. **Supply chain awareness**: Understand SLSA provenance and SBOM generation (see SECURITY.md)
 
 ### Verifying Package Integrity

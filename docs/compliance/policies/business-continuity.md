@@ -669,5 +669,5 @@ Co-founder & CTO, The Bearded CTO
 
 **FIN DU DOCUMENT — DRAFT v1.0.0**
 
-**Contact urgence :** CTO [MOBILE] | crisis@thebeardedcto.com  
+**Contact urgence :** CTO [MOBILE] | crisis@the-bearded-bear.com  
 **Confidentialité :** Internal — Management + CSIRT uniquement

@@ -6,7 +6,7 @@ version: 1.0.0
 tags: [architecture, design, tdd, planning, boundaries, contracts, dependencies]
 category: design
 license: MIT
-repository: https://github.com/TheBeardedCTO/claude-craft
+repository: https://github.com/TheBeardedBearSAS/claude-craft
 ---
 
 # Architect — Architecture Before TDD

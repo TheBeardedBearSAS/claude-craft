@@ -6,6 +6,6 @@ Please read the full text at the link above.
 
 ## Reporting
 
-If you experience or witness unacceptable behavior, please contact us at **conduct@thebearded-cto.com**.
+If you experience or witness unacceptable behavior, please contact us at **conduct@the-bearded-bear.com**.
 
 We will review and investigate all complaints and respond appropriately.

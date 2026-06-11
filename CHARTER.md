@@ -115,7 +115,7 @@ Les versions publiées de `claude-craft` sous MIT ne peuvent **jamais** être re
 
 ## 11. Contact et Transparence
 
-- **Gouvernance et questions légales :** governance@thebeardedcto.com
+- **Gouvernance et questions légales :** governance@the-bearded-bear.com
 - **Discussions communautaires :** GitHub Discussions, Discord #governance
 - **RFC :** `docs/rfc/` dans le dépôt principal
 

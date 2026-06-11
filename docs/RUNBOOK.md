@@ -347,7 +347,7 @@ npm run lint:shell
 
 - **Maintainer:** The Bearded CTO
 - **Email:** flavien.metivier@gmail.com
-- **Security:** security@thebearded-cto.com
+- **Security:** security@the-bearded-bear.com
 
 ---
 

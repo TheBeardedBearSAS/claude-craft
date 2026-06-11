@@ -209,7 +209,7 @@ cp bundles/cursor/.cursorrules /path/to/your/project/
 Exported files include attribution to **The Bearded CTO / Claude Craft**.
 
 **License:** MIT  
-**Repository:** https://github.com/TheBeardedCTO/claude-craft
+**Repository:** https://github.com/TheBeardedBearSAS/claude-craft
 
 ---
 

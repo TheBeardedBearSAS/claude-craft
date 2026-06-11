@@ -87,7 +87,7 @@ Tout le contenu est disponible en 5 langues :
 
 ```bash
 # Cloner Claude-Craft
-git clone https://github.com/thebeardedcto/claude-craft.git
+git clone https://github.com/TheBeardedBearSAS/claude-craft.git
 cd claude-craft
 
 # Installer pour un projet Symfony (en français)

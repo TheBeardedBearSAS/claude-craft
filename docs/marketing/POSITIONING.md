@@ -166,7 +166,7 @@ Partial coverage, early adopters, evolving references.
 
 **Author:** The Bearded CTO  
 **License:** MIT  
-**Repository:** https://github.com/TheBeardedCTO/claude-craft  
+**Repository:** https://github.com/TheBeardedBearSAS/claude-craft  
 **Website:** https://claude-craft.dev
 
 ---

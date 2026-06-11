@@ -270,7 +270,7 @@ Step-by-step tutorials available in 5 languages:
 
 ## Project Governance & Sustainability
 
-Claude Craft is maintained by [The Bearded CTO](https://thebeardedcto.com), a solo founder with deep involvement in the AFUP and Symfony French ecosystem.
+Claude Craft is maintained by [The Bearded CTO](https://the-bearded-bear.com), a solo founder with deep involvement in the AFUP and Symfony French ecosystem.
 
 | Item | Status |
 |------|--------|
