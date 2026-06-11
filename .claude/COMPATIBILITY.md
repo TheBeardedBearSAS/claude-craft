@@ -1,4 +1,4 @@
-# Claude Code Compatibility — Claude Craft v8.10.1
+# Claude Code Compatibility — Claude Craft v8.10.2
 
 **Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
 **Recommended Version:** 2.1.168 (Opus 4.8, `fallbackModel`, `ultracode` trigger, June 6, 2026)
