@@ -29,7 +29,7 @@ CURSOR_OUTPUT="$BUNDLES_DIR/cursor/.cursorrules"
 
 cat > "$CURSOR_OUTPUT" << 'EOF'
 # Claude Craft — AI-First TDD Framework for Cursor IDE
-# Generated from https://github.com/TheBeardedCTO/claude-craft
+# Generated from https://github.com/TheBeardedBearSAS/claude-craft
 # Version: 8.0.1 | Last updated: 2026-04-17
 
 ---
@@ -96,7 +96,7 @@ For full rules and references:
 
 **Attribution:** The Bearded CTO / Claude Craft
 **License:** MIT
-**Repository:** https://github.com/TheBeardedCTO/claude-craft
+**Repository:** https://github.com/TheBeardedBearSAS/claude-craft
 EOF
 
 echo -e "  ${YELLOW}→${NC} Created: $CURSOR_OUTPUT"

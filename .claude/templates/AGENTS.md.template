@@ -87,4 +87,4 @@ context: fork                # isoler le contexte (skills lourds)
 
 - Documentation complete : [docs/AGENTS.md](docs/AGENTS.md)
 - Standard AGENTS.md : https://agents.md
-- claude-craft : https://github.com/the-bearded-cto/claude-craft
+- claude-craft : https://github.com/TheBeardedBearSAS/claude-craft

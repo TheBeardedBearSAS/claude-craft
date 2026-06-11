@@ -4,18 +4,18 @@
   "owner": {
     "name": "The Bearded CTO",
     "email": "flavien.metivier@gmail.com",
-    "url": "https://thebeardedcto.com"
+    "url": "https://the-bearded-bear.com"
   },
   "metadata": {
     "description": "Claude Craft — multi-stack framework for Claude Code teams (11 stacks, BMAD v6, QA Recette, Kanban, RTK token optimization).",
-    "homepage": "https://thebeardedcto.com/claude-craft"
+    "homepage": "https://the-bearded-bear.com/claude-craft"
   },
   "plugins": [
     {
       "name": "claude-craft",
       "source": "./",
       "description": "Multi-stack framework: 31 specialized agents (+39 infra on-demand), 125 commands across 15 namespaces, BMAD v6 sprint workflow, browser QA automation, and token optimization (RTK). 5 languages.",
-      "version": "8.10.0",
+      "version": "8.10.1",
       "category": "development-framework",
       "keywords": ["framework", "multi-stack", "bmad", "qa-automation", "tech-leads", "clean-architecture", "tdd"],
       "license": "MIT"

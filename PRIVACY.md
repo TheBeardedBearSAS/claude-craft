@@ -8,7 +8,7 @@ This Privacy Policy describes how Claude Craft ("we", "us", or "the Project") co
 ## 1. Data Controller
 
 The Bearded Bear SAS  
-Contact: privacy@thebeardedcto.com (or open a GitHub issue at https://github.com/TheBeardedBearSAS/claude-craft/issues)
+Contact: privacy@the-bearded-bear.com (or open a GitHub issue at https://github.com/TheBeardedBearSAS/claude-craft/issues)
 
 ## 2. What Data We Collect
 
@@ -80,7 +80,7 @@ You have the following rights under GDPR:
 5. **Right to Object (Art. 21)**: Object to processing based on legitimate interest
 6. **Right to Restriction (Art. 18)**: Request limited processing of your data
 
-To exercise these rights, contact us at privacy@thebeardedcto.com or open a GitHub issue.
+To exercise these rights, contact us at privacy@the-bearded-bear.com or open a GitHub issue.
 
 ## 6. Third-Party Services
 
@@ -125,7 +125,7 @@ We implement industry-standard security measures:
 - Access controls to limit data access to authorized personnel only
 - Regular security audits
 
-However, no system is 100% secure. If you discover a security vulnerability, please report it responsibly via GitHub Security Advisories or privacy@thebeardedcto.com.
+However, no system is 100% secure. If you discover a security vulnerability, please report it responsibly via GitHub Security Advisories or privacy@the-bearded-bear.com.
 
 ## 10. Children's Privacy
 
@@ -145,9 +145,9 @@ Your continued use of Claude Craft after changes constitutes acceptance of the u
 
 For privacy-related questions or to exercise your rights:
 
-- **Email**: privacy@thebeardedcto.com
+- **Email**: privacy@the-bearded-bear.com
 - **GitHub Issues**: https://github.com/TheBeardedBearSAS/claude-craft/issues
-- **DPO (if applicable)**: Contact privacy@thebeardedcto.com to reach our Data Protection Officer
+- **DPO (if applicable)**: Contact privacy@the-bearded-bear.com to reach our Data Protection Officer
 
 ## 13. Supervisory Authority
 

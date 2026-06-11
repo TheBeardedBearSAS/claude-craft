@@ -86,6 +86,6 @@ Voir `examples/plugins/` :
 
 ## Contribuer
 
-- Discussion générale : [GitHub Discussions `plugins`](https://github.com/the-bearded-cto/claude-craft/discussions/categories/plugins)
-- Feedback API : commenter le [RFC v1.0](https://github.com/the-bearded-cto/claude-craft/discussions/plugin-rfc-v1)
+- Discussion générale : [GitHub Discussions `plugins`](https://github.com/TheBeardedBearSAS/claude-craft/discussions/categories/plugins)
+- Feedback API : commenter le [RFC v1.0](https://github.com/TheBeardedBearSAS/claude-craft/discussions/plugin-rfc-v1)
 - Bugs : issues GitHub avec label `plugins`

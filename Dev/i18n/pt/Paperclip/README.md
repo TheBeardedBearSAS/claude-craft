@@ -76,4 +76,4 @@ make install-paperclip TARGET=/path/to/my/paperclip-project RULES_LANG=en
 
 - Documentação Paperclip: https://docs.paperclip.ing/
 - Repositório Paperclip: https://github.com/paperclipai/paperclip
-- Claude-Craft: https://github.com/the-bearded-cto/claude-craft
+- Claude-Craft: https://github.com/TheBeardedBearSAS/claude-craft

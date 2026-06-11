@@ -6,7 +6,7 @@ version: 1.0.0
 tags: [testing, tdd, bdd, coverage, mutation, vitest, playwright, jest]
 category: quality
 license: MIT
-repository: https://github.com/TheBeardedCTO/claude-craft
+repository: https://github.com/TheBeardedBearSAS/claude-craft
 ---
 
 # Testing — TDD/BDD Principles (2026)

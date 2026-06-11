@@ -6,7 +6,7 @@ version: 1.0.0
 tags: [debugging, troubleshooting, regression, bug-fix, methodical]
 category: quality
 license: MIT
-repository: https://github.com/TheBeardedCTO/claude-craft
+repository: https://github.com/TheBeardedBearSAS/claude-craft
 ---
 
 # Debug-Methodical — 4-Phase Debugging

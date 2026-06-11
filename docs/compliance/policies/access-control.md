@@ -168,7 +168,7 @@ Cette Access Control Policy définit les principes et processus de gestion des a
 - IT crée ticket provisioning (checklist)
 
 **J-1 :**
-- Création compte Google Workspace (email @thebeardedcto.com)
+- Création compte Google Workspace (email @the-bearded-bear.com)
 - Envoi invitation 1Password vault approprié
 - Envoi hardware keys MFA (YubiKey si admin)
 
@@ -184,7 +184,7 @@ Cette Access Control Policy définit les principes et processus de gestion des a
 **Checklist provisioning :**
 
 ```markdown
-- [ ] Compte Google Workspace créé (email @thebeardedcto.com)
+- [ ] Compte Google Workspace créé (email @the-bearded-bear.com)
 - [ ] Invitation 1Password vault (Dev/Infra/Finance selon rôle)
 - [ ] MFA activé Google Workspace + 1Password
 - [ ] Hardware key envoyée (si admin)
@@ -413,7 +413,7 @@ Cette Access Control Policy définit les principes et processus de gestion des a
 **SLA :** 1h révocation tous accès, 24/7 (on-call IT Admin).
 
 **Process :**
-1. **Alerte :** Employé, manager, ou SIEM notifie IT Admin (#security-incidents Slack ou security@thebeardedcto.com)
+1. **Alerte :** Employé, manager, ou SIEM notifie IT Admin (#security-incidents Slack ou security@the-bearded-bear.com)
 2. **Triage :** IT Admin confirme urgence (15min)
 3. **Révocation :** IT exécute checklist offboarding urgence (section 6.2)
 4. **Notification :** CTO + Legal informés sous 30min
@@ -538,5 +538,5 @@ Cette Access Control Policy définit les principes et processus de gestion des a
 
 **FIN DU DOCUMENT — DRAFT v1.0.0**
 
-**Contact :** cto@thebeardedcto.com  
+**Contact :** cto@the-bearded-bear.com  
 **Confidentialité :** Internal — Diffusion équipe uniquement

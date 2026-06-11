@@ -6,7 +6,7 @@ version: 1.0.0
 tags: [solid, oop, clean-code, architecture, srp, ocp, lsp, isp, dip]
 category: design
 license: MIT
-repository: https://github.com/TheBeardedCTO/claude-craft
+repository: https://github.com/TheBeardedBearSAS/claude-craft
 ---
 
 # SOLID Principles — Clean OO Design

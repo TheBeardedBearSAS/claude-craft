@@ -6,7 +6,7 @@ version: 1.0.0
 tags: [brainstorming, requirements, planning, socratic-method, clarification]
 category: planning
 license: MIT
-repository: https://github.com/TheBeardedCTO/claude-craft
+repository: https://github.com/TheBeardedBearSAS/claude-craft
 ---
 
 # Socratic Brainstorm — Clarify Before Coding

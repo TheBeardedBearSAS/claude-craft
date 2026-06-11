@@ -6,7 +6,7 @@ version: 1.0.0
 tags: [simplicity, refactoring, yagni, clean-code, kiss, dry, cognitive-complexity]
 category: quality
 license: MIT
-repository: https://github.com/TheBeardedCTO/claude-craft
+repository: https://github.com/TheBeardedBearSAS/claude-craft
 ---
 
 # KISS, DRY, YAGNI — Simplicity Principles

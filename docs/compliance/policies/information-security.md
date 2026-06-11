@@ -24,7 +24,7 @@ L'ISP s'applique à tous les employés, contractors, partenaires et fournisseurs
 ### 2.1 Périmètre
 
 **Systèmes couverts :**
-- Repositories GitHub (github.com/the-bearded-cto/claude-craft)
+- Repositories GitHub (github.com/TheBeardedBearSAS/claude-craft)
 - Infrastructure cloud (Cloudflare, AWS/GCP si SaaS)
 - Services tiers (Anthropic API, Posthog, Sentry, Stripe)
 - Devices équipe (laptops, smartphones)
@@ -200,7 +200,7 @@ La sécurité de l'information repose sur trois piliers :
 - Respecter policies sécurité (ISP, Access Control, Acceptable Use)
 - Compléter formation sensibilisation 8h/an
 - Utiliser password manager (1Password) + MFA
-- Reporter incidents sécurité sous 1h (#security-incidents Slack ou security@thebeardedcto.com)
+- Reporter incidents sécurité sous 1h (#security-incidents Slack ou security@the-bearded-bear.com)
 - Protéger devices (antivirus, mises à jour, chiffrement disque)
 
 ---
@@ -436,5 +436,5 @@ La sécurité de l'information repose sur trois piliers :
 
 **FIN DU DOCUMENT — DRAFT v1.0.0**
 
-**Contact :** cto@thebeardedcto.com  
+**Contact :** cto@the-bearded-bear.com  
 **Confidentialité :** Internal — Diffusion équipe uniquement

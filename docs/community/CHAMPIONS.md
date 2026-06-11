@@ -131,7 +131,7 @@ Champions are expected to:
 
 - **Discord:** #champions channel (invite after acceptance)
 - **Email:** champions@claude-craft.dev
-- **GitHub Discussions:** [Community](https://github.com/TheBeardedCTO/claude-craft/discussions)
+- **GitHub Discussions:** [Community](https://github.com/TheBeardedBearSAS/claude-craft/discussions)
 
 ---
 

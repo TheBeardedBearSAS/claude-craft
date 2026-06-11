@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.10.1] - 2026-06-11
+
+### Fixed
+- Migration des références de domaine email/web vers `the-bearded-bear.com` (unification des variantes `thebeardedcto.com` et `thebearded-cto.com` dans plugin/marketplace, README, PRIVACY, CHARTER, SECURITY, CONTRIBUTING, CODE_OF_CONDUCT et les politiques de conformité).
+- Normalisation des URLs GitHub obsolètes (`the-bearded-cto`, `thebeardedcto`, `TheBeardedCTO`) vers `github.com/TheBeardedBearSAS/claude-craft`.
+- Correction du `CODEOWNERS` cassé (`@thebearded-cto` inexistant) vers le mainteneur `@flavien-metivier`.
+
 ## [8.10.0] - 2026-06-09
 
 Passage à un projet **100 % open-source MIT** (suppression de toute la structure de licence commerciale/enterprise) + lot d'audit de fraîcheur 2026-06-08. MINOR release. Backwards compatible.

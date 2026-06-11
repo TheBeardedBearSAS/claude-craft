@@ -6,7 +6,7 @@ version: 1.0.0
 tags: [documentation, adr, openapi, changelog, readme, markdown]
 category: quality
 license: MIT
-repository: https://github.com/TheBeardedCTO/claude-craft
+repository: https://github.com/TheBeardedBearSAS/claude-craft
 ---
 
 # Documentation — Documentation as Code

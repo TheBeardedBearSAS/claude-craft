@@ -648,7 +648,7 @@ de vos pratiques de sécurité avec nos exigences internes (ISO 27001, RGPD).
 Cordialement,
 [CTO NAME]
 CTO, The Bearded CTO
-cto@thebeardedcto.com
+cto@the-bearded-bear.com
 ```
 
 ---
@@ -685,5 +685,5 @@ cto@thebeardedcto.com
 
 **FIN DU DOCUMENT — DRAFT v1.0.0**
 
-**Contact :** cto@thebeardedcto.com  
+**Contact :** cto@the-bearded-bear.com  
 **Confidentialité :** Internal — Management + Legal uniquement

@@ -422,7 +422,7 @@ Disponible pour appel préliminaire (présentation Claude Craft, questions péri
 Cordialement,
 [CTO Name]
 The Bearded CTO
-cto@thebeardedcto.com
+cto@the-bearded-bear.com
 ```
 
 ---
@@ -663,6 +663,6 @@ Voir fichiers séparés :
 
 ---
 
-**Contact :** cto@thebeardedcto.com  
+**Contact :** cto@the-bearded-bear.com  
 **Dernière mise à jour :** 2026-04-15  
 **Confidentialité :** Internal — Ne pas diffuser hors équipe sans approbation CTO

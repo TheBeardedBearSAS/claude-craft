@@ -14,7 +14,7 @@
 
 If you discover a security vulnerability in Claude Craft, please report it responsibly.
 
-**Email:** security@thebearded-cto.com
+**Email:** security@the-bearded-bear.com
 
 ### What to include
 
@@ -180,7 +180,7 @@ Starting with version 8.1.0:
 
 If you discover a supply chain security issue (compromised dependency, malicious package, signature mismatch):
 
-**Email:** security@thebearded-cto.com
+**Email:** security@the-bearded-bear.com
 
 **Subject:** `[SUPPLY-CHAIN] <brief description>`
 

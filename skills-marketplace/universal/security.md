@@ -6,7 +6,7 @@ version: 1.0.0
 tags: [security, owasp, auth, encryption, jwt, supply-chain, ssrf]
 category: security
 license: MIT
-repository: https://github.com/TheBeardedCTO/claude-craft
+repository: https://github.com/TheBeardedBearSAS/claude-craft
 ---
 
 # Security — OWASP Top 10:2025 Essentials

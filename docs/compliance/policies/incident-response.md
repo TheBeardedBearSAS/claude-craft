@@ -121,7 +121,7 @@ Preparation → Detection → Analysis → Containment → Eradication → Recov
 **Checklist préparation :**
 - [ ] CSIRT membres identifiés, formés, on-call rotation configurée
 - [ ] Playbooks Sev1/2 rédigés et accessibles (Google Drive CSIRT folder + 1Password emergency)
-- [ ] Canaux communication : Slack #security-incidents (privé, CSIRT only), email security@thebeardedcto.com, phone tree
+- [ ] Canaux communication : Slack #security-incidents (privé, CSIRT only), email security@the-bearded-bear.com, phone tree
 - [ ] Contacts externes : ANSSI CERT-FR (+33 1 71 75 84 68), CNIL (+33 1 53 73 22 22), cabinet forensics (TBD)
 - [ ] Backup outils : laptop CSIRT isolé (forensics, pas utilisé quotidiennement), clés USB bootable (Kali Linux, Tails)
 - [ ] Assurance cyber : contrat souscrit (montant couverture, SLA expertise externe)
@@ -139,7 +139,7 @@ Preparation → Detection → Analysis → Containment → Eradication → Recov
 | **Sentry** | Spike erreurs app (possible exploitation vulnérabilité) | Real-time alerting | Dev on-call |
 | **1Password Activity Log** | Accès vault anormal (IP géo, horaires) | Daily review | IT Admin |
 | **Employés** | Reporting phishing, device volé, activité suspecte | Immédiat (Slack #security-incidents) | Tous |
-| **External researcher** | Vulnerability disclosure (security@thebeardedcto.com) | Variable | CTO |
+| **External researcher** | Vulnerability disclosure (security@the-bearded-bear.com) | Variable | CTO |
 
 **Analysis (triage <15min Sev1, <1h Sev2) :**
 
@@ -543,14 +543,14 @@ Preparation → Detection → Analysis → Containment → Eradication → Recov
 
 | Rôle | Nom | Email | Mobile | Backup |
 |------|-----|-------|--------|--------|
-| **Incident Commander** | CTO | cto@thebeardedcto.com | [À compléter] | CEO |
-| **Tech Lead** | Dev Lead | devlead@thebeardedcto.com | [À compléter] | Senior Dev |
-| **Operations Lead** | IT Admin | it@thebeardedcto.com | [À compléter] | CTO |
-| **Communications Lead** | Legal Counsel | legal@thebeardedcto.com | [À compléter] | Product Manager |
+| **Incident Commander** | CTO | cto@the-bearded-bear.com | [À compléter] | CEO |
+| **Tech Lead** | Dev Lead | devlead@the-bearded-bear.com | [À compléter] | Senior Dev |
+| **Operations Lead** | IT Admin | it@the-bearded-bear.com | [À compléter] | CTO |
+| **Communications Lead** | Legal Counsel | legal@the-bearded-bear.com | [À compléter] | Product Manager |
 
 **Slack channel :** #security-incidents (privé, CSIRT only)
 
-**Email groupe :** security@thebeardedcto.com (forwardé CSIRT members)
+**Email groupe :** security@the-bearded-bear.com (forwardé CSIRT members)
 
 ### 7.2 Autorités et Partenaires Externes
 
@@ -652,7 +652,7 @@ Vos mots de passe et informations de paiement n'ont PAS été affectés (stocké
 
 **Plus d'informations :**
 Post-mortem détaillé (anonymisé) : [LIEN BLOG]
-Questions : security@thebeardedcto.com
+Questions : security@the-bearded-bear.com
 
 Nous sommes profondément désolés pour cet incident. La sécurité de vos données est notre 
 priorité absolue, et nous avons pris des mesures pour qu'un tel incident ne se reproduise pas.
@@ -688,7 +688,7 @@ Risque phishing ciblé (emails exposés), risque faible pour droits/libertés (p
 - Remediations : patch vulnérabilité, MFA renforcé, monitoring accrue
 
 **6. Contact DPO :**
-[NOM DPO], legal@thebeardedcto.com, +33 [TÉLÉPHONE]
+[NOM DPO], legal@the-bearded-bear.com, +33 [TÉLÉPHONE]
 ```
 
 ---
@@ -842,5 +842,5 @@ Chaque incident Sev1/2 → post-mortem obligatoire (section 5.7).
 
 **FIN DU DOCUMENT — DRAFT v1.0.0**
 
-**Contact urgence 24/7 :** security@thebeardedcto.com | Slack #security-incidents  
+**Contact urgence 24/7 :** security@the-bearded-bear.com | Slack #security-incidents  
 **Confidentialité :** Internal — CSIRT + Management uniquement
