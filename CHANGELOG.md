@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.11.0] - 2026-06-12
+
+### Added
+- **Kanban — lecture des stories BMAD v6** : le tableau Kanban ingère désormais les stories déclarées dans `.bmad/sprint-status.yaml` (piste `team:`/`qa:`, single-writer), en plus des fichiers markdown `backlog/user-stories/US-*.md` (piste `workflow:`). Les projets initialisés BMAD v6 affichaient un board vide et *« no sprint »* alors que leur `sprint-status.yaml` était complet — c'est corrigé. Les stories issues de la YAML sont exposées en **lecture seule** (`_source: 'sprint-status'`, `_writable: false`) ; sur collision d'identifiant, le fichier markdown l'emporte (pas de double source de vérité).
+
+### Fixed
+- **Board Kanban vide sur projet BMAD v6** : `PATCH /api/stories/:id/status` sur une story gérée par `sprint-status.yaml` renvoie un `409 read_only_source` explicite (au lieu d'un `404` trompeur) ; le client désactive le drag et affiche un cadenas sur ces cartes. `SprintStatusSchema.metadata` accepte désormais le champ `epic` (auparavant supprimé par Zod), pour que les stories synthétiques héritent de l'épic du sprint.
+
 ## [8.10.2] - 2026-06-11
 
 ### Fixed
