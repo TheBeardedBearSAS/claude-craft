@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.10.2] - 2026-06-11
+
+### Fixed
+- **Interface web Kanban** : le package npm publié n'embarquait pas le client Svelte compilé (`cli/kanban/client/dist/` est gitignored et n'était jamais buildé en CI), si bien que `npx @the-bearded-bear/claude-craft kanban` affichait *« client not built »* pour tous les utilisateurs. La CI de publication lance désormais `npm run kanban:build` avant `npm publish`, et un garde-fou fait échouer la release si `cli/kanban/client/dist` est absent du tarball.
+
 ## [8.10.1] - 2026-06-11
 
 ### Fixed

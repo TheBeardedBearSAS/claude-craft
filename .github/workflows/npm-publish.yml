@@ -235,6 +235,15 @@ jobs:
           # Node 24 (npm 11.5.1+) required for OIDC trusted publishing (npm 10 has no OIDC support).
           # No registry-url: avoids setup-node auto-setting NODE_AUTH_TOKEN which overrides OIDC.
 
+      - name: Install dependencies
+        # Needed for the Kanban build below: vite/svelte are devDependencies, absent from a fresh checkout.
+        run: npm ci
+
+      - name: Build Kanban UI
+        # cli/kanban/client/dist is gitignored, so it must be (re)built here or the published
+        # package ships without the UI and `npx … kanban` shows "client not built".
+        run: npm run kanban:build
+
       - name: Update version for main branch
         if: ${{ needs.validate.outputs.is_main_push == 'true' }}
         run: |
@@ -256,6 +265,13 @@ jobs:
 
       - name: Generate AI bundles (chatgpt/claude/gemini)
         run: bash scripts/export-multi-ide.sh
+
+      - name: Verify Kanban UI is bundled
+        # Inspect the real tarball: fail the release loudly if the built client is missing,
+        # instead of shipping a package that greets every user with "client not built".
+        run: |
+          npm pack --dry-run 2>&1 | grep -q "cli/kanban/client/dist/index.html" \
+            || { echo "::error::Kanban UI (cli/kanban/client/dist) missing from package — kanban:build did not run"; exit 1; }
 
       - name: Publish (dry run)
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == true }}
