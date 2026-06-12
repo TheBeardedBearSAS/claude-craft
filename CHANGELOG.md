@@ -7,14 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.13.0] - 2026-06-12
+
 ### Added
+- **Distribution des scripts AgentTeams** : les helpers `Tools/AgentTeams/lib/*.sh` (`cost-estimator`, `ralph-teams-adapter`, `compatibility-check`, `cost-dashboard`, `result-aggregator`) sont désormais installés automatiquement dans le projet utilisateur avec le namespace de commandes Team (installeur npx + `make install-common`). Auparavant présents dans le repo/package npm mais jamais copiés → les commandes `/team:*` affichaient « scripts MISSING » (perte du dashboard coût et de `--ralph-mode`). Nouveau `Tools/AgentTeams/install-agentteams.sh` (`install`/`--check`/`--uninstall`) + cible `make install-agentteams TARGET=.`. Prérequis `/team:*` annotés en dégradation gracieuse (5 langues). Doc : section Installation dans `AGENT-TEAMS-GUIDE.md`.
 - **Helper de soumission awesome-claude-code** : `scripts/awesome-claude-code-submit.mjs` (`npm run community:awesome`) — prépare la recommandation de ressource vers `hesreallyhim/awesome-claude-code` sans jamais la soumettre (leur dépôt **bannit** les soumissions automatisées par `gh`/API). Il source les métadonnées (`package.json`/`marketplace.json`), calcule l'ID de ressource compatible amont (`tool-<sha256(nom+url)[:8]>`), valide le lien GitHub (HTTP 200) et l'existence npm (registry), détecte les doublons dans le CSV amont, puis imprime les valeurs du formulaire + une **URL d'Issue GitHub pré-remplie** (relecture + clic humain). Option `--write` pour régénérer la fiche de prépa locale.
 
 ### Fixed
+- **Gate validator `set -e` + `((var++))`** : sous `set -euo pipefail`, `((var++))` renvoie un exit code 1 quand le compteur vaut 0 (post-incrément évalué à l'ancienne valeur), ce qui avortait le script **après le 1er check** — cassant toutes les commandes `/gate:*` (remonté sur le projet Wrandly), le hook quality-gate, le routing engine, le batch executor et 2 scripts d'install. Remplacement des **68** `((var++))`/`((var--))` nus par `var=$((var + 1))` sur les **6** fichiers concernés (boucles `for ((i++))` préservées). Tests de non-régression ajoutés (`make test-bmad` : comportemental + garde statique anti-réintroduction).
 - **Manifest du plugin** : `plugin.json` et `marketplace.json` rendus strictement conformes au schéma Claude Code (`claude plugin validate .` : 0 erreur, 0 warning, requis pour la soumission au marketplace). `repository` passé d'objet à string (URL) ; champs réservés `commands`/`agents`/`skills` (porteurs de métadonnées custom) retirés (contenu auto-découvert depuis les dossiers) ; champs non reconnus retirés (`compatibility`, `capabilities`, `stacks`, `languages`, `categories`, `installation`, `features`, `marketplace`, `security`, `metadata.homepage`). Le test de cohérence registre↔manifest vérifie désormais les `keywords`.
 
 ### Docs
-- **Marketplace** : `marketplace.json` aligné sur la version courante (8.12.0).
+- **Marketplace** : `marketplace.json` aligné sur la version courante (8.13.0).
 - **Helm 4** : note de migration 3→4 ajoutée aux agents devops (5 langues) — major (server-side apply, plugins WASM, API v4), Helm 3 EOL sécurité nov. 2026.
 - **Python JIT** : mentions du JIT (PEP 744) reformulées en avertissement neutre (expérimental, désactivé par défaut, sujet à réévaluation du Steering Council — ne pas en dépendre en production), 5 langues.
 - **Mémoire persistante inter-sessions** : section ajoutée à `ECOSYSTEM.md` (natif `/memory` + hooks PreCompact/PostCompact ; tiers claude-mem à auditer/pinner).

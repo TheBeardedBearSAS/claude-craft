@@ -28,7 +28,12 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
-## What's New in v8.12.0
+## What's New in v8.13.0
+
+**Fiabilité BMAD + distribution AgentTeams (v8.13.0) :**
+
+- **`/gate:*` réparé** : `((var++))` sous `set -e` avortait les scripts de gate/hook après le 1er check (post-incrément = exit 1 quand le compteur vaut 0). 68 occurrences corrigées sur 6 fichiers + tests de non-régression (`make test-bmad`).
+- **Scripts AgentTeams livrés** : `Tools/AgentTeams/lib/*.sh` désormais installés automatiquement avec les commandes `/team:*` (fini le warning « scripts MISSING » ; dashboard coût et `--ralph-mode` disponibles out-of-the-box). Install/refresh manuel : `make install-agentteams TARGET=.`.
 
 **Audit exhaustif + durcissement (v8.12.0) :**
 
