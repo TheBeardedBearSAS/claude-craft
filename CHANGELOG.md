@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Manifest du plugin** : `plugin.json` et `marketplace.json` rendus strictement conformes au schéma Claude Code (`claude plugin validate .` : 0 erreur, 0 warning, requis pour la soumission au marketplace). `repository` passé d'objet à string (URL) ; champs réservés `commands`/`agents`/`skills` (porteurs de métadonnées custom) retirés (contenu auto-découvert depuis les dossiers) ; champs non reconnus retirés (`compatibility`, `capabilities`, `stacks`, `languages`, `categories`, `installation`, `features`, `marketplace`, `security`, `metadata.homepage`). Le test de cohérence registre↔manifest vérifie désormais les `keywords`.
+
 ### Docs
 - **Marketplace** : `marketplace.json` aligné sur la version courante (8.12.0).
 - **Helm 4** : note de migration 3→4 ajoutée aux agents devops (5 langues) — major (server-side apply, plugins WASM, API v4), Helm 3 EOL sécurité nov. 2026.

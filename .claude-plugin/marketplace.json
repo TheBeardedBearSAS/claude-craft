@@ -7,8 +7,7 @@
     "url": "https://the-bearded-bear.com"
   },
   "metadata": {
-    "description": "Claude Craft — multi-stack framework for Claude Code teams (11 stacks, BMAD v6, QA Recette, Kanban, RTK token optimization).",
-    "homepage": "https://the-bearded-bear.com/claude-craft"
+    "description": "Claude Craft — multi-stack framework for Claude Code teams (11 stacks, BMAD v6, QA Recette, Kanban, RTK token optimization)."
   },
   "plugins": [
     {

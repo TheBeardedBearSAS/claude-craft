@@ -185,24 +185,21 @@ describe('tech-registry consistency with i18n directories', () => {
 });
 
 describe('tech-registry consistency with plugin.json', () => {
-  it('plugin.json stacks match registry', () => {
+  // Since v8.12.1 the plugin manifest is strictly schema-valid (custom `stacks`
+  // metadata removed to pass `claude plugin validate`). Stack names now live in
+  // the schema-recognized `keywords` array; this test keeps them in sync with the
+  // registry so a new supported stack is surfaced in the published manifest.
+  it('plugin.json keywords cover every registry application stack', () => {
     const pluginPath = path.join(PROJECT_ROOT, '.claude-plugin', 'plugin.json');
     if (!fs.existsSync(pluginPath)) return; // Skip if no plugin.json
     const plugin = JSON.parse(fs.readFileSync(pluginPath, 'utf8'));
+    const keywords = plugin.keywords || [];
 
-    // v8.2.5+ schema: stacks.application + stacks.infrastructure (audit 2026-05-06)
-    // Legacy: technologies[].name
-    const pluginTechs = plugin.stacks?.application
-      ? plugin.stacks.application
-      : plugin.technologies?.map((t) => t.name) || [];
-
-    // Every plugin tech should map to a registry entry
-    for (const name of pluginTechs) {
-      // plugin uses 'dotnet' for csharp, 'react-native' for reactnative
-      const registryKey = name === 'dotnet' ? 'csharp' : name === 'react-native' ? 'reactnative' : name;
-      // Skip techs not yet in registry (e.g., paperclip — registered separately)
-      if (!TECH_REGISTRY[registryKey]) continue;
-      expect(TECH_REGISTRY, `Plugin tech '${name}' not in registry`).toHaveProperty(registryKey);
+    for (const [key, entry] of Object.entries(TECH_REGISTRY)) {
+      if (entry.tier === null) continue; // skip infra (not application stacks)
+      // plugin keywords use 'react-native' for the reactnative registry key
+      const keyword = key === 'reactnative' ? 'react-native' : key;
+      expect(keywords, `Registry stack '${key}' missing from plugin.json keywords`).toContain(keyword);
     }
   });
 });
