@@ -79,13 +79,13 @@ tasks_completed=$(yq ".stories.${story_id}.tasks.completed // 0" "$SPRINT_STATUS
 if [[ "$tasks_total" -gt 0 ]]; then
     if [[ "$tasks_completed" -lt "$tasks_total" ]]; then
         echo -e "${YELLOW}⚠️ Tasks incomplete: $tasks_completed/$tasks_total${NC}"
-        ((warnings++))
+        warnings=$((warnings + 1))
     else
         echo -e "${GREEN}✅ Tasks complete: $tasks_completed/$tasks_total${NC}"
     fi
 else
     echo -e "${YELLOW}⚠️ No tasks defined${NC}"
-    ((warnings++))
+    warnings=$((warnings + 1))
 fi
 
 # Check 2: TDD phase
@@ -97,15 +97,15 @@ case "$tdd_phase" in
         ;;
     "green")
         echo -e "${YELLOW}⚠️ TDD in green phase - consider refactoring${NC}"
-        ((warnings++))
+        warnings=$((warnings + 1))
         ;;
     "red")
         echo -e "${RED}❌ TDD in red phase - tests should pass first${NC}"
-        ((errors++))
+        errors=$((errors + 1))
         ;;
     *)
         echo -e "${YELLOW}⚠️ TDD phase not set${NC}"
-        ((warnings++))
+        warnings=$((warnings + 1))
         ;;
 esac
 
@@ -116,13 +116,13 @@ ac_validated=$(yq ".stories.${story_id}.acceptance_criteria.validated // 0" "$SP
 if [[ "$ac_total" -gt 0 ]]; then
     if [[ "$ac_validated" -lt "$ac_total" ]]; then
         echo -e "${YELLOW}⚠️ AC not validated: $ac_validated/$ac_total${NC}"
-        ((warnings++))
+        warnings=$((warnings + 1))
     else
         echo -e "${GREEN}✅ All AC validated: $ac_validated/$ac_total${NC}"
     fi
 else
     echo -e "${YELLOW}⚠️ No acceptance criteria defined${NC}"
-    ((warnings++))
+    warnings=$((warnings + 1))
 fi
 
 # Check 4: Blocked status
@@ -130,7 +130,7 @@ blocked_reason=$(yq ".stories.${story_id}.blocked_reason // \"\"" "$SPRINT_STATU
 
 if [[ -n "$blocked_reason" && "$blocked_reason" != "null" ]]; then
     echo -e "${RED}❌ Story is blocked: $blocked_reason${NC}"
-    ((errors++))
+    errors=$((errors + 1))
 else
     echo -e "${GREEN}✅ No blockers${NC}"
 fi

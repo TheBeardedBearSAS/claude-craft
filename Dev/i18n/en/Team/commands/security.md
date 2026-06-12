@@ -28,6 +28,8 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/result-aggregator.sh` available
 - `Tools/AgentTeams/lib/cost-estimator.sh` available
 
+> ℹ️ These scripts are installed automatically by claude-craft (`make install-agentteams` or via the installer). If absent, the command continues in **degraded mode**: manual cost estimation and `--ralph-mode` unavailable (non-blocking).
+
 ## Plan Mode
 
 > Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.

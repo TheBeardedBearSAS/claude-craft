@@ -71,7 +71,7 @@ validate_prd() {
     # Check 1: Problem statement
     if echo "$content" | grep -qi "problem\|challenge\|issue"; then
         log_success "Problem statement defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing problem statement"
     fi
@@ -79,7 +79,7 @@ validate_prd() {
     # Check 2: Target users
     if echo "$content" | grep -qi "user\|persona\|customer\|target"; then
         log_success "Target users defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing target users"
     fi
@@ -87,7 +87,7 @@ validate_prd() {
     # Check 3: Goals/Objectives
     if echo "$content" | grep -qi "goal\|objective\|aim"; then
         log_success "Goals/objectives defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing goals/objectives"
     fi
@@ -95,7 +95,7 @@ validate_prd() {
     # Check 4: Success metrics
     if echo "$content" | grep -qi "metric\|kpi\|measure\|success"; then
         log_success "Success metrics defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing success metrics"
     fi
@@ -103,7 +103,7 @@ validate_prd() {
     # Check 5: Scope defined
     if echo "$content" | grep -qi "scope\|boundary\|limitation"; then
         log_success "Scope defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing scope definition"
     fi
@@ -111,7 +111,7 @@ validate_prd() {
     # Check 6: User stories overview
     if echo "$content" | grep -qiE "(user stor|US-|epic)"; then
         log_success "User stories overview present"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing user stories overview"
     fi
@@ -119,7 +119,7 @@ validate_prd() {
     # Check 7: Assumptions documented
     if echo "$content" | grep -qi "assumption\|assume"; then
         log_success "Assumptions documented"
-        ((score++))
+        score=$((score + 1))
     else
         log_warning "Missing assumptions"
     fi
@@ -127,7 +127,7 @@ validate_prd() {
     # Check 8: Risks identified
     if echo "$content" | grep -qi "risk\|mitigation"; then
         log_success "Risks identified"
-        ((score++))
+        score=$((score + 1))
     else
         log_warning "Missing risk assessment"
     fi
@@ -178,7 +178,7 @@ validate_techspec() {
     # Check 1: Architecture overview
     if echo "$content" | grep -qi "architecture\|design\|structure"; then
         log_success "Architecture overview present"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing architecture overview"
     fi
@@ -186,7 +186,7 @@ validate_techspec() {
     # Check 2: Component diagram (mermaid or image)
     if echo "$content" | grep -qiE "(mermaid|diagram|\.png|\.svg|graph)"; then
         log_success "Architecture diagram present"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing architecture diagram"
     fi
@@ -194,7 +194,7 @@ validate_techspec() {
     # Check 3: Data model
     if echo "$content" | grep -qi "data\|model\|entity\|schema\|table"; then
         log_success "Data model defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing data model"
     fi
@@ -202,7 +202,7 @@ validate_techspec() {
     # Check 4: API contracts
     if echo "$content" | grep -qiE "(api|endpoint|rest|graphql|grpc)"; then
         log_success "API contracts defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing API contracts"
     fi
@@ -210,7 +210,7 @@ validate_techspec() {
     # Check 5: Security considerations
     if echo "$content" | grep -qi "security\|auth\|encrypt\|permission"; then
         log_success "Security considerations addressed"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing security considerations"
     fi
@@ -218,7 +218,7 @@ validate_techspec() {
     # Check 6: Performance requirements
     if echo "$content" | grep -qi "performance\|latency\|throughput\|scale"; then
         log_success "Performance requirements defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_warning "Missing performance requirements"
     fi
@@ -226,7 +226,7 @@ validate_techspec() {
     # Check 7: Error handling
     if echo "$content" | grep -qi "error\|exception\|handling\|failure"; then
         log_success "Error handling strategy defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_warning "Missing error handling strategy"
     fi
@@ -234,7 +234,7 @@ validate_techspec() {
     # Check 8: Testing strategy
     if echo "$content" | grep -qi "test\|quality\|coverage"; then
         log_success "Testing strategy defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Missing testing strategy"
     fi
@@ -242,7 +242,7 @@ validate_techspec() {
     # Check 9: Deployment strategy
     if echo "$content" | grep -qi "deploy\|ci\|cd\|release"; then
         log_success "Deployment strategy defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_warning "Missing deployment strategy"
     fi
@@ -250,7 +250,7 @@ validate_techspec() {
     # Check 10: Dependencies explicit
     if echo "$content" | grep -qi "dependency\|depend\|require\|integration"; then
         log_success "Dependencies documented"
-        ((score++))
+        score=$((score + 1))
     else
         log_warning "Missing dependency documentation"
     fi
@@ -302,7 +302,7 @@ validate_backlog_story() {
     local blocked_by=$(yq ".stories.${story_id}.blocked_by // []" "$SPRINT_STATUS_FILE" 2>/dev/null)
     if [[ "$blocked_by" == "[]" || -z "$blocked_by" ]]; then
         log_success "  [I] Independent: No blocking dependencies"
-        ((score++))
+        score=$((score + 1))
     else
         log_warning "  [I] Independent: Has dependencies"
     fi
@@ -311,7 +311,7 @@ validate_backlog_story() {
     local title=$(yq ".stories.${story_id}.title // \"\"" "$SPRINT_STATUS_FILE" 2>/dev/null)
     if [[ -n "$title" && ${#title} -gt 10 ]]; then
         log_success "  [N] Negotiable: Has description"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "  [N] Negotiable: Missing/short description"
     fi
@@ -320,7 +320,7 @@ validate_backlog_story() {
     local ac_total=$(yq ".stories.${story_id}.acceptance_criteria.total // 0" "$SPRINT_STATUS_FILE" 2>/dev/null)
     if [[ "$ac_total" -gt 0 ]]; then
         log_success "  [V] Valuable: Has $ac_total acceptance criteria"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "  [V] Valuable: No acceptance criteria"
     fi
@@ -329,7 +329,7 @@ validate_backlog_story() {
     local points=$(yq ".stories.${story_id}.story_points // 0" "$SPRINT_STATUS_FILE" 2>/dev/null)
     if [[ "$points" -gt 0 ]]; then
         log_success "  [E] Estimable: $points story points"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "  [E] Estimable: No story points"
     fi
@@ -337,7 +337,7 @@ validate_backlog_story() {
     # Small: <= 8 points
     if [[ "$points" -le 8 ]]; then
         log_success "  [S] Small: $points points (≤8)"
-        ((score++))
+        score=$((score + 1))
     else
         log_warning "  [S] Small: $points points (>8, consider splitting)"
     fi
@@ -345,7 +345,7 @@ validate_backlog_story() {
     # Testable: Has acceptance criteria
     if [[ "$ac_total" -gt 0 ]]; then
         log_success "  [T] Testable: Has testable criteria"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "  [T] Testable: No testable criteria"
     fi
@@ -372,10 +372,10 @@ validate_backlog() {
     local passing_stories=0
 
     for story_id in $stories; do
-        ((total_stories++))
+        total_stories=$((total_stories + 1))
         echo ""
         if validate_backlog_story "$story_id"; then
-            ((passing_stories++))
+            passing_stories=$((passing_stories + 1))
         fi
     done
 
@@ -422,7 +422,7 @@ validate_story_complete() {
 
     if [[ "$tasks_total" -gt 0 && "$tasks_completed" -eq "$tasks_total" ]]; then
         log_success "All tasks completed ($tasks_completed/$tasks_total)"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Tasks incomplete ($tasks_completed/$tasks_total)"
     fi
@@ -433,7 +433,7 @@ validate_story_complete() {
 
     if [[ "$ac_total" -gt 0 && "$ac_validated" -eq "$ac_total" ]]; then
         log_success "All acceptance criteria validated ($ac_validated/$ac_total)"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Acceptance criteria not validated ($ac_validated/$ac_total)"
     fi
@@ -443,7 +443,7 @@ validate_story_complete() {
 
     if [[ "$tdd_phase" == "refactor" || "$tdd_phase" == "done" ]]; then
         log_success "TDD cycle complete ($tdd_phase)"
-        ((score++))
+        score=$((score + 1))
     else
         log_warning "TDD cycle not complete ($tdd_phase)"
     fi
@@ -453,7 +453,7 @@ validate_story_complete() {
 
     if [[ "$status" == "review" || "$status" == "done" ]]; then
         log_success "Code review completed"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Code review pending"
     fi
@@ -463,7 +463,7 @@ validate_story_complete() {
 
     if [[ -z "$blocked_reason" ]]; then
         log_success "No blockers"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Story blocked: $blocked_reason"
     fi
@@ -513,7 +513,7 @@ validate_sprint_ready() {
     # Check 1: Sprint metadata
     if [[ -n "$has_sprint_id" && "$has_sprint_id" != "null" ]]; then
         log_success "Sprint ID defined: $has_sprint_id"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Sprint ID not defined"
     fi
@@ -521,7 +521,7 @@ validate_sprint_ready() {
     # Check 2: Sprint dates
     if [[ -n "$has_dates" && "$has_dates" != "null" ]]; then
         log_success "Sprint dates defined"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "Sprint dates not defined"
     fi
@@ -529,7 +529,7 @@ validate_sprint_ready() {
     # Check 3: Stories ready
     if [[ "$ready_stories" -gt 0 ]]; then
         log_success "$ready_stories stories ready for development"
-        ((score++))
+        score=$((score + 1))
     else
         log_error "No stories in 'ready-for-dev' status"
     fi

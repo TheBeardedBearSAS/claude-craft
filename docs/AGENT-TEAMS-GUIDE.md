@@ -16,6 +16,33 @@ Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordina
 export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 ```
 
+## Installation
+
+The `/team:*` commands rely on helper scripts in `Tools/AgentTeams/lib/`
+(`cost-estimator.sh`, `cost-dashboard.sh`, `ralph-teams-adapter.sh`,
+`compatibility-check.sh`, `result-aggregator.sh`).
+
+These are **installed automatically** into your project whenever the common
+rules/commands are installed (the npx installer and `make install-common` both
+ship the Team namespace together with these scripts).
+
+To install or refresh them manually:
+
+```bash
+# From the claude-craft repo (or npm package), targeting your project:
+make install-agentteams TARGET=/path/to/your/project
+
+# Or directly:
+bash Tools/AgentTeams/install-agentteams.sh /path/to/your/project
+
+# Verify they are present:
+bash Tools/AgentTeams/install-agentteams.sh --check /path/to/your/project
+```
+
+If the scripts are absent, the `/team:*` commands **degrade gracefully**:
+cost estimation falls back to manual, and `--ralph-mode` is unavailable — the
+commands still run.
+
 ## When to Use Agent Teams
 
 Agent Teams adds coordination overhead. Use it only when the parallelization benefit outweighs the cost.

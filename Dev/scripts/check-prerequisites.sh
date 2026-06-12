@@ -73,7 +73,7 @@ check() {
     else
         if [[ "$required" == "required" ]]; then
             ui_check_fail "$cmd - $description"
-            ((ERRORS++))
+            ERRORS=$((ERRORS + 1))
             if $FIX; then
                 case $OS in
                     macos) ui_check_info "Fix: $install_macos" ;;
@@ -108,7 +108,7 @@ check_yq_version() {
                 ui_check_info "Fix (macOS): brew install yq"
                 ui_check_info "Fix (Linux): sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq && sudo chmod +x /usr/local/bin/yq"
             fi
-            ((ERRORS++))
+            ERRORS=$((ERRORS + 1))
             return 1
         fi
     fi
@@ -126,7 +126,7 @@ check_node_version() {
             if $FIX; then
                 ui_check_info "Fix: Use nvm to install Node.js 20: nvm install 20 && nvm use 20"
             fi
-            ((ERRORS++))
+            ERRORS=$((ERRORS + 1))
             return 1
         fi
     fi

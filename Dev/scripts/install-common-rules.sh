@@ -473,6 +473,30 @@ install_commands() {
     fi
 }
 
+# Install AgentTeams helper scripts (cost-estimator, ralph-teams-adapter,
+# compatibility-check, ...) used by the /team:* commands. They are shipped
+# alongside the Team command namespace so /team:sprint etc. find them at
+# <project>/Tools/AgentTeams/lib/ instead of warning "scripts MISSING".
+install_agentteams() {
+    local craft_root
+    craft_root="$(cd "$SCRIPT_DIR/../.." && pwd)"
+    local src_lib="$craft_root/Tools/AgentTeams/lib"
+    local dest_lib="$target_dir/Tools/AgentTeams/lib"
+
+    if [[ ! -d "$src_lib" ]]; then
+        log_warning "AgentTeams lib not found at $src_lib (skipping)"
+        return 0
+    fi
+
+    log_info "${MSG_INSTALLING_AGENTTEAMS:-Installing AgentTeams helper scripts...}"
+    copy_directory "$src_lib" "$dest_lib" "*.sh"
+
+    # Some helper scripts ship without the executable bit; ensure +x on copies.
+    if ! $dry_run && [[ -d "$dest_lib" ]]; then
+        chmod +x "$dest_lib"/*.sh 2>/dev/null || true
+    fi
+}
+
 install_templates() {
     log_info "${MSG_INSTALLING_TEMPLATES}"
 
@@ -830,6 +854,7 @@ main() {
 
     if $commands_only; then
         install_commands
+        install_agentteams
     fi
 
     if $templates_only; then

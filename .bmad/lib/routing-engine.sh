@@ -268,14 +268,14 @@ cmd_auto_route() {
         if [[ "$status" == "in-progress" && "$tasks_total" -gt 0 && "$tasks_completed" -eq "$tasks_total" ]]; then
             log_info "Auto-transitioning $story_id to review (all tasks complete)"
             cmd_transition "$story_id" "review"
-            ((changes++))
+            changes=$((changes + 1))
         fi
 
         # Rule: blocked_detection
         if [[ "$status" != "blocked" && -n "$blocked_reason" ]]; then
             log_info "Auto-transitioning $story_id to blocked (blocker detected)"
             cmd_transition "$story_id" "blocked"
-            ((changes++))
+            changes=$((changes + 1))
         fi
 
         # Rule: unblocked
@@ -283,7 +283,7 @@ cmd_auto_route() {
             local previous=$(yq ".stories.${story_id}.previous_status // \"backlog\"" "$SPRINT_STATUS_FILE")
             log_info "Auto-transitioning $story_id to $previous (unblocked)"
             cmd_transition "$story_id" "$previous"
-            ((changes++))
+            changes=$((changes + 1))
         fi
     done
 
@@ -496,7 +496,7 @@ cmd_auto_route_autonomous() {
         if [[ "$status" == "in-progress" && "$tasks_total" -gt 0 && "$tasks_completed" -eq "$tasks_total" ]]; then
             log_info "Auto-transitioning $story_id to review (all tasks complete)"
             cmd_transition "$story_id" "review"
-            ((changes++))
+            changes=$((changes + 1))
             continue
         fi
 
@@ -504,7 +504,7 @@ cmd_auto_route_autonomous() {
         if [[ "$status" != "blocked" && -n "$blocked_reason" ]]; then
             log_info "Auto-transitioning $story_id to blocked (blocker detected)"
             cmd_transition "$story_id" "blocked"
-            ((changes++))
+            changes=$((changes + 1))
             continue
         fi
 
@@ -513,14 +513,14 @@ cmd_auto_route_autonomous() {
             local previous=$(yq ".stories.${story_id}.previous_status // \"backlog\"" "$SPRINT_STATUS_FILE")
             log_info "Auto-transitioning $story_id to $previous (unblocked)"
             cmd_transition "$story_id" "$previous"
-            ((changes++))
+            changes=$((changes + 1))
             continue
         fi
 
         # Autonomous rule: TDD completion check
         if [[ "$status" == "in-progress" ]]; then
             if cmd_auto_transition_check "$story_id"; then
-                ((changes++))
+                changes=$((changes + 1))
             fi
         fi
     done
