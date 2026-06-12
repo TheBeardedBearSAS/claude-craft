@@ -1,7 +1,7 @@
 # Rule 06: Tooling
 
 > **Reference version:** Python **3.14 (stable, 3.14.6+)** — Ruff 0.15+, pytest 9.x (drops Python 3.9).
-> **JIT (PEP 744):** experimental in Python 3.14, subject to re-evaluation before Python 3.15 release (oct. 2026). Do not rely on it in production unless explicitly tested.
+> **⚠ JIT (PEP 744):** experimental in Python 3.14, **disabled by default**, subject to re-evaluation by the Python Steering Council before Python 3.15 (Oct. 2026). Do not rely on it in production.
 
 Python tooling for code quality, testing, and development workflow.
 

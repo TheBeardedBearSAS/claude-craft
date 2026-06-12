@@ -50,7 +50,7 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.5.3 (CVE-2026-33997 patché, juin 2026) |
 | Docker Compose | Orchestration locale, profiles, extensions | Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète) |
 | Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, User Namespaces, Mutating Admission Policies | 1.36.1 stable (sortie 13 mai 2026) |
-| Helm | Charts, values, templating | Helm 4.2.0 (Helm 3 EOL sécurité nov 2026 — migrer vers Helm 4) |
+| Helm | Charts, values, templating | Helm 4.2.0 (MAJOR — server-side apply, WASM plugins, API v4 ; Helm 3 EOL sécurité nov. 2026) |
 | FrankenPHP | Worker mode (Laravel Octane/Symfony), HTTP/3, max_requests | 1.12.4 (PHP 8.5, Caddy 2.11.2, CVE-2026-45062 patché) |
 | PgBouncer | Transaction pooling, prepared statements natifs | 1.25.2 (1.21+ requis pour prepared stmts ; CVE-2026-6664/6665/6666/6667 patchées) |
 
@@ -322,6 +322,22 @@ kubectl get pods -o jsonpath='{.spec.initContainers[?(@.restartPolicy=="Always")
 - Sidecar-less : https://istio.io/latest/blog/2024/ambient-reaches-beta/  
 - Support Policy : https://endoflife.date/kubernetes  
 - K8s 1.36 : https://kubernetes.io/blog/2026/04/22/kubernetes-v1-36-release/
+
+### Helm 4 — Migration 3→4
+
+> **Helm 4 est un changement MAJEUR** : server-side apply par défaut, WASM plugins, API v4 incompatible avec Helm 3.
+> **Helm 3 EOL sécurité : novembre 2026** — recommander Helm 4 pour tout nouveau projet.
+> Pour l'existant, un double-support transitoire est possible (Helm 3 et Helm 4 coexistent).
+> Guide officiel : https://helm.sh/docs/topics/v4_migration/
+
+```bash
+# Vérifier la version Helm installée
+helm version
+
+# Migrer un chart Helm 3 vers Helm 4
+helm lint ./chart          # Détecter les incompatibilités API v4
+helm template ./chart      # Vérifier le rendu avec Helm 4
+```
 
 ### GitHub Actions
 ```yaml

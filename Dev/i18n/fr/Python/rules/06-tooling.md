@@ -1,7 +1,7 @@
 # Outils de Développement Python
 
 > **Version de référence :** Python **3.14 (stable, 3.14.6+)** — Ruff 0.15+, pytest 9.x (fin du support Python 3.9).
-> **JIT (PEP 744) :** expérimental en Python 3.14, sujet à réévaluation avant la sortie de Python 3.15 (oct. 2026). Ne pas utiliser en production sans tests explicites.
+> **⚠ JIT (PEP 744) :** expérimental en Python 3.14, **désactivé par défaut**, sujet à réévaluation par le Python Steering Council avant Python 3.15 (oct. 2026). Ne pas en dépendre en production.
 
 ## Package Management
 
