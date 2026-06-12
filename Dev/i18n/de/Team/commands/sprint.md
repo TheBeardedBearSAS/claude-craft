@@ -32,6 +32,8 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/compatibility-check.sh` verfügbar
 - `Tools/AgentTeams/lib/cost-estimator.sh` verfügbar
 
+> ℹ️ Diese Skripte werden automatisch von claude-craft installiert (`make install-agentteams` oder über den Installer). Fehlen sie, läuft der Befehl im **eingeschränkten Modus** weiter: manuelle Kostenschätzung und `--ralph-mode` nicht verfügbar (nicht blockierend).
+
 ## Plan-Modus
 
 > Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.

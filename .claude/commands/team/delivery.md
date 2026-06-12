@@ -33,6 +33,8 @@ $ARGUMENTS
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponible
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible
 
+> ℹ️ Ces scripts sont installés automatiquement par claude-craft (`make install-agentteams` ou via l'installeur). S'ils sont absents, la commande continue en **mode dégradé** : estimation de coût manuelle et `--ralph-mode` indisponible (non bloquant).
+
 ## Garde-Fou Fast Mode (Confirmation Bloquante)
 
 **OBLIGATOIRE** : Avant de lancer l'équipe, le Delivery Lead DOIT :
