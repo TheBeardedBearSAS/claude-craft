@@ -150,6 +150,92 @@ The two tools are **complementary**, not competing: oh-my-claudecode provides th
 
 ---
 
+## Mémoire persistante inter-sessions
+
+La mémoire inter-sessions — conserver les décisions d'architecture, les ADR, l'état du sprint et les
+conventions entre deux conversations Claude Code — est couverte à trois niveaux : natif, hooks, et
+tiers. Aucun des trois n'est mutuellement exclusif.
+
+### Natif : `/memory` + hooks PreCompact / PostCompact
+
+Claude Code v2.1.59+ expose la commande **`/memory`** : les apprentissages saisis sont persistés dans
+un fichier `MEMORY.md` rattaché au profil de projet et rechargés à chaque session. C'est le point
+d'entrée recommandé pour les décisions non urgentes (style, conventions, contexte métier).
+
+Pour les décisions critiques qui ne doivent pas disparaître lors d'une compaction automatique, Claude
+Craft distribue deux hooks complémentaires (dossier [`.claude/templates/hooks/`](../.claude/templates/hooks/)) :
+
+| Hook | Fichier template | Rôle |
+|------|-----------------|------|
+| **PreCompact** | `pre-compact.json` | Injecte `.claude/context-essentials.md` comme `systemMessage` juste _avant_ la compaction (peut bloquer via exit code 2 depuis v2.1.105). |
+| **PostCompact** | `post-compact.json` | Ré-injecte le même fichier immédiatement _après_ la compaction (v2.1.76+). |
+| **SessionStart** (matcher `compact`) | `context-reinject.json` | Repli pour les éditeurs qui ne déclenchent pas PostCompact : ré-injecte à chaque démarrage post-compaction. |
+
+**Pattern recommandé pour BMAD / ADR :**
+
+1. Créer `.claude/context-essentials.md` à la racine du projet (gitignored ou commité selon l'équipe).
+2. Y consigner les sections : Architecture, Conventions, Sprint actif, Contraintes critiques, ADR.
+3. Copier `post-compact.json` dans `.claude/settings.json` (hooks projet) ou `~/.claude/settings.json`
+   (hooks globaux).
+4. Optionnel : ajouter également `pre-compact.json` pour couvrir la fenêtre _pendant_ la compaction.
+
+Le fichier `context-essentials.md` devient le canal canonique de persistance : il est lu par les hooks,
+re-injecté automatiquement, et peut être édité manuellement ou par `/memory` (les deux coexistent).
+
+> **Compatibilité :** `/memory` ≥ v2.1.59 · PostCompact ≥ v2.1.76 · PreCompact exit-code-2 ≥ v2.1.105.
+> Vérifier avec `claude --version` avant d'activer PostCompact.
+
+### Tiers : claude-mem
+
+**[claude-mem](https://github.com/punkpeye/claude-mem)** (~MIT, statut à vérifier avant usage) est un
+serveur MCP open-source qui expose une interface mémoire inter-sessions via un stockage local structuré.
+Il propose des opérations `memory_add` / `memory_search` / `memory_list` utilisables depuis les
+instructions d'un agent ou d'une commande.
+
+| Aspect | Détail |
+|--------|--------|
+| Licence | MIT (auditer la version avant de pinner — règle 11) |
+| Stockage | Fichier JSON local (pas de vectorDB) |
+| Intégration | Serveur MCP `.mcp.json` |
+| Complémentarité | Couvre les requêtes de mémoire _explicites_ depuis les agents ; les hooks natifs couvrent la persistance _automatique_ autour des compactions. |
+
+```jsonc
+// .mcp.json — à auditer et pinner avant activation
+{
+  "mcpServers": {
+    "claude-mem": {
+      "command": "npx",
+      "args": ["-y", "claude-mem@<version-exacte>"]
+    }
+  }
+}
+```
+
+> **Sécurité avant activation :** auditer le code source, pinner une version exacte (jamais `latest`),
+> accorder uniquement les permissions nécessaires — voir [`.claude/rules/11-security.md`](../.claude/rules/11-security.md).
+
+### Ruflo (~59k ★, mémoire vectorielle)
+
+**Ruflo** ([repo](https://github.com/ruflo/ruflo), licence à vérifier) opte pour une **indexation
+vectorielle** : chaque session est indexée, et les sessions suivantes récupèrent par similarité
+sémantique les contextes pertinents. C'est la seule approche qui scale sur des historiques longs (des
+centaines de sessions).
+
+Claude Craft ne l'intègre pas nativement car elle introduit une dépendance externe (base vectorielle),
+mais elle est documentée ici comme option complémentaire pour les équipes à fort volume de sessions.
+Voir aussi `DIFF-04` dans [`docs/ROADMAP.md`](ROADMAP.md).
+
+### Tableau de décision
+
+| Besoin | Approche recommandée |
+|--------|---------------------|
+| Conserver conventions / ADR entre sessions | `/memory` natif + `context-essentials.md` |
+| Survivre aux compactions automatiques | Hooks `PreCompact` + `PostCompact` (templates intégrés) |
+| Mémoire _explicite_ depuis un agent | claude-mem (MCP, MIT, à pinner) |
+| Historique long > 100 sessions, recherche sémantique | Ruflo (vectorDB, évaluer licence) |
+
+---
+
 ## Also worth watching (from the 2026 roundup)
 
 Not evaluated in depth here, but flagged for future integration assessment:

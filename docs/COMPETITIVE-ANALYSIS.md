@@ -35,7 +35,7 @@ Orchestration **multi-modèle** : route les sous-agents vers Claude, Gemini CLI 
 
 ### Ruflo (~59k ★)
 
-Mémoire persistante inter-sessions via indexation vectorielle. Claude Craft gère la mémoire via `/memory` (natif Claude Code v2.1.59+) et les hooks `PostCompact` — pas de vectorDB. Ruflo est positionné comme **moteur complémentaire** documenté dans `docs/ECOSYSTEM.md`. Voir `DIFF-04` dans la roadmap.
+Mémoire persistante inter-sessions via indexation vectorielle. Claude Craft gère la mémoire via `/memory` (natif Claude Code v2.1.59+) et les hooks `PostCompact` — pas de vectorDB. Ruflo est positionné comme **moteur complémentaire** documenté dans `docs/ECOSYSTEM.md` (section « Mémoire persistante inter-sessions »). Voir `DIFF-04` dans la roadmap.
 
 ### GitHub Spec Kit (~80k ★)
 

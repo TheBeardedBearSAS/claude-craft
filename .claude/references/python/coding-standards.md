@@ -659,10 +659,11 @@ import concurrent.interpreters
 interp = concurrent.interpreters.create()
 ```
 
-### JIT expérimental (PEP 744)
+### JIT (PEP 744) — expérimental, désactivé par défaut
 
-Compilation JIT activable : `PYTHON_JIT=1 python script.py`. Gains attendus sur boucles intensives.
-Désactivé par défaut — tester avant d'activer en production.
+> **⚠ Avertissement :** le JIT est expérimental (PEP 744), désactivé par défaut, et sujet à réévaluation par le Python Steering Council avant Python 3.15 (oct. 2026). Ne pas en dépendre en production.
+
+Compilation JIT activable : `PYTHON_JIT=1 python script.py`. Gains observés sur boucles intensives en benchmarks isolés — non représentatifs en charge réelle.
 
 ---
 

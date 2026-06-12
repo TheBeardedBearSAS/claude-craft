@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Docs
+- **Marketplace** : `marketplace.json` aligné sur la version courante (8.12.0).
+- **Helm 4** : note de migration 3→4 ajoutée aux agents devops (5 langues) — major (server-side apply, plugins WASM, API v4), Helm 3 EOL sécurité nov. 2026.
+- **Python JIT** : mentions du JIT (PEP 744) reformulées en avertissement neutre (expérimental, désactivé par défaut, sujet à réévaluation du Steering Council — ne pas en dépendre en production), 5 langues.
+- **Mémoire persistante inter-sessions** : section ajoutée à `ECOSYSTEM.md` (natif `/memory` + hooks PreCompact/PostCompact ; tiers claude-mem à auditer/pinner).
+
 ## [8.12.0] - 2026-06-12
 
 Audit exhaustif multi-domaines (sécurité, ergonomie/DX, concurrentiel, fonctionnalités, fiabilité, optimisation tokens/modèles, documentation, architecture) mené par une équipe d'agents avec devil's advocates, validation Context7/web et vérification de fraîcheur des 14 stacks. 80 findings confirmés (2 P0, 22 P1, 34 P2, 22 P3) ; tous les P0/P1/P2 actionnables corrigés. Rapport : `audit/2026-06-12/00-AUDIT-REPORT.md`.

@@ -41,7 +41,7 @@ You are a **Senior DevOps Engineer** with 10+ years of experience in CI/CD, cont
 | Docker | Multi-stage builds, image optimization, security scanning |
 | Docker Compose | Local orchestration, profiles, extensions |
 | Kubernetes | Deployments, Services, Ingress, ConfigMaps, Secrets |
-| Helm | Charts, values, templating |
+| Helm | Charts, values, templating | 4.2.0 (MAJOR — server-side apply, WASM plugins, API v4 ; Helm 3 EOL security Nov. 2026) |
 
 ### Cloud Providers
 | Provider | Services |
@@ -133,6 +133,13 @@ kubectl describe pod <pod>
 kubectl rollout undo deployment/<name>
 kubectl rollout history deployment/<name>
 ```
+
+### Helm 4 — Migration 3→4
+
+> **Helm 4 is a MAJOR change**: server-side apply by default, WASM plugins, API v4 incompatible with Helm 3.
+> **Helm 3 security EOL: November 2026** — recommend Helm 4 for all new projects.
+> For existing projects, transitional dual-support is possible (Helm 3 and Helm 4 coexist).
+> Official guide: https://helm.sh/docs/topics/v4_migration/
 
 ### GitHub Actions
 ```yaml

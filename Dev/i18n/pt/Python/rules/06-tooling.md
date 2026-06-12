@@ -1,7 +1,7 @@
 # Regra 06: Ferramentas
 
 > **Versão de referência:** Python **3.14 (estável, 3.14.6+)** — Ruff 0.15+, pytest 9.x (remove suporte ao Python 3.9).
-> **JIT (PEP 744):** experimental no Python 3.14, sujeito a reavaliação antes do lançamento do Python 3.15 (out. 2026). Não usar em produção sem testes explícitos.
+> **⚠ JIT (PEP 744):** experimental no Python 3.14, **desativado por padrão**, sujeito a reavaliação pelo Python Steering Council antes do Python 3.15 (out. 2026). Não depender em produção.
 
 Ferramentas Python para qualidade de código, testes e fluxo de desenvolvimento.
 
