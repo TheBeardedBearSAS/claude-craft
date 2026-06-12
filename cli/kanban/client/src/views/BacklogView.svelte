@@ -1,34 +1,10 @@
 <script>
   import { store } from '../lib/store.svelte.js';
+  import { groupStoriesByEpic } from '../lib/backlog.js';
 
-  const epicGroups = $derived.by(() => {
-    const groups = new Map();
-    const orphans = [];
-
-    for (const epic of store.epics) {
-      groups.set(epic.id, {
-        epic,
-        stories: [],
-        expanded: false
-      });
-    }
-
-    for (const story of store.stories) {
-      if (story.epic_id && groups.has(story.epic_id)) {
-        groups.get(story.epic_id).stories.push(story);
-      } else if (!story.epic_id) {
-        orphans.push(story);
-      }
-    }
-
-    const sorted = Array.from(groups.values()).sort((a, b) => a.epic.id.localeCompare(b.epic.id));
-    for (const group of sorted) {
-      group.stories.sort((a, b) => a.id.localeCompare(b.id));
-    }
-    orphans.sort((a, b) => a.id.localeCompare(b.id));
-
-    return { groups: sorted, orphans };
-  });
+  // Stories with an unknown epic_id (e.g. BMAD v6 sprint-status.yaml, epic_id="E1" with no
+  // markdown epic) are kept in a synthesized group instead of being dropped — see backlog.js.
+  const epicGroups = $derived(groupStoriesByEpic(store.stories, store.epics));
 
   let expanded = $state(new Set());
 
