@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Helper de soumission awesome-claude-code** : `scripts/awesome-claude-code-submit.mjs` (`npm run community:awesome`) — prépare la recommandation de ressource vers `hesreallyhim/awesome-claude-code` sans jamais la soumettre (leur dépôt **bannit** les soumissions automatisées par `gh`/API). Il source les métadonnées (`package.json`/`marketplace.json`), calcule l'ID de ressource compatible amont (`tool-<sha256(nom+url)[:8]>`), valide le lien GitHub (HTTP 200) et l'existence npm (registry), détecte les doublons dans le CSV amont, puis imprime les valeurs du formulaire + une **URL d'Issue GitHub pré-remplie** (relecture + clic humain). Option `--write` pour régénérer la fiche de prépa locale.
+
 ### Fixed
 - **Manifest du plugin** : `plugin.json` et `marketplace.json` rendus strictement conformes au schéma Claude Code (`claude plugin validate .` : 0 erreur, 0 warning, requis pour la soumission au marketplace). `repository` passé d'objet à string (URL) ; champs réservés `commands`/`agents`/`skills` (porteurs de métadonnées custom) retirés (contenu auto-découvert depuis les dossiers) ; champs non reconnus retirés (`compatibility`, `capabilities`, `stacks`, `languages`, `categories`, `installation`, `features`, `marketplace`, `security`, `metadata.homepage`). Le test de cohérence registre↔manifest vérifie désormais les `keywords`.
 
