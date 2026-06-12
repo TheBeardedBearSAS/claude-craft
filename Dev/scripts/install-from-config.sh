@@ -226,7 +226,7 @@ validate_config() {
     if [[ "$lang_valid" == "false" ]]; then
         log_error "Langue par défaut invalide: $default_lang"
         log_error "Langues valides: ${VALID_LANGS[*]}"
-        ((errors++))
+        errors=$((errors + 1))
     else
         log_success "Langue par défaut: $default_lang"
     fi
@@ -246,12 +246,12 @@ validate_config() {
         # Vérifier les champs obligatoires
         if [[ "$name" == "null" || -z "$name" ]]; then
             log_error "  Champ 'name' manquant pour le projet $((i+1))"
-            ((errors++))
+            errors=$((errors + 1))
         fi
 
         if [[ "$root" == "null" || -z "$root" ]]; then
             log_error "  Champ 'root' manquant pour le projet: $name"
-            ((errors++))
+            errors=$((errors + 1))
         else
             # Expand le chemin (direct assignment, no subshell — SEC-1)
             local expanded_root="${root/#\~/$HOME}"
@@ -260,7 +260,7 @@ validate_config() {
 
         if [[ "$module_count" -eq 0 ]]; then
             log_error "  Aucun module défini pour le projet: $name"
-            ((errors++))
+            errors=$((errors + 1))
         else
             log_step "  Modules: $module_count"
         fi
@@ -277,7 +277,7 @@ validate_config() {
             if [[ "$project_lang_valid" == "false" ]]; then
                 log_error "  Langue invalide pour le projet: $project_lang"
                 log_error "  Langues valides: ${VALID_LANGS[*]}"
-                ((errors++))
+                errors=$((errors + 1))
             else
                 log_step "  Langue: $project_lang"
             fi
@@ -292,13 +292,13 @@ validate_config() {
 
             if [[ "$path" == "null" || -z "$path" ]]; then
                 log_error "    Module $((j+1)): champ 'path' manquant"
-                ((errors++))
+                errors=$((errors + 1))
                 continue
             fi
 
             if [[ "$techs" == "null" || -z "$techs" ]]; then
                 log_error "    Module '$path': champ 'tech' manquant"
-                ((errors++))
+                errors=$((errors + 1))
                 continue
             fi
 
@@ -320,7 +320,7 @@ validate_config() {
                 if [[ "$valid" == "false" ]]; then
                     log_error "    Module '$path': technologie '$tech' invalide"
                     log_error "    Technologies valides: ${VALID_TECHS[*]}"
-                    ((errors++))
+                    errors=$((errors + 1))
                     module_valid=false
                 else
                     if [[ -z "$tech_list" ]]; then
@@ -615,7 +615,7 @@ install_project() {
     if [[ "$common" == "true" ]]; then
         print_section "[$step/$total_steps] Installation des règles communes"
         install_module "$expanded_root" "common" "" "$project_lang"
-        ((step++))
+        step=$((step + 1))
     fi
 
     # Installer chaque module
@@ -664,7 +664,7 @@ install_project() {
 
             install_module "$target_path" "$tech" "$desc" "$project_lang" "$skip_common_flag"
             is_first=false
-            ((step++))
+            step=$((step + 1))
         done <<< "$techs"
     done
 }

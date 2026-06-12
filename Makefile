@@ -14,12 +14,12 @@
 #===============================================================================
 
 .PHONY: help install-all install-common install-project install-infra \
-        install-tools install-tools-lib install-completions \
+        install-tools install-tools-lib install-completions install-agentteams \
         install-web install-fullstack-js install-mobile install-backend \
         list list-agents list-commands \
         config-install config-install-all config-validate config-list config-dry-run \
         config-check config-check-fix check fix-permissions stats \
-        migrate-check test-tools test-rtk test-statusline test-agent-teams test-bats test-all \
+        migrate-check test-tools test-rtk test-statusline test-agent-teams test-bmad test-bats test-all \
         plugin-export plugin-export-all
 
 # Configuration
@@ -107,6 +107,9 @@ install-projectconfig: install-tools-lib ## Installe le gestionnaire de projets 
 install-rtk: ## Installe RTK (Rust Token Killer)
 	@bash "$(TOOLS_DIR)/RTK/install-rtk.sh" --lang=$(RULES_LANG)
 
+install-agentteams: ## Installe les scripts AgentTeams (/team:*) dans TARGET (defaut: .)
+	@bash "$(TOOLS_DIR)/AgentTeams/install-agentteams.sh" "$(TARGET)"
+
 install-completions: ## Installe les completions bash/zsh
 	@mkdir -p ~/.local/share/bash-completion/completions ~/.zsh/completions && \
 	cp "$(TOOLS_DIR)/MultiAccount/completions/claude-accounts.bash" ~/.local/share/bash-completion/completions/ && \
@@ -125,7 +128,12 @@ BATS_RUN = docker run --rm -v "$(CURDIR)/Tools:/mnt" bats/bats:latest /mnt/$*/te
 test-%: ## Lance les tests bats pour un outil (ex: make test-tools)
 	@$(BATS_RUN)
 
-test-bats: test-MultiAccount test-StatusLine test-RTK test-AgentTeams ## Lance tous les tests bats
+# .bmad/ lives outside Tools/ — mount the repo root so tests can reach
+# .bmad/lib, .bmad/hooks and Dev/scripts. Explicit target overrides test-%.
+test-bmad: ## Lance les tests bats BMAD (gate-validator + garde anti ((var++)))
+	@docker run --rm -v "$(CURDIR):/mnt" bats/bats:latest /mnt/.bmad/tests/
+
+test-bats: test-MultiAccount test-StatusLine test-RTK test-AgentTeams test-bmad ## Lance tous les tests bats
 
 test-all: ## Lance tous les tests (vitest + bats)
 	@npm test && $(MAKE) test-bats

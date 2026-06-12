@@ -109,7 +109,7 @@ merge_worker_reports() {
 
         if [[ "$dry_run" == "true" ]]; then
             log_info "DRY RUN - Would merge: worker=$worker_id story=$story_id status=$status"
-            ((merged_count++))
+            merged_count=$((merged_count + 1))
             continue
         fi
 
@@ -143,7 +143,7 @@ merge_worker_reports() {
 
         # Remove processed report
         rm -f "$report_file"
-        ((merged_count++))
+        merged_count=$((merged_count + 1))
     done
 
     if [[ "$dry_run" == "true" ]]; then
@@ -318,7 +318,7 @@ run_epic() {
         if [[ "$dry_run" != "true" ]]; then
             add_to_queue "$story_id" "$priority"
         fi
-        ((priority++))
+        priority=$((priority + 1))
     done
 
     if [[ "$dry_run" == "true" ]]; then
@@ -626,7 +626,7 @@ process_queue_autonomous() {
             for pid in "${!active_pids[@]}"; do
                 if ! kill -0 "$pid" 2>/dev/null; then
                     unset "active_pids[$pid]"
-                    ((active_count--))
+                    active_count=$((active_count - 1))
                 fi
             done
             sleep 2
@@ -658,7 +658,7 @@ process_queue_autonomous() {
                 fi
             ) &
             active_pids[$!]="$story_id"
-            ((active_count++))
+            active_count=$((active_count + 1))
         else
             # Sequential processing - leader writes directly (no race condition)
             if spawn_ralph_for_story "$story_id"; then
@@ -737,7 +737,7 @@ run_sprint() {
     for story_id in $stories; do
         local title=$(yq ".stories.${story_id}.title" "$SPRINT_STATUS_FILE")
         local points=$(yq ".stories.${story_id}.story_points // 0" "$SPRINT_STATUS_FILE")
-        ((count++))
+        count=$((count + 1))
 
         echo "[$count] $story_id: $title ($points pts)"
 
