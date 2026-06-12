@@ -329,12 +329,15 @@ export default defineConfig({
 
 ### Bundle Size Limits
 
+> **⚠️ Vite 8 (Rolldown) :** `manualChunks` est déprécié quand le bundler Rolldown est actif (défaut Vite 8). Rolldown applique un code-splitting automatique. Supprimer `manualChunks` ou désactiver Rolldown si un découpage custom est impératif.
+
 ```typescript
 // vite.config.ts
 export default defineConfig({
   build: {
     rollupOptions: {
       output: {
+        // ⚠️ Déprécié avec Rolldown (Vite 8 par défaut) — supprimer si Rolldown actif
         manualChunks: {
           'vue-vendor': ['vue', 'vue-router', 'pinia'],
           'ui-vendor': ['@headlessui/vue', '@heroicons/vue'],

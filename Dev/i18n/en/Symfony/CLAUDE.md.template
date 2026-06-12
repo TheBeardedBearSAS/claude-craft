@@ -4,7 +4,7 @@
 
 ## What (Stack & Structure)
 
-**Stack**: Symfony 8.1.x (or 7.4 LTS), PHP 8.4+, Doctrine ORM, PHPUnit/Behat
+**Stack**: Symfony 8.1.x (or 7.4 LTS), PHP 8.5+ (8.4+ minimum), Doctrine ORM, PHPUnit/Behat
 
 ### Project Structure
 ```

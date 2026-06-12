@@ -155,6 +155,8 @@ const renderState = (state: AsyncState) => {
 
 ## ESLint Configuration
 
+> **⚠️ ESLint v10 (2026):** The `.eslintrc.cjs` format is **removed**. Use `eslint.config.mjs` (flat config). See the tooling section for the migration example.
+
 ### Installation
 
 ```bash
@@ -164,7 +166,7 @@ npm install -D eslint-plugin-jsx-a11y eslint-plugin-import
 npm install -D eslint-config-prettier
 ```
 
-### .eslintrc.cjs Configuration
+### .eslintrc.cjs Configuration (ESLint v9 and earlier)
 
 ```javascript
 module.exports = {

@@ -1,5 +1,7 @@
 # Code Quality Tools - Python
 
+> **Reference versions:** Ruff **0.15+** | pytest **9.x** (drops Python 3.9) | target `py314`.
+
 ## Ruff - Fast Python Linter & Formatter
 
 ### Installation
@@ -15,7 +17,7 @@ pipx install ruff
 ```toml
 [tool.ruff]
 # Target Python version
-target-version = "py312"
+target-version = "py314"
 
 # Line length
 line-length = 88
@@ -122,7 +124,7 @@ pip install types-requests types-python-dateutil types-redis
 
 ```toml
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
@@ -469,7 +471,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.14'
           cache: 'pip'
 
       - name: Install dependencies

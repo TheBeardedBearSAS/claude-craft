@@ -64,8 +64,8 @@
 ### SonarAnalyzer
 
 ```xml
-<!-- Security and code quality -->
-<PackageReference Include="SonarAnalyzer.CSharp" Version="9.*">
+<!-- Security and code quality — SonarAnalyzer 10.27 (412 nouvelles règles, C# 14) -->
+<PackageReference Include="SonarAnalyzer.CSharp" Version="10.*">
   <PrivateAssets>all</PrivateAssets>
 </PackageReference>
 ```

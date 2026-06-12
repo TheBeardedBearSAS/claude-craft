@@ -484,6 +484,45 @@ Process multiple stories automatically.
 
 ---
 
+## Kanban Board
+
+Claude Craft ships a local Kanban board that visualises your BMAD v6 project without any SaaS dependency.
+
+### Launch
+
+```bash
+# From the project root (where .bmad/ or project-management/ lives)
+npx @the-bearded-bear/claude-craft kanban --open
+```
+
+The board opens at `http://127.0.0.1:3737` (default port) and binds to localhost only.
+
+### BMAD v6 ingestion
+
+When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a **read-only** story source. Stories sourced from this file display a 🔒 lock icon — they cannot be mutated via drag-and-drop or PATCH requests (server returns 409). This preserves the integrity of the sprint state managed by the AI workflow.
+
+| Story source | Mutable via board? | Written by |
+|---|---|---|
+| `project-management/US-*.md` | Yes | `/workflow:plan`, `/sprint:start` |
+| `.bmad/sprint-status.yaml` | No (read-only 🔒) | `/workflow:*`, `/sprint:*` commands |
+
+### Views
+
+- **Kanban** — 6 columns with drag-and-drop transitions (gates enforced server-side)
+- **Backlog** — Epic tree with per-epic progress bar
+- **Burndown** — Ideal vs actual curve, on-track / at-risk / behind indicator
+- **Dependencies** — Directed graph, cycles highlighted in red
+- **Docs** — Inline markdown viewer for `prd.md`, `tech-spec.md`, `architecture/*.md`
+
+### Typical BMAD workflow with the board
+
+1. Run `/workflow:init` or `/sprint:start` to populate `.bmad/sprint-status.yaml`
+2. Launch `claude-craft kanban --open` to open the board
+3. Monitor story progress in real time — the board live-reloads on every YAML change
+4. Use the board as a read-only dashboard during sprint ceremonies (stand-up, review)
+
+---
+
 ## Complete Workflow Example
 
 ### 1. Initialize Project

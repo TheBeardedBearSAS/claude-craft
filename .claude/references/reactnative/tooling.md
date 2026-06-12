@@ -8,21 +8,50 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 
 ## Prérequis système
 
-### Node.js >= 20 LTS (obligatoire pour RN 0.85)
+### Node.js >= 22 LTS (obligatoire pour RN 0.86)
 
-React Native 0.85 **supprime le support des versions de Node < 20**. La version minimale requise est **Node.js 20.19.4 LTS**.
+React Native 0.86 requiert **Node.js 22.x LTS** minimum (RN 0.85 nécessitait Node 20). La version recommandée est Node.js **22.x LTS actif**.
 
 ```bash
 # Vérifier la version
-node --version  # Doit être >= 20.19.4
+node --version  # Doit être >= 22.0.0
 
 # Installer via nvm (recommandé)
-nvm install 20
-nvm use 20
-nvm alias default 20
+nvm install 22
+nvm use 22
+nvm alias default 22
 ```
 
-> Les versions Node 16 et 18 ne sont plus supportées avec RN 0.85. Mettre à jour avant migration.
+> Les versions Node < 22 ne sont plus supportées avec RN 0.86. Mettre à jour avant migration.
+
+### React Native Gesture Handler 3.0.0 — Breaking Changes
+
+RNGH 3.0.0 introduit des changements de rupture avec RN 0.86 :
+
+```bash
+# Installation
+npm install react-native-gesture-handler@^3.0.0
+```
+
+```typescript
+// ✅ RNGH 3.0 — GestureHandlerRootView obligatoire au niveau racine
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+export default function App() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* ... */}
+    </GestureHandlerRootView>
+  );
+}
+
+// Breaking: les anciens imports `from 'react-native-gesture-handler/Swipeable'`
+// → migrer vers `from 'react-native-gesture-handler'`
+// Breaking: PanGestureHandler et TapGestureHandler (API composants)
+// → utiliser la nouvelle API Gesture : Gesture.Pan(), Gesture.Tap()
+```
+
+**Source :** [RNGH 3.0 Migration Guide](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/migrating-from-2.x/)
 
 ---
 
@@ -208,9 +237,9 @@ rm -rf node_modules/.cache
 
 ---
 
-## Metro TLS (0.85+)
+## Metro TLS (0.85+ / 0.86+)
 
-Depuis RN 0.85, Metro accepte un objet `server.tls` dans `metro.config.js`, activant HTTPS et WSS (WebSocket sécurisé pour Fast Refresh) pendant le développement local.
+Depuis RN 0.85+, Metro accepte un objet `server.tls` dans `metro.config.js`, activant HTTPS et WSS (WebSocket sécurisé pour Fast Refresh) pendant le développement local.
 
 ### Cas d'usage
 
@@ -224,7 +253,7 @@ Depuis RN 0.85, Metro accepte un objet `server.tls` dans `metro.config.js`, acti
 ### Configuration
 
 ```javascript
-// metro.config.js (bare RN 0.85+)
+// metro.config.js (bare RN 0.85+ / 0.86+)
 const { getDefaultConfig } = require('@react-native/metro-config');
 const fs = require('fs');
 
@@ -284,9 +313,9 @@ brew install --cask react-native-debugger
 # https://github.com/jhen0409/react-native-debugger
 ```
 
-### React Native DevTools (0.85+)
+### React Native DevTools (0.85+ / 0.86+)
 
-Flipper est déprécié depuis React Native 0.73. Le remplacement officiel est **React Native DevTools**, intégré nativement dans Metro. RN 0.85 en fait le debugger par défaut et stabilise plusieurs fonctionnalités.
+Flipper est déprécié depuis React Native 0.73. Le remplacement officiel est **React Native DevTools**, intégré nativement dans Metro. RN 0.85+ en fait le debugger par défaut et stabilise plusieurs fonctionnalités.
 
 ```bash
 # Démarrer avec le debugger (RN 0.73+)
@@ -399,10 +428,11 @@ npm install -g @vtsls/language-server typescript
 
 ## Checklist Tooling
 
-- [ ] Node.js >= 20.19.4 LTS installé
+- [ ] Node.js >= 22.x LTS installé (RN 0.86+)
 - [ ] Expo CLI installé
 - [ ] EAS CLI configuré
 - [ ] Metro config optimisé
+- [ ] RNGH migré vers 3.0.0 si RN 0.86+ (API Gesture, GestureHandlerRootView au niveau racine)
 - [ ] Debugger configuré (React Native DevTools 0.85+ via `--experimental-debugger`)
 - [ ] Metro TLS configuré si HTTPS local requis (deep links, origines sécurisées)
 - [ ] VS Code extensions installées

@@ -335,6 +335,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
+        // ⚠️ Vite 8 (Rolldown): manualChunks is deprecated when Rolldown is the active bundler.
+        // Remove or condition to build.rolldown !== true for Vite 8+ projects.
         manualChunks: {
           'vue-vendor': ['vue', 'vue-router', 'pinia'],
           'ui-vendor': ['@headlessui/vue', '@heroicons/vue'],

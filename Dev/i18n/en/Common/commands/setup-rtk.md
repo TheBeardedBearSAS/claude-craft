@@ -1,99 +1,149 @@
 ---
-description: Install and configure RTK (Rust Token Killer) for token optimization
-argument-hint: [--install|--check|--uninstall]
+description: Configure RTK and token optimization for Claude Code
+argument-hint: [--check]
 ---
 
-# Setup RTK (Token Optimizer)
+# Token Optimization Setup
 
-Install and configure RTK to reduce Claude Code token consumption by 60-90%.
+Configure RTK (Rust Token Killer) and comprehensive token optimization for Claude Code sessions.
 
-## Plan Mode
+## Steps
 
-> **No plan mode required.** This command runs a deterministic installation script.
-
-## Execution
-
-### Phase 1: Prerequisites Check
-
-Verify required tools are available:
-
-```
-╔══════════════════════════════════════════════════════════════╗
-║              RTK - Token Optimizer Setup                     ║
-╚══════════════════════════════════════════════════════════════╝
-
-Prerequisites:
-  ✓ jq installed
-  ✓ curl installed
-```
-
-If prerequisites are missing, display installation instructions and stop.
-
-### Phase 2: RTK Binary Installation
-
-Check if RTK is already installed (`command -v rtk`). If not, install via official installer:
+### 1. Check RTK Installation
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | sh
+# Check if RTK is installed
+if command -v rtk &>/dev/null; then
+  echo "RTK installed: $(rtk --version)"
+  echo ""
+  rtk gain 2>/dev/null || echo "No savings data yet"
+else
+  echo "RTK is NOT installed"
+  echo ""
+  echo "Install options (the curl|bash pattern is BLOCKED by Claude Craft hooks):"
+  echo "  1. (Recommended) make install-rtk    # from claude-craft root"
+  echo "  2. cargo install rtk-cli            # if you have Rust toolchain"
+  echo "  3. Download release binary manually: https://github.com/rtk-ai/rtk/releases"
+fi
 ```
 
-Verify installation with `rtk --version`.
+### 2. Configure RTK Optimizations
 
-### Phase 3: Hook Configuration
+If RTK is installed, apply these optimizations:
 
-Run `rtk init -g --no-patch` to create:
-- `~/.claude/hooks/rtk-rewrite.sh` — The PreToolUse hook script
-- `~/.claude/RTK.md` — RTK configuration reference
+#### a) Enable ultra-compact mode
 
-Then **safely merge** the hook into `~/.claude/settings.json`:
-- Backup settings.json before modification
-- Append RTK hook to `.hooks.PreToolUse[]` array
-- Preserve all existing hooks (security, etc.)
-- Skip if already present (idempotent)
-
-### Phase 4: Verification
-
-Verify all components are correctly installed:
-
-```
-Verification:
-  ✓ RTK binary (rtk 0.22.1)
-  ✓ Hook script (~/.claude/hooks/rtk-rewrite.sh)
-  ✓ settings.json hook entry
-```
-
-Show token savings if available (`rtk gain`).
-
-## Modes
-
-| Mode | Behavior |
-|------|----------|
-| `--install` (default) | Full installation: binary + hooks + settings merge |
-| `--check` | Check current RTK installation status and savings |
-| `--uninstall` | Remove RTK hooks from settings.json (keeps binary) |
-
-## Examples
+Check the hook at `~/.claude/hooks/rtk-rewrite.sh`. The rewrite command should use `--ultra-compact`:
 
 ```bash
-# Install RTK with default language
-/common:setup-rtk
-
-# Install with French messages
-/common:setup-rtk --install
-
-# Check installation status
-/common:setup-rtk --check
-
-# Remove RTK hooks
-/common:setup-rtk --uninstall
+REWRITTEN=$(rtk rewrite --ultra-compact "$CMD" 2>/dev/null)
 ```
 
-## Implementation
+If it doesn't have `--ultra-compact`, update the hook file.
 
-Run the installation script:
+#### b) Optimize RTK limits
+
+Check `~/.config/rtk/config.toml` and recommend these limits:
+
+```toml
+[limits]
+grep_max_results = 100
+grep_max_per_file = 10
+status_max_files = 10
+status_max_untracked = 5
+passthrough_max_chars = 1500
+```
+
+#### c) Add custom filters
+
+Check `~/.config/rtk/filters.toml`. If it only contains template comments, suggest filters based on the detected project stack:
+
+- **Docker projects**: Add docker exec, compose, logs filters
+- **Node.js projects**: Add npm/npx install filters
+- **PHP projects**: Add composer filters
+- **Python projects**: Add pip install filters
+
+### 3. Configure Sub-Agent Model and Forked Subagents
+
+Check if both env vars are set:
 
 ```bash
-bash Tools/RTK/install-rtk.sh --lang=$RULES_LANG $ARGUMENTS
+echo "CLAUDE_CODE_SUBAGENT_MODEL=${CLAUDE_CODE_SUBAGENT_MODEL:-NOT SET}"
+echo "CLAUDE_CODE_FORK_SUBAGENT=${CLAUDE_CODE_FORK_SUBAGENT:-NOT SET}"
 ```
 
-Where `$RULES_LANG` is detected from the project's installed language.
+If not set, recommend adding to `~/.bashrc` (or `~/.zshrc`):
+
+```bash
+# Use Sonnet 4.6 for sub-agents (exploration, grep, file reading) instead of Opus
+# → 40-60% cost reduction on sub-agent invocations
+export CLAUDE_CODE_SUBAGENT_MODEL="sonnet"
+
+# Run sub-agents in isolated contexts (Claude Code 2.1.117+, see COMPATIBILITY.md)
+# → Avoids polluting the main context window with sub-agent intermediate state
+# → Compounds with context: fork on skills (~8-15K tokens saved per long session)
+export CLAUDE_CODE_FORK_SUBAGENT=1
+
+# Enable 1-hour prompt cache TTL (Claude Code 2.1.108+)
+# → -40% cost on repetitive sessions (BMAD sprints, /team:* loops)
+# → Same prompt cache key is reused for up to 1h instead of 5min default
+export ENABLE_PROMPT_CACHING_1H=1
+
+# Force 5-minute cache writes on every turn (Claude Code 2.1.108+)
+# → Useful for short-burst dev loops that hit the cache repeatedly
+# → Trade-off: small write overhead, large hit-rate gains on iterative work
+export FORCE_PROMPT_CACHING_5M=1
+```
+
+After updating, reload your shell: `source ~/.bashrc`.
+
+### 4. Configure Hooks
+
+Check the current settings.json for these hooks:
+
+| Hook | Purpose | Status |
+|------|---------|--------|
+| **PreToolUse** (Bash) | RTK rewrite | Check if configured |
+| **PostToolUse** (Bash) | Output filtering | Check if configured |
+| **PreCompact** | Context preservation | Check if configured |
+| **SessionStart** (compact) | Context re-injection | Check if configured |
+
+For missing hooks, reference the templates in `.claude/templates/hooks/`:
+- `output-filter.json` — PostToolUse for large output filtering
+- `pre-compact.json` — PreCompact for context preservation
+- `context-reinject.json` — SessionStart for post-compaction re-injection
+- `post-compact.json` — PostCompact for context restoration after compaction
+
+#### PostCompact Hook — Context Restoration
+
+The **PostCompact** hook (Claude Code v2.1.76+) re-injects critical context after an auto-compaction event. Without it, Claude may lose track of active tasks, file paths, and decisions made earlier in the session.
+
+Template: `.claude/templates/hooks/post-compact.json`
+
+The hook reads `context-essentials.md` (a file you maintain with current session state) and injects it as a system message after compaction. Pair it with the **PreCompact** hook (`pre-compact.json`) which saves the essentials before compaction occurs.
+
+Estimated savings: avoids 5-15 re-explanation turns per long session (~3-8K tokens).
+
+### 5. Summary
+
+Display a summary table of all optimizations with their status:
+
+| Optimization | Expected Savings | Status |
+|---|---|---|
+| RTK installed + hooks | 60-90% on CLI output | ? |
+| RTK ultra-compact | +5-10% additional | ? |
+| RTK optimized limits | grep 19% -> 40-50% | ? |
+| RTK custom filters | +30-50% on docker/npm | ? |
+| Sub-agent model (Sonnet) | 40-60% cost reduction | ? |
+| Forked sub-agents (`CLAUDE_CODE_FORK_SUBAGENT=1`) | 8-15K tokens/long session | ? |
+| Prompt caching 1h (`ENABLE_PROMPT_CACHING_1H=1`) | -40% cost on repetitive sessions | ? |
+| Force 5m cache writes (`FORCE_PROMPT_CACHING_5M=1`) | Higher hit-rate on iterative loops | ? |
+| PostToolUse hook | Reduces context pollution | ? |
+| PreCompact hook | Preserves critical context | ? |
+| PostCompact hook | Restores context after compaction | ? |
+
+**Target: 60-75% overall token efficiency (with 1h cache + ultra-compact + forked subagents)**
+
+## Arguments
+
+- `$ARGUMENTS` — Pass `--check` to only display current status without making changes

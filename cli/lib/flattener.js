@@ -332,13 +332,27 @@ ${this.generateFileTree()}\`\`\`
 
 `;
 
-    // Add file contents
-    for (const file of this.files) {
+    content += this.renderFileContents(this.files);
+
+    this.stats.estimatedTokens = Math.ceil(content.length * TOKENS_PER_CHAR);
+    return content;
+  }
+
+  /**
+   * Render the markdown file-contents section for a list of files.
+   * Each file is wrapped in a fenced code block labelled with its extension.
+   * Read errors are captured inline rather than thrown (audit CLI-04).
+   * @param {Array<{path: string, fullPath: string}>} files - Files to render
+   * @returns {string} Markdown string with one block per file
+   */
+  renderFileContents(files) {
+    let result = '';
+    for (const file of files) {
       try {
         const fileContent = fs.readFileSync(file.fullPath, 'utf8');
         const ext = path.extname(file.path).slice(1) || 'text';
 
-        content += `### ${file.path}
+        result += `### ${file.path}
 
 \`\`\`${ext}
 ${fileContent}
@@ -346,7 +360,7 @@ ${fileContent}
 
 `;
       } catch (e) {
-        content += `### ${file.path}
+        result += `### ${file.path}
 
 \`\`\`
 [Error reading file: ${e.message}]
@@ -355,9 +369,7 @@ ${fileContent}
 `;
       }
     }
-
-    this.stats.estimatedTokens = Math.ceil(content.length * TOKENS_PER_CHAR);
-    return content;
+    return result;
   }
 
   /**
@@ -482,28 +494,7 @@ ${shard.files.map((f) => `- ${f.path}`).join('\n')}
 
 `;
 
-    for (const file of shard.files) {
-      try {
-        const fileContent = fs.readFileSync(file.fullPath, 'utf8');
-        const ext = path.extname(file.path).slice(1) || 'text';
-
-        content += `### ${file.path}
-
-\`\`\`${ext}
-${fileContent}
-\`\`\`
-
-`;
-      } catch (e) {
-        content += `### ${file.path}
-
-\`\`\`
-[Error reading file: ${e.message}]
-\`\`\`
-
-`;
-      }
-    }
+    content += this.renderFileContents(shard.files);
 
     return content;
   }

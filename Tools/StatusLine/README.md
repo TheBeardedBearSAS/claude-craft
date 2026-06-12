@@ -76,7 +76,7 @@ npm install -g ccusage
 bash ~/.claude/statusline.sh --version
 
 # Test with sample JSON
-echo '{"model":{"display_name":"Opus","id":"claude-opus-4-7"},"context_window":{"used_percentage":42},"cost":{"total_cost_usd":0.5},"workspace":{"current_dir":"/tmp/test","project_dir":"/tmp/test"}}' | bash ~/.claude/statusline.sh
+echo '{"model":{"display_name":"Opus","id":"claude-opus-4-8"},"context_window":{"used_percentage":42},"cost":{"total_cost_usd":0.5},"workspace":{"current_dir":"/tmp/test","project_dir":"/tmp/test"}}' | bash ~/.claude/statusline.sh
 ```
 
 ## Configuration

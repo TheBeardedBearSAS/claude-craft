@@ -699,10 +699,12 @@ describe('UserManagement Integration', () => {
 
 ## Playwright - E2E Tests
 
+> **Version courante : Playwright 1.60.0** — Nouvelles fonctionnalités : composable fixtures, `toMatchAriaSnapshot()` pour assertions d'accessibilité, MCP server pour intégration Claude Code.
+
 ### Installation
 
 ```bash
-npm install -D @playwright/test
+npm install -D @playwright/test   # @1.60.0
 npx playwright install
 ```
 

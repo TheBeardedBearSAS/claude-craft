@@ -1,14 +1,16 @@
-# Standards de Code
+# Padrões de Código
 
-## Principes Generaux
+> **Referência de stack:** Symfony 8.1 / PHP 8.5+ | API Platform 4.3 | JsonStreamer (Symfony 8.1, estável) | PHPStan Level 10 | Pest 4.7+
+
+## Princípios Gerais
 
 ### PSR-12 + Symfony Coding Standards
 
-Le projet suit strictement :
-1. **PSR-12** : Standard PHP officiel
-2. **@Symfony** : Conventions Symfony
-3. **@Symfony:risky** : Regles strictes Symfony
-4. **@PHP82Migration** : Modernisation PHP 8.2+
+O projeto segue estritamente:
+1. **PSR-12**: Padrão PHP oficial
+2. **@Symfony**: Convenções Symfony
+3. **@Symfony:risky**: Regras estritas Symfony
+4. **@PHP85Migration**: Modernização PHP 8.5+ (property hooks, pipe operator, `#[\NoDiscard]`)
 
 Configuration : `.php-cs-fixer.dist.php`
 

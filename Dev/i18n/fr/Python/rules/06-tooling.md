@@ -1,5 +1,8 @@
 # Outils de Développement Python
 
+> **Version de référence :** Python **3.14 (stable, 3.14.6+)** — Ruff 0.15+, pytest 9.x (fin du support Python 3.9).
+> **JIT (PEP 744) :** expérimental en Python 3.14, sujet à réévaluation avant la sortie de Python 3.15 (oct. 2026). Ne pas utiliser en production sans tests explicites.
+
 ## Package Management
 
 ### Poetry (Recommandé)
@@ -13,7 +16,7 @@ description = "My Python project"
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.14"
 fastapi = "^0.104.0"
 sqlalchemy = "^2.0.0"
 pydantic = "^2.5.0"
@@ -21,10 +24,10 @@ redis = "^5.0.0"
 celery = "^5.3.0"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
-pytest-cov = "^4.1.0"
+pytest = "^9.0.0"
+pytest-cov = "^6.0.0"
 pytest-mock = "^3.12.0"
-ruff = "^0.1.0"
+ruff = "^0.15.0"
 mypy = "^1.7.0"
 black = "^23.11.0"
 isort = "^5.12.0"
@@ -100,7 +103,7 @@ pyenv deactivate
 
 ```dockerfile
 # docker/Dockerfile
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 WORKDIR /app
 
@@ -129,7 +132,7 @@ CMD ["uvicorn", "src.myproject.infrastructure.api.main:app", "--host", "0.0.0.0"
 
 ```dockerfile
 # docker/Dockerfile.dev
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 WORKDIR /app
 
@@ -407,7 +410,7 @@ pre-commit autoupdate
 # pyproject.toml ou ruff.toml
 [tool.ruff]
 line-length = 88
-target-version = "py311"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = [
@@ -463,7 +466,7 @@ ruff format .             # Format (comme black)
 # pyproject.toml
 [tool.black]
 line-length = 88
-target-version = ['py311']
+target-version = ['py314']
 include = '\.pyi?$'
 ```
 
@@ -502,7 +505,7 @@ isort --diff src/         # Voir les changements
 ```toml
 # mypy.ini ou pyproject.toml
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.14"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
@@ -604,7 +607,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.14'
 
       - name: Install Poetry
         run: |
@@ -649,7 +652,7 @@ description = ""
 authors = ["Author <author@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.14"
 fastapi = "^0.104.0"
 uvicorn = {extras = ["standard"], version = "^0.24.0"}
 sqlalchemy = "^2.0.0"
@@ -664,11 +667,11 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.6"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
-pytest-cov = "^4.1.0"
+pytest = "^9.0.0"
+pytest-cov = "^6.0.0"
 pytest-mock = "^3.12.0"
 pytest-asyncio = "^0.21.0"
-ruff = "^0.1.0"
+ruff = "^0.15.0"
 mypy = "^1.7.0"
 black = "^23.11.0"
 isort = "^5.12.0"
@@ -677,19 +680,19 @@ pre-commit = "^3.5.0"
 
 [tool.black]
 line-length = 88
-target-version = ['py311']
+target-version = ['py314']
 
 [tool.isort]
 profile = "black"
 line_length = 88
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.14"
 strict = true
 
 [tool.ruff]
 line-length = 88
-target-version = "py311"
+target-version = "py314"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

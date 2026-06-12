@@ -6,7 +6,7 @@ defineProps<{
 
 const agents = [
   { name: 'bmad-master', desc: 'BMAD orchestrator: routing, gates enforcement, sprint lifecycle, batch processing.', color: '#22d3ee', badge: 'BMAD v6', badgeBg: 'rgba(6,182,212,0.2)', borderColor: 'rgba(6,182,212,0.3)' },
-  { name: 'ralph-conductor', desc: 'v2.0: Adaptive profiles, hooks integration, health monitoring, and DoD templates.', color: '#fb923c', badge: 'v8.8.2', badgeBg: 'rgba(249,115,22,0.2)', borderColor: 'rgba(249,115,22,0.3)' },
+  { name: 'ralph-conductor', desc: 'v2.0: Adaptive profiles, hooks integration, health monitoring, and DoD templates.', color: '#fb923c', badge: 'v8.11.0', badgeBg: 'rgba(249,115,22,0.2)', borderColor: 'rgba(249,115,22,0.3)' },
   { name: 'uiux-orchestrator', desc: 'Coordinates UI, UX, and Accessibility experts for holistic design solutions.', color: '#f472b6', badge: null, badgeBg: null, borderColor: 'rgba(51,65,85,1)' },
   { name: 'product-owner', desc: 'Helps with user stories, backlog prioritization, and sprint planning.', color: '#fbbf24', badge: null, badgeBg: null, borderColor: 'rgba(51,65,85,1)' },
   { name: 'accessibility-expert', desc: 'Ensures WCAG 2.2 AAA compliance and ARIA best practices.', color: '#2dd4bf', badge: null, badgeBg: null, borderColor: 'rgba(51,65,85,1)' },

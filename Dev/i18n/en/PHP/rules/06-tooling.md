@@ -54,8 +54,8 @@ composer validate
         "phpunit/phpunit": "^11.0",
         "phpstan/phpstan": "^2.0",
         "friendsofphp/php-cs-fixer": "^3.0",
-        "rector/rector": "^1.0",
-        "pestphp/pest": "^3.0"
+        "rector/rector": "^2.4",
+        "pestphp/pest": "^4.7"
     },
     "autoload": {
         "psr-4": {
@@ -188,7 +188,7 @@ includes:
 
 parameters:
     phpVersion: 80400
-    level: 9
+    level: 10
 
     paths:
         - src
@@ -474,7 +474,7 @@ echo "✅ All checks passed"
 ### Dockerfile
 
 ```dockerfile
-FROM php:8.4-fpm-alpine
+FROM php:8.5-fpm-alpine
 
 # Install extensions
 RUN apk add --no-cache \
@@ -534,7 +534,7 @@ volumes:
 
 - [ ] Composer configured with autoload
 - [ ] PHP-CS-Fixer configured (PSR-12 + strict)
-- [ ] PHPStan at level 8+ with strict rules
+- [ ] PHPStan at level 10 with strict rules
 - [ ] PHPUnit/Pest configured with coverage
 - [ ] Rector configured for upgrades
 - [ ] Makefile with common commands

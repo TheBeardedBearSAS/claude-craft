@@ -12,7 +12,7 @@ includes:
 
 parameters:
     phpVersion: 80400
-    level: 9
+    level: 10
 
     paths:
         - src
@@ -436,7 +436,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           coverage: xdebug
 
       - name: Installer les dépendances
@@ -486,14 +486,14 @@ cache:
 
 code-style:
   stage: quality
-  image: php:8.4-cli
+  image: php:8.5-cli
   script:
     - composer install --prefer-dist --no-progress
     - vendor/bin/php-cs-fixer fix --dry-run --diff
 
 static-analysis:
   stage: quality
-  image: php:8.4-cli
+  image: php:8.5-cli
   script:
     - composer install --prefer-dist --no-progress
     - vendor/bin/phpstan analyse
@@ -501,7 +501,7 @@ static-analysis:
 
 tests:
   stage: test
-  image: php:8.4-cli
+  image: php:8.5-cli
   script:
     - composer install --prefer-dist --no-progress
     - vendor/bin/phpunit --coverage-text
@@ -514,7 +514,7 @@ tests:
 
 | Métrique | Objectif | Minimum |
 |----------|----------|---------|
-| Niveau PHPStan | 9 | 8 |
+| Niveau PHPStan | 10 | 9 |
 | Couverture de Code | 85% | 80% |
 | Complexité Cyclomatique | < 10 | < 15 |
 | Longueur de Méthode | < 30 lignes | < 50 lignes |
@@ -523,7 +523,7 @@ tests:
 
 ### Checklist de Qualité
 
-- [ ] PHPStan passe au niveau 8+
+- [ ] PHPStan passe au niveau 10
 - [ ] Pas de violations PHP-CS-Fixer
 - [ ] Couverture de code > 80%
 - [ ] Pas de problèmes critiques Psalm

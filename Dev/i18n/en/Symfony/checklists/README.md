@@ -19,7 +19,7 @@ This folder contains 4 essential checklists for the development workflow.
 
 **Automatic checks:**
 - ✅ Tests pass (unit + integration + Behat)
-- ✅ PHPStan level 8 (0 errors)
+- ✅ PHPStan level 10 (0 errors)
 - ✅ CS-Fixer (PSR-12 formatted code)
 - ✅ Hadolint (valid Dockerfile)
 - ✅ Coverage ≥ 80%
@@ -388,7 +388,7 @@ Create a cron for GDPR cleanup:
 
 ### ALWAYS
 - ✅ Run tests before commit
-- ✅ PHPStan level 8 without errors
+- ✅ PHPStan level 10 without errors
 - ✅ Coverage ≥ 80%
 - ✅ Conformant commit message (Conventional Commits)
 

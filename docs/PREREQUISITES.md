@@ -6,21 +6,21 @@ Complete guide to all dependencies required for Claude Craft.
 
 ## Required Dependencies
 
-### 1. Node.js (20+)
+### 1. Node.js (22+)
 
-Required for NPX installation and CLI tools.
+Required for NPX installation and CLI tools. Node 20 reached EOL on April 30, 2026 — use Node 22 LTS or Node 24 LTS.
 
 | OS | Installation Command |
 |----|----------------------|
 | **macOS** | `brew install node` |
-| **Ubuntu/Debian** | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo -E bash - && sudo apt-get install -y nodejs` |
+| **Ubuntu/Debian** | `curl -fsSL https://deb.nodesource.com/setup_22.x \| sudo -E bash - && sudo apt-get install -y nodejs` |
 | **Windows WSL** | Same as Ubuntu |
 | **Arch Linux** | `sudo pacman -S nodejs npm` |
 
 **Verify:**
 ```bash
-node --version   # Should be v20.x or higher
-npm --version    # Should be v9.x or higher
+node --version   # Should be v22.x or higher
+npm --version    # Should be v10.x or higher
 ```
 
 ---
@@ -268,7 +268,7 @@ Then install the Claude Code plugin:
 
 | Tool | Minimum Version | Recommended |
 |------|-----------------|-------------|
-| Node.js | 20.0 | 20.x LTS |
+| Node.js | 22.0 | 22.x LTS (24.x LTS recommandé) |
 | npm | 9.0 | 10.x |
 | yq | 4.0 | 4.40+ |
 | Git | 2.0 | 2.40+ |
@@ -276,7 +276,7 @@ Then install the Claude Code plugin:
 | Docker Compose | 2.0 | 2.24+ |
 | jq | 1.5 | 1.7+ |
 | Make | 3.0 | 4.x |
-| Claude Code | 2.1.97 (CVE-2025-59536 patched) | 2.1.154 |
+| Claude Code | 2.1.97 (CVE-2025-59536 patched) | 2.1.168 |
 
 ---
 

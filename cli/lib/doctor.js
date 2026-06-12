@@ -7,6 +7,8 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+import yaml from 'js-yaml';
 import c from './colors.js';
 import { listDirs } from './fs-utils.js';
 import { assertSafeTarget } from './path-safety.js';
@@ -14,7 +16,26 @@ import { assertSafeTarget } from './path-safety.js';
 // Single source of truth for the security baseline. Bumped from 2.1.47 in v8.3.0
 // after CVE-2025-59536 (CVSS 8.7) cumulative hardening completed in 2.1.97.
 const MIN_CLAUDE_CODE = '2.1.97';
-const RECOMMENDED_CLAUDE_CODE = '2.1.118';
+
+/**
+ * Read the recommended Claude Code version from config/versions.yaml.
+ * Falls back to hardcoded value if the file is unavailable.
+ * @returns {string}
+ */
+function loadRecommendedClaudeCodeVersion() {
+  const FALLBACK = '2.1.168';
+  try {
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const versionsPath = path.resolve(__dirname, '..', '..', 'config', 'versions.yaml');
+    if (!fs.existsSync(versionsPath)) return FALLBACK;
+    const parsed = yaml.load(fs.readFileSync(versionsPath, 'utf8'));
+    return parsed?.claudeCode?.recommended ?? FALLBACK;
+  } catch {
+    return FALLBACK;
+  }
+}
+
+const RECOMMENDED_CLAUDE_CODE = loadRecommendedClaudeCodeVersion();
 
 /**
  * Compare two semver-ish version strings (`major.minor.patch`).
@@ -131,7 +152,7 @@ function runDoctor(targetPath, deps = {}) {
       failed++;
     } else if (semver && semverCmp(semver, RECOMMENDED_CLAUDE_CODE) < 0) {
       console.log(
-        `  ${c.yellow}[WARN]${c.reset} Claude Code ${semver} — recommended ${RECOMMENDED_CLAUDE_CODE} (forked subagents, native CLI)`
+        `  ${c.yellow}[WARN]${c.reset} Claude Code ${semver} — recommended ${RECOMMENDED_CLAUDE_CODE} (Opus 4.8 + Dynamic Workflows)`
       );
       warned++;
     } else {

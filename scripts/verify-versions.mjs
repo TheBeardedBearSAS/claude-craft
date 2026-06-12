@@ -39,7 +39,19 @@ for (const [key, spec] of Object.entries(versions.stacks ?? {})) {
 }
 
 // 2. Denylist de tokens obsolètes dans les fichiers vitrine
-const SHOWCASE_FILES = ['.claude/CLAUDE.md', 'README.md'];
+const SHOWCASE_FILES = [
+  '.claude/CLAUDE.md',
+  'README.md',
+  'website/.vitepress/theme/LandingPage.vue',
+  'docs/PREREQUISITES.md',
+  'docs/AGENT-TEAMS-GUIDE.md',
+  // Settings templates distribués dans les 5 langues (TOKEN-001)
+  'Dev/i18n/en/Common/templates/settings.json.template',
+  'Dev/i18n/fr/Common/templates/settings.json.template',
+  'Dev/i18n/es/Common/templates/settings.json.template',
+  'Dev/i18n/de/Common/templates/settings.json.template',
+  'Dev/i18n/pt/Common/templates/settings.json.template',
+];
 for (const rel of SHOWCASE_FILES) {
   const abs = path.join(ROOT, rel);
   if (!fs.existsSync(abs)) continue;

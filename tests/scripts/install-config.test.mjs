@@ -49,7 +49,7 @@ describe('install_config() in install-common-rules.sh', { timeout: 60000 }, () =
 
     const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
     expect(settings.env).toBeDefined();
-    expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toBe('claude-sonnet-4-5');
+    expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toBe('claude-sonnet-4-6');
   });
 
   it('settings.json contains PostCompact hook', () => {
@@ -59,9 +59,7 @@ describe('install_config() in install-common-rules.sh', { timeout: 60000 }, () =
       timeout: 30000,
     });
 
-    const settings = JSON.parse(
-      fs.readFileSync(path.join(tmpDir, '.claude', 'settings.json'), 'utf8'),
-    );
+    const settings = JSON.parse(fs.readFileSync(path.join(tmpDir, '.claude', 'settings.json'), 'utf8'));
     expect(settings.hooks.PostCompact).toBeDefined();
     expect(settings.hooks.PostCompact.length).toBeGreaterThan(0);
     expect(settings.hooks.PostCompact[0].matcher).toBe('auto');
@@ -74,9 +72,7 @@ describe('install_config() in install-common-rules.sh', { timeout: 60000 }, () =
       timeout: 30000,
     });
 
-    const settings = JSON.parse(
-      fs.readFileSync(path.join(tmpDir, '.claude', 'settings.json'), 'utf8'),
-    );
+    const settings = JSON.parse(fs.readFileSync(path.join(tmpDir, '.claude', 'settings.json'), 'utf8'));
     const sessionStartHooks = settings.hooks.SessionStart;
     expect(sessionStartHooks).toBeDefined();
     const compactHook = sessionStartHooks.find((h) => h.matcher === 'compact');
@@ -90,9 +86,7 @@ describe('install_config() in install-common-rules.sh', { timeout: 60000 }, () =
       timeout: 30000,
     });
 
-    const settings = JSON.parse(
-      fs.readFileSync(path.join(tmpDir, '.claude', 'settings.json'), 'utf8'),
-    );
+    const settings = JSON.parse(fs.readFileSync(path.join(tmpDir, '.claude', 'settings.json'), 'utf8'));
     const preToolUse = settings.hooks.PreToolUse;
     expect(preToolUse).toBeDefined();
 

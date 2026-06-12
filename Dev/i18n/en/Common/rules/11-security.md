@@ -615,6 +615,7 @@ Before installing a third-party MCP server:
 Use Claude Code hooks to block dangerous patterns.
 
 > **Best practice:** Hooks receive tool input as JSON on **stdin** — always use `jq -r '.tool_input.<field>'` (not `echo '$TOOL_INPUT'`) to read values safely and avoid shell injection.
+> **Important:** Use `exit 2` (not `exit 1`) to actually block the tool call in Claude Code. `exit 1` only signals an error but does **not** block execution.
 
 ```json
 {
@@ -625,7 +626,7 @@ Use Claude Code hooks to block dangerous patterns.
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(jq -r '.tool_input.command // empty'); echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' >&2 && exit 1 || exit 0"
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); printf '%s' \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' >&2 && exit 2 || exit 0"
           }
         ]
       }

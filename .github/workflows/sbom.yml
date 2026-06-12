@@ -7,13 +7,16 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+-*'
   workflow_dispatch:
 
+# SEC-005: top-level default is read-only; contents:write is scoped to the release job only.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   generate-sbom:
     name: Generate CycloneDX SBOM
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # pinned: v6.0.3
@@ -40,8 +43,21 @@ jobs:
           path: ./claude-craft-sbom.json
           retention-days: 90
 
+  release:
+    name: Attach SBOM to GitHub Release
+    runs-on: ubuntu-latest
+    needs: generate-sbom
+    if: github.ref_type == 'tag'
+    # SEC-005: contents:write restricted to this job only (needed to upload release assets)
+    permissions:
+      contents: write
+    steps:
+      - name: Download SBOM artifact
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # pinned: v4.2.1
+        with:
+          name: sbom-cyclonedx
+
       - name: Attach SBOM to release
-        if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # pinned: v2.3.2
         with:
           files: ./claude-craft-sbom.json

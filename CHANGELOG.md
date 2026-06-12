@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.12.0] - 2026-06-12
+
+Audit exhaustif multi-domaines (sécurité, ergonomie/DX, concurrentiel, fonctionnalités, fiabilité, optimisation tokens/modèles, documentation, architecture) mené par une équipe d'agents avec devil's advocates, validation Context7/web et vérification de fraîcheur des 14 stacks. 80 findings confirmés (2 P0, 22 P1, 34 P2, 22 P3) ; tous les P0/P1/P2 actionnables corrigés. Rapport : `audit/2026-06-12/00-AUDIT-REPORT.md`.
+
+### Security
+- **FrankenPHP 1.12.1 → 1.12.4** (CVE-2026-45062, CVSS 8.1 — découpage de chemin CGI via unicode permettant l'exécution de fichiers non-`.php`). Propagé dans `config/versions.yaml`, `.claude/CLAUDE.md` et les agents devops.
+- **Docker 29.5.2 → 29.5.3** (CVE-2026-33997 — élévation de privilège à l'installation de plugin).
+- **Hook de sécurité (règle 11)** : l'exemple distribué utilisait `exit 1` (non bloquant dans Claude Code) au lieu de `exit 2`, et `echo` au lieu de `printf '%s'` — corrigé dans les 5 langues, l'exemple n'enseigne plus un anti-pattern silencieusement permissif.
+- **Kanban — CSRF guard** : `new URL(referer)` non protégé provoquait un 500 sur en-tête `Referer` malformé (DoS par requête unique) → `try/catch` retournant 403 (`cli/kanban/server/middleware/security.js`).
+- **Kanban — en-têtes HTTP** : `Cross-Origin-Embedder-Policy: require-corp` et `X-Frame-Options: DENY` activés (`secureHeaders`).
+- **CI supply chain** : image `bats/bats:latest` épinglée par digest sha256 ; installation Vale vérifiée par `sha256sum -c` ; `contents: write` de `sbom.yml` restreint au seul job de release ; `PERSONAL_ACCESS_TOKEN` superflu retiré du workflow CLA.
+
+### Fixed
+- **Total de commandes installables** : `docs/COMMANDS.md` était figé à 185 commandes / 26 namespaces alors que la référence auto-générée en compte **219 sur 27** (le namespace `/paperclip:*` distribué n'était pas comptabilisé). Aligné sur `COMMANDS-FULL-REFERENCE.md`.
+- **Templates `settings.json` distribués** : IDs de modèles inexistants (`claude-sonnet-4-5`, `claude-opus-4-6`) → `claude-sonnet-4-6` / `claude-opus-4-8` ; ajout de `CLAUDE_CODE_FORK_SUBAGENT: "1"` (économie de tokens auparavant non distribuée) dans les 5 langues.
+- **`doctor.js`** : version Claude Code recommandée codée en dur à `2.1.118` (50 releases de retard) → lecture dynamique de `config/versions.yaml` (`recommended` = 2.1.168).
+- **Détection de projet** : `Cargo.toml` n'est plus faussement associé à « Rust (Paperclip) » (Paperclip est Node.js/TypeScript).
+- **Kanban — robustesse** : `.bmad/sprint-status.yaml` syntaxiquement invalide renvoie un 503 maîtrisé au lieu d'un 500 ; couverture des branches de `sprint-cache.js` portée de 75,75 % à 87,87 %. États vides des colonnes du board dotés d'un indice contextuel.
+- **CI** : matrice Node `20`/`22` → **`22`/`24`** (Node 20 EOL avril 2026), `engines.node >=22` ; correction de la colonne `awk` du rapport de parité i18n. `package-lock.json` resynchronisé (était figé à 8.9.0).
+- **Références de versions périmées** purgées de la documentation (5 langues) : `2.1.154`/`2.1.159` → `2.1.168`, `claude-opus-4.6` → `claude-opus-4-8`, badges website `v8.8.2` → version courante. Denylist `verify-versions` étendue pour empêcher toute régression ; périmètre `SHOWCASE_FILES` élargi (guides, PREREQUISITES, LandingPage, templates).
+
+### Changed
+- **Bumps de fraîcheur** : React Native 0.85 → **0.86**, Coolify 4.1.1 → **4.1.2**, OpenTofu 1.12.0 → **1.12.1**, Helm 3.18 → **4.2.0** (major — note de migration ajoutée, v3 EOL nov. 2026), Paperclip 2026.529.0 → **2026.609.0**, Node infra `20.x` → `22.x (24.x LTS recommandé)`.
+- **Best practices des stacks rafraîchies** (distribution + dogfood) : PHPStan niveau 10, Pest ^4.7, Rector ^2.4, Python 3.14.6 (+ notes Ruff 0.15/pytest 9, prudence JIT PEP 744), ESLint v10 flat config (suppression de `--ext`), RNGH 3.0 (breaking), Vite 8 (`manualChunks` déprécié), Vue Router 5 file-based routing, Angular 22 (`@Service`, `injectAsync()`, Angular Aria), Flutter SwiftPM/AGP 9, EF Core 10.0.9.
+- **Distribution token/modèles** : `setup-rtk` (de/pt) et `uiux:generate-design-md` (5 langues, auparavant absent de la couche distribuée) resynchronisés depuis le dogfood.
+
 ## [8.11.0] - 2026-06-12
 
 ### Added

@@ -51,7 +51,7 @@ Execute code quality check:
 
 **Evaluated Criteria**:
 - PSR-12 compliance (5 pts)
-- PHPStan level 8+ (5 pts)
+- PHPStan level 10 (5 pts)
 - Strict type hints and declare(strict_types=1) (4 pts)
 - KISS/DRY/YAGNI principles (4 pts)
 - Naming conventions and PHPDoc (4 pts)

@@ -12,7 +12,15 @@ export function csrfGuard(port) {
     }
     const origin = c.req.header('origin');
     const referer = c.req.header('referer');
-    const source = origin ?? (referer ? new URL(referer).origin : null);
+    let source = origin ?? null;
+    if (!source && referer) {
+      try {
+        source = new URL(referer).origin;
+      } catch {
+        // Referer malformé : traité comme absent → 403 en aval
+        source = null;
+      }
+    }
     if (!source || !allowed.has(source)) {
       return c.json({ error: 'forbidden', reason: 'invalid origin' }, 403);
     }

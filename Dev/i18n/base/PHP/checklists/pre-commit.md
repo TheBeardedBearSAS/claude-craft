@@ -58,7 +58,7 @@ grumphp:
       diff: true
     phpstan:
       configuration: phpstan.neon
-      level: 9
+      level: 10
     phpunit:
       testsuite: Unit
       always_execute: true
@@ -93,7 +93,7 @@ vendor/bin/php-cs-fixer fix           # Fix code style
 vendor/bin/rector process             # Apply refactorings
 
 # Static analysis
-vendor/bin/phpstan analyse            # PHPStan level 9
+vendor/bin/phpstan analyse            # PHPStan level 10
 vendor/bin/psalm                      # Psalm analysis
 
 # Tests

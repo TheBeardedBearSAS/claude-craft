@@ -56,13 +56,13 @@ dotnet publish -c Release --self-contained -r linux-x64
 
 <!-- Entity Framework Core -->
 <ItemGroup>
-  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.*" />
-  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.*" />
-  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.*">
+  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.*" />
+  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.*" />
+  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.*">
     <PrivateAssets>all</PrivateAssets>
     <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
   </PackageReference>
-  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.*" />
+  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.*" />
 </ItemGroup>
 
 <!-- Testing -->
@@ -80,13 +80,13 @@ dotnet publish -c Release --self-contained -r linux-x64
 <!-- API Documentation -->
 <ItemGroup>
   <PackageReference Include="Swashbuckle.AspNetCore" Version="6.*" />
-  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.*" />
+  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.*" />
 </ItemGroup>
 
 <!-- Resilience & Observability -->
 <ItemGroup>
   <PackageReference Include="Polly" Version="8.*" />
-  <PackageReference Include="Serilog.AspNetCore" Version="8.*" />
+  <PackageReference Include="Serilog.AspNetCore" Version="10.*" />
   <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.*" />
   <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.*" />
 </ItemGroup>
@@ -171,7 +171,7 @@ trim_trailing_whitespace = false
 <!-- Place at solution root for shared project settings -->
 <Project>
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -193,14 +193,14 @@ trim_trailing_whitespace = false
 
   <!-- Code analysis -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.*">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.*">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.*">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.*">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
@@ -217,14 +217,14 @@ trim_trailing_whitespace = false
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- ASP.NET Core -->
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <!-- ASP.NET Core (.NET 10 LTS — 10.0.9 latest patch) -->
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
 
-    <!-- Entity Framework Core -->
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
+    <!-- Entity Framework Core (10.0.9 — aligned with .NET 10 LTS patch cycle) -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.9" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.9" />
 
     <!-- Application Layer -->
     <PackageVersion Include="MediatR" Version="12.4.0" />
@@ -244,13 +244,13 @@ trim_trailing_whitespace = false
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
 
     <!-- Observability -->
-    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Polly" Version="8.3.1" />
 
     <!-- Analyzers -->
-    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.0" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.21.0.86780" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.27.0.0" />
   </ItemGroup>
 </Project>
 ```
@@ -459,7 +459,7 @@ jobs:
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/WebAPI/bin/Debug/net9.0/WebAPI.dll",
+      "program": "${workspaceFolder}/src/WebAPI/bin/Debug/net10.0/WebAPI.dll",
       "args": [],
       "cwd": "${workspaceFolder}/src/WebAPI",
       "stopAtEntry": false,

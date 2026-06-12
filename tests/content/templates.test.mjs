@@ -22,7 +22,7 @@ describe('template content validation', () => {
     it('contains CLAUDE_CODE_SUBAGENT_MODEL env', () => {
       const settings = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
       expect(settings.env).toBeDefined();
-      expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toBe('claude-sonnet-4-5');
+      expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toBe('claude-sonnet-4-6');
     });
 
     it('contains PostCompact hook', () => {

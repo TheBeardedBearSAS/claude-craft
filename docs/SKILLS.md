@@ -260,16 +260,19 @@ ls ~/my-project/.claude/skills/
 
 | Stack | Skills Count |
 |-------|--------------|
-| Common | 7 |
+| Common (cross-stack) | 21 |
 | Symfony | 16 |
 | Flutter | 8 |
-| React | 6 |
-| React Native | 9 |
-| Python | 4 |
-| **Total unique** | **48** |
-| **With i18n (×5)** | **240** |
+| React | 3 |
+| React Native | 4 |
+| Python | 1 |
+| Paperclip | 2 |
+| **Total unique** | **55** |
+| **With i18n (×5)** | **275** |
 
-> **Note :** 14 skills présents dans `.claude/skills/` ne sont pas encore documentés dans ce tableau par stack : `api-gateway`, `architect`, `atomic-tasks`, `debug-methodical`, `design-md-convention`, `edge-computing`, `event-driven`, `graphql`, `monorepo`, `observability`, `parallel-worktrees`, `remotion`, `socratic-brainstorm`, `wasm`. Ils sont disponibles et invocables normalement.
+> **Note :** Skills are counted from `.claude/skills/` (55 directories as of v8.11.0). The table above groups them by primary audience; many common skills (e.g. `security`, `testing`, `solid-principles`) are applicable to all stacks.
+
+The 48 skills include: `adapter-development`, `aggregates`, `api-gateway`, `architect`, `architecture`, `architecture-clean-ddd`, `architecture-paperclip`, `async`, `atomic-tasks`, `coding-standards`, `coding-standards-ts`, `cqrs`, `ddd-patterns`, `debug-methodical`, `design-md-convention`, `docker-hadolint`, `doctrine-extensions`, `documentation`, `domain-events`, `ecosystem-tools`, `edge-computing`, `event-driven`, `git-workflow`, `graphql`, `i18n`, `kiss-dry-yagni`, `monorepo`, `multitenant`, `navigation`, `observability`, `paperclip-onboarding`, `parallel-worktrees`, `performance`, `quality-tools`, `remotion`, `security`, `security-flutter`, `security-paperclip`, `security-react`, `security-reactnative`, `security-symfony`, `socratic-brainstorm`, `solid-principles`, `state-management`, `testing`, `testing-flutter`, `testing-paperclip`, `testing-python`, `testing-react`, `testing-reactnative`, `testing-symfony`, `tooling`, `value-objects`, `wasm`, `workflow-analysis`.
 
 ## Frequently Asked Questions
 

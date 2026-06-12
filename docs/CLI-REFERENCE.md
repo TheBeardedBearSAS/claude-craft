@@ -516,6 +516,20 @@ blocked       -> previous_status (unblock only)
 done          -> (terminal)
 ```
 
+### BMAD v6 sprint-status source (v8.11.0+)
+
+When `.bmad/sprint-status.yaml` is present in the project root, the Kanban board ingests it as a **read-only story source** alongside the `project-management/` directory.
+
+| Behaviour | Detail |
+|-----------|--------|
+| **Source** | `.bmad/sprint-status.yaml` — written by `/workflow:*` and `/sprint:*` commands |
+| **Display** | Stories from the YAML appear with a 🔒 lock icon in all Kanban views |
+| **Mutability** | Read-only. Any PATCH on a YAML-sourced story returns **409 Conflict** |
+| **Coexistence** | YAML stories and `project-management/US-*.md` stories coexist on the same board |
+| **Refresh** | The file watcher (`chokidar`) triggers a live reload when the YAML is updated externally |
+
+This design lets teams running the BMAD v6 workflow (which does not write individual `US-*.md` files) still benefit from the Kanban visualisation without any write risk to the sprint state managed by the AI workflow.
+
 ---
 
 ## Claude Code Slash Commands
@@ -696,7 +710,7 @@ Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `me
 /effort high          # Set directly
 ```
 
-Default for Pro/Max subscribers on Opus 4.6/Sonnet 4.6 is `high` since v2.1.111 (previously `medium`). Opus 4.8 supports the `xhigh` tier.
+Default for Pro/Max subscribers on Opus 4.8/Sonnet 4.6 is `high` since v2.1.111 (previously `medium`). Opus 4.8 supports the `xhigh` tier.
 
 ---
 

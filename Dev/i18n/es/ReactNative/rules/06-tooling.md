@@ -8,21 +8,43 @@ Este documento cubre las herramientas esenciales para el desarrollo de React Nat
 
 ## Requisitos del Sistema
 
-### Node.js >= 20 LTS (requerido para RN 0.85)
+### Node.js >= 22 LTS (requerido para RN 0.86)
 
-React Native 0.85 **elimina el soporte para versiones de Node < 20**. La versión mínima requerida es **Node.js 20.19.4 LTS**.
+React Native 0.86 requiere **Node.js 22.x LTS** mínimo (RN 0.85 requería Node 20). La versión recomendada es **Node.js 22.x active LTS**.
 
 ```bash
 # Verificar versión
-node --version  # Debe ser >= 20.19.4
+node --version  # Debe ser >= 22.0.0
 
 # Instalar vía nvm (recomendado)
-nvm install 20
-nvm use 20
-nvm alias default 20
+nvm install 22
+nvm use 22
+nvm alias default 22
 ```
 
-> Node 16 y 18 ya no son compatibles con RN 0.85. Actualizar antes de migrar.
+> Las versiones de Node < 22 ya no son compatibles con RN 0.86. Actualizar antes de migrar.
+
+### React Native Gesture Handler 3.0.0 — Cambios Breaking
+
+RNGH 3.0.0 introduce cambios de ruptura con RN 0.86:
+
+```typescript
+// ✅ RNGH 3.0 — GestureHandlerRootView obligatorio a nivel raíz
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+export default function App() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* ... */}
+    </GestureHandlerRootView>
+  );
+}
+
+// Breaking: API de componentes antigua (PanGestureHandler, TapGestureHandler)
+// → migrar a: Gesture.Pan(), Gesture.Tap() (nueva API Gesture)
+```
+
+**Fuente:** [Guía de migración RNGH 3.0](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/migrating-from-2.x/)
 
 ---
 
@@ -208,7 +230,7 @@ rm -rf node_modules/.cache
 
 ---
 
-## Metro TLS (0.85+)
+## Metro TLS (0.85+ / 0.86+)
 
 Desde RN 0.85, Metro acepta un objeto `server.tls` en `metro.config.js`, habilitando HTTPS y WSS (WebSocket seguro para Fast Refresh) durante el desarrollo local.
 
@@ -224,7 +246,7 @@ Desde RN 0.85, Metro acepta un objeto `server.tls` en `metro.config.js`, habilit
 ### Configuración
 
 ```javascript
-// metro.config.js (bare RN 0.85+)
+// metro.config.js (bare RN 0.85+ / 0.86+)
 const { getDefaultConfig } = require('@react-native/metro-config');
 const fs = require('fs');
 

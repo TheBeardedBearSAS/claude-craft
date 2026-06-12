@@ -93,10 +93,10 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 
 ### Core
 
-- **React Native**: 0.85
+- **React Native**: 0.86
 - **Expo SDK**: {{EXPO_SDK_VERSION}}
 - **TypeScript**: {{TYPESCRIPT_VERSION}}
-- **Node.js**: {{NODE_VERSION}} (**>= 20.19.4 LTS required** — RN 0.85 drops support for Node < 20)
+- **Node.js**: {{NODE_VERSION}} (**>= 22.x LTS recommended** — RN 0.85 drops support for Node < 20; RN 0.86 requires Node 22+)
 
 ### Navigation
 

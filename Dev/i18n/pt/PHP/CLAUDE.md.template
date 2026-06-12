@@ -40,7 +40,7 @@ Ver `rules/02-architecture.md` para padroes.
 |-------|-----------|
 | strict_types | `declare(strict_types=1)` em todos arquivos |
 | Analise | OBRIGATORIA antes de qualquer codigo |
-| PHPStan | Level 9, zero erros |
+| PHPStan | Level 10, zero erros |
 | Testes | 80% cobertura, Domain 90%+ |
 
 ## Como (Comandos & Workflows)

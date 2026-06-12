@@ -2,7 +2,7 @@
 
 > Roadmap vivante. Chaque item correspond à une issue GitHub avec vote via 👍 reactions.
 >
-> **GitHub Project** : https://github.com/users/Flavien-Metivier/projects (lien à publier à l'activation du board).
+> **GitHub Project** : https://github.com/orgs/TheBeardedBearSAS/projects (lien à publier à l'activation du board).
 
 ## Principes
 
@@ -22,7 +22,7 @@
 
 ## Milestones
 
-> **État actuel (2026-05) : v8.7.1 livrée.** Les Phases 1→5 de l'audit 2026-05-18 ont été livrées dans les versions v8.4.0 → v8.7.1 (références paperclip/RN/Vue Vapor, CI durcie CodeQL+Trivy, mutation testing bloquant, `install --auto`/`--from`, marketplace skills, rollback auto, 937 tests). Voir le [CHANGELOG](../CHANGELOG.md). Les milestones ci-dessous reflètent le board de vote communautaire restant.
+> **État actuel (2026-06) : v8.11.0 livrée.** Les Phases 1→5 de l'audit 2026-05-18 ont été livrées dans les versions v8.4.0 → v8.7.1 (références paperclip/RN/Vue Vapor, CI durcie CodeQL+Trivy, mutation testing bloquant, `install --auto`/`--from`, marketplace skills, rollback auto, 937 tests). Les versions v8.8.x→v8.11.0 ont apporté la parité i18n stricte (size-parity CI bloquante), la migration branding TheBeardedBearSAS, le Kanban BMAD v6 (ingestion `sprint-status.yaml` lecture seule), et la licence MIT-only. Voir le [CHANGELOG](../CHANGELOG.md). Les milestones ci-dessous reflètent le board de vote communautaire restant.
 
 ### v8.x — Stabilisation (livrée — Phases 1→5)
 
@@ -66,7 +66,7 @@ Issue de `audit/phases/phase-4-domination.md` — à détailler.
 
 ## Comment voter
 
-1. Aller dans [GitHub Issues](https://github.com/Flavien-Metivier/claude-craft/issues?q=is%3Aissue+label%3Aenhancement).
+1. Aller dans [GitHub Issues](https://github.com/TheBeardedBearSAS/claude-craft/issues?q=is%3Aissue+label%3Aenhancement).
 2. Cliquer sur une feature request qui vous intéresse.
 3. Réagir avec 👍 sur la description de l'issue (pas dans les commentaires).
 4. Optionnel : commenter avec votre use-case précis.
@@ -77,10 +77,10 @@ Les issues passent en colonne **Voting** à partir de 10 votes, en **In Progress
 
 ```bash
 # Créer le project board via gh CLI
-gh project create --owner Flavien-Metivier --title "Claude Craft Roadmap"
-# Ajouter colonnes via UI : https://github.com/users/Flavien-Metivier/projects/new
+gh project create --owner TheBeardedBearSAS --title "Claude Craft Roadmap"
+# Ajouter colonnes via UI : https://github.com/orgs/TheBeardedBearSAS/projects/new
 # Activer Discussions :
-gh api -X PATCH /repos/Flavien-Metivier/claude-craft -f has_discussions=true
+gh api -X PATCH /repos/TheBeardedBearSAS/claude-craft -f has_discussions=true
 ```
 
 ## Gouvernance
@@ -93,4 +93,7 @@ gh api -X PATCH /repos/Flavien-Metivier/claude-craft -f has_discussions=true
 
 | Date | Changement |
 |------|------------|
+| 2026-06-12 | Audit 2026-06-12 — 80 findings (P0×2, P1×22, P2×34, P3×22). Milestones v9.0 DIFF-01→10 ajoutés. |
+| 2026-06-01 | v8.11.0 livrée — Kanban ingestion `.bmad/sprint-status.yaml` lecture seule (🔒), MIT-only strict. |
+| 2026-05-06 | Audit adversarial 2026-06-01 — 5 phases livrées (v8.4.0→v8.7.1) : parité i18n, branding TheBeardedBearSAS, mutation testing bloquant. |
 | 2026-04-15 | Création de la roadmap publique (P2-18). |

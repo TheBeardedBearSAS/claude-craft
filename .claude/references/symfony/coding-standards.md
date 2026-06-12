@@ -1,4 +1,4 @@
-# Standards de Code - PHP 8.4+ / Symfony 8.1
+# Standards de Code - PHP 8.5 (8.4+ min) / Symfony 8.1
 
 ## Principes Generaux
 
@@ -8,13 +8,13 @@ Le projet suit strictement :
 1. **PSR-12** : Standard PHP officiel
 2. **@Symfony** : Conventions Symfony
 3. **@Symfony:risky** : Regles strictes Symfony
-4. **@PHP84Migration** : Modernisation PHP 8.4+
+4. **@PHP84Migration** + **@PHP85Migration** : Modernisation PHP 8.4+ / 8.5+
 
 Configuration : `.php-cs-fixer.dist.php`
 
 ### Versions Requises (2026)
 
-- **PHP**: 8.4+ (Symfony 8.1 requiert PHP 8.4+, recommandé pour Lazy Objects natifs et Property Hooks)
+- **PHP**: 8.4+ minimum (Symfony 8.1 requiert PHP 8.4+) — **8.5 recommandé** (pipe operator, clone with, #[\NoDiscard], stable depuis nov. 2025)
 - **Symfony**: 8.1.x (stable 8.1 (mai 2026, recommandée)) ou 7.4 LTS
 
 **Source:** https://symfony.com/releases/8.1

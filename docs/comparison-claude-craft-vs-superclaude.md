@@ -2,7 +2,7 @@
 
 > **TL;DR :** SuperClaude is a viral, single-prompt persona library optimised for individual developers. Claude Craft is a multi-stack, team-oriented framework with sprint workflow and browser-based QA. They solve different problems for different audiences. This page compares them honestly so you can pick the right tool.
 
-**Last updated :** 2026-05-06 | **Claude Craft v8.3.1** | **SuperClaude v2.x (snapshot 2026-05)**
+**Last updated :** 2026-06-12 | **Claude Craft v8.11.0** | **SuperClaude v4.x (snapshot 2026-06)**
 
 ---
 
@@ -60,16 +60,18 @@ If you're undecided, **start with SuperClaude** to learn how Claude Code persona
 | Installation | `npx superclaude install` | `npx @the-bearded-bear/claude-craft install . --tech=react --lang=fr` |
 | Config update | Manual or re-run installer | `npx ... update` with diff preview |
 | Languages supported | English (full), partial others | en, fr, es, de, pt (full parity, automated CI check) |
-| Slash commands | ~30 | 125 across 15 namespaces |
+| Slash commands | ~30 | 133 across 15 namespaces |
 | Skills (Claude Code v2.1.105+) | A few | 48 skills, 15 with `context: fork` for token isolation |
 | Hooks templates | None | 9 templates (auto-format, security-block, pre-compact, output-filter, etc.) |
 | Token optimisation guide | Generic | RTK integration + `context: fork` + sub-agent model routing (55-65% reduction stack) |
+| Local Kanban board (BMAD v6) | None | Built-in Svelte + Hono — ingests `.bmad/sprint-status.yaml` read-only (🔒) |
+| Licence | MIT | MIT (strict MIT-only since v8.10.1 — no enterprise/commercial tier) |
 
 ### Maintenance and Community
 
 | Indicator | SuperClaude | Claude Craft |
 |-----------|-------------|--------------|
-| GitHub stars (2026-05) | ~22 600 | ~96 |
+| GitHub stars (2026-06-12) | ~30 000 (SuperClaude v4) | ~97 |
 | npm weekly downloads | High (thousands) | Low (hundreds) |
 | Contributors | 50+ | 1 (solo maintainer + co-maintainer search open) |
 | Release cadence | Variable | Active (multiple releases/month) |

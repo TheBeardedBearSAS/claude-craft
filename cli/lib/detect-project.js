@@ -21,6 +21,21 @@ import path from 'path';
  */
 
 /**
+ * Run a detection function, suppressing any thrown error (ENOENT, EACCES, …).
+ * When `debug` is true, the error is logged to stderr.
+ * @param {function(): void} fn - Detection callback that mutates `detected`
+ * @param {string} label - Short label for the debug message (e.g. '.claude', 'composer')
+ * @param {boolean} debug - Whether to print errors to stderr
+ */
+function safeDetect(fn, label, debug) {
+  try {
+    fn();
+  } catch (e) {
+    if (debug) console.error(`Detection error (${label}): ${e.message}`);
+  }
+}
+
+/**
  * Detect project characteristics by inspecting files in the target directory.
  * @param {string} targetPath - Absolute path to the project directory
  * @param {Object} [options] - Optional dependencies for testing
@@ -44,112 +59,128 @@ function detectProject(targetPath, options = {}) {
   };
 
   // Check for .claude directory
-  try {
-    detected.hasClaude = fs.existsSync(path.join(targetPath, '.claude'));
-  } catch (e) {
-    if (debug) console.error(`Detection error (.claude): ${e.message}`);
-  }
+  safeDetect(
+    () => {
+      detected.hasClaude = fs.existsSync(path.join(targetPath, '.claude'));
+    },
+    '.claude',
+    debug
+  );
 
   // Check for git
-  try {
-    detected.hasGit = fs.existsSync(path.join(targetPath, '.git'));
-  } catch (e) {
-    if (debug) console.error(`Detection error (.git): ${e.message}`);
-  }
+  safeDetect(
+    () => {
+      detected.hasGit = fs.existsSync(path.join(targetPath, '.git'));
+    },
+    '.git',
+    debug
+  );
 
   // Detect C# / .NET (*.csproj or *.sln)
-  try {
-    const files = fs.readdirSync(targetPath);
-    if (files.some((f) => f.endsWith('.csproj') || f.endsWith('.sln'))) {
-      detected.hasCsproj = true;
-      detected.suggestedTechs.push('csharp');
-    }
-  } catch (e) {
-    if (debug) console.error(`Detection error (csproj): ${e.message}`);
-  }
+  safeDetect(
+    () => {
+      const files = fs.readdirSync(targetPath);
+      if (files.some((f) => f.endsWith('.csproj') || f.endsWith('.sln'))) {
+        detected.hasCsproj = true;
+        detected.suggestedTechs.push('csharp');
+      }
+    },
+    'csproj',
+    debug
+  );
 
   // Detect PHP frameworks via composer.json
-  try {
-    if (fs.existsSync(path.join(targetPath, 'composer.json'))) {
-      detected.hasComposer = true;
-      const composer = JSON.parse(fs.readFileSync(path.join(targetPath, 'composer.json'), 'utf8'));
-      const require = composer.require || {};
-      const requireDev = composer['require-dev'] || {};
-      const allDeps = { ...require, ...requireDev };
+  safeDetect(
+    () => {
+      if (fs.existsSync(path.join(targetPath, 'composer.json'))) {
+        detected.hasComposer = true;
+        const composer = JSON.parse(fs.readFileSync(path.join(targetPath, 'composer.json'), 'utf8'));
+        const require = composer.require || {};
+        const requireDev = composer['require-dev'] || {};
+        const allDeps = { ...require, ...requireDev };
 
-      const hasSymfony = Object.keys(allDeps).some((dep) => dep.startsWith('symfony/'));
-      const hasLaravel = 'laravel/framework' in allDeps;
+        const hasSymfony = Object.keys(allDeps).some((dep) => dep.startsWith('symfony/'));
+        const hasLaravel = 'laravel/framework' in allDeps;
 
-      if (hasLaravel) {
-        detected.suggestedTechs.push('laravel');
-      } else if (hasSymfony) {
-        detected.suggestedTechs.push('symfony');
-      } else {
-        detected.suggestedTechs.push('php');
+        if (hasLaravel) {
+          detected.suggestedTechs.push('laravel');
+        } else if (hasSymfony) {
+          detected.suggestedTechs.push('symfony');
+        } else {
+          detected.suggestedTechs.push('php');
+        }
       }
-    }
-  } catch (e) {
-    if (debug) console.error(`Detection error (composer): ${e.message}`);
-  }
+    },
+    'composer',
+    debug
+  );
 
   // Detect Flutter (pubspec.yaml)
-  try {
-    if (fs.existsSync(path.join(targetPath, 'pubspec.yaml'))) {
-      detected.hasPubspec = true;
-      detected.suggestedTechs.push('flutter');
-    }
-  } catch (e) {
-    if (debug) console.error(`Detection error (pubspec): ${e.message}`);
-  }
+  safeDetect(
+    () => {
+      if (fs.existsSync(path.join(targetPath, 'pubspec.yaml'))) {
+        detected.hasPubspec = true;
+        detected.suggestedTechs.push('flutter');
+      }
+    },
+    'pubspec',
+    debug
+  );
 
   // Detect JS frameworks via package.json (Angular, Vue.js, React, React Native)
-  try {
-    if (fs.existsSync(path.join(targetPath, 'package.json'))) {
-      detected.hasPackageJson = true;
-      const pkg = JSON.parse(fs.readFileSync(path.join(targetPath, 'package.json'), 'utf8'));
-      const allDeps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
+  safeDetect(
+    () => {
+      if (fs.existsSync(path.join(targetPath, 'package.json'))) {
+        detected.hasPackageJson = true;
+        const pkg = JSON.parse(fs.readFileSync(path.join(targetPath, 'package.json'), 'utf8'));
+        const allDeps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
 
-      if ('@angular/core' in allDeps) {
-        detected.suggestedTechs.push('angular');
-      } else if ('react' in allDeps) {
-        if ('react-native' in allDeps) {
-          detected.suggestedTechs.push('reactnative');
-        } else {
-          detected.suggestedTechs.push('react');
+        if ('@angular/core' in allDeps) {
+          detected.suggestedTechs.push('angular');
+        } else if ('react' in allDeps) {
+          if ('react-native' in allDeps) {
+            detected.suggestedTechs.push('reactnative');
+          } else {
+            detected.suggestedTechs.push('react');
+          }
+        } else if ('vue' in allDeps) {
+          detected.suggestedTechs.push('vuejs');
         }
-      } else if ('vue' in allDeps) {
-        detected.suggestedTechs.push('vuejs');
       }
-    }
-  } catch (e) {
-    if (debug) console.error(`Detection error (package.json): ${e.message}`);
-  }
+    },
+    'package.json',
+    debug
+  );
 
   // Detect Python (requirements.txt / pyproject.toml)
-  try {
-    if (
-      fs.existsSync(path.join(targetPath, 'requirements.txt')) ||
-      fs.existsSync(path.join(targetPath, 'pyproject.toml'))
-    ) {
-      detected.hasRequirements = true;
-      detected.suggestedTechs.push('python');
-    }
-  } catch (e) {
-    if (debug) console.error(`Detection error (python): ${e.message}`);
-  }
+  safeDetect(
+    () => {
+      if (
+        fs.existsSync(path.join(targetPath, 'requirements.txt')) ||
+        fs.existsSync(path.join(targetPath, 'pyproject.toml'))
+      ) {
+        detected.hasRequirements = true;
+        detected.suggestedTechs.push('python');
+      }
+    },
+    'python',
+    debug
+  );
 
   // Detect Docker (Dockerfile / docker-compose.yml)
-  try {
-    if (
-      fs.existsSync(path.join(targetPath, 'Dockerfile')) ||
-      fs.existsSync(path.join(targetPath, 'docker-compose.yml'))
-    ) {
-      detected.hasDockerfile = true;
-      detected.suggestedTechs.push('docker');
-    }
-  } catch (e) {
-    if (debug) console.error(`Detection error (docker): ${e.message}`);
-  }
+  safeDetect(
+    () => {
+      if (
+        fs.existsSync(path.join(targetPath, 'Dockerfile')) ||
+        fs.existsSync(path.join(targetPath, 'docker-compose.yml'))
+      ) {
+        detected.hasDockerfile = true;
+        detected.suggestedTechs.push('docker');
+      }
+    },
+    'docker',
+    debug
+  );
 
   // Estimate complexity
   if (detected.suggestedTechs.length > 2) {
@@ -161,4 +192,4 @@ function detectProject(targetPath, options = {}) {
   return detected;
 }
 
-export { detectProject };
+export { detectProject, safeDetect };

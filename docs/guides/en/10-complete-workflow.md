@@ -18,7 +18,7 @@ This guide walks you through the complete development lifecycle:
 
 **Prerequisites:**
 - Claude Craft v8.11.0 installed in your project
-- Claude Code v2.1.159 (recommended) or v2.1.97+ (minimum, CVE-2025-59536 patched)
+- Claude Code v2.1.168 (recommended) or v2.1.97+ (minimum, CVE-2025-59536 patched)
 - Basic understanding of your chosen technology stack
 
 ---

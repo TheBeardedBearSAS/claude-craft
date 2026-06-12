@@ -12,4 +12,4 @@ exports[`CLI snapshot tests > --version output format matches snapshot 1`] = `"X
 
 exports[`CLI snapshot tests > error for invalid lang matches snapshot 1`] = `"Error: Unknown language 'invalid'. Available: en, fr, es, de, pt"`;
 
-exports[`CLI snapshot tests > error for invalid tech matches snapshot 1`] = `"Error: Unknown technology 'invalid'. Available: symfony, flutter, react, reactnative, angular, csharp, laravel, vuejs, python, paperclip, docker, coolify"`;
+exports[`CLI snapshot tests > error for invalid tech matches snapshot 1`] = `"Error: Unknown technology 'invalid'. Available: symfony, flutter, react, reactnative, angular, csharp, laravel, vuejs, python, paperclip"`;

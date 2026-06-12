@@ -251,10 +251,10 @@ return RectorConfig::configure()
         "larastan/larastan": "^2.9",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
-        "pestphp/pest": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0",
-        "phpstan/phpstan": "^1.10",
-        "rector/rector": "^1.0",
+        "pestphp/pest": "^4.7",
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "phpstan/phpstan": "^2.2",
+        "rector/rector": "^2.4",
         "spatie/laravel-ignition": "^2.4"
     }
 }

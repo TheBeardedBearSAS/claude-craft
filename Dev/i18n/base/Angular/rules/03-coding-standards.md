@@ -627,6 +627,62 @@ export class SearchComponent {
 }
 ```
 
+## Angular 22 — New Features
+
+### @Service decorator (v22)
+
+Angular 22 introduces the `@Service` decorator as an ergonomic alias for `@Injectable({ providedIn: 'root' })`:
+
+```typescript
+import { Service } from '@angular/core';
+
+// Angular 22 — equivalent to @Injectable({ providedIn: 'root' })
+@Service()
+export class UserService {
+  getUsers() { /* ... */ }
+}
+```
+
+**Compatibility:** `@Injectable` continues to work. `@Service` is the recommended shorthand for root-scoped services.
+
+### injectAsync() (v22)
+
+`injectAsync()` allows injecting asynchronous dependencies (lazy-loaded, promise-based) directly in the constructor:
+
+```typescript
+import { Component, inject, injectAsync } from '@angular/core';
+
+@Component({ /* ... */ })
+export class DashboardComponent {
+  // injectAsync: lazy resolution of a service or async token
+  private analytics = injectAsync(() =>
+    import('./analytics.service').then(m => inject(m.AnalyticsService))
+  );
+}
+```
+
+**Use case:** sharing singletons from micro-frontends or dynamically loaded modules without circular dependency.
+
+### Angular Aria (v22)
+
+The `@angular/cdk` package (stable in v22) provides accessible primitives: `cdkAriaLive`, `cdkTrapFocus`, `cdkVisuallyHidden`, and new directives `cdkCombobox`, `cdkListbox`:
+
+```typescript
+import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
+
+@Component({
+  standalone: true,
+  imports: [CdkListbox, CdkOption],
+  template: `
+    <ul cdkListbox>
+      <li cdkOption="option1">Option 1</li>
+      <li cdkOption="option2">Option 2</li>
+    </ul>
+  `
+})
+export class AccessibleListComponent {}
+```
+
 ## Conclusion
 
 Angular coding standards ensure:
@@ -635,6 +691,6 @@ Angular coding standards ensure:
 2. **Maintainability**: Easy to understand and modify
 3. **Performance**: OnPush, signals, lazy loading
 4. **Type Safety**: Strict TypeScript, typed forms
-5. **Modern Practices**: Standalone components, signals, new control flow
+5. **Modern Practices**: Standalone components, signals, new control flow, @Service decorator
 
 **Golden rule**: Write code that is easy to read, test, and maintain.

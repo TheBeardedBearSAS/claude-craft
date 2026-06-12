@@ -41,7 +41,7 @@ Ver `rules/02-architecture.md` para patrones detallados.
 |-------|-------------|
 | Analisis primero | OBLIGATORIO antes de cualquier codigo |
 | `declare(strict_types=1)` | En todos los archivos |
-| PHPStan nivel 9 | 0 errores |
+| PHPStan nivel 10 | 0 errores |
 | Cobertura | Minimo 80%, Domain 90%+ |
 
 ## Como (Comandos y Flujos de trabajo)

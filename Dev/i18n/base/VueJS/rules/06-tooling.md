@@ -38,6 +38,8 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       output: {
+        // ⚠️ Vite 8 (Rolldown): manualChunks is deprecated when Rolldown is active (default bundler in Vite 8).
+        // Remove or condition to `build.rolldown !== true`. Rolldown produces equivalent or better automatic chunking.
         manualChunks: {
           'vue-vendor': ['vue', 'vue-router', 'pinia'],
         },
@@ -71,7 +73,7 @@ const isProd = import.meta.env.PROD
 ### Configuration
 
 ```javascript
-// eslint.config.js (Flat config - ESLint 9+)
+// eslint.config.js (Flat config - ESLint v9+/v10; .eslintrc.* removed in v10)
 import js from '@eslint/js'
 import vue from 'eslint-plugin-vue'
 import typescript from '@typescript-eslint/eslint-plugin'
@@ -285,6 +287,35 @@ pnpm build
 pnpm test
 ```
 
+## Vue Router 5 — File-Based Routing (optional)
+
+Vue Router 5 introduces optional **file-based routing** via `@vue-router/auto` (based on unplugin-vue-router):
+
+```bash
+npm install -D @vue-router/auto unplugin-vue-router
+```
+
+```typescript
+// vite.config.ts
+import VueRouter from 'unplugin-vue-router/vite';
+
+export default defineConfig({
+  plugins: [
+    VueRouter({ /* options */ }),
+    Vue(),
+  ],
+});
+```
+
+```typescript
+// src/main.ts — use auto-generated router
+import { createRouter, createWebHistory } from 'vue-router/auto';
+
+const router = createRouter({ history: createWebHistory() });
+```
+
+> Files in `src/pages/` are automatically mapped to routes. `createRouter` from `vue-router/auto` replaces the manual route array.
+
 ## Project Scripts
 
 ### Recommended package.json
@@ -305,8 +336,8 @@ pnpm test
     "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test",
     "type-check": "vue-tsc --noEmit -p tsconfig.json --composite false",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx",
-    "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
     "prepare": "husky install"
@@ -320,12 +351,12 @@ pnpm test
     "@types/node": "^20.0.0",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/test-utils": "^2.4.0",
-    "eslint": "^9.0.0",
+    "eslint": "^10.0.0",
     "eslint-plugin-vue": "^10.0.0",
     "prettier": "^3.0.0",
     "typescript": "~5.4.0",
     "vite": "^8.0.0",
-    "vitest": "^2.0.0",
+    "vitest": "^4.0.0",
     "vue-tsc": "^2.0.0"
   }
 }

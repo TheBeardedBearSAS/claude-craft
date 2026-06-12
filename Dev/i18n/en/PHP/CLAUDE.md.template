@@ -35,7 +35,7 @@ See `rules/02-architecture.md` for complete patterns.
 | Rule | Reason |
 |------|--------|
 | `declare(strict_types=1)` | Type safety enforcement |
-| PSR-12 + PHPStan level 9 | Code quality |
+| PSR-12 + PHPStan level 10 | Code quality |
 | Repository pattern | Data access abstraction |
 | 80%+ coverage | Quality assurance |
 
@@ -53,7 +53,7 @@ vendor/bin/php-cs-fixer fix # Code style
 ### Quality Pipeline
 ```bash
 vendor/bin/php-cs-fixer fix --dry-run  # Check style
-vendor/bin/phpstan analyse              # PHPStan level 9
+vendor/bin/phpstan analyse              # PHPStan level 10
 vendor/bin/phpunit --coverage-html cov  # Tests + coverage
 ```
 

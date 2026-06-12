@@ -47,11 +47,11 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 ### Conteneurisation
 | Technologie | Compétences | Versions 2026 |
 |-------------|-------------|---------------|
-| Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.5.2 (patch sécurité, juin 2026) |
+| Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.5.3 (CVE-2026-33997 patché, juin 2026) |
 | Docker Compose | Orchestration locale, profiles, extensions | Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète) |
 | Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, User Namespaces, Mutating Admission Policies | 1.36.1 stable (sortie 13 mai 2026) |
-| Helm | Charts, values, templating | Helm 3.18+ |
-| FrankenPHP | Worker mode (Laravel Octane/Symfony), HTTP/3, max_requests | 1.12.1 (PHP 8.5, Caddy 2.11.2) |
+| Helm | Charts, values, templating | Helm 4.2.0 (Helm 3 EOL sécurité nov 2026 — migrer vers Helm 4) |
+| FrankenPHP | Worker mode (Laravel Octane/Symfony), HTTP/3, max_requests | 1.12.4 (PHP 8.5, Caddy 2.11.2, CVE-2026-45062 patché) |
 | PgBouncer | Transaction pooling, prepared statements natifs | 1.25.2 (1.21+ requis pour prepared stmts ; CVE-2026-6664/6665/6666/6667 patchées) |
 
 **Sources** :  
@@ -69,8 +69,8 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | DigitalOcean | App Platform, Kubernetes, Managed DB |
 | Azure | AKS, App Service, Azure DevOps |
 | Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) |
-| Coolify | Self-hosted PaaS, MCP server natif (read-only), audit logging structuré | v4.1.1 (juin 2026) |
-| OpenTofu | State encryption, OCI registry backends | 1.12.0 (mai 2026) |
+| Coolify | Self-hosted PaaS, MCP server natif (read-only), audit logging structuré | v4.1.2 (juin 2026) |
+| OpenTofu | State encryption, OCI registry backends | 1.12.1 (juin 2026) |
 | Ansible | Automation, playbooks, roles | ansible-core 2.21.0 (stable mai 2026) |
 
 ### Monitoring & Observability
@@ -150,7 +150,7 @@ USER 1000
 docker history <image> --no-trunc
 docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 
-# BuildKit activé par défaut (Engine 29.5.2)
+# BuildKit activé par défaut (Engine 29.5.3)
 docker buildx build --cache-to=type=registry,ref=repo:cache .
 
 # Multi-platform build avec SBOM
@@ -164,7 +164,7 @@ trivy image <image>
 grype <image>  # Alternative Anchore
 ```
 
-**Nouveautés Docker Engine 29.5.2** :  
+**Nouveautés Docker Engine 29.5.3** :  
 - BuildKit activé par défaut (cache persistant natif)
 - SBOM generation native (`--sbom=true`)
 - Provenance attestations (`--provenance=mode=max`)
@@ -172,6 +172,7 @@ grype <image>  # Alternative Anchore
 - **CVE-2026-41567/41568/42306** : vulnérabilités `docker cp` (exec arbitraire + TOCTOU) — patchées
 - **CVE-2026-32288** : DoS daemon (mémoire non bornée via tar sparse) — patché
 - **CVE-2026-34040** : contournement AuthZ plugins — patché
+- **CVE-2026-33997** : escalade de privilèges dans containerd shim — patché
 
 **Source** : https://docs.docker.com/engine/release-notes/29/
 
@@ -188,12 +189,12 @@ frankenphp php-server --worker public/index.php
 frankenphp_max_requests 1000  # Redémarrage worker (anti memory leak)
 ```
 
-**Patterns clés FrankenPHP 1.12.1** :
+**Patterns clés FrankenPHP 1.12.4** :
 - **Worker mode** : Laravel Octane/Symfony Runtime (2-3× gains performance)
 - **`max_requests`** : Redémarrage worker après N requêtes (prévention fuites mémoire)
 - **HTTP/3 natif** : Via Caddy 2.11.2 intégré
 - **PHP 8.5 support** : Lazy Objects, Property Hooks
-- **Sécurité** : Corriger session leak worker mode (v1.11.2+) — **PINNER >= 1.12.1**
+- **Sécurité** : CVE-2026-45062 (CVSS 8.1 — unicode CGI path splitting) — **PINNER >= 1.12.4**
 
 **Sources** :  
 - FrankenPHP : https://frankenphp.dev/docs/worker/  
@@ -224,7 +225,7 @@ server_idle_timeout = 600
 
 ### Coolify (2026)
 
-**Nouveautés v4.1.1** :
+**Nouveautés v4.1.2** :
 - **MCP server natif** (instance-level, read-only) : expose les ressources Coolify comme outils MCP pour les agents IA ; activer/désactiver via POST (endpoint changé de GET en v4.1). Activer dans *Settings → Integrations → MCP*. Écriture prévue dans une version future.
 - **Audit logging structuré** : mutations API, événements webhook, authentification et autorisations loggués (queryable depuis le panel admin) — compliance-ready.
 
@@ -252,7 +253,7 @@ terraform {
 tofu plan -refresh-only -out=drift.plan
 ```
 
-**Patterns clés OpenTofu 1.12.0** :
+**Patterns clés OpenTofu 1.12.1** :
 - **State encryption at rest** : Chiffrement natif (SLSA Level 3)
 - **OCI registry backends** : Alternative S3/Azure Blob
 - **Drift detection** : `plan -refresh-only` pour audit infra
