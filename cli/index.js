@@ -42,6 +42,7 @@ import { runInstallFromUrl } from './lib/install-from-url.js';
 import { runSkillAdd, runSkillList, runSkillRemove } from './lib/skill.js';
 // Flattener module
 import { flatten as flattenCodebaseFn } from './lib/flattener.js';
+import { assertSafeTarget } from './lib/path-safety.js';
 
 // CLI package root
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -276,7 +277,12 @@ class ClaudeCraftCLI {
     console.log(`${c.dim}Generating context-optimized summary of your codebase...${c.reset}\n`);
 
     const targetPath = this.config.targetPath;
-    const outputFile = options.output || 'CODEBASE_CONTEXT.md';
+    const rawOutput = options.output || 'CODEBASE_CONTEXT.md';
+
+    // CLI-08: validate the output path against system directories (CWE-22).
+    // assertSafeTarget resolves the path first, catching relative traversals like
+    // /var/../../etc/evil.md that bypass naive string checks.
+    const outputFile = assertSafeTarget(rawOutput);
 
     await flattenCodebaseFn(targetPath, outputFile, options);
   }

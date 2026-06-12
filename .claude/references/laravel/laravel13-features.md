@@ -1,6 +1,6 @@
 # Laravel 13 - Nouvelles Fonctionnalités Majeures
 
-**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière stable : 13.14.0)
+**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière stable : 13.15.0)
 **Source :** https://laravel.com/docs/13.x/releases
 
 ---
@@ -108,7 +108,7 @@ return [
         ],
         'openai' => [
             'api_key' => env('OPENAI_API_KEY'),
-            'model' => 'gpt-4-turbo',
+            'model' => 'gpt-4.1',
         ],
         'gemini' => [
             'api_key' => env('GEMINI_API_KEY'),

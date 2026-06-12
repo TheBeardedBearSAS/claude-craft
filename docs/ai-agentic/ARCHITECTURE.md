@@ -34,7 +34,7 @@ Comparer les performances de N prompts sur un dataset de test pour identifier le
 /eval-prompt \
   --dataset=tests/prompts/customer-support.jsonl \
   --prompts=prompts/v1.txt,prompts/v2.txt,prompts/v3.txt \
-  --provider=claude:opus-4.6,openai:gpt-4.5 \
+  --provider=claude:opus-4-8,openai:gpt-4.5 \
   --metrics=accuracy,latency,cost,hallucination \
   --output=reports/eval-2026-04-15.html
 ```
@@ -64,7 +64,7 @@ Chaque ligne contient un cas de test :
 
 | Provider | Modèles | Configuration |
 |----------|---------|---------------|
-| **Claude** | `opus-4.6`, `sonnet-4.6`, `haiku-4.5` | `ANTHROPIC_API_KEY` |
+| **Claude** | `opus-4-8`, `sonnet-4-6`, `haiku-4-5` | `ANTHROPIC_API_KEY` |
 | **OpenAI** | `gpt-4.5`, `gpt-4o`, `gpt-4o-mini` | `OPENAI_API_KEY` |
 | **Gemini** | `gemini-2.0-flash`, `gemini-1.5-pro` | `GOOGLE_API_KEY` |
 | **Local (Ollama)** | `llama3.3:70b`, `qwen2.5:72b` | `OLLAMA_HOST` (default: `http://localhost:11434`) |
@@ -485,7 +485,7 @@ Respond with ONLY "yes" or "no".
   `.trim();
 
   const response = await anthropic.messages.create({
-    model: 'claude-opus-4.6',
+    model: 'claude-opus-4-8',
     max_tokens: 10,
     messages: [{ role: 'user', content: prompt }]
   });
@@ -499,7 +499,7 @@ Respond with ONLY "yes" or "no".
 ```typescript
 async function checkGrounding(output: string, context: string): Promise<boolean> {
   const response = await anthropic.messages.create({
-    model: 'claude-opus-4.6',
+    model: 'claude-opus-4-8',
     max_tokens: 2000,
     messages: [
       {
@@ -554,7 +554,7 @@ agent: false
 |--------|-------------|---------|
 | `--dataset` | Dataset JSONL (input, expected, metadata) | `tests/datasets/support.jsonl` |
 | `--prompts` | Liste de fichiers prompts (comma-separated) | `v1.txt,v2.txt,v3.txt` |
-| `--provider` | Provider et modèle (comma-separated si plusieurs) | `claude:opus-4.6,openai:gpt-4.5` |
+| `--provider` | Provider et modèle (comma-separated si plusieurs) | `claude:opus-4-8,openai:gpt-4.5` |
 | `--metrics` | Métriques à calculer | `accuracy,latency,cost,hallucination` |
 | `--output` | Chemin du rapport HTML | `reports/eval-2026-04-15.html` |
 | `--force` | Bypass cache | `--force` |
@@ -568,7 +568,7 @@ agent: false
 
 ## Providers
 
-- `claude:opus-4.6`, `claude:sonnet-4.6`, `claude:haiku-4.5`
+- `claude:opus-4-8`, `claude:sonnet-4-6`, `claude:haiku-4-5`
 - `openai:gpt-4.5`, `openai:gpt-4o`, `openai:gpt-4o-mini`
 - `gemini:gemini-2.0-flash`, `gemini:gemini-1.5-pro`
 - `ollama:llama3.3:70b`, `ollama:qwen2.5:72b`

@@ -41,9 +41,19 @@ describe('security headers', () => {
   it('sets baseline hardening headers on responses', async () => {
     const r = await req('GET', '/api/health');
     expect(r.headers.get('x-content-type-options')).toBe('nosniff');
-    expect(r.headers.get('x-frame-options')).toBe('SAMEORIGIN');
     expect(r.headers.get('cross-origin-opener-policy')).toBe('same-origin');
     expect(r.headers.get('referrer-policy')).toBeTruthy();
+  });
+
+  // SEC-003 : COEP et X-Frame-Options DENY doivent être présents
+  it('sets cross-origin-embedder-policy: require-corp', async () => {
+    const r = await req('GET', '/api/health');
+    expect(r.headers.get('cross-origin-embedder-policy')).toBe('require-corp');
+  });
+
+  it('sets x-frame-options: DENY', async () => {
+    const r = await req('GET', '/api/health');
+    expect(r.headers.get('x-frame-options')).toBe('DENY');
   });
 });
 
@@ -181,6 +191,31 @@ describe('CSRF middleware', () => {
 
   it('rejects PATCH without any origin/referer', async () => {
     const r = await req('PATCH', '/api/stories/US-001/status', { body: { status: 'done' } });
+    expect(r.status).toBe(403);
+  });
+
+  // SEC-002 : Referer malformé ne doit pas produire un 500
+  it('returns 403 (not 500) when Referer header is malformed', async () => {
+    const r = await app.request('/api/stories/US-001/status', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Referer: 'not-a-valid-url',
+      },
+      body: JSON.stringify({ status: 'done' }),
+    });
+    expect(r.status).toBe(403);
+  });
+
+  it('returns 403 (not 500) when Referer header is empty string', async () => {
+    const r = await app.request('/api/stories/US-001/status', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Referer: '',
+      },
+      body: JSON.stringify({ status: 'done' }),
+    });
     expect(r.status).toBe(403);
   });
 });

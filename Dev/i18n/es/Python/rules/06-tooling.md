@@ -1,5 +1,8 @@
 # Regla 06: Herramientas
 
+> **Versión de referencia:** Python **3.14 (estable, 3.14.6+)** — Ruff 0.15+, pytest 9.x (elimina soporte Python 3.9).
+> **JIT (PEP 744):** experimental en Python 3.14, sujeto a reevaluación antes del lanzamiento de Python 3.15 (oct. 2026). No usar en producción sin pruebas explícitas.
+
 Herramientas de Python para calidad de código, pruebas y flujo de trabajo de desarrollo.
 
 ## Gestión de Paquetes
@@ -69,7 +72,7 @@ Configuración en `pyproject.toml`:
 ```toml
 [tool.ruff]
 line-length = 88
-target-version = "py312"
+target-version = "py314"
 
 select = [
     "E",  # errores pycodestyle
@@ -144,7 +147,7 @@ Configuración en `pyproject.toml`:
 
 ```toml
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 strict = true
 warn_return_any = true
 warn_unused_configs = true

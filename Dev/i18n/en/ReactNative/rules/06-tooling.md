@@ -8,21 +8,43 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 
 ## System Requirements
 
-### Node.js >= 20 LTS (required for RN 0.85)
+### Node.js >= 22 LTS (required for RN 0.86)
 
-React Native 0.85 **drops support for Node versions < 20**. The minimum required version is **Node.js 20.19.4 LTS**.
+React Native 0.86 requires **Node.js 22.x LTS** minimum (RN 0.85 required Node 20). The recommended version is **Node.js 22.x active LTS**.
 
 ```bash
 # Check version
-node --version  # Must be >= 20.19.4
+node --version  # Must be >= 22.0.0
 
 # Install via nvm (recommended)
-nvm install 20
-nvm use 20
-nvm alias default 20
+nvm install 22
+nvm use 22
+nvm alias default 22
 ```
 
-> Node 16 and 18 are no longer supported with RN 0.85. Upgrade before migrating.
+> Node versions < 22 are no longer supported with RN 0.86. Upgrade before migrating.
+
+### React Native Gesture Handler 3.0.0 — Breaking Changes
+
+RNGH 3.0.0 introduces breaking changes with RN 0.86:
+
+```typescript
+// ✅ RNGH 3.0 — GestureHandlerRootView required at root level
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+export default function App() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* ... */}
+    </GestureHandlerRootView>
+  );
+}
+
+// Breaking: old component API (PanGestureHandler, TapGestureHandler)
+// → migrate to: Gesture.Pan(), Gesture.Tap() (new Gesture API)
+```
+
+**Source:** [RNGH 3.0 Migration Guide](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/migrating-from-2.x/)
 
 ---
 

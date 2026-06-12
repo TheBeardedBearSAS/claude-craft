@@ -276,7 +276,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
-| `skillOverrides` setting | `off` \| `user-invocable-only` \| `name-only` — contrôle visibilité skills | **NOT DOCUMENTED** — P1 : documenter dans rules/12-context-management.md |
+| `skillOverrides` setting | `off` \| `user-invocable-only` \| `name-only` — contrôle visibilité skills dans les sessions Claude Code. `off` = tous les skills visibles (défaut). `user-invocable-only` = seuls les skills avec `invocable: user` sont proposés à l'utilisateur. `name-only` = affiche uniquement le nom sans description. Configurer dans `settings.json` : `{"skillOverrides": "user-invocable-only"}` | **DOCUMENTED HERE** — Voir aussi `rules/12-context-management.md` (P1 ouvert) |
 | `--plugin-url <url>` | Installer plugin depuis URL directe | **N/A** (user CLI) |
 | `ENABLE_GATEWAY_MODEL_DISCOVERY=1` | Découverte modèles via gateway `/v1/models` | **Not documented** |
 | `claude_code.pull_request.count` OTel | Comptage PRs via MCP | **Not exploited** |
@@ -391,7 +391,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | **P1** | Intégrer `/goal` dans `ralph-run.md` comme alternative DoD | `.claude/commands/common/ralph-run.md` | 2h |
 | **P1** | Documenter `claude agents` dans `/team:*` commands | `.claude/commands/team/*.md`, `docs/AGENTS.md` | 2h |
 | **P1** | Documenter `claude.skill_activated` OTEL dans `@observability-engineer` | `.claude/agents/observability-engineer.md` | 1h |
-| **P1** | Documenter `skillOverrides` dans context-management | `.claude/rules/12-context-management.md` | 1h |
+| **P1** | Documenter `skillOverrides` dans context-management (✅ documenté § 2.1.129) | `.claude/rules/12-context-management.md` | 1h |
 | **P2** | Documenter `parentSettingsBehavior` | `docs/` + `rules/12-context-management.md` | 1h |
 | **P2** | Documenter `terminalSequence` dans hooks templates | `.claude/templates/hooks/` + `docs/` | 1h |
 | **P2** | Documenter `worktree.bgIsolation: "none"` dans parallel-worktrees | `.claude/skills/parallel-worktrees/SKILL.md` | 30min |

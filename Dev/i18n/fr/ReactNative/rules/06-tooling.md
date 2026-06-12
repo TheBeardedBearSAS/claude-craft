@@ -8,21 +8,43 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 
 ## Prérequis Système
 
-### Node.js >= 20 LTS (requis pour RN 0.85)
+### Node.js >= 22 LTS (requis pour RN 0.86)
 
-React Native 0.85 **supprime le support des versions Node < 20**. La version minimale requise est **Node.js 20.19.4 LTS**.
+React Native 0.86 requiert **Node.js 22.x LTS** minimum (RN 0.85 nécessitait Node 20). La version recommandée est **Node.js 22.x active LTS**.
 
 ```bash
 # Vérifier la version
-node --version  # Doit être >= 20.19.4
+node --version  # Doit être >= 22.0.0
 
 # Installer via nvm (recommandé)
-nvm install 20
-nvm use 20
-nvm alias default 20
+nvm install 22
+nvm use 22
+nvm alias default 22
 ```
 
-> Node 16 et 18 ne sont plus supportés avec RN 0.85. Mettre à jour avant de migrer.
+> Les versions Node < 22 ne sont plus supportées avec RN 0.86. Mettre à jour avant de migrer.
+
+### React Native Gesture Handler 3.0.0 — Changements Breaking
+
+RNGH 3.0.0 introduit des changements de rupture avec RN 0.86 :
+
+```typescript
+// ✅ RNGH 3.0 — GestureHandlerRootView obligatoire au niveau racine
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+export default function App() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* ... */}
+    </GestureHandlerRootView>
+  );
+}
+
+// Breaking : ancienne API composants (PanGestureHandler, TapGestureHandler)
+// → migrer vers : Gesture.Pan(), Gesture.Tap() (nouvelle API Gesture)
+```
+
+**Source :** [Guide de migration RNGH 3.0](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/migrating-from-2.x/)
 
 ---
 
@@ -208,7 +230,7 @@ rm -rf node_modules/.cache
 
 ---
 
-## Metro TLS (0.85+)
+## Metro TLS (0.85+ / 0.86+)
 
 Depuis RN 0.85, Metro accepte un objet `server.tls` dans `metro.config.js`, activant HTTPS et WSS (WebSocket sécurisé pour Fast Refresh) pendant le développement local.
 
@@ -224,7 +246,7 @@ Depuis RN 0.85, Metro accepte un objet `server.tls` dans `metro.config.js`, acti
 ### Configuration
 
 ```javascript
-// metro.config.js (bare RN 0.85+)
+// metro.config.js (bare RN 0.85+ / 0.86+)
 const { getDefaultConfig } = require('@react-native/metro-config');
 const fs = require('fs');
 

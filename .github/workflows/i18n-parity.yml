@@ -43,5 +43,6 @@ jobs:
         run: |
           if [ -f audit/phases/i18n-gap.csv ]; then
             echo "## I18n Size Gap Snapshot" >> "$GITHUB_STEP_SUMMARY"
-            awk -F',' 'NR>1 {s[$10]++} END {for(k in s) print k, s[k]}' audit/phases/i18n-gap.csv >> "$GITHUB_STEP_SUMMARY"
+            # REL-005: CSV columns are file($1),locale($2),size_en($3),size_locale($4),ratio($5) — was $10 (wrong).
+            awk -F',' 'NR>1 {s[$2]++} END {for(k in s) print k, s[k]}' audit/phases/i18n-gap.csv >> "$GITHUB_STEP_SUMMARY"
           fi

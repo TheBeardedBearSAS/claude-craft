@@ -3,16 +3,15 @@
  * @module cli/lib/constants
  */
 
-import { TECH_REGISTRY } from './tech-registry.js';
+import { TECH_REGISTRY, INSTALLABLE_TECHS } from './tech-registry.js';
 
 /**
  * Selectable technologies with display name and description (derived from tech-registry.js SSOT).
- * Base-layer techs (e.g. php) are excluded — they are auto-included with their framework.
+ * Uses INSTALLABLE_TECHS as the authoritative list: base-layer techs (e.g. php),
+ * infrastructure techs (docker, coolify) are excluded from the installation menu.
  */
 const TECHNOLOGIES = Object.fromEntries(
-  Object.entries(TECH_REGISTRY)
-    .filter(([, entry]) => !entry.baseLayer)
-    .map(([key, entry]) => [key, { name: entry.displayName, desc: entry.desc }])
+  INSTALLABLE_TECHS.map((key) => [key, { name: TECH_REGISTRY[key].displayName, desc: TECH_REGISTRY[key].desc }])
 );
 
 /** Available UI languages. */

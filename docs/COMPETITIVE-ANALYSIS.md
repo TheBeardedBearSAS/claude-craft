@@ -1,21 +1,62 @@
 # Analyse Concurrentielle Claude-Craft
 
-**Version:** 7.19.0 | **Date:** 2026-02-19
+**Version:** 8.11.0 | **Date:** 2026-06-12 | **Mise à jour précédente :** 2026-02-19
 
 ---
 
 ## Cartographie des Concurrents
 
-| Concurrent | Type | Agents | Multi-tech | Sprint/PM | QA Auto |
+| Concurrent | Type | ★ (relevé 2026-06-12) | Multi-tech | Sprint/PM | QA Auto |
 |-----------|------|--------|-----------|-----------|---------|
-| **claude-craft** | Framework integre | 31 agents | 11 stacks | BMAD v6 | Recette |
-| **Claude-Flow** | Orchestration | 60+ agents | Generique | Non | Non |
-| **SuperClaude** | Meta-framework | 16 personas | Generique | Non | Non |
-| **BMAD-METHOD** | Methodologie | 12+ roles | Generique | Oui | Oui |
-| **Cursor Directory** | Plateforme regles | Non | Multi-IDE | Non | Non |
-| **Skills Hub** | Marketplace | 1336+ skills | Generique | Non | Non |
-| **Claude Code Tresor** | Collection | 8 agents | Generique | Non | Non |
-| **CrewAI** | Multi-agent | Oui | LLM-agnostique | Non | Non |
+| **claude-craft** | Framework integré | ~97 | 11 stacks | BMAD v6 | Recette |
+| **obra/superpowers** | Orchestration MCP | ~177k | Générique | Non | Non |
+| **oh-my-claudecode** | Multi-model routing | ~36k | Générique | Non | Non |
+| **Ruflo** | Mémoire persistante | ~59k | Générique | Non | Non |
+| **SuperClaude v4** | Meta-framework personas | ~30k | Générique | Non | Non |
+| **BMAD-METHOD** | Méthodologie | ~49k | Générique | Oui | Oui |
+| **GitHub Spec Kit** | Spec-first workflow | ~80k | Générique | Partiel | Non |
+| **OpenSpec** | Spec-to-agent | ~12k | Générique | Non | Non |
+| **Claude-Flow** | Orchestration MCP | ~60k | Générique | Non | Non |
+| **Cursor Directory** | Plateforme règles | n/a | Multi-IDE | Non | Non |
+| **Skills Hub** | Marketplace | n/a | Générique | Non | Non |
+| **CrewAI** | Multi-agent runtime | n/a | LLM-agnostique | Non | Non |
+
+---
+
+## Nouveaux entrants 2026 (apparus après l'analyse 2026-02)
+
+### obra/superpowers (~177k ★ au 2026-06-12)
+
+Premier concurrent par étoiles. Orchestre Claude via MCP avec 30+ outils natifs (search, browser, code execution). **Différence clé :** superpowers est un runtime MCP d'exécution — il donne à Claude des capacités réelles (browser, terminal, API). Claude Craft est un framework de connaissances (règles, agents, commandes). Ce sont des couches complémentaires : superpowers peut être installé dans un projet qui utilise déjà Claude Craft. Superpowers est présent sur le **marketplace officiel Anthropic** depuis janvier 2026 (voie d'entrée `/plugin install superpowers`).
+
+### oh-my-claudecode (~36k ★)
+
+Orchestration **multi-modèle** : route les sous-agents vers Claude, Gemini CLI (gratuit), et Codex selon le type de tâche et le coût. Angle absent de Claude Craft : le multi-provider. Couvert partiellement par les Dynamic Workflows de Claude Code (tiering Haiku/Sonnet/Opus dans un provider), mais pas le routing cross-provider. Voir `DIFF-03` dans la roadmap pour le plan de réponse.
+
+### Ruflo (~59k ★)
+
+Mémoire persistante inter-sessions via indexation vectorielle. Claude Craft gère la mémoire via `/memory` (natif Claude Code v2.1.59+) et les hooks `PostCompact` — pas de vectorDB. Ruflo est positionné comme **moteur complémentaire** documenté dans `docs/ECOSYSTEM.md`. Voir `DIFF-04` dans la roadmap.
+
+### GitHub Spec Kit (~80k ★)
+
+Workflow spec-first : génère des issues GitHub, des ADR et du code à partir d'une spécification OpenAPI ou d'un fichier `SPEC.md`. Cible les équipes qui pilotent par la spec (API-first). Claude Craft couvre cela via `@api-designer` + `/arch:api` + tech-spec BMAD, mais sans l'intégration GitHub Issues native.
+
+### OpenSpec (~12k ★)
+
+Génération d'agents à partir d'une spec OpenAPI. Niche : équipes API-first qui veulent des agents Claude auto-générés depuis leur spec. Complémentaire de `@api-designer`.
+
+---
+
+## Marketplace Anthropic (claude-plugins-official)
+
+> **État au 2026-06-12 :** Claude Craft **absent** du marketplace officiel. obra/superpowers y est depuis janvier 2026.
+
+Le marketplace officiel Anthropic permet une distribution via `/plugin install <name>`. Pour soumettre :
+- Vérifier la conformité de `.claude-plugin/plugin.json` au schéma Anthropic.
+- Soumettre via [https://clau.de/plugin-directory-submission](https://clau.de/plugin-directory-submission).
+- Le fichier `.claude-plugin/marketplace.json` existe déjà dans le repo.
+
+**Priorité P0 (DIFF-01 roadmap) :** la présence sur le marketplace est un vecteur de découverte majeur. Voir `docs/ROADMAP.md`.
 
 ---
 
@@ -54,6 +95,12 @@ Execution continue avec circuit breaker adaptatif, monitoring de sante (detectio
 ### F7 : Distribution CLI mature
 
 `npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en` - Installation propre avec subcommandes (list, doctor, update, check, flatten). Tests a 94% de couverture sur le CLI.
+
+### F8 : Hooks = enforcement (pas seulement des suggestions)
+
+> **Note honnête sur le "strict mode" :** Claude Craft distribue des règles dans `CLAUDE.md` — que Claude *peut* ignorer si le contexte le pousse autrement. C'est une réalité de tout framework de prompts. Ce qui distingue Claude Craft des frameworks purement suggéstifs (SuperClaude, BMAD-METHOD) : les **hooks Claude Code** (v2.1.47+) sont du code exécuté *avant/après* chaque outil, indépendamment du contexte LLM. Les hooks de Claude Craft bloquent réellement les commits non signés, les secrets en clair, et les appels réseau non autorisés.
+
+**Ce qui est enforcement (hooks) :** exit code 2 bloque l'exécution (pre-commit, security-block, CSRF-check). **Ce qui est suggestion (CLAUDE.md) :** conventions de code, style, architecture. Voir `.claude/templates/hooks/` pour les templates prêts à l'emploi.
 
 ---
 

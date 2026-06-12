@@ -26,9 +26,17 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
   const resolvedProjectRoot = projectRoot ?? path.dirname(repository.rootDir);
   const app = new Hono();
 
-  // Baseline response hardening (X-Content-Type-Options, X-Frame-Options, Referrer-Policy,
-  // COOP, CORP…). No custom CSP: the bundled dashboard relies on inline assets served locally.
-  app.use('*', secureHeaders());
+  // Baseline response hardening.
+  // crossOriginEmbedderPolicy: require-corp isole le processus renderer (SEC-003).
+  // xFrameOptions: DENY prévient le clickjacking (renforcé vs défaut SAMEORIGIN).
+  // Pas de CSP personnalisé : le dashboard bundlé repose sur des assets inline servis localement.
+  app.use(
+    '*',
+    secureHeaders({
+      crossOriginEmbedderPolicy: true,
+      xFrameOptions: 'DENY',
+    })
+  );
   app.use('*', csrfGuard(port));
   app.use('*', readonlyGuard(readonly));
 
@@ -174,7 +182,13 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
   });
 
   app.get('/api/sprints/current', async (c) => {
-    const sprintStatus = await loadSprintStatus(resolvedProjectRoot);
+    let sprintStatus;
+    try {
+      sprintStatus = await loadSprintStatus(resolvedProjectRoot);
+    } catch (err) {
+      // YAML syntaxiquement invalide ou erreur I/O inattendue → 503 contrôlé (REL-001)
+      return c.json({ error: 'sprint_data_unavailable', reason: err.message }, 503);
+    }
     if (!sprintStatus || sprintStatus._invalid) {
       return c.json({ error: 'not_found' }, 404);
     }

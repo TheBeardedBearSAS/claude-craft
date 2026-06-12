@@ -573,4 +573,75 @@ make build-apk
 
 ---
 
+## Points de vigilance Flutter 3.44 (2026)
+
+### SwiftPM par défaut sur iOS
+
+Flutter 3.44+ utilise **Swift Package Manager (SwiftPM)** comme gestionnaire de plugins iOS par défaut, en remplacement de CocoaPods (toujours supporté mais déprécié pour les nouveaux projets).
+
+```bash
+# Vérifier la migration SwiftPM
+flutter pub upgrade
+flutter build ios  # génère Package.swift automatiquement
+
+# Si plugin non compatible SwiftPM (legacy CocoaPods uniquement)
+flutter config --no-use-swift-package-manager
+```
+
+```yaml
+# pubspec.yaml — désactiver SwiftPM pour plugin legacy
+flutter:
+  use-swift-package-manager: false
+```
+
+**Impact :** les plugins sans support SwiftPM nécessitent `use-swift-package-manager: false` ou une migration côté auteur du plugin. La majorité des plugins pub.dev officiels supportent déjà SwiftPM depuis Flutter 3.22+.
+
+**Source :** https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers
+
+### Android Gradle Plugin (AGP) 9
+
+Flutter 3.44 requiert **AGP 9.0+**. Mettre à jour `android/build.gradle` :
+
+```groovy
+// android/build.gradle
+buildscript {
+  dependencies {
+    classpath 'com.android.tools.build:gradle:9.0.0'  // AGP 9
+  }
+}
+```
+
+```properties
+# android/gradle/wrapper/gradle-wrapper.properties
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.0-bin.zip
+```
+
+**Breaking AGP 9 :** `android.enableR8.fullMode=true` par défaut (proguard plus agressif) ; vérifier les règles de keep pour la réflexion.
+
+### Dépréciations Material / Cupertino (Flutter 3.44)
+
+Plusieurs composants legacy sont dépréciés :
+
+```dart
+// ❌ Déprécié — MaterialButton
+MaterialButton(onPressed: () {}, child: Text('OK'));
+// ✅ Utiliser ElevatedButton / FilledButton / OutlinedButton / TextButton
+
+// ❌ Déprécié — FlatButton / RaisedButton (supprimés depuis 3.0, warning si encore présent)
+// ✅ Migrer vers TextButton / ElevatedButton
+
+// ❌ Déprécié — CupertinoTextField sans padding explicite (comportement changé)
+// ✅ Spécifier padding: EdgeInsets.symmetric(...)
+
+// ❌ Déprécié — showDialog sans barrierDismissible: false pour les dialogs critiques
+// ✅ Toujours spécifier barrierDismissible explicitement
+
+// ❌ Déprécié — ThemeData.colorSchemeSeed + primarySwatch ensemble
+// ✅ Utiliser ColorScheme.fromSeed() uniquement
+```
+
+Exécuter `dart fix --apply` pour migrer automatiquement les dépréciations détectables.
+
+---
+
 *These tools and configurations optimize the Flutter development workflow.*

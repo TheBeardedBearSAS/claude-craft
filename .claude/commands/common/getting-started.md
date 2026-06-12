@@ -8,7 +8,7 @@ allowed-tools: Read, Glob, Bash, Grep
 
 Welcome! This wizard helps you discover Claude Craft's value in under 10 minutes.
 
-200+ commands can feel overwhelming — let's find the 3 that matter most for YOUR project right now.
+125 commands can feel overwhelming — let's find the 3 that matter most for YOUR project right now.
 
 ## Step 1: Detect Your Project Stack (30 seconds)
 
@@ -16,17 +16,17 @@ Scanning your project to identify the technology stack...
 
 **Actions:**
 1. Check for technology markers in root directory:
-   - `package.json` → JavaScript/TypeScript (React, Angular, Vue.js, React Native)
+   - `package.json` → JavaScript/TypeScript (React, Angular, Vue.js, React Native, Paperclip)
    - `composer.json` → PHP (Symfony, Laravel)
    - `pyproject.toml` or `requirements.txt` → Python
    - `pubspec.yaml` → Flutter/Dart
    - `*.csproj` or `*.sln` → C# / .NET
-   - `Cargo.toml` → Rust (Paperclip)
    - `go.mod` → Go
    - `mix.exs` → Elixir
 
 2. For JavaScript/TypeScript projects, check dependencies to determine framework:
    - Look for `react`, `@angular/core`, `vue`, `react-native` in package.json dependencies
+   - Look for `@paperclipai` or a `paperclip.config` key in package.json to detect a Paperclip project (Node.js + TypeScript, not Rust)
 
 3. If multiple technology files found:
    - Ask user which stack to prioritize

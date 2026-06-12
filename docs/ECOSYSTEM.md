@@ -126,6 +126,30 @@ worth auditing to harvest any prompt rule not already covered.
 
 ---
 
+## Multi-model routing pattern (oh-my-claudecode style)
+
+Claude Craft runs exclusively on Claude (Opus 4.8 / Sonnet 4-6 / Haiku 4-5) via the Dynamic Workflows tiering built into Claude Code (2.1.154+, `ultracode` trigger). This covers intra-provider cost optimisation.
+
+A complementary **cross-provider routing** pattern has emerged with tools like **oh-my-claudecode** (~36k ★, [repo](https://github.com/oh-my-claudecode/oh-my-claudecode)): route sub-agents to Gemini CLI (free tier), OpenAI Codex, or other providers based on task type and cost. The pattern is:
+
+```
+Complex planning   → Claude Opus 4.8  (highest reasoning)
+Standard coding    → Claude Sonnet 4-6 (best value on Claude)
+Simple ops, search → Gemini CLI / free tier  (zero cost)
+```
+
+This is not built into Claude Craft today (see `DIFF-03` in `docs/ROADMAP.md`). If you want to experiment with this pattern now:
+
+1. Install `oh-my-claudecode` per its README.
+2. Keep Claude Craft's rules and agents as the knowledge layer.
+3. Let oh-my-claudecode handle provider selection at runtime.
+
+The two tools are **complementary**, not competing: oh-my-claudecode provides the routing runtime, Claude Craft provides the framework knowledge (BMAD, agents, rules, QA Recette).
+
+> **Security note :** Any multi-provider setup introduces additional API key exposure surface. Apply `rules/11-security.md` and pin every provider CLI version before adopting this pattern.
+
+---
+
 ## Also worth watching (from the 2026 roundup)
 
 Not evaluated in depth here, but flagged for future integration assessment:

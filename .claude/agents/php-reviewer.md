@@ -441,7 +441,7 @@ $orders = $repository->findAllWithItems(); // JOIN ou batch loading
 ### Phase 2 : Qualite PHP (10 min)
 
 1. Verifier strict_types=1 dans chaque fichier
-2. Lancer PHPStan level 9 mentalement (types, mixed, any)
+2. Lancer PHPStan level 10 mentalement (types, mixed, any)
 3. Verifier la conformite PSR-12
 4. Scanner l'utilisation des fonctionnalites PHP 8.5
 5. Verifier les enums, readonly, match expressions

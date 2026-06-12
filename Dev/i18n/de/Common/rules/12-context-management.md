@@ -348,13 +348,15 @@ Der `/context`-Befehl liefert umsetzbare Vorschlaege zur Optimierung der Kontext
 
 ### /effort-Befehl (v2.1.72+)
 
-Das Aufwandsniveau des Modells je nach Aufgabenkomplexitaet anpassen:
+Das Aufwandsniveau des Modells je nach Aufgabenkomplexität anpassen:
 
-| Befehl | Aufwand | Verwendung |
-|--------|---------|------------|
-| `/effort low` | Minimal | Einfache Aufgaben, Lookups |
-| `/effort medium` | Standard | Routineimplementierung |
-| `/effort high` | Maximum | Komplexes Reasoning, Architektur |
+| Befehl | Modell | Verwendung |
+|--------|--------|------------|
+| `/effort low` | Haiku 4.5 | Einfache Aufgaben, Lookups, Klassifikation |
+| `/effort medium` | Sonnet 4.6 | Standardimplementierung |
+| `/effort high` | Opus 4.8 | Komplexes Reasoning, Architektur |
+| `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | Kritische Entscheidungen, komplexe Migrationen, ADR |
+| `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | Maximaler Code-Durchsatz — automatisierte Pipelines, Massengenerierung |
 
 ### Inaktivitaetswarnung (v2.1.84+)
 
@@ -481,12 +483,16 @@ Bei der Kompaktierung immer erhalten:
 - Architekturentscheidungen
 ```
 
-### Nuetzliche Umgebungsvariablen
+### Nützliche Umgebungsvariablen
 
 | Variable | Beschreibung |
 |----------|-------------|
-| `CLAUDE_CODE_SUBAGENT_MODEL` | Modell fuer Sub-Agents (z.B. `sonnet` zur Kostenoptimierung) |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | **Standard**-Modell für nicht typisierte Sub-Agents (z. B. `sonnet`). **Das `model:`-Frontmatter eines Agents hat Vorrang**: 11 Reviewer mit `model: haiku` bleiben auf Haiku, auch wenn diese Variable auf `sonnet` gesetzt ist. |
+| `CLAUDE_CODE_FORK_SUBAGENT` | `1`, um den Kontext von Sub-Agents zu isolieren (Forked Subagents, v2.1.117+) |
+| `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Prompt-Caching verlängern/erzwingen (−40 % bei wiederholenden Sitzungen) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Auf `1` setzen, um automatischen Speicher zu deaktivieren |
+
+> **Modell-Vorrang (Audit 2026-06-08):** `model:` im Agent-Frontmatter > `CLAUDE_CODE_SUBAGENT_MODEL` > Sitzungsmodell. Die Variable `SUBAGENT_MODEL=sonnet` überschreibt NICHT explizit auf `model: haiku` gesetzte Agents — sie gilt nur für Sub-Agents ohne definiertes `model:`-Feld.
 
 ---
 
@@ -613,7 +619,8 @@ Das `Monitor`-Tool ermoeglicht das Streamen von Ereignissen eines Hintergrundpro
 |--------|--------|------------|
 | `/model haiku` | Haiku 4.5 | Einfache Aufgaben, Klassifikation |
 | `/model sonnet` | Sonnet 4.6 | Standardaufgaben, Implementierung |
-| `/model opus` | Opus 4.6 | Komplexes Reasoning, Architektur |
+| `/model opus` | Opus 4.8 | Komplexes Reasoning, Architektur |
+| `/model opusplan` | Opus 4.8 (Plan) / Sonnet 4.6 (Ausführung) | **Dynamisches Tiering**: Opus für Plan Mode, Sonnet für die Ausführung — optimiert das Kosten/Qualitäts-Verhältnis bei langen Aufgaben |
 
 ### Ausgabefilterung via Hooks
 
@@ -704,21 +711,36 @@ Dateien werden in alphabetischer Reihenfolge zusammengefuehrt, sodass Teams Konf
 | `/btw` | Schnelle Fragen ohne Kontextwechsel | Lookups, Syntax, Klarstellungen |
 | `/hooks` | Interaktive Hook-Verwaltung | Aktivieren/Deaktivieren, Testen, Debuggen |
 | `/reload-plugins` | Manuelles Plugin-Neuladen | Nach Plugin-Updates |
-| `/proactive` | Alias fuer `/loop` | Proaktives wiederkehrendes Monitoring |
+| `/reload-skills` (v2.1.157+) | Skills neu einlesen ohne Neustart (verschieden von `/reload-plugins`) | Nach Hinzufügen/Ändern eines Skills |
+| `/proactive` | Alias für `/loop` | Proaktives wiederkehrendes Monitoring |
+
+> **⚠️ Dynamic-Workflows-Trigger umbenannt (v2.1.160):** Das Auslösewort hat sich von `workflow` zu **`ultracode`** geändert. Ein Workflow „in eigenen Worten" anfordern funktioniert weiterhin. Die `/effort ultracode`-Stufe (oben) bleibt gültig.
+
+> **`MessageDisplay`-Hook (v2.1.157+):** Neues Ereignis zum Transformieren/Ausblenden von Assistententext bei der Anzeige — nützlich für RTK-artiges Ausgabefiltern. `SessionStart` kann `reloadSkills: true` zurückgeben, um die in derselben Sitzung installierten Skills verfügbar zu machen.
 
 ---
 
-## Zusaetzliche Umgebungsvariablen (v2.1.105+)
+## Zusätzliche Umgebungsvariablen (v2.1.105+)
 
 | Variable | Beschreibung |
 |----------|--------------|
 | `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | CLAUDE.md aus `--add-dir` laden |
 | `MAX_THINKING_TOKENS=8000` | Denktoken-Limit |
-| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Zeichenbudget fuer Slash-Befehle |
+| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Zeichenbudget für Slash-Befehle |
 | `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` | PowerShell statt Bash (Windows, v2.1.84+) |
 | `OTEL_LOG_USER_PROMPTS` | Prompts in Traces loggen (Beta) |
 | `OTEL_LOG_TOOL_DETAILS` | Tool-Details loggen (Beta) |
-| `OTEL_LOG_TOOL_CONTENT` | Tool-Inhalt loggen (Beta, ausfuehrlich) |
+| `OTEL_LOG_TOOL_CONTENT` | Tool-Inhalt loggen (Beta, ausführlich) |
+
+### `fallbackModel` — automatischer Fallback (settings.json, v2.1.166+)
+
+Einstellung für **Zuverlässigkeit + Kosten**: bis zu 3 Fallback-Modelle werden der Reihe nach versucht, wenn das primäre überlastet/nicht verfügbar ist (entsprechendes `--fallback-model`-Flag, gilt auch für interaktive Sitzungen).
+
+```json
+{ "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5"] }
+```
+
+Für die 5 `opus`-Agents (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach) vermeidet dieser `opus → sonnet → haiku`-Fallback Unterbrechungen bei Opus-Spitzenlast, ohne die laufende Arbeit zu beeinträchtigen. Gebrauchsfertiges Beispiel in `.claude/settings.local.json.example`.
 
 ---
 
@@ -731,6 +753,36 @@ Dateien werden in alphabetischer Reihenfolge zusammengefuehrt, sodass Teams Konf
 | `claudeMdExcludes` (Setting) | Bestimmte CLAUDE.md-Dateien in Monorepos ausschliessen |
 
 **Auto-Kompaktierung und Skills:** Nach der Kompaktierung werden Skills automatisch neu geladen (5K Tokens/Skill, 25K gesamt max).
+
+---
+
+## Token-Optimierung — Schnelleinrichtung
+
+> **Befehl:** `/common:setup-rtk` für die automatische Konfiguration aller Optimierungen.
+
+**RTK (Rust Token Killer):** CLI-Proxy, der den Token-Verbrauch bei Entwicklungsbefehlen um 60-90 % reduziert. Installation: `rtk init -g`.
+
+**Sub-Agent-Modell:** `export CLAUDE_CODE_SUBAGENT_MODEL="sonnet"` — 40-60 % Kostenreduktion.
+
+**Optimierungs-Hooks:**
+
+| Hook | Datei | Auswirkung |
+|------|-------|------------|
+| **PostToolUse** (Bash) | `~/.claude/hooks/post-tool-filter.sh` | Leitet Claude an, Ausgaben >10 KB zusammenzufassen |
+| **PreCompact** | `~/.claude/hooks/pre-compact.sh` | Sichert kritischen Kontext vor der Kompaktierung |
+| **SessionStart** (compact) | Template `context-reinject.json` | Injiziert `context-essentials.md` nach der Kompaktierung |
+
+Templates verfügbar in `.claude/templates/hooks/`: `output-filter.json`, `pre-compact.json`, `context-reinject.json`.
+
+| Optimierung | Einsparung |
+|---|---|
+| RTK + Ultra-Compact | 60-90 % bei CLI-Ausgaben |
+| SUBAGENT_MODEL=sonnet | 40-60 % Sub-Agent-Kosten |
+| PostToolUse-Hook | Reduziert Kontextverschmutzung |
+| PreCompact-Hook | Verhindert Kontextverlust |
+| **Kombiniert gesamt** | **55-65 % globale Reduktion** |
+
+> Detaillierte Beispiele und Templates: siehe `@.claude/references/base/context-management.md`
 
 ---
 

@@ -623,6 +623,64 @@ Angular architecture priorities for 2026 (v22 stable) :
 
 **Angular 22 nouveautés clés :** Signal Forms stables (`@angular/forms/signals`), **OnPush par défaut** (composants CLI), **HttpClient utilise Fetch par défaut** (plus XHR), TypeScript 6 requis, Resource API stable, Node.js 22.x ou 24.x requis (Node 20 supprimé).
 
+### @Service decorator (v22)
+
+Angular 22 introduit le décorateur `@Service` comme alias ergonomique de `@Injectable({ providedIn: 'root' })` :
+
+```typescript
+import { Service } from '@angular/core';
+
+// Angular 22 — équivalent à @Injectable({ providedIn: 'root' })
+@Service()
+export class UserService {
+  getUsers() { /* ... */ }
+}
+```
+
+**Compatibilité :** `@Injectable` continue de fonctionner. `@Service` est la forme courte recommandée pour les services root-scoped.
+
+### injectAsync() (v22)
+
+`injectAsync()` permet d'injecter des dépendances asynchrones (lazy-loaded, promise-based) directement dans le constructeur :
+
+```typescript
+import { Component, injectAsync } from '@angular/core';
+
+@Component({ ... })
+export class DashboardComponent {
+  // injectAsync : résolution lazy d'un service ou d'un token asynchrone
+  private analytics = injectAsync(() =>
+    import('./analytics.service').then(m => inject(m.AnalyticsService))
+  );
+}
+```
+
+**Usage :** partage de singletons issus de micro-frontends ou de modules chargés dynamiquement sans circular dependency.
+
+### Angular Aria (v22)
+
+Le package `@angular/aria` (stable v22) fournit des primitives accessibles prêtes à l'emploi : `cdkAriaLive`, `cdkTrapFocus`, `cdkVisuallyHidden`, et les nouvelles directives `cdkCombobox`, `cdkListbox` :
+
+```typescript
+import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
+
+@Component({
+  standalone: true,
+  imports: [CdkListbox, CdkOption],
+  template: `
+    <ul cdkListbox>
+      <li cdkOption="option1">Option 1</li>
+      <li cdkOption="option2">Option 2</li>
+    </ul>
+  `
+})
+export class AccessibleListComponent {}
+```
+
+**SSRF/SSR (v22) :** Angular 22 corrige plusieurs vecteurs SSRF liés au SSR (Server-Side Rendering) : les requêtes HTTP faites côté serveur n'incluent plus les cookies client par défaut (`withClientHydration()` ne forwarde plus les credentials).
+
+**Source :** https://blog.ninja-squad.com/2026/06/03/what-is-new-angular-22.0
+
 **Golden rule**: Les composants doivent être petits, focalisés et faciles à tester.
 
 **Sources :** 

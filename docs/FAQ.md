@@ -325,7 +325,7 @@ This will:
 
 ### What is Fast Mode?
 
-Fast Mode (v2.1.36+) delivers up to 2.5x faster output for Opus 4.6 with the same capabilities. Toggle with `/fast`.
+Fast Mode (v2.1.36+) delivers up to 2.5x faster output for Opus 4.8 with the same capabilities. Toggle with `/fast`.
 
 ### How much does Fast Mode cost?
 
@@ -337,6 +337,28 @@ Fast Mode (v2.1.36+) delivers up to 2.5x faster output for Opus 4.6 with the sam
 ### When to use Fast Mode with Claude Craft?
 
 Use for interactive work (code review, debugging). For batch operations (team-sprint, team-audit), standard mode is more cost-effective.
+
+---
+
+## Coût tokens BMAD
+
+### Combien de tokens consomme un workflow BMAD ?
+
+> **Disclaimer :** Les estimations ci-dessous sont indicatives. La consommation réelle dépend de la taille du projet, du nombre d'agents invoqués, du modèle (Opus vs Sonnet vs Haiku), et des options RTK activées. Relevé basé sur des sessions réelles en juin 2026.
+
+| Track BMAD | Tokens estimés (sans RTK) | Tokens estimés (avec RTK) | Coût indicatif Sonnet 4-6 |
+|-----------|--------------------------|--------------------------|--------------------------|
+| **Quick Flow** (hotfix, bug) | ~5 000 | ~2 000 | ~$0.02 |
+| **Standard** (nouvelle feature) | ~15 000–25 000 | ~6 000–10 000 | ~$0.05–$0.10 |
+| **Enterprise** (plateforme) | ~40 000–60 000 | ~16 000–24 000 | ~$0.15–$0.25 |
+| `/team:audit --sequential` | ~20 000–35 000 | ~8 000–14 000 | ~$0.08–$0.14 |
+| `/qa:recette` (story unique) | ~8 000–15 000 | ~3 000–6 000 | ~$0.03–$0.06 |
+
+**RTK** = `/common:setup-rtk` (55-65% de réduction). Voir `docs/RTK-ANALYSIS.md`.
+
+**Avec Opus 4.8** (recommandé pour les phases de planification et review), multiplier par ~5 le coût par token. Utiliser `/model opusplan` pour le tiering dynamique Opus (planning) / Sonnet (exécution).
+
+**Usage mensuel typique pour une équipe de 3 développeurs :** 5-10 sprints Standard + 2 audits = ~200 000–400 000 tokens = **$1–2/mois avec RTK + Sonnet comme modèle de base**.
 
 ---
 

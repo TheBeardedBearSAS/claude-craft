@@ -105,7 +105,7 @@ dotnet publish -c Release --self-contained -r linux-x64
 <!-- Resilience & Observability -->
 <ItemGroup>
   <PackageReference Include="Polly" Version="8.*" />
-  <PackageReference Include="Serilog.AspNetCore" Version="8.*" />
+  <PackageReference Include="Serilog.AspNetCore" Version="10.*" />
   <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.*" />
   <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.*" />
 </ItemGroup>
@@ -219,7 +219,7 @@ trim_trailing_whitespace = false
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.*">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.*">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.*">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
@@ -236,14 +236,14 @@ trim_trailing_whitespace = false
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- ASP.NET Core (.NET 10 LTS — 10.0.8 latest patch) -->
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
+    <!-- ASP.NET Core (.NET 10 LTS — 10.0.9 latest patch) -->
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
 
-    <!-- Entity Framework Core (10.0.8 — aligned with .NET 10 LTS) -->
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.8" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.8" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.8" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.8" />
+    <!-- Entity Framework Core (10.0.9 — aligned with .NET 10 LTS patch cycle) -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.9" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.9" />
 
     <!-- Application Layer -->
     <!-- MediatR 13+ = commercial (RPL-1.5). Community Edition free <$5M revenue. -->
@@ -267,13 +267,15 @@ trim_trailing_whitespace = false
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
 
     <!-- Observability -->
-    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.1" />
+    <!-- Serilog.AspNetCore 10.x — aligné sur .NET 10 LTS (breaking: namespace Serilog.AspNetCore.RequestLogging supprimé, utiliser UseSerilogRequestLogging()) -->
+    <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Polly" Version="8.3.1" />
 
     <!-- Analyzers -->
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.300" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.21.0.86780" />
+    <!-- SonarAnalyzer 10.27 — 412 nouvelles règles, support C# 14, suppression faux positifs -->
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.27.0.98514" />
   </ItemGroup>
 </Project>
 ```

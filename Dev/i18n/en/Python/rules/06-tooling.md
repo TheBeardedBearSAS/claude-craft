@@ -1,5 +1,8 @@
 # Rule 06: Tooling
 
+> **Reference version:** Python **3.14 (stable, 3.14.6+)** — Ruff 0.15+, pytest 9.x (drops Python 3.9).
+> **JIT (PEP 744):** experimental in Python 3.14, subject to re-evaluation before Python 3.15 release (oct. 2026). Do not rely on it in production unless explicitly tested.
+
 Python tooling for code quality, testing, and development workflow.
 
 ## Package Management
@@ -69,7 +72,7 @@ Configuration in `pyproject.toml`:
 ```toml
 [tool.ruff]
 line-length = 88
-target-version = "py312"
+target-version = "py314"
 
 select = [
     "E",  # pycodestyle errors
@@ -144,7 +147,7 @@ Configuration in `pyproject.toml`:
 
 ```toml
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 strict = true
 warn_return_any = true
 warn_unused_configs = true

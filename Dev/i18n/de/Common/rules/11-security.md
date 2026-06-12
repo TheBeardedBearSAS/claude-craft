@@ -613,6 +613,7 @@ Vor der Installation eines MCP-Servers von Drittanbietern:
 ### PreToolUse-Hook für Sicherheit
 
 > **Best Practice:** Hooks empfangen den Tool-Input als JSON auf **stdin** — immer `jq -r '.tool_input.<feld>'` verwenden (nicht `echo '$TOOL_INPUT'`), um Werte sicher zu lesen und Shell-Injection zu vermeiden.
+> **Wichtig:** `exit 2` verwenden (nicht `exit 1`), um den Tool-Aufruf in Claude Code tatsächlich zu blockieren. `exit 1` signalisiert nur einen Fehler, **blockiert** die Ausführung aber **nicht**.
 
 ```json
 {
@@ -623,7 +624,7 @@ Vor der Installation eines MCP-Servers von Drittanbietern:
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(jq -r '.tool_input.command // empty'); echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' >&2 && exit 1 || exit 0"
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); printf '%s' \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' >&2 && exit 2 || exit 0"
           }
         ]
       }

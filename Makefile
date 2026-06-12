@@ -42,8 +42,9 @@ YELLOW := $(shell printf '\033[1;33m')
 RED := $(shell printf '\033[0;31m')
 NC := $(shell printf '\033[0m')
 
-# Liste des technologies supportées
-TECHS := symfony flutter python react reactnative angular csharp laravel vuejs php paperclip
+# Liste des technologies supportées (doit correspondre à INSTALLABLE_TECHS dans cli/lib/tech-registry.js)
+# Note : 'php' est exclu car c'est une couche de base auto-incluse avec symfony/laravel (audit DX-07)
+TECHS := symfony flutter python react reactnative angular csharp laravel vuejs paperclip
 INFRA_TECHS := docker coolify kubernetes opentofu ansible hcloud pgbouncer frankenphp
 
 help: ## Affiche cette aide

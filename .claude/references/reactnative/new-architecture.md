@@ -1,6 +1,6 @@
-# React Native 0.85 — New Architecture (JSI, TurboModules, Fabric)
+# React Native 0.86 — New Architecture (JSI, TurboModules, Fabric)
 
-> **Status :** documentation bootstrapped 2026-05-18 (audit P0 #8). React Native 0.85 enables the **New Architecture by default** for both new projects (`npx create-expo-app`) and existing ones via opt-in. This page covers what changes for everyday development and which gotchas to watch.
+> **Version courante :** RN 0.86 (mis à jour depuis 0.85). React Native 0.85+ active la **New Architecture par défaut** pour les nouveaux projets (`npx create-expo-app`) et les projets existants via opt-in. Cette page couvre ce qui change au quotidien et les points de vigilance.
 
 ## Vue d'ensemble
 

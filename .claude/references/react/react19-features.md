@@ -795,12 +795,61 @@ function ChatRoom({ roomId, theme }) {
 | **React Compiler** | 1.0+ | Auto-memoization |
 | **Zustand** | 5.0.12 | State management |
 | **TanStack Query** | 5.99.0 | Server state (cache, revalidation) |
-| **React Router** | 7.8.0 | Routing |
-| **Zod** | 3.24.2 | Schema validation |
+| **React Router** | 7.17.0 | Routing |
+| **Zod** | 4.4.3 | Schema validation (v4 — breaking: import `z` from `zod/v4`) |
 | **Vitest** | 4.1+ | Tests (Browser Mode) |
-| **Playwright** | 1.52.0 | Tests E2E |
+| **Playwright** | 1.60.0 | Tests E2E |
 
 **Source :** [TanStack Query v5](https://tanstack.com/query/latest), [Zustand v5](https://zustand-demo.pmnd.rs/)
+
+### Migration Zod v3 → v4
+
+Zod 4 (4.4.x) introduit des changements de rupture. L'import `from 'zod'` redirige vers Zod v3 pour compatibilité ; pour utiliser Zod v4 :
+
+```typescript
+// Zod v4 — import explicite
+import { z } from 'zod/v4';
+
+// Changements breaking Zod v4 :
+// - z.string().email() → z.email() (top-level)
+// - z.union() plus performant via z.discriminatedUnion()
+// - z.infer<> remplacé par z.output<> pour les types de sortie transformés
+// - Erreurs i18n : z.setErrorMap() remplacé par z.config({ error: customErrorMap })
+```
+
+**Source :** [Zod v4 Migration](https://zod.dev/v4/changelog)
+
+### ESLint v10 — Flat Config obligatoire
+
+ESLint v10 supprime définitivement le format legacy (`.eslintrc.cjs`, `.eslintrc.json`). Migrer vers `eslint.config.mjs` :
+
+```javascript
+// eslint.config.mjs (ESLint v10 — flat config)
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+
+export default tseslint.config(
+  { ignores: ['dist', 'node_modules'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    },
+  },
+);
+```
+
+> `.eslintrc.cjs` / `.eslintrc.json` / `.eslintignore` sont **supprimés** en ESLint v10. Utiliser uniquement `eslint.config.mjs`.
+
+**Source :** [ESLint v10 Migration Guide](https://eslint.org/docs/latest/use/migrate-to-10.0.0)
 
 ---
 

@@ -1,6 +1,6 @@
 # Code Quality Tools - Python
 
-> **Version de référence :** Python **3.14 (stable, 3.14.5+)** — Python 3.15 en beta (release oct. 2026).
+> **Version de référence :** Python **3.14 (stable, 3.14.6+)** — Python 3.15 en beta (release oct. 2026).
 > FastAPI **~0.136.x** — Python 3.10+ minimum, Pydantic v2 obligatoire.
 > Pydantic **>=2.9, 2.13.x recommandé**.
 

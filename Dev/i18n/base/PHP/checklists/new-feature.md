@@ -46,7 +46,7 @@
 
 - [ ] `declare(strict_types=1)` in all files
 - [ ] PSR-12 coding standards followed
-- [ ] PHPStan level 9 passes
+- [ ] PHPStan level 10 passes
 - [ ] PHP-CS-Fixer rules applied
 - [ ] No suppressed warnings without justification
 

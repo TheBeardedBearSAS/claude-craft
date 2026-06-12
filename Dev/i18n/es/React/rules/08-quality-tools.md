@@ -13,7 +13,9 @@ npm install -D eslint-config-prettier
 npm install -D @tanstack/eslint-plugin-query
 ```
 
-### Configuración .eslintrc.cjs
+> **⚠️ ESLint v10 (2026):** El formato legacy `.eslintrc.cjs` está **eliminado**. Usar `eslint.config.mjs` (flat config). Ver el ejemplo de migración en la sección de herramientas.
+
+### Configuración .eslintrc.cjs (ESLint v9 y anterior)
 
 ```javascript
 module.exports = {
@@ -628,8 +630,8 @@ indent_style = tab
     "build": "tsc && vite build",
     "preview": "vite preview",
 
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
 
     "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,json,css,md}\"",

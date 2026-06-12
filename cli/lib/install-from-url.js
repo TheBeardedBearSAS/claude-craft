@@ -18,7 +18,8 @@
  */
 
 import c from './colors.js';
-import { TECHNOLOGIES, LANGUAGES } from './constants.js';
+import { LANGUAGES } from './constants.js';
+import { TECH_REGISTRY } from './tech-registry.js';
 import { runInstallation } from './installer.js';
 
 const SUPPORTED_SCHEMA_VERSIONS = [1];
@@ -126,7 +127,7 @@ export function validateConfig(cfg) {
       throw new Error('--from: "technologies" must be an array');
     }
     for (const t of cfg.technologies) {
-      if (!TECHNOLOGIES[t]) {
+      if (!TECH_REGISTRY[t]) {
         throw new Error(`--from: unknown technology "${t}"`);
       }
     }

@@ -6,6 +6,8 @@ on:
   pull_request_target:
     types: [opened, closed, synchronize]
 
+# SEC-007: minimum permissions — contents:write only for local signature storage on 'cla-signatures' branch.
+# PERSONAL_ACCESS_TOKEN removed: not needed when signatures are stored in the same repo (no remote-organization-name set).
 permissions:
   contents: write
   pull-requests: write
@@ -14,13 +16,16 @@ permissions:
 jobs:
   cla-check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: write
     steps:
       - name: CLA Assistant
         if: (github.event.comment.body == 'recheck' || github.event.comment.body == 'I have read and agree to the CLA') || github.event_name == 'pull_request_target'
         uses: contributor-assistant/github-action@ca4a40a7d1004f18d9960b404b97e5f30a505a08 # pinned: v2.6.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           path-to-signatures: '.github/cla-signatures/v1/signatures.json'
           path-to-document: 'https://github.com/TheBeardedBearSAS/claude-craft/blob/main/.github/CLA.md'

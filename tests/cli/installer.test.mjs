@@ -122,6 +122,20 @@ describe('runInstallation', () => {
     exitSpy.mockRestore();
   });
 
+  // CLI-03: coolify is an infra tech — not installable via runInstallation (audit CLI-03).
+  it('warns and skips coolify when passed as a technology (audit CLI-03)', async () => {
+    const cli = makeCli({ technologies: ['coolify', 'react'] });
+    await runInstallation(cli, { CLI_ROOT: '/fake/root' });
+    const scriptPaths = spawnSyncMock.mock.calls.map((c) => c[1][0]);
+    // coolify must NOT produce a Dev/scripts/install-coolify-rules.sh call
+    expect(scriptPaths.some((p) => p.includes('install-coolify-rules.sh'))).toBe(false);
+    // react should still be installed
+    expect(scriptPaths.some((p) => p.includes('install-react-rules.sh'))).toBe(true);
+    // A warning must appear in the output
+    const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toMatch(/coolify.*infra|infra.*coolify/i);
+  });
+
   it('skips infra script gracefully when file does not exist', async () => {
     // Override existsSync to return false for infra script
     const fsModule = await import('fs');

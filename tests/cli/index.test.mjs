@@ -94,6 +94,24 @@ describe('ClaudeCraftCLI', () => {
     expect(output).toContain('Codebase Flattener');
   });
 
+  // CLI-08: path traversal guard on --output (audit CLI-08)
+  it('flattenCodebase rejects --output pointing to a system directory', async () => {
+    const { ClaudeCraftCLI } = await import('../../cli/index.js');
+    const cli = new ClaudeCraftCLI();
+    cli.config.targetPath = process.cwd();
+    await expect(cli.flattenCodebase({ output: '/etc/evil.md' })).rejects.toThrow(/system directory|Refusing/i);
+  });
+
+  it('flattenCodebase rejects path-traversal in --output', async () => {
+    const { ClaudeCraftCLI } = await import('../../cli/index.js');
+    const cli = new ClaudeCraftCLI();
+    cli.config.targetPath = process.cwd();
+    // /var/../../etc resolves to /etc — a forbidden system dir
+    await expect(cli.flattenCodebase({ output: '/var/../../etc/evil.md' })).rejects.toThrow(
+      /system directory|Refusing/i
+    );
+  });
+
   it('constructor initializes with default config', async () => {
     const { ClaudeCraftCLI } = await import('../../cli/index.js');
     const cli = new ClaudeCraftCLI();
@@ -343,13 +361,15 @@ describe('ClaudeCraftCLI.run() — switch branch coverage', () => {
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
 
-  it('flattenCodebase without output option uses default filename', async () => {
+  it('flattenCodebase without output option uses default filename (absolute path, audit CLI-08)', async () => {
     const { ClaudeCraftCLI } = await import('../../cli/index.js');
     const { flatten } = await import('../../cli/lib/flattener.js');
     const cli = new ClaudeCraftCLI();
     await cli.flattenCodebase({});
-    // flatten called with default filename
-    expect(flatten).toHaveBeenCalledWith(expect.any(String), 'CODEBASE_CONTEXT.md', {});
+    // flatten is now called with the resolved absolute path (assertSafeTarget resolves relative paths)
+    expect(flatten).toHaveBeenCalledWith(expect.any(String), expect.stringContaining('CODEBASE_CONTEXT.md'), {});
+    const actualOutputArg = flatten.mock.calls.at(-1)[1];
+    expect(actualOutputArg).toMatch(/^\//); // must be an absolute path
   });
 
   it('prompt() resolves with trimmed answer', async () => {

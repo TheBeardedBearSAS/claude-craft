@@ -10,12 +10,12 @@
   let moveMenuTriggerEl = $state(null);
 
   const COLUMNS = [
-    { key: 'backlog', label: 'Backlog' },
-    { key: 'ready-for-dev', label: 'Ready for Dev' },
-    { key: 'in-progress', label: 'In Progress' },
-    { key: 'review', label: 'Review' },
-    { key: 'done', label: 'Done' },
-    { key: 'blocked', label: 'Blocked' },
+    { key: 'backlog', label: 'Backlog', emptyHint: 'No stories — run /workflow:plan' },
+    { key: 'ready-for-dev', label: 'Ready for Dev', emptyHint: 'No stories ready — run /workflow:start' },
+    { key: 'in-progress', label: 'In Progress', emptyHint: 'Nothing in progress' },
+    { key: 'review', label: 'Review', emptyHint: 'Nothing to review' },
+    { key: 'done', label: 'Done', emptyHint: 'Nothing done yet' },
+    { key: 'blocked', label: 'Blocked', emptyHint: '' },
   ];
 
   // Accessibility: keyboard navigation state
@@ -299,6 +299,10 @@
               {/if}
             </footer>
           </li>
+        {:else}
+          {#if col.emptyHint}
+            <li class="empty-hint" aria-label="Colonne vide" role="listitem">{col.emptyHint}</li>
+          {/if}
         {/each}
       </ul>
     </section>
@@ -418,6 +422,16 @@
     box-shadow: var(--shadow);
   }
   .card:active { cursor: grabbing; }
+  /* Message discret affiché quand la colonne est vide (DX-10) */
+  .empty-hint {
+    padding: 10px 8px;
+    font-size: 11px;
+    color: var(--fg-dim);
+    font-style: italic;
+    text-align: center;
+    list-style: none;
+    opacity: 0.7;
+  }
   /* Story issue de .bmad/sprint-status.yaml : non déplaçable depuis le board */
   .card.read-only { cursor: default; opacity: 0.85; }
   .card.read-only:active { cursor: default; }

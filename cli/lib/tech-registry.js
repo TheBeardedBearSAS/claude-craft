@@ -61,7 +61,7 @@ const TECH_REGISTRY = {
     namespace: 'reactnative',
     i18nDir: 'ReactNative',
     installScript: 'install-reactnative-rules.sh',
-    version: '0.85',
+    version: '0.86',
     tier: 2,
   },
   angular: {
@@ -135,7 +135,7 @@ const TECH_REGISTRY = {
     namespace: 'paperclip',
     i18nDir: 'Paperclip',
     installScript: 'install-paperclip-rules.sh',
-    version: '2026.529.0',
+    version: '2026.609.0',
     tier: 2,
   },
   docker: {
@@ -145,7 +145,7 @@ const TECH_REGISTRY = {
     namespace: 'docker',
     i18nDir: 'Docker',
     installScript: 'install-docker-rules.sh',
-    version: '29.5.2',
+    version: '29.5.3',
     tier: null,
   },
   coolify: {
@@ -155,7 +155,7 @@ const TECH_REGISTRY = {
     namespace: 'coolify',
     i18nDir: 'Coolify',
     installScript: 'install-coolify-rules.sh',
-    version: '4.1.1',
+    version: '4.1.2',
     tier: null,
   },
 };

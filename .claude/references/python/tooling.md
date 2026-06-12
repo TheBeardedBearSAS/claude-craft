@@ -1,6 +1,6 @@
 # Rule 06: Tooling
 
-> **Version de référence :** Python **3.14 (stable, 3.14.5+)** — Python 3.15 en beta (release oct. 2026).
+> **Version de référence :** Python **3.14 (stable, 3.14.6+)** — Ruff 0.15+, pytest 9.x (fin du support Python 3.9) — Python 3.15 en beta (release oct. 2026).
 
 Python tooling for code quality, testing, and development workflow.
 

@@ -26,6 +26,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
+import { TECH_REGISTRY } from '../cli/lib/tech-registry.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -183,19 +184,12 @@ function categorizeAgents(agents) {
     Project: [],
     Other: [],
   };
-  const techReviewerNames = new Set([
-    'symfony-reviewer',
-    'flutter-reviewer',
-    'react-reviewer',
-    'python-reviewer',
-    'angular-reviewer',
-    'laravel-reviewer',
-    'vuejs-reviewer',
-    'reactnative-reviewer',
-    'csharp-reviewer',
-    'php-reviewer',
-    'paperclip-reviewer',
-  ]);
+  // Derived from TECH_REGISTRY so new stacks are automatically included (audit CLI-06).
+  const techReviewerNames = new Set(
+    Object.keys(TECH_REGISTRY)
+      .filter((k) => TECH_REGISTRY[k].tier !== null) // exclude infra techs (docker, coolify)
+      .map((k) => `${k}-reviewer`)
+  );
   const projectNames = new Set(['product-owner', 'tech-lead']);
   const infraPrefixes = [
     'docker-',

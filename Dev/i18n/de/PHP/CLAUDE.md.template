@@ -40,7 +40,7 @@ Siehe `rules/02-architecture.md` fuer Muster.
 | Regel | Beschreibung |
 |-------|--------------|
 | Strict Types | `declare(strict_types=1);` in jeder Datei |
-| PHPStan | Level 9 ohne Fehler |
+| PHPStan | Level 10 ohne Fehler |
 | Tests | 80% Coverage (Domain: 90%) |
 | CQRS | Commands/Queries strikt getrennt |
 

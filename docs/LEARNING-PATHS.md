@@ -62,6 +62,18 @@ Select your workflow track:
 - **Standard:** New features (< 15 min)
 - **Enterprise:** Platform development (< 30 min)
 
+### Step 3b: Launch the Kanban Board (2 min)
+
+After initialising the workflow, open the local Kanban board to visualise your project:
+
+```bash
+npx @the-bearded-bear/claude-craft kanban --open
+```
+
+The board opens at `http://127.0.0.1:3737`. If your project uses the BMAD v6 workflow (`.bmad/sprint-status.yaml`), stories appear automatically with a 🔒 icon (read-only). Use the board during stand-ups and sprint reviews.
+
+**Tip:** Leave the board open in a browser tab while working — it live-reloads on every story change.
+
 ### Step 4: First Pre-Commit Check (5 min)
 
 ```bash

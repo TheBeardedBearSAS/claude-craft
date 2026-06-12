@@ -43,7 +43,7 @@ Voir `rules/02-architecture.md` pour les patterns.
 |-------|-------------|
 | Analyse avant code | Consulter `rules/01-workflow-analysis.md` |
 | strict_types | `declare(strict_types=1)` partout |
-| PHPStan level 9 | 0 erreurs obligatoire |
+| PHPStan level 10 | 0 erreurs obligatoire |
 | Coverage 80%+ | Domain 90%+ |
 
 ## Comment (Commandes & Workflows)

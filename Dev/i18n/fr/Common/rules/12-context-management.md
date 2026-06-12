@@ -350,11 +350,13 @@ La commande `/context` fournit des suggestions actionnables pour optimiser l'uti
 
 Ajuster le niveau d'effort du modele selon la complexite de la tache:
 
-| Commande | Effort | Usage |
+| Commande | Modele | Usage |
 |----------|--------|-------|
-| `/effort low` | Minimal | Taches simples, lookups |
-| `/effort medium` | Standard | Implementation courante |
-| `/effort high` | Maximum | Raisonnement complexe, architecture |
+| `/effort low` | Haiku 4.5 | Taches simples, lookups, classification |
+| `/effort medium` | Sonnet 4.6 | Implementation standard |
+| `/effort high` | Opus 4.8 | Raisonnement complexe, architecture |
+| `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | Décisions critiques, migrations complexes, ADR |
+| `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | Mode débit code maximal — pipelines automatisés, génération massive |
 
 ### Alerte d'inactivite (v2.1.84+)
 
@@ -485,8 +487,12 @@ Lors de la compaction, toujours preserver:
 
 | Variable | Description |
 |----------|-------------|
-| `CLAUDE_CODE_SUBAGENT_MODEL` | Modele pour les sous-agents (ex: `sonnet` pour optimiser les couts) |
-| `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre a `1` pour desactiver la memoire automatique |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | Modèle **par défaut** des sous-agents non typés (ex : `sonnet`). **Le frontmatter `model:` d'un agent prévaut** : les 11 reviewers `model: haiku` restent sur Haiku même avec cette variable à `sonnet`. |
+| `CLAUDE_CODE_FORK_SUBAGENT` | `1` pour isoler le contexte des sous-agents (forked subagents, v2.1.117+) |
+| `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Étendre/forcer le prompt caching (−40 % sur les sessions répétitives) |
+| `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre à `1` pour désactiver la mémoire automatique |
+
+> **Précédence modèle (clarification audit 2026-06-08) :** `model:` dans le frontmatter d'un agent > `CLAUDE_CODE_SUBAGENT_MODEL` > modèle de la session. La variable `SUBAGENT_MODEL=sonnet` n'écrase donc PAS les agents explicitement `model: haiku` — elle ne s'applique qu'aux sous-agents sans `model:` défini.
 
 ---
 
@@ -609,11 +615,12 @@ L'outil `Monitor` permet de streamer les evenements d'un processus en arriere-pl
 
 Utiliser `/model` pour changer de modele selon la complexite de la tache:
 
-| Commande | Modele | Usage |
+| Commande | Modèle | Usage |
 |----------|--------|-------|
-| `/model haiku` | Haiku 4.5 | Taches simples, classification |
-| `/model sonnet` | Sonnet 4.6 | Taches standard, implementation |
-| `/model opus` | Opus 4.6 | Raisonnement complexe, architecture |
+| `/model haiku` | Haiku 4.5 | Tâches simples, classification |
+| `/model sonnet` | Sonnet 4.6 | Tâches standard, implémentation |
+| `/model opus` | Opus 4.8 | Raisonnement complexe, architecture |
+| `/model opusplan` | Opus 4.8 (plan) / Sonnet 4.6 (exécution) | **Tiering dynamique** : Opus pour le Plan Mode, Sonnet pour l'exécution — optimise le ratio coût/qualité sur les tâches longues |
 
 ### Filtrage de sortie via hooks PostToolUse
 
@@ -702,23 +709,38 @@ Les fichiers sont fusionnes par ordre alphabetique, permettant aux equipes de su
 | Commande | Description | Usage |
 |----------|-------------|-------|
 | `/btw` | Questions rapides sans changement de contexte | Lookups, syntaxe, clarifications |
-| `/hooks` | Gestion interactive des hooks | Activer/desactiver, tester, debugger |
-| `/reload-plugins` | Rechargement manuel des plugins | Apres mise a jour de plugins |
-| `/proactive` | Alias pour `/loop` | Monitoring proactif recurrent |
+| `/hooks` | Gestion interactive des hooks | Activer/désactiver, tester, déboguer |
+| `/reload-plugins` | Rechargement manuel des plugins | Après mise à jour de plugins |
+| `/reload-skills` (v2.1.157+) | Re-scan des skills sans redémarrage (distinct de `/reload-plugins`) | Après ajout/modification d'un skill |
+| `/proactive` | Alias pour `/loop` | Monitoring proactif récurrent |
+
+> **⚠️ Trigger Dynamic Workflows renommé (v2.1.160) :** le mot-clé déclencheur est passé de `workflow` à **`ultracode`**. Demander un workflow « avec ses propres mots » fonctionne toujours. Le palier `/effort ultracode` (ci-dessus) reste valide.
+
+> **Hook `MessageDisplay` (v2.1.157+) :** nouvel événement permettant de transformer/masquer le texte assistant à l'affichage — utile pour un filtrage RTK-style côté sortie. `SessionStart` peut retourner `reloadSkills: true` pour rendre disponibles les skills qu'il installe dans la même session.
 
 ---
 
-## Variables d'environnement supplementaires (v2.1.105+)
+## Variables d'environnement supplémentaires (v2.1.105+)
 
 | Variable | Description |
 |----------|-------------|
 | `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | Charger CLAUDE.md depuis `--add-dir` |
-| `MAX_THINKING_TOKENS=8000` | Limite tokens de reflexion |
-| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Budget caracteres slash commands |
+| `MAX_THINKING_TOKENS=8000` | Limite tokens de réflexion |
+| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Budget caractères slash commands |
 | `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` | PowerShell au lieu de Bash (Windows, v2.1.84+) |
 | `OTEL_LOG_USER_PROMPTS` | Log prompts dans traces (beta) |
-| `OTEL_LOG_TOOL_DETAILS` | Log details outils (beta) |
+| `OTEL_LOG_TOOL_DETAILS` | Log détails outils (beta) |
 | `OTEL_LOG_TOOL_CONTENT` | Log contenu outils (beta, verbose) |
+
+### `fallbackModel` — repli automatique (settings.json, v2.1.166+)
+
+Réglage **fiabilité + coût** : jusqu'à 3 modèles de repli essayés dans l'ordre quand le primaire est surchargé/indisponible (flag équivalent `--fallback-model`, s'applique aussi aux sessions interactives).
+
+```json
+{ "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5"] }
+```
+
+Pour les 5 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), ce repli `opus → sonnet → haiku` évite les interruptions en pic de charge Opus sans dégrader le travail courant. Exemple prêt à l'emploi dans `.claude/settings.local.json.example`.
 
 ---
 

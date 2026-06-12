@@ -1,6 +1,6 @@
 # Laravel 13 — Framework Reference
 
-**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière stable : 13.14.0)
+**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière stable : 13.15.0)
 **PHP :** 8.3+ (8.5 recommandé)
 **Sources :** https://laravel.com/docs/13.x/releases
 

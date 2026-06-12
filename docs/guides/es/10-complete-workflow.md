@@ -18,7 +18,7 @@ Esta guía te lleva a través del ciclo de vida de desarrollo completo:
 
 **Prerequisitos:**
 - Claude Craft v8.11.0 instalado en tu proyecto
-- Claude Code v2.1.159 (recomendado) o v2.1.97+ (mínimo, CVE-2025-59536 parcheado)
+- Claude Code v2.1.168 (recomendado) o v2.1.97+ (mínimo, CVE-2025-59536 parcheado)
 - Comprensión básica de tu stack tecnológico elegido
 
 ---

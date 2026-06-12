@@ -1,6 +1,8 @@
-# Ferramentas de qualidade de codigo - Python
+# Ferramentas de qualidade de código - Python
 
-## Ruff - Linter e formatador rapido de Python
+> **Versões de referência:** Ruff **0.15+** | pytest **9.x** (remove suporte ao Python 3.9) | alvo `py314`.
+
+## Ruff - Linter e formatador rápido de Python
 
 ### Instalacao
 
@@ -15,7 +17,7 @@ pipx install ruff
 ```toml
 [tool.ruff]
 # Versao alvo do Python
-target-version = "py312"
+target-version = "py314"
 
 # Comprimento de linha
 line-length = 88
@@ -122,7 +124,7 @@ pip install types-requests types-python-dateutil types-redis
 
 ```toml
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
@@ -469,7 +471,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.14'
           cache: 'pip'
 
       - name: Install dependencies

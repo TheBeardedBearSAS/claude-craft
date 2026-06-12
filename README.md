@@ -28,25 +28,28 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
-## What's New in v8.7 (Audit 2026-05-18 — Phases 1→5 + refresh 2026-05-29)
+## What's New in v8.12.0
 
-**Reliability & security (Phases 1→5, v8.4.0 → v8.7.1):**
+**Audit exhaustif + durcissement (v8.12.0) :**
 
-- **Automatic rollback on update failure** (v8.7.1) -- `claude-craft update` snapshots `.claude/` before running scripts and restores it on any partial failure (`--no-rollback` opt-out for CI)
-- **Zero-prompt & team installs** (v8.7.0) -- `install --auto` auto-detects stack + locale (TTFV < 2 min), `install --from=<url>` syncs a team config from a Gist/internal endpoint, `skill add|list|remove` adds community skills from npm
-- **Hardened CI** (v8.4.0 → v8.5.0) -- CodeQL SAST + Trivy CVE scan, mutation testing now **blocking** on PRs, `@`-include linter (`lint:includes`), post-publish smoke test, 12 property-based tests via `fast-check`. **937 Vitest tests** green.
-- **Cost-optimized agents** (v8.5.0) -- 11 reviewer agents routed to `haiku`/`low` effort (-60% cost), 50 `check-*` commands to `haiku`, output filter threshold halved
-- **Security baseline** (v8.4.0) -- Python JWT pattern switched HS256 → **EdDSA (Ed25519)** with 15-min tokens, `disallowedTools` deny-list on 7 destructive-capable agents, fixed dangerous-command hook template
-- **New references** (v8.4.0) -- `paperclip/`, React Native New Architecture (JSI/TurboModules/Fabric), Vue Vapor Mode (beta)
+- **Audit multi-domaines** (sécurité, DX, concurrentiel, fiabilité, tokens/modèles, docs, architecture) mené par une équipe d'agents avec devil's advocates et vérification de fraîcheur des 14 stacks -- 80 findings, tous les P0/P1/P2 corrigés.
+- **Sécurité** : CVE FrankenPHP (CVE-2026-45062) et Docker (CVE-2026-33997) patchées ; hook de sécurité distribué corrigé (`exit 2`) ; durcissement Kanban (CSRF, COEP) et CI supply chain (digests épinglés, SHA256).
+- **Optimisation tokens** : templates `settings.json` distribués corrigés (IDs de modèles valides + `CLAUDE_CODE_FORK_SUBAGENT`).
+- **988 Vitest tests** green, mutation testing bloquant sur PRs.
 
-**Refresh 2026-05-29:**
+**Kanban BMAD v6 integration (v8.11.0):**
 
-- **Claude Code 2.1.154 + Opus 4.8** -- recommended runtime, Dynamic Workflows (orchestrate tens-to-hundreds of background agents), `effort: max`; critical agents (`security-auditor`, `migration-specialist`, `database-architect`, `ralph-conductor`) routed to `opus`/`xhigh`, reviewers stay `haiku`/`low`
-- **Repositioned around 4 defensible differentiators** -- QA Recette (browser regression capture), BMAD v6 sprint workflow, Ralph Wiggum loop, RTK token optimization (the workflow/orchestration a per-stack cookbook doesn't cover)
-- **Honest stack count (19 → 11)** -- removed orphan Go/Rust reference stacks (no commands, no reviewers); **PHP is now a base layer** auto-included with Symfony/Laravel rather than a standalone selectable stack
-- **Stack versions refreshed** -- Flutter 3.44/Dart 3.12, .NET 10 LTS/EF Core 10, Symfony 8.1, Laravel 13.12, Angular 22 (Signal Forms stable, zoneless + OnPush default, TS 6), Docker 29.5.2, Ansible 2.21.0
+- **Kanban ingère `.bmad/sprint-status.yaml`** -- le board Kanban lit les sprints directement depuis le fichier YAML BMAD v6 en lecture seule (icône verrou), sans dépendance SaaS. Les projets BMAD v6 n'ont plus le board vide.
 
-> ← Versions antérieures (v8.0 → v8.3) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
+**Releases 8.8.x → 8.10.x :**
+
+- **MIT-only strict (v8.8.0)** -- Claude Craft est 100 % open-source MIT, aucune licence commerciale ou enterprise. Stratégie open-core abandonnée.
+- **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
+- **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
+- **125 commandes sur 15 namespaces** -- namespace `/paperclip:*` (8 commandes) ajouté, 48 skills disponibles.
+- **Claude Code 2.1.168** -- version recommandée (Opus 4.8, Dynamic Workflows, `effort: ultracode`).
+
+> ← Versions antérieures (v8.0 → v8.7) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
 
 ## Install and First Result
 
@@ -97,20 +100,20 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **Python** | 3.14+ / FastAPI | `--tech=python` |
 | **Angular** | 22 | `--tech=angular` |
 | **Vue.js** | 3.5+ (3.6 beta Vapor) | `--tech=vuejs` |
-| **React Native** | 0.85 (New Architecture) | `--tech=reactnative` |
+| **React Native** | 0.86 (New Architecture) | `--tech=reactnative` |
 | **C# / .NET** | 10 LTS / C# 14 | `--tech=csharp` |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | `--tech=laravel` |
 | **PHP** | 8.5 | `--tech=php` |
-| **Paperclip** | 2026.529.0 | `--tech=paperclip` |
+| **Paperclip** | 2026.609.0 | `--tech=paperclip` |
 
-| **Docker** | 29.5.2 | `--tech=docker` |
-| **Coolify** | v4.1.1 (MCP natif, audit logging) | `--tech=coolify` |
+| **Docker** | 29.5.3 (CVE-2026-33997) | `--tech=docker` |
+| **Coolify** | v4.1.2 | `--tech=coolify` |
 | **Kubernetes** | 1.36.1 | `--tech=kubernetes` |
-| **OpenTofu** | 1.12.0 | `--tech=opentofu` |
+| **OpenTofu** | 1.12.1 | `--tech=opentofu` |
 | **Ansible** | 2.21.0 | `--tech=ansible` |
 | **Hcloud** | 1.61+ | `--tech=hcloud` |
 | **PgBouncer** | 1.25.2 (CVE-2026-6664/6665/6666/6667 patched) | `--tech=pgbouncer` |
-| **FrankenPHP** | 1.12.1 (CVE-2026-24894/24895 patched) | `--tech=frankenphp` |
+| **FrankenPHP** | 1.12.4 (CVE-2026-45062 patched) | `--tech=frankenphp` |
 
 See [Technologies](docs/TECHNOLOGIES.md) for full details.
 
@@ -119,8 +122,8 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 125 across 15 namespaces | `/workflow:init`, `/team:audit`, `/react:generate-component` |
-| **Skills** | 48 | Architecture, testing, security best practices |
+| **Commands** | 133 across 15 namespaces | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Skills** | 55 | Architecture, testing, security best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
 

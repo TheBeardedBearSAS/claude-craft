@@ -33,7 +33,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
-> Les **15 namespaces cœur + technologies** (`/common`, `/workflow`, `/team`, `/qa`, `/uiux` + les 10 stacks) totalisent **125 commandes** — c'est le chiffre d'en-tête de Claude Craft. Le tableau ci-dessous inclut en plus les namespaces d'infrastructure et de gestion de projet (BMAD), pour un total installable de **185 commandes sur 26 namespaces**. Référence détaillée auto-générée : [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> Les **15 namespaces cœur + technologies** (`/common`, `/workflow`, `/team`, `/qa`, `/uiux` + les 11 stacks dont `/paperclip:*`) totalisent **125 commandes** — c'est le chiffre d'en-tête de Claude Craft. Le tableau ci-dessous inclut en plus les namespaces d'infrastructure et de gestion de projet (BMAD), pour un total installable de **219 commandes sur 27 namespaces**. Référence détaillée auto-générée : [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
@@ -181,7 +181,7 @@ Add a complete technology stack to claude-craft with best practices:
 - [ ] Commands (5 files × 5 languages)
 - [ ] Installation script created
 - [ ] README.md updated
-- [ ] docs/index.html updated (stats + tech card)
+- [ ] website/LandingPage.vue updated (stats + tech card)
 - [ ] Makefile target added
 
 ### Agent Teams Commands

@@ -8,21 +8,43 @@ Dieses Dokument behandelt die wesentlichen Werkzeuge für die React Native Entwi
 
 ## Systemvoraussetzungen
 
-### Node.js >= 20 LTS (erforderlich für RN 0.85)
+### Node.js >= 22 LTS (erforderlich für RN 0.86)
 
-React Native 0.85 **stellt die Unterstützung für Node-Versionen < 20 ein**. Die minimal erforderliche Version ist **Node.js 20.19.4 LTS**.
+React Native 0.86 erfordert **Node.js 22.x LTS** als Minimum (RN 0.85 benötigte Node 20). Die empfohlene Version ist **Node.js 22.x active LTS**.
 
 ```bash
 # Version prüfen
-node --version  # Muss >= 20.19.4 sein
+node --version  # Muss >= 22.0.0 sein
 
 # Installation via nvm (empfohlen)
-nvm install 20
-nvm use 20
-nvm alias default 20
+nvm install 22
+nvm use 22
+nvm alias default 22
 ```
 
-> Node 16 und 18 werden mit RN 0.85 nicht mehr unterstützt. Vor der Migration aktualisieren.
+> Node-Versionen < 22 werden mit RN 0.86 nicht mehr unterstützt. Vor der Migration aktualisieren.
+
+### React Native Gesture Handler 3.0.0 — Breaking Changes
+
+RNGH 3.0.0 führt Breaking Changes mit RN 0.86 ein:
+
+```typescript
+// ✅ RNGH 3.0 — GestureHandlerRootView auf Root-Ebene erforderlich
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+export default function App() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* ... */}
+    </GestureHandlerRootView>
+  );
+}
+
+// Breaking: alte Komponenten-API (PanGestureHandler, TapGestureHandler)
+// → migrieren zu: Gesture.Pan(), Gesture.Tap() (neue Gesture-API)
+```
+
+**Quelle:** [RNGH 3.0 Migrationsleitfaden](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/migrating-from-2.x/)
 
 ---
 
@@ -208,7 +230,7 @@ rm -rf node_modules/.cache
 
 ---
 
-## Metro TLS (0.85+)
+## Metro TLS (0.85+ / 0.86+)
 
 Seit RN 0.85 akzeptiert Metro ein `server.tls`-Objekt in `metro.config.js` und ermöglicht damit HTTPS und WSS (sicheres WebSocket für Fast Refresh) während der lokalen Entwicklung.
 
@@ -224,7 +246,7 @@ Seit RN 0.85 akzeptiert Metro ein `server.tls`-Objekt in `metro.config.js` und e
 ### Konfiguration
 
 ```javascript
-// metro.config.js (bare RN 0.85+)
+// metro.config.js (bare RN 0.85+ / 0.86+)
 const { getDefaultConfig } = require('@react-native/metro-config');
 const fs = require('fs');
 

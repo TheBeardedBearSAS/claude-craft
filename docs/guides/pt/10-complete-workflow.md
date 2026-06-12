@@ -18,7 +18,7 @@ Este guia acompanha você ao longo de todo o ciclo de desenvolvimento:
 
 **Pré-requisitos:**
 - Claude Craft v8.11.0 instalado no seu projeto
-- Claude Code v2.1.159 (recomendado) ou v2.1.97+ (mínimo, CVE-2025-59536 corrigido)
+- Claude Code v2.1.168 (recomendado) ou v2.1.97+ (mínimo, CVE-2025-59536 corrigido)
 - Conhecimento básico da stack de tecnologia escolhida
 
 ---

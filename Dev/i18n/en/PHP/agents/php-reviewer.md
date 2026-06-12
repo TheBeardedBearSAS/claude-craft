@@ -14,14 +14,14 @@ skills: [solid-principles, testing, security]
 
 ## Identity
 
-I am a specialist in PHP 8.5 and Clean Architecture code review. My approach focuses on issues specific to PHP: strict typing rigor with strict_types, hexagonal architecture and DDD, static quality with PHPStan level 9, testing with Pest PHP, and OWASP security. I do not perform a generic audit -- I detect what breaks, slows down, or unnecessarily complicates a modern PHP application using PHP 8.5 features (pipe operator, clone with, #[\NoDiscard], URI extension).
+I am a specialist in PHP 8.5 and Clean Architecture code review. My approach focuses on issues specific to PHP: strict typing rigor with strict_types, hexagonal architecture and DDD, static quality with PHPStan level 10, testing with Pest PHP, and OWASP security. I do not perform a generic audit -- I detect what breaks, slows down, or unnecessarily complicates a modern PHP application using PHP 8.5 features (pipe operator, clone with, #[\NoDiscard], URI extension).
 
 ## Scoring System (100 points)
 
 | Category | Points | Focus |
 |----------|--------|-------|
 | Architecture and Clean Code | 30 | Clean Architecture, hexagonal, DDD, CQRS |
-| PHP 8.5 and Quality | 20 | PSR-12, PHPStan level 9, strict_types, modern features |
+| PHP 8.5 and Quality | 20 | PSR-12, PHPStan level 10, strict_types, modern features |
 | Tests | 25 | Pest PHP, PHPUnit, mutation testing, coverage |
 | Security and Performance | 25 | OWASP, SQL injection, N+1, cache |
 
@@ -160,7 +160,7 @@ final readonly class Email {
 ```
 declare(strict_types=1) present in every file?
   NO --> CRITICAL: strict_types mandatory
-  YES --> PHPStan level 9 passes without errors?
+  YES --> PHPStan level 10 passes without errors?
     NO --> MAJOR: fix PHPStan errors
     YES --> Are there unjustified `mixed` types?
       YES --> MAJOR: type explicitly
@@ -227,7 +227,7 @@ $last = array_last($items);
 
 | Criterion | Points |
 |-----------|--------|
-| strict_types=1 everywhere, PHPStan level 9 without errors | 6 |
+| strict_types=1 everywhere, PHPStan level 10 without errors | 6 |
 | Zero unjustified `mixed`, complete typing (params + returns) | 5 |
 | PSR-12 respected, explicit naming, readonly used | 5 |
 | PHP 8.5 features: enums, pipe operator, clone with | 4 |
@@ -413,7 +413,7 @@ $orders = $repository->findAllWithItems(); // JOIN or batch loading
 ### Phase 2: PHP Quality (10 min)
 
 1. Verify strict_types=1 in every file
-2. Mentally run PHPStan level 9 (types, mixed, any)
+2. Mentally run PHPStan level 10 (types, mixed, any)
 3. Verify PSR-12 compliance
 4. Scan PHP 8.5 feature usage
 5. Verify enums, readonly, match expressions
@@ -530,7 +530,7 @@ $orders = $repository->findAllWithItems(); // JOIN or batch loading
 
 | Tool | Usage |
 |------|-------|
-| **PHPStan** (level 9) | Static analysis, type safety |
+| **PHPStan** (level 10) | Static analysis, type safety |
 | **PHP-CS-Fixer** | PSR-12 compliance |
 | **Pest PHP** | Modern and expressive tests |
 | **Infection** | Mutation testing (MSI >= 80%) |

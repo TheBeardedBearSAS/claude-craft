@@ -539,4 +539,75 @@ make build-apk
 
 ---
 
+## Pontos de atenção Flutter 3.44 (2026)
+
+### SwiftPM padrão no iOS
+
+Flutter 3.44+ usa **Swift Package Manager (SwiftPM)** como gerenciador de plugins iOS padrão, substituindo o CocoaPods (ainda suportado, mas deprecado para novos projetos).
+
+```bash
+# Verificar migração SwiftPM
+flutter pub upgrade
+flutter build ios  # gera Package.swift automaticamente
+
+# Se o plugin não for compatível com SwiftPM (apenas CocoaPods legacy)
+flutter config --no-use-swift-package-manager
+```
+
+```yaml
+# pubspec.yaml — desabilitar SwiftPM para plugin legacy
+flutter:
+  use-swift-package-manager: false
+```
+
+**Impacto:** plugins sem suporte SwiftPM requerem `use-swift-package-manager: false` ou migração por parte do autor do plugin. A maioria dos plugins oficiais do pub.dev já suporta SwiftPM desde o Flutter 3.22+.
+
+**Fonte:** https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers
+
+### Android Gradle Plugin (AGP) 9
+
+Flutter 3.44 requer **AGP 9.0+**. Atualizar `android/build.gradle`:
+
+```groovy
+// android/build.gradle
+buildscript {
+  dependencies {
+    classpath 'com.android.tools.build:gradle:9.0.0'  // AGP 9
+  }
+}
+```
+
+```properties
+# android/gradle/wrapper/gradle-wrapper.properties
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.0-bin.zip
+```
+
+**Breaking AGP 9:** `android.enableR8.fullMode=true` por padrão (proguard mais agressivo); verificar regras de keep para reflexão.
+
+### Deprecações Material / Cupertino (Flutter 3.44)
+
+Vários componentes legacy estão deprecados:
+
+```dart
+// ❌ Deprecado — MaterialButton
+MaterialButton(onPressed: () {}, child: Text('OK'));
+// ✅ Usar ElevatedButton / FilledButton / OutlinedButton / TextButton
+
+// ❌ Deprecado — FlatButton / RaisedButton (removidos desde 3.0, warning se ainda presente)
+// ✅ Migrar para TextButton / ElevatedButton
+
+// ❌ Deprecado — CupertinoTextField sem padding explícito (comportamento alterado)
+// ✅ Especificar padding: EdgeInsets.symmetric(...)
+
+// ❌ Deprecado — showDialog sem barrierDismissible: false para dialogs críticos
+// ✅ Sempre especificar barrierDismissible explicitamente
+
+// ❌ Deprecado — ThemeData.colorSchemeSeed + primarySwatch juntos
+// ✅ Usar apenas ColorScheme.fromSeed()
+```
+
+Executar `dart fix --apply` para migrar automaticamente as deprecações detectáveis.
+
+---
+
 *Essas ferramentas e configurações otimizam o fluxo de trabalho de desenvolvimento Flutter.*

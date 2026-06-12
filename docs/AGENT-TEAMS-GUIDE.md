@@ -6,7 +6,7 @@ Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordina
 
 | Requirement | Minimum Version | Check |
 |-------------|-----------------|-------|
-| Claude Code | v2.1.97+ (v2.1.154 recommended, CVE-2025-59536 patched) | `claude --version` |
+| Claude Code | v2.1.97+ (v2.1.168 recommended, CVE-2025-59536 patched) | `claude --version` |
 | Environment variable | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (must be enabled explicitly) | `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` |
 | Claude model | Opus 4.8 (recommended for leader) | Model selector in Claude Code |
 

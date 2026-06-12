@@ -260,7 +260,7 @@ endif
 #!/bin/bash
 set -e
 
-echo "=� Flutter project setup..."
+echo "=� Flutter project setup..."
 
 # Check Flutter
 if ! command -v flutter &> /dev/null; then
@@ -268,7 +268,7 @@ if ! command -v flutter &> /dev/null; then
     exit 1
 fi
 
-echo "=� Installing dependencies..."
+echo "=� Installing dependencies..."
 flutter pub get
 
 echo "=' Generating code..."
@@ -283,18 +283,18 @@ echo " Setup complete!"
 #!/bin/bash
 set -e
 
-echo ">� Running all tests..."
+echo ">� Running all tests..."
 
-echo "1� Unit tests..."
+echo "1� Unit tests..."
 flutter test test/unit/
 
-echo "2� Widget tests..."
+echo "2� Widget tests..."
 flutter test test/widget/
 
-echo "3� Integration tests..."
+echo "3� Integration tests..."
 flutter test integration_test/
 
-echo "=� Generating coverage..."
+echo "=� Generating coverage..."
 flutter test --coverage
 
 echo " All tests passed!"
@@ -306,12 +306,12 @@ echo " All tests passed!"
 #!/bin/bash
 set -e
 
-echo "<� Building all platforms..."
+echo "<� Building all platforms..."
 
-echo "=� Android APK..."
+echo "=� Android APK..."
 flutter build apk --release
 
-echo "=� Android App Bundle..."
+echo "=� Android App Bundle..."
 flutter build appbundle --release
 
 echo "<N iOS..."
@@ -321,7 +321,7 @@ echo "< Web..."
 flutter build web --release
 
 echo " Builds complete!"
-echo "=� Files available in build/"
+echo "=� Files available in build/"
 ```
 
 ---
@@ -539,4 +539,75 @@ make build-apk
 
 ---
 
-*These tools and configurations optimize the Flutter development workflow.*
+## Flutter 3.44 Hinweise (2026)
+
+### SwiftPM standardmäßig auf iOS
+
+Flutter 3.44+ verwendet **Swift Package Manager (SwiftPM)** als Standard-iOS-Plugin-Manager und ersetzt CocoaPods (weiterhin unterstützt, aber für neue Projekte veraltet).
+
+```bash
+# SwiftPM-Migration überprüfen
+flutter pub upgrade
+flutter build ios  # generiert Package.swift automatisch
+
+# Falls Plugin nicht SwiftPM-kompatibel (nur Legacy CocoaPods)
+flutter config --no-use-swift-package-manager
+```
+
+```yaml
+# pubspec.yaml — SwiftPM für Legacy-Plugin deaktivieren
+flutter:
+  use-swift-package-manager: false
+```
+
+**Auswirkung:** Plugins ohne SwiftPM-Unterstützung erfordern `use-swift-package-manager: false` oder Migration durch den Plugin-Autor. Die meisten offiziellen pub.dev-Plugins unterstützen SwiftPM bereits seit Flutter 3.22+.
+
+**Quelle:** https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers
+
+### Android Gradle Plugin (AGP) 9
+
+Flutter 3.44 erfordert **AGP 9.0+**. `android/build.gradle` aktualisieren:
+
+```groovy
+// android/build.gradle
+buildscript {
+  dependencies {
+    classpath 'com.android.tools.build:gradle:9.0.0'  // AGP 9
+  }
+}
+```
+
+```properties
+# android/gradle/wrapper/gradle-wrapper.properties
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.0-bin.zip
+```
+
+**Breaking AGP 9:** `android.enableR8.fullMode=true` ist standardmäßig aktiviert (aggressiveres Proguard); Keep-Regeln für Reflection überprüfen.
+
+### Material / Cupertino Deprecations (Flutter 3.44)
+
+Mehrere Legacy-Komponenten sind veraltet:
+
+```dart
+// ❌ Veraltet — MaterialButton
+MaterialButton(onPressed: () {}, child: Text('OK'));
+// ✅ ElevatedButton / FilledButton / OutlinedButton / TextButton verwenden
+
+// ❌ Veraltet — FlatButton / RaisedButton (seit 3.0 entfernt, Warning wenn noch vorhanden)
+// ✅ Zu TextButton / ElevatedButton migrieren
+
+// ❌ Veraltet — CupertinoTextField ohne explizites Padding (Verhalten geändert)
+// ✅ padding: EdgeInsets.symmetric(...) angeben
+
+// ❌ Veraltet — showDialog ohne barrierDismissible: false für kritische Dialoge
+// ✅ barrierDismissible immer explizit angeben
+
+// ❌ Veraltet — ThemeData.colorSchemeSeed + primarySwatch zusammen
+// ✅ Nur ColorScheme.fromSeed() verwenden
+```
+
+`dart fix --apply` ausführen, um erkennbare Deprecations automatisch zu migrieren.
+
+---
+
+*Diese Tools und Konfigurationen optimieren den Flutter-Entwicklungsworkflow.*

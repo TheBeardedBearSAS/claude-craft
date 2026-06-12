@@ -1,10 +1,10 @@
-# Symfony 8.1 / PHP 8.4+ - Quick Reference
+# Symfony 8.1 / PHP 8.5 (8.4+ min) - Quick Reference
 
 ## Versions Requises (2026)
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| PHP | 8.4+ | Symfony 8.1 requiert PHP 8.4+ (minimum), recommandé pour Lazy Objects natifs et Property Hooks |
+| PHP | 8.4+ (8.5 recommandé) | Symfony 8.1 requiert PHP 8.4+ minimum ; PHP 8.5 recommandé (stable nov. 2025 — pipe operator, clone with, #[\NoDiscard]) |
 | Symfony | 8.1.x (ou 7.4 LTS) | Stable 8.1 (mai 2026, recommandée) — https://symfony.com/releases/8.1 |
 | Doctrine ORM | 3.x | |
 | PHPStan | 2.2.x | |

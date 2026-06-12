@@ -107,7 +107,7 @@ Not all Claude Craft skill features are supported on every surface. This matrix 
 | Feature | Claude Code | Cursor / Windsurf |
 |---------|-------------|-------------------|
 | **Rules** | Full 27 rules | Condensed 5 key rules |
-| **Skills** | 67+ skills | Skills documented (manual copy) |
+| **Skills** | 48 skills | Skills documented (manual copy) |
 | **Commands** | 125 commands | Not available (native IDE commands) |
 | **Agents** | 70 agents (31 specialized + 39 infra) | Not available |
 | **BMAD v6** | Full workflow | Principles documented |

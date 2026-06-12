@@ -6,7 +6,48 @@
 
 Vue Router 5 est **composition-API-first** : les navigation guards (`beforeEach`, `beforeRouteEnter`, etc.) sont désormais des composables de premier rang utilisables directement dans `<script setup>`. Le hook `onBeforeRouteLeave` / `onBeforeRouteUpdate` remplace les guards d'options. La création du router reste identique (`createRouter` / `createWebHistory`), mais les types internes ont été révisés — les imports depuis `vue-router` sont inchangés côté usage courant.
 
-Référence : https://router.vuejs.org/guide/migration/
+#### Vue Router 5 — File-Based Routing (nouveau)
+
+Vue Router 5 introduit le **file-based routing** optionnel via le plugin `@vue-router/auto` (basé sur unplugin-vue-router) :
+
+```bash
+npm install -D @vue-router/auto unplugin-vue-router
+```
+
+```typescript
+// vite.config.ts
+import VueRouter from 'unplugin-vue-router/vite';
+
+export default defineConfig({
+  plugins: [
+    VueRouter({
+      routesFolder: 'src/pages',  // Convention : src/pages → routes
+    }),
+    Vue(),
+  ],
+});
+```
+
+```
+src/pages/
+├── index.vue          → /
+├── about.vue          → /about
+├── users/
+│   ├── index.vue      → /users
+│   └── [id].vue       → /users/:id
+└── [...404].vue       → /* (404)
+```
+
+```typescript
+// main.ts — router auto-généré
+import { createRouter, createWebHistory } from 'vue-router/auto';
+
+const router = createRouter({ history: createWebHistory() });
+```
+
+**Avantages :** routes type-safe (`useRoute()` retourne le type précis), zéro configuration manuelle, hot reload des routes. Compatible avec `definePageMeta()` pour les meta-données.
+
+Référence : https://router.vuejs.org/guide/migration/ | https://uvr.esm.is/
 
 ### Vite 5 → 8
 
@@ -49,6 +90,9 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       output: {
+        // ⚠️ Vite 8 (Rolldown) : manualChunks est déprécié quand Rolldown est actif.
+        // Rolldown applique un code-splitting automatique optimal.
+        // Garder uniquement si Rolldown désactivé (legacy: build.rollupOptions.experimentalMinChunkSize).
         manualChunks: {
           'vue-vendor': ['vue', 'vue-router', 'pinia'],
         },
@@ -57,6 +101,8 @@ export default defineConfig({
   },
 })
 ```
+
+> **Vite 8 + Rolldown :** `manualChunks` est ignoré en mode Rolldown (bundler par défaut depuis Vite 8). Supprimer ou conditionner à `build.rolldown !== true`. Rolldown produit un découpage automatique équivalent ou meilleur.
 
 ### Environment Variables
 

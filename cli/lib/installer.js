@@ -278,6 +278,14 @@ export async function runInstallation(cli, { CLI_ROOT }) {
     let step = 2;
     for (const tech of installTechs) {
       if (tech === 'docker') continue; // Handled by infra
+      if (tech === 'coolify') {
+        // coolify is an infrastructure tech — it has no install script in Dev/scripts/.
+        // Inform the user rather than silently skipping (audit CLI-03).
+        console.log(
+          `  ${c.yellow}Note:${c.reset} 'coolify' is an infra tech — use Docker/Infrastructure rules instead (--infra or step 4).`
+        );
+        continue;
+      }
       const scriptName = `install-${tech}-rules.sh`;
       const scriptPath = path.join(scriptsDir, scriptName);
       if (fs.existsSync(scriptPath)) {

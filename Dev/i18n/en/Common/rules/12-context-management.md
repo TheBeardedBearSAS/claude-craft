@@ -350,11 +350,13 @@ The `/context` command provides actionable suggestions to optimize context usage
 
 Adjust the model's effort level based on task complexity:
 
-| Command | Effort | Usage |
-|---------|--------|-------|
-| `/effort low` | Minimal | Simple tasks, lookups |
-| `/effort medium` | Standard | Routine implementation |
-| `/effort high` | Maximum | Complex reasoning, architecture |
+| Command | Model | Usage |
+|---------|-------|-------|
+| `/effort low` | Haiku 4.5 | Simple tasks, lookups, classification |
+| `/effort medium` | Sonnet 4.6 | Standard implementation |
+| `/effort high` | Opus 4.8 | Complex reasoning, architecture |
+| `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | Critical decisions, complex migrations, ADR |
+| `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | Maximum code throughput — automated pipelines, massive generation |
 
 ### Inactivity Alert (v2.1.84+)
 
@@ -485,8 +487,12 @@ During compaction, always preserve:
 
 | Variable | Description |
 |----------|-------------|
-| `CLAUDE_CODE_SUBAGENT_MODEL` | Model for sub-agents (e.g., `sonnet` to optimize costs) |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | **Default** model for untyped sub-agents (e.g., `sonnet`). **Agent frontmatter `model:` takes precedence**: 11 reviewers with `model: haiku` stay on Haiku even with this variable set to `sonnet`. |
+| `CLAUDE_CODE_FORK_SUBAGENT` | `1` to isolate sub-agent contexts (forked subagents, v2.1.117+) |
+| `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Extend/force prompt caching (−40% on repetitive sessions) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Set to `1` to disable automatic memory |
+
+> **Model precedence (audit 2026-06-08):** `model:` in agent frontmatter > `CLAUDE_CODE_SUBAGENT_MODEL` > session model. Setting `SUBAGENT_MODEL=sonnet` does NOT override agents explicitly set to `model: haiku` — it only applies to sub-agents without a defined `model:` field.
 
 ---
 
@@ -613,7 +619,8 @@ Use `/model` to switch models based on task complexity:
 |---------|-------|-------|
 | `/model haiku` | Haiku 4.5 | Simple tasks, classification |
 | `/model sonnet` | Sonnet 4.6 | Standard tasks, implementation |
-| `/model opus` | Opus 4.6 | Complex reasoning, architecture |
+| `/model opus` | Opus 4.8 | Complex reasoning, architecture |
+| `/model opusplan` | Opus 4.8 (plan) / Sonnet 4.6 (execute) | **Dynamic tiering**: Opus for Plan Mode, Sonnet for execution — optimizes cost/quality ratio on long tasks |
 
 ### Output Filtering via Hooks
 
@@ -704,7 +711,12 @@ Files are merged in alphabetical order, allowing teams to layer configurations w
 | `/btw` | Quick questions without context switching | Lookups, syntax, clarifications |
 | `/hooks` | Interactive hook management | Enable/disable, test, debug |
 | `/reload-plugins` | Manual plugin reload | After plugin updates |
+| `/reload-skills` (v2.1.157+) | Re-scan skills without restart (distinct from `/reload-plugins`) | After adding/modifying a skill |
 | `/proactive` | Alias for `/loop` | Proactive recurring monitoring |
+
+> **⚠️ Dynamic Workflows trigger renamed (v2.1.160):** The trigger keyword changed from `workflow` to **`ultracode`**. Asking for a workflow "in your own words" still works. The `/effort ultracode` tier (above) remains valid.
+
+> **`MessageDisplay` hook (v2.1.157+):** New event to transform/hide assistant text at display — useful for RTK-style output filtering. `SessionStart` can return `reloadSkills: true` to make skills it installs available in the same session.
 
 ---
 
@@ -720,6 +732,16 @@ Files are merged in alphabetical order, allowing teams to layer configurations w
 | `OTEL_LOG_TOOL_DETAILS` | Log tool details (beta) |
 | `OTEL_LOG_TOOL_CONTENT` | Log tool content (beta, verbose) |
 
+### `fallbackModel` — automatic fallback (settings.json, v2.1.166+)
+
+**Reliability + cost** setting: up to 3 fallback models tried in order when the primary is overloaded/unavailable (equivalent `--fallback-model` flag, also applies to interactive sessions).
+
+```json
+{ "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5"] }
+```
+
+For the 5 `opus` agents (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), this `opus → sonnet → haiku` fallback avoids interruptions during Opus peak load without degrading current work. Ready-to-use example in `.claude/settings.local.json.example`.
+
 ---
 
 ## Advanced Skills (v2.1.105+)
@@ -731,6 +753,36 @@ Files are merged in alphabetical order, allowing teams to layer configurations w
 | `claudeMdExcludes` (setting) | Exclude specific CLAUDE.md files in monorepos |
 
 **Auto-compaction and skills:** After compaction, skills auto-reload (5K tokens/skill, 25K total max).
+
+---
+
+## Token Optimization — Quick Setup
+
+> **Command:** `/common:setup-rtk` to automatically configure all optimizations.
+
+**RTK (Rust Token Killer):** CLI proxy that reduces token consumption by 60-90% on dev commands. Install: `rtk init -g`.
+
+**Sub-agent model:** `export CLAUDE_CODE_SUBAGENT_MODEL="sonnet"` — 40-60% cost reduction.
+
+**Optimization hooks:**
+
+| Hook | File | Impact |
+|------|------|--------|
+| **PostToolUse** (Bash) | `~/.claude/hooks/post-tool-filter.sh` | Guides Claude to summarize outputs >10KB |
+| **PreCompact** | `~/.claude/hooks/pre-compact.sh` | Preserves critical context before compaction |
+| **SessionStart** (compact) | Template `context-reinject.json` | Re-injects `context-essentials.md` after compaction |
+
+Templates available in `.claude/templates/hooks/`: `output-filter.json`, `pre-compact.json`, `context-reinject.json`.
+
+| Optimization | Savings |
+|---|---|
+| RTK + ultra-compact | 60-90% on CLI outputs |
+| SUBAGENT_MODEL=sonnet | 40-60% sub-agent cost |
+| PostToolUse hook | Reduces context pollution |
+| PreCompact hook | Prevents context loss |
+| **Combined total** | **55-65% overall reduction** |
+
+> Detailed examples and templates: see `@.claude/references/base/context-management.md`
 
 ---
 

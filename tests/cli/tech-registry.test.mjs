@@ -130,12 +130,13 @@ describe('tech-registry consistency with constants.js', () => {
     }
   });
 
-  it('every TECH_REGISTRY key (except docker) exists in TECHNOLOGIES', () => {
+  it('every INSTALLABLE_TECHS key exists in TECHNOLOGIES (docker/coolify excluded)', () => {
     for (const key of INSTALLABLE_TECHS) {
       expect(TECHNOLOGIES, `Missing TECHNOLOGIES entry for ${key}`).toHaveProperty(key);
     }
-    // Docker is also in TECHNOLOGIES
-    expect(TECHNOLOGIES).toHaveProperty('docker');
+    // docker and coolify are infra techs — excluded from the installation menu (audit CLI-02)
+    expect(TECHNOLOGIES).not.toHaveProperty('docker');
+    expect(TECHNOLOGIES).not.toHaveProperty('coolify');
   });
 
   it('descriptions are consistent between registry and constants', () => {
@@ -146,19 +147,15 @@ describe('tech-registry consistency with constants.js', () => {
     }
   });
 
-  it('TECHNOLOGIES is derived from TECH_REGISTRY (same keys minus base layers)', () => {
-    // Base-layer techs (php) are excluded from the selectable menu (audit DA-PM-03).
-    const registryKeys = Object.keys(TECH_REGISTRY)
-      .filter((k) => !TECH_REGISTRY[k].baseLayer)
-      .sort();
+  it('TECHNOLOGIES is derived from INSTALLABLE_TECHS (excludes base layers and infra)', () => {
+    // INSTALLABLE_TECHS excludes php (base layer), docker and coolify (infra) — audit CLI-02.
     const techKeys = Object.keys(TECHNOLOGIES).sort();
-    expect(techKeys).toEqual(registryKeys);
+    expect(techKeys).toEqual([...INSTALLABLE_TECHS].sort());
   });
 
-  it('TECHNOLOGIES.name matches TECH_REGISTRY.displayName for all selectable entries', () => {
-    for (const [key, entry] of Object.entries(TECH_REGISTRY)) {
-      if (entry.baseLayer) continue; // not in the selectable menu
-      expect(TECHNOLOGIES[key].name, `${key} name mismatch`).toBe(entry.displayName);
+  it('TECHNOLOGIES.name matches TECH_REGISTRY.displayName for all installable entries', () => {
+    for (const key of INSTALLABLE_TECHS) {
+      expect(TECHNOLOGIES[key].name, `${key} name mismatch`).toBe(TECH_REGISTRY[key].displayName);
     }
   });
 });
