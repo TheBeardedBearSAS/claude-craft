@@ -28,7 +28,13 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
-## What's New in v8.14.0
+## What's New in v8.15.0
+
+**Refonte du design de l'interface web Kanban (v8.15.0) :**
+
+- **Thème dark-only opiniâtre** d'après une maquette **Claude Design** : accent **acid-lime** (oklch, distinct des six teintes de statut), typographie **Space Grotesk + JetBrains Mono** auto-hébergée via `@fontsource` (CSP `font-src 'self'`).
+- **Panneau Tweaks** : code couleur des cartes (statut / priorité / TDD / epic), accent et densité, persistés en `localStorage`.
+- **Les 6 vues restylées** (board, backlog, sprints, burndown, deps, docs) ; drag&drop, navigation clavier, `<dialog>` natifs et a11y préservés. Coloration en helpers JS purs testés.
 
 **Interface web Kanban — accès à tous les artefacts BMAD v6 (v8.14.0) :**
 
