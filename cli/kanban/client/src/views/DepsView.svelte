@@ -1,6 +1,7 @@
 <script>
   import cytoscape from 'cytoscape';
   import dagre from 'cytoscape-dagre';
+  import { STATUS } from '../lib/config.js';
 
   cytoscape.use(dagre);
 
@@ -13,11 +14,10 @@
   let loading = $state(true);
   let error = $state(null);
 
-  const stats = $derived({
-    nodes: nodes.length,
-    edges: edges.length,
-    cycles: cycles.length,
-  });
+  const stats = $derived({ nodes: nodes.length, edges: edges.length, cycles: cycles.length });
+
+  /** Couleur de statut côté DOM (badge) — var() résolu par le navigateur. */
+  const domStatusColor = (status) => `var(${STATUS[status]?.cssVar || '--fg-faint'})`;
 
   async function loadDependencies() {
     loading = true;
@@ -36,18 +36,6 @@
     }
   }
 
-  function getStatusColor(status) {
-    const colors = {
-      backlog: 'var(--fg-dim)',
-      'ready-for-dev': 'var(--info)',
-      'in-progress': 'var(--warn)',
-      review: 'var(--accent)',
-      done: 'var(--ok)',
-      blocked: 'var(--danger)',
-    };
-    return colors[status] || 'var(--fg-dim)';
-  }
-
   function isInCycle(nodeId) {
     return cycles.some((cycle) => cycle.includes(nodeId));
   }
@@ -59,16 +47,21 @@
   $effect(() => {
     if (!graphContainer || nodes.length === 0 || !edges || cyInstance) return;
 
+    // Cytoscape rend sur canvas : on résout les tokens en couleurs réelles.
+    const root = getComputedStyle(document.documentElement);
+    const tok = (n, fb) => root.getPropertyValue(n).trim() || fb;
+    const statusColor = (status) => tok(STATUS[status]?.cssVar || '--fg-faint', '#888');
+    const cBg = tok('--bg-inset', '#111');
+    const cBorder = tok('--border-faint', '#333');
+    const cBorderStrong = tok('--border-strong', '#555');
+    const cDanger = tok('--danger', '#e5484d');
+    const cMono = tok('--mono', 'monospace');
+
     const cycleSet = new Set(cycles.flat());
 
     const elements = [
-      ...nodes.map((n) => ({
-        data: { id: n.id, label: n.id },
-        classes: cycleSet.has(n.id) ? 'in-cycle' : '',
-      })),
-      ...edges.map((e) => ({
-        data: { source: e.from, target: e.to },
-      })),
+      ...nodes.map((n) => ({ data: { id: n.id, label: n.id }, classes: cycleSet.has(n.id) ? 'in-cycle' : '' })),
+      ...edges.map((e) => ({ data: { source: e.from, target: e.to } })),
     ];
 
     const cy = cytoscape({
@@ -82,56 +75,42 @@
             shape: 'round-rectangle',
             'background-color': (ele) => {
               const node = nodes.find((n) => n.id === ele.id());
-              return node ? getStatusColor(node.status) : 'var(--fg-dim)';
+              return node ? statusColor(node.status) : '#888';
             },
-            color: 'var(--bg)',
+            color: cBg,
             'text-valign': 'center',
             'text-halign': 'center',
             'font-size': '11px',
             'font-weight': '600',
-            'font-family': 'var(--mono)',
+            'font-family': cMono,
             width: 'label',
             height: 'label',
-            'padding-left': '8px',
-            'padding-right': '8px',
-            'padding-top': '6px',
-            'padding-bottom': '6px',
+            'padding-left': '10px',
+            'padding-right': '10px',
+            'padding-top': '7px',
+            'padding-bottom': '7px',
             'border-width': 1,
-            'border-color': 'var(--border)',
+            'border-color': cBorder,
           },
         },
-        {
-          selector: 'node.in-cycle',
-          style: {
-            'border-width': 3,
-            'border-color': 'var(--danger)',
-          },
-        },
+        { selector: 'node.in-cycle', style: { 'border-width': 3, 'border-color': cDanger } },
         {
           selector: 'edge',
           style: {
-            width: 1.5,
-            'line-color': 'var(--fg-dim)',
-            'target-arrow-color': 'var(--fg-dim)',
+            width: 1.6,
+            'line-color': cBorderStrong,
+            'target-arrow-color': cBorderStrong,
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
           },
         },
       ],
-      layout: {
-        name: 'dagre',
-        rankDir: 'LR',
-        spacingFactor: 1.3,
-        nodeDimensionsIncludeLabels: true,
-      },
+      layout: { name: 'dagre', rankDir: 'LR', spacingFactor: 1.3, nodeDimensionsIncludeLabels: true },
     });
 
     cy.on('tap', 'node', (evt) => {
-      const nodeId = evt.target.id();
-      const nodeData = nodes.find((n) => n.id === nodeId);
-      if (nodeData) {
-        selectedNode = nodeData;
-      }
+      const nodeData = nodes.find((n) => n.id === evt.target.id());
+      if (nodeData) selectedNode = nodeData;
     });
 
     cyInstance = cy;
@@ -145,190 +124,71 @@
   });
 </script>
 
-{#if loading}
-  <div class="empty">Loading dependencies...</div>
-{:else if error}
-  <div class="empty" style="color: var(--danger)">Error: {error}</div>
-{:else if nodes.length === 0}
-  <div class="empty">No dependencies found</div>
-{:else}
-  <div class="deps-container">
-    <header class="deps-header">
-      <span class="stat">Nodes: {stats.nodes}</span>
-      <span class="stat">Edges: {stats.edges}</span>
-      <span class="stat" class:danger={stats.cycles > 0}>
-        Cycles: {stats.cycles}
-      </span>
-    </header>
+<div class="deps-pad">
+  {#if loading}
+    <div class="empty">Loading dependencies…</div>
+  {:else if error}
+    <div class="empty" style="color: var(--danger)">Error: {error}</div>
+  {:else if nodes.length === 0}
+    <div class="empty">No dependencies found</div>
+  {:else}
+    <div class="deps-wrap">
+      <header class="deps-header">
+        <span class="stat">Nodes: {stats.nodes}</span>
+        <span class="stat">Edges: {stats.edges}</span>
+        <span class="stat" class:danger={stats.cycles > 0}>Cycles: {stats.cycles}</span>
+      </header>
 
-    <div class="deps-content">
-      <div
-        class="graph"
-        bind:this={graphContainer}
-        role="img"
-        aria-label="Dependency graph with {stats.nodes} nodes, {stats.edges} edges, and {stats.cycles} cycles"
-      ></div>
+      <div class="deps-content">
+        <div
+          class="deps-canvas"
+          bind:this={graphContainer}
+          role="img"
+          aria-label="Dependency graph with {stats.nodes} nodes, {stats.edges} edges, and {stats.cycles} cycles"
+        ></div>
 
-      {#if selectedNode}
-        <aside class="node-details">
-          <header class="details-header">
-            <strong>{selectedNode.id}</strong>
-            <button
-              class="close-btn"
-              onclick={() => (selectedNode = null)}
-              aria-label="Close details"
-            >
-              ×
-            </button>
-          </header>
-          <dl>
-            <dt>Title</dt>
-            <dd>{selectedNode.title || 'N/A'}</dd>
-            <dt>Status</dt>
-            <dd>
-              <span
-                class="badge"
-                style="background-color: {getStatusColor(selectedNode.status)}"
-              >
-                {selectedNode.status}
-              </span>
-            </dd>
-            {#if selectedNode.epic_id}
-              <dt>Epic</dt>
-              <dd class="epic">{selectedNode.epic_id}</dd>
-            {/if}
-            {#if isInCycle(selectedNode.id)}
-              <dt>Warning</dt>
-              <dd style="color: var(--danger)">Part of a dependency cycle</dd>
-            {/if}
-          </dl>
-        </aside>
-      {/if}
+        {#if selectedNode}
+          <aside class="node-details">
+            <header class="details-header">
+              <strong class="mono">{selectedNode.id}</strong>
+              <button class="close-btn" onclick={() => (selectedNode = null)} aria-label="Fermer">×</button>
+            </header>
+            <dl>
+              <dt>Titre</dt>
+              <dd>{selectedNode.title || '—'}</dd>
+              <dt>Statut</dt>
+              <dd><span class="chip"><i class="swatch" style="background: {domStatusColor(selectedNode.status)}"></i>{STATUS[selectedNode.status]?.label || selectedNode.status}</span></dd>
+              {#if selectedNode.epic_id}
+                <dt>Epic</dt>
+                <dd class="mono">{selectedNode.epic_id}</dd>
+              {/if}
+              {#if isInCycle(selectedNode.id)}
+                <dt>⚠</dt>
+                <dd style="color: var(--danger)">Fait partie d'un cycle de dépendances</dd>
+              {/if}
+            </dl>
+          </aside>
+        {/if}
+      </div>
+
+      <div class="sr-only">
+        <h2>Dependency edges (text fallback)</h2>
+        <ul>
+          {#each edges as edge}<li>{edge.from} depends on {edge.to}</li>{/each}
+        </ul>
+      </div>
     </div>
-
-    <div class="sr-only">
-      <h2>Dependency edges (text fallback)</h2>
-      <ul>
-        {#each edges as edge}
-          <li>{edge.from} depends on {edge.to}</li>
-        {/each}
-      </ul>
-    </div>
-  </div>
-{/if}
+  {/if}
+</div>
 
 <style>
-  .deps-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    height: 100%;
-  }
-
-  .deps-header {
-    display: flex;
-    gap: 16px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--fg-dim);
-    font-family: var(--mono);
-  }
-
-  .stat.danger {
-    color: var(--danger);
-  }
-
-  .deps-content {
-    display: flex;
-    gap: 12px;
-    flex: 1;
-    min-height: 0;
-  }
-
-  .graph {
-    flex: 1;
-    min-height: 600px;
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-  }
-
-  .node-details {
-    width: 280px;
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0;
-    overflow-y: auto;
-  }
-
-  .details-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid var(--border);
-    font-weight: 600;
-  }
-
+  .deps-pad { padding: 22px; height: 100%; min-height: 0; display: flex; flex-direction: column; }
+  .deps-pad .deps-wrap { flex: 1; min-height: 0; }
   .close-btn {
-    background: none;
-    border: none;
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-    color: var(--fg-dim);
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: none; border: none; font-size: 22px; line-height: 1; cursor: pointer;
+    color: var(--fg-faint); width: 28px; height: 28px; display: grid; place-items: center; border-radius: var(--radius-sm);
   }
-
-  .close-btn:hover {
-    color: var(--fg);
-  }
-
-  dl {
-    padding: 12px;
-    margin: 0;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 8px 12px;
-    font-size: 13px;
-  }
-
-  dt {
-    font-weight: 600;
-    color: var(--fg-dim);
-  }
-
-  dd {
-    margin: 0;
-  }
-
-  .badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--bg);
-    font-family: var(--mono);
-    text-transform: uppercase;
-  }
-
-  .epic {
-    font-family: var(--mono);
-    font-size: 12px;
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-  }
+  .close-btn:hover { color: var(--fg); background: var(--bg-elev-2); }
+  .node-details dl { margin-top: 4px; }
+  .node-details dd { margin: 0; }
 </style>

@@ -3,6 +3,7 @@
   import DOMPurify from 'dompurify';
   import { route, navigate } from '../lib/router.svelte.js';
   import { sortSprints } from '../lib/sprints.js';
+  import { STATUS } from '../lib/config.js';
 
   let sprints = $state([]);
   let loadingList = $state(true);
@@ -13,6 +14,14 @@
   let detailError = $state(null);
 
   const selectedId = $derived(route.parts[1] ?? null);
+
+  /** État dérivé d'un sprint depuis sa progression en points. */
+  function sprintState(s) {
+    if (s.total_points > 0 && s.done_points >= s.total_points) return 'done';
+    if (s.done_points > 0) return 'active';
+    return 'planned';
+  }
+  const pct = (s) => (s.total_points ? Math.round((s.done_points / s.total_points) * 100) : 0);
 
   async function loadList() {
     loadingList = true;
@@ -60,10 +69,16 @@
   // Group a detail's tasks under their parent story for the stories table.
   const tasksByStory = $derived.by(() => {
     const map = {};
-    for (const t of detail?.tasks ?? []) {
-      (map[t.us_id] ??= []).push(t);
-    }
+    for (const t of detail?.tasks ?? []) (map[t.us_id] ??= []).push(t);
     return map;
+  });
+
+  // Métriques agrégées du sprint courant.
+  const detailTotals = $derived.by(() => {
+    const ss = detail?.stories ?? [];
+    const total = ss.reduce((a, s) => a + (s.story_points || 0), 0);
+    const done = ss.filter((s) => s.status === 'done').reduce((a, s) => a + (s.story_points || 0), 0);
+    return { total, done, count: ss.length, pct: total ? Math.round((done / total) * 100) : 0 };
   });
 
   let expanded = $state(new Set());
@@ -73,363 +88,148 @@
     expanded = new Set(expanded);
   }
 
-  $effect(() => {
-    loadList();
-  });
-
-  $effect(() => {
-    loadDetail(selectedId);
-  });
+  $effect(() => { loadList(); });
+  $effect(() => { loadDetail(selectedId); });
 </script>
 
-<div class="sprints-container">
-  <aside class="sprints-sidebar" aria-label="Liste des sprints">
-    {#if loadingList}
-      <div class="muted">Loading…</div>
-    {:else if listError}
-      <div class="error">Error: {listError}</div>
-    {:else if sprints.length === 0}
-      <div class="muted">Aucun sprint</div>
-    {:else}
-      <nav class="sprint-list" aria-label="Sprints">
+<div class="view-pad">
+  <div class="sprints-layout">
+    <aside class="sprint-list" aria-label="Liste des sprints">
+      {#if loadingList}
+        <div class="empty">Chargement…</div>
+      {:else if listError}
+        <div class="empty">Erreur : {listError}</div>
+      {:else if sprints.length === 0}
+        <div class="empty">Aucun sprint</div>
+      {:else}
         {#each sprints as s}
-          <button
-            class="sprint-item"
-            class:active={selectedId === s.id}
-            onclick={() => navigate(`/sprints/${s.id}`)}
-          >
-            <span class="sprint-id">{s.id}</span>
-            <span class="sprint-meta">{s.story_count} US · {s.done_points}/{s.total_points} pts</span>
-            <span class="badges">
-              {#if s.has_goal}<span class="badge" title="Sprint goal">goal</span>{/if}
-              {#if s.has_review}<span class="badge review" title="Sprint review">review</span>{/if}
-              {#if s.has_retro}<span class="badge retro" title="Retrospective">retro</span>{/if}
-            </span>
+          {@const state = sprintState(s)}
+          <button class="sprint-item" aria-current={selectedId === s.id} onclick={() => navigate(`/sprints/${s.id}`)}>
+            <div class="si-top">
+              <span class="si-name">{s.id}</span>
+              <span class="si-state {state}">{state}</span>
+            </div>
+            <div class="si-stat">
+              <span>{s.story_count} US</span>
+              <span>{s.done_points}/{s.total_points} pts</span>
+            </div>
+            <div class="proj-bar" style="margin-top:9px"><span style="width: {pct(s)}%"></span></div>
+            {#if s.has_goal || s.has_review || s.has_retro}
+              <div class="si-tags">
+                {#if s.has_goal}<span class="tag-mini">goal</span>{/if}
+                {#if s.has_review}<span class="tag-mini">review</span>{/if}
+                {#if s.has_retro}<span class="tag-mini">retro</span>{/if}
+              </div>
+            {/if}
           </button>
         {/each}
-      </nav>
-    {/if}
-  </aside>
-
-  <div class="sprints-content" role="region" aria-label="Détail du sprint">
-    {#if !selectedId}
-      <div class="empty">Sélectionnez un sprint</div>
-    {:else if loadingDetail}
-      <div class="empty">Loading…</div>
-    {:else if detailError}
-      <div class="error">Error: {detailError}</div>
-    {:else if detail}
-      <header class="content-header">
-        <h1>{detail.sprint.id}</h1>
-      </header>
-
-      {#if detail.goal}
-        <section class="md-section">
-          <h2>Goal</h2>
-          <div class="markdown-body">{@html render(detail.goal)}</div>
-        </section>
       {/if}
+    </aside>
 
-      <section class="md-section">
-        <h2>Stories &amp; Tasks</h2>
-        {#if detail.stories.length === 0}
-          <p class="muted">Aucune story dans ce sprint.</p>
-        {:else}
-          <table class="stories-table">
-            <thead>
-              <tr><th></th><th>ID</th><th>Titre</th><th>Statut</th><th>Points</th><th>Assigné</th></tr>
-            </thead>
-            <tbody>
-              {#each detail.stories as st}
-                {@const tasks = tasksByStory[st.id] ?? []}
-                <tr>
-                  <td>
-                    {#if tasks.length}
-                      <button
-                        class="toggle"
-                        aria-expanded={expanded.has(st.id)}
-                        aria-label="Afficher les tâches de {st.id}"
-                        onclick={() => toggleStory(st.id)}
-                      >{expanded.has(st.id) ? '▼' : '▶'}</button>
-                    {/if}
-                  </td>
-                  <td>{st.id}</td>
-                  <td>{st.title}</td>
-                  <td><span class="status status-{st.status}">{st.status}</span></td>
-                  <td>{st.story_points ?? '—'}</td>
-                  <td>{st.assigned_to || '—'}</td>
-                </tr>
-                {#if expanded.has(st.id) && tasks.length}
-                  <tr class="tasks-row">
-                    <td></td>
-                    <td colspan="5">
-                      <table class="tasks-table">
-                        <thead>
-                          <tr><th>Task</th><th>Type</th><th>Statut</th><th>Est.</th><th>Réel</th><th>Assigné</th></tr>
-                        </thead>
-                        <tbody>
-                          {#each tasks as t}
-                            <tr>
-                              <td>{t.id}</td>
-                              <td>{t.type}</td>
-                              <td>{t.status}</td>
-                              <td>{t.estimation_hours ?? '—'}</td>
-                              <td>{t.actual_hours ?? '—'}</td>
-                              <td>{t.assigned_to || '—'}</td>
-                            </tr>
-                          {/each}
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                {/if}
-              {/each}
-            </tbody>
-          </table>
+    <main class="sprint-detail" aria-label="Détail du sprint">
+      {#if !selectedId}
+        <div class="empty">Sélectionnez un sprint</div>
+      {:else if loadingDetail}
+        <div class="empty">Chargement…</div>
+      {:else if detailError}
+        <div class="empty">Erreur : {detailError}</div>
+      {:else if detail}
+        {@const state = sprintState({ total_points: detailTotals.total, done_points: detailTotals.done })}
+        <div class="sd-head">
+          <div style="flex:1">
+            <div style="display:flex; align-items:center; gap:11px">
+              <h2>{detail.sprint.id}</h2>
+              <span class="si-state {state}" style="font-size:11px">{state}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sd-metrics">
+          <div class="metric"><div class="mk">Points</div><div class="mv">{detailTotals.total}<small> pts</small></div></div>
+          <div class="metric"><div class="mk">Complétés</div><div class="mv">{detailTotals.done}<small> pts</small></div><div class="msub">{detailTotals.pct}% du total</div></div>
+          <div class="metric"><div class="mk">Stories</div><div class="mv">{detailTotals.count}</div></div>
+        </div>
+
+        {#if detail.goal}
+          <div class="sd-panel">
+            <h3>Goal</h3>
+            <div class="md-body">{@html render(detail.goal)}</div>
+          </div>
         {/if}
-      </section>
 
-      {#if detail.review}
-        <section class="md-section">
-          <h2>Review</h2>
-          <div class="markdown-body">{@html render(detail.review)}</div>
-        </section>
-      {/if}
+        <div class="sd-panel">
+          <h3>Stories &amp; Tasks <span class="pill" style="background: var(--accent-soft); color: var(--accent)">{detail.stories.length}</span></h3>
+          {#if detail.stories.length === 0}
+            <p style="color: var(--fg-faint); font-size:13px">Aucune story dans ce sprint.</p>
+          {:else}
+            {#each detail.stories as st}
+              {@const tasks = tasksByStory[st.id] ?? []}
+              <div class="sd-story-wrap">
+                <div class="sd-story">
+                  {#if tasks.length}
+                    <button class="toggle" aria-expanded={expanded.has(st.id)} aria-label="Afficher les tâches de {st.id}" onclick={() => toggleStory(st.id)}>{expanded.has(st.id) ? '▼' : '▶'}</button>
+                  {:else}
+                    <span class="toggle-spacer"></span>
+                  {/if}
+                  <span class="s-id mono">{st.id}</span>
+                  <span class="s-t">{st.title}</span>
+                  <span class="s-status">
+                    <i style="width:8px;height:8px;border-radius:50%;background: var({STATUS[st.status]?.cssVar || '--fg-faint'});display:inline-block"></i>{STATUS[st.status]?.label || st.status}
+                  </span>
+                  <span class="points mono">{st.story_points ?? '—'}</span>
+                </div>
+                {#if expanded.has(st.id) && tasks.length}
+                  <table class="tasks sprint-tasks">
+                    <thead><tr><th>Task</th><th>Type</th><th>Statut</th><th style="text-align:right">Est</th><th style="text-align:right">Réel</th><th>Assigné</th></tr></thead>
+                    <tbody>
+                      {#each tasks as t}
+                        <tr>
+                          <td class="t-name mono">{t.id}</td>
+                          <td>{t.type}</td>
+                          <td>{t.status}</td>
+                          <td class="t-hrs">{t.estimation_hours ?? '—'}</td>
+                          <td class="t-hrs">{t.actual_hours ?? '—'}</td>
+                          <td>{t.assigned_to || '—'}</td>
+                        </tr>
+                      {/each}
+                    </tbody>
+                  </table>
+                {/if}
+              </div>
+            {/each}
+          {/if}
+        </div>
 
-      {#if detail.retro}
-        <section class="md-section">
-          <h2>Retro</h2>
-          <div class="markdown-body">{@html render(detail.retro)}</div>
-        </section>
+        {#if detail.review}
+          <div class="sd-panel">
+            <h3>Review <span class="pill" style="background: var(--success-soft); color: var(--success)">review</span></h3>
+            <div class="md-body review-md">{@html render(detail.review)}</div>
+          </div>
+        {/if}
+        {#if detail.retro}
+          <div class="sd-panel">
+            <h3>Retro <span class="pill" style="background: var(--accent-soft); color: var(--accent)">team</span></h3>
+            <div class="md-body review-md">{@html render(detail.retro)}</div>
+          </div>
+        {/if}
       {/if}
-    {/if}
+    </main>
   </div>
 </div>
 
 <style>
-  .sprints-container {
-    display: flex;
-    height: 100%;
-    overflow: hidden;
+  .si-tags { display: flex; gap: 5px; margin-top: 9px; }
+  .tag-mini {
+    font-family: var(--mono); font-size: 9.5px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.04em; padding: 2px 6px; border-radius: 5px;
+    background: var(--bg-inset); color: var(--fg-faint);
   }
-
-  .sprints-sidebar {
-    width: 240px;
-    background: var(--bg-sidebar);
-    border-right: 1px solid var(--border);
-    overflow-y: auto;
-    padding: 12px 8px;
-  }
-
-  .sprint-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .sprint-item {
-    background: none;
-    border: none;
-    text-align: left;
-    cursor: pointer;
-    border-radius: var(--radius);
-    padding: 8px 10px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    color: var(--fg);
-    transition: background 0.1s;
-  }
-
-  .sprint-item:hover {
-    background: var(--border);
-  }
-
-  .sprint-item.active {
-    background: var(--accent);
-    color: var(--accent-fg);
-  }
-
-  .sprint-item:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: -2px;
-  }
-
-  .sprint-id {
-    font-weight: 600;
-    font-size: 13px;
-  }
-
-  .sprint-meta {
-    font-size: 11px;
-    color: var(--fg-dim);
-  }
-
-  .sprint-item.active .sprint-meta {
-    color: var(--accent-fg);
-  }
-
-  .badges {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-  }
-
-  .badge {
-    font-size: 10px;
-    padding: 1px 6px;
-    border-radius: 10px;
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    color: var(--fg-dim);
-  }
-
-  .badge.review {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .badge.retro {
-    border-color: var(--success, #16a34a);
-    color: var(--success, #16a34a);
-  }
-
-  .sprints-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    background: var(--bg);
-  }
-
-  .content-header {
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .content-header h1 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--fg);
-  }
-
-  .md-section {
-    margin-bottom: 28px;
-  }
-
-  .md-section h2 {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--fg);
-    margin: 0 0 10px;
-  }
-
-  .stories-table,
-  .tasks-table {
-    border-collapse: collapse;
-    width: 100%;
-    font-size: 13px;
-  }
-
-  .stories-table th,
-  .stories-table td,
-  .tasks-table th,
-  .tasks-table td {
-    border: 1px solid var(--border);
-    padding: 6px 10px;
-    text-align: left;
-  }
-
-  .stories-table th,
-  .tasks-table th {
-    background: var(--bg-sidebar);
-    font-weight: 600;
-  }
-
-  .tasks-row td {
-    background: var(--bg-sidebar);
-    padding: 6px;
-  }
-
   .toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--fg-dim);
-    font-size: 10px;
+    background: none; border: none; cursor: pointer; color: var(--fg-faint);
+    font-size: 10px; width: 16px; flex: none;
   }
-
-  .toggle:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
-  .status {
-    font-size: 11px;
-    padding: 1px 6px;
-    border-radius: 10px;
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-  }
-
-  .empty,
-  .muted {
-    color: var(--fg-dim);
-    padding: 12px;
-  }
-
-  .error {
-    color: var(--danger);
-    padding: 12px;
-  }
-
-  .markdown-body {
-    line-height: 1.7;
-  }
-
-  .markdown-body :global(h1) {
-    font-size: 22px;
-    margin: 16px 0 12px;
-  }
-
-  .markdown-body :global(h2) {
-    font-size: 18px;
-    margin: 14px 0 10px;
-  }
-
-  .markdown-body :global(table) {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 0 0 12px;
-  }
-
-  .markdown-body :global(th),
-  .markdown-body :global(td) {
-    border: 1px solid var(--border);
-    padding: 8px 12px;
-    text-align: left;
-  }
-
-  .markdown-body :global(th) {
-    background: var(--bg-sidebar);
-    font-weight: 600;
-  }
-
-  .markdown-body :global(blockquote) {
-    border-left: 3px solid var(--accent);
-    padding-left: 12px;
-    margin: 0 0 12px;
-    color: var(--fg-dim);
-    font-style: italic;
-  }
-
-  .markdown-body :global(code) {
-    background: var(--bg-sidebar);
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-family: var(--mono);
-    font-size: 0.9em;
-  }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .toggle-spacer { width: 16px; flex: none; }
+  .sprint-tasks { margin: 4px 0 8px 28px; width: calc(100% - 28px); }
+  .sd-story .points { margin-left: 0; }
 </style>

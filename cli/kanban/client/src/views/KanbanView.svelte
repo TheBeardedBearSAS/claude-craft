@@ -2,7 +2,15 @@
   import { store, patchStatus, toast } from '../lib/store.svelte.js';
   import { onMount, tick } from 'svelte';
   import PromptDialog from '../components/PromptDialog.svelte';
+  import Icon from '../components/Icon.svelte';
+  import Avatar from '../components/Avatar.svelte';
+  import PriorityChip from '../components/PriorityChip.svelte';
+  import TddPip from '../components/TddPip.svelte';
+  import Points from '../components/Points.svelte';
+  import TaskProgress from '../components/TaskProgress.svelte';
   import { locateCard, reduceKey, buildCardDetails } from '../lib/kanban-nav.js';
+  import { STATUS, PRIORITY, TDD, TASK_TYPE, codeColor, epicHue } from '../lib/config.js';
+  import { tweaks } from '../lib/tweaks.svelte.js';
 
   let promptDialog = $state(null);
   /** Référence au <dialog> natif du menu de déplacement */
@@ -36,25 +44,40 @@
   let showMoveMenu = $state(false);
   let liveRegion = $state('');
 
+  // Board UI state
+  let dragId = $state(null);
+  let dragOverCol = $state(null);
+  /** Filtre de priorité (vide = tout afficher). */
+  let priFilter = $state([]);
+
+  function togglePri(p) {
+    priFilter = priFilter.includes(p) ? priFilter.filter((x) => x !== p) : [...priFilter, p];
+  }
+  const visible = (s) => priFilter.length === 0 || priFilter.includes(s.priority);
+
   const storiesByStatus = $derived.by(() => {
     const map = Object.fromEntries(COLUMNS.map((c) => [c.key, []]));
-    for (const s of store.stories) (map[s.status] ??= []).push(s);
+    for (const s of store.stories) {
+      if (!visible(s)) continue;
+      (map[s.status] ??= []).push(s);
+    }
     return map;
   });
 
-  function tddBadge(phase) {
-    if (phase === 'red') return { char: '●', color: 'var(--danger)', label: 'red' };
-    if (phase === 'green') return { char: '●', color: 'var(--ok)', label: 'green' };
-    if (phase === 'refactor') return { char: '●', color: 'var(--info)', label: 'refactor' };
-    if (phase === 'done') return { char: '✓', color: 'var(--ok)', label: 'done' };
-    return null;
-  }
+  const colPoints = (key) => storiesByStatus[key].reduce((a, s) => a + (s.story_points || 0), 0);
 
-  function priorityColor(p) {
-    return p === 'must' ? 'var(--danger)' : p === 'should' ? 'var(--warn)' : p === 'could' ? 'var(--info)' : 'var(--fg-dim)';
-  }
-
-  let dragId = $state(null);
+  /** Légende du code couleur selon le schéma actif. */
+  const schemeLegend = $derived.by(() => {
+    const sc = tweaks.codingScheme;
+    if (sc === 'priority') return Object.values(PRIORITY).map((v) => [v.label, `var(${v.cssVar})`]);
+    if (sc === 'tdd') return [['Red', 'var(--tdd-red)'], ['Green', 'var(--tdd-green)'], ['Refactor', 'var(--tdd-refactor)']];
+    if (sc === 'epic') {
+      const seen = new Map();
+      for (const s of store.stories) if (s.epic_id && !seen.has(s.epic_id)) seen.set(s.epic_id, epicHue(s.epic_id));
+      return [...seen.entries()];
+    }
+    return COLUMNS.map((c) => [c.label, `var(${STATUS[c.key].cssVar})`]);
+  });
 
   function onDragStart(e, id) {
     dragId = id;
@@ -66,6 +89,7 @@
 
   async function onDrop(e, targetStatus) {
     e.preventDefault();
+    dragOverCol = null;
     const id = e.dataTransfer.getData('text/plain') || dragId;
     dragId = null;
     if (!id) return;
@@ -100,7 +124,7 @@
       const { state, action } = reduceKey(
         { focusedColumnIndex, focusedCardIndex, showMoveMenu },
         { key: e.key, altKey: e.altKey },
-        ctx
+        ctx,
       );
 
       // Empêche le scroll/typeahead du navigateur uniquement pour les touches gérées.
@@ -183,15 +207,15 @@
   }
 
   function announceMove(cardId, targetStatus) {
-    const targetCol = COLUMNS.find(c => c.key === targetStatus);
+    const targetCol = COLUMNS.find((c) => c.key === targetStatus);
     liveRegion = `Card ${cardId} moved to ${targetCol?.label || targetStatus}`;
-    setTimeout(() => liveRegion = '', 2000);
+    setTimeout(() => (liveRegion = ''), 2000);
   }
 
   /** Story issue de .bmad/sprint-status.yaml : statut non modifiable depuis le board. */
   function announceReadOnly(cardId) {
     liveRegion = `Card ${cardId} is read-only (managed by .bmad/sprint-status.yaml — use team:/qa: commands)`;
-    setTimeout(() => liveRegion = '', 3000);
+    setTimeout(() => (liveRegion = ''), 3000);
     // Feedback VISIBLE pour les utilisateurs voyants (au-delà de l'annonce sr-only).
     toast({
       kind: 'info',
@@ -202,15 +226,13 @@
 
   function announceCardDetails(card) {
     liveRegion = `Card ${card.id}: ${card.title}. Status: ${card.status}. Priority: ${card.priority}. ${card.story_points} story points.`;
-    setTimeout(() => liveRegion = '', 3000);
+    setTimeout(() => (liveRegion = ''), 3000);
   }
 
   /** Ouvre le menu de déplacement via l'élément <dialog> natif. */
   async function openMoveMenu() {
-    // Mémorise l'élément déclencheur pour y retourner le focus à la fermeture
     moveMenuTriggerEl = document.activeElement;
     showMoveMenu = true;
-    // Attend que Svelte ait rendu le dialog (bind:this résolu) avant showModal()
     await tick();
     moveMenuDialog?.showModal();
   }
@@ -219,7 +241,6 @@
   function closeMoveMenu() {
     showMoveMenu = false;
     moveMenuDialog?.close();
-    // Retour de focus à la carte ayant déclenché l'ouverture (WCAG SC 2.4.3)
     if (moveMenuTriggerEl) {
       moveMenuTriggerEl.focus();
       moveMenuTriggerEl = null;
@@ -228,6 +249,8 @@
 
   /** Détails normalisés de la carte affichée (null si modale fermée). */
   const detailFields = $derived(detailCard ? buildCardDetails(detailCard) : null);
+  const detailEstTotal = $derived(detailTasks.reduce((a, t) => a + (t.estimation_hours || 0), 0));
+  const detailActTotal = $derived(detailTasks.reduce((a, t) => a + (t.actual_hours || 0), 0));
 
   /** Ouvre la modale de détail (clic ou Entrée). */
   async function openDetail(card) {
@@ -235,7 +258,7 @@
     detailCard = card;
     detailTasks = [];
     detailBody = '';
-    announceCardDetails(card); // annonce sr-only en plus du visuel
+    announceCardDetails(card);
     await tick();
     detailDialog?.showModal();
     loadDetailExtras(card.id);
@@ -251,7 +274,6 @@
       const res = await fetch(`/api/stories/${encodeURIComponent(id)}`);
       if (!res.ok) return;
       const data = await res.json();
-      // La story affichée peut avoir changé entre-temps : on ignore une réponse périmée.
       if (detailCard?.id !== id) return;
       detailTasks = data.tasks ?? [];
       if (data.body) {
@@ -279,23 +301,45 @@
   }
 </script>
 
+<div class="board-toolbar">
+  <div class="filters">
+    {#each Object.entries(PRIORITY) as [key, v]}
+      <button class="filter-chip" aria-pressed={priFilter.includes(key)} onclick={() => togglePri(key)}>
+        <i class="dot" style="background: var({v.cssVar})"></i>{v.label}
+      </button>
+    {/each}
+    {#if priFilter.length > 0}
+      <button class="filter-chip" style="border:none" onclick={() => (priFilter = [])}>Clear</button>
+    {/if}
+  </div>
+  <span class="topbar-spacer"></span>
+  <div class="coding-legend" aria-label={`Cartes colorées par ${tweaks.codingScheme}`}>
+    <span class="lbl">Codé par {tweaks.codingScheme} :</span>
+    {#each schemeLegend as [label, color]}
+      <span class="key"><i style="background: {color}"></i>{label}</span>
+    {/each}
+  </div>
+</div>
+
 <div class="board">
   {#each COLUMNS as col}
+    {@const cv = `var(${STATUS[col.key].cssVar})`}
     <section
       class="column"
+      class:drop-target={dragOverCol === col.key}
       aria-labelledby="col-{col.key}"
-      ondragover={onDragOver}
+      ondragover={(e) => { onDragOver(e); if (dragId) dragOverCol = col.key; }}
+      ondragleave={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) dragOverCol = null; }}
       ondrop={(e) => onDrop(e, col.key)}
     >
-      <header class="column-header">
-        <!-- h2 pour une navigation par titres (touche H dans NVDA/JAWS) -->
-        <h2 class="column-label" id="col-{col.key}">{col.label}</h2>
-        <span class="count" aria-label="{storiesByStatus[col.key].length} cartes">{storiesByStatus[col.key].length}</span>
+      <header class="col-head">
+        <i class="col-dot" style="background: {cv}; color: {cv}"></i>
+        <h2 class="col-title" id="col-{col.key}">{col.label}</h2>
+        <span class="col-count mono" aria-label="{storiesByStatus[col.key].length} cartes">{storiesByStatus[col.key].length}</span>
+        <span class="col-pts mono" title="story points dans la colonne">{colPoints(col.key)} pts</span>
       </header>
-      <!-- ul/li remplace article role=button (conflit sémantique) -->
-      <ul class="column-body" role="list">
+      <ul class="col-body" role="list">
         {#each storiesByStatus[col.key] as s (s.id)}
-          {@const tdd = tddBadge(s.tdd_phase)}
           <!-- Enter (détails) est géré par le handler clavier global du board ; onclick couvre la souris. -->
           <!-- svelte-ignore a11y_click_events_have_key_events -->
           <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
@@ -303,6 +347,8 @@
           <li
             class="card"
             class:read-only={s._writable === false}
+            class:dragging={dragId === s.id}
+            style="--code-color: {codeColor(s, tweaks.codingScheme)}"
             draggable={s._writable !== false}
             ondragstart={(e) => onDragStart(e, s.id)}
             onfocus={() => syncFocus(s.id)}
@@ -314,49 +360,30 @@
             aria-describedby="keyboard-help"
           >
             <div class="card-top">
-              <span class="id">{s.id}</span>
+              {#if s.epic_id}<i class="card-epic-dot" style="background: {epicHue(s.epic_id)}" title={s.epic_id}></i>{/if}
+              <span class="card-id mono">{s.id}</span>
               {#if s._writable === false}
-                <span class="readonly" aria-label="Lecture seule — gérée par .bmad/sprint-status.yaml" role="img">🔒</span>
+                <span class="card-lock" aria-label="Lecture seule — gérée par .bmad/sprint-status.yaml" role="img">🔒</span>
               {/if}
-              <span class="priority" style="color: {priorityColor(s.priority)}">{s.priority}</span>
-              <span class="points">{s.story_points}p</span>
-              {#if tdd}
-                <!-- aria-label remplace title (title non annoncé par NVDA/VoiceOver) -->
-                <span class="tdd" style="color: {tdd.color}" aria-label="TDD phase : {tdd.label}" role="img">{tdd.char}</span>
-              {/if}
+              <span class="spacer"></span>
+              <TddPip phase={s.tdd_phase} />
+              <PriorityChip priority={s.priority} />
             </div>
-            <div class="title">{s.title}</div>
-            <div class="meta">
-              {#if s.epic_id}<span class="epic">{s.epic_id}</span>{/if}
-              {#if s.persona}<span class="persona">{s.persona}</span>{/if}
-            </div>
-            {#if s.tasks?.total > 0}
-              <!-- role=progressbar + aria-valuenow/min/max (WCAG SC 4.1.2) -->
-              <div
-                class="progress"
-                role="progressbar"
-                aria-label="Tâches : {s.tasks.completed} sur {s.tasks.total} complétées"
-                aria-valuenow={s.tasks.completed}
-                aria-valuemin={0}
-                aria-valuemax={s.tasks.total}
-              >
-                <div class="bar" style="width: {(s.tasks.completed / s.tasks.total) * 100}%"></div>
-                <span class="progress-label" aria-hidden="true">{s.tasks.completed}/{s.tasks.total}</span>
-              </div>
-            {/if}
-            <footer class="card-foot">
-              {#if s.assigned_to}
-                <!-- aria-label expose le nom complet (WCAG SC 1.3.1, SC 4.1.2) -->
-                <span class="assignee" aria-label="Assigné à : {s.assigned_to}">{s.assigned_to.slice(0, 2).toUpperCase()}</span>
-              {/if}
+            <h3 class="card-title">{s.title}</h3>
+            <div class="card-meta">
+              <Points value={s.story_points} />
+              {#if s.persona}<span class="persona"><Icon name="person" cls="ico" size={13} />{s.persona}</span>{/if}
+              <span class="spacer"></span>
               {#if s.status === 'blocked' && s.blocked_reason}
-                <span class="blocked" aria-label="Bloqué : {s.blocked_reason}">⚠ blocked</span>
+                <span class="card-blocked" title={s.blocked_reason}>⚠ blocked</span>
               {/if}
-            </footer>
+              <TaskProgress tasks={s.tasks} />
+              <Avatar id={s.assigned_to} size={24} />
+            </div>
           </li>
         {:else}
           {#if col.emptyHint}
-            <li class="empty-hint" aria-label="Colonne vide" role="listitem">{col.emptyHint}</li>
+            <li class="col-empty" role="listitem">{col.emptyHint}</li>
           {/if}
         {/each}
       </ul>
@@ -366,36 +393,23 @@
 
 <PromptDialog bind:this={promptDialog} />
 
-<!-- Aide clavier : sr-only pour les lecteurs d'écran, accessible au clavier -->
+<!-- Aide clavier : sr-only pour les lecteurs d'écran -->
 <div id="keyboard-help" class="sr-only">
   Flèches pour naviguer. Alt+M pour ouvrir le menu de déplacement. Chiffres 1 à 6 pour déplacer dans une colonne. Échap pour fermer. Entrée pour les détails.
 </div>
 
 <!-- Région live pour les annonces d'accessibilité -->
-<div aria-live="polite" aria-atomic="true" class="sr-only">
-  {liveRegion}
-</div>
+<div aria-live="polite" aria-atomic="true" class="sr-only">{liveRegion}</div>
 
 <!-- Aide clavier visible pour les utilisateurs voyants au clavier (WCAG SC 3.3.2) -->
 <details class="keyboard-help-visible">
   <summary aria-label="Raccourcis clavier du tableau Kanban">⌨ Raccourcis</summary>
   <div class="keyboard-help-content">
-    <kbd>↑↓</kbd> Naviguer les cartes &ensp;
-    <kbd>←→</kbd> Changer de colonne &ensp;
-    <kbd>Alt+M</kbd> Menu déplacement &ensp;
-    <kbd>1–6</kbd> Déplacer vers colonne &ensp;
-    <kbd>Échap</kbd> Fermer &ensp;
-    <kbd>Entrée</kbd> Détails
+    <kbd>↑↓</kbd> Naviguer &ensp;<kbd>←→</kbd> Colonne &ensp;<kbd>Alt+M</kbd> Déplacer &ensp;<kbd>1–6</kbd> Vers colonne &ensp;<kbd>Échap</kbd> Fermer &ensp;<kbd>Entrée</kbd> Détails
   </div>
 </details>
 
-<!--
-  Menu de déplacement : élément <dialog> natif pour :
-  - Piège de focus automatique (Tab/Shift+Tab confinés au dialog)
-  - aria-modal géré nativement par le navigateur
-  - Retour de focus géré dans closeMoveMenu()
-  (WCAG SC 1.3.2, 2.1.2, 4.1.2)
--->
+<!-- Menu de déplacement : <dialog> natif (piège de focus + aria-modal natifs) -->
 {#if showMoveMenu}
   <dialog
     bind:this={moveMenuDialog}
@@ -420,481 +434,109 @@
   </dialog>
 {/if}
 
-<!--
-  Modale de détail de carte : <dialog> natif (piège de focus + aria-modal natifs).
-  Ouverte au clic ou via Entrée (WCAG SC 1.3.2, 2.1.2, 2.4.3).
--->
+<!-- Modale de détail : <dialog> natif, style design (dialog.modal) -->
 {#if detailFields}
   <dialog
     bind:this={detailDialog}
-    class="detail-dialog"
+    class="modal"
     aria-labelledby="detail-title"
     onclose={() => { if (detailCard) closeDetail(); }}
+    onclick={(e) => { if (e.target === detailDialog) closeDetail(); }}
   >
-    <div class="detail-content">
-      <header class="detail-header">
-        <span class="detail-id">{detailFields.id}</span>
-        {#if detailFields.readOnly}
-          <span class="detail-lock" aria-label="Lecture seule" role="img">🔒</span>
-        {/if}
-        <button class="detail-close" onclick={() => closeDetail()} aria-label="Fermer">✕</button>
+    <div class="modal-inner">
+      <header class="modal-head">
+        <div class="row1">
+          <span class="m-id mono">{detailFields.id}</span>
+          {#if detailFields.epicId}
+            <span style="color: var(--fg-faint)">·</span>
+            <span style="display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color: var(--fg-dim)">
+              <i style="width:8px; height:8px; border-radius:50%; background: {epicHue(detailFields.epicId)}; display:inline-block"></i>
+              {detailFields.epicId}
+            </span>
+          {/if}
+          {#if detailFields.readOnly}
+            <span class="ro-lock" style="margin-left:8px"><Icon name="lock" size={13} /> read-only</span>
+          {/if}
+          <button class="icon-btn m-close" onclick={() => closeDetail()} aria-label="Fermer"><Icon name="close" size={18} /></button>
+        </div>
+        <h2 class="modal-title" id="detail-title">{detailFields.title}</h2>
+        <div class="modal-frontmatter">
+          <span class="chip chip-soft"><i class="swatch" style="background: var({STATUS[detailFields.status]?.cssVar || '--border'})"></i>{STATUS[detailFields.status]?.label || detailFields.status}</span>
+          <PriorityChip priority={detailFields.priority} />
+          <TddPip phase={detailFields.tddPhase} />
+        </div>
       </header>
-      <h3 id="detail-title">{detailFields.title}</h3>
 
-      <dl class="detail-grid">
-        <dt>Statut</dt><dd>{detailFields.status}</dd>
-        <dt>Priorité</dt><dd>{detailFields.priority || '—'}</dd>
-        <dt>Points</dt><dd>{detailFields.storyPoints}</dd>
-        {#if detailFields.epicId}<dt>Epic</dt><dd>{detailFields.epicId}</dd>{/if}
-        {#if detailFields.persona}<dt>Persona</dt><dd>{detailFields.persona}</dd>{/if}
-        {#if detailFields.assignedTo}<dt>Assigné à</dt><dd>{detailFields.assignedTo}</dd>{/if}
-        {#if detailFields.tddPhase}<dt>TDD</dt><dd>{detailFields.tddPhase}</dd>{/if}
-        {#if detailFields.tasks.total > 0}
-          <dt>Tâches</dt><dd>{detailFields.tasks.completed}/{detailFields.tasks.total}</dd>
+      <div class="modal-body">
+        <div class="fm-grid">
+          <div class="fm-cell"><div class="k">Points</div><div class="v"><span class="points mono">{detailFields.storyPoints}</span></div></div>
+          <div class="fm-cell"><div class="k">Assigné</div><div class="v">{#if detailFields.assignedTo}<Avatar id={detailFields.assignedTo} size={22} />{detailFields.assignedTo}{:else}<span style="color: var(--fg-faint)">—</span>{/if}</div></div>
+          <div class="fm-cell"><div class="k">Persona</div><div class="v">{detailFields.persona || '—'}</div></div>
+          <div class="fm-cell"><div class="k">Phase TDD</div><div class="v"><TddPip phase={detailFields.tddPhase} />{#if !detailFields.tddPhase || !TDD[detailFields.tddPhase]}<span style="color: var(--fg-faint)">—</span>{/if}</div></div>
+          <div class="fm-cell"><div class="k">Tâches</div><div class="v mono">{detailFields.tasks.completed}/{detailFields.tasks.total}</div></div>
+          {#if detailEstTotal > 0}
+            <div class="fm-cell"><div class="k">Heures est / réel</div><div class="v mono">{detailEstTotal} / <span class={detailActTotal > detailEstTotal ? 't-over' : ''}>{detailActTotal}</span></div></div>
+          {/if}
+        </div>
+
+        {#if detailFields.blockedReason}
+          <div class="modal-readonly-note" style="border-color: var(--danger); color: var(--danger)">⚠ Bloqué : {detailFields.blockedReason}</div>
         {/if}
-        {#if detailFields.blockedReason}<dt>Bloqué</dt><dd>{detailFields.blockedReason}</dd>{/if}
-      </dl>
 
-      {#if detailTasks.length > 0}
-        <h4 class="detail-subtitle">Tâches ({detailFields.tasks.completed}/{detailFields.tasks.total})</h4>
-        <table class="detail-tasks">
-          <thead>
-            <tr><th>ID</th><th>Type</th><th>Statut</th><th>Est.</th><th>Réel</th><th>Assigné</th></tr>
-          </thead>
-          <tbody>
-            {#each detailTasks as t}
-              <tr>
-                <td>{t.id}</td>
-                <td>{t.type}</td>
-                <td>{t.status}</td>
-                <td>{t.estimation_hours ?? '—'}</td>
-                <td>{t.actual_hours ?? '—'}</td>
-                <td>{t.assigned_to || '—'}</td>
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-      {:else if detailLoading}
-        <p class="detail-muted">Chargement des tâches…</p>
-      {/if}
+        {#if detailTasks.length > 0}
+          <div class="section-h"><h3>Tâches</h3><span class="n mono">{detailFields.tasks.completed}/{detailFields.tasks.total}</span><span class="line"></span></div>
+          <table class="tasks">
+            <thead><tr><th style="width:54px">Type</th><th>Tâche</th><th>Statut</th><th style="text-align:right">Est</th><th style="text-align:right">Réel</th></tr></thead>
+            <tbody>
+              {#each detailTasks as t}
+                <tr>
+                  <td><span class="t-type" style="background: color-mix(in oklch, {TASK_TYPE[t.type] || 'var(--fg-faint)'} 16%, transparent); color: {TASK_TYPE[t.type] || 'var(--fg-dim)'}">{t.type}</span></td>
+                  <td class="t-name">{t.id}</td>
+                  <td>{t.status}</td>
+                  <td class="t-hrs">{t.estimation_hours ?? '—'}</td>
+                  <td class="t-hrs {(t.actual_hours || 0) > (t.estimation_hours || 0) ? 't-over' : ''}">{t.actual_hours ?? '—'}</td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        {:else if detailLoading}
+          <p style="color: var(--fg-faint); font-size:12px; margin-top:12px">Chargement des tâches…</p>
+        {/if}
 
-      {#if detailBody}
-        <h4 class="detail-subtitle">Description</h4>
-        <div class="detail-body markdown-body">{@html detailBody}</div>
-      {/if}
+        {#if detailBody}
+          <div class="section-h"><h3>Description</h3><span class="line"></span></div>
+          <div class="md-body">{@html detailBody}</div>
+        {/if}
 
-      {#if detailFields.readOnly}
-        <p class="detail-readonly-note">
-          Carte en lecture seule — gérée par <code>.bmad/sprint-status.yaml</code> (BMAD v6 single-writer).
-          Changez son statut via les commandes <code>team:</code> / <code>qa:</code>.
-        </p>
-      {/if}
+        {#if detailFields.readOnly}
+          <p class="modal-readonly-note">
+            Carte en lecture seule — gérée par <code>.bmad/sprint-status.yaml</code> (BMAD v6 single-writer).
+            Changez son statut via les commandes <code>team:</code> / <code>qa:</code>.
+          </p>
+        {/if}
+      </div>
     </div>
   </dialog>
 {/if}
 
 <style>
-  .board {
-    display: flex;
-    gap: 12px;
-    min-height: 100%;
-    overflow-x: auto;
-  }
-  .column {
-    flex: 0 0 280px;
-    background: var(--bg-sidebar);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    display: flex;
-    flex-direction: column;
-  }
-  .column-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
-  }
-  /* h2 en colonne : reset pour conserver le style visuel précédent */
-  .column-label {
-    margin: 0;
-    font-weight: 600;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--fg-dim);
-  }
-  .count {
-    background: var(--bg-elev);
-    border-radius: 10px;
-    padding: 2px 8px;
-    font-size: 11px;
-  }
-  /* ul reset (remplace la div column-body) */
-  .column-body {
-    list-style: none;
-    margin: 0;
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    min-height: 120px;
-  }
-  /* li reset — même apparence que l'ancien article */
-  .card {
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px;
-    cursor: grab;
-    box-shadow: var(--shadow);
-  }
-  .card:active { cursor: grabbing; }
-  /* Message discret affiché quand la colonne est vide (DX-10) */
-  .empty-hint {
-    padding: 10px 8px;
-    font-size: 11px;
-    color: var(--fg-dim);
-    font-style: italic;
-    text-align: center;
-    list-style: none;
-    opacity: 0.7;
-  }
-  /* Story issue de .bmad/sprint-status.yaml : non déplaçable depuis le board */
-  .card.read-only { cursor: default; opacity: 0.85; }
-  .card.read-only:active { cursor: default; }
-  .card-top .readonly { font-size: 12px; }
-  /* Focus visible explicite (WCAG 2.2 SC 2.4.11) */
-  .card:focus,
-  .card:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-  .card-top {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    margin-bottom: 4px;
-  }
-  .card-top .id {
-    font-family: var(--mono);
-    font-weight: 600;
-  }
-  .card-top .priority { text-transform: uppercase; font-weight: 600; }
-  .card-top .points {
-    margin-left: auto;
-    font-family: var(--mono);
-    color: var(--fg-dim);
-  }
-  .card-top .tdd { font-size: 14px; }
-  .title { font-weight: 500; margin-bottom: 4px; }
-  .meta {
-    display: flex;
-    gap: 6px;
-    font-size: 11px;
-    color: var(--fg-dim);
-    font-family: var(--mono);
-    margin-bottom: 6px;
-  }
-  .progress {
-    position: relative;
-    background: var(--bg-sidebar);
-    height: 6px;
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 6px;
-  }
-  .bar { background: var(--accent); height: 100%; }
-  .progress-label {
-    position: absolute;
-    right: 0;
-    top: -14px;
-    font-size: 10px;
-    color: var(--fg-dim);
-  }
-  .card-foot {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-  }
-  .assignee {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: var(--accent-fg);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 600;
-  }
-  .blocked {
-    color: var(--danger);
-    font-weight: 600;
-    margin-left: auto;
-  }
-
-  /* Accessible uniquement aux lecteurs d'écran */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-  }
-
-  /* Aide clavier visible pour les utilisateurs voyants au clavier (WCAG SC 3.3.2) */
-  .keyboard-help-visible {
-    position: fixed;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 50;
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 11px;
-    color: var(--fg-dim);
-    box-shadow: var(--shadow);
-  }
-  .keyboard-help-visible summary {
-    padding: 4px 10px;
-    cursor: pointer;
-    user-select: none;
-    list-style: none;
-  }
-  .keyboard-help-visible summary:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-  .keyboard-help-content {
-    padding: 6px 10px 8px;
-    white-space: nowrap;
-  }
-  kbd {
-    display: inline-block;
-    padding: 1px 4px;
-    font-size: 10px;
-    font-family: var(--mono);
-    background: var(--bg-sidebar);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-  }
-
-  /* Dialog natif pour le menu de déplacement (piège de focus automatique) */
+  /* Menu de déplacement — spécifique au board (hors design system global) */
   .move-menu-dialog {
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0;
-    min-width: 300px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    color: var(--fg);
+    background: var(--bg-elev); border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg); padding: 0; min-width: 300px;
+    box-shadow: var(--shadow-lg); color: var(--fg);
   }
-  .move-menu-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.5);
-  }
-
-  .move-menu-content {
-    padding: 20px;
-  }
-
-  .move-menu-content h3 {
-    margin: 0 0 12px;
-    font-size: 16px;
-  }
-
+  .move-menu-dialog::backdrop { background: oklch(0.1 0.01 264 / 0.6); backdrop-filter: blur(3px); }
+  .move-menu-content { padding: 20px; }
+  .move-menu-content h3 { margin: 0 0 12px; font-size: 15px; font-weight: 600; }
   .move-menu-content button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin: 4px 0;
-    background: var(--bg-sidebar);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--fg);
-    cursor: pointer;
-    text-align: left;
-    font-size: 14px;
+    display: block; width: 100%; padding: 10px 12px; margin: 4px 0;
+    background: var(--bg-inset); border: 1px solid var(--border-faint);
+    border-radius: var(--radius-sm); color: var(--fg); cursor: pointer;
+    text-align: left; font-size: 13px;
   }
-
   .move-menu-content button:hover,
   .move-menu-content button:focus-visible {
-    background: var(--accent);
-    color: var(--accent-fg);
-    outline: 2px solid var(--accent);
-    outline-offset: 1px;
-  }
-
-  /* Modale de détail de carte */
-  .detail-dialog {
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0;
-    min-width: 340px;
-    max-width: 480px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    color: var(--fg);
-  }
-  .detail-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.5);
-  }
-  .detail-content {
-    padding: 20px;
-  }
-  .detail-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-  }
-  .detail-id {
-    font-family: var(--mono);
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--accent);
-  }
-  .detail-lock {
-    font-size: 13px;
-  }
-  .detail-close {
-    margin-left: auto;
-    background: transparent;
-    border: none;
-    color: var(--fg-dim);
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 1;
-    padding: 4px;
-    border-radius: 4px;
-  }
-  .detail-close:hover,
-  .detail-close:focus-visible {
-    background: var(--bg-sidebar);
-    outline: 2px solid var(--accent);
-    outline-offset: 1px;
-  }
-  .detail-content h3 {
-    margin: 0 0 14px;
-    font-size: 16px;
-  }
-  .detail-grid {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 6px 14px;
-    margin: 0;
-    font-size: 13px;
-  }
-  .detail-grid dt {
-    color: var(--fg-dim);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    align-self: center;
-  }
-  .detail-grid dd {
-    margin: 0;
-  }
-  .detail-readonly-note {
-    margin: 14px 0 0;
-    padding: 10px 12px;
-    background: var(--bg-sidebar);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 12px;
-    color: var(--fg-dim);
-    line-height: 1.5;
-  }
-  .detail-readonly-note code {
-    font-family: var(--mono);
-    font-size: 11px;
-  }
-
-  .detail-subtitle {
-    margin: 18px 0 8px;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--fg-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-
-  .detail-muted {
-    font-size: 12px;
-    color: var(--fg-dim);
-    margin: 8px 0 0;
-  }
-
-  .detail-tasks {
-    border-collapse: collapse;
-    width: 100%;
-    font-size: 12px;
-  }
-  .detail-tasks th,
-  .detail-tasks td {
-    border: 1px solid var(--border);
-    padding: 5px 8px;
-    text-align: left;
-  }
-  .detail-tasks th {
-    background: var(--bg-sidebar);
-    font-weight: 600;
-  }
-
-  .detail-body {
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--fg);
-  }
-  .detail-body :global(h1),
-  .detail-body :global(h2),
-  .detail-body :global(h3) {
-    font-size: 15px;
-    font-weight: 600;
-    margin: 14px 0 8px;
-  }
-  .detail-body :global(p) {
-    margin: 0 0 10px;
-  }
-  .detail-body :global(ul),
-  .detail-body :global(ol) {
-    margin: 0 0 10px;
-    padding-left: 20px;
-  }
-  .detail-body :global(code) {
-    background: var(--bg-sidebar);
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-family: var(--mono);
-    font-size: 0.9em;
-  }
-  .detail-body :global(pre) {
-    background: var(--bg-sidebar);
-    padding: 10px;
-    border-radius: var(--radius);
-    overflow-x: auto;
-    border: 1px solid var(--border);
-  }
-  .detail-body :global(pre code) {
-    background: none;
-    padding: 0;
-  }
-  .detail-body :global(table) {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 0 0 10px;
-  }
-  .detail-body :global(th),
-  .detail-body :global(td) {
-    border: 1px solid var(--border);
-    padding: 6px 8px;
+    background: var(--accent-soft); border-color: var(--accent-ring);
   }
 </style>

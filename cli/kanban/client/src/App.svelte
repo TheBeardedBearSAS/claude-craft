@@ -2,15 +2,21 @@
   import { onMount, onDestroy } from 'svelte';
   import { route } from './lib/router.svelte.js';
   import { store, loadStories, loadSprint, connectEvents, disconnectEvents, dismissToast } from './lib/store.svelte.js';
+  import { tweaks, initTweaks } from './lib/tweaks.svelte.js';
+  import Icon from './components/Icon.svelte';
+  import TweaksPanel from './components/TweaksPanel.svelte';
   import KanbanView from './views/KanbanView.svelte';
   import BacklogView from './views/BacklogView.svelte';
-  // Lazy-loaded : pulls heavy viz libs (uPlot, Cytoscape, marked+dompurify).
+  // Lazy-loaded : tire des libs viz lourdes (uPlot, Cytoscape, marked+dompurify).
   const lazyBurndown = () => import('./views/BurndownView.svelte');
   const lazyDeps = () => import('./views/DepsView.svelte');
   const lazyDocs = () => import('./views/DocsView.svelte');
   const lazySprints = () => import('./views/SprintsView.svelte');
 
+  let tweaksPanel = $state(null);
+
   onMount(async () => {
+    initTweaks();
     await Promise.all([loadStories(), loadSprint()]);
     connectEvents();
   });
@@ -18,138 +24,160 @@
   onDestroy(() => disconnectEvents());
 
   const navItems = [
-    { path: '/kanban', label: 'Kanban' },
-    { path: '/backlog', label: 'Backlog' },
-    { path: '/sprints', label: 'Sprints' },
-    { path: '/burndown', label: 'Burndown' },
-    { path: '/deps', label: 'Dependencies' },
-    { path: '/docs', label: 'Docs' },
+    { path: '/kanban', label: 'Board', icon: 'board' },
+    { path: '/backlog', label: 'Backlog', icon: 'backlog' },
+    { path: '/sprints', label: 'Sprints', icon: 'sprint' },
+    { path: '/burndown', label: 'Burndown', icon: 'burndown' },
+    { path: '/deps', label: 'Dependencies', icon: 'deps' },
+    { path: '/docs', label: 'Docs', icon: 'docs' },
   ];
 
-  function currentPath() {
-    return '/' + (route.parts[0] ?? 'kanban');
-  }
+  const titleMap = {
+    '/kanban': 'Board',
+    '/backlog': 'Backlog',
+    '/sprints': 'Sprints',
+    '/burndown': 'Burndown',
+    '/deps': 'Dependencies',
+    '/docs': 'Docs',
+  };
 
-  let sprintLabel = $derived(store.sprint ? `${store.sprint.name} (${store.sprint.sprint_id})` : 'no sprint');
+  let currentPath = $derived('/' + (route.parts[0] ?? 'kanban'));
+  let title = $derived(titleMap[currentPath] ?? 'Board');
+
+  // Progression sprint dérivée du board (pas de fetch supplémentaire).
+  let totalPoints = $derived(store.stories.reduce((a, s) => a + (s.story_points || 0), 0));
+  let donePoints = $derived(
+    store.stories.filter((s) => s.status === 'done').reduce((a, s) => a + (s.story_points || 0), 0),
+  );
+  let progressPct = $derived(totalPoints ? (donePoints / totalPoints) * 100 : 0);
+  let sprintName = $derived(store.sprint ? store.sprint.name : null);
 </script>
 
 <a href="#main" class="skip-link">Skip to main content</a>
 
-<div class="app-shell">
+<div class="app-shell" data-density={tweaks.density}>
   <aside class="sidebar" aria-label="Navigation">
-    <h1>claude-craft</h1>
-    <nav class="nav" aria-label="Views">
+    <div class="brand">
+      <div class="brand-mark mono">cc</div>
+      <div>
+        <div class="brand-name">claude-craft</div>
+        <div class="brand-sub">BMAD v6</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Vues">
+      <div class="nav-label">Workspace</div>
       {#each navItems as item}
         <a
+          class="nav-item"
           href={'#' + item.path}
-          aria-current={currentPath() === item.path ? 'page' : undefined}
-        >{item.label}</a>
+          aria-current={currentPath === item.path ? 'page' : undefined}
+        >
+          <Icon name={item.icon} cls="ico" size={18} />
+          {item.label}
+          {#if item.path === '/kanban'}<span class="nav-count mono">{store.stories.length}</span>{/if}
+        </a>
       {/each}
     </nav>
 
-    <!-- h2 : un seul h1 par page (WCAG SC 1.3.1, SC 2.4.6) -->
-    <h2 class="sidebar-section-title">Sprint</h2>
-    <div style="font-size:12px; color: var(--fg-dim); padding: 0 10px;">
-      {sprintLabel}
+    <div class="sidebar-foot">
+      <div class="proj-card">
+        <div class="row">
+          <div class="pname">{sprintName ?? 'Sprint'}</div>
+          {#if store.sprint}<span class="si-state active">active</span>{/if}
+        </div>
+        <div class="pmeta">{donePoints}/{totalPoints} pts</div>
+        <div class="proj-bar"><span style="width: {progressPct}%"></span></div>
+      </div>
     </div>
   </aside>
 
-  <header class="topbar" role="banner">
-    <div class="title">
-      {#if store.sprint}
-        {store.sprint.goal || store.sprint.name}
-      {:else}
-        Kanban
-      {/if}
-    </div>
-    <div class="status {store.connected ? 'connected' : 'disconnected'}" aria-live="polite">
-      {store.connected ? '● live' : '○ offline'}
-    </div>
-  </header>
+  <div class="main">
+    <header class="topbar">
+      <h1>{title}</h1>
+      {#if sprintName}<span class="crumb mono">/ {sprintName}</span>{/if}
+      <div class="topbar-spacer"></div>
 
-  <main class="main" id="main">
-    {#if store.error && store.stories.length === 0}
-      <div class="empty">
-        <strong>Cannot reach server.</strong><br/>
-        {store.error}
+      <div class="search" role="search">
+        <Icon name="search" size={15} />
+        <input placeholder="Rechercher des stories…" aria-label="Rechercher des stories" />
+        <kbd class="mono">⌘K</kbd>
       </div>
-    {:else if currentPath() === '/kanban'}
-      <KanbanView />
-    {:else if currentPath() === '/backlog'}
-      <BacklogView />
-    {:else if currentPath() === '/sprints'}
-      {#await lazySprints()}
-        <div class="empty">Loading…</div>
-      {:then mod}
-        {@const Comp = mod.default}
-        <Comp />
-      {/await}
-    {:else if currentPath() === '/burndown'}
-      {#await lazyBurndown()}
-        <div class="empty">Loading…</div>
-      {:then mod}
-        {@const Comp = mod.default}
-        <Comp />
-      {/await}
-    {:else if currentPath() === '/deps'}
-      {#await lazyDeps()}
-        <div class="empty">Loading…</div>
-      {:then mod}
-        {@const Comp = mod.default}
-        <Comp />
-      {/await}
-    {:else if currentPath() === '/docs'}
-      {#await lazyDocs()}
-        <div class="empty">Loading…</div>
-      {:then mod}
-        {@const Comp = mod.default}
-        <Comp />
-      {/await}
-    {/if}
-  </main>
+
+      {#if store.sprint}
+        <div class="sprint-pill">
+          <span class="lbl">Sprint</span>
+          <span class="val">{store.sprint.sprint_id ?? store.sprint.name}</span>
+        </div>
+      {/if}
+
+      <div
+        class="live {store.connected ? 'live-on' : 'live-off'}"
+        aria-live="polite"
+        title={store.connected ? 'Flux SSE connecté' : 'Flux SSE déconnecté'}
+      >
+        <span class="dot"></span>{store.connected ? 'Live' : 'Offline'}
+      </div>
+
+      <button class="icon-btn" aria-label="Réglages d'affichage" onclick={() => tweaksPanel?.open()}>
+        <Icon name="settings" size={18} />
+      </button>
+    </header>
+
+    <main class="view" id="main">
+      {#if store.error && store.stories.length === 0}
+        <div class="empty">
+          <strong>Serveur injoignable.</strong><br />
+          {store.error}
+        </div>
+      {:else if currentPath === '/kanban'}
+        <KanbanView />
+      {:else if currentPath === '/backlog'}
+        <BacklogView />
+      {:else if currentPath === '/sprints'}
+        {#await lazySprints()}
+          <div class="empty">Chargement…</div>
+        {:then mod}
+          {@const Comp = mod.default}
+          <Comp />
+        {/await}
+      {:else if currentPath === '/burndown'}
+        {#await lazyBurndown()}
+          <div class="empty">Chargement…</div>
+        {:then mod}
+          {@const Comp = mod.default}
+          <Comp />
+        {/await}
+      {:else if currentPath === '/deps'}
+        {#await lazyDeps()}
+          <div class="empty">Chargement…</div>
+        {:then mod}
+          {@const Comp = mod.default}
+          <Comp />
+        {/await}
+      {:else if currentPath === '/docs'}
+        {#await lazyDocs()}
+          <div class="empty">Chargement…</div>
+        {:then mod}
+          {@const Comp = mod.default}
+          <Comp />
+        {/await}
+      {/if}
+    </main>
+  </div>
 </div>
 
-<div class="toast-layer" aria-live="polite">
+<div class="toast-region" aria-live="polite" aria-relevant="additions">
   {#each store.toasts as t (t.id)}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div class="toast {t.kind}" role="status" onclick={() => dismissToast(t.id)}>
-      {t.message}
+      <span class="t-ico {t.kind}">
+        <Icon name={t.kind === 'error' ? 'warn' : t.kind === 'success' ? 'check' : 'arrowR'} size={16} />
+      </span>
+      <div class="t-msg">{t.message}</div>
     </div>
   {/each}
 </div>
 
-<style>
-  /* Titre de section sidebar : même apparence que l'ancien h1 (via app.css .sidebar h1) */
-  .sidebar-section-title {
-    font-size: 13px;
-    font-weight: 700;
-    margin: 16px 0 8px;
-    color: var(--fg-dim);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .skip-link {
-    position: absolute;
-    left: -9999px;
-    top: auto;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    background: var(--accent, #7c3aed);
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    z-index: 9999;
-  }
-  .skip-link:focus {
-    position: absolute;
-    left: 8px;
-    top: 8px;
-    width: auto;
-    height: auto;
-    overflow: visible;
-  }
-</style>
+<TweaksPanel bind:this={tweaksPanel} />

@@ -63,6 +63,7 @@ export default [
         window: 'readonly',
         document: 'readonly',
         fetch: 'readonly',
+        localStorage: 'readonly',
         EventSource: 'readonly',
         setTimeout: 'readonly',
         clearTimeout: 'readonly',
