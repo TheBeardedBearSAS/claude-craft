@@ -15,9 +15,7 @@ export function summarizeSprint(sprintEntry, stories) {
     id: sprintEntry.id,
     story_count: mine.length,
     total_points: mine.reduce((n, s) => n + (s.story_points ?? 0), 0),
-    done_points: mine
-      .filter((s) => s.status === 'done')
-      .reduce((n, s) => n + (s.story_points ?? 0), 0),
+    done_points: mine.filter((s) => s.status === 'done').reduce((n, s) => n + (s.story_points ?? 0), 0),
     has_goal: !!sprintEntry.goalPath,
     has_review: files.some((f) => f.category === 'sprint-review'),
     has_retro: files.some((f) => f.category === 'sprint-retro'),
