@@ -123,13 +123,15 @@ describe('GET /api/events (SSE)', () => {
 });
 
 describe('GET /api/stories/:id', () => {
-  it('returns story + tasks', async () => {
+  it('returns story + tasks + markdown body', async () => {
     const r = await req('GET', '/api/stories/US-001');
     expect(r.status).toBe(200);
-    const { story, tasks } = await r.json();
+    const { story, tasks, body } = await r.json();
     expect(story.id).toBe('US-001');
     expect(tasks.length).toBe(1);
     expect(tasks[0].id).toBe('TASK-001');
+    expect(typeof body).toBe('string');
+    expect(body.length).toBeGreaterThan(0);
   });
 
   it('404 on unknown id', async () => {

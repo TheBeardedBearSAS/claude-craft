@@ -57,7 +57,8 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     const story = repository.getStory(id);
     if (!story) return c.json({ error: 'not_found' }, 404);
     const tasks = repository.listTasksForStory(id);
-    return c.json({ story, tasks });
+    const body = repository.getStoryBody(id);
+    return c.json({ story, tasks, body });
   });
 
   app.get('/api/dependencies', (c) => {

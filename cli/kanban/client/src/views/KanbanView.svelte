@@ -15,6 +15,11 @@
   let detailCard = $state(null);
   /** Élément ayant déclenché l'ouverture de la modale (pour retour de focus) */
   let detailTriggerEl = $state(null);
+  /** Tâches associées à la story affichée (chargées à l'ouverture via /api/stories/:id) */
+  let detailTasks = $state([]);
+  /** Corps markdown de la story rendu en HTML (AC, Gherkin…) */
+  let detailBody = $state('');
+  let detailLoading = $state(false);
 
   const COLUMNS = [
     { key: 'backlog', label: 'Backlog', emptyHint: 'No stories — run /workflow:plan' },
@@ -228,14 +233,44 @@
   async function openDetail(card) {
     detailTriggerEl = document.activeElement;
     detailCard = card;
+    detailTasks = [];
+    detailBody = '';
     announceCardDetails(card); // annonce sr-only en plus du visuel
     await tick();
     detailDialog?.showModal();
+    loadDetailExtras(card.id);
+  }
+
+  /**
+   * Charge tâches + corps markdown de la story et rend le markdown.
+   * marked/DOMPurify importés dynamiquement pour ne pas alourdir le bundle du board.
+   */
+  async function loadDetailExtras(id) {
+    detailLoading = true;
+    try {
+      const res = await fetch(`/api/stories/${encodeURIComponent(id)}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      // La story affichée peut avoir changé entre-temps : on ignore une réponse périmée.
+      if (detailCard?.id !== id) return;
+      detailTasks = data.tasks ?? [];
+      if (data.body) {
+        const [{ marked }, dompurify] = await Promise.all([import('marked'), import('dompurify')]);
+        const DOMPurify = dompurify.default ?? dompurify;
+        if (detailCard?.id === id) detailBody = DOMPurify.sanitize(marked.parse(data.body));
+      }
+    } catch {
+      /* on garde les détails de base issus du frontmatter */
+    } finally {
+      detailLoading = false;
+    }
   }
 
   /** Ferme la modale de détail et retourne le focus à la carte source. */
   function closeDetail() {
     detailCard = null;
+    detailTasks = [];
+    detailBody = '';
     detailDialog?.close();
     if (detailTriggerEl) {
       detailTriggerEl.focus();
@@ -419,6 +454,34 @@
         {/if}
         {#if detailFields.blockedReason}<dt>Bloqué</dt><dd>{detailFields.blockedReason}</dd>{/if}
       </dl>
+
+      {#if detailTasks.length > 0}
+        <h4 class="detail-subtitle">Tâches ({detailFields.tasks.completed}/{detailFields.tasks.total})</h4>
+        <table class="detail-tasks">
+          <thead>
+            <tr><th>ID</th><th>Type</th><th>Statut</th><th>Est.</th><th>Réel</th><th>Assigné</th></tr>
+          </thead>
+          <tbody>
+            {#each detailTasks as t}
+              <tr>
+                <td>{t.id}</td>
+                <td>{t.type}</td>
+                <td>{t.status}</td>
+                <td>{t.estimation_hours ?? '—'}</td>
+                <td>{t.actual_hours ?? '—'}</td>
+                <td>{t.assigned_to || '—'}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      {:else if detailLoading}
+        <p class="detail-muted">Chargement des tâches…</p>
+      {/if}
+
+      {#if detailBody}
+        <h4 class="detail-subtitle">Description</h4>
+        <div class="detail-body markdown-body">{@html detailBody}</div>
+      {/if}
 
       {#if detailFields.readOnly}
         <p class="detail-readonly-note">
@@ -753,5 +816,85 @@
   .detail-readonly-note code {
     font-family: var(--mono);
     font-size: 11px;
+  }
+
+  .detail-subtitle {
+    margin: 18px 0 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .detail-muted {
+    font-size: 12px;
+    color: var(--fg-dim);
+    margin: 8px 0 0;
+  }
+
+  .detail-tasks {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12px;
+  }
+  .detail-tasks th,
+  .detail-tasks td {
+    border: 1px solid var(--border);
+    padding: 5px 8px;
+    text-align: left;
+  }
+  .detail-tasks th {
+    background: var(--bg-sidebar);
+    font-weight: 600;
+  }
+
+  .detail-body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--fg);
+  }
+  .detail-body :global(h1),
+  .detail-body :global(h2),
+  .detail-body :global(h3) {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 14px 0 8px;
+  }
+  .detail-body :global(p) {
+    margin: 0 0 10px;
+  }
+  .detail-body :global(ul),
+  .detail-body :global(ol) {
+    margin: 0 0 10px;
+    padding-left: 20px;
+  }
+  .detail-body :global(code) {
+    background: var(--bg-sidebar);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 0.9em;
+  }
+  .detail-body :global(pre) {
+    background: var(--bg-sidebar);
+    padding: 10px;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+  .detail-body :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+  .detail-body :global(table) {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0 0 10px;
+  }
+  .detail-body :global(th),
+  .detail-body :global(td) {
+    border: 1px solid var(--border);
+    padding: 6px 8px;
   }
 </style>

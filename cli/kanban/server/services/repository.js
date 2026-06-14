@@ -170,6 +170,12 @@ export class Repository {
     return entry ? entry.path : null;
   }
 
+  /** Markdown body (prose after frontmatter) of a story, '' for YAML-only stories. */
+  getStoryBody(id) {
+    const entry = this.stories.get(id);
+    return entry?.body ?? '';
+  }
+
   listTasksForStory(usId) {
     return [...this.tasks.values()].filter((t) => t.ok && t.data.us_id === usId).map((t) => t.data);
   }
