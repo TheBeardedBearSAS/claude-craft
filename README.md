@@ -28,7 +28,13 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
-## What's New in v8.13.1
+## What's New in v8.14.0
+
+**Interface web Kanban — accès à tous les artefacts BMAD v6 (v8.14.0) :**
+
+- **Vue Sprints dédiée** : navigation listant **tous** les sprints (points, stories, badges goal/review/retro) ; le détail rend le Goal, les Stories avec leurs Tasks dépliables, et les sections **Review** et **Retro** en markdown (`GET /api/sprints`, `GET /api/sprints/:id`).
+- **Docs élargis** : les corps markdown des EPIC, US, sprint-goal/board/review/retro sont désormais navigables dans le DocsView.
+- **Détail US enrichi** : la modale du board affiche la **liste des tâches associées** et la **description** de la story (`/api/stories/:id` renvoie `body`). Tests RED-first, suite complète verte.
 
 **Corrections de l'interface web Kanban (v8.13.1) :**
 
