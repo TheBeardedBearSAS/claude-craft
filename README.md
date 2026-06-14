@@ -28,7 +28,11 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
-## What's New in v8.13.0
+## What's New in v8.13.1
+
+**Corrections de l'interface web Kanban (v8.13.1) :**
+
+- **Dashboard Kanban réparé** : 4 bugs corrigés en TDD sur le SPA Svelte 5 (`claude-craft kanban`) — vue Backlog vide (stories à `epic_id` inconnu désormais regroupées au lieu d'être perdues), raccourcis clavier inopérants (synchronisation focus + reducer pur), détails de carte inaccessibles (modale au clic/Entrée), et feedback visible (toast) au lieu d'un échec silencieux sur les cartes read-only `sprint-status.yaml`.
 
 **Fiabilité BMAD + distribution AgentTeams (v8.13.0) :**
 
