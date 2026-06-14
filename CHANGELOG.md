@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.14.0] - 2026-06-14
+
+### Added
+- **Dashboard Kanban web — accès à l'ensemble des artefacts BMAD v6** (`claude-craft kanban`, SPA Svelte 5) : l'UI n'exposait que le board des stories, le grouping des epics, le burndown du sprint courant et les docs racine. Les rétrospectives, reviews, l'ensemble des sprints et les corps markdown étaient scannés mais inaccessibles.
+  - **Vue Sprints dédiée** : nouvelle entrée de navigation listant **tous** les sprints (points, nombre de stories, badges goal/review/retro). Le détail d'un sprint rend le Goal, une table Stories avec leurs Tasks dépliables, et les sections **Review** et **Retro** (markdown rendu). Nouveaux endpoints `GET /api/sprints` et `GET /api/sprints/:id` ; logique pure `summarizeSprint()`/`sortSprints()` testée.
+  - **DocsView élargi** : `listDocs()` sert désormais les corps markdown des EPIC, US, sprint-goal/board/review/retro/deps (catégorie dédiée `sprint-retro`) → tout est navigable dans l'arbre de documents.
+  - **Détail US enrichi** : la modale détail du board charge la **liste des tâches associées** (id/type/statut/heures/assigné) et la **description markdown** de la story (`/api/stories/:id` renvoie désormais `body`). `marked`/`DOMPurify` importés dynamiquement (bundle du board inchangé).
+  - Tests RED-first : `tests/kanban/sprints.test.js` (logique pure) + endpoints (`app.test.js`) + classification (`file-scanner.test.js`). Suite complète verte. (#79)
+
 ## [8.13.1] - 2026-06-14
 
 ### Fixed
