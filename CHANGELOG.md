@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.15.0] - 2026-06-15
+
+### Changed
+- **Refonte du design de l'interface web Kanban** (`claude-craft kanban`, SPA Svelte 5) à partir d'une maquette **Claude Design**. Thème **dark-only** opiniâtre, accent **acid-lime** (oklch, distinct des six teintes de statut), typographie **Space Grotesk + JetBrains Mono** auto-hébergée via `@fontsource` (bundlée par Vite, conforme à la CSP `font-src 'self'` — Google Fonts bloqué).
+  - **Design system** en deux feuilles globales : `app.css` (tokens oklch + reset/a11y + shell) et nouvelle `views.css` (board, modale, backlog, sprints, burndown, deps, docs, toasts, chips/atomes, densité, responsive). Shim de compatibilité pour les tokens legacy (`--font/--ok/--warn/--info/--badge-fg`).
+  - **Coloration** extraite en helpers JS purs et testés (`lib/config.js` : `codeColor`, `epicHue`, `avatarColor`, `initials` ; `tests/kanban/config.test.js`, 21 tests) ; icônes inline (`lib/icons.js`) ; 8 composants présentational (Icon, Avatar, PriorityChip, TddPip, Points, TaskProgress, ProgressRing, TweaksPanel).
+  - **Panneau Tweaks** : schéma de code couleur des cartes (statut / priorité / TDD / epic), accent et densité, persistés en `localStorage` et appliqués aux variables CSS au runtime.
+  - **Shell** (sidebar brandée + nav à icônes + carte sprint ; topbar avec recherche, sprint-pill, indicateur Live SSE, panneau Tweaks) et les 6 vues restylés. uPlot (burndown) et Cytoscape (deps) résolvent les tokens via `getComputedStyle` (canvas n'honore pas `var()`).
+  - **Préservé** : drag&drop, navigation clavier, `<dialog>` natifs (piège de focus), annonces `aria-live`, gestion read-only `.bmad/sprint-status.yaml`. Build + suite complète verts. (#81)
+
 ## [8.14.0] - 2026-06-14
 
 ### Added
