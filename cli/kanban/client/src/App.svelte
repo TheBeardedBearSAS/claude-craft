@@ -8,6 +8,7 @@
   const lazyBurndown = () => import('./views/BurndownView.svelte');
   const lazyDeps = () => import('./views/DepsView.svelte');
   const lazyDocs = () => import('./views/DocsView.svelte');
+  const lazySprints = () => import('./views/SprintsView.svelte');
 
   onMount(async () => {
     await Promise.all([loadStories(), loadSprint()]);
@@ -19,6 +20,7 @@
   const navItems = [
     { path: '/kanban', label: 'Kanban' },
     { path: '/backlog', label: 'Backlog' },
+    { path: '/sprints', label: 'Sprints' },
     { path: '/burndown', label: 'Burndown' },
     { path: '/deps', label: 'Dependencies' },
     { path: '/docs', label: 'Docs' },
@@ -75,6 +77,13 @@
       <KanbanView />
     {:else if currentPath() === '/backlog'}
       <BacklogView />
+    {:else if currentPath() === '/sprints'}
+      {#await lazySprints()}
+        <div class="empty">Loading…</div>
+      {:then mod}
+        {@const Comp = mod.default}
+        <Comp />
+      {/await}
     {:else if currentPath() === '/burndown'}
       {#await lazyBurndown()}
         <div class="empty">Loading…</div>

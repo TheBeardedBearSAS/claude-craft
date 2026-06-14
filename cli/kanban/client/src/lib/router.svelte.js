@@ -1,5 +1,5 @@
 // Minimal hash-based router using Svelte 5 runes.
-// Routes : #/kanban, #/backlog, #/burndown, #/deps, #/docs[/<path>]
+// Routes : #/kanban, #/backlog, #/sprints[/<id>], #/burndown, #/deps, #/docs[/<path>]
 
 function parse() {
   const raw = window.location.hash.slice(1) || '/kanban';

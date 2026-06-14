@@ -158,6 +158,23 @@ describe('GET /api/docs', () => {
     expect(rels).toContain('architecture/c4-context.md');
   });
 
+  it('also exposes backlog and sprint markdown bodies (epics, stories, goal, review, retro)', async () => {
+    const r = await req('GET', '/api/docs');
+    const { docs } = await r.json();
+    const rels = docs.map((d) => d.rel);
+    expect(rels).toContain('backlog/epics/EPIC-001-auth.md');
+    expect(rels).toContain('backlog/user-stories/US-001-login.md');
+    expect(rels).toContain('sprints/sprint-001-skeleton/sprint-goal.md');
+    expect(rels).toContain('sprints/sprint-001-skeleton/sprint-review.md');
+    expect(rels).toContain('sprints/sprint-001-skeleton/sprint-retro.md');
+  });
+
+  it('serves a sprint retro body', async () => {
+    const r = await req('GET', '/api/docs/sprints/sprint-001-skeleton/sprint-retro.md');
+    expect(r.status).toBe(200);
+    expect(await r.text()).toContain('Rétrospective');
+  });
+
   it('returns markdown content', async () => {
     const r = await req('GET', '/api/docs/prd.md');
     expect(r.status).toBe(200);
@@ -172,6 +189,42 @@ describe('GET /api/docs', () => {
   it('blocks path traversal', async () => {
     const r = await req('GET', '/api/docs/..%2F..%2Fetc%2Fpasswd');
     expect([400, 404]).toContain(r.status);
+  });
+});
+
+describe('GET /api/sprints', () => {
+  it('lists all sprints with rolled-up counts', async () => {
+    const r = await req('GET', '/api/sprints');
+    expect(r.status).toBe(200);
+    const { sprints } = await r.json();
+    const s = sprints.find((x) => x.id === 'sprint-001-skeleton');
+    expect(s).toBeTruthy();
+    expect(s.has_goal).toBe(true);
+    expect(s.has_review).toBe(true);
+    expect(s.has_retro).toBe(true);
+    expect(s.story_count).toBe(1);
+    expect(s.total_points).toBe(5);
+    expect(s.done_points).toBe(0);
+  });
+});
+
+describe('GET /api/sprints/:id', () => {
+  it('returns detail with goal, stories and tasks', async () => {
+    const r = await req('GET', '/api/sprints/sprint-001-skeleton');
+    expect(r.status).toBe(200);
+    const body = await r.json();
+    expect(body.sprint.id).toBe('sprint-001-skeleton');
+    expect(body.sprint.has_goal).toBe(true);
+    expect(body.goal).toContain('Walking Skeleton');
+    expect(body.review).toContain('Sprint Review');
+    expect(body.retro).toContain('Rétrospective');
+    expect(body.stories.map((s) => s.id)).toEqual(['US-001']);
+    expect(body.tasks.map((t) => t.id)).toContain('TASK-001');
+  });
+
+  it('404 on unknown sprint', async () => {
+    const r = await req('GET', '/api/sprints/sprint-999');
+    expect(r.status).toBe(404);
   });
 });
 
