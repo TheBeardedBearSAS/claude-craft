@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.13.1] - 2026-06-14
+
+### Fixed
+- **Dashboard Kanban web (`claude-craft kanban`, SPA Svelte 5) — 4 bugs corrigés en TDD** (remontés sur un projet BMAD v6 réel où toutes les cartes proviennent de `.bmad/sprint-status.yaml`, donc `_writable:false`) :
+  - **Vue Backlog vide** : `BacklogView` éliminait les stories dont `epic_id` est défini mais absent de `store.epics` (les stories YAML BMAD v6 portent `epic_id="E1"` sans fichier epic markdown) → écran blanc. Nouveau module pur `groupStoriesByEpic()` synthétise un groupe pour les `epic_id` inconnus au lieu de les perdre.
+  - **Raccourcis clavier inopérants** : `focusedColumnIndex`/`focusedCardIndex` n'étaient jamais synchronisés avec la carte réellement focus (défaut colonne 0 = Backlog vide) → flèches/Alt+M/Entrée agissaient sur la mauvaise colonne. Synchronisation via `onfocus`→`locateCard()` et handler réécrit en adaptateur fin sur un reducer pur `reduceKey()`.
+  - **Détails de carte inaccessibles** : aucune modale n'existait (Entrée n'écrivait que dans une région `aria-live` invisible). Ajout d'une modale `<dialog>` native ouverte au clic/Entrée via `buildCardDetails()`.
+  - **Déplacement en échec silencieux** : les cartes `sprint-status.yaml` (refusées serveur en 409 par design — single-writer conservé) affichent désormais un toast visible + une note explicite dans la modale.
+  - Correctif latent : race d'ouverture des `<dialog>` (`Promise.resolve()` → `tick()`).
+  - Tests RED-first : `tests/kanban/backlog-grouping.test.js` + `tests/kanban/kanban-nav.test.js` (logique pure, 23 tests). Suite complète verte. (#77)
+
 ## [8.13.0] - 2026-06-12
 
 ### Added
