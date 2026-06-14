@@ -1,13 +1,20 @@
 <script>
-  import { store, patchStatus } from '../lib/store.svelte.js';
-  import { onMount } from 'svelte';
+  import { store, patchStatus, toast } from '../lib/store.svelte.js';
+  import { onMount, tick } from 'svelte';
   import PromptDialog from '../components/PromptDialog.svelte';
+  import { locateCard, reduceKey, buildCardDetails } from '../lib/kanban-nav.js';
 
   let promptDialog = $state(null);
   /** Référence au <dialog> natif du menu de déplacement */
   let moveMenuDialog = $state(null);
   /** Élément de carte ayant déclenché l'ouverture du menu (pour retour de focus) */
   let moveMenuTriggerEl = $state(null);
+  /** Référence au <dialog> natif de la modale de détail */
+  let detailDialog = $state(null);
+  /** Carte actuellement affichée dans la modale de détail */
+  let detailCard = $state(null);
+  /** Élément ayant déclenché l'ouverture de la modale (pour retour de focus) */
+  let detailTriggerEl = $state(null);
 
   const COLUMNS = [
     { key: 'backlog', label: 'Backlog', emptyHint: 'No stories — run /workflow:plan' },
@@ -77,84 +84,53 @@
     const enabled = import.meta.env.CC_A11Y_KANBAN !== '0';
     if (!enabled) return;
 
+    const HANDLED = new Set(['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Escape', 'Enter']);
+
     function handleKeyboard(e) {
       // Guard : n'agir que si le focus est dans le board ou le menu ouvert
       const inBoard = document.activeElement?.closest('.board');
-      const menuOpen = showMoveMenu;
-      if (!inBoard && !menuOpen) return;
+      if (!inBoard && !showMoveMenu) return;
 
-      // Navigation verticale entre cartes
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      const ctx = { columns: COLUMNS, storiesByStatus };
+      const { state, action } = reduceKey(
+        { focusedColumnIndex, focusedCardIndex, showMoveMenu },
+        { key: e.key, altKey: e.altKey },
+        ctx
+      );
+
+      // Empêche le scroll/typeahead du navigateur uniquement pour les touches gérées.
+      if (HANDLED.has(e.key) || (e.altKey && e.key === 'm') || (showMoveMenu && /^[1-6]$/.test(e.key))) {
         e.preventDefault();
-        const currentColumn = COLUMNS[focusedColumnIndex];
-        const cards = storiesByStatus[currentColumn.key];
-        if (cards.length === 0) return;
-
-        if (e.key === 'ArrowDown') {
-          focusedCardIndex = Math.min(focusedCardIndex + 1, cards.length - 1);
-        } else {
-          focusedCardIndex = Math.max(0, focusedCardIndex - 1);
-        }
-        focusCard(cards[focusedCardIndex]?.id);
       }
 
-      // Arrow navigation between columns
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-        e.preventDefault();
-        if (e.key === 'ArrowRight') {
-          focusedColumnIndex = Math.min(focusedColumnIndex + 1, COLUMNS.length - 1);
-        } else {
-          focusedColumnIndex = Math.max(0, focusedColumnIndex - 1);
-        }
-        focusedCardIndex = 0;
-        const newColumn = COLUMNS[focusedColumnIndex];
-        const cards = storiesByStatus[newColumn.key];
-        if (cards.length > 0) {
-          focusCard(cards[0].id);
-        }
-      }
+      // Applique le nouvel état de navigation
+      focusedColumnIndex = state.focusedColumnIndex;
+      focusedCardIndex = state.focusedCardIndex;
+      showMoveMenu = state.showMoveMenu;
 
-      // Ouvrir le menu de déplacement avec Alt+M
-      if (e.altKey && e.key === 'm') {
-        e.preventDefault();
-        const currentColumn = COLUMNS[focusedColumnIndex];
-        const cards = storiesByStatus[currentColumn.key];
-        if (focusedCardIndex >= 0 && cards[focusedCardIndex]) {
-          if (showMoveMenu) {
-            closeMoveMenu();
-          } else {
-            openMoveMenu();
-          }
+      if (!action) return;
+      switch (action.type) {
+        case 'focus':
+          focusCard(action.cardId);
+          break;
+        case 'open-menu':
+          openMoveMenu();
+          break;
+        case 'close-menu':
+          closeMoveMenu();
+          break;
+        case 'move': {
+          const card = store.stories.find((s) => s.id === action.cardId);
+          if (card) moveCard(card, action.targetStatus);
+          break;
         }
-      }
-
-      // Move card with number keys when menu is open
-      if (showMoveMenu && /^[1-6]$/.test(e.key)) {
-        e.preventDefault();
-        const targetColumn = COLUMNS[parseInt(e.key) - 1];
-        if (targetColumn) {
-          const currentColumn = COLUMNS[focusedColumnIndex];
-          const cards = storiesByStatus[currentColumn.key];
-          const card = cards[focusedCardIndex];
-          if (card) {
-            moveCard(card, targetColumn.key);
-          }
-        }
-      }
-
-      // Fermer le menu de déplacement avec Escape
-      if (e.key === 'Escape' && showMoveMenu) {
-        closeMoveMenu();
-      }
-
-      // Enter to focus card details (could be extended)
-      if (e.key === 'Enter' && !showMoveMenu) {
-        const currentColumn = COLUMNS[focusedColumnIndex];
-        const cards = storiesByStatus[currentColumn.key];
-        const card = cards[focusedCardIndex];
-        if (card) {
-          announceCardDetails(card);
-        }
+        case 'readonly':
+          announceReadOnly(action.cardId);
+          closeMoveMenu();
+          break;
+        case 'details':
+          openDetail(action.card);
+          break;
       }
     }
 
@@ -166,6 +142,15 @@
     if (!cardId) return;
     const el = document.querySelector(`[data-card-id="${cardId}"]`);
     if (el) el.focus();
+  }
+
+  /** Synchronise l'état de navigation clavier avec la carte réellement focus (souris/Tab). */
+  function syncFocus(cardId) {
+    const pos = locateCard(storiesByStatus, COLUMNS, cardId);
+    if (pos) {
+      focusedColumnIndex = pos.columnIndex;
+      focusedCardIndex = pos.cardIndex;
+    }
   }
 
   async function moveCard(card, targetStatus) {
@@ -202,6 +187,12 @@
   function announceReadOnly(cardId) {
     liveRegion = `Card ${cardId} is read-only (managed by .bmad/sprint-status.yaml — use team:/qa: commands)`;
     setTimeout(() => liveRegion = '', 3000);
+    // Feedback VISIBLE pour les utilisateurs voyants (au-delà de l'annonce sr-only).
+    toast({
+      kind: 'info',
+      message: `${cardId} en lecture seule — gérée par .bmad/sprint-status.yaml (commandes team:/qa:)`,
+      ttl: 5000,
+    });
   }
 
   function announceCardDetails(card) {
@@ -210,12 +201,13 @@
   }
 
   /** Ouvre le menu de déplacement via l'élément <dialog> natif. */
-  function openMoveMenu() {
+  async function openMoveMenu() {
     // Mémorise l'élément déclencheur pour y retourner le focus à la fermeture
     moveMenuTriggerEl = document.activeElement;
     showMoveMenu = true;
-    // Attend le prochain tick Svelte pour que le dialog soit dans le DOM
-    Promise.resolve().then(() => moveMenuDialog?.showModal());
+    // Attend que Svelte ait rendu le dialog (bind:this résolu) avant showModal()
+    await tick();
+    moveMenuDialog?.showModal();
   }
 
   /** Ferme le menu de déplacement et retourne le focus à la carte source. */
@@ -226,6 +218,28 @@
     if (moveMenuTriggerEl) {
       moveMenuTriggerEl.focus();
       moveMenuTriggerEl = null;
+    }
+  }
+
+  /** Détails normalisés de la carte affichée (null si modale fermée). */
+  const detailFields = $derived(detailCard ? buildCardDetails(detailCard) : null);
+
+  /** Ouvre la modale de détail (clic ou Entrée). */
+  async function openDetail(card) {
+    detailTriggerEl = document.activeElement;
+    detailCard = card;
+    announceCardDetails(card); // annonce sr-only en plus du visuel
+    await tick();
+    detailDialog?.showModal();
+  }
+
+  /** Ferme la modale de détail et retourne le focus à la carte source. */
+  function closeDetail() {
+    detailCard = null;
+    detailDialog?.close();
+    if (detailTriggerEl) {
+      detailTriggerEl.focus();
+      detailTriggerEl = null;
     }
   }
 </script>
@@ -247,11 +261,17 @@
       <ul class="column-body" role="list">
         {#each storiesByStatus[col.key] as s (s.id)}
           {@const tdd = tddBadge(s.tdd_phase)}
+          <!-- Enter (détails) est géré par le handler clavier global du board ; onclick couvre la souris. -->
+          <!-- svelte-ignore a11y_click_events_have_key_events -->
+          <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+          <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
           <li
             class="card"
             class:read-only={s._writable === false}
             draggable={s._writable !== false}
             ondragstart={(e) => onDragStart(e, s.id)}
+            onfocus={() => syncFocus(s.id)}
+            onclick={() => openDetail(s)}
             aria-label="{s.id} {s.title}{s._writable === false ? ' (lecture seule)' : ''}"
             data-card-id={s.id}
             tabindex="0"
@@ -361,6 +381,51 @@
         </button>
       {/each}
       <button onclick={() => closeMoveMenu()}>Annuler (Échap)</button>
+    </div>
+  </dialog>
+{/if}
+
+<!--
+  Modale de détail de carte : <dialog> natif (piège de focus + aria-modal natifs).
+  Ouverte au clic ou via Entrée (WCAG SC 1.3.2, 2.1.2, 2.4.3).
+-->
+{#if detailFields}
+  <dialog
+    bind:this={detailDialog}
+    class="detail-dialog"
+    aria-labelledby="detail-title"
+    onclose={() => { if (detailCard) closeDetail(); }}
+  >
+    <div class="detail-content">
+      <header class="detail-header">
+        <span class="detail-id">{detailFields.id}</span>
+        {#if detailFields.readOnly}
+          <span class="detail-lock" aria-label="Lecture seule" role="img">🔒</span>
+        {/if}
+        <button class="detail-close" onclick={() => closeDetail()} aria-label="Fermer">✕</button>
+      </header>
+      <h3 id="detail-title">{detailFields.title}</h3>
+
+      <dl class="detail-grid">
+        <dt>Statut</dt><dd>{detailFields.status}</dd>
+        <dt>Priorité</dt><dd>{detailFields.priority || '—'}</dd>
+        <dt>Points</dt><dd>{detailFields.storyPoints}</dd>
+        {#if detailFields.epicId}<dt>Epic</dt><dd>{detailFields.epicId}</dd>{/if}
+        {#if detailFields.persona}<dt>Persona</dt><dd>{detailFields.persona}</dd>{/if}
+        {#if detailFields.assignedTo}<dt>Assigné à</dt><dd>{detailFields.assignedTo}</dd>{/if}
+        {#if detailFields.tddPhase}<dt>TDD</dt><dd>{detailFields.tddPhase}</dd>{/if}
+        {#if detailFields.tasks.total > 0}
+          <dt>Tâches</dt><dd>{detailFields.tasks.completed}/{detailFields.tasks.total}</dd>
+        {/if}
+        {#if detailFields.blockedReason}<dt>Bloqué</dt><dd>{detailFields.blockedReason}</dd>{/if}
+      </dl>
+
+      {#if detailFields.readOnly}
+        <p class="detail-readonly-note">
+          Carte en lecture seule — gérée par <code>.bmad/sprint-status.yaml</code> (BMAD v6 single-writer).
+          Changez son statut via les commandes <code>team:</code> / <code>qa:</code>.
+        </p>
+      {/if}
     </div>
   </dialog>
 {/if}
@@ -603,5 +668,90 @@
     color: var(--accent-fg);
     outline: 2px solid var(--accent);
     outline-offset: 1px;
+  }
+
+  /* Modale de détail de carte */
+  .detail-dialog {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0;
+    min-width: 340px;
+    max-width: 480px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    color: var(--fg);
+  }
+  .detail-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .detail-content {
+    padding: 20px;
+  }
+  .detail-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .detail-id {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--accent);
+  }
+  .detail-lock {
+    font-size: 13px;
+  }
+  .detail-close {
+    margin-left: auto;
+    background: transparent;
+    border: none;
+    color: var(--fg-dim);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 4px;
+    border-radius: 4px;
+  }
+  .detail-close:hover,
+  .detail-close:focus-visible {
+    background: var(--bg-sidebar);
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .detail-content h3 {
+    margin: 0 0 14px;
+    font-size: 16px;
+  }
+  .detail-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 14px;
+    margin: 0;
+    font-size: 13px;
+  }
+  .detail-grid dt {
+    color: var(--fg-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    align-self: center;
+  }
+  .detail-grid dd {
+    margin: 0;
+  }
+  .detail-readonly-note {
+    margin: 14px 0 0;
+    padding: 10px 12px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 12px;
+    color: var(--fg-dim);
+    line-height: 1.5;
+  }
+  .detail-readonly-note code {
+    font-family: var(--mono);
+    font-size: 11px;
   }
 </style>
