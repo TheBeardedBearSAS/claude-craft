@@ -55,6 +55,7 @@ function classify(rootDir, absPath) {
     if (rest === 'board.md') return 'board';
     if (rest.startsWith('status-')) return 'sprint-status-snapshot';
     if (rest === 'sprint-review.md') return 'sprint-review';
+    if (rest === 'sprint-retro.md') return 'sprint-retro';
     if (rest === 'sprint-dependencies.md') return 'sprint-deps';
     return 'sprint-other';
   }

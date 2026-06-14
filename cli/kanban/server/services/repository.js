@@ -57,12 +57,25 @@ export class Repository {
       this.filesByPath.set(f.path, { kind: 'task', id: res.ok ? res.data.id : null });
     }
 
-    // Docs (root + architecture)
-    for (const category of ['doc', 'architecture']) {
+    // Docs browsable in the DocsView. Every markdown body that carries prose is
+    // exposed ; 'task' is excluded (frontmatter-only, already in the stories API).
+    const DOC_CATEGORIES = [
+      'doc',
+      'architecture',
+      'epic',
+      'story',
+      'sprint-goal',
+      'board',
+      'sprint-review',
+      'sprint-retro',
+      'sprint-deps',
+      'sprint-other',
+    ];
+    for (const category of DOC_CATEGORIES) {
       for (const f of groups[category] ?? []) {
         const rel = path.relative(this.rootDir, f.path).split(path.sep).join('/');
         const arr = this.docs.get(category) ?? [];
-        arr.push({ path: f.path, rel });
+        arr.push({ path: f.path, rel, category });
         this.docs.set(category, arr);
       }
     }
@@ -157,6 +170,12 @@ export class Repository {
     return entry ? entry.path : null;
   }
 
+  /** Markdown body (prose after frontmatter) of a story, '' for YAML-only stories. */
+  getStoryBody(id) {
+    const entry = this.stories.get(id);
+    return entry?.body ?? '';
+  }
+
   listTasksForStory(usId) {
     return [...this.tasks.values()].filter((t) => t.ok && t.data.us_id === usId).map((t) => t.data);
   }
@@ -174,6 +193,31 @@ export class Repository {
     const known = this.listDocs().find((d) => d.rel === rel);
     if (!known) return null;
     return await readFile(known.path, 'utf8');
+  }
+
+  /**
+   * Summaries of every scanned sprint, sorted by id descending (most recent first).
+   * @returns {Array<{id:string, has_goal:boolean, has_review:boolean, has_retro:boolean, file_count:number}>}
+   */
+  listSprints() {
+    return [...this.sprints.values()]
+      .map((s) => ({
+        id: s.id,
+        has_goal: !!s.goalPath,
+        has_review: s.files.some((f) => f.category === 'sprint-review'),
+        has_retro: s.files.some((f) => f.category === 'sprint-retro'),
+        file_count: s.files.length,
+      }))
+      .sort((a, b) => b.id.localeCompare(a.id));
+  }
+
+  /**
+   * Raw sprint aggregation entry (files + tasks + goalPath) for the detail route.
+   * @param {string} id
+   * @returns {{ id:string, files:object[], tasks:string[], goalPath?:string } | undefined}
+   */
+  getSprint(id) {
+    return this.sprints.get(id);
   }
 
   buildDependenciesGraph() {

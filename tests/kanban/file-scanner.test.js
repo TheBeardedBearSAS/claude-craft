@@ -70,6 +70,7 @@ describe('FileScanner.classify', () => {
     ['sprints/sprint-001/board.md', 'board'],
     ['sprints/sprint-001/status-2026-01-30.md', 'sprint-status-snapshot'],
     ['sprints/sprint-001/sprint-review.md', 'sprint-review'],
+    ['sprints/sprint-001/sprint-retro.md', 'sprint-retro'],
     ['sprints/sprint-001/sprint-dependencies.md', 'sprint-deps'],
     ['architecture/c4-context.md', 'architecture'],
     ['architecture/erd.md', 'architecture'],

@@ -57,7 +57,8 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     const story = repository.getStory(id);
     if (!story) return c.json({ error: 'not_found' }, 404);
     const tasks = repository.listTasksForStory(id);
-    return c.json({ story, tasks });
+    const body = repository.getStoryBody(id);
+    return c.json({ story, tasks, body });
   });
 
   app.get('/api/dependencies', (c) => {
@@ -65,7 +66,7 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
   });
 
   app.get('/api/docs', (c) => {
-    return c.json({ docs: repository.listDocs().map((d) => ({ rel: d.rel })) });
+    return c.json({ docs: repository.listDocs().map((d) => ({ rel: d.rel, category: d.category })) });
   });
 
   app.get('/api/docs/:rel{.+}', async (c) => {
@@ -212,6 +213,69 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
         tasks: s.tasks,
       })),
       burndown,
+    });
+  });
+
+  // List every scanned sprint with rolled-up story/point counts.
+  // Declared after /api/sprints/current so :id below never captures "current".
+  app.get('/api/sprints', (c) => {
+    const allStories = repository.listStories();
+    const sprints = repository.listSprints().map((s) => {
+      const stories = allStories.filter((st) => st.sprint_id === s.id);
+      return {
+        ...s,
+        story_count: stories.length,
+        total_points: stories.reduce((n, st) => n + (st.story_points ?? 0), 0),
+        done_points: stories.filter((st) => st.status === 'done').reduce((n, st) => n + (st.story_points ?? 0), 0),
+      };
+    });
+    return c.json({ sprints });
+  });
+
+  // Sprint detail : stories + their tasks, plus goal/review/retro markdown bodies.
+  app.get('/api/sprints/:id', async (c) => {
+    const id = c.req.param('id');
+    const sprint = repository.getSprint(id);
+    if (!sprint) return c.json({ error: 'not_found' }, 404);
+
+    const stories = repository.listStories({ sprintId: id });
+    const tasks = stories.flatMap((s) => repository.listTasksForStory(s.id));
+
+    // Read an optional markdown file under the project-management root only.
+    const readIfExists = async (absPath) => {
+      if (!absPath) return null;
+      try {
+        const rel = path.relative(repository.rootDir, absPath).split(path.sep).join('/');
+        resolveSafe(repository.rootDir, rel);
+        return await fs.promises.readFile(absPath, 'utf8');
+      } catch {
+        return null;
+      }
+    };
+
+    const goalFile = sprint.goalPath ?? null;
+    const reviewFile = sprint.files.find((f) => f.category === 'sprint-review')?.path ?? null;
+    const retroFile = sprint.files.find((f) => f.category === 'sprint-retro')?.path ?? null;
+
+    const [goal, review, retro] = await Promise.all([
+      readIfExists(goalFile),
+      readIfExists(reviewFile),
+      readIfExists(retroFile),
+    ]);
+
+    return c.json({
+      sprint: { id, has_goal: !!goalFile, has_review: !!reviewFile, has_retro: !!retroFile },
+      stories: stories.map((s) => ({
+        id: s.id,
+        title: s.title,
+        status: s.status,
+        story_points: s.story_points,
+        assigned_to: s.assigned_to,
+      })),
+      tasks,
+      goal,
+      review,
+      retro,
     });
   });
 
