@@ -1,11 +1,14 @@
 <script>
   /**
    * Tâches au format Svelte : { total, completed }.
-   * @type {{ tasks?: { total?: number, completed?: number } }}
+   * `status` réconcilie le compteur : une story `done` dont le compteur de
+   * tâches n'a pas été recalé (cas BMAD : TT-* terminées avec completed:0)
+   * est affichée comme complète (bug #12) plutôt que trompeusement 0/N.
+   * @type {{ tasks?: { total?: number, completed?: number }, status?: string }}
    */
-  let { tasks } = $props();
+  let { tasks, status = '' } = $props();
   let total = $derived(tasks?.total ?? 0);
-  let done = $derived(tasks?.completed ?? 0);
+  let done = $derived(status === 'done' && total > 0 ? total : (tasks?.completed ?? 0));
   let pct = $derived(total ? (done / total) * 100 : 0);
 </script>
 

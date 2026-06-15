@@ -1,6 +1,8 @@
 // Central store for the Kanban UI, backed by Svelte 5 runes.
 // Normalized caches + SSE-driven invalidation.
 
+import { classifyKanbanEvent } from './events.js';
+
 export const store = $state({
   stories: [],
   epics: [],
@@ -108,18 +110,23 @@ export function connectEvents() {
   es.addEventListener('error', () => {
     store.connected = false;
   });
-  es.addEventListener('story:updated', async () => {
-    await loadStories();
-  });
-  es.addEventListener('file:changed', async (e) => {
+  // Both story moves and relevant file changes must refresh the board AND the
+  // sprint/burndown (bug #7: the chart + topbar progress went stale otherwise).
+  const refresh = async ({ reloadStories, reloadSprint }) => {
+    const jobs = [];
+    if (reloadStories) jobs.push(loadStories());
+    if (reloadSprint) jobs.push(loadSprint());
+    if (jobs.length) await Promise.all(jobs);
+  };
+  es.addEventListener('story:updated', () => refresh(classifyKanbanEvent({ event: 'story:updated' })));
+  es.addEventListener('file:changed', (e) => {
+    let payload;
     try {
-      const { payload } = JSON.parse(e.data);
-      if (payload?.category === 'story' || payload?.category === 'task' || payload?.category === 'epic') {
-        await loadStories();
-      }
+      ({ payload } = JSON.parse(e.data));
     } catch {
-      await loadStories();
+      payload = undefined;
     }
+    return refresh(classifyKanbanEvent({ event: 'file:changed', payload }));
   });
 }
 

@@ -80,36 +80,53 @@ export const TaskFrontmatterSchema = z
 export const SprintStatusSchema = z
   .object({
     version: z.string().default('1.0'),
-    metadata: z.object({
-      sprint_id: z.string(),
-      name: z.string(),
-      start_date: z.string(),
-      end_date: z.string(),
-      goal: z.string().default(''),
-      epic: z.string().optional().default(''),
-    }),
+    // metadata is passthrough so optional BMAD fields (capacity_points,
+    // capacity_note, last_sync, …) survive validation and reach the burndown
+    // / sprint screens instead of being silently stripped.
+    metadata: z
+      .object({
+        sprint_id: z.string(),
+        name: z.string(),
+        start_date: z.string(),
+        end_date: z.string(),
+        goal: z.string().default(''),
+        epic: z.string().optional().default(''),
+        capacity_points: z.number().int().min(0).optional(),
+        capacity_note: z.string().optional().default(''),
+      })
+      .passthrough(),
     stories: z
       .record(
-        z.object({
-          title: z.string(),
-          status: StoryStatusSchema,
-          previous_status: z.string().optional().default(''),
-          assigned_to: z.string().optional().default(''),
-          tdd_phase: TddPhaseSchema.optional().default(''),
-          story_points: z.number().int().min(0).default(0),
-          epic_id: z.string().optional().default(''),
-          tasks: z
-            .object({
-              total: z.number().int().min(0).default(0),
-              completed: z.number().int().min(0).default(0),
-              list: z.array(z.string()).default([]),
-            })
-            .optional(),
-          history: z.array(HistoryEntrySchema).optional().default([]),
-        })
+        z
+          .object({
+            title: z.string(),
+            status: StoryStatusSchema,
+            previous_status: z.string().optional().default(''),
+            // Real BMAD v6 yaml uses assigned_to: null for unassigned stories.
+            // Rejecting null here flagged the WHOLE file invalid → empty board.
+            assigned_to: z.string().nullable().optional().default(''),
+            // tdd_phase is loose: BMAD writes "not-started"/"review" outside the
+            // strict enum; the UI tolerates unknown phases. Don't reject the file.
+            tdd_phase: z.string().optional().default(''),
+            story_points: z.number().int().min(0).default(0),
+            epic_id: z.string().optional().default(''),
+            tasks: z
+              .object({
+                total: z.number().int().min(0).default(0),
+                completed: z.number().int().min(0).default(0),
+                list: z.array(z.string()).default([]),
+              })
+              .optional(),
+            history: z.array(HistoryEntrySchema).optional().default([]),
+          })
+          // passthrough keeps priority (P0..P3), platform, dependencies, note…
+          // so the ingestion layer can map/surface them.
+          .passthrough()
       )
       .default({}),
   })
+  // top-level passthrough preserves archived_sprints, routing, gates,
+  // state_machine, last_sync for downstream ingestion.
   .passthrough();
 
 export const TransitionRequestSchema = z.object({

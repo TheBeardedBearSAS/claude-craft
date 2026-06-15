@@ -216,14 +216,55 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     });
   });
 
+  // Resolve display metadata (name, dates, epic) for a sprint id from
+  // sprint-status.yaml — current sprint via metadata, closed sprints via
+  // archived_sprints. Gives all sprint endpoints a coherent shape.
+  const sprintMeta = (ss, id) => {
+    const base = { name: id, start_date: '', end_date: '', epic: '', points_delivered: null };
+    if (!ss || ss._invalid) return base;
+    if (ss.metadata?.sprint_id === id) {
+      return {
+        name: ss.metadata.name ?? id,
+        start_date: ss.metadata.start_date ?? '',
+        end_date: ss.metadata.end_date ?? '',
+        epic: ss.metadata.epic ?? '',
+        points_delivered: null,
+      };
+    }
+    const a = ss.archived_sprints?.[id];
+    if (a) {
+      return {
+        name: a.name ?? id,
+        start_date: '',
+        end_date: a.closed_date ?? '',
+        epic: a.epic ?? '',
+        points_delivered: a.points_delivered ?? null,
+      };
+    }
+    return base;
+  };
+
+  const loadStatusSafe = async () => {
+    try {
+      return await loadSprintStatus(resolvedProjectRoot);
+    } catch {
+      return null;
+    }
+  };
+
   // List every scanned sprint with rolled-up story/point counts.
   // Declared after /api/sprints/current so :id below never captures "current".
-  app.get('/api/sprints', (c) => {
+  app.get('/api/sprints', async (c) => {
+    const ss = await loadStatusSafe();
     const allStories = repository.listStories();
     const sprints = repository.listSprints().map((s) => {
       const stories = allStories.filter((st) => st.sprint_id === s.id);
+      const meta = sprintMeta(ss, s.id);
       return {
         ...s,
+        name: meta.name,
+        epic: meta.epic,
+        points_delivered: meta.points_delivered,
         story_count: stories.length,
         total_points: stories.reduce((n, st) => n + (st.story_points ?? 0), 0),
         done_points: stories.filter((st) => st.status === 'done').reduce((n, st) => n + (st.story_points ?? 0), 0),
@@ -257,14 +298,26 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     const reviewFile = sprint.files.find((f) => f.category === 'sprint-review')?.path ?? null;
     const retroFile = sprint.files.find((f) => f.category === 'sprint-retro')?.path ?? null;
 
-    const [goal, review, retro] = await Promise.all([
+    const [goal, review, retro, ss] = await Promise.all([
       readIfExists(goalFile),
       readIfExists(reviewFile),
       readIfExists(retroFile),
+      loadStatusSafe(),
     ]);
+    const meta = sprintMeta(ss, id);
 
     return c.json({
-      sprint: { id, has_goal: !!goalFile, has_review: !!reviewFile, has_retro: !!retroFile },
+      sprint: {
+        id,
+        name: meta.name,
+        start_date: meta.start_date,
+        end_date: meta.end_date,
+        epic: meta.epic,
+        points_delivered: meta.points_delivered,
+        has_goal: !!goalFile,
+        has_review: !!reviewFile,
+        has_retro: !!retroFile,
+      },
       stories: stories.map((s) => ({
         id: s.id,
         title: s.title,

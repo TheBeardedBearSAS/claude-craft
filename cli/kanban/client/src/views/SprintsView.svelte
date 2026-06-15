@@ -138,8 +138,15 @@
         <div class="sd-head">
           <div style="flex:1">
             <div style="display:flex; align-items:center; gap:11px">
-              <h2>{detail.sprint.id}</h2>
+              <h2>{detail.sprint.name || detail.sprint.id}</h2>
               <span class="si-state {state}" style="font-size:11px">{state}</span>
+            </div>
+            <div class="sd-sub">
+              <span class="mono">{detail.sprint.id}</span>
+              {#if detail.sprint.epic}<span class="tag-mini">{detail.sprint.epic}</span>{/if}
+              {#if detail.sprint.start_date}<span>{detail.sprint.start_date} → {detail.sprint.end_date || '…'}</span>
+              {:else if detail.sprint.end_date}<span>clôturé le {detail.sprint.end_date}</span>{/if}
+              {#if detail.sprint.points_delivered != null}<span>{detail.sprint.points_delivered} pts livrés</span>{/if}
             </div>
           </div>
         </div>
@@ -173,6 +180,7 @@
                   {/if}
                   <span class="s-id mono">{st.id}</span>
                   <span class="s-t">{st.title}</span>
+                  {#if st.assigned_to}<span class="s-assignee mono">{st.assigned_to}</span>{/if}
                   <span class="s-status">
                     <i style="width:8px;height:8px;border-radius:50%;background: var({STATUS[st.status]?.cssVar || '--fg-faint'});display:inline-block"></i>{STATUS[st.status]?.label || st.status}
                   </span>
@@ -218,6 +226,14 @@
 </div>
 
 <style>
+  .sd-sub {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    margin-top: 6px; font-size: 12px; color: var(--fg-faint);
+  }
+  .s-assignee {
+    font-size: 11px; color: var(--fg-dim); padding: 1px 6px;
+    background: var(--bg-inset); border-radius: 5px;
+  }
   .si-tags { display: flex; gap: 5px; margin-top: 9px; }
   .tag-mini {
     font-family: var(--mono); font-size: 9.5px; font-weight: 600; text-transform: uppercase;

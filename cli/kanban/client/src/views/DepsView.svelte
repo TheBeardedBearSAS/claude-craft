@@ -174,7 +174,8 @@
       <div class="sr-only">
         <h2>Dependency edges (text fallback)</h2>
         <ul>
-          {#each edges as edge}<li>{edge.from} depends on {edge.to}</li>{/each}
+          <!-- edge = { from: prerequisite, to: dependent } : "to depends on from". -->
+          {#each edges as edge}<li>{edge.to} depends on {edge.from}</li>{/each}
         </ul>
       </div>
     </div>

@@ -1,10 +1,19 @@
 <script>
   import { store } from '../lib/store.svelte.js';
+  import { alignBurndownByDate } from '../lib/burndown.js';
   import uPlot from 'uplot';
   import 'uplot/dist/uPlot.min.css';
 
+  // sr-only table rows joined by DATE (bug #8 : was joined by array index, which
+  // mismatched because ideal has one row/day and actual is event-driven).
+  const tableRows = $derived(alignBurndownByDate(store.burndown?.ideal ?? [], store.burndown?.actual ?? []));
+
   let chartContainer = $state(null);
-  let chart = $state(null);
+  // Plain `let` (NOT $state) : the chart instance is read AND written inside the
+  // $effect below. As $state it made the effect depend on its own write → a
+  // reactive loop that spawned duplicate uPlot canvases and starved the event
+  // loop (hashchange could no longer flush, freezing route changes on this view).
+  let chart = null;
 
   const hasData = $derived(store.burndown?.ideal?.length > 0);
 
@@ -122,8 +131,8 @@
             <tr><th scope="col">Date</th><th scope="col">Points idéal</th><th scope="col">Points réel</th></tr>
           </thead>
           <tbody>
-            {#each store.burndown?.ideal ?? [] as point, i}
-              <tr><td>{point.date}</td><td>{point.points}</td><td>{store.burndown?.actual?.[i]?.points ?? '—'}</td></tr>
+            {#each tableRows as row}
+              <tr><td>{row.date}</td><td>{row.ideal ?? '—'}</td><td>{row.actual ?? '—'}</td></tr>
             {/each}
           </tbody>
         </table>

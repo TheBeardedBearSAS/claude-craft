@@ -30,13 +30,17 @@ export const TDD = {
   done: { label: 'Done', cssVar: '--success' },
 };
 
-/** Couleurs par type de tâche (modale détail). */
+/** Couleurs par type de tâche (modale détail). Clés alignées sur le schéma
+ *  TASK_TYPES = ['DB','BE','FE-WEB','FE-MOB','TEST','DOC','OPS','REV']. */
 export const TASK_TYPE = {
   DB: 'oklch(0.74 0.13 300)',
   BE: 'oklch(0.74 0.13 236)',
-  FE: 'oklch(0.80 0.14 145)',
+  'FE-WEB': 'oklch(0.80 0.14 145)',
+  'FE-MOB': 'oklch(0.80 0.14 175)',
   TEST: 'oklch(0.82 0.14 60)',
-  DOCS: 'oklch(0.70 0.02 264)',
+  DOC: 'oklch(0.70 0.02 264)',
+  OPS: 'oklch(0.74 0.13 30)',
+  REV: 'oklch(0.74 0.13 330)',
 };
 
 /** Schémas de code couleur proposés par le panneau Tweaks. */
