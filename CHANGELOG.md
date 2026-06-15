@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.15.1] - 2026-06-15
+
+### Fixed
+- **Audit de fraîcheur 2026-06-15** — alignement des références/agents sur les versions vérifiées (source `Dev/i18n/` 5 langues + couche d'install `.claude/`) :
+  - **infra** : provider `hcloud` épinglé à `1.65.0` (`config/versions.yaml` + `devops-engineer`).
+  - **CI** : matrice de test Node `[18, 20, 22]` → `[20, 22, 24]` (Node 18 EOL depuis avril 2025).
+  - **C#** : ajout d'un avertissement de licence MediatR/AutoMapper (commerciale depuis v13) + alternatives MIT (Wolverine, Cortex.Mediator, ConduitR) dans `csharp-reviewer`.
+  - **docs** : version OpenAPI harmonisée sur `3.1.1` (dernière stable) dans la règle documentation, `references/base`, le skill documentation et le template AGENTS. (#83)
+
+### Security
+- **Dependabot #31 (esbuild GHSA-gv7w-rqvm-qjhr)** — analysé et classé risque tolérable : vecteur RCE spécifique au module Deno (`lib/deno/mod.ts`), non exploitable ici (esbuild via npm/Node, dépendance dev VitePress) ; le patch `0.28.1` n'est encore supporté par aucune release vite. À revoir au prochain bump vite.
+
 ## [8.15.0] - 2026-06-15
 
 ### Changed
