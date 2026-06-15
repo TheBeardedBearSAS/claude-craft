@@ -4,12 +4,16 @@ import { scan, groupByCategory } from './file-scanner.js';
 import { parseAndValidate } from './frontmatter.js';
 import { loadSprintStatus } from './sprint-cache.js';
 import { StoryFrontmatterSchema, EpicFrontmatterSchema, TaskFrontmatterSchema } from '../../shared/schemas.js';
+import { mapBmadPriority } from '../../shared/priority.js';
+import { parseDependencyRefs } from '../../shared/deps.js';
 
 /**
  * In-memory cache of parsed project-management/ entities.
  * Rebuilt via refresh() ; individual files can be reloaded via reloadFile(path).
  */
 export class Repository {
+  #statusCache = undefined;
+
   constructor(rootDir) {
     this.rootDir = path.resolve(rootDir);
     this.stories = new Map(); // id -> { data, body, path, mtime, valid, errors? }
@@ -28,6 +32,7 @@ export class Repository {
     this.docs.clear();
     this.sprints.clear();
     this.filesByPath.clear();
+    this.#statusCache = undefined;
 
     const groups = groupByCategory(files);
 
@@ -93,6 +98,21 @@ export class Repository {
     // BMAD v6 single-writer track stores stories only in .bmad/sprint-status.yaml
     // (no individual markdown files). Surface them so the board isn't empty.
     await this.#ingestSprintStatusStories();
+    // Closed sprints live under archived_sprints.* — surface their stories
+    // (read-only history) so Sprints/Backlog/Burndown aren't limited to S-current.
+    await this.#ingestArchivedSprints();
+  }
+
+  /** Cached parse of .bmad/sprint-status.yaml, shared by the two overlay passes. */
+  async #loadStatusOnce() {
+    if (this.#statusCache !== undefined) return this.#statusCache;
+    const projectRoot = path.dirname(this.rootDir);
+    try {
+      this.#statusCache = await loadSprintStatus(projectRoot);
+    } catch {
+      this.#statusCache = null;
+    }
+    return this.#statusCache;
   }
 
   /**
@@ -102,14 +122,7 @@ export class Repository {
    * double source of truth. Synthetic stories are read-only (path === null).
    */
   async #ingestSprintStatusStories() {
-    const projectRoot = path.dirname(this.rootDir);
-    let ss;
-    try {
-      ss = await loadSprintStatus(projectRoot);
-    } catch {
-      // A broken sprint-status.yaml must not break the whole board scan.
-      return;
-    }
+    const ss = await this.#loadStatusOnce();
     if (!ss || ss._invalid || !ss.stories) return;
 
     const sprintId = ss.metadata?.sprint_id ?? null;
@@ -131,14 +144,57 @@ export class Repository {
           tdd_phase: s.tdd_phase ?? '',
           story_points: s.story_points ?? 0,
           epic_id: s.epic_id || epicFromMeta || null,
-          // BMAD priorities are P0..P3 (outside the must/should/could/wont enum),
-          // so we don't map them; the board just needs a valid default.
-          priority: 'should',
+          // Map BMAD P0..P3 onto MoSCoW so PriorityChip/filter aren't all "Should".
+          priority: mapBmadPriority(s.priority),
+          priority_raw: s.priority ?? null,
           sprint_id: sprintId,
+          blocked_reason: s.blocked_reason ?? '',
           tasks: s.tasks ?? { total: 0, completed: 0, list: [] },
-          dependencies: [],
+          // Freeform yaml deps -> resolved id references for the graph.
+          dependencies: parseDependencyRefs(s.dependencies),
         },
       });
+    }
+  }
+
+  /**
+   * Overlay stories from closed sprints (archived_sprints.<sprintKey>.stories).
+   * These are read-only history: status as recorded (done/deferred/…), points
+   * from the compact `points` field, epic from the sprint entry. A story id
+   * already present (current sprint or an earlier-listed archived sprint) wins,
+   * keeping ids globally unique as the board model requires.
+   */
+  async #ingestArchivedSprints() {
+    const ss = await this.#loadStatusOnce();
+    if (!ss || ss._invalid || !ss.archived_sprints) return;
+
+    for (const [sprintKey, sprint] of Object.entries(ss.archived_sprints)) {
+      const epic = sprint?.epic ?? null;
+      const stories = sprint?.stories ?? {};
+      for (const [id, s] of Object.entries(stories)) {
+        if (this.stories.has(id)) continue; // current / earlier sprint wins
+        this.stories.set(id, {
+          path: null, // history -> read-only
+          mtime: 0,
+          ok: true,
+          source: 'archived',
+          data: {
+            id,
+            title: s.note ? `${id} — ${s.note}` : id,
+            status: s.status ?? 'done',
+            previous_status: '',
+            assigned_to: '',
+            tdd_phase: '',
+            story_points: s.points ?? 0,
+            epic_id: epic,
+            priority: 'should',
+            sprint_id: sprintKey,
+            blocked_reason: '',
+            tasks: { total: 0, completed: 0, list: [] },
+            dependencies: [],
+          },
+        });
+      }
     }
   }
 

@@ -55,9 +55,18 @@
   }
   const visible = (s) => priFilter.length === 0 || priFilter.includes(s.priority);
 
+  // The board shows the ACTIVE sprint only. store.stories now also carries the
+  // history of closed sprints (read-only) ; without this scope the Done column
+  // would be flooded with dozens of archived stories and the metrics would be
+  // incoherent with the Burndown/topbar (sprint-scoped).
+  const activeSprintId = $derived(store.sprint?.sprint_id ?? null);
+  const boardStories = $derived(
+    activeSprintId ? store.stories.filter((s) => s.sprint_id === activeSprintId) : store.stories,
+  );
+
   const storiesByStatus = $derived.by(() => {
     const map = Object.fromEntries(COLUMNS.map((c) => [c.key, []]));
-    for (const s of store.stories) {
+    for (const s of boardStories) {
       if (!visible(s)) continue;
       (map[s.status] ??= []).push(s);
     }
@@ -73,7 +82,7 @@
     if (sc === 'tdd') return [['Red', 'var(--tdd-red)'], ['Green', 'var(--tdd-green)'], ['Refactor', 'var(--tdd-refactor)']];
     if (sc === 'epic') {
       const seen = new Map();
-      for (const s of store.stories) if (s.epic_id && !seen.has(s.epic_id)) seen.set(s.epic_id, epicHue(s.epic_id));
+      for (const s of boardStories) if (s.epic_id && !seen.has(s.epic_id)) seen.set(s.epic_id, epicHue(s.epic_id));
       return [...seen.entries()];
     }
     return COLUMNS.map((c) => [c.label, `var(${STATUS[c.key].cssVar})`]);
@@ -377,7 +386,7 @@
               {#if s.status === 'blocked' && s.blocked_reason}
                 <span class="card-blocked" title={s.blocked_reason}>⚠ blocked</span>
               {/if}
-              <TaskProgress tasks={s.tasks} />
+              <TaskProgress tasks={s.tasks} status={s.status} />
               <Avatar id={s.assigned_to} size={24} />
             </div>
           </li>

@@ -3,6 +3,7 @@
   import { route } from './lib/router.svelte.js';
   import { store, loadStories, loadSprint, connectEvents, disconnectEvents, dismissToast } from './lib/store.svelte.js';
   import { tweaks, initTweaks } from './lib/tweaks.svelte.js';
+  import { computeSprintProgress } from './lib/progress.js';
   import Icon from './components/Icon.svelte';
   import TweaksPanel from './components/TweaksPanel.svelte';
   import KanbanView from './views/KanbanView.svelte';
@@ -44,13 +45,21 @@
   let currentPath = $derived('/' + (route.parts[0] ?? 'kanban'));
   let title = $derived(titleMap[currentPath] ?? 'Board');
 
-  // Progression sprint dérivée du board (pas de fetch supplémentaire).
-  let totalPoints = $derived(store.stories.reduce((a, s) => a + (s.story_points || 0), 0));
-  let donePoints = $derived(
-    store.stories.filter((s) => s.status === 'done').reduce((a, s) => a + (s.story_points || 0), 0),
-  );
-  let progressPct = $derived(totalPoints ? (donePoints / totalPoints) * 100 : 0);
+  // Progression du SPRINT ACTIF uniquement (pas toutes les stories, qui
+  // incluent désormais l'historique des sprints clôturés) — cohérent avec le
+  // Burndown.
+  let progress = $derived(computeSprintProgress(store.stories, store.sprint?.sprint_id));
+  let totalPoints = $derived(progress.totalPoints);
+  let donePoints = $derived(progress.donePoints);
+  let progressPct = $derived(progress.pct);
   let sprintName = $derived(store.sprint ? store.sprint.name : null);
+  // Count shown next to "Board" : active-sprint stories (the board is scoped to
+  // the active sprint), falling back to the full set when no active sprint.
+  let boardCount = $derived(
+    store.sprint?.sprint_id
+      ? store.stories.filter((s) => s.sprint_id === store.sprint.sprint_id).length
+      : store.stories.length,
+  );
 </script>
 
 <a href="#main" class="skip-link">Skip to main content</a>
@@ -75,7 +84,7 @@
         >
           <Icon name={item.icon} cls="ico" size={18} />
           {item.label}
-          {#if item.path === '/kanban'}<span class="nav-count mono">{store.stories.length}</span>{/if}
+          {#if item.path === '/kanban'}<span class="nav-count mono">{boardCount}</span>{/if}
         </a>
       {/each}
     </nav>
