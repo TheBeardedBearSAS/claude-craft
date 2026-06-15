@@ -68,7 +68,7 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | GCP | Cloud Run, GKE, Cloud SQL |
 | DigitalOcean | App Platform, Kubernetes, Managed DB |
 | Azure | AKS, App Service, Azure DevOps |
-| Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) |
+| Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) | hcloud provider 1.65.0 (juin 2026) |
 | Coolify | Self-hosted PaaS, MCP server natif (read-only), audit logging structuré | v4.1.2 (juin 2026) |
 | OpenTofu | State encryption, OCI registry backends | 1.12.1 (juin 2026) |
 | Ansible | Automation, playbooks, roles | ansible-core 2.21.0 (stable mai 2026) |
@@ -350,7 +350,7 @@ helm template ./chart      # Vérifier le rendu avec Helm 4
 # Parallel jobs
 strategy:
   matrix:
-    version: [18, 20, 22]
+    version: [20, 22, 24]
 ```
 
 ## Patterns Recommandés

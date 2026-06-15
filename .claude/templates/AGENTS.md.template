@@ -13,7 +13,7 @@
 
 ### Architecture et design
 
-- `@api-designer` — Conception API REST/GraphQL, OpenAPI 3.2, GraphQL Federation
+- `@api-designer` — Conception API REST/GraphQL, OpenAPI 3.1.1, GraphQL Federation
 - `@database-architect` — Conception et optimisation BDD (PostgreSQL, MySQL, schemas)
 - `@refactoring-specialist` — Refactoring sur, patterns SOLID, extraction methode
 - `@ui-designer` — Design systems, Tailwind, design tokens

@@ -142,7 +142,7 @@ kubectl rollout history deployment/<name>
 # Parallele Jobs
 strategy:
   matrix:
-    version: [18, 20, 22]
+    version: [20, 22, 24]
 ```
 
 ## Empfohlene Patterns

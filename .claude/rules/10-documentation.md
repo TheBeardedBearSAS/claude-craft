@@ -6,7 +6,7 @@ Documentation as Code, à jour, concise et utile.
 |------|--------|-------------|
 | **README** | Markdown | Installation, démarrage rapide, config (10 sections requises) |
 | **Code comments** | Inline | POURQUOI, pas QUOI (décisions non évidentes, workarounds, refs externes) |
-| **API docs** | OpenAPI 3.2 | Endpoints, schemas, exemples, erreurs (RFC 9457), auth, rate limits |
+| **API docs** | OpenAPI 3.1.1 | Endpoints, schemas, exemples, erreurs (RFC 9457), auth, rate limits |
 | **ADR** | Markdown | Statut, Contexte, Décision, Alternatives, Conséquences (Log4brains recommandé) |
 | **Changelog** | Markdown | Keep a Changelog (Added, Changed, Deprecated, Removed, Fixed, Security) |
 

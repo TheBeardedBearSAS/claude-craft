@@ -495,6 +495,9 @@ await context.Orders.Where(o => o.Id == id)
 | **FluentAssertions** | Lesbare und ausdrucksstarke Assertions |
 | **FluentValidation** | Validierung der Commands/Queries |
 | **MediatR** | CQRS und Behavior-Pipeline |
+
+> ⚠️ **Lizenz**: MediatR und AutoMapper wechselten ab v13 zu einer kommerziellen Lizenz (angekündigt 2024/2025 von Jimmy Bogard). Die kostenlose Nutzung ist begrenzt (RPL); bei größeren Teams oder hohem Umsatz ist eine kostenpflichtige Lizenz erforderlich. Das Lizenzmodell vor dem Einsatz in einem neuen Projekt prüfen. MIT-Alternativen: **Wolverine**, **Cortex.Mediator**, **ConduitR**.
+
 | **WebApplicationFactory** | ASP.NET Core Integrationstests |
 | **Testcontainers** | Integrationstests mit echter Datenbank |
 | **SonarAnalyzer** | Statische Analyse für C# |

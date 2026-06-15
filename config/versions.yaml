@@ -12,7 +12,7 @@
 # Dernière mise à jour : 2026-06-12 (bumps audit fraîcheur G4)
 
 meta:
-  lastUpdated: '2026-06-12'
+  lastUpdated: '2026-06-15'
 
 claudeCode:
   minimum: '2.1.97'
@@ -44,6 +44,7 @@ infra:
   kubernetes: '1.36.1'
   opentofu: '1.12.1'
   ansible: '2.21.0'
+  hcloud: '1.65.0'
   frankenphp: '1.12.4'
   pgbouncer: '1.25.2'
   helm: '4.2.0'
