@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.16.0] - 2026-06-15
+
+### Added
+- **Kanban — historique des sprints clôturés** (`claude-craft kanban`) : les stories de `archived_sprints.*` du `.bmad/sprint-status.yaml` sont désormais ingérées en lecture seule. Le board (scopé au sprint actif), le Backlog, les Sprints et le Burndown couvrent l'ensemble des sprints, plus seulement le sprint courant.
+- Jeu de données de test BMAD v6 anonymisé et exhaustif (`tests/fixtures/wrandly-anon`) + suites unit / fonctionnel / E2E (`tests/kanban/wrandly-anon-*`).
+
+### Fixed
+- **Kanban — board entièrement vide sur un vrai projet BMAD v6** : `SprintStatusSchema` rejetait `assigned_to: null` et un `tdd_phase` hors énum (`not-started`/`review`), marquant tout le fichier invalide → board + burndown vides. Schéma assoupli (passthrough, `assigned_to` nullable, `tdd_phase` libre, `metadata` passthrough préservant `capacity_points`).
+- **Priorités figées** : les priorités BMAD `P0..P3` sont mappées sur MoSCoW (avant : tout affiché « Should »).
+- **Dépendances perdues** : les dépendances en texte libre du YAML sont parsées en références d'id → le graphe Dependencies n'est plus vide.
+- **Métadonnées sprint** (nom, dates, epic, points livrés) exposées ; shapes `sprint` cohérentes entre `/api/sprints`, `/api/sprints/:id` et `/api/sprints/current`.
+- **Incohérences d'écrans** : progression topbar/sidebar scopée au sprint actif ; rafraîchissement SSE du burndown ; table sr-only du burndown jointe par date (a11y) ; couleurs `TASK_TYPE` alignées au schéma ; compteur de tâches réconcilié pour les stories `done` ; libellé d'arête du graphe Dependencies corrigé.
+- **BurndownView — canvas dupliqué et navigation figée** : l'instance `chart` était un `$state` lu et écrit dans le même `$effect`, créant une boucle réactive qui dupliquait le canvas uPlot et saturait la boucle d'événements (le `hashchange` ne pouvait plus se propager). `chart` repassé en `let` simple.
+
 ## [8.15.1] - 2026-06-15
 
 ### Fixed
