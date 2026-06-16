@@ -14,7 +14,7 @@
       "name": "claude-craft",
       "source": "./",
       "description": "Multi-stack framework: 31 specialized agents (+39 infra on-demand), 125 commands across 15 namespaces, BMAD v6 sprint workflow, browser QA automation, and token optimization (RTK). 5 languages.",
-      "version": "8.16.0",
+      "version": "8.16.1",
       "category": "development-framework",
       "keywords": ["framework", "multi-stack", "bmad", "qa-automation", "tech-leads", "clean-architecture", "tdd"],
       "license": "MIT"

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.16.1] - 2026-06-16
+
+### Changed
+- **Dépendances** : montée de version des dépendances et des GitHub Actions épinglées.
+  - prod : `hono` 4.12.24 → 4.12.25 (#88).
+  - dev : groupe de 5 mises à jour (#89) ; `@playwright/test` 1.60.0 → 1.61.0 dans `website` (#90).
+  - CI : `github/codeql-action` (#87), `actions/download-artifact` 4.2.1 → 8.0.1 (#85), `aquasecurity/trivy-action` (#86).
+
 ## [8.16.0] - 2026-06-15
 
 ### Added
