@@ -1,9 +1,9 @@
 ---
 name: performance-auditor
 description: Performance analysis and optimization expert
-model: haiku
-maxTurns: 4
-effort: low
+model: sonnet
+maxTurns: 6
+effort: medium
 memory: user
 tools: [Read, Glob, Grep, Bash, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, NotebookEdit]

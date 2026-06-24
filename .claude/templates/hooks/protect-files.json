@@ -1,16 +1,28 @@
 {
-  "description": "Block edits on sensitive files (.env, secrets, credentials)",
+  "description": "Block edits on sensitive files (.env, secrets, credentials). Audit 2026-06-24 — fixed broken `echo '$TOOL_INPUT'` pattern (single quotes prevent expansion; $TOOL_INPUT is not a shell env var — Claude Code passes hook input on stdin as JSON).",
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Edit",
-        "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if printf '%s' \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then printf 'BLOCKED: Cannot edit sensitive file: %s\\n' \"$FILEPATH\" >&2; exit 2; fi; exit 0",
+            "timeout": 5000
+          }
+        ]
       },
       {
         "matcher": "Write",
-        "command": "FILEPATH=$(echo '$TOOL_INPUT' | jq -r '.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" && exit 1; fi; exit 0"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if printf '%s' \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then printf 'BLOCKED: Cannot write sensitive file: %s\\n' \"$FILEPATH\" >&2; exit 2; fi; exit 0",
+            "timeout": 5000
+          }
+        ]
       }
     ]
   },
-  "usage": "Copy this template to .claude/settings.json. Adjust the regex pattern to match your project's sensitive files."
+  "usage": "Copy the PreToolUse hooks to .claude/settings.json. Claude Code passes the hook payload on stdin as JSON — the command reads it via jq. Exit code 2 blocks the tool call and shows the stderr message to Claude. Adjust the regex to match your project's sensitive files. Requires jq."
 }

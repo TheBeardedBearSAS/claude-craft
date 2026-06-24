@@ -145,7 +145,7 @@ const TECH_REGISTRY = {
     namespace: 'docker',
     i18nDir: 'Docker',
     installScript: 'install-docker-rules.sh',
-    version: '29.5.3',
+    version: '29.6.0',
     tier: null,
   },
   coolify: {

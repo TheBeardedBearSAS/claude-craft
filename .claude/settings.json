@@ -1,8 +1,10 @@
 {
   "env": {
     "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6",
-    "CLAUDE_CODE_FORK_SUBAGENT": "1"
+    "CLAUDE_CODE_FORK_SUBAGENT": "1",
+    "ENABLE_PROMPT_CACHING_1H": "1"
   },
+  "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5-20251001"],
   "hooks": {
     "PreToolUse": [
       {
@@ -73,6 +75,16 @@
           {
             "type": "command",
             "command": "OUTPUT_SIZE=$(jq -r '.tool_output // empty' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Focus on the most relevant matches.'; fi; exit 0",
+            "timeout": 3000
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "OUTPUT_SIZE=$(jq -r '.tool_output // empty' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 51200 ]; then echo 'NOTICE: Large file read (>50KB). Extract only the relevant sections rather than processing the full file.'; fi; exit 0",
             "timeout": 3000
           }
         ]

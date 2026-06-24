@@ -615,6 +615,34 @@ Force a reload of all installed plugins without restarting Claude Code. Useful a
 
 ---
 
+### /reload-skills
+
+Re-scan all Claude Code skills without restarting the session (v2.1.157+).
+
+#### Usage
+
+```bash
+/reload-skills
+```
+
+#### Description
+
+Force a re-scan of all installed skills (`.claude/skills/`) without restarting Claude Code. Distinct from `/reload-plugins` which reloads code intelligence plugins. Useful after:
+- Adding a new skill to `.claude/skills/`
+- Modifying an existing skill file
+- Installing Claude Craft updates that include new skills
+
+> **SessionStart hook:** A `SessionStart` hook can return `reloadSkills: true` to make newly-installed skills available in the same session without user intervention.
+
+#### Examples
+
+```bash
+# Reload all skills
+/reload-skills
+```
+
+---
+
 ### /proactive
 
 Alias for `/loop` - run a command on a recurring interval.
@@ -661,6 +689,63 @@ Spawns multiple reviewer agents (security, architecture, performance, style) in 
 
 ---
 
+### /goal (v2.1.168+)
+
+Set a persistent session goal that Claude tracks until completion. A Stop hook activates and prevents Claude from stopping until the condition is met.
+
+#### Usage
+
+```bash
+/goal <description>
+/goal clear
+```
+
+#### Description
+
+Defines an objective Claude must complete before the session ends. Useful for long-running tasks (audits, migrations, multi-file refactors) where you want Claude to self-direct until done. The goal is shown in the status line. Use `/goal clear` to remove it early.
+
+#### Examples
+
+```bash
+/goal Write unit tests for all files in src/services/
+/goal Migrate all Axios calls to the fetch API across the codebase
+/goal clear
+```
+
+---
+
+### /usage (v2.1.168+)
+
+Display token usage statistics for the current session — input tokens, output tokens, cache reads, and estimated cost.
+
+#### Usage
+
+```bash
+/usage
+```
+
+#### Description
+
+Shows a breakdown of token consumption since session start: input tokens, cache read tokens, output tokens, and an estimated cost in USD. Use before `/clear` to decide whether compaction is worth it.
+
+---
+
+### /workflows (v2.1.154+)
+
+Show the live progress tree for the current Dynamic Workflow run (ultracode mode).
+
+#### Usage
+
+```bash
+/workflows
+```
+
+#### Description
+
+Displays a real-time view of all agents spawned by an active workflow, their phase assignments, completion status, and timing. Only meaningful when a Workflow tool call is in progress.
+
+---
+
 ### /tui
 
 Switch the session to the terminal UI mode (available in v2.1.110+).
@@ -701,16 +786,27 @@ Alias for `/rewind` (v2.1.108+). Reverts the last change in the session.
 
 ### /effort
 
-Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `medium`, `high`, `xhigh` (Opus 4.7 only), `max`.
+Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `medium`, `high`, `xhigh` (Opus 4.8, extended thinking), `ultracode` (v2.1.154+, Dynamic Workflows).
 
 #### Usage
 
 ```bash
 /effort               # Interactive picker
 /effort high          # Set directly
+/effort ultracode     # Dynamic Workflows — max code throughput (trigger keyword: ultracode)
 ```
 
-Default for Pro/Max subscribers on Opus 4.8/Sonnet 4.6 is `high` since v2.1.111 (previously `medium`). Opus 4.8 supports the `xhigh` tier.
+Default for Pro/Max subscribers on Opus 4.8/Sonnet 4.6 is `high` since v2.1.111 (previously `medium`). Opus 4.8 supports the `xhigh` and `ultracode` tiers.
+
+| Niveau | Modèle | Usage |
+|--------|--------|-------|
+| `low` | Haiku 4.5 (`claude-haiku-4-5-20251001`) | Tâches simples, lookups, classification |
+| `medium` | Sonnet 4.6 (`claude-sonnet-4-6`) | Implémentation standard |
+| `high` | Opus 4.8 (`claude-opus-4-8`) | Raisonnement complexe, architecture |
+| `xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | Décisions critiques, migrations complexes, ADR |
+| `ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | Mode débit code maximal — pipelines automatisés, génération massive |
+
+> **Note Fable 5 :** `claude-fable-5` est disponible depuis juin 2026 pour les scénarios de roleplay/narrative et certains agents créatifs. Il n'est pas exposé via `/effort` mais peut être utilisé en frontmatter d'agent ou via `CLAUDE_CODE_SUBAGENT_MODEL=claude-fable-5`.
 
 ---
 

@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.16.1 | **Languages:** en, fr, es, de, pt
+**Version:** 8.17.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 11 technology stacks, 31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, and BMAD v6 project management.
 
@@ -30,9 +30,9 @@ A comprehensive AI-assisted development framework for Claude Code with 11 techno
 | Symfony / PHP | `@.claude/references/symfony/CLAUDE.md` | `/symfony:*` |
 | Flutter / Dart | `@.claude/references/flutter/CLAUDE.md` | `/flutter:*` |
 | React | `@.claude/references/react/` | `/react:*` |
-| React Native | `@.claude/references/react-native/` | `/reactnative:*` |
-| Angular | `@.claude/references/angular/` | `/angular:*` |
-| Vue.js | `@.claude/references/vuejs/` | `/vuejs:*` |
+| React Native | `@.claude/references/reactnative/CLAUDE.md` | `/reactnative:*` |
+| Angular | `@.claude/references/angular/CLAUDE.md` | `/angular:*` |
+| Vue.js | `@.claude/references/vuejs/CLAUDE.md` | `/vuejs:*` |
 | Laravel | `@.claude/references/laravel/` | `/laravel:*` |
 | Python | `@.claude/references/python/` | `/python:*` |
 | PHP | `@.claude/references/php/` | `/php:*` |
@@ -47,7 +47,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Commands (15 namespaces, 125 commands)
 
-Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*`, `/paperclip:*` | Infra (via `@devops-engineer`): Docker 29.5.3 (CVE-2026-33997), Coolify v4.1.2, K8s 1.36.1, OpenTofu 1.12.1, Ansible 2.21.0, FrankenPHP 1.12.4 (CVE-2026-45062 patched), PgBouncer 1.25.2 (CVE-2026-6664/6665/6666/6667 patched) | Project: `/sprint:*`, `/gate:*`, `/project:*`
+Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*`, `/paperclip:*` | Infra (via `@devops-engineer`): Docker 29.6.0, Coolify v4.1.2, K8s 1.36.1, OpenTofu 1.12.2, Ansible 2.21.1, FrankenPHP 1.12.4, PgBouncer 1.25.2 | Project: `/sprint:*`, `/gate:*`, `/project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 
@@ -182,6 +182,6 @@ See `.claude/rules/12-context-management.md` for detailed guidance.
 | **`/memory`** | Persistent session learnings across conversations (v2.1.59+) |
 | **Pointers over copies** | Use `@path` references instead of copying code into CLAUDE.md |
 | **Token optimization** | Use `/common:setup-rtk` for 55-65% token savings |
-| **Sub-agent model** | Set `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` for cost savings |
+| **Sub-agent model** | Set `CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-4-6` for cost savings |
 
 See `.claude/templates/hooks/` for ready-to-use hook templates.

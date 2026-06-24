@@ -7,10 +7,15 @@
  *              changés depuis la dernière exécution → -90 % temps CI).
  * CI : .github/workflows/mutation.yml (nightly full, on-PR incremental).
  *
- * Seuils 2026-05 (audit 2026-05-06 TEST-002) :
+ * Seuils 2026-06 (audit 2026-06-24 P2) :
  *   - high  : 70 % (objectif qualité)
  *   - low   : 55 % (warning)
- *   - break : 50 % (échec CI sous ce seuil — score actuel ~58 %)
+ *   - break : 55 % (échec CI — relevé de 50→55 pour supprimer la marge de dérive;
+ *             cible suivante : 60 après un sprint d'amélioration de tests)
+ *
+ * Scope étendu : scripts/*.mjs ajouté (verify-versions, verify-claude-includes,
+ *   generate-references, stryker-score — gates CI critiques). Tests à créer dans
+ *   tests/scripts/ avant d'activer le blocage Stryker sur ce scope.
  */
 export default {
   packageManager: 'npm',
@@ -25,12 +30,19 @@ export default {
     '!cli/kanban/client/**',
     '!cli/lib/kanban.js',
     '!cli/**/*.test.{js,mjs}',
+    // Audit 2026-06-24 P2: gates CI critiques dans scripts/ ajoutés au scope
+    // (verify-versions.mjs, verify-claude-includes.mjs, generate-references.mjs,
+    //  stryker-score.mjs). Activer le blocage CI une fois les tests/scripts/
+    //  verify-versions.test.mjs et verify-claude-includes.test.mjs créés.
+    'scripts/stryker-score.mjs',
+    'scripts/verify-versions.mjs',
+    'scripts/verify-claude-includes.mjs',
   ],
   coverageAnalysis: 'perTest',
   thresholds: {
     high: 70,
     low: 55,
-    break: 50,
+    break: 55,
   },
   // Incremental mode: persist results between runs and mute only files whose
   // content changed since the last green run. Activate via --incremental on

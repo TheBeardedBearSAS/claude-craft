@@ -6,10 +6,12 @@ This guide takes you from zero to a working audit of your project. Every step in
 
 ## First 10 Minutes with Claude Craft
 
-**New to Claude Craft?** Start here for a personalized guided tour that shows you the 3 most valuable commands for YOUR project.
+**New to Claude Craft?** Follow Steps 1-2 below to install, then run the personalized guided tour that shows you the 3 most valuable commands for YOUR project.
+
+After installation (Step 1), open Claude Code in your project and run:
 
 ```bash
-# Inside Claude Code
+# Inside Claude Code — run AFTER installation
 /common:getting-started
 ```
 
@@ -24,7 +26,7 @@ This interactive wizard will:
 After completing the wizard, you can either:
 - Continue with the full installation steps below for team setup
 - Jump to [What's Next](#whats-next) to explore workflows and agents
-- Join the community on [Discord](https://discord.gg/claude-craft) to ask questions
+- Open an issue or discussion on [GitHub Discussions](https://github.com/TheBeardedBearSAS/claude-craft/discussions) to ask questions (Discord community planned for Q3 2026)
 
 > See `.claude/commands/common/getting-started.md` for the full wizard reference.
 
@@ -32,10 +34,10 @@ After completing the wizard, you can either:
 
 ## Prerequisites (30 seconds)
 
-You need **Node.js 20+**, **npm**, and **Claude Code CLI** installed.
+You need **Node.js 22+** (Node 24 recommended — Active LTS), **npm**, and **Claude Code CLI** installed.
 
 ```bash
-node --version   # v20.x or higher
+node --version   # v22.x or higher (v24.x recommended)
 npm --version    # 10.x or higher
 claude --version # Should show Claude Code version
 ```
@@ -58,7 +60,7 @@ Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`,
 **What you should see:**
 
 ```
-  Claude Craft v8.11.0 - AI Development Framework
+  Claude Craft v{{VERSION}} - AI Development Framework
 
   Installing react rules to /home/user/my-project...
   [OK] Common rules installed

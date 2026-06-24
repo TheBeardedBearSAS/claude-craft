@@ -11,17 +11,28 @@
 npm create vite@latest my-app -- --template react-ts
 cd my-app
 npm install
+
+# Vite 8 — install @rolldown/plugin-babel for React Compiler support
+npm install -D @rolldown/plugin-babel
 ```
 
-#### vite.config.ts
+> ⚠️ **Vite 8 / `@vitejs/plugin-react` v6+ breaking change :** la config `babel.plugins` dans `react({ babel: ... })` ne fonctionne plus pour le React Compiler. Utiliser `@rolldown/plugin-babel` avec `reactCompilerPreset` (voir ci-dessous). Pour Vite 7 et antérieur, l'ancienne approche `babel.plugins` reste valide. **Source :** `react19-features.md`
+
+#### vite.config.ts (Vite 8 + React Compiler 1.0)
 
 ```typescript
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
 import path from 'path';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    babel({
+      presets: [reactCompilerPreset()]
+    }),
+  ],
 
   // Path aliases
   resolve: {

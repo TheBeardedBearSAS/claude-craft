@@ -37,7 +37,7 @@ Hooks complement the "should-do" suggestions in CLAUDE.md with "must-do" determi
 
 ## Hook Events
 
-Claude Code supports **24 hook event types**:
+Claude Code supports **25 hook event types**:
 
 | Event | When it fires | Matcher support |
 |-------|---------------|-----------------|
@@ -53,11 +53,12 @@ Claude Code supports **24 hook event types**:
 | `SessionStart` | When session starts/resumes | Yes (`startup`, `resume`, `clear`, `compact`) |
 | `SessionEnd` | When session terminates | No |
 | `Setup` | When `--init`, `--init-only`, `--maintenance` run | No |
-| `TeammateIdle` | When a teammate agent goes idle | Yes (teammate name) |
-| `TaskCompleted` | When a task is marked completed | Yes (task ID) |
-| `ConfigChange` | When configuration files change | Yes (config key) |
-| `WorktreeCreate` | When a git worktree is created | Yes (worktree path) |
-| `WorktreeRemove` | When a git worktree is removed | Yes (worktree path) |
+| `MessageDisplay` | Before assistant message is rendered to user (v2.1.157+) | No |
+| `TeammateIdle` | When a teammate agent goes idle (v2.1.33+) | Yes (teammate name) |
+| `TaskCompleted` | When a task is marked completed (v2.1.33+) | Yes (task ID) |
+| `ConfigChange` | When configuration files change (v2.1.49+) | Yes (config key) |
+| `WorktreeCreate` | When a git worktree is created (v2.1.50+) | Yes (worktree path) |
+| `WorktreeRemove` | When a git worktree is removed (v2.1.50+) | Yes (worktree path) |
 | `StopFailure` | When a stop/termination operation fails (v2.1.78+) | No |
 | `Elicitation` | When MCP tool requests user input (v2.1.76+) | No |
 | `ElicitationResult` | After user responds to elicitation (v2.1.76+) | No |
@@ -137,6 +138,16 @@ Fires when a git worktree is removed. Use for:
 - Cleaning up worktree-specific resources
 - Archiving session logs
 - Updating project tracking
+
+#### MessageDisplay (v2.1.157+)
+
+Fires before each assistant message is rendered to the user. Can transform or suppress displayed text without affecting Claude's reasoning. Use for:
+- RTK-style output filtering (compress/trim verbose output on the response side)
+- Injecting syntax-highlighted formatting
+- Masking sensitive data patterns before display
+- Custom rendering pipelines
+
+> **Note:** This hook affects the display layer only. It does not modify the actual assistant response stored in context.
 
 ### Hook Conditional Execution (v2.1.85+)
 

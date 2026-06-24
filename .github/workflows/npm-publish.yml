@@ -207,6 +207,7 @@ jobs:
     name: Shell Script Tests (BATS)
     runs-on: ubuntu-latest
     needs: validate
+    timeout-minutes: 20
     # NOTE: keep `bats/bats:latest` (glibc/debian-based). Do NOT pin to a versioned
     # alpine/musl digest (e.g. bats/bats:1.11.0): the RTK `rtk init` test installs a
     # glibc binary that cannot execute under musl (exit 127, "required file not found").

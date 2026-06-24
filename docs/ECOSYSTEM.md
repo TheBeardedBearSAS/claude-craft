@@ -11,9 +11,11 @@ replace — that stack.
 > own license terms. We document what each does, how it complements Claude Craft, and how to enable
 > it yourself. This mirrors how Claude Craft already treats RTK: documented, recommended, not embedded.
 
-**Evaluation date:** 2026-06-02 · **Sources:** the 9 repositories below + the
+**Evaluation date:** 2026-06-24 · **Next review:** 2026-09-24 (quarterly cadence) · **Sources:** the 9 repositories below + the
 [Top Skills/Plugins Claude Code 2026 (camilleroux.com)](https://www.camilleroux.com/top-skills-plugins-claude-code-2026-v3/)
 roundup.
+
+> **Maintenance cadence:** This document is reviewed quarterly (March, June, September, December). Star counts, license statuses, and activity signals reflect the last evaluation date above. Low-activity tools (token-savior ~0.9k, claude-token-optimizer ~0.5k) are re-evaluated each quarter and may be demoted to ⚪ Skip if abandoned.
 
 ---
 
@@ -238,10 +240,16 @@ Voir aussi `DIFF-04` dans [`docs/ROADMAP.md`](ROADMAP.md).
 
 ## Also worth watching (from the 2026 roundup)
 
-Not evaluated in depth here, but flagged for future integration assessment:
-**claude-health** (config health audit — could feed `/team:audit`), **claude-hud** (real-time
-context/agent/todo monitor — complements `rtk gain`), **claude-subconscious** (cross-session memory),
-**tech-debt-skill** (tech-debt audit — candidate for `/qa:*`).
+Evaluated at 2026-06-24 — not yet integrated but flagged for Q3 assessment:
+
+| Tool | Status | Integration candidate |
+|------|--------|-----------------------|
+| **claude-health** | Maturing — config health audit | `/team:audit` supplementary check |
+| **claude-hud** | Active — real-time context/agent/todo monitor | Complements `rtk gain`; surface in `/common:setup-rtk` |
+| **claude-subconscious** | Experimental — cross-session memory via MCP | Alternative to `claude-mem` above |
+| **tech-debt-skill** | Stable — tech-debt audit skill | Candidate for `/qa:*` namespace |
+
+> **Graduation path:** any of these may be promoted to the main ✅ Integrate table when: (1) the tool is MIT-licensed, (2) has >1k stars or >6 months of active maintenance, and (3) covers a gap not already addressed in Claude Craft. The Q3 2026 review (2026-09-24) is the next evaluation checkpoint.
 
 ---
 

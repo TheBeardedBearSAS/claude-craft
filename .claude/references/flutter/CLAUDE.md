@@ -190,7 +190,7 @@ dart run build_runner build -d
 - [ ] dart:js_interop pour Wasm (pas dart:js_util)
 - [ ] const partout où possible
 - [ ] Trailing commas
-- [ ] Tests > 70% coverage
+- [ ] Tests >= 80% coverage
 - [ ] Web: Wasm build pour prod
 - [ ] BLoC v9: emit.isMounted checks
 - [ ] Riverpod 3: Mutations API pour async

@@ -75,7 +75,7 @@ Pour personnaliser un agent local, override via frontmatter dans `.claude/agents
 
 ```yaml
 ---
-model: claude-haiku-4-5      # economiser tokens pour reviewers read-only
+model: claude-haiku-4-5-20251001  # economiser tokens pour reviewers read-only
 effort: low                  # ou medium / high
 maxTurns: 20                 # limite anti-runaway
 disallowedTools: [Bash]      # securite : pas d execution shell

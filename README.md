@@ -26,9 +26,26 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
 
-A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces, 48 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces (219 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
-## What's New in v8.15.0
+## What's New in v8.17.0
+
+**Audit exhaustif multi-agents + mises à jour 2026-06-24 (v8.17.0) :**
+
+- **Versions infra** : Docker 29.6.0, OpenTofu 1.12.2, Ansible 2.21.1, Helm 4.2.2, Node.js 24.x Active LTS.
+- **Sécurité** : OWASP Top 10:2025 complet (10/10 catégories dans la règle 11) ; RS256 marqué DEPRECATED ; guidance Argon2id précisée ; hook templates `protect-files.json` / `quality-gate.json` corrigés (anti-pattern `$TOOL_INPUT` → lecture stdin JSON).
+- **Modèles** : `claude-fable-5` documenté ; IDs canoniques complets dans la table d'effort.
+- **CLI** : `/goal`, `/usage`, `/workflows` documentés dans CLI-REFERENCE.md.
+- **Optimisation tokens** : `ENABLE_PROMPT_CACHING_1H` et `fallbackModel` activés dans `settings.json` distribué.
+- **Docs** : compteur commandes corrigé (133 → 125 core / 219 total) ; TROUBLESHOOTING, FAQ, CHEAT-SHEET, COMPETITIVE-ANALYSIS enrichis.
+
+**Dépendances et supply chain (v8.16.0 / v8.16.1) :**
+
+- **Trivy action** : `aquasecurity/trivy-action` mis à jour (v8.16.0) — scan CVE supply chain.
+- **Download artifact** : `actions/download-artifact` bumped de 4.2.1 à 8.0.1 (v8.16.0).
+- **CodeQL action** : `github/codeql-action` mis à jour (v8.16.0) — analyse SAST.
+- **Playwright** : `@playwright/test` mis à jour de 1.60.0 à 1.61.0 dans `/website` (v8.16.0).
+- **Patch de stabilité** : correctifs de dernière minute (v8.16.1).
 
 **Refonte du design de l'interface web Kanban (v8.15.0) :**
 
@@ -67,7 +84,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **MIT-only strict (v8.8.0)** -- Claude Craft est 100 % open-source MIT, aucune licence commerciale ou enterprise. Stratégie open-core abandonnée.
 - **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
 - **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
-- **125 commandes sur 15 namespaces** -- namespace `/paperclip:*` (8 commandes) ajouté, 48 skills disponibles.
+- **125 commandes sur 15 namespaces** (219 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
 - **Claude Code 2.1.168** -- version recommandée (Opus 4.8, Dynamic Workflows, `effort: ultracode`).
 
 > ← Versions antérieures (v8.0 → v8.7) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
@@ -127,11 +144,11 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **PHP** | 8.5 | `--tech=php` |
 | **Paperclip** | 2026.609.0 | `--tech=paperclip` |
 
-| **Docker** | 29.5.3 (CVE-2026-33997) | `--tech=docker` |
+| **Docker** | 29.6.0 (CVE-2026-33997) | `--tech=docker` |
 | **Coolify** | v4.1.2 | `--tech=coolify` |
 | **Kubernetes** | 1.36.1 | `--tech=kubernetes` |
-| **OpenTofu** | 1.12.1 | `--tech=opentofu` |
-| **Ansible** | 2.21.0 | `--tech=ansible` |
+| **OpenTofu** | 1.12.2 | `--tech=opentofu` |
+| **Ansible** | 2.21.1 | `--tech=ansible` |
 | **Hcloud** | 1.61+ | `--tech=hcloud` |
 | **PgBouncer** | 1.25.2 (CVE-2026-6664/6665/6666/6667 patched) | `--tech=pgbouncer` |
 | **FrankenPHP** | 1.12.4 (CVE-2026-45062 patched) | `--tech=frankenphp` |
@@ -143,8 +160,8 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 133 across 15 namespaces | `/workflow:init`, `/team:audit`, `/react:generate-component` |
-| **Skills** | 55 | Architecture, testing, security best practices |
+| **Commands** | 125 across 15 namespaces (219 total with infra/project) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Skills** | 55 | Architecture, testing, security, DDD best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
 
@@ -185,7 +202,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 125 commands across 15 namespaces.
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 125 commands across 15 core namespaces (219 total including infra and project management).
 
 ## Installation
 
@@ -265,7 +282,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 125 commands |
+| [Commands](docs/COMMANDS.md) | All 133 commands |
 | [Agents](docs/AGENTS.md) | All 31 default agents (+ 39 infra on-demand) |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |
@@ -276,7 +293,10 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Privacy Policy](PRIVACY.md) | Data protection and GDPR compliance |
 | [FAQ](docs/FAQ.md) | Common questions |
 | [Troubleshooting](docs/TROUBLESHOOTING.md) | Problem solving |
-| [Migration v7](docs/MIGRATION-v7.md) | Upgrade from previous versions |
+| [Migration v6→v7](docs/MIGRATION-v7.md) | Upgrade from v6 to v7 |
+| [Migration v7→v8](docs/MIGRATION-v7-to-v8.md) | Upgrade from v7 to v8 |
+| [Agent Teams Guide](docs/AGENT-TEAMS-GUIDE.md) | Multi-agent team orchestration |
+| [Cheat Sheet](docs/CHEAT-SHEET.md) | Quick command reference card |
 | [Skills Publishing](docs/SKILLS-PUBLISHING.md) | Guide for publishing skills |
 | [Compatibility](.claude/COMPATIBILITY.md) | Claude Code version compatibility |
 

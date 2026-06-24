@@ -35,6 +35,7 @@
 | **Auto Mode** | 2.1.94+ | Team plan required |
 | **Opus 4.7** | 2.1.111+ | xhigh effort, adaptive thinking |
 | **Opus 4.8** | 2.1.154+ | Flagship (28 mai 2026), high effort par défaut, fast mode, Dynamic Workflows |
+| **Fable 5** | — | `claude-fable-5` — roleplay/narrative, agents créatifs (juin 2026) — via frontmatter ou `CLAUDE_CODE_SUBAGENT_MODEL` |
 | **Forked subagents** | 2.1.117 | `CLAUDE_CODE_FORK_SUBAGENT=1` |
 
 ---
@@ -380,7 +381,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 > **⚠️ Migration `workflow` → `ultracode` (2.1.160) :** le déclencheur des Dynamic Workflows a été renommé. Claude Craft mentionne `/effort ultracode` (palier effort) — cohérent. Tout contenu invitant à « lancer un workflow » par le mot-clé `workflow` doit être mis à jour vers `ultracode`.
 
-> **Note `fallbackModel` :** réglage de fiabilité ET de coût. Pour les 5 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), un repli `["claude-sonnet-4-6", "claude-haiku-4-5"]` évite les interruptions en cas de surcharge Opus sans dégrader le travail courant. Voir `rules/12-context-management.md`.
+> **Note `fallbackModel` :** réglage de fiabilité ET de coût. Pour les 5 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), un repli `["claude-sonnet-4-6", "claude-haiku-4-5-20251001"]` évite les interruptions en cas de surcharge Opus sans dégrader le travail courant. Voir `rules/12-context-management.md`.
 
 ---
 
@@ -510,6 +511,7 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 - [CVE-2025-59536 — Check Point Research](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/)
 - [Claude Code Changelog officiel](https://code.claude.com/docs/en/changelog)
 - [Anthropic Claude Opus 4.7 announcement](https://www.anthropic.com/news/claude-opus-4-7)
+- [Anthropic Claude Fable 5 — `claude-fable-5`](https://www.anthropic.com/)
 - [Claude Code Cost Optimization](https://code.claude.com/docs/en/costs)
 - [CLAUDE.md Authoring Guide](https://www.builder.io/blog/claude-md-guide)
 

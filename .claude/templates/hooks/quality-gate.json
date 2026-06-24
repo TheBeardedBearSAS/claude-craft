@@ -1,12 +1,18 @@
 {
-  "description": "Block git commits if tests fail — run npm test before allowing commit",
+  "description": "Block git commits if tests fail — run npm test before allowing commit. Audit 2026-06-24 — fixed broken `echo '$TOOL_INPUT'` pattern (single quotes prevent expansion; $TOOL_INPUT is not a shell env var — Claude Code passes hook input on stdin as JSON).",
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "command": "INPUT=$(echo '$TOOL_INPUT' | jq -r '.command // empty'); if echo \"$INPUT\" | grep -qE '^git\\s+commit'; then echo 'Running tests before commit...' && npm test --silent 2>&1; if [ $? -ne 0 ]; then echo 'BLOCKED: Tests failed. Fix tests before committing.' && exit 1; fi; fi; exit 0"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if printf '%s' \"$INPUT\" | grep -qE '^git[[:space:]]+commit'; then printf 'Running tests before commit...\\n'; if ! npm test --silent 2>&1; then printf 'BLOCKED: Tests failed. Fix tests before committing.\\n' >&2; exit 2; fi; fi; exit 0",
+            "timeout": 60000
+          }
+        ]
       }
     ]
   },
-  "usage": "Copy the PreToolUse hook to .claude/settings.json. This ensures all tests pass before any git commit is allowed. Customize 'npm test' to your test command."
+  "usage": "Copy the PreToolUse hook to .claude/settings.json. Claude Code passes the hook payload on stdin as JSON — the command reads it via jq. Exit code 2 blocks the git commit and shows the stderr message to Claude. Customize 'npm test' to your test command (e.g. 'composer test', 'pytest', 'cargo test'). Requires jq."
 }

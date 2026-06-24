@@ -230,16 +230,29 @@ cat ~/my-project/.claude/context.yaml
 
 **Solutions:**
 
-1. **Verify context.yaml format**
+1. **Rescan skills sans redémarrer la session (v2.1.157+)**
+   ```
+   /reload-skills
+   ```
+   Cette commande est distincte de `/reload-plugins` (qui recharge les MCP). À utiliser après tout ajout ou modification d'un fichier skill.
+
+2. **Verify context.yaml format**
    ```yaml
    triggers:
      - pattern: "*.test.ts"
        skills: ["testing"]
    ```
 
-2. **Use explicit skill invocation**
+3. **Use explicit skill invocation**
    ```
    /testing
+   ```
+
+4. **Restart Claude Code if /reload-skills is not available**
+   (Requires Claude Code v2.1.157+)
+   ```bash
+   exit
+   claude
    ```
 
 ---
@@ -377,10 +390,13 @@ services:
 
 **Solution:**
 ```bash
-# Initialize BMAD
-/bmad:init
+# Initialize workflow (commande correcte — il n'existe pas de /bmad:init)
+/workflow:init
 
-# Or create manually
+# Si les commandes /sprint:* sont absentes, installer la couche Project d'abord :
+make install-project TARGET=.
+
+# Ou créer le fichier manuellement
 mkdir -p .bmad
 cat > .bmad/sprint-status.yaml << 'EOF'
 version: 2
@@ -391,6 +407,8 @@ sprints:
     stories: []
 EOF
 ```
+
+> **Note :** `/bmad:init` n'est pas une commande valide. Utiliser `/workflow:init` (installé par défaut) pour initialiser le workflow BMAD.
 
 ---
 
@@ -517,9 +535,10 @@ yq '.stories | to_entries[] | select(.value.status == "ready-for-dev")' .bmad/sp
 
 **Solutions:**
 
-1. **Initialize BMAD first**
+1. **Initialize BMAD first** (`/bmad:init` n'existe pas — utiliser `/workflow:init`)
    ```bash
-   /bmad:init
+   /workflow:init
+   # Si la couche project est installée (make install-project TARGET=.) :
    /sprint:next-story
    ```
 
@@ -810,3 +829,92 @@ Save as `diagnose.sh` and run with `bash diagnose.sh`.
 2. Check JSON syntax: `for f in .claude/managed-settings.d/*.json; do jq empty "$f"; done`
 3. Files merge alphabetically — later files override earlier ones
 4. Requires Claude Code v2.1.83+
+
+---
+
+## Context Window Issues
+
+### Symptoms
+
+- Claude répète des informations déjà fournies
+- Les réponses deviennent moins précises ou confondent des tâches différentes
+- Erreurs malgré des instructions claires
+- "Context window exceeded" ou compaction automatique déclenchée en pleine tâche
+
+### Recovery Steps
+
+1. **Nettoyer le contexte entre tâches non liées**
+   ```
+   /clear
+   ```
+
+2. **Décomposer les tâches longues avec des sous-agents**
+   ```
+   @tdd-coach Investigate why the test suite is slow
+   ```
+   Les sous-agents ont leur propre fenêtre de contexte et n'affectent pas le contexte principal.
+
+3. **Installer RTK pour réduire la consommation de tokens (60-90%)**
+   ```
+   /common:setup-rtk
+   ```
+
+4. **Utiliser des modèles allégés pour les sous-agents**
+   ```bash
+   export CLAUDE_CODE_SUBAGENT_MODEL=sonnet
+   ```
+
+5. **Réduire la charge au démarrage**
+   - Vérifier que `.claude/CLAUDE.md` est < 200 lignes
+   - Référencer les fichiers avec `@path` plutôt que de les copier dans CLAUDE.md
+
+**Tableau de bord :** Surveiller le % de contexte dans la status line de Claude Code.
+
+| Contexte utilisé | Action recommandée |
+|-----------------|-------------------|
+| < 30% | Normal |
+| 30-60% | Surveiller, éviter les lectures inutiles |
+| 60-80% | Déléguer aux sous-agents, envisager `/clear` |
+| > 80% | Compaction imminente — lancer `/compact` proactivement |
+
+Voir `.claude/rules/12-context-management.md` pour le guide complet.
+
+---
+
+## Kanban Board Empty {#kanban-board-empty}
+
+### "Board is empty" malgré une installation valide
+
+**Cause 1 : sprint-status.yaml absent**
+```bash
+ls .bmad/sprint-status.yaml
+# Si absent, initialiser avec :
+make install-project TARGET=.
+/workflow:init
+```
+
+**Cause 2 : format de sprint-status.yaml incorrect**
+
+Le Kanban attend un fichier valide avec la structure BMAD v6 :
+```yaml
+version: 2
+current_sprint: 1
+sprints:
+  - number: 1
+    goal: "Sprint goal"
+    stories:
+      - id: "US-001"
+        title: "Feature"
+        status: "in-progress"
+        assigned_to: null   # null autorisé (ne pas mettre "")
+```
+
+**Cause 3 : stories créées avec la convention workflow/ (US-*.md)**
+
+Depuis v8.11.0, le Kanban ingère `.bmad/sprint-status.yaml` (convention BMAD v6). Les fichiers `workflow/US-*.md` (convention `/workflow:start`) sont une piste séparée. Les deux coexistent — le board n'affiche que les stories de la YAML.
+
+**Cause 4 : port déjà utilisé**
+```bash
+# Changer le port
+npx @the-bearded-bear/claude-craft kanban --port=3142
+```

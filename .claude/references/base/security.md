@@ -621,12 +621,19 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "command": "echo '$TOOL_INPUT' | grep -qE '(curl|wget).*\\.(sh|py|rb)' && echo 'BLOCKED: suspicious download' && exit 1 || exit 0"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if printf '%s' \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb)'; then printf 'BLOCKED: suspicious download\\n' >&2; exit 2; fi; exit 0"
+          }
+        ]
       }
     ]
   }
 }
 ```
+
+> **Anti-pattern à éviter :** `echo '$TOOL_INPUT' | jq ...` — `$TOOL_INPUT` n'est PAS une variable d'environnement shell. Claude Code passe le payload du hook sur **stdin** en JSON. Lire avec `jq` depuis stdin (sans argument de fichier). Voir `.claude/templates/hooks/` pour des exemples corrects.
 
 ### Vulnerabilites connues (CVE)
 

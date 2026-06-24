@@ -9,10 +9,10 @@
 # PROCÉDURE DE BUMP : modifier ICI, puis propager dans les fichiers listés, puis
 # `npm run lint:versions` pour garantir l'absence de dérive.
 #
-# Dernière mise à jour : 2026-06-12 (bumps audit fraîcheur G4)
+# Dernière mise à jour : 2026-06-24 (bumps audit fraîcheur G5 — Node 24 LTS, js-yaml 4.2, Docker 29.6, OpenTofu 1.12.2, Ansible 2.21.1, Helm 4.2.2)
 
 meta:
-  lastUpdated: '2026-06-15'
+  lastUpdated: '2026-06-24'
 
 claudeCode:
   minimum: '2.1.97'
@@ -36,19 +36,19 @@ stacks:
   php: { registry: '8.5' }
   python: { registry: '3.14+' }
   paperclip: { registry: '2026.609.0' }
-  docker: { registry: '29.5.3' }
+  docker: { registry: '29.6.0' }
   coolify: { registry: '4.1.2' }
 
 # Versions infra non portées par tech-registry (documentées dans devops-engineer.md / CLAUDE.md)
 infra:
   kubernetes: '1.36.1'
-  opentofu: '1.12.1'
-  ansible: '2.21.0'
+  opentofu: '1.12.2'
+  ansible: '2.21.1'
   hcloud: '1.65.0'
   frankenphp: '1.12.4'
   pgbouncer: '1.25.2'
-  helm: '4.2.0'
-  node: '22.x (24.x LTS recommandé)'
+  helm: '4.2.2'
+  node: '24.x (Active LTS) — 22.x Maintenance LTS'
 
 # Tokens OBSOLÈTES qui ne doivent plus apparaître dans les fichiers vitrine.
 # (catch des dérives publiques les plus fréquentes — volontairement spécifiques pour éviter les faux positifs)
@@ -68,3 +68,13 @@ denylist:
   - 'claude-opus-4-6'
   - 'FrankenPHP 1.12.1'
   - '20.x (22.x recommandé)'
+  - '22.x (24.x LTS recommandé)'
+  - '29.5.3'
+  - '1.12.1'
+  - '2.21.0'
+  - '4.2.0'
+  - '1.12.1'
+  - 'OpenTofu 1.12.1'
+  - 'Ansible 2.21.0'
+  - 'Helm 4.2.0'
+  - 'Docker 29.5'

@@ -34,13 +34,13 @@ Claude Craft classifies its 10 application technology stacks into 3 maturity tie
 | React | 1 (Core) | 19.2 + Compiler 1.0 | 30+ | 10+ | Full support | -- |
 | Python | 1 (Core) | 3.14+ | 25+ | 10+ | Full support | -- |
 | Flutter / Dart | 1 (Core) | 3.44 / Dart 3.12 | 25+ | 10+ | Full support | -- |
-| React Native | 2 (Supported) | 0.85 | 39 | 10 | Good coverage | Expand i18n to 25+, deepen agent specialization, add 3+ tech-specific skills |
+| React Native | 2 (Supported) | 0.86 (New Architecture) | 39 | 10 | Good coverage | Expand i18n to 25+, deepen agent specialization, add 3+ tech-specific skills |
 | PHP | 2 (Supported) | 8.5 | 7+ | 5 | Solid base | Add more i18n files, expand commands to 8+, add tech-specific skills |
 | C# / .NET | 3 (Community) | 10 LTS / C# 14 | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
 | Angular | 3 (Community) | 22 | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
 | Laravel | 3 (Community) | 13.x / PHP 8.3+ | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
 | Vue.js | 3 (Community) | 3.5+ | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
-| Paperclip | 2 (Supported) | 2026.529.0 | 29 × 5 langues (en/fr/es/de/pt) | 8 | Full i18n across 5 langs | Expand tests/skills, add audit commands, promote to Tier 1 |
+| Paperclip | 2 (Supported) | 2026.609.0 | 29 × 5 langues (en/fr/es/de/pt) | 8 | Full i18n across 5 langs | Expand tests/skills, add audit commands, promote to Tier 1 |
 
 ### Upgrade Path
 
@@ -505,10 +505,10 @@ All technologies follow similar testing patterns:
 
 | Technology | Unit | Integration | E2E |
 |------------|------|-------------|-----|
-| Symfony | PHPUnit | Behat | Cypress |
+| Symfony | Pest 4.5+ / PHPUnit 12 | Pest 4.5+ | Playwright via Pest |
 | Flutter | flutter_test | integration_test | - |
 | Python | pytest | pytest | pytest |
-| React | Jest | Testing Library | Playwright |
+| React | Vitest 4.1+ | Testing Library / Playwright | Playwright |
 | React Native | Jest | Detox | - |
 
 ### Security
@@ -621,3 +621,9 @@ See [`/paperclip:*`](COMMANDS.md#paperclip-commands-paperclip) — 5 audit comma
 
 - Generic Node.js / TypeScript apps — use `react` + (`symfony` or `python`) instead
 - Replacing a job queue — Paperclip is governance on top of AI execution, not a queue
+
+---
+
+## Internal Tooling Note: Svelte 5
+
+> **Note:** Svelte 5 is **not a supported project stack** in Claude Craft. However, the built-in **Kanban SPA** (`claude-craft kanban`) is itself implemented in Svelte 5. This is an internal implementation detail — Svelte is used for Claude Craft tooling, not as a recommendation for user projects. Community-maintained Svelte references are available at `.claude/references/svelte/CLAUDE.md` with a full disclaimer.

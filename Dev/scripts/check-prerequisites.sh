@@ -119,12 +119,12 @@ check_yq_version() {
 check_node_version() {
     if command -v node &> /dev/null; then
         local version=$(node --version | sed 's/v//' | cut -d. -f1)
-        if [[ $version -ge 18 ]]; then
+        if [[ $version -ge 22 ]]; then
             return 0
         else
-            ui_check_fail "node - Found v$version, need v18+"
+            ui_check_fail "node - Found v$version, need v22+"
             if $FIX; then
-                ui_check_info "Fix: Use nvm to install Node.js 20: nvm install 20 && nvm use 20"
+                ui_check_info "Fix: Use nvm to install Node.js 22: nvm install 22 && nvm use 22"
             fi
             ERRORS=$((ERRORS + 1))
             return 1
@@ -136,7 +136,7 @@ check_node_version() {
 echo -e "${BOLD}Required Dependencies:${NC}"
 echo ""
 
-check "node" "Node.js 18+ for NPX and CLI" \
+check "node" "Node.js 22+ for NPX and CLI" \
     "brew install node" \
     "sudo apt install nodejs npm" \
     "required"

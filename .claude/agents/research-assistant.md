@@ -1,9 +1,9 @@
 ---
 name: research-assistant
 description: Technical research and documentation specialist
-model: haiku
-maxTurns: 4
-effort: low
+model: sonnet
+maxTurns: 6
+effort: medium
 memory: user
 tools: [Read, Glob, Grep, WebFetch, WebSearch]
 disallowedTools: [Write, Edit, NotebookEdit]

@@ -1,6 +1,7 @@
 ---
 name: docker-hadolint
 description: Docker & Hadolint validation (2026). Use when working with Docker, containers, or validating Dockerfiles.
+context: fork
 ---
 
 # Docker & Hadolint (2026)

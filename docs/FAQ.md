@@ -8,18 +8,37 @@ Common questions and answers about Claude Craft.
 
 ### What are the minimum requirements?
 
-- **Node.js 20+** - For NPX and CLI
-- **Bash** - For installation scripts
-- **yq v4+** - For YAML configuration
-- **Git** - For version control
+Requirements depend on the install method:
+
+**NPX (recommended) — only 2 requirements:**
+- **Node.js 22+** (Node 24 recommended — Active LTS)
+- **Claude Code** v2.1.97+
+
+**Makefile / shell scripts — additional requirements:**
+- **yq v4+** (Mike Farah's version, not the Python yq) — for YAML processing
+- **Bash** — for installation scripts
+- **Git** — for version control
+- **Docker** (recommended) — for running project commands
+
+> `yq` is **not needed** when using `npx`. If you see "yq: command not found" during npx install, you are likely using the wrong installation path.
 
 See [Prerequisites](PREREQUISITES.md) for complete details.
 
 ### How do I install Claude Craft?
 
-**Quickest method (NPX):**
+**Quickest method (NPX, zero-prompt auto-detection):**
+```bash
+npx @the-bearded-bear/claude-craft install ~/my-project --auto
+```
+
+**NPX with explicit stack:**
 ```bash
 npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=en
+```
+
+**Team config sync (from shared URL):**
+```bash
+npx @the-bearded-bear/claude-craft install ~/my-project --from=https://your-org/claude-craft-config.yaml
 ```
 
 **Alternative (Makefile):**
@@ -28,6 +47,19 @@ git clone https://github.com/TheBeardedBearSAS/claude-craft.git
 cd claude-craft
 make install-symfony TARGET=~/my-project
 ```
+
+### How do I uninstall Claude Craft?
+
+```bash
+# Minimal removal
+rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml
+
+# With backup first (recommended)
+cp -r .claude/ .claude.backup/
+rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml
+```
+
+This removes all Claude Craft files. Your project code is untouched.
 
 ### How do I reduce token consumption?
 
@@ -167,9 +199,28 @@ Use the `/hooks` command to:
 - Test hook configurations
 - Debug hook execution
 
-### How do I reload plugins?
+### How do I reload plugins or skills?
 
-Use the `/reload-plugins` command. Plugins also auto-reload when their files change, so you typically only need this command when troubleshooting.
+Two distinct commands (v2.1.157+):
+
+- **`/reload-plugins`** — rechargement des plugins MCP et extensions. À utiliser après modification de la configuration MCP ou installation d'un nouveau plugin.
+- **`/reload-skills`** — rescan des fichiers de skills sans redémarrer la session. À utiliser après ajout ou modification d'un skill dans `.claude/skills/`.
+
+> Avant v2.1.157, seul `/reload-plugins` existait. Si `/reload-skills` n'est pas disponible, redémarrer la session Claude Code.
+
+### Why aren't `/sprint:*` or `/gate:*` commands available?
+
+Ces commandes font partie de la couche **Project** qui nécessite une installation séparée :
+
+```bash
+make install-project TARGET=.
+# ou
+npx @the-bearded-bear/claude-craft install . --include-project
+```
+
+Sans cette étape, les namespaces `/sprint:`, `/gate:`, et `/project:` n'existent pas. L'installation par défaut installe uniquement les namespaces `/common:`, `/workflow:`, `/team:`, `/qa:`, `/uiux:` et les namespaces technologiques.
+
+De même, `/bmad:init` n'existe pas — utiliser `/workflow:init` qui est la commande correcte installée.
 
 ### What happens when a stream stalls?
 
@@ -228,12 +279,28 @@ BMAD (Build, Measure, Analyze, Deliver) is Claude Craft's project management fra
 ### How do I start using BMAD?
 
 ```bash
-# Initialize BMAD in your project
-/bmad:init
+# Initialize workflow in your project (commande correcte)
+/workflow:init
 
-# Check status
-/bmad:status
+# Check sprint status (nécessite make install-project TARGET=.)
+/sprint:status
 ```
+
+> Il n'existe pas de commande `/bmad:init`. La commande correcte est `/workflow:init`. Les commandes `/sprint:*` et `/gate:*` nécessitent l'installation de la couche Project (voir la question ci-dessus).
+
+### How do I use the Kanban Board?
+
+```bash
+# Ouvrir dans le navigateur
+npx @the-bearded-bear/claude-craft kanban --open
+
+# Démarrer le serveur local (port 3141)
+npx @the-bearded-bear/claude-craft kanban
+```
+
+Le Kanban ingère `.bmad/sprint-status.yaml` en lecture seule — pas de modification de données. Le tableau est vide si le fichier `sprint-status.yaml` n'existe pas (nécessite `make install-project TARGET=.` pour le cycle BMAD v6 complet).
+
+**Tableau vide malgré l'installation ?** Vérifier le format du fichier — voir [TROUBLESHOOTING.md](TROUBLESHOOTING.md#kanban-board-empty).
 
 ### What are the quality gates?
 

@@ -98,7 +98,7 @@ Les sous-agents (Task tool) ont leur propre fenetre de contexte, evitant de poll
 
 **Agent frontmatter (v2.1.78+):** Les agents personnalises supportent `effort`, `maxTurns`, `disallowedTools` pour optimiser les couts et le scope.
 
-**Skill `context: fork` (v2.1.105+):** Les 17 skills lourds (>100 lignes) de Claude Craft utilisent `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 8 000-15 000 tokens par session de 4h. Liste : `architect`, `debug-methodical`, `atomic-tasks`, `socratic-brainstorm`, `architecture-clean-ddd`, `parallel-worktrees`, `event-driven`, `cqrs`, `async`, `multitenant`, `testing`, `testing-symfony`, `testing-python`, `testing-react`, `testing-flutter`, `testing-reactnative`, `design-md-convention`.
+**Skill `context: fork` (v2.1.105+):** Les 24 skills de Claude Craft (>60 lignes) utilisent `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 2 000-5 000 tokens/session pour les skills moyens (60-100 lignes), 8 000-15 000 tokens/session pour les skills lourds (>100 lignes). Liste lourds (17) : `architect`, `debug-methodical`, `atomic-tasks`, `socratic-brainstorm`, `architecture-clean-ddd`, `parallel-worktrees`, `event-driven`, `cqrs`, `async`, `multitenant`, `testing`, `testing-symfony`, `testing-python`, `testing-react`, `testing-flutter`, `testing-reactnative`, `design-md-convention`. Liste moyens (7, 60-100 lignes) : `edge-computing`, `wasm`, `graphql`, `monorepo`, `observability`, `docker-hadolint`, `api-gateway`.
 
 ---
 
@@ -151,13 +151,14 @@ La status line affiche le pourcentage de contexte utilise.
 
 **`/context`** (v2.1.74+): Suggestions actionnables pour optimiser l'utilisation du contexte.
 
-| Commande | Modele | Usage |
-|----------|--------|-------|
-| `/effort low` | Haiku 4.5 | Taches simples, lookups, classification |
-| `/effort medium` | Sonnet 4.6 | Implementation standard |
-| `/effort high` | Opus 4.8 | Raisonnement complexe, architecture |
-| `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | Decisions critiques, migrations complexes, ADR |
-| `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | Mode debit code maximal — pipelines automatises, generation massive |
+| Commande | Modele | ID canonique | Usage |
+|----------|--------|--------------|-------|
+| `/effort low` | Haiku 4.5 | `claude-haiku-4-5-20251001` | Taches simples, lookups, classification |
+| `/effort medium` | Sonnet 4.6 | `claude-sonnet-4-6` | Implementation standard |
+| `/effort high` | Opus 4.8 | `claude-opus-4-8` | Raisonnement complexe, architecture |
+| `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | `claude-opus-4-8` | Decisions critiques, migrations complexes, ADR |
+| `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | `claude-opus-4-8` | Mode debit code maximal — pipelines automatises, generation massive |
+| — | Fable 5 (juin 2026) | `claude-fable-5` | Roleplay/narrative, agents creatifs — via frontmatter ou `CLAUDE_CODE_SUBAGENT_MODEL` |
 
 **Alerte d'inactivite** (v2.1.84+): Apres 75+ minutes, Claude suggere `/clear`.
 
@@ -265,12 +266,13 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 - **Monitor** (v2.1.98+): Streamer les evenements d'un processus en arriere-plan au lieu de sleep + poll
 - **Plugins Code Intelligence:** `php-lsp`, `typescript-lsp`, `pyright-lsp`, `dart-analyzer`, `csharp-lsp` — un appel `go-to-definition` remplace plusieurs grep + lectures
 
-| Commande | Modele | Usage |
-|----------|--------|-------|
-| `/model haiku` | Haiku 4.5 | Taches simples, classification |
-| `/model sonnet` | Sonnet 4.6 | Taches standard, implementation |
-| `/model opus` | Opus 4.8 | Raisonnement complexe, architecture |
-| `/model opusplan` | Opus 4.8 (plan) / Sonnet 4.6 (execute) | **Tiering dynamique** : Opus pour le Plan Mode, Sonnet pour l'execution — optimise le ratio cout/qualite sur les taches longues |
+| Commande | Modele | ID canonique | Usage |
+|----------|--------|--------------|-------|
+| `/model haiku` | Haiku 4.5 | `claude-haiku-4-5-20251001` | Taches simples, classification |
+| `/model sonnet` | Sonnet 4.6 | `claude-sonnet-4-6` | Taches standard, implementation |
+| `/model opus` | Opus 4.8 | `claude-opus-4-8` | Raisonnement complexe, architecture |
+| `/model fable` | Fable 5 | `claude-fable-5` | Roleplay/narrative, agents creatifs (juin 2026) |
+| `/model opusplan` | Opus 4.8 (plan) / Sonnet 4.6 (execute) | — | **Tiering dynamique** : Opus pour le Plan Mode, Sonnet pour l'execution — optimise le ratio cout/qualite sur les taches longues |
 
 ---
 
@@ -303,6 +305,7 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 | Hook | Fichier | Impact |
 |------|---------|--------|
 | **PostToolUse** (Bash) | `~/.claude/hooks/post-tool-filter.sh` | Guide Claude a resumer les outputs >10KB |
+| **PostToolUse** (Read) | settings.json integre | Alerte si fichier lu >50KB — incite a extraire uniquement la section pertinente |
 | **PreCompact** | `~/.claude/hooks/pre-compact.sh` | Preserve le contexte critique avant compaction |
 | **SessionStart** (compact) | Template `context-reinject.json` | Re-injecte `context-essentials.md` apres compaction |
 
@@ -312,9 +315,12 @@ Templates disponibles dans `.claude/templates/hooks/`: `output-filter.json`, `pr
 |---|---|
 | RTK + ultra-compact | 60-90% sur outputs CLI |
 | SUBAGENT_MODEL=sonnet | 40-60% cout sub-agents |
-| PostToolUse hook | Reduit pollution contexte |
+| ENABLE_PROMPT_CACHING_1H | -40% sur sessions repetitives (active par defaut dans settings.json) |
+| fallbackModel | Fiabilite Opus — pas d'interruption de session (active par defaut dans settings.json) |
+| PostToolUse hook (Bash+Read) | Reduit pollution contexte (5K-50K tokens/session sur gros fichiers) |
 | PreCompact hook | Evite perte de contexte |
-| **Total combine** | **55-65% reduction globale** |
+| context:fork skills (24 total) | 2K-15K tokens par session longue chainant plusieurs skills |
+| **Total combine** | **60-75% reduction globale** |
 
 ---
 
@@ -355,10 +361,12 @@ Templates disponibles dans `.claude/templates/hooks/`: `output-filter.json`, `pr
 Reglage **fiabilite + cout** : jusqu'a 3 modeles de repli essayes dans l'ordre quand le primaire est surcharge/indisponible (flag equivalent `--fallback-model`, applique aussi aux sessions interactives).
 
 ```json
-{ "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5"] }
+{ "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5-20251001"] }
 ```
 
 Pour les 5 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), ce repli `opus → sonnet → haiku` evite les interruptions en pic de charge Opus sans degrader le travail courant. Exemple pret a l'emploi dans `.claude/settings.local.json.example`.
+
+**IDs canoniques (juin 2026) :** `claude-opus-4-8` | `claude-sonnet-4-6` | `claude-haiku-4-5-20251001` | `claude-fable-5` (roleplay/narrative, agents creatifs).
 
 ---
 
@@ -366,7 +374,7 @@ Pour les 5 agents `opus` (security-auditor, database-architect, migration-specia
 
 | Frontmatter | Description |
 |-------------|-------------|
-| `context: fork` | Execution dans un contexte isole (pas de pollution) |
+| `context: fork` | Execution dans un contexte isole (pas de pollution). Seuil recommande : **>60 lignes**. |
 | `disable-model-invocation: true` | Empeche l'invocation automatique par Claude |
 | `claudeMdExcludes` (setting) | Exclure des CLAUDE.md specifiques dans les monorepos |
 
@@ -402,6 +410,6 @@ En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit de
 
 ---
 
-**Date de derniere mise a jour:** 2026-04
-**Version:** 1.2.0
+**Date de derniere mise a jour:** 2026-06
+**Version:** 1.3.0
 **Auteur:** The Bearded CTO

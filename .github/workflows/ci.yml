@@ -16,6 +16,8 @@ on:
       - '.claude/**'
       - 'Dev/i18n/**'
       - 'Infra/i18n/**'
+      - 'Project/i18n/**'
+      - 'Tools/**'
       - 'docs/**'
       - 'README.md'
       - '.github/workflows/ci.yml'
@@ -23,9 +25,9 @@ on:
       - 'package-lock.json'
       - 'vitest.config.*'
       - 'eslint.config.*'
-  push:
-    branches:
-      - main
+  # push to main intentionally removed: npm-publish.yml already runs the full
+  # test suite (build job) on every push to main, avoiding a double-run.
+  # workflow_dispatch allows manual triggers for branch investigation.
   workflow_dispatch: {}
 
 concurrency:

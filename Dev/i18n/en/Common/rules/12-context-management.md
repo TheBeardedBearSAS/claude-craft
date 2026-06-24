@@ -748,11 +748,13 @@ For the 5 `opus` agents (security-auditor, database-architect, migration-special
 
 | Frontmatter | Description |
 |-------------|-------------|
-| `context: fork` | Run in isolated context (no pollution) |
+| `context: fork` | Run in isolated context (no pollution). Recommended threshold: **>60 lines**. |
 | `disable-model-invocation: true` | Prevent automatic invocation by Claude |
 | `claudeMdExcludes` (setting) | Exclude specific CLAUDE.md files in monorepos |
 
 **Auto-compaction and skills:** After compaction, skills auto-reload (5K tokens/skill, 25K total max).
+
+**Skills with `context: fork` (24 total):** Heavy (>100 lines, 17): `architect`, `debug-methodical`, `atomic-tasks`, `socratic-brainstorm`, `architecture-clean-ddd`, `parallel-worktrees`, `event-driven`, `cqrs`, `async`, `multitenant`, `testing`, `testing-symfony`, `testing-python`, `testing-react`, `testing-flutter`, `testing-reactnative`, `design-md-convention`. Medium (60-100 lines, 7): `edge-computing`, `wasm`, `graphql`, `monorepo`, `observability`, `docker-hadolint`, `api-gateway`.
 
 ---
 
@@ -762,13 +764,14 @@ For the 5 `opus` agents (security-auditor, database-architect, migration-special
 
 **RTK (Rust Token Killer):** CLI proxy that reduces token consumption by 60-90% on dev commands. Install: `rtk init -g`.
 
-**Sub-agent model:** `export CLAUDE_CODE_SUBAGENT_MODEL="sonnet"` — 40-60% cost reduction.
+**Sub-agent model:** `export CLAUDE_CODE_SUBAGENT_MODEL="claude-sonnet-4-6"` — 40-60% cost reduction.
 
 **Optimization hooks:**
 
 | Hook | File | Impact |
 |------|------|--------|
 | **PostToolUse** (Bash) | `~/.claude/hooks/post-tool-filter.sh` | Guides Claude to summarize outputs >10KB |
+| **PostToolUse** (Read) | settings.json built-in | Alerts when a file read exceeds 50KB — prompts extracting only the relevant section |
 | **PreCompact** | `~/.claude/hooks/pre-compact.sh` | Preserves critical context before compaction |
 | **SessionStart** (compact) | Template `context-reinject.json` | Re-injects `context-essentials.md` after compaction |
 
@@ -777,10 +780,13 @@ Templates available in `.claude/templates/hooks/`: `output-filter.json`, `pre-co
 | Optimization | Savings |
 |---|---|
 | RTK + ultra-compact | 60-90% on CLI outputs |
-| SUBAGENT_MODEL=sonnet | 40-60% sub-agent cost |
-| PostToolUse hook | Reduces context pollution |
+| SUBAGENT_MODEL=claude-sonnet-4-6 | 40-60% sub-agent cost |
+| ENABLE_PROMPT_CACHING_1H | -40% on repetitive sessions (active by default in settings.json) |
+| fallbackModel | Opus reliability — no session interruptions (active by default in settings.json) |
+| PostToolUse hook (Bash+Read) | Reduces context pollution (5K-50K tokens/session on large files) |
 | PreCompact hook | Prevents context loss |
-| **Combined total** | **55-65% overall reduction** |
+| context:fork skills (24 total) | 2K-15K tokens per long session chaining multiple skills |
+| **Combined total** | **60-75% overall reduction** |
 
 > Detailed examples and templates: see `@.claude/references/base/context-management.md`
 
@@ -814,6 +820,6 @@ Beyond RTK and native hooks, the Claude Code ecosystem offers tools that cover a
 
 ---
 
-**Last updated:** 2026-04
-**Version:** 1.2.0
+**Last updated:** 2026-06
+**Version:** 1.3.0
 **Author:** The Bearded CTO

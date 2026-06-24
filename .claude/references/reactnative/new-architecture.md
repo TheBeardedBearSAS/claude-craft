@@ -88,7 +88,7 @@ export default codegenNativeComponent<NativeProps>('NativeMap') as HostComponent
 |---------|------------------|
 | React Navigation 7 | ✅ |
 | Reanimated 4 (`^4.0.0`, Worklets 2) | ✅ |
-| Gesture Handler 2.20+ | ✅ |
+| Gesture Handler 3.0+ | ✅ |
 | Expo SDK 56+ | ✅ (default) |
 | react-native-mmkv 4 | ✅ |
 | react-native-vision-camera 4 | ✅ |
@@ -139,7 +139,7 @@ Au démarrage, vous verrez :
 
 Si un de ces logs est rouge, votre Pod install / Gradle build n'a pas activé la New Architecture correctement.
 
-## Checklist migration 0.74 → 0.85
+## Checklist migration 0.74 → 0.86
 
 - [ ] `newArchEnabled=true` (Android) + `RCT_NEW_ARCH_ENABLED=1` (iOS) confirmés en logs au boot.
 - [ ] Toutes les bibliothèques tierces marquées New-Arch-compatible (reactnative.directory).

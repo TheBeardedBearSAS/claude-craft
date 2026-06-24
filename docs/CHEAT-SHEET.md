@@ -7,12 +7,31 @@ Quick reference for the most common commands. Keep this handy for daily developm
 ## Quick Start (5 Lines)
 
 ```bash
+npx @the-bearded-bear/claude-craft install . --auto       # Zero-prompt auto-detection
+# ou avec stack explicite :
 npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
-/common:init                    # Configure project context
+/common:getting-started         # Assistant interactif d'onboarding (10 min) — lancer EN PREMIER
+/common:init                    # Configure la structure .claude/ du projet
 /workflow:init                  # Initialize BMAD workflow
 /common:pre-commit-check        # Validate before commit
 /team:audit                     # Run full audit
 ```
+
+**Alternatives install :**
+```bash
+npx @the-bearded-bear/claude-craft install . --auto              # Détection auto du stack
+npx @the-bearded-bear/claude-craft install . --from=URL          # Config partagée d'équipe
+npx @the-bearded-bear/claude-craft skill add <name>              # Ajouter un skill communautaire
+npx @the-bearded-bear/claude-craft kanban --open                 # Ouvrir le tableau Kanban
+```
+
+**Désinstaller :**
+```bash
+rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Suppression complète
+```
+
+> **Note :** `/sprint:*`, `/gate:*` et `/project:*` nécessitent `make install-project TARGET=.` (installation séparée).
+> `/common:getting-started` et `/common:init` requièrent que Claude Craft soit installé d'abord.
 
 ---
 
@@ -61,11 +80,14 @@ npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
 
 ---
 
-## 27 Namespaces - Top Commands
+## 20 Namespaces installés — Top Commands
+
+> **Note :** Les 7 namespaces `/sprint:`, `/gate:`, `/project:` (gestion de sprint) et les namespaces infra (`/docker:`, `/k8s:`, `/coolify:`, etc.) nécessitent une installation séparée via `make install-project TARGET=.` ou `make install-infra TARGET=.`.
 
 ### `/common:` - Transversal
 
 ```
+/common:getting-started           # Assistant interactif onboarding (lancer en premier)
 /common:init                      # Configure project
 /common:pre-commit-check          # Validate before commit
 /common:pre-merge-check           # Validate before merge
@@ -79,7 +101,8 @@ npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
 /common:generate-changelog        # Generate CHANGELOG
 /common:architecture-decision     # Document ADR
 /common:add-technology "nextjs"   # Add new tech stack
-/common:setup-project-context     # Interactive project config
+/common:setup-project-context     # Interactive project config (distinct de /common:init)
+/common:aliases                   # Raccourcis et aliases personnalisés
 ```
 
 ### `/workflow:` - BMAD Workflow
@@ -257,7 +280,22 @@ npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
 /php:check-compliance             # Check GDPR/SOC2
 ```
 
+### `/paperclip:` - Paperclip Orchestration
+
+```
+/paperclip:check-architecture     # Check architecture (control plane + adapters)
+/paperclip:check-code-quality     # Check code quality
+/paperclip:check-security         # Check security
+/paperclip:check-testing          # Check tests
+/paperclip:check-compliance       # Check GDPR/SOC2
+/paperclip:generate-feature       # Generate feature module
+/paperclip:api-endpoint           # Generate API endpoint
+/paperclip:generate-command       # Generate CLI command
+```
+
 ### `/sprint:` - Sprint Management
+
+> **Prérequis :** `make install-project TARGET=.` — commandes absentes de l'install par défaut.
 
 ```
 /sprint:create Sprint-3           # Create sprint
@@ -268,6 +306,8 @@ npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
 ```
 
 ### `/gate:` - Quality Gates
+
+> **Prérequis :** `make install-project TARGET=.`
 
 ```
 /gate:prd                         # PRD quality gate
@@ -337,6 +377,37 @@ export CLAUDE_CODE_SUBAGENT_MODEL=sonnet  # Cheaper subagents
 | Use parallel teams for 2+ stacks | `/team:audit` (vs `--sequential`) |
 | Use Ralph for long tasks | `/common:ralph-run "task"` |
 | Research with Context7 | `/common:research-context7 "topic"` |
+| Multi-agent simultané | `@tdd-coach @react-reviewer Implement this feature` |
+| Reload skills sans redémarrage | `/reload-skills` (v2.1.157+) |
+
+---
+
+## Shortcuts & Aliases
+
+```bash
+/common:aliases                   # Voir et configurer les alias personnalisés
+```
+
+Configurer des raccourcis clavier dans `~/.claude/keybindings.json` pour vos 5 commandes les plus fréquentes :
+- `/common:pre-commit-check` → `Ctrl+Shift+P`
+- `/common:ralph-run` → `Ctrl+Shift+R`
+- `/qa:tdd` → `Ctrl+Shift+T`
+- `/workflow:status` → `Ctrl+Shift+S`
+- `/clear` → `Ctrl+Shift+C`
+
+Voir `~/.claude/keybindings.json` pour la configuration complète.
+
+---
+
+## Kanban Board
+
+```bash
+npx @the-bearded-bear/claude-craft kanban --open   # Ouvrir dans le navigateur
+npx @the-bearded-bear/claude-craft kanban          # Démarrer le serveur local (port 3141)
+```
+
+Le Kanban ingère `.bmad/sprint-status.yaml` en lecture seule. Aucune dépendance SaaS.
+Nécessite `make install-project TARGET=.` pour la génération des stories BMAD v6.
 
 ---
 

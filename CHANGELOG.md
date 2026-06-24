@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.17.0] - 2026-06-24
+
+### Added
+- **CLI-REFERENCE.md** : documentation des commandes `/goal` (v2.1.168+), `/usage` (v2.1.168+), `/workflows` (v2.1.154+) absentes du guide.
+- **OWASP Top 10:2025 — 10 catégories complètes** : la règle `11-security.md` documentait 7/10 catégories ; ajout des catégories #8 (Authentication Failures), #9 (Security Logging and Monitoring Failures), #10 (Vulnerable and Outdated Components).
+- **claude-fable-5** dans la table d'effort de `12-context-management.md` (ajout note d'usage pour agents créatifs).
+- **Hooks anti-pattern** dans `11-security.md` et `references/base/security.md` : section dédiée documentant que `$TOOL_INPUT`/`$TOOL_OUTPUT` ne sont pas des variables shell — input du hook sur stdin JSON.
+
+### Changed
+- **Versions infra** : Docker 29.5.3 → 29.6.0, OpenTofu 1.12.1 → 1.12.2, Ansible 2.21.0 → 2.21.1, Helm 4.2.0 → 4.2.2, Node.js libellé corrigé (24.x Active LTS, 22.x Maintenance LTS).
+- **README** : compteur de commandes corrigé (133 → 125 core / 219 total) — la valeur 133 n'avait pas été mise à jour depuis v8.8.
+- **Hook templates** `protect-files.json` et `quality-gate.json` : migration de l'anti-pattern `echo '$TOOL_INPUT' | jq` vers la lecture stdin correcte (`jq -r '.tool_input.…'`) + exit code 2 (bloquant) + structure `hooks` imbriquée. Ces templates étaient non fonctionnels comme guards de sécurité.
+- **`11-security.md`** : guidance Argon2id précisée (t>=3 min, t=4 recommandé haute sécurité) ; RS256 marqué DEPRECATED en nouveau code ; supply chain mis à jour (CycloneDX 1.6+ JSON prioritaire, SLSA L1 via `npm publish --provenance`, audit gate `--audit-level=moderate`).
+- **`12-context-management.md`** : compteur skills avec `context:fork` mis à jour (17 lourds + 7 moyens documentés) ; table modèles avec IDs canoniques complets.
+- **`config/versions.yaml`** : denylist complétée (Docker 29.5.x, OpenTofu 1.12.1, Ansible 2.21.0, Helm 4.2.0).
+
+### Fixed
+- **`references/base/security.md`** : exemple de hook corrigé (anti-pattern `$TOOL_INPUT` remplacé par lecture stdin + note explicative).
+
 ## [8.16.1] - 2026-06-16
 
 ### Changed

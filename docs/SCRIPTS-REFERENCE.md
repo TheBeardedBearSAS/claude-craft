@@ -276,7 +276,7 @@ Checks if all prerequisites are installed.
 - `--fix` - Show installation commands
 
 **Checks:**
-- Node.js (18+)
+- Node.js (22+)
 - npm
 - yq (v4, Mike Farah's version)
 - Git
