@@ -1,12 +1,16 @@
 import { readFile } from 'node:fs/promises';
-import matter from 'gray-matter';
+import yaml from 'js-yaml';
+
+// Frontmatter delimited by `---` lines. Strips exactly one newline after the
+// closing delimiter (matches the prior gray-matter behavior the tests assert).
+const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n)?([\s\S]*)$/;
 
 /**
  * Parse a Markdown file with YAML frontmatter.
  * Returns { data, body, raw } where `data` is the parsed frontmatter,
  * `body` is everything after the second '---', and `raw` is the full file.
  *
- * gray-matter handles missing frontmatter gracefully (returns data = {}).
+ * Missing frontmatter is handled gracefully (returns data = {}).
  *
  * @param {string} filepath
  * @returns {Promise<{ data: object, body: string, raw: string }>}
@@ -20,20 +24,25 @@ export async function parseFile(filepath) {
  * Parse a Markdown string with YAML frontmatter.
  */
 export function parseString(raw) {
-  const { data, content } = matter(raw);
-  return { data: data ?? {}, body: content ?? '', raw };
+  const match = FRONTMATTER_RE.exec(raw);
+  if (!match) return { data: {}, body: raw, raw };
+  const parsed = yaml.load(match[1]);
+  const data = parsed && typeof parsed === 'object' ? parsed : {};
+  return { data, body: match[2] ?? '', raw };
 }
 
 /**
  * Serialize frontmatter + body back to a Markdown string.
- * Uses gray-matter's stringify which preserves YAML canonical format.
  *
  * @param {object} data
  * @param {string} body
  * @returns {string}
  */
 export function stringify(data, body) {
-  return matter.stringify(body ?? '', data ?? {});
+  const text = body ?? '';
+  if (!data || Object.keys(data).length === 0) return text;
+  const dumped = yaml.dump(data, { lineWidth: -1 });
+  return `---\n${dumped}---\n${text}`;
 }
 
 /**

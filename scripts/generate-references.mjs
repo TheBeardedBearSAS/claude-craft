@@ -25,8 +25,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import matter from 'gray-matter';
+import yaml from 'js-yaml';
 import { TECH_REGISTRY } from '../cli/lib/tech-registry.js';
+
+const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)/;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -88,7 +90,10 @@ function safeMatter(filePath) {
     return null;
   }
   try {
-    return matter(raw).data;
+    const match = FRONTMATTER_RE.exec(raw);
+    if (!match) return {};
+    const data = yaml.load(match[1]);
+    return data && typeof data === 'object' ? data : {};
   } catch {
     return null;
   }
