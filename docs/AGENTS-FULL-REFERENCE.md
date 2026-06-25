@@ -312,7 +312,7 @@ OpenTelemetry, distributed tracing, structured logging, metrics specialist — G
 
 Performance analysis and optimization expert
 
-**Model:** haiku · **Effort:** low · **Memory:** user
+**Model:** sonnet · **Effort:** medium · **Memory:** user
 
 **Tools:** `Read`, `Glob`, `Grep`, `Bash`, `WebFetch`, `WebSearch`
 
@@ -350,7 +350,7 @@ Safe code refactoring expert
 
 Technical research and documentation specialist
 
-**Model:** haiku · **Effort:** low · **Memory:** user
+**Model:** sonnet · **Effort:** medium · **Memory:** user
 
 **Tools:** `Read`, `Glob`, `Grep`, `WebFetch`, `WebSearch`
 
