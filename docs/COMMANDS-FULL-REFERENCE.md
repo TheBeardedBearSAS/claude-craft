@@ -33,8 +33,8 @@
 | `/team:*` | 4 |
 | `/uiux:*` | 8 |
 | `/vuejs:*` | 6 |
-| `/workflow:*` | 9 |
-| **Total** | **219** |
+| `/workflow:*` | 10 |
+| **Total** | **220** |
 
 ## `/angular:*`
 
@@ -381,6 +381,7 @@
 | Command | Description |
 |---------|-------------|
 | [`/workflow:analyze`](../.claude/commands/workflow/analyze.md) | Exécuter la phase d'Analyse - recherche, exploration et identification des contraintes |
+| [`/workflow:auto-sprint`](../.claude/commands/workflow/auto-sprint.md) | Orchestrateur de sprint de bout en bout (démarrage -> décomposition -> validation -> implémentation -> PR -> CI -> revue -> rétro -> merge) |
 | [`/workflow:design`](../.claude/commands/workflow/design.md) | Exécuter la phase de Conception (Solutioning) - spécification technique et architecture |
 | [`/workflow:implement`](../.claude/commands/workflow/implement.md) | Exécuter la phase d'Implémentation - développement sprint avec TDD/BDD |
 | [`/workflow:init`](../.claude/commands/workflow/init.md) | Analyser le contexte du projet et recommander le track de workflow optimal |
