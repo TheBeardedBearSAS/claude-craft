@@ -11,7 +11,7 @@
 const stats = [
   { value: '11', label: 'Tech Stacks' },
   { value: '31', label: 'AI Agents' },
-  { value: '125', label: 'Slash Commands' },
+  { value: '126', label: 'Slash Commands' },
   { value: '55', label: 'Skills' },
   { value: '21', label: 'Templates' },
   { value: '10', label: 'Checklists' },
