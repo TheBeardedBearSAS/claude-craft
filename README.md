@@ -28,7 +28,11 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces (219 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
-## What's New in v8.17.0
+## What's New in v8.17.1
+
+**Correctifs tests (2026-06-26, v8.17.1) :**
+
+- **`tests/scripts/` sous docker sans bash** : les 12 fichiers shell-out `bash "*.sh"` échouaient en `/bin/sh: bash: not found` sous busybox/alpine. Nouveau target `make test-scripts-docker` (image bash, `node:24`) + garde `tests/scripts/bash-available.test.mjs`.
 
 **Audit exhaustif multi-agents + mises à jour 2026-06-24 (v8.17.0) :**
 

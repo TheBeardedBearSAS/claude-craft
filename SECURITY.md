@@ -4,10 +4,10 @@
 
 | Version | Supported          |
 |---------|--------------------|
-| 8.9.x   | :white_check_mark: |
-| 8.8.x   | :white_check_mark: |
-| 8.7.x   | :white_check_mark: |
-| < 8.7   | :x:                |
+| 8.17.x  | :white_check_mark: |
+| 8.16.x  | :white_check_mark: |
+| 8.15.x  | :white_check_mark: |
+| < 8.15  | :x:                |
 
 
 ## Reporting a Vulnerability
