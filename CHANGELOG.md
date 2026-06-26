@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.17.1] - 2026-06-26
+
+### Added
+
+- **Makefile `test-scripts-docker`** : lance la suite `tests/scripts/` dans une image docker embarquant bash (`TEST_IMAGE ?= node:24`), afin que le workflow « TOUJOURS docker » dispose de bash.
+
+### Fixed
+
+- **`tests/scripts/` sous image sans bash** : les 12 fichiers qui exécutent `bash "<script>.sh"` (bashismes : `[[ ]]`, arrays, `type -t`, `local`, `${VAR:+}`) échouaient avec `/bin/sh: bash: not found` sous une image busybox/alpine. Ajout de la garde `tests/scripts/bash-available.test.mjs` qui codifie le prérequis GNU bash (docs/PREREQUISITES.md §2) avec un message actionnable pointant vers `make test-scripts-docker`.
+
 ## [8.17.0] - 2026-06-24
 
 ### Added
