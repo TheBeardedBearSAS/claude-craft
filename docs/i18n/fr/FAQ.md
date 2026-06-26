@@ -184,10 +184,10 @@ BMAD v6 est le framework de gestion de projet de Claude Craft avec :
 
 ```bash
 # Initialiser BMAD dans votre projet
-/bmad:init
+/workflow:init
 
 # Vérifier le statut
-/bmad:status
+/workflow:status
 ```
 
 ### Quels sont les quality gates ?

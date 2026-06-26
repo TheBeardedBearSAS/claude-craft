@@ -55,7 +55,7 @@ Expected output: `git version 2.x.x` (e.g., `git version 2.43.0`)
 # Check Claude Code is installed
 claude --version
 ```
-Expected output: Version number (recommended: `2.1.107` or higher)
+Expected output: Version number (recommended: `2.1.168` or higher)
 
 ### Install Missing Prerequisites
 

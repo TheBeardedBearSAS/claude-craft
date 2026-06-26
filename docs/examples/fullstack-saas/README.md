@@ -125,8 +125,8 @@ docker compose exec e2e npm test
 
 ```bash
 claude
-/bmad:init
-/bmad:status
+/workflow:init
+/workflow:status
 ```
 
 ---

@@ -1,5 +1,7 @@
 # Commands Reference
 
+> **This is the narrated, namespace-grouped reference (125 core commands).** For the complete auto-generated table of all 219 commands (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
+
 Claude Code commands are slash commands that automate workflows and provide structured assistance.
 
 ## How to Use Commands

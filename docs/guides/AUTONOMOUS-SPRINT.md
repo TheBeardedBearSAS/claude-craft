@@ -25,7 +25,7 @@ Analyze → Plan → Design → Implement → Test → PR
 
 ### Framework
 
-- ✅ BMAD v6 initialisé (`/bmad:init`)
+- ✅ BMAD v6 initialisé (`/workflow:init`)
 - ✅ Ralph Wiggum configuré (`ralph.yml`)
 - ✅ Agent Teams activés (PM, BA, Architect, Dev, QA)
 - ✅ TDD workflow configuré

@@ -210,7 +210,7 @@ sudo lsof -i :8080
 **Solution :**
 ```bash
 # Initialiser BMAD
-/bmad:init
+/workflow:init
 
 # Ou créer manuellement
 mkdir -p .bmad
@@ -338,7 +338,7 @@ yq eval '.' claude-projects.yaml
 1. **Vérifier la version de Claude Code**
    ```bash
    claude --version
-   # Minimum : v2.1.47 | Recommandé : v2.1.107
+   # Minimum : v2.1.97 | Recommandé : v2.1.168
    # PreCompact : v2.1.76+ | PostCompact : v2.1.76+
    ```
 

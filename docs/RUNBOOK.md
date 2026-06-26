@@ -39,7 +39,7 @@ Claude Craft follows a maximum cadence of **1 release per week**. Exceptions are
    - `docs/QUICKSTART.md` version references
    - Technology reference files in `.claude/references/`
    - Website content in `website/`
-   - `LandingPage.vue` if applicable
+   - **Hardcoded version badges in Vue components** (these do NOT auto-sync from `docs/`): `website/.vitepress/theme/LandingPage.vue` (`hero_badge`, feature-card badges), `…/components/StatsGrid.vue` (counts), `…/components/AgentShowcase.vue` (agent badges). `LandingPage.vue` is gated by `npm run lint:versions` (denylist in `config/versions.yaml`); the other two are not — check them manually.
 
 3. **Run Tests and Quality Checks**
    ```bash

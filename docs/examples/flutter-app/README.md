@@ -1,6 +1,6 @@
 # Flutter App Example
 
-A complete mobile application built with Flutter 3.38, BLoC pattern, and Riverpod, demonstrating Claude Craft best practices.
+A complete mobile application built with Flutter 3.44, BLoC pattern, and Riverpod, demonstrating Claude Craft best practices.
 
 ---
 

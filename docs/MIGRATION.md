@@ -1,5 +1,16 @@
 # Migration Guide: Rules to Skills
 
+> **Looking to upgrade between major versions?** This document covers the **format** migration (legacy rules → skills). For **version upgrades**, use the index below:
+>
+> | You are on… | Read |
+> |---|---|
+> | v3.x → v4 | [MIGRATION-v4.md](MIGRATION-v4.md) |
+> | v5.x → v6 | [MIGRATION-v6.md](MIGRATION-v6.md) |
+> | v6.x → v7 | [MIGRATION-v7.md](MIGRATION-v7.md) |
+> | v7.x → v8 | [MIGRATION-v7-to-v8.md](MIGRATION-v7-to-v8.md) |
+>
+> Always upgrade one major version at a time. The current release is **v8.17.2**.
+
 This guide explains how to migrate from the legacy rules format to the official Claude Code skills format.
 
 ## Why Migrate?

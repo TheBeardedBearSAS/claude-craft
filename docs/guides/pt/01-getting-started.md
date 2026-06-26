@@ -8,10 +8,10 @@ Bem-vindo ao Claude-Craft! Este guia vai ajudá-lo a entender o que é o Claude-
 
 O Claude-Craft é um framework completo para desenvolvimento assistido por IA com o Claude Code. Ele fornece:
 
-- **133 Comandos Slash** - Ações rápidas em 15 namespaces para geração de código, análise e verificações de qualidade
+- **125 Comandos Slash** - Ações rápidas em 15 namespaces para geração de código, análise e verificações de qualidade
 - **70 Agentes de IA (31 especializados + 39 de infraestrutura sob demanda)** - Assistentes especializados com níveis de esforço otimizados e memória persistente
 - **11 Stacks Tecnológicos** - De .NET/C# a Vue.js, com regras e agentes dedicados
-- **48 Skills** - Melhores práticas de arquitetura, testes e segurança
+- **55 skills** - Melhores práticas de arquitetura, testes e segurança
 - **21 Templates** - Padrões de código prontos para uso em componentes comuns
 - **10 Checklists** - Portões de qualidade para features, releases e auditorias de segurança
 - **937 Testes** - Validação abrangente (vitest + bats)
