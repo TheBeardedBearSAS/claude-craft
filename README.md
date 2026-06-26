@@ -28,6 +28,14 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 126 commands across 15 namespaces (220 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v8.18.0
+
+**Nouvelle commande `/workflow:auto-sprint` (2026-06-27, v8.18.0) :**
+
+- **Orchestrateur de sprint de bout en bout** : une seule commande joue le rôle Product Owner / Scrum Master et enchaîne `start → decompose → validate → implement → PR → CI watch → review → retro → merge`. Chaque cérémonie tourne dans un **sous-agent au contexte isolé** — l'isolation remplace le `/clear` manuel entre étapes ; la phase d'implémentation assume le rôle conductor **inline** (réutilise `/team:sprint`).
+- **PR + CI + merge intégrés** (`gh`) : `--auto-merge` opt-in (défaut : pause + GO humain) ; échec de gate (validate KO / CI rouge / DoD miss) → **auto-fix loop** borné (`--max-fix-attempts`).
+- **5 langues** (`Dev/i18n/{en,fr,es,de,pt}`) ; compteurs réalignés **126 core / 220 total** commandes.
+
 ## What's New in v8.17.2
 
 **Revue documentation (2026-06-26, v8.17.2) :**
