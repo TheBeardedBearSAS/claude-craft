@@ -126,7 +126,10 @@
       {/if}
     </aside>
 
-    <main class="sprint-detail" aria-label="Détail du sprint">
+    <!-- Région section (et non un landmark principal) : le shell App fournit déjà
+         l'unique landmark principal. L'imbriquer ici violait
+         landmark-no-duplicate-main / landmark-main-is-top-level. -->
+    <section class="sprint-detail" aria-label="Détail du sprint">
       {#if !selectedId}
         <div class="empty">Sélectionnez un sprint</div>
       {:else if loadingDetail}
@@ -221,7 +224,7 @@
           </div>
         {/if}
       {/if}
-    </main>
+    </section>
   </div>
 </div>
 

@@ -16,7 +16,9 @@
   /* --- Foreground --- */
   --fg: oklch(0.965 0.004 264);
   --fg-dim: oklch(0.72 0.012 264);
-  --fg-faint: oklch(0.55 0.012 264);
+  /* WCAG AA: 0.64 yields ≥4.8:1 on the lightest surface (--bg-elev-2). The
+     prior 0.55 scored 3.7:1 and failed Lighthouse color-contrast. */
+  --fg-faint: oklch(0.64 0.012 264);
 
   /* --- Lines --- */
   --border: oklch(0.3 0.012 264);

@@ -9,6 +9,7 @@
 {#if id}
   <span
     class="avatar"
+    role="img"
     title={id}
     aria-label={`Assigné à : ${id}`}
     style="width:{size}px; height:{size}px; background:{avatarColor(id)}; font-size:{size * 0.38}px;"
@@ -16,6 +17,7 @@
 {:else}
   <span
     class="avatar avatar-empty"
+    role="img"
     title="Non assigné"
     aria-label="Non assigné"
     style="width:{size}px; height:{size}px;"

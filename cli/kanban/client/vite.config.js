@@ -10,6 +10,11 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: false,
     target: 'es2022',
+    // Keep every font as a same-origin file. Vite's default 4 KB inline limit
+    // emitted small subsets as data:font/woff base64 URLs, which the strict CSP
+    // (default-src 'self') blocks → console errors + Lighthouse best-practices
+    // and font-render churn that delayed FCP/LCP. 0 = never inline.
+    assetsInlineLimit: 0,
   },
   server: {
     port: 5173,

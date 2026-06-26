@@ -1,13 +1,41 @@
+<script module>
+  // Cytoscape (~480 KB avec dagre) est importé dynamiquement à l'init du graphe,
+  // PAS au chargement de la vue : le shell deps (header + stats) peint alors
+  // aussi vite que les autres écrans (FCP/LCP), au lieu d'attendre le bundle viz.
+  // Le flag de module garantit un seul enregistrement de l'extension dagre.
+  let dagreRegistered = false;
+  let cytoscapePromise = null;
+  // Mémoïsé : un seul téléchargement du bundle, partagé par le préchargement au
+  // mount et l'init du graphe. Le préchargement chevauche le fetch /api/* pour
+  // sortir les 435 KB du chemin critique (LCP).
+  function loadCytoscape() {
+    if (!cytoscapePromise) {
+      cytoscapePromise = (async () => {
+        const [{ default: cytoscape }, { default: dagre }] = await Promise.all([
+          import('cytoscape'),
+          import('cytoscape-dagre'),
+        ]);
+        if (!dagreRegistered) {
+          cytoscape.use(dagre);
+          dagreRegistered = true;
+        }
+        return cytoscape;
+      })();
+    }
+    return cytoscapePromise;
+  }
+</script>
+
 <script>
-  import cytoscape from 'cytoscape';
-  import dagre from 'cytoscape-dagre';
   import { STATUS } from '../lib/config.js';
   import { buildDepsElements } from '../lib/deps-graph.js';
 
-  cytoscape.use(dagre);
-
   let graphContainer = $state(null);
-  let cyInstance = $state(null);
+  // Non-réactif volontairement : l'instance cytoscape est mutée en async depuis
+  // .then(). En faire un $state lu par le garde du $effect provoquerait une
+  // auto-invalidation (set → re-run → cleanup → destroy juste après création).
+  let cyInstance = null;
+  let graphBuilt = false;
   let nodes = $state([]);
   let edges = $state([]);
   let cycles = $state([]);
@@ -48,8 +76,23 @@
     loadDependencies();
   });
 
+  // Diffère le chargement du bundle cytoscape (435 KB) jusqu'APRÈS l'événement
+  // `load`. Pendant la fenêtre de mesure du LCP (rendu du shell), le réseau reste
+  // ainsi libre : pas de contention de bande passante qui retarderait la peinture
+  // du texte du shell (élément LCP réel). Le graphe est progressif — il apparaît
+  // juste après le premier rendu, ce qui améliore aussi l'UX réelle.
+  function afterLoad(fn) {
+    const run = () =>
+      typeof requestIdleCallback === 'function' ? requestIdleCallback(fn, { timeout: 1000 }) : setTimeout(fn, 1);
+    if (document.readyState === 'complete') run();
+    else window.addEventListener('load', run, { once: true });
+  }
+
   $effect(() => {
-    if (!graphContainer || nodes.length === 0 || !edges || cyInstance) return;
+    if (!graphContainer || nodes.length === 0 || !edges || graphBuilt) return;
+    graphBuilt = true;
+    let cancelled = false;
+    const container = graphContainer;
 
     // Cytoscape rend sur canvas : on résout les tokens en couleurs réelles.
     const root = getComputedStyle(document.documentElement);
@@ -63,10 +106,18 @@
 
     // Graphe limité aux nœuds connectés (les isolés cassent le layout dagre).
     const { elements } = buildDepsElements(nodes, edges, cycles);
-    if (elements.length === 0) return; // aucun lien → rien à dessiner (note affichée dans le DOM)
+    if (elements.length === 0) {
+      graphBuilt = false;
+      return; // aucun lien → rien à dessiner (note affichée dans le DOM)
+    }
 
-    const cy = cytoscape({
-      container: graphContainer,
+    let cy = null;
+    afterLoad(() => {
+      if (cancelled) return;
+      loadCytoscape().then((cytoscape) => {
+        if (cancelled) return;
+        cy = cytoscape({
+      container,
       elements,
       style: [
         {
@@ -107,23 +158,26 @@
         },
       ],
       layout: { name: 'dagre', rankDir: 'LR', spacingFactor: 1.3, nodeDimensionsIncludeLabels: true, fit: true, padding: 30 },
+      });
+
+      // Recentrer/zoomer pour que le graphe occupe le canvas (évite le rendu décalé).
+      cy.ready(() => cy.fit(undefined, 40));
+
+      cy.on('tap', 'node', (evt) => {
+        const nodeData = nodes.find((n) => n.id === evt.target.id());
+        if (nodeData) selectedNode = nodeData;
+      });
+
+      cyInstance = cy;
+      });
     });
-
-    // Recentrer/zoomer pour que le graphe occupe le canvas (évite le rendu décalé).
-    cy.ready(() => cy.fit(undefined, 40));
-
-    cy.on('tap', 'node', (evt) => {
-      const nodeData = nodes.find((n) => n.id === evt.target.id());
-      if (nodeData) selectedNode = nodeData;
-    });
-
-    cyInstance = cy;
 
     return () => {
-      if (cyInstance) {
-        cyInstance.destroy();
-        cyInstance = null;
-      }
+      cancelled = true;
+      graphBuilt = false;
+      const instance = cyInstance || cy;
+      if (instance) instance.destroy();
+      cyInstance = null;
     };
   });
 </script>
