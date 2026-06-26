@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.18.0] - 2026-06-27
+
+### Added
+
+- **Commande `/workflow:auto-sprint`** : orchestrateur de sprint de bout en bout jouant le rôle Product Owner / Scrum Master. Enchaîne en une seule commande `start → decompose → validate → implement → PR → CI watch → review → retro → merge`. Chaque cérémonie s'exécute dans un **sous-agent au contexte isolé** — l'isolation remplace le `/clear` manuel entre les étapes ; la phase d'implémentation assume le rôle conductor **inline** (réutilise `/team:sprint`) pour éviter le nesting d'Agent Teams. Ajoute création de PR, surveillance CI et merge via `gh`. Merge `--auto-merge` opt-in (défaut : pause + GO humain, conforme règle 09 + Karpathy) ; échec de gate (validate KO / CI rouge / DoD miss) déclenche un **auto-fix loop** borné (`--max-fix-attempts`). Livrée en 5 langues (`Dev/i18n/{en,fr,es,de,pt}`).
+
+### Changed
+
+- **Compteurs de commandes** : `126 core / 220 total` (au lieu de `125 / 219`) — `COMMANDS.md`, `COMMANDS-FULL-REFERENCE.md` (régénéré), `README.md`, `.claude/CLAUDE.md`. Test `namespace-integrity` mis à jour (namespace Workflow 9 → 10).
+
 ## [8.17.2] - 2026-06-26
 
 ### Added
