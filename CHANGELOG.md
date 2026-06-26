@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.17.2] - 2026-06-26
+
+### Added
+
+- **Tutoriel end-to-end phare** : `docs/guides/{en,fr,es,de,pt}/10-complete-workflow.md` réécrit en walkthrough narré pour grands débutants (idée → backlog → design → sprint TDD → suivi Kanban → clôture), inspiré de la pédagogie « TUTORIEL-CLAUDE-CRAFT » : glossaire, section anti-confusion des modes d'exécution, marqueurs `/clear`, gates explicités, exemple *TaskFlow* + annexe multi-stack. Lié depuis `README.md` et `docs/guides/index.md`.
+- **Index de migration** : `docs/MIGRATION.md` aiguille désormais vers les guides d'upgrade par version (v3→v8).
+
+### Changed
+
+- **Fraîcheur documentaire** : réalignement complet sur la source unique de vérité — `125 core / 219 total` commandes (au lieu de `133`), `55` skills (au lieu de `48`), `11` stacks, Claude Code `2.1.97` min / `2.1.168` rec (au lieu de `2.1.107`), Flutter `3.44`, React Native `0.86`, Symfony `8.1 / PHP 8.4+`. Placeholder `{{VERSION}}` résolu dans QUICKSTART.
+- **Dédup** : en-têtes « narré vs full » sur `COMMANDS.md` / `AGENTS.md` ; bannière `🚧 PLANIFIÉ` sur `docs/mcp/MCP-SERVERS.md` ; cross-links + rôles entre `COMPETITIVE-ANALYSIS.md` (stratégique) et `comparison-claude-craft-vs-superclaude.md` (user-facing).
+- **Site web** : badges de version hardcodés des composants Vue (`LandingPage.vue`, `StatsGrid.vue`, `AgentShowcase.vue`) réalignés ; nouveau token de denylist anti-régression dans `config/versions.yaml`.
+
+### Fixed
+
+- **Commande inexistante `/bmad:init`** remplacée par `/workflow:init` dans les fichiers courants (le namespace `/bmad:*` n'existe pas ; les passages qui l'expliquent sont conservés).
+
+### Removed
+
+- **`docs/SECURITY.md`** : stub de redirection supprimé au profit du `SECURITY.md` racine (source unique).
+
 ## [8.17.1] - 2026-06-26
 
 ### Added

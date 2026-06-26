@@ -12,7 +12,7 @@
 # Dernière mise à jour : 2026-06-24 (bumps audit fraîcheur G5 — Node 24 LTS, js-yaml 4.2, Docker 29.6, OpenTofu 1.12.2, Ansible 2.21.1, Helm 4.2.2)
 
 meta:
-  lastUpdated: '2026-06-24'
+  lastUpdated: '2026-06-26'
 
 claudeCode:
   minimum: '2.1.97'
@@ -78,3 +78,5 @@ denylist:
   - 'Ansible 2.21.0'
   - 'Helm 4.2.0'
   - 'Docker 29.5'
+  # Badge hero périmé du site (LandingPage.vue) — chaîne spécifique pour ne pas heurter les notes historiques du README
+  - 'v8.13.0 - Claude Code'
