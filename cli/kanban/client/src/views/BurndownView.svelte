@@ -69,7 +69,10 @@
       series: [
         { label: 'Date' },
         { label: 'Ideal', stroke: cFaint, width: 1.5, dash: [5, 5], points: { show: false } },
-        { label: 'Actual', stroke: cAccent, width: 3, points: { show: true, size: 6, fill: cAccent, stroke: cAccent } },
+        // spanGaps : l'axe X couvre chaque jour idéal, donc la série réelle
+        // (événementielle) a des trous (null) entre deux mesures. Sans spanGaps,
+        // uPlot rompt le trait et on ne voit que des points isolés (bug #5).
+        { label: 'Actual', stroke: cAccent, width: 3, spanGaps: true, points: { show: true, size: 6, fill: cAccent, stroke: cAccent } },
       ],
       legend: { show: true },
     };

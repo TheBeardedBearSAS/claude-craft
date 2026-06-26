@@ -280,6 +280,10 @@
 /* ---- Card ---- */
 .card {
   position: relative;
+  /* flex-none : sans ça, dans .col-body (flex column) les cartes se compriment
+     (flex-shrink:1 par défaut) avant que la colonne ne scrolle, et `overflow:hidden`
+     tronque alors le titre/contenu (bug #1). */
+  flex: none;
   background: var(--bg-elev);
   border: 1px solid var(--border-faint);
   border-radius: var(--radius);
@@ -439,6 +443,10 @@
 
 /* ================= STORY MODAL ================= */
 dialog.modal {
+  /* margin:auto : le reset global `* { margin: 0 }` écrase le centrage que
+     l'UA applique aux <dialog> ouverts via showModal() → la modale se collait
+     en haut-gauche (bug #2). On rétablit le centrage. */
+  margin: auto;
   width: min(760px, 94vw);
   max-height: 88vh;
   padding: 0;
@@ -764,13 +772,23 @@ table.tasks .t-hrs {
   align-items: center;
   gap: 13px;
   padding: 11px 18px 11px 36px;
+  border: none;
   border-top: 1px solid var(--border-faint);
   width: 100%;
   text-align: left;
   transition: background 0.12s;
+  /* Rendue cliquable (ouvre le détail de la story — bug #3) : reset du <button>. */
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
 }
 .story-row:hover {
   background: var(--bg-elev);
+}
+.story-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
 }
 .story-row .s-id {
   font-family: var(--mono);
@@ -1074,6 +1092,10 @@ table.tasks .t-hrs {
 }
 .deps-header .stat.danger {
   color: var(--danger);
+}
+.deps-header .stat.muted {
+  margin-left: auto;
+  color: var(--fg-faint);
 }
 .deps-content {
   display: flex;

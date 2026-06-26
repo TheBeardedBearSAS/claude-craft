@@ -6,6 +6,7 @@
   import { computeSprintProgress } from './lib/progress.js';
   import Icon from './components/Icon.svelte';
   import TweaksPanel from './components/TweaksPanel.svelte';
+  import StoryDetail from './components/StoryDetail.svelte';
   import KanbanView from './views/KanbanView.svelte';
   import BacklogView from './views/BacklogView.svelte';
   // Lazy-loaded : tire des libs viz lourdes (uPlot, Cytoscape, marked+dompurify).
@@ -190,3 +191,6 @@
 </div>
 
 <TweaksPanel bind:this={tweaksPanel} />
+
+<!-- Modale de détail partagée (Board + Backlog) — pilotée par lib/detail.svelte.js -->
+<StoryDetail />

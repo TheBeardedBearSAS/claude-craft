@@ -8,26 +8,18 @@
   import TddPip from '../components/TddPip.svelte';
   import Points from '../components/Points.svelte';
   import TaskProgress from '../components/TaskProgress.svelte';
-  import { locateCard, reduceKey, buildCardDetails } from '../lib/kanban-nav.js';
-  import { STATUS, PRIORITY, TDD, TASK_TYPE, codeColor, epicHue } from '../lib/config.js';
+  import { locateCard, reduceKey } from '../lib/kanban-nav.js';
+  import { STATUS, PRIORITY, codeColor, epicHue } from '../lib/config.js';
   import { tweaks } from '../lib/tweaks.svelte.js';
+  import { openDetail as openDetailStore } from '../lib/detail.svelte.js';
 
   let promptDialog = $state(null);
   /** Référence au <dialog> natif du menu de déplacement */
   let moveMenuDialog = $state(null);
   /** Élément de carte ayant déclenché l'ouverture du menu (pour retour de focus) */
   let moveMenuTriggerEl = $state(null);
-  /** Référence au <dialog> natif de la modale de détail */
-  let detailDialog = $state(null);
-  /** Carte actuellement affichée dans la modale de détail */
-  let detailCard = $state(null);
-  /** Élément ayant déclenché l'ouverture de la modale (pour retour de focus) */
-  let detailTriggerEl = $state(null);
-  /** Tâches associées à la story affichée (chargées à l'ouverture via /api/stories/:id) */
-  let detailTasks = $state([]);
-  /** Corps markdown de la story rendu en HTML (AC, Gherkin…) */
-  let detailBody = $state('');
-  let detailLoading = $state(false);
+  // La modale de détail est désormais un composant partagé (<StoryDetail>, monté
+  // dans App) piloté par le store lib/detail.svelte.js — réutilisée par le Backlog.
 
   const COLUMNS = [
     { key: 'backlog', label: 'Backlog', emptyHint: 'No stories — run /workflow:plan' },
@@ -256,57 +248,10 @@
     }
   }
 
-  /** Détails normalisés de la carte affichée (null si modale fermée). */
-  const detailFields = $derived(detailCard ? buildCardDetails(detailCard) : null);
-  const detailEstTotal = $derived(detailTasks.reduce((a, t) => a + (t.estimation_hours || 0), 0));
-  const detailActTotal = $derived(detailTasks.reduce((a, t) => a + (t.actual_hours || 0), 0));
-
-  /** Ouvre la modale de détail (clic ou Entrée). */
-  async function openDetail(card) {
-    detailTriggerEl = document.activeElement;
-    detailCard = card;
-    detailTasks = [];
-    detailBody = '';
+  /** Ouvre la modale de détail partagée (clic ou Entrée) + annonce sr-only. */
+  function openDetail(card) {
     announceCardDetails(card);
-    await tick();
-    detailDialog?.showModal();
-    loadDetailExtras(card.id);
-  }
-
-  /**
-   * Charge tâches + corps markdown de la story et rend le markdown.
-   * marked/DOMPurify importés dynamiquement pour ne pas alourdir le bundle du board.
-   */
-  async function loadDetailExtras(id) {
-    detailLoading = true;
-    try {
-      const res = await fetch(`/api/stories/${encodeURIComponent(id)}`);
-      if (!res.ok) return;
-      const data = await res.json();
-      if (detailCard?.id !== id) return;
-      detailTasks = data.tasks ?? [];
-      if (data.body) {
-        const [{ marked }, dompurify] = await Promise.all([import('marked'), import('dompurify')]);
-        const DOMPurify = dompurify.default ?? dompurify;
-        if (detailCard?.id === id) detailBody = DOMPurify.sanitize(marked.parse(data.body));
-      }
-    } catch {
-      /* on garde les détails de base issus du frontmatter */
-    } finally {
-      detailLoading = false;
-    }
-  }
-
-  /** Ferme la modale de détail et retourne le focus à la carte source. */
-  function closeDetail() {
-    detailCard = null;
-    detailTasks = [];
-    detailBody = '';
-    detailDialog?.close();
-    if (detailTriggerEl) {
-      detailTriggerEl.focus();
-      detailTriggerEl = null;
-    }
+    openDetailStore(card);
   }
 </script>
 
@@ -443,94 +388,13 @@
   </dialog>
 {/if}
 
-<!-- Modale de détail : <dialog> natif, style design (dialog.modal) -->
-{#if detailFields}
-  <dialog
-    bind:this={detailDialog}
-    class="modal"
-    aria-labelledby="detail-title"
-    onclose={() => { if (detailCard) closeDetail(); }}
-    onclick={(e) => { if (e.target === detailDialog) closeDetail(); }}
-  >
-    <div class="modal-inner">
-      <header class="modal-head">
-        <div class="row1">
-          <span class="m-id mono">{detailFields.id}</span>
-          {#if detailFields.epicId}
-            <span style="color: var(--fg-faint)">·</span>
-            <span style="display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color: var(--fg-dim)">
-              <i style="width:8px; height:8px; border-radius:50%; background: {epicHue(detailFields.epicId)}; display:inline-block"></i>
-              {detailFields.epicId}
-            </span>
-          {/if}
-          {#if detailFields.readOnly}
-            <span class="ro-lock" style="margin-left:8px"><Icon name="lock" size={13} /> read-only</span>
-          {/if}
-          <button class="icon-btn m-close" onclick={() => closeDetail()} aria-label="Fermer"><Icon name="close" size={18} /></button>
-        </div>
-        <h2 class="modal-title" id="detail-title">{detailFields.title}</h2>
-        <div class="modal-frontmatter">
-          <span class="chip chip-soft"><i class="swatch" style="background: var({STATUS[detailFields.status]?.cssVar || '--border'})"></i>{STATUS[detailFields.status]?.label || detailFields.status}</span>
-          <PriorityChip priority={detailFields.priority} />
-          <TddPip phase={detailFields.tddPhase} />
-        </div>
-      </header>
-
-      <div class="modal-body">
-        <div class="fm-grid">
-          <div class="fm-cell"><div class="k">Points</div><div class="v"><span class="points mono">{detailFields.storyPoints}</span></div></div>
-          <div class="fm-cell"><div class="k">Assigné</div><div class="v">{#if detailFields.assignedTo}<Avatar id={detailFields.assignedTo} size={22} />{detailFields.assignedTo}{:else}<span style="color: var(--fg-faint)">—</span>{/if}</div></div>
-          <div class="fm-cell"><div class="k">Persona</div><div class="v">{detailFields.persona || '—'}</div></div>
-          <div class="fm-cell"><div class="k">Phase TDD</div><div class="v"><TddPip phase={detailFields.tddPhase} />{#if !detailFields.tddPhase || !TDD[detailFields.tddPhase]}<span style="color: var(--fg-faint)">—</span>{/if}</div></div>
-          <div class="fm-cell"><div class="k">Tâches</div><div class="v mono">{detailFields.tasks.completed}/{detailFields.tasks.total}</div></div>
-          {#if detailEstTotal > 0}
-            <div class="fm-cell"><div class="k">Heures est / réel</div><div class="v mono">{detailEstTotal} / <span class={detailActTotal > detailEstTotal ? 't-over' : ''}>{detailActTotal}</span></div></div>
-          {/if}
-        </div>
-
-        {#if detailFields.blockedReason}
-          <div class="modal-readonly-note" style="border-color: var(--danger); color: var(--danger)">⚠ Bloqué : {detailFields.blockedReason}</div>
-        {/if}
-
-        {#if detailTasks.length > 0}
-          <div class="section-h"><h3>Tâches</h3><span class="n mono">{detailFields.tasks.completed}/{detailFields.tasks.total}</span><span class="line"></span></div>
-          <table class="tasks">
-            <thead><tr><th style="width:54px">Type</th><th>Tâche</th><th>Statut</th><th style="text-align:right">Est</th><th style="text-align:right">Réel</th></tr></thead>
-            <tbody>
-              {#each detailTasks as t}
-                <tr>
-                  <td><span class="t-type" style="background: color-mix(in oklch, {TASK_TYPE[t.type] || 'var(--fg-faint)'} 16%, transparent); color: {TASK_TYPE[t.type] || 'var(--fg-dim)'}">{t.type}</span></td>
-                  <td class="t-name">{t.id}</td>
-                  <td>{t.status}</td>
-                  <td class="t-hrs">{t.estimation_hours ?? '—'}</td>
-                  <td class="t-hrs {(t.actual_hours || 0) > (t.estimation_hours || 0) ? 't-over' : ''}">{t.actual_hours ?? '—'}</td>
-                </tr>
-              {/each}
-            </tbody>
-          </table>
-        {:else if detailLoading}
-          <p style="color: var(--fg-faint); font-size:12px; margin-top:12px">Chargement des tâches…</p>
-        {/if}
-
-        {#if detailBody}
-          <div class="section-h"><h3>Description</h3><span class="line"></span></div>
-          <div class="md-body">{@html detailBody}</div>
-        {/if}
-
-        {#if detailFields.readOnly}
-          <p class="modal-readonly-note">
-            Carte en lecture seule — gérée par <code>.bmad/sprint-status.yaml</code> (BMAD v6 single-writer).
-            Changez son statut via les commandes <code>team:</code> / <code>qa:</code>.
-          </p>
-        {/if}
-      </div>
-    </div>
-  </dialog>
-{/if}
 
 <style>
   /* Menu de déplacement — spécifique au board (hors design system global) */
   .move-menu-dialog {
+    /* margin:auto : recentre le <dialog> que le reset global `* { margin:0 }`
+       décalerait en haut-gauche (cf. bug #2). */
+    margin: auto;
     background: var(--bg-elev); border: 1px solid var(--border-strong);
     border-radius: var(--radius-lg); padding: 0; min-width: 300px;
     box-shadow: var(--shadow-lg); color: var(--fg);

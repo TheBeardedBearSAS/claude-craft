@@ -81,7 +81,7 @@ export async function rebuildSprintStatus(projectRoot, repository) {
  * @param {Array} storiesBySprint - Current stories in the sprint
  * @returns {object} Burndown chart with ideal/actual lines and on_track indicator
  */
-export function computeBurndown(sprintStatus, storiesBySprint) {
+export function computeBurndown(sprintStatus, storiesBySprint, now = new Date()) {
   const totalPoints = storiesBySprint.reduce((sum, s) => sum + (s.story_points ?? 0), 0);
 
   if (!sprintStatus.metadata.start_date || !sprintStatus.metadata.end_date) {
@@ -108,7 +108,7 @@ export function computeBurndown(sprintStatus, storiesBySprint) {
     });
   }
 
-  const actual = buildActualBurndown(sprintStatus, storiesBySprint, startDate, endDate);
+  const actual = buildActualBurndown(sprintStatus, storiesBySprint, startDate, endDate, now);
 
   let onTrack = null;
   if (actual.length > 0 && totalPoints > 0) {
@@ -166,7 +166,7 @@ async function readSprintGoal(repository, sprintId) {
   }
 }
 
-function buildActualBurndown(sprintStatus, storiesBySprint, startDate, endDate) {
+function buildActualBurndown(sprintStatus, storiesBySprint, startDate, endDate, now = new Date()) {
   const doneEvents = [];
 
   for (const story of storiesBySprint) {
@@ -188,8 +188,9 @@ function buildActualBurndown(sprintStatus, storiesBySprint, startDate, endDate) 
 
   doneEvents.sort((a, b) => a.date.localeCompare(b.date));
 
+  const total = storiesBySprint.reduce((sum, s) => sum + (s.story_points ?? 0), 0);
   const actual = [];
-  let remaining = storiesBySprint.reduce((sum, s) => sum + (s.story_points ?? 0), 0);
+  let remaining = total;
 
   actual.push({
     date: startDate.toISOString().split('T')[0],
@@ -202,6 +203,23 @@ function buildActualBurndown(sprintStatus, storiesBySprint, startDate, endDate) 
       date: event.date,
       points: Math.max(0, remaining),
     });
+  }
+
+  // Sprint EN COURS (now ∈ [start,end]) : ancrer un point "aujourd'hui" au
+  // remaining RÉEL (total − points des stories actuellement done). Sans ça, un
+  // sprint sans historique horodaté (history:[]) n'a qu'un point de départ et la
+  // courbe réelle est un point invisible (bug UI #5). Un sprint clôturé
+  // (now > end) ou pas encore démarré (now < start) garde l'historique brut.
+  const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  if (today >= startDate && today <= endDate) {
+    const liveDone = storiesBySprint
+      .filter((s) => s.status === 'done')
+      .reduce((sum, s) => sum + (s.story_points ?? 0), 0);
+    const todayStr = today.toISOString().split('T')[0];
+    const liveRemaining = Math.max(0, total - liveDone);
+    const last = actual[actual.length - 1];
+    if (last.date === todayStr) last.points = liveRemaining;
+    else actual.push({ date: todayStr, points: liveRemaining });
   }
 
   return actual;
