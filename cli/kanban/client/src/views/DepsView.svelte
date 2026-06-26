@@ -2,6 +2,7 @@
   import cytoscape from 'cytoscape';
   import dagre from 'cytoscape-dagre';
   import { STATUS } from '../lib/config.js';
+  import { buildDepsElements } from '../lib/deps-graph.js';
 
   cytoscape.use(dagre);
 
@@ -15,6 +16,9 @@
   let error = $state(null);
 
   const stats = $derived({ nodes: nodes.length, edges: edges.length, cycles: cycles.length });
+  // Nœuds sans aucune dépendance : exclus du graphe (sinon dagre les empile en
+  // colonne illisible) mais comptés pour informer l'utilisateur.
+  const isolatedCount = $derived(buildDepsElements(nodes, edges, cycles).hiddenCount);
 
   /** Couleur de statut côté DOM (badge) — var() résolu par le navigateur. */
   const domStatusColor = (status) => `var(${STATUS[status]?.cssVar || '--fg-faint'})`;
@@ -57,12 +61,9 @@
     const cDanger = tok('--danger', '#e5484d');
     const cMono = tok('--mono', 'monospace');
 
-    const cycleSet = new Set(cycles.flat());
-
-    const elements = [
-      ...nodes.map((n) => ({ data: { id: n.id, label: n.id }, classes: cycleSet.has(n.id) ? 'in-cycle' : '' })),
-      ...edges.map((e) => ({ data: { source: e.from, target: e.to } })),
-    ];
+    // Graphe limité aux nœuds connectés (les isolés cassent le layout dagre).
+    const { elements } = buildDepsElements(nodes, edges, cycles);
+    if (elements.length === 0) return; // aucun lien → rien à dessiner (note affichée dans le DOM)
 
     const cy = cytoscape({
       container: graphContainer,
@@ -105,8 +106,11 @@
           },
         },
       ],
-      layout: { name: 'dagre', rankDir: 'LR', spacingFactor: 1.3, nodeDimensionsIncludeLabels: true },
+      layout: { name: 'dagre', rankDir: 'LR', spacingFactor: 1.3, nodeDimensionsIncludeLabels: true, fit: true, padding: 30 },
     });
+
+    // Recentrer/zoomer pour que le graphe occupe le canvas (évite le rendu décalé).
+    cy.ready(() => cy.fit(undefined, 40));
 
     cy.on('tap', 'node', (evt) => {
       const nodeData = nodes.find((n) => n.id === evt.target.id());
@@ -137,7 +141,16 @@
         <span class="stat">Nodes: {stats.nodes}</span>
         <span class="stat">Edges: {stats.edges}</span>
         <span class="stat" class:danger={stats.cycles > 0}>Cycles: {stats.cycles}</span>
+        {#if isolatedCount > 0}
+          <span class="stat muted" title="Stories sans dépendance — masquées pour garder le graphe lisible">
+            {isolatedCount} isolée{isolatedCount > 1 ? 's' : ''} masquée{isolatedCount > 1 ? 's' : ''}
+          </span>
+        {/if}
       </header>
+
+      {#if stats.edges === 0}
+        <div class="empty">Aucune dépendance entre stories — rien à afficher dans le graphe.</div>
+      {:else}
 
       <div class="deps-content">
         <div
@@ -170,6 +183,7 @@
           </aside>
         {/if}
       </div>
+      {/if}
 
       <div class="sr-only">
         <h2>Dependency edges (text fallback)</h2>

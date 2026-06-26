@@ -31,9 +31,9 @@ describe('summarizeSprint', () => {
   });
 
   it('has_retro is true for a sprint-retro file and false for board', () => {
-    expect(summarizeSprint({ id: 'sprint-001', files: [mkFile('sprint-retro', 'sprint-retro.md')] }, []).has_retro).toBe(
-      true
-    );
+    expect(
+      summarizeSprint({ id: 'sprint-001', files: [mkFile('sprint-retro', 'sprint-retro.md')] }, []).has_retro
+    ).toBe(true);
     expect(summarizeSprint({ id: 'sprint-001', files: [mkFile('board', 'board.md')] }, []).has_retro).toBe(false);
   });
 
@@ -51,6 +51,19 @@ describe('sortSprints', () => {
   it('sorts by id descending', () => {
     const input = [{ id: 'sprint-001' }, { id: 'sprint-003' }, { id: 'sprint-002' }];
     expect(sortSprints(input).map((s) => s.id)).toEqual(['sprint-003', 'sprint-002', 'sprint-001']);
+  });
+
+  it('sorts numerically, not lexically (sprint-10 before sprint-9)', () => {
+    // Real sprint ids are NOT zero-padded (sprint-1 … sprint-10). A plain
+    // localeCompare puts "sprint-10" before "sprint-2" (lexical), so the most
+    // recent sprint was buried. Numeric-aware compare fixes the ordering.
+    const input = [{ id: 'sprint-2-foo' }, { id: 'sprint-10-bar' }, { id: 'sprint-1-baz' }, { id: 'sprint-9-qux' }];
+    expect(sortSprints(input).map((s) => s.id)).toEqual([
+      'sprint-10-bar',
+      'sprint-9-qux',
+      'sprint-2-foo',
+      'sprint-1-baz',
+    ]);
   });
 
   it('handles an empty array', () => {

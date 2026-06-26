@@ -24,9 +24,11 @@ export function summarizeSprint(sprintEntry, stories) {
 
 /**
  * Sort sprint summaries by id descending (most recent sprint first).
+ * Numeric-aware so unpadded ids order correctly (sprint-10 before sprint-9);
+ * a plain localeCompare sorts lexically and buries sprint-10 under sprint-2.
  * @param {Array<{ id:string }>} summaries
  * @returns {Array<{ id:string }>}
  */
 export function sortSprints(summaries) {
-  return [...summaries].sort((a, b) => b.id.localeCompare(a.id));
+  return [...summaries].sort((a, b) => b.id.localeCompare(a.id, undefined, { numeric: true, sensitivity: 'base' }));
 }

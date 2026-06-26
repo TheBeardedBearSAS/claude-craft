@@ -722,6 +722,85 @@ sprint_id: sprint-zzz
       expect(result.total_points).toBe(5);
       expect(['on-track', 'at-risk', 'behind', null]).toContain(result.on_track);
     });
+
+    // --- Sprint EN COURS : la ligne "réel" doit refléter la réalité ---
+    // Bug #5 (UI) : un sprint actif dont les stories ont history:[] produisait un
+    // `actual` à UN SEUL point (juste le départ) → la courbe réelle était un point
+    // invisible. Pour un sprint en cours (now ∈ [start,end]) on ancre un point
+    // "aujourd'hui" au remaining RÉEL (total − points des stories actuellement done),
+    // même sans historique horodaté.
+    const activeSprintStatus = (stories) => ({
+      version: '1.0',
+      metadata: {
+        sprint_id: 'sprint-10',
+        name: 'Active',
+        start_date: '2026-04-01',
+        end_date: '2026-04-10',
+        goal: 'Goal',
+      },
+      stories,
+    });
+
+    it('anchors a "today" point at the live remaining for a running sprint (empty history)', () => {
+      const sprintStatus = activeSprintStatus({
+        'US-001': { title: 'A', status: 'done', story_points: 5, history: [] },
+        'US-002': { title: 'B', status: 'in-progress', story_points: 3, history: [] },
+      });
+      const stories = [
+        { id: 'US-001', status: 'done', story_points: 5 },
+        { id: 'US-002', status: 'in-progress', story_points: 3 },
+      ];
+      // now injecté DANS la fenêtre du sprint → déterministe.
+      const result = computeBurndown(sprintStatus, stories, new Date('2026-04-04T12:00:00Z'));
+
+      expect(result.actual).toHaveLength(2);
+      expect(result.actual[0]).toEqual({ date: '2026-04-01', points: 8 });
+      // 8 total − 5 done (live) = 3 restants, ancré à aujourd'hui.
+      expect(result.actual[1]).toEqual({ date: '2026-04-04', points: 3 });
+    });
+
+    it('does NOT anchor today for a finished sprint (now after end → history only)', () => {
+      const sprintStatus = activeSprintStatus({
+        'US-001': { title: 'A', status: 'done', story_points: 5, history: [] },
+      });
+      const stories = [{ id: 'US-001', status: 'done', story_points: 5 }];
+      const result = computeBurndown(sprintStatus, stories, new Date('2026-05-01T00:00:00Z'));
+      // Sprint clôturé : on garde l'historique brut (ici juste le point de départ).
+      expect(result.actual).toHaveLength(1);
+      expect(result.actual[0]).toEqual({ date: '2026-04-01', points: 5 });
+    });
+
+    it('does NOT anchor today before the sprint has started', () => {
+      const sprintStatus = activeSprintStatus({
+        'US-001': { title: 'A', status: 'backlog', story_points: 5, history: [] },
+      });
+      const stories = [{ id: 'US-001', status: 'backlog', story_points: 5 }];
+      const result = computeBurndown(sprintStatus, stories, new Date('2026-03-15T00:00:00Z'));
+      expect(result.actual).toHaveLength(1);
+      expect(result.actual[0]).toEqual({ date: '2026-04-01', points: 5 });
+    });
+
+    it('extends a sparse history line to today for a running sprint', () => {
+      const sprintStatus = activeSprintStatus({
+        'US-001': {
+          title: 'A',
+          status: 'done',
+          story_points: 5,
+          history: [{ timestamp: '2026-04-02T10:00:00Z', from: 'review', to: 'done', by: 'a', reason: '' }],
+        },
+        'US-002': { title: 'B', status: 'in-progress', story_points: 3, history: [] },
+      });
+      const stories = [
+        { id: 'US-001', status: 'done', story_points: 5 },
+        { id: 'US-002', status: 'in-progress', story_points: 3 },
+      ];
+      const result = computeBurndown(sprintStatus, stories, new Date('2026-04-06T12:00:00Z'));
+      // départ(8) → événement 04-02 (3) → ancre 04-06 au remaining live (8−5=3)
+      expect(result.actual).toHaveLength(3);
+      expect(result.actual[0]).toEqual({ date: '2026-04-01', points: 8 });
+      expect(result.actual[1]).toEqual({ date: '2026-04-02', points: 3 });
+      expect(result.actual[2]).toEqual({ date: '2026-04-06', points: 3 });
+    });
   });
 
   describe('GET /api/sprints/current', () => {

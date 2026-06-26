@@ -1,5 +1,6 @@
 <script>
   import { store } from '../lib/store.svelte.js';
+  import { openDetail } from '../lib/detail.svelte.js';
   import { groupStoriesByEpic } from '../lib/backlog.js';
   import { STATUS, epicHue } from '../lib/config.js';
   import Icon from '../components/Icon.svelte';
@@ -58,7 +59,7 @@
           <div class="epic-stories">
             <div>
               {#each stories as story (story.id)}
-                <div class="story-row">
+                <button type="button" class="story-row" onclick={() => openDetail(story)}>
                   <span class="s-id mono">{story.id}</span>
                   <span class="s-title">{story.title}</span>
                   {#if story._writable === false}<span class="ro-lock"><Icon name="lock" size={12} /></span>{/if}
@@ -68,7 +69,7 @@
                     <i style="background: var({STATUS[story.status]?.cssVar || '--fg-faint'})"></i>{STATUS[story.status]?.label || story.status}
                   </span>
                   <Avatar id={story.assigned_to} size={24} />
-                </div>
+                </button>
               {/each}
             </div>
           </div>
@@ -94,7 +95,7 @@
           <div class="epic-stories">
             <div>
               {#each epicGroups.orphans as story (story.id)}
-                <div class="story-row">
+                <button type="button" class="story-row" onclick={() => openDetail(story)}>
                   <span class="s-id mono">{story.id}</span>
                   <span class="s-title">{story.title}</span>
                   {#if story._writable === false}<span class="ro-lock"><Icon name="lock" size={12} /></span>{/if}
@@ -104,7 +105,7 @@
                     <i style="background: var({STATUS[story.status]?.cssVar || '--fg-faint'})"></i>{STATUS[story.status]?.label || story.status}
                   </span>
                   <Avatar id={story.assigned_to} size={24} />
-                </div>
+                </button>
               {/each}
             </div>
           </div>
