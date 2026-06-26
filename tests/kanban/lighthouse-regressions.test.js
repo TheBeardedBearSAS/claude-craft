@@ -35,6 +35,34 @@ describe('Best Practices — no console / CSP errors', () => {
     // eliminating the data:font/woff base64 URLs that violate `default-src 'self'`.
     expect(/assetsInlineLimit\s*:\s*0\b/.test(cfg), 'vite build.assetsInlineLimit must be 0').toBe(true);
   });
+
+  it('index.html CSP declares font-src (else self-hosted fonts fall back to default-src)', () => {
+    // A build without an explicit `font-src` made the browser fall back to
+    // `default-src 'self'` and log "font-src was not explicitly set" for every
+    // glyph. The directive must be present in the meta CSP.
+    const html = read('index.html');
+    const csp = html.match(/Content-Security-Policy["']\s+content="([^"]+)"/i);
+    expect(csp, 'missing meta Content-Security-Policy').not.toBeNull();
+    expect(/font-src\s+[^;]+/.test(csp[1]), 'CSP must declare font-src').toBe(true);
+  });
+
+  it('DepsView normalises oklch design tokens for the cytoscape canvas renderer', () => {
+    // getComputedStyle resolves the oklch() tokens to lab()/oklch() strings that
+    // cytoscape's parser rejects → ~20 "style property `…: lab(…)` is invalid" +
+    // "Custom function mappers may not return invalid values" warnings, and the
+    // node status colour is lost. normalizeColor() rasterises them back to sRGB.
+    const deps = read('src/views/DepsView.svelte');
+    expect(/normalizeColor/.test(deps), 'DepsView must route resolved tokens through normalizeColor').toBe(true);
+  });
+
+  it('DepsView avoids the deprecated cytoscape width/height:"label" auto-sizing', () => {
+    // cytoscape 3.34 logs "The style value of `label` is deprecated for width/height".
+    // Node dimensions come from estimateNodeWidth/NODE_HEIGHT instead.
+    const deps = read('src/views/DepsView.svelte');
+    expect(/width:\s*['"]label['"]/.test(deps), 'must not use width: "label"').toBe(false);
+    expect(/height:\s*['"]label['"]/.test(deps), 'must not use height: "label"').toBe(false);
+    expect(/estimateNodeWidth/.test(deps), 'node width must come from estimateNodeWidth').toBe(true);
+  });
 });
 
 describe('Accessibility — single main landmark', () => {

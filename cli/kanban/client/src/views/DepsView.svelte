@@ -29,6 +29,7 @@
 <script>
   import { STATUS } from '../lib/config.js';
   import { buildDepsElements } from '../lib/deps-graph.js';
+  import { normalizeColor, estimateNodeWidth, NODE_HEIGHT } from '../lib/deps-style.js';
 
   let graphContainer = $state(null);
   // Non-réactif volontairement : l'instance cytoscape est mutée en async depuis
@@ -95,8 +96,14 @@
     const container = graphContainer;
 
     // Cytoscape rend sur canvas : on résout les tokens en couleurs réelles.
+    // Les tokens sont en oklch() ; getComputedStyle les renvoie en lab()/oklch(),
+    // que le parser de cytoscape rejette (warnings « style property invalid » +
+    // perte de la couleur des nœuds). Un contexte canvas 2D normalise chaque
+    // valeur en sRGB (cf. normalizeColor / deps-style.js).
+    const nctx = document.createElement('canvas').getContext('2d');
+    const norm = (col) => normalizeColor(col, nctx);
     const root = getComputedStyle(document.documentElement);
-    const tok = (n, fb) => root.getPropertyValue(n).trim() || fb;
+    const tok = (n, fb) => norm(root.getPropertyValue(n).trim() || fb);
     const statusColor = (status) => tok(STATUS[status]?.cssVar || '--fg-faint', '#888');
     const cBg = tok('--bg-inset', '#111');
     const cBorder = tok('--border-faint', '#333');
@@ -135,12 +142,11 @@
             'font-size': '11px',
             'font-weight': '600',
             'font-family': cMono,
-            width: 'label',
-            height: 'label',
-            'padding-left': '10px',
-            'padding-right': '10px',
-            'padding-top': '7px',
-            'padding-bottom': '7px',
+            // Dimensions déterministes (cf. estimateNodeWidth) : remplacent
+            // l'auto-sizing « label » des dimensions, déprécié par cytoscape 3.34.
+            width: (ele) => estimateNodeWidth(ele.data('label')),
+            height: NODE_HEIGHT,
+            'text-max-width': '200px',
             'border-width': 1,
             'border-color': cBorder,
           },
