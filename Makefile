@@ -135,6 +135,16 @@ test-bmad: ## Lance les tests bats BMAD (gate-validator + garde anti ((var++)))
 
 test-bats: test-MultiAccount test-StatusLine test-RTK test-AgentTeams test-bmad ## Lance tous les tests bats
 
+# tests/scripts/*.test.mjs shell out to `bash "<script>.sh"` (bashismes :
+# [[ ]], arrays, type -t, local, ${VAR:+}). Lancer la suite dans une image
+# SANS bash (busybox/alpine) fait echouer les 12 fichiers concernes avec
+# `/bin/sh: bash: not found`. node:24 (Debian) embarque bash → suite verte.
+# La garde tests/scripts/bash-available.test.mjs verifie ce prerequis.
+TEST_IMAGE ?= node:24
+test-scripts-docker: ## Lance tests/scripts dans une image docker AVEC bash
+	@docker run --rm -v "$(CURDIR):/app" -w /app $(TEST_IMAGE) \
+		npx vitest run tests/scripts/
+
 test-all: ## Lance tous les tests (vitest + bats)
 	@npm test && $(MAKE) test-bats
 
