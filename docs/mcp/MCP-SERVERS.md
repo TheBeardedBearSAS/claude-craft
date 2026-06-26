@@ -1,5 +1,7 @@
 # Claude Craft MCP Servers Architecture
 
+> 🚧 **PLANIFIÉ — NON DISPONIBLE.** Ce document est une **spécification de conception**. Les MCP servers décrits ci-dessous (Ralph MCP, RTK MCP, QA Recette MCP, Kanban MCP) **ne sont pas encore livrés**. Pour les intégrations MCP réellement disponibles aujourd'hui, voir [`MCP.md`](../MCP.md).
+
 Spécification technique des MCP servers dédiés aux fonctionnalités killer de Claude Craft.
 
 ---

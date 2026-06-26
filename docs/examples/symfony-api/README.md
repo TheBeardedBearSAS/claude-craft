@@ -1,6 +1,6 @@
 # Symfony API Example
 
-A complete REST API built with Symfony 8, API Platform, and PostgreSQL, demonstrating Claude Craft best practices.
+A complete REST API built with Symfony 8.1, API Platform, and PostgreSQL, demonstrating Claude Craft best practices.
 
 ---
 

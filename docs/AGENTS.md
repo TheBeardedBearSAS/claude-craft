@@ -1,5 +1,7 @@
 # Agents Reference
 
+> **This is the narrated reference (31 default agents + infra overview).** For the complete auto-generated table of all 70 agents (11 tech reviewers + 20 common + 39 infra, with model/effort/skills metadata), see [AGENTS-FULL-REFERENCE.md](AGENTS-FULL-REFERENCE.md).
+
 Claude Code agents are AI personas with specialized expertise. They provide focused assistance for specific domains and tasks.
 
 ## How to Use Agents
@@ -1064,7 +1066,7 @@ Helps with:
 @bmad-master Route this work to the appropriate agent
 ```
 
-**Key Commands**: `/bmad:init`, `/bmad:status`, `/bmad:route`, `/bmad:handoff`
+**Key Commands**: `/workflow:init`, `/workflow:status`, `/sprint:status`, `/sprint:transition` (le namespace `/bmad:*` n'existe pas — bmad-master est intégré aux commandes `/workflow:*` et `/sprint:*`)
 
 ---
 

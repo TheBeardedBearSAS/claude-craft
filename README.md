@@ -28,6 +28,14 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 125 commands across 15 namespaces (219 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v8.17.2
+
+**Revue documentation (2026-06-26, v8.17.2) :**
+
+- **Nouveau tutoriel phare** : `docs/guides/*/10-complete-workflow.md` réécrit en walkthrough narré de bout en bout (idée → backlog → sprint → livraison) pour grands débutants — glossaire, modes d'exécution, gates, discipline `/clear`, exemple *TaskFlow* + annexe multi-stack. Disponible en 5 langues, lié depuis le README et `guides/index.md`.
+- **Fraîcheur** : compteurs et versions réalignés sur le SSOT (125 core / 219 total commandes, 70 agents, 55 skills, 11 stacks ; Claude Code 2.1.97 min / 2.1.168 rec ; Flutter 3.44, RN 0.86, Symfony 8.1). Suppression de `/bmad:init` (→ `/workflow:init`).
+- **Sans doublon** : index des guides de migration, en-têtes « narré vs full » (COMMANDS/AGENTS), bannière PLANNED sur MCP-SERVERS, cross-links entre docs concurrentielles, stub `docs/SECURITY.md` supprimé.
+
 ## What's New in v8.17.1
 
 **Correctifs tests (2026-06-26, v8.17.1) :**
@@ -283,10 +291,12 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | Document | Description |
 |----------|-------------|
 | [Quickstart](docs/QUICKSTART.md) | Get results in 10 minutes |
+| [**Tutorial: Complete Workflow**](docs/guides/en/10-complete-workflow.md) | End-to-end narrated walkthrough: idea → backlog → sprint → ship |
+| [Learning Paths](docs/LEARNING-PATHS.md) | Beginner → Intermediate → Advanced progression |
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 133 commands |
+| [Commands](docs/COMMANDS.md) | All 125 commands |
 | [Agents](docs/AGENTS.md) | All 31 default agents (+ 39 infra on-demand) |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |
@@ -297,6 +307,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Privacy Policy](PRIVACY.md) | Data protection and GDPR compliance |
 | [FAQ](docs/FAQ.md) | Common questions |
 | [Troubleshooting](docs/TROUBLESHOOTING.md) | Problem solving |
+| [Migration Guide](docs/MIGRATION.md) | Format migration + version-upgrade index (v3→v8) |
 | [Migration v6→v7](docs/MIGRATION-v7.md) | Upgrade from v6 to v7 |
 | [Migration v7→v8](docs/MIGRATION-v7-to-v8.md) | Upgrade from v7 to v8 |
 | [Agent Teams Guide](docs/AGENT-TEAMS-GUIDE.md) | Multi-agent team orchestration |

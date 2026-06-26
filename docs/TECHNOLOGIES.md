@@ -4,7 +4,7 @@ Detailed information about rules, patterns, and best practices for each supporte
 
 ## Maturity Tiers
 
-Claude Craft classifies its 10 application technology stacks into 3 maturity tiers. This reflects the depth of support: i18n coverage, agent specialization, commands, skills, and reference documentation.
+Claude Craft classifies its 11 application technology stacks into 3 maturity tiers. This reflects the depth of support: i18n coverage, agent specialization, commands, skills, and reference documentation.
 
 ### Tier Overview
 

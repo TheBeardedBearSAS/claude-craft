@@ -2,7 +2,9 @@
 
 > **TL;DR :** SuperClaude is a viral, single-prompt persona library optimised for individual developers. Claude Craft is a multi-stack, team-oriented framework with sprint workflow and browser-based QA. They solve different problems for different audiences. This page compares them honestly so you can pick the right tool.
 
-**Last updated :** 2026-06-12 | **Claude Craft v8.11.0** | **SuperClaude v4.x (snapshot 2026-06)**
+**Last updated :** 2026-06-26 | **Claude Craft v8.17.2** | **SuperClaude v4.x (snapshot 2026-06)**
+
+> **Looking for the broader market picture?** This page is the user-facing, single-competitor comparison. For the full strategic landscape (all competitors, SWOT, roadmap), see the maintainer doc [`COMPETITIVE-ANALYSIS.md`](COMPETITIVE-ANALYSIS.md).
 
 ---
 
@@ -47,7 +49,7 @@ If you're undecided, **start with SuperClaude** to learn how Claude Code persona
 | Vue.js 3.5+ (3.6 Vapor beta) | Generic | Dedicated: Composition API, Pinia, Alien Signals |
 | Angular 22 | Generic | Dedicated: Signals, Standalone, Zoneless, httpResource |
 | Flutter 3.44 / Dart 3.12 | Generic | Dedicated: BLoC v9, Riverpod 3, Material 3, Impeller |
-| React Native 0.85 New Arch | Generic | Dedicated: JSI, TurboModules, Fabric, Reanimated 4 |
+| React Native 0.86 New Arch | Generic | Dedicated: JSI, TurboModules, Fabric, Reanimated 4 |
 | C# / .NET 10 LTS | Generic | Dedicated: Clean Architecture, CQRS, MediatR, EF Core |
 | Python 3.14+ | Generic | Dedicated: FastAPI, Pydantic, free-threading, JIT |
 | Paperclip 2026.529 | None | Dedicated: control plane + adapters |
@@ -60,8 +62,8 @@ If you're undecided, **start with SuperClaude** to learn how Claude Code persona
 | Installation | `npx superclaude install` | `npx @the-bearded-bear/claude-craft install . --tech=react --lang=fr` |
 | Config update | Manual or re-run installer | `npx ... update` with diff preview |
 | Languages supported | English (full), partial others | en, fr, es, de, pt (full parity, automated CI check) |
-| Slash commands | ~30 | 133 across 15 namespaces |
-| Skills (Claude Code v2.1.105+) | A few | 48 skills, 15 with `context: fork` for token isolation |
+| Slash commands | ~30 | 219 across 15 namespaces |
+| Skills (Claude Code v2.1.105+) | A few | 55 skills, 15 with `context: fork` for token isolation |
 | Hooks templates | None | 9 templates (auto-format, security-block, pre-compact, output-filter, etc.) |
 | Token optimisation guide | Generic | RTK integration + `context: fork` + sub-agent model routing (55-65% reduction stack) |
 | Local Kanban board (BMAD v6) | None | Built-in Svelte + Hono — ingests `.bmad/sprint-status.yaml` read-only (🔒) |

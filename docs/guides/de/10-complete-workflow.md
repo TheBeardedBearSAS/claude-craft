@@ -1,590 +1,430 @@
-# Vollständiger Workflow-Leitfaden: Von der Idee bis zur Produktion
+# Vollständiges Workflow-Tutorial: Von der Idee zur Produktion
 
-Ein umfassender Schritt-für-Schritt-Leitfaden zur Entwicklung einer vollständigen Anwendung mit Claude Craft, von der ersten Idee bis zum Produktions-Deployment.
-
----
-
-## Überblick
-
-Dieser Leitfaden führt Sie durch den vollständigen Entwicklungslebenszyklus:
-
-1. **Ideenfindung** – Produktvision definieren
-2. **Anforderungen** – Dokumentieren, was gebaut werden soll
-3. **Architektur** – Technische Lösung entwerfen
-4. **Planung** – Umsetzbare Sprints erstellen
-5. **Entwicklung** – Mit TDD implementieren
-6. **Qualität** – Validieren und testen
-7. **Deployment** – In die Produktion deployen
-
-**Voraussetzungen:**
-- Claude Craft v8.11.0 in Ihrem Projekt installiert
-- Claude Code v2.1.168 (empfohlen) oder v2.1.97+ (Minimum, CVE-2025-59536 gepatcht)
-- Grundlegendes Verständnis Ihres gewählten Technologie-Stacks
+> **Für wen ist das?** Für jemanden, der **noch nie** Claude Code oder Claude Craft verwendet hat. Wir starten bei null, bauen ein echtes Feature von Anfang bis Ende und erklären jeden Begriff bei seiner ersten Verwendung.
+>
+> **Was wir bauen:** *TaskFlow* — ein kleines SaaS zur Aufgabenverfolgung im Team mit einer REST-API (Python / FastAPI) und einem React-Web-Client. Einfach genug, um es in einer Sitzung nachzuvollziehen, real genug, um den gesamten Workflow zu durchlaufen.
+>
+> **Claude Craft v8.17.2** · Geschätzte Lese- und Übungszeit: 60–90 Minuten.
 
 ---
 
-## Phase 1: Ideenfindung (5–10 Minuten)
+## 0. Bevor du beginnst
 
-### Session einrichten
+### Was du tun wirst
 
-Konfigurieren Sie vor dem Einstieg Ihre Session für optimale Performance:
+Du wirst TaskFlow von einer Einzeiler-Idee bis hin zu einem geprüften, getesteten ersten Sprint führen — mit dem BMAD-Workflow von Claude Craft. Der Pfad fließt immer in eine Richtung, und **jeder Pfeil ist durch ein Quality Gate geschützt** (eine blockierende Prüfung):
 
-```bash
-# Denkanstrengung für die Planung anpassen (hoch für komplexe Aufgaben)
-/effort high
-
-# Optional: Token-Optimierung einrichten
-/common:setup-rtk
+```
+ IDEE
+   │  /workflow:init        ← Track wählen
+   ▼
+ BACKLOG ──/gate:validate-backlog──┐  (PRD ≥ 80%, INVEST 6/6)
+   │  /workflow:plan                │
+   ▼                                │
+ TECH DESIGN ──/gate:validate-techspec──┐  (Tech Spec ≥ 90%)
+   │  /workflow:design                   │
+   ▼                                      │
+ SPRINT PLAN ──/gate:validate-sprint──┐  (Sprint Ready 100%)
+   │  /workflow:start                  │
+   │  /project:decompose-tasks         │
+   ▼                                    │
+ IMPLEMENTIERUNG (TDD) ──/gate:validate-story──┐  (Story DoD 100%)
+   │  /sprint:dev                              │
+   ▼                                            │
+ REVIEW + RETRO ──/workflow:review, /workflow:retro
+   │
+   ▼
+ NÄCHSTER SPRINT ↺
 ```
 
-### Mit BMAD starten
+> **Goldene Regel der Methode:** Du bewegst dich erst zum nächsten Schritt, wenn sein Gate bestanden ist. Das verhindert, dass du auf wackligen Grundlagen baust.
+
+---
+
+## 1. Die Grundlagen in 5 Minuten
+
+Lies dies einmal durch. Du wirst darauf zurückkommen.
+
+- **Claude Code** — die CLI, in der du Claude in deinem Terminal (oder deiner IDE) ansprichst. Du tippst Nachrichten und *Slash-Commands*; Claude liest/schreibt Dateien, führt Befehle aus und antwortet.
+- **Slash-Command** — eine gebündelte Anweisung, die mit `/` beginnt. Beispiel: `/workflow:init`. Claude Craft liefert 125 davon in 15 Namespaces.
+- **Agent** — eine spezialisierte Claude-Persona, die du mit `@` aufrufst. Beispiel: `@tdd-coach`, `@symfony-reviewer`. Jeder verfügt über fokussiertes Fachwissen.
+- **Claude Craft** — das installierte Framework: Regeln, Befehle, Agenten, Skills und die **BMAD**-Projektmanagement-Schicht.
+- **BMAD** — die leichtgewichtige SCRUM-ähnliche Methode von Claude Craft (Backlog → Sprint → Review). Der Zustand wird in **Dateien** gespeichert, nicht im Gespräch — deshalb ist das spätere Löschen des Chats sicher.
+
+### Mini-Glossar
+
+| Begriff | Bedeutung |
+|---------|-----------|
+| **Epic** | Ein großer Wertblock, der in Stories aufgeteilt wird. |
+| **User Story (US)** | Ein kleines, für den Nutzer sichtbares Inkrement („Als Nutzer kann ich…"). |
+| **Backlog** | Die geordnete Liste von Epics und Stories. |
+| **Sprint** | Ein kurzer Stapel von Stories, die du dir vornimmst abzuschließen. |
+| **Task** | Eine Story, aufgeteilt in ≤ 30-Minuten-Schritte, die ein Entwickler (oder Agent) ausführt. |
+| **Gate** | Eine blockierende Qualitätsprüfung zwischen den Phasen. |
+| **DoD** | Definition of Done — die Checkliste, die eine Story bestehen muss. |
+| **INVEST** | Die 6 Qualitäten einer guten Story (Independent, Negotiable, Valuable, Estimable, Small, Testable). |
+| **TDD** | Test-Driven Development: schreibe einen fehlschlagenden Test → lass ihn bestehen → refaktoriere. |
+
+---
+
+## 1.5 Ausführungsmodi verstehen (unbedingt lesen — hier stolpert jeder)
+
+Es gibt **zwei verschiedene Dinge, die „Modus" heißen**. Verwechsle sie nicht.
+
+**(a) Die drei Interaktionsmodi** (umschalten mit `Shift+Tab` in Claude Code):
+
+| Modus | Anzeige | Was er tut |
+|-------|---------|------------|
+| **Plan** | 📋 | Claude schlägt einen Plan vor und bearbeitet **nichts**, bis du zustimmst. |
+| **Normal** | ⚡ | Claude handelt, fragt aber vor riskanten Aktionen nach Erlaubnis. **Standard für dieses Tutorial.** |
+| **Auto-accept** | 🤖 | Claude führt aus, ohne zu fragen. Mächtig, aber erst wenn du dem Ablauf vertraust. |
+
+**(b) Der „Plan-Modus", den manche Befehle selbst aktivieren.** Mehrere Claude-Craft-Befehle (`/workflow:design`, `/workflow:plan`…) treten absichtlich in einen Planungsschritt ein und warten auf dein „Los", bevor sie Dateien schreiben — unabhängig davon, welcher Shift-Tab-Modus aktiv ist.
+
+> **Einfache Regel für Einsteiger:** Bleibe im **Normal-Modus (⚡)**, lass Befehle ihren eigenen Planungsschritt auslösen und bestätige die Pläne. Verwende Auto-accept und `--auto`-Flags erst, wenn der Ablauf vertraut ist.
+
+Im gesamten Tutorial zeigt jeder Befehl den erwarteten Modus:
+- **Modus: Normal (⚡)** — interaktiv
+- **Modus: Plan erforderlich** — Claude plant zuerst
+- **Modus: Schreibgeschützt** — sicher in jedem Modus
+
+---
+
+## 2. Installation prüfen
+
+**Modus: Schreibgeschützt.** Öffne Claude Code in deinem Projektordner und bestätige, dass Claude Craft vorhanden ist.
 
 ```bash
-# BMAD in Ihrem Projekt initialisieren
-/bmad:init
+# Im Terminal, innerhalb des Projekts
+claude
+```
 
-# Oder einen Workflow starten
+Dann, innerhalb von Claude Code:
+
+```
+/workflow:status
+```
+
+Wenn du einen Workflow-Statusbericht siehst (auch „kein Workflow vorhanden"), ist Claude Craft installiert. Wenn der Befehl unbekannt ist, (re)installiere:
+
+```bash
+npx @the-bearded-bear/claude-craft install . --tech=python --lang=en
+```
+
+> **Über die Projektmanagement-Schicht.** Die unten verwendeten Befehle `/gate:*`, `/sprint:*` und `/project:*` stammen aus der Option **Project Management commands**, die standardmäßig bei der Installation enthalten ist (der Installer fragt *„Include Project Management commands? (Y/n)"* → Yes). Wenn diese Befehle fehlen, führe den Installer erneut aus und akzeptiere diese Option.
+
+### 2.x Token sparen: Kontext und `/clear`
+
+Das **Kontextfenster** ist Claudes Arbeitsgedächtnis — und deine kostbarste Ressource. Zwei Gewohnheiten halten es gesund:
+
+- **`/clear`** zwischen nicht zusammenhängenden Schritten. Da BMAD seinen Zustand in Dateien schreibt, geht **nichts verloren**: Nach `/clear` führe `/workflow:status` aus und Claude liest den aktuellen Stand erneut ein.
+- **RTK + Hooks** für die Token-Optimierung. Führe `/common:setup-rtk` einmalig aus, um den Rust Token Killer Proxy und die Optimierungs-Hooks zu konfigurieren (60–90 % Einsparung bei Dev-Command-Ausgabe).
+
+Du wirst unten zwischen den Schritten **„Guter Zeitpunkt für `/clear`"**-Markierungen sehen.
+
+---
+
+## Schritt A — Backlog aufbauen
+
+### A.1 Workflow initialisieren
+
+**Modus: Plan erforderlich.**
+
+```
 /workflow:init
 ```
 
-### Die Vision definieren
+Claude analysiert dein Projekt und empfiehlt einen **Track**:
 
-Mit dem Product-Manager-Agenten arbeiten:
+| Track | Setup | Phasen | Am besten für |
+|-------|-------|--------|---------------|
+| **Quick Flow** | < 5 Min | Nur Implementierung | Bug-Fixes, Hotfixes |
+| **Standard** | < 15 Min | Plan → Design → Implementierung | Neue Features (← TaskFlow nutzt diesen) |
+| **Enterprise** | < 30 Min | Analyse → Plan → Design → Implementierung | Plattformen |
 
-```
-@pm I want to build an e-commerce platform for selling artisanal products.
-Key features:
-- Product catalog with categories
-- Shopping cart and checkout
-- User authentication
-- Order management
-```
+Wähle **Standard** für TaskFlow.
 
-Der PM hilft Ihnen dabei:
-- Das zu lösende Problem zu klären
-- Zielnutzer zu identifizieren
-- Erfolgskennzahlen zu definieren
+### A.2 PRD und Backlog generieren
 
-### Erstes Visionsdokument erstellen
+**Modus: Plan erforderlich.**
 
 ```
-@pm Create a vision document for this project
+/workflow:plan
 ```
 
-Ausgabe: `docs/vision.md`
+Claude interviewt dich über TaskFlow und erstellt dann ein **PRD** (Product Requirements Document), Personas und einen ersten **Backlog** aus Epics und Stories unter `project-management/`. Antworte konkret, z. B.:
 
----
+> *„TaskFlow ermöglicht einem kleinen Team, Projekte zu erstellen, Aufgaben hinzuzufügen, zuzuweisen und als erledigt zu markieren. MVP = REST-API + Web-Listen-/Board-Ansicht. Noch kein Mobile."*
 
-## Phase 2: Anforderungen (15–30 Minuten)
+> **Was zu erwarten ist:** Dateien wie `project-management/prd.md` und `project-management/backlog/` mit Epics wie `EPIC-001 Projekte`, `EPIC-002 Aufgaben` und Stories wie `US-001 Projekt erstellen`.
 
-### Anforderungen analysieren
+### A.3 Backlog validieren
 
-Mit dem Business Analyst arbeiten:
-
-```
-@ba Analyze requirements for the e-commerce platform based on the vision
-```
-
-Der BA wird:
-- Features in User Stories aufschlüsseln
-- Abhängigkeiten identifizieren
-- Eine User-Story-Map erstellen
-
-### PRD erstellen
-
-```
-@pm Create a Product Requirements Document
-```
-
-### PRD validieren
-
-```
-/gate:validate-prd docs/prd.md
-```
-
-Stellen Sie sicher, dass Sie das PRD-Gate (≥80 %) bestehen:
-- [ ] Problem-Statement definiert
-- [ ] Zielnutzer identifiziert
-- [ ] Ziele klar formuliert
-- [ ] Erfolgskennzahlen definiert
-- [ ] Scope-Grenzen festgelegt
-
----
-
-## Phase 3: Architektur (20–45 Minuten)
-
-### Architektur entwerfen
-
-Mit dem Architekten arbeiten:
-
-```
-@architect Design the system architecture for the e-commerce platform
-Consider:
-- Symfony backend with API Platform
-- PostgreSQL database
-- Redis caching
-- Docker deployment
-```
-
-Der Architekt wird erstellen:
-- Systemarchitekturdiagramm
-- Komponentendesign
-- Datenmodell
-- API-Verträge
-
-### Technische Spezifikation erstellen
-
-```
-@architect Create technical specification from the PRD
-```
-
-Ausgabe: `docs/tech-spec.md`
-
-### Entscheidungen dokumentieren
-
-Für wichtige Entscheidungen:
-
-```
-@architect Create an ADR for choosing JWT over session-based auth
-```
-
-Ausgabe: `docs/adr/001-jwt-authentication.md`
-
-### Tech-Spec validieren
-
-```
-/gate:validate-techspec docs/tech-spec.md
-```
-
-Stellen Sie sicher, dass Sie das Tech-Spec-Gate (≥90 %) bestehen:
-- [ ] Architektur dokumentiert
-- [ ] API-Verträge definiert
-- [ ] Sicherheit berücksichtigt
-- [ ] Performance-Anforderungen festgelegt
-- [ ] Teststrategie definiert
-- [ ] Deployment-Plan erstellt
-
----
-
-## Phase 4: Planung (15–30 Minuten)
-
-### Backlog erstellen
-
-Mit dem Product Owner arbeiten:
-
-```
-@po Create user stories from the technical specification
-Prioritize using MoSCoW method
-```
-
-Der PO erstellt Stories wie:
-```
-EPIC-001: User Authentication
-├── US-001: User registration
-├── US-002: User login
-├── US-003: Password reset
-└── US-004: Social login
-
-EPIC-002: Product Catalog
-├── US-005: Browse products
-├── US-006: Product search
-├── US-007: Category filtering
-└── US-008: Product details
-```
-
-### Backlog validieren
+**Modus: Schreibgeschützt.**
 
 ```
 /gate:validate-backlog
 ```
 
-Jede Story muss INVEST bestehen:
-- **I**ndependent (Unabhängig)
-- **N**egotiable (Verhandelbar)
-- **V**aluable (Wertvoll)
-- **E**stimable (Schätzbar)
-- **S**mall (Klein)
-- **T**estable (Testbar)
+Dieses Gate prüft den Backlog gegen **INVEST (6/6)** und PRD-Abdeckung (**≥ 80 %**). Schlägt es fehl, zeigt es dir genau, welche Stories zu groß, nicht testbar oder nicht schätzbar sind. Korrigiere sie (führe `/workflow:plan` erneut aus oder bearbeite die Stories), bis das Gate grün ist.
 
-### Ersten Sprint planen
+> **Guter Zeitpunkt für `/clear`.** Dann `/workflow:status` zum Fortsetzen.
 
-Mit dem Scrum Master arbeiten:
+---
+
+## Schritt B — Design, dann Sprint erstellen
+
+### B.1 Technische Lösung entwerfen
+
+**Modus: Plan erforderlich.**
 
 ```
-@sm Plan sprint 1 with the highest priority stories
-Include:
-- US-001: User registration
-- US-002: User login
-- US-005: Browse products
+/workflow:design
 ```
 
-### Sprint validieren
+Claude (als Architekt) erstellt eine **Tech Spec**: Architekturentscheidungen, Datenmodell, API-Vertrag und zu verwendende Bibliotheken — verankert in den Claude-Craft-Referenzen deines Stacks (Clean Architecture, FastAPI-Muster usw.).
+
+### B.2 Tech Spec validieren
+
+**Modus: Schreibgeschützt.**
+
+```
+/gate:validate-techspec
+```
+
+Gate-Schwellenwert: **Tech Spec ≥ 90 %**. Es kennzeichnet fehlendes Error-Handling, undefinierte Verträge oder nicht testbare Designs.
+
+### B.3 Ersten Sprint planen
+
+**Modus: Plan erforderlich.**
+
+```
+/workflow:start
+```
+
+Claude schlägt ein **Sprint-Ziel** vor und wählt die wichtigsten Backlog-Stories aus, die hineinpassen. Für TaskFlow ist ein sinnvoller erster Sprint ein **Walking Skeleton**: Projekt- und Aufgabenerstellung über die API, in der Web-Liste angezeigt.
+
+### B.4 Stories in Tasks zerlegen
+
+**Modus: Plan erforderlich.**
+
+```
+/project:decompose-tasks
+```
+
+Jede Story wird in ≤ 30-minütige, unabhängig testbare **Tasks** aufgeteilt (Modell schreiben, Endpunkt schreiben, Test schreiben, UI verdrahten…). Das sorgt dafür, dass TDD und `/sprint:dev` reibungslos ablaufen.
+
+### B.5 Sprint validieren
+
+**Modus: Schreibgeschützt.**
 
 ```
 /gate:validate-sprint
 ```
 
----
+Gate-Schwellenwert: **Sprint Ready 100 %** — jede Story geschätzt, jeder Task definiert, Abhängigkeiten geordnet. Grün bedeutet, du kannst mit dem Coden beginnen.
 
-## Phase 5: Entwicklung (variabel)
-
-### Sprint-Entwicklung starten
-
-```
-/sprint:dev 1
-```
-
-Oder Story für Story vorgehen:
-
-### 5.1 Nächste Story holen
-
-```
-/sprint:next-story --claim
-```
-
-Beispiel: US-001 (Benutzerregistrierung)
-
-### 5.2 In Bearbeitung übertragen
-
-```
-/sprint:transition US-001 in-progress
-```
-
-### 5.3 TDD Red-Phase (fehlschlagende Tests schreiben)
-
-Mit dem Developer-Agenten arbeiten:
-
-```
-@dev Start TDD for US-001 (User Registration)
-Begin with 🔴 Red phase - write failing tests
-```
-
-Zuerst Tests erstellen:
-```php
-// tests/Feature/UserRegistrationTest.php
-class UserRegistrationTest extends TestCase
-{
-    public function test_user_can_register_with_valid_data(): void
-    {
-        $response = $this->post('/api/register', [
-            'email' => 'test@example.com',
-            'password' => 'SecurePass123!',
-            'name' => 'Test User'
-        ]);
-
-        $response->assertStatus(201);
-        $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
-    }
-}
-```
-
-### 5.4 TDD Green-Phase (Implementieren)
-
-```
-@dev Now implement 🟢 Green phase - make tests pass
-```
-
-Code generieren:
-```
-/symfony:generate-crud User
-```
-
-### 5.5 TDD Refactor-Phase
-
-```
-@dev 🔵 Refactor - clean up the implementation
-```
-
-### 5.6 Code Review
-
-```
-@symfony-reviewer Review the user registration implementation
-```
-
-### 5.7 Story-DoD validieren
-
-```
-/gate:validate-story US-001
-```
-
-### 5.8 Zum Review übertragen
-
-```
-/sprint:transition US-001 review
-```
-
-### 5.9 QA-Validierung
-
-```
-@qa Validate acceptance criteria for US-001
-```
-
-### 5.10 Story abschließen
-
-```
-/sprint:transition US-001 done
-```
-
-### 5.11 Wiederholen
-
-Mit der nächsten Story fortfahren, bis der Sprint abgeschlossen ist.
+> **Guter Zeitpunkt für `/clear`.**
 
 ---
 
-## Phase 6: Qualität (fortlaufend)
+## Schritt C — Sprint mit TDD implementieren
 
-### Kontextverwaltung
+### C.1 Der empfohlene Weg für Einsteiger
 
-Verwalten Sie während der Entwicklung Ihr Kontextfenster effizient:
+**Modus: Normal (⚡).**
+
+```
+/sprint:dev
+```
+
+`/sprint:dev` arbeitet den Sprint **Task für Task** ab und coacht dich durch den **Red → Green → Refactor**-TDD-Zyklus:
+
+1. **Red** — schreibe einen fehlschlagenden Test, der das erwartete Verhalten fixiert.
+2. **Green** — schreibe den minimalen Code, um ihn bestehen zu lassen.
+3. **Refactor** — räume auf, Tests bleiben grün.
+
+Für jede Story führt es außerdem ein Code-Review durch und prüft die **Story DoD (100 %)**, bevor es weitermacht.
+
+> **TDD ist nicht verhandelbar.** Ein Test, der *vor* dem Code geschrieben wird, ermöglicht es dem Agenten, Code zu schreiben, dem du vertrauen kannst. Bug-Fixes erhalten zuerst einen Regressionstest (er muss vor deiner Korrektur fehlschlagen, danach bestehen).
+
+### C.2 Alternativen (optional)
+
+- `/project:run-sprint` — führt den gesamten Sprint autonomer aus.
+- `/team:sprint` — implementiert mehrere Stories **parallel** mit Agent Teams (fortgeschritten).
+- `@tdd-coach` — rufe den Coach mitten in einem Task zur Beratung auf.
+
+Bleibe für deinen ersten Durchlauf bei `/sprint:dev`.
+
+### C.3 Tag für Tag steuern
+
+- `/sprint:next-story --claim` — nimm die nächste Story an.
+- `/sprint:transition US-001 in-progress` — bewege eine Story über das Board.
+- `/qa:tdd` — behebe einen Bug im strikten TDD/BDD-Modus.
+
+> **Docker-Erinnerung.** Führe Tests und Befehle über Docker aus, damit die Ergebnisse nicht von deiner lokalen Maschine abhängen, z. B. `docker compose exec app pytest`.
+
+---
+
+## Schritt D — Fortschritt mit dem Kanban-Board verfolgen
+
+### D.1 Board starten
+
+**Modus: Schreibgeschützt.**
+
+```
+/project:board
+```
+
+Dies öffnet ein lokales **Kanban-Board** (kein SaaS, kein Vendor Lock-in), das die BMAD-Statusdateien liest. Die Spalten folgen dem Status-Routing:
+
+```
+backlog → ready-for-dev → in-progress → review → done   (any → blocked)
+```
+
+Begleitansichten: `/project:burndown` (Sprint-Burndown), `/project:dependencies`, `/project:critical-path`, `/project:metrics`.
+
+### D.2 Warum eine Karte sich weigern kann, sich zu bewegen
+
+Das Board setzt dieselben Gates durch. Eine Story wird **done** nicht betreten, bis ihre DoD besteht — das ist die Methode, die dich schützt, kein Fehler.
+
+> **Guter Zeitpunkt für `/clear`.**
+
+---
+
+## Schritt E — Sprint abschließen und wiederholen
+
+### E.1 Sprint-Review
+
+**Modus: Normal (⚡).**
+
+```
+/workflow:review
+```
+
+Fasst zusammen, was im Vergleich zum Sprint-Ziel geliefert wurde, mit einer Demo-Checkliste.
+
+### E.2 Retrospektive
+
+```
+/workflow:retro
+```
+
+Hält fest, was gut lief / was verbessert werden soll. Speichere dauerhafte Erkenntnisse mit `/memory`, damit sie künftige `/clear`s überleben.
+
+### E.3 Wiederholen
+
+Führe `/workflow:start` erneut aus, um Sprint 2 aus dem verbleibenden Backlog zu planen. Der Zyklus wiederholt sich: Plan → Design → Implementierung → Review.
+
+---
+
+## Spickzettel
+
+### Befehle, in Reihenfolge
 
 ```bash
-# Optimierungsvorschläge für den Kontext prüfen
-/context
+# Schritt A — Backlog
+/workflow:init                 # Track wählen
+/workflow:plan                 # PRD + Backlog
+/gate:validate-backlog         # INVEST 6/6, PRD ≥ 80%
 
-# Für einfache Aufgaben auf niedrigeren Aufwand wechseln
-/effort low
+# Schritt B — Design + Sprint
+/workflow:design               # Tech Spec
+/gate:validate-techspec        # Tech Spec ≥ 90%
+/workflow:start                # Sprint planen
+/project:decompose-tasks       # Stories → Tasks
+/gate:validate-sprint          # Sprint Ready 100%
 
-# Kontext zwischen nicht zusammenhängenden Aufgaben löschen
-/clear
+# Schritt C — Implementierung (TDD)
+/sprint:dev                    # Task-für-Task Red/Green/Refactor
+/gate:validate-story US-001    # Story DoD 100%
 
-# Wichtige Erkenntnisse sitzungsübergreifend speichern
-/memory "Key architectural decision: using CQRS for order module"
+# Schritt D — Verfolgen
+/project:board                 # Kanban
+/project:burndown              # Burndown
+
+# Schritt E — Abschließen + wiederholen
+/workflow:review
+/workflow:retro
 ```
 
-### Kontinuierliche Qualitätsprüfungen
+### Wann `/clear` verwenden
 
-Regelmäßig während der Entwicklung ausführen:
+Nach jedem Schritt (A→B→C→D→E). Der Zustand lebt in Dateien; `/workflow:status` liest ihn erneut ein.
 
-```bash
-# Wiederkehrende Qualitätsüberwachung einrichten
-/loop 5m /common:pre-commit-check
+### Wo Dateien liegen
 
-# Architekturprüfung
-/symfony:check-architecture
+| Was | Wo |
+|-----|----|
+| PRD, Personas | `project-management/prd.md` |
+| Backlog (Epics/Stories) | `project-management/backlog/` |
+| Sprints, Tasks | `project-management/sprints/` |
+| BMAD-Status | `project-management/.bmad/` / `sprint-status.yaml` |
 
-# Codequalität
-/symfony:check-code-quality
+### Gate-Schwellenwerte
 
-# Sicherheits-Audit
-/symfony:check-security
+| Gate | Schwellenwert |
+|------|---------------|
+| PRD | ≥ 80 % |
+| Tech Spec | ≥ 90 % |
+| INVEST | 6/6 |
+| Sprint Ready | 100 % |
+| Story DoD | 100 % |
+| Spec Alignment | ≥ 85 % |
 
-# Testabdeckung
-/symfony:check-testing
-```
+### Häufige Probleme
 
-### Vollständiges Audit vor dem Release
-
-```
-/team:audit --sequential
-```
-
-### Pre-Commit-Validierung
-
-Immer vor dem Commit:
-
-```
-/common:pre-commit-check
-```
-
-### Sprint-Review
-
-Am Ende des Sprints:
-
-```
-@sm Run sprint review for sprint 1
-```
-
-### Retrospektive
-
-```
-@sm Run sprint retrospective
-```
+| Symptom | Lösung |
+|---------|--------|
+| `/gate:*` / `/sprint:*` unbekannt | Neuinstallation und *Project Management commands* akzeptieren. |
+| `/bmad:init` nicht gefunden | Existiert nicht — verwende `/workflow:init`. |
+| Gate schlägt weiter fehl | Lies den Bericht; er nennt das genau fehlschlagende Element. |
+| Karte erreicht **done** nicht | Ihre DoD ist noch nicht erfüllt — das ist so beabsichtigt. |
+| Verloren nach `/clear` | Führe `/workflow:status` aus. |
+| Kontext > 60 % | `/clear`, dann `/workflow:status`. |
 
 ---
 
-## Phase 7: Deployment (30–60 Minuten)
+## Mit Ralph automatisieren (optional)
 
-### Docker-Konfiguration vorbereiten
-
-```
-@docker-architect Design Docker architecture for production
-```
-
-### Docker-Dateien erstellen
+Sobald du dich wohlfühlst, automatisiere eine Story von Anfang bis Ende mit dem kontinuierlichen Loop:
 
 ```
-/docker:compose-setup symfony postgresql redis
+/common:ralph-run "Implement US-001 with full DoD validation"
 ```
 
-### CI/CD-Pipeline erstellen
-
-```
-/docker:cicd-pipeline github-actions
-```
-
-### Sicherheitsprüfung
-
-```
-/docker:security-scan
-```
-
-### Pre-Release-Checkliste
-
-```
-/common:release-checklist
-```
-
-### Deployen
-
-```bash
-# Bauen und testen
-docker compose -f docker-compose.prod.yml build
-docker compose -f docker-compose.prod.yml up -d
-
-# Migrationen ausführen
-docker compose exec app php bin/console doctrine:migrations:migrate
-
-# Gesundheit überprüfen
-curl https://your-app.com/health
-```
+Ralph hält Claude am Arbeiten, bis die Definition-of-Done-Validatoren bestehen. Siehe [RALPH-GUIDE.md](../../RALPH-GUIDE.md).
 
 ---
 
-## Ralph für die Automatisierung verwenden
+## Anhang — Ein reales Multi-Stack-Szenario
 
-Für automatisierte Entwicklungszyklen Ralph Wiggum verwenden:
+TaskFlow ist absichtlich Single-Stack. Echte Produkte sind unordentlicher — und derselbe Workflow skaliert auf sie. Als reicheres Beispiel betrachte eine Wrandly-ähnliche App (anonymisierte Version als Test-Fixture unter `tests/fixtures/wrandly-anon/`):
 
-```bash
-# Ein Feature automatisch implementieren
-/common:ralph-run "Implement user registration with TDD"
+- **Zwei Clients:** eine Web-PWA (Symfony + React) **und** eine Flutter-Mobile-App, plus eine eigene REST-API.
+- **Ein Design-Handoff existiert bereits** vor Entwicklungsbeginn (ein „Claude Design"-Paket): Quelldokumente, 5 gesperrte Architekturentscheidungen und ein phasenweiser Plan (Epics 0 → 7).
 
-# Mit vollständigen DoD-Prüfungen
-/common:ralph-run --full "Add password reset feature"
-```
+So ordnet es sich in dieses Tutorial ein:
 
-Ralph iteriert, bis:
-- Alle Tests bestehen
-- Lint besteht
-- DoD-Validatoren bestehen
+| Design-Artefakt | Fließt ein in |
+|-----------------|---------------|
+| Quelldokumente | `/workflow:plan` (Eingabe für PRD + Backlog) |
+| Gesperrte Architekturentscheidungen | `/workflow:design` (in der Tech Spec formalisiert) |
+| Phasen 0 → 7 | Die Aufteilung Epics → Sprints |
 
----
+Zwei Anpassungen für Multi-Stack:
 
-## Vollständige Befehlssequenz
+1. **Beginne mit dem Foundation-Epic** (Epic 0): Monorepo, gemeinsame Design-Tokens, der OpenAPI-Vertrag und ein Map-Style **bevor** irgendeine UI-Komponente — ein echtes *Walking Skeleton*.
+2. **Führe Web- und Mobile-Sprints parallel** mit `/team:sprint` (Agent Teams) aus, wobei jeder die Gates seines eigenen Stacks respektiert.
 
-Hier ist eine komprimierte Sequenz für ein typisches Feature:
-
-```bash
-# 0. Session einrichten
-/effort high                    # Komplexe Planung
-/common:setup-rtk               # Token-Optimierung (nur beim ersten Mal)
-
-# 1. Initialisieren
-/bmad:init
-
-# 2. Definieren (PM)
-@pm Create PRD for the feature
-/gate:validate-prd docs/prd.md
-
-# 3. Entwerfen (Architekt)
-@architect Create technical specification
-/gate:validate-techspec docs/tech-spec.md
-
-# 4. Planen (PO + SM)
-@po Create user stories
-@sm Plan sprint 1
-/gate:validate-sprint
-
-# 5. Entwickeln (Dev)
-/sprint:next-story --claim
-@dev Implement with TDD
-/gate:validate-story US-001
-/sprint:transition US-001 done
-
-# 6. Überprüfen (QA)
-@qa Validate acceptance criteria
-/team:audit --sequential
-
-# 7. Deployen
-/docker:cicd-pipeline github-actions
-/common:release-checklist
-```
-
----
-
-## Tipps für den Erfolg
-
-### 0. Ihr Kontextfenster verwalten
-
-Das Kontextfenster ist Ihre wichtigste Ressource:
-- `/effort low` für einfache Aufgaben, `/effort high` für komplexe
-- `/context` regelmäßig verwenden, um Optimierungsvorschläge zu prüfen
-- `/clear` zwischen nicht zusammenhängenden Aufgaben ausführen
-- `/memory` verwenden, um wichtige Entscheidungen sitzungsübergreifend zu speichern
-- `/loop` für wiederkehrende Prüfungen statt manueller Ausführungen einrichten
-
-### 1. Quality-Gates nicht überspringen
-
-Jedes Gate deckt andere Probleme auf:
-- PRD-Gate → Verhindert das Bauen der falschen Sache
-- Tech-Spec-Gate → Verhindert Architekturprobleme
-- Backlog-Gate → Stellt sicher, dass Stories implementierbar sind
-- Story-DoD → Sichert Codequalität
-
-### 2. Agenten kollaborativ nutzen
-
-Agenten sich gegenseitig übergeben lassen:
-```
-@bmad-master Route this to the appropriate agent
-```
-
-### 3. TDD ist nicht verhandelbar
-
-Immer dem Schema folgen: 🔴 Red → 🟢 Green → 🔵 Refactor.
-
-### 4. Entscheidungen dokumentieren
-
-ADRs für wichtige Entscheidungen verwenden:
-```
-@architect Create ADR for choosing X over Y
-```
-
-### 5. Regelmäßige Reviews
-
-- Täglich: `/common:daily-standup`
-- Sprint-Ende: `@sm Run sprint review`
-- Kontinuierlich: `@{tech}-reviewer Review this code`
-
----
-
-## Fehlerbehebung
-
-### Quality-Gate schlägt fehl
-
-```
-/gate:report
-```
-
-Prüfen, welche Kriterien fehlen.
-
-### Story blockiert
-
-```
-/sprint:transition US-001 blocked --reason="Waiting for API"
-```
-
-### Rollback erforderlich
-
-Bei Verwendung von Ralph mit Git-Checkpointing:
-```bash
-git log --oneline --grep="[ralph]"
-git reset --hard HEAD~3
-```
+Alles andere — Gates, TDD, das Kanban-Board, `/clear`-Disziplin — ist identisch. Die Methode ändert sich nicht mit dem Umfang; nur die Anzahl der parallelen Tracks ändert sich.
 
 ---
 
 ## Nächste Schritte
 
-- [BMAD-Praxisleitfaden](../BMAD-PRACTICAL-GUIDE.md) – Tiefes Eintauchen in BMAD
-- [Ralph-Wiggum-Leitfaden](../RALPH-GUIDE.md) – Automatisierte Entwicklung
-- [Befehls-Referenz](../COMMANDS.md) – Alle verfügbaren Befehle
-- [Agenten-Referenz](../AGENTS.md) – Alle verfügbaren Agenten
+- [Feature-Entwicklung](03-feature-development.md) — tiefer in den TDD-Loop und Agenten einsteigen.
+- [Backlog-Verwaltung](07-backlog-management.md) — Epics, Stories und die 15+ Projektbefehle meistern.
+- [BMAD Praktischer Leitfaden](../../BMAD-PRACTICAL-GUIDE.md) — die vollständige Befehlsreferenz für die Methode.
+- [Autonomer Sprint](../AUTONOMOUS-SPRINT.md) — eine Agenten-Pipeline den gesamten Sprint ausführen lassen.
+- [Lernpfade](../../LEARNING-PATHS.md) — Einsteiger → Fortgeschrittene → Experten-Progression.

@@ -1,5 +1,7 @@
 # Analyse Concurrentielle Claude-Craft
 
+> **Document stratégique (mainteneurs).** Cette analyse expose le positionnement marché, les forces, **les faiblesses internes** et la roadmap — elle n'est pas destinée à l'onboarding utilisateur. Pour une comparaison honnête orientée utilisateur (« quel outil choisir ? »), voir [`comparison-claude-craft-vs-superclaude.md`](comparison-claude-craft-vs-superclaude.md).
+
 **Version:** 8.16.1 | **Date:** 2026-06-24 | **Mise à jour précédente :** 2026-06-12
 
 ---

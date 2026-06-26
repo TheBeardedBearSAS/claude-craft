@@ -12,7 +12,7 @@ Guide opérationnel pour la gestion de la communauté Claude Craft : Discord, en
 
 | Salon | Description | Rôle auto-assignable |
 |-------|-------------|----------------------|
-| `#symfony` | Questions, discussions Symfony 8.0+ | @symfony-dev |
+| `#symfony` | Questions, discussions Symfony 8.1+ | @symfony-dev |
 | `#react` | React 19.2, Server Components, Compiler | @react-dev |
 | `#flutter` | Flutter 3.44, Dart 3.12, BLoC v9 | @flutter-dev |
 | `#python` | Python 3.14+, FastAPI, async | @python-dev |
@@ -21,7 +21,7 @@ Guide opérationnel pour la gestion de la communauté Claude Craft : Discord, en
 | `#angular` | Angular 22, Signals, Zoneless | @angular-dev |
 | `#vuejs` | Vue 3.5+, Composition API, Pinia | @vuejs-dev |
 | `#csharp` | C# 14, .NET 10 LTS, Clean Architecture | @csharp-dev |
-| `#reactnative` | React Native 0.85, New Architecture | @reactnative-dev |
+| `#reactnative` | React Native 0.86, New Architecture | @reactnative-dev |
 | `#go` | Go 1.24+, Clean Architecture patterns | @go-dev |
 | `#rust` | Rust 1.85+, async, patterns | @rust-dev |
 | `#svelte` | Svelte 5+, Runes, SvelteKit 3 | @svelte-dev |

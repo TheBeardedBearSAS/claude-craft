@@ -580,7 +580,7 @@ Generate output
 ### BMAD Flow
 
 ```
-/bmad:init
+/workflow:init
      │
      ▼
 Create .bmad/ structure

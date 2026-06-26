@@ -8,8 +8,8 @@ Complete working examples demonstrating Claude Craft capabilities.
 
 | Example | Description | Technologies |
 |---------|-------------|--------------|
-| [Symfony API](symfony-api/) | Complete REST API | Symfony 8, API Platform, PostgreSQL |
-| [Flutter App](flutter-app/) | Mobile application | Flutter 3.38, BLoC, Riverpod |
+| [Symfony API](symfony-api/) | Complete REST API | Symfony 8.1, API Platform, PostgreSQL |
+| [Flutter App](flutter-app/) | Mobile application | Flutter 3.44, BLoC, Riverpod |
 | [Fullstack SaaS](fullstack-saas/) | Complete SaaS | Symfony + Flutter + Docker |
 
 ---
