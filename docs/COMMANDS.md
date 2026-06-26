@@ -35,7 +35,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
-> Les **15 namespaces cœur + technologies** (`/common`, `/workflow`, `/team`, `/qa`, `/uiux` + les 11 stacks dont `/paperclip:*`) totalisent **125 commandes** — c'est le chiffre d'en-tête de Claude Craft. Le tableau ci-dessous inclut en plus les namespaces d'infrastructure et de gestion de projet (BMAD), pour un total installable de **219 commandes sur 27 namespaces**. Référence détaillée auto-générée : [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> Les **15 namespaces cœur + technologies** (`/common`, `/workflow`, `/team`, `/qa`, `/uiux` + les 11 stacks dont `/paperclip:*`) totalisent **126 commandes** — c'est le chiffre d'en-tête de Claude Craft. Le tableau ci-dessous inclut en plus les namespaces d'infrastructure et de gestion de projet (BMAD), pour un total installable de **220 commandes sur 27 namespaces**. Référence détaillée auto-générée : [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
@@ -92,6 +92,7 @@ Transversal commands for all projects.
 | Command | Description |
 |---------|-------------|
 | `/workflow:start` | Initialize a new sprint |
+| `/workflow:auto-sprint` | End-to-end sprint orchestrator (start → decompose → validate → implement → PR → CI → review → retro → merge) |
 | `/workflow:review` | Generate sprint review summary |
 | `/workflow:retro` | Conduct sprint retrospective |
 | `/common:daily-standup` | Generate standup summary |
@@ -213,6 +214,7 @@ BMAD-inspired workflow system adapted to project complexity.
 | `/workflow:retro` | Sprint retrospective |
 | `/workflow:review` | Sprint review summary |
 | `/workflow:start` | Start a new sprint |
+| `/workflow:auto-sprint` | End-to-end sprint orchestrator (PO/SM): chains start → decompose → validate → implement → PR → CI watch → review → retro → merge, each step in an isolated sub-agent (replaces `/clear`) |
 
 ---
 
