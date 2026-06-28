@@ -2,7 +2,7 @@
 
 > **TL;DR :** SuperClaude is a viral, single-prompt persona library optimised for individual developers. Claude Craft is a multi-stack, team-oriented framework with sprint workflow and browser-based QA. They solve different problems for different audiences. This page compares them honestly so you can pick the right tool.
 
-**Last updated :** 2026-06-27 | **Claude Craft v8.18.0** | **SuperClaude v4.x (snapshot 2026-06)**
+**Last updated :** 2026-06-27 | **Claude Craft v8.18.1** | **SuperClaude v4.x (snapshot 2026-06)**
 
 > **Looking for the broader market picture?** This page is the user-facing, single-competitor comparison. For the full strategic landscape (all competitors, SWOT, roadmap), see the maintainer doc [`COMPETITIVE-ANALYSIS.md`](COMPETITIVE-ANALYSIS.md).
 

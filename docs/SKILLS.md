@@ -270,7 +270,7 @@ ls ~/my-project/.claude/skills/
 | **Total unique** | **55** |
 | **With i18n (×5)** | **275** |
 
-> **Note :** Skills are counted across the full distribution (55 unique skills as of v8.18.0). The table above groups them by primary audience; many common skills (e.g. `security`, `testing`, `solid-principles`) are applicable to all stacks.
+> **Note :** Skills are counted across the full distribution (55 unique skills as of v8.18.1). The table above groups them by primary audience; many common skills (e.g. `security`, `testing`, `solid-principles`) are applicable to all stacks.
 
 The 55 skills include: `adapter-development`, `aggregates`, `api-gateway`, `architect`, `architecture`, `architecture-clean-ddd`, `architecture-paperclip`, `async`, `atomic-tasks`, `coding-standards`, `coding-standards-ts`, `cqrs`, `ddd-patterns`, `debug-methodical`, `design-md-convention`, `docker-hadolint`, `doctrine-extensions`, `documentation`, `domain-events`, `ecosystem-tools`, `edge-computing`, `event-driven`, `git-workflow`, `graphql`, `i18n`, `kiss-dry-yagni`, `monorepo`, `multitenant`, `navigation`, `observability`, `paperclip-onboarding`, `parallel-worktrees`, `performance`, `quality-tools`, `remotion`, `security`, `security-flutter`, `security-paperclip`, `security-react`, `security-reactnative`, `security-symfony`, `socratic-brainstorm`, `solid-principles`, `state-management`, `testing`, `testing-flutter`, `testing-paperclip`, `testing-python`, `testing-react`, `testing-reactnative`, `testing-symfony`, `tooling`, `value-objects`, `wasm`, `workflow-analysis`.
 
