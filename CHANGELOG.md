@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.18.1] - 2026-06-28
+
+### Changed
+
+- **Site de documentation — Lighthouse 100 + zéro erreur console** : score Lighthouse 100 (médiane) sur les 4 catégories (Performance, Accessibility, Best Practices, SEO) sur tous les écrans, avec zéro erreur console. Tests écrits avant correction (TDD) : gate Lighthouse dockerisé (`website/tests/lighthouse/`), `console-errors.spec.ts`, et `accessibility.spec.ts` durci (WCAG 2.1 AA complet, `color-contrast` réactivé).
+- **Accessibilité (WCAG 2.1 AA réel)** : contrastes corrigés (brand, label langage code, texte muté, commentaire Shiki), `label-content-name-mismatch` du bouton de recherche, et `nested-interactive` du caret de sidebar collapsible (patch `Layout.vue`).
+- **Performance** : fonts self-hostées (suppression de la requête Google Fonts externe), `content-visibility` sur les tables denses, profondeur d'outline réduite. La page de référence des commandes (anglais) est découpée en index léger + une page par namespace (`website/scripts/split-commands.mjs`) pour atteindre 100.
+
+### Fixed
+
+- Régression potentielle d'accessibilité : le test axe du site n'excluait plus `color-contrast` ni les composants du thème — toute violation WCAG 2.1 AA fait désormais échouer la CI.
+
 ## [8.18.0] - 2026-06-27
 
 ### Added
