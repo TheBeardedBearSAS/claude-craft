@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test'
+import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: '.',
@@ -7,6 +7,11 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4173/claude-craft/',
     headless: true,
+    // In CI/Docker, use the system Chromium (CHROME_PATH) so no Playwright browser
+    // download is needed; falls back to Playwright's bundled Chromium locally.
+    launchOptions: process.env.CHROME_PATH
+      ? { executablePath: process.env.CHROME_PATH, args: ['--no-sandbox', '--disable-dev-shm-usage'] }
+      : {},
   },
   projects: [
     {
@@ -20,4 +25,4 @@ export default defineConfig({
     reuseExistingServer: true,
     cwd: '..',
   },
-})
+});
