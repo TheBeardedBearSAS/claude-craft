@@ -136,6 +136,10 @@ copy_doc "$DOCS_DIR/CONFIGURATION.md"            "$WEBSITE_DIR/en/getting-starte
 
 copy_doc "$DOCS_DIR/CLI-REFERENCE.md"            "$WEBSITE_DIR/en/reference/cli.md" "CLI Reference" "Full CLI documentation"
 copy_doc "$DOCS_DIR/COMMANDS.md"                 "$WEBSITE_DIR/en/reference/commands.md" "Commands" "All slash commands"
+# Split the dense Commands reference (126 headings / 426 rows) into a light index page +
+# one small page per namespace, so every screen stays Lighthouse-100. en-only (this page
+# is not translated). Idempotent and locale-agnostic.
+node "$SCRIPT_DIR/split-commands.mjs" "$WEBSITE_DIR/en/reference/commands.md" "/en/reference/commands"
 copy_doc "$DOCS_DIR/COMMANDS-FULL-REFERENCE.md"  "$WEBSITE_DIR/en/reference/commands-full.md" "Commands (Full Reference)" "Complete command documentation"
 copy_doc "$DOCS_DIR/AGENTS.md"                   "$WEBSITE_DIR/en/reference/agents.md" "Agents" "All AI agents"
 copy_doc "$DOCS_DIR/AGENTS-FULL-REFERENCE.md"    "$WEBSITE_DIR/en/reference/agents-full.md" "Agents (Full Reference)" "Complete agent documentation"

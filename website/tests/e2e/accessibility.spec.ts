@@ -2,37 +2,19 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 test.describe('Accessibility', () => {
-  test('landing page has no critical WCAG 2.1 AA violations', async ({ page }) => {
+  // Lighthouse-100 target: full WCAG 2.1 AA, color-contrast included (no rule disabling).
+  test('landing page has no WCAG 2.1 AA violations', async ({ page }) => {
     await page.goto('./');
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa'])
-      .exclude('.VPSwitch') // VitePress internal theme toggle — color-contrast not under our control
-      .exclude('.VPSidebar') // VitePress sidebar — nested-interactive and contrast violations in theme
-      .exclude('button.copy') // VitePress code copy buttons — theme colors
-      // TODO(a11y, audit 2026-05-18 A11Y-06): color-contrast currently disabled because the landing
-      // page brand palette has several violations. Track these in a dedicated ticket and re-enable
-      // with targeted .exclude() once palette is fixed.
-      .disableRules(['color-contrast'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
-    const critical = results.violations.filter((v) => v.impact === 'critical' || v.impact === 'serious');
-    expect(critical).toEqual([]);
+    expect(results.violations).toEqual([]);
   });
 
-  test('doc page has no critical WCAG 2.1 AA violations', async ({ page }) => {
+  test('doc page has no WCAG 2.1 AA violations', async ({ page }) => {
     await page.goto('en/getting-started/quickstart');
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa'])
-      .exclude('.VPSwitch') // VitePress internal theme toggle — color-contrast not under our control
-      .exclude('.VPSidebar') // VitePress sidebar (nested-interactive and contrast violations)
-      .exclude('button.copy') // VitePress code copy buttons — theme colors
-      // TODO(a11y, audit 2026-05-18 A11Y-06): doc page inherits VitePress theme contrast violations.
-      // Track in dedicated ticket and re-enable with targeted .exclude() once theme overrides land.
-      .disableRules(['color-contrast'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
-    const critical = results.violations.filter((v) => v.impact === 'critical' || v.impact === 'serious');
-    expect(critical).toEqual([]);
+    expect(results.violations).toEqual([]);
   });
 
   test('landing page has html lang attribute', async ({ page }) => {

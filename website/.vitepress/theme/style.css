@@ -1,5 +1,20 @@
+/* Self-hosted JetBrains Mono (variable, latin subset) — replaces the render-blocking
+   external Google Fonts request. Inter is already self-hosted by the VitePress theme. */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/claude-craft/fonts/jetbrains-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
-  --vp-c-brand-1: #8b5cf6;
+  /* brand-1 is used as link / sidebar / inline-code text on dark bg.
+     #a78bfa (violet-400) clears WCAG AA (>=5.3:1) on every theme bg; #8b5cf6 failed (4.2:1). */
+  --vp-c-brand-1: #a78bfa;
   --vp-c-brand-2: #7c3aed;
   --vp-c-brand-3: #6d28d9;
   --vp-c-brand-soft: rgba(139, 92, 246, 0.14);
@@ -41,6 +56,15 @@
   background: #475569;
 }
 
+/* Long reference pages (e.g. the 126-row commands table) carry very large DOMs.
+   content-visibility lets the browser skip layout/paint of off-screen blocks, cutting
+   FCP/LCP and main-thread Style&Layout cost; contain-intrinsic-size reserves space so
+   initial CLS stays ~0. Applies to the node-heavy tables and long content sections. */
+.vp-doc table {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
 /* Code blocks */
 .dark .vp-code-group .tabs label {
   color: #94a3b8;
@@ -48,4 +72,17 @@
 
 .dark div[class*='language-'] {
   background-color: #1e293b !important;
+}
+
+/* Code-block language label: theme default (#6a6a71) only reaches 2.7:1 on #1e293b.
+   #94a3b8 clears AA (>=5.7:1). */
+.dark div[class*='language-'] > span.lang {
+  color: #94a3b8;
+}
+
+/* Local-search button: the keyboard-shortcut hint (⌘K) makes the visible text differ
+   from aria-label="Search" (label-content-name-mismatch). display:none drops it from the
+   a11y tree so the accessible name matches the visible "Search" text. */
+.DocSearch-Button-Keys {
+  display: none !important;
 }

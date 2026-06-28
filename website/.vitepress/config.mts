@@ -73,15 +73,28 @@ export default defineConfig({
 
   head: [
     ['link', { rel: 'icon', href: '/claude-craft/favicon.ico' }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
-    ['link', { href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap', rel: 'stylesheet' }],
+    // Fonts are self-hosted (Inter via VitePress theme, JetBrains Mono in public/fonts/).
+    // No external Google Fonts request — removes a render-path round-trip and a third-party dependency.
   ],
 
   appearance: 'dark',
   lastUpdated: true,
   cleanUrls: true,
   ignoreDeadLinks: true,
+
+  markdown: {
+    // WCAG AA: the default github-dark Shiki comment color (#6A737D) only reaches
+    // 3.0:1 on our code-block background — below the 4.5:1 threshold. Lift it to
+    // #9198A1 (>=5:1) at build time without altering any other syntax token.
+    codeTransformers: [
+      {
+        name: 'wcag-comment-contrast',
+        postprocess(html: string) {
+          return html.replace(/#6A737D/gi, '#9198A1')
+        },
+      },
+    ],
+  },
 
   themeConfig: {
     logo: '/logo.svg',
@@ -160,7 +173,10 @@ export default defineConfig({
       { text: 'Changelog', link: '/en/changelog' },
     ],
 
-    outline: { level: [2, 3] },
+    // Outline level 2 (h2 only): on dense reference pages the deep [2,3] outline rendered
+    // 100+ aside anchors, inflating DOM + hydration cost. h2-only keeps navigation useful
+    // while trimming the right-rail node count (also the VitePress default).
+    outline: { level: 2 },
 
     sidebar: {
       '/en/': [

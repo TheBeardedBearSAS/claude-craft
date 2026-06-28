@@ -15,3 +15,6 @@ de/*
 !de/index.md
 pt/*
 !pt/index.md
+
+# Lighthouse harness reports (generated)
+tests/lighthouse/reports/

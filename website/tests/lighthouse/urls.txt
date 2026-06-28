@@ -1,0 +1,13 @@
+# Representative screens (cleanUrls). Landing = shared LandingPage.vue across locales;
+# doc pages = shared VitePress theme. Covers every screen type × locale sample.
+/
+/fr/
+/es/
+/de/
+/pt/
+/en/faq
+/fr/faq
+/en/getting-started/quickstart
+/en/reference/commands
+/en/reference/commands/common-commands
+/en/guides/01-getting-started

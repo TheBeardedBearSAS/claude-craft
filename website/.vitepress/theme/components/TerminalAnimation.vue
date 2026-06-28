@@ -20,7 +20,7 @@ let cursorTimer: ReturnType<typeof setInterval> | null = null
 const sequence = [
   {
     text: 'account list',
-    output: 'Available accounts:<br>* <span style="color:white">personal</span> (active)<br>&nbsp; <span style="color:#64748b">work-profile</span>',
+    output: 'Available accounts:<br>* <span style="color:white">personal</span> (active)<br>&nbsp; <span style="color:#94a3b8">work-profile</span>',
     action: () => {},
   },
   {
@@ -113,7 +113,7 @@ const badgeColors: Record<string, { bg: string; text: string; border: string }> 
 
 <template>
   <div style="background: rgba(30,41,59,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 0.75rem;">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; margin-bottom: 0.5rem; color: #64748b;">{{ t('term_preview_label') }}</div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; margin-bottom: 0.5rem; color: #94a3b8;">{{ t('term_preview_label') }}</div>
     <div style="background: rgba(0,0,0,0.8); border-radius: 0.5rem; padding: 1.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.6; min-height: 220px; display: flex; flex-direction: column; position: relative; overflow: hidden;">
       <!-- Status Bar -->
       <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
