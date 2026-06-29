@@ -69,8 +69,8 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "21.0.2",
-    "@commitlint/config-conventional": "21.0.2",
+    "@commitlint/cli": "21.1.0",
+    "@commitlint/config-conventional": "21.1.0",
     "@eslint/js": "^10.0.0",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/space-grotesk": "^5.2.10",
@@ -81,10 +81,10 @@
     "cytoscape": "^3.33.2",
     "cytoscape-dagre": "^4.0.0",
     "dompurify": "^3.4.11",
-    "eslint": "10.5.0",
+    "eslint": "10.6.0",
     "eslint-config-prettier": "^10.0.0",
     "fast-check": "^4.8.0",
-    "prettier": "3.8.4",
+    "prettier": "3.9.3",
     "svelte": "^5.55.4",
     "uplot": "^1.6.32",
     "vite": "^8.0.14",
