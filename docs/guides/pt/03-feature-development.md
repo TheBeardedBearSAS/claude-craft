@@ -56,6 +56,8 @@ Para fases de análise que exigem raciocínio profundo, defina alto esforço:
 
 Use `/effort low` para buscas simples e `/effort medium` para trabalho de implementação padrão.
 
+> **Modelos atuais (junho de 2026):** `low` → Haiku 4.5, `medium` → **Sonnet 5** (`claude-sonnet-5`, lançado em 2026-06-30 — agêntico, preço inicial $2/$10 por M tokens até 2026-08-31), `high`/`xhigh` → Opus 4.8. O alias `model:` resolve automaticamente para a versão mais recente, então `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` agora aponta para Sonnet 5. Fable 5 está suspenso — não usar. Tabela completa de preços/roteamento: [FAQ](../../FAQ.md).
+
 ### Usando o Comando de Análise
 
 ```bash

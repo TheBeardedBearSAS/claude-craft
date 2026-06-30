@@ -58,6 +58,10 @@ Cette commande va :
 3. Lister les cas limites potentiels
 4. Suggérer une approche d'implémentation
 
+**Régler l'effort :** `/effort high` pour les phases d'analyse exigeant un raisonnement profond ; `/effort low` pour les recherches simples, `/effort medium` pour l'implémentation standard.
+
+> **Modèles courants (juin 2026) :** `low` → Haiku 4.5, `medium` → **Sonnet 5** (`claude-sonnet-5`, sorti le 2026-06-30 — agentique, prix intro $2/$10 par M tokens jusqu'au 2026-08-31), `high`/`xhigh` → Opus 4.8. L'alias `model:` se résout automatiquement vers la dernière version, donc `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` pointe désormais vers Sonnet 5. Fable 5 est suspendu — ne pas l'utiliser. Grille complète prix/routage : [FAQ](../../FAQ.md).
+
 ### Utiliser l'Agent de Recherche
 
 ```markdown
