@@ -306,18 +306,20 @@ brew install --cask react-native-debugger
 # https://github.com/jhen0409/react-native-debugger
 ```
 
-### React Native DevTools (0.85+)
+### React Native DevTools (stable since RN 0.76, default since RN 0.85+)
 
-Flipper is deprecated since React Native 0.73. The official replacement is **React Native DevTools**, natively integrated in Metro. RN 0.85 makes it the default debugger and stabilizes key features.
+Flipper is deprecated since React Native 0.73. The official replacement is **React Native DevTools**, natively integrated in Metro. DevTools is stable since RN 0.76 and is the default debugger since RN 0.85 — no CLI flag is required.
 
 ```bash
-# Start with debugger (RN 0.73+)
-npx react-native start --experimental-debugger
+# Start Metro normally — DevTools opens via the dev menu or by pressing `j`
+npx react-native start
 
 # Open from app via dev menu
 # iOS: Cmd+D (simulator) or shake device
 # Android: Cmd+M (emulator) or shake device
 # Select "Open DevTools" in the menu
+
+# Or press `j` in the Metro terminal to open DevTools directly
 ```
 
 #### React Native DevTools 0.85+ Features
@@ -391,7 +393,7 @@ npx expo install expo-camera@latest
 - [ ] Expo CLI installé
 - [ ] EAS CLI configuré
 - [ ] Metro config optimisé
-- [ ] Debugger configured (React Native DevTools 0.85+ via `--experimental-debugger`)
+- [ ] Debugger configured (React Native DevTools — default since RN 0.85+, no flag required, press `j` in Metro or use dev menu)
 - [ ] Metro TLS configured if local HTTPS required (deep links, secure origins)
 - [ ] VS Code extensions installed
 - [ ] Consistent package manager (npm)

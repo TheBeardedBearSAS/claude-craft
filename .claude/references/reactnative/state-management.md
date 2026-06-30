@@ -260,9 +260,10 @@ export const useThemeStore = create<ThemeState>((set) => ({
   setTheme: (isDark) => set({ isDark }),
 }));
 
-// Usage
+// Usage — sélecteurs individuels (primitives) : pas besoin de useShallow
 const SettingsScreen = () => {
-  const { isDark, toggleTheme } = useThemeStore();
+  const isDark = useThemeStore((state) => state.isDark);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
   return (
     <Switch value={isDark} onValueChange={toggleTheme} />
@@ -363,6 +364,28 @@ const CartScreen = () => {
   );
 };
 ```
+
+### useShallow — Multi-champs sans re-render inutile
+
+Quand un sélecteur retourne un **objet ou un tableau**, une nouvelle référence est créée à chaque appel — ce qui déclenche un re-render même si les valeurs n'ont pas changé. Utiliser `useShallow` de `zustand/shallow` pour une égalité shallow.
+
+```typescript
+import { useShallow } from 'zustand/shallow';
+
+// ❌ Mauvais : retourne un nouvel objet à chaque render → re-render systématique
+const { nuts, honey } = useBearStore((state) => ({ nuts: state.nuts, honey: state.honey }));
+
+// ✅ Bon option 1 : useShallow — égalité shallow sur l'objet retourné
+const { nuts, honey } = useBearStore(
+  useShallow((state) => ({ nuts: state.nuts, honey: state.honey }))
+);
+
+// ✅ Bon option 2 : sélecteurs primitifs individuels (sans useShallow)
+const nuts = useBearStore((state) => state.nuts);
+const honey = useBearStore((state) => state.honey);
+```
+
+> **Règle :** Pour 1-2 champs primitifs, préférer les sélecteurs individuels. Pour 3+ champs ou un objet structuré, utiliser `useShallow`.
 
 ### Slices Pattern
 

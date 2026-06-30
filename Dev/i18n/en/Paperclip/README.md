@@ -9,13 +9,13 @@ This directory contains the Claude-Craft rules, commands, skills, and templates 
 
 | Tool | Version |
 |---|---|
-| Node.js | 20+ (LTS) |
+| Node.js | 22+ LTS |
 | TypeScript | 5.x (strict) |
 | pnpm | 9.15+ |
 | React | 19+ (web UI) |
 | Vitest | 4.1+ |
 | PostgreSQL | 15+ (or embedded for dev) |
-| Paperclip | 2026.529.0+ |
+| Paperclip | 2026.609.0+ |
 
 ## What's in here
 

@@ -258,9 +258,10 @@ export const useThemeStore = create<ThemeState>((set) => ({
   setTheme: (isDark) => set({ isDark }),
 }));
 
-// Usage
+// Usage — individual selectors (primitives): no useShallow needed
 const SettingsScreen = () => {
-  const { isDark, toggleTheme } = useThemeStore();
+  const isDark = useThemeStore((state) => state.isDark);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
   return (
     <Switch value={isDark} onValueChange={toggleTheme} />
@@ -361,6 +362,28 @@ const CartScreen = () => {
   );
 };
 ```
+
+### useShallow — Multi-field without unnecessary re-renders
+
+When a selector returns an **object or array**, a new reference is created on each call — triggering a re-render even when values haven't changed. Use `useShallow` from `zustand/shallow` for shallow equality.
+
+```typescript
+import { useShallow } from 'zustand/shallow';
+
+// ❌ Bad: returns a new object on every render → re-renders on every store update
+const { nuts, honey } = useBearStore((state) => ({ nuts: state.nuts, honey: state.honey }));
+
+// ✅ Good option 1: useShallow — shallow equality on the returned object
+const { nuts, honey } = useBearStore(
+  useShallow((state) => ({ nuts: state.nuts, honey: state.honey }))
+);
+
+// ✅ Good option 2: individual primitive selectors (no useShallow needed)
+const nuts = useBearStore((state) => state.nuts);
+const honey = useBearStore((state) => state.honey);
+```
+
+> **Rule:** For 1-2 primitive fields, prefer individual selectors. For 3+ fields or a structured object, use `useShallow`.
 
 ### Slices Pattern
 

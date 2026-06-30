@@ -182,10 +182,21 @@ $this->logger->info('User login attempt', [
 ```php
 <?php
 
-// ❌ DANGEREUX: XML parsing sans protection
-$xml = simplexml_load_string($userInput);
+// ✅ SÛR: libxml 2.9+ (défaut depuis PHP 7/2013) désactive les entités externes par défaut.
+// Ne PAS passer LIBXML_NOENT ni LIBXML_DTDLOAD avec de la saisie utilisateur.
+$xml = simplexml_load_string($userInput);  // safe — aucun flag supplémentaire
 
-// ✅ SÛR: Désactiver external entities
+// ✅ SÛR (défense en profondeur, si libxml >= 2.13.0) : LIBXML_NO_XXE explicite
+// Disponible seulement si libxml >= 2.13.0 (vérifier : LIBXML_DOTTED_VERSION >= '2.13.0')
+if (defined('LIBXML_NO_XXE')) {
+    $xml = simplexml_load_string($userInput, null, LIBXML_NO_XXE);
+}
+
+// ❌ DANGEREUX: LIBXML_NOENT active la substitution d'entités ;
+//               LIBXML_DTDLOAD charge les DTD externes — combinaison XXE classique
+$xml = simplexml_load_string($userInput, 'SimpleXMLElement', LIBXML_NOENT | LIBXML_DTDLOAD);
+
+// ❌ DÉPRÉCIÉ depuis PHP 8.0 + DANGEREUX: la fonction deprecated n'annule pas les flags ci-dessous
 libxml_disable_entity_loader(true);
 $xml = simplexml_load_string($userInput, 'SimpleXMLElement', LIBXML_NOENT | LIBXML_DTDLOAD);
 ```
@@ -283,11 +294,16 @@ final class ReservationVoter extends Voter
 # config/packages/security.yaml
 
 security:
-    # ✅ Password hasher sécurisé
+    # ✅ Password hasher sécurisé : sodium = Argon2id via libsodium (OWASP 2026)
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-            algorithm: auto # Utilise meilleur algo (bcrypt/argon2)
-            cost: 12       # Coût élevé (protection brute-force)
+            algorithm: sodium      # Argon2id via libsodium (always present PHP 8.4+)
+            memory_cost: 131072    # 128 MiB in KiB — OWASP 2026 minimum
+            time_cost: 3           # iterations — OWASP 2026 minimum
+        # Legacy rehash on next login:
+        legacy_bcrypt:
+            algorithm: bcrypt
+            migrate_from: [App\Security\LegacyBcryptHasher]
 
     # ✅ Firewalls configurés
     firewalls:

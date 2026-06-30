@@ -82,14 +82,16 @@ final class OrderVoter extends Voter
 
 declare(strict_types=1);
 
-// ✅ Password hashing with modern algorithms
-final class PasswordHasher
+// ✅ Password hashing with Argon2id — mandatory for new projects (rule 11)
+final class Argon2PasswordHasher
 {
     public function hash(string $password): string
     {
-        // Use PASSWORD_DEFAULT (currently bcrypt, may change to Argon2)
-        return password_hash($password, PASSWORD_DEFAULT, [
-            'cost' => 12, // Adjust based on server capabilities
+        // 128 MiB RAM (rule 11 minimum), t=4 exceeds the t≥3 floor, 1 thread
+        return password_hash($password, PASSWORD_ARGON2ID, [
+            'memory_cost' => 131072, // 128 MiB in KiB — rule 11 minimum
+            'time_cost'   => 4,      // ≥3 required; 4 recommended for high security
+            'threads'     => 1,
         ]);
     }
 
@@ -100,20 +102,27 @@ final class PasswordHasher
 
     public function needsRehash(string $hash): bool
     {
-        return password_needs_rehash($hash, PASSWORD_DEFAULT, ['cost' => 12]);
+        return password_needs_rehash($hash, PASSWORD_ARGON2ID, [
+            'memory_cost' => 131072,
+            'time_cost'   => 4,
+            'threads'     => 1,
+        ]);
     }
 }
 
-// ✅ Argon2id (recommended for new projects)
-final class Argon2PasswordHasher
+// ❌ Legacy — bcrypt (PASSWORD_DEFAULT) — DO NOT use in new code (rule 11: NEVER bcrypt)
+// Keep only for migrating existing bcrypt hashes to Argon2id via needsRehash().
+final class LegacyBcryptHasher
 {
-    public function hash(string $password): string
+    public function verify(string $password, string $hash): bool
     {
-        return password_hash($password, PASSWORD_ARGON2ID, [
-            'memory_cost' => PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
-            'time_cost' => PASSWORD_ARGON2_DEFAULT_TIME_COST,
-            'threads' => PASSWORD_ARGON2_DEFAULT_THREADS,
-        ]);
+        return password_verify($password, $hash);
+    }
+
+    public function needsRehash(string $hash): bool
+    {
+        // Migrate to Argon2id on next successful login
+        return password_needs_rehash($hash, PASSWORD_DEFAULT, ['cost' => 12]);
     }
 }
 
@@ -749,7 +758,7 @@ echo "<script>var data = '{$userInput}';</script>";
 
 - [ ] All user input validated and sanitized
 - [ ] Prepared statements for all database queries
-- [ ] Password hashing with bcrypt/Argon2
+- [ ] Password hashing with Argon2id (128 MiB, t≥3) — never bcrypt in new code
 - [ ] CSRF protection on all forms
 - [ ] Rate limiting on authentication endpoints
 - [ ] Security headers configured

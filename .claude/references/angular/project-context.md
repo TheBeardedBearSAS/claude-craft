@@ -15,7 +15,7 @@
 - **Language**: TypeScript 6
 - **Styling**: {{STYLING}} (SCSS/Tailwind/Angular Material)
 - **State Management**: {{STATE_MANAGEMENT}} (Signals/NgRx/NGXS)
-- **Testing**: {{TESTING}} (Vitest/Jest + Cypress)
+- **Testing**: {{TESTING}} (Vitest/Jest + Playwright)
 - **Build Tool**: Angular CLI / Vite
 
 ## Architecture

@@ -325,14 +325,14 @@ class Product with _$Product {
 
 **Caractéristiques** :
 - Abstract class ou interface pure
-- Retourner `Either<Failure, Success>` (avec dartz) ou `Result<T>`
+- Retourner `Either<Failure, Success>` (avec **fpdart** — `dartz` est abandonné) ou la sealed class native `Result<T>` (recommandé)
 - Async avec `Future`
 - Nommage : `[Entity]Repository`
 
 ```dart
 // lib/features/products/domain/repositories/product_repository.dart
 
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/product.dart';
 
@@ -374,7 +374,7 @@ abstract class ProductRepository {
 }
 ```
 
-**Alternative avec Result<T>** (sans dartz) :
+**Alternative avec Result<T>** (sealed class native — recommandé pour Dart 3.x) :
 
 ```dart
 // lib/core/utils/result.dart
@@ -410,7 +410,7 @@ abstract class ProductRepository {
 ```dart
 // lib/features/products/domain/usecases/get_products.dart
 
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/product.dart';
 import '../repositories/product_repository.dart';
@@ -455,7 +455,7 @@ class GetProducts {
 ```dart
 // lib/features/products/domain/usecases/search_products.dart
 
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/product.dart';
@@ -910,7 +910,7 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
 ```dart
 // lib/features/products/data/repositories/product_repository_impl.dart
 
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/network/network_info.dart';

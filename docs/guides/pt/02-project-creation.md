@@ -65,14 +65,14 @@ A abordagem mais simples e flexível.
 
 ```bash
 # Sintaxe básica
-make install-{tecnologia} TARGET=caminho LANG=idioma
+make install-{tecnologia} TARGET=caminho RULES_LANG=idioma
 
 # Exemplos
-make install-symfony TARGET=./backend LANG=en
-make install-flutter TARGET=./mobile LANG=fr
-make install-python TARGET=./api LANG=es
-make install-react TARGET=./frontend LANG=de
-make install-reactnative TARGET=./app LANG=pt
+make install-symfony TARGET=./backend RULES_LANG=en
+make install-flutter TARGET=./mobile RULES_LANG=fr
+make install-python TARGET=./api RULES_LANG=es
+make install-react TARGET=./frontend RULES_LANG=de
+make install-reactnative TARGET=./app RULES_LANG=pt
 ```
 
 #### Opções Disponíveis
@@ -165,7 +165,7 @@ composer create-project symfony/skeleton .
 git init
 
 # Instalar as regras Claude-Craft
-make install-symfony TARGET=. LANG=fr
+make install-symfony TARGET=. RULES_LANG=fr
 
 # Verificar a instalação
 ls -la .claude/
@@ -187,7 +187,7 @@ cd my_flutter_app
 git init
 
 # Instalar as regras Claude-Craft
-make install-flutter TARGET=. LANG=en
+make install-flutter TARGET=. RULES_LANG=en
 
 # Verificar
 ls -la .claude/
@@ -210,7 +210,7 @@ python -m venv venv
 git init
 
 # Instalar as regras Claude-Craft
-make install-python TARGET=. LANG=en
+make install-python TARGET=. RULES_LANG=en
 
 # Verificar
 ls -la .claude/
@@ -231,7 +231,7 @@ npx create-react-app my-react-app
 cd my-react-app
 
 # Instalar as regras Claude-Craft
-make install-react TARGET=. LANG=en
+make install-react TARGET=. RULES_LANG=en
 
 # Verificar
 ls -la .claude/
@@ -245,7 +245,7 @@ npx react-native init MyApp
 cd MyApp
 
 # Instalar as regras Claude-Craft
-make install-reactnative TARGET=. LANG=en
+make install-reactnative TARGET=. RULES_LANG=en
 
 # Verificar
 ls -la .claude/
@@ -538,7 +538,7 @@ Use esta lista ao configurar um novo projeto:
 Para bibliotecas ou pacotes compartilhados que não se encaixam em uma tecnologia específica:
 
 ```bash
-make install-common TARGET=./shared-lib LANG=en
+make install-common TARGET=./shared-lib RULES_LANG=en
 ```
 
 ### Instalando Ferramentas de Gerenciamento de Projeto
@@ -546,7 +546,7 @@ make install-common TARGET=./shared-lib LANG=en
 Para rastreamento de sprint e gerenciamento de backlog:
 
 ```bash
-make install-project TARGET=. LANG=fr
+make install-project TARGET=. RULES_LANG=fr
 ```
 
 ### Instalando Ferramentas de Infraestrutura
@@ -554,13 +554,13 @@ make install-project TARGET=. LANG=fr
 Para suporte a Docker e CI/CD:
 
 ```bash
-make install-infra TARGET=. LANG=en
+make install-infra TARGET=. RULES_LANG=en
 ```
 
 ### Instalação Completa (Todas as Tecnologias)
 
 ```bash
-make install-all TARGET=. LANG=fr
+make install-all TARGET=. RULES_LANG=fr
 ```
 
 ---

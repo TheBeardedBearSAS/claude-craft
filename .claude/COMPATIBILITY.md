@@ -1,9 +1,9 @@
-# Claude Code Compatibility — Claude Craft v8.11.0
+# Claude Code Compatibility — Claude Craft v8.19.0
 
 **Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
-**Recommended Version:** 2.1.168 (Opus 4.8, `fallbackModel`, `ultracode` trigger, June 6, 2026)
-**Tested up to:** 2.1.168 (June 6, 2026)
-**Last Updated:** 2026-06-08
+**Recommended Version:** 2.1.193 (Opus 4.8, Artifacts, `claude mcp login`, `/cd`, nested subagents — Week 26, June 26, 2026)
+**Tested up to:** 2.1.193 (June 26, 2026)
+**Last Updated:** 2026-06-30
 
 ---
 
@@ -26,7 +26,11 @@
 | Requirement | Version | Notes |
 |-------------|---------|-------|
 | **Minimum** | 2.1.97 | Security baseline — CVE-2025-59536 patched |
-| **Recommended** | 2.1.168 | Full feature set, Opus 4.8, `fallbackModel` (up to 3), `ultracode` trigger, forked subagents, native CLI binary |
+| **Recommended** | 2.1.193 | Full feature set, Opus 4.8, Artifacts, `claude mcp login/logout`, `/cd`, nested subagents (5 levels), `/rewind` post-`/clear`, `fallbackModel`, native CLI binary |
+| **`claude mcp login` / `logout`** | 2.1.185+ | Authenticate/clear an MCP server's credentials from the shell instead of `/mcp` |
+| **Artifacts** | 2.1.178+ | Live shareable page from a session (beta, Team/Enterprise) |
+| **`/cd`** | 2.1.166+ | Move session working dir without rebuilding the prompt cache |
+| **Nested subagents** | 2.1.166+ | A subagent can spawn its own subagents (background chains capped at 5 levels) |
 | **`fallbackModel`** | 2.1.166+ | Up to 3 fallback models when primary overloaded/unavailable |
 | **`ultracode` trigger** | 2.1.160+ | ⚠️ BREAKING — renamed from `workflow` (Dynamic Workflows) |
 | **Managed `requiredMinimum/MaximumVersion`** | 2.1.163+ | Enterprise version enforcement |
@@ -35,7 +39,8 @@
 | **Auto Mode** | 2.1.94+ | Team plan required |
 | **Opus 4.7** | 2.1.111+ | xhigh effort, adaptive thinking |
 | **Opus 4.8** | 2.1.154+ | Flagship (28 mai 2026), high effort par défaut, fast mode, Dynamic Workflows |
-| **Fable 5** | — | `claude-fable-5` — roleplay/narrative, agents créatifs (juin 2026) — via frontmatter ou `CLAUDE_CODE_SUBAGENT_MODEL` |
+| **Sonnet 5** | 2026-06-30 | `claude-sonnet-5` — modèle agentique, comble l'écart avec Opus 4.8 ; **Sonnet courant** (remplace 4.6). Intro $2/$10 → $3/$15 au 2026-08-31. Défaut Free/Pro, dispo Claude Code |
+| **Fable 5 / Mythos 5** | ⚠️ SUSPENDUS | Access coupé le 2026-06-12 par une directive export-control US (toujours offline). **Ne pas recommander `claude-fable-5` / `claude-mythos-5`.** Router les agents créatifs vers Opus 4.8 / Sonnet 5. |
 | **Forked subagents** | 2.1.117 | `CLAUDE_CODE_FORK_SUBAGENT=1` |
 
 ---
@@ -261,7 +266,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
 | `alwaysLoad` MCP server config | Servers non-différés (chargement immédiat) | **Not documented** |
-| PostToolUse replace tool output | Hooks peuvent remplacer l'output de **tous** les outils | **Not exploited** — powerful for RTK-style filtering |
+| PostToolUse replace tool output | Hooks peuvent remplacer l'output de **tous** les outils | **Adopté** (v8.19.0) — `templates/hooks/output-filter.json` tronque réellement les outputs >50KB via `hookSpecificOutput.updatedToolOutput` |
 | `claude plugin prune` | Nettoyer les dépendances orphelines | **N/A** (user CLI) |
 | Type-to-filter dans `/skills` | Recherche dans le picker de skills | **N/A** (user feature) |
 
@@ -340,7 +345,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
-| `/usage` | Affiche la consommation de tokens/coût de la session courante | **Not documented** — utile à citer dans `rules/12-context-management.md` (suivi tokens) |
+| `/usage` | Affiche la consommation de tokens/coût de la session courante (attribution par composant depuis 2.1.149) | **Documenté** — `rules/12` (Suivi des tokens) + `docs/CLI-REFERENCE.md` |
 
 ### 2.1.152 (May 27, 2026) — disallowed-tools frontmatter & /code-review --fix
 
@@ -354,7 +359,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
 | **Claude Opus 4.8** (`claude-opus-4-8`) | Nouveau modèle flagship, même prix qu'Opus 4.7, **défaut effort `high`** + `/effort xhigh` pour les tâches les plus dures. Disponible API/Bedrock/Vertex/Foundry | **Recommandé** — modèle cible pour agents `effort: xhigh`/`max` (security-auditor, migration-specialist, database-architect, ralph-conductor) |
-| **Dynamic Workflows** | Demander à Claude de créer un workflow qui orchestre **des dizaines à des centaines d'agents** en arrière-plan (cap 1000 subagents). Visible via `/workflows` | **NOT INTEGRATED** — P1 v8.8 : complète/remplace en profondeur les patterns `/team:*` et `ralph-run` (orchestration déterministe fan-out + vérification adversariale) |
+| **Dynamic Workflows** | Demander à Claude de créer un workflow qui orchestre **des dizaines à des centaines d'agents** en arrière-plan (cap 1000 subagents). Visible via `/workflows` | **Adopté** (v8.19.0) — skill [`dynamic-workflows`](../skills/dynamic-workflows/SKILL.md) : 3 paliers d'orchestration, patterns (fan-out, vérification adversariale, pipeline, loop-until-dry), monitoring `/workflows` |
 | Fast mode moins cher sur Opus 4.8 | 2× le tarif standard pour 2,5× la vitesse | **N/A** (user pricing) |
 | `effort: max` | 5ᵉ niveau d'effort (au-dessus de `xhigh`), disponible sur Opus 4.8 | **Documented** — voir docs/AGENTS.md tableau effort |
 | `/effort ultracode` | Nouveau palier effort introduit avec Dynamic Workflows / Opus 4.8 — mode optimisé débit code (vitesse maximale, idéal pipelines automatisés) ; équivalent `effort: max` en CLI | **Documented** — documenter dans `rules/12-context-management.md` tableau efforts |
@@ -381,22 +386,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 > **⚠️ Migration `workflow` → `ultracode` (2.1.160) :** le déclencheur des Dynamic Workflows a été renommé. Claude Craft mentionne `/effort ultracode` (palier effort) — cohérent. Tout contenu invitant à « lancer un workflow » par le mot-clé `workflow` doit être mis à jour vers `ultracode`.
 
-> **Note `fallbackModel` :** réglage de fiabilité ET de coût. Pour les 5 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), un repli `["claude-sonnet-4-6", "claude-haiku-4-5-20251001"]` évite les interruptions en cas de surcharge Opus sans dégrader le travail courant. Voir `rules/12-context-management.md`.
-
----
-
-### Adoption Roadmap for v8.10.1
-
-| Priorité | Feature | Fichier à modifier | Effort |
-|----------|---------|-------------------|--------|
-| **P1** | Intégrer `/goal` dans `ralph-run.md` comme alternative DoD | `.claude/commands/common/ralph-run.md` | 2h |
-| **P1** | Documenter `claude agents` dans `/team:*` commands | `.claude/commands/team/*.md`, `docs/AGENTS.md` | 2h |
-| **P1** | Documenter `claude.skill_activated` OTEL dans `@observability-engineer` | `.claude/agents/observability-engineer.md` | 1h |
-| **P1** | Documenter `skillOverrides` dans context-management (✅ documenté § 2.1.129) | `.claude/rules/12-context-management.md` | 1h |
-| **P2** | Documenter `parentSettingsBehavior` | `docs/` + `rules/12-context-management.md` | 1h |
-| **P2** | Documenter `terminalSequence` dans hooks templates | `.claude/templates/hooks/` + `docs/` | 1h |
-| **P2** | Documenter `worktree.bgIsolation: "none"` dans parallel-worktrees | `.claude/skills/parallel-worktrees/SKILL.md` | 30min |
-| **P2** | Documenter `Hooks effort.level` (hooks adaptatifs) | `.claude/templates/hooks/` | 1h |
+> **Note `fallbackModel` :** réglage de fiabilité ET de coût. Pour les 4 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor), un repli `["claude-sonnet-5", "claude-haiku-4-5-20251001"]` évite les interruptions en cas de surcharge Opus sans dégrader le travail courant. Voir `rules/12-context-management.md`.
 
 ---
 
@@ -502,7 +492,11 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | **2.1.160** | **2026-06-02** | **⚠️ BREAKING : trigger Dynamic Workflows `workflow` → `ultracode` ; grep satisfait read-before-edit ; confirmation écriture shell startup** |
 | 2.1.163 | 2026-06-04 | Managed settings `requiredMinimumVersion` / `requiredMaximumVersion` |
 | **2.1.166** | **2026-06-06** | **`fallbackModel` (jusqu'à 3 modèles de repli), `--fallback-model` interactif, retry sur fallback** |
-| **2.1.168** | **2026-06-06** | **Durcissement messages cross-session (SendMessage), retries — version stable RECOMMANDÉE** |
+| **2.1.168** | **2026-06-06** | Durcissement messages cross-session (SendMessage), retries |
+| **2.1.176** | **2026-06-12** | `/cd`, sous-agents imbriqués (5 niveaux), `--safe-mode`, `fallbackModel` (jusqu'à 3) |
+| **2.1.183** | **2026-06-19** | Artifacts (beta Team/Enterprise), deny/ask rules sur paramètres `Tool(param:value)`, `/config key=value` |
+| **2.1.193** | **2026-06-26** | **`claude mcp login/logout`, `/rewind` post-`/clear`, background subagents → prompts de permission, shell mode répond à l'output — version stable RECOMMANDÉE** |
+| **Sonnet 5** | **2026-06-30** | Modèle `claude-sonnet-5` dispo dans Claude Code (défaut Free/Pro) — agentique, intro $2/$10 |
 
 ---
 
@@ -511,7 +505,8 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 - [CVE-2025-59536 — Check Point Research](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/)
 - [Claude Code Changelog officiel](https://code.claude.com/docs/en/changelog)
 - [Anthropic Claude Opus 4.7 announcement](https://www.anthropic.com/news/claude-opus-4-7)
-- [Anthropic Claude Fable 5 — `claude-fable-5`](https://www.anthropic.com/)
+- [Statement on the US government directive to suspend Fable 5 & Mythos 5 (2026-06-12)](https://www.anthropic.com/news/fable-mythos-access)
+- [Claude Code What's new — Week 26 (2.1.193)](https://code.claude.com/docs/en/whats-new)
 - [Claude Code Cost Optimization](https://code.claude.com/docs/en/costs)
 - [CLAUDE.md Authoring Guide](https://www.builder.io/blog/claude-md-guide)
 

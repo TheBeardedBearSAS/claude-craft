@@ -441,7 +441,7 @@ parameters:
 return (new PhpCsFixer\Config())
     ->setRules([
         '@PSR12' => true,
-        '@PHP84Migration' => true,
+        '@PHP85Migration' => true,
         'declare_strict_types' => true,
         'final_class' => true,
     ]);

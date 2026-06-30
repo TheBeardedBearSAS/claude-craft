@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       git \
       bc \
       ca-certificates \
-    && git clone --depth 1 https://github.com/bats-core/bats-core.git /opt/bats-core \
+    && git clone --depth 1 --branch v1.11.1 https://github.com/bats-core/bats-core.git /opt/bats-core \
     && /opt/bats-core/install.sh /usr/local \
     && rm -rf /opt/bats-core \
     && rm -rf /var/lib/apt/lists/*

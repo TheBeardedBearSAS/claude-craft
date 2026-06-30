@@ -88,7 +88,12 @@ dotnet publish -c Release --self-contained -r linux-x64
   <PackageReference Include="xunit.runner.visualstudio" Version="3.*">
     <PrivateAssets>all</PrivateAssets>
   </PackageReference>
+  <!-- Moq 4.20.0 (août 2023) a brièvement embarqué SponsorLink (scan git emails) ; revert en 4.20.2.
+       4.20.70 est propre et MIT. Les nouveaux projets peuvent préférer NSubstitute (MIT, API plus lisible) :
+       Substitute.For<T>() vs new Mock<T>().Object -->
   <PackageReference Include="Moq" Version="4.*" />
+  <!-- Alternative recommandée : NSubstitute (MIT, default communauté .NET 2026)
+  <PackageReference Include="NSubstitute" Version="5.*" /> -->
   <!-- FluentAssertions 8.x requires a COMMERCIAL license for commercial use (~$130/dev/yr).
        Apache-2.0 alternative: AwesomeAssertions (drop-in fork). v7 remains Apache-2.0. -->
   <PackageReference Include="FluentAssertions" Version="8.*" />

@@ -20,13 +20,13 @@ vi.mock('../../cli/lib/colors.js', () => ({
 import { runDoctor } from '../../cli/lib/doctor.js';
 
 /** Helper: exec mock with all tools present (including yq).
- *  Uses Claude Code 2.1.168 (recommended baseline since v8.11.0 — Opus 4.8 + Dynamic Workflows)
- *  so the version check added in Sprint 2 (CVE-2025-59536 hardening) does not
- *  emit [FAIL] in tests that don't expect one.
+ *  Uses Claude Code 2.1.193 (recommended baseline since v8.19.0 — Week 26: Artifacts,
+ *  claude mcp login, /cd) so the version check does not emit [WARN]/[FAIL] in tests
+ *  that don't expect one.
  */
 function allToolsExec(cmd) {
   if (cmd.includes('npm')) return '10.0.0';
-  if (cmd.includes('claude')) return '2.1.168';
+  if (cmd.includes('claude')) return '2.1.193';
   if (cmd.includes('git')) return 'git version 2.45.0';
   if (cmd.includes('yq')) return 'yq (https://github.com/mikefarah/yq/) version v4.44.1';
   return null;
@@ -128,8 +128,8 @@ describe('runDoctor', () => {
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('[WARN]');
     expect(output).toContain('2.1.105');
-    // RECOMMENDED_CLAUDE_CODE is loaded from config/versions.yaml (2.1.168)
-    expect(output).toContain('recommended 2.1.168');
+    // RECOMMENDED_CLAUDE_CODE is loaded from config/versions.yaml (2.1.193)
+    expect(output).toContain('recommended 2.1.193');
   });
 
   it('reports unparseable Claude Code version output as OK without crashing', () => {

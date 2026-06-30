@@ -193,7 +193,7 @@ Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craf
 
 3. **Verificar o arquivo de contexto do projeto**
    ```bash
-   cat .claude/rules/00-project-context.md
+   cat .claude/references/<your-tech>/project-context.md
    # Certifique-se de que descreve seu projeto com precisão
    ```
 
@@ -284,7 +284,7 @@ Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craf
 
 1. **Atualizar o contexto do projeto**
    ```bash
-   # Editar .claude/rules/00-project-context.md
+   # Editar .claude/references/<your-tech>/project-context.md
    # Adicionar padrões e convenções específicos
    ```
 

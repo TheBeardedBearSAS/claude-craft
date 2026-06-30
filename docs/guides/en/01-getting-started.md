@@ -54,7 +54,7 @@ All content is available in 5 languages:
 
 | Version | Status |
 |---------|--------|
-| **2.1.168** | Recommended (full feature support) |
+| **2.1.193** | Recommended (full feature support) |
 | **2.1.97+** | Minimum supported (CVE-2025-59536 patched) |
 
 ### Optional (Recommended)
@@ -92,10 +92,10 @@ git clone https://github.com/TheBeardedBearSAS/claude-craft.git
 cd claude-craft
 
 # Install for a Symfony project (in French)
-make install-symfony TARGET=~/my-project LANG=fr
+make install-symfony TARGET=~/my-project RULES_LANG=fr
 
 # Or for a Flutter project (in English)
-make install-flutter TARGET=~/my-app LANG=en
+make install-flutter TARGET=~/my-app RULES_LANG=en
 ```
 
 ### Method 2: Direct Script
@@ -139,7 +139,7 @@ git init
 
 ```bash
 # From the claude-craft directory
-make install-symfony TARGET=~/my-api LANG=fr
+make install-symfony TARGET=~/my-api RULES_LANG=fr
 ```
 
 ### Step 3: Verify Installation
@@ -155,7 +155,9 @@ You should see:
 ├── .claudeignore       # Ignore patterns for context reduction
 ├── settings.json       # Optimized defaults with PostCompact hook
 ├── settings.local.json # Local permissions (wildcard patterns)
-├── rules/              # 21 rule files
+├── references/         # Technical references (since v8.7.1 — replaces rules/)
+│   ├── base/           # Universal principles (SOLID, KISS, git, testing…)
+│   └── symfony/        # Tech-specific reference + project-context.md
 ├── agents/             # AI agents with effort/memory optimization
 ├── commands/           # Slash commands
 │   ├── common/         # Transversal commands
@@ -177,7 +179,7 @@ cd ~/my-api && claude
 
 **Option B: Manual**
 ```bash
-nano ~/my-api/.claude/rules/00-project-context.md
+nano ~/my-api/.claude/references/symfony/project-context.md
 ```
 
 Update these sections:
@@ -199,25 +201,16 @@ Now you can use all the installed commands and agents!
 
 ## Understanding the Structure
 
-### Rules (`rules/`)
+### References (`references/`)
 
-Rules are guidelines that Claude follows when working on your project. They are numbered for priority:
+Since v8.7.1, installs place guidance under `references/` (not the old `rules/`). Two layers:
 
-| Number | Topic |
-|--------|-------|
-| 00 | Project context (customize this!) |
-| 01 | Workflow and analysis |
-| 02 | Architecture |
-| 03 | Coding standards |
-| 04 | SOLID principles |
-| 05 | KISS, DRY, YAGNI |
-| 06 | Docker and tooling |
-| 07 | Testing |
-| 08 | Quality tools |
-| 09 | Git workflow |
-| 10 | Documentation |
-| 11 | Security |
-| 12+ | Advanced topics (DDD, CQRS, etc.) |
+| Location | Content |
+|----------|---------|
+| `references/base/` | Universal principles — workflow analysis, SOLID, KISS/DRY/YAGNI, git workflow, documentation, testing, security |
+| `references/{tech}/` | Tech-specific reference — `architecture.md`, `coding-standards.md`, `quality-tools.md`, `testing.md`, `security.md`, and **`project-context.md`** (customize this!) |
+
+> The richer rule taxonomy (workflow, architecture, SOLID, security, DDD, CQRS…) lives in `.claude/rules/` of the **claude-craft repo itself**; a project install receives the distilled `references/` layer.
 
 ### Agents (`agents/`)
 
@@ -343,7 +336,7 @@ Now that you understand the basics, continue with:
 
 ```bash
 # Installation
-make install-{tech} TARGET=path LANG=xx
+make install-{tech} TARGET=path RULES_LANG=xx
 
 # List available options
 make help

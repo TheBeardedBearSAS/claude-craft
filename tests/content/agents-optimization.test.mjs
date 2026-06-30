@@ -132,19 +132,14 @@ describe('agent optimization fields', () => {
     });
 
     it('only critical-reasoning agents use opus (cost optimization)', () => {
-      // Opus reserved for high-stakes work: autonomous loops, migrations, schema, security audits, TDD coaching.
-      // All tech reviewers stay on haiku; standard agents on sonnet. See audit 2026-05-20 + Opus 4.8 routing.
+      // Opus reserved for high-stakes work: autonomous loops, migrations, schema, security audits.
+      // tdd-coach moved opus→sonnet in v8.19.0 (audit 2026-06-30 token-model-opt): coaching does
+      // not need Opus-grade reasoning, ~5x cheaper. Tech reviewers stay on haiku; standard agents sonnet.
       const opusAgents = agents
         .filter((a) => a.frontmatter.model === 'opus')
         .map((a) => a.basename)
         .sort();
-      expect(opusAgents).toEqual([
-        'database-architect',
-        'migration-specialist',
-        'ralph-conductor',
-        'security-auditor',
-        'tdd-coach',
-      ]);
+      expect(opusAgents).toEqual(['database-architect', 'migration-specialist', 'ralph-conductor', 'security-auditor']);
     });
 
     it('all reviewer agents have maxTurns <= 6', () => {

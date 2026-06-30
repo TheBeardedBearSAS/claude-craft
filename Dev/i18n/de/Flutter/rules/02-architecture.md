@@ -325,14 +325,14 @@ class Product with _$Product {
 
 **Eigenschaften**:
 - Abstrakte Klasse oder reines Interface
-- Rückgabe `Either<Failure, Success>` (mit dartz) oder `Result<T>`
+- Rückgabe `Either<Failure, Success>` (mit **fpdart** — `dartz` ist nicht mehr gepflegt) oder die native `Result<T>` sealed class (empfohlen)
 - Async mit `Future`
 - Benennung: `[Entity]Repository`
 
 ```dart
 // lib/features/products/domain/repositories/product_repository.dart
 
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/product.dart';
 
@@ -374,7 +374,7 @@ abstract class ProductRepository {
 }
 ```
 
-**Alternative mit Result<T>** (ohne dartz):
+**Alternative mit Result<T>** (native sealed class — empfohlen für Dart 3.x):
 
 ```dart
 // lib/core/utils/result.dart
@@ -410,7 +410,7 @@ abstract class ProductRepository {
 ```dart
 // lib/features/products/domain/usecases/get_products.dart
 
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/product.dart';
 import '../repositories/product_repository.dart';

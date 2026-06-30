@@ -828,7 +828,8 @@ test.describe('Authentication', () => {
 // src/test/utils/customRender.tsx
 import { render, RenderOptions } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter } from 'react-router-dom';
+// React Router v7: use 'react-router' — react-router-dom is a compat shim only
+import { BrowserRouter } from 'react-router';
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   const queryClient = new QueryClient({

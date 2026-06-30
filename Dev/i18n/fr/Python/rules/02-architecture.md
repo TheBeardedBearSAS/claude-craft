@@ -220,7 +220,7 @@ Les entités sont des objets avec une identité unique.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from uuid import UUID, uuid4
 
@@ -241,7 +241,7 @@ class User:
     email: Email = field(default=None)
     name: str = field(default="")
     is_active: bool = field(default=True)
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: Optional[datetime] = field(default=None)
 
     # Domain events (pattern Event Sourcing)
@@ -260,7 +260,7 @@ class User:
             raise ValueError("User is already active")
 
         self.is_active = True
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
 
     def deactivate(self) -> None:
         """Désactive l'utilisateur."""
@@ -268,7 +268,7 @@ class User:
             raise ValueError("User is already inactive")
 
         self.is_active = False
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
 
     def change_email(self, new_email: Email) -> None:
         """Change l'email de l'utilisateur."""
@@ -277,7 +277,7 @@ class User:
 
         old_email = self.email
         self.email = new_email
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
 
         # Émettre un événement domain
         self._add_event(UserEmailChanged(

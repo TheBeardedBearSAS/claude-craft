@@ -80,20 +80,27 @@ import Vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   plugins: [Vue()],
+  // Vite 8 / Rolldown (default): object form of manualChunks removed — use codeSplitting.groups
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        // manualChunks fonctionne sous Rolldown, mais tester le comportement
-        // car Rolldown peut regrouper différemment — vérifier le bundle output
-        manualChunks: {
-          'vue-vendor': ['vue', 'vue-router', 'pinia'],
-        }
-      }
-    }
-  }
+        codeSplitting: {
+          groups: [
+            { name: 'vue-vendor', test: /node_modules\/(vue|pinia|vue-router)/ },
+          ],
+        },
+      },
+    },
+  },
 });
 ```
-> ⚠️ `manualChunks` sous Rolldown (Vite 8) peut produire une sortie différente de Rollup — toujours mesurer le bundle après migration.
+
+> **Vite 8 / Rolldown (défaut) :** la forme objet de `manualChunks` est **supprimée** (non supportée). Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
+> **Vite 7 / Rolldown désactivé (legacy) :**
+> ```ts
+> build: { rollupOptions: { output: { manualChunks: { 'vue-vendor': ['vue', 'vue-router', 'pinia'] } } } }
+> // Only if Rolldown is explicitly disabled
+> ```
 
 ### Vue Router 5 — File-Based Routing
 ```typescript
@@ -123,7 +130,7 @@ Vue 3.5 migre en interne vers **Alien Signals** pour la réactivité : performan
 - [ ] Composition API + `<script setup>` uniquement
 - [ ] Pinia 3 setup store style
 - [ ] Vue Router 5 (file-based ou manuel selon besoin)
-- [ ] Vite 8 + Rolldown (tester `manualChunks`)
+- [ ] Vite 8 + Rolldown (`manualChunks` supprimé → migrer vers `rolldownOptions.output.codeSplitting.groups`)
 - [ ] TypeScript strict mode
 - [ ] Tests >= 80% coverage (Vitest)
 - [ ] ESLint + `@vue/eslint-plugin-vue`

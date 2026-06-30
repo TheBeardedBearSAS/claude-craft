@@ -15,8 +15,10 @@ jobs:
   generate-sbom:
     name: Generate CycloneDX SBOM
     runs-on: ubuntu-latest
+    # SEC: id-token:write required for Sigstore keyless (OIDC) signing of the SBOM (rule 11).
     permissions:
       contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # pinned: v7.0.0
@@ -31,16 +33,26 @@ jobs:
         run: npm ci
 
       - name: Install CycloneDX CLI
-        run: npm install --no-save @cyclonedx/cyclonedx-npm
+        # Pinned major to avoid the SBOM generator itself being a floating dependency.
+        run: npm install --no-save @cyclonedx/cyclonedx-npm@6
 
       - name: Generate CycloneDX SBOM
         run: npx @cyclonedx/cyclonedx-npm --output-format JSON --output-file claude-craft-sbom.json
+
+      - name: Install cosign
+        # TODO: pin by SHA once available; tracked by the github-actions Dependabot entry.
+        uses: sigstore/cosign-installer@v3.8.1
+
+      - name: Sign SBOM (Sigstore keyless)
+        run: cosign sign-blob --yes claude-craft-sbom.json --bundle claude-craft-sbom.json.bundle
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # pinned: v7.0.1
         with:
           name: sbom-cyclonedx
-          path: ./claude-craft-sbom.json
+          path: |
+            ./claude-craft-sbom.json
+            ./claude-craft-sbom.json.bundle
           retention-days: 90
 
   release:
@@ -57,9 +69,11 @@ jobs:
         with:
           name: sbom-cyclonedx
 
-      - name: Attach SBOM to release
+      - name: Attach SBOM + signature to release
         uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # pinned: v2.3.2
         with:
-          files: ./claude-craft-sbom.json
+          files: |
+            ./claude-craft-sbom.json
+            ./claude-craft-sbom.json.bundle
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

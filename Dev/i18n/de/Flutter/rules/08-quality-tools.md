@@ -139,7 +139,7 @@ include: package:very_good_analysis/analysis_options.yaml
 
 ```yaml
 dev_dependencies:
-  flutter_lints: ^3.0.0
+  flutter_lints: ^5.0.0  # Flutter 3.44 / Dart 3.12+ (v3.x deckt keine sealed classes und dot shorthands ab)
 ```
 
 ---

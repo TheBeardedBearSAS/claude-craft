@@ -427,6 +427,21 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 
 **Usage mensuel typique pour une équipe de 3 développeurs :** 5-10 sprints Standard + 2 audits = ~200 000–400 000 tokens = **$1–2/mois avec RTK + Sonnet comme modèle de base**.
 
+### Grille de prix & routage modèle par tâche (juin 2026)
+
+| Modèle | ID canonique | Prix in/out (par M tokens) | Router vers (type de tâche) |
+|--------|--------------|----------------------------|------------------------------|
+| **Haiku 4.5** | `claude-haiku-4-5-20251001` | $1 / $5 | `/effort low` — lookups, classification, reviewers, sous-agents simples |
+| **Sonnet 5** | `claude-sonnet-5` | **$2 / $10 intro** (→ $3 / $15 au 2026-08-31) | `/effort medium` — implémentation standard, tâches agentiques, exécution sprint, modèle sous-agent par défaut. Sorti 2026-06-30, comble l'écart avec Opus 4.8 |
+| Sonnet 4.6 _(prédécesseur)_ | `claude-sonnet-4-6` | $3 / $15 | Toujours valide ; remplacé par Sonnet 5 comme Sonnet courant |
+| **Opus 4.8** | `claude-opus-4-8` | $5 / $25 | `/effort high`/`xhigh` — architecture, ADR, migrations, raisonnement complexe |
+
+> **Leviers de coût (cumulables) :** prompt caching **−90 %** sur l'input mis en cache (`ENABLE_PROMPT_CACHING_1H`, actif par défaut), **Batch API −50 %** in/out pour les traitements asynchrones de masse, RTK **55-90 %** sur les outputs CLI, `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` pour les sous-agents non typés.
+>
+> **Précédence modèle :** `model:` du frontmatter d'agent **>** `CLAUDE_CODE_SUBAGENT_MODEL` **>** modèle de session. Les 11 reviewers `model: haiku` restent sur Haiku même si `SUBAGENT_MODEL=sonnet`.
+>
+> ⚠️ **Fable 5 / Mythos 5 suspendus** (export-control US, 2026-06-12) : ne pas les router ; agents créatifs → Opus 4.8 / Sonnet 4.6.
+
 ---
 
 ## Token Optimization

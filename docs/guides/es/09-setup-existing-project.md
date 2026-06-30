@@ -208,7 +208,7 @@ npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=es
 **Método B: Makefile**
 ```bash
 cd ~/claude-craft
-make install-symfony TARGET=~/tu-proyecto-existente LANG=es
+make install-symfony TARGET=~/tu-proyecto-existente RULES_LANG=es
 ```
 
 ### Preservar Configuración Existente
@@ -220,7 +220,7 @@ Si tienes archivos `.claude/` existentes que quieres mantener:
 npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=es --preserve-config
 
 # Makefile con flag de preservación
-make install-symfony TARGET=~/tu-proyecto-existente LANG=es OPTIONS="--preserve-config"
+make install-symfony TARGET=~/tu-proyecto-existente RULES_LANG=es OPTIONS="--preserve-config"
 ```
 
 **Lo que `--preserve-config` mantiene:**
@@ -408,7 +408,7 @@ El comando analizará tu codebase existente, detectará tecnologías y preguntar
 Crea o actualiza el archivo de contexto del proyecto manualmente:
 
 ```bash
-nano .claude/rules/00-project-context.md
+nano .claude/references/<your-tech>/project-context.md
 ```
 
 Completa la plantilla con lo que has descubierto:
@@ -649,7 +649,7 @@ Migración:
 | Ubicación Antigua | Ubicación Claude-Craft |
 |-------------------|------------------------|
 | `.cursorrules` | `.claude/rules/90-custom.md` |
-| `.github/copilot-instructions.md` | `.claude/rules/00-project-context.md` |
+| `.github/copilot-instructions.md` | `.claude/references/<your-tech>/project-context.md` |
 | `CLAUDE.md` (raíz) | `.claude/CLAUDE.md` |
 | Prompts personalizados | `.claude/commands/custom/` |
 

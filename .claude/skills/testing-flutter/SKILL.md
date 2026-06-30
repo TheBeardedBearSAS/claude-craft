@@ -18,7 +18,7 @@ dev_dependencies:
   bloc_test: ^10.0.0
   mocktail: ^1.0.0
 
-// Test avec emit.isMounted checks (BLoC v9)
+// Test avec emit.isDone checks (BLoC v9)
 blocTest<UserBloc, UserState>(
   'emits [loading, loaded] when FetchUser is added',
   build: () {
@@ -32,7 +32,7 @@ blocTest<UserBloc, UserState>(
     const UserState(status: UserStatus.loaded, user: User(id: '123', name: 'Alice')),
   ],
   verify: (bloc) {
-    // Vérifier que le bloc respecte isMounted (v9)
+    // Vérifier que le bloc respecte isDone (v9)
     verify(() => mockUseCase.call('123')).called(1);
   },
 );

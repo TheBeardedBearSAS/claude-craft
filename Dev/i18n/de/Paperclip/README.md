@@ -9,13 +9,13 @@ Dieses Verzeichnis enthält die Claude-Craft-Regeln, -Befehle, -Skills und -Temp
 
 | Tool | Version |
 |---|---|
-| Node.js | 20+ (LTS) |
+| Node.js | 22+ LTS |
 | TypeScript | 5.x (strict) |
 | pnpm | 9.15+ |
 | React | 19+ (web UI) |
 | Vitest | 4.1+ |
 | PostgreSQL | 15+ (oder embedded für dev) |
-| Paperclip | 2026.529.0+ |
+| Paperclip | 2026.609.0+ |
 
 ## Inhalt
 

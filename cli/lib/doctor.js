@@ -23,7 +23,7 @@ const MIN_CLAUDE_CODE = '2.1.97';
  * @returns {string}
  */
 function loadRecommendedClaudeCodeVersion() {
-  const FALLBACK = '2.1.168';
+  const FALLBACK = '2.1.193';
   try {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
     const versionsPath = path.resolve(__dirname, '..', '..', 'config', 'versions.yaml');

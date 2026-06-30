@@ -71,7 +71,11 @@ dotnet publish -c Release --self-contained -r linux-x64
   <PackageReference Include="xunit.runner.visualstudio" Version="2.*">
     <PrivateAssets>all</PrivateAssets>
   </PackageReference>
+  <!-- Moq 4.20.0 (Aug 2023) briefly embedded SponsorLink (scraped git emails); reverted in 4.20.2.
+       4.20.70 is clean and MIT. New projects may prefer NSubstitute (MIT, cleaner API). -->
   <PackageReference Include="Moq" Version="4.*" />
+  <!-- Alternative: NSubstitute (MIT, .NET community default 2026)
+  <PackageReference Include="NSubstitute" Version="5.*" /> -->
   <PackageReference Include="FluentAssertions" Version="6.*" />
   <PackageReference Include="Bogus" Version="35.*" />
   <PackageReference Include="Testcontainers" Version="3.*" />

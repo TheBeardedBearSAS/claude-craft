@@ -225,22 +225,22 @@ cd ~/claude-craft
 
 # Instalar reglas en tu proyecto
 # Reemplaza 'symfony' con tu tech y 'es' con tu idioma
-make install-symfony TARGET=~/mi-proyecto LANG=es
+make install-symfony TARGET=~/mi-proyecto RULES_LANG=es
 ```
 
 **Ejemplos para otros stacks:**
 ```bash
 # Flutter en inglés
-make install-flutter TARGET=~/mi-proyecto LANG=en
+make install-flutter TARGET=~/mi-proyecto RULES_LANG=en
 
 # React en francés
-make install-react TARGET=~/mi-proyecto LANG=fr
+make install-react TARGET=~/mi-proyecto RULES_LANG=fr
 
 # Python en alemán
-make install-python TARGET=~/mi-proyecto LANG=de
+make install-python TARGET=~/mi-proyecto RULES_LANG=de
 
 # Solo reglas comunes (cualquier proyecto)
-make install-common TARGET=~/mi-proyecto LANG=es
+make install-common TARGET=~/mi-proyecto RULES_LANG=es
 ```
 
 Salida esperada:
@@ -323,7 +323,7 @@ claude
 El comando va a:
 1. **Auto-detectar** tu stack técnico, framework, base de datos y CI/CD
 2. **Hacer preguntas** para información faltante (tipo de app, dominio, usuarios, cumplimiento)
-3. **Generar** un archivo `.claude/rules/00-project-context.md` completo
+3. **Generar** un archivo `.claude/references/<your-tech>/project-context.md` completo
 4. **Sugerir próximos pasos** (agentes a ejecutar, secciones a completar)
 
 **Modos disponibles:**
@@ -337,7 +337,7 @@ Si prefieres configurar manualmente, abre el archivo directamente:
 
 ```bash
 # Abrir en tu editor (reemplaza 'nano' con 'code', 'vim', etc.)
-nano .claude/rules/00-project-context.md
+nano .claude/references/<your-tech>/project-context.md
 ```
 
 ### Secciones a Personalizar

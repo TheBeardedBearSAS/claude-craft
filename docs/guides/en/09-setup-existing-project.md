@@ -37,7 +37,7 @@ This comprehensive tutorial guides you through adding Claude-Craft to a project 
 - [ ] You have committed all current changes
 - [ ] You have write access to the project directory
 - [ ] Node.js 20+ installed (for NPX method)
-- [ ] Claude Code installed (recommended: v2.1.168, minimum: v2.1.97 — CVE-2025-59536 patched)
+- [ ] Claude Code installed (recommended: v2.1.193, minimum: v2.1.97 — CVE-2025-59536 patched)
 
 ### When NOT to Install
 
@@ -208,7 +208,7 @@ npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en
 **Method B: Makefile**
 ```bash
 cd ~/claude-craft
-make install-symfony TARGET=~/your-existing-project LANG=en
+make install-symfony TARGET=~/your-existing-project RULES_LANG=en
 ```
 
 ### Preserving Existing Configuration
@@ -220,7 +220,7 @@ If you have existing `.claude/` files you want to keep:
 npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en --preserve-config
 
 # Makefile with preserve flag
-make install-symfony TARGET=~/your-existing-project LANG=en OPTIONS="--preserve-config"
+make install-symfony TARGET=~/your-existing-project RULES_LANG=en OPTIONS="--preserve-config"
 ```
 
 **What `--preserve-config` keeps:**
@@ -408,7 +408,7 @@ The command will analyze your existing codebase, detect technologies, and ask on
 Create or update the project context file manually:
 
 ```bash
-nano .claude/rules/00-project-context.md
+nano .claude/references/<your-tech>/project-context.md
 ```
 
 Fill in the template with what you've discovered:
@@ -649,7 +649,7 @@ Migration:
 | Old Location | Claude-Craft Location |
 |--------------|----------------------|
 | `.cursorrules` | `.claude/rules/90-custom.md` |
-| `.github/copilot-instructions.md` | `.claude/rules/00-project-context.md` |
+| `.github/copilot-instructions.md` | `.claude/references/<your-tech>/project-context.md` |
 | `CLAUDE.md` (root) | `.claude/CLAUDE.md` |
 | Custom prompts | `.claude/commands/custom/` |
 
@@ -751,7 +751,7 @@ If you are upgrading an existing Claude-Craft installation to v8.7.1:
 npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en --update
 
 # Or via Makefile
-make install-symfony TARGET=. LANG=en OPTIONS="--update"
+make install-symfony TARGET=. RULES_LANG=en OPTIONS="--update"
 ```
 
 ---

@@ -724,7 +724,7 @@ readonly class Money
     }
 }
 
-// ✅ PHP 8.5 — clone with
+// ✅ PHP 8.5 — clone() avec surcharge de propriétés
 readonly class Money
 {
     public function __construct(
@@ -734,7 +734,7 @@ readonly class Money
 }
 
 $price = new Money(1000, 'EUR');
-$discounted = clone $price with { amount: 800 };
+$discounted = clone($price, ['amount' => 800]);
 // $discounted->amount === 800, $discounted->currency === 'EUR'
 ```
 
@@ -864,7 +864,7 @@ switch ($status) {
 - [ ] **Property hooks (PHP 8.4+)** for Value Objects with validation
 - [ ] **Asymmetric visibility (PHP 8.4+)** for immutable properties
 - [ ] **Pipe operator `|>` (PHP 8.5+)** for function chains instead of nested calls
-- [ ] **`clone with` (PHP 8.5+)** for wither pattern on readonly classes
+- [ ] **`clone()` avec tableau (PHP 8.5+)** for wither pattern on readonly classes
 - [ ] **`#[\NoDiscard]` (PHP 8.5+)** on methods whose return value must be checked
 - [ ] No deprecated backtick operator, non-canonical casts `(boolean)/(integer)/(double)`, or `case;` syntax
 - [ ] Enums used instead of class constants for states

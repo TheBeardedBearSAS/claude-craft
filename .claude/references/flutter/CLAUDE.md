@@ -129,10 +129,8 @@ class OrderNotifier extends _$OrderNotifier {
   @override
   FutureOr<Order?> build(String id) => fetchOrder(id);
   
-  // Mutations: Idle/Pending/Success/Error auto-gérés
-  Future<void> updateOrder(Order order) => state.mutation(() async {
-    await repository.update(order);
-  });
+  // Pas de state.mutation() — les Mutations sont des objets top-level
+  // Voir state-management.md pour l'API Riverpod 3.0 Mutations correcte
 }
 ```
 **Sources :** [Riverpod — What's New](https://riverpod.dev/docs/whats_new) | [pub.dev/packages/flutter_riverpod](https://pub.dev/packages/flutter_riverpod)
@@ -146,7 +144,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   
   // BLoC v9: vérification automatique si le bloc est actif
   Future<void> _onLoadOrder(LoadOrder event, Emitter<OrderState> emit) async {
-    if (!emit.isMounted) return;  // Nouveau dans v9
+    if (emit.isDone) return;  // BLoC v9: Emitter.isDone (isMounted n'existe pas)
     emit(OrderLoading());
     // ...
   }
@@ -192,5 +190,5 @@ dart run build_runner build -d
 - [ ] Trailing commas
 - [ ] Tests >= 80% coverage
 - [ ] Web: Wasm build pour prod
-- [ ] BLoC v9: emit.isMounted checks
+- [ ] BLoC v9: emit.isDone checks (Emitter) / isClosed checks (Cubit)
 - [ ] Riverpod 3: Mutations API pour async

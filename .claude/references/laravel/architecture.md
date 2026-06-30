@@ -646,4 +646,4 @@ class OrderResource extends JsonResource
 - [ ] Service Providers wire up dependencies
 - [ ] AI SDK for LLM integrations (https://laravel.com/docs/13.x/ai-sdk)
 - [ ] Vector Search for semantic search (https://laravel.com/docs/13.x/vector-search)
-- [ ] Passkey for passwordless authentication (https://laravel.com/docs/13.x/passkey)
+- [ ] Passkey for passwordless authentication (https://laravel.com/docs/13.x/passkey) — User model must implement `PasskeyUser` and use `PasskeyAuthenticatable` trait

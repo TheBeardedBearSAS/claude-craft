@@ -193,7 +193,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 
 3. **Vérifier le fichier de contexte projet**
    ```bash
-   cat .claude/rules/00-project-context.md
+   cat .claude/references/<your-tech>/project-context.md
    # S'assurer qu'il décrit votre projet avec précision
    ```
 
@@ -284,7 +284,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 
 1. **Mettre à jour le contexte projet**
    ```bash
-   # Éditer .claude/rules/00-project-context.md
+   # Éditer .claude/references/<your-tech>/project-context.md
    # Ajouter les patterns et conventions spécifiques
    ```
 
@@ -496,7 +496,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
    ```bash
    claude --version
    # Les hooks nécessitent v2.1.47+ (PreCompact: v2.1.76+, PostCompact: v2.1.76+)
-   # Recommandé : v2.1.168
+   # Recommandé : v2.1.193
    ```
 
 3. **Vérifier que le script hook est exécutable**

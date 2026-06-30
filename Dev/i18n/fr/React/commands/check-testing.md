@@ -288,7 +288,7 @@ src/
 // test/utils/test-utils.tsx
 import { render, RenderOptions } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 
 const AllProviders = ({ children }: { children: React.ReactNode }) => {
   const queryClient = new QueryClient({

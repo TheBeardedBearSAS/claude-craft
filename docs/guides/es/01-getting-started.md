@@ -54,7 +54,7 @@ Todo el contenido está disponible en 5 idiomas:
 
 | Versión | Estado |
 |---------|--------|
-| **2.1.168** | Recomendada (soporte completo de funcionalidades) |
+| **2.1.193** | Recomendada (soporte completo de funcionalidades) |
 | **2.1.97+** | Mínima soportada (CVE-2025-59536 parcheado) |
 
 ### Opcionales (Recomendados)
@@ -92,10 +92,10 @@ git clone https://github.com/TheBeardedBearSAS/claude-craft.git
 cd claude-craft
 
 # Instalar para un proyecto Symfony (en francés)
-make install-symfony TARGET=~/mi-proyecto LANG=fr
+make install-symfony TARGET=~/mi-proyecto RULES_LANG=fr
 
 # O para un proyecto Flutter (en inglés)
-make install-flutter TARGET=~/mi-app LANG=en
+make install-flutter TARGET=~/mi-app RULES_LANG=en
 ```
 
 ### Método 2: Script Directo
@@ -139,7 +139,7 @@ git init
 
 ```bash
 # Desde el directorio claude-craft
-make install-symfony TARGET=~/mi-api LANG=fr
+make install-symfony TARGET=~/mi-api RULES_LANG=fr
 ```
 
 ### Paso 3: Verificar la Instalación
@@ -177,7 +177,7 @@ cd ~/mi-api && claude
 
 **Opción B: Manual**
 ```bash
-nano ~/mi-api/.claude/rules/00-project-context.md
+nano ~/mi-api/.claude/references/<your-tech>/project-context.md
 ```
 
 Actualiza estas secciones:
@@ -343,7 +343,7 @@ Ahora que entiendes los conceptos básicos, continúa con:
 
 ```bash
 # Instalación
-make install-{tech} TARGET=ruta LANG=xx
+make install-{tech} TARGET=ruta RULES_LANG=xx
 
 # Listar opciones disponibles
 make help

@@ -31,19 +31,19 @@ Before starting, make sure you have the following installed:
 ### Required
 
 - [ ] **Terminal/Command Line** - Any terminal application
-- [ ] **Node.js 20+** - Required for NPX installation
+- [ ] **Node.js 22+** - Required for NPX installation
 - [ ] **Git** - For version control
-- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.168, minimum: v2.1.97 — CVE-2025-59536 patched)
+- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.193, minimum: v2.1.97 — CVE-2025-59536 patched)
 
 ### Verify Your Prerequisites
 
 Open your terminal and run these commands:
 
 ```bash
-# Check Node.js version (should be 16 or higher)
+# Check Node.js version (should be 22 or higher)
 node --version
 ```
-Expected output: `v20.x.x` or higher (e.g., `v20.10.0`)
+Expected output: `v22.x.x` or higher (e.g., `v22.11.0`)
 
 ```bash
 # Check Git version
@@ -55,7 +55,7 @@ Expected output: `git version 2.x.x` (e.g., `git version 2.43.0`)
 # Check Claude Code is installed
 claude --version
 ```
-Expected output: Version number (recommended: `2.1.168` or higher)
+Expected output: Version number (recommended: `2.1.193` or higher)
 
 ### Install Missing Prerequisites
 
@@ -229,22 +229,22 @@ cd ~/claude-craft
 
 # Install rules to your project
 # Replace 'symfony' with your tech and 'en' with your language
-make install-symfony TARGET=~/my-project LANG=en
+make install-symfony TARGET=~/my-project RULES_LANG=en
 ```
 
 **Examples for other stacks:**
 ```bash
 # Flutter in French
-make install-flutter TARGET=~/my-project LANG=fr
+make install-flutter TARGET=~/my-project RULES_LANG=fr
 
 # React in Spanish
-make install-react TARGET=~/my-project LANG=es
+make install-react TARGET=~/my-project RULES_LANG=es
 
 # Python in German
-make install-python TARGET=~/my-project LANG=de
+make install-python TARGET=~/my-project RULES_LANG=de
 
 # Common rules only (any project)
-make install-common TARGET=~/my-project LANG=en
+make install-common TARGET=~/my-project RULES_LANG=en
 ```
 
 Expected output:
@@ -333,7 +333,7 @@ claude
 The command will:
 1. **Auto-detect** your tech stack, framework, database, and CI/CD
 2. **Ask questions** for missing information (app type, domain, users, compliance)
-3. **Generate** a complete `.claude/rules/00-project-context.md` file
+3. **Generate** a complete `.claude/references/<your-tech>/project-context.md` file
 4. **Suggest next steps** (agents to run, sections to complete)
 
 **Modes available:**
@@ -347,7 +347,7 @@ If you prefer to configure manually, open the file directly:
 
 ```bash
 # Open in your editor (replace 'nano' with 'code', 'vim', etc.)
-nano .claude/rules/00-project-context.md
+nano .claude/references/<your-tech>/project-context.md
 ```
 
 ### Sections to Customize

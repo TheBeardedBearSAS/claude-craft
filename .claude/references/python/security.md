@@ -144,22 +144,26 @@ async def search_users(
 
 ## Authentication & Authorization
 
-### Password Hashing with bcrypt
+### Password Hashing with Argon2id (pwdlib)
+
+> **passlib is unmaintained since 2020 and incompatible with Python 3.13+ (the `crypt` stdlib module it depended on was removed). bcrypt is explicitly forbidden in new code by project rule 11 (OWASP 2026 mandate: Argon2id). Use `pwdlib` with Argon2id instead.**
 
 ```python
-from passlib.context import CryptContext
+# pip install pwdlib[argon2]
+from pwdlib import PasswordHash
 from pydantic import SecretStr
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_hash = PasswordHash.recommended()  # defaults to Argon2id
+
 
 def hash_password(password: str) -> str:
-    """Hash a password securely."""
-    return pwd_context.hash(password)
+    """Hash a password securely with Argon2id."""
+    return pwd_hash.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    """Verify a password against its Argon2id hash."""
+    return pwd_hash.verify(plain_password, hashed_password)
 
 
 # Usage
@@ -287,7 +291,7 @@ async def list_users(
 ### Environment Variables
 
 ```python
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr
 
 
@@ -310,10 +314,11 @@ class Settings(BaseSettings):
     # External services
     redis_url: SecretStr | None = None
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+    )
 
 
 settings = Settings()
@@ -599,18 +604,20 @@ updates:
 - [ ] HTTPS enforced
 - [ ] Secrets in environment variables
 
-### OWASP Top 10 Awareness
+### OWASP Top 10:2025 Awareness
 
-1. **Injection**: Use ORMs, parameterized queries
-2. **Broken Authentication**: Secure password hashing, JWT handling
-3. **Sensitive Data Exposure**: Encrypt data, use HTTPS
-4. **XML External Entities**: Disable XML processing
-5. **Broken Access Control**: Role-based access, validate permissions
-6. **Security Misconfiguration**: Secure defaults, security headers
-7. **Cross-Site Scripting (XSS)**: Sanitize output
-8. **Insecure Deserialization**: Validate input, use safe parsers
-9. **Vulnerable Components**: Regular dependency audits
-10. **Insufficient Logging**: Log security events, protect logs
+> Authoritative list: see `.claude/rules/11-security.md`.
+
+1. **Broken Access Control** (incl. SSRF): deny by default, verify permissions on every request
+2. **Cryptographic Failures**: TLS 1.3, Argon2id for passwords, secrets in vault
+3. **Injection**: Use ORMs, parameterized queries, validate all input
+4. **Insecure Design**: threat modeling, defense in depth, rate limiting
+5. **Security Misconfiguration**: secure defaults, security headers
+6. **Software Supply Chain Failures** *(new 2025)*: SLSA 1.0, SBOM, Sigstore, `pip-audit`
+7. **Mishandling of Exceptional Conditions** *(new 2025)*: log errors, never expose stack traces in prod
+8. **Authentication Failures**: MFA, brute-force protection, invalidate sessions on logout
+9. **Security Logging and Monitoring Failures**: centralize logs, alert on anomalies, retain >= 1 year
+10. **Vulnerable and Outdated Components**: Dependabot/Renovate, `pip-audit`, Trivy
 
 ## Conclusion
 

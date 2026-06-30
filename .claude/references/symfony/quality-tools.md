@@ -430,9 +430,9 @@ return RectorConfig::configure()
         PHPUnitSetList::PHPUNIT_120,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
 
-        // ✅ PHP 8.4 (8.5 en beta, ne pas utiliser en prod)
-        LevelSetList::UP_TO_PHP_84,
-        SetList::PHP_84,
+        // ✅ PHP 8.5 (stable depuis nov. 2025)
+        LevelSetList::UP_TO_PHP_85,
+        SetList::PHP_85,
     ])
     ->withImportNames(
         importNames: true,
@@ -1040,4 +1040,4 @@ make ci
 | Deptrac | 4.x | `composer require --dev qossmic/deptrac-shim:^4.0` |
 | PHP-CS-Fixer | 3.x | `composer require --dev friendsofphp/php-cs-fixer:^3.0` |
 | Infection | 0.29.x | `composer require --dev infection/infection:^0.29` |
-| PHPUnit | 11.x | `composer require --dev phpunit/phpunit:^11.0` |
+| PHPUnit | 12.x | `composer require --dev phpunit/phpunit:^12.0` |

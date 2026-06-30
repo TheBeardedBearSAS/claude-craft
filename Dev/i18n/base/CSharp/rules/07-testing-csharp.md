@@ -266,6 +266,36 @@ _loggerMock.Verify(
     Times.Once);
 ```
 
+### Alternative: NSubstitute
+
+> **Moq vs NSubstitute (2026):** Moq 4.20.0 (Aug 2023) briefly embedded SponsorLink (scraped git emails) — reverted in 4.20.2, 4.20.70 is clean and MIT. The .NET community has broadly adopted **NSubstitute** (MIT) for its cleaner API. Both frameworks are valid; NSubstitute is recommended for new projects.
+>
+> NuGet: `NSubstitute` Version 5.*
+
+```csharp
+// NSubstitute: equivalent of the Moq examples above
+var orderRepo = Substitute.For<IOrderRepository>();
+var emailService = Substitute.For<IEmailService>();
+
+var sut = new OrderService(orderRepo, emailService);
+
+// Setup
+var order = CreateTestOrder();
+orderRepo.GetByIdAsync(order.Id, Arg.Any<CancellationToken>()).Returns(order);
+
+// Act
+await sut.ProcessOrderAsync(order.Id);
+
+// Verify
+await emailService.Received(1).SendOrderConfirmationAsync(
+    Arg.Is<Order>(o => o.Id == order.Id),
+    Arg.Any<CancellationToken>());
+
+// Verify NOT called
+await orderRepo.DidNotReceive().DeleteAsync(
+    Arg.Any<Order>(), Arg.Any<CancellationToken>());
+```
+
 ## FluentAssertions
 
 ### Basic Assertions
@@ -392,30 +422,52 @@ public class CustomerFaker : Faker<Customer>
 
 ## Integration Testing
 
-### WebApplicationFactory
+> **Critical anti-pattern: do not use `UseInMemoryDatabase` for integration tests.** The EF Core in-memory provider enforces no FK constraints, unique constraints, transactions, or `RowVersion`. Tests pass in-memory and silently fail against real PostgreSQL/SQL Server in production. Use **Testcontainers** (see below) or SQLite with `UseRelationalNulls()` as a Docker-free fallback.
+
+### WebApplicationFactory (with Testcontainers)
 
 ```csharp
-// Custom WebApplicationFactory
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+// NuGet: Testcontainers.PostgreSql 4.* (Version 4.x — always call WithImage explicitly)
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    private PostgreSqlContainer _postgres = null!;
+
+    public async Task InitializeAsync()
+    {
+        _postgres = new PostgreSqlBuilder()
+            .WithImage("postgres:16-alpine")  // Required in 4.x — no default image
+            .WithDatabase("testdb")
+            .WithUsername("test")
+            .WithPassword("test")
+            .Build();
+        await _postgres.StartAsync();
+    }
+
+    public new async Task DisposeAsync() => await _postgres.DisposeAsync();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
         {
-            // Remove real database
+            // Replace real database with test container
             var descriptor = services.SingleOrDefault(
                 d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
             if (descriptor != null)
                 services.Remove(descriptor);
 
-            // Add in-memory database
             services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseInMemoryDatabase("TestDb");
-            });
+                options.UseNpgsql(_postgres.GetConnectionString()));
 
             // Replace external services with fakes
             services.AddScoped<IEmailService, FakeEmailService>();
+        });
+
+        builder.Configure(app =>
+        {
+            // Apply migrations on the test database
+            using var scope = app.ApplicationServices.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            db.Database.MigrateAsync().GetAwaiter().GetResult();
         });
     }
 }

@@ -313,18 +313,20 @@ brew install --cask react-native-debugger
 # https://github.com/jhen0409/react-native-debugger
 ```
 
-### React Native DevTools (0.85+ / 0.86+)
+### React Native DevTools (stable depuis RN 0.76, défaut depuis RN 0.85+)
 
-Flipper est déprécié depuis React Native 0.73. Le remplacement officiel est **React Native DevTools**, intégré nativement dans Metro. RN 0.85+ en fait le debugger par défaut et stabilise plusieurs fonctionnalités.
+Flipper est déprécié depuis React Native 0.73. Le remplacement officiel est **React Native DevTools**, intégré nativement dans Metro. DevTools est stable depuis RN 0.76 et est le debugger par défaut depuis RN 0.85 — aucun flag CLI n'est nécessaire.
 
 ```bash
-# Démarrer avec le debugger (RN 0.73+)
-npx react-native start --experimental-debugger
+# Démarrer Metro normalement — DevTools s'ouvre via le dev menu ou en appuyant sur `j`
+npx react-native start
 
 # Ouvrir depuis l'app via le dev menu
 # iOS : Cmd+D (simulateur) ou secouer le device
 # Android : Cmd+M (émulateur) ou secouer le device
 # Sélectionner "Open DevTools" dans le menu
+
+# Ou appuyer sur `j` dans le terminal Metro pour ouvrir DevTools directement
 ```
 
 #### Fonctionnalités React Native DevTools 0.85+
@@ -433,7 +435,7 @@ npm install -g @vtsls/language-server typescript
 - [ ] EAS CLI configuré
 - [ ] Metro config optimisé
 - [ ] RNGH migré vers 3.0.0 si RN 0.86+ (API Gesture, GestureHandlerRootView au niveau racine)
-- [ ] Debugger configuré (React Native DevTools 0.85+ via `--experimental-debugger`)
+- [ ] Debugger configuré (React Native DevTools — défaut depuis RN 0.85+, aucun flag requis, appuyer sur `j` dans Metro ou dev menu)
 - [ ] Metro TLS configuré si HTTPS local requis (deep links, origines sécurisées)
 - [ ] VS Code extensions installées
 - [ ] Package manager cohérent (npm)

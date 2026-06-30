@@ -41,38 +41,48 @@ Toujours utiliser `standalone: true` — NgModules réservés aux libs legacy.
 
 ### Zoneless par défaut
 ```typescript
-// app.config.ts
+// app.config.ts — projets Angular 22 générés via CLI (déjà zoneless par défaut)
 import { ApplicationConfig } from '@angular/core';
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideExperimentalZonelessChangeDetection(), // ← Zoneless (Angular 22)
+    // NOTE: Angular 21+ CLI génère les projets sans Zone.js par défaut.
+    // Ajouter provideZonelessChangeDetection() uniquement pour MIGRER
+    // une app existante zone-based vers le mode zoneless.
+    provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(),
   ]
 };
 ```
-> `provideZoneChangeDetection()` reste disponible pour migrer progressivement.
+> `provideZoneChangeDetection()` reste disponible pour migrer progressivement depuis Zone.js.
 
 ### Signal Forms (stable Angular 22)
-Remplace FormGroup/FormControl par une API signal-based pour les formulaires réactifs :
+Remplace FormGroup/FormControl par une API signal-based. Import depuis `@angular/forms/signals` :
 ```typescript
-import { FormField, FormGroup } from '@angular/forms';
+import { signal } from '@angular/core';
+import { form, FormField, required, email as emailValidator } from '@angular/forms/signals';
 
-const form = new FormGroup({
-  email: new FormField(''),
-  password: new FormField(''),
-});
+@Component({ standalone: true, imports: [FormField], template: `...` })
+export class LoginComponent {
+  model = signal({ email: '', password: '' });
 
-// Accès signal
-console.log(form.value()); // { email: '', password: '' }
+  loginForm = form(this.model, (path) => {
+    required(path.email);
+    emailValidator(path.email);
+    required(path.password);
+  });
+
+  // Accès signal
+  // loginForm.value() → { email: '', password: '' }
+}
 ```
-Voir `coding-standards.md` pour les exemples de migration Reactive Forms → Signal Forms.
+Voir `architecture.md` pour les exemples complets et la migration Reactive Forms → Signal Forms.
 
 ### httpResource — chargement HTTP déclaratif
 ```typescript
-import { httpResource } from '@angular/core';
+import { httpResource } from '@angular/common/http';
 
 @Component({ ... })
 export class UsersComponent {
@@ -111,7 +121,7 @@ export class UsersComponent {
 
 - [ ] Angular 22, TypeScript 6, Node 22/24
 - [ ] Standalone components (`standalone: true`)
-- [ ] Zoneless bootstrapping (`provideExperimentalZonelessChangeDetection`)
+- [ ] Zoneless par défaut (Angular 21+ CLI) — migration depuis zone-based : `provideZonelessChangeDetection()`
 - [ ] Signals pour l'état réactif (`signal`, `computed`, `effect`)
 - [ ] Signal Forms pour les formulaires (pas FormGroup classique)
 - [ ] `httpResource()` pour les chargements HTTP déclaratifs

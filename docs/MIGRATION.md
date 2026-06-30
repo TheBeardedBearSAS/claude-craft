@@ -9,7 +9,7 @@
 > | v6.x → v7 | [MIGRATION-v7.md](MIGRATION-v7.md) |
 > | v7.x → v8 | [MIGRATION-v7-to-v8.md](MIGRATION-v7-to-v8.md) |
 >
-> Always upgrade one major version at a time. The current release is **v8.18.2**.
+> Always upgrade one major version at a time. The current release is **v8.19.0**.
 
 This guide explains how to migrate from the legacy rules format to the official Claude Code skills format.
 

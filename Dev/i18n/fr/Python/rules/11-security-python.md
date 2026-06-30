@@ -138,22 +138,26 @@ async def search_users(
 
 ## Authentification et autorisation
 
-### Hachage de mot de passe avec bcrypt
+### Hachage de mot de passe avec Argon2id (pwdlib)
+
+> **passlib n'est plus maintenu depuis 2020 et est incompatible avec Python 3.13+ (le module stdlib `crypt` dont il dépendait a été supprimé). bcrypt est explicitement interdit dans le nouveau code par la règle projet 11 (mandat OWASP 2026 : Argon2id). Utiliser `pwdlib` avec Argon2id à la place.**
 
 ```python
-from passlib.context import CryptContext
+# pip install pwdlib[argon2]
+from pwdlib import PasswordHash
 from pydantic import SecretStr
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_hash = PasswordHash.recommended()  # defaults to Argon2id
+
 
 def hash_password(password: str) -> str:
-    """Hacher un mot de passe de maniere securisee."""
-    return pwd_context.hash(password)
+    """Hacher un mot de passe de maniere securisee avec Argon2id."""
+    return pwd_hash.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verifier un mot de passe par rapport a son hachage."""
-    return pwd_context.verify(plain_password, hashed_password)
+    """Verifier un mot de passe par rapport a son hachage Argon2id."""
+    return pwd_hash.verify(plain_password, hashed_password)
 
 
 # Utilisation
@@ -263,7 +267,7 @@ async def list_users(
 ### Variables d'environnement
 
 ```python
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr
 
 
@@ -285,10 +289,11 @@ class Settings(BaseSettings):
     # Services externes
     redis_url: SecretStr | None = None
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+    )
 
 
 settings = Settings()
@@ -572,18 +577,20 @@ updates:
 - [ ] HTTPS impose
 - [ ] Secrets dans les variables d'environnement
 
-### Sensibilisation OWASP Top 10
+### Sensibilisation OWASP Top 10:2025
 
-1. **Injection** : Utiliser les ORMs, requetes parametrees
-2. **Authentification defaillante** : Hachage securise des mots de passe, gestion JWT
-3. **Exposition de donnees sensibles** : Chiffrer les donnees, utiliser HTTPS
-4. **Entites externes XML** : Desactiver le traitement XML
-5. **Controle d'acces defaillant** : Acces base sur les roles, valider les permissions
-6. **Mauvaise configuration de securite** : Valeurs par defaut securisees, en-tetes de securite
-7. **Cross-Site Scripting (XSS)** : Assainir les sorties
-8. **Deserialisation non securisee** : Valider les entrees, utiliser des parseurs securises
-9. **Composants vulnerables** : Audits reguliers des dependances
-10. **Journalisation insuffisante** : Journaliser les evenements de securite, proteger les logs
+> Liste faisant autorité : voir `.claude/rules/11-security.md`.
+
+1. **Controle d'acces defaillant** (incl. SSRF) : refus par defaut, verifier les permissions a chaque requete
+2. **Defaillances cryptographiques** : TLS 1.3, Argon2id pour les mots de passe, secrets dans vault
+3. **Injection** : Utiliser les ORMs, requetes parametrees, valider toutes les entrees
+4. **Conception non securisee** : modelisation des menaces, defense en profondeur, rate limiting
+5. **Mauvaise configuration de securite** : valeurs par defaut securisees, en-tetes de securite
+6. **Defaillances de la chaine d'approvisionnement logiciel** *(nouveau 2025)* : SLSA 1.0, SBOM, Sigstore, `pip-audit`
+7. **Mauvaise gestion des conditions exceptionnelles** *(nouveau 2025)* : journaliser les erreurs, ne jamais exposer la stack trace en prod
+8. **Defaillances d'authentification** : MFA, protection brute-force, invalider les sessions a la deconnexion
+9. **Defaillances de journalisation et de surveillance** : centraliser les logs, alertes sur anomalies, retention >= 1 an
+10. **Composants vulnerables et obsoletes** : Dependabot/Renovate, `pip-audit`, Trivy
 
 ## Conclusion
 

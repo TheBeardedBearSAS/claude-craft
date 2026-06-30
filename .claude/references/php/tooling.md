@@ -36,6 +36,12 @@ composer validate
 
 ### composer.json Configuration
 
+> **Choose one path per project:** Pest 4 is incompatible with PHPUnit 13 (it requires PHPUnit ≤12.5.30). Pick the Pest variant (recommended) or the plain PHPUnit variant — do not mix.
+
+#### Variant A — Pest 4 (recommended)
+
+Pest 4 manages its PHPUnit 12 pin transitively; do not add an explicit `phpunit/phpunit` entry.
+
 ```json
 {
     "name": "app/my-project",
@@ -53,13 +59,12 @@ composer validate
         "psr/container": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^12.0",
+        "pestphp/pest": "^4.7",
+        "pestphp/pest-plugin-browser": "^4.0",
         "phpstan/phpstan": "^2.2",
         "friendsofphp/php-cs-fixer": "^3.0",
         "rector/rector": "^2.4",
-        "qossmic/deptrac-shim": "^4.0",
-        "pestphp/pest": "^4.7",
-        "pestphp/pest-plugin-browser": "^4.0"
+        "qossmic/deptrac-shim": "^4.0"
     },
     "autoload": {
         "psr-4": {
@@ -77,6 +82,62 @@ composer validate
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
+    },
+    "scripts": {
+        "test": "pest",
+        "test:coverage": "pest --coverage --min=80",
+        "analyse": "phpstan analyse",
+        "cs:check": "php-cs-fixer fix --dry-run --diff",
+        "cs:fix": "php-cs-fixer fix",
+        "quality": [
+            "@cs:check",
+            "@analyse",
+            "@test"
+        ]
+    }
+}
+```
+
+#### Variant B — Plain PHPUnit 13 (no Pest)
+
+PHPUnit 13 is the current stable (released February 2026, supported until February 2028).
+
+```json
+{
+    "name": "app/my-project",
+    "description": "My PHP Application",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.5",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "ramsey/uuid": "^4.7",
+        "psr/log": "^3.0",
+        "psr/container": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^13.0",
+        "phpstan/phpstan": "^2.2",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "rector/rector": "^2.4",
+        "qossmic/deptrac-shim": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
     },
     "scripts": {
         "test": "phpunit",

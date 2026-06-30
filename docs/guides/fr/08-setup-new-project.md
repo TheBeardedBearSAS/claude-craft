@@ -55,7 +55,7 @@ Sortie attendue : `git version 2.x.x` (ex: `git version 2.43.0`)
 # Vérifier que Claude Code est installé
 claude --version
 ```
-Sortie attendue : Numéro de version (recommandé: `2.1.168` ou supérieur)
+Sortie attendue : Numéro de version (recommandé: `2.1.193` ou supérieur)
 
 ### Installer les Prérequis Manquants
 
@@ -225,22 +225,22 @@ cd ~/claude-craft
 
 # Installer les règles dans votre projet
 # Remplacez 'symfony' par votre tech et 'fr' par votre langue
-make install-symfony TARGET=~/mon-projet LANG=fr
+make install-symfony TARGET=~/mon-projet RULES_LANG=fr
 ```
 
 **Exemples pour d'autres stacks :**
 ```bash
 # Flutter en anglais
-make install-flutter TARGET=~/mon-projet LANG=en
+make install-flutter TARGET=~/mon-projet RULES_LANG=en
 
 # React en espagnol
-make install-react TARGET=~/mon-projet LANG=es
+make install-react TARGET=~/mon-projet RULES_LANG=es
 
 # Python en allemand
-make install-python TARGET=~/mon-projet LANG=de
+make install-python TARGET=~/mon-projet RULES_LANG=de
 
 # Règles communes uniquement (tout projet)
-make install-common TARGET=~/mon-projet LANG=fr
+make install-common TARGET=~/mon-projet RULES_LANG=fr
 ```
 
 Sortie attendue :
@@ -323,7 +323,7 @@ claude
 La commande va :
 1. **Auto-détecter** votre stack technique, framework, base de données et CI/CD
 2. **Poser des questions** pour les informations manquantes (type d'app, domaine, utilisateurs, conformité)
-3. **Générer** un fichier `.claude/rules/00-project-context.md` complet
+3. **Générer** un fichier `.claude/references/<your-tech>/project-context.md` complet
 4. **Suggérer les prochaines étapes** (agents à exécuter, sections à compléter)
 
 **Modes disponibles :**
@@ -337,7 +337,7 @@ Si vous préférez configurer manuellement, ouvrez le fichier directement :
 
 ```bash
 # Ouvrir dans votre éditeur (remplacez 'nano' par 'code', 'vim', etc.)
-nano .claude/rules/00-project-context.md
+nano .claude/references/<your-tech>/project-context.md
 ```
 
 ### Sections à Personnaliser

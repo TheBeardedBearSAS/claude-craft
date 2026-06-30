@@ -377,7 +377,7 @@ tests/
         <server name="APP_ENV" value="test" force="true"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
-        <server name="SYMFONY_PHPUNIT_VERSION" value="10.5"/>
+        <server name="SYMFONY_PHPUNIT_VERSION" value="12"/>
     </php>
 
     <testsuites>

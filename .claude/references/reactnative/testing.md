@@ -64,7 +64,8 @@ module.exports = {
 ### jest.setup.js
 
 ```javascript
-import '@testing-library/jest-native/extend-expect';
+// @testing-library/jest-native/extend-expect est re-exporté par @testing-library/react-native v12+
+// — import séparé non nécessaire.
 
 // Mock expo modules
 jest.mock('expo-font');
@@ -176,33 +177,35 @@ npm install --save-dev @testing-library/react-native @testing-library/jest-nativ
 
 ```typescript
 // components/Button/Button.test.tsx
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, screen, userEvent } from '@testing-library/react-native';
 import { Button } from './Button';
 
 describe('Button', () => {
   it('should render correctly', () => {
-    const { getByText } = render(<Button onPress={() => {}}>Click me</Button>);
-    expect(getByText('Click me')).toBeTruthy();
+    render(<Button onPress={() => {}}>Click me</Button>);
+    expect(screen.getByText('Click me')).toBeTruthy();
   });
 
-  it('should call onPress when pressed', () => {
+  it('should call onPress when pressed', async () => {
     const onPress = jest.fn();
-    const { getByText } = render(<Button onPress={onPress}>Click me</Button>);
+    const user = userEvent.setup();
+    render(<Button onPress={onPress}>Click me</Button>);
 
-    fireEvent.press(getByText('Click me'));
+    await user.press(screen.getByRole('button', { name: 'Click me' }));
 
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
-  it('should be disabled when disabled prop is true', () => {
+  it('should be disabled when disabled prop is true', async () => {
     const onPress = jest.fn();
-    const { getByText } = render(
+    const user = userEvent.setup();
+    render(
       <Button onPress={onPress} disabled>
         Click me
       </Button>
     );
 
-    fireEvent.press(getByText('Click me'));
+    await user.press(screen.getByRole('button', { name: 'Click me' }));
 
     expect(onPress).not.toHaveBeenCalled();
   });

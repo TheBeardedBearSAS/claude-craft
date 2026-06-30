@@ -1,6 +1,6 @@
 # Commands Reference
 
-> **This is the narrated, namespace-grouped reference (125 core commands).** For the complete auto-generated table of all 219 commands (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
+> **This is the narrated, namespace-grouped reference (126 core commands).** For the complete auto-generated table of all 220 commands (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
 
 Claude Code commands are slash commands that automate workflows and provide structured assistance.
 
@@ -40,7 +40,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | Namespace | Technology | Count |
 |-----------|------------|-------|
 | `/common:` | Transversal | 19 |
-| `/workflow:` | Workflow (BMAD) | 9 |
+| `/workflow:` | Workflow (BMAD) | 10 |
 | `/team:` | Agent Teams | 4 |
 | `/qa:` | QA & Testing | 6 |
 | `/uiux:` | UI/UX & Accessibility | 8 |

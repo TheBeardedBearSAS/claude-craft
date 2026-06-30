@@ -96,7 +96,7 @@ return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR12' => true,
-        '@PHP84Migration' => true,
+        '@PHP85Migration' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
 

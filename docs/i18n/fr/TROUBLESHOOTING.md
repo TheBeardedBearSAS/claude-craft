@@ -338,7 +338,7 @@ yq eval '.' claude-projects.yaml
 1. **Vérifier la version de Claude Code**
    ```bash
    claude --version
-   # Minimum : v2.1.97 | Recommandé : v2.1.168
+   # Minimum : v2.1.97 | Recommandé : v2.1.193
    # PreCompact : v2.1.76+ | PostCompact : v2.1.76+
    ```
 

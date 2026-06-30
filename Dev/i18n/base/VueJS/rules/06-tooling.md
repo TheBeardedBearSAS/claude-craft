@@ -36,18 +36,22 @@ export default defineConfig({
   build: {
     target: 'esnext',
     sourcemap: true,
-    rollupOptions: {
+    // Vite 8 / Rolldown (default): object form of manualChunks removed — use codeSplitting.groups
+    rolldownOptions: {
       output: {
-        // ⚠️ Vite 8 (Rolldown): manualChunks is deprecated when Rolldown is active (default bundler in Vite 8).
-        // Remove or condition to `build.rolldown !== true`. Rolldown produces equivalent or better automatic chunking.
-        manualChunks: {
-          'vue-vendor': ['vue', 'vue-router', 'pinia'],
+        codeSplitting: {
+          groups: [
+            { name: 'vue-vendor', test: /node_modules\/(vue|pinia|vue-router)/ },
+          ],
         },
       },
     },
   },
 })
 ```
+
+> **Vite 8 / Rolldown (default):** The object form of `manualChunks` is **removed** (not supported). Use `build.rolldownOptions.output.codeSplitting.groups`.
+> **Vite 7 / Rolldown disabled (legacy):** use `build.rollupOptions.output.manualChunks` — `// Only if Rolldown is explicitly disabled`.
 
 ### Environment Variables
 
@@ -142,8 +146,8 @@ export default [
 ```json
 {
   "scripts": {
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx",
-    "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   }
 }
 ```
@@ -340,7 +344,7 @@ const router = createRouter({ history: createWebHistory() });
     "lint:fix": "eslint . --fix",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "vue": "^3.5.0",
@@ -368,7 +372,7 @@ const router = createRouter({ history: createWebHistory() });
 
 ```bash
 pnpm add -D husky lint-staged
-pnpm exec husky install
+pnpm exec husky init
 ```
 
 ### Configuration
@@ -389,18 +393,12 @@ pnpm exec husky install
 ```
 
 ```bash
-# .husky/pre-commit
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
+# .husky/pre-commit  (Husky v9 — no wrapper sourcing needed)
 pnpm lint-staged
 ```
 
 ```bash
-# .husky/pre-push
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
+# .husky/pre-push  (Husky v9 — no wrapper sourcing needed)
 pnpm type-check
 pnpm test:unit
 ```

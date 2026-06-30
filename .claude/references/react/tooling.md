@@ -67,7 +67,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           // Separate vendor chunks
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'react-vendor': ['react', 'react-dom', 'react-router'],
           'query-vendor': ['@tanstack/react-query'],
           'form-vendor': ['react-hook-form', 'zod']
         }
@@ -684,7 +684,7 @@ make ci           # Complete pipeline
 ```typescript
 // Lazy loading routes
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));

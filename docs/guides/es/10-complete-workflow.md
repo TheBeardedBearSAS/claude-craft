@@ -4,7 +4,7 @@
 >
 > **Qué construimos:** *TaskFlow* — un SaaS de seguimiento de tareas para equipos pequeños con una API REST (Python / FastAPI) y un cliente web en React. Es lo suficientemente sencillo para seguirlo en una sola sesión, y lo suficientemente real para ejercitar todo el flujo de trabajo.
 >
-> **Claude Craft v8.18.2** · Tiempo estimado de lectura + práctica: 60–90 minutos.
+> **Claude Craft v8.19.0** · Tiempo estimado de lectura + práctica: 60–90 minutos.
 
 ---
 

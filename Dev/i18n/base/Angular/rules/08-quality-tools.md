@@ -399,12 +399,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          build: npm run build
-          start: npm run serve:ci
-          wait-on: 'http://localhost:4200'
+      - name: Playwright install
+        run: npx playwright install --with-deps chromium
+
+      - name: Playwright run
+        run: npm run e2e
 ```
 
 ## Security Scanning
@@ -461,8 +460,8 @@ sonar.javascript.lcov.reportPaths=coverage/lcov.info
     "test": "vitest",
     "test:ci": "vitest run --coverage",
     "test:watch": "vitest watch",
-    "e2e": "cypress run",
-    "e2e:open": "cypress open",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
 
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",

@@ -432,7 +432,7 @@ php artisan pest:install
 Puis installer les navigateurs Playwright :
 
 ```bash
-./vendor/bin/pest browser:install
+npm install --save-dev @playwright/test
 # Installe Chromium, Firefox et WebKit
 ```
 
@@ -455,45 +455,39 @@ tests/
 <?php
 // tests/Browser/OrderFlowTest.php
 
-use function Pest\Browser\browse;
-
 it('completes the checkout flow', function () {
-    browse(function ($browser) {
-        $browser->visit('/shop')
-            ->assertSee('Products')
-            ->click('[data-testid="add-to-cart"]')
-            ->waitFor('[data-testid="cart-count"]')
-            ->assertSeeIn('[data-testid="cart-count"]', '1')
-            ->click('[data-testid="checkout-btn"]')
-            ->assertPathIs('/checkout')
-            ->fill('[name="email"]', 'user@example.com')
-            ->press('Place Order')
-            ->waitForText('Order confirmed')
-            ->assertSee('Order confirmed');
-    });
+    visit('/shop')
+        ->assertSee('Products')
+        ->click('[data-testid="add-to-cart"]')
+        ->waitFor('[data-testid="cart-count"]')
+        ->assertSeeIn('[data-testid="cart-count"]', '1')
+        ->click('[data-testid="checkout-btn"]')
+        ->assertUrlContains('/checkout')
+        ->type('email', 'user@example.com')
+        ->press('Place Order')
+        ->waitForText('Order confirmed')
+        ->assertSee('Order confirmed');
 });
 
 it('shows validation errors on empty checkout', function () {
-    browse(function ($browser) {
-        $browser->visit('/checkout')
-            ->press('Place Order')
-            ->waitFor('.error-message')
-            ->assertSee('The email field is required.');
-    });
+    visit('/checkout')
+        ->press('Place Order')
+        ->waitFor('.error-message')
+        ->assertSee('The email field is required.');
 });
 ```
 
 ### Navigateurs disponibles
 
-```php
-// Chromium (défaut)
-browse(function ($browser) { ... });
+```bash
+# Chromium (défaut)
+./vendor/bin/pest tests/Browser
 
-// Firefox
-browse(function ($browser) { ... }, browser: 'firefox');
+# Firefox
+./vendor/bin/pest tests/Browser --browser firefox
 
-// WebKit (Safari engine)
-browse(function ($browser) { ... }, browser: 'webkit');
+# WebKit (Safari engine)
+./vendor/bin/pest tests/Browser --browser safari
 ```
 
 ### Lancer les tests navigateur
@@ -506,13 +500,13 @@ browse(function ($browser) { ... }, browser: 'webkit');
 ./vendor/bin/pest tests/Browser --headed
 
 # Navigateur spécifique
-./vendor/bin/pest tests/Browser --browser=firefox
+./vendor/bin/pest tests/Browser --browser firefox
 ```
 
 ### Checklist Browser Testing
 
 - [ ] `pestphp/pest-plugin-browser` installé
-- [ ] Navigateurs Playwright installés via `pest browser:install`
+- [ ] Navigateurs Playwright installés via `npm install --save-dev @playwright/test`
 - [ ] Tests dans `tests/Browser/`
 - [ ] CI configurée pour le mode headless
 - [ ] Pas de `sleep()` — utiliser `waitFor()` / `waitForText()`

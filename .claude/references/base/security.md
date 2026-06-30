@@ -247,24 +247,27 @@ Preferer VALIDATION (rejeter) a SANITIZATION (transformer)
 ### Mots de passe
 
 ```
-Regles OWASP 2026:
-- Minimum 12 caracteres
-- Majuscules, minuscules, chiffres, speciaux
-- Pas dans les listes de mots de passe compromis
+Regles NIST SP 800-63B-4 (2024) + OWASP Authentication Cheat Sheet:
+- Minimum 12 caracteres (NIST SHOULD : 15 si mot de passe seul facteur ; 8 si MFA)
+- PAS de regles de complexite obligatoires — NIST 800-63B-4 les interdit (elles produisent 'P@ssw0rd!' plutot que des phrases fortes)
+- Autoriser tous les caracteres imprimables (ASCII + Unicode), encourager les passphrases
+- Pas de rotation periodique sauf compromission suspectee
+- Bloquer les mots de passe des listes compromises (Have I Been Pwned k-anonymity)
 - Hash avec Argon2id (128 MiB RAM, t=3-5, p=1)
-- JAMAIS MD5/SHA1/bcrypt en nouveau code
 - Salt unique par utilisateur (gere par Argon2id)
 
 // BON
 hash = argon2id.hash(password, memory=131072, iterations=3, parallelism=1)
 
-// MAUVAIS
+// BRISES — jamais (collisions / preimage)
 hash = md5(password)
 hash = sha1(password + "static_salt")
-hash = bcrypt.hash(password, costFactor=12)  // Ne pas utiliser en nouveau code
+
+// LEGACY — acceptable uniquement si Argon2id/scrypt indisponibles (bcrypt n'est PAS casse)
+hash = bcrypt.hash(password, costFactor=12)  // cost >=12, entree max 72 octets
 ```
 
-Sources : [Argon2id OWASP 2026](https://guptadeepak.com/the-complete-guide-to-password-hashing-argon2-vs-bcrypt-vs-scrypt-vs-pbkdf2-2026/)
+Sources : [NIST SP 800-63B-4](https://pages.nist.gov/800-63-4/sp800-63b.html), [Argon2id OWASP 2026](https://guptadeepak.com/the-complete-guide-to-password-hashing-argon2-vs-bcrypt-vs-scrypt-vs-pbkdf2-2026/)
 
 ### Sessions
 
@@ -295,9 +298,11 @@ Regles OWASP 2026:
 - Verifier signature et claims
 - Ne pas stocker de donnees sensibles dans le payload
 
-// MAUVAIS
+// MAUVAIS (secret faible, HS256 partage)
 jwt.sign(payload, "secret123", { algorithm: "HS256" })
-jwt.sign(payload, privateKey, { algorithm: "RS256" })  // Acceptable mais pas ideal
+
+// ACCEPTABLE si l'IdP l'impose (Entra ID, Google, Auth0) — non deprecie, mais preferer EdDSA/ES256
+jwt.sign(payload, privateKey, { algorithm: "RS256" })
 
 // BON
 jwt.sign(payload, ed25519PrivateKey, {
