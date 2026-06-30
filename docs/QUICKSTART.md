@@ -60,7 +60,7 @@ Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`,
 **What you should see:**
 
 ```
-  Claude Craft v8.19.0 - AI Development Framework
+  Claude Craft v8.19.1 - AI Development Framework
 
   Installing react rules to /home/user/my-project...
   [OK] Common rules installed

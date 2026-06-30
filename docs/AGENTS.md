@@ -353,7 +353,7 @@ All 22 common and reviewer agents now include optimized frontmatter:
 
 - **Effort control**: Each agent specifies `effort: low|medium|high|xhigh|max` to optimize reasoning depth (`xhigh`/`max` since Claude Code 2.1.111+/2.1.154 with Opus 4.8)
 - **Persistent memory**: 18 agents use `memory: user` or `memory: project` for cross-session knowledge
-- **Model distribution** (31 agent files): **4 opus + xhigh** (critical reasoning — database-architect, migration-specialist, ralph-conductor, security-auditor), **12 sonnet** (standard common agents + tdd-coach, moved off Opus in v8.19.0 for cost-efficiency), **15 haiku + low** (all 11 tech reviewers + accessibility-expert, cost-optimizer, performance-auditor, research-assistant). Opus reserved for high-stakes work; reviewers stay on haiku for cost-efficient read-only review.
+- **Model distribution** (31 agent files): **4 opus + xhigh** (critical reasoning — database-architect, migration-specialist, ralph-conductor, security-auditor), **12 sonnet** (standard common agents + tdd-coach, moved off Opus in v8.19.1 for cost-efficiency), **15 haiku + low** (all 11 tech reviewers + accessibility-expert, cost-optimizer, performance-auditor, research-assistant). Opus reserved for high-stakes work; reviewers stay on haiku for cost-efficient read-only review.
 
 ## Advanced Frontmatter (Claude Code 2.1.119+)
 

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.19.1] - 2026-07-01
+
+### Fixed
+
+- **Workflow SBOM** : pins corrigés (`@cyclonedx/cyclonedx-npm@5`, `sigstore/cosign-installer@v3.10.1` — les versions `@6`/`@v3.8.1` introduites en 8.19.0 n'existaient pas) ; étape de signature cosign keyless passée en `continue-on-error` (l'OIDC keyless n'est dispo que sur le dépôt upstream). Vérifié vert via `workflow_dispatch`. La publication NPM de 8.19.0 n'était pas affectée.
+
+### Changed
+
+- **Migration js-yaml 4 → 5** (`^4.2.0` → `^5.2.0`) : js-yaml 5 est ESM-only (exports nommés, plus de `default`) et **lève désormais une exception sur une entrée vide**. 7 fichiers passés à `import * as yaml from 'js-yaml'` ; `sprint-cache.js` et `frontmatter.js` traitent un fichier/frontmatter vide comme `null`/`{}` (le YAML malformé lève toujours). Remplace Dependabot #111.
+- **Bumps de dépendances** (Dependabot) : eslint 10.6.0, prettier 3.9.3, @commitlint 21.1.0 (dev) ; @playwright/test 1.61.1, @axe-core/playwright 4.12.1 (website) ; `actions/cache` 6.1.0 ; @hono/node-server 2.0.6.
+- **Formations** : lineup modèles courant ajouté à la section effort du guide 03 (5 langues) — Haiku 4.5 / **Sonnet 5** / Opus 4.8, alias `model: sonnet` = Sonnet 5, Fable 5 suspendu.
+
 ## [8.19.0] - 2026-06-30
 
 Audit exhaustif multi-agents (18 lentilles : 7 domaines + 11 stacks, vérification adverse — 70/90 findings confirmés). Rapport : `audit/2026-06-30/00-AUDIT-REPORT.md`.

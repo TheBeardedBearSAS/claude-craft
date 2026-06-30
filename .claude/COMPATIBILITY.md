@@ -1,4 +1,4 @@
-# Claude Code Compatibility — Claude Craft v8.19.0
+# Claude Code Compatibility — Claude Craft v8.19.1
 
 **Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
 **Recommended Version:** 2.1.193 (Opus 4.8, Artifacts, `claude mcp login`, `/cd`, nested subagents — Week 26, June 26, 2026)
@@ -266,7 +266,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
 | `alwaysLoad` MCP server config | Servers non-différés (chargement immédiat) | **Not documented** |
-| PostToolUse replace tool output | Hooks peuvent remplacer l'output de **tous** les outils | **Adopté** (v8.19.0) — `templates/hooks/output-filter.json` tronque réellement les outputs >50KB via `hookSpecificOutput.updatedToolOutput` |
+| PostToolUse replace tool output | Hooks peuvent remplacer l'output de **tous** les outils | **Adopté** (v8.19.1) — `templates/hooks/output-filter.json` tronque réellement les outputs >50KB via `hookSpecificOutput.updatedToolOutput` |
 | `claude plugin prune` | Nettoyer les dépendances orphelines | **N/A** (user CLI) |
 | Type-to-filter dans `/skills` | Recherche dans le picker de skills | **N/A** (user feature) |
 
@@ -359,7 +359,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
 | **Claude Opus 4.8** (`claude-opus-4-8`) | Nouveau modèle flagship, même prix qu'Opus 4.7, **défaut effort `high`** + `/effort xhigh` pour les tâches les plus dures. Disponible API/Bedrock/Vertex/Foundry | **Recommandé** — modèle cible pour agents `effort: xhigh`/`max` (security-auditor, migration-specialist, database-architect, ralph-conductor) |
-| **Dynamic Workflows** | Demander à Claude de créer un workflow qui orchestre **des dizaines à des centaines d'agents** en arrière-plan (cap 1000 subagents). Visible via `/workflows` | **Adopté** (v8.19.0) — skill [`dynamic-workflows`](../skills/dynamic-workflows/SKILL.md) : 3 paliers d'orchestration, patterns (fan-out, vérification adversariale, pipeline, loop-until-dry), monitoring `/workflows` |
+| **Dynamic Workflows** | Demander à Claude de créer un workflow qui orchestre **des dizaines à des centaines d'agents** en arrière-plan (cap 1000 subagents). Visible via `/workflows` | **Adopté** (v8.19.1) — skill [`dynamic-workflows`](../skills/dynamic-workflows/SKILL.md) : 3 paliers d'orchestration, patterns (fan-out, vérification adversariale, pipeline, loop-until-dry), monitoring `/workflows` |
 | Fast mode moins cher sur Opus 4.8 | 2× le tarif standard pour 2,5× la vitesse | **N/A** (user pricing) |
 | `effort: max` | 5ᵉ niveau d'effort (au-dessus de `xhigh`), disponible sur Opus 4.8 | **Documented** — voir docs/AGENTS.md tableau effort |
 | `/effort ultracode` | Nouveau palier effort introduit avec Dynamic Workflows / Opus 4.8 — mode optimisé débit code (vitesse maximale, idéal pipelines automatisés) ; équivalent `effort: max` en CLI | **Documented** — documenter dans `rules/12-context-management.md` tableau efforts |
