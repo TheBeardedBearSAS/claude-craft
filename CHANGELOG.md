@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.19.0] - 2026-06-30
+
+Audit exhaustif multi-agents (18 lentilles : 7 domaines + 11 stacks, vérification adverse — 70/90 findings confirmés). Rapport : `audit/2026-06-30/00-AUDIT-REPORT.md`.
+
+### Added
+
+- **Skill `dynamic-workflows`** : intègre les Dynamic Workflows de Claude Code (déclencheur `ultracode`) — 3 paliers d'orchestration (sub-agent / Agent Teams / Dynamic Workflows), patterns composables (fan-out & synthesize, vérification adversariale, pipeline, loop-until-dry), monitoring `/workflows`. Distribué via `.claude/skills/` + `Dev/i18n/base/`. `sub-agents-patterns.md` gagne une section dédiée.
+- **Modèle Sonnet 5** (`claude-sonnet-5`, sorti 2026-06-30) : intégré comme Sonnet courant dans le SSOT `config/versions.yaml`, `rules/12`, `COMPATIBILITY`, `FAQ` (grille prix/routage), `CLI-REFERENCE`, `README`, `settings(.local).json`, `setup-rtk`. Tarif intro $2/$10 → $3/$15 au 2026-08-31 ; agentique, comble l'écart avec Opus 4.8. Sonnet 4.6 conservé comme prédécesseur.
+- **Claude Code 2.1.193** (semaine 26) recommandé : `claude mcp login/logout`, Artifacts, `/rewind` post-`/clear`, `/cd`, sous-agents imbriqués (5 niveaux), deny/ask rules `Tool(param:value)` documentés (`COMPATIBILITY`, `rules/12`). Table « coût tokens & routage modèle par tâche » + `/usage` (attribution par composant) ajoutés.
+- **CI/Supply-chain** : gate `npm audit --audit-level=moderate` dans `ci.yml` (PR) ; signature Sigstore/cosign keyless du SBOM (`sbom.yml`, `id-token: write`) ; suite `ralph-behavioral.bats` réintégrée.
+
+### Changed
+
+- **`tdd-coach` : Opus → Sonnet** (optimisation coût — le coaching TDD ne requiert pas Opus, ~5× moins cher). 4 agents Opus restants. Hook `output-filter.json` tronque désormais réellement les outputs >50 KB via `hookSpecificOutput.updatedToolOutput` (au lieu d'un `systemMessage` indicatif).
+- **Stacks (références + 5 langues)** : corrections de bonnes pratiques 2026 — Angular (Signal Forms, `httpResource`, zoneless), React (`react-router` v7, Zod 4, Compiler), Vue (Rolldown, husky 9), Symfony (XXE réécrit, PHPUnit), Laravel/PHP/Python (Argon2id vs bcrypt, OWASP 2025), Flutter (BLoC/Riverpod 3 APIs), React Native (Reanimated 4, DevTools), C# (ES256 vs EdDSA), Paperclip (versions).
+- **Sécurité (rules/11 + références)** : bcrypt n'est plus assimilé à MD5/SHA1 (tier legacy-acceptable) ; RS256 « DEPRECATED » → « moins préféré » (non déprécié par l'IETF/NIST) ; règles de complexité de mot de passe alignées NIST SP 800-63B-4 ; agent `security-auditor` complété à 10/10 catégories OWASP.
+- **DX/Docs** : guides corrigés `make … LANG=` → `RULES_LANG=` (la forme `LANG=` était silencieusement ignorée → règles en anglais pour les non-anglophones) ; Node 20 (EOL) → 22 ; `CHEAT-SHEET.md` entièrement anglicisé ; structure d'install `rules/` → `references/` réalignée ; compteurs commandes 125→126 / 219→220.
+
+### Removed
+
+- **Fable 5 / Mythos 5** retirés de toutes les recommandations (modèles suspendus depuis 2026-06-12 par directive export-control US, toujours offline). Agents créatifs routés vers Opus 4.8 / Sonnet 5. `claude-fable-5` et `2.1.168` ajoutés à la denylist `versions.yaml`. Section « Adoption Roadmap v8.10.1 » périmée supprimée de `COMPATIBILITY`.
+
 ## [8.18.2] - 2026-06-30
 
 ### Fixed
