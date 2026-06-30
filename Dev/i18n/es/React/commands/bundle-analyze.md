@@ -48,7 +48,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'react-vendor': ['react', 'react-dom', 'react-router'],
           'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
           'query-vendor': ['@tanstack/react-query']
         }
@@ -141,7 +141,7 @@ du -sh dist/
 ```typescript
 // App.tsx
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router';
 
 // Lazy load de páginas
 const HomePage = lazy(() => import('@/pages/HomePage'));

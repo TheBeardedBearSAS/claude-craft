@@ -4,7 +4,7 @@
 
 ## OWASP Top 10 Protection
 
-### A01:2021 - Broken Access Control
+### A01:2025 - Broken Access Control (inclut SSRF)
 
 ```php
 <?php
@@ -59,7 +59,68 @@ Route::middleware(['auth', 'can:access-admin-panel'])
     });
 ```
 
-### A02:2021 - Cryptographic Failures
+#### SSRF — Server-Side Request Forgery (consolidé dans A01:2025)
+
+```php
+<?php
+// Validate and restrict URLs
+class WebhookRequest extends FormRequest
+{
+    public function rules(): array
+    {
+        return [
+            'url' => [
+                'required',
+                'url',
+                function ($attribute, $value, $fail) {
+                    $parsed = parse_url($value);
+
+                    // Block internal networks
+                    $blockedHosts = ['localhost', '127.0.0.1', '0.0.0.0'];
+                    if (in_array($parsed['host'] ?? '', $blockedHosts)) {
+                        $fail('Internal URLs are not allowed.');
+                    }
+
+                    // Only allow HTTPS
+                    if (($parsed['scheme'] ?? '') !== 'https') {
+                        $fail('Only HTTPS URLs are allowed.');
+                    }
+
+                    // Check for private IP ranges
+                    $ip = gethostbyname($parsed['host'] ?? '');
+                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
+                        $fail('URLs pointing to private networks are not allowed.');
+                    }
+                },
+            ],
+        ];
+    }
+}
+
+// Use allowlist for external services
+$allowedDomains = config('services.allowed_webhook_domains');
+
+if (!in_array(parse_url($url, PHP_URL_HOST), $allowedDomains)) {
+    throw new InvalidArgumentException('Domain not allowed');
+}
+```
+
+### A02:2025 - Cryptographic Failures
+
+> **Règle obligatoire (project rule 11) :** Utiliser **Argon2id** pour les mots de passe. Ne jamais utiliser bcrypt en nouveau code.
+
+```php
+<?php
+// config/hashing.php — configurer Argon2id
+return [
+    'driver' => 'argon2id',
+    'argon' => [
+        'memory' => 131072,  // 128 MiB
+        'time'   => 3,
+        'threads' => 1,
+    ],
+];
+```
 
 ```php
 <?php
@@ -81,10 +142,10 @@ class User extends Authenticatable
     ];
 }
 
-// Hashing passwords (automatic with Laravel)
+// Hashing passwords with Argon2id (configured above)
 use Illuminate\Support\Facades\Hash;
 
-$hashedPassword = Hash::make($password);
+$hashedPassword = Hash::make($password);  // uses Argon2id driver
 
 if (Hash::check($plainPassword, $hashedPassword)) {
     // Password matches
@@ -95,7 +156,7 @@ if (Hash::check($plainPassword, $hashedPassword)) {
 // GOOD: Use a payment processor that handles card data
 ```
 
-### A03:2021 - Injection
+### A03:2025 - Injection
 
 ```php
 <?php
@@ -126,7 +187,7 @@ $process->run();
 // shell_exec("ls -la $directory");
 ```
 
-### A04:2021 - Insecure Design
+### A04:2025 - Insecure Design
 
 ```php
 <?php
@@ -178,7 +239,7 @@ public function placeOrder(Order $order): void
 }
 ```
 
-### A05:2021 - Security Misconfiguration
+### A05:2025 - Security Misconfiguration
 
 ```php
 <?php
@@ -226,11 +287,11 @@ class SecureHeaders
 })
 ```
 
-### A06:2021 - Vulnerable Components
+### A06:2025 - Software Supply Chain Failures
 
 ```bash
-# Regular security audits
-composer audit
+# Regular security audits — exclure les dev deps en production
+composer audit --no-dev
 
 # Update dependencies regularly
 composer update --with-all-dependencies
@@ -250,7 +311,66 @@ composer outdated --direct
 }
 ```
 
-### A07:2021 - Authentication Failures
+```bash
+# Générer un SBOM (CycloneDX) à chaque build CI
+composer require --dev cyclonedx/cyclonedx-php-composer
+composer make-bom --output-format=JSON --output-file=sbom.json
+
+# Scanner les images Docker avec Trivy
+trivy image --exit-code 1 --severity HIGH,CRITICAL myapp:latest
+```
+
+> Utiliser **Renovate** ou **Dependabot** pour les mises à jour automatiques avec gate CI.
+
+### A07:2025 - Mishandling of Exceptional Conditions
+
+```php
+<?php
+// app/Exceptions/Handler.php — ne jamais exposer les stack traces en production
+namespace App\Exceptions;
+
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Throwable;
+use Illuminate\Support\Facades\Log;
+
+class Handler extends ExceptionHandler
+{
+    public function register(): void
+    {
+        $this->renderable(function (Throwable $e, Request $request): ?JsonResponse {
+            if ($request->expectsJson()) {
+                // Logger l'erreur complète côté serveur
+                Log::error('Unhandled exception', [
+                    'exception' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'user_id' => auth()->id(),
+                    'url' => $request->fullUrl(),
+                ]);
+
+                // Retourner une réponse générique au client
+                return response()->json(
+                    ['message' => 'An unexpected error occurred.'],
+                    500
+                );
+            }
+
+            return null; // Laisser le handler par défaut gérer les vues
+        });
+    }
+}
+```
+
+```env
+# Désactiver les stack traces en production — obligatoire
+APP_DEBUG=false
+```
+
+> **Règle :** Ne jamais retourner de stack trace en production. Logger via `Log::error()` centralement et retourner des messages génériques.
+
+### A08:2025 - Authentication Failures
 
 **Nouveauté Laravel 13 :** Passkey Authentication (WebAuthn) intégré dans Breeze/Jetstream/Fortify (https://laravel.com/docs/13.x/passkey).
 
@@ -272,6 +392,24 @@ use Laravel\Fortify\Features;
     ]),
     Features::passkeys(),  // Nouveauté Laravel 13
 ],
+```
+
+```php
+<?php
+// app/Models/User.php — Requis pour que Fortify résolve les endpoints WebAuthn
+namespace App\Models;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Fortify\Contracts\PasskeyUser;
+use Laravel\Fortify\PasskeyAuthenticatable;
+
+class User extends Authenticatable implements PasskeyUser
+{
+    use PasskeyAuthenticatable;
+
+    // ... reste du modèle
+}
+```
 
 // Laravel Sanctum for API authentication
 use Laravel\Sanctum\HasApiTokens;
@@ -317,7 +455,7 @@ use Laravel\Fortify\Features;
 ],
 ```
 
-### A08:2021 - Software and Data Integrity
+### Software and Data Integrity
 
 ```php
 <?php
@@ -354,7 +492,7 @@ public function download(Request $request, string $file)
         crossorigin="anonymous"></script>
 ```
 
-### A09:2021 - Security Logging and Monitoring
+### A09:2025 - Security Logging and Monitoring
 
 ```php
 <?php
@@ -410,52 +548,6 @@ class Order extends Model
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
-}
-```
-
-### A10:2021 - Server-Side Request Forgery (SSRF)
-
-```php
-<?php
-// Validate and restrict URLs
-class WebhookRequest extends FormRequest
-{
-    public function rules(): array
-    {
-        return [
-            'url' => [
-                'required',
-                'url',
-                function ($attribute, $value, $fail) {
-                    $parsed = parse_url($value);
-
-                    // Block internal networks
-                    $blockedHosts = ['localhost', '127.0.0.1', '0.0.0.0'];
-                    if (in_array($parsed['host'] ?? '', $blockedHosts)) {
-                        $fail('Internal URLs are not allowed.');
-                    }
-
-                    // Only allow HTTPS
-                    if (($parsed['scheme'] ?? '') !== 'https') {
-                        $fail('Only HTTPS URLs are allowed.');
-                    }
-
-                    // Check for private IP ranges
-                    $ip = gethostbyname($parsed['host'] ?? '');
-                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
-                        $fail('URLs pointing to private networks are not allowed.');
-                    }
-                },
-            ],
-        ];
-    }
-}
-
-// Use allowlist for external services
-$allowedDomains = config('services.allowed_webhook_domains');
-
-if (!in_array(parse_url($url, PHP_URL_HOST), $allowedDomains)) {
-    throw new InvalidArgumentException('Domain not allowed');
 }
 ```
 
@@ -749,9 +841,6 @@ SESSION_SAME_SITE=strict
 
 # Sanctum
 SANCTUM_STATEFUL_DOMAINS=myapp.com
-
-# Security
-BCRYPT_ROUNDS=12
 ```
 
 ```php

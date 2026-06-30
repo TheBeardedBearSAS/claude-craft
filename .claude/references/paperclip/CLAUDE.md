@@ -1,185 +1,141 @@
-# Paperclip 2026.529+ — Quick Reference
+# Paperclip 2026.609.0 — Quick Reference
 
-> **Status :** Reference set bootstrapped 2026-05-18 (audit ST-03). Promesse marketing de la table `--tech=paperclip` désormais tenue avec un minimum vital. Pull requests bienvenues pour enrichir.
+> **Paperclip** is a self-hosted AI agent orchestration platform (MIT). You **run** it — you do not build a control plane or write adapter integrations. The server, dashboard, CLI, and built-in adapters are all part of the Paperclip product.
+> Docs: https://docs.paperclip.ing/ | Repo: https://github.com/paperclipai/paperclip
 
 ## Versions requises (2026)
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Paperclip | 2026.529.0+ | Two-layer architecture (control plane + adapters) |
-| Node.js | 20+ LTS (22 LTS recommandé, testé en CI) | TypeScript natif |
-| TypeScript | 5.7+ | Strict mode obligatoire |
-| Vitest | 4.1+ | Tests unit + intégration |
-| PostgreSQL | 15+ | RLS pour multi-tenant, JSONB pour audit trail |
+| Paperclip | 2026.609.0+ | Self-hosted orchestration platform (MIT) |
+| Node.js | 22+ LTS | Required by Paperclip server and CLI |
+| TypeScript | 5.7+ | Strict mode — for plugin/adapter development |
+| Vitest | 4.1+ | Tests plugins and adapters |
+| PostgreSQL | 15+ | Paperclip server persistence |
+| pnpm | 9.15+ | Package manager (Paperclip monorepo) |
 
-## Philosophie : Governance-First
-
-Paperclip impose deux invariants non-négociables :
-
-1. **Séparation stricte control plane ↔ adapters.** Le control plane orchestre, applique les policies, écrit l'audit trail. Les adapters traduisent vers les API tierces. Aucun import croisé.
-2. **Audit trail immuable.** Chaque opération significative doit produire une ligne d'audit signée et stockée hors du chemin chaud de l'application.
-
-## Architecture two-layer
-
-```
-src/
-├── control-plane/         # Orchestration, policies, audit, governance
-│   ├── orchestrator/      # Use cases métier
-│   ├── policy/            # Règles d'autorisation, validation
-│   ├── audit/             # Audit trail writer
-│   └── ports/             # Interfaces d'adapter (ce dont le CP a besoin)
-│
-├── adapters/              # Intégrations tierces (Stripe, Salesforce, etc.)
-│   ├── stripe/
-│   ├── salesforce/
-│   └── shared/            # Helpers communs (backoff, retry, DLQ)
-│
-└── infra/                 # PostgreSQL, Redis, Vault, observability
-```
-
-**Règle d'or :** `control-plane/` ne contient aucun `import` qui chemine vers `adapters/*`. Le couplage va du registre d'adapter (résolu au runtime, par `tenantId` + `providerKey`).
-
-## Patterns critiques
-
-### 1. Idempotency keys
-
-Chaque opération externe doit accepter une clé d'idempotency stable, persistée AVANT l'appel sortant. Replay = lookup, pas réexécution.
-
-```typescript
-const idempotencyKey = `charge:${tenantId}:${orderId}`;
-const existing = await idempotencyStore.lookup(idempotencyKey);
-if (existing) return existing.response;
-
-const response = await adapter.createCharge(params);
-await idempotencyStore.write(idempotencyKey, response, ttl: '7d');
-return response;
-```
-
-### 2. Retry avec backoff exponentiel + DLQ
-
-Tous les appels adapters doivent passer par un wrapper retry. Pas de retry inline ad-hoc.
-
-```typescript
-import { retry } from './adapters/shared/retry';
-
-await retry(() => adapter.send(payload), {
-  attempts: 5,
-  backoff: 'exponential',
-  jitter: true,
-  onExhausted: (error) => dlq.publish({ payload, error }),
-});
-```
-
-### 3. Audit trail signé
-
-Chaque mutation produit une ligne JSONB signée stockée en append-only.
-
-```typescript
-await audit.record({
-  tenantId,
-  actor: ctx.user.id,
-  action: 'charge.created',
-  resource: { type: 'order', id: orderId },
-  metadata: { amount, currency, providerKey },
-  signature: await signer.sign({ ... }),
-});
-```
-
-### 4. Multi-tenant isolation
-
-- `tenant_id` propagé dans toutes les requêtes (`AsyncLocalStorage` ou paramètre explicite).
-- PostgreSQL Row-Level Security (RLS) activé sur **toutes** les tables.
-- Tests d'isolation obligatoires : un tenant A ne doit jamais lire les données de B.
-
-```sql
-ALTER TABLE charges ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenant_isolation ON charges
-  USING (tenant_id = current_setting('app.tenant_id')::uuid);
-```
-
-## Testing (Vitest 4.1+)
-
-- **Unit** : control-plane et adapters testés séparément avec doubles.
-- **Integration** : control-plane + vrai PostgreSQL (testcontainers).
-- **Contract tests** : adapters vs vrais providers en environnement sandbox.
-- **Multi-tenant isolation tests** : reproduction systématique de scénarios de leakage.
-- **Mutation testing (Stryker)** : seuil minimal 70 % sur control-plane.
+## Installation (self-hosted)
 
 ```bash
-npm run test                 # unit
-npm run test:integration     # avec testcontainers
-npm run test:contract        # adapters vs providers sandbox
-npm run test:mutation        # Stryker (Vitest 4 + control-plane scope)
+# Via npm (recommended for most operators)
+npx paperclipai onboard --yes
+
+# Via Docker
+docker compose up -d          # see docker/ in the Paperclip repo
 ```
 
-## Sécurité
+After onboarding, the server runs on `http://localhost:3100` and the dashboard is accessible at the configured port.
 
-- Secrets dans Vault (HashiCorp / AWS Secrets Manager), **jamais** dans `.env` commit.
-- Rotation automatique des credentials providers (Stripe, Salesforce…).
-- Logs **scrubés** : pas de PAN, pas de tokens, pas de PII brute (cf. `rules/11-security.md`).
-- OWASP API Top 10 :2023 review trimestrielle.
+## Monorepo structure (Paperclip source, for contributors)
 
-## Observability
+```
+paperclip/
+├── server/                    # @paperclipai/server — Node.js + TS HTTP API
+│   └── src/
+│       ├── routes/            # companies, agents, approvals, activity, ...
+│       └── adapters/          # server-side adapter registry
+├── ui/                        # @paperclipai/ui — React dashboard
+├── cli/                       # paperclipai CLI (commander.js)
+│   └── src/commands/          # onboard, doctor, company, agent, approval, ...
+├── packages/
+│   ├── shared/                # @paperclipai/shared — types + schemas
+│   ├── db/                    # @paperclipai/db — schema, migrations
+│   ├── mcp-server/            # @paperclipai/mcp-server
+│   ├── adapter-utils/         # @paperclipai/adapter-utils
+│   ├── adapters/              # Built-in adapters (see table below)
+│   └── plugins/
+│       ├── sdk/               # @paperclipai/plugin-sdk — public extension API
+│       └── create-paperclip-plugin/  # Plugin scaffolder
+└── tests/
+    ├── e2e/                   # Playwright
+    └── release-smoke/
+```
 
-- OpenTelemetry traces sur chaque appel adapter (tenantId en attribut).
-- Logs structurés JSON (zod-validated).
-- Metrics : `paperclip.adapter.duration`, `paperclip.idempotency.hit_ratio`, `paperclip.dlq.depth`.
-- Dashboard Grafana minimum : taux d'erreur par adapter, latency p95, DLQ depth.
+## Adapter types (`adapterType`)
+
+The `adapterType` field on an agent hire payload selects which AI runtime powers the agent.
+
+| adapterType | Runtime | Minimal adapterConfig fields |
+|---|---|---|
+| `claude_local` | Claude Code (local) | `cwd`, `model`, `timeoutSec`, `graceSec`, `extraArgs`, `env` |
+| `codex_local` | OpenAI Codex CLI (local) | `cwd`, `model`, `timeoutSec`, `graceSec`, `extraArgs`, `env` |
+| `cursor_local` | Cursor (local) | `cwd`, `model`, `timeoutSec`, `graceSec`, `extraArgs`, `env` |
+| `gemini_local` | Gemini CLI (local) | `cwd`, `model`, `timeoutSec`, `graceSec`, `extraArgs`, `env` |
+| `opencode_local` | OpenCode (local) | `cwd`, `model`, `timeoutSec`, `graceSec`, `extraArgs`, `env` |
+| `openclaw_gateway` | OpenClaw gateway | `endpoint`, `apiKey`, `model`, `timeoutSec` |
+| `pi_local` | Pi (local) | `cwd`, `model`, `timeoutSec`, `graceSec`, `extraArgs`, `env` |
+
+> The `agentConfigurationDoc` of each adapter (returned by the server) lists every accepted field and its constraints. Always consult it before hiring.
+
+## Company and agent management
+
+```bash
+# Operator CLI — run after onboarding
+paperclipai company list
+paperclipai company get --id <companyId>
+
+paperclipai agent list
+paperclipai agent get --id <agentId>
+
+paperclipai approval list
+paperclipai activity list
+```
+
+Hiring an agent is done via the dashboard (**Agents → Hire**) or `POST /companies/:companyId/agents`. See `/paperclip:generate-agent-config` for a guided payload builder.
+
+## Governance model (server-enforced)
+
+Paperclip enforces governance as server-side invariants — they cannot be bypassed by adapters or plugins:
+
+| Invariant | Enforcement |
+|---|---|
+| Budget limits | Hard token cap on the server; agents are halted when exceeded |
+| Approval gates | Human-in-the-loop; execution blocked until approved |
+| Activity log | Append-only; emitted for every mutation by the server |
+| Tenant isolation | `companyId` extracted from the authenticated session, never from the client payload |
+| Adapter sandboxing | Adapters select the AI runtime; they cannot modify governance state |
+
+## Extension via `@paperclipai/plugin-sdk`
+
+Plugins are the extension mechanism for Paperclip. They add features, UI slots, background jobs, or custom adapter logic.
+
+```bash
+# Scaffold a new plugin
+npx create-paperclip-plugin my-plugin
+
+# Manage plugins on a running instance
+paperclipai plugin list
+paperclipai plugin install ./my-plugin
+```
+
+A minimal plugin entry point:
+
+```typescript
+import { definePlugin } from '@paperclipai/plugin-sdk';
+
+export default definePlugin({
+  name: 'my-plugin',
+  setup(ctx) {
+    // register routes, jobs, UI slots, ...
+  },
+});
+```
 
 ## Checklist rapide
 
-- [ ] Aucun import `control-plane/* → adapters/*`
-- [ ] Idempotency keys présentes sur toutes les mutations sortantes
-- [ ] Retry wrapper unique (pas de retry inline)
-- [ ] Audit trail signé pour chaque mutation
-- [ ] PostgreSQL RLS actif sur toutes les tables tenant-scoped
-- [ ] Tests d'isolation multi-tenant verts
-- [ ] Mutation score Stryker ≥ 70 % sur control-plane
-- [ ] Secrets dans Vault, rotation < 90 jours
-- [ ] OpenTelemetry traces sur chaque adapter call
-
-## Company Skills (v2026.529+)
-
-Paperclip v529 introduit un catalogue de **Company Skills** : des capacités d'agent packagées et distribuables, alignées avec la philosophie governance-first.
-
-### Concept
-
-Un *skill* est une unité de compétence encapsulée qu'un agent peut acquérir au `hire`. Deux catégories :
-
-| Catégorie | Description |
-|-----------|-------------|
-| **Bundled** | Inclus par défaut dans chaque agent (ex : audit trail writer, idempotency enforcer) |
-| **Optional** | Activés explicitement selon le rôle de l'agent (ex : stripe-adapter-skill, salesforce-connector-skill) |
-
-### Assignation via `desiredSkills`
-
-Les skills sont déclarés lors du hire d'un agent, dans la configuration du control plane :
-
-```typescript
-const agent = await controlPlane.hire({
-  role: 'payment-processor',
-  tenantId,
-  desiredSkills: [
-    'idempotency-enforcer',   // bundled — activé explicitement
-    'stripe-adapter-skill',   // optional — spécifique au provider
-    'audit-trail-writer',     // bundled — toujours recommandé
-  ],
-});
-```
-
-Les skills bundled non déclarés dans `desiredSkills` restent désactivés pour limiter la surface d'attaque (principe du moindre privilège).
-
-### Gouvernance
-
-- Les skills disponibles dans le catalogue sont listés via la CLI Paperclip (commandes de gestion de l'instance, à consulter dans la documentation officielle de votre version).
-- Les skills optionnels doivent être audités avant activation (cf. checklist sécurité ci-dessous).
-- Chaque skill activé est tracé dans l'audit trail au moment du hire.
-
-> **Note :** Les détails d'API CLI peuvent varier selon la build de votre instance Paperclip. Référez-vous à la documentation interne ou à votre vendor Paperclip pour les commandes exactes.
+- [ ] Instance onboardée (`paperclipai onboard --yes` ou Docker)
+- [ ] Company créée (`paperclipai company list`)
+- [ ] `adapterType` vérifié contre les adapters enregistrés sur l'instance
+- [ ] Budget défini (entier positif en tokens) si enforcement souhaité
+- [ ] `workMode` choisi parmi les valeurs listées dans `agentConfigurationDoc` de l'adapter
+- [ ] Activity log consulté après chaque mutation (`paperclipai activity list`)
+- [ ] Plugins audités avant installation (licence, version pinée)
+- [ ] OpenTelemetry activé si observabilité requise
 
 ## Documentation complémentaire
 
 - `project-context.md` — Contexte projet, conventions équipe
-- (à enrichir) `architecture.md` — Schéma two-layer détaillé, ADRs
-- (à enrichir) `testing.md` — Stratégie tests détaillée
-- (à enrichir) `security.md` — Threat model + OWASP API Top 10
+- `Dev/i18n/en/Paperclip/rules/02-architecture-paperclip.md` — Architecture monorepo détaillée
+- `Dev/i18n/en/Paperclip/rules/12-adapter-protocol.md` — Protocole adapter (wire contract)
+- `Dev/i18n/en/Paperclip/commands/generate-agent-config.md` — Builder de payload hire
+- https://docs.paperclip.ing/ — Documentation officielle

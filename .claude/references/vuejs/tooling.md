@@ -88,13 +88,13 @@ export default defineConfig({
   build: {
     target: 'esnext',
     sourcemap: true,
-    rollupOptions: {
+    // Vite 8 / Rolldown (default): object form of manualChunks removed — use codeSplitting.groups
+    rolldownOptions: {
       output: {
-        // ⚠️ Vite 8 (Rolldown) : manualChunks est déprécié quand Rolldown est actif.
-        // Rolldown applique un code-splitting automatique optimal.
-        // Garder uniquement si Rolldown désactivé (legacy: build.rollupOptions.experimentalMinChunkSize).
-        manualChunks: {
-          'vue-vendor': ['vue', 'vue-router', 'pinia'],
+        codeSplitting: {
+          groups: [
+            { name: 'vue-vendor', test: /node_modules\/(vue|pinia|vue-router)/ },
+          ],
         },
       },
     },
@@ -102,7 +102,8 @@ export default defineConfig({
 })
 ```
 
-> **Vite 8 + Rolldown :** `manualChunks` est ignoré en mode Rolldown (bundler par défaut depuis Vite 8). Supprimer ou conditionner à `build.rolldown !== true`. Rolldown produit un découpage automatique équivalent ou meilleur.
+> **Vite 8 / Rolldown (défaut) :** la forme objet de `manualChunks` est **supprimée** (non supportée). Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
+> **Vite 7 / Rolldown désactivé (legacy) :** utiliser `build.rollupOptions.output.manualChunks` — `// Only if Rolldown is explicitly disabled`.
 
 ### Environment Variables
 
@@ -200,8 +201,8 @@ export default [
 ```json
 {
   "scripts": {
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx",
-    "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   }
 }
 ```
@@ -364,11 +365,11 @@ pnpm test
     "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test",
     "type-check": "vue-tsc --noEmit -p tsconfig.json --composite false",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx",
-    "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "vue": "^3.5.0",
@@ -396,8 +397,9 @@ pnpm test
 
 ```bash
 pnpm add -D husky lint-staged
-pnpm exec husky install
+pnpm exec husky init
 ```
+> **Husky >=9** is assumed (default when installing without a pinned version). `husky install` was removed in v9 — use `husky init` for first-time setup and `"prepare": "husky"` in package.json.
 
 ### Configuration
 
@@ -417,18 +419,12 @@ pnpm exec husky install
 ```
 
 ```bash
-# .husky/pre-commit
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
+# .husky/pre-commit  (Husky v9 — no wrapper sourcing needed)
 pnpm lint-staged
 ```
 
 ```bash
-# .husky/pre-push
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
+# .husky/pre-push  (Husky v9 — no wrapper sourcing needed)
 pnpm type-check
 pnpm test:unit
 ```

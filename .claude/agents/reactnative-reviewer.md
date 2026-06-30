@@ -530,7 +530,7 @@ import { format } from 'date-fns';
 | **Detox** / **Maestro** | Tests E2E |
 | **expo-bundle-visualizer** | Analyse taille du bundle |
 | **Reactotron** | Debugging et profiling |
-| **React Native DevTools** | Inspection réseau et performance (remplace Flipper depuis RN 0.73) — `npx react-native start --experimental-debugger` |
+| **React Native DevTools** | Inspection réseau et performance (remplace Flipper depuis RN 0.73) — `npx react-native start` puis `j` (activé par défaut depuis RN 0.76 ; flag `--experimental-debugger` obsolète) |
 | **FlashList** | Listes performantes |
 | **Reanimated** | Animations UI thread |
 

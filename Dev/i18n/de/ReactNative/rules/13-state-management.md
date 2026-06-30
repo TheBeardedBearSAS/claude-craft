@@ -258,9 +258,10 @@ export const useThemeStore = create<ThemeState>((set) => ({
   setTheme: (isDark) => set({ isDark }),
 }));
 
-// Usage
+// Verwendung — individuelle Selektoren (Primitive): kein useShallow nötig
 const SettingsScreen = () => {
-  const { isDark, toggleTheme } = useThemeStore();
+  const isDark = useThemeStore((state) => state.isDark);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
   return (
     <Switch value={isDark} onValueChange={toggleTheme} />

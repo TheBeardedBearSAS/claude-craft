@@ -39,7 +39,8 @@
 | **Auto Mode** | 2.1.94+ | Team plan required |
 | **Opus 4.7** | 2.1.111+ | xhigh effort, adaptive thinking |
 | **Opus 4.8** | 2.1.154+ | Flagship (28 mai 2026), high effort par défaut, fast mode, Dynamic Workflows |
-| **Fable 5 / Mythos 5** | ⚠️ SUSPENDUS | Access coupé le 2026-06-12 par une directive export-control US (toujours offline). **Ne pas recommander `claude-fable-5` / `claude-mythos-5`.** Router les agents créatifs vers Opus 4.8 / Sonnet 4.6. |
+| **Sonnet 5** | 2026-06-30 | `claude-sonnet-5` — modèle agentique, comble l'écart avec Opus 4.8 ; **Sonnet courant** (remplace 4.6). Intro $2/$10 → $3/$15 au 2026-08-31. Défaut Free/Pro, dispo Claude Code |
+| **Fable 5 / Mythos 5** | ⚠️ SUSPENDUS | Access coupé le 2026-06-12 par une directive export-control US (toujours offline). **Ne pas recommander `claude-fable-5` / `claude-mythos-5`.** Router les agents créatifs vers Opus 4.8 / Sonnet 5. |
 | **Forked subagents** | 2.1.117 | `CLAUDE_CODE_FORK_SUBAGENT=1` |
 
 ---
@@ -265,7 +266,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
 | `alwaysLoad` MCP server config | Servers non-différés (chargement immédiat) | **Not documented** |
-| PostToolUse replace tool output | Hooks peuvent remplacer l'output de **tous** les outils | **Not exploited** — powerful for RTK-style filtering |
+| PostToolUse replace tool output | Hooks peuvent remplacer l'output de **tous** les outils | **Adopté** (v8.19.0) — `templates/hooks/output-filter.json` tronque réellement les outputs >50KB via `hookSpecificOutput.updatedToolOutput` |
 | `claude plugin prune` | Nettoyer les dépendances orphelines | **N/A** (user CLI) |
 | Type-to-filter dans `/skills` | Recherche dans le picker de skills | **N/A** (user feature) |
 
@@ -344,7 +345,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
-| `/usage` | Affiche la consommation de tokens/coût de la session courante | **Not documented** — utile à citer dans `rules/12-context-management.md` (suivi tokens) |
+| `/usage` | Affiche la consommation de tokens/coût de la session courante (attribution par composant depuis 2.1.149) | **Documenté** — `rules/12` (Suivi des tokens) + `docs/CLI-REFERENCE.md` |
 
 ### 2.1.152 (May 27, 2026) — disallowed-tools frontmatter & /code-review --fix
 
@@ -385,7 +386,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 > **⚠️ Migration `workflow` → `ultracode` (2.1.160) :** le déclencheur des Dynamic Workflows a été renommé. Claude Craft mentionne `/effort ultracode` (palier effort) — cohérent. Tout contenu invitant à « lancer un workflow » par le mot-clé `workflow` doit être mis à jour vers `ultracode`.
 
-> **Note `fallbackModel` :** réglage de fiabilité ET de coût. Pour les 5 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), un repli `["claude-sonnet-4-6", "claude-haiku-4-5-20251001"]` évite les interruptions en cas de surcharge Opus sans dégrader le travail courant. Voir `rules/12-context-management.md`.
+> **Note `fallbackModel` :** réglage de fiabilité ET de coût. Pour les 4 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor), un repli `["claude-sonnet-5", "claude-haiku-4-5-20251001"]` évite les interruptions en cas de surcharge Opus sans dégrader le travail courant. Voir `rules/12-context-management.md`.
 
 ---
 
@@ -510,6 +511,7 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | **2.1.176** | **2026-06-12** | `/cd`, sous-agents imbriqués (5 niveaux), `--safe-mode`, `fallbackModel` (jusqu'à 3) |
 | **2.1.183** | **2026-06-19** | Artifacts (beta Team/Enterprise), deny/ask rules sur paramètres `Tool(param:value)`, `/config key=value` |
 | **2.1.193** | **2026-06-26** | **`claude mcp login/logout`, `/rewind` post-`/clear`, background subagents → prompts de permission, shell mode répond à l'output — version stable RECOMMANDÉE** |
+| **Sonnet 5** | **2026-06-30** | Modèle `claude-sonnet-5` dispo dans Claude Code (défaut Free/Pro) — agentique, intro $2/$10 |
 
 ---
 

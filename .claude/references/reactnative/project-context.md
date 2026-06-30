@@ -149,7 +149,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 
 - **Expo CLI**: {{EXPO_CLI_VERSION}}
 - **EAS CLI**: {{EAS_CLI_VERSION}}
-- **React Native DevTools** (`npx react-native start --experimental-debugger`) — remplace Flipper (déprécié depuis RN 0.73)
+- **React Native DevTools** (`npx react-native start`, puis presser `j` — activé par défaut depuis RN 0.76, le flag `--experimental-debugger` est obsolète/supprimé) — remplace Flipper (déprécié depuis RN 0.73)
 
 ---
 

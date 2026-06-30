@@ -54,7 +54,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 - **Versions infra** : Docker 29.6.0, OpenTofu 1.12.2, Ansible 2.21.1, Helm 4.2.2, Node.js 24.x Active LTS.
 - **Sécurité** : OWASP Top 10:2025 complet (10/10 catégories dans la règle 11) ; RS256 marqué DEPRECATED ; guidance Argon2id précisée ; hook templates `protect-files.json` / `quality-gate.json` corrigés (anti-pattern `$TOOL_INPUT` → lecture stdin JSON).
-- **Modèles** : IDs canoniques complets dans la table d'effort (Opus 4.8 / Sonnet 4.6 / Haiku 4.5). Fable 5 / Mythos 5 suspendus (directive export-control US, 2026-06-12) — retirés des recommandations.
+- **Modèles** : IDs canoniques dans la table d'effort (Opus 4.8 / **Sonnet 5** sorti 2026-06-30, intro $2/$10 / Haiku 4.5). Sonnet 5 remplace 4.6 comme Sonnet courant. Fable 5 / Mythos 5 suspendus (directive export-control US, 2026-06-12) — retirés des recommandations.
 - **CLI** : `/goal`, `/usage`, `/workflows` documentés dans CLI-REFERENCE.md.
 - **Optimisation tokens** : `ENABLE_PROMPT_CACHING_1H` et `fallbackModel` activés dans `settings.json` distribué.
 - **Docs** : compteur commandes corrigé (133 → 125 core / 219 total) ; TROUBLESHOOTING, FAQ, CHEAT-SHEET, COMPETITIVE-ANALYSIS enrichis.

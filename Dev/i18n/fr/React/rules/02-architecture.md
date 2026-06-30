@@ -934,7 +934,7 @@ import { Button } from '@/components/atoms/Button';
 ```typescript
 // app/router.tsx
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router';
 import { Spinner } from '@/components/atoms/Spinner';
 
 // Lazy load des pages

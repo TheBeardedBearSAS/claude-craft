@@ -138,22 +138,26 @@ async def search_users(
 
 ## Autenticacion y autorizacion
 
-### Hash de contrasenas con bcrypt
+### Hash de contrasenas con Argon2id (pwdlib)
+
+> **passlib esta sin mantenimiento desde 2020 e incompatible con Python 3.13+ (el modulo `crypt` del que dependia fue eliminado). bcrypt esta explicitamente prohibido en codigo nuevo por la regla 11 del proyecto (mandato OWASP 2026: Argon2id). Usar `pwdlib` con Argon2id.**
 
 ```python
-from passlib.context import CryptContext
+# pip install pwdlib[argon2]
+from pwdlib import PasswordHash
 from pydantic import SecretStr
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_hash = PasswordHash.recommended()  # por defecto Argon2id
+
 
 def hash_password(password: str) -> str:
-    """Hashear una contrasena de forma segura."""
-    return pwd_context.hash(password)
+    """Hashear una contrasena de forma segura con Argon2id."""
+    return pwd_hash.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verificar una contrasena contra su hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    """Verificar una contrasena contra su hash Argon2id."""
+    return pwd_hash.verify(plain_password, hashed_password)
 
 
 # Uso

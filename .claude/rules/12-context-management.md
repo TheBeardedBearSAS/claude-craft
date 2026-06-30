@@ -151,10 +151,12 @@ La status line affiche le pourcentage de contexte utilise.
 
 **`/context`** (v2.1.74+): Suggestions actionnables pour optimiser l'utilisation du contexte.
 
+**`/usage`** (v2.1.143+, enrichi v2.1.149) : compte de tokens exact + coût $ de la session, **avec attribution par composant** (skill, sous-agent, plugin, serveur MCP) — plus précis que le pourcentage de la status line. À lancer vers 60 % de contexte pour identifier le poste le plus coûteux avant de déléguer ou `/clear`. Complémentaire de `/context` (qui suggère la compaction).
+
 | Commande | Modele | ID canonique | Usage |
 |----------|--------|--------------|-------|
 | `/effort low` | Haiku 4.5 | `claude-haiku-4-5-20251001` | Taches simples, lookups, classification |
-| `/effort medium` | Sonnet 4.6 | `claude-sonnet-4-6` | Implementation standard |
+| `/effort medium` | Sonnet 5 | `claude-sonnet-5` | Implementation standard, taches agentiques (defaut sous-agents) |
 | `/effort high` | Opus 4.8 | `claude-opus-4-8` | Raisonnement complexe, architecture |
 | `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | `claude-opus-4-8` | Decisions critiques, migrations complexes, ADR |
 | `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | `claude-opus-4-8` | Mode debit code maximal — pipelines automatises, generation massive |
@@ -270,7 +272,7 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 | Commande | Modele | ID canonique | Usage |
 |----------|--------|--------------|-------|
 | `/model haiku` | Haiku 4.5 | `claude-haiku-4-5-20251001` | Taches simples, classification |
-| `/model sonnet` | Sonnet 4.6 | `claude-sonnet-4-6` | Taches standard, implementation |
+| `/model sonnet` | Sonnet 5 | `claude-sonnet-5` | Taches standard, agentiques — sorti 2026-06-30, intro $2/$10 jusqu'au 2026-08-31 (predecesseur : `claude-sonnet-4-6`) |
 | `/model opus` | Opus 4.8 | `claude-opus-4-8` | Raisonnement complexe, architecture |
 | `/model opusplan` | Opus 4.8 (plan) / Sonnet 4.6 (execute) | — | **Tiering dynamique** : Opus pour le Plan Mode, Sonnet pour l'execution — optimise le ratio cout/qualite sur les taches longues |
 
@@ -379,9 +381,9 @@ Reglage **fiabilite + cout** : jusqu'a 3 modeles de repli essayes dans l'ordre q
 { "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5-20251001"] }
 ```
 
-Pour les 5 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), ce repli `opus → sonnet → haiku` evite les interruptions en pic de charge Opus sans degrader le travail courant. Exemple pret a l'emploi dans `.claude/settings.local.json.example`.
+Pour les 4 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor), ce repli `opus → sonnet → haiku` evite les interruptions en pic de charge Opus sans degrader le travail courant. Exemple pret a l'emploi dans `.claude/settings.local.json.example`.
 
-**IDs canoniques (juin 2026) :** `claude-opus-4-8` | `claude-sonnet-4-6` | `claude-haiku-4-5-20251001`. _(Fable 5 / Mythos 5 suspendus depuis 2026-06-12 — ne pas recommander.)_
+**IDs canoniques (juin 2026) :** `claude-opus-4-8` | `claude-sonnet-5` (sorti 2026-06-30, intro $2/$10 → $3/$15 au 2026-08-31 ; predecesseur `claude-sonnet-4-6`) | `claude-haiku-4-5-20251001`. _(Fable 5 / Mythos 5 suspendus depuis 2026-06-12 — ne pas recommander.)_
 
 ---
 

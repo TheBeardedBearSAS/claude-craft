@@ -263,8 +263,8 @@ C# 14 + .NET 10 permet d'exécuter un fichier `.cs` directement sans projet `.cs
 # Exécuter un script sans projet
 dotnet run app.cs
 
-# Shebang Unix (exécutable cross-platform)
-#!/usr/bin/dotnet-script
+# Shebang Unix (nécessite chmod +x app.cs — Unix/macOS uniquement)
+#!/usr/bin/env dotnet run --
 ```
 
 ```csharp

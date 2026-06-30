@@ -1,7 +1,10 @@
 ---
 name: tdd-coach
 description: Test-Driven Development coach
-model: opus
+# Audit 2026-06-30 (token-model-opt) : descendu Opus→Sonnet. Le coaching TDD (red-green-refactor,
+# scaffolding de tests) ne requiert pas le raisonnement Opus-grade ; ~5x moins cher. Les 4 agents
+# Opus restants (security-auditor, database-architect, migration-specialist, ralph-conductor) gardent xhigh.
+model: sonnet
 maxTurns: 8
 effort: high
 memory: user

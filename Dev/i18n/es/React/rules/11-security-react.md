@@ -229,7 +229,7 @@ sessionStorage.setItem('auth', encryptedToken);
 ```typescript
 // components/ProtectedRoute.tsx
 import { FC, ReactNode } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
 
 interface ProtectedRouteProps {

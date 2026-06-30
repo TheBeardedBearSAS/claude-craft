@@ -327,6 +327,37 @@ _orderRepoMock.Verify(
     Times.Never);
 ```
 
+### Alternative : NSubstitute
+
+> **Moq vs NSubstitute (2026) :** Moq 4.20.0 (août 2023) a brièvement embarqué SponsorLink (scan d'emails git) — revert en 4.20.2, 4.20.70 est propre et MIT. La communauté .NET a largement migré vers **NSubstitute** (MIT) pour son API plus lisible. Les deux frameworks sont valides ; NSubstitute est recommandé pour les nouveaux projets.
+>
+> NuGet : `NSubstitute` Version 5.*
+
+```csharp
+// NSubstitute : équivalent des exemples Moq ci-dessus
+var orderRepo = Substitute.For<IOrderRepository>();
+var emailService = Substitute.For<IEmailService>();
+var logger = Substitute.For<ILogger<OrderService>>();
+
+var sut = new OrderService(orderRepo, emailService, logger);
+
+// Setup (Returns au lieu de ReturnsAsync pour les synchrones)
+var order = CreateTestOrder();
+orderRepo.GetByIdAsync(order.Id, Arg.Any<CancellationToken>()).Returns(order);
+
+// Act
+await sut.ProcessOrderAsync(order.Id);
+
+// Verify
+await emailService.Received(1).SendOrderConfirmationAsync(
+    Arg.Is<Order>(o => o.Id == order.Id),
+    Arg.Any<CancellationToken>());
+
+// Verify NOT called
+await orderRepo.DidNotReceive().DeleteAsync(
+    Arg.Any<Order>(), Arg.Any<CancellationToken>());
+```
+
 ---
 
 ## FluentAssertions
@@ -441,29 +472,52 @@ public async Task Test_WithBuilder()
 
 ## Integration Testing
 
-### WebApplicationFactory
+> **Anti-pattern critique : ne pas utiliser `UseInMemoryDatabase` pour les tests d'intégration.** Le provider EF Core in-memory n'applique aucune contrainte FK, index unique, transaction ni `RowVersion`. Les tests passent en mémoire et échouent silencieusement contre PostgreSQL/SQL Server en production. Utiliser **Testcontainers** (voir section ci-dessous) ou SQLite avec `UseRelationalNulls()` comme alternative sans Docker.
+
+### WebApplicationFactory (avec Testcontainers)
 
 ```csharp
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+// NuGet: Testcontainers.PostgreSql 4.* (Version 4.x — toujours spécifier WithImage)
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    private PostgreSqlContainer _postgres = null!;
+
+    public async Task InitializeAsync()
+    {
+        _postgres = new PostgreSqlBuilder()
+            .WithImage("postgres:16-alpine")  // Requis en 4.x — pas d'image par défaut
+            .WithDatabase("testdb")
+            .WithUsername("test")
+            .WithPassword("test")
+            .Build();
+        await _postgres.StartAsync();
+    }
+
+    public new async Task DisposeAsync() => await _postgres.DisposeAsync();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
         {
-            // Remove real database
+            // Remplacer la vraie base de données par le conteneur de test
             var descriptor = services.SingleOrDefault(
                 d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
             if (descriptor != null)
                 services.Remove(descriptor);
 
-            // Add in-memory database
             services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseInMemoryDatabase("TestDb");
-            });
+                options.UseNpgsql(_postgres.GetConnectionString()));
 
-            // Replace external services with fakes
+            // Remplacer les services externes par des fakes
             services.AddScoped<IEmailService, FakeEmailService>();
+        });
+
+        builder.Configure(app =>
+        {
+            // Appliquer les migrations sur la base de test
+            using var scope = app.ApplicationServices.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            db.Database.MigrateAsync().GetAwaiter().GetResult();
         });
     }
 }

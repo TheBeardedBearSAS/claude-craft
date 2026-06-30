@@ -179,6 +179,26 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # pinned: v4
 
+  npm-audit:
+    name: npm security audit (moderate+)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # pinned: v7.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # pinned: v6.4.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # SEC-011: rule 11-security.md mandates --audit-level=moderate (block moderate+high).
+      - name: Security audit
+        run: npm audit --omit=dev --audit-level=moderate
+
   trivy:
     name: Trivy CVE Scan
     runs-on: ubuntu-latest

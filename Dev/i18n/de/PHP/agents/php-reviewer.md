@@ -186,7 +186,7 @@ $newOrder = clone $order;
 $newOrder->status = OrderStatus::CONFIRMED;
 
 // GUT: clone with (PHP 8.5)
-$newOrder = clone $order with { status: OrderStatus::CONFIRMED };
+$newOrder = clone($order, ['status' => OrderStatus::CONFIRMED]);
 ```
 
 ```php

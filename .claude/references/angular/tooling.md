@@ -246,18 +246,15 @@ export default defineConfig({
 
 **src/test-setup.ts**
 ```typescript
-import '@analogjs/vitest-angular/setup-zone';
-import { getTestBed } from '@angular/core/testing';
-import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting
-} from '@angular/platform-browser-dynamic/testing';
-
-getTestBed().initTestEnvironment(
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting()
-);
+// Angular 22 — zoneless (NE PAS importer setup-zone : réintroduit Zone.js et masque
+// les bugs de timing des signals en tests. setup-zone est RÉSERVÉ aux apps zone-based.)
+import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
+setupTestBed({ zoneless: true });
 ```
+
+> **Important :** N'utilisez jamais `import '@analogjs/vitest-angular/setup-zone'` dans un
+> projet Angular 21+ zoneless. Cela réactive Zone.js dans les tests et rend le comportement
+> de détection de changement incohérent avec l'app réelle.
 
 ### Jest (Alternative)
 
@@ -282,25 +279,39 @@ module.exports = {
 };
 ```
 
-### Cypress for E2E
+### Playwright for E2E (Standard claude-craft)
+
+> **Standard claude-craft :** Playwright est l'outil E2E requis pour tous les projets JS/TS.
+> Cypress reste compatible pour les projets legacy mais ne doit pas être utilisé pour de
+> nouveaux projets Angular.
 
 ```bash
-npm install -D cypress @cypress/schematic
-ng add @cypress/schematic
+npm install -D @playwright/test
+npx playwright install chromium
 ```
 
-**cypress.config.ts**
+**playwright.config.ts**
 ```typescript
-import { defineConfig } from 'cypress';
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  e2e: {
-    baseUrl: 'http://localhost:4200',
-    supportFile: 'cypress/support/e2e.ts',
-    specPattern: 'cypress/e2e/**/*.cy.ts',
-    video: false,
-    screenshotOnRunFailure: true
-  }
+  testDir: './e2e',
+  fullyParallel: true,
+  forbidOnly: !!process.env['CI'],
+  retries: process.env['CI'] ? 2 : 0,
+  reporter: 'html',
+  webServer: {
+    command: 'ng serve',
+    url: 'http://localhost:4200',
+    reuseExistingServer: !process.env['CI'],
+  },
+  use: {
+    baseURL: 'http://localhost:4200',
+    trace: 'on-first-retry',
+  },
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+  ],
 });
 ```
 
@@ -563,7 +574,7 @@ Essential Angular tooling:
 | ESLint + Angular ESLint | Code linting |
 | Prettier | Code formatting |
 | Vitest/Jest | Unit testing |
-| Cypress | E2E testing |
+| Playwright | E2E testing |
 | NgRx/Signals | State management |
 | Webpack Bundle Analyzer | Bundle analysis |
 | Angular DevTools | Debugging |

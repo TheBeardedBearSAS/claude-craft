@@ -127,7 +127,7 @@ dev_dependencies:
   retrofit_generator: ^8.0.4
 
   # Linting
-  flutter_lints: ^3.0.1
+  flutter_lints: ^5.0.0
   very_good_analysis: ^5.1.0
 
   # Testing

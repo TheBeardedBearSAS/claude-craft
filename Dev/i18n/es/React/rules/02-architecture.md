@@ -402,7 +402,7 @@ export const useTheme = () => {
 
 ```typescript
 // routes.tsx
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router';
 
 export const router = createBrowserRouter([
   {

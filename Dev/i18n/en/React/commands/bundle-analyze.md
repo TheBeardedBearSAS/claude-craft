@@ -64,7 +64,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'react-vendor': ['react', 'react-dom', 'react-router'],
           'query-vendor': ['@tanstack/react-query'],
           'form-vendor': ['react-hook-form', 'zod']
         }
@@ -293,7 +293,7 @@ jobs:
 ```typescript
 manualChunks: {
   'react-vendor': ['react', 'react-dom'],
-  'router-vendor': ['react-router-dom'],
+  'router-vendor': ['react-router'],
   'query-vendor': ['@tanstack/react-query']
 }
 ```

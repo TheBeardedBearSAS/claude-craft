@@ -145,13 +145,64 @@ Si un de ces logs est rouge, votre Pod install / Gradle build n'a pas activé la
 - [ ] Toutes les bibliothèques tierces marquées New-Arch-compatible (reactnative.directory).
 - [ ] Modules natifs custom : spec TS ajouté dans `src/specs/`, build Codegen vert.
 - [ ] Tests E2E (Detox) passent — Fabric change parfois la timing des animations.
-- [ ] Reanimated 4 (`^4.0.0`, Worklets 2) installé si Reanimated 3.x.
+- [ ] Reanimated 4 (`^4.0.0`, Worklets 2) installé si Reanimated 3.x — voir [Setup & Migration](#setup--migration-3x--4x) ci-dessous.
 - [ ] Sentry / Crashlytics : sourcemaps Hermes uploadées avec Sentry CLI 2.20+.
 - [ ] Bundle size mesuré : New Arch gagne souvent 10-20 % sur AAB Android.
 
 ## Shared Animation Backend (Reanimated 4 `^4.0.0`)
 
 React Native 0.85 + Reanimated 4 (`^4.0.0`) introduit un backend d'animation partagé entre JS et le thread natif, sans passer par le Bridge asynchrone.
+
+### Setup & Migration 3.x → 4.x
+
+#### Installation (bare React Native)
+
+Reanimated 4 extrait le moteur Worklet dans un package séparé. Pour les projets **bare RN**, les deux packages sont nécessaires :
+
+```bash
+npm install react-native-reanimated@^4.0.0 react-native-worklets@^2.0.0
+cd ios && pod install
+```
+
+> **Expo managed** : `npx expo install react-native-reanimated` suffit — Expo gère `react-native-worklets` automatiquement.
+
+#### babel.config.js — plugin obligatoire
+
+**Changement critique :** le plugin Babel est passé de `react-native-reanimated/plugin` à `react-native-worklets/plugin`. L'ancien plugin produit une **erreur Babel fatale** au build.
+
+```js
+// babel.config.js
+module.exports = {
+  presets: ['babel-preset-expo'], // ou 'metro-react-native-babel-preset'
+  plugins: [
+    // ❌ Reanimated 3 — NE PAS utiliser en Reanimated 4
+    // 'react-native-reanimated/plugin',
+
+    // ✅ Reanimated 4 — plugin Worklets
+    'react-native-worklets/plugin',
+  ],
+};
+```
+
+#### API renames (3.x → 4.x)
+
+| Reanimated 3.x | Reanimated 4.x | Notes |
+|----------------|----------------|-------|
+| `runOnUI(fn)(args)` | `scheduleOnUI(fn, args)` | Signature d'arguments modifiée |
+| `runOnJS(fn)(args)` | `scheduleOnRN(fn, args)` | Idem |
+| `useAnimatedGestureHandler` | Supprimé — utiliser l'API `Gesture.*` de `react-native-gesture-handler` 3.x | |
+
+```typescript
+// ❌ Reanimated 3
+runOnUI(myWorklet)(arg1, arg2);
+runOnJS(myCallback)(value);
+
+// ✅ Reanimated 4
+scheduleOnUI(myWorklet, [arg1, arg2]);
+scheduleOnRN(myCallback, [value]);
+```
+
+> **Source :** [Guide de migration 3.x → 4.x](https://docs.swmansion.com/react-native-reanimated/docs/guides/migration-from-3.x/)
 
 ### Principe
 

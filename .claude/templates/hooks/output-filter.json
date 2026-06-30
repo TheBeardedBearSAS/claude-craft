@@ -1,5 +1,5 @@
 {
-  "description": "Filter large tool outputs to save context window tokens",
+  "description": "Filter large tool outputs to save context window tokens. >50KB outputs are hard-truncated (the model never sees the full blob); 10-50KB outputs get a summarize hint.",
   "hooks": {
     "PostToolUse": [
       {
@@ -7,12 +7,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(cat); TOOL_NAME=$(echo \"$INPUT\" | jq -r '.tool_name // empty'); TOOL_RESULT=$(echo \"$INPUT\" | jq -r '.tool_result // empty'); RESULT_LEN=${#TOOL_RESULT}; if [ \"$RESULT_LEN\" -gt 50000 ]; then jq -n --arg msg \"Output very large (${RESULT_LEN} chars). Summarize key findings only.\" '{\"systemMessage\": $msg}'; exit 0; fi; if [ \"$TOOL_NAME\" = \"Bash\" ] && [ \"$RESULT_LEN\" -gt 5120 ]; then LINES=$(echo \"$TOOL_RESULT\" | wc -l); jq -n --arg msg \"Output: ${LINES} lines. Extract only relevant information.\" '{\"systemMessage\": $msg}'; exit 0; fi; echo '{}'; exit 0",
+            "command": "INPUT=$(cat); TOOL_RESULT=$(echo \"$INPUT\" | jq -r '.tool_response.stdout? // .tool_response? // .tool_result? // empty'); RESULT_LEN=${#TOOL_RESULT}; if [ \"$RESULT_LEN\" -gt 50000 ]; then HEAD=$(printf '%s' \"$TOOL_RESULT\" | head -c 8000); NEW=\"[output hard-truncated by output-filter hook — ${RESULT_LEN} chars total, first 8000 shown]\\n${HEAD}\\n[... truncated; re-run with a narrower command (grep/head/tail) to see more]\"; jq -n --arg o \"$NEW\" '{\"hookSpecificOutput\": {\"hookEventName\": \"PostToolUse\", \"updatedToolOutput\": $o}}'; exit 0; fi; if [ \"$RESULT_LEN\" -gt 10240 ]; then LINES=$(printf '%s' \"$TOOL_RESULT\" | wc -l); jq -n --arg msg \"Output: ${LINES} lines / ${RESULT_LEN} chars. Extract only relevant information; do not repeat the full output.\" '{\"systemMessage\": $msg}'; exit 0; fi; echo '{}'; exit 0",
             "timeout": 5000
           }
         ]
       }
     ]
   },
-  "usage": "Copy the PostToolUse hook to .claude/settings.json or your profile settings.json. This hook adds a systemMessage when Bash output exceeds 10KB, guiding Claude to summarize rather than repeat verbose output. For outputs >50KB, the guidance is more aggressive. Requires jq."
+  "usage": "Copy the PostToolUse hook to .claude/settings.json or your profile settings.json. Two-tier behaviour: outputs >50KB are HARD-REPLACED via hookSpecificOutput.updatedToolOutput (v2.1.121+) so the model only ever ingests the first 8KB plus a truncation notice — this actually saves context, unlike an advisory message. Outputs 10-50KB get a non-binding systemMessage hint to summarize. Requires jq. Note: the hook reads .tool_response (current schema) with fallbacks for older payloads."
 }

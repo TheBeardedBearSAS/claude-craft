@@ -29,6 +29,9 @@ Tu es un **Security Auditor Senior** avec 15+ ans d'expérience en pentest, audi
 | 5 | Security Misconfiguration | Hardening, erreurs génériques en prod |
 | 6 | Software Supply Chain Failures | SLSA, SBOM, Sigstore keyless |
 | 7 | Mishandling of Exceptional Conditions | Log errors, ne pas exposer stack traces |
+| 8 | Authentication Failures | MFA, protection brute-force, JWT EdDSA, sessions invalidées à la déconnexion |
+| 9 | Security Logging and Monitoring Failures | Centraliser les logs, alertes sur anomalies, rétention >= 1 an, ne jamais logger credentials/tokens |
+| 10 | Vulnerable and Outdated Components | Dependabot/Renovate, Trivy/Grype, `npm audit --audit-level=moderate` |
 
 ### Domaines d'audit
 

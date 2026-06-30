@@ -6,7 +6,7 @@
 
 ```
         /\
-       /  \      E2E Tests (Cypress/Playwright)
+       /  \      E2E Tests (Playwright)
       /----\     10% - Critical user journeys
      /      \
     /--------\   Integration Tests
@@ -57,18 +57,15 @@ export default defineConfig({
 
 **src/test-setup.ts**
 ```typescript
-import '@analogjs/vitest-angular/setup-zone';
-import { getTestBed } from '@angular/core/testing';
-import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting
-} from '@angular/platform-browser-dynamic/testing';
-
-getTestBed().initTestEnvironment(
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting()
-);
+// Angular 22 — zoneless (do NOT import setup-zone: it re-introduces Zone.js and masks
+// signal timing bugs in tests. setup-zone is ONLY for zone-based apps.)
+import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
+setupTestBed({ zoneless: true });
 ```
+
+> **Important:** Never use `import '@analogjs/vitest-angular/setup-zone'` in an Angular 21+
+> zoneless project. It re-activates Zone.js in tests and makes change-detection behavior
+> inconsistent with the real app.
 
 ## Component Testing
 
@@ -611,63 +608,78 @@ describe('authInterceptor', () => {
 });
 ```
 
-## E2E Testing with Cypress
+## E2E Testing with Playwright
+
+> **claude-craft standard:** Playwright is the required E2E tool for all JS/TS projects
+> (see `.claude/rules/07-testing.md`). Cypress remains compatible for existing legacy projects
+> but should not be adopted for new Angular projects.
 
 ### Setup
 
-```typescript
-// cypress/support/commands.ts
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      login(email: string, password: string): Chainable<void>;
-    }
-  }
-}
+```bash
+npm install -D @playwright/test
+npx playwright install chromium
+```
 
-Cypress.Commands.add('login', (email: string, password: string) => {
-  cy.visit('/auth/login');
-  cy.get('[data-cy=email]').type(email);
-  cy.get('[data-cy=password]').type(password);
-  cy.get('[data-cy=submit]').click();
-  cy.url().should('include', '/dashboard');
+**playwright.config.ts**
+```typescript
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './e2e',
+  fullyParallel: true,
+  forbidOnly: !!process.env['CI'],
+  retries: process.env['CI'] ? 2 : 0,
+  reporter: 'html',
+  webServer: {
+    command: 'ng serve',
+    url: 'http://localhost:4200',
+    reuseExistingServer: !process.env['CI'],
+  },
+  use: {
+    baseURL: 'http://localhost:4200',
+    trace: 'on-first-retry',
+  },
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+  ],
 });
 ```
 
 ### E2E Test Example
 
 ```typescript
-// cypress/e2e/users.cy.ts
-describe('Users Feature', () => {
-  beforeEach(() => {
-    cy.login('admin@test.com', 'password');
+// e2e/users.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Users Feature', () => {
+  test.use({ storageState: 'e2e/.auth/user.json' });
+
+  test('should display users list', async ({ page }) => {
+    await page.goto('/users');
+
+    await expect(page.getByTestId('users-list')).toBeVisible();
+    await expect(page.getByTestId('user-card')).toHaveCount(expect.any(Number));
   });
 
-  it('should display users list', () => {
-    cy.visit('/users');
+  test('should create new user', async ({ page }) => {
+    await page.goto('/users');
+    await page.getByTestId('add-user').click();
 
-    cy.get('[data-cy=users-list]').should('be.visible');
-    cy.get('[data-cy=user-card]').should('have.length.greaterThan', 0);
+    await page.getByTestId('user-name').fill('New User');
+    await page.getByTestId('user-email').fill('new@test.com');
+    await page.getByTestId('save').click();
+
+    await expect(page.getByTestId('toast')).toContainText('User created');
+    await expect(page.getByTestId('users-list')).toContainText('New User');
   });
 
-  it('should create new user', () => {
-    cy.visit('/users');
-    cy.get('[data-cy=add-user]').click();
+  test('should search users', async ({ page }) => {
+    await page.goto('/users');
 
-    cy.get('[data-cy=user-name]').type('New User');
-    cy.get('[data-cy=user-email]').type('new@test.com');
-    cy.get('[data-cy=save]').click();
-
-    cy.get('[data-cy=toast]').should('contain', 'User created');
-    cy.get('[data-cy=users-list]').should('contain', 'New User');
-  });
-
-  it('should search users', () => {
-    cy.visit('/users');
-
-    cy.get('[data-cy=search]').type('John');
-    cy.get('[data-cy=user-card]').should('have.length', 1);
-    cy.get('[data-cy=user-card]').should('contain', 'John');
+    await page.getByTestId('search').fill('John');
+    await expect(page.getByTestId('user-card')).toHaveCount(1);
+    await expect(page.getByTestId('user-card').first()).toContainText('John');
   });
 });
 ```
@@ -730,7 +742,7 @@ beforeEach(() => {
 |-----------|------|----------|
 | Unit | Vitest/Jest | 70% |
 | Integration | TestBed | 20% |
-| E2E | Cypress | 10% |
+| E2E | Playwright | 10% |
 
 Testing priorities:
 1. Critical business logic

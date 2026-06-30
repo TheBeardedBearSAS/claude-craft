@@ -403,7 +403,12 @@ Animated.timing(fadeAnim, {
 ### 2. React Native Reanimated 4 (`^4.0.0`)
 
 ```bash
+# Expo managed — Worklets géré automatiquement
 npx expo install react-native-reanimated  # installe ^4.0.0 pour RN 0.85+
+
+# Bare React Native — installer les deux packages + mettre à jour babel.config.js
+npm install react-native-reanimated@^4.0.0 react-native-worklets@^2.0.0
+# babel.config.js : remplacer 'react-native-reanimated/plugin' par 'react-native-worklets/plugin'
 ```
 
 ```typescript

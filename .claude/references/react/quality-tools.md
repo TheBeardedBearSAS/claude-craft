@@ -14,7 +14,93 @@ npm install -D eslint-config-prettier
 npm install -D @tanstack/eslint-plugin-query
 ```
 
-> **⚠️ ESLint v10 (2026) :** Le format legacy `.eslintrc.cjs` est **supprimé**. Utiliser `eslint.config.mjs` (flat config). Voir la section Migration dans `react19-features.md` pour l'exemple complet.
+### eslint.config.mjs — Configuration Flat Config (ESLint v10+, recommandé)
+
+> **⚠️ ESLint v10 (2026) :** Le format legacy `.eslintrc.cjs` est **supprimé**. Utiliser `eslint.config.mjs` (flat config) pour tout nouveau projet.
+
+```javascript
+// eslint.config.mjs (ESLint v10 — flat config, format recommandé)
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import reactCompiler from 'eslint-plugin-react-compiler';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import importPlugin from 'eslint-plugin-import';
+import tanstackQuery from '@tanstack/eslint-plugin-query';
+import prettier from 'eslint-config-prettier';
+
+export default tseslint.config(
+  { ignores: ['dist', 'node_modules', 'coverage', '*.min.js'] },
+  {
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommendedTypeChecked,
+      react.configs.flat.recommended,
+      react.configs.flat['jsx-runtime'],
+      jsxA11y.flatConfigs.recommended,
+      importPlugin.flatConfigs.recommended,
+      importPlugin.flatConfigs.typescript,
+      ...tanstackQuery.configs['flat/recommended'],
+      prettier // Always last
+    ],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.json', './tsconfig.node.json'],
+        tsconfigRootDir: import.meta.dirname
+      }
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+      'react-compiler': reactCompiler
+    },
+    settings: {
+      react: { version: 'detect' },
+      'import/resolver': {
+        typescript: { alwaysTryTypes: true, project: './tsconfig.json' }
+      }
+    },
+    rules: {
+      // React Hooks
+      ...reactHooks.configs.recommended.rules,
+      // React Compiler
+      'react-compiler/react-compiler': 'error',
+      // React Refresh
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      // TypeScript
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/await-thenable': 'error',
+      // React
+      'react/prop-types': 'off',
+      'react/jsx-no-target-blank': 'error',
+      'react/self-closing-comp': 'error',
+      // Import
+      'import/no-duplicates': 'error',
+      'import/no-cycle': 'error',
+      'import/newline-after-import': 'error',
+      'import/no-default-export': 'warn',
+      // General
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'prefer-const': 'error',
+      eqeqeq: ['error', 'always']
+    }
+  },
+  {
+    // Allow default exports for pages and config files
+    files: ['**/pages/**/*', '**/app/**/*', '*.config.*'],
+    rules: { 'import/no-default-export': 'off' }
+  }
+);
+```
 
 ### .eslintrc.cjs Configuration (ESLint v9 et antérieur)
 

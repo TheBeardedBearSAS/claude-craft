@@ -138,22 +138,26 @@ async def search_users(
 
 ## Autenticacao e autorizacao
 
-### Hash de senha com bcrypt
+### Hash de senha com Argon2id (pwdlib)
+
+> **passlib nao e mantido desde 2020 e e incompativel com Python 3.13+ (o modulo stdlib `crypt` do qual dependia foi removido). bcrypt e explicitamente proibido em novo codigo pela regra 11 do projeto (mandato OWASP 2026: Argon2id). Use `pwdlib` com Argon2id.**
 
 ```python
-from passlib.context import CryptContext
+# pip install pwdlib[argon2]
+from pwdlib import PasswordHash
 from pydantic import SecretStr
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_hash = PasswordHash.recommended()  # defaults to Argon2id
+
 
 def hash_password(password: str) -> str:
-    """Fazer hash de uma senha de forma segura."""
-    return pwd_context.hash(password)
+    """Fazer hash de uma senha de forma segura com Argon2id."""
+    return pwd_hash.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verificar uma senha contra seu hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    """Verificar uma senha contra seu hash Argon2id."""
+    return pwd_hash.verify(plain_password, hashed_password)
 
 
 # Uso
@@ -263,7 +267,7 @@ async def list_users(
 ### Variaveis de ambiente
 
 ```python
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr
 
 
@@ -285,10 +289,11 @@ class Settings(BaseSettings):
     # Servicos externos
     redis_url: SecretStr | None = None
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+    )
 
 
 settings = Settings()
@@ -572,18 +577,20 @@ updates:
 - [ ] HTTPS forcado
 - [ ] Segredos em variaveis de ambiente
 
-### Conscientizacao OWASP Top 10
+### Conscientizacao OWASP Top 10:2025
 
-1. **Injecao**: Usar ORMs, consultas parametrizadas
-2. **Autenticacao quebrada**: Hash seguro de senhas, tratamento JWT
-3. **Exposicao de dados sensiveis**: Criptografar dados, usar HTTPS
-4. **Entidades externas XML**: Desabilitar processamento XML
-5. **Controle de acesso quebrado**: Acesso baseado em funcoes, validar permissoes
-6. **Configuracao incorreta de seguranca**: Padroes seguros, cabecalhos de seguranca
-7. **Cross-Site Scripting (XSS)**: Higienizar saida
-8. **Desserializacao insegura**: Validar entrada, usar parsers seguros
-9. **Componentes vulneraveis**: Auditorias regulares de dependencias
-10. **Registro insuficiente**: Registrar eventos de seguranca, proteger logs
+> Lista de referencia: ver `.claude/rules/11-security.md`.
+
+1. **Controle de acesso quebrado** (incl. SSRF): negar por padrao, verificar permissoes em cada requisicao
+2. **Falhas criptograficas**: TLS 1.3, Argon2id para senhas, segredos em vault
+3. **Injecao**: Usar ORMs, consultas parametrizadas, validar todas as entradas
+4. **Design inseguro**: modelagem de ameacas, defesa em profundidade, rate limiting
+5. **Configuracao incorreta de seguranca**: padroes seguros, cabecalhos de seguranca
+6. **Falhas na cadeia de suprimentos de software** *(novo 2025)*: SLSA 1.0, SBOM, Sigstore, `pip-audit`
+7. **Tratamento inadequado de condicoes excepcionais** *(novo 2025)*: registrar erros, nunca expor stack traces em producao
+8. **Falhas de autenticacao**: MFA, protecao contra forca bruta, invalidar sessoes no logout
+9. **Falhas de registro e monitoramento**: centralizar logs, alertar sobre anomalias, retencao >= 1 ano
+10. **Componentes vulneraveis e desatualizados**: Dependabot/Renovate, `pip-audit`, Trivy
 
 ## Conclusao
 

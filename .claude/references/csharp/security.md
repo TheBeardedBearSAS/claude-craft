@@ -509,14 +509,14 @@ Session config:
 - Ne jamais stocker de données sensibles dans le payload (lisible sans clé)
 
 ```csharp
-// DO: JWT Bearer avec EdDSA (Ed25519) — OWASP 2026 prioritaire
+// DO: JWT Bearer avec ES256 (ECDSA P-256) — algorithme OWASP-approuvé, natif .NET 10
 // NuGet: Microsoft.IdentityModel.Tokens (inclus dans Microsoft.AspNetCore.Authentication.JwtBearer)
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        // Charger la clé publique Ed25519 (PEM ou depuis Key Vault)
-        var edDsaKey = ECDsa.Create();
-        // edDsaKey.ImportFromPem(File.ReadAllText("public.pem")); // production: Key Vault
+        // Charger la clé publique ECDSA P-256 (PEM ou depuis Key Vault)
+        var ecdsaKey = ECDsa.Create();
+        // ecdsaKey.ImportFromPem(File.ReadAllText("public.pem")); // production: Key Vault
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -526,19 +526,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            // EdDSA : utiliser ECDsaSecurityKey avec la courbe Ed25519
-            IssuerSigningKey = new ECDsaSecurityKey(edDsaKey),
-            // RS256 / ES256 fallback (migration) :
-            // IssuerSigningKey = new RsaSecurityKey(rsa) / new ECDsaSecurityKey(ecdsa),
+            // ES256 : ECDsaSecurityKey avec courbe NIST P-256
+            IssuerSigningKey = new ECDsaSecurityKey(ecdsaKey),
+            // RS256 (migration legacy) :
+            // IssuerSigningKey = new RsaSecurityKey(rsa),
             ClockSkew = TimeSpan.Zero  // Pas de marge sur l'expiration
         };
     });
 
-// Génération de token EdDSA (côté Identity Provider)
+// Génération de token ES256 (côté Identity Provider)
 public string GenerateToken(string userId, string issuer, string audience)
 {
     using var ecdsa = ECDsa.Create(ECCurve.NamedCurves.nistP256); // ES256
-    // Pour Ed25519, utiliser OKP key (nécessite BouncyCastle ou .NET 9+ preview)
     var signingCredentials = new SigningCredentials(
         new ECDsaSecurityKey(ecdsa), SecurityAlgorithms.EcdsaSha256);
 
@@ -553,7 +552,7 @@ public string GenerateToken(string userId, string issuer, string audience)
 }
 ```
 
-> **Note :** Ed25519 natif arrive avec `System.Security.Cryptography` depuis .NET 9+. Pour les projets .NET 8, utiliser **ES256** (ECDSA P-256) comme alternative immédiate à RS256. La bibliothèque `Microsoft.IdentityModel.Tokens` supporte `SecurityAlgorithms.EcdsaSha256` (ES256) nativement.
+> **Note :** L'exemple ci-dessus implémente **ES256 (ECDSA P-256)**, algorithme OWASP-approuvé pour .NET 10. Si EdDSA (Ed25519) est requis : le primitif Ed25519 a été ajouté à `System.Security.Cryptography` dans .NET 9+, mais `Microsoft.IdentityModel.Tokens` n'expose pas encore de type de clé OKP/EdDSA. Pour un vrai JWT EdDSA, utiliser **NSec.Cryptography** (NuGet: `NSec.Cryptography`, wraps libsodium) avec un `CryptoProviderFactory` personnalisé, ou **BouncyCastle**. ES256 est le choix correct pour .NET 10 jusqu'à ce que le support OKP arrive dans `Microsoft.IdentityModel.Tokens`.
 
 ### MFA
 

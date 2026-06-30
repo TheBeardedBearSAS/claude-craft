@@ -210,7 +210,69 @@ Source : [react.dev/learn/react-compiler/installation](https://react.dev/learn/r
 
 ## ESLint Configuration
 
-> **⚠️ ESLint v10 (2026) :** Le format `.eslintrc.cjs` est **supprimé**. Utiliser `eslint.config.mjs` (flat config). Voir `react19-features.md` pour l'exemple de migration.
+### eslint.config.mjs — Configuration Flat Config (ESLint v10+, recommandé)
+
+> **⚠️ ESLint v10 (2026) :** Le format `.eslintrc.cjs` est **supprimé**. Utiliser `eslint.config.mjs` (flat config) pour tout nouveau projet.
+
+```javascript
+// eslint.config.mjs (ESLint v10 — flat config)
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import reactCompiler from 'eslint-plugin-react-compiler';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import importPlugin from 'eslint-plugin-import';
+import tanstackQuery from '@tanstack/eslint-plugin-query';
+import prettier from 'eslint-config-prettier';
+
+export default tseslint.config(
+  { ignores: ['dist', 'node_modules', 'coverage'] },
+  {
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommendedTypeChecked,
+      react.configs.flat.recommended,
+      react.configs.flat['jsx-runtime'],
+      jsxA11y.flatConfigs.recommended,
+      importPlugin.flatConfigs.recommended,
+      importPlugin.flatConfigs.typescript,
+      ...tanstackQuery.configs['flat/recommended'],
+      prettier
+    ],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.json'],
+        tsconfigRootDir: import.meta.dirname
+      }
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+      'react-compiler': reactCompiler
+    },
+    settings: { react: { version: 'detect' } },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-compiler/react-compiler': 'error',
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+      'react/prop-types': 'off',
+      'import/no-default-export': 'warn',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'prefer-const': 'error'
+    }
+  },
+  {
+    files: ['**/pages/**/*', '**/app/**/*', '*.config.*'],
+    rules: { 'import/no-default-export': 'off' }
+  }
+);
+```
 
 ### Installation
 
@@ -530,6 +592,8 @@ export const Button: FC<ButtonProps> = ({
 // Export with displayName for debugging
 Button.displayName = 'Button';
 ```
+
+> ⚠️ **React Compiler 1.0 :** `React.memo` est géré automatiquement dans la majorité des cas. Réserver à : calculs lourds (>50 ms), identité de référence tierce, ou opt-out explicite du Compiler. Voir la section [React Compiler 1.0 — Configuration](#react-compiler-10--configuration) ci-dessus.
 
 ### 2. React.memo for Performance
 

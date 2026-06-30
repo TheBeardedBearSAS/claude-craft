@@ -182,6 +182,6 @@ See `.claude/rules/12-context-management.md` for detailed guidance.
 | **`/memory`** | Persistent session learnings across conversations (v2.1.59+) |
 | **Pointers over copies** | Use `@path` references instead of copying code into CLAUDE.md |
 | **Token optimization** | Use `/common:setup-rtk` for 55-65% token savings |
-| **Sub-agent model** | Set `CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-4-6` for cost savings |
+| **Sub-agent model** | Set `CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-5` for cost savings |
 
 See `.claude/templates/hooks/` for ready-to-use hook templates.

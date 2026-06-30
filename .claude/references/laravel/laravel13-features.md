@@ -40,7 +40,7 @@ class ChatController extends Controller
             ->messages([
                 ['role' => 'user', 'content' => $request->input('message')],
             ])
-            ->model('claude-sonnet-4-6')
+            ->model('claude-sonnet-5')
             ->temperature(0.7)
             ->maxTokens(1024)
             ->generate();
@@ -104,7 +104,7 @@ return [
     'drivers' => [
         'anthropic' => [
             'api_key' => env('ANTHROPIC_API_KEY'),
-            'model' => 'claude-sonnet-4-6',
+            'model' => 'claude-sonnet-5',
         ],
         'openai' => [
             'api_key' => env('OPENAI_API_KEY'),
@@ -282,6 +282,29 @@ return [
     ],
 ];
 ```
+
+### User Model — Requis
+
+Le modèle `User` doit implémenter le contrat `PasskeyUser` et utiliser le trait `PasskeyAuthenticatable` pour que Fortify puisse résoudre les endpoints WebAuthn :
+
+```php
+<?php
+// app/Models/User.php
+namespace App\Models;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Fortify\Contracts\PasskeyUser;
+use Laravel\Fortify\PasskeyAuthenticatable;
+
+class User extends Authenticatable implements PasskeyUser
+{
+    use PasskeyAuthenticatable;
+
+    // ... reste du modèle
+}
+```
+
+> **Important :** Sans cette implémentation, les endpoints de passkey de Fortify lèvent une erreur de résolution fatale lors de la première tentative WebAuthn réelle.
 
 ### Migration
 

@@ -211,8 +211,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 // Add application services
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// .NET 10: OpenAPI natif + Scalar UI (Swashbuckle retiré du template depuis .NET 9)
+// Packages: Microsoft.AspNetCore.OpenApi + Scalar.AspNetCore (voir Directory.Packages.props)
+builder.Services.AddOpenApi();
 
 // Add database (Aspire provides connection string automatically)
 builder.AddNpgsqlDbContext<ApplicationDbContext>("ordersdb");
@@ -227,8 +228,8 @@ app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.MapOrderEndpoints();

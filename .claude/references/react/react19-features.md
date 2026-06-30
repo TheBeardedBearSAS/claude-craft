@@ -804,11 +804,17 @@ function ChatRoom({ roomId, theme }) {
 
 ### Migration Zod v3 → v4
 
-Zod 4 (4.4.x) introduit des changements de rupture. L'import `from 'zod'` redirige vers Zod v3 pour compatibilité ; pour utiliser Zod v4 :
+Zod 4 (4.4.x) introduit des changements de rupture. `import { z } from 'zod'` donne désormais **Zod 4** (c'est la racine du paquet depuis 4.x). `import { z } from 'zod/v4'` est un alias de compatibilité ascendante qui fonctionne également. Le code encore sur Zod 3 doit migrer vers `import { z } from 'zod/v3'` explicitement.
 
 ```typescript
-// Zod v4 — import explicite
+// Zod v4 — import par défaut (recommandé)
+import { z } from 'zod'; // ✅ Donne Zod 4 depuis la racine du paquet
+
+// Alias de compatibilité ascendante — aussi valide en v4
 import { z } from 'zod/v4';
+
+// Rester sur Zod 3 — import explicite requis
+import { z } from 'zod/v3';
 
 // Changements breaking Zod v4 :
 // - z.string().email() → z.email() (top-level)

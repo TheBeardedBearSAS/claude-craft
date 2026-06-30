@@ -329,18 +329,20 @@ export default defineConfig({
 
 ### Bundle Size Limits
 
-> **⚠️ Vite 8 (Rolldown) :** `manualChunks` est déprécié quand le bundler Rolldown est actif (défaut Vite 8). Rolldown applique un code-splitting automatique. Supprimer `manualChunks` ou désactiver Rolldown si un découpage custom est impératif.
+> **Vite 8 / Rolldown (défaut) :** la forme objet de `manualChunks` est **supprimée** (non supportée). Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
+> **Vite 7 / Rolldown désactivé (legacy) :** utiliser `build.rollupOptions.output.manualChunks` — `// Only if Rolldown is explicitly disabled`.
 
 ```typescript
-// vite.config.ts
+// vite.config.ts — Vite 8 / Rolldown (default)
 export default defineConfig({
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        // ⚠️ Déprécié avec Rolldown (Vite 8 par défaut) — supprimer si Rolldown actif
-        manualChunks: {
-          'vue-vendor': ['vue', 'vue-router', 'pinia'],
-          'ui-vendor': ['@headlessui/vue', '@heroicons/vue'],
+        codeSplitting: {
+          groups: [
+            { name: 'vue-vendor', test: /node_modules\/(vue|pinia|vue-router)/ },
+            { name: 'ui-vendor', test: /node_modules\/@headlessui|@heroicons/ },
+          ],
         },
       },
     },
@@ -380,7 +382,7 @@ pnpm update -i
 
 ```typescript
 // src/utils/webVitals.ts
-import { onCLS, onFID, onFCP, onLCP, onTTFB } from 'web-vitals'
+import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals'
 
 type ReportHandler = (metric: {
   name: string
@@ -390,7 +392,7 @@ type ReportHandler = (metric: {
 
 export function reportWebVitals(onReport: ReportHandler) {
   onCLS(onReport)
-  onFID(onReport)
+  onINP(onReport)   // INP replaced FID as a Core Web Vital (March 2024)
   onFCP(onReport)
   onLCP(onReport)
   onTTFB(onReport)
