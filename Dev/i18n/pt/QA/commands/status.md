@@ -1,6 +1,6 @@
 ---
-description: Mostrar o status e progresso das sessoes QA Recette
-argument-hint: [--session=<id>|--all] [--scope=<story|sprint>] [--status=<running|completed|paused|failed>]
+description: "Mostrar o status e progresso das sessoes QA Recette"
+argument-hint: "[--session=<id>|--all] [--scope=<story|sprint>] [--status=<running|completed|paused|failed>]"
 ---
 
 # QA Recette Status - Status e Progresso das Sessoes

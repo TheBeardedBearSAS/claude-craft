@@ -1,6 +1,6 @@
 ---
-description: Pack la codebase en un fichier AI-friendly (Repomix wrapper + fallback shell). Token counting inclus.
-argument-hint: [--format=xml|markdown|plain] [--output=<path>] [--compress] [--fallback]
+description: "Pack la codebase en un fichier AI-friendly (Repomix wrapper + fallback shell). Token counting inclus."
+argument-hint: "[--format=xml|markdown|plain] [--output=<path>] [--compress] [--fallback]"
 ---
 
 # Pack Repo — Repomix wrapper

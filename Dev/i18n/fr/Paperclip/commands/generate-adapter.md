@@ -1,6 +1,6 @@
 ---
-description: Échafauder une extension Paperclip (plugin via create-paperclip-plugin, ou adaptateur intégré)
-argument-hint: [nom] [kind]
+description: "Échafauder une extension Paperclip (plugin via create-paperclip-plugin, ou adaptateur intégré)"
+argument-hint: "[nom] [kind]"
 ---
 
 # Générer une extension Paperclip

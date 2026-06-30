@@ -1,6 +1,6 @@
 ---
-description: Auditoria de postura de segurança do Kubernetes
-argument-hint: [namespace] [escopo]
+description: "Auditoria de postura de segurança do Kubernetes"
+argument-hint: "[namespace] [escopo]"
 ---
 
 # Kubernetes Security Audit

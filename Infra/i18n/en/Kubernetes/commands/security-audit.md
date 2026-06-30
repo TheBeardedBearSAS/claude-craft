@@ -1,6 +1,6 @@
 ---
-description: Kubernetes security posture audit
-argument-hint: [namespace] [scope]
+description: "Kubernetes security posture audit"
+argument-hint: "[namespace] [scope]"
 ---
 
 # Kubernetes Security Audit

@@ -1,6 +1,6 @@
 ---
-description: Migrate existing backlog to BMAD v6 format
-argument-hint: [--dry-run] [--force]
+description: "Migrate existing backlog to BMAD v6 format"
+argument-hint: "[--dry-run] [--force]"
 ---
 
 # Migrate Backlog

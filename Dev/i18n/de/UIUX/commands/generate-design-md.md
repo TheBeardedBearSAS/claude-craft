@@ -1,6 +1,6 @@
 ---
-description: Generiert eine DESIGN.md im Projektstamm aus dem Claude Craft Template + Analyse vorhandener UI-Quellen (Tailwind, Tokens, CSS).
-argument-hint: [--from-tailwind] [--from-tokens=<path>] [--interactive]
+description: "Generiert eine DESIGN.md im Projektstamm aus dem Claude Craft Template + Analyse vorhandener UI-Quellen (Tailwind, Tokens, CSS)."
+argument-hint: "[--from-tailwind] [--from-tokens=<path>] [--interactive]"
 ---
 
 # DESIGN.md generieren

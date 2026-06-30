@@ -1,6 +1,6 @@
 ---
-description: Synchroniser les fichiers backlog avec sprint-status.yaml
-argument-hint: [--direction source] [--dry-run]
+description: "Synchroniser les fichiers backlog avec sprint-status.yaml"
+argument-hint: "[--direction source] [--dry-run]"
 ---
 
 # Sync Backlog

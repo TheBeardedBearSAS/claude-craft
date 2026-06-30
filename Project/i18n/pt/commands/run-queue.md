@@ -1,6 +1,6 @@
 ---
-description: Processar a fila batch de stories
-argument-hint: [--parallel N] [--auto] [--resume]
+description: "Processar a fila batch de stories"
+argument-hint: "[--parallel N] [--auto] [--resume]"
 ---
 
 # Run Queue

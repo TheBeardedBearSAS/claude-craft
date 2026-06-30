@@ -1,6 +1,6 @@
 ---
-description: Erstellt ein Paperclip-Extension-Gerüst (Plugin via create-paperclip-plugin oder Built-in-Adapter)
-argument-hint: [name] [kind]
+description: "Erstellt ein Paperclip-Extension-Gerüst (Plugin via create-paperclip-plugin oder Built-in-Adapter)"
+argument-hint: "[name] [kind]"
 ---
 
 # Generieren einer Paperclip-Extension

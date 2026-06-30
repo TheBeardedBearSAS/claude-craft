@@ -1,6 +1,6 @@
 ---
-description: Equipe de Revisao de Seguranca - Auditoria de seguranca multi-dimensao paralela usando Agent Teams
-argument-hint: [--scope=full|code|deps|infra] [--max-workers=3]
+description: "Equipe de Revisao de Seguranca - Auditoria de seguranca multi-dimensao paralela usando Agent Teams"
+argument-hint: "[--scope=full|code|deps|infra] [--max-workers=3]"
 ---
 
 # Equipe de Revisao de Seguranca - Auditoria de Seguranca Multi-Dimensao Paralela

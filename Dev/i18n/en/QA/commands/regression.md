@@ -1,6 +1,6 @@
 ---
-description: View and manage QA Recette regression test registry
-argument-hint: [--list|--stats|--check] [--status=<active|verified|obsolete>] [--source=<story-id>]
+description: "View and manage QA Recette regression test registry"
+argument-hint: "[--list|--stats|--check] [--status=<active|verified|obsolete>] [--source=<story-id>]"
 ---
 
 # QA Recette Regression - Regression Test Registry

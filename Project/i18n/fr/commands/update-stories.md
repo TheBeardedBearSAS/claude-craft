@@ -1,6 +1,6 @@
 ---
-description: Mettre à jour les stories au format BMAD v6 avec les champs manquants
-argument-hint: [--dry-run] [story-id]
+description: "Mettre à jour les stories au format BMAD v6 avec les champs manquants"
+argument-hint: "[--dry-run] [story-id]"
 ---
 
 # Update Stories

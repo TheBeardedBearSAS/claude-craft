@@ -1,6 +1,6 @@
 ---
-description: Optimizar el uso de recursos y los costes en Kubernetes
-argument-hint: [namespace] [objetivo]
+description: "Optimizar el uso de recursos y los costes en Kubernetes"
+argument-hint: "[namespace] [objetivo]"
 ---
 
 # Optimización de Kubernetes

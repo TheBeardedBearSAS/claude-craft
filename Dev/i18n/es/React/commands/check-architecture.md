@@ -1,5 +1,5 @@
 ---
-description: Comando: Verificar Arquitectura
+description: "Comando: Verificar Arquitectura"
 ---
 
 # Comando: Verificar Arquitectura

@@ -1,5 +1,5 @@
 ---
-description: Comando: Analizar Bundle
+description: "Comando: Analizar Bundle"
 ---
 
 # Comando: Analizar Bundle

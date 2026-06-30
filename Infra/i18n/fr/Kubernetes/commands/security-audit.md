@@ -1,6 +1,6 @@
 ---
-description: Audit de la posture de sécurité Kubernetes
-argument-hint: [namespace] [périmètre]
+description: "Audit de la posture de sécurité Kubernetes"
+argument-hint: "[namespace] [périmètre]"
 ---
 
 # Kubernetes Security Audit

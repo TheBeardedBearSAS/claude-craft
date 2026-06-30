@@ -1,6 +1,6 @@
 ---
-description: Sprint Status
-argument-hint: [sprint N] [--bmad] [--verbose]
+description: "Sprint Status"
+argument-hint: "[sprint N] [--bmad] [--verbose]"
 ---
 
 # Sprint Status

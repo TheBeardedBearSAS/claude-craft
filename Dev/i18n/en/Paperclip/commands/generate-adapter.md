@@ -1,6 +1,6 @@
 ---
-description: Scaffold a Paperclip extension (plugin via create-paperclip-plugin, or built-in adapter)
-argument-hint: [name] [kind]
+description: "Scaffold a Paperclip extension (plugin via create-paperclip-plugin, or built-in adapter)"
+argument-hint: "[name] [kind]"
 ---
 
 # Generate a Paperclip Extension

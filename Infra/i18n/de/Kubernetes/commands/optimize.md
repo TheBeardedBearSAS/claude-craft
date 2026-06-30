@@ -1,6 +1,6 @@
 ---
-description: Kubernetes-Ressourcennutzung und -kosten optimieren
-argument-hint: [Namespace] [Ziel]
+description: "Kubernetes-Ressourcennutzung und -kosten optimieren"
+argument-hint: "[Namespace] [Ziel]"
 ---
 
 # Kubernetes Optimize
