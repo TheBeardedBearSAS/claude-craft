@@ -173,7 +173,7 @@ cd ~/mon-api && claude
 
 **Option B : Manuelle**
 ```bash
-nano ~/mon-api/.claude/rules/00-project-context.md
+nano ~/mon-api/.claude/references/<your-tech>/project-context.md
 ```
 
 Mettez à jour ces sections :

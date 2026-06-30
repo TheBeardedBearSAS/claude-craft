@@ -193,7 +193,7 @@ This guide covers common issues and their solutions when using Claude-Craft.
 
 3. **Check project context file**
    ```bash
-   cat .claude/rules/00-project-context.md
+   cat .claude/references/<your-tech>/project-context.md
    # Ensure it describes your project accurately
    ```
 
@@ -284,7 +284,7 @@ This guide covers common issues and their solutions when using Claude-Craft.
 
 1. **Update project context**
    ```bash
-   # Edit .claude/rules/00-project-context.md
+   # Edit .claude/references/<your-tech>/project-context.md
    # Add specific patterns and conventions
    ```
 

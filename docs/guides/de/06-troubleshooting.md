@@ -193,7 +193,7 @@ Dieser Leitfaden behandelt häufige Probleme und ihre Lösungen bei der Verwendu
 
 3. **Projektkontextdatei prüfen**
    ```bash
-   cat .claude/rules/00-project-context.md
+   cat .claude/references/<your-tech>/project-context.md
    # Sicherstellen, dass das Projekt korrekt beschrieben wird
    ```
 
@@ -284,7 +284,7 @@ Dieser Leitfaden behandelt häufige Probleme und ihre Lösungen bei der Verwendu
 
 1. **Projektkontext aktualisieren**
    ```bash
-   # .claude/rules/00-project-context.md bearbeiten
+   # .claude/references/<your-tech>/project-context.md bearbeiten
    # Spezifische Muster und Konventionen hinzufügen
    ```
 

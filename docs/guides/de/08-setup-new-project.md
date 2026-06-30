@@ -323,7 +323,7 @@ claude
 Der Befehl wird:
 1. **Auto-erkennen** Ihren Tech-Stack, Framework, Datenbank und CI/CD
 2. **Fragen stellen** für fehlende Informationen (App-Typ, Domäne, Benutzer, Compliance)
-3. **Generieren** einer vollständigen `.claude/rules/00-project-context.md` Datei
+3. **Generieren** einer vollständigen `.claude/references/<your-tech>/project-context.md` Datei
 4. **Nächste Schritte vorschlagen** (auszuführende Agenten, zu vervollständigende Abschnitte)
 
 **Verfügbare Modi:**
@@ -337,7 +337,7 @@ Wenn Sie manuell konfigurieren möchten, öffnen Sie die Datei direkt:
 
 ```bash
 # In Ihrem Editor öffnen (ersetzen Sie 'nano' mit 'code', 'vim', etc.)
-nano .claude/rules/00-project-context.md
+nano .claude/references/<your-tech>/project-context.md
 ```
 
 ### Abschnitte zum Anpassen

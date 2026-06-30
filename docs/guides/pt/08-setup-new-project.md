@@ -323,7 +323,7 @@ claude
 O comando irá:
 1. **Auto-detectar** sua stack técnica, framework, banco de dados e CI/CD
 2. **Fazer perguntas** para informações faltantes (tipo de app, domínio, usuários, conformidade)
-3. **Gerar** um arquivo `.claude/rules/00-project-context.md` completo
+3. **Gerar** um arquivo `.claude/references/<your-tech>/project-context.md` completo
 4. **Sugerir próximos passos** (agentes para executar, seções para completar)
 
 **Modos disponíveis:**
@@ -337,7 +337,7 @@ Se preferir configurar manualmente, abra o arquivo diretamente:
 
 ```bash
 # Abrir no seu editor (substitua 'nano' por 'code', 'vim', etc.)
-nano .claude/rules/00-project-context.md
+nano .claude/references/<your-tech>/project-context.md
 ```
 
 ### Seções para Personalizar

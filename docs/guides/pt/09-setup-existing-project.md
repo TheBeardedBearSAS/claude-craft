@@ -408,7 +408,7 @@ O comando analisará sua codebase existente, detectará tecnologias e perguntar�
 Crie ou atualize o arquivo de contexto do projeto manualmente:
 
 ```bash
-nano .claude/rules/00-project-context.md
+nano .claude/references/<your-tech>/project-context.md
 ```
 
 Preencha o template com o que você descobriu:
@@ -649,7 +649,7 @@ Migração:
 | Localização Antiga | Localização Claude-Craft |
 |--------------------|--------------------------|
 | `.cursorrules` | `.claude/rules/90-custom.md` |
-| `.github/copilot-instructions.md` | `.claude/rules/00-project-context.md` |
+| `.github/copilot-instructions.md` | `.claude/references/<your-tech>/project-context.md` |
 | `CLAUDE.md` (raiz) | `.claude/CLAUDE.md` |
 | Prompts personalizados | `.claude/commands/custom/` |
 
