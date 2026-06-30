@@ -15,7 +15,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { TECH_REGISTRY } from '../cli/lib/tech-registry.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

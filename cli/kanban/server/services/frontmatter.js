@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 // Frontmatter delimited by `---` lines. Strips exactly one newline after the
 // closing delimiter (matches the prior gray-matter behavior the tests assert).
@@ -26,7 +26,8 @@ export async function parseFile(filepath) {
 export function parseString(raw) {
   const match = FRONTMATTER_RE.exec(raw);
   if (!match) return { data: {}, body: raw, raw };
-  const parsed = yaml.load(match[1]);
+  // js-yaml 5 throws on empty input; an empty frontmatter block (---\n---) parses to {}.
+  const parsed = match[1].trim() === '' ? {} : yaml.load(match[1]);
   const data = parsed && typeof parsed === 'object' ? parsed : {};
   return { data, body: match[2] ?? '', raw };
 }
