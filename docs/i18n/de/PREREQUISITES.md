@@ -106,7 +106,7 @@ Erforderlich für StatusLine und erweiterte Funktionen.
 | yq | 4.0 |
 | Git | 2.0 |
 | Docker | 20.0 |
-| Claude Code | 2.1.97+ (2.1.168 recommended) |
+| Claude Code | 2.1.97+ (2.1.193 recommended) |
 
 ---
 

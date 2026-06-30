@@ -1,9 +1,9 @@
-# Claude Code Compatibility — Claude Craft v8.11.0
+# Claude Code Compatibility — Claude Craft v8.19.0
 
 **Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
-**Recommended Version:** 2.1.168 (Opus 4.8, `fallbackModel`, `ultracode` trigger, June 6, 2026)
-**Tested up to:** 2.1.168 (June 6, 2026)
-**Last Updated:** 2026-06-08
+**Recommended Version:** 2.1.193 (Opus 4.8, Artifacts, `claude mcp login`, `/cd`, nested subagents — Week 26, June 26, 2026)
+**Tested up to:** 2.1.193 (June 26, 2026)
+**Last Updated:** 2026-06-30
 
 ---
 
@@ -26,7 +26,11 @@
 | Requirement | Version | Notes |
 |-------------|---------|-------|
 | **Minimum** | 2.1.97 | Security baseline — CVE-2025-59536 patched |
-| **Recommended** | 2.1.168 | Full feature set, Opus 4.8, `fallbackModel` (up to 3), `ultracode` trigger, forked subagents, native CLI binary |
+| **Recommended** | 2.1.193 | Full feature set, Opus 4.8, Artifacts, `claude mcp login/logout`, `/cd`, nested subagents (5 levels), `/rewind` post-`/clear`, `fallbackModel`, native CLI binary |
+| **`claude mcp login` / `logout`** | 2.1.185+ | Authenticate/clear an MCP server's credentials from the shell instead of `/mcp` |
+| **Artifacts** | 2.1.178+ | Live shareable page from a session (beta, Team/Enterprise) |
+| **`/cd`** | 2.1.166+ | Move session working dir without rebuilding the prompt cache |
+| **Nested subagents** | 2.1.166+ | A subagent can spawn its own subagents (background chains capped at 5 levels) |
 | **`fallbackModel`** | 2.1.166+ | Up to 3 fallback models when primary overloaded/unavailable |
 | **`ultracode` trigger** | 2.1.160+ | ⚠️ BREAKING — renamed from `workflow` (Dynamic Workflows) |
 | **Managed `requiredMinimum/MaximumVersion`** | 2.1.163+ | Enterprise version enforcement |
@@ -35,7 +39,7 @@
 | **Auto Mode** | 2.1.94+ | Team plan required |
 | **Opus 4.7** | 2.1.111+ | xhigh effort, adaptive thinking |
 | **Opus 4.8** | 2.1.154+ | Flagship (28 mai 2026), high effort par défaut, fast mode, Dynamic Workflows |
-| **Fable 5** | — | `claude-fable-5` — roleplay/narrative, agents créatifs (juin 2026) — via frontmatter ou `CLAUDE_CODE_SUBAGENT_MODEL` |
+| **Fable 5 / Mythos 5** | ⚠️ SUSPENDUS | Access coupé le 2026-06-12 par une directive export-control US (toujours offline). **Ne pas recommander `claude-fable-5` / `claude-mythos-5`.** Router les agents créatifs vers Opus 4.8 / Sonnet 4.6. |
 | **Forked subagents** | 2.1.117 | `CLAUDE_CODE_FORK_SUBAGENT=1` |
 
 ---
@@ -502,7 +506,10 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | **2.1.160** | **2026-06-02** | **⚠️ BREAKING : trigger Dynamic Workflows `workflow` → `ultracode` ; grep satisfait read-before-edit ; confirmation écriture shell startup** |
 | 2.1.163 | 2026-06-04 | Managed settings `requiredMinimumVersion` / `requiredMaximumVersion` |
 | **2.1.166** | **2026-06-06** | **`fallbackModel` (jusqu'à 3 modèles de repli), `--fallback-model` interactif, retry sur fallback** |
-| **2.1.168** | **2026-06-06** | **Durcissement messages cross-session (SendMessage), retries — version stable RECOMMANDÉE** |
+| **2.1.168** | **2026-06-06** | Durcissement messages cross-session (SendMessage), retries |
+| **2.1.176** | **2026-06-12** | `/cd`, sous-agents imbriqués (5 niveaux), `--safe-mode`, `fallbackModel` (jusqu'à 3) |
+| **2.1.183** | **2026-06-19** | Artifacts (beta Team/Enterprise), deny/ask rules sur paramètres `Tool(param:value)`, `/config key=value` |
+| **2.1.193** | **2026-06-26** | **`claude mcp login/logout`, `/rewind` post-`/clear`, background subagents → prompts de permission, shell mode répond à l'output — version stable RECOMMANDÉE** |
 
 ---
 
@@ -511,7 +518,8 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 - [CVE-2025-59536 — Check Point Research](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/)
 - [Claude Code Changelog officiel](https://code.claude.com/docs/en/changelog)
 - [Anthropic Claude Opus 4.7 announcement](https://www.anthropic.com/news/claude-opus-4-7)
-- [Anthropic Claude Fable 5 — `claude-fable-5`](https://www.anthropic.com/)
+- [Statement on the US government directive to suspend Fable 5 & Mythos 5 (2026-06-12)](https://www.anthropic.com/news/fable-mythos-access)
+- [Claude Code What's new — Week 26 (2.1.193)](https://code.claude.com/docs/en/whats-new)
 - [Claude Code Cost Optimization](https://code.claude.com/docs/en/costs)
 - [CLAUDE.md Authoring Guide](https://www.builder.io/blog/claude-md-guide)
 

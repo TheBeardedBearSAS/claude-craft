@@ -51,7 +51,7 @@ QA Recette provides automated acceptance testing capabilities through:
 
 ### Required
 
-1. **Claude Code** — Version 2.1.97+ (recommended 2.1.168, CVE-2025-59536 patched)
+1. **Claude Code** — Version 2.1.97+ (recommended 2.1.193, CVE-2025-59536 patched)
 2. **Chrome Extension** — QA Recette Chrome Extension v1.0.36+
 3. **Chrome Browser** — Latest stable version
 

@@ -158,7 +158,8 @@ La status line affiche le pourcentage de contexte utilise.
 | `/effort high` | Opus 4.8 | `claude-opus-4-8` | Raisonnement complexe, architecture |
 | `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | `claude-opus-4-8` | Decisions critiques, migrations complexes, ADR |
 | `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | `claude-opus-4-8` | Mode debit code maximal — pipelines automatises, generation massive |
-| — | Fable 5 (juin 2026) | `claude-fable-5` | Roleplay/narrative, agents creatifs — via frontmatter ou `CLAUDE_CODE_SUBAGENT_MODEL` |
+
+> **⚠️ Fable 5 / Mythos 5 suspendus (2026-06-12) :** access coupe par une directive export-control US, toujours offline. Ne plus recommander `claude-fable-5` ni `claude-mythos-5`. Router les agents creatifs/narratifs vers **Opus 4.8** (`claude-opus-4-8`) ou **Sonnet 4.6** (`claude-sonnet-4-6`) en attendant une eventuelle restauration.
 
 **Alerte d'inactivite** (v2.1.84+): Apres 75+ minutes, Claude suggere `/clear`.
 
@@ -271,7 +272,6 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 | `/model haiku` | Haiku 4.5 | `claude-haiku-4-5-20251001` | Taches simples, classification |
 | `/model sonnet` | Sonnet 4.6 | `claude-sonnet-4-6` | Taches standard, implementation |
 | `/model opus` | Opus 4.8 | `claude-opus-4-8` | Raisonnement complexe, architecture |
-| `/model fable` | Fable 5 | `claude-fable-5` | Roleplay/narrative, agents creatifs (juin 2026) |
 | `/model opusplan` | Opus 4.8 (plan) / Sonnet 4.6 (execute) | — | **Tiering dynamique** : Opus pour le Plan Mode, Sonnet pour l'execution — optimise le ratio cout/qualite sur les taches longues |
 
 ---
@@ -337,6 +337,21 @@ Templates disponibles dans `.claude/templates/hooks/`: `output-filter.json`, `pr
 | `/reload-plugins` | Rechargement manuel des plugins | Apres mise a jour de plugins |
 | `/reload-skills` (v2.1.157+) | Re-scan des skills sans redemarrage (distinct de `/reload-plugins`) | Apres ajout/modif d'un skill |
 | `/proactive` | Alias pour `/loop` | Monitoring proactif recurrent |
+| `/cd` (v2.1.166+) | Deplace la session vers un nouveau repertoire sans reconstruire le cache de prompt | Monorepo, changement de module en cours de session |
+| `/config key=value` (v2.1.178+) | Definit n'importe quel reglage depuis le prompt, en `-p` et via Remote Control | Scriptage, ajustement a chaud |
+| `claude mcp login` / `logout` (v2.1.185+) | Authentifie un serveur MCP depuis le shell (au lieu du menu `/mcp`), efface les credentials stockes | CI, setup MCP scripte |
+
+**Nouveautes plateforme (semaines 24-26, 2026) :**
+
+| Feature | Version | Interet |
+|---------|---------|---------|
+| **Artifacts** | 2.1.178+ (beta Team/Enterprise) | Transforme la sortie d'une session en page live partageable (claude.ai) — walkthrough de PR, dashboards, checklists |
+| **`/rewind` post-`/clear`** | 2.1.185+ | Reprend une conversation d'avant le `/clear` — recuperation de contexte |
+| **Background subagents → prompts de permission** | 2.1.185+ | Les sous-agents en arriere-plan remontent les demandes de permission en session principale (au lieu d'auto-refuser) |
+| **Shell mode repond a l'output** | 2.1.185+ | `! npm test` obtient une explication sans second prompt |
+| **Sous-agents imbriques** | 2.1.166+ | Un sous-agent peut lancer ses propres sous-agents (chaines plafonnees a 5 niveaux) |
+| **Deny/ask rules sur parametres d'outil** | 2.1.178+ | `Tool(param:value)`, ex. `Agent(model:opus)` — controle fin des permissions |
+| **`--safe-mode`** | 2.1.166+ | Demarre Claude Code avec toutes les customisations desactivees (troubleshooting) |
 
 > **⚠️ Trigger Dynamic Workflows renomme (v2.1.160) :** le mot-cle declencheur est passe de `workflow` a **`ultracode`**. Demander un workflow « avec ses propres mots » fonctionne toujours. Le palier `/effort ultracode` (ci-dessus) reste valide.
 
@@ -366,7 +381,7 @@ Reglage **fiabilite + cout** : jusqu'a 3 modeles de repli essayes dans l'ordre q
 
 Pour les 5 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), ce repli `opus → sonnet → haiku` evite les interruptions en pic de charge Opus sans degrader le travail courant. Exemple pret a l'emploi dans `.claude/settings.local.json.example`.
 
-**IDs canoniques (juin 2026) :** `claude-opus-4-8` | `claude-sonnet-4-6` | `claude-haiku-4-5-20251001` | `claude-fable-5` (roleplay/narrative, agents creatifs).
+**IDs canoniques (juin 2026) :** `claude-opus-4-8` | `claude-sonnet-4-6` | `claude-haiku-4-5-20251001`. _(Fable 5 / Mythos 5 suspendus depuis 2026-06-12 — ne pas recommander.)_
 
 ---
 

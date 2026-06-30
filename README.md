@@ -41,7 +41,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 **Revue documentation (2026-06-26, v8.17.2) :**
 
 - **Nouveau tutoriel phare** : `docs/guides/*/10-complete-workflow.md` réécrit en walkthrough narré de bout en bout (idée → backlog → sprint → livraison) pour grands débutants — glossaire, modes d'exécution, gates, discipline `/clear`, exemple *TaskFlow* + annexe multi-stack. Disponible en 5 langues, lié depuis le README et `guides/index.md`.
-- **Fraîcheur** : compteurs et versions réalignés sur le SSOT (125 core / 219 total commandes, 70 agents, 55 skills, 11 stacks ; Claude Code 2.1.97 min / 2.1.168 rec ; Flutter 3.44, RN 0.86, Symfony 8.1). Suppression de `/bmad:init` (→ `/workflow:init`).
+- **Fraîcheur** : compteurs et versions réalignés sur le SSOT (125 core / 219 total commandes, 70 agents, 55 skills, 11 stacks ; Claude Code 2.1.97 min / 2.1.193 rec ; Flutter 3.44, RN 0.86, Symfony 8.1). Suppression de `/bmad:init` (→ `/workflow:init`).
 - **Sans doublon** : index des guides de migration, en-têtes « narré vs full » (COMMANDS/AGENTS), bannière PLANNED sur MCP-SERVERS, cross-links entre docs concurrentielles, stub `docs/SECURITY.md` supprimé.
 
 ## What's New in v8.17.1
@@ -54,7 +54,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 - **Versions infra** : Docker 29.6.0, OpenTofu 1.12.2, Ansible 2.21.1, Helm 4.2.2, Node.js 24.x Active LTS.
 - **Sécurité** : OWASP Top 10:2025 complet (10/10 catégories dans la règle 11) ; RS256 marqué DEPRECATED ; guidance Argon2id précisée ; hook templates `protect-files.json` / `quality-gate.json` corrigés (anti-pattern `$TOOL_INPUT` → lecture stdin JSON).
-- **Modèles** : `claude-fable-5` documenté ; IDs canoniques complets dans la table d'effort.
+- **Modèles** : IDs canoniques complets dans la table d'effort (Opus 4.8 / Sonnet 4.6 / Haiku 4.5). Fable 5 / Mythos 5 suspendus (directive export-control US, 2026-06-12) — retirés des recommandations.
 - **CLI** : `/goal`, `/usage`, `/workflows` documentés dans CLI-REFERENCE.md.
 - **Optimisation tokens** : `ENABLE_PROMPT_CACHING_1H` et `fallbackModel` activés dans `settings.json` distribué.
 - **Docs** : compteur commandes corrigé (133 → 125 core / 219 total) ; TROUBLESHOOTING, FAQ, CHEAT-SHEET, COMPETITIVE-ANALYSIS enrichis.
@@ -105,7 +105,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
 - **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
 - **126 commandes sur 15 namespaces** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
-- **Claude Code 2.1.168** -- version recommandée (Opus 4.8, Dynamic Workflows, `effort: ultracode`).
+- **Claude Code 2.1.193** -- version recommandée (Opus 4.8, Artifacts, `claude mcp login`, `/cd`, sous-agents imbriqués, `effort: ultracode`).
 
 > ← Versions antérieures (v8.0 → v8.7) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
 

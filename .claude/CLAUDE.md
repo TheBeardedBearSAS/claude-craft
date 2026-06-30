@@ -162,7 +162,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version:** 2.1.97 (CVE-2025-59536 patched) | **Recommended:** 2.1.168 (Opus 4.8 + Dynamic Workflows) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
+**Minimum Version:** 2.1.97 (CVE-2025-59536 patched) | **Recommended:** 2.1.193 (Opus 4.8, Artifacts, `claude mcp login`, `/cd`, nested subagents — Week 26) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
 
 ---
 

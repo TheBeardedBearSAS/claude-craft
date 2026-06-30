@@ -689,7 +689,7 @@ Spawns multiple reviewer agents (security, architecture, performance, style) in 
 
 ---
 
-### /goal (v2.1.168+)
+### /goal (v2.1.139+)
 
 Set a persistent session goal that Claude tracks until completion. A Stop hook activates and prevents Claude from stopping until the condition is met.
 
@@ -714,7 +714,7 @@ Defines an objective Claude must complete before the session ends. Useful for lo
 
 ---
 
-### /usage (v2.1.168+)
+### /usage (v2.1.143+)
 
 Display token usage statistics for the current session — input tokens, output tokens, cache reads, and estimated cost.
 
@@ -806,7 +806,7 @@ Default for Pro/Max subscribers on Opus 4.8/Sonnet 4.6 is `high` since v2.1.111 
 | `xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | Décisions critiques, migrations complexes, ADR |
 | `ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | Mode débit code maximal — pipelines automatisés, génération massive |
 
-> **Note Fable 5 :** `claude-fable-5` est disponible depuis juin 2026 pour les scénarios de roleplay/narrative et certains agents créatifs. Il n'est pas exposé via `/effort` mais peut être utilisé en frontmatter d'agent ou via `CLAUDE_CODE_SUBAGENT_MODEL=claude-fable-5`.
+> **⚠️ Note Fable 5 / Mythos 5 :** ces modèles sont **suspendus depuis le 2026-06-12** (directive export-control US, toujours offline). Ne pas configurer `CLAUDE_CODE_SUBAGENT_MODEL=claude-fable-5`. Pour les agents créatifs/narratifs, utiliser **Opus 4.8** (`claude-opus-4-8`) ou **Sonnet 4.6** (`claude-sonnet-4-6`) en attendant une éventuelle restauration.
 
 ---
 
