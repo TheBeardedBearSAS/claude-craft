@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.18.2] - 2026-06-30
+
+### Fixed
+
+- **Descriptions de commandes garanties** : 91 fichiers commande (sur 1110) n'exposaient pas de description exploitable. 79 avaient un frontmatter YAML malformé (deux-points non quoté dans `description:`, ou `argument-hint: [a] [b]` interprété comme une séquence flow invalide) que le parser js-yaml strict de `generate-references.mjs` faisait silencieusement tomber à `_no description_` ; 12 étaient réellement sans description. Valeurs `description`/`argument-hint` quotées, descriptions manquantes ajoutées (localisées par langue + couche `base/` + `.claude/`), `COMMANDS-FULL-REFERENCE.md` régénéré (occurrences `_no description_` : 79+ → 0).
+
+### Added
+
+- **Garde-fou descriptions** : `tests/scripts/command-descriptions.test.mjs` (4 tests) impose, sur les 1110 fichiers commande des 4 layouts, que chacun ait un bloc frontmatter, parse en YAML strict et expose une description non vide. Reproduit le parsing de production → toute future commande sans description (ou au YAML cassé) fait échouer la CI.
+
 ## [8.18.1] - 2026-06-28
 
 ### Changed
