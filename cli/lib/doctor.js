@@ -8,7 +8,7 @@ import path from 'path';
 import os from 'os';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import c from './colors.js';
 import { listDirs } from './fs-utils.js';
 import { assertSafeTarget } from './path-safety.js';

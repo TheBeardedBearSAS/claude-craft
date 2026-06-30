@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import path from 'node:path';
 import { mkdtemp, rm, writeFile, mkdir, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import {
   loadSprintStatus,
   rebuildSprintStatus,

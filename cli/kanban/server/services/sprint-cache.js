@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { SprintStatusSchema } from '../../shared/schemas.js';
 
 /**
@@ -12,7 +12,10 @@ export async function loadSprintStatus(projectRoot) {
   const yamlPath = path.join(projectRoot, '.bmad', 'sprint-status.yaml');
   try {
     const content = await readFile(yamlPath, 'utf8');
-    const parsed = yaml.load(content);
+    // js-yaml 5 throws YAMLException on empty input (v4 returned undefined). Treat an
+    // empty/whitespace-only file as null so it flows to the _invalid path instead of throwing —
+    // while genuinely malformed YAML still throws.
+    const parsed = content.trim() === '' ? null : yaml.load(content);
     const result = SprintStatusSchema.safeParse(parsed);
     if (!result.success) {
       return { ...parsed, _invalid: true };
