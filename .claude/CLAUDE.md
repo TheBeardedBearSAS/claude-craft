@@ -47,7 +47,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Commands (15 namespaces, 126 commands)
 
-Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*`, `/paperclip:*` | Infra (via `@devops-engineer`): Docker 29.6.0, Coolify v4.1.2, K8s 1.36.1, OpenTofu 1.12.2, Ansible 2.21.1, FrankenPHP 1.12.4, PgBouncer 1.25.2 | Project: `/sprint:*`, `/gate:*`, `/project:*`
+Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.6.0, Coolify v4.1.2, K8s 1.36.1, OpenTofu 1.12.2, Ansible 2.21.1, FrankenPHP 1.12.4, PgBouncer 1.25.2 | Project: `/sprint:*`, `/gate:*`, `/project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 
@@ -112,7 +112,7 @@ docker compose exec app ./vendor/bin/phpunit
 
 ## Skills
 
-`/solid-principles`, `/testing`, `/security`, `/git-workflow`, `/documentation`, `/kiss-dry-yagni`, `/workflow-analysis`, `/parallel-worktrees`, `/atomic-tasks`, `/design-md-convention`, `/architect`, `/debug-methodical`, `/socratic-brainstorm`, `/ecosystem-tools` — loaded on demand from `.claude/skills/`
+`/solid-principles`, `/testing`, `/security`, `/git-workflow`, `/documentation`, `/kiss-dry-yagni`, `/workflow-analysis`, `/parallel-worktrees`, `/atomic-tasks`, `/design-md-convention`, `/architect`, `/debug-methodical`, `/socratic-brainstorm`, `/ecosystem-tools`, … — loaded on demand from `.claude/skills/`. **Full catalogue : [docs/SKILLS.md](../docs/SKILLS.md)**
 
 ## AI-First Development (Karpathy)
 

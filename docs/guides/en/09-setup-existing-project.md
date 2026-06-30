@@ -208,7 +208,7 @@ npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en
 **Method B: Makefile**
 ```bash
 cd ~/claude-craft
-make install-symfony TARGET=~/your-existing-project LANG=en
+make install-symfony TARGET=~/your-existing-project RULES_LANG=en
 ```
 
 ### Preserving Existing Configuration
@@ -220,7 +220,7 @@ If you have existing `.claude/` files you want to keep:
 npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en --preserve-config
 
 # Makefile with preserve flag
-make install-symfony TARGET=~/your-existing-project LANG=en OPTIONS="--preserve-config"
+make install-symfony TARGET=~/your-existing-project RULES_LANG=en OPTIONS="--preserve-config"
 ```
 
 **What `--preserve-config` keeps:**
@@ -751,7 +751,7 @@ If you are upgrading an existing Claude-Craft installation to v8.7.1:
 npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en --update
 
 # Or via Makefile
-make install-symfony TARGET=. LANG=en OPTIONS="--update"
+make install-symfony TARGET=. RULES_LANG=en OPTIONS="--update"
 ```
 
 ---

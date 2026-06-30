@@ -13,7 +13,7 @@ Erforderlich für NPX-Installation und CLI-Tools.
 | OS | Installationsbefehl |
 |----|---------------------|
 | **macOS** | `brew install node` |
-| **Ubuntu/Debian** | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo -E bash - && sudo apt-get install -y nodejs` |
+| **Ubuntu/Debian** | `curl -fsSL https://deb.nodesource.com/setup_22.x \| sudo -E bash - && sudo apt-get install -y nodejs` |
 | **Windows WSL** | Wie Ubuntu |
 | **Arch Linux** | `sudo pacman -S nodejs npm` |
 

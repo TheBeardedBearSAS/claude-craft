@@ -336,8 +336,8 @@ newgrp docker
 # Use nvm to manage Node versions
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 source ~/.bashrc
-nvm install 20
-nvm use 20
+nvm install 22
+nvm use 22
 ```
 
 > ⚠️ **Security Note:** The NVM installation above uses the official method from nvm-sh. Consider reviewing the script before installation or using alternative methods like package managers.

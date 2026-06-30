@@ -359,7 +359,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
 | **Claude Opus 4.8** (`claude-opus-4-8`) | Nouveau modèle flagship, même prix qu'Opus 4.7, **défaut effort `high`** + `/effort xhigh` pour les tâches les plus dures. Disponible API/Bedrock/Vertex/Foundry | **Recommandé** — modèle cible pour agents `effort: xhigh`/`max` (security-auditor, migration-specialist, database-architect, ralph-conductor) |
-| **Dynamic Workflows** | Demander à Claude de créer un workflow qui orchestre **des dizaines à des centaines d'agents** en arrière-plan (cap 1000 subagents). Visible via `/workflows` | **NOT INTEGRATED** — P1 v8.8 : complète/remplace en profondeur les patterns `/team:*` et `ralph-run` (orchestration déterministe fan-out + vérification adversariale) |
+| **Dynamic Workflows** | Demander à Claude de créer un workflow qui orchestre **des dizaines à des centaines d'agents** en arrière-plan (cap 1000 subagents). Visible via `/workflows` | **Adopté** (v8.19.0) — skill [`dynamic-workflows`](../skills/dynamic-workflows/SKILL.md) : 3 paliers d'orchestration, patterns (fan-out, vérification adversariale, pipeline, loop-until-dry), monitoring `/workflows` |
 | Fast mode moins cher sur Opus 4.8 | 2× le tarif standard pour 2,5× la vitesse | **N/A** (user pricing) |
 | `effort: max` | 5ᵉ niveau d'effort (au-dessus de `xhigh`), disponible sur Opus 4.8 | **Documented** — voir docs/AGENTS.md tableau effort |
 | `/effort ultracode` | Nouveau palier effort introduit avec Dynamic Workflows / Opus 4.8 — mode optimisé débit code (vitesse maximale, idéal pipelines automatisés) ; équivalent `effort: max` en CLI | **Documented** — documenter dans `rules/12-context-management.md` tableau efforts |
@@ -387,21 +387,6 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 > **⚠️ Migration `workflow` → `ultracode` (2.1.160) :** le déclencheur des Dynamic Workflows a été renommé. Claude Craft mentionne `/effort ultracode` (palier effort) — cohérent. Tout contenu invitant à « lancer un workflow » par le mot-clé `workflow` doit être mis à jour vers `ultracode`.
 
 > **Note `fallbackModel` :** réglage de fiabilité ET de coût. Pour les 4 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor), un repli `["claude-sonnet-5", "claude-haiku-4-5-20251001"]` évite les interruptions en cas de surcharge Opus sans dégrader le travail courant. Voir `rules/12-context-management.md`.
-
----
-
-### Adoption Roadmap for v8.10.1
-
-| Priorité | Feature | Fichier à modifier | Effort |
-|----------|---------|-------------------|--------|
-| **P1** | Intégrer `/goal` dans `ralph-run.md` comme alternative DoD | `.claude/commands/common/ralph-run.md` | 2h |
-| **P1** | Documenter `claude agents` dans `/team:*` commands | `.claude/commands/team/*.md`, `docs/AGENTS.md` | 2h |
-| **P1** | Documenter `claude.skill_activated` OTEL dans `@observability-engineer` | `.claude/agents/observability-engineer.md` | 1h |
-| **P1** | Documenter `skillOverrides` dans context-management (✅ documenté § 2.1.129) | `.claude/rules/12-context-management.md` | 1h |
-| **P2** | Documenter `parentSettingsBehavior` | `docs/` + `rules/12-context-management.md` | 1h |
-| **P2** | Documenter `terminalSequence` dans hooks templates | `.claude/templates/hooks/` + `docs/` | 1h |
-| **P2** | Documenter `worktree.bgIsolation: "none"` dans parallel-worktrees | `.claude/skills/parallel-worktrees/SKILL.md` | 30min |
-| **P2** | Documenter `Hooks effort.level` (hooks adaptatifs) | `.claude/templates/hooks/` | 1h |
 
 ---
 

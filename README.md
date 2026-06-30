@@ -144,7 +144,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
 - **31 default agents + 39 infra agents on-demand** -- reviewers, architects, coaches that know your stack deeply (70 total potentially installable)
-- **125 slash commands across 15 namespaces** -- repeatable workflows for audits, code generation, sprint management
+- **126 slash commands across 15 namespaces** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -180,7 +180,7 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 125 across 15 namespaces (219 total with infra/project) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Commands** | 126 across 15 namespaces (220 total with infra/project) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
 | **Skills** | 55 | Architecture, testing, security, DDD best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |

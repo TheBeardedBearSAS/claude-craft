@@ -91,10 +91,10 @@ git clone https://github.com/TheBeardedBearSAS/claude-craft.git
 cd claude-craft
 
 # Installer pour un projet Symfony (en français)
-make install-symfony TARGET=~/mon-projet LANG=fr
+make install-symfony TARGET=~/mon-projet RULES_LANG=fr
 
 # Ou pour un projet Flutter (en anglais)
-make install-flutter TARGET=~/mon-app LANG=en
+make install-flutter TARGET=~/mon-app RULES_LANG=en
 ```
 
 ### Méthode 2 : Script Direct
@@ -138,7 +138,7 @@ git init
 
 ```bash
 # Depuis le répertoire claude-craft
-make install-symfony TARGET=~/mon-api LANG=fr
+make install-symfony TARGET=~/mon-api RULES_LANG=fr
 ```
 
 ### Étape 3 : Vérifier l'Installation
@@ -315,7 +315,7 @@ Maintenant que vous comprenez les bases, continuez avec :
 
 ```bash
 # Installation
-make install-{tech} TARGET=chemin LANG=xx
+make install-{tech} TARGET=chemin RULES_LANG=xx
 
 # Lister les options disponibles
 make help

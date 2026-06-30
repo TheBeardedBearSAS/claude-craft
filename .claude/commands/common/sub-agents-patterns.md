@@ -231,6 +231,30 @@ Utiliser Agent Teams quand :
 | `/team:security` | Revue sécurité 3 dimensions | Corrélation 3 voies |
 | `/team:delivery` | Cycle complet sprint | Pipeline 2 phases |
 
+## 6. Dynamic Workflows — le 3ᵉ palier (au-dessus d'Agent Teams)
+
+Quand une tâche dépasse le contexte d'un agent OU exige **plus de ~4 workers concurrents** OU une
+boucle/pipeline déterministe, Agent Teams ne suffit plus : utiliser les **Dynamic Workflows**
+(Claude Code 2.1.154+, déclencheur **`ultracode`**). Claude écrit un script JS qui orchestre
+**jusqu'à ~1000 sous-agents** (cap concurrent ~16) en arrière-plan, suivi via `/workflows`.
+
+| Critère | Agent Teams | Dynamic Workflows |
+|---------|-------------|-------------------|
+| Concurrence | 1 leader + ~3 workers | jusqu'à ~1000 sous-agents (cap ~16 simultanés) |
+| Orchestration | déclarative, synchrone, 1 passe | programmatique (boucles, fan-out conditionnel, pipelines) |
+| Vérification adversariale | non native | pattern de premier ordre (réfutation par sceptiques) |
+| Déclenchement | `/team:*` | mot-clé `ultracode` / « use a workflow » |
+
+| Scénario | Approche | Justification |
+|----------|----------|---------------|
+| Audit exhaustif 7 domaines × 11 stacks + vérif adverse | **Dynamic Workflow** | > 4 workers, pipeline review→verify, dédup |
+| Migration d'un pattern sur 200 fichiers | **Dynamic Workflow** (worktree isolation) | volume, éditions concurrentes isolées |
+| Recherche multi-sources fact-checkée | **Dynamic Workflow** | fan-out + deep-read + vérification + synthèse |
+
+> Détails, patterns composables et squelette de script : skill **`dynamic-workflows`**
+> (`@.claude/skills/dynamic-workflows/SKILL.md`). Ne pas confondre avec `/effort ultracode`
+> (palier d'effort CLI) ni avec `ralph-run` (boucle séquentielle mono-contexte).
+
 ### Outils de support
 
 | Outil | Fichier | Rôle |

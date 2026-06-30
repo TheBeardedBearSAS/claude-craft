@@ -8,30 +8,30 @@ Quick reference for the most common commands. Keep this handy for daily developm
 
 ```bash
 npx @the-bearded-bear/claude-craft install . --auto       # Zero-prompt auto-detection
-# ou avec stack explicite :
+# or with an explicit stack:
 npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
-/common:getting-started         # Assistant interactif d'onboarding (10 min) — lancer EN PREMIER
-/common:init                    # Configure la structure .claude/ du projet
+/common:getting-started         # Interactive onboarding wizard (10 min) — run THIS FIRST
+/common:init                    # Set up the project's .claude/ structure
 /workflow:init                  # Initialize BMAD workflow
 /common:pre-commit-check        # Validate before commit
 /team:audit                     # Run full audit
 ```
 
-**Alternatives install :**
+**Alternative install methods:**
 ```bash
-npx @the-bearded-bear/claude-craft install . --auto              # Détection auto du stack
-npx @the-bearded-bear/claude-craft install . --from=URL          # Config partagée d'équipe
-npx @the-bearded-bear/claude-craft skill add <name>              # Ajouter un skill communautaire
-npx @the-bearded-bear/claude-craft kanban --open                 # Ouvrir le tableau Kanban
+npx @the-bearded-bear/claude-craft install . --auto              # Auto-detect the stack
+npx @the-bearded-bear/claude-craft install . --from=URL          # Shared team config
+npx @the-bearded-bear/claude-craft skill add <name>              # Add a community skill
+npx @the-bearded-bear/claude-craft kanban --open                 # Open the Kanban board
 ```
 
-**Désinstaller :**
+**Uninstall:**
 ```bash
-rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Suppression complète
+rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 ```
 
-> **Note :** `/sprint:*`, `/gate:*` et `/project:*` nécessitent `make install-project TARGET=.` (installation séparée).
-> `/common:getting-started` et `/common:init` requièrent que Claude Craft soit installé d'abord.
+> **Note:** `/sprint:*`, `/gate:*` and `/project:*` require `make install-project TARGET=.` (separate install).
+> `/common:getting-started` and `/common:init` require Claude Craft to be installed first.
 
 ---
 
@@ -80,14 +80,14 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Suppression c
 
 ---
 
-## 20 Namespaces installés — Top Commands
+## 20 Installed Namespaces — Top Commands
 
-> **Note :** Les 7 namespaces `/sprint:`, `/gate:`, `/project:` (gestion de sprint) et les namespaces infra (`/docker:`, `/k8s:`, `/coolify:`, etc.) nécessitent une installation séparée via `make install-project TARGET=.` ou `make install-infra TARGET=.`.
+> **Note:** The 7 namespaces `/sprint:`, `/gate:`, `/project:` (sprint management) and the infra namespaces (`/docker:`, `/k8s:`, `/coolify:`, etc.) require a separate install via `make install-project TARGET=.` or `make install-infra TARGET=.`.
 
-### `/common:` - Transversal
+### `/common:` - Cross-cutting
 
 ```
-/common:getting-started           # Assistant interactif onboarding (lancer en premier)
+/common:getting-started           # Interactive onboarding wizard (run first)
 /common:init                      # Configure project
 /common:pre-commit-check          # Validate before commit
 /common:pre-merge-check           # Validate before merge
@@ -101,8 +101,8 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Suppression c
 /common:generate-changelog        # Generate CHANGELOG
 /common:architecture-decision     # Document ADR
 /common:add-technology "nextjs"   # Add new tech stack
-/common:setup-project-context     # Interactive project config (distinct de /common:init)
-/common:aliases                   # Raccourcis et aliases personnalisés
+/common:setup-project-context     # Interactive project config (distinct from /common:init)
+/common:aliases                   # Custom shortcuts and aliases
 ```
 
 ### `/workflow:` - BMAD Workflow
@@ -295,7 +295,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Suppression c
 
 ### `/sprint:` - Sprint Management
 
-> **Prérequis :** `make install-project TARGET=.` — commandes absentes de l'install par défaut.
+> **Prerequisite:** `make install-project TARGET=.` — commands absent from the default install.
 
 ```
 /sprint:create Sprint-3           # Create sprint
@@ -307,7 +307,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Suppression c
 
 ### `/gate:` - Quality Gates
 
-> **Prérequis :** `make install-project TARGET=.`
+> **Prerequisite:** `make install-project TARGET=.`
 
 ```
 /gate:prd                         # PRD quality gate
@@ -377,37 +377,37 @@ export CLAUDE_CODE_SUBAGENT_MODEL=sonnet  # Cheaper subagents
 | Use parallel teams for 2+ stacks | `/team:audit` (vs `--sequential`) |
 | Use Ralph for long tasks | `/common:ralph-run "task"` |
 | Research with Context7 | `/common:research-context7 "topic"` |
-| Multi-agent simultané | `@tdd-coach @react-reviewer Implement this feature` |
-| Reload skills sans redémarrage | `/reload-skills` (v2.1.157+) |
+| Multi-agent concurrent | `@tdd-coach @react-reviewer Implement this feature` |
+| Reload skills without restart | `/reload-skills` (v2.1.157+) |
 
 ---
 
 ## Shortcuts & Aliases
 
 ```bash
-/common:aliases                   # Voir et configurer les alias personnalisés
+/common:aliases                   # View and configure custom aliases
 ```
 
-Configurer des raccourcis clavier dans `~/.claude/keybindings.json` pour vos 5 commandes les plus fréquentes :
+Configure keyboard shortcuts in `~/.claude/keybindings.json` for your 5 most frequent commands:
 - `/common:pre-commit-check` → `Ctrl+Shift+P`
 - `/common:ralph-run` → `Ctrl+Shift+R`
 - `/qa:tdd` → `Ctrl+Shift+T`
 - `/workflow:status` → `Ctrl+Shift+S`
 - `/clear` → `Ctrl+Shift+C`
 
-Voir `~/.claude/keybindings.json` pour la configuration complète.
+See `~/.claude/keybindings.json` for the full configuration.
 
 ---
 
 ## Kanban Board
 
 ```bash
-npx @the-bearded-bear/claude-craft kanban --open   # Ouvrir dans le navigateur
-npx @the-bearded-bear/claude-craft kanban          # Démarrer le serveur local (port 3141)
+npx @the-bearded-bear/claude-craft kanban --open   # Open in the browser
+npx @the-bearded-bear/claude-craft kanban          # Start the local server (port 3141)
 ```
 
-Le Kanban ingère `.bmad/sprint-status.yaml` en lecture seule. Aucune dépendance SaaS.
-Nécessite `make install-project TARGET=.` pour la génération des stories BMAD v6.
+The Kanban board ingests `.bmad/sprint-status.yaml` read-only. No SaaS dependency.
+Requires `make install-project TARGET=.` for BMAD v6 story generation.
 
 ---
 

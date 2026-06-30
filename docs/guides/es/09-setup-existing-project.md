@@ -208,7 +208,7 @@ npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=es
 **Método B: Makefile**
 ```bash
 cd ~/claude-craft
-make install-symfony TARGET=~/tu-proyecto-existente LANG=es
+make install-symfony TARGET=~/tu-proyecto-existente RULES_LANG=es
 ```
 
 ### Preservar Configuración Existente
@@ -220,7 +220,7 @@ Si tienes archivos `.claude/` existentes que quieres mantener:
 npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=es --preserve-config
 
 # Makefile con flag de preservación
-make install-symfony TARGET=~/tu-proyecto-existente LANG=es OPTIONS="--preserve-config"
+make install-symfony TARGET=~/tu-proyecto-existente RULES_LANG=es OPTIONS="--preserve-config"
 ```
 
 **Lo que `--preserve-config` mantiene:**

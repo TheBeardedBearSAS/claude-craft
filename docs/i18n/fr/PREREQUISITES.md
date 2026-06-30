@@ -13,7 +13,7 @@ Requis pour l'installation NPX et les outils CLI.
 | OS | Commande d'Installation |
 |----|-------------------------|
 | **macOS** | `brew install node` |
-| **Ubuntu/Debian** | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo -E bash - && sudo apt-get install -y nodejs` |
+| **Ubuntu/Debian** | `curl -fsSL https://deb.nodesource.com/setup_22.x \| sudo -E bash - && sudo apt-get install -y nodejs` |
 | **Windows WSL** | Identique à Ubuntu |
 | **Arch Linux** | `sudo pacman -S nodejs npm` |
 
@@ -304,8 +304,8 @@ newgrp docker
 # Utiliser nvm pour gérer les versions de Node
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 source ~/.bashrc
-nvm install 20
-nvm use 20
+nvm install 22
+nvm use 22
 ```
 
 ---

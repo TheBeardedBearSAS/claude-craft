@@ -225,22 +225,22 @@ cd ~/claude-craft
 
 # Instalar regras no seu projeto
 # Substitua 'symfony' pela sua tech e 'pt' pelo seu idioma
-make install-symfony TARGET=~/meu-projeto LANG=pt
+make install-symfony TARGET=~/meu-projeto RULES_LANG=pt
 ```
 
 **Exemplos para outras stacks:**
 ```bash
 # Flutter em inglês
-make install-flutter TARGET=~/meu-projeto LANG=en
+make install-flutter TARGET=~/meu-projeto RULES_LANG=en
 
 # React em francês
-make install-react TARGET=~/meu-projeto LANG=fr
+make install-react TARGET=~/meu-projeto RULES_LANG=fr
 
 # Python em alemão
-make install-python TARGET=~/meu-projeto LANG=de
+make install-python TARGET=~/meu-projeto RULES_LANG=de
 
 # Apenas regras comuns (qualquer projeto)
-make install-common TARGET=~/meu-projeto LANG=pt
+make install-common TARGET=~/meu-projeto RULES_LANG=pt
 ```
 
 Saída esperada:
