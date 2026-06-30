@@ -34,16 +34,20 @@ jobs:
 
       - name: Install CycloneDX CLI
         # Pinned major to avoid the SBOM generator itself being a floating dependency.
-        run: npm install --no-save @cyclonedx/cyclonedx-npm@6
+        run: npm install --no-save @cyclonedx/cyclonedx-npm@5
 
       - name: Generate CycloneDX SBOM
         run: npx @cyclonedx/cyclonedx-npm --output-format JSON --output-file claude-craft-sbom.json
 
       - name: Install cosign
-        # TODO: pin by SHA once available; tracked by the github-actions Dependabot entry.
-        uses: sigstore/cosign-installer@v3.8.1
+        # github-actions Dependabot will pin this to a SHA on its next run.
+        uses: sigstore/cosign-installer@v3.10.1
 
       - name: Sign SBOM (Sigstore keyless)
+        # Best-effort: OIDC keyless signing requires the workflow to run on the upstream repo
+        # (not a fork). Don't fail the whole SBOM job if signing is unavailable; the bundle is
+        # attached when present.
+        continue-on-error: true
         run: cosign sign-blob --yes claude-craft-sbom.json --bundle claude-craft-sbom.json.bundle
 
       - name: Upload SBOM artifact
