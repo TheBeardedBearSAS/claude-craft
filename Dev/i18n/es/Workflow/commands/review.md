@@ -1,5 +1,5 @@
 ---
-description: 
+description: "Preparación de la Sprint Review"
 argument-hint: [argumentos]
 ---
 

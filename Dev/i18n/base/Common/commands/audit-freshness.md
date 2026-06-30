@@ -1,6 +1,6 @@
 ---
-description: Audit de fraîcheur multi-stack (versions + best practices) via équipe d'agents parallèles Context7 + Web
-argument-hint: [--wave=1|2|3|all] [--stack=<nom>]
+description: "Audit de fraîcheur multi-stack (versions + best practices) via équipe d'agents parallèles Context7 + Web"
+argument-hint: "[--wave=1|2|3|all] [--stack=<nom>]"
 ---
 
 # Audit de Fraîcheur claude-craft

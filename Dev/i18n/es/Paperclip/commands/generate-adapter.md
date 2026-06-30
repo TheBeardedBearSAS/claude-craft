@@ -1,6 +1,6 @@
 ---
-description: Scaffoldear una extensión Paperclip (plugin vía create-paperclip-plugin, o adaptador built-in)
-argument-hint: [nombre] [tipo]
+description: "Scaffoldear una extensión Paperclip (plugin vía create-paperclip-plugin, o adaptador built-in)"
+argument-hint: "[nombre] [tipo]"
 ---
 
 # Generar una Extensión Paperclip

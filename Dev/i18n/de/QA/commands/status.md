@@ -1,6 +1,6 @@
 ---
-description: QA Recette Sitzungsstatus und Fortschritt anzeigen
-argument-hint: [--session=<id>|--all] [--scope=<story|sprint>] [--status=<running|completed|paused|failed>]
+description: "QA Recette Sitzungsstatus und Fortschritt anzeigen"
+argument-hint: "[--session=<id>|--all] [--scope=<story|sprint>] [--status=<running|completed|paused|failed>]"
 ---
 
 # QA Recette Status - Sitzungsstatus und Fortschritt

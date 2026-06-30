@@ -1,6 +1,6 @@
 ---
-description: Traiter la file batch de stories
-argument-hint: [--parallel N] [--auto] [--resume]
+description: "Traiter la file batch de stories"
+argument-hint: "[--parallel N] [--auto] [--resume]"
 ---
 
 # Run Queue

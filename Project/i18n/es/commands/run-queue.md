@@ -1,6 +1,6 @@
 ---
-description: Procesar la cola batch de stories
-argument-hint: [--parallel N] [--auto] [--resume]
+description: "Procesar la cola batch de stories"
+argument-hint: "[--parallel N] [--auto] [--resume]"
 ---
 
 # Run Queue

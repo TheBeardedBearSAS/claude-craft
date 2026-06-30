@@ -1,3 +1,7 @@
+---
+description: "Bootstrap the Claude-Craft structure for a new project"
+---
+
 # /init - Bootstrap Claude-Craft Structure
 
 Initialise la structure Claude-Craft pour un nouveau projet.

@@ -1,6 +1,6 @@
 ---
-description: Alle bereiten Stories des aktuellen Sprints ausfuehren
-argument-hint: [--auto] [--dry-run]
+description: "Alle bereiten Stories des aktuellen Sprints ausfuehren"
+argument-hint: "[--auto] [--dry-run]"
 ---
 
 # Sprint ausfuehren

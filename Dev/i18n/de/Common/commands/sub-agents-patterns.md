@@ -1,3 +1,7 @@
+---
+description: "Sub-Agent-Patterns für parallele und komplexe Aufgaben"
+---
+
 # Sub-Agents Patterns
 
 Leitfaden zur effektiven Nutzung von Sub-Agents in Claude Code fuer parallele und komplexe Aufgaben.

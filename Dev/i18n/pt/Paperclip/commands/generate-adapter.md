@@ -1,6 +1,6 @@
 ---
-description: Scaffold uma extensao Paperclip (plugin via create-paperclip-plugin, ou adapter built-in)
-argument-hint: [name] [kind]
+description: "Scaffold uma extensao Paperclip (plugin via create-paperclip-plugin, ou adapter built-in)"
+argument-hint: "[name] [kind]"
 ---
 
 # Gerar uma Extensao Paperclip

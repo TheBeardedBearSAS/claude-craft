@@ -64,12 +64,12 @@
 | [`/common:add-technology`](../.claude/commands/common/add-technology.md) | Ajouter une nouvelle technologie à claude-craft avec les best practices de Context7 et recherche web |
 | [`/common:aliases`](../.claude/commands/common/aliases.md) | CLI aliases for frequently used commands |
 | [`/common:architecture-decision`](../.claude/commands/common/architecture-decision.md) | Architecture Decision Record (ADR) |
-| [`/common:audit-freshness`](../.claude/commands/common/audit-freshness.md) | _no description_ |
+| [`/common:audit-freshness`](../.claude/commands/common/audit-freshness.md) | Audit de fraîcheur multi-stack (versions + best practices) via équipe d'agents parallèles Context7 + Web |
 | [`/common:daily-standup`](../.claude/commands/common/daily-standup.md) | Génération Résumé Daily Stand-up |
 | [`/common:generate-changelog`](../.claude/commands/common/generate-changelog.md) | Génération Automatique du Changelog |
 | [`/common:getting-started`](../.claude/commands/common/getting-started.md) | Interactive 10-minute guided tour for new Claude Craft users |
-| [`/common:init`](../.claude/commands/common/init.md) | _no description_ |
-| [`/common:pack-repo`](../.claude/commands/common/pack-repo.md) | _no description_ |
+| [`/common:init`](../.claude/commands/common/init.md) | Bootstrap de la structure Claude-Craft pour un nouveau projet |
+| [`/common:pack-repo`](../.claude/commands/common/pack-repo.md) | Pack la codebase en un fichier AI-friendly (Repomix wrapper + fallback shell). Token counting inclus. |
 | [`/common:pre-commit-check`](../.claude/commands/common/pre-commit-check.md) | Vérification Pre-Commit |
 | [`/common:pre-merge-check`](../.claude/commands/common/pre-merge-check.md) | Vérification Pre-Merge |
 | [`/common:ralph-run`](../.claude/commands/common/ralph-run.md) | Executer Claude en boucle continue jusqu'a completion de la tache (Ralph Wiggum v2.0) |
@@ -79,7 +79,7 @@
 | [`/common:setup-ci`](../.claude/commands/common/setup-ci.md) | Configuration CI/CD |
 | [`/common:setup-project-context`](../.claude/commands/common/setup-project-context.md) | Analyser la codebase et configurer le contexte projet interactivement |
 | [`/common:setup-rtk`](../.claude/commands/common/setup-rtk.md) | Configure RTK and token optimization for Claude Code |
-| [`/common:sub-agents-patterns`](../.claude/commands/common/sub-agents-patterns.md) | _no description_ |
+| [`/common:sub-agents-patterns`](../.claude/commands/common/sub-agents-patterns.md) | Patterns de sub-agents pour les tâches parallèles et complexes |
 
 ## `/coolify:*`
 
@@ -143,7 +143,7 @@
 |---------|-------------|
 | [`/gate:report`](../Project/i18n/en/Gate/commands/report.md) | Show comprehensive quality gates report |
 | [`/gate:validate-alignment`](../Project/i18n/en/Gate/commands/validate-alignment.md) | Validate spec-code alignment to ensure implementation matches specifications |
-| [`/gate:validate-backlog`](../Project/i18n/en/Gate/commands/validate-backlog.md) | _no description_ |
+| [`/gate:validate-backlog`](../Project/i18n/en/Gate/commands/validate-backlog.md) | Validate backlog stories against INVEST criteria |
 | [`/gate:validate-prd`](../Project/i18n/en/Gate/commands/validate-prd.md) | Validate PRD against quality gate (≥80%) |
 | [`/gate:validate-sprint`](../Project/i18n/en/Gate/commands/validate-sprint.md) | Validate sprint readiness before starting |
 | [`/gate:validate-story`](../Project/i18n/en/Gate/commands/validate-story.md) | Validate story against Definition of Done |
@@ -166,8 +166,8 @@
 | [`/kubernetes:architecture`](../Infra/i18n/en/Kubernetes/commands/architecture.md) | Design complete Kubernetes architecture |
 | [`/kubernetes:debug`](../Infra/i18n/en/Kubernetes/commands/debug.md) | Diagnose Kubernetes issues from symptoms |
 | [`/kubernetes:deploy-setup`](../Infra/i18n/en/Kubernetes/commands/deploy-setup.md) | Setup GitOps deployment pipeline for Kubernetes |
-| [`/kubernetes:optimize`](../Infra/i18n/en/Kubernetes/commands/optimize.md) | _no description_ |
-| [`/kubernetes:security-audit`](../Infra/i18n/en/Kubernetes/commands/security-audit.md) | _no description_ |
+| [`/kubernetes:optimize`](../Infra/i18n/en/Kubernetes/commands/optimize.md) | Optimize Kubernetes resource usage and costs |
+| [`/kubernetes:security-audit`](../Infra/i18n/en/Kubernetes/commands/security-audit.md) | Kubernetes security posture audit |
 
 ## `/laravel:*`
 
@@ -199,7 +199,7 @@
 | [`/paperclip:check-compliance`](../Dev/i18n/en/Paperclip/commands/check-compliance.md) | Check Complete Paperclip Compliance |
 | [`/paperclip:check-security`](../Dev/i18n/en/Paperclip/commands/check-security.md) | Audit Paperclip Security |
 | [`/paperclip:check-testing`](../Dev/i18n/en/Paperclip/commands/check-testing.md) | Audit Paperclip Test Coverage and Quality |
-| [`/paperclip:generate-adapter`](../Dev/i18n/en/Paperclip/commands/generate-adapter.md) | _no description_ |
+| [`/paperclip:generate-adapter`](../Dev/i18n/en/Paperclip/commands/generate-adapter.md) | Scaffold a Paperclip extension (plugin via create-paperclip-plugin, or built-in adapter) |
 | [`/paperclip:generate-agent-config`](../Dev/i18n/en/Paperclip/commands/generate-agent-config.md) | Draft a Paperclip agent-hire payload (for the API or the dashboard) |
 | [`/paperclip:setup-company`](../Dev/i18n/en/Paperclip/commands/setup-company.md) | Bootstrap a new Paperclip company (onboarding + first agent) |
 
@@ -248,18 +248,18 @@
 | [`/project:list-stories`](../Project/i18n/en/commands/list-stories.md) | List User Stories |
 | [`/project:list-tasks`](../Project/i18n/en/commands/list-tasks.md) | List Tasks |
 | [`/project:metrics`](../Project/i18n/en/commands/metrics.md) | Generate project metrics dashboard with sprint velocity, spec coverage, and quality indicators |
-| [`/project:migrate-backlog`](../Project/i18n/en/commands/migrate-backlog.md) | _no description_ |
+| [`/project:migrate-backlog`](../Project/i18n/en/commands/migrate-backlog.md) | Migrate existing backlog to BMAD v6 format |
 | [`/project:move-task`](../Project/i18n/en/commands/move-task.md) | Move a Task |
 | [`/project:reverse-prd`](../Project/i18n/en/commands/reverse-prd.md) | Generate a PRD from an existing codebase by analyzing implemented features and business logic |
 | [`/project:reverse-stories`](../Project/i18n/en/commands/reverse-stories.md) | Generate user stories from existing codebase features and endpoints |
 | [`/project:run-epic`](../Project/i18n/en/commands/run-epic.md) | Run all stories from an epic in batch |
-| [`/project:run-queue`](../Project/i18n/en/commands/run-queue.md) | _no description_ |
-| [`/project:run-sprint`](../Project/i18n/en/commands/run-sprint.md) | _no description_ |
+| [`/project:run-queue`](../Project/i18n/en/commands/run-queue.md) | Process the batch queue of stories |
+| [`/project:run-sprint`](../Project/i18n/en/commands/run-sprint.md) | Execute all ready stories in the current sprint |
 | [`/project:scan`](../Project/i18n/en/commands/scan.md) | Analyze existing codebase and generate a structured inventory of modules, endpoints, models, and tests |
-| [`/project:sync-backlog`](../Project/i18n/en/commands/sync-backlog.md) | _no description_ |
+| [`/project:sync-backlog`](../Project/i18n/en/commands/sync-backlog.md) | Synchronize backlog files with sprint-status.yaml |
 | [`/project:trace`](../Project/i18n/en/commands/trace.md) | Display bidirectional traceability matrix from requirements to code and tests |
 | [`/project:update-epic`](../Project/i18n/en/commands/update-epic.md) | Update an EPIC |
-| [`/project:update-stories`](../Project/i18n/en/commands/update-stories.md) | _no description_ |
+| [`/project:update-stories`](../Project/i18n/en/commands/update-stories.md) | Update stories to BMAD v6 format with missing fields |
 | [`/project:update-story`](../Project/i18n/en/commands/update-story.md) | Update a User Story |
 
 ## `/python:*`
@@ -283,9 +283,9 @@
 |---------|-------------|
 | [`/qa:fix`](../.claude/commands/qa/fix.md) | Correction automatisee des bugs identifies par la QA Recette |
 | [`/qa:recette`](../.claude/commands/qa/recette.md) | Tests d'acceptance automatises avec Claude in Chrome |
-| [`/qa:regression`](../.claude/commands/qa/regression.md) | _no description_ |
+| [`/qa:regression`](../.claude/commands/qa/regression.md) | Voir et gerer le registre de tests de regression QA Recette |
 | [`/qa:report`](../.claude/commands/qa/report.md) | Generer des rapports QA Recette a partir des donnees de session |
-| [`/qa:status`](../.claude/commands/qa/status.md) | _no description_ |
+| [`/qa:status`](../.claude/commands/qa/status.md) | Afficher le statut et la progression des sessions QA Recette |
 | [`/qa:tdd`](../.claude/commands/qa/tdd.md) | Correction de Bug en Mode TDD/BDD |
 
 ## `/react:*`
@@ -325,7 +325,7 @@
 | [`/sprint:auto-route`](../Project/i18n/en/Sprint/commands/auto-route.md) | Execute automatic routing rules for story transitions |
 | [`/sprint:dev`](../Project/i18n/en/Sprint/commands/dev.md) | Start TDD/BDD development of a sprint with automatic status updates |
 | [`/sprint:next-story`](../Project/i18n/en/Sprint/commands/next-story.md) | Get next story ready for development |
-| [`/sprint:status`](../Project/i18n/en/Sprint/commands/status.md) | _no description_ |
+| [`/sprint:status`](../Project/i18n/en/Sprint/commands/status.md) | Sprint Status |
 | [`/sprint:transition`](../Project/i18n/en/Sprint/commands/transition.md) | Transition story to a new status |
 
 ## `/symfony:*`
@@ -361,7 +361,7 @@
 | [`/uiux:audit`](../.claude/commands/uiux/audit.md) | Audit Complet UI/UX/Accessibilité |
 | [`/uiux:component-spec`](../.claude/commands/uiux/component-spec.md) | Spécification Complète Composant UI/UX/A11y |
 | [`/uiux:design-tokens`](../.claude/commands/uiux/design-tokens.md) | Définition Design Tokens |
-| [`/uiux:generate-design-md`](../.claude/commands/uiux/generate-design-md.md) | _no description_ |
+| [`/uiux:generate-design-md`](../.claude/commands/uiux/generate-design-md.md) | Génère un DESIGN.md à la racine du projet à partir du template Claude Craft + analyse des sources UI existantes (Tailwind, tokens, CSS). |
 | [`/uiux:orchestrator`](../.claude/commands/uiux/orchestrator.md) | Orchestrateur UI/UX |
 | [`/uiux:user-flow`](../.claude/commands/uiux/user-flow.md) | Conception Parcours Utilisateur |
 

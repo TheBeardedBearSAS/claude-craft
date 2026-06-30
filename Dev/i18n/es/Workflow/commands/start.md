@@ -1,5 +1,5 @@
 ---
-description: 
+description: "Preparación del inicio del Sprint"
 argument-hint: [argumentos]
 ---
 

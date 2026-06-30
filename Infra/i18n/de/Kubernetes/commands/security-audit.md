@@ -1,6 +1,6 @@
 ---
-description: Kubernetes-Sicherheitslage prufen
-argument-hint: [Namespace] [Umfang]
+description: "Kubernetes-Sicherheitslage prufen"
+argument-hint: "[Namespace] [Umfang]"
 ---
 
 # Kubernetes Security Audit

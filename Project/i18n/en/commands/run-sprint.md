@@ -1,6 +1,6 @@
 ---
-description: Execute all ready stories in the current sprint
-argument-hint: [--auto] [--dry-run]
+description: "Execute all ready stories in the current sprint"
+argument-hint: "[--auto] [--dry-run]"
 ---
 
 # Run Sprint

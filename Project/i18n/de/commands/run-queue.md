@@ -1,6 +1,6 @@
 ---
-description: Batch-Warteschlange von Stories verarbeiten
-argument-hint: [--parallel N] [--auto] [--resume]
+description: "Batch-Warteschlange von Stories verarbeiten"
+argument-hint: "[--parallel N] [--auto] [--resume]"
 ---
 
 # Warteschlange ausfuehren

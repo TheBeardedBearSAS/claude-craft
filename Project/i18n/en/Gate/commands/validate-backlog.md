@@ -1,6 +1,6 @@
 ---
-description: Validate backlog stories against INVEST criteria
-argument-hint: [story-id] [--no-gate]
+description: "Validate backlog stories against INVEST criteria"
+argument-hint: "[story-id] [--no-gate]"
 ---
 
 # Validate Backlog Gate

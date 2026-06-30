@@ -1,6 +1,6 @@
 ---
-description: Otimizar uso de recursos e custos do Kubernetes
-argument-hint: [namespace] [alvo]
+description: "Otimizar uso de recursos e custos do Kubernetes"
+argument-hint: "[namespace] [alvo]"
 ---
 
 # Kubernetes Optimize

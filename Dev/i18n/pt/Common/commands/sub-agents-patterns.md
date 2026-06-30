@@ -1,3 +1,7 @@
+---
+description: "Padrões de sub-agentes para tarefas paralelas e complexas"
+---
+
 # Padroes de Sub-Agents
 
 Guia para uso eficaz de sub-agents no Claude Code para tarefas paralelas e complexas.

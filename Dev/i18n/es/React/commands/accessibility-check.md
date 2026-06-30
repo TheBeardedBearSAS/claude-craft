@@ -1,5 +1,5 @@
 ---
-description: Comando: Verificación de Accesibilidad
+description: "Comando: Verificación de Accesibilidad"
 ---
 
 # Comando: Verificación de Accesibilidad

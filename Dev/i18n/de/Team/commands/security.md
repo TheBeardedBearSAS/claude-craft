@@ -1,6 +1,6 @@
 ---
-description: Sicherheits-Review-Team - Paralleles mehrdimensionales Sicherheitsaudit mit Agent Teams
-argument-hint: [--scope=full|code|deps|infra] [--max-workers=3]
+description: "Sicherheits-Review-Team - Paralleles mehrdimensionales Sicherheitsaudit mit Agent Teams"
+argument-hint: "[--scope=full|code|deps|infra] [--max-workers=3]"
 ---
 
 # Sicherheits-Review-Team - Paralleles mehrdimensionales Sicherheitsaudit

@@ -1,3 +1,7 @@
+---
+description: "Patterns de sub-agents pour les tâches parallèles et complexes"
+---
+
 # Patterns de Sub-Agents
 
 Guide pour utiliser efficacement les sub-agents dans Claude Code pour les tâches parallèles et complexes.
