@@ -374,7 +374,7 @@ OWASP Top 10:2025 security audit specialist — SAST, dependency scanning, secre
 
 Test-Driven Development coach
 
-**Model:** sonnet · **Effort:** high · **Memory:** user
+**Model:** sonnet · **Effort:** medium · **Memory:** user
 
 **Skills:** `testing`, `solid-principles`
 
