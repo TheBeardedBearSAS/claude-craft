@@ -1,10 +1,7 @@
 ---
 name: kiss-dry-yagni
 description: Principes KISS, DRY, YAGNI. Use when reviewing code quality or refactoring.
-triggers:
   files: ["*.cs"]
-  keywords: ["simple", "simplify", "duplicate", "duplication", "refactor", "KISS", "DRY", "YAGNI"]
-auto_suggest: true
 ---
 
 # Principes KISS, DRY, YAGNI

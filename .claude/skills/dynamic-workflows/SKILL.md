@@ -68,5 +68,20 @@ validée. Pour des éditions concurrentes de fichiers, `isolation: 'worktree'`.
 - **`/effort ultracode`** : palier d'effort CLI (débit code max sur Opus 4.8) — orthogonal au
   déclencheur `ultracode` des workflows, même si souvent utilisés ensemble.
 
+## Réutilisation & garde-fous (v2.1.166+)
+
+- **Essayer d'abord le workflow intégré** `/deep-research` (recherche multi-sources vérifiée) avant d'en
+  écrire un : beaucoup de besoins « fan-out web + synthèse » y sont déjà couverts.
+- **Sauvegarder un run éprouvé** : dans `/workflows`, presser **`s`** enregistre le script comme commande
+  réutilisable — projet (`.claude/workflows/`) ou perso (`~/.claude/workflows/`). Un paramètre `args`
+  permet de le rejouer avec une entrée différente (question de recherche, chemin cible…).
+- **⚠️ Sécurité — acceptEdits implicite** : les sous-agents lancés par un workflow tournent **toujours en
+  mode `acceptEdits`** et héritent de ton allowlist, **quel que soit le mode de la session** (y compris
+  `plan` ou `default`). **Les éditions de fichiers sont auto-approuvées.** Ne fan-out des agents qui
+  écrivent qu'en zone maîtrisée (worktree isolé, cf. règle 11 sur l'hygiène des permissions).
+- **Coupe-circuit & coût** : `disableWorkflows` (settings.json) ou `CLAUDE_CODE_DISABLE_WORKFLOWS=1`
+  désactivent la fonctionnalité ; `/workflows` affiche la consommation de tokens en direct (un workflow
+  coûte significativement plus qu'un contexte unique — piloter avec un budget explicite).
+
 > Référence : [Claude Code Workflows](https://code.claude.com/docs/en/workflows) · voir aussi
 > `@.claude/commands/common/sub-agents-patterns.md` (tableau comparatif des orchestrations).

@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.19.2] - 2026-07-03
+
+Audit exhaustif multi-agents (équipe domaines + devil's advocate, Context7 + recherche web, alignement sur les 4 articles Anthropic : Dynamic Workflows, Skills, Loops, what's-new v2.1.193).
+
+### Fixed
+
+- **Hooks PostToolUse morts** : les hooks inline (Grep/Glob/Read dans `.claude/settings.json`, Bash/Grep dans les 5 `Dev/i18n/*/Common/templates/settings.json.template`) lisaient un champ **inexistant** `.tool_output` → `OUTPUT_SIZE` toujours nul, les gardes `>50KB` ne se déclenchaient jamais (no-op silencieux livré à chaque projet installé). Corrigé vers la chaîne canonique `.tool_response.stdout? // .tool_response? // .tool_result? // empty` (celle déjà utilisée par `output-filter.json`). Gain contexte réel restauré.
+- **Fraîcheur versions** : **React Native `0.86` → `0.85`** (0.86 n'existe pas ; dernier stable = 0.85.3, confirmé endoflife + skills internes « 0.85+ ») propagé sur registry + 5 langues + docs ; **Docker `29.6.0` → `29.6.1`** (patch du 2026-06-26 manqué par l'audit du 30 juin). Garde-fous denylist ajoutés (`29.6.0`, `RN 0.86`).
+- **`docs/guides/AUTO-MODE.md` entièrement fictif** : documentait `claude config auto-mode.profile` + profils `auto_approve/confirm/block` (API inexistante). Réécrit sur le **vrai** auto mode (classifieur post-permissions, bloc `autoMode` dans settings.json : `environment`/`allow`/`soft_deny`/`hard_deny`/`classifyAllShell`, splice `$defaults`, `claude auto-mode defaults|config|critique`, revue des refus sous `/permissions`). Template `.claude/templates/auto-mode-profile.json` remplacé par un vrai fragment `autoMode`.
+- **Supply-chain** : `sigstore/cosign-installer` épinglé au SHA (`7e8b541…ebc5 # pinned: v3.10.1`) dans `sbom.yml` — les 6 actions du workflow sont désormais toutes SHA-pinnées (règle 11).
+- **Couverture shellcheck** : `website/scripts/` ajouté aux deux gates (`shellcheck.yml` strict + `package.json` `lint:shell`) ; `video/render-all.sh` durci `set -e` → `set -euo pipefail`.
+- **Onboarding — infos fausses** : la table de détection de stack de `getting-started.md` (5 langues) mappait Paperclip → `Cargo.toml`/Rust et listait `go.mod`→Go / `mix.exs`→Elixir (stacks inexistants) → corrigée (Paperclip = Node/TS via `--tech=paperclip`, Go/Elixir retirés). Compteur de commandes obsolète `211` → `220` (5 langues). `docs/QUICKSTART.md` : `paperclip` ajouté à la liste `--tech`.
+- **`/qa:fix`** : la table de dépannage référençait `/bmad:init` (commande supprimée) → `/workflow:init` (5 langues i18n + copie `.claude/`).
+- **`docs/AGENTS.md`** : « Model distribution » erroné (4/12/15) → réel **4 opus / 14 sonnet / 13 haiku** (performance-auditor et research-assistant sont sonnet depuis 8.17.0, jamais répercuté).
+- **`marketplace.json`** : version figée à `8.16.1` alors que `plugin.json`/dépôt sont à 8.19.1 (dérive silencieuse) → resynchronisée.
+- **Installeur `Project/install-project-commands.sh` — i18n** : résumé de fin de commande et contenu scaffold (`CLAUDE.md`, `README.md`, `backlog/index.md`) étaient **hardcodés en français** même avec `--lang=en`. Résumé désormais gaté (anglais par défaut, français si `--lang=fr`) ; les 3 heredocs externalisés en `Project/i18n/{en,fr}/scaffold/` et sourcés par langue avec fallback anglais (script réduit 531→304 lignes). Vérifié par dry-run install en+fr (bash -n + shellcheck stricts verts).
+
+### Changed
+
+- **26 skills — frontmatter assaini** : retrait des blocs **inertes** `triggers:`/`auto_suggest:` (non reconnus par Claude Code, pur coût tokens) sur les 25 skills concernés ; retrait de `disable-model-invocation: true` sur 11 skills dont la description est rédigée en déclencheur automatique (« Use when… ») — l'auto-invocation est désormais alignée sur l'intent marketé (règle 12 « heavy auto-forking skills ») et la leçon Anthropic « descriptions = triggers ». Propagé à la couche de distribution `Dev/i18n/base/Common/skills/` (9 fichiers, format multi-ligne).
+- **`tdd-coach`** : `effort: high` → `medium` (seul agent `model: sonnet` hors du pattern `sonnet+medium` ; `/effort high` = Opus dans la table de routing du dépôt).
+- **5 descriptions de skills sous-spécifiées** (value-objects, aggregates, domain-events, ddd-patterns, tooling) : trigger identique « Use when implementing DDD patterns » / « working with tooling » → réécrit avec un déclencheur différenciant par skill (meilleure auto-sélection, moins de faux positifs).
+
+### Security
+
+- **SEC-1 (critique) — hooks PreToolUse inopérants** : les 4 hooks de blocage (Bash download/dangerous, Edit/Write secrets) de `.claude/settings.json` et `.claude/settings.local.json.example` faisaient `exit 1` au lieu de `exit 2` → **le blocage ne se produisait jamais** (seul `exit 2` bloque un appel d'outil ; cf. `docs/HOOKS.md`). Les messages `BLOCKED:` donnaient une fausse impression de protection. Corrigé partout (`exit 1` → `exit 2`). Les templates `.claude/templates/hooks/` et les 5 templates distribués `Dev/i18n/` étaient déjà corrects.
+- **SEC-2 — `curl URL | bash`** : le hook download ne détectait pas le pattern RCE le plus courant (pipe vers un interpréteur). Clause ajoutée (`(curl|wget)…\| (sh|bash|zsh|python|perl|ruby)`) dans `settings.json`, `settings.local.json.example`, `security-block.json`.
+- **SEC-3 — denylist secrets élargie** : la regex de protection ne couvrait que `.env`/`credentials`/`secrets`/`id_rsa` → ajout de `.envrc`, `id_ed25519/ecdsa/dsa`, `*.pem`, `*.p12/pfx`, `*.key`, `.npmrc`, `.netrc`, `kubeconfig` (8 fichiers : settings + example + `protect-files.json` + 5 templates i18n).
+- **SEC-4 — cohérence supply-chain** : `npm-publish.yml` alignait `npm audit --audit-level=high` sur `moderate` (conforme à `ci.yml` + règle 11).
+
+### Added
+
+- **`docs/CLI-REFERENCE.md`** : sections dédiées `/loop` (taxonomie des **4 types de boucles** Anthropic : turn / goal / time / proactive ; mode intervalle vs self-paced `ScheduleWakeup` ; combinaison `/goal`) et `/schedule` (Routines cloud pour jobs non-surveillés qui survivent à la fermeture de session — QA recette, ralph-run).
+- **Skill `dynamic-workflows`** : sous-section « Réutilisation & garde-fous » — `/deep-research` intégré, sauvegarde d'un run via `/workflows`→`s`, **⚠️ sécurité acceptEdits** (les sous-agents auto-approuvent les éditions quel que soit le mode de session), coupe-circuit `disableWorkflows`/`CLAUDE_CODE_DISABLE_WORKFLOWS`.
+- **Gate CI cohérence des manifestes** (`verify-versions.mjs`, GAP-01) : échoue si `.claude-plugin/plugin.json` ou `marketplace.json` divergent de la version `package.json` — prévient la dérive de manifeste corrigée ci-dessus.
+- **Décisions de scope produit** (`docs/ROADMAP.md`) : GAP-02 (`.mcp.json` pré-configuré → opt-in manuel maintenu, règle 11), GAP-04 (skills marketplace maison → **parkée** au profit de l'Anthropic Skills Marketplace), GAP-06 (scaffolding `claude-craft new` → **hors-scope**, Claude Craft reste une couche de config/augmentation).
+
 ## [8.19.1] - 2026-07-01
 
 ### Fixed

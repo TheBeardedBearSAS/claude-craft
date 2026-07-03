@@ -2,10 +2,7 @@
 name: graphql
 description: GraphQL API design, Apollo Federation, schema stitching, resolvers, N+1 query problem. Use when implementing GraphQL API, federation, or optimizing queries.
 context: fork
-triggers:
   files: ["**/graphql/**", "**/*.graphql", "**/*.gql", "**/schema.gql"]
-  keywords: ["graphql", "apollo", "federation", "schema stitching", "resolver", "dataloader", "n+1", "query", "mutation", "subscription"]
-auto_suggest: true
 ---
 
 # GraphQL — Apollo Federation, Schema Design

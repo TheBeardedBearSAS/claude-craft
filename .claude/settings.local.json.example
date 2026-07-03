@@ -5,7 +5,10 @@
     "CLAUDE_CODE_FORK_SUBAGENT": "1",
     "ENABLE_PROMPT_CACHING_1H": "1"
   },
-  "fallbackModel": ["claude-sonnet-5", "claude-haiku-4-5-20251001"],
+  "fallbackModel": [
+    "claude-sonnet-5",
+    "claude-haiku-4-5-20251001"
+  ],
   "hooks": {
     "PreToolUse": [
       {
@@ -14,12 +17,12 @@
           {
             "type": "command",
             "comment": "Block downloading executable scripts (curl|wget ... | bash). Reads hook input JSON from stdin (safe against shell injection).",
-            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb|pl|bat|ps1)'; then echo \"BLOCKED: Downloading executable scripts is not allowed\" >&2 && exit 1; fi; if echo \"$INPUT\" | grep -qE '(curl|wget).*(-o|-O|>)'; then echo \"BLOCKED: Downloading files requires explicit approval\" >&2 && exit 1; fi; exit 0"
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if echo \"$INPUT\" | grep -qE '(curl|wget).*\\.(sh|py|rb|pl|bat|ps1)'; then echo \"BLOCKED: Downloading executable scripts is not allowed\" >&2 && exit 2; fi; if echo \"$INPUT\" | grep -qE '(curl|wget).*(-o|-O|>)'; then echo \"BLOCKED: Downloading files requires explicit approval\" >&2 && exit 2; fi; if printf '%s' \"$INPUT\" | grep -qE '(curl|wget)[^|;&]*\\|[[:space:]]*(sh|bash|zsh|python[0-9.]*|perl|ruby)([[:space:]]|$)'; then printf 'BLOCKED: Piping a download into a shell interpreter is not allowed\\n' >&2; exit 2; fi; exit 0"
           },
           {
             "type": "command",
             "comment": "Block destructive system commands (rm -rf /, mkfs, dd, fork bombs, chmod 777). Reads hook input JSON from stdin.",
-            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if echo \"$INPUT\" | grep -qE 'rm[[:space:]]+-[^[:space:]]*r[^[:space:]]*f[^[:space:]]*[[:space:]]*(~|/|\\.)'; then echo \"BLOCKED: Destructive rm command detected\" >&2 && exit 1; fi; if echo \"$INPUT\" | grep -qE '(mkfs|dd[[:space:]]+if=|:[[:space:]]*\\(\\)[[:space:]]*\\{[[:space:]]*:|chmod[[:space:]]+-?R?[[:space:]]*777|>[[:space:]]*/dev/(sd|null))'; then echo \"BLOCKED: Dangerous system command detected\" >&2 && exit 1; fi; exit 0"
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if echo \"$INPUT\" | grep -qE 'rm[[:space:]]+-[^[:space:]]*r[^[:space:]]*f[^[:space:]]*[[:space:]]*(~|/|\\.)'; then echo \"BLOCKED: Destructive rm command detected\" >&2 && exit 2; fi; if echo \"$INPUT\" | grep -qE '(mkfs|dd[[:space:]]+if=|:[[:space:]]*\\(\\)[[:space:]]*\\{[[:space:]]*:|chmod[[:space:]]+-?R?[[:space:]]*777|>[[:space:]]*/dev/(sd|null))'; then echo \"BLOCKED: Dangerous system command detected\" >&2 && exit 2; fi; exit 0"
           }
         ]
       },
@@ -29,7 +32,7 @@
           {
             "type": "command",
             "comment": "Block editing sensitive files (.env, credentials, keys). Reads hook input JSON from stdin.",
-            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" >&2 && exit 1; fi; exit 0"
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env(\\.|$)|\\.envrc|credentials|secrets?|private.*key|id_(rsa|dsa|ecdsa|ed25519)|\\.pem$|\\.p(fx|12)$|\\.key$|\\.npmrc$|\\.netrc$|kubeconfig)'; then echo \"BLOCKED: Cannot edit sensitive file: $FILEPATH\" >&2 && exit 2; fi; exit 0"
           }
         ]
       },
@@ -39,7 +42,7 @@
           {
             "type": "command",
             "comment": "Block writing sensitive files (.env, credentials, keys). Reads hook input JSON from stdin.",
-            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env|\\.env\\.|credentials|secrets|private.*key|id_rsa)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" >&2 && exit 1; fi; exit 0"
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if echo \"$FILEPATH\" | grep -qE '(\\.env(\\.|$)|\\.envrc|credentials|secrets?|private.*key|id_(rsa|dsa|ecdsa|ed25519)|\\.pem$|\\.p(fx|12)$|\\.key$|\\.npmrc$|\\.netrc$|kubeconfig)'; then echo \"BLOCKED: Cannot write sensitive file: $FILEPATH\" >&2 && exit 2; fi; exit 0"
           }
         ]
       }

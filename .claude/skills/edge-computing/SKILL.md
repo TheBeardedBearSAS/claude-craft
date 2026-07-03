@@ -2,10 +2,7 @@
 name: edge-computing
 description: Cloudflare Workers, Deno Deploy, Vercel Edge Functions, edge patterns (geo-routing, caching). Use when implementing edge compute, CDN logic, or global low-latency APIs.
 context: fork
-triggers:
   files: ["**/workers/**", "**/edge/**", "**/deno-deploy/**"]
-  keywords: ["cloudflare workers", "deno deploy", "vercel edge", "edge functions", "edge compute", "cdn", "geo-routing", "edge caching"]
-auto_suggest: true
 ---
 
 # Edge Computing — Cloudflare Workers, Deno Deploy

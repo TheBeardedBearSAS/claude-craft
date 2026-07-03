@@ -279,7 +279,7 @@ resume_from:
 |-------|----------|
 | "Session not found" | Verify session ID in `.recette/sessions/` |
 | "No errors in session" | Session has no errors to fix |
-| "sprint-status.yaml not found" | Initialize BMAD with `/bmad:init` |
+| "sprint-status.yaml not found" | Initialize BMAD with `/workflow:init` |
 | "RED test does not fail" | Bug may no longer exist, check manually |
 
 ## Best Practices

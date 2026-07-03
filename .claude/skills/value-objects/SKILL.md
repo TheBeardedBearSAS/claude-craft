@@ -1,6 +1,6 @@
 ---
 name: value-objects
-description: Règle 04 : Value Objects. Use when implementing DDD patterns.
+description: Règle 04 : Value Objects. Use when modeling an immutable domain concept validated at construction (Money, Email, DateRange) to replace primitive obsession.
 ---
 
 # Règle 04 : Value Objects

@@ -643,6 +643,52 @@ Force a re-scan of all installed skills (`.claude/skills/`) without restarting C
 
 ---
 
+### /loop
+
+Run a prompt or slash command repeatedly until you stop it — the time-based member of Claude Code's four loop types.
+
+#### The four loop types (Anthropic taxonomy)
+
+| Type | Trigger | Stops when | Best for |
+|------|---------|-----------|----------|
+| **Turn-based** | your prompt | Claude finishes or needs input | short, one-off tasks |
+| **Goal-based** (`/goal`) | your prompt | goal condition holds **or** max turns | tasks with a verifiable exit criterion |
+| **Time-based** (`/loop`, `/schedule`) | an interval | you cancel / work is done | recurring work, monitoring external systems |
+| **Proactive** | event or schedule, no human in the loop | routine disabled | well-defined recurring streams (triage, migrations) |
+
+#### Usage
+
+```bash
+/loop [interval] [prompt-or-command]
+```
+
+- **Interval mode:** `/loop 5m …` re-runs every 5 minutes (`s`/`m`/`h` suffixes). Runs **locally** — the session must stay open.
+- **Self-paced (dynamic) mode:** omit the interval and Claude schedules its own next wake-up (`ScheduleWakeup`), picking a delay matched to what it is waiting on. Ideal when the right cadence is not fixed.
+- **Customisation:** a `loop.md` file lets you tune loop behaviour per project.
+- Combine with **`/goal`** to give the loop a hard completion condition, and monitor cost/turns with **`/usage`**, **`/goal`**, **`/workflows`**.
+
+#### Examples
+
+```bash
+# Fixed cadence: address review comments and fix CI every 5 min
+/loop 5m check my PR, address review comments, and fix failing CI
+
+# Self-paced: watch a deploy, waking when it makes sense
+/loop watch the staging deploy and report when it is healthy or failed
+```
+
+---
+
+### /schedule
+
+Move a recurring job to the **cloud** as a *Routine* — it keeps running on a cron/event trigger **after you close the session** (unlike `/loop`, which is local). Use it for unattended nightly work: `@qa:recette` regression runs, `/common:ralph-run`-style completion loops, dependency-upgrade sweeps, PR triage. Pair with `/goal` (exit criteria), skills, and dynamic workflows for fully autonomous operation. Route judgement-heavy steps to capable models and mechanical steps to smaller/faster ones to control token cost.
+
+```bash
+/schedule            # create / list / manage cloud routines
+```
+
+---
+
 ### /proactive
 
 Alias for `/loop` - run a command on a recurring interval.

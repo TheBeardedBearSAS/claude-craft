@@ -21,7 +21,7 @@ Guide opérationnel pour la gestion de la communauté Claude Craft : Discord, en
 | `#angular` | Angular 22, Signals, Zoneless | @angular-dev |
 | `#vuejs` | Vue 3.5+, Composition API, Pinia | @vuejs-dev |
 | `#csharp` | C# 14, .NET 10 LTS, Clean Architecture | @csharp-dev |
-| `#reactnative` | React Native 0.86, New Architecture | @reactnative-dev |
+| `#reactnative` | React Native 0.85, New Architecture | @reactnative-dev |
 | `#go` | Go 1.24+, Clean Architecture patterns | @go-dev |
 | `#rust` | Rust 1.85+, async, patterns | @rust-dev |
 | `#svelte` | Svelte 5+, Runes, SvelteKit 3 | @svelte-dev |

@@ -9,10 +9,10 @@
 # PROCÉDURE DE BUMP : modifier ICI, puis propager dans les fichiers listés, puis
 # `npm run lint:versions` pour garantir l'absence de dérive.
 #
-# Dernière mise à jour : 2026-06-30 (audit fraîcheur — Claude Code 2.1.193 semaine 26, retrait Fable 5 suspendu)
+# Dernière mise à jour : 2026-07-03 (audit fraîcheur — React Native 0.86→0.85 (drift, 0.86 inexistant ; endoflife+skills confirment 0.85), Docker 29.6.0→29.6.1 (patch 2026-06-26))
 
 meta:
-  lastUpdated: '2026-06-30'
+  lastUpdated: '2026-07-03'
 
 claudeCode:
   minimum: '2.1.97'
@@ -34,14 +34,14 @@ stacks:
   symfony: { registry: '8.1 / PHP 8.4+' }
   flutter: { registry: '3.44 / Dart 3.12' }
   react: { registry: '19.2 + Compiler 1.0' }
-  reactnative: { registry: '0.86' }
+  reactnative: { registry: '0.85' }
   angular: { registry: '22' }
   laravel: { registry: '13.x / PHP 8.3+' }
   vuejs: { registry: '3.5+' }
   php: { registry: '8.5' }
   python: { registry: '3.14+' }
   paperclip: { registry: '2026.609.0' }
-  docker: { registry: '29.6.0' }
+  docker: { registry: '29.6.1' }
   coolify: { registry: '4.1.2' }
 
 # Versions infra non portées par tech-registry (documentées dans devops-engineer.md / CLAUDE.md)
@@ -78,6 +78,9 @@ denylist:
   - '1.12.1'
   - '2.21.0'
   - '4.2.0'
+  - '29.6.0'
+  - 'RN 0.86'
+  - '0.86 (New Arch'
   - '1.12.1'
   - 'OpenTofu 1.12.1'
   - 'Ansible 2.21.0'

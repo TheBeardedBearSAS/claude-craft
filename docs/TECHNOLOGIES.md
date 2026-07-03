@@ -34,7 +34,7 @@ Claude Craft classifies its 11 application technology stacks into 3 maturity tie
 | React | 1 (Core) | 19.2 + Compiler 1.0 | 30+ | 10+ | Full support | -- |
 | Python | 1 (Core) | 3.14+ | 25+ | 10+ | Full support | -- |
 | Flutter / Dart | 1 (Core) | 3.44 / Dart 3.12 | 25+ | 10+ | Full support | -- |
-| React Native | 2 (Supported) | 0.86 (New Architecture) | 39 | 10 | Good coverage | Expand i18n to 25+, deepen agent specialization, add 3+ tech-specific skills |
+| React Native | 2 (Supported) | 0.85 (New Architecture) | 39 | 10 | Good coverage | Expand i18n to 25+, deepen agent specialization, add 3+ tech-specific skills |
 | PHP | 2 (Supported) | 8.5 | 7+ | 5 | Solid base | Add more i18n files, expand commands to 8+, add tech-specific skills |
 | C# / .NET | 3 (Community) | 10 LTS / C# 14 | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
 | Angular | 3 (Community) | 22 | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |

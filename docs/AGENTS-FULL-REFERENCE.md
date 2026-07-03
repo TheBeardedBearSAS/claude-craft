@@ -128,7 +128,7 @@ React 19.2 and TypeScript code review specialist — hooks, composition, perform
 
 ### `@reactnative-reviewer`
 
-React Native 0.86 and Expo code review specialist — New Architecture (JSI, TurboModules, Fabric), navigation, mobile performance, bundle analysis
+React Native 0.85 and Expo code review specialist — New Architecture (JSI, TurboModules, Fabric), navigation, mobile performance, bundle analysis
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 

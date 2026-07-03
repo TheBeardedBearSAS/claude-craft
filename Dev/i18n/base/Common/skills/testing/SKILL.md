@@ -7,31 +7,6 @@ allowed-tools:
   - Grep
   - Bash
 model: opus
-triggers:
-  files:
-    - "*Test.php"
-    - "*_test.py"
-    - "*.spec.ts"
-    - "*.spec.tsx"
-    - "*.test.ts"
-    - "*.test.tsx"
-    - "*_test.dart"
-    - "*_test.go"
-    - "**/__tests__/**"
-    - "**/tests/**"
-  keywords:
-    - test
-    - TDD
-    - BDD
-    - coverage
-    - mock
-    - stub
-    - fixture
-    - assertion
-    - PHPUnit
-    - Jest
-    - pytest
-    - xUnit
 ---
 
 # Testing - Principes TDD/BDD

@@ -1,6 +1,6 @@
 {
   "name": "@the-bearded-bear/claude-craft",
-  "version": "8.19.1",
+  "version": "8.19.2",
   "description": "A comprehensive framework for AI-assisted development with Claude Code. Install standardized rules, agents, and commands for your projects.",
   "type": "module",
   "main": "cli/index.js",
@@ -17,7 +17,7 @@
     "test:watch": "vitest",
     "lint": "eslint cli/ scripts/",
     "lint:fix": "eslint cli/ scripts/ --fix",
-    "lint:shell": "find Dev/ Infra/ Project/ Tools/ scripts/ .bmad/ -name '*.sh' -type f | xargs shellcheck --severity=warning",
+    "lint:shell": "find Dev/ Infra/ Project/ Tools/ scripts/ .bmad/ website/scripts/ -name '*.sh' -type f | xargs shellcheck --severity=warning",
     "lint:i18n": "bash scripts/verify-i18n-parity.sh",
     "lint:includes": "node scripts/verify-claude-includes.mjs",
     "lint:versions": "node scripts/verify-versions.mjs",

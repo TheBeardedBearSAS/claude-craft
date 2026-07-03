@@ -8,9 +8,9 @@ Dieses Dokument behandelt die wesentlichen Werkzeuge für die React Native Entwi
 
 ## Systemvoraussetzungen
 
-### Node.js >= 22 LTS (erforderlich für RN 0.86)
+### Node.js >= 22 LTS (erforderlich für RN 0.85)
 
-React Native 0.86 erfordert **Node.js 22.x LTS** als Minimum (RN 0.85 benötigte Node 20). Die empfohlene Version ist **Node.js 22.x active LTS**.
+React Native 0.85 erfordert **Node.js 22.x LTS** als Minimum (RN 0.85 benötigte Node 20). Die empfohlene Version ist **Node.js 22.x active LTS**.
 
 ```bash
 # Version prüfen
@@ -22,11 +22,11 @@ nvm use 22
 nvm alias default 22
 ```
 
-> Node-Versionen < 22 werden mit RN 0.86 nicht mehr unterstützt. Vor der Migration aktualisieren.
+> Node-Versionen < 22 werden mit RN 0.85 nicht mehr unterstützt. Vor der Migration aktualisieren.
 
 ### React Native Gesture Handler 3.0.0 — Breaking Changes
 
-RNGH 3.0.0 führt Breaking Changes mit RN 0.86 ein:
+RNGH 3.0.0 führt Breaking Changes mit RN 0.85 ein:
 
 ```typescript
 // ✅ RNGH 3.0 — GestureHandlerRootView auf Root-Ebene erforderlich
@@ -230,7 +230,7 @@ rm -rf node_modules/.cache
 
 ---
 
-## Metro TLS (0.85+ / 0.86+)
+## Metro TLS (0.85+ / 0.85+)
 
 Seit RN 0.85 akzeptiert Metro ein `server.tls`-Objekt in `metro.config.js` und ermöglicht damit HTTPS und WSS (sicheres WebSocket für Fast Refresh) während der lokalen Entwicklung.
 
@@ -246,7 +246,7 @@ Seit RN 0.85 akzeptiert Metro ein `server.tls`-Objekt in `metro.config.js` und e
 ### Konfiguration
 
 ```javascript
-// metro.config.js (bare RN 0.85+ / 0.86+)
+// metro.config.js (bare RN 0.85+ / 0.85+)
 const { getDefaultConfig } = require('@react-native/metro-config');
 const fs = require('fs');
 

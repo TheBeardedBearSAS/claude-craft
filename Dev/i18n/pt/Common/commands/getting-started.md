@@ -8,7 +8,7 @@ allowed-tools: Read, Glob, Bash, Grep
 
 Welcome! This wizard helps you discover Claude Craft's value in under 10 minutes.
 
-211 commands can feel overwhelming — let's find the 3 that matter most for YOUR project right now.
+220 commands can feel overwhelming — let's find the 3 that matter most for YOUR project right now.
 
 ## Step 1: Detect Your Project Stack (30 seconds)
 
@@ -21,9 +21,7 @@ Scanning your project to identify the technology stack...
    - `pyproject.toml` or `requirements.txt` → Python
    - `pubspec.yaml` → Flutter/Dart
    - `*.csproj` or `*.sln` → C# / .NET
-   - `Cargo.toml` → Rust (Paperclip)
-   - `go.mod` → Go
-   - `mix.exs` → Elixir
+   - Paperclip is Node.js/TypeScript — not auto-detected; install explicitly with `--tech=paperclip`
 
 2. For JavaScript/TypeScript projects, check dependencies to determine framework:
    - Look for `react`, `@angular/core`, `vue`, `react-native` in package.json dependencies
@@ -117,7 +115,7 @@ Based on your stack, these 3 commands will give you immediate insights:
 3. ✓ /[command-3] — [2-sentence explanation of value]
    Why now? [1 sentence on TTFV benefit]
 
-Choose one to run (type the number 1-3), or skip to explore all 211 commands with /help
+Choose one to run (type the number 1-3), or skip to explore all 220 commands with /help
 ```
 
 ## Step 3: Execute with Pedagogical Commentary (5 minutes)
@@ -185,7 +183,7 @@ C. Join the community
 
 📚 Resources:
 - Full quickstart guide: @docs/QUICKSTART.md (section "First 10 Minutes")
-- All 211 commands: /help
+- All 220 commands: /help
 - Technology-specific guides: @.claude/references/[your-tech]/
 
 ✓ You've completed your first 10 minutes with Claude Craft!
@@ -221,7 +219,7 @@ Based on your stack, these 3 commands will give you immediate insights:
 3. ✓ /react:bundle-analyze — Identify large dependencies bloating your bundle
    Why now? Every 100KB costs users money and slows load time — quick wins here.
 
-Choose one to run (type the number 1-3), or skip to explore all 211 commands with /help
+Choose one to run (type the number 1-3), or skip to explore all 220 commands with /help
 ```
 
 **User Types: 1**
@@ -276,7 +274,7 @@ C. Join the community
 
 📚 Resources:
 - Full quickstart guide: @docs/QUICKSTART.md (section "First 10 Minutes")
-- All 211 commands: /help
+- All 220 commands: /help
 - React-specific guides: @.claude/references/react/
 
 ✓ You've completed your first 10 minutes with Claude Craft!

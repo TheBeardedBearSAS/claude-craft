@@ -1,10 +1,7 @@
 ---
 name: solid-principles
 description: SOLID principles for object-oriented design. Use when reviewing code quality, refactoring, designing classes or interfaces, or discussing architecture patterns.
-triggers:
   files: ["*.cs", "*.java", "*.ts", "*.py", "*.php", "*.rb", "*.go", "*.kt", "*.dart", "*.swift"]
-  keywords: ["SOLID", "SRP", "OCP", "LSP", "ISP", "DIP", "refactor", "interface", "abstraction", "single responsibility", "open closed", "liskov", "dependency inversion", "interface segregation", "clean architecture"]
-auto_suggest: true
 ---
 
 # SOLID Principles

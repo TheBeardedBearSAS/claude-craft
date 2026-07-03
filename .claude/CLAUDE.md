@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.19.1 | **Languages:** en, fr, es, de, pt
+**Version:** 8.19.2 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 11 technology stacks, 31 specialized agents (+39 infra agents on-demand), 126 commands across 15 namespaces, and BMAD v6 project management.
 
@@ -14,7 +14,7 @@ A comprehensive AI-assisted development framework for Claude Code with 11 techno
 | **Symfony / PHP** | 8.1 / PHP 8.4+ | Clean Architecture | DDD, Hexagonal, API Platform, HTTP-less apps, JsonStreamer |
 | **Flutter / Dart** | 3.44 / Dart 3.12 | Clean Architecture | BLoC v9, Riverpod 3, Material 3, Impeller |
 | **React** | 19.2 + Compiler 1.0 | Feature-based | Hooks, Zustand, React Query, Server Components |
-| **React Native** | 0.86 (New Architecture) | Feature-based | Navigation 7, Reanimated 4, TurboModules |
+| **React Native** | 0.85 (New Architecture) | Feature-based | Navigation 7, Reanimated 4, TurboModules |
 | **Angular** | 22 | Domain-driven | Signals, Signal Forms (stable), Zoneless par défaut, OnPush défaut, httpResource (TS 6) |
 | **Vue.js** | 3.5+ (3.6 beta Vapor) | Composition API | Pinia 3, Vue Router 5, Vite 8, Vitest, Alien Signals |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | Clean Architecture | Actions, Pest 4, Sanctum, AI SDK, Passkey |
@@ -47,7 +47,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Commands (15 namespaces, 126 commands)
 
-Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.6.0, Coolify v4.1.2, K8s 1.36.1, OpenTofu 1.12.2, Ansible 2.21.1, FrankenPHP 1.12.4, PgBouncer 1.25.2 | Project: `/sprint:*`, `/gate:*`, `/project:*`
+Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.6.1, Coolify v4.1.2, K8s 1.36.1, OpenTofu 1.12.2, Ansible 2.21.1, FrankenPHP 1.12.4, PgBouncer 1.25.2 | Project: `/sprint:*`, `/gate:*`, `/project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 

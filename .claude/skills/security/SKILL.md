@@ -1,10 +1,7 @@
 ---
 name: security
 description: Security guidelines and OWASP Top 10. Use when reviewing security, implementing authentication or authorization, hardening code, or discussing vulnerabilities.
-triggers:
   files: ["**/auth/**", "**/identity/**", "**/security/**", "**/middleware/**", "*.security.*", "*Auth*.*", "*Security*.*"]
-  keywords: ["security", "auth", "authentication", "authorization", "OWASP", "injection", "XSS", "CSRF", "JWT", "password", "vulnerability", "encryption", "hashing", "bcrypt", "token", "session", "RBAC", "permissions", "CORS", "HSTS", "CSP", "SQL injection", "SSRF", "rate limit"]
-auto_suggest: true
 ---
 
 # Security

@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if printf '%s' \"$INPUT\" | grep -qE '(curl|wget)([[:space:]]|.)*\\.(sh|py|rb|pl|bat|ps1)([[:space:]]|$|\\?|\")'; then printf 'BLOCKED: Downloading executable scripts is not allowed:\\n%s\\n' \"$INPUT\" >&2; exit 2; fi; if printf '%s' \"$INPUT\" | grep -qE '(curl|wget)([[:space:]]|.)*(-o|-O|>)'; then printf 'BLOCKED: Downloading files requires explicit approval:\\n%s\\n' \"$INPUT\" >&2; exit 2; fi; exit 0",
+            "command": "INPUT=$(jq -r '.tool_input.command // empty'); if printf '%s' \"$INPUT\" | grep -qE '(curl|wget)([[:space:]]|.)*\\.(sh|py|rb|pl|bat|ps1)([[:space:]]|$|\\?|\")'; then printf 'BLOCKED: Downloading executable scripts is not allowed:\\n%s\\n' \"$INPUT\" >&2; exit 2; fi; if printf '%s' \"$INPUT\" | grep -qE '(curl|wget)([[:space:]]|.)*(-o|-O|>)'; then printf 'BLOCKED: Downloading files requires explicit approval:\\n%s\\n' \"$INPUT\" >&2; exit 2; fi; if printf '%s' \"$INPUT\" | grep -qE '(curl|wget)[^|;&]*\\|[[:space:]]*(sh|bash|zsh|python[0-9.]*|perl|ruby)([[:space:]]|$)'; then printf 'BLOCKED: Piping a download into a shell interpreter is not allowed\\n' >&2; exit 2; fi; exit 0",
             "timeout": 5000
           }
         ]

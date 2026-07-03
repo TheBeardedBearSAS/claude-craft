@@ -6,7 +6,7 @@ description: Test-Driven Development coach
 # Opus restants (security-auditor, database-architect, migration-specialist, ralph-conductor) gardent xhigh.
 model: sonnet
 maxTurns: 8
-effort: high
+effort: medium
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
 # Audit 2026-05-18 P0 #2 — baseline destructive-command deny list.

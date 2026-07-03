@@ -63,6 +63,20 @@ for (const rel of SHOWCASE_FILES) {
   }
 }
 
+// 3. Cohérence des manifestes de version (audit 2026-07-03, GAP-01 : éviter la dérive
+//    plugin.json / marketplace.json ↔ package.json constatée à 8.16.1 vs 8.19.1).
+const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+const pluginManifest = JSON.parse(fs.readFileSync(path.join(ROOT, '.claude-plugin', 'plugin.json'), 'utf8'));
+if (pluginManifest.version !== pkg.version) {
+  errors.push(`.claude-plugin/plugin.json version="${pluginManifest.version}" ≠ package.json version="${pkg.version}"`);
+}
+const marketRaw = fs.readFileSync(path.join(ROOT, '.claude-plugin', 'marketplace.json'), 'utf8');
+if (!marketRaw.includes(`"version": "${pkg.version}"`)) {
+  errors.push(
+    `.claude-plugin/marketplace.json ne référence pas la version courante "${pkg.version}" (dérive de manifeste)`
+  );
+}
+
 if (errors.length > 0) {
   console.error('\n❌ verify-versions : dérive de versions détectée\n');
   for (const e of errors) console.error(`  - ${e}`);
