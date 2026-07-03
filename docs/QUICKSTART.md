@@ -55,12 +55,12 @@ cd ~/my-project
 npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
 ```
 
-Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`, `vuejs`, `reactnative`, `csharp`, `laravel`, `php`.
+Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`, `vuejs`, `reactnative`, `csharp`, `laravel`, `php`, `paperclip`.
 
 **What you should see:**
 
 ```
-  Claude Craft v8.19.1 - AI Development Framework
+  Claude Craft v8.19.2 - AI Development Framework
 
   Installing react rules to /home/user/my-project...
   [OK] Common rules installed

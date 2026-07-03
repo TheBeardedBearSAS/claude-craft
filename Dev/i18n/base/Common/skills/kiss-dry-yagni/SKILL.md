@@ -6,17 +6,6 @@ allowed-tools:
   - Glob
   - Grep
 model: haiku
-triggers:
-  keywords:
-    - KISS
-    - DRY
-    - YAGNI
-    - simplify
-    - duplication
-    - over-engineering
-    - premature optimization
-    - code smell
-    - complexity
 ---
 
 # Principes KISS, DRY, YAGNI

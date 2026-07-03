@@ -8,9 +8,9 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 
 ## Prérequis système
 
-### Node.js >= 22 LTS (obligatoire pour RN 0.86)
+### Node.js >= 22 LTS (obligatoire pour RN 0.85)
 
-React Native 0.86 requiert **Node.js 22.x LTS** minimum (RN 0.85 nécessitait Node 20). La version recommandée est Node.js **22.x LTS actif**.
+React Native 0.85 requiert **Node.js 22.x LTS** minimum (RN 0.85 nécessitait Node 20). La version recommandée est Node.js **22.x LTS actif**.
 
 ```bash
 # Vérifier la version
@@ -22,11 +22,11 @@ nvm use 22
 nvm alias default 22
 ```
 
-> Les versions Node < 22 ne sont plus supportées avec RN 0.86. Mettre à jour avant migration.
+> Les versions Node < 22 ne sont plus supportées avec RN 0.85. Mettre à jour avant migration.
 
 ### React Native Gesture Handler 3.0.0 — Breaking Changes
 
-RNGH 3.0.0 introduit des changements de rupture avec RN 0.86 :
+RNGH 3.0.0 introduit des changements de rupture avec RN 0.85 :
 
 ```bash
 # Installation
@@ -237,7 +237,7 @@ rm -rf node_modules/.cache
 
 ---
 
-## Metro TLS (0.85+ / 0.86+)
+## Metro TLS (0.85+ / 0.85+)
 
 Depuis RN 0.85+, Metro accepte un objet `server.tls` dans `metro.config.js`, activant HTTPS et WSS (WebSocket sécurisé pour Fast Refresh) pendant le développement local.
 
@@ -253,7 +253,7 @@ Depuis RN 0.85+, Metro accepte un objet `server.tls` dans `metro.config.js`, act
 ### Configuration
 
 ```javascript
-// metro.config.js (bare RN 0.85+ / 0.86+)
+// metro.config.js (bare RN 0.85+ / 0.85+)
 const { getDefaultConfig } = require('@react-native/metro-config');
 const fs = require('fs');
 
@@ -430,11 +430,11 @@ npm install -g @vtsls/language-server typescript
 
 ## Checklist Tooling
 
-- [ ] Node.js >= 22.x LTS installé (RN 0.86+)
+- [ ] Node.js >= 22.x LTS installé (RN 0.85+)
 - [ ] Expo CLI installé
 - [ ] EAS CLI configuré
 - [ ] Metro config optimisé
-- [ ] RNGH migré vers 3.0.0 si RN 0.86+ (API Gesture, GestureHandlerRootView au niveau racine)
+- [ ] RNGH migré vers 3.0.0 si RN 0.85+ (API Gesture, GestureHandlerRootView au niveau racine)
 - [ ] Debugger configuré (React Native DevTools — défaut depuis RN 0.85+, aucun flag requis, appuyer sur `j` dans Metro ou dev menu)
 - [ ] Metro TLS configuré si HTTPS local requis (deep links, origines sécurisées)
 - [ ] VS Code extensions installées

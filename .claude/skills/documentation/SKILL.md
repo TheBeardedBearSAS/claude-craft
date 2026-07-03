@@ -1,10 +1,7 @@
 ---
 name: documentation
 description: Documentation. Use when writing docs or reviewing documentation.
-triggers:
   files: ["*.md", "README*", "CHANGELOG*", "docs/**"]
-  keywords: ["doc", "documentation", "README", "CHANGELOG", "ADR"]
-auto_suggest: true
 ---
 
 # Documentation

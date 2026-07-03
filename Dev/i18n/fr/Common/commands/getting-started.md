@@ -8,7 +8,7 @@ allowed-tools: Read, Glob, Bash, Grep
 
 Bienvenue ! Ce guide vous aide à découvrir la valeur de Claude Craft en moins de 10 minutes.
 
-211 commandes peuvent sembler intimidantes — trouvons les 3 qui comptent le plus pour VOTRE projet, maintenant.
+220 commandes peuvent sembler intimidantes — trouvons les 3 qui comptent le plus pour VOTRE projet, maintenant.
 
 ## Étape 1 : Détection de Votre Stack Projet (30 secondes)
 
@@ -21,9 +21,7 @@ Analyse de votre projet pour identifier la stack technologique...
    - `pyproject.toml` ou `requirements.txt` → Python
    - `pubspec.yaml` → Flutter/Dart
    - `*.csproj` ou `*.sln` → C# / .NET
-   - `Cargo.toml` → Rust (Paperclip)
-   - `go.mod` → Go
-   - `mix.exs` → Elixir
+   - Paperclip is Node.js/TypeScript — not auto-detected; install explicitly with `--tech=paperclip`
 
 2. Pour les projets JavaScript/TypeScript, vérifier les dépendances pour déterminer le framework :
    - Chercher `react`, `@angular/core`, `vue`, `react-native` dans les dépendances package.json
@@ -117,7 +115,7 @@ Basé sur votre stack, ces 3 commandes vous donneront des insights immédiats :
 3. ✓ /[commande-3] — [Explication en 2 phrases de la valeur]
    Pourquoi maintenant ? [1 phrase sur le bénéfice TTFV]
 
-Choisissez une commande à exécuter (tapez le numéro 1-3), ou passez pour explorer les 211 commandes avec /help
+Choisissez une commande à exécuter (tapez le numéro 1-3), ou passez pour explorer les 220 commandes avec /help
 ```
 
 ## Étape 3 : Exécuter avec Commentaire Pédagogique (5 minutes)
@@ -185,7 +183,7 @@ C. Rejoindre la communauté
 
 📚 Ressources :
 - Guide quickstart complet : @docs/QUICKSTART.md (section "First 10 Minutes")
-- Toutes les 211 commandes : /help
+- Toutes les 220 commandes : /help
 - Guides spécifiques à votre technologie : @.claude/references/[votre-tech]/
 
 ✓ Vous avez terminé vos 10 premières minutes avec Claude Craft !
@@ -221,7 +219,7 @@ Basé sur votre stack, ces 3 commandes vous donneront des insights immédiats :
 3. ✓ /react:bundle-analyze — Identifier grandes dépendances qui alourdissent votre bundle
    Pourquoi maintenant ? Chaque 100KB coûte de l'argent aux utilisateurs et ralentit le chargement — gains rapides ici.
 
-Choisissez une commande à exécuter (tapez le numéro 1-3), ou passez pour explorer les 211 commandes avec /help
+Choisissez une commande à exécuter (tapez le numéro 1-3), ou passez pour explorer les 220 commandes avec /help
 ```
 
 **L'Utilisateur Tape : 1**
@@ -276,7 +274,7 @@ C. Rejoindre la communauté
 
 📚 Ressources :
 - Guide quickstart complet : @docs/QUICKSTART.md (section "First 10 Minutes")
-- Toutes les 211 commandes : /help
+- Toutes les 220 commandes : /help
 - Guides spécifiques React : @.claude/references/react/
 
 ✓ Vous avez terminé vos 10 premières minutes avec Claude Craft !

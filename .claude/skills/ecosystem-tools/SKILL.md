@@ -1,9 +1,6 @@
 ---
 name: ecosystem-tools
 description: Third-party Claude Code token/context/code-review tools. Use when choosing or recommending an external tool to reduce token usage, manage context, or review large codebases (caveman, code-review-graph, token-savior, context-mode...).
-triggers:
-  keywords: ["token optimization", "reduce tokens", "context management", "code review tool", "caveman", "code-review-graph", "token-savior", "context-mode", "claude-context", "MCP server", "RTK alternative"]
-auto_suggest: true
 ---
 
 # Ecosystem Tools

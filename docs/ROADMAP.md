@@ -56,6 +56,15 @@
 
 > Source détaillée et sévérités : `docs/audit/2026-06-08-comprehensive/02-domaines.md` (Domaine: Concurrentiel).
 
+### Décisions de scope — audit 2026-07-03
+
+Résolutions explicites des GAPs concurrentiels de l'audit du 2026-07-03 (vérifiés par devil's advocate). Conformément au principe « pas implémentés à la hâte », ces décisions sont documentées plutôt que codées en urgence :
+
+- **GAP-01 — Manifeste marketplace** : dérive de version corrigée (`marketplace.json` 8.16.1 → 8.19.1). **À faire** : ajouter un gate CI qui échoue si `plugin.json` ↔ `marketplace.json` divergent, puis `claude plugin validate` + soumission (cf. DIFF-01).
+- **GAP-02 — `.mcp.json` pré-configuré** : **décision = opt-in manuel maintenu** (règle 11 : auditer/épingler tout serveur MCP tiers avant usage — l'auto-install par défaut est un anti-pattern supply-chain). Les templates prêts existent (`.claude/templates/mcp/context7-with-tool-search.json`, `github-with-tool-search.json`) et `docs/MCP.md` documente la procédure. Évolution possible : un flag opt-in `--with-mcp` émettant un `.mcp.json` curé/épinglé (à spécifier + tester avant build).
+- **GAP-04 — Skills marketplace** : **décision = parkée** (DRAFT P3-23, non annoncée publiquement, aucun user ne l'attend). Rejoint DIFF-10 (soumission des skills à l'Anthropic Skills Marketplace) plutôt qu'un marketplace maison à maintenir. Statut clarifié dans `skills-marketplace/README.md`.
+- **GAP-06 — Scaffolding `claude-craft new`** : **décision = hors-scope**. Claude Craft est une **couche de configuration/augmentation** de projets existants (identité produit), pas un générateur d'application. Ne pas diluer le flow `install` avec de la génération d'app ; réévaluer seulement sur demande produit explicite.
+
 ### v9.0 (legacy) — Différenciation
 
 Issue de `audit/phases/phase-3-differenciation.md` — à détailler.

@@ -6,24 +6,6 @@ allowed-tools:
   - Glob
   - Grep
 model: haiku
-triggers:
-  files:
-    - "*.php"
-    - "*.ts"
-    - "*.tsx"
-    - "*.cs"
-    - "*.py"
-    - "*.dart"
-    - "*.java"
-  keywords:
-    - SOLID
-    - Single Responsibility
-    - Open Closed
-    - Liskov
-    - Interface Segregation
-    - Dependency Inversion
-    - refactor
-    - clean code
 ---
 
 # Principes SOLID

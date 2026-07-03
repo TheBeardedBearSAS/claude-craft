@@ -7,16 +7,6 @@ allowed-tools:
   - Grep
   - Task
 model: opus
-triggers:
-  keywords:
-    - analyze
-    - understand
-    - explore
-    - architecture
-    - codebase
-    - structure
-    - workflow
-    - investigation
 ---
 
 # Workflow d'Analyse Obligatoire

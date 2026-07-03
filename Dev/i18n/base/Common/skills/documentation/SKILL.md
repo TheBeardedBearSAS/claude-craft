@@ -8,25 +8,6 @@ allowed-tools:
   - Edit
   - Write
 model: haiku
-triggers:
-  files:
-    - "*.md"
-    - "README*"
-    - "CHANGELOG*"
-    - "CONTRIBUTING*"
-    - "**/docs/**"
-    - "**/*.yaml"
-    - "**/*.yml"
-  keywords:
-    - documentation
-    - readme
-    - changelog
-    - api docs
-    - swagger
-    - openapi
-    - jsdoc
-    - phpdoc
-    - docstring
 ---
 
 # Documentation

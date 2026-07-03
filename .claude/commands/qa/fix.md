@@ -275,7 +275,7 @@ resume_from:
 |--------|----------|
 | "Session introuvable" | Verifiez l'ID de session dans `.recette/sessions/` |
 | "Aucune erreur dans la session" | La session n'a pas d'erreurs a corriger |
-| "Sprint-status.yaml introuvable" | Initialisez BMAD avec `/bmad:init` |
+| "Sprint-status.yaml introuvable" | Initialisez BMAD avec `/workflow:init` |
 | "Test RED n'echoue pas" | Le bug n'est peut-etre plus present, verifier manuellement |
 
 ## Bonnes Pratiques

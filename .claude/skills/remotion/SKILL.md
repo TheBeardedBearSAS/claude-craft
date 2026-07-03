@@ -1,10 +1,7 @@
 ---
 name: remotion
 description: Best practices for Remotion - video creation in React. Use when creating videos, animations, compositions, sequences, or any Remotion project.
-triggers:
   files: ["**/remotion.config.*", "**/Root.tsx", "**/Composition.tsx"]
-  keywords: ["remotion", "video", "composition", "animation", "sequence", "interpolate"]
-auto_suggest: true
 ---
 
 ## When to use

@@ -1,12 +1,12 @@
-# React Native 0.86 - Quick Reference
+# React Native 0.85 - Quick Reference
 
 ## Versions Requises (2026)
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| React Native | 0.86 | New Architecture activée par défaut |
+| React Native | 0.85 | New Architecture activée par défaut |
 | Expo SDK | 56+ | New Architecture on by default |
-| Node.js | **22.x LTS** | RN 0.86 requiert Node 22+ minimum |
+| Node.js | **22.x LTS** | RN 0.85 requiert Node 22+ minimum |
 | TypeScript | 5.x+ | Strict mode obligatoire |
 | React Navigation | 7.x | Via Expo Router ou standalone |
 | Reanimated | 4 (`^4.0.0`) | Worklets 2 + JSI backend partagé |
@@ -37,7 +37,7 @@ src/
 └── types/            # Types globaux
 ```
 
-## New Architecture (activée par défaut RN 0.86)
+## New Architecture (activée par défaut RN 0.85)
 
 | Ancien (Paper / Bridge) | Nouveau (Fabric / TurboModules) |
 |------------------------|---------------------------------|
@@ -46,7 +46,7 @@ src/
 | UI Manager | Fabric : rendu concurrent C++ |
 | Hermes optionnel | Hermes V1 par défaut |
 
-**Activation bare RN 0.86 :**
+**Activation bare RN 0.85 :**
 ```bash
 # Android
 echo 'newArchEnabled=true' >> android/gradle.properties
@@ -119,7 +119,7 @@ const animatedStyle = useAnimatedStyle(() => {
 });
 ```
 
-**Bridgeless Mode (RN 0.86, nouveaux projets) :** supprime le legacy bridge (JSI only).
+**Bridgeless Mode (RN 0.85, nouveaux projets) :** supprime le legacy bridge (JSI only).
 ```bash
 # android/gradle.properties
 bridgelessEnabled=true
@@ -127,7 +127,7 @@ bridgelessEnabled=true
 
 ## Checklist Rapide
 
-- [ ] RN 0.86, Node 22+, Expo SDK 56+
+- [ ] RN 0.85, Node 22+, Expo SDK 56+
 - [ ] New Architecture activée (Fabric + TurboModules)
 - [ ] Gesture Handler 3.0+ (`@^3.0.0`, pas 2.x)
 - [ ] Reanimated 4 (`^4.0.0`) + Worklets 2

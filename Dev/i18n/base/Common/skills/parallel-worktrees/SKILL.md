@@ -6,17 +6,6 @@ allowed-tools:
   - Glob
   - Grep
   - Bash
-triggers:
-  files: []
-  keywords:
-    - worktree
-    - parallel
-    - concurrent
-    - writer
-    - reviewer
-    - multi-session
-    - productivity
-auto_suggest: true
 ---
 
 # Parallel Worktrees

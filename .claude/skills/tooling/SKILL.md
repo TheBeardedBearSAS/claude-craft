@@ -1,6 +1,6 @@
 ---
 name: tooling
-description: Tooling React Native - Expo & EAS. Use when working with tooling.
+description: Tooling React Native - Expo & EAS. Use when configuring the React Native build/dev toolchain (Expo, EAS Build, Metro, native dependencies).
 ---
 
 # Tooling React Native - Expo & EAS

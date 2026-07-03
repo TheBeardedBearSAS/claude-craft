@@ -7,18 +7,6 @@ allowed-tools:
   - Grep
   - WebFetch
 model: haiku
-triggers:
-  keywords:
-    - token optimization
-    - reduce tokens
-    - context management
-    - code review tool
-    - caveman
-    - code-review-graph
-    - token-savior
-    - context-mode
-    - claude-context
-    - RTK alternative
 ---
 
 # Ecosystem Tools

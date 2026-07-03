@@ -2,11 +2,7 @@
 name: parallel-worktrees
 description: Parallel git worktrees for concurrent Claude Code sessions. Use when working on multiple features or writer/reviewer workflows.
 context: fork
-disable-model-invocation: true
-triggers:
   files: []
-  keywords: ["worktree", "parallel", "concurrent", "writer", "reviewer", "multi-session"]
-auto_suggest: true
 ---
 
 # Parallel Worktrees

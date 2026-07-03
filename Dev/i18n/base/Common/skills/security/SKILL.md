@@ -7,26 +7,6 @@ allowed-tools:
   - Grep
   - WebSearch
 model: opus
-triggers:
-  files:
-    - "**/auth/**"
-    - "**/security/**"
-    - "**/*Auth*"
-    - "**/*Security*"
-    - "**/.env*"
-  keywords:
-    - security
-    - authentication
-    - authorization
-    - OWASP
-    - injection
-    - XSS
-    - CSRF
-    - encryption
-    - password
-    - token
-    - JWT
-    - OAuth
 ---
 
 # Sécurité

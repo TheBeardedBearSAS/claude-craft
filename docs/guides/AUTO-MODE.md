@@ -1,212 +1,122 @@
 # Auto Mode Guide
 
-> **Requires:** Claude Code v2.1.94+
+> **Requires:** Claude Code **v2.1.193+** (classifier-based auto mode; `classifyAllShell` needs 2.1.193+, the richer `environment` slots need 2.1.195+). On Bedrock / Vertex AI / Foundry / Claude apps gateway you must also set `CLAUDE_CODE_ENABLE_AUTO_MODE`.
 
 ## What is Auto Mode?
 
-Auto Mode allows Claude to execute approved commands without asking for confirmation. You define which commands to:
-- **Auto-approve**: Execute immediately (e.g., tests, linters)
-- **Confirm**: Ask before executing (e.g., commits, deploys)
-- **Block**: Never execute (e.g., destructive operations)
+Auto Mode lets Claude Code run **without routine permission prompts** by routing every tool call through a **classifier** that blocks anything irreversible, destructive, or aimed **outside your environment**. It is the middle ground between approving everything and `--dangerously-skip-permissions`.
 
-This accelerates development workflows while maintaining safety.
+Key mental model — auto mode is a **second gate that runs *after* the permissions system**:
 
----
+1. `permissions.deny` / `ask` rules are evaluated **first** (they still block or prompt).
+2. Everything else then passes through the classifier, which decides allow / block based on your trusted-environment context and its built-in safety rules.
 
-## Quick Start
+> There is **no `auto_approve` / `confirm` / `block` command-list profile** and **no `claude config auto-mode.profile` command**. Any guide describing those is out of date — the real surface is the `autoMode` block in `settings.json` plus the `claude auto-mode` subcommands documented below.
 
-### 1. Install the Recommended Profile
-
-```bash
-# Copy profile to Claude Code config
-cp .claude/templates/auto-mode-profile.json ~/.claude/auto-mode-profiles/claude-craft.json
-
-# Enable in Claude Code
-claude config auto-mode.profile claude-craft-recommended
-```
-
-### 2. Verify Configuration
-
-```bash
-# Check current profile
-claude config auto-mode.profile
-
-# Test with a safe command
-claude "run npm test in auto mode"
-```
+Enable it interactively with the permission-mode switch (`/permissions` → Auto), via `--permission-mode auto`, or by setting `"permissions": { "defaultMode": "auto" }`. See [Permission modes](https://code.claude.com/docs/en/permission-modes#eliminate-prompts-with-auto-mode) for what it blocks by default.
 
 ---
 
-## Profile Structure
+## Where the classifier reads configuration
 
-The profile defines three categories:
+The classifier reads the same **CLAUDE.md** content Claude loads, so a rule like *"never force push"* in your project steers both. For cross-project rules (trusted infra, org-wide deny), use the `autoMode` settings block:
 
-| Category | Description | Examples |
-|----------|-------------|----------|
-| **auto_approve** | Execute without confirmation | `npm test`, `git status`, `vitest` |
-| **confirm** | Ask before executing | `git push`, `npm publish` |
-| **block** | Never execute | `rm -rf`, `git push --force` |
+| Scope | File | Use for |
+|-------|------|---------|
+| One developer | `~/.claude/settings.json` | Personal trusted infrastructure |
+| One project, one dev | `.claude/settings.local.json` | Per-project trusted buckets/services |
+| Organization-wide | Managed settings | Trusted infra pushed to all developers |
+| Per-invocation | `--settings` flag / Agent SDK inline JSON | Automation overrides |
 
-### Default Profile
+> ⚠️ The classifier **does not** read `autoMode` from shared `.claude/settings.json` — a checked-in repo cannot inject its own allow rules. Put trust rules in `~/.claude/settings.json` or `.claude/settings.local.json`.
+
+---
+
+## The `autoMode` block
+
+Four prose-rule arrays (natural language, **not** globs/regex) plus one toggle:
+
+| Field | Purpose | Precedence |
+|-------|---------|------------|
+| `autoMode.environment` | Trusted repos, buckets, domains, services (what "external" means) | context |
+| `autoMode.hard_deny` | Unconditional security boundaries | 1 (never overridable) |
+| `autoMode.soft_deny` | Destructive actions user intent can clear | 2 |
+| `autoMode.allow` | Exceptions to `soft_deny` | 3 |
+| `autoMode.classifyAllShell` | `true` = route **every** Bash/PowerShell command through the classifier (ignore narrow allow rules) | — |
+
+Explicit user intent overrides remaining soft blocks: *"force-push this branch"* authorizes the push; *"clean up the repo"* does not.
+
+### `$defaults` — always splice, never replace
+
+Include the literal string `"$defaults"` in any array to keep the built-in rules and add yours around them:
 
 ```json
 {
-  "name": "claude-craft-recommended",
-  "description": "Recommended Auto Mode profile for Claude Craft development",
-  "auto_approve": [
-    "npm test",
-    "npm run lint",
-    "npm run format",
-    "npm run test:coverage",
-    "vitest",
-    "shellcheck",
-    "git status",
-    "git diff",
-    "git log"
-  ],
-  "confirm": [
-    "git push",
-    "git commit",
-    "npm publish",
-    "make deploy"
-  ],
-  "block": [
-    "rm -rf",
-    "git push --force",
-    "git reset --hard",
-    "npm unpublish"
-  ]
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "Organization: Acme Corp. Primary use: software development",
+      "Source control: github.com/acme-corp and all repos under it",
+      "Trusted internal domains: *.internal.acme.com",
+      "Key internal services: CI at ci.acme.com, registry at registry.acme.com"
+    ],
+    "allow": [
+      "$defaults",
+      "Deploying to the staging namespace is allowed: staging resets nightly"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Never run DB migrations outside the migrations CLI, even on dev"
+    ],
+    "hard_deny": [
+      "$defaults",
+      "Never send repository contents to third-party code-review APIs"
+    ]
+  }
 }
 ```
 
----
+> 🚨 **Omitting `"$defaults"` replaces the entire list for that section.** A `soft_deny` without `"$defaults"` discards every built-in block (force push, `curl | bash`, prod deploys); a `hard_deny` without it discards the built-in data-exfiltration and auto-mode-bypass guards. Only omit `"$defaults"` when you deliberately take full ownership (copy `claude auto-mode defaults` first).
 
-## Customization
-
-### Create Your Own Profile
-
-```bash
-# Create custom profile
-cat > ~/.claude/auto-mode-profiles/my-workflow.json <<EOF
-{
-  "name": "my-workflow",
-  "description": "Custom profile for my workflow",
-  "auto_approve": [
-    "npm test",
-    "make lint"
-  ],
-  "confirm": [
-    "git push"
-  ],
-  "block": [
-    "rm -rf"
-  ]
-}
-EOF
-
-# Enable it
-claude config auto-mode.profile my-workflow
-```
-
-### Extend the Default Profile
-
-```bash
-# Copy default profile
-cp ~/.claude/auto-mode-profiles/claude-craft.json ~/.claude/auto-mode-profiles/my-custom.json
-
-# Edit to add your commands
-nano ~/.claude/auto-mode-profiles/my-custom.json
-```
+A ready-to-fill starter lives at [`.claude/templates/auto-mode-profile.json`](../../.claude/templates/auto-mode-profile.json) — copy its `autoMode` block into `~/.claude/settings.json` and fill in your infrastructure.
 
 ---
 
-## Security Best Practices
+## Inspect & validate
 
-### ✅ Safe to Auto-Approve
+```bash
+claude auto-mode defaults   # print built-in environment/allow/soft_deny/hard_deny rules (JSON)
+claude auto-mode config     # print the EFFECTIVE config ($defaults expanded, your rules applied)
+claude auto-mode critique   # AI review of your custom rules (ambiguous/redundant/false-positive-prone)
+```
 
-- Read-only commands: `git status`, `git log`, `git diff`
-- Tests: `npm test`, `vitest`, `pytest`
-- Linters: `npm run lint`, `shellcheck`, `phpstan`
-- Formatters: `npm run format`, `prettier`
-
-### ⚠️ Should Confirm
-
-- Write operations: `git commit`, `git push`
-- Publishing: `npm publish`, `make deploy`
-- Database migrations: `php bin/console doctrine:migrations:migrate`
-
-### ❌ Never Auto-Approve
-
-- Destructive operations: `rm -rf`, `git reset --hard`
-- Force operations: `git push --force`, `npm unpublish`
-- Sensitive commands: `docker system prune -a`
+Run `claude auto-mode config` after editing settings to confirm the effective rules are what you expect.
 
 ---
 
-## Examples
+## Review denials
 
-### Auto Mode with TDD Workflow
-
-```bash
-# Claude auto-runs tests after each change
-claude "implement the UserService with TDD"
-# → Auto-approves: npm test (after each test written)
-# → Confirms: git commit (when feature complete)
-```
-
-### Auto Mode with CI/CD
-
-```bash
-# Claude auto-runs linters before commit
-claude "fix all linting errors and commit"
-# → Auto-approves: npm run lint
-# → Confirms: git commit, git push
-```
+When auto mode blocks a call, it lands in `/permissions` → **Recently denied**. Press **`r`** on an entry to mark it for retry (Claude Code tells the model it may retry when you exit). In v2.1.193+ the classifier's **reason** shows next to each denial — use it to decide whether the fix is an `environment` entry, an `allow` exception, or retrying with explicit intent. Repeated denials for the same destination usually mean the classifier lacks context: add it to `autoMode.environment`, then re-run `claude auto-mode config`. To react programmatically, use the [`PermissionDenied` hook](https://code.claude.com/docs/en/hooks#permissiondenied).
 
 ---
 
-## Troubleshooting
+## Rollout for a Claude Craft project
 
-### Profile Not Found
-
-```bash
-# List available profiles
-ls ~/.claude/auto-mode-profiles/
-
-# Create directory if missing
-mkdir -p ~/.claude/auto-mode-profiles
-```
-
-### Commands Still Asking for Confirmation
-
-Check if the command matches the profile exactly:
-
-```bash
-# This matches
-"npm test"
-
-# This doesn't match (different syntax)
-"npm run test"
-```
-
-Use glob patterns for flexibility:
-
-```json
-"auto_approve": [
-  "npm *",
-  "git status*",
-  "git diff*"
-]
-```
+1. Start with defaults on (`"$defaults"` only) and observe what gets blocked.
+2. Add your **source-control org** and **key internal services** to `environment` — resolves the most common false positive (pushing to your own repos).
+3. Add trusted **domains** and **cloud buckets** next; fill the rest as blocks come up.
+4. For CI/automation that must never bypass a narrow allow rule, set `"classifyAllShell": true` (trades latency for coverage).
+5. Keep hard boundaries in **`permissions.deny`** (managed settings) — those block *before* the classifier and cannot be overridden.
 
 ---
 
 ## Resources
 
-- Claude Code Documentation: [code.claude.com](https://code.claude.com)
-- Auto Mode Release Notes: [v2.1.94 changelog](https://code.claude.com/changelog)
+- [Configure auto mode](https://code.claude.com/docs/en/auto-mode-config) — full configuration reference
+- [Permission modes](https://code.claude.com/docs/en/permission-modes#eliminate-prompts-with-auto-mode) — enable + default blocks
+- [Permissions](https://code.claude.com/docs/en/permissions) — allow/ask/deny evaluated before the classifier
 
 ---
 
-**Last Updated:** 2026-04  
-**Version:** 1.0.0
+**Last Updated:** 2026-07-03
+**Version:** 2.0.0

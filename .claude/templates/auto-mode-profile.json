@@ -1,27 +1,26 @@
 {
-  "name": "claude-craft-recommended",
-  "description": "Recommended Auto Mode profile for Claude Craft development",
-  "auto_approve": [
-    "npm test",
-    "npm run lint",
-    "npm run format",
-    "npm run test:coverage",
-    "vitest",
-    "shellcheck",
-    "git status",
-    "git diff",
-    "git log"
-  ],
-  "confirm": [
-    "git push",
-    "git commit",
-    "npm publish",
-    "make deploy"
-  ],
-  "block": [
-    "rm -rf",
-    "git push --force",
-    "git reset --hard",
-    "npm unpublish"
-  ]
+  "//": "Auto Mode starter — copy this `autoMode` block into ~/.claude/settings.json or .claude/settings.local.json (NOT shared .claude/settings.json — the classifier ignores it there). Requires Claude Code v2.1.193+. Rules are natural-language prose, not globs. ALWAYS keep \"$defaults\" or you replace the built-in safety rules entirely. Inspect the result with `claude auto-mode config`. See docs/guides/AUTO-MODE.md.",
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "Organization: {COMPANY_NAME}. Primary use: software development",
+      "Source control: {SOURCE_CONTROL, e.g. github.com/your-org and all repos under it}",
+      "Cloud provider(s): {CLOUD_PROVIDERS, e.g. AWS, GCP}",
+      "Trusted cloud buckets: {TRUSTED_BUCKETS, e.g. s3://your-builds}",
+      "Trusted internal domains: {TRUSTED_DOMAINS, e.g. *.internal.example.com}",
+      "Key internal services: {SERVICES, e.g. CI at ci.example.com, registry at registry.example.com}"
+    ],
+    "allow": [
+      "$defaults"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Never run database migrations outside the project migrations CLI, even against dev databases"
+    ],
+    "hard_deny": [
+      "$defaults",
+      "Never send repository contents to third-party code-review or paste APIs"
+    ],
+    "classifyAllShell": false
+  }
 }

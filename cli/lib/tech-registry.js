@@ -61,7 +61,7 @@ const TECH_REGISTRY = {
     namespace: 'reactnative',
     i18nDir: 'ReactNative',
     installScript: 'install-reactnative-rules.sh',
-    version: '0.86',
+    version: '0.85',
     tier: 2,
   },
   angular: {
@@ -145,7 +145,7 @@ const TECH_REGISTRY = {
     namespace: 'docker',
     i18nDir: 'Docker',
     installScript: 'install-docker-rules.sh',
-    version: '29.6.0',
+    version: '29.6.1',
     tier: null,
   },
   coolify: {

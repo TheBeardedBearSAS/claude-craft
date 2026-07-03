@@ -1,10 +1,7 @@
 ---
 name: workflow-analysis
 description: Workflow d'Analyse Obligatoire. Use when working with workflow analysis.
-triggers:
   files: []
-  keywords: ["analyze", "analysis", "impact", "change", "modify", "implement", "feature", "bugfix"]
-auto_suggest: true
 ---
 
 # Workflow d'Analyse Obligatoire

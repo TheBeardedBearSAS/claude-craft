@@ -1,8 +1,9 @@
 # Claude Craft Skills Marketplace
 
-> **Status** : DRAFT (P3-23, phase 3). Scaffolding initial — site Astro + index JSON + CLI spec.
+> **Status** : DRAFT — **parkée** (décision audit 2026-07-03, GAP-04). Scaffolding initial (site Astro + index JSON + CLI spec) non terminé, **non annoncé publiquement**, aucun user ne l'attend.
+> **Décision** : privilégier la soumission des skills à l'**Anthropic Skills Marketplace** (roadmap DIFF-10) plutôt qu'un marketplace maison à maintenir. Reprendre ce chantier uniquement si DIFF-10 s'avère insuffisant.
 > **URL cible** : https://skills.claude-craft.dev
-> **Source** : `audit/10-COMMUNAUTE.md` §COMM-015 (effets réseau via marketplace communautaire).
+> **Source** : `audit/10-COMMUNAUTE.md` §COMM-015 ; décisions de scope dans `docs/ROADMAP.md`.
 
 ## Vue d'ensemble / Overview
 

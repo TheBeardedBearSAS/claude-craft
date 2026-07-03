@@ -2,10 +2,7 @@
 name: monorepo
 description: Monorepo management (Nx, Turborepo, pnpm workspaces) — task orchestration, caching, code sharing. Use when setting up monorepo, optimizing builds, or managing multi-package projects.
 context: fork
-triggers:
   files: ["**/nx.json", "**/turbo.json", "**/pnpm-workspace.yaml", "**/lerna.json"]
-  keywords: ["monorepo", "nx", "turborepo", "pnpm workspaces", "lerna", "task orchestration", "build cache", "workspace", "packages"]
-auto_suggest: true
 ---
 
 # Monorepo — Nx, Turborepo, pnpm Workspaces
