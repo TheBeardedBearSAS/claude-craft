@@ -40,7 +40,7 @@ jobs:
         run: npx @cyclonedx/cyclonedx-npm --output-format JSON --output-file claude-craft-sbom.json
 
       - name: Install cosign
-        uses: sigstore/cosign-installer@7e8b541eb2e61bf99390e1afd4be13a184e9ebc5 # pinned: v3.10.1
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # pinned: v4.1.2
 
       - name: Sign SBOM (Sigstore keyless)
         # Best-effort: OIDC keyless signing requires the workflow to run on the upstream repo
