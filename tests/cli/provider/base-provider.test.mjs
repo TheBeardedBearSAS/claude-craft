@@ -42,6 +42,76 @@ describe('BaseProvider default isAvailable/getVersion template', () => {
   });
 });
 
+describe('BaseProvider abstract template methods', () => {
+  it('execute() throws naming the concrete constructor', async () => {
+    const provider = new BaseProvider();
+    await expect(provider.execute('version', [])).rejects.toThrow(
+      "Method 'execute' must be implemented by BaseProvider"
+    );
+  });
+
+  it('sendMessage() throws naming the concrete constructor', async () => {
+    const provider = new BaseProvider();
+    await expect(provider.sendMessage('hi')).rejects.toThrow(
+      "Method 'sendMessage' must be implemented by BaseProvider"
+    );
+  });
+
+  it('spawnSubAgent() throws naming the concrete constructor', async () => {
+    const provider = new BaseProvider();
+    await expect(provider.spawnSubAgent('task')).rejects.toThrow(
+      "Method 'spawnSubAgent' must be implemented by BaseProvider"
+    );
+  });
+
+  it('getMCPServers() defaults to an empty object', () => {
+    const provider = new BaseProvider();
+    expect(provider.getMCPServers()).toEqual({});
+  });
+
+  it('getDefaultConfig() returns the shared default execution settings', () => {
+    const provider = new BaseProvider();
+    provider.defaultModel = 'some-model';
+
+    expect(provider.getDefaultConfig()).toEqual({
+      model: 'some-model',
+      timeout: 3600,
+      temperature: 0.7,
+      max_tokens: 128000,
+    });
+  });
+
+  it('mapCommand() passes commands through unchanged by default', () => {
+    const provider = new BaseProvider();
+    expect(provider.mapCommand('deploy', ['--env', 'prod'])).toEqual(['deploy', '--env', 'prod']);
+  });
+
+  describe('validateConfig()', () => {
+    it('rejects a falsy config', () => {
+      const provider = new BaseProvider();
+      expect(provider.validateConfig(null)).toBe(false);
+      expect(provider.validateConfig(undefined)).toBe(false);
+    });
+
+    it('accepts a config without a model', () => {
+      const provider = new BaseProvider();
+      expect(provider.validateConfig({})).toBe(true);
+    });
+
+    it('rejects a model not present in supportedModels', () => {
+      const provider = new BaseProvider();
+      provider.supportedModels = ['model-a', 'model-b'];
+      expect(provider.validateConfig({ model: 'model-c' })).toBe(false);
+    });
+
+    it('accepts a model present in supportedModels', () => {
+      const provider = new BaseProvider();
+      provider.supportedModels = ['model-a', 'model-b'];
+      expect(provider.validateConfig({ model: 'model-a' })).toBe(true);
+    });
+  });
+});
+
 describe('Concrete providers wire binaryName into the shared template', () => {
   afterEach(() => {
     vi.restoreAllMocks();

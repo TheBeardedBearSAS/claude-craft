@@ -359,8 +359,8 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
     // Replace references
     const replacements = [
       [/Claude Code/g, 'Multi-AI'],
-      [/claude-craft/g, 'ai-craft'],
       [/@the-bearded-bear\/claude-craft/g, '@ai-craft/core'],
+      [/claude-craft/g, 'ai-craft'],
       [/\.claude\//g, '.ai-craft/'],
       [/CLAUDE\.md/g, 'AI-CRAFT.md'],
       [
@@ -817,8 +817,8 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
     // Replace Claude-specific references
     const replacements = [
       [/Claude Code/g, 'AI Provider'],
-      [/claude-craft/g, 'ai-craft'],
       [/@the-bearded-bear\/claude-craft/g, '@ai-craft/core'],
+      [/claude-craft/g, 'ai-craft'],
       [/\.claude\//g, '.ai-craft/'],
       [/CLAUDE\.md/g, 'AI-CRAFT.md'],
       [/Claude Craft/g, 'AI Craft'],
