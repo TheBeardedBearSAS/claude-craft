@@ -107,9 +107,9 @@ describe('Claude provider extras', () => {
 
     const result = await provider.spawnSubAgent('do the thing');
 
-    // spawnSubAgent builds ['--fork', prompt], then execute('task', args) maps
-    // via commandMap.task = ['--fork', ...args] -- resulting in a duplicated flag.
-    expect(execa).toHaveBeenCalledWith('claude', ['--fork', '--fork', 'do the thing'], expect.any(Object));
+    // spawnSubAgent builds [prompt]; execute('task', args) then maps via
+    // commandMap.task = ['--fork', ...args], adding the single '--fork' flag.
+    expect(execa).toHaveBeenCalledWith('claude', ['--fork', 'do the thing'], expect.any(Object));
     expect(result).toEqual({ success: true, stdout: 'sub-agent output', stderr: '', exitCode: 0 });
   });
 

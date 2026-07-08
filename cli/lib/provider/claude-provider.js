@@ -119,8 +119,10 @@ export class ClaudeProvider extends BaseProvider {
    * Spawn a sub-agent with Claude Code
    */
   async spawnSubAgent(prompt, options = {}) {
-    // Claude Code supports sub-agents natively
-    const args = ['--fork', prompt];
+    // Claude Code supports sub-agents natively.
+    // Note: mapCommand('task', args) already prepends '--fork' (commandMap.task
+    // = ['--fork', ...args]), so args here must NOT include it again.
+    const args = [prompt];
 
     if (options.maxIterations) {
       // Claude Code doesn't have direct iteration limit, but we can use circuit breaker
