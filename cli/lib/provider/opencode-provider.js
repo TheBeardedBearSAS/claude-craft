@@ -1,10 +1,10 @@
 /**
  * AI Craft - OpenCode Provider
  * Implementation for OpenCode (Self-Hosted)
- * 
+ *
  * This file is part of AI Craft (formerly Claude Craft)
  * Multi-AI Development Framework
- * 
+ *
  * @module provider/opencode-provider
  */
 
@@ -13,7 +13,7 @@ import { execa } from 'execa';
 
 /**
  * OpenCode Provider - Self-Hosted AI
- * 
+ *
  * Supports:
  * - OpenCode CLI (https://github.com/create-open-code/open-code)
  * - Any self-hosted LLM (Llama, Mistral, Phi, etc.)
@@ -23,14 +23,14 @@ import { execa } from 'execa';
 export class OpenCodeProvider extends BaseProvider {
   constructor() {
     super();
-    
+
     this.name = 'opencode';
     this.displayName = 'OpenCode (Self-Hosted)';
     this.mcpSupported = true;
     this.hooksSupported = true;
     this.subAgentsSupported = true;
     this.forkSupported = true;
-    
+
     // OpenCode supports any model via the endpoint
     this.supportedModels = [
       'llama-3.2-90b',
@@ -53,16 +53,17 @@ export class OpenCodeProvider extends BaseProvider {
       'deepseek-llm-67b',
       'deepseek-coder-33b',
     ];
-    
+
     this.defaultModel = 'llama-3.2-90b';
-    
+    this.binaryName = 'opencode';
+
     // Model aliases for compatibility
     this.modelAliases = {
-      'opus': 'llama-3.2-90b',
+      opus: 'llama-3.2-90b',
       'opus-4.8': 'llama-3.2-90b',
-      'sonnet': 'llama-3.2-70b',
+      sonnet: 'llama-3.2-70b',
       'sonnet-5': 'llama-3.2-70b',
-      'haiku': 'llama-3.2-11b',
+      haiku: 'llama-3.2-11b',
       'haiku-4.5': 'llama-3.2-11b',
     };
   }
@@ -72,7 +73,7 @@ export class OpenCodeProvider extends BaseProvider {
    */
   async execute(command, args = [], options = {}) {
     const opencodeArgs = this.mapCommand(command, args);
-    
+
     // OpenCode uses environment variables for configuration
     const execOptions = {
       preferLocal: true,
@@ -86,7 +87,7 @@ export class OpenCodeProvider extends BaseProvider {
       },
       ...options,
     };
-    
+
     try {
       const result = await execa('opencode', opencodeArgs, execOptions);
       return {
@@ -110,38 +111,38 @@ export class OpenCodeProvider extends BaseProvider {
    */
   async sendMessage(prompt, options = {}) {
     const args = [];
-    
+
     // Add model if specified
     const model = options.model || this.defaultModel;
     if (model !== this.defaultModel) {
       args.push('--model', model);
     }
-    
+
     // Add temperature if specified
     if (options.temperature) {
       args.push('--temperature', String(options.temperature));
     }
-    
+
     // Add max tokens if specified
     if (options.maxTokens) {
       args.push('--max-tokens', String(options.maxTokens));
     }
-    
+
     // Add system prompt if specified
     if (options.systemPrompt) {
       args.push('--system', options.systemPrompt);
     }
-    
+
     // OpenCode uses the prompt directly
     args.push(prompt);
-    
+
     // Execute
     const result = await this.execute('chat', args, options);
-    
+
     if (!result.success) {
       throw new Error(`OpenCode error: ${result.stderr}`);
     }
-    
+
     return result.stdout;
   }
 
@@ -151,19 +152,19 @@ export class OpenCodeProvider extends BaseProvider {
   async spawnSubAgent(prompt, options = {}) {
     // OpenCode supports sub-agents via the --task flag
     const args = ['--task', prompt];
-    
+
     if (options.maxIterations) {
       args.push('--max-iterations', String(options.maxIterations));
     }
-    
+
     if (options.timeout) {
       args.push('--timeout', String(options.timeout));
     }
-    
+
     if (options.dod) {
       args.push('--dod', options.dod);
     }
-    
+
     return this.execute('run', args, options);
   }
 
@@ -197,44 +198,20 @@ export class OpenCodeProvider extends BaseProvider {
    */
   mapCommand(command, args) {
     const commandMap = {
-      'version': ['--version'],
-      'run': ['--prompt', args.join(' ')],
-      'chat': [args.join(' ')],
-      'audit': ['--system', '.ai-craft/AI-CRAFT.md', 'Run a full project audit'],
-      'install': ['--system', '.ai-craft/AI-CRAFT.md'],
-      'ralph': ['--task', args[0], '--loop'],
+      version: ['--version'],
+      run: ['--prompt', args.join(' ')],
+      chat: [args.join(' ')],
+      audit: ['--system', '.ai-craft/AI-CRAFT.md', 'Run a full project audit'],
+      install: ['--system', '.ai-craft/AI-CRAFT.md'],
+      ralph: ['--task', args[0], '--loop'],
     };
-    
+
     if (commandMap[command]) {
       return commandMap[command];
     }
-    
+
     // Default: pass through
     return [command, ...args];
-  }
-
-  /**
-   * Check if OpenCode is available
-   */
-  async isAvailable() {
-    try {
-      await execa('opencode', ['--version']);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  /**
-   * Get OpenCode version
-   */
-  async getVersion() {
-    try {
-      const result = await execa('opencode', ['--version']);
-      return result.stdout.trim();
-    } catch {
-      return 'unknown';
-    }
   }
 
   /**
@@ -244,13 +221,13 @@ export class OpenCodeProvider extends BaseProvider {
     if (!super.validateConfig(config)) {
       return false;
     }
-    
+
     // Check for endpoint
     if (!process.env.OPENCODE_ENDPOINT && !process.env.OPENAI_API_BASE_URL) {
       console.warn('⚠️ Warning: OPENCODE_ENDPOINT environment variable not set');
       console.warn('   OpenCode requires a running LLM server endpoint');
     }
-    
+
     return true;
   }
 
@@ -273,12 +250,12 @@ export class OpenCodeProvider extends BaseProvider {
     if (!endpoint) {
       return { healthy: false, message: 'No endpoint configured' };
     }
-    
+
     try {
       // Try to ping the endpoint
       const result = await execa('curl', ['-s', '-o', '/dev/null', '-w', '%{http_code}', endpoint]);
       const statusCode = parseInt(result.stdout.trim());
-      
+
       if (statusCode >= 200 && statusCode < 300) {
         return { healthy: true, message: 'Endpoint is healthy' };
       }

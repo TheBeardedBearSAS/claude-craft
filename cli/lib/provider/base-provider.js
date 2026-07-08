@@ -1,10 +1,10 @@
 /**
  * AI Craft - Base Provider Class
  * Abstract base class for all AI providers
- * 
+ *
  * This file is part of AI Craft (formerly Claude Craft)
  * Multi-AI Development Framework
- * 
+ *
  * @module provider/base-provider
  */
 
@@ -16,27 +16,30 @@ export class BaseProvider {
   constructor() {
     /** @type {string} */
     this.name = 'base';
-    
+
     /** @type {string} */
     this.displayName = 'Base Provider';
-    
+
     /** @type {boolean} */
     this.mcpSupported = false;
-    
+
     /** @type {boolean} */
     this.hooksSupported = false;
-    
+
     /** @type {boolean} */
     this.subAgentsSupported = false;
-    
+
     /** @type {boolean} */
     this.forkSupported = false;
-    
+
     /** @type {string[]} */
     this.supportedModels = [];
-    
+
     /** @type {string} */
     this.defaultModel = '';
+
+    /** @type {string|null} CLI binary name used by the default isAvailable/getVersion */
+    this.binaryName = null;
   }
 
   /**
@@ -115,18 +118,34 @@ export class BaseProvider {
   }
 
   /**
-   * Check if this provider is available in the current environment
+   * Check if this provider is available in the current environment.
+   * Default implementation runs `<binaryName> --version`; override for
+   * providers whose availability check differs (e.g. IDE extensions).
    * @returns {Promise<boolean>} - Whether provider is available
    */
   async isAvailable() {
-    return false;
+    if (!this.binaryName) return false;
+    try {
+      const { execa } = await import('execa');
+      await execa(this.binaryName, ['--version']);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /**
-   * Get provider version
+   * Get provider version. Default implementation runs `<binaryName> --version`.
    * @returns {Promise<string>} - Provider version
    */
   async getVersion() {
-    return 'unknown';
+    if (!this.binaryName) return 'unknown';
+    try {
+      const { execa } = await import('execa');
+      const result = await execa(this.binaryName, ['--version']);
+      return result.stdout.trim();
+    } catch {
+      return 'unknown';
+    }
   }
 }

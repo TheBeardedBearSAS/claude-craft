@@ -1,10 +1,10 @@
 /**
  * AI Craft - Claude Code Provider
  * Implementation for Anthropic's Claude Code
- * 
+ *
  * This file is part of AI Craft (formerly Claude Craft)
  * Multi-AI Development Framework
- * 
+ *
  * @module provider/claude-provider
  */
 
@@ -13,7 +13,7 @@ import { execa } from 'execa';
 
 /**
  * Claude Code Provider - Anthropic
- * 
+ *
  * Supports:
  * - Claude Code CLI (https://code.claude.com)
  * - All Claude models (Opus, Sonnet, Haiku)
@@ -25,14 +25,14 @@ import { execa } from 'execa';
 export class ClaudeProvider extends BaseProvider {
   constructor() {
     super();
-    
+
     this.name = 'claude';
     this.displayName = 'Claude Code (Anthropic)';
     this.mcpSupported = true;
     this.hooksSupported = true;
     this.subAgentsSupported = true;
     this.forkSupported = true;
-    
+
     this.supportedModels = [
       'opus-4.8',
       'opus-4.7',
@@ -43,9 +43,10 @@ export class ClaudeProvider extends BaseProvider {
       'haiku-4.5',
       'haiku-4',
     ];
-    
+
     this.defaultModel = 'sonnet-5';
-    
+    this.binaryName = 'claude';
+
     // No aliases needed - these are the canonical names
     this.modelAliases = {};
   }
@@ -55,7 +56,7 @@ export class ClaudeProvider extends BaseProvider {
    */
   async execute(command, args = [], options = {}) {
     const claudeArgs = this.mapCommand(command, args);
-    
+
     // Claude Code uses environment variables for configuration
     const execOptions = {
       preferLocal: true,
@@ -70,7 +71,7 @@ export class ClaudeProvider extends BaseProvider {
       },
       ...options,
     };
-    
+
     try {
       const result = await execa('claude', claudeArgs, execOptions);
       return {
@@ -96,21 +97,21 @@ export class ClaudeProvider extends BaseProvider {
     // Claude Code doesn't have a direct 'send message' command
     // We use the chat interface
     const args = [prompt];
-    
+
     // Add model if specified
     const model = options.model || this.defaultModel;
     if (model !== this.defaultModel) {
       // Claude Code sets model via settings.json, not CLI
       console.warn('⚠️ Claude Code model selection is configured via settings.json, not CLI arguments');
     }
-    
+
     // Execute
     const result = await this.execute('chat', args, options);
-    
+
     if (!result.success) {
       throw new Error(`Claude Code error: ${result.stderr}`);
     }
-    
+
     return result.stdout;
   }
 
@@ -120,16 +121,16 @@ export class ClaudeProvider extends BaseProvider {
   async spawnSubAgent(prompt, options = {}) {
     // Claude Code supports sub-agents natively
     const args = ['--fork', prompt];
-    
+
     if (options.maxIterations) {
       // Claude Code doesn't have direct iteration limit, but we can use circuit breaker
       console.warn('⚠️ Claude Code does not support direct iteration limits. Using circuit breaker instead.');
     }
-    
+
     if (options.timeout) {
       console.warn('⚠️ Claude Code timeout is configured via settings.json');
     }
-    
+
     return this.execute('task', args, options);
   }
 
@@ -165,47 +166,23 @@ export class ClaudeProvider extends BaseProvider {
    */
   mapCommand(command, args) {
     const commandMap = {
-      'version': ['--version'],
-      'chat': [args.join(' ')],
-      'task': ['--fork', ...args],
-      'audit': ['/team:audit'],
-      'install': [], // Claude Code doesn't have install command
-      'ralph': ['/common:ralph-run', ...args],
+      version: ['--version'],
+      chat: [args.join(' ')],
+      task: ['--fork', ...args],
+      audit: ['/team:audit'],
+      install: [], // Claude Code doesn't have install command
+      ralph: ['/common:ralph-run', ...args],
     };
-    
+
     if (commandMap[command]) {
       if (commandMap[command].length === 0) {
         return args; // Just return the args
       }
       return commandMap[command];
     }
-    
+
     // Default: pass through
     return [command, ...args];
-  }
-
-  /**
-   * Check if Claude Code is available
-   */
-  async isAvailable() {
-    try {
-      await execa('claude', ['--version']);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  /**
-   * Get Claude Code version
-   */
-  async getVersion() {
-    try {
-      const result = await execa('claude', ['--version']);
-      return result.stdout.trim();
-    } catch {
-      return 'unknown';
-    }
   }
 
   /**
@@ -215,16 +192,16 @@ export class ClaudeProvider extends BaseProvider {
     if (!super.validateConfig(config)) {
       return false;
     }
-    
+
     // Claude Code requires specific version for some features
     if (config.features?.fork_subagents) {
       console.warn('✅ Fork subagents requires Claude Code v2.1.117+');
     }
-    
+
     if (config.features?.mcp) {
       console.warn('✅ MCP support requires Claude Code v2.1.97+');
     }
-    
+
     return true;
   }
 
