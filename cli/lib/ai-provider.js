@@ -1,10 +1,10 @@
 /**
  * AI Craft - AI Provider Manager
  * Main orchestrator for multi-AI provider support
- * 
+ *
  * This file is part of AI Craft (formerly Claude Craft)
  * Multi-AI Development Framework
- * 
+ *
  * @module ai-provider
  */
 
@@ -13,6 +13,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { load as yamlLoad, dump as yamlDump } from 'js-yaml';
 import { memoryManager } from './memory.js';
+import { assertWithinDir } from './path-safety.js';
 
 // Import all provider implementations
 import { BaseProvider } from './provider/base-provider.js';
@@ -26,7 +27,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * AI Provider Manager
- * 
+ *
  * Main class for managing multiple AI providers.
  * Handles:
  * - Provider detection (auto and manual)
@@ -39,22 +40,22 @@ export class AIProviderManager {
   constructor() {
     /** @type {Map<string, BaseProvider>} */
     this.providers = new Map();
-    
+
     /** @type {string|null} */
     this.currentProvider = null;
-    
+
     /** @type {Object} */
     this.config = {};
-    
+
     /** @type {string} */
     this.configPath = path.join(process.cwd(), '.ai-craft', 'ai-craft.yaml');
-    
+
     /** @type {string} */
     this.legacyConfigPath = path.join(process.cwd(), '.claude', 'CLAUDE.md');
-    
+
     /** @type {Map<string, Promise<BaseProvider>>} */
     this.lazyProviders = new Map();
-    
+
     /** @type {Object} */
     this.cache = {
       providerAvailability: new Map(),
@@ -62,10 +63,10 @@ export class AIProviderManager {
       mcpServers: new Map(),
       providerConfigs: new Map(),
     };
-    
+
     /** @type {number} */
     this.cacheTTL = 300000; // 5 minutes
-    
+
     /** @type {Object} */
     this.performanceMetrics = {
       providerDetectionTime: 0,
@@ -73,7 +74,7 @@ export class AIProviderManager {
       hookExecutions: 0,
       mcpDiscoveries: 0,
     };
-    
+
     // Register provider factories for lazy loading
     this.providerFactories = {
       vibe: () => new VibeProvider(),
@@ -82,7 +83,7 @@ export class AIProviderManager {
       claude: () => new ClaudeProvider(),
       cursor: () => new CursorProvider(),
     };
-    
+
     // For backward compatibility, initialize all providers by default
     // This ensures existing code that expects providers to be pre-loaded works
     this.initializeAllProviders();
@@ -98,7 +99,7 @@ export class AIProviderManager {
     if (this.providers.has(name)) {
       return this.providers.get(name);
     }
-    
+
     // Lazy load the provider if not already loaded
     const factory = this.providerFactories[name];
     if (factory) {
@@ -106,7 +107,7 @@ export class AIProviderManager {
       this.providers.set(name, provider);
       return provider;
     }
-    
+
     return null;
   }
 
@@ -139,8 +140,6 @@ export class AIProviderManager {
     this.providers.set(name, provider);
   }
 
-
-
   /**
    * Get list of provider names
    * @returns {string[]} - Array of provider names
@@ -167,7 +166,7 @@ export class AIProviderManager {
    */
   loadConfig(customPath = null) {
     const configPath = customPath || this.configPath;
-    
+
     try {
       if (fs.existsSync(configPath)) {
         const content = fs.readFileSync(configPath, 'utf8');
@@ -177,7 +176,7 @@ export class AIProviderManager {
     } catch (error) {
       console.warn(`⚠️ Warning: Could not load config from ${configPath}: ${error.message}`);
     }
-    
+
     // Return default config
     this.config = this.getDefaultConfig();
     return this.config;
@@ -191,12 +190,12 @@ export class AIProviderManager {
   saveConfig(config = this.config, customPath = null) {
     const configPath = customPath || this.configPath;
     const dir = path.dirname(configPath);
-    
+
     // Ensure directory exists
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-    
+
     try {
       const yamlContent = yamlDump(config, { indent: 2 });
       fs.writeFileSync(configPath, yamlContent);
@@ -245,13 +244,13 @@ export class AIProviderManager {
 
   /**
    * Detect the current AI provider
-   * 
+   *
    * Detection priority:
    * 1. Explicit configuration (ai-craft.yaml)
    * 2. Environment variables
    * 3. Installed binaries in PATH
    * 4. Default fallback (claude)
-   * 
+   *
    * @param {Object} options - Detection options
    * @param {boolean} options.force - Force re-detection
    * @param {boolean} options.useCache - Use cached detection (default: true)
@@ -259,12 +258,12 @@ export class AIProviderManager {
    */
   async detectProvider(options = {}) {
     const { force = false, useCache = true } = options;
-    
+
     // Return cached provider if not forcing re-detection
     if (this.currentProvider && !force) {
       return this.currentProvider;
     }
-    
+
     const startTime = Date.now();
 
     // 1. Check explicit configuration
@@ -297,7 +296,7 @@ export class AIProviderManager {
         }
       }
     }
-    
+
     const binaryProvider = await this.detectFromBinaries();
     if (binaryProvider) {
       this.currentProvider = binaryProvider;
@@ -320,22 +319,22 @@ export class AIProviderManager {
     if (process.env.VIBE_PROVIDER || process.env.MISTRAL_API_KEY) {
       return 'vibe';
     }
-    
+
     // Codex
     if (process.env.CODEX_API_KEY || process.env.GOOGLE_API_KEY) {
       return 'codex';
     }
-    
+
     // OpenCode
     if (process.env.OPENCODE_ENDPOINT || process.env.OPENAI_API_BASE_URL) {
       return 'opencode';
     }
-    
+
     // Cursor
     if (process.env.CURSOR_API_KEY) {
       return 'cursor';
     }
-    
+
     return null;
   }
 
@@ -348,7 +347,7 @@ export class AIProviderManager {
   async detectFromBinaries(options = {}) {
     const { parallel = true } = options;
     const providersToCheck = this.getProviderNames();
-    
+
     if (parallel) {
       // Parallel detection for better performance
       const promises = providersToCheck.map(async (providerName) => {
@@ -356,9 +355,9 @@ export class AIProviderManager {
         const available = provider ? await provider.isAvailable() : false;
         return { name: providerName, available };
       });
-      
+
       const results = await Promise.all(promises);
-      
+
       // Cache results
       for (const result of results) {
         this.cache.providerAvailability.set(result.name, {
@@ -366,14 +365,14 @@ export class AIProviderManager {
           timestamp: Date.now(),
         });
       }
-      
-      const availableProvider = results.find(r => r.available);
+
+      const availableProvider = results.find((r) => r.available);
       return availableProvider?.name || null;
     } else {
       // Sequential detection (backward compatible)
       for (const providerName of providersToCheck) {
         const provider = this.getProvider(providerName);
-        if (provider && await provider.isAvailable()) {
+        if (provider && (await provider.isAvailable())) {
           // Cache result
           this.cache.providerAvailability.set(providerName, {
             available: true,
@@ -382,7 +381,7 @@ export class AIProviderManager {
           return providerName;
         }
       }
-      
+
       return null;
     }
   }
@@ -395,11 +394,13 @@ export class AIProviderManager {
   setProvider(providerName) {
     const provider = this.getProvider(providerName);
     if (!provider) {
-      throw new Error(`❌ Provider '${providerName}' is not registered. Available providers: ${this.getProviderNames().join(', ')}`);
+      throw new Error(
+        `❌ Provider '${providerName}' is not registered. Available providers: ${this.getProviderNames().join(', ')}`
+      );
     }
-    
+
     this.currentProvider = providerName;
-    
+
     // Update config
     this.config.providers = this.config.providers || {};
     this.config.providers.primary = providerName;
@@ -415,17 +416,17 @@ export class AIProviderManager {
   async execute(command, args = [], options = {}) {
     const providerName = await this.detectProvider();
     const provider = this.getProvider(providerName);
-    
+
     if (!provider) {
       throw new Error(`❌ Provider '${providerName}' not found`);
     }
 
     // Apply provider-specific environment variables
     const env = { ...process.env, ...provider.getEnvVars() };
-    
+
     // Execute with fallback handling
     const result = await provider.execute(command, args, { ...options, env });
-    
+
     // Handle fallback if command failed
     if (!result.success) {
       const fallbackResult = await this.tryFallback(providerName, command, args, options);
@@ -433,7 +434,7 @@ export class AIProviderManager {
         return fallbackResult;
       }
     }
-    
+
     return result;
   }
 
@@ -448,19 +449,19 @@ export class AIProviderManager {
   async tryFallback(primaryProvider, command, args, options) {
     const config = this.loadConfig();
     const fallbackProviders = config.providers?.fallback || [];
-    
+
     for (const fallbackProviderName of fallbackProviders) {
       if (fallbackProviderName === primaryProvider) continue;
-      
+
       const fallbackProvider = this.getProvider(fallbackProviderName);
       if (!fallbackProvider) continue;
-      
+
       if (await fallbackProvider.isAvailable()) {
         console.warn(`⚠️ Falling back to ${fallbackProviderName}...`);
         return await fallbackProvider.execute(command, args, options);
       }
     }
-    
+
     return null;
   }
 
@@ -473,11 +474,11 @@ export class AIProviderManager {
   async sendMessage(prompt, options = {}) {
     const providerName = await this.detectProvider();
     const provider = this.getProvider(providerName);
-    
+
     if (!provider) {
       throw new Error(`❌ Provider '${providerName}' not found`);
     }
-    
+
     return provider.sendMessage(prompt, options);
   }
 
@@ -490,16 +491,16 @@ export class AIProviderManager {
   async spawnSubAgent(prompt, options = {}) {
     const providerName = await this.detectProvider();
     const provider = this.getProvider(providerName);
-    
+
     if (!provider) {
       throw new Error(`❌ Provider '${providerName}' not found`);
     }
-    
+
     if (!provider.subAgentsSupported) {
       console.warn(`⚠️ Provider '${providerName}' does not support sub-agents. Falling back to main provider.`);
       return provider.sendMessage(prompt, options);
     }
-    
+
     return provider.spawnSubAgent(prompt, options);
   }
 
@@ -510,11 +511,11 @@ export class AIProviderManager {
   getMCPServers() {
     const providerName = this.currentProvider || 'claude';
     const provider = this.getProvider(providerName);
-    
+
     if (!provider) {
       return {};
     }
-    
+
     return provider.getMCPServers();
   }
 
@@ -524,14 +525,14 @@ export class AIProviderManager {
    */
   getAllProviderMCPServers() {
     const allServers = {};
-    
+
     for (const [name, provider] of this.providers) {
       const servers = provider.getMCPServers();
       if (Object.keys(servers).length > 0) {
         allServers[name] = servers;
       }
     }
-    
+
     return allServers;
   }
 
@@ -554,11 +555,11 @@ export class AIProviderManager {
   mapModelName(modelName, providerName = null) {
     const targetProvider = providerName || this.currentProvider;
     const provider = this.getProvider(targetProvider);
-    
+
     if (!provider) {
       return modelName; // Return as-is if provider not found
     }
-    
+
     // Use provider's model aliases if available
     return provider.modelAliases?.[modelName] || modelName;
   }
@@ -572,13 +573,13 @@ export class AIProviderManager {
   getRecommendedModel(taskType, providerName = null) {
     const targetProvider = providerName || this.currentProvider;
     const config = this.loadConfig();
-    
+
     // Check custom model routing config
     const customRouting = config.optimization?.model_routing?.[taskType];
     if (customRouting) {
       return this.mapModelName(customRouting, targetProvider);
     }
-    
+
     // Default model routing
     const defaultRouting = {
       architecture: 'opus',
@@ -586,7 +587,7 @@ export class AIProviderManager {
       implementation: 'sonnet',
       quick: 'haiku',
     };
-    
+
     const defaultModel = defaultRouting[taskType] || 'sonnet';
     return this.mapModelName(defaultModel, targetProvider);
   }
@@ -623,16 +624,16 @@ export class AIProviderManager {
   async getHealthStatus(options = {}) {
     const { parallel = true, useCache = true } = options;
     const status = {};
-    
+
     // Initialize all providers if using lazy loading
     this.initializeAllProviders();
-    
+
     if (parallel) {
       // Parallel health checks for better performance
       const providerNames = this.getProviderNames();
       const promises = providerNames.map(async (name) => {
         const provider = this.getProvider(name);
-        
+
         // Try to use cached version
         if (useCache && this.cache.providerVersions.has(name)) {
           const cached = this.cache.providerVersions.get(name);
@@ -645,30 +646,30 @@ export class AIProviderManager {
             };
           }
         }
-        
+
         try {
           const available = await provider?.isAvailable();
           const version = available ? await provider?.getVersion() : 'not available';
-          
+
           // Cache result
           this.cache.providerVersions.set(name, {
             available,
             version,
             timestamp: Date.now(),
           });
-          
+
           const result = {
             available,
             version,
             displayName: provider?.displayName || name,
           };
-          
+
           // Add health check for OpenCode
           if (name === 'opencode' && available && provider?.getHealth) {
             const health = await provider.getHealth();
             result.health = health;
           }
-          
+
           return { name, ...result };
         } catch (error) {
           return {
@@ -679,12 +680,12 @@ export class AIProviderManager {
           };
         }
       });
-      
+
       const results = await Promise.all(promises);
       for (const result of results) {
         status[result.name] = result;
       }
-      
+
       this.performanceMetrics.availabilityChecks += providerNames.length;
     } else {
       // Sequential checks (backward compatible)
@@ -692,13 +693,13 @@ export class AIProviderManager {
         try {
           const available = await provider.isAvailable();
           const version = available ? await provider.getVersion() : 'not available';
-          
+
           status[name] = {
             available,
             version,
             displayName: provider.displayName,
           };
-          
+
           // Add health check for OpenCode
           if (name === 'opencode' && available) {
             const health = await provider.getHealth();
@@ -713,7 +714,7 @@ export class AIProviderManager {
         }
       }
     }
-    
+
     return status;
   }
 
@@ -726,46 +727,46 @@ export class AIProviderManager {
     const targetPath = path.resolve(projectPath);
     const aiCraftDir = path.join(targetPath, '.ai-craft');
     const claudeDir = path.join(targetPath, '.claude');
-    
+
     // Create .ai-craft directory
     if (!fs.existsSync(aiCraftDir)) {
       fs.mkdirSync(aiCraftDir, { recursive: true });
     }
-    
+
     // Copy or create AI-CRAFT.md
     const aiCraftMdPath = path.join(aiCraftDir, 'AI-CRAFT.md');
     const sourceAiCraftMd = path.join(__dirname, '..', '..', '.claude', 'AI-CRAFT.md');
-    
+
     if (fs.existsSync(sourceAiCraftMd)) {
       fs.copyFileSync(sourceAiCraftMd, aiCraftMdPath);
     }
-    
+
     // Create ai-craft.yaml
     const configPath = path.join(aiCraftDir, 'ai-craft.yaml');
     if (!fs.existsSync(configPath)) {
       const defaultConfig = this.getDefaultConfig();
-      
+
       // Set primary provider if specified
       if (options.provider) {
         defaultConfig.providers.primary = options.provider;
       }
-      
+
       this.saveConfig(defaultConfig, configPath);
     }
-    
+
     // Create providers directory with subdirectories
     const providersDir = path.join(aiCraftDir, 'providers');
     if (!fs.existsSync(providersDir)) {
       fs.mkdirSync(providersDir, { recursive: true });
     }
-    
+
     // Initialize provider-specific directories
     const providerNames = this.getProviderNames();
     for (const providerName of providerNames) {
       const providerDir = path.join(providersDir, providerName);
       if (!fs.existsSync(providerDir)) {
         fs.mkdirSync(providerDir, { recursive: true });
-        
+
         // Create hooks, mcp, and config subdirectories
         const subDirs = ['hooks', 'mcp', 'config'];
         for (const subDir of subDirs) {
@@ -773,12 +774,12 @@ export class AIProviderManager {
         }
       }
     }
-    
+
     // Create symlink for backward compatibility
     if (!fs.existsSync(claudeDir)) {
       fs.symlinkSync(aiCraftDir, claudeDir, 'dir');
     }
-    
+
     // Initialize subdirectories
     const subDirs = ['agents', 'commands', 'skills', 'templates', 'memory', 'logs'];
     for (const subDir of subDirs) {
@@ -787,12 +788,12 @@ export class AIProviderManager {
         fs.mkdirSync(dirPath, { recursive: true });
       }
     }
-    
+
     // Create provider configuration templates
     if (options.createTemplates !== false) {
       await this.createProviderTemplates(aiCraftDir);
     }
-    
+
     return {
       success: true,
       path: aiCraftDir,
@@ -920,12 +921,9 @@ mcp:
     for (const [providerName, template] of Object.entries(templates)) {
       const providerDir = path.join(aiCraftDir, 'providers', providerName);
       const configDir = path.join(providerDir, 'config');
-      
+
       if (!fs.existsSync(path.join(configDir, 'default.yaml'))) {
-        fs.writeFileSync(
-          path.join(configDir, 'default.yaml'),
-          template.config
-        );
+        fs.writeFileSync(path.join(configDir, 'default.yaml'), template.config);
       }
     }
   }
@@ -937,20 +935,20 @@ mcp:
    */
   discoverMCPServers(directory) {
     const servers = {};
-    
+
     if (!fs.existsSync(directory)) {
       return servers;
     }
-    
+
     const entries = fs.readdirSync(directory, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       if (entry.isFile() && entry.name.endsWith('.json')) {
         try {
           const filePath = path.join(directory, entry.name);
           const content = fs.readFileSync(filePath, 'utf8');
           const config = JSON.parse(content);
-          
+
           if (config.name && config.command) {
             servers[config.name] = {
               ...config,
@@ -962,7 +960,7 @@ mcp:
         }
       }
     }
-    
+
     return servers;
   }
 
@@ -977,10 +975,10 @@ mcp:
     if (!provider) {
       return {};
     }
-    
+
     const targetPath = path.resolve(projectPath);
     const configPath = path.join(targetPath, '.ai-craft', 'providers', providerName, 'config', 'default.yaml');
-    
+
     if (fs.existsSync(configPath)) {
       try {
         const content = fs.readFileSync(configPath, 'utf8');
@@ -989,7 +987,7 @@ mcp:
         return {};
       }
     }
-    
+
     return {};
   }
 
@@ -1004,18 +1002,18 @@ mcp:
     if (!provider) {
       return {};
     }
-    
+
     const targetPath = path.resolve(projectPath);
     const providerMcpDir = path.join(targetPath, '.ai-craft', 'providers', providerName, 'mcp');
     const globalMcpDir = path.join(targetPath, '.ai-craft', 'mcp');
-    
+
     // Get built-in MCP servers from provider
     const builtIn = provider.getMCPServers();
-    
+
     // Discover custom MCP servers
     const providerCustom = this.discoverMCPServers(providerMcpDir);
     const globalCustom = this.discoverMCPServers(globalMcpDir);
-    
+
     return {
       builtIn,
       providerCustom,
@@ -1034,7 +1032,7 @@ mcp:
     const { all: servers } = await this.getAllMCPServers(providerName, projectPath);
     const started = {};
     const failed = {};
-    
+
     for (const [name, config] of Object.entries(servers)) {
       if (config.enabled !== false) {
         try {
@@ -1052,7 +1050,7 @@ mcp:
         }
       }
     }
-    
+
     return { started, failed, total: Object.keys(servers).length };
   }
 
@@ -1065,11 +1063,11 @@ mcp:
   saveProviderConfig(providerName, config, projectPath) {
     const targetPath = path.resolve(projectPath);
     const configDir = path.join(targetPath, '.ai-craft', 'providers', providerName, 'config');
-    
+
     if (!fs.existsSync(configDir)) {
       fs.mkdirSync(configDir, { recursive: true });
     }
-    
+
     const configPath = path.join(configDir, 'custom.yaml');
     const yamlContent = yamlDump(config, { indent: 2 });
     fs.writeFileSync(configPath, yamlContent);
@@ -1084,7 +1082,7 @@ mcp:
     const targetPath = path.resolve(projectPath);
     const claudeDir = path.join(targetPath, '.claude');
     const aiCraftDir = path.join(targetPath, '.ai-craft');
-    
+
     // Check if it's a Claude Craft project
     if (!fs.existsSync(claudeDir)) {
       return {
@@ -1092,19 +1090,19 @@ mcp:
         error: 'Not a Claude Craft project (no .claude/ directory found)',
       };
     }
-    
+
     // Create .ai-craft directory
     if (!fs.existsSync(aiCraftDir)) {
       fs.mkdirSync(aiCraftDir, { recursive: true });
     }
-    
+
     // Copy all files from .claude/ to .ai-craft/
     const entries = fs.readdirSync(claudeDir, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const srcPath = path.join(claudeDir, entry.name);
       const destPath = path.join(aiCraftDir, entry.name);
-      
+
       if (entry.isDirectory()) {
         // Copy directory recursively
         this.copyDirSync(srcPath, destPath);
@@ -1116,7 +1114,7 @@ mcp:
         fs.copyFileSync(srcPath, destPath);
       }
     }
-    
+
     // Create AI-CRAFT.md from CLAUDE.md
     const claudeMdPath = path.join(claudeDir, 'CLAUDE.md');
     if (fs.existsSync(claudeMdPath)) {
@@ -1126,10 +1124,10 @@ mcp:
         .replace(/Claude Code/g, 'Multi-AI')
         .replace(/claude-craft/g, 'ai-craft')
         .replace(/@the-bearded-bear\/claude-craft/g, '@ai-craft/core');
-      
+
       fs.writeFileSync(path.join(aiCraftDir, 'AI-CRAFT.md'), content);
     }
-    
+
     // Create ai-craft.yaml
     const config = this.getDefaultConfig();
     config.compatibility = {
@@ -1137,15 +1135,15 @@ mcp:
       legacy_hooks: true,
       migrated: new Date().toISOString(),
     };
-    
+
     this.saveConfig(config, path.join(aiCraftDir, 'ai-craft.yaml'));
-    
+
     // Create symlink .claude/ -> .ai-craft/ if it doesn't exist
     // (it was removed during copy)
     if (!fs.existsSync(claudeDir)) {
       fs.symlinkSync(aiCraftDir, claudeDir, 'dir');
     }
-    
+
     return {
       success: true,
       aiCraftDir,
@@ -1163,13 +1161,13 @@ mcp:
     if (!fs.existsSync(dest)) {
       fs.mkdirSync(dest, { recursive: true });
     }
-    
+
     const entries = fs.readdirSync(src, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const srcPath = path.join(src, entry.name);
       const destPath = path.join(dest, entry.name);
-      
+
       if (entry.isDirectory()) {
         this.copyDirSync(srcPath, destPath);
       } else if (entry.isFile()) {
@@ -1191,24 +1189,32 @@ mcp:
     if (!provider) {
       return { success: false, error: `Provider '${providerName}' not found` };
     }
-    
+
     const targetPath = path.resolve(projectPath);
     const hooksDir = path.join(targetPath, '.ai-craft', 'providers', providerName, 'hooks');
-    const hookPath = path.join(hooksDir, hookName);
-    
+
+    let hookPath;
+    try {
+      hookPath = assertWithinDir(hooksDir, path.join(hooksDir, hookName));
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+
     // Check if hook exists and is executable
     if (!fs.existsSync(hookPath)) {
       return { success: true, skipped: true, message: `Hook '${hookName}' not found` };
     }
-    
+
     try {
       const { execa } = await import('execa');
+      const timeoutMs = (this.getDefaultConfig().security?.max_execution_time || 3600) * 1000;
       const result = await execa(hookPath, [], {
         cwd: targetPath,
-        env: { ...process.env, ...env },
+        env: { PATH: process.env.PATH, HOME: process.env.HOME, ...env },
+        timeout: timeoutMs,
         reject: false,
       });
-      
+
       return {
         success: result.exitCode === 0,
         exitCode: result.exitCode,
@@ -1235,18 +1241,18 @@ mcp:
   async executePreCommandHooks(providerName, projectPath, env = {}) {
     const providerConfig = this.loadProviderConfig(providerName, projectPath);
     const hooks = providerConfig.hooks?.pre_command || ['pre-execute.sh'];
-    
+
     const results = [];
     for (const hook of hooks) {
       const result = await this.executeHook(providerName, hook, projectPath, env);
       results.push({ hook, ...result });
-      
+
       // Stop if hook failed
       if (!result.success && !result.skipped) {
         break;
       }
     }
-    
+
     return { hooks, results };
   }
 
@@ -1260,13 +1266,13 @@ mcp:
   async executePostCommandHooks(providerName, projectPath, env = {}) {
     const providerConfig = this.loadProviderConfig(providerName, projectPath);
     const hooks = providerConfig.hooks?.post_command || ['post-execute.sh'];
-    
+
     const results = [];
     for (const hook of hooks) {
       const result = await this.executeHook(providerName, hook, projectPath, env);
       results.push({ hook, ...result });
     }
-    
+
     return { hooks, results };
   }
 
@@ -1280,19 +1286,19 @@ mcp:
   async executePreMessageHooks(providerName, projectPath, message) {
     const providerConfig = this.loadProviderConfig(providerName, projectPath);
     const hooks = providerConfig.hooks?.pre_message || [];
-    
+
     const env = { ...process.env, AI_CRAFT_MESSAGE: message };
-    
+
     const results = [];
     for (const hook of hooks) {
       const result = await this.executeHook(providerName, hook, projectPath, env);
       results.push({ hook, ...result });
-      
+
       if (!result.success && !result.skipped) {
         break;
       }
     }
-    
+
     return { hooks, results };
   }
 
@@ -1306,15 +1312,15 @@ mcp:
   async executePostMessageHooks(providerName, projectPath, response) {
     const providerConfig = this.loadProviderConfig(providerName, projectPath);
     const hooks = providerConfig.hooks?.post_message || [];
-    
+
     const env = { ...process.env, AI_CRAFT_RESPONSE: response };
-    
+
     const results = [];
     for (const hook of hooks) {
       const result = await this.executeHook(providerName, hook, projectPath, env);
       results.push({ hook, ...result });
     }
-    
+
     return { hooks, results };
   }
 
@@ -1340,7 +1346,7 @@ mcp:
     const providerName = this.currentProvider || 'unknown';
     const config = this.loadConfig();
     const defaultModel = config.providers?.model || this.getProvider(providerName)?.defaultModel || 'unknown';
-    
+
     return memoryManager.getConversation(conversationId, {
       provider: providerName,
       model: options.model || defaultModel,
@@ -1421,13 +1427,6 @@ mcp:
   }
 
   /**
-   * Clear all cache
-   */
-  clearCache() {
-    memoryManager.clearCache();
-  }
-
-  /**
    * Get memory statistics
    * @returns {Object} - Statistics
    */
@@ -1443,18 +1442,18 @@ mcp:
    */
   shareContext(fromProvider, toProvider, context) {
     const conversationId = `shared-${fromProvider}-${toProvider}-${Date.now()}`;
-    const conversation = this.getConversation(conversationId, { 
+    const conversation = this.getConversation(conversationId, {
       provider: toProvider,
-      model: this.getProvider(toProvider)?.defaultModel || 'unknown'
+      model: this.getProvider(toProvider)?.defaultModel || 'unknown',
     });
-    
+
     conversation.context = {
       ...conversation.context,
       sharedFrom: fromProvider,
       sharedContext: context,
       sharedAt: new Date().toISOString(),
     };
-    
+
     return conversationId;
   }
 
@@ -1493,9 +1492,10 @@ mcp:
   }
 
   /**
-   * Clear all caches
+   * Clear all caches (provider manager's own cache + shared memory cache)
    */
   clearCache() {
+    memoryManager.clearCache();
     this.cache = {
       providerAvailability: new Map(),
       providerVersions: new Map(),
@@ -1542,10 +1542,10 @@ mcp:
    */
   async warmUp() {
     this.initializeAllProviders();
-    
+
     // Pre-detect all providers
     await this.detectFromBinaries({ parallel: true, useCache: false });
-    
+
     // Pre-check health
     await this.getHealthStatus({ parallel: true, useCache: false });
   }

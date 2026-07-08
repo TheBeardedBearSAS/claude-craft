@@ -58,6 +58,27 @@ export function assertSafeTarget(targetPath) {
 }
 
 /**
+ * Resolve `candidatePath` and refuse it if it does not stay inside `baseDir`.
+ *
+ * Used to validate paths built by joining a trusted directory with an
+ * untrusted segment (e.g. a hook filename read from a provider config file
+ * in the target repo) before that path is passed to `execa`/`fs`.
+ *
+ * @param {string} baseDir - Directory the candidate must resolve inside of.
+ * @param {string} candidatePath - Path to validate (typically `path.join(baseDir, untrustedName)`).
+ * @returns {string} The resolved absolute candidate path, safe to use.
+ * @throws {Error} If the resolved candidate escapes `baseDir`.
+ */
+export function assertWithinDir(baseDir, candidatePath) {
+  const resolvedBase = path.resolve(baseDir);
+  const resolvedCandidate = path.resolve(candidatePath);
+  if (resolvedCandidate !== resolvedBase && !resolvedCandidate.startsWith(resolvedBase + path.sep)) {
+    throw new Error(`Path escapes base directory: ${resolvedCandidate} (base: ${resolvedBase})`);
+  }
+  return resolvedCandidate;
+}
+
+/**
  * Validate a two-letter ISO 639-1 language code. Used to ensure the `--lang`
  * value cannot be turned into argument injection on the bash scripts called
  * via `spawnSync`.

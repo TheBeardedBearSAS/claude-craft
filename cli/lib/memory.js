@@ -1,10 +1,10 @@
 /**
  * AI Craft - Shared Memory System
  * Multi-AI Development Framework
- * 
+ *
  * This module provides a shared memory system that allows different AI providers
  * to share conversation context, project state, and user preferences.
- * 
+ *
  * @module lib/memory
  */
 
@@ -15,6 +15,16 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
+ * Conversation ids are used as filenames on disk (`${id}.json`). Restricting
+ * them to a safe charset prevents path traversal (CWE-22) via a crafted id.
+ * @param {string} id
+ * @returns {boolean}
+ */
+function isValidConversationId(id) {
+  return typeof id === 'string' && /^[A-Za-z0-9_-]+$/.test(id);
+}
+
+/**
  * Memory Manager for AI Craft
  * Manages shared memory across all AI providers
  */
@@ -22,16 +32,16 @@ export class MemoryManager {
   constructor() {
     /** @type {string} */
     this.memoryDir = path.join(process.cwd(), '.ai-craft', 'memory');
-    
+
     /** @type {Object} */
     this.cache = {};
-    
+
     /** @type {Map<string, Conversation>} */
     this.conversations = new Map();
-    
+
     /** @type {Object} */
     this.projectState = {};
-    
+
     /** @type {Object} */
     this.userPreferences = {};
   }
@@ -43,7 +53,7 @@ export class MemoryManager {
     if (!fs.existsSync(this.memoryDir)) {
       fs.mkdirSync(this.memoryDir, { recursive: true });
     }
-    
+
     // Load persisted data
     this.loadConversations();
     this.loadProjectState();
@@ -109,13 +119,13 @@ export class MemoryManager {
     if (!fs.existsSync(convDir)) {
       fs.mkdirSync(convDir, { recursive: true });
     }
-    
+
     for (const [id, conversation] of this.conversations) {
+      if (!isValidConversationId(id)) {
+        continue;
+      }
       try {
-        fs.writeFileSync(
-          path.join(convDir, `${id}.json`),
-          JSON.stringify(conversation, null, 2)
-        );
+        fs.writeFileSync(path.join(convDir, `${id}.json`), JSON.stringify(conversation, null, 2));
       } catch {
         // Skip errors
       }
@@ -257,7 +267,7 @@ export class MemoryManager {
    */
   setCache(key, value, ttl = 0) {
     this.cache[key] = value;
-    
+
     if (ttl > 0) {
       setTimeout(() => {
         delete this.cache[key];
@@ -278,6 +288,9 @@ export class MemoryManager {
    */
   deleteConversation(id) {
     this.conversations.delete(id);
+    if (!isValidConversationId(id)) {
+      return;
+    }
     const convDir = path.join(this.memoryDir, 'conversations');
     const filePath = path.join(convDir, `${id}.json`);
     if (fs.existsSync(filePath)) {
