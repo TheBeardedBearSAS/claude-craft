@@ -42,7 +42,7 @@ describe('CLI integration tests', { timeout: 60000 }, () => {
 
   it('--version returns valid semver', () => {
     const output = runCLI('--version');
-    expect(output.trim()).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.]+)?$/);
+    expect(output.trim()).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.-]+)?$/);
   });
 
   it('help command shows help text', () => {
@@ -79,7 +79,7 @@ describe('CLI integration tests', { timeout: 60000 }, () => {
 
   it('-v flag shows version', () => {
     const output = runCLI('-v');
-    expect(output.trim()).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.]+)?$/);
+    expect(output.trim()).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.-]+)?$/);
   });
 
   it('install with valid tech creates a nonexistent target path', () => {

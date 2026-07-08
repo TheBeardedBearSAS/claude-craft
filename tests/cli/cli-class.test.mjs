@@ -64,7 +64,7 @@ describe('ClaudeCraftCLI.run()', () => {
     const cli = new ClaudeCraftCLI();
     await cli.run();
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.]+)?$/);
+    expect(output).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.-]+)?$/);
   });
 
   it('-v prints version (short alias)', async () => {
@@ -72,7 +72,7 @@ describe('ClaudeCraftCLI.run()', () => {
     const cli = new ClaudeCraftCLI();
     await cli.run();
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.]+)?$/);
+    expect(output).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.-]+)?$/);
   });
 
   it('--lang=zz exits with error for invalid language', async () => {

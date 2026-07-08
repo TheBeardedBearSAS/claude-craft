@@ -1,14 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`CLI snapshot tests > --help output matches snapshot 1`] = `
-"AI Craft vX.Y.Z-craft.0
+"AI Craft vX.Y.Z
 Welcome to Claude-Craft Interactive Installer
 
 [1/5] Target Directory
   Enter path (/PATH/claude-craft):"
 `;
 
-exports[`CLI snapshot tests > --version output format matches snapshot 1`] = `"X.Y.Z-craft.0"`;
+exports[`CLI snapshot tests > --version output format matches snapshot 1`] = `"X.Y.Z"`;
 
 exports[`CLI snapshot tests > error for invalid lang matches snapshot 1`] = `"Error: Unknown language 'invalid'. Available: en, fr, es, de, pt"`;
 
