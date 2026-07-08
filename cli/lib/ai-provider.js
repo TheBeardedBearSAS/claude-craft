@@ -139,22 +139,7 @@ export class AIProviderManager {
     this.providers.set(name, provider);
   }
 
-  /**
-   * Get a provider by name
-   * @param {string} name - Provider name
-   * @returns {BaseProvider|null} - Provider instance or null
-   */
-  getProvider(name) {
-    return this.providers.get(name) || null;
-  }
 
-  /**
-   * Get all registered providers
-   * @returns {Map<string, BaseProvider>} - All providers
-   */
-  getAllProviders() {
-    return this.providers;
-  }
 
   /**
    * Get list of provider names
@@ -534,10 +519,10 @@ export class AIProviderManager {
   }
 
   /**
-   * Get all MCP servers from all providers
+   * Get all MCP servers from all loaded providers (synchronous, simple version)
    * @returns {Object} - All MCP server configurations
    */
-  getAllMCPServers() {
+  getAllProviderMCPServers() {
     const allServers = {};
     
     for (const [name, provider] of this.providers) {
