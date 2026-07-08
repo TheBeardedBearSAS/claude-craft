@@ -70,7 +70,7 @@ class AICraftCLI {
   constructor() {
     /** @type {readline.Interface|null} */
     this.rl = null;
-    
+
     /** @type {CLIConfig} */
     this.config = {
       targetPath: process.cwd(),
@@ -80,10 +80,10 @@ class AICraftCLI {
       includeInfra: false,
       includeProject: true,
       track: null,
-      provider: null,         // AI provider to use (vibe, codex, opencode, claude, cursor)
-      migrate: false,        // Whether to migrate from Claude Craft
+      provider: null, // AI provider to use (vibe, codex, opencode, claude, cursor)
+      migrate: false, // Whether to migrate from Claude Craft
     };
-    
+
     /** @type {string} */
     this.currentProvider = null;
   }
@@ -169,7 +169,7 @@ class AICraftCLI {
     // =========================================================================
     // Phase 2: Multi-AI Provider Detection and Configuration
     // =========================================================================
-    
+
     // Handle --provider option
     if (options.provider) {
       const providerNames = providerManager.getProviderNames();
@@ -183,7 +183,7 @@ class AICraftCLI {
       this.config.provider = options.provider;
       providerManager.setProvider(options.provider);
     }
-    
+
     // Detect current AI provider
     try {
       this.currentProvider = await providerManager.detectProvider();
@@ -194,7 +194,7 @@ class AICraftCLI {
       console.warn(`${c.yellow}⚠️  Could not detect AI provider: ${error.message}${c.reset}`);
       this.currentProvider = 'claude'; // Fallback to Claude for backward compatibility
     }
-    
+
     // Handle migrate command
     if (options.migrate || command === 'migrate') {
       await this.handleMigration(args, options);
@@ -211,7 +211,7 @@ class AICraftCLI {
       }
       this.config.language = options.lang;
     }
-    
+
     // Apply and validate technology option
     if (options.tech) {
       if (!TECHNOLOGIES[options.tech]) {
@@ -382,7 +382,7 @@ class AICraftCLI {
       const result = await providerManager.initProject(this.config.targetPath, {
         provider: this.config.provider || this.currentProvider,
       });
-      
+
       if (result.success) {
         if (!fs.existsSync(path.join(this.config.targetPath, '.ai-craft', 'AI-CRAFT.md'))) {
           // Copy AI-CRAFT.md if it doesn't exist
@@ -393,7 +393,7 @@ class AICraftCLI {
           }
         }
       }
-      
+
       return result;
     } catch (error) {
       console.warn(`${c.yellow}⚠️  Could not initialize AI Craft: ${error.message}${c.reset}`);
@@ -406,24 +406,24 @@ class AICraftCLI {
    */
   async handleMigration(args, options) {
     const targetPath = this.config.targetPath;
-    
+
     console.log(`${c.cyan}🔄 AI Craft Migration Tool${c.reset}\n`);
-    
+
     // Check if it's a Claude Craft project
     if (!claudeCompat.isClaudeCraftProject(targetPath)) {
       console.log(`${c.yellow}⚠️  This is not a Claude Craft project (no .claude/ directory found).${c.reset}\n`);
-      
+
       // Offer to initialize AI Craft anyway
       const readline = await import('readline');
       const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-      
+
       const answer = await new Promise((resolve) => {
         rl.question(`${c.cyan}Would you like to initialize AI Craft in this directory? (y/N): ${c.reset}`, (ans) => {
           resolve(ans.toLowerCase());
           rl.close();
         });
       });
-      
+
       if (answer === 'y' || answer === 'yes') {
         await this.initializeAICraft();
         console.log(`${c.green}✅ AI Craft initialized!${c.reset}`);
@@ -432,7 +432,7 @@ class AICraftCLI {
       }
       return;
     }
-    
+
     console.log(`${c.green}✅ Claude Craft project detected!${c.reset}\n`);
     console.log(`Migration steps:`);
     console.log(`  1. Create .ai-craft/ directory`);
@@ -441,7 +441,7 @@ class AICraftCLI {
     console.log(`  4. Generate ai-craft.yaml configuration`);
     console.log(`  5. Create symlink .claude/ -> .ai-craft/`);
     console.log(`  6. Initialize subdirectories\n`);
-    
+
     // Ask for confirmation
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
     const confirm = await new Promise((resolve) => {
@@ -450,21 +450,21 @@ class AICraftCLI {
         rl.close();
       });
     });
-    
+
     if (confirm === 'n' || confirm === 'no') {
       console.log(`${c.yellow}Migration cancelled.${c.reset}`);
       return;
     }
-    
+
     // Run migration
     console.log(`\n${c.cyan}🔄 Migrating...${c.reset}\n`);
-    
+
     try {
       const result = await claudeCompat.migrate(targetPath, {
         backup: true,
         verbose: true,
       });
-      
+
       if (result.success) {
         console.log(`\n${c.green}✅ Migration completed successfully!${c.reset}\n`);
         console.log(`Summary:`);
@@ -501,26 +501,26 @@ class AICraftCLI {
   async handleProvidersCommand(options) {
     const providers = providerManager.getProviderNames();
     const currentProvider = this.currentProvider || (await providerManager.detectProvider());
-    
+
     console.log(`${c.bold}Available AI Providers:${c.reset}\n`);
-    
+
     const statusPromises = providers.map(async (name) => {
       const provider = providerManager.getProvider(name);
-      const available = await provider?.isAvailable() || false;
+      const available = (await provider?.isAvailable()) || false;
       const version = available ? await provider.getVersion() : 'not installed';
       const isCurrent = name === currentProvider;
-      
+
       return { name, available, version, isCurrent };
     });
-    
+
     const statuses = await Promise.all(statusPromises);
-    
+
     statuses.forEach(({ name, available, version, isCurrent }) => {
       const marker = isCurrent ? `${c.green}✓${c.reset}` : available ? `${c.green}✓${c.reset}` : `${c.red}✗${c.reset}`;
       const status = available ? 'available' : 'not installed';
       console.log(`  ${marker} ${name.padEnd(15)} - ${version.padEnd(20)} (${status})`);
     });
-    
+
     console.log(`\n${c.dim}Primary provider: ${currentProvider}${c.reset}\n`);
     console.log(`Usage:`);
     console.log(`  ai-craft --provider=<name> <command>  Set provider for a single command`);
@@ -533,22 +533,22 @@ class AICraftCLI {
    */
   async handleProviderStatus(options) {
     console.log(`${c.bold}AI Provider Health Status:${c.reset}\n`);
-    
+
     const healthStatus = await providerManager.getHealthStatus();
-    
+
     for (const [name, status] of Object.entries(healthStatus)) {
       const symbol = status.available ? `${c.green}✓${c.reset}` : `${c.red}✗${c.reset}`;
       const version = status.version || 'unknown';
       const displayName = status.displayName || name;
-      
+
       console.log(`  ${symbol} ${displayName}`);
       console.log(`     Version: ${version}`);
       console.log(`     Available: ${status.available ? 'Yes' : 'No'}`);
-      
+
       if (status.health) {
         console.log(`     Health: ${status.health.healthy ? 'Healthy' : 'Unhealthy'} - ${status.health.message}`);
       }
-      
+
       if (status.error) {
         console.log(`     Error: ${status.error}`);
       }
@@ -562,7 +562,7 @@ class AICraftCLI {
   async printAICraftHelp() {
     printBanner(VERSION);
     printHelp();
-    
+
     console.log(`\n${c.bold}Multi-AI Provider Support:${c.reset}`);
     console.log(`  AI Craft now supports multiple AI providers!`);
     console.log(`\n  Supported providers:`);
@@ -608,26 +608,26 @@ class AICraftCLI {
    */
   async handleSetProvider(providerName) {
     const providerNames = providerManager.getProviderNames();
-    
+
     if (!providerNames.includes(providerName)) {
       console.error(
         `${c.red}Error: Unknown AI provider '${providerName}'. Available: ${providerNames.join(', ')}${c.reset}`
       );
       process.exit(1);
     }
-    
+
     // Set the provider
     providerManager.setProvider(providerName);
     this.config.provider = providerName;
     this.currentProvider = providerName;
-    
+
     // Save to project configuration
     const configPath = path.join(this.config.targetPath, '.ai-craft', 'ai-craft.yaml');
     const config = providerManager.loadConfig(configPath);
     config.providers = config.providers || {};
     config.providers.primary = providerName;
     providerManager.saveConfig(config, configPath);
-    
+
     console.log(`${c.green}✅ Default provider set to: ${providerName}${c.reset}`);
     console.log(`${c.cyan}This provider will be used for all commands in this project.${c.reset}`);
     console.log(`\n${c.dim}To override for a single command, use: ai-craft --provider=<name> <command>${c.reset}`);
@@ -640,7 +640,7 @@ class AICraftCLI {
    */
   async handleMCPCommand(args, options) {
     const subcommand = args[0];
-    
+
     if (!subcommand || subcommand === 'list' || subcommand === 'ls') {
       // List all MCP servers
       await this.listMCPServers();
@@ -672,34 +672,33 @@ class AICraftCLI {
   async listMCPServers() {
     const providerName = this.currentProvider || (await providerManager.detectProvider());
     const targetPath = this.config.targetPath;
-    
+
     console.log(`${c.bold}MCP Servers for ${providerName}:${c.reset}\n`);
-    
-    const { builtIn, providerCustom, globalCustom } = await providerManager.getAllMCPServers(
-      providerName,
-      targetPath
-    );
-    
+
+    const { builtIn, providerCustom, globalCustom } = await providerManager.getAllMCPServers(providerName, targetPath);
+
     console.log(`${c.cyan}Built-in Servers:${c.reset}`);
     for (const [name, config] of Object.entries(builtIn)) {
       console.log(`  ${c.green}✓${c.reset} ${name} - ${config.description || 'No description'}`);
     }
-    
+
     if (Object.keys(providerCustom).length > 0) {
       console.log(`\n${c.cyan}Provider Custom Servers:${c.reset}`);
       for (const [name, config] of Object.entries(providerCustom)) {
         console.log(`  ${c.green}✓${c.reset} ${name} - ${config.description || 'No description'} (${config.source})`);
       }
     }
-    
+
     if (Object.keys(globalCustom).length > 0) {
       console.log(`\n${c.cyan}Global Custom Servers:${c.reset}`);
       for (const [name, config] of Object.entries(globalCustom)) {
         console.log(`  ${c.green}✓${c.reset} ${name} - ${config.description || 'No description'} (${config.source})`);
       }
     }
-    
-    console.log(`\n${c.dim}Total: ${Object.keys(builtIn).length + Object.keys(providerCustom).length + Object.keys(globalCustom).length} servers${c.reset}`);
+
+    console.log(
+      `\n${c.dim}Total: ${Object.keys(builtIn).length + Object.keys(providerCustom).length + Object.keys(globalCustom).length} servers${c.reset}`
+    );
   }
 
   /**
@@ -708,16 +707,16 @@ class AICraftCLI {
    */
   async startMCPServers(providerName) {
     const targetPath = this.config.targetPath;
-    
+
     console.log(`${c.bold}Starting MCP Servers for ${providerName}...${c.reset}\n`);
-    
+
     const result = await providerManager.startAllMCPServers(providerName, targetPath);
-    
+
     console.log(`${c.green}✅ MCP Servers initialized:${c.reset}`);
     console.log(`   Started: ${Object.keys(result.started).length}`);
     console.log(`   Failed: ${Object.keys(result.failed).length}`);
     console.log(`   Total: ${result.total}`);
-    
+
     if (Object.keys(result.failed).length > 0) {
       console.log(`\n${c.yellow}⚠️  Failed to start some servers:${c.reset}`);
       for (const [name, info] of Object.entries(result.failed)) {
@@ -734,11 +733,11 @@ class AICraftCLI {
   async addMCPServer(serverName, options) {
     const targetPath = this.config.targetPath;
     const mcpDir = path.join(targetPath, '.ai-craft', 'mcp');
-    
+
     if (!fs.existsSync(mcpDir)) {
       fs.mkdirSync(mcpDir, { recursive: true });
     }
-    
+
     const serverConfig = {
       name: serverName,
       description: options.description || '',
@@ -749,10 +748,10 @@ class AICraftCLI {
       enabled: true,
       auto_start: true,
     };
-    
+
     const serverPath = path.join(mcpDir, `${serverName}.json`);
     fs.writeFileSync(serverPath, JSON.stringify(serverConfig, null, 2));
-    
+
     console.log(`${c.green}✅ MCP Server added: ${serverName}${c.reset}`);
     console.log(`   Config: ${serverPath}`);
   }
@@ -764,7 +763,7 @@ class AICraftCLI {
    */
   async handleConfigCommand(args, options) {
     const subcommand = args[0];
-    
+
     if (!subcommand || subcommand === 'show' || subcommand === 'get') {
       // Show current configuration
       await this.showConfig();
@@ -790,8 +789,8 @@ class AICraftCLI {
    */
   async showConfig() {
     const configPath = path.join(this.config.targetPath, '.ai-craft', 'ai-craft.yaml');
-    
-    let config = {};
+
+    let config;
     if (fs.existsSync(configPath)) {
       try {
         const content = fs.readFileSync(configPath, 'utf8');
@@ -802,7 +801,7 @@ class AICraftCLI {
     } else {
       config = providerManager.getDefaultConfig();
     }
-    
+
     console.log(`${c.bold}AI Craft Configuration:${c.reset}\n`);
     console.log(yamlDump(config, { indent: 2 }));
   }
@@ -814,9 +813,9 @@ class AICraftCLI {
    */
   async setConfig(key, value) {
     const configPath = path.join(this.config.targetPath, '.ai-craft', 'ai-craft.yaml');
-    
+
     // Use fs directly to read the file to avoid path issues
-    let config = {};
+    let config;
     if (fs.existsSync(configPath)) {
       try {
         const content = fs.readFileSync(configPath, 'utf8');
@@ -827,29 +826,29 @@ class AICraftCLI {
     } else {
       config = providerManager.getDefaultConfig();
     }
-    
+
     // Simple dot notation parsing
     const keys = key.split('.');
     let current = config;
-    
+
     for (let i = 0; i < keys.length - 1; i++) {
       if (!current[keys[i]]) {
         current[keys[i]] = {};
       }
       current = current[keys[i]];
     }
-    
+
     // Set the value (try to parse as JSON for numbers/booleans)
     try {
       current[keys[keys.length - 1]] = JSON.parse(value);
     } catch {
       current[keys[keys.length - 1]] = value;
     }
-    
+
     // Save directly
     const yamlContent = yamlDump(config, { indent: 2 });
     fs.writeFileSync(configPath, yamlContent);
-    
+
     console.log(`${c.green}✅ Configuration set: ${key} = ${value}${c.reset}`);
   }
 
@@ -858,18 +857,18 @@ class AICraftCLI {
    */
   async editConfig() {
     const configPath = path.join(this.config.targetPath, '.ai-craft', 'ai-craft.yaml');
-    
+
     if (!fs.existsSync(configPath)) {
       // Create default config if it doesn't exist
       const defaultConfig = providerManager.getDefaultConfig();
       providerManager.saveConfig(defaultConfig, configPath);
     }
-    
+
     // Open in default editor
     const editor = process.env.EDITOR || process.env.VISUAL || 'nano';
     console.log(`${c.cyan}Opening configuration in ${editor}...${c.reset}`);
     console.log(`${c.dim}File: ${configPath}${c.reset}`);
-    
+
     // Note: In a real implementation, we'd spawn the editor process
     // For now, just show the path
   }
