@@ -1,0 +1,500 @@
+# AI Craft Configuration
+# Multi-AI Development Framework Configuration File
+# 
+# This file configures AI Craft for multi-provider support.
+# Place this file in your project's .ai-craft/ directory.
+#
+# Version: 1.0.0
+# Documentation: https://github.com/TheBeardedBearSAS/ai-craft
+
+---
+
+# =============================================================================
+# PRIMARY CONFIGURATION
+# =============================================================================
+
+version: "1.0.0"
+
+# Primary AI provider to use
+# Supported: vibe, codex, opencode, claude, cursor
+# Default: claude (for backward compatibility)
+providers:
+  primary: "claude"
+  
+  # Fallback chain - tried in order if primary is unavailable
+  fallback:
+    - "vibe"
+    - "codex"
+    - "opencode"
+
+# =============================================================================
+# PROVIDER-SPECIFIC SETTINGS
+# =============================================================================
+
+provider_settings:
+  # Vibe (Mistral AI) - https://vibe.mistral.ai
+  vibe:
+    model: "mistral-large-3.5"      # mistral-large-3.5, mistral-medium-3.5, mistral-small-3.5
+    timeout: 3600                   # Request timeout in seconds
+    temperature: 0.7               # Sampling temperature (0.0-1.0)
+    max_tokens: 128000             # Maximum tokens per response
+    api_endpoint: null             # Custom API endpoint (null = default)
+    
+    # MCP servers to auto-load for Vibe
+    mcp_servers:
+      filesystem: true
+      git: true
+      process: true
+    
+    # Token optimization
+    optimization:
+      compression_level: "aggressive"  # aggressive, moderate, conservative
+      cache_ttl: 3600                # Cache time-to-live in seconds
+
+  # Codex (Google) - https://github.com/google-github/codex-cli
+  codex:
+    model: "codex-pro"              # codex-pro, codex-plus, codex
+    timeout: 3600
+    temperature: 0.7
+    max_tokens: 256000
+    api_key: null                  # Set via CODEX_API_KEY or GOOGLE_API_KEY env var
+    
+    # GitHub integration
+    github:
+      enabled: true
+      repo_access: true
+      pr_reviews: true
+
+  # OpenCode (Self-Hosted) - https://github.com/create-open-code/open-code
+  opencode:
+    model: "llama-3.2-90b"        # Any supported model by your endpoint
+    timeout: 3600
+    temperature: 0.7
+    max_tokens: 128000
+    base_url: null                 # Set via OPENCODE_ENDPOINT env var
+    api_key: null                 # Set via OPENCODE_API_KEY env var
+    
+    # Health check
+    health_check:
+      enabled: true
+      interval: 300                # Health check interval in seconds
+    
+    # MCP servers
+    mcp_servers:
+      filesystem: true
+      git: true
+      process: true
+      opencode: true
+
+  # Claude Code (Anthropic) - https://code.claude.com
+  claude:
+    model: "sonnet-5"              # opus-4.8, sonnet-5, haiku-4.5
+    timeout: 3600
+    temperature: 0.7
+    max_tokens: 200000
+    
+    # Claude Code specific features
+    features:
+      fork_subagents: true          # Enable forked sub-agents
+      prompt_caching: true         # Enable prompt caching
+      artifacts: true              # Enable artifacts
+    
+    # MCP servers
+    mcp_servers:
+      filesystem: true
+      git: true
+      process: true
+      browser: true
+
+  # Cursor (VSCode) - https://cursor.com
+  cursor:
+    model: "gpt-4o"                # Underlying model (gpt-4o, claude-3-5-sonnet, etc.)
+    
+    # VSCode integration
+    vscode:
+      agent_mode: true
+      enable_codex: true
+      rules_path: ".ai-craft"
+      prompt_file: "AI-CRAFT.md"
+
+# =============================================================================
+# MEMORY CONFIGURATION
+# =============================================================================
+
+memory:
+  enabled: true                   # Enable cross-session memory
+  
+  # Memory scope
+  # - user: Shared across all projects for the user
+  # - project: Specific to this project
+  # - session: Only for current session
+  scope: "project"
+  
+  # Storage backend
+  # - file: Simple file-based storage
+  # - sqlite: SQLite database
+  # - redis: Redis server
+  storage: "file"
+  
+  # Storage configuration
+  storage_config:
+    file:
+      directory: ".ai-craft/memory"
+    sqlite:
+      database: ".ai-craft/memory.db"
+    redis:
+      host: "localhost"
+      port: 6379
+      password: null
+
+# =============================================================================
+# HOOKS CONFIGURATION
+# =============================================================================
+
+hooks:
+  enabled: true                   # Enable hook system
+  
+  # Hook providers to enable
+  providers:
+    - "mcp"                       # Model Context Protocol
+    - "webhook"                   # HTTP webhooks
+    - "plugin"                    # Plugin system
+  
+  # Hook directories
+  directories:
+    - ".ai-craft/hooks"
+    - ".claude/hooks"            # Backward compatibility
+  
+  # Session hooks
+  session_start:
+    enabled: true
+    scripts:
+      - "sprint-context.sh"
+      - "memory-load.sh"
+  
+  pre_tool_use:
+    enabled: true
+    scripts:
+      - "story-status.sh"
+      - "context-inject.sh"
+  
+  post_tool_use:
+    enabled: true
+    scripts:
+      - "context-update.sh"
+      - "memory-save.sh"
+  
+  stop:
+    enabled: true
+    scripts:
+      - "quality-gate.sh"
+      - "session-save.sh"
+
+# =============================================================================
+# TOKEN OPTIMIZATION
+# =============================================================================
+
+optimization:
+  # Enable/disable optimization features
+  prompt_caching: true            # Cache frequent prompts
+  context_forking: true          # Fork heavy contexts
+  model_routing: "auto"          # auto, manual, disabled
+  output_compression: true      # Compress AI responses
+  
+  # Model routing by task type
+  model_routing:
+    architecture: "opus"          # Complex architecture tasks
+    code_review: "sonnet"        # Code review tasks
+    implementation: "sonnet"     # Implementation tasks
+    quick_tasks: "haiku"         # Quick fixes and simple tasks
+    documentation: "sonnet"      # Documentation tasks
+    
+  # Context management
+  context:
+    max_size: 128000             # Maximum context size
+    trim_strategy: "smart"       # smart, aggressive, conservative
+    include_patterns:
+      - "src/**"
+      - "tests/**"
+      - "*.md"
+      - "package.json"
+    exclude_patterns:
+      - "node_modules/**"
+      - ".git/**"
+      - "*.log"
+      - "dist/**"
+      - "build/**"
+
+# =============================================================================
+# BACKWARD COMPATIBILITY
+# =============================================================================
+
+compatibility:
+  # Enable Claude Craft compatibility mode
+  claude_craft: true
+  
+  # Support legacy .claude/ directory
+  legacy_directory: true
+  
+  # Support legacy hooks
+  legacy_hooks: true
+  
+  # Support legacy commands
+  legacy_commands: true
+  
+  # Migration settings
+  migration:
+    auto_migrate: false           # Automatically migrate Claude Craft projects
+    backup: true                 # Create backup before migration
+    
+  # Symlink settings
+  symlinks:
+    claude: true                 # Create .claude -> .ai-craft symlink
+    cursor: false                # Create .cursor -> .ai-craft symlink
+
+# =============================================================================
+# SECURITY
+# =============================================================================
+
+security:
+  # API key validation
+  api_key_validation: true
+  
+  # Allowed MCP servers
+  mcp_server_allowlist:
+    - "npx -y @modelcontextprotocol/server-filesystem"
+    - "npx -y @modelcontextprotocol/server-git"
+    - "npx -y @modelcontextprotocol/server-process"
+    - "npx -y @modelcontextprotocol/server-browser"
+    - "npx -y github-mcp-server"
+  
+  # Hook security
+  hook_sandboxing: true
+  hook_timeout: 5000             # Hook execution timeout in ms
+  max_hook_output: 1024000     # Maximum hook output size in bytes
+  
+  # Execution limits
+  max_execution_time: 3600      # Maximum execution time in seconds
+  max_memory: 4096              # Maximum memory in MB
+  max_concurrent_agents: 5     # Maximum concurrent sub-agents
+  
+  # Network security
+  allow_network_access: true
+  allowed_hosts:
+    - "api.mistral.ai"
+    - "api.anthropic.com"
+    - "codex.googleapis.com"
+    - "localhost"
+    - "127.0.0.1"
+  
+  blocked_patterns:
+    - "rm -rf"
+    - ":() { :; };"
+    - "mkfifo"
+    - "/dev/"
+
+# =============================================================================
+# QA RECETTE CONFIGURATION
+# =============================================================================
+
+qa_recette:
+  enabled: true
+  
+  # Browser configuration
+  browser: "chromium"            # chromium, firefox, webkit, chrome, edge
+  headless: true
+  timeout: 30000
+  viewport:
+    width: 1920
+    height: 1080
+  
+  # Test directories
+  test_dir: ".recette"
+  plans_dir: ".recette/plans"
+  sessions_dir: ".recette/sessions"
+  regression_dir: ".recette/regression"
+  reports_dir: ".recette/reports"
+  
+  # Golden Rule enforcement
+  golden_rule:
+    enabled: true
+    auto_generate_tests: true
+    regression_check: true
+  
+  # Error classification
+  error_classification:
+    visual: "behat"
+    interaction: "behat+functional"
+    validation: "unit+functional"
+    logic: "unit"
+    security: "functional+unit"
+    api: "functional"
+
+# =============================================================================
+# RALPH WIGGUM CONFIGURATION
+# =============================================================================
+
+ralph:
+  enabled: true
+  
+  # Default settings
+  default:
+    max_iterations: 25
+    timeout: 600000              # 10 minutes
+    delay: 1000                  # Delay between iterations in ms
+    session_dir: ".ralph"
+    config_file: "ralph.yml"
+    completion_marker: "<promise>COMPLETE</promise>"
+  
+  # DoD validators
+  dod_validators:
+    command:
+      enabled: true
+      patterns:
+        - "npm test"
+        - "make test"
+        - "pytest"
+    
+    output_contains:
+      enabled: true
+      patterns:
+        - "All tests passed"
+        - "Build successful"
+        - "No errors"
+    
+    file_changed:
+      enabled: true
+      patterns:
+        - "*.js"
+        - "*.ts"
+        - "*.py"
+        - "*.php"
+    
+    hook:
+      enabled: true
+      scripts:
+        - "quality-gate.sh"
+        - "validation-hook.sh"
+    
+    human:
+      enabled: false             # Disable by default for automation
+
+# =============================================================================
+# BMAD CONFIGURATION
+# =============================================================================
+
+bmad:
+  version: "v6"
+  enabled: true
+  
+  # Tracks
+  tracks:
+    quick:
+      name: "Quick Flow"
+      description: "Bug fixes and hotfixes"
+      max_duration: 300           # 5 minutes
+      phases:
+        - "implement"
+    
+    standard:
+      name: "Standard"
+      description: "New features and refactoring"
+      max_duration: 900           # 15 minutes
+      phases:
+        - "analyze"
+        - "plan"
+        - "design"
+        - "implement"
+    
+    enterprise:
+      name: "Enterprise"
+      description: "Platforms and migrations"
+      max_duration: 1800          # 30 minutes
+      phases:
+        - "analyze"
+        - "plan"
+        - "design"
+        - "implement"
+        - "validate"
+  
+  # Quality gates
+  gates:
+    prd:
+      threshold: 80
+      checks:
+        - "completeness"
+        - "clarity"
+        - "feasibility"
+    
+    techspec:
+      threshold: 90
+      checks:
+        - "architecture"
+        - "technologies"
+        - "data_model"
+        - "api_contracts"
+    
+    backlog:
+      threshold: 100
+      checks:
+        - "invest_compliance"
+        - "prioritization"
+        - "estimation"
+    
+    story:
+      threshold: 100
+      checks:
+        - "acceptance_criteria"
+        - "tdd_ready"
+        - "estimation"
+        - "dependencies"
+    
+    sprint_ready:
+      threshold: 100
+      checks:
+        - "stories_ready"
+        - "capacity_planned"
+        - "goal_defined"
+
+# =============================================================================
+# LOGGING
+# =============================================================================
+
+logging:
+  level: "info"                  # debug, info, warn, error
+  output:
+    console: true
+    file: true
+  file_config:
+    path: ".ai-craft/logs/ai-craft.log"
+    max_size: 10485760          # 10MB
+    max_files: 5
+  
+  # What to log
+  log_commands: true
+  log_providers: true
+  log_hooks: true
+  log_performance: true
+
+# =============================================================================
+# UPDATES
+# =============================================================================
+
+updates:
+  check: true                   # Check for updates
+  interval: 86400              # Check interval in seconds (24 hours)
+  auto_update: false           # Auto-update (not recommended for production)
+  
+  # Notification settings
+  notifications:
+    new_version: true
+    security_updates: true
+    feature_updates: true
+
+---
+# END OF CONFIGURATION
+# 
+# For more information, see:
+# - Documentation: https://github.com/TheBeardedBearSAS/ai-craft/docs
+# - Issues: https://github.com/TheBeardedBearSAS/ai-craft/issues
+# - Discussions: https://github.com/TheBeardedBearSAS/ai-craft/discussions

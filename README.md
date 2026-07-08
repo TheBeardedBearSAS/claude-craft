@@ -1,8 +1,17 @@
-# Claude Craft — Sprint workflow, multi-stack reviewers, and browser QA for Claude Code teams
+# ⚡ AI Craft — Multi-AI Development Framework
 
-> **The AI framework where bugs don't come back.** Sprint workflow, a continuous build loop, browser-based acceptance testing, and token-optimized multi-stack reviewers for tech leads adopting Claude Code with their team. **11 stacks, 5 languages, BMAD v6.**
+> **The AI framework where bugs don't come back.** Sprint workflow, a continuous build loop, browser-based acceptance testing, and token-optimized multi-AI reviewers for teams using **Vibe, Codex, OpenCode, Claude Code, Cursor, or GitHub Copilot**. **11 stacks, 5 languages, BMAD v6.**
 
-## Why teams pick Claude Craft
+> **🔄 Transition en cours : Claude Craft → AI Craft**
+> 
+> Cette branche (`refactor/ai-craft`) représente la transition vers **AI Craft**, une version **multi-provider** du framework. 
+> **Statut actuel** : ✅ Architecture de base implémentée | 🟡 Migration des agents en cours | ⏳ Tests multi-provider à compléter
+> 
+> [Voir la roadmap de migration](#-roadmap-de-migration-vers-ai-craft) en bas de ce fichier.
+
+## Why teams pick AI Craft
+
+AI Craft extends the proven Claude Craft methodology to work with **any AI provider**, not just Claude Code. Four things **any single AI tool** won't give you — they're workflow and orchestration, not prompts:
 
 Four things Claude Code + an Anthropic cookbook **won't** give you — they're workflow and orchestration, not prompts:
 

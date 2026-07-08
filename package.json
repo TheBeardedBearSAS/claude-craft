@@ -1,10 +1,11 @@
 {
-  "name": "@the-bearded-bear/claude-craft",
-  "version": "8.19.2",
-  "description": "A comprehensive framework for AI-assisted development with Claude Code. Install standardized rules, agents, and commands for your projects.",
+  "name": "@ai-craft/core",
+  "version": "1.0.0-ai-craft.0",
+  "description": "A comprehensive multi-AI development framework for Vibe, Codex, OpenCode, Claude Code, Cursor, and GitHub Copilot. Install standardized rules, agents, and commands for your projects across any AI provider.",
   "type": "module",
   "main": "cli/index.js",
   "bin": {
+    "ai-craft": "./cli/index.js",
     "claude-craft": "./cli/index.js"
   },
   "publishConfig": {
