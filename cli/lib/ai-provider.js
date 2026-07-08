@@ -52,12 +52,82 @@ export class AIProviderManager {
     /** @type {string} */
     this.legacyConfigPath = path.join(process.cwd(), '.claude', 'CLAUDE.md');
     
-    // Register all providers
-    this.registerProvider('vibe', new VibeProvider());
-    this.registerProvider('codex', new CodexProvider());
-    this.registerProvider('opencode', new OpenCodeProvider());
-    this.registerProvider('claude', new ClaudeProvider());
-    this.registerProvider('cursor', new CursorProvider());
+    /** @type {Map<string, Promise<BaseProvider>>} */
+    this.lazyProviders = new Map();
+    
+    /** @type {Object} */
+    this.cache = {
+      providerAvailability: new Map(),
+      providerVersions: new Map(),
+      mcpServers: new Map(),
+      providerConfigs: new Map(),
+    };
+    
+    /** @type {number} */
+    this.cacheTTL = 300000; // 5 minutes
+    
+    /** @type {Object} */
+    this.performanceMetrics = {
+      providerDetectionTime: 0,
+      availabilityChecks: 0,
+      hookExecutions: 0,
+      mcpDiscoveries: 0,
+    };
+    
+    // Register provider factories for lazy loading
+    this.providerFactories = {
+      vibe: () => new VibeProvider(),
+      codex: () => new CodexProvider(),
+      opencode: () => new OpenCodeProvider(),
+      claude: () => new ClaudeProvider(),
+      cursor: () => new CursorProvider(),
+    };
+    
+    // For backward compatibility, initialize all providers by default
+    // This ensures existing code that expects providers to be pre-loaded works
+    this.initializeAllProviders();
+  }
+
+  /**
+   * Get a provider instance with lazy loading
+   * @param {string} name - Provider name
+   * @returns {BaseProvider} - Provider instance
+   */
+  getProvider(name) {
+    // Check if already loaded
+    if (this.providers.has(name)) {
+      return this.providers.get(name);
+    }
+    
+    // Lazy load the provider if not already loaded
+    const factory = this.providerFactories[name];
+    if (factory) {
+      const provider = factory();
+      this.providers.set(name, provider);
+      return provider;
+    }
+    
+    return null;
+  }
+
+  /**
+   * Initialize all providers (for backward compatibility)
+   * This can be called to pre-load all providers
+   */
+  initializeAllProviders() {
+    for (const [name, factory] of Object.entries(this.providerFactories)) {
+      if (!this.providers.has(name)) {
+        this.providers.set(name, factory());
+      }
+    }
+  }
+
+  /**
+   * Enable lazy loading (don't pre-load providers)
+   * Use this for performance optimization when you know which provider you'll use
+   */
+  enableLazyLoading() {
+    this.providers.clear();
   }
 
   /**
@@ -91,7 +161,18 @@ export class AIProviderManager {
    * @returns {string[]} - Array of provider names
    */
   getProviderNames() {
-    return Array.from(this.providers.keys());
+    // Return all known provider names (from factories)
+    return Object.keys(this.providerFactories);
+  }
+
+  /**
+   * Get all registered providers (initializes lazy providers if needed)
+   * @returns {Map<string, BaseProvider>} - All providers
+   */
+  getAllProviders() {
+    // Initialize any lazy providers
+    this.initializeAllProviders();
+    return this.providers;
   }
 
   /**
@@ -188,15 +269,18 @@ export class AIProviderManager {
    * 
    * @param {Object} options - Detection options
    * @param {boolean} options.force - Force re-detection
+   * @param {boolean} options.useCache - Use cached detection (default: true)
    * @returns {Promise<string>} - Detected provider name
    */
   async detectProvider(options = {}) {
-    const { force = false } = options;
+    const { force = false, useCache = true } = options;
     
     // Return cached provider if not forcing re-detection
     if (this.currentProvider && !force) {
       return this.currentProvider;
     }
+    
+    const startTime = Date.now();
 
     // 1. Check explicit configuration
     const config = this.loadConfig();
@@ -204,6 +288,7 @@ export class AIProviderManager {
       const provider = this.getProvider(config.providers.primary);
       if (provider) {
         this.currentProvider = config.providers.primary;
+        this.performanceMetrics.providerDetectionTime = Date.now() - startTime;
         return this.currentProvider;
       }
     }
@@ -212,18 +297,32 @@ export class AIProviderManager {
     const envProvider = this.detectFromEnvironment();
     if (envProvider) {
       this.currentProvider = envProvider;
+      this.performanceMetrics.providerDetectionTime = Date.now() - startTime;
       return this.currentProvider;
     }
 
-    // 3. Check installed binaries
+    // 3. Check installed binaries (with caching)
+    if (useCache && this.cache.providerAvailability.size > 0) {
+      // Use cached detection
+      for (const [name, cached] of this.cache.providerAvailability) {
+        if (cached.available && cached.timestamp > Date.now() - this.cacheTTL) {
+          this.currentProvider = name;
+          this.performanceMetrics.providerDetectionTime = Date.now() - startTime;
+          return this.currentProvider;
+        }
+      }
+    }
+    
     const binaryProvider = await this.detectFromBinaries();
     if (binaryProvider) {
       this.currentProvider = binaryProvider;
+      this.performanceMetrics.providerDetectionTime = Date.now() - startTime;
       return this.currentProvider;
     }
 
     // 4. Default fallback
     this.currentProvider = 'claude';
+    this.performanceMetrics.providerDetectionTime = Date.now() - startTime;
     return this.currentProvider;
   }
 
@@ -257,19 +356,50 @@ export class AIProviderManager {
 
   /**
    * Detect provider from installed binaries
+   * @param {Object} options - Options
+   * @param {boolean} options.parallel - Use parallel detection (default: true)
    * @returns {Promise<string|null>} - Provider name or null
    */
-  async detectFromBinaries() {
-    const providersToCheck = ['vibe', 'codex', 'opencode', 'claude', 'cursor'];
+  async detectFromBinaries(options = {}) {
+    const { parallel = true } = options;
+    const providersToCheck = this.getProviderNames();
     
-    for (const providerName of providersToCheck) {
-      const provider = this.getProvider(providerName);
-      if (provider && await provider.isAvailable()) {
-        return providerName;
+    if (parallel) {
+      // Parallel detection for better performance
+      const promises = providersToCheck.map(async (providerName) => {
+        const provider = this.getProvider(providerName);
+        const available = provider ? await provider.isAvailable() : false;
+        return { name: providerName, available };
+      });
+      
+      const results = await Promise.all(promises);
+      
+      // Cache results
+      for (const result of results) {
+        this.cache.providerAvailability.set(result.name, {
+          available: result.available,
+          timestamp: Date.now(),
+        });
       }
+      
+      const availableProvider = results.find(r => r.available);
+      return availableProvider?.name || null;
+    } else {
+      // Sequential detection (backward compatible)
+      for (const providerName of providersToCheck) {
+        const provider = this.getProvider(providerName);
+        if (provider && await provider.isAvailable()) {
+          // Cache result
+          this.cache.providerAvailability.set(providerName, {
+            available: true,
+            timestamp: Date.now(),
+          });
+          return providerName;
+        }
+      }
+      
+      return null;
     }
-    
-    return null;
   }
 
   /**
@@ -500,33 +630,102 @@ export class AIProviderManager {
 
   /**
    * Get health status of all providers
+   * @param {Object} options - Options
+   * @param {boolean} options.parallel - Use parallel checks (default: true)
+   * @param {boolean} options.useCache - Use cached results (default: true)
    * @returns {Promise<Object>} - Health status for each provider
    */
-  async getHealthStatus() {
+  async getHealthStatus(options = {}) {
+    const { parallel = true, useCache = true } = options;
     const status = {};
     
-    for (const [name, provider] of this.providers) {
-      try {
-        const available = await provider.isAvailable();
-        const version = available ? await provider.getVersion() : 'not available';
+    // Initialize all providers if using lazy loading
+    this.initializeAllProviders();
+    
+    if (parallel) {
+      // Parallel health checks for better performance
+      const providerNames = this.getProviderNames();
+      const promises = providerNames.map(async (name) => {
+        const provider = this.getProvider(name);
         
-        status[name] = {
-          available,
-          version,
-          displayName: provider.displayName,
-        };
-        
-        // Add health check for OpenCode
-        if (name === 'opencode' && available) {
-          const health = await provider.getHealth();
-          status[name].health = health;
+        // Try to use cached version
+        if (useCache && this.cache.providerVersions.has(name)) {
+          const cached = this.cache.providerVersions.get(name);
+          if (cached.timestamp > Date.now() - this.cacheTTL) {
+            return {
+              name,
+              available: cached.available,
+              version: cached.version,
+              displayName: provider?.displayName || name,
+            };
+          }
         }
-      } catch (error) {
-        status[name] = {
-          available: false,
-          version: 'error',
-          error: error.message,
-        };
+        
+        try {
+          const available = await provider?.isAvailable();
+          const version = available ? await provider?.getVersion() : 'not available';
+          
+          // Cache result
+          this.cache.providerVersions.set(name, {
+            available,
+            version,
+            timestamp: Date.now(),
+          });
+          
+          const result = {
+            available,
+            version,
+            displayName: provider?.displayName || name,
+          };
+          
+          // Add health check for OpenCode
+          if (name === 'opencode' && available && provider?.getHealth) {
+            const health = await provider.getHealth();
+            result.health = health;
+          }
+          
+          return { name, ...result };
+        } catch (error) {
+          return {
+            name,
+            available: false,
+            version: 'error',
+            error: error.message,
+          };
+        }
+      });
+      
+      const results = await Promise.all(promises);
+      for (const result of results) {
+        status[result.name] = result;
+      }
+      
+      this.performanceMetrics.availabilityChecks += providerNames.length;
+    } else {
+      // Sequential checks (backward compatible)
+      for (const [name, provider] of this.providers) {
+        try {
+          const available = await provider.isAvailable();
+          const version = available ? await provider.getVersion() : 'not available';
+          
+          status[name] = {
+            available,
+            version,
+            displayName: provider.displayName,
+          };
+          
+          // Add health check for OpenCode
+          if (name === 'opencode' && available) {
+            const health = await provider.getHealth();
+            status[name].health = health;
+          }
+        } catch (error) {
+          status[name] = {
+            available: false,
+            version: 'error',
+            error: error.message,
+          };
+        }
       }
     }
     
@@ -1282,6 +1481,88 @@ mcp:
   getSharedContext(conversationId) {
     const conversation = memoryManager.conversations.get(conversationId);
     return conversation?.context?.sharedContext || {};
+  }
+
+  // =========================================================================
+  // Performance and Cache Management
+  // =========================================================================
+
+  /**
+   * Get performance metrics
+   * @returns {Object} - Performance metrics
+   */
+  getPerformanceMetrics() {
+    return { ...this.performanceMetrics };
+  }
+
+  /**
+   * Reset performance metrics
+   */
+  resetPerformanceMetrics() {
+    this.performanceMetrics = {
+      providerDetectionTime: 0,
+      availabilityChecks: 0,
+      hookExecutions: 0,
+      mcpDiscoveries: 0,
+    };
+  }
+
+  /**
+   * Clear all caches
+   */
+  clearCache() {
+    this.cache = {
+      providerAvailability: new Map(),
+      providerVersions: new Map(),
+      mcpServers: new Map(),
+      providerConfigs: new Map(),
+    };
+  }
+
+  /**
+   * Clear cache for a specific provider
+   * @param {string} providerName - Provider name
+   */
+  clearProviderCache(providerName) {
+    this.cache.providerAvailability.delete(providerName);
+    this.cache.providerVersions.delete(providerName);
+    this.cache.mcpServers.delete(providerName);
+    this.cache.providerConfigs.delete(providerName);
+  }
+
+  /**
+   * Set cache TTL
+   * @param {number} ttl - Time to live in milliseconds
+   */
+  setCacheTTL(ttl) {
+    this.cacheTTL = ttl;
+  }
+
+  /**
+   * Get cache statistics
+   * @returns {Object} - Cache statistics
+   */
+  getCacheStats() {
+    return {
+      providerAvailability: this.cache.providerAvailability.size,
+      providerVersions: this.cache.providerVersions.size,
+      mcpServers: this.cache.mcpServers.size,
+      providerConfigs: this.cache.providerConfigs.size,
+      ttl: this.cacheTTL,
+    };
+  }
+
+  /**
+   * Warm up caches by pre-loading all providers
+   */
+  async warmUp() {
+    this.initializeAllProviders();
+    
+    // Pre-detect all providers
+    await this.detectFromBinaries({ parallel: true, useCache: false });
+    
+    // Pre-check health
+    await this.getHealthStatus({ parallel: true, useCache: false });
   }
 }
 
