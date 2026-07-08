@@ -11,7 +11,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import yaml from 'js-yaml';
+import { load as yamlLoad, dump as yamlDump } from 'js-yaml';
 
 // Import all provider implementations
 import { BaseProvider } from './provider/base-provider.js';
@@ -104,7 +104,7 @@ export class AIProviderManager {
     try {
       if (fs.existsSync(configPath)) {
         const content = fs.readFileSync(configPath, 'utf8');
-        this.config = yaml.load(content) || {};
+        this.config = yamlLoad(content) || {};
         return this.config;
       }
     } catch (error) {
@@ -131,7 +131,7 @@ export class AIProviderManager {
     }
     
     try {
-      const yamlContent = yaml.dump(config, { indent: 2 });
+      const yamlContent = yamlDump(config, { indent: 2 });
       fs.writeFileSync(configPath, yamlContent);
     } catch (error) {
       console.error(`❌ Error saving config to ${configPath}: ${error.message}`);

@@ -12,6 +12,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { load as yamlLoad, dump as yamlDump } from 'js-yaml';
 
 /**
  * Claude Craft Compatibility Layer
@@ -79,9 +80,8 @@ export class ClaudeCompatibilityLayer {
     }
     
     try {
-      import yaml from 'js-yaml';
       const content = fs.readFileSync(aiCraftYaml, 'utf8');
-      const config = yaml.load(content);
+      const config = yamlLoad(content);
       return config.compatibility?.migrated !== undefined;
     } catch {
       return false;
@@ -119,6 +119,16 @@ export class ClaudeCompatibilityLayer {
       return {
         success: false,
         error: 'Project already migrated to AI Craft',
+        alreadyMigrated: true,
+        path: targetPath,
+      };
+    }
+
+    // Check for existing AI Craft directory
+    if (fs.existsSync(aiCraftDir)) {
+      return {
+        success: false,
+        error: 'AI Craft already initialized in this directory',
         alreadyMigrated: true,
         path: targetPath,
       };
@@ -388,13 +398,12 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
     
     if (fs.existsSync(claudeMdPath)) {
       try {
-        import yaml from 'js-yaml';
         // Try to load frontmatter from CLAUDE.md
         const content = fs.readFileSync(claudeMdPath, 'utf8');
         const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
         
         if (frontmatterMatch) {
-          const frontmatter = yaml.load(frontmatterMatch[1]);
+          const frontmatter = yamlLoad(frontmatterMatch[1]);
           // Extract version if available
           if (frontmatter.version) {
             config.compatibility = config.compatibility || {};
@@ -412,8 +421,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
     config.compatibility.auto_migrate = false;
     
     try {
-      import yaml from 'js-yaml';
-      const yamlContent = yaml.dump(config, { indent: 2 });
+      const yamlContent = yamlDump(config, { indent: 2 });
       fs.writeFileSync(configPath, yamlContent);
       return { created: true, path: configPath };
     } catch (error) {
@@ -522,12 +530,11 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
     // Try to load CLAUDE.md frontmatter
     if (fs.existsSync(claudeMdPath)) {
       try {
-        import yaml from 'js-yaml';
         const content = fs.readFileSync(claudeMdPath, 'utf8');
         const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
         
         if (frontmatterMatch) {
-          Object.assign(config, yaml.load(frontmatterMatch[1]));
+          Object.assign(config, yamlLoad(frontmatterMatch[1]));
         }
       } catch {
         // Ignore errors
