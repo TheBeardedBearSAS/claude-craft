@@ -22,6 +22,7 @@ import readline from 'readline';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { load as yamlLoad, dump as yamlDump } from 'js-yaml';
 
 // ANSI colors (shared module)
 import colors from './lib/colors.js';
@@ -157,7 +158,13 @@ class AICraftCLI {
     const { command, path: targetPath, options } = this.parseArgs(args);
 
     // Set target path
-    this.config.targetPath = path.resolve(targetPath || this.config.targetPath);
+    // For commands with subcommands (config, mcp, provider), don't use the parsed path
+    const commandsWithoutPath = ['config', 'configure', 'mcp', 'mcp-servers', 'provider', 'use'];
+    if (commandsWithoutPath.includes(command)) {
+      this.config.targetPath = path.resolve(this.config.targetPath || process.cwd());
+    } else {
+      this.config.targetPath = path.resolve(targetPath || this.config.targetPath);
+    }
 
     // =========================================================================
     // Phase 2: Multi-AI Provider Detection and Configuration
@@ -330,6 +337,30 @@ class AICraftCLI {
         console.log(`   Provider: ${this.currentProvider}`);
         console.log(`   Directory: ${path.join(this.config.targetPath, '.ai-craft')}`);
         break;
+
+      case 'provider':
+      case 'use': {
+        // Set default provider for this project
+        if (args.length < 2) {
+          console.error(`${c.red}Usage: ai-craft use <provider>${c.reset}`);
+          console.error(`Available providers: ${providerManager.getProviderNames().join(', ')}`);
+          process.exit(1);
+        }
+        await this.handleSetProvider(args[1]);
+        break;
+      }
+
+      case 'mcp':
+      case 'mcp-servers': {
+        await this.handleMCPCommand(args.slice(1), options);
+        break;
+      }
+
+      case 'config':
+      case 'configure': {
+        await this.handleConfigCommand(args.slice(1), options);
+        break;
+      }
 
       default:
         if (!command) {
@@ -569,6 +600,278 @@ class AICraftCLI {
     const outputFile = assertSafeTarget(rawOutput);
 
     await flattenCodebaseFn(targetPath, outputFile, options);
+  }
+
+  /**
+   * Set the default provider for a project
+   * @param {string} providerName - Provider name to set as default
+   */
+  async handleSetProvider(providerName) {
+    const providerNames = providerManager.getProviderNames();
+    
+    if (!providerNames.includes(providerName)) {
+      console.error(
+        `${c.red}Error: Unknown AI provider '${providerName}'. Available: ${providerNames.join(', ')}${c.reset}`
+      );
+      process.exit(1);
+    }
+    
+    // Set the provider
+    providerManager.setProvider(providerName);
+    this.config.provider = providerName;
+    this.currentProvider = providerName;
+    
+    // Save to project configuration
+    const configPath = path.join(this.config.targetPath, '.ai-craft', 'ai-craft.yaml');
+    const config = providerManager.loadConfig(configPath);
+    config.providers = config.providers || {};
+    config.providers.primary = providerName;
+    providerManager.saveConfig(config, configPath);
+    
+    console.log(`${c.green}✅ Default provider set to: ${providerName}${c.reset}`);
+    console.log(`${c.cyan}This provider will be used for all commands in this project.${c.reset}`);
+    console.log(`\n${c.dim}To override for a single command, use: ai-craft --provider=<name> <command>${c.reset}`);
+  }
+
+  /**
+   * Handle MCP server commands
+   * @param {string[]} args - Command arguments
+   * @param {Object} options - Command options
+   */
+  async handleMCPCommand(args, options) {
+    const subcommand = args[0];
+    
+    if (!subcommand || subcommand === 'list' || subcommand === 'ls') {
+      // List all MCP servers
+      await this.listMCPServers();
+    } else if (subcommand === 'start') {
+      // Start MCP servers for current provider
+      const providerName = this.currentProvider || (await providerManager.detectProvider());
+      await this.startMCPServers(providerName);
+    } else if (subcommand === 'stop') {
+      // Stop MCP servers (placeholder - would require process management)
+      console.log(`${c.yellow}⚠️  MCP server stopping is not yet implemented.${c.reset}`);
+      console.log(`${c.dim}This will be added in a future version.${c.reset}`);
+    } else if (subcommand === 'add') {
+      // Add a custom MCP server
+      if (args.length < 2) {
+        console.error(`${c.red}Usage: ai-craft mcp add <server-name> --command=<cmd> --args=<args>${c.reset}`);
+        process.exit(1);
+      }
+      await this.addMCPServer(args[1], options);
+    } else {
+      console.error(`${c.red}Unknown MCP subcommand: ${subcommand}${c.reset}`);
+      console.error(`Available: list, start, stop, add`);
+      process.exit(1);
+    }
+  }
+
+  /**
+   * List all MCP servers
+   */
+  async listMCPServers() {
+    const providerName = this.currentProvider || (await providerManager.detectProvider());
+    const targetPath = this.config.targetPath;
+    
+    console.log(`${c.bold}MCP Servers for ${providerName}:${c.reset}\n`);
+    
+    const { builtIn, providerCustom, globalCustom } = await providerManager.getAllMCPServers(
+      providerName,
+      targetPath
+    );
+    
+    console.log(`${c.cyan}Built-in Servers:${c.reset}`);
+    for (const [name, config] of Object.entries(builtIn)) {
+      console.log(`  ${c.green}✓${c.reset} ${name} - ${config.description || 'No description'}`);
+    }
+    
+    if (Object.keys(providerCustom).length > 0) {
+      console.log(`\n${c.cyan}Provider Custom Servers:${c.reset}`);
+      for (const [name, config] of Object.entries(providerCustom)) {
+        console.log(`  ${c.green}✓${c.reset} ${name} - ${config.description || 'No description'} (${config.source})`);
+      }
+    }
+    
+    if (Object.keys(globalCustom).length > 0) {
+      console.log(`\n${c.cyan}Global Custom Servers:${c.reset}`);
+      for (const [name, config] of Object.entries(globalCustom)) {
+        console.log(`  ${c.green}✓${c.reset} ${name} - ${config.description || 'No description'} (${config.source})`);
+      }
+    }
+    
+    console.log(`\n${c.dim}Total: ${Object.keys(builtIn).length + Object.keys(providerCustom).length + Object.keys(globalCustom).length} servers${c.reset}`);
+  }
+
+  /**
+   * Start MCP servers for a provider
+   * @param {string} providerName - Provider name
+   */
+  async startMCPServers(providerName) {
+    const targetPath = this.config.targetPath;
+    
+    console.log(`${c.bold}Starting MCP Servers for ${providerName}...${c.reset}\n`);
+    
+    const result = await providerManager.startAllMCPServers(providerName, targetPath);
+    
+    console.log(`${c.green}✅ MCP Servers initialized:${c.reset}`);
+    console.log(`   Started: ${Object.keys(result.started).length}`);
+    console.log(`   Failed: ${Object.keys(result.failed).length}`);
+    console.log(`   Total: ${result.total}`);
+    
+    if (Object.keys(result.failed).length > 0) {
+      console.log(`\n${c.yellow}⚠️  Failed to start some servers:${c.reset}`);
+      for (const [name, info] of Object.entries(result.failed)) {
+        console.log(`  ${c.red}✗${c.reset} ${name}: ${info.error}`);
+      }
+    }
+  }
+
+  /**
+   * Add a custom MCP server
+   * @param {string} serverName - Server name
+   * @param {Object} options - Server options
+   */
+  async addMCPServer(serverName, options) {
+    const targetPath = this.config.targetPath;
+    const mcpDir = path.join(targetPath, '.ai-craft', 'mcp');
+    
+    if (!fs.existsSync(mcpDir)) {
+      fs.mkdirSync(mcpDir, { recursive: true });
+    }
+    
+    const serverConfig = {
+      name: serverName,
+      description: options.description || '',
+      command: options.command,
+      args: options.args ? options.args.split(',') : [],
+      env: options.env ? JSON.parse(options.env) : {},
+      timeout: parseInt(options.timeout) || 30,
+      enabled: true,
+      auto_start: true,
+    };
+    
+    const serverPath = path.join(mcpDir, `${serverName}.json`);
+    fs.writeFileSync(serverPath, JSON.stringify(serverConfig, null, 2));
+    
+    console.log(`${c.green}✅ MCP Server added: ${serverName}${c.reset}`);
+    console.log(`   Config: ${serverPath}`);
+  }
+
+  /**
+   * Handle configuration commands
+   * @param {string[]} args - Command arguments
+   * @param {Object} options - Command options
+   */
+  async handleConfigCommand(args, options) {
+    const subcommand = args[0];
+    
+    if (!subcommand || subcommand === 'show' || subcommand === 'get') {
+      // Show current configuration
+      await this.showConfig();
+    } else if (subcommand === 'set') {
+      // Set configuration value
+      if (args.length < 3) {
+        console.error(`${c.red}Usage: ai-craft config set <key> <value>${c.reset}`);
+        process.exit(1);
+      }
+      await this.setConfig(args[1], args[2]);
+    } else if (subcommand === 'edit') {
+      // Edit configuration in editor
+      await this.editConfig();
+    } else {
+      console.error(`${c.red}Unknown config subcommand: ${subcommand}${c.reset}`);
+      console.error(`Available: show, set, edit`);
+      process.exit(1);
+    }
+  }
+
+  /**
+   * Show current configuration
+   */
+  async showConfig() {
+    const configPath = path.join(this.config.targetPath, '.ai-craft', 'ai-craft.yaml');
+    
+    let config = {};
+    if (fs.existsSync(configPath)) {
+      try {
+        const content = fs.readFileSync(configPath, 'utf8');
+        config = yamlLoad(content) || {};
+      } catch {
+        config = {};
+      }
+    } else {
+      config = providerManager.getDefaultConfig();
+    }
+    
+    console.log(`${c.bold}AI Craft Configuration:${c.reset}\n`);
+    console.log(yamlDump(config, { indent: 2 }));
+  }
+
+  /**
+   * Set configuration value
+   * @param {string} key - Configuration key (dot notation)
+   * @param {string} value - Value to set
+   */
+  async setConfig(key, value) {
+    const configPath = path.join(this.config.targetPath, '.ai-craft', 'ai-craft.yaml');
+    
+    // Use fs directly to read the file to avoid path issues
+    let config = {};
+    if (fs.existsSync(configPath)) {
+      try {
+        const content = fs.readFileSync(configPath, 'utf8');
+        config = yamlLoad(content) || {};
+      } catch {
+        config = {};
+      }
+    } else {
+      config = providerManager.getDefaultConfig();
+    }
+    
+    // Simple dot notation parsing
+    const keys = key.split('.');
+    let current = config;
+    
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]]) {
+        current[keys[i]] = {};
+      }
+      current = current[keys[i]];
+    }
+    
+    // Set the value (try to parse as JSON for numbers/booleans)
+    try {
+      current[keys[keys.length - 1]] = JSON.parse(value);
+    } catch {
+      current[keys[keys.length - 1]] = value;
+    }
+    
+    // Save directly
+    const yamlContent = yamlDump(config, { indent: 2 });
+    fs.writeFileSync(configPath, yamlContent);
+    
+    console.log(`${c.green}✅ Configuration set: ${key} = ${value}${c.reset}`);
+  }
+
+  /**
+   * Edit configuration in editor
+   */
+  async editConfig() {
+    const configPath = path.join(this.config.targetPath, '.ai-craft', 'ai-craft.yaml');
+    
+    if (!fs.existsSync(configPath)) {
+      // Create default config if it doesn't exist
+      const defaultConfig = providerManager.getDefaultConfig();
+      providerManager.saveConfig(defaultConfig, configPath);
+    }
+    
+    // Open in default editor
+    const editor = process.env.EDITOR || process.env.VISUAL || 'nano';
+    console.log(`${c.cyan}Opening configuration in ${editor}...${c.reset}`);
+    console.log(`${c.dim}File: ${configPath}${c.reset}`);
+    
+    // Note: In a real implementation, we'd spawn the editor process
+    // For now, just show the path
   }
 }
 
