@@ -1,0 +1,101 @@
+# Vibe Provider Configuration
+# Multi-AI Development Framework - AI Craft
+# Provider: Vibe (Mistral AI)
+
+provider:
+  name: vibe
+  display_name: "Vibe (Mistral AI)"
+  version: "2.x"
+  binary: "vibe"
+  
+# Model Configuration
+model:
+  # Default model for general tasks
+  default: "mistral-large-3.5"
+  
+  # Model aliases for compatibility with Claude Craft
+  aliases:
+    opus: "mistral-large-3.5"
+    sonnet: "mistral-medium-3.5"
+    haiku: "mistral-small-3.5"
+  
+  # Task-specific model recommendations
+  routing:
+    architecture: "mistral-large-3.5"
+    code_review: "mistral-medium-3.5"
+    implementation: "mistral-medium-3.5"
+    quick: "mistral-small-3.5"
+    analysis: "codestral-latest"
+
+# API Configuration
+api:
+  endpoint: "https://api.mistral.ai"
+  timeout: 120 # seconds
+  max_retries: 3
+
+# MCP (Model Context Protocol) Configuration
+mcp:
+  enabled: true
+  servers:
+    filesystem:
+      enabled: true
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-filesystem"]
+      env:
+        MCP_LOG_LEVEL: "warn"
+        MCP_MODE: "file"
+    
+    git:
+      enabled: true
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-git"]
+    
+    process:
+      enabled: true
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-process"]
+    
+    # Custom MCP servers can be added here
+    # custom_server:
+    #   enabled: true
+    #   command: "path/to/server"
+    #   args: []
+    #   env: {}
+
+# Hooks Configuration
+hooks:
+  enabled: true
+  pre_command:
+    - "pre-execute.sh"
+  post_command:
+    - "post-execute.sh"
+  pre_message:
+    - "pre-message.sh"
+  post_message:
+    - "post-message.sh"
+
+# Context Configuration
+context:
+  max_tokens: 32768
+  temperature: 0.7
+  top_p: 0.9
+  
+# Features
+features:
+  sub_agents: true
+  context_forking: true
+  prompt_caching: true
+  streaming: true
+  
+# Security
+security:
+  api_key_validation: true
+  max_execution_time: 3600 # 1 hour
+  sandboxing: true
+
+# Logging
+logging:
+  level: "info"
+  file: ".ai-craft/logs/vibe.log"
+  max_size: 10 # MB
+  max_files: 5

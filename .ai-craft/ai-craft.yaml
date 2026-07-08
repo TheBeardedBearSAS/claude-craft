@@ -1,0 +1,28 @@
+version: 1.0.0
+providers:
+  primary: vibe
+  fallback:
+    - vibe
+    - codex
+    - opencode
+memory:
+  enabled: true
+  scope: project
+  storage: file
+hooks:
+  enabled: true
+  providers:
+    - mcp
+    - webhook
+    - plugin
+optimization:
+  prompt_caching: true
+  context_forking: true
+  model_routing: auto
+compatibility:
+  claude_craft: true
+  legacy_hooks: true
+security:
+  api_key_validation: true
+  hook_sandboxing: true
+  max_execution_time: 3600

@@ -1,0 +1,124 @@
+# OpenCode Provider Configuration
+# Multi-AI Development Framework - AI Craft
+# Provider: OpenCode (Self-Hosted)
+
+provider:
+  name: opencode
+  display_name: "OpenCode (Self-Hosted)"
+  version: "0.0.55"
+  binary: "opencode"
+  self_hosted: true
+  
+# Model Configuration
+model:
+  # Default model for general tasks
+  default: "open-mistral-nemo-2407"
+  
+  # Model aliases for compatibility with Claude Craft
+  aliases:
+    opus: "open-mistral-nemo-2407"
+    sonnet: "open-mistral-7b"
+    haiku: "open-mistral-7b"
+  
+  # Task-specific model recommendations
+  routing:
+    architecture: "open-mistral-nemo-2407"
+    code_review: "open-mistral-7b"
+    implementation: "open-mistral-7b"
+    quick: "open-mistral-7b"
+
+# API Configuration
+api:
+  # OpenCode can use various providers
+  endpoint: "http://localhost:12345"
+  timeout: 180 # seconds (self-hosted may need more time)
+  max_retries: 3
+
+# Server Configuration (for self-hosting)
+server:
+  host: "localhost"
+  port: 12345
+  ssl: false
+  cors: true
+
+# MCP (Model Context Protocol) Configuration
+mcp:
+  enabled: true
+  servers:
+    filesystem:
+      enabled: true
+      # OpenCode has built-in filesystem access
+      command: "opencode"
+      args: ["mcp", "filesystem"]
+    
+    git:
+      enabled: true
+      command: "opencode"
+      args: ["mcp", "git"]
+    
+    process:
+      enabled: true
+      command: "opencode"
+      args: ["mcp", "process"]
+    
+    # OpenCode supports custom MCP servers
+    custom:
+      enabled: true
+      directory: ".ai-craft/providers/opencode/mcp"
+      auto_discover: true
+
+# Hooks Configuration
+hooks:
+  enabled: true
+  pre_command:
+    - "pre-execute.sh"
+  post_command:
+    - "post-execute.sh"
+  pre_message:
+    - "pre-message.sh"
+  post_message:
+    - "post-message.sh"
+
+# Context Configuration
+context:
+  max_tokens: 262144 # OpenCode supports very large contexts
+  temperature: 0.8
+  top_p: 0.9
+  
+# Features
+features:
+  sub_agents: true
+  context_forking: true
+  prompt_caching: true
+  streaming: true
+  multi_turn: true
+  
+# OpenCode-specific features
+opencode:
+  # Model loading configuration
+  models:
+    directory: ".ai-craft/providers/opencode/models"
+    auto_load: true
+    
+  # Plugin system
+  plugins:
+    enabled: true
+    directory: ".ai-craft/providers/opencode/plugins"
+    auto_load: true
+  
+  # Custom commands
+  commands:
+    directory: ".ai-craft/providers/opencode/commands"
+
+# Security
+security:
+  api_key_validation: false # Self-hosted, no API key needed
+  max_execution_time: 10800 # 3 hours
+  sandboxing: true
+
+# Logging
+logging:
+  level: "debug"
+  file: ".ai-craft/logs/opencode.log"
+  max_size: 20 # MB
+  max_files: 10

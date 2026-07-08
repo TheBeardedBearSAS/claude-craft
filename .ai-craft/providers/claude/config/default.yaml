@@ -1,0 +1,120 @@
+# Claude Code Provider Configuration
+# Multi-AI Development Framework - AI Craft
+# Provider: Claude Code (Anthropic)
+
+provider:
+  name: claude
+  display_name: "Claude Code (Anthropic)"
+  version: "2.1.x"
+  binary: "claude"
+  
+# Model Configuration
+model:
+  # Default model for general tasks
+  default: "claude-sonnet-4-5"
+  
+  # Model aliases (Claude Craft compatibility)
+  aliases:
+    opus: "claude-opus-4-8"
+    sonnet: "claude-sonnet-4-5"
+    haiku: "claude-haiku-4-5"
+  
+  # Task-specific model recommendations
+  routing:
+    architecture: "claude-opus-4-8"
+    code_review: "claude-sonnet-4-5"
+    implementation: "claude-sonnet-4-5"
+    quick: "claude-haiku-4-5"
+
+# API Configuration
+api:
+  endpoint: "https://api.anthropic.com"
+  timeout: 120 # seconds
+  max_retries: 3
+
+# MCP (Model Context Protocol) Configuration
+mcp:
+  enabled: true
+  servers:
+    filesystem:
+      enabled: true
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-filesystem"]
+      env:
+        MCP_MODE: "file"
+    
+    git:
+      enabled: true
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-git"]
+    
+    # Claude Code has built-in read-only filesystem
+    # Additional MCP servers for extended functionality
+    custom:
+      enabled: true
+      directory: ".ai-craft/providers/claude/mcp"
+      auto_discover: true
+
+# Hooks Configuration
+hooks:
+  enabled: true
+  pre_command:
+    - "pre-execute.sh"
+  post_command:
+    - "post-execute.sh"
+  pre_message:
+    - "pre-message.sh"
+  post_message:
+    - "post-message.sh"
+
+# Context Configuration
+context:
+  max_tokens: 262144 # Claude 4 supports up to 200K+ tokens
+  temperature: 1.0
+  top_p: 1.0
+  
+# Features
+features:
+  sub_agents: true
+  context_forking: false # Claude Code has limited context forking
+  prompt_caching: true
+  streaming: true
+  multi_turn: true
+  
+# Claude-specific features
+claude:
+  # Claude Code projects
+  projects:
+    auto_create: true
+    directory: ".claude"
+    
+  # Workflows
+  workflows:
+    enabled: true
+    prefix: "/workflow:"
+    
+  # Commands
+  commands:
+    enabled: true
+    prefix: "/"
+  
+  # Built-in tools
+  tools:
+    filesystem: true
+    git: true
+    web_search: true
+    terminal: false # Security: disabled by default
+
+# Security
+security:
+  api_key_validation: true
+  max_execution_time: 7200 # 2 hours
+  sandboxing: true
+  terminal_access: false
+
+# Logging
+logging:
+  level: "info"
+  file: ".ai-craft/logs/claude.log"
+  max_size: 10 # MB
+  max_files: 5

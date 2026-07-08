@@ -1,0 +1,110 @@
+# Codex Provider Configuration
+# Multi-AI Development Framework - AI Craft
+# Provider: Codex (Google)
+
+provider:
+  name: codex
+  display_name: "Codex (Google)"
+  version: "0.130.x"
+  binary: "codex"
+  
+# Model Configuration
+model:
+  # Default model for general tasks
+  default: "gemini-2.5-flash"
+  
+  # Model aliases for compatibility with Claude Craft
+  aliases:
+    opus: "gemini-2.5-pro"
+    sonnet: "gemini-2.5-flash"
+    haiku: "gemini-2.0-flash"
+  
+  # Task-specific model recommendations
+  routing:
+    architecture: "gemini-2.5-pro"
+    code_review: "gemini-2.5-flash"
+    implementation: "gemini-2.5-flash"
+    quick: "gemini-2.0-flash"
+    analysis: "gemini-2.5-pro"
+
+# API Configuration
+api:
+  endpoint: "https://codex.google.com"
+  timeout: 120 # seconds
+  max_retries: 3
+
+# MCP (Model Context Protocol) Configuration
+mcp:
+  enabled: true
+  servers:
+    filesystem:
+      enabled: true
+      command: "npx"
+      args: ["-y", "@google/codex-mcp-server-filesystem"]
+    
+    # Codex has built-in git support
+    git:
+      enabled: false
+      # Git is integrated directly in Codex CLI
+    
+    # Custom MCP servers
+    custom_server:
+      enabled: false
+      command: ""
+      args: []
+
+# Hooks Configuration
+hooks:
+  enabled: true
+  pre_command:
+    - "pre-execute.sh"
+  post_command:
+    - "post-execute.sh"
+  pre_message:
+    - "pre-message.sh"
+  post_message:
+    - "post-message.sh"
+
+# Context Configuration
+context:
+  max_tokens: 131072 # Codex supports up to 1M tokens
+  temperature: 0.9
+  top_p: 0.95
+  top_k: 40
+  
+# Features
+features:
+  sub_agents: true
+  context_forking: true
+  prompt_caching: true
+  streaming: true
+  multi_turn: true
+  
+# Security
+security:
+  api_key_validation: true
+  max_execution_time: 7200 # 2 hours
+  sandboxing: true
+  
+# Codex-specific features
+codex:
+  # Enable Codex's built-in tools
+  builtin_tools: true
+  
+  # File access patterns
+  file_access:
+    include: ["*.py", "*.js", "*.ts", "*.json", "*.yaml", "*.md"]
+    exclude: ["node_modules/", ".git/", "dist/", ".next/"]
+  
+  # Indexing configuration
+  indexing:
+    enabled: true
+    auto_update: true
+    max_files: 10000
+
+# Logging
+logging:
+  level: "info"
+  file: ".ai-craft/logs/codex.log"
+  max_size: 10 # MB
+  max_files: 5
