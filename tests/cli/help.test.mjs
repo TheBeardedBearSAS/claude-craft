@@ -49,10 +49,22 @@ describe('printHelp', () => {
     printHelp();
     const output = logSpy.mock.calls[0][0];
     const expectedPrefixes = [
-      'common', 'workflow', 'team', 'qa', 'uiux',
-      'sprint', 'gate', 'project', 'docker',
-      'csharp', 'symfony', 'flutter', 'react',
-      'angular', 'laravel', 'vuejs',
+      'common',
+      'workflow',
+      'team',
+      'qa',
+      'uiux',
+      'sprint',
+      'gate',
+      'project',
+      'docker',
+      'csharp',
+      'symfony',
+      'flutter',
+      'react',
+      'angular',
+      'laravel',
+      'vuejs',
     ];
     for (const prefix of expectedPrefixes) {
       expect(output, `Missing namespace: ${prefix}`).toContain(`/${prefix}:`);
@@ -77,6 +89,6 @@ describe('printHelp', () => {
     printHelp();
     const output = logSpy.mock.calls[0][0];
     expect(output).toContain('Examples:');
-    expect(output).toContain('npx @the-bearded-bear/claude-craft');
+    expect(output).toContain('npx @ai-craft/core');
   });
 });

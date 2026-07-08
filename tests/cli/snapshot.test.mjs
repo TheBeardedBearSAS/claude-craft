@@ -9,7 +9,7 @@ function stripAnsi(str) {
 }
 
 function stripVersion(str) {
-  return str.replace(/\d+\.\d+\.\d+/g, 'X.Y.Z');
+  return str.replace(/\d+\.\d+\.\d+(-[a-z0-9.]+)?/g, 'X.Y.Z');
 }
 
 function stripPaths(str) {
