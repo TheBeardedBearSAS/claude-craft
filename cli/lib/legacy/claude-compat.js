@@ -621,6 +621,511 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
       skipped: 0,
     };
   }
+
+  // =========================================================================
+  // Component Migration Methods
+  // =========================================================================
+
+  /**
+   * Migrate rules from Claude Craft to AI Craft
+   * @param {string} claudeDir - Source .claude directory
+   * @param {string} aiCraftDir - Destination .ai-craft directory
+   * @returns {Object} - Migration result
+   */
+  migrateRules(claudeDir, aiCraftDir) {
+    const rulesDir = path.join(claudeDir, 'rules');
+    const destRulesDir = path.join(aiCraftDir, 'rules');
+    
+    if (!fs.existsSync(rulesDir)) {
+      return { success: true, skipped: true, message: 'No rules directory found' };
+    }
+    
+    const entries = fs.readdirSync(rulesDir, { withFileTypes: true });
+    let migratedCount = 0;
+    let errorCount = 0;
+    
+    // Create destination directory
+    if (!fs.existsSync(destRulesDir)) {
+      fs.mkdirSync(destRulesDir, { recursive: true });
+    }
+    
+    // Create provider-specific subdirectories
+    const providerNames = ['vibe', 'codex', 'opencode', 'claude', 'cursor'];
+    for (const providerName of providerNames) {
+      const providerRulesDir = path.join(destRulesDir, providerName);
+      if (!fs.existsSync(providerRulesDir)) {
+        fs.mkdirSync(providerRulesDir, { recursive: true });
+      }
+    }
+    
+    // Copy rules to each provider directory
+    for (const entry of entries) {
+      const srcPath = path.join(rulesDir, entry.name);
+      const destPath = path.join(destRulesDir, 'claude', entry.name);
+      
+      try {
+        if (entry.isDirectory()) {
+          this.copyDirSync(srcPath, destPath);
+        } else if (entry.isFile()) {
+          fs.copyFileSync(srcPath, destPath);
+        }
+        migratedCount++;
+      } catch (error) {
+        errorCount++;
+        console.warn(`⚠️  Failed to migrate rule: ${entry.name} - ${error.message}`);
+      }
+    }
+    
+    return {
+      success: errorCount === 0,
+      migratedCount,
+      errorCount,
+      source: rulesDir,
+      destination: destRulesDir,
+    };
+  }
+
+  /**
+   * Migrate agents from Claude Craft to AI Craft
+   * @param {string} claudeDir - Source .claude directory
+   * @param {string} aiCraftDir - Destination .ai-craft directory
+   * @returns {Object} - Migration result
+   */
+  migrateAgents(claudeDir, aiCraftDir) {
+    const agentsDir = path.join(claudeDir, 'agents');
+    const destAgentsDir = path.join(aiCraftDir, 'agents');
+    
+    if (!fs.existsSync(agentsDir)) {
+      return { success: true, skipped: true, message: 'No agents directory found' };
+    }
+    
+    const entries = fs.readdirSync(agentsDir, { withFileTypes: true });
+    let migratedCount = 0;
+    let errorCount = 0;
+    
+    // Create destination directory
+    if (!fs.existsSync(destAgentsDir)) {
+      fs.mkdirSync(destAgentsDir, { recursive: true });
+    }
+    
+    // Copy agents (they're generally provider-agnostic)
+    for (const entry of entries) {
+      const srcPath = path.join(agentsDir, entry.name);
+      const destPath = path.join(destAgentsDir, entry.name);
+      
+      try {
+        if (entry.isDirectory()) {
+          this.copyDirSync(srcPath, destPath);
+        } else if (entry.isFile()) {
+          fs.copyFileSync(srcPath, destPath);
+        }
+        migratedCount++;
+      } catch (error) {
+        errorCount++;
+        console.warn(`⚠️  Failed to migrate agent: ${entry.name} - ${error.message}`);
+      }
+    }
+    
+    return {
+      success: errorCount === 0,
+      migratedCount,
+      errorCount,
+      source: agentsDir,
+      destination: destAgentsDir,
+    };
+  }
+
+  /**
+   * Migrate commands from Claude Craft to AI Craft
+   * @param {string} claudeDir - Source .claude directory
+   * @param {string} aiCraftDir - Destination .ai-craft directory
+   * @returns {Object} - Migration result
+   */
+  migrateCommands(claudeDir, aiCraftDir) {
+    const commandsDir = path.join(claudeDir, 'commands');
+    const destCommandsDir = path.join(aiCraftDir, 'commands');
+    
+    if (!fs.existsSync(commandsDir)) {
+      return { success: true, skipped: true, message: 'No commands directory found' };
+    }
+    
+    const entries = fs.readdirSync(commandsDir, { withFileTypes: true });
+    let migratedCount = 0;
+    let errorCount = 0;
+    
+    // Create destination directory
+    if (!fs.existsSync(destCommandsDir)) {
+      fs.mkdirSync(destCommandsDir, { recursive: true });
+    }
+    
+    // Copy commands
+    for (const entry of entries) {
+      const srcPath = path.join(commandsDir, entry.name);
+      const destPath = path.join(destCommandsDir, entry.name);
+      
+      try {
+        if (entry.isDirectory()) {
+          // Migrate command directory with provider-specific adaptations
+          this.migrateCommandDirectory(srcPath, destPath);
+        } else if (entry.isFile()) {
+          fs.copyFileSync(srcPath, destPath);
+        }
+        migratedCount++;
+      } catch (error) {
+        errorCount++;
+        console.warn(`⚠️  Failed to migrate command: ${entry.name} - ${error.message}`);
+      }
+    }
+    
+    return {
+      success: errorCount === 0,
+      migratedCount,
+      errorCount,
+      source: commandsDir,
+      destination: destCommandsDir,
+    };
+  }
+
+  /**
+   * Migrate a single command directory with provider adaptations
+   * @param {string} srcPath - Source command directory
+   * @param {string} destPath - Destination command directory
+   */
+  migrateCommandDirectory(srcPath, destPath) {
+    const entries = fs.readdirSync(srcPath, { withFileTypes: true });
+    
+    // Create destination directory
+    if (!fs.existsSync(destPath)) {
+      fs.mkdirSync(destPath, { recursive: true });
+    }
+    
+    // Copy all files
+    for (const entry of entries) {
+      const srcFile = path.join(srcPath, entry.name);
+      const destFile = path.join(destPath, entry.name);
+      
+      if (entry.isDirectory()) {
+        this.copyDirSync(srcFile, destFile);
+      } else if (entry.isFile()) {
+        // For markdown files, replace Claude-specific references
+        if (entry.name.endsWith('.md')) {
+          let content = fs.readFileSync(srcFile, 'utf8');
+          content = this.transformClaudeContent(content);
+          fs.writeFileSync(destFile, content);
+        } else {
+          fs.copyFileSync(srcFile, destFile);
+        }
+      }
+    }
+  }
+
+  /**
+   * Transform Claude-specific content to AI Craft
+   * @param {string} content - Original content
+   * @returns {string} - Transformed content
+   */
+  transformClaudeContent(content) {
+    // Replace Claude-specific references
+    const replacements = [
+      [/Claude Code/g, 'AI Provider'],
+      [/claude-craft/g, 'ai-craft'],
+      [/@the-bearded-bear\/claude-craft/g, '@ai-craft/core'],
+      [/\.claude\//g, '.ai-craft/'],
+      [/CLAUDE\.md/g, 'AI-CRAFT.md'],
+      [/Claude Craft/g, 'AI Craft'],
+    ];
+    
+    for (const [pattern, replacement] of replacements) {
+      content = content.replace(pattern, replacement);
+    }
+    
+    return content;
+  }
+
+  /**
+   * Migrate skills from Claude Craft to AI Craft
+   * @param {string} claudeDir - Source .claude directory
+   * @param {string} aiCraftDir - Destination .ai-craft directory
+   * @returns {Object} - Migration result
+   */
+  migrateSkills(claudeDir, aiCraftDir) {
+    const skillsDir = path.join(claudeDir, 'skills');
+    const destSkillsDir = path.join(aiCraftDir, 'skills');
+    
+    if (!fs.existsSync(skillsDir)) {
+      return { success: true, skipped: true, message: 'No skills directory found' };
+    }
+    
+    const entries = fs.readdirSync(skillsDir, { withFileTypes: true });
+    let migratedCount = 0;
+    let errorCount = 0;
+    
+    // Create destination directory
+    if (!fs.existsSync(destSkillsDir)) {
+      fs.mkdirSync(destSkillsDir, { recursive: true });
+    }
+    
+    // Copy skills
+    for (const entry of entries) {
+      const srcPath = path.join(skillsDir, entry.name);
+      const destPath = path.join(destSkillsDir, entry.name);
+      
+      try {
+        if (entry.isDirectory()) {
+          this.copyDirSync(srcPath, destPath);
+        } else if (entry.isFile()) {
+          fs.copyFileSync(srcPath, destPath);
+        }
+        migratedCount++;
+      } catch (error) {
+        errorCount++;
+        console.warn(`⚠️  Failed to migrate skill: ${entry.name} - ${error.message}`);
+      }
+    }
+    
+    return {
+      success: errorCount === 0,
+      migratedCount,
+      errorCount,
+      source: skillsDir,
+      destination: destSkillsDir,
+    };
+  }
+
+  /**
+   * Migrate templates from Claude Craft to AI Craft
+   * @param {string} claudeDir - Source .claude directory
+   * @param {string} aiCraftDir - Destination .ai-craft directory
+   * @returns {Object} - Migration result
+   */
+  migrateTemplates(claudeDir, aiCraftDir) {
+    const templatesDir = path.join(claudeDir, 'templates');
+    const destTemplatesDir = path.join(aiCraftDir, 'templates');
+    
+    if (!fs.existsSync(templatesDir)) {
+      return { success: true, skipped: true, message: 'No templates directory found' };
+    }
+    
+    const entries = fs.readdirSync(templatesDir, { withFileTypes: true });
+    let migratedCount = 0;
+    let errorCount = 0;
+    
+    // Create destination directory
+    if (!fs.existsSync(destTemplatesDir)) {
+      fs.mkdirSync(destTemplatesDir, { recursive: true });
+    }
+    
+    // Create provider-specific subdirectories
+    const providerNames = ['vibe', 'codex', 'opencode', 'claude', 'cursor'];
+    for (const providerName of providerNames) {
+      const providerTemplatesDir = path.join(destTemplatesDir, providerName);
+      if (!fs.existsSync(providerTemplatesDir)) {
+        fs.mkdirSync(providerTemplatesDir, { recursive: true });
+      }
+    }
+    
+    // Copy templates to each provider directory
+    for (const entry of entries) {
+      const srcPath = path.join(templatesDir, entry.name);
+      const destPath = path.join(destTemplatesDir, 'claude', entry.name);
+      
+      try {
+        if (entry.isDirectory()) {
+          this.copyDirSync(srcPath, destPath);
+        } else if (entry.isFile()) {
+          // Transform template content
+          if (entry.name.endsWith('.md')) {
+            let content = fs.readFileSync(srcPath, 'utf8');
+            content = this.transformClaudeContent(content);
+            fs.writeFileSync(destPath, content);
+          } else {
+            fs.copyFileSync(srcPath, destPath);
+          }
+        }
+        migratedCount++;
+      } catch (error) {
+        errorCount++;
+        console.warn(`⚠️  Failed to migrate template: ${entry.name} - ${error.message}`);
+      }
+    }
+    
+    return {
+      success: errorCount === 0,
+      migratedCount,
+      errorCount,
+      source: templatesDir,
+      destination: destTemplatesDir,
+    };
+  }
+
+  /**
+   * Migrate MCP servers from Claude Craft to AI Craft
+   * @param {string} claudeDir - Source .claude directory
+   * @param {string} aiCraftDir - Destination .ai-craft directory
+   * @returns {Object} - Migration result
+   */
+  migrateMCP(claudeDir, aiCraftDir) {
+    const mcpDir = path.join(claudeDir, 'mcp');
+    const destMCPDir = path.join(aiCraftDir, 'mcp');
+    
+    if (!fs.existsSync(mcpDir)) {
+      return { success: true, skipped: true, message: 'No MCP directory found' };
+    }
+    
+    // Create destination directory
+    if (!fs.existsSync(destMCPDir)) {
+      fs.mkdirSync(destMCPDir, { recursive: true });
+    }
+    
+    // Copy MCP configurations
+    const entries = fs.readdirSync(mcpDir, { withFileTypes: true });
+    let migratedCount = 0;
+    let errorCount = 0;
+    
+    for (const entry of entries) {
+      const srcPath = path.join(mcpDir, entry.name);
+      const destPath = path.join(destMCPDir, entry.name);
+      
+      try {
+        if (entry.isDirectory()) {
+          this.copyDirSync(srcPath, destPath);
+        } else if (entry.isFile()) {
+          fs.copyFileSync(srcPath, destPath);
+        }
+        migratedCount++;
+      } catch (error) {
+        errorCount++;
+        console.warn(`⚠️  Failed to migrate MCP config: ${entry.name} - ${error.message}`);
+      }
+    }
+    
+    return {
+      success: errorCount === 0,
+      migratedCount,
+      errorCount,
+      source: mcpDir,
+      destination: destMCPDir,
+    };
+  }
+
+  /**
+   * Perform a detailed migration with component-by-component breakdown
+   * @param {string} projectPath - Path to the project
+   * @param {Object} options - Migration options
+   * @returns {Promise<Object>} - Detailed migration result
+   */
+  async migrateDetailed(projectPath, options = {}) {
+    const targetPath = path.resolve(projectPath);
+    const claudeDir = path.join(targetPath, '.claude');
+    const aiCraftDir = path.join(targetPath, '.ai-craft');
+    
+    // Check if it's a Claude Craft project
+    if (!this.isClaudeCraftProject(targetPath)) {
+      return {
+        success: false,
+        error: 'Not a Claude Craft project (no .claude/ directory found)',
+        path: targetPath,
+      };
+    }
+    
+    // Create .ai-craft directory if it doesn't exist
+    if (!fs.existsSync(aiCraftDir)) {
+      fs.mkdirSync(aiCraftDir, { recursive: true });
+    }
+    
+    const results = {};
+    const startTime = Date.now();
+    
+    // Migrate each component
+    console.log(`🔄 Migrating AI Craft components...\n`);
+    
+    // 1. Migrate CLAUDE.md to AI-CRAFT.md
+    console.log(`  📄 Migrating CLAUDE.md...`);
+    results.claudeMd = this.createAICraftMd(claudeDir, aiCraftDir);
+    console.log(`     ${results.claudeMd.created ? '✅' : '⚠️ '} AI-CRAFT.md`);
+    
+    // 2. Migrate configuration
+    console.log(`  ⚙️  Migrating configuration...`);
+    results.config = this.createConfig(claudeDir, aiCraftDir);
+    console.log(`     ${results.config.created ? '✅' : '⚠️ '} ai-craft.yaml`);
+    
+    // 3. Migrate rules
+    console.log(`  📜 Migrating rules...`);
+    results.rules = this.migrateRules(claudeDir, aiCraftDir);
+    console.log(`     ${results.rules.success ? '✅' : '⚠️ '} ${results.rules.migratedCount || 0} rules`);
+    
+    // 4. Migrate agents
+    console.log(`  🤖 Migrating agents...`);
+    results.agents = this.migrateAgents(claudeDir, aiCraftDir);
+    console.log(`     ${results.agents.success ? '✅' : '⚠️ '} ${results.agents.migratedCount || 0} agents`);
+    
+    // 5. Migrate commands
+    console.log(`  ⚡ Migrating commands...`);
+    results.commands = this.migrateCommands(claudeDir, aiCraftDir);
+    console.log(`     ${results.commands.success ? '✅' : '⚠️ '} ${results.commands.migratedCount || 0} commands`);
+    
+    // 6. Migrate skills
+    console.log(`  🎯 Migrating skills...`);
+    results.skills = this.migrateSkills(claudeDir, aiCraftDir);
+    console.log(`     ${results.skills.success ? '✅' : '⚠️ '} ${results.skills.migratedCount || 0} skills`);
+    
+    // 7. Migrate templates
+    console.log(`  📋 Migrating templates...`);
+    results.templates = this.migrateTemplates(claudeDir, aiCraftDir);
+    console.log(`     ${results.templates.success ? '✅' : '⚠️ '} ${results.templates.migratedCount || 0} templates`);
+    
+    // 8. Migrate MCP
+    console.log(`  🔗 Migrating MCP servers...`);
+    results.mcp = this.migrateMCP(claudeDir, aiCraftDir);
+    console.log(`     ${results.mcp.success ? '✅' : '⚠️ '} ${results.mcp.migratedCount || 0} MCP configs`);
+    
+    // 9. Create subdirectories
+    console.log(`  📦 Creating subdirectories...`);
+    this.initializeSubdirs(aiCraftDir);
+    console.log(`     ✅ Subdirectories created`);
+    
+    // 10. Create providers directory structure
+    console.log(`  🎨 Creating providers directory...`);
+    this.createProvidersDir(aiCraftDir);
+    console.log(`     ✅ Providers directory created`);
+    
+    // 11. Create symlink for backward compatibility
+    console.log(`  🔗 Creating backward compatibility symlink...`);
+    this.createSymlink(aiCraftDir, claudeDir);
+    console.log(`     ✅ .claude -> .ai-craft symlink created`);
+    
+    // Mark as migrated
+    const configPath = path.join(aiCraftDir, 'ai-craft.yaml');
+    if (fs.existsSync(configPath)) {
+      try {
+        let config = yamlLoad(fs.readFileSync(configPath, 'utf8'));
+        config.compatibility = config.compatibility || {};
+        config.compatibility.migrated = new Date().toISOString();
+        config.compatibility.auto_migrate = false;
+        config.compatibility.from_claude_craft = true;
+        
+        fs.writeFileSync(configPath, yamlDump(config, { indent: 2 }));
+      } catch {
+        // Ignore errors
+      }
+    }
+    
+    const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+    
+    // Update stats
+    this.migrationStats.total++;
+    this.migrationStats.success++;
+    
+    return {
+      success: true,
+      path: targetPath,
+      aiCraftDir,
+      claudeDir,
+      results,
+      duration,
+      timestamp: new Date().toISOString(),
+    };
+  }
 }
 
 // Singleton instance

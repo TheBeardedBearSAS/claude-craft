@@ -12,6 +12,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { load as yamlLoad, dump as yamlDump } from 'js-yaml';
+import { memoryManager } from './memory.js';
 
 // Import all provider implementations
 import { BaseProvider } from './provider/base-provider.js';
@@ -991,6 +992,296 @@ mcp:
         fs.copyFileSync(srcPath, destPath);
       }
     }
+  }
+
+  /**
+   * Execute a hook script
+   * @param {string} providerName - Provider name
+   * @param {string} hookName - Hook name (pre-execute, post-execute, pre-message, post-message)
+   * @param {string} projectPath - Project path
+   * @param {Object} env - Environment variables to pass
+   * @returns {Promise<Object>} - Execution result
+   */
+  async executeHook(providerName, hookName, projectPath, env = {}) {
+    const provider = this.getProvider(providerName);
+    if (!provider) {
+      return { success: false, error: `Provider '${providerName}' not found` };
+    }
+    
+    const targetPath = path.resolve(projectPath);
+    const hooksDir = path.join(targetPath, '.ai-craft', 'providers', providerName, 'hooks');
+    const hookPath = path.join(hooksDir, hookName);
+    
+    // Check if hook exists and is executable
+    if (!fs.existsSync(hookPath)) {
+      return { success: true, skipped: true, message: `Hook '${hookName}' not found` };
+    }
+    
+    try {
+      const { execa } = await import('execa');
+      const result = await execa(hookPath, [], {
+        cwd: targetPath,
+        env: { ...process.env, ...env },
+        reject: false,
+      });
+      
+      return {
+        success: result.exitCode === 0,
+        exitCode: result.exitCode,
+        stdout: result.stdout,
+        stderr: result.stderr,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        stdout: error.stdout,
+        stderr: error.stderr,
+      };
+    }
+  }
+
+  /**
+   * Execute all pre-command hooks for a provider
+   * @param {string} providerName - Provider name
+   * @param {string} projectPath - Project path
+   * @param {Object} env - Environment variables
+   * @returns {Promise<Object>} - Execution result
+   */
+  async executePreCommandHooks(providerName, projectPath, env = {}) {
+    const providerConfig = this.loadProviderConfig(providerName, projectPath);
+    const hooks = providerConfig.hooks?.pre_command || ['pre-execute.sh'];
+    
+    const results = [];
+    for (const hook of hooks) {
+      const result = await this.executeHook(providerName, hook, projectPath, env);
+      results.push({ hook, ...result });
+      
+      // Stop if hook failed
+      if (!result.success && !result.skipped) {
+        break;
+      }
+    }
+    
+    return { hooks, results };
+  }
+
+  /**
+   * Execute all post-command hooks for a provider
+   * @param {string} providerName - Provider name
+   * @param {string} projectPath - Project path
+   * @param {Object} env - Environment variables
+   * @returns {Promise<Object>} - Execution result
+   */
+  async executePostCommandHooks(providerName, projectPath, env = {}) {
+    const providerConfig = this.loadProviderConfig(providerName, projectPath);
+    const hooks = providerConfig.hooks?.post_command || ['post-execute.sh'];
+    
+    const results = [];
+    for (const hook of hooks) {
+      const result = await this.executeHook(providerName, hook, projectPath, env);
+      results.push({ hook, ...result });
+    }
+    
+    return { hooks, results };
+  }
+
+  /**
+   * Execute pre-message hooks for a provider
+   * @param {string} providerName - Provider name
+   * @param {string} projectPath - Project path
+   * @param {string} message - The message being sent
+   * @returns {Promise<Object>} - Execution result
+   */
+  async executePreMessageHooks(providerName, projectPath, message) {
+    const providerConfig = this.loadProviderConfig(providerName, projectPath);
+    const hooks = providerConfig.hooks?.pre_message || [];
+    
+    const env = { ...process.env, AI_CRAFT_MESSAGE: message };
+    
+    const results = [];
+    for (const hook of hooks) {
+      const result = await this.executeHook(providerName, hook, projectPath, env);
+      results.push({ hook, ...result });
+      
+      if (!result.success && !result.skipped) {
+        break;
+      }
+    }
+    
+    return { hooks, results };
+  }
+
+  /**
+   * Execute post-message hooks for a provider
+   * @param {string} providerName - Provider name
+   * @param {string} projectPath - Project path
+   * @param {string} response - The AI response
+   * @returns {Promise<Object>} - Execution result
+   */
+  async executePostMessageHooks(providerName, projectPath, response) {
+    const providerConfig = this.loadProviderConfig(providerName, projectPath);
+    const hooks = providerConfig.hooks?.post_message || [];
+    
+    const env = { ...process.env, AI_CRAFT_RESPONSE: response };
+    
+    const results = [];
+    for (const hook of hooks) {
+      const result = await this.executeHook(providerName, hook, projectPath, env);
+      results.push({ hook, ...result });
+    }
+    
+    return { hooks, results };
+  }
+
+  // =========================================================================
+  // Memory Management Methods
+  // =========================================================================
+
+  /**
+   * Get memory manager instance
+   * @returns {Object} - Memory manager
+   */
+  getMemoryManager() {
+    return memoryManager;
+  }
+
+  /**
+   * Get or create a conversation with memory
+   * @param {string} conversationId - Conversation ID
+   * @param {Object} options - Options
+   * @returns {Object} - Conversation
+   */
+  getConversation(conversationId, options = {}) {
+    const providerName = this.currentProvider || 'unknown';
+    const config = this.loadConfig();
+    const defaultModel = config.providers?.model || this.getProvider(providerName)?.defaultModel || 'unknown';
+    
+    return memoryManager.getConversation(conversationId, {
+      provider: providerName,
+      model: options.model || defaultModel,
+    });
+  }
+
+  /**
+   * Add a message to conversation memory
+   * @param {string} conversationId - Conversation ID
+   * @param {Object} message - Message object
+   */
+  addToConversation(conversationId, message) {
+    memoryManager.addMessage(conversationId, message);
+  }
+
+  /**
+   * Get conversation history
+   * @param {string} conversationId - Conversation ID
+   * @param {number} limit - Maximum messages
+   * @returns {Array} - Message history
+   */
+  getConversationHistory(conversationId, limit = 100) {
+    return memoryManager.getHistory(conversationId, limit);
+  }
+
+  /**
+   * Set shared project context
+   * @param {Object} context - Project context
+   */
+  setProjectContext(context) {
+    memoryManager.setProjectContext(context);
+  }
+
+  /**
+   * Get shared project context
+   * @returns {Object} - Project context
+   */
+  getProjectContext() {
+    return memoryManager.getProjectContext();
+  }
+
+  /**
+   * Set user preference
+   * @param {string} key - Preference key
+   * @param {*} value - Preference value
+   */
+  setPreference(key, value) {
+    memoryManager.setPreference(key, value);
+  }
+
+  /**
+   * Get user preference
+   * @param {string} key - Preference key
+   * @param {*} defaultValue - Default value
+   * @returns {*} - Preference value
+   */
+  getPreference(key, defaultValue) {
+    return memoryManager.getPreference(key, defaultValue);
+  }
+
+  /**
+   * Set cached value
+   * @param {string} key - Cache key
+   * @param {*} value - Value to cache
+   * @param {number} ttl - Time to live in ms
+   */
+  setCache(key, value, ttl = 0) {
+    memoryManager.setCache(key, value, ttl);
+  }
+
+  /**
+   * Get cached value
+   * @param {string} key - Cache key
+   * @returns {*} - Cached value
+   */
+  getCache(key) {
+    return memoryManager.getCache(key);
+  }
+
+  /**
+   * Clear all cache
+   */
+  clearCache() {
+    memoryManager.clearCache();
+  }
+
+  /**
+   * Get memory statistics
+   * @returns {Object} - Statistics
+   */
+  getMemoryStats() {
+    return memoryManager.getStats();
+  }
+
+  /**
+   * Share context between providers
+   * @param {string} fromProvider - Source provider
+   * @param {string} toProvider - Target provider
+   * @param {Object} context - Context to share
+   */
+  shareContext(fromProvider, toProvider, context) {
+    const conversationId = `shared-${fromProvider}-${toProvider}-${Date.now()}`;
+    const conversation = this.getConversation(conversationId, { 
+      provider: toProvider,
+      model: this.getProvider(toProvider)?.defaultModel || 'unknown'
+    });
+    
+    conversation.context = {
+      ...conversation.context,
+      sharedFrom: fromProvider,
+      sharedContext: context,
+      sharedAt: new Date().toISOString(),
+    };
+    
+    return conversationId;
+  }
+
+  /**
+   * Get shared context
+   * @param {string} conversationId - Conversation ID
+   * @returns {Object} - Shared context
+   */
+  getSharedContext(conversationId) {
+    const conversation = memoryManager.conversations.get(conversationId);
+    return conversation?.context?.sharedContext || {};
   }
 }
 

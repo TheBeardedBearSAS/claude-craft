@@ -1,7 +1,7 @@
 {
   "name": "@ai-craft/core",
   "version": "1.0.0-ai-craft.0",
-  "description": "A comprehensive multi-AI development framework for Vibe, Codex, OpenCode, Claude Code, Cursor, and GitHub Copilot. Install standardized rules, agents, and commands for your projects across any AI provider.",
+  "description": "A comprehensive multi-AI development framework compatible with Vibe, Codex, OpenCode, Claude Code, Cursor, GitHub Copilot, and more. Install standardized rules, agents, commands, and MCP servers for your projects across any AI provider.",
   "type": "module",
   "main": "cli/index.js",
   "bin": {
@@ -39,14 +39,27 @@
     "community:awesome": "node scripts/awesome-claude-code-submit.mjs"
   },
   "keywords": [
-    "claude",
-    "claude-code",
+    "ai-craft",
     "ai",
     "development",
+    "claude",
+    "claude-code",
+    "vibe",
+    "mistral",
+    "codex",
+    "google",
+    "opencode",
+    "cursor",
+    "github-copilot",
+    "multi-ai",
+    "mcp",
+    "model-context-protocol",
     "rules",
     "agents",
     "commands",
     "workflow",
+    "memory",
+    "hooks",
     "symfony",
     "flutter",
     "react",
@@ -56,12 +69,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheBeardedBearSAS/claude-craft.git"
+    "url": "git+https://github.com/TheBeardedBearSAS/ai-craft.git"
   },
   "bugs": {
-    "url": "https://github.com/TheBeardedBearSAS/claude-craft/issues"
+    "url": "https://github.com/TheBeardedBearSAS/ai-craft/issues"
   },
-  "homepage": "https://github.com/TheBeardedBearSAS/claude-craft#readme",
+  "homepage": "https://github.com/TheBeardedBearSAS/ai-craft#readme",
   "engines": {
     "node": ">=22.0.0",
     "os": [
