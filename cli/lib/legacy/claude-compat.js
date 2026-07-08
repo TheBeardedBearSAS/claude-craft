@@ -1,12 +1,12 @@
 /**
  * AI Craft - Claude Craft Compatibility Layer
- * 
+ *
  * This module provides backward compatibility for existing Claude Craft projects.
  * It allows AI Craft to work seamlessly with projects that were set up with Claude Craft.
- * 
+ *
  * This file is part of AI Craft (formerly Claude Craft)
  * Multi-AI Development Framework
- * 
+ *
  * @module legacy/claude-compat
  */
 
@@ -16,7 +16,7 @@ import { load as yamlLoad, dump as yamlDump } from 'js-yaml';
 
 /**
  * Claude Craft Compatibility Layer
- * 
+ *
  * Handles:
  * - Detecting Claude Craft projects
  * - Migrating to AI Craft
@@ -41,12 +41,10 @@ export class ClaudeCompatibilityLayer {
       'settings.json',
       'context.yaml',
     ];
-    
+
     /** @type {string[]} */
-    this.legacyDirectories = [
-      '.claude',
-    ];
-    
+    this.legacyDirectories = ['.claude'];
+
     /** @type {Object} */
     this.migrationStats = {
       total: 0,
@@ -74,11 +72,11 @@ export class ClaudeCompatibilityLayer {
   isAlreadyMigrated(projectPath) {
     const aiCraftDir = path.join(projectPath, '.ai-craft');
     const aiCraftYaml = path.join(aiCraftDir, 'ai-craft.yaml');
-    
+
     if (!fs.existsSync(aiCraftYaml)) {
       return false;
     }
-    
+
     try {
       const content = fs.readFileSync(aiCraftYaml, 'utf8');
       const config = yamlLoad(content);
@@ -95,16 +93,12 @@ export class ClaudeCompatibilityLayer {
    * @returns {Promise<Object>} - Migration result
    */
   async migrate(projectPath, options = {}) {
-    const {
-      backup = true,
-      force = false,
-      verbose = false,
-    } = options;
-    
+    const { backup = true, force = false, verbose = false } = options;
+
     const targetPath = path.resolve(projectPath);
     const claudeDir = path.join(targetPath, '.claude');
     const aiCraftDir = path.join(targetPath, '.ai-craft');
-    
+
     // Check if it's a Claude Craft project
     if (!this.isClaudeCraftProject(targetPath)) {
       return {
@@ -113,7 +107,7 @@ export class ClaudeCompatibilityLayer {
         path: targetPath,
       };
     }
-    
+
     // Check if already migrated
     if (!force && this.isAlreadyMigrated(targetPath)) {
       return {
@@ -133,7 +127,7 @@ export class ClaudeCompatibilityLayer {
         path: targetPath,
       };
     }
-    
+
     // Create backup if requested
     let backupPath = null;
     if (backup) {
@@ -142,12 +136,12 @@ export class ClaudeCompatibilityLayer {
         console.log(`💾 Backup created: ${backupPath}`);
       }
     }
-    
+
     // Log start
     if (verbose) {
       console.log(`🔄 Migrating Claude Craft project: ${targetPath}`);
     }
-    
+
     try {
       // Step 1: Create .ai-craft directory
       if (verbose) {
@@ -156,47 +150,47 @@ export class ClaudeCompatibilityLayer {
       if (!fs.existsSync(aiCraftDir)) {
         fs.mkdirSync(aiCraftDir, { recursive: true });
       }
-      
+
       // Step 2: Copy files from .claude/ to .ai-craft/
       if (verbose) {
         console.log('📋 Copying files from .claude/ to .ai-craft/...');
       }
       const copyResult = await this.copyClaudeFiles(claudeDir, aiCraftDir, verbose);
-      
+
       // Step 3: Create AI-CRAFT.md from CLAUDE.md
       if (verbose) {
         console.log('📄 Creating AI-CRAFT.md from CLAUDE.md...');
       }
       const aiCraftMdResult = this.createAICraftMd(claudeDir, aiCraftDir);
-      
+
       // Step 4: Create ai-craft.yaml configuration
       if (verbose) {
         console.log('⚙️ Creating ai-craft.yaml configuration...');
       }
       const configResult = this.createConfig(claudeDir, aiCraftDir);
-      
+
       // Step 5: Create providers directory
       if (verbose) {
         console.log('📂 Creating providers directory...');
       }
       this.createProvidersDir(aiCraftDir);
-      
+
       // Step 6: Create symlink for backward compatibility
       if (verbose) {
         console.log('🔗 Creating .claude -> .ai-craft symlink...');
       }
       this.createSymlink(aiCraftDir, claudeDir);
-      
+
       // Step 7: Initialize subdirectories
       if (verbose) {
         console.log('📦 Initializing subdirectories...');
       }
       this.initializeSubdirs(aiCraftDir);
-      
+
       // Update stats
       this.migrationStats.total++;
       this.migrationStats.success++;
-      
+
       // Return result
       const result = {
         success: true,
@@ -210,19 +204,18 @@ export class ClaudeCompatibilityLayer {
         backupPath,
         timestamp: new Date().toISOString(),
       };
-      
+
       if (verbose) {
         console.log('✅ Migration completed successfully!');
       }
-      
+
       return result;
-      
     } catch (error) {
       this.migrationStats.total++;
       this.migrationStats.failed++;
-      
+
       console.error(`❌ Migration failed: ${error.message}`);
-      
+
       // Restore from backup if available
       if (backupPath && fs.existsSync(backupPath)) {
         try {
@@ -232,7 +225,7 @@ export class ClaudeCompatibilityLayer {
           console.error(`❌ Failed to restore from backup: ${restoreError.message}`);
         }
       }
-      
+
       return {
         success: false,
         error: error.message,
@@ -250,10 +243,10 @@ export class ClaudeCompatibilityLayer {
   async createBackup(claudeDir) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const backupDir = path.join(path.dirname(claudeDir), `.claude-backup-${timestamp}`);
-    
+
     // Copy the entire .claude directory
     this.copyDirSync(claudeDir, backupDir);
-    
+
     return backupDir;
   }
 
@@ -267,7 +260,7 @@ export class ClaudeCompatibilityLayer {
     if (fs.existsSync(targetDir)) {
       this.removeDirSync(targetDir);
     }
-    
+
     // Copy from backup
     this.copyDirSync(backupPath, targetDir);
   }
@@ -282,11 +275,11 @@ export class ClaudeCompatibilityLayer {
   copyClaudeFiles(srcDir, destDir, verbose = false) {
     let filesCopied = 0;
     const entries = fs.readdirSync(srcDir, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const srcPath = path.join(srcDir, entry.name);
       const destPath = path.join(destDir, entry.name);
-      
+
       // Skip CLAUDE.md - we'll handle it separately
       if (entry.name === 'CLAUDE.md') {
         if (verbose) {
@@ -294,7 +287,7 @@ export class ClaudeCompatibilityLayer {
         }
         continue;
       }
-      
+
       if (entry.isDirectory()) {
         // Copy directory recursively
         if (verbose) {
@@ -311,7 +304,7 @@ export class ClaudeCompatibilityLayer {
         filesCopied++;
       }
     }
-    
+
     return { filesCopied };
   }
 
@@ -324,19 +317,19 @@ export class ClaudeCompatibilityLayer {
   createAICraftMd(claudeDir, aiCraftDir) {
     const claudeMdPath = path.join(claudeDir, 'CLAUDE.md');
     const aiCraftMdPath = path.join(aiCraftDir, 'AI-CRAFT.md');
-    
+
     if (!fs.existsSync(claudeMdPath)) {
       return { created: false, error: 'CLAUDE.md not found' };
     }
-    
+
     try {
       let content = fs.readFileSync(claudeMdPath, 'utf8');
-      
+
       // Replace Claude-specific references with AI Craft equivalents
       content = this.transformClaudeMd(content);
-      
+
       fs.writeFileSync(aiCraftMdPath, content);
-      
+
       return { created: true, path: aiCraftMdPath };
     } catch (error) {
       return { created: false, error: error.message };
@@ -362,7 +355,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
 ---
 `
     );
-    
+
     // Replace references
     const replacements = [
       [/Claude Code/g, 'Multi-AI'],
@@ -370,16 +363,20 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
       [/@the-bearded-bear\/claude-craft/g, '@ai-craft/core'],
       [/\.claude\//g, '.ai-craft/'],
       [/CLAUDE\.md/g, 'AI-CRAFT.md'],
-      [/a comprehensive framework for AI-assisted development with Claude Code/g, 
-        'a comprehensive multi-AI development framework'],
-      [/Install standardized rules, agents, and commands for your projects\./g, 
-        'Install standardized rules, agents, and commands for your projects across any AI provider.'],
+      [
+        /a comprehensive framework for AI-assisted development with Claude Code/g,
+        'a comprehensive multi-AI development framework',
+      ],
+      [
+        /Install standardized rules, agents, and commands for your projects\./g,
+        'Install standardized rules, agents, and commands for your projects across any AI provider.',
+      ],
     ];
-    
+
     for (const [pattern, replacement] of replacements) {
       content = content.replace(pattern, replacement);
     }
-    
+
     return content;
   }
 
@@ -391,17 +388,17 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
    */
   createConfig(claudeDir, aiCraftDir) {
     const configPath = path.join(aiCraftDir, 'ai-craft.yaml');
-    
+
     // Load existing CLAUDE.md to extract some info
     const claudeMdPath = path.join(claudeDir, 'CLAUDE.md');
     let config = this.getDefaultConfig();
-    
+
     if (fs.existsSync(claudeMdPath)) {
       try {
         // Try to load frontmatter from CLAUDE.md
         const content = fs.readFileSync(claudeMdPath, 'utf8');
         const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
-        
+
         if (frontmatterMatch) {
           const frontmatter = yamlLoad(frontmatterMatch[1]);
           // Extract version if available
@@ -414,12 +411,12 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         // Ignore errors in frontmatter parsing
       }
     }
-    
+
     // Mark as migrated
     config.compatibility = config.compatibility || {};
     config.compatibility.migrated = new Date().toISOString();
     config.compatibility.auto_migrate = false;
-    
+
     try {
       const yamlContent = yamlDump(config, { indent: 2 });
       fs.writeFileSync(configPath, yamlContent);
@@ -450,7 +447,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
     if (fs.existsSync(claudeDir)) {
       this.removeDirSync(claudeDir);
     }
-    
+
     // Create symlink
     fs.symlinkSync(aiCraftDir, claudeDir, 'dir');
   }
@@ -460,16 +457,8 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
    * @param {string} aiCraftDir - Path to .ai-craft directory
    */
   initializeSubdirs(aiCraftDir) {
-    const subDirs = [
-      'agents',
-      'commands',
-      'skills',
-      'templates',
-      'memory',
-      'logs',
-      'hooks',
-    ];
-    
+    const subDirs = ['agents', 'commands', 'skills', 'templates', 'memory', 'logs', 'hooks'];
+
     for (const subDir of subDirs) {
       const dirPath = path.join(aiCraftDir, subDir);
       if (!fs.existsSync(dirPath)) {
@@ -524,15 +513,15 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
     const claudeDir = path.join(projectPath, '.claude');
     const claudeMdPath = path.join(claudeDir, 'CLAUDE.md');
     const settingsPath = path.join(claudeDir, 'settings.json');
-    
+
     const config = {};
-    
+
     // Try to load CLAUDE.md frontmatter
     if (fs.existsSync(claudeMdPath)) {
       try {
         const content = fs.readFileSync(claudeMdPath, 'utf8');
         const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
-        
+
         if (frontmatterMatch) {
           Object.assign(config, yamlLoad(frontmatterMatch[1]));
         }
@@ -540,7 +529,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         // Ignore errors
       }
     }
-    
+
     // Try to load settings.json
     if (fs.existsSync(settingsPath)) {
       try {
@@ -550,7 +539,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         // Ignore errors
       }
     }
-    
+
     return config;
   }
 
@@ -563,13 +552,13 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
     if (!fs.existsSync(dest)) {
       fs.mkdirSync(dest, { recursive: true });
     }
-    
+
     const entries = fs.readdirSync(src, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const srcPath = path.join(src, entry.name);
       const destPath = path.join(dest, entry.name);
-      
+
       if (entry.isDirectory()) {
         this.copyDirSync(srcPath, destPath);
       } else if (entry.isFile()) {
@@ -586,19 +575,19 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
     if (!fs.existsSync(dirPath)) {
       return;
     }
-    
+
     const entries = fs.readdirSync(dirPath, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const entryPath = path.join(dirPath, entry.name);
-      
+
       if (entry.isDirectory()) {
         this.removeDirSync(entryPath);
       } else if (entry.isFile()) {
         fs.unlinkSync(entryPath);
       }
     }
-    
+
     fs.rmdirSync(dirPath);
   }
 
@@ -635,20 +624,20 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
   migrateRules(claudeDir, aiCraftDir) {
     const rulesDir = path.join(claudeDir, 'rules');
     const destRulesDir = path.join(aiCraftDir, 'rules');
-    
+
     if (!fs.existsSync(rulesDir)) {
       return { success: true, skipped: true, message: 'No rules directory found' };
     }
-    
+
     const entries = fs.readdirSync(rulesDir, { withFileTypes: true });
     let migratedCount = 0;
     let errorCount = 0;
-    
+
     // Create destination directory
     if (!fs.existsSync(destRulesDir)) {
       fs.mkdirSync(destRulesDir, { recursive: true });
     }
-    
+
     // Create provider-specific subdirectories
     const providerNames = ['vibe', 'codex', 'opencode', 'claude', 'cursor'];
     for (const providerName of providerNames) {
@@ -657,12 +646,12 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         fs.mkdirSync(providerRulesDir, { recursive: true });
       }
     }
-    
+
     // Copy rules to each provider directory
     for (const entry of entries) {
       const srcPath = path.join(rulesDir, entry.name);
       const destPath = path.join(destRulesDir, 'claude', entry.name);
-      
+
       try {
         if (entry.isDirectory()) {
           this.copyDirSync(srcPath, destPath);
@@ -675,7 +664,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         console.warn(`⚠️  Failed to migrate rule: ${entry.name} - ${error.message}`);
       }
     }
-    
+
     return {
       success: errorCount === 0,
       migratedCount,
@@ -694,25 +683,25 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
   migrateAgents(claudeDir, aiCraftDir) {
     const agentsDir = path.join(claudeDir, 'agents');
     const destAgentsDir = path.join(aiCraftDir, 'agents');
-    
+
     if (!fs.existsSync(agentsDir)) {
       return { success: true, skipped: true, message: 'No agents directory found' };
     }
-    
+
     const entries = fs.readdirSync(agentsDir, { withFileTypes: true });
     let migratedCount = 0;
     let errorCount = 0;
-    
+
     // Create destination directory
     if (!fs.existsSync(destAgentsDir)) {
       fs.mkdirSync(destAgentsDir, { recursive: true });
     }
-    
+
     // Copy agents (they're generally provider-agnostic)
     for (const entry of entries) {
       const srcPath = path.join(agentsDir, entry.name);
       const destPath = path.join(destAgentsDir, entry.name);
-      
+
       try {
         if (entry.isDirectory()) {
           this.copyDirSync(srcPath, destPath);
@@ -725,7 +714,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         console.warn(`⚠️  Failed to migrate agent: ${entry.name} - ${error.message}`);
       }
     }
-    
+
     return {
       success: errorCount === 0,
       migratedCount,
@@ -744,25 +733,25 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
   migrateCommands(claudeDir, aiCraftDir) {
     const commandsDir = path.join(claudeDir, 'commands');
     const destCommandsDir = path.join(aiCraftDir, 'commands');
-    
+
     if (!fs.existsSync(commandsDir)) {
       return { success: true, skipped: true, message: 'No commands directory found' };
     }
-    
+
     const entries = fs.readdirSync(commandsDir, { withFileTypes: true });
     let migratedCount = 0;
     let errorCount = 0;
-    
+
     // Create destination directory
     if (!fs.existsSync(destCommandsDir)) {
       fs.mkdirSync(destCommandsDir, { recursive: true });
     }
-    
+
     // Copy commands
     for (const entry of entries) {
       const srcPath = path.join(commandsDir, entry.name);
       const destPath = path.join(destCommandsDir, entry.name);
-      
+
       try {
         if (entry.isDirectory()) {
           // Migrate command directory with provider-specific adaptations
@@ -776,7 +765,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         console.warn(`⚠️  Failed to migrate command: ${entry.name} - ${error.message}`);
       }
     }
-    
+
     return {
       success: errorCount === 0,
       migratedCount,
@@ -793,17 +782,17 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
    */
   migrateCommandDirectory(srcPath, destPath) {
     const entries = fs.readdirSync(srcPath, { withFileTypes: true });
-    
+
     // Create destination directory
     if (!fs.existsSync(destPath)) {
       fs.mkdirSync(destPath, { recursive: true });
     }
-    
+
     // Copy all files
     for (const entry of entries) {
       const srcFile = path.join(srcPath, entry.name);
       const destFile = path.join(destPath, entry.name);
-      
+
       if (entry.isDirectory()) {
         this.copyDirSync(srcFile, destFile);
       } else if (entry.isFile()) {
@@ -834,11 +823,11 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
       [/CLAUDE\.md/g, 'AI-CRAFT.md'],
       [/Claude Craft/g, 'AI Craft'],
     ];
-    
+
     for (const [pattern, replacement] of replacements) {
       content = content.replace(pattern, replacement);
     }
-    
+
     return content;
   }
 
@@ -851,25 +840,25 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
   migrateSkills(claudeDir, aiCraftDir) {
     const skillsDir = path.join(claudeDir, 'skills');
     const destSkillsDir = path.join(aiCraftDir, 'skills');
-    
+
     if (!fs.existsSync(skillsDir)) {
       return { success: true, skipped: true, message: 'No skills directory found' };
     }
-    
+
     const entries = fs.readdirSync(skillsDir, { withFileTypes: true });
     let migratedCount = 0;
     let errorCount = 0;
-    
+
     // Create destination directory
     if (!fs.existsSync(destSkillsDir)) {
       fs.mkdirSync(destSkillsDir, { recursive: true });
     }
-    
+
     // Copy skills
     for (const entry of entries) {
       const srcPath = path.join(skillsDir, entry.name);
       const destPath = path.join(destSkillsDir, entry.name);
-      
+
       try {
         if (entry.isDirectory()) {
           this.copyDirSync(srcPath, destPath);
@@ -882,7 +871,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         console.warn(`⚠️  Failed to migrate skill: ${entry.name} - ${error.message}`);
       }
     }
-    
+
     return {
       success: errorCount === 0,
       migratedCount,
@@ -901,20 +890,20 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
   migrateTemplates(claudeDir, aiCraftDir) {
     const templatesDir = path.join(claudeDir, 'templates');
     const destTemplatesDir = path.join(aiCraftDir, 'templates');
-    
+
     if (!fs.existsSync(templatesDir)) {
       return { success: true, skipped: true, message: 'No templates directory found' };
     }
-    
+
     const entries = fs.readdirSync(templatesDir, { withFileTypes: true });
     let migratedCount = 0;
     let errorCount = 0;
-    
+
     // Create destination directory
     if (!fs.existsSync(destTemplatesDir)) {
       fs.mkdirSync(destTemplatesDir, { recursive: true });
     }
-    
+
     // Create provider-specific subdirectories
     const providerNames = ['vibe', 'codex', 'opencode', 'claude', 'cursor'];
     for (const providerName of providerNames) {
@@ -923,12 +912,12 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         fs.mkdirSync(providerTemplatesDir, { recursive: true });
       }
     }
-    
+
     // Copy templates to each provider directory
     for (const entry of entries) {
       const srcPath = path.join(templatesDir, entry.name);
       const destPath = path.join(destTemplatesDir, 'claude', entry.name);
-      
+
       try {
         if (entry.isDirectory()) {
           this.copyDirSync(srcPath, destPath);
@@ -948,7 +937,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         console.warn(`⚠️  Failed to migrate template: ${entry.name} - ${error.message}`);
       }
     }
-    
+
     return {
       success: errorCount === 0,
       migratedCount,
@@ -967,25 +956,25 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
   migrateMCP(claudeDir, aiCraftDir) {
     const mcpDir = path.join(claudeDir, 'mcp');
     const destMCPDir = path.join(aiCraftDir, 'mcp');
-    
+
     if (!fs.existsSync(mcpDir)) {
       return { success: true, skipped: true, message: 'No MCP directory found' };
     }
-    
+
     // Create destination directory
     if (!fs.existsSync(destMCPDir)) {
       fs.mkdirSync(destMCPDir, { recursive: true });
     }
-    
+
     // Copy MCP configurations
     const entries = fs.readdirSync(mcpDir, { withFileTypes: true });
     let migratedCount = 0;
     let errorCount = 0;
-    
+
     for (const entry of entries) {
       const srcPath = path.join(mcpDir, entry.name);
       const destPath = path.join(destMCPDir, entry.name);
-      
+
       try {
         if (entry.isDirectory()) {
           this.copyDirSync(srcPath, destPath);
@@ -998,7 +987,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         console.warn(`⚠️  Failed to migrate MCP config: ${entry.name} - ${error.message}`);
       }
     }
-    
+
     return {
       success: errorCount === 0,
       migratedCount,
@@ -1018,7 +1007,7 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
     const targetPath = path.resolve(projectPath);
     const claudeDir = path.join(targetPath, '.claude');
     const aiCraftDir = path.join(targetPath, '.ai-craft');
-    
+
     // Check if it's a Claude Craft project
     if (!this.isClaudeCraftProject(targetPath)) {
       return {
@@ -1027,73 +1016,73 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         path: targetPath,
       };
     }
-    
+
     // Create .ai-craft directory if it doesn't exist
     if (!fs.existsSync(aiCraftDir)) {
       fs.mkdirSync(aiCraftDir, { recursive: true });
     }
-    
+
     const results = {};
     const startTime = Date.now();
-    
+
     // Migrate each component
     console.log(`🔄 Migrating AI Craft components...\n`);
-    
+
     // 1. Migrate CLAUDE.md to AI-CRAFT.md
     console.log(`  📄 Migrating CLAUDE.md...`);
     results.claudeMd = this.createAICraftMd(claudeDir, aiCraftDir);
     console.log(`     ${results.claudeMd.created ? '✅' : '⚠️ '} AI-CRAFT.md`);
-    
+
     // 2. Migrate configuration
     console.log(`  ⚙️  Migrating configuration...`);
     results.config = this.createConfig(claudeDir, aiCraftDir);
     console.log(`     ${results.config.created ? '✅' : '⚠️ '} ai-craft.yaml`);
-    
+
     // 3. Migrate rules
     console.log(`  📜 Migrating rules...`);
     results.rules = this.migrateRules(claudeDir, aiCraftDir);
     console.log(`     ${results.rules.success ? '✅' : '⚠️ '} ${results.rules.migratedCount || 0} rules`);
-    
+
     // 4. Migrate agents
     console.log(`  🤖 Migrating agents...`);
     results.agents = this.migrateAgents(claudeDir, aiCraftDir);
     console.log(`     ${results.agents.success ? '✅' : '⚠️ '} ${results.agents.migratedCount || 0} agents`);
-    
+
     // 5. Migrate commands
     console.log(`  ⚡ Migrating commands...`);
     results.commands = this.migrateCommands(claudeDir, aiCraftDir);
     console.log(`     ${results.commands.success ? '✅' : '⚠️ '} ${results.commands.migratedCount || 0} commands`);
-    
+
     // 6. Migrate skills
     console.log(`  🎯 Migrating skills...`);
     results.skills = this.migrateSkills(claudeDir, aiCraftDir);
     console.log(`     ${results.skills.success ? '✅' : '⚠️ '} ${results.skills.migratedCount || 0} skills`);
-    
+
     // 7. Migrate templates
     console.log(`  📋 Migrating templates...`);
     results.templates = this.migrateTemplates(claudeDir, aiCraftDir);
     console.log(`     ${results.templates.success ? '✅' : '⚠️ '} ${results.templates.migratedCount || 0} templates`);
-    
+
     // 8. Migrate MCP
     console.log(`  🔗 Migrating MCP servers...`);
     results.mcp = this.migrateMCP(claudeDir, aiCraftDir);
     console.log(`     ${results.mcp.success ? '✅' : '⚠️ '} ${results.mcp.migratedCount || 0} MCP configs`);
-    
+
     // 9. Create subdirectories
     console.log(`  📦 Creating subdirectories...`);
     this.initializeSubdirs(aiCraftDir);
     console.log(`     ✅ Subdirectories created`);
-    
+
     // 10. Create providers directory structure
     console.log(`  🎨 Creating providers directory...`);
     this.createProvidersDir(aiCraftDir);
     console.log(`     ✅ Providers directory created`);
-    
+
     // 11. Create symlink for backward compatibility
     console.log(`  🔗 Creating backward compatibility symlink...`);
     this.createSymlink(aiCraftDir, claudeDir);
     console.log(`     ✅ .claude -> .ai-craft symlink created`);
-    
+
     // Mark as migrated
     const configPath = path.join(aiCraftDir, 'ai-craft.yaml');
     if (fs.existsSync(configPath)) {
@@ -1103,19 +1092,19 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         config.compatibility.migrated = new Date().toISOString();
         config.compatibility.auto_migrate = false;
         config.compatibility.from_claude_craft = true;
-        
+
         fs.writeFileSync(configPath, yamlDump(config, { indent: 2 }));
       } catch {
         // Ignore errors
       }
     }
-    
+
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
-    
+
     // Update stats
     this.migrationStats.total++;
     this.migrationStats.success++;
-    
+
     return {
       success: true,
       path: targetPath,

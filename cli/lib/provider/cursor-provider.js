@@ -1,10 +1,10 @@
 /**
  * AI Craft - Cursor Provider
  * Implementation for Cursor (VSCode)
- * 
+ *
  * This file is part of AI Craft (formerly Claude Craft)
  * Multi-AI Development Framework
- * 
+ *
  * @module provider/cursor-provider
  */
 
@@ -13,10 +13,10 @@ import { execa } from 'execa';
 
 /**
  * Cursor Provider - VSCode Integration
- * 
+ *
  * Note: Cursor is primarily a VSCode extension, not a standalone CLI
  * This provider provides limited CLI support where available
- * 
+ *
  * Supports:
  * - Cursor CLI (if available)
  * - VSCode extension commands
@@ -25,14 +25,14 @@ import { execa } from 'execa';
 export class CursorProvider extends BaseProvider {
   constructor() {
     super();
-    
+
     this.name = 'cursor';
     this.displayName = 'Cursor (VSCode)';
     this.mcpSupported = false; // Cursor has limited MCP support
     this.hooksSupported = false; // Cursor uses VSCode extensions
     this.subAgentsSupported = false; // Not available in CLI
     this.forkSupported = false;
-    
+
     // Cursor supports various underlying models
     this.supportedModels = [
       'gpt-4o',
@@ -47,16 +47,16 @@ export class CursorProvider extends BaseProvider {
       'mistral-large',
       'gemini-1.5-pro',
     ];
-    
+
     this.defaultModel = 'gpt-4o';
-    
+
     // Model aliases
     this.modelAliases = {
-      'opus': 'claude-3-5-sonnet',
+      opus: 'claude-3-5-sonnet',
       'opus-4.8': 'claude-3-5-sonnet',
-      'sonnet': 'gpt-4o',
+      sonnet: 'gpt-4o',
       'sonnet-5': 'gpt-4o',
-      'haiku': 'gpt-4o-mini',
+      haiku: 'gpt-4o-mini',
       'haiku-4.5': 'gpt-4o-mini',
     };
   }
@@ -76,7 +76,7 @@ export class CursorProvider extends BaseProvider {
         reject: false,
         ...options,
       };
-      
+
       const result = await execa('cursor', cursorArgs, execOptions);
       return {
         success: true,
@@ -132,14 +132,14 @@ export class CursorProvider extends BaseProvider {
     // Cursor doesn't have a standard CLI interface
     // Most commands would be executed through VSCode
     const commandMap = {
-      'version': ['--version'],
-      'chat': [args.join(' ')],
+      version: ['--version'],
+      chat: [args.join(' ')],
     };
-    
+
     if (commandMap[command]) {
       return commandMap[command];
     }
-    
+
     // Default: return as-is (will likely fail)
     return [command, ...args];
   }
@@ -182,10 +182,10 @@ export class CursorProvider extends BaseProvider {
     if (!super.validateConfig(config)) {
       return false;
     }
-    
+
     console.warn('⚠️ Cursor is primarily a VSCode extension. CLI support is limited.');
     console.warn('   For full functionality, use Cursor within VSCode.');
-    
+
     return true;
   }
 
@@ -195,14 +195,14 @@ export class CursorProvider extends BaseProvider {
   getVSCodeConfig() {
     // Configuration that would go in VSCode settings.json
     return {
-      "cursor.rules": [
+      'cursor.rules': [
         {
-          "path": ".ai-craft",
-          "prompt": ".ai-craft/AI-CRAFT.md"
-        }
+          path: '.ai-craft',
+          prompt: '.ai-craft/AI-CRAFT.md',
+        },
       ],
-      "cursor.agentMode": true,
-      "cursor.enableCodex": true,
+      'cursor.agentMode': true,
+      'cursor.enableCodex': true,
     };
   }
 
