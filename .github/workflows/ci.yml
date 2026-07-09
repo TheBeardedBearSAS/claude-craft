@@ -171,13 +171,13 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # pinned: v7.0.0
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # pinned: v4
+        uses: github/codeql-action/init@54f647b7e1bb85c95cddabcd46b0c578ec92bc1a # pinned: v4
         with:
           languages: javascript
           config-file: ./.github/codeql/codeql-config.yml
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # pinned: v4
+        uses: github/codeql-action/analyze@54f647b7e1bb85c95cddabcd46b0c578ec92bc1a # pinned: v4
 
   npm-audit:
     name: npm security audit (moderate+)
@@ -207,7 +207,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # pinned: v7.0.0
 
       - name: Run Trivy vulnerability scanner (filesystem)
-        uses: aquasecurity/trivy-action@cf5c088a69634cd13ccddc735d7926162c31f9a6 # pinned: master @ 2026-06-08
+        uses: aquasecurity/trivy-action@c07df6fec6fa692e6fd1200d50aaa1fdd66f03c8 # pinned: master @ 2026-06-08
         with:
           scan-type: 'fs'
           severity: 'CRITICAL,HIGH'
