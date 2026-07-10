@@ -305,6 +305,23 @@ describe('ClaudeCraftCLI extra command handlers', () => {
       expect(errorSpy.mock.calls.join('\n')).toContain('Usage: ai-craft config set');
     });
 
+    // SEC-02: the manual key.split('.') walk had no guard on __proto__/constructor/
+    // prototype, so `config set __proto__.polluted 1` polluted Object.prototype
+    // for the whole process (CWE-1321).
+    it('rejects __proto__ key segments to prevent prototype pollution (SEC-02)', async () => {
+      const cli = new ClaudeCraftCLI();
+      cli.config.targetPath = tempDir;
+      fs.mkdirSync(path.join(tempDir, '.ai-craft'), { recursive: true });
+
+      await expect(cli.handleConfigCommand(['set', '__proto__.polluted', '1'], {})).rejects.toThrow(
+        'process.exit called'
+      );
+
+      expect({}.polluted).toBeUndefined();
+      expect(errorSpy.mock.calls.join('\n')).toContain('__proto__');
+      expect(exitSpy).toHaveBeenCalledWith(1);
+    });
+
     it('sets a nested config value with JSON parsing', async () => {
       const cli = new ClaudeCraftCLI();
       cli.config.targetPath = tempDir;

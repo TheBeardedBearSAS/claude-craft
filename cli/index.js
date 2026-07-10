@@ -846,6 +846,17 @@ class AICraftCLI {
 
     // Simple dot notation parsing
     const keys = key.split('.');
+
+    // SEC-02: without this guard, `config set __proto__.polluted 1` walks
+    // into Object.prototype and pollutes it for the whole process (CWE-1321).
+    const forbiddenKeySegments = new Set(['__proto__', 'constructor', 'prototype']);
+    if (keys.some((segment) => forbiddenKeySegments.has(segment))) {
+      console.error(
+        `${c.red}Error: Invalid configuration key '${key}' — '__proto__', 'constructor', and 'prototype' are reserved.${c.reset}`
+      );
+      process.exit(1);
+    }
+
     let current = config;
 
     for (let i = 0; i < keys.length - 1; i++) {
