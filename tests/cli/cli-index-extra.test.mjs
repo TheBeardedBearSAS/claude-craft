@@ -171,7 +171,11 @@ describe('ClaudeCraftCLI extra command handlers', () => {
       expect(output()).toContain('Total: 2 servers');
     });
 
-    it('starts MCP servers for the current provider', async () => {
+    // ERG-05/FONC-02: startAllMCPServers() is a stub (would_start, no real
+    // process is spawned), but the CLI used to print "✅ MCP Servers
+    // initialized: Started: N" — a false claim of success. The message must
+    // be honest about auto-start not being implemented yet.
+    it('registers MCP servers without claiming a real start (ERG-05)', async () => {
       const cli = new ClaudeCraftCLI();
       cli.currentProvider = 'claude';
       cli.config.targetPath = tempDir;
@@ -183,8 +187,9 @@ describe('ClaudeCraftCLI extra command handlers', () => {
 
       await cli.handleMCPCommand(['start'], {});
 
-      expect(output()).toContain('Started: 1');
-      expect(output()).toContain('Failed: 1');
+      expect(output()).not.toContain('MCP Servers initialized');
+      expect(output()).toContain('MCP servers registered (1)');
+      expect(output()).toContain('auto-start is not yet implemented');
       expect(output()).toContain('git: boom');
     });
 

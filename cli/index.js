@@ -743,10 +743,12 @@ class AICraftCLI {
 
     const result = await providerManager.startAllMCPServers(providerName, targetPath);
 
-    console.log(`${c.green}✅ MCP Servers initialized:${c.reset}`);
-    console.log(`   Started: ${Object.keys(result.started).length}`);
-    console.log(`   Failed: ${Object.keys(result.failed).length}`);
-    console.log(`   Total: ${result.total}`);
+    // ERG-05/FONC-02: startAllMCPServers() is currently a stub (registers
+    // servers, spawns no real process), so claiming "Started: N" here was a
+    // false success message. Report registration honestly instead.
+    console.log(
+      `${c.yellow}⚠️  MCP servers registered (${Object.keys(result.started).length}) — auto-start is not yet implemented, see .ai-craft/providers/MCP-README.md for manual startup${c.reset}`
+    );
 
     if (Object.keys(result.failed).length > 0) {
       console.log(`\n${c.yellow}⚠️  Failed to start some servers:${c.reset}`);
