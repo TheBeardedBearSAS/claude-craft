@@ -154,6 +154,18 @@ class AICraftCLI {
       return;
     }
 
+    // ERG-01: parseArgs() routes every `--`-prefixed argument into `options`,
+    // never into `command`. So `--help` becomes options.help=true with
+    // command left null, and the switch's default branch mistakes that for
+    // "no command" and launches interactiveInstall — which blocks on stdin
+    // and hangs in CI when stdin is closed. `-h` and the bare `help` command
+    // already work correctly via the switch below, so only the long flag
+    // needs this early, pre-parse check.
+    if (args.includes('--help')) {
+      await this.printAICraftHelp();
+      return;
+    }
+
     // Parse arguments
     const { command, path: targetPath, options } = this.parseArgs(args);
 
