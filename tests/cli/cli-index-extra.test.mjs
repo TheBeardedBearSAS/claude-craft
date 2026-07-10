@@ -233,6 +233,22 @@ describe('ClaudeCraftCLI extra command handlers', () => {
       await expect(cli.handleMCPCommand(['bogus'], {})).rejects.toThrow('process.exit called');
       expect(errorSpy.mock.calls.join('\n')).toContain('Unknown MCP subcommand');
     });
+
+    // SEC-01: serverName was interpolated into path.join(mcpDir, `${serverName}.json`)
+    // without validation, so `mcp add '../../escaped-poc' --command=evil` wrote a
+    // JSON file outside .ai-craft/mcp/ (CWE-22 path traversal).
+    it('rejects a server name that path-traversals out of the mcp directory (SEC-01)', async () => {
+      const cli = new ClaudeCraftCLI();
+      cli.config.targetPath = tempDir;
+
+      await expect(cli.handleMCPCommand(['add', '../../escaped-poc'], { command: 'evil' })).rejects.toThrow(
+        'process.exit called'
+      );
+
+      expect(fs.existsSync(path.join(tempDir, 'escaped-poc.json'))).toBe(false);
+      expect(errorSpy.mock.calls.join('\n')).toContain('Invalid MCP server name');
+      expect(exitSpy).toHaveBeenCalledWith(1);
+    });
   });
 
   // -------------------------------------------------------------------

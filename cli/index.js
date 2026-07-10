@@ -50,7 +50,7 @@ import { runInstallFromUrl } from './lib/install-from-url.js';
 import { runSkillAdd, runSkillList, runSkillRemove } from './lib/skill.js';
 // Flattener module
 import { flatten as flattenCodebaseFn } from './lib/flattener.js';
-import { assertSafeTarget } from './lib/path-safety.js';
+import { assertSafeTarget, assertWithinDir } from './lib/path-safety.js';
 
 // CLI package root
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -738,6 +738,17 @@ class AICraftCLI {
       fs.mkdirSync(mcpDir, { recursive: true });
     }
 
+    // SEC-01: serverName is user input (positional arg of `mcp add <name>`).
+    // Without this check a name like `../../escaped-poc` writes the JSON
+    // config outside .ai-craft/mcp/ (CWE-22 path traversal).
+    let serverPath;
+    try {
+      serverPath = assertWithinDir(mcpDir, path.join(mcpDir, `${serverName}.json`));
+    } catch (error) {
+      console.error(`${c.red}Error: Invalid MCP server name '${serverName}': ${error.message}${c.reset}`);
+      process.exit(1);
+    }
+
     const serverConfig = {
       name: serverName,
       description: options.description || '',
@@ -749,7 +760,6 @@ class AICraftCLI {
       auto_start: true,
     };
 
-    const serverPath = path.join(mcpDir, `${serverName}.json`);
     fs.writeFileSync(serverPath, JSON.stringify(serverConfig, null, 2));
 
     console.log(`${c.green}✅ MCP Server added: ${serverName}${c.reset}`);
