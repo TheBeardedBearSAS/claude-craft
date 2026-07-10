@@ -1,7 +1,7 @@
 {
   "name": "@ai-craft/core",
-  "version": "1.0.0-ai-craft.0",
-  "description": "A comprehensive multi-AI development framework compatible with Vibe, Codex, OpenCode, Claude Code, Cursor, GitHub Copilot, and more. Install standardized rules, agents, commands, and MCP servers for your projects across any AI provider.",
+  "version": "9.0.0",
+  "description": "A comprehensive multi-AI development framework compatible with Vibe, Codex, OpenCode, Claude Code, Cursor, and more. Install standardized rules, agents, commands, and MCP servers for your projects across any AI provider.",
   "type": "module",
   "main": "cli/index.js",
   "bin": {
@@ -83,26 +83,26 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "21.1.0",
-    "@commitlint/config-conventional": "21.1.0",
+    "@commitlint/cli": "21.2.1",
+    "@commitlint/config-conventional": "21.2.0",
     "@eslint/js": "^10.0.0",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/space-grotesk": "^5.2.10",
     "@stryker-mutator/core": "9.6.1",
     "@stryker-mutator/vitest-runner": "9.6.1",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
-    "@vitest/coverage-v8": "4.1.9",
+    "@vitest/coverage-v8": "4.1.10",
     "cytoscape": "^3.33.2",
     "cytoscape-dagre": "^4.0.0",
     "dompurify": "^3.4.11",
     "eslint": "10.6.0",
     "eslint-config-prettier": "^10.0.0",
     "fast-check": "^4.8.0",
-    "prettier": "3.9.3",
+    "prettier": "3.9.5",
     "svelte": "^5.55.4",
     "uplot": "^1.6.32",
     "vite": "^8.0.14",
-    "vitest": "4.1.9"
+    "vitest": "4.1.10"
   },
   "files": [
     "bundles/",

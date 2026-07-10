@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.19.4] - 2026-07-10
+
+### Fixed
+
+- **Lockfile Dependabot désynchronisé (récidive)** (#131) : le bump `marked` 18.0.5→18.0.6 laissait à nouveau `package-lock.json` sans l'entrée imbriquée `conventional-commits-parser@6.4.0`, faisant échouer `npm ci` sous Node 22 (`Missing: conventional-commits-parser@6.4.0 from lock file`). Lockfile régénéré via `npm install` sous `node:22` (Docker).
+
+### Chore
+
+- Mise à jour dépendances : groupe `github/codeql-action` (`init`/`analyze`) 4.36.3→4.37.0 (#132) ; groupe development `@commitlint/cli` 21.2.0→21.2.1, `@sveltejs/vite-plugin-svelte` 7.1.2→7.2.0, `fast-check` 4.8.0→4.9.0, `prettier` 3.9.4→3.9.5, `vite` 8.1.3→8.1.4 (#133) ; `marked` 18.0.5→18.0.6 (#131).
+
+## [8.19.3] - 2026-07-10
+
+### Fixed
+
+- **Lockfile Dependabot désynchronisé** (#128) : après le bump de `@commitlint/config-conventional` à 21.2.0 (qui force `conventional-commits-parser` à `^7.0.0`), le lockfile ne contenait plus la copie imbriquée `conventional-commits-parser@6.4.0` requise en peer optionnel par `@conventional-changelog/git-client`. npm 11 tolère cette absence mais **npm 10** (bundled avec Node 22, utilisé par la lane CI Node 22) la refuse avec `npm ci` (`Missing: conventional-commits-parser@6.4.0 from lock file`). Lockfile régénéré via `npm install` sous `node:22` (Docker) pour matcher exactement l'environnement CI.
+- **CodeQL "configuration error"** récurrent (#123, #125) : `init`/`analyze` de `github/codeql-action` étaient bumpés par Dependabot dans des PRs séparées (pas de `groups:` pour l'écosystème `github-actions`), ce qui pouvait laisser les deux steps sur des versions différentes de codeql-action (`Loaded a configuration file for version X, but running version Y`). `.github/dependabot.yml` groupe désormais `github/codeql-action/*` dans une seule PR.
+
+### Chore
+
+- Mise à jour dépendances : `@commitlint/cli`/`config-conventional` 21.2.0, `vitest`/`@vitest/coverage-v8` 4.1.10, `prettier` 3.9.4 (#128) ; `sigstore/cosign-installer` 4.1.2 (#124) ; `github/codeql-action` 4.36.3 (#123) ; groupe production npm (#126) ; `aquasecurity/trivy-action` (#127).
+
 ## [8.19.2] - 2026-07-03
 
 Audit exhaustif multi-agents (équipe domaines + devil's advocate, Context7 + recherche web, alignement sur les 4 articles Anthropic : Dynamic Workflows, Skills, Loops, what's-new v2.1.193).
