@@ -1,9 +1,9 @@
 # AI Craft - Multi-AI Development Framework
 
-**Version:** 1.0.0-ai-craft.0 | **Providers:** Vibe, Codex, OpenCode, Claude Code, Cursor, GitHub Copilot  
+**Version:** 9.0.0 | **Providers:** Vibe, Codex, OpenCode, Claude Code, Cursor  
 **Legacy:** Compatible with existing Claude Craft installations
 
-A comprehensive AI-assisted development framework compatible with **multiple AI providers**. This framework extends the proven Claude Craft methodology to work seamlessly with Vibe, Codex, OpenCode, Claude Code, Cursor, GitHub Copilot, and other AI coding assistants.
+A comprehensive AI-assisted development framework compatible with **multiple AI providers**. This framework extends the proven Claude Craft methodology to work seamlessly with Vibe, Codex, OpenCode, Claude Code, Cursor, and other AI coding assistants.
 
 ---
 
@@ -24,11 +24,12 @@ AI Craft maintains the same core principles as Claude Craft, but abstracts away 
 | Provider | Status | Models | CLI | MCP Support | Hooks |
 |----------|--------|--------|-----|-------------|--------|
 | **Vibe** (Mistral AI) | ✅ Tier 1 | mistral-large, mistral-medium, mistral-small | ✅ | ✅ | ✅ |
-| **Codex** (Google) | ✅ Tier 1 | codex-pro, codex-plus, codex | ✅ | ⚠️ Limited | ⚠️ Partial |
-| **OpenCode** (Open Source) | ✅ Tier 1 | llama-3.2, mixtral, phi-4 | ✅ | ✅ | ✅ |
+| **Codex** (OpenAI) | ✅ Tier 1 | gpt-5-codex, gpt-5-codex-mini | ✅ | ✅ Native | ✅ Via GitHub |
+| **OpenCode** (sst/opencode) | ✅ Tier 1 | 75+ cloud providers via Models.dev (Anthropic, OpenAI, Google, DeepSeek, Qwen, ...) | ✅ | ✅ | ✅ |
 | **Claude Code** (Anthropic) | ✅ Tier 1 | opus-4.8, sonnet-5, haiku-4.5 | ✅ | ✅ | ✅ |
-| **Cursor** (VSCode) | ⚠️ Tier 2 | gpt-4o, claude-3-5-sonnet | ✅ | ⚠️ Limited | ⚠️ Partial |
-| **GitHub Copilot** | ⚠️ Tier 2 | gpt-4o, gpt-4 | ❌ (Extension) | ❌ | ❌ |
+| **Cursor CLI** | ⚠️ Tier 2 | gpt-4o, claude-3-5-sonnet, +more (multi-model) | ✅ | ✅ Native | ⚠️ Partial |
+
+> **GitHub Copilot** is not currently supported: there is no `copilot-provider.js` in `cli/lib/provider/` (see Contributing → Adding a New AI Provider to add one). GitHub Copilot CLI is a real, separate product (`github.com/github/copilot-cli`, GA since 2026-06) and could be integrated in a future release.
 
 ---
 
@@ -127,12 +128,12 @@ provider_settings:
     api_endpoint: "https://api.mistral.ai"
     
   codex:
-    api_key: "${CODEX_API_KEY}"
-    model: "codex-pro"
+    api_key: "${OPENAI_API_KEY}"
+    model: "gpt-5-codex"
     
   opencode:
-    base_url: "http://localhost:8080"
-    model: "llama-3.2-90b"
+    model: "anthropic/claude-sonnet-4-20250514"  # provider-qualified id (Models.dev registry)
+    # self_hosted_url: "http://localhost:8080"   # optional: `opencode run --attach <url>` for a self-hosted/OpenAI-compatible backend
     
   claude:
     model: "opus-4.8"
@@ -302,11 +303,11 @@ providers:
     effort: high
     memory: user
   codex:
-    model: "codex-pro"
+    model: "gpt-5-codex"
     effort: high
     memory: project
   opencode:
-    model: "llama-3.2-90b"
+    model: "anthropic/claude-sonnet-4-20250514"
     effort: high
     memory: session
   claude:
@@ -343,8 +344,8 @@ AI Craft optimizes token usage across all providers:
 optimization:
   model_routing:
     architecture: "opus-4.8"      # or "mistral-large-3.5" for Vibe
-    code_review: "sonnet-5"       # or "codex-pro" for Codex
-    implementation: "sonnet-5"    # or "llama-3.2-70b" for OpenCode
+    code_review: "sonnet-5"       # or "gpt-5-codex" for Codex
+    implementation: "sonnet-5"    # or "openai/gpt-5" for OpenCode
     quick_tasks: "haiku-4.5"      # or "mistral-small-3.5" for Vibe
 ```
 
@@ -408,7 +409,7 @@ All 220 commands work identically across all providers:
 | `/workflow:init` | Start development workflow | ✅ All |
 | `/workflow:status` | Show current workflow status | ✅ All |
 | `/workflow:auto-sprint` | Autonomous sprint orchestration | ✅ All |
-| `/team:audit` | Full project audit | ✅ All (except Copilot) |
+| `/team:audit` | Full project audit | ✅ All |
 | `/team:sprint` | Sprint management | ✅ All |
 
 ### Quality Commands
@@ -416,7 +417,7 @@ All 220 commands work identically across all providers:
 | Command | Description | Providers |
 |---------|-------------|-----------|
 | `/qa:tdd` | Test-Driven Development | ✅ All |
-| `/qa:recette` | Browser-based acceptance testing | ✅ All (except Copilot) |
+| `/qa:recette` | Browser-based acceptance testing | ✅ All |
 | `/qa:fix` | Fix bugs with AI assistance | ✅ All |
 | `/qa:regression` | Check regression tests | ✅ All |
 | `/gate:validate-*` | Quality gate validation | ✅ All |
@@ -460,63 +461,57 @@ vibe --system-prompts .ai-craft/AI-CRAFT.md
 - Excellent reasoning capabilities
 - Cost-effective for most tasks
 
-### Codex (Google)
+### Codex (OpenAI)
 
 **Installation:**
 ```bash
-# Install Codex CLI
-npm install -g @google-cloud/codex-cli
+# Install Codex CLI (github.com/openai/codex, developers.openai.com/codex)
+npm install -g @openai/codex
 
 # Install AI Craft for Codex
 npx @ai-craft/core install ~/my-project --provider=codex
 
 # Set your API key
-export CODEX_API_KEY=your_api_key
+export OPENAI_API_KEY=your_api_key
 
 # Start a session
-codex --system .ai-craft/AI-CRAFT.md
+codex
 ```
 
 **Recommended Models:**
-- **Architecture:** `codex-pro`
-- **Implementation:** `codex-plus`
-- **Quick Tasks:** `codex`
+- **Architecture / Implementation:** `gpt-5-codex`
+- **Quick Tasks:** `gpt-5-codex-mini`
 
 **Codex-Specific Features:**
 - Deep GitHub integration
 - Excellent code completion
 - Strong infilling capabilities
 
-### OpenCode (Self-Hosted)
+### OpenCode (sst/opencode)
 
 **Installation:**
 ```bash
-# Install OpenCode
-git clone https://github.com/github/vscode-codex.git
-cd vscode-codex
-npm install
-npm run build
+# Install OpenCode (github.com/sst/opencode, opencode.ai)
+npm install -g opencode-ai
 
 # Install AI Craft for OpenCode
 npx @ai-craft/core install ~/my-project --provider=opencode
 
-# Configure your endpoint
-export OPENCODE_ENDPOINT=http://localhost:8080
+# Authenticate with a cloud provider (or paste an API key when prompted)
+opencode auth login
 
 # Start a session
-opencode --model llama-3.2-90b --system .ai-craft/AI-CRAFT.md
+opencode
 ```
 
-**Recommended Models:**
-- **All Tasks:** `llama-3.2-90b` (best overall)
-- **Lightweight:** `llama-3.2-70b`
-- **Ultra-Light:** `llama-3.2-11b`
+**Recommended Models** (provider-qualified ids, Models.dev registry — representative sample of 75+ supported providers):
+- **Architecture / Implementation:** `anthropic/claude-sonnet-4-20250514`, `openai/gpt-5`
+- **Alternative providers:** `google/gemini-2.5-pro`, `deepseek/deepseek-v4-pro`, `qwen/qwen3-coder-480b`
 
 **OpenCode-Specific Features:**
-- Complete data privacy
-- Full customization
-- No API costs (self-hosted)
-- Support for any open-source model
+- 75+ cloud model providers via Models.dev, resolved through `opencode auth login` or plain API key env vars (not self-hosted-only)
+- Full MCP support
+- Optional self-hosted / OpenAI-compatible backend via `opencode run --attach <url>`
 
 ### Claude Code (Anthropic)
 
@@ -538,47 +533,29 @@ claude
 - **Standard Tasks:** `sonnet-5`
 - **Quick Tasks:** `haiku-4.5`
 
-### Cursor (VSCode)
+### Cursor CLI
 
 **Installation:**
 ```bash
-# Install Cursor extension in VSCode
-# (Download from VSCode Marketplace)
+# Install Cursor CLI (cursor.com/cli, cursor.com/docs/cli/installation)
+curl https://cursor.com/install -fsS | bash
 
 # Install AI Craft for Cursor
 npx @ai-craft/core install ~/my-project --provider=cursor
 
-# Configure in VSCode settings.json
-{
-  "cursor.rules": [
-    {
-      "path": ".ai-craft",
-      "prompt": ".ai-craft/AI-CRAFT.md"
-    }
-  ]
-}
+# Start a session (invoked as `agent`)
+agent
 ```
 
-**Limitations:**
-- Primarily VSCode-based
-- Limited CLI support
-- Uses underlying LLM provider (GPT-4, Claude, etc.)
+**Notes:**
+- Full standalone terminal agent since 2026 - not merely a VSCode extension
+- Scriptable in CI/SSH via non-interactive mode (`-p`/`--output-format`)
+- Native MCP support via `agent mcp` / shared `mcp.json`
+- Uses underlying LLM providers (GPT-4o, Claude, etc.)
 
-### GitHub Copilot
+### GitHub Copilot (not implemented)
 
-**Limited Support (Read-Only Mode):**
-```bash
-# Install AI Craft for Copilot
-npx @ai-craft/core install ~/my-project --provider=copilot --read-only
-
-# Use via GitHub Copilot Chat
-# (Reference .ai-craft/AI-CRAFT.md in your prompts)
-```
-
-**Limitations:**
-- No CLI support
-- No hook system
-- Limited to Copilot's capabilities
+GitHub Copilot is **not currently supported** by AI Craft: no `copilot-provider.js` exists in `cli/lib/provider/`, and `--provider=copilot` is not a recognized option. GitHub Copilot CLI is a real, separate terminal agent (`github.com/github/copilot-cli`, GA since 2026-06) that could be integrated in a future release — see "Adding a New AI Provider" below if you want to contribute one.
 
 ---
 
@@ -624,24 +601,17 @@ security:
 
 ### Model Routing Matrix
 
-| Task Type | Vibe | Codex | OpenCode | Claude | Cursor | Copilot |
-|-----------|------|-------|----------|--------|--------|---------|
-| **Architecture Design** | mistral-large | codex-pro | llama-3.2-90b | opus-4.8 | gpt-4o | gpt-4o |
-| **Code Review** | mistral-large | codex-pro | llama-3.2-70b | sonnet-5 | gpt-4o | gpt-4o |
-| **Implementation** | mistral-medium | codex-plus | llama-3.2-70b | sonnet-5 | gpt-4o | gpt-4o |
-| **Quick Fixes** | mistral-small | codex | llama-3.2-11b | haiku-4.5 | gpt-4o-mini | gpt-4o-mini |
-| **Documentation** | mistral-medium | codex-plus | llama-3.2-70b | sonnet-5 | gpt-4o | gpt-4o |
+| Task Type | Vibe | Codex | OpenCode | Claude | Cursor |
+|-----------|------|-------|----------|--------|--------|
+| **Architecture Design** | mistral-large | gpt-5-codex | anthropic/claude-sonnet-4-20250514 | opus-4.8 | gpt-4o |
+| **Code Review** | mistral-large | gpt-5-codex | openai/gpt-5 | sonnet-5 | gpt-4o |
+| **Implementation** | mistral-medium | gpt-5-codex | openai/gpt-5 | sonnet-5 | gpt-4o |
+| **Quick Fixes** | mistral-small | gpt-5-codex-mini | google/gemini-2.5-pro | haiku-4.5 | gpt-4o-mini |
+| **Documentation** | mistral-medium | gpt-5-codex | openai/gpt-5 | sonnet-5 | gpt-4o |
 
 ### Token Usage Comparison
 
-| Provider | Cost per 1M Tokens | AI Craft Savings |
-|----------|---------------------|------------------|
-| **Claude Opus** | ~$15-20 | 55-65% |
-| **Claude Sonnet** | ~$3-4 | 55-65% |
-| **Vibe Large** | ~$2-3 | 55-65% |
-| **Vibe Medium** | ~$0.5-1 | 55-65% |
-| **Codex Pro** | ~$10-15 | 55-65% |
-| **OpenCode (Self-Host)** | ~$0 | 55-65% |
+> **Not independently measured per provider.** The 55-65% figure quoted for Claude Craft's RTK optimization was measured specifically for Claude Code token usage. It has **not** been re-measured for this multi-provider architecture, and reusing it as-is across all six providers would be misleading: per-token cost varies radically between them (e.g. a paid Claude Opus/Sonnet or Codex API call vs. an OpenCode session routed through a near-$0 self-hosted/OpenAI-compatible backend). Until real per-provider benchmarks exist, treat any cross-provider savings claim in this document as unverified.
 
 ### Performance Benchmarks
 
@@ -730,7 +700,9 @@ Special thanks to:
 - The **Claude Code** community for inspiration and feedback
 - **Anthropic** for creating the original Claude Code
 - **Mistral AI** for Vibe and excellent open-source contributions
-- **Google** for Codex and AI research
+- **OpenAI** for Codex
+- **sst** for the open-source OpenCode terminal agent
+- **Cursor** for the Cursor CLI
 - All contributors who have helped shape this framework
 
 ---
