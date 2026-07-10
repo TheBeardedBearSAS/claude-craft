@@ -587,6 +587,40 @@ describe('ClaudeCraftCLI extra command handlers', () => {
       expect(cli.handleSetProvider).toHaveBeenCalledWith('codex');
     });
 
+    // ERG-03: `provider list/status/use` were treated as a raw provider name
+    // (not a subcommand keyword), so they all failed with
+    // "Unknown AI provider 'list'" instead of dispatching like `mcp`/`config`.
+    it('provider list dispatches to handleProvidersCommand (ERG-03)', async () => {
+      process.argv = ['node', 'index.js', 'provider', 'list'];
+      const cli = new ClaudeCraftCLI();
+      vi.spyOn(cli, 'handleProvidersCommand').mockResolvedValue(undefined);
+      await cli.run();
+      expect(cli.handleProvidersCommand).toHaveBeenCalled();
+    });
+
+    it('provider status dispatches to handleProviderStatus (ERG-03)', async () => {
+      process.argv = ['node', 'index.js', 'provider', 'status'];
+      const cli = new ClaudeCraftCLI();
+      vi.spyOn(cli, 'handleProviderStatus').mockResolvedValue(undefined);
+      await cli.run();
+      expect(cli.handleProviderStatus).toHaveBeenCalled();
+    });
+
+    it('provider use <name> dispatches to handleSetProvider (ERG-03)', async () => {
+      process.argv = ['node', 'index.js', 'provider', 'use', 'codex'];
+      const cli = new ClaudeCraftCLI();
+      vi.spyOn(cli, 'handleSetProvider').mockResolvedValue(undefined);
+      await cli.run();
+      expect(cli.handleSetProvider).toHaveBeenCalledWith('codex');
+    });
+
+    it('provider use without a name errors with usage (ERG-03)', async () => {
+      process.argv = ['node', 'index.js', 'provider', 'use'];
+      const cli = new ClaudeCraftCLI();
+      await expect(cli.run()).rejects.toThrow('process.exit called');
+      expect(errorSpy.mock.calls.join('\n')).toContain('Usage: ai-craft provider use');
+    });
+
     it('mcp command dispatches to handleMCPCommand', async () => {
       process.argv = ['node', 'index.js', 'mcp', 'list'];
       const cli = new ClaudeCraftCLI();

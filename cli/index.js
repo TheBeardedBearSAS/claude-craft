@@ -353,13 +353,31 @@ class AICraftCLI {
 
       case 'provider':
       case 'use': {
-        // Set default provider for this project
-        if (args.length < 2) {
-          console.error(`${c.red}Usage: ai-craft use <provider>${c.reset}`);
-          console.error(`Available providers: ${providerManager.getProviderNames().join(', ')}`);
-          process.exit(1);
+        // ERG-03: unlike `mcp <subcommand>`/`config <subcommand>`, args[1] was
+        // always treated as a raw provider name, so `provider list/status/use`
+        // all failed with "Unknown AI provider 'list'". Dispatch subcommand
+        // keywords first, falling back to the original "set provider" behavior.
+        const sub = args[1];
+        if (sub === 'list') {
+          await this.handleProvidersCommand(options);
+        } else if (sub === 'status') {
+          await this.handleProviderStatus(options);
+        } else if (sub === 'use') {
+          if (!args[2]) {
+            console.error(`${c.red}Usage: ai-craft provider use <provider>${c.reset}`);
+            console.error(`Available providers: ${providerManager.getProviderNames().join(', ')}`);
+            process.exit(1);
+          }
+          await this.handleSetProvider(args[2]);
+        } else {
+          // Set default provider for this project
+          if (args.length < 2) {
+            console.error(`${c.red}Usage: ai-craft use <provider>${c.reset}`);
+            console.error(`Available providers: ${providerManager.getProviderNames().join(', ')}`);
+            process.exit(1);
+          }
+          await this.handleSetProvider(args[1]);
         }
-        await this.handleSetProvider(args[1]);
         break;
       }
 
