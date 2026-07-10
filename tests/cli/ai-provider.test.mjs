@@ -985,6 +985,32 @@ describe('AIProviderManager', () => {
 
       await expect(manager.spawnSubAgent('task')).rejects.toThrow(/Provider 'ghost' not found/);
     });
+
+    it('warns that context forking is unsupported but still spawns the sub-agent (FONC-10)', async () => {
+      manager.currentProvider = 'vibe'; // subAgentsSupported: true in the mock
+      const provider = manager.getProvider('vibe');
+      provider.forkSupported = false; // simulate a provider without context-forking support
+      const spy = vi.spyOn(provider, 'spawnSubAgent').mockResolvedValue({ success: true, agentId: 'a1' });
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      const result = await manager.spawnSubAgent('task');
+
+      expect(result).toEqual({ success: true, agentId: 'a1' });
+      expect(spy).toHaveBeenCalledWith('task', {});
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('does not support context forking'));
+    });
+
+    it('does not warn about context forking when the provider supports it', async () => {
+      manager.currentProvider = 'vibe'; // forkSupported: true in the mock
+      const provider = manager.getProvider('vibe');
+      provider.forkSupported = true;
+      vi.spyOn(provider, 'spawnSubAgent').mockResolvedValue({ success: true });
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      await manager.spawnSubAgent('task');
+
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
   });
 
   // =========================================================================

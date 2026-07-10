@@ -499,6 +499,12 @@ export class AIProviderManager {
       return provider.sendMessage(prompt, options);
     }
 
+    if (provider.forkSupported === false) {
+      console.warn(
+        `⚠️ Provider '${providerName}' does not support context forking. Sub-agent will run without the context-forking optimization.`
+      );
+    }
+
     return provider.spawnSubAgent(prompt, options);
   }
 
