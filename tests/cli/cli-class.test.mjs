@@ -101,6 +101,17 @@ describe('ClaudeCraftCLI.run()', () => {
     expect(output).toContain('Usage');
   });
 
+  it('ERG-08: help command prints the banner exactly once', async () => {
+    // case 'help' used to call printBanner(VERSION) itself and then call
+    // this.printAICraftHelp(), which also calls printBanner(VERSION)
+    // internally — printing the banner twice in a row.
+    process.argv = ['node', 'index.js', 'help'];
+    const cli = new ClaudeCraftCLI();
+    await cli.run();
+    const bannerCalls = logSpy.mock.calls.filter((c) => typeof c[0] === 'string' && c[0].includes('AI Craft v'));
+    expect(bannerCalls).toHaveLength(1);
+  });
+
   it('init command prints workflow message', async () => {
     process.argv = ['node', 'index.js', 'init'];
     const cli = new ClaudeCraftCLI();

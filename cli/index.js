@@ -330,7 +330,8 @@ class AICraftCLI {
       case 'help':
       case '--help':
       case '-h':
-        printBanner(VERSION);
+        // ERG-08: printAICraftHelp() already calls printBanner(VERSION)
+        // internally, so calling it here too printed the banner twice.
         await this.printAICraftHelp();
         break;
 
