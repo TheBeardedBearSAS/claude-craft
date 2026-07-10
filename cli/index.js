@@ -749,6 +749,13 @@ class AICraftCLI {
       process.exit(1);
     }
 
+    // ERG-06: without --command the JSON is written with `command: undefined`,
+    // which JSON.stringify silently drops, producing an unusable server entry.
+    if (!options.command) {
+      console.error(`${c.red}Usage: ai-craft mcp add <name> --command=<cmd>${c.reset}`);
+      process.exit(1);
+    }
+
     const serverConfig = {
       name: serverName,
       description: options.description || '',

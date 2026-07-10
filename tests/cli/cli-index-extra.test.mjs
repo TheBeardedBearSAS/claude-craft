@@ -249,6 +249,17 @@ describe('ClaudeCraftCLI extra command handlers', () => {
       expect(errorSpy.mock.calls.join('\n')).toContain('Invalid MCP server name');
       expect(exitSpy).toHaveBeenCalledWith(1);
     });
+
+    it('requires --command when adding a valid server name (ERG-06)', async () => {
+      const cli = new ClaudeCraftCLI();
+      cli.config.targetPath = tempDir;
+
+      await expect(cli.handleMCPCommand(['add', 'my-server'], {})).rejects.toThrow('process.exit called');
+
+      expect(fs.existsSync(path.join(tempDir, '.ai-craft', 'mcp', 'my-server.json'))).toBe(false);
+      expect(errorSpy.mock.calls.join('\n')).toContain('Usage: ai-craft mcp add <name> --command=<cmd>');
+      expect(exitSpy).toHaveBeenCalledWith(1);
+    });
   });
 
   // -------------------------------------------------------------------
