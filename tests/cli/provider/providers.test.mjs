@@ -317,15 +317,17 @@ describe('OpenCode provider extras', () => {
     vi.restoreAllMocks();
   });
 
-  it('spawnSubAgent() maps task/iteration/timeout/dod options into --run flags', async () => {
+  it('spawnSubAgent() maps task/iteration/timeout/dod options into distinct --run flags (SEC-04)', async () => {
     execa.mockResolvedValue({ stdout: 'ok', stderr: '', exitCode: 0 });
     const provider = new OpenCodeProvider();
 
     await provider.spawnSubAgent('investigate', { maxIterations: 4, timeout: 30, dod: 'tests pass' });
 
+    // mapCommand('run', args) must return the structured args array as-is: each
+    // flag/value arrives as its own argv element, not flattened into one string.
     expect(execa).toHaveBeenCalledWith(
       'opencode',
-      ['--prompt', '--task investigate --max-iterations 4 --timeout 30 --dod tests pass'],
+      ['--task', 'investigate', '--max-iterations', '4', '--timeout', '30', '--dod', 'tests pass'],
       expect.any(Object)
     );
   });

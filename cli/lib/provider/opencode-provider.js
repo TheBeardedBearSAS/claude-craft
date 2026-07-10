@@ -194,7 +194,10 @@ export class OpenCodeProvider extends BaseProvider {
   mapCommand(command, args) {
     const commandMap = {
       version: ['--version'],
-      run: ['--prompt', args.join(' ')],
+      // Pass structured args through as-is: spawnSubAgent() already builds
+      // discrete flags (--task, --max-iterations, ...); flattening them into
+      // one string would break the real CLI invocation (SEC-04).
+      run: args,
       chat: [args.join(' ')],
       audit: ['--system', '.ai-craft/AI-CRAFT.md', 'Run a full project audit'],
       install: ['--system', '.ai-craft/AI-CRAFT.md'],
