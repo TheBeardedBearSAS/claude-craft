@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0] - 2026-07-10
+
+Renommage du framework en **AI Craft** — passage à une architecture multi-provider (Vibe, Codex, OpenCode, Claude Code, Cursor) au-dessus de la base Claude Craft. MAJOR bump : continuité SemVer (pas de reset à `1.0.0`), justifié par le breaking change de rename du package.
+
+### Changed
+
+- **BREAKING** : renommage du package npm `@the-bearded-bear/claude-craft` → `@ai-craft/core`. Les binaires `ai-craft` et `claude-craft` restent tous deux disponibles pour compatibilité ascendante.
+- **Architecture multi-provider** : introduction d'une couche provider (`cli/lib/provider/`) pour Vibe, Codex, OpenCode, Claude Code et Cursor, au-dessus du framework Claude Craft existant. Voir `.claude/AI-CRAFT.md`.
+
+### Security
+
+- **Path traversal (CWE-22, SEC-01)** : `ai-craft mcp add <name>` interpolait le nom de serveur non validé dans un chemin de fichier, permettant d'écrire hors de `.ai-craft/mcp/` (ex. `../../escaped-poc`). Validation du chemin résolu ajoutée avant écriture.
+- **Prototype pollution (CWE-1321, SEC-02)** : `ai-craft config set` acceptait des clés `__proto__`/`constructor`/`prototype` en notation pointée, polluant `Object.prototype` pour tout le process. Ces segments sont désormais rejetés.
+- **Migration symlink irrécupérable sans rollback (SEC-03)** : `createSymlink()` supprimait `.claude/` avant de créer le lien de remplacement ; un échec de `symlinkSync()` sans backup (`migrate({backup:false})`) laissait `.claude/` supprimé sans recours. Le lien est désormais créé à un chemin temporaire puis renommé atomiquement à la place de l'original.
+- **Config sécurité factice retirée (SEC-05)** : les clés `security.hook_sandboxing`/`api_key_validation` (jamais lues par aucun chemin de code, confirmé par grep exhaustif) donnaient une fausse impression de protection ; supprimées de `getDefaultConfig()`, des templates `ai-craft.yaml` et de leur duplicata dans `claude-compat.js`.
+- **Argument flattening dans le spawn de sous-processus (SEC-04)** : `mapCommand('run', args)` recombinait le tableau d'arguments structurés en une seule chaîne avant l'appel `execa`, corrompant les flags transmis au binaire réel. Corrigé sur les providers Codex, OpenCode et Vibe.
+
+### Fixed
+
+- **`spawnSubAgent()` cassait les arguments sur 3 providers** (Codex, OpenCode, Vibe) : les flags (`--task`, `--max-iterations`, `--timeout`, `--dod`, `--system`, prompt…) arrivaient aplatis en un seul argument au lieu d'argv distincts.
+- **Attribution provider erronée corrigée dans le code et la documentation** : Codex attribué à Google au lieu d'OpenAI (CONC-01), avec des noms de modèles fictifs remplacés par les vrais identifiants Codex (CONC-07) ; OpenCode modélisé à tort comme un outil local-LLM auto-hébergé uniquement, réécrit pour refléter le vrai produit (75+ providers cloud) (CONC-02) ; Cursor sous-évalué (flags de capacité CLI corrigés, fallback extension VSCode halluciné retiré) (CONC-03, FONC-05) ; support natif MCP/sub-agents de Codex rétabli (CONC-06). Ces mêmes corrections d'attribution ont été répercutées dans les templates générés (`createProviderTemplates()`) et le texte d'aide CLI, où la revendication non implémentée « GitHub Copilot » a également été retirée (FONC-06).
+- **CLI — ergonomie/fiabilité** : dispatch des sous-commandes `provider list/status/use` (ERG-03) ; `--help` ne tombe plus dans l'installeur interactif (ERG-01) ; `mcp start` ne prétend plus démarrer des serveurs qu'il ne démarre pas (ERG-05) ; `config edit` lance réellement l'éditeur (ERG-07) ; bypass `--yes` et migration signalée comme ignorée sur stdin fermé (ERG-09) ; le nom du serveur MCP est désormais requis via `--command` (ERG-06) ; suppression du faux checkmark vert pour un provider courant non installé (ERG-04).
+
+### Added
+
+- **Couverture de tests d'intégration réelle (non mockée)** pour les 5 providers (Vibe, Codex, OpenCode, Claude Code, Cursor) : `tests/cli/provider/real-subprocess.test.mjs` n'intercepte pas `execa` et vérifie l'argv exact transmis à un binaire réel, comblant l'angle mort des tests précédents (100% mockés) qui laissait passer la classe de bugs de flattening d'arguments (SEC-04).
+
 ## [8.19.4] - 2026-07-10
 
 ### Fixed
