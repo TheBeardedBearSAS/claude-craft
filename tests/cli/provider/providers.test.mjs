@@ -618,15 +618,16 @@ describe('Cursor provider extras', () => {
     vi.restoreAllMocks();
   });
 
-  it('spawnSubAgent() always throws (no sub-agent support)', async () => {
+  it('spawnSubAgent() throws because no documented CLI invocation syntax exists (not because Cursor lacks the feature)', async () => {
     const provider = new CursorProvider();
-    await expect(provider.spawnSubAgent('task')).rejects.toThrow('Cursor does not support sub-agents');
+    await expect(provider.spawnSubAgent('task')).rejects.toThrow(/not.*document/i);
+    await expect(provider.spawnSubAgent('task')).rejects.not.toThrow('Cursor does not support sub-agents');
   });
 
-  it('getMCPServers() documents that MCP is configured via VSCode settings', () => {
+  it('getMCPServers() documents native MCP support via mcp.json, not VSCode settings', () => {
     const provider = new CursorProvider();
     expect(provider.getMCPServers()).toEqual({
-      note: 'Cursor MCP servers are configured in VSCode settings.json',
+      note: 'Cursor MCP servers are configured via `agent mcp` / a shared mcp.json (see cursor.com/docs/cli/mcp).',
     });
   });
 

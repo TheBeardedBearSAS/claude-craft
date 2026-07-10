@@ -35,7 +35,7 @@ export class CursorProvider extends BaseProvider {
     super();
 
     this.name = 'cursor';
-    this.displayName = 'Cursor (VSCode)';
+    this.displayName = 'Cursor CLI';
     this.mcpSupported = true; // Native MCP support via `agent mcp` / mcp.json
     this.hooksSupported = true; // .cursor/hooks.json, partial event coverage vs the IDE
     this.subAgentsSupported = true; // Documented CLI subagent support
@@ -115,21 +115,26 @@ export class CursorProvider extends BaseProvider {
 
   /**
    * Spawn a sub-agent with Cursor
-   * Note: Not supported in Cursor
+   * Note (CONC-03): Cursor CLI does support subagents conceptually
+   * (cursor.com/docs/subagents), but no CLI invocation syntax (flag or
+   * command) is publicly documented for triggering one programmatically —
+   * only editor slash-commands (`/name`) are documented. This wrapper
+   * cannot safely guess an unverified flag, so it fails loudly instead.
    */
   async spawnSubAgent(prompt, options = {}) {
-    throw new Error('Cursor does not support sub-agents. Please use a different provider for this feature.');
+    throw new Error(
+      'Cursor CLI sub-agent invocation is not documented (no public --fork/--subagent flag) — this wrapper cannot trigger it programmatically yet.'
+    );
   }
 
   /**
    * Get MCP server configurations for Cursor
-   * Note: Cursor has limited MCP support
+   * Note (CONC-03): native MCP support via `agent mcp` / a shared mcp.json,
+   * not VSCode settings — see cursor.com/docs/cli/mcp.
    */
   getMCPServers() {
-    // Cursor can use MCP servers through VSCode extensions
     return {
-      // These would be configured in VSCode settings
-      note: 'Cursor MCP servers are configured in VSCode settings.json',
+      note: 'Cursor MCP servers are configured via `agent mcp` / a shared mcp.json (see cursor.com/docs/cli/mcp).',
     };
   }
 
