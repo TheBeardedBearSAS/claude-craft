@@ -56,6 +56,11 @@ export class AIProviderManager {
     /** @type {Map<string, Promise<BaseProvider>>} */
     this.lazyProviders = new Map();
 
+    // TOKEN-02: this cache is in-memory only and does NOT persist across CLI
+    // invocations. `cli/index.js` is a one-shot script — a new process (and a
+    // new AIProviderManager) is created on every command, so the 5-minute TTL
+    // below only has an effect for multiple calls made WITHIN the same process
+    // (e.g. programmatic use of this manager), never across separate CLI runs.
     /** @type {Object} */
     this.cache = {
       providerAvailability: new Map(),
