@@ -1,0 +1,138 @@
+# Cursor Provider Configuration
+# Multi-AI Development Framework - AI Craft
+# Provider: Cursor (VSCode Extension)
+
+provider:
+  name: cursor
+  display_name: "Cursor (VSCode)"
+  version: "1.0.x"
+  binary: "cursor"
+  extension: true
+  ide: "vscode"
+  
+# Model Configuration
+model:
+  # Default model for general tasks
+  default: "claude-3-7-sonnet"
+  
+  # Model aliases for compatibility with Claude Craft
+  aliases:
+    opus: "claude-3-7-sonnet"
+    sonnet: "claude-3-7-sonnet"
+    haiku: "claude-3-haiku"
+  
+  # Task-specific model recommendations
+  routing:
+    architecture: "claude-3-7-sonnet"
+    code_review: "claude-3-7-sonnet"
+    implementation: "claude-3-7-sonnet"
+    quick: "claude-3-haiku"
+
+# API Configuration
+api:
+  endpoint: "https://cursor.com"
+  timeout: 120 # seconds
+  max_retries: 3
+
+# MCP (Model Context Protocol) Configuration
+mcp:
+  enabled: true
+  servers:
+    # Cursor has built-in MCP support through extensions
+    filesystem:
+      enabled: true
+      # Handled by Cursor extension
+      command: "cursor"
+      args: ["--mcp-filesystem"]
+    
+    git:
+      enabled: true
+      command: "cursor"
+      args: ["--mcp-git"]
+    
+    # Custom MCP servers
+    custom:
+      enabled: true
+      directory: ".ai-craft/providers/cursor/mcp"
+      auto_discover: true
+
+# Hooks Configuration
+hooks:
+  enabled: true
+  pre_command:
+    - "pre-execute.sh"
+  post_command:
+    - "post-execute.sh"
+  pre_message:
+    - "pre-message.sh"
+  post_message:
+    - "post-message.sh"
+
+# Context Configuration
+context:
+  max_tokens: 200000 # Cursor supports large contexts
+  temperature: 0.9
+  top_p: 0.95
+  
+# Features
+features:
+  sub_agents: false # Cursor has limited sub-agent support
+  context_forking: false
+  prompt_caching: true
+  streaming: true
+  multi_turn: true
+  
+# Cursor-specific features
+cursor:
+  # VSCode integration
+  vscode:
+    extensions:
+      - "ContinuumAI.cursor"
+      - "redhat.vscode-yaml"
+      - "ms-vscode.vscode-node-azure-pack"
+    
+    # Recommended extensions
+    recommended:
+      - "GitHub.copilot"
+      - "ms-vscode.vscode-github"
+      - "eamodio.gitlens"
+    
+    # Settings sync
+    settings_sync: true
+    settings_file: ".vscode/settings.json"
+  
+  # Cursor Composer (multi-model)
+  composer:
+    enabled: true
+    models:
+      - "claude-3-7-sonnet"
+      - "claude-3-haiku"
+      - "gpt-4o-mini"
+    
+    # Model selection strategy
+    strategy: "auto"
+
+# Security
+security:
+  api_key_validation: true
+  max_execution_time: 7200 # 2 hours
+  sandboxing: true
+
+# Logging
+logging:
+  level: "info"
+  file: ".ai-craft/logs/cursor.log"
+  max_size: 10 # MB
+  max_files: 5
+
+# UI Configuration
+ui:
+  theme: "system"
+  font_family: "default"
+  font_size: 14
+  
+# Workspace Configuration
+workspace:
+  auto_open: true
+  trusted_workspaces: true
+  default_view: "explorer"

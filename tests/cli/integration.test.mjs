@@ -42,7 +42,7 @@ describe('CLI integration tests', { timeout: 60000 }, () => {
 
   it('--version returns valid semver', () => {
     const output = runCLI('--version');
-    expect(output.trim()).toMatch(/^\d+\.\d+\.\d+$/);
+    expect(output.trim()).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.-]+)?$/);
   });
 
   it('help command shows help text', () => {
@@ -79,20 +79,19 @@ describe('CLI integration tests', { timeout: 60000 }, () => {
 
   it('-v flag shows version', () => {
     const output = runCLI('-v');
-    expect(output.trim()).toMatch(/^\d+\.\d+\.\d+$/);
+    expect(output.trim()).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.-]+)?$/);
   });
 
-  it('install with valid tech and nonexistent path exits with error', () => {
-    const fakePath = path.join(
-      fs.mkdtempSync(path.join(os.tmpdir(), 'claude-craft-test-')),
-      'does-not-exist',
-    );
-    // Ensure parent temp dir exists but target subdir does not
-    const result = runCLIExpectFail(`install "${fakePath}" --tech=symfony --lang=en`);
-    // The CLI will attempt to run the install script which should fail
-    // because the target path does not exist
-    expect(result.status).not.toBe(0);
+  it('install with valid tech creates a nonexistent target path', () => {
+    const parentDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-craft-test-'));
+    const targetPath = path.join(parentDir, 'does-not-exist');
+    // The installer creates the target directory rather than erroring on it.
+    const output = runCLI(`install "${targetPath}" --tech=symfony --lang=en`);
+    expect(fs.existsSync(targetPath)).toBe(true);
+    expect(output).toContain('Installation Complete');
     // Clean up the temp dir
-    try { fs.rmSync(path.dirname(fakePath), { recursive: true }); } catch {}
+    try {
+      fs.rmSync(parentDir, { recursive: true });
+    } catch {}
   });
 });

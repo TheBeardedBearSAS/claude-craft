@@ -1,11 +1,146 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`CLI snapshot tests > --help output matches snapshot 1`] = `
-"Claude Craft vX.Y.Z
-Welcome to Claude-Craft Interactive Installer
+"AI Craft vX.Y.Z
 
-[1/5] Target Directory
-  Enter path (/PATH/claude-craft):"
+Usage: npx @ai-craft/core [command] [options]
+
+Commands:
+  install              Interactive installation wizard
+  install <path>       Install to specific directory
+  install --auto       Zero-prompt install (auto-detect stack + locale)
+  install --from=<url> Install from a remote team config JSON URL
+  skill add <pkg>      Install a community skill from npm (ai-craft-skill-*)
+  skill list           List installed community skills
+  skill remove <name>  Remove a community skill
+  init                 Initialize workflow in current project
+  check                Verify ai-craft installation
+  list                 List installed components
+  doctor               Environment diagnostics
+  update               Refresh existing installation
+  flatten              Generate flattened codebase summary
+  ralph                Run Ralph Wiggum continuous loop
+  kanban               Launch local Kanban UI for project-management/
+  providers             List available AI providers
+  provider-status     Show AI provider health status
+  init-ai-craft       Initialize AI Craft in current directory
+  migrate              Migrate from Claude Craft to AI Craft
+  help                 Show this help message
+
+Options:
+  --version, -v        Show version
+  --lang=XX            Language (en, fr, es, de, pt)
+  --tech=NAME          Technology (symfony, flutter, react, reactnative, angular, csharp, laravel, vuejs, python, paperclip)
+  --auto               Zero-prompt install (auto-detect stack + locale)
+  --from=URL           Install from a remote team config JSON URL
+  --target=PATH        Target directory (for skill subcommands)
+  --force              Overwrite existing files
+  --quick              Quick Flow track (bug fixes)
+  --standard           Standard track (features)
+  --enterprise         Enterprise track (platforms)
+
+Available Namespaces:
+  /common:*                   Shared tools: pre-commit, standup, changelog, CI setup
+  /workflow:*                 Development lifecycle: init, analyze, plan, design, implement
+  /team:*                     Agent Teams: parallel audit, sprint, security, delivery
+  /qa:*                       Quality assurance: recette, fix, regression, TDD
+  /uiux:*                     UI/UX: audit, a11y, component-spec, design-tokens
+  /sprint:*                   Sprint management: next-story, transition, status, dev
+  /gate:*                     Quality gates: validate PRD, story, backlog, techspec
+  /project:*                  Project execution: run-sprint, run-epic, batch-status
+  /docker:*                   Docker: compose-setup, architecture, debug, optimize
+  /coolify:*                  Coolify: setup, deploy, debug, backup, optimize
+  /csharp:*                   C#/.NET: compliance, architecture, code-quality, security
+  /symfony:*                  Symfony: architecture, compliance, CRUD, security
+  /flutter:*                  Flutter: architecture, generate-feature, performance
+  /react:*                    React: generate-component, architecture, accessibility
+  /angular:*                  Angular: architecture, compliance, testing
+  /laravel:*                  Laravel: architecture, compliance, testing
+  /vuejs:*                    Vue.js: architecture, compliance, testing
+  /python:*                   Python: endpoints, async, typing, FastAPI
+  /reactnative:*              React Native: screens, navigation, native modules
+  /php:*                      PHP: entities, value objects, use cases, Clean Architecture
+  /kubernetes:*               Kubernetes: manifests, helm, ingress, scaling, monitoring
+  /ansible:*                  Ansible: playbooks, roles, inventory, automation
+  /hcloud:*                   Hetzner Cloud: servers, networks, firewalls, load balancers
+  /pgbouncer:*                PgBouncer: connection pooling, configuration, monitoring
+  /frankenphp:*               FrankenPHP: server setup, workers, TLS, performance
+  /opentofu:*                 OpenTofu: infrastructure-as-code, modules, state management
+
+  Example: /common:pre-commit-check, /workflow:init, /team:sprint
+
+Examples:
+  # Interactive installation
+  npx @ai-craft/core install
+
+  # Zero-prompt auto-install (TTFV < 10 min)
+  npx @ai-craft/core install --auto
+
+  # Install from a team config URL
+  npx @ai-craft/core install --from=https://org.example/ai-craft-team.json
+
+  # Add a community skill from npm
+  npx @ai-craft/core skill add ai-craft-skill-foo
+
+  # Install Symfony rules in French
+  npx @ai-craft/core install ~/my-project --tech=symfony --lang=fr
+
+  # Initialize workflow
+  npx @ai-craft/core init --standard
+
+  # Flatten codebase for context
+  npx @ai-craft/core flatten --output=context.md
+
+  # Run Ralph continuous loop
+  npx @ai-craft/core ralph "Implement user authentication"
+
+  # Launch Kanban UI for the current project
+  npx @ai-craft/core kanban --open
+
+  # Multi-AI provider commands
+  npx @ai-craft/core providers
+  npx @ai-craft/core --provider=vibe install ./my-project
+  npx @ai-craft/core migrate ./my-project
+
+Technologies:
+  symfony      PHP backend with Clean Architecture, DDD, API Platform
+  flutter      Mobile Dart with BLoC v9, Riverpod 3, Material 3, Impeller
+  react        Frontend JS/TS with Hooks, Compiler 1.0, Server Components
+  reactnative  Mobile JS/TS New Architecture (JSI, TurboModules, Fabric)
+  angular      Frontend TS with Signals, Zoneless, httpResource, Signal Forms
+  csharp       Backend with Clean Architecture, CQRS, MediatR, EF Core
+  laravel      PHP backend with Actions, Pest 4, Sanctum, AI SDK, Passkey
+  vuejs        Frontend JS/TS with Composition API, Pinia, Vitest
+  python       Backend with FastAPI, Pydantic, free-threading, JIT
+  paperclip    Governance-first integration platform (control plane + adapters)
+
+Languages:
+  en - English
+  fr - Français
+  es - Español
+  de - Deutsch
+  pt - Português
+
+
+Multi-AI Provider Support:
+  AI Craft now supports multiple AI providers!
+
+  Supported providers:
+    ✓ Vibe (Mistral AI)     - https://vibe.mistral.ai
+    ✓ Codex (OpenAI)       - https://developers.openai.com/codex
+    ✓ OpenCode            - https://opencode.ai
+    ✓ Claude Code        - https://code.claude.com
+    ✓ Cursor CLI          - https://cursor.com/cli
+
+  Current provider: auto-detected
+
+  Usage:
+    ai-craft --provider=vibe install ./my-project
+    ai-craft migrate ./my-project
+    ai-craft providers
+
+  Backward compatible with Claude Craft:
+    claude-craft install ./my-project  # Still works!"
 `;
 
 exports[`CLI snapshot tests > --version output format matches snapshot 1`] = `"X.Y.Z"`;

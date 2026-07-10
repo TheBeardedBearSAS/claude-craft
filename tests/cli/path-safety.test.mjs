@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { assertSafeTarget, assertSafeLang, FORBIDDEN_SYSTEM_DIRS } from '../../cli/lib/path-safety.js';
+import path from 'path';
+import { assertSafeTarget, assertSafeLang, assertWithinDir, FORBIDDEN_SYSTEM_DIRS } from '../../cli/lib/path-safety.js';
 
 // Sprint 4 hotfix : path-safety.js was at 90% branch coverage because the
 // non-string / empty-string guard branch (line 48-49 of the source) had no
@@ -81,6 +82,31 @@ describe('assertSafeLang', () => {
 
   it('rejects 3+ letter code', () => {
     expect(() => assertSafeLang('eng')).toThrow(/Invalid --lang/);
+  });
+});
+
+describe('assertWithinDir', () => {
+  it('accepts a direct child path', () => {
+    const result = assertWithinDir('/home/user/hooks', '/home/user/hooks/pre-execute.sh');
+    expect(result).toBe('/home/user/hooks/pre-execute.sh');
+  });
+
+  it('rejects a candidate built by joining a traversal name onto the base', () => {
+    // Mirrors real usage: hookPath = path.join(hooksDir, hookName)
+    const hooksDir = '/home/user/project/.ai-craft/providers/vibe/hooks';
+    const hookName = '../../../../../../tmp/evil.sh';
+    const hookPath = path.join(hooksDir, hookName);
+    expect(() => assertWithinDir(hooksDir, hookPath)).toThrow(/escapes/);
+  });
+
+  it('rejects a sibling directory that shares a name prefix', () => {
+    // /home/user/hooks-evil must NOT be considered "within" /home/user/hooks
+    expect(() => assertWithinDir('/home/user/hooks', '/home/user/hooks-evil/x.sh')).toThrow(/escapes/);
+  });
+
+  it('returns the resolved absolute candidate path when safe', () => {
+    const result = assertWithinDir('/home/user/hooks', '/home/user/hooks/sub/pre.sh');
+    expect(result).toBe('/home/user/hooks/sub/pre.sh');
   });
 });
 

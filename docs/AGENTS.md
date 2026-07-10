@@ -2,6 +2,8 @@
 
 > **This is the narrated reference (31 default agents + infra overview).** For the complete auto-generated table of all 70 agents (11 tech reviewers + 20 common + 39 infra, with model/effort/skills metadata), see [AGENTS-FULL-REFERENCE.md](AGENTS-FULL-REFERENCE.md).
 
+> **Multi-provider CLI:** the `ai-craft` CLI now supports multiple AI providers (Vibe, Codex, OpenCode, Claude Code, Cursor) in addition to Claude Code. See [`.claude/AI-CRAFT.md`](../.claude/AI-CRAFT.md) for the provider architecture — the agents below remain Claude Code agent personas.
+
 Claude Code agents are AI personas with specialized expertise. They provide focused assistance for specific domains and tasks.
 
 ## How to Use Agents

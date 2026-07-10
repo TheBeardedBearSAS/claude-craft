@@ -1,8 +1,19 @@
-# Claude Craft — Sprint workflow, multi-stack reviewers, and browser QA for Claude Code teams
+# ⚡ AI Craft — Multi-AI Development Framework
 
-> **The AI framework where bugs don't come back.** Sprint workflow, a continuous build loop, browser-based acceptance testing, and token-optimized multi-stack reviewers for tech leads adopting Claude Code with their team. **11 stacks, 5 languages, BMAD v6.**
+> **The AI framework where bugs don't come back.** Sprint workflow, a continuous build loop, browser-based acceptance testing, and token-optimized multi-AI reviewers for teams using **Vibe, Codex, OpenCode, Claude Code, or Cursor**. **11 stacks, 5 languages, BMAD v6.**
 
-## Why teams pick Claude Craft
+> **🔄 Transition en cours : Claude Craft → AI Craft**
+> 
+> Cette branche (`refactor/ai-craft`) représente la transition vers **AI Craft**, une version **multi-provider** du framework. 
+> **Statut actuel** : ✅ Architecture de base implémentée | 🟡 Migration des agents en cours | ⏳ Tests multi-provider à compléter
+> 
+> [Voir la roadmap de migration](#-roadmap-de-migration-vers-ai-craft) en bas de ce fichier.
+>
+> Pour le détail de l'architecture multi-provider (Vibe, Codex, OpenCode, Claude Code, Cursor), voir [`.claude/AI-CRAFT.md`](.claude/AI-CRAFT.md).
+
+## Why teams pick AI Craft
+
+AI Craft extends the proven Claude Craft methodology to work with **any AI provider**, not just Claude Code. Four things **any single AI tool** won't give you — they're workflow and orchestration, not prompts:
 
 Four things Claude Code + an Anthropic cookbook **won't** give you — they're workflow and orchestration, not prompts:
 
@@ -19,8 +30,8 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 
 
-[![npm version](https://img.shields.io/npm/v/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
-[![npm downloads](https://img.shields.io/npm/dm/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
+[![npm version](https://img.shields.io/npm/v/@ai-craft/core)](https://www.npmjs.com/package/@ai-craft/core)
+[![npm downloads](https://img.shields.io/npm/dm/@ai-craft/core)](https://www.npmjs.com/package/@ai-craft/core)
 [![Claude Code 2.1.97+](https://img.shields.io/badge/Claude%20Code-2.1.97%2B-blue)](https://code.claude.com)
 [![CI](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -113,19 +124,19 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ```bash
 # Install to your project (picks your tech stack interactively)
-npx @the-bearded-bear/claude-craft
+npx @ai-craft/core
 
 # Or install directly
-npx @the-bearded-bear/claude-craft install ~/my-project --tech=react --lang=en
+npx @ai-craft/core install ~/my-project --tech=react --lang=en
 
 # Zero-prompt install (auto-detects your stack + locale, target < 2 min)
-npx @the-bearded-bear/claude-craft install --auto
+npx @ai-craft/core install --auto
 
 # Install from a team config URL (Gist or internal endpoint)
-npx @the-bearded-bear/claude-craft install --from=https://org.example/cc-team.json
+npx @ai-craft/core install --from=https://org.example/cc-team.json
 
 # Add a community skill from npm (claude-craft-skill-* convention)
-npx @the-bearded-bear/claude-craft skill add claude-craft-skill-foo
+npx @ai-craft/core skill add claude-craft-skill-foo
 
 # Open Claude Code and run your first audit
 claude
@@ -231,7 +242,7 @@ See [CLI Reference](docs/CLI-REFERENCE.md) for all 126 commands across 15 core n
 ### NPX (Recommended)
 
 ```bash
-npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=en
+npx @ai-craft/core install ~/my-project --tech=symfony --lang=en
 ```
 
 ### Clone + Makefile

@@ -64,7 +64,7 @@ describe('ClaudeCraftCLI.run()', () => {
     const cli = new ClaudeCraftCLI();
     await cli.run();
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toMatch(/^\d+\.\d+\.\d+$/);
+    expect(output).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.-]+)?$/);
   });
 
   it('-v prints version (short alias)', async () => {
@@ -72,7 +72,7 @@ describe('ClaudeCraftCLI.run()', () => {
     const cli = new ClaudeCraftCLI();
     await cli.run();
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toMatch(/^\d+\.\d+\.\d+$/);
+    expect(output).toMatch(/^\d+\.\d+\.\d+(-[a-z0-9.-]+)?$/);
   });
 
   it('--lang=zz exits with error for invalid language', async () => {
@@ -99,6 +99,17 @@ describe('ClaudeCraftCLI.run()', () => {
     await cli.run();
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('Usage');
+  });
+
+  it('ERG-08: help command prints the banner exactly once', async () => {
+    // case 'help' used to call printBanner(VERSION) itself and then call
+    // this.printAICraftHelp(), which also calls printBanner(VERSION)
+    // internally — printing the banner twice in a row.
+    process.argv = ['node', 'index.js', 'help'];
+    const cli = new ClaudeCraftCLI();
+    await cli.run();
+    const bannerCalls = logSpy.mock.calls.filter((c) => typeof c[0] === 'string' && c[0].includes('AI Craft v'));
+    expect(bannerCalls).toHaveLength(1);
   });
 
   it('init command prints workflow message', async () => {

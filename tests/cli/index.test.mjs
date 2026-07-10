@@ -253,16 +253,21 @@ describe('ClaudeCraftCLI.run() — switch branch coverage', () => {
     expect(runKanban).toHaveBeenCalled();
   });
 
-  it('--help parsed as option (dead case): default → interactiveInstall', async () => {
-    // parseArgs converts '--help' to options.help=true, not a command, so the
-    // switch falls to default (!command) → interactiveInstall. The case '--help':
-    // label in the switch is unreachable via parseArgs.
+  it('ERG-01: --help never falls through to interactiveInstall', async () => {
+    // Regression test for ERG-01: parseArgs converts '--help' to
+    // options.help=true (not a command), so command stays null and the
+    // switch's default branch used to mistake this for "no command" and
+    // launch interactiveInstall — which blocks on stdin and hangs in CI
+    // when stdin is closed. run() now short-circuits on '--help' before
+    // parseArgs is even called.
     process.argv = ['node', 'index.js', '--help'];
     const { ClaudeCraftCLI } = await import('../../cli/index.js');
     const { interactiveInstall } = await import('../../cli/lib/installer.js');
     const cli = new ClaudeCraftCLI();
     await cli.run();
-    expect(interactiveInstall).toHaveBeenCalled();
+    expect(interactiveInstall).not.toHaveBeenCalled();
+    const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('Usage');
   });
 
   it('case "--help" reachable via mocked parseArgs → printHelp', async () => {

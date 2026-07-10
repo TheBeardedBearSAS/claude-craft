@@ -23,7 +23,7 @@ describe('printBanner', () => {
     expect(logSpy).toHaveBeenCalledOnce();
     const output = logSpy.mock.calls[0][0];
     expect(output).toContain('1.2.3');
-    expect(output).toContain('Claude');
+    expect(output).toContain('AI Craft');
   });
 
   it('handles long version strings without crashing', () => {

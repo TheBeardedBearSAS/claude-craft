@@ -41,24 +41,28 @@ const NAMESPACES = [
  */
 export function printHelp() {
   console.log(`
-${c.bold}Usage:${c.reset} npx @the-bearded-bear/claude-craft [command] [options]
+${c.bold}Usage:${c.reset} npx @ai-craft/core [command] [options]
 
 ${c.bold}Commands:${c.reset}
   ${c.green}install${c.reset}              Interactive installation wizard
   ${c.green}install <path>${c.reset}       Install to specific directory
   ${c.green}install --auto${c.reset}       Zero-prompt install (auto-detect stack + locale)
   ${c.green}install --from=<url>${c.reset} Install from a remote team config JSON URL
-  ${c.green}skill add <pkg>${c.reset}      Install a community skill from npm (claude-craft-skill-*)
+  ${c.green}skill add <pkg>${c.reset}      Install a community skill from npm (ai-craft-skill-*)
   ${c.green}skill list${c.reset}           List installed community skills
   ${c.green}skill remove <name>${c.reset}  Remove a community skill
   ${c.green}init${c.reset}                 Initialize workflow in current project
-  ${c.green}check${c.reset}                Verify claude-craft installation
+  ${c.green}check${c.reset}                Verify ai-craft installation
   ${c.green}list${c.reset}                 List installed components
   ${c.green}doctor${c.reset}               Environment diagnostics
   ${c.green}update${c.reset}               Refresh existing installation
   ${c.green}flatten${c.reset}              Generate flattened codebase summary
   ${c.green}ralph${c.reset}                Run Ralph Wiggum continuous loop
   ${c.green}kanban${c.reset}               Launch local Kanban UI for project-management/
+  ${c.green}providers${c.reset}             List available AI providers
+  ${c.green}provider-status${c.reset}     Show AI provider health status
+  ${c.green}init-ai-craft${c.reset}       Initialize AI Craft in current directory
+  ${c.green}migrate${c.reset}              Migrate from Claude Craft to AI Craft
   ${c.green}help${c.reset}                 Show this help message
 
 ${c.bold}Options:${c.reset}
@@ -80,31 +84,36 @@ ${NAMESPACES.map((ns) => `  ${c.cyan}/${ns.prefix}:*${c.reset}`.padEnd(30 + c.cy
 
 ${c.bold}Examples:${c.reset}
   ${c.dim}# Interactive installation${c.reset}
-  npx @the-bearded-bear/claude-craft install
+  npx @ai-craft/core install
 
   ${c.dim}# Zero-prompt auto-install (TTFV < 10 min)${c.reset}
-  npx @the-bearded-bear/claude-craft install --auto
+  npx @ai-craft/core install --auto
 
   ${c.dim}# Install from a team config URL${c.reset}
-  npx @the-bearded-bear/claude-craft install --from=https://org.example/cc-team.json
+  npx @ai-craft/core install --from=https://org.example/ai-craft-team.json
 
   ${c.dim}# Add a community skill from npm${c.reset}
-  npx @the-bearded-bear/claude-craft skill add claude-craft-skill-foo
+  npx @ai-craft/core skill add ai-craft-skill-foo
 
   ${c.dim}# Install Symfony rules in French${c.reset}
-  npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=fr
+  npx @ai-craft/core install ~/my-project --tech=symfony --lang=fr
 
   ${c.dim}# Initialize workflow${c.reset}
-  npx @the-bearded-bear/claude-craft init --standard
+  npx @ai-craft/core init --standard
 
   ${c.dim}# Flatten codebase for context${c.reset}
-  npx @the-bearded-bear/claude-craft flatten --output=context.md
+  npx @ai-craft/core flatten --output=context.md
 
   ${c.dim}# Run Ralph continuous loop${c.reset}
-  npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
+  npx @ai-craft/core ralph "Implement user authentication"
 
-  ${c.dim}# Launch Kanban UI for the current BMAD project${c.reset}
-  npx @the-bearded-bear/claude-craft kanban --open
+  ${c.dim}# Launch Kanban UI for the current project${c.reset}
+  npx @ai-craft/core kanban --open
+
+  ${c.dim}# Multi-AI provider commands${c.reset}
+  npx @ai-craft/core providers
+  npx @ai-craft/core --provider=vibe install ./my-project
+  npx @ai-craft/core migrate ./my-project
 
 ${c.bold}Technologies:${c.reset}
 ${Object.entries(TECHNOLOGIES)

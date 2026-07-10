@@ -2,6 +2,8 @@
 
 > **This is the narrated, namespace-grouped reference (126 core commands).** For the complete auto-generated table of all 220 commands (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
 
+> **Multi-provider CLI:** the `ai-craft` CLI now supports multiple AI providers (Vibe, Codex, OpenCode, Claude Code, Cursor) in addition to Claude Code. See [`.claude/AI-CRAFT.md`](../.claude/AI-CRAFT.md) for the provider architecture — the commands below remain Claude Code slash commands.
+
 Claude Code commands are slash commands that automate workflows and provide structured assistance.
 
 ## How to Use Commands

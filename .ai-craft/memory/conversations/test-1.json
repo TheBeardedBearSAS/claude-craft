@@ -1,0 +1,27 @@
+{
+  "id": "test-1",
+  "provider": "vibe",
+  "model": "mistral-large",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello!",
+      "timestamp": "2026-07-08T15:26:39.304Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Hi there!",
+      "timestamp": "2026-07-08T15:26:39.304Z"
+    }
+  ],
+  "metadata": {
+    "createdAt": "2026-07-08T15:26:39.303Z",
+    "updatedAt": "2026-07-08T15:26:39.304Z",
+    "project": "/home/flavien-metiiver/Documents/Company/TheBeardedCTO/Tools/claude-craft"
+  },
+  "context": {
+    "files": [],
+    "symbols": [],
+    "projectInfo": null
+  }
+}
