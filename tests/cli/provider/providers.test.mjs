@@ -428,15 +428,17 @@ describe('Vibe provider extras', () => {
     vi.restoreAllMocks();
   });
 
-  it('spawnSubAgent() maps task/iteration/timeout/dod options into --run flags', async () => {
+  it('spawnSubAgent() maps task/iteration/timeout/dod options into distinct --run flags (SEC-04)', async () => {
     execa.mockResolvedValue({ stdout: 'ok', stderr: '', exitCode: 0 });
     const provider = new VibeProvider();
 
     await provider.spawnSubAgent('investigate', { maxIterations: 2, timeout: 15, dod: 'green CI' });
 
+    // mapCommand('run', args) must return the structured args array as-is: each
+    // flag arrives as its own argv element, not flattened into one string.
     expect(execa).toHaveBeenCalledWith(
       'vibe',
-      ['--prompt', '--task investigate --loop --max-iterations 2 --timeout 15 --dod green CI'],
+      ['--task', 'investigate', '--loop', '--max-iterations', '2', '--timeout', '15', '--dod', 'green CI'],
       expect.any(Object)
     );
   });
@@ -447,10 +449,10 @@ describe('Vibe provider extras', () => {
 
     await provider.sendMessage('hello', { temperature: 0.9, maxTokens: 2000, systemPrompt: 'be brief' });
 
-    // mapCommand('run', args) for Vibe wraps everything as ['--prompt', args.join(' ')].
+    // mapCommand('run', args) now passes structured args through unchanged (SEC-04).
     expect(execa).toHaveBeenCalledWith(
       'vibe',
-      ['--prompt', '--temperature 0.9 --max-tokens 2000 --system-prompt be brief --prompt hello'],
+      ['--temperature', '0.9', '--max-tokens', '2000', '--system-prompt', 'be brief', '--prompt', 'hello'],
       expect.any(Object)
     );
   });

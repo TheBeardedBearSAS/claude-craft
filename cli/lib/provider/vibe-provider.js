@@ -189,7 +189,10 @@ export class VibeProvider extends BaseProvider {
   mapCommand(command, args) {
     const commandMap = {
       version: ['--version'],
-      run: ['--prompt', args.join(' ')],
+      // Pass structured args through as-is: sendMessage()/spawnSubAgent() already
+      // build discrete flags (--task, --loop, --max-iterations, ...); flattening
+      // them into one string would break the real CLI invocation (SEC-04).
+      run: args,
       ralph: ['--task', args[0], '--loop'],
       audit: ['--system-prompt', '.ai-craft/AI-CRAFT.md', '--prompt', 'Run a full project audit'],
       install: ['--system-prompt', '.ai-craft/AI-CRAFT.md'],
