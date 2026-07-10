@@ -204,13 +204,19 @@ describe('Codex provider extras', () => {
     vi.restoreAllMocks();
   });
 
-  it('spawnSubAgent() runs with the AI Craft system prompt file', async () => {
+  it('spawnSubAgent() runs with the AI Craft system prompt file (SEC-04: args stay distinct)', async () => {
     execa.mockResolvedValue({ stdout: 'ok', stderr: '', exitCode: 0 });
     const provider = new CodexProvider();
 
     await provider.spawnSubAgent('investigate bug');
 
-    expect(execa).toHaveBeenCalledWith('codex', ['--system .ai-craft/AI-CRAFT.md investigate bug'], expect.any(Object));
+    // mapCommand('run', args) must return the structured args array as-is: each
+    // flag/value arrives as its own argv element, not flattened into one string.
+    expect(execa).toHaveBeenCalledWith(
+      'codex',
+      ['--system', '.ai-craft/AI-CRAFT.md', 'investigate bug'],
+      expect.any(Object)
+    );
   });
 
   it('spawnSubAgent() warns when maxIterations is provided', async () => {

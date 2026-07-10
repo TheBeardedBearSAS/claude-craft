@@ -171,7 +171,10 @@ export class CodexProvider extends BaseProvider {
   mapCommand(command, args) {
     const commandMap = {
       version: ['--version'],
-      run: [args.join(' ')],
+      // Pass structured args through as-is: spawnSubAgent() already builds
+      // discrete flags (--system, ...); flattening them into one string would
+      // break the real CLI invocation (SEC-04).
+      run: args,
       chat: [], // Default command
       audit: ['--system', '.ai-craft/AI-CRAFT.md', 'Run a full project audit'],
       install: ['--system', '.ai-craft/AI-CRAFT.md'],
