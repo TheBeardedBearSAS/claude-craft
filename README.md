@@ -8,6 +8,8 @@
 > **Statut actuel** : ✅ Architecture de base implémentée | 🟡 Migration des agents en cours | ⏳ Tests multi-provider à compléter
 > 
 > [Voir la roadmap de migration](#-roadmap-de-migration-vers-ai-craft) en bas de ce fichier.
+>
+> Pour le détail de l'architecture multi-provider (Vibe, Codex, OpenCode, Claude Code, Cursor), voir [`.claude/AI-CRAFT.md`](.claude/AI-CRAFT.md).
 
 ## Why teams pick AI Craft
 
