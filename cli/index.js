@@ -926,12 +926,18 @@ class AICraftCLI {
     }
 
     // Open in default editor
-    const editor = process.env.EDITOR || process.env.VISUAL || 'nano';
+    const editor = process.env.EDITOR || process.env.VISUAL || 'vi';
     console.log(`${c.cyan}Opening configuration in ${editor}...${c.reset}`);
     console.log(`${c.dim}File: ${configPath}${c.reset}`);
 
-    // Note: In a real implementation, we'd spawn the editor process
-    // For now, just show the path
+    // ERG-07/FONC-04: actually spawn the editor instead of only printing the path.
+    try {
+      const { execa } = await import('execa');
+      await execa(editor, [configPath], { stdio: 'inherit' });
+    } catch (error) {
+      console.error(`${c.red}Error: Could not open editor '${editor}': ${error.message}${c.reset}`);
+      process.exit(1);
+    }
   }
 }
 

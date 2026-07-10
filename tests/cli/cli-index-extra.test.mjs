@@ -8,8 +8,10 @@ vi.mock('readline', () => ({
   default: { createInterface: createInterfaceMock },
   createInterface: createInterfaceMock,
 }));
+vi.mock('execa', () => ({ execa: vi.fn() }));
 
 const { ClaudeCraftCLI } = await import('../../cli/index.js');
+const { execa } = await import('execa');
 const { providerManager } = await import('../../cli/lib/ai-provider.js');
 const { claudeCompat } = await import('../../cli/lib/legacy/claude-compat.js');
 
@@ -35,6 +37,7 @@ describe('ClaudeCraftCLI extra command handlers', () => {
       throw new Error('process.exit called');
     });
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cli-index-extra-'));
+    execa.mockReset().mockResolvedValue({ exitCode: 0 });
   });
 
   afterEach(() => {
@@ -374,6 +377,40 @@ describe('ClaudeCraftCLI extra command handlers', () => {
       await cli.handleConfigCommand(['edit'], {});
 
       expect(saveSpy).not.toHaveBeenCalled();
+    });
+
+    // ERG-07/FONC-04: editConfig() printed "Opening configuration in ${editor}..."
+    // but never actually spawned the editor process — a comment in the code
+    // said "For now, just show the path".
+    it('edit spawns the configured editor with the config path (ERG-07)', async () => {
+      const cli = new ClaudeCraftCLI();
+      cli.config.targetPath = tempDir;
+      fs.mkdirSync(path.join(tempDir, '.ai-craft'), { recursive: true });
+      fs.writeFileSync(path.join(tempDir, '.ai-craft', 'ai-craft.yaml'), 'a: 1\n');
+      const originalEditor = process.env.EDITOR;
+      process.env.EDITOR = 'my-editor';
+
+      try {
+        await cli.handleConfigCommand(['edit'], {});
+      } finally {
+        process.env.EDITOR = originalEditor;
+      }
+
+      const configPath = path.join(tempDir, '.ai-craft', 'ai-craft.yaml');
+      expect(execa).toHaveBeenCalledWith('my-editor', [configPath], expect.objectContaining({ stdio: 'inherit' }));
+    });
+
+    it('edit surfaces a clear error when the editor cannot be spawned (ERG-07)', async () => {
+      const cli = new ClaudeCraftCLI();
+      cli.config.targetPath = tempDir;
+      fs.mkdirSync(path.join(tempDir, '.ai-craft'), { recursive: true });
+      fs.writeFileSync(path.join(tempDir, '.ai-craft', 'ai-craft.yaml'), 'a: 1\n');
+      execa.mockRejectedValueOnce(new Error('spawn nonexistent-editor ENOENT'));
+
+      await expect(cli.handleConfigCommand(['edit'], {})).rejects.toThrow('process.exit called');
+
+      expect(errorSpy.mock.calls.join('\n')).toContain('Could not open editor');
+      expect(exitSpy).toHaveBeenCalledWith(1);
     });
 
     it('rejects an unknown config subcommand', async () => {
