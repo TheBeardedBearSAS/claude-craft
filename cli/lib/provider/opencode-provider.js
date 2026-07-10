@@ -1,6 +1,6 @@
 /**
  * AI Craft - OpenCode Provider
- * Implementation for OpenCode (Self-Hosted)
+ * Implementation for OpenCode (sst/opencode's terminal AI coding agent)
  *
  * This file is part of AI Craft (formerly Claude Craft)
  * Multi-AI Development Framework
@@ -12,60 +12,50 @@ import { BaseProvider } from './base-provider.js';
 import { execa } from 'execa';
 
 /**
- * OpenCode Provider - Self-Hosted AI
+ * OpenCode Provider
+ *
+ * OpenCode (https://github.com/sst/opencode, opencode.ai) is an open-source
+ * terminal AI coding agent, NOT a self-hosted-only tool (CONC-02). It connects
+ * to 75+ cloud model providers (Anthropic, OpenAI, Google, DeepSeek, Qwen, ...)
+ * via the Vercel AI SDK / Models.dev registry, resolving credentials through
+ * `opencode auth login`, `opencode.json`, or plain provider API key env vars
+ * (ANTHROPIC_API_KEY, OPENAI_API_KEY, ...). Pointing at a self-hosted or
+ * OpenAI-compatible server (`opencode run --attach <url>`) is one optional
+ * deployment mode among many, not a requirement.
  *
  * Supports:
- * - OpenCode CLI (https://github.com/create-open-code/open-code)
- * - Any self-hosted LLM (Llama, Mistral, Phi, etc.)
+ * - OpenCode CLI (`opencode` binary)
+ * - 75+ cloud model providers via Models.dev, plus optional self-hosted servers
  * - Full MCP support
- * - Complete data privacy
  */
 export class OpenCodeProvider extends BaseProvider {
   constructor() {
     super();
 
     this.name = 'opencode';
-    this.displayName = 'OpenCode (Self-Hosted)';
+    this.displayName = 'OpenCode (sst/opencode)';
     this.mcpSupported = true;
     this.hooksSupported = true;
     this.subAgentsSupported = true;
     this.forkSupported = true;
 
-    // OpenCode supports any model via the endpoint
+    // Real OpenCode model identifiers are provider-qualified ("<provider>/<model>",
+    // Models.dev registry format) — this is a representative sample, not the
+    // full 75+ provider catalog OpenCode itself resolves at runtime.
     this.supportedModels = [
-      'llama-3.2-90b',
-      'llama-3.2-70b',
-      'llama-3.2-11b',
-      'llama-3.1-405b',
-      'llama-3.1-70b',
-      'llama-3.1-8b',
-      'mistral-large-2',
-      'mistral-medium-2',
-      'mistral-small-2',
-      'mixtral-8x22b',
-      'mixtral-8x7b',
-      'phi-4',
-      'phi-3.5',
-      'qwen2-72b',
-      'qwen2-7b',
-      'gemma-2-27b',
-      'gemma-2-9b',
-      'deepseek-llm-67b',
-      'deepseek-coder-33b',
+      'anthropic/claude-sonnet-4-20250514',
+      'openai/gpt-5',
+      'openai/gpt-4o',
+      'google/gemini-2.5-pro',
+      'deepseek/deepseek-v4-pro',
+      'qwen/qwen3-coder-480b',
     ];
 
-    this.defaultModel = 'llama-3.2-90b';
+    this.defaultModel = 'anthropic/claude-sonnet-4-20250514';
     this.binaryName = 'opencode';
 
-    // Model aliases for compatibility
-    this.modelAliases = {
-      opus: 'llama-3.2-90b',
-      'opus-4.8': 'llama-3.2-90b',
-      sonnet: 'llama-3.2-70b',
-      'sonnet-5': 'llama-3.2-70b',
-      haiku: 'llama-3.2-11b',
-      'haiku-4.5': 'llama-3.2-11b',
-    };
+    // No aliases needed - OpenCode already exposes provider-qualified model ids
+    this.modelAliases = {};
   }
 
   /**
@@ -74,16 +64,21 @@ export class OpenCodeProvider extends BaseProvider {
   async execute(command, args = [], options = {}) {
     const opencodeArgs = this.mapCommand(command, args);
 
-    // OpenCode uses environment variables for configuration
+    // OpenCode resolves provider credentials itself (`opencode auth login`,
+    // opencode.json, or provider env vars); we just forward the common ones
+    // plus the resolved model, and OPENCODE_ENDPOINT for users who explicitly
+    // opted into a self-hosted/OpenAI-compatible server.
     const execOptions = {
       preferLocal: true,
       localDir: process.cwd(),
       reject: false,
       env: {
         ...process.env,
-        OPENCODE_ENDPOINT: process.env.OPENCODE_ENDPOINT || process.env.OPENAI_API_BASE_URL,
-        OPENCODE_API_KEY: process.env.OPENCODE_API_KEY || process.env.OPENAI_API_KEY,
+        ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+        OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+        GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
         OPENCODE_MODEL: process.env.OPENCODE_MODEL || this.defaultModel,
+        OPENCODE_ENDPOINT: process.env.OPENCODE_ENDPOINT,
       },
       ...options,
     };
@@ -222,10 +217,17 @@ export class OpenCodeProvider extends BaseProvider {
       return false;
     }
 
-    // Check for endpoint
-    if (!process.env.OPENCODE_ENDPOINT && !process.env.OPENAI_API_BASE_URL) {
-      console.warn('⚠️ Warning: OPENCODE_ENDPOINT environment variable not set');
-      console.warn('   OpenCode requires a running LLM server endpoint');
+    // OpenCode resolves credentials itself (`opencode auth login`, opencode.json,
+    // or provider env vars) — none of these are required for our wrapper to run
+    // the CLI. This is a soft first-run nudge, not a hard requirement.
+    const hasProviderKey = ['ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'GOOGLE_API_KEY'].some((key) => process.env[key]);
+    if (!hasProviderKey && !process.env.OPENCODE_ENDPOINT) {
+      console.warn(
+        '⚠️ Warning: no provider API key detected (e.g. ANTHROPIC_API_KEY, OPENAI_API_KEY) and OPENCODE_ENDPOINT is not set'
+      );
+      console.warn(
+        '   Run `opencode auth login`, set a provider API key, or set OPENCODE_ENDPOINT for a self-hosted server'
+      );
     }
 
     return true;
@@ -236,19 +238,27 @@ export class OpenCodeProvider extends BaseProvider {
    */
   getEnvVars() {
     return {
-      OPENCODE_ENDPOINT: process.env.OPENCODE_ENDPOINT || process.env.OPENAI_API_BASE_URL,
-      OPENCODE_API_KEY: process.env.OPENCODE_API_KEY || process.env.OPENAI_API_KEY,
+      ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+      GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
       OPENCODE_MODEL: process.env.OPENCODE_MODEL || this.defaultModel,
+      OPENCODE_ENDPOINT: process.env.OPENCODE_ENDPOINT,
     };
   }
 
   /**
-   * Get OpenCode health status
+   * Get OpenCode health status.
+   * Only meaningful when the user opted into a self-hosted/OpenAI-compatible
+   * endpoint via OPENCODE_ENDPOINT — OpenCode's default cloud-provider mode
+   * has no local endpoint to ping.
    */
   async getHealth() {
-    const endpoint = process.env.OPENCODE_ENDPOINT || process.env.OPENAI_API_BASE_URL;
+    const endpoint = process.env.OPENCODE_ENDPOINT;
     if (!endpoint) {
-      return { healthy: false, message: 'No endpoint configured' };
+      return {
+        healthy: true,
+        message: 'Using OpenCode-managed cloud provider routing (no self-hosted endpoint configured)',
+      };
     }
 
     try {

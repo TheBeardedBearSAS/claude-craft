@@ -335,7 +335,7 @@ describe('OpenCode provider extras', () => {
     const provider = new OpenCodeProvider();
 
     await provider.sendMessage('hello', {
-      model: 'mistral-small-2',
+      model: 'openai/gpt-4o',
       temperature: 0.2,
       maxTokens: 500,
       systemPrompt: 'be concise',
@@ -344,7 +344,7 @@ describe('OpenCode provider extras', () => {
     // mapCommand('chat', args) for OpenCode joins all args into one string element.
     expect(execa).toHaveBeenCalledWith(
       'opencode',
-      ['--model mistral-small-2 --temperature 0.2 --max-tokens 500 --system be concise hello'],
+      ['--model openai/gpt-4o --temperature 0.2 --max-tokens 500 --system be concise hello'],
       expect.any(Object)
     );
   });
@@ -357,22 +357,51 @@ describe('OpenCode provider extras', () => {
     expect(servers.opencode).toEqual({ command: 'opencode', args: ['mcp-server'] });
   });
 
-  it('validateConfig() warns when no endpoint is configured', () => {
-    const originalEndpoint = process.env.OPENCODE_ENDPOINT;
-    const originalBaseUrl = process.env.OPENAI_API_BASE_URL;
-    delete process.env.OPENCODE_ENDPOINT;
-    delete process.env.OPENAI_API_BASE_URL;
+  it('supportedModels lists real provider-qualified OpenCode model ids, not fictitious local LLM names (CONC-02)', () => {
+    const provider = new OpenCodeProvider();
+
+    // Real OpenCode (sst/opencode) exposes provider-qualified ids like
+    // "anthropic/claude-..." or "openai/gpt-...", not flat local-LLM names.
+    expect(provider.supportedModels.every((model) => /^[a-z0-9-]+\/[a-z0-9.-]+$/i.test(model))).toBe(true);
+    expect(provider.defaultModel).toContain('/');
+    const fictitiousLocalNames = ['llama-3.2-90b', 'mistral-large-2', 'phi-4', 'qwen2-72b', 'gemma-2-27b'];
+    expect(provider.supportedModels.some((model) => fictitiousLocalNames.includes(model))).toBe(false);
+  });
+
+  it('validateConfig() warns when no provider API key or endpoint is configured (CONC-02)', () => {
+    const keys = ['ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'GOOGLE_API_KEY', 'OPENCODE_ENDPOINT'];
+    const originals = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
+    keys.forEach((key) => delete process.env[key]);
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const provider = new OpenCodeProvider();
 
     try {
       expect(provider.validateConfig({})).toBe(true);
-      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('OPENCODE_ENDPOINT environment variable not set'));
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('no provider API key detected'));
     } finally {
+      Object.entries(originals).forEach(([key, value]) => {
+        if (value === undefined) delete process.env[key];
+        else process.env[key] = value;
+      });
+    }
+  });
+
+  it('validateConfig() does not warn when a provider API key is set, without requiring OPENCODE_ENDPOINT (CONC-02)', () => {
+    const originalAnthropic = process.env.ANTHROPIC_API_KEY;
+    const originalEndpoint = process.env.OPENCODE_ENDPOINT;
+    process.env.ANTHROPIC_API_KEY = 'sk-test';
+    delete process.env.OPENCODE_ENDPOINT;
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const provider = new OpenCodeProvider();
+
+    try {
+      expect(provider.validateConfig({})).toBe(true);
+      expect(warnSpy).not.toHaveBeenCalled();
+    } finally {
+      if (originalAnthropic === undefined) delete process.env.ANTHROPIC_API_KEY;
+      else process.env.ANTHROPIC_API_KEY = originalAnthropic;
       if (originalEndpoint === undefined) delete process.env.OPENCODE_ENDPOINT;
       else process.env.OPENCODE_ENDPOINT = originalEndpoint;
-      if (originalBaseUrl === undefined) delete process.env.OPENAI_API_BASE_URL;
-      else process.env.OPENAI_API_BASE_URL = originalBaseUrl;
     }
   });
 
@@ -381,12 +410,14 @@ describe('OpenCode provider extras', () => {
     expect(provider.validateConfig({ model: 'not-a-real-model' })).toBe(false);
   });
 
-  it('getEnvVars() resolves endpoint, key and model from env with fallbacks', () => {
+  it('getEnvVars() forwards provider API keys and the resolved model, without requiring OPENCODE_ENDPOINT (CONC-02)', () => {
     const provider = new OpenCodeProvider();
     const envVars = provider.getEnvVars();
-    expect(envVars.OPENCODE_MODEL).toBe('llama-3.2-90b');
+    expect(envVars.OPENCODE_MODEL).toBe(provider.defaultModel);
+    expect(envVars).toHaveProperty('ANTHROPIC_API_KEY');
+    expect(envVars).toHaveProperty('OPENAI_API_KEY');
+    expect(envVars).toHaveProperty('GOOGLE_API_KEY');
     expect(envVars).toHaveProperty('OPENCODE_ENDPOINT');
-    expect(envVars).toHaveProperty('OPENCODE_API_KEY');
   });
 
   describe('getHealth()', () => {
@@ -395,14 +426,13 @@ describe('OpenCode provider extras', () => {
       delete process.env.OPENCODE_ENDPOINT;
     });
 
-    it('reports unhealthy with no endpoint configured', async () => {
+    it('reports healthy when no self-hosted endpoint is configured, since OpenCode manages cloud providers itself (CONC-02)', async () => {
       delete process.env.OPENCODE_ENDPOINT;
-      delete process.env.OPENAI_API_BASE_URL;
       const provider = new OpenCodeProvider();
 
       await expect(provider.getHealth()).resolves.toEqual({
-        healthy: false,
-        message: 'No endpoint configured',
+        healthy: true,
+        message: 'Using OpenCode-managed cloud provider routing (no self-hosted endpoint configured)',
       });
     });
 
