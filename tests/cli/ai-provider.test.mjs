@@ -1417,6 +1417,53 @@ describe('AIProviderManager', () => {
   });
 
   // =========================================================================
+  // createProviderTemplates() — provider attribution (CONC-01/02/03)
+  // =========================================================================
+
+  describe('createProviderTemplates() provider attribution', () => {
+    let tmpDir;
+
+    beforeEach(() => {
+      tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ai-provider-templates-'));
+      for (const providerName of ['vibe', 'codex', 'opencode', 'claude', 'cursor']) {
+        fs.mkdirSync(path.join(tmpDir, 'providers', providerName, 'config'), { recursive: true });
+      }
+    });
+
+    afterEach(() => {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    });
+
+    it('does not misattribute Codex to Google or use fictitious Gemini model names', async () => {
+      await manager.createProviderTemplates(tmpDir);
+      const config = fs.readFileSync(path.join(tmpDir, 'providers', 'codex', 'config', 'default.yaml'), 'utf8');
+
+      expect(config).not.toMatch(/Google/i);
+      expect(config).not.toMatch(/gemini/i);
+      expect(config).toContain('Codex (OpenAI)');
+      expect(config).toMatch(/gpt-5-codex/);
+    });
+
+    it('does not model OpenCode as self-hosted-only with local Mistral model names', async () => {
+      await manager.createProviderTemplates(tmpDir);
+      const config = fs.readFileSync(path.join(tmpDir, 'providers', 'opencode', 'config', 'default.yaml'), 'utf8');
+
+      expect(config).not.toMatch(/self_hosted/i);
+      expect(config).not.toMatch(/open-mistral/i);
+      expect(config).toContain('anthropic/claude-sonnet-4-5');
+    });
+
+    it('does not describe Cursor as a VSCode extension', async () => {
+      await manager.createProviderTemplates(tmpDir);
+      const config = fs.readFileSync(path.join(tmpDir, 'providers', 'cursor', 'config', 'default.yaml'), 'utf8');
+
+      expect(config).not.toContain('Cursor (VSCode)');
+      expect(config).not.toMatch(/ide:\s*"?vscode"?/i);
+      expect(config).toContain('Cursor CLI');
+    });
+  });
+
+  // =========================================================================
   // discoverMCPServers()
   // =========================================================================
 
