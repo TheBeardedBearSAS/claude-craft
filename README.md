@@ -1,6 +1,6 @@
 # ⚡ AI Craft — Multi-AI Development Framework
 
-> **The AI framework where bugs don't come back.** Sprint workflow, a continuous build loop, browser-based acceptance testing, and token-optimized multi-AI reviewers for teams using **Vibe, Codex, OpenCode, Claude Code, Cursor, or GitHub Copilot**. **11 stacks, 5 languages, BMAD v6.**
+> **The AI framework where bugs don't come back.** Sprint workflow, a continuous build loop, browser-based acceptance testing, and token-optimized multi-AI reviewers for teams using **Vibe, Codex, OpenCode, Claude Code, or Cursor**. **11 stacks, 5 languages, BMAD v6.**
 
 > **🔄 Transition en cours : Claude Craft → AI Craft**
 > 
