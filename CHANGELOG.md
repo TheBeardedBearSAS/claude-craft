@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.19.4] - 2026-07-10
+
+### Fixed
+
+- **Lockfile Dependabot désynchronisé (récidive)** (#131) : le bump `marked` 18.0.5→18.0.6 laissait à nouveau `package-lock.json` sans l'entrée imbriquée `conventional-commits-parser@6.4.0`, faisant échouer `npm ci` sous Node 22 (`Missing: conventional-commits-parser@6.4.0 from lock file`). Lockfile régénéré via `npm install` sous `node:22` (Docker).
+
+### Chore
+
+- Mise à jour dépendances : groupe `github/codeql-action` (`init`/`analyze`) 4.36.3→4.37.0 (#132) ; groupe development `@commitlint/cli` 21.2.0→21.2.1, `@sveltejs/vite-plugin-svelte` 7.1.2→7.2.0, `fast-check` 4.8.0→4.9.0, `prettier` 3.9.4→3.9.5, `vite` 8.1.3→8.1.4 (#133) ; `marked` 18.0.5→18.0.6 (#131).
+
 ## [8.19.3] - 2026-07-10
 
 ### Fixed
