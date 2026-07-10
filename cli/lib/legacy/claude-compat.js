@@ -508,8 +508,6 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
         legacy_hooks: true,
       },
       security: {
-        api_key_validation: true,
-        hook_sandboxing: true,
         max_execution_time: 3600,
       },
     };
