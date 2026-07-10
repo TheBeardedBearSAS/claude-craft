@@ -1,9 +1,9 @@
 # 🚀 Migration Guide: Claude Craft → AI Craft
 
-**Version:** 1.0.0-ai-craft.0  
+**Version:** 9.0.0  
 **Status:** Work in Progress  
 **Branch:** `refactor/ai-craft`  
-**Last Updated:** 2026-07-08
+**Last Updated:** 2026-07-10
 
 ---
 
@@ -64,8 +64,20 @@ This document outlines the migration path from **Claude Craft** (single-provider
 
 5. **Package Updates**
    - Package name: `@ai-craft/core` (was `@the-bearded-bear/claude-craft`)
-   - Version: `1.0.0-ai-craft.0`
+   - Version: `9.0.0` (major bump — SemVer continuity from the `8.19.x` Claude Craft
+     series, not a reset to `1.0.0`, since the package rename is treated as this
+     project's breaking change, not a brand-new product)
    - Binaries: `ai-craft` + `claude-craft` (backward compat)
+
+6. **Old Package Deprecation** (maintainer action, not automated by this repo)
+   - Once `@ai-craft/core` is published, mark the old package as deprecated so
+     existing installs surface a clear pointer instead of silently going stale:
+     ```bash
+     npm deprecate @the-bearded-bear/claude-craft "Renamed to @ai-craft/core — see https://github.com/TheBeardedBearSAS/claude-craft/blob/main/MIGRATION-TO-AI-CRAFT.md"
+     ```
+   - This requires npm publish access to the old package name and is not run by
+     any script in this repo — it's a manual, one-time step for whoever holds
+     that access.
 
 #### Files Modified/Created
 
