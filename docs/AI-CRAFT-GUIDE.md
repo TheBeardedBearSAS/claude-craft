@@ -19,7 +19,9 @@
 
 ## Introduction
 
-AI Craft is a comprehensive multi-AI development framework that extends the proven Claude Craft methodology to work seamlessly with multiple AI providers. Whether you're using **Vibe (Mistral AI)**, **Codex (Google)**, **OpenCode**, **Claude Code (Anthropic)**, **Cursor (VSCode)**, or **GitHub Copilot**, AI Craft provides a unified interface for installing rules, agents, commands, and workflows.
+AI Craft is a comprehensive multi-AI development framework that extends the proven Claude Craft methodology to work seamlessly with multiple AI providers. Whether you're using **Vibe (Mistral AI)**, **Codex (OpenAI)**, **OpenCode (sst/opencode)**, **Claude Code (Anthropic)**, or **Cursor CLI**, AI Craft provides a unified interface for installing rules, agents, commands, and workflows.
+
+> **GitHub Copilot is not currently supported** — there is no `copilot-provider.js` in `cli/lib/provider/`. GitHub Copilot CLI (`github.com/github/copilot-cli`) is a real, separate product that could be added as a future provider.
 
 ### Key Features
 
@@ -38,11 +40,11 @@ AI Craft is a comprehensive multi-AI development framework that extends the prov
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
 │  │   Vibe      │  │   Codex      │  │    OpenCode         │  │
-│  │ (Mistral)   │  │ (Google)     │  │ (Self-Hosted)       │  │
+│  │ (Mistral)   │  │ (OpenAI)     │  │ (sst/opencode)      │  │
 │  └─────────────┘  └─────────────┘  └─────────────────────┘  │
 │  ┌─────────────┐  ┌─────────────┐                          │
 │  │   Claude    │  │   Cursor     │                          │
-│  │ (Anthropic) │  │ (VSCode)     │                          │
+│  │ (Anthropic) │  │ (CLI)        │                          │
 │  └─────────────┘  └─────────────┘                          │
 └─────────────────────────────────────────────────────────────┘
          │              │              │
@@ -69,7 +71,7 @@ npm install -g @ai-craft/core
 
 # Verify installation
 ai-craft --version
-# Output: 1.0.0-ai-craft.0
+# Output: 9.0.0
 ```
 
 ### Local Installation (in a project)
@@ -597,10 +599,10 @@ Begin with the default configuration and add customizations incrementally.
 Each provider has different strengths. Configure them appropriately:
 
 - **Vibe**: Great for coding tasks, use with Mistral models
-- **Codex**: Excellent for Google ecosystem, large context windows
-- **OpenCode**: Best for self-hosted, local development
+- **Codex**: OpenAI's terminal coding agent, deep GitHub integration
+- **OpenCode**: 75+ cloud model providers via Models.dev, optional self-hosted backend
 - **Claude Code**: Proven reliability, excellent for complex tasks
-- **Cursor**: Best for VSCode users, tight IDE integration
+- **Cursor CLI**: Full standalone terminal agent, scriptable in CI/SSH
 
 ### 3. Enable MCP Servers Incrementally
 
@@ -646,17 +648,19 @@ ai-craft providers
 
 # Install missing provider
 # For Vibe: npm install -g @vibe/cli
-# For Codex: npm install -g @google/codex-cli
-# For OpenCode: npm install -g @open-code-ai/cli
+# For Codex: npm install -g @openai/codex
+# For OpenCode: npm install -g opencode-ai
 # For Claude Code: Follow Anthropic instructions
-# For Cursor: Install VSCode extension
+# For Cursor: curl https://cursor.com/install -fsS | bash
 ```
 
 #### "MCP server not starting"
 
 ```bash
-# Check logs
-tail -f .ai-craft/logs/mcp.log
+# MCP auto-start is not yet implemented (startAllMCPServers() is a stub
+# that registers servers without spawning a process) - there is no
+# .ai-craft/logs/mcp.log to check. Start servers manually for now, see
+# .ai-craft/providers/MCP-README.md.
 
 # Test server manually
 npx @modelcontextprotocol/server-filesystem --help
@@ -731,4 +735,4 @@ ai-craft --version
 
 ---
 
-*AI Craft - Multi-AI Development Framework | Version 1.0.0-ai-craft.0 | © 2026 TheBeardedCTO*
+*AI Craft - Multi-AI Development Framework | Version 9.0.0 | © 2026 TheBeardedCTO*
