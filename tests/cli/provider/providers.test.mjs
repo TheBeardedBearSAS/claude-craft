@@ -670,32 +670,18 @@ describe('Cursor provider extras', () => {
       expect(execa).toHaveBeenCalledWith('cursor', ['--version']);
     });
 
-    it('falls back to checking the VSCode extension list when the cursor CLI is missing', async () => {
-      execa.mockImplementation((bin) => {
-        if (bin === 'cursor') return Promise.reject(new Error('not found'));
-        return Promise.resolve({ stdout: 'ms-python.python\ncontensis.cursor\ndbaeumer.vscode-eslint' });
-      });
-      const provider = new CursorProvider();
-
-      await expect(provider.isAvailable()).resolves.toBe(true);
-      expect(execa).toHaveBeenCalledWith('code', ['--list-extensions']);
-    });
-
-    it('returns false when neither cursor nor the VSCode extension are present', async () => {
-      execa.mockImplementation((bin) => {
-        if (bin === 'cursor') return Promise.reject(new Error('not found'));
-        return Promise.resolve({ stdout: 'ms-python.python' });
-      });
-      const provider = new CursorProvider();
-
-      await expect(provider.isAvailable()).resolves.toBe(false);
-    });
-
-    it('returns false when both the cursor CLI and the code CLI are unavailable', async () => {
+    it('returns false and does not probe a fictitious VSCode extension id when the cursor CLI is missing (FONC-05)', async () => {
+      // Cursor is a standalone fork of VS Code, not distributed as a VS Code
+      // extension (cursor.com/docs/cli/overview) - there is no verified,
+      // stable extension id to detect via `code --list-extensions`, so
+      // isAvailable() must not invent one and must not shell out to `code`.
+      execa.mockClear();
       execa.mockRejectedValue(new Error('not found'));
       const provider = new CursorProvider();
 
       await expect(provider.isAvailable()).resolves.toBe(false);
+      expect(execa).toHaveBeenCalledTimes(1);
+      expect(execa).toHaveBeenCalledWith('cursor', ['--version']);
     });
   });
 

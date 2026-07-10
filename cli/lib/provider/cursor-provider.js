@@ -154,20 +154,18 @@ export class CursorProvider extends BaseProvider {
 
   /**
    * Check if Cursor is available
+   *
+   * Note (FONC-05): there is no verified, stable VSCode extension id for
+   * Cursor to fall back on - Cursor is a standalone fork of VS Code, not
+   * distributed as a VS Code extension (cursor.com/docs/cli/overview) - so
+   * this only probes the `cursor` CLI binary.
    */
   async isAvailable() {
     try {
       await execa('cursor', ['--version']);
       return true;
     } catch {
-      // Check if VSCode with Cursor extension is installed
-      // This is a heuristic check
-      try {
-        const result = await execa('code', ['--list-extensions']);
-        return result.stdout.includes('contensis.cursor');
-      } catch {
-        return false;
-      }
+      return false;
     }
   }
 
