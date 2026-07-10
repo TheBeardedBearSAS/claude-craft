@@ -287,6 +287,14 @@ describe('Codex provider extras', () => {
     expect(provider.validateConfig({ model: 'not-a-real-model' })).toBe(false);
   });
 
+  it('supportedModels lists real Codex CLI model identifiers, not fictitious Gemini names (CONC-07)', () => {
+    const provider = new CodexProvider();
+
+    expect(provider.supportedModels).toEqual(['gpt-5-codex', 'gpt-5-codex-mini']);
+    expect(provider.defaultModel).toBe('gpt-5-codex');
+    expect(provider.supportedModels.some((model) => model.startsWith('gemini'))).toBe(false);
+  });
+
   it('getEnvVars() surfaces API keys and the resolved model', () => {
     const provider = new CodexProvider();
     const originalModel = process.env.CODEX_MODEL;

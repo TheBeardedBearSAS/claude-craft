@@ -30,28 +30,19 @@ export class CodexProvider extends BaseProvider {
     this.subAgentsSupported = true;
     this.forkSupported = false; // Codex doesn't support forking in the same way
 
-    this.supportedModels = [
-      'codex-pro',
-      'codex-plus',
-      'codex',
-      'codex-text',
-      'gemini-1.5-pro',
-      'gemini-1.5-flash',
-      'gemini-2.0-pro',
-      'gemini-2.0-flash',
-    ];
+    this.supportedModels = ['gpt-5-codex', 'gpt-5-codex-mini'];
 
-    this.defaultModel = 'codex-pro';
+    this.defaultModel = 'gpt-5-codex';
     this.binaryName = 'codex';
 
     // Model aliases for compatibility
     this.modelAliases = {
-      opus: 'codex-pro',
-      'opus-4.8': 'codex-pro',
-      sonnet: 'codex-plus',
-      'sonnet-5': 'codex-plus',
-      haiku: 'codex',
-      'haiku-4.5': 'codex',
+      opus: 'gpt-5-codex',
+      'opus-4.8': 'gpt-5-codex',
+      sonnet: 'gpt-5-codex',
+      'sonnet-5': 'gpt-5-codex',
+      haiku: 'gpt-5-codex-mini',
+      'haiku-4.5': 'gpt-5-codex-mini',
     };
   }
 
