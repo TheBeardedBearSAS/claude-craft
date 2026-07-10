@@ -75,6 +75,25 @@ describe('ClaudeCraftCLI extra command handlers', () => {
       expect(output()).toContain('Primary provider: claude');
     });
 
+    it('shows ✗ for the current provider when it is not actually installed (ERG-04)', async () => {
+      const cli = new ClaudeCraftCLI();
+      cli.currentProvider = 'claude';
+      vi.spyOn(providerManager, 'getProviderNames').mockReturnValue(['claude']);
+      vi.spyOn(providerManager, 'getProvider').mockImplementation(() => ({
+        isAvailable: () => Promise.resolve(false),
+        getVersion: () => Promise.resolve('not installed'),
+      }));
+
+      await cli.handleProvidersCommand({});
+
+      const claudeLine = output()
+        .split('\n')
+        .find((line) => line.includes('claude') && line.includes('not installed'));
+      expect(claudeLine).toMatch(/✗/);
+      expect(claudeLine).not.toMatch(/✓/);
+      expect(claudeLine).toContain('(current)');
+    });
+
     it('detects current provider when not already set', async () => {
       const cli = new ClaudeCraftCLI();
       cli.currentProvider = null;

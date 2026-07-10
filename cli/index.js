@@ -598,9 +598,12 @@ class AICraftCLI {
     const statuses = await Promise.all(statusPromises);
 
     statuses.forEach(({ name, available, version, isCurrent }) => {
-      const marker = isCurrent ? `${c.green}✓${c.reset}` : available ? `${c.green}✓${c.reset}` : `${c.red}✗${c.reset}`;
+      // ERG-04: the checkmark reflects real availability, never overridden
+      // by isCurrent — a selected-but-uninstalled provider must show ✗.
+      const marker = available ? `${c.green}✓${c.reset}` : `${c.red}✗${c.reset}`;
       const status = available ? 'available' : 'not installed';
-      console.log(`  ${marker} ${name.padEnd(15)} - ${version.padEnd(20)} (${status})`);
+      const currentTag = isCurrent ? ` ${c.dim}(current)${c.reset}` : '';
+      console.log(`  ${marker} ${name.padEnd(15)} - ${version.padEnd(20)} (${status})${currentTag}`);
     });
 
     console.log(`\n${c.dim}Primary provider: ${currentProvider}${c.reset}\n`);
