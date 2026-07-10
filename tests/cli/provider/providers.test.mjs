@@ -96,6 +96,28 @@ describe('Cursor provider (limited CLI, VSCode-based)', () => {
   });
 });
 
+describe('Cursor provider capabilities (CONC-03: cursor-agent is a full headless terminal agent)', () => {
+  it('mcpSupported reflects native MCP support (agent mcp, mcp.json)', () => {
+    const provider = new CursorProvider();
+    expect(provider.mcpSupported).toBe(true);
+  });
+
+  it('hooksSupported reflects CLI hooks.json support (partial event coverage vs the IDE)', () => {
+    const provider = new CursorProvider();
+    expect(provider.hooksSupported).toBe(true);
+  });
+
+  it('subAgentsSupported reflects documented CLI subagent support', () => {
+    const provider = new CursorProvider();
+    expect(provider.subAgentsSupported).toBe(true);
+  });
+
+  it('forkSupported stays false: no dedicated --fork flag is documented for the CLI', () => {
+    const provider = new CursorProvider();
+    expect(provider.forkSupported).toBe(false);
+  });
+});
+
 describe('Claude provider extras', () => {
   afterEach(() => {
     vi.restoreAllMocks();

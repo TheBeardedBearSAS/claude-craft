@@ -12,15 +12,23 @@ import { BaseProvider } from './base-provider.js';
 import { execa } from 'execa';
 
 /**
- * Cursor Provider - VSCode Integration
+ * Cursor Provider - CLI Integration
  *
- * Note: Cursor is primarily a VSCode extension, not a standalone CLI
- * This provider provides limited CLI support where available
+ * Note (CONC-03, verified 2026-07): the Cursor CLI (`cursor-agent`/`agent`,
+ * see cursor.com/docs/cli/overview) is a full standalone headless terminal
+ * agent since 2026 - not merely a VSCode extension. It is scriptable in CI/SSH
+ * via `-p`/`--output-format` non-interactive mode and has a Plan mode.
  *
  * Supports:
  * - Cursor CLI (if available)
- * - VSCode extension commands
- * - Limited MCP support via extensions
+ * - Native MCP servers (cursor.com/docs/cli/mcp: `agent mcp`, shared mcp.json)
+ * - Hooks via .cursor/hooks.json, though CLI event coverage is narrower than
+ *   the IDE's (community reports confirm at least beforeShellExecution/
+ *   afterShellExecution fire from the CLI - cursor.com/docs/hooks)
+ * - Subagents ("You can use subagents in the editor, CLI, and Cloud Agents" -
+ *   cursor.com/docs/subagents)
+ * - No dedicated --fork flag is documented for the CLI (closest analogues are
+ *   `-w/--worktree` and the `&` Cloud Agent handoff, not a literal fork)
  */
 export class CursorProvider extends BaseProvider {
   constructor() {
@@ -28,10 +36,10 @@ export class CursorProvider extends BaseProvider {
 
     this.name = 'cursor';
     this.displayName = 'Cursor (VSCode)';
-    this.mcpSupported = false; // Cursor has limited MCP support
-    this.hooksSupported = false; // Cursor uses VSCode extensions
-    this.subAgentsSupported = false; // Not available in CLI
-    this.forkSupported = false;
+    this.mcpSupported = true; // Native MCP support via `agent mcp` / mcp.json
+    this.hooksSupported = true; // .cursor/hooks.json, partial event coverage vs the IDE
+    this.subAgentsSupported = true; // Documented CLI subagent support
+    this.forkSupported = false; // No documented --fork mechanism in the CLI
 
     // Cursor supports various underlying models
     this.supportedModels = [
