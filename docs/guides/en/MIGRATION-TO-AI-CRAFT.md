@@ -538,45 +538,45 @@ node tests/ai-provider.test.mjs
 
 ---
 
-## 🎯 Roadmap de Migration vers AI Craft
+## 🎯 AI Craft Migration Roadmap
 
-### Phase 1: Fondations (Semaines 1-2) ✅ **COMPLET**
-- [x] Architecture du AI Provider Manager
-- [x] Implémentation des providers de base
-- [x] Configuration multi-provider
-- [x] Couche de compatibilité Claude Craft
-- [x] Documentation initiale
+### Phase 1: Foundations (Weeks 1-2) ✅ **COMPLETE**
+- [x] AI Provider Manager architecture
+- [x] Base provider implementations
+- [x] Multi-provider configuration
+- [x] Claude Craft compatibility layer
+- [x] Initial documentation
 
-### Phase 2: Intégration CLI (Semaines 3-4) ⏳ **EN COURS**
-- [ ] Mise à jour de cli/index.js pour utiliser le provider manager
-- [ ] Mise à jour de l'installer (Dev/scripts/install-*.sh)
-- [ ] Intégration de Ralph avec multi-provider
-- [ ] Tests d'intégration basiques
+### Phase 2: CLI Integration (Weeks 3-4) ⏳ **IN PROGRESS**
+- [ ] Update cli/index.js to use the provider manager
+- [ ] Update the installer (Dev/scripts/install-*.sh)
+- [ ] Integrate Ralph with multi-provider support
+- [ ] Basic integration tests
 
-### Phase 3: Adaptation des Outils (Semaines 5-6) ⏳ **À VENIR**
-- [ ] Ralph Wiggum multi-provider
-- [ ] QA Recette multi-browser + multi-AI
-- [ ] BMAD hooks multi-provider
-- [ ] Mise à jour des templates de hooks
+### Phase 3: Tooling Adaptation (Weeks 5-6) ⏳ **UPCOMING**
+- [ ] Multi-provider Ralph Wiggum
+- [ ] Multi-browser + multi-AI QA Recette
+- [ ] Multi-provider BMAD hooks
+- [ ] Update hook templates
 
-### Phase 4: Migration des Agents (Semaines 7-8) ⏳ **À VENIR**
-- [ ] Script de migration des agents
-- [ ] Mise à jour des 70 agents existants
-- [ ] Frontmatter multi-provider
-- [ ] Validation des agents
+### Phase 4: Agent Migration (Weeks 7-8) ⏳ **UPCOMING**
+- [ ] Agent migration script
+- [ ] Update the 70 existing agents
+- [ ] Multi-provider frontmatter
+- [ ] Agent validation
 
-### Phase 5: Tests & Validation (Semaines 9-10) ⏳ **À VENIR**
-- [ ] Suite de tests multi-provider
-- [ ] Tests d'intégration end-to-end
-- [ ] Validation de la backward compatibility
-- [ ] Benchmark des performances
+### Phase 5: Testing & Validation (Weeks 9-10) ⏳ **UPCOMING**
+- [ ] Multi-provider test suite
+- [ ] End-to-end integration tests
+- [ ] Backward compatibility validation
+- [ ] Performance benchmarking
 
-### Phase 6: Release (Semaine 11-12) ⏳ **À VENIR**
-- [ ] Mise à jour de la documentation
-- [ ] Création des bundles multi-IDE
-- [ ] Mise à jour du CI/CD
-- [ ] Publication sur npm
-- [ ] Annonce à la communauté
+### Phase 6: Release (Week 11-12) ⏳ **UPCOMING**
+- [ ] Documentation update
+- [ ] Multi-IDE bundle creation
+- [ ] CI/CD update
+- [ ] npm publication
+- [ ] Community announcement
 
 ---
 
