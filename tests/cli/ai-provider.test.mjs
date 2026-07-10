@@ -701,6 +701,35 @@ describe('AIProviderManager', () => {
       expect(options.timeout).toBeGreaterThan(0);
     });
 
+    it('honors a user-configured max_execution_time instead of the hardcoded default (SEC-07)', async () => {
+      const { execa } = await import('execa');
+      execa.mockClear();
+      execa.mockResolvedValue({ exitCode: 0, stdout: '', stderr: '' });
+      vi.spyOn(fs, 'existsSync').mockReturnValue(true);
+
+      // Simulate a project config loaded via loadConfig() overriding the default 3600s.
+      manager.config = { security: { max_execution_time: 42 } };
+
+      await manager.executeHook('vibe', 'pre-execute.sh', '/test/project');
+
+      const [, , options] = execa.mock.calls[0];
+      expect(options.timeout).toBe(42000);
+    });
+
+    it('falls back to the default timeout when no config has been loaded', async () => {
+      const { execa } = await import('execa');
+      execa.mockClear();
+      execa.mockResolvedValue({ exitCode: 0, stdout: '', stderr: '' });
+      vi.spyOn(fs, 'existsSync').mockReturnValue(true);
+
+      manager.config = {};
+
+      await manager.executeHook('vibe', 'pre-execute.sh', '/test/project');
+
+      const [, , options] = execa.mock.calls[0];
+      expect(options.timeout).toBe(3600 * 1000);
+    });
+
     it('does not leak arbitrary process env vars into the hook subprocess', async () => {
       const { execa } = await import('execa');
       execa.mockClear();

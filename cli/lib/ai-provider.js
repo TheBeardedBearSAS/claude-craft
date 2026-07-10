@@ -1205,7 +1205,8 @@ mcp:
 
     try {
       const { execa } = await import('execa');
-      const timeoutMs = (this.getDefaultConfig().security?.max_execution_time || 3600) * 1000;
+      const timeoutMs =
+        (this.config?.security?.max_execution_time || this.getDefaultConfig().security.max_execution_time) * 1000;
       const result = await execa(hookPath, [], {
         cwd: targetPath,
         env: { PATH: process.env.PATH, HOME: process.env.HOME, ...env },
