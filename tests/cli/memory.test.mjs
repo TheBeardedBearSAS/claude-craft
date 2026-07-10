@@ -111,6 +111,39 @@ describe('MemoryManager init', () => {
   });
 });
 
+describe('MemoryManager lazy init (ERG-02)', () => {
+  let manager;
+  let mkdirSpy;
+
+  beforeEach(() => {
+    manager = new MemoryManager();
+    vi.spyOn(fs, 'existsSync').mockReturnValue(false);
+    mkdirSpy = vi.spyOn(fs, 'mkdirSync').mockImplementation(() => {});
+    vi.spyOn(fs, 'readFileSync').mockReturnValue('{}');
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('does not create the memory directory just from construction', () => {
+    expect(mkdirSpy).not.toHaveBeenCalled();
+  });
+
+  it('creates the memory directory on first real accessor call, not before', () => {
+    expect(mkdirSpy).not.toHaveBeenCalled();
+    manager.getPreference('theme');
+    expect(mkdirSpy).toHaveBeenCalledWith(manager.memoryDir, { recursive: true });
+  });
+
+  it('only initializes once across repeated accessor calls', () => {
+    manager.getPreference('theme');
+    manager.getPreference('lang');
+    manager.getStats();
+    expect(mkdirSpy).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe('MemoryManager loadConversations', () => {
   let manager;
 

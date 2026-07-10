@@ -44,6 +44,21 @@ export class MemoryManager {
 
     /** @type {Object} */
     this.userPreferences = {};
+
+    /** @type {boolean} */
+    this._initialized = false;
+  }
+
+  /**
+   * Lazily run init() on first real use (ERG-02): importing this module, or
+   * running any CLI command that never touches memory (--version, --help),
+   * must not create .ai-craft/memory/ in the caller's cwd as a side effect.
+   */
+  _ensureInit() {
+    if (!this._initialized) {
+      this._initialized = true;
+      this.init();
+    }
   }
 
   /**
@@ -163,6 +178,7 @@ export class MemoryManager {
    * @returns {Conversation} - Conversation object
    */
   getConversation(id, options = {}) {
+    this._ensureInit();
     if (!this.conversations.has(id)) {
       this.conversations.set(id, {
         id,
@@ -206,6 +222,7 @@ export class MemoryManager {
    * @returns {Array} - Message history
    */
   getHistory(id, limit = 100) {
+    this._ensureInit();
     const conversation = this.conversations.get(id);
     if (!conversation) {
       return [];
@@ -218,6 +235,7 @@ export class MemoryManager {
    * @param {Object} context - Project context
    */
   setProjectContext(context) {
+    this._ensureInit();
     this.projectState.context = context;
     this.saveProjectState();
   }
@@ -227,6 +245,7 @@ export class MemoryManager {
    * @returns {Object} - Project context
    */
   getProjectContext() {
+    this._ensureInit();
     return this.projectState.context || {};
   }
 
@@ -236,6 +255,7 @@ export class MemoryManager {
    * @param {*} value - Preference value
    */
   setPreference(key, value) {
+    this._ensureInit();
     this.userPreferences[key] = value;
     this.saveUserPreferences();
   }
@@ -247,6 +267,7 @@ export class MemoryManager {
    * @returns {*} - Preference value
    */
   getPreference(key, defaultValue = undefined) {
+    this._ensureInit();
     return this.userPreferences[key] !== undefined ? this.userPreferences[key] : defaultValue;
   }
 
@@ -287,6 +308,7 @@ export class MemoryManager {
    * @param {string} id - Conversation ID
    */
   deleteConversation(id) {
+    this._ensureInit();
     this.conversations.delete(id);
     if (!isValidConversationId(id)) {
       return;
@@ -302,6 +324,7 @@ export class MemoryManager {
    * Clear all conversations
    */
   clearConversations() {
+    this._ensureInit();
     this.conversations.clear();
     const convDir = path.join(this.memoryDir, 'conversations');
     if (fs.existsSync(convDir)) {
@@ -348,11 +371,10 @@ export class MemoryManager {
   }
 }
 
-// Singleton instance
+// Singleton instance. init() is deferred to first real use (ERG-02) via
+// _ensureInit() rather than run here, so importing this module never
+// creates .ai-craft/memory/ as a side effect on unrelated CLI commands.
 export const memoryManager = new MemoryManager();
-
-// Initialize on import
-memoryManager.init();
 
 // Conversation type definition
 /**
