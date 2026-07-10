@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import fs from 'fs';
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync, existsSync, readFileSync, symlinkSync, lstatSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
@@ -450,6 +451,28 @@ describe('ClaudeCompatibilityLayer', () => {
 
       const stats = lstatSync(claudeDir);
       expect(stats.isSymbolicLink()).toBe(true);
+    });
+
+    it('leaves claudeDir and its original content untouched when symlinkSync fails (SEC-03)', () => {
+      const aiCraftDir = join(tempDir, '.ai-craft11');
+      const claudeDir = join(tempDir, '.claude11');
+      mkdirSync(aiCraftDir);
+      mkdirSync(claudeDir);
+      writeFileSync(join(claudeDir, 'important.txt'), 'do not lose me');
+
+      const symlinkSpy = vi.spyOn(fs, 'symlinkSync').mockImplementation(() => {
+        throw new Error('EPERM: simulated symlink failure');
+      });
+
+      expect(() => layer.createSymlink(aiCraftDir, claudeDir)).toThrow('simulated symlink failure');
+      symlinkSpy.mockRestore();
+
+      // claudeDir must still exist as a real directory, not removed or partially replaced.
+      const stats = lstatSync(claudeDir);
+      expect(stats.isSymbolicLink()).toBe(false);
+      expect(stats.isDirectory()).toBe(true);
+      expect(existsSync(join(claudeDir, 'important.txt'))).toBe(true);
+      expect(readFileSync(join(claudeDir, 'important.txt'), 'utf8')).toBe('do not lose me');
     });
   });
 

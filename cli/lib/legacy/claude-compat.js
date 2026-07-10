@@ -443,13 +443,24 @@ A comprehensive AI-assisted development framework compatible with **multiple AI 
    * @param {string} claudeDir - Path to .claude directory
    */
   createSymlink(aiCraftDir, claudeDir) {
-    // Remove existing .claude directory first
+    // Create the symlink at a temporary path first. If this throws,
+    // claudeDir has not been touched yet — nothing is lost, even without
+    // a backup (SEC-03).
+    const tempLink = `${claudeDir}.ai-craft-tmp-symlink`;
+    try {
+      fs.lstatSync(tempLink);
+      fs.rmSync(tempLink, { recursive: true, force: true });
+    } catch {
+      // No stale temp symlink from a previous failed attempt — nothing to clean up
+    }
+    fs.symlinkSync(aiCraftDir, tempLink, 'dir');
+
+    // Only now that the symlink exists do we remove the original directory
+    // and atomically move the symlink into place.
     if (fs.existsSync(claudeDir)) {
       this.removeDirSync(claudeDir);
     }
-
-    // Create symlink
-    fs.symlinkSync(aiCraftDir, claudeDir, 'dir');
+    fs.renameSync(tempLink, claudeDir);
   }
 
   /**
