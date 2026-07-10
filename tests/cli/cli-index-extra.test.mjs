@@ -38,6 +38,11 @@ describe('ClaudeCraftCLI extra command handlers', () => {
     });
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cli-index-extra-'));
     execa.mockReset().mockResolvedValue({ exitCode: 0 });
+    // createInterfaceMock is a plain vi.fn(), so vi.restoreAllMocks() in
+    // afterEach doesn't clear its recorded calls — reset explicitly so
+    // `expect(createInterfaceMock).not.toHaveBeenCalled()` assertions aren't
+    // polluted by earlier tests' invocations.
+    createInterfaceMock.mockClear();
   });
 
   afterEach(() => {
@@ -533,6 +538,78 @@ describe('ClaudeCraftCLI extra command handlers', () => {
 
       await expect(cli.handleMigration([], {})).rejects.toThrow('process.exit called');
       expect(errorSpy.mock.calls.join('\n')).toContain('Migration error');
+    });
+
+    // ERG-09: handleMigration() only accepted confirmation via readline.question
+    // with no non-interactive flag. On closed stdin, the question's callback
+    // never fires, nothing is printed, and the process exits 0 as if nothing
+    // happened.
+    it('--yes skips the confirmation and initializes directly when not a Claude Craft project (ERG-09)', async () => {
+      const cli = new ClaudeCraftCLI();
+      cli.config.targetPath = tempDir;
+      vi.spyOn(claudeCompat, 'isClaudeCraftProject').mockReturnValue(false);
+      vi.spyOn(cli, 'initializeAICraft').mockResolvedValue({ success: true });
+
+      await cli.handleMigration(['migrate', '--yes'], { yes: true });
+
+      expect(createInterfaceMock).not.toHaveBeenCalled();
+      expect(cli.initializeAICraft).toHaveBeenCalled();
+      expect(output()).toContain('AI Craft initialized');
+    });
+
+    it('--yes skips the confirmation and migrates directly when already a Claude Craft project (ERG-09)', async () => {
+      const cli = new ClaudeCraftCLI();
+      cli.config.targetPath = tempDir;
+      vi.spyOn(claudeCompat, 'isClaudeCraftProject').mockReturnValue(true);
+      vi.spyOn(claudeCompat, 'migrate').mockResolvedValue({
+        success: true,
+        aiCraftDir: '.ai-craft',
+        filesCopied: 3,
+        aiCraftMdCreated: true,
+        configCreated: true,
+        symlinkCreated: true,
+      });
+
+      await cli.handleMigration(['migrate', '--yes'], { yes: true });
+
+      expect(createInterfaceMock).not.toHaveBeenCalled();
+      expect(output()).toContain('Migration completed successfully');
+    });
+
+    it('prints a skipped message and exits non-zero when stdin closes without an answer (not a project) (ERG-09)', async () => {
+      const cli = new ClaudeCraftCLI();
+      cli.config.targetPath = tempDir;
+      vi.spyOn(claudeCompat, 'isClaudeCraftProject').mockReturnValue(false);
+      createInterfaceMock.mockReturnValue({
+        question: () => {}, // never answers — simulates closed stdin
+        close: () => {},
+        on: (event, cb) => {
+          if (event === 'close') cb();
+        },
+      });
+
+      await expect(cli.handleMigration([], {})).rejects.toThrow('process.exit called');
+
+      expect(output()).toContain('Skipped: no confirmation received');
+      expect(exitSpy).toHaveBeenCalledWith(1);
+    });
+
+    it('prints a skipped message and exits non-zero when stdin closes without an answer (existing project) (ERG-09)', async () => {
+      const cli = new ClaudeCraftCLI();
+      cli.config.targetPath = tempDir;
+      vi.spyOn(claudeCompat, 'isClaudeCraftProject').mockReturnValue(true);
+      createInterfaceMock.mockReturnValue({
+        question: () => {}, // never answers — simulates closed stdin
+        close: () => {},
+        on: (event, cb) => {
+          if (event === 'close') cb();
+        },
+      });
+
+      await expect(cli.handleMigration([], {})).rejects.toThrow('process.exit called');
+
+      expect(output()).toContain('Skipped: no confirmation received');
+      expect(exitSpy).toHaveBeenCalledWith(1);
     });
   });
 

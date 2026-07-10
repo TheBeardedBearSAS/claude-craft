@@ -433,10 +433,46 @@ class AICraftCLI {
   }
 
   /**
+   * Ask a yes/no question on a readline interface, resolving even if stdin
+   * closes (EOF) before an answer is given.
+   *
+   * ERG-09: without this, a closed-stdin invocation (piped /dev/null, CI)
+   * left the underlying `rl.question()` callback never firing, so the
+   * enclosing `await` never resolved and the process exited silently once
+   * the event loop drained — code 0, no message, no action taken.
+   *
+   * @param {readline.Interface} rl - Readline interface to question.
+   * @param {string} question - Prompt text to display.
+   * @returns {Promise<{answered: boolean, value: string|null}>} `answered`
+   *   is false when `rl` closed before the question was answered.
+   */
+  askConfirmation(rl, question) {
+    return new Promise((resolve) => {
+      let settled = false;
+      rl.question(question, (answer) => {
+        if (settled) return;
+        settled = true;
+        resolve({ answered: true, value: answer.trim().toLowerCase() });
+      });
+      if (typeof rl.on === 'function') {
+        rl.on('close', () => {
+          if (settled) return;
+          settled = true;
+          resolve({ answered: false, value: null });
+        });
+      }
+    });
+  }
+
+  /**
    * Handle migration from Claude Craft to AI Craft
    */
   async handleMigration(args, options) {
     const targetPath = this.config.targetPath;
+
+    // ERG-09: --yes/-y lets CI/scripts opt into the migration non-interactively
+    // instead of hanging on (or silently skipping) a readline prompt.
+    const skipConfirmation = options.yes === true || args.includes('-y');
 
     console.log(`${c.cyan}🔄 AI Craft Migration Tool${c.reset}\n`);
 
@@ -444,16 +480,25 @@ class AICraftCLI {
     if (!claudeCompat.isClaudeCraftProject(targetPath)) {
       console.log(`${c.yellow}⚠️  This is not a Claude Craft project (no .claude/ directory found).${c.reset}\n`);
 
+      if (skipConfirmation) {
+        await this.initializeAICraft();
+        console.log(`${c.green}✅ AI Craft initialized!${c.reset}`);
+        return;
+      }
+
       // Offer to initialize AI Craft anyway
       const readline = await import('readline');
       const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+      const { answered, value: answer } = await this.askConfirmation(
+        rl,
+        `${c.cyan}Would you like to initialize AI Craft in this directory? (y/N): ${c.reset}`
+      );
+      rl.close();
 
-      const answer = await new Promise((resolve) => {
-        rl.question(`${c.cyan}Would you like to initialize AI Craft in this directory? (y/N): ${c.reset}`, (ans) => {
-          resolve(ans.toLowerCase());
-          rl.close();
-        });
-      });
+      if (!answered) {
+        console.log(`${c.yellow}Skipped: no confirmation received${c.reset}`);
+        process.exit(1);
+      }
 
       if (answer === 'y' || answer === 'yes') {
         await this.initializeAICraft();
@@ -473,18 +518,24 @@ class AICraftCLI {
     console.log(`  5. Create symlink .claude/ -> .ai-craft/`);
     console.log(`  6. Initialize subdirectories\n`);
 
-    // Ask for confirmation
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-    const confirm = await new Promise((resolve) => {
-      rl.question(`${c.cyan}Proceed with migration? (Y/n): ${c.reset}`, (ans) => {
-        resolve(ans.toLowerCase());
-        rl.close();
-      });
-    });
+    if (!skipConfirmation) {
+      // Ask for confirmation
+      const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+      const { answered, value: confirm } = await this.askConfirmation(
+        rl,
+        `${c.cyan}Proceed with migration? (Y/n): ${c.reset}`
+      );
+      rl.close();
 
-    if (confirm === 'n' || confirm === 'no') {
-      console.log(`${c.yellow}Migration cancelled.${c.reset}`);
-      return;
+      if (!answered) {
+        console.log(`${c.yellow}Skipped: no confirmation received${c.reset}`);
+        process.exit(1);
+      }
+
+      if (confirm === 'n' || confirm === 'no') {
+        console.log(`${c.yellow}Migration cancelled.${c.reset}`);
+        return;
+      }
     }
 
     // Run migration
