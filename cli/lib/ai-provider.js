@@ -443,6 +443,13 @@ export class AIProviderManager {
 
   /**
    * Try fallback providers if primary fails
+   *
+   * CONC-04: this walks `config.providers.fallback` in declared order and
+   * picks the first one that reports available — there is no cost, latency,
+   * or budget-aware routing (unlike e.g. LiteLLM's router). That is a
+   * deliberate scope limitation, not a bug: this is a CLI wrapper choosing
+   * between local coding-agent binaries, not an API request router.
+   *
    * @param {string} primaryProvider - The primary provider that failed
    * @param {string} command - Command to execute
    * @param {string[]} args - Command arguments
