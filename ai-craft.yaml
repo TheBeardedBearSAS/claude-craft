@@ -257,9 +257,6 @@ compatibility:
 # =============================================================================
 
 security:
-  # API key validation
-  api_key_validation: true
-  
   # Allowed MCP servers
   mcp_server_allowlist:
     - "npx -y @modelcontextprotocol/server-filesystem"
@@ -267,9 +264,8 @@ security:
     - "npx -y @modelcontextprotocol/server-process"
     - "npx -y @modelcontextprotocol/server-browser"
     - "npx -y github-mcp-server"
-  
+
   # Hook security
-  hook_sandboxing: true
   hook_timeout: 5000             # Hook execution timeout in ms
   max_hook_output: 1024000     # Maximum hook output size in bytes
   

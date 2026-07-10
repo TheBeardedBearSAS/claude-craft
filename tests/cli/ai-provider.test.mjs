@@ -622,6 +622,17 @@ describe('AIProviderManager', () => {
       expect(config.providers).toHaveProperty('fallback');
     });
 
+    it('does not declare security flags that are never read anywhere (SEC-05)', () => {
+      const config = manager.getDefaultConfig();
+
+      // hook_sandboxing and api_key_validation are fake security: no code path
+      // in the repo ever reads them, so they must not be advertised as active.
+      expect(config.security).not.toHaveProperty('hook_sandboxing');
+      expect(config.security).not.toHaveProperty('api_key_validation');
+      // max_execution_time IS consumed by executeHook() and must remain.
+      expect(config.security).toHaveProperty('max_execution_time', 3600);
+    });
+
     it('should return all MCP servers', () => {
       const allServers = manager.getAllProviderMCPServers();
 
