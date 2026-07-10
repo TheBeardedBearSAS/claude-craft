@@ -459,7 +459,7 @@ export class AIProviderManager {
       const fallbackProvider = this.getProvider(fallbackProviderName);
       if (!fallbackProvider) continue;
 
-      if (await fallbackProvider.isAvailable()) {
+      if (await this.isProviderAvailable(fallbackProviderName)) {
         console.warn(`⚠️ Falling back to ${fallbackProviderName}...`);
         return await fallbackProvider.execute(command, args, options);
       }
@@ -609,7 +609,15 @@ export class AIProviderManager {
   async isProviderAvailable(providerName) {
     const provider = this.getProvider(providerName);
     if (!provider) return false;
-    return await provider.isAvailable();
+
+    const cached = this.cache.providerAvailability.get(providerName);
+    if (cached && cached.timestamp > Date.now() - this.cacheTTL) {
+      return cached.available;
+    }
+
+    const available = await provider.isAvailable();
+    this.cache.providerAvailability.set(providerName, { ...cached, available, timestamp: Date.now() });
+    return available;
   }
 
   /**
@@ -620,7 +628,15 @@ export class AIProviderManager {
   async getProviderVersion(providerName) {
     const provider = this.getProvider(providerName);
     if (!provider) return 'unknown';
-    return await provider.getVersion();
+
+    const cached = this.cache.providerVersions.get(providerName);
+    if (cached && cached.timestamp > Date.now() - this.cacheTTL && cached.version) {
+      return cached.version;
+    }
+
+    const version = await provider.getVersion();
+    this.cache.providerVersions.set(providerName, { ...cached, version, timestamp: Date.now() });
+    return version;
   }
 
   /**

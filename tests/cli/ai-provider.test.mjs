@@ -932,6 +932,18 @@ describe('AIProviderManager', () => {
 
       expect(result).toBeNull();
     });
+
+    it('tryFallback() consults the availability cache instead of re-checking isAvailable() every call (TOKEN-04)', async () => {
+      vi.spyOn(manager, 'loadConfig').mockReturnValue({ providers: { fallback: ['vibe'] } });
+      const vibe = manager.getProvider('vibe');
+      const availSpy = vi.spyOn(vibe, 'isAvailable').mockResolvedValue(true);
+      vi.spyOn(vibe, 'execute').mockResolvedValue({ success: true, stdout: 'vibe-ran' });
+
+      await manager.tryFallback('claude', 'cmd', [], {});
+      await manager.tryFallback('claude', 'cmd', [], {});
+
+      expect(availSpy).toHaveBeenCalledTimes(1);
+    });
   });
 
   // =========================================================================
@@ -1048,6 +1060,52 @@ describe('AIProviderManager', () => {
 
     it('returns "unknown" for an unregistered provider version', async () => {
       expect(await manager.getProviderVersion('ghost')).toBe('unknown');
+    });
+
+    it('caches isProviderAvailable() results within the TTL window (TOKEN-04)', async () => {
+      const provider = manager.getProvider('vibe');
+      const spy = vi.spyOn(provider, 'isAvailable').mockResolvedValue(true);
+
+      const r1 = await manager.isProviderAvailable('vibe');
+      const r2 = await manager.isProviderAvailable('vibe');
+      const r3 = await manager.isProviderAvailable('vibe');
+
+      expect([r1, r2, r3]).toEqual([true, true, true]);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('re-checks isProviderAvailable() once the cache entry has expired', async () => {
+      const provider = manager.getProvider('vibe');
+      const spy = vi.spyOn(provider, 'isAvailable').mockResolvedValue(true);
+
+      await manager.isProviderAvailable('vibe');
+      manager.cache.providerAvailability.get('vibe').timestamp = Date.now() - manager.cacheTTL - 1000;
+      await manager.isProviderAvailable('vibe');
+
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    it('caches getProviderVersion() results within the TTL window (TOKEN-04)', async () => {
+      const provider = manager.getProvider('claude');
+      const spy = vi.spyOn(provider, 'getVersion').mockResolvedValue('9.9.9');
+
+      const v1 = await manager.getProviderVersion('claude');
+      const v2 = await manager.getProviderVersion('claude');
+
+      expect(v1).toBe('9.9.9');
+      expect(v2).toBe('9.9.9');
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('re-checks getProviderVersion() once the cache entry has expired', async () => {
+      const provider = manager.getProvider('claude');
+      const spy = vi.spyOn(provider, 'getVersion').mockResolvedValue('9.9.9');
+
+      await manager.getProviderVersion('claude');
+      manager.cache.providerVersions.get('claude').timestamp = Date.now() - manager.cacheTTL - 1000;
+      await manager.getProviderVersion('claude');
+
+      expect(spy).toHaveBeenCalledTimes(2);
     });
   });
 
