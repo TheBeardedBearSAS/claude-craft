@@ -3,7 +3,7 @@
 /**
  * AI Craft CLI - Multi-AI Development Framework
  * Interactive installer for AI rules, agents, and commands.
- * Compatible with Vibe, Codex, OpenCode, Claude Code, Cursor, and GitHub Copilot.
+ * Compatible with Vibe, Codex, OpenCode, Claude Code, and Cursor.
  *
  * This is a thin orchestrator that dispatches to focused modules:
  * - banner.js: ASCII art banner and success messages
@@ -61,7 +61,7 @@ const { version: VERSION } = JSON.parse(fs.readFileSync(path.join(CLI_ROOT, 'pac
 
 /**
  * AI Craft CLI - Main class for the multi-AI development framework
- * Supports Vibe, Codex, OpenCode, Claude Code, Cursor, and GitHub Copilot
+ * Supports Vibe, Codex, OpenCode, Claude Code, and Cursor
  */
 class AICraftCLI {
   /**
@@ -649,10 +649,10 @@ class AICraftCLI {
     console.log(`  AI Craft now supports multiple AI providers!`);
     console.log(`\n  Supported providers:`);
     console.log(`    ${c.green}✓${c.reset} Vibe (Mistral AI)     - https://vibe.mistral.ai`);
-    console.log(`    ${c.green}✓${c.reset} Codex (Google)       - https://codex.google.com`);
-    console.log(`    ${c.green}✓${c.reset} OpenCode            - https://github.com/create-open-code/open-code`);
+    console.log(`    ${c.green}✓${c.reset} Codex (OpenAI)       - https://developers.openai.com/codex`);
+    console.log(`    ${c.green}✓${c.reset} OpenCode            - https://opencode.ai`);
     console.log(`    ${c.green}✓${c.reset} Claude Code        - https://code.claude.com`);
-    console.log(`    ${c.green}✓${c.reset} Cursor (VSCode)     - https://cursor.com`);
+    console.log(`    ${c.green}✓${c.reset} Cursor CLI          - https://cursor.com/cli`);
     console.log(`\n  Current provider: ${this.currentProvider || 'auto-detected'}`);
     console.log(`\n  Usage:`);
     console.log(`    ai-craft --provider=vibe install ./my-project`);

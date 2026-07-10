@@ -127,10 +127,10 @@ Multi-AI Provider Support:
 
   Supported providers:
     ✓ Vibe (Mistral AI)     - https://vibe.mistral.ai
-    ✓ Codex (Google)       - https://codex.google.com
-    ✓ OpenCode            - https://github.com/create-open-code/open-code
+    ✓ Codex (OpenAI)       - https://developers.openai.com/codex
+    ✓ OpenCode            - https://opencode.ai
     ✓ Claude Code        - https://code.claude.com
-    ✓ Cursor (VSCode)     - https://cursor.com
+    ✓ Cursor CLI          - https://cursor.com/cli
 
   Current provider: auto-detected
 
