@@ -25,7 +25,7 @@ export class CodexProvider extends BaseProvider {
 
     this.name = 'codex';
     this.displayName = 'Codex (OpenAI)';
-    this.mcpSupported = false; // Codex has limited MCP support
+    this.mcpSupported = true; // Codex CLI supports MCP natively out of the box
     this.hooksSupported = true; // Via GitHub hooks
     this.subAgentsSupported = true;
     this.forkSupported = false; // Codex doesn't support forking in the same way
@@ -133,18 +133,11 @@ export class CodexProvider extends BaseProvider {
 
   /**
    * Spawn a sub-agent with Codex
-   * Note: Codex doesn't support forking in the same way as Claude Code
-   * We simulate it by spawning a new Codex session
+   * Codex CLI supports sub-agents natively (GA since v0.115.0, 2026-03-16),
+   * with up to 6 concurrent sub-agents.
    */
   async spawnSubAgent(prompt, options = {}) {
-    // Codex doesn't have native sub-agent support
-    // We can simulate it by creating a new session with context
     const args = ['--system', '.ai-craft/AI-CRAFT.md', prompt];
-
-    if (options.maxIterations) {
-      // Codex doesn't have native loop, but we can simulate
-      console.warn('⚠️ Codex does not support native sub-agents. Using workarounds.');
-    }
 
     return this.execute('run', args, options);
   }

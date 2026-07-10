@@ -219,14 +219,21 @@ describe('Codex provider extras', () => {
     );
   });
 
-  it('spawnSubAgent() warns when maxIterations is provided', async () => {
+  it('spawnSubAgent() does not claim Codex lacks native sub-agent support (CONC-06)', async () => {
     execa.mockResolvedValue({ stdout: '', stderr: '', exitCode: 0 });
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const provider = new CodexProvider();
 
+    // Codex CLI has GA native sub-agent support since v0.115.0 (up to 6
+    // concurrent sub-agents), so this must no longer warn about workarounds.
     await provider.spawnSubAgent('task', { maxIterations: 3 });
 
-    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('does not support native sub-agents'));
+    expect(warnSpy).not.toHaveBeenCalledWith(expect.stringContaining('does not support native sub-agents'));
+  });
+
+  it('mcpSupported reflects Codex CLI native MCP support (CONC-06)', () => {
+    const provider = new CodexProvider();
+    expect(provider.mcpSupported).toBe(true);
   });
 
   it('sendMessage() forwards temperature, maxTokens and systemPrompt as CLI flags', async () => {
