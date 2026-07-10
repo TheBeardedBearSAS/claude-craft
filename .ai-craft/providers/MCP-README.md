@@ -36,7 +36,7 @@ These are automatically available based on your provider:
 | Codex | filesystem (built-in), git (built-in) |
 | OpenCode | filesystem, git, process |
 | Claude Code | filesystem, git |
-| Cursor | filesystem, git (via extensions) |
+| Cursor | filesystem, git (native, via `agent mcp`) |
 
 ### 2. Standard MCP Servers
 
@@ -158,7 +158,7 @@ mcp:
 ### Codex
 - Built-in filesystem and git access
 - Supports custom MCP servers
-- Requires Google Cloud authentication
+- Requires an OpenAI API key (`OPENAI_API_KEY`)
 
 ### OpenCode
 - Excellent MCP support
@@ -171,9 +171,9 @@ mcp:
 - Requires manual MCP server configuration
 
 ### Cursor
-- MCP support via VSCode extension
+- Native MCP support via the CLI (`agent mcp`, shared `mcp.json`)
 - Built-in filesystem and git
-- Supports custom MCP via extensions
+- Supports custom MCP servers
 
 ## Best Practices
 
@@ -186,9 +186,17 @@ mcp:
 ## Troubleshooting
 
 ### MCP server not starting
+
+> **Auto-start is not yet implemented.** `startAllMCPServers()` (in
+> `cli/lib/ai-provider.js`) currently only *registers* servers - it does
+> not spawn any real process, so there is no `.ai-craft/logs/mcp.log` to
+> tail. Running `ai-craft mcp start` will print `⚠️  MCP servers
+> registered (N) — auto-start is not yet implemented`. Until real
+> process management ships, start each MCP server manually.
+
 ```bash
-# Check logs
-tail -f .ai-craft/logs/mcp.log
+# Start a server manually with the same command/args from your config
+npx -y @modelcontextprotocol/server-filesystem
 
 # Test server manually
 npx @modelcontextprotocol/server-filesystem --help
