@@ -1423,7 +1423,9 @@ describe('AIProviderManager', () => {
 
       const result = await manager.startAllMCPServers('claude', tmpDir);
 
-      expect(result.started.git).toEqual({ status: 'would_start', command: undefined, args: undefined });
+      // FONC-01: no process is ever spawned here, so the status must not imply
+      // a start attempt occurred ('not_implemented', not the misleading 'would_start').
+      expect(result.started.git).toEqual({ status: 'not_implemented', command: undefined, args: undefined });
       expect(result.started['disabled-tool']).toBeUndefined();
       expect(result.failed).toEqual({});
       expect(result.total).toBe(2); // built-in "git" + "disabled-tool"

@@ -1036,10 +1036,10 @@ mcp:
     for (const [name, config] of Object.entries(servers)) {
       if (config.enabled !== false) {
         try {
-          // In a real implementation, this would start the MCP server process
-          // For now, we just log it
+          // MCP server auto-start is not implemented: no process is spawned here.
+          // Report an honest status instead of implying a start was attempted.
           started[name] = {
-            status: 'would_start',
+            status: 'not_implemented',
             command: config.command,
             args: config.args,
           };
