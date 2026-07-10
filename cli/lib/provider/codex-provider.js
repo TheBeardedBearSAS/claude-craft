@@ -1,6 +1,6 @@
 /**
  * AI Craft - Codex Provider
- * Implementation for Google's Codex
+ * Implementation for OpenAI's Codex
  *
  * This file is part of AI Craft (formerly Claude Craft)
  * Multi-AI Development Framework
@@ -12,11 +12,11 @@ import { BaseProvider } from './base-provider.js';
 import { execa } from 'execa';
 
 /**
- * Codex Provider - Google
+ * Codex Provider - OpenAI
  *
  * Supports:
- * - Codex CLI (https://github.com/google-github/codex-cli)
- * - Google Cloud AI API
+ * - Codex CLI (https://github.com/openai/codex)
+ * - OpenAI API
  * - GitHub integration
  */
 export class CodexProvider extends BaseProvider {
@@ -24,7 +24,7 @@ export class CodexProvider extends BaseProvider {
     super();
 
     this.name = 'codex';
-    this.displayName = 'Codex (Google)';
+    this.displayName = 'Codex (OpenAI)';
     this.mcpSupported = false; // Codex has limited MCP support
     this.hooksSupported = true; // Via GitHub hooks
     this.subAgentsSupported = true;
@@ -68,7 +68,7 @@ export class CodexProvider extends BaseProvider {
       reject: false,
       env: {
         ...process.env,
-        CODEX_API_KEY: process.env.CODEX_API_KEY || process.env.GOOGLE_API_KEY,
+        CODEX_API_KEY: process.env.CODEX_API_KEY || process.env.OPENAI_API_KEY,
       },
       ...options,
     };
@@ -201,8 +201,8 @@ export class CodexProvider extends BaseProvider {
     }
 
     // Check for API key
-    if (!process.env.CODEX_API_KEY && !process.env.GOOGLE_API_KEY) {
-      console.warn('⚠️ Warning: CODEX_API_KEY or GOOGLE_API_KEY environment variable not set');
+    if (!process.env.CODEX_API_KEY && !process.env.OPENAI_API_KEY) {
+      console.warn('⚠️ Warning: CODEX_API_KEY or OPENAI_API_KEY environment variable not set');
     }
 
     return true;
@@ -214,7 +214,7 @@ export class CodexProvider extends BaseProvider {
   getEnvVars() {
     return {
       CODEX_API_KEY: process.env.CODEX_API_KEY,
-      GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY,
       CODEX_MODEL: process.env.CODEX_MODEL || this.defaultModel,
     };
   }

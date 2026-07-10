@@ -251,22 +251,27 @@ describe('Codex provider extras', () => {
     });
   });
 
+  it('displayName and docs attribute Codex to OpenAI, not Google (CONC-01)', () => {
+    const provider = new CodexProvider();
+    expect(provider.displayName).toBe('Codex (OpenAI)');
+  });
+
   it('validateConfig() warns when no API key is configured', () => {
     const originalCodex = process.env.CODEX_API_KEY;
-    const originalGoogle = process.env.GOOGLE_API_KEY;
+    const originalOpenAI = process.env.OPENAI_API_KEY;
     delete process.env.CODEX_API_KEY;
-    delete process.env.GOOGLE_API_KEY;
+    delete process.env.OPENAI_API_KEY;
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const provider = new CodexProvider();
 
     try {
       expect(provider.validateConfig({})).toBe(true);
-      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('CODEX_API_KEY or GOOGLE_API_KEY'));
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('CODEX_API_KEY or OPENAI_API_KEY'));
     } finally {
       if (originalCodex === undefined) delete process.env.CODEX_API_KEY;
       else process.env.CODEX_API_KEY = originalCodex;
-      if (originalGoogle === undefined) delete process.env.GOOGLE_API_KEY;
-      else process.env.GOOGLE_API_KEY = originalGoogle;
+      if (originalOpenAI === undefined) delete process.env.OPENAI_API_KEY;
+      else process.env.OPENAI_API_KEY = originalOpenAI;
     }
   });
 
@@ -282,9 +287,9 @@ describe('Codex provider extras', () => {
 
     try {
       const envVars = provider.getEnvVars();
-      expect(envVars.CODEX_MODEL).toBe('codex-pro');
+      expect(envVars.CODEX_MODEL).toBe(provider.defaultModel);
       expect(envVars).toHaveProperty('CODEX_API_KEY');
-      expect(envVars).toHaveProperty('GOOGLE_API_KEY');
+      expect(envVars).toHaveProperty('OPENAI_API_KEY');
     } finally {
       if (originalModel === undefined) delete process.env.CODEX_MODEL;
       else process.env.CODEX_MODEL = originalModel;
