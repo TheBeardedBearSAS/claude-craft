@@ -27,6 +27,10 @@ Claude Craft installs into any codebase to provide technology-specific rules, re
 - [07 - Backlog Management](https://thebeardedbearsas.github.io/claude-craft/en/guides/07-backlog-management): managing sprints and backlog
 - [10 - Complete Workflow](https://thebeardedbearsas.github.io/claude-craft/en/guides/10-complete-workflow): end-to-end reference workflow
 
+## Comparisons
+
+- [Claude Craft vs SuperClaude vs Vanilla Claude Code](https://thebeardedbearsas.github.io/claude-craft/en/compare/claude-craft-vs-superclaude): sourced feature comparison to help evaluators pick a framework
+
 ## About
 
 - [About / Contact](https://thebeardedbearsas.github.io/claude-craft/en/about): maintainer information and contact via GitHub Issues

@@ -221,6 +221,7 @@ copy_doc "$DOCS_DIR/MIGRATION-v7.md"             "$WEBSITE_DIR/en/migration/v7.m
 copy_doc "$PROJECT_ROOT/CHANGELOG.md"            "$WEBSITE_DIR/en/changelog.md" "Changelog" "Release history"
 copy_doc "$PROJECT_ROOT/CONTRIBUTING.md"         "$WEBSITE_DIR/en/contributing.md" "Contributing" "How to contribute"
 copy_doc "$DOCS_DIR/ABOUT.md"                    "$WEBSITE_DIR/en/about.md" "About" "Claude Craft is maintained by The Bearded CTO and published under the MIT license by The Bearded Bear SAS. Learn who's behind the project and how to reach out."
+copy_doc "$DOCS_DIR/COMPARE-SUPERCLAUDE.md"      "$WEBSITE_DIR/en/compare/claude-craft-vs-superclaude.md"
 
 # English guides
 echo "  Syncing English guides..."

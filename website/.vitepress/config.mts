@@ -144,7 +144,7 @@ export default defineConfig({
   transformHead({ page, title, description }): HeadConfig[] {
     const urlPath = pageToUrlPath(page)
     const pageUrl = SITE_URL + urlPath
-    const ogImage = SITE_URL + 'logo.png'
+    const ogImage = SITE_URL + 'og-image.png'
 
     const canonicalHead: HeadConfig[] = [
       ['link', { rel: 'canonical', href: pageUrl }],
@@ -156,7 +156,10 @@ export default defineConfig({
       ['meta', { property: 'og:description', content: description }],
       ['meta', { property: 'og:url', content: pageUrl }],
       ['meta', { property: 'og:image', content: ogImage }],
-      ['meta', { name: 'twitter:card', content: 'summary' }],
+      ['meta', { property: 'og:image:width', content: '1200' }],
+      ['meta', { property: 'og:image:height', content: '630' }],
+      ['meta', { property: 'og:image:alt', content: `${SITE_NAME} — ${SITE_DESCRIPTION}` }],
+      ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
       ['meta', { name: 'twitter:title', content: title }],
       ['meta', { name: 'twitter:description', content: description }],
       ['meta', { name: 'twitter:image', content: ogImage }],
@@ -268,6 +271,7 @@ export default defineConfig({
         ],
       },
       { text: 'Changelog', link: '/en/changelog' },
+      { text: 'Compare', link: '/en/compare/claude-craft-vs-superclaude' },
       { text: 'About', link: '/en/about' },
     ],
 
