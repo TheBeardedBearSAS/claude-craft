@@ -42,7 +42,7 @@ const infraTechs = [
         <h2 style="font-size: 2.25rem; font-weight: 700; color: white;">{{ title }}</h2>
         <p style="margin-top: 1rem; color: #94a3b8;">{{ desc }}</p>
       </div>
-      <div class="tech-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+      <div class="tech-grid tech-grid-3" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;">
         <div v-for="tech in appTechs" :key="tech.name" style="background: rgba(30,41,59,0.5); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.05); text-align: center; transition: border-color 0.3s;" class="tech-card">
           <div style="height: 4rem; width: 4rem; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; transition: transform 0.3s;" class="tech-icon">
             <img :src="tech.logo" :alt="tech.name" class="tech-logo" />
@@ -54,7 +54,7 @@ const infraTechs = [
 
       <h3 style="color: #94a3b8; margin: 3rem 0 1.5rem; font-size: 1.1rem; text-align: center;">Infrastructure</h3>
 
-      <div class="tech-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
+      <div class="tech-grid tech-grid-4" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;">
         <div v-for="tech in infraTechs" :key="tech.name" style="background: rgba(30,41,59,0.5); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.05); text-align: center; transition: border-color 0.3s;" class="tech-card">
           <div style="height: 4rem; width: 4rem; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; transition: transform 0.3s;" class="tech-icon">
             <img :src="tech.logo" :alt="tech.name" class="tech-logo" />
@@ -79,14 +79,24 @@ const infraTechs = [
   height: 2.5rem;
   object-fit: contain;
 }
+.tech-card {
+  flex-grow: 0;
+  flex-shrink: 1;
+}
+.tech-grid-3 .tech-card {
+  flex-basis: calc((100% - 3rem) / 3);
+}
+.tech-grid-4 .tech-card {
+  flex-basis: calc((100% - 4.5rem) / 4);
+}
 @media (max-width: 768px) {
-  .tech-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
+  .tech-card {
+    flex-basis: calc((100% - 1.5rem) / 2) !important;
   }
 }
 @media (max-width: 480px) {
-  .tech-grid {
-    grid-template-columns: 1fr !important;
+  .tech-card {
+    flex-basis: 100% !important;
   }
 }
 </style>
