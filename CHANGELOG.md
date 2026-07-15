@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.19.5] - 2026-07-15
+
+### Fixed
+
+- **Grille tech-stack — dernière ligne non centrée** : `TechGrid.vue` passe de `display: grid` à `display: flex` avec `flex-basis` calculé par variante, pour que les lignes incomplètes (11 items appTechs / 3 colonnes → 2 en dernière ligne) se centrent automatiquement au lieu de s'aligner à gauche.
+
+### Docs
+
+- **Headers de sécurité (CSP, X-Frame-Options, HSTS...)** : décision documentée dans `docs/internal/CDN_CACHE_CONTROL_SETUP_20260715.md`, réutilisant le même mécanisme Cloudflare (Response Header Transform Rule) déjà retenu pour le cache-control — GitHub Pages ne supportant nativement aucun header custom. Documentation seule, aucune mise en œuvre (dépend d'une config Cloudflare externe au dépôt).
+
 ## [8.19.4] - 2026-07-10
 
 ### Fixed

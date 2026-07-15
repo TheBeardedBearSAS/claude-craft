@@ -1,4 +1,4 @@
-# Claude Code Compatibility — Claude Craft v8.19.4
+# Claude Code Compatibility — Claude Craft v8.19.5
 
 **Minimum Version:** 2.1.97 (elevated from 2.1.47 — see [rationale](#why-we-elevated-minimum-from-2147-to-2197))
 **Recommended Version:** 2.1.193 (Opus 4.8, Artifacts, `claude mcp login`, `/cd`, nested subagents — Week 26, June 26, 2026)
