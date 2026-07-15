@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.20.0] - 2026-07-15
+
+### Added
+
+- **Website SEO/SXO** : audit SXO du homepage (page-type mismatch vs SERP, gap score 43/100) suivi de la mise en œuvre complète des correctifs :
+  - Canonical par page + JSON-LD `WebSite`/`SoftwareApplication`/`BreadcrumbList` (`website/.vitepress/config.mts`, hook `transformHead`).
+  - Balises Open Graph et Twitter Card (`og:title/description/url/image` + dimensions/alt, `twitter:card=summary_large_image`).
+  - Hreflang alternates (en/fr/es/de/pt) sur les pages doc, mutualisés entre le build hook et le générateur de sitemap (`website/.vitepress/seo-locales.mjs`).
+  - `website/public/llms.txt` et `website/scripts/generate-sitemap.mjs` (sitemap régénéré au build, `postbuild`).
+  - Landing page : badges GitHub stars/licence MIT, CTA « View on GitHub », intitulés de sections reformulés en questions (alignement featured snippets/PAA), zones de tap 48px.
+  - Page « About » (5 langues) pour les signaux E-E-A-T de maintainer.
+  - Page de comparaison sourcée « Claude Craft vs SuperClaude vs Claude Code nu » (`docs/COMPARE-SUPERCLAUDE.md`, schema `FAQPage`, chiffres vérifiés sur les README respectifs au 2026-07-15).
+  - Image Open Graph dédiée 1200×630 (`website/public/og-image.png`), remplaçant le fallback `logo.png`.
+
+### Fixed
+
+- **Dérive des badges de version** : `config/versions.yaml` liste désormais `v8.19.2`–`v8.19.5` en denylist et `scripts/verify-versions.mjs` couvre `AgentShowcase.vue`, empêchant qu'un badge de version reste figé sur une release dépassée.
+
 ## [8.19.5] - 2026-07-15
 
 ### Fixed
