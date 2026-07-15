@@ -193,7 +193,7 @@ Vous pouvez maintenant utiliser toutes les commandes et agents installés !
 
 ---
 
-## Comprendre la Structure
+## Comment Claude Craft est-il structuré ?
 
 ### Règles (`rules/`)
 
@@ -259,7 +259,7 @@ Portes qualité pour différents scénarios :
 
 ---
 
-## Concepts Clés
+## Quels sont les concepts clés de Claude Craft ?
 
 ### 1. Workflow TDD
 

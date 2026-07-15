@@ -43,6 +43,7 @@ const SHOWCASE_FILES = [
   '.claude/CLAUDE.md',
   'README.md',
   'website/.vitepress/theme/LandingPage.vue',
+  'website/.vitepress/theme/components/AgentShowcase.vue',
   'docs/PREREQUISITES.md',
   'docs/AGENT-TEAMS-GUIDE.md',
   // Settings templates distribués dans les 5 langues (TOKEN-001)

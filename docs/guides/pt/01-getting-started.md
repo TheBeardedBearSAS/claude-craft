@@ -197,7 +197,7 @@ Agora você pode usar todos os comandos e agentes instalados!
 
 ---
 
-## Entendendo a Estrutura
+## Como o Claude Craft está estruturado?
 
 ### Regras (`rules/`)
 
@@ -263,7 +263,7 @@ Portões de qualidade para diferentes cenários:
 
 ---
 
-## Conceitos-Chave
+## Quais são os conceitos-chave do Claude Craft?
 
 ### 1. Fluxo de Trabalho TDD
 

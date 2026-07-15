@@ -197,7 +197,7 @@ Jetzt können Sie alle installierten Befehle und Agenten verwenden!
 
 ---
 
-## Die Struktur verstehen
+## Wie ist Claude Craft strukturiert?
 
 ### Regeln (`rules/`)
 
@@ -263,7 +263,7 @@ Qualitätstore für verschiedene Szenarien:
 
 ---
 
-## Schlüsselkonzepte
+## Was sind die Schlüsselkonzepte von Claude Craft?
 
 ### 1. TDD-Workflow
 

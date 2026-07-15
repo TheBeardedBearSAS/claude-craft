@@ -1,0 +1,38 @@
+# Claude Craft
+
+> AI-assisted development framework for Claude Code: 11 technology stacks, ~31 specialized agents (+39 infra agents on-demand), ~126 slash commands across 15 namespaces, and BMAD v6 project management. Fully open-source under the MIT license, maintained by The Bearded CTO (The Bearded Bear SAS).
+
+Claude Craft installs into any codebase to provide technology-specific rules, reference documentation, specialized subagents, and slash commands for Claude Code. Supported stacks: C#/.NET, Symfony/PHP, Flutter/Dart, React, React Native, Angular, Vue.js, Laravel, Python, PHP, Paperclip. The documentation site is available in 5 languages (en, fr, es, de, pt) under `/en/`, `/fr/`, `/es/`, `/de/`, `/pt/` path prefixes; the root landing page (`/`) is English-only.
+
+## Getting Started
+
+- [Quickstart](https://thebeardedbearsas.github.io/claude-craft/en/getting-started/quickstart): 5-minute install and first commands
+- [Prerequisites](https://thebeardedbearsas.github.io/claude-craft/en/getting-started/prerequisites): required dependencies before installing
+- [Installation](https://thebeardedbearsas.github.io/claude-craft/en/getting-started/installation): full installation options and flags
+- [Configuration](https://thebeardedbearsas.github.io/claude-craft/en/getting-started/configuration): post-install configuration
+
+## Reference
+
+- [CLI Reference](https://thebeardedbearsas.github.io/claude-craft/en/reference/cli): full command-line interface documentation
+- [Commands](https://thebeardedbearsas.github.io/claude-craft/en/reference/commands): index of the ~126 slash commands across 15 namespaces
+- [Agents](https://thebeardedbearsas.github.io/claude-craft/en/reference/agents): specialized subagents (common, tech reviewers, infrastructure, project)
+- [Skills](https://thebeardedbearsas.github.io/claude-craft/en/reference/skills): on-demand skills catalogue
+- [Supported Technologies](https://thebeardedbearsas.github.io/claude-craft/en/reference/technologies): the 11 supported technology stacks
+
+## Guides
+
+- [01 - Getting Started](https://thebeardedbearsas.github.io/claude-craft/en/guides/01-getting-started): onboarding walkthrough
+- [02 - Project Creation](https://thebeardedbearsas.github.io/claude-craft/en/guides/02-project-creation): scaffolding a new project
+- [03 - Feature Development](https://thebeardedbearsas.github.io/claude-craft/en/guides/03-feature-development): building features with the BMAD workflow
+- [07 - Backlog Management](https://thebeardedbearsas.github.io/claude-craft/en/guides/07-backlog-management): managing sprints and backlog
+- [10 - Complete Workflow](https://thebeardedbearsas.github.io/claude-craft/en/guides/10-complete-workflow): end-to-end reference workflow
+
+## About
+
+- [About / Contact](https://thebeardedbearsas.github.io/claude-craft/en/about): maintainer information and contact via GitHub Issues
+- [Changelog](https://thebeardedbearsas.github.io/claude-craft/en/changelog): release history
+- [GitHub Repository](https://github.com/TheBeardedBearSAS/claude-craft): source code, issues, and the MIT `LICENSE` file
+
+## Licensing
+
+All content on this site and in the linked repository is distributed under the [MIT License](https://opensource.org/licenses/MIT) (see the [LICENSE file](https://github.com/TheBeardedBearSAS/claude-craft/blob/main/LICENSE)). This documentation may be freely reused, quoted, and indexed by AI crawlers and language models under the terms of the MIT license, with no additional restrictions.

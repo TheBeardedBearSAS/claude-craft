@@ -17,13 +17,13 @@ const translations = {
     nav_tools: "Tools",
     nav_install: "Install",
     nav_tech: "Tech Stack",
-    hero_badge: "v8.19.2 - Claude Code 2.1.193",
+    hero_badge: "v8.19.4 - Claude Code 2.1.193",
     hero_title_1: "Supercharge",
     hero_title_2: "with Expert Knowledge",
     hero_desc: "A comprehensive framework for AI-assisted development. Install standardized rules, agents, and commands for your projects across multiple technology stacks.",
     cta_get_started: "Get Started",
     cta_docs: "Documentation",
-    feat_main_title: "Everything you need to scale AI coding",
+    feat_main_title: "What do you need to scale AI coding?",
     feat_main_desc: "Stop prompting from scratch. Equip Claude with context-aware tools.",
     feat_bmad_title: "BMAD v6 Framework",
     feat_bmad_desc: "9 Agent-as-Code personas, 5 Quality Gates with thresholds, Status-based routing, and batch processing.",
@@ -37,7 +37,7 @@ const translations = {
     feat_skills_desc: "Best practices in official Claude Code format. Architecture, testing, security patterns for all technologies.",
     feat_3_title: "Automated Workflows",
     feat_3_desc: "Use 126 slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits.",
-    tools_title: "Developer Experience Tools",
+    tools_title: "What developer experience tools does Claude Craft include?",
     tools_desc: "Enhance your terminal workflow with power tools designed for daily use.",
     tool_status_title: "Custom Status Line",
     tool_status_desc: "Rich status bar with profile, model, git branch, and context usage tracking.",
@@ -53,9 +53,9 @@ const translations = {
     install_method_2_desc: "Perfect for Monorepos and complex setups.",
     install_method_3_title: "Direct Script",
     install_method_3_desc: "Granular control without Make dependencies.",
-    tech_title: "Supported Technologies",
+    tech_title: "Which technologies does Claude Craft support?",
     tech_desc: "Tailored rulesets for your favorite stacks.",
-    qs_title: "Up and running in seconds",
+    qs_title: "How do you get up and running in seconds?",
     qs_step1_title: "Clone the repository",
     qs_step1_desc: "Get the framework on your local machine.",
     qs_step2_title: "Install rules to your project",
@@ -63,23 +63,27 @@ const translations = {
     qs_lang_note: "Supports: en, fr, es, de, pt",
     qs_step3_title: "Use in Claude Code",
     qs_step3_desc: "Start using slash commands and agents immediately.",
-    agents_title: "Meet Your New AI Team",
+    agents_title: "Who are the AI agents in Claude Craft?",
     agents_desc: "Specialized personas ready to assist you.",
-    footer_copyright: "\u00a9 2026 Claude Craft. MIT License.",
+    footer_copyright: "\u00a9 2026 Claude Craft. MIT License. By The Bearded CTO.",
     footer_built: "Built for Claude Code by Anthropic",
+    cta_view_github: "View on GitHub",
+    trust_stars_alt: "GitHub stars",
+    trust_license_alt: "MIT License",
+    trust_changelog: "Changelog",
   },
   fr: {
     nav_features: "Fonctionnalit\u00e9s",
     nav_tools: "Outils",
     nav_install: "Installation",
     nav_tech: "Technologies",
-    hero_badge: "v8.19.2 - Claude Code 2.1.193",
+    hero_badge: "v8.19.4 - Claude Code 2.1.193",
     hero_title_1: "Superchargez",
     hero_title_2: "d'une Expertise Technique",
     hero_desc: "Un framework complet pour le d\u00e9veloppement assist\u00e9 par IA. Installez des r\u00e8gles, agents et commandes standardis\u00e9s pour vos projets.",
     cta_get_started: "Commencer",
     cta_docs: "Documentation",
-    feat_main_title: "Tout pour passer \u00e0 l'\u00e9chelle",
+    feat_main_title: "De quoi avez-vous besoin pour passer \u00e0 l'\u00e9chelle avec l'IA\u00a0?",
     feat_main_desc: "Arr\u00eatez de prompter de z\u00e9ro. \u00c9quipez Claude d'outils conscients du contexte.",
     feat_bmad_title: "Framework BMAD v6",
     feat_bmad_desc: "9 agents Agent-as-Code, 5 Quality Gates avec seuils, routage par statut et traitement par lot.",
@@ -93,7 +97,7 @@ const translations = {
     feat_skills_desc: "Bonnes pratiques au format officiel Claude Code.",
     feat_3_title: "Flux Automatis\u00e9s",
     feat_3_desc: "Utilisez 126 commandes pour automatiser les t\u00e2ches fastidieuses.",
-    tools_title: "Outils d'Exp\u00e9rience D\u00e9veloppeur",
+    tools_title: "Quels outils d'exp\u00e9rience d\u00e9veloppeur Claude Craft propose-t-il ?",
     tools_desc: "Am\u00e9liorez votre flux de travail terminal avec des outils puissants.",
     tool_status_title: "Barre d'\u00c9tat Personnalis\u00e9e",
     tool_status_desc: "Barre d'\u00e9tat riche avec profil, mod\u00e8le, git et suivi du contexte.",
@@ -109,9 +113,9 @@ const translations = {
     install_method_2_desc: "Parfait pour les Monorepos et configurations complexes.",
     install_method_3_title: "Script Direct",
     install_method_3_desc: "Contr\u00f4le granulaire sans d\u00e9pendance \u00e0 Make.",
-    tech_title: "Technologies Support\u00e9es",
+    tech_title: "Quelles technologies Claude Craft prend-il en charge ?",
     tech_desc: "Des jeux de r\u00e8gles sur mesure pour vos stacks pr\u00e9f\u00e9r\u00e9es.",
-    qs_title: "Op\u00e9rationnel en quelques secondes",
+    qs_title: "Comment \u00eatre op\u00e9rationnel en quelques secondes ?",
     qs_step1_title: "Cloner le d\u00e9p\u00f4t",
     qs_step1_desc: "R\u00e9cup\u00e9rez le framework sur votre machine locale.",
     qs_step2_title: "Installer les r\u00e8gles",
@@ -119,23 +123,27 @@ const translations = {
     qs_lang_note: "Supporte: en, fr, es, de, pt",
     qs_step3_title: "Utiliser dans Claude Code",
     qs_step3_desc: "Commencez imm\u00e9diatement \u00e0 utiliser les commandes slash et les agents.",
-    agents_title: "Rencontrez votre nouvelle \u00e9quipe IA",
+    agents_title: "Quels sont les agents IA de Claude Craft ?",
     agents_desc: "Des personas sp\u00e9cialis\u00e9s pr\u00eats \u00e0 vous aider.",
-    footer_copyright: "\u00a9 2026 Claude Craft. Licence MIT.",
+    footer_copyright: "\u00a9 2026 Claude Craft. Licence MIT. Par The Bearded CTO.",
     footer_built: "Con\u00e7u pour Claude Code par Anthropic",
+    cta_view_github: "Voir sur GitHub",
+    trust_stars_alt: "\u00c9toiles GitHub",
+    trust_license_alt: "Licence MIT",
+    trust_changelog: "Journal des modifications",
   },
   es: {
     nav_features: "Caracter\u00edsticas", nav_tools: "Herramientas", nav_install: "Instalaci\u00f3n", nav_tech: "Tecnolog\u00edas",
-    hero_badge: "v8.19.2 - Claude Code 2.1.193", hero_title_1: "Potencia", hero_title_2: "con Conocimiento Experto",
+    hero_badge: "v8.19.4 - Claude Code 2.1.193", hero_title_1: "Potencia", hero_title_2: "con Conocimiento Experto",
     hero_desc: "Un marco integral para el desarrollo asistido por IA.", cta_get_started: "Empezar", cta_docs: "Documentaci\u00f3n",
-    feat_main_title: "Todo lo que necesitas para escalar", feat_main_desc: "Equipa a Claude con herramientas conscientes del contexto.",
+    feat_main_title: "¿Qué necesitas para escalar con IA?", feat_main_desc: "Equipa a Claude con herramientas conscientes del contexto.",
     feat_bmad_title: "Framework BMAD v6", feat_bmad_desc: "9 agentes Agent-as-Code, 5 Quality Gates.",
     feat_ralph_title: "Ralph Wiggum v2.0", feat_ralph_desc: "Circuit breaker adaptativo, hooks Claude Code.",
     feat_1_title: "Soporte Multi-Idioma", feat_1_desc: "Soporte nativo para 5 idiomas.",
     feat_2_title: "Agentes Especializados", feat_2_desc: "Despliega revisores, arquitectos y entrenadores virtuales.",
     feat_skills_title: "55 Skills", feat_skills_desc: "Mejores pr\u00e1cticas en formato oficial de Claude Code.",
     feat_3_title: "Flujos Automatizados", feat_3_desc: "Usa 126 comandos para automatizar tareas.",
-    tools_title: "Herramientas de Desarrollador", tools_desc: "Mejora tu flujo de trabajo en la terminal.",
+    tools_title: "¿Qué herramientas de experiencia de desarrollador incluye Claude Craft?", tools_desc: "Mejora tu flujo de trabajo en la terminal.",
     tool_status_title: "L\u00ednea de Estado", tool_status_desc: "Barra de estado rica con perfil, modelo y git.",
     tool_account_title: "Gestor Multi-Cuenta", tool_account_desc: "Cambia f\u00e1cilmente entre perfiles.",
     tool_ralph_title: "Ralph Wiggum v2.0", tool_ralph_desc: "Circuit breaker adaptativo.",
@@ -144,26 +152,27 @@ const translations = {
     install_method_1_title: "Makefile", install_method_1_desc: "R\u00e1pida configuraci\u00f3n.",
     install_method_2_title: "Config YAML", install_method_2_desc: "Para Monorepos.",
     install_method_3_title: "Script Directo", install_method_3_desc: "Control granular.",
-    tech_title: "Tecnolog\u00edas Soportadas", tech_desc: "Reglas adaptadas para tus stacks favoritos.",
-    qs_title: "Listo en segundos", qs_step1_title: "Clonar el repositorio", qs_step1_desc: "Obt\u00e9n el framework.",
+    tech_title: "\u00bfQu\u00e9 tecnolog\u00edas admite Claude Craft?", tech_desc: "Reglas adaptadas para tus stacks favoritos.",
+    qs_title: "¿Cómo puedes estar listo en segundos?", qs_step1_title: "Clonar el repositorio", qs_step1_desc: "Obt\u00e9n el framework.",
     qs_step2_title: "Instalar reglas", qs_step2_desc: "Usa el Makefile para inyectar reglas.",
     qs_lang_note: "Soporta: en, fr, es, de, pt",
     qs_step3_title: "Usar en Claude Code", qs_step3_desc: "Comienza a usar comandos slash.",
-    agents_title: "Conoce a tu equipo de IA", agents_desc: "Personas especializadas.",
-    footer_copyright: "\u00a9 2026 Claude Craft. Licencia MIT.", footer_built: "Creado para Claude Code por Anthropic",
+    agents_title: "¿Quiénes son los agentes de IA de Claude Craft?", agents_desc: "Personas especializadas.",
+    footer_copyright: "\u00a9 2026 Claude Craft. Licencia MIT. Por The Bearded CTO.", footer_built: "Creado para Claude Code por Anthropic",
+    cta_view_github: "Ver en GitHub", trust_stars_alt: "Estrellas de GitHub", trust_license_alt: "Licencia MIT", trust_changelog: "Registro de cambios",
   },
   de: {
     nav_features: "Funktionen", nav_tools: "Werkzeuge", nav_install: "Installation", nav_tech: "Technologien",
-    hero_badge: "v8.19.2 - Claude Code 2.1.193", hero_title_1: "Laden Sie", hero_title_2: "mit Expertenwissen auf",
+    hero_badge: "v8.19.4 - Claude Code 2.1.193", hero_title_1: "Laden Sie", hero_title_2: "mit Expertenwissen auf",
     hero_desc: "Ein umfassendes Framework f\u00fcr KI-gest\u00fctzte Entwicklung.", cta_get_started: "Loslegen", cta_docs: "Dokumentation",
-    feat_main_title: "Alles f\u00fcr skalierbare KI-Entwicklung", feat_main_desc: "Statten Sie Claude mit kontextbezogenen Tools aus.",
+    feat_main_title: "Was brauchen Sie, um KI-gest\u00fctzte Entwicklung zu skalieren?", feat_main_desc: "Statten Sie Claude mit kontextbezogenen Tools aus.",
     feat_bmad_title: "BMAD v6 Framework", feat_bmad_desc: "9 Agent-as-Code Personas, 5 Quality Gates.",
     feat_ralph_title: "Ralph Wiggum v2.0", feat_ralph_desc: "Adaptiver Circuit Breaker, Claude Code Hooks.",
     feat_1_title: "Mehrsprachige Unterst\u00fctzung", feat_1_desc: "Native Unterst\u00fctzung f\u00fcr 5 Sprachen.",
     feat_2_title: "Spezialisierte Agenten", feat_2_desc: "Virtuelle Reviewer, Architekten und Coaches.",
     feat_skills_title: "55 Skills", feat_skills_desc: "Best Practices im offiziellen Claude Code Format.",
     feat_3_title: "Automatisierte Abl\u00e4ufe", feat_3_desc: "126 Befehle f\u00fcr Automatisierung.",
-    tools_title: "Entwickler-Tools", tools_desc: "Leistungsstarke Terminal-Tools.",
+    tools_title: "Welche Entwickler-Tools bietet Claude Craft?", tools_desc: "Leistungsstarke Terminal-Tools.",
     tool_status_title: "Statuszeile", tool_status_desc: "Reichhaltige Statusleiste.",
     tool_account_title: "Multi-Account Manager", tool_account_desc: "Einfacher Profilwechsel.",
     tool_ralph_title: "Ralph Wiggum v2.0", tool_ralph_desc: "Adaptiver Circuit Breaker.",
@@ -172,26 +181,27 @@ const translations = {
     install_method_1_title: "Makefile", install_method_1_desc: "Schnelle Einrichtung.",
     install_method_2_title: "YAML Konfig", install_method_2_desc: "F\u00fcr Monorepos.",
     install_method_3_title: "Direktes Skript", install_method_3_desc: "Granulare Kontrolle.",
-    tech_title: "Unterst\u00fctzte Technologien", tech_desc: "Ma\u00dfgeschneiderte Regels\u00e4tze.",
-    qs_title: "In Sekunden einsatzbereit", qs_step1_title: "Repository klonen", qs_step1_desc: "Framework herunterladen.",
+    tech_title: "Welche Technologien unterst\u00fctzt Claude Craft?", tech_desc: "Ma\u00dfgeschneiderte Regels\u00e4tze.",
+    qs_title: "Wie sind Sie in Sekunden einsatzbereit?", qs_step1_title: "Repository klonen", qs_step1_desc: "Framework herunterladen.",
     qs_step2_title: "Regeln installieren", qs_step2_desc: "Makefile verwenden.",
     qs_lang_note: "Unterst\u00fctzt: en, fr, es, de, pt",
     qs_step3_title: "In Claude Code verwenden", qs_step3_desc: "Slash-Befehle und Agenten nutzen.",
-    agents_title: "Treffen Sie Ihr KI-Team", agents_desc: "Spezialisierte Personas.",
-    footer_copyright: "\u00a9 2026 Claude Craft. MIT Lizenz.", footer_built: "Entwickelt f\u00fcr Claude Code von Anthropic",
+    agents_title: "Wer sind die KI-Agenten von Claude Craft?", agents_desc: "Spezialisierte Personas.",
+    footer_copyright: "\u00a9 2026 Claude Craft. MIT Lizenz. Von The Bearded CTO.", footer_built: "Entwickelt f\u00fcr Claude Code von Anthropic",
+    cta_view_github: "Auf GitHub ansehen", trust_stars_alt: "GitHub Sterne", trust_license_alt: "MIT-Lizenz", trust_changelog: "\u00c4nderungsprotokoll",
   },
   pt: {
     nav_features: "Funcionalidades", nav_tools: "Ferramentas", nav_install: "Instala\u00e7\u00e3o", nav_tech: "Tecnologias",
-    hero_badge: "v8.19.2 - Claude Code 2.1.193", hero_title_1: "Turbine o", hero_title_2: "com Conhecimento Especializado",
+    hero_badge: "v8.19.4 - Claude Code 2.1.193", hero_title_1: "Turbine o", hero_title_2: "com Conhecimento Especializado",
     hero_desc: "Um framework abrangente para desenvolvimento assistido por IA.", cta_get_started: "Come\u00e7ar", cta_docs: "Documenta\u00e7\u00e3o",
-    feat_main_title: "Tudo para escalar", feat_main_desc: "Equipe o Claude com ferramentas conscientes do contexto.",
+    feat_main_title: "O que você precisa para escalar com IA?", feat_main_desc: "Equipe o Claude com ferramentas conscientes do contexto.",
     feat_bmad_title: "Framework BMAD v6", feat_bmad_desc: "9 agentes Agent-as-Code, 5 Quality Gates.",
     feat_ralph_title: "Ralph Wiggum v2.0", feat_ralph_desc: "Circuit breaker adaptativo, hooks Claude Code.",
     feat_1_title: "Suporte Multi-Idioma", feat_1_desc: "Suporte nativo para 5 idiomas.",
     feat_2_title: "Agentes Especializados", feat_2_desc: "Implante revisores, arquitetos e treinadores virtuais.",
     feat_skills_title: "55 Skills", feat_skills_desc: "Melhores pr\u00e1ticas no formato oficial do Claude Code.",
     feat_3_title: "Fluxos Automatizados", feat_3_desc: "Use 126 comandos para automatizar tarefas.",
-    tools_title: "Ferramentas do Desenvolvedor", tools_desc: "Melhore seu fluxo de trabalho no terminal.",
+    tools_title: "Quais ferramentas de experiência do desenvolvedor o Claude Craft inclui?", tools_desc: "Melhore seu fluxo de trabalho no terminal.",
     tool_status_title: "Linha de Status", tool_status_desc: "Barra de status rica.",
     tool_account_title: "Gerenciador Multi-Conta", tool_account_desc: "Alterne entre perfis.",
     tool_ralph_title: "Ralph Wiggum v2.0", tool_ralph_desc: "Circuit breaker adaptativo.",
@@ -200,13 +210,14 @@ const translations = {
     install_method_1_title: "Makefile", install_method_1_desc: "Configura\u00e7\u00e3o r\u00e1pida.",
     install_method_2_title: "Config YAML", install_method_2_desc: "Para Monorepos.",
     install_method_3_title: "Script Direto", install_method_3_desc: "Controle granular.",
-    tech_title: "Tecnologias Suportadas", tech_desc: "Regras personalizadas para suas stacks.",
-    qs_title: "Funcionando em segundos", qs_step1_title: "Clonar o reposit\u00f3rio", qs_step1_desc: "Obtenha o framework.",
+    tech_title: "Quais tecnologias o Claude Craft suporta?", tech_desc: "Regras personalizadas para suas stacks.",
+    qs_title: "Como ficar funcionando em segundos?", qs_step1_title: "Clonar o reposit\u00f3rio", qs_step1_desc: "Obtenha o framework.",
     qs_step2_title: "Instalar regras", qs_step2_desc: "Use o Makefile para injetar regras.",
     qs_lang_note: "Suporta: en, fr, es, de, pt",
     qs_step3_title: "Usar no Claude Code", qs_step3_desc: "Comece a usar comandos slash.",
-    agents_title: "Conhe\u00e7a sua equipe de IA", agents_desc: "Personas especializadas.",
-    footer_copyright: "\u00a9 2026 Claude Craft. Licen\u00e7a MIT.", footer_built: "Constru\u00eddo para Claude Code por Anthropic",
+    agents_title: "Quem s\u00e3o os agentes de IA do Claude Craft?", agents_desc: "Personas especializadas.",
+    footer_copyright: "\u00a9 2026 Claude Craft. Licen\u00e7a MIT. Por The Bearded CTO.", footer_built: "Constru\u00eddo para Claude Code por Anthropic",
+    cta_view_github: "Ver no GitHub", trust_stars_alt: "Estrelas do GitHub", trust_license_alt: "Licen\u00e7a MIT", trust_changelog: "Registro de altera\u00e7\u00f5es",
   },
 }
 
@@ -313,6 +324,18 @@ onMounted(() => {
           {{ t('hero_badge') }}
         </div>
 
+        <div style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+          <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; line-height: 0;">
+            <img src="https://img.shields.io/github/stars/TheBeardedBearSAS/claude-craft?style=social" :alt="t('trust_stars_alt')" width="110" height="20" loading="lazy" style="display: block;" />
+          </a>
+          <a href="https://github.com/TheBeardedBearSAS/claude-craft/blob/main/LICENSE" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; line-height: 0;">
+            <img src="https://img.shields.io/badge/license-MIT-blue" :alt="t('trust_license_alt')" width="86" height="20" loading="lazy" style="display: block;" />
+          </a>
+          <a :href="withBase('/en/changelog')" style="display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.05); border-radius: 0.25rem; font-size: 0.75rem; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.05); text-decoration: none;">
+            {{ t('trust_changelog') }}
+          </a>
+        </div>
+
         <h1 style="font-size: 3.75rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 1.5rem; line-height: 1.1;">
           {{ t('hero_title_1') }} <span style="background: linear-gradient(to right, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Claude Code</span><br>
           {{ t('hero_title_2') }}
@@ -323,11 +346,15 @@ onMounted(() => {
         </p>
 
         <div style="margin-top: 2.5rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-          <a href="#quickstart" style="display: inline-flex; align-items: center; padding: 0.75rem 2rem; background: #7c3aed; color: white; border-radius: 0.5rem; text-decoration: none; font-weight: 500; font-size: 1.125rem; box-shadow: 0 4px 14px rgba(139,92,246,0.3);">
+          <a href="#quickstart" class="hero-cta" style="display: inline-flex; align-items: center; justify-content: center; min-height: 48px; box-sizing: border-box; padding: 0.75rem 2rem; background: #7c3aed; color: white; border-radius: 0.5rem; text-decoration: none; font-weight: 500; font-size: 1.125rem; box-shadow: 0 4px 14px rgba(139,92,246,0.3);">
             {{ t('cta_get_started') }}
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 0.5rem;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
-          <a :href="withBase('/' + currentLang + '/getting-started/quickstart')" style="display: inline-flex; align-items: center; padding: 0.75rem 2rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; border-radius: 0.5rem; text-decoration: none; font-weight: 500; font-size: 1.125rem; backdrop-filter: blur(4px);">
+          <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" rel="noopener" class="hero-cta" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 48px; box-sizing: border-box; padding: 0.75rem 2rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; border-radius: 0.5rem; text-decoration: none; font-weight: 500; font-size: 1.125rem; backdrop-filter: blur(4px);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+            {{ t('cta_view_github') }}
+          </a>
+          <a :href="withBase('/' + currentLang + '/getting-started/quickstart')" class="hero-cta" style="display: inline-flex; align-items: center; justify-content: center; min-height: 48px; box-sizing: border-box; padding: 0.75rem 2rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; border-radius: 0.5rem; text-decoration: none; font-weight: 500; font-size: 1.125rem; backdrop-filter: blur(4px);">
             {{ t('cta_docs') }}
           </a>
         </div>
@@ -344,8 +371,8 @@ onMounted(() => {
           <p style="margin-top: 1rem; font-size: 1.25rem; color: #94a3b8;">{{ t('feat_main_desc') }}</p>
         </div>
         <div class="grid-3col" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
-          <FeatureCard icon="git-branch" color="cyan" :badge="'v8.19.2'" :title="t('feat_bmad_title')" :desc="t('feat_bmad_desc')" />
-          <FeatureCard icon="repeat" color="orange" :badge="'v8.19.2'" :title="t('feat_ralph_title')" :desc="t('feat_ralph_desc')" />
+          <FeatureCard icon="git-branch" color="cyan" :badge="'v8.19.4'" :title="t('feat_bmad_title')" :desc="t('feat_bmad_desc')" />
+          <FeatureCard icon="repeat" color="orange" :badge="'v8.19.4'" :title="t('feat_ralph_title')" :desc="t('feat_ralph_desc')" />
           <FeatureCard icon="globe" color="brand" :title="t('feat_1_title')" :desc="t('feat_1_desc')" />
           <FeatureCard icon="bot" color="blue" :title="t('feat_2_title')" :desc="t('feat_2_desc')" />
           <FeatureCard icon="sparkles" color="emerald" :title="t('feat_skills_title')" :desc="t('feat_skills_desc')" />
@@ -542,7 +569,8 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .landing-page h1 {
-    font-size: 2rem !important;
+    font-size: clamp(1.5rem, 7vw, 2rem) !important;
+    line-height: 1.15 !important;
   }
   .landing-page h2 {
     font-size: 1.75rem !important;
@@ -567,6 +595,12 @@ onMounted(() => {
     flex-direction: column !important;
     gap: 0.5rem !important;
     text-align: center !important;
+  }
+  /* WCAG 2.5.5 / Material Design: comfortable tap target above the 48px minimum */
+  .hero-cta {
+    min-height: 48px !important;
+    padding-top: 0.875rem !important;
+    padding-bottom: 0.875rem !important;
   }
 }
 </style>

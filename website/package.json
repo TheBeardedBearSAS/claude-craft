@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "bash scripts/sync-docs.sh && vitepress build",
+    "postbuild": "node scripts/generate-sitemap.mjs",
     "preview": "vitepress preview",
     "sync": "bash scripts/sync-docs.sh",
     "test:e2e": "playwright test --config tests/e2e/playwright.config.ts"

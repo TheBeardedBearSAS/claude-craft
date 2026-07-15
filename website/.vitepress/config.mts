@@ -1,4 +1,65 @@
-import { defineConfig } from 'vitepress'
+import { readFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { defineConfig, type HeadConfig } from 'vitepress'
+import { SITE_URL, buildHreflangAlternates, buildLocaleGroups, listPageIds, pageToUrlPath } from './seo-locales.mjs'
+
+// SEO: JSON-LD + canonical tags (docs/internal/SEO_AUDIT_TRACKING_20260715.md, Vague 2)
+// and hreflang alternates (Vague 1, item 2). VitePress `head` is static; per-page data
+// (canonical URL, breadcrumbs, hreflang) requires the `transformHead` build hook below,
+// which only exists on the root config export. URL mapping + locale grouping logic
+// lives in `./seo-locales.mjs` so the sitemap generator (scripts/generate-sitemap.mjs)
+// stays in sync with this hook instead of duplicating divergent logic.
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const pkg = JSON.parse(readFileSync(resolve(__dirname, '../../package.json'), 'utf-8'))
+
+// Built once at config-load time: every markdown page id, grouped by locale-agnostic
+// relative path (e.g. "guides/x.md" -> { en: "en/guides/x", fr: "fr/guides/x" }).
+const localeGroups = buildLocaleGroups(listPageIds(resolve(__dirname, '..')))
+
+const GITHUB_URL = 'https://github.com/TheBeardedBearSAS/claude-craft'
+const SITE_NAME = 'Claude Craft'
+const SITE_DESCRIPTION = 'A comprehensive framework for AI-assisted development with Claude Code'
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_NAME,
+  url: SITE_URL,
+}
+
+const softwareApplicationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: SITE_NAME,
+  applicationCategory: 'DeveloperApplication',
+  description: SITE_DESCRIPTION,
+  license: 'https://opensource.org/licenses/MIT',
+  url: GITHUB_URL,
+  softwareVersion: pkg.version,
+}
+
+function segmentToTitle(segment: string): string {
+  return segment.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
+function buildBreadcrumbList(urlPath: string) {
+  const segments = urlPath.split('/').filter(Boolean)
+  if (segments.length === 0) return null
+
+  const pageItems = segments.map((segment, index) => ({
+    '@type': 'ListItem',
+    position: index + 2,
+    name: segmentToTitle(segment),
+    item: SITE_URL + segments.slice(0, index + 1).join('/') + (index < segments.length - 1 ? '/' : ''),
+  }))
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL }, ...pageItems],
+  }
+}
 
 const guidesItems = [
   { text: '01 - Getting Started', link: '/en/guides/01-getting-started' },
@@ -76,6 +137,42 @@ export default defineConfig({
     // Fonts are self-hosted (Inter via VitePress theme, JetBrains Mono in public/fonts/).
     // No external Google Fonts request — removes a render-path round-trip and a third-party dependency.
   ],
+
+  // SEO: per-page canonical tag + JSON-LD (WebSite, SoftwareApplication, BreadcrumbList)
+  // + Open Graph / Twitter Card (docs/internal/SEO_AUDIT_TRACKING_20260715.md, Vague 2).
+  // See constants/helpers defined above the guidesItems arrays.
+  transformHead({ page, title, description }): HeadConfig[] {
+    const urlPath = pageToUrlPath(page)
+    const pageUrl = SITE_URL + urlPath
+    const ogImage = SITE_URL + 'logo.png'
+
+    const canonicalHead: HeadConfig[] = [
+      ['link', { rel: 'canonical', href: pageUrl }],
+      ['script', { type: 'application/ld+json' }, JSON.stringify(websiteSchema)],
+      ['script', { type: 'application/ld+json' }, JSON.stringify(softwareApplicationSchema)],
+      ['meta', { property: 'og:type', content: 'website' }],
+      ['meta', { property: 'og:site_name', content: SITE_NAME }],
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { property: 'og:description', content: description }],
+      ['meta', { property: 'og:url', content: pageUrl }],
+      ['meta', { property: 'og:image', content: ogImage }],
+      ['meta', { name: 'twitter:card', content: 'summary' }],
+      ['meta', { name: 'twitter:title', content: title }],
+      ['meta', { name: 'twitter:description', content: description }],
+      ['meta', { name: 'twitter:image', content: ogImage }],
+    ]
+
+    const breadcrumbList = buildBreadcrumbList(urlPath)
+    if (breadcrumbList) {
+      canonicalHead.push(['script', { type: 'application/ld+json' }, JSON.stringify(breadcrumbList)])
+    }
+
+    for (const alt of buildHreflangAlternates(page, localeGroups)) {
+      canonicalHead.push(['link', { rel: 'alternate', hreflang: alt.hreflang, href: alt.href }])
+    }
+
+    return canonicalHead
+  },
 
   appearance: 'dark',
   lastUpdated: true,
@@ -171,6 +268,7 @@ export default defineConfig({
         ],
       },
       { text: 'Changelog', link: '/en/changelog' },
+      { text: 'About', link: '/en/about' },
     ],
 
     // Outline level 2 (h2 only): on dense reference pages the deep [2,3] outline rendered
@@ -329,11 +427,17 @@ export default defineConfig({
     fr: {
       label: 'Français',
       lang: 'fr-FR',
+      // SEO: fallback <meta description> for /fr/ pages without their own frontmatter
+      // `description` (VitePress uses this per-locale value instead of the English
+      // root-level `description` above). See docs/internal/SEO_AUDIT_TRACKING_20260715.md.
+      description:
+        "Framework complet pour le développement assisté par IA avec Claude Code : règles, agents et commandes standardisés pour vos projets, prêts à l'emploi.",
       themeConfig: {
         nav: [
           { text: 'Documentation', link: '/fr/getting-started/quickstart' },
           { text: 'Guides', link: '/fr/guides/01-getting-started' },
           { text: 'Changelog', link: '/en/changelog' },
+          { text: 'À propos', link: '/fr/about' },
         ],
         editLink: { text: 'Modifier cette page sur GitHub' },
         lastUpdated: { text: 'Dernière mise à jour' },
@@ -347,10 +451,14 @@ export default defineConfig({
     es: {
       label: 'Español',
       lang: 'es-ES',
+      // SEO: fallback <meta description> for /es/ pages — see the /fr/ locale above.
+      description:
+        'Framework completo para el desarrollo asistido por IA con Claude Code: reglas, agentes y comandos estandarizados listos para tus proyectos.',
       themeConfig: {
         nav: [
           { text: 'Documentación', link: '/es/getting-started/quickstart' },
           { text: 'Guías', link: '/es/guides/01-getting-started' },
+          { text: 'Acerca de', link: '/es/about' },
         ],
         editLink: { text: 'Editar esta página en GitHub' },
         lastUpdated: { text: 'Última actualización' },
@@ -361,10 +469,14 @@ export default defineConfig({
     de: {
       label: 'Deutsch',
       lang: 'de-DE',
+      // SEO: fallback <meta description> for /de/ pages — see the /fr/ locale above.
+      description:
+        'Umfassendes Framework für KI-gestützte Entwicklung mit Claude Code: standardisierte Regeln, Agenten und Befehle für Ihre Projekte.',
       themeConfig: {
         nav: [
           { text: 'Dokumentation', link: '/de/getting-started/quickstart' },
           { text: 'Anleitungen', link: '/de/guides/01-getting-started' },
+          { text: 'Über uns', link: '/de/about' },
         ],
         editLink: { text: 'Diese Seite auf GitHub bearbeiten' },
         lastUpdated: { text: 'Zuletzt aktualisiert' },
@@ -375,10 +487,14 @@ export default defineConfig({
     pt: {
       label: 'Português',
       lang: 'pt-BR',
+      // SEO: fallback <meta description> for /pt/ pages — see the /fr/ locale above.
+      description:
+        'Framework completo para desenvolvimento assistido por IA com Claude Code: regras, agentes e comandos padronizados prontos para os seus projetos.',
       themeConfig: {
         nav: [
           { text: 'Documentação', link: '/pt/getting-started/quickstart' },
           { text: 'Guias', link: '/pt/guides/01-getting-started' },
+          { text: 'Sobre', link: '/pt/about' },
         ],
         editLink: { text: 'Editar esta página no GitHub' },
         lastUpdated: { text: 'Última atualização' },

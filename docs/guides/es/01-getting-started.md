@@ -197,7 +197,7 @@ claude
 
 ---
 
-## Entendiendo la Estructura
+## ¿Cómo está estructurado Claude Craft?
 
 ### Reglas (`rules/`)
 
@@ -263,7 +263,7 @@ Puertas de calidad para diferentes escenarios:
 
 ---
 
-## Conceptos Clave
+## ¿Cuáles son los conceptos clave de Claude Craft?
 
 ### 1. Flujo de Trabajo TDD
 

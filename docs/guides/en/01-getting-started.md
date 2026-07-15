@@ -199,7 +199,7 @@ Now you can use all the installed commands and agents!
 
 ---
 
-## Understanding the Structure
+## How is Claude Craft structured?
 
 ### References (`references/`)
 
@@ -256,7 +256,7 @@ Quality gates for different scenarios:
 
 ---
 
-## Key Concepts
+## What are the key concepts in Claude Craft?
 
 ### 1. TDD Workflow
 
