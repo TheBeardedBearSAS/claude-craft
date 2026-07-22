@@ -7,10 +7,10 @@
 
 | Category | Count |
 |----------|-------|
-| Tech Reviewers | 12 |
+| Tech Reviewers | 13 |
 | Common | 20 |
 | Infrastructure | 39 |
-| **Total** | **71** |
+| **Total** | **72** |
 
 ## Tech Reviewers
 
@@ -151,6 +151,20 @@ Symfony 8 / PHP 8.5+ code review specialist — DDD, Doctrine, CQRS, API Platfor
 **Tools:** `Read`, `Glob`, `Grep`, `WebFetch`, `WebSearch`
 
 **Source:** [`.claude/agents/symfony-reviewer.md`](../.claude/agents/symfony-reviewer.md)
+
+---
+
+### `@vercel-reviewer`
+
+Vercel platform code review specialist — vercel.json config, Functions (Node.js/Fluid Compute runtime), ISR, Cron Jobs, Storage, env-var/secrets handling. Framework-agnostic (not Next.js-specific).
+
+**Model:** haiku · **Effort:** low · **Memory:** project
+
+**Skills:** `solid-principles`, `testing`, `security`
+
+**Tools:** `Read`, `Glob`, `Grep`, `WebFetch`, `WebSearch`
+
+**Source:** [`.claude/agents/vercel-reviewer.md`](../.claude/agents/vercel-reviewer.md)
 
 ---
 

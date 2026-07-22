@@ -1,0 +1,133 @@
+# {{PROJECT_NAME}} - Project Context
+
+> Vercel is a **deployment platform**, not a framework — this document covers only the platform surface (Functions, `vercel.json`, Cron, storage). If a framework is deployed on Vercel (Next.js, etc.), see that framework's own `00-project-context.md.template` for routing/rendering conventions.
+
+## Overview
+
+{{PROJECT_DESCRIPTION}}
+
+## Technology Stack
+
+| Component | Technology | Version |
+|-----------|------------|---------|
+| Platform | Vercel | {{VERCEL_CLI_VERSION}} |
+| Language | TypeScript | {{TS_VERSION}} |
+| Functions Runtime | Node.js (Fluid Compute) | {{NODE_RUNTIME_VERSION}} |
+| Paired Framework (optional) | {{FRAMEWORK}} | {{FRAMEWORK_VERSION}} <!-- none if framework-agnostic --> |
+| Package Manager | {{PACKAGE_MANAGER}} | {{PM_VERSION}} |
+| Unit Tests | Vitest | {{VITEST_VERSION}} |
+
+## Deployment Configuration
+
+| Setting | Value |
+|---------|-------|
+| **Production regions** | {{DEPLOY_REGIONS}} <!-- e.g. iad1, cdg1 — see vercel.json "regions" -->|
+| **Functions runtime** | Node.js runtime (Fluid Compute) <!-- Edge Runtime is deprecated — do not select for new projects --> |
+| **Cron Jobs** | {{CRON_JOBS_SUMMARY}} <!-- none, or list of schedule/path pairs from vercel.json "crons" --> |
+| **Preview Deployments** | {{PREVIEW_POLICY}} <!-- e.g. auto on every PR, restricted to internal branches --> |
+
+## Storage Providers
+
+**In use**: {{STORAGE_PROVIDERS}} <!-- one or more of: Blob (native) | Marketplace Postgres (Neon) | Marketplace KV/Redis (Upstash) | none -->
+
+> Native `@vercel/kv` and `@vercel/postgres` packages are **deprecated** — Postgres/KV storage is provisioned through the Marketplace (Neon, Upstash) with auto-injected environment variables. `@vercel/blob` remains the native, current package for blob storage.
+
+| Provider | Purpose | Env Var(s) |
+|----------|---------|------------|
+| {{STORAGE_1}} | {{STORAGE_1_PURPOSE}} | {{STORAGE_1_ENV_VARS}} |
+| {{STORAGE_2}} | {{STORAGE_2_PURPOSE}} | {{STORAGE_2_ENV_VARS}} |
+
+## Project Structure
+
+```
+{{PROJECT_ROOT}}/
+├── api/                        # Serverless Functions (one file = one route)
+│   ├── {{ENDPOINT_1}}.ts
+│   └── cron/
+│       └── {{CRON_HANDLER}}.ts
+├── middleware.ts                # optional — runs on every matched request
+├── vercel.json                  # regions, headers, rewrites, crons
+├── tsconfig.json
+└── package.json
+```
+
+## Coding Standards
+
+### Vercel Standards
+- **Functions runtime**: Node.js runtime (Fluid Compute) by default — Edge Runtime only for recognized legacy code pending migration
+- **Handler signature**: native `Request`/`Response` preferred over `VercelRequest`/`VercelResponse` for new handlers
+- **Config file**: `vercel.json`, validated against `openapi.vercel.sh/vercel.json` in CI
+- **Environment variables**: scoped per environment (Production/Preview/Development) in the dashboard, never assumed to be shared
+
+### Naming Conventions
+- Function files: `api/{{resource}}.ts` (one route per file), `api/cron/{{job-name}}.ts` for scheduled jobs
+- Env vars: no public-exposure prefix unless the value is genuinely safe to ship to the client
+- Cron secret env var: `CRON_SECRET` (or project-specific equivalent), checked in every Cron handler
+
+### Code Quality
+- **Linter**: ESLint flat config (`eslint.config.js`), scoped to `api/**`
+- **Type Checker**: `tsc --noEmit`
+- **Test Runner**: Vitest
+- **Coverage**: 85% handler logic minimum, 100% on auth/secret-guard branches
+
+## Key Modules
+
+### {{MODULE_1}}
+{{MODULE_1_DESCRIPTION}}
+
+### {{MODULE_2}}
+{{MODULE_2_DESCRIPTION}}
+
+## External Integrations
+
+| Service | Purpose | Documentation |
+|---------|---------|---------------|
+| {{SERVICE_1}} | {{PURPOSE_1}} | {{DOC_URL_1}} |
+| {{SERVICE_2}} | {{PURPOSE_2}} | {{DOC_URL_2}} |
+
+## Development Workflow
+
+### Git Flow
+- **Main**: Production-ready code, deploys to Production
+- **Feature**: `feature/{ticket}-{description}`, each PR gets its own Preview Deployment
+- **Hotfix**: `hotfix/{ticket}-{description}`
+
+### Pull Request Requirements
+- [ ] All tests pass (`vitest run`)
+- [ ] Type check passes (`tsc --noEmit`)
+- [ ] ESLint passes
+- [ ] Handler coverage >= 85% (100% on auth/secret-guard branches)
+- [ ] `vercel.json` validated against the platform schema
+- [ ] `vercel build` succeeds in CI
+- [ ] Code reviewed
+
+## Commands Reference
+
+### Development
+```bash
+vercel dev                # Local dev server with platform routing/vercel.json behavior
+vercel build              # Build Functions + static output locally (used as a CI gate)
+vercel deploy             # Deploy a Preview Deployment
+vercel deploy --prod      # Deploy to Production
+```
+
+### Testing
+```bash
+npm run test              # Run Vitest in watch mode
+npm run test:unit         # Run tests once
+npm run test:coverage     # Run with coverage
+```
+
+### Quality
+```bash
+npm run lint               # Run ESLint
+npm run lint:vercel-config # Validate vercel.json against the platform schema
+npm run type-check         # Run tsc --noEmit
+```
+
+### Environment Variables
+```bash
+vercel env ls                     # List env vars per environment
+vercel env add {{VAR_NAME}}       # Add a var, prompts for environment scope
+vercel env pull .env.local        # Pull Development-scoped vars locally (gitignored)
+```

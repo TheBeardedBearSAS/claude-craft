@@ -35,7 +35,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
-> Les **16 namespaces cœur + technologies** (`/common`, `/workflow`, `/team`, `/qa`, `/uiux` + les 12 stacks dont `/paperclip:*` et `/vite:*`) totalisent **133 commandes** — c'est le chiffre d'en-tête de Claude Craft. Le tableau ci-dessous inclut en plus les namespaces d'infrastructure et de gestion de projet (BMAD), pour un total installable de **227 commandes sur 28 namespaces**. Référence détaillée auto-générée : [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> Les **17 namespaces cœur + technologies** (`/common`, `/workflow`, `/team`, `/qa`, `/uiux` + les 13 stacks dont `/paperclip:*`, `/vite:*` et `/vercel:*`) totalisent **139 commandes** — c'est le chiffre d'en-tête de Claude Craft. Le tableau ci-dessous inclut en plus les namespaces d'infrastructure et de gestion de projet (BMAD), pour un total installable de **233 commandes sur 29 namespaces**. Référence détaillée auto-générée : [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
@@ -54,6 +54,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/laravel:` | PHP/Laravel | 6 |
 | `/vuejs:` | Vue.js | 6 |
 | `/vite:` | Vite | 7 |
+| `/vercel:` | Vercel | 6 |
 | `/php:` | PHP | 5 |
 | `/docker:` | Docker/Infrastructure | 5 |
 | `/coolify:` | Coolify/PaaS | 5 |
@@ -502,6 +503,28 @@ Framework-agnostic Vite projects only — vanilla JS/TS apps, library authoring,
 | `/vite:check-security` | Security audit (`envPrefix`/`define()` leakage, multi-page CSP, Workers/WASM sandboxing) |
 | `/vite:check-testing` | Test coverage analysis (Vitest) |
 | `/vite:check-library-build` | Validate `build.lib` output and `vite-plugin-dts` `.d.ts` generation |
+
+---
+
+## Vercel Commands (`/vercel:`)
+
+Framework-agnostic Vercel platform features only — `vercel.json`, Serverless Functions (Node.js/Fluid Compute runtime), ISR, Cron Jobs, Storage. Not a Next.js stack (no `/nextjs:*` namespace exists) — for framework-specific routing/rendering, use `/react:*`, `/vuejs:*`, `/angular:*` instead.
+
+### Code Generation
+
+| Command | Description |
+|---------|-------------|
+| `/vercel:deploy-config` | Detect project shape and generate/validate a `vercel.json` |
+
+### Analysis Commands
+
+| Command | Description |
+|---------|-------------|
+| `/vercel:check-architecture` | Validate `vercel.json` structure (rewrites/redirects/headers/regions/functions/crons) and project-shape fit |
+| `/vercel:check-code-quality` | Run code quality checks on `api/**` (ESLint, `tsc --strict`, handler signature conventions) |
+| `/vercel:check-compliance` | Check rule compliance (vercel.json & Architecture, Functions & Runtime Choice, Security & Env Handling, ISR/Caching & Tests) |
+| `/vercel:check-security` | Security audit (env vars/secrets, cron auth guard, CORS/CSP headers, Marketplace credential scoping) |
+| `/vercel:check-testing` | Test coverage analysis (Vitest for Function handlers, `vercel dev` smoke tests) |
 
 ---
 
