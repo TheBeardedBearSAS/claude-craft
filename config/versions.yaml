@@ -38,6 +38,7 @@ stacks:
   angular: { registry: '22' }
   laravel: { registry: '13.x / PHP 8.3+' }
   vuejs: { registry: '3.5+' }
+  vite: { registry: '8.1' }
   php: { registry: '8.5' }
   python: { registry: '3.14+' }
   paperclip: { registry: '2026.609.0' }

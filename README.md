@@ -26,7 +26,7 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
 
-A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **31 specialized agents (+39 infra agents on-demand), 126 commands across 15 namespaces (220 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **32 specialized agents (+39 infra agents on-demand), 133 commands across 16 namespaces (227 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
 ## What's New in v8.18.0
 
@@ -143,8 +143,8 @@ That's it. You get an architecture, security, and quality audit of your project 
 Claude Code is powerful on its own. Claude Craft makes it **consistent and team-ready**:
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
-- **31 default agents + 39 infra agents on-demand** -- reviewers, architects, coaches that know your stack deeply (70 total potentially installable)
-- **126 slash commands across 15 namespaces** -- repeatable workflows for audits, code generation, sprint management
+- **32 default agents + 39 infra agents on-demand** -- reviewers, architects, coaches that know your stack deeply (71 total potentially installable)
+- **133 slash commands across 16 namespaces** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -158,6 +158,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **Python** | 3.14+ / FastAPI | `--tech=python` |
 | **Angular** | 22 | `--tech=angular` |
 | **Vue.js** | 3.5+ (3.6 beta Vapor) | `--tech=vuejs` |
+| **Vite** _(community)_ | 8.1 | `--tech=vite` |
 | **React Native** | 0.85 (New Architecture) | `--tech=reactnative` |
 | **C# / .NET** | 10 LTS / C# 14 | `--tech=csharp` |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | `--tech=laravel` |

@@ -1,0 +1,120 @@
+# {{PROJECT_NAME}} - Project Context
+
+> For Vite configured as a React/Vue/Angular/Svelte dev-server, see that stack's `06-tooling.md` — this document covers **only** framework-agnostic Vite usage (vanilla SPA, library authoring, multi-page apps, workers/WASM).
+
+## Overview
+
+{{PROJECT_DESCRIPTION}}
+
+## Technology Stack
+
+| Component | Technology | Version |
+|-----------|------------|---------|
+| Build Tool | Vite | {{VITE_VERSION}} |
+| Language | TypeScript | {{TS_VERSION}} |
+| Bundler Engine | Rolldown (default since Vite 8) | {{ROLLDOWN_MODE}} |
+| Package Manager | {{PACKAGE_MANAGER}} | {{PM_VERSION}} |
+| Unit Tests | Vitest | {{VITEST_VERSION}} |
+| Scaffold Template | {{SCAFFOLD_TEMPLATE}} | — |
+
+## Project Shape
+
+**Shape**: {{PROJECT_SHAPE}} <!-- one of: vanilla-spa | library | multi-page | worker-wasm -->
+
+This project uses Vite as a **framework-agnostic** build tool — no UI framework (React/Vue/Angular/Svelte) is involved. See `02-architecture-vite.md` for the four supported shapes and their directory trees.
+
+### Project Structure (adapt to {{PROJECT_SHAPE}})
+
+```
+{{PROJECT_ROOT}}/
+├── index.html                 # SOURCE file at project root (vanilla-spa/multi-page only)
+├── public/                    # Static assets copied as-is (favicon, robots.txt)
+├── src/
+│   ├── main.ts                # Entry point (referenced by <script type="module" src="/src/main.ts">)
+│   ├── {{ENTRY_MODULE}}
+│   └── types/
+├── vite.config.ts
+├── tsconfig.json
+└── package.json
+```
+
+## Coding Standards
+
+### Vite Standards
+- **Config file**: `vite.config.ts`, typed via `defineConfig`
+- **TypeScript**: Strict mode enabled, `moduleResolution: "bundler"`
+- **Custom plugins**: named `vite-plugin-{{purpose}}`, one responsibility per plugin
+- **Environment variables**: `VITE_` prefix (or custom `envPrefix`) for anything exposed to the client bundle
+
+### Naming Conventions
+- Custom Vite plugins: `vite-plugin-{name}.ts`, exported factory function `{name}Plugin(options)`
+- Worker entry files: `*.worker.ts`
+- WASM modules: `*.wasm`, imported via the `?init` suffix
+- Library entry: `src/index.ts` (single public surface)
+
+### Code Quality
+- **Linter**: ESLint flat config (`eslint.config.js`)
+- **Type Checker**: `tsc --noEmit`
+- **Test Runner**: Vitest
+- **Coverage**: Minimum 80%
+
+## Key Modules
+
+### {{MODULE_1}}
+{{MODULE_1_DESCRIPTION}}
+
+### {{MODULE_2}}
+{{MODULE_2_DESCRIPTION}}
+
+## External Integrations
+
+| Service | Purpose | Documentation |
+|---------|---------|---------------|
+| {{SERVICE_1}} | {{PURPOSE_1}} | {{DOC_URL_1}} |
+| {{SERVICE_2}} | {{PURPOSE_2}} | {{DOC_URL_2}} |
+
+## Development Workflow
+
+### Git Flow
+- **Main**: Production-ready code
+- **Develop**: Integration branch
+- **Feature**: `feature/{ticket}-{description}`
+- **Hotfix**: `hotfix/{ticket}-{description}`
+
+### Pull Request Requirements
+- [ ] All tests pass (`vitest run`)
+- [ ] Type check passes (`tsc --noEmit`)
+- [ ] ESLint passes
+- [ ] Coverage >= 80%
+- [ ] Build succeeds (`vite build`) with no warnings above `chunkSizeWarningLimit`
+- [ ] Code reviewed
+
+## Commands Reference
+
+### Development
+```bash
+npm run dev              # Start dev server (HMR)
+npm run build            # Production build
+npm run preview          # Preview production build locally
+```
+
+### Testing
+```bash
+npm run test             # Run Vitest in watch mode
+npm run test:unit        # Run tests once
+npm run test:coverage    # Run with coverage
+```
+
+### Quality
+```bash
+npm run lint             # Run ESLint
+npm run lint:fix         # Fix ESLint issues
+npm run type-check       # Run tsc --noEmit
+```
+
+### Library-specific (if {{PROJECT_SHAPE}} == library)
+```bash
+npm run build             # vite build (build.lib mode)
+npm run build:types       # emitted automatically by vite-plugin-dts during build
+npm pack --dry-run        # verify published file list before release
+```

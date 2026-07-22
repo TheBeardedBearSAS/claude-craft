@@ -104,6 +104,16 @@ const TECH_REGISTRY = {
     version: '3.5+',
     tier: 3,
   },
+  vite: {
+    name: 'vite',
+    displayName: 'Vite',
+    desc: 'Framework-agnostic build tool: vanilla JS/TS, library authoring, multi-page apps',
+    namespace: 'vite',
+    i18nDir: 'Vite',
+    installScript: 'install-vite-rules.sh',
+    version: '8.1',
+    tier: 3,
+  },
   php: {
     name: 'php',
     displayName: 'PHP',
