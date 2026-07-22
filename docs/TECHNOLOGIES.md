@@ -4,7 +4,7 @@ Detailed information about rules, patterns, and best practices for each supporte
 
 ## Maturity Tiers
 
-Claude Craft classifies its 11 application technology stacks into 3 maturity tiers. This reflects the depth of support: i18n coverage, agent specialization, commands, skills, and reference documentation.
+Claude Craft classifies its 12 application technology stacks into 3 maturity tiers. This reflects the depth of support: i18n coverage, agent specialization, commands, skills, and reference documentation.
 
 ### Tier Overview
 
@@ -12,7 +12,7 @@ Claude Craft classifies its 11 application technology stacks into 3 maturity tie
 |------|-------|-------------|----------------|
 | **1** | Core | Symfony, React, Python, Flutter | Production-grade support. Deep agent specialization, extensive i18n (25+ files), 8+ commands, 3+ tech-specific skills, full reference docs with examples. |
 | **2** | Supported | React Native, PHP | Solid support. Customized reviewer agent, 7+ i18n files, 5+ commands, at least 1 tech-specific skill, full reference docs. |
-| **3** | Community | C# / .NET, Angular, Laravel, Vue.js | Basic scaffolding. Generic reviewer template, 2+ i18n files, 3+ commands, shared skills only, basic CLAUDE.md reference. Community contributions welcome. |
+| **3** | Community | C# / .NET, Angular, Laravel, Vue.js, Vite | Basic scaffolding. Generic reviewer template, 2+ i18n files, 3+ commands, shared skills only, basic CLAUDE.md reference. Community contributions welcome. |
 | -- | Infra | Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP | Infrastructure tooling, not application stacks. Not tiered. |
 
 ### Tier Requirements
@@ -40,6 +40,7 @@ Claude Craft classifies its 11 application technology stacks into 3 maturity tie
 | Angular | 3 (Community) | 22 | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
 | Laravel | 3 (Community) | 13.x / PHP 8.3+ | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
 | Vue.js | 3 (Community) | 3.5+ | 2 | 6 | Basic scaffold | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
+| Vite | 3 (Community) | 8.1 | 3 | 7 | Basic scaffold — framework-agnostic (vanilla/lib/multi-page) | Add 5+ i18n files, customize reviewer agent, create tech-specific skill |
 | Paperclip | 2 (Supported) | 2026.609.0 | 29 × 5 langues (en/fr/es/de/pt) | 8 | Full i18n across 5 langs | Expand tests/skills, add audit commands, promote to Tier 1 |
 
 ### Upgrade Path

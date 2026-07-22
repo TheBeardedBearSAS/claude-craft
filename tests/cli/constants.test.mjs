@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { TECHNOLOGIES, LANGUAGES, TRACKS } from '../../cli/lib/constants.js';
 
 describe('TECHNOLOGIES', () => {
-  it('contains all 10 selectable technologies (php, docker, coolify excluded)', () => {
+  it('contains all 11 selectable technologies (php, docker, coolify excluded)', () => {
     const keys = Object.keys(TECHNOLOGIES);
-    expect(keys).toHaveLength(10);
+    expect(keys).toHaveLength(11);
     expect(keys).toContain('symfony');
     expect(keys).toContain('flutter');
     expect(keys).toContain('react');
@@ -13,6 +13,7 @@ describe('TECHNOLOGIES', () => {
     expect(keys).toContain('csharp');
     expect(keys).toContain('laravel');
     expect(keys).toContain('vuejs');
+    expect(keys).toContain('vite');
     expect(keys).toContain('python');
     expect(keys).toContain('paperclip');
     // php is auto-included with symfony/laravel — not a standalone menu option (audit DA-PM-03)

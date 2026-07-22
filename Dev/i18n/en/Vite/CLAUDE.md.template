@@ -1,0 +1,86 @@
+# {{PROJECT_NAME}} - Vite
+
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## What (Stack & Structure)
+
+**Stack**: Vite {{VITE_VERSION}}, TypeScript {{TS_VERSION}}
+
+**Scope**: framework-agnostic Vite usage only — vanilla JS/TS apps, library authoring (build.lib), multi-page apps (rollupOptions.input), Workers/WASM entries. Not for React/Vue/Angular/Svelte dev-server config — see that stack's own tooling.md.
+
+### Project Structure
+```
+project-root/
+├── index.html            # Entry point (SPA) — never move to public/
+├── pages/                 # Additional HTML entries (multi-page apps)
+│   ├── about.html
+│   └── admin/
+│       └── index.html
+├── public/                # Static assets copied as-is (favicon, robots.txt) — NOT index.html
+├── src/
+│   ├── main.ts             # Vanilla app entry (SPA/MPA)
+│   ├── index.ts             # Library entry (build.lib mode)
+│   ├── workers/             # Worker entry points (new URL(...import.meta.url))
+│   └── wasm/                 # WASM modules (?init / ?url imports)
+├── vite.config.ts
+├── vitest.config.ts        # Or a `test` field merged into vite.config.ts
+└── tsconfig.json
+```
+
+## Why (Purpose & Organization)
+
+### Architecture: {{ARCHITECTURE_PATTERN}}
+- **Entry point**: `index.html` at the project root (or `root`), never inside `public/`
+- **Library mode**: `build.lib` + `vite-plugin-dts` for packages published to npm
+- **Multi-page**: `build.rollupOptions.input` naming each HTML entry explicitly
+- **Workers/WASM**: `new Worker(new URL(...), { type: 'module' })`, `?init`/`?url` suffixes
+
+See `rules/02-architecture.md` for complete patterns.
+
+### Critical Rules
+| Rule | Reason |
+|------|--------|
+| index.html never in public/ | Ensures module graph, HMR, and asset hashing |
+| TypeScript strict + moduleResolution: "bundler" | Type safety aligned with Vite/esbuild resolution |
+| Externalize peer deps in library mode | Avoids duplicated runtime for consumers |
+| 80%+ coverage | Quality assurance |
+
+## How (Commands & Workflows)
+
+### Development Commands
+```bash
+pnpm dev              # Start dev server
+pnpm build            # Production build
+pnpm test             # Run tests (Vitest)
+pnpm lint             # ESLint check
+pnpm type-check       # TypeScript check (tsc --noEmit)
+```
+
+### Quality Pipeline
+```bash
+pnpm lint && pnpm type-check && pnpm test
+```
+
+### Development Workflow
+1. **Analyze** - Understand entry points and build target (`rules/01-workflow-analysis.md`)
+2. **TDD** - Write test -> Implement -> Refactor
+3. **Quality** - Run full quality check
+4. **Commit** - Conventional Commits format
+
+## References
+
+| Topic | Rule File |
+|-------|-----------|
+| Analysis | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture.md` |
+| TypeScript | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Build Configuration | `rules/06-build-configuration.md` |
+| Testing | `rules/07-testing.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

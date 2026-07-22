@@ -465,7 +465,7 @@ install_tcl() {
             ctx_template="${src_dir}/rules/00-project-context.md.template"
         fi
         if [ -f "$ctx_template" ]; then
-            local sed_args=(-e "s/{{PROJECT_NAME}}/${project_name}/g" -e "s/{{TECH_STACK}}/${tech_stack}/g")
+            local sed_args=(-e "s#{{PROJECT_NAME}}#${project_name}#g" -e "s#{{TECH_STACK}}#${tech_stack}#g")
             if [[ ${#TECH_EXTRA_SED_ARGS[@]} -gt 0 ]]; then
                 sed_args+=("${TECH_EXTRA_SED_ARGS[@]}")
             fi

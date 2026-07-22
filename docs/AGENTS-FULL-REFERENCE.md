@@ -7,10 +7,10 @@
 
 | Category | Count |
 |----------|-------|
-| Tech Reviewers | 11 |
+| Tech Reviewers | 12 |
 | Common | 20 |
 | Infrastructure | 39 |
-| **Total** | **70** |
+| **Total** | **71** |
 
 ## Tech Reviewers
 
@@ -151,6 +151,20 @@ Symfony 8 / PHP 8.5+ code review specialist — DDD, Doctrine, CQRS, API Platfor
 **Tools:** `Read`, `Glob`, `Grep`, `WebFetch`, `WebSearch`
 
 **Source:** [`.claude/agents/symfony-reviewer.md`](../.claude/agents/symfony-reviewer.md)
+
+---
+
+### `@vite-reviewer`
+
+Vite 8.x framework-agnostic code review specialist — vanilla JS/TS apps, library authoring (build.lib), multi-page apps (rollupOptions.input), Workers/WASM entries, plugin config
+
+**Model:** haiku · **Effort:** low · **Memory:** project
+
+**Skills:** `solid-principles`, `testing`, `security`
+
+**Tools:** `Read`, `Glob`, `Grep`, `WebFetch`, `WebSearch`
+
+**Source:** [`.claude/agents/vite-reviewer.md`](../.claude/agents/vite-reviewer.md)
 
 ---
 

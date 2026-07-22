@@ -1,0 +1,86 @@
+# {{PROJECT_NAME}} - Vite
+
+> Gerado em: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## O Quê (Stack & Estrutura)
+
+**Stack**: Vite {{VITE_VERSION}}, TypeScript {{TS_VERSION}}
+
+**Escopo**: uso do Vite agnóstico de framework apenas — aplicações vanilla JS/TS, criação de bibliotecas (build.lib), aplicações multi-página (rollupOptions.input), entradas Workers/WASM. Não cobre configuração de dev-server específica de React/Vue/Angular/Svelte — consulte o tooling.md próprio dessa stack.
+
+### Estrutura do Projeto
+```
+project-root/
+├── index.html            # Ponto de entrada (SPA) — nunca mover para public/
+├── pages/                 # Entradas HTML adicionais (aplicações multi-página)
+│   ├── about.html
+│   └── admin/
+│       └── index.html
+├── public/                # Assets estáticos copiados tal como estão (favicon, robots.txt) — NÃO o index.html
+├── src/
+│   ├── main.ts             # Entrada da aplicação vanilla (SPA/MPA)
+│   ├── index.ts             # Entrada da biblioteca (modo build.lib)
+│   ├── workers/             # Pontos de entrada de Workers (new URL(...import.meta.url))
+│   └── wasm/                 # Módulos WASM (imports ?init / ?url)
+├── vite.config.ts
+├── vitest.config.ts        # Ou um campo `test` mesclado ao vite.config.ts
+└── tsconfig.json
+```
+
+## Por Quê (Propósito & Organização)
+
+### Arquitetura: {{ARCHITECTURE_PATTERN}}
+- **Ponto de entrada**: `index.html` na raiz do projeto (ou `root`), nunca dentro de `public/`
+- **Modo biblioteca**: `build.lib` + `vite-plugin-dts` para pacotes publicados no npm
+- **Multi-página**: `build.rollupOptions.input` nomeando explicitamente cada entrada HTML
+- **Workers/WASM**: `new Worker(new URL(...), { type: 'module' })`, sufixos `?init`/`?url`
+
+Ver `rules/02-architecture.md` para os padrões completos.
+
+### Regras Críticas
+| Regra | Motivo |
+|------|--------|
+| index.html nunca em public/ | Garante o grafo de módulos, o HMR e o hashing de assets |
+| TypeScript strict + moduleResolution: "bundler" | Segurança de tipos alinhada com a resolução do Vite/esbuild |
+| Externalizar peer deps no modo biblioteca | Evita runtime duplicado para os consumidores |
+| Cobertura de 80%+ | Garantia de qualidade |
+
+## Como (Comandos & Workflows)
+
+### Comandos de Desenvolvimento
+```bash
+pnpm dev              # Iniciar servidor de desenvolvimento
+pnpm build            # Build de produção
+pnpm test             # Executar testes (Vitest)
+pnpm lint             # Verificação ESLint
+pnpm type-check       # Verificação TypeScript (tsc --noEmit)
+```
+
+### Pipeline de Qualidade
+```bash
+pnpm lint && pnpm type-check && pnpm test
+```
+
+### Workflow de Desenvolvimento
+1. **Analisar** - Compreender os pontos de entrada e o alvo de build (`rules/01-workflow-analysis.md`)
+2. **TDD** - Escrever teste -> Implementar -> Refatorar
+3. **Qualidade** - Executar a verificação completa de qualidade
+4. **Commit** - Formato Conventional Commits
+
+## Referências
+
+| Tópico | Arquivo de Regra |
+|-------|-----------|
+| Análise | `rules/01-workflow-analysis.md` |
+| Arquitetura | `rules/02-architecture.md` |
+| TypeScript | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Configuração de Build | `rules/06-build-configuration.md` |
+| Testes | `rules/07-testing.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Especificidades do Projeto
+
+<!-- Adicionar configuração específica do projeto abaixo -->
+
+<!-- PROJECT-SPECIFIC-END -->

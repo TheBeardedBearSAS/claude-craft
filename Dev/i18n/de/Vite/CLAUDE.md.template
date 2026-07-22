@@ -1,0 +1,86 @@
+# {{PROJECT_NAME}} - Vite
+
+> Erstellt: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## Was (Stack & Struktur)
+
+**Stack**: Vite {{VITE_VERSION}}, TypeScript {{TS_VERSION}}
+
+**Geltungsbereich**: ausschließlich framework-agnostische Vite-Nutzung — Vanilla JS/TS-Anwendungen, Bibliotheksentwicklung (build.lib), Multi-Page-Anwendungen (rollupOptions.input), Worker-/WASM-Einstiegspunkte. Nicht zuständig für die Dev-Server-Konfiguration von React/Vue/Angular/Svelte — siehe dazu die jeweilige tooling.md des betreffenden Stacks.
+
+### Projektstruktur
+```
+project-root/
+├── index.html            # Einstiegspunkt (SPA) — niemals nach public/ verschieben
+├── pages/                 # Zusätzliche HTML-Einstiegspunkte (Multi-Page-Apps)
+│   ├── about.html
+│   └── admin/
+│       └── index.html
+├── public/                # Statische Assets, unverändert kopiert (favicon, robots.txt) — NICHT index.html
+├── src/
+│   ├── main.ts             # Vanilla-App-Einstiegspunkt (SPA/MPA)
+│   ├── index.ts             # Bibliotheks-Einstiegspunkt (build.lib-Modus)
+│   ├── workers/             # Worker-Einstiegspunkte (new URL(...import.meta.url))
+│   └── wasm/                 # WASM-Module (?init- / ?url-Imports)
+├── vite.config.ts
+├── vitest.config.ts        # Oder ein `test`-Feld, das in vite.config.ts gemergt wird
+└── tsconfig.json
+```
+
+## Warum (Zweck & Organisation)
+
+### Architektur: {{ARCHITECTURE_PATTERN}}
+- **Einstiegspunkt**: `index.html` im Projekt-Root (bzw. in `root`), niemals innerhalb von `public/`
+- **Bibliotheksmodus**: `build.lib` + `vite-plugin-dts` für Pakete, die auf npm veröffentlicht werden
+- **Multi-Page**: `build.rollupOptions.input` benennt jeden HTML-Einstiegspunkt explizit
+- **Worker/WASM**: `new Worker(new URL(...), { type: 'module' })`, Suffixe `?init`/`?url`
+
+Siehe `rules/02-architecture.md` für vollständige Muster.
+
+### Kritische Regeln
+| Regel | Begründung |
+|------|--------|
+| index.html niemals in public/ | Sichert Modulgraph, HMR und Asset-Hashing |
+| TypeScript strict + moduleResolution: "bundler" | Typsicherheit im Einklang mit der Auflösungslogik von Vite/esbuild |
+| Peer Dependencies im Bibliotheksmodus externalisieren | Vermeidet doppelte Laufzeitumgebungen bei Konsumenten |
+| Mindestens 80% Coverage | Qualitätssicherung |
+
+## Wie (Befehle & Workflows)
+
+### Entwicklungsbefehle
+```bash
+pnpm dev              # Dev-Server starten
+pnpm build            # Produktions-Build
+pnpm test             # Tests ausführen (Vitest)
+pnpm lint             # ESLint-Prüfung
+pnpm type-check       # TypeScript-Prüfung (tsc --noEmit)
+```
+
+### Qualitäts-Pipeline
+```bash
+pnpm lint && pnpm type-check && pnpm test
+```
+
+### Entwicklungs-Workflow
+1. **Analysieren** - Einstiegspunkte und Build-Ziel verstehen (`rules/01-workflow-analysis.md`)
+2. **TDD** - Test schreiben -> Implementieren -> Refaktorisieren
+3. **Qualität** - Vollständige Qualitätsprüfung ausführen
+4. **Commit** - Format der Conventional Commits
+
+## Referenzen
+
+| Thema | Regeldatei |
+|-------|-----------|
+| Analyse | `rules/01-workflow-analysis.md` |
+| Architektur | `rules/02-architecture.md` |
+| TypeScript | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Build-Konfiguration | `rules/06-build-configuration.md` |
+| Testing | `rules/07-testing.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Projektspezifika
+
+<!-- Projektspezifische Konfiguration unten hinzufügen -->
+
+<!-- PROJECT-SPECIFIC-END -->

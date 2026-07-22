@@ -2,8 +2,8 @@
   "$schema": "https://claude.ai/schemas/plugin.json",
   "name": "claude-craft",
   "displayName": "Claude Craft",
-  "version": "8.20.0",
-  "description": "Multi-stack framework for Claude Code teams: 11 stacks, BMAD v6 sprint workflow, browser QA automation, and Kanban — for tech leads adopting Claude Code with their team.",
+  "version": "8.21.0",
+  "description": "Multi-stack framework for Claude Code teams: 12 stacks, BMAD v6 sprint workflow, browser QA automation, and Kanban — for tech leads adopting Claude Code with their team.",
   "author": {
     "name": "Flavien Métivier",
     "email": "flavien.metivier@gmail.com",
@@ -29,6 +29,7 @@
     "angular",
     "laravel",
     "vuejs",
+    "vite",
     "react-native",
     "csharp",
     "python",

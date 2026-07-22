@@ -1,8 +1,8 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.20.0 | **Languages:** en, fr, es, de, pt
+**Version:** 8.21.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 11 technology stacks, 31 specialized agents (+39 infra agents on-demand), 126 commands across 15 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 12 technology stacks, 32 specialized agents (+39 infra agents on-demand), 133 commands across 16 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -17,6 +17,7 @@ A comprehensive AI-assisted development framework for Claude Code with 11 techno
 | **React Native** | 0.85 (New Architecture) | Feature-based | Navigation 7, Reanimated 4, TurboModules |
 | **Angular** | 22 | Domain-driven | Signals, Signal Forms (stable), Zoneless par défaut, OnPush défaut, httpResource (TS 6) |
 | **Vue.js** | 3.5+ (3.6 beta Vapor) | Composition API | Pinia 3, Vue Router 5, Vite 8, Vitest, Alien Signals |
+| **Vite** _(community, framework-agnostic)_ | 8.1 | Vanilla / Library / Multi-page | `build.lib`, `vite-plugin-dts`, `rollupOptions.input`, Workers/WASM |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | Clean Architecture | Actions, Pest 4, Sanctum, AI SDK, Passkey |
 | **Python** | 3.14+ | Clean Architecture / Hexagonal | FastAPI, async/await, Pydantic, free-threading, JIT |
 | **PHP** | 8.5 (Property Hooks 8.4+) | Clean Architecture | PSR-12, PHPStan Level 10, Pest 4 |
@@ -33,6 +34,7 @@ A comprehensive AI-assisted development framework for Claude Code with 11 techno
 | React Native | `@.claude/references/reactnative/CLAUDE.md` | `/reactnative:*` |
 | Angular | `@.claude/references/angular/CLAUDE.md` | `/angular:*` |
 | Vue.js | `@.claude/references/vuejs/CLAUDE.md` | `/vuejs:*` |
+| Vite _(community)_ | `@.claude/references/vite/CLAUDE.md` | `/vite:*` |
 | Laravel | `@.claude/references/laravel/` | `/laravel:*` |
 | Python | `@.claude/references/python/` | `/python:*` |
 | PHP | `@.claude/references/php/` | `/php:*` |
@@ -40,6 +42,8 @@ A comprehensive AI-assisted development framework for Claude Code with 11 techno
 | **Svelte** _(community)_ | `@.claude/references/svelte/CLAUDE.md` | — |
 
 > **Note:** Svelte/SvelteKit is **community-maintained** and hors-scope officiel. Voir `.claude/references/svelte/CLAUDE.md` pour le disclaimer complet.
+
+> **Note:** Vite (ce stack) couvre uniquement l'usage **framework-agnostic** de Vite — apps vanilla JS/TS, bibliothèques npm (`build.lib`), apps multi-pages (`rollupOptions.input`) et entrées Workers/WASM. Ce n'est **pas** un remplacement de la configuration Vite dev-server de React/Vue/Angular/Svelte, documentée dans le `tooling.md` propre à chacun de ces stacks.
 
 See `@.claude/INDEX.md` for condensed checklists and patterns.
 
