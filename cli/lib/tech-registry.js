@@ -114,6 +114,16 @@ const TECH_REGISTRY = {
     version: '8.1',
     tier: 3,
   },
+  vercel: {
+    name: 'vercel',
+    displayName: 'Vercel',
+    desc: 'Framework-agnostic deployment platform: vercel.json, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage',
+    namespace: 'vercel',
+    i18nDir: 'Vercel',
+    installScript: 'install-vercel-rules.sh',
+    version: '56.5.0',
+    tier: 3,
+  },
   php: {
     name: 'php',
     displayName: 'PHP',

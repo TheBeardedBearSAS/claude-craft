@@ -1,0 +1,83 @@
+# {{PROJECT_NAME}} - Vercel
+
+> Généré le : {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## Quoi (Stack & Structure)
+
+**Stack** : Vercel Platform, Node.js {{NODE_VERSION}}, TypeScript {{TS_VERSION}}
+
+**Périmètre** : uniquement les fonctionnalités de plateforme indépendantes de tout framework — vercel.json, Functions, ISR, Cron, Storage. Explicitement hors périmètre : Next.js, ainsi que tout adaptateur de déploiement propre à un framework.
+
+> **Note :** Vercel (ce stack) couvre uniquement la **surface de la plateforme de déploiement indépendante de tout framework** : la configuration `vercel.json` (rewrites, redirects, headers, regions), les Serverless Functions sur le runtime Node.js / Fluid Compute, les primitives de cache ISR, les Cron Jobs, le Vercel Storage (Blob natif ; Postgres/KV via le Marketplace — Neon/Upstash), Analytics/Speed Insights, et le workflow variables d'environnement/Preview Deployment. Ce n'est **pas** un stack Next.js — Next.js lui-même est hors périmètre et n'est pas une technologie claude-craft supportée (aucun namespace `/nextjs:*` n'existe). Le routage, le rendu ou les patterns de récupération de données propres à un framework relèvent du stack propre à ce framework (`/react:*`, `/vuejs:*`, `/angular:*`) — consulter le `tooling.md` de ce stack pour savoir comment il s'intègre avec la sortie de build de Vercel. Par ailleurs, l'Edge Runtime (`export const runtime = 'edge'`) est **déprécié par Vercel** depuis 2026 au profit du Fluid Compute sur le runtime Node.js ; ce stack documente l'Edge Runtime uniquement pour aider à identifier et migrer du code legacy, pas comme un pattern recommandé pour du nouveau code.
+
+### Structure du projet
+```
+project-root/
+├── vercel.json           # rewrites, redirects, headers, regions, crons, functions
+├── api/                  # Serverless Functions (runtime Node.js/Fluid Compute)
+│   ├── hello.ts
+│   └── cron/
+│       └── daily.ts
+├── middleware.ts          # Edge middleware (s'exécute avant les Functions, garder minimal)
+├── .env.local             # Variables d'environnement locales (jamais commitées)
+└── .vercel/               # Métadonnées de liaison du projet local (gitignored)
+```
+
+## Pourquoi (Objectif & Organisation)
+
+### Architecture : {{ARCHITECTURE_PATTERN}}
+- **Point d'entrée de configuration** : `vercel.json` à la racine du projet — validé contre `$schema`, version 2
+- **Functions** : handlers `api/**` sur le runtime Node.js / Fluid Compute par défaut ; l'Edge Runtime n'est qu'une cible de migration legacy
+- **ISR** : primitives de cache stale-while-revalidate exposées via le cache edge de Vercel (`Cache-Control`, `x-vercel-cache`)
+- **Cron Jobs** : Functions `api/cron/**` planifiées, déclarées dans le bloc `crons` de `vercel.json`, protégées par un secret partagé
+- **Storage** : Blob natif ; Postgres/KV via le Marketplace (Neon/Upstash) — jamais les packages dépréciés `@vercel/kv`/`@vercel/postgres`
+
+Voir `rules/02-architecture.md` pour les patterns complets.
+
+### Règles critiques
+| Règle | Raison |
+|------|--------|
+| vercel.json validé contre `$schema` | Détecte les globs/clés mal orthographiés avant qu'ils échouent silencieusement au déploiement |
+| Node.js/Fluid Compute est le runtime par défaut | L'Edge Runtime (`runtime: 'edge'`) est déprécié — cible de migration legacy uniquement |
+| Variables d'environnement jamais en dur ni commitées | Les secrets appartiennent au store de variables d'environnement de Vercel, scopés par environnement |
+| Les endpoints Cron vérifient l'en-tête secret | Un chemin cron non protégé peut être déclenché par quiconque le trouve |
+| Couverture 80%+ sur la logique des handlers | Assurance qualité pour la logique métier des Functions et du middleware |
+
+## Comment (Commandes & Workflows)
+
+### Commandes de développement
+```bash
+vercel dev              # Démarrer le serveur de développement local avec parité plateforme
+vercel build            # Produire un build de production en local
+vercel deploy --prebuilt # Déployer un build produit par `vercel build`
+vercel env pull          # Synchroniser les variables d'environnement vers .env.local
+```
+
+### Pipeline qualité
+```bash
+pnpm lint && pnpm type-check && pnpm test && vercel build
+```
+
+### Workflow de développement
+1. **Analyser** - Comprendre la forme du projet (statique/SPA, Functions, ISR, Cron, hybride) (`rules/01-workflow-analysis.md`)
+2. **TDD** - Écrire le test -> Implémenter -> Refactoriser
+3. **Qualité** - Lancer la vérification qualité complète
+4. **Commit** - Format Conventional Commits
+
+## Références
+
+| Sujet | Fichier de règle |
+|-------|-----------|
+| Architecture | `.claude/references/vercel/architecture.md` |
+| Standards de code | `.claude/references/vercel/coding-standards.md` |
+| Tests | `.claude/references/vercel/testing.md` |
+| Tooling | `.claude/references/vercel/tooling.md` |
+| Outils qualité | `.claude/references/vercel/quality-tools.md` |
+| Sécurité | `.claude/references/vercel/security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Spécificités du projet
+
+<!-- Ajouter la configuration spécifique au projet ci-dessous -->
+
+<!-- PROJECT-SPECIFIC-END -->

@@ -1,6 +1,6 @@
 # Agents Reference
 
-> **This is the narrated reference (31 default agents + infra overview).** For the complete auto-generated table of all 70 agents (11 tech reviewers + 20 common + 39 infra, with model/effort/skills metadata), see [AGENTS-FULL-REFERENCE.md](AGENTS-FULL-REFERENCE.md).
+> **This is the narrated reference (31 default agents + infra overview).** For the complete auto-generated table of all 71 agents (12 tech reviewers + 20 common + 39 infra, with model/effort/skills metadata), see [AGENTS-FULL-REFERENCE.md](AGENTS-FULL-REFERENCE.md).
 
 Claude Code agents are AI personas with specialized expertise. They provide focused assistance for specific domains and tasks.
 
@@ -353,7 +353,7 @@ All 22 common and reviewer agents now include optimized frontmatter:
 
 - **Effort control**: Each agent specifies `effort: low|medium|high|xhigh|max` to optimize reasoning depth (`xhigh`/`max` since Claude Code 2.1.111+/2.1.154 with Opus 4.8)
 - **Persistent memory**: 18 agents use `memory: user` or `memory: project` for cross-session knowledge
-- **Model distribution** (31 agent files): **4 opus + xhigh** (critical reasoning — database-architect, migration-specialist, ralph-conductor, security-auditor), **14 sonnet** (standard common agents + tdd-coach + performance-auditor + research-assistant, on Sonnet for the right cost/quality balance), **13 haiku + low** (all 11 tech reviewers + accessibility-expert, cost-optimizer). Opus reserved for high-stakes work; reviewers stay on haiku for cost-efficient read-only review.
+- **Model distribution** (31 agent files): **4 opus + xhigh** (critical reasoning — database-architect, migration-specialist, ralph-conductor, security-auditor), **14 sonnet** (standard common agents + tdd-coach + performance-auditor + research-assistant, on Sonnet for the right cost/quality balance), **14 haiku + low** (all 12 tech reviewers + accessibility-expert, cost-optimizer). Opus reserved for high-stakes work; reviewers stay on haiku for cost-efficient read-only review.
 
 ## Advanced Frontmatter (Claude Code 2.1.119+)
 
@@ -436,7 +436,7 @@ All 10 reviewer agents use the **Claude Sonnet** model and share a standardized 
 
 ---
 
-## Technology Reviewers (11)
+## Technology Reviewers (12)
 
 Each technology has a specialized reviewer agent.
 
@@ -631,6 +631,23 @@ Focuses on:
 ```
 @php-reviewer Audit this domain layer
 @php-reviewer Check this code for security vulnerabilities
+```
+
+---
+
+### vercel-reviewer
+
+**Expertise**: Vercel platform code review (framework-agnostic — not Next.js-specific)
+
+Focuses on:
+- `vercel.json` schema correctness (rewrites, redirects, headers, regions, functions, crons)
+- Functions & runtime choice (Node.js/Fluid Compute vs deprecated Edge Runtime)
+- Security & env-var handling (secrets, Cron auth guard, CORS/CSP headers, Marketplace credential scoping)
+- ISR/caching correctness and Function handler test coverage
+
+```
+@vercel-reviewer Review this vercel.json
+@vercel-reviewer Is this Cron endpoint secured correctly?
 ```
 
 ---

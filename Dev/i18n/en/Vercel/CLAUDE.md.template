@@ -1,0 +1,83 @@
+# {{PROJECT_NAME}} - Vercel
+
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## What (Stack & Structure)
+
+**Stack**: Vercel Platform, Node.js {{NODE_VERSION}}, TypeScript {{TS_VERSION}}
+
+**Scope**: framework-agnostic platform features only — vercel.json, Functions, ISR, Cron, Storage. Explicitly not Next.js, not any framework's own deploy adapter.
+
+> **Note:** Vercel (this stack) covers only the **framework-agnostic deployment-platform surface**: `vercel.json` configuration (rewrites, redirects, headers, regions), Serverless Functions on the Node.js runtime / Fluid Compute, ISR cache primitives, Cron Jobs, Vercel Storage (Blob native; Postgres/KV via Marketplace — Neon/Upstash), Analytics/Speed Insights, and environment-variable/Preview-Deployment workflow. It is **not** a Next.js stack — Next.js itself is out of scope and not a supported claude-craft technology (no `/nextjs:*` namespace exists). Framework-specific routing, rendering, or data-fetching patterns belong to each framework's own stack (`/react:*`, `/vuejs:*`, `/angular:*`) — consult that stack's `tooling.md` for how it integrates with Vercel's build output. Additionally, the Edge Runtime (`export const runtime = 'edge'`) is **deprecated by Vercel** as of 2026 in favor of Fluid Compute on the Node.js runtime; this stack documents Edge Runtime only to help identify and migrate legacy code, not as a recommended pattern for new work.
+
+### Project Structure
+```
+project-root/
+├── vercel.json           # rewrites, redirects, headers, regions, crons, functions
+├── api/                  # Serverless Functions (Node.js/Fluid Compute runtime)
+│   ├── hello.ts
+│   └── cron/
+│       └── daily.ts
+├── middleware.ts          # Edge middleware (runs before Functions, keep minimal)
+├── .env.local             # Local env vars (never committed)
+└── .vercel/               # Local project link metadata (gitignored)
+```
+
+## Why (Purpose & Organization)
+
+### Architecture: {{ARCHITECTURE_PATTERN}}
+- **Config entry point**: `vercel.json` at the project root — validated against `$schema`, version 2
+- **Functions**: `api/**` handlers on the Node.js runtime / Fluid Compute by default; Edge Runtime is a legacy-migration target only
+- **ISR**: stale-while-revalidate cache primitives surfaced through Vercel's edge cache (`Cache-Control`, `x-vercel-cache`)
+- **Cron Jobs**: scheduled `api/cron/**` Functions declared in `vercel.json`'s `crons` block, guarded by a shared secret
+- **Storage**: Blob native; Postgres/KV via Marketplace (Neon/Upstash) — never the deprecated `@vercel/kv`/`@vercel/postgres` packages
+
+See `rules/02-architecture.md` for complete patterns.
+
+### Critical Rules
+| Rule | Reason |
+|------|--------|
+| vercel.json validated against `$schema` | Catches typo'd globs/keys before they fail silently at deploy time |
+| Node.js/Fluid Compute is the runtime default | Edge Runtime (`runtime: 'edge'`) is deprecated — legacy migration target only |
+| Env vars never hardcoded or committed | Secrets belong in Vercel's environment-variable store, scoped per environment |
+| Cron endpoints verify the secret header | An unguarded cron path can be triggered by anyone who finds it |
+| 80%+ coverage on handler logic | Quality assurance for Functions and middleware business logic |
+
+## How (Commands & Workflows)
+
+### Development Commands
+```bash
+vercel dev              # Start local dev server with platform parity
+vercel build            # Produce a production build locally
+vercel deploy --prebuilt # Deploy a build produced by `vercel build`
+vercel env pull          # Sync environment variables to .env.local
+```
+
+### Quality Pipeline
+```bash
+pnpm lint && pnpm type-check && pnpm test && vercel build
+```
+
+### Development Workflow
+1. **Analyze** - Understand the project shape (static/SPA, Functions, ISR, Cron, hybrid) (`rules/01-workflow-analysis.md`)
+2. **TDD** - Write test -> Implement -> Refactor
+3. **Quality** - Run full quality check
+4. **Commit** - Conventional Commits format
+
+## References
+
+| Topic | Rule File |
+|-------|-----------|
+| Architecture | `.claude/references/vercel/architecture.md` |
+| Coding Standards | `.claude/references/vercel/coding-standards.md` |
+| Testing | `.claude/references/vercel/testing.md` |
+| Tooling | `.claude/references/vercel/tooling.md` |
+| Quality Tools | `.claude/references/vercel/quality-tools.md` |
+| Security | `.claude/references/vercel/security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

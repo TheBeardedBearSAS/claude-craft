@@ -1,0 +1,84 @@
+# vercel.json Skeleton
+
+Annotated `vercel.json` skeleton covering every platform-level section: `rewrites`, security `headers`, `functions`, `crons`, and `regions`. JSON has no comment syntax, so each section is explained in the surrounding prose instead of inline — copy only the sections your detected project shape needs (see `02-architecture-vercel.md` for the four shapes) and delete the rest. Never keep a section your project doesn't use "just in case" (YAGNI, rule 05).
+
+## Full Skeleton
+
+```json
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "rewrites": [
+    { "source": "/app/:path*", "destination": "/index.html" }
+  ],
+
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'" }
+      ]
+    }
+  ],
+
+  "functions": {
+    "api/webhooks/*.ts": {
+      "runtime": "nodejs22.x",
+      "memory": 1024,
+      "maxDuration": 30
+    },
+    "api/health.ts": {
+      "runtime": "nodejs22.x",
+      "memory": 512,
+      "maxDuration": 10
+    }
+  },
+
+  "crons": [
+    { "path": "/api/cron/send-digest", "schedule": "0 8 * * *" }
+  ],
+
+  "regions": ["iad1"]
+}
+```
+
+## Section-by-Section Notes
+
+### `rewrites`
+
+Serves a different path/origin without changing the browser URL. Used for SPA fallback routing (Shape 1) or proxying to an external origin. Does not apply to framework-owned routes — if a claude-craft framework stack (React Router, Angular Router, ...) already owns client-side routing, this section is usually unnecessary; only add a rewrite for a concern the framework's own router cannot express (e.g. proxying `/api/legacy/*` to an external host).
+
+### `headers` — Security Baseline (rule 11)
+
+The example above is the **minimum baseline** for a project with no framework-level header configuration. Every value must be reviewed against the actual project:
+- `Content-Security-Policy` is the one directive that cannot be copied blindly — it must reflect the real script/style/connect sources of the project. The example (`'self'` only) is a starting point, not a universal default.
+- If a claude-craft framework stack already sets equivalent headers (e.g. via its own middleware or hosting adapter), do not duplicate them here — pick one owner per header to avoid silently conflicting values.
+
+### `functions`
+
+Per-function runtime configuration, keyed by glob path. Only declare a key for a function that needs a **non-default** value:
+- `runtime`: omit entirely to use the platform default (Node.js runtime, Fluid Compute). Only set `"nodejs22.x"` (or the current LTS runtime identifier) explicitly if the project's baseline requires pinning a specific Node major version.
+- `memory` / `maxDuration`: never invent a value "to be safe" — set these only when a specific, observed need exists (e.g. a known slow upstream call, a large payload). An unjustified `maxDuration: 300` on every function is scope creep, not a sane default.
+
+### `crons`
+
+Each entry pairs a `path` (a normal `api/**` handler) with a 5-field UTC cron `schedule`. The handler **must** implement a secret-guard (see `templates/function-handler.template.ts` and `07-testing-vercel.md`) — a cron path is a plain HTTP endpoint reachable by anyone who guesses the URL. Check the current plan's minimum interval and per-project cron cap before adding a high-frequency schedule.
+
+### `regions`
+
+Pins Serverless Function execution to specific region(s), typically to co-locate compute with a primary database. Only set this when there is a concrete latency/data-residency reason — do not add it speculatively. Never invent a region code; use the one the project's actual database/data residency requirement points to, and ask if it isn't documented anywhere.
+
+## Detecting Which Sections Apply
+
+| Repo signal | Section(s) to keep |
+|---|---|
+| No `api/` directory, no existing `vercel.json` | `rewrites` + `headers` only |
+| `api/**/*.ts` present, no `api/cron/` | add `functions` |
+| `api/cron/**/*.ts` present | add `crons` (and `functions` if the cron handler needs non-default memory/duration) |
+| Project has a documented region/latency requirement | add `regions` |
+| A claude-craft framework stack's own config already sets a header/rewrite | omit the duplicate key here, defer to that stack |

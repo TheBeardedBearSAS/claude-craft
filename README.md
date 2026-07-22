@@ -159,6 +159,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **Angular** | 22 | `--tech=angular` |
 | **Vue.js** | 3.5+ (3.6 beta Vapor) | `--tech=vuejs` |
 | **Vite** _(community)_ | 8.1 | `--tech=vite` |
+| **Vercel** _(community)_ | 56.5.0 | `--tech=vercel` |
 | **React Native** | 0.85 (New Architecture) | `--tech=reactnative` |
 | **C# / .NET** | 10 LTS / C# 14 | `--tech=csharp` |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | `--tech=laravel` |

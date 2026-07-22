@@ -1,0 +1,83 @@
+# {{PROJECT_NAME}} - Vercel
+
+> Erstellt: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## Was (Stack & Struktur)
+
+**Stack**: Vercel Platform, Node.js {{NODE_VERSION}}, TypeScript {{TS_VERSION}}
+
+**Geltungsbereich**: ausschließlich framework-agnostische Platform-Features — vercel.json, Functions, ISR, Cron, Storage. Ausdrücklich nicht Next.js, nicht der eigene Deploy-Adapter irgendeines Frameworks.
+
+> **Hinweis:** Vercel (dieser Stack) deckt ausschließlich die **framework-agnostische Deployment-Platform-Oberfläche** ab: `vercel.json`-Konfiguration (Rewrites, Redirects, Headers, Regionen), Serverless Functions auf der Node.js-Laufzeit / Fluid Compute, ISR-Cache-Primitiven, Cron Jobs, Vercel Storage (Blob nativ; Postgres/KV über den Marketplace — Neon/Upstash), Analytics/Speed Insights sowie den Workflow für Umgebungsvariablen/Preview-Deployments. Es ist **kein** Next.js-Stack — Next.js selbst liegt außerhalb des Geltungsbereichs und ist keine unterstützte claude-craft-Technologie (es existiert kein `/nextjs:*`-Namespace). Framework-spezifische Routing-, Rendering- oder Data-Fetching-Muster gehören zum jeweils eigenen Stack des Frameworks (`/react:*`, `/vuejs:*`, `/angular:*`) — dort ist in der `tooling.md` nachzulesen, wie die Integration mit Vercels Build-Output funktioniert. Zusätzlich ist die Edge Runtime (`export const runtime = 'edge'`) seit 2026 von Vercel **deprecated** zugunsten von Fluid Compute auf der Node.js-Laufzeit; dieser Stack dokumentiert die Edge Runtime nur, um Legacy-Code zu identifizieren und zu migrieren, nicht als empfohlenes Muster für neue Arbeiten.
+
+### Projektstruktur
+```
+project-root/
+├── vercel.json           # Rewrites, Redirects, Headers, Regionen, Crons, Functions
+├── api/                  # Serverless Functions (Node.js-/Fluid-Compute-Laufzeit)
+│   ├── hello.ts
+│   └── cron/
+│       └── daily.ts
+├── middleware.ts          # Edge Middleware (läuft vor den Functions, möglichst minimal halten)
+├── .env.local             # Lokale Umgebungsvariablen (niemals committen)
+└── .vercel/               # Lokale Projekt-Link-Metadaten (gitignored)
+```
+
+## Warum (Zweck & Organisation)
+
+### Architektur: {{ARCHITECTURE_PATTERN}}
+- **Konfigurations-Einstiegspunkt**: `vercel.json` im Projekt-Root — validiert gegen `$schema`, Version 2
+- **Functions**: `api/**`-Handler standardmäßig auf der Node.js-Laufzeit / Fluid Compute; die Edge Runtime ist nur ein Ziel für Legacy-Migrationen
+- **ISR**: Stale-while-revalidate-Cache-Primitiven, sichtbar über Vercels Edge-Cache (`Cache-Control`, `x-vercel-cache`)
+- **Cron Jobs**: geplante `api/cron/**`-Functions, deklariert im `crons`-Block von `vercel.json`, abgesichert durch ein geteiltes Secret
+- **Storage**: Blob nativ; Postgres/KV über den Marketplace (Neon/Upstash) — niemals die deprecateten Pakete `@vercel/kv`/`@vercel/postgres`
+
+Vollständige Muster siehe `rules/02-architecture.md`.
+
+### Kritische Regeln
+| Regel | Begründung |
+|------|--------|
+| vercel.json gegen `$schema` validiert | Fängt vertippte Globs/Schlüssel ab, bevor sie beim Deploy stillschweigend fehlschlagen |
+| Node.js/Fluid Compute ist die Laufzeit-Vorgabe | Die Edge Runtime (`runtime: 'edge'`) ist deprecated — nur Ziel für Legacy-Migrationen |
+| Umgebungsvariablen niemals hartkodiert oder committet | Secrets gehören in Vercels Umgebungsvariablen-Store, pro Umgebung skopiert |
+| Cron-Endpunkte prüfen den Secret-Header | Ein ungeschützter Cron-Pfad kann von jedem ausgelöst werden, der ihn findet |
+| >= 80% Coverage auf der Handler-Logik | Qualitätssicherung für die Business-Logik von Functions und Middleware |
+
+## Wie (Befehle & Workflows)
+
+### Entwicklungsbefehle
+```bash
+vercel dev              # Lokalen Dev-Server mit Platform-Parität starten
+vercel build            # Produktions-Build lokal erzeugen
+vercel deploy --prebuilt # Einen mit `vercel build` erzeugten Build deployen
+vercel env pull          # Umgebungsvariablen nach .env.local synchronisieren
+```
+
+### Qualitäts-Pipeline
+```bash
+pnpm lint && pnpm type-check && pnpm test && vercel build
+```
+
+### Entwicklungs-Workflow
+1. **Analysieren** - Projektform verstehen (statisch/SPA, Functions, ISR, Cron, hybrid) (`rules/01-workflow-analysis.md`)
+2. **TDD** - Test schreiben -> Implementieren -> Refaktorisieren
+3. **Qualität** - Vollständige Qualitätsprüfung ausführen
+4. **Commit** - Format der Conventional Commits
+
+## Referenzen
+
+| Thema | Regeldatei |
+|-------|-----------|
+| Architektur | `.claude/references/vercel/architecture.md` |
+| Coding Standards | `.claude/references/vercel/coding-standards.md` |
+| Testing | `.claude/references/vercel/testing.md` |
+| Tooling | `.claude/references/vercel/tooling.md` |
+| Quality Tools | `.claude/references/vercel/quality-tools.md` |
+| Security | `.claude/references/vercel/security.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Projektspezifika
+
+<!-- Projektspezifische Konfiguration unten hinzufügen -->
+
+<!-- PROJECT-SPECIFIC-END -->
