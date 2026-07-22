@@ -99,3 +99,4 @@ denylist:
   # Badge hero périmé du site (LandingPage.vue) — chaîne spécifique pour ne pas heurter les notes historiques du README
   - 'v8.13.0 - Claude Code'
   - 'v8.20.0'
+  - 'v8.21.0'

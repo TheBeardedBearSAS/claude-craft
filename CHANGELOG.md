@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.22.0] - 2026-07-22
+
+### Added
+
+- **Vercel (Tier-3, framework-agnostic)** : nouveau stack couvrant la surface plateforme de déploiement Vercel — `vercel.json` (rewrites, redirects, headers, regions, functions, crons), Serverless Functions (Node.js runtime / Fluid Compute), ISR (cache stale-while-revalidate), Cron Jobs, Storage (Blob natif ; Postgres/KV via Marketplace — Neon/Upstash, les packages `@vercel/kv`/`@vercel/postgres` étant dépréciés). Ne couvre pas Next.js lui-même (aucun namespace `/nextjs:*`) ; l'Edge Runtime (`export const runtime = 'edge'`) est documenté comme déprécié/legacy-only, au profit de Fluid Compute.
+  - `Dev/i18n/base/Vercel/` (16 fichiers canoniques) + `Dev/i18n/{en,fr,es,de,pt}/Vercel/` (empreinte installable, 3 fichiers × 5 langues).
+  - Agent `vercel-reviewer` (`.claude/agents/`, rubric 100 pts sur 4 catégories), 6 commandes `/vercel:*`, 6 fichiers de référence (`.claude/references/vercel/`).
+  - Script `Dev/scripts/install-vercel-rules.sh`, enregistrement `cli/lib/tech-registry.js`/`Makefile`/`config/versions.yaml` (version `56.5.0`, vérifiée via `npm view vercel version`).
+
 ## [8.21.0] - 2026-07-22
 
 ### Added
