@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.20.0 | **Languages:** en, fr, es, de, pt
+**Version:** 8.21.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 12 technology stacks, 32 specialized agents (+39 infra agents on-demand), 133 commands across 16 namespaces, and BMAD v6 project management.
 

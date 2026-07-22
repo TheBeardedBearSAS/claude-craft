@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.21.0] - 2026-07-22
+
+### Added
+
+- **Vite (Tier-3, framework-agnostic)** : nouveau stack couvrant l'usage Vite hors dev-server de framework — apps vanilla JS/TS (`index.html` en tant que source), bibliothèques npm (`build.lib` + `vite-plugin-dts`), apps multi-pages (`rollupOptions.input`), et entrées Workers/WASM. Ne duplique pas l'intégration Vite déjà documentée dans React/Vue.js/Angular/Svelte.
+  - `Dev/i18n/base/Vite/` (18 fichiers canoniques) + `Dev/i18n/{en,fr,es,de,pt}/Vite/` (empreinte installable, 3 fichiers × 5 langues).
+  - Agent `vite-reviewer` (`.claude/agents/`), 7 commandes `/vite:*`, 9 fichiers de référence (`.claude/references/vite/`).
+  - Script `Dev/scripts/install-vite-rules.sh`, enregistrement `cli/lib/tech-registry.js`/`Makefile`/`config/versions.yaml`.
+
+### Fixed
+
+- **`Dev/scripts/lib/install-tech-common.sh`** : la substitution `sed` de `project-context.md` utilisait `/` comme délimiteur, ce qui cassait dès qu'une valeur `DEFAULT_STACK` contenait elle-même un `/` (cas du stack Vite : "multi-page/Workers-WASM"). Délimiteur changé en `#`, non-régression vérifiée sur un stack existant (Vue.js).
+
 ## [8.20.0] - 2026-07-15
 
 ### Added
