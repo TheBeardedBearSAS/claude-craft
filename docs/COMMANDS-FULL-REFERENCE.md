@@ -32,9 +32,10 @@
 | `/symfony:*` | 10 |
 | `/team:*` | 4 |
 | `/uiux:*` | 8 |
+| `/vite:*` | 7 |
 | `/vuejs:*` | 6 |
 | `/workflow:*` | 10 |
-| **Total** | **220** |
+| **Total** | **227** |
 
 ## `/angular:*`
 
@@ -364,6 +365,18 @@
 | [`/uiux:generate-design-md`](../.claude/commands/uiux/generate-design-md.md) | Génère un DESIGN.md à la racine du projet à partir du template Claude Craft + analyse des sources UI existantes (Tailwind, tokens, CSS). |
 | [`/uiux:orchestrator`](../.claude/commands/uiux/orchestrator.md) | Orchestrateur UI/UX |
 | [`/uiux:user-flow`](../.claude/commands/uiux/user-flow.md) | Conception Parcours Utilisateur |
+
+## `/vite:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/vite:check-architecture`](../.claude/commands/vite/check-architecture.md) | Audit Vite project architecture and build configuration organization |
+| [`/vite:check-code-quality`](../.claude/commands/vite/check-code-quality.md) | Analyze Vite project code quality with ESLint, TypeScript, and build diagnostics |
+| [`/vite:check-compliance`](../.claude/commands/vite/check-compliance.md) | Audit Vite project compliance with framework-agnostic best practices |
+| [`/vite:check-library-build`](../.claude/commands/vite/check-library-build.md) | Validate build.lib output and vite-plugin-dts .d.ts generation for a Vite library |
+| [`/vite:check-security`](../.claude/commands/vite/check-security.md) | Security audit for Vite build configuration (env leakage, CSP, WASM sandboxing) |
+| [`/vite:check-testing`](../.claude/commands/vite/check-testing.md) | Audit Vite project test coverage and quality with Vitest |
+| [`/vite:scaffold-project`](../.claude/commands/vite/scaffold-project.md) | Scaffold a new Vite project (vanilla-ts or lit-ts template) or a library skeleton |
 
 ## `/vuejs:*`
 
