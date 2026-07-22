@@ -32,10 +32,11 @@
 | `/symfony:*` | 10 |
 | `/team:*` | 4 |
 | `/uiux:*` | 8 |
+| `/vercel:*` | 6 |
 | `/vite:*` | 7 |
 | `/vuejs:*` | 6 |
 | `/workflow:*` | 10 |
-| **Total** | **227** |
+| **Total** | **233** |
 
 ## `/angular:*`
 
@@ -365,6 +366,17 @@
 | [`/uiux:generate-design-md`](../.claude/commands/uiux/generate-design-md.md) | Génère un DESIGN.md à la racine du projet à partir du template Claude Craft + analyse des sources UI existantes (Tailwind, tokens, CSS). |
 | [`/uiux:orchestrator`](../.claude/commands/uiux/orchestrator.md) | Orchestrateur UI/UX |
 | [`/uiux:user-flow`](../.claude/commands/uiux/user-flow.md) | Conception Parcours Utilisateur |
+
+## `/vercel:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/vercel:check-architecture`](../.claude/commands/vercel/check-architecture.md) | Audit Vercel deployment configuration structure and project shape classification |
+| [`/vercel:check-code-quality`](../.claude/commands/vercel/check-code-quality.md) | Analyze Vercel Serverless Functions code quality with ESLint, TypeScript, and bundle-size checks |
+| [`/vercel:check-compliance`](../.claude/commands/vercel/check-compliance.md) | Check Complete Vercel Compliance |
+| [`/vercel:check-security`](../.claude/commands/vercel/check-security.md) | Security audit for Vercel deployment configuration (env vars, Cron auth, headers, Marketplace credentials) |
+| [`/vercel:check-testing`](../.claude/commands/vercel/check-testing.md) | Audit test coverage for Vercel Function handlers, middleware, and Cron secret-guards |
+| [`/vercel:deploy-config`](../.claude/commands/vercel/deploy-config.md) | Detect the project's Vercel deployment shape and generate or validate a tailored vercel.json |
 
 ## `/vite:*`
 

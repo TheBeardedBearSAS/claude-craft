@@ -1,6 +1,6 @@
 ---
 description: Detect the project's Vercel deployment shape and generate or validate a tailored vercel.json
-argument-hint: [--check] [--force]
+argument-hint: "[--check] [--force]"
 ---
 
 # Vercel Deploy Config
