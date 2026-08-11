@@ -102,7 +102,8 @@ When a user invokes `/common:search <keyword>`:
 | `architecture` | architecture skill, @database-architect |
 | `react` | /react:* commands, @react-reviewer |
 | `symfony` | /symfony:* commands, @symfony-reviewer |
-| `audit` | /team:audit, /common:audit-freshness |
+| `audit` | /team:audit, /common:audit-freshness, /common:audit-claude-alignment |
+| `claude code` | /common:audit-claude-alignment, .claude/COMPATIBILITY.md |
 | `workflow` | /workflow:* commands, workflow-analysis skill |
 
 ---

@@ -1,0 +1,13 @@
+{
+  "_comment": "État incrémental de /common:audit-claude-alignment. Écrit par la commande à la fin d'un run validé, lu par scripts/collect-claude-signals.mjs pour ne réveiller que les lentilles dont la source a bougé. Ne pas éditer à la main hors amorçage.",
+  "schema_version": 1,
+  "last_run": "2026-06-30",
+  "cli_version_seen": "2.1.193",
+  "page_hashes": {
+    "models-pricing": null,
+    "prompt-context": null,
+    "cc-features": null
+  },
+  "community_csv_hash": null,
+  "advisories_seen": []
+}
