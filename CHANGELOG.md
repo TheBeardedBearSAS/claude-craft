@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`/common:audit-claude-alignment`** : audit hebdomadaire d'alignement sur l'écosystème Claude lui-même — version du CLI Claude Code, identifiants et pricing des modèles, best practices Anthropic (prompt/context engineering), features de la plateforme (hooks, skills, sous-agents, MCP, plugins, settings), avis de sécurité, et pratiques de la communauté. Comble l'angle mort de `/common:audit-freshness`, qui ne couvre que les stacks applicatifs.
+  - `scripts/collect-claude-signals.mjs` : pré-collecte déterministe (registry npm, GitHub Security Advisories, catalogue `awesome-claude-code`, empreintes SHA-256 des pages de doc sans API). Elle décide, sans appeler de modèle, quelles lentilles méritent un sous-agent — une lentille dont la source n'a pas bougé n'en déclenche aucun. Conception fail-open : une source injoignable rend la lentille « à auditer », jamais « rien à signaler ».
+  - Équipe de 7 lentilles avec routing modèle explicite : `haiku`/`effort: low` pour le scan de conformité local, `sonnet`/`medium` pour l'interprétation de changelogs et d'advisories, agent `claude-code-guide` pour les features de la plateforme. Aucun agent `opus`.
+  - Sortie : rapport `docs/audit/claude-alignment/<date>.md` + jumeau JSON, et une PR portant **uniquement** des substitutions de version littérales sur une allowlist (`config/versions.yaml`, `.claude/COMPATIBILITY.md`, fichiers vitrine, templates i18n). Tout ce qui demande un arbitrage part en checklist dans la PR. Garde-fous : worktree propre exigé, `.github/workflows/` interdit, 4 gates CI verts avant ouverture, jamais de merge automatique.
+  - État incrémental versionné dans `config/claude-alignment-baseline.json` ; cible `make audit-claude-alignment` pour le rituel hebdomadaire.
+  - Première exécution : dérive réelle constatée de **2.1.193 → 2.1.227** sur le CLI Claude Code (`config/versions.yaml` et `.claude/COMPATIBILITY.md` figés au 2026-06-30).
+
+### Fixed
+
+- **`scripts/collect-claude-signals.mjs`** : le catalogue `awesome-claude-code` a été renommé upstream (`THE_RESOURCES_TABLE.csv` → `THE_RESOURCES_TABLE_NEW.csv`), l'URL historique renvoie 404. Le collecteur essaie les deux noms dans l'ordre. `scripts/awesome-claude-code-submit.mjs` porte encore l'URL périmée — à corriger séparément.
+
 ## [8.22.0] - 2026-07-22
 
 ### Added

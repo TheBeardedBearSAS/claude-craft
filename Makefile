@@ -149,6 +149,22 @@ test-all: ## Lance tous les tests (vitest + bats)
 	@npm test && $(MAKE) test-bats
 
 #===============================================================================
+# Audit d'alignement Claude (rituel hebdomadaire)
+#===============================================================================
+
+# Pre-collecte deterministe : decide quelles lentilles d'audit meritent un agent
+# cette semaine. Cout LLM nul. L'audit complet se lance ensuite dans Claude Code
+# via /common:audit-claude-alignment.
+audit-claude-signals: ## Collecte les signaux Claude (npm, advisories, empreintes de pages)
+	@node scripts/collect-claude-signals.mjs $(if $(SINCE),--since=$(SINCE))
+
+audit-claude-alignment: ## Rituel hebdo : affiche les lentilles a auditer puis la commande a lancer
+	@node scripts/collect-claude-signals.mjs --dry-run $(if $(SINCE),--since=$(SINCE)) | head -3
+	@echo ""
+	@echo "Lancer ensuite dans Claude Code :"
+	@echo "  /common:audit-claude-alignment$(if $(SINCE), --since=$(SINCE))"
+
+#===============================================================================
 # Configuration YAML
 #===============================================================================
 

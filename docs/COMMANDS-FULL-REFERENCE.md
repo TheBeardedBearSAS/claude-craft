@@ -9,7 +9,7 @@
 |-----------|-------|
 | `/angular:*` | 6 |
 | `/ansible:*` | 5 |
-| `/common:*` | 19 |
+| `/common:*` | 20 |
 | `/coolify:*` | 5 |
 | `/csharp:*` | 6 |
 | `/docker:*` | 5 |
@@ -36,7 +36,7 @@
 | `/vite:*` | 7 |
 | `/vuejs:*` | 6 |
 | `/workflow:*` | 10 |
-| **Total** | **233** |
+| **Total** | **234** |
 
 ## `/angular:*`
 
@@ -66,6 +66,7 @@
 | [`/common:add-technology`](../.claude/commands/common/add-technology.md) | Ajouter une nouvelle technologie à claude-craft avec les best practices de Context7 et recherche web |
 | [`/common:aliases`](../.claude/commands/common/aliases.md) | CLI aliases for frequently used commands |
 | [`/common:architecture-decision`](../.claude/commands/common/architecture-decision.md) | Architecture Decision Record (ADR) |
+| [`/common:audit-claude-alignment`](../.claude/commands/common/audit-claude-alignment.md) | Audit hebdomadaire d'alignement sur l'écosystème Claude (CLI, modèles, best practices Anthropic, communauté) via équipe d'agents + PR de correction |
 | [`/common:audit-freshness`](../.claude/commands/common/audit-freshness.md) | Audit de fraîcheur multi-stack (versions + best practices) via équipe d'agents parallèles Context7 + Web |
 | [`/common:daily-standup`](../.claude/commands/common/daily-standup.md) | Génération Résumé Daily Stand-up |
 | [`/common:generate-changelog`](../.claude/commands/common/generate-changelog.md) | Génération Automatique du Changelog |

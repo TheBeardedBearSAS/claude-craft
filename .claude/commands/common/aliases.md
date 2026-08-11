@@ -19,6 +19,7 @@ These aliases reduce typing and improve productivity by providing short mnemonic
 | Alias | Full Command | Description |
 |-------|-------------|-------------|
 | `/ca` | `/common:audit-freshness` | Audit documentation freshness |
+| `/caa` | `/common:audit-claude-alignment` | Weekly Claude ecosystem alignment audit |
 | `/ci` | `/common:init` | Initialize Claude Craft |
 | `/cr` | `/common:release-checklist` | Pre-release verification checklist |
 | `/cs` | `/common:setup-project-context` | Setup project context for Claude |
@@ -123,6 +124,7 @@ Add to `~/.bashrc` or `~/.zshrc`:
 ```bash
 # Claude Craft Aliases
 alias ca='claude-code -p /common:audit-freshness'
+alias caa='claude-code -p /common:audit-claude-alignment'
 alias ci='claude-code -p /common:init'
 alias cr='claude-code -p /common:release-checklist'
 alias cs='claude-code -p /common:setup-project-context'
@@ -156,6 +158,7 @@ Add to `~/.config/fish/config.fish`:
 ```fish
 # Claude Craft Aliases
 alias ca 'claude-code -p /common:audit-freshness'
+alias caa 'claude-code -p /common:audit-claude-alignment'
 alias ci 'claude-code -p /common:init'
 alias cr 'claude-code -p /common:release-checklist'
 alias cs 'claude-code -p /common:setup-project-context'
