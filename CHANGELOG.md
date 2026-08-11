@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **`scripts/collect-claude-signals.mjs`** : le catalogue `awesome-claude-code` a été renommé upstream (`THE_RESOURCES_TABLE.csv` → `THE_RESOURCES_TABLE_NEW.csv`), l'URL historique renvoie 404. Le collecteur essaie les deux noms dans l'ordre. `scripts/awesome-claude-code-submit.mjs` porte encore l'URL périmée — à corriger séparément.
+- **`scripts/collect-claude-signals.mjs`** : le catalogue `awesome-claude-code` a été renommé upstream (`THE_RESOURCES_TABLE.csv` → `THE_RESOURCES_TABLE_NEW.csv`), l'URL historique renvoie 404. Le collecteur essaie les deux noms dans l'ordre.
+- **`scripts/awesome-claude-code-submit.mjs`** : même URL périmée, avec une conséquence plus sournoise — `findDuplicate()` retombe sur `{ status: 'unknown' }` à tout non-200, donc le contrôle anti-doublon était **inopérant sans le signaler**, et une ressource déjà présente au catalogue pouvait être soumise. Même repli à deux candidats. Le module expose désormais `findDuplicate`/`CSV_CANDIDATES` et n'exécute plus `main()` à l'import (garde `import.meta.url === process.argv[1]`, comme `track-adoption-metrics.mjs`), ce qui le rend testable : 6 tests de régression ajoutés.
 
 ## [8.22.0] - 2026-07-22
 

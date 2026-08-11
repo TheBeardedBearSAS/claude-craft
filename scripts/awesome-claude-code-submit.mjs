@@ -35,7 +35,16 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const UPSTREAM = 'https://github.com/hesreallyhim/awesome-claude-code';
 const ISSUE_FORM = `${UPSTREAM}/issues/new?template=recommend-resource.yml`;
-const CSV_RAW = 'https://raw.githubusercontent.com/hesreallyhim/awesome-claude-code/main/THE_RESOURCES_TABLE.csv';
+/**
+ * Catalogue upstream, essayé dans l'ordre. Le fichier a été renommé
+ * (`THE_RESOURCES_TABLE.csv` → `..._NEW.csv`) et l'ancien nom renvoie 404 : sans
+ * repli, `findDuplicate` retombe silencieusement sur `unknown` et le contrôle
+ * anti-doublon devient inopérant sans que rien ne le signale.
+ */
+export const CSV_CANDIDATES = [
+  'https://raw.githubusercontent.com/hesreallyhim/awesome-claude-code/main/THE_RESOURCES_TABLE_NEW.csv',
+  'https://raw.githubusercontent.com/hesreallyhim/awesome-claude-code/main/THE_RESOURCES_TABLE.csv',
+];
 
 const CATEGORY = 'Tooling';
 const SUBCATEGORY = 'General';
@@ -81,15 +90,21 @@ async function urlOk(url) {
   }
 }
 
-async function findDuplicate(displayName, primaryLink) {
+export async function findDuplicate(displayName, primaryLink) {
   let csv;
-  try {
-    const res = await fetch(CSV_RAW, { redirect: 'follow' });
-    if (!(res.status >= 200 && res.status < 300)) return { status: 'unknown' };
-    csv = await res.text();
-  } catch {
-    return { status: 'unknown' };
+  for (const url of CSV_CANDIDATES) {
+    try {
+      const res = await fetch(url, { redirect: 'follow' });
+      if (res.status >= 200 && res.status < 300) {
+        csv = await res.text();
+        break;
+      }
+    } catch {
+      // candidat injoignable : on tente le suivant
+    }
   }
+  // Aucun candidat n'a répondu : on ne prétend PAS qu'il n'y a pas de doublon.
+  if (csv === undefined) return { status: 'unknown' };
   const needle = primaryLink.toLowerCase();
   const hit = csv
     .split('\n')
@@ -241,7 +256,12 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(`✗ ${err.message}`);
-  process.exit(1);
-});
+// Garde d'exécution : sans elle, `main()` partirait au moindre import et rendrait
+// le module intestable (appels réseau + process.exit). Même motif que
+// scripts/track-adoption-metrics.mjs et scripts/collect-claude-signals.mjs.
+if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((err) => {
+    console.error(`✗ ${err.message}`);
+    process.exit(1);
+  });
+}
