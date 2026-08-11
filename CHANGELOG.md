@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **`js-yaml` 5.2.1 → 5.2.3** (GHSA-pm4m-ph32-ghv5, **haute**) : temps de parsing exponentiel sur les collections flow, exploitable en déni de service. Le paquet est sur le chemin critique du projet — `scripts/verify-versions.mjs`, `scripts/generate-references.mjs` et le parseur de frontmatter du serveur Kanban chargent tous du YAML.
+- **`hono` 4.12.28 → 4.13.1** (4 avis, modérés) : ReDoS dans le middleware CORS via `Access-Control-Request-Headers` (GHSA-8j4g-w8fx-2239), rétention de sortie SSR par `memo()` entre requêtes menant à une divulgation de données inter-utilisateurs (GHSA-f23p-vx2j-j53r), en-têtes listés dans `Connection` non retirés par le Proxy Helper (GHSA-79qm-7rj5-m7r9), et DoS algorithmique dans le middleware Language (GHSA-54fx-42gc-7vw4).
+
+  Les deux montées tiennent dans les plages semver déjà déclarées (`^5.2.0`, `^4.12.14`) : `package.json` est inchangé, seul le lockfile bouge. `npm audit --omit=dev --audit-level=moderate` repasse à 0 vulnérabilité.
+
 ### Added
 
 - **`/common:audit-claude-alignment`** : audit hebdomadaire d'alignement sur l'écosystème Claude lui-même — version du CLI Claude Code, identifiants et pricing des modèles, best practices Anthropic (prompt/context engineering), features de la plateforme (hooks, skills, sous-agents, MCP, plugins, settings), avis de sécurité, et pratiques de la communauté. Comble l'angle mort de `/common:audit-freshness`, qui ne couvre que les stacks applicatifs.
