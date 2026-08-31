@@ -12,11 +12,11 @@
 # Dernière mise à jour : 2026-07-03 (audit fraîcheur — React Native 0.86→0.85 (drift, 0.86 inexistant ; endoflife+skills confirment 0.85), Docker 29.6.0→29.6.1 (patch 2026-06-26))
 
 meta:
-  lastUpdated: '2026-07-03'
+  lastUpdated: '2026-08-31'
 
 claudeCode:
   minimum: '2.1.97'
-  recommended: '2.1.193'
+  recommended: '2.1.251'
   testedUpTo: '2.1.193'
   # Fable 5 / Mythos 5 suspendus depuis 2026-06-12 (directive export-control US, toujours offline) —
   # retirés des recommandations ; agents créatifs routés vers Opus 4.8 / Sonnet 5.

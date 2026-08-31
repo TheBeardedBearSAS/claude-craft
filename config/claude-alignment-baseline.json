@@ -1,13 +1,44 @@
 {
   "_comment": "État incrémental de /common:audit-claude-alignment. Écrit par la commande à la fin d'un run validé, lu par scripts/collect-claude-signals.mjs pour ne réveiller que les lentilles dont la source a bougé. Ne pas éditer à la main hors amorçage.",
   "schema_version": 1,
-  "last_run": "2026-06-30",
-  "cli_version_seen": "2.1.193",
+  "last_run": "2026-08-31",
+  "cli_version_seen": "2.1.251",
   "page_hashes": {
-    "models-pricing": null,
-    "prompt-context": null,
-    "cc-features": null
+    "models-pricing": "edc00e145be69c7b",
+    "prompt-context": "18dcb671adcb5fb8",
+    "cc-features": "f983f289d1e0ab8e"
   },
-  "community_csv_hash": null,
-  "advisories_seen": []
+  "community_csv_hash": "fbbf6c92b4085689",
+  "advisories_seen": [
+    "GHSA-7835-87q9-rgvv",
+    "GHSA-fg94-h982-f3mm",
+    "GHSA-4vp2-6q8c-pvq2",
+    "GHSA-5p5x-5294-qhp3",
+    "GHSA-3rwf-2g6p-c2f9",
+    "GHSA-5cwg-9f6j-9jvx",
+    "GHSA-q5hj-mxqh-vv77",
+    "GHSA-mmgp-wc2j-qcv7",
+    "GHSA-vp62-r36r-9xqp",
+    "GHSA-66q4-vfjg-2qhh",
+    "GHSA-mhg7-666j-cqg4",
+    "GHSA-ff64-7w26-62rf",
+    "GHSA-4q92-rfm6-2cqx",
+    "GHSA-qgqw-h4xq-7w8w",
+    "GHSA-q728-gf8j-w49r",
+    "GHSA-vhw5-3g5m-8ggf",
+    "GHSA-jh7p-qr78-84p7",
+    "GHSA-xq4m-mc3c-vvg3",
+    "GHSA-5hhx-v7f6-x7gv",
+    "GHSA-7mv8-j34q-vp7q",
+    "GHSA-66m2-gx93-v996",
+    "GHSA-2jjv-qf24-vfm4",
+    "GHSA-4fgq-fpq9-mr3g",
+    "GHSA-j4h9-wv2m-wrf7",
+    "GHSA-qxfv-fcpc-w36x",
+    "GHSA-ph6w-f82w-28w6",
+    "GHSA-x5gv-jw7f-j6xj",
+    "GHSA-x56v-x2h6-7j34",
+    "GHSA-pmw4-pwvc-3hx2",
+    "GHSA-9f65-56v6-gxw7"
+  ]
 }
