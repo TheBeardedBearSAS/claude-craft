@@ -73,7 +73,7 @@ jobs:
           name: sbom-cyclonedx
 
       - name: Attach SBOM + signature to release
-        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # pinned: v2.3.2
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # pinned: v2.3.2
         with:
           files: |
             ./claude-craft-sbom.json
