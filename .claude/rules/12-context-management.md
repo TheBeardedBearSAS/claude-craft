@@ -161,7 +161,7 @@ La status line affiche le pourcentage de contexte utilise.
 | `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | `claude-opus-4-8` | Decisions critiques, migrations complexes, ADR |
 | `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | `claude-opus-4-8` | Mode debit code maximal — pipelines automatises, generation massive |
 
-> **⚠️ Fable 5 / Mythos 5 suspendus (2026-06-12) :** access coupe par une directive export-control US, toujours offline. Ne plus recommander `claude-fable-5` ni `claude-mythos-5`. Router les agents creatifs/narratifs vers **Opus 4.8** (`claude-opus-4-8`) ou **Sonnet 4.6** (`claude-sonnet-4-6`) en attendant une eventuelle restauration.
+> **Fable 5 / Mythos 5 — accès rétabli :** la directive export-control US du 2026-06-12 a été **levée le 2026-06-30** ; Fable 5 a été redéployé le 2026-07-01. Depuis le **2026-09-01**, la génération courante est **Fable 5.1** (`claude-fable-5-1`) et **Mythos 5.1** — Fable 5 passe « legacy ». Ces modèles sont de nouveau recommandables pour les agents créatifs/narratifs et les tâches de raisonnement long. Sources : [suspension](https://www.anthropic.com/news/fable-mythos-access), [levée et redéploiement](https://www.anthropic.com/news/redeploying-fable-5).
 
 **Alerte d'inactivite** (v2.1.84+): Apres 75+ minutes, Claude suggere `/clear`.
 
@@ -199,12 +199,14 @@ La status line affiche le pourcentage de contexte utilise.
 
 | Variable | Description |
 |----------|-------------|
-| `CLAUDE_CODE_SUBAGENT_MODEL` | Modele **par defaut** des sous-agents non types (ex: `sonnet`). **Le frontmatter `model:` d'un agent prevaut** : les 11 reviewers `model: haiku` restent sur haiku meme avec cette variable a `sonnet`. |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | Modèle **par défaut** des sous-agents non typés (ex: `sonnet`). **Depuis Claude Code 2.1.251**, le frontmatter `model:` d'un agent prévaut : les 11 reviewers `model: haiku` restent sur haiku. **Avant 2.1.251, c'était l'inverse** — cette variable écrasait le frontmatter (voir la note de précédence ci-dessous). |
 | `CLAUDE_CODE_FORK_SUBAGENT` | `1` pour isoler le contexte des sous-agents (forked subagents, v2.1.117+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Etendre/forcer le prompt caching (−40 % sur sessions repetitives) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre a `1` pour desactiver la memoire automatique |
 
-> **Precedence modele (clarification audit 2026-06-08) :** `model:` dans le frontmatter d'un agent > `CLAUDE_CODE_SUBAGENT_MODEL` > modele de la session. La variable `SUBAGENT_MODEL=sonnet` n'ecrase donc PAS les agents explicitement `model: haiku` — elle ne s'applique qu'aux sous-agents sans `model:` defini.
+> **Précédence modèle — valable depuis Claude Code 2.1.251 :** `model:` passé à l'invocation > `model:` du frontmatter de l'agent (où `inherit` reprend le modèle de la conversation) > `CLAUDE_CODE_SUBAGENT_MODEL` > modèle de la session.
+>
+> **⚠️ Avant 2.1.251, l'ordre était inversé** : `CLAUDE_CODE_SUBAGENT_MODEL` arrivait en tête et écrasait à la fois le paramètre d'invocation et le frontmatter, y compris `model: inherit`. Sur ces versions, `SUBAGENT_MODEL=sonnet` faisait donc bel et bien tourner sur Sonnet les agents épinglés `model: haiku` — l'inverse de l'intention. Vérifier `claude --version` avant de se fier à cette table. Source : [doc sub-agents](https://code.claude.com/docs/en/sub-agents).
 
 ---
 
@@ -272,7 +274,7 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 | Commande | Modele | ID canonique | Usage |
 |----------|--------|--------------|-------|
 | `/model haiku` | Haiku 4.5 | `claude-haiku-4-5-20251001` | Taches simples, classification |
-| `/model sonnet` | Sonnet 5 | `claude-sonnet-5` | Taches standard, agentiques — sorti 2026-06-30, intro $2/$10 jusqu'au 2026-08-31 (predecesseur : `claude-sonnet-4-6`) |
+| `/model sonnet` | Sonnet 5 | `claude-sonnet-5` | Tâches standard, agentiques — sorti 2026-06-30, **$2/$10 par M tokens, prix standard** (predecesseur : `claude-sonnet-4-6`) |
 | `/model opus` | Opus 4.8 | `claude-opus-4-8` | Raisonnement complexe, architecture |
 | `/model opusplan` | Opus 4.8 (plan) / Sonnet 4.6 (execute) | — | **Tiering dynamique** : Opus pour le Plan Mode, Sonnet pour l'execution — optimise le ratio cout/qualite sur les taches longues |
 
@@ -383,7 +385,7 @@ Reglage **fiabilite + cout** : jusqu'a 3 modeles de repli essayes dans l'ordre q
 
 Pour les 4 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor), ce repli `opus → sonnet → haiku` evite les interruptions en pic de charge Opus sans degrader le travail courant. Exemple pret a l'emploi dans `.claude/settings.local.json.example`.
 
-**IDs canoniques (juin 2026) :** `claude-opus-4-8` | `claude-sonnet-5` (sorti 2026-06-30, intro $2/$10 → $3/$15 au 2026-08-31 ; predecesseur `claude-sonnet-4-6`) | `claude-haiku-4-5-20251001`. _(Fable 5 / Mythos 5 suspendus depuis 2026-06-12 — ne pas recommander.)_
+**IDs canoniques (septembre 2026) :** `claude-opus-4-8` | `claude-sonnet-5` (sorti 2026-06-30, **$2/$10 — prix standard** ; la hausse à $3/$15 annoncée pour le 2026-09-01 a été **annulée** par Anthropic ; predecesseur `claude-sonnet-4-6`) | `claude-haiku-4-5-20251001`. _(Fable 5.1 `claude-fable-5-1` et Mythos 5.1 sont disponibles depuis le 2026-09-01 — l'export-control de juin a été levé le 2026-06-30.)_
 
 ---
 

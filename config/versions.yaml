@@ -18,10 +18,14 @@ claudeCode:
   minimum: '2.1.97'
   recommended: '2.1.193'
   testedUpTo: '2.1.193'
-  # Fable 5 / Mythos 5 suspendus depuis 2026-06-12 (directive export-control US, toujours offline) —
-  # retirés des recommandations ; agents créatifs routés vers Opus 4.8 / Sonnet 5.
-  # Sonnet 5 (claude-sonnet-5) sorti le 2026-06-30 : modèle agentique, comble l'écart avec Opus 4.8,
-  # prix intro $2/$10 par M tokens jusqu'au 2026-08-31 puis $3/$15. Remplace Sonnet 4.6 (predecesseur).
+  # Fable 5 / Mythos 5 : l'export-control US du 2026-06-12 a ete leve le 2026-06-30 et Fable 5 a ete
+  # redeploye le 2026-07-01. Depuis le 2026-09-01 la generation courante est Fable 5.1
+  # (claude-fable-5-1) / Mythos 5.1, Fable 5 passant en legacy. Ces modeles sont de nouveau
+  # recommandables. Sources : anthropic.com/news/fable-mythos-access (suspension),
+  # anthropic.com/news/redeploying-fable-5 (levee).
+  # Sonnet 5 (claude-sonnet-5) sorti le 2026-06-30 : modele agentique, comble l'ecart avec Opus 4.8,
+  # $2/$10 par M tokens — prix STANDARD confirme. La hausse a $3/$15 annoncee pour le 2026-09-01 a ete
+  # annulee par Anthropic. Remplace Sonnet 4.6 (predecesseur).
   models:
     opus: 'claude-opus-4-8'
     sonnet: 'claude-sonnet-5'
@@ -94,9 +98,65 @@ denylist:
   - 'Docker 29.5'
   # Claude Code recommandé périmé (remplacé par 2.1.193 semaine 26)
   - '2.1.168'
-  # Fable 5 suspendu (export-control US, 2026-06-12) — interdit comme modèle recommandé dans les fichiers vitrine
-  - 'claude-fable-5'
   # Badge hero périmé du site (LandingPage.vue) — chaîne spécifique pour ne pas heurter les notes historiques du README
   - 'v8.13.0 - Claude Code'
   - 'v8.20.0'
   - 'v8.21.0'
+
+# Affirmations périmées interdites dans des fichiers PRÉCIS (filet complémentaire de `denylist`,
+# qui ne couvre que SHOWCASE_FILES). Vérifié par scripts/verify-versions.mjs.
+# Motivation : ces trois affirmations sont restées fausses 62 jours sans qu'aucun gate ne les voie.
+claimDenylist:
+  - reason: 'Hausse de prix Sonnet 5 annulée par Anthropic — $2/$10 est le prix standard (source: platform.claude.com/docs/en/about-claude/pricing)'
+    tokens:
+      - '$3/$15 au 2026-08-31'
+      - 'jusqu''au 2026-08-31'
+      - 'until 2026-08-31'
+      - 'bis 2026-08-31'
+      - 'hasta el 2026-08-31'
+      - 'puis $3/$15'
+    files:
+      - '.claude/rules/12-context-management.md'
+      - '.claude/COMPATIBILITY.md'
+      - 'docs/FAQ.md'
+      - 'docs/CLI-REFERENCE.md'
+      - 'docs/guides/en/03-feature-development.md'
+      - 'docs/guides/fr/03-feature-development.md'
+      - 'docs/guides/es/03-feature-development.md'
+      - 'docs/guides/de/03-feature-development.md'
+      - 'docs/guides/pt/03-feature-development.md'
+  - reason: 'Export-control levé le 2026-06-30, Fable 5 redéployé le 2026-07-01, Fable 5.1 / Mythos 5.1 sortis le 2026-09-01 (source: anthropic.com/news/redeploying-fable-5)'
+    tokens:
+      - 'Mythos 5 suspendus'
+      - 'Fable 5 est suspendu'
+      - 'Fable 5 ist ausgesetzt'
+      - 'Fable 5 is suspended'
+      - 'Fable 5 est suspendu'
+      - 'Fable 5 esta suspendido'
+      - 'Fable 5 esta suspenso'
+      - 'toujours offline'
+    files:
+      - '.claude/rules/12-context-management.md'
+      - '.claude/COMPATIBILITY.md'
+      - 'docs/FAQ.md'
+      - 'docs/CLI-REFERENCE.md'
+      - 'docs/guides/en/03-feature-development.md'
+      - 'docs/guides/fr/03-feature-development.md'
+      - 'docs/guides/es/03-feature-development.md'
+      - 'docs/guides/de/03-feature-development.md'
+      - 'docs/guides/pt/03-feature-development.md'
+  - reason: 'La precedence frontmatter model: > CLAUDE_CODE_SUBAGENT_MODEL n est vraie que depuis Claude Code 2.1.251 ; l affirmation doit rester bornee en version (source: code.claude.com/docs/en/sub-agents)'
+    tokens:
+      - 'clarification audit 2026-06-08'
+      - 'audit 2026-06-08'
+      - 'auditoria 2026-06-08'
+      - 'auditoría 2026-06-08'
+      - 'Audit 2026-06-08'
+    files:
+      - '.claude/rules/12-context-management.md'
+      - 'docs/FAQ.md'
+      - 'Dev/i18n/en/Common/rules/12-context-management.md'
+      - 'Dev/i18n/fr/Common/rules/12-context-management.md'
+      - 'Dev/i18n/es/Common/rules/12-context-management.md'
+      - 'Dev/i18n/de/Common/rules/12-context-management.md'
+      - 'Dev/i18n/pt/Common/rules/12-context-management.md'

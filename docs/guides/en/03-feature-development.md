@@ -56,7 +56,7 @@ For analysis phases that require deep reasoning, set high effort:
 
 Use `/effort low` for simple lookups and `/effort medium` for standard implementation work.
 
-> **Current models (June 2026):** `low` → Haiku 4.5, `medium` → **Sonnet 5** (`claude-sonnet-5`, released 2026-06-30 — agentic, intro $2/$10 per M tokens until 2026-08-31), `high`/`xhigh` → Opus 4.8. The `model:` alias auto-resolves to the latest, so `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` now maps to Sonnet 5. Fable 5 is suspended — do not use it. Full pricing/routing grid: [FAQ](../../FAQ.md#grille-de-prix--routage-modèle-par-tâche-juin-2026).
+> **Current models (June 2026):** `low` → Haiku 4.5, `medium` → **Sonnet 5** (`claude-sonnet-5`, released 2026-06-30 — agentic, $2/$10 per M tokens, standard price), `high`/`xhigh` → Opus 4.8. The `model:` alias auto-resolves to the latest, so `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` now maps to Sonnet 5. Fable 5.1 (`claude-fable-5-1`) is available again since 2026-09-01 — the June export-control was lifted on 2026-06-30. Full pricing/routing grid: [FAQ](../../FAQ.md#grille-de-prix--routage-modèle-par-tâche-juin-2026).
 
 ### Using the Analysis Command
 

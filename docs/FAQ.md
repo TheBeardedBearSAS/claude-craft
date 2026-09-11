@@ -438,9 +438,9 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 
 > **Leviers de coût (cumulables) :** prompt caching **−90 %** sur l'input mis en cache (`ENABLE_PROMPT_CACHING_1H`, actif par défaut), **Batch API −50 %** in/out pour les traitements asynchrones de masse, RTK **55-90 %** sur les outputs CLI, `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` pour les sous-agents non typés.
 >
-> **Précédence modèle :** `model:` du frontmatter d'agent **>** `CLAUDE_CODE_SUBAGENT_MODEL` **>** modèle de session. Les 11 reviewers `model: haiku` restent sur Haiku même si `SUBAGENT_MODEL=sonnet`.
+> **Précédence modèle (depuis Claude Code 2.1.251) :** `model:` du frontmatter d'agent **>** `CLAUDE_CODE_SUBAGENT_MODEL` **>** modèle de session. Les 11 reviewers `model: haiku` restent sur Haiku même si `SUBAGENT_MODEL=sonnet`. **Avant 2.1.251, l'ordre était inversé** : la variable écrasait le frontmatter, et ces reviewers tournaient en réalité sur Sonnet.
 >
-> ⚠️ **Fable 5 / Mythos 5 suspendus** (export-control US, 2026-06-12) : ne pas les router ; agents créatifs → Opus 4.8 / Sonnet 4.6.
+> **Fable 5.1 / Mythos 5.1 disponibles** : l'export-control US du 2026-06-12 a été levé le 2026-06-30 ; depuis le 2026-09-01 la génération courante est Fable 5.1 (`claude-fable-5-1`) / Mythos 5.1. Routage possible pour les agents créatifs et le raisonnement long.
 
 ---
 
