@@ -487,12 +487,14 @@ Durante a compactacao, sempre preservar:
 
 | Variável | Descrição |
 |----------|-----------|
-| `CLAUDE_CODE_SUBAGENT_MODEL` | Modelo **padrão** para sub-agentes sem tipo (ex: `sonnet`). **O frontmatter `model:` de um agente tem prioridade**: 11 revisores com `model: haiku` permanecem no Haiku mesmo com esta variável em `sonnet`. |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | Modelo **padrão** para sub-agentes sem tipo (ex: `sonnet`). **Desde o Claude Code 2.1.251**, o frontmatter `model:` de um agente tem prioridade: os 11 revisores com `model: haiku` permanecem no Haiku. **Antes de 2.1.251 era o contrário** — esta variável sobrescrevia o frontmatter. |
 | `CLAUDE_CODE_FORK_SUBAGENT` | `1` para isolar o contexto dos sub-agentes (forked subagents, v2.1.117+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Ampliar/forçar o prompt caching (−40 % em sessões repetitivas) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Definir como `1` para desativar a memória automática |
 
-> **Precedência de modelos (auditoria 2026-06-08):** `model:` no frontmatter do agente > `CLAUDE_CODE_SUBAGENT_MODEL` > modelo de sessão. A variável `SUBAGENT_MODEL=sonnet` NÃO sobrescreve agentes explicitamente com `model: haiku` — aplica-se apenas a sub-agentes sem `model:` definido.
+> **Precedência de modelos — válida desde o Claude Code 2.1.251:** `model:` passado na invocação > `model:` do frontmatter do agente (onde `inherit` assume o modelo da conversa) > `CLAUDE_CODE_SUBAGENT_MODEL` > modelo de sessão.
+>
+> **⚠️ Antes de 2.1.251 a ordem era inversa:** `CLAUDE_CODE_SUBAGENT_MODEL` vinha primeiro e sobrescrevia tanto o parâmetro de invocação quanto o frontmatter, incluindo `model: inherit`. Nessas versões, `SUBAGENT_MODEL=sonnet` de facto executava em Sonnet os revisores `model: haiku` — o oposto da intenção. Verifique `claude --version` antes de confiar nesta tabela. Fonte: [documentação de sub-agents](https://code.claude.com/docs/en/sub-agents).
 
 ---
 

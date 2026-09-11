@@ -487,12 +487,14 @@ Bei der Kompaktierung immer erhalten:
 
 | Variable | Beschreibung |
 |----------|-------------|
-| `CLAUDE_CODE_SUBAGENT_MODEL` | **Standard**-Modell für nicht typisierte Sub-Agents (z. B. `sonnet`). **Das `model:`-Frontmatter eines Agents hat Vorrang**: 11 Reviewer mit `model: haiku` bleiben auf Haiku, auch wenn diese Variable auf `sonnet` gesetzt ist. |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | **Standard**-Modell für nicht typisierte Sub-Agents (z. B. `sonnet`). **Seit Claude Code 2.1.251** hat das `model:`-Frontmatter eines Agents Vorrang: die 11 Reviewer mit `model: haiku` bleiben auf Haiku. **Vor 2.1.251 war es umgekehrt** — diese Variable überschrieb das Frontmatter. |
 | `CLAUDE_CODE_FORK_SUBAGENT` | `1`, um den Kontext von Sub-Agents zu isolieren (Forked Subagents, v2.1.117+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Prompt-Caching verlängern/erzwingen (−40 % bei wiederholenden Sitzungen) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Auf `1` setzen, um automatischen Speicher zu deaktivieren |
 
-> **Modell-Vorrang (Audit 2026-06-08):** `model:` im Agent-Frontmatter > `CLAUDE_CODE_SUBAGENT_MODEL` > Sitzungsmodell. Die Variable `SUBAGENT_MODEL=sonnet` überschreibt NICHT explizit auf `model: haiku` gesetzte Agents — sie gilt nur für Sub-Agents ohne definiertes `model:`-Feld.
+> **Modell-Vorrang — gültig seit Claude Code 2.1.251:** `model:` aus dem Aufruf > `model:` im Agent-Frontmatter (wobei `inherit` das Modell der Hauptkonversation übernimmt) > `CLAUDE_CODE_SUBAGENT_MODEL` > Sitzungsmodell.
+>
+> **⚠️ Vor 2.1.251 war die Reihenfolge umgekehrt:** `CLAUDE_CODE_SUBAGENT_MODEL` stand an erster Stelle und überschrieb sowohl den Aufrufparameter als auch das Frontmatter, einschließlich `model: inherit`. Auf diesen Versionen liefen die `model: haiku`-Reviewer mit `SUBAGENT_MODEL=sonnet` tatsächlich auf Sonnet — das Gegenteil der Absicht. Prüfe `claude --version`, bevor du dich auf diese Tabelle verlässt. Quelle: [Sub-Agents-Doku](https://code.claude.com/docs/en/sub-agents).
 
 ---
 

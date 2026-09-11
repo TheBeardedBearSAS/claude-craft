@@ -852,7 +852,7 @@ Default for Pro/Max subscribers on Opus 4.8/Sonnet 4.6 is `high` since v2.1.111 
 | `xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | Décisions critiques, migrations complexes, ADR |
 | `ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | Mode débit code maximal — pipelines automatisés, génération massive |
 
-> **⚠️ Note Fable 5 / Mythos 5 :** ces modèles sont **suspendus depuis le 2026-06-12** (directive export-control US, toujours offline). Ne pas configurer `CLAUDE_CODE_SUBAGENT_MODEL=claude-fable-5`. Pour les agents créatifs/narratifs, utiliser **Opus 4.8** (`claude-opus-4-8`) ou **Sonnet 5** (`claude-sonnet-5`) en attendant une éventuelle restauration.
+> **Note Fable 5.1 / Mythos 5.1 :** la directive export-control US du 2026-06-12 a été **levée le 2026-06-30** et Fable 5 redéployé le 2026-07-01. Depuis le **2026-09-01**, la génération courante est **Fable 5.1** (`claude-fable-5-1`) et **Mythos 5.1**. Ces modèles sont de nouveau utilisables, y compris via `CLAUDE_CODE_SUBAGENT_MODEL`. Source : [Redeploying Claude Fable 5](https://www.anthropic.com/news/redeploying-fable-5).
 
 ---
 

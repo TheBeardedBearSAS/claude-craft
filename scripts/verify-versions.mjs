@@ -46,6 +46,13 @@ const SHOWCASE_FILES = [
   'website/.vitepress/theme/components/AgentShowcase.vue',
   'docs/PREREQUISITES.md',
   'docs/AGENT-TEAMS-GUIDE.md',
+  'docs/FAQ.md',
+  // Guides « feature development » : portent la grille modèles/prix dans les 5 langues (audit 2026-09-11)
+  'docs/guides/en/03-feature-development.md',
+  'docs/guides/fr/03-feature-development.md',
+  'docs/guides/es/03-feature-development.md',
+  'docs/guides/de/03-feature-development.md',
+  'docs/guides/pt/03-feature-development.md',
   // Settings templates distribués dans les 5 langues (TOKEN-001)
   'Dev/i18n/en/Common/templates/settings.json.template',
   'Dev/i18n/fr/Common/templates/settings.json.template',
@@ -60,6 +67,26 @@ for (const rel of SHOWCASE_FILES) {
   for (const token of versions.denylist ?? []) {
     if (content.includes(token)) {
       errors.push(`Token obsolète "${token}" trouvé dans ${rel} (mettre à jour vers la version courante)`);
+    }
+  }
+}
+
+// 2bis. Affirmations périmées, interdites dans des fichiers ciblés.
+//    La denylist globale ne s'applique qu'à SHOWCASE_FILES, et les fichiers qui portent le plus
+//    d'affirmations sur les modèles (rules/12, COMPATIBILITY.md, CLI-REFERENCE.md) ne peuvent pas y
+//    entrer : ils citent légitimement d'anciennes versions dans leurs tables d'historique.
+//    Ce second filet est donc scopé fichier par fichier. Ajouté par l'audit 2026-09-11, après que
+//    trois affirmations fausses (hausse de prix Sonnet 5 annulée, suspension Fable/Mythos levée,
+//    précédence modèle non bornée en version) ont survécu à tous les gates pendant 62 jours.
+for (const rule of versions.claimDenylist ?? []) {
+  for (const rel of rule.files ?? []) {
+    const abs = path.join(ROOT, rel);
+    if (!fs.existsSync(abs)) continue;
+    const content = fs.readFileSync(abs, 'utf8');
+    for (const token of rule.tokens ?? []) {
+      if (content.includes(token)) {
+        errors.push(`Affirmation périmée "${token}" trouvée dans ${rel} — ${rule.reason ?? 'voir config/versions.yaml'}`);
+      }
     }
   }
 }
