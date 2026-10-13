@@ -67,8 +67,8 @@ Extraer y clarificar:
    ┌─────────────────────────────────────────────────────────┐
    │                    CAPA DE INGRESS                       │
    │  ┌──────────────┐         ┌──────────────┐              │
-   │  │ Ingress NGINX│─────────│  Cert-Manager│              │
-   │  │ / Traefik    │         │  (Let's Enc.)│              │
+   │  │ Gateway API  │─────────│  Cert-Manager│              │
+   │  │ (HTTPRoute)  │         │  (Let's Enc.)│              │
    │  └──────┬───────┘         └──────────────┘              │
    └─────────┼───────────────────────────────────────────────┘
              │
@@ -95,7 +95,7 @@ Extraer y clarificar:
    - Cuotas de recursos y rangos de límites por namespace
 
 3. **Redes**
-   - Selección del controlador Ingress (NGINX, Traefik, Istio Gateway)
+   - Gateway API (HTTPRoute) como primera opción (implementaciones: Envoy Gateway, Traefik, Istio, Cilium); Ingress NGINX está retirado desde marzo de 2026 (sin más correcciones de seguridad), migrar con `ingress2gateway`
    - NetworkPolicies para el aislamiento entre namespaces
    - Estrategia DNS (descubrimiento de servicios internos)
    - Terminación TLS y gestión de certificados

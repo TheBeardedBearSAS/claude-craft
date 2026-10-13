@@ -67,8 +67,8 @@ Extract and clarify:
    ┌─────────────────────────────────────────────────────────┐
    │                    INGRESS LAYER                         │
    │  ┌──────────────┐         ┌──────────────┐              │
-   │  │ Ingress NGINX│─────────│  Cert-Manager│              │
-   │  │ / Traefik    │         │  (Let's Enc.)│              │
+   │  │ Gateway API  │─────────│  Cert-Manager│              │
+   │  │ (HTTPRoute)  │         │  (Let's Enc.)│              │
    │  └──────┬───────┘         └──────────────┘              │
    └─────────┼───────────────────────────────────────────────┘
              │
@@ -95,7 +95,7 @@ Extract and clarify:
    - Resource quotas and limit ranges per namespace
 
 3. **Networking**
-   - Ingress controller selection (NGINX, Traefik, Istio Gateway)
+   - Gateway API (HTTPRoute) as first choice (implementations: Envoy Gateway, Traefik, Istio, Cilium); Ingress NGINX is retired since March 2026 (no more security fixes), migrate with `ingress2gateway`
    - NetworkPolicies for inter-namespace isolation
    - DNS strategy (internal service discovery)
    - TLS termination and certificate management

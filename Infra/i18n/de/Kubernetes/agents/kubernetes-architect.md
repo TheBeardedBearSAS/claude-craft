@@ -67,8 +67,8 @@ Extrahieren und klarstellen:
    ┌─────────────────────────────────────────────────────────┐
    │                    INGRESS LAYER                         │
    │  ┌──────────────┐         ┌──────────────┐              │
-   │  │ Ingress NGINX│─────────│  Cert-Manager│              │
-   │  │ / Traefik    │         │  (Let's Enc.)│              │
+   │  │ Gateway API  │─────────│  Cert-Manager│              │
+   │  │ (HTTPRoute)  │         │  (Let's Enc.)│              │
    │  └──────┬───────┘         └──────────────┘              │
    └─────────┼───────────────────────────────────────────────┘
              │
@@ -95,7 +95,7 @@ Extrahieren und klarstellen:
    - Ressourcenquoten und Limit-Ranges pro Namespace
 
 3. **Netzwerk**
-   - Auswahl des Ingress-Controllers (NGINX, Traefik, Istio Gateway)
+   - Gateway API (HTTPRoute) als erste Wahl (Implementierungen: Envoy Gateway, Traefik, Istio, Cilium); Ingress NGINX ist seit März 2026 eingestellt (keine Sicherheitskorrekturen mehr), Migration mit `ingress2gateway`
    - NetworkPolicies fur die Isolierung zwischen Namespaces
    - DNS-Strategie (interne Service-Erkennung)
    - TLS-Terminierung und Zertifikatsverwaltung
