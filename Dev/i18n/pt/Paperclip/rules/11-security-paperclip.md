@@ -141,6 +141,15 @@ Ajuste fontes script/style CSP se a UI requer CDNs especificos; caso contrario m
 - [ ] Activity log append-only, forcado DB onde possivel
 - [ ] Kill switch + plugin disable testados
 
+## Notas de atualização: mudanças incompatíveis (2026.916.0 a 2026.1012.0)
+
+Verificado nas notas de versão oficiais do GitHub (paperclipai/paperclip).
+
+- **2026.916.0**: as APIs de agente não retornam mais credenciais em texto claro (os bindings `plain` são ocultados: usar `secretRef`, nunca reler segredos); os "cheap model profiles" foram removidos (a migração `0236` apaga os `modelProfiles` armazenados); `X-Forwarded-Host` só é considerado quando o peer imediato passa `TRUST_PROXY` (defini-lo atrás de um reverse proxy; caso contrário, usa-se o cabeçalho `Host` bruto); a opção de conexão REST legacy da Anthropic foi removida (conexões de ferramentas REST são validadas como REST).
+- **2026.1001.0**: o broker Composio legacy foi aposentado (sem migração automática; substituto: Composio Connect atrás do flag `enableMcpAggregators`). Os harnesses de execução passam a **full auto por padrão**: ACPX/Claude `approve-all`, OpenCode `allow`, Codex `never` (sem pausas de aprovação). Para manter os portões de aprovação do provedor, definir explicitamente um modo restritivo por agente: `acpxPermissionMode` (`approve-paperclip`, `approve-reads` ou `deny-all`) ou `opencodePermissionMode` (`ask` ou `deny`). As aprovações governadas do Paperclip continuam valendo.
+- **2026.1005.0**: `PAPERCLIP_CLOUD_UI_SNIPPET` / `PAPERCLIP_CLOUD_UI_SNIPPET_B64` não injetam mais HTML (migrar a integração para uma contribuição de UI de plugin); uma @-menção em um comentário de tarefa é apenas contexto e não inicia mais um run (somente atribuição explícita ou pedidos de revisão iniciam).
+- **2026.1012.0**: os locks de restauração de workspace agora são locks de arquivo SQLite em `<instance root>/locks/directory-merge/`: parar todos os processos antigos de servidor e worker antes de atualizar ou reverter; tool grants com seletores desconhecidos ou restrições malformadas agora negam o acesso (revisar os grants personalizados).
+
 ---
 
 **Ultima atualizacao:** 2026-04 | **Versao:** 2.0.0 | **Autor:** The Bearded CTO

@@ -141,6 +141,15 @@ Adjust CSP script/style sources if the UI requires specific CDNs; otherwise keep
 - [ ] Activity log append-only, DB-enforced where possible
 - [ ] Kill switch + plugin disable tested
 
+## Upgrade Notes: Breaking Changes (2026.916.0 to 2026.1012.0)
+
+Verified against the official GitHub release notes (paperclipai/paperclip).
+
+- **2026.916.0**: agent APIs no longer return plaintext credentials (`plain` bindings are redacted: use `secretRef`, never read secrets back); "cheap model profiles" removed (migration `0236` strips stored `modelProfiles`); `X-Forwarded-Host` is honored only when the immediate peer passes `TRUST_PROXY` (set it behind a reverse proxy, otherwise the raw `Host` header is used); the legacy Anthropic REST connection option is removed (REST tool connections are validated as REST).
+- **2026.1001.0**: the legacy Composio broker is retired (no automated migration; replacement: Composio Connect behind the `enableMcpAggregators` flag). Execution harnesses now default to **full auto**: ACPX/Claude `approve-all`, OpenCode `allow`, Codex `never` (no approval pauses). To keep provider-side approval gates, set an explicit restrictive mode per agent: `acpxPermissionMode` (`approve-paperclip`, `approve-reads` or `deny-all`) or `opencodePermissionMode` (`ask` or `deny`). Paperclip's own governed approvals still apply.
+- **2026.1005.0**: `PAPERCLIP_CLOUD_UI_SNIPPET` / `PAPERCLIP_CLOUD_UI_SNIPPET_B64` no longer inject HTML (move the integration to a plugin UI contribution); an @-mention in a task comment is context only and no longer starts a run (only explicit assignment or review requests do).
+- **2026.1012.0**: workspace restore locks are now SQLite file locks under `<instance root>/locks/directory-merge/`: stop all old server and worker processes before upgrading or rolling back; tool grants with unknown selectors or malformed restrictions now deny access (review custom grants).
+
 ---
 
 **Last updated:** 2026-04 | **Version:** 2.0.0 | **Author:** The Bearded CTO

@@ -72,7 +72,7 @@ Laravel 13 and PHP 8.3+ (8.5 recommended) code review specialist — Actions pat
 
 ### `@paperclip-reviewer`
 
-Paperclip 2026.529+ governance-first integration platform code review specialist — control plane + adapters two-layer architecture, Node.js 20+ TypeScript, Vitest, PostgreSQL, idempotency keys, audit trails, multi-tenant adapter isolation
+Paperclip 2026.1012.0+ governance-first integration platform code review specialist — control plane + adapters two-layer architecture, Node.js 24.11+ TypeScript, Vitest, PostgreSQL, idempotency keys, audit trails, multi-tenant adapter isolation
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 

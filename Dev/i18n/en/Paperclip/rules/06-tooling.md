@@ -6,7 +6,7 @@
 
 | Tool | Version | Why |
 |---|---|---|
-| Node.js | 20+ LTS (22 LTS also supported and recommended) | Paperclip minimum; Node.js 22 LTS tested in CI |
+| Node.js | 24.11+ LTS | Paperclip minimum (`paperclipai` `engines`: `>=24.11.0`) |
 | pnpm | 9.15+ | Official workspace manager |
 | tsx | latest | Running TS files during dev |
 | PostgreSQL | 15+ (or embedded) | Primary store |
@@ -183,7 +183,7 @@ jobs:
   ci:
     strategy:
       matrix:
-        node: [20.x, 22.x]
+        node: [24.x]
     steps:
       - uses: pnpm/action-setup@v3
       - run: pnpm install --frozen-lockfile
@@ -209,7 +209,7 @@ Paperclip ships a Dockerfile (see `docs.paperclip.ing/deployment/docker`). For c
 
 ## Checklist
 
-- [ ] Node 20+, pnpm 9.15+, Corepack enabled
+- [ ] Node 24.11+, pnpm 9.15+, Corepack enabled
 - [ ] ESLint flat config + Prettier configured
 - [ ] Pre-commit hook runs lint-staged
 - [ ] CI runs lint, typecheck, test, build

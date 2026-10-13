@@ -6,9 +6,9 @@
 
 | Layer | Technology |
 |-------|-----------|
-| Runtime | Node.js 22+ LTS |
+| Runtime | Node.js 24.11+ LTS |
 | Language | TypeScript 5.7+ (strict) |
-| Framework | Paperclip 2026.609.0+ |
+| Framework | Paperclip 2026.1012.0+ |
 | Database | PostgreSQL 15+ (RLS, JSONB) |
 | Cache / Queue | Redis 7+, BullMQ |
 | Tests | Vitest 4.1+, testcontainers |

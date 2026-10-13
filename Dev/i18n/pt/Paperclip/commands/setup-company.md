@@ -19,7 +19,7 @@ Guiar um operador atraves do onboarding: instalar, criar a instancia, bootstrap 
 
 ### 1. Precondicoes
 
-- [ ] Node.js 20+ e pnpm 9.15+ instalados
+- [ ] Node.js 24.11+ e pnpm 9.15+ instalados
 - [ ] PostgreSQL acessivel **OU** aceite o Postgres embedado para dev local
 - [ ] Porta 3100 disponivel (ou defina `PORT`)
 
