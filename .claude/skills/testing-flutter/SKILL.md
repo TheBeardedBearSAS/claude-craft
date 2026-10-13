@@ -1,6 +1,6 @@
 ---
 name: testing-flutter
-description: Testing Flutter 3.44 / BLoC v9 / Riverpod 3 - Stratégie Complète. Use when writing tests, reviewing test coverage, or setting up testing.
+description: Testing Flutter 3.47 / BLoC v9 / Riverpod 3 - Stratégie Complète. Use when writing tests, reviewing test coverage, or setting up testing.
 context: fork
 ---
 

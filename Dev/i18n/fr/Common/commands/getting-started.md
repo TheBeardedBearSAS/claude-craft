@@ -70,7 +70,7 @@ Basé sur la stack détectée, recommander 3 commandes contextualisées qui appo
 - `/vuejs:check-security` — Audit XSS, CSP, OWASP
 
 **Laravel :**
-- `/laravel:check-code-quality` — PSR-12, Pest 4, standards de code
+- `/laravel:check-code-quality` — PER-CS 3.0, Pest 4/5, standards de code
 - `/laravel:check-testing` — Couverture de tests avec Pest
 - `/laravel:check-security` — Audit OWASP, configuration Sanctum
 
@@ -91,7 +91,7 @@ Basé sur la stack détectée, recommander 3 commandes contextualisées qui appo
 
 **PHP (standalone) :**
 - `/php:check-code-quality` — PSR-12, PHPStan Niveau 10
-- `/php:check-testing` — Couverture de tests Pest 4
+- `/php:check-testing` — Couverture de tests Pest 5
 - `/php:check-security` — Bonnes pratiques de sécurité
 
 **Inconnu/Multi-stack :**
