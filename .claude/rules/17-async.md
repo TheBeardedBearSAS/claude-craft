@@ -13,4 +13,6 @@ Architecture async-first pour améliorer la réactivité en déchargeant les tra
 
 **Patterns avancés :** Idempotency keys, retry strategies, DLQ, lifecycle events
 
+**Contrats de messages :** documenter avec AsyncAPI 3.x (3.1.0 courante) lorsque des messages sont exposés à d'autres systèmes.
+
 > Détails complets, exemples et checklists : `@.claude/skills/async/SKILL.md`

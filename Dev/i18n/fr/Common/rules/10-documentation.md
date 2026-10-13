@@ -289,7 +289,7 @@ docs/
 ### OpenAPI (Swagger)
 
 ```yaml
-openapi: 3.1.1
+openapi: 3.2.1  # current (3.1.x remains valid if your tooling lags)
 info:
   title: User API
   version: 1.0.0

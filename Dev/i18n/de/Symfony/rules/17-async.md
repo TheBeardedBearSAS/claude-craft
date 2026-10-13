@@ -188,3 +188,4 @@ final class MessengerEventSubscriber implements EventSubscriberInterface
 - [ ] Workers supervisord in Produktion
 - [ ] Monitoring fehlgeschlagener Nachrichten
 - [ ] Tests mit `messenger:consume --limit=1`
+- [ ] Nachrichten, die anderen Systemen bereitgestellt werden, mit AsyncAPI 3.x (3.1.0) dokumentiert
