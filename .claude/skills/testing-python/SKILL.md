@@ -18,6 +18,7 @@ Ruff remplace Black + isort + Flake8 (10-100x plus rapide). mypy strict élimine
 | **Linting + Format** | **Ruff 0.17+** | 10-100× plus rapide que Black+Flake8 |
 | **Type checking** | **mypy 2.x** strict | Vérification statique |
 | **E2E/Browser** | **Playwright** | Tests frontend web |
+| **BDD (Gherkin)** | **pytest-bdd** | Scénarios Given/When/Then |
 | **Mutation** | **Mutmut** | Qualité des tests (score >= 80%) |
 | **Property-based** | **Hypothesis** | Génération de cas de test automatique |
 
