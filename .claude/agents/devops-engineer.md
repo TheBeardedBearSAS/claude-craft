@@ -48,7 +48,7 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | Technologie | Compétences | Versions 2026 |
 |-------------|-------------|---------------|
 | Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.9.0 (SSOT `config/versions.yaml` ; inclut les correctifs CVE de la branche 29.x) |
-| Docker Compose | Orchestration locale, profiles, extensions | Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète) |
+| Docker Compose | Orchestration locale, profiles, extensions | Compose 5.6.0 (Compose Specification ; champ `version:` obsolète — le supprimer) |
 | Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, User Namespaces, Mutating Admission Policies | 1.37.1 stable (1.36.5 sur la branche 1.36 ; 1.34 hors support après le 2026-10-27) — Ingress-NGINX retiré (mars 2026) → Gateway API |
 | Helm | Charts, values, templating | Helm 4.2.2 (Helm 4 = MAJOR — server-side apply, WASM plugins, API v4 ; Helm 3 EOL sécurité nov. 2026) |
 | FrankenPHP | Worker mode (Laravel Octane/Symfony), HTTP/3, max_requests | 1.13.0 (PHP 8.5 ; 1.12.4 vulnérable → minimum 1.12.5, recommandé 1.13.0) |
@@ -56,8 +56,10 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 
 **Sources** :  
 - Docker Engine 29.x : https://docs.docker.com/engine/release-notes/29/  
-- Compose Spec v5.0.0 : https://www.compose-spec.io/  
-- Kubernetes 1.36 : https://kubernetes.io/blog/2026/04/22/kubernetes-v1-36-release/  
+- Compose 5.6.0 : https://github.com/docker/compose/releases  
+- Compose Specification : https://www.compose-spec.io/  
+- Kubernetes releases (1.37.1 / 1.36.5) : https://kubernetes.io/releases/  
+- Retrait Ingress-NGINX : https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/  
 - K8s Gateway API : https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl  
 - K8s Support Policy : https://endoflife.date/kubernetes
 
@@ -211,7 +213,7 @@ max_prepared_statements = 200  # Requis 1.21+
 server_idle_timeout = 600
 ```
 
-**Patterns clés PgBouncer 1.26.0** (CVE-2026-6664/6665/6666/6667 patchées depuis 1.25.2 ; nouvelles CVE corrigées en 1.26.0 — voir changelog) :
+**Patterns clés PgBouncer 1.26.0** (CVE-2026-19888, CVE-2026-6668 et CVE-2026-6669 corrigées en 1.26.0 ; CVE-2026-6664/6665/6666/6667 corrigées depuis 1.25.2 ; option `-R` supprimée) :
 - **CVE-2026-6665** : stack overflow dans le parseur SCRAM (auth), exploitable sans authentification préalable
 - **CVE-2026-6666** : null pointer dereference lors de la propagation SQLSTATE depuis le serveur backend
 - **Prepared statements natifs** : Depuis 1.21 (15-250% gains perf selon charge)
