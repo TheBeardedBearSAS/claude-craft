@@ -8,7 +8,7 @@
           {
             "type": "command",
             "command": "INPUT=$(jq -r '.tool_input.command // empty'); if printf '%s' \"$INPUT\" | grep -qE '^git[[:space:]]+commit'; then printf 'Running tests before commit...\\n'; if ! npm test --silent 2>&1; then printf 'BLOCKED: Tests failed. Fix tests before committing.\\n' >&2; exit 2; fi; fi; exit 0",
-            "timeout": 60000
+            "timeout": 60
           }
         ]
       }

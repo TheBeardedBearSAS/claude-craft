@@ -8,7 +8,7 @@
           {
             "type": "command",
             "command": "PROJECT_DIR=\"${CLAUDE_PROJECT_DIR:-$(pwd)}\"; ESSENTIALS_FILE=\"$PROJECT_DIR/.claude/context-essentials.md\"; if [ -f \"$ESSENTIALS_FILE\" ]; then BODY=$(head -150 \"$ESSENTIALS_FILE\"); jq -n --arg msg \"PROJECT CONTEXT RE-INJECTED AFTER COMPACTION:\\n\\n$BODY\" '{\"systemMessage\": $msg}'; else echo '{}'; fi; exit 0",
-            "timeout": 10000
+            "timeout": 10
           }
         ]
       }

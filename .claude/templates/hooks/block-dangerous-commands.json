@@ -8,7 +8,7 @@
           {
             "type": "command",
             "command": "INPUT=$(jq -r '.tool_input.command // empty'); if printf '%s' \"$INPUT\" | grep -qE '(^|[^a-zA-Z_])rm[[:space:]]+(-[a-zA-Z]*[rf][a-zA-Z]*[[:space:]]+)+/([[:space:]]|$)|^[[:space:]]*sudo[[:space:]]|chmod[[:space:]]+777|mkfs\\.|dd[[:space:]]+if=|:\\(\\)\\{[[:space:]]*:|fork[[:space:]]+bomb'; then printf 'BLOCKED: Dangerous command detected:\\n%s\\n' \"$INPUT\" >&2; exit 2; fi; exit 0",
-            "timeout": 5000
+            "timeout": 5
           }
         ]
       }

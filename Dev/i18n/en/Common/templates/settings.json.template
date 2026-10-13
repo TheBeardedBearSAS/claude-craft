@@ -59,7 +59,7 @@
           {
             "type": "command",
             "command": "if [ -f .claude/context-essentials.md ]; then echo 'Context preserved for restoration after compaction'; else echo 'No context-essentials.md found'; fi",
-            "timeout": 5000
+            "timeout": 5
           }
         ]
       }
@@ -102,7 +102,7 @@
           {
             "type": "command",
             "command": "OUTPUT_SIZE=$(jq -r '.tool_response.stdout? // .tool_response? // .tool_result? // empty' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Extract only the relevant information and summarize in under 20 lines.'; elif [ \"$OUTPUT_SIZE\" -gt 10000 ]; then echo 'NOTICE: Moderate output (>10KB). Focus on errors, warnings, and key results.'; fi; exit 0",
-            "timeout": 3000
+            "timeout": 3
           }
         ]
       },
@@ -112,7 +112,7 @@
           {
             "type": "command",
             "command": "OUTPUT_SIZE=$(jq -r '.tool_response.stdout? // .tool_response? // .tool_result? // empty' | wc -c); if [ \"$OUTPUT_SIZE\" -gt 50000 ]; then echo 'NOTICE: Large output (>50KB). Summarize key findings in under 20 lines.'; fi; exit 0",
-            "timeout": 3000
+            "timeout": 3
           }
         ]
       }
@@ -124,7 +124,7 @@
           {
             "type": "command",
             "command": "if [ -f .claude/context-essentials.md ]; then jq -n --rawfile c .claude/context-essentials.md '{\"systemMessage\": (\"CONTEXT RESTORED AFTER COMPACTION:\\n\" + $c)}'; else echo '{}'; fi",
-            "timeout": 5000
+            "timeout": 5
           }
         ]
       }

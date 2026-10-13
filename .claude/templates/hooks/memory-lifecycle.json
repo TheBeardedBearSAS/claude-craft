@@ -8,7 +8,7 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PROJECT_DIR:-$(pwd)}/Dev/scripts/memory-lifecycle/session-start.sh\"",
-            "timeout": 5000
+            "timeout": 5
           }
         ]
       }
@@ -20,7 +20,7 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PROJECT_DIR:-$(pwd)}/Dev/scripts/memory-lifecycle/prompt-submit.sh\"",
-            "timeout": 3000
+            "timeout": 3
           }
         ]
       }
@@ -32,7 +32,7 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PROJECT_DIR:-$(pwd)}/Dev/scripts/memory-lifecycle/post-tool.sh\"",
-            "timeout": 2000
+            "timeout": 2
           }
         ]
       }
@@ -44,7 +44,7 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PROJECT_DIR:-$(pwd)}/Dev/scripts/memory-lifecycle/pre-compact.sh\"",
-            "timeout": 8000
+            "timeout": 8
           }
         ]
       }
@@ -56,7 +56,7 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PROJECT_DIR:-$(pwd)}/Dev/scripts/memory-lifecycle/session-end.sh\"",
-            "timeout": 10000
+            "timeout": 10
           }
         ]
       }
