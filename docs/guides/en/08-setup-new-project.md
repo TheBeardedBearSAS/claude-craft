@@ -33,7 +33,7 @@ Before starting, make sure you have the following installed:
 - [ ] **Terminal/Command Line** - Any terminal application
 - [ ] **Node.js 22+** - Required for NPX installation
 - [ ] **Git** - For version control
-- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.193, minimum: v2.1.97 — CVE-2025-59536 patched)
+- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.296, minimum: v2.1.260 — security baseline)
 
 ### Verify Your Prerequisites
 
@@ -55,7 +55,7 @@ Expected output: `git version 2.x.x` (e.g., `git version 2.43.0`)
 # Check Claude Code is installed
 claude --version
 ```
-Expected output: Version number (recommended: `2.1.193` or higher)
+Expected output: Version number (recommended: `2.1.296` or higher)
 
 ### Install Missing Prerequisites
 

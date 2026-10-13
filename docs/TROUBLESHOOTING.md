@@ -144,7 +144,7 @@ head -20 ~/my-project/.claude/commands/common/pre-commit-check.md
 4. **Check Claude Code version**
    ```bash
    claude --version
-   # Requires Claude Code 2.1.97+
+   # Requires Claude Code 2.1.260+
    ```
 
 ---

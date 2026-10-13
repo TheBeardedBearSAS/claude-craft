@@ -55,7 +55,7 @@ const COMMUNITY_CSV_CANDIDATES = [
  */
 const WATCHED_PAGES = {
   'models-pricing': 'https://docs.claude.com/en/docs/about-claude/models/overview.md',
-  'prompt-context': 'https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview.md',
+  'prompt-context': 'https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/claude-prompting-best-practices.md',
   'cc-features': 'https://docs.claude.com/en/docs/claude-code/settings.md',
 };
 

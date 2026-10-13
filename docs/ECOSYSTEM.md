@@ -11,11 +11,11 @@ replace — that stack.
 > own license terms. We document what each does, how it complements Claude Craft, and how to enable
 > it yourself. This mirrors how Claude Craft already treats RTK: documented, recommended, not embedded.
 
-**Evaluation date:** 2026-06-24 · **Next review:** 2026-09-24 (quarterly cadence) · **Sources:** the 9 repositories below + the
+**Evaluation date:** 2026-10-13 (previous: 2026-06-24; the 2026-09-24 review was skipped and caught up here) · **Next review:** 2027-01-13 (quarterly cadence) · **Sources:** the 10 repositories below (GitHub API, licenses re-read) + the
 [Top Skills/Plugins Claude Code 2026 (camilleroux.com)](https://www.camilleroux.com/top-skills-plugins-claude-code-2026-v3/)
 roundup.
 
-> **Maintenance cadence:** This document is reviewed quarterly (March, June, September, December). Star counts, license statuses, and activity signals reflect the last evaluation date above. Low-activity tools (token-savior ~0.9k, claude-token-optimizer ~0.5k) are re-evaluated each quarter and may be demoted to ⚪ Skip if abandoned.
+> **Maintenance cadence:** This document is reviewed quarterly (March, June, September, December). Star counts, license statuses, and activity signals reflect the last evaluation date above. Low-activity tools (token-savior ~1.2k, claude-token-optimizer ~0.5k) are re-evaluated each quarter and may be demoted to ⚪ Skip if abandoned.
 
 ---
 
@@ -23,15 +23,16 @@ roundup.
 
 | Tool | ★ | License | Type | Recommendation | Note |
 |------|----|---------|------|----------------|------|
-| [caveman](https://github.com/juliusbrussee/caveman) | ~67.8k | MIT | Skill (+ optional MCP) | ✅ **Integrate** | Compresses agent **output** ~65% (telegraphic style, 4 levels). Covers the output side RTK doesn't. |
-| [code-review-graph](https://github.com/tirth8205/code-review-graph) | ~17.9k | MIT | MCP + CLI | ✅ **Integrate** | Tree-sitter/AST code graph → reads only the blast radius on review. 38×–528× token reduction on large repos. |
-| [token-savior](https://github.com/mibayy/token-savior) | ~0.9k | MIT | MCP + hooks | ✅ **Integrate** | Symbol-index + Bash output compaction (−80%). RTK alternative without a Rust binary. |
-| [claude-token-efficient](https://github.com/drona23/claude-token-efficient) | ~5.5k | MIT | CLAUDE.md drop-in | ✅ **Integrate** | Prompt rules cutting Claude verbosity ~63% output / 17–41% cost. Zero code. |
-| [context-mode](https://github.com/mksglu/context-mode) | ~16.3k | **ELv2** | MCP + hooks | 🔶 **Reference** | Sandboxes tool outputs (315 KB → 5.4 KB), SQLite session continuity. License blocks commercial redistribution. |
-| [token-optimizer](https://github.com/alexgreensh/token-optimizer) (alexgreensh) | ~1.2k | **PolyForm NC** | Plugin | 🔶 **Reference** | Real-time dashboard + quality scoring. Noncommercial license. |
-| [claude-context](https://github.com/zilliztech/claude-context) (zilliztech) | ~11.7k | MIT | MCP + VSCode ext | 🔶 **Reference** | Hybrid semantic search (BM25 + vectors) over the whole codebase. Requires a Milvus/Zilliz vector DB. |
+| [caveman](https://github.com/juliusbrussee/caveman) | ~111k | **Apache-2.0** | Skill (+ optional MCP) | ✅ **Integrate** | Compresses agent **output** ~65% (telegraphic style, 4 levels). Covers the output side RTK doesn't. |
+| [code-review-graph](https://github.com/tirth8205/code-review-graph) | ~32.1k | MIT | MCP + CLI | ✅ **Integrate** | Tree-sitter/AST code graph → reads only the blast radius on review. 38×–528× token reduction on large repos. |
+| [token-savior](https://github.com/mibayy/token-savior) | ~1.2k | MIT | MCP + hooks | ✅ **Integrate** | Symbol-index + Bash output compaction (−80%). RTK alternative without a Rust binary. |
+| [claude-token-efficient](https://github.com/drona23/claude-token-efficient) | ~6.1k | MIT | CLAUDE.md drop-in | ✅ **Integrate** | Prompt rules cutting Claude verbosity ~63% output / 17–41% cost. Zero code. |
+| [claude-hud](https://github.com/jarrodwatts/claude-hud) | ~28.5k | MIT | Status line / monitor | ✅ **Integrate** | Real-time context, agent and todo monitor. Graduated from "Also worth watching" (2026-10-13). Complements `rtk gain`. |
+| [context-mode](https://github.com/mksglu/context-mode) | ~27.6k | **ELv2** (GitHub: `NOASSERTION`, text re-read 2026-10-13) | MCP + hooks | 🔶 **Reference** | Sandboxes tool outputs (315 KB → 5.4 KB), SQLite session continuity. License blocks commercial redistribution. |
+| [token-optimizer](https://github.com/alexgreensh/token-optimizer) (alexgreensh) | ~2.5k | **PolyForm NC** | Plugin | 🔶 **Reference** | Real-time dashboard + quality scoring. Noncommercial license. |
+| [claude-context](https://github.com/zilliztech/claude-context) (zilliztech) | ~12.6k | MIT | MCP + VSCode ext | 🔶 **Reference** | Hybrid semantic search (BM25 + vectors) over the whole codebase. Requires a Milvus/Zilliz vector DB. |
 | [claude-token-optimizer](https://github.com/nadimtuhin/claude-token-optimizer) (nadimtuhin) | ~0.5k | MIT | CLI | ⚪ **Skip** | Essential/supplemental doc split — already native to Claude Craft (`.claude/rules/`, on-demand skills). |
-| [token-optimizer-mcp](https://github.com/ooples/token-optimizer-mcp) (ooples) | ~0.4k | MIT | MCP | ⚪ **Skip** | 95%+ claims unverified; inactive since Nov 2025. |
+| [token-optimizer-mcp](https://github.com/ooples/token-optimizer-mcp) (ooples) | ~0.5k | MIT | MCP | ⚪ **Skip** | 95%+ claims unverified; active again (push 2026-10-13) — re-evaluate at next review. |
 
 Legend: ✅ Integrate (documented + activation recipe) · 🔶 Reference (documented, license/infra caveat) ·
 ⚪ Skip (superseded or unverified).
@@ -40,7 +41,7 @@ Legend: ✅ Integrate (documented + activation recipe) · 🔶 Reference (docume
 
 ## ✅ Recommended — Integrate
 
-These four are MIT-licensed, mature or trivially safe, and cover gaps in Claude Craft's stack.
+These five use permissive OSI licenses (MIT, or Apache-2.0 for caveman — compatible with Claude Craft's MIT-only policy since they are recommended, not bundled), are mature or trivially safe, and cover gaps in Claude Craft's stack.
 
 ### caveman — output compression
 
@@ -55,6 +56,8 @@ git clone https://github.com/juliusbrussee/caveman
 ```
 
 Pairs with the verbosity rules already in [`.claude/rules/12-context-management.md`](../.claude/rules/12-context-management.md).
+
+> **License note (2026-10-13):** caveman's LICENSE is now **Apache-2.0** (previously listed here as MIT). Apache-2.0 is permissive; keep its NOTICE/attribution if you redistribute it.
 
 ### code-review-graph — blast-radius-aware review
 
@@ -100,6 +103,16 @@ worth auditing to harvest any prompt rule not already covered.
 
 ---
 
+### claude-hud — real-time session monitor
+
+MIT, ~28.5k ★ ([repo](https://github.com/jarrodwatts/claude-hud)). Shows context usage, running agents
+and todos live while Claude Code works. Where `rtk gain` reports savings after the fact, claude-hud makes
+context pressure visible *during* the session — a natural trigger for `/compact`, `/clear` or delegation
+(rule 12 thresholds). Install and configure it as a status line by following the repository README; pin
+a release tag.
+
+---
+
 ## 🔶 Reference only — license or infrastructure caveat
 
 > **License compliance.** The tools below are **not** embedded in Claude Craft and **must not** be.
@@ -111,7 +124,7 @@ worth auditing to harvest any prompt rule not already covered.
   aligned with rule 12, but ELv2 forbids offering it as a managed service / redistributing commercially.
   Evaluate for internal use under the ELv2 terms.
 - **token-optimizer** (alexgreensh) ([repo](https://github.com/alexgreensh/token-optimizer)) —
-  **PolyForm Noncommercial 1.0.0**. Real-time dashboard, checkpoint-based session continuity, quality
+  **PolyForm Noncommercial 1.0.0** (GitHub reports `NOASSERTION`; LICENSE text re-read 2026-10-13, plus a `LICENSE-SMALL-BUSINESS.md` grant). Real-time dashboard, checkpoint-based session continuity, quality
   scoring. Free for teams under the noncommercial threshold; commercial use is paid.
 - **claude-context** (zilliztech) ([repo](https://github.com/zilliztech/claude-context)) — MIT, but
   requires an external **Milvus / Zilliz Cloud** vector database. High setup friction; reserve it for
@@ -123,20 +136,20 @@ worth auditing to harvest any prompt rule not already covered.
 
 - **claude-token-optimizer** (nadimtuhin) — splits docs into essential vs. supplemental. Already native
   to Claude Craft via modular `.claude/rules/` and on-demand skills; little marginal value.
-- **token-optimizer-mcp** (ooples) — aggressive "95%+ reduction" claims without recent validation;
-  no release since November 2025.
+- **token-optimizer-mcp** (ooples) — aggressive "95%+ reduction" claims without recent validation.
+  Activity resumed (push on 2026-10-13); claims still unverified — re-evaluate at the 2027-01 review.
 
 ---
 
 ## Multi-model routing pattern (oh-my-claudecode style)
 
-Claude Craft runs exclusively on Claude (Opus 4.8 / Sonnet 4-6 / Haiku 4-5) via the Dynamic Workflows tiering built into Claude Code (2.1.154+, `ultracode` trigger). This covers intra-provider cost optimisation.
+Claude Craft runs exclusively on Claude (Opus 5.5 / Sonnet 5.5 / Haiku 5.5) via the Dynamic Workflows tiering built into Claude Code (2.1.154+, `ultracode` trigger). This covers intra-provider cost optimisation.
 
 A complementary **cross-provider routing** pattern has emerged with tools like **oh-my-claudecode** (~36k ★, [repo](https://github.com/oh-my-claudecode/oh-my-claudecode)): route sub-agents to Gemini CLI (free tier), OpenAI Codex, or other providers based on task type and cost. The pattern is:
 
 ```
-Complex planning   → Claude Opus 4.8  (highest reasoning)
-Standard coding    → Claude Sonnet 4-6 (best value on Claude)
+Complex planning   → Claude Opus 5.5  (highest reasoning)
+Standard coding    → Claude Sonnet 5.5 (best value on Claude)
 Simple ops, search → Gemini CLI / free tier  (zero cost)
 ```
 
@@ -240,16 +253,16 @@ Voir aussi `DIFF-04` dans [`docs/ROADMAP.md`](ROADMAP.md).
 
 ## Also worth watching (from the 2026 roundup)
 
-Evaluated at 2026-06-24 — not yet integrated but flagged for Q3 assessment:
+Evaluated at 2026-10-13 — not yet integrated but flagged for the next assessment (claude-hud graduated to the main table):
 
 | Tool | Status | Integration candidate |
 |------|--------|-----------------------|
 | **claude-health** | Maturing — config health audit | `/team:audit` supplementary check |
-| **claude-hud** | Active — real-time context/agent/todo monitor | Complements `rtk gain`; surface in `/common:setup-rtk` |
+| **claude-context-optimizer**, **capy**, **cxpak**, **llm-router**, **Codeburn**, **context-tax** | New in the awesome-claude-code catalogue (2026-10) — licenses not yet verified | To triage at the 2027-01 review |
 | **claude-subconscious** | Experimental — cross-session memory via MCP | Alternative to `claude-mem` above |
 | **tech-debt-skill** | Stable — tech-debt audit skill | Candidate for `/qa:*` namespace |
 
-> **Graduation path:** any of these may be promoted to the main ✅ Integrate table when: (1) the tool is MIT-licensed, (2) has >1k stars or >6 months of active maintenance, and (3) covers a gap not already addressed in Claude Craft. The Q3 2026 review (2026-09-24) is the next evaluation checkpoint.
+> **Graduation path:** any of these may be promoted to the main ✅ Integrate table when: (1) the tool uses a permissive OSI license (MIT or Apache-2.0), (2) has >1k stars or >6 months of active maintenance, and (3) covers a gap not already addressed in Claude Craft. The 2027-01-13 review is the next evaluation checkpoint.
 
 ---
 
@@ -260,7 +273,7 @@ apply [`.claude/rules/11-security.md`](../.claude/rules/11-security.md):
 
 - **Audit the source** and pin an exact version (no floating `latest`).
 - **Minimal permissions** — grant only the tools/paths the server needs.
-- Prefer Claude Code **v2.1.97+** when combining MCP servers with hooks.
+- Prefer Claude Code **v2.1.260+** when combining MCP servers, plugins and hooks.
 - See [`docs/MCP.md#security`](MCP.md#security) for the full MCP hardening checklist.
 
 > **Non-affiliation.** Claude Craft is not affiliated with any of the projects listed here. Stars,

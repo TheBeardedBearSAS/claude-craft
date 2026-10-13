@@ -13,29 +13,29 @@ import c from './colors.js';
 import { listDirs } from './fs-utils.js';
 import { assertSafeTarget } from './path-safety.js';
 
-// Single source of truth for the security baseline. Bumped from 2.1.47 in v8.3.0
-// after CVE-2025-59536 (CVSS 8.7) cumulative hardening completed in 2.1.97.
-const MIN_CLAUDE_CODE = '2.1.97';
-
 /**
- * Read the recommended Claude Code version from config/versions.yaml.
- * Falls back to hardcoded value if the file is unavailable.
+ * Read a Claude Code version from config/versions.yaml (`claudeCode.<key>`).
+ * Falls back to the given hardcoded value if the file is unavailable.
+ * @param {'minimum'|'recommended'} key
+ * @param {string} fallback
  * @returns {string}
  */
-function loadRecommendedClaudeCodeVersion() {
-  const FALLBACK = '2.1.193';
+function loadClaudeCodeVersion(key, fallback) {
   try {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
     const versionsPath = path.resolve(__dirname, '..', '..', 'config', 'versions.yaml');
-    if (!fs.existsSync(versionsPath)) return FALLBACK;
+    if (!fs.existsSync(versionsPath)) return fallback;
     const parsed = yaml.load(fs.readFileSync(versionsPath, 'utf8'));
-    return parsed?.claudeCode?.recommended ?? FALLBACK;
+    return parsed?.claudeCode?.[key] ?? fallback;
   } catch {
-    return FALLBACK;
+    return fallback;
   }
 }
 
-const RECOMMENDED_CLAUDE_CODE = loadRecommendedClaudeCodeVersion();
+// Security floor: plugin SHA-pin bypass (CVE-2026-86063, fixed 2.1.179), symlink
+// TOCTOU write (CVE-2026-103435, 2.1.129), managed settings bypass (CVE-2026-103012, 2.1.260).
+const MIN_CLAUDE_CODE = loadClaudeCodeVersion('minimum', '2.1.260');
+const RECOMMENDED_CLAUDE_CODE = loadClaudeCodeVersion('recommended', '2.1.296');
 
 /**
  * Compare two semver-ish version strings (`major.minor.patch`).
@@ -140,19 +140,19 @@ function runDoctor(targetPath, deps = {}) {
     failed++;
   }
 
-  // 3. Claude Code installed and >= 2.1.97 (CVE-2025-59536 baseline)
+  // 3. Claude Code installed and >= MIN_CLAUDE_CODE (security baseline)
   const claudeVerRaw = exec('claude --version');
   if (claudeVerRaw) {
     const semver = extractSemver(claudeVerRaw);
     if (semver && semverCmp(semver, MIN_CLAUDE_CODE) < 0) {
       console.log(
-        `  ${c.red}[FAIL]${c.reset} Claude Code ${semver} — requires >= ${MIN_CLAUDE_CODE} (CVE-2025-59536, CVSS 8.7)`
+        `  ${c.red}[FAIL]${c.reset} Claude Code ${semver} — requires >= ${MIN_CLAUDE_CODE} (security fixes: CVE-2026-86063, CVE-2026-103435, CVE-2026-103012)`
       );
       console.log(`         Upgrade: ${c.cyan}npm install -g @anthropic-ai/claude-code@latest${c.reset}`);
       failed++;
     } else if (semver && semverCmp(semver, RECOMMENDED_CLAUDE_CODE) < 0) {
       console.log(
-        `  ${c.yellow}[WARN]${c.reset} Claude Code ${semver} — recommended ${RECOMMENDED_CLAUDE_CODE} (Opus 4.8 + Dynamic Workflows)`
+        `  ${c.yellow}[WARN]${c.reset} Claude Code ${semver} — recommended ${RECOMMENDED_CLAUDE_CODE} (latest permission fixes)`
       );
       warned++;
     } else {

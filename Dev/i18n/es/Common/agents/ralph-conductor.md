@@ -5,6 +5,17 @@ model: opus
 effort: xhigh
 maxTurns: 10
 memory: user
+disallowedTools:
+  - "Bash(rm -rf:*)"
+  - "Bash(dd:*)"
+  - "Bash(mkfs:*)"
+  - "Bash(:(){:|:&};:*)"
+  - "Bash(sudo:*)"
+  - "Bash(chmod 777:*)"
+  - "Bash(curl * | sh*)"
+  - "Bash(wget * | sh*)"
+  - "Bash(git push --force*)"
+  - "Bash(git push -f*)"
 ---
 
 # Agente Ralph Conductor v2.0

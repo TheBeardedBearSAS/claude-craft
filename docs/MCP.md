@@ -538,10 +538,12 @@ Configure MCP tool permissions in `settings.json`:
 
 | CVE | Severity | Version Fixed | Impact |
 |-----|----------|---------------|--------|
-| CVE-2025-59536 | 9.1/10 CVSS | v2.1.51 | Hook command injection via crafted MCP tool inputs |
-| CVE-2026-21852 | 5.3/10 CVSS | v2.0.65 | API key exfiltration via path traversal in hook file resolution |
+| CVE-2025-59536 | 8.7/10 CVSS | v1.0.111 | Command execution before the startup trust dialog (GHSA-4fgq-fpq9-mr3g) |
+| CVE-2026-21852 | 5.3/10 CVSS | v2.0.65 | Data leak via repo environment configuration used before trust confirmation (GHSA-jh7p-qr78-84p7) |
+| CVE-2026-86063 | High | v2.1.179 | Plugin commit SHA pin bypass installs attacker-controlled code (GHSA-pq7j-f95f-qfcv) |
+| CVE-2026-103435 | High | v2.1.129 | Arbitrary file write via symlink following, TOCTOU (GHSA-5j29-h97v-84ch) |
 
-**Recommendation:** Always run Claude Code v2.1.51+ when using MCP servers with hooks.
+**Recommendation:** Always run Claude Code v2.1.260+ (claude-craft security minimum) when using MCP servers with hooks. Since v2.1.292 local stdio MCP servers negotiate protocol 2026-07-28 by default (opt out: `MCP_PROTOCOL_NEGOTIATION=legacy`); since v2.1.296 tool descriptions sent up front are capped at 4,096 characters (`CLAUDE_CODE_MAX_MCP_DESCRIPTION_LENGTH`).
 
 ### MCP Buffer Leak Fix (v2.1.97+)
 

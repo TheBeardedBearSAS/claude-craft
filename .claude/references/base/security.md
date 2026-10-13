@@ -644,14 +644,19 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 
 | CVE | Severite | Version corrigee | Impact |
 |-----|----------|-----------------|--------|
-| CVE-2025-59536 | 8.7/10 CVSS | v2.1.51 | Injection de commandes via inputs MCP dans le pipeline de hooks |
-| CVE-2026-21852 | 5.3/10 CVSS | v2.0.65 | Exfiltration de cles API via traversee de chemin dans la resolution de hooks |
+| CVE-2025-59536 | 8.7/10 CVSS | v1.0.111 | Execution de commandes avant le dialogue de confiance au demarrage (GHSA-4fgq-fpq9-mr3g) |
+| CVE-2026-21852 | 5.3/10 CVSS | v2.0.65 | Fuite de donnees via la configuration d'environnement du depot lue avant confirmation de confiance (GHSA-jh7p-qr78-84p7) |
 | CVE-2026-35020 | High | v2.1.97 | Compound command bypass — permissions not checked on compound bash commands |
 | CVE-2026-35021 | High | v2.1.97 | Network redirect bypass in Bash tool |
 | CVE-2026-35022 | High | v2.1.98 | Env-var prefix injection in Bash tool |
 | N/A | High | v2.1.101 | Command injection via POSIX `which` fallback |
+| CVE-2026-40068 | High | v2.1.84 | Contournement du dialogue de confiance via usurpation de git worktree (GHSA-q5hj-mxqh-vv77) |
+| CVE-2026-103435 | High | v2.1.129 | Ecriture arbitraire de fichier via suivi de symlink, TOCTOU (GHSA-5j29-h97v-84ch) |
+| CVE-2026-55607 | High | v2.1.163 | Evasion du sandbox via confusion de chemin git worktree (GHSA-7835-87q9-rgvv) |
+| CVE-2026-86063 | High | v2.1.179 | Contournement du pin SHA des plugins → installation de code attaquant (GHSA-pq7j-f95f-qfcv) |
+| CVE-2026-103012 | Low | v2.1.260 | Managed settings non appliques avec une cle API stockee (GHSA-gfvf-j8jh-jxxw) |
 
-> **Recommandation:** Toujours utiliser Claude Code v2.1.97+ lorsque des serveurs MCP sont utilises avec des hooks.
+> **Recommandation:** Toujours utiliser Claude Code v2.1.260+ (plancher securite, voir `.claude/COMPATIBILITY.md`) lorsque des serveurs MCP ou plugins sont utilises avec des hooks.
 
 ### CLAUDE.md vs Hooks
 

@@ -354,7 +354,7 @@ Orchestre les sessions Ralph Wiggum v2.0 avec validation DoD adaptative
 
 **Model:** opus · **Effort:** xhigh · **Memory:** user
 
-**Tools:** `Read`, `Glob`, `Grep`, `Edit`, `Write`, `Bash`, `Task`, `WebFetch`, `WebSearch`
+**Tools:** `Read`, `Glob`, `Grep`, `Edit`, `Write`, `Bash`, `Agent`, `WebFetch`, `WebSearch`
 
 **Source:** [`.claude/agents/ralph-conductor.md`](../.claude/agents/ralph-conductor.md)
 
@@ -430,7 +430,7 @@ UI-UX coordination and orchestration
 
 **Model:** sonnet · **Effort:** medium · **Memory:** project
 
-**Tools:** `Read`, `Glob`, `Grep`, `Edit`, `Write`, `Bash`, `Task`, `WebFetch`, `WebSearch`
+**Tools:** `Read`, `Glob`, `Grep`, `Edit`, `Write`, `Bash`, `Agent`, `WebFetch`, `WebSearch`
 
 **Source:** [`.claude/agents/uiux-orchestrator.md`](../.claude/agents/uiux-orchestrator.md)
 

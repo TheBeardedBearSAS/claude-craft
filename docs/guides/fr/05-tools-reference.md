@@ -103,7 +103,7 @@ Claude Code supporte 24 événements de hook (8 ajoutés dans les versions réce
       "matcher": "Bash",
       "hooks": [{
         "type": "command",
-        "command": "echo '$TOOL_OUTPUT' | head -100"
+        "command": "jq -r '.tool_response.stdout // empty' | head -100"
       }]
     }]
   }

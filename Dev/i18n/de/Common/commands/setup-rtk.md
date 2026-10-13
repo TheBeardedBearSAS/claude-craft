@@ -75,9 +75,9 @@ echo "CLAUDE_CODE_FORK_SUBAGENT=${CLAUDE_CODE_FORK_SUBAGENT:-NICHT GESETZT}"
 Falls nicht gesetzt, empfehlen zu `~/.bashrc` (oder `~/.zshrc`) hinzuzufügen:
 
 ```bash
-# Sonnet 4.6 für Sub-Agents verwenden (Exploration, grep, Dateilesen) statt Opus
+# Sonnet 5.5 für Sub-Agents verwenden (Exploration, grep, Dateilesen) statt Opus
 # → 40-60% Kostenreduzierung bei Sub-Agent-Aufrufen
-export CLAUDE_CODE_SUBAGENT_MODEL="sonnet"
+export CLAUDE_CODE_SUBAGENT_MODEL="claude-sonnet-5-5"
 
 # Sub-Agents in isolierten Kontexten ausführen (Claude Code 2.1.117+, siehe COMPATIBILITY.md)
 # → Verhindert Verschmutzung des Hauptkontextfensters durch Sub-Agent-Zwischenzustände

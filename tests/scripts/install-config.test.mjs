@@ -49,7 +49,7 @@ describe('install_config() in install-common-rules.sh', { timeout: 60000 }, () =
 
     const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
     expect(settings.env).toBeDefined();
-    expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toBe('claude-sonnet-4-6');
+    expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toBe('claude-sonnet-5-5');
   });
 
   it('settings.json contains PostCompact hook', () => {

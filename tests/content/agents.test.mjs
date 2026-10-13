@@ -10,7 +10,8 @@ const AGENTS_DIR = path.join(PROJECT_ROOT, '.claude', 'agents');
 const SKILLS_DIR = path.join(PROJECT_ROOT, '.claude', 'skills');
 
 const ALLOWED_MODELS = ['haiku', 'sonnet', 'opus'];
-const VALID_TOOLS = ['Read', 'Glob', 'Grep', 'Write', 'Edit', 'Bash', 'WebFetch', 'WebSearch', 'NotebookEdit', 'Task'];
+// `Task` was renamed `Agent` in Claude Code 2.1.63 — the deprecated alias is rejected on purpose.
+const VALID_TOOLS = ['Read', 'Glob', 'Grep', 'Write', 'Edit', 'Bash', 'WebFetch', 'WebSearch', 'NotebookEdit', 'Agent'];
 
 // Agents that are known to not use frontmatter (legacy format).
 // This list should shrink over time as agents are migrated.

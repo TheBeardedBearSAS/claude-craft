@@ -63,16 +63,16 @@ Add to your project's `.claude/settings.json`:
   "hooks": {
     "SessionStart": [{
       "command": ".bmad/hooks/sprint-context.sh",
-      "timeout": 5000
+      "timeout": 5
     }],
     "PreToolUse": [{
       "command": ".bmad/hooks/story-status.sh",
       "once": true,
-      "timeout": 3000
+      "timeout": 3
     }],
     "Stop": [{
       "command": ".bmad/hooks/quality-gate.sh",
-      "timeout": 10000
+      "timeout": 10
     }]
   }
 }

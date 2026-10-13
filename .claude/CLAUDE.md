@@ -170,7 +170,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version:** 2.1.97 (CVE-2025-59536 patched) | **Recommended:** 2.1.193 (Opus 4.8, Artifacts, `claude mcp login`, `/cd`, nested subagents — Week 26) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
+**Minimum Version:** 2.1.260 (CVE-2026-86063 / CVE-2026-103435 / CVE-2026-103012 patched) | **Recommended:** 2.1.296 (Opus 5.5, Sonnet 5.5, Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
 
 ---
 
@@ -188,8 +188,8 @@ See `.claude/rules/12-context-management.md` for detailed guidance.
 | **Parallel worktrees** | Use `git worktree` for concurrent sessions |
 | **Hooks** | CLAUDE.md = suggestions. Hooks = requirements |
 | **`/memory`** | Persistent session learnings across conversations (v2.1.59+) |
-| **Pointers over copies** | Use `@path` references instead of copying code into CLAUDE.md |
+| **Pointers over copies** | Reference files instead of copying code; `@path` imports still load at launch — plain paths or `paths:` rules load on demand |
 | **Token optimization** | Use `/common:setup-rtk` for 55-65% token savings |
-| **Sub-agent model** | Set `CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-5` for cost savings |
+| **Sub-agent model** | Set `CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-5-5` for cost savings |
 
 See `.claude/templates/hooks/` for ready-to-use hook templates.

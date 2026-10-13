@@ -70,6 +70,6 @@ Voir les templates corrects dans `.claude/templates/hooks/block-dangerous-comman
 ## MCP & Plugins
 
 Avant d'installer un serveur MCP tiers : code source auditable, version pinee, permissions minimales.
-Utiliser Claude Code **v2.1.97+** minimum avec des serveurs MCP + hooks.
+Utiliser Claude Code **v2.1.260+** minimum avec des serveurs MCP + hooks + plugins (CVE-2026-86063 pin SHA plugins, CVE-2026-103435 symlink TOCTOU, CVE-2026-103012 managed settings).
 
 > Details complets, checklists, CVE, patterns supply-chain : `@.claude/references/base/security.md`

@@ -21,10 +21,11 @@ See `../../../../docs/ECOSYSTEM.md` for the full catalogue, licenses, and `.mcp.
 
 | Tool | License | Use it for | Rec |
 |------|---------|-----------|-----|
-| **caveman** | MIT | Compress agent **output** ~65% | ✅ Integrate |
+| **caveman** | Apache-2.0 | Compress agent **output** ~65% | ✅ Integrate |
 | **code-review-graph** | MIT | AST graph → read only the blast radius on review | ✅ Integrate |
 | **token-savior** | MIT | Symbol index + Bash output compaction (−80%), RTK alternative | ✅ Integrate |
 | **claude-token-efficient** | MIT | Anti-verbosity CLAUDE.md drop-in | ✅ Integrate |
+| **claude-hud** | MIT | Real-time context/agent/todo monitor (status line) | ✅ Integrate |
 | **context-mode** | ELv2 | Output sandboxing — license blocks commercial redistribution | 🔶 Reference |
 | **claude-context** | MIT | Semantic search; needs a Milvus/Zilliz vector DB | 🔶 Reference |
 

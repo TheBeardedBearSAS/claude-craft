@@ -36,13 +36,13 @@ La fenetre de contexte est **LA ressource critique** dans Claude Code. Chaque to
 
 ## Regles de taille CLAUDE.md
 
-> **CLAUDE.md principal: 150-200 lignes maximum.**
+> **CLAUDE.md principal : moins de 200 lignes** (cible Anthropic : « under 200 lines per CLAUDE.md file »).
 > Chaque instruction supplementaire dilue l'attention sur les instructions existantes.
 
 ```
 .claude/
-  CLAUDE.md              <- Resume (150-200 lignes max)
-  rules/                 <- Regles detaillees (chargees a la demande)
+  CLAUDE.md              <- Résumé (< 200 lignes)
+  rules/                 <- Règles détaillées (chargées au lancement, sauf celles avec `paths:` → à la demande)
   references/            <- Documentation technique
   skills/                <- Competences a la demande
 ```
@@ -50,7 +50,7 @@ La fenetre de contexte est **LA ressource critique** dans Claude Code. Chaque to
 | Pratique | Description |
 |----------|-------------|
 | **CLAUDE.md court** | Vue d'ensemble, liens vers les regles |
-| **Rules modulaires** | Un fichier par sujet dans `.claude/rules/` |
+| **Rules modulaires** | Un fichier par sujet dans `.claude/rules/`. **Sans** frontmatter `paths:`, une rule est chargée au lancement (même priorité que `.claude/CLAUDE.md`) ; **avec** `paths:` (globs), elle n'est chargée que lorsque Claude touche des fichiers correspondants |
 | **References separees** | Documentation technique dans `.claude/references/` |
 | **Skills a la demande** | Competences chargees uniquement quand necessaires |
 
@@ -155,13 +155,15 @@ La status line affiche le pourcentage de contexte utilise.
 
 | Commande | Modele | ID canonique | Usage |
 |----------|--------|--------------|-------|
-| `/effort low` | Haiku 4.5 | `claude-haiku-4-5-20251001` | Taches simples, lookups, classification |
-| `/effort medium` | Sonnet 5 | `claude-sonnet-5` | Implementation standard, taches agentiques (defaut sous-agents) |
-| `/effort high` | Opus 4.8 | `claude-opus-4-8` | Raisonnement complexe, architecture |
-| `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | `claude-opus-4-8` | Decisions critiques, migrations complexes, ADR |
-| `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | `claude-opus-4-8` | Mode debit code maximal — pipelines automatises, generation massive |
+| `/effort low` | Haiku 5.5 | `claude-haiku-5-5` | Taches simples, lookups, classification |
+| `/effort medium` | Sonnet 5.5 | `claude-sonnet-5-5` | Implementation standard, taches agentiques (defaut sous-agents) |
+| `/effort high` | Opus 5.5 | `claude-opus-5-5` | Raisonnement complexe, architecture |
+| `/effort xhigh` | Opus 5.5 (extended thinking) | `claude-opus-5-5` | Decisions critiques, migrations complexes, ADR |
+| `/effort ultracode` | Opus 5.5 (toggle séparé depuis v2.1.284, Dynamic Workflows) | `claude-opus-5-5` | Mode debit code maximal — pipelines automatises, generation massive |
 
-> **⚠️ Fable 5 / Mythos 5 suspendus (2026-06-12) :** access coupe par une directive export-control US, toujours offline. Ne plus recommander `claude-fable-5` ni `claude-mythos-5`. Router les agents creatifs/narratifs vers **Opus 4.8** (`claude-opus-4-8`) ou **Sonnet 4.6** (`claude-sonnet-4-6`) en attendant une eventuelle restauration.
+> **Effort par défaut (doc Anthropic, octobre 2026) :** `medium` sur Opus 5.5 et Haiku 5.5 ; `high` sur Sonnet 5.5, Fable 5.1 et les modèles *legacy* (Sonnet 5, Opus 4.8). Monter explicitement à `high`/`xhigh` sur Opus 5.5 pour les tâches critiques.
+
+> **Fable 5.1 / Mythos :** **Fable 5.1** (`claude-fable-5-1`, $10/$50 par M tokens) est un modèle courant — pertinent pour les agents créatifs/narratifs ; Fable 5 reste disponible (*legacy*). **Mythos 5 / 5.1** sont en disponibilité limitée (organisations vérifiées via le Cyber Verification Program) — ne pas les recommander par défaut.
 
 **Alerte d'inactivite** (v2.1.84+): Apres 75+ minutes, Claude suggere `/clear`.
 
@@ -234,8 +236,8 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 
 ## Bonnes pratiques de redaction CLAUDE.md
 
-- **Pointeurs > copies:** Utiliser `@chemin` pour referencer des fichiers au lieu de copier du code
-- **Emphase:** `IMPORTANT`, `VOUS DEVEZ`, `JAMAIS` pour les contraintes non-negociables
+- **Pointeurs > copies (sans illusion de gain de contexte) :** un import `@chemin` évite la duplication, mais le fichier importé est **chargé au lancement** — il ne réduit pas le coût en contexte. Pour un chargement à la demande, citer le chemin sans `@` (Claude le lira au besoin) ou utiliser une rule avec `paths:` / un skill
+- **Emphase avec parcimonie :** `IMPORTANT`, `VOUS DEVEZ`, `JAMAIS` réservés aux quelques contraintes réellement non-négociables — si tout est souligné, plus rien ne ressort (recommandation Anthropic)
 - **Maintenance:** Revoir chaque trimestre, traiter comme du code de production
 
 | Fichier | Portee | Usage |
@@ -271,10 +273,10 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 
 | Commande | Modele | ID canonique | Usage |
 |----------|--------|--------------|-------|
-| `/model haiku` | Haiku 4.5 | `claude-haiku-4-5-20251001` | Taches simples, classification |
-| `/model sonnet` | Sonnet 5 | `claude-sonnet-5` | Taches standard, agentiques — sorti 2026-06-30, intro $2/$10 jusqu'au 2026-08-31 (predecesseur : `claude-sonnet-4-6`) |
-| `/model opus` | Opus 4.8 | `claude-opus-4-8` | Raisonnement complexe, architecture |
-| `/model opusplan` | Opus 4.8 (plan) / Sonnet 4.6 (execute) | — | **Tiering dynamique** : Opus pour le Plan Mode, Sonnet pour l'execution — optimise le ratio cout/qualite sur les taches longues |
+| `/model haiku` | Haiku 5.5 | `claude-haiku-5-5` | Taches simples, classification — $0.10/$0.50 (≤ 100K tokens de prompt) |
+| `/model sonnet` | Sonnet 5.5 | `claude-sonnet-5-5` | Taches standard, agentiques — $2/$10 (predecesseur *legacy* : `claude-sonnet-5`) |
+| `/model opus` | Opus 5.5 | `claude-opus-5-5` | Raisonnement complexe, architecture — $4/$20 |
+| `/model opusplan` | Opus 5.5 (plan) / Sonnet 5.5 (execute) | — | **Tiering dynamique** : Opus pour le Plan Mode, Sonnet pour l'execution — optimise le ratio cout/qualite sur les taches longues |
 
 ---
 
@@ -378,12 +380,12 @@ Templates disponibles dans `.claude/templates/hooks/`: `output-filter.json`, `pr
 Reglage **fiabilite + cout** : jusqu'a 3 modeles de repli essayes dans l'ordre quand le primaire est surcharge/indisponible (flag equivalent `--fallback-model`, applique aussi aux sessions interactives).
 
 ```json
-{ "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5-20251001"] }
+{ "fallbackModel": ["claude-sonnet-5-5", "claude-haiku-5-5"] }
 ```
 
 Pour les 4 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor), ce repli `opus → sonnet → haiku` evite les interruptions en pic de charge Opus sans degrader le travail courant. Exemple pret a l'emploi dans `.claude/settings.local.json.example`.
 
-**IDs canoniques (juin 2026) :** `claude-opus-4-8` | `claude-sonnet-5` (sorti 2026-06-30, intro $2/$10 → $3/$15 au 2026-08-31 ; predecesseur `claude-sonnet-4-6`) | `claude-haiku-4-5-20251001`. _(Fable 5 / Mythos 5 suspendus depuis 2026-06-12 — ne pas recommander.)_
+**IDs canoniques (octobre 2026) :** `claude-opus-5-5` ($4/$20) | `claude-sonnet-5-5` ($2/$10) | `claude-haiku-5-5` ($0.10/$0.50) | `claude-fable-5-1` ($10/$50). *Legacy* toujours disponibles : `claude-opus-4-8`, `claude-sonnet-5` ($2/$10, tarif devenu standard), `claude-haiku-4-5-20251001`, `claude-fable-5`. Source : [models overview](https://platform.claude.com/docs/en/about-claude/models/overview).
 
 ---
 
@@ -405,7 +407,7 @@ En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit de
 
 | Outil | Licence | Angle | Reco |
 |-------|---------|-------|------|
-| **caveman** | MIT | Compression des réponses (output) ~65 % | ✅ Intégrer |
+| **caveman** | Apache-2.0 | Compression des réponses (output) ~65 % | ✅ Intégrer |
 | **code-review-graph** | MIT | Graphe AST, lecture du blast radius (−38× à −528×) | ✅ Intégrer |
 | **token-savior** | MIT | Index symbolique + compaction Bash (−80 %) | ✅ Intégrer |
 | **claude-token-efficient** | MIT | Règles CLAUDE.md anti-verbosité (~63 % output) | ✅ Intégrer |

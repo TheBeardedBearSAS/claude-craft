@@ -41,15 +41,15 @@ A janela de contexto e **O recurso critico** no Claude Code. Cada token conta. U
 
 ### Limite recomendado
 
-> **CLAUDE.md principal: 150-200 linhas maximo.**
+> **CLAUDE.md principal: menos de 200 linhas (meta da Anthropic).**
 > Cada instrucao adicional dilui a atencao nas instrucoes existentes.
 
 ### Estrategia de modularidade
 
 ```
 .claude/
-  CLAUDE.md              <- Resumo (150-200 linhas max)
-  rules/                 <- Regras detalhadas (carregadas sob demanda)
+  CLAUDE.md              <- Resumo (menos de 200 linhas)
+  rules/                 <- Regras detalhadas (carregadas no arranque; a pedido com frontmatter `paths:`)
     01-workflow-analysis.md
     04-solid-principles.md
     05-kiss-dry-yagni.md
@@ -57,6 +57,8 @@ A janela de contexto e **O recurso critico** no Claude Code. Cada token conta. U
   references/            <- Documentacao tecnica
   skills/                <- Competencias sob demanda
 ```
+
+> **Nota:** os arquivos `.claude/rules/*.md` sem frontmatter `paths:` são carregados no arranque com a mesma prioridade que `.claude/CLAUDE.md`. Apenas as regras com globs `paths:` são carregadas a pedido, quando Claude trabalha em arquivos correspondentes.
 
 ### Boas praticas
 
@@ -352,11 +354,14 @@ Ajustar o nível de esforço do modelo de acordo com a complexidade da tarefa:
 
 | Comando | Modelo | Uso |
 |---------|--------|-----|
-| `/effort low` | Haiku 4.5 | Tarefas simples, lookups, classificação |
-| `/effort medium` | Sonnet 4.6 | Implementação padrão |
-| `/effort high` | Opus 4.8 | Raciocínio complexo, arquitetura |
-| `/effort xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | Decisões críticas, migrações complexas, ADR |
-| `/effort ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | Modo de máximo débito de código — pipelines automatizados, geração massiva |
+| `/effort low` | Haiku 5.5 | Tarefas simples, lookups, classificação |
+| `/effort medium` | Sonnet 5.5 | Implementação padrão |
+| `/effort high` | Opus 5.5 | Raciocínio complexo, arquitetura |
+| `/effort xhigh` | Opus 5.5 (extended thinking) | Decisões críticas, migrações complexas, ADR |
+| `/effort ultracode` | Opus 5.5 (toggle separado desde v2.1.284, Dynamic Workflows) | Modo de máximo débito de código — pipelines automatizados, geração massiva |
+
+> **Esforço padrão por modelo:** medium no Opus 5.5 e Haiku 5.5; high no Sonnet 5.5, Fable 5.1 e modelos legacy.
+> **Fable 5.1** (`claude-fable-5-1`, $10/$50 por Mtok) é um modelo atual, adequado para agentes criativos/narrativos. **Mythos** tem disponibilidade limitada (apenas Cyber Verification Program).
 
 ### Alerta de inatividade (v2.1.84+)
 
@@ -539,17 +544,17 @@ CLAUDE.local.md
 
 ### Preferir ponteiros sobre copias
 
-Nao copiar codigo no CLAUDE.md — ele se torna obsoleto. Usar a sintaxe `@caminho` para referenciar arquivos:
+Não copiar código no CLAUDE.md — ele se torna obsoleto. Atenção: os imports `@caminho` são carregados no arranque junto com o arquivo que os importa: evitam duplicação mas **não reduzem** o custo de contexto. Para carga a pedido, citar o caminho sem `@`, ou usar uma regra com frontmatter `paths:` / um skill:
 
 ```markdown
 # No CLAUDE.md:
-Ver @.claude/references/symfony/CLAUDE.md para as convencoes Symfony.
-Ver @docs/API.md para a documentacao da API.
+Ver @.claude/references/symfony/CLAUDE.md para as convencoes Symfony.   # sempre necessário: import @
+Documentação da API pontual: docs/API.md                                 # a pedido: caminho simples, sem @
 ```
 
 ### Enfase para regras criticas
 
-Usar `IMPORTANT`, `VOCE DEVE`, `NUNCA` para restricoes nao negociaveis:
+Usar `IMPORTANT`, `VOCE DEVE`, `NUNCA` com moderação, reservados para as poucas restrições realmente não negociáveis — se tudo é enfatizado, nada se destaca (recomendação da Anthropic):
 
 ```markdown
 IMPORTANT: Nunca modificar as migracoes existentes.
@@ -617,10 +622,10 @@ Usar `/model` para trocar de modelo de acordo com a complexidade da tarefa:
 
 | Comando | Modelo | Uso |
 |---------|--------|-----|
-| `/model haiku` | Haiku 4.5 | Tarefas simples, classificação |
-| `/model sonnet` | Sonnet 4.6 | Tarefas padrão, implementação |
-| `/model opus` | Opus 4.8 | Raciocínio complexo, arquitetura |
-| `/model opusplan` | Opus 4.8 (plano) / Sonnet 4.6 (execução) | **Tiering dinâmico**: Opus para o Plan Mode, Sonnet para a execução — otimiza a relação custo/qualidade em tarefas longas |
+| `/model haiku` | Haiku 5.5 | Tarefas simples, classificação |
+| `/model sonnet` | Sonnet 5.5 | Tarefas padrão, implementação |
+| `/model opus` | Opus 5.5 | Raciocínio complexo, arquitetura |
+| `/model opusplan` | Opus 5.5 (plano) / Sonnet 5.5 (execução) | **Tiering dinâmico**: Opus para o Plan Mode, Sonnet para a execução — otimiza a relação custo/qualidade em tarefas longas |
 
 ### Filtragem de saida via hooks PostToolUse
 
@@ -631,11 +636,16 @@ Usar hooks PostToolUse para filtrar saidas verbosas antes que Claude as processe
   "hooks": {
     "PostToolUse": [{
       "matcher": "Bash",
-      "command": "echo '$TOOL_OUTPUT' | grep -A 5 -E '(FAIL|ERROR|WARN)' || echo 'All clear'"
+      "hooks": [{
+        "type": "command",
+        "command": "jq -r '.tool_response.stdout // empty' | grep -A 5 -E '(FAIL|ERROR|WARN)' || echo 'All clear'"
+      }]
     }]
   }
 }
 ```
+
+> O payload do hook chega como JSON via stdin (`$TOOL_OUTPUT` / `$TOOL_INPUT` não são variáveis de ambiente); lê-lo com `jq`.
 
 Reducao potencial: 90%+ para logs verbosos.
 
@@ -737,7 +747,7 @@ Os arquivos sao fundidos em ordem alfabetica, permitindo que as equipes sobrepon
 Configuração de **confiabilidade + custo**: até 3 modelos de fallback tentados em ordem quando o primário está sobrecarregado/indisponível (flag equivalente `--fallback-model`, aplica-se também a sessões interativas).
 
 ```json
-{ "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5"] }
+{ "fallbackModel": ["claude-sonnet-5-5", "claude-haiku-5-5"] }
 ```
 
 Para os 5 agentes `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), este fallback `opus → sonnet → haiku` evita interrupções em picos de carga do Opus sem degradar o trabalho atual. Exemplo pronto em `.claude/settings.local.json.example`.
@@ -792,7 +802,7 @@ Além do RTK e dos hooks nativos, o ecossistema do Claude Code oferece ferrament
 
 | Ferramenta | Licença | Ângulo | Rec |
 |------------|---------|--------|-----|
-| **caveman** | MIT | Compressão das respostas (output) ~65 % | ✅ Integrar |
+| **caveman** | Apache-2.0 | Compressão das respostas (output) ~65 % | ✅ Integrar |
 | **code-review-graph** | MIT | Grafo AST, leitura do blast radius (−38× a −528×) | ✅ Integrar |
 | **token-savior** | MIT | Índice simbólico + compactação do Bash (−80 %) | ✅ Integrar |
 | **claude-token-efficient** | MIT | Regras CLAUDE.md anti-verbosidade (~63 % output) | ✅ Integrar |

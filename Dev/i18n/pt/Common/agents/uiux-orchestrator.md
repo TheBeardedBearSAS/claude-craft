@@ -4,8 +4,17 @@ description: UI-UX coordination and orchestration
 model: sonnet
 effort: medium
 maxTurns: 10
-tools: [Read, Glob, Grep, Edit, Write, Bash, Task, WebFetch, WebSearch]
+tools: [Read, Glob, Grep, Edit, Write, Bash, Agent, WebFetch, WebSearch]
 permissionMode: default
+disallowedTools:
+  - "Bash(rm -rf:*)"
+  - "Bash(dd:*)"
+  - "Bash(mkfs:*)"
+  - "Bash(:(){:|:&};:*)"
+  - "Bash(sudo:*)"
+  - "Bash(chmod 777:*)"
+  - "Bash(curl * | sh*)"
+  - "Bash(wget * | sh*)"
 ---
 
 # Agente Orquestrador UI/UX

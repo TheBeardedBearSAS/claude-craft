@@ -151,7 +151,7 @@ Tous les events suivent le format JSON :
     "user": "flavien.metivier@gmail.com",
     "stack": "symfony",
     "repository": "https://github.com/acme/api",
-    "claudeModel": "claude-opus-4-8"
+    "claudeModel": "claude-opus-5-5"
   }
 }
 ```

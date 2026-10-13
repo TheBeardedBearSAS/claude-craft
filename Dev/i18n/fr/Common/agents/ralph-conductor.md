@@ -5,8 +5,19 @@ model: opus
 effort: xhigh
 maxTurns: 10
 memory: user
-tools: [Read, Glob, Grep, Edit, Write, Bash, Task, WebFetch, WebSearch]
+tools: [Read, Glob, Grep, Edit, Write, Bash, Agent, WebFetch, WebSearch]
 permissionMode: default
+disallowedTools:
+  - "Bash(rm -rf:*)"
+  - "Bash(dd:*)"
+  - "Bash(mkfs:*)"
+  - "Bash(:(){:|:&};:*)"
+  - "Bash(sudo:*)"
+  - "Bash(chmod 777:*)"
+  - "Bash(curl * | sh*)"
+  - "Bash(wget * | sh*)"
+  - "Bash(git push --force*)"
+  - "Bash(git push -f*)"
 ---
 
 # Agent Ralph Conductor v2.0

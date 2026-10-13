@@ -37,7 +37,7 @@ This comprehensive tutorial guides you through adding Claude-Craft to a project 
 - [ ] You have committed all current changes
 - [ ] You have write access to the project directory
 - [ ] Node.js 20+ installed (for NPX method)
-- [ ] Claude Code installed (recommended: v2.1.193, minimum: v2.1.97 — CVE-2025-59536 patched)
+- [ ] Claude Code installed (recommended: v2.1.296, minimum: v2.1.260 — security baseline)
 
 ### When NOT to Install
 
@@ -733,7 +733,7 @@ If you are upgrading an existing Claude-Craft installation to v8.7.1:
 
 | Feature | Minimum Version |
 |---------|----------------|
-| Core Claude-Craft | v2.1.97 (CVE-2025-59536 patched) |
+| Core Claude-Craft | v2.1.260 (security baseline) |
 | `/effort`, `/model` | v2.1.72 |
 | `/context` | v2.1.74 |
 | Agent frontmatter | v2.1.78 |

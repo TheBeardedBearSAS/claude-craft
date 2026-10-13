@@ -52,6 +52,12 @@ const SHOWCASE_FILES = [
   'Dev/i18n/es/Common/templates/settings.json.template',
   'Dev/i18n/de/Common/templates/settings.json.template',
   'Dev/i18n/pt/Common/templates/settings.json.template',
+  // Fichiers à versions infra/modèles explicites (audit d'alignement 2026-10-13)
+  '.claude/agents/devops-engineer.md',
+  '.claude/references/symfony/docker.md',
+  '.claude/references/laravel/tooling.md',
+  '.claude/templates/AGENTS.md.template',
+  '.claude/settings.json',
 ];
 for (const rel of SHOWCASE_FILES) {
   const abs = path.join(ROOT, rel);

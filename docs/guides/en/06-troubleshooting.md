@@ -546,8 +546,10 @@ cat .claude/settings.json | jq '.hooks.PreCompact'
 
 ### Security-Related Hook Failures
 
-If using MCP servers with hooks, ensure Claude Code v2.1.97+ to avoid known CVEs:
-- CVE-2025-59536: Command injection via MCP inputs in hook pipeline
+If using MCP servers with hooks, ensure Claude Code v2.1.260+ to avoid known CVEs:
+- CVE-2025-59536: Command execution before the startup trust dialog
+- CVE-2026-86063: Plugin commit SHA pin bypass (fixed 2.1.179)
+- CVE-2026-103435: Arbitrary file write via symlink, TOCTOU (fixed 2.1.129)
 - CVE-2026-35020: Compound command bypass
 - CVE-2026-35022: Env-var prefix injection
 

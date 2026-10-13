@@ -351,7 +351,7 @@ Helps with:
 
 All 22 common and reviewer agents now include optimized frontmatter:
 
-- **Effort control**: Each agent specifies `effort: low|medium|high|xhigh|max` to optimize reasoning depth (`xhigh`/`max` since Claude Code 2.1.111+/2.1.154 with Opus 4.8)
+- **Effort control**: Each agent specifies `effort: low|medium|high|xhigh|max` to optimize reasoning depth (`xhigh`/`max` since Claude Code 2.1.111+/2.1.154 — Opus 4.8 then, Opus 5.5 today)
 - **Persistent memory**: 18 agents use `memory: user` or `memory: project` for cross-session knowledge
 - **Model distribution** (31 agent files): **4 opus + xhigh** (critical reasoning — database-architect, migration-specialist, ralph-conductor, security-auditor), **14 sonnet** (standard common agents + tdd-coach + performance-auditor + research-assistant, on Sonnet for the right cost/quality balance), **14 haiku + low** (all 12 tech reviewers + accessibility-expert, cost-optimizer). Opus reserved for high-stakes work; reviewers stay on haiku for cost-efficient read-only review.
 
@@ -1391,7 +1391,7 @@ Agent content...
 | `name` | Yes | Agent identifier (used with @mention) |
 | `description` | Yes | Brief description shown in agent discovery |
 | `model` | No | `haiku` \| `sonnet` \| `opus` — model routing for cost/quality |
-| `effort` | No | `low` \| `medium` \| `high` \| `xhigh` \| `max` — reasoning depth (`xhigh`/`max` need Opus 4.8) |
+| `effort` | No | `low` \| `medium` \| `high` \| `xhigh` \| `max` — reasoning depth (`xhigh`/`max` need an Opus-class model, e.g. Opus 5.5) |
 | `memory` | No | Memory scope: `user`, `project`, or `local` (v2.1.33+) |
 | `tools` | No | Allowed tools, including `Task(agent_type)` (v2.1.33+) |
 | `disallowedTools` | No | Denied tools (camelCase); `disallowed-tools` kebab-case also accepted (v2.1.152+) |

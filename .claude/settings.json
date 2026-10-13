@@ -1,12 +1,12 @@
 {
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-5",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-5-5",
     "CLAUDE_CODE_FORK_SUBAGENT": "1",
     "ENABLE_PROMPT_CACHING_1H": "1"
   },
   "fallbackModel": [
-    "claude-sonnet-5",
-    "claude-haiku-4-5-20251001"
+    "claude-sonnet-5-5",
+    "claude-haiku-5-5"
   ],
   "hooks": {
     "PreToolUse": [
