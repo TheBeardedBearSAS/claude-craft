@@ -142,8 +142,6 @@ project/
 
 ```yaml
 # docker-compose.yml
-version: "3.8"
-
 services:
   # ═══════════════════════════════════════════════════════════
   # REVERSE PROXY

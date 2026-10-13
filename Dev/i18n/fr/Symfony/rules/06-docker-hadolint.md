@@ -548,8 +548,6 @@ CMD ["php-fpm"]
 ### docker-compose.yml (Production-ready)
 
 ```yaml
-version: '3.8'
-
 services:
   # PHP-FPM
   php:
@@ -668,8 +666,6 @@ networks:
 ### compose.override.yaml (Local)
 
 ```yaml
-version: '3.8'
-
 # Overrides locaux (gitignored)
 services:
   php:

@@ -68,7 +68,8 @@ Extract and clarify:
    ```
    Application uses prepared statements?
    ├── Yes, cannot disable → Session mode
-   ├── Yes, can use DEALLOCATE ALL → Transaction mode + server_reset_query
+   ├── Yes, protocol-level (extended protocol) → Transaction mode + max_prepared_statements (default 200 since 1.24)
+   ├── Yes, SQL-level PREPARE, can use DEALLOCATE ALL → Transaction mode + server_reset_query
    └── No
        ├── Uses SET/session variables? → Session mode (or transaction + reset_query)
        ├── Uses LISTEN/NOTIFY? → Session mode
@@ -264,7 +265,15 @@ default_pool_size = 20
 | No reserve pool | Bursts cause connection failures | Set reserve_pool_size = 25% of default |
 | PgBouncer per app instance | Multiplied pools, no sharing | Shared PgBouncer instance(s) |
 | No server_reset_query | Session state leaks between clients | DISCARD ALL for transaction mode |
-| Ignoring prepared statements | Errors in transaction mode | Test with app, use DEALLOCATE ALL or session mode |
+| Ignoring prepared statements | Errors in transaction mode | Test with app, use max_prepared_statements, DEALLOCATE ALL or session mode |
+
+## PgBouncer 1.26 Notes
+
+- **Security**: 1.26.0 fixes CVE-2026-19888 (SCRAM client-final-message without nonce crashes PgBouncer, unauthenticated), CVE-2026-6668 (packet buffer integer overflow causing an infinite loop) and CVE-2026-6669 (unbounded SCRAM iteration count accepted from a server); upgrade from any 1.25.x.
+- **Prepared statements**: `max_prepared_statements` is 200 by default since 1.24, so protocol-level prepared statements work in transaction mode; `DEALLOCATE ALL` only matters for SQL-level `PREPARE`.
+- **Tracked parameters**: `search_path` (PostgreSQL 18+) and `default_transaction_read_only` are tracked by default, so `SET` no longer leaks between clients in transaction mode.
+- **New settings**: `pool_idle_timeout` (disabled by default) removes unused pools; `query_wait_timeout` can be set per user and per database; `SHOW STATS` exposes `client_login_count`.
+- **Removed**: online restart (`-R`), `SHOW FDS` and `SUSPEND`; use rolling restarts with `so_reuseport`.
 
 ## Documentation Template
 

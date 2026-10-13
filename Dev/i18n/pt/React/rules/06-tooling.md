@@ -398,8 +398,6 @@ http {
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
-
 services:
   # Frontend React
   frontend:

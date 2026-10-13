@@ -493,8 +493,6 @@ WORKDIR /var/www/html
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
-
 services:
   php:
     build:

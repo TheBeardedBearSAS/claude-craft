@@ -82,8 +82,6 @@ CMD ["flutter", "test"]
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
-
 services:
   flutter:
     build:

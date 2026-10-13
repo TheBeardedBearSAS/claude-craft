@@ -54,7 +54,7 @@ ESTRATEGIA DE DESPLIEGUE
 
 Metodo: {Docker Compose / K8s Standalone / K8s Sidecar / Systemd}
 HA: {Active-passive / Multiples replicas / Instancia unica}
-Imagen: bitnami/pgbouncer:1.25.1
+Imagen: edoburu/pgbouncer:v1.26.0-p0
 
 | Decision | Eleccion | Justificacion |
 |----------|----------|---------------|

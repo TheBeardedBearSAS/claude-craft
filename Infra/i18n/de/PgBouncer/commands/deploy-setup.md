@@ -54,7 +54,7 @@ DEPLOYMENT-STRATEGIE
 
 Methode: {Docker Compose / K8s Standalone / K8s Sidecar / Systemd}
 HA: {Active-Passive / Mehrere Replicas / Einzelinstanz}
-Image: bitnami/pgbouncer:1.25.1
+Image: edoburu/pgbouncer:v1.26.0-p0
 
 | Entscheidung | Wahl | Begruendung |
 |-------------|------|-------------|
