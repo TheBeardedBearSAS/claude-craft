@@ -31,7 +31,9 @@ Identifier :
 - Index et contraintes
 - Validations
 
-### Étape 2 : Model SQLAlchemy 2.0
+### Étape 2 : Model SQLAlchemy 2.1
+
+> **Migration 2.0 → 2.1 (points majeurs) :** Python 3.11+ requis ; `greenlet` n'est plus installé par défaut (asyncio : extra `sqlalchemy[asyncio]`) ; pilote PostgreSQL par défaut = psycopg 3 ; autoflush de `Session` désormais inconditionnel (y compris Core/texte) ; `Select.filter_by()` lève `AmbiguousColumnError` si le nom est ambigu ; défauts des dataclasses mappées fournis via descripteur. Source : docs.sqlalchemy.org/en/21/changelog/migration_21.html
 
 ```python
 # app/models/{model}.py

@@ -538,7 +538,7 @@ pip-audit --fix
 # pyproject.toml - Fixar versoes para seguranca
 [project]
 dependencies = [
-    "fastapi>=0.115.0,<0.116.0",
+    "fastapi>=0.143.0,<1.0.0",
     "pydantic>=2.10.0,<3.0.0",
     "sqlalchemy>=2.0.0,<3.0.0",
 ]

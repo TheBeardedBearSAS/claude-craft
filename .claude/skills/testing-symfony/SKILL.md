@@ -6,20 +6,20 @@ context: fork
 
 # Stratégie de Tests Symfony 8.1 / PHP 8.5
 
-**Versions :** Symfony 8.1+ | PHP 8.5 | Pest 4.5+ | PHPUnit 12 | Playwright
+**Versions :** Symfony 8.1+ | PHP 8.5 | Pest 5 | PHPUnit 13 | Playwright
 
-Abandonner Panther (lourd) et Behat (verbeux) — Pest 4 intègre tout nativement.
+Pest 5 (PHP 8.4+, PHPUnit 13) intègre nativement le test navigateur (Playwright) : plus besoin de Panther pour l'E2E. Behat (4.x, maintenu) reste pertinent pour le BDD Gherkin ; sinon préférer des tests Pest descriptifs.
 
 ## Stack recommandée 2026
 
 | Type | Outil | Usage |
 |------|-------|-------|
-| **Unit/Integration** | **Pest 4.5+** (PHPUnit 12, arch tests) | Tests backend Symfony |
-| **Browser/E2E** | **Pest 4 Browser Testing** (Playwright natif) | Tests frontend intégrés |
+| **Unit/Integration** | **Pest 5** (PHPUnit 13, PHP 8.4+, arch tests) | Tests backend Symfony |
+| **Browser/E2E** | **Pest 5 Browser Testing** (Playwright natif) | Tests frontend intégrés |
 | **Mutation** | **Infection** | Qualité des tests (MSI >= 80%) |
 | **Static Analysis** | **PHPStan Level 10** | Vérification statique |
 
-**Sources :** [Pest 4](https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing), [Infection](https://infection.github.io/)
+**Sources :** [Pest 5 Upgrade Guide](https://v5.pestphp.com/docs/upgrade-guide), [Infection](https://infection.github.io/)
 
 ## Invariants non-négociables
 
@@ -37,7 +37,7 @@ Abandonner Panther (lourd) et Behat (verbeux) — Pest 4 intègre tout nativemen
 |------|-------------|
 | Unit | Isolation totale, pas de DB, mocks Prophecy/Mockery |
 | Integration | `KernelTestCase`, fixtures chargées, DB de test |
-| Browser | Playwright natif Pest 4, assertions sur l'UI réelle |
+| Browser | Playwright natif Pest 5, assertions sur l'UI réelle |
 | Arch | `pest()->arch()` — namespaces, dépendances, interdictions |
 | Mutation | `vendor/bin/infection --threads=4`, MSI >= 80 |
 

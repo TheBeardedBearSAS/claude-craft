@@ -1,8 +1,8 @@
 # Python Security
 
-> **Version de référence :** Python **3.14 (stable, 3.14.6+)** — Python 3.15 en beta (release oct. 2026).
-> FastAPI **~0.136.x** — Python **3.10+ minimum**, Pydantic v2 obligatoire.
-> Pydantic **>=2.9, 2.13.x recommandé** — Pydantic v1 incompatible avec Python 3.14.
+> **Version de référence :** Python **3.15 (stable, 3.15.0 — 9 oct. 2026)** — socle minimal 3.14+ (3.14.8).
+> FastAPI **~0.143.x** — Python **3.10+ minimum**, Pydantic v2 obligatoire.
+> Pydantic **>=2.9, 2.14.x recommandé** — Pydantic v1 incompatible avec Python 3.14.
 
 ## Fundamental Security Principles
 
@@ -565,8 +565,8 @@ pip-audit --fix
 # pyproject.toml - Pin versions for security
 [project]
 dependencies = [
-    "fastapi>=0.136.0,<0.137.0",   # ~0.136.x stable (2026-05) — Python 3.10+ min
-    "pydantic>=2.9.0,<3.0.0",      # v2.13.x recommandé ; v1 incompatible Python 3.14
+    "fastapi>=0.143.0,<1.0.0",       # 0.143.x stable (2026-10) — Python 3.10+ min
+    "pydantic>=2.9.0,<3.0.0",      # v2.14.x recommandé ; v1 incompatible Python 3.14
     "sqlalchemy>=2.0.0,<3.0.0",
 ]
 ```
