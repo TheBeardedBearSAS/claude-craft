@@ -564,6 +564,15 @@ snyk test
 snyk monitor
 ```
 
+### React Server Components — React2Shell (CVE-2025-55182)
+
+- **CVSS 10.0** : exécution de code à distance sans authentification via une requête HTTP forgée vers un endpoint Server Function ; les apps qui supportent les React Server Components sont touchées même sans Server Function.
+- Affectés : `react-server-dom-webpack`, `-parcel`, `-turbopack` 19.0, 19.1.0, 19.1.1, 19.2.0. Corrigé en : 19.0.1, 19.1.2, 19.2.1.
+- Failles de suivi (CVE-2025-55183, CVE-2025-55184, CVE-2025-67779, CVE-2026-23864 : DoS / exposition de code source) : toujours installer le dernier correctif.
+- Mettre aussi à jour les frameworks qui embarquent ces paquets (Next.js, React Router, Waku, `@parcel/rsc`, `@vitejs/plugin-rsc`, rwsdk).
+
+Source: [React advisory](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components)
+
 ## Secrets Management
 
 ### Variables d'Environnement
