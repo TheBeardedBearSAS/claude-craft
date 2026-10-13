@@ -29,7 +29,7 @@ Der einfachste Code ist oft der beste Code.
 
 ### KISS-Regeln
 
-1. **Kurze Methoden:** Maximal 20 Zeilen pro Methode
+1. **Kurze Methoden:** Ziel < 10 Zeilen, harte Grenze 20 Zeilen pro Methode
 2. **Zyklomatische Komplexität:** Maximal 10 pro Methode
 3. **Einrückungstiefe:** Maximal 3 Ebenen
 4. **Parameter:** Maximal 4 Parameter pro Methode
@@ -369,7 +369,7 @@ class ConcreteRepository         // Infrastructure
 ### Vor jedem Commit
 
 #### KISS
-- [ ] Methoden < 20 Zeilen
+- [ ] Methoden < 10 Zeilen (Grenze 20)
 - [ ] Zyklomatische Komplexität < 10
 - [ ] Einrückung max 3 Ebenen
 - [ ] Parameter max 4 pro Methode
@@ -395,10 +395,13 @@ class ConcreteRepository         // Infrastructure
 |--------|------|-----------|
 | Zeilen pro Methode | < 10 | < 20 |
 | Zyklomatische Komplexität | < 5 | < 10 |
+| Kognitive Komplexität | < 7 | < 10 |
 | Zeilen pro Klasse | < 150 | < 200 |
 | Duplikation | 0% | < 3% |
 | Testabdeckung | > 80% | > 70% |
 | Abhängigkeiten pro Klasse | < 5 | < 7 |
+
+> Die Schwellenwerte der Cognitive Complexity (SonarQube S3776) < 7 / < 10 sind eine interne, bewusst strengere Wahl als der Sonar-Standard (15 pro Funktion); bei Bedarf des Teamkontexts lockern.
 
 ---
 

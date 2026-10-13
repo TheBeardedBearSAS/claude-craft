@@ -29,7 +29,7 @@ Le code le plus simple est souvent le meilleur code.
 
 ### Règles KISS
 
-1. **Méthodes courtes:** Maximum 20 lignes par méthode
+1. **Méthodes courtes:** Cible < 10 lignes, limite maximale 20 lignes par méthode
 2. **Complexité cyclomatique:** Maximum 10 par méthode
 3. **Profondeur d'indentation:** Maximum 3 niveaux
 4. **Paramètres:** Maximum 4 paramètres par méthode
@@ -369,7 +369,7 @@ class ConcreteRepository         // Infrastructure
 ### Avant chaque commit
 
 #### KISS
-- [ ] Méthodes < 20 lignes
+- [ ] Méthodes < 10 lignes (limite 20)
 - [ ] Complexité cyclomatique < 10
 - [ ] Indentation max 3 niveaux
 - [ ] Paramètres max 4 par méthode
@@ -395,10 +395,13 @@ class ConcreteRepository         // Infrastructure
 |----------|-------|--------|
 | Lignes par méthode | < 10 | < 20 |
 | Complexité cyclomatique | < 5 | < 10 |
+| Complexité cognitive | < 7 | < 10 |
 | Lignes par classe | < 150 | < 200 |
 | Duplication | 0% | < 3% |
 | Couverture tests | > 80% | > 70% |
 | Dépendances par classe | < 5 | < 7 |
+
+> Les seuils de Cognitive Complexity (SonarQube S3776) < 7 / < 10 sont un choix interne, volontairement plus strict que le défaut de Sonar (15 par fonction) ; à relâcher si le contexte de l'équipe l'exige.
 
 ---
 

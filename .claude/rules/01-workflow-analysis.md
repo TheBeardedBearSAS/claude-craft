@@ -2,14 +2,15 @@
 
 AVANT toute modification de code (feature, bugfix, refactoring), une phase d'analyse approfondie est **OBLIGATOIRE**.
 
-## Processus en 4 étapes
+## Processus en 4 étapes (puis implémentation TDD)
 
 | Étape | Actions clés |
 |-------|--------------|
 | **1. Comprendre** | Objectif précis, critères d'acceptation, contraintes, impact utilisateur |
 | **2. Analyser** | Lire fichiers concernés + dépendants + tests + migrations |
 | **3. Documenter** | Fichiers impactés, breaking changes, migration DB, risques + mitigations, tests TDD |
-| **4. Valider** | Impact faible (< 1h, 1 fichier) → procéder ; Impact moyen/fort → validation utilisateur |
+| **4. Valider** | Faible (1 fichier, < 1h) → procéder ; Moyen (2-5 fichiers, migration, < 4h) → validation utilisateur ; Fort (> 5 fichiers, breaking changes) → plan détaillé + validation |
+| **Ensuite : TDD** | Écrire les tests d'abord (Red → Green → Refactor) — ce n'est pas une étape d'analyse |
 
 **Pattern GSD :** Tâches atomiques (1-3 phrases, < 30 min, testable, committable seule). Si contexte > 50%, découper + `/clear` entre tâches.
 

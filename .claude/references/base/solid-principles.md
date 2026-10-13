@@ -351,13 +351,19 @@ Il vaut mieux plusieurs interfaces spécifiques qu'une interface générale.
 
 ---
 
+## Architectures pragmatiques (2026)
+
+La Clean Architecture stricte reste valide, mais un **Modular Monolith** (un seul déploiement, modules découplés) combiné à des **Vertical Slices par module** est une alternative courante : chaque feature regroupe ses couches, ce qui borne le contexte à lire pour un développeur comme pour un agent IA. SOLID s'applique à l'intérieur de chaque slice.
+
+---
+
 ## Checklist de validation
 
 ### Avant chaque commit
 
 #### SRP
 - [ ] Chaque classe a une seule responsabilité clairement définie
-- [ ] Les méthodes font une seule chose (< 20 lignes)
+- [ ] Les méthodes font une seule chose (cible < 10, max 20 lignes)
 - [ ] Pas de méthodes avec "et" ou "ou" dans le nom
 
 #### OCP
@@ -391,6 +397,6 @@ Il vaut mieux plusieurs interfaces spécifiques qu'une interface générale.
 
 ---
 
-**Date de dernière mise à jour:** 2025-01
-**Version:** 1.0.0
+**Date de dernière mise à jour:** 2026-10
+**Version:** 1.1.0
 **Auteur:** The Bearded CTO

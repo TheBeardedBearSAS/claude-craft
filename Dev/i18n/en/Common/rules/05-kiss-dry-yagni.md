@@ -29,7 +29,7 @@ The simplest code is often the best code.
 
 ### KISS Rules
 
-1. **Short methods:** Maximum 20 lines per method
+1. **Short methods:** Target < 10 lines, hard limit 20 lines per method
 2. **Cyclomatic complexity:** Maximum 10 per method
 3. **Indentation depth:** Maximum 3 levels
 4. **Parameters:** Maximum 4 parameters per method
@@ -369,7 +369,7 @@ class ConcreteRepository         // Infrastructure
 ### Before each commit
 
 #### KISS
-- [ ] Methods < 20 lines
+- [ ] Methods < 10 lines (hard limit 20)
 - [ ] Cyclomatic complexity < 10
 - [ ] Max 3 indentation levels
 - [ ] Max 4 parameters per method
@@ -395,10 +395,13 @@ class ConcreteRepository         // Infrastructure
 |--------|--------|-------|
 | Lines per method | < 10 | < 20 |
 | Cyclomatic complexity | < 5 | < 10 |
+| Cognitive complexity | < 7 | < 10 |
 | Lines per class | < 150 | < 200 |
 | Duplication | 0% | < 3% |
 | Test coverage | > 80% | > 70% |
 | Dependencies per class | < 5 | < 7 |
+
+> Cognitive Complexity (SonarQube S3776) thresholds < 7 / < 10 are an internal, deliberately stricter choice than Sonar's default of 15 per function; relax them if your team context requires it.
 
 ---
 
