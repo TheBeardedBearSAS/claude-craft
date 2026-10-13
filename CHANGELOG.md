@@ -13,6 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`hono` 4.12.28 → 4.13.1** (4 avis, modérés) : ReDoS dans le middleware CORS via `Access-Control-Request-Headers` (GHSA-8j4g-w8fx-2239), rétention de sortie SSR par `memo()` entre requêtes menant à une divulgation de données inter-utilisateurs (GHSA-f23p-vx2j-j53r), en-têtes listés dans `Connection` non retirés par le Proxy Helper (GHSA-79qm-7rj5-m7r9), et DoS algorithmique dans le middleware Language (GHSA-54fx-42gc-7vw4).
 
   Les deux montées tiennent dans les plages semver déjà déclarées (`^5.2.0`, `^4.12.14`) : `package.json` est inchangé, seul le lockfile bouge. `npm audit --omit=dev --audit-level=moderate` repasse à 0 vulnérabilité.
+- **Minimum Claude Code 2.1.97 → 2.1.260** (audit d'alignement du 2026-10-13) : couvre GHSA-pq7j-f95f-qfcv / CVE-2026-86063 (contournement du pin SHA des plugins, *high*, 2.1.179), GHSA-5j29-h97v-84ch / CVE-2026-103435 (écriture arbitraire via symlink TOCTOU, *high*, 2.1.129), GHSA-7835-87q9-rgvv / CVE-2026-55607 (évasion du sandbox via git worktree, 2.1.163) et GHSA-gfvf-j8jh-jxxw / CVE-2026-103012 (managed settings non appliqués, 2.1.260). `claude-craft doctor` lit désormais le minimum depuis `config/versions.yaml`. Descriptions et versions de correction de CVE-2025-59536 (v1.0.111) et CVE-2026-21852 (v2.0.65) alignées sur les avis officiels.
+- **Timeouts des hooks en secondes** : `.claude/settings.json`, les 5 `settings.json.template`, les templates `.claude/templates/hooks/*.json` et `.bmad/hooks-config.example.json` déclaraient `5000`/`3000`/`10000` comme des millisecondes — Claude Code les lit en secondes (≈ 83 min au lieu de 5 s). Test de régression ajouté.
+
+### Changed
+
+- **Claude Code recommandé 2.1.193 → 2.1.296** ; `COMPATIBILITY.md` couvre 2.1.194 → 2.1.296 (MCP protocole 2026-07-28, descriptions MCP plafonnées à 4 096 caractères, settings projet restreints, hooks `onFailure: "block"`, `claude purge`).
+- **Modèles génération 5.5** : `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`, `claude-fable-5-1` (settings, templates, règle 12 ×6, CLI-REFERENCE, FAQ, guides). La note « Fable 5 / Mythos 5 suspendus » est retirée (Fable 5.1 est courant) ; Sonnet 5 reste à $2/$10.
+- **Règle 12 (6 versions)** : CLAUDE.md « < 200 lignes » ; rules sans `paths:` chargées au lancement ; imports `@` sans gain de contexte ; emphase avec parcimonie.
+- **Écosystème** : caveman sous **Apache-2.0** (et non MIT), étoiles et licences rafraîchies, claude-hud gradué en ✅ Intégrer, revue suivante 2027-01-13.
+- Outil `Task` → `Agent` dans les agents (alias déprécié rejeté par le test de contenu) ; `disallowedTools` propagé aux copies i18n de 5 agents ; versions infra de `devops-engineer` et des références Symfony/Laravel alignées sur `config/versions.yaml` (gate `verify-versions` étendu à ces fichiers).
 
 ### Added
 
@@ -25,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Exemples de hooks utilisant `echo '$TOOL_OUTPUT'` / `$FILEPATH` (variables inexistantes) remplacés par une lecture JSON sur stdin avec `jq` (référence context-management, règle 12 i18n, guides 05, `templates/hooks/README.md`, `auto-format.json`).
+- Denylist `verify-versions` : l'entrée `claude-fable-5` matchait `claude-fable-5-1` ; doublons `'1.12.1'` retirés.
 - **`scripts/collect-claude-signals.mjs`** : le catalogue `awesome-claude-code` a été renommé upstream (`THE_RESOURCES_TABLE.csv` → `THE_RESOURCES_TABLE_NEW.csv`), l'URL historique renvoie 404. Le collecteur essaie les deux noms dans l'ordre.
 - **`scripts/awesome-claude-code-submit.mjs`** : même URL périmée, avec une conséquence plus sournoise — `findDuplicate()` retombe sur `{ status: 'unknown' }` à tout non-200, donc le contrôle anti-doublon était **inopérant sans le signaler**, et une ressource déjà présente au catalogue pouvait être soumise. Même repli à deux candidats. Le module expose désormais `findDuplicate`/`CSV_CANDIDATES` et n'exécute plus `main()` à l'import (garde `import.meta.url === process.argv[1]`, comme `track-adoption-metrics.mjs`), ce qui le rend testable : 6 tests de régression ajoutés.
 

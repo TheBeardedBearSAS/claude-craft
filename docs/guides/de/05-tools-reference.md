@@ -103,7 +103,7 @@ Claude Code unterstützt 24 Hook-Ereignisse (8 davon wurden in neueren Claude Co
       "matcher": "Bash",
       "hooks": [{
         "type": "command",
-        "command": "echo '$TOOL_OUTPUT' | head -100"
+        "command": "jq -r '.tool_response.stdout // empty' | head -100"
       }]
     }]
   }

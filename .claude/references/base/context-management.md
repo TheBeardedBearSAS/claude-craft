@@ -611,11 +611,11 @@ Utiliser `/model` pour changer de modele selon la complexite de la tache:
 
 | Commande | Modele | Usage |
 |----------|--------|-------|
-| `/model haiku` | Haiku 4.5 | Taches simples, classification |
-| `/model sonnet` | Sonnet 4.6 | Taches standard, implementation |
-| `/model opus` | Opus 4.8 | Raisonnement complexe, architecture |
+| `/model haiku` | Haiku 5.5 | Taches simples, classification |
+| `/model sonnet` | Sonnet 5.5 | Taches standard, implementation |
+| `/model opus` | Opus 5.5 | Raisonnement complexe, architecture |
 
-### Filtrage de sortie via hooks PreToolUse
+### Filtrage de sortie via hooks PostToolUse
 
 Utiliser des hooks PostToolUse pour filtrer les sorties verbeuses avant que Claude ne les traite:
 
@@ -624,11 +624,16 @@ Utiliser des hooks PostToolUse pour filtrer les sorties verbeuses avant que Clau
   "hooks": {
     "PostToolUse": [{
       "matcher": "Bash",
-      "command": "echo '$TOOL_OUTPUT' | grep -A 5 -E '(FAIL|ERROR|WARN)' || echo 'All clear'"
+      "hooks": [{
+        "type": "command",
+        "command": "jq -r '.tool_response.stdout // empty' | grep -A 5 -E '(FAIL|ERROR|WARN)' || echo 'All clear'"
+      }]
     }]
   }
 }
 ```
+
+> Le payload du hook arrive en JSON sur **stdin** : `$TOOL_OUTPUT` / `$TOOL_INPUT` ne sont **pas** des variables d'environnement (voir `.claude/rules/11-security.md`).
 
 Reduction potentielle: 90%+ pour les logs verbeux.
 

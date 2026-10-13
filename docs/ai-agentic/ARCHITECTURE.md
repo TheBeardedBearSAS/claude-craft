@@ -485,7 +485,7 @@ Respond with ONLY "yes" or "no".
   `.trim();
 
   const response = await anthropic.messages.create({
-    model: 'claude-opus-4-8',
+    model: 'claude-opus-5-5',
     max_tokens: 10,
     messages: [{ role: 'user', content: prompt }]
   });
@@ -499,7 +499,7 @@ Respond with ONLY "yes" or "no".
 ```typescript
 async function checkGrounding(output: string, context: string): Promise<boolean> {
   const response = await anthropic.messages.create({
-    model: 'claude-opus-4-8',
+    model: 'claude-opus-5-5',
     max_tokens: 2000,
     messages: [
       {

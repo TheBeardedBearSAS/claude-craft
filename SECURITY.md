@@ -53,16 +53,21 @@ When using Claude Craft:
 
 ### Known CVE Fixes (Claude Code)
 
-Claude Code v2.1.97+ includes critical security fixes:
+Claude Code v2.1.260+ (claude-craft security minimum) includes critical security fixes:
 
 | CVE | Severity | Fixed In | Description |
 |-----|----------|----------|-------------|
-| CVE-2025-59536 | 8.7/10 CVSS | v2.1.51 | Command injection via MCP hook inputs |
-| CVE-2026-21852 | 5.3/10 CVSS | v2.0.65 | API key exfiltration via path traversal |
+| CVE-2025-59536 | 8.7/10 CVSS | v1.0.111 | Command execution before the startup trust dialog |
+| CVE-2026-21852 | 5.3/10 CVSS | v2.0.65 | Data leak via repo environment configuration used before trust confirmation |
 | CVE-2026-35020 | High | v2.1.97 | Compound command bypass in Bash tool |
 | CVE-2026-35021 | High | v2.1.97 | Network redirect bypass in Bash tool |
 | CVE-2026-35022 | High | v2.1.98 | Env-var prefix injection in Bash tool |
 | N/A | High | v2.1.101 | Command injection via POSIX `which` fallback |
+| CVE-2026-40068 | High | v2.1.84 | Trust dialog bypass via git worktree spoofing (GHSA-q5hj-mxqh-vv77) |
+| CVE-2026-103435 | High | v2.1.129 | Arbitrary file write via symlink following, TOCTOU (GHSA-5j29-h97v-84ch) |
+| CVE-2026-55607 | High | v2.1.163 | Sandbox escape via git worktree path confusion (GHSA-7835-87q9-rgvv) |
+| CVE-2026-86063 | High | v2.1.179 | Plugin commit SHA pin bypass installs attacker code (GHSA-pq7j-f95f-qfcv) |
+| CVE-2026-103012 | Low | v2.1.260 | Managed settings not applied with a stored API key (GHSA-gfvf-j8jh-jxxw) |
 
 **Incident**: Claude Code v2.1.88 exposed source code via `.map` file (59.8 MB). Fixed in v2.1.89.
 

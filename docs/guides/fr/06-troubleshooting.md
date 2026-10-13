@@ -496,7 +496,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
    ```bash
    claude --version
    # Les hooks nécessitent v2.1.47+ (PreCompact: v2.1.76+, PostCompact: v2.1.76+)
-   # Recommandé : v2.1.193
+   # Minimum : v2.1.260 | Recommandé : v2.1.296
    ```
 
 3. **Vérifier que le script hook est exécutable**
@@ -543,7 +543,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 
 3. **Vérifier la sécurité MCP**
    - Auditer le code source des serveurs MCP tiers
-   - Utiliser Claude Code v2.1.97+ avec des serveurs MCP (corrections de sécurité CVE)
+   - Utiliser Claude Code v2.1.260+ avec des serveurs MCP (corrections de sécurité CVE)
    - Voir `.claude/rules/11-security.md` pour la checklist de vetting MCP
 
 ---

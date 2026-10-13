@@ -12,7 +12,7 @@ Requirements depend on the install method:
 
 **NPX (recommended) — only 2 requirements:**
 - **Node.js 22+** (Node 24 recommended — Active LTS)
-- **Claude Code** v2.1.97+
+- **Claude Code** v2.1.260+ (2.1.296 recommended)
 
 **Makefile / shell scripts — additional requirements:**
 - **yq v4+** (Mike Farah's version, not the Python yq) — for YAML processing
@@ -392,7 +392,7 @@ This will:
 
 ### What is Fast Mode?
 
-Fast Mode (v2.1.36+) delivers up to 2.5x faster output for Opus 4.8 with the same capabilities. Toggle with `/fast`.
+Fast Mode (v2.1.36+) delivers up to 2.5x faster output on supported Opus models with the same capabilities. Toggle with `/fast`.
 
 ### How much does Fast Mode cost?
 
@@ -423,24 +423,25 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 
 **RTK** = `/common:setup-rtk` (55-65% de réduction). Voir `docs/RTK-ANALYSIS.md`.
 
-**Avec Opus 4.8** (recommandé pour les phases de planification et review), multiplier par ~5 le coût par token. Utiliser `/model opusplan` pour le tiering dynamique Opus (planning) / Sonnet (exécution).
+**Avec Opus 5.5** (recommandé pour les phases de planification et review), multiplier par ~2 le coût par token par rapport à Sonnet 5.5. Utiliser `/model opusplan` pour le tiering dynamique Opus (planning) / Sonnet (exécution).
 
 **Usage mensuel typique pour une équipe de 3 développeurs :** 5-10 sprints Standard + 2 audits = ~200 000–400 000 tokens = **$1–2/mois avec RTK + Sonnet comme modèle de base**.
 
-### Grille de prix & routage modèle par tâche (juin 2026)
+### Grille de prix & routage modèle par tâche (octobre 2026)
 
 | Modèle | ID canonique | Prix in/out (par M tokens) | Router vers (type de tâche) |
 |--------|--------------|----------------------------|------------------------------|
-| **Haiku 4.5** | `claude-haiku-4-5-20251001` | $1 / $5 | `/effort low` — lookups, classification, reviewers, sous-agents simples |
-| **Sonnet 5** | `claude-sonnet-5` | **$2 / $10 intro** (→ $3 / $15 au 2026-08-31) | `/effort medium` — implémentation standard, tâches agentiques, exécution sprint, modèle sous-agent par défaut. Sorti 2026-06-30, comble l'écart avec Opus 4.8 |
-| Sonnet 4.6 _(prédécesseur)_ | `claude-sonnet-4-6` | $3 / $15 | Toujours valide ; remplacé par Sonnet 5 comme Sonnet courant |
-| **Opus 4.8** | `claude-opus-4-8` | $5 / $25 | `/effort high`/`xhigh` — architecture, ADR, migrations, raisonnement complexe |
+| **Haiku 5.5** | `claude-haiku-5-5` | $0.10 / $0.50 (≤ 100K tokens de prompt ; $0.50 / $2.50 au-delà) | `/effort low` — lookups, classification, reviewers, sous-agents simples |
+| **Sonnet 5.5** | `claude-sonnet-5-5` | $2 / $10 | `/effort medium` — implémentation standard, tâches agentiques, exécution sprint, modèle sous-agent par défaut |
+| **Opus 5.5** | `claude-opus-5-5` | $4 / $20 | `/effort high`/`xhigh` — architecture, ADR, migrations, raisonnement complexe |
+| **Fable 5.1** | `claude-fable-5-1` | $10 / $50 | Agents créatifs/narratifs |
+| _Legacy_ (toujours disponibles) | `claude-sonnet-5`, `claude-opus-4-8`, `claude-haiku-4-5-20251001`, `claude-fable-5` | $2/$10, $5/$25, $1/$5, $10/$50 | À migrer vers la génération 5.5 |
 
 > **Leviers de coût (cumulables) :** prompt caching **−90 %** sur l'input mis en cache (`ENABLE_PROMPT_CACHING_1H`, actif par défaut), **Batch API −50 %** in/out pour les traitements asynchrones de masse, RTK **55-90 %** sur les outputs CLI, `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` pour les sous-agents non typés.
 >
 > **Précédence modèle :** `model:` du frontmatter d'agent **>** `CLAUDE_CODE_SUBAGENT_MODEL` **>** modèle de session. Les 11 reviewers `model: haiku` restent sur Haiku même si `SUBAGENT_MODEL=sonnet`.
 >
-> ⚠️ **Fable 5 / Mythos 5 suspendus** (export-control US, 2026-06-12) : ne pas les router ; agents créatifs → Opus 4.8 / Sonnet 4.6.
+> **Mythos 5 / 5.1** : disponibilité limitée (Cyber Verification Program) — ne pas les router par défaut. Source : [models overview](https://platform.claude.com/docs/en/about-claude/models/overview).
 
 ---
 

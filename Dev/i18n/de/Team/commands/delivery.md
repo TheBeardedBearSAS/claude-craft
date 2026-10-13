@@ -517,7 +517,7 @@ Für 1 EPIC, 5 US, ~25 Aufgaben:
 | **Gesamtzeit** | **~120 Min.** | **~55 Min.** | **~2,2x** |
 | Gesamtkosten* | ~$28 | ~$17 | **-38%** |
 
-*Kosteneinsparungen, weil Sonnet ($3/$15/M) die meiste Arbeit übernimmt vs. Opus ($15/$75/M) im sequenziellen Modus.
+*Kosteneinsparungen, weil Sonnet 5.5 ($2/$10/M) die meiste Arbeit übernimmt vs. Opus 5.5 ($4/$20/M) im sequenziellen Modus.
 
 ## Leistungserwartungen
 

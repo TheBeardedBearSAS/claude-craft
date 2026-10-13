@@ -832,7 +832,7 @@ Alias for `/rewind` (v2.1.108+). Reverts the last change in the session.
 
 ### /effort
 
-Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `medium`, `high`, `xhigh` (Opus 4.8, extended thinking), `ultracode` (v2.1.154+, Dynamic Workflows).
+Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `medium`, `high`, `xhigh` (Opus 5.5, extended thinking), `ultracode` (v2.1.154+, Dynamic Workflows ; separate toggle since v2.1.284).
 
 #### Usage
 
@@ -842,17 +842,17 @@ Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `me
 /effort ultracode     # Dynamic Workflows — max code throughput (trigger keyword: ultracode)
 ```
 
-Default for Pro/Max subscribers on Opus 4.8/Sonnet 4.6 is `high` since v2.1.111 (previously `medium`). Opus 4.8 supports the `xhigh` and `ultracode` tiers.
+Default effort: `medium` on Opus 5.5 and Haiku 5.5, `high` on Sonnet 5.5, Fable 5.1 and legacy models. Since v2.1.284 Ultracode is a separate toggle in `/effort` and no longer forces `xhigh`.
 
 | Niveau | Modèle | Usage |
 |--------|--------|-------|
-| `low` | Haiku 4.5 (`claude-haiku-4-5-20251001`) | Tâches simples, lookups, classification |
-| `medium` | Sonnet 5 (`claude-sonnet-5`) | Implémentation standard |
-| `high` | Opus 4.8 (`claude-opus-4-8`) | Raisonnement complexe, architecture |
-| `xhigh` | Opus 4.8 (extended thinking, v2.1.111+) | Décisions critiques, migrations complexes, ADR |
-| `ultracode` | Opus 4.8 (v2.1.154+, Dynamic Workflows) | Mode débit code maximal — pipelines automatisés, génération massive |
+| `low` | Haiku 5.5 (`claude-haiku-5-5`) | Tâches simples, lookups, classification |
+| `medium` | Sonnet 5.5 (`claude-sonnet-5-5`) | Implémentation standard |
+| `high` | Opus 5.5 (`claude-opus-5-5`) | Raisonnement complexe, architecture |
+| `xhigh` | Opus 5.5 (extended thinking) | Décisions critiques, migrations complexes, ADR |
+| `ultracode` | Opus 5.5 (toggle séparé depuis v2.1.284, Dynamic Workflows) | Mode débit code maximal — pipelines automatisés, génération massive |
 
-> **⚠️ Note Fable 5 / Mythos 5 :** ces modèles sont **suspendus depuis le 2026-06-12** (directive export-control US, toujours offline). Ne pas configurer `CLAUDE_CODE_SUBAGENT_MODEL=claude-fable-5`. Pour les agents créatifs/narratifs, utiliser **Opus 4.8** (`claude-opus-4-8`) ou **Sonnet 5** (`claude-sonnet-5`) en attendant une éventuelle restauration.
+> **Note Fable 5.1 / Mythos :** **Fable 5.1** (`claude-fable-5-1`, $10/$50) est un modèle courant, adapté aux agents créatifs/narratifs ; Fable 5 reste disponible (*legacy*). **Mythos 5 / 5.1** sont en disponibilité limitée (Cyber Verification Program) — ne pas les configurer par défaut.
 
 ---
 
@@ -920,7 +920,7 @@ projects:
 | `CLAUDE_CODE_FORK_SUBAGENT` | Fork each subagent in isolated context (v2.1.117+) | _unset_ |
 | `ENABLE_PROMPT_CACHING_1H` | Use 1-hour prompt cache tier (v2.1.108+) | _unset_ |
 | `FORCE_PROMPT_CACHING_5M` | Force 5-minute cache tier (v2.1.108+) | _unset_ |
-| `CLAUDE_CODE_SUBAGENT_MODEL` | Model for subagents (e.g. `claude-sonnet-5`) | _unset_ |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | Model for subagents (e.g. `claude-sonnet-5-5`) | _unset_ |
 
 ---
 

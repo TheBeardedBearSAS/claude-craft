@@ -9,24 +9,25 @@
 # PROCÉDURE DE BUMP : modifier ICI, puis propager dans les fichiers listés, puis
 # `npm run lint:versions` pour garantir l'absence de dérive.
 #
-# Dernière mise à jour : 2026-07-03 (audit fraîcheur — React Native 0.86→0.85 (drift, 0.86 inexistant ; endoflife+skills confirment 0.85), Docker 29.6.0→29.6.1 (patch 2026-06-26))
+# Dernière mise à jour : 2026-10-13 (audit d'alignement Claude — CLI 2.1.260/2.1.296, modèles 5.5). Précédente : 2026-07-03 (audit fraîcheur — React Native 0.86→0.85 (drift, 0.86 inexistant ; endoflife+skills confirment 0.85), Docker 29.6.0→29.6.1 (patch 2026-06-26))
 
 meta:
-  lastUpdated: '2026-07-03'
+  lastUpdated: '2026-10-13'
 
 claudeCode:
-  minimum: '2.1.97'
-  recommended: '2.1.193'
-  testedUpTo: '2.1.193'
-  # Fable 5 / Mythos 5 suspendus depuis 2026-06-12 (directive export-control US, toujours offline) —
-  # retirés des recommandations ; agents créatifs routés vers Opus 4.8 / Sonnet 5.
-  # Sonnet 5 (claude-sonnet-5) sorti le 2026-06-30 : modèle agentique, comble l'écart avec Opus 4.8,
-  # prix intro $2/$10 par M tokens jusqu'au 2026-08-31 puis $3/$15. Remplace Sonnet 4.6 (predecesseur).
+  # minimum : plancher sécurité — couvre GHSA-5j29 (2.1.129), GHSA-7835 (2.1.163),
+  # GHSA-pq7j (2.1.179) et GHSA-gfvf (2.1.260). Audit d'alignement du 2026-10-13.
+  minimum: '2.1.260'
+  recommended: '2.1.296'
+  testedUpTo: '2.1.296'
+  # Génération courante (2026-10) : Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.1.
+  # Opus 4.8, Sonnet 5, Haiku 4.5 et Fable 5 restent disponibles mais sont legacy.
   models:
-    opus: 'claude-opus-4-8'
-    sonnet: 'claude-sonnet-5'
-    sonnetPrev: 'claude-sonnet-4-6'
-    haiku: 'claude-haiku-4-5-20251001'
+    opus: 'claude-opus-5-5'
+    sonnet: 'claude-sonnet-5-5'
+    sonnetPrev: 'claude-sonnet-5'
+    haiku: 'claude-haiku-5-5'
+    fable: 'claude-fable-5-1'
 
 # stacks.<key>.registry DOIT être strictement égal à TECH_REGISTRY[<key>].version
 stacks:
@@ -77,7 +78,6 @@ denylist:
   - '20.x (22.x recommandé)'
   - '22.x (24.x LTS recommandé)'
   - '29.5.3'
-  - '1.12.1'
   - '2.21.0'
   - 'v8.19.2'
   - 'v8.19.3'
@@ -87,15 +87,19 @@ denylist:
   - '29.6.0'
   - 'RN 0.86'
   - '0.86 (New Arch'
-  - '1.12.1'
   - 'OpenTofu 1.12.1'
   - 'Ansible 2.21.0'
   - 'Helm 4.2.0'
   - 'Docker 29.5'
   # Claude Code recommandé périmé (remplacé par 2.1.193 semaine 26)
   - '2.1.168'
-  # Fable 5 suspendu (export-control US, 2026-06-12) — interdit comme modèle recommandé dans les fichiers vitrine
-  - 'claude-fable-5'
+  # Claude Code recommandé périmé (remplacé par 2.1.296, audit 2026-10-13)
+  - '2.1.193'
+  # Note « Fable 5 / Mythos 5 suspendus » fausse (Fable 5.1 courant) — audit 2026-10-13
+  - 'Fable 5 / Mythos 5 suspendus'
+  # IDs de modèles legacy à ne plus recommander dans les fichiers vitrine
+  - 'claude-sonnet-4-6'
+  - 'claude-haiku-4-5'
   # Badge hero périmé du site (LandingPage.vue) — chaîne spécifique pour ne pas heurter les notes historiques du README
   - 'v8.13.0 - Claude Code'
   - 'v8.20.0'

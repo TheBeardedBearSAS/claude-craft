@@ -22,7 +22,7 @@ describe('template content validation', () => {
     it('contains CLAUDE_CODE_SUBAGENT_MODEL env', () => {
       const settings = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
       expect(settings.env).toBeDefined();
-      expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toBe('claude-sonnet-4-6');
+      expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toBe('claude-sonnet-5-5');
     });
 
     it('contains PostCompact hook', () => {
@@ -73,6 +73,41 @@ describe('template content validation', () => {
       expect(deny).toContain('Bash(rm -rf:*)');
       expect(deny).toContain('Bash(sudo:*)');
       expect(deny.some((d) => d.includes('.env'))).toBe(true);
+    });
+  });
+
+  // Claude Code reads hook `timeout` in SECONDS (default 60). Values like 5000
+  // (written as if milliseconds) mean ~83 minutes — regression from the
+  // 2026-10-13 alignment audit.
+  describe('hook timeouts are expressed in seconds', () => {
+    const LANGS = ['en', 'fr', 'es', 'de', 'pt'];
+    const HOOK_TEMPLATES_DIR = path.join(PROJECT_ROOT, '.claude/templates/hooks');
+    const files = [
+      path.join(PROJECT_ROOT, '.claude/settings.json'),
+      path.join(PROJECT_ROOT, '.bmad/hooks-config.example.json'),
+      ...LANGS.map((l) => path.join(PROJECT_ROOT, `Dev/i18n/${l}/Common/templates/settings.json.template`)),
+      ...fs
+        .readdirSync(HOOK_TEMPLATES_DIR)
+        .filter((f) => f.endsWith('.json'))
+        .map((f) => path.join(HOOK_TEMPLATES_DIR, f)),
+    ];
+
+    // Supports both the matcher-group schema ({ matcher, hooks: [...] }) and
+    // flat entries ({ command, timeout }) used by older examples.
+    const collectTimeouts = (hooks) =>
+      Object.values(hooks ?? {})
+        .flat()
+        .flatMap((group) => [group, ...(group.hooks ?? [])])
+        .map((h) => h.timeout)
+        .filter((t) => t !== undefined);
+
+    it.each(files.map((f) => [path.relative(PROJECT_ROOT, f), f]))('%s', (_rel, file) => {
+      const settings = JSON.parse(fs.readFileSync(file, 'utf8'));
+      const timeouts = collectTimeouts(settings.hooks);
+      for (const t of timeouts) {
+        expect(t).toBeGreaterThan(0);
+        expect(t).toBeLessThanOrEqual(600);
+      }
     });
   });
 

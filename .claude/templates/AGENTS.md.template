@@ -25,7 +25,7 @@
 - `@laravel-reviewer` — Laravel 13 / PHP 8.5, Pest 4, Eloquent, Sanctum
 - `@react-reviewer` — React 19 + Compiler 1.0, TypeScript, hooks, bundle analysis
 - `@vuejs-reviewer` — Vue 3.5+, Composition API, Pinia, Vitest 4
-- `@angular-reviewer` — Angular 21 (22 en RC), Signals, Standalone, Zoneless par défaut
+- `@angular-reviewer` — Angular 22, Signals, Standalone, Zoneless par défaut
 - `@flutter-reviewer` — Flutter 3.44 / Dart 3.12, BLoC v9, Riverpod 3
 - `@reactnative-reviewer` — React Native 0.85 New Architecture (JSI, TurboModules)
 - `@python-reviewer` — Python 3.14+, FastAPI, Pydantic v2, async correctness
@@ -75,7 +75,7 @@ Pour personnaliser un agent local, override via frontmatter dans `.claude/agents
 
 ```yaml
 ---
-model: claude-haiku-4-5-20251001  # economiser tokens pour reviewers read-only
+model: claude-haiku-5-5  # economiser tokens pour reviewers read-only
 effort: low                  # ou medium / high
 maxTurns: 20                 # limite anti-runaway
 disallowedTools: [Bash]      # securite : pas d execution shell

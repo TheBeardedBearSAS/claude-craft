@@ -65,7 +65,7 @@ validée. Pour des éditions concurrentes de fichiers, `isolation: 'worktree'`.
 
 - **ralph-run** (`/common:ralph-run`) : boucle séquentielle mono-contexte jusqu'à une DoD — pas de
   parallélisme. Pour une tâche qui dépasse ce modèle, basculer sur un Dynamic Workflow.
-- **`/effort ultracode`** : palier d'effort CLI (débit code max sur Opus 4.8) — orthogonal au
+- **`/effort ultracode`** : palier d'effort CLI (débit code max sur Opus 5.5) — orthogonal au
   déclencheur `ultracode` des workflows, même si souvent utilisés ensemble.
 
 ## Réutilisation & garde-fous (v2.1.166+)

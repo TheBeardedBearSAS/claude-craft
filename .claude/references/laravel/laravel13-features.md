@@ -40,7 +40,7 @@ class ChatController extends Controller
             ->messages([
                 ['role' => 'user', 'content' => $request->input('message')],
             ])
-            ->model('claude-sonnet-5')
+            ->model('claude-sonnet-5-5')
             ->temperature(0.7)
             ->maxTokens(1024)
             ->generate();
@@ -104,7 +104,7 @@ return [
     'drivers' => [
         'anthropic' => [
             'api_key' => env('ANTHROPIC_API_KEY'),
-            'model' => 'claude-sonnet-5',
+            'model' => 'claude-sonnet-5-5',
         ],
         'openai' => [
             'api_key' => env('OPENAI_API_KEY'),

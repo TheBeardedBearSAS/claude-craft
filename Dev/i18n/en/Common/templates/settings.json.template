@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
 
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-5-5",
     "CLAUDE_CODE_FORK_SUBAGENT": "1"
   },
 
@@ -47,7 +47,7 @@
     ]
   },
 
-  "model": "claude-opus-4-8",
+  "model": "claude-opus-5-5",
 
   "plansDirectory": ".claude/plans",
 

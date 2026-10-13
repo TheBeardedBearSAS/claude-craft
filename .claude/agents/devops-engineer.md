@@ -47,15 +47,15 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 ### Conteneurisation
 | Technologie | Compétences | Versions 2026 |
 |-------------|-------------|---------------|
-| Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.5.3 (CVE-2026-33997 patché, juin 2026) |
+| Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.6.1 (SSOT `config/versions.yaml` ; inclut les correctifs CVE de la branche 29.x) |
 | Docker Compose | Orchestration locale, profiles, extensions | Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète) |
 | Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, User Namespaces, Mutating Admission Policies | 1.36.1 stable (sortie 13 mai 2026) |
-| Helm | Charts, values, templating | Helm 4.2.0 (MAJOR — server-side apply, WASM plugins, API v4 ; Helm 3 EOL sécurité nov. 2026) |
+| Helm | Charts, values, templating | Helm 4.2.2 (Helm 4 = MAJOR — server-side apply, WASM plugins, API v4 ; Helm 3 EOL sécurité nov. 2026) |
 | FrankenPHP | Worker mode (Laravel Octane/Symfony), HTTP/3, max_requests | 1.12.4 (PHP 8.5, Caddy 2.11.2, CVE-2026-45062 patché) |
 | PgBouncer | Transaction pooling, prepared statements natifs | 1.25.2 (1.21+ requis pour prepared stmts ; CVE-2026-6664/6665/6666/6667 patchées) |
 
 **Sources** :  
-- Docker Engine 29.5.2 : https://docs.docker.com/engine/release-notes/29/  
+- Docker Engine 29.x : https://docs.docker.com/engine/release-notes/29/  
 - Compose Spec v5.0.0 : https://www.compose-spec.io/  
 - Kubernetes 1.36 : https://kubernetes.io/blog/2026/04/22/kubernetes-v1-36-release/  
 - K8s Gateway API : https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl  
@@ -70,8 +70,8 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | Azure | AKS, App Service, Azure DevOps |
 | Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) | hcloud provider 1.65.0 (juin 2026) |
 | Coolify | Self-hosted PaaS, MCP server natif (read-only), audit logging structuré | v4.1.2 (juin 2026) |
-| OpenTofu | State encryption, OCI registry backends | 1.12.1 (juin 2026) |
-| Ansible | Automation, playbooks, roles | ansible-core 2.21.0 (stable mai 2026) |
+| OpenTofu | State encryption, OCI registry backends | 1.12.2 |
+| Ansible | Automation, playbooks, roles | ansible-core 2.21.1 |
 
 ### Monitoring & Observability
 | Catégorie | Outils |
@@ -150,7 +150,7 @@ USER 1000
 docker history <image> --no-trunc
 docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 
-# BuildKit activé par défaut (Engine 29.5.3)
+# BuildKit activé par défaut (Engine 29.x)
 docker buildx build --cache-to=type=registry,ref=repo:cache .
 
 # Multi-platform build avec SBOM
@@ -164,7 +164,7 @@ trivy image <image>
 grype <image>  # Alternative Anchore
 ```
 
-**Nouveautés Docker Engine 29.5.3** :  
+**Docker Engine 29.x (29.6.1)** :  
 - BuildKit activé par défaut (cache persistant natif)
 - SBOM generation native (`--sbom=true`)
 - Provenance attestations (`--provenance=mode=max`)
@@ -253,7 +253,7 @@ terraform {
 tofu plan -refresh-only -out=drift.plan
 ```
 
-**Patterns clés OpenTofu 1.12.1** :
+**Patterns clés OpenTofu 1.12.x (1.12.2)** :
 - **State encryption at rest** : Chiffrement natif (SLSA Level 3)
 - **OCI registry backends** : Alternative S3/Azure Blob
 - **Drift detection** : `plan -refresh-only` pour audit infra
@@ -268,20 +268,20 @@ tofu plan -refresh-only -out=drift.plan
 ### Ansible (2026)
 
 ```yaml
-# ansible-core 2.21.0 — Breaking changes 2.20→2.21
+# ansible-core 2.21.x — Breaking changes 2.20→2.21
 - name: Utiliser collections FQCNs
   ansible.builtin.copy:  # Requis 2.20+, plus de noms courts
     src: file.txt
     dest: /tmp/
 ```
 
-**Patterns clés Ansible 2.21.0** :
+**Patterns clés ansible-core 2.21.x (2.21.1)** :
 - **Migration 2.20→2.21** : FQCNs obligatoires (`ansible.builtin.*`)
 - **Collections** : `ansible-galaxy collection install` requis
-- **Ansible 2.21.0 stable** : Optimisations parallélisation, Python 3.13 support
+- **ansible-core 2.21** : Optimisations parallélisation, Python 3.13 support
 
 **Sources** :  
-- ansible-core 2.21 : https://pypi.org/project/ansible-core/2.21.0/  
+- ansible-core 2.21 : https://pypi.org/project/ansible-core/2.21.1/  
 - Migration guide : https://docs.ansible.com/ansible/latest/porting_guides/porting_guide_core_2.21.html
 
 ### Kubernetes (2026)

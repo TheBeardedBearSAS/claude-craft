@@ -288,8 +288,8 @@ return RectorConfig::configure()
 
 | Composant | Version | Usage Laravel |
 |-----------|---------|---------------|
-| Docker Engine | 29.4.3 | BuildKit par défaut, SBOM natif |
-| FrankenPHP | 1.12.1 | Alternative moderne à PHP-FPM (Worker mode Octane) |
+| Docker Engine | 29.6.1 | BuildKit par défaut, SBOM natif |
+| FrankenPHP | 1.12.4 | Alternative moderne à PHP-FPM (Worker mode Octane) |
 | PgBouncer | 1.25.2 | Transaction pooling + prepared statements natifs (CVE-2026-6664/6667 patchées) |
 
 **FrankenPHP + Laravel Octane** : 2-3× gains performance (Worker mode, HTTP/3, max_requests anti-leak).  

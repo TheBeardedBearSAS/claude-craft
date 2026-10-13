@@ -338,7 +338,7 @@ yq eval '.' claude-projects.yaml
 1. **Vérifier la version de Claude Code**
    ```bash
    claude --version
-   # Minimum : v2.1.97 | Recommandé : v2.1.193
+   # Minimum : v2.1.260 | Recommandé : v2.1.296
    # PreCompact : v2.1.76+ | PostCompact : v2.1.76+
    ```
 
@@ -398,7 +398,7 @@ yq eval '.' claude-projects.yaml
    - Les outils MCP peuvent être chargés à la demande (réduction de 95% du contexte)
 
 2. **Vérifier la sécurité des serveurs MCP**
-   - Utiliser Claude Code v2.1.97+ avec des serveurs MCP (corrections CVE critiques)
+   - Utiliser Claude Code v2.1.260+ avec des serveurs MCP (corrections CVE critiques)
    - Auditer le code source des serveurs MCP tiers avant installation
    - Voir la checklist de vetting dans les règles de sécurité
 

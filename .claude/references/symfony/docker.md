@@ -19,9 +19,9 @@ L'utilisation de **Docker est OBLIGATOIRE** pour tout le projet Atoll Tourisme. 
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Docker Engine | 29.4.0 | BuildKit par défaut, SBOM natif |
+| Docker Engine | 29.6.1 | BuildKit par défaut, SBOM natif |
 | Docker Compose | v5.0.0 "Mont Blanc" | Champ `version:` obsolète |
-| FrankenPHP | 1.12.1 | PHP 8.5, Caddy 2.11.2, Worker mode (2-3× gains) |
+| FrankenPHP | 1.12.4 | PHP 8.5, Caddy 2.11.2, Worker mode (2-3× gains) |
 | PgBouncer | 1.25.2 | Prepared statements natifs (1.21+ requis ; CVE-2026-6664/6667 patchées) |
 
 **FrankenPHP** : Alternative moderne à PHP-FPM pour Symfony (Worker mode, HTTP/3, max_requests anti-leak).  
@@ -407,7 +407,7 @@ docker run --rm -i hadolint/hadolint:v2.12.0 < Dockerfile
 ```dockerfile
 # Dockerfile - Production - Atoll Tourisme
 # Validé par Hadolint v2.12.0
-# Docker Engine 29.4.0 (avril 2026)
+# Docker Engine 29.6.1
 # Source: https://www.docker.com/blog/docker-engine-version-29/
 
 # Métadonnées obligatoires
@@ -809,10 +809,10 @@ make shell  # puis psql
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Docker Engine | 29.4.0 | BuildKit par défaut, SBOM natif |
+| Docker Engine | 29.6.1 | BuildKit par défaut, SBOM natif |
 | Compose Spec | v5.0.0 "Mont Blanc" | Champ `version:` obsolète depuis v2.40+ |
 | Hadolint | v2.12.0 | Version stable pinnée |
-| Kubernetes | 1.35.3 | Gateway API v1.4+, sidecar-less architectures |
+| Kubernetes | 1.36.1 | Gateway API v1.4+, sidecar-less architectures |
 
 **Sources** :  
 https://www.docker.com/blog/docker-engine-version-29/  

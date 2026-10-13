@@ -53,7 +53,12 @@ Combined with `context: fork` on heavy skills (already enabled by Claude Craft) 
     "PostToolUse": [
       {
         "matcher": "Edit",
-        "command": "npx prettier --write \"$FILEPATH\""
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); [ -n \"$FILEPATH\" ] && npx prettier --write \"$FILEPATH\" || true"
+          }
+        ]
       }
     ]
   }
@@ -106,11 +111,18 @@ You can combine multiple hooks in the same `settings.json`:
 
 ## Creating Custom Hooks
 
-Hooks are shell commands that receive tool context via environment variables:
+Hooks are shell commands that receive the event payload as **JSON on stdin** (there are no
+`$TOOL_INPUT` / `$TOOL_OUTPUT` / `$FILEPATH` environment variables). Read fields with `jq`:
 
-- `$TOOL_INPUT` — JSON input for the tool
-- `$TOOL_OUTPUT` — JSON output from the tool (PostToolUse only)
-- `$FILEPATH` — File path for file-related tools
+- `.tool_name` — the tool being called
+- `.tool_input` — the tool's input (e.g. `.tool_input.file_path`, `.tool_input.command`)
+- `.tool_response` — the tool's result (PostToolUse only)
+
+```bash
+FILEPATH=$(jq -r '.tool_input.file_path // empty')
+```
+
+`timeout` is expressed in **seconds** (default 600 for command hooks).
 
 Exit codes:
 - `0` — Allow the operation

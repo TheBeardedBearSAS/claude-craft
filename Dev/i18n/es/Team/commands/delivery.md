@@ -494,7 +494,7 @@ Para 1 EPIC, 5 US, ~25 tareas:
 | **Tiempo total** | **~120 min** | **~55 min** | **~2.2x** |
 | Costo total* | ~$28 | ~$17 | **-38%** |
 
-*Ahorro de costos porque Sonnet ($3/$15/M) gestiona la mayoria del trabajo vs Opus ($15/$75/M) en modo secuencial.
+*Ahorro de costos porque Sonnet 5.5 ($2/$10/M) gestiona la mayoria del trabajo vs Opus 5.5 ($4/$20/M) en modo secuencial.
 
 ## Expectativas de rendimiento
 

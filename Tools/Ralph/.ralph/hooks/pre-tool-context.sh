@@ -59,8 +59,8 @@ get_tool_context() {
             fi
             ;;
 
-        # Task tool - remind about sprint context
-        Task)
+        # Agent tool (named Task before Claude Code 2.1.63) - remind about sprint context
+        Agent|Task)
             local progress_file="$RALPH_SESSION_BASE/sprint-progress.md"
             if [[ -f "$progress_file" ]]; then
                 local current_task

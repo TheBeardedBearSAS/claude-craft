@@ -5,7 +5,7 @@ model: opus
 maxTurns: 10
 effort: xhigh
 memory: user
-tools: [Read, Glob, Grep, Edit, Write, Bash, Task, WebFetch, WebSearch]
+tools: [Read, Glob, Grep, Edit, Write, Bash, Agent, WebFetch, WebSearch]
 # Audit 2026-05-18 P0 #2 — Ralph runs unattended in loops. Baseline
 # deny list prevents an autonomous session from nuking the workspace.
 disallowedTools:

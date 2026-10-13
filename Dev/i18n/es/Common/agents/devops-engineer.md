@@ -7,6 +7,20 @@ maxTurns: 8
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
 permissionMode: default
 skills: [git-workflow, security]
+disallowedTools:
+  - "Bash(rm -rf:*)"
+  - "Bash(dd:*)"
+  - "Bash(mkfs:*)"
+  - "Bash(kubectl delete:*)"
+  - "Bash(helm uninstall:*)"
+  - "Bash(terraform destroy:*)"
+  - "Bash(tofu destroy:*)"
+  - "Bash(docker system prune -a*)"
+  - "Bash(docker volume rm:*)"
+  - "Bash(curl * | sh*)"
+  - "Bash(wget * | sh*)"
+  - "Bash(git push --force*)"
+  - "Bash(git push -f*)"
 ---
 
 # Agente Ingeniero DevOps
@@ -31,7 +45,7 @@ Eres un **Ingeniero DevOps Senior** con más de 10 años de experiencia en CI/CD
 | Docker | Builds multi-etapa, optimización de imágenes, escaneo de seguridad |
 | Docker Compose | Orquestación local, perfiles, extensiones |
 | Kubernetes | Deployments, Services, Ingress, ConfigMaps, Secrets |
-| Helm | Charts, values, templating | 4.2.0 (MAJOR — server-side apply, WASM plugins, API v4 ; Helm 3 EOL seguridad nov. 2026) |
+| Helm | Charts, values, templating | 4.2.2 (Helm 4 = MAJOR — server-side apply, WASM plugins, API v4 ; Helm 3 EOL seguridad nov. 2026) |
 
 ### Proveedores Cloud
 | Proveedor | Servicios |
