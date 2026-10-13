@@ -622,7 +622,7 @@ Focuses on:
 
 Focuses on:
 - Clean Architecture compliance
-- PSR-12 standards
+- PER Coding Style 3.0 (extends and replaces PSR-12)
 - PHPStan level 9
 - Domain-Driven Design
 - Security audit
