@@ -52,7 +52,7 @@ export default async function handler(req: Request): Promise<Response> {
 
 // ============================================================================
 // Edge Runtime migration notes (placeholder only — do NOT implement Edge
-// Runtime code here; Edge Runtime is deprecated by Vercel).
+// Runtime code here; Edge Runtime is not recommended by Vercel).
 //
 // If this handler is being converted FROM a legacy `export const runtime =
 // 'edge'` file:

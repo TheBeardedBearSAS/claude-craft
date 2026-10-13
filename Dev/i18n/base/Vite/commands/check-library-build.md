@@ -39,7 +39,7 @@ Confirm the library builds to ES + CJS + `.d.ts`, peer dependencies are correctl
 ### 3. Dependency Externalization
 
 ```
-[ ] Every peer dependency appears in BOTH package.json "peerDependencies" AND build.rollupOptions.external
+[ ] Every peer dependency appears in BOTH package.json "peerDependencies" AND build.rolldownOptions.external
 [ ] No peer dependency's code is present in the built dist/ bundle (verify by inspecting dist/ output or the bundle-visualizer report)
 [ ] Regular (non-peer) dependencies are intentionally bundled, not accidentally externalized
 ```
@@ -95,7 +95,7 @@ Status: ✅ CLEAN | ❌ LEAKS FOUND
 
 Findings:
 [🔴 HIGH] "some-peer-lib" bundled into dist/my-lib.js
-    Fix: Add to peerDependencies and build.rollupOptions.external
+    Fix: Add to peerDependencies and build.rolldownOptions.external
 
 🗂️ PACKAGE.JSON EXPORTS MAP
 ──────────────────────────────────────────────────────────────
@@ -156,7 +156,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
       fileName: (format) => `my-lib.${format === 'es' ? 'js' : 'cjs'}`,
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: ['some-peer-lib'],
     },
   },

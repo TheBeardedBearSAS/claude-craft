@@ -20,7 +20,7 @@ Functions on Vercel expose two handler signatures depending on runtime:
 | Runtime | Signature | Status |
 |---------|-----------|--------|
 | **Node.js runtime (Fluid Compute)** — default | `(req: VercelRequest, res: VercelResponse) => void` **or** `(req: Request) => Response` | Current, recommended |
-| **Edge Runtime** | `(req: Request) => Response` | **Deprecated** by Vercel — do not target for new code; only relevant when testing legacy handlers during migration |
+| **Edge Runtime** | `(req: Request) => Response` | **Not recommended** by Vercel — do not target for new code; only relevant when testing legacy handlers during migration |
 
 Prefer the native `Request`/`Response` signature for new handlers under Fluid Compute — it is portable and trivial to unit test without mocking Vercel-specific types.
 

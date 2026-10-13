@@ -107,7 +107,7 @@ High Complexity (>10): X
 
 Files to refactor:
 - vite.config.ts (210 lines)
-  → Extract build.rollupOptions.input map to config/entries.ts
+  → Extract build.rolldownOptions.input map to config/entries.ts
 
 🎯 VITE-SPECIFIC ISSUES
 ──────────────────────────────────────────────────────────────

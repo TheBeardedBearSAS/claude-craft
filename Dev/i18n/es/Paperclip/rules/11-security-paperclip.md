@@ -141,6 +141,15 @@ Ajustar fuentes script/style de CSP si la UI requiere CDNs específicos; de lo c
 - [ ] Log de actividad append-only, forzado por DB donde sea posible
 - [ ] Kill switch + deshabilitar plugin testeado
 
+## Notas de actualización: cambios incompatibles (2026.916.0 a 2026.1012.0)
+
+Verificado con las notas de versión oficiales de GitHub (paperclipai/paperclip).
+
+- **2026.916.0**: las APIs de agente ya no devuelven credenciales en texto plano (los bindings `plain` se redactan: usar `secretRef`, nunca releer secretos); se eliminan los "cheap model profiles" (la migración `0236` borra los `modelProfiles` almacenados); `X-Forwarded-Host` solo se respeta cuando el par inmediato pasa `TRUST_PROXY` (definirlo detrás de un reverse proxy; si no, se usa la cabecera `Host` sin procesar); se elimina la opción de conexión REST legacy de Anthropic (las conexiones de herramientas REST se validan como REST).
+- **2026.1001.0**: se retira el broker Composio legacy (sin migración automática; reemplazo: Composio Connect tras el flag `enableMcpAggregators`). Los harnesses de ejecución pasan a **full auto por defecto**: ACPX/Claude `approve-all`, OpenCode `allow`, Codex `never` (sin pausas de aprobación). Para conservar las puertas de aprobación del proveedor, definir explícitamente un modo restrictivo por agente: `acpxPermissionMode` (`approve-paperclip`, `approve-reads` o `deny-all`) u `opencodePermissionMode` (`ask` o `deny`). Las aprobaciones gobernadas de Paperclip siguen aplicándose.
+- **2026.1005.0**: `PAPERCLIP_CLOUD_UI_SNIPPET` / `PAPERCLIP_CLOUD_UI_SNIPPET_B64` ya no inyectan HTML (migrar la integración a una contribución de UI de plugin); una @-mención en un comentario de tarea es solo contexto y ya no lanza un run (solo lo hacen la asignación explícita o las solicitudes de revisión).
+- **2026.1012.0**: los locks de restauración de workspace son ahora locks de archivo SQLite bajo `<instance root>/locks/directory-merge/`: detener todos los procesos antiguos de servidor y worker antes de actualizar o revertir; los tool grants con selectores desconocidos o restricciones mal formadas ahora deniegan el acceso (revisar los grants personalizados).
+
 ---
 
 **Última actualización:** 2026-04 | **Versión:** 2.0.0 | **Autor:** The Bearded CTO

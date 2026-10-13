@@ -19,7 +19,7 @@ Guider un opérateur à travers l'onboarding : installer, créer l'instance, ini
 
 ### 1. Préconditions
 
-- [ ] Node.js 20+ et pnpm 9.15+ installés
+- [ ] Node.js 24.11+ et pnpm 9.15+ installés
 - [ ] PostgreSQL accessible **OU** accepter le Postgres embarqué pour le dev local
 - [ ] Port 3100 disponible (ou définir `PORT`)
 

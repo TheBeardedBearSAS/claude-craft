@@ -4,7 +4,7 @@
 
 ## Architecture Pattern
 
-**Pattern**: Vite is a build tool and dev server, not an application framework. There is no single "correct" project structure — instead there are **four distinct project shapes**, each with its own `vite.config.ts` conventions. A project should commit to exactly one shape; mixing them (e.g. `build.lib` alongside `build.rollupOptions.input` for an app) is a compliance smell (see `check-compliance.md`).
+**Pattern**: Vite is a build tool and dev server, not an application framework. There is no single "correct" project structure — instead there are **four distinct project shapes**, each with its own `vite.config.ts` conventions. A project should commit to exactly one shape; mixing them (e.g. `build.lib` alongside top-level `input` for an app) is a compliance smell (see `check-compliance.md`).
 
 ## Shape 1 — Vanilla SPA
 
@@ -85,7 +85,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
       fileName: (format) => `my-lib.${format === 'es' ? 'js' : 'cjs'}`,
     },
-    rollupOptions: {
+    rolldownOptions: {
       // Peer dependencies must be externalized, never bundled
       external: [],
     },
@@ -95,7 +95,7 @@ export default defineConfig({
 
 ## Shape 3 — Multi-Page App (MPA)
 
-`build.rollupOptions.input` maps multiple HTML entries explicitly. Each page gets its own bundle graph; shared modules are automatically deduplicated into common chunks by Rolldown.
+top-level `input` maps multiple HTML entries explicitly. Each page gets its own bundle graph; shared modules are automatically deduplicated into common chunks by Rolldown.
 
 ### Project Structure
 
@@ -123,19 +123,16 @@ import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
 
 export default defineConfig({
-  build: {
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        admin: resolve(__dirname, 'admin/index.html'),
-        docs: resolve(__dirname, 'docs/index.html'),
-      },
-    },
+  // top-level `input` (also used by the dev server); build.rolldownOptions.input overrides it for build only
+  input: {
+    main: resolve(__dirname, 'index.html'),
+    admin: resolve(__dirname, 'admin/index.html'),
+    docs: resolve(__dirname, 'docs/index.html'),
   },
 });
 ```
 
-**Key rule**: every HTML file under the project root that is meant to be built **must** appear in `rollupOptions.input` — Vite does not auto-discover HTML files outside the configured root.
+**Key rule**: every HTML file under the project root that is meant to be built **must** appear in the top-level `input` — Vite does not auto-discover HTML files outside the configured root.
 
 ## Shape 4 — Workers / WASM
 
@@ -191,13 +188,13 @@ export default defineConfig({
 ## Key Architecture Principles
 
 ### 1. One Shape Per Project
-A single `vite.config.ts` should express exactly one of the four shapes above. If a repository genuinely needs both a library and a demo app, split them into a monorepo with two independent Vite configs rather than merging `build.lib` and `rollupOptions.input` in one config.
+A single `vite.config.ts` should express exactly one of the four shapes above. If a repository genuinely needs both a library and a demo app, split them into a monorepo with two independent Vite configs rather than merging `build.lib` and top-level `input` in one config.
 
 ### 2. `index.html` as Source, Not Static Asset
 Across every shape except pure libraries, `index.html` is compiled by Vite — script/link tags are resolved, hashed, and injected at build time. Never hand-write a `dist/index.html` post-build; let Vite own it.
 
 ### 3. Explicit Entry Points
-Multi-page apps and libraries must declare every entry explicitly (`rollupOptions.input`, `build.lib.entry`). Relying on directory scanning/globbing for entries makes the build non-deterministic and harder to audit.
+Multi-page apps and libraries must declare every entry explicitly (top-level `input`, `build.lib.entry`). Relying on directory scanning/globbing for entries makes the build non-deterministic and harder to audit.
 
 ### 4. `public/` vs `src/assets/`
 - `public/` — copied byte-for-byte to `dist/` root, referenced by absolute path (`/favicon.svg`), **not** processed or hashed. Use for files that must keep a stable name (robots.txt, manifest.json).

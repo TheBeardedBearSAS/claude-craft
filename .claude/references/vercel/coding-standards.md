@@ -39,7 +39,7 @@ export default async function handler(
 }
 ```
 
-**Rule**: type the handler with `VercelRequest`/`VercelResponse` from `@vercel/node`, not bare `Request`/`Response` — those are the Web Fetch API types used by the (deprecated-for-new-code) Edge runtime, and mixing the two signatures across the `api/` tree makes the runtime each function targets ambiguous at a glance.
+**Rule**: type the handler with `VercelRequest`/`VercelResponse` from `@vercel/node`, not bare `Request`/`Response` — those are the Web Fetch API types used by the (not-recommended-for-new-code) Edge runtime, and mixing the two signatures across the `api/` tree makes the runtime each function targets ambiguous at a glance.
 
 ### Method Dispatch — Guard Clauses, Not Nested Conditionals
 

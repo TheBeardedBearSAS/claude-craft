@@ -36,7 +36,7 @@ Exécuter la vérification complète de configuration et d'architecture :
 - Correction de vite.config.ts (defineConfig, alias synchronisés avec tsconfig) (8 pts)
 - Emplacement d'index.html à la racine du projet, jamais dans public/ (6 pts)
 - Configuration build.lib pour les librairies (entry, formats, external, vite-plugin-dts) (8 pts)
-- rollupOptions.input pour les applications multi-pages, convention de nommage des plugins (vite-plugin-*) (8 pts)
+- rolldownOptions.input pour les applications multi-pages, convention de nommage des plugins (vite-plugin-*) (8 pts)
 
 **Référence** : `.claude/agents/vite-reviewer.md` (section 1)
 
@@ -151,7 +151,7 @@ Sous-scores :
   • Correction de vite.config.ts     : XX/8
   • Emplacement d'index.html         : XX/6
   • Configuration build.lib          : XX/8
-  • rollupOptions.input / plugins    : XX/8
+  • rolldownOptions.input / plugins    : XX/8
 
 Points forts :
 - [Points forts architecture]

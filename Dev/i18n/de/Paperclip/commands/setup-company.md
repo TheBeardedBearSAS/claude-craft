@@ -19,7 +19,7 @@ Führen Sie einen Operator durch das Onboarding: installieren, die Instanz erste
 
 ### 1. Vorbedingungen
 
-- [ ] Node.js 20+ und pnpm 9.15+ installiert
+- [ ] Node.js 24.11+ und pnpm 9.15+ installiert
 - [ ] PostgreSQL erreichbar **ODER** akzeptieren Sie das eingebettete Postgres für Local-Dev
 - [ ] Port 3100 verfügbar (oder setzen Sie `PORT`)
 

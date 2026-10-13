@@ -17,13 +17,13 @@
 ## Library Feature (new export)
 
 - [ ] **Exported from `src/index.ts`** - single public entry stays the source of truth
-- [ ] **Peer dependency added** to both `package.json` "peerDependencies" and `build.rollupOptions.external`, if applicable
+- [ ] **Peer dependency added** to both `package.json` "peerDependencies" and `build.rolldownOptions.external`, if applicable
 - [ ] **Type declarations verified** - `vite-plugin-dts` output includes the new export with correct types
 - [ ] **Build-output smoke test updated** - `test/build-output.test.ts` covers the new public API surface
 
 ## Multi-Page Feature (new page)
 
-- [ ] **HTML entry created** and added to `build.rollupOptions.input`
+- [ ] **HTML entry created** and added to top-level `input`
 - [ ] **Entry key is stable, kebab-case**, matches folder/file naming convention
 - [ ] **Shared code factored** into `src/shared/`, not duplicated across page entries
 - [ ] **CSP verified** for the new entry (see `11-security-vite.md`)

@@ -30,8 +30,8 @@ npx eslint . && tsc -b --noEmit && npx vitest run
 ### Shape-Specific
 
 - [ ] **Vanilla SPA**: `index.html` stayed at project root, not moved into `public/`
-- [ ] **Library**: peer dependencies externalized in `build.rollupOptions.external`, not bundled
-- [ ] **Multi-page**: `build.rollupOptions.input` keys unchanged/stable if renaming was not intentional
+- [ ] **Library**: peer dependencies externalized in `build.rolldownOptions.external`, not bundled
+- [ ] **Multi-page**: top-level `input` keys unchanged/stable if renaming was not intentional
 - [ ] **Worker/WASM**: worker message handler validates payload shape
 
 ### Testing

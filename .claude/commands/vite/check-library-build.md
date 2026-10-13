@@ -21,7 +21,7 @@ Run the library build, inspect `dist/`, and verify that JS output, `.d.ts` decla
 ```
 [ ] build.lib.entry points to a single, deliberate public entry (src/index.ts)
 [ ] build.lib.formats includes both 'es' and 'cjs' unless ESM-only is an explicit decision
-[ ] rollupOptions.external lists all peer dependencies (not bundled into the library)
+[ ] rolldownOptions.external lists all peer dependencies (not bundled into the library)
 [ ] vite-plugin-dts configured with include matching the actual source tree
 [ ] No accidental bundling of devDependencies into the library output
 ```
@@ -70,7 +70,7 @@ Status: ✅ PUBLISHABLE | ⚠️ NEEDS WORK | ❌ BROKEN
 ──────────────────────────────────────────────────────────────
 [✓] build.lib.entry = src/index.ts
 [✗] "lodash" bundled instead of externalized
-    File: vite.config.ts (rollupOptions.external)
+    File: vite.config.ts (rolldownOptions.external)
     → Add "lodash" to external, declare it as a peerDependency
 
 📝 TYPESCRIPT & QUALITÉ: XX/20

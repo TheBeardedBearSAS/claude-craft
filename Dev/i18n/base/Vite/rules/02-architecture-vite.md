@@ -58,7 +58,7 @@ project-root/
 
 ## Shape 2 — Library Authoring
 
-Published as an npm package. Vite bundles `src/index.ts` in **library mode** (`build.lib`), producing ES + CJS outputs plus type declarations via `vite-plugin-dts`. Peer dependencies (e.g. a host framework, if the library happens to wrap one) are excluded from the bundle via `rollupOptions.external`.
+Published as an npm package. Vite bundles `src/index.ts` in **library mode** (`build.lib`), producing ES + CJS outputs plus type declarations via `vite-plugin-dts`. Peer dependencies (e.g. a host framework, if the library happens to wrap one) are excluded from the bundle via `rolldownOptions.external`.
 
 ```
 my-lib/
@@ -98,13 +98,13 @@ my-lib/
 }
 ```
 
-**Rule**: never bundle a peer dependency into the library output — declare it in both `peerDependencies` and `build.rollupOptions.external`, otherwise consumers end up with duplicate copies (and duplicate global state) of that dependency.
+**Rule**: never bundle a peer dependency into the library output — declare it in both `peerDependencies` and `build.rolldownOptions.external`, otherwise consumers end up with duplicate copies (and duplicate global state) of that dependency.
 
 ---
 
 ## Shape 3 — Multi-Page App (MPA)
 
-Multiple independent HTML entry points, each with its own module graph, sharing one `vite.config.ts`. Configured via `build.rollupOptions.input` — an object mapping a page name to its HTML file.
+Multiple independent HTML entry points, each with its own module graph, sharing one `vite.config.ts`. Configured via top-level `input` — an object mapping a page name to its HTML file.
 
 ```
 project-root/
@@ -130,7 +130,7 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
         about: resolve(__dirname, 'about.html'),
@@ -196,7 +196,7 @@ export async function loadImageFilter() {
 - Do not let a "library" project accumulate an `index.html` dev harness inside `src/` — keep a separate `playground/` or `demo/` folder with its own `vite.config.ts` if a local preview is needed.
 
 ### 2. Explicit Entry Points
-- Every HTML entry, worker, and WASM module must be reachable from the module graph via a static, analyzable reference (`rollupOptions.input`, `new URL(..., import.meta.url)`, `?init`). Dynamic string concatenation defeats Vite's static analysis.
+- Every HTML entry, worker, and WASM module must be reachable from the module graph via a static, analyzable reference (`rolldownOptions.input`, `new URL(..., import.meta.url)`, `?init`). Dynamic string concatenation defeats Vite's static analysis.
 
 ### 3. Externalize What You Don't Own
 - Libraries externalize peer dependencies; apps do not — this is the one place library and app configs diverge (see `03-coding-standards.md`).

@@ -8,7 +8,7 @@
 
 **Geltungsbereich**: ausschließlich framework-agnostische Platform-Features — vercel.json, Functions, ISR, Cron, Storage. Ausdrücklich nicht Next.js, nicht der eigene Deploy-Adapter irgendeines Frameworks.
 
-> **Hinweis:** Vercel (dieser Stack) deckt ausschließlich die **framework-agnostische Deployment-Platform-Oberfläche** ab: `vercel.json`-Konfiguration (Rewrites, Redirects, Headers, Regionen), Serverless Functions auf der Node.js-Laufzeit / Fluid Compute, ISR-Cache-Primitiven, Cron Jobs, Vercel Storage (Blob nativ; Postgres/KV über den Marketplace — Neon/Upstash), Analytics/Speed Insights sowie den Workflow für Umgebungsvariablen/Preview-Deployments. Es ist **kein** Next.js-Stack — Next.js selbst liegt außerhalb des Geltungsbereichs und ist keine unterstützte claude-craft-Technologie (es existiert kein `/nextjs:*`-Namespace). Framework-spezifische Routing-, Rendering- oder Data-Fetching-Muster gehören zum jeweils eigenen Stack des Frameworks (`/react:*`, `/vuejs:*`, `/angular:*`) — dort ist in der `tooling.md` nachzulesen, wie die Integration mit Vercels Build-Output funktioniert. Zusätzlich ist die Edge Runtime (`export const runtime = 'edge'`) seit 2026 von Vercel **deprecated** zugunsten von Fluid Compute auf der Node.js-Laufzeit; dieser Stack dokumentiert die Edge Runtime nur, um Legacy-Code zu identifizieren und zu migrieren, nicht als empfohlenes Muster für neue Arbeiten.
+> **Hinweis:** Vercel (dieser Stack) deckt ausschließlich die **framework-agnostische Deployment-Platform-Oberfläche** ab: `vercel.json`-Konfiguration (Rewrites, Redirects, Headers, Regionen), Serverless Functions auf der Node.js-Laufzeit / Fluid Compute, ISR-Cache-Primitiven, Cron Jobs, Vercel Storage (Blob nativ; Postgres/KV über den Marketplace — Neon/Upstash), Analytics/Speed Insights sowie den Workflow für Umgebungsvariablen/Preview-Deployments. Es ist **kein** Next.js-Stack — Next.js selbst liegt außerhalb des Geltungsbereichs und ist keine unterstützte claude-craft-Technologie (es existiert kein `/nextjs:*`-Namespace). Framework-spezifische Routing-, Rendering- oder Data-Fetching-Muster gehören zum jeweils eigenen Stack des Frameworks (`/react:*`, `/vuejs:*`, `/angular:*`) — dort ist in der `tooling.md` nachzulesen, wie die Integration mit Vercels Build-Output funktioniert. Zusätzlich wird die Edge Runtime (`export const runtime = 'edge'`) von Vercel **nicht empfohlen**; Vercel bevorzugt Fluid Compute auf der Node.js-Laufzeit; dieser Stack dokumentiert die Edge Runtime nur, um Legacy-Code zu identifizieren und zu migrieren, nicht als empfohlenes Muster für neue Arbeiten.
 
 ### Projektstruktur
 ```
@@ -38,7 +38,7 @@ Vollständige Muster siehe `rules/02-architecture.md`.
 | Regel | Begründung |
 |------|--------|
 | vercel.json gegen `$schema` validiert | Fängt vertippte Globs/Schlüssel ab, bevor sie beim Deploy stillschweigend fehlschlagen |
-| Node.js/Fluid Compute ist die Laufzeit-Vorgabe | Die Edge Runtime (`runtime: 'edge'`) ist deprecated — nur Ziel für Legacy-Migrationen |
+| Node.js/Fluid Compute ist die Laufzeit-Vorgabe | Die Edge Runtime (`runtime: 'edge'`) wird nicht empfohlen — nur Ziel für Legacy-Migrationen |
 | Umgebungsvariablen niemals hartkodiert oder committet | Secrets gehören in Vercels Umgebungsvariablen-Store, pro Umgebung skopiert |
 | Cron-Endpunkte prüfen den Secret-Header | Ein ungeschützter Cron-Pfad kann von jedem ausgelöst werden, der ihn findet |
 | >= 80% Coverage auf der Handler-Logik | Qualitätssicherung für die Business-Logik von Functions und Middleware |

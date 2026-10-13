@@ -208,9 +208,9 @@ Alguma Function declara export const config = { runtime: 'edge' } (ou
 "runtime": "edge" no bloco functions do vercel.json)?
   SIM --> Essa Function foi recentemente adicionada ou modificada (não puramente
           código legado intocado)?
-          SIM --> MAIOR: o Edge Runtime está descontinuado pela Vercel — migrar para o
+          SIM --> MAIOR: o Edge Runtime não é recomendado pela Vercel — migrar para o
                   Fluid Compute no runtime Node.js (padrão) para acesso total à API Node,
-                  cold starts com cache de bytecode (Node 20+), e precificação Active CPU
+                  cold starts com cache de bytecode (Node 22+), e precificação Active CPU
           NÃO --> MENOR: sinalizar como dívida de migração legada, não bloquear código não modificado
   NÃO --> A Function executa no padrão Node.js/Fluid Compute --> continuar para a
           verificação da versão do Node
@@ -222,7 +222,7 @@ Alguma Function declara export const config = { runtime: 'edge' } (ou
 A versão do Node.js está fixada (package.json "engines.node", ou a configuração
 Node.js Version do projeto na Vercel) para 20.x ou mais recente?
   NÃO --> MENOR: uma versão do Node não fixada/antiga abre mão da melhoria de cold-start
-          por cache de bytecode do Fluid Compute (específica do Node 20+) e arrisca uma
+          por cache de bytecode do Fluid Compute (específica do Node 22+) e arrisca uma
           deriva silenciosa de runtime entre redeploys
   SIM --> OK
 ```
@@ -244,7 +244,7 @@ de usá-lo?
 
 **Edge Runtime em código novo/modificado:**
 ```typescript
-// PROIBIDO — Edge Runtime declarado em uma Function recém-adicionada: padrão descontinuado
+// PROIBIDO — Edge Runtime declarado em uma Function recém-adicionada: padrão desaconselhado
 export const config = { runtime: 'edge' };
 
 export default function handler(req: Request) {
@@ -253,7 +253,7 @@ export default function handler(req: Request) {
 }
 
 // CORRETO — padrão Node.js/Fluid Compute, acesso total à API Node, cold starts mais
-// rápidos no Node 20+ via cache de bytecode
+// rápidos no Node 22+ via cache de bytecode
 export const config = { maxDuration: 10 };
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
@@ -279,7 +279,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 ```
 ```typescript
 // api/legacy.ts
-// TODO(JIRA-1234): migrar para fora do Edge Runtime — descontinuado pela Vercel, ver Fluid Compute
+// TODO(JIRA-1234): migrar para fora do Edge Runtime — não recomendado pela Vercel, ver Fluid Compute
 export const config = { runtime: 'edge' };
 ```
 
@@ -332,7 +332,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 |---------|----------|--------------|
 | Runtime | Padrão Node.js/Fluid Compute | `runtime: 'edge'` em código novo/modificado |
 | Edge Runtime legado | Marcador de migração registrado (TODO + referência de issue) | Edge Runtime silencioso e não sinalizado deixado em produção |
-| Versão do Node | Fixada em 20+ (`engines.node` ou config do projeto) | Não fixada, com deriva no padrão |
+| Versão do Node | Fixada em 22.x ou 24.x (Node 20 está descontinuado na Vercel desde 2026-10-01) (`engines.node` ou config do projeto) | Não fixada, com deriva no padrão |
 | Input do handler | Validado/parseado (zod, guarda manual) antes de usar | `req.body`/`req.query` bruto usado sem verificação |
 | Output do handler | Status explícito + body tipado em todo caminho | 200 implícito, formato de erro inconsistente |
 | Consciência de cold-start | Imports pesados carregados de forma lazy/adiada quando não sempre necessários | Toda dependência importada de forma eager no topo do módulo |
@@ -802,7 +802,7 @@ describe('api/cron/daily', () => {
 | Tópico | O Que Verificar |
 |-------|-----------|
 | **Fluid Compute** | Confirmar que as Functions usam Fluid Compute por padrão (precificação Active CPU), não o faturamento legado de Serverless Functions com concorrência fixa |
-| **Descontinuação do Edge Runtime** | Qualquer `runtime: 'edge'` encontrado deve carregar uma referência de ticket de migração, nunca ser apresentado como o padrão recomendado para código novo |
+| **Edge Runtime desaconselhado** | Qualquer `runtime: 'edge'` encontrado deve carregar uma referência de ticket de migração, nunca ser apresentado como o padrão recomendado para código novo |
 | **Pacotes de Storage descontinuados** | Imports de `@vercel/kv`/`@vercel/postgres` são um achado MAIOR independentemente de quando foram adicionados — sinalizar para migração ao Marketplace (Neon/Upstash) |
 | **Primitiva de cache ISR vs headers do vercel.json** | A revalidação nativa do framework e os `headers` do vercel.json nunca devem visar a mesma rota para `Cache-Control` |
 | **Limites do plano de Cron** | O plano Hobby limita os Cron Jobs a 1/dia — verificar se o schedule declarado corresponde ao plano realmente em uso |

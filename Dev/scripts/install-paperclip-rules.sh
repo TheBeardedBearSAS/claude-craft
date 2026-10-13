@@ -4,7 +4,7 @@
 # Usage: ./install-paperclip-rules.sh [OPTIONS] [PROJECT_DIR]
 #
 # Paperclip: Open-source orchestration for zero-human companies.
-# Node.js 20+ / TypeScript / React UI / Vitest / PostgreSQL.
+# Node.js 24.11+ / TypeScript / React UI / Vitest / PostgreSQL.
 # Docs: https://docs.paperclip.ing/  —  Repo: https://github.com/paperclipai/paperclip
 
 set -euo pipefail
@@ -16,7 +16,7 @@ I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 TECH_NAME="Paperclip"
 TECH_DISPLAY_NAME="Paperclip"
 TECH_NAMESPACE="paperclip"
-DEFAULT_STACK="Node.js 20+, TypeScript 5+, React 18+, Vitest, pnpm 9.15+, PostgreSQL"
+DEFAULT_STACK="Node.js 24.11+, TypeScript 5+, React 18+, Vitest, pnpm 9.15+, PostgreSQL"
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
@@ -47,7 +47,7 @@ TECH_RULES=(
 HELP_DESCRIPTION="    TCL-optimized installation covering:
     - Paperclip monorepo shape (server + ui + cli + packages)
     - Built-in adapters (packages/adapters/*) and plugins (@paperclipai/plugin-sdk)
-    - Node.js 20+ / TypeScript strict mode
+    - Node.js 24.11+ / TypeScript strict mode
     - Testing (Vitest, plugin test harness from @paperclipai/plugin-sdk/testing)
     - Security (Better Auth, tenancy, plugin capabilities, approval gates)
 
@@ -64,7 +64,7 @@ AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check-compliance\` - Full compliance 
 - \`/${TECH_NAMESPACE}:setup-company\` - Bootstrap a new Paperclip company"
 
 ARCHITECTURE_SUMMARY="\`\`\`
-Paperclip monorepo (v2026.529.0+)
+Paperclip monorepo (v2026.1012.0+)
 
 server/                Node.js + TypeScript API (companies, agents, approvals, activity)
 ui/                    React dashboard
@@ -101,7 +101,7 @@ TESTING_STACK="**Paperclip Stack**: Vitest (unit + integration) + adapter contra
 TECH_REFERENCES="- \`${TECH_NAMESPACE}/architecture.md\` - Two-layer control plane + adapters
 - \`${TECH_NAMESPACE}/coding-standards.md\` - TypeScript & Paperclip conventions
 - \`${TECH_NAMESPACE}/testing.md\` - Vitest & adapter contract tests
-- \`${TECH_NAMESPACE}/tooling.md\` - pnpm, tsx, Vite, Node 20+
+- \`${TECH_NAMESPACE}/tooling.md\` - pnpm, tsx, Vite, Node 24.11+
 - \`${TECH_NAMESPACE}/quality-tools.md\` - ESLint flat config, Prettier, tsc
 - \`${TECH_NAMESPACE}/security.md\` - Secrets, approval gates, budgets, audit trails
 - \`${TECH_NAMESPACE}/adapter-protocol.md\` - Heartbeat, cost reporting, approvals"
