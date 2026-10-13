@@ -543,7 +543,7 @@ make build-apk
 
 ### SwiftPM par défaut sur iOS
 
-Flutter 3.44+ utilise **Swift Package Manager (SwiftPM)** comme gestionnaire de plugins iOS par défaut, en remplacement de CocoaPods (toujours supporté mais déprécié pour les nouveaux projets).
+Flutter 3.47+ utilise **Swift Package Manager (SwiftPM)** comme gestionnaire de plugins iOS par défaut, en remplacement de CocoaPods (toujours supporté mais déprécié pour les nouveaux projets).
 
 ```bash
 # Vérifier la migration SwiftPM
@@ -560,7 +560,7 @@ flutter:
   use-swift-package-manager: false
 ```
 
-**Impact :** les plugins sans support SwiftPM nécessitent `use-swift-package-manager: false` ou une migration côté auteur du plugin. La majorité des plugins pub.dev officiels supportent déjà SwiftPM depuis Flutter 3.22+.
+**Impact :** les plugins sans support SwiftPM nécessitent `use-swift-package-manager: false` ou une migration côté auteur du plugin. La majorité des plugins pub.dev officiels supportent déjà SwiftPM.
 
 **Source :** https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers
 
@@ -607,6 +607,14 @@ MaterialButton(onPressed: () {}, child: Text('OK'));
 ```
 
 Exécuter `dart fix --apply` pour migrer automatiquement les dépréciations détectables.
+
+### Breaking changes Flutter 3.44 et 3.47
+
+- **3.44** : ordre de fermeture de `RawMenuAnchor` modifié ; `onReorder` déprécié ; `TextInputConnection.setStyle` déprécié ; `cacheExtent` / `cacheExtentStyle` dépréciés ; `IconData` devient `final` ; Android 17 ignore les restrictions d'orientation et de redimensionnement sur grands écrans ; `ListTile` signale une erreur en debug lorsqu'il est enveloppé dans un widget coloré ; les projets Android migrent vers Kotlin intégré ; réorganisation des page transition builders.
+- **3.47** : le contenu OpenGL ES render-to-texture est stocké de haut en bas ; comportement de `Semantics` header / `headingLevel` mis à jour sur iOS et Android ; `describeEnum` supprimé (utiliser `Enum.name`).
+- **Annoncé, pas encore en stable** : migration vers les packages autonomes `material_ui` / `cupertino_ui`.
+
+**Source :** https://docs.flutter.dev/release/breaking-changes
 
 ---
 

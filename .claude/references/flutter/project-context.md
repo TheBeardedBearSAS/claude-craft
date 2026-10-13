@@ -7,8 +7,8 @@
 **Stack technologique** : {{TECH_STACK}}
 
 **Versions requises (2026)** :
-- **Flutter**: 3.44.x+ (WebAssembly stable, hot reload web)
-- **Dart**: 3.12.x+ (dot shorthands, enhanced patterns)
+- **Flutter**: 3.47.x+ (WebAssembly stable, hot reload web)
+- **Dart**: 3.13.x+ (dot shorthands, enhanced patterns)
 - **DevTools**: 2.40.x+
 
 **Description** :
@@ -70,15 +70,15 @@ lib/
 // Voir .claude/references/flutter/mcp-integration.md
 ```
 
-#### Dart 3.11 Dot Shorthands
+#### Dart 3.10 Dot Shorthands
 ```dart
 // ✅ Dot shorthands - syntaxe simplifiée
 enum Status { pending, active, completed }
 
-// Avant Dart 3.11
+// Avant Dart 3.10
 if (status == Status.active) { }
 
-// Dart 3.11+ avec dot shorthands
+// Dart 3.10+ avec dot shorthands
 if (status == .active) { }  // Inférence automatique
 
 // Fonctionne aussi avec constructors
@@ -551,8 +551,8 @@ class AuthService {
 
 | Composant | Version Minimale | Notes |
 |-----------|-----------------|-------|
-| Flutter | 3.44+ | WebAssembly stable, MCP |
-| Dart | 3.12+ | Dot shorthands |
+| Flutter | 3.47+ | WebAssembly stable, MCP |
+| Dart | 3.13+ | Dot shorthands |
 | Android SDK | 34+ | Android 14 |
 | iOS | 15.0+ | Swift 6.0 interop |
 | macOS | 12.0+ | Apple Silicon natif |

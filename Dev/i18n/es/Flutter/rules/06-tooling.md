@@ -539,11 +539,11 @@ make build-apk
 
 ---
 
-## Puntos de atención Flutter 3.44 (2026)
+## Puntos de atención Flutter 3.47 (2026)
 
 ### SwiftPM por defecto en iOS
 
-Flutter 3.44+ utiliza **Swift Package Manager (SwiftPM)** como gestor de plugins iOS por defecto, reemplazando a CocoaPods (aún soportado pero deprecado para nuevos proyectos).
+Flutter 3.47+ utiliza **Swift Package Manager (SwiftPM)** como gestor de plugins iOS por defecto, reemplazando a CocoaPods (aún soportado pero deprecado para nuevos proyectos).
 
 ```bash
 # Verificar la migración SwiftPM
@@ -566,7 +566,7 @@ flutter:
 
 ### Android Gradle Plugin (AGP) 9
 
-Flutter 3.44 requiere **AGP 9.0+**. Actualizar `android/build.gradle`:
+Flutter 3.47 requiere **AGP 9.0+**. Actualizar `android/build.gradle`:
 
 ```groovy
 // android/build.gradle
@@ -584,7 +584,7 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-9.0-bin.zip
 
 **Breaking AGP 9:** `android.enableR8.fullMode=true` por defecto (proguard más agresivo); verificar las reglas de keep para la reflexión.
 
-### Deprecaciones Material / Cupertino (Flutter 3.44)
+### Deprecaciones Material / Cupertino (Flutter 3.47)
 
 Varios componentes legacy están deprecados:
 
@@ -607,6 +607,14 @@ MaterialButton(onPressed: () {}, child: Text('OK'));
 ```
 
 Ejecutar `dart fix --apply` para migrar automáticamente las deprecaciones detectables.
+
+### Breaking changes de Flutter 3.44 y 3.47
+
+- **3.44**: cambia el orden de cierre de `RawMenuAnchor`; `onReorder` obsoleto; `TextInputConnection.setStyle` obsoleto; `cacheExtent` / `cacheExtentStyle` obsoletos; `IconData` pasa a ser `final`; Android 17 ignora las restricciones de orientación y redimensionado en pantallas grandes; `ListTile` informa un error en debug cuando está envuelto en un widget con color; los proyectos Android migran a Kotlin integrado; reorganización de los page transition builders.
+- **3.47**: el contenido OpenGL ES render-to-texture se almacena de arriba abajo; comportamiento de `Semantics` header / `headingLevel` actualizado en iOS y Android; `describeEnum` eliminado (usar `Enum.name`).
+- **Anunciado, aún no en stable**: migración a los paquetes independientes `material_ui` / `cupertino_ui`.
+
+**Fuente:** https://docs.flutter.dev/release/breaking-changes
 
 ---
 
