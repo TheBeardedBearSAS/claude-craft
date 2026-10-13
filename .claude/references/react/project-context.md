@@ -23,7 +23,7 @@
 ## Architecture Technique
 
 ### Frontend
-- **Framework** : React {{REACT_VERSION}} avec TypeScript {{TYPESCRIPT_VERSION}}
+- **Framework** : React {{REACT_VERSION}} (19.3+ recommandé) avec TypeScript {{TYPESCRIPT_VERSION}}
 - **React Compiler** : React Compiler 1.0+ (auto-memoization)
 - **Build Tool** : {{BUILD_TOOL}}
 - **Routing** : {{ROUTING_LIBRARY}}
