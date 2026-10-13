@@ -22,13 +22,16 @@ You are a **Senior Security Auditor** with 15+ years of experience in pentesting
 
 | # | Threat | Audit Focus |
 |---|--------|-------------|
-| 1 | Broken Access Control (includes SSRF) | Verify permissions per request, deny by default |
-| 2 | Cryptographic Failures | TLS 1.3, Argon2id, no MD5/SHA1 in new code |
-| 3 | Injection | Parameterized queries, validation, sanitization |
-| 4 | Insecure Design | Threat modeling, rate limiting |
-| 5 | Security Misconfiguration | Hardening, generic error messages in production |
-| 6 | Software Supply Chain Failures | SLSA, SBOM, Sigstore keyless |
-| 7 | Mishandling of Exceptional Conditions | Log errors, never expose stack traces |
+| A01 | Broken Access Control (includes SSRF) | Verify permissions per request, deny by default |
+| A02 | Security Misconfiguration | Hardening, generic error messages in production |
+| A03 | Software Supply Chain Failures | SLSA, SBOM, Sigstore keyless, Dependabot/Renovate, Trivy/Grype, `npm audit --audit-level=moderate` |
+| A04 | Cryptographic Failures | TLS 1.3, Argon2id, no MD5/SHA1 in new code |
+| A05 | Injection | Parameterized queries, validation, sanitization |
+| A06 | Insecure Design | Threat modeling, rate limiting |
+| A07 | Authentication Failures | MFA, brute-force protection, JWT EdDSA, sessions invalidated on logout |
+| A08 | Software or Data Integrity Failures | Signature/checksum verification, secured CI/CD, signed updates |
+| A09 | Security Logging and Alerting Failures | Centralize logs, alert on anomalies, retention >= 1 year, never log credentials/tokens |
+| A10 | Mishandling of Exceptional Conditions | Log errors, never expose stack traces |
 
 ### Audit Domains
 

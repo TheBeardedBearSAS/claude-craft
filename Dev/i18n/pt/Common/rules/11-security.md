@@ -9,7 +9,7 @@ A seguranca e uma **prioridade absoluta**. Este documento apresenta os principio
 **Referencias:**
 - **OWASP Top 10:2025** (publicado novembro 2025)
 - CWE/SANS Top 25
-- SLSA 1.0
+- SLSA 1.2
 
 ---
 
@@ -31,9 +31,11 @@ A seguranca e uma **prioridade absoluta**. Este documento apresenta os principio
 ## OWASP Top 10:2025
 
 > **Fonte:** [OWASP Top 10:2025](https://owasp.org/Top10/2025/) — publicado novembro 2025.
-> Principais mudancas vs 2021: SSRF consolidado em #1, Supply Chain Failures novo em #6, Mishandling Exceptional Conditions novo em #7.
+> Principais mudancas vs 2021: SSRF consolidado em A01, Security Misconfiguration sobe para A02, Software Supply Chain Failures novo em A03 (absorve o antigo "Vulnerable and Outdated Components"), Software or Data Integrity Failures em A08, Mishandling of Exceptional Conditions novo em A10.
 
-### 1. Broken Access Control (inclui SSRF consolidado)
+> **Listas relacionadas:** OWASP Top 10 for Agentic Applications 2026 (publicado em 2025-12-09) e OWASP Top 10 for LLM Applications 2025 ([genai.owasp.org](https://genai.owasp.org/)) para codigo de agentes IA/LLM; OWASP ASVS 5.0.0 para requisitos de verificacao.
+
+### A01. Broken Access Control (inclui SSRF consolidado)
 
 ```
 RISCO
@@ -50,54 +52,7 @@ PROTECAO
 - Sem acesso a rede interna a partir dos inputs do usuario
 ```
 
-### 2. Cryptographic Failures
-
-```
-RISCO
-- Dados sensiveis em texto plano
-- Algoritmos obsoletos (MD5, SHA1, bcrypt em novo codigo)
-- Chaves no codigo fonte
-- JWT com algoritmo fraco (HS256, RS256)
-
-PROTECAO
-- Criptografar dados sensiveis em repouso
-- Utilizar TLS 1.3 em transito
-- Hash de senhas: Argon2id (128 MiB RAM, t=3-5, p=1) — NUNCA MD5/SHA1/bcrypt
-- JWT: EdDSA (Ed25519) preferido > ES256 > RS256
-- Segredos em um vault (nao no codigo)
-```
-
-### 3. Injection
-
-```
-RISCO
-- SQL Injection
-- Command Injection
-- LDAP Injection
-
-PROTECAO
-- Consultas parametrizadas (prepared statements)
-- Validacao e sanitizacao das entradas
-- Principio do menor privilegio (DB)
-- Escape das saidas
-```
-
-### 4. Insecure Design
-
-```
-RISCO
-- Sem threat modeling
-- Funcionalidades sensiveis nao protegidas
-- Rate limiting ausente
-
-PROTECAO
-- Threat modeling desde a concepcao
-- Security by design
-- Defense in depth
-- Rate limiting
-```
-
-### 5. Security Misconfiguration
+### A02. Security Misconfiguration
 
 ```
 RISCO
@@ -113,7 +68,7 @@ PROTECAO
 - Principio do menor privilegio
 ```
 
-### 6. Software Supply Chain Failures (novo em 2025)
+### A03. Software Supply Chain Failures (novo em 2025)
 
 ```
 RISCO
@@ -123,29 +78,62 @@ RISCO
 - Artefatos nao assinados
 
 PROTECAO
-- SLSA 1.0 niveis 1-3 (fontes verificaveis, builds reproduziveis, procedencia)
-- SBOM automatico (SPDX 3 ou CycloneDX) em cada build
+- SLSA 1.2 niveis 1-3 (fontes verificaveis, builds reproduziveis, procedencia)
+- SBOM automatico (SPDX 3 ou CycloneDX 1.7) em cada build
 - Sigstore keyless signing (cosign) para artefatos e imagens
 - Dependabot / Renovate com scan de CVE (Trivy, Grype)
 - Versoes fixadas em todas as dependencias (sem "latest")
+- Componentes desatualizados ou vulneraveis (antes A06:2021): inventario, atualizacoes regulares, `npm audit --omit=dev --audit-level=moderate`
 ```
 
-### 7. Mishandling of Exceptional Conditions (novo em 2025)
+### A04. Cryptographic Failures
 
 ```
 RISCO
-- Stack traces expostos em producao
-- Excecoes nao tratadas que vazam dados internos
-- Comportamento indefinido em inputs mal formados
+- Dados sensiveis em texto plano
+- Algoritmos obsoletos (MD5, SHA1, bcrypt em novo codigo)
+- Chaves no codigo fonte
+- JWT com algoritmo fraco (HS256, RS256)
 
 PROTECAO
-- Registrar erros em log, nunca expor stack traces em producao
-- Gestores de excecoes globais (error boundaries)
-- Mensagens de erro genericas no lado do cliente
-- Fail fast com erros de negocio claros
+- Criptografar dados sensiveis em repouso
+- Utilizar TLS 1.3 em transito
+- Hash de senhas: Argon2id (minimo OWASP 19 MiB RAM, t=2, p=1; recomendacao interna 128 MiB RAM, t≥3, p=1) — NUNCA MD5/SHA1 ; bcrypt apenas como alternativa legacy se Argon2id/scrypt nao estiverem disponiveis (work factor OWASP ≥ 10; ≥ 12 aqui)
+- JWT: EdDSA (Ed25519) preferido > ES256 > RS256
+- Segredos em um vault (nao no codigo)
 ```
 
-### 8. Authentication Failures
+### A05. Injection
+
+```
+RISCO
+- SQL Injection
+- Command Injection
+- LDAP Injection
+
+PROTECAO
+- Consultas parametrizadas (prepared statements)
+- Validacao e sanitizacao das entradas
+- Principio do menor privilegio (DB)
+- Escape das saidas
+```
+
+### A06. Insecure Design
+
+```
+RISCO
+- Sem threat modeling
+- Funcionalidades sensiveis nao protegidas
+- Rate limiting ausente
+
+PROTECAO
+- Threat modeling desde a concepcao
+- Security by design
+- Defense in depth
+- Rate limiting
+```
+
+### A07. Authentication Failures
 
 ```
 RISCO
@@ -162,7 +150,21 @@ PROTECAO
 - Deteccao de brute force
 ```
 
-### 9. Logging & Monitoring Failures
+### A08. Software or Data Integrity Failures
+
+```
+RISCO
+- Dependencias nao verificadas
+- CI/CD nao seguro
+- Atualizacoes nao assinadas
+
+PROTECAO
+- Verificacao de assinaturas
+- CI/CD seguro
+- Verificacoes de integridade (checksums)
+```
+
+### A09. Security Logging and Alerting Failures
 
 ```
 RISCO
@@ -177,18 +179,19 @@ PROTECAO
 - Retencao apropriada
 ```
 
-### 10. Data Integrity Failures
+### A10. Mishandling of Exceptional Conditions (novo em 2025)
 
 ```
 RISCO
-- Dependencias nao verificadas
-- CI/CD nao seguro
-- Atualizacoes nao assinadas
+- Stack traces expostos em producao
+- Excecoes nao tratadas que vazam dados internos
+- Comportamento indefinido em inputs mal formados
 
 PROTECAO
-- Verificacao de assinaturas
-- CI/CD seguro
-- Verificacoes de integridade (checksums)
+- Registrar erros em log, nunca expor stack traces em producao
+- Gestores de excecoes globais (error boundaries)
+- Mensagens de erro genericas no lado do cliente
+- Fail fast com erros de negocio claros
 ```
 
 ---
@@ -251,8 +254,8 @@ Regras OWASP 2026:
 - Minimo 12 caracteres
 - Maiusculas, minusculas, numeros, especiais
 - Nao estar em listas de senhas comprometidas
-- Hash com Argon2id (128 MiB RAM, t=3-5, p=1)
-- NUNCA MD5/SHA1/bcrypt em novo codigo
+- Hash com Argon2id (minimo OWASP 19 MiB RAM, t=2, p=1; recomendacao interna 128 MiB RAM, t≥3, p=1)
+- NUNCA MD5/SHA1 ; bcrypt apenas como alternativa legacy se Argon2id/scrypt nao estiverem disponiveis (work factor OWASP ≥ 10; ≥ 12 aqui)
 - Salt unico por usuario (gerenciado pelo Argon2id)
 
 // BOM
@@ -390,9 +393,9 @@ function getOrder(orderId, currentUser):
 
 ```
 Senhas:
-  -> Hash com Argon2id (128 MiB RAM, t=3-5, p=1)
+  -> Hash com Argon2id (minimo OWASP 19 MiB RAM, t=2, p=1; recomendacao interna 128 MiB RAM, t≥3, p=1)
   -> NUNCA em texto plano
-  -> NUNCA bcrypt/MD5/SHA1 em novo codigo
+  -> NUNCA MD5/SHA1 ; bcrypt apenas como alternativa legacy se Argon2id/scrypt nao estiverem disponiveis (work factor OWASP ≥ 10; ≥ 12 aqui)
 
 Dados pessoais (LGPD):
   -> Criptografia em repouso (AES-256-GCM)
@@ -483,7 +486,7 @@ Content-Security-Policy:
 
 > **Referencia:** [Supply Chain Security 2026](https://kawaldeepsingh.medium.com/practical-software-supply-chain-security-2026-sboms-signing-slsa-reproducible-builds-a-0416cfac32dc)
 
-### SLSA 1.0 (Supply-chain Levels for Software Artifacts)
+### SLSA 1.2 (Supply-chain Levels for Software Artifacts)
 
 | Nivel | Requisitos | Impacto |
 |-------|------------|---------|
@@ -495,7 +498,7 @@ Content-Security-Policy:
 
 ```
 Gerar automaticamente em cada build:
-- Formato SPDX 3 ou CycloneDX
+- Formato SPDX 3 ou CycloneDX 1.7
 - Listar todas as dependencias diretas e transitivas
 - Incluir versoes, licencas, CVEs conhecidos
 - Publicar no registro de artefatos
@@ -517,7 +520,7 @@ cosign sign --identity-token=$(cat $ACTIONS_ID_TOKEN_REQUEST_TOKEN) \
 
 ### Checklist Supply Chain
 
-- [ ] SBOM gerado automaticamente (SPDX 3 ou CycloneDX)
+- [ ] SBOM gerado automaticamente (SPDX 3 ou CycloneDX 1.7)
 - [ ] Artefatos assinados com Sigstore/cosign
 - [ ] Procedencia SLSA 1+ documentada
 - [ ] Dependencias com versoes fixadas (hash ou versao exata)
@@ -653,7 +656,7 @@ Antes de instalar um servidor MCP de terceiros:
 - [ ] Validacao de entradas do lado do servidor
 - [ ] Consultas parametrizadas (sem concatenacao SQL)
 - [ ] Escape das saidas (prevencao XSS)
-- [ ] Senhas com hash usando **Argon2id** (128 MiB, t=3-5, p=1)
+- [ ] Senhas com hash usando **Argon2id** (minimo OWASP 19 MiB, t=2, p=1; recomendacao interna 128 MiB, t≥3, p=1)
 - [ ] Sessoes seguras (httpOnly, secure, sameSite)
 - [ ] Verificacao de permissoes a cada requisicao
 - [ ] Segredos em variaveis de ambiente ou Vault
@@ -672,7 +675,7 @@ Antes de instalar um servidor MCP de terceiros:
 
 ### Supply Chain
 
-- [ ] SBOM gerado (SPDX 3 ou CycloneDX)
+- [ ] SBOM gerado (SPDX 3 ou CycloneDX 1.7)
 - [ ] Artefatos assinados (Sigstore/cosign)
 - [ ] Procedencia SLSA 1+ documentada
 - [ ] Dependencias fixadas na versao exata

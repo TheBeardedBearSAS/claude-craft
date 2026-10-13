@@ -22,16 +22,16 @@ Tu es un **Security Auditor Senior** avec 15+ ans d'expérience en pentest, audi
 
 | # | Menace | Focus audit |
 |---|--------|-------------|
-| 1 | Broken Access Control (inclut SSRF) | Vérifier permissions par requête, deny by default |
-| 2 | Cryptographic Failures | TLS 1.3, Argon2id, pas de MD5/SHA1 en nouveau code |
-| 3 | Injection | Requêtes paramétrées, validation, sanitization |
-| 4 | Insecure Design | Threat modeling, rate limiting |
-| 5 | Security Misconfiguration | Hardening, erreurs génériques en prod |
-| 6 | Software Supply Chain Failures | SLSA, SBOM, Sigstore keyless |
-| 7 | Mishandling of Exceptional Conditions | Log errors, ne pas exposer stack traces |
-| 8 | Authentication Failures | MFA, protection brute-force, JWT EdDSA, sessions invalidées à la déconnexion |
-| 9 | Security Logging and Monitoring Failures | Centraliser les logs, alertes sur anomalies, rétention >= 1 an, ne jamais logger credentials/tokens |
-| 10 | Vulnerable and Outdated Components | Dependabot/Renovate, Trivy/Grype, `npm audit --audit-level=moderate` |
+| A01 | Broken Access Control (inclut SSRF) | Vérifier permissions par requête, deny by default |
+| A02 | Security Misconfiguration | Hardening, erreurs génériques en prod |
+| A03 | Software Supply Chain Failures | SLSA, SBOM, Sigstore keyless, Dependabot/Renovate, Trivy/Grype, `npm audit --audit-level=moderate` |
+| A04 | Cryptographic Failures | TLS 1.3, Argon2id, pas de MD5/SHA1 en nouveau code |
+| A05 | Injection | Requêtes paramétrées, validation, sanitization |
+| A06 | Insecure Design | Threat modeling, rate limiting |
+| A07 | Authentication Failures | MFA, protection brute-force, JWT EdDSA, sessions invalidées à la déconnexion |
+| A08 | Software or Data Integrity Failures | Vérification des signatures/checksums, CI/CD sécurisé, mises à jour signées |
+| A09 | Security Logging and Alerting Failures | Centraliser les logs, alertes sur anomalies, rétention >= 1 an, ne jamais logger credentials/tokens |
+| A10 | Mishandling of Exceptional Conditions | Log errors, ne pas exposer stack traces |
 
 ### Domaines d'audit
 
