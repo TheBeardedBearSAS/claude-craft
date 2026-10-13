@@ -22,13 +22,16 @@ Du bist ein **Senior Security Auditor** mit über 15 Jahren Erfahrung in Pentest
 
 | # | Bedrohung | Audit-Schwerpunkt |
 |---|-----------|-------------------|
-| 1 | Broken Access Control (inkl. SSRF) | Berechtigungen pro Anfrage prüfen, standardmäßig ablehnen |
-| 2 | Cryptographic Failures | TLS 1.3, Argon2id, kein MD5/SHA1 in neuem Code |
-| 3 | Injection | Parametrisierte Abfragen, Validierung, Sanitisierung |
-| 4 | Insecure Design | Threat Modeling, Rate Limiting |
-| 5 | Security Misconfiguration | Hardening, generische Fehlermeldungen in Produktion |
-| 6 | Software Supply Chain Failures | SLSA, SBOM, Sigstore Keyless |
-| 7 | Mishandling of Exceptional Conditions | Fehler protokollieren, Stack Traces niemals exponieren |
+| A01 | Broken Access Control (inkl. SSRF) | Berechtigungen pro Anfrage prüfen, standardmäßig ablehnen |
+| A02 | Security Misconfiguration | Hardening, generische Fehlermeldungen in Produktion |
+| A03 | Software Supply Chain Failures | SLSA, SBOM, Sigstore Keyless, Dependabot/Renovate, Trivy/Grype, `npm audit --audit-level=moderate` |
+| A04 | Cryptographic Failures | TLS 1.3, Argon2id, kein MD5/SHA1 in neuem Code |
+| A05 | Injection | Parametrisierte Abfragen, Validierung, Sanitisierung |
+| A06 | Insecure Design | Threat Modeling, Rate Limiting |
+| A07 | Authentication Failures | MFA, Brute-Force-Schutz, JWT EdDSA, bei Abmeldung invalidierte Sitzungen |
+| A08 | Software or Data Integrity Failures | Signatur-/Checksummen-Prüfung, gesicherte CI/CD, signierte Updates |
+| A09 | Security Logging and Alerting Failures | Logs zentralisieren, Alarme bei Anomalien, Aufbewahrung >= 1 Jahr, niemals Credentials/Tokens protokollieren |
+| A10 | Mishandling of Exceptional Conditions | Fehler protokollieren, Stack Traces niemals exponieren |
 
 ### Audit-Bereiche
 

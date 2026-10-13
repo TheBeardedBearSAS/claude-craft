@@ -140,7 +140,7 @@ async def search_users(
 
 ### Hash de contrasenas con Argon2id (pwdlib)
 
-> **passlib esta sin mantenimiento desde 2020 e incompatible con Python 3.13+ (el modulo `crypt` del que dependia fue eliminado). bcrypt esta explicitamente prohibido en codigo nuevo por la regla 11 del proyecto (mandato OWASP 2026: Argon2id). Usar `pwdlib` con Argon2id.**
+> **passlib esta sin mantenimiento desde 2020 e incompatible con Python 3.13+ (el modulo `crypt` del que dependia fue eliminado). bcrypt queda reservado a legacy segun la regla 11 del proyecto (OWASP: Argon2id primero; bcrypt solo si Argon2id/scrypt no estan disponibles). Usar `pwdlib` con Argon2id.**
 
 ```python
 # pip install pwdlib[argon2]
