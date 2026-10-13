@@ -71,7 +71,7 @@ Flag as a **migration item** (not a live vulnerability, but unsupported surface)
 ```bash
 grep -rn "runtime.*=.*['\"]edge['\"]\|export const runtime = 'edge'" api/ middleware.ts
 ```
-Flag as a **migration item**: Edge Runtime is deprecated. Recommend migrating to the Node.js runtime default (Fluid Compute) — never recommend adopting Edge Runtime in new code.
+Flag as a **migration item**: Edge Runtime is discouraged. Recommend migrating to the Node.js runtime default (Fluid Compute) — never recommend adopting Edge Runtime in new code.
 
 ### 7. Dependency Security
 
@@ -133,7 +133,7 @@ Findings:
 ⚙️ LEGACY EDGE RUNTIME (migration items)
 ──────────────────────────────────────────────────────────────
 [ℹ️ MIGRATION] export const runtime = 'edge' in middleware.ts
-    Fix: Migrate to the Node.js runtime default (Fluid Compute); Edge Runtime is deprecated
+    Fix: Migrate to the Node.js runtime default (Fluid Compute); Edge Runtime is discouraged
 
 📦 DEPENDENCY AUDIT
 ──────────────────────────────────────────────────────────────

@@ -114,6 +114,18 @@ npx ajv-cli validate -s https://openapi.vercel.sh/vercel.json -d vercel.json
 
 ---
 
+## Platform Updates (CLI 63.x, October 2026)
+
+Verified against the official Vercel docs (October 2026):
+
+- **Node.js runtimes**: `24.x` (default) and `22.x` are available; Node.js 20 is deprecated since 2026-10-01. Pin with `package.json` `engines.node` (e.g. `"24.x"`) or the project setting.
+- **Function duration**: with Fluid Compute (default), the default max duration is 300 s on all plans; the configurable maximum is 300 s on Hobby and 800 s on Pro/Enterprise (up to 1800 s in beta, set per function: `maxDuration` in code or `vercel.json` `functions`).
+- **Edge Runtime**: Vercel recommends migrating from Edge to Node.js (both run on Fluid Compute), see https://vercel.com/docs/functions/runtimes/edge.
+- **`vercel.ts`**: programmatic alternative to `vercel.json` (`npm i @vercel/config`; `import { routes, type VercelConfig } from '@vercel/config/v1'`; `export const config: VercelConfig = { ... }`). Use only one of `vercel.ts` or `vercel.json`.
+- **Bun runtime (Beta)**: opt in with `"bunVersion": "1.x"` (or `"1.4.x"`) in `vercel.json`; Node.js remains the default.
+- **`vercel upgrade`**: upgrades the CLI via the package manager that installed it (`--dry-run` previews the command, `--enable-auto`/`--disable-auto` toggle automatic updates).
+- **`vercel api`**: makes authenticated HTTP requests to the Vercel REST API from the CLI.
+
 ## Storage & Marketplace Tooling
 
 Native (first-party) products are provisioned directly from the CLI or dashboard:

@@ -26,7 +26,7 @@ export default [
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-restricted-globals': [
         'error',
-        { name: 'EdgeRuntime', message: 'Edge Runtime is deprecated by Vercel — target the Node.js runtime (Fluid Compute) instead.' },
+        { name: 'EdgeRuntime', message: 'Edge Runtime is not recommended by Vercel — target the Node.js runtime (Fluid Compute) instead.' },
       ],
     },
   },

@@ -34,7 +34,7 @@ npx eslint . && tsc --noEmit && npx vitest run && npm run lint:vercel-config
 ### Deprecated Patterns
 
 - [ ] **No new `@vercel/kv` or `@vercel/postgres` import** - these native storage packages are deprecated; use Vercel Blob (native) or the Marketplace integrations (Neon for Postgres, Upstash for KV/Redis) instead
-- [ ] **No new `runtime: 'edge'` declaration** without an explicit migration comment - Edge Runtime is deprecated in favor of Fluid Compute; a legacy handler being touched must carry a comment explaining why it still targets Edge (see the migration note in `templates/function-handler.template.ts`)
+- [ ] **No new `runtime: 'edge'` declaration** without an explicit migration comment - Vercel recommends Fluid Compute over Edge Runtime; a legacy handler being touched must carry a comment explaining why it still targets Edge (see the migration note in `templates/function-handler.template.ts`)
 
 ### Testing
 

@@ -188,11 +188,11 @@ Choosing a runtime for an api/** handler or middleware:
 ├─ New code, no prior runtime pinned?
 │   → Default to the Node.js runtime with Fluid Compute.
 │     Full Node API access, bytecode caching gives fast cold
-│     starts on Node 20+, Active CPU pricing (billed for actual
+│     starts on Node 22+, Active CPU pricing (billed for actual
 │     CPU work, not idle wall-clock time).
 │
 ├─ Existing code has `export const runtime = 'edge'`?
-│   → Recognize this as LEGACY. Edge Runtime is deprecated by
+│   → Recognize this as LEGACY. Edge Runtime is discouraged by
 │     Vercel in favor of Fluid Compute. Do not extend or copy
 │     this pattern into new handlers. Flag it during a migration
 │     audit; plan removal of the `runtime = 'edge'` export and
