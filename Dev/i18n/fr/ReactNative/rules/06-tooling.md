@@ -8,9 +8,9 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 
 ## Prérequis Système
 
-### Node.js >= 22 LTS (requis pour RN 0.85)
+### Node.js >= 22 LTS (requis pour RN 0.87)
 
-React Native 0.85 requiert **Node.js 22.x LTS** minimum (RN 0.85 nécessitait Node 20). La version recommandée est **Node.js 22.x active LTS**.
+React Native 0.87 requiert **Node.js 22.x LTS** minimum (RN 0.85 nécessitait Node 20). La version recommandée est **Node.js 22.x active LTS**.
 
 ```bash
 # Vérifier la version
@@ -22,7 +22,7 @@ nvm use 22
 nvm alias default 22
 ```
 
-> Les versions Node < 22 ne sont plus supportées avec RN 0.85. Mettre à jour avant de migrer.
+> Les versions Node < 22 ne sont plus supportées avec RN 0.87. Mettre à jour avant de migrer.
 
 ### React Native Gesture Handler 3.0.0 — Changements Breaking
 
@@ -398,6 +398,22 @@ npx expo install expo-camera@latest
 - [ ] VS Code extensions installées
 - [ ] Package manager cohérent (npm)
 - [ ] Scripts npm configurés
+
+## React Native 0.86 / 0.87 et Expo SDK 57
+
+**Expo SDK 57 embarque RN 0.86** (0.86.3) ; **RN bare = 0.87** (0.87.1 `latest`, 0.88 en RC). Un projet Expo suit la version RN de son SDK.
+
+- `expo@57.0.17+` : régression mémoire Hermes V1 / Reanimated corrigée (dès 57.0.9) et temps de démarrage dev corrigé
+- Reanimated 4.7.x supporte RN 0.86-0.88 (4.5 est embarqué dans le SDK 57)
+- Le bundle mode de Worklets est expérimental et non supporté : **ne pas l'utiliser en production**
+- Préférer les **development builds** à Expo Go dès que l'on vise les stores
+- `expo prebuild` nettoie et régénère `android/` et `ios/` par défaut (`--no-clean` pour les conserver)
+- iOS 27 : `ios.enableSceneSupport` (`expo-build-properties`, `expo@57.0.23+`, opt-in ; défaut en SDK 58)
+- React Navigation 8 est en alpha : à surveiller, rester sur 7.x en production
+
+**Breaking changes RN 0.87 :** API TypeScript stricte par défaut (imports profonds `react-native/Libraries/*` interdits, opt-out jusqu'à 0.88) ; `InteractionManager` retiré (utiliser `requestIdleCallback`) ; `ImageBackground` déprécié (`Image` absolu dans une `View`) ; props `Modal.animated` et `StatusBar` `backgroundColor`/`translucent` retirées ; Node 22.13+, Kotlin 2.0+ ; AGP 9 supporté (`android.builtInKotlin=false` et `android.newDsl=false` conservent l'ancien comportement) ; Swift Package Manager iOS expérimental en opt-in (CocoaPods reste le défaut).
+
+**Sources :** [RN 0.87](https://reactnative.dev/blog/2026/08/11/react-native-0.87), [Expo SDK 57](https://expo.dev/changelog/sdk-57)
 
 ---
 

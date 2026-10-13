@@ -1,6 +1,6 @@
-# React Native 0.85 — New Architecture (JSI, TurboModules, Fabric)
+# React Native 0.87 — New Architecture (JSI, TurboModules, Fabric)
 
-> **Version courante :** RN 0.85 (mis à jour depuis 0.85). React Native 0.85+ active la **New Architecture par défaut** pour les nouveaux projets (`npx create-expo-app`) et les projets existants via opt-in. Cette page couvre ce qui change au quotidien et les points de vigilance.
+> **Version courante :** RN 0.87 (Expo SDK 57 : RN 0.86). React Native 0.85+ active la **New Architecture par défaut** pour les nouveaux projets (`npx create-expo-app`) et les projets existants via opt-in. Cette page couvre ce qui change au quotidien et les points de vigilance.
 
 ## Vue d'ensemble
 
@@ -23,7 +23,7 @@ La New Architecture remplace trois couches historiques :
 | Project type | Activation |
 |--------------|-----------|
 | **New project (Expo SDK 56+)** | New Architecture **on** by default. |
-| **Existing project (bare RN 0.85)** | Set `newArchEnabled=true` in `android/gradle.properties` AND `RCT_NEW_ARCH_ENABLED=1` env on iOS pod install. |
+| **Existing project (bare RN 0.87)** | Set `newArchEnabled=true` in `android/gradle.properties` AND `RCT_NEW_ARCH_ENABLED=1` env on iOS pod install. |
 | **Disable temporarily** | `newArchEnabled=false` + `RCT_NEW_ARCH_ENABLED=0`. Deprecated path — sunset in 0.85. |
 
 ```bash

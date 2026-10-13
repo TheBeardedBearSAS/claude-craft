@@ -8,9 +8,9 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 
 ## Prérequis système
 
-### Node.js >= 22 LTS (obligatoire pour RN 0.85)
+### Node.js >= 22 LTS (obligatoire pour RN 0.87 : Node 22.13+)
 
-React Native 0.85 requiert **Node.js 22.x LTS** minimum (RN 0.85 nécessitait Node 20). La version recommandée est Node.js **22.x LTS actif**.
+React Native 0.87 requiert **Node.js 22.13+** (22.x LTS) minimum (RN 0.85 nécessitait Node 20). La version recommandée est Node.js **22.x LTS actif**.
 
 ```bash
 # Vérifier la version
@@ -22,7 +22,7 @@ nvm use 22
 nvm alias default 22
 ```
 
-> Les versions Node < 22 ne sont plus supportées avec RN 0.85. Mettre à jour avant migration.
+> Les versions Node < 22 ne sont plus supportées avec RN 0.87. Mettre à jour avant migration.
 
 ### React Native Gesture Handler 3.0.0 — Breaking Changes
 
