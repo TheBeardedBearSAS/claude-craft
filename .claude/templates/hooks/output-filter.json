@@ -8,7 +8,7 @@
           {
             "type": "command",
             "command": "INPUT=$(cat); TOOL_RESULT=$(echo \"$INPUT\" | jq -r '.tool_response.stdout? // .tool_response? // .tool_result? // empty'); RESULT_LEN=${#TOOL_RESULT}; if [ \"$RESULT_LEN\" -gt 50000 ]; then HEAD=$(printf '%s' \"$TOOL_RESULT\" | head -c 8000); NEW=\"[output hard-truncated by output-filter hook — ${RESULT_LEN} chars total, first 8000 shown]\\n${HEAD}\\n[... truncated; re-run with a narrower command (grep/head/tail) to see more]\"; jq -n --arg o \"$NEW\" '{\"hookSpecificOutput\": {\"hookEventName\": \"PostToolUse\", \"updatedToolOutput\": $o}}'; exit 0; fi; if [ \"$RESULT_LEN\" -gt 10240 ]; then LINES=$(printf '%s' \"$TOOL_RESULT\" | wc -l); jq -n --arg msg \"Output: ${LINES} lines / ${RESULT_LEN} chars. Extract only relevant information; do not repeat the full output.\" '{\"systemMessage\": $msg}'; exit 0; fi; echo '{}'; exit 0",
-            "timeout": 5000
+            "timeout": 5
           }
         ]
       }

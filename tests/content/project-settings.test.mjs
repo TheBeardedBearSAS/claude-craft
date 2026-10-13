@@ -139,3 +139,32 @@ describe('.claudeignore', () => {
     expect(content).toContain('CHANGELOG.md');
   });
 });
+
+// Claude Code reads hook `timeout` in SECONDS (https://code.claude.com/docs/en/hooks.md).
+// Values like 5000 were written as milliseconds and meant an 83-minute timeout.
+describe('hook timeouts are expressed in seconds', () => {
+  const MAX_TIMEOUT_SECONDS = 600;
+  const LANGS = ['en', 'fr', 'es', 'de', 'pt'];
+  const HOOK_TEMPLATES_DIR = path.join(PROJECT_ROOT, '.claude', 'templates', 'hooks');
+  const files = [
+    SETTINGS_PATH,
+    path.join(PROJECT_ROOT, '.bmad', 'hooks-config.example.json'),
+    ...fs
+      .readdirSync(HOOK_TEMPLATES_DIR)
+      .filter((f) => f.endsWith('.json'))
+      .map((f) => path.join(HOOK_TEMPLATES_DIR, f)),
+    ...LANGS.map((lang) =>
+      path.join(PROJECT_ROOT, 'Dev', 'i18n', lang, 'Common', 'templates', 'settings.json.template'),
+    ),
+  ];
+
+  for (const file of files) {
+    it(`${path.relative(PROJECT_ROOT, file)} has no millisecond-sized timeout`, () => {
+      const content = fs.readFileSync(file, 'utf8');
+      const timeouts = [...content.matchAll(/"timeout":\s*(\d+)/g)].map((m) => Number(m[1]));
+      for (const timeout of timeouts) {
+        expect(timeout, `timeout ${timeout} looks like milliseconds`).toBeLessThanOrEqual(MAX_TIMEOUT_SECONDS);
+      }
+    });
+  }
+});

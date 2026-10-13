@@ -8,7 +8,7 @@
           {
             "type": "command",
             "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if printf '%s' \"$FILEPATH\" | grep -qE '(\\.env(\\.|$)|\\.envrc|credentials|secrets?|private.*key|id_(rsa|dsa|ecdsa|ed25519)|\\.pem$|\\.p(fx|12)$|\\.key$|\\.npmrc$|\\.netrc$|kubeconfig)'; then printf 'BLOCKED: Cannot edit sensitive file: %s\\n' \"$FILEPATH\" >&2; exit 2; fi; exit 0",
-            "timeout": 5000
+            "timeout": 5
           }
         ]
       },
@@ -18,7 +18,7 @@
           {
             "type": "command",
             "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); if printf '%s' \"$FILEPATH\" | grep -qE '(\\.env(\\.|$)|\\.envrc|credentials|secrets?|private.*key|id_(rsa|dsa|ecdsa|ed25519)|\\.pem$|\\.p(fx|12)$|\\.key$|\\.npmrc$|\\.netrc$|kubeconfig)'; then printf 'BLOCKED: Cannot write sensitive file: %s\\n' \"$FILEPATH\" >&2; exit 2; fi; exit 0",
-            "timeout": 5000
+            "timeout": 5
           }
         ]
       }

@@ -8,7 +8,7 @@
           {
             "type": "command",
             "command": "PROJECT_DIR=\"${CLAUDE_PROJECT_DIR:-$(pwd)}\"; OUTPUT=''; if [ -f \"$PROJECT_DIR/.claude/context-essentials.md\" ]; then ESSENTIALS=$(head -100 \"$PROJECT_DIR/.claude/context-essentials.md\"); OUTPUT=\"CRITICAL CONTEXT TO PRESERVE:\\n\\n$ESSENTIALS\"; fi; if [ -n \"$OUTPUT\" ]; then jq -n --arg msg \"$OUTPUT\" '{\"systemMessage\": $msg}'; else echo '{}'; fi; exit 0",
-            "timeout": 10000
+            "timeout": 10
           }
         ]
       }
