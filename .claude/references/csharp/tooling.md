@@ -373,8 +373,6 @@ ENTRYPOINT ["dotnet", "WebAPI.dll"]
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
-
 services:
   api:
     build:

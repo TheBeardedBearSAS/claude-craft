@@ -159,8 +159,6 @@ CMD ["uvicorn", "src.myproject.infrastructure.api.main:app", "--host", "0.0.0.0"
 
 ```yaml
 # docker-compose.yml
-version: '3.8'
-
 services:
   app:
     build:
