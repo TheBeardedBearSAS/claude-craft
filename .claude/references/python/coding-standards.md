@@ -1,8 +1,8 @@
 # Rule 03: Coding Standards
 
-> **Version de référence :** Python **3.14 (stable, 3.14.6+)** — Python 3.15 en beta (release oct. 2026).
-> FastAPI **~0.136.x** (0.136.3 au 2026-05) — Python 3.10+ minimum, Pydantic v2 obligatoire.
-> Pydantic **>=2.9, 2.13.x recommandé** — Pydantic v1 incompatible avec Python 3.14.
+> **Version de référence :** Python **3.15 (stable, 3.15.0 — 9 oct. 2026)** — socle minimal 3.14+ (3.14.8).
+> FastAPI **~0.143.x** — Python 3.10+ minimum, Pydantic v2 obligatoire.
+> Pydantic **>=2.9, 2.14.x recommandé** — Pydantic v1 incompatible avec Python 3.14.
 
 ## PEP 8 Compliance
 
@@ -641,9 +641,13 @@ de type hints sans recourir à `from __future__ import annotations`.
 > En Python 3.14+, préférer la nouvelle sémantique native (PEP 649) ; `from __future__ import
 > annotations` n'est plus nécessaire dans les nouveaux modules ciblant 3.10+.
 
-> **Python 3.15 beta 2 (feature-freeze, release oct. 2026) :** anticiper la migration.
-> Surveiller les breaking changes potentiels : `__future__.annotations` obsolescence progressive,
-> `concurrent.interpreters` API stabilisée, et renforcement du free-threading opt-in → opt-out.
+> **Python 3.15 (stable depuis le 9 oct. 2026) — nouveautés utiles :**
+> - **PEP 810 — imports paresseux explicites** : `lazy import json` / `lazy from pathlib import Path` (niveau module uniquement ; `SyntaxError` dans une fonction, une classe ou un `try`). Réduit le temps de démarrage des CLI.
+> - **PEP 814 — `frozendict`** : dictionnaire immuable natif (hashable si clés et valeurs le sont).
+> - **PEP 661 — `sentinel`** : type natif pour des valeurs sentinelles uniques (remplace les `_MISSING = object()` artisanaux).
+> - **PEP 686** : UTF-8 par défaut pour `open()` sans `encoding` ; **PEP 798** : `*` / `**` dans les compréhensions.
+>
+> Source : docs.python.org/3.15/whatsnew/3.15.html
 
 ### `concurrent.interpreters` (stdlib)
 

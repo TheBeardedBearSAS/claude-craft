@@ -6,7 +6,7 @@ context: fork
 
 # Stratégie de Tests Python 3.14+
 
-**Versions :** Python 3.14+ | pytest 8.x | Ruff 0.8+ | mypy 1.13+ | Playwright
+**Versions :** Python 3.14+ | pytest 9.x | Ruff 0.17+ | mypy 2.x | Playwright
 
 Ruff remplace Black + isort + Flake8 (10-100x plus rapide). mypy strict élimine les bugs de type à la compilation.
 
@@ -14,9 +14,9 @@ Ruff remplace Black + isort + Flake8 (10-100x plus rapide). mypy strict élimine
 
 | Type | Outil | Usage |
 |------|-------|-------|
-| **Unit/Integration** | **pytest 8.x** | Tests backend FastAPI/Django |
-| **Linting + Format** | **Ruff 0.8+** | 10-100× plus rapide que Black+Flake8 |
-| **Type checking** | **mypy 1.13+** strict | Vérification statique |
+| **Unit/Integration** | **pytest 9.x** | Tests backend FastAPI/Django |
+| **Linting + Format** | **Ruff 0.17+** | 10-100× plus rapide que Black+Flake8 |
+| **Type checking** | **mypy 2.x** strict | Vérification statique |
 | **E2E/Browser** | **Playwright** | Tests frontend web |
 | **Mutation** | **Mutmut** | Qualité des tests (score >= 80%) |
 | **Property-based** | **Hypothesis** | Génération de cas de test automatique |

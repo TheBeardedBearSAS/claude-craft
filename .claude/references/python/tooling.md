@@ -1,6 +1,6 @@
 # Rule 06: Tooling
 
-> **Version de référence :** Python **3.14 (stable, 3.14.6+)** — Ruff 0.15+, pytest 9.x (fin du support Python 3.9) — Python 3.15 en beta (release oct. 2026).
+> **Version de référence :** Python **3.15 (stable, 3.15.0 — 9 oct. 2026)**, socle 3.14+ (3.14.8) — Ruff 0.17+, pytest 9.x (fin du support Python 3.9).
 
 Python tooling for code quality, testing, and development workflow.
 
@@ -283,14 +283,14 @@ repos:
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # ruff lint (remplace flake8 + isort) + ruff format (remplace black)
-    rev: v0.15.16
+    rev: v0.17.0
     hooks:
       - id: ruff
         args: [--fix]
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.1.0
+    rev: v2.4.0
     hooks:
       - id: mypy
         additional_dependencies: [types-requests, pydantic]
