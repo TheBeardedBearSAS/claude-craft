@@ -59,14 +59,14 @@ export default defineConfig(({ mode, command }) => ({
     //   formats: ['es', 'cjs'],
     //   fileName: (format) => `{{PACKAGE_NAME}}.${format === 'es' ? 'js' : 'cjs'}`,
     // },
-    // rollupOptions: {
+    // rolldownOptions: {
     //   external: [/* peer deps, e.g. 'some-peer-lib' */],
     // },
 
     // ============================================================
     // {{SHAPE: multi-page}} — object map of page name -> HTML path
     // ============================================================
-    // rollupOptions: {
+    // rolldownOptions: {
     //   input: {
     //     main: resolve(__dirname, 'index.html'),
     //     about: resolve(__dirname, 'about.html'),

@@ -6,7 +6,7 @@
 
 ## Pourquoi Rolldown ?
 
-Rolldown est un bundler écrit en **Rust** par l'équipe Vite/VoidZero, conçu comme un remplacement drop-in de Rollup avec une API de configuration très proche (`rollupOptions` reste le point d'entrée conceptuel), mais une exécution native bien plus rapide.
+Rolldown est un bundler écrit en **Rust** par l'équipe Vite/VoidZero, conçu comme un remplacement drop-in de Rollup avec une API de configuration très proche (`build.rolldownOptions` remplace `build.rollupOptions`, déprécié depuis Vite 8), mais une exécution native bien plus rapide.
 
 | Aspect | Rollup (Vite ≤7 legacy) | Rolldown (Vite 8 défaut) |
 |--------|--------------------------|---------------------------|
@@ -21,7 +21,7 @@ Bénéfices typiques : builds de production 3 à 5 fois plus rapides sur des pro
 
 ## Configuration — `rolldownOptions`
 
-`build.rolldownOptions` est le pendant direct de l'ancien `build.rollupOptions` : mêmes concepts (`input`, `output`, `external`, `plugins`), API largement compatible champ par champ.
+`build.rolldownOptions` est le pendant direct de l'ancien `build.rollupOptions` : mêmes concepts (`input`, `output`, `external`, `plugins`), API largement compatible champ par champ. `build.rollupOptions` et `worker.rollupOptions` sont **dépréciés depuis Vite 8** (alias avec avertissement) : utiliser `build.rolldownOptions` et `worker.rolldownOptions` ; `optimizeDeps.esbuildOptions` est lui aussi déprécié au profit de `optimizeDeps.rolldownOptions`.
 
 ```typescript
 // vite.config.ts — Vite 8 / Rolldown (défaut)
@@ -137,7 +137,7 @@ Le bundling des entrées `?worker` et `?init` (WASM) traverse le même pipeline 
 ## Checklist Migration Vite 7 → 8 (Rolldown)
 
 - [ ] Remplacer toute forme objet de `manualChunks` par `rolldownOptions.output.codeSplitting.groups`
-- [ ] Renommer `build.rollupOptions` en `build.rolldownOptions` (les deux clés coexistent, mais `rolldownOptions` est prioritaire et recommandée)
+- [ ] Renommer `build.rollupOptions` en `build.rolldownOptions` (`rollupOptions` est déprécié : si les deux clés sont présentes, `rolldownOptions` est prioritaire) ; idem pour `worker.rollupOptions` et `optimizeDeps.esbuildOptions`
 - [ ] Vérifier que chaque plugin Rollup tiers custom fonctionne sans avertissement (`vite-plugin-inspect` pour visualiser les transforms)
 - [ ] Mesurer le temps de build avant/après (`time npm run build`) — un gain nul ou négatif signale une régression à investiguer
 - [ ] Confirmer que `vite-plugin-dts` produit toujours un `.d.ts` correct (`arethetypeswrong --pack .`)

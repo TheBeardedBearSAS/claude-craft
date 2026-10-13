@@ -170,7 +170,7 @@ Vercel platform code review specialist — vercel.json config, Functions (Node.j
 
 ### `@vite-reviewer`
 
-Vite 8.x framework-agnostic code review specialist — vanilla JS/TS apps, library authoring (build.lib), multi-page apps (rollupOptions.input), Workers/WASM entries, plugin config
+Vite 8.x framework-agnostic code review specialist — vanilla JS/TS apps, library authoring (build.lib), multi-page apps (rolldownOptions.input), Workers/WASM entries, plugin config
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 

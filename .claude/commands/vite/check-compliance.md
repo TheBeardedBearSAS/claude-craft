@@ -23,7 +23,7 @@ Audit the project for compliance with Vite 8 best practices, TypeScript conventi
 [ ] Project shape unambiguous (vanilla SPA / library / multi-page / workers-wasm)
 [ ] resolve.alias used instead of deep relative imports
 [ ] envPrefix respected — no secrets exposed via VITE_ prefix
-[ ] Entry points (index.html, build.lib.entry, rollupOptions.input) match files on disk
+[ ] Entry points (index.html, build.lib.entry, rolldownOptions.input) match files on disk
 [ ] Custom plugins named vite-plugin-<purpose> and typed
 ```
 
@@ -72,7 +72,7 @@ Status: ✅ COMPLIANT | ⚠️ NEEDS WORK | ❌ NON-COMPLIANT
 ⚙️ CONFIG & ARCHITECTURE VITE: XX/30
 ──────────────────────────────────────────────────────────────
 [✓] Single vite.config.ts
-[✗] Project shape ambiguous — build.lib and rollupOptions.input both set
+[✗] Project shape ambiguous — build.lib and rolldownOptions.input both set
     → Split into a library package and a demo app, or document the intent
 
 📝 TYPESCRIPT & QUALITÉ: XX/20

@@ -305,7 +305,7 @@ npm run test
     "eslint": "^9.0.0",
     "prettier": "^3.0.0",
     "typescript": "^5.6.0",
-    "vite": "^8.1.0",
+    "vite": "^8.3.0",
     "vitest": "^4.1.0"
   }
 }
@@ -336,8 +336,8 @@ npm run test
     "test:dist": "npm run build && vitest run tests/dist.smoke.test.ts"
   },
   "devDependencies": {
-    "vite": "^8.1.0",
-    "vite-plugin-dts": "^4.0.0",
+    "vite": "^8.3.0",
+    "vite-plugin-dts": "^5.1.0",
     "vitest": "^4.1.0"
   }
 }

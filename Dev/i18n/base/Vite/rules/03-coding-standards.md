@@ -47,7 +47,7 @@ Keep top-level keys in this order for readability and diff-friendliness:
 4. `envPrefix` / `envDir` (only if overriding the `VITE_` default)
 5. `server` (dev server only)
 6. `preview` (preview server only)
-7. `build` (`lib`, `rollupOptions`, `target`, `sourcemap`)
+7. `build` (`lib`, `rolldownOptions`, `target`, `sourcemap`)
 8. `worker` (worker-specific build options)
 9. `test` (Vitest — co-located, not a separate `vitest.config.ts`, unless the project needs a workspace)
 

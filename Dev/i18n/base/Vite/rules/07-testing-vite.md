@@ -154,7 +154,7 @@ describe('loadImageFilter', () => {
 
 ## Testing Library Build Output
 
-A library's unit tests exercise the **source** (`src/`); a separate smoke test confirms the **published build** (`dist/`) is actually importable and shaped correctly — this catches `rollupOptions.external` misconfigurations and broken `exports` maps that source-level tests cannot see.
+A library's unit tests exercise the **source** (`src/`); a separate smoke test confirms the **published build** (`dist/`) is actually importable and shaped correctly — this catches `rolldownOptions.external` misconfigurations and broken `exports` maps that source-level tests cannot see.
 
 ```typescript
 // test/build-output.test.ts — run AFTER `vite build`, not part of the regular unit suite

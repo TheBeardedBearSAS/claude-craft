@@ -41,7 +41,7 @@ TECH_RULES=(
 HELP_DESCRIPTION="    TCL-optimized installation covering framework-agnostic Vite usage:
     - Vanilla JS/TS applications (src/main.ts entry)
     - Library authoring (build.lib + vite-plugin-dts)
-    - Multi-page apps (rollupOptions.input)
+    - Multi-page apps (rolldownOptions.input)
     - Workers / WASM entry points
     - Vitest for testing
 
@@ -78,7 +78,7 @@ vite.config.ts          # build.lib + vite-plugin-dts
 pages/
 ├── index.html
 └── admin.html
-vite.config.ts          # rollupOptions.input per page
+vite.config.ts          # rolldownOptions.input per page
 
 # 4. Workers / WASM
 src/
@@ -94,7 +94,7 @@ CODING_STANDARDS_SUMMARY="| Element | Convention | Example |
 | Entry point | \`src/main.ts\` (app) / \`src/index.ts\` (library) | \`main.ts\` |
 | Custom plugins | \`vite-plugin-*\` prefix | \`vite-plugin-my-transform.ts\` |
 | Config file | \`vite.config.ts\`, typed via \`defineConfig\` | \`defineConfig({ ... })\` |
-| Multi-page entries | \`rollupOptions.input\` keyed by page name | \`{ admin: 'pages/admin.html' }\` |
+| Multi-page entries | \`rolldownOptions.input\` keyed by page name | \`{ admin: 'pages/admin.html' }\` |
 | Worker entries | \`new URL('./x.worker.ts', import.meta.url)\` | \`type: 'module'\` |
 | Library exports | \`build.lib.entry\` + \`vite-plugin-dts\` for \`.d.ts\` | \`entry: 'src/index.ts'\` |
 
@@ -115,7 +115,7 @@ FILE_CONTEXTS="  # Vite config
       - solid-principles
     auto_load: false
     quick_tips: |
-      Use build.lib for npm packages, rollupOptions.input for multi-page apps.
+      Use build.lib for npm packages, rolldownOptions.input for multi-page apps.
       index.html is a source file, not a public asset.
       Not for React/Vue/Angular/Svelte dev-server config — see that stack's tooling.md.
 

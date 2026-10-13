@@ -24,7 +24,7 @@ Detect which of the four project shapes the codebase implements, and validate it
 [ ] Identify shape: vanilla-spa | library | multi-page | worker-wasm (or a combination)
 [ ] index.html present at project root as a SOURCE file (not under public/) — vanilla-spa/multi-page
 [ ] src/index.ts as the single public entry — library shape
-[ ] build.rollupOptions.input is an object map — multi-page shape
+[ ] build.rolldownOptions.input is an object map — multi-page shape
 [ ] worker/WASM entry points use import.meta.url / ?init — worker-wasm shape
 ```
 
@@ -42,7 +42,7 @@ Detect which of the four project shapes the codebase implements, and validate it
 ```
 [ ] Vanilla SPA: single index.html, <script type="module" src="/src/main.ts">
 [ ] Library: build.lib.entry points to src/index.ts, formats include 'es' and 'cjs'
-[ ] MPA: build.rollupOptions.input keys are stable, kebab-case, match folder/file names
+[ ] MPA: build.rolldownOptions.input keys are stable, kebab-case, match folder/file names
 [ ] Worker/WASM: `new Worker(new URL('./x.worker.ts', import.meta.url), { type: 'module' })` pattern used (no bare string URLs)
 ```
 
@@ -57,7 +57,7 @@ Detect which of the four project shapes the codebase implements, and validate it
 ### 5. Dependency Externalization (library shape)
 
 ```
-[ ] Peer dependencies declared in package.json AND in build.rollupOptions.external
+[ ] Peer dependencies declared in package.json AND in build.rolldownOptions.external
 [ ] package.json "exports" map covers both import and require conditions
 [ ] "sideEffects": false set, unless the library genuinely has side-effectful modules
 ```
@@ -118,11 +118,11 @@ Issues:
 📦 DEPENDENCY EXTERNALIZATION (if library)
 ──────────────────────────────────────────────────────────────
 Peer deps declared: X
-Externalized in rollupOptions.external: X/X
+Externalized in rolldownOptions.external: X/X
 
 Issues:
 - "some-peer-lib" bundled into dist/ instead of externalized
-  → Add to peerDependencies AND build.rollupOptions.external
+  → Add to peerDependencies AND build.rolldownOptions.external
 
 📤 OUTPUT STRUCTURE
 ──────────────────────────────────────────────────────────────
