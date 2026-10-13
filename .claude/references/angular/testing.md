@@ -66,7 +66,7 @@ setupTestBed({ zoneless: true });
 ```
 
 > **Important :** N'utilisez jamais `import '@analogjs/vitest-angular/setup-zone'` dans un
-> projet Angular 21+ zoneless. Cela réactive Zone.js dans les tests et rend le comportement
+> projet Angular zoneless (défaut depuis v21, donc en v22). Cela réactive Zone.js dans les tests et rend le comportement
 > de détection de changement incohérent avec l'app réelle.
 
 ## Component Testing

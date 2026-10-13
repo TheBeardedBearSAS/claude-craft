@@ -78,8 +78,8 @@ Le composant utilise-t-il inject() ?
 
 **Zoneless par défaut (v21+) :**
 - Économie ~33 KB de bundle (Zone.js optionnel)
-- +30-40% de performance de rendu selon Angular DevRel (https://blog.angular.dev/zoneless-change-detection-f1622c3c5c51)
-- API stable : `provideZonelessChangeDetection()` depuis `@angular/core`
+- Gains de performance variables selon l'application (le « +30-40 % » vient d'une source de 2024) : à mesurer, ne pas affirmer
+- Aucun provider requis en v21+/v22 : `provideZonelessChangeDetection()` n'est nécessaire qu'en v20 (https://angular.dev/guide/zoneless)
 
 **Resource API stable (v20+) :**
 - `httpResource()` : chargement déclaratif avec états automatiques (loading, error)
@@ -426,7 +426,7 @@ L'application utilise-t-elle la détection de changement zoneless ?
     OUI --> Les event listeners déclenchent-ils correctement le CD ?
   NON --> Zone.js est-il utilisé ?
     OUI --> Acceptable (v20), MINEUR en v21+ (migration recommandée)
-    NON --> Vérifier provideZonelessChangeDetection() (stable depuis v20.2)
+    NON --> Vérifier qu'aucun provideZoneChangeDetection() ne réactive Zone.js (zoneless par défaut depuis v21)
 
 httpResource() est-il utilisé pour les requêtes HTTP répétitives ?
   NON --> Les composants utilisent signal + effect + HttpClient ?

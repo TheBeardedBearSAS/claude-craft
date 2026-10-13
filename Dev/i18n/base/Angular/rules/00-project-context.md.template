@@ -10,7 +10,7 @@
 ## Tech Stack
 
 - **Framework**: Angular {{ANGULAR_VERSION}}
-- **Language**: TypeScript 5.x
+- **Language**: TypeScript 6.x
 - **Styling**: {{STYLING}} (SCSS/Tailwind/Angular Material)
 - **State Management**: {{STATE_MANAGEMENT}} (Signals/NgRx/NGXS)
 - **Testing**: {{TESTING}} (Vitest/Jest + Playwright)

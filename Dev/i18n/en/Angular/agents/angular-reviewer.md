@@ -46,8 +46,8 @@ Is the state synchronous and used for rendering?
 
 **Zoneless by default (stable) :**
 - ~33 KB bundle savings (Zone.js optional)
-- +30-40% rendering performance improvement according to Angular DevRel
-- Stable API: `provideZonelessChangeDetection()` from `@angular/core` (no longer `Experimental`)
+- Performance gains vary by application (the "+30-40%" figure comes from a 2024 source): measure, do not assume
+- No provider required in v21+/v22: `provideZonelessChangeDetection()` is only needed in v20 (https://angular.dev/guide/zoneless)
 
 **Signal Forms (stable v22) :**
 - Native signal-based alternative to Reactive Forms, **production-ready**
@@ -421,7 +421,7 @@ Does the application use zoneless change detection?
     YES --> Do event listeners correctly trigger CD?
   NO --> Is Zone.js used?
     YES --> MINOR in v22+: migration to zoneless recommended (saves ~33 KB)
-    NO --> Verify provideZonelessChangeDetection() is configured (stable since v20.2)
+    NO --> Verify no provideZoneChangeDetection() re-enables Zone.js (zoneless by default since v21)
 
 Is httpResource() used for repetitive HTTP requests?
   NO --> Do components use signal + effect + HttpClient?

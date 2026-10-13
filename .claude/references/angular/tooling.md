@@ -113,7 +113,7 @@ ng update @angular/core @angular/cli
 }
 ```
 
-> **Angular 22 zoneless :** la clé `"polyfills": ["zone.js"]` est **supprimée** dans les nouveaux projets générés par le CLI. Zone.js (~33 KB) n'est plus nécessaire grâce à `provideZonelessChangeDetection()` activé par défaut. Si vous migrez un projet existant, retirez `zone.js` de `polyfills` dans `angular.json` **et** de `package.json`.
+> **Angular 22 zoneless :** la clé `"polyfills": ["zone.js"]` est **supprimée** dans les nouveaux projets générés par le CLI. Zone.js (~33 KB) n'est plus nécessaire : zoneless est le défaut depuis Angular v21 (aucun `provideZonelessChangeDetection()` requis, sauf en v20). Si vous migrez un projet existant, retirez `zone.js` de `polyfills` dans `angular.json` **et** de `package.json`.
 
 ## Formatting and Linting
 
@@ -220,9 +220,9 @@ npm install -D stylelint stylelint-config-standard-scss stylelint-order
 
 ## Testing Tools
 
-### Vitest (Recommandé pour Angular 21+)
+### Vitest (Recommandé depuis Angular v21, donc en v22)
 
-Vitest est l'outil de test recommandé pour Angular 21+ grâce à sa rapidité (~10x plus rapide que Karma) et son support natif des ES modules.
+Vitest est l'outil de test recommandé (v21 et v22) grâce à sa rapidité (~10x plus rapide que Karma) et son support natif des ES modules.
 
 ```bash
 npm install -D vitest @analogjs/vitest-angular jsdom
@@ -253,7 +253,7 @@ setupTestBed({ zoneless: true });
 ```
 
 > **Important :** N'utilisez jamais `import '@analogjs/vitest-angular/setup-zone'` dans un
-> projet Angular 21+ zoneless. Cela réactive Zone.js dans les tests et rend le comportement
+> projet Angular zoneless (défaut depuis v21, donc en v22). Cela réactive Zone.js dans les tests et rend le comportement
 > de détection de changement incohérent avec l'app réelle.
 
 ### Jest (Alternative)

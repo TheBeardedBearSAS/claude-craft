@@ -1,6 +1,6 @@
 # Vue.js 3.6 — Vapor Mode (beta)
 
-> **Status :** **Vue 3.6.0-beta.14** (juin 2026) — Vapor Mode est **feature-complete** mais toujours marqué **unstable**. Stable 3.6.0 attendue courant 2026. Production-grade Vue 3 reste sur 3.5+ Virtual DOM. Suivre la progression : [github.com/vuejs/core/releases](https://github.com/vuejs/core/releases).
+> **Status :** **Vue 3.6.0-rc.11** (10 octobre 2026) — Vapor Mode est **feature-complete** depuis 3.6.0-rc.1 (phase RC) mais reste marqué **unstable** pour la production. Stable 3.6.0 pas encore publiée. Production-grade Vue 3 reste sur 3.5+ Virtual DOM. **Breaking (rc.2) :** les listeners DOM Vapor sont attachés directement aux éléments par défaut (option `compilerOptions.eventDelegation` supprimée ; ajouter `.delegate` sur un listener pour conserver la délégation). Suivre la progression : [github.com/vuejs/core/releases](https://github.com/vuejs/core/releases).
 
 ## Pourquoi Vapor Mode ?
 
@@ -63,13 +63,13 @@ const items = ref<Item[]>([]);
 const total = computed(() => items.value.reduce((n, i) => n + i.qty, 0));
 ```
 
-## Limitations beta (3.6.0-beta.14, juin 2026)
+## Limitations signalées en beta (à revérifier en RC, 3.6.0-rc.11)
 
 - **Pas de transitions** Vue (`<Transition>`, `<TransitionGroup>`) dans un composant Vapor → utiliser CSS pur ou GSAP.
 - **Pas de `<KeepAlive>`** : le runtime Vapor ne sait pas mettre en cache un sous-tree (suivi WG-1432).
 - **DevTools** : support partiel — l'inspecteur de composants fonctionne, l'inspecteur de réactivité (timeline) pas encore.
 - **SSR** : pas encore stable. Vue 3.6 Vapor ciblé SPA d'abord, SSR prévu Vue 3.7.
-- **Bibliothèques tierces** : Pinia 3 et Vue Router 5 supportent Vapor. **Pinia 2 et Vue Router 4 ne supportent pas Vapor** → migration préalable obligatoire.
+- **Bibliothèques tierces** : Pinia 3+ (4 actuel) et Vue Router 5 supportent Vapor. **Pinia 2 et Vue Router 4 ne supportent pas Vapor** → migration préalable obligatoire.
 
 ## Quand utiliser Vapor
 
@@ -91,7 +91,7 @@ const total = computed(() => items.value.reduce((n, i) => n + i.qty, 0));
 
 ## Checklist Vapor production-ready
 
-- [ ] Vue 3.6+ installé, Pinia 3+, Vue Router 5+
+- [ ] Vue 3.6+ installé, Pinia 4 (3+ minimum), Vue Router 5+
 - [ ] Composant cible identifié via profiling (pas par "bonne pratique")
 - [ ] Pas de `<Transition>` / `<KeepAlive>` dans l'arbre Vapor
 - [ ] Tests Vitest 4 verts avec Vapor compiler
@@ -104,4 +104,4 @@ const total = computed(() => items.value.reduce((n, i) => n + i.qty, 0));
 - [Vue 3.6 release plan + Vapor RFC](https://github.com/vuejs/rfcs)
 - [Alien Signals — design doc](https://github.com/stackblitz/alien-signals)
 - [Vapor Mode playground](https://play.vuejs.org/) (activer `<script setup vapor>`)
-- [Pinia 3 migration](https://pinia.vuejs.org/migration/) (prérequis Vapor)
+- [Pinia migration](https://pinia.vuejs.org/migration/) (prérequis Vapor ; Pinia 4 : ESM-only + `@vue/devtools-api` v8)
