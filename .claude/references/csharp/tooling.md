@@ -241,18 +241,18 @@ trim_trailing_whitespace = false
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- ASP.NET Core (.NET 10 LTS — 10.0.9 latest patch) -->
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+    <!-- ASP.NET Core (.NET 10 LTS — 10.0.12 latest patch) -->
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
 
-    <!-- Entity Framework Core (10.0.9 — aligned with .NET 10 LTS patch cycle) -->
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.9" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.9" />
+    <!-- Entity Framework Core (10.0.12 — aligned with .NET 10 LTS patch cycle) -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.12" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
 
     <!-- Application Layer -->
     <!-- MediatR 13+ = commercial (RPL-1.5). Community Edition free <$5M revenue. -->
-    <PackageVersion Include="MediatR" Version="14.1.0" />
+    <PackageVersion Include="MediatR" Version="14.2.0" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <!-- AutoMapper 15+ = commercial (RPL-1.5). v13.0.1 = last MIT release. Prefer Riok.Mapperly for new projects. -->
@@ -546,7 +546,9 @@ dotnet tool install -g csharp-ls
 
 ## Tooling Checklist
 
-- [ ] .NET 10 SDK installed (10.0.300+)
+- [ ] .NET 10 SDK installed (10.0.4xx feature band; 10.0.401 on 2026-10-13)
+- [ ] Not on .NET 8 / .NET 9: both reach end of support on 2026-11-10 (.NET 10 LTS is supported until 2028-11-14)
+- [ ] .NET 11 / C# 15: go-live RC today, GA expected in November 2026 (STS) — stay on .NET 10 LTS for production until then
 - [ ] EditorConfig configured
 - [ ] Directory.Build.props set up
 - [ ] Central package management enabled

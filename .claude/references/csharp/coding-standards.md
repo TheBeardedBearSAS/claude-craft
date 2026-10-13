@@ -32,9 +32,11 @@ private readonly IOrderRepository _repo;    // Bad
 public const int MPS = 100;        // Bad
 ```
 
-## Modern C# Features (C# 13/14)
+## Modern C# Features (C# 14)
 
 > **Note 2026**: .NET 10 LTS avec C# 14 apporte Extension Members, Null-Conditional Assignment, et Span<T> enhancements.
+
+> **À venir (C# 15 / .NET 11, preview — GA attendue en novembre 2026) :** union types (mot-clé `union`), extension indexers, `break`/`continue` étiquetés. Source : https://learn.microsoft.com/dotnet/csharp/whats-new/csharp-15. Ne pas les utiliser en production avant la GA ; rester sur C# 14 / .NET 10 LTS.
 
 ### Primary Constructors
 
