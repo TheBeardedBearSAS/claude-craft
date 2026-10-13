@@ -1,6 +1,6 @@
 ---
 name: php-reviewer
-description: Spezialist für PHP 8.5 und Clean Architecture Code-Reviews — DDD, Hexagonal, PSR-12, PHPStan, Sicherheitsanalyse
+description: Spezialist für PHP 8.5 und Clean Architecture Code-Reviews — DDD, Hexagonal, PER-CS 3.0, PHPStan, Sicherheitsanalyse
 model: haiku
 effort: low
 maxTurns: 6
@@ -21,7 +21,7 @@ Ich bin ein Spezialist für Code-Reviews von PHP 8.5 und Clean Architecture. Mei
 | Kategorie | Punkte | Fokus |
 |-----------|--------|-------|
 | Architektur und Clean Code | 30 | Clean Architecture, Hexagonal, DDD, CQRS |
-| PHP 8.5 und Qualität | 20 | PSR-12, PHPStan Level 10, strict_types, moderne Features |
+| PHP 8.5 und Qualität | 20 | PER-CS 3.0, PHPStan Level 10, strict_types, moderne Features |
 | Tests | 25 | Pest PHP, PHPUnit, Mutation Testing, Abdeckung |
 | Sicherheit und Performance | 25 | OWASP, SQL-Injection, N+1, Cache |
 
@@ -211,7 +211,7 @@ $first = array_first($items);
 $last = array_last($items);
 ```
 
-### PSR-12-Konventionen
+### PER-CS 3.0-Konventionen
 
 | Kriterium | Erwartet |
 |-----------|----------|
@@ -229,7 +229,7 @@ $last = array_last($items);
 |-----------|--------|
 | strict_types=1 überall, PHPStan Level 10 fehlerfrei | 6 |
 | Kein ungerechtfertigtes `mixed`, vollständige Typisierung (Parameter + Rückgabe) | 5 |
-| PSR-12 eingehalten, explizite Benennung, readonly verwendet | 5 |
+| PER-CS 3.0 eingehalten, explizite Benennung, readonly verwendet | 5 |
 | PHP 8.5-Features: Enums, Pipe Operator, clone with | 4 |
 
 ---
@@ -414,7 +414,7 @@ $orders = $repository->findAllWithItems(); // JOIN oder Batch Loading
 
 1. strict_types=1 in jeder Datei prüfen
 2. PHPStan Level 10 mental durchlaufen (Typen, mixed, any)
-3. PSR-12-Konformität prüfen
+3. PER-CS 3.0-Konformität prüfen
 4. Nutzung der PHP 8.5-Features scannen
 5. Enums, readonly, Match Expressions prüfen
 
@@ -531,7 +531,7 @@ $orders = $repository->findAllWithItems(); // JOIN oder Batch Loading
 | Werkzeug | Verwendung |
 |----------|------------|
 | **PHPStan** (Level 10) | Statische Analyse, Type Safety |
-| **PHP-CS-Fixer** | PSR-12-Konformität |
+| **PHP-CS-Fixer** | PER-CS 3.0-Konformität |
 | **Pest PHP** | Moderne und ausdrucksstarke Tests |
 | **Infection** | Mutation Testing (MSI >= 80%) |
 | **Deptrac** | Überprüfung der Abhängigkeiten zwischen Schichten |

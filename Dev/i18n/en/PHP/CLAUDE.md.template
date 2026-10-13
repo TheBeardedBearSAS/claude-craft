@@ -35,7 +35,7 @@ See `rules/02-architecture.md` for complete patterns.
 | Rule | Reason |
 |------|--------|
 | `declare(strict_types=1)` | Type safety enforcement |
-| PSR-12 + PHPStan level 10 | Code quality |
+| PER-CS 3.0 + PHPStan level 10 | Code quality |
 | Repository pattern | Data access abstraction |
 | 80%+ coverage | Quality assurance |
 

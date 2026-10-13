@@ -29,7 +29,9 @@ class UserAccount
 }
 ```
 
-### PSR-12: Extended Coding Style
+### PER-CS 3.0: Extended Coding Style
+
+> PER Coding Style 3.0 extends, expands and replaces PSR-12 (PSR-1 remains required). PHP-CS-Fixer ruleset: `@PER-CS3x0` (`@PER-CS3.0` is deprecated).
 
 ```php
 <?php
@@ -856,7 +858,7 @@ switch ($status) {
 ## Coding Standards Checklist (2026)
 
 - [ ] `declare(strict_types=1)` at top of every file
-- [ ] PSR-12 formatting applied
+- [ ] PER-CS 3.0 formatting applied
 - [ ] PSR-4 autoloading configured
 - [ ] All methods have return type declarations
 - [ ] All parameters have type declarations

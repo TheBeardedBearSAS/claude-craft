@@ -15,7 +15,7 @@ Run comprehensive code quality analysis on PHP project.
    - Dead code detection
 
 2. **Code Style**
-   - PSR-12 compliance
+   - PER-CS 3.0 compliance
    - PHP-CS-Fixer rules
    - Naming convention verification
    - Import organization
@@ -95,7 +95,7 @@ parameters:
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PSR12' => true,
+        '@PER-CS3x0' => true,
         '@PHP85Migration' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
@@ -381,7 +381,7 @@ final class UserRepository implements RepositoryInterface
 - [ ] No deprecated code usage
 
 ### Code Style
-- [ ] PSR-12 compliant
+- [ ] PER-CS 3.0 compliant
 - [ ] PHP-CS-Fixer passes
 - [ ] Imports properly ordered
 - [ ] No unused imports

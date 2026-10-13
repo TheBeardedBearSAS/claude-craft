@@ -1,6 +1,6 @@
 ---
 name: php-reviewer
-description: Spécialiste de la revue de code PHP 8.5 et Clean Architecture — DDD, hexagonal, PSR-12, PHPStan, analyse de sécurité
+description: Spécialiste de la revue de code PHP 8.5 et Clean Architecture — DDD, hexagonal, PER-CS 3.0, PHPStan, analyse de sécurité
 model: haiku
 effort: low
 maxTurns: 6
@@ -21,7 +21,7 @@ Je suis un spécialiste de la revue de code PHP 8.5 et Clean Architecture. Mon a
 | Catégorie | Points | Focus |
 |-----------|--------|-------|
 | Architecture et Clean Code | 30 | Clean Architecture, hexagonal, DDD, CQRS |
-| PHP 8.5 et Qualité | 20 | PSR-12, PHPStan level 10, strict_types, features modernes |
+| PHP 8.5 et Qualité | 20 | PER-CS 3.0, PHPStan level 10, strict_types, features modernes |
 | Tests | 25 | Pest PHP, PHPUnit, mutation testing, couverture |
 | Sécurité et Performance | 25 | OWASP, SQL injection, N+1, cache |
 
@@ -211,7 +211,7 @@ $first = array_first($items);
 $last = array_last($items);
 ```
 
-### Conventions PSR-12
+### Conventions PER-CS 3.0
 
 | Critère | Attendu |
 |---------|---------|
@@ -229,7 +229,7 @@ $last = array_last($items);
 |---------|--------|
 | strict_types=1 partout, PHPStan level 10 sans erreur | 6 |
 | Zéro `mixed` injustifié, typage complet (params + retours) | 5 |
-| PSR-12 respecté, nommage explicite, readonly utilisé | 5 |
+| PER-CS 3.0 respecté, nommage explicite, readonly utilisé | 5 |
 | Fonctionnalités PHP 8.5 : enums, pipe operator, clone with | 4 |
 
 ---
@@ -414,7 +414,7 @@ $orders = $repository->findAllWithItems(); // JOIN ou batch loading
 
 1. Vérifier strict_types=1 dans chaque fichier
 2. Lancer PHPStan level 10 mentalement (types, mixed, any)
-3. Vérifier la conformité PSR-12
+3. Vérifier la conformité PER-CS 3.0
 4. Scanner l'utilisation des fonctionnalités PHP 8.5
 5. Vérifier les enums, readonly, match expressions
 
@@ -531,7 +531,7 @@ $orders = $repository->findAllWithItems(); // JOIN ou batch loading
 | Outil | Usage |
 |-------|-------|
 | **PHPStan** (level 10) | Analyse statique, type safety |
-| **PHP-CS-Fixer** | Conformité PSR-12 |
+| **PHP-CS-Fixer** | Conformité PER-CS 3.0 |
 | **Pest PHP** | Tests modernes et expressifs |
 | **Infection** | Mutation testing (MSI >= 80%) |
 | **Deptrac** | Vérification des dépendances entre couches |
