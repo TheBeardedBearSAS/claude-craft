@@ -192,7 +192,7 @@ docker-shell: ## Interactive shell in Docker
 	docker run --rm -it -v $(PWD):/app my-flutter-app /bin/bash
 
 ci: analyze format-check test ## Complete CI pipeline
-	@echo " CI passed!"
+	@echo "✅ CI passed!"
 ```
 
 ---
@@ -258,21 +258,21 @@ endif
 #!/bin/bash
 set -e
 
-echo "=� Flutter project setup..."
+echo "🚀 Flutter project setup..."
 
 # Check Flutter
 if ! command -v flutter &> /dev/null; then
-    echo "L Flutter is not installed"
+    echo "❌ Flutter is not installed"
     exit 1
 fi
 
-echo "=� Installing dependencies..."
+echo "📦 Installing dependencies..."
 flutter pub get
 
-echo "=' Generating code..."
+echo "🔧 Generating code..."
 flutter pub run build_runner build --delete-conflicting-outputs
 
-echo " Setup complete!"
+echo "✅ Setup complete!"
 ```
 
 ### scripts/test_all.sh
@@ -281,21 +281,21 @@ echo " Setup complete!"
 #!/bin/bash
 set -e
 
-echo ">� Running all tests..."
+echo "🧪 Running all tests..."
 
-echo "1� Unit tests..."
+echo "1️⃣ Unit tests..."
 flutter test test/unit/
 
-echo "2� Widget tests..."
+echo "2️⃣ Widget tests..."
 flutter test test/widget/
 
-echo "3� Integration tests..."
+echo "3️⃣ Integration tests..."
 flutter test integration_test/
 
-echo "=� Generating coverage..."
+echo "📊 Generating coverage..."
 flutter test --coverage
 
-echo " All tests passed!"
+echo "✅ All tests passed!"
 ```
 
 ### scripts/build_all.sh
@@ -304,22 +304,22 @@ echo " All tests passed!"
 #!/bin/bash
 set -e
 
-echo "<� Building all platforms..."
+echo "🏗️ Building all platforms..."
 
-echo "=� Android APK..."
+echo "📱 Android APK..."
 flutter build apk --release
 
-echo "=� Android App Bundle..."
+echo "📱 Android App Bundle..."
 flutter build appbundle --release
 
-echo "<N iOS..."
+echo "🍎 iOS..."
 flutter build ios --release
 
-echo "< Web..."
+echo "🌐 Web..."
 flutter build web --release
 
-echo " Builds complete!"
-echo "=� Files available in build/"
+echo "✅ Builds complete!"
+echo "📦 Files available in build/"
 ```
 
 ---

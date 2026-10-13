@@ -24,7 +24,7 @@ flutter:
 ## const Widgets
 
 ```dart
-//  GOOD - const
+// ✅ GOOD - const
 class MyWidget extends StatelessWidget {
   const MyWidget({super.key});
 
@@ -40,7 +40,7 @@ class MyWidget extends StatelessWidget {
   }
 }
 
-// L BAD - no const
+// ❌ BAD - no const
 class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class MyWidget extends StatelessWidget {
 ## ListView Optimization
 
 ```dart
-//  GOOD - ListView.builder (lazy loading)
+// ✅ GOOD - ListView.builder (lazy loading)
 ListView.builder(
   itemCount: items.length,
   itemBuilder: (context, index) {
@@ -68,7 +68,7 @@ ListView.builder(
   },
 )
 
-// L BAD - ListView with children (all created at once)
+// ❌ BAD - ListView with children (all created at once)
 ListView(
   children: items.map((item) => ItemWidget(item)).toList(),
 )
@@ -144,7 +144,7 @@ VisibilityDetector(
 ## Avoid Rebuilds
 
 ```dart
-//  GOOD - Separate widgets
+// ✅ GOOD - Separate widgets
 class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -157,12 +157,12 @@ class MyPage extends StatelessWidget {
   }
 }
 
-//  GOOD - RepaintBoundary
+// ✅ GOOD - RepaintBoundary
 RepaintBoundary(
   child: ComplexWidget(),
 )
 
-//  GOOD - AutomaticKeepAliveClientMixin for TabBar
+// ✅ GOOD - AutomaticKeepAliveClientMixin for TabBar
 class MyTab extends StatefulWidget {
   @override
   State<MyTab> createState() => _MyTabState();
