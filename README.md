@@ -28,6 +28,14 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces (234 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v8.23.0
+
+**Audit de fraîcheur + alignement Claude (2026-10-13, v8.23.0) :**
+
+- **Sécurité** : classement OWASP Top 10:2025 officiel (A01–A10) dans la règle 11 et ses miroirs, avec test de régression ; FrankenPHP 1.13.0 et PgBouncer 1.26.0 (versions précédentes vulnérables) ; types de serveurs Hetzner et `datacenter` retirés corrigés.
+- **Versions vérifiées sur registres** : React 19.3, Flutter 3.47, React Native 0.87 / Expo 57, Pinia 4, Vite 8.3 (`rolldownOptions`), Vercel CLI 63, Python 3.15, Paperclip 2026.1012.0, Docker 29.9, Kubernetes 1.37 (Gateway API), Vitest 5, Pest 5, pytest 9, PER-CS 3.0.
+- **Claude Code** : minimum 2.1.260, recommandé 2.1.296, modèles 5.5. Détails : [CHANGELOG](CHANGELOG.md#8230---2026-10-13).
+
 ## What's New in v8.18.0
 
 **Nouvelle commande `/workflow:auto-sprint` (2026-06-27, v8.18.0) :**

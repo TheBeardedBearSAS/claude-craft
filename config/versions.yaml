@@ -106,6 +106,7 @@ denylist:
   - 'v8.13.0 - Claude Code'
   - 'v8.20.0'
   - 'v8.21.0'
+  - 'v8.22.0'
   # Versions périmées — audit fraîcheur 2026-10-13
   - '19.2 + Compiler'
   - '3.44 / Dart 3.12'
