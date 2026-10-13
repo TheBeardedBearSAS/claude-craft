@@ -26,6 +26,8 @@ export class SafeComponent {
 }
 ```
 
+> **Correctifs 22.2.1 (sécurité) :** le sanitizer d'URL bloque désormais les URLs `data:` et `vbscript:` dangereuses (allowlist `data:` étendue aux types MIME non exécutables), et `resolveUrl` (`platform-server`) rejette les chemins protocol-relative (`//host`). Le router limite aussi les redirections absolues issues des redirect functions. Rester sur `@angular/core` >= 22.2.1. Source : https://github.com/angular/angular/releases (22.2.1). À surveiller : 22.3.0-next (`@defer` `scrollMargin`, opérateurs `++`/`--` dans les templates, `@for` n'ignore plus les valeurs non itérables).
+
 ### Security Contexts
 
 Angular recognizes these security contexts:
