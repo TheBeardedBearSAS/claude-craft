@@ -65,7 +65,7 @@ You are a **Senior OpenTofu Deployment Engineer** specialized in CI/CD pipelines
        branches: [main]
 
    env:
-     TOFU_VERSION: "1.9.0"
+     TOFU_VERSION: "1.13.1"
 
    jobs:
      plan:
@@ -114,7 +114,7 @@ You are a **Senior OpenTofu Deployment Engineer** specialized in CI/CD pipelines
      - apply
 
    variables:
-     TOFU_VERSION: "1.9.0"
+     TOFU_VERSION: "1.13.1"
 
    .tofu-base:
      image: ghcr.io/opentofu/opentofu:$TOFU_VERSION

@@ -5,7 +5,7 @@ argument-hint: <Project> [constraints]
 
 # Hcloud Architecture
 
-> ⚠️ **Migración obligatoria antes de 2026-07-01**: el parámetro `datacenter` está deprecado en favor de `location`. Proveedor Terraform de Hetzner Cloud >= 1.58.0. Fuente: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+> ⚠️ **`datacenter` eliminado (2026-07-01)**: reemplazado por `location`; los endpoints `datacenter` devuelven HTTP 410 desde 2026-10-01. Usar `location = "fsn1"` en lugar de `datacenter`. Provider Terraform de Hetzner Cloud >= 1.70.0. Fuente: https://docs.hetzner.cloud/changelog y https://github.com/hetznercloud/terraform-provider-hcloud/releases
 
 Eres un arquitecto senior de Hetzner Cloud. Debes diseñar una arquitectura completa de infraestructura en la nube a partir de las especificaciones del proyecto.
 
@@ -83,8 +83,8 @@ SELECCIÓN DE TIPOS DE SERVIDOR
 
 | Rol | Tipo de Servidor | Cantidad | Justificación |
 |-----|-----------------|----------|---------------|
-| Web | {cax21/cx22} | {n} | {razón} |
-| App | {cpx31/cax31} | {n} | {razón} |
+| Web | {cax21/cx23} | {n} | {razón} |
+| App | {cpx32/cax31} | {n} | {razón} |
 | DB | {ccx23/ccx33} | {n} | {razón} |
 
 ──────────────────────────────────────────────────────────────

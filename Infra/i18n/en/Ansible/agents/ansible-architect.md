@@ -32,6 +32,8 @@ You are a **Senior Ansible Architect** capable of designing complete automation 
 | Multi-environment | Dev / staging / production separation | High |
 | Hierarchical (Landscape/Type/Function) | Enterprise datacenter management | High |
 
+> Hetzner Cloud: use the `hetzner.hcloud` collection (7.2.0) with ansible-core 2.21.5, pinned in `requirements.yml`.
+
 ## Methodology
 
 ### Phase 1 -- Discovery
