@@ -88,7 +88,7 @@ private array $participants;
 
 ## 3. Coding Standards (PHP CS Fixer)
 
-### ✅ Code formaté selon PSR-12
+### ✅ Code formaté selon PER-CS 3.0
 
 ```bash
 make cs-fix
@@ -97,7 +97,7 @@ make cs-fix
 
 **Critère de succès:**
 - ✅ Code formaté automatiquement
-- ✅ PSR-12 respecté
+- ✅ PER-CS 3.0 respecté
 - ✅ Pas de trailing whitespace
 - ✅ Indentation cohérente (4 espaces)
 
@@ -514,7 +514,7 @@ make pre-commit && git commit
 ### ✅ Toujours commit
 
 - ✅ Tests qui passent
-- ✅ Code formaté (PSR-12)
+- ✅ Code formaté (PER-CS 3.0)
 - ✅ PHPStan niveau 8 OK
 - ✅ Documentation à jour
 - ✅ Message de commit clair

@@ -2,10 +2,10 @@
 
 ## Principes Generaux
 
-### PSR-12 + Symfony Coding Standards
+### PER-CS 3.0 + Symfony Coding Standards
 
 Le projet suit strictement :
-1. **PSR-12** : Standard PHP officiel
+1. **PER-CS 3.0** : Standard PHP officiel
 2. **@Symfony** : Conventions Symfony
 3. **@Symfony:risky** : Regles strictes Symfony
 4. **@PHP84Migration** + **@PHP85Migration** : Modernisation PHP 8.4+ / 8.5+
@@ -23,12 +23,14 @@ Configuration : `.php-cs-fixer.dist.php`
 
 | Version | Type | Fin de maintenance | Fin de sécurité | Recommandation |
 |---------|------|--------------------|-----------------|----------------|
+| **6.4** | LTS | Nov. 2026 | Nov. 2027 | ⚠️ Fin des correctifs de bugs en nov. 2026 — migrer vers 7.4 LTS |
 | **7.4** | LTS | Nov. 2028 | Nov. 2029 | ✅ Recommandée (LTS) |
-| **8.0** | Standard | Juil. 2026 | Juil. 2026 | ❌ EOS imminent — ne pas démarrer |
-| **8.1** | Standard | Jan. 2027 | Jan. 2027 | ✅ Recommandée (dernière stable) |
+| **8.0** | Standard | Juil. 2026 | Juil. 2026 | ❌ EOL (juil. 2026) — ne pas utiliser |
+| **8.1** | Standard | Jan. 2027 | Jan. 2027 | ✅ Recommandée (dernière stable) — non LTS, fin de support jan. 2027 |
+| **8.2** | Standard | Juil. 2027 | Juil. 2027 | ⏳ Sortie prévue nov. 2026 |
 | **8.4** | LTS (attendue) | ~Nov. 2030 | ~Nov. 2031 | ⏳ Sortie prévue nov. 2027 |
 
-**Règle :** démarrer un nouveau projet sur **7.4 LTS** (support jusqu'à 2029) ou **8.1** (dernière stable). Ne jamais choisir **8.0** (EOS juillet 2026).
+**Règle :** démarrer un nouveau projet sur **7.4 LTS** (support jusqu'à 2029) ou **8.1** (dernière stable). Ne jamais choisir **8.0** (EOL juillet 2026) ; la **6.4 LTS** n'a plus de correctifs de bugs à partir de nov. 2026.
 
 **Source:** https://symfony.com/releases
 
@@ -428,7 +430,7 @@ Configuration PHP-CS-Fixer :
 
 ## Indentation et Formatage
 
-### Regles PSR-12
+### Regles PER-CS 3.0
 
 ```php
 <?php
@@ -515,7 +517,7 @@ Voir `.claude/checklists/pre-commit.md` pour checklist complete.
 
 ## References
 
-- **PSR-12** : https://www.php-fig.org/psr/psr-12/
+- **PER-CS 3.0** : https://www.php-fig.org/per/coding-style/
 - **Symfony Coding Standards** : https://symfony.com/doc/current/contributing/code/standards.html
 - **PHP-CS-Fixer** : https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 - **PHPStan** : https://phpstan.org/

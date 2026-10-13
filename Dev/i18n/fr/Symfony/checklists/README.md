@@ -20,7 +20,7 @@ Ce dossier contient 4 checklists essentielles pour le workflow de développement
 **Vérifications automatiques:**
 - ✅ Tests passent (unitaires + intégration + Behat)
 - ✅ PHPStan niveau 8 (0 erreurs)
-- ✅ CS-Fixer (code formaté PSR-12)
+- ✅ CS-Fixer (code formaté PER-CS 3.0)
 - ✅ Hadolint (Dockerfile valide)
 - ✅ Coverage ≥ 80%
 - ✅ Message commit conforme (Conventional Commits)

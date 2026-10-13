@@ -32,10 +32,10 @@ Vérifie la configuration du Security Bundle :
 
 ```bash
 # Vérifier si symfony/security-bundle est installé
-docker run --rm -v $(pwd):/app php:8.2-cli grep "symfony/security-bundle" /app/composer.json
+docker run --rm -v $(pwd):/app php:8.5-cli grep "symfony/security-bundle" /app/composer.json
 
 # Lister les firewalls configurés
-docker run --rm -v $(pwd):/app php:8.2-cli cat /app/config/packages/security.yaml | grep -A 10 "firewalls:"
+docker run --rm -v $(pwd):/app php:8.5-cli cat /app/config/packages/security.yaml | grep -A 10 "firewalls:"
 ```
 
 #### Configuration Security Bundle (5 points)
@@ -59,11 +59,11 @@ docker run --rm -v $(pwd):/app php:8.2-cli cat /app/config/packages/security.yam
 
 ```bash
 # Vérifier l'utilisation de requêtes préparées
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "->createQuery(" /app/src --include="*.php" | wc -l
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "->createNativeQuery(" /app/src --include="*.php" | wc -l
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "->createQuery(" /app/src --include="*.php" | wc -l
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "->createNativeQuery(" /app/src --include="*.php" | wc -l
 
 # Rechercher les concaténations de requêtes dangereuses
-docker run --rm -v $(pwd):/app php:8.2-cli grep -rE "\"SELECT.*\\..*\$" /app/src --include="*.php" || echo "✅ Pas de concaténation SQL détectée"
+docker run --rm -v $(pwd):/app php:8.5-cli grep -rE "\"SELECT.*\\..*\$" /app/src --include="*.php" || echo "✅ Pas de concaténation SQL détectée"
 ```
 
 - [ ] Utilisation exclusive de requêtes préparées (Doctrine DQL/QueryBuilder)
@@ -85,10 +85,10 @@ docker run --rm -v $(pwd):/app php:8.2-cli grep -rE "\"SELECT.*\\..*\$" /app/src
 
 ```bash
 # Vérifier la configuration des mots de passe
-docker run --rm -v $(pwd):/app php:8.2-cli cat /app/config/packages/security.yaml | grep -A 5 "password_hashers:"
+docker run --rm -v $(pwd):/app php:8.5-cli cat /app/config/packages/security.yaml | grep -A 5 "password_hashers:"
 
 # Vérifier la présence de rate limiting
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "RateLimiter" /app/config --include="*.yaml"
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "RateLimiter" /app/config --include="*.yaml"
 ```
 
 - [ ] Hash de mot de passe fort (argon2i ou bcrypt avec coût élevé)
@@ -110,10 +110,10 @@ docker run --rm -v $(pwd):/app php:8.2-cli grep -r "RateLimiter" /app/config --i
 
 ```bash
 # Vérifier les secrets dans le code
-docker run --rm -v $(pwd):/app php:8.2-cli grep -rE "(password|secret|api_key|token).*=.*['\"]" /app/src --include="*.php" | grep -v "//.*password" || echo "✅ Pas de secrets en dur"
+docker run --rm -v $(pwd):/app php:8.5-cli grep -rE "(password|secret|api_key|token).*=.*['\"]" /app/src --include="*.php" | grep -v "//.*password" || echo "✅ Pas de secrets en dur"
 
 # Vérifier HTTPS
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "SECURE_SCHEME" /app/.env.example || echo "⚠️ Configuration HTTPS non trouvée"
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "SECURE_SCHEME" /app/.env.example || echo "⚠️ Configuration HTTPS non trouvée"
 ```
 
 - [ ] Secrets externalisés (.env, vault)
@@ -135,10 +135,10 @@ docker run --rm -v $(pwd):/app php:8.2-cli grep -r "SECURE_SCHEME" /app/.env.exa
 
 ```bash
 # Vérifier les Voters
-docker run --rm -v $(pwd):/app php:8.2-cli find /app/src -name "*Voter.php" | wc -l
+docker run --rm -v $(pwd):/app php:8.5-cli find /app/src -name "*Voter.php" | wc -l
 
 # Vérifier les annotations @IsGranted
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "@IsGranted" /app/src --include="*.php" | wc -l
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "@IsGranted" /app/src --include="*.php" | wc -l
 ```
 
 - [ ] Voters Symfony pour autorisations complexes
@@ -160,10 +160,10 @@ docker run --rm -v $(pwd):/app php:8.2-cli grep -r "@IsGranted" /app/src --inclu
 
 ```bash
 # Vérifier l'auto-échappement Twig
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "autoescape" /app/config/packages/twig.yaml
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "autoescape" /app/config/packages/twig.yaml
 
 # Vérifier les |raw non sécurisés
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "|raw" /app/templates --include="*.twig" || echo "✅ Pas de |raw détecté"
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "|raw" /app/templates --include="*.twig" || echo "✅ Pas de |raw détecté"
 ```
 
 - [ ] Auto-escape activé dans Twig
@@ -183,7 +183,7 @@ docker run --rm -v $(pwd):/app php:8.2-cli grep -r "|raw" /app/templates --inclu
 
 ```bash
 # Vérifier CSRF protection
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "csrf_protection" /app/config/packages/framework.yaml
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "csrf_protection" /app/config/packages/framework.yaml
 ```
 
 - [ ] CSRF protection activée globalement
@@ -205,10 +205,10 @@ docker run --rm -v $(pwd):/app php:8.2-cli grep -r "csrf_protection" /app/config
 
 ```bash
 # Vérifier le mode debug
-docker run --rm -v $(pwd):/app php:8.2-cli grep "APP_ENV" /app/.env.example
+docker run --rm -v $(pwd):/app php:8.5-cli grep "APP_ENV" /app/.env.example
 
 # Vérifier les dépendances vulnérables
-docker run --rm -v $(pwd):/app php:8.2-cli composer audit
+docker run --rm -v $(pwd):/app php:8.5-cli composer audit
 ```
 
 - [ ] APP_ENV=prod en production
@@ -228,10 +228,10 @@ docker run --rm -v $(pwd):/app php:8.2-cli composer audit
 
 ```bash
 # Audit de sécurité Composer
-docker run --rm -v $(pwd):/app php:8.2-cli composer audit
+docker run --rm -v $(pwd):/app php:8.5-cli composer audit
 
 # Vérifier les versions Symfony
-docker run --rm -v $(pwd):/app php:8.2-cli composer show symfony/* | grep "versions"
+docker run --rm -v $(pwd):/app php:8.5-cli composer show symfony/* | grep "versions"
 ```
 
 - [ ] Symfony à jour (dernière version LTS ou stable)
@@ -253,10 +253,10 @@ docker run --rm -v $(pwd):/app php:8.2-cli composer show symfony/* | grep "versi
 
 ```bash
 # Rechercher le traitement des données personnelles
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "email\|phone\|address" /app/src/Domain/Entity --include="*.php"
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "email\|phone\|address" /app/src/Domain/Entity --include="*.php"
 
 # Vérifier les mécanismes de consentement
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "consent\|gdpr" /app/src --include="*.php" -i
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "consent\|gdpr" /app/src --include="*.php" -i
 ```
 
 - [ ] Consentement utilisateur pour collecte de données
@@ -278,7 +278,7 @@ docker run --rm -v $(pwd):/app php:8.2-cli grep -r "consent\|gdpr" /app/src --in
 
 ```bash
 # Vérifier la configuration des headers
-docker run --rm -v $(pwd):/app php:8.2-cli cat /app/config/packages/framework.yaml | grep -A 10 "headers:"
+docker run --rm -v $(pwd):/app php:8.5-cli cat /app/config/packages/framework.yaml | grep -A 10 "headers:"
 ```
 
 - [ ] X-Content-Type-Options: nosniff
@@ -531,11 +531,11 @@ framework:
 
 ```bash
 # Audit Composer
-docker run --rm -v $(pwd):/app php:8.2-cli composer audit
+docker run --rm -v $(pwd):/app php:8.5-cli composer audit
 
 # Security Checker Symfony
-docker run --rm -v $(pwd):/app php:8.2-cli composer require --dev symfony/security-checker
-docker run --rm -v $(pwd):/app php:8.2-cli ./vendor/bin/security-checker security:check
+docker run --rm -v $(pwd):/app php:8.5-cli composer require --dev symfony/security-checker
+docker run --rm -v $(pwd):/app php:8.5-cli ./vendor/bin/security-checker security:check
 
 # PHPStan pour détecter problèmes de sécurité
 docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=9
@@ -557,26 +557,26 @@ docker run --rm -v $(pwd):/usr/src sonarqube:latest sonar-scanner
 
 ```bash
 # Audit des dépendances
-docker run --rm -v $(pwd):/app php:8.2-cli composer audit
+docker run --rm -v $(pwd):/app php:8.5-cli composer audit
 
 # Check les secrets dans le code
-docker run --rm -v $(pwd):/app php:8.2-cli grep -rE "(password|secret|api_key|token).*=.*['\"]" /app/src --include="*.php"
+docker run --rm -v $(pwd):/app php:8.5-cli grep -rE "(password|secret|api_key|token).*=.*['\"]" /app/src --include="*.php"
 
 # Check CSRF protection
-docker run --rm -v $(pwd):/app php:8.2-cli cat /app/config/packages/framework.yaml | grep csrf
+docker run --rm -v $(pwd):/app php:8.5-cli cat /app/config/packages/framework.yaml | grep csrf
 
 # Check les Voters
-docker run --rm -v $(pwd):/app php:8.2-cli find /app/src -name "*Voter.php"
+docker run --rm -v $(pwd):/app php:8.5-cli find /app/src -name "*Voter.php"
 
 # Check mode debug
-docker run --rm -v $(pwd):/app php:8.2-cli grep "APP_DEBUG" /app/.env
+docker run --rm -v $(pwd):/app php:8.5-cli grep "APP_DEBUG" /app/.env
 
 # Check les requêtes SQL
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "createNativeQuery\|createQuery" /app/src --include="*.php"
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "createNativeQuery\|createQuery" /app/src --include="*.php"
 
 # Security Checker
-docker run --rm -v $(pwd):/app php:8.2-cli composer require --dev symfony/security-checker
-docker run --rm -v $(pwd):/app php:8.2-cli ./vendor/bin/security-checker security:check composer.lock
+docker run --rm -v $(pwd):/app php:8.5-cli composer require --dev symfony/security-checker
+docker run --rm -v $(pwd):/app php:8.5-cli ./vendor/bin/security-checker security:check composer.lock
 ```
 
 ## IMPORTANT

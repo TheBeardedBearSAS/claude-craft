@@ -31,10 +31,10 @@ Ejecuta PHP_CodeSniffer para verificar el respeto de PSR-12:
 
 ```bash
 # Verificar si phpcs está instalado
-docker run --rm -v $(pwd):/app php:8.2-cli test -f /app/vendor/bin/phpcs && echo "✅ phpcs encontrado" || echo "❌ phpcs faltante"
+docker run --rm -v $(pwd):/app php:8.5-cli test -f /app/vendor/bin/phpcs && echo "✅ phpcs encontrado" || echo "❌ phpcs faltante"
 
 # Ejecutar phpcs
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpcs --standard=PSR12 src/ --report=summary
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpcs --standard=PSR12 src/ --report=summary
 ```
 
 #### Estándares PSR-12 (5 puntos)
@@ -58,7 +58,7 @@ Ejecuta PHPStan al nivel 10:
 
 ```bash
 # Verificar si PHPStan está instalado
-docker run --rm -v $(pwd):/app php:8.2-cli test -f /app/vendor/bin/phpstan && echo "✅ PHPStan encontrado" || echo "❌ PHPStan faltante"
+docker run --rm -v $(pwd):/app php:8.5-cli test -f /app/vendor/bin/phpstan && echo "✅ PHPStan encontrado" || echo "❌ PHPStan faltante"
 
 # Ejecutar PHPStan nivel 10
 docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=10 --error-format=table
@@ -100,10 +100,10 @@ Verifica el uso estricto de tipos:
 
 ```bash
 # Verificar declare(strict_types=1)
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "declare(strict_types=1)" /app/src --include="*.php" | wc -l
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "declare(strict_types=1)" /app/src --include="*.php" | wc -l
 
 # Contar el número de archivos PHP
-docker run --rm -v $(pwd):/app php:8.2-cli find /app/src -name "*.php" | wc -l
+docker run --rm -v $(pwd):/app php:8.5-cli find /app/src -name "*.php" | wc -l
 
 # Los dos números deben ser idénticos
 ```
@@ -113,13 +113,13 @@ docker run --rm -v $(pwd):/app php:8.2-cli find /app/src -name "*.php" | wc -l
 - [ ] `declare(strict_types=1)` en 100% de los archivos PHP
 - [ ] Type hints en todos los parámetros de métodos públicos
 - [ ] Type hints en todos los retornos de métodos públicos
-- [ ] Type hints en todas las propiedades de clase (PHP 7.4+)
-- [ ] Uso de union types (PHP 8.0+) en lugar de mixed
+- [ ] Type hints en todas las propiedades de clase
+- [ ] Uso de union types en lugar de mixed
 - [ ] No hay docblock @param/@return redundantes con los tipos nativos
-- [ ] Uso de readonly para propiedades inmutables (PHP 8.1+)
+- [ ] Uso de readonly para propiedades inmutables
 - [ ] No hay supresión de errores con @phpstan-ignore
 - [ ] Tipos estrictos en los arrays: array<string, int>
-- [ ] Uso del tipo never para métodos que nunca retornan (PHP 8.1+)
+- [ ] Uso del tipo never para métodos que nunca retornan
 
 **Puntos obtenidos**: ___/5
 
@@ -130,7 +130,7 @@ Analiza la complejidad del código:
 ```bash
 # Instalar phpmetrics si es necesario
 # Analizar la complejidad
-docker run --rm -v $(pwd):/app php:8.2-cli php -r "
+docker run --rm -v $(pwd):/app php:8.5-cli php -r "
 require '/app/vendor/autoload.php';
 // Análisis básico de complejidad
 "
@@ -262,7 +262,7 @@ Ejemplos:
 
 3. 🎯 [ACCIÓN RECOMENDADA] - Formatear el código según PSR-12
    Impacto: ⭐⭐⭐ | Esfuerzo: 🔥
-   Comando: docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpcbf --standard=PSR12 src/
+   Comando: docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpcbf --standard=PSR12 src/
 
 =================================================
    RECOMENDACIONES
@@ -305,10 +305,10 @@ CI/CD:
 
 ```bash
 # Verificar PSR-12
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpcs --standard=PSR12 src/ --report=summary
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpcs --standard=PSR12 src/ --report=summary
 
 # Corregir automáticamente PSR-12
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpcbf --standard=PSR12 src/
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpcbf --standard=PSR12 src/
 
 # PHPStan nivel 10
 docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=10 --error-format=table
@@ -317,10 +317,10 @@ docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=10 --error-fo
 docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=10 --generate-baseline
 
 # PHP CS Fixer
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/php-cs-fixer fix src --dry-run --diff
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/php-cs-fixer fix src --dry-run --diff
 
 # Verificar declare(strict_types=1) en todos los archivos
-docker run --rm -v $(pwd):/app php:8.2-cli sh -c 'for f in $(find /app/src -name "*.php"); do grep -q "declare(strict_types=1)" "$f" || echo "❌ Faltante: $f"; done'
+docker run --rm -v $(pwd):/app php:8.5-cli sh -c 'for f in $(find /app/src -name "*.php"); do grep -q "declare(strict_types=1)" "$f" || echo "❌ Faltante: $f"; done'
 ```
 
 ## IMPORTANTE

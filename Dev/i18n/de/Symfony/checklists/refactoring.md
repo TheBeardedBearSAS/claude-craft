@@ -897,7 +897,7 @@ Vor dem Merge des Refactorings:
 - [ ] Code einfacher (KISS)
 - [ ] SOLID eingehalten
 - [ ] PHPStan Level 8 OK
-- [ ] Code formatiert (PSR-12)
+- [ ] Code formatiert (PER-CS 3.0)
 - [ ] Atomare Commits (1 Änderung = 1 Commit)
 - [ ] Klare Commit-Nachricht
 - [ ] Dokumentation bei größerem Refactoring (ADR)

@@ -15,12 +15,14 @@
 
 | Version | Type | Fin de maintenance | Fin de sécurité | Recommandation |
 |---------|------|--------------------|-----------------|----------------|
+| **6.4** | LTS | Nov. 2026 | Nov. 2027 | ⚠️ Fin des correctifs de bugs en nov. 2026 — migrer vers 7.4 LTS |
 | **7.4** | LTS | Nov. 2028 | Nov. 2029 | ✅ Recommandée (LTS) |
-| **8.0** | Standard | Juil. 2026 | Juil. 2026 | ❌ EOS imminent — ne pas démarrer |
-| **8.1** | Standard | Jan. 2027 | Jan. 2027 | ✅ Recommandée (dernière stable) |
+| **8.0** | Standard | Juil. 2026 | Juil. 2026 | ❌ EOL (juil. 2026) — ne pas utiliser |
+| **8.1** | Standard | Jan. 2027 | Jan. 2027 | ✅ Recommandée (dernière stable) — non LTS, fin de support jan. 2027 |
+| **8.2** | Standard | Juil. 2027 | Juil. 2027 | ⏳ Sortie prévue nov. 2026 |
 | **8.4** | LTS (attendue) | ~Nov. 2030 | ~Nov. 2031 | ⏳ Sortie prévue nov. 2027 |
 
-**Règle :** démarrer un nouveau projet sur **7.4 LTS** (support jusqu'à 2029) ou **8.1** (dernière stable). Ne jamais choisir **8.0** (EOS juillet 2026).
+**Règle :** démarrer un nouveau projet sur **7.4 LTS** (support jusqu'à 2029) ou **8.1** (dernière stable). Ne jamais choisir **8.0** (EOL juillet 2026) ; la **6.4 LTS** n'a plus de correctifs de bugs à partir de nov. 2026.
 
 **Source:** https://symfony.com/releases
 

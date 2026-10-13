@@ -4,10 +4,10 @@
 
 ## Princípios Gerais
 
-### PSR-12 + Symfony Coding Standards
+### PER-CS 3.0 + Symfony Coding Standards
 
 O projeto segue estritamente:
-1. **PSR-12**: Padrão PHP oficial
+1. **PER-CS 3.0**: Padrão PHP oficial
 2. **@Symfony**: Convenções Symfony
 3. **@Symfony:risky**: Regras estritas Symfony
 4. **@PHP85Migration**: Modernização PHP 8.5+ (property hooks, pipe operator, `#[\NoDiscard]`)
@@ -311,7 +311,7 @@ Configuration PHP-CS-Fixer :
 
 ## Indentation et Formatage
 
-### Regles PSR-12
+### Regles PER-CS 3.0
 
 ```php
 <?php
@@ -398,7 +398,7 @@ Voir `.claude/checklists/pre-commit.md` pour checklist complete.
 
 ## References
 
-- **PSR-12** : https://www.php-fig.org/psr/psr-12/
+- **PER-CS 3.0** : https://www.php-fig.org/per/coding-style/
 - **Symfony Coding Standards** : https://symfony.com/doc/current/contributing/code/standards.html
 - **PHP-CS-Fixer** : https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 - **PHPStan** : https://phpstan.org/

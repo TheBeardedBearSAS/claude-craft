@@ -897,7 +897,7 @@ Antes de mergear el refactoring:
 - [ ] Código más simple (KISS)
 - [ ] SOLID respetado
 - [ ] PHPStan nivel 8 OK
-- [ ] Código formateado (PSR-12)
+- [ ] Código formateado (PER-CS 3.0)
 - [ ] Commits atómicos (1 cambio = 1 commit)
 - [ ] Mensaje de commit claro
 - [ ] Documentación si refactoring mayor (ADR)
