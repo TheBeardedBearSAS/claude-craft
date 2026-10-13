@@ -146,7 +146,7 @@ async def search_users(
 
 ### Password Hashing with Argon2id (pwdlib)
 
-> **passlib is unmaintained since 2020 and incompatible with Python 3.13+ (the `crypt` stdlib module it depended on was removed). bcrypt is explicitly forbidden in new code by project rule 11 (OWASP 2026 mandate: Argon2id). Use `pwdlib` with Argon2id instead.**
+> **passlib is unmaintained since 2020 and incompatible with Python 3.13+ (the `crypt` stdlib module it depended on was removed). bcrypt is legacy-only per project rule 11 (OWASP: Argon2id first; bcrypt only if Argon2id/scrypt are unavailable). Use `pwdlib` with Argon2id instead.**
 
 ```python
 # pip install pwdlib[argon2]
@@ -609,15 +609,15 @@ updates:
 > Authoritative list: see `.claude/rules/11-security.md`.
 
 1. **Broken Access Control** (incl. SSRF): deny by default, verify permissions on every request
-2. **Cryptographic Failures**: TLS 1.3, Argon2id for passwords, secrets in vault
-3. **Injection**: Use ORMs, parameterized queries, validate all input
-4. **Insecure Design**: threat modeling, defense in depth, rate limiting
-5. **Security Misconfiguration**: secure defaults, security headers
-6. **Software Supply Chain Failures** *(new 2025)*: SLSA 1.0, SBOM, Sigstore, `pip-audit`
-7. **Mishandling of Exceptional Conditions** *(new 2025)*: log errors, never expose stack traces in prod
-8. **Authentication Failures**: MFA, brute-force protection, invalidate sessions on logout
-9. **Security Logging and Monitoring Failures**: centralize logs, alert on anomalies, retain >= 1 year
-10. **Vulnerable and Outdated Components**: Dependabot/Renovate, `pip-audit`, Trivy
+2. **Security Misconfiguration**: secure defaults, security headers
+3. **Software Supply Chain Failures** *(new 2025, absorbs Vulnerable and Outdated Components)*: SLSA 1.2, SBOM (CycloneDX 1.7), Sigstore, `pip-audit`, Dependabot/Renovate, Trivy
+4. **Cryptographic Failures**: TLS 1.3, Argon2id for passwords, secrets in vault
+5. **Injection**: Use ORMs, parameterized queries, validate all input
+6. **Insecure Design**: threat modeling, defense in depth, rate limiting
+7. **Authentication Failures**: MFA, brute-force protection, invalidate sessions on logout
+8. **Software or Data Integrity Failures**: verify signatures/checksums, secured CI/CD
+9. **Security Logging and Alerting Failures**: centralize logs, alert on anomalies, retain >= 1 year
+10. **Mishandling of Exceptional Conditions** *(new 2025)*: log errors, never expose stack traces in prod
 
 ## Conclusion
 
