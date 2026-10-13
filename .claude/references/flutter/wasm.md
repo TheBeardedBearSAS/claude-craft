@@ -1,8 +1,8 @@
-# WebAssembly (Wasm) - Flutter 3.44+
+# WebAssembly (Wasm) - Flutter 3.47+
 
 ## Overview
 
-Flutter 3.44+ offre un support WebAssembly stable, permettant des performances 2-3x supérieures au JavaScript traditionnel pour les applications web.
+Flutter 3.47+ offre un support WebAssembly stable, permettant des performances 2-3x supérieures au JavaScript traditionnel pour les applications web.
 
 **Avantages:**
 - Performance 2-3x plus rapide
@@ -16,8 +16,8 @@ Flutter 3.44+ offre un support WebAssembly stable, permettant des performances 2
 
 | Composant | Version |
 |-----------|---------|
-| Flutter | 3.44+ |
-| Dart | 3.12+ |
+| Flutter | 3.47+ |
+| Dart | 3.13+ |
 | Chrome | 120+ |
 | Edge | 120+ |
 | Firefox | 120+ |
@@ -74,8 +74,8 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.12.0 <4.0.0'
-  flutter: '>=3.44.0'
+  sdk: '>=3.13.0 <4.0.0'
+  flutter: '>=3.47.7'
 
 dependencies:
   flutter:
@@ -417,7 +417,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.0'
+          flutter-version: '3.47.7'
           channel: 'stable'
 
       - name: Get dependencies

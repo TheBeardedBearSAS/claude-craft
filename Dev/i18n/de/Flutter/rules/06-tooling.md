@@ -539,11 +539,11 @@ make build-apk
 
 ---
 
-## Flutter 3.44 Hinweise (2026)
+## Flutter 3.47 Hinweise (2026)
 
 ### SwiftPM standardmäßig auf iOS
 
-Flutter 3.44+ verwendet **Swift Package Manager (SwiftPM)** als Standard-iOS-Plugin-Manager und ersetzt CocoaPods (weiterhin unterstützt, aber für neue Projekte veraltet).
+Flutter 3.47+ verwendet **Swift Package Manager (SwiftPM)** als Standard-iOS-Plugin-Manager und ersetzt CocoaPods (weiterhin unterstützt, aber für neue Projekte veraltet).
 
 ```bash
 # SwiftPM-Migration überprüfen
@@ -566,7 +566,7 @@ flutter:
 
 ### Android Gradle Plugin (AGP) 9
 
-Flutter 3.44 erfordert **AGP 9.0+**. `android/build.gradle` aktualisieren:
+Flutter 3.47 erfordert **AGP 9.0+**. `android/build.gradle` aktualisieren:
 
 ```groovy
 // android/build.gradle
@@ -607,6 +607,14 @@ MaterialButton(onPressed: () {}, child: Text('OK'));
 ```
 
 `dart fix --apply` ausführen, um erkennbare Deprecations automatisch zu migrieren.
+
+### Breaking Changes Flutter 3.44 und 3.47
+
+- **3.44**: Schließreihenfolge von `RawMenuAnchor` geändert; `onReorder` veraltet; `TextInputConnection.setStyle` veraltet; `cacheExtent` / `cacheExtentStyle` veraltet; `IconData` ist jetzt `final`; Android 17 ignoriert Ausrichtungs- und Größenänderungsbeschränkungen auf großen Bildschirmen; `ListTile` meldet im Debug-Modus einen Fehler, wenn es in ein farbiges Widget eingebettet ist; Android-Projekte migrieren zu integriertem Kotlin; Page-Transition-Builder neu organisiert.
+- **3.47**: OpenGL-ES-Render-to-Texture-Inhalte werden von oben nach unten gespeichert; Verhalten von `Semantics` header / `headingLevel` auf iOS und Android angepasst; `describeEnum` entfernt (`Enum.name` verwenden).
+- **Angekündigt, noch nicht in stable**: Migration zu den eigenständigen Paketen `material_ui` / `cupertino_ui`.
+
+**Quelle:** https://docs.flutter.dev/release/breaking-changes
 
 ---
 

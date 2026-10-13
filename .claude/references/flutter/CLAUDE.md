@@ -1,11 +1,11 @@
-# Flutter 3.44+ / Dart 3.12+ - Quick Reference
+# Flutter 3.47+ / Dart 3.13+ - Quick Reference
 
 ## Versions Requises (2026)
 
 | Composant | Version |
 |-----------|---------|
-| Flutter | 3.44+ |
-| Dart | 3.12+ |
+| Flutter | 3.47+ |
+| Dart | 3.13+ |
 | DevTools | 2.42+ |
 | Android SDK | 35+ |
 | iOS | 15.0+ |
@@ -29,12 +29,12 @@ lib/
 
 ## Nouvelles Features 2026
 
-### Dart 3.11 Dot Shorthands & Patterns
+### Dart 3.10 Dot Shorthands & Patterns
 ```dart
 // Avant
 if (status == OrderStatus.active) { }
 
-// Dart 3.11+
+// Dart 3.10+
 if (status == .active) { }
 
 // Switch expressions
@@ -49,7 +49,7 @@ final label = status switch {
 // Après: switch(value) { case _: ... }
 ```
 
-### Impeller par défaut (Flutter 3.44)
+### Impeller par défaut (Flutter 3.47)
 ```yaml
 # Activé par défaut sur iOS et Android (−50% rastérisation)
 # Désactiver uniquement si nécessaire:
@@ -175,15 +175,15 @@ dart run build_runner build -d
 ## Documentation Complète
 
 - `project-context.md` - Contexte projet
-- `coding-standards.md` - Standards Dart 3.12+
+- `coding-standards.md` - Standards Dart 3.13+
 - `wasm.md` - WebAssembly
 - `mcp-integration.md` - Model Context Protocol
 - `web-performance-2026.md` - Performance web
 
 ## Checklist Rapide
 
-- [ ] Flutter 3.44+, Dart 3.12+
-- [ ] Dot shorthands utilisés (Dart 3.11)
+- [ ] Flutter 3.47+, Dart 3.13+
+- [ ] Dot shorthands utilisés (Dart 3.10)
 - [ ] Impeller activé (par défaut)
 - [ ] dart:js_interop pour Wasm (pas dart:js_util)
 - [ ] const partout où possible

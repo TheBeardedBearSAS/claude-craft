@@ -8,9 +8,9 @@ Ce document couvre les outils essentiels pour le développement React Native ave
 
 ## System Requirements
 
-### Node.js >= 22 LTS (required for RN 0.85)
+### Node.js >= 22 LTS (required for RN 0.87)
 
-React Native 0.85 requires **Node.js 22.x LTS** minimum (RN 0.85 required Node 20). The recommended version is **Node.js 22.x active LTS**.
+React Native 0.87 requires **Node.js 22.x LTS** minimum (RN 0.85 required Node 20). The recommended version is **Node.js 22.x active LTS**.
 
 ```bash
 # Check version
@@ -22,7 +22,7 @@ nvm use 22
 nvm alias default 22
 ```
 
-> Node versions < 22 are no longer supported with RN 0.85. Upgrade before migrating.
+> Node versions < 22 are no longer supported with RN 0.87. Upgrade before migrating.
 
 ### React Native Gesture Handler 3.0.0 — Breaking Changes
 
@@ -398,6 +398,22 @@ npx expo install expo-camera@latest
 - [ ] VS Code extensions installed
 - [ ] Consistent package manager (npm)
 - [ ] npm scripts configured
+
+## React Native 0.86 / 0.87 and Expo SDK 57
+
+**Expo SDK 57 ships RN 0.86** (0.86.3); **bare RN = 0.87** (0.87.1 `latest`, 0.88 in RC). An Expo project follows the RN version of its SDK.
+
+- `expo@57.0.17+`: Hermes V1 / Reanimated memory regression fixed (from 57.0.9) and dev startup time fixed
+- Reanimated 4.7.x supports RN 0.86-0.88 (4.5 is bundled in SDK 57)
+- Worklets bundle mode is experimental and unsupported: **do not use it in production**
+- Prefer **development builds** over Expo Go when targeting the stores
+- `expo prebuild` cleans and regenerates `android/` and `ios/` by default (`--no-clean` to keep them)
+- iOS 27: `ios.enableSceneSupport` (`expo-build-properties`, `expo@57.0.23+`, opt-in; default in SDK 58)
+- React Navigation 8 is in alpha: watch it, stay on 7.x in production
+
+**RN 0.87 breaking changes:** strict TypeScript API by default (deep imports of `react-native/Libraries/*` forbidden, opt-out until 0.88); `InteractionManager` removed (use `requestIdleCallback`); `ImageBackground` deprecated (absolute `Image` inside a `View`); `Modal.animated` and `StatusBar` `backgroundColor`/`translucent` props removed; Node 22.13+, Kotlin 2.0+; AGP 9 supported (`android.builtInKotlin=false` and `android.newDsl=false` keep the old behavior); experimental opt-in Swift Package Manager on iOS (CocoaPods stays the default).
+
+**Sources:** [RN 0.87](https://reactnative.dev/blog/2026/08/11/react-native-0.87), [Expo SDK 57](https://expo.dev/changelog/sdk-57)
 
 ---
 

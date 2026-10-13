@@ -1,11 +1,11 @@
 # Flutter Performance (2026)
 
-**Versions :** Flutter 3.44+ | Impeller par défaut | Dart 3.12
+**Versions :** Flutter 3.47+ | Impeller par défaut | Dart 3.13
 
 ## Impeller: Moteur de rendu par défaut
 
 ```yaml
-# Activé PAR DÉFAUT sur iOS et Android (Flutter 3.44)
+# Activé PAR DÉFAUT sur iOS et Android (Flutter 3.47)
 # −50% temps rastérisation, +30% fluidité animations
 # Désactiver uniquement si problèmes critiques:
 flutter:
@@ -234,7 +234,7 @@ heavy.showFeature();
 ## Performance Checklist 2026
 
 ```
-✅ Impeller activé (par défaut Flutter 3.44)
+✅ Impeller activé (par défaut Flutter 3.47)
 ✅ const widgets partout où possible
 ✅ ListView.builder pour listes
 ✅ Image caching activé (cached_network_image)

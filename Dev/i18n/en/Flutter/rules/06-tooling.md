@@ -543,7 +543,7 @@ make build-apk
 
 ### SwiftPM default on iOS
 
-Flutter 3.44+ uses **Swift Package Manager (SwiftPM)** as the default iOS plugin manager, replacing CocoaPods (still supported but deprecated for new projects).
+Flutter 3.47+ uses **Swift Package Manager (SwiftPM)** as the default iOS plugin manager, replacing CocoaPods (still supported but deprecated for new projects).
 
 ```bash
 # Verify SwiftPM migration
@@ -560,7 +560,7 @@ flutter:
   use-swift-package-manager: false
 ```
 
-**Impact:** plugins without SwiftPM support require `use-swift-package-manager: false` or migration by the plugin author. Most official pub.dev plugins already support SwiftPM since Flutter 3.22+.
+**Impact:** plugins without SwiftPM support require `use-swift-package-manager: false` or migration by the plugin author. Most official pub.dev plugins already support SwiftPM.
 
 **Source:** https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers
 
@@ -607,6 +607,14 @@ MaterialButton(onPressed: () {}, child: Text('OK'));
 ```
 
 Run `dart fix --apply` to automatically migrate detectable deprecations.
+
+### Breaking changes Flutter 3.44 and 3.47
+
+- **3.44**: `RawMenuAnchor` close order changed; `onReorder` deprecated; `TextInputConnection.setStyle` deprecated; `cacheExtent` / `cacheExtentStyle` deprecated; `IconData` is now `final`; Android 17 ignores orientation/resizability restrictions on large screens; `ListTile` reports a debug error when wrapped in a colored widget; Android projects migrate to built-in Kotlin; page transition builders reorganized.
+- **3.47**: OpenGL ES render-to-texture content is stored top-down; `Semantics` header / `headingLevel` behavior updated on iOS and Android; `describeEnum` removed (use `Enum.name`).
+- **Announced, not yet in stable**: migration to standalone `material_ui` / `cupertino_ui` packages.
+
+**Source:** https://docs.flutter.dev/release/breaking-changes
 
 ---
 
