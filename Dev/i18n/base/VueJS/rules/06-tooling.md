@@ -277,7 +277,7 @@ auto-install-peers=true
 pnpm install
 
 # Add dependency
-pnpm add vue-router pinia
+pnpm add vue-router pinia @vue/devtools-api
 
 # Add dev dependency
 pnpm add -D vitest @vue/test-utils
@@ -349,7 +349,8 @@ const router = createRouter({ history: createWebHistory() });
   "dependencies": {
     "vue": "^3.5.0",
     "vue-router": "^5.0.0",
-    "pinia": "^3.0.0"
+    "pinia": "^4.0.0",
+    "@vue/devtools-api": "^8.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

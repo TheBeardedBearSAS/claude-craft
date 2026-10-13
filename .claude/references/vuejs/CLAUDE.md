@@ -1,11 +1,11 @@
-# Vue.js 3.5+ / 3.6 beta Vapor - Quick Reference
+# Vue.js 3.5+ / 3.6 RC Vapor - Quick Reference
 
 ## Versions Requises (2026)
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Vue.js | 3.5.x (stable) / 3.6.x beta | Vapor Mode : feature-complete, instable (SSR dispo en 3.7) |
-| Pinia | 3.x | Requis pour Vapor Mode |
+| Vue.js | 3.5.x (stable) / 3.6.x RC (rc.11) | Vapor Mode : feature-complete, instable (SSR dispo en 3.7) |
+| Pinia | 4.x | ESM-only ; `@vue/devtools-api` v8 à installer explicitement ; 3+ requis pour Vapor Mode |
 | Vue Router | 5.x | File-based routing via `@vue-router/auto` |
 | Vite | 8.x | Rolldown bundler par défaut (3-5× plus rapide) |
 | TypeScript | 5.x+ | Strict mode obligatoire |
@@ -48,7 +48,7 @@ const filtered = computed(() => store.users.filter(u => u.name.includes(search.v
 </script>
 ```
 
-### Pinia 3 (store composition style)
+### Pinia 4 (store composition style)
 ```typescript
 // stores/users.store.ts
 import { defineStore } from 'pinia';
@@ -71,6 +71,8 @@ export const useUsersStore = defineStore('users', () => {
 ```
 
 > **Pinia 2 → 3 :** l'API `defineStore` reste compatible ; la migration principale concerne la suppression des `mapState`/`mapActions` dans les Options API. Préférer le setup store style (ci-dessus) en Pinia 3.
+>
+> **Pinia 3 → 4 :** uniquement des breaking changes techniques — Pinia 4 est **ESM-only** et `@vue/devtools-api` (v8) doit être installé explicitement à côté de `pinia` (`npm i pinia @vue/devtools-api`). Source : https://github.com/vuejs/pinia/releases
 
 ### Vite 8 — Rolldown
 ```typescript
@@ -119,16 +121,16 @@ Structure `src/pages/` → routes auto-générées avec types précis. Pour un r
 ### Alien Signals (Vue 3.5+)
 Vue 3.5 migre en interne vers **Alien Signals** pour la réactivité : performances +2× sur les graphes larges. Aucun changement d'API côté utilisateur.
 
-### Vapor Mode (Vue 3.6 beta — ne pas utiliser en prod)
+### Vapor Mode (Vue 3.6 RC — ne pas utiliser en prod sans validation)
 - Feature-complete mais **instable** — SSR prévu en Vue 3.7
-- Nécessite Pinia 3 et `@vue-router/auto`
+- Nécessite Pinia 3+ (4 recommandé) et `@vue-router/auto`
 - Voir `vapor-mode.md` pour les détails et caveats
 
 ## Checklist Rapide
 
 - [ ] Vue 3.5.x stable (3.6 réservé expérimental)
 - [ ] Composition API + `<script setup>` uniquement
-- [ ] Pinia 3 setup store style
+- [ ] Pinia 4 setup store style
 - [ ] Vue Router 5 (file-based ou manuel selon besoin)
 - [ ] Vite 8 + Rolldown (`manualChunks` supprimé → migrer vers `rolldownOptions.output.codeSplitting.groups`)
 - [ ] TypeScript strict mode
@@ -139,7 +141,7 @@ Vue 3.5 migre en interne vers **Alien Signals** pour la réactivité : performan
 
 - `architecture.md` — Structure modulaire, patterns composables, routing
 - `coding-standards.md` — TypeScript, conventions, Composition API rules
-- `tooling.md` — Vite 8, Vue Router 5, Pinia 3, migrations
+- `tooling.md` — Vite 8, Vue Router 5, Pinia 4, migrations
 - `quality-tools.md` — ESLint, Vitest, audit qualité
 - `testing.md` — Vitest, Vue Test Utils, stratégies TDD
 - `security.md` — XSS, CSRF, validation, CSP
