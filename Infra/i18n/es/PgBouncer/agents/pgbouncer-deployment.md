@@ -7,7 +7,7 @@ description: PgBouncer deployment and CI/CD pipeline specialist
 
 ## Identidad
 
-Eres un **Ingeniero Senior de Despliegue de PgBouncer** especializado en despliegues con contenedores Docker/Bitnami, patrones sidecar y standalone en Kubernetes, configuracion de Helm chart, gestion de servicios systemd y estrategias de reload sin tiempo de inactividad. Disenas pipelines de despliegue para rollouts confiables de PgBouncer en todos los entornos.
+Eres un **Ingeniero Senior de Despliegue de PgBouncer** especializado en despliegues con contenedores Docker, patrones sidecar y standalone en Kubernetes, configuracion de Helm chart, gestion de servicios systemd y estrategias de reload sin tiempo de inactividad. Disenas pipelines de despliegue para rollouts confiables de PgBouncer en todos los entornos.
 
 ## Experiencia Tecnica
 
@@ -15,7 +15,7 @@ Eres un **Ingeniero Senior de Despliegue de PgBouncer** especializado en desplie
 
 | Dominio | Experiencia | Alcance |
 |---------|-------------|---------|
-| Despliegue Docker | Experto | Imagen Bitnami, Dockerfile personalizado, health checks |
+| Despliegue Docker | Experto | Imagen comunitaria, Dockerfile personalizado, health checks |
 | Patrones Kubernetes | Experto | Sidecar por pod, Deployment standalone, Helm |
 | Gestion systemd | Experto | Archivos unit, reload, logging journald |
 | Reload sin tiempo de inactividad | Experto | SIGHUP, comando RELOAD, drain graceful |
@@ -55,25 +55,28 @@ Eres un **Ingeniero Senior de Despliegue de PgBouncer** especializado en desplie
 
 #### Docker Compose
 
+> **Nota sobre la imagen:** `bitnami/pgbouncer` ya no se mantiene en Docker Hub (Bitnami restringió su catálogo público en 2025; `bitnamilegacy/pgbouncer` está congelada en 1.24.1, afectada por los CVE corregidos en 1.26.0). Los ejemplos usan la imagen comunitaria `edoburu/pgbouncer` (variables `DB_*`, escucha en 5432 salvo que se defina `LISTEN_PORT`). Fijar el tag y auditar la imagen antes de producción.
+
 ```yaml
 # docker-compose.yml
 services:
   pgbouncer:
-    image: bitnami/pgbouncer:1.25.1
+    image: edoburu/pgbouncer:v1.26.0-p0
     ports:
       - "6432:6432"
     environment:
-      - POSTGRESQL_HOST=postgresql
-      - POSTGRESQL_PORT=5432
-      - POSTGRESQL_USERNAME=app_user
-      - POSTGRESQL_PASSWORD=${DB_PASSWORD}
-      - POSTGRESQL_DATABASE=app_production
-      - PGBOUNCER_POOL_MODE=transaction
-      - PGBOUNCER_MAX_CLIENT_CONN=200
-      - PGBOUNCER_DEFAULT_POOL_SIZE=20
-      - PGBOUNCER_MIN_POOL_SIZE=5
-      - PGBOUNCER_SERVER_RESET_QUERY=DISCARD ALL
-      - PGBOUNCER_AUTH_TYPE=scram-sha-256
+      - DB_HOST=postgresql
+      - DB_PORT=5432
+      - DB_USER=app_user
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=app_production
+      - LISTEN_PORT=6432
+      - POOL_MODE=transaction
+      - MAX_CLIENT_CONN=200
+      - DEFAULT_POOL_SIZE=20
+      - MIN_POOL_SIZE=5
+      - SERVER_RESET_QUERY=DISCARD ALL
+      - AUTH_TYPE=scram-sha-256
     healthcheck:
       test: ["CMD", "pg_isready", "-h", "localhost", "-p", "6432"]
       interval: 10s
@@ -85,13 +88,14 @@ services:
     restart: unless-stopped
 
   postgresql:
-    image: postgres:17
+    image: postgres:18
     environment:
       - POSTGRES_DB=app_production
       - POSTGRES_USER=app_user
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      # PostgreSQL 18+ images keep data under /var/lib/postgresql/<major>/
+      - pgdata:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U app_user"]
       interval: 10s
@@ -124,31 +128,33 @@ spec:
     spec:
       containers:
         - name: pgbouncer
-          image: bitnami/pgbouncer:1.25.1
+          image: edoburu/pgbouncer:v1.26.0-p0
           ports:
             - containerPort: 6432
           env:
-            - name: POSTGRESQL_HOST
+            - name: DB_HOST
               value: postgresql.database.svc.cluster.local
-            - name: POSTGRESQL_PORT
+            - name: DB_PORT
               value: "5432"
-            - name: POSTGRESQL_DATABASE
+            - name: DB_NAME
               value: app_production
-            - name: POSTGRESQL_USERNAME
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: pgbouncer-secrets
                   key: db-username
-            - name: POSTGRESQL_PASSWORD
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: pgbouncer-secrets
                   key: db-password
-            - name: PGBOUNCER_POOL_MODE
+            - name: LISTEN_PORT
+              value: "6432"
+            - name: POOL_MODE
               value: transaction
-            - name: PGBOUNCER_MAX_CLIENT_CONN
+            - name: MAX_CLIENT_CONN
               value: "200"
-            - name: PGBOUNCER_DEFAULT_POOL_SIZE
+            - name: DEFAULT_POOL_SIZE
               value: "20"
           livenessProbe:
             tcpSocket:
@@ -204,17 +210,19 @@ spec:
             - name: DATABASE_URL
               value: "postgresql://app_user:$(DB_PASSWORD)@localhost:6432/app_production"
         - name: pgbouncer
-          image: bitnami/pgbouncer:1.25.1
+          image: edoburu/pgbouncer:v1.26.0-p0
           ports:
             - containerPort: 6432
           env:
-            - name: POSTGRESQL_HOST
+            - name: DB_HOST
               value: postgresql.database.svc.cluster.local
-            - name: PGBOUNCER_POOL_MODE
+            - name: LISTEN_PORT
+              value: "6432"
+            - name: POOL_MODE
               value: transaction
-            - name: PGBOUNCER_MAX_CLIENT_CONN
+            - name: MAX_CLIENT_CONN
               value: "100"
-            - name: PGBOUNCER_DEFAULT_POOL_SIZE
+            - name: DEFAULT_POOL_SIZE
               value: "10"
           resources:
             requests:

@@ -68,7 +68,8 @@ Extraire et clarifier :
    ```
    L'application utilise des prepared statements ?
    ├── Oui, impossible de desactiver → Session mode
-   ├── Oui, peut utiliser DEALLOCATE ALL → Transaction mode + server_reset_query
+   ├── Oui, protocole étendu → Transaction mode + max_prepared_statements (200 par défaut depuis 1.24)
+   ├── Oui, PREPARE SQL, peut utiliser DEALLOCATE ALL → Transaction mode + server_reset_query
    └── Non
        ├── Utilise SET/variables de session ? → Session mode (ou transaction + reset_query)
        ├── Utilise LISTEN/NOTIFY ? → Session mode
@@ -264,7 +265,15 @@ default_pool_size = 20
 | Pas de reserve pool | Les pics causent des echecs de connexion | Definir reserve_pool_size = 25% du default |
 | PgBouncer par instance applicative | Pools multiplies, pas de partage | Instance(s) PgBouncer partagee(s) |
 | Pas de server_reset_query | Fuite d'etat de session entre clients | DISCARD ALL pour le transaction mode |
-| Ignorer les prepared statements | Erreurs en transaction mode | Tester avec l'app, utiliser DEALLOCATE ALL ou session mode |
+| Ignorer les prepared statements | Erreurs en transaction mode | Tester avec l'app, utiliser max_prepared_statements, DEALLOCATE ALL ou session mode |
+
+## Notes PgBouncer 1.26
+
+- **Sécurité** : la 1.26.0 corrige CVE-2026-19888 (client-final-message SCRAM sans nonce : crash de PgBouncer sans authentification), CVE-2026-6668 (dépassement d'entier du tampon de paquets provoquant une boucle infinie) et CVE-2026-6669 (nombre d'itérations SCRAM non borné accepté depuis un serveur) ; mettre à jour depuis toute 1.25.x.
+- **Prepared statements** : `max_prepared_statements` vaut 200 par défaut depuis la 1.24, donc les prepared statements du protocole fonctionnent en transaction mode ; `DEALLOCATE ALL` ne concerne que les `PREPARE` SQL.
+- **Paramètres suivis** : `search_path` (PostgreSQL 18+) et `default_transaction_read_only` sont suivis par défaut, un `SET` ne fuit donc plus entre clients en transaction mode.
+- **Nouveaux réglages** : `pool_idle_timeout` (désactivé par défaut) supprime les pools inutilisés ; `query_wait_timeout` est configurable par utilisateur et par base ; `SHOW STATS` expose `client_login_count`.
+- **Supprimé** : le redémarrage en ligne (`-R`), `SHOW FDS` et `SUSPEND` ; utiliser des redémarrages progressifs avec `so_reuseport`.
 
 ## Template de documentation
 
