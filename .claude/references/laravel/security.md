@@ -479,8 +479,10 @@ public function download(Request $request, string $file)
     return Storage::download($file);
 }
 
-// CSRF protection (enabled by default)
-// All POST, PUT, PATCH, DELETE requests require CSRF token
+// Request forgery protection (enabled by default, Laravel 13)
+// `Illuminate\Foundation\Http\Middleware\PreventRequestForgery` (web group) checks the
+// Sec-Fetch-Site header first (origin verification), then falls back to the CSRF token.
+// Origin-only mode (403 on failure instead of 419): $middleware->preventRequestForgery(originOnly: true);
 <form method="POST" action="/orders">
     @csrf
     <!-- form fields -->

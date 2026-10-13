@@ -1,18 +1,17 @@
 # Laravel 13 Testing Standards
 
-**Source :** https://laravel.com/docs/13.x/testing | https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing
+**Source :** https://laravel.com/docs/13.x/testing | https://pestphp.com/docs/mutation-testing
 
 ## Testing Frameworks
 
-### Pest 4 (Recommended) avec Mutation Testing
+### Pest 5 (Recommended) avec Mutation Testing
 
-**Pest 4** introduit le Mutation Testing natif pour garantir que les tests tuent réellement les bugs (https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing).
+**Pest** (Mutation Testing natif depuis Pest 3, v5 courante) permet de garantir que les tests tuent réellement les bugs (https://pestphp.com/docs/mutation-testing).
 
 ```bash
-# Install Pest 4
+# Install Pest 5
 composer require pestphp/pest --dev --with-all-dependencies
 composer require pestphp/pest-plugin-laravel --dev
-composer require pestphp/pest-plugin-mutate --dev
 php artisan pest:install
 ```
 
@@ -415,11 +414,11 @@ describe('prune:orders command', function () {
 });
 ```
 
-## Browser Testing avec Pest 4
+## Browser Testing avec Pest 5
 
-**Source :** https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing
+**Source :** https://pestphp.com/docs/mutation-testing
 
-Pest 4 intègre le **Browser Testing natif** propulsé par Playwright (Chromium, Firefox, WebKit), sans dépendance Dusk ni driver Selenium.
+Pest 5 intègre le **Browser Testing natif** propulsé par Playwright (Chromium, Firefox, WebKit), sans dépendance Dusk ni driver Selenium.
 
 ### Installation
 
@@ -562,9 +561,9 @@ arch('Strict types declared')
     ->toUseStrictTypes();
 ```
 
-## Mutation Testing avec Pest 4
+## Mutation Testing avec Pest 5
 
-**Nouveauté Pest 4 :** Mutation Testing natif (https://pestphp.com/docs/mutation-testing).
+**Natif depuis Pest 3 :** Mutation Testing intégré (https://pestphp.com/docs/mutation-testing).
 
 ```bash
 # Lancer le mutation testing
@@ -574,7 +573,7 @@ arch('Strict types declared')
 ./vendor/bin/pest --mutate --min=80
 ```
 
-**Principe :** Pest 4 mute le code (change les opérateurs, supprime des lignes) et vérifie que les tests échouent. Si un test passe sur du code muté, le test est insuffisant.
+**Principe :** Pest 5 mute le code (change les opérateurs, supprime des lignes) et vérifie que les tests échouent. Si un test passe sur du code muté, le test est insuffisant.
 
 ## Model Factories
 
@@ -648,4 +647,4 @@ class OrderFactory extends Factory
 - [ ] Event/Queue faking where appropriate
 - [ ] Coverage > 80%
 - [ ] No debugging statements in code
-- [ ] Mutation Testing score >= 80% (Pest 4)
+- [ ] Mutation Testing score >= 80% (Pest 5)

@@ -135,7 +135,7 @@ make hadolint
 FROM php:fpm
 
 # ✅ Version explicite
-FROM php:8.2-fpm-alpine
+FROM php:8.5-fpm-alpine
 
 # ❌ apt-get sans cleanup
 RUN apt-get install -y curl
