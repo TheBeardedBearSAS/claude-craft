@@ -641,7 +641,7 @@ Focuses on:
 
 Focuses on:
 - `vercel.json` schema correctness (rewrites, redirects, headers, regions, functions, crons)
-- Functions & runtime choice (Node.js/Fluid Compute vs deprecated Edge Runtime)
+- Functions & runtime choice (Node.js/Fluid Compute recommended over Edge Runtime)
 - Security & env-var handling (secrets, Cron auth guard, CORS/CSP headers, Marketplace credential scoping)
 - ISR/caching correctness and Function handler test coverage
 

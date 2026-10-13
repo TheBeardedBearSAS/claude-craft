@@ -17,12 +17,12 @@ A comprehensive AI-assisted development framework for Claude Code with 13 techno
 | **React Native** | 0.87 (New Architecture) — Expo SDK 57 | Feature-based | Navigation 7, Reanimated 4, TurboModules |
 | **Angular** | 22 | Domain-driven | Signals, Signal Forms (stable), Zoneless par défaut, OnPush défaut, httpResource (TS 6) |
 | **Vue.js** | 3.5+ (3.6 RC Vapor) | Composition API | Pinia 4, Vue Router 5, Vite 8, Vitest, Alien Signals |
-| **Vite** _(community, framework-agnostic)_ | 8.3 | Vanilla / Library / Multi-page | `build.lib`, `vite-plugin-dts`, `rolldownOptions.input`, Workers/WASM |
+| **Vite** _(community, framework-agnostic)_ | 8.3 | Vanilla / Library / Multi-page | `build.lib`, `vite-plugin-dts`, `input` multi-page, Workers/WASM |
 | **Vercel** _(community, deployment platform)_ | 63.1.2 | Platform config (framework-agnostic) | `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | Clean Architecture | Actions, Pest 4/5 (Pest 5 : PHP 8.4+), Sanctum, AI SDK, Passkey |
 | **Python** | 3.15 / 3.14+ | Clean Architecture / Hexagonal | FastAPI, async/await, Pydantic, free-threading, JIT |
 | **PHP** | 8.5 (Property Hooks 8.4+) | Clean Architecture | PER-CS 3.0 (ex-PSR-12), PHPStan Level 10, Pest 5 |
-| **Paperclip** | 2026.1012.0 | Two-layer (control plane + adapters) | Node.js 22+, TypeScript, Vitest, PostgreSQL, governance-first |
+| **Paperclip** | 2026.1012.0 | Two-layer (control plane + adapters) | Node.js 24.11+, TypeScript, Vitest, PostgreSQL, governance-first |
 
 ### Technology Quick Links
 
@@ -45,9 +45,9 @@ A comprehensive AI-assisted development framework for Claude Code with 13 techno
 
 > **Note:** Svelte/SvelteKit is **community-maintained** and hors-scope officiel. Voir `.claude/references/svelte/CLAUDE.md` pour le disclaimer complet.
 
-> **Note:** Vite (ce stack) couvre uniquement l'usage **framework-agnostic** de Vite — apps vanilla JS/TS, bibliothèques npm (`build.lib`), apps multi-pages (`build.rolldownOptions.input`) et entrées Workers/WASM. Ce n'est **pas** un remplacement de la configuration Vite dev-server de React/Vue/Angular/Svelte, documentée dans le `tooling.md` propre à chacun de ces stacks.
+> **Note:** Vite (ce stack) couvre uniquement l'usage **framework-agnostic** de Vite — apps vanilla JS/TS, bibliothèques npm (`build.lib`), apps multi-pages (option top-level `input`) et entrées Workers/WASM. Ce n'est **pas** un remplacement de la configuration Vite dev-server de React/Vue/Angular/Svelte, documentée dans le `tooling.md` propre à chacun de ces stacks.
 
-> **Note:** Vercel couvre uniquement la **surface plateforme de déploiement agnostique au framework** — `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage (Blob natif ; Postgres/KV via Marketplace — Neon/Upstash). Ce n'est **pas** un stack Next.js (hors-périmètre, aucun namespace `/nextjs:*`). L'Edge Runtime (`export const runtime = 'edge'`) est **déprécié par Vercel depuis 2026** au profit de Fluid Compute — ce stack le documente uniquement à des fins de migration de code legacy.
+> **Note:** Vercel couvre uniquement la **surface plateforme de déploiement agnostique au framework** — `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage (Blob natif ; Postgres/KV via Marketplace — Neon/Upstash). Ce n'est **pas** un stack Next.js (hors-périmètre, aucun namespace `/nextjs:*`). Vercel recommande de migrer l'Edge Runtime (`export const runtime = 'edge'`) vers Node.js (Fluid Compute) — ce stack le documente uniquement à des fins de migration de code legacy.
 
 See `@.claude/INDEX.md` for condensed checklists and patterns.
 
