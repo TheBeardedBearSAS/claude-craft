@@ -1,6 +1,6 @@
 # Laravel 13 - Nouvelles Fonctionnalités Majeures
 
-**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière stable : 13.15.0)
+**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière version vérifiée : 13.36.0 au 2026-10-13)
 **Source :** https://laravel.com/docs/13.x/releases
 
 ---
@@ -377,18 +377,17 @@ class PasskeyController extends Controller
 
 ---
 
-## Pest 4 Mutation Testing Intégré
+## Pest Mutation Testing Intégré (natif depuis Pest 3)
 
-**Source :** https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing
+**Source :** https://pestphp.com/docs/mutation-testing
 
-Laravel 13 recommande **Pest 4** avec le **Mutation Testing natif** pour garantir la qualité des tests.
+Laravel 13 recommande **Pest 5** (PHP 8.4+ ; Pest 4 si PHP 8.3) avec le **Mutation Testing natif** (intégré depuis Pest 3, pas de plugin à installer) pour garantir la qualité des tests.
 
 ### Installation
 
 ```bash
 composer require pestphp/pest --dev --with-all-dependencies
 composer require pestphp/pest-plugin-laravel --dev
-composer require pestphp/pest-plugin-mutate --dev
 php artisan pest:install
 ```
 
@@ -677,17 +676,52 @@ public $relationships = [
 
 ---
 
+## Autres nouveautés 13.x (queues, cache, sécurité, recherche vectorielle)
+
+**Source :** https://laravel.com/docs/13.x/releases
+
+```php
+// Routage de queue par classe (centralisé, ex. AppServiceProvider::boot)
+Queue::route(ProcessPodcast::class, connection: 'redis', queue: 'podcasts');
+
+// Prolonger le TTL d'une entrée sans la relire/réécrire
+Cache::touch('user:42:profile', now()->addHour());
+
+// Attributs de contrôleur (Illuminate\Routing\Attributes\Controllers\{Middleware, Authorize})
+#[Middleware('auth')]
+class CommentController
+{
+    #[Middleware('subscribed')]
+    #[Authorize('create', [Comment::class, 'post'])]
+    public function store(Post $post) { /* ... */ }
+}
+
+// Attributs de job : #[Tries], #[Backoff], #[Timeout], #[FailOnTimeout]
+
+// Recherche vectorielle native (Query Builder) et embeddings
+$documents = DB::table('documents')
+    ->whereVectorSimilarTo('embedding', 'Best wineries in Napa Valley')
+    ->limit(10)
+    ->get();
+$embeddings = Str::of('Napa Valley has great wine.')->toEmbeddings();
+```
+
+- **Sécurité :** le middleware `PreventRequestForgery` (groupe `web`) vérifie d'abord `Sec-Fetch-Site` puis retombe sur le jeton CSRF.
+
+---
+
 ## Checklist Laravel 13
 
 - [ ] AI SDK configuré pour OpenAI/Anthropic/Gemini
 - [ ] Vector Search avec pgvector pour RAG
 - [ ] Passkey Authentication activé dans Fortify
-- [ ] Pest 4 avec Mutation Testing >= 80%
+- [ ] Pest 5 avec Mutation Testing >= 80%
 - [ ] Arch Presets Laravel appliqués
 - [ ] PHPStan Level 10 (PHPStan 2.0)
 - [ ] Team Management configuré (si Jetstream)
 - [ ] PHP native attributes Eloquent utilisés (si projet greenfield)
 - [ ] JsonApiResource si API JSON:API requise
+- [ ] `Queue::route()` / attributs `#[Tries]`/`#[Backoff]`/`#[Timeout]` pour les jobs
 
 ---
 

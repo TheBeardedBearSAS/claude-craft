@@ -1,6 +1,6 @@
 # Laravel 13 — Framework Reference
 
-**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière stable : 13.15.0)
+**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière version vérifiée : 13.36.0 au 2026-10-13)
 **PHP :** 8.3+ (8.5 recommandé)
 **Sources :** https://laravel.com/docs/13.x/releases
 
@@ -12,7 +12,7 @@
 |---------|-------|
 | `@architecture.md` | Clean Architecture, Actions, DTOs, Repositories |
 | `@coding-standards.md` | PHP 8.3+ (8.5 recommandé), Conventions Laravel, Enums, Match |
-| `@testing.md` | Pest 4 + Mutation Testing, Arch Presets |
+| `@testing.md` | Pest 5 + Mutation Testing, Arch Presets |
 | `@quality-tools.md` | PHPStan 2.0 Level 10, Pint, Rector |
 | `@security.md` | OWASP Top 10, Sanctum, Passkey Auth |
 | `@project-context.md` | Template contexte projet |
@@ -38,9 +38,9 @@
 - Authentification sans mot de passe
 - https://laravel.com/docs/13.x/passkey
 
-### Pest 4 Mutation Testing
+### Pest 5 Mutation Testing
 - Mutation Testing natif pour garantir la qualité des tests
-- https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing
+- https://pestphp.com/docs/mutation-testing
 
 ### Arch Presets
 - Tests d'architecture préconfigurés pour Laravel
@@ -58,7 +58,7 @@
 |-----------|---------|-------------|
 | **PHP** | 8.3+ (8.5 recommandé) | Constructor promotion, readonly, enums, match |
 | **Laravel** | 13.x | Framework fullstack avec AI SDK |
-| **Pest** | 4.x | Tests + Mutation Testing |
+| **Pest** | 5.x (PHP 8.4+) | Tests + Mutation Testing |
 | **PHPStan** | 2.0 Level 10 | Analyse statique stricte |
 | **Pint** | 1.x | Formatage PSR-12 / Laravel |
 | **Sanctum** | 4.x | API Token Authentication + Passkey |
@@ -151,13 +151,13 @@ $relevantDocs = Document::similarTo($question, limit: 3)->get();
 
 ## Tests
 
-### Pest 4 avec Mutation Testing
+### Pest 5 avec Mutation Testing
 
 ```bash
 # Tests classiques
 php artisan test --coverage --min=80
 
-# Mutation Testing (Pest 4)
+# Mutation Testing (Pest 5)
 ./vendor/bin/pest --mutate --min=80
 ```
 
@@ -219,7 +219,7 @@ parameters:
 - [ ] DTOs readonly PHP 8.3+
 - [ ] Form Requests + Policies
 - [ ] PHPStan Level 10 (PHPStan 2.0)
-- [ ] Pest 4 + Mutation Testing >= 80%
+- [ ] Pest 5 + Mutation Testing >= 80%
 - [ ] Arch Presets Laravel appliqués
 - [ ] AI SDK configuré (si LLM)
 - [ ] Vector Search / pgvector (si RAG)

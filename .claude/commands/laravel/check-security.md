@@ -339,9 +339,9 @@ grep -r "api_key" --include="*.php" app/
 ## High Priority Issues
 
 ### 1. Outdated Dependencies with Vulnerabilities
-**Package**: `laravel/framework 10.x`
-**Vulnerability**: CVE-2024-XXXX
-**Fix**: Update to latest version
+**Package**: `laravel/framework 11.x` (out of security support; Laravel 13.x is current)
+**Vulnerability**: no security fixes are published anymore for this major (confirm with `composer audit`)
+**Fix**: Upgrade to a supported major (13.x) and re-run `composer audit`
 
 ## Recommendations
 

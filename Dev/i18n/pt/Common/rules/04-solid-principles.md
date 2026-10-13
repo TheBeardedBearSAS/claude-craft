@@ -357,7 +357,7 @@ A logica de negocio e isolada dos detalhes tecnicos
 
 #### SRP
 - [ ] Cada classe tem uma unica responsabilidade claramente definida
-- [ ] Os metodos fazem uma unica coisa (< 20 linhas)
+- [ ] Os metodos fazem uma unica coisa (meta < 10, max 20 linhas)
 - [ ] Sem metodos com "e" ou "ou" no nome
 
 #### OCP

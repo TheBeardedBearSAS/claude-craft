@@ -43,7 +43,7 @@ composer validate
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.4",
         "ext-pdo": "*",
         "ext-json": "*",
         "ramsey/uuid": "^4.7",
@@ -51,11 +51,10 @@ composer validate
         "psr/container": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.0",
         "phpstan/phpstan": "^2.0",
         "friendsofphp/php-cs-fixer": "^3.0",
         "rector/rector": "^2.4",
-        "pestphp/pest": "^4.7"
+        "pestphp/pest": "^5.3"
     },
     "autoload": {
         "psr-4": {
@@ -107,7 +106,7 @@ $finder = PhpCsFixer\Finder::create()
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PSR12' => true,
+        '@PER-CS3x0' => true,
         '@PHP85Migration' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
@@ -531,7 +530,7 @@ volumes:
 ## Tooling Checklist
 
 - [ ] Composer configured with autoload
-- [ ] PHP-CS-Fixer configured (PSR-12 + strict)
+- [ ] PHP-CS-Fixer configured (PER-CS 3.0 + strict)
 - [ ] PHPStan at level 10 with strict rules
 - [ ] PHPUnit/Pest configured with coverage
 - [ ] Rector configured for upgrades

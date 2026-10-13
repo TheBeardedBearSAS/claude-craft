@@ -116,7 +116,7 @@ $finder = PhpCsFixer\Finder::create()
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PSR12' => true,
+        '@PER-CS3x0' => true,
         '@PHP85Migration' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
@@ -209,7 +209,7 @@ vendor/bin/php-cs-fixer fix
 vendor/bin/php-cs-fixer fix src/Domain/Entity/User.php
 
 # Show rules explanation
-vendor/bin/php-cs-fixer describe @PSR12
+vendor/bin/php-cs-fixer describe @PER-CS3x0
 ```
 
 ## Architecture Testing

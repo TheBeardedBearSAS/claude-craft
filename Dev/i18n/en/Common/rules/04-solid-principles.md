@@ -357,7 +357,7 @@ Business logic is isolated from technical details
 
 #### SRP
 - [ ] Each class has a single, clearly defined responsibility
-- [ ] Methods do one thing (< 20 lines)
+- [ ] Methods do one thing (target < 10 lines, max 20)
 - [ ] No methods with "and" or "or" in the name
 
 #### OCP

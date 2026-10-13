@@ -30,7 +30,7 @@ Analyse la structure du dossier tests/ :
 
 ```bash
 # Lister la structure des tests
-docker run --rm -v $(pwd):/app php:8.2-cli find /app/tests -type d
+docker run --rm -v $(pwd):/app php:8.5-cli find /app/tests -type d
 ```
 
 #### Organisation des Tests (3 points)
@@ -54,10 +54,10 @@ Exécute les tests unitaires :
 
 ```bash
 # Exécuter les tests unitaires uniquement
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpunit tests/Unit --testdox
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpunit tests/Unit --testdox
 
 # Compter les tests unitaires
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpunit tests/Unit --list-tests | wc -l
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpunit tests/Unit --list-tests | wc -l
 ```
 
 #### Tests Unitaires Domain (7 points)
@@ -84,7 +84,7 @@ Exécute les tests d'intégration :
 
 ```bash
 # Exécuter les tests d'intégration
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpunit tests/Integration --testdox
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpunit tests/Integration --testdox
 ```
 
 #### Tests d'Intégration Infrastructure (5 points)
@@ -111,10 +111,10 @@ Exécute les tests fonctionnels :
 
 ```bash
 # Exécuter les tests fonctionnels
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpunit tests/Functional --testdox
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpunit tests/Functional --testdox
 
 # Vérifier si Behat est installé
-docker run --rm -v $(pwd):/app php:8.2-cli test -f /app/vendor/bin/behat && echo "✅ Behat trouvé" || echo "⚠️ Behat manquant"
+docker run --rm -v $(pwd):/app php:8.5-cli test -f /app/vendor/bin/behat && echo "✅ Behat trouvé" || echo "⚠️ Behat manquant"
 ```
 
 #### Tests Fonctionnels (5 points)
@@ -141,10 +141,10 @@ Génère le rapport de couverture :
 
 ```bash
 # Générer la couverture de code (nécessite xdebug ou pcov)
-docker run --rm -v $(pwd):/app php:8.2-cli php -d memory_limit=-1 /app/vendor/bin/phpunit --coverage-text --coverage-html=/app/var/coverage
+docker run --rm -v $(pwd):/app php:8.5-cli php -d memory_limit=-1 /app/vendor/bin/phpunit --coverage-text --coverage-html=/app/var/coverage
 
 # Afficher le résumé de couverture
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpunit --coverage-text | grep "Lines:"
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpunit --coverage-text | grep "Lines:"
 ```
 
 #### Couverture de Code (5 points)
@@ -191,7 +191,7 @@ Exécute les tests de mutation :
 
 ```bash
 # Vérifier si Infection est installé
-docker run --rm -v $(pwd):/app php:8.2-cli test -f /app/vendor/bin/infection && echo "✅ Infection trouvé" || echo "❌ Infection manquant"
+docker run --rm -v $(pwd):/app php:8.5-cli test -f /app/vendor/bin/infection && echo "✅ Infection trouvé" || echo "❌ Infection manquant"
 
 # Exécuter Infection
 docker run --rm -v $(pwd):/app infection/infection --min-msi=70 --min-covered-msi=80 --threads=4
@@ -414,28 +414,28 @@ CI/CD :
 
 ```bash
 # Exécuter tous les tests
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpunit
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpunit
 
 # Tests unitaires uniquement
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpunit tests/Unit
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpunit tests/Unit
 
 # Tests avec couverture
-docker run --rm -v $(pwd):/app php:8.2-cli php -d xdebug.mode=coverage /app/vendor/bin/phpunit --coverage-text
+docker run --rm -v $(pwd):/app php:8.5-cli php -d xdebug.mode=coverage /app/vendor/bin/phpunit --coverage-text
 
 # Infection (mutation testing)
 docker run --rm -v $(pwd):/app infection/infection --threads=4 --min-msi=70
 
 # Behat (tests BDD)
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/behat
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/behat
 
 # Lister tous les tests
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpunit --list-tests
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpunit --list-tests
 
 # Exécuter un test spécifique
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpunit tests/Unit/Domain/Entity/UserTest.php
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpunit tests/Unit/Domain/Entity/UserTest.php
 
 # Tests avec sortie détaillée
-docker run --rm -v $(pwd):/app php:8.2-cli /app/vendor/bin/phpunit --testdox
+docker run --rm -v $(pwd):/app php:8.5-cli /app/vendor/bin/phpunit --testdox
 ```
 
 ## IMPORTANT

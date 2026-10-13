@@ -357,7 +357,7 @@ Die Geschäftslogik ist von technischen Details isoliert
 
 #### SRP
 - [ ] Jede Klasse hat eine einzige klar definierte Verantwortung
-- [ ] Methoden tun eine einzige Sache (< 20 Zeilen)
+- [ ] Methoden tun eine einzige Sache (Ziel < 10, max. 20 Zeilen)
 - [ ] Keine Methoden mit "und" oder "oder" im Namen
 
 #### OCP

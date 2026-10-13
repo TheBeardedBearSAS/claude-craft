@@ -95,7 +95,7 @@ Exécute Deptrac pour vérifier les dépendances entre couches :
 
 ```bash
 # Vérifier si deptrac.yaml existe
-docker run --rm -v $(pwd):/app php:8.2-cli test -f /app/deptrac.yaml && echo "✅ deptrac.yaml trouvé" || echo "❌ deptrac.yaml manquant"
+docker run --rm -v $(pwd):/app php:8.5-cli test -f /app/deptrac.yaml && echo "✅ deptrac.yaml trouvé" || echo "❌ deptrac.yaml manquant"
 
 # Exécuter Deptrac
 docker run --rm -v $(pwd):/app qossmic/deptrac analyse
@@ -219,16 +219,16 @@ Outils :
 
 ```bash
 # Analyser la structure du projet
-docker run --rm -v $(pwd):/app php:8.2-cli find /app/src -type d -maxdepth 2
+docker run --rm -v $(pwd):/app php:8.5-cli find /app/src -type d -maxdepth 2
 
 # Vérifier les dépendances avec Deptrac
 docker run --rm -v $(pwd):/app qossmic/deptrac analyse --no-progress
 
 # Lister les classes par namespace
-docker run --rm -v $(pwd):/app php:8.2-cli find /app/src -name "*.php" -exec grep -l "namespace" {} \;
+docker run --rm -v $(pwd):/app php:8.5-cli find /app/src -name "*.php" -exec grep -l "namespace" {} \;
 
 # Vérifier la présence d'annotations Doctrine dans Domain
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "@ORM" /app/src/Domain/ || echo "✅ Pas d'annotations ORM dans Domain"
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "@ORM" /app/src/Domain/ || echo "✅ Pas d'annotations ORM dans Domain"
 ```
 
 ## IMPORTANT

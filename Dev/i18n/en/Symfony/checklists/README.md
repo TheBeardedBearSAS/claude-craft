@@ -20,7 +20,7 @@ This folder contains 4 essential checklists for the development workflow.
 **Automatic checks:**
 - ✅ Tests pass (unit + integration + Behat)
 - ✅ PHPStan level 10 (0 errors)
-- ✅ CS-Fixer (PSR-12 formatted code)
+- ✅ CS-Fixer (PER-CS 3.0 formatted code)
 - ✅ Hadolint (valid Dockerfile)
 - ✅ Coverage ≥ 80%
 - ✅ Conformant commit message (Conventional Commits)

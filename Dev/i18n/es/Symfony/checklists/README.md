@@ -20,7 +20,7 @@ Esta carpeta contiene 4 checklists esenciales para el flujo de trabajo de desarr
 **Verificaciones automáticas:**
 - ✅ Tests aprobados (unitarios + integración + Behat)
 - ✅ PHPStan nivel 8 (0 errores)
-- ✅ CS-Fixer (código formateado PSR-12)
+- ✅ CS-Fixer (código formateado PER-CS 3.0)
 - ✅ Hadolint (Dockerfile válido)
 - ✅ Cobertura ≥ 80%
 - ✅ Mensaje de commit conforme (Conventional Commits)

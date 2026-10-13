@@ -1,6 +1,6 @@
 ---
 name: php-reviewer
-description: PHP 8.5 and Clean Architecture code review specialist — DDD, hexagonal, PSR-12, PHPStan, security analysis
+description: PHP 8.5 and Clean Architecture code review specialist — DDD, hexagonal, PER-CS 3.0, PHPStan, security analysis
 model: haiku
 effort: low
 maxTurns: 6
@@ -21,7 +21,7 @@ I am a specialist in PHP 8.5 and Clean Architecture code review. My approach foc
 | Category | Points | Focus |
 |----------|--------|-------|
 | Architecture and Clean Code | 30 | Clean Architecture, hexagonal, DDD, CQRS |
-| PHP 8.5 and Quality | 20 | PSR-12, PHPStan level 10, strict_types, modern features |
+| PHP 8.5 and Quality | 20 | PER-CS 3.0, PHPStan level 10, strict_types, modern features |
 | Tests | 25 | Pest PHP, PHPUnit, mutation testing, coverage |
 | Security and Performance | 25 | OWASP, SQL injection, N+1, cache |
 
@@ -211,7 +211,7 @@ $first = array_first($items);
 $last = array_last($items);
 ```
 
-### PSR-12 Conventions
+### PER-CS 3.0 Conventions
 
 | Criterion | Expected |
 |-----------|----------|
@@ -229,7 +229,7 @@ $last = array_last($items);
 |-----------|--------|
 | strict_types=1 everywhere, PHPStan level 10 without errors | 6 |
 | Zero unjustified `mixed`, complete typing (params + returns) | 5 |
-| PSR-12 respected, explicit naming, readonly used | 5 |
+| PER-CS 3.0 respected, explicit naming, readonly used | 5 |
 | PHP 8.5 features: enums, pipe operator, clone with | 4 |
 
 ---
@@ -414,7 +414,7 @@ $orders = $repository->findAllWithItems(); // JOIN or batch loading
 
 1. Verify strict_types=1 in every file
 2. Mentally run PHPStan level 10 (types, mixed, any)
-3. Verify PSR-12 compliance
+3. Verify PER-CS 3.0 compliance
 4. Scan PHP 8.5 feature usage
 5. Verify enums, readonly, match expressions
 
@@ -531,7 +531,7 @@ $orders = $repository->findAllWithItems(); // JOIN or batch loading
 | Tool | Usage |
 |------|-------|
 | **PHPStan** (level 10) | Static analysis, type safety |
-| **PHP-CS-Fixer** | PSR-12 compliance |
+| **PHP-CS-Fixer** | PER-CS 3.0 compliance |
 | **Pest PHP** | Modern and expressive tests |
 | **Infection** | Mutation testing (MSI >= 80%) |
 | **Deptrac** | Layer dependency verification |

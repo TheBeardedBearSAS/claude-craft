@@ -247,7 +247,7 @@ $finder = Finder::create()
 return (new Config())
     ->setRules([
         '@Symfony' => true,
-        '@PSR12' => true,
+        '@PER-CS3x0' => true,
 
         // ✅ Règles strictes supplémentaires
         'array_syntax' => ['syntax' => 'short'],
