@@ -305,22 +305,23 @@ jobs:
         # Poll the registry until the just-published version appears at the dist-tag,
         # instead of a single check after a fixed sleep. The NPM CDN can take >30s to
         # propagate, which previously made this (and the smoke test) flake red even
-        # though the publish succeeded.
+        # though the publish succeeded. Since 2026-10 npm also "processes" new versions
+        # before exposing them (~7 min observed for 8.23.0), so the window is 15 min.
         run: |
           NPM_TAG="${{ steps.npm_tag.outputs.tag }}"
           EXPECTED="${{ needs.validate.outputs.version }}"
           PUBLISHED_VERSION=""
-          for i in $(seq 1 18); do
+          for i in $(seq 1 60); do
             PUBLISHED_VERSION=$(npm view "@the-bearded-bear/claude-craft@${NPM_TAG}" version 2>/dev/null || echo "")
             if [[ "${PUBLISHED_VERSION}" == "${EXPECTED}" ]]; then
-              echo "✓ Propagated: ${PUBLISHED_VERSION} (tag ${NPM_TAG}) after ~$(( (i - 1) * 10 ))s"
+              echo "✓ Propagated: ${PUBLISHED_VERSION} (tag ${NPM_TAG}) after ~$(( (i - 1) * 15 ))s"
               break
             fi
-            echo "Attempt ${i}/18: registry has '${PUBLISHED_VERSION:-<none>}', expected '${EXPECTED}' — waiting 10s for NPM propagation…"
-            sleep 10
+            echo "Attempt ${i}/60: registry has '${PUBLISHED_VERSION:-<none>}', expected '${EXPECTED}' — waiting 15s for NPM propagation…"
+            sleep 15
           done
           if [[ "${PUBLISHED_VERSION}" != "${EXPECTED}" ]]; then
-            echo "::error::Version ${EXPECTED} (tag ${NPM_TAG}) did not propagate to NPM within 180s (last seen: '${PUBLISHED_VERSION:-<none>}')"
+            echo "::error::Version ${EXPECTED} (tag ${NPM_TAG}) did not propagate to NPM within 900s (last seen: '${PUBLISHED_VERSION:-<none>}')"
             exit 1
           fi
 
