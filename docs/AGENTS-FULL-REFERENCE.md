@@ -44,7 +44,7 @@ C# 14 / .NET 10 code review specialist — Clean Architecture, CQRS, MediatR, EF
 
 ### `@flutter-reviewer`
 
-Flutter 3.44 / Dart 3.12 code review specialist — BLoC v9, Riverpod 3, widget optimization, Impeller, platform-specific code
+Flutter 3.47 / Dart 3.13 code review specialist — BLoC v9, Riverpod 3, widget optimization, Impeller, platform-specific code
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 
@@ -86,7 +86,7 @@ Paperclip 2026.1012.0+ governance-first integration platform code review special
 
 ### `@php-reviewer`
 
-PHP 8.5 and Clean Architecture code review specialist — DDD, hexagonal, PSR-12, PHPStan, security analysis
+PHP 8.5 and Clean Architecture code review specialist — DDD, hexagonal, PER-CS 3.0, PHPStan, security analysis
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 
@@ -114,7 +114,7 @@ Python 3.14+ code review specialist — async correctness, Pydantic v2, FastAPI,
 
 ### `@react-reviewer`
 
-React 19.2 and TypeScript code review specialist — hooks, composition, performance, bundle analysis
+React 19.3 and TypeScript code review specialist — hooks, composition, performance, bundle analysis
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 
@@ -128,7 +128,7 @@ React 19.2 and TypeScript code review specialist — hooks, composition, perform
 
 ### `@reactnative-reviewer`
 
-React Native 0.85 and Expo code review specialist — New Architecture (JSI, TurboModules, Fabric), navigation, mobile performance, bundle analysis
+React Native 0.87 and Expo code review specialist — New Architecture (JSI, TurboModules, Fabric), navigation, mobile performance, bundle analysis
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 
@@ -142,7 +142,7 @@ React Native 0.85 and Expo code review specialist — New Architecture (JSI, Tur
 
 ### `@symfony-reviewer`
 
-Symfony 8 / PHP 8.5+ code review specialist — DDD, Doctrine, CQRS, API Platform
+Symfony 8.1 / PHP 8.4+ (8.5 recommended) code review specialist — DDD, Doctrine, CQRS, API Platform
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 
@@ -184,7 +184,7 @@ Vite 8.x framework-agnostic code review specialist — vanilla JS/TS apps, libra
 
 ### `@vuejs-reviewer`
 
-Vue.js 3.5+ / 3.6 Vapor (beta) and TypeScript code review specialist — Composition API, Pinia, reactivity, performance, composables, useTemplateRef, useId, Vapor Mode
+Vue.js 3.5+ / 3.6 Vapor (RC) and TypeScript code review specialist — Composition API, Pinia, reactivity, performance, composables, useTemplateRef, useId, Vapor Mode
 
 **Model:** haiku · **Effort:** low · **Memory:** project
 
