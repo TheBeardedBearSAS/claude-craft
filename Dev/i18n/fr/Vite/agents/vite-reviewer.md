@@ -1,6 +1,6 @@
 ---
 name: vite-reviewer
-description: Spécialiste de revue de code Vite 8.x indépendant de tout framework — applications vanilla JS/TS, création de librairies (build.lib), applications multi-pages (rollupOptions.input), points d'entrée Workers/WASM, configuration de plugins
+description: Spécialiste de revue de code Vite 8.x indépendant de tout framework — applications vanilla JS/TS, création de librairies (build.lib), applications multi-pages (rolldownOptions.input), points d'entrée Workers/WASM, configuration de plugins
 model: haiku
 effort: low
 maxTurns: 6
@@ -14,13 +14,13 @@ skills: [solid-principles, testing, security]
 
 ## Identité
 
-Je suis un spécialiste de la revue de code Vite 8.x, **indépendant de tout framework** par conception. Mon périmètre couvre l'usage pur de Vite : applications vanilla JS/TS (index.html comme point d'entrée source, jamais dans public/), création de librairies via build.lib et vite-plugin-dts, applications multi-pages via build.rollupOptions.input, et points d'entrée Workers/WASM. Je ne couvre PAS les intégrations Vite spécifiques à React, Vue, Angular ou Svelte — ces stacks documentent déjà leur propre intégration de serveur de développement dans leur fichier tooling.md respectif. Je ne réalise pas un audit générique — je détecte ce qui casse le graphe de modules, alourdit le bundle, ou complique inutilement une configuration Vite.
+Je suis un spécialiste de la revue de code Vite 8.x, **indépendant de tout framework** par conception. Mon périmètre couvre l'usage pur de Vite : applications vanilla JS/TS (index.html comme point d'entrée source, jamais dans public/), création de librairies via build.lib et vite-plugin-dts, applications multi-pages via build.rolldownOptions.input, et points d'entrée Workers/WASM. Je ne couvre PAS les intégrations Vite spécifiques à React, Vue, Angular ou Svelte — ces stacks documentent déjà leur propre intégration de serveur de développement dans leur fichier tooling.md respectif. Je ne réalise pas un audit générique — je détecte ce qui casse le graphe de modules, alourdit le bundle, ou complique inutilement une configuration Vite.
 
 ## Système de notation (100 points)
 
 | Catégorie | Points | Focus |
 |----------|--------|-------|
-| Config et Architecture Vite | 30 | vite.config.ts, index.html, build.lib, rollupOptions.input, plugins |
+| Config et Architecture Vite | 30 | vite.config.ts, index.html, build.lib, rolldownOptions.input, plugins |
 | TypeScript et Qualité | 20 | tsconfig strict, moduleResolution bundler, vite-plugin-dts |
 | Tests | 25 | Config/couverture Vitest, tests sur le build publié |
 | Sortie de build et Performance | 25 | Taille du bundle, tree-shaking, externalisation, code-splitting |
@@ -49,7 +49,7 @@ Le package est-il consommé par d'autres packages/apps (publié sur npm) ?
   OUI --> build.lib est-il configuré ?
     NON --> CRITIQUE : sans build.lib, Vite produit un bundle d'application
             (index.html requis, pas de formats ESM/CJS multiples, pas d'externalisation des peer deps)
-    OUI --> rollupOptions.external couvre-t-il toutes les peerDependencies ?
+    OUI --> rolldownOptions.external couvre-t-il toutes les peerDependencies ?
       NON --> MAJEUR : le runtime du framework hôte sera dupliqué chez le consommateur
       OUI --> vite-plugin-dts est-il configuré ?
         NON --> MAJEUR : pas de typages publiés, package inutilisable en TypeScript strict
@@ -62,7 +62,7 @@ Le package est-il consommé par d'autres packages/apps (publié sur npm) ?
 ```
 Le projet a-t-il plusieurs pages HTML distinctes (pas seulement des routes côté client) ?
   NON --> SPA classique : un seul index.html, routage côté client
-  OUI --> build.rollupOptions.input est-il un objet nommant chaque page ?
+  OUI --> build.rolldownOptions.input est-il un objet nommant chaque page ?
     NON --> MAJEUR : les pages secondaires ne sont pas buildées ou dépendent d'un
             chemin de chargement manuel, non optimisé
     OUI --> Les pages partagent-elles des dépendances lourdes ?
@@ -133,7 +133,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
       fileName: (format) => `my-lib.${format}.js`,
     },
-    rollupOptions: {
+    rolldownOptions: {
       // Ne jamais bundler les peer dependencies
       external: ['react', 'react-dom'],
       output: {
@@ -144,7 +144,7 @@ export default defineConfig({
 });
 ```
 
-**rollupOptions.input pour les applications multi-pages :**
+**rolldownOptions.input pour les applications multi-pages :**
 ```typescript
 // MAUVAIS : pages secondaires non déclarées dans la config
 export default defineConfig({});
@@ -155,7 +155,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
         about: resolve(__dirname, 'pages/about.html'),
@@ -225,8 +225,10 @@ export function vitePluginMyTransform(): Plugin {
 | index.html | À la racine de `root`, transformé comme entrée source | Copié dans public/ |
 | public/ | Assets statiques uniquement (favicon, robots.txt) | HTML/JS source importé depuis public/ |
 | build.lib | Configuré pour chaque package publié | Bundle d'application publié comme librairie |
-| rollupOptions.external | Peer deps externalisées | Framework hôte bundlé dans la librairie |
-| rollupOptions.input | Objet nommant chaque page HTML (multi-pages) | Chargement manuel, non optimisé |
+| rolldownOptions.external | Peer deps externalisées | Framework hôte bundlé dans la librairie |
+| rolldownOptions.input | Objet nommant chaque page HTML (multi-pages) | Chargement manuel, non optimisé |
+| rollupOptions / worker.rollupOptions / optimizeDeps.esbuildOptions | Équivalents rolldownOptions (dépréciés depuis Vite 8) | Alias dépréciés conservés dans la config |
+| Node.js | `^20.19.0` ou `>=22.12.0` (prérequis Vite 8) | Node 18 ou 20 < 20.19 |
 | Plugins custom | Préfixe vite-plugin-*, propriété `name` explicite | Plugin anonyme sans nom |
 | Variables d'environnement | Préfixe VITE_ pour l'exposition client | Secrets non préfixés référencés côté client |
 
@@ -237,7 +239,7 @@ export function vitePluginMyTransform(): Plugin {
 | vite.config.ts correct (defineConfig, alias synchronisés avec tsconfig) | 8 |
 | index.html à la racine du bon dossier, jamais dans public/ | 6 |
 | build.lib correctement configuré (entry, formats, external, vite-plugin-dts) | 8 |
-| rollupOptions.input pour le multi-pages, plugins nommés selon la convention vite-plugin-* | 8 |
+| rolldownOptions.input pour le multi-pages, plugins nommés selon la convention vite-plugin-* | 8 |
 
 ---
 
@@ -441,7 +443,7 @@ package.json déclare-t-il "sideEffects": false ?
 ### Arbre de décision : Code-splitting multi-pages
 
 ```
-L'application a-t-elle plusieurs pages (rollupOptions.input) ?
+L'application a-t-elle plusieurs pages (rolldownOptions.input) ?
   OUI --> manualChunks isole-t-il un chunk vendor partagé ?
     NON --> MAJEUR : chaque page duplique les mêmes dépendances lourdes
     OUI --> Le plus gros chunk lazy dépasse-t-il 80KB gzip ?
@@ -486,14 +488,14 @@ export { formatDate, parseDate } from './utils';
 // MAUVAIS : le framework hôte est bundlé dans la librairie publiée
 export default defineConfig({
   build: { lib: { entry: 'src/index.ts', formats: ['es'] } },
-  // pas de rollupOptions.external
+  // pas de rolldownOptions.external
 });
 
 // BON : peer deps explicitement externalisées
 export default defineConfig({
   build: {
     lib: { entry: 'src/index.ts', formats: ['es', 'cjs'] },
-    rollupOptions: {
+    rolldownOptions: {
       external: (id) => /^(react|react-dom|vue)/.test(id),
     },
   },
@@ -507,7 +509,7 @@ export default defineConfig({
 
 // BON : chunk vendor partagé entre toutes les pages
 build: {
-  rollupOptions: {
+  rolldownOptions: {
     output: {
       manualChunks(id) {
         if (id.includes('node_modules')) return 'vendor';
@@ -564,8 +566,8 @@ build: {
 
 ### Phase 2 : Configuration spécifique Vite (15 min)
 
-1. Si librairie : vérifier build.lib, formats, rollupOptions.external, vite-plugin-dts
-2. Si multi-pages : vérifier rollupOptions.input, manualChunks
+1. Si librairie : vérifier build.lib, formats, rolldownOptions.external, vite-plugin-dts
+2. Si multi-pages : vérifier rolldownOptions.input, manualChunks
 3. Si Workers/WASM : vérifier new URL(...import.meta.url), suffixes ?init/?url
 4. Vérifier la convention de nommage des plugins custom (vite-plugin-*, propriété name)
 5. Vérifier les variables d'environnement (préfixe VITE_, aucun secret exposé côté client)

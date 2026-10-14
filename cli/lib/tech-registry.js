@@ -41,7 +41,7 @@ const TECH_REGISTRY = {
     namespace: 'flutter',
     i18nDir: 'Flutter',
     installScript: 'install-flutter-rules.sh',
-    version: '3.44 / Dart 3.12',
+    version: '3.47 / Dart 3.13',
     tier: 1,
   },
   react: {
@@ -51,7 +51,7 @@ const TECH_REGISTRY = {
     namespace: 'react',
     i18nDir: 'React',
     installScript: 'install-react-rules.sh',
-    version: '19.2 + Compiler 1.0',
+    version: '19.3 + Compiler 1.0',
     tier: 1,
   },
   reactnative: {
@@ -61,7 +61,7 @@ const TECH_REGISTRY = {
     namespace: 'reactnative',
     i18nDir: 'ReactNative',
     installScript: 'install-reactnative-rules.sh',
-    version: '0.85',
+    version: '0.87',
     tier: 2,
   },
   angular: {
@@ -87,7 +87,7 @@ const TECH_REGISTRY = {
   laravel: {
     name: 'laravel',
     displayName: 'Laravel',
-    desc: 'PHP backend with Actions, Pest 4, Sanctum, AI SDK, Passkey',
+    desc: 'PHP backend with Actions, Pest 5, Sanctum, AI SDK, Passkey',
     namespace: 'laravel',
     i18nDir: 'Laravel',
     installScript: 'install-laravel-rules.sh',
@@ -111,7 +111,7 @@ const TECH_REGISTRY = {
     namespace: 'vite',
     i18nDir: 'Vite',
     installScript: 'install-vite-rules.sh',
-    version: '8.1',
+    version: '8.3',
     tier: 3,
   },
   vercel: {
@@ -121,7 +121,7 @@ const TECH_REGISTRY = {
     namespace: 'vercel',
     i18nDir: 'Vercel',
     installScript: 'install-vercel-rules.sh',
-    version: '56.5.0',
+    version: '63.1.2',
     tier: 3,
   },
   php: {
@@ -145,7 +145,7 @@ const TECH_REGISTRY = {
     namespace: 'python',
     i18nDir: 'Python',
     installScript: 'install-python-rules.sh',
-    version: '3.14+',
+    version: '3.15 / 3.14+',
     tier: 1,
   },
   paperclip: {
@@ -155,7 +155,7 @@ const TECH_REGISTRY = {
     namespace: 'paperclip',
     i18nDir: 'Paperclip',
     installScript: 'install-paperclip-rules.sh',
-    version: '2026.609.0',
+    version: '2026.1012.0',
     tier: 2,
   },
   docker: {
@@ -165,7 +165,7 @@ const TECH_REGISTRY = {
     namespace: 'docker',
     i18nDir: 'Docker',
     installScript: 'install-docker-rules.sh',
-    version: '29.6.1',
+    version: '29.9.0',
     tier: null,
   },
   coolify: {
@@ -175,7 +175,7 @@ const TECH_REGISTRY = {
     namespace: 'coolify',
     i18nDir: 'Coolify',
     installScript: 'install-coolify-rules.sh',
-    version: '4.1.2',
+    version: '4.4.6',
     tier: null,
   },
 };

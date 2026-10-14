@@ -15,6 +15,7 @@ namespace App\Commercial\Domain\Client\Event;
 
 use App\Shared\Domain\DomainEvent;
 use DateTimeImmutable;
+use DateTimeInterface;
 
 final readonly class ClientCreated implements DomainEvent
 {

@@ -424,7 +424,7 @@ make phpstan
 
 # CS-Fixer
 make cs-fix
-# ✅ Code formatiert PSR-12
+# ✅ Code formatiert PER-CS 3.0
 
 # Hadolint (wenn Dockerfile geändert)
 make hadolint
@@ -585,7 +585,7 @@ Angleichung an die Preispolitik der Partner-Hotels.
 
 - [x] Tests bestehen
 - [x] PHPStan Level 8 OK
-- [x] Code formatiert (PSR-12)
+- [x] Code formatiert (PER-CS 3.0)
 - [x] Dokumentation aktualisiert
 - [x] Keine Breaking Changes
 - [x] DB-Migration: N/A

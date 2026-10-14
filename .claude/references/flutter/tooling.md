@@ -82,8 +82,6 @@ CMD ["flutter", "test"]
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
-
 services:
   flutter:
     build:
@@ -194,7 +192,7 @@ docker-shell: ## Interactive shell in Docker
 	docker run --rm -it -v $(PWD):/app my-flutter-app /bin/bash
 
 ci: analyze format-check test ## Complete CI pipeline
-	@echo " CI passed!"
+	@echo "✅ CI passed!"
 ```
 
 ---
@@ -220,8 +218,8 @@ fvm install stable
 fvm use stable
 
 # Specific versions
-fvm install 3.44.0
-fvm use 3.44.0
+fvm install 3.47.7
+fvm use 3.47.7
 
 # List versions
 fvm list
@@ -232,7 +230,7 @@ fvm releases
 
 ```json
 {
-  "flutter": "3.44.0"
+  "flutter": "3.47.7"
 }
 ```
 
@@ -260,21 +258,21 @@ endif
 #!/bin/bash
 set -e
 
-echo "=� Flutter project setup..."
+echo "🚀 Flutter project setup..."
 
 # Check Flutter
 if ! command -v flutter &> /dev/null; then
-    echo "L Flutter is not installed"
+    echo "❌ Flutter is not installed"
     exit 1
 fi
 
-echo "=� Installing dependencies..."
+echo "📦 Installing dependencies..."
 flutter pub get
 
 echo "=' Generating code..."
 flutter pub run build_runner build --delete-conflicting-outputs
 
-echo " Setup complete!"
+echo "✅ Setup complete!"
 ```
 
 ### scripts/test_all.sh
@@ -283,21 +281,21 @@ echo " Setup complete!"
 #!/bin/bash
 set -e
 
-echo ">� Running all tests..."
+echo "🧪 Running all tests..."
 
-echo "1� Unit tests..."
+echo "1️⃣ Unit tests..."
 flutter test test/unit/
 
-echo "2� Widget tests..."
+echo "2️⃣ Widget tests..."
 flutter test test/widget/
 
-echo "3� Integration tests..."
+echo "3️⃣ Integration tests..."
 flutter test integration_test/
 
-echo "=� Generating coverage..."
+echo "📊 Generating coverage..."
 flutter test --coverage
 
-echo " All tests passed!"
+echo "✅ All tests passed!"
 ```
 
 ### scripts/build_all.sh
@@ -306,22 +304,22 @@ echo " All tests passed!"
 #!/bin/bash
 set -e
 
-echo "<� Building all platforms..."
+echo "🏗️ Building all platforms..."
 
-echo "=� Android APK..."
+echo "📱 Android APK..."
 flutter build apk --release
 
-echo "=� Android App Bundle..."
+echo "📱 Android App Bundle..."
 flutter build appbundle --release
 
 echo "<N iOS..."
 flutter build ios --release
 
-echo "< Web..."
+echo "🌐 Web..."
 flutter build web --release
 
-echo " Builds complete!"
-echo "=� Files available in build/"
+echo "✅ Builds complete!"
+echo "📦 Files available in build/"
 ```
 
 ---
@@ -350,7 +348,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.0'
+          flutter-version: '3.47.7'
           channel: 'stable'
 
       - name: Get dependencies
@@ -380,7 +378,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.0'
+          flutter-version: '3.47.7'
 
       - name: Build APK
         run: flutter build apk --release
@@ -542,7 +540,7 @@ flutter doctor
 
 - Real-time Dart analysis matching `flutter analyze` output
 - Navigation through widget trees, BLoC events, and Riverpod providers
-- Dot shorthand (Dart 3.11) type inference
+- Dot shorthand (Dart 3.10) type inference
 - Build runner generated code awareness
 
 ---
@@ -577,7 +575,7 @@ make build-apk
 
 ### SwiftPM par défaut sur iOS
 
-Flutter 3.44+ utilise **Swift Package Manager (SwiftPM)** comme gestionnaire de plugins iOS par défaut, en remplacement de CocoaPods (toujours supporté mais déprécié pour les nouveaux projets).
+Flutter 3.47+ utilise **Swift Package Manager (SwiftPM)** comme gestionnaire de plugins iOS par défaut, en remplacement de CocoaPods (toujours supporté mais déprécié pour les nouveaux projets).
 
 ```bash
 # Vérifier la migration SwiftPM
@@ -594,7 +592,7 @@ flutter:
   use-swift-package-manager: false
 ```
 
-**Impact :** les plugins sans support SwiftPM nécessitent `use-swift-package-manager: false` ou une migration côté auteur du plugin. La majorité des plugins pub.dev officiels supportent déjà SwiftPM depuis Flutter 3.22+.
+**Impact :** les plugins sans support SwiftPM nécessitent `use-swift-package-manager: false` ou une migration côté auteur du plugin. La majorité des plugins pub.dev officiels supportent déjà SwiftPM.
 
 **Source :** https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers
 
@@ -641,6 +639,14 @@ MaterialButton(onPressed: () {}, child: Text('OK'));
 ```
 
 Exécuter `dart fix --apply` pour migrer automatiquement les dépréciations détectables.
+
+### Breaking changes Flutter 3.44 et 3.47
+
+- **3.44** : ordre de fermeture de `RawMenuAnchor` modifié ; `onReorder` déprécié ; `TextInputConnection.setStyle` déprécié ; `cacheExtent` / `cacheExtentStyle` dépréciés ; `IconData` devient `final` ; Android 17 ignore les restrictions d'orientation et de redimensionnement sur grands écrans ; `ListTile` signale une erreur en debug lorsqu'il est enveloppé dans un widget coloré ; les projets Android migrent vers Kotlin intégré ; réorganisation des page transition builders.
+- **3.47** : le contenu OpenGL ES render-to-texture est stocké de haut en bas ; comportement de `Semantics` header / `headingLevel` mis à jour sur iOS et Android ; `describeEnum` supprimé (utiliser `Enum.name`).
+- **Annoncé, pas encore en stable** : migration vers les packages autonomes `material_ui` / `cupertino_ui`.
+
+**Source :** https://docs.flutter.dev/release/breaking-changes
 
 ---
 

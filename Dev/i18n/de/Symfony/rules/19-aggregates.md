@@ -23,6 +23,7 @@ namespace App\Commercial\Domain\Client;
 use App\Shared\Domain\AggregateRoot;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use DateTimeImmutable;
 
 class Client extends AggregateRoot
 {

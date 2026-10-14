@@ -158,10 +158,10 @@ Pour chaque vérification, utilise Docker pour s'abstraire de l'environnement lo
 docker run --rm -v $(pwd):/app phpstan/phpstan analyse src --level=9
 
 # PHP_CodeSniffer (PSR-12)
-docker run --rm -v $(pwd):/project php:8.2-cli vendor/bin/phpcs --standard=PSR12 src/
+docker run --rm -v $(pwd):/project php:8.5-cli vendor/bin/phpcs --standard=PSR12 src/
 
 # PHPUnit avec couverture
-docker run --rm -v $(pwd):/app php:8.2-cli vendor/bin/phpunit --coverage-text --coverage-html=coverage
+docker run --rm -v $(pwd):/app php:8.5-cli vendor/bin/phpunit --coverage-text --coverage-html=coverage
 
 # Infection (mutation testing)
 docker run --rm -v $(pwd):/app infection/infection --min-msi=70

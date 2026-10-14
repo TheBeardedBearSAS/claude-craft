@@ -14,7 +14,7 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 
 ## Table des matières
 
-1. [OWASP Top 10](#owasp-top-10)
+1. [OWASP Top 10:2025](#owasp-top-102025)
 2. [Validation des entrées](#validation-des-entrées)
 3. [Authentification](#authentification)
 4. [Autorisation](#autorisation)
@@ -25,68 +25,25 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 
 ---
 
-## OWASP Top 10
+## OWASP Top 10:2025
 
-### 1. Broken Access Control
+### A01. Broken Access Control (inclut SSRF)
 
 ```
 ❌ RISQUE
 - Accès à des ressources sans vérification
 - URLs prédictibles (/admin, /user/123/edit)
 - Manipulation d'IDs dans les URLs
+- SSRF : URLs fournies par l'utilisateur non validées, accès à des ressources internes
 
 ✅ PROTECTION
 - Vérifier les permissions à CHAQUE requête
 - Utiliser des identifiants non prédictibles (UUID)
 - Deny by default
+- SSRF : whitelist des destinations autorisées, validation stricte des URLs, pas d'accès réseau interne depuis les inputs
 ```
 
-### 2. Cryptographic Failures
-
-```
-❌ RISQUE
-- Données sensibles en clair
-- Algorithmes obsolètes (MD5, SHA1)
-- Clés dans le code source
-
-✅ PROTECTION
-- Chiffrer les données sensibles au repos
-- Utiliser TLS 1.3 en transit
-- Algorithmes modernes (bcrypt, Argon2, AES-256)
-- Secrets dans un vault (pas dans le code)
-```
-
-### 3. Injection
-
-```
-❌ RISQUE
-- SQL Injection
-- Command Injection
-- LDAP Injection
-
-✅ PROTECTION
-- Requêtes paramétrées (prepared statements)
-- Validation et sanitization des entrées
-- Principe du moindre privilège (DB)
-- Escape des outputs
-```
-
-### 4. Insecure Design
-
-```
-❌ RISQUE
-- Pas de threat modeling
-- Fonctionnalités sensibles non protégées
-- Rate limiting absent
-
-✅ PROTECTION
-- Threat modeling dès la conception
-- Security by design
-- Defense in depth
-- Rate limiting
-```
-
-### 5. Security Misconfiguration
+### A02. Security Misconfiguration
 
 ```
 ❌ RISQUE
@@ -102,7 +59,7 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 - Principe du moindre privilège
 ```
 
-### 6. Vulnerable Components
+### A03. Software Supply Chain Failures
 
 ```
 ❌ RISQUE
@@ -113,10 +70,57 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 ✅ PROTECTION
 - Audit régulier des dépendances
 - Mise à jour automatique (Dependabot)
-- SBOM (Software Bill of Materials)
+- SBOM (Software Bill of Materials) : CycloneDX 1.7 ou SPDX 3
+- Provenance et signature des artefacts (SLSA, Sigstore)
+- CI/CD sécurisé, versions pinnées
 ```
 
-### 7. Authentication Failures
+### A04. Cryptographic Failures
+
+```
+❌ RISQUE
+- Données sensibles en clair
+- Algorithmes obsolètes (MD5, SHA1)
+- Clés dans le code source
+
+✅ PROTECTION
+- Chiffrer les données sensibles au repos
+- Utiliser TLS 1.3 en transit
+- Algorithmes modernes (Argon2id pour les mots de passe — bcrypt = legacy uniquement, AES-256)
+- Secrets dans un vault (pas dans le code)
+```
+
+### A05. Injection
+
+```
+❌ RISQUE
+- SQL Injection
+- Command Injection
+- LDAP Injection
+
+✅ PROTECTION
+- Requêtes paramétrées (prepared statements)
+- Validation et sanitization des entrées
+- Principe du moindre privilège (DB)
+- Escape des outputs
+```
+
+### A06. Insecure Design
+
+```
+❌ RISQUE
+- Pas de threat modeling
+- Fonctionnalités sensibles non protégées
+- Rate limiting absent
+
+✅ PROTECTION
+- Threat modeling dès la conception
+- Security by design
+- Defense in depth
+- Rate limiting
+```
+
+### A07. Authentication Failures
 
 ```
 ❌ RISQUE
@@ -133,11 +137,11 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 - Détection de brute force
 ```
 
-### 8. Data Integrity Failures
+### A08. Software or Data Integrity Failures
 
 ```
 ❌ RISQUE
-- Dépendances non vérifiées
+- Dépendances/artefacts non vérifiés
 - CI/CD non sécurisé
 - Updates non signés
 
@@ -147,7 +151,7 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 - Integrity checks (checksums)
 ```
 
-### 9. Logging & Monitoring Failures
+### A09. Security Logging and Alerting Failures
 
 ```
 ❌ RISQUE
@@ -162,17 +166,19 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 - Retention appropriée
 ```
 
-### 10. SSRF (Server-Side Request Forgery)
+### A10. Mishandling of Exceptional Conditions
 
 ```
 ❌ RISQUE
-- URLs fournies par l'utilisateur non validées
-- Accès à des ressources internes
+- Stack traces exposées en production
+- Exceptions non gérées qui fuient des données internes
+- Comportement indéfini sur des entrées mal formées
 
 ✅ PROTECTION
-- Whitelist des destinations autorisées
-- Validation stricte des URLs
-- Pas d'accès réseau interne depuis les inputs
+- Logger les erreurs, ne jamais exposer la stack trace en prod
+- Gestionnaires d'exceptions globaux (error boundaries)
+- Messages d'erreur génériques côté client
+- Fail fast avec des erreurs métier claires
 ```
 
 ---

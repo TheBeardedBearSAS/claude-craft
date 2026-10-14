@@ -1,6 +1,6 @@
 # React 19 — Nouvelles Fonctionnalités
 
-**Version :** React 19.2.x (latest: 19.2.7) | React Compiler 1.0 (octobre 2025)
+**Version :** React 19.3.x (latest: 19.3.0, 9 sept. 2026) | React Compiler 1.0 (octobre 2025)
 
 ## Vue d'ensemble
 
@@ -634,7 +634,7 @@ const TabView = () => {
 
 ## `<ViewTransition>` — Animations de navigation
 
-Disponible depuis **React 19.2** (octobre 2025). `<ViewTransition>` permet de déclarer des animations de page (enter, exit, shared elements) en s'appuyant sur la View Transitions API du navigateur, sans CSS impératif.
+Stable depuis **React 19.3** (septembre 2026). `<ViewTransition>` permet de déclarer des animations de page (enter, exit, shared elements) en s'appuyant sur la View Transitions API du navigateur, sans CSS impératif.
 
 ### API
 
@@ -787,14 +787,31 @@ function ChatRoom({ roomId, theme }) {
 
 ---
 
+## Nouveautés React 19.3 (9 septembre 2026)
+
+Aucun breaking change annoncé. Source : [React 19.3](https://react.dev/blog/2026/09/09/react-19-3).
+
+| Nouveauté | Détail |
+|-----------|--------|
+| `<ViewTransition>` **stable** | Animations enter / exit / update / share ; DOM uniquement (React Native en cours). Les mises à jour doivent être des Transitions |
+| `addTransitionType` | `startTransition(() => { addTransitionType('next'); setSlide(c => c + 1); })` ; `<ViewTransition enter={{ next: 'from-right' }}>` ; ajouté aussi comme *view transition type* du navigateur (`:active-view-transition-type()`) |
+| Fragment Refs **stables** | `<Fragment ref={ref}>` → `FragmentInstance` (`addEventListener`, `focus`, `focusLast`, `blur`, `observeUsing`, `getClientRects`, `scrollIntoView`…) |
+| `browser()` (`react-dom`) | `use(browser())` exclut un composant du rendu serveur (suspend côté serveur, fallback dans le HTML) ; sans suspension côté client |
+| Trusted Types | React ne convertit plus en chaîne les valeurs passées au DOM : `TrustedHTML`/`TrustedScript`/`TrustedScriptURL` atteignent le navigateur |
+| Context en Server Components | Un Server Component peut rendre `<UserContext value={…}>` (Context importé d'un module `'use client'`) sans Provider intermédiaire |
+| Strict Mode | Les Effects sont invoqués deux fois aussi à l'**hydratation** (comme sur les racines rendues côté client) |
+| Transitions indépendantes | Une Transition lente ne bloque plus les Transitions sans rapport |
+
+---
+
 ## Écosystème React 19 (2026)
 
 | Bibliothèque | Version | Usage |
 |--------------|---------|-------|
-| **React** | 19.2.x (latest: 19.2.7) | Core |
+| **React** | 19.3.x (latest: 19.3.0) | Core |
 | **React Compiler** | 1.0+ | Auto-memoization |
-| **Zustand** | 5.0.12 | State management |
-| **TanStack Query** | 5.99.0 | Server state (cache, revalidation) |
+| **Zustand** | 5.0.15 | State management |
+| **TanStack Query** | 5.104.2 | Server state (cache, revalidation) |
 | **React Router** | 7.17.0 | Routing |
 | **Zod** | 4.4.3 | Schema validation (v4 — breaking: import `z` from `zod/v4`) |
 | **Vitest** | 4.1+ | Tests (Browser Mode) |

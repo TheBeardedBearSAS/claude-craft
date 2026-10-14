@@ -143,7 +143,7 @@ Producir todas las configuraciones necesarias:
 ```hcl
 # versions.tf
 terraform {
-  required_version = ">= 1.7.0"
+  required_version = ">= 1.13.0"
   required_providers {
     aws = {
       source  = "hashicorp/aws"

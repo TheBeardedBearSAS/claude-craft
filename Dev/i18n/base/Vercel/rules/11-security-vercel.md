@@ -129,7 +129,7 @@ Native `@vercel/kv` and `@vercel/postgres` packages are **deprecated** — curre
 
 ## Edge Runtime Legacy-Code Security Gap
 
-Edge Runtime is **deprecated** by Vercel in favor of Fluid Compute on the Node.js runtime — it should not be targeted for new code. When auditing existing handlers still running on Edge Runtime, treat its reduced API surface as a **security-relevant gap**, not just a compatibility one: the historical absence of Node's `crypto` and `fs` modules on Edge Runtime pushed some codebases toward insecure workarounds (hand-rolled or under-vetted crypto implementations, non-constant-time comparisons for secret/signature checks, or fetching data that should have stayed server-side because a Node-only library couldn't run).
+Vercel recommends migrating from Edge Runtime to Node.js on Fluid Compute (source: vercel.com/docs/functions/runtimes/edge) — it should not be targeted for new code. When auditing existing handlers still running on Edge Runtime, treat its reduced API surface as a **security-relevant gap**, not just a compatibility one: the historical absence of Node's `crypto` and `fs` modules on Edge Runtime pushed some codebases toward insecure workarounds (hand-rolled or under-vetted crypto implementations, non-constant-time comparisons for secret/signature checks, or fetching data that should have stayed server-side because a Node-only library couldn't run).
 
 **Rule**: if a Function still targets Edge Runtime and its diff/history shows a custom crypto or signature-comparison routine, treat it as a migration priority — moving it to the Node.js runtime (Fluid Compute) restores access to Node's `crypto` module (`crypto.timingSafeEqual`, etc.) and removes the reason the workaround existed in the first place.
 

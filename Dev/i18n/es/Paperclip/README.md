@@ -15,7 +15,7 @@ Este directorio contiene las reglas, comandos, skills y plantillas de Claude-Cra
 | React | 19+ (web UI) |
 | Vitest | 4.1+ |
 | PostgreSQL | 15+ (o embebido para dev) |
-| Paperclip | 2026.609.0+ |
+| Paperclip | 2026.1012.0+ |
 
 ## Qué hay aquí
 

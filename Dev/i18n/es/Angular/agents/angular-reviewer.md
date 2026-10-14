@@ -46,8 +46,8 @@ Soy un especialista en revisión de código Angular 22 y TypeScript. Mi enfoque 
 
 **Zoneless por defecto (estable) :**
 - Ahorro de ~33 KB de bundle (Zone.js opcional)
-- +30-40% de mejora en el rendimiento de renderizado según Angular DevRel
-- API estable: `provideZonelessChangeDetection()` desde `@angular/core` (ya no `Experimental`)
+- Las mejoras de rendimiento varían según la aplicación (la cifra «+30-40%» proviene de una fuente de 2024): medir, no asumir
+- Ningún provider requerido en v21+/v22: `provideZonelessChangeDetection()` solo es necesario en v20 (https://angular.dev/guide/zoneless)
 
 **Signal Forms (estable v22) :**
 - Alternativa nativa a los Reactive Forms con APIs de señales, **lista para producción**
@@ -421,7 +421,7 @@ it('should load users on init', () => {
     SÍ --> ¿Los event listeners activan correctamente el CD?
   NO --> ¿Se usa Zone.js?
     SÍ --> MENOR en v22+: se recomienda migrar a zoneless (ahorra ~33 KB)
-    NO --> Verificar que provideZonelessChangeDetection() esté configurado (estable desde v20.2)
+    NO --> Verificar que ningún provideZoneChangeDetection() reactive Zone.js (zoneless por defecto desde v21)
 
 ¿Se usa httpResource() para peticiones HTTP repetitivas?
   NO --> ¿Los componentes usan signal + effect + HttpClient?

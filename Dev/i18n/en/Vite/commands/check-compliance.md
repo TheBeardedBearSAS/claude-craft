@@ -36,7 +36,7 @@ Execute complete configuration and architecture check:
 - vite.config.ts correctness (defineConfig, aliases synced with tsconfig) (8 pts)
 - index.html placement at project root, never inside public/ (6 pts)
 - build.lib configuration for libraries (entry, formats, external, vite-plugin-dts) (8 pts)
-- rollupOptions.input for multi-page apps, plugin naming convention (vite-plugin-*) (8 pts)
+- rolldownOptions.input for multi-page apps, plugin naming convention (vite-plugin-*) (8 pts)
 
 **Reference**: `.claude/agents/vite-reviewer.md` (section 1)
 
@@ -151,7 +151,7 @@ Sub-scores:
   • vite.config.ts correctness       : XX/8
   • index.html placement             : XX/6
   • build.lib configuration          : XX/8
-  • rollupOptions.input / plugins    : XX/8
+  • rolldownOptions.input / plugins    : XX/8
 
 Strengths:
 - [Architecture strengths]

@@ -1,6 +1,6 @@
 ---
 name: testing-reactnative
-description: Testing React Native 0.85+. Use when writing tests, reviewing test coverage, or setting up testing.
+description: Testing React Native 0.87+. Use when writing tests, reviewing test coverage, or setting up testing.
 context: fork
 ---
 
@@ -10,9 +10,9 @@ Ce skill fournit les bonnes pratiques de test pour React Native 0.85+ avec la Ne
 
 ## Principes clés
 
-- **React Native Testing Library (RNTL)** : tester le comportement utilisateur, pas l'implémentation
+- **React Native Testing Library (RNTL 14)** : tester le comportement utilisateur, pas l'implémentation
 - **Jest** : runner de tests avec mocks natifs
-- **Detox / Maestro** : tests E2E pour flows critiques
+- **Maestro** (flows YAML, 2.x) ou **Detox** : tests E2E pour flows critiques
 - **Couverture >= 80%** pour la logique métier
 
 ## Spécificités React Native 0.85+
@@ -23,4 +23,4 @@ Ce skill fournit les bonnes pratiques de test pour React Native 0.85+ avec la Ne
 
 ## Références
 
-**Sources :** [RN Testing Library](https://callstack.github.io/react-native-testing-library/), [Detox](https://wix.github.io/Detox/)
+**Sources :** [RN Testing Library](https://callstack.github.io/react-native-testing-library/), [Maestro](https://docs.maestro.dev/), [Detox](https://wix.github.io/Detox/)

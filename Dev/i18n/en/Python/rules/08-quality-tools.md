@@ -1,6 +1,6 @@
 # Code Quality Tools - Python
 
-> **Reference versions:** Ruff **0.15+** | pytest **9.x** (drops Python 3.9) | target `py314`.
+> **Reference versions:** Ruff **0.17+** | pytest **9.x** (drops Python 3.9) | target `py314`.
 
 ## Ruff - Fast Python Linter & Formatter
 

@@ -8,7 +8,7 @@
 
 **Scope**: framework-agnostic platform features only — vercel.json, Functions, ISR, Cron, Storage. Explicitly not Next.js, not any framework's own deploy adapter.
 
-> **Note:** Vercel (this stack) covers only the **framework-agnostic deployment-platform surface**: `vercel.json` configuration (rewrites, redirects, headers, regions), Serverless Functions on the Node.js runtime / Fluid Compute, ISR cache primitives, Cron Jobs, Vercel Storage (Blob native; Postgres/KV via Marketplace — Neon/Upstash), Analytics/Speed Insights, and environment-variable/Preview-Deployment workflow. It is **not** a Next.js stack — Next.js itself is out of scope and not a supported claude-craft technology (no `/nextjs:*` namespace exists). Framework-specific routing, rendering, or data-fetching patterns belong to each framework's own stack (`/react:*`, `/vuejs:*`, `/angular:*`) — consult that stack's `tooling.md` for how it integrates with Vercel's build output. Additionally, the Edge Runtime (`export const runtime = 'edge'`) is **deprecated by Vercel** as of 2026 in favor of Fluid Compute on the Node.js runtime; this stack documents Edge Runtime only to help identify and migrate legacy code, not as a recommended pattern for new work.
+> **Note:** Vercel (this stack) covers only the **framework-agnostic deployment-platform surface**: `vercel.json` configuration (rewrites, redirects, headers, regions), Serverless Functions on the Node.js runtime / Fluid Compute, ISR cache primitives, Cron Jobs, Vercel Storage (Blob native; Postgres/KV via Marketplace — Neon/Upstash), Analytics/Speed Insights, and environment-variable/Preview-Deployment workflow. It is **not** a Next.js stack — Next.js itself is out of scope and not a supported claude-craft technology (no `/nextjs:*` namespace exists). Framework-specific routing, rendering, or data-fetching patterns belong to each framework's own stack (`/react:*`, `/vuejs:*`, `/angular:*`) — consult that stack's `tooling.md` for how it integrates with Vercel's build output. Additionally, the Edge Runtime (`export const runtime = 'edge'`) is **not recommended by Vercel**, which favors Fluid Compute on the Node.js runtime; this stack documents Edge Runtime only to help identify and migrate legacy code, not as a recommended pattern for new work.
 
 ### Project Structure
 ```
@@ -38,7 +38,7 @@ See `rules/02-architecture.md` for complete patterns.
 | Rule | Reason |
 |------|--------|
 | vercel.json validated against `$schema` | Catches typo'd globs/keys before they fail silently at deploy time |
-| Node.js/Fluid Compute is the runtime default | Edge Runtime (`runtime: 'edge'`) is deprecated — legacy migration target only |
+| Node.js/Fluid Compute is the runtime default | Edge Runtime (`runtime: 'edge'`) is discouraged — legacy migration target only |
 | Env vars never hardcoded or committed | Secrets belong in Vercel's environment-variable store, scoped per environment |
 | Cron endpoints verify the secret header | An unguarded cron path can be triggered by anyone who finds it |
 | 80%+ coverage on handler logic | Quality assurance for Functions and middleware business logic |

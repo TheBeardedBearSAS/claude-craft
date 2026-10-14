@@ -26,7 +26,7 @@ Security is an **absolute priority**. This document covers general security prin
 
 ## OWASP Top 10
 
-### A01: Broken Access Control
+### A01: Broken Access Control (includes SSRF)
 
 **Risks:**
 - Access to resources without verification
@@ -75,7 +75,113 @@ public class OrderOwnerAuthorizationHandler
 }
 ```
 
-### A02: Cryptographic Failures
+#### SSRF — Server-Side Request Forgery (consolidated into A01 in 2025)
+
+```csharp
+// DO: Validate and restrict URLs
+public class SafeHttpClient
+{
+    private readonly HttpClient _httpClient;
+    private readonly HashSet<string> _allowedHosts;
+
+    public async Task<string> FetchAsync(string url)
+    {
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
+            throw new ArgumentException("Invalid URL format");
+
+        if (IsPrivateIp(uri.Host))
+            throw new SecurityException("Access to internal resources not allowed");
+
+        if (!_allowedHosts.Contains(uri.Host))
+            throw new SecurityException("Host not in allowed list");
+
+        return await _httpClient.GetStringAsync(uri);
+    }
+
+    private static bool IsPrivateIp(string host)
+    {
+        if (!IPAddress.TryParse(host, out var ip))
+            return false;
+        var bytes = ip.GetAddressBytes();
+        return bytes[0] switch
+        {
+            10 => true,
+            127 => true,
+            172 => bytes[1] >= 16 && bytes[1] <= 31,
+            192 => bytes[1] == 168,
+            _ => false
+        };
+    }
+}
+```
+
+---
+
+### A02: Security Misconfiguration
+
+```csharp
+// Program.cs - Security headers
+var app = builder.Build();
+
+if (app.Environment.IsProduction())
+{
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
+// Security headers middleware
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Append("X-Frame-Options", "DENY");
+    // X-XSS-Protection est déprécié — s'appuyer sur CSP Level 3
+    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+    context.Response.Headers.Append(
+        "Content-Security-Policy",
+        "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; upgrade-insecure-requests");
+    context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
+    context.Response.Headers.Append("Cross-Origin-Embedder-Policy", "require-corp");
+    context.Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
+    await next();
+});
+
+// DO: Configure CORS properly
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Production", policy =>
+    {
+        policy.WithOrigins("https://myapp.com", "https://www.myapp.com")
+              .AllowCredentials()
+              .WithMethods("GET", "POST", "PUT", "DELETE")
+              .WithHeaders("Content-Type", "Authorization");
+    });
+});
+```
+
+### A03: Software Supply Chain Failures
+
+```bash
+# Check for vulnerable packages
+dotnet list package --vulnerable
+
+# Update packages
+dotnet outdated --upgrade
+```
+
+```yaml
+# .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "daily"
+```
+
+- Generate an SBOM (CycloneDX 1.7) on every build and sign artifacts (Sigstore); pin package versions (`packages.lock.json`).
+
+### A04: Cryptographic Failures
 
 **Risks:**
 - Sensitive data in plain text
@@ -162,7 +268,7 @@ public class PasswordHasher
 // NEVER use MD5, SHA-1, SHA-256 or unsalted hashes for passwords.
 ```
 
-### A03: Injection
+### A05: Injection
 
 **Risks:**
 - SQL Injection
@@ -199,7 +305,7 @@ public async Task<IEnumerable<Order>> SearchOrdersUnsafe(string status)
 }
 ```
 
-### A04: Insecure Design
+### A06: Insecure Design
 
 **Protection:**
 - Threat modeling from design
@@ -229,68 +335,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 });
-```
-
-### A05: Security Misconfiguration
-
-```csharp
-// Program.cs - Security headers
-var app = builder.Build();
-
-if (app.Environment.IsProduction())
-{
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-
-// Security headers middleware
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-    context.Response.Headers.Append("X-Frame-Options", "DENY");
-    // X-XSS-Protection est déprécié — s'appuyer sur CSP Level 3
-    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
-    context.Response.Headers.Append(
-        "Content-Security-Policy",
-        "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; upgrade-insecure-requests");
-    context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
-    context.Response.Headers.Append("Cross-Origin-Embedder-Policy", "require-corp");
-    context.Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
-    await next();
-});
-
-// DO: Configure CORS properly
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("Production", policy =>
-    {
-        policy.WithOrigins("https://myapp.com", "https://www.myapp.com")
-              .AllowCredentials()
-              .WithMethods("GET", "POST", "PUT", "DELETE")
-              .WithHeaders("Content-Type", "Authorization");
-    });
-});
-```
-
-### A06: Vulnerable Components
-
-```bash
-# Check for vulnerable packages
-dotnet list package --vulnerable
-
-# Update packages
-dotnet outdated --upgrade
-```
-
-```yaml
-# .github/dependabot.yml
-version: 2
-updates:
-  - package-ecosystem: "nuget"
-    directory: "/"
-    schedule:
-      interval: "daily"
 ```
 
 ### A07: Authentication Failures
@@ -339,7 +383,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 ```
 
-### A08: Data Integrity Failures
+### A08: Software or Data Integrity Failures
 
 ```csharp
 // DO: Use anti-forgery tokens
@@ -372,7 +416,7 @@ public async Task<IActionResult> UploadFile(IFormFile file)
 }
 ```
 
-### A09: Logging & Monitoring Failures
+### A09: Security Logging and Alerting Failures
 
 ```csharp
 // DO: Implement security logging
@@ -416,47 +460,27 @@ builder.Host.UseSerilog((context, config) =>
 });
 ```
 
-### A10: SSRF
+### A10: Mishandling of Exceptional Conditions
 
 ```csharp
-// DO: Validate and restrict URLs
-public class SafeHttpClient
+// DO: Global exception handler returning ProblemDetails (RFC 9457) — no stack trace in production
+public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
-    private readonly HttpClient _httpClient;
-    private readonly HashSet<string> _allowedHosts;
-
-    public async Task<string> FetchAsync(string url)
+    public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken ct)
     {
-        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
-            throw new ArgumentException("Invalid URL format");
-
-        if (IsPrivateIp(uri.Host))
-            throw new SecurityException("Access to internal resources not allowed");
-
-        if (!_allowedHosts.Contains(uri.Host))
-            throw new SecurityException("Host not in allowed list");
-
-        return await _httpClient.GetStringAsync(uri);
-    }
-
-    private static bool IsPrivateIp(string host)
-    {
-        if (!IPAddress.TryParse(host, out var ip))
-            return false;
-        var bytes = ip.GetAddressBytes();
-        return bytes[0] switch
-        {
-            10 => true,
-            127 => true,
-            172 => bytes[1] >= 16 && bytes[1] <= 31,
-            192 => bytes[1] == 168,
-            _ => false
-        };
+        logger.LogError(exception, "Unhandled exception");
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        await context.Response.WriteAsJsonAsync(
+            new ProblemDetails { Status = 500, Title = "An unexpected error occurred" }, ct);
+        return true;
     }
 }
-```
 
----
+// Program.cs
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+app.UseExceptionHandler();
+```
 
 ## Input Validation
 

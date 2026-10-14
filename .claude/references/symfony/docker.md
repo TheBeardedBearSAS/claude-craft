@@ -19,8 +19,8 @@ L'utilisation de **Docker est OBLIGATOIRE** pour tout le projet Atoll Tourisme. 
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Docker Engine | 29.6.1 | BuildKit par défaut, SBOM natif |
-| Docker Compose | v5.0.0 "Mont Blanc" | Champ `version:` obsolète |
+| Docker Engine | 29.9.0 | BuildKit par défaut, SBOM natif |
+| Docker Compose | 5.6.0 | Champ `version:` obsolète |
 | FrankenPHP | 1.12.4 | PHP 8.5, Caddy 2.11.2, Worker mode (2-3× gains) |
 | PgBouncer | 1.25.2 | Prepared statements natifs (1.21+ requis ; CVE-2026-6664/6667 patchées) |
 
@@ -271,8 +271,8 @@ phpmetrics: ## Génère les métriques
 	docker-compose exec php vendor/bin/phpmetrics --report-html=var/phpmetrics src/
 
 hadolint: ## Valide les Dockerfiles
-	docker run --rm -i hadolint/hadolint:v2.12.0 < Dockerfile
-	docker run --rm -i hadolint/hadolint:v2.12.0 < Dockerfile.dev
+	docker run --rm -i hadolint/hadolint:v2.15.1 < Dockerfile
+	docker run --rm -i hadolint/hadolint:v2.15.1 < Dockerfile.dev
 
 quality: phpstan cs-fixer-dry rector-dry deptrac phpcpd ## Lance toutes les vérifications qualité
 
@@ -387,15 +387,15 @@ label-schema:
 
 ### Validation Hadolint
 
-**Version 2026** : Hadolint v2.12.0 (stable, mai 2024 — toujours valide avril 2026)  
-**Source** : https://github.com/hadolint/hadolint/releases/tag/v2.12.0
+**Version 2026** : Hadolint v2.15.1 (stable, octobre 2026)  
+**Source** : https://github.com/hadolint/hadolint/releases/tag/v2.15.1
 
 ```bash
 # Via Makefile (OBLIGATOIRE)
 make hadolint
 
 # Direct (pour debug uniquement, version pinnée)
-docker run --rm -i hadolint/hadolint:v2.12.0 < Dockerfile
+docker run --rm -i hadolint/hadolint:v2.15.1 < Dockerfile
 ```
 
 ---
@@ -406,8 +406,8 @@ docker run --rm -i hadolint/hadolint:v2.12.0 < Dockerfile
 
 ```dockerfile
 # Dockerfile - Production - Atoll Tourisme
-# Validé par Hadolint v2.12.0
-# Docker Engine 29.6.1
+# Validé par Hadolint v2.15.1
+# Docker Engine 29.9.0
 # Source: https://www.docker.com/blog/docker-engine-version-29/
 
 # Métadonnées obligatoires
@@ -585,7 +585,7 @@ CMD ["php-fpm"]
 
 ### docker-compose.yml (Production-ready)
 
-**Note** : Depuis Docker Compose v2.40+ (décembre 2024), le champ `version:` est obsolète et non requis. La version est automatiquement détectée via Compose Spec v5.0.0 "Mont Blanc" (avril 2026).  
+**Note** : Depuis Docker Compose v2.40+ (décembre 2024), le champ `version:` est obsolète et non requis. Compose 5.6.0 ignore ce champ et affiche un avertissement s'il est présent.  
 **Source** : https://www.compose-spec.io/
 
 ```yaml
@@ -809,13 +809,13 @@ make shell  # puis psql
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Docker Engine | 29.6.1 | BuildKit par défaut, SBOM natif |
-| Compose Spec | v5.0.0 "Mont Blanc" | Champ `version:` obsolète depuis v2.40+ |
-| Hadolint | v2.12.0 | Version stable pinnée |
+| Docker Engine | 29.9.0 | BuildKit par défaut, SBOM natif |
+| Docker Compose | 5.6.0 | Champ `version:` obsolète depuis v2.40+ |
+| Hadolint | v2.15.1 | Version stable pinnée |
 | Kubernetes | 1.36.1 | Gateway API v1.4+, sidecar-less architectures |
 
 **Sources** :  
 https://www.docker.com/blog/docker-engine-version-29/  
 https://www.compose-spec.io/  
-https://github.com/hadolint/hadolint/releases/tag/v2.12.0  
+https://github.com/hadolint/hadolint/releases/tag/v2.15.1  
 https://endoflife.date/kubernetes

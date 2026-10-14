@@ -19,7 +19,7 @@ Walk an operator through onboarding: install, create the instance, bootstrap the
 
 ### 1. Preconditions
 
-- [ ] Node.js 20+ and pnpm 9.15+ installed
+- [ ] Node.js 24.11+ and pnpm 9.15+ installed
 - [ ] PostgreSQL reachable **OR** accept the embedded Postgres for local dev
 - [ ] Port 3100 available (or set `PORT`)
 

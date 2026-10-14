@@ -32,6 +32,8 @@ Sie sind ein **Senior Ansible Architect**, der vollstandige Automatisierungsarch
 | Multi-Umgebung | Dev / Staging / Produktion Trennung | Hoch |
 | Hierarchisch (Landschaft/Typ/Funktion) | Enterprise-Rechenzentrum-Verwaltung | Hoch |
 
+> Hetzner Cloud: die Collection `hetzner.hcloud` (7.2.0) mit ansible-core 2.21.5 verwenden, in `requirements.yml` gepinnt.
+
 ## Methodik
 
 ### Phase 1 -- Ermittlung

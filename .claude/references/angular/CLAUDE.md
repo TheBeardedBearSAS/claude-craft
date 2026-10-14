@@ -7,7 +7,7 @@
 | Composant | Version | Notes |
 |-----------|---------|-------|
 | Angular | 22 | Stable depuis 03/06/2026 |
-| TypeScript | **6.x** | TS 5.x non supporté depuis Angular 22 |
+| TypeScript | **6.x** | TS 5.x non supporté depuis Angular 22 (`>=6.0.0 <6.1.0`, angular.dev/reference/versions) |
 | Node.js | **22.x ou 24.x** | Node 20 supprimé depuis Angular 22 |
 | Angular CLI | 22.x | `npm install -g @angular/cli` |
 
@@ -41,16 +41,14 @@ Toujours utiliser `standalone: true` — NgModules réservés aux libs legacy.
 
 ### Zoneless par défaut
 ```typescript
-// app.config.ts — projets Angular 22 générés via CLI (déjà zoneless par défaut)
+// app.config.ts — Angular 22 : zoneless par défaut (depuis v21), rien à activer
 import { ApplicationConfig } from '@angular/core';
-import { provideZonelessChangeDetection } from '@angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // NOTE: Angular 21+ CLI génère les projets sans Zone.js par défaut.
-    // Ajouter provideZonelessChangeDetection() uniquement pour MIGRER
-    // une app existante zone-based vers le mode zoneless.
-    provideZonelessChangeDetection(),
+    // NOTE: zoneless est le défaut depuis Angular v21 (angular.dev/guide/zoneless) :
+    // provideZonelessChangeDetection() n'est requis qu'en v20. Vérifier simplement
+    // qu'aucun provideZoneChangeDetection() ne réactive Zone.js.
     provideRouter(routes),
     provideHttpClient(),
   ]
@@ -121,7 +119,7 @@ export class UsersComponent {
 
 - [ ] Angular 22, TypeScript 6, Node 22/24
 - [ ] Standalone components (`standalone: true`)
-- [ ] Zoneless par défaut (Angular 21+ CLI) — migration depuis zone-based : `provideZonelessChangeDetection()`
+- [ ] Zoneless par défaut (depuis v21, donc en v22) — aucun provider requis ; `provideZonelessChangeDetection()` seulement en v20
 - [ ] Signals pour l'état réactif (`signal`, `computed`, `effect`)
 - [ ] Signal Forms pour les formulaires (pas FormGroup classique)
 - [ ] `httpResource()` pour les chargements HTTP déclaratifs

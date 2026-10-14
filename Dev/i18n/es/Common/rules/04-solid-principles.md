@@ -357,7 +357,7 @@ Es mejor tener varias interfaces especificas que una interfaz general.
 
 #### SRP
 - [ ] Cada clase tiene una sola responsabilidad claramente definida
-- [ ] Los metodos hacen una sola cosa (< 20 lineas)
+- [ ] Los metodos hacen una sola cosa (objetivo < 10, max 20 lineas)
 - [ ] Sin metodos con "y" u "o" en el nombre
 
 #### OCP

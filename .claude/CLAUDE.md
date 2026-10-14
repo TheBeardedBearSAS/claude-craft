@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 8.22.0 | **Languages:** en, fr, es, de, pt
+**Version:** 8.23.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 13 technology stacks, 33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces, and BMAD v6 project management.
 
@@ -12,17 +12,17 @@ A comprehensive AI-assisted development framework for Claude Code with 13 techno
 |-------|---------|--------------|--------------|
 | **.NET / C#** | 10 LTS / C# 14 | Clean Architecture | CQRS, MediatR (ou alternative), EF Core |
 | **Symfony / PHP** | 8.1 / PHP 8.4+ | Clean Architecture | DDD, Hexagonal, API Platform, HTTP-less apps, JsonStreamer |
-| **Flutter / Dart** | 3.44 / Dart 3.12 | Clean Architecture | BLoC v9, Riverpod 3, Material 3, Impeller |
-| **React** | 19.2 + Compiler 1.0 | Feature-based | Hooks, Zustand, React Query, Server Components |
-| **React Native** | 0.85 (New Architecture) | Feature-based | Navigation 7, Reanimated 4, TurboModules |
+| **Flutter / Dart** | 3.47 / Dart 3.13 | Clean Architecture | BLoC v9, Riverpod 3, Material 3, Impeller |
+| **React** | 19.3 + Compiler 1.0 | Feature-based | Hooks, Zustand, React Query, Server Components |
+| **React Native** | 0.87 (New Architecture) — Expo SDK 57 | Feature-based | Navigation 7, Reanimated 4, TurboModules |
 | **Angular** | 22 | Domain-driven | Signals, Signal Forms (stable), Zoneless par défaut, OnPush défaut, httpResource (TS 6) |
-| **Vue.js** | 3.5+ (3.6 beta Vapor) | Composition API | Pinia 3, Vue Router 5, Vite 8, Vitest, Alien Signals |
-| **Vite** _(community, framework-agnostic)_ | 8.1 | Vanilla / Library / Multi-page | `build.lib`, `vite-plugin-dts`, `rollupOptions.input`, Workers/WASM |
-| **Vercel** _(community, deployment platform)_ | 56.5.0 | Platform config (framework-agnostic) | `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage |
-| **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | Clean Architecture | Actions, Pest 4, Sanctum, AI SDK, Passkey |
-| **Python** | 3.14+ | Clean Architecture / Hexagonal | FastAPI, async/await, Pydantic, free-threading, JIT |
-| **PHP** | 8.5 (Property Hooks 8.4+) | Clean Architecture | PSR-12, PHPStan Level 10, Pest 4 |
-| **Paperclip** | 2026.609.0 | Two-layer (control plane + adapters) | Node.js 22+, TypeScript, Vitest, PostgreSQL, governance-first |
+| **Vue.js** | 3.5+ (3.6 RC Vapor) | Composition API | Pinia 4, Vue Router 5, Vite 8, Vitest, Alien Signals |
+| **Vite** _(community, framework-agnostic)_ | 8.3 | Vanilla / Library / Multi-page | `build.lib`, `vite-plugin-dts`, `input` multi-page, Workers/WASM |
+| **Vercel** _(community, deployment platform)_ | 63.1.2 | Platform config (framework-agnostic) | `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage |
+| **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | Clean Architecture | Actions, Pest 4/5 (Pest 5 : PHP 8.4+), Sanctum, AI SDK, Passkey |
+| **Python** | 3.15 / 3.14+ | Clean Architecture / Hexagonal | FastAPI, async/await, Pydantic, free-threading, JIT |
+| **PHP** | 8.5 (Property Hooks 8.4+) | Clean Architecture | PER-CS 3.0 (ex-PSR-12), PHPStan Level 10, Pest 5 |
+| **Paperclip** | 2026.1012.0 | Two-layer (control plane + adapters) | Node.js 24.11+, TypeScript, Vitest, PostgreSQL, governance-first |
 
 ### Technology Quick Links
 
@@ -45,9 +45,9 @@ A comprehensive AI-assisted development framework for Claude Code with 13 techno
 
 > **Note:** Svelte/SvelteKit is **community-maintained** and hors-scope officiel. Voir `.claude/references/svelte/CLAUDE.md` pour le disclaimer complet.
 
-> **Note:** Vite (ce stack) couvre uniquement l'usage **framework-agnostic** de Vite — apps vanilla JS/TS, bibliothèques npm (`build.lib`), apps multi-pages (`rollupOptions.input`) et entrées Workers/WASM. Ce n'est **pas** un remplacement de la configuration Vite dev-server de React/Vue/Angular/Svelte, documentée dans le `tooling.md` propre à chacun de ces stacks.
+> **Note:** Vite (ce stack) couvre uniquement l'usage **framework-agnostic** de Vite — apps vanilla JS/TS, bibliothèques npm (`build.lib`), apps multi-pages (option top-level `input`) et entrées Workers/WASM. Ce n'est **pas** un remplacement de la configuration Vite dev-server de React/Vue/Angular/Svelte, documentée dans le `tooling.md` propre à chacun de ces stacks.
 
-> **Note:** Vercel couvre uniquement la **surface plateforme de déploiement agnostique au framework** — `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage (Blob natif ; Postgres/KV via Marketplace — Neon/Upstash). Ce n'est **pas** un stack Next.js (hors-périmètre, aucun namespace `/nextjs:*`). L'Edge Runtime (`export const runtime = 'edge'`) est **déprécié par Vercel depuis 2026** au profit de Fluid Compute — ce stack le documente uniquement à des fins de migration de code legacy.
+> **Note:** Vercel couvre uniquement la **surface plateforme de déploiement agnostique au framework** — `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage (Blob natif ; Postgres/KV via Marketplace — Neon/Upstash). Ce n'est **pas** un stack Next.js (hors-périmètre, aucun namespace `/nextjs:*`). Vercel recommande de migrer l'Edge Runtime (`export const runtime = 'edge'`) vers Node.js (Fluid Compute) — ce stack le documente uniquement à des fins de migration de code legacy.
 
 See `@.claude/INDEX.md` for condensed checklists and patterns.
 
@@ -55,7 +55,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Commands (15 namespaces, 126 commands)
 
-Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.6.1, Coolify v4.1.2, K8s 1.36.1, OpenTofu 1.12.2, Ansible 2.21.1, FrankenPHP 1.12.4, PgBouncer 1.25.2 | Project: `/sprint:*`, `/gate:*`, `/project:*`
+Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.9.0, Coolify v4.4.6, K8s 1.37.1, OpenTofu 1.13.1, Ansible 2.21.5, FrankenPHP 1.13.0, PgBouncer 1.26.0 | Project: `/sprint:*`, `/gate:*`, `/project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 

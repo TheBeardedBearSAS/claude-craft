@@ -50,7 +50,7 @@ Execute code quality check:
 **Command**: Use slash command `/php:check-code-quality` or manually follow steps in `check-code-quality.md`
 
 **Evaluated Criteria**:
-- PSR-12 compliance (5 pts)
+- PER-CS 3.0 compliance (5 pts)
 - PHPStan level 10 (5 pts)
 - Strict type hints and declare(strict_types=1) (4 pts)
 - KISS/DRY/YAGNI principles (4 pts)

@@ -36,7 +36,7 @@ Ejecutar la verificación completa de configuración y arquitectura:
 - Corrección de vite.config.ts (defineConfig, alias sincronizados con tsconfig) (8 pts)
 - Ubicación de index.html en la raíz del proyecto, nunca dentro de public/ (6 pts)
 - Configuración de build.lib para librerías (entry, formats, external, vite-plugin-dts) (8 pts)
-- rollupOptions.input para apps multi-página, convención de nombrado de plugins (vite-plugin-*) (8 pts)
+- rolldownOptions.input para apps multi-página, convención de nombrado de plugins (vite-plugin-*) (8 pts)
 
 **Referencia**: `.claude/agents/vite-reviewer.md` (sección 1)
 
@@ -151,7 +151,7 @@ Sub-puntuaciones:
   • Corrección de vite.config.ts     : XX/8
   • Ubicación de index.html          : XX/6
   • Configuración de build.lib       : XX/8
-  • rollupOptions.input / plugins    : XX/8
+  • rolldownOptions.input / plugins    : XX/8
 
 Fortalezas:
 - [Fortalezas de arquitectura]

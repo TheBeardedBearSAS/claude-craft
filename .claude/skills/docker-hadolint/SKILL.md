@@ -6,22 +6,22 @@ context: fork
 
 # Docker & Hadolint (2026)
 
-## Versions (avril 2026)
+## Versions (octobre 2026)
 
-- **Docker Engine** : 29.5.2 (patch sécurité, juin 2026)  
+- **Docker Engine** : 29.9.0  
   Source : https://docs.docker.com/engine/release-notes/29/
-- **Docker Compose** : Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète depuis v2.40+)  
-  Source : https://www.compose-spec.io/
-- **Hadolint** : v2.12.0 (version stable pinnée)  
-  Source : https://github.com/hadolint/hadolint/releases/tag/v2.12.0
+- **Docker Compose** : 5.6.0 (champ `version:` obsolète, à ne plus écrire)  
+  Source : https://github.com/docker/compose/releases
+- **Hadolint** : v2.15.1 (version stable pinnée)  
+  Source : https://github.com/hadolint/hadolint/releases/tag/v2.15.1
 
 ## Validation Hadolint
 
-**TOUJOURS utiliser la version pinnée `v2.12.0`** (jamais `latest` ou sans tag).
+**TOUJOURS utiliser la version pinnée `v2.15.1`** (jamais `latest` ou sans tag).
 
 ```bash
 # Validation Dockerfile
-docker run --rm -i hadolint/hadolint:v2.12.0 < Dockerfile
+docker run --rm -i hadolint/hadolint:v2.15.1 < Dockerfile
 
 # Validation via Makefile (recommandé)
 make hadolint

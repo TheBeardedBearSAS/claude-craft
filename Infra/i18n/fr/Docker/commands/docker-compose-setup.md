@@ -51,8 +51,6 @@ Stack : {stack}
 
 ```yaml
 # docker-compose.yml - Base commune
-version: "3.8"
-
 services:
   app:
     build:

@@ -21,16 +21,16 @@
 
 ### Code review (par stack)
 
-- `@symfony-reviewer` — Symfony 8 / PHP 8.5+, DDD, Doctrine, API Platform
-- `@laravel-reviewer` — Laravel 13 / PHP 8.5, Pest 4, Eloquent, Sanctum
-- `@react-reviewer` — React 19 + Compiler 1.0, TypeScript, hooks, bundle analysis
-- `@vuejs-reviewer` — Vue 3.5+, Composition API, Pinia, Vitest 4
+- `@symfony-reviewer` — Symfony 8.1 / PHP 8.4+ (8.5 recommandé), DDD, Doctrine, API Platform
+- `@laravel-reviewer` — Laravel 13 / PHP 8.5, Pest 4/5, Eloquent, Sanctum
+- `@react-reviewer` — React 19.3 + Compiler 1.0, TypeScript, hooks, bundle analysis
+- `@vuejs-reviewer` — Vue 3.5+, Composition API, Pinia 4, Vitest 5
 - `@angular-reviewer` — Angular 22, Signals, Standalone, Zoneless par défaut
-- `@flutter-reviewer` — Flutter 3.44 / Dart 3.12, BLoC v9, Riverpod 3
-- `@reactnative-reviewer` — React Native 0.85 New Architecture (JSI, TurboModules)
-- `@python-reviewer` — Python 3.14+, FastAPI, Pydantic v2, async correctness
+- `@flutter-reviewer` — Flutter 3.47 / Dart 3.13, BLoC v9, Riverpod 3
+- `@reactnative-reviewer` — React Native 0.87 New Architecture (JSI, TurboModules)
+- `@python-reviewer` — Python 3.15 / 3.14+, FastAPI, Pydantic v2, async correctness
 - `@csharp-reviewer` — C# 14 / .NET 10, Clean Architecture, CQRS, EF Core
-- `@php-reviewer` — PHP 8.5, Property Hooks, PSR-12, PHPStan level max, Pest 4
+- `@php-reviewer` — PHP 8.5, Property Hooks, PER-CS 3.0, PHPStan level max, Pest 5
 - `@paperclip-reviewer` — Paperclip 2026.x, governance-first, Node.js + PostgreSQL
 
 ### Test et qualite

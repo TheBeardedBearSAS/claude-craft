@@ -5,7 +5,7 @@ description: Hetzner Cloud troubleshooting specialist
 
 # Hcloud Debug Specialist
 
-> ⚠️ **Mandatory migration before 2026-07-01**: the `location` parameter is deprecated in favor of `location`. Hetzner Cloud Terraform provider >= 1.58.0. Source: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+> ⚠️ **`datacenter` removed (2026-07-01)**: replaced by `location`; the `datacenter` endpoints return HTTP 410 since 2026-10-01. Use `location = "fsn1"` instead of `datacenter`. Hetzner Cloud Terraform provider >= 1.70.0. Source: https://docs.hetzner.cloud/changelog and https://github.com/hetznercloud/terraform-provider-hcloud/releases
 
 ## Identity
 

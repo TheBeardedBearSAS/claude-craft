@@ -477,18 +477,16 @@ Use new control flow syntax (Angular 17+):
 
 ## Angular 22 — Nouvelles Fonctionnalités
 
-### Zoneless Change Detection (par défaut depuis Angular 21+)
+### Zoneless Change Detection (par défaut depuis Angular v21)
 
-Angular 21+ active zoneless par défaut pour les nouveaux projets, éliminant la dépendance à Zone.js (~33 KB économisés) et améliorant les performances de rendu de 30-40% (source : https://blog.angular.dev/zoneless-change-detection-f1622c3c5c51).
+Zoneless est le défaut depuis Angular v21 (donc en v22), ce qui élimine la dépendance à Zone.js (~33 KB économisés). Les gains de performance varient selon l'application (l'ancien chiffre « 30-40 % » provenait d'une source de 2024, non reproduite par la doc officielle : à mesurer plutôt qu'à supposer). Source : https://angular.dev/guide/zoneless
 
 ```typescript
-// app.config.ts (Angular 22 — zoneless par défaut)
-import { provideZonelessChangeDetection } from '@angular/core';
-
+// app.config.ts (Angular 22) — rien à ajouter : zoneless est actif par défaut.
+// provideZonelessChangeDetection() n'est requis qu'en Angular v20.
+// Vérifier qu'aucun provideZoneChangeDetection() ne réactive Zone.js.
 export const appConfig = {
-  providers: [
-    provideZonelessChangeDetection()
-  ]
+  providers: [provideRouter(routes)]
 };
 ```
 
@@ -611,7 +609,7 @@ Angular architecture priorities for 2026 (v22 stable) :
 
 1. **Standalone Components**: Par défaut pour tous les nouveaux composants
 2. **Signals**: Primitive réactive principale (état synchrone)
-3. **Zoneless (par défaut v21+)**: `provideZonelessChangeDetection()` — +30-40% performance
+3. **Zoneless (par défaut depuis v21)**: aucun provider requis en v22 (`provideZonelessChangeDetection()` seulement en v20) — gains de performance à mesurer
 4. **httpResource()**: Chargement déclaratif avec états automatiques (stable v20+)
 5. **OnPush par défaut (v22)**: Stratégie de change detection par défaut pour les composants CLI — plus besoin de le spécifier
 6. **HttpClient Fetch par défaut (v22)**: `HttpClient` utilise désormais l'API `fetch` native au lieu de `XMLHttpRequest` — meilleure intégration SSR et streaming

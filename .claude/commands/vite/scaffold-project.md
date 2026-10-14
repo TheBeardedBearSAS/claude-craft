@@ -85,7 +85,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
       fileName: (format) => `my-lib.${format === 'es' ? 'js' : 'cjs'}`,
     },
-    rollupOptions: {
+    rolldownOptions: {
       // Externalize peer dependencies that consumers must provide
       external: [],
     },

@@ -1,11 +1,11 @@
 # Stratégie de Tests React 19 + Compiler 1.0 — Référence Complète
 
-**Versions :** React 19.2+ | React Compiler 1.0 | Vitest 4.1+ | Playwright
+**Versions :** React 19.2+ | React Compiler 1.0 | Vitest 5 | Playwright
 
 ## Compatibilité React Compiler 1.0
 
 **React Compiler 1.0** (auto-memoization) est compatible avec tous les outils de tests React :
-- **Vitest** + **React Testing Library / Browser Mode** : aucun changement requis
+- **Vitest** + **React Testing Library / vitest-browser-react (Browser Mode)** : aucun changement requis
 - **Playwright** : aucun changement requis
 - **MSW** : aucun changement requis
 
@@ -15,20 +15,21 @@ Les tests restent **comportementaux** (pas d'implémentation testée), donc l'op
 
 Source : [react.dev/blog/2025/10/07/react-compiler-1](https://react.dev/blog/2025/10/07/react-compiler-1)
 
-## Configuration Vitest 4 Browser Mode
+## Configuration Vitest 5 Browser Mode
 
 ```typescript
 // vitest.config.ts
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import { playwright } from '@vitest/browser-playwright';
 
 export default defineConfig({
   plugins: [react()],
   test: {
     browser: {
       enabled: true,
-      name: 'chromium', // ou 'firefox', 'webkit'
-      provider: 'playwright',
+      provider: playwright(),
+      instances: [{ browser: 'chromium' }], // ou 'firefox', 'webkit'
     },
     globals: true,
   },
@@ -39,15 +40,15 @@ export default defineConfig({
 
 ```typescript
 // Button.test.tsx
-import { render, screen, userEvent } from '@vitest/browser/context';
+import { render } from 'vitest-browser-react';
 import { Button } from './Button';
 
 test('handles click events', async () => {
   const handleClick = vi.fn();
-  render(<Button onClick={handleClick}>Click me</Button>);
-  
-  await userEvent.click(screen.getByText('Click me'));
-  
+  const screen = render(<Button onClick={handleClick}>Click me</Button>);
+
+  await screen.getByText('Click me').click();
+
   expect(handleClick).toHaveBeenCalledOnce();
 });
 ```
@@ -56,7 +57,7 @@ test('handles click events', async () => {
 
 ## Playwright Component Testing
 
-Alternative supérieure à React Testing Library — browser réel, debugging visuel.
+Alternative à React Testing Library — browser réel, debugging visuel (RTL 16 reste maintenu et valide pour les suites JSDOM).
 
 ```typescript
 // Button.test.tsx
@@ -77,7 +78,7 @@ test('handles click events', async ({ mount }) => {
 });
 ```
 
-**Source :** [Playwright Component Testing](https://playwright.dev/docs/test-components)
+**Source :** [vitest-browser-react](https://github.com/vitest-community/vitest-browser-react), [Playwright Component Testing](https://playwright.dev/docs/test-components)
 
 ## Mutation Testing avec Stryker
 

@@ -22,7 +22,7 @@
 | Setting | Value |
 |---------|-------|
 | **Production regions** | {{DEPLOY_REGIONS}} <!-- e.g. iad1, cdg1 — see vercel.json "regions" -->|
-| **Functions runtime** | Node.js runtime (Fluid Compute) <!-- Edge Runtime is deprecated — do not select for new projects --> |
+| **Functions runtime** | Node.js runtime (Fluid Compute) <!-- Edge Runtime is discouraged — do not select for new projects --> |
 | **Cron Jobs** | {{CRON_JOBS_SUMMARY}} <!-- none, or list of schedule/path pairs from vercel.json "crons" --> |
 | **Preview Deployments** | {{PREVIEW_POLICY}} <!-- e.g. auto on every PR, restricted to internal branches --> |
 

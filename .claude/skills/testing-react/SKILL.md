@@ -1,12 +1,12 @@
 ---
 name: testing-react
-description: Stratégie de Tests React 19 + Compiler 1.0. Use when writing tests, reviewing test coverage, or setting up testing.
+description: Stratégie de Tests React 19.3 + Compiler 1.0. Use when writing tests, reviewing test coverage, or setting up testing.
 context: fork
 ---
 
 # Stratégie de Tests React 19 + Compiler 1.0
 
-**Versions :** React 19.2+ | React Compiler 1.0 | Vitest 4.1+ | Playwright
+**Versions :** React 19.2+ | React Compiler 1.0 | Vitest 5 | Playwright
 
 React Compiler 1.0 (auto-memoization) est transparent pour les tests — tester le comportement visible, jamais les optimisations internes.
 
@@ -14,23 +14,25 @@ React Compiler 1.0 (auto-memoization) est transparent pour les tests — tester 
 
 | Type | Outil | Usage |
 |------|-------|-------|
-| **Unit/Composants** | **Vitest 4.1+** Browser Mode | Chromium/Firefox/WebKit natif |
+| **Unit/Composants** | **Vitest 5** Browser Mode | Chromium/Firefox/WebKit natif |
+| **Composants (navigateur)** | **vitest-browser-react** | `render` + locators, intégré à Vitest Browser Mode |
 | **Component Testing** | **Playwright CT** | Alternative à RTL — browser réel |
+| **Composants (JSDOM)** | **React Testing Library 16** | Toujours maintenu — pertinent pour les suites JSDOM existantes |
 | **E2E** | **Playwright** | Flows utilisateur complets |
 | **Mutation** | **Stryker** | Qualité des tests (score >= 80%) |
 | **Property-based** | **fast-check** | Génération de cas de test |
 
-Abandonner : JSDOM (lourd, incomplet) et React Testing Library (remplacé par Playwright CT).
+Privilégier un vrai navigateur (Vitest Browser Mode, Playwright CT) plutôt que JSDOM (lourd, incomplet). React Testing Library 16 reste maintenu : l'utiliser pour les suites JSDOM existantes, ne pas migrer sans bénéfice.
 
-**Sources :** [Vitest 4](https://vitest.dev/blog/vitest-4), [Playwright Component Testing](https://playwright.dev/docs/test-components), [Stryker Mutator](https://stryker-mutator.io/)
+**Sources :** [Vitest Browser Mode](https://vitest.dev/guide/browser/), [vitest-browser-react](https://github.com/vitest-community/vitest-browser-react), [Playwright Component Testing](https://playwright.dev/docs/test-components), [Stryker Mutator](https://stryker-mutator.io/)
 
 ## Invariants non-négociables
 
-- Vitest Browser Mode (provider: playwright) — pas de JSDOM
+- Vitest Browser Mode (provider: playwright) pour les nouveaux tests composants — éviter JSDOM
 - Tester le comportement (ce que voit l'utilisateur), pas l'implémentation
 - Ne jamais tester les optimisations du React Compiler (memoization)
 - Mutation score >= 80% via Stryker avant merge
-- Vitest workspaces pour monorepos (unit / browser séparés)
+- Vitest `projects` pour monorepos (unit / browser séparés) — `workspace` est déprécié
 - MSW pour mocker les appels API (pas de `fetch` mockée à la main)
 
 ## Checklist par type

@@ -3,7 +3,7 @@
 ## const Widgets
 
 ```dart
-//  GOOD - const
+// âœ… GOOD - const
 class MyWidget extends StatelessWidget {
   const MyWidget({super.key});
 
@@ -19,7 +19,7 @@ class MyWidget extends StatelessWidget {
   }
 }
 
-// L BAD - no const
+// âŒ BAD - no const
 class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class MyWidget extends StatelessWidget {
 ## ListView Optimization
 
 ```dart
-//  GOOD - ListView.builder (lazy loading)
+// âœ… GOOD - ListView.builder (lazy loading)
 ListView.builder(
   itemCount: items.length,
   itemBuilder: (context, index) {
@@ -47,7 +47,7 @@ ListView.builder(
   },
 )
 
-// L BAD - ListView with children (all created at once)
+// âŒ BAD - ListView with children (all created at once)
 ListView(
   children: items.map((item) => ItemWidget(item)).toList(),
 )
@@ -123,7 +123,7 @@ VisibilityDetector(
 ## Avoid Rebuilds
 
 ```dart
-//  GOOD - Separate widgets
+// âœ… GOOD - Separate widgets
 class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -136,12 +136,12 @@ class MyPage extends StatelessWidget {
   }
 }
 
-//  GOOD - RepaintBoundary
+// âœ… GOOD - RepaintBoundary
 RepaintBoundary(
   child: ComplexWidget(),
 )
 
-//  GOOD - AutomaticKeepAliveClientMixin for TabBar
+// âœ… GOOD - AutomaticKeepAliveClientMixin for TabBar
 class MyTab extends StatefulWidget {
   @override
   State<MyTab> createState() => _MyTabState();
@@ -213,16 +213,16 @@ heavy.showFeature();
 ## Checklist de Rendimiento
 
 ```
-¡ const widgets everywhere possible
-¡ ListView.builder for lists
-¡ Image caching enabled
-¡ Lazy loading of images
-¡ Avoid unnecessary rebuilds
-¡ RepaintBoundary for complex widgets
-¡ Code splitting for heavy features
-¡ Profile mode tested
-¡ Frame rate > 60 FPS
-¡ Startup time < 2s
+â–¡ const widgets everywhere possible
+â–¡ ListView.builder for lists
+â–¡ Image caching enabled
+â–¡ Lazy loading of images
+â–¡ Avoid unnecessary rebuilds
+â–¡ RepaintBoundary for complex widgets
+â–¡ Code splitting for heavy features
+â–¡ Profile mode tested
+â–¡ Frame rate > 60 FPS
+â–¡ Startup time < 2s
 ```
 
 ---

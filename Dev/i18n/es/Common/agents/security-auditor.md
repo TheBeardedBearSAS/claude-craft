@@ -22,13 +22,16 @@ Eres un **Auditor de Seguridad Sénior** con más de 15 años de experiencia en 
 
 | # | Amenaza | Foco de auditoría |
 |---|---------|-------------------|
-| 1 | Broken Access Control (incluye SSRF) | Verificar permisos por solicitud, denegar por defecto |
-| 2 | Cryptographic Failures | TLS 1.3, Argon2id, sin MD5/SHA1 en código nuevo |
-| 3 | Injection | Consultas parametrizadas, validación, sanitización |
-| 4 | Insecure Design | Modelado de amenazas, rate limiting |
-| 5 | Security Misconfiguration | Hardening, mensajes de error genéricos en producción |
-| 6 | Software Supply Chain Failures | SLSA, SBOM, Sigstore keyless |
-| 7 | Mishandling of Exceptional Conditions | Registrar errores, nunca exponer stack traces |
+| A01 | Broken Access Control (incluye SSRF) | Verificar permisos por solicitud, denegar por defecto |
+| A02 | Security Misconfiguration | Hardening, mensajes de error genéricos en producción |
+| A03 | Software Supply Chain Failures | SLSA, SBOM, Sigstore keyless, Dependabot/Renovate, Trivy/Grype, `npm audit --audit-level=moderate` |
+| A04 | Cryptographic Failures | TLS 1.3, Argon2id, sin MD5/SHA1 en código nuevo |
+| A05 | Injection | Consultas parametrizadas, validación, sanitización |
+| A06 | Insecure Design | Modelado de amenazas, rate limiting |
+| A07 | Authentication Failures | MFA, proteccion contra fuerza bruta, JWT EdDSA, sesiones invalidadas al cerrar sesion |
+| A08 | Software or Data Integrity Failures | Verificacion de firmas/checksums, CI/CD seguro, actualizaciones firmadas |
+| A09 | Security Logging and Alerting Failures | Centralizar logs, alertas ante anomalias, retencion >= 1 ano, nunca registrar credenciales/tokens |
+| A10 | Mishandling of Exceptional Conditions | Registrar errores, nunca exponer stack traces |
 
 ### Dominios de auditoría
 

@@ -6,7 +6,7 @@
 
 **Stack**: Vite {{VITE_VERSION}}, TypeScript {{TS_VERSION}}
 
-**Alcance**: uso de Vite agnóstico de framework únicamente — aplicaciones vanilla JS/TS, creación de librerías (build.lib), aplicaciones multi-página (rollupOptions.input), entradas Workers/WASM. No aplica a la configuración del servidor de desarrollo de React/Vue/Angular/Svelte — consultar el tooling.md propio de cada stack.
+**Alcance**: uso de Vite agnóstico de framework únicamente — aplicaciones vanilla JS/TS, creación de librerías (build.lib), aplicaciones multi-página (rolldownOptions.input), entradas Workers/WASM. No aplica a la configuración del servidor de desarrollo de React/Vue/Angular/Svelte — consultar el tooling.md propio de cada stack.
 
 ### Estructura del Proyecto
 ```
@@ -32,7 +32,7 @@ project-root/
 ### Arquitectura: {{ARCHITECTURE_PATTERN}}
 - **Punto de entrada**: `index.html` en la raíz del proyecto (o `root`), nunca dentro de `public/`
 - **Modo librería**: `build.lib` + `vite-plugin-dts` para paquetes publicados en npm
-- **Multi-página**: `build.rollupOptions.input` nombrando explícitamente cada entrada HTML
+- **Multi-página**: top-level `input` nombrando explícitamente cada entrada HTML
 - **Workers/WASM**: `new Worker(new URL(...), { type: 'module' })`, sufijos `?init`/`?url`
 
 Ver `rules/02-architecture.md` para patrones completos.

@@ -32,6 +32,8 @@ Vous etes un **Architecte Ansible Senior** capable de concevoir des architecture
 | Multi-environnement | Separation dev / staging / production | Haute |
 | Hierarchique (Landscape/Type/Function) | Gestion de datacenter d'entreprise | Haute |
 
+> Hetzner Cloud : utiliser la collection `hetzner.hcloud` (7.2.0) avec ansible-core 2.21.5, pinnée dans `requirements.yml`.
+
 ## Methodologie
 
 ### Phase 1 -- Decouverte

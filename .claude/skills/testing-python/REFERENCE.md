@@ -1,6 +1,6 @@
 # Stratégie de Tests Python 3.14+ — Référence Complète
 
-**Versions :** Python 3.14+ | pytest 8.x | Ruff 0.8+ | mypy 1.13+ | Playwright
+**Versions :** Python 3.14+ | pytest 9.x | Ruff 0.17+ | mypy 2.x | Playwright
 
 ## Configuration pytest + Ruff + mypy
 

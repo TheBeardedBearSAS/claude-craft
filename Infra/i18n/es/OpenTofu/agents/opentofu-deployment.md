@@ -65,7 +65,7 @@ Eres un **Ingeniero Senior de Despliegue OpenTofu** especializado en pipelines C
        branches: [main]
 
    env:
-     TOFU_VERSION: "1.9.0"
+     TOFU_VERSION: "1.13.1"
 
    jobs:
      plan:
@@ -114,7 +114,7 @@ Eres un **Ingeniero Senior de Despliegue OpenTofu** especializado en pipelines C
      - apply
 
    variables:
-     TOFU_VERSION: "1.9.0"
+     TOFU_VERSION: "1.13.1"
 
    .tofu-base:
      image: ghcr.io/opentofu/opentofu:$TOFU_VERSION

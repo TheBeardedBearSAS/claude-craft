@@ -5,7 +5,7 @@ description: Hetzner Cloud infrastructure architecture designer
 
 # Hcloud Architect
 
-> ⚠️ **Migração obrigatória antes de 2026-07-01**: o parâmetro `location` está deprecado em favor de `location`. Provider Terraform do Hetzner Cloud >= 1.58.0. Fonte: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+> ⚠️ **`datacenter` removido (2026-07-01)**: substituído por `location`; os endpoints `datacenter` retornam HTTP 410 desde 2026-10-01. Usar `location = "fsn1"` em vez de `datacenter`. Provider Terraform da Hetzner Cloud >= 1.70.0. Fonte: https://docs.hetzner.cloud/changelog e https://github.com/hetznercloud/terraform-provider-hcloud/releases
 
 ## Identidade
 
@@ -135,7 +135,7 @@ hcloud placement-group create --name web-spread --type spread
 # Servers
 hcloud server create \
   --name web-01 \
-  --type cx22 \
+  --type cx23 \
   --image ubuntu-24.04 \
   --location fsn1 \
   --ssh-key deploy-key \
@@ -199,12 +199,22 @@ hcloud network add-subnet primary-net --type cloud --network-zone eu-central --i
 
 # Servers in different locations with placement groups
 hcloud placement-group create --name pg-primary --type spread
-hcloud server create --name app-fsn-01 --type cpx31 --image ubuntu-24.04 \
+hcloud server create --name app-fsn-01 --type cpx32 --image ubuntu-24.04 \
   --location fsn1 --placement-group pg-primary --network primary-net
 
-hcloud server create --name app-hel-01 --type cpx31 --image ubuntu-24.04 \
+hcloud server create --name app-hel-01 --type cpx32 --image ubuntu-24.04 \
   --location hel1 --network primary-net
 ```
+
+## Mudanças da API Hetzner a considerar (2026)
+
+- Os Load Balancers aceitam Primary IPs existentes na criação (`public_net.ipv4` / `public_net.ipv6`; provider >= 1.70.0: `ipv4_id` / `ipv6_id`); a atribuição não pode ser alterada depois (changelog 2026-10-05)
+- Primary IPs e Floating IPs devem ser desatribuídos antes de serem excluídos: a API retorna `must_be_unassigned` (desde 2026-05-01)
+- `dns_ptr` é obrigatório nos pedidos de alteração (Primary IPs, Floating IPs, Servers, Load Balancers) desde 2026-09-30; `null` redefine o ponteiro
+- O campo `deprecated` dos server types é removido em 2026-11-02: ler `locations[].deprecation` em vez disso (`null` = não obsoleto)
+- O provider Terraform 1.69 abandona o Terraform 1.14 (1.16 adicionado); manter o provider hcloud em `>= 1.70.0`, CLI hcloud 1.70.1
+- Os server types cx22/cx32/cx42/cx52 e cpx11-cpx51 não podem mais ser pedidos desde 2026-01-01: usar cx23/cx33/cx43/cx53 e cpx12/cpx22/cpx32/cpx42/cpx52/cpx62
+- Ansible: usar a coleção `hetzner.hcloud` (7.2.0, requer um ansible-core recente, ex. 2.21.5) e fixar a versão em `requirements.yml`
 
 ## Checklist de Arquitetura
 

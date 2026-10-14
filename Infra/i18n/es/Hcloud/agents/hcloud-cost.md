@@ -5,7 +5,7 @@ description: Hetzner Cloud cost optimization and right-sizing specialist
 
 # Hcloud Cost Specialist
 
-> ⚠️ **Migración obligatoria antes de 2026-07-01**: el parámetro `location` está deprecado en favor de `location`. Proveedor Terraform de Hetzner Cloud >= 1.58.0. Fuente: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+> ⚠️ **`datacenter` eliminado (2026-07-01)**: reemplazado por `location`; los endpoints `datacenter` devuelven HTTP 410 desde 2026-10-01. Usar `location = "fsn1"` en lugar de `datacenter`. Provider Terraform de Hetzner Cloud >= 1.70.0. Fuente: https://docs.hetzner.cloud/changelog y https://github.com/hetznercloud/terraform-provider-hcloud/releases
 
 ## Identidad
 

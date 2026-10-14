@@ -4,7 +4,8 @@
 
 ### Vue Router 4 → 5
 
-Vue Router 5 est **composition-API-first** : les navigation guards (`beforeEach`, `beforeRouteEnter`, etc.) sont désormais des composables de premier rang utilisables directement dans `<script setup>`. Le hook `onBeforeRouteLeave` / `onBeforeRouteUpdate` remplace les guards d'options. La création du router reste identique (`createRouter` / `createWebHistory`), mais les types internes ont été révisés — les imports depuis `vue-router` sont inchangés côté usage courant.
+Vue Router 5 n'introduit **aucun breaking change** pour qui vient de la v4 sans file-based routing : la mise à jour se fait sans modification de code (seule exception : le build iife n'inclut plus `@vue/devtools-api`). Les `onBeforeRouteLeave` / `onBeforeRouteUpdate` et `createRouter` / `createWebHistory` restent inchangés. Les utilisateurs d'`unplugin-vue-router` doivent changer leurs imports (voir plus bas). Les **data loaders** (expérimentaux) s'importent depuis `vue-router/experimental` (ex. `unplugin-vue-router/data-loaders/*` → `vue-router/experimental`). Source : https://router.vuejs.org/guide/migration/v4-to-v5.html
+
 
 #### Vue Router 5 — File-Based Routing (nouveau)
 
@@ -52,7 +53,7 @@ Référence : https://router.vuejs.org/guide/migration/ | https://uvr.esm.is/
 ### Vite 5 → 8
 
 - **Vite 6 (Environment API)** : nouvelle API multi-environment (`createEnvironment`) pour orchestrer client, SSR et edge dans un seul `vite.config`. Optionnel et rétrocompatible.
-- **Vite 8 (Rolldown bundler par défaut)** : Rolldown (port Rust de Rollup) remplace esbuild en bundler prod. Build 3-5× plus rapide, sortie identique. `rollupOptions` restent supportés.
+- **Vite 8 (Rolldown bundler par défaut)** : Rolldown (port Rust de Rollup) remplace esbuild en bundler prod. Build 3-5× plus rapide, sortie identique. `build.rollupOptions` est **déprécié** depuis Vite 8 : utiliser `build.rolldownOptions`.
 
 Référence : https://vite.dev/blog/
 
@@ -374,7 +375,8 @@ pnpm test
   "dependencies": {
     "vue": "^3.5.0",
     "vue-router": "^5.0.0",
-    "pinia": "^3.0.0"
+    "pinia": "^4.0.0",
+    "@vue/devtools-api": "^8.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

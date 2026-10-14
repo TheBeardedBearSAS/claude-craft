@@ -105,7 +105,90 @@ if (!in_array(parse_url($url, PHP_URL_HOST), $allowedDomains)) {
 }
 ```
 
-### A02:2025 - Cryptographic Failures
+### A02:2025 - Security Misconfiguration
+
+```php
+<?php
+// .env configuration for production
+// APP_ENV=production
+// APP_DEBUG=false
+// APP_KEY=base64:your-secure-key-here
+
+// config/app.php
+return [
+    'debug' => env('APP_DEBUG', false),
+    'env' => env('APP_ENV', 'production'),
+];
+
+// Disable unnecessary features in production
+// config/debugbar.php
+return [
+    'enabled' => env('DEBUGBAR_ENABLED', false),
+];
+
+// Secure headers middleware
+class SecureHeaders
+{
+    public function handle(Request $request, Closure $next): Response
+    {
+        $response = $next($request);
+
+        // X-XSS-Protection est déprécié — s'appuyer sur CSP Level 3
+        return $response
+            ->header('X-Content-Type-Options', 'nosniff')
+            ->header('X-Frame-Options', 'DENY')
+            ->header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests")
+            ->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
+            ->header('Referrer-Policy', 'strict-origin-when-cross-origin')
+            ->header('Permissions-Policy', 'geolocation=(), microphone=(), camera=()')
+            ->header('Cross-Origin-Opener-Policy', 'same-origin')
+            ->header('Cross-Origin-Embedder-Policy', 'require-corp')
+            ->header('Cross-Origin-Resource-Policy', 'same-origin');
+    }
+}
+
+// Register in bootstrap/app.php
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->append(SecureHeaders::class);
+})
+```
+
+### A03:2025 - Software Supply Chain Failures
+
+```bash
+# Regular security audits — exclure les dev deps en production
+composer audit --no-dev
+
+# Update dependencies regularly
+composer update --with-all-dependencies
+
+# Check for security advisories
+composer outdated --direct
+```
+
+```json
+// composer.json - Pin versions and use version constraints
+{
+    "require": {
+        "php": "^8.3",
+        "laravel/framework": "^13.0",
+        "laravel/sanctum": "^4.0"
+    }
+}
+```
+
+```bash
+# Générer un SBOM (CycloneDX) à chaque build CI
+composer require --dev cyclonedx/cyclonedx-php-composer
+composer make-bom --output-format=JSON --output-file=sbom.json
+
+# Scanner les images Docker avec Trivy
+trivy image --exit-code 1 --severity HIGH,CRITICAL myapp:latest
+```
+
+> Utiliser **Renovate** ou **Dependabot** pour les mises à jour automatiques avec gate CI.
+
+### A04:2025 - Cryptographic Failures
 
 > **Règle obligatoire (project rule 11) :** Utiliser **Argon2id** pour les mots de passe. Ne jamais utiliser bcrypt en nouveau code.
 
@@ -156,7 +239,7 @@ if (Hash::check($plainPassword, $hashedPassword)) {
 // GOOD: Use a payment processor that handles card data
 ```
 
-### A03:2025 - Injection
+### A05:2025 - Injection
 
 ```php
 <?php
@@ -187,7 +270,7 @@ $process->run();
 // shell_exec("ls -la $directory");
 ```
 
-### A04:2025 - Insecure Design
+### A06:2025 - Insecure Design
 
 ```php
 <?php
@@ -239,138 +322,7 @@ public function placeOrder(Order $order): void
 }
 ```
 
-### A05:2025 - Security Misconfiguration
-
-```php
-<?php
-// .env configuration for production
-// APP_ENV=production
-// APP_DEBUG=false
-// APP_KEY=base64:your-secure-key-here
-
-// config/app.php
-return [
-    'debug' => env('APP_DEBUG', false),
-    'env' => env('APP_ENV', 'production'),
-];
-
-// Disable unnecessary features in production
-// config/debugbar.php
-return [
-    'enabled' => env('DEBUGBAR_ENABLED', false),
-];
-
-// Secure headers middleware
-class SecureHeaders
-{
-    public function handle(Request $request, Closure $next): Response
-    {
-        $response = $next($request);
-
-        // X-XSS-Protection est déprécié — s'appuyer sur CSP Level 3
-        return $response
-            ->header('X-Content-Type-Options', 'nosniff')
-            ->header('X-Frame-Options', 'DENY')
-            ->header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests")
-            ->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
-            ->header('Referrer-Policy', 'strict-origin-when-cross-origin')
-            ->header('Permissions-Policy', 'geolocation=(), microphone=(), camera=()')
-            ->header('Cross-Origin-Opener-Policy', 'same-origin')
-            ->header('Cross-Origin-Embedder-Policy', 'require-corp')
-            ->header('Cross-Origin-Resource-Policy', 'same-origin');
-    }
-}
-
-// Register in bootstrap/app.php
-->withMiddleware(function (Middleware $middleware) {
-    $middleware->append(SecureHeaders::class);
-})
-```
-
-### A06:2025 - Software Supply Chain Failures
-
-```bash
-# Regular security audits — exclure les dev deps en production
-composer audit --no-dev
-
-# Update dependencies regularly
-composer update --with-all-dependencies
-
-# Check for security advisories
-composer outdated --direct
-```
-
-```json
-// composer.json - Pin versions and use version constraints
-{
-    "require": {
-        "php": "^8.3",
-        "laravel/framework": "^13.0",
-        "laravel/sanctum": "^4.0"
-    }
-}
-```
-
-```bash
-# Générer un SBOM (CycloneDX) à chaque build CI
-composer require --dev cyclonedx/cyclonedx-php-composer
-composer make-bom --output-format=JSON --output-file=sbom.json
-
-# Scanner les images Docker avec Trivy
-trivy image --exit-code 1 --severity HIGH,CRITICAL myapp:latest
-```
-
-> Utiliser **Renovate** ou **Dependabot** pour les mises à jour automatiques avec gate CI.
-
-### A07:2025 - Mishandling of Exceptional Conditions
-
-```php
-<?php
-// app/Exceptions/Handler.php — ne jamais exposer les stack traces en production
-namespace App\Exceptions;
-
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Throwable;
-use Illuminate\Support\Facades\Log;
-
-class Handler extends ExceptionHandler
-{
-    public function register(): void
-    {
-        $this->renderable(function (Throwable $e, Request $request): ?JsonResponse {
-            if ($request->expectsJson()) {
-                // Logger l'erreur complète côté serveur
-                Log::error('Unhandled exception', [
-                    'exception' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'user_id' => auth()->id(),
-                    'url' => $request->fullUrl(),
-                ]);
-
-                // Retourner une réponse générique au client
-                return response()->json(
-                    ['message' => 'An unexpected error occurred.'],
-                    500
-                );
-            }
-
-            return null; // Laisser le handler par défaut gérer les vues
-        });
-    }
-}
-```
-
-```env
-# Désactiver les stack traces en production — obligatoire
-APP_DEBUG=false
-```
-
-> **Règle :** Ne jamais retourner de stack trace en production. Logger via `Log::error()` centralement et retourner des messages génériques.
-
-### A08:2025 - Authentication Failures
+### A07:2025 - Authentication Failures
 
 **Nouveauté Laravel 13 :** Passkey Authentication (WebAuthn) intégré dans Breeze/Jetstream/Fortify (https://laravel.com/docs/13.x/passkey).
 
@@ -455,7 +407,7 @@ use Laravel\Fortify\Features;
 ],
 ```
 
-### Software and Data Integrity
+### A08:2025 - Software or Data Integrity Failures
 
 ```php
 <?php
@@ -479,8 +431,10 @@ public function download(Request $request, string $file)
     return Storage::download($file);
 }
 
-// CSRF protection (enabled by default)
-// All POST, PUT, PATCH, DELETE requests require CSRF token
+// Request forgery protection (enabled by default, Laravel 13)
+// `Illuminate\Foundation\Http\Middleware\PreventRequestForgery` (web group) checks the
+// Sec-Fetch-Site header first (origin verification), then falls back to the CSRF token.
+// Origin-only mode (403 on failure instead of 419): $middleware->preventRequestForgery(originOnly: true);
 <form method="POST" action="/orders">
     @csrf
     <!-- form fields -->
@@ -492,7 +446,7 @@ public function download(Request $request, string $file)
         crossorigin="anonymous"></script>
 ```
 
-### A09:2025 - Security Logging and Monitoring
+### A09:2025 - Security Logging and Alerting Failures
 
 ```php
 <?php
@@ -550,6 +504,54 @@ class Order extends Model
     }
 }
 ```
+
+### A10:2025 - Mishandling of Exceptional Conditions
+
+```php
+<?php
+// app/Exceptions/Handler.php — ne jamais exposer les stack traces en production
+namespace App\Exceptions;
+
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Throwable;
+use Illuminate\Support\Facades\Log;
+
+class Handler extends ExceptionHandler
+{
+    public function register(): void
+    {
+        $this->renderable(function (Throwable $e, Request $request): ?JsonResponse {
+            if ($request->expectsJson()) {
+                // Logger l'erreur complète côté serveur
+                Log::error('Unhandled exception', [
+                    'exception' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'user_id' => auth()->id(),
+                    'url' => $request->fullUrl(),
+                ]);
+
+                // Retourner une réponse générique au client
+                return response()->json(
+                    ['message' => 'An unexpected error occurred.'],
+                    500
+                );
+            }
+
+            return null; // Laisser le handler par défaut gérer les vues
+        });
+    }
+}
+```
+
+```env
+# Désactiver les stack traces en production — obligatoire
+APP_DEBUG=false
+```
+
+> **Règle :** Ne jamais retourner de stack trace en production. Logger via `Log::error()` centralement et retourner des messages génériques.
 
 ## Authentication Best Practices
 

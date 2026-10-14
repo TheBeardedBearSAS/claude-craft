@@ -31,7 +31,9 @@ Identifizieren:
 - Indizes und Constraints
 - Validierungen
 
-### Schritt 2: SQLAlchemy 2.0 Modell
+### Schritt 2: SQLAlchemy 2.1 Modell
+
+> **Migration 2.0 -> 2.1 (wichtigste Punkte):** Python 3.11+ erforderlich; `greenlet` wird nicht mehr standardmäßig installiert (asyncio: Extra `sqlalchemy[asyncio]`); Standard-PostgreSQL-Treiber ist psycopg 3; das Autoflush der `Session` ist jetzt unbedingt (auch Core/Text); `Select.filter_by()` löst bei mehrdeutigen Namen `AmbiguousColumnError` aus; Defaults gemappter Dataclasses werden über Deskriptoren geliefert. Quelle: docs.sqlalchemy.org/en/21/changelog/migration_21.html
 
 [Vollständiges Modell mit Mapped, Relationships, Constraints erstellen]
 

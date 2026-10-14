@@ -140,7 +140,7 @@ async def search_users(
 
 ### Hachage de mot de passe avec Argon2id (pwdlib)
 
-> **passlib n'est plus maintenu depuis 2020 et est incompatible avec Python 3.13+ (le module stdlib `crypt` dont il dépendait a été supprimé). bcrypt est explicitement interdit dans le nouveau code par la règle projet 11 (mandat OWASP 2026 : Argon2id). Utiliser `pwdlib` avec Argon2id à la place.**
+> **passlib n'est plus maintenu depuis 2020 et est incompatible avec Python 3.13+ (le module stdlib `crypt` dont il dépendait a été supprimé). bcrypt est réservé au legacy selon la règle projet 11 (OWASP : Argon2id d'abord ; bcrypt uniquement si Argon2id/scrypt sont indisponibles). Utiliser `pwdlib` avec Argon2id à la place.**
 
 ```python
 # pip install pwdlib[argon2]
@@ -538,7 +538,7 @@ pip-audit --fix
 # pyproject.toml - Epingler les versions pour la securite
 [project]
 dependencies = [
-    "fastapi>=0.115.0,<0.116.0",
+    "fastapi>=0.143.0,<1.0.0",
     "pydantic>=2.10.0,<3.0.0",
     "sqlalchemy>=2.0.0,<3.0.0",
 ]

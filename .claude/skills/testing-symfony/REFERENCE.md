@@ -1,20 +1,18 @@
 # Stratégie de Tests Symfony 8.1 / PHP 8.5 — Référence Complète
 
-**Versions :** Symfony 8.1+ | PHP 8.5 | Pest 4.5+ | PHPUnit 12 | Playwright
+**Versions :** Symfony 8.1+ | PHP 8.5 | Pest 5 | PHPUnit 13 | Playwright
 
-## Configuration Pest 4
+## Configuration Pest 5
 
 ```php
 // Pest.php
 <?php
 
-use Symfony\Component\Panther\PantherTestCase;
-
 pest()->extend(Tests\TestCase::class)->in('Feature');
 pest()->extend(Tests\TestCase::class)->in('Unit');
 
-// Browser testing
-pest()->extend(PantherTestCase::class)->in('Browser');
+// Browser testing : plugin navigateur Pest (Playwright), pas de classe de base Panther requise
+pest()->extend(Tests\TestCase::class)->in('Browser');
 
 // Arch tests
 pest()->arch('strict types')
@@ -26,9 +24,9 @@ pest()->arch('no helpers')
     ->not->toUse(['dd', 'dump']);
 ```
 
-**Source :** [Pest 4 Configuration](https://pestphp.com/docs/configuring-tests)
+**Source :** [Pest Configuration](https://pestphp.com/docs/configuring-tests)
 
-## Tests Unit avec Pest 4
+## Tests Unit avec Pest 5
 
 ```php
 // tests/Unit/Service/OrderServiceTest.php
@@ -51,39 +49,35 @@ test('create order returns order with id', function () {
 });
 ```
 
-## Pest 4 Browser Testing (Playwright intégré)
+## Pest 5 Browser Testing (Playwright intégré)
 
-Plus besoin de Panther ou configuration externe — Playwright natif dans Pest 4.
+Plus besoin de Panther pour l'E2E ni de configuration externe — Playwright natif dans Pest 5 (plugin navigateur de Pest, `visit()`).
 
 ```php
 // tests/Browser/LoginTest.php
 <?php
 
 test('user can login', function () {
-    $this->browse(function (Browser $browser) {
-        $browser->visit('/login')
-            ->type('email', 'alice@example.com')
-            ->type('password', 'secret')
-            ->press('Login')
-            ->assertPathIs('/dashboard')
-            ->assertSee('Welcome Alice');
-    });
+    visit('/login')
+        ->fill('email', 'alice@example.com')
+        ->fill('password', 'secret')
+        ->click('Login')
+        ->assertPathIs('/dashboard')
+        ->assertSee('Welcome Alice');
 });
 
 test('login validates email format', function () {
-    $this->browse(function (Browser $browser) {
-        $browser->visit('/login')
-            ->type('email', 'invalid-email')
-            ->type('password', 'secret')
-            ->press('Login')
-            ->assertSee('Please provide a valid email');
-    });
+    visit('/login')
+        ->fill('email', 'invalid-email')
+        ->fill('password', 'secret')
+        ->click('Login')
+        ->assertSee('Please provide a valid email');
 });
 ```
 
-**Source :** [Pest 4 Browser Testing](https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing)
+**Source :** [Pest Browser Testing](https://pestphp.com/docs/browser-testing)
 
-## Pest 4 Arch Tests améliorés
+## Pest 5 Arch Tests améliorés
 
 Presets réutilisables pour valider l'architecture.
 

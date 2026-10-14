@@ -98,7 +98,7 @@ php artisan up                             # Exit maintenance
 ### Laravel Pint (Formatter)
 
 ```bash
-# Install (included in Laravel 10+)
+# Install (included by default in new Laravel 13 applications)
 composer require laravel/pint --dev
 
 # Run
@@ -288,9 +288,9 @@ return RectorConfig::configure()
 
 | Composant | Version | Usage Laravel |
 |-----------|---------|---------------|
-| Docker Engine | 29.6.1 | BuildKit par défaut, SBOM natif |
-| FrankenPHP | 1.12.4 | Alternative moderne à PHP-FPM (Worker mode Octane) |
-| PgBouncer | 1.25.2 | Transaction pooling + prepared statements natifs (CVE-2026-6664/6667 patchées) |
+| Docker Engine | 29.9.0 | BuildKit par défaut, SBOM natif |
+| FrankenPHP | 1.13.0 | Alternative moderne à PHP-FPM (Worker mode Octane) |
+| PgBouncer | 1.26.0 | Transaction pooling + prepared statements natifs (CVE-2026-6664/6667 patchées) |
 
 **FrankenPHP + Laravel Octane** : 2-3× gains performance (Worker mode, HTTP/3, max_requests anti-leak).  
 **Sources** : https://frankenphp.dev/docs/laravel/ | https://laravel.com/docs/octane
@@ -298,8 +298,6 @@ return RectorConfig::configure()
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
-
 services:
     app:
         build:
@@ -619,7 +617,7 @@ npm install -g intelephense
 
 - [ ] Laravel Pint configured
 - [ ] PHPStan/Larastan at level 10 (PHPStan 2.0)
-- [ ] Pest 4 + Mutation Testing configured
+- [ ] Pest 5 + Mutation Testing configured
 - [ ] IDE Helper generated
 - [ ] Docker/Sail configured
 - [ ] CI/CD pipeline set up

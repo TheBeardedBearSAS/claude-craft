@@ -46,6 +46,8 @@ const SHOWCASE_FILES = [
   'website/.vitepress/theme/components/AgentShowcase.vue',
   'docs/PREREQUISITES.md',
   'docs/AGENT-TEAMS-GUIDE.md',
+  // Tableau des versions par stack (dérive détectée par l'audit fraîcheur 2026-10-13)
+  'docs/TECHNOLOGIES.md',
   // Settings templates distribués dans les 5 langues (TOKEN-001)
   'Dev/i18n/en/Common/templates/settings.json.template',
   'Dev/i18n/fr/Common/templates/settings.json.template',

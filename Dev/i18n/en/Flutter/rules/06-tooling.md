@@ -82,8 +82,6 @@ CMD ["flutter", "test"]
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
-
 services:
   flutter:
     build:
@@ -194,7 +192,7 @@ docker-shell: ## Interactive shell in Docker
 	docker run --rm -it -v $(PWD):/app my-flutter-app /bin/bash
 
 ci: analyze format-check test ## Complete CI pipeline
-	@echo " CI passed!"
+	@echo "✅ CI passed!"
 ```
 
 ---
@@ -260,21 +258,21 @@ endif
 #!/bin/bash
 set -e
 
-echo "=� Flutter project setup..."
+echo "🚀 Flutter project setup..."
 
 # Check Flutter
 if ! command -v flutter &> /dev/null; then
-    echo "L Flutter is not installed"
+    echo "❌ Flutter is not installed"
     exit 1
 fi
 
-echo "=� Installing dependencies..."
+echo "📦 Installing dependencies..."
 flutter pub get
 
-echo "=' Generating code..."
+echo "🔧 Generating code..."
 flutter pub run build_runner build --delete-conflicting-outputs
 
-echo " Setup complete!"
+echo "✅ Setup complete!"
 ```
 
 ### scripts/test_all.sh
@@ -283,21 +281,21 @@ echo " Setup complete!"
 #!/bin/bash
 set -e
 
-echo ">� Running all tests..."
+echo "🧪 Running all tests..."
 
-echo "1� Unit tests..."
+echo "1️⃣ Unit tests..."
 flutter test test/unit/
 
-echo "2� Widget tests..."
+echo "2️⃣ Widget tests..."
 flutter test test/widget/
 
-echo "3� Integration tests..."
+echo "3️⃣ Integration tests..."
 flutter test integration_test/
 
-echo "=� Generating coverage..."
+echo "📊 Generating coverage..."
 flutter test --coverage
 
-echo " All tests passed!"
+echo "✅ All tests passed!"
 ```
 
 ### scripts/build_all.sh
@@ -306,22 +304,22 @@ echo " All tests passed!"
 #!/bin/bash
 set -e
 
-echo "<� Building all platforms..."
+echo "🏗️ Building all platforms..."
 
-echo "=� Android APK..."
+echo "📱 Android APK..."
 flutter build apk --release
 
-echo "=� Android App Bundle..."
+echo "📱 Android App Bundle..."
 flutter build appbundle --release
 
-echo "<N iOS..."
+echo "🍎 iOS..."
 flutter build ios --release
 
-echo "< Web..."
+echo "🌐 Web..."
 flutter build web --release
 
-echo " Builds complete!"
-echo "=� Files available in build/"
+echo "✅ Builds complete!"
+echo "📦 Files available in build/"
 ```
 
 ---
@@ -543,7 +541,7 @@ make build-apk
 
 ### SwiftPM default on iOS
 
-Flutter 3.44+ uses **Swift Package Manager (SwiftPM)** as the default iOS plugin manager, replacing CocoaPods (still supported but deprecated for new projects).
+Flutter 3.47+ uses **Swift Package Manager (SwiftPM)** as the default iOS plugin manager, replacing CocoaPods (still supported but deprecated for new projects).
 
 ```bash
 # Verify SwiftPM migration
@@ -560,7 +558,7 @@ flutter:
   use-swift-package-manager: false
 ```
 
-**Impact:** plugins without SwiftPM support require `use-swift-package-manager: false` or migration by the plugin author. Most official pub.dev plugins already support SwiftPM since Flutter 3.22+.
+**Impact:** plugins without SwiftPM support require `use-swift-package-manager: false` or migration by the plugin author. Most official pub.dev plugins already support SwiftPM.
 
 **Source:** https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers
 
@@ -607,6 +605,14 @@ MaterialButton(onPressed: () {}, child: Text('OK'));
 ```
 
 Run `dart fix --apply` to automatically migrate detectable deprecations.
+
+### Breaking changes Flutter 3.44 and 3.47
+
+- **3.44**: `RawMenuAnchor` close order changed; `onReorder` deprecated; `TextInputConnection.setStyle` deprecated; `cacheExtent` / `cacheExtentStyle` deprecated; `IconData` is now `final`; Android 17 ignores orientation/resizability restrictions on large screens; `ListTile` reports a debug error when wrapped in a colored widget; Android projects migrate to built-in Kotlin; page transition builders reorganized.
+- **3.47**: OpenGL ES render-to-texture content is stored top-down; `Semantics` header / `headingLevel` behavior updated on iOS and Android; `describeEnum` removed (use `Enum.name`).
+- **Announced, not yet in stable**: migration to standalone `material_ui` / `cupertino_ui` packages.
+
+**Source:** https://docs.flutter.dev/release/breaking-changes
 
 ---
 

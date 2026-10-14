@@ -2,7 +2,7 @@
 
 ## Stack Overview (2026)
 
-.NET 10 LTS / C# 14 | Symfony 8.1 / PHP 8.4+ | Flutter 3.44 / Dart 3.12 | React 19.2 | Angular 22 | Vue 3.5+ | Laravel 13 / PHP 8.3+ | Python 3.14+
+.NET 10 LTS / C# 14 | Symfony 8.1 / PHP 8.4+ | Flutter 3.47 / Dart 3.13 | React 19.3 | Angular 22 | Vue 3.5+ | Laravel 13 / PHP 8.3+ | Python 3.15 / 3.14+
 
 ## Architecture Layers
 
@@ -30,7 +30,7 @@ WebAPI/Presentation → Infrastructure → Application → Domain (← INWARD ON
 
 Unit 70% (< 1s) | Integration 20% (< 5s) | E2E 10% (< 30s) — **TDD**: RED → GREEN → REFACTOR
 
-**Stacks**: xUnit/FluentAssertions (C#), Pest 4 (PHP), Vitest 4 (JS/TS), pytest 8 (Python)
+**Stacks**: xUnit/FluentAssertions (C#), Pest 5 (PHP), Vitest 5 (JS/TS), pytest 9 (Python)
 
 ## Security Essentials
 

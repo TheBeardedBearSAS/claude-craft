@@ -9,7 +9,11 @@
 # PROCÉDURE DE BUMP : modifier ICI, puis propager dans les fichiers listés, puis
 # `npm run lint:versions` pour garantir l'absence de dérive.
 #
-# Dernière mise à jour : 2026-10-13 (audit d'alignement Claude — CLI 2.1.260/2.1.296, modèles 5.5). Précédente : 2026-07-03 (audit fraîcheur — React Native 0.86→0.85 (drift, 0.86 inexistant ; endoflife+skills confirment 0.85), Docker 29.6.0→29.6.1 (patch 2026-06-26))
+# Dernière mise à jour : 2026-10-13 (audit fraîcheur docs/audit/freshness-2026-10-13.md — React 19.3, Flutter 3.47/Dart 3.13,
+# RN 0.87, Vite 8.3, Vercel CLI 63.1.2, Python 3.15, Paperclip 2026.1012.0, Docker 29.9.0, Coolify 4.4.6, K8s 1.37.1,
+# OpenTofu 1.13.1, Ansible 2.21.5, hcloud 1.70.1, FrankenPHP 1.13.0 et PgBouncer 1.26.0 (correctifs CVE)).
+# CORRECTIF : la note du 2026-07-03 (« RN 0.86 inexistant », 0.86→0.85) était FAUSSE — dist-tags npm vérifiés
+# le 2026-10-13 : 0.86-stable=0.86.3, latest=0.87.1. Précédente : audit d'alignement Claude du 2026-10-13 (CLI 2.1.260/2.1.296).
 
 meta:
   lastUpdated: '2026-10-13'
@@ -33,28 +37,28 @@ claudeCode:
 stacks:
   csharp: { registry: '10 LTS / C# 14' }
   symfony: { registry: '8.1 / PHP 8.4+' }
-  flutter: { registry: '3.44 / Dart 3.12' }
-  react: { registry: '19.2 + Compiler 1.0' }
-  reactnative: { registry: '0.85' }
+  flutter: { registry: '3.47 / Dart 3.13' }
+  react: { registry: '19.3 + Compiler 1.0' }
+  reactnative: { registry: '0.87' }
   angular: { registry: '22' }
   laravel: { registry: '13.x / PHP 8.3+' }
   vuejs: { registry: '3.5+' }
-  vite: { registry: '8.1' }
-  vercel: { registry: '56.5.0' }
+  vite: { registry: '8.3' }
+  vercel: { registry: '63.1.2' }
   php: { registry: '8.5' }
-  python: { registry: '3.14+' }
-  paperclip: { registry: '2026.609.0' }
-  docker: { registry: '29.6.1' }
-  coolify: { registry: '4.1.2' }
+  python: { registry: '3.15 / 3.14+' }
+  paperclip: { registry: '2026.1012.0' }
+  docker: { registry: '29.9.0' }
+  coolify: { registry: '4.4.6' }
 
 # Versions infra non portées par tech-registry (documentées dans devops-engineer.md / CLAUDE.md)
 infra:
-  kubernetes: '1.36.1'
-  opentofu: '1.12.2'
-  ansible: '2.21.1'
-  hcloud: '1.65.0'
-  frankenphp: '1.12.4'
-  pgbouncer: '1.25.2'
+  kubernetes: '1.37.1'
+  opentofu: '1.13.1'
+  ansible: '2.21.5'
+  hcloud: '1.70.1'
+  frankenphp: '1.13.0'
+  pgbouncer: '1.26.0'
   helm: '4.2.2'
   node: '24.x (Active LTS) — 22.x Maintenance LTS'
 
@@ -85,8 +89,6 @@ denylist:
   - 'v8.19.5'
   - '4.2.0'
   - '29.6.0'
-  - 'RN 0.86'
-  - '0.86 (New Arch'
   - 'OpenTofu 1.12.1'
   - 'Ansible 2.21.0'
   - 'Helm 4.2.0'
@@ -104,3 +106,21 @@ denylist:
   - 'v8.13.0 - Claude Code'
   - 'v8.20.0'
   - 'v8.21.0'
+  - 'v8.22.0'
+  # Versions périmées — audit fraîcheur 2026-10-13
+  - '19.2 + Compiler'
+  - '3.44 / Dart 3.12'
+  - '56.5.0'
+  - '2026.609.0'
+  - '| 29.6.1'
+  - 'Engine 29.6.1'
+  - 'Docker 29.6.1, Coolify'
+  - 'Coolify v4.1.2'
+  - 'K8s 1.36.1'
+  - 'FrankenPHP 1.12.4'
+  - 'PgBouncer 1.25.2'
+  - '0.85 (New Arch'
+  - 'React Native 0.85'
+  - 'Pinia 3'
+  # Catégorie OWASP 2021 absente du Top 10:2025
+  - 'Vulnerable and Outdated Components'

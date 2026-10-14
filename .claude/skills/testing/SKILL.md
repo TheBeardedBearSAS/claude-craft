@@ -21,34 +21,37 @@ Principes universels de testing pour toutes les technologies du framework Claude
 
 | Stack | Unit/Composants | E2E/Browser | Mutation Testing |
 |-------|-----------------|-------------|------------------|
-| **JS/TS/React** | **Vitest 4.1+** (Browser Mode stable) | **Playwright** | **Stryker** |
-| **PHP/Laravel/Symfony** | **Pest 4.5+** (PHPUnit 12, Browser Testing) | Playwright via Pest | **Infection** |
-| **Python** | **pytest 8.x** + **Ruff 0.8+** | **Playwright** | **Mutmut** |
-| **Flutter** | **flutter_test** + **bloc_test 10+** | **Patrol 3.13+** | built-in |
-| **React Native** | **RNTL** + **Jest** | **Detox/Maestro** | **Stryker** |
+| **JS/TS/React** | **Vitest 5** (Browser Mode stable) | **Playwright** | **Stryker** |
+| **PHP/Laravel/Symfony** | **Pest 5** (PHPUnit 13, PHP 8.4+, Browser Testing) | Playwright via Pest | **Infection** |
+| **Python** | **pytest 9.x** + **Ruff 0.17+** | **Playwright** | **Mutmut** |
+| **Flutter** | **flutter_test** + **bloc_test 10+** | **Patrol 4** | built-in |
+| **React Native** | **RNTL 14** + **Jest** | **Maestro** (ou Detox) | **Stryker** |
 
-**Sources :** [Vitest 4](https://vitest.dev/blog/vitest-4), [Pest 4](https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing), [Stryker Mutator](https://stryker-mutator.io/)
+**Sources :** [Vitest Browser Mode](https://vitest.dev/guide/browser/), [Pest 5 Upgrade Guide](https://v5.pestphp.com/docs/upgrade-guide), [Stryker Mutator](https://stryker-mutator.io/)
 
 ## Stratégies 2026
 
-### Vitest 4 — Browser Mode stable
+### Vitest 5 — Browser Mode stable
 
 Abandonner JSDOM lourd. Chromium/Firefox/WebKit natifs.
 
 ```typescript
 // vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import { playwright } from '@vitest/browser-playwright';
+
 export default defineConfig({
   test: {
     browser: {
       enabled: true,
-      name: 'chromium', // ou 'firefox', 'webkit'
-      provider: 'playwright',
+      provider: playwright(),
+      instances: [{ browser: 'chromium' }], // ou 'firefox', 'webkit'
     },
   },
 });
 ```
 
-**Source :** [Vitest Browser Mode](https://vitest.dev/guide/browser.html)
+**Source :** [Vitest Browser Mode](https://vitest.dev/guide/browser/)
 
 ### Mutation Testing — "Coverage ment, mutation scores disent la vérité"
 
@@ -87,39 +90,57 @@ test('sorting preserves all elements', () => {
 
 **Source :** [fast-check](https://fast-check.dev/)
 
-### Pest 4 — Browser Testing intégré
+### Pest 5 — Browser Testing intégré
 
 ```php
-// Pest 4.5+ avec Playwright natif
+// Pest 5 avec Playwright natif
 test('user can login', function () {
-    $this->browse(function (Browser $browser) {
-        $browser->visit('/login')
-            ->type('email', 'alice@example.com')
-            ->type('password', 'secret')
-            ->press('Login')
-            ->assertPathIs('/dashboard');
-    });
+    visit('/login')
+        ->fill('email', 'alice@example.com')
+        ->fill('password', 'secret')
+        ->click('Login')
+        ->assertPathIs('/dashboard');
 });
 ```
 
-**Source :** [Pest 4 Browser Testing](https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing)
+**Source :** [Pest Browser Testing](https://pestphp.com/docs/browser-testing)
 
-### Vitest Workspaces — Monorepos
+### Vitest Projects — Monorepos
+
+`workspace` est déprécié depuis Vitest 3.2 au profit de `projects`.
 
 ```typescript
-// vitest.workspace.ts
-export default defineWorkspace([
-  'packages/*/vitest.config.ts', // Unit tests
-  {
-    test: {
-      browser: { enabled: true, name: 'chromium' },
-      include: ['e2e/**/*.test.ts'],
-    },
-  }, // Browser tests
-]);
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import { playwright } from '@vitest/browser-playwright';
+
+export default defineConfig({
+  test: {
+    projects: [
+      'packages/*', // Unit tests (un vitest.config par package)
+      {
+        test: {
+          name: 'browser',
+          include: ['e2e/**/*.test.ts'],
+          browser: { enabled: true, provider: playwright(), instances: [{ browser: 'chromium' }] },
+        },
+      },
+    ],
+  },
+});
 ```
 
-**Source :** [Vitest Workspaces](https://vitest.dev/guide/workspace.html)
+**Source :** [Vitest Projects](https://vitest.dev/guide/projects)
+
+### BDD — un outil Gherkin par écosystème
+
+| Écosystème | Outil |
+|------------|-------|
+| JS/TS | **Cucumber.js** (`@cucumber/cucumber`) |
+| PHP/Symfony | **Behat** 4.x |
+| Python | **pytest-bdd** |
+
+Pour l'E2E mobile, **Maestro** (flows YAML) couvre React Native, Flutter et natif ; **Patrol** (Flutter) et **Detox** (React Native) restent des alternatives intégrées à leur framework.
 
 ---
 

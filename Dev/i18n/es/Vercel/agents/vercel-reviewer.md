@@ -211,9 +211,9 @@ Clasificar el proyecto: static-only / Functions-only / ISR-enabled / Cron-enable
 "runtime": "edge" en el bloque functions de vercel.json)?
   SÍ --> ¿Esta Function fue recién añadida o modificada recientemente (no es código
           puramente legacy sin tocar)?
-          SÍ --> MAYOR: el Edge Runtime está deprecado por Vercel — migrar a Fluid
+          SÍ --> MAYOR: el Edge Runtime no está recomendado por Vercel — migrar a Fluid
                   Compute sobre el runtime de Node.js (por defecto) para acceso completo
-                  a las APIs de Node, cold starts con caché de bytecode (Node 20+), y
+                  a las APIs de Node, cold starts con caché de bytecode (Node 22+), y
                   pricing por Active CPU
           NO  --> MENOR: marcar como deuda de migración legacy, no bloquear código no modificado
   NO  --> La Function corre en el runtime por defecto Node.js/Fluid Compute --> continuar
@@ -226,7 +226,7 @@ Clasificar el proyecto: static-only / Functions-only / ISR-enabled / Cron-enable
 ¿La versión de Node.js está fijada ("engines.node" en package.json, o el ajuste
 Node.js Version del proyecto en Vercel) a 20.x o superior?
   NO  --> MENOR: una versión de Node no fijada/antigua renuncia a la mejora de cold-start
-          por caché de bytecode de Fluid Compute (específica de Node 20+) y arriesga una
+          por caché de bytecode de Fluid Compute (específica de Node 22+) y arriesga una
           deriva silenciosa de runtime entre redeploys
   SÍ --> OK
 ```
@@ -247,7 +247,7 @@ Node.js Version del proyecto en Vercel) a 20.x o superior?
 
 **Edge Runtime en código nuevo/modificado:**
 ```typescript
-// PROHIBIDO — Edge Runtime declarado en una Function recién añadida: patrón deprecado
+// PROHIBIDO — Edge Runtime declarado en una Function recién añadida: patrón desaconsejado
 export const config = { runtime: 'edge' };
 
 export default function handler(req: Request) {
@@ -256,7 +256,7 @@ export default function handler(req: Request) {
 }
 
 // CORRECTO — runtime por defecto Node.js/Fluid Compute, acceso completo a las APIs de Node,
-// cold starts más rápidos en Node 20+ vía caché de bytecode
+// cold starts más rápidos en Node 22+ vía caché de bytecode
 export const config = { maxDuration: 10 };
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
@@ -282,7 +282,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 ```
 ```typescript
 // api/legacy.ts
-// TODO(JIRA-1234): migrar fuera del Edge Runtime — deprecado por Vercel, ver Fluid Compute
+// TODO(JIRA-1234): migrar fuera del Edge Runtime — no recomendado por Vercel, ver Fluid Compute
 export const config = { runtime: 'edge' };
 ```
 
@@ -335,7 +335,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 |---------|----------|--------------|
 | Runtime | Por defecto Node.js/Fluid Compute | `runtime: 'edge'` en código nuevo/modificado |
 | Edge Runtime legacy | Marcador de migración ticketado (TODO + referencia de issue) | Edge Runtime silencioso y sin marcar dejado en el sitio |
-| Versión de Node | Fijada a 20+ (`engines.node` o ajuste del proyecto) | Sin fijar, deriva del valor por defecto |
+| Versión de Node | Fijada a 22.x o 24.x (Node 20 está deprecado en Vercel desde 2026-10-01) (`engines.node` o ajuste del proyecto) | Sin fijar, deriva del valor por defecto |
 | Input del handler | Validado/parseado (zod, guarda manual) antes de usarlo | `req.body`/`req.query` crudo usado sin verificar |
 | Output del handler | Status explícito + body tipado en cada ruta | 200 implícito, forma de error inconsistente |
 | Conciencia del cold-start | Imports pesados cargados de forma diferida cuando no siempre se necesitan | Cada dependencia importada de forma eager en la cabecera del módulo |

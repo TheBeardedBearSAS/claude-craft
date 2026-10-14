@@ -1,6 +1,6 @@
 # Code-Qualitätswerkzeuge - Python
 
-> **Referenzversionen:** Ruff **0.15+** | pytest **9.x** (Python 3.9 wird nicht mehr unterstützt) | Ziel `py314`.
+> **Referenzversionen:** Ruff **0.17+** | pytest **9.x** (Python 3.9 wird nicht mehr unterstützt) | Ziel `py314`.
 
 ## Ruff - Schneller Python-Linter und Formatter
 

@@ -36,11 +36,11 @@ composer validate
 
 ### composer.json Configuration
 
-> **Choose one path per project:** Pest 4 is incompatible with PHPUnit 13 (it requires PHPUnit ≤12.5.30). Pick the Pest variant (recommended) or the plain PHPUnit variant — do not mix.
+> **Choose one path per project:** Pest 4 requires PHPUnit ≤12.5.30, while Pest 5 (PHP 8.4+) requires PHPUnit 13 — never mix majors. Pick the Pest variant (recommended, Pest 5 + PHPUnit 13) or the plain PHPUnit variant.
 
-#### Variant A — Pest 4 (recommended)
+#### Variant A — Pest 5 (recommended)
 
-Pest 4 manages its PHPUnit 12 pin transitively; do not add an explicit `phpunit/phpunit` entry.
+Pest 5 manages its PHPUnit 13 pin transitively; do not add an explicit `phpunit/phpunit` entry.
 
 ```json
 {
@@ -59,8 +59,8 @@ Pest 4 manages its PHPUnit 12 pin transitively; do not add an explicit `phpunit/
         "psr/container": "^2.0"
     },
     "require-dev": {
-        "pestphp/pest": "^4.7",
-        "pestphp/pest-plugin-browser": "^4.0",
+        "pestphp/pest": "^5.3",
+        "pestphp/pest-plugin-browser": "^5.1",
         "phpstan/phpstan": "^2.2",
         "friendsofphp/php-cs-fixer": "^3.0",
         "rector/rector": "^2.4",
@@ -172,7 +172,7 @@ $finder = PhpCsFixer\Finder::create()
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PSR12' => true,
+        '@PER-CS3x0' => true,
         '@PHP85Migration' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
@@ -436,8 +436,8 @@ vendor/bin/phpunit -v
 
 ## Pest - Modern Testing
 
-> **Version 2026:** Pest 4 integre PHPUnit 12 + browser testing natif (Playwright) + architecture tests ameliores.
-> Sources : [Pest 4 Announcement](https://pestphp.com/docs/pest4-announcement), [PHPUnit 12 Release](https://phpunit.de/announcements/phpunit-12.html)
+> **Version 2026 :** Pest 5 (PHP 8.4+) integre PHPUnit 13 + browser testing natif (Playwright) + architecture tests + mutation testing.
+> Sources : [Pest](https://pestphp.com/docs/installation), [PHPUnit 13 Release](https://phpunit.de/announcements/phpunit-13.html)
 
 ### Configuration (pest.php in tests/)
 
@@ -463,7 +463,7 @@ uses()
     ->in('Browser');
 ```
 
-### Pest 4 Browser Testing (Playwright natif)
+### Pest 5 Browser Testing (Playwright natif)
 
 ```php
 <?php
@@ -482,7 +482,7 @@ test('user can login', function () {
 });
 ```
 
-### Architecture Tests (Pest 4 presets ameliores)
+### Architecture Tests (Pest 5 presets ameliores)
 
 ```php
 <?php
@@ -500,10 +500,10 @@ arch('value objects are readonly')
     ->classes()->toBeReadonly();
 ```
 
-### Mutation Testing (Pest 4 + Infection)
+### Mutation Testing (Pest 5 + Infection)
 
 ```bash
-# Pest 4 integre Infection nativement
+# Pest 5 integre Infection nativement
 vendor/bin/pest --mutate
 ```
 
@@ -516,7 +516,7 @@ vendor/bin/pest
 # Run with coverage
 vendor/bin/pest --coverage
 
-# Run in parallel (default in Pest 4)
+# Run in parallel (default in Pest 5)
 vendor/bin/pest --parallel
 
 # Watch mode
@@ -620,8 +620,6 @@ WORKDIR /var/www/html
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
-
 services:
   php:
     build:
@@ -694,9 +692,9 @@ npm install -g intelephense
 ## Tooling Checklist (2026)
 
 - [ ] Composer configured with autoload
-- [ ] PHP-CS-Fixer configured (PSR-12 + strict)
+- [ ] PHP-CS-Fixer configured (PER-CS 3.0 + strict)
 - [ ] PHPStan at **level 10** (PHPStan 2.0+) with strict rules
-- [ ] Pest 4 configured (browser testing, architecture tests, mutation)
+- [ ] Pest 5 configured (browser testing, architecture tests, mutation)
 - [ ] Rector configured for PHP 8.5 upgrades
 - [ ] Makefile with common commands
 - [ ] Pre-commit hooks installed

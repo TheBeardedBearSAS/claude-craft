@@ -141,6 +141,15 @@ Passen Sie CSP-Script-/Style-Sources an, falls die UI spezifische CDNs benötigt
 - [ ] Activity-Log Append-only, DB-enforced wo möglich
 - [ ] Kill Switch + Plugin-Disable getestet
 
+## Upgrade-Hinweise: Breaking Changes (2026.916.0 bis 2026.1012.0)
+
+Geprüft anhand der offiziellen GitHub-Release-Notes (paperclipai/paperclip).
+
+- **2026.916.0**: Agent-APIs liefern keine Klartext-Zugangsdaten mehr (`plain`-Bindings werden geschwärzt: `secretRef` verwenden, Secrets nie zurücklesen); die „cheap model profiles“ entfallen (Migration `0236` entfernt gespeicherte `modelProfiles`); `X-Forwarded-Host` wird nur berücksichtigt, wenn der direkte Peer `TRUST_PROXY` besteht (hinter einem Reverse Proxy setzen, sonst wird der rohe `Host`-Header verwendet); die Legacy-Anthropic-REST-Verbindungsoption entfällt (REST-Tool-Verbindungen werden als REST validiert).
+- **2026.1001.0**: der Legacy-Composio-Broker ist abgeschaltet (keine automatische Migration; Ersatz: Composio Connect hinter dem Flag `enableMcpAggregators`). Execution-Harnesses laufen jetzt standardmäßig **vollautomatisch**: ACPX/Claude `approve-all`, OpenCode `allow`, Codex `never` (keine Freigabe-Pausen). Um die Freigabe-Gates des Providers zu behalten, pro Agent explizit einen restriktiven Modus setzen: `acpxPermissionMode` (`approve-paperclip`, `approve-reads` oder `deny-all`) oder `opencodePermissionMode` (`ask` oder `deny`). Die governten Freigaben von Paperclip gelten weiterhin.
+- **2026.1005.0**: `PAPERCLIP_CLOUD_UI_SNIPPET` / `PAPERCLIP_CLOUD_UI_SNIPPET_B64` injizieren kein HTML mehr (Integration in einen Plugin-UI-Beitrag verschieben); eine @-Erwähnung in einem Task-Kommentar ist nur Kontext und startet keinen Run mehr (nur explizite Zuweisung oder Review-Anfragen tun das).
+- **2026.1012.0**: Workspace-Restore-Locks sind jetzt SQLite-Dateisperren unter `<instance root>/locks/directory-merge/`: vor Upgrade oder Rollback alle alten Server- und Worker-Prozesse stoppen; Tool-Grants mit unbekannten Selektoren oder fehlerhaften Einschränkungen verweigern jetzt den Zugriff (eigene Grants prüfen).
+
 ---
 
 **Zuletzt aktualisiert:** 2026-04 | **Version:** 2.0.0 | **Autor:** The Bearded CTO

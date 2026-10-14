@@ -9,7 +9,7 @@ Verify that the PHP project follows established coding standards and best practi
 ## What This Command Does
 
 1. **Standards Verification**
-   - Check PSR-1/PSR-12 compliance
+   - Check PSR-1/PER-CS 3.0 compliance
    - Verify naming conventions
    - Validate file organization
    - Check import order
@@ -440,7 +440,7 @@ parameters:
 <?php
 return (new PhpCsFixer\Config())
     ->setRules([
-        '@PSR12' => true,
+        '@PER-CS3x0' => true,
         '@PHP85Migration' => true,
         'declare_strict_types' => true,
         'final_class' => true,
@@ -450,7 +450,7 @@ return (new PhpCsFixer\Config())
 ## Compliance Checklist
 
 - [ ] `declare(strict_types=1)` in all files
-- [ ] PSR-12 formatting applied
+- [ ] PER-CS 3.0 formatting applied
 - [ ] PSR-4 autoloading configured
 - [ ] Naming conventions followed
 - [ ] Files properly organized (Clean Architecture)

@@ -5,6 +5,6 @@ description: Estándares de codificación TypeScript de Paperclip — modo stric
 
 # Estándares de Codificación de Paperclip (TypeScript)
 
-Node 20+, TypeScript strict + `noUncheckedIndexedAccess`, workspaces pnpm 9.15+, archivos kebab-case, tipos PascalCase, vars camelCase, sin `any`, logs estructurados con redacción.
+Node 24.11+, TypeScript strict + `noUncheckedIndexedAccess`, workspaces pnpm 9.15+, archivos kebab-case, tipos PascalCase, vars camelCase, sin `any`, logs estructurados con redacción.
 
 Ver ../../rules/03-coding-standards.md para documentación detallada.

@@ -59,12 +59,12 @@ npm install -D vite-plugin-dts
 - Move app entry logic out; create `src/index.ts` as the single public entry
 - Rewrite `vite.config.ts` using `templates/vite.config.template.ts` (library section) + `templates/library-entry.template.ts`
 - Add `"main"`, `"module"`, `"types"`, `"exports"`, `"files": ["dist"]`, `"sideEffects": false` to `package.json`
-- Declare any host dependency as a peer dependency, and externalize it in `build.rollupOptions.external`
+- Declare any host dependency as a peer dependency, and externalize it in `build.rolldownOptions.external`
 
 ### Shape: `multi-page`
 
 - Create one HTML file per page (`about.html`, `admin/index.html`, ...) alongside `index.html`
-- Configure `build.rollupOptions.input` as an object map (page name → HTML path) — see `02-architecture-vite.md`, Shape 3
+- Configure top-level `input` as an object map (page name → HTML path) — see `02-architecture-vite.md`, Shape 3
 - Create one `src/<page>.ts` entry per HTML page
 
 ### Shape: `worker-wasm`

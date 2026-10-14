@@ -68,7 +68,8 @@ Extrair e esclarecer:
    ```
    Aplicacao usa prepared statements?
    ├── Sim, nao pode desabilitar → Session mode
-   ├── Sim, pode usar DEALLOCATE ALL → Transaction mode + server_reset_query
+   ├── Sim, protocolo estendido → Transaction mode + max_prepared_statements (200 por padrão desde 1.24)
+   ├── Sim, PREPARE SQL, pode usar DEALLOCATE ALL → Transaction mode + server_reset_query
    └── Nao
        ├── Usa SET/variaveis de sessao? → Session mode (ou transaction + reset_query)
        ├── Usa LISTEN/NOTIFY? → Session mode
@@ -264,7 +265,15 @@ default_pool_size = 20
 | Sem reserve pool | Picos causam falhas de conexao | Definir reserve_pool_size = 25% do default |
 | PgBouncer por instancia da app | Pools multiplicados, sem compartilhamento | Instancia(s) PgBouncer compartilhada(s) |
 | Sem server_reset_query | Estado de sessao vaza entre clientes | DISCARD ALL para transaction mode |
-| Ignorar prepared statements | Erros em transaction mode | Testar com app, usar DEALLOCATE ALL ou session mode |
+| Ignorar prepared statements | Erros em transaction mode | Testar com app, usar max_prepared_statements, DEALLOCATE ALL ou session mode |
+
+## Notas do PgBouncer 1.26
+
+- **Segurança**: a 1.26.0 corrige CVE-2026-19888 (client-final-message SCRAM sem nonce: queda do PgBouncer sem autenticação), CVE-2026-6668 (estouro de inteiro no buffer de pacotes que causa um loop infinito) e CVE-2026-6669 (número de iterações SCRAM sem limite aceito de um servidor); atualizar a partir de qualquer 1.25.x.
+- **Prepared statements**: `max_prepared_statements` vale 200 por padrão desde a 1.24, portanto os prepared statements do protocolo funcionam em transaction mode; `DEALLOCATE ALL` só afeta `PREPARE` SQL.
+- **Parâmetros rastreados**: `search_path` (PostgreSQL 18+) e `default_transaction_read_only` são rastreados por padrão, então um `SET` não vaza mais entre clientes em transaction mode.
+- **Novas configurações**: `pool_idle_timeout` (desativado por padrão) remove pools sem uso; `query_wait_timeout` pode ser configurado por usuário e por banco; `SHOW STATS` expõe `client_login_count`.
+- **Removido**: o restart online (`-R`), `SHOW FDS` e `SUSPEND`; usar restarts progressivos com `so_reuseport`.
 
 ## Template de Documentacao
 

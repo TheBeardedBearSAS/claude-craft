@@ -9,7 +9,7 @@ La securite est une **priorite absolue**. Ce document presente les principes gen
 **References:**
 - **OWASP Top 10:2025** (publie novembre 2025)
 - CWE/SANS Top 25
-- SLSA 1.0
+- SLSA 1.2
 
 ---
 
@@ -31,9 +31,11 @@ La securite est une **priorite absolue**. Ce document presente les principes gen
 ## OWASP Top 10:2025
 
 > **Source:** [OWASP Top 10:2025](https://owasp.org/Top10/2025/) — publie novembre 2025.
-> Changements majeurs vs 2021 : SSRF consolide dans #1, Supply Chain Failures nouveau en #6, Mishandling Exceptional Conditions nouveau en #7.
+> Changements majeurs vs 2021 : SSRF consolidé dans A01, Security Misconfiguration remonte en A02, Software Supply Chain Failures nouveau en A03 (absorbe l'ancien « Vulnerable and Outdated Components »), Software or Data Integrity Failures en A08, Mishandling of Exceptional Conditions nouveau en A10.
 
-### 1. Broken Access Control (inclut SSRF consolide)
+> **Listes connexes :** OWASP Top 10 for Agentic Applications 2026 (publié le 2025-12-09) et OWASP Top 10 for LLM Applications 2025 ([genai.owasp.org](https://genai.owasp.org/)) pour le code d'agents IA/LLM ; OWASP ASVS 5.0.0 pour les exigences de vérification.
+
+### A01. Broken Access Control (inclut SSRF consolide)
 
 ```
 RISQUE
@@ -50,54 +52,7 @@ PROTECTION
 - Pas d'acces reseau interne depuis les inputs utilisateur
 ```
 
-### 2. Cryptographic Failures
-
-```
-RISQUE
-- Donnees sensibles en clair
-- Algorithmes obsoletes (MD5, SHA1, bcrypt en nouveau code)
-- Cles dans le code source
-- JWT avec algorithme faible (HS256, RS256)
-
-PROTECTION
-- Chiffrer les donnees sensibles au repos
-- Utiliser TLS 1.3 en transit
-- Hachage mots de passe : Argon2id (128 MiB RAM, t=3-5, p=1) — JAMAIS MD5/SHA1/bcrypt
-- JWT : EdDSA (Ed25519) prioritaire > ES256 > RS256
-- Secrets dans un vault (pas dans le code)
-```
-
-### 3. Injection
-
-```
-RISQUE
-- SQL Injection
-- Command Injection
-- LDAP Injection
-
-PROTECTION
-- Requetes parametrees (prepared statements)
-- Validation et sanitization des entrees
-- Principe du moindre privilege (DB)
-- Escape des outputs
-```
-
-### 4. Insecure Design
-
-```
-RISQUE
-- Pas de threat modeling
-- Fonctionnalites sensibles non protegees
-- Rate limiting absent
-
-PROTECTION
-- Threat modeling des la conception
-- Security by design
-- Defense in depth
-- Rate limiting
-```
-
-### 5. Security Misconfiguration
+### A02. Security Misconfiguration
 
 ```
 RISQUE
@@ -113,7 +68,7 @@ PROTECTION
 - Principe du moindre privilege
 ```
 
-### 6. Software Supply Chain Failures (nouveau 2025)
+### A03. Software Supply Chain Failures (nouveau 2025)
 
 ```
 RISQUE
@@ -123,29 +78,62 @@ RISQUE
 - Artefacts non signes
 
 PROTECTION
-- SLSA 1.0 niveaux 1-3 (sources verifiables, builds reproductibles, provenance)
-- SBOM automatique (SPDX 3 ou CycloneDX) a chaque build
+- SLSA 1.2 niveaux 1-3 (sources verifiables, builds reproductibles, provenance)
+- SBOM automatique (SPDX 3 ou CycloneDX 1.7) a chaque build
 - Sigstore keyless signing (cosign) pour artefacts et images
 - Dependabot / Renovate avec scan CVE (Trivy, Grype)
 - Version pinee sur toutes les dependances (pas de "latest")
+- Composants vulnérables ou obsolètes (ex-A06:2021) : inventaire, mises à jour régulières, `npm audit --omit=dev --audit-level=moderate`
 ```
 
-### 7. Mishandling of Exceptional Conditions (nouveau 2025)
+### A04. Cryptographic Failures
 
 ```
 RISQUE
-- Stack traces exposees en production
-- Exceptions non gerees qui leakent des donnees internes
-- Comportement undefined sur inputs mal formes
+- Donnees sensibles en clair
+- Algorithmes obsoletes (MD5, SHA1, bcrypt en nouveau code)
+- Cles dans le code source
+- JWT avec algorithme faible (HS256, RS256)
 
 PROTECTION
-- Logger les erreurs, ne jamais exposer la stack trace en prod
-- Gestionnaires d'exceptions globaux (error boundaries)
-- Messages d'erreur generiques cote client
-- Fail fast avec des erreurs metier claires
+- Chiffrer les donnees sensibles au repos
+- Utiliser TLS 1.3 en transit
+- Hachage mots de passe : Argon2id (minimum OWASP 19 MiB RAM, t=2, p=1; recommandation interne 128 MiB RAM, t≥3, p=1) — JAMAIS MD5/SHA1 ; bcrypt uniquement en repli legacy si Argon2id/scrypt sont indisponibles (work factor OWASP ≥ 10 ; ≥ 12 ici)
+- JWT : EdDSA (Ed25519) prioritaire > ES256 > RS256
+- Secrets dans un vault (pas dans le code)
 ```
 
-### 8. Authentication Failures
+### A05. Injection
+
+```
+RISQUE
+- SQL Injection
+- Command Injection
+- LDAP Injection
+
+PROTECTION
+- Requetes parametrees (prepared statements)
+- Validation et sanitization des entrees
+- Principe du moindre privilege (DB)
+- Escape des outputs
+```
+
+### A06. Insecure Design
+
+```
+RISQUE
+- Pas de threat modeling
+- Fonctionnalites sensibles non protegees
+- Rate limiting absent
+
+PROTECTION
+- Threat modeling des la conception
+- Security by design
+- Defense in depth
+- Rate limiting
+```
+
+### A07. Authentication Failures
 
 ```
 RISQUE
@@ -162,7 +150,21 @@ PROTECTION
 - Detection de brute force
 ```
 
-### 9. Logging & Monitoring Failures
+### A08. Software or Data Integrity Failures
+
+```
+RISQUE
+- Dependances non verifiees
+- CI/CD non securise
+- Updates non signes
+
+PROTECTION
+- Verification des signatures
+- CI/CD securise
+- Integrity checks (checksums)
+```
+
+### A09. Security Logging and Alerting Failures
 
 ```
 RISQUE
@@ -177,18 +179,19 @@ PROTECTION
 - Retention appropriee
 ```
 
-### 10. Data Integrity Failures
+### A10. Mishandling of Exceptional Conditions (nouveau 2025)
 
 ```
 RISQUE
-- Dependances non verifiees
-- CI/CD non securise
-- Updates non signes
+- Stack traces exposees en production
+- Exceptions non gerees qui leakent des donnees internes
+- Comportement undefined sur inputs mal formes
 
 PROTECTION
-- Verification des signatures
-- CI/CD securise
-- Integrity checks (checksums)
+- Logger les erreurs, ne jamais exposer la stack trace en prod
+- Gestionnaires d'exceptions globaux (error boundaries)
+- Messages d'erreur generiques cote client
+- Fail fast avec des erreurs metier claires
 ```
 
 ---
@@ -253,7 +256,7 @@ Regles NIST SP 800-63B-4 (2024) + OWASP Authentication Cheat Sheet:
 - Autoriser tous les caracteres imprimables (ASCII + Unicode), encourager les passphrases
 - Pas de rotation periodique sauf compromission suspectee
 - Bloquer les mots de passe des listes compromises (Have I Been Pwned k-anonymity)
-- Hash avec Argon2id (128 MiB RAM, t=3-5, p=1)
+- Hash avec Argon2id (minimum OWASP 19 MiB RAM, t=2, p=1; recommandation interne 128 MiB RAM, t≥3, p=1)
 - Salt unique par utilisateur (gere par Argon2id)
 
 // BON
@@ -264,7 +267,7 @@ hash = md5(password)
 hash = sha1(password + "static_salt")
 
 // LEGACY — acceptable uniquement si Argon2id/scrypt indisponibles (bcrypt n'est PAS casse)
-hash = bcrypt.hash(password, costFactor=12)  // cost >=12, entree max 72 octets
+hash = bcrypt.hash(password, costFactor=12)  // work factor OWASP >= 10 ; interne >= 12 ; entrée max 72 octets
 ```
 
 Sources : [NIST SP 800-63B-4](https://pages.nist.gov/800-63-4/sp800-63b.html), [Argon2id OWASP 2026](https://guptadeepak.com/the-complete-guide-to-password-hashing-argon2-vs-bcrypt-vs-scrypt-vs-pbkdf2-2026/)
@@ -396,9 +399,9 @@ function getOrder(orderId, currentUser):
 
 ```
 Mots de passe:
-  -> Hash avec Argon2id (128 MiB RAM, t=3-5, p=1)
+  -> Hash avec Argon2id (minimum OWASP 19 MiB RAM, t=2, p=1; recommandation interne 128 MiB RAM, t≥3, p=1)
   -> JAMAIS en clair
-  -> JAMAIS bcrypt/MD5/SHA1 en nouveau code
+  -> JAMAIS MD5/SHA1 ; bcrypt uniquement en repli legacy si Argon2id/scrypt sont indisponibles (work factor OWASP ≥ 10 ; ≥ 12 ici)
 
 Donnees personnelles (RGPD):
   -> Chiffrement au repos (AES-256-GCM)
@@ -489,7 +492,7 @@ Content-Security-Policy:
 
 > **Reference :** [Supply Chain Security 2026](https://kawaldeepsingh.medium.com/practical-software-supply-chain-security-2026-sboms-signing-slsa-reproducible-builds-a-0416cfac32dc)
 
-### SLSA 1.0 (Supply-chain Levels for Software Artifacts)
+### SLSA 1.2 (Supply-chain Levels for Software Artifacts)
 
 | Niveau | Exigences | Impact |
 |--------|-----------|--------|
@@ -501,7 +504,7 @@ Content-Security-Policy:
 
 ```
 Generer automatiquement a chaque build :
-- Format SPDX 3 ou CycloneDX
+- Format SPDX 3 ou CycloneDX 1.7
 - Liste toutes les dependances directes et transitives
 - Inclure les versions, licences, CVE connus
 - Publier dans le registre artefact
@@ -523,7 +526,7 @@ cosign sign --identity-token=$(cat $ACTIONS_ID_TOKEN_REQUEST_TOKEN) \
 
 ### Checklist Supply Chain
 
-- [ ] SBOM genere automatiquement (SPDX 3 ou CycloneDX)
+- [ ] SBOM genere automatiquement (SPDX 3 ou CycloneDX 1.7)
 - [ ] Artefacts signes avec Sigstore/cosign
 - [ ] Provenance SLSA 1+ documentee
 - [ ] Dependances avec versions pinnes (hash ou version exacte)
@@ -642,6 +645,8 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 
 ### Vulnerabilites connues (CVE)
 
+> Cette liste ne couvre que Claude Code. Pour les CVE de frameworks (ex. React2Shell, CVE-2025-55182), voir `skills/security-react`.
+
 | CVE | Severite | Version corrigee | Impact |
 |-----|----------|-----------------|--------|
 | CVE-2025-59536 | 8.7/10 CVSS | v1.0.111 | Execution de commandes avant le dialogue de confiance au demarrage (GHSA-4fgq-fpq9-mr3g) |
@@ -678,7 +683,7 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 - [ ] Validation des entrees cote serveur
 - [ ] Requetes parametrees (pas de concatenation SQL)
 - [ ] Escape des outputs (prevention XSS)
-- [ ] Mots de passe hashes avec **Argon2id** (128 MiB, t=3-5, p=1)
+- [ ] Mots de passe hashes avec **Argon2id** (minimum OWASP 19 MiB, t=2, p=1; recommandation interne 128 MiB, t≥3, p=1)
 - [ ] Sessions securisees (httpOnly, secure, sameSite)
 - [ ] Verification des permissions a chaque requete
 - [ ] Secrets dans variables d'environnement ou Vault
@@ -697,7 +702,7 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 
 ### Supply Chain
 
-- [ ] SBOM genere (SPDX 3 ou CycloneDX)
+- [ ] SBOM genere (SPDX 3 ou CycloneDX 1.7)
 - [ ] Artefacts signes (Sigstore/cosign)
 - [ ] Provenance SLSA 1+ documentee
 - [ ] Dependances pinnes sur version exacte

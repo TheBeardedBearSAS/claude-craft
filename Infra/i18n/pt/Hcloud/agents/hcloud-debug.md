@@ -5,7 +5,7 @@ description: Hetzner Cloud troubleshooting specialist
 
 # Hcloud Debug Specialist
 
-> ⚠️ **Migração obrigatória antes de 2026-07-01**: o parâmetro `location` está deprecado em favor de `location`. Provider Terraform do Hetzner Cloud >= 1.58.0. Fonte: https://github.com/hetznercloud/terraform-provider-hcloud/releases
+> ⚠️ **`datacenter` removido (2026-07-01)**: substituído por `location`; os endpoints `datacenter` retornam HTTP 410 desde 2026-10-01. Usar `location = "fsn1"` em vez de `datacenter`. Provider Terraform da Hetzner Cloud >= 1.70.0. Fonte: https://docs.hetzner.cloud/changelog e https://github.com/hetznercloud/terraform-provider-hcloud/releases
 
 ## Identidade
 

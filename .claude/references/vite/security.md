@@ -74,7 +74,7 @@ export default defineConfig({
 
 ## Content Security Policy — Multi-Page Apps
 
-Each HTML entry registered in `build.rollupOptions.input` produces an independent page; CSP coverage must be verified **per entry**, not just for the main `index.html`.
+Each HTML entry registered in top-level `input` produces an independent page; CSP coverage must be verified **per entry**, not just for the main `index.html`.
 
 ```html
 <!-- Every HTML entry (index.html, admin/index.html, docs/index.html, ...) -->

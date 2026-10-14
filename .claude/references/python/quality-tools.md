@@ -1,8 +1,8 @@
 # Code Quality Tools - Python
 
-> **Version de référence :** Python **3.14 (stable, 3.14.6+)** — Python 3.15 en beta (release oct. 2026).
-> FastAPI **~0.136.x** — Python 3.10+ minimum, Pydantic v2 obligatoire.
-> Pydantic **>=2.9, 2.13.x recommandé**.
+> **Version de référence :** Python **3.15 (stable, 3.15.0 — 9 oct. 2026)** — socle minimal 3.14+ (3.14.8).
+> FastAPI **~0.143.x** — Python 3.10+ minimum, Pydantic v2 obligatoire.
+> Pydantic **>=2.9, 2.14.x recommandé**.
 
 ## Ruff - Fast Python Linter & Formatter
 
@@ -137,7 +137,7 @@ mypy 2.0 (mai 2026) introduit des changements de défauts et le parallélisme ex
 | Parallélisme | non disponible | `--num-workers N` (jusqu'à 5x sur gros projets) |
 
 **Migration depuis mypy 1.x :**
-1. Mettre à jour `mirrors-mypy` en `v2.1.0` dans `.pre-commit-config.yaml`
+1. Mettre à jour `mirrors-mypy` en `v2.4.0` dans `.pre-commit-config.yaml`
 2. Lancer `mypy --num-workers 4 src/` et corriger les nouvelles erreurs
 3. Si besoin de l'ancien comportement de redéfinition : utiliser `--allow-redefinition-old`
 
@@ -291,14 +291,14 @@ pre-commit install
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # ruff lint (remplace flake8 + isort) + ruff format (remplace black)
-    rev: v0.15.16
+    rev: v0.17.0
     hooks:
       - id: ruff
         args: [--fix]
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.1.0
+    rev: v2.4.0
     hooks:
       - id: mypy
         additional_dependencies:

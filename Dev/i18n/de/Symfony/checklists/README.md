@@ -20,7 +20,7 @@ Dieser Ordner enthält 4 wesentliche Checklisten für den Entwicklungsworkflow.
 **Automatische Prüfungen:**
 - ✅ Tests bestehen (Unit + Integration + Behat)
 - ✅ PHPStan Level 8 (0 Fehler)
-- ✅ CS-Fixer (PSR-12 formatierter Code)
+- ✅ CS-Fixer (PER-CS 3.0 formatierter Code)
 - ✅ Hadolint (gültiges Dockerfile)
 - ✅ Coverage ≥ 80%
 - ✅ Konformes Commit-Message (Conventional Commits)

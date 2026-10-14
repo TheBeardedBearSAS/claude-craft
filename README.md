@@ -28,6 +28,14 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces (234 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v8.23.0
+
+**Audit de fraîcheur + alignement Claude (2026-10-13, v8.23.0) :**
+
+- **Sécurité** : classement OWASP Top 10:2025 officiel (A01–A10) dans la règle 11 et ses miroirs, avec test de régression ; FrankenPHP 1.13.0 et PgBouncer 1.26.0 (versions précédentes vulnérables) ; types de serveurs Hetzner et `datacenter` retirés corrigés.
+- **Versions vérifiées sur registres** : React 19.3, Flutter 3.47, React Native 0.87 / Expo 57, Pinia 4, Vite 8.3 (`rolldownOptions`), Vercel CLI 63, Python 3.15, Paperclip 2026.1012.0, Docker 29.9, Kubernetes 1.37 (Gateway API), Vitest 5, Pest 5, pytest 9, PER-CS 3.0.
+- **Claude Code** : minimum 2.1.260, recommandé 2.1.296, modèles 5.5. Détails : [CHANGELOG](CHANGELOG.md#8230---2026-10-13).
+
 ## What's New in v8.18.0
 
 **Nouvelle commande `/workflow:auto-sprint` (2026-06-27, v8.18.0) :**
@@ -153,27 +161,27 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | Stack | Version | Install Command |
 |-------|---------|-----------------|
 | **Symfony / PHP** | 8.1 / PHP 8.4+ | `--tech=symfony` |
-| **React** | 19.2 + Compiler 1.0 | `--tech=react` |
-| **Flutter / Dart** | 3.44 / Dart 3.12 | `--tech=flutter` |
-| **Python** | 3.14+ / FastAPI | `--tech=python` |
+| **React** | 19.3 + Compiler 1.0 | `--tech=react` |
+| **Flutter / Dart** | 3.47 / Dart 3.13 | `--tech=flutter` |
+| **Python** | 3.15 / 3.14+ / FastAPI | `--tech=python` |
 | **Angular** | 22 | `--tech=angular` |
-| **Vue.js** | 3.5+ (3.6 beta Vapor) | `--tech=vuejs` |
-| **Vite** _(community)_ | 8.1 | `--tech=vite` |
-| **Vercel** _(community)_ | 56.5.0 | `--tech=vercel` |
-| **React Native** | 0.85 (New Architecture) | `--tech=reactnative` |
+| **Vue.js** | 3.5+ (3.6 RC Vapor) | `--tech=vuejs` |
+| **Vite** _(community)_ | 8.3 | `--tech=vite` |
+| **Vercel** _(community)_ | 63.1.2 | `--tech=vercel` |
+| **React Native** | 0.87 (New Architecture) | `--tech=reactnative` |
 | **C# / .NET** | 10 LTS / C# 14 | `--tech=csharp` |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | `--tech=laravel` |
 | **PHP** | 8.5 | `--tech=php` |
-| **Paperclip** | 2026.609.0 | `--tech=paperclip` |
+| **Paperclip** | 2026.1012.0 | `--tech=paperclip` |
 
-| **Docker** | 29.6.1 (CVE-2026-33997) | `--tech=docker` |
-| **Coolify** | v4.1.2 | `--tech=coolify` |
-| **Kubernetes** | 1.36.1 | `--tech=kubernetes` |
-| **OpenTofu** | 1.12.2 | `--tech=opentofu` |
-| **Ansible** | 2.21.1 | `--tech=ansible` |
-| **Hcloud** | 1.61+ | `--tech=hcloud` |
-| **PgBouncer** | 1.25.2 (CVE-2026-6664/6665/6666/6667 patched) | `--tech=pgbouncer` |
-| **FrankenPHP** | 1.12.4 (CVE-2026-45062 patched) | `--tech=frankenphp` |
+| **Docker** | 29.9.0 | `--tech=docker` |
+| **Coolify** | v4.4.6 | `--tech=coolify` |
+| **Kubernetes** | 1.37.1 | `--tech=kubernetes` |
+| **OpenTofu** | 1.13.1 | `--tech=opentofu` |
+| **Ansible** | 2.21.5 | `--tech=ansible` |
+| **Hcloud** | provider 1.70+ / CLI 1.70.1 | `--tech=hcloud` |
+| **PgBouncer** | 1.26.0 (security fixes over 1.25.x) | `--tech=pgbouncer` |
+| **FrankenPHP** | 1.13.0 (security fixes over 1.12.4) | `--tech=frankenphp` |
 
 See [Technologies](docs/TECHNOLOGIES.md) for full details.
 

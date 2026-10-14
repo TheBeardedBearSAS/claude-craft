@@ -531,7 +531,7 @@ class OrderCannotBeShippedException extends Exception
 ### Exception Handler
 
 ```php
-// bootstrap/app.php (Laravel 11+)
+// bootstrap/app.php (Laravel 13)
 ->withExceptions(function (Exceptions $exceptions) {
     $exceptions->render(function (ValidationException $e) {
         return response()->json([

@@ -18,7 +18,7 @@ Identify security vulnerabilities specific to Vercel's deployment model, mapped 
 
 ## SECURITY CHECKS
 
-### 1. Env Var Handling (OWASP #2 Cryptographic Failures, #5 Security Misconfiguration)
+### 1. Env Var Handling (OWASP #4 Cryptographic Failures, #2 Security Misconfiguration)
 
 Scan for:
 - Secrets logged via `console.log(process.env...)` in any `api/` handler
@@ -43,14 +43,14 @@ grep -A3 '"crons"' vercel.json
 grep -n "CRON_SECRET\|x-vercel-cron" api/**/*.ts
 ```
 
-### 3. CORS / CSP Headers in vercel.json (OWASP #1, #5)
+### 3. CORS / CSP Headers in vercel.json (OWASP #1, #2)
 
 Check `headers[]` in `vercel.json`:
 - `Access-Control-Allow-Origin` is not a bare `*` on any route handling authenticated requests
 - CSP (`Content-Security-Policy`) present and restrictive (`script-src`, `frame-ancestors`, `base-uri`)
 - `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, HSTS present
 
-### 4. Marketplace Credential Handling (OWASP #6 Supply Chain, #2 Cryptographic Failures)
+### 4. Marketplace Credential Handling (OWASP #3 Supply Chain, #4 Cryptographic Failures)
 
 For Storage via Marketplace (Neon/Upstash, etc.):
 - Connection strings/API keys stored only as env vars, never committed
@@ -71,7 +71,7 @@ Flag as a **migration item** (not a live vulnerability, but unsupported surface)
 ```bash
 grep -rn "runtime.*=.*['\"]edge['\"]\|export const runtime = 'edge'" api/ middleware.ts
 ```
-Flag as a **migration item**: Edge Runtime is deprecated. Recommend migrating to the Node.js runtime default (Fluid Compute) — never recommend adopting Edge Runtime in new code.
+Flag as a **migration item**: Edge Runtime is discouraged. Recommend migrating to the Node.js runtime default (Fluid Compute) — never recommend adopting Edge Runtime in new code.
 
 ### 7. Dependency Security
 
@@ -89,7 +89,7 @@ VERCEL SECURITY AUDIT
 📊 SECURITY SCORE: XX/100
 Risk Level: 🟢 LOW | 🟡 MEDIUM | 🔴 HIGH | ⚫ CRITICAL
 
-🔑 ENV VAR HANDLING (OWASP #2/#5)
+🔑 ENV VAR HANDLING (OWASP #4/#2)
 ──────────────────────────────────────────────────────────────
 Status: ✅ SECURE | ⚠️ RISKS FOUND | ❌ VULNERABLE
 
@@ -117,7 +117,7 @@ Findings:
     File: vercel.json
     Fix: Restrict to explicit allowed origins
 
-🔐 MARKETPLACE CREDENTIALS (OWASP #6/#2)
+🔐 MARKETPLACE CREDENTIALS (OWASP #3/#4)
 ──────────────────────────────────────────────────────────────
 Status: ✅ LEAST PRIVILEGE | ⚠️ OVERSCOPED
 
@@ -133,7 +133,7 @@ Findings:
 ⚙️ LEGACY EDGE RUNTIME (migration items)
 ──────────────────────────────────────────────────────────────
 [ℹ️ MIGRATION] export const runtime = 'edge' in middleware.ts
-    Fix: Migrate to the Node.js runtime default (Fluid Compute); Edge Runtime is deprecated
+    Fix: Migrate to the Node.js runtime default (Fluid Compute); Edge Runtime is discouraged
 
 📦 DEPENDENCY AUDIT
 ──────────────────────────────────────────────────────────────
@@ -184,14 +184,14 @@ grep -rn "runtime.*=.*['\"]edge['\"]" api/ middleware.ts
 ## SECURITY CHECKLIST
 
 ```
-[ ] No secret env var ever logged (OWASP #2)
-[ ] .env.local gitignored, Preview/Production scoping deliberate (OWASP #5)
+[ ] No secret env var ever logged (OWASP #4)
+[ ] .env.local gitignored, Preview/Production scoping deliberate (OWASP #2)
 [ ] Every crons[] target validates a shared secret before executing (OWASP #1)
 [ ] No cron target reachable unauthenticated as a public route (OWASP #1)
 [ ] CORS restricted to explicit origins on authenticated routes (OWASP #1)
-[ ] CSP/HSTS/nosniff/frame-ancestors present in vercel.json headers[] (OWASP #5)
-[ ] Marketplace credentials scoped to least privilege (OWASP #6)
+[ ] CSP/HSTS/nosniff/frame-ancestors present in vercel.json headers[] (OWASP #2)
+[ ] Marketplace credentials scoped to least privilege (OWASP #3)
 [ ] @vercel/kv / @vercel/postgres usage flagged for Marketplace migration
 [ ] No new code uses Edge Runtime; existing usage flagged for Fluid Compute migration
-[ ] Dependencies audited, no moderate+ vulnerabilities (OWASP #10)
+[ ] Dependencies audited, no moderate+ vulnerabilities (OWASP #3)
 ```

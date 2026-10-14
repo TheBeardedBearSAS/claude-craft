@@ -4,7 +4,7 @@ Les principes SOLID sont **obligatoires** pour tout le code du projet.
 
 | Principe | Regle | Verification |
 |----------|-------|-------------|
-| **SRP** | 1 classe = 1 responsabilite. Methodes < 20 lignes. | Nommage clair, pas de "and/or" |
+| **SRP** | 1 classe = 1 responsabilite. Methodes : cible < 10 lignes, limite < 20 (voir règle 05). | Nommage clair, pas de "and/or" |
 | **OCP** | Extension via interfaces/Strategy, pas modification. | Pas de switch/if sur types |
 | **LSP** | Sous-types substituables. Pas de preconditions renforcees. | Contrats respectes |
 | **ISP** | Interfaces < 5 methodes, segregees par client. | Pas de NotImplementedException |
@@ -19,7 +19,7 @@ Clean Architecture stricte reste valide, mais **accepter des alternatives** quan
 | Pattern | Quand l'utiliser | Source |
 |---------|------------------|--------|
 | **Vertical Slice Architecture (VSA)** | Features isolees (ex: API endpoints CRUD), eviter la sur-abstraction par couches | [Clean vs VSA](https://dev.to/harrykhlo/clean-architecture-vs-vertical-slice-pragmatism-over-dogma-in-modern-software-design-2co5) |
-| **Modular Monolith** | Fatigue microservices, un deploiement, modules decouples (Spring Modulith) | [Modular Monolith 2026](https://www.ancient.global/en/blogs-ancient/microservices-vs-modular-monolith-2026) |
+| **Modular Monolith** | Fatigue microservices, un deploiement, modules decouples (Spring Modulith) ; combiner avec des **Vertical Slices par module** pour borner le contexte (humain comme agent IA) | [Modular Monolith 2026](https://www.ancient.global/en/blogs-ancient/microservices-vs-modular-monolith-2026) |
 | **Hexagonal + DDD** | Bounded contexts clairs, ports/adapters explicites | Classique |
 | **Clean pragmatique** | Accepter DTOs/Shared Kernels traversant les couches | 2026 |
 

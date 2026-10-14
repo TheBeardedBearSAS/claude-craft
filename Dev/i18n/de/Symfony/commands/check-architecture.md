@@ -97,7 +97,7 @@ Deptrac ausführen, um Abhängigkeiten zwischen Schichten zu überprüfen:
 
 ```bash
 # Prüfen, ob deptrac.yaml existiert
-docker run --rm -v $(pwd):/app php:8.2-cli test -f /app/deptrac.yaml && echo "✅ deptrac.yaml gefunden" || echo "❌ deptrac.yaml fehlt"
+docker run --rm -v $(pwd):/app php:8.5-cli test -f /app/deptrac.yaml && echo "✅ deptrac.yaml gefunden" || echo "❌ deptrac.yaml fehlt"
 
 # Deptrac ausführen
 docker run --rm -v $(pwd):/app qossmic/deptrac analyse
@@ -221,16 +221,16 @@ Tools:
 
 ```bash
 # Projektstruktur analysieren
-docker run --rm -v $(pwd):/app php:8.2-cli find /app/src -type d -maxdepth 2
+docker run --rm -v $(pwd):/app php:8.5-cli find /app/src -type d -maxdepth 2
 
 # Abhängigkeiten mit Deptrac überprüfen
 docker run --rm -v $(pwd):/app qossmic/deptrac analyse --no-progress
 
 # Klassen nach Namespace auflisten
-docker run --rm -v $(pwd):/app php:8.2-cli find /app/src -name "*.php" -exec grep -l "namespace" {} \;
+docker run --rm -v $(pwd):/app php:8.5-cli find /app/src -name "*.php" -exec grep -l "namespace" {} \;
 
 # Doctrine-Annotations in Domain prüfen
-docker run --rm -v $(pwd):/app php:8.2-cli grep -r "@ORM" /app/src/Domain/ || echo "✅ Keine ORM-Annotations in Domain"
+docker run --rm -v $(pwd):/app php:8.5-cli grep -r "@ORM" /app/src/Domain/ || echo "✅ Keine ORM-Annotations in Domain"
 ```
 
 ## WICHTIG

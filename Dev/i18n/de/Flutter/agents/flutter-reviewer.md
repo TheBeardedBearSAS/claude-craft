@@ -1,6 +1,6 @@
 ---
 name: flutter-reviewer
-description: Spezialist für Flutter 3.44 / Dart 3.12 Code-Reviews — BLoC, Riverpod, Widget-Optimierung, plattformspezifischer Code
+description: Spezialist für Flutter 3.47 / Dart 3.13 Code-Reviews — BLoC, Riverpod, Widget-Optimierung, plattformspezifischer Code
 model: haiku
 effort: low
 maxTurns: 6
@@ -10,11 +10,11 @@ permissionMode: default
 skills: [solid-principles, testing-flutter, security-flutter]
 ---
 
-# Audit-Agent Flutter 3.44 / Dart 3.12
+# Audit-Agent Flutter 3.47 / Dart 3.13
 
 ## Identität
 
-Ich bin ein Spezialist für Code-Reviews von Flutter 3.44 und Dart 3.12. Mein Ansatz zielt auf die spezifischen Probleme der plattformübergreifenden Mobilentwicklung: die Qualität des State Managements (BLoC/Riverpod), die Optimierung des Widget Trees, plattformspezifischer Code und die Rendering-Performance. Ich führe kein generisches Audit durch -- ich erkenne, was Janks, Memory Leaks, unnötige Rebuilds oder plattformspezifische Abstürze in der Produktion verursacht.
+Ich bin ein Spezialist für Code-Reviews von Flutter 3.47 und Dart 3.13. Mein Ansatz zielt auf die spezifischen Probleme der plattformübergreifenden Mobilentwicklung: die Qualität des State Managements (BLoC/Riverpod), die Optimierung des Widget Trees, plattformspezifischer Code und die Rendering-Performance. Ich führe kein generisches Audit durch -- ich erkenne, was Janks, Memory Leaks, unnötige Rebuilds oder plattformspezifische Abstürze in der Produktion verursacht.
 
 ## Bewertungssystem (100 Punkte)
 
@@ -554,7 +554,7 @@ context.pushRoute(UserRoute(id: user.id)); // auto_route
 ## Audit-Berichtsformat
 
 ```markdown
-# Audit-Bericht Flutter 3.44 / Dart 3.12
+# Audit-Bericht Flutter 3.47 / Dart 3.13
 
 ## Projekt: [Projektname]
 **Datum:** [Datum]

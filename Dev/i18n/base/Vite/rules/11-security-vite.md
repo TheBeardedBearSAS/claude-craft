@@ -4,7 +4,7 @@
 
 ## OWASP Top 10:2025 Focus Areas for This Stack
 
-### A05:2025 - Security Misconfiguration — `envPrefix` / `define()` Secret Leakage
+### A02:2025 - Security Misconfiguration — `envPrefix` / `define()` Secret Leakage
 
 Vite inlines any environment variable matching `envPrefix` (default: `VITE_`) directly into the **client** bundle at build time, as plain-text string replacement — there is no runtime secret-fetch, no server boundary. The same is true of anything passed through `define()`. Both are permanent, public leaks once shipped: a value baked into a bundle by `define()` or `VITE_*` is retrievable by anyone who downloads the JS file, forever (until the artifact is rebuilt and redeployed).
 
@@ -38,7 +38,7 @@ VITE_API_BASE_URL=https://api.example.com   // public endpoint, fine to expose
 
 **Custom `envPrefix`**: if a project sets `envPrefix: ['PUBLIC_', 'APP_']` to move away from the `VITE_` convention, audit the prefix change itself — a broader or misconfigured prefix (e.g. accidentally matching `SECRET_` too) silently starts exposing variables that were previously safe by not matching the default `VITE_` filter.
 
-### A05:2025 - Security Misconfiguration — CSP for Multi-Page Apps
+### A02:2025 - Security Misconfiguration — CSP for Multi-Page Apps
 
 Each HTML entry point in an MPA (Shape 3) is a separate document with its own `<head>` — a CSP `<meta>` tag added to `index.html` does **not** propagate to `admin/index.html` or `about.html`. Either template the CSP meta tag into every HTML entry consistently, or (preferred) set it once via server response headers so it applies uniformly regardless of which entry is served.
 
@@ -66,7 +66,7 @@ export default defineConfig({
 
 **Rule**: for a multi-page app, verify the CSP (or its equivalent header configuration on the production host) against *every* entry, not just the root `index.html` — a common gap is a hardened root page next to an `admin/index.html` that was scaffolded later and never got the same treatment.
 
-### A05:2025 - Security Misconfiguration — WASM Sandboxing
+### A02:2025 - Security Misconfiguration — WASM Sandboxing
 
 A WebAssembly module loaded via the `?init` suffix runs inside the **same** JavaScript sandbox as the rest of the page — it gains no elevated OS-level privileges, but it does share the page's origin and any capabilities explicitly passed to it through the imports object. Two practical implications:
 
@@ -87,7 +87,7 @@ export default defineConfig({
 
 **Rule**: never grant a WASM module's imports object a host function it doesn't need (e.g. a raw `fetch` or filesystem-like capability) just because it's convenient — the imports object is the module's entire capability surface; treat it like a permissions list, not a utility bag.
 
-### A03:2025 - Injection — Worker Message Contracts
+### A05:2025 - Injection — Worker Message Contracts
 
 A Web Worker (Shape 4) receiving untrusted `postMessage` payloads (e.g. data forwarded from a third-party iframe, or attacker-influenced input) must validate the message shape before acting on it — `onmessage` has no built-in origin check when the worker is same-document, but if a worker is ever exposed to `postMessage` from other windows/origins, validate `event.origin` before trusting `event.data`.
 

@@ -137,7 +137,7 @@ Du bist ein **Senior Hetzner Cloud Deployment Engineer**, spezialisiert auf CI/C
              # Neuen Server aus Image erstellen
              hcloud server create \
                --name prod-blue-$(date +%s) \
-               --type cpx31 \
+               --type cpx32 \
                --image ${{ needs.build-image.outputs.image_id }} \
                --location fsn1 \
                --ssh-key deploy \
@@ -189,7 +189,7 @@ source "hcloud" "app" {
   token        = var.hcloud_token
   image        = "ubuntu-24.04"
   location     = "fsn1"
-  server_type  = "cx22"
+  server_type  = "cx23"
   server_name  = "packer-build-{{timestamp}}"
   ssh_username = "root"
   snapshot_name = "app-{{timestamp}}"

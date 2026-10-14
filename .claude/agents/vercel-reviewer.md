@@ -206,9 +206,9 @@ Does any Function declare export const config = { runtime: 'edge' } (or
 "runtime": "edge" in vercel.json's functions block)?
   YES --> Is this Function newly added or recently modified (not purely legacy,
           untouched code)?
-          YES --> MAJOR: Edge Runtime is deprecated by Vercel — migrate to Fluid
+          YES --> MAJOR: Edge Runtime is not recommended by Vercel — migrate to Fluid
                   Compute on the Node.js runtime (default) for full Node API access,
-                  bytecode-cached cold starts (Node 20+), and Active CPU pricing
+                  bytecode-cached cold starts (Node 22+), and Active CPU pricing
           NO  --> MINOR: flag as legacy-migration debt, do not block unmodified code
   NO  --> Function runs on the Node.js/Fluid Compute default --> continue to Node
           version check
@@ -220,7 +220,7 @@ Does any Function declare export const config = { runtime: 'edge' } (or
 Is the Node.js version pinned (package.json "engines.node", or the Vercel project's
 Node.js Version setting) to 20.x or newer?
   NO  --> MINOR: unpinned/old Node version forfeits Fluid Compute's bytecode-caching
-          cold-start improvement (Node 20+ specific) and risks silent runtime drift
+          cold-start improvement (Node 22+ specific) and risks silent runtime drift
           across redeploys
   YES --> OK
 ```
@@ -242,7 +242,7 @@ using it?
 
 **Edge Runtime on new/modified code:**
 ```typescript
-// FORBIDDEN — Edge Runtime declared on a newly-added Function: deprecated pattern
+// FORBIDDEN — Edge Runtime declared on a newly-added Function: discouraged pattern
 export const config = { runtime: 'edge' };
 
 export default function handler(req: Request) {
@@ -251,7 +251,7 @@ export default function handler(req: Request) {
 }
 
 // CORRECT — Node.js/Fluid Compute default, full Node API access, faster cold starts
-// on Node 20+ via bytecode caching
+// on Node 22+ via bytecode caching
 export const config = { maxDuration: 10 };
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
@@ -277,7 +277,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 ```
 ```typescript
 // api/legacy.ts
-// TODO(JIRA-1234): migrate off Edge Runtime — deprecated by Vercel, see Fluid Compute
+// TODO(JIRA-1234): migrate off Edge Runtime — not recommended by Vercel, see Fluid Compute
 export const config = { runtime: 'edge' };
 ```
 
@@ -329,7 +329,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 |---------|----------|--------------|
 | Runtime | Node.js/Fluid Compute default | `runtime: 'edge'` on new/modified code |
 | Legacy Edge Runtime | Ticketed migration marker (TODO + issue ref) | Silent, un-flagged Edge Runtime left in place |
-| Node version | Pinned to 20+ (`engines.node` or project setting) | Unpinned, drifting default |
+| Node version | Pinned to 22.x or 24.x (Node 20 is deprecated on Vercel since 2026-10-01) (`engines.node` or project setting) | Unpinned, drifting default |
 | Handler input | Validated/parsed (zod, manual guard) before use | Raw `req.body`/`req.query` used unchecked |
 | Handler output | Explicit status + typed body on every path | Implicit 200, inconsistent error shape |
 | Cold-start awareness | Heavy imports lazy-loaded/deferred when not always needed | Every dependency imported eagerly at module top |
@@ -796,7 +796,7 @@ describe('api/cron/daily', () => {
 | Topic | What to check |
 |-------|---------------|
 | **Fluid Compute** | Confirm Functions default to Fluid Compute (Active CPU pricing), not legacy fixed-concurrency Serverless Functions billing |
-| **Edge Runtime deprecation** | Any `runtime: 'edge'` found should carry a migration ticket reference, never be presented as the recommended pattern for new code |
+| **Edge Runtime discouraged** | Any `runtime: 'edge'` found should carry a migration ticket reference, never be presented as the recommended pattern for new code |
 | **Deprecated Storage packages** | `@vercel/kv`/`@vercel/postgres` imports are a MAJOR finding regardless of when they were added — flag for Marketplace migration (Neon/Upstash) |
 | **ISR cache primitive vs vercel.json headers** | Framework-native revalidation and vercel.json `headers` must never target the same route for `Cache-Control` |
 | **Cron plan limits** | The Hobby plan caps Cron Jobs at 1/day — verify the declared schedule matches the actual plan tier in use |

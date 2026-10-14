@@ -70,6 +70,10 @@ $this->bus->dispatch(new SendWelcomeEmail($user->id));
 - ❌ Stocker la payload complète d'un email/PDF dans le message → préférer un ID + lookup, sinon RabbitMQ explose.
 - ❌ Pas de circuit breaker autour des appels tiers : un provider down fait monter la DLQ en flèche.
 
+## Documenter les contrats de messages
+
+Si des messages sont consommés par d'autres systèmes/équipes, les décrire avec **AsyncAPI 3.x** (3.1.0 courante, https://www.asyncapi.com/docs/reference/specification/latest) — l'équivalent d'OpenAPI pour les APIs événementielles.
+
 ## Pour aller plus loin
 
 > Détails complets, patterns Laravel/Ecotone, exemples de configuration, observabilité OpenTelemetry, lifecycle events, checklists par phase : voir `@.claude/skills/async/REFERENCE.md`.

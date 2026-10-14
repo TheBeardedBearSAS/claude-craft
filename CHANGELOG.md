@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.23.0] - 2026-10-13
+
 ### Security
+
+- **Audit fraîcheur 2026-10-13 — OWASP Top 10:2025** : la règle `11-security` (chargée à chaque session), `references/base/security.md`, le skill `security`, `security-auditor` et leurs miroirs i18n suivaient un classement faux (8/10 catégories mal numérotées, A08 *Software or Data Integrity Failures* absente). Ordre officiel A01–A10 rétabli, « Vulnerable and Outdated Components » fusionné dans A03 Supply Chain, A09 renommé *Logging and Alerting*. Test de régression `tests/content/owasp-top10.test.mjs`.
+- **FrankenPHP 1.12.4 → 1.13.0** et **PgBouncer 1.25.2 → 1.26.0** : versions recommandées vulnérables (1.12.5/1.13.0 et 1.26.0 corrigent des CVE, dont CVE-2026-19888, -6668, -6669 pour PgBouncer). Images des agents infra mises à jour ; `bitnami/pgbouncer` (plus de tag 1.26 publié) remplacé par `edoburu/pgbouncer:v1.26.0-p0`.
+- **Hetzner Cloud** : types cx22/cx32/cpx21/cpx31… (plus commandables depuis 2026-01-01) remplacés par cx23/cx33/cpx22/cpx32… ; bannière `datacenter` → `location` corrigée (`datacenter` supprimé, endpoints en 410 depuis 2026-10-01) ; provider hcloud ≥ 1.70.0, CLI 1.70.1, OpenTofu 1.13.x en CI.
+- Argon2id : minimum OWASP (19 MiB / t=2 / p=1) distingué de la recommandation interne (128 MiB / t≥3) ; statut bcrypt harmonisé (legacy, work factor ≥ 10) ; CycloneDX 1.7, SLSA 1.2, ASVS 5.0, OWASP Agentic Top 10 2026 ; React2Shell (CVE-2025-55182) documenté dans la sécurité React.
 
 - **`js-yaml` 5.2.1 → 5.2.3** (GHSA-pm4m-ph32-ghv5, **haute**) : temps de parsing exponentiel sur les collections flow, exploitable en déni de service. Le paquet est sur le chemin critique du projet — `scripts/verify-versions.mjs`, `scripts/generate-references.mjs` et le parseur de frontmatter du serveur Kanban chargent tous du YAML.
 - **`hono` 4.12.28 → 4.13.1** (4 avis, modérés) : ReDoS dans le middleware CORS via `Access-Control-Request-Headers` (GHSA-8j4g-w8fx-2239), rétention de sortie SSR par `memo()` entre requêtes menant à une divulgation de données inter-utilisateurs (GHSA-f23p-vx2j-j53r), en-têtes listés dans `Connection` non retirés par le Proxy Helper (GHSA-79qm-7rj5-m7r9), et DoS algorithmique dans le middleware Language (GHSA-54fx-42gc-7vw4).
@@ -17,6 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Timeouts des hooks en secondes** : `.claude/settings.json`, les 5 `settings.json.template`, les templates `.claude/templates/hooks/*.json` et `.bmad/hooks-config.example.json` déclaraient `5000`/`3000`/`10000` comme des millisecondes — Claude Code les lit en secondes (≈ 83 min au lieu de 5 s). Test de régression ajouté.
 
 ### Changed
+
+- **Audit fraîcheur 2026-10-13** (`config/versions.yaml` SSOT + `tech-registry.js` + 5 langues) : React 19.3, Flutter 3.47 / Dart 3.13, React Native 0.87 / Expo SDK 57 (annule la note erronée du 2026-07-03 « 0.86 inexistant »), Vue 3.6 RC / Pinia 4, Vite 8.3 (`build.rollupOptions` → `build.rolldownOptions`, vite-plugin-dts 5), Vercel CLI 63.1.2 (Node 22/24), Python 3.15 / FastAPI 0.143 / SQLAlchemy 2.1, Paperclip 2026.1012.0 (Node 24.11+, breaking changes 2026.916 → 2026.1012), Docker 29.9.0, Compose 5.6.0, Hadolint 2.15.1, Kubernetes 1.37.1 (Gateway API au lieu d'Ingress-NGINX retiré), Coolify 4.4.6, OpenTofu 1.13.1, ansible-core 2.21.5.
+- **Testing** : Vitest 5 (`projects`), Pest 5 / PHPUnit 13, pytest 9, Ruff 0.17, Patrol 4 ; outils BDD par écosystème ; `vitest-browser-react`.
+- **PHP** : PER Coding Style 3.0 (`@PER-CS3x0`) remplace PSR-12 comme standard ; Laravel 13.x (patch figé retiré, `PreventRequestForgery`, `Queue::route`, attributs de jobs) ; Symfony 8.1 (calendrier de support 6.4/8.2) ; .NET 8/9 fin de support 2026-11-10, C# 15 en preview.
+- **Principes / docs** : seuils de complexité cognitive présentés comme choix interne (Sonar S3776 = 15) ; limite de lignes par méthode unifiée ; workflow d'analyse aligné ; OpenAPI 3.2.x, AsyncAPI 3.1, ICU MessageFormat 2.0 ; Log4brains signalé inactif.
+- « Edge Runtime déprécié » (non sourcé) reformulé : Vercel recommande de migrer vers Node.js (Fluid Compute).
+- `docs/TECHNOLOGIES.md` désormais vérifié par `verify-versions` ; denylist étendue aux versions périmées.
 
 - **Claude Code recommandé 2.1.193 → 2.1.296** ; `COMPATIBILITY.md` couvre 2.1.194 → 2.1.296 (MCP protocole 2026-07-28, descriptions MCP plafonnées à 4 096 caractères, settings projet restreints, hooks `onFailure: "block"`, `claude purge`).
 - **Modèles génération 5.5** : `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`, `claude-fable-5-1` (settings, templates, règle 12 ×6, CLI-REFERENCE, FAQ, guides). La note « Fable 5 / Mythos 5 suspendus » est retirée (Fable 5.1 est courant) ; Sonnet 5 reste à $2/$10.
@@ -34,6 +48,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Première exécution : dérive réelle constatée de **2.1.193 → 2.1.227** sur le CLI Claude Code (`config/versions.yaml` et `.claude/COMPATIBILITY.md` figés au 2026-06-30).
 
 ### Fixed
+
+- Champ compose obsolète `version: "3.8"` retiré d'une quarantaine d'exemples ; caractères Unicode corrompus (octet de poids fort perdu : `│`, `✅`, `─`…) restaurés dans 18 fichiers Flutter/Workflow ; imports `DateTimeImmutable`/`DateTimeInterface` manquants dans les exemples DDD.
 
 - Exemples de hooks utilisant `echo '$TOOL_OUTPUT'` / `$FILEPATH` (variables inexistantes) remplacés par une lecture JSON sur stdin avec `jq` (référence context-management, règle 12 i18n, guides 05, `templates/hooks/README.md`, `auto-format.json`).
 - Denylist `verify-versions` : l'entrée `claude-fable-5` matchait `claude-fable-5-1` ; doublons `'1.12.1'` retirés.

@@ -1,6 +1,6 @@
 ---
 name: react-reviewer
-description: Spécialiste de la revue de code React 19.2 + Compiler 1.0 et TypeScript — hooks, composition, performance, analyse de bundle
+description: Spécialiste de la revue de code React 19.3 + Compiler 1.0 et TypeScript — hooks, composition, performance, analyse de bundle
 model: haiku
 effort: low
 maxTurns: 6
@@ -10,11 +10,11 @@ permissionMode: default
 skills: [solid-principles, testing-react, security-react]
 ---
 
-# Agent Auditeur React 19.2 + Compiler 1.0 / TypeScript
+# Agent Auditeur React 19.3 + Compiler 1.0 / TypeScript
 
 ## Identité
 
-Je suis un spécialiste de la revue de code React 19.2 + Compiler 1.0 et TypeScript. Mon approche est centrée sur les problèmes spécifiques à React : les règles des hooks, la composition de composants, le rendu performant, la frontière Server/Client Components, et l'analyse de la taille des bundles. Je ne fais pas un audit générique -- je détecte ce qui casse, ralentit ou complexifie inutilement une application React moderne.
+Je suis un spécialiste de la revue de code React 19.3 + Compiler 1.0 et TypeScript. Mon approche est centrée sur les problèmes spécifiques à React : les règles des hooks, la composition de composants, le rendu performant, la frontière Server/Client Components, et l'analyse de la taille des bundles. Je ne fais pas un audit générique -- je détecte ce qui casse, ralentit ou complexifie inutilement une application React moderne.
 
 ## Système de notation (100 points)
 
@@ -247,7 +247,11 @@ Le composant re-render-il à chaque changement de parent ?
     NON --> Acceptable (micro-optimisation inutile)
 ```
 
-### React 19.2 + Compiler 1.0 : Server Components vs Client Components
+### Nouveautés React 19.3 à connaître
+
+Aucun breaking change. `<ViewTransition>` et les Fragment Refs (`<Fragment ref>`) sont stables ; `addTransitionType` qualifie une Transition ; `use(browser())` (`react-dom`) exclut un composant du rendu serveur ; Trusted Types supportés ; Context rendu sans Provider dans les Server Components ; Effects invoqués deux fois à l'hydratation en Strict Mode. Ne pas signaler ces API comme expérimentales. 
+
+### React 19.3 + Compiler 1.0 : Server Components vs Client Components
 
 ```
 Le composant a-t-il besoin d'interactivité (hooks, events) ?
@@ -368,7 +372,7 @@ import { format } from 'date-fns';
 ## Format de rapport d'audit
 
 ```markdown
-# Rapport d'audit React 19.2 + Compiler 1.0 / TypeScript
+# Rapport d'audit React 19.3 + Compiler 1.0 / TypeScript
 
 ## Projet : [Nom du projet]
 **Date :** [Date]

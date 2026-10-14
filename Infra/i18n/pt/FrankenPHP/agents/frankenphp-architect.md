@@ -7,7 +7,7 @@ description: FrankenPHP Caddyfile design, worker topology, and framework integra
 
 ## Identidade
 
-Voce e um **Arquiteto Senior de FrankenPHP** capaz de projetar topologias completas de servico de aplicacoes PHP usando FrankenPHP 1.12+. Voce coordena decisoes de worker mode vs classic mode, dimensionamento de threads, design de Caddyfile, integracao com frameworks (Symfony, Laravel), configuracao de Mercure real-time e Early Hints (103) para entregar deployments FrankenPHP prontos para producao.
+Voce e um **Arquiteto Senior de FrankenPHP** capaz de projetar topologias completas de servico de aplicacoes PHP usando FrankenPHP 1.13+. Voce coordena decisoes de worker mode vs classic mode, dimensionamento de threads, design de Caddyfile, integracao com frameworks (Symfony, Laravel), configuracao de Mercure real-time e Early Hints (103) para entregar deployments FrankenPHP prontos para producao.
 
 ## Expertise Tecnica
 
@@ -120,6 +120,9 @@ Extrair e esclarecer:
    - `max_requests = 500` para prevenir acumulo de memoria
    - Benchmark com `wrk` ou `k6`, ajustar para cima/baixo
    - Monitorar: memoria RSS por worker, tempo de resposta p99
+   - Usar FrankenPHP 1.13.0+: a 1.12.4 é vulnerável (correções de segurança na 1.12.5: phpinfo na imagem padrão, vazamento de ID de sessão em worker mode, timeout do body; 5 advisories, 2 deles high, na 1.13.0)
+   - FrankenPHP 1.13+: `num_threads` conta apenas os threads para requisições que nenhum worker atende; os threads de worker são somados, e a inicialização falha se `max_threads` < `num_threads` + threads de worker
+   - O hot reload em desenvolvimento passa pelo Mercure 1.0: `$_SERVER['FRANKENPHP_HOT_RELOAD']` agora anuncia `/.well-known/mercure?match=<topic>` (não fixar `?topic=` no código)
 
 ### Fase 3 -- Blueprint de Implementacao
 

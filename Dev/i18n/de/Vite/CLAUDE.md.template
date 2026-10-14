@@ -6,7 +6,7 @@
 
 **Stack**: Vite {{VITE_VERSION}}, TypeScript {{TS_VERSION}}
 
-**Geltungsbereich**: ausschließlich framework-agnostische Vite-Nutzung — Vanilla JS/TS-Anwendungen, Bibliotheksentwicklung (build.lib), Multi-Page-Anwendungen (rollupOptions.input), Worker-/WASM-Einstiegspunkte. Nicht zuständig für die Dev-Server-Konfiguration von React/Vue/Angular/Svelte — siehe dazu die jeweilige tooling.md des betreffenden Stacks.
+**Geltungsbereich**: ausschließlich framework-agnostische Vite-Nutzung — Vanilla JS/TS-Anwendungen, Bibliotheksentwicklung (build.lib), Multi-Page-Anwendungen (rolldownOptions.input), Worker-/WASM-Einstiegspunkte. Nicht zuständig für die Dev-Server-Konfiguration von React/Vue/Angular/Svelte — siehe dazu die jeweilige tooling.md des betreffenden Stacks.
 
 ### Projektstruktur
 ```
@@ -32,7 +32,7 @@ project-root/
 ### Architektur: {{ARCHITECTURE_PATTERN}}
 - **Einstiegspunkt**: `index.html` im Projekt-Root (bzw. in `root`), niemals innerhalb von `public/`
 - **Bibliotheksmodus**: `build.lib` + `vite-plugin-dts` für Pakete, die auf npm veröffentlicht werden
-- **Multi-Page**: `build.rollupOptions.input` benennt jeden HTML-Einstiegspunkt explizit
+- **Multi-Page**: top-level `input` benennt jeden HTML-Einstiegspunkt explizit
 - **Worker/WASM**: `new Worker(new URL(...), { type: 'module' })`, Suffixe `?init`/`?url`
 
 Siehe `rules/02-architecture.md` für vollständige Muster.

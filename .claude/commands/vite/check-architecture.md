@@ -20,7 +20,7 @@ Evaluate the project's Vite configuration, entry-point organization, and adheren
 
 ```
 [ ] Exactly one project shape identified (vanilla SPA | library | multi-page | workers/WASM)
-[ ] No mixing of build.lib and build.rollupOptions.input without justification
+[ ] No mixing of build.lib and build.rolldownOptions.input without justification
 [ ] index.html present at project root (SPA/MPA) or absent by design (library)
 [ ] package.json "type": "module" set
 ```
@@ -39,7 +39,7 @@ Evaluate the project's Vite configuration, entry-point organization, and adheren
 
 ```
 [ ] SPA: single index.html entry point, no orphaned HTML files
-[ ] MPA: build.rollupOptions.input maps each page explicitly (no glob magic without review)
+[ ] MPA: build.rolldownOptions.input maps each page explicitly (no glob magic without review)
 [ ] Library: build.lib.entry points to src/index.ts (or per sub-path exports)
 [ ] Workers: worker entries use ?worker / ?worker&inline suffix explicitly, not ad-hoc new Worker(string)
 ```
@@ -77,7 +77,7 @@ Detected Shape: Vanilla SPA | Library | Multi-Page | Workers/WASM
 Status: ✅ Consistent | ⚠️ Mixed signals | ❌ Ambiguous
 
 Issues:
-- build.lib present alongside build.rollupOptions.input
+- build.lib present alongside build.rolldownOptions.input
   → Pick one shape; split into two packages if both are genuinely needed
 
 ⚙️ VITE.CONFIG.TS ORGANIZATION
@@ -99,7 +99,7 @@ Entries Found: X
 Shape-Consistent: ✅ Yes | ❌ No
 
 Issues:
-- pages/legacy.html not registered in rollupOptions.input
+- pages/legacy.html not registered in input
   → Add it explicitly or delete the orphaned file
 
 📦 BUILD OUTPUT
@@ -122,7 +122,7 @@ Issues:
 
 📋 RECOMMENDATIONS
 ──────────────────────────────────────────────────────────────
-Priority 1: Resolve project-shape ambiguity (lib vs rollupOptions.input)
+Priority 1: Resolve project-shape ambiguity (lib vs rolldownOptions.input)
 Priority 2: Register all HTML entries explicitly for MPA
 Priority 3: Align dist/ output with package.json exports
 

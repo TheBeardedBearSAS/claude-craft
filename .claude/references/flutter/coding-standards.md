@@ -1,12 +1,12 @@
-# Flutter/Dart Coding Standards - Dart 3.12+ / Flutter 3.44+
+# Flutter/Dart Coding Standards - Dart 3.13+ / Flutter 3.47+
 
 ## Core Principle
 
 Follow **Effective Dart**: the official guide for Dart style and best practices.
 
 **Versions 2026:**
-- Dart 3.12.x+ (dot shorthands, enhanced patterns)
-- Flutter 3.44.x+ (WebAssembly, MCP, hot reload web stable)
+- Dart 3.13.x+ (dot shorthands, enhanced patterns)
+- Flutter 3.47.x+ (WebAssembly, MCP, hot reload web stable)
 
 References:
 - [Effective Dart: Style](https://dart.dev/guides/language/effective-dart/style)
@@ -248,14 +248,14 @@ final colors = [
 
 ---
 
-## Dart 3.11+ Features
+## Dart 3.10+ Features
 
 ### 1. Dot Shorthands (Nouveau)
 
 **Rule**: Utiliser dot shorthands quand le type est inféré.
 
 ```dart
-✅ GOOD - Dart 3.11+
+✅ GOOD - Dart 3.10+
 enum OrderStatus { pending, active, completed, cancelled }
 
 // Dans un switch

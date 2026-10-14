@@ -47,17 +47,19 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 ### Conteneurisation
 | Technologie | Compétences | Versions 2026 |
 |-------------|-------------|---------------|
-| Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.6.1 (SSOT `config/versions.yaml` ; inclut les correctifs CVE de la branche 29.x) |
-| Docker Compose | Orchestration locale, profiles, extensions | Spec v5.0.0 "Mont Blanc" (champ `version:` obsolète) |
-| Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, User Namespaces, Mutating Admission Policies | 1.36.1 stable (sortie 13 mai 2026) |
+| Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.9.0 (SSOT `config/versions.yaml` ; inclut les correctifs CVE de la branche 29.x) |
+| Docker Compose | Orchestration locale, profiles, extensions | Compose 5.6.0 (Compose Specification ; champ `version:` obsolète — le supprimer) |
+| Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, User Namespaces, Mutating Admission Policies | 1.37.1 stable (1.36.5 sur la branche 1.36 ; 1.34 hors support après le 2026-10-27) — Ingress-NGINX retiré (mars 2026) → Gateway API |
 | Helm | Charts, values, templating | Helm 4.2.2 (Helm 4 = MAJOR — server-side apply, WASM plugins, API v4 ; Helm 3 EOL sécurité nov. 2026) |
-| FrankenPHP | Worker mode (Laravel Octane/Symfony), HTTP/3, max_requests | 1.12.4 (PHP 8.5, Caddy 2.11.2, CVE-2026-45062 patché) |
-| PgBouncer | Transaction pooling, prepared statements natifs | 1.25.2 (1.21+ requis pour prepared stmts ; CVE-2026-6664/6665/6666/6667 patchées) |
+| FrankenPHP | Worker mode (Laravel Octane/Symfony), HTTP/3, max_requests | 1.13.0 (PHP 8.5 ; 1.12.4 vulnérable → minimum 1.12.5, recommandé 1.13.0) |
+| PgBouncer | Transaction pooling, prepared statements natifs | 1.26.0 (1.21+ requis pour prepared stmts ; 1.25.x vulnérable, CVE corrigées en 1.26.0 ; option `-R` supprimée) |
 
 **Sources** :  
 - Docker Engine 29.x : https://docs.docker.com/engine/release-notes/29/  
-- Compose Spec v5.0.0 : https://www.compose-spec.io/  
-- Kubernetes 1.36 : https://kubernetes.io/blog/2026/04/22/kubernetes-v1-36-release/  
+- Compose 5.6.0 : https://github.com/docker/compose/releases  
+- Compose Specification : https://www.compose-spec.io/  
+- Kubernetes releases (1.37.1 / 1.36.5) : https://kubernetes.io/releases/  
+- Retrait Ingress-NGINX : https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/  
 - K8s Gateway API : https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl  
 - K8s Support Policy : https://endoflife.date/kubernetes
 
@@ -68,10 +70,10 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | GCP | Cloud Run, GKE, Cloud SQL |
 | DigitalOcean | App Platform, Kubernetes, Managed DB |
 | Azure | AKS, App Service, Azure DevOps |
-| Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) | hcloud provider 1.65.0 (juin 2026) |
-| Coolify | Self-hosted PaaS, MCP server natif (read-only), audit logging structuré | v4.1.2 (juin 2026) |
-| OpenTofu | State encryption, OCI registry backends | 1.12.2 |
-| Ansible | Automation, playbooks, roles | ansible-core 2.21.1 |
+| Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) | hcloud provider 1.70.0 / CLI 1.70.1 — `datacenter` supprimé (410 depuis le 2026-10-01) → `location` ; cx22/cpx21… retirés → cx23/cpx22… |
+| Coolify | Self-hosted PaaS, MCP server natif (read-only), audit logging structuré | v4.4.6 (octobre 2026) |
+| OpenTofu | State encryption, OCI registry backends | 1.13.1 |
+| Ansible | Automation, playbooks, roles | ansible-core 2.21.5 (collection `hetzner.hcloud` 7.2.0) |
 
 ### Monitoring & Observability
 | Catégorie | Outils |
@@ -164,7 +166,7 @@ trivy image <image>
 grype <image>  # Alternative Anchore
 ```
 
-**Docker Engine 29.x (29.6.1)** :  
+**Docker Engine 29.x (29.9.0)** :  
 - BuildKit activé par défaut (cache persistant natif)
 - SBOM generation native (`--sbom=true`)
 - Provenance attestations (`--provenance=mode=max`)
@@ -189,17 +191,17 @@ frankenphp php-server --worker public/index.php
 frankenphp_max_requests 1000  # Redémarrage worker (anti memory leak)
 ```
 
-**Patterns clés FrankenPHP 1.12.4** :
+**Patterns clés FrankenPHP 1.13.0** :
 - **Worker mode** : Laravel Octane/Symfony Runtime (2-3× gains performance)
 - **`max_requests`** : Redémarrage worker après N requêtes (prévention fuites mémoire)
-- **HTTP/3 natif** : Via Caddy 2.11.2 intégré
+- **HTTP/3 natif** : Via Caddy 2.11.x intégré (2.11.7 avec FrankenPHP 1.13.0)
 - **PHP 8.5 support** : Lazy Objects, Property Hooks
-- **Sécurité** : CVE-2026-45062 (CVSS 8.1 — unicode CGI path splitting) — **PINNER >= 1.12.4**
+- **Sécurité** : 1.12.4 est vulnérable (1.12.5 = release de sécurité : phpinfo, fuite de session ID en worker mode, timeout du body ; 1.13.0 corrige d'autres vulnérabilités) — **PINNER >= 1.13.0** (CVE-2026-45062 corrigée depuis 1.12.4)
 
 **Sources** :  
 - FrankenPHP : https://frankenphp.dev/docs/worker/  
 - Worker Laravel : https://laravel.com/docs/octane  
-- CVE corrections : https://github.com/dunglas/frankenphp/releases
+- CVE corrections : https://github.com/php/frankenphp/releases (dépôt transféré sous l'organisation `php`)
 
 ### PgBouncer (2026)
 
@@ -211,7 +213,7 @@ max_prepared_statements = 200  # Requis 1.21+
 server_idle_timeout = 600
 ```
 
-**Patterns clés PgBouncer 1.25.2** (CVE-2026-6664/6665/6666/6667 patchées) :
+**Patterns clés PgBouncer 1.26.0** (CVE-2026-19888, CVE-2026-6668 et CVE-2026-6669 corrigées en 1.26.0 ; CVE-2026-6664/6665/6666/6667 corrigées depuis 1.25.2 ; option `-R` supprimée) :
 - **CVE-2026-6665** : stack overflow dans le parseur SCRAM (auth), exploitable sans authentification préalable
 - **CVE-2026-6666** : null pointer dereference lors de la propagation SQLSTATE depuis le serveur backend
 - **Prepared statements natifs** : Depuis 1.21 (15-250% gains perf selon charge)
@@ -220,12 +222,13 @@ server_idle_timeout = 600
 - **Monitoring** : `SHOW POOLS`, `SHOW STATS` via admin console
 
 **Sources** :  
+- Changelog (CVE 1.26.0) : https://www.pgbouncer.org/changelog.html  
 - Release 1.21 : https://www.postgresql.org/about/news/pgbouncer-1210-released-now-with-prepared-statements-2735/  
 - Benchmarks : https://www.percona.com/blog/pgbouncer-prepared-statements/
 
 ### Coolify (2026)
 
-**Nouveautés v4.1.2** :
+**Nouveautés v4.1.x → v4.4.6** :
 - **MCP server natif** (instance-level, read-only) : expose les ressources Coolify comme outils MCP pour les agents IA ; activer/désactiver via POST (endpoint changé de GET en v4.1). Activer dans *Settings → Integrations → MCP*. Écriture prévue dans une version future.
 - **Audit logging structuré** : mutations API, événements webhook, authentification et autorisations loggués (queryable depuis le panel admin) — compliance-ready.
 
@@ -253,7 +256,7 @@ terraform {
 tofu plan -refresh-only -out=drift.plan
 ```
 
-**Patterns clés OpenTofu 1.12.x (1.12.2)** :
+**Patterns clés OpenTofu 1.13.x (1.13.1)** :
 - **State encryption at rest** : Chiffrement natif (SLSA Level 3)
 - **OCI registry backends** : Alternative S3/Azure Blob
 - **Drift detection** : `plan -refresh-only` pour audit infra
@@ -275,13 +278,13 @@ tofu plan -refresh-only -out=drift.plan
     dest: /tmp/
 ```
 
-**Patterns clés ansible-core 2.21.x (2.21.1)** :
+**Patterns clés ansible-core 2.21.x (2.21.5)** :
 - **Migration 2.20→2.21** : FQCNs obligatoires (`ansible.builtin.*`)
 - **Collections** : `ansible-galaxy collection install` requis
 - **ansible-core 2.21** : Optimisations parallélisation, Python 3.13 support
 
 **Sources** :  
-- ansible-core 2.21 : https://pypi.org/project/ansible-core/2.21.1/  
+- ansible-core 2.21 : https://pypi.org/project/ansible-core/2.21.5/  
 - Migration guide : https://docs.ansible.com/ansible/latest/porting_guides/porting_guide_core_2.21.html
 
 ### Kubernetes (2026)

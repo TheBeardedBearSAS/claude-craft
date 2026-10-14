@@ -46,8 +46,8 @@ O estado e sincrono e usado para renderizacao?
 
 **Zoneless por padrao (estavel) :**
 - Economia de ~33 KB de bundle (Zone.js opcional)
-- +30-40% de melhoria de performance de renderizacao segundo Angular DevRel
-- API estavel: `provideZonelessChangeDetection()` de `@angular/core` (nao mais `Experimental`)
+- Ganhos de performance variam conforme a aplicacao (o numero "+30-40%" vem de uma fonte de 2024): medir, nao assumir
+- Nenhum provider necessario na v21+/v22: `provideZonelessChangeDetection()` so e necessario na v20 (https://angular.dev/guide/zoneless)
 
 **Signal Forms (estavel v22) :**
 - Alternativa nativa baseada em signals aos Reactive Forms, **pronto para producao**
@@ -421,7 +421,7 @@ A aplicacao utiliza deteccao de mudancas zoneless?
     SIM --> Os event listeners disparam corretamente o CD?
   NAO --> Zone.js e utilizado?
     SIM --> MENOR em v22+: migracao para zoneless recomendada (economiza ~33 KB)
-    NAO --> Verificar que provideZonelessChangeDetection() esta configurado (estavel desde v20.2)
+    NAO --> Verificar que nenhum provideZoneChangeDetection() reativa o Zone.js (zoneless por padrao desde a v21)
 
 httpResource() e usado para requisicoes HTTP repetitivas?
   NAO --> Os componentes usam signal + effect + HttpClient?

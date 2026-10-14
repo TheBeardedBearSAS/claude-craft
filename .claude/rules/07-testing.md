@@ -31,17 +31,19 @@ Format Gherkin pour les user stories. Documentation vivante, langage commun dev 
 
 | Stack | Unit/Composants | E2E/Browser |
 |-------|-----------------|-------------|
-| **JS/TS/React** | **Vitest 4.1+** (Browser Mode stable) | **Playwright** |
-| **PHP** | **Pest 4.5+** (PHPUnit 12, Browser Testing intégré) | Playwright via Pest |
-| **Python** | **pytest 8.x** + **Ruff 0.8+** (linting+format) | Playwright |
+| **JS/TS/React** | **Vitest 5** (Browser Mode stable) | **Playwright** |
+| **PHP** | **Pest 5** (PHPUnit 13, PHP 8.4+, Browser Testing intégré) | Playwright via Pest |
+| **Python** | **pytest 9.x** + **Ruff 0.17+** (linting+format) | Playwright |
 
-**Sources :** [Vitest 4](https://vitest.dev/blog/vitest-4), [Pest 4](https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing)
+**Sources :** [Vitest Browser Mode](https://vitest.dev/guide/browser/), [Pest 5 Upgrade Guide](https://v5.pestphp.com/docs/upgrade-guide)
 
 ## Stratégies 2026
 
 - **Vitest Browser Mode** (Chromium/Firefox/WebKit) — abandonner JSDOM lourd
-- **Vitest workspaces** pour monorepos (unit/browser séparés)
-- **Playwright component testing** — alternative supérieure à React Testing Library
+- **Vitest `projects`** pour monorepos (unit/browser séparés) — `workspace` est déprécié depuis Vitest 3.2
+- **Playwright component testing** ou **vitest-browser-react** (navigateur réel) pour les composants ; React Testing Library 16 / RNTL 14 restent maintenus et valides (JSDOM, React Native)
+- **E2E mobile** : **Maestro** (YAML, React Native/Flutter/natif), Detox (RN), Patrol (Flutter)
+- **BDD (Gherkin)** : **Cucumber.js** (JS/TS), **Behat** (PHP), **pytest-bdd** (Python)
 - **Mutation testing** : **Stryker** (JS/TS/C#), **Infection** (PHP), **Mutmut** (Python) — "coverage ment, mutation scores disent la vérité" ([Stryker Mutator](https://stryker-mutator.io/))
 - **Property-based testing** : **fast-check** (JS), **Hypothesis** (Python)
 

@@ -36,7 +36,7 @@ Vollständige Konfigurations- und Architekturprüfung ausführen:
 - Korrektheit von vite.config.ts (defineConfig, Aliase synchron mit tsconfig) (8 Pkt.)
 - Platzierung von index.html im Projekt-Root, niemals in public/ (6 Pkt.)
 - Konfiguration von build.lib für Bibliotheken (entry, formats, external, vite-plugin-dts) (8 Pkt.)
-- rollupOptions.input für Multi-Page-Anwendungen, Namenskonvention der Plugins (vite-plugin-*) (8 Pkt.)
+- rolldownOptions.input für Multi-Page-Anwendungen, Namenskonvention der Plugins (vite-plugin-*) (8 Pkt.)
 
 **Referenz**: `.claude/agents/vite-reviewer.md` (Abschnitt 1)
 
@@ -151,7 +151,7 @@ Teilpunktzahlen:
   • Korrektheit von vite.config.ts   : XX/8
   • Platzierung von index.html       : XX/6
   • Konfiguration von build.lib      : XX/8
-  • rollupOptions.input / Plugins    : XX/8
+  • rolldownOptions.input / Plugins    : XX/8
 
 Stärken:
 - [Architekturstärken]

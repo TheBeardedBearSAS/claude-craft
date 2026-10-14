@@ -167,6 +167,7 @@ psql -h localhost -p 6432 -U app_user -d app_production
 -- In PgBouncer logs, look for:
 -- "prepared statement X does not exist"
 
+-- Fix 0: protocol-level prepared statements need max_prepared_statements > 0 (200 by default since 1.24)
 -- Fix 1: Add DEALLOCATE ALL to server_reset_query
 -- In pgbouncer.ini:
 -- server_reset_query = DISCARD ALL

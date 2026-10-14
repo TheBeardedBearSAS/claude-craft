@@ -1,6 +1,6 @@
 # Outils de Développement Python
 
-> **Version de référence :** Python **3.14 (stable, 3.14.6+)** — Ruff 0.15+, pytest 9.x (fin du support Python 3.9).
+> **Version de référence :** Python **3.14 (stable, 3.14.8+)** — Ruff 0.17+, pytest 9.x (fin du support Python 3.9).
 > **⚠ JIT (PEP 744) :** expérimental en Python 3.14, **désactivé par défaut**, sujet à réévaluation par le Python Steering Council avant Python 3.15 (oct. 2026). Ne pas en dépendre en production.
 
 ## Package Management
@@ -159,8 +159,6 @@ CMD ["uvicorn", "src.myproject.infrastructure.api.main:app", "--host", "0.0.0.0"
 
 ```yaml
 # docker-compose.yml
-version: '3.8'
-
 services:
   app:
     build:

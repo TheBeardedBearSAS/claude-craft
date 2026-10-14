@@ -100,7 +100,7 @@ Always use Docker for commands to abstract from local environment.
 ```markdown
 # Claude-Craft - {{PROJECT_NAME}}
 
-**Stack**: Flutter 3.44+, Dart 3.12+, Clean Architecture, Riverpod/BLoC
+**Stack**: Flutter 3.47+, Dart 3.13+, Clean Architecture, Riverpod/BLoC
 
 ## Quick Reference
 

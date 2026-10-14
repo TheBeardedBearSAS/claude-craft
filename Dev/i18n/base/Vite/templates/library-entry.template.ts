@@ -12,7 +12,7 @@ export type { {{PublicType}}, {{PublicOptions}} } from './core/{{public-module}}
 // export * as {{subArea}} from './{{sub-area}}'
 
 // ============================================================================
-// vite.config.ts — build.lib entry + rollupOptions.external example
+// vite.config.ts — build.lib entry + rolldownOptions.external example
 // ============================================================================
 //
 // import { resolve } from 'node:path'
@@ -27,7 +27,7 @@ export type { {{PublicType}}, {{PublicOptions}} } from './core/{{public-module}}
 //       formats: ['es', 'cjs'],
 //       fileName: (format) => `{{PACKAGE_NAME}}.${format === 'es' ? 'js' : 'cjs'}`,
 //     },
-//     rollupOptions: {
+//     rolldownOptions: {
 //       // Peer deps: declared in package.json "peerDependencies" AND excluded
 //       // from the bundle here — never both bundle AND declare as a peer dep.
 //       external: ['{{peer-dependency-name}}', /^{{peer-dependency-name}}\//],
