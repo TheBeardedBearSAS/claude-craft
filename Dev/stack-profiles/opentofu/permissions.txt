@@ -1,0 +1,3 @@
+Bash(tofu fmt:*)
+Bash(tofu validate:*)
+Bash(tofu plan:*)

@@ -1,0 +1,2 @@
+React
+React, TypeScript, Vite, TanStack Query, Zustand

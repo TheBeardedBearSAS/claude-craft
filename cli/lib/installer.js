@@ -261,6 +261,9 @@ export async function runInstallation(cli, { CLI_ROOT }) {
   const hasDocker = installTechs.includes('docker');
   const includeInfra = cli.config.includeInfra || hasDocker;
   const techsWithoutDocker = installTechs.filter((t) => t !== 'docker');
+  // Full project stack, rendered by common (AGENTS.md, settings.json) and project (CLAUDE.md) scripts
+  const stackTechs = includeInfra && !hasDocker ? [...installTechs, 'docker'] : installTechs;
+  const stackArgs = stackTechs.length > 0 ? [`--tech=${stackTechs.join(',')}`] : [];
   // 1 base step (common rules) + installable tech scripts + optional infra + optional project + optional rtk
   const totalSteps =
     1 +
@@ -272,7 +275,11 @@ export async function runInstallation(cli, { CLI_ROOT }) {
   try {
     // Always install common rules
     console.log(`${c.cyan}[1/${totalSteps}]${c.reset} Installing common rules...`);
-    runScript(path.join(scriptsDir, 'install-common-rules.sh'), [langArg, cli.config.targetPath], CLI_ROOT);
+    runScript(
+      path.join(scriptsDir, 'install-common-rules.sh'),
+      [langArg, ...stackArgs, cli.config.targetPath],
+      CLI_ROOT
+    );
 
     // Install technology-specific rules (incl. auto-included base layers)
     let step = 2;
@@ -310,7 +317,7 @@ export async function runInstallation(cli, { CLI_ROOT }) {
       console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing project commands...`);
       const projectScript = path.join(CLI_ROOT, 'Project', 'install-project-commands.sh');
       if (fs.existsSync(projectScript)) {
-        runScript(projectScript, [langArg, cli.config.targetPath], CLI_ROOT);
+        runScript(projectScript, [langArg, ...stackArgs, cli.config.targetPath], CLI_ROOT);
       }
       step++;
     }

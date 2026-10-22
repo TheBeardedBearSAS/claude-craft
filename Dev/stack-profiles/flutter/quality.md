@@ -1,0 +1,3 @@
+- dart analyze (strict)
+- flutter test (widget + golden)
+- BLoC / Riverpod

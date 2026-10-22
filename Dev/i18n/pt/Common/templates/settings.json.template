@@ -18,19 +18,10 @@
       "Write",
       "Glob",
       "Grep",
+      "__STACK_PERMISSIONS__",
       "Bash(git:*)",
-      "Bash(npm run:*)",
-      "Bash(npm test:*)",
-      "Bash(pnpm:*)",
-      "Bash(yarn:*)",
-      "Bash(composer:*)",
-      "Bash(php bin/console:*)",
-      "Bash(php artisan:*)",
-      "Bash(dotnet:*)",
       "Bash(make:*)",
-      "Bash(docker compose:*)",
-      "Bash(flutter:*)",
-      "Bash(ng:*)"
+      "Bash(docker compose:*)"
     ],
     "deny": [
       "Bash(rm -rf:*)",

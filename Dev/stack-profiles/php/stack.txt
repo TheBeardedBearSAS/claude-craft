@@ -1,0 +1,2 @@
+PHP
+PHP, Composer, PHPStan, Pest

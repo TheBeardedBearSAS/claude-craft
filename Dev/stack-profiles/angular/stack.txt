@@ -1,0 +1,2 @@
+Angular
+Angular, TypeScript, Signals, RxJS

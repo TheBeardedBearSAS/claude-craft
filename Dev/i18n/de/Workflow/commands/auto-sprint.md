@@ -40,7 +40,7 @@ $ARGUMENTS
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` gesetzt
 - `gh` CLI authentifiziert (PR erstellen / Prüfungen / Merge)
 - Docker verfügbar (alle Tests laufen über Docker — siehe Projekt-CLAUDE.md)
-- BMAD v6-Projekt mit vorhandener `.bmad/sprint-status.yaml`
+- BMAD v6-Projekt: `.bmad/sprint-status.yaml` wird bei Bedarf von `/workflow:start` (Phase 1) angelegt
 
 > Falls eine Voraussetzung fehlt, sofort mit einer klaren, handlungsorientierten Meldung abbrechen. Eine Phase nicht stillschweigend überspringen.
 

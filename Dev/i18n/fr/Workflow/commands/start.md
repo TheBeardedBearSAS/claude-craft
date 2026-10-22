@@ -224,7 +224,43 @@ Points |
 {Notes de sprint planning, décisions prises...}
 ```
 
-### Étape 6 : Checklist Finale
+### Étape 6 : Synchroniser `.bmad/sprint-status.yaml`
+
+`/gate:validate-sprint` et les commandes `/sprint:*` lisent le sprint dans `.bmad/sprint-status.yaml`. L'écrire maintenant à partir du `sprint-goal.md` ci-dessus et des fiches US sélectionnées (`project-management/backlog/user-stories/US-*.md`) :
+
+1. Créer `.bmad/` s'il n'existe pas.
+2. `metadata` : `sprint_id` (`sprint-{N}`), `name`, `start_date`, `end_date`, `goal`, `capacity_points`, repris de `sprint-goal.md`.
+3. `stories` : une entrée par US sélectionnée : `title`, `status: ready-for-dev`, `story_points`, `epic_id`, `priority` (MoSCoW), `dependencies`, `tasks`, `history: []`.
+4. Fichier déjà présent pour le **même** `sprint_id` : conserver les statuts existants (ne jamais faire reculer une story) et n'ajouter que les nouvelles US.
+5. Fichier présent pour un **autre** sprint : déplacer d'abord ses stories sous `archived_sprints.<ancien sprint_id>` (`status`, `points`), puis écrire le nouveau sprint.
+
+```yaml
+# .bmad/sprint-status.yaml
+version: "1.0"
+metadata:
+  sprint_id: "sprint-2"
+  name: "Gestion des utilisateurs"
+  start_date: "2026-11-02"
+  end_date: "2026-11-13"
+  goal: "Les utilisateurs peuvent s'inscrire, se connecter et modifier leur profil"
+  capacity_points: 21
+stories:
+  US-010:
+    title: "Inscription utilisateur"
+    status: "ready-for-dev"
+    story_points: 5
+    epic_id: "EPIC-002"
+    priority: "must"
+    dependencies: ["US-001"]
+    tasks: { total: 0, completed: 0, list: [] }
+    history: []
+archived_sprints:
+  sprint-1:
+    stories:
+      US-001: { status: "done", points: 5 }
+```
+
+### Étape 7 : Checklist Finale
 
 ```
 ══════════════════════════════════════════════════════════════
@@ -290,6 +326,9 @@ Points |
 ╔══════════════════════════════════════════════════════════╗
 ║                   PROCHAINE ÉTAPE                        ║
 ╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /gate:validate-sprint {N}                             ║
+║    Vérifier que le sprint est prêt (gate)                ║
 ║                                                          ║
 ║  → /sprint:next-story                                    ║
 ║    Prendre la première story du sprint backlog           ║

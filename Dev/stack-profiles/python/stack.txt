@@ -1,0 +1,2 @@
+Python
+Python, FastAPI, Pydantic v2, SQLAlchemy 2 (async), uv

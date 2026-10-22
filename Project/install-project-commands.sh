@@ -12,20 +12,27 @@ lang="en"
 
 # Shared UI library
 source "${SCRIPT_DIR}/../Dev/scripts/lib/shell-ui.sh"
+source "${SCRIPT_DIR}/../Dev/scripts/lib/stack-profiles.sh"
 
 # Parse arguments
 PROJECT_DIR="."
 skip_common=false
+force=false
+tech_arg=""
 while [[ $# -gt 0 ]]; do
     case $1 in
         --lang=*) lang="${1#--lang=}"; shift ;;
         --skip-common) skip_common=true; shift ;;
+        --tech=*) tech_arg="${1#--tech=}"; shift ;;
+        --force) force=true; shift ;;
         --help|-h)
             echo "Usage: $0 [OPTIONS] [PROJECT_DIR]"
             echo ""
             echo "Options:"
             echo "  --lang=XX      Language (en, fr, es, de, pt) - default: en"
             echo "  --skip-common  Skip common rules installation (for multi-tech modules)"
+            echo "  --tech=a,b     Project stack, rendered into CLAUDE.md (e.g. python,react,docker)"
+            echo "  --force        Overwrite existing CLAUDE.md and project-management scaffold"
             echo "  --help         Show this help"
             echo ""
             echo "Example:"
@@ -134,18 +141,46 @@ if [ -d "$TPL_SRC" ]; then
     ui_success "$TEMPLATES_COUNT templates copied"
 fi
 
-# Créer l'index initial du backlog
-cat "$SCAFFOLD_DIR/project-management__backlog__index.md" > "$PROJECT_DIR/project-management/backlog/index.md"
-ui_success "Index backlog créé"
+# Render the CLAUDE.md scaffold placeholders from the --tech stack profiles
+render_claude_md() {
+    local techs line
+    IFS=' ' read -ra techs <<< "$(parse_tech_list "$tech_arg")"
+    local skills="" slice="UI + API + DB"
+    if [[ ${#techs[@]} -gt 0 ]]; then
+        skills=", $(stack_display_names ', ' "${techs[@]}")"
+        slice="$(stack_display_names ' + ' "${techs[@]}")"
+    fi
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        case "$line" in
+            '{{STACK_BLOCK}}')
+                if [[ ${#techs[@]} -gt 0 ]]; then render_stack_block "${techs[@]}"
+                else echo "# → /project:generate-tech-spec"; fi ;;
+            '{{QUALITY_BLOCK}}')
+                if [[ ${#techs[@]} -gt 0 ]]; then render_quality_block "${techs[@]}"; fi ;;
+            *)
+                line="${line//\{\{STACK_SKILLS\}\}/$skills}"
+                echo "${line//\{\{STACK_SLICE\}\}/$slice}" ;;
+        esac
+    done < "$SCAFFOLD_DIR/CLAUDE.md"
+}
 
-# Créer CLAUDE.md
-cat "$SCAFFOLD_DIR/CLAUDE.md" > "$PROJECT_DIR/CLAUDE.md"
+# Write $2 to $1 unless it already exists (never clobber user content without --force)
+write_scaffold() {
+    local dest="$1" label="$2" content
+    content="$(cat)"
+    if [[ -f "$dest" ]] && ! $force; then
+        ui_info "$label exists (not overwritten, use --force)"
+        return
+    fi
+    printf '%s\n' "$content" > "$dest"
+    ui_success "$label created"
+}
 
-ui_success "CLAUDE.md créé"
-
-# Créer un fichier README dans project-management
-cat "$SCAFFOLD_DIR/project-management__README.md" > "$PROJECT_DIR/project-management/README.md"
-ui_success "README project-management créé"
+write_scaffold "$PROJECT_DIR/project-management/backlog/index.md" "Backlog index" \
+    < "$SCAFFOLD_DIR/project-management__backlog__index.md"
+render_claude_md | write_scaffold "$PROJECT_DIR/CLAUDE.md" "CLAUDE.md"
+write_scaffold "$PROJECT_DIR/project-management/README.md" "project-management README" \
+    < "$SCAFFOLD_DIR/project-management__README.md"
 
 echo ""
 echo "=================================================="

@@ -1,0 +1,3 @@
+Bash(kubectl get:*)
+Bash(kubectl describe:*)
+Bash(helm template:*)

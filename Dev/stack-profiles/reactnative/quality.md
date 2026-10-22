@@ -1,0 +1,3 @@
+- ESLint + TypeScript strict
+- Jest + React Native Testing Library
+- Maestro (E2E)

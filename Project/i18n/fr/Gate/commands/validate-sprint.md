@@ -1,6 +1,6 @@
 ---
 description: Valider la préparation du sprint avant démarrage
-argument-hint: [--verbose]
+argument-hint: "[N] [--verbose]"
 ---
 
 # Valider Sprint Gate
@@ -10,7 +10,8 @@ Tous les critères requis doivent être remplis.
 
 ## Arguments
 
-$ARGUMENTS (format: [--verbose])
+$ARGUMENTS (format: [N] [--verbose])
+- **N** (optionnel) : numéro du sprint (`1`, `001` ou `sprint-001`) ; par défaut : `metadata.sprint_id`, sinon le dossier `project-management/sprints/sprint-*/` le plus récent
 - **--verbose** (optionnel) : Afficher le détail par story
 
 ## Critères Sprint Ready
@@ -30,9 +31,16 @@ $ARGUMENTS (format: [--verbose])
 
 ### Étape 1 : Charger le statut sprint
 
-1. Lire `.bmad/sprint-status.yaml`
-2. Extraire les métadonnées
-3. Compter les stories par statut
+Source, dans cet ordre :
+
+1. **`.bmad/sprint-status.yaml`** s'il existe et que son `metadata.sprint_id` correspond au sprint `N` : extraire les métadonnées et compter les stories par statut.
+2. **Sinon, repli Markdown** sur `project-management/sprints/sprint-{N}-*/` (écrit par `/workflow:start`) :
+   - métadonnées, objectif, capacité : `sprint-goal.md` (début, fin, capacité, objectif) ;
+   - stories : la table des US sélectionnées de `sprint-goal.md` et les fiches `project-management/backlog/user-stories/US-*.md` (points, statut). Une story planifiée et non démarrée compte comme `ready-for-dev` ;
+   - dépendances bloquantes : `sprint-dependencies.md`.
+3. Aucun des deux : échouer avec « Aucun sprint {N} : lancez `/workflow:start {N}` ».
+
+En repli, le gate est quand même évalué, mais le rapport ajoute un avertissement non bloquant : les commandes `/sprint:*` ont besoin de `.bmad/sprint-status.yaml`, lancez `/workflow:start {N}` ou `/project:migrate-backlog`.
 
 ### Étape 2 : Valider les métadonnées
 
@@ -58,6 +66,7 @@ Si `metadata.capacity_points` défini :
 ### Étape 5 : Générer le rapport
 
 Afficher le statut de préparation du sprint.
+Commencer le rapport par la source utilisée : `Source : .bmad/sprint-status.yaml` ou `Source : Markdown (project-management/sprints/sprint-{N}-*/)`.
 
 ## Format de sortie
 

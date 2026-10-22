@@ -1,0 +1,2 @@
+React Native
+React Native (New Architecture), Expo, TypeScript, React Navigation

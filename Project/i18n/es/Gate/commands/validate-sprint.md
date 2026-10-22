@@ -1,6 +1,6 @@
 ---
 description: Validar la preparacion del sprint antes de iniciar
-argument-hint: [--verbose]
+argument-hint: "[N] [--verbose]"
 ---
 
 # Validar Sprint Gate
@@ -10,7 +10,8 @@ Todos los criterios requeridos deben cumplirse.
 
 ## Argumentos
 
-$ARGUMENTS (format: [--verbose])
+$ARGUMENTS (format: [N] [--verbose])
+- **N** (opcional): número del sprint (`1`, `001` o `sprint-001`); por defecto: `metadata.sprint_id`, si no, la carpeta `project-management/sprints/sprint-*/` más reciente
 - **--verbose** (opcional): Mostrar el detalle por story
 
 ## Criterios Sprint Ready
@@ -30,9 +31,16 @@ $ARGUMENTS (format: [--verbose])
 
 ### Paso 1: Cargar el estado del sprint
 
-1. Leer `.bmad/sprint-status.yaml`
-2. Extraer los metadatos
-3. Contar las stories por estado
+Fuente, en este orden:
+
+1. **`.bmad/sprint-status.yaml`** si existe y su `metadata.sprint_id` corresponde al sprint `N`: extraer los metadatos y contar las stories por estado.
+2. **Si no, respaldo Markdown** desde `project-management/sprints/sprint-{N}-*/` (escrito por `/workflow:start`):
+   - metadatos, objetivo, capacidad: `sprint-goal.md` (inicio, fin, capacidad, objetivo);
+   - stories: la tabla de US seleccionadas de `sprint-goal.md` y las fichas `project-management/backlog/user-stories/US-*.md` (puntos, estado). Una story planificada y no iniciada cuenta como `ready-for-dev`;
+   - dependencias bloqueantes: `sprint-dependencies.md`.
+3. Ninguno de los dos: fallar con «No existe el sprint {N}: ejecute `/workflow:start {N}`».
+
+En modo respaldo el gate se evalúa igualmente, pero el informe añade una advertencia no bloqueante: los comandos `/sprint:*` necesitan `.bmad/sprint-status.yaml`, ejecute `/workflow:start {N}` o `/project:migrate-backlog`.
 
 ### Paso 2: Validar los metadatos
 
@@ -58,6 +66,7 @@ Si `metadata.capacity_points` esta definido:
 ### Paso 5: Generar el informe
 
 Mostrar el estado de preparacion del sprint.
+Empezar el informe con la fuente utilizada: `Fuente: .bmad/sprint-status.yaml` o `Fuente: Markdown (project-management/sprints/sprint-{N}-*/)`.
 
 ## Formato de salida
 

@@ -51,13 +51,13 @@ const SUBCATEGORY = 'General';
 
 // 1–3 sentences, no emoji (upstream form constraint). Kept under ~250 chars.
 const DESCRIPTION =
-  'Multi-stack framework for Claude Code: 11 technology stacks, 125 slash-commands across 15 namespaces, ' +
-  '31 specialized agents, BMAD v6 sprint workflow, browser QA automation, and i18n in 5 languages. Installable via npx.';
+  'Multi-stack framework for Claude Code: 13 technology stacks, 140 commands across 17 namespaces, ' +
+  '33 specialized agents, BMAD v6 sprint workflow, browser QA automation, and i18n in 5 languages. Installable via npx.';
 
 // Evidence for the form's "validate_claims" field (required for frameworks).
 const VALIDATE_CLAIMS =
-  'Public npm package (@the-bearded-bear/claude-craft), MIT, 988 passing tests + mutation testing, ' +
-  '11 stack-specific reviewers, BMAD v6 sprint workflow, and a strictly schema-valid plugin manifest.';
+  'Public npm package (@the-bearded-bear/claude-craft), MIT, 1200+ passing tests + mutation testing, ' +
+  '13 stack-specific reviewers, BMAD v6 sprint workflow, and a strictly schema-valid plugin manifest.';
 
 function readJson(relPath) {
   return JSON.parse(fs.readFileSync(path.join(ROOT, relPath), 'utf8'));

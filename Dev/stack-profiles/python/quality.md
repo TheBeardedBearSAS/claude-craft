@@ -1,0 +1,3 @@
+- Ruff (lint + format)
+- mypy --strict
+- pytest + pytest-cov (>= 80 %)

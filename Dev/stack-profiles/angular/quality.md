@@ -1,0 +1,3 @@
+- ESLint (angular-eslint) + TypeScript strict
+- ng test
+- Playwright (E2E)

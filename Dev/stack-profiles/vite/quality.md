@@ -1,0 +1,2 @@
+- ESLint + tsc --noEmit
+- Vitest

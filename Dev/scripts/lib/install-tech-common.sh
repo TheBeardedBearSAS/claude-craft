@@ -525,7 +525,12 @@ main() {
 
     load_messages
 
-    [ "$target_dir" != "." ] && [ -d "$target_dir" ] && target_dir="$(cd "${target_dir}" && pwd)" || target_dir="$(pwd)"
+    # Never fall back to $(pwd) for a missing target: it would install into the caller's cwd
+    if [[ ! -d "$target_dir" ]]; then
+        log_error "Directory does not exist: $target_dir"
+        exit 1
+    fi
+    target_dir="$(cd "${target_dir}" && pwd)"
 
     echo ""
     echo "Installing Claude Code rules - ${TECH_DISPLAY_NAME} (TCL)"

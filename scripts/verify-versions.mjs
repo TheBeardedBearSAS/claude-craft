@@ -58,7 +58,7 @@ const SHOWCASE_FILES = [
   '.claude/agents/devops-engineer.md',
   '.claude/references/symfony/docker.md',
   '.claude/references/laravel/tooling.md',
-  '.claude/templates/AGENTS.md.template',
+  'Dev/i18n/base/Common/templates/AGENTS.md.template',
   '.claude/settings.json',
 ];
 for (const rel of SHOWCASE_FILES) {

@@ -1,0 +1,3 @@
+- ESLint + vue-tsc
+- Vitest + Vue Test Utils
+- Playwright (E2E)

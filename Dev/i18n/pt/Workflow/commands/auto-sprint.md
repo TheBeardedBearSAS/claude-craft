@@ -40,7 +40,7 @@ $ARGUMENTS
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` definido
 - CLI `gh` autenticado (criação de PR / verificações / merge)
 - Docker disponível (todos os testes são executados via Docker — veja o CLAUDE.md do projeto)
-- Projeto BMAD v6 com `.bmad/sprint-status.yaml` presente
+- Projeto BMAD v6: `.bmad/sprint-status.yaml` é criado por `/workflow:start` (fase 1) se não existir
 
 > Se um pré-requisito estiver ausente, aborte imediatamente com uma mensagem clara e acionável. Não pule uma fase silenciosamente.
 

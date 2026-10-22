@@ -46,6 +46,7 @@ VERSION=$(get_claude_craft_version)
 # Shared UI (colors + logging)
 # shellcheck source=lib/shell-ui.sh
 source "${SCRIPT_DIR}/lib/shell-ui.sh"
+source "${SCRIPT_DIR}/lib/stack-profiles.sh"
 
 # Default options
 action="install"
@@ -61,6 +62,7 @@ templates_only=false
 checklists_only=false
 target_dir=""
 lang="en"
+tech_arg=""
 
 #-------------------------------------------------------------------------------
 # Load i18n messages
@@ -165,6 +167,7 @@ ${MSG_HELP_OPTIONS}
     --backup            ${MSG_HELP_BACKUP}
     --interactive       ${MSG_HELP_INTERACTIVE}
     --lang=XX           ${MSG_HELP_LANG}
+    --tech=a,b          Project stack: scopes AGENTS.md reviewers and settings.json permissions
     --agents-only       Install agents only
     --commands-only     Install commands only
     --templates-only    Install templates only
@@ -216,6 +219,10 @@ parse_args() {
                 ;;
             --lang=*)
                 lang="${1#--lang=}"
+                shift
+                ;;
+            --tech=*)
+                tech_arg="${1#--tech=}"
                 shift
                 ;;
             --agents-only)
@@ -558,6 +565,43 @@ install_checklists() {
     fi
 }
 
+# Selected stack (--tech) or, without it, every profiled stack
+selected_techs() {
+    if [[ -n "$tech_arg" ]]; then
+        parse_tech_list "$tech_arg"
+    else
+        all_profile_techs
+    fi
+}
+
+# Replace the __STACK_PERMISSIONS__ marker line with the stacks' permission rules
+render_settings_json() {
+    local techs line
+    IFS=' ' read -ra techs <<< "$(selected_techs)"
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        if [[ "$line" == *'"__STACK_PERMISSIONS__"'* ]]; then
+            if [[ ${#techs[@]} -gt 0 ]]; then render_permission_lines "${techs[@]}"; fi
+        else
+            printf '%s\n' "$line"
+        fi
+    done < "$1"
+}
+
+# With --tech, drop the "- `@<tech>-reviewer`" lines of stacks not selected
+render_agents_md() {
+    if [[ -z "$tech_arg" ]]; then
+        cat "$1"
+        return
+    fi
+    awk -v keep=" $(parse_tech_list "$tech_arg") " '
+        match($0, /^- `@[a-z]+-reviewer`/) {
+            tech = substr($0, 5, RLENGTH - 14)
+            if (index(keep, " " tech " ") == 0) next
+        }
+        { print }
+    ' "$1"
+}
+
 install_config() {
     log_info "${MSG_INSTALLING_CONFIG:-Installing configuration files...}"
 
@@ -587,7 +631,7 @@ install_config() {
                 log_dry_run "${MSG_CREATING:-Creating} .claude/settings.json"
             else
                 mkdir -p "$(dirname "$settings_dest")"
-                cp "$settings_src" "$settings_dest"
+                render_settings_json "$settings_src" > "$settings_dest"
                 log_success "${MSG_CREATING:-Creating} .claude/settings.json"
             fi
             ((++files_created))
@@ -873,13 +917,13 @@ main() {
 
     # Copy AGENTS.md template to target root (idempotent — won't overwrite existing)
     local agents_template
-    agents_template="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../.claude/templates/AGENTS.md.template"
+    agents_template="$I18N_DIR/base/Common/templates/AGENTS.md.template"
     local agents_target="$target_dir/AGENTS.md"
     if [[ -f "$agents_template" && ! -f "$agents_target" ]]; then
         if $dry_run; then
             log_dry_run "Would create $agents_target from AGENTS.md.template"
         else
-            cp "$agents_template" "$agents_target"
+            render_agents_md "$agents_template" > "$agents_target"
             log_success "[install-common-rules] Created $agents_target from template"
             ((++files_created))
         fi

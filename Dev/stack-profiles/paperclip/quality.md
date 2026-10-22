@@ -1,0 +1,2 @@
+- ESLint + TypeScript strict
+- Vitest

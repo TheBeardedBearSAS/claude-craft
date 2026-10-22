@@ -114,4 +114,27 @@ describe('tech install scripts', { timeout: 30000 }, () => {
     );
     expect(fs.existsSync(path.join(tmpDir, '.claude', 'INDEX.md'))).toBe(true);
   });
+
+  // Régression : un dossier cible inexistant faisait retomber l'install sur $(pwd),
+  // écrivant les règles dans le répertoire courant (ex. le dépôt claude-craft lui-même).
+  it('refuses a non-existent target directory instead of installing into the cwd', () => {
+    const cwd = makeTmpDir();
+    const missing = path.join(cwd, 'does-not-exist');
+
+    let status = 0;
+    try {
+      execSync(`bash "${path.join(SCRIPTS_DIR, 'install-python-rules.sh')}" --lang=en "${missing}"`, {
+        cwd,
+        encoding: 'utf8',
+        stdio: 'pipe',
+        timeout: 30000,
+      });
+    } catch (err) {
+      status = err.status;
+    }
+
+    expect(status).not.toBe(0);
+    expect(fs.existsSync(path.join(cwd, '.claude'))).toBe(false);
+  });
 });
+

@@ -50,16 +50,22 @@ export function stringify(data, body) {
  * Parse and validate frontmatter against a Zod schema.
  * @param {string} filepath
  * @param {import('zod').ZodTypeAny} schema
- * @returns {Promise<{ ok: true, data: object, body: string } | { ok: false, errors: Array, body: string, raw: any }>}
+ * @param {(body: string) => object} [derive] - builds the data from the body when
+ *   the file has no frontmatter (e.g. a "## Metadata" bullet list)
+ * @returns {Promise<{ ok: true, data: object, body: string, derived: boolean } | { ok: false, errors: Array, body: string, raw: any, derived: boolean }>}
  */
-export async function parseAndValidate(filepath, schema) {
-  const { data, body } = await parseFile(filepath);
+export async function parseAndValidate(filepath, schema, derive) {
+  const parsed = await parseFile(filepath);
+  const derived = !!derive && Object.keys(parsed.data).length === 0;
+  const data = derived ? derive(parsed.body) : parsed.data;
+  const { body } = parsed;
   const result = schema.safeParse(data);
-  if (result.success) return { ok: true, data: result.data, body };
+  if (result.success) return { ok: true, data: result.data, body, derived };
   return {
     ok: false,
     errors: result.error.issues,
     body,
     raw: data,
+    derived,
   };
 }

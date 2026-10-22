@@ -85,6 +85,21 @@ describe('runInstallation', () => {
     expect(output).toContain('[6/6]');
   });
 
+  it('passes the selected stack to common and project scripts via --tech', async () => {
+    const cli = makeCli({ technologies: ['python', 'react'], includeInfra: true, includeProject: true });
+    await runInstallation(cli, { CLI_ROOT: '/fake/root' });
+    const argsFor = (script) => spawnSyncMock.mock.calls.find((c) => c[1][0].includes(script))[1];
+    expect(argsFor('install-common-rules.sh')).toContain('--tech=python,react,docker');
+    expect(argsFor('install-project-commands.sh')).toContain('--tech=python,react,docker');
+  });
+
+  it('omits --tech when no technology is selected', async () => {
+    const cli = makeCli();
+    await runInstallation(cli, { CLI_ROOT: '/fake/root' });
+    const commonArgs = spawnSyncMock.mock.calls[0][1];
+    expect(commonArgs.some((a) => a.startsWith('--tech='))).toBe(false);
+  });
+
   it('calls printSuccess on completion', async () => {
     const cli = makeCli();
     await runInstallation(cli, { CLI_ROOT: '/fake/root' });
