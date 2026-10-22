@@ -14,6 +14,7 @@ import { parseDependencyRefs } from '../../shared/deps.js';
  */
 export class Repository {
   #statusCache = undefined;
+  #refreshChain = Promise.resolve();
 
   constructor(rootDir) {
     this.rootDir = path.resolve(rootDir);
@@ -25,7 +26,17 @@ export class Repository {
     this.filesByPath = new Map();
   }
 
-  async refresh() {
+  /**
+   * Serialized: the watcher fires one refresh per changed file, and overlapping
+   * rebuilds interleave their clear/fill steps (every doc listed twice).
+   */
+  refresh() {
+    const run = this.#refreshChain.then(() => this.#rebuild());
+    this.#refreshChain = run.catch(() => {});
+    return run;
+  }
+
+  async #rebuild() {
     const { files } = await scan(this.rootDir);
     this.stories.clear();
     this.epics.clear();
