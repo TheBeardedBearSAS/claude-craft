@@ -275,7 +275,11 @@ export async function runInstallation(cli, { CLI_ROOT }) {
   try {
     // Always install common rules
     console.log(`${c.cyan}[1/${totalSteps}]${c.reset} Installing common rules...`);
-    runScript(path.join(scriptsDir, 'install-common-rules.sh'), [langArg, ...stackArgs, cli.config.targetPath], CLI_ROOT);
+    runScript(
+      path.join(scriptsDir, 'install-common-rules.sh'),
+      [langArg, ...stackArgs, cli.config.targetPath],
+      CLI_ROOT
+    );
 
     // Install technology-specific rules (incl. auto-included base layers)
     let step = 2;
