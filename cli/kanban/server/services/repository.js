@@ -2,6 +2,7 @@ import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { scan, groupByCategory } from './file-scanner.js';
 import { parseAndValidate } from './frontmatter.js';
+import { deriveStoryData, deriveEpicData } from './markdown-metadata.js';
 import { loadSprintStatus } from './sprint-cache.js';
 import { StoryFrontmatterSchema, EpicFrontmatterSchema, TaskFrontmatterSchema } from '../../shared/schemas.js';
 import { mapBmadPriority } from '../../shared/priority.js';
@@ -37,8 +38,8 @@ export class Repository {
     const groups = groupByCategory(files);
 
     for (const f of groups.story ?? []) {
-      const res = await parseAndValidate(f.path, StoryFrontmatterSchema);
-      const entry = { path: f.path, mtime: f.mtime, ...res };
+      const res = await parseAndValidate(f.path, StoryFrontmatterSchema, deriveStoryData);
+      const entry = { path: f.path, mtime: f.mtime, ...res, ...sourceOf(res) };
       if (res.ok) {
         this.stories.set(res.data.id, entry);
       } else {
@@ -49,8 +50,8 @@ export class Repository {
     }
 
     for (const f of groups.epic ?? []) {
-      const res = await parseAndValidate(f.path, EpicFrontmatterSchema);
-      const entry = { path: f.path, mtime: f.mtime, ...res };
+      const res = await parseAndValidate(f.path, EpicFrontmatterSchema, deriveEpicData);
+      const entry = { path: f.path, mtime: f.mtime, ...res, ...sourceOf(res) };
       if (res.ok) this.epics.set(res.data.id, entry);
       this.filesByPath.set(f.path, { kind: 'epic', id: res.ok ? res.data.id : null });
     }
@@ -206,7 +207,7 @@ export class Repository {
       if (sprintId && d.sprint_id !== sprintId) continue;
       if (status && d.status !== status) continue;
       if (epicId && d.epic_id !== epicId) continue;
-      out.push({ ...d, _mtime: entry.mtime, _source: entry.source ?? 'markdown', _writable: entry.path !== null });
+      out.push({ ...d, _mtime: entry.mtime, _source: entry.source ?? 'markdown', _writable: isWritable(entry) });
     }
     return out.sort((a, b) => a.id.localeCompare(b.id));
   }
@@ -218,7 +219,7 @@ export class Repository {
   getStory(id) {
     const entry = this.stories.get(id);
     if (!entry || !entry.ok) return null;
-    return { ...entry.data, _mtime: entry.mtime, _source: entry.source ?? 'markdown', _writable: entry.path !== null };
+    return { ...entry.data, _mtime: entry.mtime, _source: entry.source ?? 'markdown', _writable: isWritable(entry) };
   }
 
   getStoryFile(id) {
@@ -287,6 +288,16 @@ export class Repository {
     }
     return { nodes, edges, cycles: detectCycles(nodes, edges) };
   }
+}
+
+// Metadata-list files (no frontmatter) are read-only: updateFrontmatter would
+// write a frontmatter holding only the patch, which no longer validates.
+function sourceOf(res) {
+  return res.derived ? { source: 'markdown-metadata' } : {};
+}
+
+function isWritable(entry) {
+  return entry.path !== null && entry.source !== 'markdown-metadata';
 }
 
 export function detectCycles(nodes, edges) {

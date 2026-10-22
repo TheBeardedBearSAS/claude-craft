@@ -86,13 +86,16 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     const filepath = repository.getStoryFile(id);
     const story = repository.getStory(id);
     if (!story) return c.json({ error: 'not_found' }, 404);
-    // YAML-only story (BMAD v6 single-writer): no markdown file to rewrite.
-    if (!filepath) {
+    // YAML-only story (BMAD v6 single-writer) or metadata-list markdown (no
+    // frontmatter): no frontmatter to rewrite safely.
+    if (!story._writable) {
       return c.json(
         {
           error: 'read_only_source',
           reason:
-            'story gérée par .bmad/sprint-status.yaml (BMAD v6) ; utilisez les commandes team:/qa: pour changer le statut',
+            story._source === 'markdown-metadata'
+              ? 'story sans frontmatter YAML (métadonnées en liste Markdown) ; modifiez le statut dans le fichier'
+              : 'story gérée par .bmad/sprint-status.yaml (BMAD v6) ; utilisez les commandes team:/qa: pour changer le statut',
         },
         409
       );
