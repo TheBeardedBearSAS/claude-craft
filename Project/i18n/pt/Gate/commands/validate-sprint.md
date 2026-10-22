@@ -1,6 +1,6 @@
 ---
 description: Validar a preparacao do sprint antes do inicio
-argument-hint: [--verbose]
+argument-hint: "[N] [--verbose]"
 ---
 
 # Validar Sprint Gate
@@ -10,7 +10,8 @@ Todos os criterios obrigatorios devem ser atendidos.
 
 ## Argumentos
 
-$ARGUMENTS (formato: [--verbose])
+$ARGUMENTS (formato: [N] [--verbose])
+- **N** (opcional): número do sprint (`1`, `001` ou `sprint-001`); padrão: `metadata.sprint_id`, senão a pasta `project-management/sprints/sprint-*/` mais recente
 - **--verbose** (opcional): Exibir o detalhe por story
 
 ## Criterios Sprint Ready
@@ -30,9 +31,16 @@ $ARGUMENTS (formato: [--verbose])
 
 ### Etapa 1: Carregar o status do sprint
 
-1. Ler `.bmad/sprint-status.yaml`
-2. Extrair os metadados
-3. Contar as stories por status
+Fonte, nesta ordem:
+
+1. **`.bmad/sprint-status.yaml`** se existir e o seu `metadata.sprint_id` corresponder ao sprint `N`: extrair os metadados e contar as stories por status.
+2. **Senão, fallback Markdown** a partir de `project-management/sprints/sprint-{N}-*/` (escrito por `/workflow:start`):
+   - metadados, meta, capacidade: `sprint-goal.md` (início, fim, capacidade, meta);
+   - stories: a tabela de US selecionadas de `sprint-goal.md` e as fichas `project-management/backlog/user-stories/US-*.md` (pontos, status). Uma story planejada e ainda não iniciada conta como `ready-for-dev`;
+   - dependências bloqueantes: `sprint-dependencies.md`.
+3. Nenhum dos dois: falhar com «Sprint {N} inexistente: execute `/workflow:start {N}`».
+
+Em modo fallback o gate é avaliado mesmo assim, mas o relatório adiciona um aviso não bloqueante: os comandos `/sprint:*` precisam de `.bmad/sprint-status.yaml`, execute `/workflow:start {N}` ou `/project:migrate-backlog`.
 
 ### Etapa 2: Validar os metadados
 
@@ -58,6 +66,7 @@ Se `metadata.capacity_points` definido:
 ### Etapa 5: Gerar o relatorio
 
 Exibir o status de preparacao do sprint.
+Começar o relatório pela fonte utilizada: `Fonte: .bmad/sprint-status.yaml` ou `Fonte: Markdown (project-management/sprints/sprint-{N}-*/)`.
 
 ## Formato de Saida
 

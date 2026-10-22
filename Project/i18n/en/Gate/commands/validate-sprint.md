@@ -1,6 +1,6 @@
 ---
 description: Validate sprint readiness before starting
-argument-hint: [--verbose]
+argument-hint: "[N] [--verbose]"
 ---
 
 # Validate Sprint Gate
@@ -10,7 +10,8 @@ All required criteria must be met.
 
 ## Arguments
 
-$ARGUMENTS (format: [--verbose])
+$ARGUMENTS (format: [N] [--verbose])
+- **N** (optional): sprint number (`1`, `001` or `sprint-001`); default: `metadata.sprint_id`, otherwise the most recent `project-management/sprints/sprint-*/` folder
 - **--verbose** (optional): Show detailed story breakdown
 
 ## Sprint Ready Criteria
@@ -30,9 +31,16 @@ $ARGUMENTS (format: [--verbose])
 
 ### Step 1: Load sprint status
 
-1. Read `.bmad/sprint-status.yaml`
-2. Extract metadata
-3. Count stories by status
+Source, in this order:
+
+1. **`.bmad/sprint-status.yaml`** if it exists and its `metadata.sprint_id` matches sprint `N`: extract the metadata and count stories by status.
+2. **Otherwise, markdown fallback** from `project-management/sprints/sprint-{N}-*/` (written by `/workflow:start`):
+   - metadata, goal, capacity: `sprint-goal.md` (start, end, capacity, goal);
+   - stories: the selected US table of `sprint-goal.md` and the `project-management/backlog/user-stories/US-*.md` files (points, status). A planned story not yet started counts as `ready-for-dev`;
+   - blocking dependencies: `sprint-dependencies.md`.
+3. Neither found: fail with "No sprint {N}: run `/workflow:start {N}`".
+
+In fallback mode the gate is still evaluated, but the report adds a non-blocking warning: the `/sprint:*` commands need `.bmad/sprint-status.yaml`, run `/workflow:start {N}` or `/project:migrate-backlog`.
 
 ### Step 2: Validate metadata
 
@@ -58,6 +66,7 @@ If `metadata.capacity_points` defined:
 ### Step 5: Generate report
 
 Show sprint readiness status.
+Start the report with the source used: `Source: .bmad/sprint-status.yaml` or `Source: markdown (project-management/sprints/sprint-{N}-*/)`.
 
 ## Output Format
 

@@ -1,6 +1,6 @@
 ---
 description: Sprint-Bereitschaft vor dem Start validieren
-argument-hint: [--verbose]
+argument-hint: "[N] [--verbose]"
 ---
 
 # Sprint-Gate validieren
@@ -10,7 +10,8 @@ Alle erforderlichen Kriterien muessen erfuellt sein.
 
 ## Argumente
 
-$ARGUMENTS (format: [--verbose])
+$ARGUMENTS (format: [N] [--verbose])
+- **N** (optional): Sprintnummer (`1`, `001` oder `sprint-001`); Standard: `metadata.sprint_id`, sonst der neueste Ordner `project-management/sprints/sprint-*/`
 - **--verbose** (optional): Details pro Story anzeigen
 
 ## Sprint Ready-Kriterien
@@ -30,9 +31,16 @@ $ARGUMENTS (format: [--verbose])
 
 ### Schritt 1: Sprint-Status laden
 
-1. `.bmad/sprint-status.yaml` lesen
-2. Metadaten extrahieren
-3. Stories pro Status zaehlen
+Quelle, in dieser Reihenfolge:
+
+1. **`.bmad/sprint-status.yaml`**, falls vorhanden und `metadata.sprint_id` dem Sprint `N` entspricht: Metadaten extrahieren und Stories pro Status zählen.
+2. **Sonst Markdown-Fallback** aus `project-management/sprints/sprint-{N}-*/` (von `/workflow:start` geschrieben):
+   - Metadaten, Ziel, Kapazität: `sprint-goal.md` (Beginn, Ende, Kapazität, Ziel);
+   - Stories: die Tabelle der ausgewählten US in `sprint-goal.md` und die Dateien `project-management/backlog/user-stories/US-*.md` (Punkte, Status). Eine geplante, nicht begonnene Story zählt als `ready-for-dev`;
+   - blockierende Abhängigkeiten: `sprint-dependencies.md`.
+3. Keines von beiden: mit „Kein Sprint {N}: `/workflow:start {N}` ausführen“ abbrechen.
+
+Im Fallback-Modus wird das Gate trotzdem ausgewertet, der Bericht ergänzt aber eine nicht blockierende Warnung: Die `/sprint:*`-Befehle benötigen `.bmad/sprint-status.yaml`, `/workflow:start {N}` oder `/project:migrate-backlog` ausführen.
 
 ### Schritt 2: Metadaten validieren
 
@@ -58,6 +66,7 @@ Falls `metadata.capacity_points` definiert:
 ### Schritt 5: Bericht generieren
 
 Sprint-Bereitschaftsstatus anzeigen.
+Den Bericht mit der verwendeten Quelle beginnen: `Quelle: .bmad/sprint-status.yaml` oder `Quelle: Markdown (project-management/sprints/sprint-{N}-*/)`.
 
 ## Ausgabeformat
 
