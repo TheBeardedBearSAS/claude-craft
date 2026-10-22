@@ -171,8 +171,29 @@ audit-claude-alignment: ## Rituel hebdo : affiche les lentilles a auditer puis l
 # Pattern rule pour config operations
 CONFIG_SCRIPT = $(SCRIPTS_DIR)/install-from-config.sh
 
-config-%: ## Operations config YAML (install/install-all/validate/list)
-	@$(CONFIG_SCRIPT) --$* $(if $(PROJECT),--project $(PROJECT)) $(OPTIONS) $(CONFIG)
+# Cibles explicites : une règle motif (config-%) est ignorée pour des cibles .PHONY.
+PROJECT_OPT = $(if $(PROJECT),--project $(PROJECT))
+
+config-install: ## Installe un projet du YAML (PROJECT=nom)
+	@$(CONFIG_SCRIPT) $(PROJECT_OPT) $(OPTIONS) $(CONFIG)
+
+config-install-all: ## Installe tous les projets du YAML
+	@$(CONFIG_SCRIPT) $(OPTIONS) $(CONFIG)
+
+config-validate: ## Valide le fichier de configuration YAML
+	@$(CONFIG_SCRIPT) --validate $(CONFIG)
+
+config-list: ## Liste les projets du YAML
+	@$(CONFIG_SCRIPT) --list $(CONFIG)
+
+config-dry-run: ## Simule l'installation (PROJECT=nom optionnel)
+	@$(CONFIG_SCRIPT) --dry-run $(PROJECT_OPT) $(OPTIONS) $(CONFIG)
+
+config-check: ## Vérifie l'installation des projets configurés (PROJECT=nom optionnel)
+	@$(SCRIPTS_DIR)/check-config.sh $(PROJECT_OPT) $(CONFIG)
+
+config-check-fix: ## Vérifie et propose de corriger les problèmes
+	@$(SCRIPTS_DIR)/check-config.sh --fix $(PROJECT_OPT) $(CONFIG)
 
 #===============================================================================
 # Plugin Export
