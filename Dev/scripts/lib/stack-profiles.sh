@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # Stack profiles — render stack-aware snippets from Dev/stack-profiles/<tech>/.
 # Pure bash (no yq/jq): sourced by install-common-rules.sh and install-project-commands.sh.
 
