@@ -1,5 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { execSync } from 'child_process';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { execSync, spawnSync } from 'child_process';
+import fs from 'fs';
+import os from 'os';
 import path from 'path';
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '../..');
@@ -56,3 +58,52 @@ describe('check-config.sh', { timeout: 30000 }, () => {
     }
   });
 });
+
+// Régression : check-config.sh attendait l'ancien layout (.claude/rules par techno),
+// ne connaissait ni l'infra, ni `project`, ni vite/vercel/paperclip, et lisait
+// `tech: [a, b]` comme une seule techno inconnue → faux échecs sur une install saine.
+describe('check-config.sh — module checks', { timeout: 120000 }, () => {
+  let root;
+
+  /** Sources the script (no yq needed) and runs check_module on the given techs */
+  function checkModule(dir, ...techs) {
+    return spawnSync('bash', ['-c', `source "${SCRIPT}"; check_module "$@"`, '_', dir, 'label', ...techs], {
+      encoding: 'utf8',
+    }).status;
+  }
+
+  beforeAll(() => {
+    root = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-test-check-'));
+    const run = (script, dir) => {
+      fs.mkdirSync(dir, { recursive: true });
+      execSync(`bash "${path.join(PROJECT_ROOT, script)}" --lang=en "${dir}"`, { encoding: 'utf8', timeout: 60000 });
+    };
+    run('Dev/scripts/install-python-rules.sh', path.join(root, 'backend'));
+    run('Dev/scripts/install-vite-rules.sh', path.join(root, 'web'));
+    run('Project/install-project-commands.sh', root);
+    run('Infra/install-docker-rules.sh', root);
+  });
+
+  afterAll(() => {
+    fs.rmSync(root, { recursive: true, force: true });
+  });
+
+  it('accepts a dev tech module installed with the current layout', () => {
+    expect(checkModule(path.join(root, 'backend'), 'python')).toBe(0);
+    expect(checkModule(path.join(root, 'web'), 'vite')).toBe(0);
+  });
+
+  it('accepts a multi-tech module mixing project and infra techs', () => {
+    expect(checkModule(root, 'project', 'docker')).toBe(0);
+  });
+
+  it('flags a tech that is not installed', () => {
+    expect(checkModule(path.join(root, 'backend'), 'react')).not.toBe(0);
+    expect(checkModule(root, 'ansible')).not.toBe(0);
+  });
+
+  it('flags an unknown tech', () => {
+    expect(checkModule(root, 'cobol')).not.toBe(0);
+  });
+});
+

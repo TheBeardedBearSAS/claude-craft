@@ -235,91 +235,80 @@ check_common_installation() {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Technology Registry (data-driven validation)
-# Format: tech_name:cmd_namespace:min_rules:min_commands:min_templates:min_checklists
+# Techs connues (namespace de commandes = clé de la techno)
 # ─────────────────────────────────────────────────────────────────────────────
-TECH_REGISTRY=(
-    "symfony:symfony:18:5:5:3"
-    "flutter:flutter:14:5:3:2"
-    "react:react:12:5:2:2"
-    "reactnative:reactnative:15:5:2:2"
-    "python:python:10:5:2:2"
-    "angular:angular:10:5:2:2"
-    "csharp:csharp:10:5:2:2"
-    "laravel:laravel:10:5:2:2"
-    "vuejs:vuejs:10:5:2:2"
-    "php:php:10:5:2:2"
-)
+DEV_TECHS=" symfony flutter react reactnative angular csharp laravel vuejs php python vite vercel paperclip "
+INFRA_TECHS=" docker coolify kubernetes opentofu ansible hcloud pgbouncer frankenphp "
+
+# Vérifie la présence d'agents d'un préfixe donné (agents infra : <tech>-*.md)
+check_agents_prefix() {
+    local dir="$1" prefix="$2" count
+    count=$(find "$dir" -maxdepth 1 -name "${prefix}-*.md" 2>/dev/null | wc -l | tr -d ' ')
+    if [[ $count -lt 1 ]]; then
+        log_error "agents ${prefix}-*: non trouvé"
+        return 1
+    fi
+    log_ok "agents ${prefix}-*: $count fichiers"
+}
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Generic tech installation checker (data-driven)
+# Vérifie l'installation d'une techno dans un module
 # ─────────────────────────────────────────────────────────────────────────────
 check_tech_installation() {
     local path="$1"
     local tech="$2"
     local issues=0
 
-    # Look up tech in registry
-    local entry=""
-    for reg in "${TECH_REGISTRY[@]}"; do
-        local reg_tech="${reg%%:*}"
-        if [[ "$reg_tech" == "$tech" ]]; then
-            entry="$reg"
-            break
+    if [[ "$DEV_TECHS" == *" $tech "* ]]; then
+        check_dir_count "$path/.claude/commands/$tech" "commands/$tech" 1 || ((issues++)) || true
+        # Layout actuel : references/<tech> ; installations anciennes : rules/
+        if [[ -d "$path/.claude/references/$tech" ]]; then
+            check_dir_count "$path/.claude/references/$tech" "references/$tech" 1 || ((issues++)) || true
+        else
+            check_dir_count "$path/.claude/rules" "rules" 1 || ((issues++)) || true
         fi
-    done
-
-    if [[ -z "$entry" ]]; then
+        check_file_exists "$path/.claude/CLAUDE.md" "CLAUDE.md" || ((issues++)) || true
+        check_dir_count "$path/.claude/agents" "agents" 1 || ((issues++)) || true
+    elif [[ "$INFRA_TECHS" == *" $tech "* ]]; then
+        check_dir_count "$path/.claude/commands/$tech" "commands/$tech" 1 || ((issues++)) || true
+        check_agents_prefix "$path/.claude/agents" "$tech" || ((issues++)) || true
+    elif [[ "$tech" == "project" ]]; then
+        local ns
+        for ns in project sprint gate; do
+            check_dir_count "$path/.claude/commands/$ns" "commands/$ns" 1 || ((issues++)) || true
+        done
+        check_file_exists "$path/.claude/agents/tech-lead.md" "agents/tech-lead" || ((issues++)) || true
+        check_file_exists "$path/.claude/agents/product-owner.md" "agents/product-owner" || ((issues++)) || true
+    else
         log_warn "Technologie inconnue: $tech"
         return 1
     fi
 
-    # Parse registry entry
-    IFS=':' read -r _ cmd_ns min_rules min_cmds min_templates min_checklists <<< "$entry"
+    return $issues
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Dispatcher - vérifie un module pour chacune de ses technologies
+# Args: $1=path, $2=label, $3..=techs
+# ─────────────────────────────────────────────────────────────────────────────
+check_module() {
+    local path="$1"
+    local label="$2"
+    shift 2
+    local issues=0 tech tech_issues
+
+    echo -e "   ${BOLD}$label:${NC}"
 
     if [[ ! -d "$path/.claude" ]]; then
         log_error ".claude/: non trouvé"
         return 1
     fi
 
-    # Rules (generic + tech-specific)
-    check_dir_count "$path/.claude/rules" "rules" "$min_rules" || ((issues++)) || true
-
-    # Commands (tech namespace)
-    check_dir_count "$path/.claude/commands/${cmd_ns}" "commands/${cmd_ns}" "$min_cmds" || ((issues++)) || true
-
-    # Templates
-    check_dir_count "$path/.claude/templates" "templates" "$min_templates" || ((issues++)) || true
-
-    # Checklists
-    check_dir_count "$path/.claude/checklists" "checklists" "$min_checklists" || ((issues++)) || true
-
-    # CLAUDE.md
-    check_file_exists "$path/.claude/CLAUDE.md" "CLAUDE.md" || ((issues++)) || true
-
-    # Agents
-    check_dir_count "$path/.claude/agents" "agents" 1 || ((issues++)) || true
-
-    # Optional directories
-    check_dir_optional "$path/.claude/adr" "adr"
-    check_dir_optional "$path/.claude/examples" "examples"
-
-    return $issues
-}
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Dispatcher - vérifie un module selon sa technologie
-# ─────────────────────────────────────────────────────────────────────────────
-check_module() {
-    local path="$1"
-    local tech="$2"
-    local label="$3"
-    local issues=0
-
-    echo -e "   ${BOLD}$label:${NC}"
-
-    check_tech_installation "$path" "$tech"
-    issues=$?
+    for tech in "$@"; do
+        tech_issues=0
+        check_tech_installation "$path" "$tech" || tech_issues=$?
+        issues=$((issues + tech_issues))
+    done
 
     return $issues
 }
@@ -365,9 +354,11 @@ check_project() {
 
     # Vérifier chaque module
     for ((j=0; j<module_count; j++)); do
-        local path tech
+        local path tech techs
         path=$(yq e ".projects[$project_index].modules[$j].path" "$config_file")
-        tech=$(yq e ".projects[$project_index].modules[$j].tech" "$config_file")
+        # tech : string ou tableau YAML
+        mapfile -t techs < <(yq e ".projects[$project_index].modules[$j].tech | [.] | flatten | .[]" "$config_file")
+        tech=$(IFS=,; echo "${techs[*]}")
 
         local target_path
         if [[ "$path" == "." ]]; then
@@ -394,7 +385,7 @@ check_project() {
         fi
 
         local module_issues=0
-        check_module "$target_path" "$tech" "$module_label" || module_issues=$?
+        check_module "$target_path" "$module_label" "${techs[@]}" || module_issues=$?
         if [[ $module_issues -gt 0 ]]; then
             issues_list+=("$name:$tech:$target_path")
             ((total_issues += module_issues)) || true
@@ -540,4 +531,7 @@ main() {
     exit 0
 }
 
-main "$@"
+# Exécuté directement (pas quand le script est sourcé, ex. par les tests)
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    main "$@"
+fi
