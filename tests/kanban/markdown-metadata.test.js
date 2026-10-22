@@ -1,8 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  deriveStoryData,
-  deriveEpicData,
-} from '../../cli/kanban/server/services/markdown-metadata.js';
+import { deriveStoryData, deriveEpicData } from '../../cli/kanban/server/services/markdown-metadata.js';
 
 // Backlogs generated from the claude-craft templates (Project/i18n/<lang>/templates)
 // carry their metadata as a "## Metadata" bullet list, not YAML frontmatter.
@@ -58,6 +55,11 @@ describe('deriveStoryData', () => {
     expect(d.dependencies).toEqual([]);
   });
 
+  it('strips nested HTML comments completely (no residual "<!--")', () => {
+    const d = deriveStoryData('# US-011: Nested\n\n- **Persona**: Alex <!<!-- a -->-- hidden -->\n');
+    expect(d.persona).toBe('Alex');
+  });
+
   it('treats "—" as no dependency and an unknown status as backlog', () => {
     const d = deriveStoryData('# US-005 : X\n\n- **Statut** : 🔵 Bizarre\n- **Dépend de** : —\n');
     expect(d.id).toBe('US-005'); // falls back on the H1 id
@@ -72,7 +74,9 @@ describe('deriveStoryData', () => {
 
 describe('deriveEpicData', () => {
   it('maps epic status onto the epic enum', () => {
-    const d = deriveEpicData('# EPIC-004 : Tri suggéré\n\n## Métadonnées\n- **ID** : EPIC-004\n- **Statut** : 🔴 To Do\n');
+    const d = deriveEpicData(
+      '# EPIC-004 : Tri suggéré\n\n## Métadonnées\n- **ID** : EPIC-004\n- **Statut** : 🔴 To Do\n'
+    );
     expect(d).toMatchObject({ id: 'EPIC-004', title: 'Tri suggéré', status: 'draft' });
     expect(deriveEpicData('# EPIC-005: Y\n- **Status**: 🟡 In Progress').status).toBe('in-progress');
   });

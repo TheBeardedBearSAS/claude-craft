@@ -79,9 +79,19 @@ function isPlaceholder(value) {
   return value === '' || /^\{.*\}$/.test(value) || /^[—–-]+$/.test(value);
 }
 
+// Repeat until stable: a single pass leaves "<!--" behind for nested input like "<!<!-- -->-- -->".
+function stripComments(text) {
+  let previous;
+  do {
+    previous = text;
+    text = text.replace(/<!--[\s\S]*?-->/g, '');
+  } while (text !== previous);
+  return text;
+}
+
 /** Raw field -> value map from the H1 and the metadata bullets (first occurrence wins). */
 function parseMetadataList(body) {
-  const text = body.replace(/<!--[\s\S]*?-->/g, '');
+  const text = stripComments(body);
   const raw = {};
   const h1 = text.match(H1_RE);
   if (h1) {
