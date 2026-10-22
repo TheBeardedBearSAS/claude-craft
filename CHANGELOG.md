@@ -7,8 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.23.1] - 2026-10-22
+
+### Security
+
+- **Kanban : retrait incomplet des commentaires HTML** dans le repli de lecture des métadonnées Markdown (CodeQL `js/incomplete-multi-character-sanitization`, *high*) : une entrée imbriquée comme `<!<!-- a -->-- b -->` laissait un `<!--` résiduel après une passe unique. Le retrait est répété jusqu'à stabilité. Test de régression dans `tests/kanban/markdown-metadata.test.js`.
+- **Dépendances** : `fast-uri` 3.1.4 → 3.1.7 ; groupe dev (`dompurify` 3.4.14, `eslint` 10.9.1, `prettier` 3.9.6, `svelte` 5.56.10, `@stryker-mutator/*` 10.0.0, `@vitest/coverage-v8` 4.1.11…) ; website : `@axe-core/playwright` 4.13.0, `postcss` 8.5.25 ; GitHub Actions : `actions/checkout` 7.0.1, `actions/setup-node` 7.0.0, `aquasecurity/trivy-action`, `codeql-action`, `softprops/action-gh-release` 3.0.2.
+
 ### Fixed
 
+- **`Dev/scripts/lib/stack-profiles.sh`** : mode strict `set -euo pipefail` exigé par le gate ShellCheck (les deux appelants l'activaient déjà).
 - **Fichiers racine adaptés à la stack réelle** : le `CLAUDE.md` racine du module `project` décrivait toujours une stack Symfony/Flutter, `AGENTS.md` listait les 11 reviewers et `.claude/settings.json` autorisait `flutter`/`php artisan`/`ng` sans rien pour Python, quelle que soit la stack installée. Nouvelle option `--tech=a,b,c` sur `install-common-rules.sh` et `install-project-commands.sh`, transmise par `install-from-config.sh` (techs de tous les modules) et par le CLI. Données par techno dans `Dev/stack-profiles/<tech>/` (composants, outils qualité, permissions), rendues par `Dev/scripts/lib/stack-profiles.sh`. Sans `--tech`, `AGENTS.md` et `settings.json` gardent la liste complète et `CLAUDE.md` reste neutre.
 - **`install-project-commands.sh` n'écrase plus `CLAUDE.md`**, `project-management/README.md` ni `backlog/index.md` s'ils existent déjà (`--force` pour forcer).
 - **Agent `@tech-lead` (module `project`) agnostique de la stack** : il présupposait Symfony/Flutter/API Platform (stack maîtrisée, types de tâches, template de décomposition, graphe de dépendances, vertical slicing, DoD). Il lit désormais la stack dans la section « Stack technique » du `CLAUDE.md` racine, dans les 5 langues. Test `tests/content/tech-lead-agent.test.mjs`.

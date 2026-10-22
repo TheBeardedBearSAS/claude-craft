@@ -1,9 +1,9 @@
-# Claude Code Compatibility — Claude Craft v8.23.0
+# Claude Code Compatibility — Claude Craft v8.23.1
 
 **Minimum Version:** 2.1.260 (elevated from 2.1.97 — see [security advisories 2026](#security-advisories-2026--why-the-minimum-is-21260))
 **Recommended Version:** 2.1.296 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, permission fixes 2.1.288–2.1.296)
 **Tested up to:** 2.1.296 (October 2026)
-**Last Updated:** 2026-10-13
+**Last Updated:** 2026-10-22
 
 ---
 
