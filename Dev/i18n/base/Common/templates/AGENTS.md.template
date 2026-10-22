@@ -32,6 +32,8 @@
 - `@csharp-reviewer` — C# 14 / .NET 10, Clean Architecture, CQRS, EF Core
 - `@php-reviewer` — PHP 8.5, Property Hooks, PER-CS 3.0, PHPStan level max, Pest 5
 - `@paperclip-reviewer` — Paperclip 2026.x, governance-first, Node.js + PostgreSQL
+- `@vite-reviewer` — Vite 8.x framework-agnostic : apps vanilla JS/TS, `build.lib`, multi-pages, Workers/WASM
+- `@vercel-reviewer` — Vercel : `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage
 
 ### Test et qualite
 

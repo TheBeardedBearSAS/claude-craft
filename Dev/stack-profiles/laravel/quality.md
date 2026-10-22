@@ -1,0 +1,3 @@
+- Larastan (level max)
+- Laravel Pint
+- Pest

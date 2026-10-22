@@ -1,0 +1,4 @@
+Bash(uv:*)
+Bash(pytest:*)
+Bash(ruff:*)
+Bash(mypy:*)

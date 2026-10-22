@@ -97,6 +97,38 @@ describe('install_config() in install-common-rules.sh', { timeout: 60000 }, () =
     expect(writeHook).toBeDefined();
   });
 
+  it('scopes settings.json permissions to --tech stacks', () => {
+    const tmpDir = makeTmpDir();
+    execSync(`bash "${SCRIPT}" --lang=en --tech=python,react "${tmpDir}"`, {
+      encoding: 'utf8',
+      timeout: 30000,
+    });
+
+    const settings = JSON.parse(fs.readFileSync(path.join(tmpDir, '.claude', 'settings.json'), 'utf8'));
+    const allow = settings.permissions.allow;
+    expect(allow).toContain('Bash(git:*)');
+    expect(allow).toContain('Bash(pytest:*)');
+    expect(allow).toContain('Bash(npm run:*)');
+    expect(allow).not.toContain('Bash(flutter:*)');
+    expect(allow).not.toContain('Bash(php artisan:*)');
+    expect(allow.some((rule) => rule.includes('__STACK_PERMISSIONS__'))).toBe(false);
+    expect(new Set(allow).size).toBe(allow.length);
+  });
+
+  it('keeps every stack permission in settings.json without --tech', () => {
+    const tmpDir = makeTmpDir();
+    execSync(`bash "${SCRIPT}" --lang=en "${tmpDir}"`, {
+      encoding: 'utf8',
+      timeout: 30000,
+    });
+
+    const settings = JSON.parse(fs.readFileSync(path.join(tmpDir, '.claude', 'settings.json'), 'utf8'));
+    expect(settings.permissions.allow).toContain('Bash(flutter:*)');
+    expect(settings.permissions.allow).toContain('Bash(php artisan:*)');
+    expect(settings.permissions.allow).toContain('Bash(pytest:*)');
+    expect(settings.permissions.allow.some((rule) => rule.includes('__STACK_PERMISSIONS__'))).toBe(false);
+  });
+
   it('installs settings.local.json with consolidated permissions', () => {
     const tmpDir = makeTmpDir();
     execSync(`bash "${SCRIPT}" --lang=en "${tmpDir}"`, {

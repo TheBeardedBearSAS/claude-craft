@@ -1,0 +1,2 @@
+- vercel build
+- vercel env (no secret in code)

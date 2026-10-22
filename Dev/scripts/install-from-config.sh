@@ -46,6 +46,7 @@ list_only=false
 force_mode=false
 preserve_config=false
 backup_mode=false
+project_techs=""
 default_lang="en"
 
 # Compteurs
@@ -502,7 +503,8 @@ install_module() {
     fi
 
     # Construire les options selon les capacités de chaque script
-    # - "project" : --lang, --skip-common uniquement
+    # - "project" : --lang, --force, --tech
+    # - "common"  : options standard + --tech (stack du projet pour AGENTS.md / settings.json)
     # - infra (docker, coolify, kubernetes, opentofu, ansible, hcloud, pgbouncer, frankenphp) :
     #   --install, --force, --backup, --lang (pas --preserve-config ni --skip-common)
     # - autres    : --install, --force, --preserve-config, --backup, --lang, --skip-common
@@ -523,9 +525,15 @@ install_module() {
         if [[ "$backup_mode" == "true" ]]; then
             opts+=("--backup")
         fi
+    elif [[ "$force_mode" == "true" ]]; then
+        opts=("--force")
     fi
     # Ajouter la langue
     opts+=("--lang=$lang")
+    # Stack du projet (tous modules) : common et project tournent avant les modules
+    if [[ ( "$tech" == "common" || "$tech" == "project" ) && -n "$project_techs" ]]; then
+        opts+=("--tech=$project_techs")
+    fi
     # Skip common si multi-tech (2ème+ technologie) - pas supporté par project et infra
     if [[ -n "$skip_common" && "$tech" != "project" && "$is_infra" == "false" ]]; then
         opts+=("$skip_common")
@@ -610,6 +618,9 @@ install_project() {
     if [[ "$common" == "true" ]]; then
         total_steps=$((total_steps + 1))
     fi
+
+    # Stack complète du projet, transmise à common et project (rendu CLAUDE.md, AGENTS.md, settings.json)
+    project_techs=$(yq e ".projects[$project_index].modules[].tech | [.] | flatten | .[]" "$config_file" | paste -sd, -)
 
     # Installer les règles communes si demandé
     if [[ "$common" == "true" ]]; then

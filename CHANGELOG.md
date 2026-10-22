@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Fichiers racine adaptés à la stack réelle** : le `CLAUDE.md` racine du module `project` décrivait toujours une stack Symfony/Flutter, `AGENTS.md` listait les 11 reviewers et `.claude/settings.json` autorisait `flutter`/`php artisan`/`ng` sans rien pour Python, quelle que soit la stack installée. Nouvelle option `--tech=a,b,c` sur `install-common-rules.sh` et `install-project-commands.sh`, transmise par `install-from-config.sh` (techs de tous les modules) et par le CLI. Données par techno dans `Dev/stack-profiles/<tech>/` (composants, outils qualité, permissions), rendues par `Dev/scripts/lib/stack-profiles.sh`. Sans `--tech`, `AGENTS.md` et `settings.json` gardent la liste complète et `CLAUDE.md` reste neutre.
+- **`install-project-commands.sh` n'écrase plus `CLAUDE.md`**, `project-management/README.md` ni `backlog/index.md` s'ils existent déjà (`--force` pour forcer).
+- **`AGENTS.md` absent des installations `npx`** : le template était lu depuis `.claude/templates/`, hors du paquet npm. Il est déplacé dans `Dev/i18n/base/Common/templates/` et complété des reviewers `vite` et `vercel`.
+
 ## [8.23.0] - 2026-10-13
 
 ### Security

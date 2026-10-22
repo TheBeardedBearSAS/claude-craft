@@ -1,0 +1,2 @@
+Vercel
+Vercel (vercel.json, Functions, ISR, Cron Jobs, Storage)

@@ -1,0 +1,3 @@
+- ESLint + TypeScript strict
+- Vitest + Testing Library
+- Playwright (E2E)

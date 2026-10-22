@@ -1,0 +1,3 @@
+- tofu fmt
+- tofu validate
+- tflint

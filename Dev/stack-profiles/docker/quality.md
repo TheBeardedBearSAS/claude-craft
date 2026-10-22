@@ -1,0 +1,2 @@
+- hadolint
+- Multi-stage images, non-root user

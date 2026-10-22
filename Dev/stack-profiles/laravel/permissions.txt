@@ -1,0 +1,2 @@
+Bash(composer:*)
+Bash(php artisan:*)

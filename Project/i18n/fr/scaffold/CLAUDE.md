@@ -10,7 +10,7 @@ Expert en gestion de backlog, personas, User Stories et priorisation.
 ### 🔧 Tech Lead (`@tech`)
 Expert en architecture, décomposition technique et facilitation Scrum.
 - Certifié CSM (Certified Scrum Master)
-- Maîtrise : Symfony, Flutter, API Platform, Architecture hexagonale
+- Maîtrise : Architecture hexagonale{{STACK_SKILLS}}
 
 ## Commandes personnalisées
 
@@ -85,13 +85,7 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 ## Stack technique
 
 ```yaml
-web: Symfony UX + Turbo (Twig, Stimulus, Live Components)
-mobile: Flutter (Dart, Material/Cupertino)
-api: API Platform (REST, OpenAPI)
-database: PostgreSQL + Doctrine ORM
-infrastructure: Docker
-tests: PHPUnit, Flutter Test
-quality: PHPStan max, Dart analyzer
+{{STACK_BLOCK}}
 ```
 
 ## Structure projet
@@ -129,7 +123,7 @@ project-management/
 - Format : "En tant que [P-XXX]... Je veux... Afin de..."
 - Validation **INVEST** : Independent, Negotiable, Valuable, Estimable, Sized ≤8pts, Testable
 - Les **3 C** : Carte, Conversation, Confirmation
-- **Vertical Slicing** : Symfony + Flutter + API + PostgreSQL
+- **Vertical Slicing** : {{STACK_SLICE}}
 
 ### Critères d'Acceptance
 - Format **Gherkin** : GIVEN [contexte] / WHEN [acteur] [action] / THEN [résultat]
@@ -189,20 +183,6 @@ project-management/
 
 ## Qualité du code
 
-### Backend (Symfony)
-- PHPStan niveau max
 - Tests > 80% couverture
-- Architecture hexagonale
-- PSR-12
 
-### Mobile (Flutter)
-- Dart analyzer strict
-- Widget tests
-- BLoC/Riverpod
-- Material Design 3
-
-### API (API Platform)
-- OpenAPI auto-généré
-- Validation constraints
-- Serialization groups
-- Security voters
+{{QUALITY_BLOCK}}

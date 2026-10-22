@@ -1,0 +1,2 @@
+Symfony
+Symfony, Doctrine ORM, API Platform, Messenger, PHPUnit / Pest

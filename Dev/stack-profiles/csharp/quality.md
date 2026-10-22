@@ -1,0 +1,3 @@
+- dotnet format
+- Roslyn analyzers (warnings as errors)
+- xUnit

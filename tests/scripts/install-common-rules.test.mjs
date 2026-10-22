@@ -110,4 +110,31 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     expect(fs.existsSync(path.join(commonDir, 'ralph-run.md'))).toBe(true);
     expect(fs.existsSync(path.join(commonDir, 'pre-commit-check.md'))).toBe(true);
   });
+
+  it('lists only the selected stack reviewers in AGENTS.md', () => {
+    const tmpDir = makeTmpDir();
+    execSync(`bash "${SCRIPT}" --lang=en --tech=python,react,docker "${tmpDir}"`, {
+      encoding: 'utf8',
+      timeout: 30000,
+    });
+
+    const agentsMd = fs.readFileSync(path.join(tmpDir, 'AGENTS.md'), 'utf8');
+    expect(agentsMd).toContain('@python-reviewer');
+    expect(agentsMd).toContain('@react-reviewer');
+    expect(agentsMd).not.toContain('@symfony-reviewer');
+    expect(agentsMd).not.toContain('@flutter-reviewer');
+    // Common agents are kept whatever the stack
+    expect(agentsMd).toContain('@tdd-coach');
+  });
+
+  it('lists every stack reviewer in AGENTS.md without --tech', () => {
+    const tmpDir = makeTmpDir();
+    execSync(`bash "${SCRIPT}" --lang=en "${tmpDir}"`, {
+      encoding: 'utf8',
+      timeout: 30000,
+    });
+
+    const agentsMd = fs.readFileSync(path.join(tmpDir, 'AGENTS.md'), 'utf8');
+    expect(agentsMd.match(/^- `@[a-z]+-reviewer`/gm)).toHaveLength(13);
+  });
 });

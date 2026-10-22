@@ -1,0 +1,3 @@
+- PHPStan (level max)
+- PHP-CS-Fixer (PER-CS 3.0)
+- Pest / PHPUnit
