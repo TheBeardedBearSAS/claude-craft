@@ -28,6 +28,14 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces (234 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v8.23.1
+
+**Correctifs d'installation, Kanban et workflow (2026-10-22, v8.23.1) :**
+
+- **Installation adaptée à la stack** : `--tech=a,b,c` rend le `CLAUDE.md` racine, `AGENTS.md` et `.claude/settings.json` selon les technos réellement installées ; `install-project-commands.sh` n'écrase plus les fichiers existants ; `@tech-lead` agnostique de la stack ; `make config-*` et `check-config.sh` réparés.
+- **Kanban** : lecture des backlogs générés depuis les templates (métadonnées en liste Markdown), plus de documents dupliqués, retrait complet des commentaires HTML imbriqués (alerte CodeQL).
+- **Workflow** : `/workflow:start` crée `.bmad/sprint-status.yaml`, `/gate:validate-sprint` fonctionne sans lui. Dépendances et GitHub Actions à jour. Détails : [CHANGELOG](CHANGELOG.md#8231---2026-10-22).
+
 ## What's New in v8.23.0
 
 **Audit de fraîcheur + alignement Claude (2026-10-13, v8.23.0) :**
