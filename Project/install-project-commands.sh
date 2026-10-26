@@ -119,6 +119,9 @@ if [ -d "$GATE_CMD_SRC" ]; then
     ui_success "$GATE_COUNT gate commands copied"
 fi
 
+# Delete commands retired from the distribution (config/removed-commands.yaml)
+bash "$SCRIPT_DIR/../Dev/scripts/prune-removed-commands.sh" "$PROJECT_DIR"
+
 # Copy agents from i18n source
 AGT_SRC="$SRC_DIR/agents"
 if [ ! -d "$AGT_SRC" ]; then

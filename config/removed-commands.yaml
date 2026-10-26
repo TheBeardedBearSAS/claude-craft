@@ -1,0 +1,12 @@
+# Command files removed from the claude-craft distribution.
+#
+# Installers (Project/install-project-commands.sh, Dev/scripts/install-common-rules.sh)
+# and `claude-craft update` delete these paths from <target>/.claude/commands/ so an
+# upgrade does not leave stale commands behind. Paths are <namespace>/<command>.md.
+# Deprecated commands stay distributed as redirect stubs (frontmatter
+# `deprecated: true` + `replaced-by:`) and are only listed here once retired.
+removed:
+  # 8.24.0 — maintainer-only commands, kept in the claude-craft repository (.claude/commands/common/)
+  - common/add-technology.md
+  - common/audit-claude-alignment.md
+  - common/audit-freshness.md

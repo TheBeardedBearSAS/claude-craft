@@ -94,6 +94,7 @@
   "files": [
     "bundles/",
     "cli/",
+    "config/removed-commands.yaml",
     "Dev/",
     "Infra/",
     "Project/",

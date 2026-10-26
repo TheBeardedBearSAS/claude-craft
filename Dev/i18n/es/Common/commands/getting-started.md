@@ -95,7 +95,6 @@ Based on the detected stack, recommend 3 contextualized commands that provide im
 - `/php:check-security` — Security best practices
 
 **Unknown/Multi-stack:**
-- `/common:audit-freshness` — Check dependency updates and security
 - `/common:pre-commit-check` — Quality gates before commits
 - `/team:audit` — Full project audit (architecture, security, performance)
 

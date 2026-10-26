@@ -150,6 +150,19 @@ function runUpdate(targetPath, options, cliRoot) {
     }
   }
 
+  // Delete commands retired from the distribution (config/removed-commands.yaml).
+  // The Project installer is not re-run here, so prune every namespace explicitly.
+  const pruneScript = path.join(scriptsDir, 'prune-removed-commands.sh');
+  if (fs.existsSync(pruneScript)) {
+    const result = spawnSync('bash', [pruneScript, safeTarget], { encoding: 'utf8', timeout: 60_000, stdio: 'pipe' });
+    if (result.status !== 0) {
+      console.log(`  ${c.red}[FAIL]${c.reset} Retired commands cleanup: ${result.stderr || result.error?.message || 'unknown'}`);
+      anyFailed = true;
+    } else if (result.stdout.trim()) {
+      console.log(result.stdout.trimEnd());
+    }
+  }
+
   // Rollback on partial failure (CC-REL-14).
   if (anyFailed && backupPath) {
     try {

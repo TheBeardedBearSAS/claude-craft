@@ -453,23 +453,20 @@ install_commands() {
         local lang_commands="$I18N_DIR/$lang/${ns_source}/commands"
         local dest_commands="$target_dir/.claude/commands/${ns_target}"
 
-        # Determine exclusion (add-technology.md only for Common)
-        local exclude=""
-        if [[ "$ns_source" == "Common" ]]; then
-            exclude="add-technology.md"
-        fi
-
         if [[ -d "$base_commands" ]] || [[ -d "$lang_commands" ]]; then
             found_any=true
             if [[ -d "$base_commands" ]]; then
-                copy_directory "$base_commands" "$dest_commands" "*.md" "$exclude"
+                copy_directory "$base_commands" "$dest_commands" "*.md"
             fi
             if [[ -d "$lang_commands" ]]; then
-                copy_directory "$lang_commands" "$dest_commands" "*.md" "$exclude"
+                copy_directory "$lang_commands" "$dest_commands" "*.md"
             fi
         fi
     done
     IFS="$OLD_IFS"
+
+    # Delete commands retired from the distribution (config/removed-commands.yaml)
+    $dry_run || bash "$SCRIPT_DIR/prune-removed-commands.sh" "$target_dir"
 
     if ! $found_any; then
         if [[ -d "$SCRIPT_DIR/claude-commands/common" ]]; then
@@ -736,8 +733,8 @@ install_claude_md() {
                 while IFS= read -r cmd_file; do
                     local cmd_name
                     cmd_name=$(basename "$cmd_file" .md)
-                    # Exclude add-technology (claude-craft internal command, Common only)
-                    if [[ "$ns_source" == "Common" && "$cmd_name" == "add-technology" ]]; then
+                    # Deprecated redirect stubs are not advertised
+                    if grep -q "^deprecated: true" "$cmd_file"; then
                         continue
                     fi
                     local cmd_desc
