@@ -49,7 +49,7 @@ Preguntar al usuario:
 
 ### Paso 5: Crear el archivo
 
-1. Usar plantilla `templates/user-story.md`
+1. Usar plantilla `.claude/templates/project/user-story.md`
 2. Reemplazar marcadores de posición:
    - `{ID}`: ID generado
    - `{NOM}`: Nombre de la US

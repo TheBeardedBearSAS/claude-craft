@@ -41,7 +41,7 @@ Demander à l'utilisateur (si non fourni):
 
 ### Étape 4: Créer le fichier
 
-1. Utiliser le template `templates/epic.md`
+1. Utiliser le template `.claude/templates/project/epic.md`
 2. Remplacer les placeholders:
    - `{ID}`: ID généré
    - `{NOM}`: Nom de l'EPIC

@@ -161,7 +161,7 @@ Para cada Epic:
 - **S**ized: ≤ 8 pontos
 - **T**estável: Critérios verificáveis
 
-**Template**: partir de `templates/user-story.md` e preencher a seção `## Rastreabilidade`: `Implements:` lista os requisitos do PRD (`FR-xxx`) que a story entrega.
+**Template**: partir de `.claude/templates/project/user-story.md` e preencher a seção `## Rastreabilidade`: `Implements:` lista os requisitos do PRD (`FR-xxx`) que a story entrega.
 
 **Os 3 Cs (OBRIGATÓRIO)**:
 - **Card**: Conciso, formato "Como... Eu quero... Para que..."

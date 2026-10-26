@@ -49,7 +49,7 @@ Perguntar ao usuário:
 
 ### Etapa 5: Criar o arquivo
 
-1. Usar template `templates/user-story.md`
+1. Usar template `.claude/templates/project/user-story.md`
 2. Substituir placeholders:
    - `{ID}`: ID gerado
    - `{NOM}`: Nome da US

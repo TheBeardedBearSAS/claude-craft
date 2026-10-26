@@ -47,7 +47,7 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
 ├── board.md                         # Quadro Kanban (arquivo de board único)
 └── tasks/
     ├── README.md                    # Visão geral: tarefas agrupadas por US
-    ├── TASK-001.md                  # Um arquivo por tarefa (templates/task.md)
+    ├── TASK-001.md                  # Um arquivo por tarefa (.claude/templates/project/task.md)
     └── ...
 ```
 
@@ -82,7 +82,7 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
 
 ### ETAPA 4: Template de decomposição de US
 
-Para cada US, adicionar uma seção em `tasks/README.md` usando o template abaixo e criar um arquivo `tasks/TASK-{ID}.md` por linha de tarefa a partir de `templates/task.md` (os IDs continuam após o último `TASK-*` existente, como faz `/project:add-task`):
+Para cada US, adicionar uma seção em `tasks/README.md` usando o template abaixo e criar um arquivo `tasks/TASK-{ID}.md` por linha de tarefa a partir de `.claude/templates/project/task.md` (os IDs continuam após o último `TASK-*` existente, como faz `/project:add-task`):
 
 ````markdown
 # Tarefas - US-XXX: [Título]
@@ -482,7 +482,7 @@ graph TD
 
 ### ETAPA 5: Criar Task Board
 
-Criar `board.md` (template `templates/board.md`):
+Criar `board.md` (template `.claude/templates/project/board.md`):
 
 ```markdown
 # Task Board - Sprint $ARGUMENTS

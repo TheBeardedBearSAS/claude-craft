@@ -61,7 +61,7 @@ Extract from $ARGUMENTS:
 
 ### Step 5: Create the file
 
-1. Use template `templates/task.md`
+1. Use template `.claude/templates/project/task.md`
 2. Replace placeholders:
    - `{ID}`: Generated ID
    - `{DESCRIPTION}`: Short description

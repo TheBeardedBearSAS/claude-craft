@@ -61,7 +61,7 @@ Extraer de $ARGUMENTS:
 
 ### Paso 5: Crear el archivo
 
-1. Usar plantilla `templates/task.md`
+1. Usar plantilla `.claude/templates/project/task.md`
 2. Reemplazar marcadores de posición:
    - `{ID}`: ID generado
    - `{DESCRIPTION}`: Descripción corta

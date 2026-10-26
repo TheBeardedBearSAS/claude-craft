@@ -161,7 +161,7 @@ Für jedes Epic:
 - **S**ized: ≤ 8 Punkte
 - **T**estable: Überprüfbare Kriterien
 
-**Vorlage**: von `templates/user-story.md` ausgehen und den Abschnitt `## Rückverfolgbarkeit` ausfüllen: `Implements:` listet die PRD-Anforderungen (`FR-xxx`), die die Story umsetzt.
+**Vorlage**: von `.claude/templates/project/user-story.md` ausgehen und den Abschnitt `## Rückverfolgbarkeit` ausfüllen: `Implements:` listet die PRD-Anforderungen (`FR-xxx`), die die Story umsetzt.
 
 **Die 3 Cs (VERPFLICHTEND)**:
 - **Card**: Prägnant, Format "Als... möchte ich... damit..."

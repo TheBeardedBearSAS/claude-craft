@@ -38,8 +38,9 @@ function hits(lang, pattern) {
 }
 
 describe('PM commands share one file layout', () => {
-  it.each(LANGS)('templates live in templates/, not Scrum/templates/ (lang=%s)', (lang) => {
-    expect(hits(lang, /Scrum\/templates\//)).toEqual([]);
+  it.each(LANGS)('templates are referenced where the installer copies them (lang=%s)', (lang) => {
+    // Project/install-project-commands.sh copies templates/*.md to .claude/templates/project/
+    expect(hits(lang, /Scrum\/templates\/|(?<![\w.\/])templates\/[a-z-]+\.md/)).toEqual([]);
   });
 
   it.each(LANGS)('gates default to project-management/ documents (lang=%s)', (lang) => {
@@ -102,7 +103,7 @@ describe('/project:generate-backlog keeps PRD traceability', () => {
   it.each(LANGS)('reads prd.md and writes Implements: from the user-story template (lang=%s)', (lang) => {
     const cmd = read('Project/i18n', lang, 'commands/generate-backlog.md');
     expect(cmd).toContain('project-management/prd.md');
-    expect(cmd).toContain('templates/user-story.md');
+    expect(cmd).toContain('.claude/templates/project/user-story.md');
     expect(cmd).toContain('Implements');
     // /project:trace greps the literal key in every language.
     expect(read('Project/i18n', lang, 'templates/user-story.md')).toContain('- **Implements**:');

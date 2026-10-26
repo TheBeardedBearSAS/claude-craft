@@ -47,7 +47,7 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
 ├── board.md                         # Kanban-Board (einzelne Board-Datei)
 └── tasks/
     ├── README.md                    # Übersicht: Aufgaben nach US gruppiert
-    ├── TASK-001.md                  # Eine Datei pro Aufgabe (templates/task.md)
+    ├── TASK-001.md                  # Eine Datei pro Aufgabe (.claude/templates/project/task.md)
     └── ...
 ```
 
@@ -82,7 +82,7 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
 
 ### SCHRITT 4: US-Zerlegungsvorlage
 
-Für jede US einen Abschnitt in `tasks/README.md` nach der folgenden Vorlage hinzufügen und pro Aufgabenzeile eine Datei `tasks/TASK-{ID}.md` aus `templates/task.md` erstellen (IDs setzen nach dem letzten vorhandenen `TASK-*` fort, wie bei `/project:add-task`):
+Für jede US einen Abschnitt in `tasks/README.md` nach der folgenden Vorlage hinzufügen und pro Aufgabenzeile eine Datei `tasks/TASK-{ID}.md` aus `.claude/templates/project/task.md` erstellen (IDs setzen nach dem letzten vorhandenen `TASK-*` fort, wie bei `/project:add-task`):
 
 ````markdown
 # Aufgaben - US-XXX: [Titel]
@@ -482,7 +482,7 @@ graph TD
 
 ### SCHRITT 5: Task Board erstellen
 
-`board.md` erstellen (Vorlage `templates/board.md`):
+`board.md` erstellen (Vorlage `.claude/templates/project/board.md`):
 
 ```markdown
 # Task Board - Sprint $ARGUMENTS

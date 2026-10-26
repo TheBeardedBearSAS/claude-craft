@@ -47,7 +47,7 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
 ├── board.md                         # Tablero Kanban (archivo único)
 └── tasks/
     ├── README.md                    # Resumen: tareas agrupadas por US
-    ├── TASK-001.md                  # Un archivo por tarea (templates/task.md)
+    ├── TASK-001.md                  # Un archivo por tarea (.claude/templates/project/task.md)
     └── ...
 ```
 
@@ -82,7 +82,7 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
 
 ### PASO 4: Plantilla de descomposición de US
 
-Para cada US, añadir una sección a `tasks/README.md` con la plantilla siguiente, y crear un archivo `tasks/TASK-{ID}.md` por cada fila de tarea a partir de `templates/task.md` (los IDs continúan tras el último `TASK-*` existente, como hace `/project:add-task`):
+Para cada US, añadir una sección a `tasks/README.md` con la plantilla siguiente, y crear un archivo `tasks/TASK-{ID}.md` por cada fila de tarea a partir de `.claude/templates/project/task.md` (los IDs continúan tras el último `TASK-*` existente, como hace `/project:add-task`):
 
 ````markdown
 # Tareas - US-XXX: [Título]
@@ -482,7 +482,7 @@ graph TD
 
 ### PASO 5: Crear Tablero de Tareas
 
-Crear `board.md` (plantilla `templates/board.md`):
+Crear `board.md` (plantilla `.claude/templates/project/board.md`):
 
 ```markdown
 # Tablero de Tareas - Sprint $ARGUMENTS

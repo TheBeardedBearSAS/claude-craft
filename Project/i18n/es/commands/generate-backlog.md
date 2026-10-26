@@ -161,7 +161,7 @@ Para cada Epic:
 - **S**ized (Pequeña): ≤ 8 puntos
 - **T**esteable: Criterios verificables
 
-**Plantilla**: partir de `templates/user-story.md` y completar su sección `## Trazabilidad`: `Implements:` enumera los requisitos del PRD (`FR-xxx`) que la historia entrega.
+**Plantilla**: partir de `.claude/templates/project/user-story.md` y completar su sección `## Trazabilidad`: `Implements:` enumera los requisitos del PRD (`FR-xxx`) que la historia entrega.
 
 **Las 3 C (OBLIGATORIO)**:
 - **Card (Tarjeta)**: Concisa, formato "Como... Quiero... Para..."

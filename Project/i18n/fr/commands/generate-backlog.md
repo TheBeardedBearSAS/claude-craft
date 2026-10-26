@@ -161,7 +161,7 @@ Pour chaque Epic :
 - **S**ized : ≤ 8 points
 - **T**estable : Critères vérifiables
 
-**Template** : partir de `templates/user-story.md` et remplir sa section `## Traçabilité` : `Implements:` liste les exigences du PRD (`FR-xxx`) que la story livre.
+**Template** : partir de `.claude/templates/project/user-story.md` et remplir sa section `## Traçabilité` : `Implements:` liste les exigences du PRD (`FR-xxx`) que la story livre.
 
 **Les 3 C (OBLIGATOIRE)** :
 - **Carte** : Concis, format "En tant que... Je veux... Afin de..."
