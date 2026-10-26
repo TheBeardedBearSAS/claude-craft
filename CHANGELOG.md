@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.23.4] - 2026-10-26
+
+Phase 0 de la feuille de route de simplification des commandes de gestion de projet : corrections de cohérence, surface de commandes inchangée (5 langues).
+
+### Added
+
+- **Garde-fou `tests/scripts/command-refs.test.mjs`** : toute référence `/ns:cmd` dans `Project/i18n/<lang>/`, `Dev/i18n/<lang>/`, `Dev/i18n/base/` et `Tools/Ralph/README.md` doit résoudre vers une commande distribuée (65 références mortes par langue avant correctif).
+- **`tests/content/pm-consistency.test.mjs`** : arborescence unique des sprints, chemins par défaut des gates, squelette `.bmad/sprint-status.yaml` créé par `/workflow:init` (validé par le schéma Kanban), traçabilité `Implements:` du backlog.
+
+### Fixed
+
+- **Références mortes** : `/qa:recette-*` → `/qa:*`, `/sprint:start|plan|retrospective` → `/workflow:start|retro`, `/arch:adr` → `/common:architecture-decision`, `/pm:handoff` / `/arch:handoff` → générateur suivant, `/gate:configure` → `/gate:report`, commandes `/project:queue-*`, `split-story`, `add-ac`, `/sprint:tdd*` inexistantes remplacées par les commandes ou champs YAML réels ; `Tools/Ralph/README.md` (`/project:sprint-dev`, `/common:team-sprint`, `/common:fix-bug-tdd`).
+- **Gates** : `/gate:validate-prd`, `/gate:validate-techspec` et `/gate:report` ainsi que `.bmad/lib/gate-validator.sh` lisent par défaut `project-management/prd.md` et `project-management/tech-spec.md` (là où les générateurs écrivent) au lieu de `docs/` (tests BATS ajoutés).
+- **Templates** : `add-epic`, `add-story`, `add-task` pointent vers `templates/` (le dossier `Scrum/templates/` n'existe pas).
+- **Arborescence de sprint unique** : `sprints/sprint-{N}-{slug}/` avec `board.md` et un fichier `tasks/TASK-*.md` par tâche ; `/project:decompose-tasks` n'écrit plus `task-board.md` ni `tasks/US-XXX-tasks.md` (invisibles du Kanban et de `/sprint:dev`) ; `/sprint:dev` lit les stories dans `.bmad/sprint-status.yaml` au lieu d'un `sprint-backlog.md` jamais créé.
+- **`/workflow:init`** crée le squelette `.bmad/sprint-status.yaml` (avec `routing.auto_transitions`) et recommande `/workflow:start` → `/workflow:implement` ou `/workflow:auto-sprint` ; le message d'erreur de `/qa:fix` qui y renvoie devient exact.
+- **`/workflow:auto-sprint`** : la phase 0 n'abandonne plus quand le sprint n'existe pas encore (la phase 1 le crée).
+- **`/project:generate-backlog`** lit `project-management/prd.md` en priorité et remplit le champ `Implements:` du template `templates/user-story.md` ; la clé `**Implements**` n'est plus traduite dans les templates fr/es/de/pt (`/project:trace` la cherche telle quelle dans toutes les langues).
+- **`.claude/commands/`** (installation interne du dépôt) : mêmes corrections de références `/qa:*` et resynchronisation des commandes `/workflow:*` modifiées.
+
 ## [8.23.3] - 2026-10-26
 
 ### Security
