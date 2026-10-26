@@ -1,6 +1,6 @@
 ---
 description: Orchestrateur de sprint de bout en bout (démarrage -> décomposition -> validation -> implémentation -> PR -> CI -> revue -> rétro -> merge)
-argument-hint: "<N> [--auto-merge] [--max-fix-attempts=2] [--max-workers=3] [--base=main] [--dry-run] [--overnight]"
+argument-hint: "<N> [--from-prd] [--auto-merge] [--max-fix-attempts=2] [--max-workers=3] [--base=main] [--dry-run] [--overnight]"
 ---
 
 # Auto Sprint — Orchestrateur de Sprint de Bout en Bout
@@ -14,8 +14,8 @@ que `/team:sprint`) afin d'éviter l'imbrication d'Agent Teams.
 Cette commande automatise ce qui nécessitait auparavant six commandes manuelles avec un `/clear` entre chaque :
 
 ```
-/workflow:start N -> /project:decompose-tasks 00N -> /gate:check sprint 00N
--> /team:sprint "sprint-00N" -> /workflow:review N -> /workflow:retro N
+/workflow:start N -> /workflow:start N --tasks-only -> /gate:check sprint 00N
+-> /workflow:implement N -> /workflow:review N -> /workflow:retro N
 ```
 
 …et ajoute : branche, commit, Pull Request, surveillance CI et merge.
@@ -25,6 +25,7 @@ Cette commande automatise ce qui nécessitait auparavant six commandes manuelles
 $ARGUMENTS
 
 - `<N>` : Numéro du sprint (ex. `5`). **Obligatoire.**
+- `--from-prd` : Avant la Phase 1, exécute `/workflow:plan --only=backlog` (sous-agent) pour générer le backlog depuis `project-management/prd.md`, puis poursuit le pipeline normal.
 - `--auto-merge` : Merge automatiquement dès que la CI est verte et que la DoD est validée. **Défaut : DÉSACTIVÉ** — la
   commande se met en pause et attend un GO humain explicite avant de merger (respecte la règle de « revue obligatoire »,
   règle 09, et le principe Karpathy « pas d'auto-merge sans revue humaine »).
@@ -52,7 +53,7 @@ la bonne forme à chaque phase :
 | Phase | Forme attendue |
 |-------|----------------|
 | `start`, `review`, `retro` | `N` brut (ex. `5`) |
-| `decompose-tasks` | `00N` avec zéros (ex. `005`) |
+| `start --tasks-only` | `N` nu (ex. `5`) |
 | `team:sprint` (implémentation) | nom libre du sprint résolu depuis le dossier / fichier de statut |
 
 Résoudre le dossier du sprint via glob `project-management/sprints/sprint-{N}-*/` et lire
@@ -70,6 +71,10 @@ Résoudre le dossier du sprint via glob `project-management/sprints/sprint-{N}-*
    (règle 09 : `main` toujours déployable — ne jamais travailler directement sur la branche de base).
 5. Si `--dry-run` : afficher le contexte résolu + les 9 phases planifiées et **s'arrêter ici**.
 
+### Phase 0b — Backlog depuis le PRD (sous-agent, uniquement avec `--from-prd`)
+
+> « Lis `.claude/commands/workflow/plan.md` et exécute `/workflow:plan --only=backlog` (entrée : `project-management/prd.md`). Retourne un résumé concis et les fichiers créés. »
+
 ### Phase 1 — Démarrage (sous-agent)
 
 Instancier un sous-agent isolé :
@@ -80,13 +85,13 @@ Instancier un sous-agent isolé :
 
 ### Phase 2 — Décomposition (sous-agent)
 
-> « Lis `.claude/commands/project/decompose-tasks.md` et exécute-le pour le sprint **00N**.
+> « Lis `.claude/commands/workflow/start.md` (`/workflow:start {N} --tasks-only`) et exécute-le pour le sprint **N**.
 > Génère les fichiers `tasks/TASK-*.md`, `board.md`, et le graphe de dépendances.
 > Retourne un résumé concis et les fichiers créés. »
 
 ### Phase 3 — Validation du gate (sous-agent + boucle de correction automatique)
 
-> « Lis `.claude/commands/gate/validate-sprint.md` et exécute-le pour le sprint **00N**.
+> « Lis `.claude/commands/gate/check.md` (gate `sprint`) et exécute-le pour le sprint **00N**.
 > Retourne PASS/FAIL, le score et la liste des critères échoués. »
 
 **En cas d'ÉCHEC → boucle de correction automatique** (jusqu'à `--max-fix-attempts`) :
@@ -96,6 +101,8 @@ Instancier un sous-agent isolé :
 - Si toujours en échec après `--max-fix-attempts` → **abandonner** avec le rapport de remédiation.
 
 ### Phase 4 — Implémentation (tu = chef d'orchestre)
+
+> Équivalent à `/workflow:implement --parallel N` (qui délègue à `/team:sprint`).
 
 Prendre **directement le rôle de conducteur `/team:sprint`** (ne **pas** instancier un Agent Team imbriqué) :
 
@@ -195,3 +202,4 @@ Phase              | Statut | Notes
 - **L'auto-merge est opt-in** et intentionnellement conditionné à un drapeau.
 - **Docker est obligatoire** pour les tests (CLAUDE.md du projet).
 - L'isolation des sous-agents remplace `/clear` — garder chaque rapport de sous-agent concis.
+- Pour la variante parallèle Agent Teams qui rédige aussi les stories avec revue croisée, utiliser `/team:delivery`.

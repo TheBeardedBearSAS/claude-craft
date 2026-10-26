@@ -151,6 +151,6 @@ Risco: um atraso de 2 ou mais dias em US-001 coloca todo o sprint em risco.
 ## Comandos relacionados
 
 - `/project:trace` — Matriz de rastreabilidade e cobertura
-- `/sprint:status` — Visão geral do status do sprint
-- `/sprint:next-story` — Próxima história (considera as dependências)
+- `/workflow:status` — Visão geral do status do sprint
+- `/project:backlog next story` — Próxima história (considera as dependências)
 - `/workflow:retro` — Retrospectiva do sprint (usa as métricas)

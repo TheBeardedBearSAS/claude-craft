@@ -168,7 +168,7 @@ Recommended Actions
 Next Commands
 - /project:trace requirement FR-005   → rastreio detalhado de um requisito
 - /project:backlog add story         → criar as user stories em falta
-- /project:generate-backlog          → regenerar o backlog com as lacunas
+- /workflow:plan --only=backlog          → regenerar o backlog com as lacunas
 ```
 
 Com `--level test`, apresentar uma linha por story: `US-003 | ❌ | 0 files | 0 tests` e a ação (por ex. «Criar tests/RegistrationServiceTest.php»).
@@ -215,7 +215,7 @@ Claude: [relatório de cobertura com tabela por prioridade, 2 requisitos P0 prec
 
 ## Comandos relacionados
 
-- `/project:generate-prd` - Gerar o PRD com identificadores de requisitos
-- `/project:generate-backlog` - Criar o backlog a partir do PRD
-- `/project:generate-tech-spec` - Gerar a especificação técnica
+- `/workflow:plan --only=prd` - Gerar o PRD com identificadores de requisitos
+- `/workflow:plan --only=backlog` - Criar o backlog a partir do PRD
+- `/workflow:design` - Gerar a especificação técnica
 - `/project:migrate --stories` - Adicionar os campos em falta (como `Implements:`) às stories

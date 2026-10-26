@@ -168,7 +168,7 @@ Recommended Actions
 Next Commands
 - /project:trace requirement FR-005   → deep trace of one requirement
 - /project:backlog add story         → create missing user stories
-- /project:generate-backlog          → regenerate backlog with gaps
+- /workflow:plan --only=backlog          → regenerate backlog with gaps
 ```
 
 With `--level test`, print one row per story: `US-003 | ❌ | 0 files | 0 tests` and the action (e.g. "Create tests/RegistrationServiceTest.php").
@@ -215,7 +215,7 @@ Claude: [coverage report with per-priority table, 2 P0 requirements need attenti
 
 ## Related Commands
 
-- `/project:generate-prd` - Generate PRD with requirement IDs
-- `/project:generate-backlog` - Create backlog from PRD
-- `/project:generate-tech-spec` - Generate technical specification
+- `/workflow:plan --only=prd` - Generate PRD with requirement IDs
+- `/workflow:plan --only=backlog` - Create backlog from PRD
+- `/workflow:design` - Generate technical specification
 - `/project:migrate --stories` - Add missing fields (such as `Implements:`) to stories

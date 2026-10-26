@@ -104,7 +104,7 @@ Avant toute query : quelle décision sera prise avec ce résultat ?
 - `@database-architect` — design de schéma
 - `@performance-auditor` — métriques système
 - `.claude/rules/14-multitenant.md` — isolation des données par tenant
-- `/common:daily-standup` — données d'entrée pour le standup
+- `/workflow:status --standup` — données d'entrée pour le standup
 - Infrastructure d'observabilité via `@devops-engineer`
 
 ## Ressources

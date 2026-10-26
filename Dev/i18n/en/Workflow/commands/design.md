@@ -1,7 +1,11 @@
 ---
 name: workflow-design
-description: Execute the Design (Solutioning) phase - technical specification and architecture
+description: "Execute the Design (Solutioning) phase - generate the technical specification (default) or the project constitution (--constitution)"
+argument-hint: "[--constitution] [--continue]"
 arguments:
+  - name: constitution
+    description: Generate the project constitution (project-management/constitution.md) instead of the tech spec
+    required: false
   - name: continue
     description: Continue from where left off
     required: false
@@ -11,245 +15,168 @@ arguments:
 
 ## Mission
 
-Execute the Design (Solutioning) phase of the development workflow. This phase focuses on creating the Technical Specification, designing the architecture, and documenting key technical decisions.
+Execute the Design (Solutioning) phase: turn the PRD into a Technical Specification, architecture diagrams, data model, API design and ADRs. With `--constitution`, capture the immutable project decisions in a Project Constitution instead.
+
+## Usage
+
+| Invocation | What it does | Replaces |
+|------------|--------------|----------|
+| `/workflow:design` | Reads `project-management/prd.md`, writes `project-management/tech-spec.md` + architecture files + ADRs | `/workflow:design` |
+| `/workflow:design --constitution` | Writes `project-management/constitution.md` (immutable decisions, used by `/gate:check alignment`) | `/workflow:design --constitution` |
+| `/workflow:design --continue` | Resumes an interrupted design session | - |
+
+Canonical document order: PRD → tech spec → backlog → sprint.
 
 ## When to Use
 
 - **Standard** and **Enterprise** tracks
-- After `/workflow:plan` is complete
-- When PRD and backlog are ready
+- After `/workflow:plan --only=prd` is complete
+- `--constitution`: at project start (or any time decisions must be locked)
 
 ## Prerequisites
 
-- PRD exists at `project-management/prd.md`
-- Backlog exists at `project-management/backlog/`
+- PRD exists at `project-management/prd.md` (`--constitution`: only optional sources, see below)
+- Technology stack identified (asked interactively for new projects)
 
 ## Plan Mode
 
-> **Plan mode is recommended.** Claude activates plan mode to structure the approach, identify dependencies, and present a generation strategy before creating artifacts.
+> **Plan mode is mandatory.** Claude activates plan mode to analyze impacted code, propose a generation strategy and wait for your validation before creating artifacts.
 
-## Workflow
+## Workflow: Tech Spec (default)
 
-### Step 1: Design Setup
+### Step 1: PRD Analysis
 
 ```
 ╔══════════════════════════════════════════════════════════╗
 ║              DESIGN PHASE - STARTING                      ║
-╠══════════════════════════════════════════════════════════╣
-║ Track: Standard                                           ║
-║ Phase: 3 of 4 - Design (Solutioning)                      ║
-║                                                           ║
-║ Objectives:                                               ║
-║ • Create Technical Specification from PRD                 ║
-║ • Design system architecture (C4 diagrams)                ║
-║ • Define data model and API design                        ║
-║ • Document Architecture Decision Records (ADRs)           ║
-║ • Plan testing strategy                                   ║
-╚══════════════════════════════════════════════════════════╝
-```
-
-### Step 2: Load Planning Artifacts
-
-```
-╔══════════════════════════════════════════════════════════╗
-║              LOADING PLANNING ARTIFACTS                   ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ PRD Analysis:                                             ║
-║ ├── ✅ prd.md loaded                                      ║
+║ Track: Standard | Phase: 3 of 4 - Design (Solutioning)    ║
+║ Loading project-management/prd.md ...                     ║
 ║ ├── Functional requirements: 12                           ║
 ║ ├── Non-functional requirements: 8                        ║
 ║ └── Integrations required: 2                              ║
-║                                                           ║
-║ Backlog Summary:                                          ║
-║ ├── ✅ backlog/ loaded                                    ║
-║ ├── EPICs: 4                                              ║
-║ ├── User Stories: 18                                      ║
-║ └── Total Story Points: 89                                ║
-║                                                           ║
-║ Constraints (if Enterprise):                              ║
-║ └── ✅ analysis/constraints.md loaded                     ║
-║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Step 3: Design Tasks
+Extract from the PRD: functional requirements (`FR-xxx`), non-functional requirements (performance, security, scalability), personas and journeys, constraints and assumptions, integrations. If `project-management/analysis/constraints.md` exists (Enterprise), load it too.
 
-Execute design tasks in order:
+### Step 2: Codebase Analysis
 
-```
-╔══════════════════════════════════════════════════════════╗
-║                 DESIGN TASKS                              ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ □ Task 1: Generate Tech Spec                              ║
-║   Command: /project:generate-tech-spec                    ║
-║   Output: project-management/tech-spec.md                 ║
-║                                                           ║
-║ □ Task 2: Architecture Design                             ║
-║   Create C4 diagrams (context, container, component)      ║
-║   Output: project-management/architecture/                ║
-║                                                           ║
-║ □ Task 3: Data Model Design                               ║
-║   ERD and database schema                                 ║
-║   Output: project-management/architecture/erd.md          ║
-║                                                           ║
-║ □ Task 4: API Design                                      ║
-║   Endpoints, payloads, authentication                     ║
-║   Output: project-management/architecture/api.md          ║
-║                                                           ║
-║ □ Task 5: Create ADRs                                     ║
-║   Document key technical decisions                        ║
-║   Output: docs/adr/                                       ║
-║                                                           ║
-║ □ Task 6: Security Review                                 ║
-║   OWASP checklist, auth strategy                          ║
-║   Output: project-management/architecture/security.md     ║
-║                                                           ║
-╚══════════════════════════════════════════════════════════╝
-```
+Existing codebase: detect stack (backend, frontend, database, cache, infrastructure) and existing patterns (architecture, API style, auth, testing) and stay consistent with them.
 
-### Step 4: Execute Tech Spec Generation
+New project: ask the technology questions.
 
 ```
-Starting /project:generate-tech-spec...
-
-Analyzing PRD requirements...
-Detecting existing codebase patterns...
-
-[Tech Spec generation workflow runs with interactive Q&A]
-
-✅ Tech Spec created: project-management/tech-spec.md
+┌─────────────────────────────────────────────────────────┐
+│ QUESTIONS - Technology Stack                             │
+├─────────────────────────────────────────────────────────┤
+│ 1. Preferred backend framework? (Symfony/Laravel/Node)   │
+│ 2. Frontend framework? (React/Vue/Angular/None)          │
+│ 3. Database preference? (PostgreSQL/MySQL/MongoDB)       │
+│ 4. Deployment target? (Docker/K8s/Serverless/VPS)        │
+│ 5. Any existing integrations to consider?                │
+└─────────────────────────────────────────────────────────┘
 ```
 
-### Step 5: Architecture Diagrams
-
-Generate C4 architecture diagrams:
+### Step 3: Architecture Questions
 
 ```
-╔══════════════════════════════════════════════════════════╗
-║             ARCHITECTURE DIAGRAMS                         ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ C4 Level 1 - System Context:                              ║
-║ ┌─────────────────────────────────────────────────────┐  ║
-║ │                                                     │  ║
-║ │     [User] ──────► [Our System] ──────► [Stripe]    │  ║
-║ │                         │                           │  ║
-║ │                         ▼                           │  ║
-║ │                    [SendGrid]                       │  ║
-║ │                                                     │  ║
-║ └─────────────────────────────────────────────────────┘  ║
-║                                                           ║
-║ C4 Level 2 - Container:                                   ║
-║ ┌─────────────────────────────────────────────────────┐  ║
-║ │                                                     │  ║
-║ │  [React SPA] ──► [Symfony API] ──► [PostgreSQL]    │  ║
-║ │                       │                             │  ║
-║ │                       ▼                             │  ║
-║ │                    [Redis]                          │  ║
-║ │                                                     │  ║
-║ └─────────────────────────────────────────────────────┘  ║
-║                                                           ║
-║ Files created:                                            ║
-║ ├── architecture/c4-context.md                            ║
-║ ├── architecture/c4-container.md                          ║
-║ └── architecture/c4-component.md                          ║
-║                                                           ║
-╚══════════════════════════════════════════════════════════╝
+┌─────────────────────────────────────────────────────────┐
+│ QUESTIONS - Architecture Decisions                       │
+├─────────────────────────────────────────────────────────┤
+│ 1. Monolith or Microservices?                            │
+│ 2. API style preference? (REST/GraphQL/gRPC)             │
+│ 3. Expected scale? (users, requests/sec)                 │
+│ 4. Real-time features needed? (WebSockets/SSE)           │
+│ 5. File storage requirements? (S3/local/CDN)             │
+│ 6. Background job processing needs?                      │
+│ 7. Third-party integrations? (payments, email, etc.)     │
+└─────────────────────────────────────────────────────────┘
 ```
 
-### Step 6: ADR Creation
+### Step 4: Design Tasks
 
-Document key architecture decisions:
+Execute in order:
 
-```
-╔══════════════════════════════════════════════════════════╗
-║        ARCHITECTURE DECISION RECORDS (ADRs)               ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ ADRs Created:                                             ║
-║                                                           ║
-║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ ADR-001: Database Choice                             │  ║
-║ │ Decision: PostgreSQL                                 │  ║
-║ │ Rationale: ACID compliance, JSON support, existing   │  ║
-║ └─────────────────────────────────────────────────────┘  ║
-║                                                           ║
-║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ ADR-002: API Style                                   │  ║
-║ │ Decision: REST with JSON:API                         │  ║
-║ │ Rationale: Team expertise, caching, simplicity       │  ║
-║ └─────────────────────────────────────────────────────┘  ║
-║                                                           ║
-║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ ADR-003: Authentication                              │  ║
-║ │ Decision: JWT with refresh tokens                    │  ║
-║ │ Rationale: Stateless, mobile-friendly, standard      │  ║
-║ └─────────────────────────────────────────────────────┘  ║
-║                                                           ║
-║ Files: docs/adr/ADR-001.md, ADR-002.md, ADR-003.md       ║
-║                                                           ║
-╚══════════════════════════════════════════════════════════╝
-```
+| # | Task | Output |
+|---|------|--------|
+| 1 | Tech Spec (template `.claude/templates/project/tech-spec.md`) | `project-management/tech-spec.md` |
+| 2 | C4 diagrams (context, container, component) | `project-management/architecture/c4-*.md` |
+| 3 | Data model: ERD (Mermaid `erDiagram`) + schemas; validate relationships, missing entities, indexing | `project-management/architecture/erd.md` |
+| 4 | API design: endpoints derived from FR-xxx and personas, payloads, errors, auth | `project-management/architecture/api.md` |
+| 5 | Security and performance: OWASP mitigations, authN/authZ, encryption, rate limiting, GDPR gaps | `project-management/architecture/security.md` |
+| 6 | ADRs for key decisions (database, API style, authentication) | `docs/adr/ADR-00x-*.md` |
+| 7 | Testing strategy (coverage target 80%), CI/CD and deployment, monitoring | in `tech-spec.md` |
 
-### Step 7: Design Review Gate
+Security checklist example:
 
 ```
-╔══════════════════════════════════════════════════════════╗
-║              DESIGN REVIEW GATE                           ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ Checklist:                                                ║
-║ ✅ Tech Spec covers all PRD requirements                  ║
-║ ✅ Architecture supports NFRs (performance, security)     ║
-║ ✅ Data model handles all entities                        ║
-║ ✅ API design covers all user stories                     ║
-║ ✅ Security considerations documented                     ║
-║ ✅ Testing strategy defined                               ║
-║ ✅ Deployment approach documented                         ║
-║                                                           ║
-║ Review Questions:                                         ║
-║ 1. Is the architecture appropriate for the scale?         ║
-║ 2. Are there any missing integrations?                    ║
-║ 3. Is the security approach sufficient?                   ║
-║ 4. Are ADRs complete and justified?                       ║
-║                                                           ║
-╚══════════════════════════════════════════════════════════╝
+✅ Authentication: JWT with HttpOnly cookies
+✅ Authorization: RBAC with policies
+✅ Data encryption: AES-256 at rest, TLS 1.3 in transit
+✅ Input validation: DTO validation + sanitization
+✅ Rate limiting: 100 req/min per user
+⚠️  GDPR compliance: needs data retention policy
 ```
 
-### Step 8: Phase Completion
+### Step 5: Design Review Gate
+
+- Tech Spec covers all PRD requirements (every `FR-xxx` traceable)
+- Architecture supports the NFRs (performance, security)
+- Data model handles all entities; API design covers all user stories
+- Security, testing strategy and deployment approach documented
+- ADRs complete and justified
+
+Offer iterations: caching strategy, expanded API documentation, deployment pipeline.
+
+### Step 6: Completion
 
 ```
 ╔══════════════════════════════════════════════════════════╗
 ║              DESIGN PHASE COMPLETE                        ║
-╠══════════════════════════════════════════════════════════╣
+║ ✅ project-management/tech-spec.md                        ║
+║ ✅ project-management/architecture/ (c4, erd, api, sec.)  ║
+║ ✅ docs/adr/ (3 ADRs)                                     ║
+║ • 24 API endpoints • 8 entities • 3 integrations          ║
 ║                                                           ║
-║ Artifacts Created:                                        ║
-║ ✅ tech-spec.md            Technical Specification        ║
-║ ✅ architecture/                                          ║
-║    ├── c4-context.md       System context diagram         ║
-║    ├── c4-container.md     Container diagram              ║
-║    ├── c4-component.md     Component diagram              ║
-║    ├── erd.md              Entity Relationship Diagram    ║
-║    ├── api.md              API design                     ║
-║    └── security.md         Security considerations        ║
-║ ✅ docs/adr/               3 Architecture Decision Records║
-║                                                           ║
-║ Summary:                                                  ║
-║ • 24 API endpoints designed                               ║
-║ • 8 database entities defined                             ║
-║ • 3 external integrations specified                       ║
-║ • 80% test coverage target set                            ║
-║                                                           ║
-║ ─────────────────────────────────────────────────────────║
-║ NEXT PHASE: Implementation                                ║
-║ Command: /workflow:implement                              ║
-║ ─────────────────────────────────────────────────────────║
-║                                                           ║
-║ Ready to start Sprint 1 development!                      ║
+║ NEXT: /workflow:plan --only=backlog                       ║
+║ THEN: /workflow:start 1                                   ║
 ╚══════════════════════════════════════════════════════════╝
 ```
+
+The backlog reads `project-management/prd.md` and, once it exists, `project-management/tech-spec.md`. After design, recommend `/workflow:plan --only=backlog` then `/workflow:start 1`.
+
+## Workflow: Constitution (`--constitution`)
+
+### Phase 1: Context Discovery
+
+Automatic analysis of: `README.md`, `project-management/prd.md`, `project-management/tech-spec.md`, codebase structure (patterns, conventions) and `.claude/` configuration. List which sources were found.
+
+### Phase 2: Interactive Clarification
+
+Ask the user, by theme, to fill the gaps:
+
+| Theme | Questions |
+|-------|-----------|
+| Vision & Mission | Vision in one sentence; what, for whom, why; non-negotiable objectives; what would make the project a failure |
+| Technical Constraints | Locked technologies; mandatory architecture pattern; infrastructure constraints; mandatory third-party integrations |
+| Design Principles | Mandatory patterns; forbidden patterns/practices; code standards; required testing strategy |
+| Non-Functional Requirements | Performance targets (latency, load); security; compliance (GDPR, SOC2); availability/uptime |
+| Boundaries | Out of scope; external systems; team boundaries and ownership; who may amend the constitution |
+
+### Phase 3: Generation
+
+1. Load template `.claude/templates/project/constitution.md`
+2. Fill vision, mission and non-negotiable objectives
+3. Lock the tech stack (technologies and versions)
+4. Capture mandatory and forbidden patterns
+5. Record performance, security and compliance targets
+6. Document exclusions, integration boundaries and the amendment process
+
+### Phase 4: Review & Ratification
+
+Output: `project-management/constitution.md` with sections Vision & Mission, Technical Constraints, Design Principles, Non-Functional Requirements, Boundaries, Amendment Process. Offer to adjust locked decisions, add constraints or refine boundaries. Optional discovery notes go to `project-management/analysis/discovery-notes.md`.
+
+The constitution is the reference used by `/gate:check alignment`. Next steps: `/workflow:plan --only=prd` if no PRD yet, otherwise run the default `/workflow:design`.
 
 ## Agents Involved
 
@@ -263,17 +190,33 @@ Document key architecture decisions:
 
 | File | Purpose |
 |------|---------|
-| `tech-spec.md` | Complete Technical Specification |
-| `architecture/c4-*.md` | C4 architecture diagrams |
-| `architecture/erd.md` | Entity Relationship Diagram |
-| `architecture/api.md` | API endpoint documentation |
-| `architecture/security.md` | Security design |
+| `project-management/tech-spec.md` | Complete Technical Specification |
+| `project-management/constitution.md` | Project Constitution (`--constitution`) |
+| `project-management/architecture/c4-*.md` | C4 architecture diagrams |
+| `project-management/architecture/erd.md` | Entity Relationship Diagram |
+| `project-management/architecture/api.md` | API endpoint documentation |
+| `project-management/architecture/security.md` | Security design |
 | `docs/adr/*.md` | Architecture Decision Records |
+
+## Example Session
+
+```
+User: /workflow:design
+
+Claude: Loading project-management/prd.md: 12 FR, 8 NFR.
+Detected: Symfony + React + PostgreSQL.
+❓ Current API is REST. Keep REST or migrate to GraphQL?
+> Keep REST
+[... interactive Q&A ...]
+✅ Tech Spec generated: project-management/tech-spec.md
+Next: /workflow:plan --only=backlog, then /workflow:start 1
+```
 
 ## Related Commands
 
-- `/workflow:plan` - Previous phase
-- `/workflow:implement` - Next phase
+- `/workflow:plan` - Previous phase (`--only=prd`, `--only=backlog`)
+- `/workflow:start` - Start the first sprint
+- `/workflow:implement` - Implementation phase
 - `/workflow:status` - Check progress
-- `/project:generate-tech-spec` - Direct tech spec generation
+- `/gate:check` - Quality gates (`alignment` uses the constitution)
 - `/common:architecture-decision` - Create individual ADRs

@@ -217,7 +217,7 @@ entries:
 | `/qa:fix` | Corrigir bugs de uma sessao |
 | `/qa:status` | Mostrar status da sessao |
 | `/qa:regression` | Ver testes de regressao |
-| `/qa:report` | Gerar relatorio |
+| `/qa:status --report` | Gerar relatorio |
 | `/gate:check story` | Validar AC de uma story |
 
 ## Capacidades do Chrome
@@ -261,9 +261,9 @@ entries:
 ║    Correção com abordagem TDD                            ║
 ║                                                          ║
 ║  Se todos os testes passam:                              ║
-║  → /qa:report                                            ║
+║  → /qa:status --report                                            ║
 ║    Gerar o relatório de recette                          ║
-║  → /sprint:transition done                               ║
+║  → /project:backlog move story done                               ║
 ║    Marcar a story como concluída                         ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

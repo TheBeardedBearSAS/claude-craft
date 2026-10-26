@@ -1,6 +1,6 @@
 ---
-description: "QA Recette Sitzungsstatus und Fortschritt anzeigen"
-argument-hint: "[--session=<id>|--all] [--scope=<story|sprint>] [--status=<running|completed|paused|failed>]"
+description: "QA Recette Sitzungsstatus und Fortschritt anzeigen oder Berichte erzeugen (--report)"
+argument-hint: "[--session=<id>|--all] [--scope=<story|sprint>] [--status=<running|completed|paused|failed>] [--report] [--format=<md|html|json>] [--output=<path>] [--compare=<id>]"
 ---
 
 # QA Recette Status - Sitzungsstatus und Fortschritt
@@ -17,6 +17,11 @@ Zeigt den Status und Fortschritt von QA Recette Sitzungen an. Einzelne Sitzungsd
 - `--status=<status>` : Nach Status filtern (running, completed, paused, failed)
 - `--format=<type>` : Ausgabeformat (table, yaml, json) — Standard: table
 - `--watch` : Live-Aktualisierungsmodus (alle 5 Sekunden)
+- `--report`: Berichtsmodus (ehemals `/qa:status --report`): Bericht aus einer Sitzung erzeugen; erfordert `--session=<id>`
+- `--format=<type>`: mit `--report`: md, html, json (Standard: md)
+- `--output=<path>`: mit `--report`: benutzerdefinierter Ausgabepfad (Standard: `.recette/reports/`)
+- `--include-screenshots`: mit `--report`: Screenshots in den HTML-Bericht einbetten
+- `--compare=<id>`: mit `--report`: mit einer anderen Sitzung für ein Regressions-Diff vergleichen
 
 ## Hauptfunktionen
 
@@ -83,6 +88,128 @@ Generierte Regressionstests: 3
 Behebungsstatus: completed (2/2 Bugs behoben)
 ```
 
+## Verwendung
+
+| Modus / Option | Was es tut | Ersetzt |
+|---|---|---|
+| `/qa:status --all` / `--session=<id>` | Sitzungen auflisten oder eine Sitzung im Detail anzeigen | — |
+| `/qa:status --report --session=<id>` | Markdown-/HTML-/JSON-Bericht erzeugen (`--format`, `--output`, `--include-screenshots`) | `/qa:status --report` |
+| `/qa:status --report --session=<id> --compare=<id>` | Zwei Sitzungen vergleichen, um Regressionen zu erkennen | `/qa:status --report --compare` |
+
+## Berichtsmodus (--report)
+
+Erzeugt detaillierte Berichte aus den Sitzungsdaten. Ausgabe in mehreren Formaten (Markdown, HTML, JSON), Abschnitt zur Einhaltung der Golden Rule, eingebettete Screenshots, Rückverfolgbarkeit von Akzeptanzkriterien zu Tests und Erfolgs-/Fehlermetriken. Ohne `--format` ist der Bericht Markdown.
+
+### Berichtsprozess
+
+```
+┌─────────────────────────────────────────┐
+│  1. load_session_data(session_id)       │
+│     - Read .recette/sessions/{id}/      │
+│     - Load state.yaml                   │
+│     - Load fix-state.yaml if present    │
+│     - Collect screenshots and logs      │
+│     - Load regression registry          │
+├─────────────────────────────────────────┤
+│  2. generate_report(format)             │
+│     - Build summary, test results,      │
+│       error details, regression tests   │
+│     - Build Golden Rule statement       │
+│     - Apply format template             │
+│     - Write to output path              │
+└─────────────────────────────────────────┘
+```
+
+### Berichtsstruktur
+
+```markdown
+# QA Recette Report — REC-20260130-143022
+
+## Summary
+| Metric | Value |
+|--------|-------|
+| Session | REC-20260130-143022 |
+| Scope | story → US-001 |
+| Duration | 14m 48s |
+| Passed / Failed / Skipped | 12 (80%) / 2 (13%) / 1 (7%) |
+
+## Test Results
+### Failed Tests (2)
+- TC-008: Login validation error display ✗ (ERR-001)
+
+## Error Details
+### ERR-001: Login validation not displayed
+- Type: visual · Severity: medium · Screenshot: screenshots/err-001.png
+
+## Regression Tests Generated
+| ID | Error | Test Type | Path |
+|----|-------|-----------|------|
+| REG-001 | ERR-001 | behat | features/auth/login_validation.feature |
+
+## Golden Rule Compliance
+All detected errors have generated regression tests.
+Registry updated: .recette/regression/registry.yaml
+```
+
+### Vergleich (--compare)
+
+Vergleicht zwei Durchläufe: Metrik-Deltas, behobene Fehler, neue Fehler und Verstöße gegen die Golden Rule.
+
+```
+## Comparison: REC-20260130-143022 vs REC-20260201-140000
+
+| Metric | Session 1 | Session 2 | Delta |
+|--------|-----------|-----------|-------|
+| Passed | 12 | 14 | +2 |
+| Failed | 2 | 0 | -2 |
+
+### Resolved Errors / New Errors / Regression Status
+```
+
+### Datenquellen des Berichts
+
+| Quelle | Pfad | Beschreibung |
+|---|---|---|
+| Registry | `.recette/regression/registry.yaml` | Registry der Regressionstests |
+| Vorlage | `Tools/Recette/templates/report.md.template` | Berichtsvorlage |
+
+### Berichtsfehler
+
+| Fehler | Lösung |
+|---|---|
+| "Template not found" | Prüfen, ob `Tools/Recette/templates/` existiert |
+| "Compare session not found" | Die ID der Vergleichssitzung prüfen |
+| "No test results" | Die Sitzung hat keine abgeschlossenen Tests für den Bericht |
+
+### Berichtsbeispiele
+
+```bash
+# Markdown-Bericht erzeugen (Standard)
+/qa:status --report --session=REC-20260130-143022
+
+# HTML-Bericht mit Screenshots erzeugen
+/qa:status --report --session=REC-20260130-143022 --format=html --include-screenshots
+
+# JSON-Bericht für die CI-Integration erzeugen
+/qa:status --report --session=REC-20260130-143022 --format=json
+
+# Benutzerdefinierter Ausgabepfad
+/qa:status --report --session=REC-20260130-143022 --output=./reports/sprint-3/
+
+# Zwei Sitzungen vergleichen
+/qa:status --report --session=REC-20260201-140000 --compare=REC-20260130-143022
+```
+
+### Ausgabestruktur des Berichts
+
+```
+.recette/reports/
+├── REC-20260130-143022-report.md       # Markdown report
+├── REC-20260130-143022-report.html     # HTML report (if --format=html)
+├── REC-20260130-143022-report.json     # JSON report (if --format=json)
+└── REC-20260201-vs-20260130-diff.md    # Comparison report (if --compare)
+```
+
 ## Datenquellen
 
 | Quelle | Pfad | Beschreibung |
@@ -140,7 +267,7 @@ Behebungsstatus: completed (2/2 Bugs behoben)
 | `/qa:recette` | Akzeptanztests ausfuehren |
 | `/qa:fix` | Bugs aus einer Sitzung beheben |
 | `/qa:regression` | Regressionstests anzeigen |
-| `/qa:report` | Bericht generieren |
+| `/qa:status --report` | Bericht erzeugen (`--report`) |
 
 ## Fehlermeldungen
 
@@ -170,7 +297,7 @@ Behebungsstatus: completed (2/2 Bugs behoben)
 ║    Identifizierte Bugs beheben                           ║
 ║                                                          ║
 ║  Wenn die Sitzung abgeschlossen ist:                     ║
-║  → /qa:report                                            ║
+║  → /qa:status --report                                   ║
 ║    Recette-Bericht generieren                            ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

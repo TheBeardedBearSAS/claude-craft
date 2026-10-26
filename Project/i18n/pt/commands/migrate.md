@@ -104,7 +104,7 @@ Dry run: lista os ficheiros que seriam criados (ex.: `.bmad/sprint-status.yaml`)
 
 Reversão: `tar -xzf .bmad/backup/backlog-*.tar.gz -C project-management/ && rm .bmad/sprint-status.yaml`.
 
-Próximos passos: rever o YAML, executar `/sprint:status`, definir os metadados do sprint (datas, objetivos), verificar os quality gates com `/gate:check all`.
+Próximos passos: rever o YAML, executar `/workflow:status`, definir os metadados do sprint (datas, objetivos), verificar os quality gates com `/gate:check all`.
 
 ## --stories
 
@@ -141,7 +141,7 @@ Reconcilia conteúdo e IDs entre os ficheiros markdown e o YAML. O estado nunca 
 6. **Órfãos**: no YAML mas não nos ficheiros → marcar `archived` ou avisar; nos ficheiros mas não no YAML → adicionar ao YAML (estado `backlog`).
 7. **Marcas temporais**: `last_sync` no YAML e `<!-- last_sync: … -->` nos ficheiros de stories.
 
-Saída: alterações ficheiros → YAML, alterações YAML → ficheiros, conflitos resolvidos, órfãos (arquivados / adicionados), hora da última sincronização. Depois rever o `git diff` e executar `/sprint:status`.
+Saída: alterações ficheiros → YAML, alterações YAML → ficheiros, conflitos resolvidos, órfãos (arquivados / adicionados), hora da última sincronização. Depois rever o `git diff` e executar `/workflow:status`.
 
 Automatização: um hook pre-commit pode executar `/project:migrate --resync` (`.bmad/hooks/pre-commit.sh`).
 

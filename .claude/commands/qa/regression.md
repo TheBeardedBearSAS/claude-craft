@@ -149,7 +149,7 @@ Verification Regle d'Or : 1 VIOLATION DETECTEE
 | `/qa:recette` | Executer les tests d'acceptance |
 | `/qa:fix` | Corriger les bugs d'une session |
 | `/qa:status` | Afficher le statut de session |
-| `/qa:report` | Generer un rapport |
+| `/qa:status --report` | Generer un rapport |
 
 ## Messages d'Erreur
 
@@ -167,3 +167,16 @@ Verification Regle d'Or : 1 VIOLATION DETECTEE
 3. **Corrigez les violations immediatement** : Les violations indiquent des bugs reintroduits
 4. **Nettoyez les tests obsoletes** : Marquez comme obsoletes les tests de fonctionnalites supprimees
 5. **Filtrez par source** : Examinez les tests de regression par story pour une analyse ciblee
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Lancer une nouvelle session de recette                ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

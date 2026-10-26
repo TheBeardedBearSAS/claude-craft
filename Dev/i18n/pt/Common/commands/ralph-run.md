@@ -275,4 +275,4 @@ Quando um timeout ocorre:
 
 - `@ralph-conductor` - Agente para orquestração Ralph
 - `/qa:tdd` - Correção de bugs baseada em TDD
-- `/sprint:dev` - Desenvolvimento de sprint com TDD
+- `/workflow:implement` - Desenvolvimento de sprint com TDD

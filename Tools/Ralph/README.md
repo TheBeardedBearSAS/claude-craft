@@ -637,7 +637,7 @@ definition_of_done:
 
 ```bash
 # In sprint workflow
-/sprint:dev 1
+/workflow:implement 1
 # Ralph handles each task until DoD passes
 ```
 
@@ -735,7 +735,7 @@ The ASC enables overnight/unattended sprint execution:
 - `/team:sprint --ralph-mode` - Autonomous Sprint Conductor
 - `@ralph-conductor` - Agent for Ralph orchestration
 - `/qa:tdd` - TDD-based bug fixing
-- `/sprint:dev` - Sprint development with TDD
+- `/workflow:implement` - Sprint development with TDD
 
 ## Credits
 

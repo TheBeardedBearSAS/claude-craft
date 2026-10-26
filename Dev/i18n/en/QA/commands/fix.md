@@ -271,7 +271,7 @@ resume_from:
 | `/qa:recette` | Execute acceptance tests |
 | `/qa:status` | Show session status |
 | `/qa:regression` | View regression tests |
-| `/qa:report` | Generate report |
+| `/qa:status --report` | Generate report |
 
 ## Error Messages
 

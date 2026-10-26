@@ -271,7 +271,7 @@ resume_from:
 | `/qa:recette` | Executar testes de aceitacao |
 | `/qa:status` | Mostrar status da sessao |
 | `/qa:regression` | Ver testes de regressao |
-| `/qa:report` | Gerar relatorio |
+| `/qa:status --report` | Gerar relatorio |
 
 ## Mensagens de Erro
 

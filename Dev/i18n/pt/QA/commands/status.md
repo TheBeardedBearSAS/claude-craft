@@ -1,6 +1,6 @@
 ---
-description: "Mostrar o status e progresso das sessoes QA Recette"
-argument-hint: "[--session=<id>|--all] [--scope=<story|sprint>] [--status=<running|completed|paused|failed>]"
+description: "Mostrar o status e progresso das sessões QA Recette, ou gerar relatórios (--report)"
+argument-hint: "[--session=<id>|--all] [--scope=<story|sprint>] [--status=<running|completed|paused|failed>] [--report] [--format=<md|html|json>] [--output=<path>] [--compare=<id>]"
 ---
 
 # QA Recette Status - Status e Progresso das Sessoes
@@ -17,6 +17,11 @@ Exibe o status e progresso das sessoes QA Recette. Consulte os detalhes de uma s
 - `--status=<status>` : Filtrar por status (running, completed, paused, failed)
 - `--format=<type>` : Formato de saida (table, yaml, json) — padrao: table
 - `--watch` : Modo de atualizacao ao vivo (a cada 5 segundos)
+- `--report`: Modo relatório (antigo `/qa:status --report`): gerar um relatório a partir de uma sessão; requer `--session=<id>`
+- `--format=<type>`: com `--report`: md, html, json (padrão: md)
+- `--output=<path>`: com `--report`: caminho de saída personalizado (padrão: `.recette/reports/`)
+- `--include-screenshots`: com `--report`: incorporar as capturas de tela no relatório HTML
+- `--compare=<id>`: com `--report`: comparar com outra sessão para obter um diferencial de regressão
 
 ## Funcionalidades Principais
 
@@ -83,6 +88,128 @@ Testes de Regressao Gerados: 3
 Estado de Correcao: completed (2/2 bugs corrigidos)
 ```
 
+## Uso
+
+| Modo / opção | O que faz | Substitui |
+|---|---|---|
+| `/qa:status --all` / `--session=<id>` | Listar as sessões ou mostrar o detalhe de uma sessão | — |
+| `/qa:status --report --session=<id>` | Gerar um relatório Markdown/HTML/JSON (`--format`, `--output`, `--include-screenshots`) | `/qa:status --report` |
+| `/qa:status --report --session=<id> --compare=<id>` | Comparar duas sessões para detectar regressões | `/qa:status --report --compare` |
+
+## Modo Relatório (--report)
+
+Gera relatórios detalhados a partir dos dados da sessão. Saída em vários formatos (Markdown, HTML, JSON), seção de conformidade com a Golden Rule, incorporação de capturas de tela, rastreabilidade dos critérios de aceitação até os testes e métricas de sucesso/falha. Sem `--format`, o relatório é Markdown.
+
+### Processo do Relatório
+
+```
+┌─────────────────────────────────────────┐
+│  1. load_session_data(session_id)       │
+│     - Read .recette/sessions/{id}/      │
+│     - Load state.yaml                   │
+│     - Load fix-state.yaml if present    │
+│     - Collect screenshots and logs      │
+│     - Load regression registry          │
+├─────────────────────────────────────────┤
+│  2. generate_report(format)             │
+│     - Build summary, test results,      │
+│       error details, regression tests   │
+│     - Build Golden Rule statement       │
+│     - Apply format template             │
+│     - Write to output path              │
+└─────────────────────────────────────────┘
+```
+
+### Estrutura do Relatório
+
+```markdown
+# QA Recette Report — REC-20260130-143022
+
+## Summary
+| Metric | Value |
+|--------|-------|
+| Session | REC-20260130-143022 |
+| Scope | story → US-001 |
+| Duration | 14m 48s |
+| Passed / Failed / Skipped | 12 (80%) / 2 (13%) / 1 (7%) |
+
+## Test Results
+### Failed Tests (2)
+- TC-008: Login validation error display ✗ (ERR-001)
+
+## Error Details
+### ERR-001: Login validation not displayed
+- Type: visual · Severity: medium · Screenshot: screenshots/err-001.png
+
+## Regression Tests Generated
+| ID | Error | Test Type | Path |
+|----|-------|-----------|------|
+| REG-001 | ERR-001 | behat | features/auth/login_validation.feature |
+
+## Golden Rule Compliance
+All detected errors have generated regression tests.
+Registry updated: .recette/regression/registry.yaml
+```
+
+### Comparação (--compare)
+
+Compara duas execuções: diferenças de métricas, erros resolvidos, novos erros e violações da Golden Rule.
+
+```
+## Comparison: REC-20260130-143022 vs REC-20260201-140000
+
+| Metric | Session 1 | Session 2 | Delta |
+|--------|-----------|-----------|-------|
+| Passed | 12 | 14 | +2 |
+| Failed | 2 | 0 | -2 |
+
+### Resolved Errors / New Errors / Regression Status
+```
+
+### Fontes de dados do relatório
+
+| Fonte | Caminho | Descrição |
+|---|---|---|
+| Registro | `.recette/regression/registry.yaml` | Registro de testes de regressão |
+| Modelo | `Tools/Recette/templates/report.md.template` | Modelo de relatório |
+
+### Erros do relatório
+
+| Erro | Solução |
+|---|---|
+| "Template not found" | Verificar se `Tools/Recette/templates/` existe |
+| "Compare session not found" | Verificar o ID da sessão a comparar |
+| "No test results" | A sessão não tem testes concluídos para relatar |
+
+### Exemplos de Relatório
+
+```bash
+# Gerar um relatório Markdown (padrão)
+/qa:status --report --session=REC-20260130-143022
+
+# Gerar um relatório HTML com capturas de tela
+/qa:status --report --session=REC-20260130-143022 --format=html --include-screenshots
+
+# Gerar um relatório JSON para integração CI
+/qa:status --report --session=REC-20260130-143022 --format=json
+
+# Caminho de saída personalizado
+/qa:status --report --session=REC-20260130-143022 --output=./reports/sprint-3/
+
+# Comparar duas sessões
+/qa:status --report --session=REC-20260201-140000 --compare=REC-20260130-143022
+```
+
+### Estrutura de Saída do Relatório
+
+```
+.recette/reports/
+├── REC-20260130-143022-report.md       # Markdown report
+├── REC-20260130-143022-report.html     # HTML report (if --format=html)
+├── REC-20260130-143022-report.json     # JSON report (if --format=json)
+└── REC-20260201-vs-20260130-diff.md    # Comparison report (if --compare)
+```
+
 ## Fontes de Dados
 
 | Fonte | Caminho | Descricao |
@@ -140,7 +267,7 @@ Estado de Correcao: completed (2/2 bugs corrigidos)
 | `/qa:recette` | Executar testes de aceitacao |
 | `/qa:fix` | Corrigir bugs de uma sessao |
 | `/qa:regression` | Ver testes de regressao |
-| `/qa:report` | Gerar relatorio |
+| `/qa:status --report` | Gerar relatório (`--report`) |
 
 ## Mensagens de Erro
 
@@ -170,7 +297,7 @@ Estado de Correcao: completed (2/2 bugs corrigidos)
 ║    Corrigir os bugs identificados                        ║
 ║                                                          ║
 ║  Se a sessão está completa:                              ║
-║  → /qa:report                                            ║
+║  → /qa:status --report                                   ║
 ║    Gerar o relatório de recette                          ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

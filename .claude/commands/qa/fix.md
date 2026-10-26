@@ -17,6 +17,10 @@ Complement de `/qa:recette`. Lit un rapport/session de recette, affine chaque er
 - `--skip-fix` : Generer uniquement les documents, pas de correction TDD
 - `--auto-commit` : Commit automatique apres chaque bug corrige
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## Fonctionnalites Cles
 
 | Fonctionnalite | Description |
@@ -267,7 +271,7 @@ resume_from:
 | `/qa:recette` | Executer les tests d'acceptance |
 | `/qa:status` | Afficher le statut de session |
 | `/qa:regression` | Voir les tests de regression |
-| `/qa:report` | Generer un rapport |
+| `/qa:status --report` | Generer un rapport |
 
 ## Messages d'Erreur
 
@@ -285,3 +289,19 @@ resume_from:
 3. **Validez les groupements** : Verifiez que les erreurs groupees partagent bien la meme cause
 4. **Revoyez les stories** : Verifiez les bug stories generees avant de lancer le TDD
 5. **Utilisez auto-commit** : Pour garder un historique propre des corrections
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Re-tester après les corrections                       ║
+║                                                          ║
+║  Voir aussi :                                            ║
+║  • /qa:regression — Vérifier les tests de régression     ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

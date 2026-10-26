@@ -10,3 +10,5 @@ removed:
   - common/add-technology.md
   - common/audit-claude-alignment.md
   - common/audit-freshness.md
+  # 8.26.0 — documentation, now the `sub-agents-patterns` skill
+  - common/sub-agents-patterns.md

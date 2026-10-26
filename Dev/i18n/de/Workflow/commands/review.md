@@ -310,7 +310,7 @@ Gesamtdauer: 2h
 ║                                                          ║
 ║  Siehe auch:                                             ║
 ║  • /workflow:status  — Gesamtfortschritt prüfen          ║
-║  • /sprint:status    — Sprint-Metriken anzeigen          ║
+║  • /workflow:status    — Sprint-Metriken anzeigen          ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

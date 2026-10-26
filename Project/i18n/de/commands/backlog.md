@@ -1,6 +1,6 @@
 ---
-description: "Backlog verwalten: EPICs, User Stories und Tasks hinzufügen, auflisten, bearbeiten und verschieben"
-argument-hint: "<add|list|edit|move> <epic|story|task> [args]"
+description: "Backlog verwalten: EPICs, User Stories und Tasks hinzufügen, auflisten, bearbeiten und verschieben, nächste Story wählen, Story-Status ändern und Routing-Regeln anwenden"
+argument-hint: "<add|list|edit|move|next> <epic|story|task> [args] | move story --auto"
 ---
 
 # Backlog
@@ -20,17 +20,20 @@ Zentraler Einstiegspunkt zur Verwaltung des Projekt-Backlogs: EPICs, User Storie
 | `/project:backlog edit epic EPIC-XXX [Feld] [Wert]` | Einen EPIC ändern | `/project:backlog edit epic` |
 | `/project:backlog edit story US-XXX [Feld] [Wert]` | Eine User Story ändern | `/project:backlog edit story` |
 | `/project:backlog move task TASK-XXX <in-progress\|blocked\|done>` | Den Status eines Tasks ändern | `/project:backlog move task` |
+| `/project:backlog next story [--claim]` | Die nächste `ready-for-dev`-Story nach Priorität und Abhängigkeiten wählen (`--claim` setzt sie auf `in-progress`) | `/project:backlog next story` |
+| `/project:backlog move story US-XXX <backlog\|ready-for-dev\|in-progress\|review\|done\|blocked\|sprint-N> ["Grund"]` | Den Status einer Story über die BMAD-Zustandsmaschine ändern, mit Gates | `/project:backlog move story` |
+| `/project:backlog move story --auto [--dry-run]` | Die Regeln `routing.auto_transitions` aus `.bmad/sprint-status.yaml` auswerten und die ausgelösten Übergänge anwenden | `/project:backlog move story --auto` |
 
-Es gibt weder `edit task` noch `move story`/`move epic`: Story-Status werden mit `/sprint:transition` geändert, EPIC-Status sind abgeleitet.
+Es gibt weder `edit task` noch `move epic`: EPIC-Status sind abgeleitet. Story-Status werden mit `move story` geändert (Zustandsmaschine mit Gates); die Regeln `routing.auto_transitions` werden auch nach jedem Übergang angewendet.
 
 ## Argumente
 
 $ARGUMENTS: `<Aktion> <Entität> [args]`
 
-1. Erstes Wort = Aktion: `add`, `list`, `edit` oder `move`
-2. Zweites Wort = Entität: `epic`, `story` oder `task` (`move` akzeptiert nur `task`)
+1. Erstes Wort = Aktion: `add`, `list`, `edit`, `move` oder `next`
+2. Zweites Wort = Entität: `epic`, `story` oder `task` (`move` akzeptiert `task` oder `story`, `next` nur `story`)
 3. Der Rest wird an den passenden Abschnitt weiter unten übergeben
-4. Fehlende oder unbekannte Aktion/Entität: die Verwendungstabelle anzeigen und anhalten. `move story` / `move epic`: antworten, dass Story-Status mit `/sprint:transition` geändert werden und der EPIC-Status abgeleitet ist
+4. Fehlende oder unbekannte Aktion/Entität: die Verwendungstabelle anzeigen und anhalten. `move epic`: antworten, dass der EPIC-Status abgeleitet ist
 
 ## Gemeinsame Regeln
 
@@ -118,7 +121,7 @@ Validierung: Name nicht leer, Priorität aus High/Medium/Low, `project-managemen
    Datei: project-management/backlog/user-stories/US-{ID}-{slug}.md
 
 Nächste Schritte:
-  /sprint:transition US-{ID} sprint-X                # Einem Sprint zuweisen
+  /project:backlog move story US-{ID} sprint-X                # Einem Sprint zuweisen
   /project:backlog add task US-{ID} "[BE] ..." 4h    # Tasks hinzufügen
 ```
 
@@ -163,7 +166,7 @@ INVEST-Prüfung: **I**ndependent (unabhängig), **N**egotiable (verhandelbar), *
 
 Nächste Schritte:
   /project:backlog move task TASK-{ID} in-progress  # Task starten
-  /project:board                                     # Kanban ansehen
+  /workflow:status --board                                     # Kanban ansehen
 ```
 
 Beispiele: `/project:backlog add task US-001 "[BE] Login-API-Endpunkt" 4h`, `/project:backlog add task US-001 "[TEST] AuthService-Unit-Tests" 3h`.
@@ -229,7 +232,7 @@ Gesamt: 3 US | 11 Punkte | 🔴 2 | 🟡 1 | 🟢 0
 
 Beispiele: `/project:backlog list story`, `... list story epic EPIC-001`, `... list story sprint 1`, `... list story status blocked`, `... list story backlog`.
 
-Vorgeschlagene Aktionen: `/sprint:transition US-XXX sprint-2` (einem Sprint zuweisen), `/sprint:transition US-XXX in-progress` (Status ändern), `/project:backlog add task US-XXX "[BE] ..." 4h`.
+Vorgeschlagene Aktionen: `/project:backlog move story US-XXX sprint-2` (einem Sprint zuweisen), `/project:backlog move story US-XXX in-progress` (Status ändern), `/project:backlog add task US-XXX "[BE] ..." 4h`.
 
 ## list task
 
@@ -272,7 +275,7 @@ Beispiele: `/project:backlog list task`, `... list task us US-001`, `... list ta
 | `mmf` | Minimum Marketable Feature | "MMF-Beschreibung" |
 | `description` | Beschreibung | "Neue Beschreibung" |
 
-> **Der Status ist hier nicht bearbeitbar.** Der Status eines EPICs wird aus den Status seiner Stories in `.bmad/sprint-status.yaml` abgeleitet. Um den Status einer Story zu ändern, `/sprint:transition` verwenden; für den Status eines Tasks `/project:backlog move task`.
+> **Der Status ist hier nicht bearbeitbar.** Der Status eines EPICs wird aus den Status seiner Stories in `.bmad/sprint-status.yaml` abgeleitet. Um den Status einer Story zu ändern, `/project:backlog move story` verwenden; für den Status eines Tasks `/project:backlog move task`.
 
 - **Interaktiver Modus** (nur ID): die aktuellen Felder nummeriert anzeigen (Name, Priorität, MMF, Beschreibung) und fragen, welches geändert werden soll (`1-4`, oder `q` zum Beenden)
 - **Direkter Modus** (Feld und Wert): das Feld direkt ändern
@@ -307,7 +310,7 @@ Validierung: das Feld muss änderbar sein, Priorität High/Medium/Low, Name nich
 | `story` | US-Text | "Als ..." |
 | `criteria` | Akzeptanzkriterien | (interaktiver Modus) |
 
-> **Der Status ist hier nicht bearbeitbar.** Status leben in `.bmad/sprint-status.yaml`. Um den Status einer Story zu ändern, `/sprint:transition` verwenden; für den Status eines Tasks `/project:backlog move task`.
+> **Der Status ist hier nicht bearbeitbar.** Status leben in `.bmad/sprint-status.yaml`. Um den Status einer Story zu ändern, `/project:backlog move story` verwenden; für den Status eines Tasks `/project:backlog move task`.
 
 - **Interaktiver Modus** (nur ID): die Felder nummeriert anzeigen (Name, EPIC, Punkte, Persona, Story, Akzeptanzkriterien) und fragen, welches geändert werden soll (`1-6`, oder `q`)
 - **Direkter Modus**: z. B. `/project:backlog edit story US-001 points 8`
@@ -339,7 +342,7 @@ Validierung: Punkte Fibonacci (1, 2, 3, 5, 8), bei > 8 vor Aufteilung warnen, de
 
 `/project:backlog move task TASK-XXX <Ziel>`
 
-- **TASK-ID** (erforderlich); **Ziel** (erforderlich): `in-progress` (starten), `blocked`, `done`. Für den Status einer **Story** `/sprint:transition` verwenden.
+- **TASK-ID** (erforderlich); **Ziel** (erforderlich): `in-progress` (starten), `blocked`, `done`. Für den Status einer **Story** `/project:backlog move story` verwenden.
 
 ```
 to-do ──→ in-progress ──→ done
@@ -396,7 +399,7 @@ Bei `done` zusätzlich die Schätzung im Vergleich zur tatsächlichen Zeit (`Sch
 🎉 Alle Tasks von US-001 abgeschlossen!
 
 Empfohlener nächster Schritt:
-  /sprint:transition US-001 done
+  /project:backlog move story US-001 done
 ```
 
 Workflow-Fehler:
@@ -421,3 +424,230 @@ Bei `blocked` `Status: in-progress → blocked`, den Blocker-Text und die Aufheb
 Beispiele: `/project:backlog move task TASK-001 in-progress`, `... move task TASK-001 done`, `... move task TASK-001 blocked`, `... move task TASK-001 in-progress` (Blocker aufheben).
 
 Bei jeder Verschiebung aktualisierte Metriken: Anzahl der Tasks pro Status, geschätzte vs. tatsächliche Stunden, US-Fortschritt, Sprint-Fortschritt, Kanban-Board.
+
+## next story
+
+`/project:backlog next story [--claim]`
+
+- **--claim** (optional): setzt die Story automatisch auf `in-progress`
+
+1. **Laden**: `.bmad/sprint-status.yaml` lesen, die Stories mit Status `ready-for-dev` sammeln, nach Priorität (falls definiert) oder nach ID sortieren
+2. **Voraussetzungen prüfen** für jede bereite Story: keine blockierenden Abhängigkeiten (alle `Depends on`-Stories sind `done` oder `review`, andernfalls anzeigen, welche blockieren), Story Points geschätzt, Tasks zerlegt, Akzeptanzkriterien definiert
+3. **Auswählen**, in dieser Reihenfolge: alle Abhängigkeiten aufgelöst, keine blockierenden Abhängigkeiten, niedrigere Story-ID (früher im Backlog), weniger Story Points (einfachere zuerst)
+4. **Anzeigen** der Story: ID und Titel, Points, EPIC, Akzeptanzkriterien, Task-Liste, Voraussetzungen, Abhängigkeiten, Notizen
+5. **Reservieren** (nur mit `--claim`): gleiche Wirkung wie `/project:backlog move story US-XXX in-progress` (Gates, Historie): Status `in-progress`, `tdd_phase` auf `red`, `current_task` auf den ersten Task, Eintrag in `history` angehängt
+6. **Anleiten**: erster zu bearbeitender Task und TDD-Erinnerung
+
+```
+═══════════════════════════════════════════════════════
+         Nächste Story bereit für die Entwicklung
+═══════════════════════════════════════════════════════
+
+📖 US-012: Benutzerprofilseite implementieren
+   Epic: EPIC-003 (Benutzerverwaltung)
+   Points: 5
+   Priorität: High
+
+Akzeptanzkriterien (3):
+□ AC1: Der Benutzer kann seine Profilinformationen ansehen
+□ AC2: Der Benutzer kann Name und E-Mail bearbeiten
+□ AC3: Änderungen werden vor dem Speichern validiert
+
+Tasks (4):
+□ TASK-031 [BE] Profil-API-Endpoint erstellen
+□ TASK-033 [FE] Profilkomponente erstellen
+
+Voraussetzungen:
+✅ Keine blockierenden Abhängigkeiten
+✅ Story Points geschätzt
+✅ Tasks zerlegt
+✅ Akzeptanzkriterien definiert
+
+Abhängigkeiten:
+✅ US-001 (Login-Seite) — done
+
+Zum Starten:
+  /project:backlog move story US-012 in-progress
+Oder: /project:backlog next story --claim
+═══════════════════════════════════════════════════════
+```
+
+Ist keine Story bereit, den Backlog-Zustand anzeigen (Stories im Backlog, die verfeinert werden müssen, in Bearbeitung, blockiert) sowie Vorschläge: Backlog-Stories verfeinern (`/project:migrate --stories`), bei laufenden Stories helfen, eine blockierte Story entblocken (ihren `blocked_reason` anzeigen), den Abhängigkeitsgraphen ansehen (`/project:report deps`), den Sprint ansehen (`/workflow:status`) und die Bereitschaft der Stories prüfen (`/gate:check backlog`).
+
+Nach dem Reservieren einer Story dem TDD folgen: 🔴 RED (fehlschlagender Test für das erste AC/den ersten Task), 🟢 GREEN (minimaler Code zum Bestehen), 🔵 REFACTOR (aufräumen, Tests bleiben grün), dann für jeden Task wiederholen. `tdd_phase` in `.bmad/sprint-status.yaml` verfolgt die Phase.
+
+Beispiele: `/project:backlog next story`, `/project:backlog next story --claim`.
+
+## move story
+
+`/project:backlog move story US-XXX <Status> ["Grund"]`
+
+- **US-ID** (erforderlich); **Status** (erforderlich): `backlog`, `ready-for-dev`, `in-progress`, `review`, `done`, `blocked` oder `sprint-N` (weist die Story Sprint N zu, z. B. `sprint-2`)
+- **Grund** (erforderlich für `blocked`): wird als `blocked_reason` gespeichert
+
+```
+backlog → ready-for-dev → in-progress → review → done
+                              ↑            │
+                              └────────────┘  (Änderungen angefordert)
+jeder Status → blocked → previous_status (fortsetzen)
+```
+
+| Von | Nach | Erlaubt |
+|-----|------|---------|
+| backlog | ready-for-dev | ✅ |
+| ready-for-dev | in-progress | ✅ |
+| in-progress | review | ✅ |
+| review | done | ✅ |
+| review | in-progress | ✅ (Änderungen angefordert) |
+| beliebig | blocked | ✅ (Grund erforderlich) |
+| blocked | previous_status | ✅ (fortsetzen) |
+| in-progress | done | ❌ **Verboten** (über `review` gehen) |
+
+Ablauf:
+
+1. **Story validieren**: `.bmad/sprint-status.yaml` lesen, die Story per ID finden, ihren aktuellen Status ermitteln
+2. **Übergang validieren** anhand der Tabelle oben; andernfalls die gültigen Übergänge vom aktuellen Status anzeigen
+3. **Gates prüfen** des Zielstatus; ein fehlgeschlagenes Gate blockiert den Übergang und listet die erforderlichen Aktionen auf:
+
+| → Ziel | Gate-Anforderungen |
+|--------|--------------------|
+| `ready-for-dev` | Akzeptanzkriterien definiert, Story Points geschätzt, Tasks zerlegt |
+| `in-progress` | Keine blockierenden Abhängigkeiten, Entwickler zugewiesen (optional) |
+| `review` | Alle Tasks abgeschlossen, Tests grün (TDD green oder refactor), Code gepusht |
+| `done` | Code reviewt, alle AC validiert, DoD-Checkliste vollständig |
+| `blocked` | `blocked_reason` angegeben |
+
+4. **Übergang ausführen**: alles wird in `.bmad/sprint-status.yaml` geschrieben (einzige Quelle der Wahrheit für den Status, Schema in `.claude/templates/project/sprint-status.md`); Markdown-Dateien für US/EPIC enthalten nur Inhalt und erhalten nie einen Status:
+   1. `previous_status` in `stories.<US>` speichern
+   2. `stories.<US>.status` aktualisieren
+   3. Zeitstempel setzen
+   4. `stories.<US>.tdd_phase` aktualisieren, falls zutreffend
+   5. Einen Eintrag an `stories.<US>.history` anhängen (`timestamp`, `from`, `to`, `by`, `reason`)
+5. **Nebeneffekte anwenden**: `→ in-progress`: `tdd_phase: red`, `current_task` = erster Task | `→ review`: `tdd_phase: refactor`, `current_task` löschen | `→ done`: `tdd_phase` löschen, Abschlusszeit erfassen | `→ blocked`: `blocked_reason` und `previous_status` speichern
+6. **Routing-Regeln anwenden**: nach jedem Übergang `routing.auto_transitions` auswerten (siehe `move story --auto` unten), damit abhängige Übergänge verkettet werden
+
+```yaml
+history:
+  - timestamp: "2026-01-29T10:00:00Z"
+    from: "in-progress"
+    to: "review"
+    by: "manual"
+    reason: "All tasks complete"
+```
+
+Erfolgreicher Übergang:
+
+```
+📖 US-005: Benutzerauthentifizierung
+
+Status: in-progress → review ✅
+
+Gate-Prüfungen:
+✅ Alle Tasks abgeschlossen (5/5)
+✅ Tests grün
+✅ Code gepusht
+
+Historie aktualisiert:
+• 2026-01-29 10:00 - in-progress → review (manual)
+• 2026-01-27 09:00 - ready-for-dev → in-progress
+```
+
+Gate fehlgeschlagen:
+
+```
+📖 US-005: Benutzerauthentifizierung
+
+Angefordert: in-progress → review ❌
+
+Fehlgeschlagene Gates:
+❌ Tasks unvollständig: 3/5
+❌ TDD-Phase ist 'red' - Tests müssen zuerst bestehen
+
+Erforderliche Aktionen:
+1. Verbleibende Tasks abschließen (TASK-015, TASK-016)
+2. TDD in die Green-Phase bringen: .bmad/sprint-status.yaml → US-005: tdd_phase: green
+
+Dann erneut versuchen: /project:backlog move story US-005 review
+```
+
+Ungültiger Übergang: aktuellen und angeforderten Status anzeigen, den Grund (`Direkter Übergang von 'in-progress' nach 'done' nicht möglich`), die gültigen Übergänge vom aktuellen Status und die Zustandsmaschine.
+
+Sonderfälle:
+
+- **Blockieren**: `/project:backlog move story US-003 blocked "Warten auf API-Zugangsdaten"` speichert den Grund und bewahrt den vorherigen Status zum Fortsetzen
+- **Entblocken**: `/project:backlog move story US-003 in-progress` kehrt zum vorherigen Status zurück
+- **Änderungen angefordert** (review): `/project:backlog move story US-005 in-progress`
+- **Einem Sprint zuweisen**: `/project:backlog move story US-003 sprint-2` weist die Story Sprint 2 zu und legt bei Bedarf das Sprint-Verzeichnis an; der Story-Status bleibt erhalten
+- **Kaskade auf die Tasks**: `→ in-progress` lässt die Tasks in ihrem aktuellen Status (einzeln gestartet); `→ done` prüft, dass alle Tasks `done` sind, und warnt andernfalls; `→ blocked` setzt alle laufenden Tasks auf `blocked`
+
+Nächste Schritte je nach Zielstatus: `→ in-progress`: `/workflow:implement --story US-XXX` | `→ review`: `/gate:check story` (DoD validieren) | `→ done`: `/project:backlog next story` (und `/workflow:review`, wenn der Sprint abgeschlossen ist) | `→ blocked`: Blockade beheben, dann `/project:backlog move story US-XXX in-progress`.
+
+### move story --auto
+
+`/project:backlog move story --auto [--dry-run]`
+
+Wertet die Routing-Regeln aus und überführt die Stories entsprechend (ohne Story-ID). **--dry-run** zeigt die Übergänge vorab, ohne sie anzuwenden. Dieselben Regeln werden auch nach jedem `move story`-Übergang angewendet und, je nach den Einstellungen von `routing.auto_transitions`, im Stop-Hook, nach Abschluss eines Tasks und beim Sitzungsstart.
+
+1. **Laden**: `.bmad/sprint-status.yaml` lesen, `routing.auto_transitions.rules` laden, alle Stories abrufen
+2. **Auswerten** jeder Regel für jede Story:
+
+| Regel | `when` | Von → Nach |
+|-------|--------|------------|
+| `all_tasks_complete` | `tasks.completed == tasks.total && tasks.total > 0` | `in-progress` → `review` |
+| `review_approved` | `review.approved == true` | `review` → `done` |
+| `blocked_detection` | `blocked_reason != null` | `*` → `blocked` |
+| `unblocked` | `blocked_reason == null && previous_status != null` | `blocked` → `previous_status` |
+
+3. **Voraussetzungen prüfen** vor dem automatischen Übergang: Gate-Anforderungen des Zielstatus (wie bei `move story`), keine widersprüchlichen Regeln, Story nicht manuell gesperrt
+4. **Ausführen** (außer mit `--dry-run`): Übergang protokollieren, Status aktualisieren, in `history` mit `by: "auto-route"` erfassen, Nebeneffekte anwenden (TDD-Phase usw.)
+5. **Berichten**: ausgewertete Regeln, geprüfte Stories, durchgeführte Übergänge, unveränderte Stories, Fehler oder Warnungen
+
+```
+═══════════════════════════════════════════════════════
+         Auto-Route-Vorschau (DRY RUN)
+═══════════════════════════════════════════════════════
+Werte 4 Routing-Regeln für 8 Stories aus...
+
+Geplante Übergänge:
+📖 US-005: Benutzerauthentifizierung
+   Regel: all_tasks_complete
+   in-progress → review
+   Grund: 5/5 Tasks abgeschlossen
+
+📖 US-003: OAuth-Integration
+   Regel: unblocked
+   blocked → in-progress
+   Grund: blocked_reason gelöscht
+
+Zusammenfassung:
+Regeln ausgewertet: 4 | Stories geprüft: 8
+Geplante Übergänge: 2 | Keine Änderung: 6
+
+Ohne --dry-run ausführen, um die Übergänge anzuwenden.
+═══════════════════════════════════════════════════════
+```
+
+Ohne `--dry-run` listet der Bericht `✅ US-005: in-progress → review` mit Regel und Details, danach `Durchgeführte Übergänge: N`. Wird nichts ausgelöst: `Keine automatischen Übergänge erforderlich.` gefolgt von den Stories nach Status.
+
+Eigene Regeln und Auslöser werden in `.bmad/sprint-status.yaml` konfiguriert:
+
+```yaml
+routing:
+  auto_transitions:
+    enabled: true
+    run_on_session_start: false
+    run_on_task_complete: true
+    rules:
+      - name: "review_timeout"
+        description: "Stories markieren, die länger als 2 Tage in review sind"
+        when: "status == 'review' && days_in_status > 2"
+        action: "flag"  # flag | transition | notify
+      - name: "priority_bump"
+        description: "Bereite Stories mit hoher Priorität melden"
+        when: "priority == 'high' && status == 'ready-for-dev'"
+        action: "notify"
+```
+
+Nächste Schritte: `/project:backlog next story` (die nächste gerouteten Story wählen), `/workflow:implement` (Entwicklung starten).
+
+Beispiele: `/project:backlog move story US-005 review`, `/project:backlog move story US-003 blocked "Warten auf externe API"`, `/project:backlog move story --auto --dry-run`, `/project:backlog move story --auto`.

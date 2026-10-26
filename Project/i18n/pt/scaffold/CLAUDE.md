@@ -18,8 +18,8 @@ Expert in architecture, technical decomposition and Scrum facilitation.
 
 | Command | Description |
 |---------|-------------|
-| `/project:generate-backlog` | Generate the full backlog |
-| `/project:decompose-tasks N` | Break sprint N into tasks |
+| `/workflow:plan --only=backlog` | Generate the full backlog |
+| `/workflow:start N` | Break sprint N into tasks |
 | `/project:migrate --analyze` | Analyze the existing backlog |
 | `/project:migrate` | Migrate an existing backlog |
 | `/project:migrate --resync` | Synchronize the backlog index |
@@ -53,23 +53,23 @@ Expert in architecture, technical decomposition and Scrum facilitation.
 
 | Command | Description |
 |---------|-------------|
-| `/project:board` | Show the sprint Kanban |
-| `/project:batch-status` | Batch status of items |
-| `/project:run-sprint N` | Run a full sprint |
-| `/project:run-epic EPIC-XXX` | Run a full EPIC |
-| `/project:run-queue` | Run the queue |
-| `/project:generate-prd` | Generate the PRD |
-| `/project:generate-tech-spec` | Generate the technical spec |
+| `/workflow:status --board` | Show the sprint Kanban |
+| `/workflow:status --queue` | Batch status of items |
+| `/workflow:implement N` | Run a full sprint |
+| `/workflow:implement --epic EPIC-XXX` | Run a full EPIC |
+| `/workflow:implement --queue` | Run the queue |
+| `/workflow:plan --only=prd` | Generate the PRD |
+| `/workflow:design` | Generate the technical spec |
 
 ### Sprint (`/sprint:`)
 
 | Command | Description |
 |---------|-------------|
-| `/sprint:status` | Detailed sprint metrics |
-| `/sprint:transition US-XXX status` | Change a User Story's status/sprint |
-| `/sprint:next-story` | Next story ready for dev |
-| `/sprint:auto-route` | Automatic story routing |
-| `/sprint:dev US-XXX` | Develop a story |
+| `/workflow:status` | Detailed sprint metrics |
+| `/project:backlog move story US-XXX status` | Change a User Story's status/sprint |
+| `/project:backlog next story` | Next story ready for dev |
+| `/project:backlog move story --auto` | Automatic story routing |
+| `/workflow:implement US-XXX` | Develop a story |
 
 ### Quality Gates (`/gate:`)
 
@@ -150,25 +150,25 @@ project-management/
 
 ```bash
 # 1. Initialize the backlog
-/project:generate-backlog
+/workflow:plan --only=backlog
 
 # 2. Validate compliance
 /gate:check backlog
 
 # 3. Plan sprint 1
-/project:decompose-tasks 001
+/workflow:start 001
 
 # 4. Get the next story
-/sprint:next-story
+/project:backlog next story
 
 # 5. Develop a story
-/sprint:dev US-XXX
+/workflow:implement US-XXX
 
 # 6. Track the sprint
-/sprint:status
+/workflow:status
 
 # 7. Prepare the next sprint
-/project:decompose-tasks 002
+/workflow:start 002
 ```
 
 ## Naming conventions

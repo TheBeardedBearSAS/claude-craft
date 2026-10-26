@@ -143,7 +143,7 @@ ENTONCES [resultado observable y medible]
 
 ## Comandos que Puedo Ejecutar
 
-### /project:generate-backlog
+### /workflow:plan --only=backlog
 Genera un backlog completo con:
 - Personas (mín 3)
 - Definition of Done
@@ -215,5 +215,5 @@ Cuando me piden ayuda con el backlog:
 → Genero un reporte con puntuación y acciones correctivas
 
 **"Quiero crear un backlog para mi proyecto"**
-→ Ejecuto /project:generate-backlog
+→ Ejecuto /workflow:plan --only=backlog
 → Creo toda la estructura: personas, DoD, epics, US, sprints

@@ -64,10 +64,10 @@ File: project-management/prd.md   Threshold: 80%
 ❌ Goals/Objectives (15%)    Missing: no measurable goals found
 ⚠️ Risks (10%)               Partial: risks listed but no mitigations
 Score: 90/100 (90%)
-✅ PRD GATE PASSED — Next: /project:generate-tech-spec
+✅ PRD GATE PASSED — Next: /workflow:design
 ```
 
-On failure, suggest an example per gap (e.g. goal "Reduce checkout time by 30%", KPI "Conversion rate > 5%", risk "API rate limits; Mitigation: caching"). The gate is also checked before `/project:generate-tech-spec` and at the BMAD workflow transition.
+On failure, suggest an example per gap (e.g. goal "Reduce checkout time by 30%", KPI "Conversion rate > 5%", risk "API rate limits; Mitigation: caching"). The gate is also checked before `/workflow:design` and at the BMAD workflow transition.
 
 ## spec
 
@@ -97,7 +97,7 @@ Score: 68/100 (68%)
 ❌ TECH SPEC GATE FAILED (need 90%, got 68%)
 ```
 
-Required actions give a template per gap: a mermaid diagram skeleton, the security strategy (authentication method, authorization model, encryption), request/response schemas with error formats and versioning, CI/CD stages with promotion and rollback. For significant decisions suggest an ADR: `/common:architecture-decision "JWT vs Session-based authentication"`. On pass: next step `/project:generate-backlog`, then `/gate:check backlog`.
+Required actions give a template per gap: a mermaid diagram skeleton, the security strategy (authentication method, authorization model, encryption), request/response schemas with error formats and versioning, CI/CD stages with promotion and rollback. For significant decisions suggest an ADR: `/common:architecture-decision "JWT vs Session-based authentication"`. On pass: next step `/workflow:plan --only=backlog`, then `/gate:check backlog`.
 
 ## backlog
 
@@ -154,7 +154,7 @@ Sprint: sprint-3 - User Management   Period: 2026-01-29 → 2026-02-12 (14 days)
 ✅ Sprint Metadata (20%)  ✅ Sprint Goal (15%)  ✅ Stories Ready (25%): 5 stories, 21 points
 ✅ Stories Estimated (20%)  ✅ Capacity Check (10%): 21/25 = 84%  ✅ Dependencies Resolved (10%)
 Score: 100/100 — ✅ SPRINT READY GATE PASSED
-Commands: /workflow:start (start the sprint), /sprint:next-story (pick the first story)
+Commands: /workflow:start (start the sprint), /project:backlog next story (pick the first story)
 ```
 
 On failure, the required actions show the `metadata` block to add to `.bmad/sprint-status.yaml`:
@@ -193,10 +193,10 @@ Story DoD Gate: US-005 — Email verification   Status: in-progress
 ❌ Tests Passing (20%)    TDD Phase: red
 ⚠️ Acceptance Criteria    1/3 validated
 ❌ Code Reviewed (15%)    No PR created yet
-Score: 25/100 — ❌ STORY DoD GATE FAILED. Resume work: /sprint:dev US-005
+Score: 25/100 — ❌ STORY DoD GATE FAILED. Resume work: /workflow:implement US-005
 ```
 
-On pass: the story can move to `done` with `/sprint:transition US-005 done`. The gate is also checked by the Stop hook (`quality-gate.sh`) and before `/sprint:transition <id> done`.
+On pass: the story can move to `done` with `/project:backlog move story US-005 done`. The gate is also checked by the Stop hook (`quality-gate.sh`) and before `/project:backlog move story <id> done`.
 
 | TDD phase | Meaning | Next step |
 |-----------|---------|-----------|
@@ -327,8 +327,8 @@ Runs automated checkpoints at the critical phases of the lifecycle to ensure the
 | Phase | When | Target |
 |-------|------|--------|
 | `pre-sprint` | Before starting a sprint (after `/workflow:start`) | sprint |
-| `pre-impl` | Before coding a story (after `/sprint:next-story --claim`) | story |
-| `post-impl` | After completing a story (before `/sprint:transition US-xxx review`) | story |
+| `pre-impl` | Before coding a story (after `/project:backlog next story --claim`) | story |
+| `post-impl` | After completing a story (before `/project:backlog move story US-xxx review`) | story |
 | `pre-merge` | Before merging to main (called by `merge`) | story or sprint |
 
 **pre-sprint**: load the stories assigned to the sprint.
@@ -382,11 +382,11 @@ Actions required: 1. Add FR-003 coverage to tech spec section 3.2  2. Define per
 → Fix issues before proceeding
 ```
 
-Example: `/gate:check --phase=pre-sprint Sprint-3` → "Score: 83% (5/6 passed) — WARNING: US-015 has no tasks yet". Integration: `/workflow:start` triggers `pre-sprint`, `/sprint:next-story` suggests `pre-impl`, `/sprint:transition` triggers `post-impl`, and `merge` triggers `pre-merge`.
+Example: `/gate:check --phase=pre-sprint Sprint-3` → "Score: 83% (5/6 passed) — WARNING: US-015 has no tasks yet". Integration: `/workflow:start` triggers `pre-sprint`, `/project:backlog next story` suggests `pre-impl`, `/project:backlog move story` triggers `post-impl`, and `merge` triggers `pre-merge`.
 
 ## Related Commands
 
 - `/project:trace` — traceability matrix and requirement coverage (`--gaps`)
-- `/project:generate-tech-spec`, `/project:generate-backlog` — produce the artifacts the gates validate
+- `/workflow:design`, `/workflow:plan --only=backlog` — produce the artifacts the gates validate
 - `/workflow:start` — start the sprint (includes the pre-sprint checkpoint)
-- `/sprint:transition` — move a story to the next status
+- `/project:backlog move story` — move a story to the next status

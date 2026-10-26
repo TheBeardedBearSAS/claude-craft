@@ -1,6 +1,6 @@
 # Sprint {NUMERO} - Kanban Board
 
-> **Generated view**: regenerated from `.bmad/sprint-status.yaml` by `/project:board`. Do not edit by hand.
+> **Generated view**: regenerated from `.bmad/sprint-status.yaml` by `/workflow:status --board`. Do not edit by hand.
 > **Sprint Goal**: {SPRINT_GOAL}
 > **Period**: {DATE_DEBUT} → {DATE_FIN}
 

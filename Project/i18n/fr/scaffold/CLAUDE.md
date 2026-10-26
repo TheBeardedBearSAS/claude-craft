@@ -18,8 +18,8 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 
 | Commande | Description |
 |----------|-------------|
-| `/project:generate-backlog` | Génère le backlog complet |
-| `/project:decompose-tasks N` | Décompose le sprint N en tâches |
+| `/workflow:plan --only=backlog` | Génère le backlog complet |
+| `/workflow:start N` | Décompose le sprint N en tâches |
 | `/project:migrate --analyze` | Analyser le backlog existant |
 | `/project:migrate` | Migrer un backlog existant |
 | `/project:migrate --resync` | Synchroniser l'index du backlog |
@@ -53,23 +53,23 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 
 | Commande | Description |
 |----------|-------------|
-| `/project:board` | Afficher le Kanban du sprint |
-| `/project:batch-status` | Statut par lot des éléments |
-| `/project:run-sprint N` | Exécuter un sprint complet |
-| `/project:run-epic EPIC-XXX` | Exécuter un EPIC complet |
-| `/project:run-queue` | Exécuter la file d'attente |
-| `/project:generate-prd` | Générer le PRD |
-| `/project:generate-tech-spec` | Générer la spécification technique |
+| `/workflow:status --board` | Afficher le Kanban du sprint |
+| `/workflow:status --queue` | Statut par lot des éléments |
+| `/workflow:implement N` | Exécuter un sprint complet |
+| `/workflow:implement --epic EPIC-XXX` | Exécuter un EPIC complet |
+| `/workflow:implement --queue` | Exécuter la file d'attente |
+| `/workflow:plan --only=prd` | Générer le PRD |
+| `/workflow:design` | Générer la spécification technique |
 
 ### Sprint (`/sprint:`)
 
 | Commande | Description |
 |----------|-------------|
-| `/sprint:status` | Métriques détaillées du sprint |
-| `/sprint:transition US-XXX statut` | Changer statut/sprint d'une US |
-| `/sprint:next-story` | Prochaine story prête pour le dev |
-| `/sprint:auto-route` | Routage automatique des stories |
-| `/sprint:dev US-XXX` | Développer une story |
+| `/workflow:status` | Métriques détaillées du sprint |
+| `/project:backlog move story US-XXX statut` | Changer statut/sprint d'une US |
+| `/project:backlog next story` | Prochaine story prête pour le dev |
+| `/project:backlog move story --auto` | Routage automatique des stories |
+| `/workflow:implement US-XXX` | Développer une story |
 
 ### Quality Gates (`/gate:`)
 
@@ -150,25 +150,25 @@ project-management/
 
 ```bash
 # 1. Initialiser le backlog
-/project:generate-backlog
+/workflow:plan --only=backlog
 
 # 2. Valider la conformité
 /gate:check backlog
 
 # 3. Planifier le sprint 1
-/project:decompose-tasks 001
+/workflow:start 001
 
 # 4. Obtenir la prochaine story
-/sprint:next-story
+/project:backlog next story
 
 # 5. Développer une story
-/sprint:dev US-XXX
+/workflow:implement US-XXX
 
 # 6. Suivre le sprint
-/sprint:status
+/workflow:status
 
 # 7. Préparer le sprint suivant
-/project:decompose-tasks 002
+/workflow:start 002
 ```
 
 ## Conventions de nommage

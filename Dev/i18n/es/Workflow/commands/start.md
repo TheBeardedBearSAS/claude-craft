@@ -1,20 +1,32 @@
 ---
-description: "Preparación del inicio del Sprint"
-argument-hint: [argumentos]
+description: "Preparación del inicio de sprint: carpeta del sprint, entradas de sprint-status.yaml y descomposición en tareas"
+argument-hint: "<N> [--tasks-only]"
 ---
 
 # Preparación del Inicio de Sprint
 
-Eres un Scrum Master experimentado. Debes preparar y facilitar el inicio de un nuevo sprint verificando que todas las condiciones estén satisfechas.
+Eres un Scrum Master y Tech Lead experimentado. Debes preparar y facilitar el arranque de un nuevo sprint: verificar las condiciones, crear la carpeta del sprint, registrar el sprint en `.bmad/sprint-status.yaml` y descomponer las historias en tareas (Sprint Planning Parte 2, «El Cómo»).
+
+## Uso
+
+| Invocación | Qué hace | Reemplaza |
+|------------|----------|-----------|
+| `/workflow:start <N>` | Inicio completo: requisitos previos, capacidad, planning, `project-management/sprints/sprint-{N}-{slug}/` (sprint-goal.md, sprint-dependencies.md, board.md, `tasks/TASK-*.md`), sprint e historias escritos en `.bmad/sprint-status.yaml`, tareas registradas | pasos de inicio de `/sprint:*` |
+| `/workflow:start <N> --tasks-only` | Descompone en tareas las historias de un sprint **existente** (solo Pasos 7 a 9, omitir los Pasos 1 a 6) | `/workflow:start <N>` |
 
 ## Argumentos
 $ARGUMENTS
 
 Argumentos:
-- Número de sprint (p. ej., `5`)
+- Número del sprint (p. ej.: `5`, `005`); si falta, preguntar qué sprint iniciar
 - (Opcional) Duración en días (por defecto: 10 días = 2 semanas)
+- `--tasks-only`: solo descompone en tareas las historias de un sprint existente
 
-Ejemplo: `/workflow:start 5`
+Ejemplos: `/workflow:start 5`, `/workflow:start 5 --tasks-only`
+
+> **El Plan Mode es obligatorio para la descomposición** (Paso 7): analizar el código afectado, proponer el desglose en tareas y esperar la validación antes de escribir archivos.
+
+> **El estado vive en `.bmad/sprint-status.yaml`** (esquema: `.claude/templates/project/sprint-status.md`), nunca en el markdown. Los archivos de sprint, de tareas y de board solo contienen contenido.
 
 ## MISIÓN
 
@@ -136,20 +148,23 @@ Para cada US seleccionada:
 
 ### Paso 4: Crear la Estructura del Sprint
 
-Crear la carpeta del sprint:
+Crear la carpeta del sprint (plantillas en `.claude/templates/project/`):
 
 ```
 project-management/
-   sprints/
-       sprint-{N}-{slug}/
-           sprint-goal.md
-           board.md
-           tasks/
-           daily-notes/
-              {YYYY-MM-DD}.md
-              ...
-           sprint-review.md
-           sprint-retro.md
+└── sprints/
+    └── sprint-{N}-{slug}/
+        ├── sprint-goal.md
+        ├── sprint-dependencies.md
+        ├── board.md                  # vista Kanban única, solo contenido
+        ├── tasks/
+        │   ├── README.md             # resumen: tareas agrupadas por US
+        │   ├── TASK-001.md           # un archivo por tarea (.claude/templates/project/task.md)
+        │   └── ...
+        ├── daily-notes/
+        │   └── {YYYY-MM-DD}.md
+        ├── sprint-review.md
+        └── sprint-retro.md
 ```
 
 ### Paso 5: Plantilla sprint-goal.md
@@ -227,7 +242,7 @@ Puntos |
 
 ### Paso 6: Sincronizar `.bmad/sprint-status.yaml`
 
-`/gate:check sprint` y los comandos `/sprint:*` leen el sprint en `.bmad/sprint-status.yaml`. Escríbelo ahora a partir del `sprint-goal.md` anterior y de las fichas US seleccionadas (`project-management/backlog/user-stories/US-*.md`):
+`/gate:check sprint` y `/workflow:implement` leen el sprint en `.bmad/sprint-status.yaml`. Escríbelo ahora a partir del `sprint-goal.md` anterior y de las fichas US seleccionadas (`project-management/backlog/user-stories/US-*.md`):
 
 1. Crear `.bmad/` si no existe.
 2. `metadata`: `sprint_id` (`sprint-{N}`), `name`, `start_date`, `end_date`, `goal`, `capacity_points`, tomados de `sprint-goal.md`.
@@ -261,7 +276,83 @@ archived_sprints:
       US-001: { status: "done", points: 5 }
 ```
 
-### Paso 7: Lista de Verificación Final
+### Paso 7: Descomponer las Historias en Tareas
+
+Leer `sprint-goal.md`, `sprint-dependencies.md` y cada US referenciada en `project-management/backlog/user-stories/` (con `--tasks-only`, empezar aquí). Adaptar los tipos de tarea al stack real del proyecto (leer `CLAUDE.md` / `.claude/rules/`); la tabla siguiente es un ejemplo típico.
+
+| Capa | Prefijo | Tareas típicas |
+|------|---------|----------------|
+| Base de datos | `[DB]` | Entidad, migración, repositorio, fixtures |
+| Backend | `[BE]` | Servicio, recurso API, DTO, processor, voter |
+| Frontend Web | `[FE-WEB]` | Controlador, plantilla, componente |
+| Frontend Mobile | `[FE-MOB]` | Modelo, repositorio, estado, pantalla |
+| Tests | `[TEST]` | Unitarios, integración, API, E2E |
+| Documentación | `[DOC]` | Documentación del código, README, OpenAPI |
+| DevOps | `[OPS]` | Docker, CI/CD |
+| Revisión | `[REV]` | Code review |
+
+**Buena tarea (SMART)**: Específica (acción clara), Medible (se sabe cuándo termina), Asignable (un único responsable), Realista, Acotada en el tiempo (estimada en horas, no en puntos).
+
+**Reglas de tamaño**: mínimo 30 min, máximo 8 h (1 día), ideal 2 a 4 h. Por encima de 8 h: dividir en subtareas.
+
+**Corte vertical**: cada US recibe las tareas DB + API + front + tests + doc + revisión según haga falta. Tamaño típico: CRUD simple ~15 tareas, funcionalidad de negocio ~18, solo UI ~11.
+
+Para cada US, crear un `tasks/TASK-{NNN}.md` por tarea a partir de `.claude/templates/project/task.md` (los IDs continúan tras el último `TASK-*` existente, como hace `/project:backlog add task`) con: tipo, estimación, `Depends on`, descripción, archivos a crear o modificar, criterios de validación. Después añadir una sección en `tasks/README.md`:
+
+```markdown
+## US-XXX: [Título] (Epic EPIC-XXX, [X] puntos)
+
+| ID | Tipo | Tarea | Estimación | Depende de |
+|----|------|-------|------------|-----------|
+| TASK-001 | [DB] | Crear la entidad [Nombre] | 2h | - |
+| TASK-002 | [DB] | Migración | 1h | TASK-001 |
+| TASK-003 | [BE] | Recurso API | 3h | TASK-001 |
+| TASK-004 | [TEST] | Tests API | 2h | TASK-003 |
+
+**Total estimado**: XXh
+```
+
+Añadir las dependencias como grafo Mermaid (`TASK-001 --> TASK-002`) y un resumen por capa (tareas y horas). Añadir también una sección «Tareas técnicas transversales» (entorno, actualización de dependencias, pipeline CI, refactorización identificada) con un `tasks/TASK-{NNN}.md` cada una (sin US).
+
+Reglas:
+1. Estimación en horas (no en puntos)
+2. Una tarea = un responsable
+3. Máx. 2 tareas en curso por persona
+4. Dependencias explícitas (grafo Mermaid)
+
+### Paso 8: Board y Resumen de Tareas
+
+Crear `board.md` (plantilla `.claude/templates/project/board.md`):
+
+```markdown
+# Task Board - Sprint {N}
+
+> Vista generada: regenerada desde `.bmad/sprint-status.yaml` por `/workflow:status --board`. No editar a mano.
+
+## to-do
+| ID | US | Tarea | Estimación | Asignado |
+|----|-----|-------|------------|---------|
+
+## in-progress | review | done | blocked
+(mismo formato, una tabla por columna)
+
+## Métricas
+- **Tareas**: X en total | X completadas (X%)
+- **Horas**: Xh estimadas | Xh dedicadas | Xh restantes
+```
+
+`tasks/README.md` contiene además la tabla resumen (US, título, puntos, tareas, horas), el desglose por tipo y las convenciones: ID `TASK-[NNN]`, tamaño 0,5 h a 8 h, estados seguidos en `.bmad/sprint-status.yaml` (`to-do | in-progress | done | blocked`).
+
+### Paso 9: Registrar las Tareas en `.bmad/sprint-status.yaml`
+
+Para cada tarea creada (tareas de US y tareas transversales), según `.claude/templates/project/sprint-status.md`:
+
+1. Crear `.bmad/sprint-status.yaml` a partir del esqueleto de `/workflow:init` si no existe (con `--tasks-only`, el sprint y las historias ya existen; si no, ejecutar el `/workflow:start <N>` completo)
+2. Añadir los ids TASK a `stories.<US>.tasks.list`
+3. Definir `stories.<US>.tasks.status.<TASK>: to-do`
+4. Actualizar `stories.<US>.tasks.total` (`completed` sigue siendo el número de tareas `done`)
+
+### Paso 10: Lista de Verificación Final
 
 ```
 ══════════════════════════════════════════════════════════════
@@ -328,17 +419,15 @@ archived_sprints:
 ║                    SIGUIENTE PASO                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /gate:check sprint {N}                             ║
+║  → /gate:check sprint {N}                                ║
 ║    Verificar que el sprint está listo (gate)             ║
 ║                                                          ║
-║  → /sprint:next-story                                    ║
-║    Tomar la primera story del sprint backlog             ║
-║                                                          ║
-║  → /sprint:dev                                           ║
+║  → /workflow:implement {N}                               ║
 ║    Iniciar el desarrollo TDD/BDD                         ║
 ║                                                          ║
 ║  Ver también:                                            ║
-║  • /workflow:status  — Verificar el progreso del sprint  ║
+║  • /project:backlog next story — Tomar la 1.ª historia   ║
+║  • /workflow:status  — Seguir el avance del sprint       ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

@@ -149,7 +149,7 @@ Verification Regle d'Or : 1 VIOLATION DETECTEE
 | `/qa:recette` | Executer les tests d'acceptance |
 | `/qa:fix` | Corriger les bugs d'une session |
 | `/qa:status` | Afficher le statut de session |
-| `/qa:report` | Generer un rapport |
+| `/qa:status --report` | Generer un rapport |
 
 ## Messages d'Erreur
 

@@ -16,6 +16,10 @@ Arguments :
 
 Exemple : `/qa:tdd "L'utilisateur ne peut pas se déconnecter"` ou `/qa:tdd #123`
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## MISSION
 
 ### Philosophie TDD/BDD
@@ -382,7 +386,18 @@ Fixes #XXX
 - [ ] Ticket fermé
 ```
 
-## Skills recommandés (auto-load)
+## Prochaine étape
 
-- `debug-methodical` — 4 phases rigoureuses (reproduce → isolate → fix → verify)
-- `atomic-tasks` — un commit par phase debug, pas de mélange fix/refactor
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  → /qa:recette                                           ║
+║    Re-tester après les corrections                       ║
+║                                                          ║
+║  Voir aussi :                                            ║
+║  • /gate:check commit — Valider avant le commit    ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

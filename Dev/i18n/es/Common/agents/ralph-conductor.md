@@ -237,7 +237,7 @@ Sin estas condiciones, el conductor opera exactamente como antes.
 
 - Funciona con el comando `/common:ralph-run`
 - Se integra con los hooks de Claude Code 2.1.23+
-- Compatible con el flujo de trabajo `/sprint:dev`
+- Compatible con el flujo de trabajo `/workflow:implement`
 - Utiliza los principios de `@tdd-coach`
 - Modo Agent Teams mediante `/team:sprint --ralph-mode`
 

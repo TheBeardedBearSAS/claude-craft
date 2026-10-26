@@ -1,7 +1,11 @@
 ---
 name: workflow-design
-description: Executar a fase de Design (Solução) - especificação técnica e arquitetura
+description: "Executar a fase de Design (Solutioning) - gerar a especificação técnica (padrão) ou a constituição do projeto (--constitution)"
+argument-hint: "[--constitution] [--continue]"
 arguments:
+  - name: constitution
+    description: Gerar a constituição do projeto (project-management/constitution.md) em vez da especificação técnica
+    required: false
   - name: continue
     description: Continuar de onde parou
     required: false
@@ -11,270 +15,208 @@ arguments:
 
 ## Missão
 
-Executar a fase de Design (Solução) do fluxo de trabalho de desenvolvimento. Esta fase foca-se na criação da Especificação Técnica, no design da arquitetura e na documentação das principais decisões técnicas.
+Executar a fase de Design (Solutioning): transformar o PRD em Especificação Técnica, diagramas de arquitetura, modelo de dados, design de API e ADR. Com `--constitution`, registrar em vez disso as decisões imutáveis do projeto em uma Constituição do projeto.
 
-## Quando Usar
+## Uso
+
+| Invocação | O que faz | Substitui |
+|-----------|-----------|-----------|
+| `/workflow:design` | Lê `project-management/prd.md`, escreve `project-management/tech-spec.md` + arquivos de arquitetura + ADR | `/workflow:design` |
+| `/workflow:design --constitution` | Escreve `project-management/constitution.md` (decisões imutáveis, usada por `/gate:check alignment`) | `/workflow:design --constitution` |
+| `/workflow:design --continue` | Retoma uma sessão de design interrompida | - |
+
+Ordem canônica dos documentos: PRD → spec técnica → backlog → sprint.
+
+## Quando usar
 
 - Tracks **Standard** e **Enterprise**
-- Após a conclusão de `/workflow:plan`
-- Quando o PRD e o backlog estiverem prontos
+- Depois de `/workflow:plan --only=prd`
+- `--constitution`: no início do projeto (ou sempre que for preciso travar decisões)
 
 ## Pré-requisitos
 
-- PRD existente em `project-management/prd.md`
-- Backlog existente em `project-management/backlog/`
+- O PRD existe em `project-management/prd.md` (`--constitution`: apenas fontes opcionais, veja abaixo)
+- Stack tecnológica identificada (perguntada de forma interativa em projetos novos)
 
-## Modo de Planejamento
+## Plan Mode
 
-> **O modo de planejamento é recomendado.** O Claude ativa o modo de planejamento para estruturar a abordagem, identificar dependências e apresentar uma estratégia de geração antes de criar os artefatos.
+> **O plan mode é obrigatório.** O Claude ativa o plan mode para analisar o código impactado, propor uma estratégia de geração e aguardar sua validação antes de criar artefatos.
 
-## Fluxo de Trabalho
+## Workflow: Spec técnica (padrão)
 
-### Etapa 1: Configuração do Design
-
-```
-╔══════════════════════════════════════════════════════════╗
-║              FASE DE DESIGN - INICIANDO                   ║
-╠══════════════════════════════════════════════════════════╣
-║ Track: Standard                                           ║
-║ Fase: 3 de 4 - Design (Solução)                           ║
-║                                                           ║
-║ Objetivos:                                                ║
-║ • Criar Especificação Técnica a partir do PRD             ║
-║ • Projetar arquitetura do sistema (diagramas C4)          ║
-║ • Definir modelo de dados e design de API                 ║
-║ • Documentar Registros de Decisão de Arquitetura (ADRs)   ║
-║ • Planejar estratégia de testes                           ║
-╚══════════════════════════════════════════════════════════╝
-```
-
-### Etapa 2: Carregamento dos Artefatos de Planejamento
+### Passo 1: Análise do PRD
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              CARREGANDO ARTEFATOS DE PLANEJAMENTO         ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ Análise do PRD:                                           ║
-║ ├── ✅ prd.md carregado                                   ║
+║            FASE DE DESIGN - INÍCIO                        ║
+║ Track: Standard | Fase: 3 de 4 - Design (Solutioning)     ║
+║ Carregando project-management/prd.md ...                  ║
 ║ ├── Requisitos funcionais: 12                             ║
-║ ├── Requisitos não-funcionais: 8                          ║
+║ ├── Requisitos não funcionais: 8                          ║
 ║ └── Integrações necessárias: 2                            ║
-║                                                           ║
-║ Resumo do Backlog:                                        ║
-║ ├── ✅ backlog/ carregado                                 ║
-║ ├── EPICs: 4                                              ║
-║ ├── User Stories: 18                                      ║
-║ └── Total de Story Points: 89                             ║
-║                                                           ║
-║ Restrições (se Enterprise):                               ║
-║ └── ✅ analysis/constraints.md carregado                  ║
-║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Etapa 3: Tarefas de Design
+Extrair do PRD: requisitos funcionais (`FR-xxx`), requisitos não funcionais (desempenho, segurança, escalabilidade), personas e jornadas, restrições e premissas, integrações. Se `project-management/analysis/constraints.md` existir (Enterprise), carregá-lo também.
 
-Execute as tarefas de design na ordem indicada:
+### Passo 2: Análise da base de código
+
+Base de código existente: detectar a stack (backend, frontend, banco de dados, cache, infraestrutura) e os padrões existentes (arquitetura, estilo de API, auth, testes) e manter a coerência com eles.
+
+Projeto novo: fazer as perguntas tecnológicas.
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ PERGUNTAS - Stack tecnológica                            │
+├─────────────────────────────────────────────────────────┤
+│ 1. Framework backend preferido? (Symfony/Laravel/Node)   │
+│ 2. Framework frontend? (React/Vue/Angular/Nenhum)        │
+│ 3. Banco de dados preferido? (PostgreSQL/MySQL/MongoDB)  │
+│ 4. Destino de deploy? (Docker/K8s/Serverless/VPS)        │
+│ 5. Integrações existentes a considerar?                  │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Passo 3: Perguntas de arquitetura
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ PERGUNTAS - Decisões de arquitetura                      │
+├─────────────────────────────────────────────────────────┤
+│ 1. Monólito ou microsserviços?                           │
+│ 2. Estilo de API preferido? (REST/GraphQL/gRPC)          │
+│ 3. Escala esperada? (usuários, requisições/s)            │
+│ 4. Funcionalidades em tempo real? (WebSockets/SSE)       │
+│ 5. Necessidades de armazenamento? (S3/local/CDN)         │
+│ 6. Necessidades de jobs em segundo plano?                │
+│ 7. Integrações de terceiros? (pagamentos, e-mail, etc.)  │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Passo 4: Tarefas de design
+
+Executar em ordem:
+
+| # | Tarefa | Saída |
+|---|--------|-------|
+| 1 | Spec técnica (template `.claude/templates/project/tech-spec.md`) | `project-management/tech-spec.md` |
+| 2 | Diagramas C4 (contexto, contêiner, componente) | `project-management/architecture/c4-*.md` |
+| 3 | Modelo de dados: ERD (Mermaid `erDiagram`) + schemas; validar relacionamentos, entidades faltantes, indexação | `project-management/architecture/erd.md` |
+| 4 | Design de API: endpoints derivados dos FR-xxx e das personas, payloads, erros, auth | `project-management/architecture/api.md` |
+| 5 | Segurança e desempenho: mitigações OWASP, authN/authZ, criptografia, rate limiting, lacunas LGPD/GDPR | `project-management/architecture/security.md` |
+| 6 | ADR para as decisões-chave (banco de dados, estilo de API, autenticação) | `docs/adr/ADR-00x-*.md` |
+| 7 | Estratégia de testes (meta de cobertura 80 %), CI/CD e deploy, monitoramento | em `tech-spec.md` |
+
+Exemplo de checklist de segurança:
+
+```
+✅ Autenticação: JWT com cookies HttpOnly
+✅ Autorização: RBAC com policies
+✅ Criptografia de dados: AES-256 em repouso, TLS 1.3 em trânsito
+✅ Validação de entradas: validação DTO + sanitização
+✅ Rate limiting: 100 req/min por usuário
+⚠️  Conformidade GDPR: falta uma política de retenção de dados
+```
+
+### Passo 5: Gate de revisão do design
+
+- A spec técnica cobre todos os requisitos do PRD (cada `FR-xxx` é rastreável)
+- A arquitetura suporta os NFR (desempenho, segurança)
+- O modelo de dados trata todas as entidades; o design de API cobre todas as user stories
+- Segurança, estratégia de testes e abordagem de deploy documentados
+- ADR completos e justificados
+
+Oferecer iterações: estratégia de cache, documentação de API detalhada, pipeline de deploy.
+
+### Passo 6: Conclusão
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║                 TAREFAS DE DESIGN                         ║
-╠══════════════════════════════════════════════════════════╣
+║            FASE DE DESIGN CONCLUÍDA                       ║
+║ ✅ project-management/tech-spec.md                        ║
+║ ✅ project-management/architecture/ (c4, erd, api, sec.)  ║
+║ ✅ docs/adr/ (3 ADR)                                      ║
+║ • 24 endpoints de API • 8 entidades • 3 integrações       ║
 ║                                                           ║
-║ □ Tarefa 1: Gerar Especificação Técnica                   ║
-║   Comando: /project:generate-tech-spec                    ║
-║   Saída: project-management/tech-spec.md                  ║
-║                                                           ║
-║ □ Tarefa 2: Design de Arquitetura                         ║
-║   Criar diagramas C4 (contexto, container, componente)    ║
-║   Saída: project-management/architecture/                 ║
-║                                                           ║
-║ □ Tarefa 3: Design do Modelo de Dados                     ║
-║   DER e schema do banco de dados                          ║
-║   Saída: project-management/architecture/erd.md           ║
-║                                                           ║
-║ □ Tarefa 4: Design de API                                 ║
-║   Endpoints, payloads, autenticação                       ║
-║   Saída: project-management/architecture/api.md           ║
-║                                                           ║
-║ □ Tarefa 5: Criar ADRs                                    ║
-║   Documentar decisões técnicas principais                 ║
-║   Saída: docs/adr/                                        ║
-║                                                           ║
-║ □ Tarefa 6: Revisão de Segurança                          ║
-║   Checklist OWASP, estratégia de autenticação             ║
-║   Saída: project-management/architecture/security.md      ║
-║                                                           ║
+║ PRÓXIMO: /workflow:plan --only=backlog                    ║
+║ DEPOIS: /workflow:start 1                                 ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### Etapa 4: Execução da Geração da Especificação Técnica
+O backlog lê `project-management/prd.md` e, depois de criada, `project-management/tech-spec.md`. Após o design, recomendar `/workflow:plan --only=backlog` e em seguida `/workflow:start 1`.
 
-```
-Iniciando /project:generate-tech-spec...
+## Workflow: Constituição (`--constitution`)
 
-Analisando requisitos do PRD...
-Detectando padrões do código existente...
+### Fase 1: Descoberta do contexto
 
-[Fluxo de geração da Especificação Técnica executa com perguntas interativas]
+Análise automática de: `README.md`, `project-management/prd.md`, `project-management/tech-spec.md`, estrutura da base de código (padrões, convenções) e configuração `.claude/`. Listar as fontes encontradas.
 
-✅ Especificação Técnica criada: project-management/tech-spec.md
-```
+### Fase 2: Esclarecimento interativo
 
-### Etapa 5: Diagramas de Arquitetura
+Perguntar ao usuário, por tema, para preencher as lacunas:
 
-Gere os diagramas de arquitetura C4:
+| Tema | Perguntas |
+|------|-----------|
+| Visão e Missão | Visão em uma frase; o quê, para quem, por quê; objetivos inegociáveis; o que faria o projeto fracassar |
+| Restrições técnicas | Tecnologias travadas; padrão de arquitetura obrigatório; restrições de infraestrutura; integrações de terceiros obrigatórias |
+| Princípios de design | Padrões obrigatórios; padrões/práticas proibidos; padrões de código; estratégia de testes exigida |
+| Requisitos não funcionais | Metas de desempenho (latência, carga); segurança; conformidade (GDPR, SOC2); disponibilidade/uptime |
+| Limites | Fora do escopo; sistemas externos; limites de equipe e responsabilidades; quem pode emendar a constituição |
 
-```
-╔══════════════════════════════════════════════════════════╗
-║             DIAGRAMAS DE ARQUITETURA                      ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ C4 Nível 1 - Contexto do Sistema:                         ║
-║ ┌─────────────────────────────────────────────────────┐  ║
-║ │                                                     │  ║
-║ │  [Usuário] ──────► [Nosso Sistema] ──────► [Stripe] │  ║
-║ │                          │                          │  ║
-║ │                          ▼                          │  ║
-║ │                     [SendGrid]                      │  ║
-║ │                                                     │  ║
-║ └─────────────────────────────────────────────────────┘  ║
-║                                                           ║
-║ C4 Nível 2 - Container:                                   ║
-║ ┌─────────────────────────────────────────────────────┐  ║
-║ │                                                     │  ║
-║ │  [React SPA] ──► [Symfony API] ──► [PostgreSQL]    │  ║
-║ │                       │                             │  ║
-║ │                       ▼                             │  ║
-║ │                    [Redis]                          │  ║
-║ │                                                     │  ║
-║ └─────────────────────────────────────────────────────┘  ║
-║                                                           ║
-║ Arquivos criados:                                         ║
-║ ├── architecture/c4-context.md                            ║
-║ ├── architecture/c4-container.md                          ║
-║ └── architecture/c4-component.md                          ║
-║                                                           ║
-╚══════════════════════════════════════════════════════════╝
-```
+### Fase 3: Geração
 
-### Etapa 6: Criação de ADRs
+1. Carregar o template `.claude/templates/project/constitution.md`
+2. Preencher visão, missão e objetivos inegociáveis
+3. Travar a stack técnica (tecnologias e versões)
+4. Registrar os padrões obrigatórios e proibidos
+5. Anotar as metas de desempenho, segurança e conformidade
+6. Documentar exclusões, limites de integração e o processo de emenda
 
-Documente as principais decisões de arquitetura:
+### Fase 4: Revisão e ratificação
 
-```
-╔══════════════════════════════════════════════════════════╗
-║        REGISTROS DE DECISÃO DE ARQUITETURA (ADRs)         ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ ADRs Criados:                                             ║
-║                                                           ║
-║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ ADR-001: Escolha do Banco de Dados                   │  ║
-║ │ Decisão: PostgreSQL                                  │  ║
-║ │ Justificativa: conformidade ACID, suporte a JSON,    │  ║
-║ │ já existente na infraestrutura                       │  ║
-║ └─────────────────────────────────────────────────────┘  ║
-║                                                           ║
-║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ ADR-002: Estilo de API                               │  ║
-║ │ Decisão: REST com JSON:API                           │  ║
-║ │ Justificativa: expertise da equipe, cache, simplic.  │  ║
-║ └─────────────────────────────────────────────────────┘  ║
-║                                                           ║
-║ ┌─────────────────────────────────────────────────────┐  ║
-║ │ ADR-003: Autenticação                                │  ║
-║ │ Decisão: JWT com refresh tokens                      │  ║
-║ │ Justificativa: stateless, amigável ao mobile, padrão │  ║
-║ └─────────────────────────────────────────────────────┘  ║
-║                                                           ║
-║ Arquivos: docs/adr/ADR-001.md, ADR-002.md, ADR-003.md    ║
-║                                                           ║
-╚══════════════════════════════════════════════════════════╝
-```
+Saída: `project-management/constitution.md` com as seções Visão e Missão, Restrições técnicas, Princípios de design, Requisitos não funcionais, Limites, Processo de emenda. Oferecer ajustar as decisões travadas, adicionar restrições ou refinar os limites. As notas de descoberta opcionais vão para `project-management/analysis/discovery-notes.md`.
 
-### Etapa 7: Gate de Revisão do Design
+A constituição é a referência usada por `/gate:check alignment`. Próximos passos: `/workflow:plan --only=prd` se ainda não houver PRD; caso contrário, executar o `/workflow:design` padrão.
 
-```
-╔══════════════════════════════════════════════════════════╗
-║              GATE DE REVISÃO DO DESIGN                    ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ Checklist:                                                ║
-║ ✅ Especificação Técnica cobre todos os requisitos do PRD ║
-║ ✅ Arquitetura suporta RNFs (desempenho, segurança)       ║
-║ ✅ Modelo de dados contempla todas as entidades           ║
-║ ✅ Design de API cobre todas as user stories              ║
-║ ✅ Considerações de segurança documentadas                ║
-║ ✅ Estratégia de testes definida                          ║
-║ ✅ Abordagem de implantação documentada                   ║
-║                                                           ║
-║ Perguntas de Revisão:                                     ║
-║ 1. A arquitetura é adequada para a escala esperada?       ║
-║ 2. Há alguma integração faltando?                         ║
-║ 3. A abordagem de segurança é suficiente?                 ║
-║ 4. Os ADRs estão completos e justificados?                ║
-║                                                           ║
-╚══════════════════════════════════════════════════════════╝
-```
+## Agentes envolvidos
 
-### Etapa 8: Conclusão da Fase
+- **tech-lead**: design técnico global e criação dos ADR
+- **api-designer**: design de API REST/GraphQL
+- **database-architect**: modelo de dados e design do schema
+- **ui-designer**: arquitetura frontend (se aplicável)
+- **devops-engineer**: design do deploy e da infraestrutura
 
-```
-╔══════════════════════════════════════════════════════════╗
-║              FASE DE DESIGN CONCLUÍDA                     ║
-╠══════════════════════════════════════════════════════════╣
-║                                                           ║
-║ Artefatos Criados:                                        ║
-║ ✅ tech-spec.md            Especificação Técnica          ║
-║ ✅ architecture/                                          ║
-║    ├── c4-context.md       Diagrama de contexto do sistema║
-║    ├── c4-container.md     Diagrama de containers         ║
-║    ├── c4-component.md     Diagrama de componentes        ║
-║    ├── erd.md              Diagrama Entidade-Relacionamento║
-║    ├── api.md              Design de API                  ║
-║    └── security.md         Considerações de segurança     ║
-║ ✅ docs/adr/               3 Registros de Decisão de Arq. ║
-║                                                           ║
-║ Resumo:                                                   ║
-║ • 24 endpoints de API projetados                          ║
-║ • 8 entidades de banco de dados definidas                 ║
-║ • 3 integrações externas especificadas                    ║
-║ • Meta de 80% de cobertura de testes estabelecida         ║
-║                                                           ║
-║ ─────────────────────────────────────────────────────────║
-║ PRÓXIMA FASE: Implementação                               ║
-║ Comando: /workflow:implement                              ║
-║ ─────────────────────────────────────────────────────────║
-║                                                           ║
-║ Pronto para iniciar o desenvolvimento do Sprint 1!        ║
-╚══════════════════════════════════════════════════════════╝
-```
-
-## Agentes Envolvidos
-
-- **tech-lead**: Design técnico geral e criação de ADRs
-- **api-designer**: Design de API REST/GraphQL
-- **database-architect**: Design do modelo de dados e schema
-- **ui-designer**: Arquitetura frontend (quando aplicável)
-- **devops-engineer**: Design de implantação e infraestrutura
-
-## Arquivos de Saída
+## Arquivos de saída
 
 | Arquivo | Finalidade |
-|---------|-----------|
-| `tech-spec.md` | Especificação Técnica completa |
-| `architecture/c4-*.md` | Diagramas de arquitetura C4 |
-| `architecture/erd.md` | Diagrama Entidade-Relacionamento |
-| `architecture/api.md` | Documentação dos endpoints de API |
-| `architecture/security.md` | Design de segurança |
-| `docs/adr/*.md` | Registros de Decisão de Arquitetura |
+|---------|------------|
+| `project-management/tech-spec.md` | Especificação técnica completa |
+| `project-management/constitution.md` | Constituição do projeto (`--constitution`) |
+| `project-management/architecture/c4-*.md` | Diagramas de arquitetura C4 |
+| `project-management/architecture/erd.md` | Diagrama entidade-relacionamento |
+| `project-management/architecture/api.md` | Documentação dos endpoints de API |
+| `project-management/architecture/security.md` | Design de segurança |
+| `docs/adr/*.md` | Architecture Decision Records |
 
-## Comandos Relacionados
+## Exemplo de sessão
 
-- `/workflow:plan` - Fase anterior
-- `/workflow:implement` - Próxima fase
+```
+User: /workflow:design
+
+Claude: Carregando project-management/prd.md: 12 FR, 8 NFR.
+Detectado: Symfony + React + PostgreSQL.
+❓ A API atual é REST. Manter REST ou migrar para GraphQL?
+> Manter REST
+[... Q&A interativo ...]
+✅ Spec técnica gerada: project-management/tech-spec.md
+Próximo: /workflow:plan --only=backlog, depois /workflow:start 1
+```
+
+## Comandos relacionados
+
+- `/workflow:plan` - Fase anterior (`--only=prd`, `--only=backlog`)
+- `/workflow:start` - Iniciar o primeiro sprint
+- `/workflow:implement` - Fase de implementação
 - `/workflow:status` - Verificar o progresso
-- `/project:generate-tech-spec` - Geração direta da especificação técnica
-- `/common:architecture-decision` - Criar ADRs individuais
+- `/gate:check` - Quality gates (`alignment` usa a constituição)
+- `/common:architecture-decision` - Criar ADR individuais

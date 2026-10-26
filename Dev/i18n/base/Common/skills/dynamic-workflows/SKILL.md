@@ -69,4 +69,4 @@ validée. Pour des éditions concurrentes de fichiers, `isolation: 'worktree'`.
   déclencheur `ultracode` des workflows, même si souvent utilisés ensemble.
 
 > Référence : [Claude Code Workflows](https://code.claude.com/docs/en/workflows) · voir aussi
-> `@.claude/commands/common/sub-agents-patterns.md` (tableau comparatif des orchestrations).
+> le skill `sub-agents-patterns` (`.claude/skills/sub-agents-patterns/SKILL.md`) (tableau comparatif des orchestrations).

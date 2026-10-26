@@ -1,6 +1,6 @@
 # Sprint {NUMERO} - Tablero Kanban
 
-> **Vista generada**: regenerada desde `.bmad/sprint-status.yaml` por `/project:board`. No editar a mano.
+> **Vista generada**: regenerada desde `.bmad/sprint-status.yaml` por `/workflow:status --board`. No editar a mano.
 > **Objetivo del Sprint**: {SPRINT_GOAL}
 > **Período**: {DATE_DEBUT} → {DATE_FIN}
 

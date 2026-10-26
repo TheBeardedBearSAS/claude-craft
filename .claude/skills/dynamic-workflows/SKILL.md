@@ -84,4 +84,4 @@ validée. Pour des éditions concurrentes de fichiers, `isolation: 'worktree'`.
   coûte significativement plus qu'un contexte unique — piloter avec un budget explicite).
 
 > Référence : [Claude Code Workflows](https://code.claude.com/docs/en/workflows) · voir aussi
-> `@.claude/commands/common/sub-agents-patterns.md` (tableau comparatif des orchestrations).
+> le skill `sub-agents-patterns` (`.claude/skills/sub-agents-patterns/SKILL.md`) (tableau comparatif des orchestrations).

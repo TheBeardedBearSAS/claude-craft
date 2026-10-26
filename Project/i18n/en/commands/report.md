@@ -151,6 +151,6 @@ Risk: a 2+ day delay on US-001 puts the whole sprint at risk.
 ## Related Commands
 
 - `/project:trace` — Traceability matrix and coverage
-- `/sprint:status` — Sprint status overview
-- `/sprint:next-story` — Next story (considers dependencies)
+- `/workflow:status` — Sprint status overview
+- `/project:backlog next story` — Next story (considers dependencies)
 - `/workflow:retro` — Sprint retrospective (uses metrics)

@@ -149,7 +149,7 @@ Golden Rule Check: 1 VIOLATION DETECTED
 | `/qa:recette` | Execute acceptance tests |
 | `/qa:fix` | Fix bugs from a recette session |
 | `/qa:status` | Show session status |
-| `/qa:report` | Generate report |
+| `/qa:status --report` | Generate report |
 
 ## Error Messages
 

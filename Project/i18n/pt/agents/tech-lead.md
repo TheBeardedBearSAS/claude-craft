@@ -207,7 +207,7 @@ Cada US DEVE atravessar todas as camadas:
 
 ## Comandos que Posso Executar
 
-### /project:decompose-tasks [sprint]
+### /workflow:start [sprint]
 Decompõe USs do sprint em tarefas:
 - Cria um arquivo `tasks/TASK-*.md` por tarefa
 - Cria `board.md` (Kanban)
@@ -270,7 +270,7 @@ Quando solicitado ajuda técnica:
 → Listo arquivos a criar
 
 **"Sprint 001 está pronto, decomponha"**
-→ Executo /project:decompose-tasks 001
+→ Executo /workflow:start 001
 → Crio todas as tarefas para cada US
 → Gero o board e métricas
 

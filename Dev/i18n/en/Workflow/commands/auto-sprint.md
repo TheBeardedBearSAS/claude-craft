@@ -1,6 +1,6 @@
 ---
 description: End-to-end sprint orchestrator (start -> decompose -> validate -> implement -> PR -> CI -> review -> retro -> merge)
-argument-hint: "<N> [--auto-merge] [--max-fix-attempts=2] [--max-workers=3] [--base=main] [--dry-run] [--overnight]"
+argument-hint: "<N> [--from-prd] [--auto-merge] [--max-fix-attempts=2] [--max-workers=3] [--base=main] [--dry-run] [--overnight]"
 ---
 
 # Auto Sprint — End-to-End Sprint Orchestrator
@@ -14,8 +14,8 @@ stays lean. The implementation phase is run by **you as conductor** (same logic 
 This automates what was previously six manual commands with a `/clear` in between:
 
 ```
-/workflow:start N -> /project:decompose-tasks 00N -> /gate:check sprint 00N
--> /team:sprint "sprint-00N" -> /workflow:review N -> /workflow:retro N
+/workflow:start N -> /workflow:start N --tasks-only -> /gate:check sprint 00N
+-> /workflow:implement N -> /workflow:review N -> /workflow:retro N
 ```
 
 …and adds: branch, commit, Pull Request, CI watch, and merge.
@@ -25,6 +25,7 @@ This automates what was previously six manual commands with a `/clear` in betwee
 $ARGUMENTS
 
 - `<N>` : Sprint number (e.g. `5`). **Required.**
+- `--from-prd` : Before Phase 1, run `/workflow:plan --only=backlog` (sub-agent) to generate the backlog from `project-management/prd.md`, then continue the normal pipeline.
 - `--auto-merge` : Merge automatically once CI is green and DoD passes. **Default: OFF** — the
   command pauses and waits for an explicit human GO before merging (honors "review obligatoire",
   rule 09, and the Karpathy "no auto-merge without human review" principle).
@@ -52,7 +53,7 @@ to each phase:
 | Phase | Expected form |
 |-------|---------------|
 | `start`, `review`, `retro` | bare `N` (e.g. `5`) |
-| `decompose-tasks` | zero-padded `00N` (e.g. `005`) |
+| `start --tasks-only` | bare `N` (e.g. `5`) |
 | `team:sprint` (implementation) | free-form sprint name resolved from the folder / status file |
 
 Resolve the sprint folder by globbing `project-management/sprints/sprint-{N}-*/` and read
@@ -70,6 +71,10 @@ Resolve the sprint folder by globbing `project-management/sprints/sprint-{N}-*/`
    (rule 09: `main` always deployable — never work directly on the base branch).
 5. If `--dry-run`: print the resolved context + the 9 planned phases and **stop here**.
 
+### Phase 0b — Backlog from PRD (sub-agent, only with `--from-prd`)
+
+> "Read `.claude/commands/workflow/plan.md` and execute `/workflow:plan --only=backlog` (input: `project-management/prd.md`). Return a terse summary and the files created."
+
 ### Phase 1 — Start (sub-agent)
 
 Spawn one isolated sub-agent:
@@ -80,13 +85,13 @@ Spawn one isolated sub-agent:
 
 ### Phase 2 — Decompose (sub-agent)
 
-> "Read `.claude/commands/project/decompose-tasks.md` and execute it for sprint **00N**.
+> "Read `.claude/commands/workflow/start.md` (`/workflow:start {N} --tasks-only`) and execute it for sprint **N**.
 > Generate the `tasks/TASK-*.md` files, `board.md`, and the dependency graph.
 > Return a terse summary and the files created."
 
 ### Phase 3 — Validate gate (sub-agent + auto-fix loop)
 
-> "Read `.claude/commands/gate/validate-sprint.md` and run it for sprint **00N**.
+> "Read `.claude/commands/gate/check.md` (gate `sprint`) and run it for sprint **00N**.
 > Return PASS/FAIL, the score, and the list of failing criteria."
 
 **On FAIL → auto-fix loop** (up to `--max-fix-attempts`):
@@ -96,6 +101,8 @@ Spawn one isolated sub-agent:
 - If still failing after `--max-fix-attempts` → **abort** with the remediation report.
 
 ### Phase 4 — Implement (you = conductor)
+
+> Equivalent to `/workflow:implement --parallel N` (which delegates to `/team:sprint`).
 
 Assume the **`/team:sprint` conductor role directly** (do **not** spawn a nested Agent Team):
 
@@ -196,3 +203,4 @@ Phase            | Status | Notes
 - **Auto-merge is opt-in** and intentionally gated behind a flag.
 - **Docker is mandatory** for tests (project CLAUDE.md).
 - Sub-agent isolation is what replaces `/clear` — keep each sub-agent report terse.
+- For the parallel Agent Teams variant that also writes the stories with cross-review, use `/team:delivery`.
