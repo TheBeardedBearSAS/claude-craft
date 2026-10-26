@@ -28,6 +28,10 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces (239 total, including deprecated redirect stubs kept until 9.0), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v8.25.0
+
+**Fusion des commandes `/project:` et `/gate:` (2026-10-26, v8.25.0) :** 5 commandes `/project:` (`backlog`, `reverse`, `trace`, `report`, `migrate`) et une seule `/gate:check` remplacent 41 commandes ; les anciennes restent des stubs de redirection jusqu'en 9.0. Détails : [CHANGELOG](CHANGELOG.md#8250---2026-10-26).
+
 ## What's New in v8.24.0
 
 **Source de vérité unique du statut (2026-10-26, v8.24.0) :** `.bmad/sprint-status.yaml` porte désormais seul le statut des stories et des tâches. Les fichiers markdown ne portent que le contenu, et le Kanban écrit les déplacements dans la YAML. Nouveau guide [Quel parcours ?](docs/guides/en/11-which-path.md). Les commandes retirées sont désormais supprimées à l'upgrade (`config/removed-commands.yaml`), et les commandes mainteneur ne sont plus installées dans les projets. Détails : [CHANGELOG](CHANGELOG.md#8240---2026-10-26).
