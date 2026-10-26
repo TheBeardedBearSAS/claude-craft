@@ -461,7 +461,7 @@ Utilisez la commande :
 /common:add-technology "nextjs"
 ```
 
-Cela génère tous les fichiers pour 5 langues.
+Cela génère tous les fichiers pour 5 langues. Commande réservée aux mainteneurs : lancez-la depuis un clone du dépôt claude-craft (elle n’est plus installée dans les projets depuis la 8.24.0).
 
 ### Comment signaler un bug ?
 

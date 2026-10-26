@@ -409,7 +409,7 @@ Follow the structure of existing templates (`team-audit`, `team-sprint`).
 After completing all paths:
 
 1. **Contribute:** Submit PRs to improve templates, skills, or documentation
-2. **Add Technology:** Use `/common:add-technology` to add your stack
+2. **Add Technology:** From a clone of the claude-craft repository, use `/common:add-technology` to add your stack
 3. **Train Team:** Onboard team members using this learning path
 4. **Customize:** Create custom skills, agents, and workflows
 5. **Optimize:** Fine-tune Ralph DoD, agent team sizes, and quality gates

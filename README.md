@@ -28,6 +28,10 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces (234 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v8.24.0
+
+**Source de vérité unique du statut (2026-10-26, v8.24.0) :** `.bmad/sprint-status.yaml` porte désormais seul le statut des stories et des tâches. Les fichiers markdown ne portent que le contenu, et le Kanban écrit les déplacements dans la YAML. Nouveau guide [Quel parcours ?](docs/guides/en/11-which-path.md). Les commandes retirées sont désormais supprimées à l'upgrade (`config/removed-commands.yaml`), et les commandes mainteneur ne sont plus installées dans les projets. Détails : [CHANGELOG](CHANGELOG.md#8240---2026-10-26).
+
 ## What's New in v8.23.4
 
 **Cohérence des commandes de gestion de projet (2026-10-26, v8.23.4) :** 65 références vers des commandes inexistantes corrigées dans les 5 langues (nouveau garde-fou CI `command-refs.test.mjs`) ; gates alignées sur `project-management/` ; arborescence de sprint unique (`board.md` + `tasks/TASK-*.md`) ; `/workflow:init` crée `.bmad/sprint-status.yaml` ; `/workflow:auto-sprint` démarre un sprint inexistant. Détails : [CHANGELOG](CHANGELOG.md#8234---2026-10-26).
@@ -333,6 +337,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 |----------|-------------|
 | [Quickstart](docs/QUICKSTART.md) | Get results in 10 minutes |
 | [**Tutorial: Complete Workflow**](docs/guides/en/10-complete-workflow.md) | End-to-end narrated walkthrough: idea → backlog → sprint → ship |
+| [**Which path?**](docs/guides/en/11-which-path.md) | Decision page: greenfield, brownfield, bugfix or autonomous sprint |
 | [Learning Paths](docs/LEARNING-PATHS.md) | Beginner → Intermediate → Advanced progression |
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |

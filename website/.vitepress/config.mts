@@ -72,6 +72,7 @@ const guidesItems = [
   { text: '08 - Setup New Project', link: '/en/guides/08-setup-new-project' },
   { text: '09 - Setup Existing Project', link: '/en/guides/09-setup-existing-project' },
   { text: '10 - Complete Workflow', link: '/en/guides/10-complete-workflow' },
+  { text: '11 - Which Path?', link: '/en/guides/11-which-path' },
 ]
 
 const guidesItemsFr = [
@@ -85,6 +86,7 @@ const guidesItemsFr = [
   { text: '08 - Nouveau Projet', link: '/fr/guides/08-setup-new-project' },
   { text: '09 - Projet Existant', link: '/fr/guides/09-setup-existing-project' },
   { text: '10 - Workflow Complet', link: '/fr/guides/10-complete-workflow' },
+  { text: '11 - Quel chemin ?', link: '/fr/guides/11-which-path' },
 ]
 
 const guidesItemsEs = [
@@ -98,6 +100,7 @@ const guidesItemsEs = [
   { text: '08 - Nuevo Proyecto', link: '/es/guides/08-setup-new-project' },
   { text: '09 - Proyecto Existente', link: '/es/guides/09-setup-existing-project' },
   { text: '10 - Workflow Completo', link: '/es/guides/10-complete-workflow' },
+  { text: '11 - ¿Qué camino?', link: '/es/guides/11-which-path' },
 ]
 
 const guidesItemsDe = [
@@ -111,6 +114,7 @@ const guidesItemsDe = [
   { text: '08 - Neues Projekt', link: '/de/guides/08-setup-new-project' },
   { text: '09 - Bestehendes Projekt', link: '/de/guides/09-setup-existing-project' },
   { text: '10 - Kompletter Workflow', link: '/de/guides/10-complete-workflow' },
+  { text: '11 - Welcher Weg?', link: '/de/guides/11-which-path' },
 ]
 
 const guidesItemsPt = [
@@ -124,6 +128,7 @@ const guidesItemsPt = [
   { text: '08 - Novo Projeto', link: '/pt/guides/08-setup-new-project' },
   { text: '09 - Projeto Existente', link: '/pt/guides/09-setup-existing-project' },
   { text: '10 - Workflow Completo', link: '/pt/guides/10-complete-workflow' },
+  { text: '11 - Qual caminho?', link: '/pt/guides/11-which-path' },
 ]
 
 export default defineConfig({

@@ -100,7 +100,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 /common:release-checklist         # Pre-release checks
 /common:generate-changelog        # Generate CHANGELOG
 /common:architecture-decision     # Document ADR
-/common:add-technology "nextjs"   # Add new tech stack
+/common:add-technology "nextjs"   # Add new tech stack (claude-craft repo only)
 /common:setup-project-context     # Interactive project config (distinct from /common:init)
 /common:aliases                   # Custom shortcuts and aliases
 ```

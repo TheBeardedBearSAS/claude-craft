@@ -311,7 +311,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - [ ] Scope boundaries set
 
 ```bash
-/gate:validate-prd docs/prd.md
+/gate:validate-prd                 # default: project-management/prd.md
 ```
 
 ---
@@ -536,7 +536,7 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 ```bash
 @pm Create a PRD for the shopping cart feature
-/gate:validate-prd docs/prd.md
+/gate:validate-prd                 # default: project-management/prd.md
 ```
 
 ### 3. Analyze Requirements (BA Phase)
