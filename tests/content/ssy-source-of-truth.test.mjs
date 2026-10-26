@@ -14,16 +14,15 @@ const SCHEMA_TEMPLATE = '.claude/templates/project/sprint-status.md';
 const STATUS_EMOJI = /🔴|🟡|🟢|🔲|🔄|👀|🚫/u;
 
 // Commands that change a story or task status.
+// 8.25.0: add-story/add-task/move-task are stubs of /project:backlog.
 const WRITERS = [
-  'commands/add-story.md',
-  'commands/add-task.md',
-  'commands/move-task.md',
+  'commands/backlog.md',
   'commands/decompose-tasks.md',
   'Sprint/commands/dev.md',
   'Sprint/commands/transition.md',
 ];
 // Commands that display statuses.
-const READERS = ['commands/board.md', 'commands/list-stories.md', 'commands/list-tasks.md', 'commands/list-epics.md'];
+const READERS = ['commands/board.md', 'commands/backlog.md', 'commands/report.md'];
 
 describe('canonical sprint-status.yaml schema template', () => {
   it.each(LANGS)('documents a schema the Kanban accepts, with task statuses and routing (lang=%s)', (lang) => {
@@ -66,7 +65,7 @@ describe('"Which path?" decision page', () => {
 
   it.each(LANGS)('exists and routes greenfield, brownfield, bugfix and autonomous sprint (lang=%s)', (lang) => {
     const guide = read('docs/guides', lang, GUIDE);
-    for (const cmd of ['/workflow:init', '/workflow:auto-sprint', '/project:scan', '/qa:tdd']) expect(guide).toContain(cmd);
+    for (const cmd of ['/workflow:init', '/workflow:auto-sprint', '/project:reverse', '/qa:tdd']) expect(guide).toContain(cmd);
   });
 
   it.each(LANGS)('is linked from /common:getting-started and /workflow:init (lang=%s)', (lang) => {

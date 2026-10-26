@@ -214,7 +214,7 @@ Exibir o estado atual do workflow de desenvolvimento, incluindo fases concluidas
 | COMANDOS DISPONIVEIS                                                 |
 +====================================================================+
 | - /qa:tdd     - Continuar com abordagem TDD             |
-| - /project:move-task done - Marcar tarefa como concluida             |
+| - /project:backlog move task done - Marcar tarefa como concluida             |
 | - /workflow:init          - Iniciar novo workflow                    |
 +====================================================================+
 ```

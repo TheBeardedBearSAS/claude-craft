@@ -19,7 +19,7 @@ These aliases reduce typing and improve productivity by providing short mnemonic
 | Alias | Full Command | Description |
 |-------|-------------|-------------|
 | `/ci` | `/common:init` | Initialize Claude Craft |
-| `/cr` | `/common:release-checklist` | Pre-release verification checklist |
+| `/cr` | `/gate:check release` | Pre-release verification checklist |
 | `/cs` | `/common:setup-project-context` | Setup project context for Claude |
 
 ### Technology Check Compliance
@@ -122,7 +122,7 @@ Add to `~/.bashrc` or `~/.zshrc`:
 ```bash
 # Claude Craft Aliases
 alias ci='claude-code -p /common:init'
-alias cr='claude-code -p /common:release-checklist'
+alias cr='claude-code -p /gate:check release'
 alias cs='claude-code -p /common:setup-project-context'
 
 alias sc='claude-code -p /symfony:check-compliance'
@@ -154,7 +154,7 @@ Add to `~/.config/fish/config.fish`:
 ```fish
 # Claude Craft Aliases
 alias ci 'claude-code -p /common:init'
-alias cr 'claude-code -p /common:release-checklist'
+alias cr 'claude-code -p /gate:check release'
 alias cs 'claude-code -p /common:setup-project-context'
 
 alias sc 'claude-code -p /symfony:check-compliance'

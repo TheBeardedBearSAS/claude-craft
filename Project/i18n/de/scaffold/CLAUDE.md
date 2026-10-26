@@ -20,34 +20,34 @@ Expert in architecture, technical decomposition and Scrum facilitation.
 |---------|-------------|
 | `/project:generate-backlog` | Generate the full backlog |
 | `/project:decompose-tasks N` | Break sprint N into tasks |
-| `/project:analyze-backlog` | Analyze the existing backlog |
-| `/project:migrate-backlog` | Migrate an existing backlog |
-| `/project:sync-backlog` | Synchronize the backlog index |
+| `/project:migrate --analyze` | Analyze the existing backlog |
+| `/project:migrate` | Migrate an existing backlog |
+| `/project:migrate --resync` | Synchronize the backlog index |
 
 ### EPIC Management (`/project:`)
 
 | Command | Description |
 |---------|-------------|
-| `/project:add-epic "Name"` | Create a new EPIC |
-| `/project:list-epics` | List all EPICs |
-| `/project:update-epic EPIC-XXX` | Edit an EPIC |
+| `/project:backlog add epic "Name"` | Create a new EPIC |
+| `/project:backlog list epic` | List all EPICs |
+| `/project:backlog edit epic EPIC-XXX` | Edit an EPIC |
 
 ### User Story Management (`/project:`)
 
 | Command | Description |
 |---------|-------------|
-| `/project:add-story EPIC-XXX "Name"` | Create a User Story |
-| `/project:list-stories` | List User Stories |
-| `/project:update-story US-XXX` | Edit a User Story |
-| `/project:update-stories` | Update multiple User Stories |
+| `/project:backlog add story EPIC-XXX "Name"` | Create a User Story |
+| `/project:backlog list story` | List User Stories |
+| `/project:backlog edit story US-XXX` | Edit a User Story |
+| `/project:migrate --stories` | Update multiple User Stories |
 
 ### Task Management (`/project:`)
 
 | Command | Description |
 |---------|-------------|
-| `/project:add-task US-XXX "[TYPE] Desc" Xh` | Create a task |
-| `/project:list-tasks` | List tasks |
-| `/project:move-task TASK-XXX status` | Change status |
+| `/project:backlog add task US-XXX "[TYPE] Desc" Xh` | Create a task |
+| `/project:backlog list task` | List tasks |
+| `/project:backlog move task TASK-XXX status` | Change status |
 
 ### Visualization & Execution (`/project:`)
 
@@ -75,12 +75,12 @@ Expert in architecture, technical decomposition and Scrum facilitation.
 
 | Command | Description |
 |---------|-------------|
-| `/gate:validate-backlog` | Validate backlog compliance (score /100) |
-| `/gate:validate-prd` | Validate the PRD |
-| `/gate:validate-techspec` | Validate the technical spec |
-| `/gate:validate-story US-XXX` | Validate a User Story (DoD) |
-| `/gate:validate-sprint N` | Validate a sprint |
-| `/gate:report` | Full quality report |
+| `/gate:check backlog` | Validate backlog compliance (score /100) |
+| `/gate:check prd` | Validate the PRD |
+| `/gate:check spec` | Validate the technical spec |
+| `/gate:check story US-XXX` | Validate a User Story (DoD) |
+| `/gate:check sprint N` | Validate a sprint |
+| `/gate:check all` | Full quality report |
 
 ## Technical stack
 
@@ -153,7 +153,7 @@ project-management/
 /project:generate-backlog
 
 # 2. Validate compliance
-/gate:validate-backlog
+/gate:check backlog
 
 # 3. Plan sprint 1
 /project:decompose-tasks 001

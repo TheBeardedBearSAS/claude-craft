@@ -101,8 +101,8 @@ Sprint: 10 puntos | Completados: 0 pts
 ══════════════════════════════════════════════════════════════════════════
 
 Acciones:
-  /project:move-task TASK-XXX in-progress  # Iniciar una tarea
-  /project:move-task TASK-XXX done         # Completar una tarea
+  /project:backlog move task TASK-XXX in-progress  # Iniciar una tarea
+  /project:backlog move task TASK-XXX done         # Completar una tarea
   /sprint:status                   # Ver más métricas
 ```
 

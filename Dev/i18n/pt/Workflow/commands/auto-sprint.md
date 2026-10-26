@@ -14,7 +14,7 @@ de `/team:sprint`) para evitar o aninhamento de Agent Teams.
 Isso automatiza o que anteriormente eram seis comandos manuais com `/clear` entre eles:
 
 ```
-/workflow:start N -> /project:decompose-tasks 00N -> /gate:validate-sprint 00N
+/workflow:start N -> /project:decompose-tasks 00N -> /gate:check sprint 00N
 -> /team:sprint "sprint-00N" -> /workflow:review N -> /workflow:retro N
 ```
 

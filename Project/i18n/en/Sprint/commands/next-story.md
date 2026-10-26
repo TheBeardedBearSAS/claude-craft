@@ -128,14 +128,14 @@ Or use: /sprint:next-story --claim
 
 Suggestions:
 ──────────────────────────────────────────────────────
-1. Refine backlog stories: /project:update-stories
+1. Refine backlog stories: /project:migrate --stories
 2. Help with in-progress stories
 3. Unblock US-003: waiting for API credentials
-4. View dependency graph: /project:dependencies
+4. View dependency graph: /project:report deps
 
 Commands:
   /sprint:status --bmad  View full sprint status
-  /gate:validate-backlog Check story readiness
+  /gate:check backlog Check story readiness
 ═══════════════════════════════════════════════════════
 ```
 

@@ -386,7 +386,7 @@ Session 2: Implementation (code, test)
 The `/loop` command allows scheduling recurring tasks:
 
 ```bash
-/loop 5m /common:pre-commit-check    # Check every 5 minutes
+/loop 5m /gate:check commit    # Check every 5 minutes
 /loop "Monitor CI tests"              # Auto-paced by the model
 ```
 

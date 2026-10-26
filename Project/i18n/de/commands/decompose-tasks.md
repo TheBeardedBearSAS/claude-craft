@@ -84,7 +84,7 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
 
 ### SCHRITT 4: US-Zerlegungsvorlage
 
-Für jede US einen Abschnitt in `tasks/README.md` nach der folgenden Vorlage hinzufügen und pro Aufgabenzeile eine Datei `tasks/TASK-{ID}.md` aus `.claude/templates/project/task.md` erstellen (IDs setzen nach dem letzten vorhandenen `TASK-*` fort, wie bei `/project:add-task`):
+Für jede US einen Abschnitt in `tasks/README.md` nach der folgenden Vorlage hinzufügen und pro Aufgabenzeile eine Datei `tasks/TASK-{ID}.md` aus `.claude/templates/project/task.md` erstellen (IDs setzen nach dem letzten vorhandenen `TASK-*` fort, wie bei `/project:backlog add task`):
 
 ````markdown
 # Aufgaben - US-XXX: [Titel]

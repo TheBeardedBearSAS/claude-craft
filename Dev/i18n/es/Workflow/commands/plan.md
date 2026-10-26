@@ -90,7 +90,7 @@ Ejecutar las tareas de planificacion en orden:
 ║   Salida: project-management/backlog/                     ║
 ║                                                           ║
 ║ □ Tarea 4: Validar backlog                                ║
-║   Comando: /gate:validate-backlog                      ║
+║   Comando: /gate:check backlog                      ║
 ║   Asegura cumplimiento SCRUM                              ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝

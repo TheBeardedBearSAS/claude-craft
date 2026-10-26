@@ -23,12 +23,12 @@ project-management/
 
 ## Workflow
 
-1. `/project:add-epic` - Create an EPIC
-2. `/project:add-story` - Add User Stories
+1. `/project:backlog add epic` - Create an EPIC
+2. `/project:backlog add story` - Add User Stories
 3. `/sprint:transition US-XXX sprint-N` - Plan the sprint
-4. `/project:add-task` or `/project:decompose-tasks` - Create tasks
+4. `/project:backlog add task` or `/project:decompose-tasks` - Create tasks
 5. `/project:board` - Track progress
-6. `/project:move-task` - Update statuses
+6. `/project:backlog move task` - Update statuses
 
 ## Statuses
 

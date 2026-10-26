@@ -133,7 +133,7 @@ Sprint-Status:
 
 Befehle:
   /sprint:status --bmad    Aktualisierten Status sehen
-  /gate:report          Qualitaetsbericht
+  /gate:check all          Qualitaetsbericht
 ═══════════════════════════════════════════════════════
 ```
 

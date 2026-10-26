@@ -14,7 +14,7 @@ stays lean. The implementation phase is run by **you as conductor** (same logic 
 This automates what was previously six manual commands with a `/clear` in between:
 
 ```
-/workflow:start N -> /project:decompose-tasks 00N -> /gate:validate-sprint 00N
+/workflow:start N -> /project:decompose-tasks 00N -> /gate:check sprint 00N
 -> /team:sprint "sprint-00N" -> /workflow:review N -> /workflow:retro N
 ```
 

@@ -45,10 +45,10 @@ describe('PM commands share one file layout', () => {
 
   it.each(LANGS)('gates default to project-management/ documents (lang=%s)', (lang) => {
     expect(hits(lang, /(?<!project-management\/)docs\/(prd|tech-spec)\.md/)).toEqual([]);
-    expect(read('Project/i18n', lang, 'Gate/commands/validate-prd.md')).toContain('project-management/prd.md');
-    expect(read('Project/i18n', lang, 'Gate/commands/validate-techspec.md')).toContain(
-      'project-management/tech-spec.md'
-    );
+    // 8.25.0: the document gates live in /gate:check
+    const check = read('Project/i18n', lang, 'Gate/commands/check.md');
+    expect(check).toContain('project-management/prd.md');
+    expect(check).toContain('project-management/tech-spec.md');
   });
 
   it.each(LANGS)('one board (board.md) and one file per task (TASK-*.md) (lang=%s)', (lang) => {

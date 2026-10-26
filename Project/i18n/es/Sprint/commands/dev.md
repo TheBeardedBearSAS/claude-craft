@@ -445,5 +445,5 @@ Siguiente tarea: TAREA-009 [FE-WEB] Controlador de Inicio de Sesión
 | `/project:decompose-tasks N` | Crear tareas antes de sprint-dev |
 | `/project:board N` | Ver tablero Kanban |
 | `/sprint:status N` | Ver métricas del sprint |
-| `/project:move-task` | Cambiar manualmente el estado de una tarea |
+| `/project:backlog move task` | Cambiar manualmente el estado de una tarea |
 | `/sprint:transition` | Cambiar manualmente el estado de una HU |

@@ -89,7 +89,7 @@ Planungsaufgaben in Reihenfolge ausführen:
 ║   Ausgabe: project-management/backlog/                    ║
 ║                                                           ║
 ║ □ Aufgabe 4: Backlog validieren                           ║
-║   Befehl: /gate:validate-backlog                       ║
+║   Befehl: /gate:check backlog                       ║
 ║   Stellt SCRUM-Konformität sicher                         ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝

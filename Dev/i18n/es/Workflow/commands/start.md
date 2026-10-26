@@ -227,7 +227,7 @@ Puntos |
 
 ### Paso 6: Sincronizar `.bmad/sprint-status.yaml`
 
-`/gate:validate-sprint` y los comandos `/sprint:*` leen el sprint en `.bmad/sprint-status.yaml`. Escríbelo ahora a partir del `sprint-goal.md` anterior y de las fichas US seleccionadas (`project-management/backlog/user-stories/US-*.md`):
+`/gate:check sprint` y los comandos `/sprint:*` leen el sprint en `.bmad/sprint-status.yaml`. Escríbelo ahora a partir del `sprint-goal.md` anterior y de las fichas US seleccionadas (`project-management/backlog/user-stories/US-*.md`):
 
 1. Crear `.bmad/` si no existe.
 2. `metadata`: `sprint_id` (`sprint-{N}`), `name`, `start_date`, `end_date`, `goal`, `capacity_points`, tomados de `sprint-goal.md`.
@@ -328,7 +328,7 @@ archived_sprints:
 ║                    SIGUIENTE PASO                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /gate:validate-sprint {N}                             ║
+║  → /gate:check sprint {N}                             ║
 ║    Verificar que el sprint está listo (gate)             ║
 ║                                                          ║
 ║  → /sprint:next-story                                    ║

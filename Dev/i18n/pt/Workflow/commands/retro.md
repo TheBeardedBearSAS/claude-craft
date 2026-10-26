@@ -340,7 +340,7 @@ Verbatims:
 ║    Iniciar o próximo sprint                              ║
 ║                                                          ║
 ║  Se o projeto está completo:                             ║
-║  → /common:release-checklist                             ║
+║  → /gate:check release                             ║
 ║    Preparar o lançamento                                 ║
 ║  → /common:generate-changelog                            ║
 ║    Gerar o changelog                                     ║

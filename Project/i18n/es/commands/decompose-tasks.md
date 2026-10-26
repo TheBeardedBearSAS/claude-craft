@@ -84,7 +84,7 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
 
 ### PASO 4: Plantilla de descomposición de US
 
-Para cada US, añadir una sección a `tasks/README.md` con la plantilla siguiente, y crear un archivo `tasks/TASK-{ID}.md` por cada fila de tarea a partir de `.claude/templates/project/task.md` (los IDs continúan tras el último `TASK-*` existente, como hace `/project:add-task`):
+Para cada US, añadir una sección a `tasks/README.md` con la plantilla siguiente, y crear un archivo `tasks/TASK-{ID}.md` por cada fila de tarea a partir de `.claude/templates/project/task.md` (los IDs continúan tras el último `TASK-*` existente, como hace `/project:backlog add task`):
 
 ````markdown
 # Tareas - US-XXX: [Título]

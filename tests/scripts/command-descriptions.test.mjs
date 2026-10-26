@@ -159,7 +159,7 @@ describe('deprecation stubs', () => {
   const sample = path.join(PROJECT_ROOT, 'Project/i18n/en/commands/sample-stub.md');
 
   it('accepts a small stub redirecting to a live command', () => {
-    const raw = '---\ndescription: "Deprecated: use /project:add-story"\ndeprecated: true\nreplaced-by: /project:add-story\n---\n\nRun /project:add-story $ARGUMENTS.\n';
+    const raw = '---\ndescription: "Deprecated: use /project:backlog add story"\ndeprecated: true\nreplaced-by: /project:backlog\n---\n\nRun /project:backlog add story $ARGUMENTS.\n';
     expect(stubViolations(sample, raw)).toEqual([]);
   });
 
@@ -167,7 +167,7 @@ describe('deprecation stubs', () => {
     const fm = (by) => `---\ndescription: d\ndeprecated: true\n${by}---\n`;
     expect(stubViolations(sample, fm('replaced-by: /project:nope\n'))).toHaveLength(1);
     expect(stubViolations(sample, fm(''))).toHaveLength(1);
-    expect(stubViolations(sample, fm('replaced-by: /project:add-story\n') + 'x'.repeat(600))).toHaveLength(1);
+    expect(stubViolations(sample, fm('replaced-by: /project:backlog\n') + 'x'.repeat(600))).toHaveLength(1);
   });
 
   it('every deprecated command honours the stub contract', () => {

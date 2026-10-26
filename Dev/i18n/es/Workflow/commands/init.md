@@ -121,7 +121,7 @@ Segun el track, mostrar el flujo de trabajo:
 ║                                                           ║
 ║ Comandos:                                                 ║
 ║ • /qa:tdd    - Corregir con TDD               ║
-║ • /project:add-task      - Registrar el trabajo            ║
+║ • /project:backlog add task      - Registrar el trabajo            ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```

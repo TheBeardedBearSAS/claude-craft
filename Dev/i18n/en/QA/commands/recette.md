@@ -218,7 +218,7 @@ entries:
 | `/qa:status` | Show session status |
 | `/qa:regression` | View regression tests |
 | `/qa:report` | Generate report |
-| `/gate:validate-story` | Validate story AC |
+| `/gate:check story` | Validate story AC |
 
 ## Chrome Capabilities
 

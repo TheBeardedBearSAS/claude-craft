@@ -299,7 +299,7 @@ Zitate:
 ║    Nächsten Sprint starten                               ║
 ║                                                          ║
 ║  Wenn das Projekt abgeschlossen ist:                     ║
-║  → /common:release-checklist                             ║
+║  → /gate:check release                             ║
 ║    Release vorbereiten                                   ║
 ║  → /common:generate-changelog                            ║
 ║    Changelog generieren                                  ║
