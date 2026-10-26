@@ -54,7 +54,13 @@ export async function updateSprintStatusStory(projectRoot, id, patch, opts = {})
     Object.assign(story, patch);
     story.history = [
       ...(story.history ?? []),
-      { timestamp: opts.now ?? new Date().toISOString(), from, to: patch.status, by: opts.by ?? 'kanban', reason: patch.blocked_reason ?? '' },
+      {
+        timestamp: opts.now ?? new Date().toISOString(),
+        from,
+        to: patch.status,
+        by: opts.by ?? 'kanban',
+        reason: patch.blocked_reason ?? '',
+      },
     ];
     const tmp = `${yamlPath}.tmp`;
     await writeFile(tmp, yaml.dump(doc, { lineWidth: -1 }), 'utf8');

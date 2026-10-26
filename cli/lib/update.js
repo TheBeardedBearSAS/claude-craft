@@ -156,7 +156,9 @@ function runUpdate(targetPath, options, cliRoot) {
   if (fs.existsSync(pruneScript)) {
     const result = spawnSync('bash', [pruneScript, safeTarget], { encoding: 'utf8', timeout: 60_000, stdio: 'pipe' });
     if (result.status !== 0) {
-      console.log(`  ${c.red}[FAIL]${c.reset} Retired commands cleanup: ${result.stderr || result.error?.message || 'unknown'}`);
+      console.log(
+        `  ${c.red}[FAIL]${c.reset} Retired commands cleanup: ${result.stderr || result.error?.message || 'unknown'}`
+      );
       anyFailed = true;
     } else if (result.stdout.trim()) {
       console.log(result.stdout.trimEnd());
