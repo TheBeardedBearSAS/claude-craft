@@ -124,3 +124,54 @@ denylist:
   - 'Pinia 3'
   # Catégorie OWASP 2021 absente du Top 10:2025
   - 'Vulnerable and Outdated Components'
+
+# Affirmations périmées interdites dans des fichiers PRÉCIS (filet complémentaire de `denylist`,
+# qui ne couvre que les fichiers vitrine). Vérifié par scripts/verify-versions.mjs.
+# Motivation : ces trois affirmations sont restées fausses des mois sans qu'aucun gate ne les voie
+# (audit d'alignement 2026-08-31, PR #174).
+claimDenylist:
+  - reason: 'Hausse de prix Sonnet 5 annulée par Anthropic — $2/$10 est le prix standard (source: platform.claude.com/docs/en/about-claude/pricing)'
+    tokens:
+      - '$3/$15 au 2026-08-31'
+      - 'jusqu''au 2026-08-31'
+      - 'until 2026-08-31'
+      - 'bis 2026-08-31'
+      - 'hasta el 2026-08-31'
+      - 'puis $3/$15'
+    files:
+      - '.claude/rules/12-context-management.md'
+      - '.claude/COMPATIBILITY.md'
+      - 'docs/FAQ.md'
+      - 'docs/CLI-REFERENCE.md'
+      - 'docs/guides/en/03-feature-development.md'
+  - reason: 'Export-control levé le 2026-06-30, Fable 5 redéployé le 2026-07-01, Fable 5.1 / Mythos 5.1 sortis le 2026-09-01 (source: anthropic.com/news/redeploying-fable-5)'
+    tokens:
+      - 'Mythos 5 suspendus'
+      - 'Fable 5 est suspendu'
+      - 'Fable 5 ist ausgesetzt'
+      - 'Fable 5 is suspended'
+      - 'Fable 5 esta suspendido'
+      - 'Fable 5 está suspendido'
+      - 'Fable 5 esta suspenso'
+      - 'Fable 5 está suspenso'
+      - 'toujours offline'
+    files:
+      - '.claude/rules/12-context-management.md'
+      - '.claude/COMPATIBILITY.md'
+      - 'docs/FAQ.md'
+      - 'docs/CLI-REFERENCE.md'
+      - 'docs/guides/en/03-feature-development.md'
+  - reason: 'La précédence frontmatter model: > CLAUDE_CODE_SUBAGENT_MODEL n est vraie que depuis Claude Code 2.1.251 ; l affirmation doit rester bornée en version (source: code.claude.com/docs/en/sub-agents)'
+    tokens:
+      - 'audit 2026-06-08'
+      - 'auditoria 2026-06-08'
+      - 'auditoría 2026-06-08'
+      - 'Audit 2026-06-08'
+    files:
+      - '.claude/rules/12-context-management.md'
+      - 'Dev/i18n/en/Common/rules/12-context-management.md'
+      - 'Dev/i18n/fr/Common/rules/12-context-management.md'
+      - 'Dev/i18n/es/Common/rules/12-context-management.md'
+      - 'Dev/i18n/de/Common/rules/12-context-management.md'
+      - 'Dev/i18n/pt/Common/rules/12-context-management.md'
+      - 'docs/FAQ.md'

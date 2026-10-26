@@ -439,7 +439,7 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 
 > **Leviers de coût (cumulables) :** prompt caching **−90 %** sur l'input mis en cache (`ENABLE_PROMPT_CACHING_1H`, actif par défaut), **Batch API −50 %** in/out pour les traitements asynchrones de masse, RTK **55-90 %** sur les outputs CLI, `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` pour les sous-agents non typés.
 >
-> **Précédence modèle :** `model:` du frontmatter d'agent **>** `CLAUDE_CODE_SUBAGENT_MODEL` **>** modèle de session. Les 11 reviewers `model: haiku` restent sur Haiku même si `SUBAGENT_MODEL=sonnet`.
+> **Précédence modèle (depuis Claude Code 2.1.251) :** `model:` du frontmatter d'agent **>** `CLAUDE_CODE_SUBAGENT_MODEL` **>** modèle de session. Les 11 reviewers `model: haiku` restent sur Haiku même si `SUBAGENT_MODEL=sonnet`. **Avant 2.1.251, l'ordre était inversé** : la variable écrasait le frontmatter, et ces reviewers tournaient en réalité sur Sonnet.
 >
 > **Mythos 5 / 5.1** : disponibilité limitée (Cyber Verification Program) — ne pas les router par défaut. Source : [models overview](https://platform.claude.com/docs/en/about-claude/models/overview).
 

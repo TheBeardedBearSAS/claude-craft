@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Précédence modèle des sous-agents bornée en version** : la règle 12 (et ses 5 miroirs) et la FAQ affirmaient sans réserve que le frontmatter `model:` d'un agent prime sur `CLAUDE_CODE_SUBAGENT_MODEL`. C'est vrai seulement depuis Claude Code 2.1.251 ; avant, la variable écrasait le frontmatter, y compris `model: inherit`. Texte repris de #174. Test `tests/content/model-precedence.test.mjs`.
+- **Gate anti-récidive `claimDenylist`** dans `config/versions.yaml`, vérifiée par `scripts/verify-versions.mjs` : affirmations périmées interdites fichier par fichier (hausse de prix Sonnet 5 annulée, suspension Fable/Mythos levée, précédence modèle non bornée), là où la `denylist` des fichiers vitrine ne s'applique pas.
+
 ## [8.23.1] - 2026-10-22
 
 ### Security

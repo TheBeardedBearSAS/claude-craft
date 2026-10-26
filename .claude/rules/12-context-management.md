@@ -201,12 +201,14 @@ La status line affiche le pourcentage de contexte utilise.
 
 | Variable | Description |
 |----------|-------------|
-| `CLAUDE_CODE_SUBAGENT_MODEL` | Modele **par defaut** des sous-agents non types (ex: `sonnet`). **Le frontmatter `model:` d'un agent prevaut** : les 11 reviewers `model: haiku` restent sur haiku meme avec cette variable a `sonnet`. |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | Modèle **par défaut** des sous-agents non typés (ex: `sonnet`). **Depuis Claude Code 2.1.251**, le frontmatter `model:` d'un agent prévaut : les 11 reviewers `model: haiku` restent sur haiku. **Avant 2.1.251, c'était l'inverse** — cette variable écrasait le frontmatter (voir la note de précédence ci-dessous). |
 | `CLAUDE_CODE_FORK_SUBAGENT` | `1` pour isoler le contexte des sous-agents (forked subagents, v2.1.117+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Etendre/forcer le prompt caching (−40 % sur sessions repetitives) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre a `1` pour desactiver la memoire automatique |
 
-> **Precedence modele (clarification audit 2026-06-08) :** `model:` dans le frontmatter d'un agent > `CLAUDE_CODE_SUBAGENT_MODEL` > modele de la session. La variable `SUBAGENT_MODEL=sonnet` n'ecrase donc PAS les agents explicitement `model: haiku` — elle ne s'applique qu'aux sous-agents sans `model:` defini.
+> **Précédence modèle — valable depuis Claude Code 2.1.251 :** `model:` passé à l'invocation > `model:` du frontmatter de l'agent (où `inherit` reprend le modèle de la conversation) > `CLAUDE_CODE_SUBAGENT_MODEL` > modèle de la session.
+>
+> **⚠️ Avant 2.1.251, l'ordre était inversé** : `CLAUDE_CODE_SUBAGENT_MODEL` arrivait en tête et écrasait à la fois le paramètre d'invocation et le frontmatter, y compris `model: inherit`. Sur ces versions, `SUBAGENT_MODEL=sonnet` faisait donc bel et bien tourner sur Sonnet les agents épinglés `model: haiku` — l'inverse de l'intention. Vérifier `claude --version` avant de se fier à cette table. Source : [doc sub-agents](https://code.claude.com/docs/en/sub-agents).
 
 ---
 

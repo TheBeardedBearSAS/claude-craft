@@ -72,6 +72,28 @@ for (const rel of SHOWCASE_FILES) {
   }
 }
 
+// 2bis. Affirmations périmées, interdites dans des fichiers ciblés.
+//    La denylist globale ne s'applique qu'à SHOWCASE_FILES, et les fichiers qui portent le plus
+//    d'affirmations sur les modèles (rules/12, COMPATIBILITY.md, CLI-REFERENCE.md) ne peuvent pas y
+//    entrer : ils citent légitimement d'anciennes versions dans leurs tables d'historique.
+//    Ce second filet est donc scopé fichier par fichier. Ajouté après que trois affirmations fausses
+//    (hausse de prix Sonnet 5 annulée, suspension Fable/Mythos levée, précédence modèle non bornée
+//    en version) ont survécu à tous les gates pendant des mois (audit 2026-08-31, PR #174).
+for (const rule of versions.claimDenylist ?? []) {
+  for (const rel of rule.files ?? []) {
+    const abs = path.join(ROOT, rel);
+    if (!fs.existsSync(abs)) continue;
+    const content = fs.readFileSync(abs, 'utf8');
+    for (const token of rule.tokens ?? []) {
+      if (content.includes(token)) {
+        errors.push(
+          `Affirmation périmée "${token}" trouvée dans ${rel} — ${rule.reason ?? 'voir config/versions.yaml'}`
+        );
+      }
+    }
+  }
+}
+
 // 3. Cohérence des manifestes de version (audit 2026-07-03, GAP-01 : éviter la dérive
 //    plugin.json / marketplace.json ↔ package.json constatée à 8.16.1 vs 8.19.1).
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
