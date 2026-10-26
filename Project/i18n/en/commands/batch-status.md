@@ -138,10 +138,11 @@ Points completed: 18/21
 Actions:
 ──────────────────────────────────────────────────────
 To retry failed stories:
-  /project:queue-retry US-013
+  .bmad/batch-queue.yaml → US-013: status: pending
+  /project:run-queue
 
 To clear queue:
-  /project:queue-clear
+  .bmad/batch-queue.yaml → queue: []
 ═══════════════════════════════════════════════════════
 ```
 
@@ -181,12 +182,13 @@ Or add individual story:
 
 ### Retry failed story
 ```
-/project:queue-retry US-013
+# .bmad/batch-queue.yaml → US-013: status: pending
+/project:run-queue
 ```
 
 ### Clear queue
 ```
-/project:queue-clear --force
+# .bmad/batch-queue.yaml → queue: []
 ```
 
 ### Resume from checkpoint

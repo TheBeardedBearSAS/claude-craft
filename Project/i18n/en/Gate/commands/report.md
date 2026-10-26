@@ -26,8 +26,8 @@ Determine which gates apply based on project state:
 ### Step 2: Run validations
 
 Execute each applicable gate validator:
-1. PRD validation (if docs/prd.md exists)
-2. Tech Spec validation (if docs/tech-spec.md exists)
+1. PRD validation (if project-management/prd.md exists)
+2. Tech Spec validation (if project-management/tech-spec.md exists)
 3. Backlog INVEST validation
 4. Sprint readiness validation
 5. Individual story DoD validations
@@ -109,7 +109,7 @@ Sprint: sprint-3 - User Management
 ═══════════════════════════════════════════════════════
                     PRD Gate
 ═══════════════════════════════════════════════════════
-File: docs/prd.md
+File: project-management/prd.md
 Threshold: 80%
 Score: 90%
 Status: ✅ PASS
@@ -127,7 +127,7 @@ Criteria:
 ═══════════════════════════════════════════════════════
                   Tech Spec Gate
 ═══════════════════════════════════════════════════════
-File: docs/tech-spec.md
+File: project-management/tech-spec.md
 Threshold: 90%
 Score: 92%
 Status: ✅ PASS

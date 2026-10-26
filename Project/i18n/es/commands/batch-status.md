@@ -138,10 +138,11 @@ Puntos completados: 18/21
 Acciones:
 ──────────────────────────────────────────────────────
 Para reintentar las stories fallidas:
-  /project:queue-retry US-013
+  .bmad/batch-queue.yaml → US-013: status: pending
+  /project:run-queue
 
 Para vaciar la cola:
-  /project:queue-clear
+  .bmad/batch-queue.yaml → queue: []
 ═══════════════════════════════════════════════════════
 ```
 
@@ -181,12 +182,13 @@ O agregar una story individual:
 
 ### Reintentar una story fallida
 ```
-/project:queue-retry US-013
+# .bmad/batch-queue.yaml → US-013: status: pending
+/project:run-queue
 ```
 
 ### Vaciar la cola
 ```
-/project:queue-clear --force
+# .bmad/batch-queue.yaml → queue: []
 ```
 
 ### Reanudar desde el checkpoint

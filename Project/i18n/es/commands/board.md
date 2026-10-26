@@ -22,7 +22,7 @@ $ARGUMENTS (opcional, formato: [sprint N])
 
 ### Paso 2: Leer datos
 
-1. Leer archivo `project-management/sprints/sprint-XXX/board.md`
+1. Leer archivo `project-management/sprints/sprint-{N}-{slug}/board.md`
 2. O regenerar desde archivos de tareas
 
 ### Paso 3: Agrupar por estado

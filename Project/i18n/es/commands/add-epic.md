@@ -41,7 +41,7 @@ Preguntar al usuario (si no se proporciona):
 
 ### Paso 4: Crear el archivo
 
-1. Usar plantilla `Scrum/templates/epic.md`
+1. Usar plantilla `templates/epic.md`
 2. Reemplazar marcadores de posición:
    - `{ID}`: ID generado
    - `{NOM}`: Nombre del EPIC

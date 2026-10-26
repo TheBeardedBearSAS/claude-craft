@@ -191,7 +191,8 @@ Reprendre le travail : /sprint:dev US-005
 
 Mettre à jour la phase :
 ```
-/sprint:tdd US-005 green
+# .bmad/sprint-status.yaml
+US-005: { tdd_phase: green }
 ```
 
 ## Intégration

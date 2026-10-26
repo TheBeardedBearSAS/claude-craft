@@ -223,8 +223,8 @@ Estado Sprint:
 🎉 Objetivo del sprint alcanzado!
 
 Proximos pasos:
-  /sprint:retrospective    Iniciar la retrospectiva
-  /sprint:plan            Planificar el proximo sprint
+  /workflow:retro    Iniciar la retrospectiva
+  /workflow:start            Planificar el proximo sprint
 ═══════════════════════════════════════════════════════
 ```
 

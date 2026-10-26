@@ -149,7 +149,7 @@ Set initial TDD phase based on task completion:
 1. Review sprint-status.yaml
 2. Run `/sprint:status` to verify
 3. Configure sprint metadata (dates, goals)
-4. Set up quality gates with `/gate:configure`
+4. Set up quality gates with `/gate:report`
 ```
 
 ## Dry Run Output

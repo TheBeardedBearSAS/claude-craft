@@ -160,7 +160,7 @@ Generiert ein vollständiges Backlog mit:
 - MMF für Epics
 - Generiert Bericht mit Punktzahl /100
 
-### /project:prioritize
+### Priorisierung (auf Anfrage)
 Hilft bei der Priorisierung des Backlogs mit:
 - Geschäftswertanalyse
 - MoSCoW

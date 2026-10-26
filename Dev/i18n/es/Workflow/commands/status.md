@@ -139,7 +139,7 @@ Mostrar el estado actual del flujo de trabajo de desarrollo, incluyendo fases co
 ║ FASE 4: IMPLEMENTACION (Pendiente)                                ║
 ║ ══════════════════════════════════════════════════════════════   ║
 ║                                                                   ║
-║ Sprint 1: sprint-001-walking-skeleton                             ║
+║ Sprint 1: sprint-1-walking-skeleton                               ║
 ║ ├── Estado: Listo para iniciar                                    ║
 ║ ├── Stories: 5                                                    ║
 ║ ├── Puntos: 21                                                    ║
@@ -274,7 +274,7 @@ phases:
   implementation:
     status: pending
     sprints:
-      - name: sprint-001-walking-skeleton
+      - name: sprint-1-walking-skeleton
         status: pending
         points: 21
         stories: 5

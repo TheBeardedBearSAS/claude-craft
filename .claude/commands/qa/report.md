@@ -99,19 +99,19 @@ Aucune violation de la Regle d'Or detectee.
 
 ```bash
 # Generer un rapport Markdown (defaut)
-/qa:recette-report --session=REC-20260130-143022
+/qa:report --session=REC-20260130-143022
 
 # Generer un rapport HTML avec captures
-/qa:recette-report --session=REC-20260130-143022 --format=html --include-screenshots
+/qa:report --session=REC-20260130-143022 --format=html --include-screenshots
 
 # Generer un rapport JSON pour integration CI
-/qa:recette-report --session=REC-20260130-143022 --format=json
+/qa:report --session=REC-20260130-143022 --format=json
 
 # Chemin de sortie personnalise
-/qa:recette-report --session=REC-20260130-143022 --output=./reports/sprint-3/
+/qa:report --session=REC-20260130-143022 --output=./reports/sprint-3/
 
 # Comparer deux sessions
-/qa:recette-report --session=REC-20260201-140000 --compare=REC-20260130-143022
+/qa:report --session=REC-20260201-140000 --compare=REC-20260130-143022
 ```
 
 ## Structure de Sortie
@@ -129,9 +129,9 @@ Aucune violation de la Regle d'Or detectee.
 | Commande | Description |
 |----------|-------------|
 | `/qa:recette` | Executer les tests d'acceptance |
-| `/qa:recette-fix` | Corriger les bugs d'une session |
-| `/qa:recette-status` | Afficher le statut de session |
-| `/qa:recette-regression` | Voir les tests de regression |
+| `/qa:fix` | Corriger les bugs d'une session |
+| `/qa:status` | Afficher le statut de session |
+| `/qa:regression` | Voir les tests de regression |
 
 ## Messages d'Erreur
 

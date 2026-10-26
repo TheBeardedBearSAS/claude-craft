@@ -66,10 +66,9 @@ Symfony UX/Turbo + Flutter → API Platform → PostgreSQL
 - API Platform é o ponto central consumido por Web e Mobile
 
 ## DOCUMENTOS A ANALISAR
-Procurar em `./docs/` por arquivos de especificação:
-- ARCHITECTURE_TECHNIQUE*.md
-- CAHIER_DES_CHARGES*.md
-- Ou qualquer outro arquivo de spec disponível
+1. `project-management/prd.md` (escrito por `/project:generate-prd`): fonte principal. Seus IDs de requisitos (`FR-xxx`) alimentam o campo `Implements:` de cada US.
+2. `project-management/tech-spec.md`, se existir.
+3. Alternativa quando não há PRD: arquivos de especificação em `./docs/` (ARCHITECTURE_TECHNIQUE*.md, CAHIER_DES_CHARGES*.md ou qualquer outro arquivo de spec disponível).
 
 ## MISSÃO
 
@@ -90,7 +89,7 @@ project-management/
 │   └── user-stories/
 │       └── US-XXX-nome.md
 └── sprints/
-    └── sprint-XXX-objetivo_sprint/
+    └── sprint-{N}-{slug}/
         ├── sprint-goal.md
         └── sprint-dependencies.md
 ```
@@ -161,6 +160,8 @@ Para cada Epic:
 - **E**stimável: Pode ser estimada
 - **S**ized: ≤ 8 pontos
 - **T**estável: Critérios verificáveis
+
+**Template**: partir de `templates/user-story.md` e preencher a seção `## Rastreabilidade`: `Implements:` lista os requisitos do PRD (`FR-xxx`) que a story entrega.
 
 **Os 3 Cs (OBRIGATÓRIO)**:
 - **Card**: Conciso, formato "Como... Eu quero... Para que..."
@@ -246,6 +247,9 @@ ENTÃO a mensagem "[mensagem exata]" é exibida
 - Template Twig: [Path]
 - Widget Flutter: [Nome]
 
+## Rastreabilidade
+- **Implements**: {FR-001, FR-003}
+
 ## Estimativa
 - **Story Points**: [1/2/3/5/8]
 - **MoSCoW**: [Must/Should/Could/Won't]
@@ -283,10 +287,10 @@ EPIC-001 → EPIC-002 → EPIC-004
 | US Origem | US Destino | Motivo |
 ````
 
-### ETAPA 8: Criar Sprints (sprint-XXX-objetivo/)
+### ETAPA 8: Criar Sprints (sprint-{N}-{slug}/)
 
-**Convenção de nomenclatura**: sprint-XXX-objetivo_sprint
-Exemplos: sprint-001-walking_skeleton, sprint-002-jwt_authentication
+**Convenção de nomenclatura**: sprint-{N}-{slug}
+Exemplos: sprint-1-walking_skeleton, sprint-2-jwt_authentication
 
 **sprint-goal.md**:
 ````markdown

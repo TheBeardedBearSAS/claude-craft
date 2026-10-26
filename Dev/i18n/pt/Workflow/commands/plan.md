@@ -203,7 +203,7 @@ Executar validacao do backlog:
 | `personas.md` | Definicoes de personas de usuario |
 | `backlog/epics/` | Definicoes de EPICs |
 | `backlog/user-stories/` | Arquivos de User Stories |
-| `sprints/sprint-001/` | Estrutura do primeiro sprint |
+| `sprints/sprint-1-{slug}/` | Estrutura do primeiro sprint |
 
 ## Opcao de Continuacao
 

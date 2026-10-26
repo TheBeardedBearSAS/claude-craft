@@ -203,7 +203,7 @@ Run backlog validation:
 | `personas.md` | User persona definitions |
 | `backlog/epics/` | EPIC definitions |
 | `backlog/user-stories/` | User Story files |
-| `sprints/sprint-001/` | First sprint structure |
+| `sprints/sprint-1-{slug}/` | First sprint structure |
 
 ## Continue Option
 

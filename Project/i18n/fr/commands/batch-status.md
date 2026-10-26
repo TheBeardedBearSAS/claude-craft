@@ -138,10 +138,11 @@ Points terminés : 18/21
 Actions :
 ──────────────────────────────────────────────────────
 Pour réessayer les stories échouées :
-  /project:queue-retry US-013
+  .bmad/batch-queue.yaml → US-013: status: pending
+  /project:run-queue
 
 Pour vider la file :
-  /project:queue-clear
+  .bmad/batch-queue.yaml → queue: []
 ═══════════════════════════════════════════════════════
 ```
 
@@ -181,12 +182,13 @@ Ou ajouter une story individuelle :
 
 ### Réessayer une story échouée
 ```
-/project:queue-retry US-013
+# .bmad/batch-queue.yaml → US-013: status: pending
+/project:run-queue
 ```
 
 ### Vider la file
 ```
-/project:queue-clear --force
+# .bmad/batch-queue.yaml → queue: []
 ```
 
 ### Reprendre depuis le checkpoint

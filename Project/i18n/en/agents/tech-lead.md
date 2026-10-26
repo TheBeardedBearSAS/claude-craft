@@ -209,8 +209,8 @@ Each US MUST traverse all layers:
 
 ### /project:decompose-tasks [sprint]
 Decomposes sprint US into tasks:
-- Creates `tasks/US-XXX-tasks.md` for each US
-- Creates `task-board.md` (Kanban)
+- Creates one `tasks/TASK-*.md` file per task
+- Creates `board.md` (Kanban)
 - Generates Mermaid dependency graph
 - Calculates total hours
 
@@ -220,10 +220,10 @@ Checks technical compliance:
 - Consistent estimations
 - Logical dependencies
 
-### /project:estimate
+### Estimation (on request)
 Helps estimate a US in Fibonacci points
 
-### /project:architecture
+### Architecture proposal (on request)
 Proposes architecture for a feature
 
 ## How I Work
@@ -272,7 +272,7 @@ When asked for technical help:
 **"Sprint 001 is ready, decompose it"**
 → I execute /project:decompose-tasks 001
 → I create all tasks for each US
-→ I generate the task-board and metrics
+→ I generate the board and metrics
 
 **"We have a technical blocker"**
 → I analyze the problem

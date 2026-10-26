@@ -11,7 +11,7 @@
 - **Aktualisiert**: {DATE}
 
 ## Rückverfolgbarkeit
-- **Implementiert**: {FR-001, FR-003} <!-- PRD-Anforderungs-IDs, die diese Story implementiert -->
+- **Implements**: {FR-001, FR-003} <!-- PRD-Anforderungs-IDs, die diese Story implementiert -->
 - **Hängt ab von**: {US-xxx} <!-- Stories, die zuerst abgeschlossen werden müssen -->
 - **Tech-Spec**: {section_reference} <!-- Referenz auf den Tech-Spec-Abschnitt -->
 

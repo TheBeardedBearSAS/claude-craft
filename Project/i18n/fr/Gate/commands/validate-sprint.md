@@ -122,7 +122,7 @@ Stories prêtes :
   📖 US-014 : Vérification email (3 pts)
 
 Commandes :
-  /sprint:start           Démarrer le sprint
+  /workflow:start           Démarrer le sprint
   /sprint:next-story     Prendre la première story
 ═══════════════════════════════════════════════════════
 ```

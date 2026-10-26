@@ -107,25 +107,25 @@ Golden Rule Check: 1 VIOLATION DETECTED
 
 ```bash
 # List all regression tests
-/qa:recette-regression --list
+/qa:regression --list
 
 # Show stability score
-/qa:recette-regression --stats
+/qa:regression --stats
 
 # Run regression check (detect Golden Rule violations)
-/qa:recette-regression --check
+/qa:regression --check
 
 # Filter by source story
-/qa:recette-regression --list --source=US-001
+/qa:regression --list --source=US-001
 
 # Filter by status
-/qa:recette-regression --list --status=active
+/qa:regression --list --status=active
 
 # Show historical trend
-/qa:recette-regression --stats --trend
+/qa:regression --stats --trend
 
 # Output as JSON
-/qa:recette-regression --list --format=json
+/qa:regression --list --format=json
 ```
 
 ## Output Structure
@@ -147,9 +147,9 @@ Golden Rule Check: 1 VIOLATION DETECTED
 | Command | Description |
 |---------|-------------|
 | `/qa:recette` | Execute acceptance tests |
-| `/qa:recette-fix` | Fix bugs from a recette session |
-| `/qa:recette-status` | Show session status |
-| `/qa:recette-report` | Generate report |
+| `/qa:fix` | Fix bugs from a recette session |
+| `/qa:status` | Show session status |
+| `/qa:report` | Generate report |
 
 ## Error Messages
 
@@ -157,7 +157,7 @@ Golden Rule Check: 1 VIOLATION DETECTED
 |-------|----------|
 | "Registry not found" | Run `/qa:recette` first to generate a registry |
 | "No regression tests" | No errors have been detected in previous runs |
-| "Golden Rule violation" | A bug has reappeared — run `/qa:recette-fix` to fix |
+| "Golden Rule violation" | A bug has reappeared — run `/qa:fix` to fix |
 | "History file missing" | Run at least 2 recette sessions for trend data |
 
 ## Best Practices

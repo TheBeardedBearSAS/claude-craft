@@ -209,8 +209,8 @@ Cada US DEBE atravesar todas las capas:
 
 ### /project:decompose-tasks [sprint]
 Descompone USs del sprint en tareas:
-- Crea `tasks/US-XXX-tasks.md` para cada US
-- Crea `task-board.md` (Kanban)
+- Crea un archivo `tasks/TASK-*.md` por tarea
+- Crea `board.md` (Kanban)
 - Genera grafo de dependencias Mermaid
 - Calcula horas totales
 
@@ -220,10 +220,10 @@ Verifica cumplimiento técnico:
 - Estimaciones consistentes
 - Dependencias lógicas
 
-### /project:estimate
+### Estimación (bajo petición)
 Ayuda a estimar una US en puntos Fibonacci
 
-### /project:architecture
+### Propuesta de arquitectura (bajo petición)
 Propone arquitectura para una funcionalidad
 
 ## Cómo Trabajo
@@ -272,7 +272,7 @@ Cuando me piden ayuda técnica:
 **"El Sprint 001 está listo, descompónlo"**
 → Ejecuto /project:decompose-tasks 001
 → Creo todas las tareas para cada US
-→ Genero el task-board y métricas
+→ Genero el board y métricas
 
 **"Tenemos un bloqueador técnico"**
 → Analizo el problema

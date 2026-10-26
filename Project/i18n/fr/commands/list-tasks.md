@@ -20,7 +20,7 @@ $ARGUMENTS (optionnel, format: [filtre] [valeur])
 ### Étape 1: Lire les Tasks
 
 1. Scanner les répertoires de tasks:
-   - `project-management/sprints/sprint-XXX/tasks/`
+   - `project-management/sprints/sprint-{N}-{slug}/tasks/`
    - `project-management/backlog/tasks/` (si existe)
 2. Lire chaque fichier TASK-XXX.md
 3. Extraire les métadonnées

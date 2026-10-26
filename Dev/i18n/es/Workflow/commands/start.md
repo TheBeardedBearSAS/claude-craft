@@ -141,9 +141,10 @@ Crear la carpeta del sprint:
 ```
 project-management/
    sprints/
-       sprint-{N}-{objetivo}/
+       sprint-{N}-{slug}/
            sprint-goal.md
-           sprint-backlog.md
+           board.md
+           tasks/
            daily-notes/
               {YYYY-MM-DD}.md
               ...

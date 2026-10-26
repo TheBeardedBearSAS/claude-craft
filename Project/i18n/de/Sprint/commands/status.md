@@ -155,7 +155,7 @@ Aktionen:
 ## Berichtsgenerierung
 
 Bericht wird auch gespeichert in:
-`project-management/sprints/sprint-XXX/status-YYYY-MM-DD.md`
+`project-management/sprints/sprint-{N}-{slug}/status-YYYY-MM-DD.md`
 
 ## Nächster Schritt
 

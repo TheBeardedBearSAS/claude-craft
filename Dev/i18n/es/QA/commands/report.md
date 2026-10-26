@@ -98,19 +98,19 @@ No se detectaron violaciones de la Regla de Oro.
 
 ```bash
 # Generar informe Markdown (defecto)
-/qa:recette-report --session=REC-20260130-143022
+/qa:report --session=REC-20260130-143022
 
 # Generar informe HTML con capturas
-/qa:recette-report --session=REC-20260130-143022 --format=html --include-screenshots
+/qa:report --session=REC-20260130-143022 --format=html --include-screenshots
 
 # Generar informe JSON para integracion CI
-/qa:recette-report --session=REC-20260130-143022 --format=json
+/qa:report --session=REC-20260130-143022 --format=json
 
 # Ruta de salida personalizada
-/qa:recette-report --session=REC-20260130-143022 --output=./reports/sprint-3/
+/qa:report --session=REC-20260130-143022 --output=./reports/sprint-3/
 
 # Comparar dos sesiones
-/qa:recette-report --session=REC-20260201-140000 --compare=REC-20260130-143022
+/qa:report --session=REC-20260201-140000 --compare=REC-20260130-143022
 ```
 
 ## Estructura de Salida
@@ -128,9 +128,9 @@ No se detectaron violaciones de la Regla de Oro.
 | Comando | Descripcion |
 |---------|-------------|
 | `/qa:recette` | Ejecutar pruebas de aceptacion |
-| `/qa:recette-fix` | Corregir bugs de una sesion |
-| `/qa:recette-status` | Mostrar estado de sesion |
-| `/qa:recette-regression` | Ver tests de regresion |
+| `/qa:fix` | Corregir bugs de una sesion |
+| `/qa:status` | Mostrar estado de sesion |
+| `/qa:regression` | Ver tests de regresion |
 
 ## Mensajes de Error
 

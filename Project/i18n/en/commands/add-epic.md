@@ -41,7 +41,7 @@ Ask the user (if not provided):
 
 ### Step 4: Create the file
 
-1. Use template `Scrum/templates/epic.md`
+1. Use template `templates/epic.md`
 2. Replace placeholders:
    - `{ID}`: Generated ID
    - `{NOM}`: EPIC name

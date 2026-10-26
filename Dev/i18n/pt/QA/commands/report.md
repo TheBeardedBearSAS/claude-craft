@@ -98,19 +98,19 @@ Nenhuma violacao da Regra de Ouro detectada.
 
 ```bash
 # Gerar relatorio Markdown (padrao)
-/qa:recette-report --session=REC-20260130-143022
+/qa:report --session=REC-20260130-143022
 
 # Gerar relatorio HTML com capturas
-/qa:recette-report --session=REC-20260130-143022 --format=html --include-screenshots
+/qa:report --session=REC-20260130-143022 --format=html --include-screenshots
 
 # Gerar relatorio JSON para integracao CI
-/qa:recette-report --session=REC-20260130-143022 --format=json
+/qa:report --session=REC-20260130-143022 --format=json
 
 # Caminho de saida personalizado
-/qa:recette-report --session=REC-20260130-143022 --output=./reports/sprint-3/
+/qa:report --session=REC-20260130-143022 --output=./reports/sprint-3/
 
 # Comparar duas sessoes
-/qa:recette-report --session=REC-20260201-140000 --compare=REC-20260130-143022
+/qa:report --session=REC-20260201-140000 --compare=REC-20260130-143022
 ```
 
 ## Estrutura de Saida
@@ -128,9 +128,9 @@ Nenhuma violacao da Regra de Ouro detectada.
 | Comando | Descricao |
 |---------|-----------|
 | `/qa:recette` | Executar testes de aceitacao |
-| `/qa:recette-fix` | Corrigir bugs de uma sessao |
-| `/qa:recette-status` | Mostrar status da sessao |
-| `/qa:recette-regression` | Ver testes de regressao |
+| `/qa:fix` | Corrigir bugs de uma sessao |
+| `/qa:status` | Mostrar status da sessao |
+| `/qa:regression` | Ver testes de regressao |
 
 ## Mensagens de Erro
 

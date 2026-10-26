@@ -20,7 +20,7 @@ $ARGUMENTS (optional, Format: [Filter] [Wert])
 ### Schritt 1: Aufgaben lesen
 
 1. Aufgabenverzeichnisse scannen:
-   - `project-management/sprints/sprint-XXX/tasks/`
+   - `project-management/sprints/sprint-{N}-{slug}/tasks/`
    - `project-management/backlog/tasks/` (falls vorhanden)
 2. Jede Datei TASK-XXX.md lesen
 3. Metadaten extrahieren

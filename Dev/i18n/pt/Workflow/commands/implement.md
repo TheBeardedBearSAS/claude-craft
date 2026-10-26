@@ -95,7 +95,7 @@ Para execução completa do sprint, este comando redireciona para o comando espe
 ║           INICIANDO DESENVOLVIMENTO DO SPRINT             ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Invocando: /sprint:dev sprint-001-walking-skeleton        ║
+║ Invocando: /sprint:dev sprint-1-walking-skeleton          ║
 ║                                                           ║
 ║ Funcionalidades do Modo de Desenvolvimento de Sprint:     ║
 ║ • Modo de planejamento obrigatório antes de cada tarefa   ║

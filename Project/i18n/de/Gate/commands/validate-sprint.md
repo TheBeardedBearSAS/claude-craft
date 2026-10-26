@@ -122,7 +122,7 @@ Bereite Stories:
   📖 US-014: E-Mail-Verifizierung (3 Pkt.)
 
 Befehle:
-  /sprint:start           Sprint starten
+  /workflow:start           Sprint starten
   /sprint:next-story     Erste Story uebernehmen
 ═══════════════════════════════════════════════════════
 ```

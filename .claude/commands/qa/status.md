@@ -96,25 +96,25 @@ Etat de Correction: completed (2/2 bugs corriges)
 
 ```bash
 # Lister toutes les sessions
-/qa:recette-status --all
+/qa:status --all
 
 # Afficher le statut detaille d'une session
-/qa:recette-status --session=REC-20260130-143022
+/qa:status --session=REC-20260130-143022
 
 # Filtrer les sessions en cours
-/qa:recette-status --all --status=running
+/qa:status --all --status=running
 
 # Filtrer par perimetre
-/qa:recette-status --all --scope=sprint
+/qa:status --all --scope=sprint
 
 # Suivi en direct d'une session
-/qa:recette-status --session=REC-20260130-143022 --watch
+/qa:status --session=REC-20260130-143022 --watch
 
 # Sortie en YAML
-/qa:recette-status --session=REC-20260130-143022 --format=yaml
+/qa:status --session=REC-20260130-143022 --format=yaml
 
 # Sortie en JSON (pour scripting)
-/qa:recette-status --all --format=json
+/qa:status --all --format=json
 ```
 
 ## Structure de Sortie
@@ -138,9 +138,9 @@ Etat de Correction: completed (2/2 bugs corriges)
 | Commande | Description |
 |----------|-------------|
 | `/qa:recette` | Executer les tests d'acceptance |
-| `/qa:recette-fix` | Corriger les bugs d'une session |
-| `/qa:recette-regression` | Voir les tests de regression |
-| `/qa:recette-report` | Generer un rapport |
+| `/qa:fix` | Corriger les bugs d'une session |
+| `/qa:regression` | Voir les tests de regression |
+| `/qa:report` | Generer un rapport |
 
 ## Messages d'Erreur
 

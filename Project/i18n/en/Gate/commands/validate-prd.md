@@ -11,7 +11,7 @@ The PRD must score at least 80% to pass.
 ## Arguments
 
 $ARGUMENTS (format: [prd-file])
-- **prd-file** (optional): Path to PRD file. Default: `docs/prd.md`
+- **prd-file** (optional): Path to PRD file. Default: `project-management/prd.md`
 
 ## Gate Criteria
 
@@ -32,7 +32,7 @@ $ARGUMENTS (format: [prd-file])
 
 ### Step 1: Locate PRD file
 
-1. Use provided path or default `docs/prd.md`
+1. Use provided path or default `project-management/prd.md`
 2. Verify file exists
 3. Load content for analysis
 
@@ -67,7 +67,7 @@ Show:
             PRD Quality Gate Validation
 ═══════════════════════════════════════════════════════
 
-File: docs/prd.md
+File: project-management/prd.md
 Threshold: 80%
 
 Validation Results:
@@ -102,7 +102,7 @@ Score: 90/100 (90%)
 ✅ PRD GATE PASSED
 
 Ready to proceed to Tech Spec phase.
-Next: /pm:handoff architect
+Next: /project:generate-tech-spec
 ═══════════════════════════════════════════════════════
 ```
 
@@ -113,7 +113,7 @@ Next: /pm:handoff architect
             PRD Quality Gate Validation
 ═══════════════════════════════════════════════════════
 
-File: docs/prd.md
+File: project-management/prd.md
 Threshold: 80%
 
 Validation Results:
@@ -166,7 +166,7 @@ Re-run after fixes: /gate:validate-prd
 
 This gate is checked:
 1. Manually via this command
-2. Before `/pm:handoff architect`
+2. Before `/project:generate-tech-spec`
 3. In the BMAD workflow transition
 
 Gate configuration: `.bmad/gates/prd-gate.yaml`

@@ -64,7 +64,7 @@ Den Sprint-Ordner durch Glob-Suche `project-management/sprints/sprint-{N}-*/` au
 
 1. `<N>` und Flags parsen. `N`, `00N`, Sprint-Slug und Sprint-Name ableiten.
 2. `project-management/sprints/sprint-{N}-*/` und `.bmad/sprint-status.yaml` auflösen.
-   **Abbruch**, falls weder das eine noch das andere existiert (nichts zu orchestrieren).
+   Existiert keines von beiden, ist der Sprint neu: Phase 1 legt beides an (kein Abbruch).
 3. Sicherstellen, dass der Working Tree sauber ist und `--base` aktuell ist. **Abbruch** bei schmutzigem Tree.
 4. Den Feature-Branch `feature/sprint-{N}-<slug>` von `--base` erstellen / auschecken
    (Regel 09: `main` immer deployfähig — nie direkt auf dem Basis-Branch arbeiten).
@@ -81,7 +81,7 @@ Einen isolierten Unter-Agenten starten:
 ### Phase 2 — Zerlegung (Unter-Agent)
 
 > „Lesen Sie `.claude/commands/project/decompose-tasks.md` und führen Sie es für Sprint **00N** aus.
-> Generieren Sie die Task-Dateien je US, `task-board.md` und den Abhängigkeitsgraphen.
+> Generieren Sie die `tasks/TASK-*.md`-Dateien, `board.md` und den Abhängigkeitsgraphen.
 > Geben Sie eine knappe Zusammenfassung und die erstellten Dateien zurück."
 
 ### Phase 3 — Gate-Validierung (Unter-Agent + Auto-Korrektur-Schleife)

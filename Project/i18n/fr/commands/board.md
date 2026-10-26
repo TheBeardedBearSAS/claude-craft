@@ -22,7 +22,7 @@ $ARGUMENTS (optionnel, format: [sprint N])
 
 ### Étape 2: Lire les données
 
-1. Lire le fichier `project-management/sprints/sprint-XXX/board.md`
+1. Lire le fichier `project-management/sprints/sprint-{N}-{slug}/board.md`
 2. Ou le régénérer depuis les fichiers de tasks
 
 ### Étape 3: Grouper par statut

@@ -11,7 +11,7 @@
 - **Mis à jour**: {DATE}
 
 ## Traçabilité
-- **Implémente**: {FR-001, FR-003} <!-- IDs des exigences PRD implémentées par cette story -->
+- **Implements**: {FR-001, FR-003} <!-- IDs des exigences PRD implémentées par cette story -->
 - **Dépend de**: {US-xxx} <!-- Stories devant être complétées avant -->
 - **Spec Technique**: {section_reference} <!-- Référence à la section de la spec technique -->
 

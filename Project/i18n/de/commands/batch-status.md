@@ -138,10 +138,11 @@ Abgeschlossene Punkte: 18/21
 Aktionen:
 ──────────────────────────────────────────────────────
 Um fehlgeschlagene Stories erneut zu versuchen:
-  /project:queue-retry US-013
+  .bmad/batch-queue.yaml → US-013: status: pending
+  /project:run-queue
 
 Um Warteschlange zu leeren:
-  /project:queue-clear
+  .bmad/batch-queue.yaml → queue: []
 ═══════════════════════════════════════════════════════
 ```
 
@@ -181,12 +182,13 @@ Oder einzelne Story hinzufuegen:
 
 ### Fehlgeschlagene Story erneut versuchen
 ```
-/project:queue-retry US-013
+# .bmad/batch-queue.yaml → US-013: status: pending
+/project:run-queue
 ```
 
 ### Warteschlange leeren
 ```
-/project:queue-clear --force
+# .bmad/batch-queue.yaml → queue: []
 ```
 
 ### Vom Checkpoint fortsetzen

@@ -66,10 +66,9 @@ Symfony UX/Turbo + Flutter → API Platform → PostgreSQL
 - API Platform es el punto central consumido por Web y Móvil
 
 ## DOCUMENTOS A ANALIZAR
-Buscar en `./docs/` archivos de especificación:
-- ARCHITECTURE_TECHNIQUE*.md
-- CAHIER_DES_CHARGES*.md
-- O cualquier otro archivo de especificación disponible
+1. `project-management/prd.md` (escrito por `/project:generate-prd`): fuente principal. Sus IDs de requisitos (`FR-xxx`) alimentan el campo `Implements:` de cada US.
+2. `project-management/tech-spec.md` si existe.
+3. Alternativa si no hay PRD: archivos de especificación en `./docs/` (ARCHITECTURE_TECHNIQUE*.md, CAHIER_DES_CHARGES*.md o cualquier otro archivo de especificación disponible).
 
 ## MISIÓN
 
@@ -90,7 +89,7 @@ project-management/
 │   └── user-stories/
 │       └── US-XXX-nombre.md
 └── sprints/
-    └── sprint-XXX-objetivo_sprint/
+    └── sprint-{N}-{slug}/
         ├── sprint-goal.md
         └── sprint-dependencies.md
 ```
@@ -161,6 +160,8 @@ Para cada Epic:
 - **E**stimable: Se puede estimar
 - **S**ized (Pequeña): ≤ 8 puntos
 - **T**esteable: Criterios verificables
+
+**Plantilla**: partir de `templates/user-story.md` y completar su sección `## Trazabilidad`: `Implements:` enumera los requisitos del PRD (`FR-xxx`) que la historia entrega.
 
 **Las 3 C (OBLIGATORIO)**:
 - **Card (Tarjeta)**: Concisa, formato "Como... Quiero... Para..."
@@ -246,6 +247,9 @@ ENTONCES se muestra el mensaje "[mensaje exacto]"
 - Template Twig: [Ruta]
 - Widget Flutter: [Nombre]
 
+## Trazabilidad
+- **Implements**: {FR-001, FR-003}
+
 ## Estimación
 - **Story Points**: [1/2/3/5/8]
 - **MoSCoW**: [Must/Should/Could/Won't]
@@ -283,10 +287,10 @@ EPIC-001 → EPIC-002 → EPIC-004
 | US Origen | US Destino | Razón |
 ````
 
-### PASO 8: Crear Sprints (sprint-XXX-objetivo/)
+### PASO 8: Crear Sprints (sprint-{N}-{slug}/)
 
-**Convención de nomenclatura**: sprint-XXX-objetivo_sprint
-Ejemplos: sprint-001-walking_skeleton, sprint-002-jwt_authentication
+**Convención de nomenclatura**: sprint-{N}-{slug}
+Ejemplos: sprint-1-walking_skeleton, sprint-2-jwt_authentication
 
 **sprint-goal.md**:
 ````markdown

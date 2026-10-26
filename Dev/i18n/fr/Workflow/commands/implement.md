@@ -96,7 +96,7 @@ Pour l'exécution complète du sprint, cette commande redirige vers la commande 
 ║           DÉMARRAGE DU DÉVELOPPEMENT SPRINT               ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Invocation : /sprint:dev sprint-001-walking-skeleton║
+║ Invocation : /sprint:dev sprint-1-walking-skeleton  ║
 ║                                                           ║
 ║ Fonctionnalités du mode développement sprint :            ║
 ║ • Mode plan obligatoire avant chaque tâche                ║

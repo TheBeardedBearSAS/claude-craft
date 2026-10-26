@@ -223,8 +223,8 @@ Sprint Status:
 🎉 Sprint goal achieved!
 
 Next Steps:
-  /sprint:retrospective    Run retrospective
-  /sprint:plan            Plan next sprint
+  /workflow:retro    Run retrospective
+  /workflow:start            Plan next sprint
 ═══════════════════════════════════════════════════════
 ```
 

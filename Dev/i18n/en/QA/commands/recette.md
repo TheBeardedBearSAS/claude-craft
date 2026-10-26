@@ -214,12 +214,11 @@ entries:
 
 | Command | Description |
 |---------|-------------|
-| `/qa:recette-fix` | Fix bugs from a recette session |
-| `/qa:recette-status` | Show session status |
-| `/qa:recette-regression` | View regression tests |
-| `/qa:recette-report` | Generate report |
-| `/qa:validate` | Validate story AC |
-| `/qa:automate` | Create automated tests |
+| `/qa:fix` | Fix bugs from a recette session |
+| `/qa:status` | Show session status |
+| `/qa:regression` | View regression tests |
+| `/qa:report` | Generate report |
+| `/gate:validate-story` | Validate story AC |
 
 ## Chrome Capabilities
 

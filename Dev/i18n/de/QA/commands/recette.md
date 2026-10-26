@@ -214,12 +214,11 @@ entries:
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/qa:recette-fix` | Bugs aus einer Recette-Sitzung beheben |
-| `/qa:recette-status` | Sitzungsstatus anzeigen |
-| `/qa:recette-regression` | Regressionstests anzeigen |
-| `/qa:recette-report` | Bericht generieren |
-| `/qa:validate` | Story AC validieren |
-| `/qa:automate` | Automatisierte Tests erstellen |
+| `/qa:fix` | Bugs aus einer Recette-Sitzung beheben |
+| `/qa:status` | Sitzungsstatus anzeigen |
+| `/qa:regression` | Regressionstests anzeigen |
+| `/qa:report` | Bericht generieren |
+| `/gate:validate-story` | Story AC validieren |
 
 ## Chrome-Faehigkeiten
 

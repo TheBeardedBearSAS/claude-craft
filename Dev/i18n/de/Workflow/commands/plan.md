@@ -204,7 +204,7 @@ Backlog-Validierung ausführen:
 | `personas.md` | Benutzer-Persona-Definitionen |
 | `backlog/epics/` | EPIC-Definitionen |
 | `backlog/user-stories/` | User-Story-Dateien |
-| `sprints/sprint-001/` | Erste Sprint-Struktur |
+| `sprints/sprint-1-{slug}/` | Erste Sprint-Struktur |
 
 ## Fortsetzen-Option
 

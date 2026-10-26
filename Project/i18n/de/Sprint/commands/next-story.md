@@ -154,4 +154,4 @@ Nach Uebernahme einer Story:
 3. 🔵 REFACTOR: Bereinigen und Tests gruen halten
 4. Fuer jede Aufgabe wiederholen
 
-`/sprint:tdd-cycle` verwenden, um Phasenuebergaenge zu verfolgen.
+`tdd_phase` (`.bmad/sprint-status.yaml`) verwenden, um Phasenuebergaenge zu verfolgen.

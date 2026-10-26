@@ -61,7 +61,7 @@ Aus $ARGUMENTS extrahieren:
 
 ### Schritt 5: Datei erstellen
 
-1. Template `Scrum/templates/task.md` verwenden
+1. Template `templates/task.md` verwenden
 2. Platzhalter ersetzen:
    - `{ID}`: Generierte ID
    - `{DESCRIPTION}`: Kurzbeschreibung
@@ -72,7 +72,7 @@ Aus $ARGUMENTS extrahieren:
    - `{DESCRIPTION_DETAILLEE}`: Detaillierte Beschreibung
 
 3. Pfad bestimmen:
-   - Falls US im Sprint: `project-management/sprints/sprint-XXX/tasks/TASK-{ID}.md`
+   - Falls US im Sprint: `project-management/sprints/sprint-{N}-{slug}/tasks/TASK-{ID}.md`
    - Sonst: `project-management/backlog/tasks/TASK-{ID}.md`
 
 ### Schritt 6: User Story aktualisieren
@@ -85,7 +85,7 @@ Aus $ARGUMENTS extrahieren:
 ### Schritt 7: Board aktualisieren (falls Sprint)
 
 Falls US in einem Sprint ist:
-1. `project-management/sprints/sprint-XXX/board.md` lesen
+1. `project-management/sprints/sprint-{N}-{slug}/board.md` lesen
 2. Aufgabe zu "🔴 To Do" hinzufügen
 3. Metriken aktualisieren
 4. Speichern

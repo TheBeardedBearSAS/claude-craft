@@ -144,7 +144,9 @@ Com base no track, mostrar o workflow:
 | - /project:generate-tech-spec - Design tecnico                  |
 |                                                                 |
 | Fase 3 - Implementacao:                                         |
-| - /sprint:dev      - Desenvolvimento TDD/BDD            |
+| - /workflow:start N       - Preparação do sprint                |
+| - /workflow:implement     - Desenvolvimento TDD/BDD             |
+| - /workflow:auto-sprint N - Sprint de ponta a ponta             |
 |                                                                 |
 +================================================================+
 ```
@@ -173,7 +175,9 @@ Com base no track, mostrar o workflow:
 | - /common:architecture-decision - ADRs                          |
 |                                                                 |
 | Fase 4 - Implementacao:                                         |
-| - /sprint:dev      - Desenvolvimento sprint a sprint    |
+| - /workflow:start N       - Preparação do sprint                |
+| - /workflow:implement     - Desenvolvimento TDD/BDD             |
+| - /workflow:auto-sprint N - Sprint de ponta a ponta             |
 |                                                                 |
 +================================================================+
 ```
@@ -211,6 +215,26 @@ next_action: "Gerar ou atualizar PRD"
 next_command: "/project:generate-prd"
 ```
 
+Criar o esqueleto de status BMAD (fonte única de verdade para o status das stories, lido por `/gate:*`, `/sprint:*`, `/workflow:auto-sprint` e pelo Kanban). Ignorar se `.bmad/sprint-status.yaml` já existir; `/workflow:start` preenche depois `metadata` e `stories`:
+
+```yaml
+# .bmad/sprint-status.yaml
+version: "1.0"
+metadata:
+  sprint_id: "sprint-0"
+  name: "Não iniciado"
+  start_date: ""
+  end_date: ""
+  goal: ""
+stories: {}
+routing:
+  auto_transitions:
+    enabled: true
+    run_on_session_start: false
+    run_on_task_complete: true
+    rules: []
+```
+
 ### Etapa 6: Indicar Proxima Acao
 
 ```
@@ -219,6 +243,7 @@ next_command: "/project:generate-prd"
 +================================================================+
 | Workflow inicializado: track STANDARD                           |
 | Arquivo de status: project-management/workflow-status.yaml      |
+| Status do sprint: .bmad/sprint-status.yaml                      |
 |                                                                 |
 | ------------------------------------------------------------- |
 | PROXIMO PASSO: Fase de Planejamento                             |
@@ -254,4 +279,5 @@ next_command: "/project:generate-prd"
 - `/workflow:plan` - Iniciar fase de planejamento
 - `/workflow:design` - Iniciar fase de design
 - `/workflow:implement` - Iniciar fase de implementacao
+- `/workflow:auto-sprint` - Executar um sprint inteiro de ponta a ponta (início → merge)
 - `/workflow:analyze` - Iniciar fase de analise (somente Enterprise)

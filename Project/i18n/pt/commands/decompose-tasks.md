@@ -41,14 +41,14 @@ Ler arquivos do sprint `project-management/sprints/sprint-$ARGUMENTS-*/`:
 ### ETAPA 2: Criar estrutura de tarefas
 
 ```
-project-management/sprints/sprint-$ARGUMENTS-[name]/
+project-management/sprints/sprint-$ARGUMENTS-{slug}/
 ├── sprint-goal.md
 ├── sprint-dependencies.md
-├── tasks/
-│   ├── README.md                    # Visão geral das tarefas
-│   ├── US-XXX-tasks.md              # Tarefas por US
-│   └── technical-tasks.md           # Tarefas transversais
-└── task-board.md                    # Quadro Kanban
+├── board.md                         # Quadro Kanban (arquivo de board único)
+└── tasks/
+    ├── README.md                    # Visão geral: tarefas agrupadas por US
+    ├── TASK-001.md                  # Um arquivo por tarefa (templates/task.md)
+    └── ...
 ```
 
 ### ETAPA 3: Regras de decomposição
@@ -82,7 +82,7 @@ project-management/sprints/sprint-$ARGUMENTS-[name]/
 
 ### ETAPA 4: Template de decomposição de US
 
-Para cada US, criar `tasks/US-XXX-tasks.md`:
+Para cada US, adicionar uma seção em `tasks/README.md` usando o template abaixo e criar um arquivo `tasks/TASK-{ID}.md` por linha de tarefa a partir de `templates/task.md` (os IDs continuam após o último `TASK-*` existente, como faz `/project:add-task`):
 
 ````markdown
 # Tarefas - US-XXX: [Título]
@@ -91,7 +91,7 @@ Para cada US, criar `tasks/US-XXX-tasks.md`:
 - **Epic**: EPIC-XXX
 - **Persona**: P-XXX - [Nome]
 - **Story Points**: [X]
-- **Sprint**: sprint-$ARGUMENTS-[nome]
+- **Sprint**: sprint-$ARGUMENTS-{slug}
 
 ## Resumo da US
 **Como** [persona]
@@ -102,23 +102,23 @@ Para cada US, criar `tasks/US-XXX-tasks.md`:
 
 | ID | Tipo | Tarefa | Estimativa | Depende de | Status |
 |----|------|--------|------------|-----------|--------|
-| T-XXX-01 | [DB] | Criar entidade [Nome] | 2h | - | 🔲 |
-| T-XXX-02 | [DB] | Migration | 1h | T-XXX-01 | 🔲 |
-| T-XXX-03 | [BE] | API Platform resource | 3h | T-XXX-01 | 🔲 |
-| T-XXX-04 | [BE] | Serviço de negócio | 4h | T-XXX-03 | 🔲 |
-| T-XXX-05 | [FE-WEB] | Symfony controller | 2h | T-XXX-03 | 🔲 |
-| T-XXX-06 | [FE-WEB] | Templates Twig | 3h | T-XXX-05 | 🔲 |
-| T-XXX-07 | [FE-WEB] | Stimulus controller | 2h | T-XXX-06 | 🔲 |
-| T-XXX-08 | [FE-MOB] | Modelo Dart | 1h | T-XXX-03 | 🔲 |
-| T-XXX-09 | [FE-MOB] | Flutter repository | 2h | T-XXX-08 | 🔲 |
-| T-XXX-10 | [FE-MOB] | Bloc/Provider | 3h | T-XXX-09 | 🔲 |
-| T-XXX-11 | [FE-MOB] | Flutter screen | 4h | T-XXX-10 | 🔲 |
-| T-XXX-12 | [TEST] | Testes unitários backend | 2h | T-XXX-04 | 🔲 |
-| T-XXX-13 | [TEST] | Testes API | 2h | T-XXX-03 | 🔲 |
-| T-XXX-14 | [TEST] | Widget tests | 2h | T-XXX-11 | 🔲 |
-| T-XXX-15 | [TEST] | Testes E2E | 3h | T-XXX-07, T-XXX-11 | 🔲 |
-| T-XXX-16 | [DOC] | Documentação | 1h | T-XXX-15 | 🔲 |
-| T-XXX-17 | [REV] | Code Review | 2h | T-XXX-16 | 🔲 |
+| TASK-001 | [DB] | Criar entidade [Nome] | 2h | - | 🔲 |
+| TASK-002 | [DB] | Migration | 1h | TASK-001 | 🔲 |
+| TASK-003 | [BE] | API Platform resource | 3h | TASK-001 | 🔲 |
+| TASK-004 | [BE] | Serviço de negócio | 4h | TASK-003 | 🔲 |
+| TASK-005 | [FE-WEB] | Symfony controller | 2h | TASK-003 | 🔲 |
+| TASK-006 | [FE-WEB] | Templates Twig | 3h | TASK-005 | 🔲 |
+| TASK-007 | [FE-WEB] | Stimulus controller | 2h | TASK-006 | 🔲 |
+| TASK-008 | [FE-MOB] | Modelo Dart | 1h | TASK-003 | 🔲 |
+| TASK-009 | [FE-MOB] | Flutter repository | 2h | TASK-008 | 🔲 |
+| TASK-010 | [FE-MOB] | Bloc/Provider | 3h | TASK-009 | 🔲 |
+| TASK-011 | [FE-MOB] | Flutter screen | 4h | TASK-010 | 🔲 |
+| TASK-012 | [TEST] | Testes unitários backend | 2h | TASK-004 | 🔲 |
+| TASK-013 | [TEST] | Testes API | 2h | TASK-003 | 🔲 |
+| TASK-014 | [TEST] | Widget tests | 2h | TASK-011 | 🔲 |
+| TASK-015 | [TEST] | Testes E2E | 3h | TASK-007, TASK-011 | 🔲 |
+| TASK-016 | [DOC] | Documentação | 1h | TASK-015 | 🔲 |
+| TASK-017 | [REV] | Code Review | 2h | TASK-016 | 🔲 |
 
 **Total estimado**: XXh
 
@@ -128,7 +128,7 @@ Para cada US, criar `tasks/US-XXX-tasks.md`:
 
 ### Camada Database [DB]
 
-#### T-XXX-01: Criar entidade [Nome] com Doctrine
+#### TASK-001: Criar entidade [Nome] com Doctrine
 - **Tipo**: [DB]
 - **Estimativa**: 2h
 - **Depende de**: -
@@ -153,10 +153,10 @@ php bin/console make:entity [Nome]
 
 ---
 
-#### T-XXX-02: Migration para [Nome]
+#### TASK-002: Migration para [Nome]
 - **Tipo**: [DB]
 - **Estimativa**: 1h
-- **Depende de**: T-XXX-01
+- **Depende de**: TASK-001
 
 **Arquivos**:
 - `migrations/VersionXXXX.php`
@@ -176,10 +176,10 @@ php bin/console doctrine:migrations:migrate
 
 ### Camada API [BE]
 
-#### T-XXX-03: API Platform resource [Nome]
+#### TASK-003: API Platform resource [Nome]
 - **Tipo**: [BE]
 - **Estimativa**: 3h
-- **Depende de**: T-XXX-01
+- **Depende de**: TASK-001
 
 **Arquivos**:
 - `src/Entity/[Nome].php` (atributos ApiResource)
@@ -210,10 +210,10 @@ php bin/console doctrine:migrations:migrate
 
 ---
 
-#### T-XXX-04: [Nome]Service serviço de negócio
+#### TASK-004: [Nome]Service serviço de negócio
 - **Tipo**: [BE]
 - **Estimativa**: 4h
-- **Depende de**: T-XXX-03
+- **Depende de**: TASK-003
 
 **Arquivos**:
 - `src/Service/[Nome]Service.php`
@@ -228,10 +228,10 @@ php bin/console doctrine:migrations:migrate
 
 ### Camada Frontend Web [FE-WEB]
 
-#### T-XXX-05: Symfony [Nome] controller
+#### TASK-005: Symfony [Nome] controller
 - **Tipo**: [FE-WEB]
 - **Estimativa**: 2h
-- **Depende de**: T-XXX-03
+- **Depende de**: TASK-003
 
 **Arquivos**:
 - `src/Controller/[Nome]Controller.php`
@@ -251,10 +251,10 @@ php bin/console doctrine:migrations:migrate
 
 ---
 
-#### T-XXX-06: Templates Twig [Nome]
+#### TASK-006: Templates Twig [Nome]
 - **Tipo**: [FE-WEB]
 - **Estimativa**: 3h
-- **Depende de**: T-XXX-05
+- **Depende de**: TASK-005
 
 **Arquivos**:
 - `templates/[nome]/index.html.twig`
@@ -270,10 +270,10 @@ php bin/console doctrine:migrations:migrate
 
 ---
 
-#### T-XXX-07: Stimulus controller
+#### TASK-007: Stimulus controller
 - **Tipo**: [FE-WEB]
 - **Estimativa**: 2h
-- **Depende de**: T-XXX-06
+- **Depende de**: TASK-006
 
 **Arquivos**:
 - `assets/controllers/[nome]_controller.js`
@@ -286,10 +286,10 @@ php bin/console doctrine:migrations:migrate
 
 ### Camada Frontend Mobile [FE-MOB]
 
-#### T-XXX-08: Modelo Dart [Nome]
+#### TASK-008: Modelo Dart [Nome]
 - **Tipo**: [FE-MOB]
 - **Estimativa**: 1h
-- **Depende de**: T-XXX-03
+- **Depende de**: TASK-003
 
 **Arquivos**:
 - `lib/models/[nome].dart`
@@ -310,10 +310,10 @@ class [Nome] {
 
 ---
 
-#### T-XXX-09: Flutter [Nome] repository
+#### TASK-009: Flutter [Nome] repository
 - **Tipo**: [FE-MOB]
 - **Estimativa**: 2h
-- **Depende de**: T-XXX-08
+- **Depende de**: TASK-008
 
 **Arquivos**:
 - `lib/repositories/[nome]_repository.dart`
@@ -325,10 +325,10 @@ class [Nome] {
 
 ---
 
-#### T-XXX-10: [Nome] Provider/Bloc
+#### TASK-010: [Nome] Provider/Bloc
 - **Tipo**: [FE-MOB]
 - **Estimativa**: 3h
-- **Depende de**: T-XXX-09
+- **Depende de**: TASK-009
 
 **Arquivos**:
 - `lib/providers/[nome]_provider.dart`
@@ -339,10 +339,10 @@ class [Nome] {
 
 ---
 
-#### T-XXX-11: Flutter [Nome] screen
+#### TASK-011: Flutter [Nome] screen
 - **Tipo**: [FE-MOB]
 - **Estimativa**: 4h
-- **Depende de**: T-XXX-10
+- **Depende de**: TASK-010
 
 **Arquivos**:
 - `lib/screens/[nome]/[nome]_list_screen.dart`
@@ -360,10 +360,10 @@ class [Nome] {
 
 ### Camada Tests [TEST]
 
-#### T-XXX-12: Testes unitários backend
+#### TASK-012: Testes unitários backend
 - **Tipo**: [TEST]
 - **Estimativa**: 2h
-- **Depende de**: T-XXX-04
+- **Depende de**: TASK-004
 
 **Arquivos**:
 - `tests/Unit/Service/[Nome]ServiceTest.php`
@@ -374,10 +374,10 @@ class [Nome] {
 
 ---
 
-#### T-XXX-13: Testes API
+#### TASK-013: Testes API
 - **Tipo**: [TEST]
 - **Estimativa**: 2h
-- **Depende de**: T-XXX-03
+- **Depende de**: TASK-003
 
 **Arquivos**:
 - `tests/Functional/Api/[Nome]Test.php`
@@ -392,20 +392,20 @@ class [Nome] {
 
 ---
 
-#### T-XXX-14: Flutter widget tests
+#### TASK-014: Flutter widget tests
 - **Tipo**: [TEST]
 - **Estimativa**: 2h
-- **Depende de**: T-XXX-11
+- **Depende de**: TASK-011
 
 **Arquivos**:
 - `test/widgets/[nome]_card_test.dart`
 
 ---
 
-#### T-XXX-15: Testes E2E
+#### TASK-015: Testes E2E
 - **Tipo**: [TEST]
 - **Estimativa**: 3h
-- **Depende de**: T-XXX-07, T-XXX-11
+- **Depende de**: TASK-007, TASK-011
 
 **Arquivos**:
 - `tests/E2E/[Nome]FlowTest.php`
@@ -419,10 +419,10 @@ class [Nome] {
 
 ### Documentação & Review
 
-#### T-XXX-16: Documentação
+#### TASK-016: Documentação
 - **Tipo**: [DOC]
 - **Estimativa**: 1h
-- **Depende de**: T-XXX-15
+- **Depende de**: TASK-015
 
 **Critérios**:
 - [ ] PHPDoc/DartDoc
@@ -430,10 +430,10 @@ class [Nome] {
 
 ---
 
-#### T-XXX-17: Code Review
+#### TASK-017: Code Review
 - **Tipo**: [REV]
 - **Estimativa**: 2h
-- **Depende de**: T-XXX-16
+- **Depende de**: TASK-016
 
 **Checklist**:
 - [ ] Código legível
@@ -447,23 +447,23 @@ class [Nome] {
 
 ```mermaid
 graph TD
-    T01[T-XXX-01: Entity] --> T02[T-XXX-02: Migration]
-    T01 --> T03[T-XXX-03: API Resource]
-    T03 --> T04[T-XXX-04: Service]
-    T03 --> T05[T-XXX-05: Controller]
-    T05 --> T06[T-XXX-06: Templates]
-    T06 --> T07[T-XXX-07: Stimulus]
-    T03 --> T08[T-XXX-08: Model Dart]
-    T08 --> T09[T-XXX-09: Repository]
-    T09 --> T10[T-XXX-10: Bloc]
-    T10 --> T11[T-XXX-11: Screen]
-    T04 --> T12[T-XXX-12: Unit Tests]
-    T03 --> T13[T-XXX-13: API Tests]
-    T11 --> T14[T-XXX-14: Widget Tests]
-    T07 --> T15[T-XXX-15: E2E Tests]
+    T01[TASK-001: Entity] --> T02[TASK-002: Migration]
+    T01 --> T03[TASK-003: API Resource]
+    T03 --> T04[TASK-004: Service]
+    T03 --> T05[TASK-005: Controller]
+    T05 --> T06[TASK-006: Templates]
+    T06 --> T07[TASK-007: Stimulus]
+    T03 --> T08[TASK-008: Model Dart]
+    T08 --> T09[TASK-009: Repository]
+    T09 --> T10[TASK-010: Bloc]
+    T10 --> T11[TASK-011: Screen]
+    T04 --> T12[TASK-012: Unit Tests]
+    T03 --> T13[TASK-013: API Tests]
+    T11 --> T14[TASK-014: Widget Tests]
+    T07 --> T15[TASK-015: E2E Tests]
     T11 --> T15
-    T15 --> T16[T-XXX-16: Doc]
-    T16 --> T17[T-XXX-17: Review]
+    T15 --> T16[TASK-016: Doc]
+    T16 --> T17[TASK-017: Review]
 ```
 
 ## Resumo
@@ -482,7 +482,7 @@ graph TD
 
 ### ETAPA 5: Criar Task Board
 
-Criar `task-board.md`:
+Criar `board.md` (template `templates/board.md`):
 
 ```markdown
 # Task Board - Sprint $ARGUMENTS
@@ -544,42 +544,41 @@ Criar `tasks/README.md`:
 | [TEST] | X | Xh | X% |
 
 ## Arquivos
-- [US-XXX - Título](./US-XXX-tasks.md)
-- [Tarefas técnicas](./technical-tasks.md)
+- [TASK-001 - Título](./TASK-001.md)
 
 ## Convenções
-- **ID**: T-[US]-[Número] (ex: T-001-05)
+- **ID**: TASK-[NNN] (ex: TASK-005); a US pai está nos metadados da tarefa
 - **Tamanho**: 0.5h - 8h máx
 - **Status**: 🔲 🔄 👀 ✅ 🚫
 ```
 
 ### ETAPA 7: Tarefas técnicas transversais
 
-Criar `tasks/technical-tasks.md`:
+Adicionar uma seção "Tarefas técnicas transversais" em `tasks/README.md` e criar um `tasks/TASK-{ID}.md` por tarefa (US: nenhuma):
 
 ```markdown
 # Tarefas Técnicas Transversais - Sprint $ARGUMENTS
 
 ## Infraestrutura
 
-### T-TECH-01: Configuração de ambiente
+### TASK-018: Configuração de ambiente
 - **Tipo**: [OPS]
 - **Estimativa**: 2h
 
-### T-TECH-02: Atualização de dependências
+### TASK-019: Atualização de dependências
 - **Tipo**: [OPS]
 - **Estimativa**: 1h
 
 ## Refatoração
 
-### T-TECH-03: [Refatoração identificada]
+### TASK-020: [Refatoração identificada]
 - **Tipo**: [BE]
 - **Estimativa**: Xh
 - **Motivo**: Dívida técnica
 
 ## CI/CD
 
-### T-TECH-04: Pipeline CI
+### TASK-021: Pipeline CI
 - **Tipo**: [OPS]
 - **Estimativa**: 2h
 ```

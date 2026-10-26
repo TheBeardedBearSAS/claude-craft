@@ -61,7 +61,7 @@ Extract from $ARGUMENTS:
 
 ### Step 5: Create the file
 
-1. Use template `Scrum/templates/task.md`
+1. Use template `templates/task.md`
 2. Replace placeholders:
    - `{ID}`: Generated ID
    - `{DESCRIPTION}`: Short description
@@ -72,7 +72,7 @@ Extract from $ARGUMENTS:
    - `{DESCRIPTION_DETAILLEE}`: Detailed description
 
 3. Determine path:
-   - If US in sprint: `project-management/sprints/sprint-XXX/tasks/TASK-{ID}.md`
+   - If US in sprint: `project-management/sprints/sprint-{N}-{slug}/tasks/TASK-{ID}.md`
    - Otherwise: `project-management/backlog/tasks/TASK-{ID}.md`
 
 ### Step 6: Update User Story
@@ -85,7 +85,7 @@ Extract from $ARGUMENTS:
 ### Step 7: Update board (if sprint)
 
 If US is in a sprint:
-1. Read `project-management/sprints/sprint-XXX/board.md`
+1. Read `project-management/sprints/sprint-{N}-{slug}/board.md`
 2. Add task to "🔴 To Do"
 3. Update metrics
 4. Save

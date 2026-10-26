@@ -64,7 +64,7 @@ Resolve the sprint folder by globbing `project-management/sprints/sprint-{N}-*/`
 
 1. Parse `<N>` and flags. Derive `N`, `00N`, sprint slug, and sprint name.
 2. Resolve `project-management/sprints/sprint-{N}-*/` and `.bmad/sprint-status.yaml`.
-   **Abort** if neither exists (nothing to orchestrate).
+   If neither exists, the sprint is new: Phase 1 creates both (no abort).
 3. Verify the working tree is clean and `--base` is up to date. **Abort** if dirty.
 4. Create / checkout the feature branch `feature/sprint-{N}-<slug>` from `--base`
    (rule 09: `main` always deployable — never work directly on the base branch).
@@ -81,7 +81,7 @@ Spawn one isolated sub-agent:
 ### Phase 2 — Decompose (sub-agent)
 
 > "Read `.claude/commands/project/decompose-tasks.md` and execute it for sprint **00N**.
-> Generate the per-US task files, `task-board.md`, and the dependency graph.
+> Generate the `tasks/TASK-*.md` files, `board.md`, and the dependency graph.
 > Return a terse summary and the files created."
 
 ### Phase 3 — Validate gate (sub-agent + auto-fix loop)

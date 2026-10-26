@@ -64,7 +64,7 @@ Résoudre le dossier du sprint via glob `project-management/sprints/sprint-{N}-*
 
 1. Parser `<N>` et les drapeaux. Dériver `N`, `00N`, le slug et le nom du sprint.
 2. Résoudre `project-management/sprints/sprint-{N}-*/` et `.bmad/sprint-status.yaml`.
-   **Abandonner** si aucun des deux n'existe (rien à orchestrer).
+   Si aucun des deux n'existe, le sprint est nouveau : la Phase 1 crée les deux (pas d'abandon).
 3. Vérifier que l'arbre de travail est propre et que `--base` est à jour. **Abandonner** si sale.
 4. Créer / basculer sur la branche feature `feature/sprint-{N}-<slug>` depuis `--base`
    (règle 09 : `main` toujours déployable — ne jamais travailler directement sur la branche de base).
@@ -81,7 +81,7 @@ Instancier un sous-agent isolé :
 ### Phase 2 — Décomposition (sous-agent)
 
 > « Lis `.claude/commands/project/decompose-tasks.md` et exécute-le pour le sprint **00N**.
-> Génère les fichiers de tâches par US, `task-board.md`, et le graphe de dépendances.
+> Génère les fichiers `tasks/TASK-*.md`, `board.md`, et le graphe de dépendances.
 > Retourne un résumé concis et les fichiers créés. »
 
 ### Phase 3 — Validation du gate (sous-agent + boucle de correction automatique)

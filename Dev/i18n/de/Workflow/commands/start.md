@@ -141,9 +141,10 @@ Sprint-Ordner erstellen:
 ```
 project-management/
    sprints/
-       sprint-{N}-{ziel}/
+       sprint-{N}-{slug}/
            sprint-goal.md
-           sprint-backlog.md
+           board.md
+           tasks/
            daily-notes/
               {YYYY-MM-DD}.md
               ...

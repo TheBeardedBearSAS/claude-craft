@@ -95,7 +95,7 @@ Für die vollständige Sprint-Ausführung leitet dieser Befehl zum spezialisiert
 ║         SPRINT-ENTWICKLUNG WIRD GESTARTET                 ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                           ║
-║ Aufrufen: /sprint:dev sprint-001-walking-skeleton ║
+║ Aufrufen: /sprint:dev sprint-1-walking-skeleton   ║
 ║                                                           ║
 ║ Sprint-Entwicklungsmodus-Funktionen:                      ║
 ║ • Obligatorischer Plan-Modus vor jeder Aufgabe            ║

@@ -117,7 +117,7 @@ Befehle:
 ### PRD-Validierung
 
 ```
-Datei: docs/prd.md
+Datei: project-management/prd.md
 Schwelle: 80%
 Kriterien:
   ✅ Problemstellung (15%)
@@ -133,7 +133,7 @@ Kriterien:
 ### Tech-Spec-Validierung
 
 ```
-Datei: docs/tech-spec.md
+Datei: project-management/tech-spec.md
 Schwelle: 90%
 Kriterien:
   ✅ Architekturübersicht (12%)

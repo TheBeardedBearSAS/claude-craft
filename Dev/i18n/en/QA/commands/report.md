@@ -157,19 +157,19 @@ No Golden Rule violations detected.
 
 ```bash
 # Generate Markdown report (default)
-/qa:recette-report --session=REC-20260130-143022
+/qa:report --session=REC-20260130-143022
 
 # Generate HTML report with screenshots
-/qa:recette-report --session=REC-20260130-143022 --format=html --include-screenshots
+/qa:report --session=REC-20260130-143022 --format=html --include-screenshots
 
 # Generate JSON report for CI integration
-/qa:recette-report --session=REC-20260130-143022 --format=json
+/qa:report --session=REC-20260130-143022 --format=json
 
 # Custom output path
-/qa:recette-report --session=REC-20260130-143022 --output=./reports/sprint-3/
+/qa:report --session=REC-20260130-143022 --output=./reports/sprint-3/
 
 # Compare two sessions
-/qa:recette-report --session=REC-20260201-140000 --compare=REC-20260130-143022
+/qa:report --session=REC-20260201-140000 --compare=REC-20260130-143022
 ```
 
 ## Output Structure
@@ -187,9 +187,9 @@ No Golden Rule violations detected.
 | Command | Description |
 |---------|-------------|
 | `/qa:recette` | Execute acceptance tests |
-| `/qa:recette-fix` | Fix bugs from a recette session |
-| `/qa:recette-status` | Show session status |
-| `/qa:recette-regression` | View regression test registry |
+| `/qa:fix` | Fix bugs from a recette session |
+| `/qa:status` | Show session status |
+| `/qa:regression` | View regression test registry |
 
 ## Error Messages
 
