@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.23.3] - 2026-10-26
+
 ### Security
 
 - **30 alertes Dependabot résolues (dépendances de dev uniquement)** : `dompurify` 3.4.17 (GHSA-cg2g-xh64-v4q7, *critical*), `devalue` 5.9.4, `vite` 8.3.5, `source-map-js` 1.2.2, `fast-uri` 3.1.9, `brace-expansion` 5.0.12, `@humanfs/node` 0.16.8 ; `vitest` et `@vitest/coverage-v8` 4.1.11 → 4.1.12 (`@vitest/mocker`, GHSA-qxg6-89mg-rqv8 / GHSA-xp26-3454-mjgp) ; website : `vite` 6.4.5. `npm audit` à 0 à la racine et dans `website/`.
