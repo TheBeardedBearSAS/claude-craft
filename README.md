@@ -28,6 +28,13 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces (234 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v8.23.2
+
+**Correctif de sécurité (2026-10-26, v8.23.2) :**
+
+- **`zod` 4.6.7** : corrige GHSA-mrhx-c7xc-m3w5 (*high*, épuisement mémoire à la validation).
+- **Précédence modèle des sous-agents** bornée à Claude Code 2.1.251+ dans la règle 12 (5 langues) et la FAQ, avec un garde-fou CI (`claimDenylist`) contre le retour d'affirmations périmées sur les modèles. Détails : [CHANGELOG](CHANGELOG.md#8232---2026-10-26).
+
 ## What's New in v8.23.1
 
 **Correctifs d'installation, Kanban et workflow (2026-10-22, v8.23.1) :**
