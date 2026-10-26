@@ -1,7 +1,8 @@
 import path from 'node:path';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, open, rename, unlink } from 'node:fs/promises';
 import * as yaml from 'js-yaml';
 import { SprintStatusSchema } from '../../shared/schemas.js';
+import { LockedError } from './file-writer.js';
 
 /**
  * Load sprint status from .bmad/sprint-status.yaml
@@ -24,6 +25,43 @@ export async function loadSprintStatus(projectRoot) {
   } catch (err) {
     if (err.code === 'ENOENT') return null;
     throw err;
+  }
+}
+
+/**
+ * Apply a status transition to one story of .bmad/sprint-status.yaml (the
+ * single source of truth for status) and append it to the story history.
+ * Other keys of the file are preserved; YAML comments are not.
+ * @param {string} projectRoot - Parent of project-management/ directory
+ * @param {string} id - Story id (key of `stories`)
+ * @param {object} patch - Fields from computeTransitionPatch()
+ * @param {{ by?: string, now?: string }} [opts]
+ * @returns {Promise<object>} The updated story entry
+ */
+export async function updateSprintStatusStory(projectRoot, id, patch, opts = {}) {
+  const yamlPath = path.join(projectRoot, '.bmad', 'sprint-status.yaml');
+  const lockPath = `${yamlPath}.lock`;
+  const fd = await open(lockPath, 'wx').catch((err) => {
+    if (err.code === 'EEXIST') throw new LockedError(yamlPath);
+    throw err;
+  });
+  await fd.close();
+  try {
+    const doc = yaml.load(await readFile(yamlPath, 'utf8'));
+    const story = doc?.stories?.[id];
+    if (!story) throw new Error(`story ${id} not found in ${yamlPath}`);
+    const from = story.status;
+    Object.assign(story, patch);
+    story.history = [
+      ...(story.history ?? []),
+      { timestamp: opts.now ?? new Date().toISOString(), from, to: patch.status, by: opts.by ?? 'kanban', reason: patch.blocked_reason ?? '' },
+    ];
+    const tmp = `${yamlPath}.tmp`;
+    await writeFile(tmp, yaml.dump(doc, { lineWidth: -1 }), 'utf8');
+    await rename(tmp, yamlPath);
+    return story;
+  } finally {
+    await unlink(lockPath).catch(() => {});
   }
 }
 

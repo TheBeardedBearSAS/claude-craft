@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import { csrfGuard, readonlyGuard, resolveSafe } from './middleware/security.js';
 import { validateTransition, validateUnblock, computeTransitionPatch } from './services/state-machine.js';
 import { updateFrontmatter, LockedError, MtimeMismatchError } from './services/file-writer.js';
-import { loadSprintStatus, computeBurndown } from './services/sprint-cache.js';
+import { loadSprintStatus, computeBurndown, updateSprintStatusStory } from './services/sprint-cache.js';
 import { TransitionRequestSchema } from '../shared/schemas.js';
 
 /**
@@ -86,8 +86,8 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     const filepath = repository.getStoryFile(id);
     const story = repository.getStory(id);
     if (!story) return c.json({ error: 'not_found' }, 404);
-    // YAML-only story (BMAD v6 single-writer) or metadata-list markdown (no
-    // frontmatter): no frontmatter to rewrite safely.
+    // Metadata-list markdown (no frontmatter) not tracked in sprint-status.yaml:
+    // no frontmatter to rewrite safely.
     if (!story._writable) {
       return c.json(
         {
@@ -146,7 +146,12 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
 
     const patch = computeTransitionPatch(story, target, { blocked_reason });
     try {
-      await updateFrontmatter(filepath, patch, { expectedMtime: story._mtime });
+      // sprint-status.yaml is the source of truth for status whenever it tracks the story.
+      if (story._statusSource === 'sprint-status') {
+        await updateSprintStatusStory(resolvedProjectRoot, id, patch);
+      } else {
+        await updateFrontmatter(filepath, patch, { expectedMtime: story._mtime });
+      }
       await repository.refresh();
       const fresh = repository.getStory(id);
       if (eventBus) eventBus.publish('story:updated', { id, story: fresh });
