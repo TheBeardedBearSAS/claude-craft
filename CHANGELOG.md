@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.23.2] - 2026-10-26
+
 ### Security
 
 - **`zod` 4.4.3 → 4.6.7** (GHSA-mrhx-c7xc-m3w5, *high*) : épuisement mémoire lors de la validation de collections contraintes surdimensionnées. Lockfile uniquement, plage `^4.4.3` inchangée.
+- **Dépendances** : website `@vue/server-renderer` 3.5.44 ; `skills-marketplace/site` (brouillon, non déployé) `astro` 7.1.3.
 
 ### Fixed
 
