@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0] - 2026-10-26
+
+Phase 4 de la feuille de route de simplification des commandes de gestion de projet : retrait des stubs de redirection. Guide : [MIGRATION-v9](docs/MIGRATION-v9.md).
+
+### Removed
+
+- **BREAKING — 52 commandes dépréciées depuis 8.25.0 / 8.26.0** (les stubs de redirection), dans les 5 langues, et **le namespace `/sprint:`**. Table complète ancien → nouveau : `docs/MIGRATION-v9.md`. Surface de gestion de projet active : 35 commandes (`/workflow:` 9, `/project:` 5, `/gate:` 1, `/qa:` 5, `/team:` 4, `/common:` 11).
+- `claude-craft update` et les deux installeurs suppriment les fichiers retirés (`config/removed-commands.yaml` complété) et le dossier `.claude/commands/sprint/` devenu vide.
+- Copies du dépôt (`.claude/commands/`) alignées sur la distribution : 132 commandes.
+
+### Added
+
+- `docs/MIGRATION-v9.md` (table ancien → nouveau, étapes d'upgrade) ; test `tests/content/pm-v9-removal.test.mjs` (aucun stub restant, manifeste complet, aucune référence à une commande retirée hors documents historiques).
+
 ## [8.26.0] - 2026-10-26
 
 Phase 3 de la feuille de route de simplification des commandes de gestion de projet : parcours principal `/workflow:init → plan → design → start → implement → review → retro` (+ `status`), 86 → 35 commandes actives (5 langues).
