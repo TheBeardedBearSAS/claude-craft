@@ -284,3 +284,5 @@ routing:
 - `/workflow:implement` - Iniciar fase de implementacion
 - `/workflow:auto-sprint` - Ejecutar un sprint completo de extremo a extremo (inicio → merge)
 - `/workflow:analyze` - Iniciar fase de analisis (solo Enterprise)
+
+> ¿No sabes qué camino seguir? Consulta la página de decisión: https://github.com/TheBeardedBearSAS/claude-craft/blob/main/docs/guides/es/11-which-path.md

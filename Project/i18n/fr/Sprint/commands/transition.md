@@ -72,11 +72,13 @@ Avant de transitionner, vérifier les exigences du gate :
 
 ### Étape 4 : Exécuter la transition
 
-1. Stocker le statut précédent
-2. Mettre à jour le champ statut
+Tout écrire dans `.bmad/sprint-status.yaml` (source unique de vérité des statuts ; schéma dans `.claude/templates/project/sprint-status.md`). Les fichiers markdown US/EPIC ne contiennent que du contenu et ne reçoivent jamais de statut :
+
+1. Stocker `previous_status` dans `stories.<US>`
+2. Mettre à jour `stories.<US>.status`
 3. Définir les timestamps
-4. Mettre à jour la phase TDD si applicable
-5. Enregistrer dans l'historique
+4. Mettre à jour `stories.<US>.tdd_phase` si applicable
+5. Ajouter une entrée à `stories.<US>.history` (`timestamp`, `from`, `to`, `by`, `reason`)
 
 ### Étape 5 : Effets secondaires
 

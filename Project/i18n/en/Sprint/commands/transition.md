@@ -72,11 +72,13 @@ Before transitioning, verify gate requirements:
 
 ### Step 4: Execute transition
 
-1. Store previous status
-2. Update status field
+Write everything in `.bmad/sprint-status.yaml` (single source of truth for status; schema in `.claude/templates/project/sprint-status.md`). Markdown US/EPIC files hold content only and are never given a status:
+
+1. Store `previous_status` in `stories.<US>`
+2. Update `stories.<US>.status`
 3. Set timestamps
-4. Update TDD phase if applicable
-5. Record in history
+4. Update `stories.<US>.tdd_phase` if applicable
+5. Append an entry to `stories.<US>.history` (`timestamp`, `from`, `to`, `by`, `reason`)
 
 ### Step 5: Side effects
 

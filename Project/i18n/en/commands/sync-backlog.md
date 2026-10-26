@@ -5,6 +5,8 @@ argument-hint: "[--direction source] [--dry-run]"
 
 # Sync Backlog
 
+> **Note:** `.bmad/sprint-status.yaml` is now the single source of truth for story and task status (schema: `.claude/templates/project/sprint-status.md`). Markdown files hold content only, so status sync is no longer needed; this command only reconciles content and IDs (missing stories, orphans, titles, points). Status fields in the steps below apply to legacy files only.
+
 Bidirectional synchronization between markdown backlog files and sprint-status.yaml.
 
 ## Arguments

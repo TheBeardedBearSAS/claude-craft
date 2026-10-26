@@ -346,3 +346,5 @@ User should:
 - ✓ Feel confident exploring further
 
 Time to First Value (TTFV): **< 10 minutes total**
+
+> Vous hésitez sur le chemin à suivre ? Consultez la page de décision : https://github.com/TheBeardedBearSAS/claude-craft/blob/main/docs/guides/fr/11-which-path.md

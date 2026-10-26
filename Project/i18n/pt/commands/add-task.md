@@ -75,10 +75,19 @@ Extrair de $ARGUMENTS:
    - Se US em sprint: `project-management/sprints/sprint-{N}-{slug}/tasks/TASK-{ID}.md`
    - Caso contrário: `project-management/backlog/tasks/TASK-{ID}.md`
 
+### Etapa 5b: Registrar a tarefa em `.bmad/sprint-status.yaml`
+
+O arquivo da tarefa contém apenas conteúdo. O status fica em `.bmad/sprint-status.yaml` (fonte única de verdade), seguindo o schema de `.claude/templates/project/sprint-status.md`:
+
+1. Criar `.bmad/sprint-status.yaml` a partir do esqueleto de `/workflow:init` se ele não existir
+2. Adicionar `TASK-{ID}` a `stories.{US_ID}.tasks.list`
+3. Definir `stories.{US_ID}.tasks.status.TASK-{ID}: to-do`
+4. Atualizar `stories.{US_ID}.tasks.total` (e manter `completed` = número de tarefas `done`)
+
 ### Etapa 6: Atualizar User Story
 
 1. Ler arquivo da US
-2. Adicionar tarefa à tabela de Tarefas
+2. Adicionar tarefa à tabela de Tarefas (sem coluna de status)
 3. Atualizar progresso
 4. Salvar
 
@@ -86,7 +95,7 @@ Extrair de $ARGUMENTS:
 
 Se US está em um sprint:
 1. Ler `project-management/sprints/sprint-{N}-{slug}/board.md`
-2. Adicionar tarefa a "🔴 To Do"
+2. Regenerá-lo a partir de `.bmad/sprint-status.yaml` (o board é uma visão gerada; a tarefa aparece no estado `to-do`)
 3. Atualizar métricas
 4. Salvar
 
@@ -98,7 +107,7 @@ Se US está em um sprint:
 🔧 TASK-{ID}: {DESCRIPTION}
    US: {US_ID}
    Tipo: {TYPE}
-   Status: 🔴 To Do
+   Status: to-do (.bmad/sprint-status.yaml)
    Estimativa: {ESTIMATION}h
    Arquivo: {PATH}
 

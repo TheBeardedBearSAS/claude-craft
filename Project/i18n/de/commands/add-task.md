@@ -75,10 +75,19 @@ Aus $ARGUMENTS extrahieren:
    - Falls US im Sprint: `project-management/sprints/sprint-{N}-{slug}/tasks/TASK-{ID}.md`
    - Sonst: `project-management/backlog/tasks/TASK-{ID}.md`
 
+### Schritt 5b: Aufgabe in `.bmad/sprint-status.yaml` registrieren
+
+Die Aufgaben-Datei enthält nur Inhalt. Der Status steht in `.bmad/sprint-status.yaml` (einzige Quelle der Wahrheit) gemäß dem Schema in `.claude/templates/project/sprint-status.md`:
+
+1. `.bmad/sprint-status.yaml` aus dem Skelett von `/workflow:init` erstellen, falls nicht vorhanden
+2. `TASK-{ID}` an `stories.{US_ID}.tasks.list` anhängen
+3. `stories.{US_ID}.tasks.status.TASK-{ID}: to-do` setzen
+4. `stories.{US_ID}.tasks.total` aktualisieren (und `completed` = Anzahl der `done`-Aufgaben beibehalten)
+
 ### Schritt 6: User Story aktualisieren
 
 1. US-Datei lesen
-2. Aufgabe zur Aufgabentabelle hinzufügen
+2. Aufgabe zur Aufgabentabelle hinzufügen (keine Status-Spalte)
 3. Fortschritt aktualisieren
 4. Speichern
 
@@ -86,7 +95,7 @@ Aus $ARGUMENTS extrahieren:
 
 Falls US in einem Sprint ist:
 1. `project-management/sprints/sprint-{N}-{slug}/board.md` lesen
-2. Aufgabe zu "🔴 To Do" hinzufügen
+2. Es aus `.bmad/sprint-status.yaml` neu generieren (das Board ist eine generierte Ansicht; die Aufgabe erscheint im Zustand `to-do`)
 3. Metriken aktualisieren
 4. Speichern
 
@@ -98,7 +107,7 @@ Falls US in einem Sprint ist:
 🔧 TASK-{ID}: {DESCRIPTION}
    US: {US_ID}
    Typ: {TYPE}
-   Status: 🔴 To Do
+   Status: to-do (.bmad/sprint-status.yaml)
    Schätzung: {ESTIMATION}h
    Datei: {PATH}
 

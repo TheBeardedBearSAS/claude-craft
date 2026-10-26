@@ -4,7 +4,7 @@
 - **ID**: TASK-{ID}
 - **US**: {US_ID}
 - **Typ**: {TYPE}
-- **Status**: 🔴 To Do
+- **Status**: wird in .bmad/sprint-status.yaml verfolgt
 - **Schätzung**: {ESTIMATION}h
 - **Aufgewendete Zeit**: 0h
 - **Erstellt am**: {DATE}

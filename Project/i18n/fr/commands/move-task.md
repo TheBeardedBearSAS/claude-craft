@@ -19,34 +19,36 @@ $ARGUMENTS (format: TASK-XXX destination)
 ## Workflow Strict
 
 ```
-🔴 To Do ──→ 🟡 In Progress ──→ 🟢 Done
-     │              │
-     │              ↓
-     └────→ ⏸️ Blocked ←────┘
-                │
-                ↓
-           🟡 In Progress
+to-do ──→ in-progress ──→ done
+   │            │
+   │            ↓
+   └────→ blocked ←────┘
+              │
+              ↓
+         in-progress
 ```
 
 ### Transitions Autorisées
 
 | Depuis | Vers | Autorisé |
 |--------|------|----------|
-| 🔴 To Do | 🟡 In Progress | ✅ |
-| 🔴 To Do | ⏸️ Blocked | ✅ |
-| 🔴 To Do | 🟢 Done | ❌ **Interdit** |
-| 🟡 In Progress | 🟢 Done | ✅ |
-| 🟡 In Progress | ⏸️ Blocked | ✅ |
-| 🟡 In Progress | 🔴 To Do | ✅ (rollback) |
-| ⏸️ Blocked | 🟡 In Progress | ✅ |
-| 🟢 Done | 🟡 In Progress | ⚠️ (réouverture) |
+| to-do | in-progress | ✅ |
+| to-do | blocked | ✅ |
+| to-do | done | ❌ **Interdit** |
+| in-progress | done | ✅ |
+| in-progress | blocked | ✅ |
+| in-progress | to-do | ✅ (rollback) |
+| blocked | in-progress | ✅ |
+| done | in-progress | ⚠️ (réouverture) |
+
+> Les statuts des tâches sont stockés uniquement dans `.bmad/sprint-status.yaml` (`stories.<US>.tasks.status.<TASK>`), selon `.claude/templates/project/sprint-status.md`. Les fichiers markdown de tâche et de US ne contiennent aucun statut.
 
 ## Processus
 
 ### Étape 1: Valider la Task
 
 1. Trouver le fichier de la task
-2. Lire son statut actuel
+2. Lire son statut actuel depuis `.bmad/sprint-status.yaml` (`stories.<US>.tasks.status.<TASK>`)
 3. Identifier la US et le sprint associés
 
 ### Étape 2: Valider la transition
@@ -72,21 +74,19 @@ Temps passé sur TASK-XXX? (estimation: 4h)
 
 ### Étape 5: Mettre à jour la Task
 
-1. Modifier le statut dans les métadonnées
-2. Ajouter le bloqueur si Blocked
-3. Mettre à jour le temps passé si Done
-4. Mettre à jour la date de modification
+1. Écrire le nouveau statut dans `.bmad/sprint-status.yaml` : `stories.<US>.tasks.status.<TASK>` (schéma : `.claude/templates/project/sprint-status.md`) ; jamais dans le fichier de la task
+2. Recalculer `stories.<US>.tasks.completed` (= nombre de tasks `done`)
+3. Contenu uniquement dans le fichier de la task : ajouter le bloqueur si Blocked, mettre à jour le temps passé si Done, mettre à jour la date de modification
 
 ### Étape 6: Mettre à jour le Board
 
-1. Lire le board du sprint
-2. Déplacer la task vers la nouvelle colonne
-3. Mettre à jour les métriques
+1. Régénérer le `board.md` du sprint depuis `.bmad/sprint-status.yaml` (vue générée, jamais éditée à la main)
+2. Mettre à jour les métriques
 
 ### Étape 7: Mettre à jour la User Story
 
-1. Mettre à jour la liste des tasks
-2. Recalculer la progression
+1. Mettre à jour la liste des tasks (contenu uniquement)
+2. Recalculer la progression depuis `.bmad/sprint-status.yaml`
 3. Si toutes les tasks Done, suggérer de terminer la US
 
 ### Étape 8: Mettre à jour l'Index
@@ -101,8 +101,8 @@ Temps passé sur TASK-XXX? (estimation: 4h)
 ✅ Task déplacée!
 
 🔧 TASK-003: API endpoint login
-   Avant: 🔴 To Do
-   Après: 🟡 In Progress
+   Avant: to-do
+   Après: in-progress
 
 📖 US-001: Login utilisateur
    Progression: 2/6 → 3/6 (50%)
@@ -118,7 +118,7 @@ Prochaines étapes:
 ✅ Task terminée!
 
 🔧 TASK-003: API endpoint login
-   Statut: 🟡 In Progress → 🟢 Done
+   Statut: in-progress → done
    Estimation: 4h
    Temps réel: 3.5h ✓
 
@@ -136,7 +136,7 @@ Sprint 1:
 ✅ Task terminée!
 
 🔧 TASK-006: Tests AuthService
-   Statut: 🟢 Done
+   Statut: done
 
 🎉 Toutes les tasks de US-001 sont terminées!
 
@@ -153,8 +153,8 @@ Prochaine étape recommandée:
 ❌ Transition non autorisée!
 
 🔧 TASK-004: Controller Auth
-   Statut actuel: 🔴 To Do
-   Transition demandée: → 🟢 Done
+   Statut actuel: to-do
+   Transition demandée: → done
 
 Règle: Une task doit passer par "In Progress" avant "Done"
 
@@ -170,7 +170,7 @@ Action correcte:
 ✅ Task marquée comme bloquée
 
 🔧 TASK-005: Screen Login
-   Statut: 🟡 In Progress → ⏸️ Blocked
+   Statut: in-progress → blocked
    Bloqueur: En attente de l'API auth (TASK-003)
 
 Pour débloquer:

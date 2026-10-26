@@ -19,34 +19,36 @@ $ARGUMENTS (format: TASK-XXX destination)
 ## Strict Workflow
 
 ```
-🔴 To Do ──→ 🟡 In Progress ──→ 🟢 Done
-     │              │
-     │              ↓
-     └────→ ⏸️ Blocked ←────┘
-                │
-                ↓
-           🟡 In Progress
+to-do ──→ in-progress ──→ done
+   │            │
+   │            ↓
+   └────→ blocked ←────┘
+              │
+              ↓
+         in-progress
 ```
 
 ### Allowed Transitions
 
 | From | To | Allowed |
 |--------|------|----------|
-| 🔴 To Do | 🟡 In Progress | ✅ |
-| 🔴 To Do | ⏸️ Blocked | ✅ |
-| 🔴 To Do | 🟢 Done | ❌ **Forbidden** |
-| 🟡 In Progress | 🟢 Done | ✅ |
-| 🟡 In Progress | ⏸️ Blocked | ✅ |
-| 🟡 In Progress | 🔴 To Do | ✅ (rollback) |
-| ⏸️ Blocked | 🟡 In Progress | ✅ |
-| 🟢 Done | 🟡 In Progress | ⚠️ (reopening) |
+| to-do | in-progress | ✅ |
+| to-do | blocked | ✅ |
+| to-do | done | ❌ **Forbidden** |
+| in-progress | done | ✅ |
+| in-progress | blocked | ✅ |
+| in-progress | to-do | ✅ (rollback) |
+| blocked | in-progress | ✅ |
+| done | in-progress | ⚠️ (reopening) |
+
+> Task statuses are stored only in `.bmad/sprint-status.yaml` (`stories.<US>.tasks.status.<TASK>`), following `.claude/templates/project/sprint-status.md`. Task and US markdown files hold no status.
 
 ## Process
 
 ### Step 1: Validate Task
 
 1. Find task file
-2. Read current status
+2. Read current status from `.bmad/sprint-status.yaml` (`stories.<US>.tasks.status.<TASK>`)
 3. Identify associated US and sprint
 
 ### Step 2: Validate transition
@@ -72,21 +74,19 @@ Time spent on TASK-XXX? (estimation: 4h)
 
 ### Step 5: Update Task
 
-1. Modify status in metadata
-2. Add blocker if Blocked
-3. Update time spent if Done
-4. Update modification date
+1. Write the new status in `.bmad/sprint-status.yaml`: `stories.<US>.tasks.status.<TASK>` (schema: `.claude/templates/project/sprint-status.md`); never in the task file
+2. Recompute `stories.<US>.tasks.completed` (= number of `done` tasks)
+3. Content only in the task file: add the blocker text if Blocked, update time spent if Done, update modification date
 
 ### Step 6: Update Board
 
-1. Read sprint board
-2. Move task to new column
-3. Update metrics
+1. Regenerate the sprint `board.md` from `.bmad/sprint-status.yaml` (generated view, never edited by hand)
+2. Update metrics
 
 ### Step 7: Update User Story
 
-1. Update task list
-2. Recalculate progress
+1. Update task list (content only)
+2. Recalculate progress from `.bmad/sprint-status.yaml`
 3. If all tasks Done, suggest completing US
 
 ### Step 8: Update Index
@@ -101,8 +101,8 @@ Time spent on TASK-XXX? (estimation: 4h)
 ✅ Task moved!
 
 🔧 TASK-003: Login API endpoint
-   Before: 🔴 To Do
-   After: 🟡 In Progress
+   Before: to-do
+   After: in-progress
 
 📖 US-001: User login
    Progress: 2/6 → 3/6 (50%)
@@ -118,7 +118,7 @@ Next steps:
 ✅ Task completed!
 
 🔧 TASK-003: Login API endpoint
-   Status: 🟡 In Progress → 🟢 Done
+   Status: in-progress → done
    Estimation: 4h
    Actual time: 3.5h ✓
 
@@ -136,7 +136,7 @@ Sprint 1:
 ✅ Task completed!
 
 🔧 TASK-006: AuthService tests
-   Status: 🟢 Done
+   Status: done
 
 🎉 All tasks of US-001 completed!
 
@@ -153,8 +153,8 @@ Recommended next step:
 ❌ Transition not allowed!
 
 🔧 TASK-004: Auth controller
-   Current status: 🔴 To Do
-   Requested transition: → 🟢 Done
+   Current status: to-do
+   Requested transition: → done
 
 Rule: A task must go through "In Progress" before "Done"
 
@@ -170,7 +170,7 @@ Correct action:
 ✅ Task marked as blocked
 
 🔧 TASK-005: Login screen
-   Status: 🟡 In Progress → ⏸️ Blocked
+   Status: in-progress → blocked
    Blocker: Waiting for auth API (TASK-003)
 
 To unblock:

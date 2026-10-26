@@ -29,6 +29,8 @@ $ARGUMENTS (format: US-XXX [champ] [valeur])
 | `story` | Texte de la US | "En tant que..." |
 | `criteria` | Critères d'acceptation | (mode interactif) |
 
+> **Le statut n'est pas modifiable ici.** Les statuts vivent dans `.bmad/sprint-status.yaml`. Pour changer le statut d'une story, utiliser `/sprint:transition` ; pour celui d'une tâche, `/project:move-task`.
+
 ## Processus
 
 ### Mode Interactif (sans arguments de champ)

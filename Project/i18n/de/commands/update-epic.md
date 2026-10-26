@@ -27,6 +27,8 @@ $ARGUMENTS (Format: EPIC-XXX [Feld] [Wert])
 | `mmf` | Minimum Marketable Feature | "MMF-Beschreibung" |
 | `description` | Beschreibung | "Neue Beschreibung" |
 
+> **Der Status ist hier nicht änderbar.** Der Status eines EPIC wird aus den Status seiner Stories in `.bmad/sprint-status.yaml` abgeleitet. Um den Status einer Story zu ändern, `/sprint:transition` verwenden; für den Status einer Aufgabe `/project:move-task`.
+
 ## Prozess
 
 ### Interaktiver Modus (ohne Feld-Argumente)

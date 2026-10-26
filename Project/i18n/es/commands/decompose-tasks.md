@@ -51,6 +51,8 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
     └── ...
 ```
 
+> **El estado no se escribe en markdown.** Los archivos de tareas, `README.md` y `board.md` contienen solo contenido. Los estados viven en `.bmad/sprint-status.yaml` (esquema: `.claude/templates/project/sprint-status.md`); ver PASO 8.
+
 ### PASO 3: Reglas de descomposición
 
 #### Características de buenas tareas (SMART)
@@ -100,25 +102,25 @@ Para cada US, añadir una sección a `tasks/README.md` con la plantilla siguient
 
 ## Resumen de Tareas
 
-| ID | Tipo | Tarea | Estimación | Depende de | Estado |
-|----|------|-------|------------|-----------|--------|
-| TASK-001 | [DB] | Crear entidad [Nombre] | 2h | - | 🔲 |
-| TASK-002 | [DB] | Migration | 1h | TASK-001 | 🔲 |
-| TASK-003 | [BE] | Recurso API Platform | 3h | TASK-001 | 🔲 |
-| TASK-004 | [BE] | Servicio de negocio | 4h | TASK-003 | 🔲 |
-| TASK-005 | [FE-WEB] | Controller Symfony | 2h | TASK-003 | 🔲 |
-| TASK-006 | [FE-WEB] | Templates Twig | 3h | TASK-005 | 🔲 |
-| TASK-007 | [FE-WEB] | Controller Stimulus | 2h | TASK-006 | 🔲 |
-| TASK-008 | [FE-MOB] | Modelo Dart | 1h | TASK-003 | 🔲 |
-| TASK-009 | [FE-MOB] | Repositorio Flutter | 2h | TASK-008 | 🔲 |
-| TASK-010 | [FE-MOB] | Bloc/Provider | 3h | TASK-009 | 🔲 |
-| TASK-011 | [FE-MOB] | Pantalla Flutter | 4h | TASK-010 | 🔲 |
-| TASK-012 | [TEST] | Tests unitarios backend | 2h | TASK-004 | 🔲 |
-| TASK-013 | [TEST] | Tests API | 2h | TASK-003 | 🔲 |
-| TASK-014 | [TEST] | Tests de Widget | 2h | TASK-011 | 🔲 |
-| TASK-015 | [TEST] | Tests E2E | 3h | TASK-007, TASK-011 | 🔲 |
-| TASK-016 | [DOC] | Documentación | 1h | TASK-015 | 🔲 |
-| TASK-017 | [REV] | Code Review | 2h | TASK-016 | 🔲 |
+| ID | Tipo | Tarea | Estimación | Depende de |
+|----|------|-------|------------|-----------|
+| TASK-001 | [DB] | Crear entidad [Nombre] | 2h | - |
+| TASK-002 | [DB] | Migration | 1h | TASK-001 |
+| TASK-003 | [BE] | Recurso API Platform | 3h | TASK-001 |
+| TASK-004 | [BE] | Servicio de negocio | 4h | TASK-003 |
+| TASK-005 | [FE-WEB] | Controller Symfony | 2h | TASK-003 |
+| TASK-006 | [FE-WEB] | Templates Twig | 3h | TASK-005 |
+| TASK-007 | [FE-WEB] | Controller Stimulus | 2h | TASK-006 |
+| TASK-008 | [FE-MOB] | Modelo Dart | 1h | TASK-003 |
+| TASK-009 | [FE-MOB] | Repositorio Flutter | 2h | TASK-008 |
+| TASK-010 | [FE-MOB] | Bloc/Provider | 3h | TASK-009 |
+| TASK-011 | [FE-MOB] | Pantalla Flutter | 4h | TASK-010 |
+| TASK-012 | [TEST] | Tests unitarios backend | 2h | TASK-004 |
+| TASK-013 | [TEST] | Tests API | 2h | TASK-003 |
+| TASK-014 | [TEST] | Tests de Widget | 2h | TASK-011 |
+| TASK-015 | [TEST] | Tests E2E | 3h | TASK-007, TASK-011 |
+| TASK-016 | [DOC] | Documentación | 1h | TASK-015 |
+| TASK-017 | [REV] | Code Review | 2h | TASK-016 |
 
 **Total estimado**: XXh
 
@@ -487,30 +489,25 @@ Crear `board.md` (plantilla `.claude/templates/project/board.md`):
 ```markdown
 # Tablero de Tareas - Sprint $ARGUMENTS
 
-## Leyenda
-- 🔲 To Do
-- 🔄 In Progress
-- 👀 In Review
-- ✅ Done
-- 🚫 Blocked
+> Vista generada: regenerada desde `.bmad/sprint-status.yaml` por `/project:board`. No editar a mano.
 
-## 🔲 To Do
+## to-do
 | ID | US | Tarea | Estimación | Asignado |
 |----|-----|-------|------------|---------|
 
-## 🔄 In Progress
+## in-progress
 | ID | US | Tarea | Iniciado | Asignado |
 |----|-----|-------|---------|---------|
 
-## 👀 In Review
+## review
 | ID | US | Tarea | Revisor |
 |----|-----|-------|----------|
 
-## ✅ Done
+## done
 | ID | US | Tarea | Real | Completado |
 |----|-----|-------|------|---------|
 
-## 🚫 Blocked
+## blocked
 | ID | US | Razón | Acción |
 |----|-----|--------|--------|
 
@@ -528,8 +525,8 @@ Crear `tasks/README.md`:
 
 ## Resumen
 
-| US | Título | Puntos | Tareas | Horas | Estado |
-|----|-------|--------|--------|--------|--------|
+| US | Título | Puntos | Tareas | Horas |
+|----|-------|--------|--------|--------|
 
 **Total**: X tareas | Xh
 
@@ -549,7 +546,7 @@ Crear `tasks/README.md`:
 ## Convenciones
 - **ID**: TASK-[NNN] (ej., TASK-005); la US padre figura en los metadatos de la tarea
 - **Tamaño**: 0.5h - 8h máx
-- **Estados**: 🔲 🔄 👀 ✅ 🚫
+- **Estados**: seguidos en `.bmad/sprint-status.yaml` (`to-do | in-progress | done | blocked`), nunca en markdown
 ```
 
 ### PASO 7: Tareas técnicas transversales
@@ -582,6 +579,15 @@ Añadir una sección «Tareas técnicas transversales» a `tasks/README.md` y cr
 - **Tipo**: [OPS]
 - **Estimación**: 2h
 ```
+
+### PASO 8: Registrar los estados en `.bmad/sprint-status.yaml`
+
+Para cada tarea creada (tareas de las US y tareas transversales), siguiendo `.claude/templates/project/sprint-status.md`:
+
+1. Crear `.bmad/sprint-status.yaml` desde el esqueleto de `/workflow:init` si no existe
+2. Agregar los ids TASK a `stories.<US>.tasks.list`
+3. Definir `stories.<US>.tasks.status.<TASK>: to-do`
+4. Actualizar `stories.<US>.tasks.total` (`completed` sigue siendo el número de tareas `done`)
 
 ## MAPEO US → TAREAS
 

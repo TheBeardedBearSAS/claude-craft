@@ -155,8 +155,8 @@ Der Plan-Modus MUSS:
 #### 3.3 Aufgabe → In Bearbeitung markieren
 
 Nach Plan-Bestätigung:
-- Aufgabenstatus auf „In Bearbeitung" aktualisieren
-- board.md aktualisieren
+- In `.bmad/sprint-status.yaml` (Schema: `.claude/templates/project/sprint-status.md`): `stories.<US>.tasks.status.<TASK>: in-progress` setzen und, bei der ersten Aufgabe einer Story im Status `ready-for-dev`, die Story auf `in-progress` überführen (`status`, `previous_status`, `tdd_phase`, History-Eintrag)
+- board.md neu generieren (generierte Ansicht)
 - index.md aktualisieren
 
 #### 3.4 TDD-Zyklus
@@ -214,8 +214,9 @@ Tatsächlich aufgewendete Zeit eingeben (Stunden): 1.5
 ```
 
 Aktualisierungen:
-- Aufgaben-Datei-Metadaten (Status, time_spent, updated_at)
-- board.md
+- `.bmad/sprint-status.yaml`: `tasks.status.<TASK>: done`, `tasks.completed` (= Anzahl der `done`-Aufgaben)
+- Inhaltliche Metadaten der Aufgaben-Datei (time_spent, updated_at; kein Status)
+- board.md (aus der YAML neu generiert)
 - index.md
 - Sprint-Metriken
 
@@ -259,7 +260,7 @@ Akzeptanzkriterien prüfen:
 E2E-Tests ausführen, falls vorhanden...
 ✓ tests/E2E/AuthenticationTest.php bestanden
 
-US-001 → 🟢 Erledigt
+US-001 → done
 
 EPIC-001-Fortschritt aktualisieren: 1/3 US abgeschlossen (33%)
 ```
@@ -348,12 +349,14 @@ Weiter zu TASK-004...
 
 Bei jeder Statusänderung:
 
-1. **Aufgaben-Datei**: Status, time_spent, updated_at aktualisieren
-2. **User-Story-Datei**: Aufgabenfortschritt aktualisieren, Status wenn alle erledigt
-3. **EPIC-Datei**: US-Fortschritt aktualisieren
-4. **board.md**: Kanban-Spalten aktualisieren
-5. **index.md**: Globale Metriken aktualisieren
-6. **sprint-status**: Metriken neu berechnen
+Alle Status werden in `.bmad/sprint-status.yaml` geschrieben (Schema: `.claude/templates/project/sprint-status.md`); Markdown-Dateien enthalten nur Inhalt.
+
+1. **sprint-status.yaml**: Aufgabenstatus (`to-do | in-progress | done | blocked`), `tasks.completed`, `tdd_phase` und Story-Übergänge (`ready-for-dev` → `in-progress` → `review` → `done`) mit `previous_status` und einem `history`-Eintrag
+2. **Aufgaben-Datei**: time_spent, updated_at aktualisieren (kein Status)
+3. **User-Story-Datei**: Anzeige des Aufgabenfortschritts aktualisieren (kein Status)
+4. **EPIC-Datei**: US-Fortschritt aktualisieren (der EPIC-Status wird abgeleitet)
+5. **board.md**: Kanban-Spalten aus der YAML neu generieren
+6. **index.md**: Globale Metriken aktualisieren
 
 ---
 
@@ -427,10 +430,11 @@ Von TASK-009 fortfahren? [j/n]
 
 | Datei | Aktualisierungen |
 |-------|-----------------|
-| `project-management/backlog/user-stories/US-XXX.md` | Status, Aufgabenfortschritt |
+| `.bmad/sprint-status.yaml` | Story-Status, `tdd_phase`, Aufgabenstatus, `tasks.completed`, History (einzige Quelle für Status) |
+| `project-management/backlog/user-stories/US-XXX.md` | Aufgabenfortschritt (nur Inhalt, kein Status) |
 | `project-management/backlog/epics/EPIC-XXX.md` | US-Fortschritt |
-| `project-management/sprints/sprint-N-*/board.md` | Kanban-Spalten |
-| `project-management/sprints/sprint-N-*/tasks/*.md` | Aufgabenstatus, Zeit |
+| `project-management/sprints/sprint-N-*/board.md` | Kanban-Spalten (aus der YAML neu generiert) |
+| `project-management/sprints/sprint-N-*/tasks/*.md` | Aufgewendete Zeit (kein Status) |
 | `project-management/backlog/index.md` | Globale Metriken |
 | `project-management/sprints/sprint-N-*/sprint-review.md` | Am Ende generiert |
 

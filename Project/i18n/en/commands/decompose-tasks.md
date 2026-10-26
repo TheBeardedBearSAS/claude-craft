@@ -51,6 +51,8 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
     └── ...
 ```
 
+> **Status is not written in markdown.** Task files, `README.md` and `board.md` hold content only. Statuses live in `.bmad/sprint-status.yaml` (schema: `.claude/templates/project/sprint-status.md`); see STEP 8.
+
 ### STEP 3: Decomposition rules
 
 #### Good task characteristics (SMART)
@@ -100,25 +102,25 @@ For each US, add one section to `tasks/README.md` using the template below, and 
 
 ## Task Overview
 
-| ID | Type | Task | Estimation | Depends on | Status |
-|----|------|-------|------------|-----------|--------|
-| TASK-001 | [DB] | Create [Name] entity | 2h | - | 🔲 |
-| TASK-002 | [DB] | Migration | 1h | TASK-001 | 🔲 |
-| TASK-003 | [BE] | API Platform resource | 3h | TASK-001 | 🔲 |
-| TASK-004 | [BE] | Business service | 4h | TASK-003 | 🔲 |
-| TASK-005 | [FE-WEB] | Symfony controller | 2h | TASK-003 | 🔲 |
-| TASK-006 | [FE-WEB] | Twig templates | 3h | TASK-005 | 🔲 |
-| TASK-007 | [FE-WEB] | Stimulus controller | 2h | TASK-006 | 🔲 |
-| TASK-008 | [FE-MOB] | Dart model | 1h | TASK-003 | 🔲 |
-| TASK-009 | [FE-MOB] | Flutter repository | 2h | TASK-008 | 🔲 |
-| TASK-010 | [FE-MOB] | Bloc/Provider | 3h | TASK-009 | 🔲 |
-| TASK-011 | [FE-MOB] | Flutter screen | 4h | TASK-010 | 🔲 |
-| TASK-012 | [TEST] | Backend unit tests | 2h | TASK-004 | 🔲 |
-| TASK-013 | [TEST] | API tests | 2h | TASK-003 | 🔲 |
-| TASK-014 | [TEST] | Widget tests | 2h | TASK-011 | 🔲 |
-| TASK-015 | [TEST] | E2E tests | 3h | TASK-007, TASK-011 | 🔲 |
-| TASK-016 | [DOC] | Documentation | 1h | TASK-015 | 🔲 |
-| TASK-017 | [REV] | Code Review | 2h | TASK-016 | 🔲 |
+| ID | Type | Task | Estimation | Depends on |
+|----|------|-------|------------|-----------|
+| TASK-001 | [DB] | Create [Name] entity | 2h | - |
+| TASK-002 | [DB] | Migration | 1h | TASK-001 |
+| TASK-003 | [BE] | API Platform resource | 3h | TASK-001 |
+| TASK-004 | [BE] | Business service | 4h | TASK-003 |
+| TASK-005 | [FE-WEB] | Symfony controller | 2h | TASK-003 |
+| TASK-006 | [FE-WEB] | Twig templates | 3h | TASK-005 |
+| TASK-007 | [FE-WEB] | Stimulus controller | 2h | TASK-006 |
+| TASK-008 | [FE-MOB] | Dart model | 1h | TASK-003 |
+| TASK-009 | [FE-MOB] | Flutter repository | 2h | TASK-008 |
+| TASK-010 | [FE-MOB] | Bloc/Provider | 3h | TASK-009 |
+| TASK-011 | [FE-MOB] | Flutter screen | 4h | TASK-010 |
+| TASK-012 | [TEST] | Backend unit tests | 2h | TASK-004 |
+| TASK-013 | [TEST] | API tests | 2h | TASK-003 |
+| TASK-014 | [TEST] | Widget tests | 2h | TASK-011 |
+| TASK-015 | [TEST] | E2E tests | 3h | TASK-007, TASK-011 |
+| TASK-016 | [DOC] | Documentation | 1h | TASK-015 |
+| TASK-017 | [REV] | Code Review | 2h | TASK-016 |
 
 **Total estimated**: XXh
 
@@ -487,30 +489,25 @@ Create `board.md` (template `.claude/templates/project/board.md`):
 ```markdown
 # Task Board - Sprint $ARGUMENTS
 
-## Legend
-- 🔲 To Do
-- 🔄 In Progress
-- 👀 In Review
-- ✅ Done
-- 🚫 Blocked
+> Generated view: regenerated from `.bmad/sprint-status.yaml` by `/project:board`. Do not edit by hand.
 
-## 🔲 To Do
+## to-do
 | ID | US | Task | Estimation | Assigned |
 |----|-----|-------|------------|---------|
 
-## 🔄 In Progress
+## in-progress
 | ID | US | Task | Started | Assigned |
 |----|-----|-------|---------|---------|
 
-## 👀 In Review
+## review
 | ID | US | Task | Reviewer |
 |----|-----|-------|----------|
 
-## ✅ Done
+## done
 | ID | US | Task | Actual | Completed |
 |----|-----|-------|------|---------|
 
-## 🚫 Blocked
+## blocked
 | ID | US | Reason | Action |
 |----|-----|--------|--------|
 
@@ -528,8 +525,8 @@ Create `tasks/README.md`:
 
 ## Overview
 
-| US | Title | Points | Tasks | Hours | Status |
-|----|-------|--------|--------|--------|--------|
+| US | Title | Points | Tasks | Hours |
+|----|-------|--------|--------|--------|
 
 **Total**: X tasks | Xh
 
@@ -549,7 +546,7 @@ Create `tasks/README.md`:
 ## Conventions
 - **ID**: TASK-[NNN] (e.g., TASK-005); the parent US is in the task metadata
 - **Size**: 0.5h - 8h max
-- **Statuses**: 🔲 🔄 👀 ✅ 🚫
+- **Statuses**: tracked in `.bmad/sprint-status.yaml` (`to-do | in-progress | done | blocked`), never in markdown
 ```
 
 ### STEP 7: Cross-cutting technical tasks
@@ -582,6 +579,15 @@ Add a "Cross-cutting technical tasks" section to `tasks/README.md` and create on
 - **Type**: [OPS]
 - **Estimation**: 2h
 ```
+
+### STEP 8: Register statuses in `.bmad/sprint-status.yaml`
+
+For every created task (US tasks and cross-cutting tasks), following `.claude/templates/project/sprint-status.md`:
+
+1. Create `.bmad/sprint-status.yaml` from the `/workflow:init` skeleton if missing
+2. Append the TASK ids to `stories.<US>.tasks.list`
+3. Set `stories.<US>.tasks.status.<TASK>: to-do`
+4. Update `stories.<US>.tasks.total` (`completed` stays the number of `done` tasks)
 
 ## US → TASKS MAPPING
 

@@ -22,8 +22,10 @@ $ARGUMENTS (opcional, formato: [sprint N])
 
 ### Etapa 2: Ler dados
 
-1. Ler arquivo `project-management/sprints/sprint-{N}-{slug}/board.md`
-2. Ou regenerar a partir dos arquivos de tarefa
+1. Ler os status em `.bmad/sprint-status.yaml` (fonte única de verdade: `stories.<US>.status`, `stories.<US>.tasks.status.<TASK>`)
+2. Ler o conteúdo (títulos, estimativas, tipos) nos arquivos markdown das US e das tarefas
+
+Ver `.claude/templates/project/sprint-status.md` para o schema.
 
 ### Etapa 3: Agrupar por status
 
@@ -131,4 +133,4 @@ Progresso: 13/32 (41%) | 45h/98h
 
 ## Atualizar arquivo board.md
 
-Após exibição, o arquivo `board.md` do sprint é atualizado com os dados atuais.
+`board.md` é uma visão gerada. Após a exibição, o arquivo `board.md` do sprint é regenerado a partir de `.bmad/sprint-status.yaml` (template `.claude/templates/project/board.md`); ele nunca é editado manualmente e nunca é a fonte de um status.

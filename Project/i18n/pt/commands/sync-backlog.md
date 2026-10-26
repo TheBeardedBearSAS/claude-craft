@@ -5,6 +5,8 @@ argument-hint: "[--direction source] [--dry-run]"
 
 # Sync Backlog
 
+> **Nota:** `.bmad/sprint-status.yaml` é agora a fonte única de verdade para o status das stories e das tarefas (schema: `.claude/templates/project/sprint-status.md`). Os arquivos markdown contêm apenas conteúdo, portanto a sincronização de status não é mais necessária; este comando apenas reconcilia conteúdo e IDs (stories ausentes, órfãs, títulos, pontos). Os campos de status nas etapas abaixo se aplicam somente a arquivos legados.
+
 Sincronizacao bidirecional entre os arquivos markdown do backlog e sprint-status.yaml.
 
 ## Argumentos
