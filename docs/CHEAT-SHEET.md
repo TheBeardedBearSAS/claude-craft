@@ -292,9 +292,9 @@ Main path: `init → plan → design → start → implement → review → retr
 /paperclip:generate-command       # Generate CLI command
 ```
 
-### `/sprint:` - Deprecated
+### Removed in 9.0
 
-The 5 `/sprint:*` commands are redirect stubs (removed in 9.0): `/sprint:dev` → `/workflow:implement`, `/sprint:status` → `/workflow:status`, `/sprint:next-story` → `/project:backlog next story`, `/sprint:transition` → `/project:backlog move story <US> <status>`, `/sprint:auto-route` → `/project:backlog move story --auto`.
+The sprint namespace and 52 deprecated PM commands were removed in 9.0; see [MIGRATION-v9.md](MIGRATION-v9.md) for the old → new table.
 
 ### `/gate:` - Quality Gates
 
@@ -326,7 +326,7 @@ The 5 `/sprint:*` commands are redirect stubs (removed in 9.0): `/sprint:dev` �
 /project:backlog move story US-001 done  # Transition a story (--auto for routing rules)
 ```
 
-> The 52 former commands (`/project:add-epic`, `/gate:validate-prd`, `/sprint:dev`, `/project:run-sprint`...) are deprecated redirect stubs removed in 9.0: see "Deprecated commands" in `docs/COMMANDS.md`.
+> The 52 former PM commands (e.g. add-epic, validate-prd, run-sprint) were removed in 9.0: see [MIGRATION-v9.md](MIGRATION-v9.md).
 
 
 ---

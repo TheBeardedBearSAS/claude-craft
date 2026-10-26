@@ -1,6 +1,6 @@
 # Commands Reference
 
-> **This is the narrated, namespace-grouped reference (active commands only; the 52 deprecated redirect stubs are listed in [Deprecated commands](#deprecated-commands-removed-in-90)).** For the complete auto-generated table of all 238 commands (186 active + 52 deprecated stubs, core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
+> **This is the narrated, namespace-grouped reference (active commands only; the commands removed in 9.0 are listed in [MIGRATION-v9.md](MIGRATION-v9.md)).** For the complete auto-generated table of all 186 commands (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
 
 Claude Code commands are slash commands that automate workflows and provide structured assistance.
 
@@ -35,7 +35,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
-> The generated reference lists **238 command files** across all namespaces: **186 active commands** plus **52 deprecated redirect stubs** (removed in 9.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> The generated reference lists **186 commands** across all namespaces; no deprecated stubs remain since 9.0. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
@@ -65,7 +65,6 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/pgbouncer:` | PgBouncer/Connection Pooling | 5 |
 | `/frankenphp:` | FrankenPHP/PHP Server | 5 |
 | `/paperclip:` | Paperclip AI-workforce orchestration | 8 |
-| `/sprint:` | _Deprecated_ — 5 redirect stubs, removed in 9.0 | 0 active |
 | `/gate:` | Quality Gates (BMAD v6) | 1 (`/gate:check`, 11 modes) |
 | `/project:` | Project Management (BMAD v6) | 5 |
 
@@ -75,7 +74,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 Transversal commands for all projects.
 
-> `/common:pre-commit-check`, `/common:pre-merge-check` and `/common:release-checklist` moved to `/gate:check commit|merge|release` (see [Quality Gate Commands](#quality-gate-commands-gate)). The old names remain as deprecated stubs until 9.0.
+> Pre-commit, pre-merge and release checks are `/gate:check commit|merge|release` (see [Quality Gate Commands](#quality-gate-commands-gate)).
 
 ### Generation Commands
 
@@ -90,7 +89,7 @@ Transversal commands for all projects.
 
 | Command | Description |
 |---------|-------------|
-| `/common:init --context` | Analyze the codebase and configure the project context (was `/common:setup-project-context`) |
+| `/common:init --context` | Analyze the codebase and configure the project context |
 | `/common:setup-rtk` | Install and configure RTK (token optimization) |
 
 ### Continuous Loop Commands
@@ -194,17 +193,17 @@ BMAD-inspired workflow system adapted to project complexity. Since Phase 3 of th
 
 **Main path:** `/workflow:init` → `plan` → `design` → `start` → `implement` → `review` → `retro` (with `/workflow:status` at any time). `/workflow:auto-sprint <N>` chains start → … → merge in one run.
 
-| Command | Description | Replaces |
-|---------|-------------|----------|
-| `/workflow:init` | Analyze project context and recommend the track | |
-| `/workflow:plan` | PRD + backlog (default); `--research` adds the research phase; `--only=prd` / `--only=backlog` runs a single document | `/workflow:analyze`, `/project:generate-prd`, `/project:generate-backlog` |
-| `/workflow:design` | Technical specification; `--constitution` generates the project constitution | `/project:generate-tech-spec`, `/project:generate-constitution` |
-| `/workflow:start <N>` | Prepare a sprint: sprint folder, `sprint-status.yaml` entries, task breakdown (`--tasks-only` decomposes an existing sprint) | `/project:decompose-tasks` |
-| `/workflow:implement [<N>]` | Sprint development in TDD/BDD, sequential by default; `--story <US-ID>`, `--epic <EPIC>`, `--queue` / `--resume` (batch queue), `--parallel N` (delegates to `/team:sprint`), `--auto` | `/sprint:dev`, `/project:run-sprint`, `/project:run-epic`, `/project:run-queue` |
-| `/workflow:status` | Where am I + next action; `--board` (Kanban), `--queue` (batch queue), `--standup`, `--gates` | `/sprint:status`, `/project:board`, `/project:batch-status`, `/common:daily-standup` |
-| `/workflow:review` | Sprint review summary | |
-| `/workflow:retro` | Sprint retrospective | |
-| `/workflow:auto-sprint <N>` | End-to-end orchestrator (PO/SM): start → decompose → validate → implement → PR → CI watch → review → retro → merge, each step in an isolated sub-agent (`--from-prd` starts from a PRD) | |
+| Command | Description |
+|---------|-------------|
+| `/workflow:init` | Analyze project context and recommend the track |
+| `/workflow:plan` | PRD + backlog (default); `--research` adds the research phase; `--only=prd` / `--only=backlog` runs a single document |
+| `/workflow:design` | Technical specification; `--constitution` generates the project constitution |
+| `/workflow:start <N>` | Prepare a sprint: sprint folder, `sprint-status.yaml` entries, task breakdown (`--tasks-only` decomposes an existing sprint) |
+| `/workflow:implement [<N>]` | Sprint development in TDD/BDD, sequential by default; `--story <US-ID>`, `--epic <EPIC>`, `--queue` / `--resume` (batch queue), `--parallel N` (delegates to `/team:sprint`), `--auto` |
+| `/workflow:status` | Where am I + next action; `--board` (Kanban), `--queue` (batch queue), `--standup`, `--gates` |
+| `/workflow:review` | Sprint review summary |
+| `/workflow:retro` | Sprint retrospective |
+| `/workflow:auto-sprint <N>` | End-to-end orchestrator (PO/SM): start → decompose → validate → implement → PR → CI watch → review → retro → merge, each step in an isolated sub-agent (`--from-prd` starts from a PRD) |
 
 Story transitions are handled by `/project:backlog` (`next story`, `move story <US> <status>`, `move story --auto`).
 
@@ -719,7 +718,7 @@ Paperclip is an open-source AI-workforce orchestration platform (Node.js + TypeS
 
 ## Project Commands (`/project:`)
 
-Available with Project installation. Since Phase 2 of the PM simplification, the many per-entity commands were merged into five commands with subcommands (`backlog`, `reverse`, `trace`, `report`, `migrate`); the old names are listed in [Deprecated commands](#deprecated-commands-removed-in-90).
+Available with Project installation. Since Phase 2 of the PM simplification, the many per-entity commands were merged into five commands with subcommands (`backlog`, `reverse`, `trace`, `report`, `migrate`); the old names are listed in [MIGRATION-v9.md](MIGRATION-v9.md).
 
 ### Backlog (`/project:backlog <action> <entity>`)
 
@@ -815,17 +814,17 @@ Orchestrates complete sprint development in TDD/BDD mode:
 
 ---
 
-## Sprint Status Commands (formerly `/sprint:`)
+## Sprint Status Commands
 
-The `/sprint:` namespace is **deprecated** (5 redirect stubs, removed in 9.0). Story routing now lives in `/project:backlog`; status is read with `/workflow:status`. Available with BMAD v6 installation.
+Story routing lives in `/project:backlog`; status is read with `/workflow:status`.
 
-| Command | Description | Replaces |
-|---------|-------------|----------|
-| `/project:backlog next story` | Get next ready-for-dev story | `/sprint:next-story` |
-| `/project:backlog move story <ID> <status>` | Transition story status | `/sprint:transition` |
-| `/project:backlog move story --auto` | Execute automatic routing rules (`routing.auto_transitions`, also applied after every transition) | `/sprint:auto-route` |
-| `/workflow:status` | Phase, sprint metrics and next action | `/sprint:status` |
-| `/workflow:implement` | Sprint development | `/sprint:dev` |
+| Command | Description |
+|---------|-------------|
+| `/project:backlog next story` | Get next ready-for-dev story |
+| `/project:backlog move story <ID> <status>` | Transition story status |
+| `/project:backlog move story --auto` | Execute automatic routing rules (`routing.auto_transitions`, also applied after every transition) |
+| `/workflow:status` | Phase, sprint metrics and next action |
+| `/workflow:implement` | Sprint development |
 
 ### State Machine
 
@@ -856,11 +855,11 @@ Available with BMAD v6 installation.
 | `/gate:check story <ID>` | Validate story Definition of Done |
 | `/gate:check sprint` | Validate sprint readiness |
 | `/gate:check alignment [story-id]` | Validate spec-code alignment (≥85% threshold) |
-| `/gate:check commit [--fix] [--staged]` | Pre-commit verification (was `/common:pre-commit-check`) |
-| `/gate:check merge [source] [target]` | Pre-merge verification (was `/common:pre-merge-check`) |
-| `/gate:check release <version>` | Release checklist (was `/common:release-checklist`) |
-| `/gate:check all [--detailed]` | Full quality gates report (was `/gate:report`) |
-| `/gate:check --phase=<pre-sprint\|pre-impl\|post-impl\|pre-merge>` | Lifecycle checkpoint (was `/project:checkpoint`) |
+| `/gate:check commit [--fix] [--staged]` | Pre-commit verification |
+| `/gate:check merge [source] [target]` | Pre-merge verification |
+| `/gate:check release <version>` | Release checklist |
+| `/gate:check all [--detailed]` | Full quality gates report |
+| `/gate:check --phase=<pre-sprint\|pre-impl\|post-impl\|pre-merge>` | Lifecycle checkpoint |
 
 ### Quality Gate Thresholds
 
@@ -875,60 +874,9 @@ Available with BMAD v6 installation.
 
 ---
 
-## Deprecated commands (removed in 9.0)
+## Removed commands (9.0)
 
-The 52 old commands remain as redirect stubs that point to their replacement. They will be removed in 9.0.
-
-| Deprecated | Replacement |
-|------------|-------------|
-| `/project:add-epic`, `add-story`, `add-task` | `/project:backlog add epic\|story\|task` |
-| `/project:list-epics`, `list-stories`, `list-tasks` | `/project:backlog list epic\|story\|task` |
-| `/project:update-epic`, `update-story` | `/project:backlog edit epic\|story` |
-| `/project:move-task` | `/project:backlog move task` |
-| `/project:scan` | `/project:reverse scan` |
-| `/project:reverse-prd` | `/project:reverse prd` |
-| `/project:reverse-stories` | `/project:reverse stories` |
-| `/project:gap-analysis` | `/project:reverse gaps` |
-| `/project:coverage-map` | `/project:trace --by-priority` (gaps: `--gaps`) |
-| `/project:burndown` | `/project:report burndown` |
-| `/project:metrics` | `/project:report metrics` |
-| `/project:dependencies` | `/project:report deps` |
-| `/project:critical-path` | `/project:report deps --critical` |
-| `/project:analyze-backlog` | `/project:migrate --analyze` |
-| `/project:migrate-backlog` | `/project:migrate` |
-| `/project:update-stories` | `/project:migrate --stories` |
-| `/project:sync-backlog` | `/project:migrate --resync` |
-| `/project:checkpoint` | `/gate:check --phase=<phase>` |
-| `/gate:validate-prd` | `/gate:check prd` |
-| `/gate:validate-techspec` | `/gate:check spec` |
-| `/gate:validate-backlog` | `/gate:check backlog` |
-| `/gate:validate-sprint` | `/gate:check sprint` |
-| `/gate:validate-story` | `/gate:check story` |
-| `/gate:validate-alignment` | `/gate:check alignment` |
-| `/gate:report` | `/gate:check all` |
-| `/common:pre-commit-check` | `/gate:check commit` |
-| `/common:pre-merge-check` | `/gate:check merge` |
-| `/common:release-checklist` | `/gate:check release` |
-| `/sprint:dev`, `/project:run-sprint` | `/workflow:implement [<N>]` |
-| `/project:run-epic` | `/workflow:implement --epic <EPIC>` |
-| `/project:run-queue` | `/workflow:implement --queue` (`--resume` to resume) |
-| `/sprint:status` | `/workflow:status` |
-| `/project:board` | `/workflow:status --board` |
-| `/project:batch-status` | `/workflow:status --queue` |
-| `/common:daily-standup` | `/workflow:status --standup` |
-| `/workflow:analyze` | `/workflow:plan --research` |
-| `/project:generate-prd` | `/workflow:plan --only=prd` |
-| `/project:generate-backlog` | `/workflow:plan --only=backlog` |
-| `/project:generate-tech-spec` | `/workflow:design` |
-| `/project:generate-constitution` | `/workflow:design --constitution` |
-| `/project:decompose-tasks` | `/workflow:start <N>` (`--tasks-only` for an existing sprint) |
-| `/sprint:next-story` | `/project:backlog next story` |
-| `/sprint:transition` | `/project:backlog move story <US> <status>` |
-| `/sprint:auto-route` | `/project:backlog move story --auto` |
-| `/qa:report` | `/qa:status --report` |
-| `/common:setup-project-context` | `/common:init --context` |
-
-`/common:sub-agents-patterns` is no longer a command: it became the `sub-agents-patterns` skill (not a stub). `/team:delivery` is kept.
+The 52 deprecated PM commands and the whole sprint namespace were removed in 9.0. See [MIGRATION-v9.md](MIGRATION-v9.md) for the complete old → new table.
 
 ---
 
@@ -942,7 +890,7 @@ Automated acceptance testing with Claude in Chrome.
 | `/qa:fix` | Fix bugs from recette session (TDD workflow) |
 | `/qa:status` | Show recette session status and progress |
 | `/qa:regression` | View and manage regression test registry |
-| `/qa:status --report` | Generate recette report (MD/HTML/JSON) — was `/qa:report` |
+| `/qa:status --report` | Generate recette report (MD/HTML/JSON) |
 | `/qa:tdd` | Fix a bug in TDD/BDD mode |
 
 ### Golden Rule

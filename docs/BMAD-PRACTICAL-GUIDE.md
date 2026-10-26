@@ -314,7 +314,7 @@ For Standard/Enterprise tracks run `plan --only=prd` → `design` → `plan --on
 
 ## Quality Gates
 
-Quality gates are validation checkpoints that ensure work meets standards before progressing. They are all run through the single `/gate:check <gate>` command (`prd`, `spec`, `backlog`, `sprint`, `story`, `alignment`, `all`, plus the code gates `commit`, `merge`, `release` and `--phase=<phase>` checkpoints). The former `/gate:validate-*` and `/gate:report` commands are deprecated stubs removed in 9.0.
+Quality gates are validation checkpoints that ensure work meets standards before progressing. They are all run through the single `/gate:check <gate>` command (`prd`, `spec`, `backlog`, `sprint`, `story`, `alignment`, `all`, plus the code gates `commit`, `merge`, `release` and `--phase=<phase>` checkpoints). The former validate-* and report gate commands were removed in 9.0 (see [MIGRATION-v9.md](MIGRATION-v9.md)).
 
 ### 1. PRD Gate (≥80%)
 

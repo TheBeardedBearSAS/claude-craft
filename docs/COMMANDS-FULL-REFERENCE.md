@@ -9,13 +9,13 @@
 |-----------|-------|
 | `/angular:*` | 6 |
 | `/ansible:*` | 5 |
-| `/common:*` | 19 |
+| `/common:*` | 14 |
 | `/coolify:*` | 5 |
 | `/csharp:*` | 6 |
 | `/docker:*` | 5 |
 | `/flutter:*` | 10 |
 | `/frankenphp:*` | 5 |
-| `/gate:*` | 8 |
+| `/gate:*` | 1 |
 | `/hcloud:*` | 5 |
 | `/kubernetes:*` | 5 |
 | `/laravel:*` | 6 |
@@ -23,20 +23,19 @@
 | `/paperclip:*` | 8 |
 | `/pgbouncer:*` | 5 |
 | `/php:*` | 5 |
-| `/project:*` | 38 |
+| `/project:*` | 5 |
 | `/python:*` | 10 |
-| `/qa:*` | 6 |
+| `/qa:*` | 5 |
 | `/react:*` | 10 |
 | `/reactnative:*` | 10 |
-| `/sprint:*` | 5 |
 | `/symfony:*` | 10 |
 | `/team:*` | 4 |
 | `/uiux:*` | 8 |
 | `/vercel:*` | 6 |
 | `/vite:*` | 7 |
 | `/vuejs:*` | 6 |
-| `/workflow:*` | 10 |
-| **Total** | **238** |
+| `/workflow:*` | 9 |
+| **Total** | **186** |
 
 ## `/angular:*`
 
@@ -68,19 +67,14 @@
 | [`/common:architecture-decision`](../.claude/commands/common/architecture-decision.md) | Architecture Decision Record (ADR) |
 | [`/common:audit-claude-alignment`](../.claude/commands/common/audit-claude-alignment.md) | Audit hebdomadaire d'alignement sur l'écosystème Claude (CLI, modèles, best practices Anthropic, communauté) via équipe d'agents + PR de correction |
 | [`/common:audit-freshness`](../.claude/commands/common/audit-freshness.md) | Audit de fraîcheur multi-stack (versions + best practices) via équipe d'agents parallèles Context7 + Web |
-| [`/common:daily-standup`](../.claude/commands/common/daily-standup.md) | Obsolète (retirée en 9.0) : utilisez /workflow:status --standup |
 | [`/common:generate-changelog`](../.claude/commands/common/generate-changelog.md) | Génération Automatique du Changelog |
 | [`/common:getting-started`](../.claude/commands/common/getting-started.md) | Interactive 10-minute guided tour for new Claude Craft users |
 | [`/common:init`](../.claude/commands/common/init.md) | Bootstrap the Claude-Craft structure for a new project, or analyze the codebase and configure the project context (--context) |
 | [`/common:pack-repo`](../.claude/commands/common/pack-repo.md) | Pack la codebase en un fichier AI-friendly (Repomix wrapper + fallback shell). Token counting inclus. |
-| [`/common:pre-commit-check`](../.claude/commands/common/pre-commit-check.md) | Vérification Pre-Commit |
-| [`/common:pre-merge-check`](../.claude/commands/common/pre-merge-check.md) | Vérification Pre-Merge |
 | [`/common:ralph-run`](../.claude/commands/common/ralph-run.md) | Executer Claude en boucle continue jusqu'a completion de la tache (Ralph Wiggum v2.0) |
-| [`/common:release-checklist`](../.claude/commands/common/release-checklist.md) | Checklist de Release |
 | [`/common:research-context7`](../.claude/commands/common/research-context7.md) | Recherche avec Context7 et Web |
 | [`/common:search`](../.claude/commands/common/search.md) | Search commands, skills and agents by keyword |
 | [`/common:setup-ci`](../.claude/commands/common/setup-ci.md) | Configuration CI/CD |
-| [`/common:setup-project-context`](../.claude/commands/common/setup-project-context.md) | Obsolète (retirée en 9.0) : utilisez /common:init --context |
 | [`/common:setup-rtk`](../.claude/commands/common/setup-rtk.md) | Configure RTK and token optimization for Claude Code |
 
 ## `/coolify:*`
@@ -144,13 +138,6 @@
 | Command | Description |
 |---------|-------------|
 | [`/gate:check`](../Project/i18n/en/Gate/commands/check.md) | Run any quality gate: document gates (PRD, tech spec, backlog, sprint, story, alignment), code gates (commit, merge, release), the full report or a phase checkpoint |
-| [`/gate:report`](../Project/i18n/en/Gate/commands/report.md) | Deprecated (removed in 9.0): use /gate:check all |
-| [`/gate:validate-alignment`](../Project/i18n/en/Gate/commands/validate-alignment.md) | Deprecated (removed in 9.0): use /gate:check alignment |
-| [`/gate:validate-backlog`](../Project/i18n/en/Gate/commands/validate-backlog.md) | Deprecated (removed in 9.0): use /gate:check backlog |
-| [`/gate:validate-prd`](../Project/i18n/en/Gate/commands/validate-prd.md) | Deprecated (removed in 9.0): use /gate:check prd |
-| [`/gate:validate-sprint`](../Project/i18n/en/Gate/commands/validate-sprint.md) | Deprecated (removed in 9.0): use /gate:check sprint |
-| [`/gate:validate-story`](../Project/i18n/en/Gate/commands/validate-story.md) | Deprecated (removed in 9.0): use /gate:check story |
-| [`/gate:validate-techspec`](../Project/i18n/en/Gate/commands/validate-techspec.md) | Deprecated (removed in 9.0): use /gate:check spec |
 
 ## `/hcloud:*`
 
@@ -230,44 +217,11 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/project:add-epic`](../Project/i18n/en/commands/add-epic.md) | Deprecated (removed in 9.0): use /project:backlog add epic |
-| [`/project:add-story`](../Project/i18n/en/commands/add-story.md) | Deprecated (removed in 9.0): use /project:backlog add story |
-| [`/project:add-task`](../Project/i18n/en/commands/add-task.md) | Deprecated (removed in 9.0): use /project:backlog add task |
-| [`/project:analyze-backlog`](../Project/i18n/en/commands/analyze-backlog.md) | Deprecated (removed in 9.0): use /project:migrate --analyze |
 | [`/project:backlog`](../Project/i18n/en/commands/backlog.md) | Manage the backlog: add, list, edit and move EPICs, User Stories and Tasks, pick the next story, move story statuses and apply routing rules |
-| [`/project:batch-status`](../Project/i18n/en/commands/batch-status.md) | Deprecated (removed in 9.0): use /workflow:status --queue |
-| [`/project:board`](../Project/i18n/en/commands/board.md) | Deprecated (removed in 9.0): use /workflow:status --board |
-| [`/project:burndown`](../Project/i18n/en/commands/burndown.md) | Deprecated (removed in 9.0): use /project:report burndown |
-| [`/project:checkpoint`](../Project/i18n/en/commands/checkpoint.md) | Deprecated (removed in 9.0): use /gate:check --phase= |
-| [`/project:coverage-map`](../Project/i18n/en/commands/coverage-map.md) | Deprecated (removed in 9.0): use /project:trace --gaps |
-| [`/project:critical-path`](../Project/i18n/en/commands/critical-path.md) | Deprecated (removed in 9.0): use /project:report deps --critical |
-| [`/project:decompose-tasks`](../Project/i18n/en/commands/decompose-tasks.md) | Deprecated (removed in 9.0): use /workflow:start |
-| [`/project:dependencies`](../Project/i18n/en/commands/dependencies.md) | Deprecated (removed in 9.0): use /project:report deps |
-| [`/project:gap-analysis`](../Project/i18n/en/commands/gap-analysis.md) | Deprecated (removed in 9.0): use /project:reverse gaps |
-| [`/project:generate-backlog`](../Project/i18n/en/commands/generate-backlog.md) | Deprecated (removed in 9.0): use /workflow:plan --only=backlog |
-| [`/project:generate-constitution`](../Project/i18n/en/commands/generate-constitution.md) | Deprecated (removed in 9.0): use /workflow:design --constitution |
-| [`/project:generate-prd`](../Project/i18n/en/commands/generate-prd.md) | Deprecated (removed in 9.0): use /workflow:plan --only=prd |
-| [`/project:generate-tech-spec`](../Project/i18n/en/commands/generate-tech-spec.md) | Deprecated (removed in 9.0): use /workflow:design |
-| [`/project:list-epics`](../Project/i18n/en/commands/list-epics.md) | Deprecated (removed in 9.0): use /project:backlog list epic |
-| [`/project:list-stories`](../Project/i18n/en/commands/list-stories.md) | Deprecated (removed in 9.0): use /project:backlog list story |
-| [`/project:list-tasks`](../Project/i18n/en/commands/list-tasks.md) | Deprecated (removed in 9.0): use /project:backlog list task |
-| [`/project:metrics`](../Project/i18n/en/commands/metrics.md) | Deprecated (removed in 9.0): use /project:report metrics |
 | [`/project:migrate`](../Project/i18n/en/commands/migrate.md) | One-shot migration of an existing backlog to BMAD v6 (analyze, migrate, fill stories, resync) |
-| [`/project:migrate-backlog`](../Project/i18n/en/commands/migrate-backlog.md) | Deprecated (removed in 9.0): use /project:migrate |
-| [`/project:move-task`](../Project/i18n/en/commands/move-task.md) | Deprecated (removed in 9.0): use /project:backlog move task |
 | [`/project:report`](../Project/i18n/en/commands/report.md) | Project analytics reports: sprint burndown, metrics dashboard, story dependency graph and critical path |
 | [`/project:reverse`](../Project/i18n/en/commands/reverse.md) | Brownfield reverse-engineering pipeline: scan the codebase, then derive a draft PRD, user stories and a spec-vs-code gap analysis |
-| [`/project:reverse-prd`](../Project/i18n/en/commands/reverse-prd.md) | Deprecated (removed in 9.0): use /project:reverse prd |
-| [`/project:reverse-stories`](../Project/i18n/en/commands/reverse-stories.md) | Deprecated (removed in 9.0): use /project:reverse stories |
-| [`/project:run-epic`](../Project/i18n/en/commands/run-epic.md) | Deprecated (removed in 9.0): use /workflow:implement --epic |
-| [`/project:run-queue`](../Project/i18n/en/commands/run-queue.md) | Deprecated (removed in 9.0): use /workflow:implement --queue |
-| [`/project:run-sprint`](../Project/i18n/en/commands/run-sprint.md) | Deprecated (removed in 9.0): use /workflow:implement |
-| [`/project:scan`](../Project/i18n/en/commands/scan.md) | Deprecated (removed in 9.0): use /project:reverse scan |
-| [`/project:sync-backlog`](../Project/i18n/en/commands/sync-backlog.md) | Deprecated (removed in 9.0): use /project:migrate --resync |
 | [`/project:trace`](../Project/i18n/en/commands/trace.md) | Bidirectional traceability matrix (requirement → story → code → tests); --gaps lists uncovered requirements, --by-priority groups by MoSCoW |
-| [`/project:update-epic`](../Project/i18n/en/commands/update-epic.md) | Deprecated (removed in 9.0): use /project:backlog edit epic |
-| [`/project:update-stories`](../Project/i18n/en/commands/update-stories.md) | Deprecated (removed in 9.0): use /project:migrate --stories |
-| [`/project:update-story`](../Project/i18n/en/commands/update-story.md) | Deprecated (removed in 9.0): use /project:backlog edit story |
 
 ## `/python:*`
 
@@ -291,7 +245,6 @@
 | [`/qa:fix`](../.claude/commands/qa/fix.md) | Correction automatisee des bugs identifies par la QA Recette |
 | [`/qa:recette`](../.claude/commands/qa/recette.md) | Tests d'acceptance automatises avec Claude in Chrome |
 | [`/qa:regression`](../.claude/commands/qa/regression.md) | Voir et gerer le registre de tests de regression QA Recette |
-| [`/qa:report`](../.claude/commands/qa/report.md) | Obsolète (retirée en 9.0) : utilisez /qa:status --report |
 | [`/qa:status`](../.claude/commands/qa/status.md) | Afficher le statut et la progression des sessions QA Recette, ou générer des rapports (--report) |
 | [`/qa:tdd`](../.claude/commands/qa/tdd.md) | Correction de Bug en Mode TDD/BDD |
 
@@ -324,16 +277,6 @@
 | [`/reactnative:generate-screen`](../.claude/commands/reactnative/generate-screen.md) | Génération Screen React Native |
 | [`/reactnative:native-module`](../.claude/commands/reactnative/native-module.md) | Guide Création Module Natif React Native |
 | [`/reactnative:store-prepare`](../.claude/commands/reactnative/store-prepare.md) | Checklist Publication Store React Native |
-
-## `/sprint:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/sprint:auto-route`](../Project/i18n/en/Sprint/commands/auto-route.md) | Deprecated (removed in 9.0): use /project:backlog move story --auto |
-| [`/sprint:dev`](../Project/i18n/en/Sprint/commands/dev.md) | Deprecated (removed in 9.0): use /workflow:implement |
-| [`/sprint:next-story`](../Project/i18n/en/Sprint/commands/next-story.md) | Deprecated (removed in 9.0): use /project:backlog next story |
-| [`/sprint:status`](../Project/i18n/en/Sprint/commands/status.md) | Deprecated (removed in 9.0): use /workflow:status |
-| [`/sprint:transition`](../Project/i18n/en/Sprint/commands/transition.md) | Deprecated (removed in 9.0): use /project:backlog move story |
 
 ## `/symfony:*`
 
@@ -410,7 +353,6 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/workflow:analyze`](../.claude/commands/workflow/analyze.md) | Obsolète (retirée en 9.0) : utilisez /workflow:plan --research |
 | [`/workflow:auto-sprint`](../.claude/commands/workflow/auto-sprint.md) | Orchestrateur de sprint de bout en bout (démarrage -> décomposition -> validation -> implémentation -> PR -> CI -> revue -> rétro -> merge) |
 | [`/workflow:design`](../.claude/commands/workflow/design.md) | Exécuter la phase de Conception (Solutioning) - générer la spécification technique (défaut) ou la constitution du projet (--constitution) |
 | [`/workflow:implement`](../.claude/commands/workflow/implement.md) | Exécuter la phase d'Implémentation - développement TDD/BDD d'un sprint, d'un epic, d'une story ou de la file batch (séquentiel, ou parallèle via /team:sprint) |
