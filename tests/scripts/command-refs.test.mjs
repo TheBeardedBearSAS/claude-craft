@@ -74,7 +74,7 @@ describe('command references resolve to existing commands', () => {
   it('finds a realistic set of commands', () => {
     const valid = validCommands('en');
     expect(valid.size).toBeGreaterThan(100);
-    expect(valid.has('project:add-story')).toBe(true);
+    expect(valid.has('project:backlog')).toBe(true);
     expect(valid.has('common:init')).toBe(true); // base-only command
   });
 

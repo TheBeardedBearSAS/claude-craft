@@ -12,3 +12,56 @@ removed:
   - common/audit-freshness.md
   # 8.26.0 — documentation, now the `sub-agents-patterns` skill
   - common/sub-agents-patterns.md
+  # 9.0.0 — redirect stubs of the PM simplification (8.25.0 / 8.26.0), see docs/MIGRATION-v9.md
+  - project/add-epic.md
+  - project/add-story.md
+  - project/add-task.md
+  - project/list-epics.md
+  - project/list-stories.md
+  - project/list-tasks.md
+  - project/update-epic.md
+  - project/update-story.md
+  - project/move-task.md
+  - project/scan.md
+  - project/reverse-prd.md
+  - project/reverse-stories.md
+  - project/gap-analysis.md
+  - project/coverage-map.md
+  - project/burndown.md
+  - project/metrics.md
+  - project/dependencies.md
+  - project/critical-path.md
+  - project/analyze-backlog.md
+  - project/migrate-backlog.md
+  - project/update-stories.md
+  - project/sync-backlog.md
+  - project/checkpoint.md
+  - project/run-sprint.md
+  - project/run-epic.md
+  - project/run-queue.md
+  - project/board.md
+  - project/batch-status.md
+  - project/generate-prd.md
+  - project/generate-backlog.md
+  - project/generate-tech-spec.md
+  - project/generate-constitution.md
+  - project/decompose-tasks.md
+  - gate/validate-prd.md
+  - gate/validate-techspec.md
+  - gate/validate-backlog.md
+  - gate/validate-sprint.md
+  - gate/validate-story.md
+  - gate/validate-alignment.md
+  - gate/report.md
+  - sprint/dev.md
+  - sprint/status.md
+  - sprint/next-story.md
+  - sprint/transition.md
+  - sprint/auto-route.md
+  - workflow/analyze.md
+  - qa/report.md
+  - common/pre-commit-check.md
+  - common/pre-merge-check.md
+  - common/release-checklist.md
+  - common/daily-standup.md
+  - common/setup-project-context.md

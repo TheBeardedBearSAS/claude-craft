@@ -86,7 +86,7 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     // Workflow namespace should have workflow commands
     const workflowDir = path.join(tmpDir, '.claude', 'commands', 'workflow');
     expect(fs.existsSync(path.join(workflowDir, 'init.md'))).toBe(true);
-    expect(fs.existsSync(path.join(workflowDir, 'analyze.md'))).toBe(true);
+    expect(fs.existsSync(path.join(workflowDir, 'implement.md'))).toBe(true);
 
     // Team namespace
     const teamDir = path.join(tmpDir, '.claude', 'commands', 'team');
@@ -108,7 +108,9 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     expect(fs.existsSync(path.join(commonDir, 'recette.md'))).toBe(false);
     // Common should still have its commands
     expect(fs.existsSync(path.join(commonDir, 'ralph-run.md'))).toBe(true);
-    expect(fs.existsSync(path.join(commonDir, 'pre-commit-check.md'))).toBe(true);
+    expect(fs.existsSync(path.join(commonDir, 'getting-started.md'))).toBe(true);
+    // 9.0: absorbed by /gate:check commit
+    expect(fs.existsSync(path.join(commonDir, 'pre-commit-check.md'))).toBe(false);
   });
 
   it('lists only the selected stack reviewers in AGENTS.md', () => {

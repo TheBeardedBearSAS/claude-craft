@@ -19,4 +19,6 @@ grep -oE '^[[:space:]]*-[[:space:]]+[a-z]+/[a-z0-9-]+\.md' "$manifest" | sed -E 
             rm -f "$commands_dir/$rel"
             echo "  removed retired command: .claude/commands/$rel"
         fi
+        # Drop the namespace folder once it is empty (e.g. /sprint: in 9.0)
+        rmdir "$commands_dir/${rel%%/*}" 2>/dev/null || true
     done

@@ -100,7 +100,7 @@ describe('v7.0.0 namespace integrity', () => {
   it('i18n parity for new Project namespaces', () => {
     const langs = ['en', 'fr', 'es', 'de', 'pt'];
     // '' = flat Project/i18n/<lang>/commands/ (/project: namespace)
-    const namespaces = ['', 'Sprint', 'Gate'];
+    const namespaces = ['', 'Gate']; // 9.0: /sprint: removed
 
     for (const ns of namespaces) {
       const enDir = path.join(PROJECT_ROOT, 'Project/i18n/en', ns, 'commands');
@@ -123,18 +123,16 @@ describe('v7.0.0 namespace integrity', () => {
   it('correct command counts per namespace', () => {
     const expected = {
       // 8.24.0: add-technology, audit-* are maintainer-only (repo .claude/commands/common/)
-      // 8.26.0: sub-agents-patterns became a skill
-      'Dev/i18n/en/Common/commands': 12,
+      // 9.0: pre-commit/pre-merge/release → /gate:check, daily-standup → /workflow:status, setup-project-context → /common:init
+      'Dev/i18n/en/Common/commands': 7,
       'Dev/i18n/base/Common/commands': 4,
-      'Dev/i18n/en/Workflow/commands': 10,
+      'Dev/i18n/en/Workflow/commands': 9,
       'Dev/i18n/en/Team/commands': 4,
-      'Dev/i18n/en/QA/commands': 6,
+      'Dev/i18n/en/QA/commands': 5,
       'Dev/i18n/en/UIUX/commands': 8,
-      // 8.25.0: + backlog, reverse, report, migrate (old commands kept as stubs until 9.0)
-      'Project/i18n/en/commands': 38,
-      'Project/i18n/en/Sprint/commands': 5,
-      // 8.25.0: + check
-      'Project/i18n/en/Gate/commands': 8,
+      // 9.0: backlog, reverse, trace, report, migrate
+      'Project/i18n/en/commands': 5,
+      'Project/i18n/en/Gate/commands': 1,
       'Infra/i18n/en/Docker/commands': 5,
     };
 

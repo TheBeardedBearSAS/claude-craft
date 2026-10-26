@@ -146,7 +146,7 @@ Valida la preparación del sprint (argumentos: `[N] [--verbose]`). `N` es el nú
 3. Validar las stories (ready, estimadas, ninguna bloqueada) y la capacidad opcional.
 4. Generar el informe, empezando por la fuente utilizada: `Source: .bmad/sprint-status.yaml` o `Source: markdown (project-management/sprints/sprint-{N}-*/)`.
 
-En modo fallback el gate se evalúa igualmente, pero el informe añade una advertencia no bloqueante: los comandos `/sprint:*` necesitan `.bmad/sprint-status.yaml`; ejecutar `/workflow:start {N}`, o `/project:migrate` para crear `.bmad/sprint-status.yaml` a partir de un backlog existente.
+En modo fallback el gate se evalúa igualmente, pero el informe añade una advertencia no bloqueante: los comandos `/workflow:*` necesitan `.bmad/sprint-status.yaml`; ejecutar `/workflow:start {N}`, o `/project:migrate` para crear `.bmad/sprint-status.yaml` a partir de un backlog existente.
 
 ```
 Sprint Ready Gate Validation
