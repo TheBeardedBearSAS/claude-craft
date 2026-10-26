@@ -214,7 +214,7 @@ Tracking SQLite local (metriques de savings)
 |---------|--------|
 | **Court terme** | Tester RTK manuellement avec claude-craft pour valider les savings reels |
 | **Moyen terme** | Si RTK atteint v1.0 avec stabilite prouvee, envisager une mention dans la doc ou un guide d'integration |
-| **Long terme** | Potentielle integration optionnelle dans le workflow claude-craft (ajout de hooks RTK via `/common:setup-project-context`) |
+| **Long terme** | Potentielle integration optionnelle dans le workflow claude-craft (ajout de hooks RTK via `/common:init --context`) |
 
 ### Risques a monitorer
 

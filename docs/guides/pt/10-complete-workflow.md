@@ -26,10 +26,10 @@ Você vai levar o TaskFlow de uma ideia em uma frase até um primeiro sprint rev
    ▼                                │
  PLANO DE SPRINT ──/gate:check sprint──┐  (Sprint Ready 100%)
    │  /workflow:start                  │
-   │  /project:decompose-tasks         │
+   │  /workflow:start         │
    ▼                                   │
  IMPLEMENTAÇÃO (TDD) ──/gate:check story──┐  (Story DoD 100%)
-   │  /sprint:dev                         │
+   │  /workflow:implement                         │
    ▼                                      │
  REVISÃO + RETRO ──/workflow:review, /workflow:retro
                                           │
@@ -111,7 +111,7 @@ Se você vir um relatório de status do fluxo (mesmo que diga "nenhum fluxo aind
 npx @the-bearded-bear/claude-craft install . --tech=python --lang=en
 ```
 
-> **Sobre a camada de Gerenciamento de Projetos.** Os comandos `/gate:*`, `/sprint:*` e `/project:*` usados abaixo vêm da opção **Project Management commands**, incluída por padrão durante a instalação (o instalador pergunta *"Include Project Management commands? (Y/n)"* → Yes). Se esses comandos estiverem ausentes, execute o instalador novamente e aceite essa opção.
+> **Sobre a camada de Gerenciamento de Projetos.** Os comandos `/gate:*` e `/project:*` usados abaixo vêm da opção **Project Management commands**, incluída por padrão durante a instalação (o instalador pergunta *"Include Project Management commands? (Y/n)"* → Yes). Se esses comandos estiverem ausentes, execute o instalador novamente e aceite essa opção.
 
 ### 2.x Economizando tokens: contexto e `/clear`
 
@@ -209,10 +209,10 @@ O Claude propõe um **objetivo de sprint** e seleciona as principais histórias 
 **Modo: Plano necessário.**
 
 ```
-/project:decompose-tasks
+/workflow:start
 ```
 
-Cada história é dividida em **tarefas** de ≤ 30 minutos, testáveis de forma independente (escrever o modelo, escrever o endpoint, escrever o teste, conectar a UI…). Isso é o que faz o TDD e o `/sprint:dev` fluírem sem problemas.
+Cada história é dividida em **tarefas** de ≤ 30 minutos, testáveis de forma independente (escrever o modelo, escrever o endpoint, escrever o teste, conectar a UI…). Isso é o que faz o TDD e o `/workflow:implement` fluírem sem problemas.
 
 ### B.5 Validar o sprint
 
@@ -235,10 +235,10 @@ Limite do gate: **Sprint Ready 100%** — cada história estimada, cada tarefa d
 **Modo: Normal (⚡).**
 
 ```
-/sprint:dev
+/workflow:implement
 ```
 
-`/sprint:dev` percorre o sprint **tarefa por tarefa**, guiando você pelo ciclo TDD **Red → Green → Refactor**:
+`/workflow:implement` percorre o sprint **tarefa por tarefa**, guiando você pelo ciclo TDD **Red → Green → Refactor**:
 
 1. **Red** — escrever um teste que falha e que define o comportamento esperado.
 2. **Green** — escrever o código mínimo para fazê-lo passar.
@@ -250,16 +250,16 @@ Para cada história, ele também executa uma revisão de código e verifica o **
 
 ### C.2 Alternativas (opcional)
 
-- `/project:run-sprint` — executa o sprint inteiro de forma mais autônoma.
-- `/team:sprint` — implementa múltiplas histórias **em paralelo** usando Agent Teams (avançado).
+- `/workflow:implement --auto` — executa o sprint inteiro de forma mais autônoma.
+- `/workflow:implement --parallel 3` (`/team:sprint`) — implementa múltiplas histórias **em paralelo** usando Agent Teams (avançado).
 - `@tdd-coach` — invoque o coach no meio de uma tarefa para orientação.
 
-Fique com `/sprint:dev` na sua primeira execução.
+Fique com `/workflow:implement` na sua primeira execução.
 
 ### C.3 Conduzir dia a dia
 
-- `/sprint:next-story --claim` — pegar a próxima história.
-- `/sprint:transition US-001 in-progress` — mover uma história pelo board.
+- `/project:backlog next story --claim` — pegar a próxima história.
+- `/project:backlog move story US-001 in-progress` — mover uma história pelo board.
 - `/qa:tdd` — corrigir um bug no modo TDD/BDD estrito.
 
 > **Lembrete sobre Docker.** Execute testes e comandos via Docker para que os resultados não dependam da sua máquina local, por exemplo: `docker compose exec app pytest`.
@@ -273,7 +273,7 @@ Fique com `/sprint:dev` na sua primeira execução.
 **Modo: Somente leitura.**
 
 ```
-/project:board
+/workflow:status --board
 ```
 
 Isso abre um **board Kanban** local (sem SaaS, sem lock-in) que lê os arquivos de estado do BMAD. As colunas seguem o roteamento de status:
@@ -332,15 +332,15 @@ Execute `/workflow:start` novamente para planejar o sprint 2 a partir do backlog
 /workflow:design               # tech spec
 /gate:check spec               # Tech Spec ≥ 90%
 /workflow:start                # planejar o sprint
-/project:decompose-tasks       # histórias → tarefas
+/workflow:start       # histórias → tarefas
 /gate:check sprint             # Sprint Ready 100%
 
 # Etapa C — Implementar (TDD)
-/sprint:dev                    # tarefa a tarefa Red/Green/Refactor
+/workflow:implement                    # tarefa a tarefa Red/Green/Refactor
 /gate:check story US-001       # Story DoD 100%
 
 # Etapa D — Acompanhar
-/project:board                 # Kanban
+/workflow:status --board                 # Kanban
 /project:report burndown       # burndown
 
 # Etapa E — Fechar + repetir
@@ -376,7 +376,7 @@ Após cada etapa com letra (A→B→C→D→E). O estado vive em arquivos; `/wor
 
 | Sintoma | Solução |
 |---------|---------|
-| `/gate:*` / `/sprint:*` desconhecidos | Reinstale e aceite *Project Management commands*. |
+| `/gate:*` / `/project:*` desconhecidos | Reinstale e aceite *Project Management commands*. |
 | `/bmad:init` não encontrado | Não existe — use `/workflow:init`. |
 | Gate continua falhando | Leia o relatório; ele nomeia exatamente o item que falhou. |
 | Cartão não chega em **done** | O DoD ainda não foi cumprido — é intencional. |

@@ -95,7 +95,7 @@ Chaque stack dispose de : reviewer agent dedie, commandes specifiques (check-com
 
 ### F2 : Cycle de vie sprint complet (analyse -> QA)
 
-Le seul framework couvrant : `/workflow:analyze` -> `/workflow:plan` -> `/workflow:design` -> `/workflow:implement` -> `/qa:recette`. Avec 5 quality gates (PRD >=80%, Tech Spec >=90%, INVEST 6/6, Sprint Ready 100%, Story DoD 100%). Le `/team:delivery` orchestre ecriture + implementation en 2 phases avec detection de conflits de domaines fichiers. BMAD-METHOD fournit la methodologie mais pas le moteur d'execution.
+Le seul framework couvrant : `/workflow:plan --research` -> `/workflow:plan` -> `/workflow:design` -> `/workflow:implement` -> `/qa:recette`. Avec 5 quality gates (PRD >=80%, Tech Spec >=90%, INVEST 6/6, Sprint Ready 100%, Story DoD 100%). Le `/team:delivery` orchestre ecriture + implementation en 2 phases avec detection de conflits de domaines fichiers. BMAD-METHOD fournit la methodologie mais pas le moteur d'execution.
 
 ### F3 : QA Recette (differenciateur exclusif)
 

@@ -398,7 +398,7 @@ You have two options to configure the project context:
 Use the built-in command to auto-detect your stack and answer targeted questions:
 
 ```bash
-/common:setup-project-context
+/common:init --context
 ```
 
 The command will analyze your existing codebase, detect technologies, and ask only for missing information.

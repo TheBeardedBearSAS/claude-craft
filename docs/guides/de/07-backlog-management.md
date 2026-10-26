@@ -8,7 +8,7 @@ Vollständiger Workflow zur Erstellung und Verwaltung eines SCRUM-Backlogs mit C
 
 Claude-Craft bietet einen umfassenden Satz von Befehlen zur Verwaltung Ihres Product Backlogs nach der SCRUM-Methodik:
 
-- **Ein einziger Befehl `/project:backlog`** (`add`, `list`, `edit`, `move`) sowie `/project:board` und `/sprint:*` für Backlog-Operationen; die alten Befehle `/project:add-*`, `list-*`, `update-*` und `move-task` sind veraltet und werden in 9.0 entfernt
+- **Ein einziger Befehl `/project:backlog`** (`add`, `list`, `edit`, `move`, dazu `next story` und `move story --auto` für das Story-Routing) zusammen mit `/workflow:plan --only=backlog`, `/workflow:start` und `/workflow:status --board`; die alten Befehle `/project:add-*`, `list-*`, `update-*`, `move-task`, `/project:generate-backlog`, `/project:decompose-tasks`, `/project:board` und `/sprint:*` sind veraltet und werden in 9.0 entfernt
 - **5 Vorlagen** für eine konsistente Struktur
 - **Vertical Slicing** über alle Technologieschichten hinweg
 - **INVEST-Modell**-Validierung für User Stories
@@ -30,7 +30,7 @@ Basiert auf:
 Legen Sie Ihre Projektspezifikationen in `./docs/` ab und führen Sie dann aus:
 
 ```bash
-/project:generate-backlog symfony+flutter
+/workflow:plan --only=backlog symfony+flutter
 ```
 
 ### Generierte Struktur
@@ -161,7 +161,7 @@ Technische Arbeitselemente innerhalb einer User Story:
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/project:generate-backlog [stack]` | Vollständiges Backlog aus Specs generieren |
+| `/workflow:plan --only=backlog [stack]` | Vollständiges Backlog aus Specs generieren |
 | `/project:backlog add epic` | Neues EPIC erstellen |
 | `/project:backlog add story` | User Story zu einem EPIC hinzufügen |
 | `/project:backlog add task` | Technische Aufgabe für eine US erstellen |
@@ -173,14 +173,14 @@ Technische Arbeitselemente innerhalb einer User Story:
 | `/project:backlog list epic` | Alle EPICs mit Status anzeigen |
 | `/project:backlog list story [filter]` | User Stories auflisten (nach EPIC, Sprint, Status) |
 | `/project:backlog list task [filter]` | Aufgaben auflisten (nach US, Sprint, Typ, Status) |
-| `/project:board [sprint]` | Kanban-Board anzeigen |
-| `/sprint:status [sprint]` | Detaillierter Sprint-Fortschrittsbericht |
+| `/workflow:status --board [sprint]` | Kanban-Board anzeigen |
+| `/workflow:status [sprint]` | Detaillierter Sprint-Fortschrittsbericht |
 
 ### Aktualisierungsbefehle
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/sprint:transition [id] [status/sprint]` | US-Status ändern oder Sprint zuweisen |
+| `/project:backlog move story [id] [status/sprint]` | US-Status ändern oder Sprint zuweisen |
 | `/project:backlog move task [id] [status]` | Aufgabenstatus ändern |
 | `/project:backlog edit epic [id]` | Bestehendes EPIC bearbeiten |
 | `/project:backlog edit story [id]` | Bestehende User Story bearbeiten |
@@ -189,7 +189,7 @@ Technische Arbeitselemente innerhalb einer User Story:
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/project:decompose-tasks [sprint]` | Sprint-US in Aufgaben zerlegen |
+| `/workflow:start [sprint]` | Sprint-US in Aufgaben zerlegen |
 | `/gate:check backlog` | Backlog-Qualität prüfen (SCRUM-Konformität) |
 
 ---
@@ -200,7 +200,7 @@ Technische Arbeitselemente innerhalb einer User Story:
 
 ```bash
 # Sicherstellen, dass Specs in ./docs/ vorhanden sind
-/project:generate-backlog symfony+flutter
+/workflow:plan --only=backlog symfony+flutter
 ```
 
 ### Schritt 2: Qualität validieren
@@ -218,7 +218,7 @@ Dies generiert `scrum-validation-report.md` mit:
 ### Schritt 3: Sprint 1 überprüfen
 
 ```bash
-/project:board 1
+/workflow:status --board 1
 ```
 
 Zeigt Kanban-Board mit Spalten:
@@ -227,7 +227,7 @@ Zeigt Kanban-Board mit Spalten:
 ### Schritt 4: In Aufgaben zerlegen
 
 ```bash
-/project:decompose-tasks 1
+/workflow:start 1
 ```
 
 Erstellt detaillierte Aufgabenaufschlüsselung:
@@ -251,7 +251,7 @@ Erstellt detaillierte Aufgabenaufschlüsselung:
 ### Schritt 6: Fortschritt verfolgen
 
 ```bash
-/sprint:status 1
+/workflow:status 1
 ```
 
 ### Schritt 7: Wiederkehrendes Monitoring einrichten (Optional)
@@ -260,7 +260,7 @@ Mit `/loop` (v2.1.71+) den Sprint-Fortschritt automatisch überwachen:
 
 ```bash
 # Sprint-Status alle 30 Minuten prüfen
-/loop 30m /sprint:status 1
+/loop 30m /workflow:status 1
 
 # Pre-Commit-Checks alle 5 Minuten während der Entwicklung
 /loop 5m /gate:check commit

@@ -329,7 +329,7 @@ Lança uma interface web local que visualiza o diretório BMAD v6 `project-manag
 npx @the-bearded-bear/claude-craft kanban [caminho] [opções]
 ```
 
-O `caminho` é por padrão o diretório atual. O destino deve conter uma subpasta `project-management/` (gerada por `/workflow:plan` ou `/sprint:start`).
+O `caminho` é por padrão o diretório atual. O destino deve conter uma subpasta `project-management/` (gerada por `/workflow:plan` ou `/workflow:start`).
 
 ### Opções
 

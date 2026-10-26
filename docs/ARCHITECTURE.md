@@ -607,7 +607,7 @@ Create .bmad/ structure
 @sm plans sprint
      │
      ▼
-/sprint:next-story
+/project:backlog next story
      │
      ▼
 @dev implements (TDD)
@@ -616,7 +616,7 @@ Create .bmad/ structure
 /gate:check story
      │
      ▼
-/sprint:transition done
+/project:backlog move story done
 ```
 
 ---

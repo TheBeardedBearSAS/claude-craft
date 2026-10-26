@@ -317,7 +317,7 @@ Use o comando integrado para detectar automaticamente sua stack e responder perg
 claude
 
 # Executar o comando de configuração
-/common:setup-project-context
+/common:init --context
 ```
 
 O comando irá:

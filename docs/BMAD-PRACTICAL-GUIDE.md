@@ -51,6 +51,23 @@ This creates:
 /workflow:status
 ```
 
+### The Main Path
+
+Nine `/workflow:` commands cover the whole lifecycle. `.bmad/sprint-status.yaml` is the single source of truth for status; markdown files only hold content.
+
+```bash
+/workflow:init            # 1. Detect the track (Quick Flow / Standard / Enterprise)
+/workflow:plan            # 2. PRD + backlog (--research, --only=prd, --only=backlog)
+/workflow:design          # 3. Tech spec (--constitution for the project constitution)
+/workflow:start 1         # 4. Sprint folder, sprint-status.yaml entries, tasks
+/workflow:implement       # 5. TDD/BDD implementation (--story, --epic, --queue, --parallel N)
+/workflow:review          # 6. Sprint review
+/workflow:retro           # 7. Retrospective
+/workflow:status          # Anytime: phase, metrics, next action (--board, --queue, --standup, --gates)
+```
+
+For Standard/Enterprise tracks run `plan --only=prd` → `design` → `plan --only=backlog`, so the backlog reads the PRD and tech spec. To run a whole sprint unattended: `/workflow:auto-sprint 1` (add `--from-prd` to generate the backlog from `project-management/prd.md` first).
+
 ---
 
 ## The 9 BMAD Agents
@@ -77,7 +94,7 @@ This creates:
 - `/workflow:start` - Start a sprint phase
 - `/workflow:review` - Sprint review and phase handoff
 
-> Note: BMAD roles (pm, ba, architect, po, sm, dev, qa) are integrated into the `/workflow:*` and `/sprint:*` commands — there is no standalone `/bmad:*` namespace.
+> Note: BMAD roles (pm, ba, architect, po, sm, dev, qa) are integrated into the `/workflow:*` and `/project:*` commands — there is no standalone `/bmad:*` namespace.
 
 ---
 
@@ -264,7 +281,7 @@ This creates:
 - `/qa:validate` - Validate AC
 - `/qa:automate` - Automate tests
 - `/qa:explore` - Exploratory testing
-- `/qa:report` - Quality report
+- `/qa:status --report` - Quality report
 - `/qa:bug` - Report bug
 
 ---
@@ -411,21 +428,21 @@ Stories automatically transition through statuses:
 
 ```bash
 # View current status
-/sprint:status --bmad
+/workflow:status
 
 # Get next story ready for development
-/sprint:next-story --claim
+/project:backlog next story --claim
 
 # Transition a story
-/sprint:transition US-005 in-progress
-/sprint:transition US-005 review
-/sprint:transition US-005 done
+/project:backlog move story US-005 in-progress
+/project:backlog move story US-005 review
+/project:backlog move story US-005 done
 
 # Block a story
-/sprint:transition US-005 blocked --reason="Waiting for API"
+/project:backlog move story US-005 blocked --reason="Waiting for API"
 
 # Run automatic routing rules
-/sprint:auto-route
+/project:backlog move story --auto
 ```
 
 ### TDD Phase Within In-Progress
@@ -449,37 +466,43 @@ Visual indicators:
 
 Process multiple stories automatically.
 
-### Queue an Epic
+### Run an Epic
 
 ```bash
-# Queue all stories from an epic
-/project:run-epic EPIC-002
+# Queue and implement all stories of an epic
+/workflow:implement --epic EPIC-002
 ```
 
 ### Process the Queue
 
 ```bash
 # Process stories in queue
-/project:run-queue
+/workflow:implement --queue
 
 # With parallel processing
-/project:run-queue --parallel 3
+/workflow:implement --queue --parallel 3
 ```
 
 ### Execute Full Sprint
 
 ```bash
-# Run entire sprint automatically
-/project:run-sprint
+# Run the whole sprint (sequential by default)
+/workflow:implement
 
-# With auto-routing
-/project:run-sprint --auto
+# Skip the confirmation prompt
+/workflow:implement --auto
+
+# Resume from the last checkpoint
+/workflow:implement --resume
+
+# Whole sprint unattended: start → implement → PR → review → retro → merge
+/workflow:auto-sprint 1
 ```
 
 ### Check Batch Status
 
 ```bash
-/project:batch-status
+/workflow:status --queue
 ```
 
 ---
@@ -503,8 +526,8 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 | Story source | Mutable via board? | Written by |
 |---|---|---|
-| `project-management/US-*.md` | Yes | `/workflow:plan`, `/sprint:start` |
-| `.bmad/sprint-status.yaml` | No (read-only 🔒) | `/workflow:*`, `/sprint:*` commands |
+| `project-management/US-*.md` | Yes | `/workflow:plan`, `/workflow:start` |
+| `.bmad/sprint-status.yaml` | No (read-only 🔒) | `/workflow:*`, `/project:backlog` commands |
 
 ### Views
 
@@ -516,7 +539,7 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 ### Typical BMAD workflow with the board
 
-1. Run `/workflow:init` or `/sprint:start` to populate `.bmad/sprint-status.yaml`
+1. Run `/workflow:init` then `/workflow:start 1` to populate `.bmad/sprint-status.yaml`
 2. Launch `claude-craft kanban --open` to open the board
 3. Monitor story progress in real time — the board live-reloads on every YAML change
 4. Use the board as a read-only dashboard during sprint ceremonies (stand-up, review)
@@ -570,13 +593,13 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 ```bash
 # Get next story
-/sprint:next-story --claim
+/project:backlog next story --claim
 
 # Implement with TDD
 @dev Implement US-001 using TDD
 
 # 🔴 Red - Write failing test
-/sprint:transition US-001 in-progress
+/project:backlog move story US-001 in-progress
 # Write test...
 
 # 🟢 Green - Implement
@@ -586,7 +609,7 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 # Refactor...
 
 # Move to review
-/sprint:transition US-001 review
+/project:backlog move story US-001 review
 ```
 
 ### 8. Validate (QA Phase)
@@ -599,7 +622,7 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 ### 9. Complete
 
 ```bash
-/sprint:transition US-001 done
+/project:backlog move story US-001 done
 ```
 
 ---

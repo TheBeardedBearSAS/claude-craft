@@ -329,7 +329,7 @@ Lance une interface web locale qui visualise le répertoire BMAD v6 `project-man
 npx @the-bearded-bear/claude-craft kanban [chemin] [options]
 ```
 
-Le `chemin` est par défaut le répertoire courant. La cible doit contenir un sous-dossier `project-management/` (généré par `/workflow:plan` ou `/sprint:start`).
+Le `chemin` est par défaut le répertoire courant. La cible doit contenir un sous-dossier `project-management/` (généré par `/workflow:plan` ou `/workflow:start`).
 
 ### Options
 

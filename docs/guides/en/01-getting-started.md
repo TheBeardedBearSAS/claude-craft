@@ -174,7 +174,7 @@ You can configure the project context interactively or manually:
 ```bash
 cd ~/my-api && claude
 # Then run:
-/common:setup-project-context
+/common:init --context
 ```
 
 **Option B: Manual**

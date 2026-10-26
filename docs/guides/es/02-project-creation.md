@@ -417,7 +417,7 @@ Este es el archivo más importante a personalizar. Le indica a Claude los detall
 
 Ejecuta este comando en Claude Code para autodetectar tu stack y responder preguntas específicas:
 ```bash
-/common:setup-project-context
+/common:init --context
 ```
 
 **Opción B: Configuración Manual**

@@ -513,7 +513,7 @@ npx @the-bearded-bear/claude-craft autonomous-sprint --story=US-001
 
 ```bash
 # Status en temps réel
-/sprint:status
+/workflow:status
 
 # Logs détaillés
 /sprint:logs --story=US-001

@@ -168,7 +168,7 @@ Vous pouvez configurer le contexte du projet de manière interactive ou manuelle
 ```bash
 cd ~/mon-api && claude
 # Puis exécutez :
-/common:setup-project-context
+/common:init --context
 ```
 
 **Option B : Manuelle**

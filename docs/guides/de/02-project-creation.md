@@ -417,7 +417,7 @@ Dies ist die wichtigste Datei zum Anpassen. Sie informiert Claude über Ihr spez
 
 Führen Sie diesen Befehl in Claude Code aus, um Ihren Stack automatisch zu erkennen und gezielte Fragen zu beantworten:
 ```bash
-/common:setup-project-context
+/common:init --context
 ```
 
 **Option B: Manuelle Konfiguration**

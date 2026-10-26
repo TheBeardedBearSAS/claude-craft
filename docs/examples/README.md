@@ -107,7 +107,7 @@ claude
 
 ```bash
 # 1. Get next story
-/sprint:next-story --claim
+/project:backlog next story --claim
 
 # 2. Start TDD
 @dev Implement US-001 with TDD
@@ -116,7 +116,7 @@ claude
 /gate:check story US-001
 
 # 4. Complete
-/sprint:transition US-001 done
+/project:backlog move story US-001 done
 ```
 
 ---

@@ -342,7 +342,7 @@ Installs project management commands.
 
 **Installs:**
 - Project commands (`/project:*`)
-- Sprint commands (`/sprint:*`)
+- Sprint commands (`/workflow:*`)
 - Gate commands (`/gate:*`)
 - BMAD agents and commands
 - Product Owner and Tech Lead agents

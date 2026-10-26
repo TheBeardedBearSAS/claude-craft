@@ -6,10 +6,10 @@ Workflow complet pour créer et gérer un backlog SCRUM avec Claude-Craft.
 
 ## Vue d'ensemble
 
-Claude-Craft fournit un ensemble complet de commandes pour gérer votre product backlog selon la méthodologie SCRUM (parmi les 239 fichiers de commandes de Claude Craft, dont 33 redirections dépréciées) :
+Claude-Craft fournit un ensemble complet de commandes pour gérer votre product backlog selon la méthodologie SCRUM (parmi les 238 fichiers de commandes de Claude Craft, dont 52 redirections dépréciées) :
 
-- **Une commande `/project:backlog`** (`add`, `list`, `edit`, `move`) ainsi que `/project:board`, `/project:reverse`, `/project:trace`, `/project:report` et `/project:migrate` pour le backlog et la gestion de projet ; les anciennes commandes `/project:add-*`, `list-*`, `update-*` et `move-task` sont dépréciées (retrait en 9.0)
-- **5 commandes `/sprint:`** pour le suivi des sprints
+- **Une commande `/project:backlog`** (`add`, `list`, `edit`, `move`, plus `next story` et `move story --auto` pour le routage des stories) ainsi que `/workflow:plan --only=backlog`, `/workflow:start`, `/workflow:status --board`, `/project:reverse`, `/project:trace`, `/project:report` et `/project:migrate` pour le backlog et la gestion de projet ; les anciennes commandes `/project:add-*`, `list-*`, `update-*`, `move-task`, `/project:generate-backlog`, `/project:decompose-tasks`, `/project:board` et `/sprint:*` sont dépréciées (retrait en 9.0)
+- **Le chemin `/workflow:`** (`init`, `plan`, `design`, `start`, `implement`, `review`, `retro`, `status`) pour le cycle de sprint ; le namespace `/sprint:` est déprécié
 - **Une commande `/gate:check`** (`prd`, `spec`, `backlog`, `sprint`, `story`, `alignment`, `all`, `commit`, `merge`, `release`) pour la validation qualité
 - **Vertical slicing** obligatoire sur toutes les couches tech
 - **Validation INVEST** pour les User Stories
@@ -31,7 +31,7 @@ Basé sur :
 Placez vos spécifications projet dans `./docs/` puis exécutez :
 
 ```bash
-/project:generate-backlog symfony+flutter
+/workflow:plan --only=backlog symfony+flutter
 ```
 
 ### Structure Générée
@@ -162,7 +162,7 @@ Scenario: L'utilisateur se connecte avec succès
 
 | Commande | Description |
 |----------|-------------|
-| `/project:generate-backlog [stack]` | Générer le backlog complet depuis les specs |
+| `/workflow:plan --only=backlog [stack]` | Générer le backlog complet depuis les specs |
 | `/project:backlog add epic` | Créer un nouvel EPIC |
 | `/project:backlog add story` | Ajouter une User Story à un EPIC |
 | `/project:backlog add task` | Créer une tâche technique pour une US |
@@ -174,14 +174,14 @@ Scenario: L'utilisateur se connecte avec succès
 | `/project:backlog list epic` | Afficher tous les EPICs avec statut |
 | `/project:backlog list story [filtre]` | Lister les User Stories (par EPIC, Sprint, Statut) |
 | `/project:backlog list task [filtre]` | Lister les tâches (par US, Sprint, Type, Statut) |
-| `/project:board [sprint]` | Afficher le tableau Kanban |
-| `/sprint:status [sprint]` | Rapport détaillé de progression du sprint |
+| `/workflow:status --board [sprint]` | Afficher le tableau Kanban |
+| `/workflow:status [sprint]` | Rapport détaillé de progression du sprint |
 
 ### Commandes de Mise à Jour
 
 | Commande | Description |
 |----------|-------------|
-| `/sprint:transition [id] [statut/sprint]` | Changer le statut de l'US ou assigner au sprint |
+| `/project:backlog move story [id] [statut/sprint]` | Changer le statut de l'US ou assigner au sprint |
 | `/project:backlog move task [id] [statut]` | Changer le statut de la tâche |
 | `/project:backlog edit epic [id]` | Modifier un EPIC existant |
 | `/project:backlog edit story [id]` | Modifier une User Story existante |
@@ -190,7 +190,7 @@ Scenario: L'utilisateur se connecte avec succès
 
 | Commande | Description |
 |----------|-------------|
-| `/project:decompose-tasks [sprint]` | Décomposer les US du sprint en tâches |
+| `/workflow:start [sprint]` | Décomposer les US du sprint en tâches |
 | `/gate:check backlog` | Auditer la qualité du backlog (conformite SCRUM) |
 
 ---
@@ -201,7 +201,7 @@ Scenario: L'utilisateur se connecte avec succès
 
 ```bash
 # S'assurer que les specs sont dans ./docs/
-/project:generate-backlog symfony+flutter
+/workflow:plan --only=backlog symfony+flutter
 ```
 
 ### Étape 2 : Valider la Qualité
@@ -219,7 +219,7 @@ Cela génère `scrum-validation-report.md` avec :
 ### Étape 3 : Examiner le Sprint 1
 
 ```bash
-/project:board 1
+/workflow:status --board 1
 ```
 
 Affiche le tableau Kanban avec les colonnes :
@@ -228,7 +228,7 @@ Affiche le tableau Kanban avec les colonnes :
 ### Étape 4 : Décomposer en Tâches
 
 ```bash
-/project:decompose-tasks 1
+/workflow:start 1
 ```
 
 Crée une décomposition détaillée des tâches :
@@ -252,7 +252,7 @@ Crée une décomposition détaillée des tâches :
 ### Étape 6 : Suivre la Progression
 
 ```bash
-/sprint:status 1
+/workflow:status 1
 ```
 
 Affiche :

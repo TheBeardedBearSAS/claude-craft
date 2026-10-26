@@ -138,7 +138,8 @@ You can also ask the TDD coach agent directly:
 | I want to... | Command / Agent |
 |--------------|----------------|
 | Review my code | `@{tech}-reviewer Review my src/ folder` |
-| Start a feature with full workflow | `/workflow:init` |
+| Start a feature with full workflow | `/workflow:init` → `plan` → `design` → `start` → `implement` → `review` → `retro` (`/workflow:status` anytime) |
+| Run a whole sprint unattended | `/workflow:auto-sprint 1` (`--from-prd` to start from the PRD) |
 | Generate code following project patterns | `/{tech}:generate-*` |
 | Validate before committing | `/gate:check commit` |
 | Run acceptance tests in Chrome | `/qa:recette --scope=story --id=US-001` |
@@ -150,7 +151,7 @@ You can also ask the TDD coach agent directly:
 
 **Frontend developer:** Use `@uiux-orchestrator` for design system coordination, `/{tech}:generate-component` for scaffolding.
 
-**Team lead:** Run `/team:audit` regularly, use `/sprint:status` for progress tracking, `/gate:check all` for quality metrics.
+**Team lead:** Run `/team:audit` regularly, use `/workflow:status` (`--board`, `--gates`) for progress tracking, `/gate:check all` for quality metrics.
 
 ### Learn more
 

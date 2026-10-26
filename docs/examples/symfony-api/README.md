@@ -150,7 +150,7 @@ sprints:
 
 ```bash
 # 1. Get next story
-/sprint:next-story --claim
+/project:backlog next story --claim
 
 # 2. Start TDD
 @dev Implement US-003 with TDD
@@ -163,7 +163,7 @@ sprints:
 /gate:check story US-003
 
 # 4. Complete
-/sprint:transition US-003 done
+/project:backlog move story US-003 done
 ```
 
 ### Quality Checks

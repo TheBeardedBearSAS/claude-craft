@@ -180,13 +180,13 @@ For cross-technology features, coordinate using BMAD:
 # 1. Start with backend
 cd backend
 claude
-/sprint:next-story --claim
+/project:backlog next story --claim
 # Implement API endpoint
 
 # 2. Then frontend
 cd ../mobile
 claude
-/sprint:next-story --claim
+/project:backlog next story --claim
 # Implement mobile feature
 
 # 3. E2E testing

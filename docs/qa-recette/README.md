@@ -341,7 +341,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for the planned standalone tool — **ful
 | `/qa:recette --scope=sprint --id=<ID>` | Test all stories in a sprint |
 | `/qa:recette --resume=<SESSION_ID>` | Resume interrupted session |
 | `/qa:status` | Show current test session status |
-| `/qa:report` | Generate full test report |
+| `/qa:status --report` | Generate full test report |
 | `/qa:tdd` | Run TDD workflow for a feature |
 | `/qa:fix` | Fix a failing test |
 | `/qa:regression` | Check for regressions |

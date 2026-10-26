@@ -327,7 +327,7 @@ Use the built-in command to auto-detect your stack and answer targeted questions
 claude
 
 # Run the setup command
-/common:setup-project-context
+/common:init --context
 ```
 
 The command will:
