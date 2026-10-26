@@ -28,6 +28,10 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces (234 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v8.23.3
+
+**Maintenance sécurité (2026-10-26, v8.23.3) :** 30 alertes Dependabot résolues, toutes en dépendances de développement (`dompurify` 3.4.17 — *critical*, `vite`, `vitest` 4.1.12, `devalue`…). `npm audit` à 0 à la racine et dans `website/`. Détails : [CHANGELOG](CHANGELOG.md#8233---2026-10-26).
+
 ## What's New in v8.23.2
 
 **Correctif de sécurité (2026-10-26, v8.23.2) :**
