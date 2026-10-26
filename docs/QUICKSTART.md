@@ -140,7 +140,7 @@ You can also ask the TDD coach agent directly:
 | Review my code | `@{tech}-reviewer Review my src/ folder` |
 | Start a feature with full workflow | `/workflow:init` |
 | Generate code following project patterns | `/{tech}:generate-*` |
-| Validate before committing | `/common:pre-commit-check` |
+| Validate before committing | `/gate:check commit` |
 | Run acceptance tests in Chrome | `/qa:recette --scope=story --id=US-001` |
 | Run Claude in a continuous loop | `/common:ralph-run "implement feature X"` |
 
@@ -150,7 +150,7 @@ You can also ask the TDD coach agent directly:
 
 **Frontend developer:** Use `@uiux-orchestrator` for design system coordination, `/{tech}:generate-component` for scaffolding.
 
-**Team lead:** Run `/team:audit` regularly, use `/sprint:status` for progress tracking, `/gate:report` for quality metrics.
+**Team lead:** Run `/team:audit` regularly, use `/sprint:status` for progress tracking, `/gate:check all` for quality metrics.
 
 ### Learn more
 
@@ -178,7 +178,7 @@ INSTALLATION
 COMMON COMMANDS
   /team:audit                Full project audit
   /workflow:init             Start development workflow
-  /common:pre-commit-check   Validate before commit
+  /gate:check commit         Validate before commit
   /qa:tdd                    TDD flow
 
 USEFUL AGENTS

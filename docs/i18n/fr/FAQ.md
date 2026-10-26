@@ -316,7 +316,7 @@ Voir [Guide de Dépannage](TROUBLESHOOTING.md) pour plus de solutions.
 ### Comment créer une user story ?
 
 ```
-/project:add-story EPIC-001 "En tant qu'utilisateur, je veux..."
+/project:backlog add story EPIC-001 "En tant qu'utilisateur, je veux..."
 ```
 
 ### Comment suivre la progression du sprint ?
@@ -438,11 +438,11 @@ rtk init -g
 3. Générer le code avec `/symfony:generate-crud`
 4. Écrire les tests avec `@tdd-coach`
 5. Faire la revue avec `@symfony-reviewer`
-6. Valider avec `/common:pre-commit-check`
+6. Valider avec `/gate:check commit`
 
 ### À quelle fréquence exécuter les audits ?
 
-- **Pré-commit** : Toujours (`/common:pre-commit-check`)
+- **Pré-commit** : Toujours (`/gate:check commit`)
 - **Audit complet** : Hebdomadaire ou avant les releases
 - **Audit de sécurité** : Avant chaque release
 

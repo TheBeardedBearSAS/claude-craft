@@ -152,7 +152,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 @dev Implement cart feature with TDD
 
 # 4. Validate
-/gate:validate-story US-003
+/gate:check story US-003
 
 # 5. Complete
 /sprint:transition US-003 done

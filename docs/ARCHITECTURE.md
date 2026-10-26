@@ -589,19 +589,19 @@ Create .bmad/ structure
 @pm creates PRD
      │
      ▼
-/gate:validate-prd
+/gate:check prd
      │
      ▼
 @architect creates tech spec
      │
      ▼
-/gate:validate-techspec
+/gate:check spec
      │
      ▼
 @po creates backlog
      │
      ▼
-/gate:validate-backlog
+/gate:check backlog
      │
      ▼
 @sm plans sprint
@@ -613,7 +613,7 @@ Create .bmad/ structure
 @dev implements (TDD)
      │
      ▼
-/gate:validate-story
+/gate:check story
      │
      ▼
 /sprint:transition done

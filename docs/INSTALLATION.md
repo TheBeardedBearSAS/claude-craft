@@ -339,7 +339,7 @@ find ~/my-project/.claude -name "*.md" | wc -l
 Open your project in Claude Code and try:
 
 ```
-/common:pre-commit-check
+/gate:check commit
 /symfony:check-architecture
 ```
 

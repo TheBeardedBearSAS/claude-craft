@@ -13,7 +13,7 @@ npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
 /common:getting-started         # Interactive onboarding wizard (10 min) — run THIS FIRST
 /common:init                    # Set up the project's .claude/ structure
 /workflow:init                  # Initialize BMAD workflow
-/common:pre-commit-check        # Validate before commit
+/gate:check commit            # Validate before commit
 /team:audit                     # Run full audit
 ```
 
@@ -42,7 +42,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 | Task | Command |
 |------|---------|
 | Start new feature | `/workflow:start "Add user authentication"` |
-| Pre-commit validation | `/common:pre-commit-check` |
+| Pre-commit validation | `/gate:check commit` |
 | Fix bug with TDD | `/qa:tdd "Login fails with empty password"` |
 | Generate CRUD (Symfony) | `/symfony:generate-crud User` |
 | Generate component (React) | `/react:generate-component Button` |
@@ -70,7 +70,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 | Full audit (sequential) | `/team:audit --sequential` |
 | Full audit (parallel) | `/team:audit` |
 | Security review | `/team:security` |
-| Pre-merge check | `/common:pre-merge-check` |
+| Pre-merge check | `/gate:check merge` |
 | Architecture decision | `/common:architecture-decision "Choose database"` |
 | Sprint review | `/workflow:review` |
 | Sprint retrospective | `/workflow:retro` |
@@ -89,15 +89,12 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 ```
 /common:getting-started           # Interactive onboarding wizard (run first)
 /common:init                      # Configure project
-/common:pre-commit-check          # Validate before commit
-/common:pre-merge-check           # Validate before merge
-/common:ralph-run "task"          # Continuous AI loop
+/common:ralph-run "task"          # Continuous AI loop (code gates moved to /gate:check commit|merge|release)
 /common:setup-rtk                 # Install token optimizer
 /common:setup-ci                  # Configure CI/CD
 /common:pack-repo                 # Pack codebase for AI
 /common:research-context7 "topic" # Deep research
 /common:daily-standup             # Standup summary
-/common:release-checklist         # Pre-release checks
 /common:generate-changelog        # Generate CHANGELOG
 /common:architecture-decision     # Document ADR
 /common:add-technology "nextjs"   # Add new tech stack (claude-craft repo only)
@@ -310,18 +307,32 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 > **Prerequisite:** `make install-project TARGET=.`
 
 ```
-/gate:prd                         # PRD quality gate
-/gate:backlog                     # Backlog quality gate
-/gate:sprint-ready                # Sprint Ready gate
-/gate:dod                         # DoD gate
-/gate:spec-alignment              # Spec Alignment gate
-/gate:tech-spec                   # Tech Spec gate
-/gate:invest                      # INVEST criteria gate
+/gate:check prd                   # PRD gate (>= 80%)
+/gate:check spec                  # Tech Spec gate (>= 90%)
+/gate:check backlog               # Backlog / INVEST gate (6/6)
+/gate:check sprint                # Sprint Ready gate
+/gate:check story US-001          # Story DoD gate
+/gate:check alignment             # Spec-code alignment gate (>= 85%)
+/gate:check all                   # Report of all document gates
+/gate:check commit|merge|release  # Code gates (ex /common:pre-*-check, release-checklist)
+/gate:check --phase=pre-sprint    # Lifecycle checkpoint (pre-sprint|pre-impl|post-impl|pre-merge)
 ```
 
-### `/project:` - Project Management (34 commands)
+### `/project:` - Project Management (15 commands)
 
-See `docs/COMMANDS.md` for full list of project management commands.
+```
+/project:backlog add epic|story|task      # Create (also: list, edit, move task)
+/project:backlog list story               # List EPICs / stories / tasks
+/project:backlog move task TASK-001 done  # Change task status
+/project:reverse scan|prd|stories|gaps|all  # Brownfield reverse engineering
+/project:trace [--gaps] [--by-priority]   # Traceability matrix / coverage
+/project:report burndown|metrics|deps [--critical]  # Sprint reports
+/project:migrate [--analyze|--stories|--resync|--dry-run]  # Backlog to BMAD v6
+/project:generate-backlog | generate-prd | generate-tech-spec | run-sprint | board
+```
+
+> The 33 former commands (`/project:add-epic`, `/gate:validate-prd`, `/common:pre-commit-check`...) are deprecated redirect stubs removed in 9.0: see "Deprecated commands" in `docs/COMMANDS.md`.
+
 
 ---
 
@@ -372,8 +383,8 @@ export CLAUDE_CODE_SUBAGENT_MODEL=sonnet  # Cheaper subagents
 |----------|---------|
 | Clear context between tasks | `/clear` |
 | Use Plan Mode for complex tasks | Automatic for `generate-*` commands |
-| Validate before commit | `/common:pre-commit-check` |
-| Validate before merge | `/common:pre-merge-check` |
+| Validate before commit | `/gate:check commit` |
+| Validate before merge | `/gate:check merge` |
 | Use parallel teams for 2+ stacks | `/team:audit` (vs `--sequential`) |
 | Use Ralph for long tasks | `/common:ralph-run "task"` |
 | Research with Context7 | `/common:research-context7 "topic"` |
@@ -389,7 +400,7 @@ export CLAUDE_CODE_SUBAGENT_MODEL=sonnet  # Cheaper subagents
 ```
 
 Configure keyboard shortcuts in `~/.claude/keybindings.json` for your 5 most frequent commands:
-- `/common:pre-commit-check` → `Ctrl+Shift+P`
+- `/gate:check commit` → `Ctrl+Shift+P`
 - `/common:ralph-run` → `Ctrl+Shift+R`
 - `/qa:tdd` → `Ctrl+Shift+T`
 - `/workflow:status` → `Ctrl+Shift+S`
@@ -419,7 +430,7 @@ Requires `make install-project TARGET=.` for BMAD v6 story generation.
 | Need plan before action | `/workflow:plan "feature"` |
 | Broken tests | `/qa:tdd "test description"` |
 | Security vulnerability | `/team:security` |
-| Pre-release panic | `/common:release-checklist` |
+| Pre-release panic | `/gate:check release` |
 | Need to pack repo | `/common:pack-repo --format=xml` |
 
 ---

@@ -18,21 +18,21 @@ Você vai levar o TaskFlow de uma ideia em uma frase até um primeiro sprint rev
  IDEIA
    │  /workflow:init        ← escolher o fluxo
    ▼
- BACKLOG ──/gate:validate-backlog──┐  (PRD ≥ 80%, INVEST 6/6)
-   │  /workflow:plan                │
+ BACKLOG ──/gate:check backlog──┐  (PRD ≥ 80%, INVEST 6/6)
+   │  /workflow:plan            │
+   ▼                            │
+ DESIGN TÉCNICO ──/gate:check spec──┐  (Tech Spec ≥ 90%)
+   │  /workflow:design              │
    ▼                                │
- DESIGN TÉCNICO ──/gate:validate-techspec──┐  (Tech Spec ≥ 90%)
-   │  /workflow:design                   │
-   ▼                                      │
- PLANO DE SPRINT ──/gate:validate-sprint──┐  (Sprint Ready 100%)
+ PLANO DE SPRINT ──/gate:check sprint──┐  (Sprint Ready 100%)
    │  /workflow:start                  │
    │  /project:decompose-tasks         │
-   ▼                                    │
- IMPLEMENTAÇÃO (TDD) ──/gate:validate-story──┐  (Story DoD 100%)
-   │  /sprint:dev                              │
-   ▼                                            │
+   ▼                                   │
+ IMPLEMENTAÇÃO (TDD) ──/gate:check story──┐  (Story DoD 100%)
+   │  /sprint:dev                         │
+   ▼                                      │
  REVISÃO + RETRO ──/workflow:review, /workflow:retro
-   │
+                                          │
    ▼
  PRÓXIMO SPRINT ↺
 ```
@@ -163,7 +163,7 @@ O Claude entrevista você sobre o TaskFlow, depois elabora um **PRD** (Documento
 **Modo: Somente leitura.**
 
 ```
-/gate:validate-backlog
+/gate:check backlog
 ```
 
 Este gate verifica o backlog contra **INVEST (6/6)** e a cobertura do PRD (**≥ 80%**). Se falhar, indica exatamente quais histórias são grandes demais, não testáveis ou não estimáveis. Corrija-as (execute novamente `/workflow:plan` ou edite as histórias) até o gate ficar verde.
@@ -189,7 +189,7 @@ O Claude (atuando como arquiteto) produz um **Tech Spec**: escolhas de arquitetu
 **Modo: Somente leitura.**
 
 ```
-/gate:validate-techspec
+/gate:check spec
 ```
 
 Limite do gate: **Tech Spec ≥ 90%**. Ele sinaliza tratamento de erros ausente, contratos indefinidos ou designs não testáveis.
@@ -219,7 +219,7 @@ Cada história é dividida em **tarefas** de ≤ 30 minutos, testáveis de forma
 **Modo: Somente leitura.**
 
 ```
-/gate:validate-sprint
+/gate:check sprint
 ```
 
 Limite do gate: **Sprint Ready 100%** — cada história estimada, cada tarefa definida, dependências ordenadas. Verde significa que você pode começar a codificar.
@@ -282,7 +282,7 @@ Isso abre um **board Kanban** local (sem SaaS, sem lock-in) que lê os arquivos 
 backlog → ready-for-dev → in-progress → review → done   (any → blocked)
 ```
 
-Visões complementares: `/project:burndown` (burndown do sprint), `/project:dependencies`, `/project:critical-path`, `/project:metrics`.
+Visões complementares: `/project:report burndown` (burndown do sprint), `/project:report deps`, `/project:report deps --critical`, `/project:report metrics`.
 
 ### D.2 Por que um cartão pode se recusar a avançar
 
@@ -326,22 +326,22 @@ Execute `/workflow:start` novamente para planejar o sprint 2 a partir do backlog
 # Etapa A — Backlog
 /workflow:init                 # escolher o fluxo
 /workflow:plan                 # PRD + backlog
-/gate:validate-backlog         # INVEST 6/6, PRD ≥ 80%
+/gate:check backlog            # INVEST 6/6, PRD ≥ 80%
 
 # Etapa B — Design + sprint
 /workflow:design               # tech spec
-/gate:validate-techspec        # Tech Spec ≥ 90%
+/gate:check spec               # Tech Spec ≥ 90%
 /workflow:start                # planejar o sprint
 /project:decompose-tasks       # histórias → tarefas
-/gate:validate-sprint          # Sprint Ready 100%
+/gate:check sprint             # Sprint Ready 100%
 
 # Etapa C — Implementar (TDD)
 /sprint:dev                    # tarefa a tarefa Red/Green/Refactor
-/gate:validate-story US-001    # Story DoD 100%
+/gate:check story US-001       # Story DoD 100%
 
 # Etapa D — Acompanhar
 /project:board                 # Kanban
-/project:burndown              # burndown
+/project:report burndown       # burndown
 
 # Etapa E — Fechar + repetir
 /workflow:review

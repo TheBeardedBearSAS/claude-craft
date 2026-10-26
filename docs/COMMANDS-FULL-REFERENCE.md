@@ -15,7 +15,7 @@
 | `/docker:*` | 5 |
 | `/flutter:*` | 10 |
 | `/frankenphp:*` | 5 |
-| `/gate:*` | 7 |
+| `/gate:*` | 8 |
 | `/hcloud:*` | 5 |
 | `/kubernetes:*` | 5 |
 | `/laravel:*` | 6 |
@@ -23,7 +23,7 @@
 | `/paperclip:*` | 8 |
 | `/pgbouncer:*` | 5 |
 | `/php:*` | 5 |
-| `/project:*` | 34 |
+| `/project:*` | 38 |
 | `/python:*` | 10 |
 | `/qa:*` | 6 |
 | `/react:*` | 10 |
@@ -36,7 +36,7 @@
 | `/vite:*` | 7 |
 | `/vuejs:*` | 6 |
 | `/workflow:*` | 10 |
-| **Total** | **234** |
+| **Total** | **239** |
 
 ## `/angular:*`
 
@@ -144,13 +144,14 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/gate:report`](../Project/i18n/en/Gate/commands/report.md) | Show comprehensive quality gates report |
-| [`/gate:validate-alignment`](../Project/i18n/en/Gate/commands/validate-alignment.md) | Validate spec-code alignment to ensure implementation matches specifications |
-| [`/gate:validate-backlog`](../Project/i18n/en/Gate/commands/validate-backlog.md) | Validate backlog stories against INVEST criteria |
-| [`/gate:validate-prd`](../Project/i18n/en/Gate/commands/validate-prd.md) | Validate PRD against quality gate (≥80%) |
-| [`/gate:validate-sprint`](../Project/i18n/en/Gate/commands/validate-sprint.md) | Validate sprint readiness before starting |
-| [`/gate:validate-story`](../Project/i18n/en/Gate/commands/validate-story.md) | Validate story against Definition of Done |
-| [`/gate:validate-techspec`](../Project/i18n/en/Gate/commands/validate-techspec.md) | Validate Tech Spec against quality gate (≥90%) |
+| [`/gate:check`](../Project/i18n/en/Gate/commands/check.md) | Run any quality gate: document gates (PRD, tech spec, backlog, sprint, story, alignment), code gates (commit, merge, release), the full report or a phase checkpoint |
+| [`/gate:report`](../Project/i18n/en/Gate/commands/report.md) | Deprecated (removed in 9.0): use /gate:check all |
+| [`/gate:validate-alignment`](../Project/i18n/en/Gate/commands/validate-alignment.md) | Deprecated (removed in 9.0): use /gate:check alignment |
+| [`/gate:validate-backlog`](../Project/i18n/en/Gate/commands/validate-backlog.md) | Deprecated (removed in 9.0): use /gate:check backlog |
+| [`/gate:validate-prd`](../Project/i18n/en/Gate/commands/validate-prd.md) | Deprecated (removed in 9.0): use /gate:check prd |
+| [`/gate:validate-sprint`](../Project/i18n/en/Gate/commands/validate-sprint.md) | Deprecated (removed in 9.0): use /gate:check sprint |
+| [`/gate:validate-story`](../Project/i18n/en/Gate/commands/validate-story.md) | Deprecated (removed in 9.0): use /gate:check story |
+| [`/gate:validate-techspec`](../Project/i18n/en/Gate/commands/validate-techspec.md) | Deprecated (removed in 9.0): use /gate:check spec |
 
 ## `/hcloud:*`
 
@@ -230,40 +231,44 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/project:add-epic`](../Project/i18n/en/commands/add-epic.md) | Add an EPIC |
-| [`/project:add-story`](../Project/i18n/en/commands/add-story.md) | Add a User Story |
-| [`/project:add-task`](../Project/i18n/en/commands/add-task.md) | Add a Task |
-| [`/project:analyze-backlog`](../Project/i18n/en/commands/analyze-backlog.md) | Analyze existing backlog structure for BMAD migration |
+| [`/project:add-epic`](../Project/i18n/en/commands/add-epic.md) | Deprecated (removed in 9.0): use /project:backlog add epic |
+| [`/project:add-story`](../Project/i18n/en/commands/add-story.md) | Deprecated (removed in 9.0): use /project:backlog add story |
+| [`/project:add-task`](../Project/i18n/en/commands/add-task.md) | Deprecated (removed in 9.0): use /project:backlog add task |
+| [`/project:analyze-backlog`](../Project/i18n/en/commands/analyze-backlog.md) | Deprecated (removed in 9.0): use /project:migrate --analyze |
+| [`/project:backlog`](../Project/i18n/en/commands/backlog.md) | Manage the backlog: add, list, edit and move EPICs, User Stories and Tasks |
 | [`/project:batch-status`](../Project/i18n/en/commands/batch-status.md) | Show batch processing queue status |
 | [`/project:board`](../Project/i18n/en/commands/board.md) | Display Kanban Board |
-| [`/project:burndown`](../Project/i18n/en/commands/burndown.md) | Generate sprint burndown chart in Mermaid format showing daily progress |
-| [`/project:checkpoint`](../Project/i18n/en/commands/checkpoint.md) | Run spec verification checkpoints before and after implementation phases |
-| [`/project:coverage-map`](../Project/i18n/en/commands/coverage-map.md) | Identify requirements not covered by stories, code, or tests |
-| [`/project:critical-path`](../Project/i18n/en/commands/critical-path.md) | Identify the critical path through story dependencies to optimize sprint execution |
+| [`/project:burndown`](../Project/i18n/en/commands/burndown.md) | Deprecated (removed in 9.0): use /project:report burndown |
+| [`/project:checkpoint`](../Project/i18n/en/commands/checkpoint.md) | Deprecated (removed in 9.0): use /gate:check --phase= |
+| [`/project:coverage-map`](../Project/i18n/en/commands/coverage-map.md) | Deprecated (removed in 9.0): use /project:trace --gaps |
+| [`/project:critical-path`](../Project/i18n/en/commands/critical-path.md) | Deprecated (removed in 9.0): use /project:report deps --critical |
 | [`/project:decompose-tasks`](../Project/i18n/en/commands/decompose-tasks.md) | Decompose User Stories into Tasks |
-| [`/project:dependencies`](../Project/i18n/en/commands/dependencies.md) | Generate a visual dependency graph between user stories using Mermaid |
-| [`/project:gap-analysis`](../Project/i18n/en/commands/gap-analysis.md) | Compare existing specifications with actual codebase to identify gaps and inconsistencies |
+| [`/project:dependencies`](../Project/i18n/en/commands/dependencies.md) | Deprecated (removed in 9.0): use /project:report deps |
+| [`/project:gap-analysis`](../Project/i18n/en/commands/gap-analysis.md) | Deprecated (removed in 9.0): use /project:reverse gaps |
 | [`/project:generate-backlog`](../Project/i18n/en/commands/generate-backlog.md) | Generate Complete SCRUM Backlog |
 | [`/project:generate-constitution`](../Project/i18n/en/commands/generate-constitution.md) | Generate a Project Constitution capturing immutable project decisions and principles |
 | [`/project:generate-prd`](../Project/i18n/en/commands/generate-prd.md) | Generate a Product Requirements Document from project context and specifications |
 | [`/project:generate-tech-spec`](../Project/i18n/en/commands/generate-tech-spec.md) | Generate a Technical Specification from PRD and architecture analysis |
-| [`/project:list-epics`](../Project/i18n/en/commands/list-epics.md) | List EPICs |
-| [`/project:list-stories`](../Project/i18n/en/commands/list-stories.md) | List User Stories |
-| [`/project:list-tasks`](../Project/i18n/en/commands/list-tasks.md) | List Tasks |
-| [`/project:metrics`](../Project/i18n/en/commands/metrics.md) | Generate project metrics dashboard with sprint velocity, spec coverage, and quality indicators |
-| [`/project:migrate-backlog`](../Project/i18n/en/commands/migrate-backlog.md) | Migrate existing backlog to BMAD v6 format |
-| [`/project:move-task`](../Project/i18n/en/commands/move-task.md) | Move a Task |
-| [`/project:reverse-prd`](../Project/i18n/en/commands/reverse-prd.md) | Generate a PRD from an existing codebase by analyzing implemented features and business logic |
-| [`/project:reverse-stories`](../Project/i18n/en/commands/reverse-stories.md) | Generate user stories from existing codebase features and endpoints |
+| [`/project:list-epics`](../Project/i18n/en/commands/list-epics.md) | Deprecated (removed in 9.0): use /project:backlog list epic |
+| [`/project:list-stories`](../Project/i18n/en/commands/list-stories.md) | Deprecated (removed in 9.0): use /project:backlog list story |
+| [`/project:list-tasks`](../Project/i18n/en/commands/list-tasks.md) | Deprecated (removed in 9.0): use /project:backlog list task |
+| [`/project:metrics`](../Project/i18n/en/commands/metrics.md) | Deprecated (removed in 9.0): use /project:report metrics |
+| [`/project:migrate`](../Project/i18n/en/commands/migrate.md) | One-shot migration of an existing backlog to BMAD v6 (analyze, migrate, fill stories, resync) |
+| [`/project:migrate-backlog`](../Project/i18n/en/commands/migrate-backlog.md) | Deprecated (removed in 9.0): use /project:migrate |
+| [`/project:move-task`](../Project/i18n/en/commands/move-task.md) | Deprecated (removed in 9.0): use /project:backlog move task |
+| [`/project:report`](../Project/i18n/en/commands/report.md) | Project analytics reports: sprint burndown, metrics dashboard, story dependency graph and critical path |
+| [`/project:reverse`](../Project/i18n/en/commands/reverse.md) | Brownfield reverse-engineering pipeline: scan the codebase, then derive a draft PRD, user stories and a spec-vs-code gap analysis |
+| [`/project:reverse-prd`](../Project/i18n/en/commands/reverse-prd.md) | Deprecated (removed in 9.0): use /project:reverse prd |
+| [`/project:reverse-stories`](../Project/i18n/en/commands/reverse-stories.md) | Deprecated (removed in 9.0): use /project:reverse stories |
 | [`/project:run-epic`](../Project/i18n/en/commands/run-epic.md) | Run all stories from an epic in batch |
 | [`/project:run-queue`](../Project/i18n/en/commands/run-queue.md) | Process the batch queue of stories |
 | [`/project:run-sprint`](../Project/i18n/en/commands/run-sprint.md) | Execute all ready stories in the current sprint |
-| [`/project:scan`](../Project/i18n/en/commands/scan.md) | Analyze existing codebase and generate a structured inventory of modules, endpoints, models, and tests |
-| [`/project:sync-backlog`](../Project/i18n/en/commands/sync-backlog.md) | Synchronize backlog files with sprint-status.yaml |
-| [`/project:trace`](../Project/i18n/en/commands/trace.md) | Display bidirectional traceability matrix from requirements to code and tests |
-| [`/project:update-epic`](../Project/i18n/en/commands/update-epic.md) | Update an EPIC |
-| [`/project:update-stories`](../Project/i18n/en/commands/update-stories.md) | Update stories to BMAD v6 format with missing fields |
-| [`/project:update-story`](../Project/i18n/en/commands/update-story.md) | Update a User Story |
+| [`/project:scan`](../Project/i18n/en/commands/scan.md) | Deprecated (removed in 9.0): use /project:reverse scan |
+| [`/project:sync-backlog`](../Project/i18n/en/commands/sync-backlog.md) | Deprecated (removed in 9.0): use /project:migrate --resync |
+| [`/project:trace`](../Project/i18n/en/commands/trace.md) | Bidirectional traceability matrix (requirement → story → code → tests); --gaps lists uncovered requirements, --by-priority groups by MoSCoW |
+| [`/project:update-epic`](../Project/i18n/en/commands/update-epic.md) | Deprecated (removed in 9.0): use /project:backlog edit epic |
+| [`/project:update-stories`](../Project/i18n/en/commands/update-stories.md) | Deprecated (removed in 9.0): use /project:migrate --stories |
+| [`/project:update-story`](../Project/i18n/en/commands/update-story.md) | Deprecated (removed in 9.0): use /project:backlog edit story |
 
 ## `/python:*`
 
