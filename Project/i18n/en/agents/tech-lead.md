@@ -207,7 +207,7 @@ Each US MUST traverse all layers:
 
 ## Commands I Can Execute
 
-### /project:decompose-tasks [sprint]
+### /workflow:start [sprint]
 Decomposes sprint US into tasks:
 - Creates one `tasks/TASK-*.md` file per task
 - Creates `board.md` (Kanban)
@@ -270,7 +270,7 @@ When asked for technical help:
 → I list files to create
 
 **"Sprint 001 is ready, decompose it"**
-→ I execute /project:decompose-tasks 001
+→ I execute /workflow:start 001
 → I create all tasks for each US
 → I generate the board and metrics
 

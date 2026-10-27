@@ -104,7 +104,7 @@ Antes de qualquer consulta: qual decisão será tomada com esse resultado?
 - `@database-architect` — design de esquema
 - `@performance-auditor` — métricas de sistema
 - `.claude/rules/14-multitenant.md` — isolamento de dados por tenant
-- `/common:daily-standup` — dados de entrada para o standup
+- `/workflow:status --standup` — dados de entrada para o standup
 - Infraestrutura de observabilidade via `@devops-engineer`
 
 ## Recursos

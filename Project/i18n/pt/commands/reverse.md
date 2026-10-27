@@ -64,7 +64,7 @@ project-management/
     +-- gap-analysis.md             # gaps
 ```
 
-**Pré-requisitos:** código-fonte acessível; `README.md`, `docker-compose.yml`, `./docs/` opcionais. `prd`, `stories` e `gaps` precisam de `project-management/scan-report.md` -- se estiver ausente, executar `scan` primeiro (automático com `all`). `gaps` também precisa de um PRD (`project-management/prd.md`, vindo de `/project:generate-prd` ou de `prd`); `stories` e `gaps` o usam para a rastreabilidade FR-xxx quando existe.
+**Pré-requisitos:** código-fonte acessível; `README.md`, `docker-compose.yml`, `./docs/` opcionais. `prd`, `stories` e `gaps` precisam de `project-management/scan-report.md` -- se estiver ausente, executar `scan` primeiro (automático com `all`). `gaps` também precisa de um PRD (`project-management/prd.md`, vindo de `/workflow:plan --only=prd` ou de `prd`); `stories` e `gaps` o usam para a rastreabilidade FR-xxx quando existe.
 
 **Convenção de saída:** cada etapa exibe um banner de progresso emoldurado, termina com um breve resumo e sugere os próximos passos (validar de forma interativa, executar o próximo subcomando). Com `all`, fazer uma pausa de validação humana após `prd` e `stories` antes de seguir para `gaps`.
 
@@ -111,7 +111,7 @@ Métricas do Complexity Summary: LOC total, total de arquivos, bounded contexts,
 
 ## prd
 
-Contrapartida brownfield de `/project:generate-prd`: um PRD RASCUNHO inferido do código.
+Contrapartida brownfield de `/workflow:plan --only=prd`: um PRD RASCUNHO inferido do código.
 
 **1. Carregar** o relatório de scan (e `./docs/`, `README.md`); analisar stack, módulos, endpoints, entidades, serviços.
 
@@ -243,7 +243,7 @@ Executar `scan` -> `prd` -> `stories` -> `gaps` em ordem, reutilizando cada saí
 
 ## Comandos relacionados
 
-- `/project:generate-prd` - Gerar um PRD de forma interativa (greenfield)
-- `/project:generate-backlog` - Criar um backlog SCRUM a partir do PRD
-- `/project:generate-tech-spec` - Gerar uma especificação técnica
+- `/workflow:plan --only=prd` - Gerar um PRD de forma interativa (greenfield)
+- `/workflow:plan --only=backlog` - Criar um backlog SCRUM a partir do PRD
+- `/workflow:design` - Gerar uma especificação técnica
 - `/project:backlog` - Gerenciar epics, stories e tarefas

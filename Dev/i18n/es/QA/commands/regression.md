@@ -149,7 +149,7 @@ Verificacion Regla de Oro: 1 VIOLACION DETECTADA
 | `/qa:recette` | Ejecutar pruebas de aceptacion |
 | `/qa:fix` | Corregir bugs de una sesion |
 | `/qa:status` | Mostrar estado de sesion |
-| `/qa:report` | Generar informe |
+| `/qa:status --report` | Generar informe |
 
 ## Mensajes de Error
 

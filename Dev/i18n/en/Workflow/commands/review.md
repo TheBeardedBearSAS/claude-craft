@@ -324,7 +324,7 @@ Total duration: 2h
 ║                                                          ║
 ║  See also:                                               ║
 ║  • /workflow:status  — Check overall progress            ║
-║  • /sprint:status    — View sprint metrics               ║
+║  • /workflow:status    — View sprint metrics               ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

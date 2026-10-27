@@ -64,10 +64,10 @@ File: project-management/prd.md   Threshold: 80%
 ❌ Goals/Objectives (15%)    Missing: no measurable goals found
 ⚠️ Risks (10%)               Partial: risks listed but no mitigations
 Score: 90/100 (90%)
-✅ PRD GATE PASSED — Next: /project:generate-tech-spec
+✅ PRD GATE PASSED — Next: /workflow:design
 ```
 
-En cas d'échec, proposer un exemple par manque (p. ex. objectif « Réduire le temps de checkout de 30 % », KPI « Taux de conversion > 5 % », risque « Limites de débit de l'API ; Mitigation : cache »). La porte est aussi vérifiée avant `/project:generate-tech-spec` et lors de la transition du workflow BMAD.
+En cas d'échec, proposer un exemple par manque (p. ex. objectif « Réduire le temps de checkout de 30 % », KPI « Taux de conversion > 5 % », risque « Limites de débit de l'API ; Mitigation : cache »). La porte est aussi vérifiée avant `/workflow:design` et lors de la transition du workflow BMAD.
 
 ## spec
 
@@ -97,7 +97,7 @@ Score: 68/100 (68%)
 ❌ TECH SPEC GATE FAILED (need 90%, got 68%)
 ```
 
-Les actions requises fournissent un modèle par manque : un squelette de diagramme mermaid, la stratégie de sécurité (méthode d'authentification, modèle d'autorisation, chiffrement), des schémas de requête/réponse avec formats d'erreur et versionnement, des étapes CI/CD avec promotion et rollback. Pour les décisions importantes, suggérer un ADR : `/common:architecture-decision "JWT vs Session-based authentication"`. En cas de succès : étape suivante `/project:generate-backlog`, puis `/gate:check backlog`.
+Les actions requises fournissent un modèle par manque : un squelette de diagramme mermaid, la stratégie de sécurité (méthode d'authentification, modèle d'autorisation, chiffrement), des schémas de requête/réponse avec formats d'erreur et versionnement, des étapes CI/CD avec promotion et rollback. Pour les décisions importantes, suggérer un ADR : `/common:architecture-decision "JWT vs Session-based authentication"`. En cas de succès : étape suivante `/workflow:plan --only=backlog`, puis `/gate:check backlog`.
 
 ## backlog
 
@@ -154,7 +154,7 @@ Sprint: sprint-3 - User Management   Period: 2026-01-29 → 2026-02-12 (14 days)
 ✅ Sprint Metadata (20%)  ✅ Sprint Goal (15%)  ✅ Stories Ready (25%): 5 stories, 21 points
 ✅ Stories Estimated (20%)  ✅ Capacity Check (10%): 21/25 = 84%  ✅ Dependencies Resolved (10%)
 Score: 100/100 — ✅ SPRINT READY GATE PASSED
-Commands: /workflow:start (start the sprint), /sprint:next-story (pick the first story)
+Commands: /workflow:start (start the sprint), /project:backlog next story (pick the first story)
 ```
 
 En cas d'échec, les actions requises montrent le bloc `metadata` à ajouter à `.bmad/sprint-status.yaml` :
@@ -193,10 +193,10 @@ Story DoD Gate: US-005 — Email verification   Status: in-progress
 ❌ Tests Passing (20%)    TDD Phase: red
 ⚠️ Acceptance Criteria    1/3 validated
 ❌ Code Reviewed (15%)    No PR created yet
-Score: 25/100 — ❌ STORY DoD GATE FAILED. Resume work: /sprint:dev US-005
+Score: 25/100 — ❌ STORY DoD GATE FAILED. Resume work: /workflow:implement US-005
 ```
 
-En cas de succès : la story peut passer à `done` avec `/sprint:transition US-005 done`. La porte est aussi vérifiée par le hook Stop (`quality-gate.sh`) et avant `/sprint:transition <id> done`.
+En cas de succès : la story peut passer à `done` avec `/project:backlog move story US-005 done`. La porte est aussi vérifiée par le hook Stop (`quality-gate.sh`) et avant `/project:backlog move story <id> done`.
 
 | Phase TDD | Signification | Étape suivante |
 |-----------|---------------|----------------|
@@ -327,8 +327,8 @@ Exécute des checkpoints automatisés aux phases critiques du cycle de vie afin 
 | Phase | Quand | Cible |
 |-------|-------|-------|
 | `pre-sprint` | Avant de démarrer un sprint (après `/workflow:start`) | sprint |
-| `pre-impl` | Avant de coder une story (après `/sprint:next-story --claim`) | story |
-| `post-impl` | Après avoir terminé une story (avant `/sprint:transition US-xxx review`) | story |
+| `pre-impl` | Avant de coder une story (après `/project:backlog next story --claim`) | story |
+| `post-impl` | Après avoir terminé une story (avant `/project:backlog move story US-xxx review`) | story |
 | `pre-merge` | Avant de fusionner dans main (appelé par `merge`) | story ou sprint |
 
 **pre-sprint** : charger les stories assignées au sprint.
@@ -382,11 +382,11 @@ Actions required: 1. Add FR-003 coverage to tech spec section 3.2  2. Define per
 → Fix issues before proceeding
 ```
 
-Exemple : `/gate:check --phase=pre-sprint Sprint-3` → « Score: 83% (5/6 passed) — WARNING: US-015 has no tasks yet ». Intégration : `/workflow:start` déclenche `pre-sprint`, `/sprint:next-story` suggère `pre-impl`, `/sprint:transition` déclenche `post-impl`, et `merge` déclenche `pre-merge`.
+Exemple : `/gate:check --phase=pre-sprint Sprint-3` → « Score: 83% (5/6 passed) — WARNING: US-015 has no tasks yet ». Intégration : `/workflow:start` déclenche `pre-sprint`, `/project:backlog next story` suggère `pre-impl`, `/project:backlog move story` déclenche `post-impl`, et `merge` déclenche `pre-merge`.
 
 ## Commandes associées
 
 - `/project:trace` — matrice de traçabilité et couverture des exigences (`--gaps`)
-- `/project:generate-tech-spec`, `/project:generate-backlog` — produisent les artefacts que valident les portes
+- `/workflow:design`, `/workflow:plan --only=backlog` — produisent les artefacts que valident les portes
 - `/workflow:start` — démarrer le sprint (inclut le checkpoint pre-sprint)
-- `/sprint:transition` — faire passer une story au statut suivant
+- `/project:backlog move story` — faire passer une story au statut suivant

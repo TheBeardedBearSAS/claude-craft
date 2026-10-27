@@ -53,7 +53,8 @@ describe('PM commands share one file layout', () => {
 
   it.each(LANGS)('one board (board.md) and one file per task (TASK-*.md) (lang=%s)', (lang) => {
     expect(hits(lang, /task-board\.md|US-XXX-tasks\.md|sprint-backlog\.md/)).toEqual([]);
-    const decompose = read('Project/i18n', lang, 'commands/decompose-tasks.md');
+    // 8.26.0: /project:decompose-tasks is a stub of /workflow:start
+    const decompose = read('Dev/i18n', lang, 'Workflow/commands/start.md');
     expect(decompose).toContain('board.md');
     expect(decompose).toMatch(/TASK-/);
   });
@@ -99,9 +100,10 @@ describe('/qa:fix points to the command that creates sprint-status.yaml', () => 
   });
 });
 
-describe('/project:generate-backlog keeps PRD traceability', () => {
+describe('/workflow:plan --only=backlog keeps PRD traceability', () => {
   it.each(LANGS)('reads prd.md and writes Implements: from the user-story template (lang=%s)', (lang) => {
-    const cmd = read('Project/i18n', lang, 'commands/generate-backlog.md');
+    // 8.26.0: /project:generate-backlog is a stub of /workflow:plan --only=backlog
+    const cmd = read('Dev/i18n', lang, 'Workflow/commands/plan.md');
     expect(cmd).toContain('project-management/prd.md');
     expect(cmd).toContain('.claude/templates/project/user-story.md');
     expect(cmd).toContain('Implements');

@@ -104,7 +104,7 @@ Before any query: what decision will be made with this result?
 - `@database-architect` — schema design
 - `@performance-auditor` — system metrics
 - `.claude/rules/14-multitenant.md` — data isolation per tenant
-- `/common:daily-standup` — data input for standup
+- `/workflow:status --standup` — data input for standup
 - Observability infrastructure via `@devops-engineer`
 
 ## Resources

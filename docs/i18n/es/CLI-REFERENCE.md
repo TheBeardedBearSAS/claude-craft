@@ -329,7 +329,7 @@ Lanza una interfaz web local que visualiza el directorio BMAD v6 `project-manage
 npx @the-bearded-bear/claude-craft kanban [ruta] [opciones]
 ```
 
-La `ruta` es por defecto el directorio actual. El destino debe contener una subcarpeta `project-management/` (generada por `/workflow:plan` o `/sprint:start`).
+La `ruta` es por defecto el directorio actual. El destino debe contener una subcarpeta `project-management/` (generada por `/workflow:plan` o `/workflow:start`).
 
 ### Opciones
 

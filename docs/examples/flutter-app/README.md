@@ -143,7 +143,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
 ```bash
 # 1. Get next story
-/sprint:next-story --claim
+/project:backlog next story --claim
 
 # 2. Generate feature
 /flutter:generate-feature ShoppingCart
@@ -155,7 +155,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 /gate:check story US-003
 
 # 5. Complete
-/sprint:transition US-003 done
+/project:backlog move story US-003 done
 ```
 
 ### Quality Checks

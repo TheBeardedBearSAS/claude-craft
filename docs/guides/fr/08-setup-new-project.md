@@ -317,7 +317,7 @@ Utilisez la commande intégrée pour détecter automatiquement votre stack et r�
 claude
 
 # Exécuter la commande de configuration
-/common:setup-project-context
+/common:init --context
 ```
 
 La commande va :

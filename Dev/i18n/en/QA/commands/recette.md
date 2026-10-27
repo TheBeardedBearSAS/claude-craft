@@ -217,7 +217,7 @@ entries:
 | `/qa:fix` | Fix bugs from a recette session |
 | `/qa:status` | Show session status |
 | `/qa:regression` | View regression tests |
-| `/qa:report` | Generate report |
+| `/qa:status --report` | Generate report |
 | `/gate:check story` | Validate story AC |
 
 ## Chrome Capabilities
@@ -261,9 +261,9 @@ entries:
 ║    Fix bugs with TDD approach                            ║
 ║                                                          ║
 ║  If all tests pass:                                      ║
-║  → /qa:report                                            ║
+║  → /qa:status --report                                            ║
 ║    Generate the recette report                           ║
-║  → /sprint:transition done                               ║
+║  → /project:backlog move story done                               ║
 ║    Mark the story as done                                ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

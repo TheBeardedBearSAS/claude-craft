@@ -14,15 +14,19 @@ const SCHEMA_TEMPLATE = '.claude/templates/project/sprint-status.md';
 const STATUS_EMOJI = /🔴|🟡|🟢|🔲|🔄|👀|🚫/u;
 
 // Commands that change a story or task status.
-// 8.25.0: add-story/add-task/move-task are stubs of /project:backlog.
+// 8.25.0/8.26.0: the former writers/readers are stubs of these merged commands.
 const WRITERS = [
-  'commands/backlog.md',
-  'commands/decompose-tasks.md',
-  'Sprint/commands/dev.md',
-  'Sprint/commands/transition.md',
+  'Project/i18n/{lang}/commands/backlog.md',
+  'Dev/i18n/{lang}/Workflow/commands/start.md',
+  'Dev/i18n/{lang}/Workflow/commands/implement.md',
 ];
 // Commands that display statuses.
-const READERS = ['commands/board.md', 'commands/backlog.md', 'commands/report.md'];
+const READERS = [
+  'Project/i18n/{lang}/commands/backlog.md',
+  'Project/i18n/{lang}/commands/report.md',
+  'Dev/i18n/{lang}/Workflow/commands/status.md',
+];
+const at = (tpl, lang) => fs.readFileSync(path.join(PROJECT_ROOT, tpl.replace('{lang}', lang)), 'utf8');
 
 describe('canonical sprint-status.yaml schema template', () => {
   it.each(LANGS)('documents a schema the Kanban accepts, with task statuses and routing (lang=%s)', (lang) => {
@@ -49,14 +53,14 @@ describe('markdown templates hold content only', () => {
 describe('status writers and readers go through sprint-status.yaml', () => {
   it.each(LANGS)('writers update .bmad/sprint-status.yaml and cite the schema (lang=%s)', (lang) => {
     for (const f of WRITERS) {
-      const cmd = read('Project/i18n', lang, f);
+      const cmd = at(f, lang);
       expect(cmd, `${lang}/${f}`).toContain('.bmad/sprint-status.yaml');
       expect(cmd, `${lang}/${f}`).toContain(SCHEMA_TEMPLATE);
     }
   });
 
   it.each(LANGS)('readers take statuses from .bmad/sprint-status.yaml (lang=%s)', (lang) => {
-    for (const f of READERS) expect(read('Project/i18n', lang, f), `${lang}/${f}`).toContain('.bmad/sprint-status.yaml');
+    for (const f of READERS) expect(at(f, lang), `${lang}/${f}`).toContain('.bmad/sprint-status.yaml');
   });
 });
 

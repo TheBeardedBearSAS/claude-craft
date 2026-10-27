@@ -239,7 +239,7 @@ Ohne diese Bedingungen arbeitet der Conductor genau wie bisher.
 
 - Funktioniert mit dem `/common:ralph-run`-Befehl
 - Integriert mit Claude Code 2.1.23+ Hooks
-- Kompatibel mit dem `/sprint:dev`-Workflow
+- Kompatibel mit dem `/workflow:implement`-Workflow
 - Verwendet `@tdd-coach`-Prinzipien
 - Agent Teams Modus über `/team:sprint --ralph-mode`
 

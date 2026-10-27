@@ -138,11 +138,11 @@ Basierend auf dem Track den Workflow anzeigen:
 ║   Hier starten                                            ║
 ║                                                           ║
 ║ Phase 1 - Planung:                                        ║
-║ • /project:generate-prd    - PRD erstellen/aktualisieren  ║
-║ • /project:generate-backlog - User Stories erstellen      ║
+║ • /workflow:plan --only=prd    - PRD erstellen/aktualisieren  ║
+║ • /workflow:plan --only=backlog - User Stories erstellen      ║
 ║                                                           ║
 ║ Phase 2 - Design:                                         ║
-║ • /project:generate-tech-spec - Technisches Design        ║
+║ • /workflow:design - Technisches Design        ║
 ║                                                           ║
 ║ Phase 3 - Implementierung:                                ║
 ║ • /workflow:start N      - Sprint-Setup           ║
@@ -165,14 +165,14 @@ Basierend auf dem Track den Workflow anzeigen:
 ║   Hier starten                                            ║
 ║                                                           ║
 ║ Phase 1 - Analyse:                                        ║
-║ • /workflow:analyze        - Recherche & Exploration      ║
+║ • /workflow:plan --research        - Recherche & Exploration      ║
 ║                                                           ║
 ║ Phase 2 - Planung:                                        ║
-║ • /project:generate-prd    - Vollständiges PRD            ║
-║ • /project:generate-backlog - Vollständiges Backlog       ║
+║ • /workflow:plan --only=prd    - Vollständiges PRD            ║
+║ • /workflow:plan --only=backlog - Vollständiges Backlog       ║
 ║                                                           ║
 ║ Phase 3 - Design:                                         ║
-║ • /project:generate-tech-spec - Vollständiges Tech Spec   ║
+║ • /workflow:design - Vollständiges Tech Spec   ║
 ║ • /common:architecture-decision - ADRs                    ║
 ║                                                           ║
 ║ Phase 4 - Implementierung:                                ║
@@ -213,7 +213,7 @@ phases:
     status: pending
 
 next_action: "Generate or update PRD"
-next_command: "/project:generate-prd"
+next_command: "/workflow:plan --only=prd"
 ```
 
 BMAD-Status-Skeleton erstellen (Single Source of Truth für den Story-Status, gelesen von `/gate:*`, `/sprint:*`, `/workflow:auto-sprint` und dem Kanban). Überspringen, falls `.bmad/sprint-status.yaml` bereits existiert; `/workflow:start` füllt `metadata` und `stories` später:
@@ -253,8 +253,8 @@ routing:
 ║ Starten mit: /workflow:plan                               ║
 ║                                                           ║
 ║ Oder direkt zu bestimmten Aufgaben:                       ║
-║ • /project:generate-prd     - Anforderungsdokument erst.  ║
-║ • /project:generate-backlog - User Stories erstellen      ║
+║ • /workflow:plan --only=prd     - Anforderungsdokument erst.  ║
+║ • /workflow:plan --only=backlog - User Stories erstellen      ║
 ║                                                           ║
 ║ Fortschritt jederzeit prüfen: /workflow:status            ║
 ╚══════════════════════════════════════════════════════════╝
@@ -281,6 +281,6 @@ routing:
 - `/workflow:design` - Designphase starten
 - `/workflow:implement` - Implementierungsphase starten
 - `/workflow:auto-sprint` - Einen ganzen Sprint Ende-zu-Ende ausführen (Start → Merge)
-- `/workflow:analyze` - Analysephase starten (nur Enterprise)
+- `/workflow:plan --research` - Analysephase starten (nur Enterprise)
 
 > Unsicher, welchen Weg Sie wählen sollen? Siehe die Entscheidungsseite: https://github.com/TheBeardedBearSAS/claude-craft/blob/main/docs/guides/de/11-which-path.md

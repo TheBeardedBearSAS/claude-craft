@@ -329,7 +329,7 @@ Startet eine lokale Web-Oberfläche, die das BMAD v6 Verzeichnis `project-manage
 npx @the-bearded-bear/claude-craft kanban [Pfad] [Optionen]
 ```
 
-Der `Pfad` ist standardmäßig das aktuelle Verzeichnis. Das Ziel muss einen Unterordner `project-management/` enthalten (generiert durch `/workflow:plan` oder `/sprint:start`).
+Der `Pfad` ist standardmäßig das aktuelle Verzeichnis. Das Ziel muss einen Unterordner `project-management/` enthalten (generiert durch `/workflow:plan` oder `/workflow:start`).
 
 ### Optionen
 

@@ -1,5 +1,10 @@
 ---
-description: "Sub-agent patterns for parallel and complex tasks"
+name: sub-agents-patterns
+description: Sub-agent patterns for parallel and complex tasks. Use when splitting work across Explore/Plan/general-purpose sub-agents or running independent investigations in parallel.
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
 ---
 
 # Sub-Agents Patterns

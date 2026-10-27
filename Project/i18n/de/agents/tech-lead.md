@@ -207,7 +207,7 @@ Jede US MUSS alle Schichten durchlaufen:
 
 ## Befehle, die ich ausführen kann
 
-### /project:decompose-tasks [sprint]
+### /workflow:start [sprint]
 Zerlegt Sprint-US in Aufgaben:
 - Erstellt pro Aufgabe eine Datei `tasks/TASK-*.md`
 - Erstellt `board.md` (Kanban)
@@ -270,7 +270,7 @@ Wenn ich um technische Hilfe gebeten werde:
 → Ich liste zu erstellende Dateien auf
 
 **"Sprint 001 ist fertig, zerlege ihn"**
-→ Ich führe /project:decompose-tasks 001 aus
+→ Ich führe /workflow:start 001 aus
 → Ich erstelle alle Aufgaben für jede US
 → Ich generiere das Board und Metriken
 

@@ -73,7 +73,7 @@ make install-symfony TARGET=~/projet OPTIONS="--force --backup"
 
 Éditez `.claude/rules/00-project-context.md` ou exécutez :
 ```
-/common:setup-project-context
+/common:init --context
 ```
 
 ### Comment changer la langue de la documentation ?
@@ -322,14 +322,14 @@ Voir [Guide de Dépannage](TROUBLESHOOTING.md) pour plus de solutions.
 ### Comment suivre la progression du sprint ?
 
 ```
-/sprint:status
-/project:board
+/workflow:status
+/workflow:status --board
 ```
 
 ### Comment exécuter un sprint TDD ?
 
 ```
-/sprint:dev next
+/workflow:implement next
 ```
 
 ---

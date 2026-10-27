@@ -8,7 +8,7 @@ Fluxo de trabalho completo para criar e gerenciar um backlog SCRUM com o Claude-
 
 O Claude-Craft fornece um conjunto completo de comandos para gerenciar seu product backlog seguindo a metodologia SCRUM:
 
-- **Um único comando `/project:backlog`** (`add`, `list`, `edit`, `move`) mais `/project:board` e `/sprint:*` para operações de backlog; os antigos `/project:add-*`, `list-*`, `update-*` e `move-task` estão obsoletos e serão removidos na 9.0
+- **Um único comando `/project:backlog`** (`add`, `list`, `edit`, `move`, mais `next story` e `move story --auto` para o roteamento de histórias) junto com `/workflow:plan --only=backlog`, `/workflow:start` e `/workflow:status --board`; os antigos `/project:add-*`, `list-*`, `update-*`, `move-task`, `/project:generate-backlog`, `/project:decompose-tasks`, `/project:board` e `/sprint:*` estão obsoletos e serão removidos na 9.0
 - **5 templates** para estrutura consistente
 - **Vertical slicing** obrigatório em todas as camadas tecnológicas
 - **Validação do modelo INVEST** para User Stories
@@ -30,7 +30,7 @@ Baseada em:
 Coloque as especificações do seu projeto em `./docs/` e execute:
 
 ```bash
-/project:generate-backlog symfony+flutter
+/workflow:plan --only=backlog symfony+flutter
 ```
 
 ### Estrutura Gerada
@@ -161,7 +161,7 @@ Itens de trabalho técnico dentro de uma User Story:
 
 | Comando | Descrição |
 |---------|-----------|
-| `/project:generate-backlog [stack]` | Gerar backlog completo a partir das specs |
+| `/workflow:plan --only=backlog [stack]` | Gerar backlog completo a partir das specs |
 | `/project:backlog add epic` | Criar um novo EPIC |
 | `/project:backlog add story` | Adicionar uma User Story a um EPIC |
 | `/project:backlog add task` | Criar uma tarefa técnica para uma US |
@@ -173,14 +173,14 @@ Itens de trabalho técnico dentro de uma User Story:
 | `/project:backlog list epic` | Exibir todos os EPICs com status |
 | `/project:backlog list story [filtro]` | Listar User Stories (por EPIC, Sprint, Status) |
 | `/project:backlog list task [filtro]` | Listar tarefas (por US, Sprint, Tipo, Status) |
-| `/project:board [sprint]` | Exibir quadro Kanban |
-| `/sprint:status [sprint]` | Relatório detalhado de progresso do sprint |
+| `/workflow:status --board [sprint]` | Exibir quadro Kanban |
+| `/workflow:status [sprint]` | Relatório detalhado de progresso do sprint |
 
 ### Comandos de Atualização
 
 | Comando | Descrição |
 |---------|-----------|
-| `/sprint:transition [id] [status/sprint]` | Alterar status da US ou atribuir ao sprint |
+| `/project:backlog move story [id] [status/sprint]` | Alterar status da US ou atribuir ao sprint |
 | `/project:backlog move task [id] [status]` | Alterar status de uma tarefa |
 | `/project:backlog edit epic [id]` | Modificar um EPIC existente |
 | `/project:backlog edit story [id]` | Modificar uma User Story existente |
@@ -189,7 +189,7 @@ Itens de trabalho técnico dentro de uma User Story:
 
 | Comando | Descrição |
 |---------|-----------|
-| `/project:decompose-tasks [sprint]` | Decompor as US do sprint em tarefas |
+| `/workflow:start [sprint]` | Decompor as US do sprint em tarefas |
 | `/gate:check backlog` | Auditar a qualidade do backlog (conformidade SCRUM) |
 
 ---
@@ -200,7 +200,7 @@ Itens de trabalho técnico dentro de uma User Story:
 
 ```bash
 # Certifique-se de que as specs estão em ./docs/
-/project:generate-backlog symfony+flutter
+/workflow:plan --only=backlog symfony+flutter
 ```
 
 ### Passo 2: Validar a Qualidade
@@ -218,7 +218,7 @@ Isso gera `scrum-validation-report.md` com:
 ### Passo 3: Revisar o Sprint 1
 
 ```bash
-/project:board 1
+/workflow:status --board 1
 ```
 
 Exibe o quadro Kanban com as colunas:
@@ -227,7 +227,7 @@ Exibe o quadro Kanban com as colunas:
 ### Passo 4: Decompor em Tarefas
 
 ```bash
-/project:decompose-tasks 1
+/workflow:start 1
 ```
 
 Cria o detalhamento das tarefas:
@@ -251,7 +251,7 @@ Cria o detalhamento das tarefas:
 ### Passo 6: Acompanhar o Progresso
 
 ```bash
-/sprint:status 1
+/workflow:status 1
 ```
 
 ### Passo 7: Configurar Monitoramento Recorrente (Opcional)
@@ -260,7 +260,7 @@ Use `/loop` (v2.1.71+) para monitorar automaticamente o progresso do sprint:
 
 ```bash
 # Verificar status do sprint a cada 30 minutos
-/loop 30m /sprint:status 1
+/loop 30m /workflow:status 1
 
 # Executar verificações pré-commit a cada 5 minutos durante o desenvolvimento
 /loop 5m /gate:check commit

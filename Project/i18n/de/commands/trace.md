@@ -168,7 +168,7 @@ Recommended Actions
 Next Commands
 - /project:trace requirement FR-005   → detaillierte Verfolgung einer Anforderung
 - /project:backlog add story         → fehlende User Stories erstellen
-- /project:generate-backlog          → Backlog mit den Lücken neu generieren
+- /workflow:plan --only=backlog          → Backlog mit den Lücken neu generieren
 ```
 
 Mit `--level test` eine Zeile pro Story ausgeben: `US-003 | ❌ | 0 files | 0 tests` und die Maßnahme (z. B. „tests/RegistrationServiceTest.php erstellen“).
@@ -215,7 +215,7 @@ Claude: [Abdeckungsbericht mit Tabelle pro Priorität, 2 P0-Anforderungen benöt
 
 ## Verwandte Befehle
 
-- `/project:generate-prd` - PRD mit Anforderungs-IDs generieren
-- `/project:generate-backlog` - Backlog aus dem PRD erstellen
-- `/project:generate-tech-spec` - Technische Spezifikation generieren
+- `/workflow:plan --only=prd` - PRD mit Anforderungs-IDs generieren
+- `/workflow:plan --only=backlog` - Backlog aus dem PRD erstellen
+- `/workflow:design` - Technische Spezifikation generieren
 - `/project:migrate --stories` - Fehlende Felder (wie `Implements:`) zu Stories hinzufügen

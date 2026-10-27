@@ -317,7 +317,7 @@ Usa el comando integrado para auto-detectar tu stack y responder preguntas espec
 claude
 
 # Ejecutar el comando de configuración
-/common:setup-project-context
+/common:init --context
 ```
 
 El comando va a:

@@ -275,4 +275,4 @@ Lorsqu'un timeout se déclenche :
 
 - `@ralph-conductor` - Agent pour l'orchestration Ralph
 - `/qa:tdd` - Correction de bugs basée sur le TDD
-- `/sprint:dev` - Développement de sprint avec TDD
+- `/workflow:implement` - Développement de sprint avec TDD

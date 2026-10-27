@@ -117,7 +117,7 @@ make install-symfony TARGET=~/project OPTIONS="--force --backup"
 
 Edit `.claude/CLAUDE.md` or run:
 ```
-/common:setup-project-context
+/common:init --context
 ```
 
 ### How do I change the documentation language?
@@ -208,7 +208,7 @@ Two distinct commands (v2.1.157+):
 
 > Avant v2.1.157, seul `/reload-plugins` existait. Si `/reload-skills` n'est pas disponible, redémarrer la session Claude Code.
 
-### Why aren't `/sprint:*` or `/gate:*` commands available?
+### Why aren't `/gate:*` or `/project:*` commands available?
 
 Ces commandes font partie de la couche **Project** qui nécessite une installation séparée :
 
@@ -218,7 +218,7 @@ make install-project TARGET=.
 npx @the-bearded-bear/claude-craft install . --include-project
 ```
 
-Sans cette étape, les namespaces `/sprint:`, `/gate:`, et `/project:` n'existent pas. L'installation par défaut installe uniquement les namespaces `/common:`, `/workflow:`, `/team:`, `/qa:`, `/uiux:` et les namespaces technologiques.
+Sans cette étape, les namespaces `/gate:` et `/project:` n'existent pas (le namespace `/sprint:` est déprécié : ses 5 commandes redirigent vers `/workflow:` et `/project:backlog`, retrait en 9.0). L'installation par défaut installe uniquement les namespaces `/common:`, `/workflow:`, `/team:`, `/qa:`, `/uiux:` et les namespaces technologiques.
 
 De même, `/bmad:init` n'existe pas — utiliser `/workflow:init` qui est la commande correcte installée.
 
@@ -283,10 +283,10 @@ BMAD (Build, Measure, Analyze, Deliver) is Claude Craft's project management fra
 /workflow:init
 
 # Check sprint status (nécessite make install-project TARGET=.)
-/sprint:status
+/workflow:status
 ```
 
-> Il n'existe pas de commande `/bmad:init`. La commande correcte est `/workflow:init`. Les commandes `/sprint:*` et `/gate:*` nécessitent l'installation de la couche Project (voir la question ci-dessus).
+> Il n'existe pas de commande `/bmad:init`. La commande correcte est `/workflow:init`. Les commandes `/gate:*` et `/project:*` nécessitent l'installation de la couche Project (voir la question ci-dessus).
 
 ### How do I use the Kanban Board?
 
@@ -541,14 +541,14 @@ See [Troubleshooting Guide](TROUBLESHOOTING.md) for more solutions.
 ### How do I track sprint progress?
 
 ```
-/sprint:status
-/project:board
+/workflow:status
+/workflow:status --board
 ```
 
 ### How do I run a TDD sprint?
 
 ```
-/sprint:dev next
+/workflow:implement next
 ```
 
 ---

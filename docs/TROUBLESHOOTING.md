@@ -393,7 +393,7 @@ services:
 # Initialize workflow (commande correcte — il n'existe pas de /bmad:init)
 /workflow:init
 
-# Si les commandes /sprint:* sont absentes, installer la couche Project d'abord :
+# Si les commandes /gate:* et /project:* sont absentes, installer la couche Project d'abord :
 make install-project TARGET=.
 
 # Ou créer le fichier manuellement
@@ -440,7 +440,7 @@ EOF
 
 ### Story transitions not working
 
-**Problem:** `/sprint:transition` fails to update story status.
+**Problem:** `/project:backlog move story` fails to update story status.
 
 **Solution:**
 ```bash
@@ -539,12 +539,12 @@ yq '.stories | to_entries[] | select(.value.status == "ready-for-dev")' .bmad/sp
    ```bash
    /workflow:init
    # Si la couche project est installée (make install-project TARGET=.) :
-   /sprint:next-story
+   /project:backlog next story
    ```
 
 2. **Transition stories to ready-for-dev**
    ```bash
-   /sprint:transition US-001 ready-for-dev
+   /project:backlog move story US-001 ready-for-dev
    ```
 
 > **Note:** `/common:ralph-sprint` was removed in v6.0. Use `/team:sprint --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).

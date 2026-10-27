@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.26.0] - 2026-10-26
+
+Phase 3 de la feuille de route de simplification des commandes de gestion de projet : parcours principal `/workflow:init → plan → design → start → implement → review → retro` (+ `status`), 86 → 35 commandes actives (5 langues).
+
+### Added
+
+- **`/workflow:implement [<N>|--epic|--story|--queue] [--resume] [--parallel N]`** : séquentiel par défaut, `--parallel` délègue à `/team:sprint` ; tous les statuts sont écrits dans `.bmad/sprint-status.yaml`.
+- **`/workflow:status [--board|--queue|--standup|--gates]`** : « où en suis-je + prochaine action » ; met enfin à jour `workflow-status.yaml`.
+- **`/workflow:plan [--research] [--only=prd|backlog]`** et **`/workflow:design [--constitution]`** : logique des générateurs intégrée (plus de wrapper) ; ordre canonique PRD → tech spec → backlog → sprint.
+- **`/workflow:start <N> [--tasks-only]`** : dossier de sprint, entrées YAML et décomposition en tâches.
+- **`/project:backlog next story | move story [--auto]`** : machine à états BMAD unique ; règles `routing.auto_transitions` appliquées après chaque transition.
+- **`/workflow:auto-sprint --from-prd`** : génère le backlog depuis le PRD avant le pipeline. `/team:delivery` est conservée comme variante parallèle Agent Teams (rédaction en revue croisée + implémentation).
+- **`/qa:status --report`**, **`/common:init --context`** ; skill **`sub-agents-patterns`**.
+- Test `tests/content/pm-phase3-merge.test.mjs`.
+
+### Deprecated
+
+- **19 commandes remplacées par des stubs de redirection** (retrait en 9.0) : tout le namespace `/sprint:` (`dev`, `status`, `next-story`, `transition`, `auto-route`), `/project:run-sprint|run-epic|run-queue|board|batch-status|generate-prd|generate-backlog|generate-tech-spec|generate-constitution|decompose-tasks`, `/workflow:analyze`, `/qa:report`, `/common:daily-standup`, `/common:setup-project-context`.
+
+### Removed
+
+- **`/common:sub-agents-patterns`** (documentation, pas une action) : devient le skill `sub-agents-patterns` ; supprimée à l'upgrade via `config/removed-commands.yaml`.
+
 ## [8.25.0] - 2026-10-26
 
 Phase 2 de la feuille de route de simplification des commandes de gestion de projet : fusion de `/project:` et `/gate:` (5 langues).

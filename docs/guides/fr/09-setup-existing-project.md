@@ -398,7 +398,7 @@ Vous avez deux options pour configurer le contexte du projet :
 Utilisez la commande intégrée pour détecter automatiquement votre stack et répondre à des questions ciblées :
 
 ```bash
-/common:setup-project-context
+/common:init --context
 ```
 
 La commande analysera votre codebase existante, détectera les technologies et posera uniquement les questions pour les informations manquantes.

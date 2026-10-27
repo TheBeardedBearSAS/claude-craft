@@ -151,6 +151,6 @@ Risiko: Ein Verzug von 2 oder mehr Tagen bei US-001 gefährdet den gesamten Spri
 ## Verwandte Befehle
 
 - `/project:trace` — Traceability-Matrix und Abdeckung
-- `/sprint:status` — Übersicht über den Sprint-Status
-- `/sprint:next-story` — Nächste Story (berücksichtigt Abhängigkeiten)
+- `/workflow:status` — Übersicht über den Sprint-Status
+- `/project:backlog next story` — Nächste Story (berücksichtigt Abhängigkeiten)
 - `/workflow:retro` — Sprint-Retrospektive (nutzt die Metriken)

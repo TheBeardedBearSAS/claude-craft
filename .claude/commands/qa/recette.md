@@ -18,6 +18,10 @@ Execute des tests d'acceptance automatises (recette) sur les applications web en
 - `--dry-run` : Generer le plan sans executer les tests
 - `--base-url=<url>` : Surcharger l'URL de base
 
+## Mode Plan
+
+> **Le mode plan est obligatoire.** Avant l'exécution, Claude active le mode plan pour analyser le code impacté, proposer un plan d'implémentation et attendre votre validation avant toute modification.
+
 ## Fonctionnalites Cles
 
 | Fonctionnalite | Description |
@@ -213,8 +217,8 @@ entries:
 | `/qa:fix` | Corriger les bugs d'une session |
 | `/qa:status` | Afficher le statut de session |
 | `/qa:regression` | Voir les tests de regression |
-| `/qa:report` | Generer un rapport |
-| `/gate:validate-story` | Valider les AC d'une story |
+| `/qa:status --report` | Generer un rapport |
+| `/gate:check story` | Valider les AC d'une story |
 
 ## Capacites Chrome
 
@@ -242,3 +246,25 @@ entries:
 3. **Examinez les regressions** : Consultez `.recette/regression/` apres chaque execution
 4. **Activez l'enregistrement GIF** : Pour debugger les echecs complexes
 5. **Maintenez l'URL de base** : Configurez dans le plan pour des tests coherents
+
+## Prochaine étape
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                   PROCHAINE ÉTAPE                        ║
+╠══════════════════════════════════════════════════════════╣
+║                                                          ║
+║  Si des bugs ont été trouvés :                           ║
+║  → /qa:fix                                               ║
+║    Correction automatisée des bugs                       ║
+║  → /qa:tdd                                               ║
+║    Correction avec approche TDD                          ║
+║                                                          ║
+║  Si tous les tests passent :                             ║
+║  → /qa:status --report                                            ║
+║    Générer le rapport de recette                         ║
+║  → /project:backlog move story done                               ║
+║    Marquer la story comme terminée                       ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```

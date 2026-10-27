@@ -275,4 +275,4 @@ When a timeout fires:
 
 - `@ralph-conductor` - Agent for Ralph orchestration
 - `/qa:tdd` - TDD-based bug fixing
-- `/sprint:dev` - Sprint development with TDD
+- `/workflow:implement` - Sprint development with TDD

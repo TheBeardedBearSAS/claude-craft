@@ -104,7 +104,7 @@ Vor jeder Abfrage: Welche Entscheidung wird mit diesem Ergebnis getroffen?
 - `@database-architect` — Schema-Design
 - `@performance-auditor` — Systemmetriken
 - `.claude/rules/14-multitenant.md` — Datenisolierung pro Tenant
-- `/common:daily-standup` — Dateneingabe für das Standup
+- `/workflow:status --standup` — Dateneingabe für das Standup
 - Observability-Infrastruktur über `@devops-engineer`
 
 ## Ressourcen

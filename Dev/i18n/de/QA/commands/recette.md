@@ -217,7 +217,7 @@ entries:
 | `/qa:fix` | Bugs aus einer Recette-Sitzung beheben |
 | `/qa:status` | Sitzungsstatus anzeigen |
 | `/qa:regression` | Regressionstests anzeigen |
-| `/qa:report` | Bericht generieren |
+| `/qa:status --report` | Bericht generieren |
 | `/gate:check story` | Story AC validieren |
 
 ## Chrome-Faehigkeiten
@@ -261,9 +261,9 @@ entries:
 ║    Fehlerbehebung mit TDD-Ansatz                         ║
 ║                                                          ║
 ║  Wenn alle Tests bestehen:                               ║
-║  → /qa:report                                            ║
+║  → /qa:status --report                                            ║
 ║    Recette-Bericht generieren                            ║
-║  → /sprint:transition done                               ║
+║  → /project:backlog move story done                               ║
 ║    Story als erledigt markieren                          ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

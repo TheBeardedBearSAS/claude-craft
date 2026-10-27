@@ -133,7 +133,7 @@ Afficher :
 ## Intégration
 
 - **`/workflow:init`** — propose pack-repo pour contexte initial nouveau projet
-- **`/common:setup-project-context`** — utilise pack-repo pour alimenter `.claude/INDEX.md`
+- **`/common:init --context`** — utilise pack-repo pour alimenter `.claude/INDEX.md`
 - **`/team:audit`** — packe avant audit multi-stack
 - **Skill `atomic-tasks`** — pack léger par feature pour subagent frais
 

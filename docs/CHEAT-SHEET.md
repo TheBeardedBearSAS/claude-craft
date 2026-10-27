@@ -30,7 +30,7 @@ npx @the-bearded-bear/claude-craft kanban --open                 # Open the Kanb
 rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 ```
 
-> **Note:** `/sprint:*`, `/gate:*` and `/project:*` require `make install-project TARGET=.` (separate install).
+> **Note:** `/gate:*` and `/project:*` require `make install-project TARGET=.` (separate install).
 > `/common:getting-started` and `/common:init` require Claude Craft to be installed first.
 
 ---
@@ -41,7 +41,8 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 
 | Task | Command |
 |------|---------|
-| Start new feature | `/workflow:start "Add user authentication"` |
+| Start the sprint | `/workflow:start 1` |
+| Implement the sprint | `/workflow:implement` (or `--story US-001`) |
 | Pre-commit validation | `/gate:check commit` |
 | Fix bug with TDD | `/qa:tdd "Login fails with empty password"` |
 | Generate CRUD (Symfony) | `/symfony:generate-crud User` |
@@ -50,7 +51,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 | Continuous loop | `/common:ralph-run "Implement payment module"` |
 | Run tests | `/qa:status` |
 | Research tech topic | `/common:research-context7 "FastAPI best practices"` |
-| Daily standup summary | `/common:daily-standup` |
+| Daily standup summary | `/workflow:status --standup` |
 
 ### QA / Tester
 
@@ -61,7 +62,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 | Resume test session | `/qa:recette --resume=REC-20260130-143022` |
 | Fix regression | `/qa:fix "User can submit empty form"` |
 | Generate regression test | `/qa:regression US-042` |
-| Report test results | `/qa:report` |
+| Report test results | `/qa:status --report` |
 
 ### Tech Lead / Architect
 
@@ -82,7 +83,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 
 ## 20 Installed Namespaces — Top Commands
 
-> **Note:** The 7 namespaces `/sprint:`, `/gate:`, `/project:` (sprint management) and the infra namespaces (`/docker:`, `/k8s:`, `/coolify:`, etc.) require a separate install via `make install-project TARGET=.` or `make install-infra TARGET=.`.
+> **Note:** The namespaces `/gate:` and `/project:` (project management) and the infra namespaces (`/docker:`, `/k8s:`, `/coolify:`, etc.) require a separate install via `make install-project TARGET=.` or `make install-infra TARGET=.`.
 
 ### `/common:` - Cross-cutting
 
@@ -94,26 +95,27 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 /common:setup-ci                  # Configure CI/CD
 /common:pack-repo                 # Pack codebase for AI
 /common:research-context7 "topic" # Deep research
-/common:daily-standup             # Standup summary
 /common:generate-changelog        # Generate CHANGELOG
 /common:architecture-decision     # Document ADR
 /common:add-technology "nextjs"   # Add new tech stack (claude-craft repo only)
-/common:setup-project-context     # Interactive project config (distinct from /common:init)
+/common:init --context            # Analyze codebase, configure project context
 /common:aliases                   # Custom shortcuts and aliases
 ```
 
-### `/workflow:` - BMAD Workflow
+### `/workflow:` - BMAD Workflow (9 commands)
+
+Main path: `init → plan → design → start → implement → review → retro`, with `status` at any time.
 
 ```
-/workflow:init                    # Initialize workflow
-/workflow:start "feature"         # Start new feature
-/workflow:analyze "requirement"   # Analyze requirement
-/workflow:plan "feature"          # Plan feature
-/workflow:design "feature"        # Design architecture
-/workflow:implement "feature"     # Implement feature
-/workflow:review                  # Sprint review
-/workflow:retro                   # Sprint retrospective
-/workflow:status                  # Current status
+/workflow:init                    # 1. Detect track / analyze context
+/workflow:plan                    # 2. PRD + backlog (--research, --only=prd|backlog)
+/workflow:design                  # 3. Tech spec (--constitution)
+/workflow:start 1                 # 4. Sprint folder + sprint-status.yaml + tasks
+/workflow:implement               # 5. TDD sprint (--story, --epic, --queue, --parallel N)
+/workflow:review                  # 6. Sprint review
+/workflow:retro                   # 7. Retrospective
+/workflow:status                  # Anytime: phase, metrics, next action (--board, --queue, --standup, --gates)
+/workflow:auto-sprint 1           # start → … → merge in one run (--from-prd to start from a PRD)
 ```
 
 ### `/team:` - Agent Teams (Parallel)
@@ -133,7 +135,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 /qa:fix "regression"              # Fix regression
 /qa:regression US-042             # Generate regression test
 /qa:status                        # Test status
-/qa:report                        # Test report
+/qa:status --report                        # Test report
 ```
 
 ### `/uiux:` - UI/UX & Accessibility
@@ -290,17 +292,9 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 /paperclip:generate-command       # Generate CLI command
 ```
 
-### `/sprint:` - Sprint Management
+### `/sprint:` - Deprecated
 
-> **Prerequisite:** `make install-project TARGET=.` — commands absent from the default install.
-
-```
-/sprint:create Sprint-3           # Create sprint
-/sprint:status                    # Sprint status
-/sprint:review                    # Sprint review
-/sprint:retro                     # Sprint retrospective
-/sprint:close                     # Close sprint
-```
+The 5 `/sprint:*` commands are redirect stubs (removed in 9.0): `/sprint:dev` → `/workflow:implement`, `/sprint:status` → `/workflow:status`, `/sprint:next-story` → `/project:backlog next story`, `/sprint:transition` → `/project:backlog move story <US> <status>`, `/sprint:auto-route` → `/project:backlog move story --auto`.
 
 ### `/gate:` - Quality Gates
 
@@ -318,7 +312,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 /gate:check --phase=pre-sprint    # Lifecycle checkpoint (pre-sprint|pre-impl|post-impl|pre-merge)
 ```
 
-### `/project:` - Project Management (15 commands)
+### `/project:` - Project Management (5 commands)
 
 ```
 /project:backlog add epic|story|task      # Create (also: list, edit, move task)
@@ -328,10 +322,11 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 /project:trace [--gaps] [--by-priority]   # Traceability matrix / coverage
 /project:report burndown|metrics|deps [--critical]  # Sprint reports
 /project:migrate [--analyze|--stories|--resync|--dry-run]  # Backlog to BMAD v6
-/project:generate-backlog | generate-prd | generate-tech-spec | run-sprint | board
+/project:backlog next story --claim       # Next ready story
+/project:backlog move story US-001 done  # Transition a story (--auto for routing rules)
 ```
 
-> The 33 former commands (`/project:add-epic`, `/gate:validate-prd`, `/common:pre-commit-check`...) are deprecated redirect stubs removed in 9.0: see "Deprecated commands" in `docs/COMMANDS.md`.
+> The 52 former commands (`/project:add-epic`, `/gate:validate-prd`, `/sprint:dev`, `/project:run-sprint`...) are deprecated redirect stubs removed in 9.0: see "Deprecated commands" in `docs/COMMANDS.md`.
 
 
 ---

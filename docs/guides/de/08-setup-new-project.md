@@ -317,7 +317,7 @@ Verwenden Sie den integrierten Befehl, um Ihren Stack automatisch zu erkennen un
 claude
 
 # Einrichtungsbefehl ausführen
-/common:setup-project-context
+/common:init --context
 ```
 
 Der Befehl wird:

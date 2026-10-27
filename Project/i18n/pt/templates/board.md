@@ -1,6 +1,6 @@
 # Sprint {NUMERO} - Quadro Kanban
 
-> **Visão gerada**: regenerada a partir de `.bmad/sprint-status.yaml` por `/project:board`. Não editar manualmente.
+> **Visão gerada**: regenerada a partir de `.bmad/sprint-status.yaml` por `/workflow:status --board`. Não editar manualmente.
 > **Objetivo do Sprint**: {SPRINT_GOAL}
 > **Período**: {DATE_DEBUT} → {DATE_FIN}
 

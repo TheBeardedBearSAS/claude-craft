@@ -1,6 +1,6 @@
 # Commands Reference
 
-> **This is the narrated, namespace-grouped reference (active commands only; the 33 deprecated redirect stubs are listed in [Deprecated commands](#deprecated-commands-removed-in-90)).** For the complete auto-generated table of all 239 commands (206 active + 33 deprecated stubs, core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
+> **This is the narrated, namespace-grouped reference (active commands only; the 52 deprecated redirect stubs are listed in [Deprecated commands](#deprecated-commands-removed-in-90)).** For the complete auto-generated table of all 238 commands (186 active + 52 deprecated stubs, core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
 
 Claude Code commands are slash commands that automate workflows and provide structured assistance.
 
@@ -27,22 +27,22 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 |-------|-------------|-----------------|
 | **MANDATORY** | Plan mode activates automatically before execution. Claude analyzes impacted code and proposes a plan for your validation. | `/workflow:implement`, `/qa:tdd`, `/qa:recette`, `generate-*` commands |
 | **RECOMMENDED** | Plan mode is recommended for complex scenarios. Activates when scope spans multiple modules. | `/workflow:plan`, `/workflow:design`, `/common:architecture-decision` |
-| **CONDITIONAL** | Plan mode activates automatically when scope is broad (multiple modules, cross-cutting analysis). | `check-*` commands, `/workflow:analyze`, `/common:research-context7` |
+| **CONDITIONAL** | Plan mode activates automatically when scope is broad (multiple modules, cross-cutting analysis). | `check-*` commands, `/workflow:plan --research`, `/common:research-context7` |
 
-> **Tip:** Commands without a Plan Mode section (e.g., `/workflow:status`, `/common:daily-standup`) are lightweight and never require plan mode.
+> **Tip:** Commands without a Plan Mode section (e.g., `/workflow:status`, `/workflow:status --standup`) are lightweight and never require plan mode.
 
 ---
 
 ## Command Namespaces
 
-> The generated reference lists **239 command files** across all namespaces: **206 active commands** plus **33 deprecated redirect stubs** (removed in 9.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> The generated reference lists **238 command files** across all namespaces: **186 active commands** plus **52 deprecated redirect stubs** (removed in 9.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 17 |
-| `/workflow:` | Workflow (BMAD) | 10 |
+| `/common:` | Transversal | 14 (11 distributed + 3 maintainer-only) |
+| `/workflow:` | Workflow (BMAD) — main path | 9 |
 | `/team:` | Agent Teams | 4 |
-| `/qa:` | QA & Testing | 6 |
+| `/qa:` | QA & Testing | 5 |
 | `/uiux:` | UI/UX & Accessibility | 8 |
 | `/symfony:` | PHP/Symfony | 10 |
 | `/flutter:` | Dart/Flutter | 10 |
@@ -65,9 +65,9 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/pgbouncer:` | PgBouncer/Connection Pooling | 5 |
 | `/frankenphp:` | FrankenPHP/PHP Server | 5 |
 | `/paperclip:` | Paperclip AI-workforce orchestration | 8 |
-| `/sprint:` | Sprint Management (BMAD v6) | 5 |
+| `/sprint:` | _Deprecated_ — 5 redirect stubs, removed in 9.0 | 0 active |
 | `/gate:` | Quality Gates (BMAD v6) | 1 (`/gate:check`, 11 modes) |
-| `/project:` | Project Management (BMAD v6) | 15 |
+| `/project:` | Project Management (BMAD v6) | 5 |
 
 ---
 
@@ -84,21 +84,13 @@ Transversal commands for all projects.
 | `/common:generate-changelog` | Generate changelog from commits |
 | `/common:architecture-decision` | Document an ADR |
 
-### Sprint Commands
-
-| Command | Description |
-|---------|-------------|
-| `/workflow:start` | Initialize a new sprint |
-| `/workflow:auto-sprint` | End-to-end sprint orchestrator (start → decompose → validate → implement → PR → CI → review → retro → merge) |
-| `/workflow:review` | Generate sprint review summary |
-| `/workflow:retro` | Conduct sprint retrospective |
-| `/common:daily-standup` | Generate standup summary |
+> Sprint-lifecycle commands live in [`/workflow:`](#workflow-commands-workflow); the daily stand-up is `/workflow:status --standup`.
 
 ### Configuration Commands
 
 | Command | Description |
 |---------|-------------|
-| `/common:setup-project-context` | Interactive project context configuration |
+| `/common:init --context` | Analyze the codebase and configure the project context (was `/common:setup-project-context`) |
 | `/common:setup-rtk` | Install and configure RTK (token optimization) |
 
 ### Continuous Loop Commands
@@ -140,7 +132,7 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 
 | Command | Description |
 |---------|-------------|
-| `/qa:tdd` | Fix bug using TDD methodology |
+| `/qa:tdd` | Fix bug using TDD methodology (see [QA Recette Commands](#qa-recette-commands-qa)) |
 | `/common:research-context7` | Deep technical research |
 
 ### UI/UX Commands
@@ -192,26 +184,29 @@ Add a complete technology stack to claude-craft with best practices:
 | `/team:sprint` | Parallel sprint implementation (Agent Teams) |
 | `/team:security` | Parallel security review (Agent Teams) |
 | `/team:delivery` | Full sprint lifecycle — writing + implementation (Agent Teams) |
-| `/common:sub-agents-patterns` | Sub-agent orchestration patterns for Agent Teams |
+| skill `sub-agents-patterns` | Sub-agent orchestration patterns for Agent Teams (a skill since 8.26.0, no longer a command) |
 
 ---
 
 ## Workflow Commands (`/workflow:`)
 
-BMAD-inspired workflow system adapted to project complexity.
+BMAD-inspired workflow system adapted to project complexity. Since Phase 3 of the PM simplification, the whole sprint lifecycle is covered by **9 commands**; `.bmad/sprint-status.yaml` is the single source of truth for status.
 
-| Command | Description |
-|---------|-------------|
-| `/workflow:init` | Initialize workflow (auto-detect track) |
-| `/workflow:analyze` | Research and exploration phase |
-| `/workflow:plan` | Generate PRD, personas, backlog |
-| `/workflow:design` | Tech spec, architecture, ADRs |
-| `/workflow:implement` | Sprint development with TDD/BDD |
-| `/workflow:status` | Show current progress |
-| `/workflow:retro` | Sprint retrospective |
-| `/workflow:review` | Sprint review summary |
-| `/workflow:start` | Start a new sprint |
-| `/workflow:auto-sprint` | End-to-end sprint orchestrator (PO/SM): chains start → decompose → validate → implement → PR → CI watch → review → retro → merge, each step in an isolated sub-agent (replaces `/clear`) |
+**Main path:** `/workflow:init` → `plan` → `design` → `start` → `implement` → `review` → `retro` (with `/workflow:status` at any time). `/workflow:auto-sprint <N>` chains start → … → merge in one run.
+
+| Command | Description | Replaces |
+|---------|-------------|----------|
+| `/workflow:init` | Analyze project context and recommend the track | |
+| `/workflow:plan` | PRD + backlog (default); `--research` adds the research phase; `--only=prd` / `--only=backlog` runs a single document | `/workflow:analyze`, `/project:generate-prd`, `/project:generate-backlog` |
+| `/workflow:design` | Technical specification; `--constitution` generates the project constitution | `/project:generate-tech-spec`, `/project:generate-constitution` |
+| `/workflow:start <N>` | Prepare a sprint: sprint folder, `sprint-status.yaml` entries, task breakdown (`--tasks-only` decomposes an existing sprint) | `/project:decompose-tasks` |
+| `/workflow:implement [<N>]` | Sprint development in TDD/BDD, sequential by default; `--story <US-ID>`, `--epic <EPIC>`, `--queue` / `--resume` (batch queue), `--parallel N` (delegates to `/team:sprint`), `--auto` | `/sprint:dev`, `/project:run-sprint`, `/project:run-epic`, `/project:run-queue` |
+| `/workflow:status` | Where am I + next action; `--board` (Kanban), `--queue` (batch queue), `--standup`, `--gates` | `/sprint:status`, `/project:board`, `/project:batch-status`, `/common:daily-standup` |
+| `/workflow:review` | Sprint review summary | |
+| `/workflow:retro` | Sprint retrospective | |
+| `/workflow:auto-sprint <N>` | End-to-end orchestrator (PO/SM): start → decompose → validate → implement → PR → CI watch → review → retro → merge, each step in an isolated sub-agent (`--from-prd` starts from a PRD) | |
+
+Story transitions are handled by `/project:backlog` (`next story`, `move story <US> <status>`, `move story --auto`).
 
 ---
 
@@ -730,8 +725,6 @@ Available with Project installation. Since Phase 2 of the PM simplification, the
 
 | Command | Description |
 |---------|-------------|
-| `/project:generate-backlog <Feature>` | Generate backlog |
-| `/project:decompose-tasks <Epic>` | Break down epic into tasks |
 | `/project:backlog add epic <Name>` | Create a new EPIC |
 | `/project:backlog add story <Epic> <Name>` | Create a User Story |
 | `/project:backlog add task <US> <Desc> <Est>` | Create a task |
@@ -741,7 +734,9 @@ Available with Project installation. Since Phase 2 of the PM simplification, the
 | `/project:backlog edit epic <Epic>` | Update an EPIC |
 | `/project:backlog edit story <US>` | Update a User Story |
 | `/project:backlog move task <Task> <Status>` | Change task status |
-| `/project:board` | Display Kanban board |
+| `/project:backlog move story <US> <Status>` | Transition a story (also `next story`, `move story --auto`) |
+
+> Backlog generation, sprint breakdown and the Kanban board are workflow commands: `/workflow:plan --only=backlog`, `/workflow:start <N>`, `/workflow:status --board`. PRD, tech spec, batch queue and constitution: `/workflow:plan --only=prd`, `/workflow:design`, `/workflow:implement --queue`, `/workflow:design --constitution` (see [Workflow Commands](#workflow-commands-workflow)).
 
 ### BMAD v6 Commands
 
@@ -752,18 +747,11 @@ Available with Project installation. Since Phase 2 of the PM simplification, the
 | `/project:migrate --stories` | Add missing BMAD fields to stories |
 | `/project:migrate --resync` | Synchronize backlog files and YAML |
 | `/project:migrate --dry-run` | Preview the migration without writing |
-| `/project:generate-prd` | Generate Product Requirements Document |
-| `/project:generate-tech-spec` | Generate Technical Specification |
-| `/project:run-epic <ID>` | Queue all stories in an epic |
-| `/project:run-queue` | Process queued stories |
-| `/project:run-sprint` | Execute full sprint |
-| `/project:batch-status` | View batch queue status |
 
 ### SDD v2.0 Commands
 
 | Command | Description |
 |---------|-------------|
-| `/project:generate-constitution` | Generate project constitution document |
 | `/project:trace [--scope] [--id]` | Display bidirectional traceability matrix |
 | `/project:trace --gaps` | Analyze requirement coverage gaps |
 | `/project:trace --by-priority` | Coverage map grouped by priority |
@@ -783,21 +771,18 @@ Available with Project installation. Since Phase 2 of the PM simplification, the
 | `/project:report deps [--sprint]` | Generate story dependency graph (Mermaid) |
 | `/project:report deps --critical [--sprint]` | Identify critical path for sprint optimization |
 
-### Sprint status
-
-| Command | Description |
-|---------|-------------|
-| `/sprint:status` | Show sprint metrics |
-| `/sprint:dev <N\|next>` | **Start TDD/BDD sprint development** |
-
-### Sprint Development (`/sprint:dev`)
+### Sprint Development (`/workflow:implement`, part of the workflow path)
 
 Orchestrates complete sprint development in TDD/BDD mode:
 
 ```bash
-/sprint:dev 1        # Sprint 1
-/sprint:dev next     # Next incomplete sprint
-/sprint:dev current  # Currently active sprint
+/workflow:implement 1        # Sprint 1
+/workflow:implement next     # Next incomplete sprint
+/workflow:implement current  # Currently active sprint
+/workflow:implement --story US-003      # One story
+/workflow:implement --epic EPIC-002     # All stories of an epic
+/workflow:implement --queue [--resume]  # Batch queue (.bmad/batch-queue.yaml)
+/workflow:implement --parallel 3        # Parallel engine (/team:sprint)
 ```
 
 **Features:**
@@ -830,15 +815,17 @@ Orchestrates complete sprint development in TDD/BDD mode:
 
 ---
 
-## Sprint Management Commands (`/sprint:`)
+## Sprint Status Commands (formerly `/sprint:`)
 
-Available with BMAD v6 installation.
+The `/sprint:` namespace is **deprecated** (5 redirect stubs, removed in 9.0). Story routing now lives in `/project:backlog`; status is read with `/workflow:status`. Available with BMAD v6 installation.
 
-| Command | Description |
-|---------|-------------|
-| `/sprint:next-story` | Get next ready-for-dev story |
-| `/sprint:transition <ID> <status>` | Transition story status |
-| `/sprint:auto-route` | Execute automatic routing rules |
+| Command | Description | Replaces |
+|---------|-------------|----------|
+| `/project:backlog next story` | Get next ready-for-dev story | `/sprint:next-story` |
+| `/project:backlog move story <ID> <status>` | Transition story status | `/sprint:transition` |
+| `/project:backlog move story --auto` | Execute automatic routing rules (`routing.auto_transitions`, also applied after every transition) | `/sprint:auto-route` |
+| `/workflow:status` | Phase, sprint metrics and next action | `/sprint:status` |
+| `/workflow:implement` | Sprint development | `/sprint:dev` |
 
 ### State Machine
 
@@ -890,7 +877,7 @@ Available with BMAD v6 installation.
 
 ## Deprecated commands (removed in 9.0)
 
-The 33 old commands remain as redirect stubs that point to their replacement. They will be removed in 9.0.
+The 52 old commands remain as redirect stubs that point to their replacement. They will be removed in 9.0.
 
 | Deprecated | Replacement |
 |------------|-------------|
@@ -922,10 +909,30 @@ The 33 old commands remain as redirect stubs that point to their replacement. Th
 | `/common:pre-commit-check` | `/gate:check commit` |
 | `/common:pre-merge-check` | `/gate:check merge` |
 | `/common:release-checklist` | `/gate:check release` |
+| `/sprint:dev`, `/project:run-sprint` | `/workflow:implement [<N>]` |
+| `/project:run-epic` | `/workflow:implement --epic <EPIC>` |
+| `/project:run-queue` | `/workflow:implement --queue` (`--resume` to resume) |
+| `/sprint:status` | `/workflow:status` |
+| `/project:board` | `/workflow:status --board` |
+| `/project:batch-status` | `/workflow:status --queue` |
+| `/common:daily-standup` | `/workflow:status --standup` |
+| `/workflow:analyze` | `/workflow:plan --research` |
+| `/project:generate-prd` | `/workflow:plan --only=prd` |
+| `/project:generate-backlog` | `/workflow:plan --only=backlog` |
+| `/project:generate-tech-spec` | `/workflow:design` |
+| `/project:generate-constitution` | `/workflow:design --constitution` |
+| `/project:decompose-tasks` | `/workflow:start <N>` (`--tasks-only` for an existing sprint) |
+| `/sprint:next-story` | `/project:backlog next story` |
+| `/sprint:transition` | `/project:backlog move story <US> <status>` |
+| `/sprint:auto-route` | `/project:backlog move story --auto` |
+| `/qa:report` | `/qa:status --report` |
+| `/common:setup-project-context` | `/common:init --context` |
+
+`/common:sub-agents-patterns` is no longer a command: it became the `sub-agents-patterns` skill (not a stub). `/team:delivery` is kept.
 
 ---
 
-## QA Recette Commands (`/common:`) - NEW
+## QA Recette Commands (`/qa:`)
 
 Automated acceptance testing with Claude in Chrome.
 
@@ -935,7 +942,8 @@ Automated acceptance testing with Claude in Chrome.
 | `/qa:fix` | Fix bugs from recette session (TDD workflow) |
 | `/qa:status` | Show recette session status and progress |
 | `/qa:regression` | View and manage regression test registry |
-| `/qa:report` | Generate recette report (MD/HTML/JSON) |
+| `/qa:status --report` | Generate recette report (MD/HTML/JSON) — was `/qa:report` |
+| `/qa:tdd` | Fix a bug in TDD/BDD mode |
 
 ### Golden Rule
 
@@ -1015,7 +1023,7 @@ See command documentation: `Dev/i18n/{lang}/Common/commands/recette.md`
 See fix command documentation: `Dev/i18n/{lang}/Common/commands/recette-fix.md`
 See status command documentation: `Dev/i18n/{lang}/Common/commands/recette-status.md`
 See regression command documentation: `Dev/i18n/{lang}/Common/commands/recette-regression.md`
-See report command documentation: `Dev/i18n/{lang}/Common/commands/recette-report.md`
+See report documentation: `/qa:status --report` (`Dev/i18n/{lang}/QA/commands/status.md`)
 
 ---
 

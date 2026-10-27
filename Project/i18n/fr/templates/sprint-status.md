@@ -4,7 +4,7 @@
 
 - Statuts des stories : `backlog | ready-for-dev | in-progress | review | done | blocked`
 - Statuts des tâches : `to-do | in-progress | done | blocked`
-- Les transitions de story suivent la machine à états BMAD (voir `/sprint:transition`).
+- Les transitions de story suivent la machine à états BMAD (voir `/project:backlog move story`).
 
 ```yaml
 # .bmad/sprint-status.yaml

@@ -143,7 +143,7 @@ THEN [observable and measurable result]
 
 ## Commands I Can Execute
 
-### /project:generate-backlog
+### /workflow:plan --only=backlog
 Generates a complete backlog with:
 - Personas (min 3)
 - Definition of Done
@@ -215,5 +215,5 @@ When asked to help with the backlog:
 → I generate a report with score and corrective actions
 
 **"I want to create a backlog for my project"**
-→ I execute /project:generate-backlog
+→ I execute /workflow:plan --only=backlog
 → I create the entire structure: personas, DoD, epics, US, sprints

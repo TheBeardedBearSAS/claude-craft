@@ -398,7 +398,7 @@ Sie haben zwei Optionen zur Konfiguration des Projektkontexts:
 Verwenden Sie den integrierten Befehl, um Ihren Stack automatisch zu erkennen und gezielte Fragen zu beantworten:
 
 ```bash
-/common:setup-project-context
+/common:init --context
 ```
 
 Der Befehl analysiert Ihre vorhandene Codebase, erkennt Technologien und fragt nur nach fehlenden Informationen.

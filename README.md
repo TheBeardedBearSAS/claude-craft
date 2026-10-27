@@ -26,7 +26,11 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
 
-A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces (239 total, including deprecated redirect stubs kept until 9.0), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 139 commands across 17 namespaces (238 total, including deprecated redirect stubs kept until 9.0), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+
+## What's New in v8.26.0
+
+**Un parcours principal pour la gestion de projet (2026-10-26, v8.26.0) :** `/workflow:init → plan → design → start → implement → review → retro` (+ `/workflow:status` à tout moment, `/workflow:auto-sprint` de bout en bout). Le namespace `/sprint:` et les générateurs `/project:*` deviennent des stubs de redirection jusqu'en 9.0. Il reste 35 commandes de gestion de projet actives au lieu de 86. Guide : [Quel parcours ?](docs/guides/en/11-which-path.md). Détails : [CHANGELOG](CHANGELOG.md#8260---2026-10-26).
 
 ## What's New in v8.25.0
 
@@ -255,7 +259,7 @@ These are the commands you'll use most:
 | `/workflow:init` | Start a development workflow (auto-detects track) |
 | `/team:audit` | Full project audit (architecture, security, quality) |
 | `/gate:check commit` | Validate before committing |
-| `/sprint:next-story` | Get next story ready for development |
+| `/project:backlog next story` | Get next story ready for development |
 | `/qa:tdd` | Test-Driven Development flow |
 | `/gate:check story` | Check story meets Definition of Done |
 | `/{tech}:check-architecture` | Verify architecture compliance |

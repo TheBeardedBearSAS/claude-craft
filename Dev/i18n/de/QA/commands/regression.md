@@ -149,7 +149,7 @@ Goldene-Regel-Pruefung: 1 VERSTOSS ERKANNT
 | `/qa:recette` | Akzeptanztests ausfuehren |
 | `/qa:fix` | Bugs aus einer Sitzung beheben |
 | `/qa:status` | Sitzungsstatus anzeigen |
-| `/qa:report` | Bericht generieren |
+| `/qa:status --report` | Bericht generieren |
 
 ## Fehlermeldungen
 
