@@ -12,7 +12,7 @@ project-management/
 │   ├── user-stories/         # User Stories
 │   └── tasks/                # Tasks non assignées à un sprint
 ├── sprints/
-│   └── sprint-XXX/
+│   └── sprint-{N}-{slug}/
 │       ├── sprint-goal.md    # Objectif et infos du sprint
 │       ├── board.md          # Kanban board
 │       └── tasks/            # Tasks du sprint

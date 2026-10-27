@@ -64,7 +64,7 @@ Resolver la carpeta del sprint mediante un glob `project-management/sprints/spri
 
 1. Parsear `<N>` y los flags. Derivar `N`, `00N`, el slug del sprint y el nombre del sprint.
 2. Resolver `project-management/sprints/sprint-{N}-*/` y `.bmad/sprint-status.yaml`.
-   **Abortar** si ninguno existe (no hay nada que orquestar).
+   Si ninguno existe, el sprint es nuevo: la Fase 1 crea ambos (sin abortar).
 3. Verificar que el árbol de trabajo esté limpio y que `--base` esté actualizado. **Abortar** si está sucio.
 4. Crear / hacer checkout de la rama de feature `feature/sprint-{N}-<slug>` desde `--base`
    (regla 09: `main` siempre desplegable — nunca trabajar directamente sobre la rama base).
@@ -81,7 +81,7 @@ Lanzar un sub-agente aislado:
 ### Fase 2 — Descomposición (sub-agente)
 
 > "Lee `.claude/commands/project/decompose-tasks.md` y ejecútalo para el sprint **00N**.
-> Genera los archivos de tareas por historia de usuario, `task-board.md` y el grafo de dependencias.
+> Genera los archivos `tasks/TASK-*.md`, `board.md` y el grafo de dependencias.
 > Devuelve un resumen breve y los archivos creados."
 
 ### Fase 3 — Validación de gate (sub-agente + bucle de corrección automática)

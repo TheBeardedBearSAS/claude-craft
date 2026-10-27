@@ -209,8 +209,8 @@ Jede US MUSS alle Schichten durchlaufen:
 
 ### /project:decompose-tasks [sprint]
 Zerlegt Sprint-US in Aufgaben:
-- Erstellt `tasks/US-XXX-tasks.md` für jede US
-- Erstellt `task-board.md` (Kanban)
+- Erstellt pro Aufgabe eine Datei `tasks/TASK-*.md`
+- Erstellt `board.md` (Kanban)
 - Generiert Mermaid-Abhängigkeitsgraph
 - Berechnet Gesamtstunden
 
@@ -220,10 +220,10 @@ Zerlegt Sprint-US in Aufgaben:
 - Konsistente Schätzungen
 - Logische Abhängigkeiten
 
-### /project:estimate
+### Schätzung (auf Anfrage)
 Hilft bei der Schätzung einer US in Fibonacci-Punkten
 
-### /project:architecture
+### Architekturvorschlag (auf Anfrage)
 Schlägt Architektur für ein Feature vor
 
 ## Wie ich arbeite
@@ -272,7 +272,7 @@ Wenn ich um technische Hilfe gebeten werde:
 **"Sprint 001 ist fertig, zerlege ihn"**
 → Ich führe /project:decompose-tasks 001 aus
 → Ich erstelle alle Aufgaben für jede US
-→ Ich generiere das Task-Board und Metriken
+→ Ich generiere das Board und Metriken
 
 **"Wir haben einen technischen Blocker"**
 → Ich analysiere das Problem

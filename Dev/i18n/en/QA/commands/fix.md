@@ -227,19 +227,19 @@ resume_from:
 
 ```bash
 # Fix all bugs from a recette session
-/qa:recette-fix --session=REC-20260130-143022
+/qa:fix --session=REC-20260130-143022
 
 # Dry run: refine and document without fixing
-/qa:recette-fix --session=REC-20260130-143022 --dry-run
+/qa:fix --session=REC-20260130-143022 --dry-run
 
 # Fix only critical and high severity bugs
-/qa:recette-fix --session=REC-20260130-143022 --severity=high
+/qa:fix --session=REC-20260130-143022 --severity=high
 
 # Generate BMAD documents without launching TDD
-/qa:recette-fix --session=REC-20260130-143022 --skip-fix
+/qa:fix --session=REC-20260130-143022 --skip-fix
 
 # Fix with automatic commits
-/qa:recette-fix --session=REC-20260130-143022 --auto-commit
+/qa:fix --session=REC-20260130-143022 --auto-commit
 ```
 
 ## Output Structure
@@ -269,9 +269,9 @@ resume_from:
 | Command | Description |
 |---------|-------------|
 | `/qa:recette` | Execute acceptance tests |
-| `/qa:recette-status` | Show session status |
-| `/qa:recette-regression` | View regression tests |
-| `/qa:recette-report` | Generate report |
+| `/qa:status` | Show session status |
+| `/qa:regression` | View regression tests |
+| `/qa:report` | Generate report |
 
 ## Error Messages
 

@@ -165,7 +165,7 @@ Acciones requeridas:
    □ TASK-016: Agregar el soporte refresh token
 
 2. Pasar la fase TDD a green:
-   /sprint:tdd green
+   .bmad/sprint-status.yaml → US-005: tdd_phase: green
 
 Luego reintentar: /sprint:transition US-005 review
 ═══════════════════════════════════════════════════════

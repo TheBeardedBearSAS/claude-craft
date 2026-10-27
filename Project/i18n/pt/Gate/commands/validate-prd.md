@@ -11,7 +11,7 @@ O PRD deve obter pelo menos 80% para ser aprovado.
 ## Argumentos
 
 $ARGUMENTS (formato: [arquivo-prd])
-- **arquivo-prd** (opcional): Caminho para o arquivo PRD. Padrao: `docs/prd.md`
+- **arquivo-prd** (opcional): Caminho para o arquivo PRD. Padrao: `project-management/prd.md`
 
 ## Criterios do Gate
 
@@ -32,7 +32,7 @@ $ARGUMENTS (formato: [arquivo-prd])
 
 ### Etapa 1: Localizar o arquivo PRD
 
-1. Usar o caminho fornecido ou o padrao `docs/prd.md`
+1. Usar o caminho fornecido ou o padrao `project-management/prd.md`
 2. Verificar se o arquivo existe
 3. Carregar o conteudo para analise
 
@@ -67,7 +67,7 @@ Exibir:
             Validacao Gate PRD
 ═══════════════════════════════════════════════════════
 
-Arquivo: docs/prd.md
+Arquivo: project-management/prd.md
 Limite: 80%
 
 Resultados da Validacao:
@@ -87,7 +87,7 @@ Pontuacao: 90/100 (90%)
 ✅ GATE PRD APROVADO
 
 Pronto para avancar para a fase Tech Spec.
-Proximo: /pm:handoff architect
+Proximo: /project:generate-tech-spec
 ═══════════════════════════════════════════════════════
 ```
 
@@ -98,7 +98,7 @@ Proximo: /pm:handoff architect
             Validacao Gate PRD
 ═══════════════════════════════════════════════════════
 
-Arquivo: docs/prd.md
+Arquivo: project-management/prd.md
 Limite: 80%
 
 Pontuacao: 50/100 (50%)

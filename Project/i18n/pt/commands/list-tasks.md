@@ -20,7 +20,7 @@ $ARGUMENTS (opcional, formato: [filtro] [valor])
 ### Etapa 1: Ler Tarefas
 
 1. Escanear diretórios de tarefas:
-   - `project-management/sprints/sprint-XXX/tasks/`
+   - `project-management/sprints/sprint-{N}-{slug}/tasks/`
    - `project-management/backlog/tasks/` (se existir)
 2. Ler cada arquivo TASK-XXX.md
 3. Extrair metadados

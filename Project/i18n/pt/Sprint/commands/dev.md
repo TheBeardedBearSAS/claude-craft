@@ -20,7 +20,7 @@ Orquestrar o desenvolvimento completo do sprint no modo TDD/BDD com:
 ## Pré-requisitos
 
 - Sprint existe com tarefas decompostas
-- Arquivos presentes: `sprint-backlog.md`, `tasks/*.md`
+- Arquivos presentes: `sprint-goal.md`, `board.md`, `tasks/TASK-*.md`
 - Executar `/project:decompose-tasks N` primeiro se necessário
 
 ## Argumentos
@@ -38,7 +38,7 @@ Orquestrar o desenvolvimento completo do sprint no modo TDD/BDD com:
 ### Fase 1: Inicialização
 
 1. Carregar sprint de `project-management/sprints/sprint-N-*/`
-2. Ler `sprint-backlog.md` para obter as User Stories
+2. Ler as stories do sprint em `.bmad/sprint-status.yaml` (`stories`) e `sprint-goal.md`
 3. Listar tarefas por US (ordenadas por dependências)
 4. Exibir o quadro inicial
 

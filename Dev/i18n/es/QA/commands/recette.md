@@ -214,12 +214,11 @@ entries:
 
 | Comando | Descripcion |
 |---------|-------------|
-| `/qa:recette-fix` | Corregir bugs de una sesion |
-| `/qa:recette-status` | Mostrar estado de sesion |
-| `/qa:recette-regression` | Ver pruebas de regresion |
-| `/qa:recette-report` | Generar reporte |
-| `/qa:validate` | Validar AC de una story |
-| `/qa:automate` | Crear pruebas automatizadas |
+| `/qa:fix` | Corregir bugs de una sesion |
+| `/qa:status` | Mostrar estado de sesion |
+| `/qa:regression` | Ver pruebas de regresion |
+| `/qa:report` | Generar reporte |
+| `/gate:validate-story` | Validar AC de una story |
 
 ## Capacidades de Chrome
 

@@ -20,7 +20,7 @@ $ARGUMENTS (optional, format: [filter] [value])
 ### Step 1: Read Tasks
 
 1. Scan task directories:
-   - `project-management/sprints/sprint-XXX/tasks/`
+   - `project-management/sprints/sprint-{N}-{slug}/tasks/`
    - `project-management/backlog/tasks/` (if exists)
 2. Read each file TASK-XXX.md
 3. Extract metadata

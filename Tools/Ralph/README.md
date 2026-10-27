@@ -67,8 +67,8 @@ npx @the-bearded-bear/claude-craft ralph --continue=ralph-1704067200-a1b2
 /common:ralph-run "Implement user authentication"
 
 # Autonomous sprint (via team-sprint)
-/common:team-sprint --ralph-mode "Sprint 3" --overnight
-/common:team-sprint --ralph-mode "Sprint 3" --parallel 3 --overnight
+/team:sprint --ralph-mode "Sprint 3" --overnight
+/team:sprint --ralph-mode "Sprint 3" --parallel 3 --overnight
 ```
 
 ### Direct Script
@@ -637,7 +637,7 @@ definition_of_done:
 
 ```bash
 # In sprint workflow
-/project:sprint-dev 1
+/sprint:dev 1
 # Ralph handles each task until DoD passes
 ```
 
@@ -702,13 +702,13 @@ The ASC enables overnight/unattended sprint execution:
 
 ```bash
 # Overnight sprint
-/common:team-sprint --ralph-mode "Sprint 3" --overnight
+/team:sprint --ralph-mode "Sprint 3" --overnight
 
 # Parallel processing
-/common:team-sprint --ralph-mode "Sprint 3" --parallel 3 --overnight
+/team:sprint --ralph-mode "Sprint 3" --parallel 3 --overnight
 
 # Supervised mode
-/common:team-sprint --ralph-mode "Sprint 3" --supervised
+/team:sprint --ralph-mode "Sprint 3" --supervised
 ```
 
 ### Components
@@ -732,10 +732,10 @@ The ASC enables overnight/unattended sprint execution:
 ## Related
 
 - `/common:ralph-run` - Command to start Ralph from Claude Code
-- `/common:team-sprint --ralph-mode` - Autonomous Sprint Conductor
+- `/team:sprint --ralph-mode` - Autonomous Sprint Conductor
 - `@ralph-conductor` - Agent for Ralph orchestration
-- `/common:fix-bug-tdd` - TDD-based bug fixing
-- `/project:sprint-dev` - Sprint development with TDD
+- `/qa:tdd` - TDD-based bug fixing
+- `/sprint:dev` - Sprint development with TDD
 
 ## Credits
 

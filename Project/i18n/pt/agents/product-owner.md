@@ -160,7 +160,7 @@ Verifica conformidade SCRUM:
 - MMF para Epics
 - Gera relatório com score /100
 
-### /project:prioritize
+### Priorização (sob pedido)
 Ajuda a priorizar o backlog com:
 - Análise de valor de negócio
 - MoSCoW

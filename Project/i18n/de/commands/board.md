@@ -22,7 +22,7 @@ $ARGUMENTS (optional, Format: [sprint N])
 
 ### Schritt 2: Daten lesen
 
-1. Datei `project-management/sprints/sprint-XXX/board.md` lesen
+1. Datei `project-management/sprints/sprint-{N}-{slug}/board.md` lesen
 2. Oder aus Aufgabendateien regenerieren
 
 ### Schritt 3: Nach Status gruppieren

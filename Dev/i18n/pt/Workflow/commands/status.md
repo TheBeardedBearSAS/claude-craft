@@ -139,7 +139,7 @@ Exibir o estado atual do workflow de desenvolvimento, incluindo fases concluidas
 | FASE 4: IMPLEMENTACAO (Pendente)                                     |
 | ================================================================== |
 |                                                                      |
-| Sprint 1: sprint-001-walking-skeleton                                |
+| Sprint 1: sprint-1-walking-skeleton                                  |
 | +-- Status: Pronto para iniciar                                      |
 | +-- Stories: 5                                                       |
 | +-- Pontos: 21                                                       |
@@ -274,7 +274,7 @@ phases:
   implementation:
     status: pending
     sprints:
-      - name: sprint-001-walking-skeleton
+      - name: sprint-1-walking-skeleton
         status: pending
         points: 21
         stories: 5

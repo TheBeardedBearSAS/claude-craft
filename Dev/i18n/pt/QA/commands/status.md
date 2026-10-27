@@ -96,25 +96,25 @@ Estado de Correcao: completed (2/2 bugs corrigidos)
 
 ```bash
 # Listar todas as sessoes
-/qa:recette-status --all
+/qa:status --all
 
 # Mostrar status detalhado de uma sessao
-/qa:recette-status --session=REC-20260130-143022
+/qa:status --session=REC-20260130-143022
 
 # Filtrar sessoes em execucao
-/qa:recette-status --all --status=running
+/qa:status --all --status=running
 
 # Filtrar por escopo
-/qa:recette-status --all --scope=sprint
+/qa:status --all --scope=sprint
 
 # Monitoramento ao vivo de uma sessao
-/qa:recette-status --session=REC-20260130-143022 --watch
+/qa:status --session=REC-20260130-143022 --watch
 
 # Saida em YAML
-/qa:recette-status --session=REC-20260130-143022 --format=yaml
+/qa:status --session=REC-20260130-143022 --format=yaml
 
 # Saida em JSON (para scripting)
-/qa:recette-status --all --format=json
+/qa:status --all --format=json
 ```
 
 ## Estrutura de Saida
@@ -138,9 +138,9 @@ Estado de Correcao: completed (2/2 bugs corrigidos)
 | Comando | Descricao |
 |---------|-----------|
 | `/qa:recette` | Executar testes de aceitacao |
-| `/qa:recette-fix` | Corrigir bugs de uma sessao |
-| `/qa:recette-regression` | Ver testes de regressao |
-| `/qa:recette-report` | Gerar relatorio |
+| `/qa:fix` | Corrigir bugs de uma sessao |
+| `/qa:regression` | Ver testes de regressao |
+| `/qa:report` | Gerar relatorio |
 
 ## Mensagens de Erro
 

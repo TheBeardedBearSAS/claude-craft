@@ -11,7 +11,7 @@ Die Tech Spec muss mindestens 90% erreichen, um zu bestehen.
 ## Argumente
 
 $ARGUMENTS (format: [techspec-datei])
-- **techspec-datei** (optional): Pfad zur Tech Spec-Datei. Standard: `docs/tech-spec.md`
+- **techspec-datei** (optional): Pfad zur Tech Spec-Datei. Standard: `project-management/tech-spec.md`
 
 ## Gate-Kriterien
 
@@ -34,7 +34,7 @@ $ARGUMENTS (format: [techspec-datei])
 
 ### Schritt 1: Tech Spec-Datei lokalisieren
 
-1. Angegebenen Pfad oder Standard `docs/tech-spec.md` verwenden
+1. Angegebenen Pfad oder Standard `project-management/tech-spec.md` verwenden
 2. Pruefen, ob Datei existiert
 3. Inhalt zur Analyse laden
 
@@ -62,7 +62,7 @@ Detaillierte Ergebnisse mit Vorschlaegen anzeigen.
           Tech Spec Quality Gate-Validierung
 ═══════════════════════════════════════════════════════
 
-Datei: docs/tech-spec.md
+Datei: project-management/tech-spec.md
 Schwelle: 90%
 
 Validierungsergebnisse:
@@ -103,7 +103,7 @@ Punktzahl: 100/100 (100%)
 ✅ TECH SPEC-GATE VALIDIERT
 
 Bereit fuer die Backlog-Erstellung.
-Naechster Schritt: /arch:handoff po
+Naechster Schritt: /project:generate-backlog
 ═══════════════════════════════════════════════════════
 ```
 
@@ -114,7 +114,7 @@ Naechster Schritt: /arch:handoff po
           Tech Spec Quality Gate-Validierung
 ═══════════════════════════════════════════════════════
 
-Datei: docs/tech-spec.md
+Datei: project-management/tech-spec.md
 Schwelle: 90%
 
 Validierungsergebnisse:
@@ -179,7 +179,7 @@ Nach Korrekturen erneut ausfuehren: /gate:validate-techspec
 
 Erwaegen Sie die Erstellung eines ADR fuer bedeutende Entscheidungen:
 ```
-/arch:adr "JWT vs. sitzungsbasierte Authentifizierung"
+/common:architecture-decision "JWT vs. sitzungsbasierte Authentifizierung"
 ```
 
 Gate-Konfiguration: `.bmad/gates/techspec-gate.yaml`

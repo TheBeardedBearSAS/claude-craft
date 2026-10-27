@@ -102,13 +102,13 @@ project-management/
 │   └── user-stories/
 │       └── US-XXX-nom.md         # INVEST + 3C + Gherkin SMART
 └── sprints/
-    └── sprint-XXX-but/
+    └── sprint-{N}-{slug}/
         ├── sprint-goal.md        # Sprint Goal + Cérémonies + Rétro
         ├── sprint-dependencies.md
-        ├── tasks/
-        │   ├── README.md
-        │   └── US-XXX-tasks.md   # Tâches détaillées
-        └── task-board.md         # Kanban
+        ├── board.md              # Kanban
+        └── tasks/
+            ├── README.md
+            └── TASK-XXX.md       # Un fichier par tâche
 ```
 
 ## Standards SCRUM appliqués
@@ -178,8 +178,8 @@ project-management/
 | Epic | EPIC-XXX-nom | EPIC-001-authentification |
 | User Story | US-XXX-nom | US-001-inscription |
 | Persona | P-XXX | P-001 |
-| Sprint | sprint-XXX-but | sprint-001-walking_skeleton |
-| Tâche | T-XXX-YY | T-001-05 |
+| Sprint | sprint-{N}-{slug} | sprint-1-walking_skeleton   |
+| Tâche | TASK-XXX | TASK-005 |
 
 ## Qualité du code
 

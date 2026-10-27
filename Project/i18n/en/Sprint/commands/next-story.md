@@ -154,4 +154,4 @@ After claiming a story:
 3. 🔵 REFACTOR: Clean up while keeping tests green
 4. Repeat for each task
 
-Use `/sprint:tdd-cycle` to track phase transitions.
+Use `tdd_phase` (`.bmad/sprint-status.yaml`) to track phase transitions.

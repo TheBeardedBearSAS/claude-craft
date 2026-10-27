@@ -11,7 +11,7 @@ The Tech Spec must score at least 90% to pass.
 ## Arguments
 
 $ARGUMENTS (format: [techspec-file])
-- **techspec-file** (optional): Path to Tech Spec file. Default: `docs/tech-spec.md`
+- **techspec-file** (optional): Path to Tech Spec file. Default: `project-management/tech-spec.md`
 
 ## Gate Criteria
 
@@ -34,7 +34,7 @@ $ARGUMENTS (format: [techspec-file])
 
 ### Step 1: Locate Tech Spec file
 
-1. Use provided path or default `docs/tech-spec.md`
+1. Use provided path or default `project-management/tech-spec.md`
 2. Verify file exists
 3. Load content for analysis
 
@@ -62,7 +62,7 @@ Show detailed results with suggestions.
           Tech Spec Quality Gate Validation
 ═══════════════════════════════════════════════════════
 
-File: docs/tech-spec.md
+File: project-management/tech-spec.md
 Threshold: 90%
 
 Validation Results:
@@ -103,7 +103,7 @@ Score: 100/100 (100%)
 ✅ TECH SPEC GATE PASSED
 
 Ready to proceed to Backlog creation.
-Next: /arch:handoff po
+Next: /project:generate-backlog
 ═══════════════════════════════════════════════════════
 ```
 
@@ -114,7 +114,7 @@ Next: /arch:handoff po
           Tech Spec Quality Gate Validation
 ═══════════════════════════════════════════════════════
 
-File: docs/tech-spec.md
+File: project-management/tech-spec.md
 Threshold: 90%
 
 Validation Results:
@@ -179,7 +179,7 @@ Re-run after fixes: /gate:validate-techspec
 
 Consider creating an ADR for significant decisions:
 ```
-/arch:adr "JWT vs Session-based authentication"
+/common:architecture-decision "JWT vs Session-based authentication"
 ```
 
 Gate configuration: `.bmad/gates/techspec-gate.yaml`

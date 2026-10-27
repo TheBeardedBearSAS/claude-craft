@@ -66,10 +66,9 @@ Symfony UX/Turbo + Flutter → API Platform → PostgreSQL
 - API Platform is the central point consumed by Web and Mobile
 
 ## DOCUMENTS TO ANALYZE
-Search in `./docs/` for specification files:
-- ARCHITECTURE_TECHNIQUE*.md
-- CAHIER_DES_CHARGES*.md
-- Or any other available spec file
+1. `project-management/prd.md` (written by `/project:generate-prd`): primary source. Its requirement IDs (`FR-xxx`) feed the `Implements:` field of every US.
+2. `project-management/tech-spec.md` if present.
+3. Fallback when there is no PRD: spec files in `./docs/` (ARCHITECTURE_TECHNIQUE*.md, CAHIER_DES_CHARGES*.md or any other available spec file).
 
 ## MISSION
 
@@ -90,7 +89,7 @@ project-management/
 │   └── user-stories/
 │       └── US-XXX-name.md
 └── sprints/
-    └── sprint-XXX-sprint_goal/
+    └── sprint-{N}-{slug}/
         ├── sprint-goal.md
         └── sprint-dependencies.md
 ```
@@ -161,6 +160,8 @@ For each Epic:
 - **E**stimable: Can be estimated
 - **S**ized: ≤ 8 points
 - **T**estable: Verifiable criteria
+
+**Template**: start from `.claude/templates/project/user-story.md` and fill its `## Traceability` section: `Implements:` lists the PRD requirements (`FR-xxx`) the story delivers.
 
 **The 3 Cs (MANDATORY)**:
 - **Card**: Concise, "As a... I want... So that..." format
@@ -246,6 +247,9 @@ THEN the message "[exact message]" is displayed
 - Twig template: [Path]
 - Flutter widget: [Name]
 
+## Traceability
+- **Implements**: {FR-001, FR-003}
+
 ## Estimation
 - **Story Points**: [1/2/3/5/8]
 - **MoSCoW**: [Must/Should/Could/Won't]
@@ -283,10 +287,10 @@ EPIC-001 → EPIC-002 → EPIC-004
 | Source US | Target US | Reason |
 ````
 
-### STEP 8: Create Sprints (sprint-XXX-goal/)
+### STEP 8: Create Sprints (sprint-{N}-{slug}/)
 
-**Naming convention**: sprint-XXX-sprint_goal
-Examples: sprint-001-walking_skeleton, sprint-002-jwt_authentication
+**Naming convention**: sprint-{N}-{slug}
+Examples: sprint-1-walking_skeleton, sprint-2-jwt_authentication
 
 **sprint-goal.md**:
 ````markdown

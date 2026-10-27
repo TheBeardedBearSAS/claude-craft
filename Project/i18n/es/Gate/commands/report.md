@@ -116,7 +116,7 @@ Comandos:
 ### Validación PRD
 
 ```
-Archivo: docs/prd.md
+Archivo: project-management/prd.md
 Umbral: 80%
 Criterios:
   ✅ Declaración del problema (15%)
@@ -132,7 +132,7 @@ Criterios:
 ### Validación Tech Spec
 
 ```
-Archivo: docs/tech-spec.md
+Archivo: project-management/tech-spec.md
 Umbral: 90%
 Criterios:
   ✅ Vista general de arquitectura (12%)

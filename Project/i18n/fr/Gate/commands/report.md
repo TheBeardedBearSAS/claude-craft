@@ -26,8 +26,8 @@ Déterminer quels gates s'appliquent selon l'état du projet:
 ### Étape 2: Exécuter les validations
 
 Exécuter chaque validateur de gate applicable:
-1. Validation PRD (si docs/prd.md existe)
-2. Validation Tech Spec (si docs/tech-spec.md existe)
+1. Validation PRD (si project-management/prd.md existe)
+2. Validation Tech Spec (si project-management/tech-spec.md existe)
 3. Validation INVEST Backlog
 4. Validation readiness sprint
 5. Validations DoD stories individuelles

@@ -143,7 +143,7 @@ US-003:
   → Dividir em stories menores (≤8 pontos cada)
   → Remover detalhes de tarefas desnecessários
   → Resolver dependências ou reordenar
-  → Considerar: /project:split-story US-003
+  → Considerar: /project:update-story US-003 + /project:add-story
 
 Reexecutar após correções: /gate:validate-backlog
 ═══════════════════════════════════════════════════════
@@ -201,7 +201,8 @@ Status: ready-for-dev
 
 ### Story muito grande (S)
 ```
-/project:split-story US-003
+/project:update-story US-003   # reduce scope
+/project:add-story            # remainder
 ```
 
 ### Story points faltando (E)
@@ -211,7 +212,7 @@ Status: ready-for-dev
 
 ### Critérios de aceitação faltando (V, T)
 ```
-/project:add-ac US-002 "Given... When... Then..."
+/project:update-story US-002 "Given... When... Then..."
 ```
 
 Configuração do gate: `.bmad/gates/backlog-gate.yaml`

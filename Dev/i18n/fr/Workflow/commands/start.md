@@ -141,9 +141,10 @@ Créer le dossier du sprint :
 ```
 project-management/
 └── sprints/
-    └── sprint-{N}-{objectif}/
+    └── sprint-{N}-{slug}/
         ├── sprint-goal.md
-        ├── sprint-backlog.md
+        ├── board.md
+        ├── tasks/
         ├── daily-notes/
         │   ├── {YYYY-MM-DD}.md
         │   └── ...

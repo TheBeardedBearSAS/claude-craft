@@ -100,25 +100,25 @@ Checkpoint:
 
 ```bash
 # List all sessions
-/qa:recette-status --all
+/qa:status --all
 
 # Show detailed status for a specific session
-/qa:recette-status --session=REC-20260130-143022
+/qa:status --session=REC-20260130-143022
 
 # Filter running sessions
-/qa:recette-status --all --status=running
+/qa:status --all --status=running
 
 # Filter by scope
-/qa:recette-status --all --scope=sprint
+/qa:status --all --scope=sprint
 
 # Live monitoring of a running session
-/qa:recette-status --session=REC-20260130-143022 --watch
+/qa:status --session=REC-20260130-143022 --watch
 
 # Output as YAML
-/qa:recette-status --session=REC-20260130-143022 --format=yaml
+/qa:status --session=REC-20260130-143022 --format=yaml
 
 # Output as JSON (for scripting)
-/qa:recette-status --all --format=json
+/qa:status --all --format=json
 ```
 
 ## Output Structure
@@ -142,9 +142,9 @@ Checkpoint:
 | Command | Description |
 |---------|-------------|
 | `/qa:recette` | Execute acceptance tests |
-| `/qa:recette-fix` | Fix bugs from a recette session |
-| `/qa:recette-regression` | View regression test registry |
-| `/qa:recette-report` | Generate report |
+| `/qa:fix` | Fix bugs from a recette session |
+| `/qa:regression` | View regression test registry |
+| `/qa:report` | Generate report |
 
 ## Error Messages
 

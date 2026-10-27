@@ -154,7 +154,7 @@ Actions:
 ## Génération de rapport
 
 Le rapport est également sauvegardé dans:
-`project-management/sprints/sprint-XXX/status-YYYY-MM-DD.md`
+`project-management/sprints/sprint-{N}-{slug}/status-YYYY-MM-DD.md`
 
 ## Prochaine étape
 

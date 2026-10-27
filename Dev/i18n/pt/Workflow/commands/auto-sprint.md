@@ -64,7 +64,7 @@ Resolva a pasta do sprint fazendo glob de `project-management/sprints/sprint-{N}
 
 1. Analise `<N>` e as flags. Derive `N`, `00N`, o slug e o nome do sprint.
 2. Resolva `project-management/sprints/sprint-{N}-*/` e `.bmad/sprint-status.yaml`.
-   **Aborte** se nenhum existir (nada a orquestrar).
+   Se nenhum existir, o sprint é novo: a Fase 1 cria ambos (sem abortar).
 3. Verifique se a árvore de trabalho está limpa e se `--base` está atualizado. **Aborte** se estiver suja.
 4. Crie / faça checkout do branch de feature `feature/sprint-{N}-<slug>` a partir de `--base`
    (regra 09: `main` sempre implantável — nunca trabalhe diretamente no branch base).
@@ -81,7 +81,7 @@ Inicie um sub-agente isolado:
 ### Fase 2 — Decomposição (sub-agente)
 
 > "Leia `.claude/commands/project/decompose-tasks.md` e execute para o sprint **00N**.
-> Gere os arquivos de tarefas por US, `task-board.md` e o grafo de dependências.
+> Gere os arquivos `tasks/TASK-*.md`, `board.md` e o grafo de dependências.
 > Retorne um resumo conciso e os arquivos criados."
 
 ### Fase 3 — Validação do gate (sub-agente + loop de correção automática)

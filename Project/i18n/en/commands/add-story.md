@@ -49,7 +49,7 @@ Ask the user:
 
 ### Step 5: Create the file
 
-1. Use template `Scrum/templates/user-story.md`
+1. Use template `.claude/templates/project/user-story.md`
 2. Replace placeholders:
    - `{ID}`: Generated ID
    - `{NOM}`: US name

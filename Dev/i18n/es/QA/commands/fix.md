@@ -227,19 +227,19 @@ resume_from:
 
 ```bash
 # Corregir todos los bugs de una sesion recette
-/qa:recette-fix --session=REC-20260130-143022
+/qa:fix --session=REC-20260130-143022
 
 # Dry run: refinar y documentar sin corregir
-/qa:recette-fix --session=REC-20260130-143022 --dry-run
+/qa:fix --session=REC-20260130-143022 --dry-run
 
 # Corregir solo bugs criticos y altos
-/qa:recette-fix --session=REC-20260130-143022 --severity=high
+/qa:fix --session=REC-20260130-143022 --severity=high
 
 # Generar documentos BMAD sin lanzar el TDD
-/qa:recette-fix --session=REC-20260130-143022 --skip-fix
+/qa:fix --session=REC-20260130-143022 --skip-fix
 
 # Corregir con commit automatico
-/qa:recette-fix --session=REC-20260130-143022 --auto-commit
+/qa:fix --session=REC-20260130-143022 --auto-commit
 ```
 
 ## Estructura de Salida
@@ -269,9 +269,9 @@ resume_from:
 | Comando | Descripcion |
 |---------|-------------|
 | `/qa:recette` | Ejecutar pruebas de aceptacion |
-| `/qa:recette-status` | Mostrar estado de sesion |
-| `/qa:recette-regression` | Ver tests de regresion |
-| `/qa:recette-report` | Generar informe |
+| `/qa:status` | Mostrar estado de sesion |
+| `/qa:regression` | Ver tests de regresion |
+| `/qa:report` | Generar informe |
 
 ## Mensajes de Error
 

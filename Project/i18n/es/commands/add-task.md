@@ -61,7 +61,7 @@ Extraer de $ARGUMENTS:
 
 ### Paso 5: Crear el archivo
 
-1. Usar plantilla `Scrum/templates/task.md`
+1. Usar plantilla `.claude/templates/project/task.md`
 2. Reemplazar marcadores de posición:
    - `{ID}`: ID generado
    - `{DESCRIPTION}`: Descripción corta
@@ -72,7 +72,7 @@ Extraer de $ARGUMENTS:
    - `{DESCRIPTION_DETAILLEE}`: Descripción detallada
 
 3. Determinar ruta:
-   - Si US en sprint: `project-management/sprints/sprint-XXX/tasks/TASK-{ID}.md`
+   - Si US en sprint: `project-management/sprints/sprint-{N}-{slug}/tasks/TASK-{ID}.md`
    - De lo contrario: `project-management/backlog/tasks/TASK-{ID}.md`
 
 ### Paso 6: Actualizar User Story
@@ -85,7 +85,7 @@ Extraer de $ARGUMENTS:
 ### Paso 7: Actualizar tablero (si es sprint)
 
 Si la US está en un sprint:
-1. Leer `project-management/sprints/sprint-XXX/board.md`
+1. Leer `project-management/sprints/sprint-{N}-{slug}/board.md`
 2. Agregar tarea a "🔴 To Do"
 3. Actualizar métricas
 4. Guardar

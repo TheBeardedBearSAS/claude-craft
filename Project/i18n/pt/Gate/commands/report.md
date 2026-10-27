@@ -116,7 +116,7 @@ Comandos:
 ### Validação PRD
 
 ```
-Arquivo: docs/prd.md
+Arquivo: project-management/prd.md
 Limiar: 80%
 Critérios:
   ✅ Declaração do problema (15%)
@@ -132,7 +132,7 @@ Critérios:
 ### Validação Tech Spec
 
 ```
-Arquivo: docs/tech-spec.md
+Arquivo: project-management/tech-spec.md
 Limiar: 90%
 Critérios:
   ✅ Visão geral da arquitetura (12%)

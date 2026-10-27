@@ -49,7 +49,7 @@ Benutzer fragen:
 
 ### Schritt 5: Datei erstellen
 
-1. Template `Scrum/templates/user-story.md` verwenden
+1. Template `.claude/templates/project/user-story.md` verwenden
 2. Platzhalter ersetzen:
    - `{ID}`: Generierte ID
    - `{NOM}`: US-Name

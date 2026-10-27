@@ -122,7 +122,7 @@ Ready Stories:
   📖 US-014: Email verification (3 pts)
 
 Commands:
-  /sprint:start           Start the sprint
+  /workflow:start           Start the sprint
   /sprint:next-story     Pick first story
 ═══════════════════════════════════════════════════════
 ```

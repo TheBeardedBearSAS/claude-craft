@@ -210,12 +210,11 @@ entries:
 
 | Commande | Description |
 |----------|-------------|
-| `/qa:recette-fix` | Corriger les bugs d'une session |
-| `/qa:recette-status` | Afficher le statut de session |
-| `/qa:recette-regression` | Voir les tests de regression |
-| `/qa:recette-report` | Generer un rapport |
-| `/qa:validate` | Valider les AC d'une story |
-| `/qa:automate` | Creer des tests automatises |
+| `/qa:fix` | Corriger les bugs d'une session |
+| `/qa:status` | Afficher le statut de session |
+| `/qa:regression` | Voir les tests de regression |
+| `/qa:report` | Generer un rapport |
+| `/gate:validate-story` | Valider les AC d'une story |
 
 ## Capacites Chrome
 

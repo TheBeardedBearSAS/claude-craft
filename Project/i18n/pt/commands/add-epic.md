@@ -41,7 +41,7 @@ Perguntar ao usuário (se não fornecido):
 
 ### Etapa 4: Criar o arquivo
 
-1. Usar template `Scrum/templates/epic.md`
+1. Usar template `.claude/templates/project/epic.md`
 2. Substituir placeholders:
    - `{ID}`: ID gerado
    - `{NOM}`: Nome do EPIC

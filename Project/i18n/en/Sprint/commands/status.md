@@ -196,7 +196,7 @@ US-008 has all tasks complete -> /sprint:transition US-008 review
 ## Report Generation
 
 Report is also saved in:
-`project-management/sprints/sprint-XXX/status-YYYY-MM-DD.md`
+`project-management/sprints/sprint-{N}-{slug}/status-YYYY-MM-DD.md`
 
 ## Next Step
 

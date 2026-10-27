@@ -96,25 +96,25 @@ Behebungsstatus: completed (2/2 Bugs behoben)
 
 ```bash
 # Alle Sitzungen auflisten
-/qa:recette-status --all
+/qa:status --all
 
 # Detaillierten Status einer Sitzung anzeigen
-/qa:recette-status --session=REC-20260130-143022
+/qa:status --session=REC-20260130-143022
 
 # Laufende Sitzungen filtern
-/qa:recette-status --all --status=running
+/qa:status --all --status=running
 
 # Nach Umfang filtern
-/qa:recette-status --all --scope=sprint
+/qa:status --all --scope=sprint
 
 # Live-Ueberwachung einer Sitzung
-/qa:recette-status --session=REC-20260130-143022 --watch
+/qa:status --session=REC-20260130-143022 --watch
 
 # Ausgabe als YAML
-/qa:recette-status --session=REC-20260130-143022 --format=yaml
+/qa:status --session=REC-20260130-143022 --format=yaml
 
 # Ausgabe als JSON (fuer Scripting)
-/qa:recette-status --all --format=json
+/qa:status --all --format=json
 ```
 
 ## Ausgabestruktur
@@ -138,9 +138,9 @@ Behebungsstatus: completed (2/2 Bugs behoben)
 | Befehl | Beschreibung |
 |--------|--------------|
 | `/qa:recette` | Akzeptanztests ausfuehren |
-| `/qa:recette-fix` | Bugs aus einer Sitzung beheben |
-| `/qa:recette-regression` | Regressionstests anzeigen |
-| `/qa:recette-report` | Bericht generieren |
+| `/qa:fix` | Bugs aus einer Sitzung beheben |
+| `/qa:regression` | Regressionstests anzeigen |
+| `/qa:report` | Bericht generieren |
 
 ## Fehlermeldungen
 

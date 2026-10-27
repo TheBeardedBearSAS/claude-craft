@@ -107,25 +107,25 @@ Goldene-Regel-Pruefung: 1 VERSTOSS ERKANNT
 
 ```bash
 # Alle Regressionstests auflisten
-/qa:recette-regression --list
+/qa:regression --list
 
 # Stabilitaetswert anzeigen
-/qa:recette-regression --stats
+/qa:regression --stats
 
 # Regressionspruefung ausfuehren (Verstoesse erkennen)
-/qa:recette-regression --check
+/qa:regression --check
 
 # Nach Quell-Story filtern
-/qa:recette-regression --list --source=US-001
+/qa:regression --list --source=US-001
 
 # Nach Status filtern
-/qa:recette-regression --list --status=active
+/qa:regression --list --status=active
 
 # Historischen Trend anzeigen
-/qa:recette-regression --stats --trend
+/qa:regression --stats --trend
 
 # Ausgabe als JSON
-/qa:recette-regression --list --format=json
+/qa:regression --list --format=json
 ```
 
 ## Ausgabestruktur
@@ -147,9 +147,9 @@ Goldene-Regel-Pruefung: 1 VERSTOSS ERKANNT
 | Befehl | Beschreibung |
 |--------|--------------|
 | `/qa:recette` | Akzeptanztests ausfuehren |
-| `/qa:recette-fix` | Bugs aus einer Sitzung beheben |
-| `/qa:recette-status` | Sitzungsstatus anzeigen |
-| `/qa:recette-report` | Bericht generieren |
+| `/qa:fix` | Bugs aus einer Sitzung beheben |
+| `/qa:status` | Sitzungsstatus anzeigen |
+| `/qa:report` | Bericht generieren |
 
 ## Fehlermeldungen
 
@@ -157,7 +157,7 @@ Goldene-Regel-Pruefung: 1 VERSTOSS ERKANNT
 |--------|---------|
 | "Register nicht gefunden" | Fuehren Sie `/qa:recette` zuerst aus |
 | "Keine Regressionstests" | Keine Fehler in vorherigen Laeufen erkannt |
-| "Verstoss gegen Goldene Regel" | Bug wieder aufgetreten — `/qa:recette-fix` ausfuehren |
+| "Verstoss gegen Goldene Regel" | Bug wieder aufgetreten — `/qa:fix` ausfuehren |
 | "Historiedatei fehlt" | Mindestens 2 Recette-Sitzungen fuer Trends ausfuehren |
 
 ## Best Practices

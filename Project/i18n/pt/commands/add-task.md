@@ -61,7 +61,7 @@ Extrair de $ARGUMENTS:
 
 ### Etapa 5: Criar o arquivo
 
-1. Usar template `Scrum/templates/task.md`
+1. Usar template `.claude/templates/project/task.md`
 2. Substituir placeholders:
    - `{ID}`: ID gerado
    - `{DESCRIPTION}`: Descrição curta
@@ -72,7 +72,7 @@ Extrair de $ARGUMENTS:
    - `{DESCRIPTION_DETAILLEE}`: Descrição detalhada
 
 3. Determinar caminho:
-   - Se US em sprint: `project-management/sprints/sprint-XXX/tasks/TASK-{ID}.md`
+   - Se US em sprint: `project-management/sprints/sprint-{N}-{slug}/tasks/TASK-{ID}.md`
    - Caso contrário: `project-management/backlog/tasks/TASK-{ID}.md`
 
 ### Etapa 6: Atualizar User Story
@@ -85,7 +85,7 @@ Extrair de $ARGUMENTS:
 ### Etapa 7: Atualizar board (se sprint)
 
 Se US está em um sprint:
-1. Ler `project-management/sprints/sprint-XXX/board.md`
+1. Ler `project-management/sprints/sprint-{N}-{slug}/board.md`
 2. Adicionar tarefa a "🔴 To Do"
 3. Atualizar métricas
 4. Salvar

@@ -223,8 +223,8 @@ Sprint-Status:
 🎉 Sprint-Ziel erreicht!
 
 Naechste Schritte:
-  /sprint:retrospective    Retrospektive starten
-  /sprint:plan            Naechsten Sprint planen
+  /workflow:retro    Retrospektive starten
+  /workflow:start            Naechsten Sprint planen
 ═══════════════════════════════════════════════════════
 ```
 

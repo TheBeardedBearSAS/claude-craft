@@ -107,25 +107,25 @@ Verificacao Regra de Ouro: 1 VIOLACAO DETECTADA
 
 ```bash
 # Listar todos os testes de regressao
-/qa:recette-regression --list
+/qa:regression --list
 
 # Mostrar pontuacao de estabilidade
-/qa:recette-regression --stats
+/qa:regression --stats
 
 # Executar verificacao de regressao (detectar violacoes)
-/qa:recette-regression --check
+/qa:regression --check
 
 # Filtrar por story de origem
-/qa:recette-regression --list --source=US-001
+/qa:regression --list --source=US-001
 
 # Filtrar por status
-/qa:recette-regression --list --status=active
+/qa:regression --list --status=active
 
 # Mostrar tendencia historica
-/qa:recette-regression --stats --trend
+/qa:regression --stats --trend
 
 # Saida em JSON
-/qa:recette-regression --list --format=json
+/qa:regression --list --format=json
 ```
 
 ## Estrutura de Saida
@@ -147,9 +147,9 @@ Verificacao Regra de Ouro: 1 VIOLACAO DETECTADA
 | Comando | Descricao |
 |---------|-----------|
 | `/qa:recette` | Executar testes de aceitacao |
-| `/qa:recette-fix` | Corrigir bugs de uma sessao |
-| `/qa:recette-status` | Mostrar status da sessao |
-| `/qa:recette-report` | Gerar relatorio |
+| `/qa:fix` | Corrigir bugs de uma sessao |
+| `/qa:status` | Mostrar status da sessao |
+| `/qa:report` | Gerar relatorio |
 
 ## Mensagens de Erro
 
@@ -157,7 +157,7 @@ Verificacao Regra de Ouro: 1 VIOLACAO DETECTADA
 |------|---------|
 | "Registro nao encontrado" | Execute `/qa:recette` primeiro para gerar um registro |
 | "Sem testes de regressao" | Nenhum erro detectado em execucoes anteriores |
-| "Violacao da Regra de Ouro" | Um bug reapareceu — execute `/qa:recette-fix` |
+| "Violacao da Regra de Ouro" | Um bug reapareceu — execute `/qa:fix` |
 | "Arquivo historico ausente" | Execute ao menos 2 sessoes recette para tendencias |
 
 ## Melhores Praticas

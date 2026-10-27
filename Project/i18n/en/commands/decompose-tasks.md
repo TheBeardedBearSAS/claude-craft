@@ -41,14 +41,14 @@ Read sprint files `project-management/sprints/sprint-$ARGUMENTS-*/`:
 ### STEP 2: Create task structure
 
 ```
-project-management/sprints/sprint-$ARGUMENTS-[name]/
+project-management/sprints/sprint-$ARGUMENTS-{slug}/
 ├── sprint-goal.md
 ├── sprint-dependencies.md
-├── tasks/
-│   ├── README.md                    # Task overview
-│   ├── US-XXX-tasks.md              # Tasks by US
-│   └── technical-tasks.md           # Cross-cutting tasks
-└── task-board.md                    # Kanban board
+├── board.md                         # Kanban board (single board file)
+└── tasks/
+    ├── README.md                    # Overview: tasks grouped by US
+    ├── TASK-001.md                  # One file per task (.claude/templates/project/task.md)
+    └── ...
 ```
 
 ### STEP 3: Decomposition rules
@@ -82,7 +82,7 @@ project-management/sprints/sprint-$ARGUMENTS-[name]/
 
 ### STEP 4: US decomposition template
 
-For each US, create `tasks/US-XXX-tasks.md`:
+For each US, add one section to `tasks/README.md` using the template below, and create one `tasks/TASK-{ID}.md` file per task row from `.claude/templates/project/task.md` (IDs continue after the last existing `TASK-*`, as `/project:add-task` does):
 
 ````markdown
 # Tasks - US-XXX: [Title]
@@ -91,7 +91,7 @@ For each US, create `tasks/US-XXX-tasks.md`:
 - **Epic**: EPIC-XXX
 - **Persona**: P-XXX - [Name]
 - **Story Points**: [X]
-- **Sprint**: sprint-$ARGUMENTS-[name]
+- **Sprint**: sprint-$ARGUMENTS-{slug}
 
 ## US Summary
 **As** [persona]
@@ -102,23 +102,23 @@ For each US, create `tasks/US-XXX-tasks.md`:
 
 | ID | Type | Task | Estimation | Depends on | Status |
 |----|------|-------|------------|-----------|--------|
-| T-XXX-01 | [DB] | Create [Name] entity | 2h | - | 🔲 |
-| T-XXX-02 | [DB] | Migration | 1h | T-XXX-01 | 🔲 |
-| T-XXX-03 | [BE] | API Platform resource | 3h | T-XXX-01 | 🔲 |
-| T-XXX-04 | [BE] | Business service | 4h | T-XXX-03 | 🔲 |
-| T-XXX-05 | [FE-WEB] | Symfony controller | 2h | T-XXX-03 | 🔲 |
-| T-XXX-06 | [FE-WEB] | Twig templates | 3h | T-XXX-05 | 🔲 |
-| T-XXX-07 | [FE-WEB] | Stimulus controller | 2h | T-XXX-06 | 🔲 |
-| T-XXX-08 | [FE-MOB] | Dart model | 1h | T-XXX-03 | 🔲 |
-| T-XXX-09 | [FE-MOB] | Flutter repository | 2h | T-XXX-08 | 🔲 |
-| T-XXX-10 | [FE-MOB] | Bloc/Provider | 3h | T-XXX-09 | 🔲 |
-| T-XXX-11 | [FE-MOB] | Flutter screen | 4h | T-XXX-10 | 🔲 |
-| T-XXX-12 | [TEST] | Backend unit tests | 2h | T-XXX-04 | 🔲 |
-| T-XXX-13 | [TEST] | API tests | 2h | T-XXX-03 | 🔲 |
-| T-XXX-14 | [TEST] | Widget tests | 2h | T-XXX-11 | 🔲 |
-| T-XXX-15 | [TEST] | E2E tests | 3h | T-XXX-07, T-XXX-11 | 🔲 |
-| T-XXX-16 | [DOC] | Documentation | 1h | T-XXX-15 | 🔲 |
-| T-XXX-17 | [REV] | Code Review | 2h | T-XXX-16 | 🔲 |
+| TASK-001 | [DB] | Create [Name] entity | 2h | - | 🔲 |
+| TASK-002 | [DB] | Migration | 1h | TASK-001 | 🔲 |
+| TASK-003 | [BE] | API Platform resource | 3h | TASK-001 | 🔲 |
+| TASK-004 | [BE] | Business service | 4h | TASK-003 | 🔲 |
+| TASK-005 | [FE-WEB] | Symfony controller | 2h | TASK-003 | 🔲 |
+| TASK-006 | [FE-WEB] | Twig templates | 3h | TASK-005 | 🔲 |
+| TASK-007 | [FE-WEB] | Stimulus controller | 2h | TASK-006 | 🔲 |
+| TASK-008 | [FE-MOB] | Dart model | 1h | TASK-003 | 🔲 |
+| TASK-009 | [FE-MOB] | Flutter repository | 2h | TASK-008 | 🔲 |
+| TASK-010 | [FE-MOB] | Bloc/Provider | 3h | TASK-009 | 🔲 |
+| TASK-011 | [FE-MOB] | Flutter screen | 4h | TASK-010 | 🔲 |
+| TASK-012 | [TEST] | Backend unit tests | 2h | TASK-004 | 🔲 |
+| TASK-013 | [TEST] | API tests | 2h | TASK-003 | 🔲 |
+| TASK-014 | [TEST] | Widget tests | 2h | TASK-011 | 🔲 |
+| TASK-015 | [TEST] | E2E tests | 3h | TASK-007, TASK-011 | 🔲 |
+| TASK-016 | [DOC] | Documentation | 1h | TASK-015 | 🔲 |
+| TASK-017 | [REV] | Code Review | 2h | TASK-016 | 🔲 |
 
 **Total estimated**: XXh
 
@@ -128,7 +128,7 @@ For each US, create `tasks/US-XXX-tasks.md`:
 
 ### Database Layer [DB]
 
-#### T-XXX-01: Create [Name] entity with Doctrine
+#### TASK-001: Create [Name] entity with Doctrine
 - **Type**: [DB]
 - **Estimation**: 2h
 - **Depends on**: -
@@ -153,10 +153,10 @@ php bin/console make:entity [Name]
 
 ---
 
-#### T-XXX-02: Migration for [Name]
+#### TASK-002: Migration for [Name]
 - **Type**: [DB]
 - **Estimation**: 1h
-- **Depends on**: T-XXX-01
+- **Depends on**: TASK-001
 
 **Files**:
 - `migrations/VersionXXXX.php`
@@ -176,10 +176,10 @@ php bin/console doctrine:migrations:migrate
 
 ### API Layer [BE]
 
-#### T-XXX-03: API Platform [Name] resource
+#### TASK-003: API Platform [Name] resource
 - **Type**: [BE]
 - **Estimation**: 3h
-- **Depends on**: T-XXX-01
+- **Depends on**: TASK-001
 
 **Files**:
 - `src/Entity/[Name].php` (ApiResource attributes)
@@ -210,10 +210,10 @@ php bin/console doctrine:migrations:migrate
 
 ---
 
-#### T-XXX-04: [Name]Service business service
+#### TASK-004: [Name]Service business service
 - **Type**: [BE]
 - **Estimation**: 4h
-- **Depends on**: T-XXX-03
+- **Depends on**: TASK-003
 
 **Files**:
 - `src/Service/[Name]Service.php`
@@ -228,10 +228,10 @@ php bin/console doctrine:migrations:migrate
 
 ### Web Frontend Layer [FE-WEB]
 
-#### T-XXX-05: Symfony [Name] controller
+#### TASK-005: Symfony [Name] controller
 - **Type**: [FE-WEB]
 - **Estimation**: 2h
-- **Depends on**: T-XXX-03
+- **Depends on**: TASK-003
 
 **Files**:
 - `src/Controller/[Name]Controller.php`
@@ -251,10 +251,10 @@ php bin/console doctrine:migrations:migrate
 
 ---
 
-#### T-XXX-06: Twig [Name] templates
+#### TASK-006: Twig [Name] templates
 - **Type**: [FE-WEB]
 - **Estimation**: 3h
-- **Depends on**: T-XXX-05
+- **Depends on**: TASK-005
 
 **Files**:
 - `templates/[name]/index.html.twig`
@@ -270,10 +270,10 @@ php bin/console doctrine:migrations:migrate
 
 ---
 
-#### T-XXX-07: Stimulus controller
+#### TASK-007: Stimulus controller
 - **Type**: [FE-WEB]
 - **Estimation**: 2h
-- **Depends on**: T-XXX-06
+- **Depends on**: TASK-006
 
 **Files**:
 - `assets/controllers/[name]_controller.js`
@@ -286,10 +286,10 @@ php bin/console doctrine:migrations:migrate
 
 ### Mobile Frontend Layer [FE-MOB]
 
-#### T-XXX-08: Dart [Name] model
+#### TASK-008: Dart [Name] model
 - **Type**: [FE-MOB]
 - **Estimation**: 1h
-- **Depends on**: T-XXX-03
+- **Depends on**: TASK-003
 
 **Files**:
 - `lib/models/[name].dart`
@@ -310,10 +310,10 @@ class [Name] {
 
 ---
 
-#### T-XXX-09: Flutter [Name] repository
+#### TASK-009: Flutter [Name] repository
 - **Type**: [FE-MOB]
 - **Estimation**: 2h
-- **Depends on**: T-XXX-08
+- **Depends on**: TASK-008
 
 **Files**:
 - `lib/repositories/[name]_repository.dart`
@@ -325,10 +325,10 @@ class [Name] {
 
 ---
 
-#### T-XXX-10: [Name] Provider/Bloc
+#### TASK-010: [Name] Provider/Bloc
 - **Type**: [FE-MOB]
 - **Estimation**: 3h
-- **Depends on**: T-XXX-09
+- **Depends on**: TASK-009
 
 **Files**:
 - `lib/providers/[name]_provider.dart`
@@ -339,10 +339,10 @@ class [Name] {
 
 ---
 
-#### T-XXX-11: Flutter [Name] screen
+#### TASK-011: Flutter [Name] screen
 - **Type**: [FE-MOB]
 - **Estimation**: 4h
-- **Depends on**: T-XXX-10
+- **Depends on**: TASK-010
 
 **Files**:
 - `lib/screens/[name]/[name]_list_screen.dart`
@@ -360,10 +360,10 @@ class [Name] {
 
 ### Tests Layer [TEST]
 
-#### T-XXX-12: Backend unit tests
+#### TASK-012: Backend unit tests
 - **Type**: [TEST]
 - **Estimation**: 2h
-- **Depends on**: T-XXX-04
+- **Depends on**: TASK-004
 
 **Files**:
 - `tests/Unit/Service/[Name]ServiceTest.php`
@@ -374,10 +374,10 @@ class [Name] {
 
 ---
 
-#### T-XXX-13: API tests
+#### TASK-013: API tests
 - **Type**: [TEST]
 - **Estimation**: 2h
-- **Depends on**: T-XXX-03
+- **Depends on**: TASK-003
 
 **Files**:
 - `tests/Functional/Api/[Name]Test.php`
@@ -392,20 +392,20 @@ class [Name] {
 
 ---
 
-#### T-XXX-14: Flutter widget tests
+#### TASK-014: Flutter widget tests
 - **Type**: [TEST]
 - **Estimation**: 2h
-- **Depends on**: T-XXX-11
+- **Depends on**: TASK-011
 
 **Files**:
 - `test/widgets/[name]_card_test.dart`
 
 ---
 
-#### T-XXX-15: E2E tests
+#### TASK-015: E2E tests
 - **Type**: [TEST]
 - **Estimation**: 3h
-- **Depends on**: T-XXX-07, T-XXX-11
+- **Depends on**: TASK-007, TASK-011
 
 **Files**:
 - `tests/E2E/[Name]FlowTest.php`
@@ -419,10 +419,10 @@ class [Name] {
 
 ### Documentation & Review
 
-#### T-XXX-16: Documentation
+#### TASK-016: Documentation
 - **Type**: [DOC]
 - **Estimation**: 1h
-- **Depends on**: T-XXX-15
+- **Depends on**: TASK-015
 
 **Criteria**:
 - [ ] PHPDoc/DartDoc
@@ -430,10 +430,10 @@ class [Name] {
 
 ---
 
-#### T-XXX-17: Code Review
+#### TASK-017: Code Review
 - **Type**: [REV]
 - **Estimation**: 2h
-- **Depends on**: T-XXX-16
+- **Depends on**: TASK-016
 
 **Checklist**:
 - [ ] Readable code
@@ -447,23 +447,23 @@ class [Name] {
 
 ```mermaid
 graph TD
-    T01[T-XXX-01: Entity] --> T02[T-XXX-02: Migration]
-    T01 --> T03[T-XXX-03: API Resource]
-    T03 --> T04[T-XXX-04: Service]
-    T03 --> T05[T-XXX-05: Controller]
-    T05 --> T06[T-XXX-06: Templates]
-    T06 --> T07[T-XXX-07: Stimulus]
-    T03 --> T08[T-XXX-08: Model Dart]
-    T08 --> T09[T-XXX-09: Repository]
-    T09 --> T10[T-XXX-10: Bloc]
-    T10 --> T11[T-XXX-11: Screen]
-    T04 --> T12[T-XXX-12: Unit Tests]
-    T03 --> T13[T-XXX-13: API Tests]
-    T11 --> T14[T-XXX-14: Widget Tests]
-    T07 --> T15[T-XXX-15: E2E Tests]
+    T01[TASK-001: Entity] --> T02[TASK-002: Migration]
+    T01 --> T03[TASK-003: API Resource]
+    T03 --> T04[TASK-004: Service]
+    T03 --> T05[TASK-005: Controller]
+    T05 --> T06[TASK-006: Templates]
+    T06 --> T07[TASK-007: Stimulus]
+    T03 --> T08[TASK-008: Model Dart]
+    T08 --> T09[TASK-009: Repository]
+    T09 --> T10[TASK-010: Bloc]
+    T10 --> T11[TASK-011: Screen]
+    T04 --> T12[TASK-012: Unit Tests]
+    T03 --> T13[TASK-013: API Tests]
+    T11 --> T14[TASK-014: Widget Tests]
+    T07 --> T15[TASK-015: E2E Tests]
     T11 --> T15
-    T15 --> T16[T-XXX-16: Doc]
-    T16 --> T17[T-XXX-17: Review]
+    T15 --> T16[TASK-016: Doc]
+    T16 --> T17[TASK-017: Review]
 ```
 
 ## Summary
@@ -482,7 +482,7 @@ graph TD
 
 ### STEP 5: Create Task Board
 
-Create `task-board.md`:
+Create `board.md` (template `.claude/templates/project/board.md`):
 
 ```markdown
 # Task Board - Sprint $ARGUMENTS
@@ -544,42 +544,41 @@ Create `tasks/README.md`:
 | [TEST] | X | Xh | X% |
 
 ## Files
-- [US-XXX - Title](./US-XXX-tasks.md)
-- [Technical tasks](./technical-tasks.md)
+- [TASK-001 - Title](./TASK-001.md)
 
 ## Conventions
-- **ID**: T-[US]-[Number] (e.g., T-001-05)
+- **ID**: TASK-[NNN] (e.g., TASK-005); the parent US is in the task metadata
 - **Size**: 0.5h - 8h max
 - **Statuses**: 🔲 🔄 👀 ✅ 🚫
 ```
 
 ### STEP 7: Cross-cutting technical tasks
 
-Create `tasks/technical-tasks.md`:
+Add a "Cross-cutting technical tasks" section to `tasks/README.md` and create one `tasks/TASK-{ID}.md` per task (US: none):
 
 ```markdown
 # Cross-cutting Technical Tasks - Sprint $ARGUMENTS
 
 ## Infrastructure
 
-### T-TECH-01: Environment configuration
+### TASK-018: Environment configuration
 - **Type**: [OPS]
 - **Estimation**: 2h
 
-### T-TECH-02: Dependency updates
+### TASK-019: Dependency updates
 - **Type**: [OPS]
 - **Estimation**: 1h
 
 ## Refactoring
 
-### T-TECH-03: [Identified refactoring]
+### TASK-020: [Identified refactoring]
 - **Type**: [BE]
 - **Estimation**: Xh
 - **Reason**: Technical debt
 
 ## CI/CD
 
-### T-TECH-04: CI Pipeline
+### TASK-021: CI Pipeline
 - **Type**: [OPS]
 - **Estimation**: 2h
 ```

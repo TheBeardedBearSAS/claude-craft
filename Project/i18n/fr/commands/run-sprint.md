@@ -223,8 +223,8 @@ Statut Sprint :
 🎉 Objectif du sprint atteint !
 
 Prochaines étapes :
-  /sprint:retrospective    Lancer la rétrospective
-  /sprint:plan            Planifier le prochain sprint
+  /workflow:retro    Lancer la rétrospective
+  /workflow:start            Planifier le prochain sprint
 ═══════════════════════════════════════════════════════
 ```
 

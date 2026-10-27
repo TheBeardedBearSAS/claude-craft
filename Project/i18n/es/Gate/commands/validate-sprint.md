@@ -122,7 +122,7 @@ Stories listas:
   📖 US-014: Verificacion de email (3 pts)
 
 Comandos:
-  /sprint:start           Iniciar el sprint
+  /workflow:start           Iniciar el sprint
   /sprint:next-story     Tomar la primera story
 ═══════════════════════════════════════════════════════
 ```

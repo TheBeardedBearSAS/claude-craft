@@ -22,7 +22,7 @@ $ARGUMENTS (optional, format: [sprint N])
 
 ### Step 2: Read data
 
-1. Read file `project-management/sprints/sprint-XXX/board.md`
+1. Read file `project-management/sprints/sprint-{N}-{slug}/board.md`
 2. Or regenerate from task files
 
 ### Step 3: Group by status

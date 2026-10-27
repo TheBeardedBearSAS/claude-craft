@@ -127,3 +127,25 @@ EOF
     [[ "$output" == *"Score:"* ]]
     [[ "$output" == *"FAIL"* ]]
 }
+
+@test "validate_prd defaults to project-management/prd.md (where /project:generate-prd writes)" {
+    mkdir -p "$BATS_TEST_TMPDIR/proj/project-management"
+    write_complete_prd "$BATS_TEST_TMPDIR/proj/project-management/prd.md"
+    cd "$BATS_TEST_TMPDIR/proj"
+
+    run bash "$VALIDATOR" prd
+
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"PRD Gate PASSED"* ]]
+}
+
+@test "validate_techspec defaults to project-management/tech-spec.md" {
+    mkdir -p "$BATS_TEST_TMPDIR/proj/project-management"
+    write_complete_techspec "$BATS_TEST_TMPDIR/proj/project-management/tech-spec.md"
+    cd "$BATS_TEST_TMPDIR/proj"
+
+    run bash "$VALIDATOR" techspec
+
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"Tech Spec Gate PASSED"* ]]
+}

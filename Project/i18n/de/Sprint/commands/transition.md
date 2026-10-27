@@ -165,7 +165,7 @@ Erforderliche Massnahmen:
    □ TASK-016: Refresh-Token-Unterstuetzung hinzufuegen
 
 2. TDD-Phase auf green setzen:
-   /sprint:tdd green
+   .bmad/sprint-status.yaml → US-005: tdd_phase: green
 
 Dann erneut versuchen: /sprint:transition US-005 review
 ═══════════════════════════════════════════════════════

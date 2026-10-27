@@ -98,19 +98,19 @@ Keine Verstoesse gegen die Goldene Regel erkannt.
 
 ```bash
 # Markdown-Bericht generieren (Standard)
-/qa:recette-report --session=REC-20260130-143022
+/qa:report --session=REC-20260130-143022
 
 # HTML-Bericht mit Screenshots generieren
-/qa:recette-report --session=REC-20260130-143022 --format=html --include-screenshots
+/qa:report --session=REC-20260130-143022 --format=html --include-screenshots
 
 # JSON-Bericht fuer CI-Integration generieren
-/qa:recette-report --session=REC-20260130-143022 --format=json
+/qa:report --session=REC-20260130-143022 --format=json
 
 # Benutzerdefinierter Ausgabepfad
-/qa:recette-report --session=REC-20260130-143022 --output=./reports/sprint-3/
+/qa:report --session=REC-20260130-143022 --output=./reports/sprint-3/
 
 # Zwei Sitzungen vergleichen
-/qa:recette-report --session=REC-20260201-140000 --compare=REC-20260130-143022
+/qa:report --session=REC-20260201-140000 --compare=REC-20260130-143022
 ```
 
 ## Ausgabestruktur
@@ -128,9 +128,9 @@ Keine Verstoesse gegen die Goldene Regel erkannt.
 | Befehl | Beschreibung |
 |--------|--------------|
 | `/qa:recette` | Akzeptanztests ausfuehren |
-| `/qa:recette-fix` | Bugs aus einer Sitzung beheben |
-| `/qa:recette-status` | Sitzungsstatus anzeigen |
-| `/qa:recette-regression` | Regressionstests anzeigen |
+| `/qa:fix` | Bugs aus einer Sitzung beheben |
+| `/qa:status` | Sitzungsstatus anzeigen |
+| `/qa:regression` | Regressionstests anzeigen |
 
 ## Fehlermeldungen
 

@@ -154,4 +154,4 @@ Despues de tomar una story:
 3. 🔵 REFACTOR: Limpiar manteniendo los tests en verde
 4. Repetir para cada tarea
 
-Usar `/sprint:tdd-cycle` para seguir las transiciones de fase.
+Usar `tdd_phase` (`.bmad/sprint-status.yaml`) para seguir las transiciones de fase.

@@ -138,10 +138,11 @@ Pontos concluidos: 18/21
 Acoes:
 ──────────────────────────────────────────────────────
 Para retentar as stories falhadas:
-  /project:queue-retry US-013
+  .bmad/batch-queue.yaml → US-013: status: pending
+  /project:run-queue
 
 Para limpar a fila:
-  /project:queue-clear
+  .bmad/batch-queue.yaml → queue: []
 ═══════════════════════════════════════════════════════
 ```
 
@@ -181,12 +182,13 @@ Ou adicionar uma story individual:
 
 ### Retentar uma story falhada
 ```
-/project:queue-retry US-013
+# .bmad/batch-queue.yaml → US-013: status: pending
+/project:run-queue
 ```
 
 ### Limpar a fila
 ```
-/project:queue-clear --force
+# .bmad/batch-queue.yaml → queue: []
 ```
 
 ### Retomar a partir do checkpoint

@@ -107,25 +107,25 @@ Verification Regle d'Or : 1 VIOLATION DETECTEE
 
 ```bash
 # Lister tous les tests de regression
-/qa:recette-regression --list
+/qa:regression --list
 
 # Afficher le score de stabilite
-/qa:recette-regression --stats
+/qa:regression --stats
 
 # Executer la verification de regression (detecter les violations)
-/qa:recette-regression --check
+/qa:regression --check
 
 # Filtrer par story source
-/qa:recette-regression --list --source=US-001
+/qa:regression --list --source=US-001
 
 # Filtrer par statut
-/qa:recette-regression --list --status=active
+/qa:regression --list --status=active
 
 # Afficher la tendance historique
-/qa:recette-regression --stats --trend
+/qa:regression --stats --trend
 
 # Sortie en JSON
-/qa:recette-regression --list --format=json
+/qa:regression --list --format=json
 ```
 
 ## Structure de Sortie
@@ -147,9 +147,9 @@ Verification Regle d'Or : 1 VIOLATION DETECTEE
 | Commande | Description |
 |----------|-------------|
 | `/qa:recette` | Executer les tests d'acceptance |
-| `/qa:recette-fix` | Corriger les bugs d'une session |
-| `/qa:recette-status` | Afficher le statut de session |
-| `/qa:recette-report` | Generer un rapport |
+| `/qa:fix` | Corriger les bugs d'une session |
+| `/qa:status` | Afficher le statut de session |
+| `/qa:report` | Generer un rapport |
 
 ## Messages d'Erreur
 
@@ -157,7 +157,7 @@ Verification Regle d'Or : 1 VIOLATION DETECTEE
 |--------|----------|
 | "Registre introuvable" | Executez `/qa:recette` d'abord pour generer un registre |
 | "Aucun test de regression" | Aucune erreur detectee lors des executions precedentes |
-| "Violation de la Regle d'Or" | Un bug est reapparu — executez `/qa:recette-fix` |
+| "Violation de la Regle d'Or" | Un bug est reapparu — executez `/qa:fix` |
 | "Fichier historique manquant" | Executez au moins 2 sessions recette pour les tendances |
 
 ## Bonnes Pratiques

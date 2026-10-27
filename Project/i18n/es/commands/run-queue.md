@@ -168,7 +168,7 @@ Acciones:
    /project:run-queue --resume
 
 O reiniciar y reintentar:
-   /project:queue-reset US-012
+   .bmad/batch-queue.yaml → US-012: status: pending
    /project:run-queue
 ═══════════════════════════════════════════════════════
 ```

@@ -49,7 +49,7 @@ calc_percentage() {
 # ============================================
 
 validate_prd() {
-    local prd_file="${1:-docs/prd.md}"
+    local prd_file="${1:-project-management/prd.md}"
     local score=0
     local total=8
     local checks=()
@@ -157,7 +157,7 @@ validate_prd() {
 # ============================================
 
 validate_techspec() {
-    local techspec_file="${1:-docs/tech-spec.md}"
+    local techspec_file="${1:-project-management/tech-spec.md}"
     local score=0
     local total=10
 

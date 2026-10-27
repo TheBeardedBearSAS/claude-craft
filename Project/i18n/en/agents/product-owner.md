@@ -160,7 +160,7 @@ Checks SCRUM compliance:
 - MMF for Epics
 - Generates a report with score /100
 
-### /project:prioritize
+### Prioritization (on request)
 Helps prioritize the backlog with:
 - Business value analysis
 - MoSCoW
