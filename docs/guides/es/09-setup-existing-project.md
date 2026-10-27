@@ -506,7 +506,7 @@ Adelante, implementa este cambio siguiendo TDD:
 Antes de commitear, ejecuta verificaciones de calidad:
 
 ```
-/common:pre-commit-check
+/gate:check commit
 ```
 
 Revisa todos los cambios:
@@ -580,7 +580,7 @@ Crea una guía breve para compañeros:
 3. Lanzar en el proyecto: `cd project && claude`
 
 ### Comandos Rápidos
-- `/common:pre-commit-check` - Ejecutar antes de commitear
+- `/gate:check commit` - Ejecutar antes de commitear
 - `@tdd-coach` - Ayuda con tests
 - `@{tech}-reviewer` - Revisión de código
 

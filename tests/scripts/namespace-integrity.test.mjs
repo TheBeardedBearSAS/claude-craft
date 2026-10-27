@@ -99,7 +99,8 @@ describe('v7.0.0 namespace integrity', () => {
 
   it('i18n parity for new Project namespaces', () => {
     const langs = ['en', 'fr', 'es', 'de', 'pt'];
-    const namespaces = ['Sprint', 'Gate'];
+    // '' = flat Project/i18n/<lang>/commands/ (/project: namespace)
+    const namespaces = ['', 'Sprint', 'Gate'];
 
     for (const ns of namespaces) {
       const enDir = path.join(PROJECT_ROOT, 'Project/i18n/en', ns, 'commands');
@@ -128,9 +129,11 @@ describe('v7.0.0 namespace integrity', () => {
       'Dev/i18n/en/Team/commands': 4,
       'Dev/i18n/en/QA/commands': 6,
       'Dev/i18n/en/UIUX/commands': 8,
-      'Project/i18n/en/commands': 34,
+      // 8.25.0: + backlog, reverse, report, migrate (old commands kept as stubs until 9.0)
+      'Project/i18n/en/commands': 38,
       'Project/i18n/en/Sprint/commands': 5,
-      'Project/i18n/en/Gate/commands': 7,
+      // 8.25.0: + check
+      'Project/i18n/en/Gate/commands': 8,
       'Infra/i18n/en/Docker/commands': 5,
     };
 

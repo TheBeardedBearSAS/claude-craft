@@ -485,7 +485,7 @@ Expected: Claude should respond as the TDD Coach agent with testing guidance.
 
 Try a simple command:
 ```
-/common:pre-commit-check
+/gate:check commit
 ```
 
 Expected: Claude should run a pre-commit quality check (may report no changes if project is empty).
@@ -590,7 +590,7 @@ claude
 # Common commands
 /common:analyze-feature     # Analyze requirements
 /{tech}:generate-crud       # Generate CRUD code
-/common:pre-commit-check    # Quality check
+/gate:check commit         # Quality check
 /common:security-audit      # Security review
 ```
 

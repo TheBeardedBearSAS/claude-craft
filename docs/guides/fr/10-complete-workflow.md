@@ -18,21 +18,21 @@ Vous allez emmener TaskFlow d'une idée en une phrase jusqu'à un premier sprint
  IDÉE
    │  /workflow:init        ← choisir le track
    ▼
- BACKLOG ──/gate:validate-backlog──┐  (PRD ≥ 80%, INVEST 6/6)
-   │  /workflow:plan                │
-   ▼                                │
- CONCEPTION TECHNIQUE ──/gate:validate-techspec──┐  (Tech Spec ≥ 90%)
-   │  /workflow:design                   │
+ BACKLOG ──/gate:check backlog──┐  (PRD ≥ 80%, INVEST 6/6)
+   │  /workflow:plan            │
+   ▼                            │
+ CONCEPTION TECHNIQUE ──/gate:check spec──┐  (Tech Spec ≥ 90%)
+   │  /workflow:design                    │
    ▼                                      │
- PLAN DE SPRINT ──/gate:validate-sprint──┐  (Sprint Ready 100%)
-   │  /workflow:start                  │
-   │  /project:decompose-tasks         │
-   ▼                                    │
- IMPLÉMENTATION (TDD) ──/gate:validate-story──┐  (Story DoD 100%)
-   │  /sprint:dev                              │
-   ▼                                            │
+ PLAN DE SPRINT ──/gate:check sprint──┐  (Sprint Ready 100%)
+   │  /workflow:start                 │
+   │  /project:decompose-tasks        │
+   ▼                                  │
+ IMPLÉMENTATION (TDD) ──/gate:check story──┐  (Story DoD 100%)
+   │  /sprint:dev                          │
+   ▼                                       │
  REVUE + RÉTRO ──/workflow:review, /workflow:retro
-   │
+                                           │
    ▼
  SPRINT SUIVANT ↺
 ```
@@ -163,7 +163,7 @@ Claude vous interviewe sur TaskFlow, puis rédige un **PRD** (Product Requiremen
 **Mode : Lecture seule.**
 
 ```
-/gate:validate-backlog
+/gate:check backlog
 ```
 
 Cette gate vérifie le backlog selon **INVEST (6/6)** et la couverture du PRD (**≥ 80 %**). En cas d'échec, elle vous indique exactement quelles stories sont trop grandes, non testables ou non estimables. Corrigez-les (relancez `/workflow:plan` ou éditez les stories) jusqu'à ce que la gate passe au vert.
@@ -189,7 +189,7 @@ Claude (en tant qu'architecte) produit une **Tech Spec** : choix d'architecture,
 **Mode : Lecture seule.**
 
 ```
-/gate:validate-techspec
+/gate:check spec
 ```
 
 Seuil de la gate : **Tech Spec ≥ 90 %**. Elle signale les gestions d'erreurs manquantes, les contrats non définis ou les conceptions non testables.
@@ -219,7 +219,7 @@ Chaque story est découpée en **tâches** de ≤ 30 minutes, testables indépen
 **Mode : Lecture seule.**
 
 ```
-/gate:validate-sprint
+/gate:check sprint
 ```
 
 Seuil de la gate : **Sprint Ready 100 %** — chaque story estimée, chaque tâche définie, les dépendances ordonnées. Vert signifie que vous pouvez commencer à coder.
@@ -282,7 +282,7 @@ Cela ouvre un **tableau Kanban** local (pas de SaaS, pas de dépendance externe)
 backlog → ready-for-dev → in-progress → review → done   (any → blocked)
 ```
 
-Vues complémentaires : `/project:burndown` (burndown du sprint), `/project:dependencies`, `/project:critical-path`, `/project:metrics`.
+Vues complémentaires : `/project:report burndown` (burndown du sprint), `/project:report deps`, `/project:report deps --critical`, `/project:report metrics`.
 
 ### D.2 Pourquoi une carte peut refuser de bouger
 
@@ -326,22 +326,22 @@ Relancez `/workflow:start` pour planifier le sprint 2 à partir du backlog resta
 # Étape A — Backlog
 /workflow:init                 # choisir le track
 /workflow:plan                 # PRD + backlog
-/gate:validate-backlog         # INVEST 6/6, PRD ≥ 80%
+/gate:check backlog            # INVEST 6/6, PRD ≥ 80%
 
 # Étape B — Design + sprint
 /workflow:design               # tech spec
-/gate:validate-techspec        # Tech Spec ≥ 90%
+/gate:check spec               # Tech Spec ≥ 90%
 /workflow:start                # planifier le sprint
 /project:decompose-tasks       # stories → tâches
-/gate:validate-sprint          # Sprint Ready 100%
+/gate:check sprint             # Sprint Ready 100%
 
 # Étape C — Implémenter (TDD)
 /sprint:dev                    # tâche par tâche Rouge/Vert/Refactor
-/gate:validate-story US-001    # Story DoD 100%
+/gate:check story US-001       # Story DoD 100%
 
 # Étape D — Suivre
 /project:board                 # Kanban
-/project:burndown              # burndown
+/project:report burndown       # burndown
 
 # Étape E — Clore + boucler
 /workflow:review

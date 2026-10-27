@@ -8,7 +8,7 @@ Complete workflow for creating and managing a SCRUM backlog with Claude-Craft.
 
 Claude-Craft provides a comprehensive set of commands for managing your product backlog following SCRUM methodology:
 
-- **15 slash commands** for backlog operations
+- **One `/project:backlog` command** (`add`, `list`, `edit`, `move`) plus `/project:board` and `/sprint:*` for backlog operations; the old `/project:add-*`, `list-*`, `update-*` and `move-task` commands are deprecated stubs removed in 9.0
 - **5 templates** for consistent structure
 - **Vertical slicing** enforcement across all tech layers
 - **INVEST model** validation for User Stories
@@ -162,17 +162,17 @@ Technical work items within a User Story:
 | Command | Description |
 |---------|-------------|
 | `/project:generate-backlog [stack]` | Generate complete backlog from specs |
-| `/project:add-epic` | Create a new EPIC |
-| `/project:add-story` | Add a User Story to an EPIC |
-| `/project:add-task` | Create a technical task for a US |
+| `/project:backlog add epic` | Create a new EPIC |
+| `/project:backlog add story` | Add a User Story to an EPIC |
+| `/project:backlog add task` | Create a technical task for a US |
 
 ### Viewing Commands
 
 | Command | Description |
 |---------|-------------|
-| `/project:list-epics` | Display all EPICs with status |
-| `/project:list-stories [filter]` | List User Stories (by EPIC, Sprint, Status) |
-| `/project:list-tasks [filter]` | List tasks (by US, Sprint, Type, Status) |
+| `/project:backlog list epic` | Display all EPICs with status |
+| `/project:backlog list story [filter]` | List User Stories (by EPIC, Sprint, Status) |
+| `/project:backlog list task [filter]` | List tasks (by US, Sprint, Type, Status) |
 | `/project:board [sprint]` | Show Kanban board |
 | `/sprint:status [sprint]` | Detailed sprint progress report |
 
@@ -181,16 +181,16 @@ Technical work items within a User Story:
 | Command | Description |
 |---------|-------------|
 | `/sprint:transition [id] [status/sprint]` | Change US status or assign to sprint |
-| `/project:move-task [id] [status]` | Change task status |
-| `/project:update-epic [id]` | Modify an existing EPIC |
-| `/project:update-story [id]` | Modify an existing User Story |
+| `/project:backlog move task [id] [status]` | Change task status |
+| `/project:backlog edit epic [id]` | Modify an existing EPIC |
+| `/project:backlog edit story [id]` | Modify an existing User Story |
 
 ### Advanced Commands
 
 | Command | Description |
 |---------|-------------|
 | `/project:decompose-tasks [sprint]` | Break down sprint US into tasks |
-| `/gate:validate-backlog` | Audit backlog quality (SCRUM compliance) |
+| `/gate:check backlog` | Audit backlog quality (SCRUM compliance) |
 
 ---
 
@@ -206,7 +206,7 @@ Technical work items within a User Story:
 ### Step 2: Validate Quality
 
 ```bash
-/gate:validate-backlog
+/gate:check backlog
 ```
 
 This generates `scrum-validation-report.md` with:
@@ -239,13 +239,13 @@ Creates detailed task breakdown:
 
 ```bash
 # Move first task to in progress
-/project:move-task TASK-001 in-progress
+/project:backlog move task TASK-001 in-progress
 
 # Later, mark as done
-/project:move-task TASK-001 done
+/project:backlog move task TASK-001 done
 
 # If blocked
-/project:move-task TASK-002 blocked "Waiting for API specs"
+/project:backlog move task TASK-002 blocked "Waiting for API specs"
 ```
 
 ### Step 6: Track Progress
@@ -263,7 +263,7 @@ Use `/loop` (v2.1.71+) to automatically monitor sprint progress:
 /loop 30m /sprint:status 1
 
 # Run pre-commit checks every 5 minutes during development
-/loop 5m /common:pre-commit-check
+/loop 5m /gate:check commit
 ```
 
 Alias: `/proactive` (v2.1.105+).
@@ -328,7 +328,7 @@ No "Backend only", "Frontend only", or "Mobile only" User Stories allowed.
 - [ ] Stories estimated in Fibonacci points
 - [ ] Sprint 1 = Walking Skeleton
 - [ ] Definition of Done documented
-- [ ] Backlog validated (`/gate:validate-backlog`)
+- [ ] Backlog validated (`/gate:check backlog`)
 
 ---
 

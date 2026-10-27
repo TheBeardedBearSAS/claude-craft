@@ -397,7 +397,7 @@ Fixes #XXX
 ║    Re-tester après les corrections                       ║
 ║                                                          ║
 ║  Voir aussi :                                            ║
-║  • /common:pre-commit-check — Valider avant le commit    ║
+║  • /gate:check commit — Valider avant le commit    ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

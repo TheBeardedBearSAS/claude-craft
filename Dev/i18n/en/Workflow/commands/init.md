@@ -119,7 +119,7 @@ Based on track, show the workflow:
 ║                                                           ║
 ║ Commands:                                                 ║
 ║ • /qa:tdd    - Fix with TDD                   ║
-║ • /project:add-task      - Track the work                 ║
+║ • /project:backlog add task      - Track the work                 ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```

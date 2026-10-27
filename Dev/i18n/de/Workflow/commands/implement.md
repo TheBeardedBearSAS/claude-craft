@@ -157,8 +157,8 @@ Für Quick-Flow-Track (Bugfixes, kleine Features):
 ║ • /{tech}:* Befehle          - Technologiespezifisch      ║
 ║                                                           ║
 ║ Tracking:                                                 ║
-║ • /project:add-task          - Als Aufgabe verfolgen      ║
-║ • /project:move-task done    - Als erledigt markieren     ║
+║ • /project:backlog add task          - Als Aufgabe verfolgen      ║
+║ • /project:backlog move task done    - Als erledigt markieren     ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
@@ -218,7 +218,7 @@ Wenn alle Sprints abgeschlossen sind:
 ║ └── Gesamte Commits: 87                                   ║
 ║                                                           ║
 ║ Nächste Schritte:                                         ║
-║ • /common:release-checklist  - Release vorbereiten        ║
+║ • /gate:check release  - Release vorbereiten        ║
 ║ • /common:generate-changelog - Release Notes erstellen    ║
 ║ • Auf Staging/Produktion deployen                         ║
 ║                                                           ║

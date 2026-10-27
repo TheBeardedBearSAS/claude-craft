@@ -26,7 +26,11 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
 
-A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces (234 total), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 17 namespaces (239 total, including deprecated redirect stubs kept until 9.0), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+
+## What's New in v8.25.0
+
+**Fusion des commandes `/project:` et `/gate:` (2026-10-26, v8.25.0) :** 5 commandes `/project:` (`backlog`, `reverse`, `trace`, `report`, `migrate`) et une seule `/gate:check` remplacent 41 commandes ; les anciennes restent des stubs de redirection jusqu'en 9.0. Détails : [CHANGELOG](CHANGELOG.md#8250---2026-10-26).
 
 ## What's New in v8.24.0
 
@@ -53,7 +57,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 - **Installation adaptée à la stack** : `--tech=a,b,c` rend le `CLAUDE.md` racine, `AGENTS.md` et `.claude/settings.json` selon les technos réellement installées ; `install-project-commands.sh` n'écrase plus les fichiers existants ; `@tech-lead` agnostique de la stack ; `make config-*` et `check-config.sh` réparés.
 - **Kanban** : lecture des backlogs générés depuis les templates (métadonnées en liste Markdown), plus de documents dupliqués, retrait complet des commentaires HTML imbriqués (alerte CodeQL).
-- **Workflow** : `/workflow:start` crée `.bmad/sprint-status.yaml`, `/gate:validate-sprint` fonctionne sans lui. Dépendances et GitHub Actions à jour. Détails : [CHANGELOG](CHANGELOG.md#8231---2026-10-22).
+- **Workflow** : `/workflow:start` crée `.bmad/sprint-status.yaml`, `/gate:check sprint` fonctionne sans lui. Dépendances et GitHub Actions à jour. Détails : [CHANGELOG](CHANGELOG.md#8231---2026-10-22).
 
 ## What's New in v8.23.0
 
@@ -250,10 +254,10 @@ These are the commands you'll use most:
 |---------|-------------|
 | `/workflow:init` | Start a development workflow (auto-detects track) |
 | `/team:audit` | Full project audit (architecture, security, quality) |
-| `/common:pre-commit-check` | Validate before committing |
+| `/gate:check commit` | Validate before committing |
 | `/sprint:next-story` | Get next story ready for development |
 | `/qa:tdd` | Test-Driven Development flow |
-| `/gate:validate-story` | Check story meets Definition of Done |
+| `/gate:check story` | Check story meets Definition of Done |
 | `/{tech}:check-architecture` | Verify architecture compliance |
 | `/{tech}:generate-*` | Generate code following project patterns |
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |

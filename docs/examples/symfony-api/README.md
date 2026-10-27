@@ -160,7 +160,7 @@ sprints:
 # 🔵 Refactor
 
 # 3. Validate
-/gate:validate-story US-003
+/gate:check story US-003
 
 # 4. Complete
 /sprint:transition US-003 done

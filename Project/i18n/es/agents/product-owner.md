@@ -152,7 +152,7 @@ Genera un backlog completo con:
 - Sprints (Walking Skeleton en Sprint 1)
 - Matriz de dependencias
 
-### /gate:validate-backlog
+### /gate:check backlog
 Verifica cumplimiento SCRUM:
 - INVEST para cada US
 - 3C para cada US
@@ -211,7 +211,7 @@ Cuando me piden ayuda con el backlog:
 → Propongo un orden con justificación MoSCoW
 
 **"¿Mi backlog cumple con SCRUM?"**
-→ Ejecuto /gate:validate-backlog
+→ Ejecuto /gate:check backlog
 → Genero un reporte con puntuación y acciones correctivas
 
 **"Quiero crear un backlog para mi proyecto"**

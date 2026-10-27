@@ -1,104 +1,96 @@
 ---
 name: trace
-description: Display bidirectional traceability matrix from requirements to code and tests
-arguments:
-  - name: scope
-    description: Scope of tracing (all, requirement, story, code)
-    required: false
-  - name: id
-    description: Specific ID to trace (e.g., FR-001, US-001)
-    required: false
-  - name: format
-    description: Output format (table, mermaid, json)
-    required: false
+description: "Bidirectional traceability matrix (requirement → story → code → tests); --gaps lists uncovered requirements, --by-priority groups by MoSCoW"
+argument-hint: "[all|requirement|story|code] [ID] [--gaps] [--by-priority] [--level=story|code|test|all] [--format=table|mermaid|json]"
 ---
 
 # /project:trace
 
 ## Mission
 
-Generate a bidirectional traceability matrix that maps every requirement from the PRD through user stories, code implementation, and test coverage. This provides full visibility into what is implemented, what is tested, and what gaps exist.
+Map every requirement of the PRD through user stories, code and tests. The default view is the full bidirectional matrix; `--gaps` turns it into a coverage report that lists only what is not covered (this is the former `/project:trace --gaps`); `--by-priority` groups the result by MoSCoW priority.
+
+## Usage
+
+| Invocation | What it does | Replaces |
+|------------|--------------|----------|
+| `/project:trace` or `/project:trace all` | Full matrix: requirement → story → code → tests | `/project:trace` |
+| `/project:trace requirement FR-001` | Trace one requirement downwards | `/project:trace --scope requirement --id FR-001` |
+| `/project:trace story US-001` | Trace one story upwards (requirements) and downwards (code, tests) | `/project:trace --scope story` |
+| `/project:trace code` | Code files with and without story reference | `/project:trace --scope code` |
+| `/project:trace --gaps` | Coverage report: requirements not covered by stories, code or tests, with recommended actions | `/project:trace --gaps` |
+| `/project:trace --gaps --level test` | Same, limited to one coverage level (`story`, `code`, `test`, `all`; default `all`) | `/project:trace --gaps --level test` |
+| `/project:trace --by-priority` | Group requirements and coverage percentages by MoSCoW priority | new (was a section of coverage-map) |
+
+Flags combine: `/project:trace --gaps --by-priority` gives the coverage report with the per-priority breakdown.
+
+## Arguments
+
+Parse `$ARGUMENTS`:
+- First positional token in `all|requirement|story|code` → scope (default `all`).
+- Next positional token matching `FR-\d+` or `US-\d+` → ID to trace (required to be meaningful for `requirement` and `story`).
+- `--gaps` → coverage mode. `--level` is only read in this mode.
+- `--by-priority` → group by priority: P0 = Must have, P1 = Should have, P2 = Could have / Nice to have.
+- `--format` → `table` (default), `mermaid`, `json`.
 
 ## Prerequisites
 
 - `project-management/prd.md` exists with FR-xxx requirement IDs
 - `project-management/backlog/` contains user stories with `Implements:` references
-- Codebase with `// Story: US-xxx` or `# Story: US-xxx` comments
+- Codebase with `// Story: US-xxx` or `# Story: US-xxx` comments (optional for `--gaps --level story`)
 - Test files with story/requirement references
 
 ## Plan Mode
 
 > **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
 
-## Workflow
+## Shared scans
 
-### Step 1: Scan PRD Requirements
+Both modes run the same four scans once; the results feed either the matrix or the coverage report. Story **status** always comes from `.bmad/sprint-status.yaml` (single source of truth); markdown files only provide content.
 
-```
-╔══════════════════════════════════════════════════════════╗
-║              TRACEABILITY SCAN - REQUIREMENTS             ║
-╠══════════════════════════════════════════════════════════╣
-║ Scanning project-management/prd.md...                     ║
-╚══════════════════════════════════════════════════════════╝
-```
+### Scan 1: Requirements
 
-Parse the PRD for all functional requirements:
 1. Read `project-management/prd.md`
-2. Extract all FR-xxx IDs from section 5 (Functional Requirements)
-3. Record requirement text, priority (P0/P1/P2), and acceptance criteria
-4. Build a requirements registry: `{FR-001: {text, priority, status}}`
+2. Extract all FR-xxx IDs from the Functional Requirements section
+3. Record text, priority (P0/P1/P2) and acceptance criteria
+4. Registry: `{FR-001: {text, priority}}`; count requirements per priority
 
-### Step 2: Scan User Stories
+### Scan 2: User stories
 
-Search for user stories referencing requirements:
-1. Scan `project-management/backlog/` for `US-*.md` or `user-stories/` files
-2. In each story, look for `Implements:` or `Traceability` section
-3. Extract mappings: `{US-001: [FR-001, FR-003]}`
-4. Record story status, sprint, and acceptance criteria count
+1. Scan `project-management/backlog/` for `US-*.md` (or `user-stories/` files)
+2. In each story, read the `Implements:` line or the `Traceability` section
+3. Mapping: `{US-001: [FR-001, FR-003]}`; read status and sprint from `.bmad/sprint-status.yaml`
+4. A requirement with no story referencing it is "No Story"
 
-### Step 3: Scan Codebase
+### Scan 3: Code
 
-Search for code files referencing stories:
-1. Grep codebase for patterns: `// Story: US-xxx`, `# Story: US-xxx`, `@story US-xxx`
-2. Record file paths and line numbers for each reference
-3. Build mapping: `{US-001: [src/Service/OrderService.php:42, src/Controller/OrderController.php:15]}`
-4. Identify code files with no story reference
+1. Grep the codebase for `// Story: US-xxx`, `# Story: US-xxx`, `@story US-xxx`
+2. Mapping with file and line: `{US-001: [src/Service/OrderService.php:42]}`
+3. A story with no reference is "No Code"; list code files with no story reference
 
-### Step 4: Scan Tests
+### Scan 4: Tests
 
-Search for test files referencing stories or requirements:
-1. Grep test directories for `US-xxx` or `FR-xxx` references
-2. Check test names for story/requirement patterns
-3. Build mapping: `{US-001: [tests/OrderServiceTest.php, tests/OrderControllerTest.php]}`
-4. Identify stories with no test coverage
-
-### Step 5: Generate Traceability Matrix
-
-Combine all mappings into a comprehensive matrix:
+1. Grep test directories for `US-xxx` / `FR-xxx` references and check test names
+2. Mapping: `{US-001: [tests/OrderServiceTest.php]}`
+3. A story with code but no test reference is "No Tests"
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              TRACEABILITY MATRIX GENERATED                ║
-╠══════════════════════════════════════════════════════════╣
 ║ Requirements: {n} | Stories: {n} | Files: {n} | Tests: {n}║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-## Output Format
+## Matrix mode (default)
 
-### Table Format (default)
+Combine the four mappings. Output (table format):
 
 ```
 Bidirectional Traceability Matrix
 =================================
 
-Requirement → Story → Code → Tests
-─────────────────────────────────────────────────────
-
 FR-001 (P0) User Authentication
   ├── US-001: Login with email/password
   │   ├── src/Service/AuthService.php:25
-  │   ├── src/Controller/AuthController.php:18
   │   ├── tests/AuthServiceTest.php ✅
   │   └── tests/AuthControllerTest.php ✅
   └── US-002: Password reset flow
@@ -115,7 +107,6 @@ FR-010 (P1) Export to CSV
 
 Coverage Summary
 ================
-
 | Level | Covered | Total | Percentage |
 |-------|---------|-------|------------|
 | Requirements → Stories | 8 | 10 | 80% |
@@ -125,145 +116,106 @@ Coverage Summary
 
 Gaps Identified
 ===============
-
 | Type | ID | Description | Action Needed |
 |------|----|-------------|---------------|
 | No Stories | FR-010 | Export to CSV | Create user story |
 | No Tests | US-003 | Register with email | Add test coverage |
-| No Code | US-005 | Bulk import | Implement feature |
 ```
 
-### Mermaid Format (--format mermaid)
+With an ID, only that branch is printed, with story status and test counts (e.g. `US-001: Login [Done]`, `tests/AuthServiceTest.php ✅ (12 tests)`), then `Status: Fully covered (2/2 stories, 3/3 code files, 3/3 test files)`.
 
-```mermaid
-graph LR
-    subgraph Requirements
-        FR001[FR-001 Auth]
-        FR002[FR-002 Registration]
-        FR010[FR-010 Export]
-    end
+### Mermaid (`--format mermaid`)
 
-    subgraph Stories
-        US001[US-001 Login]
-        US002[US-002 Password Reset]
-        US003[US-003 Register]
-    end
+`graph LR` with four subgraphs (Requirements, Stories, Code, Tests); solid arrows for links, dotted arrows (`-.->|NO STORY|`) to a gap node for missing links; gaps styled `fill:#ff6b6b`.
 
-    subgraph Code
-        AUTH[AuthService]
-        PWD[PasswordResetService]
-        REG[RegistrationService]
-    end
-
-    subgraph Tests
-        T1[AuthServiceTest ✅]
-        T2[PasswordResetTest ✅]
-        T3[❌ Missing]
-    end
-
-    FR001 --> US001
-    FR001 --> US002
-    FR002 --> US003
-    FR010 -.->|NO STORY| X1[Gap]
-
-    US001 --> AUTH
-    US002 --> PWD
-    US003 --> REG
-
-    AUTH --> T1
-    PWD --> T2
-    REG -.-> T3
-
-    style FR010 fill:#ff6b6b
-    style X1 fill:#ff6b6b
-    style T3 fill:#ff6b6b
-```
-
-### JSON Format (--format json)
+### JSON (`--format json`)
 
 ```json
 {
   "generated_at": "2026-02-19T10:00:00Z",
-  "requirements": {
-    "FR-001": {
-      "text": "User Authentication",
-      "priority": "P0",
-      "stories": ["US-001", "US-002"],
-      "covered": true
-    }
-  },
-  "stories": {
-    "US-001": {
-      "title": "Login with email/password",
-      "implements": ["FR-001"],
-      "code_files": ["src/Service/AuthService.php"],
-      "test_files": ["tests/AuthServiceTest.php"],
-      "covered": true
-    }
-  },
-  "coverage": {
-    "requirements_to_stories": 0.80,
-    "stories_to_code": 0.87,
-    "stories_to_tests": 0.75,
-    "end_to_end": 0.60
-  },
-  "gaps": [
-    {"type": "no_stories", "id": "FR-010", "description": "Export to CSV"},
-    {"type": "no_tests", "id": "US-003", "description": "Register with email"}
-  ]
+  "requirements": {"FR-001": {"text": "User Authentication", "priority": "P0", "stories": ["US-001"], "covered": true}},
+  "stories": {"US-001": {"title": "Login", "implements": ["FR-001"], "code_files": ["src/Service/AuthService.php"], "test_files": ["tests/AuthServiceTest.php"], "covered": true}},
+  "coverage": {"requirements_to_stories": 0.80, "stories_to_code": 0.87, "stories_to_tests": 0.75, "end_to_end": 0.60},
+  "gaps": [{"type": "no_stories", "id": "FR-010", "description": "Export to CSV"}]
 }
 ```
 
-## Example Session
+## Gaps mode (`--gaps`)
+
+Reuses the shared scans, computes coverage per layer and lists only what is missing. `--level` restricts the layers computed: `story` (scan 1-2), `code` (1-3), `test` (1-4), `all` (default).
+
+```
+Requirement Coverage Map
+========================
+| Layer | Covered | Total | Coverage | Status |
+|-------|---------|-------|----------|--------|
+| Stories | 8 | 10 | 80% | ⚠️ |
+| Code | 7 | 8 | 87% | ⚠️ |
+| Tests | 6 | 8 | 75% | ❌ |
+| End-to-End | 6 | 10 | 60% | ❌ |
+
+Uncovered Requirements
+| ID | Requirement | Priority | Missing |
+|----|-------------|----------|---------|
+| FR-005 | Bulk export | P0 | Tests |
+| FR-010 | CSV import | P1 | Story, Code, Tests |
+
+Recommended Actions
+1. 🔴 CRITICAL: FR-005 (P0) has code but no tests — add test coverage
+2. ⚠️ HIGH: FR-010 (P1) has no story — create a user story
+3. 📝 LOW: FR-020 (P2) not started — plan for future sprints
+
+Next Commands
+- /project:trace requirement FR-005   → deep trace of one requirement
+- /project:backlog add story         → create missing user stories
+- /project:generate-backlog          → regenerate backlog with gaps
+```
+
+With `--level test`, print one row per story: `US-003 | ❌ | 0 files | 0 tests` and the action (e.g. "Create tests/RegistrationServiceTest.php").
+
+Mermaid (`--format mermaid`): `graph TD` with one subgraph per priority; nodes `FR-001 ✅`, `FR-005 ⚠️ No Tests`, `FR-010 ❌ No Story`; styles `#4caf50` (covered), `#ff9800` (partial), `#f44336` (missing).
+
+### Coverage thresholds
+
+| Threshold | Status | Action |
+|-----------|--------|--------|
+| >= 90% | ✅ Excellent | Maintain |
+| 80-89% | ⚠️ Good | Review gaps |
+| 60-79% | ⚠️ Needs Work | Prioritize coverage |
+| < 60% | ❌ Critical | Immediate action required |
+
+## Priority grouping (`--by-priority`)
+
+Works in both modes. In matrix mode, requirements are listed under `P0 Must have`, `P1 Should have`, `P2 Could have` headings. In gaps mode, add:
+
+```
+Coverage by Priority
+| Priority | Requirements | Story Coverage | Code Coverage | Test Coverage |
+|----------|-------------|----------------|---------------|---------------|
+| P0 (Must Have) | 5 | 100% ✅ | 100% ✅ | 80% ⚠️ |
+| P1 (Should Have) | 3 | 66% ⚠️ | 50% ❌ | 33% ❌ |
+| P2 (Could Have) | 2 | 0% ❌ | 0% ❌ | 0% ❌ |
+```
+
+Recommended actions are then ordered P0 first.
+
+## Example session
 
 ```
 User: /project:trace
+Claude: Found 10 requirements (5 P0, 3 P1, 2 P2), 8 stories, 24 code files, 18 test files.
+        [full matrix] Coverage: 60% end-to-end
 
-Claude: Starting traceability scan...
+User: /project:trace requirement FR-001
+Claude: [FR-001 branch only]
 
-📋 Scanning PRD requirements...
-Found 10 requirements (5 P0, 3 P1, 2 P2)
-
-📖 Scanning user stories...
-Found 8 stories with requirement references
-
-💻 Scanning codebase...
-Found 24 code files with story references
-
-🧪 Scanning tests...
-Found 18 test files with story references
-
-Bidirectional Traceability Matrix
-=================================
-[... full matrix output ...]
-
-Coverage: 60% end-to-end
-Gaps: 2 requirements without stories, 1 story without tests
-
-User: /project:trace --scope requirement --id FR-001
-
-Claude: Tracing FR-001: User Authentication
-
-FR-001 (P0) User Authentication
-├── US-001: Login with email/password [Done]
-│   ├── src/Service/AuthService.php:25
-│   ├── src/Controller/AuthController.php:18
-│   ├── tests/AuthServiceTest.php ✅ (12 tests)
-│   └── tests/AuthControllerTest.php ✅ (8 tests)
-└── US-002: Password reset flow [In Progress]
-    ├── src/Service/PasswordResetService.php:10
-    └── tests/PasswordResetServiceTest.php ✅ (6 tests)
-
-Status: Fully covered (2/2 stories, 3/3 code files, 3/3 test files)
-
-User: /project:trace --format mermaid
-
-Claude: [generates Mermaid diagram]
+User: /project:trace --gaps --by-priority
+Claude: [coverage report with per-priority table, 2 P0 requirements need attention]
 ```
 
 ## Related Commands
 
-- `/project:coverage-map` - Identify uncovered requirements
 - `/project:generate-prd` - Generate PRD with requirement IDs
 - `/project:generate-backlog` - Create backlog from PRD
 - `/project:generate-tech-spec` - Generate technical specification
+- `/project:migrate --stories` - Add missing fields (such as `Implements:`) to stories

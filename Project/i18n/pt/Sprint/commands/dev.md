@@ -445,5 +445,5 @@ Continuar a partir de TASK-009? [s/n]
 | `/project:decompose-tasks N` | Criar tarefas antes do sprint-dev |
 | `/project:board N` | Ver quadro Kanban |
 | `/sprint:status N` | Ver métricas do sprint |
-| `/project:move-task` | Alterar manualmente o status da tarefa |
+| `/project:backlog move task` | Alterar manualmente o status da tarefa |
 | `/sprint:transition` | Alterar manualmente o status da US |

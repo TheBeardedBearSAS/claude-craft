@@ -1,6 +1,6 @@
 # Commands Reference
 
-> **This is the narrated, namespace-grouped reference (126 core commands).** For the complete auto-generated table of all 220 commands (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
+> **This is the narrated, namespace-grouped reference (active commands only; the 33 deprecated redirect stubs are listed in [Deprecated commands](#deprecated-commands-removed-in-90)).** For the complete auto-generated table of all 239 commands (206 active + 33 deprecated stubs, core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
 
 Claude Code commands are slash commands that automate workflows and provide structured assistance.
 
@@ -9,7 +9,7 @@ Claude Code commands are slash commands that automate workflows and provide stru
 Type a slash command in Claude Code:
 
 ```
-/common:pre-commit-check
+/gate:check commit
 /symfony:generate-crud User
 /react:generate-component Button
 ```
@@ -35,11 +35,11 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
-> Les **17 namespaces cœur + technologies** (`/common`, `/workflow`, `/team`, `/qa`, `/uiux` + les 13 stacks dont `/paperclip:*`, `/vite:*` et `/vercel:*`) totalisent **139 commandes** — c'est le chiffre d'en-tête de Claude Craft. Le tableau ci-dessous inclut en plus les namespaces d'infrastructure et de gestion de projet (BMAD), pour un total installable de **233 commandes sur 29 namespaces**. Référence détaillée auto-générée : [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> The generated reference lists **239 command files** across all namespaces: **206 active commands** plus **33 deprecated redirect stubs** (removed in 9.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 19 |
+| `/common:` | Transversal | 17 |
 | `/workflow:` | Workflow (BMAD) | 10 |
 | `/team:` | Agent Teams | 4 |
 | `/qa:` | QA & Testing | 6 |
@@ -66,7 +66,8 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/frankenphp:` | FrankenPHP/PHP Server | 5 |
 | `/paperclip:` | Paperclip AI-workforce orchestration | 8 |
 | `/sprint:` | Sprint Management (BMAD v6) | 5 |
-| `/gate:` | Quality Gates (BMAD v6) | 7 |
+| `/gate:` | Quality Gates (BMAD v6) | 1 (`/gate:check`, 11 modes) |
+| `/project:` | Project Management (BMAD v6) | 15 |
 
 ---
 
@@ -74,13 +75,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 Transversal commands for all projects.
 
-### Workflow Commands
-
-| Command | Description |
-|---------|-------------|
-| `/common:pre-commit-check` | Validate code before commit |
-| `/common:pre-merge-check` | Validate code before merge |
-| `/common:release-checklist` | Pre-release validation |
+> `/common:pre-commit-check`, `/common:pre-merge-check` and `/common:release-checklist` moved to `/gate:check commit|merge|release` (see [Quality Gate Commands](#quality-gate-commands-gate)). The old names remain as deprecated stubs until 9.0.
 
 ### Generation Commands
 
@@ -729,33 +724,34 @@ Paperclip is an open-source AI-workforce orchestration platform (Node.js + TypeS
 
 ## Project Commands (`/project:`)
 
-Available with Project installation.
+Available with Project installation. Since Phase 2 of the PM simplification, the many per-entity commands were merged into five commands with subcommands (`backlog`, `reverse`, `trace`, `report`, `migrate`); the old names are listed in [Deprecated commands](#deprecated-commands-removed-in-90).
+
+### Backlog (`/project:backlog <action> <entity>`)
 
 | Command | Description |
 |---------|-------------|
 | `/project:generate-backlog <Feature>` | Generate backlog |
 | `/project:decompose-tasks <Epic>` | Break down epic into tasks |
-| `/project:add-epic <Name>` | Create a new EPIC |
-| `/project:add-story <Epic> <Name>` | Create a User Story |
-| `/project:add-task <US> <Desc> <Est>` | Create a task |
-| `/project:list-epics` | List all EPICs |
-| `/project:list-stories` | List User Stories |
-| `/project:list-tasks` | List tasks |
-| `/project:move-task <Task> <Status>` | Change task status |
+| `/project:backlog add epic <Name>` | Create a new EPIC |
+| `/project:backlog add story <Epic> <Name>` | Create a User Story |
+| `/project:backlog add task <US> <Desc> <Est>` | Create a task |
+| `/project:backlog list epic` | List all EPICs |
+| `/project:backlog list story` | List User Stories |
+| `/project:backlog list task` | List tasks |
+| `/project:backlog edit epic <Epic>` | Update an EPIC |
+| `/project:backlog edit story <US>` | Update a User Story |
+| `/project:backlog move task <Task> <Status>` | Change task status |
 | `/project:board` | Display Kanban board |
-| `/sprint:status` | Show sprint metrics |
-| `/project:update-epic <Epic>` | Update an EPIC |
-| `/project:update-story <US>` | Update a User Story |
-| `/sprint:dev <N\|next>` | **Start TDD/BDD sprint development** |
 
-### BMAD v6 Commands (NEW)
+### BMAD v6 Commands
 
 | Command | Description |
 |---------|-------------|
-| `/project:analyze-backlog` | Analyze current backlog structure |
-| `/project:migrate-backlog` | Convert backlog to BMAD v6 format |
-| `/project:update-stories` | Add missing BMAD fields to stories |
-| `/project:sync-backlog` | Synchronize backlog files ↔ YAML |
+| `/project:migrate --analyze` | Analyze current backlog structure |
+| `/project:migrate` | Convert backlog to BMAD v6 format |
+| `/project:migrate --stories` | Add missing BMAD fields to stories |
+| `/project:migrate --resync` | Synchronize backlog files and YAML |
+| `/project:migrate --dry-run` | Preview the migration without writing |
 | `/project:generate-prd` | Generate Product Requirements Document |
 | `/project:generate-tech-spec` | Generate Technical Specification |
 | `/project:run-epic <ID>` | Queue all stories in an epic |
@@ -763,22 +759,36 @@ Available with Project installation.
 | `/project:run-sprint` | Execute full sprint |
 | `/project:batch-status` | View batch queue status |
 
-### SDD v2.0 Commands (NEW)
+### SDD v2.0 Commands
 
 | Command | Description |
 |---------|-------------|
 | `/project:generate-constitution` | Generate project constitution document |
 | `/project:trace [--scope] [--id]` | Display bidirectional traceability matrix |
-| `/project:coverage-map` | Analyze requirement coverage gaps |
-| `/project:scan [--scope]` | Analyze codebase and generate structured inventory |
-| `/project:reverse-prd` | Generate PRD from existing codebase (brownfield) |
-| `/project:reverse-stories` | Generate user stories from existing features |
-| `/project:gap-analysis` | Compare specifications with actual code |
-| `/project:checkpoint --phase=<phase>` | Run spec verification checkpoints (pre-sprint, pre-impl, post-impl, pre-merge) |
-| `/project:dependencies [--sprint]` | Generate story dependency graph (Mermaid) |
-| `/project:critical-path [--sprint]` | Identify critical path for sprint optimization |
-| `/project:metrics [--sprint]` | Generate project metrics dashboard |
-| `/project:burndown [--sprint]` | Generate sprint burndown chart (Mermaid) |
+| `/project:trace --gaps` | Analyze requirement coverage gaps |
+| `/project:trace --by-priority` | Coverage map grouped by priority |
+| `/project:reverse scan [--scope]` | Analyze codebase and generate structured inventory |
+| `/project:reverse prd` | Generate PRD from existing codebase (brownfield) |
+| `/project:reverse stories` | Generate user stories from existing features |
+| `/project:reverse gaps` | Compare specifications with actual code |
+| `/project:reverse all` | Run scan, prd, stories and gaps in sequence |
+| `/gate:check --phase=<phase>` | Run spec verification checkpoints (pre-sprint, pre-impl, post-impl, pre-merge) |
+
+### Reports (`/project:report`)
+
+| Command | Description |
+|---------|-------------|
+| `/project:report burndown [--sprint]` | Generate sprint burndown chart (Mermaid) |
+| `/project:report metrics [--sprint]` | Generate project metrics dashboard |
+| `/project:report deps [--sprint]` | Generate story dependency graph (Mermaid) |
+| `/project:report deps --critical [--sprint]` | Identify critical path for sprint optimization |
+
+### Sprint status
+
+| Command | Description |
+|---------|-------------|
+| `/sprint:status` | Show sprint metrics |
+| `/sprint:dev <N\|next>` | **Start TDD/BDD sprint development** |
 
 ### Sprint Development (`/sprint:dev`)
 
@@ -853,13 +863,17 @@ Available with BMAD v6 installation.
 
 | Command | Description |
 |---------|-------------|
-| `/gate:validate-prd` | Validate PRD (≥80% threshold) |
-| `/gate:validate-techspec` | Validate Tech Spec (≥90% threshold) |
-| `/gate:validate-backlog` | Validate INVEST compliance |
-| `/gate:validate-story <ID>` | Validate story Definition of Done |
-| `/gate:validate-sprint` | Validate sprint readiness |
-| `/gate:report` | Full quality gates report |
-| `/gate:validate-alignment [story-id]` | Validate spec-code alignment (≥85% threshold) |
+| `/gate:check prd` | Validate PRD (≥80% threshold) |
+| `/gate:check spec` | Validate Tech Spec (≥90% threshold) |
+| `/gate:check backlog` | Validate INVEST compliance |
+| `/gate:check story <ID>` | Validate story Definition of Done |
+| `/gate:check sprint` | Validate sprint readiness |
+| `/gate:check alignment [story-id]` | Validate spec-code alignment (≥85% threshold) |
+| `/gate:check commit [--fix] [--staged]` | Pre-commit verification (was `/common:pre-commit-check`) |
+| `/gate:check merge [source] [target]` | Pre-merge verification (was `/common:pre-merge-check`) |
+| `/gate:check release <version>` | Release checklist (was `/common:release-checklist`) |
+| `/gate:check all [--detailed]` | Full quality gates report (was `/gate:report`) |
+| `/gate:check --phase=<pre-sprint\|pre-impl\|post-impl\|pre-merge>` | Lifecycle checkpoint (was `/project:checkpoint`) |
 
 ### Quality Gate Thresholds
 
@@ -871,6 +885,43 @@ Available with BMAD v6 installation.
 | Story DoD | 100% | Tasks, tests, AC, review, no blockers |
 | Sprint Ready | 100% | Metadata, goal, stories ready, estimated |
 | Spec Alignment | ≥85% | Requirement coverage, story-code mapping, AC-test mapping, constitution |
+
+---
+
+## Deprecated commands (removed in 9.0)
+
+The 33 old commands remain as redirect stubs that point to their replacement. They will be removed in 9.0.
+
+| Deprecated | Replacement |
+|------------|-------------|
+| `/project:add-epic`, `add-story`, `add-task` | `/project:backlog add epic\|story\|task` |
+| `/project:list-epics`, `list-stories`, `list-tasks` | `/project:backlog list epic\|story\|task` |
+| `/project:update-epic`, `update-story` | `/project:backlog edit epic\|story` |
+| `/project:move-task` | `/project:backlog move task` |
+| `/project:scan` | `/project:reverse scan` |
+| `/project:reverse-prd` | `/project:reverse prd` |
+| `/project:reverse-stories` | `/project:reverse stories` |
+| `/project:gap-analysis` | `/project:reverse gaps` |
+| `/project:coverage-map` | `/project:trace --by-priority` (gaps: `--gaps`) |
+| `/project:burndown` | `/project:report burndown` |
+| `/project:metrics` | `/project:report metrics` |
+| `/project:dependencies` | `/project:report deps` |
+| `/project:critical-path` | `/project:report deps --critical` |
+| `/project:analyze-backlog` | `/project:migrate --analyze` |
+| `/project:migrate-backlog` | `/project:migrate` |
+| `/project:update-stories` | `/project:migrate --stories` |
+| `/project:sync-backlog` | `/project:migrate --resync` |
+| `/project:checkpoint` | `/gate:check --phase=<phase>` |
+| `/gate:validate-prd` | `/gate:check prd` |
+| `/gate:validate-techspec` | `/gate:check spec` |
+| `/gate:validate-backlog` | `/gate:check backlog` |
+| `/gate:validate-sprint` | `/gate:check sprint` |
+| `/gate:validate-story` | `/gate:check story` |
+| `/gate:validate-alignment` | `/gate:check alignment` |
+| `/gate:report` | `/gate:check all` |
+| `/common:pre-commit-check` | `/gate:check commit` |
+| `/common:pre-merge-check` | `/gate:check merge` |
+| `/common:release-checklist` | `/gate:check release` |
 
 ---
 

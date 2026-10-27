@@ -386,7 +386,7 @@ Session 2: Implementierung (kodieren, testen)
 Der `/loop`-Befehl ermoeglicht die Planung wiederkehrender Aufgaben:
 
 ```bash
-/loop 5m /common:pre-commit-check    # Alle 5 Minuten pruefen
+/loop 5m /gate:check commit    # Alle 5 Minuten pruefen
 /loop "CI-Tests ueberwachen"          # Automatische Taktung durch das Modell
 ```
 

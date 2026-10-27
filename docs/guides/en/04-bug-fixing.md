@@ -651,7 +651,7 @@ Regression tests added:
 3. **Static analysis**: Tools find common errors
 4. **Integration tests**: Catch interaction bugs
 5. **Monitor production**: Catch issues early
-6. **Use `/loop`**: Set up recurring quality checks (e.g., `/loop 5m /common:pre-commit-check`)
+6. **Use `/loop`**: Set up recurring quality checks (e.g., `/loop 5m /gate:check commit`)
 7. **Save learnings**: Use `/memory` to persist bug patterns across sessions
 
 ---

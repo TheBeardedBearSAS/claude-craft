@@ -18,21 +18,21 @@ You will take TaskFlow from a one-sentence idea to a reviewed, tested first spri
  IDEA
    │  /workflow:init        ← pick the track
    ▼
- BACKLOG ──/gate:validate-backlog──┐  (PRD ≥ 80%, INVEST 6/6)
-   │  /workflow:plan                │
-   ▼                                │
- TECH DESIGN ──/gate:validate-techspec──┐  (Tech Spec ≥ 90%)
-   │  /workflow:design                   │
-   ▼                                      │
- SPRINT PLAN ──/gate:validate-sprint──┐  (Sprint Ready 100%)
-   │  /workflow:start                  │
-   │  /project:decompose-tasks         │
-   ▼                                    │
- IMPLEMENTATION (TDD) ──/gate:validate-story──┐  (Story DoD 100%)
-   │  /sprint:dev                              │
-   ▼                                            │
+ BACKLOG ──/gate:check backlog──┐  (PRD ≥ 80%, INVEST 6/6)
+   │  /workflow:plan            │
+   ▼                            │
+ TECH DESIGN ──/gate:check spec──┐  (Tech Spec ≥ 90%)
+   │  /workflow:design           │
+   ▼                             │
+ SPRINT PLAN ──/gate:check sprint──┐  (Sprint Ready 100%)
+   │  /workflow:start              │
+   │  /project:decompose-tasks     │
+   ▼                               │
+ IMPLEMENTATION (TDD) ──/gate:check story──┐  (Story DoD 100%)
+   │  /sprint:dev                          │
+   ▼                                       │
  REVIEW + RETRO ──/workflow:review, /workflow:retro
-   │
+                                           │
    ▼
  NEXT SPRINT ↺
 ```
@@ -163,7 +163,7 @@ Claude interviews you about TaskFlow, then drafts a **PRD** (Product Requirement
 **Mode: Read-only.**
 
 ```
-/gate:validate-backlog
+/gate:check backlog
 ```
 
 This gate checks the backlog against **INVEST (6/6)** and PRD coverage (**≥ 80%**). If it fails, it tells you exactly which stories are too big, untestable, or unestimable. Fix them (re-run `/workflow:plan` or edit the stories) until the gate is green.
@@ -189,7 +189,7 @@ Claude (acting as architect) produces a **Tech Spec**: architecture choices, dat
 **Mode: Read-only.**
 
 ```
-/gate:validate-techspec
+/gate:check spec
 ```
 
 Gate threshold: **Tech Spec ≥ 90%**. It flags missing error handling, undefined contracts, or untestable designs.
@@ -219,7 +219,7 @@ Each story is split into ≤ 30-minute, independently testable **tasks** (write 
 **Mode: Read-only.**
 
 ```
-/gate:validate-sprint
+/gate:check sprint
 ```
 
 Gate threshold: **Sprint Ready 100%** — every story estimated, every task defined, dependencies ordered. Green means you can start coding.
@@ -282,7 +282,7 @@ This opens a local **Kanban board** (no SaaS, no lock-in) reading the BMAD state
 backlog → ready-for-dev → in-progress → review → done   (any → blocked)
 ```
 
-Companion views: `/project:burndown` (sprint burndown), `/project:dependencies`, `/project:critical-path`, `/project:metrics`.
+Companion views: `/project:report burndown` (sprint burndown), `/project:report deps`, `/project:report deps --critical`, `/project:report metrics`.
 
 ### D.2 Why a card may refuse to move
 
@@ -326,22 +326,22 @@ Run `/workflow:start` again to plan sprint 2 from the remaining backlog. The cyc
 # Step A — Backlog
 /workflow:init                 # pick the track
 /workflow:plan                 # PRD + backlog
-/gate:validate-backlog         # INVEST 6/6, PRD ≥ 80%
+/gate:check backlog            # INVEST 6/6, PRD ≥ 80%
 
 # Step B — Design + sprint
 /workflow:design               # tech spec
-/gate:validate-techspec        # Tech Spec ≥ 90%
+/gate:check spec               # Tech Spec ≥ 90%
 /workflow:start                # plan the sprint
 /project:decompose-tasks       # stories → tasks
-/gate:validate-sprint          # Sprint Ready 100%
+/gate:check sprint             # Sprint Ready 100%
 
 # Step C — Implement (TDD)
 /sprint:dev                    # task-by-task Red/Green/Refactor
-/gate:validate-story US-001    # Story DoD 100%
+/gate:check story US-001       # Story DoD 100%
 
 # Step D — Track
 /project:board                 # Kanban
-/project:burndown              # burndown
+/project:report burndown       # burndown
 
 # Step E — Close + loop
 /workflow:review

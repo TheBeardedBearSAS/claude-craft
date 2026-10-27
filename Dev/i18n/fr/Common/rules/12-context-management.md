@@ -386,7 +386,7 @@ Session 2: Implementation (coder, tester)
 La commande `/loop` permet de planifier des taches recurrentes:
 
 ```bash
-/loop 5m /common:pre-commit-check    # Verifier toutes les 5 minutes
+/loop 5m /gate:check commit    # Verifier toutes les 5 minutes
 /loop "Surveiller les tests CI"       # Auto-cadence par le modele
 ```
 

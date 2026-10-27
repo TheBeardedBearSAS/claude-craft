@@ -119,7 +119,7 @@ Com base no track, mostrar o workflow:
 |                                                                 |
 | Comandos:                                                       |
 | - /qa:tdd    - Corrigir com TDD                    |
-| - /project:add-task      - Registrar o trabalho                |
+| - /project:backlog add task      - Registrar o trabalho                |
 |                                                                 |
 +================================================================+
 ```

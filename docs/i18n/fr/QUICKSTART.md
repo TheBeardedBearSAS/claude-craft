@@ -185,7 +185,7 @@ Après l'installation, configurez l'optimisation des tokens pour réduire vos co
 │   make install-{tech} TARGET=~/projet RULES_LANG=fr       │
 ├────────────────────────────────────────────────────────────┤
 │ COMMANDES COURANTES (204+ disponibles)                     │
-│   /common:pre-commit-check    Validation avant commit      │
+│   /gate:check commit          Validation avant commit      │
 │   /common:setup-rtk           Optimisation tokens (RTK)    │
 │   /team:audit                 Audit multi-tech du projet   │
 │   /workflow:init              Démarrer la méthodologie     │

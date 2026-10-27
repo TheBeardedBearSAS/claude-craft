@@ -453,7 +453,7 @@ Erwartet: Claude sollte als TDD-Coach-Agent mit Testing-Anleitungen antworten.
 
 Versuchen Sie einen einfachen Befehl:
 ```
-/common:pre-commit-check
+/gate:check commit
 ```
 
 Erwartet: Claude sollte eine Pre-Commit-Qualitätsprüfung ausführen (kann keine Änderungen melden, wenn das Projekt leer ist).
@@ -558,7 +558,7 @@ claude
 # Häufige Befehle
 /common:analyze-feature     # Anforderungen analysieren
 /{tech}:generate-crud       # CRUD-Code generieren
-/common:pre-commit-check    # Qualitätsprüfung
+/gate:check commit         # Qualitätsprüfung
 /common:security-audit      # Sicherheitsaudit
 ```
 

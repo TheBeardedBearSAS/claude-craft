@@ -95,7 +95,7 @@ Basé sur la stack détectée, recommander 3 commandes contextualisées qui appo
 - `/php:check-security` — Bonnes pratiques de sécurité
 
 **Inconnu/Multi-stack :**
-- `/common:pre-commit-check` — Portes qualité avant commits
+- `/gate:check commit` — Portes qualité avant commits
 - `/team:audit` — Audit projet complet (architecture, sécurité, performance)
 
 ### Format de Sortie

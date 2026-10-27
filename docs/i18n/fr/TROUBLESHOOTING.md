@@ -232,7 +232,7 @@ EOF
 
 **Diagnostic :**
 ```
-/gate:report
+/gate:check all
 ```
 
 **Causes courantes :**

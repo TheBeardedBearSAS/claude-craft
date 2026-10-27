@@ -297,7 +297,7 @@ This creates:
 
 ## Quality Gates
 
-Quality gates are validation checkpoints that ensure work meets standards before progressing.
+Quality gates are validation checkpoints that ensure work meets standards before progressing. They are all run through the single `/gate:check <gate>` command (`prd`, `spec`, `backlog`, `sprint`, `story`, `alignment`, `all`, plus the code gates `commit`, `merge`, `release` and `--phase=<phase>` checkpoints). The former `/gate:validate-*` and `/gate:report` commands are deprecated stubs removed in 9.0.
 
 ### 1. PRD Gate (≥80%)
 
@@ -311,7 +311,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - [ ] Scope boundaries set
 
 ```bash
-/gate:validate-prd                 # default: project-management/prd.md
+/gate:check prd                 # default: project-management/prd.md
 ```
 
 ---
@@ -329,7 +329,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - [ ] Deployment plan created
 
 ```bash
-/gate:validate-techspec docs/tech-spec.md
+/gate:check spec docs/tech-spec.md
 ```
 
 ---
@@ -347,7 +347,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - **T**estable - Has clear acceptance criteria
 
 ```bash
-/gate:validate-backlog
+/gate:check backlog
 ```
 
 ---
@@ -364,7 +364,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - [ ] Team capacity confirmed
 
 ```bash
-/gate:validate-sprint
+/gate:check sprint
 ```
 
 ---
@@ -382,7 +382,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - [ ] No blockers
 
 ```bash
-/gate:validate-story US-005
+/gate:check story US-005
 ```
 
 ---
@@ -390,7 +390,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 ### Full Gates Report
 
 ```bash
-/gate:report
+/gate:check all
 ```
 
 ---
@@ -536,7 +536,7 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 ```bash
 @pm Create a PRD for the shopping cart feature
-/gate:validate-prd                 # default: project-management/prd.md
+/gate:check prd                 # default: project-management/prd.md
 ```
 
 ### 3. Analyze Requirements (BA Phase)
@@ -549,21 +549,21 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 ```bash
 @architect Create technical specification from the PRD
-/gate:validate-techspec docs/tech-spec.md
+/gate:check spec docs/tech-spec.md
 ```
 
 ### 5. Prepare Backlog (PO Phase)
 
 ```bash
 @po Create and prioritize user stories
-/gate:validate-backlog
+/gate:check backlog
 ```
 
 ### 6. Plan Sprint (SM Phase)
 
 ```bash
 @sm Plan sprint 1 with selected stories
-/gate:validate-sprint
+/gate:check sprint
 ```
 
 ### 7. Implement (Dev Phase)
@@ -593,7 +593,7 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 ```bash
 @qa Validate acceptance criteria for US-001
-/gate:validate-story US-001
+/gate:check story US-001
 ```
 
 ### 9. Complete
@@ -686,7 +686,7 @@ tdd:
 
 Check required fields:
 ```bash
-/gate:report
+/gate:check all
 ```
 
 ### Stories not transitioning

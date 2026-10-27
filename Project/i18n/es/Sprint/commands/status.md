@@ -137,8 +137,8 @@ Impacto: 14h bloqueadas (22% del sprint)
 
 Acciones:
   /project:board                    # Ver Kanban
-  /project:move-task TASK-XXX done  # Completar una tarea
-  /project:list-tasks status blocked # Ver todos los bloqueadores
+  /project:backlog move task TASK-XXX done  # Completar una tarea
+  /project:backlog list task status blocked # Ver todos los bloqueadores
 ```
 
 ## Ejemplos

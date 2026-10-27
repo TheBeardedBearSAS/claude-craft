@@ -39,7 +39,7 @@ Claude Code fournit des commandes intégrées pour la gestion du contexte et des
 
 | Commande | Version | Description |
 |---------|---------|-------------|
-| `/loop [intervalle] [commande]` | v2.1.71+ | Exécuter des tâches récurrentes (ex. `/loop 5m /common:pre-commit-check`) |
+| `/loop [intervalle] [commande]` | v2.1.71+ | Exécuter des tâches récurrentes (ex. `/loop 5m /gate:check commit`) |
 | `/proactive` | v2.1.105+ | Alias de `/loop` |
 | `/color` | v2.1.94+ | Changer le schéma de couleurs du terminal |
 | `/rename` | v2.1.94+ | Renommer la session courante |

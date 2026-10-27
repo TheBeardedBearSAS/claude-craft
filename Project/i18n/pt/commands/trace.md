@@ -1,104 +1,96 @@
 ---
 name: trace
-description: Display bidirectional traceability matrix from requirements to code and tests
-arguments:
-  - name: scope
-    description: Scope of tracing (all, requirement, story, code)
-    required: false
-  - name: id
-    description: Specific ID to trace (e.g., FR-001, US-001)
-    required: false
-  - name: format
-    description: Output format (table, mermaid, json)
-    required: false
+description: "Matriz de rastreabilidade bidirecional (requisito → story → código → testes); --gaps lista os requisitos não cobertos, --by-priority agrupa por prioridade MoSCoW"
+argument-hint: "[all|requirement|story|code] [ID] [--gaps] [--by-priority] [--level=story|code|test|all] [--format=table|mermaid|json]"
 ---
 
 # /project:trace
 
-## Mission
+## Missão
 
-Generate a bidirectional traceability matrix that maps every requirement from the PRD through user stories, code implementation, and test coverage. This provides full visibility into what is implemented, what is tested, and what gaps exist.
+Relacionar cada requisito do PRD com as user stories, o código e os testes. A vista predefinida é a matriz bidirecional completa; `--gaps` transforma-a num relatório de cobertura que lista apenas o que não está coberto (o antigo `/project:trace --gaps`); `--by-priority` agrupa o resultado por prioridade MoSCoW.
 
-## Prerequisites
+## Utilização
 
-- `project-management/prd.md` exists with FR-xxx requirement IDs
-- `project-management/backlog/` contains user stories with `Implements:` references
-- Codebase with `// Story: US-xxx` or `# Story: US-xxx` comments
-- Test files with story/requirement references
+| Invocação | O que faz | Substitui |
+|-----------|-----------|-----------|
+| `/project:trace` ou `/project:trace all` | Matriz completa: requisito → story → código → testes | `/project:trace` |
+| `/project:trace requirement FR-001` | Rastreia um requisito para baixo | `/project:trace --scope requirement --id FR-001` |
+| `/project:trace story US-001` | Rastreia uma story para cima (requisitos) e para baixo (código, testes) | `/project:trace --scope story` |
+| `/project:trace code` | Ficheiros de código com e sem referência a uma story | `/project:trace --scope code` |
+| `/project:trace --gaps` | Relatório de cobertura: requisitos não cobertos por stories, código ou testes, com ações recomendadas | `/project:trace --gaps` |
+| `/project:trace --gaps --level test` | Igual, limitado a um nível de cobertura (`story`, `code`, `test`, `all`; predefinido `all`) | `/project:trace --gaps --level test` |
+| `/project:trace --by-priority` | Agrupa requisitos e percentagens de cobertura por prioridade MoSCoW | novo (antes era uma secção do coverage-map) |
 
-## Modo Plano
+As opções combinam-se: `/project:trace --gaps --by-priority` produz o relatório de cobertura com a repartição por prioridade.
 
-> **O modo plano é obrigatório.** Antes de executar, Claude ativa o modo plano para analisar o código impactado, propor um plano de implementação e aguardar sua validação antes de realizar qualquer alteração.
+## Argumentos
 
-## Workflow
+Analisar `$ARGUMENTS`:
+- Primeiro argumento posicional entre `all|requirement|story|code` → âmbito (predefinido `all`).
+- Argumento posicional seguinte que corresponda a `FR-\d+` ou `US-\d+` → ID a rastrear (necessário para `requirement` e `story`).
+- `--gaps` → modo de cobertura. `--level` só é lido neste modo.
+- `--by-priority` → agrupar por prioridade: P0 = Must have, P1 = Should have, P2 = Could have / Nice to have.
+- `--format` → `table` (predefinido), `mermaid`, `json`.
 
-### Step 1: Scan PRD Requirements
+## Pré-requisitos
+
+- `project-management/prd.md` existe com identificadores de requisitos FR-xxx
+- `project-management/backlog/` contém user stories com referências `Implements:`
+- Código com comentários `// Story: US-xxx` ou `# Story: US-xxx` (opcional para `--gaps --level story`)
+- Ficheiros de testes com referências a stories/requisitos
+
+## Plan Mode
+
+> **O Plan Mode é obrigatório.** Antes de executar, o Claude ativa o Plan Mode para analisar o código afetado, propor um plano de implementação e aguardar a sua validação antes de fazer qualquer alteração.
+
+## Análises partilhadas
+
+Ambos os modos executam uma só vez as mesmas quatro análises; os resultados alimentam a matriz ou o relatório de cobertura. O **estado** de uma story provém sempre de `.bmad/sprint-status.yaml` (fonte única de verdade); os ficheiros markdown fornecem apenas o conteúdo.
+
+### Análise 1: Requisitos
+
+1. Ler `project-management/prd.md`
+2. Extrair todos os identificadores FR-xxx da secção de requisitos funcionais
+3. Registar o texto, a prioridade (P0/P1/P2) e os critérios de aceitação
+4. Registo: `{FR-001: {text, priority}}`; contar os requisitos por prioridade
+
+### Análise 2: User stories
+
+1. Percorrer `project-management/backlog/` à procura de `US-*.md` (ou ficheiros `user-stories/`)
+2. Em cada story, ler a linha `Implements:` ou a secção `Traceability`
+3. Correspondência: `{US-001: [FR-001, FR-003]}`; ler o estado e o sprint em `.bmad/sprint-status.yaml`
+4. Um requisito que nenhuma story referencia é «No Story»
+
+### Análise 3: Código
+
+1. Procurar no código `// Story: US-xxx`, `# Story: US-xxx`, `@story US-xxx`
+2. Correspondência com ficheiro e linha: `{US-001: [src/Service/OrderService.php:42]}`
+3. Uma story sem referência é «No Code»; listar os ficheiros de código sem referência a uma story
+
+### Análise 4: Testes
+
+1. Procurar nos diretórios de testes as referências `US-xxx` / `FR-xxx` e verificar os nomes dos testes
+2. Correspondência: `{US-001: [tests/OrderServiceTest.php]}`
+3. Uma story com código mas sem referência de testes é «No Tests»
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║              TRACEABILITY SCAN - REQUIREMENTS             ║
-╠══════════════════════════════════════════════════════════╣
-║ Scanning project-management/prd.md...                     ║
-╚══════════════════════════════════════════════════════════╝
-```
-
-Parse the PRD for all functional requirements:
-1. Read `project-management/prd.md`
-2. Extract all FR-xxx IDs from section 5 (Functional Requirements)
-3. Record requirement text, priority (P0/P1/P2), and acceptance criteria
-4. Build a requirements registry: `{FR-001: {text, priority, status}}`
-
-### Step 2: Scan User Stories
-
-Search for user stories referencing requirements:
-1. Scan `project-management/backlog/` for `US-*.md` or `user-stories/` files
-2. In each story, look for `Implements:` or `Traceability` section
-3. Extract mappings: `{US-001: [FR-001, FR-003]}`
-4. Record story status, sprint, and acceptance criteria count
-
-### Step 3: Scan Codebase
-
-Search for code files referencing stories:
-1. Grep codebase for patterns: `// Story: US-xxx`, `# Story: US-xxx`, `@story US-xxx`
-2. Record file paths and line numbers for each reference
-3. Build mapping: `{US-001: [src/Service/OrderService.php:42, src/Controller/OrderController.php:15]}`
-4. Identify code files with no story reference
-
-### Step 4: Scan Tests
-
-Search for test files referencing stories or requirements:
-1. Grep test directories for `US-xxx` or `FR-xxx` references
-2. Check test names for story/requirement patterns
-3. Build mapping: `{US-001: [tests/OrderServiceTest.php, tests/OrderControllerTest.php]}`
-4. Identify stories with no test coverage
-
-### Step 5: Generate Traceability Matrix
-
-Combine all mappings into a comprehensive matrix:
-
-```
-╔══════════════════════════════════════════════════════════╗
-║              TRACEABILITY MATRIX GENERATED                ║
-╠══════════════════════════════════════════════════════════╣
 ║ Requirements: {n} | Stories: {n} | Files: {n} | Tests: {n}║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-## Output Format
+## Modo matriz (predefinido)
 
-### Table Format (default)
+Combinar as quatro correspondências. Saída (formato table):
 
 ```
 Bidirectional Traceability Matrix
 =================================
 
-Requirement → Story → Code → Tests
-─────────────────────────────────────────────────────
-
 FR-001 (P0) User Authentication
   ├── US-001: Login with email/password
   │   ├── src/Service/AuthService.php:25
-  │   ├── src/Controller/AuthController.php:18
   │   ├── tests/AuthServiceTest.php ✅
   │   └── tests/AuthControllerTest.php ✅
   └── US-002: Password reset flow
@@ -115,7 +107,6 @@ FR-010 (P1) Export to CSV
 
 Coverage Summary
 ================
-
 | Level | Covered | Total | Percentage |
 |-------|---------|-------|------------|
 | Requirements → Stories | 8 | 10 | 80% |
@@ -125,145 +116,106 @@ Coverage Summary
 
 Gaps Identified
 ===============
-
 | Type | ID | Description | Action Needed |
 |------|----|-------------|---------------|
 | No Stories | FR-010 | Export to CSV | Create user story |
 | No Tests | US-003 | Register with email | Add test coverage |
-| No Code | US-005 | Bulk import | Implement feature |
 ```
 
-### Mermaid Format (--format mermaid)
+Com um ID, só esse ramo é apresentado, com o estado da story e o número de testes (por ex. `US-001: Login [Done]`, `tests/AuthServiceTest.php ✅ (12 tests)`), seguido de `Status: Fully covered (2/2 stories, 3/3 code files, 3/3 test files)`.
 
-```mermaid
-graph LR
-    subgraph Requirements
-        FR001[FR-001 Auth]
-        FR002[FR-002 Registration]
-        FR010[FR-010 Export]
-    end
+### Mermaid (`--format mermaid`)
 
-    subgraph Stories
-        US001[US-001 Login]
-        US002[US-002 Password Reset]
-        US003[US-003 Register]
-    end
+`graph LR` com quatro subgrafos (Requirements, Stories, Code, Tests); setas contínuas para as ligações, setas tracejadas (`-.->|NO STORY|`) para um nó de lacuna quando faltam ligações; lacunas com estilo `fill:#ff6b6b`.
 
-    subgraph Code
-        AUTH[AuthService]
-        PWD[PasswordResetService]
-        REG[RegistrationService]
-    end
-
-    subgraph Tests
-        T1[AuthServiceTest ✅]
-        T2[PasswordResetTest ✅]
-        T3[❌ Missing]
-    end
-
-    FR001 --> US001
-    FR001 --> US002
-    FR002 --> US003
-    FR010 -.->|NO STORY| X1[Gap]
-
-    US001 --> AUTH
-    US002 --> PWD
-    US003 --> REG
-
-    AUTH --> T1
-    PWD --> T2
-    REG -.-> T3
-
-    style FR010 fill:#ff6b6b
-    style X1 fill:#ff6b6b
-    style T3 fill:#ff6b6b
-```
-
-### JSON Format (--format json)
+### JSON (`--format json`)
 
 ```json
 {
   "generated_at": "2026-02-19T10:00:00Z",
-  "requirements": {
-    "FR-001": {
-      "text": "User Authentication",
-      "priority": "P0",
-      "stories": ["US-001", "US-002"],
-      "covered": true
-    }
-  },
-  "stories": {
-    "US-001": {
-      "title": "Login with email/password",
-      "implements": ["FR-001"],
-      "code_files": ["src/Service/AuthService.php"],
-      "test_files": ["tests/AuthServiceTest.php"],
-      "covered": true
-    }
-  },
-  "coverage": {
-    "requirements_to_stories": 0.80,
-    "stories_to_code": 0.87,
-    "stories_to_tests": 0.75,
-    "end_to_end": 0.60
-  },
-  "gaps": [
-    {"type": "no_stories", "id": "FR-010", "description": "Export to CSV"},
-    {"type": "no_tests", "id": "US-003", "description": "Register with email"}
-  ]
+  "requirements": {"FR-001": {"text": "User Authentication", "priority": "P0", "stories": ["US-001"], "covered": true}},
+  "stories": {"US-001": {"title": "Login", "implements": ["FR-001"], "code_files": ["src/Service/AuthService.php"], "test_files": ["tests/AuthServiceTest.php"], "covered": true}},
+  "coverage": {"requirements_to_stories": 0.80, "stories_to_code": 0.87, "stories_to_tests": 0.75, "end_to_end": 0.60},
+  "gaps": [{"type": "no_stories", "id": "FR-010", "description": "Export to CSV"}]
 }
 ```
 
-## Example Session
+## Modo lacunas (`--gaps`)
+
+Reutiliza as análises partilhadas, calcula a cobertura por camada e lista apenas o que falta. `--level` restringe as camadas calculadas: `story` (análises 1-2), `code` (1-3), `test` (1-4), `all` (predefinido).
+
+```
+Requirement Coverage Map
+========================
+| Layer | Covered | Total | Coverage | Status |
+|-------|---------|-------|----------|--------|
+| Stories | 8 | 10 | 80% | ⚠️ |
+| Code | 7 | 8 | 87% | ⚠️ |
+| Tests | 6 | 8 | 75% | ❌ |
+| End-to-End | 6 | 10 | 60% | ❌ |
+
+Uncovered Requirements
+| ID | Requirement | Priority | Missing |
+|----|-------------|----------|---------|
+| FR-005 | Bulk export | P0 | Tests |
+| FR-010 | CSV import | P1 | Story, Code, Tests |
+
+Recommended Actions
+1. 🔴 CRITICAL: FR-005 (P0) tem código mas não tem testes — adicionar cobertura de testes
+2. ⚠️ HIGH: FR-010 (P1) não tem story — criar uma user story
+3. 📝 LOW: FR-020 (P2) não iniciada — planear para sprints futuros
+
+Next Commands
+- /project:trace requirement FR-005   → rastreio detalhado de um requisito
+- /project:backlog add story         → criar as user stories em falta
+- /project:generate-backlog          → regenerar o backlog com as lacunas
+```
+
+Com `--level test`, apresentar uma linha por story: `US-003 | ❌ | 0 files | 0 tests` e a ação (por ex. «Criar tests/RegistrationServiceTest.php»).
+
+Mermaid (`--format mermaid`): `graph TD` com um subgrafo por prioridade; nós `FR-001 ✅`, `FR-005 ⚠️ No Tests`, `FR-010 ❌ No Story`; estilos `#4caf50` (coberto), `#ff9800` (parcial), `#f44336` (em falta).
+
+### Limiares de cobertura
+
+| Limiar | Estado | Ação |
+|--------|--------|------|
+| >= 90% | ✅ Excelente | Manter |
+| 80-89% | ⚠️ Bom | Rever as lacunas |
+| 60-79% | ⚠️ A melhorar | Priorizar a cobertura |
+| < 60% | ❌ Crítico | Ação imediata necessária |
+
+## Agrupamento por prioridade (`--by-priority`)
+
+Funciona nos dois modos. No modo matriz, os requisitos são listados sob os títulos `P0 Must have`, `P1 Should have`, `P2 Could have`. No modo lacunas, acrescentar:
+
+```
+Coverage by Priority
+| Priority | Requirements | Story Coverage | Code Coverage | Test Coverage |
+|----------|-------------|----------------|---------------|---------------|
+| P0 (Must Have) | 5 | 100% ✅ | 100% ✅ | 80% ⚠️ |
+| P1 (Should Have) | 3 | 66% ⚠️ | 50% ❌ | 33% ❌ |
+| P2 (Could Have) | 2 | 0% ❌ | 0% ❌ | 0% ❌ |
+```
+
+As ações recomendadas passam a ser ordenadas começando por P0.
+
+## Exemplo de sessão
 
 ```
 User: /project:trace
+Claude: 10 requisitos encontrados (5 P0, 3 P1, 2 P2), 8 stories, 24 ficheiros de código, 18 ficheiros de testes.
+        [matriz completa] Cobertura: 60% de ponta a ponta
 
-Claude: Starting traceability scan...
+User: /project:trace requirement FR-001
+Claude: [apenas o ramo FR-001]
 
-📋 Scanning PRD requirements...
-Found 10 requirements (5 P0, 3 P1, 2 P2)
-
-📖 Scanning user stories...
-Found 8 stories with requirement references
-
-💻 Scanning codebase...
-Found 24 code files with story references
-
-🧪 Scanning tests...
-Found 18 test files with story references
-
-Bidirectional Traceability Matrix
-=================================
-[... full matrix output ...]
-
-Coverage: 60% end-to-end
-Gaps: 2 requirements without stories, 1 story without tests
-
-User: /project:trace --scope requirement --id FR-001
-
-Claude: Tracing FR-001: User Authentication
-
-FR-001 (P0) User Authentication
-├── US-001: Login with email/password [Done]
-│   ├── src/Service/AuthService.php:25
-│   ├── src/Controller/AuthController.php:18
-│   ├── tests/AuthServiceTest.php ✅ (12 tests)
-│   └── tests/AuthControllerTest.php ✅ (8 tests)
-└── US-002: Password reset flow [In Progress]
-    ├── src/Service/PasswordResetService.php:10
-    └── tests/PasswordResetServiceTest.php ✅ (6 tests)
-
-Status: Fully covered (2/2 stories, 3/3 code files, 3/3 test files)
-
-User: /project:trace --format mermaid
-
-Claude: [generates Mermaid diagram]
+User: /project:trace --gaps --by-priority
+Claude: [relatório de cobertura com tabela por prioridade, 2 requisitos P0 precisam de atenção]
 ```
 
-## Related Commands
+## Comandos relacionados
 
-- `/project:coverage-map` - Identify uncovered requirements
-- `/project:generate-prd` - Generate PRD with requirement IDs
-- `/project:generate-backlog` - Create backlog from PRD
-- `/project:generate-tech-spec` - Generate technical specification
+- `/project:generate-prd` - Gerar o PRD com identificadores de requisitos
+- `/project:generate-backlog` - Criar o backlog a partir do PRD
+- `/project:generate-tech-spec` - Gerar a especificação técnica
+- `/project:migrate --stories` - Adicionar os campos em falta (como `Implements:`) às stories

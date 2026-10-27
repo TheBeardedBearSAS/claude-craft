@@ -14,7 +14,7 @@ que `/team:sprint`) afin d'éviter l'imbrication d'Agent Teams.
 Cette commande automatise ce qui nécessitait auparavant six commandes manuelles avec un `/clear` entre chaque :
 
 ```
-/workflow:start N -> /project:decompose-tasks 00N -> /gate:validate-sprint 00N
+/workflow:start N -> /project:decompose-tasks 00N -> /gate:check sprint 00N
 -> /team:sprint "sprint-00N" -> /workflow:review N -> /workflow:retro N
 ```
 

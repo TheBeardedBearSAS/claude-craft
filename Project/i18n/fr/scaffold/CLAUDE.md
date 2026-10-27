@@ -20,34 +20,34 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 |----------|-------------|
 | `/project:generate-backlog` | Génère le backlog complet |
 | `/project:decompose-tasks N` | Décompose le sprint N en tâches |
-| `/project:analyze-backlog` | Analyser le backlog existant |
-| `/project:migrate-backlog` | Migrer un backlog existant |
-| `/project:sync-backlog` | Synchroniser l'index du backlog |
+| `/project:migrate --analyze` | Analyser le backlog existant |
+| `/project:migrate` | Migrer un backlog existant |
+| `/project:migrate --resync` | Synchroniser l'index du backlog |
 
 ### Gestion des EPICs (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
-| `/project:add-epic "Nom"` | Créer un nouvel EPIC |
-| `/project:list-epics` | Lister tous les EPICs |
-| `/project:update-epic EPIC-XXX` | Modifier un EPIC |
+| `/project:backlog add epic "Nom"` | Créer un nouvel EPIC |
+| `/project:backlog list epic` | Lister tous les EPICs |
+| `/project:backlog edit epic EPIC-XXX` | Modifier un EPIC |
 
 ### Gestion des User Stories (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
-| `/project:add-story EPIC-XXX "Nom"` | Créer une User Story |
-| `/project:list-stories` | Lister les User Stories |
-| `/project:update-story US-XXX` | Modifier une US |
-| `/project:update-stories` | Mettre à jour plusieurs US |
+| `/project:backlog add story EPIC-XXX "Nom"` | Créer une User Story |
+| `/project:backlog list story` | Lister les User Stories |
+| `/project:backlog edit story US-XXX` | Modifier une US |
+| `/project:migrate --stories` | Mettre à jour plusieurs US |
 
 ### Gestion des Tasks (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
-| `/project:add-task US-XXX "[TYPE] Desc" Xh` | Créer une tâche |
-| `/project:list-tasks` | Lister les tâches |
-| `/project:move-task TASK-XXX statut` | Changer le statut |
+| `/project:backlog add task US-XXX "[TYPE] Desc" Xh` | Créer une tâche |
+| `/project:backlog list task` | Lister les tâches |
+| `/project:backlog move task TASK-XXX statut` | Changer le statut |
 
 ### Visualisation & Exécution (`/project:`)
 
@@ -75,12 +75,12 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 
 | Commande | Description |
 |----------|-------------|
-| `/gate:validate-backlog` | Valide la conformité du backlog (score /100) |
-| `/gate:validate-prd` | Valider le PRD |
-| `/gate:validate-techspec` | Valider la spécification technique |
-| `/gate:validate-story US-XXX` | Valider une User Story (DoD) |
-| `/gate:validate-sprint N` | Valider un sprint |
-| `/gate:report` | Rapport de qualité complet |
+| `/gate:check backlog` | Valide la conformité du backlog (score /100) |
+| `/gate:check prd` | Valider le PRD |
+| `/gate:check spec` | Valider la spécification technique |
+| `/gate:check story US-XXX` | Valider une User Story (DoD) |
+| `/gate:check sprint N` | Valider un sprint |
+| `/gate:check all` | Rapport de qualité complet |
 
 ## Stack technique
 
@@ -153,7 +153,7 @@ project-management/
 /project:generate-backlog
 
 # 2. Valider la conformité
-/gate:validate-backlog
+/gate:check backlog
 
 # 3. Planifier le sprint 1
 /project:decompose-tasks 001

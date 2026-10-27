@@ -453,7 +453,7 @@ Esperado: Claude debería responder como el agente TDD Coach con orientación so
 
 Prueba un comando simple:
 ```
-/common:pre-commit-check
+/gate:check commit
 ```
 
 Esperado: Claude debería ejecutar una verificación de calidad pre-commit (puede reportar sin cambios si el proyecto está vacío).
@@ -558,7 +558,7 @@ claude
 # Comandos comunes
 /common:analyze-feature     # Analizar requisitos
 /{tech}:generate-crud       # Generar código CRUD
-/common:pre-commit-check    # Verificación de calidad
+/gate:check commit         # Verificación de calidad
 /common:security-audit      # Auditoría de seguridad
 ```
 

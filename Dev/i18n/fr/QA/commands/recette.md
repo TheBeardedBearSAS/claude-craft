@@ -218,7 +218,7 @@ entries:
 | `/qa:status` | Afficher le statut de session |
 | `/qa:regression` | Voir les tests de regression |
 | `/qa:report` | Generer un rapport |
-| `/gate:validate-story` | Valider les AC d'une story |
+| `/gate:check story` | Valider les AC d'une story |
 
 ## Capacites Chrome
 

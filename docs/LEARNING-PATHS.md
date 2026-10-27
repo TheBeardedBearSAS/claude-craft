@@ -77,7 +77,7 @@ The board opens at `http://127.0.0.1:3737`. If your project uses the BMAD v6 wor
 ### Step 4: First Pre-Commit Check (5 min)
 
 ```bash
-/common:pre-commit-check
+/gate:check commit
 ```
 
 This validates:
@@ -112,7 +112,7 @@ Claude will:
 ### Prerequisites
 
 - Completed Beginner path
-- At least 3 commits using `/common:pre-commit-check`
+- At least 3 commits using `/gate:check commit`
 
 ### Step 1: Full Audit (20 min)
 
@@ -167,7 +167,7 @@ dod:
 Before creating a PR:
 
 ```bash
-/common:pre-merge-check
+/gate:check merge
 ```
 
 This runs:

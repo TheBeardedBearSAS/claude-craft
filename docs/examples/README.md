@@ -100,7 +100,7 @@ claude
 /symfony:check-architecture
 
 # 5. Commit
-/common:pre-commit-check
+/gate:check commit
 ```
 
 ### Implement Feature with TDD (15 minutes)
@@ -113,7 +113,7 @@ claude
 @dev Implement US-001 with TDD
 
 # 3. Validate
-/gate:validate-story US-001
+/gate:check story US-001
 
 # 4. Complete
 /sprint:transition US-001 done

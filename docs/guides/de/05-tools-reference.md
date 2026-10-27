@@ -39,7 +39,7 @@ Claude Code stellt eingebaute Befehle für die Kontext- und Sitzungsverwaltung b
 
 | Befehl | Version | Beschreibung |
 |--------|---------|--------------|
-| `/loop [interval] [befehl]` | v2.1.71+ | Wiederkehrende Aufgaben ausführen (z. B. `/loop 5m /common:pre-commit-check`) |
+| `/loop [interval] [befehl]` | v2.1.71+ | Wiederkehrende Aufgaben ausführen (z. B. `/loop 5m /gate:check commit`) |
 | `/proactive` | v2.1.105+ | Alias für `/loop` |
 | `/color` | v2.1.94+ | Farbschema des Terminals ändern |
 | `/rename` | v2.1.94+ | Aktuelle Sitzung umbenennen |

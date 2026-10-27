@@ -651,7 +651,7 @@ Regressionstests hinzugefügt:
 3. **Statische Analyse**: Werkzeuge finden häufige Fehler
 4. **Integrationstests**: Interaktionsfehler erkennen
 5. **Produktion überwachen**: Probleme frühzeitig erkennen
-6. **`/loop` verwenden**: Wiederkehrende Qualitätsprüfungen einrichten (z. B. `/loop 5m /common:pre-commit-check`)
+6. **`/loop` verwenden**: Wiederkehrende Qualitätsprüfungen einrichten (z. B. `/loop 5m /gate:check commit`)
 7. **Erkenntnisse speichern**: `/memory` verwenden, um Fehlermuster über Sitzungen hinweg zu persistieren
 
 ---

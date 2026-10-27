@@ -128,14 +128,14 @@ Ou usar: /sprint:next-story --claim
 
 Sugestoes:
 ──────────────────────────────────────────────────────
-1. Refinar as stories do backlog: /project:update-stories
+1. Refinar as stories do backlog: /project:migrate --stories
 2. Ajudar nas stories em andamento
 3. Desbloquear US-003: aguardando credenciais da API
-4. Ver grafo de dependencias: /project:dependencies
+4. Ver grafo de dependencias: /project:report deps
 
 Comandos:
   /sprint:status --bmad  Ver o status completo do sprint
-  /gate:validate-backlog Verificar a preparacao das stories
+  /gate:check backlog Verificar a preparacao das stories
 ═══════════════════════════════════════════════════════
 ```
 

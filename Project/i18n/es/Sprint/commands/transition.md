@@ -251,7 +251,7 @@ Al transicionar una story:
 ║    /sprint:dev — Desarrollar la story                    ║
 ║                                                          ║
 ║  → review:                                               ║
-║    /gate:validate-story — Validar la DoD                 ║
+║    /gate:check story — Validar la DoD                 ║
 ║                                                          ║
 ║  → done:                                                 ║
 ║    /sprint:next-story — Tomar la siguiente story         ║

@@ -128,14 +128,14 @@ Oder verwenden: /sprint:next-story --claim
 
 Vorschlaege:
 ──────────────────────────────────────────────────────
-1. Backlog-Stories verfeinern: /project:update-stories
+1. Backlog-Stories verfeinern: /project:migrate --stories
 2. Bei Stories in Bearbeitung unterstuetzen
 3. US-003 entsperren: Wartet auf API-Zugangsdaten
-4. Abhaengigkeitsgraph anzeigen: /project:dependencies
+4. Abhaengigkeitsgraph anzeigen: /project:report deps
 
 Befehle:
   /sprint:status --bmad  Vollstaendigen Sprint-Status sehen
-  /gate:validate-backlog Story-Bereitschaft pruefen
+  /gate:check backlog Story-Bereitschaft pruefen
 ═══════════════════════════════════════════════════════
 ```
 

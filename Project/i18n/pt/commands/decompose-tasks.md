@@ -84,7 +84,7 @@ project-management/sprints/sprint-$ARGUMENTS-{slug}/
 
 ### ETAPA 4: Template de decomposição de US
 
-Para cada US, adicionar uma seção em `tasks/README.md` usando o template abaixo e criar um arquivo `tasks/TASK-{ID}.md` por linha de tarefa a partir de `.claude/templates/project/task.md` (os IDs continuam após o último `TASK-*` existente, como faz `/project:add-task`):
+Para cada US, adicionar uma seção em `tasks/README.md` usando o template abaixo e criar um arquivo `tasks/TASK-{ID}.md` por linha de tarefa a partir de `.claude/templates/project/task.md` (os IDs continuam após o último `TASK-*` existente, como faz `/project:backlog add task`):
 
 ````markdown
 # Tarefas - US-XXX: [Título]

@@ -386,7 +386,7 @@ Sessao 2: Implementacao (codificar, testar)
 O comando `/loop` permite agendar tarefas recorrentes:
 
 ```bash
-/loop 5m /common:pre-commit-check    # Verificar a cada 5 minutos
+/loop 5m /gate:check commit    # Verificar a cada 5 minutos
 /loop "Monitorar testes CI"           # Auto-cadencia pelo modelo
 ```
 

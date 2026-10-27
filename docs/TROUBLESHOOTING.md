@@ -418,7 +418,7 @@ EOF
 
 **Diagnosis:**
 ```
-/gate:report
+/gate:check all
 ```
 
 **Common causes:**

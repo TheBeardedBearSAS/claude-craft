@@ -651,7 +651,7 @@ Testes de regressão adicionados:
 3. **Análise estática**: Ferramentas encontram erros comuns
 4. **Testes de integração**: Capturam bugs de interação
 5. **Monitorar produção**: Detectar problemas mais cedo
-6. **Use `/loop`**: Configure verificações de qualidade recorrentes (ex.: `/loop 5m /common:pre-commit-check`)
+6. **Use `/loop`**: Configure verificações de qualidade recorrentes (ex.: `/loop 5m /gate:check commit`)
 7. **Salve aprendizados**: Use `/memory` para persistir padrões de bugs entre sessões
 
 ---

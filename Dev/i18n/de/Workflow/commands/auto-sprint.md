@@ -14,7 +14,7 @@ Orchestrator-Kontext schlank bleibt. Die Implementierungsphase wird **von Ihnen 
 Dies automatisiert, was zuvor sechs manuelle Befehle mit einem `/clear` dazwischen erforderte:
 
 ```
-/workflow:start N -> /project:decompose-tasks 00N -> /gate:validate-sprint 00N
+/workflow:start N -> /project:decompose-tasks 00N -> /gate:check sprint 00N
 -> /team:sprint "sprint-00N" -> /workflow:review N -> /workflow:retro N
 ```
 

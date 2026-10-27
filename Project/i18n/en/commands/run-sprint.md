@@ -21,7 +21,7 @@ $ARGUMENTS (format: [--auto] [--dry-run])
 
 ### Step 1: Validate sprint
 
-1. Run `/gate:validate-sprint` to ensure sprint is ready
+1. Run `/gate:check sprint` to ensure sprint is ready
 2. If gate fails, show issues and exit
 3. Get sprint metadata
 
@@ -262,5 +262,5 @@ Checkpoint is saved after each story completion.
 
 Works with:
 - `/sprint:status --bmad` - View progress
-- `/gate:report` - Quality metrics
+- `/gate:check all` - Quality metrics
 - Ralph (if configured) - External orchestration

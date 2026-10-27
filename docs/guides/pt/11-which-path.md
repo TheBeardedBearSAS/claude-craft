@@ -19,7 +19,7 @@
         │              │              │                  │
         ▼              ▼              ▼                  ▼
    GREENFIELD      BROWNFIELD      BUGFIX         SPRINT AUTÔNOMO
-  /workflow:init  /project:scan   /qa:tdd         /workflow:auto-sprint N
+  /workflow:init  /project:reverse scan  /qa:tdd   /workflow:auto-sprint N
         │              │        (+ Quick Flow)          │
         ▼              ▼              ▼                  ▼
      Seção 2        Seção 3       Seção 4            Seção 5
@@ -63,16 +63,16 @@ Para uma versão narrada passo a passo, leia o [tutorial do workflow completo](1
 Você herdou (ou já escreveu) uma base de código, mas ninguém documentou o que ela faz. Primeiro faça a engenharia reversa do produto e depois junte-se ao caminho principal:
 
 ```
-/project:scan  →  /project:reverse-prd  →  /project:reverse-stories
-               →  /project:gap-analysis  →  /workflow:start
+/project:reverse scan  →  /project:reverse prd  →  /project:reverse stories
+               →  /project:reverse gaps  →  /workflow:start
 ```
 
 | Etapa | Comando | O que você obtém |
 |-------|---------|------------------|
-| 1 | `/project:scan` | Inventário da base de código: stack, estrutura, módulos |
-| 2 | `/project:reverse-prd` | Um PRD reconstruído a partir do que o código realmente faz |
-| 3 | `/project:reverse-stories` | Histórias de usuário deduzidas das funcionalidades existentes |
-| 4 | `/project:gap-analysis` | Funcionalidades ausentes, testes ausentes, dívida técnica |
+| 1 | `/project:reverse scan` | Inventário da base de código: stack, estrutura, módulos |
+| 2 | `/project:reverse prd` | Um PRD reconstruído a partir do que o código realmente faz |
+| 3 | `/project:reverse stories` | Histórias de usuário deduzidas das funcionalidades existentes |
+| 4 | `/project:reverse gaps` | Funcionalidades ausentes, testes ausentes, dívida técnica |
 | 5 | `/workflow:start` | Primeiro sprint planejado a partir das lacunas; continue com `/workflow:implement` |
 
 Veja também o [guia de integração em um projeto existente](09-setup-existing-project.md).
@@ -134,7 +134,7 @@ O comando mostra a fase atual, o progresso do sprint e a próxima ação recomen
 | Situação | Comece com | Depois |
 |----------|------------|--------|
 | Produto novo | `/workflow:init` | `/workflow:plan` → `/workflow:design` → `/workflow:start 1` |
-| Código existente, sem backlog | `/project:scan` | `/project:reverse-prd` → `/project:reverse-stories` → `/project:gap-analysis` → `/workflow:start` |
+| Código existente, sem backlog | `/project:reverse scan` | `/project:reverse prd` → `/project:reverse stories` → `/project:reverse gaps` → `/workflow:start` |
 | Bug | `/qa:tdd` | `/workflow:init --quick` |
 | Sprint planejado, sem intervenção | `/workflow:auto-sprint N` | Revisar a PR |
 | Perdido | `/workflow:status` | Seguir a ação recomendada |

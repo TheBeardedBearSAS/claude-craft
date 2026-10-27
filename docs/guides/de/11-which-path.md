@@ -19,7 +19,7 @@
         │              │              │                wollen
         ▼              ▼              ▼                  ▼
    GREENFIELD      BROWNFIELD      BUGFIX         AUTONOMER SPRINT
-  /workflow:init  /project:scan   /qa:tdd         /workflow:auto-sprint N
+  /workflow:init  /project:reverse scan  /qa:tdd   /workflow:auto-sprint N
         │              │        (+ Quick Flow)          │
         ▼              ▼              ▼                  ▼
      Abschnitt 2    Abschnitt 3   Abschnitt 4        Abschnitt 5
@@ -63,16 +63,16 @@ Eine erzählte Schritt-für-Schritt-Version finden Sie im [Tutorial zum komplett
 Sie übernehmen (oder haben bereits geschrieben) eine Codebasis, aber niemand hat dokumentiert, was sie tut. Rekonstruieren Sie zuerst das Produkt und schließen Sie sich dann dem Hauptweg an:
 
 ```
-/project:scan  →  /project:reverse-prd  →  /project:reverse-stories
-               →  /project:gap-analysis  →  /workflow:start
+/project:reverse scan  →  /project:reverse prd  →  /project:reverse stories
+               →  /project:reverse gaps  →  /workflow:start
 ```
 
 | Schritt | Befehl | Ergebnis |
 |---------|--------|----------|
-| 1 | `/project:scan` | Bestandsaufnahme der Codebasis: Stack, Struktur, Module |
-| 2 | `/project:reverse-prd` | Ein PRD, rekonstruiert aus dem, was der Code tatsächlich tut |
-| 3 | `/project:reverse-stories` | Aus vorhandenen Funktionen abgeleitete User Stories |
-| 4 | `/project:gap-analysis` | Fehlende Funktionen, fehlende Tests, technische Schulden |
+| 1 | `/project:reverse scan` | Bestandsaufnahme der Codebasis: Stack, Struktur, Module |
+| 2 | `/project:reverse prd` | Ein PRD, rekonstruiert aus dem, was der Code tatsächlich tut |
+| 3 | `/project:reverse stories` | Aus vorhandenen Funktionen abgeleitete User Stories |
+| 4 | `/project:reverse gaps` | Fehlende Funktionen, fehlende Tests, technische Schulden |
 | 5 | `/workflow:start` | Erster Sprint, aus den Lücken geplant; weiter mit `/workflow:implement` |
 
 Siehe auch den [Leitfaden zur Einrichtung in einem bestehenden Projekt](09-setup-existing-project.md).
@@ -134,7 +134,7 @@ Der Befehl zeigt die aktuelle Phase, den Sprint-Fortschritt und die empfohlene n
 | Situation | Beginnen mit | Danach |
 |-----------|--------------|--------|
 | Neues Produkt | `/workflow:init` | `/workflow:plan` → `/workflow:design` → `/workflow:start 1` |
-| Bestehender Code, kein Backlog | `/project:scan` | `/project:reverse-prd` → `/project:reverse-stories` → `/project:gap-analysis` → `/workflow:start` |
+| Bestehender Code, kein Backlog | `/project:reverse scan` | `/project:reverse prd` → `/project:reverse stories` → `/project:reverse gaps` → `/workflow:start` |
 | Bug | `/qa:tdd` | `/workflow:init --quick` |
 | Geplanter Sprint, ohne Eingriff | `/workflow:auto-sprint N` | PR prüfen |
 | Verloren | `/workflow:status` | Empfohlene Aktion befolgen |

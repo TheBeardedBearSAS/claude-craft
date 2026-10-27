@@ -138,8 +138,8 @@ Auswirkung: 14h blockiert (22% des Sprints)
 
 Aktionen:
   /project:board                    # Kanban anzeigen
-  /project:move-task TASK-XXX done  # Aufgabe abschließen
-  /project:list-tasks status blocked # Alle Blocker anzeigen
+  /project:backlog move task TASK-XXX done  # Aufgabe abschließen
+  /project:backlog list task status blocked # Alle Blocker anzeigen
 ```
 
 ## Beispiele

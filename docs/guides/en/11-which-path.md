@@ -18,7 +18,7 @@
         │              │                │             without babysitting
         ▼              ▼                ▼                  ▼
    GREENFIELD      BROWNFIELD        BUGFIX         AUTONOMOUS SPRINT
-  /workflow:init  /project:scan     /qa:tdd         /workflow:auto-sprint N
+  /workflow:init  /project:reverse scan  /qa:tdd   /workflow:auto-sprint N
         │              │          (+ Quick Flow)          │
         ▼              ▼                ▼                  ▼
      Section 2      Section 3       Section 4          Section 5
@@ -62,16 +62,16 @@ For a narrated, step-by-step version, read the [Complete Workflow tutorial](10-c
 You inherit (or already wrote) a codebase, but nobody documented what it does. Reverse-engineer the product first, then join the main path:
 
 ```
-/project:scan  →  /project:reverse-prd  →  /project:reverse-stories
-               →  /project:gap-analysis  →  /workflow:start
+/project:reverse scan  →  /project:reverse prd  →  /project:reverse stories
+               →  /project:reverse gaps  →  /workflow:start
 ```
 
 | Step | Command | What you get |
 |------|---------|--------------|
-| 1 | `/project:scan` | Inventory of the codebase: stack, structure, modules |
-| 2 | `/project:reverse-prd` | A PRD rebuilt from what the code actually does |
-| 3 | `/project:reverse-stories` | User stories inferred from existing features |
-| 4 | `/project:gap-analysis` | Missing features, missing tests, technical debt |
+| 1 | `/project:reverse scan` | Inventory of the codebase: stack, structure, modules |
+| 2 | `/project:reverse prd` | A PRD rebuilt from what the code actually does |
+| 3 | `/project:reverse stories` | User stories inferred from existing features |
+| 4 | `/project:reverse gaps` | Missing features, missing tests, technical debt |
 | 5 | `/workflow:start` | First sprint planned from the gaps; continue with `/workflow:implement` |
 
 See also the [Existing Project setup guide](09-setup-existing-project.md).
@@ -133,7 +133,7 @@ It shows the current phase, the progress of the sprint and the recommended next 
 | Situation | Start with | Then |
 |-----------|-----------|------|
 | New product | `/workflow:init` | `/workflow:plan` → `/workflow:design` → `/workflow:start 1` |
-| Existing code, no backlog | `/project:scan` | `/project:reverse-prd` → `/project:reverse-stories` → `/project:gap-analysis` → `/workflow:start` |
+| Existing code, no backlog | `/project:reverse scan` | `/project:reverse prd` → `/project:reverse stories` → `/project:reverse gaps` → `/workflow:start` |
 | Bug | `/qa:tdd` | `/workflow:init --quick` |
 | Planned sprint, hands-off | `/workflow:auto-sprint N` | Review the PR |
 | Lost | `/workflow:status` | Follow the recommended action |

@@ -535,7 +535,7 @@ See [Troubleshooting Guide](TROUBLESHOOTING.md) for more solutions.
 ### How do I create a user story?
 
 ```
-/project:add-story EPIC-001 "As a user, I want..."
+/project:backlog add story EPIC-001 "As a user, I want..."
 ```
 
 ### How do I track sprint progress?
@@ -616,11 +616,11 @@ Not recommended. Migrate projects one at a time.
 3. Generate code with `/symfony:generate-crud`
 4. Write tests with `@tdd-coach`
 5. Review with `@symfony-reviewer`
-6. Validate with `/common:pre-commit-check`
+6. Validate with `/gate:check commit`
 
 ### How often should I run audits?
 
-- **Pre-commit**: Always (`/common:pre-commit-check`)
+- **Pre-commit**: Always (`/gate:check commit`)
 - **Full audit**: Weekly or before releases
 - **Security audit**: Before each release
 

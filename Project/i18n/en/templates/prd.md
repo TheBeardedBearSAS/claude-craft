@@ -235,7 +235,7 @@ Every functional requirement in section 5 uses a unique FR-xxx ID. These IDs ser
 | Covered by Code | {n} | {%} |
 | Covered by Tests | {n} | {%} |
 
-> Run `/project:coverage-map` to generate an up-to-date coverage report.
+> Run `/project:trace --gaps` to generate an up-to-date coverage report.
 > Run `/project:trace` to view the full bidirectional traceability matrix.
 
 ---

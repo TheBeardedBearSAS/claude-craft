@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.25.0] - 2026-10-26
+
+Phase 2 de la feuille de route de simplification des commandes de gestion de projet : fusion de `/project:` et `/gate:` (5 langues).
+
+### Added
+
+- **`/project:backlog <add|list|edit|move> <epic|story|task>`** : gestion du backlog en une commande (statut dans `.bmad/sprint-status.yaml`).
+- **`/project:reverse [scan|prd|stories|gaps|all]`** : pipeline brownfield ; règles de personas dédupliquées.
+- **`/project:report <burndown|metrics|deps> [--critical]`** : analytique lue dans la YAML.
+- **`/project:migrate [--analyze|--dry-run|--resync|--stories]`** : migration one-shot vers BMAD v6.
+- **`/gate:check <prd|spec|backlog|sprint|story|alignment|commit|merge|release|all> [--phase=…]`** : toutes les quality gates (documents et code) sous un seul verbe, chemins par défaut `project-management/`.
+- `/project:trace` absorbe `coverage-map` (`--gaps`, `--by-priority`).
+- Tests : `tests/content/pm-phase2-merge.test.mjs` (commandes fusionnées et stubs) ; `namespace-integrity` vérifie aussi la parité des noms du dossier plat `Project/i18n/<lang>/commands/`.
+
+### Deprecated
+
+- **33 commandes remplacées par des stubs de redirection** (`deprecated: true`, `replaced-by`, < 500 o, retrait en 9.0) : `/project:add-*`, `list-*`, `update-epic|story`, `move-task`, `scan`, `reverse-prd`, `reverse-stories`, `gap-analysis`, `coverage-map`, `burndown`, `metrics`, `dependencies`, `critical-path`, `analyze-backlog`, `migrate-backlog`, `update-stories`, `sync-backlog`, `checkpoint` ; `/gate:validate-*` (6) et `/gate:report` ; `/common:pre-commit-check`, `pre-merge-check`, `release-checklist`. Les références des sources, de l'aide de l'installeur et de la documentation utilisent les nouvelles invocations.
+
+### Fixed
+
+- **CI** : `typescript` épinglé en 6.x (override) — la 7.0.2 résolue depuis #186 n'expose plus l'API JS appelée par Stryker, qui échouait avant toute mutation.
+
 ## [8.24.0] - 2026-10-26
 
 Phase 1 de la feuille de route de simplification des commandes de gestion de projet : source de vérité unique du statut et mécanisme de dépréciation (5 langues).

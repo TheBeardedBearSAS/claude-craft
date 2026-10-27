@@ -21,7 +21,7 @@ $ARGUMENTS (format: [--auto] [--dry-run])
 
 ### Étape 1 : Valider le sprint
 
-1. Exécuter `/gate:validate-sprint` pour s'assurer que le sprint est prêt
+1. Exécuter `/gate:check sprint` pour s'assurer que le sprint est prêt
 2. Si le gate échoue, afficher les problèmes et sortir
 3. Obtenir les métadonnées du sprint
 
@@ -262,5 +262,5 @@ Le checkpoint est sauvegardé après chaque story terminée.
 
 Fonctionne avec :
 - `/sprint:status --bmad` - Voir la progression
-- `/gate:report` - Métriques qualité
+- `/gate:check all` - Métriques qualité
 - Ralph (si configuré) - Orchestration externe

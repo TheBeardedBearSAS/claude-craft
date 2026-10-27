@@ -18,21 +18,21 @@ Llevarás TaskFlow desde una idea de una frase hasta un primer sprint revisado y
  IDEA
    │  /workflow:init        ← elige el track
    ▼
- BACKLOG ──/gate:validate-backlog──┐  (PRD ≥ 80%, INVEST 6/6)
-   │  /workflow:plan                │
-   ▼                                │
- TECH DESIGN ──/gate:validate-techspec──┐  (Tech Spec ≥ 90%)
-   │  /workflow:design                   │
-   ▼                                      │
- SPRINT PLAN ──/gate:validate-sprint──┐  (Sprint Ready 100%)
-   │  /workflow:start                  │
-   │  /project:decompose-tasks         │
-   ▼                                    │
- IMPLEMENTATION (TDD) ──/gate:validate-story──┐  (Story DoD 100%)
-   │  /sprint:dev                              │
-   ▼                                            │
+ BACKLOG ──/gate:check backlog──┐  (PRD ≥ 80%, INVEST 6/6)
+   │  /workflow:plan            │
+   ▼                            │
+ TECH DESIGN ──/gate:check spec──┐  (Tech Spec ≥ 90%)
+   │  /workflow:design           │
+   ▼                             │
+ SPRINT PLAN ──/gate:check sprint──┐  (Sprint Ready 100%)
+   │  /workflow:start              │
+   │  /project:decompose-tasks     │
+   ▼                               │
+ IMPLEMENTATION (TDD) ──/gate:check story──┐  (Story DoD 100%)
+   │  /sprint:dev                          │
+   ▼                                       │
  REVIEW + RETRO ──/workflow:review, /workflow:retro
-   │
+                                           │
    ▼
  NEXT SPRINT ↺
 ```
@@ -163,7 +163,7 @@ Claude te entrevista sobre TaskFlow y luego redacta un **PRD** (Product Requirem
 **Modo: Solo lectura.**
 
 ```
-/gate:validate-backlog
+/gate:check backlog
 ```
 
 Esta puerta verifica el backlog contra **INVEST (6/6)** y la cobertura del PRD (**≥ 80%**). Si falla, te indica exactamente qué historias son demasiado grandes, no testeables o no estimables. Corrígelas (vuelve a ejecutar `/workflow:plan` o edita las historias) hasta que la puerta esté en verde.
@@ -189,7 +189,7 @@ Claude (actuando como arquitecto) produce un **Tech Spec**: decisiones de arquit
 **Modo: Solo lectura.**
 
 ```
-/gate:validate-techspec
+/gate:check spec
 ```
 
 Umbral de la puerta: **Tech Spec ≥ 90%**. Señala el manejo de errores ausente, contratos indefinidos o diseños no testeables.
@@ -219,7 +219,7 @@ Cada historia se divide en **tareas** de ≤ 30 minutos, testeables de forma ind
 **Modo: Solo lectura.**
 
 ```
-/gate:validate-sprint
+/gate:check sprint
 ```
 
 Umbral de la puerta: **Sprint Ready 100%** — cada historia estimada, cada tarea definida, dependencias ordenadas. Verde significa que puedes empezar a codificar.
@@ -282,7 +282,7 @@ Esto abre un **tablero Kanban** local (sin SaaS, sin dependencias externas) que 
 backlog → ready-for-dev → in-progress → review → done   (any → blocked)
 ```
 
-Vistas complementarias: `/project:burndown` (burndown del sprint), `/project:dependencies`, `/project:critical-path`, `/project:metrics`.
+Vistas complementarias: `/project:report burndown` (burndown del sprint), `/project:report deps`, `/project:report deps --critical`, `/project:report metrics`.
 
 ### D.2 Por qué una tarjeta puede negarse a moverse
 
@@ -326,22 +326,22 @@ Ejecuta `/workflow:start` de nuevo para planificar el sprint 2 desde el backlog 
 # Paso A — Backlog
 /workflow:init                 # elige el track
 /workflow:plan                 # PRD + backlog
-/gate:validate-backlog         # INVEST 6/6, PRD ≥ 80%
+/gate:check backlog            # INVEST 6/6, PRD ≥ 80%
 
 # Paso B — Diseño + sprint
 /workflow:design               # tech spec
-/gate:validate-techspec        # Tech Spec ≥ 90%
+/gate:check spec               # Tech Spec ≥ 90%
 /workflow:start                # planifica el sprint
 /project:decompose-tasks       # historias → tareas
-/gate:validate-sprint          # Sprint Ready 100%
+/gate:check sprint             # Sprint Ready 100%
 
 # Paso C — Implementar (TDD)
 /sprint:dev                    # tarea por tarea Red/Green/Refactor
-/gate:validate-story US-001    # Story DoD 100%
+/gate:check story US-001       # Story DoD 100%
 
 # Paso D — Seguimiento
 /project:board                 # Kanban
-/project:burndown              # burndown
+/project:report burndown       # burndown
 
 # Paso E — Cerrar + repetir
 /workflow:review

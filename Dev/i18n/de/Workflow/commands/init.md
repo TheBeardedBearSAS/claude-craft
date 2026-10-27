@@ -120,7 +120,7 @@ Basierend auf dem Track den Workflow anzeigen:
 ║                                                           ║
 ║ Befehle:                                                  ║
 ║ • /qa:tdd    - Fix mit TDD                    ║
-║ • /project:add-task      - Arbeit verfolgen               ║
+║ • /project:backlog add task      - Arbeit verfolgen               ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```

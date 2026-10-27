@@ -453,7 +453,7 @@ Attendu : Claude devrait répondre en tant qu'agent TDD Coach avec des conseils 
 
 Essayez une commande simple :
 ```
-/common:pre-commit-check
+/gate:check commit
 ```
 
 Attendu : Claude devrait exécuter une vérification de qualité pré-commit (peut indiquer qu'il n'y a pas de changements si le projet est vide).
@@ -564,7 +564,7 @@ claude
 # Commandes courantes
 /common:analyze-feature     # Analyser les besoins
 /{tech}:generate-crud       # Générer du code CRUD
-/common:pre-commit-check    # Vérification qualité
+/gate:check commit         # Vérification qualité
 /common:security-audit      # Audit de sécurité
 ```
 

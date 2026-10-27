@@ -147,8 +147,8 @@ Impact: 14h blocked (22% of sprint)
 
 Actions:
   /project:board                    # View Kanban
-  /project:move-task TASK-XXX done  # Complete a task
-  /project:list-tasks status blocked # View all blockers
+  /project:backlog move task TASK-XXX done  # Complete a task
+  /project:backlog list task status blocked # View all blockers
 ```
 
 ## BMAD Output (with --bmad)

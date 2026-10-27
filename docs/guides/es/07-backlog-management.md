@@ -8,7 +8,7 @@ Flujo de trabajo completo para crear y gestionar un backlog SCRUM con Claude-Cra
 
 Claude-Craft proporciona un conjunto completo de comandos para gestionar tu product backlog siguiendo la metodología SCRUM:
 
-- **15 comandos slash** para operaciones de backlog
+- **Un único comando `/project:backlog`** (`add`, `list`, `edit`, `move`) más `/project:board` y `/sprint:*` para las operaciones de backlog; los antiguos `/project:add-*`, `list-*`, `update-*` y `move-task` están obsoletos y se eliminarán en 9.0
 - **5 plantillas** para estructura consistente
 - **Vertical slicing** obligatorio en todas las capas tecnológicas
 - **Validación del modelo INVEST** para las User Stories
@@ -162,17 +162,17 @@ Elementos de trabajo técnico dentro de una User Story:
 | Comando | Descripción |
 |---------|-------------|
 | `/project:generate-backlog [stack]` | Generar backlog completo desde specs |
-| `/project:add-epic` | Crear un nuevo EPIC |
-| `/project:add-story` | Añadir una User Story a un EPIC |
-| `/project:add-task` | Crear una tarea técnica para una US |
+| `/project:backlog add epic` | Crear un nuevo EPIC |
+| `/project:backlog add story` | Añadir una User Story a un EPIC |
+| `/project:backlog add task` | Crear una tarea técnica para una US |
 
 ### Comandos de Visualización
 
 | Comando | Descripción |
 |---------|-------------|
-| `/project:list-epics` | Mostrar todos los EPICs con su estado |
-| `/project:list-stories [filtro]` | Listar User Stories (por EPIC, Sprint, Estado) |
-| `/project:list-tasks [filtro]` | Listar tareas (por US, Sprint, Tipo, Estado) |
+| `/project:backlog list epic` | Mostrar todos los EPICs con su estado |
+| `/project:backlog list story [filtro]` | Listar User Stories (por EPIC, Sprint, Estado) |
+| `/project:backlog list task [filtro]` | Listar tareas (por US, Sprint, Tipo, Estado) |
 | `/project:board [sprint]` | Mostrar tablero Kanban |
 | `/sprint:status [sprint]` | Informe detallado de progreso del sprint |
 
@@ -181,16 +181,16 @@ Elementos de trabajo técnico dentro de una User Story:
 | Comando | Descripción |
 |---------|-------------|
 | `/sprint:transition [id] [estado/sprint]` | Cambiar estado de US o asignarla a un sprint |
-| `/project:move-task [id] [estado]` | Cambiar estado de una tarea |
-| `/project:update-epic [id]` | Modificar un EPIC existente |
-| `/project:update-story [id]` | Modificar una User Story existente |
+| `/project:backlog move task [id] [estado]` | Cambiar estado de una tarea |
+| `/project:backlog edit epic [id]` | Modificar un EPIC existente |
+| `/project:backlog edit story [id]` | Modificar una User Story existente |
 
 ### Comandos Avanzados
 
 | Comando | Descripción |
 |---------|-------------|
 | `/project:decompose-tasks [sprint]` | Descomponer las US del sprint en tareas |
-| `/gate:validate-backlog` | Auditar la calidad del backlog (conformidad SCRUM) |
+| `/gate:check backlog` | Auditar la calidad del backlog (conformidad SCRUM) |
 
 ---
 
@@ -206,7 +206,7 @@ Elementos de trabajo técnico dentro de una User Story:
 ### Paso 2: Validar la Calidad
 
 ```bash
-/gate:validate-backlog
+/gate:check backlog
 ```
 
 Esto genera `scrum-validation-report.md` con:
@@ -239,13 +239,13 @@ Crea un desglose detallado de tareas:
 
 ```bash
 # Mover la primera tarea a en progreso
-/project:move-task TASK-001 in-progress
+/project:backlog move task TASK-001 in-progress
 
 # Después, marcar como hecha
-/project:move-task TASK-001 done
+/project:backlog move task TASK-001 done
 
 # Si está bloqueada
-/project:move-task TASK-002 blocked "Esperando specs de la API"
+/project:backlog move task TASK-002 blocked "Esperando specs de la API"
 ```
 
 ### Paso 6: Seguir el Progreso
@@ -263,7 +263,7 @@ Usa `/loop` (v2.1.71+) para monitorear automáticamente el progreso del sprint:
 /loop 30m /sprint:status 1
 
 # Ejecutar verificaciones pre-commit cada 5 minutos durante el desarrollo
-/loop 5m /common:pre-commit-check
+/loop 5m /gate:check commit
 ```
 
 Alias: `/proactive` (v2.1.105+).
@@ -328,7 +328,7 @@ No se permiten User Stories solo de "Backend", solo de "Frontend" o solo de "Mó
 - [ ] Historias estimadas en puntos Fibonacci
 - [ ] Sprint 1 = Walking Skeleton
 - [ ] Definition of Done documentada
-- [ ] Backlog validado (`/gate:validate-backlog`)
+- [ ] Backlog validado (`/gate:check backlog`)
 
 ---
 

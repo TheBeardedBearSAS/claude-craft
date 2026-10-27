@@ -39,7 +39,7 @@ Claude Code provides built-in commands for context and session management. These
 
 | Command | Version | Description |
 |---------|---------|-------------|
-| `/loop [interval] [command]` | v2.1.71+ | Run recurring tasks (e.g., `/loop 5m /common:pre-commit-check`) |
+| `/loop [interval] [command]` | v2.1.71+ | Run recurring tasks (e.g., `/loop 5m /gate:check commit`) |
 | `/proactive` | v2.1.105+ | Alias for `/loop` |
 | `/color` | v2.1.94+ | Change terminal color scheme |
 | `/rename` | v2.1.94+ | Rename current session |

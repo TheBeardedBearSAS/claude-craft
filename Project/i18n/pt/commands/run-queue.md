@@ -133,7 +133,7 @@ Status do Sprint:
 
 Comandos:
   /sprint:status --bmad    Ver o status atualizado
-  /gate:report          Relatorio de qualidade
+  /gate:check all          Relatorio de qualidade
 ═══════════════════════════════════════════════════════
 ```
 
