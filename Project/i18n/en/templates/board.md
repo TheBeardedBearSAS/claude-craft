@@ -1,31 +1,44 @@
 # Sprint {NUMERO} - Kanban Board
 
+> **Generated view**: regenerated from `.bmad/sprint-status.yaml` by `/project:board`. Do not edit by hand.
 > **Sprint Goal**: {SPRINT_GOAL}
 > **Period**: {DATE_DEBUT} → {DATE_FIN}
 
 ---
 
-## 🔴 To Do
+## backlog
 
-_No tasks_
-
----
-
-## 🟡 In Progress
-
-_No tasks_
+_No stories_
 
 ---
 
-## ⏸️ Blocked
+## ready-for-dev
 
-_No blocked tasks_
+_No stories_
 
 ---
 
-## 🟢 Done
+## in-progress
 
-_No completed tasks_
+_No stories_
+
+---
+
+## review
+
+_No stories_
+
+---
+
+## blocked
+
+_No blocked stories_
+
+---
+
+## done
+
+_No completed stories_
 
 ---
 
@@ -49,4 +62,4 @@ _No completed tasks_
 
 ---
 
-_Last updated: {DATE}_
+_Last generated: {DATE}_

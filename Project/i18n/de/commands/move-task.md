@@ -19,34 +19,36 @@ $ARGUMENTS (Format: TASK-XXX Ziel)
 ## Strikter Workflow
 
 ```
-🔴 To Do ──→ 🟡 In Progress ──→ 🟢 Done
-     │              │
-     │              ↓
-     └────→ ⏸️ Blocked ←────┘
-                │
-                ↓
-           🟡 In Progress
+to-do ──→ in-progress ──→ done
+   │            │
+   │            ↓
+   └────→ blocked ←────┘
+              │
+              ↓
+         in-progress
 ```
 
 ### Erlaubte Übergänge
 
 | Von | Nach | Erlaubt |
 |--------|------|----------|
-| 🔴 To Do | 🟡 In Progress | ✅ |
-| 🔴 To Do | ⏸️ Blocked | ✅ |
-| 🔴 To Do | 🟢 Done | ❌ **Verboten** |
-| 🟡 In Progress | 🟢 Done | ✅ |
-| 🟡 In Progress | ⏸️ Blocked | ✅ |
-| 🟡 In Progress | 🔴 To Do | ✅ (Rollback) |
-| ⏸️ Blocked | 🟡 In Progress | ✅ |
-| 🟢 Done | 🟡 In Progress | ⚠️ (Wiedereröffnen) |
+| to-do | in-progress | ✅ |
+| to-do | blocked | ✅ |
+| to-do | done | ❌ **Verboten** |
+| in-progress | done | ✅ |
+| in-progress | blocked | ✅ |
+| in-progress | to-do | ✅ (Rollback) |
+| blocked | in-progress | ✅ |
+| done | in-progress | ⚠️ (Wiedereröffnen) |
+
+> Aufgabenstatus werden ausschließlich in `.bmad/sprint-status.yaml` gespeichert (`stories.<US>.tasks.status.<TASK>`), gemäß `.claude/templates/project/sprint-status.md`. Aufgaben- und US-Markdown-Dateien enthalten keinen Status.
 
 ## Prozess
 
 ### Schritt 1: Aufgabe validieren
 
 1. Aufgabendatei finden
-2. Aktuellen Status lesen
+2. Aktuellen Status aus `.bmad/sprint-status.yaml` lesen (`stories.<US>.tasks.status.<TASK>`)
 3. Zugehörige US und Sprint identifizieren
 
 ### Schritt 2: Übergang validieren
@@ -72,21 +74,19 @@ Zeit für TASK-XXX aufgewendet? (Schätzung: 4h)
 
 ### Schritt 5: Aufgabe aktualisieren
 
-1. Status in Metadaten ändern
-2. Blocker hinzufügen, falls Blocked
-3. Aufgewendete Zeit aktualisieren, falls Done
-4. Änderungsdatum aktualisieren
+1. Den neuen Status in `.bmad/sprint-status.yaml` schreiben: `stories.<US>.tasks.status.<TASK>` (Schema: `.claude/templates/project/sprint-status.md`); nie in die Aufgaben-Datei
+2. `stories.<US>.tasks.completed` neu berechnen (= Anzahl der `done`-Aufgaben)
+3. Nur Inhalt in der Aufgaben-Datei: Blocker-Text hinzufügen, falls Blocked, aufgewendete Zeit aktualisieren, falls Done, Änderungsdatum aktualisieren
 
 ### Schritt 6: Board aktualisieren
 
-1. Sprint-Board lesen
-2. Aufgabe in neue Spalte verschieben
-3. Metriken aktualisieren
+1. Das `board.md` des Sprints aus `.bmad/sprint-status.yaml` neu generieren (generierte Ansicht, nie von Hand bearbeitet)
+2. Metriken aktualisieren
 
 ### Schritt 7: User Story aktualisieren
 
-1. Aufgabenliste aktualisieren
-2. Fortschritt neu berechnen
+1. Aufgabenliste aktualisieren (nur Inhalt)
+2. Fortschritt aus `.bmad/sprint-status.yaml` neu berechnen
 3. Falls alle Aufgaben Done, Abschluss der US vorschlagen
 
 ### Schritt 8: Index aktualisieren
@@ -101,8 +101,8 @@ Zeit für TASK-XXX aufgewendet? (Schätzung: 4h)
 ✅ Aufgabe verschoben!
 
 🔧 TASK-003: Login API Endpoint
-   Vorher: 🔴 To Do
-   Nachher: 🟡 In Progress
+   Vorher: to-do
+   Nachher: in-progress
 
 📖 US-001: Benutzer-Login
    Fortschritt: 2/6 → 3/6 (50%)
@@ -118,7 +118,7 @@ Nächste Schritte:
 ✅ Aufgabe abgeschlossen!
 
 🔧 TASK-003: Login API Endpoint
-   Status: 🟡 In Progress → 🟢 Done
+   Status: in-progress → done
    Schätzung: 4h
    Tatsächliche Zeit: 3.5h ✓
 
@@ -136,7 +136,7 @@ Sprint 1:
 ✅ Aufgabe abgeschlossen!
 
 🔧 TASK-006: AuthService Tests
-   Status: 🟢 Done
+   Status: done
 
 🎉 Alle Aufgaben von US-001 abgeschlossen!
 
@@ -153,8 +153,8 @@ Empfohlener nächster Schritt:
 ❌ Übergang nicht erlaubt!
 
 🔧 TASK-004: Auth Controller
-   Aktueller Status: 🔴 To Do
-   Angeforderter Übergang: → 🟢 Done
+   Aktueller Status: to-do
+   Angeforderter Übergang: → done
 
 Regel: Eine Aufgabe muss durch "In Progress" gehen, bevor sie "Done" sein kann
 
@@ -170,7 +170,7 @@ Korrekte Aktion:
 ✅ Aufgabe als blockiert markiert
 
 🔧 TASK-005: Login Screen
-   Status: 🟡 In Progress → ⏸️ Blocked
+   Status: in-progress → blocked
    Blocker: Warte auf Auth API (TASK-003)
 
 Zum Entblocken:

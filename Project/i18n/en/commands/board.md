@@ -22,8 +22,10 @@ $ARGUMENTS (optional, format: [sprint N])
 
 ### Step 2: Read data
 
-1. Read file `project-management/sprints/sprint-{N}-{slug}/board.md`
-2. Or regenerate from task files
+1. Read the statuses from `.bmad/sprint-status.yaml` (single source of truth: `stories.<US>.status`, `stories.<US>.tasks.status.<TASK>`)
+2. Read content (titles, estimates, types) from the US and task markdown files
+
+See `.claude/templates/project/sprint-status.md` for the schema.
 
 ### Step 3: Group by status
 
@@ -131,4 +133,4 @@ Progress: 13/32 (41%) | 45h/98h
 
 ## Update board.md file
 
-After display, the sprint's `board.md` file is updated with current data.
+`board.md` is a generated view. After display, the sprint's `board.md` file is regenerated from `.bmad/sprint-status.yaml` (template `.claude/templates/project/board.md`); it is never edited by hand and never the source of a status.

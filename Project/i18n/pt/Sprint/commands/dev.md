@@ -154,8 +154,8 @@ O modo de planejamento DEVE:
 #### 3.3 Marcar Tarefa → Em Andamento
 
 Após a validação do plano:
-- Atualizar o status da tarefa para Em Andamento
-- Atualizar board.md
+- Em `.bmad/sprint-status.yaml` (schema: `.claude/templates/project/sprint-status.md`): definir `stories.<US>.tasks.status.<TASK>: in-progress` e, para a primeira tarefa de uma story `ready-for-dev`, fazer a transição da story para `in-progress` (`status`, `previous_status`, `tdd_phase`, entrada em `history`)
+- Regenerar board.md (visão gerada)
 - Atualizar index.md
 
 #### 3.4 Ciclo TDD
@@ -213,8 +213,9 @@ Inserir tempo real gasto (horas): 1.5
 ```
 
 Atualizações:
-- Metadados do arquivo de tarefa (status, time_spent, updated_at)
-- board.md
+- `.bmad/sprint-status.yaml`: `tasks.status.<TASK>: done`, `tasks.completed` (= número de tarefas `done`)
+- Metadados de conteúdo do arquivo de tarefa (time_spent, updated_at; sem status)
+- board.md (regenerado a partir do YAML)
 - index.md
 - Métricas do sprint
 
@@ -257,7 +258,7 @@ Verificando critérios de aceitação:
 Executando testes E2E se presentes...
 ✓ tests/E2E/AuthenticationTest.php passou
 
-US-001 → 🟢 Concluída
+US-001 → done
 
 Atualizando progresso da EPIC-001: 1/3 US concluídas (33%)
 ```
@@ -346,12 +347,14 @@ Avançando para TASK-004...
 
 A cada mudança de status:
 
-1. **Arquivo de tarefa**: Atualizar status, time_spent, updated_at
-2. **Arquivo de User Story**: Atualizar progresso das tarefas, status se todas concluídas
-3. **Arquivo EPIC**: Atualizar progresso das US
-4. **board.md**: Atualizar colunas Kanban
-5. **index.md**: Atualizar métricas globais
-6. **sprint-status**: Recalcular métricas
+Todos os status são escritos em `.bmad/sprint-status.yaml` (schema: `.claude/templates/project/sprint-status.md`); os arquivos markdown recebem apenas conteúdo.
+
+1. **sprint-status.yaml**: status da tarefa (`to-do | in-progress | done | blocked`), `tasks.completed`, `tdd_phase` e transições da story (`ready-for-dev` → `in-progress` → `review` → `done`) com `previous_status` e uma entrada em `history`
+2. **Arquivo de tarefa**: Atualizar time_spent, updated_at (sem status)
+3. **Arquivo de User Story**: Atualizar a exibição do progresso das tarefas (sem status)
+4. **Arquivo EPIC**: Atualizar progresso das US (o status do EPIC é derivado)
+5. **board.md**: Regenerar as colunas Kanban a partir do YAML
+6. **index.md**: Atualizar métricas globais
 
 ---
 
@@ -425,10 +428,11 @@ Continuar a partir de TASK-009? [s/n]
 
 | Arquivo | Atualizações |
 |---------|--------------|
-| `project-management/backlog/user-stories/US-XXX.md` | Status, progresso de tarefas |
+| `.bmad/sprint-status.yaml` | Status da story, `tdd_phase`, status das tarefas, `tasks.completed`, history (fonte única do status) |
+| `project-management/backlog/user-stories/US-XXX.md` | Progresso das tarefas (apenas conteúdo, sem status) |
 | `project-management/backlog/epics/EPIC-XXX.md` | Progresso de US |
-| `project-management/sprints/sprint-N-*/board.md` | Colunas Kanban |
-| `project-management/sprints/sprint-N-*/tasks/*.md` | Status da tarefa, tempo |
+| `project-management/sprints/sprint-N-*/board.md` | Colunas Kanban (regeneradas a partir do YAML) |
+| `project-management/sprints/sprint-N-*/tasks/*.md` | Tempo gasto (sem status) |
 | `project-management/backlog/index.md` | Métricas globais |
 | `project-management/sprints/sprint-N-*/sprint-review.md` | Gerado ao final |
 

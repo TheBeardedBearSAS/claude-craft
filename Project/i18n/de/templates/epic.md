@@ -2,7 +2,7 @@
 
 ## Metadaten
 - **ID**: EPIC-{ID}
-- **Status**: 🔴 To Do
+- **Status**: abgeleitet aus seinen Stories in .bmad/sprint-status.yaml
 - **Priorität**: {PRIORITE}
 - **MMF**: {MINIMUM_MARKETABLE_FEATURE}
 - **Erstellt am**: {DATE}
@@ -19,9 +19,9 @@
 
 ## User Stories
 
-| ID | Name | Status | Punkte | Sprint |
-|----|-----|--------|--------|--------|
-| - | - | - | - | - |
+| ID | Name | Punkte | Sprint |
+|----|-----|--------|--------|
+| - | - | - | - |
 
 ## Erfolgskriterien
 

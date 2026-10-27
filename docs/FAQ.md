@@ -639,7 +639,7 @@ Use the command:
 /common:add-technology "nextjs"
 ```
 
-This generates all files for 5 languages.
+This generates all files for 5 languages. The command is maintainer-only: run it from a clone of the claude-craft repository (it is not installed in projects since 8.24.0).
 
 ### How do I report a bug?
 

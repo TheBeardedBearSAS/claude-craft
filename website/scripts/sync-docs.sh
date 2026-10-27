@@ -68,6 +68,7 @@ guide_meta_description() {
     fr:08-setup-new-project) echo "Configurez Claude Craft sur un nouveau projet : installation, choix des technologies et premiers réglages." ;;
     fr:09-setup-existing-project) echo "Intégrez Claude Craft à un projet existant : migration progressive, configuration et bonnes pratiques d'adoption." ;;
     fr:10-complete-workflow) echo "Le workflow complet Claude Craft de bout en bout : planification, conception, implémentation et revue de sprint." ;;
+    fr:11-which-path) echo "Quel chemin choisir avec Claude Craft : greenfield, brownfield, correction de bug ou sprint autonome, avec la séquence de commandes de chacun." ;;
 
     es:01-getting-started) echo "Primeros pasos con Claude Craft: instalación, configuración inicial y puesta en marcha de tu primer proyecto con Claude Code." ;;
     es:02-project-creation) echo "Crea un nuevo proyecto con Claude Craft: estructura, tecnologías compatibles y buenas prácticas desde el inicio." ;;
@@ -79,6 +80,7 @@ guide_meta_description() {
     es:08-setup-new-project) echo "Configura Claude Craft en un proyecto nuevo: instalación, elección de tecnologías y primeros ajustes." ;;
     es:09-setup-existing-project) echo "Integra Claude Craft en un proyecto existente: migración progresiva, configuración y buenas prácticas de adopción." ;;
     es:10-complete-workflow) echo "El flujo de trabajo completo de Claude Craft de principio a fin: planificación, diseño, implementación y revisión del sprint." ;;
+    es:11-which-path) echo "Qué camino elegir con Claude Craft: greenfield, brownfield, corrección de bugs o sprint autónomo, con la secuencia de comandos de cada uno." ;;
 
     de:01-getting-started) echo "Erste Schritte mit Claude Craft: Installation, Erstkonfiguration und Start Ihres ersten Projekts mit Claude Code." ;;
     de:02-project-creation) echo "Erstellen Sie ein neues Projekt mit Claude Craft: Struktur, unterstützte Technologien und Best Practices von Anfang an." ;;
@@ -90,6 +92,7 @@ guide_meta_description() {
     de:08-setup-new-project) echo "Richten Sie Claude Craft in einem neuen Projekt ein: Installation, Technologieauswahl und erste Einstellungen." ;;
     de:09-setup-existing-project) echo "Integrieren Sie Claude Craft in ein bestehendes Projekt: schrittweise Migration, Konfiguration und Best Practices." ;;
     de:10-complete-workflow) echo "Der komplette Claude-Craft-Workflow von Anfang bis Ende: Planung, Design, Umsetzung und Sprint-Review." ;;
+    de:11-which-path) echo "Welcher Weg mit Claude Craft: Greenfield, Brownfield, Bugfix oder autonomer Sprint, jeweils mit der passenden Befehlsfolge." ;;
 
     pt:01-getting-started) echo "Primeiros passos com o Claude Craft: instalação, configuração inicial e início do seu primeiro projeto com Claude Code." ;;
     pt:02-project-creation) echo "Crie um novo projeto com o Claude Craft: estrutura, tecnologias suportadas e boas práticas desde o início." ;;
@@ -101,6 +104,7 @@ guide_meta_description() {
     pt:08-setup-new-project) echo "Configure o Claude Craft em um novo projeto: instalação, escolha de tecnologias e primeiros ajustes." ;;
     pt:09-setup-existing-project) echo "Integre o Claude Craft a um projeto existente: migração progressiva, configuração e boas práticas de adoção." ;;
     pt:10-complete-workflow) echo "O fluxo de trabalho completo do Claude Craft de ponta a ponta: planejamento, design, implementação e revisão do sprint." ;;
+    pt:11-which-path) echo "Qual caminho seguir com o Claude Craft: greenfield, brownfield, correção de bugs ou sprint autônomo, com a sequência de comandos de cada um." ;;
 
     *) echo "" ;;
   esac

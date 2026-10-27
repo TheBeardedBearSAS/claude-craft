@@ -66,10 +66,17 @@ Ask the user:
 
 4. Create file: `project-management/backlog/user-stories/US-{ID}-{slug}.md`
 
+### Step 5b: Register the status in `.bmad/sprint-status.yaml`
+
+The US file holds content only. The status lives in `.bmad/sprint-status.yaml` (single source of truth), following the schema in `.claude/templates/project/sprint-status.md`:
+
+1. Create `.bmad/sprint-status.yaml` from the `/workflow:init` skeleton if missing
+2. Add `stories.US-{ID}` with `title`, `status: backlog`, `story_points`, `epic_id`, `priority`, `dependencies: []`, `tasks: { total: 0, completed: 0, list: [] }`, `history: []`
+
 ### Step 6: Update EPIC
 
 1. Read EPIC file
-2. Add US to User Stories table
+2. Add US to User Stories table (no status column: the EPIC status is derived from its stories)
 3. Update progress
 4. Save
 
@@ -87,7 +94,7 @@ Ask the user:
 
 📖 US-{ID}: {NAME}
    EPIC: {EPIC_ID}
-   Status: 🔴 To Do
+   Status: backlog (.bmad/sprint-status.yaml)
    Points: {POINTS}
    File: project-management/backlog/user-stories/US-{ID}-{slug}.md
 

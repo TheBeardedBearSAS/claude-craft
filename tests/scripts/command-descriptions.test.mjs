@@ -100,3 +100,78 @@ describe('command descriptions', () => {
     expect(offenders, `${offenders.length} command(s) missing a description`).toEqual([]);
   });
 });
+
+/**
+ * Deprecation stubs (roadmap PM 86 → 34): an old command kept until 9.0 as a
+ * redirect. Contract: `deprecated: true`, `replaced-by: /ns:cmd` pointing to a
+ * live (non-deprecated) command of the same language, and a body small enough
+ * (< 500 bytes) to be exempt from the i18n size-parity check.
+ */
+const STUB_MAX_BYTES = 500;
+
+function frontmatterOf(raw) {
+  const match = FRONTMATTER_RE.exec(raw);
+  if (!match) return null;
+  try {
+    return yaml.load(match[1]);
+  } catch {
+    return null;
+  }
+}
+
+// `/ns:cmd` -> candidate files next to the stub (same i18n language, or base).
+function resolveCommand(stubFile, ref) {
+  const m = /^\/([a-z][a-z0-9]*):([a-z0-9][a-z0-9-]*)$/.exec(ref ?? '');
+  if (!m) return null;
+  const [, ns, name] = m;
+  const rel = path.relative(PROJECT_ROOT, stubFile).split(path.sep);
+  if (rel[0] === '.claude') return [path.join(PROJECT_ROOT, '.claude/commands', ns, `${name}.md`)];
+  const lang = rel[2];
+  const out = [];
+  for (const root of ['Dev', 'Infra', 'Project']) {
+    for (const l of [lang, 'base']) {
+      const langDir = path.join(PROJECT_ROOT, root, 'i18n', l);
+      if (!fs.existsSync(langDir)) continue;
+      if (ns === root.toLowerCase()) out.push(path.join(langDir, 'commands', `${name}.md`));
+      for (const d of fs.readdirSync(langDir)) {
+        if (d.toLowerCase() === ns) out.push(path.join(langDir, d, 'commands', `${name}.md`));
+      }
+    }
+  }
+  return out;
+}
+
+function stubViolations(file, raw) {
+  const data = frontmatterOf(raw);
+  if (!data || data.deprecated !== true) return [];
+  const where = path.relative(PROJECT_ROOT, file);
+  const out = [];
+  if (Buffer.byteLength(raw) >= STUB_MAX_BYTES) out.push(`${where}: stub is ${Buffer.byteLength(raw)} bytes (max ${STUB_MAX_BYTES - 1})`);
+  const candidates = resolveCommand(file, data['replaced-by']);
+  if (!candidates) return [...out, `${where}: replaced-by must be "/ns:cmd", got ${JSON.stringify(data['replaced-by'])}`];
+  const target = candidates.find((f) => fs.existsSync(f));
+  if (!target) out.push(`${where}: replaced-by ${data['replaced-by']} does not resolve`);
+  else if (frontmatterOf(fs.readFileSync(target, 'utf8'))?.deprecated === true) out.push(`${where}: replaced-by ${data['replaced-by']} is itself deprecated`);
+  return out;
+}
+
+describe('deprecation stubs', () => {
+  const sample = path.join(PROJECT_ROOT, 'Project/i18n/en/commands/sample-stub.md');
+
+  it('accepts a small stub redirecting to a live command', () => {
+    const raw = '---\ndescription: "Deprecated: use /project:add-story"\ndeprecated: true\nreplaced-by: /project:add-story\n---\n\nRun /project:add-story $ARGUMENTS.\n';
+    expect(stubViolations(sample, raw)).toEqual([]);
+  });
+
+  it('rejects an unresolvable replaced-by, a missing one and an oversized body', () => {
+    const fm = (by) => `---\ndescription: d\ndeprecated: true\n${by}---\n`;
+    expect(stubViolations(sample, fm('replaced-by: /project:nope\n'))).toHaveLength(1);
+    expect(stubViolations(sample, fm(''))).toHaveLength(1);
+    expect(stubViolations(sample, fm('replaced-by: /project:add-story\n') + 'x'.repeat(600))).toHaveLength(1);
+  });
+
+  it('every deprecated command honours the stub contract', () => {
+    const offenders = COMMAND_FILES.flatMap((f) => stubViolations(f, fs.readFileSync(f, 'utf8')));
+    expect(offenders).toEqual([]);
+  });
+});

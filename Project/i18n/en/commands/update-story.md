@@ -29,6 +29,8 @@ $ARGUMENTS (format: US-XXX [field] [value])
 | `story` | US text | "As a..." |
 | `criteria` | Acceptance criteria | (interactive mode) |
 
+> **Status is not editable here.** Statuses live in `.bmad/sprint-status.yaml`. To change a story status use `/sprint:transition`; for a task status use `/project:move-task`.
+
 ## Process
 
 ### Interactive Mode (without field arguments)

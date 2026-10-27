@@ -1,31 +1,44 @@
 # Sprint {NUMERO} - Quadro Kanban
 
+> **Visão gerada**: regenerada a partir de `.bmad/sprint-status.yaml` por `/project:board`. Não editar manualmente.
 > **Objetivo do Sprint**: {SPRINT_GOAL}
 > **Período**: {DATE_DEBUT} → {DATE_FIN}
 
 ---
 
-## 🔴 A Fazer
+## backlog
 
-_Nenhuma tarefa_
-
----
-
-## 🟡 Em Andamento
-
-_Nenhuma tarefa_
+_Nenhuma story_
 
 ---
 
-## ⏸️ Bloqueado
+## ready-for-dev
 
-_Nenhuma tarefa bloqueada_
+_Nenhuma story_
 
 ---
 
-## 🟢 Concluído
+## in-progress
 
-_Nenhuma tarefa concluída_
+_Nenhuma story_
+
+---
+
+## review
+
+_Nenhuma story_
+
+---
+
+## blocked
+
+_Nenhuma story bloqueada_
+
+---
+
+## done
+
+_Nenhuma story concluída_
 
 ---
 
@@ -49,4 +62,4 @@ _Nenhuma tarefa concluída_
 
 ---
 
-_Última atualização: {DATE}_
+_Última geração: {DATE}_

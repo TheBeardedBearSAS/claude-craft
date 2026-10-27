@@ -22,8 +22,10 @@ $ARGUMENTS (optional, Format: [sprint N])
 
 ### Schritt 2: Daten lesen
 
-1. Datei `project-management/sprints/sprint-{N}-{slug}/board.md` lesen
-2. Oder aus Aufgabendateien regenerieren
+1. Die Status aus `.bmad/sprint-status.yaml` lesen (einzige Quelle der Wahrheit: `stories.<US>.status`, `stories.<US>.tasks.status.<TASK>`)
+2. Den Inhalt (Titel, Schätzungen, Typen) aus den Markdown-Dateien der US und Aufgaben lesen
+
+Das Schema steht in `.claude/templates/project/sprint-status.md`.
 
 ### Schritt 3: Nach Status gruppieren
 
@@ -131,4 +133,4 @@ Fortschritt: 13/32 (41%) | 45h/98h
 
 ## board.md-Datei aktualisieren
 
-Nach der Anzeige wird die `board.md`-Datei des Sprints mit aktuellen Daten aktualisiert.
+`board.md` ist eine generierte Ansicht. Nach der Anzeige wird die `board.md`-Datei des Sprints aus `.bmad/sprint-status.yaml` neu generiert (Vorlage `.claude/templates/project/board.md`); sie wird nie von Hand bearbeitet und ist nie die Quelle eines Status.

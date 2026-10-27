@@ -76,10 +76,12 @@ describe('current sprint stories surfaced', () => {
     expect(story.dependencies).toContain('US-E4-02');
   });
 
-  it('keeps a YAML-only story read-only (no backing markdown file)', () => {
+  it('keeps no markdown file for a YAML-only story; its status is written to sprint-status.yaml', () => {
     const story = repo.getStory('US-E4-03');
-    expect(story._writable).toBe(false);
+    expect(repo.getStoryFile('US-E4-03')).toBeNull();
     expect(story._source).toBe('sprint-status');
+    expect(story._statusSource).toBe('sprint-status');
+    expect(story._writable).toBe(true);
   });
 
   it('handles assigned_to:null and role assignees without crashing', () => {

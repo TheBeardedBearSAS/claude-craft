@@ -128,10 +128,11 @@ export class Repository {
   }
 
   /**
-   * Overlay stories declared in <projectRoot>/.bmad/sprint-status.yaml that have
-   * no backing markdown file. Markdown-backed stories (already in this.stories)
-   * always win — the YAML entry is ignored for a colliding id so there is no
-   * double source of truth. Synthetic stories are read-only (path === null).
+   * .bmad/sprint-status.yaml is the single source of truth for story STATUS;
+   * markdown files hold the CONTENT. For an id present in both, the markdown
+   * entry keeps its content and takes its status fields from the YAML. Ids
+   * only present in the YAML become synthetic stories (no backing file).
+   * Either way the status is written back to the YAML (statusSource).
    */
   async #ingestSprintStatusStories() {
     const ss = await this.#loadStatusOnce();
@@ -141,12 +142,26 @@ export class Repository {
     const epicFromMeta = ss.metadata?.epic ?? null;
 
     for (const [id, s] of Object.entries(ss.stories)) {
-      if (this.stories.has(id)) continue; // markdown-backed story wins
+      const existing = this.stories.get(id);
+      if (existing) {
+        if (existing.ok) {
+          existing.data = {
+            ...existing.data,
+            status: s.status,
+            previous_status: s.previous_status ?? '',
+            tdd_phase: s.tdd_phase ?? existing.data.tdd_phase ?? '',
+            blocked_reason: s.blocked_reason ?? '',
+          };
+          existing.statusSource = 'sprint-status';
+        }
+        continue;
+      }
       this.stories.set(id, {
-        path: null, // no backing file -> read-only
+        path: null, // no backing file: content is the YAML entry only
         mtime: 0,
         ok: true,
         source: 'sprint-status',
+        statusSource: 'sprint-status',
         data: {
           id,
           title: s.title ?? id,
@@ -218,7 +233,7 @@ export class Repository {
       if (sprintId && d.sprint_id !== sprintId) continue;
       if (status && d.status !== status) continue;
       if (epicId && d.epic_id !== epicId) continue;
-      out.push({ ...d, _mtime: entry.mtime, _source: entry.source ?? 'markdown', _writable: isWritable(entry) });
+      out.push(view(entry));
     }
     return out.sort((a, b) => a.id.localeCompare(b.id));
   }
@@ -230,7 +245,7 @@ export class Repository {
   getStory(id) {
     const entry = this.stories.get(id);
     if (!entry || !entry.ok) return null;
-    return { ...entry.data, _mtime: entry.mtime, _source: entry.source ?? 'markdown', _writable: isWritable(entry) };
+    return view(entry);
   }
 
   getStoryFile(id) {
@@ -308,7 +323,19 @@ function sourceOf(res) {
 }
 
 function isWritable(entry) {
+  if (entry.statusSource === 'sprint-status') return true;
   return entry.path !== null && entry.source !== 'markdown-metadata';
+}
+
+function view(entry) {
+  const source = entry.source ?? 'markdown';
+  return {
+    ...entry.data,
+    _mtime: entry.mtime,
+    _source: source,
+    _statusSource: entry.statusSource ?? source,
+    _writable: isWritable(entry),
+  };
 }
 
 export function detectCycles(nodes, edges) {

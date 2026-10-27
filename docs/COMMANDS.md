@@ -165,7 +165,7 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 
 | Command | Description |
 |---------|-------------|
-| `/common:add-technology` | Add a new technology to claude-craft |
+| `/common:add-technology` | Add a new technology to claude-craft (maintainer-only: available in a clone of the claude-craft repository, not installed in projects since 8.24.0) |
 
 Add a complete technology stack to claude-craft with best practices:
 

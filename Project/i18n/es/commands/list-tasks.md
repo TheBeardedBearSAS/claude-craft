@@ -13,7 +13,7 @@ $ARGUMENTS (opcional, formato: [filtro] [valor])
 - **us US-XXX**: Filtrar por User Story
 - **sprint N**: Filtrar por sprint
 - **type TYPE**: Filtrar por tipo (DB, BE, FE-WEB, FE-MOB, TEST, DOC, OPS, REV)
-- **status STATUS**: Filtrar por estado (todo, in-progress, blocked, done)
+- **status STATUS**: Filtrar por estado (to-do, in-progress, blocked, done)
 
 ## Proceso
 
@@ -23,7 +23,8 @@ $ARGUMENTS (opcional, formato: [filtro] [valor])
    - `project-management/sprints/sprint-{N}-{slug}/tasks/`
    - `project-management/backlog/tasks/` (si existe)
 2. Leer cada archivo TASK-XXX.md
-3. Extraer metadatos
+3. Extraer los metadatos de contenido (tipo, descripción, estimación)
+4. Leer el estado de cada tarea desde `.bmad/sprint-status.yaml` (`stories.<US>.tasks.status.<TASK>`, única fuente de verdad, esquema: `.claude/templates/project/sprint-status.md`)
 
 ### Paso 2: Filtrar
 

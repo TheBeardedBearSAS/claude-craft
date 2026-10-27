@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.24.0] - 2026-10-26
+
+Phase 1 de la feuille de route de simplification des commandes de gestion de projet : source de vérité unique du statut et mécanisme de dépréciation (5 langues).
+
+### Added
+
+- **Schéma canonique `.bmad/sprint-status.yaml`** : nouveau template `templates/sprint-status.md` (installé dans `.claude/templates/project/`), validé par le schéma Kanban. Statuts de story `backlog | ready-for-dev | in-progress | review | done | blocked`, statuts de tâche `to-do | in-progress | done | blocked` (`tasks.status`, accepté par le schéma zod), `history`, `routing.auto_transitions`.
+- **Retrait de commandes à l'upgrade** : manifeste `config/removed-commands.yaml` (publié dans le paquet npm) et `Dev/scripts/prune-removed-commands.sh`, appelé par les deux installeurs et par `claude-craft update`. Jusqu'ici, aucune mise à jour ne supprimait de fichier.
+- **Contrat des stubs de dépréciation** (`deprecated: true`, `replaced-by: /ns:cmd` qui résout vers une commande active, corps < 500 o), vérifié par `tests/scripts/command-descriptions.test.mjs` ; les stubs ne sont pas listés dans le `CLAUDE.md` généré.
+- **Guide « Quel parcours ? »** (`docs/guides/<lang>/11-which-path.md`) : greenfield, brownfield, bugfix, sprint autonome ; lié depuis `/common:getting-started`, `/workflow:init`, le README et la barre latérale du site.
+
+### Changed
+
+- **`.bmad/sprint-status.yaml` = seule source de vérité du statut** : `add-story`, `add-task`, `move-task`, `decompose-tasks`, `/sprint:dev` et `/sprint:transition` écrivent le statut dans la YAML ; `board` et `list-*` l'y lisent ; le statut d'un epic est dérivé de ses stories ; les templates story/epic/task/board ne portent plus de statut ni d'emoji (contenu seul). `sync-backlog` ne réconcilie plus que le contenu.
+- **Kanban** : pour une story suivie dans la YAML, le markdown fournit le contenu et la YAML le statut ; un déplacement de carte écrit le statut (et une entrée `history`) dans la YAML au lieu du frontmatter. Les stories présentes uniquement dans la YAML deviennent déplaçables.
+
+### Removed
+
+- **Commandes mainteneur non distribuées** : `/common:add-technology`, `/common:audit-claude-alignment`, `/common:audit-freshness` restent dans le dépôt (`.claude/commands/common/`) mais ne sont plus installées dans les projets ; elles sont supprimées à l'upgrade via le manifeste.
+
 ## [8.23.4] - 2026-10-26
 
 Phase 0 de la feuille de route de simplification des commandes de gestion de projet : corrections de cohérence, surface de commandes inchangée (5 langues).

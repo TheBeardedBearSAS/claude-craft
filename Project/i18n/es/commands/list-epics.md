@@ -10,7 +10,7 @@ Mostrar la lista de todos los EPICs con su estado y progreso.
 ## Argumentos
 
 $ARGUMENTS (opcional, formato: [estado] [prioridad])
-- **Estado** (opcional): todo, in-progress, blocked, done, all (por defecto: all)
+- **Estado** (opcional, derivado de las stories): todo, in-progress, blocked, done, all (por defecto: all)
 - **Prioridad** (opcional): high, medium, low
 
 ## Proceso
@@ -19,7 +19,8 @@ $ARGUMENTS (opcional, formato: [estado] [prioridad])
 
 1. Escanear directorio `project-management/backlog/epics/`
 2. Leer cada archivo EPIC-XXX-*.md
-3. Extraer metadatos de cada EPIC
+3. Extraer los metadatos de contenido de cada EPIC (nombre, prioridad)
+4. Leer los estados de sus stories desde `.bmad/sprint-status.yaml` (única fuente de verdad, esquema: `.claude/templates/project/sprint-status.md`)
 
 ### Paso 2: Filtrar (si hay argumentos)
 
@@ -28,6 +29,8 @@ Aplicar filtros solicitados:
 - Por prioridad
 
 ### Paso 3: Calcular estadísticas
+
+**El estado del EPIC se deriva, nunca se almacena**: todas las stories `backlog` (o ninguna story) = no iniciado; todas `done` = terminado; alguna `blocked` y ninguna en curso = bloqueado; en otro caso en curso.
 
 Para cada EPIC:
 - Contar USs totales

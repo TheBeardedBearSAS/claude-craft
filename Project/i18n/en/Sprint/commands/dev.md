@@ -154,8 +154,8 @@ The plan mode MUST:
 #### 3.3 Mark Task → In Progress
 
 After plan validation:
-- Update task status to In Progress
-- Update board.md
+- In `.bmad/sprint-status.yaml` (schema: `.claude/templates/project/sprint-status.md`): set `stories.<US>.tasks.status.<TASK>: in-progress` and, for the first task of a `ready-for-dev` story, transition the story to `in-progress` (`status`, `previous_status`, `tdd_phase`, history entry)
+- Regenerate board.md (generated view)
 - Update index.md
 
 #### 3.4 TDD Cycle
@@ -213,8 +213,9 @@ Enter actual time spent (hours): 1.5
 ```
 
 Updates:
-- Task file metadata (status, time_spent, updated_at)
-- board.md
+- `.bmad/sprint-status.yaml`: `tasks.status.<TASK>: done`, `tasks.completed` (= number of `done` tasks)
+- Task file content metadata (time_spent, updated_at; no status)
+- board.md (regenerated from the YAML)
 - index.md
 - Sprint metrics
 
@@ -257,7 +258,7 @@ Checking acceptance criteria:
 Running E2E tests if present...
 ✓ tests/E2E/AuthenticationTest.php passed
 
-US-001 → 🟢 Done
+US-001 → done
 
 Updating EPIC-001 progress: 1/3 US completed (33%)
 ```
@@ -346,12 +347,14 @@ Moving to TASK-004...
 
 At each status change:
 
-1. **Task file**: Update status, time_spent, updated_at
-2. **User Story file**: Update task progress, status if all done
-3. **EPIC file**: Update US progress
-4. **board.md**: Refresh Kanban columns
-5. **index.md**: Update global metrics
-6. **sprint-status**: Recalculate metrics
+All statuses are written in `.bmad/sprint-status.yaml` (schema: `.claude/templates/project/sprint-status.md`); markdown files get content only.
+
+1. **sprint-status.yaml**: task status (`to-do | in-progress | done | blocked`), `tasks.completed`, `tdd_phase`, and story transitions (`ready-for-dev` → `in-progress` → `review` → `done`) with `previous_status` and a `history` entry
+2. **Task file**: Update time_spent, updated_at (no status)
+3. **User Story file**: Update task progress display (no status)
+4. **EPIC file**: Update US progress (EPIC status is derived)
+5. **board.md**: Regenerate Kanban columns from the YAML
+6. **index.md**: Update global metrics
 
 ---
 
@@ -425,10 +428,11 @@ Continue from TASK-009? [y/n]
 
 | File | Updates |
 |------|---------|
-| `project-management/backlog/user-stories/US-XXX.md` | Status, task progress |
+| `.bmad/sprint-status.yaml` | Story status, `tdd_phase`, task statuses, `tasks.completed`, history (single source of status) |
+| `project-management/backlog/user-stories/US-XXX.md` | Task progress (content only, no status) |
 | `project-management/backlog/epics/EPIC-XXX.md` | US progress |
-| `project-management/sprints/sprint-N-*/board.md` | Kanban columns |
-| `project-management/sprints/sprint-N-*/tasks/*.md` | Task status, time |
+| `project-management/sprints/sprint-N-*/board.md` | Kanban columns (regenerated from the YAML) |
+| `project-management/sprints/sprint-N-*/tasks/*.md` | Time spent (no status) |
 | `project-management/backlog/index.md` | Global metrics |
 | `project-management/sprints/sprint-N-*/sprint-review.md` | Generated at end |
 

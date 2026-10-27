@@ -12,7 +12,7 @@ Exibir lista de User Stories com filtragem por EPIC, Sprint ou Status.
 $ARGUMENTS (opcional, formato: [filtro] [valor])
 - **epic EPIC-XXX**: Filtrar por EPIC
 - **sprint N**: Filtrar por sprint
-- **status STATUS**: Filtrar por status (todo, in-progress, blocked, done)
+- **status STATUS**: Filtrar por status (backlog, ready-for-dev, in-progress, review, done, blocked)
 - **backlog**: Exibir apenas USs não atribuídas a um sprint
 
 ## Processo
@@ -21,7 +21,8 @@ $ARGUMENTS (opcional, formato: [filtro] [valor])
 
 1. Escanear diretório `project-management/backlog/user-stories/`
 2. Ler cada arquivo US-XXX-*.md
-3. Extrair metadados de cada US
+3. Extrair os metadados de conteúdo de cada US (título, EPIC, sprint)
+4. Ler o status de cada US, os status das tarefas e as contagens em `.bmad/sprint-status.yaml` (fonte única de verdade, schema: `.claude/templates/project/sprint-status.md`)
 
 ### Etapa 2: Filtrar
 

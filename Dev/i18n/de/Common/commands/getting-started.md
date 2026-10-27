@@ -95,7 +95,6 @@ Based on the detected stack, recommend 3 contextualized commands that provide im
 - `/php:check-security` — Security best practices
 
 **Unknown/Multi-stack:**
-- `/common:audit-freshness` — Check dependency updates and security
 - `/common:pre-commit-check` — Quality gates before commits
 - `/team:audit` — Full project audit (architecture, security, performance)
 
@@ -344,3 +343,5 @@ User should:
 - ✓ Feel confident exploring further
 
 Time to First Value (TTFV): **< 10 minutes total**
+
+> Unsicher, welchen Weg Sie wählen sollen? Siehe die Entscheidungsseite: https://github.com/TheBeardedBearSAS/claude-craft/blob/main/docs/guides/de/11-which-path.md

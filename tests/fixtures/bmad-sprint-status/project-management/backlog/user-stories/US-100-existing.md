@@ -1,6 +1,6 @@
 ---
 id: US-100
-title: Markdown-backed story (wins over YAML)
+title: Markdown-backed story (content from markdown)
 status: in-progress
 previous_status: ready-for-dev
 story_points: 8
@@ -17,4 +17,5 @@ dependencies: []
 # US-100
 
 This story exists as a markdown file. When the same id is also present in
-`.bmad/sprint-status.yaml`, the markdown entry must take precedence.
+`.bmad/sprint-status.yaml`, the markdown gives the content and the YAML the status
+(single source of truth for status).

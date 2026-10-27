@@ -115,6 +115,8 @@ export const SprintStatusSchema = z
                 total: z.number().int().min(0).default(0),
                 completed: z.number().int().min(0).default(0),
                 list: z.array(z.string()).default([]),
+                // Per-task status (TASK-xxx -> to-do|in-progress|done|blocked).
+                status: z.record(z.string(), z.enum(TASK_STATUSES)).optional(),
               })
               .optional(),
             history: z.array(HistoryEntrySchema).optional().default([]),

@@ -186,4 +186,20 @@ describe('SprintStatusSchema', () => {
   it('rejects missing metadata', () => {
     expect(() => SprintStatusSchema.parse({ stories: {} })).toThrow();
   });
+
+  const withTasks = (tasks) => ({
+    metadata: { sprint_id: 'sprint-1', name: 'S1', start_date: '', end_date: '' },
+    stories: { 'US-001': { title: 'Login', status: 'in-progress', tasks } },
+  });
+
+  it('keeps per-task statuses (sprint-status.yaml is the source of truth for task status)', () => {
+    const parsed = SprintStatusSchema.parse(
+      withTasks({ total: 2, completed: 1, list: ['TASK-001', 'TASK-002'], status: { 'TASK-001': 'done', 'TASK-002': 'in-progress' } })
+    );
+    expect(parsed.stories['US-001'].tasks.status).toEqual({ 'TASK-001': 'done', 'TASK-002': 'in-progress' });
+  });
+
+  it('rejects an unknown task status', () => {
+    expect(SprintStatusSchema.safeParse(withTasks({ list: ['TASK-001'], status: { 'TASK-001': 'wip' } })).success).toBe(false);
+  });
 });

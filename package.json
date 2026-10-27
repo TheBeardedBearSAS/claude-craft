@@ -1,6 +1,6 @@
 {
   "name": "@the-bearded-bear/claude-craft",
-  "version": "8.23.4",
+  "version": "8.24.0",
   "description": "A comprehensive framework for AI-assisted development with Claude Code. Install standardized rules, agents, and commands for your projects.",
   "type": "module",
   "main": "cli/index.js",
@@ -94,6 +94,7 @@
   "files": [
     "bundles/",
     "cli/",
+    "config/removed-commands.yaml",
     "Dev/",
     "Infra/",
     "Project/",
@@ -108,6 +109,7 @@
     "zod": "^4.4.3"
   },
   "overrides": {
-    "qs": "^6.15.2"
+    "qs": "^6.15.2",
+    "typescript": "^6.0.3"
   }
 }

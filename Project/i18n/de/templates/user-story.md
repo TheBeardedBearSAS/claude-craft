@@ -4,7 +4,7 @@
 - **ID**: US-{ID}
 - **EPIC**: {EPIC_ID}
 - **Sprint**: {SPRINT}
-- **Status**: 🔴 To Do
+- **Status**: wird in .bmad/sprint-status.yaml verfolgt
 - **Punkte**: {POINTS}
 - **Persona**: {PERSONA_ID}
 - **Erstellt am**: {DATE}
@@ -39,13 +39,15 @@ THEN {erwartetes Ergebnis}
 
 ## Aufgaben
 
-| ID | Typ | Beschreibung | Status | Schätzung |
-|----|------|-------------|--------|------------|
-| - | - | - | 🔴 | - |
+| ID | Typ | Beschreibung | Schätzung |
+|----|------|-------------|------------|
+| - | - | - | - |
+
+_Die Aufgabenstatus werden in `.bmad/sprint-status.yaml` verfolgt._
 
 ## Fortschritt
 
-0/0 Aufgaben abgeschlossen (0%)
+0/0 Aufgaben abgeschlossen (0%) <!-- abgeleitet aus .bmad/sprint-status.yaml -->
 
 ## Definition of Done
 

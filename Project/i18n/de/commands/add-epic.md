@@ -52,7 +52,9 @@ Benutzer fragen (falls nicht angegeben):
    - `{OBJECTIF_1}`, `{OBJECTIF_2}`: Geschäftsziele
    - `{CRITERE_1}`, `{CRITERE_2}`: Erfolgskriterien
 
-3. Datei erstellen: `project-management/backlog/epics/EPIC-{ID}-{slug}.md`
+3. Es wird kein Status geschrieben: Der EPIC-Status wird aus seinen Stories in `.bmad/sprint-status.yaml` abgeleitet
+
+4. Datei erstellen: `project-management/backlog/epics/EPIC-{ID}-{slug}.md`
 
 ### Schritt 5: Index aktualisieren
 
@@ -67,7 +69,7 @@ Benutzer fragen (falls nicht angegeben):
 ✅ EPIC erfolgreich erstellt!
 
 📋 EPIC-{ID}: {NAME}
-   Status: 🔴 To Do
+   Status: abgeleitet aus seinen Stories (noch keine)
    Priorität: {PRIORITY}
    Datei: project-management/backlog/epics/EPIC-{ID}-{slug}.md
 
