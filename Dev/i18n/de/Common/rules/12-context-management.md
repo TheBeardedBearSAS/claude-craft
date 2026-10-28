@@ -357,7 +357,7 @@ Das Aufwandsniveau des Modells je nach Aufgabenkomplexität anpassen:
 | `/effort low` | Haiku 5.5 | Einfache Aufgaben, Lookups, Klassifikation |
 | `/effort medium` | Sonnet 5.5 | Standardimplementierung |
 | `/effort high` | Opus 5.5 | Komplexes Reasoning, Architektur |
-| `/effort xhigh` | Opus 5.5 (extended thinking) | Kritische Entscheidungen, komplexe Migrationen, ADR |
+| `/effort xhigh` | Opus 5.5 (adaptive thinking, effort xhigh) | Kritische Entscheidungen, komplexe Migrationen, ADR |
 | `/effort ultracode` | Opus 5.5 (separater Toggle seit v2.1.284, Dynamic Workflows) | Maximaler Code-Durchsatz — automatisierte Pipelines, Massengenerierung |
 
 > **Standard-Effort je Modell:** medium bei Opus 5.5 und Haiku 5.5; high bei Sonnet 5.5, Fable 5.1 und Legacy-Modellen.

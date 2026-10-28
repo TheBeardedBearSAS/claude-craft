@@ -456,13 +456,15 @@ Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claud
 | Version | Feature | Description | Adoption Claude Craft |
 |---------|---------|-------------|----------------------|
 | 2.1.300 | `advisorModel` / `--advisor` ; `DISABLE_COMPACT` ne peut que désactiver | `/advisor` sur Claude Platform on AWS ; `CLAUDE_CODE_DISABLE_ADVISOR_TOOL=1` | **Not Adopted** |
+| 2.1.300 | **Breaking** : `claude remote-control` refuse `--sandbox` / `--no-sandbox` ; `updatedInput` des hooks validé | Utiliser `sandbox.enabled` dans les settings | **Documented** |
 | 2.1.302 | Fork subagents activés par défaut en `-p`, SDK, desktop, VS Code | `CLAUDE_CODE_FORK_SUBAGENT=0` pour désactiver ; appels `Agent` au premier plan en `-p`/SDK | **Documented** — règle 12 ; moteur `--engine=subagents` des `/team:*` (8.27.0) |
 | 2.1.302 | **Breaking** : `claude -p` sans mode de permission démarre en `default` sur les fournisseurs tiers | `--permission-mode auto` conserve auto | **Documented** |
 | 2.1.304 | `/auto-mode-setup` ; hooks d'agent ne passent plus en fail-open | Repli sur le modèle de l'appelant | **Not Adopted** |
 | 2.1.305 | **Breaking** : `allowedMcpServers` ne filtre plus les serveurs stdio `managed-mcp.json` utilisant `${VAR}` seulement dans `env` | Utiliser `deniedMcpServers` pour les bloquer | **Documented** — règle 11 (vetting MCP) |
+| 2.1.307 | `axScreenReader` / `CLAUDE_AX_SCREEN_READER` (bloc `env`) lus seulement depuis les settings user, managed ou `--settings` | Ignorés dans les settings projet | **Documented** |
 | 2.1.309 | Correctifs permissions (deny `Edit` sur redirections Bash, `cd`/git composés, `--mcp-config`, shell hors sandbox) ; **Breaking** : `claude ultrareview` exige la confiance du workspace | `--trust-workspace` pour les scripts | **Adopted** — version recommandée |
-| 2.1.311 | `ultrathink` = effort xhigh sur la génération 5.5 ; `SubagentStop` émis une seule fois ; worktree d'un sous-agent background conservé | | **Documented** |
-| 2.1.312 | `autoCompactWindow` d'un sous-agent peut abaisser `CLAUDE_CODE_AUTO_COMPACT_WINDOW` ; 24 hooks prompt/agent concurrents max ; `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK=1` | | **Documented** — version RECOMMANDÉE |
+| 2.1.311 | `ultrathink` = effort xhigh sur la génération 5.5 ; `SubagentStop` émis une seule fois ; worktree d'un sous-agent background conservé | `--output-format json` / `stream-json` échappent certains caractères de contrôle en `\uXXXX` ; `DISABLE_COMPACT` des settings ne peut que désactiver | **Documented** |
+| 2.1.312 | `autoCompactWindow` d'un sous-agent peut abaisser `CLAUDE_CODE_AUTO_COMPACT_WINDOW` ; 24 hooks prompt/agent concurrents max ; `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK=1` | Prompt système raccourci sur Bedrock, Vertex, Foundry et Mantle (`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` pour le complet) | **Documented** — version RECOMMANDÉE |
 
 ---
 

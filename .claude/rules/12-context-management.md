@@ -96,7 +96,7 @@ Les sous-agents (Task tool) ont leur propre fenetre de contexte, evitant de poll
 | Planifier une implementation | Sous-agent Plan |
 | Tache independante en parallele | Sous-agent general-purpose |
 
-**Agent frontmatter (v2.1.78+):** Les agents personnalises supportent `effort`, `maxTurns`, `disallowedTools` pour optimiser les couts et le scope.
+**Agent frontmatter (v2.1.78+):** Les agents personnalises supportent `effort`, `maxTurns`, `disallowedTools` pour optimiser les couts et le scope. `disallowedTools` retire des outils entiers : une entrée `Bash(git push *)` retire tout Bash à l'agent — bloquer une commande via `permissions.deny` (s'applique aussi aux sous-agents).
 
 **Skill `context: fork` (v2.1.105+):** Les 24 skills de Claude Craft (>60 lignes) utilisent `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 2 000-5 000 tokens/session pour les skills moyens (60-100 lignes), 8 000-15 000 tokens/session pour les skills lourds (>100 lignes). Liste lourds (17) : `architect`, `debug-methodical`, `atomic-tasks`, `socratic-brainstorm`, `architecture-clean-ddd`, `parallel-worktrees`, `event-driven`, `cqrs`, `async`, `multitenant`, `testing`, `testing-symfony`, `testing-python`, `testing-react`, `testing-flutter`, `testing-reactnative`, `design-md-convention`. Liste moyens (7, 60-100 lignes) : `edge-computing`, `wasm`, `graphql`, `monorepo`, `observability`, `docker-hadolint`, `api-gateway`.
 
@@ -158,7 +158,7 @@ La status line affiche le pourcentage de contexte utilise.
 | `/effort low` | Haiku 5.5 | `claude-haiku-5-5` | Taches simples, lookups, classification |
 | `/effort medium` | Sonnet 5.5 | `claude-sonnet-5-5` | Implementation standard, taches agentiques (defaut sous-agents) |
 | `/effort high` | Opus 5.5 | `claude-opus-5-5` | Raisonnement complexe, architecture |
-| `/effort xhigh` | Opus 5.5 (extended thinking) | `claude-opus-5-5` | Decisions critiques, migrations complexes, ADR |
+| `/effort xhigh` | Opus 5.5 (adaptive thinking, effort xhigh) | `claude-opus-5-5` | Decisions critiques, migrations complexes, ADR |
 | `/effort ultracode` | Opus 5.5 (toggle séparé depuis v2.1.284, Dynamic Workflows) | `claude-opus-5-5` | Mode debit code maximal — pipelines automatises, generation massive |
 
 > **Effort par défaut (doc Anthropic, octobre 2026) :** `medium` sur Opus 5.5 et Haiku 5.5 ; `high` sur Sonnet 5.5, Fable 5.1 et les modèles *legacy* (Sonnet 5, Opus 4.8). Monter explicitement à `high`/`xhigh` sur Opus 5.5 pour les tâches critiques.

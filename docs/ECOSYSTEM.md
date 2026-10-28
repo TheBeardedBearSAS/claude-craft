@@ -145,7 +145,7 @@ a release tag.
 
 Claude Craft runs exclusively on Claude (Opus 5.5 / Sonnet 5.5 / Haiku 5.5) via the Dynamic Workflows tiering built into Claude Code (2.1.154+, `ultracode` trigger). This covers intra-provider cost optimisation.
 
-A complementary **cross-provider routing** pattern has emerged with tools like **oh-my-claudecode** (~36k ★, [repo](https://github.com/oh-my-claudecode/oh-my-claudecode)): route sub-agents to Gemini CLI (free tier), OpenAI Codex, or other providers based on task type and cost. The pattern is:
+A complementary **cross-provider routing** pattern has emerged with tools like **oh-my-claudecode** (MIT, ~40k ★, [repo](https://github.com/Yeachan-Heo/oh-my-claudecode)): route sub-agents to Gemini CLI (free tier), OpenAI Codex, or other providers based on task type and cost. The pattern is:
 
 ```
 Complex planning   → Claude Opus 5.5  (highest reasoning)
@@ -202,7 +202,7 @@ re-injecté automatiquement, et peut être édité manuellement ou par `/memory`
 
 ### Tiers : claude-mem
 
-**[claude-mem](https://github.com/punkpeye/claude-mem)** (~MIT, statut à vérifier avant usage) est un
+**[claude-mem](https://github.com/thedotmack/claude-mem)** (Apache-2.0, ~104k ★, vérifié le 2026-10-28) est un
 serveur MCP open-source qui expose une interface mémoire inter-sessions via un stockage local structuré.
 Il propose des opérations `memory_add` / `memory_search` / `memory_list` utilisables depuis les
 instructions d'un agent ou d'une commande.
@@ -231,7 +231,7 @@ instructions d'un agent ou d'une commande.
 
 ### Ruflo (~59k ★, mémoire vectorielle)
 
-**Ruflo** ([repo](https://github.com/ruflo/ruflo), licence à vérifier) opte pour une **indexation
+**Ruflo** ([repo](https://github.com/ruvnet/ruflo), MIT) opte pour une **indexation
 vectorielle** : chaque session est indexée, et les sessions suivantes récupèrent par similarité
 sémantique les contextes pertinents. C'est la seule approche qui scale sur des historiques longs (des
 centaines de sessions).
@@ -246,7 +246,7 @@ Voir aussi `DIFF-04` dans [`docs/ROADMAP.md`](ROADMAP.md).
 |--------|---------------------|
 | Conserver conventions / ADR entre sessions | `/memory` natif + `context-essentials.md` |
 | Survivre aux compactions automatiques | Hooks `PreCompact` + `PostCompact` (templates intégrés) |
-| Mémoire _explicite_ depuis un agent | claude-mem (MCP, MIT, à pinner) |
+| Mémoire _explicite_ depuis un agent | claude-mem (MCP, Apache-2.0, à pinner) |
 | Historique long > 100 sessions, recherche sémantique | Ruflo (vectorDB, évaluer licence) |
 
 ---
