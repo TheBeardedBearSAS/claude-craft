@@ -147,7 +147,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **MIT-only strict (v8.8.0)** -- Claude Craft est 100 % open-source MIT, aucune licence commerciale ou enterprise. Stratégie open-core abandonnée.
 - **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
 - **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
-- **126 commandes sur 15 namespaces** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
+- **126 commandes sur 15 namespaces (v8.10.x)** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
 - **Claude Code 2.1.296** -- version recommandée (minimum sécurité 2.1.260 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
 
 > ← Versions antérieures (v8.0 → v8.7) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
@@ -225,7 +225,7 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 126 across 15 namespaces (220 total with infra/project) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Commands** | 140 across 18 namespaces (238 total with infra/project) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
 | **Skills** | 55 | Architecture, testing, security, DDD best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -267,7 +267,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 126 commands across 15 core namespaces (220 total including infra and project management).
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 140 commands across 18 namespaces (238 total including infra, project management and deprecated redirect stubs kept until 9.0).
 
 ## Installation
 
@@ -350,7 +350,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 126 commands |
+| [Commands](docs/COMMANDS.md) | All 140 commands |
 | [Agents](docs/AGENTS.md) | All 31 default agents (+ 39 infra on-demand) |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |
