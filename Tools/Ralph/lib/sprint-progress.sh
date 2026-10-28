@@ -343,10 +343,10 @@ update_state_section() {
     local state_json="$1"
 
     # Parse JSON and update each field
-    local sprint=$(echo "$state_json" | grep -oP '"sprint":\s*"\K[^"]*' 2>/dev/null)
-    local current_us=$(echo "$state_json" | grep -oP '"current_us":\s*"\K[^"]*' 2>/dev/null)
-    local current_task=$(echo "$state_json" | grep -oP '"current_task":\s*"\K[^"]*' 2>/dev/null)
-    local phase=$(echo "$state_json" | grep -oP '"phase":\s*"\K[^"]*' 2>/dev/null)
+    local sprint=$(echo "$state_json" | grep -oP '"sprint":\s*"\K[^"]*' 2>/dev/null) || true
+    local current_us=$(echo "$state_json" | grep -oP '"current_us":\s*"\K[^"]*' 2>/dev/null) || true
+    local current_task=$(echo "$state_json" | grep -oP '"current_task":\s*"\K[^"]*' 2>/dev/null) || true
+    local phase=$(echo "$state_json" | grep -oP '"phase":\s*"\K[^"]*' 2>/dev/null) || true
 
     # Build list of sed patterns (escape special chars)
     local patterns=()

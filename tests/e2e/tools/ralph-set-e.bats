@@ -75,18 +75,10 @@ teardown() {
 # (c) Real loop: reaches the summary with exit_reason=max_iterations.
 # ─────────────────────────────────────────────────────────────────────────────
 
+# A real run: the first Claude call fails transiently (API overload), the
+# second succeeds. Whatever happens in an iteration, the loop must reach
+# print_summary with exit_reason=max_iterations — never exit silently.
 @test "loop: ralph.sh --max-iterations=2 ends with exit_reason=max_iterations" {
-    cd "$REPO"
-    run bash "$RALPH" --max-iterations=2 --delay=0 "hello"
-    echo "$output"; echo "--- claude log ---"; cat "$MOCK_LOG" || true
-
-    [ "$status" -eq 1 ]
-    echo "$output" | grep -q "Exit reason:.*max_iterations"
-    # Both iterations really invoked Claude with the prompt.
-    [ "$(grep -vc -- '/context\|/compact' "$MOCK_LOG")" -eq 2 ]
-}
-
-@test "loop: a failed Claude call does not kill the loop silently" {
     cd "$REPO"
     MOCK_FAIL_FIRST=1 run bash "$RALPH" --max-iterations=2 --delay=0 "hello"
     echo "$output"; echo "--- claude log ---"; cat "$MOCK_LOG" || true
@@ -94,6 +86,7 @@ teardown() {
     [ "$status" -eq 1 ]
     echo "$output" | grep -q "Claude invocation failed"
     echo "$output" | grep -q "Exit reason:.*max_iterations"
+    # Both iterations really invoked Claude with the prompt.
     [ "$(grep -vc -- '/context\|/compact' "$MOCK_LOG")" -eq 2 ]
 }
 

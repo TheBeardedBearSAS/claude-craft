@@ -21,7 +21,7 @@ generate_uuid() {
         uuidgen | tr '[:upper:]' '[:lower:]'
     else
         local hex
-        hex=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
+        hex=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n') || true
         printf '%s-%s-4%s-%x%s-%s\n' "${hex:0:8}" "${hex:8:4}" "${hex:13:3}" \
             $(( (0x${hex:16:1} & 0x3) | 0x8 )) "${hex:17:3}" "${hex:20:12}"
     fi
@@ -138,7 +138,7 @@ detect_file_changes() {
 
     # Use git to detect changes if available
     if command -v git &> /dev/null && git rev-parse --git-dir &> /dev/null; then
-        local changes=$(git status --porcelain 2>/dev/null | wc -l)
+        local changes=$(git status --porcelain 2>/dev/null | wc -l) || true
         log_session "$session_id" "DEBUG" "Detected $changes file changes"
         echo "$changes"
     else
@@ -146,7 +146,7 @@ detect_file_changes() {
         local changes=0
         for dir in src lib app tests; do
             if [[ -d "$dir" ]]; then
-                local recent=$(find "$dir" -type f -mmin -1 2>/dev/null | wc -l)
+                local recent=$(find "$dir" -type f -mmin -1 2>/dev/null | wc -l) || true
                 changes=$((changes + recent))
             fi
         done

@@ -52,14 +52,14 @@ validate_dod() {
     local results=()
 
     # Get count of checklist items
-    local count=$(echo "$checklist" | yq e 'length' -)
+    local count=$(echo "$checklist" | yq e 'length' -) || true
 
     for ((i=0; i<count; i++)); do
         local item=$(yq e ".definition_of_done.checklist[$i]" "$config_file")
-        local id=$(echo "$item" | yq e '.id' -)
-        local name=$(echo "$item" | yq e '.name' -)
-        local type=$(echo "$item" | yq e '.type' -)
-        local required=$(echo "$item" | yq e '.required // true' -)
+        local id=$(echo "$item" | yq e '.id' -) || true
+        local name=$(echo "$item" | yq e '.name' -) || true
+        local type=$(echo "$item" | yq e '.type' -) || true
+        local required=$(echo "$item" | yq e '.required // true' -) || true
 
         # Validate based on type
         local passed=false
@@ -67,7 +67,7 @@ validate_dod() {
 
         case "$type" in
             command)
-                local cmd=$(echo "$item" | yq e '.command' -)
+                local cmd=$(echo "$item" | yq e '.command' -) || true
                 if validate_command "$cmd"; then
                     passed=true
                     message="Command passed"
@@ -76,7 +76,7 @@ validate_dod() {
                 fi
                 ;;
             output_contains)
-                local pattern=$(echo "$item" | yq e '.pattern' -)
+                local pattern=$(echo "$item" | yq e '.pattern' -) || true
                 if validate_output_contains "$output" "$pattern"; then
                     passed=true
                     message="Pattern found"
@@ -85,7 +85,7 @@ validate_dod() {
                 fi
                 ;;
             file_changed)
-                local pattern=$(echo "$item" | yq e '.pattern' -)
+                local pattern=$(echo "$item" | yq e '.pattern' -) || true
                 if validate_file_changed "$pattern"; then
                     passed=true
                     message="Files changed"
@@ -94,7 +94,7 @@ validate_dod() {
                 fi
                 ;;
             hook)
-                local script=$(echo "$item" | yq e '.script' -)
+                local script=$(echo "$item" | yq e '.script' -) || true
                 if validate_hook "$script" "$output"; then
                     passed=true
                     message="Hook passed"
@@ -103,7 +103,7 @@ validate_dod() {
                 fi
                 ;;
             human)
-                local prompt=$(echo "$item" | yq e '.prompt // ""' -)
+                local prompt=$(echo "$item" | yq e '.prompt // ""' -) || true
                 if validate_human "$name" "$prompt"; then
                     passed=true
                     message="Human approved"
@@ -209,13 +209,13 @@ validate_file_changed() {
 
     # Use git to check for changes matching pattern
     if command -v git &> /dev/null && git rev-parse --git-dir &> /dev/null; then
-        local changes=$(git status --porcelain 2>/dev/null | grep -E "$pattern" | wc -l)
+        local changes=$(git status --porcelain 2>/dev/null | grep -E "$pattern" | wc -l) || true
         if [[ $changes -gt 0 ]]; then
             return 0
         fi
     else
         # Fallback: check for recently modified files
-        local changes=$(find . -name "$pattern" -mmin -5 2>/dev/null | wc -l)
+        local changes=$(find . -name "$pattern" -mmin -5 2>/dev/null | wc -l) || true
         if [[ $changes -gt 0 ]]; then
             return 0
         fi
@@ -381,7 +381,7 @@ export_dod_status() {
 
     # Count checks
     local total
-    total=$(echo "$checklist" | yq e 'length' -)
+    total=$(echo "$checklist" | yq e 'length' -) || total=0
 
     local required=0
     for ((i=0; i<total; i++)); do
@@ -424,7 +424,7 @@ get_dod_summary() {
 
     # Build summary
     local count
-    count=$(echo "$checklist" | yq e 'length' -)
+    count=$(echo "$checklist" | yq e 'length' -) || count=0
 
     local checks="["
     for ((i=0; i<count; i++)); do

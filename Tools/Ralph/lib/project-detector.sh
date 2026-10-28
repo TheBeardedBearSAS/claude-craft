@@ -325,7 +325,7 @@ detect_dotnet() {
 
     # Look for .csproj files
     local csproj_count
-    csproj_count=$(find "$project_dir" -maxdepth 3 -name "*.csproj" 2>/dev/null | wc -l)
+    csproj_count=$(find "$project_dir" -maxdepth 3 -name "*.csproj" 2>/dev/null | wc -l) || csproj_count=0
 
     if [[ $csproj_count -gt 0 ]]; then
         DETECTED_PROJECT_TYPE="dotnet"
@@ -340,7 +340,7 @@ detect_dotnet() {
 
         # Detect specific framework
         local csproj_file
-        csproj_file=$(find "$project_dir" -maxdepth 3 -name "*.csproj" 2>/dev/null | head -1)
+        csproj_file=$(find "$project_dir" -maxdepth 3 -name "*.csproj" 2>/dev/null | head -1) || true
         if [[ -f "$csproj_file" ]]; then
             if grep -q 'Microsoft.NET.Sdk.Web' "$csproj_file" 2>/dev/null; then
                 DETECTED_PROJECT_TYPE="dotnet-web"

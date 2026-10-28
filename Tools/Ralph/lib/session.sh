@@ -23,10 +23,10 @@ generate_session_id() {
     elif command -v xxd &>/dev/null; then
         random=$(head -c 4 /dev/urandom | xxd -p)
     elif command -v od &>/dev/null; then
-        random=$(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n')
+        random=$(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n') || true
     else
         # Fallback: use $RANDOM (less entropy but portable)
-        random=$(printf '%04x%04x' $RANDOM $RANDOM | head -c 8)
+        random=$(printf '%04x%04x' $RANDOM $RANDOM | head -c 8) || true
     fi
 
     echo "ralph-${timestamp}-${random}"

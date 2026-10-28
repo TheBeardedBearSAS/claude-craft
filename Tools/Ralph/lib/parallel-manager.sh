@@ -508,7 +508,7 @@ process_stories_parallel() {
 
     local processed=0
     local total
-    total=$(echo "$stories" | wc -w | tr -d ' ')
+    total=$(echo "$stories" | wc -w | tr -d ' ') || total=0
 
     while [[ $processed -lt $total ]]; do
         # Collect completed sessions

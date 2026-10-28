@@ -373,10 +373,10 @@ create_continuation_session() {
     elif command -v xxd &>/dev/null; then
         random_suffix=$(head -c 4 /dev/urandom | xxd -p)
     elif command -v od &>/dev/null; then
-        random_suffix=$(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n')
+        random_suffix=$(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n') || true
     else
         # Fallback: use $RANDOM (less entropy but portable)
-        random_suffix=$(printf '%04x%04x' $RANDOM $RANDOM | head -c 8)
+        random_suffix=$(printf '%04x%04x' $RANDOM $RANDOM | head -c 8) || true
     fi
 
     local new_session_id="ralph-cont-${timestamp}-${random_suffix}"

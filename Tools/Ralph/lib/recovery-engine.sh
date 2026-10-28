@@ -124,7 +124,7 @@ init_recovery_engine() {
 classify_error() {
     local error_output="$1"
     local error_lower
-    error_lower=$(echo "$error_output" | tr '[:upper:]' '[:lower:]')
+    error_lower=$(echo "$error_output" | tr '[:upper:]' '[:lower:]') || true
 
     # Check Level 3 - Blocked (security, architecture)
     for pattern_name in "${!ERROR_PATTERNS_BLOCKED[@]}"; do
