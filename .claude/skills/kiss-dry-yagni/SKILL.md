@@ -1,7 +1,7 @@
 ---
 name: kiss-dry-yagni
-description: Principes KISS, DRY, YAGNI. Use when reviewing code quality or refactoring.
-  files: ["*.cs", "*.java", "*.ts", "*.tsx", "*.js", "*.py", "*.php", "*.rb", "*.go", "*.kt", "*.dart", "*.swift"]
+description: "Principes KISS, DRY, YAGNI. Use when reviewing code quality or refactoring."
+files: ["*.cs", "*.java", "*.ts", "*.tsx", "*.js", "*.py", "*.php", "*.rb", "*.go", "*.kt", "*.dart", "*.swift"]
 ---
 
 # Principes KISS, DRY, YAGNI

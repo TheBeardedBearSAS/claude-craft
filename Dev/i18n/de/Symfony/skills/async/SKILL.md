@@ -1,6 +1,6 @@
 ---
 name: async
-description: Regel 10: Async-First mit Symfony Messenger. Use when working with async.
+description: "Regel 10: Async-First mit Symfony Messenger. Use when working with async."
 ---
 
 # Regel 10: Async-First mit Symfony Messenger

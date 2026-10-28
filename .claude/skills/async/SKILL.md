@@ -1,8 +1,8 @@
 ---
 name: async
-description: Architecture async-first avec messaging et queues (Symfony Messenger, Laravel Queue, Ecotone). Use when working with async processing, queues, workers, background jobs.
+description: "Architecture async-first avec messaging et queues (Symfony Messenger, Laravel Queue, Ecotone). Use when working with async processing, queues, workers, background jobs."
 context: fork
-  files: ["config/packages/messenger.yaml", "config/queue.php", "app/Jobs/**", "src/Message/**", "src/MessageHandler/**"]
+files: ["config/packages/messenger.yaml", "config/queue.php", "app/Jobs/**", "src/Message/**", "src/MessageHandler/**"]
 ---
 
 # Async-First — Quick Reference

@@ -1,6 +1,6 @@
 ---
 name: coding-standards
-description: Rule 03: Coding Standards. Use when reviewing code style or formatting.
+description: "Rule 03: Coding Standards. Use when reviewing code style or formatting."
 ---
 
 # Rule 03: Coding Standards

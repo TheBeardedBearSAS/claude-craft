@@ -1,7 +1,7 @@
 ---
 name: solid-principles
-description: SOLID principles for object-oriented design. Use when reviewing code quality, refactoring, designing classes or interfaces, or discussing architecture patterns.
-  files: ["*.cs", "*.java", "*.ts", "*.py", "*.php", "*.rb", "*.go", "*.kt", "*.dart", "*.swift"]
+description: "SOLID principles for object-oriented design. Use when reviewing code quality, refactoring, designing classes or interfaces, or discussing architecture patterns."
+files: ["*.cs", "*.java", "*.ts", "*.py", "*.php", "*.rb", "*.go", "*.kt", "*.dart", "*.swift"]
 ---
 
 # SOLID Principles

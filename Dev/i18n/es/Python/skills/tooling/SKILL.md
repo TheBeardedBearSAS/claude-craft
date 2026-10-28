@@ -1,6 +1,6 @@
 ---
 name: tooling
-description: Regla 06: Herramientas. Use when working with tooling.
+description: "Regla 06: Herramientas. Use when working with tooling."
 ---
 
 # Regla 06: Herramientas

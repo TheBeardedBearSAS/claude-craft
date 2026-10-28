@@ -1,8 +1,8 @@
 ---
 name: design-md-convention
-description: Convention DESIGN.md pour design systems AI-friendly. Use when setting up a new project UI, documenting design tokens, or generating UI consistent with a design system.
+description: "Convention DESIGN.md pour design systems AI-friendly. Use when setting up a new project UI, documenting design tokens, or generating UI consistent with a design system."
 context: fork
-  files: ["DESIGN.md", "tailwind.config.*", "tokens.json"]
+files: ["DESIGN.md", "tailwind.config.*", "tokens.json"]
 ---
 
 # DESIGN.md — Convention Design System AI-Friendly

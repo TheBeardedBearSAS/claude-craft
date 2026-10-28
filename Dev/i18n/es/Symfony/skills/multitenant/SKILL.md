@@ -1,6 +1,6 @@
 ---
 name: multitenant
-description: Regla 08: Multitenant - Aislamiento y Seguridad. Use when working with multitenant.
+description: "Regla 08: Multitenant - Aislamiento y Seguridad. Use when working with multitenant."
 ---
 
 # Regla 08: Multitenant - Aislamiento y Seguridad

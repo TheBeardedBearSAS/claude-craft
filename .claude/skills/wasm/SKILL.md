@@ -1,8 +1,8 @@
 ---
 name: wasm
-description: WebAssembly (WASM) integration, WASI, component model, Rust/Go to WASM compilation. Use when implementing WASM modules, browser/edge compute, or polyglot runtime.
+description: "WebAssembly (WASM) integration, WASI, component model, Rust/Go to WASM compilation. Use when implementing WASM modules, browser/edge compute, or polyglot runtime."
 context: fork
-  files: ["**/*.wasm", "**/wasm/**", "**/*.wat"]
+files: ["**/*.wasm", "**/wasm/**", "**/*.wat"]
 ---
 
 # WebAssembly (WASM) — Component Model, WASI
