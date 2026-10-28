@@ -207,12 +207,12 @@ list_checkpoints() {
 
     # Find commits matching the checkpoint pattern
     local commits
-    commits=$(git log --oneline --grep="checkpoint: Ralph" 2>/dev/null | head -20)
+    commits=$(git log --oneline --grep="checkpoint: Ralph" 2>/dev/null | head -20) || true
 
     if [[ -n "$commits" ]]; then
         echo "$commits" | while read -r line; do
-            local hash=$(echo "$line" | cut -d' ' -f1)
-            local msg=$(echo "$line" | cut -d' ' -f2-)
+            local hash=$(echo "$line" | cut -d' ' -f1) || true
+            local msg=$(echo "$line" | cut -d' ' -f2-) || true
             echo "{\"hash\":\"$hash\",\"message\":\"$msg\"}"
         done | jq -s '.'
     else

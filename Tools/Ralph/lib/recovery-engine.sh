@@ -124,7 +124,7 @@ init_recovery_engine() {
 classify_error() {
     local error_output="$1"
     local error_lower
-    error_lower=$(echo "$error_output" | tr '[:upper:]' '[:lower:]')
+    error_lower=$(echo "$error_output" | tr '[:upper:]' '[:lower:]') || true
 
     # Check Level 3 - Blocked (security, architecture)
     for pattern_name in "${!ERROR_PATTERNS_BLOCKED[@]}"; do
@@ -415,7 +415,7 @@ run_tdd_retry() {
 
     # Try to parse test output
     if echo "$error_output" | grep -qE "FAIL|FAILED|Error:"; then
-        failing_tests=$(echo "$error_output" | grep -E "FAIL|FAILED|Error:" | head -5)
+        failing_tests=$(echo "$error_output" | grep -E "FAIL|FAILED|Error:" | head -5) || true
     fi
 
     # Update sprint progress with TDD phase

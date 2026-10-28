@@ -47,8 +47,7 @@ EOF
     export MOCK_LOG="$SCRATCH/claude.log"
     export PATH="$MOCK_DIR:$PATH"
 
-    # Stub ralph.sh found by spawn_session via SCRIPT_DIR: bounds the real loop
-    # (yq is absent from the e2e image, so a ralph.yml would be ignored).
+    # Stub ralph.sh found by spawn_session via SCRIPT_DIR: bounds the real loop.
     STUB_DIR="$SCRATCH/stub"
     mkdir -p "$STUB_DIR"
     cat > "$STUB_DIR/ralph.sh" <<EOF

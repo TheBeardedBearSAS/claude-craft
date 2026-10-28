@@ -56,7 +56,7 @@ ralph_finalize_loop() {
 
     # Save sprint progress before summary
     if type save_sprint_progress &>/dev/null; then
-        save_sprint_progress "$session_id"
+        save_sprint_progress "$session_id" || print_verbose "No sprint progress file to save"
     fi
 
     # Save metrics export

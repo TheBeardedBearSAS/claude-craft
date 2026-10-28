@@ -21,10 +21,20 @@ generate_uuid() {
         uuidgen | tr '[:upper:]' '[:lower:]'
     else
         local hex
-        hex=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
+        hex=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n') || true
         printf '%s-%s-4%s-%x%s-%s\n' "${hex:0:8}" "${hex:8:4}" "${hex:13:3}" \
             $(( (0x${hex:16:1} & 0x3) | 0x8 )) "${hex:17:3}" "${hex:20:12}"
     fi
+}
+
+# Print the Claude session UUID pinned to a Ralph session, or nothing if
+# Claude has not been invoked yet for it. Always succeeds (set -e safe).
+get_claude_session_uuid() {
+    local id_file="$RALPH_SESSION_BASE/sessions/$1/claude_session_id"
+    if [[ -n "$1" && -s "$id_file" ]]; then
+        cat "$id_file"
+    fi
+    return 0
 }
 
 invoke_claude() {
@@ -43,11 +53,12 @@ invoke_claude() {
     # "the most recent conversation in this directory", which parallel workers
     # (and unrelated user sessions) would share.
     if [[ -n "$session_id" ]]; then
-        local id_file="$RALPH_SESSION_BASE/sessions/$session_id/claude_session_id"
-        if [[ -s "$id_file" ]]; then
-            cmd+=(--resume "$(< "$id_file")")
+        local claude_session_uuid
+        claude_session_uuid=$(get_claude_session_uuid "$session_id")
+        if [[ -n "$claude_session_uuid" ]]; then
+            cmd+=(--resume "$claude_session_uuid")
         else
-            local claude_session_uuid
+            local id_file="$RALPH_SESSION_BASE/sessions/$session_id/claude_session_id"
             claude_session_uuid=$(generate_uuid)
             mkdir -p "$(dirname "$id_file")"
             echo "$claude_session_uuid" > "$id_file"
@@ -64,12 +75,11 @@ invoke_claude() {
     # Execute with timeout
     local timeout_sec=$((timeout / 1000))
     local output
-    local exit_code
+    local exit_code=0
 
     # Use timeout command if available
     if command -v timeout &> /dev/null; then
-        output=$(timeout "${timeout_sec}s" "${cmd[@]}" "$prompt" 2>&1)
-        exit_code=$?
+        output=$(timeout "${timeout_sec}s" "${cmd[@]}" "$prompt" 2>&1) || exit_code=$?
 
         # Check for timeout (exit code 124)
         if [[ $exit_code -eq 124 ]]; then
@@ -78,8 +88,7 @@ invoke_claude() {
         fi
     else
         # Fallback without timeout
-        output=$("${cmd[@]}" "$prompt" 2>&1)
-        exit_code=$?
+        output=$("${cmd[@]}" "$prompt" 2>&1) || exit_code=$?
     fi
 
     # Log result
@@ -129,7 +138,7 @@ detect_file_changes() {
 
     # Use git to detect changes if available
     if command -v git &> /dev/null && git rev-parse --git-dir &> /dev/null; then
-        local changes=$(git status --porcelain 2>/dev/null | wc -l)
+        local changes=$(git status --porcelain 2>/dev/null | wc -l) || true
         log_session "$session_id" "DEBUG" "Detected $changes file changes"
         echo "$changes"
     else
@@ -137,7 +146,7 @@ detect_file_changes() {
         local changes=0
         for dir in src lib app tests; do
             if [[ -d "$dir" ]]; then
-                local recent=$(find "$dir" -type f -mmin -1 2>/dev/null | wc -l)
+                local recent=$(find "$dir" -type f -mmin -1 2>/dev/null | wc -l) || true
                 changes=$((changes + recent))
             fi
         done
@@ -244,7 +253,7 @@ get_loop_state() {
         status: (.status // "unknown"),
         circuit_breaker: (.circuit_breaker // {}),
         dod_results: (.dod_results // [])
-    }' 2>/dev/null)
+    }' 2>/dev/null) || result=""
 
     if [[ -n "$result" ]]; then
         echo "$result"

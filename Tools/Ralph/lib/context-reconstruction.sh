@@ -109,7 +109,7 @@ build_git_section() {
     echo ""
     echo "### Uncommitted Changes"
     local status
-    status=$(git status --porcelain 2>/dev/null | head -10)
+    status=$(git status --porcelain 2>/dev/null | head -10) || true
     if [[ -n "$status" ]]; then
         echo "\`\`\`"
         echo "$status"

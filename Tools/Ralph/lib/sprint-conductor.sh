@@ -196,7 +196,7 @@ run_sprint_conductor_parallel() {
     fi
 
     local story_count
-    story_count=$(echo "$all_stories" | wc -w | tr -d ' ')
+    story_count=$(echo "$all_stories" | wc -w | tr -d ' ') || story_count=0
     log_conductor "Found $story_count stories for parallel processing"
 
     # Build dependency graph
@@ -749,7 +749,7 @@ build_story_prompt() {
         local title description acceptance_criteria
         title=$(yq ".stories.${story_id}.title" "$status_file" 2>/dev/null)
         description=$(yq ".stories.${story_id}.description" "$status_file" 2>/dev/null)
-        acceptance_criteria=$(yq ".stories.${story_id}.acceptance_criteria[]" "$status_file" 2>/dev/null | tr '\n' '; ')
+        acceptance_criteria=$(yq ".stories.${story_id}.acceptance_criteria[]" "$status_file" 2>/dev/null | tr '\n' '; ') || true
 
         prompt="Implement user story: $title
 

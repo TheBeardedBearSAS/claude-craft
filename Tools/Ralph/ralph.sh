@@ -506,7 +506,8 @@ run_ralph() {
         local effective_prompt="$PROMPT"
         if type get_context_continuation_prompt &>/dev/null; then
             local continuation_prompt
-            continuation_prompt=$(get_context_continuation_prompt)
+            # Returns 1 when there is no continuation context (nominal).
+            continuation_prompt=$(get_context_continuation_prompt) || true
             if [[ -n "$continuation_prompt" ]]; then
                 # Prepend continuation context to the prompt
                 effective_prompt="$continuation_prompt
@@ -520,9 +521,11 @@ $PROMPT"
 
         # Invoke Claude
         print_info "${MSG_INVOKING_CLAUDE}"
+        # `|| invoke_status=$?`: a failed call must reach the circuit breaker,
+        # not kill the loop through errexit.
         local response
-        response=$(invoke_claude "$SESSION_ID" "$effective_prompt" "$TIMEOUT")
-        local invoke_status=$?
+        local invoke_status=0
+        response=$(invoke_claude "$SESSION_ID" "$effective_prompt" "$TIMEOUT") || invoke_status=$?
 
         if [[ $invoke_status -ne 0 ]]; then
             print_error "${MSG_ERROR}: Claude invocation failed"
@@ -536,8 +539,8 @@ $PROMPT"
 
             if type run_auto_compact &>/dev/null; then
                 local compact_result
-                compact_result=$(run_auto_compact "$SESSION_ID")
-                local compact_status=$?
+                local compact_status=0
+                compact_result=$(run_auto_compact "$SESSION_ID") || compact_status=$?
 
                 case $compact_status in
                     0)
@@ -548,7 +551,7 @@ $PROMPT"
                         local retry_prompt="$PROMPT"
                         if type get_context_continuation_prompt &>/dev/null; then
                             local cont_prompt
-                            cont_prompt=$(get_context_continuation_prompt)
+                            cont_prompt=$(get_context_continuation_prompt) || true
                             if [[ -n "$cont_prompt" ]]; then
                                 retry_prompt="$cont_prompt
 
@@ -558,8 +561,8 @@ $PROMPT"
                             fi
                         fi
 
-                        response=$(invoke_claude "$SESSION_ID" "$retry_prompt" "$TIMEOUT")
-                        invoke_status=$?
+                        invoke_status=0
+                        response=$(invoke_claude "$SESSION_ID" "$retry_prompt" "$TIMEOUT") || invoke_status=$?
 
                         if [[ $invoke_status -ne 0 ]]; then
                             print_error "${MSG_ERROR}: Claude invocation failed after compact"
@@ -581,10 +584,10 @@ $PROMPT"
                         fi
 
                         # Retry with new session and handoff context
+                        invoke_status=0
                         response=$(invoke_claude "$SESSION_ID" "$handoff_prompt
 
-$PROMPT" "$TIMEOUT")
-                        invoke_status=$?
+$PROMPT" "$TIMEOUT") || invoke_status=$?
 
                         if [[ $invoke_status -ne 0 ]]; then
                             print_error "${MSG_ERROR}: Claude invocation failed in continuation session"
