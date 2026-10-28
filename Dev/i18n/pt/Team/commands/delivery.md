@@ -1,6 +1,6 @@
 ---
-description: Equipe de Entrega - Ciclo de vida completo do sprint (redacao + implementacao) usando Agent Teams
-argument-hint: <sprint-name|prd-path> [--phase=all|writing|implementation] [--max-workers=3]
+description: Equipe de Entrega - Ciclo de vida completo do sprint (redacao + implementacao) com subagentes (Agent Teams opcional)
+argument-hint: <sprint-name|prd-path> [--phase=all|writing|implementation] [--max-workers=3] [--engine=subagents|teams]
 ---
 
 # Equipe de Entrega - Ciclo de Vida Completo do Sprint (Redacao + Implementacao)
@@ -14,6 +14,7 @@ $ARGUMENTS
 - `<sprint-name|prd-path>`: Nome/ID do sprint ou caminho para o documento PRD
 - `--phase=all`: Fase a executar (padrao: `all`). Opcoes: `all`, `writing`, `implementation`
 - `--max-workers=3`: Maximo de workers paralelos por fase (padrao: 3, max: 3)
+- `--engine=subagents`: Motor de execução (padrão: `subagents`). Opções: `subagents` (delegação a subagentes pela ferramenta `Agent`, sem pré-requisito), `teams` (Agent Teams experimental). Ver "Motor de execução"
 - `--overnight`: Executar em modo noturno (limitado, para as 6h)
 - `--supervised`: Pausar antes de cada story para confirmacao humana
 - `--max-stories=10`: Maximo de stories a processar (padrao: 10)
@@ -27,10 +28,34 @@ $ARGUMENTS
 
 > O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
 
+## Motor de execução (`--engine`)
+
+O motor padrão não depende de nenhuma funcionalidade experimental: o comando funciona mesmo que `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` não esteja definida.
+
+| Motor | Ativação | Pré-requisitos | Comportamento |
+|-------|----------|----------------|---------------|
+| `subagents` (padrão) | sem flag ou `--engine=subagents` | Nenhum (ferramenta `Agent` nativa) | A sessão atual assume o papel de líder e delega cada tarefa de worker a um subagente pela ferramenta `Agent` (modelo do worker passado pelo parâmetro `model`). Os subagentes independentes são lançados numa mesma mensagem para executar em paralelo; cada um escreve seu resultado no seu diretório isolado e devolve apenas um resumo curto. Os workers não se comunicam entre si: o líder faz a ponte. Funciona em modo interativo, com `claude -p` e em CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Equipe Agent Teams: workers persistentes coordenados por `TaskCreate` / `TaskList` / `SendMessage`, mensagens diretas entre colegas, hooks `TeammateIdle` / `TaskCompleted`. |
+
+**Fallback**: se `--engine=teams` for pedido sem que `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` esteja definida, não falhar — exibir `ℹ️ Agent Teams indisponível: fallback para --engine=subagents` e continuar com o motor `subagents`.
+
+**Limites do motor `teams`**: sem modo não interativo (`claude -p`) nem execução em CI; uma única equipe por sessão (encerrar a equipe atual antes de lançar outra); API em research preview, sujeita a mudanças.
+
+O processo abaixo é descrito com as primitivas do Agent Teams. Com `--engine=subagents`, aplicar esta correspondência:
+
+| Agent Teams (`teams`) | Subagentes (`subagents`) |
+|------------------------|---------------------------|
+| `TaskCreate` + lançamento de um worker | Uma chamada à ferramenta `Agent` cujo prompt retoma a descrição da tarefa |
+| Polling de `TaskList` / barreira de sincronização | Aguardar o retorno de todas as chamadas `Agent` do lote |
+| `SendMessage` para um worker | Retomar o subagente (`SendMessage` para seu ID) ou nova chamada `Agent` com o contexto necessário |
+| `shutdown_request` | Desnecessário: um subagente termina ao devolver seu resultado |
+
+**Específico da entrega**: na Fase 1, a revisão cruzada passa pelo líder, que entrega o artefato redigido a um subagente revisor e devolve os comentários ao redator. Na Fase 2, lançar cada worker desenvolvedor com `isolation: "worktree"`.
+
 ## Pre-requisitos
 
-- Claude Code v2.1.32+ com suporte a Agent Teams
-- Variavel de ambiente `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` definida
+- Claude Code v2.1.32+ com suporte a Agent Teams — apenas com `--engine=teams`
+- Variavel de ambiente `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` definida — apenas com `--engine=teams`
 - PRD ou tech spec disponivel (para Fase 1) ou backlog de sprint BMAD com stories `ready-for-dev` (somente Fase 2)
 - Metadados do sprint em `.bmad/sprint-status.yaml`
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponivel

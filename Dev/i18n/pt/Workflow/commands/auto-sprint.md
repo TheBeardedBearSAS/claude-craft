@@ -1,6 +1,6 @@
 ---
 description: Orquestrador de sprint completo de ponta a ponta (início -> decomposição -> validação -> implementação -> PR -> CI -> revisão -> retro -> merge)
-argument-hint: "<N> [--from-prd] [--auto-merge] [--max-fix-attempts=2] [--max-workers=3] [--base=main] [--dry-run] [--overnight]"
+argument-hint: "<N> [--from-prd] [--auto-merge] [--max-fix-attempts=2] [--max-workers=3] [--base=main] [--dry-run] [--overnight] [--engine=subagents|teams]"
 ---
 
 # Auto Sprint — Orquestrador de Sprint de Ponta a Ponta
@@ -31,14 +31,15 @@ $ARGUMENTS
   regra 09, e o princípio Karpathy "sem auto-merge sem revisão humana").
 - `--max-fix-attempts=2` : Máximo de tentativas de correção automática por gate com falha antes de abortar (padrão: 2).
 - `--max-workers=3` : Máximo de workers de desenvolvimento em paralelo na fase de implementação (padrão: 2, máximo: 3).
+- `--engine=subagents`: Motor da fase de implementação (padrão: `subagents`, delegação pela ferramenta `Agent`). `teams`: Agent Teams experimental, com fallback para `subagents` se indisponível. Ver `/team:sprint`, seção "Motor de execução"
 - `--base=main` : Branch base para o PR (padrão: `main`).
 - `--dry-run` : Exibe as 9 fases planejadas e o contexto do sprint resolvido, depois para. **Nenhuma escrita.**
 - `--overnight` : Repassado para a fase de implementação (limitado, para às 6h).
 
 ## Pré-requisitos
 
-- Claude Code v2.1.32+ com suporte a Agent Teams
-- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` definido
+- Claude Code v2.1.32+ com suporte a Agent Teams — apenas com `--engine=teams`
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` definido — apenas com `--engine=teams`
 - CLI `gh` autenticado (criação de PR / verificações / merge)
 - Docker disponível (todos os testes são executados via Docker — veja o CLAUDE.md do projeto)
 - Projeto BMAD v6: `.bmad/sprint-status.yaml` é criado por `/workflow:start` (fase 1) se não existir
@@ -105,6 +106,8 @@ Inicie um sub-agente isolado:
 > Equivalente a `/workflow:implement --parallel N` (que delega para `/team:sprint`).
 
 Assuma diretamente o **papel de maestro de `/team:sprint`** (**não** inicie um Agent Team aninhado):
+
+**Motor**: com `--engine=subagents` (padrão), na etapa 4 lançar um subagente por story pela ferramenta `Agent` (`isolation: "worktree"`, todos numa mesma mensagem) em vez de `TaskCreate`, e na etapa 5 aguardar seu retorno em vez de consultar `TaskList` (correspondência completa em `/team:sprint`, seção "Motor de execução"). Com `--engine=teams`, seguir as etapas como estão escritas.
 
 1. Leia `.bmad/sprint-status.yaml`; filtre histórias em `ready-for-dev`.
 2. Analise a independência por domínio de arquivo (sinalize sobreposições de `**/Shared/**`, `**/Common/**`, `**/Utils/**`,
@@ -195,7 +198,7 @@ Fase             | Status | Notas
 | Falha no DoD da história após tentativas | Marcar como `blocked`, continuar, reportar ao final |
 | CI vermelha após tentativas | Abortar com relatório de verificações com falha |
 | Merge bloqueado (proteção / escopo) | Expor o erro + flag sugerida, não forçar |
-| Agent Teams indisponível | Abortar Fase 4 com dica de configuração (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) |
+| Agent Teams indisponível com `--engine=teams` | Fallback para `--engine=subagents` (sem abortar); definir `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` para usar `--engine=teams` |
 
 ## Notas
 

@@ -1,6 +1,6 @@
 ---
-description: Sprint Development Team - Parallel story implementation using Agent Teams
-argument-hint: <sprint-name> [--max-workers=3] [--overnight]
+description: Sprint Development Team - Parallel story implementation using sub-agents (Agent Teams optional)
+argument-hint: <sprint-name> [--max-workers=3] [--overnight] [--engine=subagents|teams]
 ---
 
 # Sprint Development Team - Parallel Story Implementation
@@ -13,18 +13,43 @@ $ARGUMENTS
 
 - `<sprint-name>`: Name or ID of the sprint to process
 - `--max-workers=3`: Maximum parallel dev workers (default: 2, max: 3)
+- `--engine=subagents`: Execution engine (default: `subagents`). Options: `subagents` (delegation to sub-agents via the `Agent` tool, no prerequisite), `teams` (experimental Agent Teams). See "Execution engine"
 - `--overnight`: Run in overnight mode (bounded, stops at 6am)
 - `--supervised`: Pause before each story for human confirmation
 - `--max-stories=10`: Maximum stories to process (default: 10)
 - `--timeout=12`: Maximum runtime in hours (default: 12)
 - `--dry-run`: Show team composition and story assignments without executing
 - `--max-cost=<dollars>`: Maximum budget in dollars. If the estimated parallel cost exceeds this threshold, execution is blocked with an OVER BUDGET message
-- `--ralph-mode`: Enable Ralph recovery engine (error classification, auto-retry, escalation service) alongside Agent Teams parallelism.
+- `--ralph-mode`: Enable Ralph recovery engine (error classification, auto-retry, escalation service) alongside Agent Teams parallelism. Requires `--engine=teams`: the Ralph Teams adapter relies on `TaskCreate` / `SendMessage`.
+
+## Execution engine (`--engine`)
+
+The default engine relies on no experimental feature: the command works even when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is not set.
+
+| Engine | Activation | Prerequisites | Behavior |
+|--------|------------|---------------|----------|
+| `subagents` (default) | no flag or `--engine=subagents` | None (native `Agent` tool) | The current session acts as the lead and delegates each worker task to a sub-agent via the `Agent` tool (worker model passed through the `model` parameter). Independent sub-agents are launched in a single message so they run in parallel; each one writes its result to its isolated directory and returns only a short summary. Workers do not talk to each other: the lead relays. Works interactively, with `claude -p` and in CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Agent Teams team: persistent workers coordinated through `TaskCreate` / `TaskList` / `SendMessage`, direct teammate messaging, `TeammateIdle` / `TaskCompleted` hooks. |
+
+**Fallback**: if `--engine=teams` is requested while `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is missing, do not fail — print `ℹ️ Agent Teams unavailable: falling back to --engine=subagents` and continue with the `subagents` engine.
+
+**`teams` engine limits**: no non-interactive mode (`claude -p`) and no CI runs; one team per session (finish the current team before starting another); research preview API, subject to change.
+
+The process below is written with Agent Teams primitives. With `--engine=subagents`, apply this mapping:
+
+| Agent Teams (`teams`) | Sub-agents (`subagents`) |
+|------------------------|---------------------------|
+| `TaskCreate` + worker spawn | One `Agent` tool call whose prompt carries the task description |
+| `TaskList` polling / synchronization barrier | Wait for every `Agent` call of the batch to return |
+| `SendMessage` to a worker | Resume the sub-agent (`SendMessage` to its ID) or a new `Agent` call with the needed context |
+| `shutdown_request` | Not needed: a sub-agent ends when it returns |
+
+**Sprint specifics**: with `subagents`, launch each developer worker with `isolation: "worktree"` so parallel stories do not edit the same working tree.
 
 ## Prerequisites
 
-- Claude Code v2.1.32+ with Agent Teams support
-- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable set
+- Claude Code v2.1.32+ with Agent Teams support — only with `--engine=teams`
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable set — only with `--engine=teams`
 - BMAD sprint backlog with stories in `ready-for-dev` status
 - Sprint metadata in `.bmad/sprint-status.yaml`
 - At least 2 independent stories (single-story sprints use sequential Ralph)
