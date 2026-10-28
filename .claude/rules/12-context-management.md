@@ -202,7 +202,7 @@ La status line affiche le pourcentage de contexte utilise.
 | Variable | Description |
 |----------|-------------|
 | `CLAUDE_CODE_SUBAGENT_MODEL` | Modèle **par défaut** des sous-agents non typés (ex: `sonnet`). **Depuis Claude Code 2.1.251**, le frontmatter `model:` d'un agent prévaut : les 11 reviewers `model: haiku` restent sur haiku. **Avant 2.1.251, c'était l'inverse** — cette variable écrasait le frontmatter (voir la note de précédence ci-dessous). |
-| `CLAUDE_CODE_FORK_SUBAGENT` | `1` pour isoler le contexte des sous-agents (forked subagents, v2.1.117+) |
+| `CLAUDE_CODE_FORK_SUBAGENT` | `1` pour isoler le contexte des sous-agents (forked subagents, v2.1.117+) ; actif par défaut en `-p`, SDK, desktop et VS Code depuis 2.1.302, `0` pour le désactiver |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Etendre/forcer le prompt caching (−40 % sur sessions repetitives) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre a `1` pour desactiver la memoire automatique |
 

@@ -54,7 +54,7 @@ Todo el contenido está disponible en 5 idiomas:
 
 | Versión | Estado |
 |---------|--------|
-| **2.1.296** | Recomendada (soporte completo de funcionalidades) |
+| **2.1.312** | Recomendada (soporte completo de funcionalidades) |
 | **2.1.260+** | Mínima soportada (CVE-2026-86063 / CVE-2026-103435 parcheado) |
 
 ### Opcionales (Recomendados)

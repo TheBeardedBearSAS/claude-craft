@@ -244,7 +244,7 @@ fi
 | Docker Compose | 2.0 | 2.24+ |
 | jq | 1.5 | 1.7+ |
 | Make | 3.0 | 4.x |
-| Claude Code | 2.1.260 (CVE-2026-86063 / CVE-2026-103435 patchés) | 2.1.296 |
+| Claude Code | 2.1.260 (CVE-2026-86063 / CVE-2026-103435 patchés) | 2.1.312 |
 
 ---
 
