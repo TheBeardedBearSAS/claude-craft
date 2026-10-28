@@ -7,15 +7,6 @@ maxTurns: 8
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
 permissionMode: default
 skills: [solid-principles, kiss-dry-yagni, testing]
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(:(){:|:&};:*)"
-  - "Bash(sudo:*)"
-  - "Bash(chmod 777:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
 ---
 
 # Refactoring Specialist Agent

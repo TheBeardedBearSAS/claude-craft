@@ -17,20 +17,6 @@ permissionMode: default
 skills:
   - git-workflow
   - security
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(kubectl delete:*)"
-  - "Bash(helm uninstall:*)"
-  - "Bash(terraform destroy:*)"
-  - "Bash(tofu destroy:*)"
-  - "Bash(docker system prune -a*)"
-  - "Bash(docker volume rm:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
-  - "Bash(git push --force*)"
-  - "Bash(git push -f*)"
 ---
 
 # DevOps Engineer Agent

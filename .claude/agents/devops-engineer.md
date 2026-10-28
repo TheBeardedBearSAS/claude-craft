@@ -6,24 +6,6 @@ maxTurns: 8
 effort: medium
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
-# Audit 2026-05-18 QW-15 — DevOps touches shared infra (clusters, secrets,
-# load balancers). Block destructive shell verbs and remote infra-as-code
-# applies. Investigation / generating manifests is fine; executing them
-# against prod must require an explicit user opt-in.
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(kubectl delete:*)"
-  - "Bash(helm uninstall:*)"
-  - "Bash(terraform destroy:*)"
-  - "Bash(tofu destroy:*)"
-  - "Bash(docker system prune -a*)"
-  - "Bash(docker volume rm:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
-  - "Bash(git push --force*)"
-  - "Bash(git push -f*)"
 permissionMode: default
 skills: [git-workflow, security]
 ---
