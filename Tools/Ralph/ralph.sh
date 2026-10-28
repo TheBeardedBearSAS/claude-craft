@@ -53,6 +53,7 @@ CLI_DELAY=""
 VERBOSE=false
 DRY_RUN=false
 CONTINUE_SESSION=""
+HANDOFF_PROMPT=""
 
 # v2.0 New flags
 AUTO_DETECT=false
@@ -440,6 +441,20 @@ parse_args() {
 # Main Ralph loop
 # =============================================================================
 
+# Switch SESSION_ID to the continuation session created by run_auto_compact
+# (return 3) and store its handoff prompt in HANDOFF_PROMPT. Not in `$(...)`.
+switch_to_continuation_session() {
+    local previous_session="$SESSION_ID"
+    SESSION_ID="$CONTEXT_NEW_SESSION_ID"
+    print_info "Switching to continuation session: $SESSION_ID"
+
+    if type get_session_handoff_prompt &>/dev/null; then
+        HANDOFF_PROMPT=$(get_session_handoff_prompt "$previous_session")
+    else
+        HANDOFF_PROMPT="Continue the implementation from where the previous session left off."
+    fi
+}
+
 run_ralph() {
     local iteration=0
     local exit_reason=""
@@ -506,14 +521,24 @@ run_ralph() {
             continue
         fi
 
-        # Check for preventive compact (before hitting the limit)
+        # Check for preventive compact (before hitting the limit). Return 3:
+        # max_compacts reached, switch session as the reactive path does.
+        local preventive_status=0
+        HANDOFF_PROMPT=""
         if type check_preventive_compact &>/dev/null; then
-            check_preventive_compact "$SESSION_ID" || true
+            check_preventive_compact "$SESSION_ID" || preventive_status=$?
+            if [[ $preventive_status -eq 3 ]]; then
+                switch_to_continuation_session
+            fi
         fi
 
         # Check if we have a continuation prompt (after compact/session handoff)
         local effective_prompt="$PROMPT"
-        if type get_context_continuation_prompt &>/dev/null; then
+        if [[ -n "$HANDOFF_PROMPT" ]]; then
+            effective_prompt="$HANDOFF_PROMPT
+
+$PROMPT"
+        elif type get_context_continuation_prompt &>/dev/null; then
             local continuation_prompt
             # Returns 1 when there is no continuation context (nominal).
             continuation_prompt=$(get_context_continuation_prompt) || true
@@ -581,21 +606,11 @@ $PROMPT"
                         ;;
                     3)
                         # Session continuation - new session created
-                        local previous_session="$SESSION_ID"
-                        SESSION_ID="$CONTEXT_NEW_SESSION_ID"
-                        print_info "Switching to continuation session: $SESSION_ID"
-
-                        # Get handoff prompt for new session
-                        local handoff_prompt
-                        if type get_session_handoff_prompt &>/dev/null; then
-                            handoff_prompt=$(get_session_handoff_prompt "$previous_session")
-                        else
-                            handoff_prompt="Continue the implementation from where the previous session left off."
-                        fi
+                        switch_to_continuation_session
 
                         # Retry with new session and handoff context
                         invoke_status=0
-                        response=$(invoke_claude "$SESSION_ID" "$handoff_prompt
+                        response=$(invoke_claude "$SESSION_ID" "$HANDOFF_PROMPT
 
 $PROMPT" "$TIMEOUT") || invoke_status=$?
 

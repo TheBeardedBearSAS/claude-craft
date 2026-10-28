@@ -27,7 +27,9 @@ PARALLEL_FAILED_COUNT=0
 # must run in the leader shell, never in `$(...)` (the worker would hold the
 # substitution pipe open, and the tracking arrays would be lost).
 PARALLEL_SPAWNED_SESSION_ID=""
+# One story id per line (ids may contain spaces).
 PARALLEL_COLLECTED_STORIES=""
+PARALLEL_FAILED_STORIES=""
 
 # Paths
 PARALLEL_BASE_DIR=""
@@ -106,7 +108,7 @@ EOF
 
 # Build dependency graph from stories
 build_dependency_graph() {
-    local stories="$1"  # Space-separated list of story IDs
+    local stories="$1"  # Story IDs, one per line
     local bmad_dir="${BMAD_DIR:-.bmad}"
     local status_file="$bmad_dir/sprint-status.yaml"
 
@@ -120,7 +122,10 @@ build_dependency_graph() {
     local nodes="{}"
     local edges="[]"
 
-    for story_id in $stories; do
+    local -a story_list=()
+    mapfile -t story_list <<< "$stories"
+    for story_id in "${story_list[@]}"; do
+        [[ -z "$story_id" ]] && continue
         # Get story dependencies
         local deps="[]"
         if [[ "$with_deps" == "true" ]]; then
@@ -133,7 +138,9 @@ build_dependency_graph() {
 
         # Add edges for dependencies
         if [[ "$deps" != "[]" && "$deps" != "null" ]]; then
-            for dep in $(echo "$deps" | jq -r '.[]' 2>/dev/null || true); do
+            local -a dep_list=()
+            mapfile -t dep_list < <(echo "$deps" | jq -r '.[]' 2>/dev/null || true)
+            for dep in "${dep_list[@]}"; do
                 next=$(echo "$edges" | jq --arg from "$dep" --arg to "$story_id" '. + [{"from": $from, "to": $to}]') && edges="$next"
                 next=$(echo "$nodes" | jq --arg id "$story_id" --arg dep "$dep" '.[$id].deps += [$dep]') && nodes="$next"
             done
@@ -291,15 +298,16 @@ spawn_session() {
     local session_dir="$PARALLEL_BASE_DIR/sessions/$session_id"
     mkdir -p "$session_dir"
 
-    # Write session info
-    cat > "$session_dir/info.yaml" << EOF
-session_id: "$session_id"
-story_id: "$story_id"
-status: "running"
-started_at: "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-pid: ""
-exit_code: ""
-EOF
+    # Write session info (ids through strenv(): a `"` must not break the YAML)
+    if command -v yq &>/dev/null; then
+        SESSION_ID_ARG="$session_id" STORY_ID="$story_id" TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" yq -n '
+            .session_id = strenv(SESSION_ID_ARG) |
+            .story_id = strenv(STORY_ID) |
+            .status = "running" |
+            .started_at = strenv(TS) |
+            .pid = "" |
+            .exit_code = ""' > "$session_dir/info.yaml"
+    fi
 
     # Find Ralph script
     local ralph_script=""
@@ -317,6 +325,7 @@ EOF
 
     # Build command
     local -a cmd=("$ralph_script")
+    [[ -n "${LANG_ARG:-}" ]] && cmd+=("--lang=$LANG_ARG")
     [[ -n "$config" ]] && cmd+=("--config=$config")
 
     # Isolate the worker's working tree (one git worktree per session)
@@ -413,7 +422,8 @@ cleanup_worker_worktree() {
 # Check and collect completed sessions.
 # In the single-writer pattern, this function collects finished PIDs
 # and then merges worker reports written by the background processes.
-# Completed stories are also appended to PARALLEL_COLLECTED_STORIES.
+# Completed (failed) stories are also appended, one per line, to
+# PARALLEL_COLLECTED_STORIES (PARALLEL_FAILED_STORIES).
 collect_completed_sessions() {
     local completed=()
     local failed=()
@@ -432,10 +442,12 @@ collect_completed_sessions() {
 
             if [[ $exit_code -eq 0 ]]; then
                 completed+=("$story_id")
+                PARALLEL_COLLECTED_STORIES+="$story_id"$'\n'
                 PARALLEL_COMPLETED_COUNT=$((PARALLEL_COMPLETED_COUNT + 1))
                 print_success "Session completed: $session_id ($story_id)"
             else
                 failed+=("$story_id")
+                PARALLEL_FAILED_STORIES+="$story_id"$'\n'
                 PARALLEL_FAILED_COUNT=$((PARALLEL_FAILED_COUNT + 1))
                 print_error "Session failed: $session_id ($story_id)"
             fi
@@ -452,9 +464,6 @@ collect_completed_sessions() {
     fi
 
     # Return completed stories
-    if [[ ${#completed[@]} -gt 0 ]]; then
-        PARALLEL_COLLECTED_STORIES+=" ${completed[*]}"
-    fi
     echo "${completed[*]}"
 }
 
@@ -514,8 +523,8 @@ process_stories_parallel() {
     print_info "Stories: $(echo "$stories" | wc -w | tr -d ' ')"
     print_info "Max concurrent: $PARALLEL_MAX_CONCURRENT"
 
-    # Build dependency graph
-    build_dependency_graph "$stories" > /dev/null
+    # Build dependency graph (it reads one id per line)
+    build_dependency_graph "$(tr -s ' ' '\n' <<< "$stories")" > /dev/null
 
     local processed=0
     local total
@@ -589,16 +598,14 @@ write_worker_report() {
     local status="$4"  # "completed" or "failed"
 
     local report_file="${PARALLEL_WORKER_DIR}/worker-${worker_id}.yaml"
-    local ts
-    ts="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-
-    cat > "$report_file" << EOF
-worker_id: "${worker_id}"
-session_id: "${session_id}"
-story_id: "${story_id}"
-status: "${status}"
-reported_at: "${ts}"
-EOF
+    # Values through strenv(): a `"` in an id must not break the YAML
+    WORKER_ID="$worker_id" SESSION_ID_ARG="$session_id" STORY_ID="$story_id" \
+        STATUS="$status" TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" yq -n '
+        .worker_id = strenv(WORKER_ID) |
+        .session_id = strenv(SESSION_ID_ARG) |
+        .story_id = strenv(STORY_ID) |
+        .status = strenv(STATUS) |
+        .reported_at = strenv(TS)' > "$report_file"
 }
 
 # Merge all worker reports into the shared state file (leader only).
