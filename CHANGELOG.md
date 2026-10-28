@@ -7,13 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.27.0] - 2026-10-28
+
+Dernière version 8.x avant la consolidation 9.0 : les commandes `/team:*` fonctionnent sans Agent Teams, deux commandes redondantes avec des capacités natives sont dépréciées, et le moteur Ralph est fiabilisé (mode parallèle, `set -e`, sessions). Claude Code recommandé : 2.1.312.
+
+### Added
+
+- **`--engine=subagents|teams`** sur `/team:audit`, `/team:security`, `/team:sprint`, `/team:delivery` et `/workflow:auto-sprint` (détails ci-dessous).
+- **`tests/scripts/team-engine.test.mjs`**, **`tests/scripts/ralph-conductor-sync.test.mjs`** ; suites e2e Ralph `ralph-set-e.bats`, `ralph-continuation.bats`, `ralph-conductor-sessions.bats`, `ralph-handoff-workers.bats`, `ralph-unsafe-session-paths.bats`, `i18n-parity.bats`.
+
+### Deprecated
+
+- **`/common:research-context7`** → MCP context7 (docs de bibliothèques) ou `/deep-research` (recherche web), avec repli WebSearch/WebFetch ou `@research-assistant` hors claude.ai. **`/uiux:orchestrator`** → agent `@uiux-orchestrator`. Stubs de redirection jusqu'en 9.0 (5 langues). Le contrat de stub accepte `replaced-by: "@agent"` et `"mcp:server"` ; `config/removed-commands.yaml` gagne une table `scheduled:` (54 stubs distribués prévus pour la 9.0). Les complétions Bash/Zsh/Fish ne proposent plus les 12 commandes dépréciées ou retirées.
+
 ### Changed
 
+- **Claude Code recommandé : 2.1.296 → 2.1.312** (minimum inchangé : 2.1.260). Correctifs permissions 2.1.309-2.1.310 (règles deny `Edit` sur les redirections Bash, `cd`/git composés, `--mcp-config` protégé, hooks Windows). Section « Features 2.1.297 → 2.1.312 » dans `.claude/COMPATIBILITY.md` ; règle 12 : `CLAUDE_CODE_FORK_SUBAGENT` actif par défaut en `-p`/SDK depuis 2.1.302.
+- **Compteurs de commandes** : deux définitions canoniques (140 commandes / 18 namespaces sous `.claude/commands/`, 238 / 29 installables dont les stubs) appliquées au README et au script de soumission awesome-claude-code ; `doc-counts.test.mjs` rejette tout autre chiffre.
+- **`uiux:audit`** délègue l'accessibilité à `/uiux:a11y-audit` et **`uiux:component-spec`** (étape 3) à `/uiux:a11y-component` (5 langues).
 - **`/team:audit`, `/team:security`, `/team:sprint`, `/team:delivery`** : nouveau flag `--engine=subagents|teams`. Le moteur par défaut `subagents` délègue aux sous-agents via l'outil `Agent` et ne requiert plus `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` (fonctionne avec `claude -p` et en CI) ; Agent Teams devient optionnel (`--engine=teams`, avec repli automatique si la variable est absente). Limites de `teams` documentées (pas de `-p` ni de CI, une équipe par session). `/team:security` précise que `/security-review` natif ne couvre que le diff. Descriptions mises à jour (« par sous-agents (Agent Teams en option) »). `/workflow:auto-sprint` relaie `--engine` à sa phase d'implémentation et se replie sur `subagents` au lieu d'abandonner ; `--ralph-mode` et le mode de coordination de `@ralph-conductor` sont réservés à `/team:sprint --engine=teams`. 5 langues. Test `tests/scripts/team-engine.test.mjs`.
 
 ### Fixed
 
 - **`/common:pre-commit-check`, `/common:pre-merge-check`, `/common:release-checklist`** : les stubs dépréciés renvoyaient vers `.claude/commands/gate/check.md`, installé uniquement par le paquet Project ; une installation Dev seule (`install-common-rules.sh`, `claude-craft update`) installe désormais `/gate:check`. Test `tests/scripts/install-common-rules.test.mjs`.
+- **Ralph — isolation du mode parallèle** : chaque session Ralph fixe son propre identifiant de session Claude (`--session-id` puis `--resume`, au lieu de `--continue` partagé) et chaque worker tourne dans un worktree git dédié ; les workers du conductor s'exécutent réellement en parallèle ; identifiants de story/session nettoyés (`/`, `../`, espaces) et passés à yq via `strenv()`.
+- **Ralph — chemins `set -euo pipefail`** : un appel Claude en échec atteint le circuit breaker au lieu de tuer la boucle ; extractions par pipe protégées dans `lib/*.sh` ; `/context` et `/compact` utilisent la session Ralph (`--resume`) ; `max_compacts` bascule vraiment sur une session de continuation (préventif comme réactif) ; workers en échec comptés et passés à `blocked`.
+- **Ralph — prompts et i18n** : prompt de continuation envoyé seulement après une compaction ou un relais réel, diagnostics envoyés sur stderr ; prompts de continuation/relais, sections de contexte et sortie du leader du conductor localisés (`--lang`, 5 langues, accents restaurés) ; options CLI prioritaires sur `ralph.yml`.
+- **Gate E2E** : le job bats passait au vert sans exécuter les tests (liste de fichiers collée, `tee` sans `pipefail`) ; trois échecs préexistants corrigés (`install-rtk.bats`, regex SEC-001, mode exécutable de `statusline.sh`).
+- **Correctifs de contenu** : chemins `/home/fmetivier` retirés des commandes React ; `symfony:check-security` migré vers l'OWASP Top 10:2025 (5 langues, couvert par `owasp-top10.test.mjs`) ; grille de scoring dupliquée retirée de `vite:check-library-build` ; `common:aliases` appelle le binaire `claude` ; `.claude/agents/ralph-conductor.md` aligné sur la version distribuée.
 
 ## [8.26.0] - 2026-10-26
 

@@ -14,16 +14,17 @@
 # OpenTofu 1.13.1, Ansible 2.21.5, hcloud 1.70.1, FrankenPHP 1.13.0 et PgBouncer 1.26.0 (correctifs CVE)).
 # CORRECTIF : la note du 2026-07-03 (« RN 0.86 inexistant », 0.86→0.85) était FAUSSE — dist-tags npm vérifiés
 # le 2026-10-13 : 0.86-stable=0.86.3, latest=0.87.1. Précédente : audit d'alignement Claude du 2026-10-13 (CLI 2.1.260/2.1.296).
+# 2026-10-28 (release 8.27.0) : Claude Code recommandé/testé 2.1.296 → 2.1.312 (changelog 2.1.297–2.1.312 relu).
 
 meta:
-  lastUpdated: '2026-10-13'
+  lastUpdated: '2026-10-28'
 
 claudeCode:
   # minimum : plancher sécurité — couvre GHSA-5j29 (2.1.129), GHSA-7835 (2.1.163),
   # GHSA-pq7j (2.1.179) et GHSA-gfvf (2.1.260). Audit d'alignement du 2026-10-13.
   minimum: '2.1.260'
-  recommended: '2.1.296'
-  testedUpTo: '2.1.296'
+  recommended: '2.1.312'
+  testedUpTo: '2.1.312'
   # Génération courante (2026-10) : Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.1.
   # Opus 4.8, Sonnet 5, Haiku 4.5 et Fable 5 restent disponibles mais sont legacy.
   models:
@@ -97,6 +98,8 @@ denylist:
   - '2.1.168'
   # Claude Code recommandé périmé (remplacé par 2.1.296, audit 2026-10-13)
   - '2.1.193'
+  # Claude Code recommandé périmé (remplacé par 2.1.312, release 8.27.0 — correctifs permissions 2.1.309)
+  - '2.1.296'
   # Note « Fable 5 / Mythos 5 suspendus » fausse (Fable 5.1 courant) — audit 2026-10-13
   - 'Fable 5 / Mythos 5 suspendus'
   # IDs de modèles legacy à ne plus recommander dans les fichiers vitrine
@@ -107,6 +110,7 @@ denylist:
   - 'v8.20.0'
   - 'v8.21.0'
   - 'v8.22.0'
+  - 'v8.26.0 - Claude Code'
   # Versions périmées — audit fraîcheur 2026-10-13
   - '19.2 + Compiler'
   - '3.44 / Dart 3.12'
