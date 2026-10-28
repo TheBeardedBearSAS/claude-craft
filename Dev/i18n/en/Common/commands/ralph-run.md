@@ -51,6 +51,12 @@ Execute Claude in a continuous loop until the task is complete or the Definition
    - Set max iterations, timeouts, DoD criteria
    - Initialize hooks if enabled
 
+#### Session and parallel worker isolation
+
+- **Explicit Claude session**: each Ralph session pins its own Claude conversation ID — `claude --session-id <uuid>` on the first iteration, then `claude --resume <uuid>`. The UUID is stored in `.ralph/sessions/<session>/claude_session_id`, so `--continue=<session>` resumes the right conversation. Ralph no longer uses `claude --continue`, which resumed "the most recent conversation in the directory" (shared between workers, or even with the user's interactive session).
+- **One git worktree per worker** (parallel mode, `lib/parallel-manager.sh`): each story runs in a dedicated worktree `.ralph/parallel/worktrees/<session>` on branch `ralph/<session>`, with its Ralph state under `.ralph/parallel/sessions/<session>/ralph/`. At the end of the run, leftover changes are committed as `wip(ralph): <story>` on that branch, then the worktree is removed (`git worktree remove`). If that commit fails, the worktree is kept (no data loss) and reported in `output.log`. Collect the work by merging the `ralph/*` branches.
+- **Outside a git repository**: no worktree; the worker runs in the current directory (a warning is printed), Claude session isolation still applies.
+
 ### 2. Main Loop with Dashboard
 
 ```

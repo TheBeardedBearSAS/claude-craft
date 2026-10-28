@@ -21,7 +21,7 @@ ESCALATION_RESOLVED_DIR=""
 ESCALATION_AUDIT_FILE=""
 
 # Escalation priorities
-declare -A ESCALATION_PRIORITIES=(
+declare -gA ESCALATION_PRIORITIES=(
     ["critical"]=1
     ["high"]=2
     ["medium"]=3

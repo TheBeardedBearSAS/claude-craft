@@ -499,7 +499,7 @@ run_ralph() {
 
         # Check for preventive compact (before hitting the limit)
         if type check_preventive_compact &>/dev/null; then
-            check_preventive_compact "$SESSION_ID"
+            check_preventive_compact "$SESSION_ID" || true
         fi
 
         # Check if we have a continuation prompt (after compact/session handoff)
