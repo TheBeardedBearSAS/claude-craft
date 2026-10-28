@@ -72,7 +72,7 @@ detect_symfony() {
 
         # Detect Symfony version
         local version
-        version=$(grep -o '"symfony/framework-bundle"[[:space:]]*:[[:space:]]*"[^"]*"' "$composer_file" | grep -o '[0-9]\+\.[0-9]\+' | head -1)
+        version=$(grep -o '"symfony/framework-bundle"[[:space:]]*:[[:space:]]*"[^"]*"' "$composer_file" | grep -o '[0-9]\+\.[0-9]\+' | head -1) || true
         if [[ -n "$version" ]]; then
             DETECTED_PROJECT_TYPE="symfony-$version"
         fi

@@ -415,7 +415,7 @@ run_tdd_retry() {
 
     # Try to parse test output
     if echo "$error_output" | grep -qE "FAIL|FAILED|Error:"; then
-        failing_tests=$(echo "$error_output" | grep -E "FAIL|FAILED|Error:" | head -5)
+        failing_tests=$(echo "$error_output" | grep -E "FAIL|FAILED|Error:" | head -5) || true
     fi
 
     # Update sprint progress with TDD phase

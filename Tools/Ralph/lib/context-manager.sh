@@ -106,6 +106,17 @@ init_context_manager() {
     print_verbose "  - Smart reconstruction: $CONTEXT_SMART_RECONSTRUCTION"
 }
 
+# Print the first lines of `/context` for a Claude session UUID.
+# Best effort: prints nothing on failure, always succeeds (set -e safe).
+probe_context_usage() {
+    local claude_uuid="$1"
+    if command -v timeout &> /dev/null; then
+        timeout 10s "${CLAUDE_CMD[@]}" --resume "$claude_uuid" -p "/context" 2>/dev/null | head -5 || true
+    else
+        "${CLAUDE_CMD[@]}" --resume "$claude_uuid" -p "/context" 2>/dev/null | head -5 || true
+    fi
+}
+
 # =============================================================================
 # Auto-Compact
 # =============================================================================
@@ -120,14 +131,19 @@ run_auto_compact() {
         return 1
     fi
 
+    # /context and /compact must target this Ralph session's Claude session,
+    # never "the most recent conversation in this directory" (--continue).
+    local claude_uuid
+    claude_uuid=$(get_claude_session_uuid "$session_id")
+    if [[ -z "$claude_uuid" ]]; then
+        log_session "$session_id" "WARN" "No Claude session yet, nothing to compact"
+        return 1
+    fi
+
     # Check if context is above minimum threshold before compacting
     if [[ "$CONTEXT_MIN_THRESHOLD" -gt 0 ]]; then
         local context_info
-        if command -v timeout &> /dev/null; then
-            context_info=$(timeout 10s "${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
-        else
-            context_info=$("${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
-        fi
+        context_info=$(probe_context_usage "$claude_uuid")
         local current_usage
         current_usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1 || true)
 
@@ -145,8 +161,8 @@ run_auto_compact() {
 
         # Handle overflow strategy
         local overflow_result
-        overflow_result=$(handle_max_compacts_reached "$session_id")
-        local overflow_status=$?
+        local overflow_status=0
+        overflow_result=$(handle_max_compacts_reached "$session_id") || overflow_status=$?
 
         if [[ $overflow_status -eq 0 && -n "$overflow_result" ]]; then
             # New session ID returned - signal continuation
@@ -185,11 +201,10 @@ run_auto_compact() {
 
     # Execute /compact via Claude CLI
     local compact_output
-    local compact_status
+    local compact_status=0
 
     if command -v timeout &> /dev/null; then
-        compact_output=$(timeout 60s "${CLAUDE_CMD[@]}" --continue -p "/compact" 2>&1)
-        compact_status=$?
+        compact_output=$(timeout 60s "${CLAUDE_CMD[@]}" --resume "$claude_uuid" -p "/compact" 2>&1) || compact_status=$?
 
         # Handle timeout specifically (exit code 124)
         if [[ $compact_status -eq 124 ]]; then
@@ -198,8 +213,7 @@ run_auto_compact() {
             return 1
         fi
     else
-        compact_output=$("${CLAUDE_CMD[@]}" --continue -p "/compact" 2>&1)
-        compact_status=$?
+        compact_output=$("${CLAUDE_CMD[@]}" --resume "$claude_uuid" -p "/compact" 2>&1) || compact_status=$?
     fi
 
     if [[ $compact_status -eq 0 ]]; then
@@ -404,14 +418,15 @@ check_preventive_compact() {
         return 1
     fi
 
+    # Nothing to measure before the first Claude call of this session.
+    local claude_uuid
+    claude_uuid=$(get_claude_session_uuid "$session_id")
+    [[ -z "$claude_uuid" ]] && return 1
+
     # Try to get context usage from Claude CLI
     # Note: This is a best-effort check, Claude may not always report usage
     local context_info
-    if command -v timeout &> /dev/null; then
-        context_info=$(timeout 10s "${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
-    else
-        context_info=$("${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
-    fi
+    context_info=$(probe_context_usage "$claude_uuid")
 
     # Try to extract percentage from output
     local usage
@@ -423,7 +438,7 @@ check_preventive_compact() {
 
         # Save progress before preventive compact
         if type save_sprint_progress &>/dev/null; then
-            save_sprint_progress "$session_id"
+            save_sprint_progress "$session_id" || print_verbose "No sprint progress file to save"
         fi
 
         run_auto_compact "$session_id"

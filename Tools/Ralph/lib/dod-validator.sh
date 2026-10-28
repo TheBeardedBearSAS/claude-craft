@@ -27,12 +27,12 @@ validate_dod() {
 
     # If no config, use simple completion marker check
     if [[ -z "$config_file" || ! -f "$config_file" ]]; then
-        return $(validate_simple_completion "$output")
+        validate_simple_completion "$output"; return
     fi
 
     # Check if yq is available for YAML parsing
     if ! command -v yq &> /dev/null; then
-        return $(validate_simple_completion "$output")
+        validate_simple_completion "$output"; return
     fi
 
     # Get DoD checklist from config
@@ -44,7 +44,7 @@ validate_dod() {
         if [[ -n "$marker" ]]; then
             DOD_COMPLETION_MARKER="$marker"
         fi
-        return $(validate_simple_completion "$output")
+        validate_simple_completion "$output"; return
     fi
 
     # Process checklist items

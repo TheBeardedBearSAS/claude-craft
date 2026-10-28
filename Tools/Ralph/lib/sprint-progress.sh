@@ -288,7 +288,7 @@ get_completed_tasks_count() {
 
 update_sprint_progress() {
     local section="$1"
-    local content="$2"
+    local content="${2:-}"  # optional: "compact" is called without content
 
     if [[ "$SPRINT_PROGRESS_ENABLED" != "true" ]]; then
         return 0
@@ -657,7 +657,7 @@ compact_on_sprint_start() {
     print_info "${MSG_CONTEXT_SPRINT_START:-Compact at sprint start for clean context}..."
 
     # Save initial state
-    save_sprint_progress "$session_id"
+    save_sprint_progress "$session_id" || print_verbose "No sprint progress file to save"
 
     # Run compact if available
     if type run_auto_compact &>/dev/null; then
@@ -688,7 +688,7 @@ compact_on_task_complete() {
     if [[ -n "$task_info" ]]; then
         update_sprint_progress "task_complete" "$task_info"
     fi
-    save_sprint_progress "$session_id"
+    save_sprint_progress "$session_id" || print_verbose "No sprint progress file to save"
 
     # Run compact
     if type run_auto_compact &>/dev/null; then
@@ -710,7 +710,7 @@ compact_on_us_complete() {
 
     if [[ "$SPRINT_COMPACT_ON_US_COMPLETE" != "true" ]]; then
         # Even if compact is disabled, we should save and checkpoint
-        save_sprint_progress "$session_id"
+        save_sprint_progress "$session_id" || print_verbose "No sprint progress file to save"
         if type create_checkpoint &>/dev/null; then
             create_checkpoint "$session_id" "us-complete-$us_id"
         fi
@@ -721,7 +721,7 @@ compact_on_us_complete() {
     print_info "${MSG_CONTEXT_US_COMPLETE:-US complete - running strategic compact}..."
 
     # Save and checkpoint
-    save_sprint_progress "$session_id"
+    save_sprint_progress "$session_id" || print_verbose "No sprint progress file to save"
     if type create_checkpoint &>/dev/null; then
         create_checkpoint "$session_id" "us-complete-$us_id"
     fi

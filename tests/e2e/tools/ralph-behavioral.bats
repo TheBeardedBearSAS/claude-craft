@@ -139,9 +139,11 @@ EOF
     PATH="$mock_dir:$PATH" run bash "$RALPH" --dry-run --max-iterations=1 "hello world"
 
     # Status: dry-run completes without DoD passing (DoD is skipped after the
-    # `continue` in the dry-run shortcut), so the script returns 1. We just
-    # require the status to be <= 1 (no bash crash, no >= 2 error).
-    [ "$status" -le 1 ]
+    # `continue` in the dry-run shortcut), so the script returns exactly 1.
+    # A silent `set -e` death also exits 1, so the summary must be printed too.
+    echo "$output"
+    [ "$status" -eq 1 ]
+    echo "$output" | grep -q "max_iterations"
 
     # Critical assertion: claude was not invoked in dry-run mode.
     if [ -f "$MOCK_LOG" ]; then

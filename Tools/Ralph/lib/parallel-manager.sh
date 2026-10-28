@@ -17,8 +17,9 @@ PARALLEL_RESOURCE_LIMIT_CPU="${PARALLEL_RESOURCE_LIMIT_CPU:-80}"
 PARALLEL_RESOURCE_LIMIT_MEM="${PARALLEL_RESOURCE_LIMIT_MEM:-80}"
 
 # Session tracking
-declare -gA PARALLEL_SESSIONS
-declare -gA PARALLEL_PIDS
+# `=()`: a declared-but-unassigned array is "unbound" for `${#arr[@]}` under set -u
+declare -gA PARALLEL_SESSIONS=()
+declare -gA PARALLEL_PIDS=()
 PARALLEL_SESSION_COUNT=0
 PARALLEL_COMPLETED_COUNT=0
 PARALLEL_FAILED_COUNT=0
@@ -104,10 +105,11 @@ build_dependency_graph() {
     local bmad_dir="${BMAD_DIR:-.bmad}"
     local status_file="$bmad_dir/sprint-status.yaml"
 
+    # Without a status file (or yq), all stories are independent nodes: the
+    # graph must still list them, get_ready_stories reads it.
+    local with_deps=true
     if [[ ! -f "$status_file" ]] || ! command -v yq &>/dev/null; then
-        # No dependencies, all stories are independent
-        echo '{"nodes":{},"edges":[]}'
-        return
+        with_deps=false
     fi
 
     local nodes="{}"
@@ -115,8 +117,10 @@ build_dependency_graph() {
 
     for story_id in $stories; do
         # Get story dependencies
-        local deps
-        deps=$(yq ".stories.${story_id}.blocked_by // []" "$status_file" 2>/dev/null)
+        local deps="[]"
+        if [[ "$with_deps" == "true" ]]; then
+            deps=$(yq ".stories.${story_id}.blocked_by // []" "$status_file" 2>/dev/null) || deps="[]"
+        fi
 
         # Add node
         nodes=$(echo "$nodes" | jq --arg id "$story_id" '. + {($id): {"status": "pending", "deps": []}}')
@@ -146,18 +150,20 @@ get_ready_stories() {
     fi
 
     # Find nodes with status=pending and all deps completed
+    # ($root: jq has no `$.` root accessor — that syntax failed to compile)
     jq -r '
+        . as $root |
         .nodes | to_entries[] |
         select(.value.status == "pending") |
         select(
             (.value.deps | length) == 0 or
             (
                 .value.deps as $deps |
-                ($deps | map(. as $d | $.nodes[$d].status == "completed") | all)
+                ($deps | map(. as $d | $root.nodes[$d].status == "completed") | all)
             )
         ) |
         .key
-    ' "$PARALLEL_DEPENDENCY_GRAPH" 2>/dev/null
+    ' "$PARALLEL_DEPENDENCY_GRAPH" 2>/dev/null || true
 }
 
 # Mark story as completed in dependency graph
@@ -170,6 +176,19 @@ mark_story_completed() {
 
     local updated
     updated=$(jq --arg id "$story_id" '.nodes[$id].status = "completed"' "$PARALLEL_DEPENDENCY_GRAPH")
+    echo "$updated" > "$PARALLEL_DEPENDENCY_GRAPH"
+}
+
+# Mark story as running in dependency graph (leader only, at spawn time)
+mark_story_running() {
+    local story_id="$1"
+
+    if [[ ! -f "$PARALLEL_DEPENDENCY_GRAPH" ]] || ! command -v jq &>/dev/null; then
+        return 0
+    fi
+
+    local updated
+    updated=$(jq --arg id "$story_id" '.nodes[$id].status = "running"' "$PARALLEL_DEPENDENCY_GRAPH")
     echo "$updated" > "$PARALLEL_DEPENDENCY_GRAPH"
 }
 
@@ -213,11 +232,11 @@ check_resource_availability() {
         mem_usage=$(free | grep Mem | awk '{print int($3/$2 * 100)}' 2>/dev/null || echo "0")
     elif [[ "$(uname)" == "Darwin" ]]; then
         local pages_free pages_active pages_inactive pages_speculative pages_wired
-        pages_free=$(vm_stat | grep "Pages free" | awk '{print $3}' | tr -d '.')
-        pages_active=$(vm_stat | grep "Pages active" | awk '{print $3}' | tr -d '.')
-        pages_inactive=$(vm_stat | grep "Pages inactive" | awk '{print $3}' | tr -d '.')
-        pages_speculative=$(vm_stat | grep "Pages speculative" | awk '{print $3}' | tr -d '.')
-        pages_wired=$(vm_stat | grep "Pages wired" | awk '{print $4}' | tr -d '.')
+        pages_free=$(vm_stat | grep "Pages free" | awk '{print $3}' | tr -d '.') || pages_free=0
+        pages_active=$(vm_stat | grep "Pages active" | awk '{print $3}' | tr -d '.') || pages_active=0
+        pages_inactive=$(vm_stat | grep "Pages inactive" | awk '{print $3}' | tr -d '.') || pages_inactive=0
+        pages_speculative=$(vm_stat | grep "Pages speculative" | awk '{print $3}' | tr -d '.') || pages_speculative=0
+        pages_wired=$(vm_stat | grep "Pages wired" | awk '{print $4}' | tr -d '.') || pages_wired=0
         local total=$((pages_free + pages_active + pages_inactive + pages_speculative + pages_wired))
         local used=$((pages_active + pages_wired))
         mem_usage=$((used * 100 / total))
@@ -399,9 +418,9 @@ collect_completed_sessions() {
             local session_id="${PARALLEL_PIDS[$pid]}"
             local story_id="${PARALLEL_SESSIONS[$session_id]}"
 
-            # Check exit status
-            wait "$pid" 2>/dev/null
-            local exit_code=$?
+            # Check exit status (a failed worker must not kill the leader)
+            local exit_code=0
+            wait "$pid" 2>/dev/null || exit_code=$?
 
             if [[ $exit_code -eq 0 ]]; then
                 completed+=("$story_id")
@@ -507,9 +526,6 @@ process_stories_parallel() {
             for story_id in $ready; do
                 [[ $slots -le 0 ]] && break
 
-                # Skip if already processed
-                [[ -n "${PARALLEL_SESSIONS[$story_id]:-}" ]] && continue
-
                 # Build prompt
                 local prompt="$prompt_template $story_id"
 
@@ -522,10 +538,15 @@ process_stories_parallel() {
                     prompt="Implement user story $story_id: $title. Follow TDD approach."
                 fi
 
-                # Spawn session
-                spawn_session "$story_id" "$prompt"
-                ((slots--))
-                ((processed++))
+                # Spawn session. "running" keeps get_ready_stories (pending
+                # only) from re-spawning it before its report is merged.
+                if spawn_session "$story_id" "$prompt"; then
+                    mark_story_running "$story_id"
+                else
+                    mark_story_failed "$story_id"
+                fi
+                slots=$((slots - 1))
+                processed=$((processed + 1))
             done
         fi
 
@@ -604,7 +625,7 @@ merge_worker_reports() {
         if [[ "$dry_run" == "true" ]]; then
             print_info "DRY RUN - Would merge: session=$session_id story=$story_id status=$status" 2>/dev/null \
                 || echo "[INFO] DRY RUN - Would merge: session=$session_id story=$story_id status=$status"
-            ((merged_count++))
+            merged_count=$((merged_count + 1))
             continue
         fi
 
@@ -628,7 +649,7 @@ merge_worker_reports() {
         fi
 
         rm -f "$report_file"
-        ((merged_count++))
+        merged_count=$((merged_count + 1))
     done
 
     # Update efficiency after merge
