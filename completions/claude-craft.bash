@@ -11,20 +11,20 @@ _claude_craft_completions() {
 
     # Commands by namespace
     local angular_commands="check-architecture check-code-quality check-compliance check-security check-testing generate-component"
-    local common_commands="add-technology architecture-decision audit-freshness daily-standup generate-changelog getting-started init pack-repo pre-commit-check pre-merge-check ralph-run release-checklist research-context7 setup-ci setup-project-context setup-rtk sub-agents-patterns"
+    local common_commands="architecture-decision generate-changelog getting-started init pack-repo ralph-run setup-ci setup-rtk"
     local csharp_commands="check-architecture check-code-quality check-compliance check-security check-testing generate-feature"
     local flutter_commands="analyze-performance check-architecture check-code-quality check-compliance check-security check-testing generate-feature generate-widget golden-update localization-check"
     local laravel_commands="check-architecture check-code-quality check-compliance check-security check-testing generate-controller"
     local php_commands="check-architecture check-code-quality check-compliance check-security check-testing"
     local python_commands="async-check check-architecture check-code-quality check-compliance check-security check-testing dependency-audit generate-endpoint generate-model type-coverage"
-    local qa_commands="fix recette regression report status tdd"
+    local qa_commands="fix recette regression status tdd"
     local react_commands="accessibility-check bundle-analyze check-architecture check-code-quality check-compliance check-security check-testing generate-component generate-hook storybook-story"
     local reactnative_commands="app-size check-architecture check-code-quality check-compliance check-security check-testing deep-link generate-screen native-module store-prepare"
     local symfony_commands="api-endpoint check-architecture check-code-quality check-compliance check-security check-testing generate-command generate-crud migration-plan optimize-doctrine"
     local team_commands="audit delivery security sprint"
-    local uiux_commands="a11y-audit a11y-component audit component-spec design-tokens generate-design-md orchestrator user-flow"
+    local uiux_commands="a11y-audit a11y-component audit component-spec design-tokens generate-design-md user-flow"
     local vuejs_commands="check-architecture check-code-quality check-compliance check-security check-testing generate-component"
-    local workflow_commands="analyze design implement init plan retro review start status"
+    local workflow_commands="design implement init plan retro review start status"
 
     # If first argument, suggest namespaces
     if [[ ${COMP_CWORD} -eq 1 ]]; then

@@ -34,23 +34,14 @@ _claude-craft() {
 
     local -a common_commands
     common_commands=(
-        'add-technology:Add new technology stack'
         'architecture-decision:Create ADR'
-        'audit-freshness:Audit documentation freshness'
-        'daily-standup:Daily standup report'
         'generate-changelog:Generate CHANGELOG'
         'getting-started:Getting started guide'
         'init:Initialize Claude Craft'
         'pack-repo:Pack repository for sharing'
-        'pre-commit-check:Pre-commit checks'
-        'pre-merge-check:Pre-merge checks'
         'ralph-run:Run Ralph continuous loop'
-        'release-checklist:Release checklist'
-        'research-context7:Research with Context7'
         'setup-ci:Setup CI/CD'
-        'setup-project-context:Setup project context'
         'setup-rtk:Setup RTK token optimization'
-        'sub-agents-patterns:Sub-agents patterns'
     )
 
     local -a csharp_commands
@@ -115,7 +106,6 @@ _claude-craft() {
         'fix:Fix failing test'
         'recette:Run acceptance testing'
         'regression:Regression testing'
-        'report:Generate QA report'
         'status:QA status'
         'tdd:TDD workflow'
     )
@@ -178,7 +168,6 @@ _claude-craft() {
         'component-spec:Component specification'
         'design-tokens:Generate design tokens'
         'generate-design-md:Generate DESIGN.md'
-        'orchestrator:UI/UX orchestrator'
         'user-flow:User flow analysis'
     )
 
@@ -194,7 +183,6 @@ _claude-craft() {
 
     local -a workflow_commands
     workflow_commands=(
-        'analyze:Analyze workflow'
         'design:Design phase'
         'implement:Implementation phase'
         'init:Initialize workflow'

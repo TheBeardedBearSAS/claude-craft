@@ -27,23 +27,14 @@ complete -c claude-craft -n "__fish_seen_subcommand_from angular" -a "check-test
 complete -c claude-craft -n "__fish_seen_subcommand_from angular" -a "generate-component" -d "Generate Angular component"
 
 # Common commands
-complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "add-technology" -d "Add new technology stack"
 complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "architecture-decision" -d "Create ADR"
-complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "audit-freshness" -d "Audit documentation freshness"
-complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "daily-standup" -d "Daily standup report"
 complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "generate-changelog" -d "Generate CHANGELOG"
 complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "getting-started" -d "Getting started guide"
 complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "init" -d "Initialize Claude Craft"
 complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "pack-repo" -d "Pack repository for sharing"
-complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "pre-commit-check" -d "Pre-commit checks"
-complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "pre-merge-check" -d "Pre-merge checks"
 complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "ralph-run" -d "Run Ralph continuous loop"
-complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "release-checklist" -d "Release checklist"
-complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "research-context7" -d "Research with Context7"
 complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "setup-ci" -d "Setup CI/CD"
-complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "setup-project-context" -d "Setup project context"
 complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "setup-rtk" -d "Setup RTK token optimization"
-complete -c claude-craft -n "__fish_seen_subcommand_from common" -a "sub-agents-patterns" -d "Sub-agents patterns"
 
 # C# commands
 complete -c claude-craft -n "__fish_seen_subcommand_from csharp" -a "check-architecture" -d "Check C# architecture"
@@ -96,7 +87,6 @@ complete -c claude-craft -n "__fish_seen_subcommand_from python" -a "type-covera
 complete -c claude-craft -n "__fish_seen_subcommand_from qa" -a "fix" -d "Fix failing test"
 complete -c claude-craft -n "__fish_seen_subcommand_from qa" -a "recette" -d "Run acceptance testing"
 complete -c claude-craft -n "__fish_seen_subcommand_from qa" -a "regression" -d "Regression testing"
-complete -c claude-craft -n "__fish_seen_subcommand_from qa" -a "report" -d "Generate QA report"
 complete -c claude-craft -n "__fish_seen_subcommand_from qa" -a "status" -d "QA status"
 complete -c claude-craft -n "__fish_seen_subcommand_from qa" -a "tdd" -d "TDD workflow"
 
@@ -149,7 +139,6 @@ complete -c claude-craft -n "__fish_seen_subcommand_from uiux" -a "audit" -d "UI
 complete -c claude-craft -n "__fish_seen_subcommand_from uiux" -a "component-spec" -d "Component specification"
 complete -c claude-craft -n "__fish_seen_subcommand_from uiux" -a "design-tokens" -d "Generate design tokens"
 complete -c claude-craft -n "__fish_seen_subcommand_from uiux" -a "generate-design-md" -d "Generate DESIGN.md"
-complete -c claude-craft -n "__fish_seen_subcommand_from uiux" -a "orchestrator" -d "UI/UX orchestrator"
 complete -c claude-craft -n "__fish_seen_subcommand_from uiux" -a "user-flow" -d "User flow analysis"
 
 # Vue.js commands
@@ -161,7 +150,6 @@ complete -c claude-craft -n "__fish_seen_subcommand_from vuejs" -a "check-testin
 complete -c claude-craft -n "__fish_seen_subcommand_from vuejs" -a "generate-component" -d "Generate Vue component"
 
 # Workflow commands
-complete -c claude-craft -n "__fish_seen_subcommand_from workflow" -a "analyze" -d "Analyze workflow"
 complete -c claude-craft -n "__fish_seen_subcommand_from workflow" -a "design" -d "Design phase"
 complete -c claude-craft -n "__fish_seen_subcommand_from workflow" -a "implement" -d "Implementation phase"
 complete -c claude-craft -n "__fish_seen_subcommand_from workflow" -a "init" -d "Initialize workflow"

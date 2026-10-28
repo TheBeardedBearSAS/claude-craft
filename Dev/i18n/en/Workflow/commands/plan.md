@@ -69,7 +69,7 @@ Former `/workflow:plan --research`. Focus on research, exploration and constrain
 | Market | Existing solutions? Competitors? Industry best practices? Emerging trends? |
 | Technical | Candidate technologies? Integrations? Scalability? Security / compliance? |
 
-If MCP Context7 is configured, use it for up-to-date technical documentation (`/common:research-context7` for deep research).
+If MCP Context7 is configured, use it for up-to-date technical documentation (`/deep-research` for deep web research; outside claude.ai, the `@research-assistant` agent).
 
 **Constraints**: document technical (existing backend, database), business (budget, timeline, backward compatibility), regulatory (GDPR, PCI DSS) and resource (team size, no DevOps) constraints.
 
@@ -213,4 +213,3 @@ If interrupted, `/workflow:plan --continue` detects what exists (PRD complete, b
 - `/workflow:status` - Check progress
 - `/project:backlog` - Add, list, edit and move stories afterwards
 - `/gate:check` - Validate the backlog
-- `/common:research-context7` - Deep research with Context7 MCP

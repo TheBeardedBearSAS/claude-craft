@@ -98,7 +98,7 @@ Based on the detected stack, recommend 3 contextualized commands that provide im
 
 **Unknown/Multi-stack:**
 - `/common:audit-freshness` — Check dependency updates and security
-- `/common:pre-commit-check` — Quality gates before commits
+- `/gate:check commit` — Quality gates before commits
 - `/team:audit` — Full project audit (architecture, security, performance)
 
 ### Output Format
