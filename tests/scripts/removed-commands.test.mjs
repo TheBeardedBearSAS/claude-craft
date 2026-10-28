@@ -90,6 +90,32 @@ describe('config/removed-commands.yaml', () => {
   });
 });
 
+// `<ns>/<cmd>.md` offered by each shell completion script.
+const COMPLETIONS = {
+  'completions/claude-craft.bash': (src) =>
+    [...src.matchAll(/local ([a-z]+)_commands="([^"]*)"/g)].flatMap(([, ns, cmds]) =>
+      cmds
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((c) => `${ns}/${c}.md`)
+    ),
+  'completions/_claude-craft': (src) =>
+    [...src.matchAll(/([a-z]+)_commands=\(\n([\s\S]*?)\n\s*\)/g)].flatMap(([, ns, body]) =>
+      [...body.matchAll(/'([a-z0-9-]+):/g)].map(([, c]) => `${ns}/${c}.md`)
+    ),
+  'completions/claude-craft.fish': (src) =>
+    [...src.matchAll(/__fish_seen_subcommand_from ([a-z]+)" -a "([a-z0-9-]+)"/g)].map(([, ns, c]) => `${ns}/${c}.md`),
+};
+
+describe('shell completions', () => {
+  it.each(Object.keys(COMPLETIONS))('%s offers no deprecated or removed command', (file) => {
+    const offered = COMPLETIONS[file](fs.readFileSync(path.join(PROJECT_ROOT, file), 'utf8'));
+    expect(offered.length).toBeGreaterThan(50);
+    const gone = new Set([...removed(), ...Object.keys(scheduled())]);
+    expect(offered.filter((c) => gone.has(c))).toEqual([]);
+  });
+});
+
 describe('prune-removed-commands.sh', () => {
   it('deletes listed files from <target>/.claude/commands and keeps the others', () => {
     const target = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-prune-'));

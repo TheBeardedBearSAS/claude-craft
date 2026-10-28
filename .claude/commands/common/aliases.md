@@ -21,8 +21,8 @@ These aliases reduce typing and improve productivity by providing short mnemonic
 | `/ca` | `/common:audit-freshness` | Audit documentation freshness |
 | `/caa` | `/common:audit-claude-alignment` | Weekly Claude ecosystem alignment audit |
 | `/ci` | `/common:init` | Initialize Claude Craft |
-| `/cr` | `/common:release-checklist` | Pre-release verification checklist |
-| `/cs` | `/common:setup-project-context` | Setup project context for Claude |
+| `/cr` | `/gate:check release` | Pre-release verification checklist |
+| `/cs` | `/common:init --context` | Setup project context for Claude |
 
 ### Technology Check Compliance
 
@@ -72,7 +72,7 @@ These aliases reduce typing and improve productivity by providing short mnemonic
 # Instead of: /common:init
 /ci
 
-# Instead of: /common:setup-project-context
+# Instead of: /common:init --context
 /cs
 ```
 
@@ -126,8 +126,8 @@ Add to `~/.bashrc` or `~/.zshrc`:
 alias ca='claude -p /common:audit-freshness'
 alias caa='claude -p /common:audit-claude-alignment'
 alias ci='claude -p /common:init'
-alias cr='claude -p /common:release-checklist'
-alias cs='claude -p /common:setup-project-context'
+alias cr='claude -p /gate:check release'
+alias cs='claude -p /common:init --context'
 
 alias sc='claude -p /symfony:check-compliance'
 alias rc='claude -p /react:check-compliance'
@@ -160,8 +160,8 @@ Add to `~/.config/fish/config.fish`:
 alias ca 'claude -p /common:audit-freshness'
 alias caa 'claude -p /common:audit-claude-alignment'
 alias ci 'claude -p /common:init'
-alias cr 'claude -p /common:release-checklist'
-alias cs 'claude -p /common:setup-project-context'
+alias cr 'claude -p /gate:check release'
+alias cs 'claude -p /common:init --context'
 
 alias sc 'claude -p /symfony:check-compliance'
 alias rc 'claude -p /react:check-compliance'

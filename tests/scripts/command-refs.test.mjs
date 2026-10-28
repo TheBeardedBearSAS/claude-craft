@@ -119,6 +119,20 @@ describe('command references resolve to existing commands', () => {
     expect(offenders, `Live commands pointing to deprecated stubs:\n${offenders.join('\n')}`).toEqual([]);
   });
 
+  it('no live maintainer command in .claude/commands points to a deprecated command', () => {
+    const files = listMd(path.join(PROJECT_ROOT, '.claude/commands'));
+    const name = (f) => `${path.basename(path.dirname(f))}:${path.basename(f, '.md')}`;
+    const deprecated = new Set(files.filter(isDeprecated).map(name));
+    const offenders = files
+      .filter((f) => !isDeprecated(f))
+      .flatMap((f) =>
+        [...fs.readFileSync(f, 'utf8').matchAll(REF_RE)]
+          .filter(([, ns, cmd]) => deprecated.has(`${ns}:${cmd}`))
+          .map(([ref]) => `${path.relative(PROJECT_ROOT, f)} ${ref}`)
+      );
+    expect(offenders, `Live commands pointing to deprecated stubs:\n${offenders.join('\n')}`).toEqual([]);
+  });
+
   it('every /ns:cmd in distributed tool docs resolves', () => {
     const dead = deadRefs(
       EXTRA_FILES.map((f) => path.join(PROJECT_ROOT, f)),
