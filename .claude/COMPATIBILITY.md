@@ -80,10 +80,12 @@
 
 ## Security Advisories 2026 — why the minimum is 2.1.260
 
-Source : [GitHub Security Advisories — anthropics/claude-code](https://github.com/anthropics/claude-code/security/advisories) (relevé du 2026-10-13).
+Source : [GitHub Security Advisories — anthropics/claude-code](https://github.com/anthropics/claude-code/security/advisories) (relevé du 2026-10-13, complété le 2026-10-28).
 
 | GHSA | CVE | Sévérité | Publié | Description | Corrigé dans |
 |------|-----|----------|--------|-------------|--------------|
+| GHSA-5xjx-9qx6-jcrv | CVE-2026-88968 | High | 2026-10-26 | Course TOCTOU dans l'outil Edit → écriture de fichiers hors du workspace | 2.1.251 (couvert par le minimum 2.1.260) |
+| GHSA-4p2j-qj3c-6x84 | CVE-2026-88066 | High | 2026-10-13 | Claude Desktop (Windows) : `git.exe` résolu depuis le répertoire courant → exécution de code via un dépôt cloné. **Hors périmètre CLI** (corrigé Desktop 1.8089.0) | — |
 | GHSA-q5hj-mxqh-vv77 | CVE-2026-40068 | High | 2026-04-24 | Contournement du dialogue de confiance via usurpation de git worktree → exécution de code | 2.1.84 |
 | GHSA-5j29-h97v-84ch | CVE-2026-103435 | High | 2026-10-05 | Écriture arbitraire de fichier via suivi de symlink au moment de l'écriture (TOCTOU) | 2.1.129 |
 | GHSA-7835-87q9-rgvv | CVE-2026-55607 | High | 2026-06-25 | Évasion du sandbox via confusion de chemin git worktree | 2.1.163 |
