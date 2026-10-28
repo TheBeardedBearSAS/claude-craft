@@ -63,9 +63,11 @@ describe('/team:* execution engine', () => {
 describe('Agent Teams callers', () => {
   const LANGS = ['en', 'fr', 'es', 'de', 'pt'];
   const AUTO_SPRINT = ['.claude/commands/workflow', ...LANGS.map((l) => `Dev/i18n/${l}/Workflow/commands`)].map(
-    (d) => `${d}/auto-sprint.md`,
+    (d) => `${d}/auto-sprint.md`
   );
-  const CONDUCTOR = LANGS.map((l) => `Dev/i18n/${l}/Common/agents/ralph-conductor.md`);
+  const CONDUCTOR = ['.claude/agents', ...LANGS.map((l) => `Dev/i18n/${l}/Common/agents`)].map(
+    (d) => `${d}/ralph-conductor.md`
+  );
 
   for (const file of [...AUTO_SPRINT, ...CONDUCTOR]) {
     const content = fs.readFileSync(path.join(PROJECT_ROOT, file), 'utf8');

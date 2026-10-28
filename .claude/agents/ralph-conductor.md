@@ -94,6 +94,55 @@ Vous etes un agent specialise pour orchestrer les sessions de boucle continue Ra
 - `[HEALTH]` - Statut de sante
 - `[COMPLETE]` - Tache terminee
 
+## Mode de coordination Agent Teams
+
+Lors d'une opération en mode Agent Teams (activé via `--ralph-mode` sur `/team:sprint --engine=teams`), le conductor endosse le rôle de **chef d'équipe** et coordonne un coéquipier dev via l'API Agent Teams de Claude Code au lieu de la gestion de processus bash.
+
+### Prérequis
+
+- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (requis uniquement par `/team:sprint --engine=teams`)
+- Claude Code v2.1.32+
+- Bibliothèque d'adaptation : `Tools/AgentTeams/lib/ralph-teams-adapter.sh`
+
+### Coordination via le système de tâches
+
+En mode Agent Teams, le conductor remplace le suivi par PID par le système de tâches partagé :
+
+| Mode Bash (actuel) | Mode Agent Teams |
+|--------------------|-----------------|
+| `spawn_ralph_for_story()` avec bash `&` | `TaskCreate` + `SendMessage` au coéquipier dev |
+| Polling `kill -0 $pid` | `TaskList` / hook `TaskCompleted` |
+| Détection de complétion par PID | `TaskUpdate(status=completed)` par le dev |
+| `kill -9` pour les processus bloqués | `SendMessage(type=shutdown_request)` + fallback watchdog |
+| Écriture `yq` dans `batch-queue.yaml` | `TaskList` partagé (coordination intégrée) |
+
+### Flux de traitement des stories
+
+1. **Réclamer une story** : Le conductor lit `sprint-status.yaml`, réclame la prochaine story `ready-for-dev`
+2. **Créer une tâche** : `TaskCreate` avec les détails de la story, les critères d'acceptation et les instructions TDD
+3. **Assigner au dev** : `SendMessage(type=message, recipient=dev-1)` avec le prompt de la story
+4. **Surveiller la progression** : Interroger `TaskList` pour les mises à jour de statut du coéquipier dev
+5. **Gérer la complétion** : Quand le dev marque la tâche comme `completed`, le conductor fait passer la story à `review`
+6. **Gérer les échecs** : Si le dev signale un échec ou si le watchdog détecte un blocage, le conductor applique la stratégie de récupération
+7. **Story suivante** : Assigner la prochaine story prête ou envoyer `shutdown_request` si le sprint est terminé
+
+### Intégration du Watchdog
+
+Le conductor exécute des vérifications de santé périodiques via `teams_watchdog()` de l'adaptateur :
+
+- **Intervalle de vérification** : Toutes les 60 secondes (configurable via `TEAMS_WATCHDOG_INTERVAL`)
+- **Seuil de timeout** : 5 minutes sans activité (configurable via `TEAMS_WATCHDOG_TIMEOUT`)
+- **Action en cas de blocage** : Marquer le coéquipier comme bloqué, déclencher `teams_fallback_sequential()`, retraiter la story via `execute_story_with_ralph()` existant
+
+### Maintien du mode Bash intact
+
+Toute l'orchestration en mode bash existante reste inchangée. Le mode Agent Teams n'est activé que lorsque :
+1. Le drapeau `--ralph-mode` est passé à `/team:sprint --engine=teams`
+2. La variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` est définie (requis uniquement par `/team:sprint --engine=teams`)
+3. La bibliothèque d'adaptation est disponible
+
+Sans ces conditions, le conductor opère exactement comme avant.
+
 ## Points d'integration
 
 - Fonctionne avec `/common:ralph-run`
