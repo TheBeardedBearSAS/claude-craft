@@ -1,6 +1,6 @@
 ---
 description: Équipe de Développement Sprint - Implémentation parallèle de stories utilisant les Agent Teams
-argument-hint: "<sprint-name> [--max-workers=3] [--overnight]"
+argument-hint: "<sprint-name> [--max-workers=3] [--overnight] [--engine=subagents|teams]"
 ---
 
 # Équipe de Développement Sprint - Implémentation Parallèle de Stories
@@ -13,6 +13,7 @@ $ARGUMENTS
 
 - `<sprint-name>` : Nom ou ID du sprint à traiter
 - `--max-workers=3` : Nombre maximum de workers dev parallèles (par défaut : 2, max : 3)
+- `--engine=subagents` : Moteur d'exécution (par défaut : `subagents`). Options : `subagents` (délégation à des sous-agents via l'outil `Agent`, aucun prérequis), `teams` (Agent Teams expérimental). Voir « Moteur d'exécution »
 - `--overnight` : Exécuter en mode nuit (borné, s'arrête à 6h)
 - `--supervised` : Pause avant chaque story pour confirmation humaine
 - `--max-stories=10` : Nombre maximum de stories à traiter (par défaut : 10)
@@ -43,10 +44,34 @@ $ARGUMENTS
    - **Attendre la confirmation explicite** de l'utilisateur avant de poursuivre
    - Si l'utilisateur refuse, abandonner avec un message suggérant `/fast` pour désactiver
 
+## Moteur d'exécution (`--engine`)
+
+Le moteur par défaut ne dépend d'aucune fonctionnalité expérimentale : la commande fonctionne même si `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` n'est pas défini.
+
+| Moteur | Activation | Prérequis | Comportement |
+|--------|------------|-----------|--------------|
+| `subagents` (défaut) | aucun flag ou `--engine=subagents` | Aucun (outil `Agent` natif) | La session courante joue le rôle de leader et délègue chaque tâche de worker à un sous-agent via l'outil `Agent` (modèle du worker passé par le paramètre `model`). Les sous-agents indépendants sont lancés dans un même message pour s'exécuter en parallèle ; chacun écrit son résultat dans son répertoire isolé et ne renvoie qu'un résumé court. Les workers ne communiquent pas entre eux : le leader relaie. Fonctionne en interactif, avec `claude -p` et en CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Équipe Agent Teams : workers persistants coordonnés par `TaskCreate` / `TaskList` / `SendMessage`, messagerie directe entre coéquipiers, hooks `TeammateIdle` / `TaskCompleted`. |
+
+**Repli** : si `--engine=teams` est demandé alors que `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` est absent, ne pas échouer — afficher `ℹ️ Agent Teams indisponible : repli sur --engine=subagents` et poursuivre avec le moteur `subagents`.
+
+**Limites du moteur `teams`** : pas de mode non interactif (`claude -p`) ni d'exécution en CI ; une seule équipe par session (terminer l'équipe en cours avant d'en lancer une autre) ; API en research preview, susceptible de changer.
+
+Le processus ci-dessous est décrit avec les primitives Agent Teams. Avec `--engine=subagents`, appliquer cette correspondance :
+
+| Agent Teams (`teams`) | Sous-agents (`subagents`) |
+|------------------------|----------------------------|
+| `TaskCreate` + spawn d'un worker | Un appel à l'outil `Agent` dont le prompt reprend la description de la tâche |
+| Polling `TaskList` / barrière de synchronisation | Attendre le retour de tous les appels `Agent` du lot |
+| `SendMessage` vers un worker | Relancer le sous-agent (`SendMessage` vers son ID) ou nouvel appel `Agent` avec le contexte nécessaire |
+| `shutdown_request` | Inutile : un sous-agent se termine à son retour |
+
+**Spécifique sprint** : avec `subagents`, lancer chaque worker développeur avec `isolation: "worktree"` pour que les stories parallèles ne modifient pas le même arbre de travail.
+
 ## Prérequis
 
-- Claude Code v2.1.32+ avec support Agent Teams
-- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` définie
+- Claude Code v2.1.32+ avec support Agent Teams — uniquement avec `--engine=teams`
+- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` définie — uniquement avec `--engine=teams`
 - Backlog sprint BMAD avec des stories au statut `ready-for-dev`
 - Métadonnées du sprint dans `.bmad/sprint-status.yaml`
 - Au moins 2 stories indépendantes (les sprints à story unique utilisent Ralph séquentiel)

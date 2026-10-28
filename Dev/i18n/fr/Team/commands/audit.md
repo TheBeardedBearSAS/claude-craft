@@ -1,6 +1,6 @@
 ---
 description: Équipe d'Audit Complet - Audit multi-technologie parallèle utilisant les Agent Teams
-argument-hint: "[--techs=auto|tech1,tech2] [--max-workers=4]"
+argument-hint: "[--techs=auto|tech1,tech2] [--max-workers=4] [--engine=subagents|teams]"
 ---
 
 # Équipe d'Audit Complet - Audit Multi-Technologie Parallèle
@@ -13,15 +13,40 @@ $ARGUMENTS
 
 - `--techs=auto` : Auto-détection des technologies (par défaut). Ou spécifier en séparant par des virgules : `--techs=symfony,react`
 - `--max-workers=4` : Nombre maximum de workers auditeurs en parallèle (par défaut : 4, max : 4)
+- `--engine=subagents` : Moteur d'exécution (par défaut : `subagents`). Options : `subagents` (délégation à des sous-agents via l'outil `Agent`, aucun prérequis), `teams` (Agent Teams expérimental). Voir « Moteur d'exécution »
 - `--output-dir=<path>` : Répertoire de sortie personnalisé pour les résultats d'audit
 - `--dry-run` : Afficher la composition de l'équipe et le coût estimé sans exécuter
 - `--skip-aggregation` : Sortir les résultats par stack sans les fusionner
 - `--sequential` : Exécuter les audits séquentiellement au lieu de les paralléliser (pas de surcoût Agent Teams). Utile pour les projets mono-technologie ou quand les Agent Teams ne sont pas disponibles.
 
+## Moteur d'exécution (`--engine`)
+
+Le moteur par défaut ne dépend d'aucune fonctionnalité expérimentale : la commande fonctionne même si `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` n'est pas défini.
+
+| Moteur | Activation | Prérequis | Comportement |
+|--------|------------|-----------|--------------|
+| `subagents` (défaut) | aucun flag ou `--engine=subagents` | Aucun (outil `Agent` natif) | La session courante joue le rôle de leader et délègue chaque tâche de worker à un sous-agent via l'outil `Agent` (modèle du worker passé par le paramètre `model`). Les sous-agents indépendants sont lancés dans un même message pour s'exécuter en parallèle ; chacun écrit son résultat dans son répertoire isolé et ne renvoie qu'un résumé court. Les workers ne communiquent pas entre eux : le leader relaie. Fonctionne en interactif, avec `claude -p` et en CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Équipe Agent Teams : workers persistants coordonnés par `TaskCreate` / `TaskList` / `SendMessage`, messagerie directe entre coéquipiers, hooks `TeammateIdle` / `TaskCompleted`. |
+
+**Repli** : si `--engine=teams` est demandé alors que `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` est absent, ne pas échouer — afficher `ℹ️ Agent Teams indisponible : repli sur --engine=subagents` et poursuivre avec le moteur `subagents`.
+
+**Limites du moteur `teams`** : pas de mode non interactif (`claude -p`) ni d'exécution en CI ; une seule équipe par session (terminer l'équipe en cours avant d'en lancer une autre) ; API en research preview, susceptible de changer.
+
+Le processus ci-dessous est décrit avec les primitives Agent Teams. Avec `--engine=subagents`, appliquer cette correspondance :
+
+| Agent Teams (`teams`) | Sous-agents (`subagents`) |
+|------------------------|----------------------------|
+| `TaskCreate` + spawn d'un worker | Un appel à l'outil `Agent` dont le prompt reprend la description de la tâche |
+| Polling `TaskList` / barrière de synchronisation | Attendre le retour de tous les appels `Agent` du lot |
+| `SendMessage` vers un worker | Relancer le sous-agent (`SendMessage` vers son ID) ou nouvel appel `Agent` avec le contexte nécessaire |
+| `shutdown_request` | Inutile : un sous-agent se termine à son retour |
+
+**Spécifique audit** : un sous-agent par stack, avec le prompt du template de spawn de l'étape 4. `--sequential` reste disponible pour tout traiter dans la session courante, sans délégation.
+
 ## Prérequis
 
-- Claude Code v2.1.32+ avec support Agent Teams
-- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` définie
+- Claude Code v2.1.32+ avec support Agent Teams — uniquement avec `--engine=teams`
+- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` définie — uniquement avec `--engine=teams`
 - Projet avec 2+ stacks technologiques détectées (les projets mono-stack doivent utiliser le flag `--sequential`)
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponible
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible

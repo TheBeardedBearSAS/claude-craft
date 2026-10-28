@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **`/team:audit`, `/team:security`, `/team:sprint`, `/team:delivery`** : nouveau flag `--engine=subagents|teams`. Le moteur par défaut `subagents` délègue aux sous-agents via l'outil `Agent` et ne requiert plus `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` (fonctionne avec `claude -p` et en CI) ; Agent Teams devient optionnel (`--engine=teams`, avec repli automatique si la variable est absente). Limites de `teams` documentées (pas de `-p` ni de CI, une équipe par session). `/team:security` précise que `/security-review` natif ne couvre que le diff. 5 langues. Test `tests/scripts/team-engine.test.mjs`.
+
 ### Fixed
 
 - **`/common:pre-commit-check`, `/common:pre-merge-check`, `/common:release-checklist`** : les stubs dépréciés renvoyaient vers `.claude/commands/gate/check.md`, installé uniquement par le paquet Project ; une installation Dev seule (`install-common-rules.sh`, `claude-craft update`) installe désormais `/gate:check`. Test `tests/scripts/install-common-rules.test.mjs`.

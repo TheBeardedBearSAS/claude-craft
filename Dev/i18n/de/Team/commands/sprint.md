@@ -1,6 +1,6 @@
 ---
 description: Sprint-Entwicklungsteam - Parallele Story-Implementierung mit Agent Teams
-argument-hint: <sprint-name> [--max-workers=3] [--overnight]
+argument-hint: <sprint-name> [--max-workers=3] [--overnight] [--engine=subagents|teams]
 ---
 
 # Sprint-Entwicklungsteam - Parallele Story-Implementierung
@@ -13,6 +13,7 @@ $ARGUMENTS
 
 - `<sprint-name>`: Name oder ID des zu bearbeitenden Sprints
 - `--max-workers=3`: Maximale parallele Entwickler-Worker (Standard: 2, max: 3)
+- `--engine=subagents`: Ausführungs-Engine (Standard: `subagents`). Optionen: `subagents` (Delegation an Sub-Agenten über das `Agent`-Tool, keine Voraussetzung), `teams` (experimentelle Agent Teams). Siehe „Ausführungs-Engine“
 - `--overnight`: Im Nachtmodus ausführen (begrenzt, stoppt um 6 Uhr)
 - `--supervised`: Vor jeder Story für menschliche Bestätigung pausieren
 - `--max-stories=10`: Maximale Anzahl zu bearbeitender Stories (Standard: 10)
@@ -21,10 +22,34 @@ $ARGUMENTS
 - `--max-cost=<dollars>`: Maximales Budget in Dollar. Wenn die geschaetzten Parallelkosten diesen Schwellenwert ueberschreiten, wird die Ausfuehrung mit einer OVER BUDGET Meldung blockiert
 - `--ralph-mode`: Ralph-Recovery-Engine aktivieren (Fehlerklassifizierung, Auto-Retry, Eskalationsdienst) zusammen mit Agent-Teams-Parallelisierung.
 
+## Ausführungs-Engine (`--engine`)
+
+Die Standard-Engine hängt von keiner experimentellen Funktion ab: Der Befehl funktioniert auch, wenn `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` nicht gesetzt ist.
+
+| Engine | Aktivierung | Voraussetzungen | Verhalten |
+|--------|-------------|-----------------|-----------|
+| `subagents` (Standard) | kein Flag oder `--engine=subagents` | Keine (natives `Agent`-Tool) | Die aktuelle Sitzung übernimmt die Lead-Rolle und delegiert jede Worker-Aufgabe über das `Agent`-Tool an einen Sub-Agenten (Worker-Modell über den Parameter `model`). Unabhängige Sub-Agenten werden in einer einzigen Nachricht gestartet, damit sie parallel laufen; jeder schreibt sein Ergebnis in sein isoliertes Verzeichnis und gibt nur eine kurze Zusammenfassung zurück. Die Worker kommunizieren nicht miteinander: Der Lead leitet weiter. Funktioniert interaktiv, mit `claude -p` und in der CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Agent-Teams-Team: persistente Worker, koordiniert über `TaskCreate` / `TaskList` / `SendMessage`, direkte Nachrichten zwischen Teammitgliedern, Hooks `TeammateIdle` / `TaskCompleted`. |
+
+**Fallback**: Wird `--engine=teams` angefordert, obwohl `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` fehlt, nicht abbrechen — `ℹ️ Agent Teams nicht verfügbar: Fallback auf --engine=subagents` ausgeben und mit der Engine `subagents` fortfahren.
+
+**Grenzen der Engine `teams`**: kein nicht-interaktiver Modus (`claude -p`) und keine Ausführung in der CI; ein Team pro Sitzung (laufendes Team beenden, bevor ein neues gestartet wird); API im Research Preview, Änderungen vorbehalten.
+
+Der folgende Ablauf ist mit den Agent-Teams-Primitiven beschrieben. Mit `--engine=subagents` gilt diese Zuordnung:
+
+| Agent Teams (`teams`) | Sub-Agenten (`subagents`) |
+|------------------------|----------------------------|
+| `TaskCreate` + Worker-Spawn | Ein Aufruf des `Agent`-Tools, dessen Prompt die Aufgabenbeschreibung übernimmt |
+| `TaskList`-Polling / Synchronisationsbarriere | Auf die Rückkehr aller `Agent`-Aufrufe des Stapels warten |
+| `SendMessage` an einen Worker | Sub-Agenten fortsetzen (`SendMessage` an seine ID) oder neuer `Agent`-Aufruf mit dem nötigen Kontext |
+| `shutdown_request` | Nicht nötig: Ein Sub-Agent endet mit seiner Rückgabe |
+
+**Sprint-spezifisch**: Mit `subagents` jeden Entwickler-Worker mit `isolation: "worktree"` starten, damit parallele Stories nicht denselben Arbeitsbaum ändern.
+
 ## Voraussetzungen
 
-- Claude Code v2.1.32+ mit Agent-Teams-Unterstützung
-- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` Umgebungsvariable gesetzt
+- Claude Code v2.1.32+ mit Agent-Teams-Unterstützung — nur mit `--engine=teams`
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` Umgebungsvariable gesetzt — nur mit `--engine=teams`
 - BMAD-Sprint-Backlog mit Stories im Status `ready-for-dev`
 - Sprint-Metadaten in `.bmad/sprint-status.yaml`
 - Mindestens 2 unabhängige Stories (Einzelstory-Sprints verwenden sequenzielles Ralph)

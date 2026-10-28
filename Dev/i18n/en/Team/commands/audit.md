@@ -1,6 +1,6 @@
 ---
 description: Full Audit Team - Parallel multi-technology audit using Agent Teams
-argument-hint: "[--techs=auto|tech1,tech2] [--max-workers=4]"
+argument-hint: "[--techs=auto|tech1,tech2] [--max-workers=4] [--engine=subagents|teams]"
 ---
 
 # Full Audit Team - Parallel Multi-Technology Audit
@@ -13,16 +13,41 @@ $ARGUMENTS
 
 - `--techs=auto`: Auto-detect technologies (default). Or specify comma-separated: `--techs=symfony,react`
 - `--max-workers=4`: Maximum parallel auditor workers (default: 4, max: 4)
+- `--engine=subagents`: Execution engine (default: `subagents`). Options: `subagents` (delegation to sub-agents via the `Agent` tool, no prerequisite), `teams` (experimental Agent Teams). See "Execution engine"
 - `--output-dir=<path>`: Custom output directory for audit results
 - `--max-cost=<dollars>`: Maximum budget in dollars. If the estimated parallel cost exceeds this threshold, execution is blocked with an OVER BUDGET message
 - `--dry-run`: Show team composition and estimated cost without executing
 - `--skip-aggregation`: Output per-stack results without merging
 - `--sequential`: Run audits sequentially instead of in parallel (no Agent Teams overhead). Useful for single-technology projects or when Agent Teams is not available.
 
+## Execution engine (`--engine`)
+
+The default engine relies on no experimental feature: the command works even when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is not set.
+
+| Engine | Activation | Prerequisites | Behavior |
+|--------|------------|---------------|----------|
+| `subagents` (default) | no flag or `--engine=subagents` | None (native `Agent` tool) | The current session acts as the lead and delegates each worker task to a sub-agent via the `Agent` tool (worker model passed through the `model` parameter). Independent sub-agents are launched in a single message so they run in parallel; each one writes its result to its isolated directory and returns only a short summary. Workers do not talk to each other: the lead relays. Works interactively, with `claude -p` and in CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Agent Teams team: persistent workers coordinated through `TaskCreate` / `TaskList` / `SendMessage`, direct teammate messaging, `TeammateIdle` / `TaskCompleted` hooks. |
+
+**Fallback**: if `--engine=teams` is requested while `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is missing, do not fail — print `ℹ️ Agent Teams unavailable: falling back to --engine=subagents` and continue with the `subagents` engine.
+
+**`teams` engine limits**: no non-interactive mode (`claude -p`) and no CI runs; one team per session (finish the current team before starting another); research preview API, subject to change.
+
+The process below is written with Agent Teams primitives. With `--engine=subagents`, apply this mapping:
+
+| Agent Teams (`teams`) | Sub-agents (`subagents`) |
+|------------------------|---------------------------|
+| `TaskCreate` + worker spawn | One `Agent` tool call whose prompt carries the task description |
+| `TaskList` polling / synchronization barrier | Wait for every `Agent` call of the batch to return |
+| `SendMessage` to a worker | Resume the sub-agent (`SendMessage` to its ID) or a new `Agent` call with the needed context |
+| `shutdown_request` | Not needed: a sub-agent ends when it returns |
+
+**Audit specifics**: one sub-agent per stack, using the spawn template prompt from Step 4. `--sequential` remains available to process everything in the current session, without delegation.
+
 ## Prerequisites
 
-- Claude Code v2.1.32+ with Agent Teams support
-- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable set
+- Claude Code v2.1.32+ with Agent Teams support — only with `--engine=teams`
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable set — only with `--engine=teams`
 - Project with 2+ detected technology stacks (single-stack projects should use `--sequential` flag)
 - `Tools/AgentTeams/lib/compatibility-check.sh` available
 - `Tools/AgentTeams/lib/result-aggregator.sh` available

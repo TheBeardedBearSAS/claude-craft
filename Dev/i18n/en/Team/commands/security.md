@@ -1,6 +1,6 @@
 ---
 description: "Security Review Team - Parallel multi-dimension security audit using Agent Teams"
-argument-hint: "[--scope=full|code|deps|infra] [--max-workers=3]"
+argument-hint: "[--scope=full|code|deps|infra] [--max-workers=3] [--engine=subagents|teams]"
 ---
 
 # Security Review Team - Parallel Multi-Dimension Security Audit
@@ -13,16 +13,43 @@ $ARGUMENTS
 
 - `--scope=full`: Audit scope (default: `full`). Options: `full`, `code`, `deps`, `infra`
 - `--max-workers=3`: Maximum parallel reviewers (default: 3, max: 3)
+- `--engine=subagents`: Execution engine (default: `subagents`). Options: `subagents` (delegation to sub-agents via the `Agent` tool, no prerequisite), `teams` (experimental Agent Teams). See "Execution engine"
 - `--severity=medium`: Minimum severity to report: `low`, `medium`, `high`, `critical`
 - `--output-dir=<path>`: Custom output directory for security results
 - `--dry-run`: Show team composition and scan plan without executing
 - `--sarif`: Output results in SARIF format (for CI/CD integration)
 - `--max-cost=<dollars>`: Maximum budget in dollars. If the estimated parallel cost exceeds this threshold, execution is blocked with an OVER BUDGET message
 
+## Execution engine (`--engine`)
+
+The default engine relies on no experimental feature: the command works even when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is not set.
+
+| Engine | Activation | Prerequisites | Behavior |
+|--------|------------|---------------|----------|
+| `subagents` (default) | no flag or `--engine=subagents` | None (native `Agent` tool) | The current session acts as the lead and delegates each worker task to a sub-agent via the `Agent` tool (worker model passed through the `model` parameter). Independent sub-agents are launched in a single message so they run in parallel; each one writes its result to its isolated directory and returns only a short summary. Workers do not talk to each other: the lead relays. Works interactively, with `claude -p` and in CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Agent Teams team: persistent workers coordinated through `TaskCreate` / `TaskList` / `SendMessage`, direct teammate messaging, `TeammateIdle` / `TaskCompleted` hooks. |
+
+**Fallback**: if `--engine=teams` is requested while `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is missing, do not fail — print `ℹ️ Agent Teams unavailable: falling back to --engine=subagents` and continue with the `subagents` engine.
+
+**`teams` engine limits**: no non-interactive mode (`claude -p`) and no CI runs; one team per session (finish the current team before starting another); research preview API, subject to change.
+
+The process below is written with Agent Teams primitives. With `--engine=subagents`, apply this mapping:
+
+| Agent Teams (`teams`) | Sub-agents (`subagents`) |
+|------------------------|---------------------------|
+| `TaskCreate` + worker spawn | One `Agent` tool call whose prompt carries the task description |
+| `TaskList` polling / synchronization barrier | Wait for every `Agent` call of the batch to return |
+| `SendMessage` to a worker | Resume the sub-agent (`SendMessage` to its ID) or a new `Agent` call with the needed context |
+| `shutdown_request` | Not needed: a sub-agent ends when it returns |
+
+**Scope**: `--scope=full|code|deps|infra` applies to both engines (`full` = 3 reviewers in parallel, a single scope = a single reviewer).
+
+**Difference with native `/security-review`**: Claude Code's built-in `/security-review` only analyzes the diff (pending changes on the current branch). `/team:security` audits the whole repository for the chosen scope (code, dependencies, infrastructure). Use `/security-review` before a commit or a PR, `/team:security` for a full audit.
+
 ## Prerequisites
 
-- Claude Code v2.1.32+ with Agent Teams support
-- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable set
+- Claude Code v2.1.32+ with Agent Teams support — only with `--engine=teams`
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable set — only with `--engine=teams`
 - Docker available for running security scanners
 - `Tools/AgentTeams/lib/compatibility-check.sh` available
 - `Tools/AgentTeams/lib/result-aggregator.sh` available

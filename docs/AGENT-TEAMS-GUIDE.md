@@ -4,6 +4,8 @@ Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordina
 
 ## Prerequisites
 
+> **Engines:** `/team:audit`, `/team:security`, `/team:sprint` and `/team:delivery` default to `--engine=subagents` (plain sub-agent delegation via the `Agent` tool, no prerequisite, works with `claude -p` and in CI). The prerequisites below only apply to `--engine=teams`. If `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is missing, `--engine=teams` falls back to `subagents` instead of failing. Agent Teams limits: no `claude -p` / CI, one team per session.
+
 | Requirement | Minimum Version | Check |
 |-------------|-----------------|-------|
 | Claude Code | v2.1.260+ (v2.1.296 recommended, security advisories through CVE-2026-86063 patched) | `claude --version` |

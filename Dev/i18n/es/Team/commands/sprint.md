@@ -1,6 +1,6 @@
 ---
 description: Equipo de Desarrollo de Sprint - Implementacion paralela de stories usando Agent Teams
-argument-hint: <sprint-name> [--max-workers=3] [--overnight]
+argument-hint: <sprint-name> [--max-workers=3] [--overnight] [--engine=subagents|teams]
 ---
 
 # Equipo de Desarrollo de Sprint - Implementacion Paralela de Stories
@@ -13,6 +13,7 @@ $ARGUMENTS
 
 - `<sprint-name>`: Nombre o ID del sprint a procesar
 - `--max-workers=3`: Maximo de dev workers paralelos (por defecto: 2, max: 3)
+- `--engine=subagents`: Motor de ejecución (por defecto: `subagents`). Opciones: `subagents` (delegación a subagentes mediante la herramienta `Agent`, sin requisitos previos), `teams` (Agent Teams experimental). Ver «Motor de ejecución»
 - `--overnight`: Ejecutar en modo nocturno (limitado, se detiene a las 6am)
 - `--supervised`: Pausar antes de cada story para confirmacion humana
 - `--max-stories=10`: Maximo de stories a procesar (por defecto: 10)
@@ -25,10 +26,34 @@ $ARGUMENTS
 
 > El modo plan se activa automáticamente cuando el alcance abarca varios módulos o requiere una investigación transversal.
 
+## Motor de ejecución (`--engine`)
+
+El motor por defecto no depende de ninguna funcionalidad experimental: el comando funciona aunque `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` no esté definida.
+
+| Motor | Activación | Requisitos previos | Comportamiento |
+|-------|------------|--------------------|----------------|
+| `subagents` (por defecto) | sin flag o `--engine=subagents` | Ninguno (herramienta `Agent` nativa) | La sesión actual actúa como líder y delega cada tarea de worker a un subagente mediante la herramienta `Agent` (modelo del worker pasado con el parámetro `model`). Los subagentes independientes se lanzan en un mismo mensaje para ejecutarse en paralelo; cada uno escribe su resultado en su directorio aislado y solo devuelve un resumen breve. Los workers no se comunican entre sí: el líder hace de relevo. Funciona en modo interactivo, con `claude -p` y en CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Equipo Agent Teams: workers persistentes coordinados mediante `TaskCreate` / `TaskList` / `SendMessage`, mensajería directa entre compañeros, hooks `TeammateIdle` / `TaskCompleted`. |
+
+**Repliegue**: si se pide `--engine=teams` y `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` no está definida, no fallar — mostrar `ℹ️ Agent Teams no disponible: repliegue a --engine=subagents` y continuar con el motor `subagents`.
+
+**Límites del motor `teams`**: sin modo no interactivo (`claude -p`) ni ejecución en CI; un solo equipo por sesión (terminar el equipo en curso antes de lanzar otro); API en research preview, sujeta a cambios.
+
+El proceso siguiente se describe con las primitivas de Agent Teams. Con `--engine=subagents`, aplicar esta correspondencia:
+
+| Agent Teams (`teams`) | Subagentes (`subagents`) |
+|------------------------|---------------------------|
+| `TaskCreate` + lanzamiento de un worker | Una llamada a la herramienta `Agent` cuyo prompt retoma la descripción de la tarea |
+| Polling de `TaskList` / barrera de sincronización | Esperar el retorno de todas las llamadas `Agent` del lote |
+| `SendMessage` a un worker | Reanudar el subagente (`SendMessage` a su ID) o nueva llamada `Agent` con el contexto necesario |
+| `shutdown_request` | Innecesario: un subagente termina al devolver su resultado |
+
+**Específico del sprint**: con `subagents`, lanzar cada worker desarrollador con `isolation: "worktree"` para que las stories en paralelo no modifiquen el mismo árbol de trabajo.
+
 ## Prerequisitos
 
-- Claude Code v2.1.32+ con soporte de Agent Teams
-- Variable de entorno `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` configurada
+- Claude Code v2.1.32+ con soporte de Agent Teams — solo con `--engine=teams`
+- Variable de entorno `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` configurada — solo con `--engine=teams`
 - Backlog de sprint BMAD con stories en estado `ready-for-dev`
 - Metadatos del sprint en `.bmad/sprint-status.yaml`
 - Al menos 2 stories independientes (sprints de una sola story usan Ralph secuencial)
