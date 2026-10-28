@@ -22,7 +22,7 @@ Tu es un expert en qualité logicielle chargé d'effectuer un audit complet de c
 - Identifier le répertoire du projet à auditer ($ARGUMENTS ou répertoire courant)
 - Vérifier que le projet est bien un projet React (présence de package.json avec react)
 - Créer un contexte d'audit avec timestamp
-- Lire l'ensemble des règles disponibles dans `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/`
+- Lire l'ensemble des règles disponibles dans `.claude/rules/`
 
 ### Étape 2 : Exécution des audits sectoriels
 

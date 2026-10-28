@@ -6,52 +6,63 @@ model: haiku
 
 # Vite Library Build Audit
 
-You are an expert library packaging auditor. Validate that a Vite library build (`build.lib`) produces correct, consumable output with accurate type declarations.
+You are an expert in Vite library authoring. Validate that a library project's `build.lib` configuration and `vite-plugin-dts` output are correct and consumable.
 
-> Scope framework-agnostic uniquement. Pour Vite en tant que dev-server React/Vue/Angular/Svelte, voir le tooling.md de ce stack.
+> This command is specific to the library shape (Shape 2 in `02-architecture-vite.md`). For app/MPA/worker shapes, use `check-architecture.md` instead.
 
 ## MISSION
 
-Run the library build, inspect `dist/`, and verify that JS output, `.d.ts` declarations, and `package.json` metadata are all consistent and consumable by both ESM and CJS consumers.
+Confirm the library builds to ES + CJS + `.d.ts`, peer dependencies are correctly externalized, and the published package is actually importable by a consumer under both module systems.
+
+## Plan Mode
+
+> Plan mode is activated automatically when the scope spans multiple modules or requires cross-cutting investigation.
 
 ## AUDIT AREAS
 
-### 1. Config & Architecture Vite (30 points)
+### 1. `build.lib` Configuration
 
 ```
-[ ] build.lib.entry points to a single, deliberate public entry (src/index.ts)
-[ ] build.lib.formats includes both 'es' and 'cjs' unless ESM-only is an explicit decision
-[ ] rolldownOptions.external lists all peer dependencies (not bundled into the library)
-[ ] vite-plugin-dts configured with include matching the actual source tree
-[ ] No accidental bundling of devDependencies into the library output
+[ ] build.lib.entry points to the single public entry (src/index.ts)
+[ ] build.lib.formats includes both 'es' and 'cjs' (unless the library is genuinely ESM-only by design)
+[ ] build.lib.fileName produces predictable, versioned-free output names
+[ ] build.lib.name set if a 'umd'/'iife' global build is also required
 ```
 
-### 2. TypeScript & Qualité (20 points)
+### 2. `vite-plugin-dts` Configuration
 
 ```
-[ ] tsconfig.json declaration-compatible (composite/declaration settings don't conflict with vite-plugin-dts)
-[ ] Public API fully typed — no `any` leaking into generated .d.ts
-[ ] vite-plugin-dts rollupTypes: true used when a single bundled .d.ts is desired
-[ ] Re-exported types (export type { ... }) match runtime exports 1:1
+[ ] vite-plugin-dts included in the plugins array
+[ ] rollupTypes: true (or equivalent) used to roll up declarations into a single .d.ts, avoiding leaked internal type paths
+[ ] tsconfigPath points at the correct tsconfig (declaration-friendly settings)
+[ ] Generated dist/*.d.ts actually matches the runtime public API (no stale/missing exports)
 ```
 
-### 3. Tests (25 points)
+### 3. Dependency Externalization
 
 ```
-[ ] A build smoke test imports the compiled dist/ output (not just src/) at least once
-[ ] Both ESM and CJS entry points tested if both are published
-[ ] Type-level test (e.g. tsd or expect-type) validates the shape of the generated .d.ts
-[ ] Regression test for tree-shaking: importing one named export does not pull in unrelated code
+[ ] Every peer dependency appears in BOTH package.json "peerDependencies" AND build.rolldownOptions.external
+[ ] No peer dependency's code is present in the built dist/ bundle (verify by inspecting dist/ output or the bundle-visualizer report)
+[ ] Regular (non-peer) dependencies are intentionally bundled, not accidentally externalized
 ```
 
-### 4. Build Output & Performance (25 points)
+### 4. `package.json` Exports Map
 
 ```
-[ ] npm run build completes without warnings
-[ ] dist/ contains exactly the files declared in package.json "files"
-[ ] .d.ts files generated for every JS/TS entry point, no missing or stale declarations
-[ ] package.json exports map resolves correctly for both "import" and "require" consumers
-[ ] Bundle size reported and within the declared budget (no unexpected dependency inlined)
+[ ] "type": "module" set (or intentionally omitted for a CJS-first library)
+[ ] "exports" maps both "import" and "require" conditions to the correct files
+[ ] "main"/"module"/"types" fields kept in sync with "exports" for older tooling
+[ ] "files": ["dist"] restricts the published tarball to build output only
+[ ] "sideEffects": false set, unless specific modules have genuine side effects (then list them explicitly)
+```
+
+### 5. Consumability Smoke Test
+
+```
+[ ] A test (or `npm pack` + local install in a throwaway project) confirms:
+    - `import { X } from 'my-lib'` resolves against the ESM build
+    - `const { X } = require('my-lib')` resolves against the CJS build
+    - TypeScript consumers get correct types with no `any` fallback
 ```
 
 ## OUTPUT FORMAT
@@ -61,51 +72,55 @@ Run the library build, inspect `dist/`, and verify that JS output, `.d.ts` decla
 VITE LIBRARY BUILD AUDIT
 ══════════════════════════════════════════════════════════════
 
-📊 SUMMARY
-──────────────────────────────────────────────────────────────
-Total Score: XX/100
-Status: ✅ PUBLISHABLE | ⚠️ NEEDS WORK | ❌ BROKEN
+📊 LIBRARY BUILD SCORE: XX/100
 
-⚙️ CONFIG & ARCHITECTURE VITE: XX/30
+📦 BUILD.LIB CONFIGURATION
 ──────────────────────────────────────────────────────────────
-[✓] build.lib.entry = src/index.ts
-[✗] "lodash" bundled instead of externalized
-    File: vite.config.ts (rolldownOptions.external)
-    → Add "lodash" to external, declare it as a peerDependency
+Status: ✅ CORRECT | ⚠️ ISSUES FOUND
 
-📝 TYPESCRIPT & QUALITÉ: XX/20
-──────────────────────────────────────────────────────────────
-[✓] No `any` in public API
-[✗] vite-plugin-dts include glob misses src/utils/**
-    → Update dts({ include: ['src'] }) to cover the full source tree
+Findings:
+[⚠️] formats: ['es'] only — no CJS output
+    File: vite.config.ts
+    Fix: Add 'cjs' to build.lib.formats unless the library is intentionally ESM-only
 
-🧪 TESTS: XX/25
+📝 VITE-PLUGIN-DTS
 ──────────────────────────────────────────────────────────────
-[✓] dist/ ESM entry smoke-tested
-[✗] No test imports the CJS build
-    → Add a require('./dist/my-lib.cjs') smoke test
+Status: ✅ CORRECT | ⚠️ ISSUES FOUND
 
-📦 BUILD OUTPUT & PERFORMANCE: XX/25
-──────────────────────────────────────────────────────────────
-[✓] Build succeeds without warnings
-[✗] dist/my-lib.d.ts missing for src/utils/format.ts
-    → Regenerate declarations, verify dts.include covers utils/
+Findings:
+[⚠️] rollupTypes not enabled — dist/*.d.ts references internal src/ paths
+    Fix: Set rollupTypes: true in the vite-plugin-dts options
 
-🔍 DIST/ INVENTORY
+📤 DEPENDENCY EXTERNALIZATION
 ──────────────────────────────────────────────────────────────
-Expected (package.json "files"): dist/**
-Found:
-  dist/my-lib.js        ✅ ESM output
-  dist/my-lib.cjs       ✅ CJS output
-  dist/my-lib.d.ts      ⚠️ Incomplete — missing utils/format exports
-  dist/style.css        ❓ Not declared in package.json exports
+Status: ✅ CLEAN | ❌ LEAKS FOUND
 
-📋 RECOMMENDATIONS
+Findings:
+[🔴 HIGH] "some-peer-lib" bundled into dist/my-lib.js
+    Fix: Add to peerDependencies and build.rolldownOptions.external
+
+🗂️ PACKAGE.JSON EXPORTS MAP
 ──────────────────────────────────────────────────────────────
-1. [CRITICAL] Externalize lodash instead of bundling it
-2. [HIGH] Fix vite-plugin-dts include glob to cover src/utils/**
-3. [MEDIUM] Add a CJS smoke test
-4. [LOW] Declare dist/style.css in package.json exports if it's meant to be consumed
+Status: ✅ CORRECT | ⚠️ INCOMPLETE
+
+Findings:
+[⚠️] "exports" missing the "require" condition
+    Fix: Add "require": "./dist/my-lib.cjs" alongside "import"
+
+🧪 CONSUMABILITY SMOKE TEST
+──────────────────────────────────────────────────────────────
+Status: ✅ PASS | ❌ FAIL | ⚠️ NOT PRESENT
+
+Findings:
+[✗] No test imports from dist/ after build
+    Fix: Add test/build-output.test.ts (see 07-testing-vite.md)
+
+📋 ACTION ITEMS
+──────────────────────────────────────────────────────────────
+1. [CRITICAL] Externalize leaked peer dependency
+2. [HIGH] Enable rollupTypes for clean .d.ts output
+3. [MEDIUM] Complete the exports map (require condition)
+4. [LOW] Add a build-output consumability test
 
 ══════════════════════════════════════════════════════════════
 ```
@@ -113,28 +128,39 @@ Found:
 ## COMMANDS
 
 ```bash
-# Build the library
+# Build and inspect output
 npm run build
-
-# Inspect the produced files
 ls -la dist/
 
-# Verify the ESM entry loads
+# Verify no peer dependency leaked into the bundle
+grep -l "some-peer-lib" dist/*.js || echo "clean"
+
+# Verify the published file list before release
+npm pack --dry-run
+
+# Smoke test both module systems
+node -e "require('./dist/my-lib.cjs')"
 node --input-type=module -e "import('./dist/my-lib.js').then(m => console.log(Object.keys(m)))"
-
-# Verify the CJS entry loads (if formats includes 'cjs')
-node -e "console.log(Object.keys(require('./dist/my-lib.cjs')))"
-
-# Validate exports map resolution
-npx arethetypeswrong --pack .
 ```
 
-## PROCESS
+## REFERENCE CONFIG
 
-1. Run `npm run build` and capture warnings/errors
-2. Inventory `dist/` and compare against `package.json` `"files"`
-3. Score Config & Architecture Vite (30 pts) — entry, formats, externals, dts config
-4. Score TypeScript & Qualité (20 pts) — type accuracy, rollupTypes usage
-5. Score Tests (25 pts) — dist-level smoke tests, type-level tests, tree-shaking regression
-6. Score Build Output & Performance (25 pts) — exports map correctness, bundle budget
-7. Generate report with total score and prioritized fixes
+```typescript
+// vite.config.ts — minimal correct library config
+import { defineConfig } from 'vite'
+import dts from 'vite-plugin-dts'
+
+export default defineConfig({
+  plugins: [dts({ rollupTypes: true })],
+  build: {
+    lib: {
+      entry: 'src/index.ts',
+      formats: ['es', 'cjs'],
+      fileName: (format) => `my-lib.${format === 'es' ? 'js' : 'cjs'}`,
+    },
+    rolldownOptions: {
+      external: ['some-peer-lib'],
+    },
+  },
+})
+```

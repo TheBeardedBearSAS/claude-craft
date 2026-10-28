@@ -41,11 +41,7 @@ Visuelles definieren:
 
 ### Schritt 3: A11y-Spezifikation (A11y-Experte)
 
-Barrierefreiheit definieren:
-- HTML-Semantik
-- ARIA-Attribute
-- Tastaturnavigation
-- Screenreader-Ankündigungen
+`/uiux:a11y-component {NAME}` ausführen und dessen Spezifikation (HTML-Semantik, ARIA-Attribute, Tastaturnavigation, Fokus, Kontrast, Screenreader-Ansagen) in den ♿-Abschnitt der Synthese übernehmen. Hier nicht neu definieren.
 
 ### Schritt 4: Synthese
 

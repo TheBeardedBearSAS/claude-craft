@@ -121,30 +121,30 @@ Add to `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 # Claude Craft Aliases
-alias ci='claude-code -p /common:init'
-alias cr='claude-code -p /gate:check release'
-alias cs='claude-code -p /common:init --context'
+alias ci='claude -p /common:init'
+alias cr='claude -p /gate:check release'
+alias cs='claude -p /common:init --context'
 
-alias sc='claude-code -p /symfony:check-compliance'
-alias rc='claude-code -p /react:check-compliance'
-alias fc='claude-code -p /flutter:check-compliance'
-alias pc='claude-code -p /python:check-compliance'
-alias ac='claude-code -p /angular:check-compliance'
-alias vc='claude-code -p /vuejs:check-compliance'
-alias lc='claude-code -p /laravel:check-compliance'
-alias cc='claude-code -p /csharp:check-compliance'
+alias sc='claude -p /symfony:check-compliance'
+alias rc='claude -p /react:check-compliance'
+alias fc='claude -p /flutter:check-compliance'
+alias pc='claude -p /python:check-compliance'
+alias ac='claude -p /angular:check-compliance'
+alias vc='claude -p /vuejs:check-compliance'
+alias lc='claude -p /laravel:check-compliance'
+alias cc='claude -p /csharp:check-compliance'
 
-alias ta='claude-code -p /team:audit'
-alias ts='claude-code -p /team:sprint'
-alias td='claude-code -p /team:delivery'
+alias ta='claude -p /team:audit'
+alias ts='claude -p /team:sprint'
+alias td='claude -p /team:delivery'
 
-alias wi='claude-code -p /workflow:init'
-alias wp='claude-code -p /workflow:plan'
+alias wi='claude -p /workflow:init'
+alias wp='claude -p /workflow:plan'
 
-alias qr='claude-code -p /qa:recette'
-alias qs='claude-code -p /qa:status'
+alias qr='claude -p /qa:recette'
+alias qs='claude -p /qa:status'
 
-alias rr='claude-code -p /common:ralph-run'
+alias rr='claude -p /common:ralph-run'
 ```
 
 ### Fish Setup
@@ -153,30 +153,30 @@ Add to `~/.config/fish/config.fish`:
 
 ```fish
 # Claude Craft Aliases
-alias ci 'claude-code -p /common:init'
-alias cr 'claude-code -p /gate:check release'
-alias cs 'claude-code -p /common:init --context'
+alias ci 'claude -p /common:init'
+alias cr 'claude -p /gate:check release'
+alias cs 'claude -p /common:init --context'
 
-alias sc 'claude-code -p /symfony:check-compliance'
-alias rc 'claude-code -p /react:check-compliance'
-alias fc 'claude-code -p /flutter:check-compliance'
-alias pc 'claude-code -p /python:check-compliance'
-alias ac 'claude-code -p /angular:check-compliance'
-alias vc 'claude-code -p /vuejs:check-compliance'
-alias lc 'claude-code -p /laravel:check-compliance'
-alias cc 'claude-code -p /csharp:check-compliance'
+alias sc 'claude -p /symfony:check-compliance'
+alias rc 'claude -p /react:check-compliance'
+alias fc 'claude -p /flutter:check-compliance'
+alias pc 'claude -p /python:check-compliance'
+alias ac 'claude -p /angular:check-compliance'
+alias vc 'claude -p /vuejs:check-compliance'
+alias lc 'claude -p /laravel:check-compliance'
+alias cc 'claude -p /csharp:check-compliance'
 
-alias ta 'claude-code -p /team:audit'
-alias ts 'claude-code -p /team:sprint'
-alias td 'claude-code -p /team:delivery'
+alias ta 'claude -p /team:audit'
+alias ts 'claude -p /team:sprint'
+alias td 'claude -p /team:delivery'
 
-alias wi 'claude-code -p /workflow:init'
-alias wp 'claude-code -p /workflow:plan'
+alias wi 'claude -p /workflow:init'
+alias wp 'claude -p /workflow:plan'
 
-alias qr 'claude-code -p /qa:recette'
-alias qs 'claude-code -p /qa:status'
+alias qr 'claude -p /qa:recette'
+alias qs 'claude -p /qa:status'
 
-alias rr 'claude-code -p /common:ralph-run'
+alias rr 'claude -p /common:ralph-run'
 ```
 
 ## Mnemonic Logic

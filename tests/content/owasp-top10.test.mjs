@@ -59,3 +59,28 @@ describe('OWASP Top 10:2025 ranking', () => {
     });
   }
 });
+
+// /symfony:check-security still graded projects against the 2021 list
+// (A03:2021 Injection, "Broken Authentication", "Sensitive Data Exposure").
+const SYMFONY_CHECK_SECURITY = [
+  '.claude/commands/symfony/check-security.md',
+  ...['en', 'fr', 'es', 'de', 'pt'].map((l) => `Dev/i18n/${l}/Symfony/commands/check-security.md`),
+];
+
+describe('/symfony:check-security uses OWASP Top 10:2025 only', () => {
+  for (const file of SYMFONY_CHECK_SECURITY) {
+    const content = fs.readFileSync(path.join(PROJECT_ROOT, file), 'utf8');
+
+    it(`${file} has no 2021 category or label`, () => {
+      expect(content).not.toMatch(/A\d{2}:2021/);
+      expect(content).not.toMatch(/Broken Authentication|Sensitive Data Exposure/i);
+    });
+
+    it(`${file} summary follows the official A01–A10:2025 order`, () => {
+      const summary = new Map([...content.matchAll(/^A(\d{2}):2025 - (.+?)\s+:/gm)].map(([, n, t]) => [Number(n), t]));
+      OFFICIAL_2025.forEach((expected, i) => {
+        expect(summary.get(i + 1), `${file} rank ${i + 1}`).toMatch(expected);
+      });
+    });
+  }
+});

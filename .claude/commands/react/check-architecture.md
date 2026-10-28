@@ -17,7 +17,7 @@ Tu es un expert en architecture React chargé d'auditer la conformité architect
 
 ### Étape 1 : Analyse du contexte
 - Identifier le répertoire du projet à auditer ($ARGUMENTS ou répertoire courant)
-- Lire les règles architecturales depuis `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/02-architecture.md`
+- Lire les règles architecturales depuis `.claude/rules/02-architecture.md`
 - Comprendre la structure attendue (Feature-based, Atomic Design)
 
 ### Étape 2 : Vérification de la structure du projet
