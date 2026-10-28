@@ -225,3 +225,51 @@ MSG_CONFIG_GENERATED="Configuration generated"
 MSG_CONFIG_WIZARD_TITLE="Configuration Wizard"
 MSG_CONFIG_DETECTING="Detecting project settings..."
 MSG_CONFIG_CONFIRM="Is this correct?"
+
+# Prompts sent to Claude ({0} = reconstructed context)
+MSG_PROMPT_CONTINUATION="# Sprint Continuation
+
+You are resuming work on this sprint after a context compaction.
+The sprint-progress.md file holds the full state of the work done so far.
+
+{0}
+
+## Instructions
+
+1. **Read** the progress above to understand the current state
+2. **Check** the modified files if needed
+3. **Resume** the current task where it stopped
+4. **Continue** the TDD workflow (RED -> GREEN -> REFACTOR)
+5. **Update** sprint-progress.md after each completed task
+
+## Important Commands
+
+- After each task: update sprint-progress.md
+- If blocked: note it in the Blockers section
+- If an important decision is made: add it to Key Decisions
+
+Continue the implementation."
+
+# {0} = previous session id, {1} = reconstructed context
+MSG_PROMPT_HANDOFF="# New Continuation Session
+
+This session continues the work of the previous session ({0}).
+The context was reset but the sprint-progress.md file holds all the progress.
+
+{1}
+
+## Transition Context
+
+- Previous session: {0}
+- Reason: context limit reached (max compacts)
+- The work was saved in sprint-progress.md
+- Files are in the state of the last git checkpoint
+
+## Instructions
+
+1. **Check** the current state with git status
+2. **Read** sprint-progress.md for the full context
+3. **Identify** the current task and its state
+4. **Continue** exactly where the previous session stopped
+
+Resume the work."

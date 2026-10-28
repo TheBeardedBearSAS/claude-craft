@@ -23,6 +23,11 @@ declare -gA PARALLEL_PIDS=()
 PARALLEL_SESSION_COUNT=0
 PARALLEL_COMPLETED_COUNT=0
 PARALLEL_FAILED_COUNT=0
+# Results returned through globals: spawn_session and collect_completed_sessions
+# must run in the leader shell, never in `$(...)` (the worker would hold the
+# substitution pipe open, and the tracking arrays would be lost).
+PARALLEL_SPAWNED_SESSION_ID=""
+PARALLEL_COLLECTED_STORIES=""
 
 # Paths
 PARALLEL_BASE_DIR=""
@@ -119,7 +124,7 @@ build_dependency_graph() {
         # Get story dependencies
         local deps="[]"
         if [[ "$with_deps" == "true" ]]; then
-            deps=$(yq ".stories.${story_id}.blocked_by // []" "$status_file" 2>/dev/null) || deps="[]"
+            deps=$(STORY_ID="$story_id" yq '.stories[strenv(STORY_ID)].blocked_by // []' "$status_file" 2>/dev/null) || deps="[]"
         fi
 
         # Add node (on jq failure, keep the previous value: `next` buffers it)
@@ -270,7 +275,7 @@ get_available_slots() {
 # Session Spawning
 # =============================================================================
 
-# Spawn a new Ralph session for a story
+# Spawn a new Ralph session for a story (id in PARALLEL_SPAWNED_SESSION_ID)
 spawn_session() {
     local story_id="$1"
     local prompt="$2"
@@ -278,6 +283,7 @@ spawn_session() {
 
     # Generate session ID
     local session_id="PAR-${story_id}-$(date +%s)"
+    PARALLEL_SPAWNED_SESSION_ID=""
 
     print_info "Spawning parallel session: $session_id for $story_id"
 
@@ -373,7 +379,7 @@ EOF
     # Update state file
     update_parallel_state "spawn" "$session_id" "$story_id"
 
-    echo "$session_id"
+    PARALLEL_SPAWNED_SESSION_ID="$session_id"
 }
 
 # Create a dedicated git worktree on branch ralph/<session_id> so parallel
@@ -407,6 +413,7 @@ cleanup_worker_worktree() {
 # Check and collect completed sessions.
 # In the single-writer pattern, this function collects finished PIDs
 # and then merges worker reports written by the background processes.
+# Completed stories are also appended to PARALLEL_COLLECTED_STORIES.
 collect_completed_sessions() {
     local completed=()
     local failed=()
@@ -445,6 +452,9 @@ collect_completed_sessions() {
     fi
 
     # Return completed stories
+    if [[ ${#completed[@]} -gt 0 ]]; then
+        PARALLEL_COLLECTED_STORIES+=" ${completed[*]}"
+    fi
     echo "${completed[*]}"
 }
 
@@ -535,7 +545,7 @@ process_stories_parallel() {
                 local status_file="$bmad_dir/sprint-status.yaml"
                 if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
                     local title
-                    title=$(yq ".stories.${story_id}.title" "$status_file" 2>/dev/null)
+                    title=$(STORY_ID="$story_id" yq '.stories[strenv(STORY_ID)].title' "$status_file" 2>/dev/null)
                     prompt="Implement user story $story_id: $title. Follow TDD approach."
                 fi
 
@@ -632,12 +642,12 @@ merge_worker_reports() {
 
         # Update state file (single writer - no race condition)
         if [[ -f "$PARALLEL_STATE_FILE" ]]; then
-            yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+            SESSION_ID_ARG="$session_id" yq -i '.sessions.active -= [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
             if [[ "$status" == "completed" ]]; then
-                yq -i ".sessions.completed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.completed += [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
                 yq -i ".metrics.total_completed += 1" "$PARALLEL_STATE_FILE"
             else
-                yq -i ".sessions.failed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.failed += [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
                 yq -i ".metrics.total_failed += 1" "$PARALLEL_STATE_FILE"
             fi
         fi
@@ -699,19 +709,19 @@ update_parallel_state() {
     case "$action" in
         spawn)
             # Spawn is always called from the leader, safe to write directly
-            yq -i ".sessions.active += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+            SESSION_ID_ARG="$session_id" yq -i '.sessions.active += [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
             yq -i ".metrics.total_spawned += 1" "$PARALLEL_STATE_FILE"
             ;;
         complete|fail)
             # DEPRECATED for parallel mode: use write_worker_report() + merge_worker_reports()
             # Kept for backward compatibility with sequential mode
             if [[ "$action" == "complete" ]]; then
-                yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
-                yq -i ".sessions.completed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.active -= [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.completed += [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
                 yq -i ".metrics.total_completed += 1" "$PARALLEL_STATE_FILE"
             else
-                yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
-                yq -i ".sessions.failed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.active -= [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.failed += [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
                 yq -i ".metrics.total_failed += 1" "$PARALLEL_STATE_FILE"
             fi
             ;;
@@ -805,7 +815,7 @@ cmd_parallel_manager() {
                 echo "Usage: parallel-manager.sh spawn <story-id> [prompt]"
                 return 1
             fi
-            spawn_session "$story_id" "$prompt"
+            spawn_session "$story_id" "$prompt" && echo "$PARALLEL_SPAWNED_SESSION_ID"
             ;;
         wait)
             wait_all_sessions "${1:-0}"

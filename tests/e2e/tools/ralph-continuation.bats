@@ -108,7 +108,7 @@ EOF
 
     [ -f "$MOCK_PROMPTS/prompt-1.txt" ]
     [ "$(cat "$MOCK_PROMPTS/prompt-1.txt")" = "hello" ]
-    ! grep -q "Continuation du Sprint" "$MOCK_PROMPTS"/prompt-*.txt
+    ! grep -q "Sprint Continuation" "$MOCK_PROMPTS"/prompt-*.txt
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -122,7 +122,7 @@ EOF
 
     [ -f "$MOCK_PROMPTS/prompt-2.txt" ]
     # Iteration 2 follows a real preventive compaction: continuation expected.
-    grep -q "Continuation du Sprint" "$MOCK_PROMPTS/prompt-2.txt"
+    grep -q "Sprint Continuation" "$MOCK_PROMPTS/prompt-2.txt"
     ! grep -q $'\x1b' "$MOCK_PROMPTS"/prompt-*.txt
     ! grep -qE 'ℹ|✓|⚠|Reconstructing context|Loaded module|Context manager initialized' "$MOCK_PROMPTS"/prompt-*.txt
 }
@@ -133,7 +133,7 @@ EOF
     echo "$output"; dump_prompts
 
     [ -f "$MOCK_PROMPTS/prompt-2.txt" ]
-    grep -q "Continuation du Sprint" "$MOCK_PROMPTS/prompt-2.txt"
+    grep -q "Sprint Continuation" "$MOCK_PROMPTS/prompt-2.txt"
     grep -q "hello" "$MOCK_PROMPTS/prompt-2.txt"
     ! grep -q $'\x1b' "$MOCK_PROMPTS/prompt-2.txt"
 }
