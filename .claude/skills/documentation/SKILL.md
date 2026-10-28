@@ -1,7 +1,7 @@
 ---
 name: documentation
-description: Documentation. Use when writing docs or reviewing documentation.
-  files: ["*.md", "README*", "CHANGELOG*", "docs/**"]
+description: "Documentation. Use when writing docs or reviewing documentation."
+files: ["*.md", "README*", "CHANGELOG*", "docs/**"]
 ---
 
 # Documentation

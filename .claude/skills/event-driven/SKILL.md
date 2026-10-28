@@ -1,8 +1,8 @@
 ---
 name: event-driven
-description: Event Sourcing, CQRS, Saga patterns, event bus (Kafka, RabbitMQ, AWS EventBridge). Use when implementing event-driven architecture, distributed transactions, or event sourcing.
+description: "Event Sourcing, CQRS, Saga patterns, event bus (Kafka, RabbitMQ, AWS EventBridge). Use when implementing event-driven architecture, distributed transactions, or event sourcing."
 context: fork
-  files: ["**/events/**", "**/sagas/**", "**/event-store/**"]
+files: ["**/events/**", "**/sagas/**", "**/event-store/**"]
 ---
 
 # Event-Driven — Event Sourcing, Saga, CQRS

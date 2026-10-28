@@ -1,6 +1,6 @@
 ---
 name: aggregates
-description: Regla 05: Aggregates y Aggregate Roots. Use when implementing DDD patterns.
+description: "Regla 05: Aggregates y Aggregate Roots. Use when implementing DDD patterns."
 ---
 
 # Regla 05: Aggregates y Aggregate Roots

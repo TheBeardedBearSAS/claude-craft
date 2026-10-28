@@ -1,6 +1,6 @@
 ---
 name: testing-python
-description: Regel 07: Testing. Use when writing tests, reviewing test coverage, or setting up testing.
+description: "Regel 07: Testing. Use when writing tests, reviewing test coverage, or setting up testing."
 ---
 
 # Regel 07: Testing

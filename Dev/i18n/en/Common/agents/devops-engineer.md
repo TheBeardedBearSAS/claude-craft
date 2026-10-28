@@ -17,20 +17,6 @@ permissionMode: default
 skills:
   - git-workflow
   - security
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(kubectl delete:*)"
-  - "Bash(helm uninstall:*)"
-  - "Bash(terraform destroy:*)"
-  - "Bash(tofu destroy:*)"
-  - "Bash(docker system prune -a*)"
-  - "Bash(docker volume rm:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
-  - "Bash(git push --force*)"
-  - "Bash(git push -f*)"
 ---
 
 # DevOps Engineer Agent
@@ -242,3 +228,22 @@ strategy:
 3. Configure health checks
 4. Prepare rollback
 5. Monitor deployment
+
+## Destructive commands guard
+
+An agent cannot block a single command: `disallowedTools: Bash(...)` removes all of Bash. These commands therefore go through the permission prompt — always ask for explicit confirmation before running them. To block them in a project, add to its `.claude/settings.json` (the rules also apply to subagents):
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Bash(kubectl delete:*)",
+      "Bash(helm uninstall:*)",
+      "Bash(terraform destroy:*)",
+      "Bash(tofu destroy:*)",
+      "Bash(docker volume rm:*)",
+      "Bash(docker system prune -a*)"
+    ]
+  }
+}
+```

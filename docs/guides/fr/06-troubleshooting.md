@@ -496,7 +496,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
    ```bash
    claude --version
    # Les hooks nécessitent v2.1.47+ (PreCompact: v2.1.76+, PostCompact: v2.1.76+)
-   # Minimum : v2.1.260 | Recommandé : v2.1.296
+   # Minimum : v2.1.260 | Recommandé : v2.1.312
    ```
 
 3. **Vérifier que le script hook est exécutable**

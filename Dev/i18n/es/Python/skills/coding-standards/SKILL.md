@@ -1,6 +1,6 @@
 ---
 name: coding-standards
-description: Regla 03: Estándares de Codificación. Use when reviewing code style or formatting.
+description: "Regla 03: Estándares de Codificación. Use when reviewing code style or formatting."
 ---
 
 # Regla 03: Estándares de Codificación

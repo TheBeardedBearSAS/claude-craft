@@ -1,7 +1,7 @@
 ---
 name: workflow-analysis
-description: Analyse obligatoire en 4 étapes (comprendre, analyser, documenter, valider) avant toute modification de code, puis implémentation TDD. Use when starting a feature, bugfix or refactoring, or before touching existing code with unclear impact.
-  files: []
+description: "Analyse obligatoire en 4 étapes (comprendre, analyser, documenter, valider) avant toute modification de code, puis implémentation TDD. Use when starting a feature, bugfix or refactoring, or before touching existing code with unclear impact."
+files: []
 ---
 
 # Workflow d'Analyse Obligatoire

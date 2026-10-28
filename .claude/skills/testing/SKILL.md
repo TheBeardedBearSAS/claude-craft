@@ -1,8 +1,8 @@
 ---
 name: testing
-description: TDD/BDD testing principles. Use when writing tests, reviewing test coverage, setting up testing, or discussing test strategy and test architecture.
+description: "TDD/BDD testing principles. Use when writing tests, reviewing test coverage, setting up testing, or discussing test strategy and test architecture."
 context: fork
-  files: ["**/tests/**", "**/test/**", "**/__tests__/**", "**/spec/**", "*.test.*", "*.spec.*", "*Test*.*", "*_test.*"]
+files: ["**/tests/**", "**/test/**", "**/__tests__/**", "**/spec/**", "*.test.*", "*.spec.*", "*Test*.*", "*_test.*"]
 ---
 
 # Testing - Principes TDD/BDD (2026)

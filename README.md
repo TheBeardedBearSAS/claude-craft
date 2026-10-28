@@ -28,6 +28,10 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 18 namespaces (238 total, including deprecated redirect stubs kept until 9.0), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v8.27.0
+
+**Les commandes `/team:*` sans Agent Teams (2026-10-28, v8.27.0) :** `/team:audit`, `/team:security`, `/team:sprint` et `/team:delivery` délèguent par défaut à des sous-agents (`--engine=subagents`, compatible `claude -p` et CI) ; Agent Teams devient optionnel (`--engine=teams`, repli automatique si `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` est absent). `/common:research-context7` et `/uiux:orchestrator` sont dépréciées au profit du MCP context7 / `/deep-research` et de l'agent `@uiux-orchestrator`. Ralph est fiabilisé en mode parallèle (sessions et worktrees isolés). Claude Code recommandé : 2.1.312. Dernière version 8.x avant la 9.0. Détails : [CHANGELOG](CHANGELOG.md#8270---2026-10-28).
+
 ## What's New in v8.26.0
 
 **Un parcours principal pour la gestion de projet (2026-10-26, v8.26.0) :** `/workflow:init → plan → design → start → implement → review → retro` (+ `/workflow:status` à tout moment, `/workflow:auto-sprint` de bout en bout). Le namespace `/sprint:` et les générateurs `/project:*` deviennent des stubs de redirection jusqu'en 9.0. Il reste 35 commandes de gestion de projet actives au lieu de 86. Guide : [Quel parcours ?](docs/guides/en/11-which-path.md). Détails : [CHANGELOG](CHANGELOG.md#8260---2026-10-26).
@@ -69,7 +73,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 - **Sécurité** : classement OWASP Top 10:2025 officiel (A01–A10) dans la règle 11 et ses miroirs, avec test de régression ; FrankenPHP 1.13.0 et PgBouncer 1.26.0 (versions précédentes vulnérables) ; types de serveurs Hetzner et `datacenter` retirés corrigés.
 - **Versions vérifiées sur registres** : React 19.3, Flutter 3.47, React Native 0.87 / Expo 57, Pinia 4, Vite 8.3 (`rolldownOptions`), Vercel CLI 63, Python 3.15, Paperclip 2026.1012.0, Docker 29.9, Kubernetes 1.37 (Gateway API), Vitest 5, Pest 5, pytest 9, PER-CS 3.0.
-- **Claude Code** : minimum 2.1.260, recommandé 2.1.296, modèles 5.5. Détails : [CHANGELOG](CHANGELOG.md#8230---2026-10-13).
+- **Claude Code** : minimum 2.1.260, recommandé 2.1.312, modèles 5.5. Détails : [CHANGELOG](CHANGELOG.md#8230---2026-10-13).
 
 ## What's New in v8.18.0
 
@@ -148,7 +152,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
 - **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
 - **126 commandes sur 15 namespaces (v8.10.x)** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
-- **Claude Code 2.1.296** -- version recommandée (minimum sécurité 2.1.260 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
+- **Claude Code 2.1.312** -- version recommandée (minimum sécurité 2.1.260 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
 
 > ← Versions antérieures (v8.0 → v8.7) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
 

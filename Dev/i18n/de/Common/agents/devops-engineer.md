@@ -7,20 +7,6 @@ maxTurns: 8
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
 permissionMode: default
 skills: [security, git-workflow]
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(kubectl delete:*)"
-  - "Bash(helm uninstall:*)"
-  - "Bash(terraform destroy:*)"
-  - "Bash(tofu destroy:*)"
-  - "Bash(docker system prune -a*)"
-  - "Bash(docker volume rm:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
-  - "Bash(git push --force*)"
-  - "Bash(git push -f*)"
 ---
 
 # DevOps Engineer Agent
@@ -232,3 +218,22 @@ strategy:
 3. Health Checks konfigurieren
 4. Rollback vorbereiten
 5. Deployment überwachen
+
+## Schutz vor destruktiven Befehlen
+
+Ein Agent kann keinen einzelnen Befehl sperren: `disallowedTools: Bash(...)` entfernt Bash vollständig. Diese Befehle laufen daher über den Berechtigungs-Prompt — vor der Ausführung immer eine ausdrückliche Bestätigung einholen. Um sie in einem Projekt zu sperren, in dessen `.claude/settings.json` ergänzen (die Regeln gelten auch für Sub-Agenten):
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Bash(kubectl delete:*)",
+      "Bash(helm uninstall:*)",
+      "Bash(terraform destroy:*)",
+      "Bash(tofu destroy:*)",
+      "Bash(docker volume rm:*)",
+      "Bash(docker system prune -a*)"
+    ]
+  }
+}
+```

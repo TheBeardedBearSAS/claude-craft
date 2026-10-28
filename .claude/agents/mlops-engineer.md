@@ -6,21 +6,6 @@ maxTurns: 6
 effort: medium
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
-# Audit 2026-05-18 QW-15 — MLOps touches feature stores, model registries
-# and inference endpoints (often production). Block destructive verbs on
-# data/model artefacts and on the underlying infra.
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(kubectl delete:*)"
-  - "Bash(helm uninstall:*)"
-  - "Bash(mlflow models delete:*)"
-  - "Bash(mlflow registered-models delete:*)"
-  - "Bash(aws s3 rm:*)"
-  - "Bash(gsutil rm:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
 permissionMode: default
 ---
 
@@ -262,3 +247,22 @@ if report.as_dict()["metrics"][0]["result"]["dataset_drift"]:
 - [Google MLOps Guide](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning)
 - [Book: Introducing MLOps](https://www.oreilly.com/library/view/introducing-mlops/9781492083283/)
 - [ML Model Governance](https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-management-and-deployment)
+
+## Garde-fou des commandes destructives
+
+Un agent ne peut pas bloquer une commande précise : `disallowedTools: Bash(...)` retire tout Bash. Ces commandes passent donc par le prompt de permission — toujours demander une confirmation explicite avant de les lancer. Pour les bloquer dans un projet, ajouter à son `.claude/settings.json` (règles appliquées aussi aux sous-agents) :
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Bash(kubectl delete:*)",
+      "Bash(helm uninstall:*)",
+      "Bash(mlflow models delete:*)",
+      "Bash(mlflow registered-models delete:*)",
+      "Bash(aws s3 rm:*)",
+      "Bash(gsutil rm:*)"
+    ]
+  }
+}
+```

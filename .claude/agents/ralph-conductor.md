@@ -6,19 +6,6 @@ maxTurns: 10
 effort: xhigh
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, Agent, WebFetch, WebSearch]
-# Audit 2026-05-18 P0 #2 — Ralph runs unattended in loops. Baseline
-# deny list prevents an autonomous session from nuking the workspace.
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(:(){:|:&};:*)"
-  - "Bash(sudo:*)"
-  - "Bash(chmod 777:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
-  - "Bash(git push --force*)"
-  - "Bash(git push -f*)"
 permissionMode: default
 ---
 

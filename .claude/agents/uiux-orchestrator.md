@@ -6,16 +6,6 @@ maxTurns: 10
 effort: medium
 memory: project
 tools: [Read, Glob, Grep, Edit, Write, Bash, Agent, WebFetch, WebSearch]
-# Audit 2026-05-18 P0 #2 — baseline destructive-command deny list.
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(:(){:|:&};:*)"
-  - "Bash(sudo:*)"
-  - "Bash(chmod 777:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
 permissionMode: default
 ---
 

@@ -1,8 +1,8 @@
 ---
 name: multitenant
-description: Architecture multitenant avec approche tiered (Shared/Dedicated Schema/DB), RBAC/ABAC, field-level encryption. Use when working with multitenant applications, tenant isolation, data segregation.
+description: "Architecture multitenant avec approche tiered (Shared/Dedicated Schema/DB), RBAC/ABAC, field-level encryption. Use when working with multitenant applications, tenant isolation, data segregation."
 context: fork
-  files: ["**/TenantFilter.php", "**/TenantScope.php", "**/middleware/Tenant*"]
+files: ["**/TenantFilter.php", "**/TenantScope.php", "**/middleware/Tenant*"]
 ---
 
 # Multitenant — Quick Reference

@@ -352,13 +352,15 @@ The `/context` command provides actionable suggestions to optimize context usage
 
 Adjust the model's effort level based on task complexity:
 
-| Command | Model | Usage |
-|---------|-------|-------|
-| `/effort low` | Haiku 5.5 | Simple tasks, lookups, classification |
-| `/effort medium` | Sonnet 5.5 | Standard implementation |
-| `/effort high` | Opus 5.5 | Complex reasoning, architecture |
-| `/effort xhigh` | Opus 5.5 (extended thinking) | Critical decisions, complex migrations, ADR |
-| `/effort ultracode` | Opus 5.5 (separate toggle since v2.1.284, Dynamic Workflows) | Maximum code throughput — automated pipelines, massive generation |
+| Command | Effect | Usage |
+|---------|--------|-------|
+| `/effort low` | Minimal reasoning, fast answers | Simple tasks, lookups, classification |
+| `/effort medium` | Standard depth | Standard implementation |
+| `/effort high` | Deeper reasoning | Complex reasoning, architecture |
+| `/effort xhigh` | Maximum adaptive thinking | Critical decisions, complex migrations, ADR |
+| `/effort ultracode` | Separate toggle (v2.1.284+), Dynamic Workflows | Maximum code throughput — automated pipelines, massive generation |
+
+> **Effort does not switch models:** it sets the reasoning depth of the current model; pick the model with `/model`. Recommended pairs: `low` on Haiku 5.5, `medium` on Sonnet 5.5, `high`/`xhigh` on Opus 5.5.
 
 > **Default effort per model:** medium on Opus 5.5 and Haiku 5.5; high on Sonnet 5.5, Fable 5.1 and legacy models.
 > **Fable 5.1** (`claude-fable-5-1`, $10/$50 per Mtok) is a current model, suitable for creative/narrative agents. **Mythos** is limited availability (Cyber Verification Program only).
@@ -493,7 +495,7 @@ During compaction, always preserve:
 | Variable | Description |
 |----------|-------------|
 | `CLAUDE_CODE_SUBAGENT_MODEL` | **Default** model for untyped sub-agents (e.g., `sonnet`). **Since Claude Code 2.1.251**, agent frontmatter `model:` takes precedence: the 11 reviewers with `model: haiku` stay on Haiku. **Before 2.1.251 it was the other way round** — this variable overrode the frontmatter. |
-| `CLAUDE_CODE_FORK_SUBAGENT` | `1` to isolate sub-agent contexts (forked subagents, v2.1.117+) |
+| `CLAUDE_CODE_FORK_SUBAGENT` | `1` to isolate sub-agent contexts (forked subagents, v2.1.117+); on by default in `-p`, the SDK, desktop and VS Code since 2.1.302, `0` to turn it off |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Extend/force prompt caching (−40% on repetitive sessions) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Set to `1` to disable automatic memory |
 
@@ -766,7 +768,7 @@ For the 5 `opus` agents (security-auditor, database-architect, migration-special
 
 **Auto-compaction and skills:** After compaction, skills auto-reload (5K tokens/skill, 25K total max).
 
-**Skills with `context: fork` (24 total):** Heavy (>100 lines, 17): `architect`, `debug-methodical`, `atomic-tasks`, `socratic-brainstorm`, `architecture-clean-ddd`, `parallel-worktrees`, `event-driven`, `cqrs`, `async`, `multitenant`, `testing`, `testing-symfony`, `testing-python`, `testing-react`, `testing-flutter`, `testing-reactnative`, `design-md-convention`. Medium (60-100 lines, 7): `edge-computing`, `wasm`, `graphql`, `monorepo`, `observability`, `docker-hadolint`, `api-gateway`.
+**Skills with `context: fork`:** every Claude Craft skill over 60 lines uses it (checked by the framework's internal conformance audit).
 
 ---
 
@@ -797,7 +799,7 @@ Templates available in `.claude/templates/hooks/`: `output-filter.json`, `pre-co
 | fallbackModel | Opus reliability — no session interruptions (active by default in settings.json) |
 | PostToolUse hook (Bash+Read) | Reduces context pollution (5K-50K tokens/session on large files) |
 | PreCompact hook | Prevents context loss |
-| context:fork skills (24 total) | 2K-15K tokens per long session chaining multiple skills |
+| `context: fork` skills (>60 lines) | 2K-15K tokens per long session chaining multiple skills |
 | **Combined total** | **60-75% overall reduction** |
 
 > Detailed examples and templates: see `@.claude/references/base/context-management.md`

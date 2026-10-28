@@ -1,8 +1,8 @@
 ---
 name: observability
-description: OpenTelemetry, distributed tracing, structured logging, metrics (Prometheus, Grafana, Datadog). Use when implementing monitoring, tracing, or debugging production issues.
+description: "OpenTelemetry, distributed tracing, structured logging, metrics (Prometheus, Grafana, Datadog). Use when implementing monitoring, tracing, or debugging production issues."
 context: fork
-  files: ["**/otel*", "**/prometheus*", "**/grafana*", "**/jaeger*", "**/tempo*", "**/loki*"]
+files: ["**/otel*", "**/prometheus*", "**/grafana*", "**/jaeger*", "**/tempo*", "**/loki*"]
 ---
 
 # Observability — OpenTelemetry & Distributed Tracing

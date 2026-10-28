@@ -37,7 +37,7 @@ This comprehensive tutorial guides you through adding Claude-Craft to a project 
 - [ ] You have committed all current changes
 - [ ] You have write access to the project directory
 - [ ] Node.js 20+ installed (for NPX method)
-- [ ] Claude Code installed (recommended: v2.1.296, minimum: v2.1.260 — security baseline)
+- [ ] Claude Code installed (recommended: v2.1.312, minimum: v2.1.260 — security baseline)
 
 ### When NOT to Install
 

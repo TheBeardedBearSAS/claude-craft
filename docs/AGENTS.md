@@ -1394,7 +1394,7 @@ Agent content...
 | `effort` | No | `low` \| `medium` \| `high` \| `xhigh` \| `max` — reasoning depth (`xhigh`/`max` need an Opus-class model, e.g. Opus 5.5) |
 | `memory` | No | Memory scope: `user`, `project`, or `local` (v2.1.33+) |
 | `tools` | No | Allowed tools, including `Task(agent_type)` (v2.1.33+) |
-| `disallowedTools` | No | Denied tools (camelCase); `disallowed-tools` kebab-case also accepted (v2.1.152+) |
+| `disallowedTools` | No | Denied tools (camelCase); `disallowed-tools` kebab-case also accepted (v2.1.152+). Whole tools only: an entry with a specifier such as `Bash(git push *)` removes all of Bash from the agent — block commands with `permissions.deny` in settings instead |
 | `maxTurns` | No | Cap on agent turns (cost/scope control, v2.1.78+) |
 | `permissionMode` | No | Permission mode for the agent session |
 | `skills` | No | Skills made available to the agent |

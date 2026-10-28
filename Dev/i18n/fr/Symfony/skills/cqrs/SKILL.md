@@ -1,6 +1,6 @@
 ---
 name: cqrs
-description: Règle 07 : CQRS - Command Query Responsibility Segregation. Use when implementing DDD patterns.
+description: "Règle 07 : CQRS - Command Query Responsibility Segregation. Use when implementing DDD patterns."
 ---
 
 # Règle 07 : CQRS - Command Query Responsibility Segregation

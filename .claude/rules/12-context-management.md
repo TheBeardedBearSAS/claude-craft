@@ -96,9 +96,9 @@ Les sous-agents (Task tool) ont leur propre fenetre de contexte, evitant de poll
 | Planifier une implementation | Sous-agent Plan |
 | Tache independante en parallele | Sous-agent general-purpose |
 
-**Agent frontmatter (v2.1.78+):** Les agents personnalises supportent `effort`, `maxTurns`, `disallowedTools` pour optimiser les couts et le scope.
+**Agent frontmatter (v2.1.78+):** Les agents personnalises supportent `effort`, `maxTurns`, `disallowedTools` pour optimiser les couts et le scope. `disallowedTools` retire des outils entiers : une entrée `Bash(git push *)` retire tout Bash à l'agent — bloquer une commande via `permissions.deny` (s'applique aussi aux sous-agents).
 
-**Skill `context: fork` (v2.1.105+):** Les 24 skills de Claude Craft (>60 lignes) utilisent `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 2 000-5 000 tokens/session pour les skills moyens (60-100 lignes), 8 000-15 000 tokens/session pour les skills lourds (>100 lignes). Liste lourds (17) : `architect`, `debug-methodical`, `atomic-tasks`, `socratic-brainstorm`, `architecture-clean-ddd`, `parallel-worktrees`, `event-driven`, `cqrs`, `async`, `multitenant`, `testing`, `testing-symfony`, `testing-python`, `testing-react`, `testing-flutter`, `testing-reactnative`, `design-md-convention`. Liste moyens (7, 60-100 lignes) : `edge-computing`, `wasm`, `graphql`, `monorepo`, `observability`, `docker-hadolint`, `api-gateway`.
+**Skill `context: fork` (v2.1.105+):** Tout skill de Claude Craft de plus de 60 lignes utilise `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 2 000-5 000 tokens/session pour les skills moyens (60-100 lignes), 8 000-15 000 tokens/session pour les skills lourds (>100 lignes). Règle vérifiée par la lentille `internal-conformance` de `/common:audit-claude-alignment`.
 
 ---
 
@@ -153,13 +153,15 @@ La status line affiche le pourcentage de contexte utilise.
 
 **`/usage`** (v2.1.143+, enrichi v2.1.149) : compte de tokens exact + coût $ de la session, **avec attribution par composant** (skill, sous-agent, plugin, serveur MCP) — plus précis que le pourcentage de la status line. À lancer vers 60 % de contexte pour identifier le poste le plus coûteux avant de déléguer ou `/clear`. Complémentaire de `/context` (qui suggère la compaction).
 
-| Commande | Modele | ID canonique | Usage |
-|----------|--------|--------------|-------|
-| `/effort low` | Haiku 5.5 | `claude-haiku-5-5` | Taches simples, lookups, classification |
-| `/effort medium` | Sonnet 5.5 | `claude-sonnet-5-5` | Implementation standard, taches agentiques (defaut sous-agents) |
-| `/effort high` | Opus 5.5 | `claude-opus-5-5` | Raisonnement complexe, architecture |
-| `/effort xhigh` | Opus 5.5 (extended thinking) | `claude-opus-5-5` | Decisions critiques, migrations complexes, ADR |
-| `/effort ultracode` | Opus 5.5 (toggle séparé depuis v2.1.284, Dynamic Workflows) | `claude-opus-5-5` | Mode debit code maximal — pipelines automatises, generation massive |
+| Commande | Effet | Usage |
+|----------|-------|-------|
+| `/effort low` | Raisonnement minimal, réponses rapides | Tâches simples, lookups, classification |
+| `/effort medium` | Profondeur standard | Implémentation standard, tâches agentiques |
+| `/effort high` | Raisonnement approfondi | Raisonnement complexe, architecture |
+| `/effort xhigh` | Adaptive thinking au maximum | Décisions critiques, migrations complexes, ADR |
+| `/effort ultracode` | Toggle séparé (v2.1.284+), Dynamic Workflows | Débit de code maximal — pipelines automatisés, génération massive |
+
+> **L'effort ne change pas de modèle :** il règle la profondeur de raisonnement du modèle courant ; le modèle se choisit avec `/model` (table plus bas). Couples conseillés : `low` sur Haiku 5.5 (`claude-haiku-5-5`), `medium` sur Sonnet 5.5 (`claude-sonnet-5-5`), `high`/`xhigh` sur Opus 5.5 (`claude-opus-5-5`).
 
 > **Effort par défaut (doc Anthropic, octobre 2026) :** `medium` sur Opus 5.5 et Haiku 5.5 ; `high` sur Sonnet 5.5, Fable 5.1 et les modèles *legacy* (Sonnet 5, Opus 4.8). Monter explicitement à `high`/`xhigh` sur Opus 5.5 pour les tâches critiques.
 
@@ -202,7 +204,7 @@ La status line affiche le pourcentage de contexte utilise.
 | Variable | Description |
 |----------|-------------|
 | `CLAUDE_CODE_SUBAGENT_MODEL` | Modèle **par défaut** des sous-agents non typés (ex: `sonnet`). **Depuis Claude Code 2.1.251**, le frontmatter `model:` d'un agent prévaut : les 11 reviewers `model: haiku` restent sur haiku. **Avant 2.1.251, c'était l'inverse** — cette variable écrasait le frontmatter (voir la note de précédence ci-dessous). |
-| `CLAUDE_CODE_FORK_SUBAGENT` | `1` pour isoler le contexte des sous-agents (forked subagents, v2.1.117+) |
+| `CLAUDE_CODE_FORK_SUBAGENT` | `1` pour isoler le contexte des sous-agents (forked subagents, v2.1.117+) ; actif par défaut en `-p`, SDK, desktop et VS Code depuis 2.1.302, `0` pour le désactiver |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Etendre/forcer le prompt caching (−40 % sur sessions repetitives) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre a `1` pour desactiver la memoire automatique |
 
@@ -325,7 +327,7 @@ Templates disponibles dans `.claude/templates/hooks/`: `output-filter.json`, `pr
 | fallbackModel | Fiabilite Opus — pas d'interruption de session (active par defaut dans settings.json) |
 | PostToolUse hook (Bash+Read) | Reduit pollution contexte (5K-50K tokens/session sur gros fichiers) |
 | PreCompact hook | Evite perte de contexte |
-| context:fork skills (24 total) | 2K-15K tokens par session longue chainant plusieurs skills |
+| Skills `context: fork` (>60 lignes) | 2K-15K tokens par session longue chainant plusieurs skills |
 | **Total combine** | **60-75% reduction globale** |
 
 ---
