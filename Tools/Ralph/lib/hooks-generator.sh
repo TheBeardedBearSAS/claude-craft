@@ -95,7 +95,8 @@ generate_hooks_config() {
     # Merge with existing settings
     local merged
     if command -v jq &>/dev/null; then
-        merged=$(echo "$existing_settings" | jq --argjson hooks "$hooks_config" '. + {hooks: $hooks}')
+        merged=$(echo "$existing_settings" | jq --argjson hooks "$hooks_config" '. + {hooks: $hooks}') \
+            || merged="{\"hooks\": $hooks_config}"
     else
         # Fallback: just write hooks config
         merged="{\"hooks\": $hooks_config}"

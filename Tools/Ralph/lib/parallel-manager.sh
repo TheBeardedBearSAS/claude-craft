@@ -122,14 +122,15 @@ build_dependency_graph() {
             deps=$(yq ".stories.${story_id}.blocked_by // []" "$status_file" 2>/dev/null) || deps="[]"
         fi
 
-        # Add node
-        nodes=$(echo "$nodes" | jq --arg id "$story_id" '. + {($id): {"status": "pending", "deps": []}}')
+        # Add node (on jq failure, keep the previous value: `next` buffers it)
+        local next
+        next=$(echo "$nodes" | jq --arg id "$story_id" '. + {($id): {"status": "pending", "deps": []}}') && nodes="$next"
 
         # Add edges for dependencies
         if [[ "$deps" != "[]" && "$deps" != "null" ]]; then
-            for dep in $(echo "$deps" | jq -r '.[]' 2>/dev/null); do
-                edges=$(echo "$edges" | jq --arg from "$dep" --arg to "$story_id" '. + [{"from": $from, "to": $to}]')
-                nodes=$(echo "$nodes" | jq --arg id "$story_id" --arg dep "$dep" '.[$id].deps += [$dep]')
+            for dep in $(echo "$deps" | jq -r '.[]' 2>/dev/null || true); do
+                next=$(echo "$edges" | jq --arg from "$dep" --arg to "$story_id" '. + [{"from": $from, "to": $to}]') && edges="$next"
+                next=$(echo "$nodes" | jq --arg id "$story_id" --arg dep "$dep" '.[$id].deps += [$dep]') && nodes="$next"
             done
         fi
     done

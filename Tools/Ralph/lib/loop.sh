@@ -253,7 +253,7 @@ get_loop_state() {
         status: (.status // "unknown"),
         circuit_breaker: (.circuit_breaker // {}),
         dod_results: (.dod_results // [])
-    }' 2>/dev/null)
+    }' 2>/dev/null) || result=""
 
     if [[ -n "$result" ]]; then
         echo "$result"
