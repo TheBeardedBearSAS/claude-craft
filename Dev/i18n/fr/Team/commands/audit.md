@@ -1,5 +1,5 @@
 ---
-description: Équipe d'Audit Complet - Audit multi-technologie parallèle utilisant les Agent Teams
+description: Équipe d'Audit Complet - Audit multi-technologie parallèle par sous-agents (Agent Teams en option)
 argument-hint: "[--techs=auto|tech1,tech2] [--max-workers=4] [--engine=subagents|teams]"
 ---
 

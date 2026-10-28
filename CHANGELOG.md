@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **`/team:audit`, `/team:security`, `/team:sprint`, `/team:delivery`** : nouveau flag `--engine=subagents|teams`. Le moteur par défaut `subagents` délègue aux sous-agents via l'outil `Agent` et ne requiert plus `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` (fonctionne avec `claude -p` et en CI) ; Agent Teams devient optionnel (`--engine=teams`, avec repli automatique si la variable est absente). Limites de `teams` documentées (pas de `-p` ni de CI, une équipe par session). `/team:security` précise que `/security-review` natif ne couvre que le diff. 5 langues. Test `tests/scripts/team-engine.test.mjs`.
+- **`/team:audit`, `/team:security`, `/team:sprint`, `/team:delivery`** : nouveau flag `--engine=subagents|teams`. Le moteur par défaut `subagents` délègue aux sous-agents via l'outil `Agent` et ne requiert plus `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` (fonctionne avec `claude -p` et en CI) ; Agent Teams devient optionnel (`--engine=teams`, avec repli automatique si la variable est absente). Limites de `teams` documentées (pas de `-p` ni de CI, une équipe par session). `/team:security` précise que `/security-review` natif ne couvre que le diff. Descriptions mises à jour (« par sous-agents (Agent Teams en option) »). `/workflow:auto-sprint` relaie `--engine` à sa phase d'implémentation et se replie sur `subagents` au lieu d'abandonner ; `--ralph-mode` et le mode de coordination de `@ralph-conductor` sont réservés à `/team:sprint --engine=teams`. 5 langues. Test `tests/scripts/team-engine.test.mjs`.
 
 ### Fixed
 

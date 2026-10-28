@@ -1,5 +1,5 @@
 ---
-description: Sprint Development Team - Parallel story implementation using Agent Teams
+description: Sprint Development Team - Parallel story implementation using sub-agents (Agent Teams optional)
 argument-hint: <sprint-name> [--max-workers=3] [--overnight] [--engine=subagents|teams]
 ---
 
@@ -20,7 +20,7 @@ $ARGUMENTS
 - `--timeout=12`: Maximum runtime in hours (default: 12)
 - `--dry-run`: Show team composition and story assignments without executing
 - `--max-cost=<dollars>`: Maximum budget in dollars. If the estimated parallel cost exceeds this threshold, execution is blocked with an OVER BUDGET message
-- `--ralph-mode`: Enable Ralph recovery engine (error classification, auto-retry, escalation service) alongside Agent Teams parallelism.
+- `--ralph-mode`: Enable Ralph recovery engine (error classification, auto-retry, escalation service) alongside Agent Teams parallelism. Requires `--engine=teams`: the Ralph Teams adapter relies on `TaskCreate` / `SendMessage`.
 
 ## Execution engine (`--engine`)
 

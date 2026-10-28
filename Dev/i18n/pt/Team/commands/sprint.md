@@ -1,5 +1,5 @@
 ---
-description: Equipe de Desenvolvimento de Sprint - Implementacao paralela de stories usando Agent Teams
+description: Equipe de Desenvolvimento de Sprint - Implementacao paralela de stories com subagentes (Agent Teams opcional)
 argument-hint: <sprint-name> [--max-workers=3] [--overnight] [--engine=subagents|teams]
 ---
 
@@ -20,7 +20,7 @@ $ARGUMENTS
 - `--timeout=12`: Tempo maximo de execucao em horas (padrao: 12)
 - `--dry-run`: Mostrar composicao da equipe e atribuicoes de stories sem executar
 - `--max-cost=<dollars>`: Orcamento maximo em dolares. Se o custo paralelo estimado ultrapassar este limiar, a execucao e bloqueada com uma mensagem OVER BUDGET
-- `--ralph-mode`: Ativar motor de recuperacao Ralph (classificacao de erros, auto-retry, servico de escalacao) junto com paralelismo Agent Teams.
+- `--ralph-mode`: Ativar motor de recuperacao Ralph (classificacao de erros, auto-retry, servico de escalacao) junto com paralelismo Agent Teams. Requer `--engine=teams`: o adaptador Ralph Teams se apoia em `TaskCreate` / `SendMessage`.
 
 ## Modo Plano
 

@@ -1,5 +1,5 @@
 ---
-description: Full Audit Team - Parallel multi-technology audit using Agent Teams
+description: Full Audit Team - Parallel multi-technology audit using sub-agents (Agent Teams optional)
 argument-hint: "[--techs=auto|tech1,tech2] [--max-workers=4] [--engine=subagents|teams]"
 ---
 

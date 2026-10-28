@@ -1,5 +1,5 @@
 ---
-description: "Equipo de Revision de Seguridad - Auditoria de seguridad paralela multi-dimension usando Agent Teams"
+description: "Equipo de Revision de Seguridad - Auditoria de seguridad paralela multi-dimension con subagentes (Agent Teams opcional)"
 argument-hint: "[--scope=full|code|deps|infra] [--max-workers=3] [--engine=subagents|teams]"
 ---
 

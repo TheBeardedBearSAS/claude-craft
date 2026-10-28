@@ -1,5 +1,5 @@
 ---
-description: Equipo de Entrega - Ciclo de vida completo del sprint (redaccion + implementacion) usando Agent Teams
+description: Equipo de Entrega - Ciclo de vida completo del sprint (redaccion + implementacion) con subagentes (Agent Teams opcional)
 argument-hint: <sprint-name|prd-path> [--phase=all|writing|implementation] [--max-workers=3] [--engine=subagents|teams]
 ---
 

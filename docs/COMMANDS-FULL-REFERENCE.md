@@ -354,10 +354,10 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/team:audit`](../.claude/commands/team/audit.md) | Équipe d'Audit Complet - Audit multi-technologie parallèle utilisant les Agent Teams |
-| [`/team:delivery`](../.claude/commands/team/delivery.md) | Équipe de Livraison - Cycle de vie complet du sprint (rédaction + implémentation) utilisant les Agent Teams |
-| [`/team:security`](../.claude/commands/team/security.md) | Équipe de Revue de Sécurité - Audit de sécurité multi-dimension parallèle utilisant les Agent Teams |
-| [`/team:sprint`](../.claude/commands/team/sprint.md) | Équipe de Développement Sprint - Implémentation parallèle de stories utilisant les Agent Teams |
+| [`/team:audit`](../.claude/commands/team/audit.md) | Équipe d'Audit Complet - Audit multi-technologie parallèle par sous-agents (Agent Teams en option) |
+| [`/team:delivery`](../.claude/commands/team/delivery.md) | Équipe de Livraison - Cycle de vie complet du sprint (rédaction + implémentation) par sous-agents (Agent Teams en option) |
+| [`/team:security`](../.claude/commands/team/security.md) | Équipe de Revue de Sécurité - Audit de sécurité multi-dimension parallèle par sous-agents (Agent Teams en option) |
+| [`/team:sprint`](../.claude/commands/team/sprint.md) | Équipe de Développement Sprint - Implémentation parallèle de stories par sous-agents (Agent Teams en option) |
 
 ## `/uiux:*`
 
