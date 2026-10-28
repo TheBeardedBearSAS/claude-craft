@@ -76,6 +76,35 @@ Le système DoD valide la complétion à travers plusieurs critères :
 | `hook` | Exécuter un hook Claude existant |
 | `human` | Validation humaine interactive |
 
+#### Limite du validateur `command` → utiliser `type: hook`
+
+`type: command` n'exécute que les commandes qui passent la liste blanche de `Tools/Ralph/lib/dod-validator.sh` : lettres, chiffres, espace et `_ . / " ' -`. Toute commande contenant `=`, `|`, `&` ou `:` (ainsi que `;`, `>`, `$`, etc.) est rejetée avec `ERROR: Invalid command` : le critère n'est alors **jamais** validé et la boucle tourne jusqu'au circuit breaker.
+
+| Commande rejetée | Caractère en cause |
+|------------------|--------------------|
+| `dotnet build /p:TreatWarningsAsErrors=true` | `:` et `=` |
+| `npm test && npm run lint` | `&` |
+| `pytest \| tee out.log` | `\|` |
+
+Pour ces cas, placer la commande dans un script et la déclarer en `type: hook` :
+
+```yaml
+definition_of_done:
+  checklist:
+    - id: build
+      type: hook
+      script: ".ralph/dod/build.sh"
+      required: true
+```
+
+```bash
+#!/usr/bin/env bash
+# .ralph/dod/build.sh — reçoit {"cwd": ..., "output": ...} en JSON sur stdin
+dotnet build /p:TreatWarningsAsErrors=true || exit 2
+```
+
+Le script retourne `0` (critère validé) ou `2` (critère échoué). Clés lues par type : `command` → `command:`, `output_contains` et `file_changed` → `pattern:`, `hook` → `script:`, `human` → `prompt:`.
+
 ### 4. Circuit Breaker Adaptatif (v2.0)
 
 Sélection automatique du profil selon les mots-clés de la tâche :
@@ -99,6 +128,23 @@ Claude travaille...
      ↓
 Stop → stop-dod-gate.sh → Bloquer si DoD non satisfait (exit 2)
 ```
+
+## /goal (interactif) ou Ralph (autonome/CI) ?
+
+`/goal` est une commande native de Claude Code, tapée dans une session : ce n'est pas une option de `ralph.sh`, qui n'en propose aucune et ne génère jamais de `/goal`. Les deux outils sont complémentaires :
+
+| Critère | `/goal` (natif) | Ralph (`ralph.sh`) |
+|---------|-----------------|--------------------|
+| Critère de fin | Jugement LLM : un petit modèle rapide évalue, après chaque tour, ce qui est visible dans la conversation — il ne lance aucune commande et ne lit aucun fichier | Déterministe : commandes, patterns et hooks exécutés par `dod-validator.sh` |
+| Plafond d'itérations | Aucun plafond fixe : fin quand la condition est atteinte ou jugée impossible, sur `/goal clear`, ou si Claude enchaîne plusieurs tours sans outil ; une borne peut être écrite dans la condition | `max_iterations` + circuit breaker adaptatif |
+| Headless / CI | `claude -p "/goal ..."` boucle jusqu'au bout en une seule invocation ; usage en CI non documenté | Conçu pour : exécution autonome (`--autonomous`, `--overnight`), dashboard `headless` |
+| `disableAllHooks: true` | Indisponible : `/goal` enveloppe un Stop hook de session (idem avec `allowManagedHooksOnly`) | La boucle et la DoD tournent dans `ralph.sh` ; seule l'intégration hooks (`stop-dod-gate.sh`) est désactivée |
+| Configuration | Aucune ; un seul goal par session, effacé par `/clear` | `ralph.yml` |
+
+- **Choisir `/goal`** pour une tâche interactive dont la fin se constate dans la conversation (afficher la sortie des tests : l'évaluateur ne les lance pas).
+- **Choisir Ralph** quand la fin doit être prouvée par des commandes, avec un plafond d'itérations, en autonomie ou en CI.
+
+Référence : [documentation `/goal`](https://code.claude.com/docs/en/goal).
 
 ## Exemples de démarrage rapide
 
