@@ -129,7 +129,7 @@ run_auto_compact() {
             context_info=$("${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
         fi
         local current_usage
-        current_usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1)
+        current_usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1 || true)
 
         if [[ -n "$current_usage" && "$current_usage" -lt "$CONTEXT_MIN_THRESHOLD" ]]; then
             log_session "$session_id" "INFO" "Context at ${current_usage}% - below minimum threshold (${CONTEXT_MIN_THRESHOLD}%), skipping compact"
@@ -415,7 +415,7 @@ check_preventive_compact() {
 
     # Try to extract percentage from output
     local usage
-    usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1)
+    usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1 || true)
 
     if [[ -n "$usage" && "$usage" -ge "$CONTEXT_PREVENTIVE_THRESHOLD" ]]; then
         print_warning "${MSG_CONTEXT_PREVENTIVE:-Context at ${usage}% - running preventive compact}"

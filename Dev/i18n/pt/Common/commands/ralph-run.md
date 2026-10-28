@@ -51,6 +51,12 @@ Executa o Claude em loop contínuo até que a tarefa seja concluída ou os crit�
    - Definir máximo de iterações, timeouts e critérios de DoD
    - Inicializar hooks se habilitados
 
+#### Isolamento de sessões e workers paralelos
+
+- **Sessão Claude explícita**: cada sessão Ralph fixa seu próprio identificador de conversa Claude — `claude --session-id <uuid>` na primeira iteração e depois `claude --resume <uuid>`. O UUID é armazenado em `.ralph/sessions/<session>/claude_session_id`, para que `--continue=<session>` retome a conversa correta. O Ralph não usa mais `claude --continue`, que retomava "a conversa mais recente do diretório" (compartilhada entre workers, ou até com a sessão interativa do usuário).
+- **Um worktree git por worker** (modo paralelo, `lib/parallel-manager.sh`): cada história é executada em um worktree dedicado `.ralph/parallel/worktrees/<session>` na branch `ralph/<session>`, com seu estado Ralph em `.ralph/parallel/sessions/<session>/ralph/`. No fim da execução, as alterações restantes são commitadas como `wip(ralph): <story>` nessa branch e o worktree é removido (`git worktree remove`). Se esse commit falhar, o worktree é mantido (sem perda de dados) e sinalizado em `output.log`. O trabalho é recuperado fazendo merge das branches `ralph/*`.
+- **Fora de um repositório git**: sem worktree; o worker é executado no diretório atual (um aviso é exibido) e o isolamento das sessões Claude continua garantido.
+
 ### 2. Loop Principal com Painel
 
 ```

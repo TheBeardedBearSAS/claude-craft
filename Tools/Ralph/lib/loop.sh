@@ -13,6 +13,20 @@ CLAUDE_ARGS="${CLAUDE_ARGS:-}"
 # Claude Invocation
 # =============================================================================
 
+# Print a random RFC 4122 v4 UUID (`claude --session-id` requires a valid UUID).
+generate_uuid() {
+    if [[ -r /proc/sys/kernel/random/uuid ]]; then
+        cat /proc/sys/kernel/random/uuid
+    elif command -v uuidgen &> /dev/null; then
+        uuidgen | tr '[:upper:]' '[:lower:]'
+    else
+        local hex
+        hex=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
+        printf '%s-%s-4%s-%x%s-%s\n' "${hex:0:8}" "${hex:8:4}" "${hex:13:3}" \
+            $(( (0x${hex:16:1} & 0x3) | 0x8 )) "${hex:17:3}" "${hex:20:12}"
+    fi
+}
+
 invoke_claude() {
     local session_id="$1"
     local prompt="$2"
@@ -25,9 +39,20 @@ invoke_claude() {
     local -a cmd
     IFS=' ' read -r -a cmd <<< "${CLAUDE_COMMAND:-claude}"
 
-    # Add continue flag if we have a session
+    # Pin an explicit Claude session per Ralph session. `--continue` resumes
+    # "the most recent conversation in this directory", which parallel workers
+    # (and unrelated user sessions) would share.
     if [[ -n "$session_id" ]]; then
-        cmd+=(--continue)
+        local id_file="$RALPH_SESSION_BASE/sessions/$session_id/claude_session_id"
+        if [[ -s "$id_file" ]]; then
+            cmd+=(--resume "$(< "$id_file")")
+        else
+            local claude_session_uuid
+            claude_session_uuid=$(generate_uuid)
+            mkdir -p "$(dirname "$id_file")"
+            echo "$claude_session_uuid" > "$id_file"
+            cmd+=(--session-id "$claude_session_uuid")
+        fi
     fi
 
     # Add prompt

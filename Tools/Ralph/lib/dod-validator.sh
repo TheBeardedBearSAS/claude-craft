@@ -9,7 +9,7 @@ set -euo pipefail
 DOD_COMPLETION_MARKER="${DOD_COMPLETION_MARKER:-<promise>COMPLETE</promise>}"
 
 # DoD validator types
-declare -A DOD_VALIDATORS=(
+declare -gA DOD_VALIDATORS=(
     ["command"]="validate_command"
     ["output_contains"]="validate_output_contains"
     ["file_changed"]="validate_file_changed"

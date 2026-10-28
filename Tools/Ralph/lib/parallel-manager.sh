@@ -17,8 +17,8 @@ PARALLEL_RESOURCE_LIMIT_CPU="${PARALLEL_RESOURCE_LIMIT_CPU:-80}"
 PARALLEL_RESOURCE_LIMIT_MEM="${PARALLEL_RESOURCE_LIMIT_MEM:-80}"
 
 # Session tracking
-declare -A PARALLEL_SESSIONS
-declare -A PARALLEL_PIDS
+declare -gA PARALLEL_SESSIONS
+declare -gA PARALLEL_PIDS
 PARALLEL_SESSION_COUNT=0
 PARALLEL_COMPLETED_COUNT=0
 PARALLEL_FAILED_COUNT=0
@@ -36,6 +36,8 @@ PARALLEL_WORKER_DIR=""
 init_parallel_manager() {
     PARALLEL_BASE_DIR="${RALPH_SESSION_BASE:-.ralph}/parallel"
     mkdir -p "$PARALLEL_BASE_DIR"
+    # Absolute: workers cd into their own worktree
+    PARALLEL_BASE_DIR="$(cd "$PARALLEL_BASE_DIR" && pwd)"
 
     PARALLEL_STATE_FILE="$PARALLEL_BASE_DIR/state.yaml"
     PARALLEL_DEPENDENCY_GRAPH="$PARALLEL_BASE_DIR/dependencies.json"
@@ -232,9 +234,7 @@ check_resource_availability() {
 # Get number of available slots
 get_available_slots() {
     local active_count=0
-    if [[ -v PARALLEL_PIDS ]]; then
-        active_count=${#PARALLEL_PIDS[@]}
-    fi
+    active_count=${#PARALLEL_PIDS[@]}
     local available=$((PARALLEL_MAX_CONCURRENT - active_count))
 
     # Further limit if resources are constrained
@@ -279,7 +279,7 @@ EOF
     local ralph_script=""
     for path in "${SCRIPT_DIR}/ralph.sh" "Tools/Ralph/ralph.sh" "$(dirname "${BASH_SOURCE[0]}")/../ralph.sh"; do
         if [[ -f "$path" ]]; then
-            ralph_script="$path"
+            ralph_script="$(cd "$(dirname "$path")" && pwd)/$(basename "$path")"
             break
         fi
     done
@@ -290,19 +290,35 @@ EOF
     fi
 
     # Build command
-    local cmd="$ralph_script"
-    [[ -n "$config" ]] && cmd="$cmd --config=$config"
+    local -a cmd=("$ralph_script")
+    [[ -n "$config" ]] && cmd+=("--config=$config")
+
+    # Isolate the worker's working tree (one git worktree per session)
+    local worktree_dir=""
+    if ! worktree_dir=$(create_worker_worktree "$session_id"); then
+        worktree_dir=""
+        print_warning "No git worktree for $session_id: worker shares the current directory"
+    fi
 
     # Spawn in background
     # Workers write to individual temp files (single-writer pattern).
     # The leader merges results after all workers complete.
     local worker_id="${story_id}-$$-$(date +%s)"
     (
-        cd "$(pwd)" || exit 1
+        if [[ -n "$worktree_dir" ]]; then
+            cd "$worktree_dir" || exit 1
+        fi
+        # Per-worker Ralph state (incl. the Claude session UUID) under the
+        # leader's .ralph/, so it survives the worktree removal.
+        export RALPH_SESSION_BASE="$session_dir/ralph"
 
         local output
-        output=$($cmd "$prompt" 2>&1)
-        local status=$?
+        local status=0
+        output=$("${cmd[@]}" "$prompt" 2>&1) || status=$?
+
+        if [[ -n "$worktree_dir" ]] && ! cleanup_worker_worktree "$worktree_dir" "$story_id"; then
+            output+=$'\n'"[WARN] Worktree kept: $worktree_dir"
+        fi
 
         # Save output (per-session dir, no conflict)
         echo "$output" > "$session_dir/output.log"
@@ -338,6 +354,30 @@ EOF
     update_parallel_state "spawn" "$session_id" "$story_id"
 
     echo "$session_id"
+}
+
+# Create a dedicated git worktree on branch ralph/<session_id> so parallel
+# workers never share a working tree. Prints its path; fails outside git.
+create_worker_worktree() {
+    local session_id="$1"
+    local worktree_dir="$PARALLEL_BASE_DIR/worktrees/$session_id"
+
+    git rev-parse --is-inside-work-tree &> /dev/null || return 1
+    git worktree add -q -b "ralph/$session_id" "$worktree_dir" HEAD &> /dev/null || return 1
+    echo "$worktree_dir"
+}
+
+# Commit leftover changes as WIP on the worker branch, then remove the
+# worktree. If the commit fails, the dirty worktree is kept (no data loss).
+cleanup_worker_worktree() {
+    local worktree_dir="$1"
+    local story_id="$2"
+
+    if [[ -n "$(git -C "$worktree_dir" status --porcelain)" ]]; then
+        git -C "$worktree_dir" add -A
+        git -C "$worktree_dir" commit -q -m "wip(ralph): $story_id" || return 1
+    fi
+    git -C "$worktree_dir" worktree remove "$worktree_dir"
 }
 
 # =============================================================================
@@ -395,9 +435,7 @@ wait_all_sessions() {
     start_time=$(date +%s)
 
     local active_count=0
-    if [[ -v PARALLEL_PIDS ]]; then
-        active_count=${#PARALLEL_PIDS[@]}
-    fi
+    active_count=${#PARALLEL_PIDS[@]}
 
     while [[ $active_count -gt 0 ]]; do
         collect_completed_sessions > /dev/null
@@ -415,9 +453,7 @@ wait_all_sessions() {
 
         # Update active count
         active_count=0
-        if [[ -v PARALLEL_PIDS ]]; then
-            active_count=${#PARALLEL_PIDS[@]}
-        fi
+        active_count=${#PARALLEL_PIDS[@]}
     done
 
     return 0
@@ -426,9 +462,7 @@ wait_all_sessions() {
 # Get active session count
 get_active_count() {
     local count=0
-    if [[ -v PARALLEL_PIDS ]]; then
-        count=${#PARALLEL_PIDS[@]}
-    fi
+    count=${#PARALLEL_PIDS[@]}
     echo "$count"
 }
 
@@ -502,6 +536,9 @@ process_stories_parallel() {
     # Wait for remaining sessions
     print_info "Waiting for remaining sessions to complete..."
     wait_all_sessions
+
+    # Drop stale worktree metadata (e.g. a worker killed before its cleanup)
+    git worktree prune &> /dev/null || true
 
     # Print summary
     print_parallel_summary
@@ -781,6 +818,11 @@ cmd_parallel_manager() {
             echo "Single-Writer Pattern:"
             echo "  Background workers write to .ralph/parallel/workers/worker-{id}.yaml"
             echo "  Only the leader merges results into shared state files"
+            echo ""
+            echo "Isolation:"
+            echo "  Each worker runs in its own git worktree (branch ralph/<session>),"
+            echo "  removed at the end of the run (leftover changes committed as WIP)."
+            echo "  Each Ralph session pins its own Claude session (--session-id, then --resume)."
             ;;
         *)
             echo "Usage: parallel-manager.sh <command> [args]"
