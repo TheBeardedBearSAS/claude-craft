@@ -387,10 +387,11 @@ process_collected_parallel_stories() {
 is_story_in_progress() {
     local story_id="$1"
 
-    # Check in parallel sessions
-    if [[ -n "${PARALLEL_SESSIONS[$story_id]:-}" ]]; then
-        return 0
-    fi
+    # Check in parallel sessions (keyed by session id, the value is the story)
+    local session_id
+    for session_id in "${!PARALLEL_SESSIONS[@]}"; do
+        [[ "${PARALLEL_SESSIONS[$session_id]}" == "$story_id" ]] && return 0
+    done
 
     # Check in BMAD status
     local bmad_dir="${BMAD_DIR:-.bmad}"
@@ -997,6 +998,11 @@ cmd_sprint_conductor() {
             *) sprint_name="$1"; shift ;;
         esac
     done
+
+    # Messages were loaded before --lang was read: reload them for the leader
+    if type load_messages &>/dev/null; then
+        load_messages
+    fi
 
     if [[ -z "$sprint_name" ]]; then
         echo "Usage: sprint-conductor.sh [options] <sprint-name>"
