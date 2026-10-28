@@ -352,13 +352,15 @@ O comando `/context` fornece sugestoes acionaveis para otimizar o uso do context
 
 Ajustar o nível de esforço do modelo de acordo com a complexidade da tarefa:
 
-| Comando | Modelo | Uso |
+| Comando | Efeito | Uso |
 |---------|--------|-----|
-| `/effort low` | Haiku 5.5 | Tarefas simples, lookups, classificação |
-| `/effort medium` | Sonnet 5.5 | Implementação padrão |
-| `/effort high` | Opus 5.5 | Raciocínio complexo, arquitetura |
-| `/effort xhigh` | Opus 5.5 (adaptive thinking, effort xhigh) | Decisões críticas, migrações complexas, ADR |
-| `/effort ultracode` | Opus 5.5 (toggle separado desde v2.1.284, Dynamic Workflows) | Modo de máximo débito de código — pipelines automatizados, geração massiva |
+| `/effort low` | Raciocínio mínimo, respostas rápidas | Tarefas simples, lookups, classificação |
+| `/effort medium` | Profundidade padrão | Implementação padrão |
+| `/effort high` | Raciocínio aprofundado | Raciocínio complexo, arquitetura |
+| `/effort xhigh` | Adaptive thinking no máximo | Decisões críticas, migrações complexas, ADR |
+| `/effort ultracode` | Toggle separado (v2.1.284+), Dynamic Workflows | Máximo débito de código — pipelines automatizados, geração massiva |
+
+> **O esforço não troca de modelo:** ajusta a profundidade de raciocínio do modelo atual; o modelo é escolhido com `/model`. Pares recomendados: `low` com Haiku 5.5, `medium` com Sonnet 5.5, `high`/`xhigh` com Opus 5.5.
 
 > **Esforço padrão por modelo:** medium no Opus 5.5 e Haiku 5.5; high no Sonnet 5.5, Fable 5.1 e modelos legacy.
 > **Fable 5.1** (`claude-fable-5-1`, $10/$50 por Mtok) é um modelo atual, adequado para agentes criativos/narrativos. **Mythos** tem disponibilidade limitada (apenas Cyber Verification Program).

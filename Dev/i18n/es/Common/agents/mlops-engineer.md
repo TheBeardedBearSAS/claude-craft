@@ -247,3 +247,22 @@ if report.as_dict()["metrics"][0]["result"]["dataset_drift"]:
 - [Google MLOps Guide](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning)
 - [Book: Introducing MLOps](https://www.oreilly.com/library/view/introducing-mlops/9781492083283/)
 - [ML Model Governance](https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-management-and-deployment)
+
+## Protección de comandos destructivos
+
+Un agente no puede bloquear un comando concreto: `disallowedTools: Bash(...)` retira todo Bash. Estos comandos pasan por el prompt de permiso — pedir siempre una confirmación explícita antes de ejecutarlos. Para bloquearlos en un proyecto, añadir a su `.claude/settings.json` (las reglas también se aplican a los subagentes):
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Bash(kubectl delete:*)",
+      "Bash(helm uninstall:*)",
+      "Bash(mlflow models delete:*)",
+      "Bash(mlflow registered-models delete:*)",
+      "Bash(aws s3 rm:*)",
+      "Bash(gsutil rm:*)"
+    ]
+  }
+}
+```

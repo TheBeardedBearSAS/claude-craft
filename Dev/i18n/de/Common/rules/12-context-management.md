@@ -352,13 +352,15 @@ Der `/context`-Befehl liefert umsetzbare Vorschlaege zur Optimierung der Kontext
 
 Das Aufwandsniveau des Modells je nach Aufgabenkomplexität anpassen:
 
-| Befehl | Modell | Verwendung |
-|--------|--------|------------|
-| `/effort low` | Haiku 5.5 | Einfache Aufgaben, Lookups, Klassifikation |
-| `/effort medium` | Sonnet 5.5 | Standardimplementierung |
-| `/effort high` | Opus 5.5 | Komplexes Reasoning, Architektur |
-| `/effort xhigh` | Opus 5.5 (adaptive thinking, effort xhigh) | Kritische Entscheidungen, komplexe Migrationen, ADR |
-| `/effort ultracode` | Opus 5.5 (separater Toggle seit v2.1.284, Dynamic Workflows) | Maximaler Code-Durchsatz — automatisierte Pipelines, Massengenerierung |
+| Befehl | Wirkung | Verwendung |
+|--------|---------|------------|
+| `/effort low` | Minimales Reasoning, schnelle Antworten | Einfache Aufgaben, Lookups, Klassifikation |
+| `/effort medium` | Standardtiefe | Standardimplementierung |
+| `/effort high` | Tieferes Reasoning | Komplexes Reasoning, Architektur |
+| `/effort xhigh` | Maximales Adaptive Thinking | Kritische Entscheidungen, komplexe Migrationen, ADR |
+| `/effort ultracode` | Separater Toggle (v2.1.284+), Dynamic Workflows | Maximaler Code-Durchsatz — automatisierte Pipelines, Massengenerierung |
+
+> **Effort wechselt nicht das Modell:** Es steuert die Reasoning-Tiefe des aktuellen Modells; das Modell wählt man mit `/model`. Empfohlene Paare: `low` mit Haiku 5.5, `medium` mit Sonnet 5.5, `high`/`xhigh` mit Opus 5.5.
 
 > **Standard-Effort je Modell:** medium bei Opus 5.5 und Haiku 5.5; high bei Sonnet 5.5, Fable 5.1 und Legacy-Modellen.
 > **Fable 5.1** (`claude-fable-5-1`, $10/$50 pro Mtok) ist ein aktuelles Modell, geeignet für kreative/narrative Agents. **Mythos** hat eingeschränkte Verfügbarkeit (nur Cyber Verification Program).

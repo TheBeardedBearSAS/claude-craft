@@ -261,6 +261,9 @@ Evaluated at 2026-10-13 — not yet integrated but flagged for the next assessme
 | **claude-context-optimizer**, **capy**, **cxpak**, **llm-router**, **Codeburn**, **context-tax** | New in the awesome-claude-code catalogue (2026-10) — licenses not yet verified | To triage at the 2027-01 review |
 | **claude-subconscious** | Experimental — cross-session memory via MCP | Alternative to `claude-mem` above |
 | **tech-debt-skill** | Stable — tech-debt audit skill | Candidate for `/qa:*` namespace |
+| **[claude-code-security-review](https://github.com/anthropics/claude-code-security-review)** (Anthropic) | Official GitHub Action, MIT, ~6.6k ★ (checked 2026-10-28; last push 2026-02-11) — Claude reviews pull-request diffs for vulnerabilities | CI counterpart of native `/security-review` (diff only); `/team:security` keeps the full-repository audit |
+| **[claude-code-tools](https://github.com/pchalasani/claude-code-tools)** (pchalasani) | MIT, ~2k ★, active (push 2026-10-28) — session continuity: avoid compaction, recover context, Claude Code ↔ Codex CLI handoff | Overlaps Ralph continuation and the PreCompact/PostCompact hooks — compare before adopting |
+| **[localpr](https://github.com/gilles-g/localpr)** (gilles-g) | MIT, 6 ★, new (2026-10) — GitHub-style local review page for uncommitted changes, batched line comments sent back to Claude | Below the >1k ★ graduation bar; review-loop idea worth tracking |
 
 > **Graduation path:** any of these may be promoted to the main ✅ Integrate table when: (1) the tool uses a permissive OSI license (MIT or Apache-2.0), (2) has >1k stars or >6 months of active maintenance, and (3) covers a gap not already addressed in Claude Craft. The 2027-01-13 review is the next evaluation checkpoint.
 

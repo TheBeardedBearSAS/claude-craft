@@ -218,3 +218,22 @@ strategy:
 3. Configurar health checks
 4. Preparar rollback
 5. Monitorear despliegue
+
+## Protección de comandos destructivos
+
+Un agente no puede bloquear un comando concreto: `disallowedTools: Bash(...)` retira todo Bash. Estos comandos pasan por el prompt de permiso — pedir siempre una confirmación explícita antes de ejecutarlos. Para bloquearlos en un proyecto, añadir a su `.claude/settings.json` (las reglas también se aplican a los subagentes):
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Bash(kubectl delete:*)",
+      "Bash(helm uninstall:*)",
+      "Bash(terraform destroy:*)",
+      "Bash(tofu destroy:*)",
+      "Bash(docker volume rm:*)",
+      "Bash(docker system prune -a*)"
+    ]
+  }
+}
+```
