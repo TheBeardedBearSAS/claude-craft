@@ -41,11 +41,7 @@ Define visuals:
 
 ### Step 3: A11y Specification (A11y Expert)
 
-Define accessibility:
-- HTML semantics
-- ARIA attributes
-- Keyboard navigation
-- Screen reader announcements
+Run `/uiux:a11y-component {NAME}` and carry its specification (HTML semantics, ARIA attributes, keyboard navigation, focus, contrast, screen reader announcements) into the ♿ section of the synthesis. Do not redefine it here.
 
 ### Step 4: Synthesis
 

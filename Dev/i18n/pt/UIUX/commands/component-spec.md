@@ -41,11 +41,7 @@ Definir o visual:
 
 ### Etapa 3: Especificação A11y (Especialista A11y)
 
-Definir acessibilidade:
-- Semântica HTML
-- Atributos ARIA
-- Navegação por teclado
-- Anúncios de leitor de tela
+Executar `/uiux:a11y-component {NOME}` e levar a sua especificação (semântica HTML, atributos ARIA, navegação por teclado, foco, contraste, anúncios do leitor de ecrã) para a secção ♿ da síntese. Não a redefinir aqui.
 
 ### Etapa 4: Síntese
 

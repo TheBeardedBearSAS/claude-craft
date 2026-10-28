@@ -18,10 +18,10 @@ Tu es un expert en qualité de code React chargé d'auditer les standards de cod
 ### Étape 1 : Analyse du contexte
 - Identifier le répertoire du projet à auditer ($ARGUMENTS ou répertoire courant)
 - Lire les règles de qualité depuis :
-  - `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/03-coding-standards.md`
-  - `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/04-solid-principles.md`
-  - `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/05-kiss-dry-yagni.md`
-  - `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/08-quality-tools.md`
+  - `.claude/rules/03-coding-standards.md`
+  - `.claude/rules/04-solid-principles.md`
+  - `.claude/rules/05-kiss-dry-yagni.md`
+  - `.claude/rules/08-quality-tools.md`
 
 ### Étape 2 : Vérification TypeScript et typage
 

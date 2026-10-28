@@ -53,7 +53,7 @@ docker run --rm -v $(pwd):/app php:8.5-cli cat /app/config/packages/security.yam
 
 ### Étape 3 : OWASP Top 10 - Injection
 
-#### A03:2021 – Injection (SQL, NoSQL, OS, LDAP) (3 points)
+#### A05:2025 – Injection (SQL, NoSQL, OS, LDAP) (3 points)
 
 ```bash
 # Vérifier l'utilisation de requêtes préparées
@@ -77,9 +77,9 @@ docker run --rm -v $(pwd):/app php:8.5-cli grep -rE "\"SELECT.*\\..*\$" /app/src
 
 **Points obtenus** : ___/3
 
-### Étape 4 : OWASP Top 10 - Broken Authentication
+### Étape 4 : OWASP Top 10 - Authentication Failures
 
-#### A07:2021 – Identification and Authentication Failures (3 points)
+#### A07:2025 – Authentication Failures (3 points)
 
 ```bash
 # Vérifier la configuration des mots de passe
@@ -102,9 +102,9 @@ docker run --rm -v $(pwd):/app php:8.5-cli grep -r "RateLimiter" /app/config --i
 
 **Points obtenus** : ___/3
 
-### Étape 5 : OWASP Top 10 - Sensitive Data Exposure
+### Étape 5 : OWASP Top 10 - Cryptographic Failures
 
-#### A02:2021 – Cryptographic Failures (3 points)
+#### A04:2025 – Cryptographic Failures (3 points)
 
 ```bash
 # Vérifier les secrets dans le code
@@ -129,7 +129,7 @@ docker run --rm -v $(pwd):/app php:8.5-cli grep -r "SECURE_SCHEME" /app/.env.exa
 
 ### Étape 6 : OWASP Top 10 - Broken Access Control
 
-#### A01:2021 – Broken Access Control (3 points)
+#### A01:2025 – Broken Access Control (3 points)
 
 ```bash
 # Vérifier les Voters
@@ -154,7 +154,7 @@ docker run --rm -v $(pwd):/app php:8.5-cli grep -r "@IsGranted" /app/src --inclu
 
 ### Étape 7 : OWASP Top 10 - XSS et CSRF
 
-#### A03:2021 – XSS (Cross-Site Scripting) (2 points)
+#### A05:2025 – Injection : XSS (Cross-Site Scripting) (2 points)
 
 ```bash
 # Vérifier l'auto-échappement Twig
@@ -177,7 +177,7 @@ docker run --rm -v $(pwd):/app php:8.5-cli grep -r "|raw" /app/templates --inclu
 
 **Points obtenus** : ___/2
 
-#### A08:2021 – CSRF (Cross-Site Request Forgery) (2 points)
+#### A01:2025 – Broken Access Control : CSRF (Cross-Site Request Forgery) (2 points)
 
 ```bash
 # Vérifier CSRF protection
@@ -199,7 +199,7 @@ docker run --rm -v $(pwd):/app php:8.5-cli grep -r "csrf_protection" /app/config
 
 ### Étape 8 : OWASP Top 10 - Autres Vulnérabilités
 
-#### A05:2021 – Security Misconfiguration (2 points)
+#### A02:2025 – Security Misconfiguration (2 points)
 
 ```bash
 # Vérifier le mode debug
@@ -222,7 +222,7 @@ docker run --rm -v $(pwd):/app php:8.5-cli composer audit
 
 **Points obtenus** : ___/2
 
-#### A06:2021 – Vulnerable and Outdated Components (1 point)
+#### A03:2025 – Software Supply Chain Failures (1 point)
 
 ```bash
 # Audit de sécurité Composer
@@ -396,16 +396,16 @@ Fixed in: 5.4.25
    OWASP TOP 10 - RÉSUMÉ
 =================================================
 
-A01:2021 - Broken Access Control          : [✅|⚠️|❌]
-A02:2021 - Cryptographic Failures         : [✅|⚠️|❌]
-A03:2021 - Injection                      : [✅|⚠️|❌]
-A04:2021 - Insecure Design                : [✅|⚠️|❌]
-A05:2021 - Security Misconfiguration      : [✅|⚠️|❌]
-A06:2021 - Vulnerable Components          : [✅|⚠️|❌]
-A07:2021 - Authentication Failures        : [✅|⚠️|❌]
-A08:2021 - Software and Data Integrity    : [✅|⚠️|❌]
-A09:2021 - Security Logging Failures      : [✅|⚠️|❌]
-A10:2021 - Server-Side Request Forgery    : [✅|⚠️|❌]
+A01:2025 - Broken Access Control                 : [✅|⚠️|❌]
+A02:2025 - Security Misconfiguration             : [✅|⚠️|❌]
+A03:2025 - Software Supply Chain Failures        : [✅|⚠️|❌]
+A04:2025 - Cryptographic Failures                : [✅|⚠️|❌]
+A05:2025 - Injection                             : [✅|⚠️|❌]
+A06:2025 - Insecure Design                       : [✅|⚠️|❌]
+A07:2025 - Authentication Failures               : [✅|⚠️|❌]
+A08:2025 - Software or Data Integrity Failures   : [✅|⚠️|❌]
+A09:2025 - Logging & Alerting Failures           : [✅|⚠️|❌]
+A10:2025 - Mishandling of Exceptional Conditions : [✅|⚠️|❌]
 
 =================================================
    CONFORMITÉ RGPD

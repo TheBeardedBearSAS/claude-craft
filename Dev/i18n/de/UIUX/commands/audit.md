@@ -24,36 +24,7 @@ Beispiel: `/uiux:audit src/pages/Dashboard.tsx AAA`
 
 ### Schritt 1: Barrierefreiheit-Audit (A11y-Experte)
 
-#### 1.1 Automatisiertes Audit
-```bash
-# Ausführen falls verfügbar
-npx axe-cli {URL}
-npx pa11y {URL}
-# Oder Lighthouse prüfen
-```
-
-#### 1.2 Manuelle WCAG 2.2 AAA Überprüfung
-
-**Wahrnehmbar**
-- [ ] Bilder mit Alt-Text
-- [ ] Semantische Struktur (h1-h6, Landmarks)
-- [ ] Kontrast ≥ 7:1 (AAA)
-- [ ] Reflow bei 320px
-
-**Bedienbar**
-- [ ] Vollständige Tastaturnavigation
-- [ ] Keine Tastaturfalle
-- [ ] Sichtbarer Fokus (≥ 2px)
-- [ ] Touch-Ziele ≥ 44px
-
-**Verständlich**
-- [ ] lang auf html
-- [ ] Labels auf Inputs
-- [ ] Klare Fehlermeldungen
-
-**Robust**
-- [ ] Korrektes ARIA
-- [ ] aria-live für Dynamisches
+`/uiux:a11y-audit {URL oder Pfad} {Stufe}` ausführen und dessen Bericht (Score, nicht erfüllte WCAG-Kriterien, Maßnahmen) in die Synthese übernehmen. Das automatisierte Audit und die WCAG-Checkliste hier nicht wiederholen: `/uiux:a11y-audit` ist die einzige Quelle.
 
 ### Schritt 2: UX/Ergonomie-Audit (UX-Experte)
 
