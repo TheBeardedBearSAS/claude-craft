@@ -73,10 +73,10 @@
 | [`/common:getting-started`](../.claude/commands/common/getting-started.md) | Interactive 10-minute guided tour for new Claude Craft users |
 | [`/common:init`](../.claude/commands/common/init.md) | Bootstrap the Claude-Craft structure for a new project, or analyze the codebase and configure the project context (--context) |
 | [`/common:pack-repo`](../.claude/commands/common/pack-repo.md) | Pack la codebase en un fichier AI-friendly (Repomix wrapper + fallback shell). Token counting inclus. |
-| [`/common:pre-commit-check`](../.claude/commands/common/pre-commit-check.md) | Vérification Pre-Commit |
-| [`/common:pre-merge-check`](../.claude/commands/common/pre-merge-check.md) | Vérification Pre-Merge |
+| [`/common:pre-commit-check`](../.claude/commands/common/pre-commit-check.md) | Obsolète (retirée en 9.0) : utilisez /gate:check commit |
+| [`/common:pre-merge-check`](../.claude/commands/common/pre-merge-check.md) | Obsolète (retirée en 9.0) : utilisez /gate:check merge |
 | [`/common:ralph-run`](../.claude/commands/common/ralph-run.md) | Executer Claude en boucle continue jusqu'a completion de la tache (Ralph Wiggum v2.0) |
-| [`/common:release-checklist`](../.claude/commands/common/release-checklist.md) | Checklist de Release |
+| [`/common:release-checklist`](../.claude/commands/common/release-checklist.md) | Obsolète (retirée en 9.0) : utilisez /gate:check release |
 | [`/common:research-context7`](../.claude/commands/common/research-context7.md) | Recherche avec Context7 et Web |
 | [`/common:search`](../.claude/commands/common/search.md) | Search commands, skills and agents by keyword |
 | [`/common:setup-ci`](../.claude/commands/common/setup-ci.md) | Configuration CI/CD |
@@ -143,7 +143,7 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/gate:check`](../Project/i18n/en/Gate/commands/check.md) | Run any quality gate: document gates (PRD, tech spec, backlog, sprint, story, alignment), code gates (commit, merge, release), the full report or a phase checkpoint |
+| [`/gate:check`](../.claude/commands/gate/check.md) | Exécuter n'importe quelle porte qualité : portes documentaires (PRD, spec technique, backlog, sprint, story, alignement), portes de code (commit, merge, release), le rapport complet ou un checkpoint de phase |
 | [`/gate:report`](../Project/i18n/en/Gate/commands/report.md) | Deprecated (removed in 9.0): use /gate:check all |
 | [`/gate:validate-alignment`](../Project/i18n/en/Gate/commands/validate-alignment.md) | Deprecated (removed in 9.0): use /gate:check alignment |
 | [`/gate:validate-backlog`](../Project/i18n/en/Gate/commands/validate-backlog.md) | Deprecated (removed in 9.0): use /gate:check backlog |

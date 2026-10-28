@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **`/common:pre-commit-check`, `/common:pre-merge-check`, `/common:release-checklist`** : les stubs dépréciés renvoyaient vers `.claude/commands/gate/check.md`, installé uniquement par le paquet Project ; une installation Dev seule (`install-common-rules.sh`, `claude-craft update`) installe désormais `/gate:check`. Test `tests/scripts/install-common-rules.test.mjs`.
+
 ## [8.26.0] - 2026-10-26
 
 Phase 3 de la feuille de route de simplification des commandes de gestion de projet : parcours principal `/workflow:init → plan → design → start → implement → review → retro` (+ `status`), 86 → 35 commandes actives (5 langues).
