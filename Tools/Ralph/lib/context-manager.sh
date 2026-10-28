@@ -32,6 +32,9 @@ IFS=' ' read -r -a CLAUDE_CMD <<< "$CLAUDE_COMMAND"
 CONTEXT_COMPACT_COUNT=0
 CONTEXT_CONTINUATION_COUNT=0
 CONTEXT_CONTINUATION_PROMPT=""
+# Set by run_auto_compact (return 3) / handle_max_compacts_reached: call them
+# in this shell, never in `$(...)`, or the counters above are lost.
+CONTEXT_NEW_SESSION_ID=""
 
 # =============================================================================
 # Context Limit Detection
@@ -149,7 +152,9 @@ run_auto_compact() {
 
         if [[ -n "$current_usage" && "$current_usage" -lt "$CONTEXT_MIN_THRESHOLD" ]]; then
             log_session "$session_id" "INFO" "Context at ${current_usage}% - below minimum threshold (${CONTEXT_MIN_THRESHOLD}%), skipping compact"
-            print_verbose "Context at ${current_usage}% - below min threshold (${CONTEXT_MIN_THRESHOLD}%), skipping compact"
+            local msg="${MSG_CONTEXT_BELOW_MIN:-"Context at {0}% - below minimum threshold ({1}%), skipping compact"}"
+            msg="${msg//\{0\}/"$current_usage"}"
+            print_verbose "${msg//\{1\}/"$CONTEXT_MIN_THRESHOLD"}"
             return 1
         fi
     fi
@@ -160,13 +165,12 @@ run_auto_compact() {
         print_warning "${MSG_CONTEXT_MAX_REACHED:-Maximum compacts reached} ($CONTEXT_MAX_COMPACTS)"
 
         # Handle overflow strategy
-        local overflow_result
         local overflow_status=0
-        overflow_result=$(handle_max_compacts_reached "$session_id") || overflow_status=$?
+        CONTEXT_NEW_SESSION_ID=""
+        handle_max_compacts_reached "$session_id" || overflow_status=$?
 
-        if [[ $overflow_status -eq 0 && -n "$overflow_result" ]]; then
-            # New session ID returned - signal continuation
-            echo "$overflow_result"
+        if [[ $overflow_status -eq 0 && -n "$CONTEXT_NEW_SESSION_ID" ]]; then
+            # New session ID in CONTEXT_NEW_SESSION_ID - signal continuation
             return 3  # Special return code for session continuation
         fi
 
@@ -327,10 +331,12 @@ handle_max_compacts_reached() {
             new_session_id=$(create_continuation_session "$session_id")
 
             if [[ -n "$new_session_id" ]]; then
+                # Reset here: create_continuation_session ran in a subshell
+                CONTEXT_COMPACT_COUNT=0
                 CONTEXT_CONTINUATION_COUNT=$((CONTEXT_CONTINUATION_COUNT + 1))
                 print_success "${MSG_CONTEXT_CONTINUATION_CREATED:-Continuation session created}: $new_session_id"
                 log_session "$session_id" "INFO" "Created continuation session: $new_session_id"
-                echo "$new_session_id"
+                CONTEXT_NEW_SESSION_ID="$new_session_id"
                 return 0
             else
                 print_error "Failed to create continuation session"
@@ -398,10 +404,6 @@ create_continuation_session() {
     if type link_session_to_progress &>/dev/null; then
         link_session_to_progress "$new_session_id" || print_verbose "Failed to link session to progress"
     fi
-
-    # Reset context manager for new session
-    CONTEXT_COMPACT_COUNT=0
-    CONTEXT_CONTINUATION_COUNT=$((CONTEXT_CONTINUATION_COUNT))  # Keep continuation count
 
     echo "$new_session_id"
 }

@@ -549,28 +549,25 @@ $PROMPT"
             print_warning "${MSG_CONTEXT_LIMIT_DETECTED:-Context limit detected}"
 
             if type run_auto_compact &>/dev/null; then
-                local compact_result
+                # Not in `$(...)`: run_auto_compact updates the compact counter
+                # (max_compacts) and returns the new session id in a global.
                 local compact_status=0
-                compact_result=$(run_auto_compact "$SESSION_ID") || compact_status=$?
+                run_auto_compact "$SESSION_ID" || compact_status=$?
 
                 case $compact_status in
                     0)
                         # Compact successful - retry with continuation prompt
                         print_info "${MSG_CONTEXT_RETRYING:-Retrying after compact}..."
 
-                        # Get reconstructed context. run_auto_compact ran in a
-                        # subshell, so the prompt it stored is lost: rebuild it.
+                        # Consume the reconstructed context stored by the compact
                         local retry_prompt="$PROMPT"
-                        if [[ "${CONTEXT_SMART_RECONSTRUCTION:-}" == "true" ]] && type generate_continuation_prompt &>/dev/null; then
-                            local cont_prompt
-                            cont_prompt=$(generate_continuation_prompt) || true
-                            if [[ -n "$cont_prompt" ]]; then
-                                retry_prompt="$cont_prompt
+                        if [[ -n "$CONTEXT_CONTINUATION_PROMPT" ]]; then
+                            retry_prompt="$CONTEXT_CONTINUATION_PROMPT
 
 ---
 
 $PROMPT"
-                            fi
+                            CONTEXT_CONTINUATION_PROMPT=""
                         fi
 
                         invoke_status=0
@@ -584,13 +581,14 @@ $PROMPT"
                         ;;
                     3)
                         # Session continuation - new session created
-                        SESSION_ID="$compact_result"
+                        local previous_session="$SESSION_ID"
+                        SESSION_ID="$CONTEXT_NEW_SESSION_ID"
                         print_info "Switching to continuation session: $SESSION_ID"
 
                         # Get handoff prompt for new session
                         local handoff_prompt
                         if type get_session_handoff_prompt &>/dev/null; then
-                            handoff_prompt=$(get_session_handoff_prompt "$compact_result")
+                            handoff_prompt=$(get_session_handoff_prompt "$previous_session")
                         else
                             handoff_prompt="Continue the implementation from where the previous session left off."
                         fi

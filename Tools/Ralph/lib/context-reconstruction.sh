@@ -195,34 +195,16 @@ build_current_task_section() {
 # Continuation Prompt Generation
 # =============================================================================
 
+# Templates come from Tools/i18n/ralph/<lang>.sh (MSG_PROMPT_*), so the
+# prompt sent to Claude follows --lang. Replacements are quoted: bash 5.2
+# would otherwise expand `&` in the context to the matched placeholder.
 generate_continuation_prompt() {
     local session_id="${SESSION_ID:-unknown}"
-    local context=$(reconstruct_context "$session_id")
+    local context
+    context=$(reconstruct_context "$session_id")
 
-    cat << EOF
-# Continuation du Sprint
-
-Vous reprenez le travail sur ce sprint apres une compaction de contexte.
-Le fichier sprint-progress.md contient l'etat complet du travail effectue.
-
-$context
-
-## Instructions
-
-1. **Lisez** le progres ci-dessus pour comprendre l'etat actuel
-2. **Verifiez** les fichiers modifies si necessaire
-3. **Reprenez** la tache en cours la ou elle s'est arretee
-4. **Continuez** le workflow TDD (RED -> GREEN -> REFACTOR)
-5. **Mettez a jour** sprint-progress.md apres chaque tache terminee
-
-## Commandes Importantes
-
-- Apres chaque tache: mettre a jour sprint-progress.md
-- Si blocker: noter dans la section Blockers
-- Si decision importante: ajouter dans Key Decisions
-
-Continuez l'implementation.
-EOF
+    local prompt="${MSG_PROMPT_CONTINUATION:-"{0}"}"
+    echo "${prompt//\{0\}/"$context"}"
 }
 
 # =============================================================================
@@ -231,32 +213,12 @@ EOF
 
 generate_session_handoff_prompt() {
     local previous_session="$1"
-    local context=$(reconstruct_context "$previous_session")
+    local context
+    context=$(reconstruct_context "$previous_session")
 
-    cat << EOF
-# Nouvelle Session de Continuation
-
-Cette session continue le travail de la session precedente ($previous_session).
-Le contexte a ete reinitialise mais le fichier sprint-progress.md contient tout le progres.
-
-$context
-
-## Contexte de la Transition
-
-- Session precedente: $previous_session
-- Raison: Limite de contexte atteinte (max compacts)
-- Le travail a ete sauvegarde dans sprint-progress.md
-- Les fichiers sont dans l'etat du dernier checkpoint git
-
-## Instructions
-
-1. **Verifiez** l'etat actuel via git status
-2. **Lisez** sprint-progress.md pour le contexte complet
-3. **Identifiez** la tache en cours et son etat
-4. **Continuez** exactement ou la session precedente s'est arretee
-
-Reprenez le travail.
-EOF
+    local prompt="${MSG_PROMPT_HANDOFF:-"{1}"}"
+    prompt="${prompt//\{0\}/"$previous_session"}"
+    echo "${prompt//\{1\}/"$context"}"
 }
 
 # =============================================================================

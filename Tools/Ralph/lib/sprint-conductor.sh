@@ -217,10 +217,12 @@ run_sprint_conductor_parallel() {
 
         log_conductor "=== Wave $wave ==="
 
-        # Collect completed sessions from previous wave
+        # Collect completed sessions from previous wave (in this shell: it
+        # updates the tracking arrays that free the slots)
         if type collect_completed_sessions &>/dev/null; then
-            local completed_stories
-            completed_stories=$(collect_completed_sessions)
+            collect_completed_sessions > /dev/null
+            local completed_stories="$PARALLEL_COLLECTED_STORIES"
+            PARALLEL_COLLECTED_STORIES=""
 
             for story_id in $completed_stories; do
                 ASC_STORIES_COMPLETED=$((ASC_STORIES_COMPLETED + 1))
@@ -304,10 +306,13 @@ run_sprint_conductor_parallel() {
             local prompt
             prompt=$(build_story_prompt "$story_id")
 
-            # Spawn parallel session
+            # Spawn parallel session. Not in `$(...)`: the background worker
+            # would keep the substitution open until it ends (no parallelism).
             if type spawn_session &>/dev/null; then
-                local session_id
-                session_id=$(spawn_session "$story_id" "$prompt")
+                local session_id=""
+                if spawn_session "$story_id" "$prompt"; then
+                    session_id="$PARALLEL_SPAWNED_SESSION_ID"
+                fi
                 if [[ -n "$session_id" ]]; then
                     log_conductor "Spawned parallel session $session_id for story $story_id"
                     spawned=$((spawned + 1))
@@ -342,10 +347,11 @@ run_sprint_conductor_parallel() {
         log_conductor "Waiting for all parallel sessions to complete..."
         wait_all_sessions 0
 
-        # Final collection
+        # Final collection (wait_all_sessions already collected them)
         if type collect_completed_sessions &>/dev/null; then
-            local final_completed
-            final_completed=$(collect_completed_sessions)
+            collect_completed_sessions > /dev/null
+            local final_completed="$PARALLEL_COLLECTED_STORIES"
+            PARALLEL_COLLECTED_STORIES=""
 
             for story_id in $final_completed; do
                 ASC_STORIES_COMPLETED=$((ASC_STORIES_COMPLETED + 1))
@@ -375,7 +381,7 @@ is_story_in_progress() {
 
     if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
         local status
-        status=$(yq ".stories.${story_id}.status" "$status_file" 2>/dev/null)
+        status=$(STORY_ID="$story_id" yq '.stories[strenv(STORY_ID)].status' "$status_file" 2>/dev/null)
         [[ "$status" == "in-progress" ]] && return 0
     fi
 
@@ -631,9 +637,11 @@ claim_story() {
         local timestamp
         timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-        yq -i ".stories.${story_id}.claimed_by = \"$ASC_SESSION_ID\"" "$status_file"
-        yq -i ".stories.${story_id}.claimed_at = \"$timestamp\"" "$status_file"
-        yq -i ".stories.${story_id}.status = \"in-progress\"" "$status_file"
+        # Ids and values go through strenv(): never parsed as yq expressions
+        STORY_ID="$story_id" OWNER="$ASC_SESSION_ID" TS="$timestamp" yq -i '
+            .stories[strenv(STORY_ID)].claimed_by = strenv(OWNER) |
+            .stories[strenv(STORY_ID)].claimed_at = strenv(TS) |
+            .stories[strenv(STORY_ID)].status = "in-progress"' "$status_file"
 
         log_conductor "Claimed story: $story_id"
         return 0
@@ -648,8 +656,7 @@ unclaim_story() {
     local status_file="$bmad_dir/sprint-status.yaml"
 
     if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
-        yq -i ".stories.${story_id}.claimed_by = \"\"" "$status_file"
-        yq -i ".stories.${story_id}.claimed_at = \"\"" "$status_file"
+        STORY_ID="$story_id" yq -i '.stories[strenv(STORY_ID)].claimed_by = "" | .stories[strenv(STORY_ID)].claimed_at = ""' "$status_file"
 
         log_conductor "Unclaimed story: $story_id"
         return 0
@@ -675,9 +682,10 @@ transition_story() {
         local timestamp
         timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-        yq -i ".stories.${story_id}.previous_status = .stories.${story_id}.status" "$status_file"
-        yq -i ".stories.${story_id}.status = \"$new_status\"" "$status_file"
-        yq -i ".stories.${story_id}.updated_at = \"$timestamp\"" "$status_file"
+        STORY_ID="$story_id" NEW_STATUS="$new_status" TS="$timestamp" yq -i '
+            .stories[strenv(STORY_ID)].previous_status = .stories[strenv(STORY_ID)].status |
+            .stories[strenv(STORY_ID)].status = strenv(NEW_STATUS) |
+            .stories[strenv(STORY_ID)].updated_at = strenv(TS)' "$status_file"
 
         log_conductor "Transitioned $story_id to $new_status"
         return 0
@@ -744,9 +752,9 @@ build_story_prompt() {
 
     if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
         local title description acceptance_criteria
-        title=$(yq ".stories.${story_id}.title" "$status_file" 2>/dev/null)
-        description=$(yq ".stories.${story_id}.description" "$status_file" 2>/dev/null)
-        acceptance_criteria=$(yq ".stories.${story_id}.acceptance_criteria[]" "$status_file" 2>/dev/null | tr '\n' '; ') || true
+        title=$(STORY_ID="$story_id" yq '.stories[strenv(STORY_ID)].title' "$status_file" 2>/dev/null)
+        description=$(STORY_ID="$story_id" yq '.stories[strenv(STORY_ID)].description' "$status_file" 2>/dev/null)
+        acceptance_criteria=$(STORY_ID="$story_id" yq '.stories[strenv(STORY_ID)].acceptance_criteria[]' "$status_file" 2>/dev/null | tr '\n' '; ') || true
 
         prompt="Implement user story: $title
 
@@ -782,7 +790,7 @@ confirm_story_start() {
 
         if [[ -f "$status_file" ]]; then
             local title
-            title=$(yq ".stories.${story_id}.title" "$status_file" 2>/dev/null)
+            title=$(STORY_ID="$story_id" yq '.stories[strenv(STORY_ID)].title' "$status_file" 2>/dev/null)
             echo "Title: $title"
         fi
     fi
@@ -811,7 +819,7 @@ update_conductor_state() {
 
     case "$field" in
         current)
-            yq -i ".stories.current = \"$value\"" "$ASC_STATE_FILE"
+            VALUE="$value" yq -i '.stories.current = strenv(VALUE)' "$ASC_STATE_FILE"
             ;;
         stories)
             yq -i ".stories.completed = $ASC_STORIES_COMPLETED" "$ASC_STATE_FILE"
@@ -819,7 +827,7 @@ update_conductor_state() {
             yq -i ".stories.skipped = $ASC_STORIES_SKIPPED" "$ASC_STATE_FILE"
             ;;
         status)
-            yq -i ".status = \"$value\"" "$ASC_STATE_FILE"
+            VALUE="$value" yq -i '.status = strenv(VALUE)' "$ASC_STATE_FILE"
             ;;
     esac
 }
@@ -832,9 +840,9 @@ create_conductor_checkpoint() {
     local timestamp
     timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-    yq -i ".checkpoints += [{
-        \"timestamp\": \"$timestamp\",
-        \"story\": \"$ASC_CURRENT_STORY\",
+    TS="$timestamp" STORY="$ASC_CURRENT_STORY" yq -i ".checkpoints += [{
+        \"timestamp\": strenv(TS),
+        \"story\": strenv(STORY),
         \"completed\": $ASC_STORIES_COMPLETED,
         \"failed\": $ASC_STORIES_FAILED,
         \"skipped\": $ASC_STORIES_SKIPPED
