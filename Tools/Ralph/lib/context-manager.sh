@@ -433,7 +433,8 @@ check_preventive_compact() {
     usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1 || true)
 
     if [[ -n "$usage" && "$usage" -ge "$CONTEXT_PREVENTIVE_THRESHOLD" ]]; then
-        print_warning "${MSG_CONTEXT_PREVENTIVE:-Context at ${usage}% - running preventive compact}"
+        local msg="${MSG_CONTEXT_PREVENTIVE:-Context at ${usage}% - running preventive compact}"
+        print_warning "${msg//\{0\}/$usage}"
         log_session "$session_id" "INFO" "Preventive compact triggered at ${usage}%"
 
         # Save progress before preventive compact
@@ -452,21 +453,13 @@ check_preventive_compact() {
 # Context Continuation Prompt
 # =============================================================================
 
+# Print the continuation prompt stored by a real compaction, if any.
+# Callers using `$(...)` must reset CONTEXT_CONTINUATION_PROMPT themselves.
 get_context_continuation_prompt() {
-    # Return the stored continuation prompt if available
     if [[ -n "$CONTEXT_CONTINUATION_PROMPT" ]]; then
         echo "$CONTEXT_CONTINUATION_PROMPT"
-        # Clear after use
         CONTEXT_CONTINUATION_PROMPT=""
         return 0
-    fi
-
-    # Generate fresh if smart reconstruction is enabled
-    if [[ "$CONTEXT_SMART_RECONSTRUCTION" == "true" ]]; then
-        if type generate_continuation_prompt &>/dev/null; then
-            generate_continuation_prompt
-            return 0
-        fi
     fi
 
     return 1

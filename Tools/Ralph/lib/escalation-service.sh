@@ -188,7 +188,7 @@ list_escalations() {
             priority=$(yq e '.priority' "$file")
 
             printf "[%s] %s: %s - %s (%s)\n" "$priority" "$id" "$level" "$error_type" "$created"
-            ((count++))
+            count=$((count + 1))
         fi
     done
 
@@ -295,7 +295,9 @@ check_escalation_timeouts() {
 get_pending_count() {
     local count=0
     for file in "$ESCALATION_QUEUE_DIR"/*.yaml; do
-        [[ -f "$file" ]] && ((count++))
+        if [[ -f "$file" ]]; then
+            count=$((count + 1))
+        fi
     done
     echo "$count"
 }

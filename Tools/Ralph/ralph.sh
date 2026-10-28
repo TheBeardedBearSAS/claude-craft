@@ -46,6 +46,10 @@ SESSION_ID=""
 MAX_ITERATIONS=$DEFAULT_MAX_ITERATIONS
 TIMEOUT=$DEFAULT_TIMEOUT
 DELAY=$DEFAULT_DELAY
+# Values given on the command line: they win over ralph.yml (CLI > ralph.yml > defaults).
+CLI_MAX_ITERATIONS=""
+CLI_TIMEOUT=""
+CLI_DELAY=""
 VERBOSE=false
 DRY_RUN=false
 CONTINUE_SESSION=""
@@ -101,8 +105,10 @@ print_header() {
     echo -e "${C_CYAN}╚════════════════════════════════════════════════════════════╝${C_RESET}\n"
 }
 
+# Diagnostics go to stderr: many helpers return data on stdout through
+# `$(...)` (prompts, session ids, story lists) and must not capture them.
 print_success() {
-    echo -e "${C_GREEN}✓${C_RESET} $1"
+    echo -e "${C_GREEN}✓${C_RESET} $1" >&2
 }
 
 print_error() {
@@ -110,16 +116,16 @@ print_error() {
 }
 
 print_info() {
-    echo -e "${C_BLUE}ℹ${C_RESET} $1"
+    echo -e "${C_BLUE}ℹ${C_RESET} $1" >&2
 }
 
 print_warning() {
-    echo -e "${C_YELLOW}⚠${C_RESET} $1"
+    echo -e "${C_YELLOW}⚠${C_RESET} $1" >&2
 }
 
 print_verbose() {
     if [[ "$VERBOSE" == "true" ]]; then
-        echo -e "${C_DIM}  $1${C_RESET}"
+        echo -e "${C_DIM}  $1${C_RESET}" >&2
     fi
 }
 
@@ -226,7 +232,7 @@ load_config() {
                 # Session settings with validation
                 local max_iter
                 max_iter=$(yq e '.session.max_iterations // ""' "$path" 2>/dev/null)
-                if [[ -n "$max_iter" ]]; then
+                if [[ -n "$max_iter" && -z "$CLI_MAX_ITERATIONS" ]]; then
                     if [[ "$max_iter" =~ ^[1-9][0-9]*$ ]]; then
                         MAX_ITERATIONS=$max_iter
                     else
@@ -236,7 +242,7 @@ load_config() {
 
                 local timeout
                 timeout=$(yq e '.session.timeout // ""' "$path" 2>/dev/null)
-                if [[ -n "$timeout" ]]; then
+                if [[ -n "$timeout" && -z "$CLI_TIMEOUT" ]]; then
                     if [[ "$timeout" =~ ^[0-9]+$ ]]; then
                         TIMEOUT=$timeout
                     else
@@ -246,7 +252,7 @@ load_config() {
 
                 local delay
                 delay=$(yq e '.session.delay_between_iterations // ""' "$path" 2>/dev/null)
-                if [[ -n "$delay" ]]; then
+                if [[ -n "$delay" && -z "$CLI_DELAY" ]]; then
                     if [[ "$delay" =~ ^[0-9]+$ ]]; then
                         DELAY=$delay
                     else
@@ -355,6 +361,7 @@ parse_args() {
                     exit 1
                 fi
                 MAX_ITERATIONS="$value"
+                CLI_MAX_ITERATIONS="$value"
                 ;;
             --timeout=*)
                 local value="${1#--timeout=}"
@@ -363,6 +370,7 @@ parse_args() {
                     exit 1
                 fi
                 TIMEOUT="$value"
+                CLI_TIMEOUT="$value"
                 ;;
             --delay=*)
                 local value="${1#--delay=}"
@@ -371,6 +379,7 @@ parse_args() {
                     exit 1
                 fi
                 DELAY="$value"
+                CLI_DELAY="$value"
                 ;;
             --verbose)
                 VERBOSE=true
@@ -508,6 +517,8 @@ run_ralph() {
             local continuation_prompt
             # Returns 1 when there is no continuation context (nominal).
             continuation_prompt=$(get_context_continuation_prompt) || true
+            # Consumed: the subshell above cannot clear it.
+            CONTEXT_CONTINUATION_PROMPT=""
             if [[ -n "$continuation_prompt" ]]; then
                 # Prepend continuation context to the prompt
                 effective_prompt="$continuation_prompt
@@ -547,11 +558,12 @@ $PROMPT"
                         # Compact successful - retry with continuation prompt
                         print_info "${MSG_CONTEXT_RETRYING:-Retrying after compact}..."
 
-                        # Get reconstructed context
+                        # Get reconstructed context. run_auto_compact ran in a
+                        # subshell, so the prompt it stored is lost: rebuild it.
                         local retry_prompt="$PROMPT"
-                        if type get_context_continuation_prompt &>/dev/null; then
+                        if [[ "${CONTEXT_SMART_RECONSTRUCTION:-}" == "true" ]] && type generate_continuation_prompt &>/dev/null; then
                             local cont_prompt
-                            cont_prompt=$(get_context_continuation_prompt) || true
+                            cont_prompt=$(generate_continuation_prompt) || true
                             if [[ -n "$cont_prompt" ]]; then
                                 retry_prompt="$cont_prompt
 

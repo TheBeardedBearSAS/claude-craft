@@ -289,7 +289,7 @@ run_sprint_conductor_parallel() {
                 if ! confirm_story_start "$story_id"; then
                     log_conductor "Story skipped by user: $story_id"
                     ASC_STORIES_SKIPPED=$((ASC_STORIES_SKIPPED + 1))
-                    ((processed++))
+                    processed=$((processed + 1))
                     continue
                 fi
             fi
@@ -310,8 +310,8 @@ run_sprint_conductor_parallel() {
                 session_id=$(spawn_session "$story_id" "$prompt")
                 if [[ -n "$session_id" ]]; then
                     log_conductor "Spawned parallel session $session_id for story $story_id"
-                    ((spawned++))
-                    ((processed++))
+                    spawned=$((spawned + 1))
+                    processed=$((processed + 1))
                 else
                     log_conductor "Failed to spawn session for $story_id"
                     unclaim_story "$story_id"
@@ -320,7 +320,7 @@ run_sprint_conductor_parallel() {
             else
                 # Fallback: execute sequentially
                 execute_story_with_ralph "$story_id"
-                ((processed++))
+                processed=$((processed + 1))
             fi
         done
 
@@ -331,7 +331,7 @@ run_sprint_conductor_parallel() {
         # Create checkpoint
         create_conductor_checkpoint
 
-        ((wave++))
+        wave=$((wave + 1))
 
         # Small delay between waves
         sleep 2
@@ -469,9 +469,10 @@ run_sprint_conductor_sequential() {
         fi
 
         # Execute story with Ralph
+        # `|| status=$?`: a failed story must be counted, not kill the loop.
         local result
-        result=$(execute_story_with_ralph "$next_story")
-        local status=$?
+        local status=0
+        result=$(execute_story_with_ralph "$next_story") || status=$?
 
         # Process result
         case $status in
@@ -595,13 +596,9 @@ get_all_ready_stories() {
             select(.value.status == "ready-for-dev") |
             select(.value.claimed_by == null or .value.claimed_by == "") |
             select(
-                (.value.blocked_by // []) | length == 0 or
-                (
-                    (.value.blocked_by // []) | all(
-                        . as $dep |
-                        ($stories[$dep].status == "done" or $stories[$dep].status == "review")
-                    )
-                )
+                [(.value.blocked_by // [])[] |
+                    select($stories[.].status != "done" and $stories[.].status != "review")
+                ] | length == 0
             ) |
             .key
         ' "$status_file" 2>/dev/null | tr '\n' ' '
