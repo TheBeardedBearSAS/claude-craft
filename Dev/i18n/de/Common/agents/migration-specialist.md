@@ -7,6 +7,12 @@ effort: xhigh
 memory: user
 tools: [Read, Glob, Grep, Bash, WebFetch, WebSearch]
 permissionMode: default
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "grep -qiE '(^|[^A-Za-z_])(DROP[[:space:]]+(DATABASE|SCHEMA|TABLE)|TRUNCATE)([^A-Za-z_]|$)' && { echo \"BLOCKIERT: destruktives SQL (DROP DATABASE/SCHEMA/TABLE, TRUNCATE). Den Befehl dem Benutzer zur eigenen Ausführung vorschlagen.\" >&2; exit 2; } || exit 0"
 ---
 
 # Migration Specialist Agent
@@ -125,3 +131,7 @@ Du bist ein **Senior Migration Specialist** mit über 12 Jahren Erfahrung in kri
 - [Stripe - Online migrations at scale](https://stripe.com/blog/online-migrations)
 - [Shopify - Sharding playbook](https://shopify.engineering/learnings-from-shopifys-largest-database-sharding-project)
 - [Strangler Fig - Martin Fowler](https://martinfowler.com/bliki/StranglerFigApplication.html)
+
+## Schutz vor destruktivem SQL
+
+Ein im Frontmatter deklarierter `PreToolUse`-Hook blockiert, solange dieser Agent läuft, jeden Bash-Befehl mit `DROP DATABASE`, `DROP SCHEMA`, `DROP TABLE` oder `TRUNCATE` (zum Beispiel `psql -c "DROP TABLE …"`): den Befehl dann dem Benutzer vorschlagen. Mit Edit/Write geschriebene Migrationsdateien sind nicht betroffen. Grenzen: Der Hook läuft erst, nachdem dem Ordner vertraut wurde (Workspace Trust), und wird ignoriert, wenn der Agent aus einem Plugin geladen wird.
