@@ -166,8 +166,8 @@ run_spawn() {
 # (d) cmd_sprint_conductor --lang=fr switches the leader messages to French.
 # ─────────────────────────────────────────────────────────────────────────────
 
-@test "conductor: --lang=fr reloads the leader messages in French" {
-    command -v yq
+# $1 = conductor arguments: run it from a leader whose messages are English.
+run_conductor_lang() {
     cd "$REPO"
     mkdir -p .bmad
     printf 'stories:\n  US-1:\n    title: "First"\n    status: ready-for-dev\n' > .bmad/sprint-status.yaml
@@ -178,15 +178,39 @@ run_spawn() {
         SCRIPT_DIR='$STUB_DIR'
         RALPH_SESSION_BASE='$REPO/.ralph'
         ASC_STOP_WINDOW='23:59'
-        cmd_sprint_conductor --lang=fr Sprint-1
-        print_header
-        print_info \"\$MSG_LOOP_COMPLETE\"
+        cmd_sprint_conductor $1 Sprint-1
     "
     echo "$output"
+}
+
+@test "conductor: --lang=fr prints the leader output (log lines, summary) in French" {
+    command -v yq
+    run_conductor_lang "--lang=fr"
 
     [ "$status" -eq 0 ]
-    echo "$output" | grep -q "Sprint Conductor Summary"
-    echo "$output" | grep -qF "Boucle Continue d'Agent IA"
-    echo "$output" | grep -qF "Boucle terminée"
-    ! echo "$output" | grep -qF "Continuous AI Agent Loop" || false
+    echo "$output" | grep -qF "Conducteur de sprint autonome (ASC)"
+    echo "$output" | grep -qF "[ASC] Mode SÉQUENTIEL"
+    echo "$output" | grep -qF "[ASC] Traitement de la story : US-1"
+    echo "$output" | grep -qF "[ASC] Échec de la story : US-1"
+    echo "$output" | grep -qF "[ASC] Plus aucune story disponible"
+    echo "$output" | grep -qF "Résumé du conducteur de sprint"
+    echo "$output" | grep -qE "^  Échecs : +1$"
+    # No English leader line left (the summary's escalation keys come from jq).
+    ! echo "$output" | grep -qE "\[ASC\] (Running in|Processing story|Story failed|No more stories|Sprint Conductor completed)" || false
+    ! echo "$output" | grep -qE "Sprint Conductor Summary|^  Failed:|^Stories:|Autonomous Sprint Conductor" || false
+}
+
+@test "conductor: without --lang the leader output stays in English" {
+    command -v yq
+    run_conductor_lang ""
+
+    [ "$status" -eq 0 ]
+    echo "$output" | grep -qF "Autonomous Sprint Conductor (ASC)"
+    echo "$output" | grep -qF "[ASC] Running in SEQUENTIAL mode"
+    echo "$output" | grep -qF "[ASC] Processing story: US-1"
+    echo "$output" | grep -qF "[ASC] Transitioned US-1 to blocked"
+    echo "$output" | grep -qF "Sprint Conductor Summary"
+    echo "$output" | grep -qE "^  Completed: 0$"
+    echo "$output" | grep -qE "^  Failed:    1$"
+    echo "$output" | grep -qE "^  Skipped:   0$"
 }
