@@ -288,8 +288,11 @@ spawn_session() {
     local prompt="$2"
     local config="${3:-}"
 
-    # Generate session ID
-    local session_id="PAR-${story_id}-$(date +%s)"
+    # Generate session ID. It names a directory and a git branch: the story id
+    # is reduced to [A-Za-z0-9_-] (no `/`, `..` nor space), and the spawn
+    # counter keeps ids that sanitize alike ("US 1", "US/1") apart.
+    local session_id
+    session_id="PAR-${story_id//[^A-Za-z0-9_-]/-}-$(date +%s)-${PARALLEL_SESSION_COUNT}"
     PARALLEL_SPAWNED_SESSION_ID=""
 
     print_info "Spawning parallel session: $session_id for $story_id"
@@ -338,7 +341,8 @@ spawn_session() {
     # Spawn in background
     # Workers write to individual temp files (single-writer pattern).
     # The leader merges results after all workers complete.
-    local worker_id="${story_id}-$$-$(date +%s)"
+    # Derived from the (sanitized) session id: it names the report file
+    local worker_id="${session_id}-$$"
     (
         if [[ -n "$worktree_dir" ]]; then
             cd "$worktree_dir" || exit 1

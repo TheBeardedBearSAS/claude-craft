@@ -129,7 +129,7 @@ EOF
             PARALLEL_MAX_CONCURRENT="$ASC_PARALLEL_MAX"
             init_parallel_manager
         else
-            print_warning "Parallel manager not available, falling back to sequential"
+            print_warning "$(asc_msg MSG_ASC_NO_PARALLEL_MANAGER "Parallel manager not available, falling back to sequential")"
             ASC_PARALLEL_ENABLED="false"
         fi
     fi
@@ -139,14 +139,14 @@ EOF
         enable_autonomous_mode
     fi
 
-    log_conductor "Initialized Sprint Conductor"
-    log_conductor "  Session: $ASC_SESSION_ID"
-    log_conductor "  Mode: $ASC_MODE"
-    log_conductor "  Max stories: $ASC_MAX_STORIES"
-    log_conductor "  Max runtime: ${ASC_MAX_RUNTIME_HOURS}h"
-    log_conductor "  Parallel: $ASC_PARALLEL_ENABLED (max $ASC_PARALLEL_MAX)"
+    log_conductor "$(asc_msg MSG_ASC_INITIALIZED "Initialized Sprint Conductor")"
+    log_conductor "$(asc_msg MSG_ASC_INIT_SESSION "  Session: {0}" "$ASC_SESSION_ID")"
+    log_conductor "$(asc_msg MSG_ASC_INIT_MODE "  Mode: {0}" "$ASC_MODE")"
+    log_conductor "$(asc_msg MSG_ASC_INIT_MAX_STORIES "  Max stories: {0}" "$ASC_MAX_STORIES")"
+    log_conductor "$(asc_msg MSG_ASC_INIT_MAX_RUNTIME "  Max runtime: {0}h" "$ASC_MAX_RUNTIME_HOURS")"
+    log_conductor "$(asc_msg MSG_ASC_INIT_PARALLEL "  Parallel: {0} (max {1})" "$ASC_PARALLEL_ENABLED" "$ASC_PARALLEL_MAX")"
 
-    print_info "Sprint Conductor initialized: $ASC_SESSION_ID"
+    print_info "$(asc_msg MSG_ASC_INITIALIZED_ID "Sprint Conductor initialized: {0}" "$ASC_SESSION_ID")"
 }
 
 # =============================================================================
@@ -164,7 +164,7 @@ run_sprint_conductor() {
     [[ "$overnight" == "true" ]] && ASC_MODE="bounded"
     [[ "$supervised" == "true" ]] && ASC_MODE="supervised"
 
-    log_conductor "Starting sprint conductor for: $sprint_name (mode: $ASC_MODE)"
+    log_conductor "$(asc_msg MSG_ASC_STARTING "Starting sprint conductor for: {0} (mode: {1})" "$sprint_name" "$ASC_MODE")"
 
     # Use parallel or sequential execution based on configuration
     if [[ "$ASC_PARALLEL_ENABLED" == "true" ]] && type process_stories_parallel &>/dev/null; then
@@ -184,20 +184,20 @@ run_sprint_conductor() {
 run_sprint_conductor_parallel() {
     local sprint_name="$1"
 
-    log_conductor "Running in PARALLEL mode (max $ASC_PARALLEL_MAX concurrent)"
+    log_conductor "$(asc_msg MSG_ASC_PARALLEL_MODE "Running in PARALLEL mode (max {0} concurrent)" "$ASC_PARALLEL_MAX")"
 
     # Get all stories for the sprint
     local all_stories
     all_stories=$(get_all_ready_stories)
 
     if [[ -z "$all_stories" ]]; then
-        log_conductor "No stories available for parallel processing"
+        log_conductor "$(asc_msg MSG_ASC_NO_PARALLEL_STORIES "No stories available for parallel processing")"
         return 0
     fi
 
     local story_count
     story_count=$(echo "$all_stories" | wc -l | tr -d ' ') || story_count=0
-    log_conductor "Found $story_count stories for parallel processing"
+    log_conductor "$(asc_msg MSG_ASC_FOUND_STORIES "Found {0} stories for parallel processing" "$story_count")"
 
     # Build dependency graph
     if type build_dependency_graph &>/dev/null; then
@@ -211,11 +211,11 @@ run_sprint_conductor_parallel() {
     while [[ $processed -lt $story_count ]]; do
         # Check stop conditions
         if ! check_continue_conditions; then
-            log_conductor "Stop condition met, halting parallel processing"
+            log_conductor "$(asc_msg MSG_ASC_STOP_PARALLEL "Stop condition met, halting parallel processing")"
             break
         fi
 
-        log_conductor "=== Wave $wave ==="
+        log_conductor "$(asc_msg MSG_ASC_WAVE "=== Wave {0} ===" "$wave")"
 
         # Collect completed sessions from previous wave (in this shell: it
         # updates the tracking arrays that free the slots)
@@ -238,7 +238,7 @@ run_sprint_conductor_parallel() {
                 local active
                 active=$(get_active_count)
                 if [[ $active -gt 0 ]]; then
-                    log_conductor "Waiting for $active active sessions to complete..."
+                    log_conductor "$(asc_msg MSG_ASC_WAITING_ACTIVE "Waiting for {0} active sessions to complete..." "$active")"
                     sleep 10
                     continue
                 fi
@@ -251,7 +251,7 @@ run_sprint_conductor_parallel() {
             fi
 
             if [[ $pending_escalations -gt 0 ]]; then
-                log_conductor "Waiting for $pending_escalations pending escalations..."
+                log_conductor "$(asc_msg MSG_ASC_WAITING_ESCALATIONS "Waiting for {0} pending escalations..." "$pending_escalations")"
                 sleep 60
                 continue
             fi
@@ -285,7 +285,7 @@ run_sprint_conductor_parallel() {
             # Supervised mode - pause for confirmation
             if [[ "$ASC_MODE" == "supervised" ]]; then
                 if ! confirm_story_start "$story_id"; then
-                    log_conductor "Story skipped by user: $story_id"
+                    log_conductor "$(asc_msg MSG_ASC_SKIPPED_BY_USER "Story skipped by user: {0}" "$story_id")"
                     ASC_STORIES_SKIPPED=$((ASC_STORIES_SKIPPED + 1))
                     processed=$((processed + 1))
                     continue
@@ -294,7 +294,7 @@ run_sprint_conductor_parallel() {
 
             # Claim the story
             if ! claim_story "$story_id"; then
-                log_conductor "Failed to claim story: $story_id (may be claimed by another process)"
+                log_conductor "$(asc_msg MSG_ASC_CLAIM_FAILED_OTHER "Failed to claim story: {0} (may be claimed by another process)" "$story_id")"
                 continue
             fi
 
@@ -310,11 +310,11 @@ run_sprint_conductor_parallel() {
                     session_id="$PARALLEL_SPAWNED_SESSION_ID"
                 fi
                 if [[ -n "$session_id" ]]; then
-                    log_conductor "Spawned parallel session $session_id for story $story_id"
+                    log_conductor "$(asc_msg MSG_ASC_SPAWNED "Spawned parallel session {0} for story {1}" "$session_id" "$story_id")"
                     spawned=$((spawned + 1))
                     processed=$((processed + 1))
                 else
-                    log_conductor "Failed to spawn session for $story_id"
+                    log_conductor "$(asc_msg MSG_ASC_SPAWN_FAILED "Failed to spawn session for {0}" "$story_id")"
                     unclaim_story "$story_id"
                     ASC_STORIES_FAILED=$((ASC_STORIES_FAILED + 1))
                 fi
@@ -340,7 +340,7 @@ run_sprint_conductor_parallel() {
 
     # Wait for remaining sessions
     if type wait_all_sessions &>/dev/null; then
-        log_conductor "Waiting for all parallel sessions to complete..."
+        log_conductor "$(asc_msg MSG_ASC_WAITING_ALL "Waiting for all parallel sessions to complete...")"
         wait_all_sessions 0
 
         # Final collection (wait_all_sessions already collected them)
@@ -371,7 +371,7 @@ process_collected_parallel_stories() {
         ASC_STORIES_COMPLETED=$((ASC_STORIES_COMPLETED + 1))
         ASC_CONSECUTIVE_FAILURES=0
         transition_story "$story_id" "review"
-        log_conductor "Story completed in parallel: $story_id"
+        log_conductor "$(asc_msg MSG_ASC_PAR_COMPLETED "Story completed in parallel: {0}" "$story_id")"
     done
 
     for story_id in "${failed_list[@]}"; do
@@ -379,7 +379,7 @@ process_collected_parallel_stories() {
         ASC_STORIES_FAILED=$((ASC_STORIES_FAILED + 1))
         ASC_CONSECUTIVE_FAILURES=$((ASC_CONSECUTIVE_FAILURES + 1))
         transition_story "$story_id" "blocked"
-        log_conductor "Story failed in parallel: $story_id"
+        log_conductor "$(asc_msg MSG_ASC_PAR_FAILED "Story failed in parallel: {0}" "$story_id")"
     done
 }
 
@@ -387,10 +387,11 @@ process_collected_parallel_stories() {
 is_story_in_progress() {
     local story_id="$1"
 
-    # Check in parallel sessions
-    if [[ -n "${PARALLEL_SESSIONS[$story_id]:-}" ]]; then
-        return 0
-    fi
+    # Check in parallel sessions (keyed by session id, the value is the story)
+    local session_id
+    for session_id in "${!PARALLEL_SESSIONS[@]}"; do
+        [[ "${PARALLEL_SESSIONS[$session_id]}" == "$story_id" ]] && return 0
+    done
 
     # Check in BMAD status
     local bmad_dir="${BMAD_DIR:-.bmad}"
@@ -435,7 +436,7 @@ update_parallel_conductor_state() {
 run_sprint_conductor_sequential() {
     local sprint_name="$1"
 
-    log_conductor "Running in SEQUENTIAL mode"
+    log_conductor "$(asc_msg MSG_ASC_SEQUENTIAL_MODE "Running in SEQUENTIAL mode")"
 
     # Main loop
     while true; do
@@ -449,14 +450,14 @@ run_sprint_conductor_sequential() {
         next_story=$(get_next_ready_story)
 
         if [[ -z "$next_story" ]]; then
-            log_conductor "No more stories available"
+            log_conductor "$(asc_msg MSG_ASC_NO_MORE_STORIES "No more stories available")"
 
             # Check escalation queue
             if type get_pending_count &>/dev/null; then
                 local pending
                 pending=$(get_pending_count)
                 if [[ $pending -gt 0 ]]; then
-                    log_conductor "Waiting for $pending pending escalations..."
+                    log_conductor "$(asc_msg MSG_ASC_WAITING_ESCALATIONS "Waiting for {0} pending escalations..." "$pending")"
                     if type check_escalation_timeouts &>/dev/null; then
                         check_escalation_timeouts
                     fi
@@ -472,11 +473,11 @@ run_sprint_conductor_sequential() {
         ASC_CURRENT_STORY="$next_story"
         update_conductor_state "current" "$next_story"
 
-        log_conductor "Processing story: $next_story"
+        log_conductor "$(asc_msg MSG_ASC_PROCESSING "Processing story: {0}" "$next_story")"
 
         # Claim the story
         if ! claim_story "$next_story"; then
-            log_conductor "Failed to claim story: $next_story"
+            log_conductor "$(asc_msg MSG_ASC_CLAIM_FAILED "Failed to claim story: {0}" "$next_story")"
             ASC_STORIES_SKIPPED=$((ASC_STORIES_SKIPPED + 1))
             continue
         fi
@@ -484,7 +485,7 @@ run_sprint_conductor_sequential() {
         # Supervised mode - pause for confirmation
         if [[ "$ASC_MODE" == "supervised" ]]; then
             if ! confirm_story_start "$next_story"; then
-                log_conductor "Story skipped by user: $next_story"
+                log_conductor "$(asc_msg MSG_ASC_SKIPPED_BY_USER "Story skipped by user: {0}" "$next_story")"
                 unclaim_story "$next_story"
                 ASC_STORIES_SKIPPED=$((ASC_STORIES_SKIPPED + 1))
                 continue
@@ -501,26 +502,26 @@ run_sprint_conductor_sequential() {
         case $status in
             0)
                 # Success
-                log_conductor "Story completed: $next_story"
+                log_conductor "$(asc_msg MSG_ASC_COMPLETED "Story completed: {0}" "$next_story")"
                 ASC_STORIES_COMPLETED=$((ASC_STORIES_COMPLETED + 1))
                 ASC_CONSECUTIVE_FAILURES=0
                 transition_story "$next_story" "review"
                 ;;
             1)
                 # Failed but recoverable
-                log_conductor "Story failed: $next_story"
+                log_conductor "$(asc_msg MSG_ASC_FAILED "Story failed: {0}" "$next_story")"
                 ASC_STORIES_FAILED=$((ASC_STORIES_FAILED + 1))
                 ASC_CONSECUTIVE_FAILURES=$((ASC_CONSECUTIVE_FAILURES + 1))
                 transition_story "$next_story" "blocked"
                 ;;
             2)
                 # Escalated
-                log_conductor "Story escalated: $next_story"
+                log_conductor "$(asc_msg MSG_ASC_ESCALATED "Story escalated: {0}" "$next_story")"
                 # Keep in-progress, will be handled by escalation resolution
                 ;;
             3)
                 # Skipped
-                log_conductor "Story skipped: $next_story"
+                log_conductor "$(asc_msg MSG_ASC_SKIPPED "Story skipped: {0}" "$next_story")"
                 ASC_STORIES_SKIPPED=$((ASC_STORIES_SKIPPED + 1))
                 transition_story "$next_story" "ready-for-dev"
                 ;;
@@ -545,13 +546,13 @@ check_continue_conditions() {
     # Check max stories
     local total_processed=$((ASC_STORIES_COMPLETED + ASC_STORIES_FAILED + ASC_STORIES_SKIPPED))
     if [[ $total_processed -ge $ASC_MAX_STORIES ]]; then
-        log_conductor "Max stories reached: $total_processed"
+        log_conductor "$(asc_msg MSG_ASC_MAX_STORIES "Max stories reached: {0}" "$total_processed")"
         return 1
     fi
 
     # Check consecutive failures
     if [[ $ASC_CONSECUTIVE_FAILURES -ge $ASC_MAX_CONSECUTIVE_FAILURES ]]; then
-        log_conductor "Max consecutive failures reached: $ASC_CONSECUTIVE_FAILURES"
+        log_conductor "$(asc_msg MSG_ASC_MAX_FAILURES "Max consecutive failures reached: {0}" "$ASC_CONSECUTIVE_FAILURES")"
         return 1
     fi
 
@@ -561,7 +562,7 @@ check_continue_conditions() {
     local runtime_hours=$(((current_time - ASC_START_TIME) / 3600))
 
     if [[ $runtime_hours -ge $ASC_MAX_RUNTIME_HOURS ]]; then
-        log_conductor "Max runtime reached: ${runtime_hours}h"
+        log_conductor "$(asc_msg MSG_ASC_MAX_RUNTIME "Max runtime reached: {0}h" "$runtime_hours")"
         return 1
     fi
 
@@ -571,14 +572,14 @@ check_continue_conditions() {
         current_hour=$(date +%H:%M)
 
         if [[ "$current_hour" > "$ASC_STOP_WINDOW" && "$current_hour" < "12:00" ]]; then
-            log_conductor "Stop window reached: $current_hour (window: $ASC_STOP_WINDOW)"
+            log_conductor "$(asc_msg MSG_ASC_STOP_WINDOW "Stop window reached: {0} (window: {1})" "$current_hour" "$ASC_STOP_WINDOW")"
             return 1
         fi
     fi
 
     # Check for critical escalations
     if type has_critical_pending &>/dev/null && has_critical_pending; then
-        log_conductor "Critical escalation pending - pausing"
+        log_conductor "$(asc_msg MSG_ASC_CRITICAL_ESCALATION "Critical escalation pending - pausing")"
 
         # Wait for resolution or timeout
         sleep 300  # 5 minutes
@@ -660,7 +661,7 @@ claim_story() {
             .stories[strenv(STORY_ID)].claimed_at = strenv(TS) |
             .stories[strenv(STORY_ID)].status = "in-progress"' "$status_file"
 
-        log_conductor "Claimed story: $story_id"
+        log_conductor "$(asc_msg MSG_ASC_CLAIMED "Claimed story: {0}" "$story_id")"
         return 0
     fi
 
@@ -675,7 +676,7 @@ unclaim_story() {
     if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
         STORY_ID="$story_id" yq -i '.stories[strenv(STORY_ID)].claimed_by = "" | .stories[strenv(STORY_ID)].claimed_at = ""' "$status_file"
 
-        log_conductor "Unclaimed story: $story_id"
+        log_conductor "$(asc_msg MSG_ASC_UNCLAIMED "Unclaimed story: {0}" "$story_id")"
         return 0
     fi
 
@@ -704,7 +705,7 @@ transition_story() {
             .stories[strenv(STORY_ID)].status = strenv(NEW_STATUS) |
             .stories[strenv(STORY_ID)].updated_at = strenv(TS)' "$status_file"
 
-        log_conductor "Transitioned $story_id to $new_status"
+        log_conductor "$(asc_msg MSG_ASC_TRANSITIONED "Transitioned {0} to {1}" "$story_id" "$new_status")"
         return 0
     fi
 
@@ -718,7 +719,7 @@ transition_story() {
 execute_story_with_ralph() {
     local story_id="$1"
 
-    log_conductor "Spawning Ralph for story: $story_id"
+    log_conductor "$(asc_msg MSG_ASC_SPAWNING_RALPH "Spawning Ralph for story: {0}" "$story_id")"
 
     # Build prompt for Ralph
     local prompt
@@ -756,7 +757,7 @@ execute_story_with_ralph() {
                 ;;
         esac
     else
-        log_conductor "Ralph script not found: $ralph_script"
+        log_conductor "$(asc_msg MSG_ASC_RALPH_NOT_FOUND "Ralph script not found: {0}" "$ralph_script")"
         return 1
     fi
 }
@@ -797,10 +798,10 @@ confirm_story_start() {
 
     echo ""
     echo "════════════════════════════════════════"
-    echo "    Supervised Mode: Story Ready"
+    echo "    $(asc_msg MSG_ASC_SUPERVISED_TITLE "Supervised Mode: Story Ready")"
     echo "════════════════════════════════════════"
     echo ""
-    echo "Story: $story_id"
+    echo "$(asc_msg MSG_ASC_SUPERVISED_STORY "Story: {0}" "$story_id")"
 
     if command -v yq &>/dev/null; then
         local bmad_dir="${BMAD_DIR:-.bmad}"
@@ -809,12 +810,12 @@ confirm_story_start() {
         if [[ -f "$status_file" ]]; then
             local title
             title=$(STORY_ID="$story_id" yq '.stories[strenv(STORY_ID)].title' "$status_file" 2>/dev/null)
-            echo "Title: $title"
+            echo "$(asc_msg MSG_ASC_SUPERVISED_TITLE_LINE "Title: {0}" "$title")"
         fi
     fi
 
     echo ""
-    read -rp "Start this story? (y/n/s for skip all): " response
+    read -rp "$(asc_msg MSG_ASC_SUPERVISED_PROMPT "Start this story? (y/n/s for skip all): ")" response
 
     case "$response" in
         y|Y) return 0 ;;
@@ -871,6 +872,19 @@ create_conductor_checkpoint() {
 # Logging
 # =============================================================================
 
+# Leader message in the --lang language: asc_msg <MSG_ var> <English default>
+# [values for {0} {1}...] (MSG_ASC_* strings live in Tools/i18n/ralph/<lang>.sh)
+asc_msg() {
+    local msg="${!1:-$2}"
+    shift 2
+    local i=0 value
+    for value in "$@"; do
+        msg="${msg//\{$i\}/"$value"}"
+        i=$((i + 1))
+    done
+    printf '%s' "$msg"
+}
+
 log_conductor() {
     local message="$1"
     local timestamp
@@ -889,7 +903,7 @@ print_header_conductor() {
 
     echo ""
     echo -e "${C_CYAN}╔════════════════════════════════════════════════════════════╗${C_RESET}"
-    echo -e "${C_CYAN}║${C_RESET}     ${C_BOLD}Autonomous Sprint Conductor (ASC)${C_RESET}              ${C_CYAN}║${C_RESET}"
+    echo -e "${C_CYAN}║${C_RESET}     ${C_BOLD}$(asc_msg MSG_ASC_HEADER "Autonomous Sprint Conductor (ASC)")${C_RESET}              ${C_CYAN}║${C_RESET}"
     echo -e "${C_CYAN}║${C_RESET}     ${C_DIM}$sprint_name${C_RESET}                                    ${C_CYAN}║${C_RESET}"
     echo -e "${C_CYAN}╚════════════════════════════════════════════════════════════╝${C_RESET}"
     echo ""
@@ -920,33 +934,33 @@ finalize_sprint_conductor() {
     # Print summary
     echo ""
     echo "════════════════════════════════════════"
-    echo "    Sprint Conductor Summary"
+    echo "    $(asc_msg MSG_ASC_SUMMARY "Sprint Conductor Summary")"
     echo "════════════════════════════════════════"
     echo ""
-    echo "Session: $ASC_SESSION_ID"
-    echo "Duration: ${duration_hours}h ${duration_mins}m"
+    echo "$(asc_msg MSG_ASC_SUMMARY_SESSION "Session: {0}" "$ASC_SESSION_ID")"
+    echo "$(asc_msg MSG_ASC_SUMMARY_DURATION "Duration: {0}h {1}m" "$duration_hours" "$duration_mins")"
     echo ""
-    echo "Stories:"
-    echo "  Completed: $ASC_STORIES_COMPLETED"
-    echo "  Failed:    $ASC_STORIES_FAILED"
-    echo "  Skipped:   $ASC_STORIES_SKIPPED"
+    echo "$(asc_msg MSG_ASC_SUMMARY_STORIES "Stories:")"
+    echo "$(asc_msg MSG_ASC_SUMMARY_COMPLETED "  Completed: {0}" "$ASC_STORIES_COMPLETED")"
+    echo "$(asc_msg MSG_ASC_SUMMARY_FAILED "  Failed:    {0}" "$ASC_STORIES_FAILED")"
+    echo "$(asc_msg MSG_ASC_SUMMARY_SKIPPED "  Skipped:   {0}" "$ASC_STORIES_SKIPPED")"
     echo ""
 
     # Show escalation stats if available
     if type get_escalation_stats &>/dev/null; then
-        echo "Escalations:"
+        echo "$(asc_msg MSG_ASC_SUMMARY_ESCALATIONS "Escalations:")"
         get_escalation_stats | jq -r 'to_entries[] | "  \(.key): \(.value)"' 2>/dev/null || echo "  N/A"
         echo ""
     fi
 
     # Show recovery stats if available
     if type get_recovery_stats &>/dev/null; then
-        echo "Recovery attempts:"
+        echo "$(asc_msg MSG_ASC_SUMMARY_RECOVERY "Recovery attempts:")"
         get_recovery_stats "$ASC_SESSION_ID" | jq -r '.total_attempts // 0' 2>/dev/null || echo "  N/A"
         echo ""
     fi
 
-    log_conductor "Sprint Conductor completed"
+    log_conductor "$(asc_msg MSG_ASC_DONE "Sprint Conductor completed")"
 }
 
 generate_conductor_metrics() {
@@ -997,6 +1011,11 @@ cmd_sprint_conductor() {
             *) sprint_name="$1"; shift ;;
         esac
     done
+
+    # Messages were loaded before --lang was read: reload them for the leader
+    if type load_messages &>/dev/null; then
+        load_messages
+    fi
 
     if [[ -z "$sprint_name" ]]; then
         echo "Usage: sprint-conductor.sh [options] <sprint-name>"

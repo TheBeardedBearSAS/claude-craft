@@ -14,7 +14,18 @@
 |--------|-------|------:|
 | `Tools/StatusLine/statusline.sh` | `statusline.bats` | 4 |
 | `Tools/Ralph/ralph.sh` | `ralph.bats` | 5 |
+| `Tools/Ralph/` (comportement de la boucle) | `ralph-behavioral.bats` | 11 |
+| `Tools/Ralph/lib/parallel-manager.sh` (sessions Claude) | `ralph-parallel-session.bats` | 2 |
+| `Tools/Ralph/` (chemins `set -e`) | `ralph-set-e.bats` | 7 |
+| `Tools/Ralph/` (sessions de continuation) | `ralph-continuation.bats` | 8 |
+| `Tools/Ralph/lib/sprint-conductor.sh` (sessions, workers) | `ralph-conductor-sessions.bats` | 7 |
+| `Tools/Ralph/` (handoff, workers parallèles) | `ralph-handoff-workers.bats` | 7 |
+| `Tools/Ralph/` (ids de story non sûrs, langue du leader) | `ralph-unsafe-session-paths.bats` | 5 |
+| `scripts/verify-i18n-parity.sh` (dépôt en lecture seule) | `i18n-parity.bats` | 2 |
 | `Tools/install-rtk.sh` | `install-rtk.bats` | 6 |
+| `Dev/scripts/install-*-rules.sh` | `install-scripts.bats` | 12 |
+| `cli/lib/path-safety.js` (skippée sans `node`) | `path-safety.bats` | 9 |
+| **Total** | 13 suites | **85** |
 
 ## Exécution locale
 
