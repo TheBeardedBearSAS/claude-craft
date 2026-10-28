@@ -196,7 +196,7 @@ run_sprint_conductor_parallel() {
     fi
 
     local story_count
-    story_count=$(echo "$all_stories" | wc -w | tr -d ' ') || story_count=0
+    story_count=$(echo "$all_stories" | wc -l | tr -d ' ') || story_count=0
     log_conductor "Found $story_count stories for parallel processing"
 
     # Build dependency graph
@@ -221,15 +221,7 @@ run_sprint_conductor_parallel() {
         # updates the tracking arrays that free the slots)
         if type collect_completed_sessions &>/dev/null; then
             collect_completed_sessions > /dev/null
-            local completed_stories="$PARALLEL_COLLECTED_STORIES"
-            PARALLEL_COLLECTED_STORIES=""
-
-            for story_id in $completed_stories; do
-                ASC_STORIES_COMPLETED=$((ASC_STORIES_COMPLETED + 1))
-                ASC_CONSECUTIVE_FAILURES=0
-                transition_story "$story_id" "review"
-                log_conductor "Story completed in parallel: $story_id"
-            done
+            process_collected_parallel_stories
         fi
 
         # Get stories ready for this wave (dependencies satisfied)
@@ -276,9 +268,13 @@ run_sprint_conductor_parallel() {
             slots=$ASC_PARALLEL_MAX
         fi
 
-        # Spawn sessions for ready stories (up to available slots)
+        # Spawn sessions for ready stories (up to available slots), one id
+        # per line: ids may contain spaces
         local spawned=0
-        for story_id in $ready_stories; do
+        local -a ready_list=()
+        mapfile -t ready_list <<< "$ready_stories"
+        for story_id in "${ready_list[@]}"; do
+            [[ -z "$story_id" ]] && continue
             [[ $spawned -ge $slots ]] && break
 
             # Skip if already processed or in progress
@@ -350,13 +346,7 @@ run_sprint_conductor_parallel() {
         # Final collection (wait_all_sessions already collected them)
         if type collect_completed_sessions &>/dev/null; then
             collect_completed_sessions > /dev/null
-            local final_completed="$PARALLEL_COLLECTED_STORIES"
-            PARALLEL_COLLECTED_STORIES=""
-
-            for story_id in $final_completed; do
-                ASC_STORIES_COMPLETED=$((ASC_STORIES_COMPLETED + 1))
-                transition_story "$story_id" "review"
-            done
+            process_collected_parallel_stories
         fi
     fi
 
@@ -364,6 +354,33 @@ run_sprint_conductor_parallel() {
     if type print_parallel_summary &>/dev/null; then
         print_parallel_summary
     fi
+}
+
+# Count and transition the stories collected from finished workers:
+# completed -> review, failed -> blocked (as in sequential mode).
+process_collected_parallel_stories() {
+    local -a completed_list=() failed_list=()
+    mapfile -t completed_list <<< "$PARALLEL_COLLECTED_STORIES"
+    mapfile -t failed_list <<< "$PARALLEL_FAILED_STORIES"
+    PARALLEL_COLLECTED_STORIES=""
+    PARALLEL_FAILED_STORIES=""
+
+    local story_id
+    for story_id in "${completed_list[@]}"; do
+        [[ -z "$story_id" ]] && continue
+        ASC_STORIES_COMPLETED=$((ASC_STORIES_COMPLETED + 1))
+        ASC_CONSECUTIVE_FAILURES=0
+        transition_story "$story_id" "review"
+        log_conductor "Story completed in parallel: $story_id"
+    done
+
+    for story_id in "${failed_list[@]}"; do
+        [[ -z "$story_id" ]] && continue
+        ASC_STORIES_FAILED=$((ASC_STORIES_FAILED + 1))
+        ASC_CONSECUTIVE_FAILURES=$((ASC_CONSECUTIVE_FAILURES + 1))
+        transition_story "$story_id" "blocked"
+        log_conductor "Story failed in parallel: $story_id"
+    done
 }
 
 # Check if a story is already in progress (parallel tracking)
@@ -588,7 +605,7 @@ get_next_ready_story() {
     fi
 }
 
-# Get all ready-for-dev stories (for parallel processing)
+# Get all ready-for-dev stories (for parallel processing), one id per line
 get_all_ready_stories() {
     local bmad_dir="${BMAD_DIR:-.bmad}"
     local status_file="$bmad_dir/sprint-status.yaml"
@@ -607,7 +624,7 @@ get_all_ready_stories() {
                 ] | length == 0
             ) |
             .key
-        ' "$status_file" 2>/dev/null | tr '\n' ' '
+        ' "$status_file" 2>/dev/null
     fi
 }
 
@@ -624,7 +641,7 @@ get_independent_ready_stories() {
             select(.value.claimed_by == null or .value.claimed_by == "") |
             select((.value.blocked_by // []) | length == 0) |
             .key
-        ' "$status_file" 2>/dev/null | tr '\n' ' '
+        ' "$status_file" 2>/dev/null
     fi
 }
 
@@ -707,10 +724,11 @@ execute_story_with_ralph() {
     local prompt
     prompt=$(build_story_prompt "$story_id")
 
-    # Get story-specific config if available
-    local story_config=""
-    if [[ -f ".ralph/stories/${story_id}.yml" ]]; then
-        story_config="--config=.ralph/stories/${story_id}.yml"
+    # Get story-specific config if available. An id with `/` (e.g. `../x`)
+    # would read a config outside .ralph/stories/: ignored.
+    local -a story_config=()
+    if [[ "$story_id" != */* && -f ".ralph/stories/${story_id}.yml" ]]; then
+        story_config=("--config=.ralph/stories/${story_id}.yml")
     fi
 
     # Run Ralph with autonomous profile
@@ -720,7 +738,7 @@ execute_story_with_ralph() {
         local output
         output=$("$ralph_script" \
             --lang="${LANG_ARG:-en}" \
-            $story_config \
+            "${story_config[@]}" \
             "$prompt" 2>&1)
         local status=$?
 
@@ -974,6 +992,7 @@ cmd_sprint_conductor() {
             --parallel) parallel="$2"; ASC_PARALLEL_ENABLED="true"; ASC_PARALLEL_MAX="$2"; shift 2 ;;
             --max-stories) max_stories="$2"; shift 2 ;;
             --timeout) timeout="$2"; shift 2 ;;
+            --lang=*) LANG_ARG="${1#--lang=}"; shift ;;
             -*) shift ;;
             *) sprint_name="$1"; shift ;;
         esac

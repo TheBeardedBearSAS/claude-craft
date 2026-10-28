@@ -369,30 +369,11 @@ handle_max_compacts_reached() {
 create_continuation_session() {
     local previous_session="$1"
 
-    # Generate new session ID with portable random suffix generation
-    local timestamp=$(date +%Y%m%d_%H%M%S)
-    local random_suffix
-
-    # Use utils function if available, otherwise fallback
-    if type generate_random_suffix &>/dev/null; then
-        random_suffix=$(generate_random_suffix 4)
-    elif command -v xxd &>/dev/null; then
-        random_suffix=$(head -c 4 /dev/urandom | xxd -p)
-    elif command -v od &>/dev/null; then
-        random_suffix=$(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n') || true
-    else
-        # Fallback: use $RANDOM (less entropy but portable)
-        random_suffix=$(printf '%04x%04x' $RANDOM $RANDOM | head -c 8) || true
-    fi
-
-    local new_session_id="ralph-cont-${timestamp}-${random_suffix}"
-
-    # Create session directory if create_session is available
-    if type create_session &>/dev/null; then
-        if ! create_session "$new_session_id" 2>/dev/null; then
-            print_warning "Failed to create session directory for $new_session_id"
-        fi
-    fi
+    # create_session takes a prompt and prints the id it created (with its
+    # state.json and session.log): the id must come from it, or the session
+    # directory is an orphan and the continuation id has no state.
+    local new_session_id
+    new_session_id=$(create_session "Continuation of $previous_session") || return 1
 
     # Link sessions in state files (with error handling)
     if type update_session_state &>/dev/null; then
