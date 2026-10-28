@@ -465,6 +465,14 @@ install_commands() {
     done
     IFS="$OLD_IFS"
 
+    # The deprecated common:pre-commit-check|pre-merge-check|release-checklist
+    # stubs redirect to /gate:check, which otherwise ships only with the Project
+    # package: install it here too so a Dev-only install keeps them working.
+    local gate_check="$SCRIPT_DIR/../../Project/i18n/$lang/Gate/commands/check.md"
+    if [[ -f "$gate_check" ]]; then
+        copy_file "$gate_check" "$target_dir/.claude/commands/gate/check.md"
+    fi
+
     # Delete commands retired from the distribution (config/removed-commands.yaml)
     $dry_run || bash "$SCRIPT_DIR/prune-removed-commands.sh" "$target_dir"
 

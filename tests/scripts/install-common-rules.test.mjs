@@ -48,10 +48,10 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     const langs = ['en', 'fr', 'es', 'de', 'pt'];
 
     for (const lang of langs) {
-      const output = execSync(
-        `bash "${SCRIPT}" --dry-run --lang=${lang} "${tmpDir}"`,
-        { encoding: 'utf8', timeout: 30000 },
-      );
+      const output = execSync(`bash "${SCRIPT}" --dry-run --lang=${lang} "${tmpDir}"`, {
+        encoding: 'utf8',
+        timeout: 30000,
+      });
       // Dry-run should succeed for each language
       expect(output).toBeTruthy();
     }
@@ -109,6 +109,24 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     // Common should still have its commands
     expect(fs.existsSync(path.join(commonDir, 'ralph-run.md'))).toBe(true);
     expect(fs.existsSync(path.join(commonDir, 'pre-commit-check.md'))).toBe(true);
+  });
+
+  it.each([
+    ['pre-commit-check', 'commit'],
+    ['pre-merge-check', 'merge'],
+    ['release-checklist', 'release'],
+  ])('gives the deprecated common:%s stub a reachable redirect target', (stub, gate) => {
+    const tmpDir = makeTmpDir();
+    execSync(`bash "${SCRIPT}" --lang=fr "${tmpDir}"`, {
+      encoding: 'utf8',
+      timeout: 30000,
+    });
+
+    const stubMd = fs.readFileSync(path.join(tmpDir, '.claude', 'commands', 'common', `${stub}.md`), 'utf8');
+    const target = stubMd.match(/`(\.claude\/commands\/[^`]+\.md)`/)[1];
+    const targetPath = path.join(tmpDir, target);
+    expect(fs.existsSync(targetPath)).toBe(true);
+    expect(fs.readFileSync(targetPath, 'utf8')).toMatch(new RegExp(`^## ${gate}$`, 'm'));
   });
 
   it('lists only the selected stack reviewers in AGENTS.md', () => {
