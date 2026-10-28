@@ -50,7 +50,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 | Generate endpoint (Python) | `/python:generate-endpoint /api/users` |
 | Continuous loop | `/common:ralph-run "Implement payment module"` |
 | Run tests | `/qa:status` |
-| Research tech topic | `/common:research-context7 "FastAPI best practices"` |
+| Research library docs | context7 MCP (`/deep-research` for web research) |
 | Daily standup summary | `/workflow:status --standup` |
 
 ### QA / Tester
@@ -94,7 +94,6 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 /common:setup-rtk                 # Install token optimizer
 /common:setup-ci                  # Configure CI/CD
 /common:pack-repo                 # Pack codebase for AI
-/common:research-context7 "topic" # Deep research
 /common:generate-changelog        # Generate CHANGELOG
 /common:architecture-decision     # Document ADR
 /common:add-technology "nextjs"   # Add new tech stack (claude-craft repo only)
@@ -141,7 +140,7 @@ Main path: `init → plan → design → start → implement → review → retr
 ### `/uiux:` - UI/UX & Accessibility
 
 ```
-/uiux:orchestrator "task"         # Orchestrate UI/UX/A11y
+@uiux-orchestrator "task"         # Orchestrate UI/UX/A11y (agent)
 /uiux:audit                       # Full UI/UX/A11y audit
 /uiux:component-spec Button       # Component spec
 /uiux:design-tokens               # Design system tokens
@@ -326,7 +325,7 @@ The 5 `/sprint:*` commands are redirect stubs (removed in 9.0): `/sprint:dev` �
 /project:backlog move story US-001 done  # Transition a story (--auto for routing rules)
 ```
 
-> The 52 former commands (`/project:add-epic`, `/gate:validate-prd`, `/sprint:dev`, `/project:run-sprint`...) are deprecated redirect stubs removed in 9.0: see "Deprecated commands" in `docs/COMMANDS.md`.
+> The 54 former commands (`/project:add-epic`, `/gate:validate-prd`, `/sprint:dev`, `/project:run-sprint`...) are deprecated redirect stubs removed in 9.0: see "Deprecated commands" in `docs/COMMANDS.md`.
 
 
 ---
@@ -382,7 +381,7 @@ export CLAUDE_CODE_SUBAGENT_MODEL=sonnet  # Cheaper subagents
 | Validate before merge | `/gate:check merge` |
 | Use parallel teams for 2+ stacks | `/team:audit` (vs `--sequential`) |
 | Use Ralph for long tasks | `/common:ralph-run "task"` |
-| Research with Context7 | `/common:research-context7 "topic"` |
+| Research with Context7 | context7 MCP, or `/deep-research` |
 | Multi-agent concurrent | `@tdd-coach @react-reviewer Implement this feature` |
 | Reload skills without restart | `/reload-skills` (v2.1.157+) |
 

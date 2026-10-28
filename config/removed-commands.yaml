@@ -4,7 +4,8 @@
 # and `claude-craft update` delete these paths from <target>/.claude/commands/ so an
 # upgrade does not leave stale commands behind. Paths are <namespace>/<command>.md.
 # Deprecated commands stay distributed as redirect stubs (frontmatter
-# `deprecated: true` + `replaced-by:`) and are only listed here once retired.
+# `deprecated: true` + `replaced-by:`) and are only listed under `removed:` once
+# retired; until then they are listed under `scheduled:` below.
 removed:
   # 8.24.0 — maintainer-only commands, kept in the claude-craft repository (.claude/commands/common/)
   - common/add-technology.md
@@ -12,3 +13,62 @@ removed:
   - common/audit-freshness.md
   # 8.26.0 — documentation, now the `sub-agents-patterns` skill
   - common/sub-agents-patterns.md
+
+# Deprecated commands still distributed as redirect stubs, with the release that
+# retires them (they move to `removed:` then). A mapping, not a list, so
+# prune-removed-commands.sh never deletes them before that release.
+scheduled:
+  common/daily-standup.md: '9.0'
+  common/pre-commit-check.md: '9.0'
+  common/pre-merge-check.md: '9.0'
+  common/release-checklist.md: '9.0'
+  common/research-context7.md: '9.0'
+  common/setup-project-context.md: '9.0'
+  gate/report.md: '9.0'
+  gate/validate-alignment.md: '9.0'
+  gate/validate-backlog.md: '9.0'
+  gate/validate-prd.md: '9.0'
+  gate/validate-sprint.md: '9.0'
+  gate/validate-story.md: '9.0'
+  gate/validate-techspec.md: '9.0'
+  project/add-epic.md: '9.0'
+  project/add-story.md: '9.0'
+  project/add-task.md: '9.0'
+  project/analyze-backlog.md: '9.0'
+  project/batch-status.md: '9.0'
+  project/board.md: '9.0'
+  project/burndown.md: '9.0'
+  project/checkpoint.md: '9.0'
+  project/coverage-map.md: '9.0'
+  project/critical-path.md: '9.0'
+  project/decompose-tasks.md: '9.0'
+  project/dependencies.md: '9.0'
+  project/gap-analysis.md: '9.0'
+  project/generate-backlog.md: '9.0'
+  project/generate-constitution.md: '9.0'
+  project/generate-prd.md: '9.0'
+  project/generate-tech-spec.md: '9.0'
+  project/list-epics.md: '9.0'
+  project/list-stories.md: '9.0'
+  project/list-tasks.md: '9.0'
+  project/metrics.md: '9.0'
+  project/migrate-backlog.md: '9.0'
+  project/move-task.md: '9.0'
+  project/reverse-prd.md: '9.0'
+  project/reverse-stories.md: '9.0'
+  project/run-epic.md: '9.0'
+  project/run-queue.md: '9.0'
+  project/run-sprint.md: '9.0'
+  project/scan.md: '9.0'
+  project/sync-backlog.md: '9.0'
+  project/update-epic.md: '9.0'
+  project/update-stories.md: '9.0'
+  project/update-story.md: '9.0'
+  qa/report.md: '9.0'
+  sprint/auto-route.md: '9.0'
+  sprint/dev.md: '9.0'
+  sprint/next-story.md: '9.0'
+  sprint/status.md: '9.0'
+  sprint/transition.md: '9.0'
+  uiux/orchestrator.md: '9.0'
+  workflow/analyze.md: '9.0'

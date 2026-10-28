@@ -54,6 +54,17 @@ function validCommands(lang) {
   return names;
 }
 
+const isDeprecated = (file) =>
+  /^---\r?\n[\s\S]*?^deprecated: true\s*$[\s\S]*?^---/m.test(fs.readFileSync(file, 'utf8'));
+
+// `<Root>/i18n/<lang>/<Dir>/commands/x.md` -> `dir:x` ; flat `<Root>/i18n/<lang>/commands/x.md` -> `root:x`.
+function commandName(file) {
+  const parts = path.relative(PROJECT_ROOT, file).split(path.sep);
+  const i = parts.lastIndexOf('commands');
+  const ns = i === 3 ? parts[0] : parts[i - 1];
+  return `${ns.toLowerCase()}:${path.basename(file, '.md')}`;
+}
+
 function deadRefs(files, valid) {
   const dead = [];
   for (const file of files) {
@@ -88,8 +99,31 @@ describe('command references resolve to existing commands', () => {
     expect(dead, `Dead command references:\n${dead.join('\n')}`).toEqual([]);
   });
 
+  // A distributed live command must not send users to a stub that disappears in 9.0.
+  it.each(LANGS)('no live command in %s points to a deprecated command', (lang) => {
+    const commandFiles = I18N_ROOTS.flatMap((root) =>
+      ['base', lang].flatMap((sub) => listMd(path.join(PROJECT_ROOT, root, sub)))
+    ).filter((f) => f.split(path.sep).includes('commands'));
+    const deprecated = new Set();
+    const live = [];
+    for (const f of commandFiles) {
+      if (isDeprecated(f)) deprecated.add(commandName(f));
+      else live.push(f);
+    }
+    const offenders = [];
+    for (const f of live) {
+      for (const [, ns, cmd] of fs.readFileSync(f, 'utf8').matchAll(REF_RE)) {
+        if (deprecated.has(`${ns}:${cmd}`)) offenders.push(`${path.relative(PROJECT_ROOT, f)} /${ns}:${cmd}`);
+      }
+    }
+    expect(offenders, `Live commands pointing to deprecated stubs:\n${offenders.join('\n')}`).toEqual([]);
+  });
+
   it('every /ns:cmd in distributed tool docs resolves', () => {
-    const dead = deadRefs(EXTRA_FILES.map((f) => path.join(PROJECT_ROOT, f)), validCommands('en'));
+    const dead = deadRefs(
+      EXTRA_FILES.map((f) => path.join(PROJECT_ROOT, f)),
+      validCommands('en')
+    );
     expect(dead, `Dead command references:\n${dead.join('\n')}`).toEqual([]);
   });
 });

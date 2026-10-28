@@ -77,7 +77,7 @@
 | [`/common:pre-merge-check`](../.claude/commands/common/pre-merge-check.md) | Obsolète (retirée en 9.0) : utilisez /gate:check merge |
 | [`/common:ralph-run`](../.claude/commands/common/ralph-run.md) | Executer Claude en boucle continue jusqu'a completion de la tache (Ralph Wiggum v2.0) |
 | [`/common:release-checklist`](../.claude/commands/common/release-checklist.md) | Obsolète (retirée en 9.0) : utilisez /gate:check release |
-| [`/common:research-context7`](../.claude/commands/common/research-context7.md) | Recherche avec Context7 et Web |
+| [`/common:research-context7`](../.claude/commands/common/research-context7.md) | Obsolète (retirée en 9.0) : utilisez le MCP context7 ou /deep-research |
 | [`/common:search`](../.claude/commands/common/search.md) | Search commands, skills and agents by keyword |
 | [`/common:setup-ci`](../.claude/commands/common/setup-ci.md) | Configuration CI/CD |
 | [`/common:setup-project-context`](../.claude/commands/common/setup-project-context.md) | Obsolète (retirée en 9.0) : utilisez /common:init --context |
@@ -369,7 +369,7 @@
 | [`/uiux:component-spec`](../.claude/commands/uiux/component-spec.md) | Spécification Complète Composant UI/UX/A11y |
 | [`/uiux:design-tokens`](../.claude/commands/uiux/design-tokens.md) | Définition Design Tokens |
 | [`/uiux:generate-design-md`](../.claude/commands/uiux/generate-design-md.md) | Génère un DESIGN.md à la racine du projet à partir du template Claude Craft + analyse des sources UI existantes (Tailwind, tokens, CSS). |
-| [`/uiux:orchestrator`](../.claude/commands/uiux/orchestrator.md) | Orchestrateur UI/UX |
+| [`/uiux:orchestrator`](../.claude/commands/uiux/orchestrator.md) | Obsolète (retirée en 9.0) : utilisez l'agent @uiux-orchestrator |
 | [`/uiux:user-flow`](../.claude/commands/uiux/user-flow.md) | Conception Parcours Utilisateur |
 
 ## `/vercel:*`

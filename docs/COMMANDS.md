@@ -1,6 +1,6 @@
 # Commands Reference
 
-> **This is the narrated, namespace-grouped reference (active commands only; the 52 deprecated redirect stubs are listed in [Deprecated commands](#deprecated-commands-removed-in-90)).** For the complete auto-generated table of all 238 commands (186 active + 52 deprecated stubs, core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
+> **This is the narrated, namespace-grouped reference (active commands only; the 54 deprecated redirect stubs are listed in [Deprecated commands](#deprecated-commands-removed-in-90)).** For the complete auto-generated table of all 238 commands (184 active + 54 deprecated stubs, core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
 
 Claude Code commands are slash commands that automate workflows and provide structured assistance.
 
@@ -27,7 +27,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 |-------|-------------|-----------------|
 | **MANDATORY** | Plan mode activates automatically before execution. Claude analyzes impacted code and proposes a plan for your validation. | `/workflow:implement`, `/qa:tdd`, `/qa:recette`, `generate-*` commands |
 | **RECOMMENDED** | Plan mode is recommended for complex scenarios. Activates when scope spans multiple modules. | `/workflow:plan`, `/workflow:design`, `/common:architecture-decision` |
-| **CONDITIONAL** | Plan mode activates automatically when scope is broad (multiple modules, cross-cutting analysis). | `check-*` commands, `/workflow:plan --research`, `/common:research-context7` |
+| **CONDITIONAL** | Plan mode activates automatically when scope is broad (multiple modules, cross-cutting analysis). | `check-*` commands, `/workflow:plan --research` |
 
 > **Tip:** Commands without a Plan Mode section (e.g., `/workflow:status`, `/workflow:status --standup`) are lightweight and never require plan mode.
 
@@ -35,15 +35,15 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
-> The generated reference lists **238 command files** across all namespaces: **186 active commands** plus **52 deprecated redirect stubs** (removed in 9.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> The generated reference lists **238 command files** across all namespaces: **184 active commands** plus **54 deprecated redirect stubs** (removed in 9.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 14 (11 distributed + 3 maintainer-only) |
+| `/common:` | Transversal | 13 (10 distributed + 3 maintainer-only) |
 | `/workflow:` | Workflow (BMAD) — main path | 9 |
 | `/team:` | Agent Teams | 4 |
 | `/qa:` | QA & Testing | 5 |
-| `/uiux:` | UI/UX & Accessibility | 8 |
+| `/uiux:` | UI/UX & Accessibility | 7 |
 | `/symfony:` | PHP/Symfony | 10 |
 | `/flutter:` | Dart/Flutter | 10 |
 | `/python:` | Python | 10 |
@@ -133,13 +133,11 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 | Command | Description |
 |---------|-------------|
 | `/qa:tdd` | Fix bug using TDD methodology (see [QA Recette Commands](#qa-recette-commands-qa)) |
-| `/common:research-context7` | Deep technical research |
 
 ### UI/UX Commands
 
 | Command | Description |
 |---------|-------------|
-| `/uiux:orchestrator` | Orchestrate UI, UX, and A11y experts for a task |
 | `/uiux:audit` | Complete UI/UX/Accessibility audit |
 | `/uiux:component-spec` | Full component specification (UI + UX + A11y) |
 | `/uiux:design-tokens` | Define design system tokens |
@@ -877,7 +875,7 @@ Available with BMAD v6 installation.
 
 ## Deprecated commands (removed in 9.0)
 
-The 52 old commands remain as redirect stubs that point to their replacement. They will be removed in 9.0.
+The 54 old commands remain as redirect stubs that point to their replacement. They will be removed in 9.0.
 
 | Deprecated | Replacement |
 |------------|-------------|
@@ -927,6 +925,8 @@ The 52 old commands remain as redirect stubs that point to their replacement. Th
 | `/sprint:auto-route` | `/project:backlog move story --auto` |
 | `/qa:report` | `/qa:status --report` |
 | `/common:setup-project-context` | `/common:init --context` |
+| `/common:research-context7` | context7 MCP (library docs) or `/deep-research` (web research; outside claude.ai: `@research-assistant` agent) |
+| `/uiux:orchestrator` | `@uiux-orchestrator` agent |
 
 `/common:sub-agents-patterns` is no longer a command: it became the `sub-agents-patterns` skill (not a stub). `/team:delivery` is kept.
 
