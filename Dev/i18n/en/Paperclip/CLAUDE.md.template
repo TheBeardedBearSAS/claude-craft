@@ -73,7 +73,7 @@ paperclipai approval list
 2. **TDD** — Red → Green → Refactor (`rules/07-testing-paperclip.md`)
 3. **Adapter changes** → run the shared contract suite (`rules/12-adapter-protocol.md`)
 4. **Governance check** — Activity log, budget, approvals wired
-5. **Compliance** — Run `/paperclip:check-compliance` before PR
+5. **Compliance** — Run `/paperclip:check all` before PR
 6. **Commit** — Conventional Commits
 
 ## References

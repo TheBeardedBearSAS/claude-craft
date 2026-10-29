@@ -8,7 +8,7 @@ Complete workflow for creating and managing a SCRUM backlog with Claude-Craft.
 
 Claude-Craft provides a comprehensive set of commands for managing your product backlog following SCRUM methodology:
 
-- **One `/project:backlog` command** (`add`, `list`, `edit`, `move`, plus `next story` and `move story --auto` for story routing) together with `/workflow:plan --only=backlog`, `/workflow:start` and `/workflow:status --board`; the old `/project:add-*`, `list-*`, `update-*`, `move-task`, `/project:generate-backlog`, `/project:decompose-tasks`, `/project:board` and `/sprint:*` commands are deprecated stubs removed in 9.0
+- **One `/project:backlog` command** (`add`, `list`, `edit`, `move`, plus `next story` and `move story --auto` for story routing) together with `/workflow:plan --only=backlog`, `/workflow:start` and `/workflow:status --board`; the former per-entity commands (add-*, list-*, update-*, move-task, generate-backlog, decompose-tasks, board) and the sprint namespace were removed in 9.0 (see MIGRATION-v9)
 - **5 templates** for consistent structure
 - **Vertical slicing** enforcement across all tech layers
 - **INVEST model** validation for User Stories

@@ -59,9 +59,9 @@ dotnet format                # Formatear codigo
 ```
 
 ### Comandos disponibles
-- `/csharp:check-compliance` - Auditoria completa
-- `/csharp:check-architecture` - Validacion arquitectura
-- `/csharp:check-code-quality` - Analisis calidad codigo
+- `/csharp:check all` - Auditoria completa
+- `/csharp:check architecture` - Validacion arquitectura
+- `/csharp:check code-quality` - Analisis calidad codigo
 - `/csharp:generate-feature` - Generar feature CQRS
 
 ### Flujo de desarrollo

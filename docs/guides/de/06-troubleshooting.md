@@ -21,7 +21,7 @@ Dieser Leitfaden behandelt häufige Probleme und ihre Lösungen bei der Verwendu
 ### Befehle werden nach der Installation nicht erkannt
 
 **Symptome:**
-- Slash-Befehle wie `/symfony:check-compliance` funktionieren nicht
+- Slash-Befehle wie `/symfony:check all` funktionieren nicht
 - Claude erkennt installierte Befehle nicht
 
 **Lösungen:**

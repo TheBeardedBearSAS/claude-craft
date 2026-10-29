@@ -56,8 +56,8 @@ dotnet test --collect:"XPlat Code Coverage"
 ```
 
 ### Available Skills
-- `/csharp:check-compliance` - Full compliance audit
-- `/csharp:check-architecture` - Architecture validation
+- `/csharp:check all` - Full compliance audit
+- `/csharp:check architecture` - Architecture validation
 - `/csharp:generate-feature` - Generate CQRS feature
 
 ## References

@@ -239,7 +239,7 @@ Los comandos slash son acciones rápidas:
 /symfony:generate-crud User
 
 # Verificar calidad
-/symfony:check-compliance
+/symfony:check all
 
 # Analizar arquitectura
 /common:architecture-decision
@@ -367,7 +367,7 @@ make config-validate CONFIG=archivo.yaml
 |---------|-----------|
 | `/common:analyze-feature` | Analizar requisitos |
 | `/{tech}:generate-crud` | Generar código CRUD |
-| `/{tech}:check-compliance` | Auditoría completa de calidad |
+| `/{tech}:check all` | Auditoría completa de calidad |
 | `/common:security-audit` | Revisión de seguridad |
 
 ---

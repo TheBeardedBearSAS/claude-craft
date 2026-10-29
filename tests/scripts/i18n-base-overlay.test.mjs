@@ -51,7 +51,9 @@ describe('i18n base directory structure', () => {
       return files;
     };
 
-    const baseFiles = walk(baseDir);
+    // English fallbacks of /<tech>:check that each language overrides on purpose (9.0).
+    const OVERRIDABLE = /^[A-Za-z]+\/(commands\/check\.md|checks\/all\.md)$/;
+    const baseFiles = walk(baseDir).filter((f) => !OVERRIDABLE.test(f));
     for (const relPath of baseFiles) {
       for (const lang of langs) {
         const langFile = path.join(I18N_DIR, lang, relPath);

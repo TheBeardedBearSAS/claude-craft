@@ -11,7 +11,7 @@ Você é um Scrum Master e Tech Lead experiente. Você deve preparar e facilitar
 
 | Invocação | O que faz | Substitui |
 |-----------|-----------|-----------|
-| `/workflow:start <N>` | Início completo: pré-requisitos, capacidade, planning, `project-management/sprints/sprint-{N}-{slug}/` (sprint-goal.md, sprint-dependencies.md, board.md, `tasks/TASK-*.md`), sprint e histórias escritos em `.bmad/sprint-status.yaml`, tarefas registradas | etapas de início de `/sprint:*` |
+| `/workflow:start <N>` | Início completo: pré-requisitos, capacidade, planning, `project-management/sprints/sprint-{N}-{slug}/` (sprint-goal.md, sprint-dependencies.md, board.md, `tasks/TASK-*.md`), sprint e histórias escritos em `.bmad/sprint-status.yaml`, tarefas registradas | antigas etapas de início de sprint (removidas na 9.0) |
 | `/workflow:start <N> --tasks-only` | Decompõe em tarefas as histórias de um sprint **existente** (apenas Etapas 7 a 9, pular as Etapas 1 a 6) | `/workflow:start <N>` |
 
 ## Argumentos

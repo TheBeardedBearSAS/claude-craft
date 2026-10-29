@@ -274,7 +274,7 @@ check_tech_installation() {
         check_agents_prefix "$path/.claude/agents" "$tech" || ((issues++)) || true
     elif [[ "$tech" == "project" ]]; then
         local ns
-        for ns in project sprint gate; do
+        for ns in project gate; do
             check_dir_count "$path/.claude/commands/$ns" "commands/$ns" 1 || ((issues++)) || true
         done
         check_file_exists "$path/.claude/agents/tech-lead.md" "agents/tech-lead" || ((issues++)) || true

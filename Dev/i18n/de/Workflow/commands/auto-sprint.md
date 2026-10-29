@@ -9,7 +9,7 @@ Sie agieren als **Product Owner / Scrum Master** und steuern einen vollständige
 in einem **einzigen Befehl**. Jede Zeremonie läuft in einem **isolierten Unter-Agenten**: Das eigene
 Kontextfenster des Unter-Agenten ersetzt das manuelle `/clear` zwischen den Schritten, sodass der
 Orchestrator-Kontext schlank bleibt. Die Implementierungsphase wird **von Ihnen als Dirigent** übernommen
-(gleiche Logik wie `/team:sprint`), um verschachtelte Agent Teams zu vermeiden.
+(gleiche Logik wie `/team:delivery --phase=implementation`), um verschachtelte Agent Teams zu vermeiden.
 
 Dies automatisiert, was zuvor sechs manuelle Befehle mit einem `/clear` dazwischen erforderte:
 
@@ -31,7 +31,7 @@ $ARGUMENTS
   Regel 09, und das Karpathy-Prinzip „kein Auto-Merge ohne menschliche Review").
 - `--max-fix-attempts=2` : Maximale automatische Korrekturversuche pro fehlgeschlagenem Gate vor dem Abbruch (Standard: 2).
 - `--max-workers=3` : Maximale parallele Entwickler-Worker in der Implementierungsphase (Standard: 2, Maximum: 3).
-- `--engine=subagents`: Engine der Implementierungsphase (Standard: `subagents`, Delegation über das `Agent`-Tool). `teams`: experimentelle Agent Teams, mit Fallback auf `subagents`, wenn nicht verfügbar. Siehe `/team:sprint`, Abschnitt „Ausführungs-Engine“
+- `--engine=subagents`: Engine der Implementierungsphase (Standard: `subagents`, Delegation über das `Agent`-Tool). `teams`: experimentelle Agent Teams, mit Fallback auf `subagents`, wenn nicht verfügbar. Siehe `/team:delivery --phase=implementation`, Abschnitt „Ausführungs-Engine“
 - `--base=main` : Basis-Branch für den PR (Standard: `main`).
 - `--dry-run` : Gibt die geplanten 9 Phasen und den aufgelösten Sprint-Kontext aus und hält dann an. **Keine Schreibvorgänge.**
 - `--overnight` : Wird an die Implementierungsphase weitergegeben (begrenzt, stoppt um 6 Uhr morgens).
@@ -103,11 +103,11 @@ Einen isolierten Unter-Agenten starten:
 
 ### Phase 4 — Implementierung (Sie = Dirigent)
 
-> Entspricht `/workflow:implement --parallel N` (das an `/team:sprint` delegiert).
+> Entspricht `/workflow:implement --parallel N` (das an `/team:delivery --phase=implementation` delegiert).
 
-Direkt die **`/team:sprint`-Dirigenten-Rolle übernehmen** (kein verschachteltes Agent Team starten):
+Direkt die **Lead-Rolle der Implementierungsphase von `/team:delivery --phase=implementation` übernehmen** (kein verschachteltes Agent Team starten):
 
-**Engine**: Mit `--engine=subagents` (Standard) in Schritt 4 pro Story einen Sub-Agenten über das `Agent`-Tool starten (`isolation: "worktree"`, alle in einer Nachricht) statt `TaskCreate`, und in Schritt 5 auf ihre Rückkehr warten statt `TaskList` abzufragen (vollständige Zuordnung in `/team:sprint`, Abschnitt „Ausführungs-Engine“). Mit `--engine=teams` die Schritte wie beschrieben befolgen.
+**Engine**: Mit `--engine=subagents` (Standard) in Schritt 4 pro Story einen Sub-Agenten über das `Agent`-Tool starten (`isolation: "worktree"`, alle in einer Nachricht) statt `TaskCreate`, und in Schritt 5 auf ihre Rückkehr warten statt `TaskList` abzufragen (vollständige Zuordnung in `/team:delivery --phase=implementation`, Abschnitt „Ausführungs-Engine“). Mit `--engine=teams` die Schritte wie beschrieben befolgen.
 
 1. `.bmad/sprint-status.yaml` lesen; Stories mit Status `ready-for-dev` filtern.
 2. Datei-Domain-Unabhängigkeit analysieren (`**/Shared/**`, `**/Common/**`, `**/Utils/**`,

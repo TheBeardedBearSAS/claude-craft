@@ -81,7 +81,7 @@ describe('install-common-rules.sh dry-run integration', { timeout: 60000 }, () =
     expect(countMatches('Creating:.*commands/common/')).toBeGreaterThanOrEqual(10);
     expect(countMatches('Creating:.*commands/workflow/')).toBeGreaterThanOrEqual(9);
     expect(countMatches('Creating:.*commands/team/')).toBeGreaterThanOrEqual(4);
-    expect(countMatches('Creating:.*commands/qa/')).toBeGreaterThanOrEqual(6);
+    expect(countMatches('Creating:.*commands/qa/')).toBeGreaterThanOrEqual(5);
     expect(countMatches('Creating:.*commands/uiux/')).toBeGreaterThanOrEqual(7);
   });
 
@@ -110,7 +110,7 @@ describe('install-common-rules.sh dry-run integration', { timeout: 60000 }, () =
     expect(countMd(path.join(base, 'common'))).toBeGreaterThanOrEqual(10);
     expect(countMd(path.join(base, 'workflow'))).toBeGreaterThanOrEqual(9);
     expect(countMd(path.join(base, 'team'))).toBeGreaterThanOrEqual(4);
-    expect(countMd(path.join(base, 'qa'))).toBeGreaterThanOrEqual(6);
+    expect(countMd(path.join(base, 'qa'))).toBeGreaterThanOrEqual(5);
     expect(countMd(path.join(base, 'uiux'))).toBeGreaterThanOrEqual(7);
   });
 

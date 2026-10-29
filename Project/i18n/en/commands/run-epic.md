@@ -1,9 +1,0 @@
----
-description: "Deprecated (removed in 9.0): use /workflow:implement --epic"
-deprecated: true
-replaced-by: /workflow:implement
----
-
-> ⚠️ `/project:run-epic` is deprecated and will be removed in 9.0. Use `/workflow:implement --epic`.
-
-Run `/workflow:implement --epic $ARGUMENTS`: read `.claude/commands/workflow/implement.md` and follow it with these arguments.

@@ -21,7 +21,7 @@ Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craf
 ### Comandos Não Reconhecidos Após a Instalação
 
 **Sintomas:**
-- Comandos slash como `/symfony:check-compliance` não funcionam
+- Comandos slash como `/symfony:check all` não funcionam
 - Claude não reconhece os comandos instalados
 
 **Soluções:**

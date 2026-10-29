@@ -490,7 +490,7 @@ Generated with Claude Craft Autonomous Sprint Mode
 
 ```bash
 # Depuis Claude Code
-/sprint:autonomous "US-001: User login with email"
+/workflow:auto-sprint 5
 
 # Ou via CLI
 npx @the-bearded-bear/claude-craft autonomous-sprint --story=US-001
@@ -499,14 +499,17 @@ npx @the-bearded-bear/claude-craft autonomous-sprint --story=US-001
 ### Options avancées
 
 ```bash
-# Avec checkpoints forcés
-/sprint:autonomous "US-001" --force-checkpoints
+# Merge automatique une fois la CI verte (par défaut : pause en attente d'un GO humain)
+/workflow:auto-sprint 5 --auto-merge
 
-# Sans checkpoints (full auto, risqué)
-/sprint:autonomous "US-001" --no-checkpoints
+# Backlog généré depuis le PRD avant le sprint
+/workflow:auto-sprint 5 --from-prd
 
-# Dry-run (simulation)
-/sprint:autonomous "US-001" --dry-run
+# Dry-run (simulation, aucune écriture)
+/workflow:auto-sprint 5 --dry-run
+
+# Mode nuit (borné, s'arrête à 6h)
+/workflow:auto-sprint 5 --overnight
 ```
 
 ### Monitoring
@@ -515,8 +518,8 @@ npx @the-bearded-bear/claude-craft autonomous-sprint --story=US-001
 # Status en temps réel
 /workflow:status
 
-# Logs détaillés
-/sprint:logs --story=US-001
+# Détail des stories et du Kanban
+/workflow:status --board
 ```
 
 ---
@@ -527,7 +530,7 @@ npx @the-bearded-bear/claude-craft autonomous-sprint --story=US-001
 
 **Input** :
 ```
-/sprint:autonomous "US-001: User login with email/password"
+/workflow:auto-sprint 5
 ```
 
 **Output** :
@@ -547,7 +550,7 @@ Waiting for code review...
 
 **Input** :
 ```
-/sprint:autonomous "US-002: Create article (title, body, tags)"
+/workflow:auto-sprint 6
 ```
 
 **Output** :
@@ -606,9 +609,9 @@ Approve? [y/n]
 
 ### Q: Autonomous Sprint bloqué à une phase
 
-**A:** Vérifier les logs :
+**A:** Vérifier l'état du sprint :
 ```bash
-/sprint:logs --story=US-001 --phase=implement
+/workflow:status --board
 ```
 
 Circuit breaker a peut-être déclenché (> 10 itérations). Décomposer la story.
@@ -628,7 +631,7 @@ auto_proceed_threshold:
 **A:** Autonomous Sprint a committé du code cassé. Rollback :
 ```bash
 git reset --hard HEAD~1
-/sprint:autonomous "US-001" --force-checkpoints
+/workflow:auto-sprint 5
 ```
 
 ---

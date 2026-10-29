@@ -86,7 +86,7 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     // Workflow namespace should have workflow commands
     const workflowDir = path.join(tmpDir, '.claude', 'commands', 'workflow');
     expect(fs.existsSync(path.join(workflowDir, 'init.md'))).toBe(true);
-    expect(fs.existsSync(path.join(workflowDir, 'analyze.md'))).toBe(true);
+    expect(fs.existsSync(path.join(workflowDir, 'implement.md'))).toBe(true);
 
     // Team namespace
     const teamDir = path.join(tmpDir, '.claude', 'commands', 'team');
@@ -108,25 +108,23 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     expect(fs.existsSync(path.join(commonDir, 'recette.md'))).toBe(false);
     // Common should still have its commands
     expect(fs.existsSync(path.join(commonDir, 'ralph-run.md'))).toBe(true);
-    expect(fs.existsSync(path.join(commonDir, 'pre-commit-check.md'))).toBe(true);
+    expect(fs.existsSync(path.join(commonDir, 'getting-started.md'))).toBe(true);
+    // 9.0: absorbed by /gate:check commit
+    expect(fs.existsSync(path.join(commonDir, 'pre-commit-check.md'))).toBe(false);
   });
 
-  it.each([
-    ['pre-commit-check', 'commit'],
-    ['pre-merge-check', 'merge'],
-    ['release-checklist', 'release'],
-  ])('gives the deprecated common:%s stub a reachable redirect target', (stub, gate) => {
+  // 8.27.0 shipped /gate:check with the Dev package so the common:* gate stubs resolved;
+  // the stubs are gone in 9.0 but /gate:check stays the code-gate entry point.
+  it.each(['commit', 'merge', 'release'])('ships /gate:check with its %s gate', (gate) => {
     const tmpDir = makeTmpDir();
     execSync(`bash "${SCRIPT}" --lang=fr "${tmpDir}"`, {
       encoding: 'utf8',
       timeout: 30000,
     });
 
-    const stubMd = fs.readFileSync(path.join(tmpDir, '.claude', 'commands', 'common', `${stub}.md`), 'utf8');
-    const target = stubMd.match(/`(\.claude\/commands\/[^`]+\.md)`/)[1];
-    const targetPath = path.join(tmpDir, target);
-    expect(fs.existsSync(targetPath)).toBe(true);
-    expect(fs.readFileSync(targetPath, 'utf8')).toMatch(new RegExp(`^## ${gate}$`, 'm'));
+    const target = path.join(tmpDir, '.claude', 'commands', 'gate', 'check.md');
+    expect(fs.existsSync(target)).toBe(true);
+    expect(fs.readFileSync(target, 'utf8')).toMatch(new RegExp(`^## ${gate}$`, 'm'));
   });
 
   it('lists only the selected stack reviewers in AGENTS.md', () => {

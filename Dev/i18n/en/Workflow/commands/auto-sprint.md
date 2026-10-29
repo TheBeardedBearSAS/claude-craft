@@ -9,7 +9,7 @@ You act as **Product Owner / Scrum Master** and drive a full sprint from kick-of
 in a **single command**. Each ceremony runs inside an **isolated sub-agent**: the sub-agent's
 own context window replaces the manual `/clear` between steps, so your orchestrator context
 stays lean. The implementation phase is run by **you as conductor** (same logic as
-`/team:sprint`) to avoid nesting Agent Teams.
+`/team:delivery --phase=implementation`) to avoid nesting Agent Teams.
 
 This automates what was previously six manual commands with a `/clear` in between:
 
@@ -31,7 +31,7 @@ $ARGUMENTS
   rule 09, and the Karpathy "no auto-merge without human review" principle).
 - `--max-fix-attempts=2` : Max auto-fix retries per failing gate before aborting (default: 2).
 - `--max-workers=3` : Max parallel dev workers in the implementation phase (default: 2, max: 3).
-- `--engine=subagents`: Engine of the implementation phase (default: `subagents`, delegation via the `Agent` tool). `teams`: experimental Agent Teams, falling back to `subagents` when unavailable. See `/team:sprint`, "Execution engine" section
+- `--engine=subagents`: Engine of the implementation phase (default: `subagents`, delegation via the `Agent` tool). `teams`: experimental Agent Teams, falling back to `subagents` when unavailable. See `/team:delivery --phase=implementation`, "Execution engine" section
 - `--base=main` : Base branch for the PR (default: `main`).
 - `--dry-run` : Print the planned 9 phases and the resolved sprint context, then stop. **No writes.**
 - `--overnight` : Pass-through to the implementation phase (bounded, stops at 6am).
@@ -103,11 +103,11 @@ Spawn one isolated sub-agent:
 
 ### Phase 4 — Implement (you = conductor)
 
-> Equivalent to `/workflow:implement --parallel N` (which delegates to `/team:sprint`).
+> Equivalent to `/workflow:implement --parallel N` (which delegates to `/team:delivery --phase=implementation`).
 
-Assume the **`/team:sprint` conductor role directly** (do **not** spawn a nested Agent Team):
+Assume the **`/team:delivery --phase=implementation` Lead role directly** (do **not** spawn a nested Agent Team):
 
-**Engine**: with `--engine=subagents` (default), in step 4 launch one sub-agent per story via the `Agent` tool (`isolation: "worktree"`, all in a single message) instead of `TaskCreate`, and in step 5 wait for them to return instead of polling `TaskList` (full mapping in `/team:sprint`, "Execution engine" section). With `--engine=teams`, follow the steps as written.
+**Engine**: with `--engine=subagents` (default), in step 4 launch one sub-agent per story via the `Agent` tool (`isolation: "worktree"`, all in a single message) instead of `TaskCreate`, and in step 5 wait for them to return instead of polling `TaskList` (full mapping in `/team:delivery --phase=implementation`, "Execution engine" section). With `--engine=teams`, follow the steps as written.
 
 1. Read `.bmad/sprint-status.yaml`; filter stories at `ready-for-dev`.
 2. Analyze file-domain independence (flag `**/Shared/**`, `**/Common/**`, `**/Utils/**`,

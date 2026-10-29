@@ -363,10 +363,6 @@ show_tcl_summary() {
     echo "Token reduction: ~95% (from ~70K to ~3.5K)"
     echo ""
     echo "Commandes disponibles:"
-    echo "  /${tech_namespace}:check-compliance"
-    echo "  /${tech_namespace}:check-architecture"
-    echo "  /${tech_namespace}:check-code-quality"
-    echo "  /${tech_namespace}:check-testing"
-    echo "  /${tech_namespace}:check-security"
+    echo "  /${tech_namespace}:check <architecture|code-quality|security|testing|all>"
     echo ""
 }

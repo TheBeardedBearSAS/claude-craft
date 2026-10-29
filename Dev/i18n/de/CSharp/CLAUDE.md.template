@@ -65,9 +65,9 @@ dotnet format --verify-no-changes        # Format pruefen
 4. **Commit** - Conventional Commits Format
 
 ### Verfuegbare Skills
-- `/csharp:check-compliance` - Compliance Audit
-- `/csharp:check-architecture` - Architektur Validierung
-- `/csharp:check-code-quality` - Code Qualitaet
+- `/csharp:check all` - Compliance Audit
+- `/csharp:check architecture` - Architektur Validierung
+- `/csharp:check code-quality` - Code Qualitaet
 - `/csharp:generate-feature` - CQRS Feature generieren
 
 ## Referenzen

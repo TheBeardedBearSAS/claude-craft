@@ -1,6 +1,6 @@
 # Commands Reference
 
-> **This is the narrated, namespace-grouped reference (active commands only; the 54 deprecated redirect stubs are listed in [Deprecated commands](#deprecated-commands-removed-in-90)).** For the complete auto-generated table of all 238 commands (184 active + 54 deprecated stubs, core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
+> **This is the narrated, namespace-grouped reference (active commands only; the commands removed in 9.0 are listed in [MIGRATION-v9.md](MIGRATION-v9.md)).** For the complete auto-generated table of all 197 command files (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
 
 Claude Code commands are slash commands that automate workflows and provide structured assistance.
 
@@ -35,27 +35,27 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
-> The generated reference lists **238 command files** across all namespaces: **184 active commands** plus **54 deprecated redirect stubs** (removed in 9.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> The generated reference lists **197 command files** across all namespaces: **131 active commands** plus **66 deprecated redirect stubs** (the `/<tech>:check-*` commands → `/<tech>:check <axis>` and `/team:sprint` → `/team:delivery --phase=implementation`, deprecated in 9.0 and removed in 10.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
 | `/common:` | Transversal | 13 (10 distributed + 3 maintainer-only) |
 | `/workflow:` | Workflow (BMAD) — main path | 9 |
-| `/team:` | Agent Teams | 4 |
+| `/team:` | Agent Teams | 3 |
 | `/qa:` | QA & Testing | 5 |
 | `/uiux:` | UI/UX & Accessibility | 7 |
-| `/symfony:` | PHP/Symfony | 10 |
-| `/flutter:` | Dart/Flutter | 10 |
-| `/python:` | Python | 10 |
-| `/react:` | React/TypeScript | 10 |
-| `/reactnative:` | React Native | 10 |
-| `/angular:` | Angular | 6 |
-| `/csharp:` | C#/.NET | 6 |
-| `/laravel:` | PHP/Laravel | 6 |
-| `/vuejs:` | Vue.js | 6 |
-| `/vite:` | Vite | 7 |
-| `/vercel:` | Vercel | 6 |
-| `/php:` | PHP | 5 |
+| `/symfony:` | PHP/Symfony | 6 |
+| `/flutter:` | Dart/Flutter | 6 |
+| `/python:` | Python | 6 |
+| `/react:` | React/TypeScript | 6 |
+| `/reactnative:` | React Native | 6 |
+| `/angular:` | Angular | 2 |
+| `/csharp:` | C#/.NET | 2 |
+| `/laravel:` | PHP/Laravel | 2 |
+| `/vuejs:` | Vue.js | 2 |
+| `/vite:` | Vite | 3 |
+| `/vercel:` | Vercel | 2 |
+| `/php:` | PHP | 1 |
 | `/docker:` | Docker/Infrastructure | 5 |
 | `/coolify:` | Coolify/PaaS | 5 |
 | `/kubernetes:` | Kubernetes/Infrastructure | 5 |
@@ -64,8 +64,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/hcloud:` | Hcloud/Hetzner Cloud | 5 |
 | `/pgbouncer:` | PgBouncer/Connection Pooling | 5 |
 | `/frankenphp:` | FrankenPHP/PHP Server | 5 |
-| `/paperclip:` | Paperclip AI-workforce orchestration | 8 |
-| `/sprint:` | _Deprecated_ — 5 redirect stubs, removed in 9.0 | 0 active |
+| `/paperclip:` | Paperclip AI-workforce orchestration | 4 |
 | `/gate:` | Quality Gates (BMAD v6) | 1 (`/gate:check`, 11 modes) |
 | `/project:` | Project Management (BMAD v6) | 5 |
 
@@ -75,7 +74,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 Transversal commands for all projects.
 
-> `/common:pre-commit-check`, `/common:pre-merge-check` and `/common:release-checklist` moved to `/gate:check commit|merge|release` (see [Quality Gate Commands](#quality-gate-commands-gate)). The old names remain as deprecated stubs until 9.0.
+> Pre-commit, pre-merge and release checks are `/gate:check commit|merge|release` (see [Quality Gate Commands](#quality-gate-commands-gate)).
 
 ### Generation Commands
 
@@ -90,7 +89,7 @@ Transversal commands for all projects.
 
 | Command | Description |
 |---------|-------------|
-| `/common:init --context` | Analyze the codebase and configure the project context (was `/common:setup-project-context`) |
+| `/common:init --context` | Analyze the codebase and configure the project context |
 | `/common:setup-rtk` | Install and configure RTK (token optimization) |
 
 ### Continuous Loop Commands
@@ -113,7 +112,7 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 - `hook`: Integrate with quality-gate.sh
 - `human`: Manual approval gate
 
-> **Note:** `/common:full-audit` and `/common:ralph-sprint` were removed in v6.0. Use `/team:audit --sequential` and `/team:sprint --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).
+> **Note:** `/common:full-audit` and `/common:ralph-sprint` were removed in v6.0. Use `/team:audit --sequential` and `/team:delivery --phase=implementation --engine=teams --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).
 
 ### DevOps Commands
 
@@ -179,9 +178,8 @@ Add a complete technology stack to claude-craft with best practices:
 | Command | Description |
 |---------|-------------|
 | `/team:audit` | Parallel multi-tech audit (Agent Teams) |
-| `/team:sprint` | Parallel sprint implementation (Agent Teams) |
 | `/team:security` | Parallel security review (Agent Teams) |
-| `/team:delivery` | Full sprint lifecycle — writing + implementation (Agent Teams) |
+| `/team:delivery` | Full sprint lifecycle — writing + implementation (Agent Teams); `--phase=implementation` implements existing stories (replaces `/team:sprint` in 9.0) |
 | skill `sub-agents-patterns` | Sub-agent orchestration patterns for Agent Teams (a skill since 8.26.0, no longer a command) |
 
 ---
@@ -192,17 +190,17 @@ BMAD-inspired workflow system adapted to project complexity. Since Phase 3 of th
 
 **Main path:** `/workflow:init` → `plan` → `design` → `start` → `implement` → `review` → `retro` (with `/workflow:status` at any time). `/workflow:auto-sprint <N>` chains start → … → merge in one run.
 
-| Command | Description | Replaces |
-|---------|-------------|----------|
-| `/workflow:init` | Analyze project context and recommend the track | |
-| `/workflow:plan` | PRD + backlog (default); `--research` adds the research phase; `--only=prd` / `--only=backlog` runs a single document | `/workflow:analyze`, `/project:generate-prd`, `/project:generate-backlog` |
-| `/workflow:design` | Technical specification; `--constitution` generates the project constitution | `/project:generate-tech-spec`, `/project:generate-constitution` |
-| `/workflow:start <N>` | Prepare a sprint: sprint folder, `sprint-status.yaml` entries, task breakdown (`--tasks-only` decomposes an existing sprint) | `/project:decompose-tasks` |
-| `/workflow:implement [<N>]` | Sprint development in TDD/BDD, sequential by default; `--story <US-ID>`, `--epic <EPIC>`, `--queue` / `--resume` (batch queue), `--parallel N` (delegates to `/team:sprint`), `--auto` | `/sprint:dev`, `/project:run-sprint`, `/project:run-epic`, `/project:run-queue` |
-| `/workflow:status` | Where am I + next action; `--board` (Kanban), `--queue` (batch queue), `--standup`, `--gates` | `/sprint:status`, `/project:board`, `/project:batch-status`, `/common:daily-standup` |
-| `/workflow:review` | Sprint review summary | |
-| `/workflow:retro` | Sprint retrospective | |
-| `/workflow:auto-sprint <N>` | End-to-end orchestrator (PO/SM): start → decompose → validate → implement → PR → CI watch → review → retro → merge, each step in an isolated sub-agent (`--from-prd` starts from a PRD) | |
+| Command | Description |
+|---------|-------------|
+| `/workflow:init` | Analyze project context and recommend the track |
+| `/workflow:plan` | PRD + backlog (default); `--research` adds the research phase; `--only=prd` / `--only=backlog` runs a single document |
+| `/workflow:design` | Technical specification; `--constitution` generates the project constitution |
+| `/workflow:start <N>` | Prepare a sprint: sprint folder, `sprint-status.yaml` entries, task breakdown (`--tasks-only` decomposes an existing sprint) |
+| `/workflow:implement [<N>]` | Sprint development in TDD/BDD, sequential by default; `--story <US-ID>`, `--epic <EPIC>`, `--queue` / `--resume` (batch queue), `--parallel N` (delegates to `/team:delivery --phase=implementation`), `--auto` |
+| `/workflow:status` | Where am I + next action; `--board` (Kanban), `--queue` (batch queue), `--standup`, `--gates` |
+| `/workflow:review` | Sprint review summary |
+| `/workflow:retro` | Sprint retrospective |
+| `/workflow:auto-sprint <N>` | End-to-end orchestrator (PO/SM): start → decompose → validate → implement → PR → CI watch → review → retro → merge, each step in an isolated sub-agent (`--from-prd` starts from a PRD) |
 
 Story transitions are handled by `/project:backlog` (`next story`, `move story <US> <status>`, `move story --auto`).
 
@@ -224,11 +222,7 @@ PHP backend development with Symfony.
 
 | Command | Description |
 |---------|-------------|
-| `/symfony:check-architecture` | Validate Clean Architecture |
-| `/symfony:check-code-quality` | Run code quality checks |
-| `/symfony:check-compliance` | Check DDD compliance |
-| `/symfony:check-security` | Security audit |
-| `/symfony:check-testing` | Test coverage analysis |
+| `/symfony:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ### Database Commands
 
@@ -254,11 +248,7 @@ Mobile development with Flutter/Dart.
 
 | Command | Description |
 |---------|-------------|
-| `/flutter:check-architecture` | Validate architecture |
-| `/flutter:check-code-quality` | Run code quality checks |
-| `/flutter:check-compliance` | Check rule compliance |
-| `/flutter:check-security` | Security audit |
-| `/flutter:check-testing` | Test coverage analysis |
+| `/flutter:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 | `/flutter:analyze-performance` | Performance analysis |
 
 ### Testing Commands
@@ -290,11 +280,7 @@ Python backend and API development.
 
 | Command | Description |
 |---------|-------------|
-| `/python:check-architecture` | Validate architecture |
-| `/python:check-code-quality` | Run code quality checks |
-| `/python:check-compliance` | Check rule compliance |
-| `/python:check-security` | Security audit |
-| `/python:check-testing` | Test coverage analysis |
+| `/python:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ### Type Commands
 
@@ -332,11 +318,7 @@ Frontend development with React/TypeScript.
 
 | Command | Description |
 |---------|-------------|
-| `/react:check-architecture` | Validate architecture |
-| `/react:check-code-quality` | Run code quality checks |
-| `/react:check-compliance` | Check rule compliance |
-| `/react:check-security` | Security audit |
-| `/react:check-testing` | Test coverage analysis |
+| `/react:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ### Performance Commands
 
@@ -367,11 +349,7 @@ Mobile development with React Native.
 
 | Command | Description |
 |---------|-------------|
-| `/reactnative:check-architecture` | Validate architecture |
-| `/reactnative:check-code-quality` | Run code quality checks |
-| `/reactnative:check-compliance` | Check rule compliance |
-| `/reactnative:check-security` | Security audit |
-| `/reactnative:check-testing` | Test coverage analysis |
+| `/reactnative:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ### App Commands
 
@@ -397,11 +375,7 @@ Frontend development with Angular standalone components and signals.
 
 | Command | Description |
 |---------|-------------|
-| `/angular:check-architecture` | Validate architecture (domain-driven, smart/dumb) |
-| `/angular:check-code-quality` | Run code quality checks (signals, OnPush, RxJS) |
-| `/angular:check-compliance` | Check rule compliance (standalone, modern syntax) |
-| `/angular:check-security` | Security audit (XSS, CSRF, authentication) |
-| `/angular:check-testing` | Test coverage analysis (Vitest/Jest, Cypress) |
+| `/angular:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -419,11 +393,7 @@ Backend development with C#/.NET, Clean Architecture, and CQRS.
 
 | Command | Description |
 |---------|-------------|
-| `/csharp:check-architecture` | Validate Clean Architecture (layers, dependencies) |
-| `/csharp:check-code-quality` | Run code quality checks (async, LINQ, null safety) |
-| `/csharp:check-compliance` | Check rule compliance (CQRS, DDD, modern C#) |
-| `/csharp:check-security` | Security audit (OWASP Top 10, injection, auth) |
-| `/csharp:check-testing` | Test coverage analysis (xUnit, integration tests) |
+| `/csharp:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -441,11 +411,7 @@ PHP backend development with Laravel, Clean Architecture, and Pest PHP.
 
 | Command | Description |
 |---------|-------------|
-| `/laravel:check-architecture` | Validate Clean Architecture (layers, dependencies) |
-| `/laravel:check-code-quality` | Run code quality checks (PHPStan, Pint, N+1) |
-| `/laravel:check-compliance` | Check rule compliance (Actions, DTOs, modern PHP) |
-| `/laravel:check-security` | Security audit (OWASP Top 10, Sanctum, validation) |
-| `/laravel:check-testing` | Test coverage analysis (Pest PHP, factories) |
+| `/laravel:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -463,11 +429,7 @@ Frontend development with Vue.js 3, Composition API, and TypeScript.
 
 | Command | Description |
 |---------|-------------|
-| `/vuejs:check-architecture` | Validate architecture (modules, components, stores) |
-| `/vuejs:check-code-quality` | Run code quality checks (ESLint, TypeScript, Prettier) |
-| `/vuejs:check-compliance` | Check rule compliance (Composition API, Pinia, modern Vue) |
-| `/vuejs:check-security` | Security audit (XSS, CSRF, authentication) |
-| `/vuejs:check-testing` | Test coverage analysis (Vitest, Vue Test Utils) |
+| `/vuejs:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -485,11 +447,7 @@ Framework-agnostic Vite projects only — vanilla JS/TS apps, library authoring,
 
 | Command | Description |
 |---------|-------------|
-| `/vite:check-architecture` | Validate project shape (vanilla SPA, library, multi-page, Workers/WASM) and `vite.config.ts` organization |
-| `/vite:check-code-quality` | Run code quality checks (ESLint, `tsc --noEmit`) |
-| `/vite:check-compliance` | Check rule compliance (Config & Architecture, TypeScript & Quality, Tests, Build Output & Performance) |
-| `/vite:check-security` | Security audit (`envPrefix`/`define()` leakage, multi-page CSP, Workers/WASM sandboxing) |
-| `/vite:check-testing` | Test coverage analysis (Vitest) |
+| `/vite:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 | `/vite:check-library-build` | Validate `build.lib` output and `vite-plugin-dts` `.d.ts` generation |
 
 ---
@@ -508,11 +466,7 @@ Framework-agnostic Vercel platform features only — `vercel.json`, Serverless F
 
 | Command | Description |
 |---------|-------------|
-| `/vercel:check-architecture` | Validate `vercel.json` structure (rewrites/redirects/headers/regions/functions/crons) and project-shape fit |
-| `/vercel:check-code-quality` | Run code quality checks on `api/**` (ESLint, `tsc --strict`, handler signature conventions) |
-| `/vercel:check-compliance` | Check rule compliance (vercel.json & Architecture, Functions & Runtime Choice, Security & Env Handling, ISR/Caching & Tests) |
-| `/vercel:check-security` | Security audit (env vars/secrets, cron auth guard, CORS/CSP headers, Marketplace credential scoping) |
-| `/vercel:check-testing` | Test coverage analysis (Vitest for Function handlers, `vercel dev` smoke tests) |
+| `/vercel:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -522,11 +476,7 @@ Standalone PHP development with PSR-12 and PHPStan.
 
 | Command | Description |
 |---------|-------------|
-| `/php:check-architecture` | Validate architecture (layers, dependencies) |
-| `/php:check-code-quality` | Run code quality checks (PHPStan, PSR-12) |
-| `/php:check-compliance` | Check rule compliance (modern PHP 8.5) |
-| `/php:check-security` | Security audit (OWASP Top 10, injection) |
-| `/php:check-testing` | Test coverage analysis (Pest PHP) |
+| `/php:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -707,17 +657,13 @@ Paperclip is an open-source AI-workforce orchestration platform (Node.js + TypeS
 
 | Command | Description |
 |---------|-------------|
-| `/paperclip:check-compliance` | Full audit — Architecture + Code Quality + Tests + Security + Adapter protocol, scored /100 |
-| `/paperclip:check-architecture` | Two-layer split, module boundaries, activity log coverage, OpenAPI spec alignment |
-| `/paperclip:check-code-quality` | TypeScript strictness, lint, complexity, logging hygiene, error modeling |
-| `/paperclip:check-testing` | Coverage thresholds, adapter contract tests, integration tests vs real Postgres, cross-tenant isolation |
-| `/paperclip:check-security` | Tenant isolation, secrets, approval gates, hard budgets, signed adapter channel, HTTP headers, supply chain |
+| `/paperclip:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
 ## Project Commands (`/project:`)
 
-Available with Project installation. Since Phase 2 of the PM simplification, the many per-entity commands were merged into five commands with subcommands (`backlog`, `reverse`, `trace`, `report`, `migrate`); the old names are listed in [Deprecated commands](#deprecated-commands-removed-in-90).
+Available with Project installation. Since Phase 2 of the PM simplification, the many per-entity commands were merged into five commands with subcommands (`backlog`, `reverse`, `trace`, `report`, `migrate`); the old names are listed in [MIGRATION-v9.md](MIGRATION-v9.md).
 
 ### Backlog (`/project:backlog <action> <entity>`)
 
@@ -780,7 +726,7 @@ Orchestrates complete sprint development in TDD/BDD mode:
 /workflow:implement --story US-003      # One story
 /workflow:implement --epic EPIC-002     # All stories of an epic
 /workflow:implement --queue [--resume]  # Batch queue (.bmad/batch-queue.yaml)
-/workflow:implement --parallel 3        # Parallel engine (/team:sprint)
+/workflow:implement --parallel 3        # Parallel engine (/team:delivery --phase=implementation)
 ```
 
 **Features:**
@@ -813,17 +759,17 @@ Orchestrates complete sprint development in TDD/BDD mode:
 
 ---
 
-## Sprint Status Commands (formerly `/sprint:`)
+## Sprint Status Commands
 
-The `/sprint:` namespace is **deprecated** (5 redirect stubs, removed in 9.0). Story routing now lives in `/project:backlog`; status is read with `/workflow:status`. Available with BMAD v6 installation.
+Story routing lives in `/project:backlog`; status is read with `/workflow:status`.
 
-| Command | Description | Replaces |
-|---------|-------------|----------|
-| `/project:backlog next story` | Get next ready-for-dev story | `/sprint:next-story` |
-| `/project:backlog move story <ID> <status>` | Transition story status | `/sprint:transition` |
-| `/project:backlog move story --auto` | Execute automatic routing rules (`routing.auto_transitions`, also applied after every transition) | `/sprint:auto-route` |
-| `/workflow:status` | Phase, sprint metrics and next action | `/sprint:status` |
-| `/workflow:implement` | Sprint development | `/sprint:dev` |
+| Command | Description |
+|---------|-------------|
+| `/project:backlog next story` | Get next ready-for-dev story |
+| `/project:backlog move story <ID> <status>` | Transition story status |
+| `/project:backlog move story --auto` | Execute automatic routing rules (`routing.auto_transitions`, also applied after every transition) |
+| `/workflow:status` | Phase, sprint metrics and next action |
+| `/workflow:implement` | Sprint development |
 
 ### State Machine
 
@@ -854,11 +800,11 @@ Available with BMAD v6 installation.
 | `/gate:check story <ID>` | Validate story Definition of Done |
 | `/gate:check sprint` | Validate sprint readiness |
 | `/gate:check alignment [story-id]` | Validate spec-code alignment (≥85% threshold) |
-| `/gate:check commit [--fix] [--staged]` | Pre-commit verification (was `/common:pre-commit-check`) |
-| `/gate:check merge [source] [target]` | Pre-merge verification (was `/common:pre-merge-check`) |
-| `/gate:check release <version>` | Release checklist (was `/common:release-checklist`) |
-| `/gate:check all [--detailed]` | Full quality gates report (was `/gate:report`) |
-| `/gate:check --phase=<pre-sprint\|pre-impl\|post-impl\|pre-merge>` | Lifecycle checkpoint (was `/project:checkpoint`) |
+| `/gate:check commit [--fix] [--staged]` | Pre-commit verification |
+| `/gate:check merge [source] [target]` | Pre-merge verification |
+| `/gate:check release <version>` | Release checklist |
+| `/gate:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/gate:check --phase=<pre-sprint\|pre-impl\|post-impl\|pre-merge>` | Lifecycle checkpoint |
 
 ### Quality Gate Thresholds
 
@@ -873,62 +819,24 @@ Available with BMAD v6 installation.
 
 ---
 
-## Deprecated commands (removed in 9.0)
+## Removed commands (9.0)
 
-The 54 old commands remain as redirect stubs that point to their replacement. They will be removed in 9.0.
+The 52 deprecated PM commands and the whole sprint namespace were removed in 9.0, together with `/common:research-context7` and `/uiux:orchestrator` (deprecated in 8.27.0). See [MIGRATION-v9.md](MIGRATION-v9.md) for the complete old → new table.
+
+## Deprecated commands (removed in 10.0)
+
+These redirect stubs print a warning and run their replacement until 10.0.
 
 | Deprecated | Replacement |
 |------------|-------------|
-| `/project:add-epic`, `add-story`, `add-task` | `/project:backlog add epic\|story\|task` |
-| `/project:list-epics`, `list-stories`, `list-tasks` | `/project:backlog list epic\|story\|task` |
-| `/project:update-epic`, `update-story` | `/project:backlog edit epic\|story` |
-| `/project:move-task` | `/project:backlog move task` |
-| `/project:scan` | `/project:reverse scan` |
-| `/project:reverse-prd` | `/project:reverse prd` |
-| `/project:reverse-stories` | `/project:reverse stories` |
-| `/project:gap-analysis` | `/project:reverse gaps` |
-| `/project:coverage-map` | `/project:trace --by-priority` (gaps: `--gaps`) |
-| `/project:burndown` | `/project:report burndown` |
-| `/project:metrics` | `/project:report metrics` |
-| `/project:dependencies` | `/project:report deps` |
-| `/project:critical-path` | `/project:report deps --critical` |
-| `/project:analyze-backlog` | `/project:migrate --analyze` |
-| `/project:migrate-backlog` | `/project:migrate` |
-| `/project:update-stories` | `/project:migrate --stories` |
-| `/project:sync-backlog` | `/project:migrate --resync` |
-| `/project:checkpoint` | `/gate:check --phase=<phase>` |
-| `/gate:validate-prd` | `/gate:check prd` |
-| `/gate:validate-techspec` | `/gate:check spec` |
-| `/gate:validate-backlog` | `/gate:check backlog` |
-| `/gate:validate-sprint` | `/gate:check sprint` |
-| `/gate:validate-story` | `/gate:check story` |
-| `/gate:validate-alignment` | `/gate:check alignment` |
-| `/gate:report` | `/gate:check all` |
-| `/common:pre-commit-check` | `/gate:check commit` |
-| `/common:pre-merge-check` | `/gate:check merge` |
-| `/common:release-checklist` | `/gate:check release` |
-| `/sprint:dev`, `/project:run-sprint` | `/workflow:implement [<N>]` |
-| `/project:run-epic` | `/workflow:implement --epic <EPIC>` |
-| `/project:run-queue` | `/workflow:implement --queue` (`--resume` to resume) |
-| `/sprint:status` | `/workflow:status` |
-| `/project:board` | `/workflow:status --board` |
-| `/project:batch-status` | `/workflow:status --queue` |
-| `/common:daily-standup` | `/workflow:status --standup` |
-| `/workflow:analyze` | `/workflow:plan --research` |
-| `/project:generate-prd` | `/workflow:plan --only=prd` |
-| `/project:generate-backlog` | `/workflow:plan --only=backlog` |
-| `/project:generate-tech-spec` | `/workflow:design` |
-| `/project:generate-constitution` | `/workflow:design --constitution` |
-| `/project:decompose-tasks` | `/workflow:start <N>` (`--tasks-only` for an existing sprint) |
-| `/sprint:next-story` | `/project:backlog next story` |
-| `/sprint:transition` | `/project:backlog move story <US> <status>` |
-| `/sprint:auto-route` | `/project:backlog move story --auto` |
-| `/qa:report` | `/qa:status --report` |
-| `/common:setup-project-context` | `/common:init --context` |
-| `/common:research-context7` | context7 MCP (library docs) or `/deep-research` (web research; outside claude.ai: `@research-assistant` agent) |
-| `/uiux:orchestrator` | `@uiux-orchestrator` agent |
+| `/<tech>:check-architecture` | `/<tech>:check architecture` |
+| `/<tech>:check-code-quality` | `/<tech>:check code-quality` |
+| `/<tech>:check-security` | `/<tech>:check security` |
+| `/<tech>:check-testing` | `/<tech>:check testing` |
+| `/<tech>:check-compliance` | `/<tech>:check all` |
+| `/team:sprint` | `/team:delivery --phase=implementation` |
 
-`/common:sub-agents-patterns` is no longer a command: it became the `sub-agents-patterns` skill (not a stub). `/team:delivery` is kept.
+`<tech>` is any of the 13 stacks: `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `symfony`, `vercel`, `vite`, `vuejs`. The per-axis checklists are installed in `.claude/references/<tech>/checks/`.
 
 ---
 
@@ -942,7 +850,7 @@ Automated acceptance testing with Claude in Chrome.
 | `/qa:fix` | Fix bugs from recette session (TDD workflow) |
 | `/qa:status` | Show recette session status and progress |
 | `/qa:regression` | View and manage regression test registry |
-| `/qa:status --report` | Generate recette report (MD/HTML/JSON) — was `/qa:report` |
+| `/qa:status --report` | Generate recette report (MD/HTML/JSON) |
 | `/qa:tdd` | Fix a bug in TDD/BDD mode |
 
 ### Golden Rule

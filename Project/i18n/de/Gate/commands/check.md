@@ -146,7 +146,7 @@ Validiert die Sprint-Bereitschaft (Argumente: `[N] [--verbose]`). `N` ist die Sp
 3. Die Stories validieren (ready, geschätzt, keine blockiert) sowie die optionale Kapazität.
 4. Bericht erstellen, beginnend mit der verwendeten Quelle: `Source: .bmad/sprint-status.yaml` oder `Source: markdown (project-management/sprints/sprint-{N}-*/)`.
 
-Im Fallback-Modus wird das Gate weiterhin ausgewertet, aber der Bericht fügt eine nicht blockierende Warnung hinzu: Die `/sprint:*`-Befehle benötigen `.bmad/sprint-status.yaml`; `/workflow:start {N}` ausführen oder `/project:migrate`, um `.bmad/sprint-status.yaml` aus einem bestehenden Backlog zu erstellen.
+Im Fallback-Modus wird das Gate weiterhin ausgewertet, aber der Bericht fügt eine nicht blockierende Warnung hinzu: Die `/workflow:*`-Befehle benötigen `.bmad/sprint-status.yaml`; `/workflow:start {N}` ausführen oder `/project:migrate`, um `.bmad/sprint-status.yaml` aus einem bestehenden Backlog zu erstellen.
 
 ```
 Sprint Ready Gate Validation

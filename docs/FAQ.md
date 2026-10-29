@@ -218,7 +218,7 @@ make install-project TARGET=.
 npx @the-bearded-bear/claude-craft install . --include-project
 ```
 
-Sans cette étape, les namespaces `/gate:` et `/project:` n'existent pas (le namespace `/sprint:` est déprécié : ses 5 commandes redirigent vers `/workflow:` et `/project:backlog`, retrait en 9.0). L'installation par défaut installe uniquement les namespaces `/common:`, `/workflow:`, `/team:`, `/qa:`, `/uiux:` et les namespaces technologiques.
+Sans cette étape, les namespaces `/gate:` et `/project:` n'existent pas (le namespace sprint a été retiré en 9.0 : voir MIGRATION-v9). L'installation par défaut installe uniquement les namespaces `/common:`, `/workflow:`, `/team:`, `/qa:`, `/uiux:` et les namespaces technologiques.
 
 De même, `/bmad:init` n'existe pas — utiliser `/workflow:init` qui est la commande correcte installée.
 
@@ -348,7 +348,7 @@ npx @the-bearded-bear/claude-craft ralph "Fix the login bug"
 Yes! Use the team-sprint command with Ralph mode:
 
 ```bash
-/team:sprint --ralph-mode "Sprint 3" --overnight --max-stories 5
+/team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --overnight --max-stories 5
 ```
 
 This will:

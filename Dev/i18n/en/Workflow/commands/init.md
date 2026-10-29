@@ -215,7 +215,7 @@ next_action: "Generate or update PRD"
 next_command: "/workflow:plan --only=prd"
 ```
 
-Create the BMAD status skeleton (single source of truth for story status, read by `/gate:*`, `/sprint:*`, `/workflow:auto-sprint` and the Kanban). Skip if `.bmad/sprint-status.yaml` already exists; `/workflow:start` fills `metadata` and `stories` later:
+Create the BMAD status skeleton (single source of truth for story status, read by `/gate:*`, `/workflow:auto-sprint` and the Kanban). Skip if `.bmad/sprint-status.yaml` already exists; `/workflow:start` fills `metadata` and `stories` later:
 
 ```yaml
 # .bmad/sprint-status.yaml

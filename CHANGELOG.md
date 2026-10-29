@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0] - 2026-10-29
+
+Phase 4 de la feuille de route de simplification des commandes de gestion de projet : retrait des stubs de redirection. Guide : [MIGRATION-v9](docs/MIGRATION-v9.md).
+
+### Removed
+
+- **BREAKING — 54 commandes dépréciées depuis 8.25.0 / 8.26.0 / 8.27.0** (dont `/common:research-context7` et `/uiux:orchestrator`) (les stubs de redirection), dans les 5 langues, et **le namespace `/sprint:`**. Table complète ancien → nouveau : `docs/MIGRATION-v9.md`. Surface de gestion de projet active : 35 commandes (`/workflow:` 9, `/project:` 5, `/gate:` 1, `/qa:` 5, `/team:` 4, `/common:` 11).
+- `claude-craft update` et les deux installeurs suppriment les fichiers retirés (`config/removed-commands.yaml` complété) et le dossier `.claude/commands/sprint/` devenu vide.
+- Copies du dépôt (`.claude/commands/`) alignées sur la distribution : 143 fichiers de commandes (dont 61 stubs de redirection), 18 namespaces.
+
+### Deprecated
+
+- **`/<tech>:check-architecture|code-quality|security|testing|compliance`** (13 stacks) → **`/<tech>:check <architecture|code-quality|security|testing|all>`** (`all` = agrégat noté sur 100, ex-`check-compliance`). Les 65 anciennes commandes restent des stubs de redirection (`deprecated: true` / `replaced-by:`) jusqu'en **10.0** (`scheduled:` dans `config/removed-commands.yaml`). Table : `docs/MIGRATION-v9.md`.
+- **`/team:sprint`** → **`/team:delivery --phase=implementation`** (stub jusqu'en 10.0). `--ralph-mode` est porté dans `/team:delivery` (phase d'implémentation, `--engine=teams`) ; `/workflow:implement --parallel N`, `/workflow:auto-sprint` et `@ralph-conductor` délèguent désormais à `/team:delivery --phase=implementation`.
+
+### Changed
+
+- **Checklists des checks tech** : le contenu des anciens `check-<axe>` vit dans `Dev/i18n/<lang|base>/<Tech>/checks/<axe>.md`, installé dans `.claude/references/<tech>/checks/` (`copy_checks` dans `Dev/scripts/lib/install-tech-common.sh`) ; `/<tech>:check` est un routeur léger (5 langues, plus un repli anglais `check.md` / `checks/all.md` dans `base/` pour les 7 stacks à couche base, remplacé par la langue à l'installation). Complétions shell, `AVAILABLE_COMMANDS` des installeurs, aliases et docs alignés.
+- **`check-compliance` de symfony, php, laravel, csharp, angular, vuejs, vite et vercel** : délèguent aux 4 checks par axe (comme react) au lieu de recopier leurs checklists (`.claude/` + 5 langues ; vite et vercel restructurés sur les 4 axes).
+
+### Added
+
+- `docs/MIGRATION-v9.md` (table ancien → nouveau, étapes d'upgrade) ; test `tests/content/pm-v9-removal.test.mjs` (aucun stub PM restant, seuls les stubs programmés pour 10.0 tolérés, manifeste complet, aucune référence à une commande retirée hors documents historiques).
+- Tests `tests/scripts/check-compliance-delegation.test.mjs` ; `/<tech>:check` exposé partout (`namespace-integrity`), stubs non valides comme cible de référence (`command-refs`), docs documentant `/<tech>:check` (`doc-counts`), stubs programmés pour 10.0 (`removed-commands`).
+
+### Security
+
+- **`@hono/node-server` 2.0.11 → 2.1.5** (dépendance du serveur Kanban) : corrige GHSA-rmxm-3fg6-px4f (`serveStatic` décode deux fois le chemin, contournement de middleware sur les chemins statiques).
+
 ## [8.27.0] - 2026-10-28
 
 Dernière version 8.x avant la consolidation 9.0 : les commandes `/team:*` fonctionnent sans Agent Teams, deux commandes redondantes avec des capacités natives sont dépréciées, et le moteur Ralph est fiabilisé (mode parallèle, `set -e`, sessions). Claude Code recommandé : 2.1.312.

@@ -93,7 +93,7 @@ No Claude Code, tente estes comandos:
 
 ```
 # Verificar a arquitetura do seu projeto
-/symfony:check-architecture
+/symfony:check architecture
 
 # Obter uma revisão de código
 @symfony-reviewer Revise minha pasta src/

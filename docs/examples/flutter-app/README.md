@@ -162,13 +162,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
 ```bash
 # Architecture
-/flutter:check-architecture
+/flutter:check architecture
 
 # Performance
 /flutter:analyze-performance
 
 # Testing
-/flutter:check-testing
+/flutter:check testing
 
 # Golden tests
 /flutter:golden-update

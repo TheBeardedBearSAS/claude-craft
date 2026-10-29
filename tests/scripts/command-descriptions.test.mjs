@@ -210,24 +210,17 @@ describe('deprecation stubs', () => {
     expect(stubViolations(fr, fm('mcp:nope'))).toHaveLength(1);
   });
 
-  // Lot 5: commands overlapping native Claude Code features become stubs.
+  // Lot 5 (8.27.0) stubs of native Claude Code overlaps, removed in 9.0.
   it.each([
-    ['common/research-context7.md', 'Common', 'mcp:context7'],
-    ['uiux/orchestrator.md', 'UIUX', '@uiux-orchestrator'],
-  ])('%s is a deprecated stub in .claude and in the 5 languages', (rel, dir, replacedBy) => {
+    ['common/research-context7.md', 'Common'],
+    ['uiux/orchestrator.md', 'UIUX'],
+  ])('%s is removed from .claude and the 5 languages', (rel, dir) => {
     const [, name] = rel.split('/');
     const files = [
       path.join(PROJECT_ROOT, '.claude/commands', rel),
       ...['en', 'fr', 'es', 'de', 'pt'].map((l) => path.join(PROJECT_ROOT, 'Dev/i18n', l, dir, 'commands', name)),
     ];
-    for (const f of files) {
-      const raw = fs.readFileSync(f, 'utf8');
-      const data = frontmatterOf(raw);
-      expect(data?.deprecated, path.relative(PROJECT_ROOT, f)).toBe(true);
-      expect(data['replaced-by'], path.relative(PROJECT_ROOT, f)).toBe(replacedBy);
-      expect(raw, path.relative(PROJECT_ROOT, f)).toContain('⚠️');
-      expect(stubViolations(f, raw)).toEqual([]);
-    }
+    expect(files.filter((f) => fs.existsSync(f)).map((f) => path.relative(PROJECT_ROOT, f))).toEqual([]);
   });
 
   it('every deprecated command honours the stub contract', () => {

@@ -1,9 +1,9 @@
-# Claude Code Compatibility — Claude Craft v8.27.0
+# Claude Code Compatibility — Claude Craft v9.0.0
 
 **Minimum Version:** 2.1.260 (elevated from 2.1.97 — see [security advisories 2026](#security-advisories-2026--why-the-minimum-is-21260))
-**Recommended Version:** 2.1.312 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, permission fixes 2.1.288–2.1.309)
-**Tested up to:** 2.1.312 (October 2026)
-**Last Updated:** 2026-10-28
+**Recommended Version:** 2.1.296 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, permission fixes 2.1.288–2.1.296)
+**Tested up to:** 2.1.296 (October 2026)
+**Last Updated:** 2026-10-26
 
 ---
 
@@ -18,7 +18,6 @@
 7. [Features 2.1.105–2.1.117 Available](#features-21105-21117-available)
 8. [Features 2.1.119 → 2.1.145 (May 2026)](#features-21119--21145-may-2026)
 9. [Features 2.1.194 → 2.1.296 (July–October 2026)](#features-21194--21296-julyoctober-2026)
-   - [Features 2.1.297 → 2.1.312 (October 2026)](#features-21297--21312-october-2026)
 10. [Migration from < 2.1.260](#migration-from--21260)
 11. [Version History Summary](#version-history-summary)
 
@@ -28,8 +27,8 @@
 
 | Requirement | Version | Notes |
 |-------------|---------|-------|
-| **Minimum** | 2.1.260 | Security baseline — CVE-2026-86063 (2.1.179), CVE-2026-103435 (2.1.129), CVE-2026-55607 (2.1.163), CVE-2026-88968 (2.1.251), CVE-2026-103012 (2.1.260) patched |
-| **Recommended** | 2.1.312 | Génération 5.5 (Opus/Sonnet/Haiku), Fable 5.1, MCP 2026-07-28, hooks `onFailure: "block"`, `effort` sur l'outil Agent, `autoCompactWindow` sous-agents, correctifs permissions 2.1.288–2.1.309 |
+| **Minimum** | 2.1.260 | Security baseline — CVE-2026-86063 (2.1.179), CVE-2026-103435 (2.1.129), CVE-2026-55607 (2.1.163), CVE-2026-103012 (2.1.260) patched |
+| **Recommended** | 2.1.296 | Génération 5.5 (Opus/Sonnet/Haiku), Fable 5.1, MCP 2026-07-28, hooks `onFailure: "block"`, `effort` sur l'outil Agent, `autoCompactWindow` sous-agents, correctifs permissions 2.1.288–2.1.296 |
 | **Hooks `onFailure: "block"`** | 2.1.295+ | Un hook command/HTTP qui ne démarre pas, timeout ou sort avec un code inattendu bloque l'action |
 | **MCP protocole 2026-07-28** | 2.1.292+ | Négocié par défaut pour les serveurs stdio locaux ; retour arrière `MCP_PROTOCOL_NEGOTIATION=legacy` |
 | **`claude mcp login` / `logout`** | 2.1.185+ | Authenticate/clear an MCP server's credentials from the shell instead of `/mcp` |
@@ -80,12 +79,10 @@
 
 ## Security Advisories 2026 — why the minimum is 2.1.260
 
-Source : [GitHub Security Advisories — anthropics/claude-code](https://github.com/anthropics/claude-code/security/advisories) (relevé du 2026-10-13, complété le 2026-10-28).
+Source : [GitHub Security Advisories — anthropics/claude-code](https://github.com/anthropics/claude-code/security/advisories) (relevé du 2026-10-13).
 
 | GHSA | CVE | Sévérité | Publié | Description | Corrigé dans |
 |------|-----|----------|--------|-------------|--------------|
-| GHSA-5xjx-9qx6-jcrv | CVE-2026-88968 | High | 2026-10-26 | Course TOCTOU dans l'outil Edit → écriture de fichiers hors du workspace | 2.1.251 (couvert par le minimum 2.1.260) |
-| GHSA-4p2j-qj3c-6x84 | CVE-2026-88066 | High | 2026-10-13 | Claude Desktop (Windows) : `git.exe` résolu depuis le répertoire courant → exécution de code via un dépôt cloné. **Hors périmètre CLI** (corrigé Desktop 1.8089.0) | — |
 | GHSA-q5hj-mxqh-vv77 | CVE-2026-40068 | High | 2026-04-24 | Contournement du dialogue de confiance via usurpation de git worktree → exécution de code | 2.1.84 |
 | GHSA-5j29-h97v-84ch | CVE-2026-103435 | High | 2026-10-05 | Écriture arbitraire de fichier via suivi de symlink au moment de l'écriture (TOCTOU) | 2.1.129 |
 | GHSA-7835-87q9-rgvv | CVE-2026-55607 | High | 2026-06-25 | Évasion du sandbox via confusion de chemin git worktree | 2.1.163 |
@@ -95,7 +92,7 @@ Source : [GitHub Security Advisories — anthropics/claude-code](https://github.
 
 **Pertinence Claude Craft :** le framework distribue des plugins, hooks et agents. CVE-2026-86063 (pin SHA plugins) et CVE-2026-103435 (symlink TOCTOU) touchent directement ce modèle de distribution ; 2.1.260 couvre en plus l'application des managed settings en entreprise.
 
-**Correctifs permissions postérieurs (non CVE, inclus dans le recommandé 2.1.312) :** contournement Bash masquant une partie de la commande (2.1.223), `$PSDefaultParameterValues` PowerShell (2.1.232), chemins NT `\??\` rejetés (2.1.234), `CLAUDE_CODE_DISABLE_ATTACHMENTS` et activation de Claude in Chrome ignorés dans les settings projet (2.1.290), lectures de chemins UNC réseau soumises au prompt même après approbation PreToolUse/auto mode (2.1.292), règles deny `Edit` appliquées à davantage de redirections Bash, prompt sur certaines commandes composées `cd`/git, fichier `--mcp-config` protégé des commandes sandboxées, fichiers de démarrage du shell plus exécutés hors sandbox, hooks Windows/PowerShell qui ne laissent plus passer l'outil (2.1.309-2.1.310).
+**Correctifs permissions postérieurs (non CVE, inclus dans le recommandé 2.1.296) :** contournement Bash masquant une partie de la commande (2.1.223), `$PSDefaultParameterValues` PowerShell (2.1.232), chemins NT `\??\` rejetés (2.1.234), `CLAUDE_CODE_DISABLE_ATTACHMENTS` et activation de Claude in Chrome ignorés dans les settings projet (2.1.290), lectures de chemins UNC réseau soumises au prompt même après approbation PreToolUse/auto mode (2.1.292).
 
 ---
 
@@ -336,7 +333,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
 | **`/goal` command** | Définir condition de completion — Claude travaille jusqu'à ce qu'elle soit atteinte | **NOT INTEGRATED** — P1 : intégrer dans `ralph-run.md` comme alternative native aux DoD validators |
-| **`claude agents` command** | Agent View : liste unique de toutes les sessions actives | **NOT DOCUMENTED** — P1 : pertinent pour `/team:*` et `/team:sprint` |
+| **`claude agents` command** | Agent View : liste unique de toutes les sessions actives | **NOT DOCUMENTED** — P1 : pertinent pour `/team:*` et `/team:delivery` |
 | `/scroll-speed` | Tuning vitesse scroll souris | **N/A** |
 | `claude plugin details <name>` | Inventaire composants + coût token | **N/A** |
 | Hook `args: string[]` field | Exec form sans shell | **Not documented** |
@@ -401,7 +398,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 > **Note Opus 4.8 :** L'ID de modèle est `claude-opus-4-8`. Pour les agents critiques (audits sécurité, migrations, décisions schéma, boucles autonomes), `model: opus` + `effort: xhigh` routait alors vers Opus 4.8 — **depuis 2.1.280, l'alias `opus` route vers Opus 5.5** (`claude-opus-5-5`, Opus 4.8 devenu *legacy*). Le `model: sonnet` des reviewers tech reste optimal pour le ratio coût/qualité (routing économe).
 
-> **Note Dynamic Workflows vs `/team:*` :** Les commandes `/team:audit`, `/team:sprint`, `/team:security` restent valides (orchestration documentée déclarative). Dynamic Workflows offre en plus une orchestration **programmatique** (boucles, fan-out conditionnel, pipelines, vérification adversariale) pour les tâches dépassant un seul contexte. À évaluer pour v8.8.
+> **Note Dynamic Workflows vs `/team:*` :** Les commandes `/team:audit`, `/team:delivery`, `/team:security` restent valides (orchestration documentée déclarative). Dynamic Workflows offre en plus une orchestration **programmatique** (boucles, fan-out conditionnel, pipelines, vérification adversariale) pour les tâches dépassant un seul contexte. À évaluer pour v8.8.
 
 ---
 
@@ -446,25 +443,6 @@ Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claud
 | 2.1.293 | Haiku 5.5 par défaut | `claude-haiku-5-5` | **Adopted** — `fallbackModel` |
 | 2.1.295 | Hooks `onFailure: "block"` ; connecteurs claude.ai en 2026-07-28 | Fail-closed hooks | **Not Adopted** (voir Feature Adoption Status) |
 | 2.1.296 | Description d'outil MCP plafonnée à 4 096 caractères (au lieu de 2 048) ; `autoCompactWindow` sous-agents ; Esc pendant `UserPromptSubmit` ne laisse plus passer le prompt | | **Documented** |
-
----
-
-## Features 2.1.297 → 2.1.312 (October 2026)
-
-Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) (lu le 2026-10-28). Aucune CVE publiée sur cette plage : le minimum reste 2.1.260.
-
-| Version | Feature | Description | Adoption Claude Craft |
-|---------|---------|-------------|----------------------|
-| 2.1.300 | `advisorModel` / `--advisor` ; `DISABLE_COMPACT` ne peut que désactiver | `/advisor` sur Claude Platform on AWS ; `CLAUDE_CODE_DISABLE_ADVISOR_TOOL=1` | **Not Adopted** |
-| 2.1.300 | **Breaking** : `claude remote-control` refuse `--sandbox` / `--no-sandbox` ; `updatedInput` des hooks validé | Utiliser `sandbox.enabled` dans les settings | **Documented** |
-| 2.1.302 | Fork subagents activés par défaut en `-p`, SDK, desktop, VS Code | `CLAUDE_CODE_FORK_SUBAGENT=0` pour désactiver ; appels `Agent` au premier plan en `-p`/SDK | **Documented** — règle 12 ; moteur `--engine=subagents` des `/team:*` (8.27.0) |
-| 2.1.302 | **Breaking** : `claude -p` sans mode de permission démarre en `default` sur les fournisseurs tiers | `--permission-mode auto` conserve auto | **Documented** |
-| 2.1.304 | `/auto-mode-setup` ; hooks d'agent ne passent plus en fail-open | Repli sur le modèle de l'appelant | **Not Adopted** |
-| 2.1.305 | **Breaking** : `allowedMcpServers` ne filtre plus les serveurs stdio `managed-mcp.json` utilisant `${VAR}` seulement dans `env` | Utiliser `deniedMcpServers` pour les bloquer | **Documented** — règle 11 (vetting MCP) |
-| 2.1.307 | `axScreenReader` / `CLAUDE_AX_SCREEN_READER` (bloc `env`) lus seulement depuis les settings user, managed ou `--settings` | Ignorés dans les settings projet | **Documented** |
-| 2.1.309 | Correctifs permissions (deny `Edit` sur redirections Bash, `cd`/git composés, `--mcp-config`, shell hors sandbox) ; **Breaking** : `claude ultrareview` exige la confiance du workspace | `--trust-workspace` pour les scripts | **Adopted** — version recommandée |
-| 2.1.311 | `ultrathink` = effort xhigh sur la génération 5.5 ; `SubagentStop` émis une seule fois ; worktree d'un sous-agent background conservé | `--output-format json` / `stream-json` échappent certains caractères de contrôle en `\uXXXX` ; `DISABLE_COMPACT` des settings ne peut que désactiver | **Documented** |
-| 2.1.312 | `autoCompactWindow` d'un sous-agent peut abaisser `CLAUDE_CODE_AUTO_COMPACT_WINDOW` ; 24 hooks prompt/agent concurrents max ; `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK=1` | Prompt système raccourci sur Bedrock, Vertex, Foundry et Mantle (`CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` pour le complet) | **Documented** — version RECOMMANDÉE |
 
 ---
 
@@ -586,10 +564,7 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | 2.1.292 | 2026-10 | MCP stdio 2026-07-28, `effort` outil Agent, UNC |
 | 2.1.293 | 2026-10 | Haiku 5.5 par défaut |
 | 2.1.295 | 2026-10 | Hooks `onFailure: "block"` |
-| 2.1.296 | 2026-10 | Description MCP 4 096 car., `autoCompactWindow` sous-agents |
-| 2.1.302 | 2026-10 | Fork subagents par défaut en `-p`/SDK/desktop/VS Code |
-| 2.1.309 | 2026-10 | Correctifs permissions (deny Edit, sandbox, hooks Windows), `ultrareview` exige la confiance du workspace |
-| **2.1.312** | **2026-10** | **`autoCompactWindow` sous-agent abaisse le global, plafond 24 hooks prompt/agent — version RECOMMANDÉE** |
+| **2.1.296** | **2026-10** | **Description MCP 4 096 car., `autoCompactWindow` sous-agents — version RECOMMANDÉE** |
 
 ---
 

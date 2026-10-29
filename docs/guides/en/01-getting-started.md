@@ -232,7 +232,7 @@ Slash commands are quick actions:
 /symfony:generate-crud User
 
 # Check quality
-/symfony:check-compliance
+/symfony:check all
 
 # Analyze architecture
 /common:architecture-decision
@@ -360,7 +360,7 @@ make config-validate CONFIG=file.yaml
 |---------|---------|
 | `/common:analyze-feature` | Analyze requirements |
 | `/{tech}:generate-crud` | Generate CRUD code |
-| `/{tech}:check-compliance` | Full quality audit |
+| `/{tech}:check all` | Full quality audit |
 | `/common:security-audit` | Security review |
 
 ---

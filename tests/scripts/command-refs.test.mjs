@@ -37,7 +37,9 @@ function commandsOf(langDir, flatNamespace) {
     if (!fs.existsSync(cmdDir)) continue;
     const ns = isFlat ? flatNamespace : entry.name.toLowerCase();
     for (const f of fs.readdirSync(cmdDir)) {
-      if (f.endsWith('.md')) names.add(`${ns}:${f.slice(0, -3)}`);
+      // A deprecated redirect stub is not a valid target: docs must point at its replacement.
+      if (!f.endsWith('.md') || /^deprecated: true$/m.test(fs.readFileSync(path.join(cmdDir, f), 'utf8'))) continue;
+      names.add(`${ns}:${f.slice(0, -3)}`);
     }
   }
   return names;
@@ -68,7 +70,10 @@ function commandName(file) {
 function deadRefs(files, valid) {
   const dead = [];
   for (const file of files) {
-    const lines = fs.readFileSync(file, 'utf8').split('\n');
+    const raw = fs.readFileSync(file, 'utf8');
+    // A redirect stub names the command it deprecates.
+    if (/^deprecated: true$/m.test(raw)) continue;
+    const lines = raw.split('\n');
     lines.forEach((line, i) => {
       for (const [, ns, cmd] of line.matchAll(REF_RE)) {
         if (NON_COMMAND_PREFIXES.has(ns)) continue;
@@ -85,8 +90,15 @@ describe('command references resolve to existing commands', () => {
   it('finds a realistic set of commands', () => {
     const valid = validCommands('en');
     expect(valid.size).toBeGreaterThan(100);
-    expect(valid.has('project:add-story')).toBe(true);
+    expect(valid.has('project:backlog')).toBe(true);
     expect(valid.has('common:init')).toBe(true); // base-only command
+  });
+
+  it.each(LANGS)('every stack exposes /<tech>:check in %s', (lang) => {
+    const valid = validCommands(lang);
+    const stacks = ['angular', 'csharp', 'flutter', 'laravel', 'paperclip', 'php', 'python', 'react'];
+    stacks.push('reactnative', 'symfony', 'vercel', 'vite', 'vuejs');
+    expect(stacks.filter((ns) => !valid.has(`${ns}:check`))).toEqual([]);
   });
 
   it.each(LANGS)('every /ns:cmd in %s sources resolves', (lang) => {

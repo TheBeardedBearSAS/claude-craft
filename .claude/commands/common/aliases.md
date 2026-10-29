@@ -24,25 +24,27 @@ These aliases reduce typing and improve productivity by providing short mnemonic
 | `/cr` | `/gate:check release` | Pre-release verification checklist |
 | `/cs` | `/common:init --context` | Setup project context for Claude |
 
-### Technology Check Compliance
+### Technology Checks (`/<tech>:check all`)
 
 | Alias | Full Command | Description |
 |-------|-------------|-------------|
-| `/sc` | `/symfony:check-compliance` | Check Symfony compliance |
-| `/rc` | `/react:check-compliance` | Check React compliance |
-| `/fc` | `/flutter:check-compliance` | Check Flutter compliance |
-| `/pc` | `/python:check-compliance` | Check Python compliance |
-| `/ac` | `/angular:check-compliance` | Check Angular compliance |
-| `/vc` | `/vuejs:check-compliance` | Check Vue.js compliance |
-| `/lc` | `/laravel:check-compliance` | Check Laravel compliance |
-| `/cc` | `/csharp:check-compliance` | Check C# compliance |
+| `/sc` | `/symfony:check all` | Full Symfony audit (4 axes, scored /100) |
+| `/rc` | `/react:check all` | Full React audit (4 axes, scored /100) |
+| `/fc` | `/flutter:check all` | Full Flutter audit (4 axes, scored /100) |
+| `/pc` | `/python:check all` | Full Python audit (4 axes, scored /100) |
+| `/ac` | `/angular:check all` | Full Angular audit (4 axes, scored /100) |
+| `/vc` | `/vuejs:check all` | Full Vue.js audit (4 axes, scored /100) |
+| `/lc` | `/laravel:check all` | Full Laravel audit (4 axes, scored /100) |
+| `/cc` | `/csharp:check all` | Full C# audit (4 axes, scored /100) |
+
+Single axis: `/<tech>:check architecture|code-quality|security|testing`. Stacks without an alias: `/php:check all`, `/reactnative:check all`, `/vite:check all`, `/vercel:check all`.
 
 ### Team Namespace
 
 | Alias | Full Command | Description |
 |-------|-------------|-------------|
 | `/ta` | `/team:audit` | Run team audit (sequential) |
-| `/ts` | `/team:sprint` | Sprint planning and management |
+| `/ts` | `/team:delivery --phase=implementation` | Parallel sprint implementation |
 | `/td` | `/team:delivery` | Delivery workflow |
 
 ### Workflow Namespace
@@ -78,10 +80,10 @@ These aliases reduce typing and improve productivity by providing short mnemonic
 
 ### Quick Compliance Checks
 ```bash
-# Instead of: /symfony:check-compliance
+# Instead of: /symfony:check all
 /sc
 
-# Instead of: /react:check-compliance
+# Instead of: /react:check all
 /rc
 ```
 
@@ -90,8 +92,8 @@ These aliases reduce typing and improve productivity by providing short mnemonic
 # Instead of: /team:audit --sequential
 /ta --sequential
 
-# Instead of: /team:sprint --id=Sprint-3
-/ts --id=Sprint-3
+# Instead of: /team:delivery Sprint-3 --phase=implementation
+/ts Sprint-3
 ```
 
 ### Quick QA
@@ -126,20 +128,20 @@ Add to `~/.bashrc` or `~/.zshrc`:
 alias ca='claude -p /common:audit-freshness'
 alias caa='claude -p /common:audit-claude-alignment'
 alias ci='claude -p /common:init'
-alias cr='claude -p /gate:check release'
-alias cs='claude -p /common:init --context'
+alias cr='claude -p "/gate:check release"'
+alias cs='claude -p "/common:init --context"'
 
-alias sc='claude -p /symfony:check-compliance'
-alias rc='claude -p /react:check-compliance'
-alias fc='claude -p /flutter:check-compliance'
-alias pc='claude -p /python:check-compliance'
-alias ac='claude -p /angular:check-compliance'
-alias vc='claude -p /vuejs:check-compliance'
-alias lc='claude -p /laravel:check-compliance'
-alias cc='claude -p /csharp:check-compliance'
+alias sc='claude -p "/symfony:check all"'
+alias rc='claude -p "/react:check all"'
+alias fc='claude -p "/flutter:check all"'
+alias pc='claude -p "/python:check all"'
+alias ac='claude -p "/angular:check all"'
+alias vc='claude -p "/vuejs:check all"'
+alias lc='claude -p "/laravel:check all"'
+alias cc='claude -p "/csharp:check all"'
 
 alias ta='claude -p /team:audit'
-alias ts='claude -p /team:sprint'
+alias ts='claude -p "/team:delivery --phase=implementation"'
 alias td='claude -p /team:delivery'
 
 alias wi='claude -p /workflow:init'
@@ -160,20 +162,20 @@ Add to `~/.config/fish/config.fish`:
 alias ca 'claude -p /common:audit-freshness'
 alias caa 'claude -p /common:audit-claude-alignment'
 alias ci 'claude -p /common:init'
-alias cr 'claude -p /gate:check release'
-alias cs 'claude -p /common:init --context'
+alias cr 'claude -p "/gate:check release"'
+alias cs 'claude -p "/common:init --context"'
 
-alias sc 'claude -p /symfony:check-compliance'
-alias rc 'claude -p /react:check-compliance'
-alias fc 'claude -p /flutter:check-compliance'
-alias pc 'claude -p /python:check-compliance'
-alias ac 'claude -p /angular:check-compliance'
-alias vc 'claude -p /vuejs:check-compliance'
-alias lc 'claude -p /laravel:check-compliance'
-alias cc 'claude -p /csharp:check-compliance'
+alias sc 'claude -p "/symfony:check all"'
+alias rc 'claude -p "/react:check all"'
+alias fc 'claude -p "/flutter:check all"'
+alias pc 'claude -p "/python:check all"'
+alias ac 'claude -p "/angular:check all"'
+alias vc 'claude -p "/vuejs:check all"'
+alias lc 'claude -p "/laravel:check all"'
+alias cc 'claude -p "/csharp:check all"'
 
 alias ta 'claude -p /team:audit'
-alias ts 'claude -p /team:sprint'
+alias ts 'claude -p "/team:delivery --phase=implementation"'
 alias td 'claude -p /team:delivery'
 
 alias wi 'claude -p /workflow:init'

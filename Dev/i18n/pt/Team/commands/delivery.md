@@ -1,6 +1,6 @@
 ---
 description: Equipe de Entrega - Ciclo de vida completo do sprint (redacao + implementacao) com subagentes (Agent Teams opcional)
-argument-hint: <sprint-name|prd-path> [--phase=all|writing|implementation] [--max-workers=3] [--engine=subagents|teams]
+argument-hint: <sprint-name|prd-path> [--phase=all|writing|implementation] [--max-workers=3] [--engine=subagents|teams] [--ralph-mode]
 ---
 
 # Equipe de Entrega - Ciclo de Vida Completo do Sprint (Redacao + Implementacao)
@@ -23,6 +23,7 @@ $ARGUMENTS
 - `--quality-threshold=6`: Pontuacao INVEST minima para Fase 1 (padrao: 6/6)
 - `--max-rewrites=2`: Maximo de loops de reescrita por artefato na Fase 1 (padrao: 2)
 - `--max-cost=<dollars>`: Orcamento maximo em dolares. Se o custo paralelo estimado ultrapassar este limiar, a execucao e bloqueada com uma mensagem OVER BUDGET
+- `--ralph-mode`: Ativar motor de recuperacao Ralph (classificacao de erros, auto-retry, servico de escalacao) junto com paralelismo Agent Teams. Requer `--engine=teams`: o adaptador Ralph Teams se apoia em `TaskCreate` / `SendMessage`. (apenas fase de implementação)
 
 ## Modo Plano
 
@@ -61,6 +62,7 @@ O processo abaixo é descrito com as primitivas do Agent Teams. Com `--engine=su
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponivel
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponivel
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponivel
+- `Tools/AgentTeams/lib/ralph-teams-adapter.sh` disponivel
 
 > ℹ️ Esses scripts são instalados automaticamente pelo claude-craft (`make install-agentteams` ou via instalador). Se ausentes, o comando continua em **modo degradado**: estimativa de custo manual e `--ralph-mode` indisponível (não bloqueante).
 
@@ -91,10 +93,10 @@ O processo abaixo é descrito com as primitivas do Agent Teams. Com `--engine=su
 | Condicao | Usar Team Delivery | Alternativa |
 |----------|-------------------|-------------|
 | Ciclo completo (planejar + codar), 3+ stories | **Sim (~2.2x speedup)** | Muito lento sequencialmente |
-| < 3 stories | Nao | `@product-owner` + `/team:sprint --sequential` |
+| < 3 stories | Nao | `@product-owner` + `/workflow:implement` |
 | Story unica | Nao | `/common:ralph-run` |
 | 5+ stories independentes | **Sim (melhor ROI)** | Possivel mas lento sequencialmente |
-| Somente implementacao (stories existem) | Usar `--phase=implementation` | `/team:sprint` |
+| Somente implementacao (stories existem) | Usar `--phase=implementation` | `/workflow:implement` |
 | Somente redacao (sem codificacao) | Usar `--phase=writing` | `@product-owner` manualmente |
 | Orcamento muito limitado | Nao (+30-40% overhead de tokens) | Workflow sequencial |
 | Precisa de mapeamento de dominio de arquivo | **Sim (integrado)** | Coordenacao manual |
@@ -554,6 +556,15 @@ Para 1 EPIC, 5 US, ~25 tarefas:
 | 3 (redacao) + 3 (impl) | 9 | ~180 min | ~75 min | ~2.4x | +37% |
 
 **Nota**: Speedup depende da independencia das stories e complexidade comparavel. Transicao de fase adiciona ~30s de overhead.
+
+## Integracao com o motor de recuperacao Ralph
+
+Quando `--ralph-mode` esta ativado, o adaptador Ralph Teams (`Tools/AgentTeams/lib/ralph-teams-adapter.sh`) cuida de:
+
+1. Classificacao de erros e auto-retry para falhas transientes
+2. Conectar checkpoint/recuperacao com Agent Teams
+3. Garantir que atualizacoes de sprint-status.yaml sigam o padrao single-writer
+4. Mapear niveis de erro Ralph para acoes de recuperacao Agent Teams
 
 ## Tratamento de Erros
 

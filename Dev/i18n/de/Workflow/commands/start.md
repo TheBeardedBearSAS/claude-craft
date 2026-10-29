@@ -11,7 +11,7 @@ Du bist ein erfahrener Scrum Master und Tech Lead. Du bereitest den Start eines 
 
 | Aufruf | Was er tut | Ersetzt |
 |--------|-----------|---------|
-| `/workflow:start <N>` | Kompletter Start: Voraussetzungen, Kapazität, Planning, `project-management/sprints/sprint-{N}-{slug}/` (sprint-goal.md, sprint-dependencies.md, board.md, `tasks/TASK-*.md`), Sprint und Stories in `.bmad/sprint-status.yaml` geschrieben, Tasks registriert | Start-Schritte von `/sprint:*` |
+| `/workflow:start <N>` | Kompletter Start: Voraussetzungen, Kapazität, Planning, `project-management/sprints/sprint-{N}-{slug}/` (sprint-goal.md, sprint-dependencies.md, board.md, `tasks/TASK-*.md`), Sprint und Stories in `.bmad/sprint-status.yaml` geschrieben, Tasks registriert | frühere Sprint-Start-Schritte (in 9.0 entfernt) |
 | `/workflow:start <N> --tasks-only` | Zerlegt die Stories eines **bestehenden** Sprints in Tasks (nur Schritte 7 bis 9, Schritte 1 bis 6 überspringen) | `/workflow:start <N>` |
 
 ## Argumente

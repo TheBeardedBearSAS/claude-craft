@@ -250,7 +250,7 @@ Für jede Story führt es außerdem ein Code-Review durch und prüft die **Story
 ### C.2 Alternativen (optional)
 
 - `/workflow:implement --auto` — führt den gesamten Sprint autonomer aus.
-- `/workflow:implement --parallel 3` (`/team:sprint`) — implementiert mehrere Stories **parallel** mit Agent Teams (fortgeschritten).
+- `/workflow:implement --parallel 3` (`/team:delivery --phase=implementation`) — implementiert mehrere Stories **parallel** mit Agent Teams (fortgeschritten).
 - `@tdd-coach` — rufe den Coach mitten in einem Task zur Beratung auf.
 
 Bleibe für deinen ersten Durchlauf bei `/workflow:implement`.
@@ -414,7 +414,7 @@ So ordnet es sich in dieses Tutorial ein:
 Zwei Anpassungen für Multi-Stack:
 
 1. **Beginne mit dem Foundation-Epic** (Epic 0): Monorepo, gemeinsame Design-Tokens, der OpenAPI-Vertrag und ein Map-Style **bevor** irgendeine UI-Komponente — ein echtes *Walking Skeleton*.
-2. **Führe Web- und Mobile-Sprints parallel** mit `/team:sprint` (Agent Teams) aus, wobei jeder die Gates seines eigenen Stacks respektiert.
+2. **Führe Web- und Mobile-Sprints parallel** mit `/team:delivery --phase=implementation` (Agent Teams) aus, wobei jeder die Gates seines eigenen Stacks respektiert.
 
 Alles andere — Gates, TDD, das Kanban-Board, `/clear`-Disziplin — ist identisch. Die Methode ändert sich nicht mit dem Umfang; nur die Anzahl der parallelen Tracks ändert sich.
 

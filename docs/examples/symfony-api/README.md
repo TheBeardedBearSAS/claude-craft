@@ -170,13 +170,13 @@ sprints:
 
 ```bash
 # Architecture
-/symfony:check-architecture
+/symfony:check architecture
 
 # Code quality
-/symfony:check-code-quality
+/symfony:check code-quality
 
 # Security
-/symfony:check-security
+/symfony:check security
 
 # Full audit
 /team:audit --sequential

@@ -199,13 +199,13 @@ npm test
 ```bash
 # Backend
 cd backend
-/symfony:check-architecture
-/symfony:check-security
+/symfony:check architecture
+/symfony:check security
 
 # Mobile
 cd ../mobile
-/flutter:check-architecture
-/flutter:check-testing
+/flutter:check architecture
+/flutter:check testing
 
 # Full audit
 cd ..

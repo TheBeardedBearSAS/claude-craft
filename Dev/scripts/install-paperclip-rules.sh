@@ -54,11 +54,7 @@ HELP_DESCRIPTION="    TCL-optimized installation covering:
     Token reduction: ~95% (from ~80K to ~4K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check-compliance\` - Full compliance audit
-- \`/${TECH_NAMESPACE}:check-architecture\` - Architecture validation
-- \`/${TECH_NAMESPACE}:check-code-quality\` - Code quality analysis
-- \`/${TECH_NAMESPACE}:check-testing\` - Test coverage analysis
-- \`/${TECH_NAMESPACE}:check-security\` - Security audit
+AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
 - \`/${TECH_NAMESPACE}:generate-adapter\` - Scaffold a custom adapter (HTTP / Process / Local)
 - \`/${TECH_NAMESPACE}:generate-agent-config\` - Generate an agent.yaml configuration
 - \`/${TECH_NAMESPACE}:setup-company\` - Bootstrap a new Paperclip company"

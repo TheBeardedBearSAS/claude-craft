@@ -61,7 +61,7 @@ Expert in architecture, technical decomposition and Scrum facilitation.
 | `/workflow:plan --only=prd` | Generate the PRD |
 | `/workflow:design` | Generate the technical spec |
 
-### Sprint (`/sprint:`)
+### Sprint
 
 | Command | Description |
 |---------|-------------|

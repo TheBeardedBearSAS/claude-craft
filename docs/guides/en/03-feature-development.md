@@ -241,16 +241,16 @@ Feature: User Authentication
 
 ```bash
 # Symfony
-/symfony:check-testing
+/symfony:check testing
 
 # Flutter
-/flutter:check-testing
+/flutter:check testing
 
 # Python
-/python:check-testing
+/python:check testing
 
 # React
-/react:check-testing
+/react:check testing
 ```
 
 ### Test Writing Checklist
@@ -366,14 +366,14 @@ With tests passing, improve the code quality.
 
 ```bash
 # Check code quality
-/symfony:check-code-quality
-/flutter:check-code-quality
-/python:check-code-quality
-/react:check-code-quality
+/symfony:check code-quality
+/flutter:check code-quality
+/python:check code-quality
+/react:check code-quality
 
 # Check architecture compliance
-/symfony:check-architecture
-/flutter:check-architecture
+/symfony:check architecture
+/flutter:check architecture
 ```
 
 ### Using Refactoring Specialist
@@ -417,10 +417,10 @@ Final quality check before completion.
 
 ```bash
 # Full compliance check (returns score /100)
-/symfony:check-compliance
-/flutter:check-compliance
-/python:check-compliance
-/react:check-compliance
+/symfony:check all
+/flutter:check all
+/python:check all
+/react:check all
 ```
 
 This comprehensive audit checks:
@@ -575,7 +575,7 @@ public function register(string $email, string $password): User
 ### Step 7: Refactor
 
 ```bash
-/symfony:check-code-quality
+/symfony:check code-quality
 ```
 
 Fix any issues identified.
@@ -596,7 +596,7 @@ Complete implementation including:
 ### Step 9: Final Check
 
 ```bash
-/symfony:check-compliance
+/symfony:check all
 ```
 
 Target: Score 90+/100
@@ -623,10 +623,10 @@ Target: Score 90+/100
 |-------|----------|
 | Analysis | `/common:analyze-feature` |
 | Design | `/common:architecture-decision` |
-| Testing | `/{tech}:check-testing` |
+| Testing | `/{tech}:check testing` |
 | Generation | `/{tech}:generate-*` |
-| Quality | `/{tech}:check-code-quality` |
-| Review | `/{tech}:check-compliance` |
+| Quality | `/{tech}:check code-quality` |
+| Review | `/{tech}:check all` |
 | Security | `/common:security-audit` |
 
 ### Templates Location

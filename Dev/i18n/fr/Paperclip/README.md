@@ -35,11 +35,11 @@ Paperclip/
 
 | Commande | Objet |
 |---|---|
-| `/paperclip:check-compliance` | Audit complet (Architecture + Qualité + Tests + Sécurité + Extensions), score /100 |
-| `/paperclip:check-architecture` | Séparation bi-couche + limites de modules + couverture activity log |
-| `/paperclip:check-code-quality` | Stricture TypeScript, lint, complexité, hygiène des logs |
-| `/paperclip:check-testing` | Couverture, tests de contrat adaptateur, isolation multi-tenant |
-| `/paperclip:check-security` | Tenance, secrets, approbations, budgets, canal adaptateur signé |
+| `/paperclip:check all` | Audit complet (Architecture + Qualité + Tests + Sécurité + Extensions), score /100 |
+| `/paperclip:check architecture` | Séparation bi-couche + limites de modules + couverture activity log |
+| `/paperclip:check code-quality` | Stricture TypeScript, lint, complexité, hygiène des logs |
+| `/paperclip:check testing` | Couverture, tests de contrat adaptateur, isolation multi-tenant |
+| `/paperclip:check security` | Tenance, secrets, approbations, budgets, canal adaptateur signé |
 | `/paperclip:generate-adapter` | Scaffold d'adaptateur (local / process / http) |
 | `/paperclip:generate-agent-config` | Génère une config `agent.yaml` avec budget + approbations |
 | `/paperclip:setup-company` | Bootstrap d'une nouvelle company Paperclip de bout en bout |

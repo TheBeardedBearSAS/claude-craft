@@ -18,7 +18,7 @@ const P = (l, f) => `Project/i18n/${l}/commands/${f}.md`;
 const S = (l, f) => `Project/i18n/${l}/Sprint/commands/${f}.md`;
 
 const MERGED = [
-  [W, 'implement', ['--epic', '--resume', '--parallel', '--queue', '--story', '/team:sprint', '.bmad/sprint-status.yaml']],
+  [W, 'implement', ['--epic', '--resume', '--parallel', '--queue', '--story', '/team:delivery', '.bmad/sprint-status.yaml']],
   [W, 'status', ['--board', '--queue', '--standup', '--gates', 'workflow-status.yaml', '.bmad/sprint-status.yaml']],
   [W, 'plan', ['--research', '--only=prd', '--only=backlog', 'project-management/prd.md', 'Implements']],
   [W, 'design', ['--constitution', 'project-management/tech-spec.md']],
@@ -29,28 +29,6 @@ const MERGED = [
   [B, 'init', ['--context']],
 ];
 
-// old command file -> [replaced-by, invocation the stub must run]
-const STUBS = [
-  [S, 'dev', '/workflow:implement', '/workflow:implement'],
-  [S, 'status', '/workflow:status', '/workflow:status'],
-  [S, 'next-story', '/project:backlog', '/project:backlog next story'],
-  [S, 'transition', '/project:backlog', '/project:backlog move story'],
-  [S, 'auto-route', '/project:backlog', '/project:backlog move story --auto'],
-  [P, 'run-sprint', '/workflow:implement', '/workflow:implement'],
-  [P, 'run-epic', '/workflow:implement', '/workflow:implement --epic'],
-  [P, 'run-queue', '/workflow:implement', '/workflow:implement --queue'],
-  [P, 'board', '/workflow:status', '/workflow:status --board'],
-  [P, 'batch-status', '/workflow:status', '/workflow:status --queue'],
-  [P, 'generate-prd', '/workflow:plan', '/workflow:plan --only=prd'],
-  [P, 'generate-backlog', '/workflow:plan', '/workflow:plan --only=backlog'],
-  [P, 'generate-tech-spec', '/workflow:design', '/workflow:design'],
-  [P, 'generate-constitution', '/workflow:design', '/workflow:design --constitution'],
-  [P, 'decompose-tasks', '/workflow:start', '/workflow:start'],
-  [W, 'analyze', '/workflow:plan', '/workflow:plan --research'],
-  [Q, 'report', '/qa:status', '/qa:status --report'],
-  [C, 'daily-standup', '/workflow:status', '/workflow:status --standup'],
-  [C, 'setup-project-context', '/common:init', '/common:init --context'],
-];
 
 const read = (rel) => fs.readFileSync(path.join(PROJECT_ROOT, rel), 'utf8');
 const fm = (raw) => yaml.load(FRONTMATTER_RE.exec(raw)[1]);
@@ -66,19 +44,6 @@ describe('phase 3 merged commands', () => {
   );
 });
 
-describe('phase 3 redirect stubs', () => {
-  it.each(LANGS.flatMap((l) => STUBS.map(([file, ...rest]) => [l, ...rest, file])))(
-    '%s %s -> %s',
-    (lang, name, replacedBy, invocation, file) => {
-      const raw = read(file(lang, name));
-      const data = fm(raw);
-      expect(data.deprecated).toBe(true);
-      expect(data['replaced-by']).toBe(replacedBy);
-      expect(raw).toContain(invocation);
-      expect(raw).toContain('$ARGUMENTS');
-    }
-  );
-});
 
 describe('sub-agents-patterns is documentation, not an action', () => {
   it('ships as a skill and is retired as a command', () => {

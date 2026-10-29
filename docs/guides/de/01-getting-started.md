@@ -239,7 +239,7 @@ Slash-Befehle sind Schnellaktionen:
 /symfony:generate-crud User
 
 # Qualität prüfen
-/symfony:check-compliance
+/symfony:check all
 
 # Architektur analysieren
 /common:architecture-decision
@@ -367,7 +367,7 @@ make config-validate CONFIG=file.yaml
 |--------|-------|
 | `/common:analyze-feature` | Anforderungen analysieren |
 | `/{tech}:generate-crud` | CRUD-Code generieren |
-| `/{tech}:check-compliance` | Vollständiges Qualitätsaudit |
+| `/{tech}:check all` | Vollständiges Qualitätsaudit |
 | `/common:security-audit` | Sicherheitsüberprüfung |
 
 ---

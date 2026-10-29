@@ -58,11 +58,7 @@ HELP_DESCRIPTION="    TCL-optimized installation covering framework-agnostic Ver
     Token reduction: ~95% (from ~70K to ~3.5K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check-compliance\` - Full compliance audit
-- \`/${TECH_NAMESPACE}:check-architecture\` - vercel.json / Functions / ISR / Cron architecture review
-- \`/${TECH_NAMESPACE}:check-code-quality\` - Function code quality (runtime config, handler signatures)
-- \`/${TECH_NAMESPACE}:check-testing\` - Test coverage for Functions/middleware logic
-- \`/${TECH_NAMESPACE}:check-security\` - Env var handling, header/CORS config, secrets audit
+AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
 - \`/${TECH_NAMESPACE}:deploy-config\` - Detect project shape and generate/validate a vercel.json"
 
 ARCHITECTURE_SUMMARY="\`\`\`

@@ -241,16 +241,16 @@ Feature: User Authentication
 
 ```bash
 # Symfony
-/symfony:check-testing
+/symfony:check testing
 
 # Flutter
-/flutter:check-testing
+/flutter:check testing
 
 # Python
-/python:check-testing
+/python:check testing
 
 # React
-/react:check-testing
+/react:check testing
 ```
 
 ### Lista de Verificación de Escritura de Tests
@@ -366,14 +366,14 @@ Con los tests pasando, mejora la calidad del código.
 
 ```bash
 # Verificar calidad del código
-/symfony:check-code-quality
-/flutter:check-code-quality
-/python:check-code-quality
-/react:check-code-quality
+/symfony:check code-quality
+/flutter:check code-quality
+/python:check code-quality
+/react:check code-quality
 
 # Verificar cumplimiento de la arquitectura
-/symfony:check-architecture
-/flutter:check-architecture
+/symfony:check architecture
+/flutter:check architecture
 ```
 
 ### Usar el Especialista en Refactorización
@@ -417,10 +417,10 @@ Verificación de calidad final antes de la finalización.
 
 ```bash
 # Verificación de cumplimiento completa (devuelve puntuación /100)
-/symfony:check-compliance
-/flutter:check-compliance
-/python:check-compliance
-/react:check-compliance
+/symfony:check all
+/flutter:check all
+/python:check all
+/react:check all
 ```
 
 Esta auditoría completa verifica:
@@ -575,7 +575,7 @@ public function register(string $email, string $password): User
 ### Paso 7: Refactorizar
 
 ```bash
-/symfony:check-code-quality
+/symfony:check code-quality
 ```
 
 Corrige los problemas identificados.
@@ -596,7 +596,7 @@ Implementación completa que incluye:
 ### Paso 9: Verificación Final
 
 ```bash
-/symfony:check-compliance
+/symfony:check all
 ```
 
 Objetivo: Puntuación ≥90/100
@@ -623,10 +623,10 @@ Objetivo: Puntuación ≥90/100
 |------|----------|
 | Análisis | `/common:analyze-feature` |
 | Diseño | `/common:architecture-decision` |
-| Testing | `/{tech}:check-testing` |
+| Testing | `/{tech}:check testing` |
 | Generación | `/{tech}:generate-*` |
-| Calidad | `/{tech}:check-code-quality` |
-| Revisión | `/{tech}:check-compliance` |
+| Calidad | `/{tech}:check code-quality` |
+| Revisión | `/{tech}:check all` |
 | Seguridad | `/common:security-audit` |
 
 ### Ubicación de Plantillas

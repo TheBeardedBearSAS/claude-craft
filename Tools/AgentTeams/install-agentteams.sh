@@ -2,7 +2,7 @@
 # =============================================================================
 # install-agentteams.sh — Install AgentTeams helper scripts into a project
 #
-# The /team:* commands (sprint, audit, delivery, security) expect helper
+# The /team:* commands (audit, delivery, security) expect helper
 # scripts at <project>/Tools/AgentTeams/lib/:
 #   - cost-estimator.sh      (token/cost estimation)
 #   - cost-dashboard.sh      (cost dashboard)

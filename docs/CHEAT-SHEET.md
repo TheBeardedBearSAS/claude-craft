@@ -75,8 +75,8 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 | Architecture decision | `/common:architecture-decision "Choose database"` |
 | Sprint review | `/workflow:review` |
 | Sprint retrospective | `/workflow:retro` |
-| Check architecture | `/symfony:check-architecture` (or tech-specific) |
-| Check security | `/react:check-security` (or tech-specific) |
+| Check architecture | `/symfony:check architecture` (or tech-specific) |
+| Check security | `/react:check security` (or tech-specific) |
 | Setup CI/CD | `/common:setup-ci` |
 
 ---
@@ -121,7 +121,7 @@ Main path: `init → plan → design → start → implement → review → retr
 
 ```
 /team:audit                       # Full audit (parallel)
-/team:sprint Sprint-3             # Sprint implementation (parallel)
+/team:delivery Sprint-3 --phase=implementation  # Sprint implementation (parallel)
 /team:security                    # Security review (parallel)
 /team:delivery                    # Full lifecycle (write + implement)
 ```
@@ -155,13 +155,13 @@ Main path: `init → plan → design → start → implement → review → retr
 /symfony:generate-crud User       # Generate CRUD
 /symfony:api-endpoint /api/users  # Generate API endpoint
 /symfony:generate-command app:import  # Generate console command
-/symfony:check-testing            # Check tests
-/symfony:check-code-quality       # Check quality
-/symfony:check-architecture       # Check architecture
-/symfony:check-security           # Check security
+/symfony:check testing            # Check tests
+/symfony:check code-quality       # Check quality
+/symfony:check architecture       # Check architecture
+/symfony:check security           # Check security
 /symfony:optimize-doctrine        # Optimize Doctrine
 /symfony:migration-plan           # Migration strategy
-/symfony:check-compliance         # Check GDPR/SOC2
+/symfony:check all                # All 4 axes, scored /100
 ```
 
 ### `/react:` - React/TypeScript
@@ -172,11 +172,11 @@ Main path: `init → plan → design → start → implement → review → retr
 /react:storybook-story Button     # Generate Storybook story
 /react:accessibility-check        # Check accessibility
 /react:bundle-analyze             # Analyze bundle size
-/react:check-testing              # Check tests
-/react:check-code-quality         # Check quality
-/react:check-architecture         # Check architecture
-/react:check-security             # Check security
-/react:check-compliance           # Check GDPR/SOC2
+/react:check testing              # Check tests
+/react:check code-quality         # Check quality
+/react:check architecture         # Check architecture
+/react:check security             # Check security
+/react:check all                  # All 4 axes, scored /100
 ```
 
 ### `/python:` - Python/FastAPI
@@ -187,11 +187,11 @@ Main path: `init → plan → design → start → implement → review → retr
 /python:dependency-audit          # Check dependencies
 /python:type-coverage             # Check type coverage
 /python:async-check               # Check async patterns
-/python:check-testing             # Check tests
-/python:check-code-quality        # Check quality
-/python:check-architecture        # Check architecture
-/python:check-security            # Check security
-/python:check-compliance          # Check GDPR/SOC2
+/python:check testing             # Check tests
+/python:check code-quality        # Check quality
+/python:check architecture        # Check architecture
+/python:check security            # Check security
+/python:check all                 # All 4 axes, scored /100
 ```
 
 ### `/flutter:` - Flutter/Dart
@@ -202,44 +202,44 @@ Main path: `init → plan → design → start → implement → review → retr
 /flutter:golden-update            # Update golden files
 /flutter:analyze-performance      # Performance analysis
 /flutter:localization-check       # Check i18n
-/flutter:check-testing            # Check tests
-/flutter:check-code-quality       # Check quality
-/flutter:check-architecture       # Check architecture
-/flutter:check-security           # Check security
-/flutter:check-compliance         # Check GDPR/SOC2
+/flutter:check testing            # Check tests
+/flutter:check code-quality       # Check quality
+/flutter:check architecture       # Check architecture
+/flutter:check security           # Check security
+/flutter:check all                # All 4 axes, scored /100
 ```
 
 ### `/angular:` - Angular
 
 ```
 /angular:generate-component Button  # Generate component
-/angular:check-testing            # Check tests
-/angular:check-code-quality       # Check quality
-/angular:check-architecture       # Check architecture
-/angular:check-security           # Check security
-/angular:check-compliance         # Check GDPR/SOC2
+/angular:check testing            # Check tests
+/angular:check code-quality       # Check quality
+/angular:check architecture       # Check architecture
+/angular:check security           # Check security
+/angular:check all                # All 4 axes, scored /100
 ```
 
 ### `/vuejs:` - Vue.js
 
 ```
 /vuejs:generate-component Button  # Generate component
-/vuejs:check-testing              # Check tests
-/vuejs:check-code-quality         # Check quality
-/vuejs:check-architecture         # Check architecture
-/vuejs:check-security             # Check security
-/vuejs:check-compliance           # Check GDPR/SOC2
+/vuejs:check testing              # Check tests
+/vuejs:check code-quality         # Check quality
+/vuejs:check architecture         # Check architecture
+/vuejs:check security             # Check security
+/vuejs:check all                  # All 4 axes, scored /100
 ```
 
 ### `/laravel:` - Laravel/PHP
 
 ```
 /laravel:generate-controller UserController  # Generate controller
-/laravel:check-testing            # Check tests
-/laravel:check-code-quality       # Check quality
-/laravel:check-architecture       # Check architecture
-/laravel:check-security           # Check security
-/laravel:check-compliance         # Check GDPR/SOC2
+/laravel:check testing            # Check tests
+/laravel:check code-quality       # Check quality
+/laravel:check architecture       # Check architecture
+/laravel:check security           # Check security
+/laravel:check all                # All 4 axes, scored /100
 ```
 
 ### `/reactnative:` - React Native
@@ -250,50 +250,67 @@ Main path: `init → plan → design → start → implement → review → retr
 /reactnative:deep-link            # Configure deep links
 /reactnative:app-size             # Analyze app size
 /reactnative:store-prepare        # Prepare for app stores
-/reactnative:check-testing        # Check tests
-/reactnative:check-code-quality   # Check quality
-/reactnative:check-architecture   # Check architecture
-/reactnative:check-security       # Check security
-/reactnative:check-compliance     # Check GDPR/SOC2
+/reactnative:check testing        # Check tests
+/reactnative:check code-quality   # Check quality
+/reactnative:check architecture   # Check architecture
+/reactnative:check security       # Check security
+/reactnative:check all            # All 4 axes, scored /100
 ```
 
 ### `/csharp:` - C#/.NET
 
 ```
 /csharp:generate-feature Auth     # Generate feature (CQRS)
-/csharp:check-testing             # Check tests
-/csharp:check-code-quality        # Check quality
-/csharp:check-architecture        # Check architecture
-/csharp:check-security            # Check security
-/csharp:check-compliance          # Check GDPR/SOC2
+/csharp:check testing             # Check tests
+/csharp:check code-quality        # Check quality
+/csharp:check architecture        # Check architecture
+/csharp:check security            # Check security
+/csharp:check all                 # All 4 axes, scored /100
 ```
 
 ### `/php:` - PHP (Generic)
 
 ```
-/php:check-testing                # Check tests
-/php:check-code-quality           # Check quality
-/php:check-architecture           # Check architecture
-/php:check-security               # Check security
-/php:check-compliance             # Check GDPR/SOC2
+/php:check testing                # Check tests
+/php:check code-quality           # Check quality
+/php:check architecture           # Check architecture
+/php:check security               # Check security
+/php:check all                    # All 4 axes, scored /100
+```
+
+### `/vite:` - Vite (framework-agnostic)
+
+```
+/vite:scaffold-project            # Scaffold a vanilla/lit project
+/vite:check-library-build         # Validate build.lib / vite-plugin-dts output
+/vite:check architecture          # Check architecture
+/vite:check all                   # All 4 axes, scored /100
+```
+
+### `/vercel:` - Vercel (deployment platform)
+
+```
+/vercel:deploy-config             # Generate vercel.json
+/vercel:check security            # Check security
+/vercel:check all                 # All 4 axes, scored /100
 ```
 
 ### `/paperclip:` - Paperclip Orchestration
 
 ```
-/paperclip:check-architecture     # Check architecture (control plane + adapters)
-/paperclip:check-code-quality     # Check code quality
-/paperclip:check-security         # Check security
-/paperclip:check-testing          # Check tests
-/paperclip:check-compliance       # Check GDPR/SOC2
+/paperclip:check architecture     # Check architecture (control plane + adapters)
+/paperclip:check code-quality     # Check code quality
+/paperclip:check security         # Check security
+/paperclip:check testing          # Check tests
+/paperclip:check all              # All 4 axes, scored /100
 /paperclip:generate-feature       # Generate feature module
 /paperclip:api-endpoint           # Generate API endpoint
 /paperclip:generate-command       # Generate CLI command
 ```
 
-### `/sprint:` - Deprecated
+### Removed in 9.0
 
-The 5 `/sprint:*` commands are redirect stubs (removed in 9.0): `/sprint:dev` → `/workflow:implement`, `/sprint:status` → `/workflow:status`, `/sprint:next-story` → `/project:backlog next story`, `/sprint:transition` → `/project:backlog move story <US> <status>`, `/sprint:auto-route` → `/project:backlog move story --auto`.
+The sprint namespace and 52 deprecated PM commands were removed in 9.0; see [MIGRATION-v9.md](MIGRATION-v9.md) for the old → new table.
 
 ### `/gate:` - Quality Gates
 
@@ -306,7 +323,7 @@ The 5 `/sprint:*` commands are redirect stubs (removed in 9.0): `/sprint:dev` �
 /gate:check sprint                # Sprint Ready gate
 /gate:check story US-001          # Story DoD gate
 /gate:check alignment             # Spec-code alignment gate (>= 85%)
-/gate:check all                   # Report of all document gates
+/gate:check all                   # All 4 axes, scored /100
 /gate:check commit|merge|release  # Code gates (ex /common:pre-*-check, release-checklist)
 /gate:check --phase=pre-sprint    # Lifecycle checkpoint (pre-sprint|pre-impl|post-impl|pre-merge)
 ```
@@ -325,7 +342,7 @@ The 5 `/sprint:*` commands are redirect stubs (removed in 9.0): `/sprint:dev` �
 /project:backlog move story US-001 done  # Transition a story (--auto for routing rules)
 ```
 
-> The 54 former commands (`/project:add-epic`, `/gate:validate-prd`, `/sprint:dev`, `/project:run-sprint`...) are deprecated redirect stubs removed in 9.0: see "Deprecated commands" in `docs/COMMANDS.md`.
+> The 52 former PM commands (e.g. add-epic, validate-prd, run-sprint) were removed in 9.0: see [MIGRATION-v9.md](MIGRATION-v9.md).
 
 
 ---

@@ -6,10 +6,10 @@ Workflow complet pour créer et gérer un backlog SCRUM avec Claude-Craft.
 
 ## Vue d'ensemble
 
-Claude-Craft fournit un ensemble complet de commandes pour gérer votre product backlog selon la méthodologie SCRUM (parmi les 238 fichiers de commandes de Claude Craft, dont 54 redirections dépréciées) :
+Claude-Craft fournit un ensemble complet de commandes pour gérer votre product backlog selon la méthodologie SCRUM :
 
-- **Une commande `/project:backlog`** (`add`, `list`, `edit`, `move`, plus `next story` et `move story --auto` pour le routage des stories) ainsi que `/workflow:plan --only=backlog`, `/workflow:start`, `/workflow:status --board`, `/project:reverse`, `/project:trace`, `/project:report` et `/project:migrate` pour le backlog et la gestion de projet ; les anciennes commandes `/project:add-*`, `list-*`, `update-*`, `move-task`, `/project:generate-backlog`, `/project:decompose-tasks`, `/project:board` et `/sprint:*` sont dépréciées (retrait en 9.0)
-- **Le chemin `/workflow:`** (`init`, `plan`, `design`, `start`, `implement`, `review`, `retro`, `status`) pour le cycle de sprint ; le namespace `/sprint:` est déprécié
+- **Une commande `/project:backlog`** (`add`, `list`, `edit`, `move`, plus `next story` et `move story --auto` pour le routage des stories) ainsi que `/workflow:plan --only=backlog`, `/workflow:start`, `/workflow:status --board`, `/project:reverse`, `/project:trace`, `/project:report` et `/project:migrate` pour le backlog et la gestion de projet ; les anciennes commandes par entité (add-*, list-*, update-*, move-task, generate-backlog, decompose-tasks, board) et le namespace sprint ont été retirées en 9.0 (voir MIGRATION-v9)
+- **Le chemin `/workflow:`** (`init`, `plan`, `design`, `start`, `implement`, `review`, `retro`, `status`) pour le cycle de sprint 
 - **Une commande `/gate:check`** (`prd`, `spec`, `backlog`, `sprint`, `story`, `alignment`, `all`, `commit`, `merge`, `release`) pour la validation qualité
 - **Vertical slicing** obligatoire sur toutes les couches tech
 - **Validation INVEST** pour les User Stories

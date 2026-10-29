@@ -8,7 +8,7 @@ Vollständiger Workflow zur Erstellung und Verwaltung eines SCRUM-Backlogs mit C
 
 Claude-Craft bietet einen umfassenden Satz von Befehlen zur Verwaltung Ihres Product Backlogs nach der SCRUM-Methodik:
 
-- **Ein einziger Befehl `/project:backlog`** (`add`, `list`, `edit`, `move`, dazu `next story` und `move story --auto` für das Story-Routing) zusammen mit `/workflow:plan --only=backlog`, `/workflow:start` und `/workflow:status --board`; die alten Befehle `/project:add-*`, `list-*`, `update-*`, `move-task`, `/project:generate-backlog`, `/project:decompose-tasks`, `/project:board` und `/sprint:*` sind veraltet und werden in 9.0 entfernt
+- **Ein einziger Befehl `/project:backlog`** (`add`, `list`, `edit`, `move`, dazu `next story` und `move story --auto` für das Story-Routing) zusammen mit `/workflow:plan --only=backlog`, `/workflow:start` und `/workflow:status --board`; die früheren Einzelbefehle (add-*, list-*, update-*, move-task, generate-backlog, decompose-tasks, board) und der Sprint-Namespace wurden in 9.0 entfernt (siehe MIGRATION-v9)
 - **5 Vorlagen** für eine konsistente Struktur
 - **Vertical Slicing** über alle Technologieschichten hinweg
 - **INVEST-Modell**-Validierung für User Stories

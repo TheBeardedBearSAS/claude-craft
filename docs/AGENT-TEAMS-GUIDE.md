@@ -4,7 +4,7 @@ Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordina
 
 ## Prerequisites
 
-> **Engines:** `/team:audit`, `/team:security`, `/team:sprint` and `/team:delivery` default to `--engine=subagents` (plain sub-agent delegation via the `Agent` tool, no prerequisite, works with `claude -p` and in CI). The prerequisites below only apply to `--engine=teams`. If `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is missing, `--engine=teams` falls back to `subagents` instead of failing. Agent Teams limits: no `claude -p` / CI, one team per session.
+> **Engines:** `/team:audit`, `/team:security` and `/team:delivery` default to `--engine=subagents` (plain sub-agent delegation via the `Agent` tool, no prerequisite, works with `claude -p` and in CI). The prerequisites below only apply to `--engine=teams`. If `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is missing, `--engine=teams` falls back to `subagents` instead of failing. Agent Teams limits: no `claude -p` / CI, one team per session.
 
 | Requirement | Minimum Version | Check |
 |-------------|-----------------|-------|
@@ -85,7 +85,7 @@ All `/team:*` commands support `--max-cost=<dollars>` to set a maximum budget:
 /team:audit --max-cost=2.00
 
 # Budget guard with dry-run preview
-/team:sprint Sprint-3 --max-cost=5.00 --dry-run
+/team:delivery --phase=implementation Sprint-3 --max-cost=5.00 --dry-run
 ```
 
 If the estimated parallel cost exceeds the budget:

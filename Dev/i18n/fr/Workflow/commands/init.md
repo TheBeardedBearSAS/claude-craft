@@ -219,7 +219,7 @@ next_action: "Générer ou mettre à jour le PRD"
 next_command: "/workflow:plan --only=prd"
 ```
 
-Créer le squelette BMAD de statut (source unique de vérité du statut des stories, lu par `/gate:*`, `/sprint:*`, `/workflow:auto-sprint` et le Kanban). Ignorer si `.bmad/sprint-status.yaml` existe déjà ; `/workflow:start` renseigne ensuite `metadata` et `stories` :
+Créer le squelette BMAD de statut (source unique de vérité du statut des stories, lu par `/gate:*`, `/workflow:auto-sprint` et le Kanban). Ignorer si `.bmad/sprint-status.yaml` existe déjà ; `/workflow:start` renseigne ensuite `metadata` et `stories` :
 
 ```yaml
 # .bmad/sprint-status.yaml

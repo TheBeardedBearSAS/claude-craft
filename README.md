@@ -26,7 +26,13 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
 
-A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 140 commands across 18 namespaces (238 total, including deprecated redirect stubs kept until 9.0), 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+
+## What's New in v9.0.0
+
+**BREAKING — retrait des commandes dépréciées (2026-10-29, v9.0.0) :** les 54 stubs de redirection (PM, `/common:research-context7`, `/uiux:orchestrator`) et le namespace `/sprint:` sont supprimés ; `claude-craft update` les efface des projets. Table de correspondance : [MIGRATION-v9](docs/MIGRATION-v9.md). Détails : [CHANGELOG](CHANGELOG.md#900---2026-10-29).
+
+**Un seul `/<tech>:check <axe>` par stack (v9.0.0) :** `/react:check architecture|code-quality|security|testing|all` remplace les 5 `check-*` de chaque stack (`all` = audit noté sur 100) ; `/team:sprint` devient `/team:delivery --phase=implementation`. Les anciens noms restent des stubs de redirection jusqu'en 10.0. Table : [MIGRATION-v9](docs/MIGRATION-v9.md).
 
 ## What's New in v8.27.0
 
@@ -191,7 +197,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
 - **33 default agents + 39 infra agents on-demand** -- reviewers, architects, coaches that know your stack deeply (72 total potentially installable)
-- **140 slash commands across 18 namespaces** -- repeatable workflows for audits, code generation, sprint management
+- **143 slash commands across 18 namespaces** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -229,7 +235,7 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 140 across 18 namespaces (238 total with infra/project) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Commands** | 143 across 18 namespaces (197 total with infra/project, including 66 redirect stubs kept until 10.0) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
 | **Skills** | 55 | Architecture, testing, security, DDD best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -266,12 +272,12 @@ These are the commands you'll use most:
 | `/project:backlog next story` | Get next story ready for development |
 | `/qa:tdd` | Test-Driven Development flow |
 | `/gate:check story` | Check story meets Definition of Done |
-| `/{tech}:check-architecture` | Verify architecture compliance |
+| `/{tech}:check <axis>` | Audit architecture, code-quality, security, testing, or all (scored) |
 | `/{tech}:generate-*` | Generate code following project patterns |
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 140 commands across 18 namespaces (238 total including infra, project management and deprecated redirect stubs kept until 9.0).
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 143 commands across 18 namespaces (197 total including infra, project management and the redirect stubs kept until 10.0).
 
 ## Installation
 
@@ -354,7 +360,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 140 commands |
+| [Commands](docs/COMMANDS.md) | All 143 commands |
 | [Agents](docs/AGENTS.md) | All 31 default agents (+ 39 infra on-demand) |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |

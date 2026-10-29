@@ -106,7 +106,7 @@ src/
 /symfony:generate-crud Product
 
 # Check architecture compliance
-/symfony:check-architecture
+/symfony:check architecture
 
 # Plan database migration
 /symfony:migration-plan "Add user preferences"

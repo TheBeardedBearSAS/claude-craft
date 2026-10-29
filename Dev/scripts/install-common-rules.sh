@@ -487,7 +487,7 @@ install_commands() {
 
 # Install AgentTeams helper scripts (cost-estimator, ralph-teams-adapter,
 # compatibility-check, ...) used by the /team:* commands. They are shipped
-# alongside the Team command namespace so /team:sprint etc. find them at
+# alongside the Team command namespace so /team:delivery etc. find them at
 # <project>/Tools/AgentTeams/lib/ instead of warning "scripts MISSING".
 install_agentteams() {
     local craft_root

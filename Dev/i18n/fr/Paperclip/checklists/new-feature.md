@@ -91,7 +91,7 @@ Une fonctionnalité dans Paperclip touche typiquement un ou plusieurs **modules*
 ## 10. Revue
 
 - [ ] Auto-revue : `git diff main...HEAD`
-- [ ] Exécuter `/paperclip:check-compliance` localement
+- [ ] Exécuter `/paperclip:check all` localement
 - [ ] Description PR : quoi, pourquoi, plan de migration, plan de rollback
 - [ ] Tests de contrat d'adaptateur verts pour chaque adaptateur touché
 

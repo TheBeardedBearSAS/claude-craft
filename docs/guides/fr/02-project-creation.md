@@ -184,7 +184,7 @@ ls -la .claude/
 
 **Contenu installé :**
 - 21 règles spécifiques Symfony (Clean Architecture, DDD, CQRS, etc.)
-- 10+ commandes Symfony (`/symfony:generate-crud`, `/symfony:check-compliance`, etc.)
+- 10+ commandes Symfony (`/symfony:generate-crud`, `/symfony:check all`, etc.)
 - Agent reviewer Symfony
 - Templates de code (Service, ValueObject, Aggregate, etc.)
 - Checklists qualité
@@ -531,7 +531,7 @@ Utilisez cette checklist lors de la configuration d'un nouveau projet :
 ### Vérification
 
 - [ ] Claude Code démarré dans le répertoire projet
-- [ ] Commandes disponibles (essayer `/symfony:check-compliance`)
+- [ ] Commandes disponibles (essayer `/symfony:check all`)
 - [ ] Agents répondent (essayer `@symfony-reviewer bonjour`)
 
 ### Configuration Équipe

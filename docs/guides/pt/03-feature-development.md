@@ -241,16 +241,16 @@ Feature: Autenticação de Usuário
 
 ```bash
 # Symfony
-/symfony:check-testing
+/symfony:check testing
 
 # Flutter
-/flutter:check-testing
+/flutter:check testing
 
 # Python
-/python:check-testing
+/python:check testing
 
 # React
-/react:check-testing
+/react:check testing
 ```
 
 ### Lista de Verificação de Escrita de Testes
@@ -366,14 +366,14 @@ Com os testes passando, melhore a qualidade do código.
 
 ```bash
 # Verificar qualidade do código
-/symfony:check-code-quality
-/flutter:check-code-quality
-/python:check-code-quality
-/react:check-code-quality
+/symfony:check code-quality
+/flutter:check code-quality
+/python:check code-quality
+/react:check code-quality
 
 # Verificar conformidade de arquitetura
-/symfony:check-architecture
-/flutter:check-architecture
+/symfony:check architecture
+/flutter:check architecture
 ```
 
 ### Usando o Especialista em Refatoração
@@ -417,10 +417,10 @@ Verificação de qualidade final antes da conclusão.
 
 ```bash
 # Verificação de conformidade completa (retorna pontuação /100)
-/symfony:check-compliance
-/flutter:check-compliance
-/python:check-compliance
-/react:check-compliance
+/symfony:check all
+/flutter:check all
+/python:check all
+/react:check all
 ```
 
 Esta auditoria abrangente verifica:
@@ -575,7 +575,7 @@ public function register(string $email, string $password): User
 ### Passo 7: Refatorar
 
 ```bash
-/symfony:check-code-quality
+/symfony:check code-quality
 ```
 
 Corrija todos os problemas identificados.
@@ -596,7 +596,7 @@ Implementação completa incluindo:
 ### Passo 9: Verificação Final
 
 ```bash
-/symfony:check-compliance
+/symfony:check all
 ```
 
 Meta: Pontuação 90+/100
@@ -623,10 +623,10 @@ Meta: Pontuação 90+/100
 |------|----------|
 | Análise | `/common:analyze-feature` |
 | Design | `/common:architecture-decision` |
-| Testes | `/{tech}:check-testing` |
+| Testes | `/{tech}:check testing` |
 | Geração | `/{tech}:generate-*` |
-| Qualidade | `/{tech}:check-code-quality` |
-| Revisão | `/{tech}:check-compliance` |
+| Qualidade | `/{tech}:check code-quality` |
+| Revisão | `/{tech}:check all` |
 | Segurança | `/common:security-audit` |
 
 ### Localização dos Templates
