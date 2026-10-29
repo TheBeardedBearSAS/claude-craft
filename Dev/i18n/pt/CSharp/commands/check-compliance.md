@@ -1,182 +1,253 @@
 ---
-description: Verify C#/.NET project compliance with Clean Architecture and coding standards
+description: Verificar Conformidade Completa do C#/.NET
+argument-hint: [arguments]
 ---
 
-# C#/.NET Compliance Check
+# Verificar Conformidade Completa do C#/.NET
 
-You are a C#/.NET compliance expert. Analyze the project to verify adherence to Clean Architecture principles and modern .NET best practices.
+## Argumentos
 
-## Analysis Scope
+$ARGUMENTS (opcional: caminho para o projeto a analisar)
 
-### 1. Architecture Compliance
+## Modo de Planejamento
 
-Check layer separation and dependencies:
+> O modo de planejamento é ativado automaticamente quando o escopo abrange múltiplos módulos ou requer investigação transversal.
+
+## MISSÃO
+
+Realizar uma auditoria de conformidade completa do projeto C#/.NET orquestrando as 4 verificações principais: Arquitetura, Qualidade de Código, Testes e Segurança. Produzir um relatório consolidado com uma pontuação geral de 100 pontos.
+
+### Etapa 1: Preparação da Auditoria
+
+Preparar o ambiente de auditoria:
+- [ ] Identificar o caminho do projeto a auditar
+- [ ] Verificar a presença de arquivos de configuração (.sln, .csproj, Directory.Build.props)
+- [ ] Listar os diretórios principais (src/, tests/, etc.)
+- [ ] Identificar a estrutura do projeto e a versão do .NET
+
+**Nota**: Se $ARGUMENTS for fornecido, utilizá-lo como caminho do projeto; caso contrário, usar o diretório atual.
+
+### Etapa 2: Auditoria de Arquitetura (25 pontos)
+
+Executar a verificação completa de arquitetura:
+
+**Comando**: Usar o slash command `/csharp:check-architecture` ou seguir manualmente os passos em `check-architecture.md`
+
+**Critérios Avaliados**:
+- Separação de camadas da Clean Architecture (6 pts)
+- Fluxo de dependências (o Domain não possui referências externas) (6 pts)
+- Padrões CQRS e MediatR (4 pts)
+- Modelagem DDD (Entidades, Value Objects, Agregados) (4 pts)
+- Padrões Repository e Unit of Work (3 pts)
+- Referências de projetos e regras de dependência (2 pts)
+
+**Referência**: `check-architecture.md`
+
+### Etapa 3: Auditoria de Qualidade de Código (25 pontos)
+
+Executar a verificação de qualidade de código:
+
+**Comando**: Usar o slash command `/csharp:check-code-quality` ou seguir manualmente os passos em `check-code-quality.md`
+
+**Critérios Avaliados**:
+- Convenções de nomenclatura (PascalCase, _camelCase) (5 pts)
+- Recursos modernos do C# (records, pattern matching) (5 pts)
+- Tipos de referência anuláveis habilitados (4 pts)
+- Princípios KISS/DRY/YAGNI (4 pts)
+- Padrões async/await (sem .Result/.Wait()) (4 pts)
+- Documentação e comentários XML (3 pts)
+
+**Referência**: `check-code-quality.md`
+
+### Etapa 4: Auditoria de Testes (25 pontos)
+
+Executar a verificação de testes:
+
+**Comando**: Usar o slash command `/csharp:check-testing` ou seguir manualmente os passos em `check-testing.md`
+
+**Critérios Avaliados**:
+- Cobertura de código (7 pts)
+- Testes unitários do Domain e da Application (6 pts)
+- Testes de integração da Infrastructure (4 pts)
+- Qualidade do FluentAssertions (3 pts)
+- Organização de testes e fixtures (3 pts)
+- Padrões de mocking (Moq/NSubstitute) (2 pts)
+
+**Referência**: `check-testing.md`
+
+### Etapa 5: Auditoria de Segurança (25 pontos)
+
+Executar a verificação de segurança:
+
+**Comando**: Usar o slash command `/csharp:check-security` ou seguir manualmente os passos em `check-security.md`
+
+**Critérios Avaliados**:
+- Proteções OWASP Top 10 (6 pts)
+- Gerenciamento de segredos e credenciais (5 pts)
+- Validação de entradas (FluentValidation) (4 pts)
+- Vulnerabilidades de dependências (4 pts)
+- Autenticação e autorização (3 pts)
+- Configuração segura (2 pts)
+- Prevenção de injeção SQL (1 pt)
+
+**Referência**: `check-security.md`
+
+### Etapa 6: Consolidação e Pontuação Global
+
+Calcular a pontuação geral e produzir o relatório consolidado:
+- [ ] Somar as 4 pontuações (máximo de 100 pontos)
+- [ ] Identificar categorias críticas (<50%)
+- [ ] Listar todos os problemas transversais críticos
+- [ ] Priorizar ações por impacto/esforço
+- [ ] Produzir o relatório consolidado final
+
+**Escala de Avaliação**:
+- 90-100: Excelente — Projeto de referência
+- 75-89: Muito Bom — Algumas melhorias menores
+- 60-74: Aceitável — Requer melhorias
+- 40-59: Insuficiente — Refatoração significativa necessária
+- 0-39: Crítico — Revisão completa necessária
+
+### Etapa 7: Recomendações e Plano de Ação
+
+Produzir as recomendações finais:
+- [ ] Identificar as 3 ações prioritárias em todas as categorias
+- [ ] Estimar o esforço (Baixo/Médio/Alto) para cada ação
+- [ ] Estimar o impacto (Baixo/Médio/Alto) para cada ação
+- [ ] Propor uma ordem de implementação
+- [ ] Sugerir ganhos rápidos (alta relação impacto/esforço)
+
+## FORMATO DE SAÍDA
 
 ```
-Expected Structure:
-src/
-├── Domain/           → NO external dependencies
-├── Application/      → Only depends on Domain
-├── Infrastructure/   → Implements Domain/Application interfaces
-└── WebAPI/          → Presentation layer
+AUDITORIA DE CONFORMIDADE C#/.NET - RELATÓRIO COMPLETO
+=============================================
 
-Dependency Rule: Dependencies MUST flow inward only
+PONTUAÇÃO GERAL: XX/100
+
+NÍVEL DE CONFORMIDADE: [Excelente/Muito Bom/Aceitável/Insuficiente/Crítico]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PONTUAÇÕES POR CATEGORIA:
+
+ARQUITETURA        : XX/25  [██████████░░░░░░░░░░] XX%
+QUALIDADE DE CÓDIGO: XX/25  [██████████░░░░░░░░░░] XX%
+TESTES             : XX/25  [██████████░░░░░░░░░░] XX%
+SEGURANÇA          : XX/25  [██████████░░░░░░░░░░] XX%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PONTOS FORTES GERAIS:
+1. [Ponto forte identificado em múltiplas categorias]
+2. [Outro ponto forte principal]
+3. [Terceiro ponto forte]
+
+MELHORIAS GERAIS:
+1. [Melhoria transversal menor]
+2. [Outra melhoria recomendada]
+3. [Terceira melhoria]
+
+PROBLEMAS CRÍTICOS:
+1. [Problema crítico nº 1 - categoria afetada]
+2. [Problema crítico nº 2 - categoria afetada]
+3. [Problema crítico nº 3 - categoria afetada]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DETALHES POR CATEGORIA:
+
+┌─────────────────────────────────────────────┐
+│ ARQUITETURA (XX/25)                         │
+└─────────────────────────────────────────────┘
+
+Sub-pontuações:
+  • Camadas da Clean Architecture  : XX/6
+  • Fluxo de dependências          : XX/6
+  • CQRS e MediatR                 : XX/4
+  • Modelagem DDD                  : XX/4
+  • Padrões Repository             : XX/3
+  • Referências de projetos        : XX/2
+
+Pontos Fortes:
+- [Pontos fortes de arquitetura]
+
+Problemas:
+- [Problemas de arquitetura]
+
+[Seções semelhantes para Qualidade de Código, Testes e Segurança...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP 3 AÇÕES PRIORITÁRIAS (TODAS AS CATEGORIAS):
+
+1. CRÍTICO - [Ação nº 1]
+   Categoria : [Arquitetura/Qualidade/Testes/Segurança]
+   Impacto   : [Alto/Médio/Baixo]
+   Esforço   : [Alto/Médio/Baixo]
+   Prioridade: IMEDIATA
+
+   Descrição detalhada:
+   [Explicação do problema e solução proposta]
+
+   Arquivos afetados:
+   - [arquivo:linha]
+
+   Exemplo de correção:
+   [Código ou comando de correção]
+
+2. IMPORTANTE - [Ação nº 2]
+   [Mesmo formato...]
+
+3. RECOMENDADO - [Ação nº 3]
+   [Mesmo formato...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GANHOS RÁPIDOS (Alto Impacto / Baixo Esforço):
+
+- [Ganho rápido nº 1] - Categoria: [X] - Impacto: [X] - Esforço: [X]
+- [Ganho rápido nº 2] - Categoria: [X] - Impacto: [X] - Esforço: [X]
+- [Ganho rápido nº 3] - Categoria: [X] - Impacto: [X] - Esforço: [X]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PLANO DE AÇÃO RECOMENDADO:
+
+SEMANA 1 (Imediato):
+- [ ] [Ação crítica nº 1]
+- [ ] [Ganho rápido prioritário]
+
+SEMANAS 2-4 (Curto prazo):
+- [ ] [Ação importante nº 2]
+- [ ] [Outros ganhos rápidos]
+
+MESES 2-3 (Médio prazo):
+- [ ] [Ação recomendada nº 3]
+- [ ] [Melhorias progressivas]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RESUMO EXECUTIVO:
+
+[Parágrafo de síntese sobre o estado geral do projeto, principais pontos
+fortes, principais pontos fracos e a trajetória recomendada para melhorar
+a conformidade. Indicar se o projeto está pronto para produção,
+requer correções ou necessita de refatoração.]
+
+Recomendação Geral: [Pronto para produção / Correções menores /
+Refatoração significativa / Revisão completa necessária]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**Verify:**
-- [ ] Domain has no references to Infrastructure or Application
-- [ ] Application only references Domain
-- [ ] Infrastructure implements interfaces from Domain/Application
-- [ ] No circular dependencies between projects
+## NOTAS IMPORTANTES
 
-### 2. Clean Architecture Patterns
-
-**Domain Layer:**
-- [ ] Entities have private setters
-- [ ] Value Objects are immutable
-- [ ] Aggregate roots are identified
-- [ ] Domain events are used for side effects
-- [ ] Repository interfaces defined in Domain
-
-**Application Layer:**
-- [ ] CQRS pattern implemented (Commands/Queries)
-- [ ] MediatR used for decoupling
-- [ ] FluentValidation for input validation
-- [ ] DTOs used for data transfer
-- [ ] No direct entity exposure to API
-
-**Infrastructure Layer:**
-- [ ] EF Core configurations in separate files
-- [ ] Repository pattern implementations
-- [ ] External service implementations
-
-### 3. Modern C# Features
-
-**Check usage of:**
-- [ ] File-scoped namespaces
-- [ ] Primary constructors (where appropriate)
-- [ ] Records for DTOs
-- [ ] Pattern matching
-- [ ] Nullable reference types enabled
-- [ ] Collection expressions (C# 12)
-
-### 4. Coding Standards
-
-**Naming Conventions:**
-- [ ] PascalCase for public members
-- [ ] _camelCase for private fields
-- [ ] Async suffix on async methods
-- [ ] I prefix for interfaces
-
-**Code Quality:**
-- [ ] No unused using directives
-- [ ] No empty catch blocks
-- [ ] Proper async/await usage (no .Result or .Wait())
-- [ ] CancellationToken passed to async methods
-
-## Modo Plano
-
-> O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
-
-## Output Format
-
-```
-══════════════════════════════════════════════════════════════
-C#/.NET COMPLIANCE REPORT
-══════════════════════════════════════════════════════════════
-
-Project: {ProjectName}
-Framework: .NET {Version}
-Analysis Date: {Date}
-
-──────────────────────────────────────────────────────────────
-ARCHITECTURE COMPLIANCE
-──────────────────────────────────────────────────────────────
-
-Layer Separation:
-[✓] Domain has no external dependencies
-[✓] Application only references Domain
-[✗] Infrastructure references Application directly
-    → Issue: OrderRepository.cs:15 - direct DbContext usage
-
-Dependency Flow:
-[✓] No circular dependencies detected
-
-Score: 75/100
-
-──────────────────────────────────────────────────────────────
-CLEAN ARCHITECTURE PATTERNS
-──────────────────────────────────────────────────────────────
-
-Domain Layer:
-[✓] Entities use private setters
-[✓] Value Objects are immutable
-[✗] Missing aggregate root markers
-    → Order.cs should implement IAggregateRoot
-
-Application Layer:
-[✓] CQRS pattern implemented
-[✓] MediatR configured
-[✗] Validation missing on CreateOrderCommand
-    → Add CreateOrderCommandValidator
-
-Score: 80/100
-
-──────────────────────────────────────────────────────────────
-MODERN C# FEATURES
-──────────────────────────────────────────────────────────────
-
-[✓] File-scoped namespaces used
-[✓] Nullable reference types enabled
-[✗] Records not used for DTOs
-    → OrderDto.cs - consider converting to record
-[✗] Pattern matching underutilized
-    → OrderService.cs:45 - use switch expression
-
-Score: 70/100
-
-──────────────────────────────────────────────────────────────
-CODING STANDARDS
-──────────────────────────────────────────────────────────────
-
-Naming:
-[✓] PascalCase for public members
-[✓] Private fields use _camelCase prefix
-[✗] Async method missing Async suffix
-    → OrderService.cs: GetOrder → GetOrderAsync
-
-Code Quality:
-[✓] No empty catch blocks
-[✗] Blocking call detected
-    → Program.cs:23 - Replace .Result with await
-
-Score: 85/100
-
-══════════════════════════════════════════════════════════════
-OVERALL COMPLIANCE SCORE: 77/100
-══════════════════════════════════════════════════════════════
-
-Priority Fixes:
-1. [HIGH] Remove blocking calls (.Result/.Wait())
-2. [HIGH] Add missing validators
-3. [MEDIUM] Convert DTOs to records
-4. [MEDIUM] Mark aggregate roots with IAggregateRoot
-5. [LOW] Rename async methods with Async suffix
-```
-
-## Scoring Criteria
-
-| Category | Weight | Criteria |
-|----------|--------|----------|
-| Architecture | 30% | Layer separation, dependency flow |
-| Clean Architecture | 25% | CQRS, DDD patterns, validation |
-| Modern C# | 20% | Latest language features |
-| Coding Standards | 25% | Naming, async patterns, quality |
-
-## Actions
-
-After analysis:
-1. List all compliance issues found
-2. Prioritize by severity (HIGH/MEDIUM/LOW)
-3. Provide specific fix recommendations with code examples
-4. Calculate overall compliance score
+- Este comando orquestra as 4 auditorias especializadas
+- Usar Docker para todas as ferramentas de análise
+- Fornecer exemplos concretos com arquivo:linha para cada problema
+- Priorizar ações com base na matriz Impacto/Esforço
+- Problemas de segurança são SEMPRE a prioridade máxima
+- Propor correções automatizáveis (scripts, hooks de pré-commit)
+- O relatório deve ser acionável, não apenas descritivo
+- Adaptar as recomendações ao contexto de negócio do projeto

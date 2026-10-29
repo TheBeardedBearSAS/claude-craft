@@ -15,7 +15,9 @@ $ARGUMENTS (optional: path to project to analyze)
 
 ## MISSION
 
-Perform a complete compliance audit of the Vite project by orchestrating the 4 major checks: Config & Architecture Vite, TypeScript & Quality, Tests, and Build Output & Performance. Produce a consolidated report with an overall score out of 100 points. **Scope reminder**: this audit covers framework-agnostic Vite usage only (vanilla JS/TS apps, library authoring, multi-page apps, Workers/WASM). Do not evaluate React/Vue/Angular/Svelte-specific dev-server integration — that belongs to the corresponding stack's own compliance check.
+Perform a complete compliance audit of the Vite project by orchestrating the 4 major checks: Architecture, Code Quality, Tests, and Security. Produce a consolidated report with an overall score out of 100 points.
+
+> **Scope reminder**: this audit covers framework-agnostic Vite usage only (vanilla JS/TS apps, library authoring with `build.lib`, multi-page apps, Workers/WASM entries). Do not evaluate React/Vue/Angular/Svelte-specific dev-server integration; that belongs to the corresponding stack's own compliance check.
 
 ### Step 1: Audit Preparation
 
@@ -24,66 +26,77 @@ Prepare audit environment:
 - [ ] Verify presence of configuration files (package.json, tsconfig.json, vite.config.ts)
 - [ ] List main directories (src/, pages/, public/, tests/, etc.)
 - [ ] Identify project type: vanilla SPA, library (build.lib), multi-page app, or Workers/WASM entry points
-- [ ] Identify Vite version and confirm no framework-specific plugin (`@vitejs/plugin-react`, `@vitejs/plugin-vue`, etc.) is in scope for this audit
+- [ ] Identify Vite version and confirm no framework-specific plugin (`@vitejs/plugin-react`, `@vitejs/plugin-vue`, etc.) is in scope
 
 **Note**: If $ARGUMENTS provided, use it as project path, otherwise use current directory.
 
-### Step 2: Config & Architecture Vite Audit (30 points)
+### Step 2: Architecture Audit (25 points)
 
-Execute complete configuration and architecture check:
+Execute complete architecture check:
 
-**Evaluated Criteria**:
-- vite.config.ts correctness (defineConfig, aliases synced with tsconfig) (8 pts)
-- index.html placement at project root, never inside public/ (6 pts)
-- build.lib configuration for libraries (entry, formats, external, vite-plugin-dts) (8 pts)
-- rolldownOptions.input for multi-page apps, plugin naming convention (vite-plugin-*) (8 pts)
-
-**Reference**: `.claude/agents/vite-reviewer.md` (section 1)
-
-### Step 3: TypeScript & Quality Audit (20 points)
-
-Execute TypeScript configuration and typing quality check:
+**Command**: Use slash command `/vite:check-architecture` or manually follow steps in `check-architecture.md`
 
 **Evaluated Criteria**:
-- strict: true, moduleResolution: "bundler", target ES2022+ (6 pts)
-- Vite types present (vite/client), import.meta.env correctly typed (5 pts)
-- vite-plugin-dts output correctness (rollupTypes, zero unjustified any) (5 pts)
-- Custom plugin hooks typed via the Plugin interface (4 pts)
+- Project shape detection and entry points (index.html at root, build.lib entry, multi-page input, Worker/WASM `new URL` pattern) (6 pts)
+- vite.config.ts structure (defineConfig, functional form, key ordering) (5 pts)
+- Custom plugin organization (vite-plugins/, vite-plugin-* naming, one concern per plugin) (4 pts)
+- Dependency externalization and package.json exports map (library) (6 pts)
+- Output structure (dist/ ignored, ES + CJS + .d.ts via vite-plugin-dts, stable chunk names) (4 pts)
 
-**Reference**: `.claude/agents/vite-reviewer.md` (section 2)
+**Reference**: `check-architecture.md`
+
+### Step 3: Code Quality Audit (25 points)
+
+Execute code quality check:
+
+**Command**: Use slash command `/vite:check-code-quality` or manually follow steps in `check-code-quality.md`
+
+**Evaluated Criteria**:
+- ESLint analysis (no-explicit-any, no-restricted-imports, no-console) (5 pts)
+- TypeScript strictness (strict, moduleResolution: "bundler", vite/client types) (6 pts)
+- Framework leakage check (no React/Vue/Angular/Svelte coupling) (5 pts)
+- Code complexity (function/file size, cyclomatic complexity, nesting) (4 pts)
+- Vite-specific quality (functional config, extracted plugins, public-only VITE_* variables, static Worker/WASM patterns) (5 pts)
+
+**Reference**: `check-code-quality.md`
 
 ### Step 4: Testing Audit (25 points)
 
 Execute testing check:
 
-**Evaluated Criteria**:
-- Coherent Vitest config (mergeConfig or dedicated file), no drift with vite.config.ts (6 pts)
-- Coverage >= 80% on business logic / public API (6 pts)
-- Test environment matches the need (node vs jsdom/happy-dom) (4 pts)
-- Tests on the published build (dist/), not just source code (5 pts)
-- Integration/E2E tests for multi-page apps (4 pts)
-
-**Reference**: `.claude/agents/vite-reviewer.md` (section 3)
-
-### Step 5: Build Output & Performance Audit (25 points)
-
-Execute build output and performance check:
+**Command**: Use slash command `/vite:check-testing` or manually follow steps in `check-testing.md`
 
 **Evaluated Criteria**:
-- Effective tree-shaking (sideEffects: false, named exports, coherent exports map) (6 pts)
-- Dependencies externalized for libraries (peer deps not bundled) (6 pts)
-- Code-splitting for multi-page apps (manualChunks, shared vendor) (5 pts)
-- Bundle under thresholds, assetsInlineLimit controlled (4 pts)
-- Asset hashing, appropriate build.target, sourcemaps handled correctly in prod (4 pts)
+- Code coverage with Vitest (>= 80% statements, branches, functions, lines) (7 pts)
+- Test organization and isolation (4 pts)
+- Vanilla module testing (pure functions, edge cases, node environment) (4 pts)
+- Worker testing (extracted handler logic, message contract) (4 pts)
+- WASM wrapper testing (mocked `?init`, one real .wasm integration test) (3 pts)
+- Library build-output testing on dist/ (ESM, CJS, exports map) (3 pts)
 
-**Reference**: `.claude/agents/vite-reviewer.md` (section 4)
+**Reference**: `check-testing.md`
+
+### Step 5: Security Audit (25 points)
+
+Execute security check:
+
+**Command**: Use slash command `/vite:check-security` or manually follow steps in `check-security.md`
+
+**Evaluated Criteria**:
+- Env / `define()` secret leakage (VITE_* prefix, hardcoded secrets) (7 pts)
+- CSP coverage across entries (multi-page, server/CDN enforcement) (5 pts)
+- WASM sandboxing (COOP/COEP, wasm-unsafe-eval, minimal imports object) (4 pts)
+- Worker message validation (shape checks, no eval, origin checks) (5 pts)
+- Dependency vulnerabilities (npm audit) (4 pts)
+
+**Reference**: `check-security.md`
 
 ### Step 6: Consolidation and Global Scoring
 
 Calculate overall score and produce consolidated report:
-- [ ] Sum the 4 scores (30 + 20 + 25 + 25 = 100 points)
-- [ ] Identify critical categories (<50% of their max)
-- [ ] List all critical cross-cutting issues (e.g. index.html in public/, missing peer dep externalization)
+- [ ] Sum the 4 scores (max 100 points)
+- [ ] Identify critical categories (<50%)
+- [ ] List all critical cross-cutting issues (e.g. index.html in public/, secrets exposed via VITE_*, missing peer dep externalization)
 - [ ] Prioritize actions by impact/effort
 - [ ] Produce final consolidated report
 
@@ -103,6 +116,8 @@ Produce final recommendations:
 - [ ] Propose implementation order
 - [ ] Suggest quick wins (high impact/effort ratio)
 
+> **Library projects**: `/vite:check-library-build` complements this audit for library projects (build.lib output, exports map, type declarations, tree-shaking). Run it in addition when the project publishes a package.
+
 ## OUTPUT FORMAT
 
 ```
@@ -117,10 +132,10 @@ COMPLIANCE LEVEL: [Excellent/Very Good/Acceptable/Insufficient/Critical]
 
 SCORES BY CATEGORY:
 
-CONFIG & ARCHITECTURE VITE   : XX/30  [██████████░░░░░░░░░░] XX%
-TYPESCRIPT & QUALITY         : XX/20  [██████████░░░░░░░░░░] XX%
-TESTS                        : XX/25  [██████████░░░░░░░░░░] XX%
-BUILD OUTPUT & PERFORMANCE   : XX/25  [██████████░░░░░░░░░░] XX%
+ARCHITECTURE      : XX/25  [██████████░░░░░░░░░░] XX%
+CODE QUALITY      : XX/25  [██████████░░░░░░░░░░] XX%
+TESTS             : XX/25  [██████████░░░░░░░░░░] XX%
+SECURITY          : XX/25  [██████████░░░░░░░░░░] XX%
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -135,23 +150,24 @@ OVERALL IMPROVEMENTS:
 3. [Third improvement]
 
 CRITICAL ISSUES:
-1. [Critical issue #1 - affected category]
-2. [Critical issue #2 - affected category]
-3. [Critical issue #3 - affected category]
+1. [Critical issue - affected category #1]
+2. [Critical issue - affected category #2]
+3. [Critical issue - affected category #3]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 DETAILS BY CATEGORY:
 
 ┌─────────────────────────────────────────────┐
-│ CONFIG & ARCHITECTURE VITE (XX/30)           │
+│ ARCHITECTURE (XX/25)
 └─────────────────────────────────────────────┘
 
 Sub-scores:
-  • vite.config.ts correctness       : XX/8
-  • index.html placement             : XX/6
-  • build.lib configuration          : XX/8
-  • rolldownOptions.input / plugins    : XX/8
+  • Project shape detection and entry points (index.html at root, build.lib entry, multi-page input, Worker/WASM `new URL` pattern) : XX/6
+  • vite.config.ts structure (defineConfig, functional form, key ordering) : XX/5
+  • Custom plugin organization (vite-plugins/, vite-plugin-* naming, one concern per plugin) : XX/4
+  • Dependency externalization and package.json exports map (library) : XX/6
+  • Output structure (dist/ ignored, ES + CJS + .d.ts via vite-plugin-dts, stable chunk names) : XX/4
 
 Strengths:
 - [Architecture strengths]
@@ -159,64 +175,16 @@ Strengths:
 Issues:
 - [Architecture issues]
 
-┌─────────────────────────────────────────────┐
-│ TYPESCRIPT & QUALITY (XX/20)                 │
-└─────────────────────────────────────────────┘
-
-Sub-scores:
-  • strict mode / moduleResolution   : XX/6
-  • Vite types / import.meta.env     : XX/5
-  • vite-plugin-dts output           : XX/5
-  • Typed plugin hooks               : XX/4
-
-Strengths:
-- [Typing strengths]
-
-Issues:
-- [Typing issues]
-
-┌─────────────────────────────────────────────┐
-│ TESTS (XX/25)                                │
-└─────────────────────────────────────────────┘
-
-Sub-scores:
-  • Vitest config coherence          : XX/6
-  • Coverage >= 80%                  : XX/6
-  • Test environment fit             : XX/4
-  • Published build tested           : XX/5
-  • Integration/E2E multi-page       : XX/4
-
-Strengths:
-- [Testing strengths]
-
-Issues:
-- [Testing issues]
-
-┌─────────────────────────────────────────────┐
-│ BUILD OUTPUT & PERFORMANCE (XX/25)           │
-└─────────────────────────────────────────────┘
-
-Sub-scores:
-  • Tree-shaking effectiveness       : XX/6
-  • Peer dep externalization         : XX/6
-  • Multi-page code-splitting        : XX/5
-  • Bundle thresholds                : XX/4
-  • Hashing / build.target / sourcemaps : XX/4
-
-Strengths:
-- [Performance strengths]
-
-Issues:
-- [Performance issues]
+[Similar sections for Code Quality, Tests, and Security...]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 TOP 3 PRIORITY ACTIONS (ALL CATEGORIES):
 
 1. CRITICAL - [Action #1]
-   Category  : [Architecture/TypeScript/Tests/Performance]
-   Impact    : [High/Medium/Low]
-   Effort    : [High/Medium/Low]
+   Category : [Architecture/Code Quality/Tests/Security]
+   Impact   : [High/Medium/Low]
+   Effort   : [High/Medium/Low]
    Priority  : IMMEDIATE
 
    Detailed description:
@@ -238,9 +206,9 @@ TOP 3 PRIORITY ACTIONS (ALL CATEGORIES):
 
 QUICK WINS (High Impact / Low Effort):
 
-- [Quick win #1] - Category: [X] - Impact: [X] - Effort: [X]
-- [Quick win #2] - Category: [X] - Impact: [X] - Effort: [X]
-- [Quick win #3] - Category: [X] - Impact: [X] - Effort: [X]
+- [Quick win #1] - Category : [X] - Impact   : [X] - Effort   : [X]
+- [Quick win #2] - Category : [X] - Impact   : [X] - Effort   : [X]
+- [Quick win #3] - Category : [X] - Impact   : [X] - Effort   : [X]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -275,12 +243,12 @@ Major refactoring / Overhaul necessary]
 
 ## IMPORTANT NOTES
 
-- This command orchestrates the 4 categories covered by `@vite-reviewer`
+- This command orchestrates the 4 specialized audits (`/vite:check-architecture`, `/vite:check-code-quality`, `/vite:check-testing`, `/vite:check-security`)
 - Use Docker for all analysis tools
 - Provide concrete examples with file:line for each problem
 - Prioritize actions based on Impact/Effort matrix
-- index.html placement and peer dependency externalization are ALWAYS top priority when violated (they break the module graph or bloat every consumer's bundle)
+- Security problems are ALWAYS top priority (secrets exposed through VITE_* or define() first)
 - Propose automatable corrections (scripts, pre-commit hooks)
 - Report must be actionable, not just descriptive
 - Adapt recommendations to project type (vanilla app / library / multi-page / Workers-WASM)
-- Do NOT evaluate framework-specific dev-server integration (React/Vue/Angular/Svelte) — out of scope for this audit
+- Do NOT evaluate framework-specific dev-server integration (React/Vue/Angular/Svelte); out of scope for this audit

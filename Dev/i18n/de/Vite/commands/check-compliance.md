@@ -3,7 +3,7 @@ description: Vollständige Vite-Konformitätsprüfung durchführen
 argument-hint: [arguments]
 ---
 
-# Vollständige Vite-Konformitätsprüfung
+# Vollständiges Vite-Konformitäts-Audit
 
 ## Argumente
 
@@ -13,274 +13,242 @@ $ARGUMENTS (optional: Pfad zum zu analysierenden Projekt)
 
 > Der Plan-Modus wird automatisch aktiviert, wenn der Umfang mehrere Module umfasst oder eine modulübergreifende Untersuchung erfordert.
 
-## AUFTRAG
+## MISSION
 
-Führen Sie ein vollständiges Konformitäts-Audit des Vite-Projekts durch, indem Sie die 4 wichtigsten Prüfungen orchestrieren: Konfiguration & Architektur Vite, TypeScript & Qualität, Tests sowie Build-Ausgabe & Performance. Erstellen Sie einen konsolidierten Bericht mit einer Gesamtpunktzahl von 100 Punkten. **Hinweis zum Geltungsbereich**: Dieses Audit deckt ausschließlich die framework-agnostische Vite-Nutzung ab (Vanilla-JS/TS-Anwendungen, Bibliotheksentwicklung, Multi-Page-Anwendungen, Worker/WASM). Bewerten Sie keine React-/Vue-/Angular-/Svelte-spezifische Dev-Server-Integration — das gehört zur jeweiligen Konformitätsprüfung des betreffenden Stacks.
+Ein vollständiges Konformitäts-Audit des Vite-Projekts durchführen, indem die 4 wesentlichen Prüfungen orchestriert werden: Architektur, Code-Qualität, Tests und Sicherheit. Einen konsolidierten Bericht mit einem Gesamtergebnis von 100 Punkten erstellen.
+
+> **Hinweis zum Umfang**: Dieses Audit deckt ausschließlich die framework-unabhängige Nutzung von Vite ab (Vanilla-JS/TS-Anwendungen, Bibliotheksentwicklung mit `build.lib`, Multi-Page-Anwendungen, Workers/WASM-Einstiegspunkte). Die Dev-Server-Integration spezifisch für React/Vue/Angular/Svelte nicht bewerten; sie gehört zur Konformitätsprüfung des jeweiligen Stacks.
 
 ### Schritt 1: Audit-Vorbereitung
 
 Audit-Umgebung vorbereiten:
-- [ ] Zu prüfenden Projektpfad identifizieren
-- [ ] Vorhandensein der Konfigurationsdateien überprüfen (package.json, tsconfig.json, vite.config.ts)
+- [ ] Zu auditierendes Projektverzeichnis identifizieren
+- [ ] Vorhandensein von Konfigurationsdateien prüfen (package.json, tsconfig.json, vite.config.ts)
 - [ ] Hauptverzeichnisse auflisten (src/, pages/, public/, tests/ usw.)
-- [ ] Projekttyp identifizieren: Vanilla-SPA, Bibliothek (build.lib), Multi-Page-Anwendung oder Worker-/WASM-Einstiegspunkte
-- [ ] Vite-Version identifizieren und bestätigen, dass kein framework-spezifisches Plugin (`@vitejs/plugin-react`, `@vitejs/plugin-vue` usw.) im Geltungsbereich dieses Audits liegt
+- [ ] Projekttyp identifizieren: Vanilla-SPA, Bibliothek (build.lib), Multi-Page-Anwendung oder Workers/WASM-Einstiegspunkte
+- [ ] Vite-Version identifizieren und bestätigen, dass kein Framework-spezifisches Plugin (`@vitejs/plugin-react`, `@vitejs/plugin-vue` usw.) im Umfang liegt
 
-**Hinweis**: Falls $ARGUMENTS angegeben, als Projektpfad verwenden; andernfalls das aktuelle Verzeichnis nutzen.
+**Hinweis**: Wenn $ARGUMENTS angegeben ist, diesen als Projektpfad verwenden, andernfalls das aktuelle Verzeichnis verwenden.
 
-### Schritt 2: Audit Konfiguration & Architektur Vite (30 Punkte)
+### Schritt 2: Architektur-Audit (25 Punkte)
 
-Vollständige Konfigurations- und Architekturprüfung ausführen:
+Vollständige Architekturprüfung durchführen:
 
-**Bewertete Kriterien**:
-- Korrektheit von vite.config.ts (defineConfig, Aliase synchron mit tsconfig) (8 Pkt.)
-- Platzierung von index.html im Projekt-Root, niemals in public/ (6 Pkt.)
-- Konfiguration von build.lib für Bibliotheken (entry, formats, external, vite-plugin-dts) (8 Pkt.)
-- rolldownOptions.input für Multi-Page-Anwendungen, Namenskonvention der Plugins (vite-plugin-*) (8 Pkt.)
-
-**Referenz**: `.claude/agents/vite-reviewer.md` (Abschnitt 1)
-
-### Schritt 3: Audit TypeScript & Qualität (20 Punkte)
-
-Prüfung der TypeScript-Konfiguration und der Typisierungsqualität ausführen:
+**Befehl**: Slash-Befehl `/vite:check-architecture` verwenden oder die Schritte in `check-architecture.md` manuell befolgen
 
 **Bewertete Kriterien**:
-- strict: true, moduleResolution: "bundler", target ES2022+ (6 Pkt.)
-- Vite-Typen vorhanden (vite/client), import.meta.env korrekt typisiert (5 Pkt.)
-- Korrektheit der vite-plugin-dts-Ausgabe (rollupTypes, kein unbegründetes any) (5 Pkt.)
-- Benutzerdefinierte Plugin-Hooks über das Plugin-Interface typisiert (4 Pkt.)
+- Erkennung der Projektform und Einstiegspunkte (index.html im Root, build.lib-Entry, Multi-Page-Input, `new URL`-Muster für Worker/WASM) (6 Pkt.)
+- Struktur von vite.config.ts (defineConfig, funktionale Form, Schlüsselreihenfolge) (5 Pkt.)
+- Organisation eigener Plugins (vite-plugins/, Namensschema vite-plugin-*, eine Zuständigkeit pro Plugin) (4 Pkt.)
+- Externalisierung von Abhängigkeiten und exports-Map in package.json (Bibliothek) (6 Pkt.)
+- Ausgabestruktur (dist/ ignoriert, ES + CJS + .d.ts via vite-plugin-dts, stabile Chunk-Namen) (4 Pkt.)
 
-**Referenz**: `.claude/agents/vite-reviewer.md` (Abschnitt 2)
+**Referenz**: `check-architecture.md`
+
+### Schritt 3: Code-Qualitäts-Audit (25 Punkte)
+
+Code-Qualitätsprüfung durchführen:
+
+**Befehl**: Slash-Befehl `/vite:check-code-quality` verwenden oder die Schritte in `check-code-quality.md` manuell befolgen
+
+**Bewertete Kriterien**:
+- ESLint-Analyse (no-explicit-any, no-restricted-imports, no-console) (5 Pkt.)
+- TypeScript-Strenge (strict, moduleResolution: "bundler", vite/client-Typen) (6 Pkt.)
+- Prüfung auf Framework-Leaks (keine Kopplung an React/Vue/Angular/Svelte) (5 Pkt.)
+- Code-Komplexität (Funktions-/Dateigröße, zyklomatische Komplexität, Verschachtelung) (4 Pkt.)
+- Vite-spezifische Qualität (funktionale Konfiguration, ausgelagerte Plugins, nur öffentliche VITE_*-Variablen, statische Worker/WASM-Muster) (5 Pkt.)
+
+**Referenz**: `check-code-quality.md`
 
 ### Schritt 4: Test-Audit (25 Punkte)
 
-Testprüfung ausführen:
+Test-Prüfung durchführen:
+
+**Befehl**: Slash-Befehl `/vite:check-testing` verwenden oder die Schritte in `check-testing.md` manuell befolgen
 
 **Bewertete Kriterien**:
-- Kohärente Vitest-Konfiguration (mergeConfig oder eigene Datei), keine Divergenz zu vite.config.ts (6 Pkt.)
-- Coverage >= 80% auf Business-Logik / öffentlicher API (6 Pkt.)
-- Testumgebung entspricht dem Bedarf (node vs. jsdom/happy-dom) (4 Pkt.)
-- Tests auf dem veröffentlichten Build (dist/), nicht nur auf dem Quellcode (5 Pkt.)
-- Integrations-/E2E-Tests für Multi-Page-Anwendungen (4 Pkt.)
+- Code-Abdeckung mit Vitest (>= 80 % Statements, Branches, Funktionen, Zeilen) (7 Pkt.)
+- Testorganisation und -isolation (4 Pkt.)
+- Tests von Vanilla-Modulen (reine Funktionen, Grenzfälle, node-Umgebung) (4 Pkt.)
+- Worker-Tests (ausgelagerte Handler-Logik, Nachrichtenvertrag) (4 Pkt.)
+- Tests von WASM-Wrappern (gemocktes `?init`, ein Integrationstest mit echtem .wasm) (3 Pkt.)
+- Tests der Build-Ausgabe der Bibliothek auf dist/ (ESM, CJS, exports-Map) (3 Pkt.)
 
-**Referenz**: `.claude/agents/vite-reviewer.md` (Abschnitt 3)
+**Referenz**: `check-testing.md`
 
-### Schritt 5: Audit Build-Ausgabe & Performance (25 Punkte)
+### Schritt 5: Sicherheits-Audit (25 Punkte)
 
-Prüfung von Build-Ausgabe und Performance ausführen:
+Sicherheitsprüfung durchführen:
+
+**Befehl**: Slash-Befehl `/vite:check-security` verwenden oder die Schritte in `check-security.md` manuell befolgen
 
 **Bewertete Kriterien**:
-- Effektives Tree-Shaking (sideEffects: false, benannte Exporte, kohärente Exports-Map) (6 Pkt.)
-- Abhängigkeiten für Bibliotheken externalisiert (Peer Dependencies nicht gebündelt) (6 Pkt.)
-- Code-Splitting für Multi-Page-Anwendungen (manualChunks, gemeinsamer Vendor) (5 Pkt.)
-- Bundle unter den Schwellenwerten, assetsInlineLimit kontrolliert (4 Pkt.)
-- Asset-Hashing, angemessenes build.target, Sourcemaps in Produktion korrekt gehandhabt (4 Pkt.)
+- Secret-Leaks über env / `define()` (VITE_*-Präfix, hartkodierte Secrets) (7 Pkt.)
+- CSP-Abdeckung über alle Einstiegspunkte (Multi-Page, Durchsetzung auf Server/CDN) (5 Pkt.)
+- WASM-Sandboxing (COOP/COEP, wasm-unsafe-eval, minimales Imports-Objekt) (4 Pkt.)
+- Validierung von Worker-Nachrichten (Formprüfung, kein eval, Origin-Prüfung) (5 Pkt.)
+- Abhängigkeitsschwachstellen (npm audit) (4 Pkt.)
 
-**Referenz**: `.claude/agents/vite-reviewer.md` (Abschnitt 4)
+**Referenz**: `check-security.md`
 
 ### Schritt 6: Konsolidierung und Gesamtbewertung
 
-Gesamtpunktzahl berechnen und konsolidierten Bericht erstellen:
-- [ ] Die 4 Punktzahlen summieren (30 + 20 + 25 + 25 = 100 Punkte)
-- [ ] Kritische Kategorien identifizieren (<50% ihres Maximums)
-- [ ] Alle kritischen bereichsübergreifenden Probleme auflisten (z. B. index.html in public/, fehlende Externalisierung von Peer Dependencies)
-- [ ] Maßnahmen nach Wirkung/Aufwand priorisieren
-- [ ] Endgültigen konsolidierten Bericht erstellen
+Gesamtergebnis berechnen und konsolidierten Bericht erstellen:
+- [ ] Die 4 Bewertungen addieren (max. 100 Punkte)
+- [ ] Kritische Kategorien identifizieren (< 50 %)
+- [ ] Alle kritischen kategorienübergreifenden Probleme auflisten (z. B. index.html in public/, über VITE_* offengelegte Secrets, fehlende Externalisierung von Peer-Dependencies)
+- [ ] Maßnahmen nach Auswirkung/Aufwand priorisieren
+- [ ] Abschließenden konsolidierten Bericht erstellen
 
 **Bewertungsskala**:
-- 90-100: Exzellent - Referenzprojekt
-- 75-89: Sehr gut - Einige geringfügige Verbesserungen
-- 60-74: Akzeptabel - Verbesserungen erforderlich
-- 40-59: Unzureichend - Größeres Refactoring erforderlich
-- 0-39: Kritisch - Vollständige Überarbeitung notwendig
+- 90–100: Ausgezeichnet – Referenzprojekt
+- 75–89: Sehr gut – Einige kleinere Verbesserungen
+- 60–74: Akzeptabel – Verbesserungen erforderlich
+- 40–59: Unzureichend – Umfangreiches Refactoring erforderlich
+- 0–39: Kritisch – Vollständige Überarbeitung notwendig
 
 ### Schritt 7: Empfehlungen und Aktionsplan
 
 Abschließende Empfehlungen erstellen:
-- [ ] Die 3 wichtigsten priorisierten Maßnahmen über alle Kategorien hinweg identifizieren
+- [ ] Top-3-Prioritätsmaßnahmen über alle Kategorien hinweg identifizieren
 - [ ] Aufwand (Niedrig/Mittel/Hoch) für jede Maßnahme schätzen
-- [ ] Wirkung (Niedrig/Mittel/Hoch) für jede Maßnahme schätzen
+- [ ] Auswirkung (Niedrig/Mittel/Hoch) für jede Maßnahme schätzen
 - [ ] Umsetzungsreihenfolge vorschlagen
-- [ ] Quick Wins vorschlagen (hohes Verhältnis von Wirkung zu Aufwand)
+- [ ] Quick Wins vorschlagen (hohes Auswirkungs-/Aufwandsverhältnis)
+
+> **Bibliotheksprojekte**: `/vite:check-library-build` ergänzt dieses Audit für Bibliotheksprojekte (build.lib-Ausgabe, exports-Map, Typdeklarationen, Tree-Shaking). Zusätzlich ausführen, wenn das Projekt ein Paket veröffentlicht.
 
 ## AUSGABEFORMAT
 
 ```
-VITE-KONFORMITÄTSAUDIT - VOLLSTÄNDIGER BERICHT
+VITE-KONFORMITÄTS-AUDIT - VOLLSTÄNDIGER BERICHT
 =============================================
 
-GESAMTPUNKTZAHL: XX/100
+GESAMTERGEBNIS: XX/100
 
-KONFORMITÄTSNIVEAU: [Exzellent/Sehr gut/Akzeptabel/Unzureichend/Kritisch]
+KONFORMITÄTSNIVEAU: [Ausgezeichnet/Sehr gut/Akzeptabel/Unzureichend/Kritisch]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-PUNKTZAHLEN NACH KATEGORIE:
+ERGEBNISSE NACH KATEGORIE:
 
-KONFIGURATION & ARCHITEKTUR VITE : XX/30  [██████████░░░░░░░░░░] XX%
-TYPESCRIPT & QUALITÄT            : XX/20  [██████████░░░░░░░░░░] XX%
-TESTS                            : XX/25  [██████████░░░░░░░░░░] XX%
-BUILD-AUSGABE & PERFORMANCE      : XX/25  [██████████░░░░░░░░░░] XX%
+ARCHITEKTUR       : XX/25  [██████████░░░░░░░░░░] XX%
+CODE-QUALITÄT     : XX/25  [██████████░░░░░░░░░░] XX%
+TESTS             : XX/25  [██████████░░░░░░░░░░] XX%
+SICHERHEIT        : XX/25  [██████████░░░░░░░░░░] XX%
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 GESAMTSTÄRKEN:
-1. [In mehreren Kategorien festgestellte Stärke]
+1. [In mehreren Kategorien identifizierte Stärke]
 2. [Weitere wichtige Stärke]
 3. [Dritte Stärke]
 
 GESAMTVERBESSERUNGEN:
-1. [Geringfügige bereichsübergreifende Verbesserung]
+1. [Kleinere kategorienübergreifende Verbesserung]
 2. [Weitere empfohlene Verbesserung]
 3. [Dritte Verbesserung]
 
 KRITISCHE PROBLEME:
-1. [Kritisches Problem Nr. 1 - betroffene Kategorie]
-2. [Kritisches Problem Nr. 2 - betroffene Kategorie]
-3. [Kritisches Problem Nr. 3 - betroffene Kategorie]
+1. [Kritisches Problem - betroffene Kategorie #1]
+2. [Kritisches Problem - betroffene Kategorie #2]
+3. [Kritisches Problem - betroffene Kategorie #3]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 DETAILS NACH KATEGORIE:
 
 ┌─────────────────────────────────────────────┐
-│ KONFIGURATION & ARCHITEKTUR VITE (XX/30)     │
+│ ARCHITEKTUR (XX/25)
 └─────────────────────────────────────────────┘
 
-Teilpunktzahlen:
-  • Korrektheit von vite.config.ts   : XX/8
-  • Platzierung von index.html       : XX/6
-  • Konfiguration von build.lib      : XX/8
-  • rolldownOptions.input / Plugins    : XX/8
+Teilergebnisse:
+  • Erkennung der Projektform und Einstiegspunkte (index.html im Root, build.lib-Entry, Multi-Page-Input, `new URL`-Muster für Worker/WASM) : XX/6
+  • Struktur von vite.config.ts (defineConfig, funktionale Form, Schlüsselreihenfolge) : XX/5
+  • Organisation eigener Plugins (vite-plugins/, Namensschema vite-plugin-*, eine Zuständigkeit pro Plugin) : XX/4
+  • Externalisierung von Abhängigkeiten und exports-Map in package.json (Bibliothek) : XX/6
+  • Ausgabestruktur (dist/ ignoriert, ES + CJS + .d.ts via vite-plugin-dts, stabile Chunk-Namen) : XX/4
 
 Stärken:
-- [Architekturstärken]
+- [Stärken der Architektur]
 
 Probleme:
 - [Architekturprobleme]
 
-┌─────────────────────────────────────────────┐
-│ TYPESCRIPT & QUALITÄT (XX/20)                │
-└─────────────────────────────────────────────┘
-
-Teilpunktzahlen:
-  • Strict Mode / moduleResolution   : XX/6
-  • Vite-Typen / import.meta.env     : XX/5
-  • vite-plugin-dts-Ausgabe          : XX/5
-  • Typisierte Plugin-Hooks          : XX/4
-
-Stärken:
-- [Typisierungsstärken]
-
-Probleme:
-- [Typisierungsprobleme]
-
-┌─────────────────────────────────────────────┐
-│ TESTS (XX/25)                                │
-└─────────────────────────────────────────────┘
-
-Teilpunktzahlen:
-  • Kohärenz der Vitest-Konfiguration : XX/6
-  • Coverage >= 80%                   : XX/6
-  • Passgenauigkeit der Testumgebung  : XX/4
-  • Veröffentlichter Build getestet   : XX/5
-  • Integration/E2E Multi-Page        : XX/4
-
-Stärken:
-- [Teststärken]
-
-Probleme:
-- [Testprobleme]
-
-┌─────────────────────────────────────────────┐
-│ BUILD-AUSGABE & PERFORMANCE (XX/25)          │
-└─────────────────────────────────────────────┘
-
-Teilpunktzahlen:
-  • Effektivität des Tree-Shakings     : XX/6
-  • Externalisierung von Peer Deps     : XX/6
-  • Code-Splitting Multi-Page          : XX/5
-  • Bundle-Schwellenwerte              : XX/4
-  • Hashing / build.target / Sourcemaps : XX/4
-
-Stärken:
-- [Performance-Stärken]
-
-Probleme:
-- [Performance-Probleme]
+[Ähnliche Abschnitte für Code-Qualität, Tests und Sicherheit...]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-TOP-3-PRIORITÄTSMASSNAHMEN (ALLE KATEGORIEN):
+TOP 3 PRIORITÄTSMASSNAHMEN (ALLE KATEGORIEN):
 
-1. KRITISCH - [Maßnahme Nr. 1]
-   Kategorie : [Architektur/TypeScript/Tests/Performance]
-   Wirkung   : [Hoch/Mittel/Niedrig]
+1. KRITISCH - [Maßnahme #1]
+   Kategorie  : [Architecture/Code Quality/Tests/Security]
+   Auswirkung: [Hoch/Mittel/Niedrig]
    Aufwand   : [Hoch/Mittel/Niedrig]
    Priorität : SOFORT
 
    Detaillierte Beschreibung:
-   [Erklärung des Problems und vorgeschlagene Lösung]
+   [Erklärung des Problems und der vorgeschlagenen Lösung]
 
    Betroffene Dateien:
-   - [Datei:Zeile]
+   - [file:line]
 
    Korrekturbeispiel:
    [Code oder Korrekturbefehl]
 
-2. WICHTIG - [Maßnahme Nr. 2]
+2. WICHTIG - [Maßnahme #2]
    [Gleiches Format...]
 
-3. EMPFOHLEN - [Maßnahme Nr. 3]
+3. EMPFOHLEN - [Maßnahme #3]
    [Gleiches Format...]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-QUICK WINS (Hohe Wirkung / Geringer Aufwand):
+QUICK WINS (Hohe Auswirkung / Geringer Aufwand):
 
-- [Quick Win Nr. 1] - Kategorie: [X] - Wirkung: [X] - Aufwand: [X]
-- [Quick Win Nr. 2] - Kategorie: [X] - Wirkung: [X] - Aufwand: [X]
-- [Quick Win Nr. 3] - Kategorie: [X] - Wirkung: [X] - Aufwand: [X]
+- [Quick win #1] - Kategorie  : [X] - Auswirkung: [X] - Aufwand   : [X]
+- [Quick win #2] - Kategorie  : [X] - Auswirkung: [X] - Aufwand   : [X]
+- [Quick win #3] - Kategorie  : [X] - Auswirkung: [X] - Aufwand   : [X]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 EMPFOHLENER AKTIONSPLAN:
 
 WOCHE 1 (Sofort):
-- [ ] [Kritische Maßnahme Nr. 1]
+- [ ] [Kritische Maßnahme #1]
 - [ ] [Prioritärer Quick Win]
 
 WOCHE 2-4 (Kurzfristig):
-- [ ] [Wichtige Maßnahme Nr. 2]
+- [ ] [Wichtige Maßnahme #2]
 - [ ] [Weitere Quick Wins]
 
 MONAT 2-3 (Mittelfristig):
-- [ ] [Empfohlene Maßnahme Nr. 3]
+- [ ] [Empfohlene Maßnahme #3]
 - [ ] [Schrittweise Verbesserungen]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-EXECUTIVE SUMMARY:
+ZUSAMMENFASSUNG FÜR DAS MANAGEMENT:
 
-[Zusammenfassender Absatz zum Gesamtzustand des Projekts, den wichtigsten
-Stärken, den wichtigsten Schwächen und der empfohlenen Entwicklungsrichtung
-zur Verbesserung der Konformität. Angeben, ob das Projekt produktionsreif ist,
-Korrekturen benötigt oder ein Refactoring erfordert.]
+[Zusammenfassender Absatz zum Gesamtzustand des Projekts, zu den
+wichtigsten Stärken und Schwächen und zur empfohlenen Vorgehensweise
+zur Verbesserung der Konformität. Angeben, ob das Projekt
+produktionsreif ist, Korrekturen erfordert oder ein Refactoring braucht.]
 
-Allgemeine Empfehlung: [Produktionsreif / Geringfügige Korrekturen /
-Größeres Refactoring / Überarbeitung notwendig]
+Gesamtempfehlung: [Produktionsreif / Kleinere Korrekturen /
+Umfangreiches Refactoring / Überarbeitung notwendig]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ## WICHTIGE HINWEISE
 
-- Dieser Befehl orchestriert die 4 von `@vite-reviewer` abgedeckten Kategorien
-- Docker für alle Analysewerkzeuge verwenden
-- Konkrete Beispiele mit Datei:Zeile für jedes Problem liefern
-- Maßnahmen anhand der Wirkung/Aufwand-Matrix priorisieren
-- Die Platzierung von index.html und die Externalisierung von Peer Dependencies haben IMMER oberste Priorität bei Verstößen (sie zerstören den Modulgraph oder blähen das Bundle jedes Konsumenten auf)
+- Dieser Befehl orchestriert die 4 spezialisierten Audits (`/vite:check-architecture`, `/vite:check-code-quality`, `/vite:check-testing`, `/vite:check-security`)
+- Docker für alle Analysetools verwenden
+- Konkrete Beispiele mit datei:zeile für jedes Problem angeben
+- Maßnahmen nach der Auswirkung-/Aufwand-Matrix priorisieren
+- Sicherheitsprobleme haben IMMER höchste Priorität (zuerst über VITE_* oder define() offengelegte Secrets)
 - Automatisierbare Korrekturen vorschlagen (Skripte, Pre-Commit-Hooks)
-- Der Bericht muss umsetzbar sein, nicht nur beschreibend
-- Empfehlungen an den Projekttyp anpassen (Vanilla-App / Bibliothek / Multi-Page / Worker-WASM)
-- Framework-spezifische Dev-Server-Integration (React/Vue/Angular/Svelte) NICHT bewerten — außerhalb des Geltungsbereichs dieses Audits
+- Der Bericht muss handlungsorientiert sein, nicht nur beschreibend
+- Empfehlungen an den Projekttyp anpassen (Vanilla-Anwendung / Bibliothek / Multi-Page / Workers-WASM)
+- Die Dev-Server-Integration spezifisch für ein Framework (React/Vue/Angular/Svelte) NICHT bewerten; außerhalb des Umfangs dieses Audits

@@ -15,7 +15,7 @@ $ARGUMENTS (optional: Pfad zum zu analysierenden Projekt)
 
 ## AUFTRAG
 
-Ein vollständiges Compliance-Audit der Vercel-Deployment-Konfiguration und des Platform-Oberflächen-Codes durchführen, indem die 4 großen Prüfungen orchestriert werden: vercel.json & Architektur, Functions & Laufzeitwahl, Sicherheit & Umgang mit Umgebungsvariablen sowie ISR/Caching & Tests. Einen konsolidierten Bericht mit einer Gesamtpunktzahl von 100 Punkten erstellen. **Hinweis zum Geltungsbereich**: dieses Audit deckt ausschließlich die framework-agnostische Vercel-Platform-Nutzung ab (`vercel.json`, Serverless Functions auf Node.js/Fluid Compute, ISR-Cache-Primitiven, Cron Jobs, Storage). Next.js-spezifisches Routing, Rendering oder Data-Fetching (`revalidatePath`, `revalidateTag`, App Router usw.) NICHT bewerten — das gehört zur eigenen Compliance-Prüfung des jeweiligen Framework-Stacks (`/react:*`, `/vuejs:*`, `/angular:*`).
+Ein vollständiges Compliance-Audit der Vercel-Deployment-Konfiguration und des Platform-Oberflächen-Codes durchführen, indem die 4 großen Prüfungen orchestriert werden: Architektur, Code-Qualität, Tests und Sicherheit. Einen konsolidierten Bericht mit einer Gesamtpunktzahl von 100 Punkten erstellen. **Hinweis zum Geltungsbereich**: dieses Audit deckt ausschließlich die framework-agnostische Vercel-Platform-Nutzung ab (`vercel.json`, Serverless Functions auf Node.js/Fluid Compute, ISR-Cache-Primitiven, Cron Jobs, Storage). Next.js-spezifisches Routing, Rendering oder Data-Fetching (`revalidatePath`, `revalidateTag`, App Router usw.) NICHT bewerten — das gehört zur eigenen Compliance-Prüfung des jeweiligen Framework-Stacks (`/react:*`, `/vuejs:*`, `/angular:*`).
 
 ### Schritt 1: Audit-Vorbereitung
 
@@ -28,96 +28,111 @@ Audit-Umgebung vorbereiten:
 
 **Hinweis**: Falls $ARGUMENTS angegeben, als Projektpfad verwenden, andernfalls das aktuelle Verzeichnis verwenden.
 
-### Schritt 2: Audit vercel.json & Architektur (30 Punkte)
+### Schritt 2: Architektur-Audit (25 Punkte)
 
-Vollständige Konfigurations- und Architekturprüfung durchführen:
+Vollständige Architekturprüfung durchführen:
 
-**Bewertete Kriterien**:
-- vercel.json schema-korrekt (`$schema`, `version`, gültige Top-Level-Schlüssel) (8 Pkt.)
-- Korrektheit von Rewrites/Redirects/Headers (Redirect vs. Rewrite, keine Header-Duplizierung mit Middleware) (6 Pkt.)
-- Regions & Functions-Block (keine mehrdeutige Glob-Überlappung, memory/maxDuration begründet) (8 Pkt.)
-- Passung zur Projektform (Konfiguration entspricht der deklarierten statisch/Functions/ISR/Cron-Form) (8 Pkt.)
-
-**Referenz**: `.claude/agents/vercel-reviewer.md` (Abschnitt 1)
-
-### Schritt 3: Audit Functions & Laufzeitwahl (20 Punkte)
-
-Prüfung der Laufzeit- und Handler-Qualität durchführen:
+**Befehl**: Slash-Befehl `/vercel:check-architecture` verwenden oder die Schritte in `check-architecture.md` manuell befolgen
 
 **Bewertete Kriterien**:
-- Kein unmarkiertes `runtime: 'edge'` bei neuem/geändertem Code (Node.js-/Fluid-Compute-Vorgabe respektiert) (8 Pkt.)
-- Node.js-Version auf 20+ gepinnt für den Bytecode-Caching-Vorteil von Fluid Compute (6 Pkt.)
-- Qualität der Handler-Signatur (Input validiert, explizite typisierte Antworten, cold-start-bewusste Imports) (6 Pkt.)
+- Gültigkeit des vercel.json-Schemas (`$schema`, `version`, gültige Schlüssel der obersten Ebene) (6 Pkt.)
+- Korrektheit von rewrites / redirects / headers (6 Pkt.)
+- Block regions und functions (keine mehrdeutige Glob-Überlappung, memory/maxDuration begründet) (5 Pkt.)
+- Konfiguration der Cron Jobs (gültige Pfade und Zeitpläne in `crons[]`) (4 Pkt.)
+- Passung zur Projektform und Konflikte mit dem Framework-Adapter (4 Pkt.)
 
-**Referenz**: `.claude/agents/vercel-reviewer.md` (Abschnitt 2)
+**Referenz**: `check-architecture.md`
 
-### Schritt 4: Audit Sicherheit & Umgang mit Umgebungsvariablen (25 Punkte)
+### Schritt 3: Code-Qualitäts-Audit (25 Punkte)
 
-Prüfung der Sicherheit und des Umgangs mit Secrets durchführen:
+Code-Qualitätsprüfung durchführen:
 
-**Bewertete Kriterien**:
-- Secrets/Umgebungsvariablen (keine Hartkodierung, kein Leak ins Client-Bundle, korrektes Umgebungs-Scoping) (8 Pkt.)
-- Cron-Endpunkte verifizieren ein Invocation-Secret (timing-safe Vergleich) (8 Pkt.)
-- Korrektheit von CORS-/CSP-Headers (kein Wildcard + Credentials, Basis-CSP vorhanden) (5 Pkt.)
-- Scoping von Marketplace-Credentials (Least-Privilege, keine deprecateten `@vercel/kv`/`@vercel/postgres`) (4 Pkt.)
-
-**Referenz**: `.claude/agents/vercel-reviewer.md` (Abschnitt 3)
-
-### Schritt 5: Audit ISR/Caching & Tests (25 Punkte)
-
-Prüfung von Caching und Tests durchführen:
+**Befehl**: Slash-Befehl `/vercel:check-code-quality` verwenden oder die Schritte in `check-code-quality.md` manuell befolgen
 
 **Bewertete Kriterien**:
-- Korrektheit von Cache-Control (stale-while-revalidate auf cachebaren Routen) (8 Pkt.)
-- Kein Konflikt zwischen vercel.json und Framework-Revalidierung (eine Quelle der Wahrheit) (7 Pkt.)
-- Handler-Testabdeckung (Happy-/Validierungs-/Auth-Pfade, >= 80%) (6 Pkt.)
-- `x-vercel-cache` verifiziert / Integrations-Smoke-Test via `vercel dev` (4 Pkt.)
+- ESLint-Analyse der Functions und der Middleware (6 Pkt.)
+- TypeScript-Strict-Modus und Typsicherheit (6 Pkt.)
+- Konventionen für Handler-Signaturen (typisierte Request/Response, validierte Eingabe, Node.js/Fluid-Compute-Runtime als Standard) (6 Pkt.)
+- Bewusstsein für die Bundle-Größe (Cold-Start-gerechte Imports) (4 Pkt.)
+- Qualität der Middleware (3 Pkt.)
 
-**Referenz**: `.claude/agents/vercel-reviewer.md` (Abschnitt 4)
+**Referenz**: `check-code-quality.md`
+
+### Schritt 4: Test-Audit (25 Punkte)
+
+Test-Prüfung durchführen:
+
+**Befehl**: Slash-Befehl `/vercel:check-testing` verwenden oder die Schritte in `check-testing.md` manuell befolgen
+
+**Bewertete Kriterien**:
+- Abdeckung der Function-Handler und der Middleware (>= 80 %) (7 Pkt.)
+- Tests der Function-Handler (Normalfall, Validierung und Fehlerfälle) (6 Pkt.)
+- Tests der Cron-Secret-Guards (alle Guard-Zweige) (5 Pkt.)
+- Middleware-Tests (3 Pkt.)
+- Testorganisation und -isolation (2 Pkt.)
+- Smoke-Tests mit `vercel dev` und Prüfung von `x-vercel-cache` (2 Pkt.)
+
+**Referenz**: `check-testing.md`
+
+### Schritt 5: Sicherheits-Audit (25 Punkte)
+
+Sicherheitsprüfung durchführen:
+
+**Befehl**: Slash-Befehl `/vercel:check-security` verwenden oder die Schritte in `check-security.md` manuell befolgen
+
+**Bewertete Kriterien**:
+- Umgang mit Umgebungsvariablen (keine Hardcodierung, kein Leak ins Client-Bundle, korrekter Umgebungs-Scope) (7 Pkt.)
+- Authentifizierung der Cron-Endpunkte (Invocation-Secret, zeitkonstanter Vergleich) (7 Pkt.)
+- CORS-/CSP-Header in vercel.json (4 Pkt.)
+- Scope der Marketplace-Zugangsdaten (Least Privilege) (3 Pkt.)
+- Veraltete Storage-Pakete (`@vercel/kv`, `@vercel/postgres`) und Hinweise zur Migration der Legacy-Edge-Runtime (2 Pkt.)
+- Schwachstellen in Abhängigkeiten (2 Pkt.)
+
+**Referenz**: `check-security.md`
 
 ### Schritt 6: Konsolidierung und Gesamtbewertung
 
-Gesamtpunktzahl berechnen und konsolidierten Bericht erstellen:
-- [ ] Die 4 Punktzahlen summieren (30 + 20 + 25 + 25 = 100 Punkte)
-- [ ] Kritische Kategorien identifizieren (<50% ihres Maximums)
-- [ ] Alle kritischen, übergreifenden Probleme auflisten (z. B. ungeschützter Cron-Endpunkt, hartkodiertes Secret, deprecatetes Storage-Paket)
-- [ ] Maßnahmen nach Impact/Aufwand priorisieren
+Gesamtergebnis berechnen und konsolidierten Bericht erstellen:
+- [ ] Die 4 Bewertungen addieren (max. 100 Punkte)
+- [ ] Kritische Kategorien identifizieren (< 50 %)
+- [ ] Alle kritischen kategorienübergreifenden Probleme auflisten
+- [ ] Maßnahmen nach Auswirkung/Aufwand priorisieren
 - [ ] Abschließenden konsolidierten Bericht erstellen
 
 **Bewertungsskala**:
-- 90-100: Exzellent - Referenzprojekt
-- 75-89: Sehr gut - Einige geringfügige Verbesserungen
-- 60-74: Akzeptabel - Verbesserungen erforderlich
-- 40-59: Unzureichend - Größeres Refactoring erforderlich
-- 0-39: Kritisch - Vollständige Überarbeitung notwendig
+- 90–100: Ausgezeichnet – Referenzprojekt
+- 75–89: Sehr gut – Einige kleinere Verbesserungen
+- 60–74: Akzeptabel – Verbesserungen erforderlich
+- 40–59: Unzureichend – Umfangreiches Refactoring erforderlich
+- 0–39: Kritisch – Vollständige Überarbeitung notwendig
 
 ### Schritt 7: Empfehlungen und Aktionsplan
 
 Abschließende Empfehlungen erstellen:
-- [ ] Die Top-3-Prioritätsmaßnahmen über alle Kategorien hinweg identifizieren
-- [ ] Aufwand (Niedrig/Mittel/Hoch) für jede Maßnahme abschätzen
-- [ ] Impact (Niedrig/Mittel/Hoch) für jede Maßnahme abschätzen
+- [ ] Top-3-Prioritätsmaßnahmen über alle Kategorien hinweg identifizieren
+- [ ] Aufwand (Niedrig/Mittel/Hoch) für jede Maßnahme schätzen
+- [ ] Auswirkung (Niedrig/Mittel/Hoch) für jede Maßnahme schätzen
 - [ ] Umsetzungsreihenfolge vorschlagen
-- [ ] Quick Wins vorschlagen (hohes Verhältnis von Impact zu Aufwand)
+- [ ] Quick Wins vorschlagen (hohes Auswirkungs-/Aufwandsverhältnis)
 
 ## AUSGABEFORMAT
 
 ```
-VERCEL COMPLIANCE AUDIT - VOLLSTÄNDIGER BERICHT
+VERCEL-KONFORMITÄTS-AUDIT - VOLLSTÄNDIGER BERICHT
 =============================================
 
-GESAMTPUNKTZAHL: XX/100
+GESAMTERGEBNIS: XX/100
 
-COMPLIANCE-NIVEAU: [Exzellent/Sehr gut/Akzeptabel/Unzureichend/Kritisch]
+KONFORMITÄTSNIVEAU: [Ausgezeichnet/Sehr gut/Akzeptabel/Unzureichend/Kritisch]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-PUNKTZAHLEN NACH KATEGORIE:
+ERGEBNISSE NACH KATEGORIE:
 
-VERCEL.JSON & ARCHITEKTUR    : XX/30  [██████████░░░░░░░░░░] XX%
-FUNCTIONS & LAUFZEITWAHL     : XX/20  [██████████░░░░░░░░░░] XX%
-SICHERHEIT & UMGEBUNGSVARIABLEN : XX/25  [██████████░░░░░░░░░░] XX%
-ISR/CACHING & TESTS          : XX/25  [██████████░░░░░░░░░░] XX%
+ARCHITEKTUR        : XX/25  [██████████░░░░░░░░░░] XX%
+CODE-QUALITÄT      : XX/25  [██████████░░░░░░░░░░] XX%
+TESTS              : XX/25  [██████████░░░░░░░░░░] XX%
+SICHERHEIT         : XX/25  [██████████░░░░░░░░░░] XX%
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -127,114 +142,70 @@ GESAMTSTÄRKEN:
 3. [Dritte Stärke]
 
 GESAMTVERBESSERUNGEN:
-1. [Geringfügige übergreifende Verbesserung]
+1. [Kleinere kategorienübergreifende Verbesserung]
 2. [Weitere empfohlene Verbesserung]
 3. [Dritte Verbesserung]
 
 KRITISCHE PROBLEME:
-1. [Kritisches Problem Nr. 1 - betroffene Kategorie]
-2. [Kritisches Problem Nr. 2 - betroffene Kategorie]
-3. [Kritisches Problem Nr. 3 - betroffene Kategorie]
+1. [Kritisches Problem Nr. 1 – betroffene Kategorie]
+2. [Kritisches Problem Nr. 2 – betroffene Kategorie]
+3. [Kritisches Problem Nr. 3 – betroffene Kategorie]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 DETAILS NACH KATEGORIE:
 
 ┌─────────────────────────────────────────────┐
-│ VERCEL.JSON & ARCHITEKTUR (XX/30)            │
+│ ARCHITEKTUR (XX/25)                         │
 └─────────────────────────────────────────────┘
 
-Teilpunktzahlen:
-  • Schema-Korrektheit der vercel.json  : XX/8
-  • Rewrites/Redirects/Headers          : XX/6
-  • Regions & Functions-Block           : XX/8
-  • Passung zur Projektform             : XX/8
+Teilbewertungen:
+  • vercel.json-Schema            : XX/6
+  • rewrites/redirects/headers    : XX/6
+  • regions & functions           : XX/5
+  • Konfiguration crons[]         : XX/4
+  • Projektform                   : XX/4
 
 Stärken:
-- [Architektur-Stärken]
+- [Architekturstärken]
 
 Probleme:
-- [Architektur-Probleme]
+- [Architekturprobleme]
 
-┌─────────────────────────────────────────────┐
-│ FUNCTIONS & LAUFZEITWAHL (XX/20)             │
-└─────────────────────────────────────────────┘
-
-Teilpunktzahlen:
-  • Node.js/Fluid Compute vs. Edge      : XX/8
-  • Node.js-Version gepinnt             : XX/6
-  • Qualität der Handler-Signatur       : XX/6
-
-Stärken:
-- [Laufzeit-Stärken]
-
-Probleme:
-- [Laufzeit-Probleme]
-
-┌─────────────────────────────────────────────┐
-│ SICHERHEIT & UMGEBUNGSVARIABLEN (XX/25)      │
-└─────────────────────────────────────────────┘
-
-Teilpunktzahlen:
-  • Secrets/Umgebungsvariablen           : XX/8
-  • Cron-Auth-Guard                      : XX/8
-  • CORS-/CSP-Headers                    : XX/5
-  • Scoping von Marketplace-Credentials  : XX/4
-
-Stärken:
-- [Sicherheits-Stärken]
-
-Probleme:
-- [Sicherheits-Probleme]
-
-┌─────────────────────────────────────────────┐
-│ ISR/CACHING & TESTS (XX/25)                  │
-└─────────────────────────────────────────────┘
-
-Teilpunktzahlen:
-  • Korrektheit von Cache-Control        : XX/8
-  • Konfliktfreie Revalidierung          : XX/7
-  • Handler-Testabdeckung                : XX/6
-  • x-vercel-cache verifiziert           : XX/4
-
-Stärken:
-- [Caching-/Test-Stärken]
-
-Probleme:
-- [Caching-/Test-Probleme]
+[Ähnliche Abschnitte für Code-Qualität, Tests und Sicherheit...]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-TOP-3-PRIORITÄTSMASSNAHMEN (ALLE KATEGORIEN):
+TOP 3 PRIORITÄTSMASSNAHMEN (ALLE KATEGORIEN):
 
 1. KRITISCH - [Maßnahme Nr. 1]
-   Kategorie : [Architektur/Laufzeit/Sicherheit/Caching]
-   Impact    : [Hoch/Mittel/Niedrig]
-   Aufwand   : [Hoch/Mittel/Niedrig]
-   Priorität : SOFORT
+   Kategorie  : [Architektur/Qualität/Tests/Sicherheit]
+   Auswirkung : [Hoch/Mittel/Niedrig]
+   Aufwand    : [Hoch/Mittel/Niedrig]
+   Priorität  : SOFORT
 
    Detaillierte Beschreibung:
-   [Erläuterung des Problems und vorgeschlagene Lösung]
+   [Erklärung des Problems und vorgeschlagene Lösung]
 
    Betroffene Dateien:
-   - [Datei:Zeile]
+   - [datei:zeile]
 
    Korrekturbeispiel:
    [Code oder Korrekturbefehl]
 
 2. WICHTIG - [Maßnahme Nr. 2]
-   [Gleiches Format...]
+   [Gleiche Format...]
 
 3. EMPFOHLEN - [Maßnahme Nr. 3]
-   [Gleiches Format...]
+   [Gleiche Format...]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-QUICK WINS (Hoher Impact / Geringer Aufwand):
+QUICK WINS (Hohe Auswirkung / Niedriger Aufwand):
 
-- [Quick Win Nr. 1] - Kategorie: [X] - Impact: [X] - Aufwand: [X]
-- [Quick Win Nr. 2] - Kategorie: [X] - Impact: [X] - Aufwand: [X]
-- [Quick Win Nr. 3] - Kategorie: [X] - Impact: [X] - Aufwand: [X]
+- [Quick Win Nr. 1] - Kategorie: [X] - Auswirkung: [X] - Aufwand: [X]
+- [Quick Win Nr. 2] - Kategorie: [X] - Auswirkung: [X] - Aufwand: [X]
+- [Quick Win Nr. 3] - Kategorie: [X] - Auswirkung: [X] - Aufwand: [X]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -242,40 +213,41 @@ EMPFOHLENER AKTIONSPLAN:
 
 WOCHE 1 (Sofort):
 - [ ] [Kritische Maßnahme Nr. 1]
-- [ ] [Prioritärer Quick Win]
+- [ ] [Prioritäts-Quick-Win]
 
-WOCHE 2-4 (Kurzfristig):
+WOCHE 2–4 (Kurzfristig):
 - [ ] [Wichtige Maßnahme Nr. 2]
 - [ ] [Weitere Quick Wins]
 
-MONAT 2-3 (Mittelfristig):
+MONAT 2–3 (Mittelfristig):
 - [ ] [Empfohlene Maßnahme Nr. 3]
 - [ ] [Schrittweise Verbesserungen]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-EXECUTIVE SUMMARY:
+MANAGEMENT-ZUSAMMENFASSUNG:
 
-[Zusammenfassender Absatz zum Gesamtzustand des Projekts, wesentlichen Stärken,
-wesentlichen Schwächen und empfohlener Trajektorie zur Verbesserung der
-Compliance. Angeben, ob das Projekt produktionsreif ist, Korrekturen
-erfordert oder ein Refactoring benötigt.]
+[Zusammenfassender Absatz zum allgemeinen Projektzustand, wesentlichen Stärken,
+wesentlichen Schwächen und empfohlenem Weg zur Verbesserung der
+Konformität. Angabe, ob das Projekt produktionsbereit ist,
+Korrekturen erfordert oder refaktoriert werden muss.]
 
-Gesamtempfehlung: [Produktionsreif / Geringfügige Korrekturen /
-Größeres Refactoring / Überarbeitung notwendig]
+Allgemeine Empfehlung: [Produktionsbereit / Kleinere Korrekturen /
+Umfangreiches Refactoring / Vollständige Überarbeitung notwendig]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ## WICHTIGE HINWEISE
 
-- Dieser Befehl orchestriert die 4 von `@vercel-reviewer` abgedeckten Kategorien
-- Für alle Analysewerkzeuge Docker verwenden
-- Konkrete Beispiele mit Datei:Zeile für jedes Problem liefern
-- Maßnahmen nach der Impact-/Aufwand-Matrix priorisieren
-- Ein ungeschützter Cron-Endpunkt und ein hartkodiertes Secret haben IMMER oberste Priorität, wenn gefunden (sie erlauben jedem, der den Pfad/das Repo entdeckt, Jobs auszulösen oder Credentials zu exfiltrieren)
-- Ein Befund von `runtime: 'edge'` bei neuem/geändertem Code wird immer markiert, blockiert aber niemals einen Bericht bei unverändertem Legacy-Code — als Migrationsschuld behandeln, nicht als harten Fehlschlag
+- Dieser Befehl orchestriert die 4 spezialisierten Audits
+- Docker für alle Analysetools verwenden
+- Konkrete Beispiele mit datei:zeile für jedes Problem angeben
+- Maßnahmen nach der Auswirkung-/Aufwand-Matrix priorisieren
+- Sicherheitsprobleme haben IMMER höchste Priorität
 - Automatisierbare Korrekturen vorschlagen (Skripte, Pre-Commit-Hooks)
-- Der Bericht muss umsetzbar sein, nicht nur beschreibend
-- Empfehlungen an die Projektform anpassen (nur-statisch / nur-Functions / ISR-aktiviert / Cron-aktiviert / hybrid)
-- Next.js-spezifisches Routing/Rendering/Data-Fetching oder die Dev-Server-Integration irgendeines anderen Frameworks NICHT bewerten — außerhalb des Geltungsbereichs dieses Audits
+- Der Bericht muss handlungsorientiert sein, nicht nur beschreibend
+- Empfehlungen an den fachlichen Kontext des Projekts anpassen
+- Ein ungeschützter Cron-Endpunkt und ein hartcodiertes Secret haben IMMER höchste Priorität, sobald sie gefunden werden
+- Ein `runtime: 'edge'` in neuem oder geändertem Code wird immer markiert, ist bei unverändertem Legacy-Code aber Migrationsschuld (kein harter Fehler)
+- Next.js-spezifisches Routing/Rendering/Data-Fetching NICHT bewerten — außerhalb des Geltungsbereichs (siehe `/react:*`, `/vuejs:*`, `/angular:*`)
