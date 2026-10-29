@@ -156,6 +156,18 @@ describe('v7.0.0 namespace integrity', () => {
     expect(files.filter((f) => !fs.existsSync(path.join(PROJECT_ROOT, f)))).toEqual([]);
   });
 
+  // Stacks whose axis checklists live in the language-neutral base/ layer also ship an
+  // English /<tech>:check router and aggregate there; the 5 languages override them.
+  it.each(['Angular', 'CSharp', 'Laravel', 'PHP', 'Vercel', 'Vite', 'VueJS'])(
+    '%s exposes /<tech>:check in Dev/i18n/base',
+    (dir) => {
+      const files = [`commands/check.md`, 'checks/all.md', 'checks/architecture.md'].map(
+        (f) => `Dev/i18n/base/${dir}/${f}`
+      );
+      expect(files.filter((f) => !fs.existsSync(path.join(PROJECT_ROOT, f)))).toEqual([]);
+    }
+  );
+
   it('no reference to the 9.0 tech check-* stubs or /team:sprint outside the stubs and migration notes', () => {
     const banned = new RegExp(
       `/(?:${Object.keys(TECH).join('|')}):check-(?:architecture|code-quality|security|testing|compliance)(?![\\w-])|/team:sprint(?![\\w-])`

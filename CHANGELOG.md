@@ -24,7 +24,7 @@ Phase 4 de la feuille de route de simplification des commandes de gestion de pro
 
 ### Changed
 
-- **Checklists des checks tech** : le contenu des anciens `check-<axe>` vit dans `Dev/i18n/<lang|base>/<Tech>/checks/<axe>.md`, installé dans `.claude/references/<tech>/checks/` (`copy_checks` dans `Dev/scripts/lib/install-tech-common.sh`) ; `/<tech>:check` est un routeur léger (5 langues). Complétions shell, `AVAILABLE_COMMANDS` des installeurs, aliases et docs alignés.
+- **Checklists des checks tech** : le contenu des anciens `check-<axe>` vit dans `Dev/i18n/<lang|base>/<Tech>/checks/<axe>.md`, installé dans `.claude/references/<tech>/checks/` (`copy_checks` dans `Dev/scripts/lib/install-tech-common.sh`) ; `/<tech>:check` est un routeur léger (5 langues, plus un repli anglais `check.md` / `checks/all.md` dans `base/` pour les 7 stacks à couche base, remplacé par la langue à l'installation). Complétions shell, `AVAILABLE_COMMANDS` des installeurs, aliases et docs alignés.
 - **`check-compliance` de symfony, php, laravel, csharp, angular, vuejs, vite et vercel** : délèguent aux 4 checks par axe (comme react) au lieu de recopier leurs checklists (`.claude/` + 5 langues ; vite et vercel restructurés sur les 4 axes).
 
 ### Added
