@@ -62,10 +62,10 @@ claude-craft <TAB>
 
 ```bash
 claude-craft symfony <TAB>
-# Shows: api-endpoint check-architecture check-code-quality...
+# Shows: api-endpoint check generate-command...
 
 claude-craft react <TAB>
-# Shows: accessibility-check bundle-analyze check-architecture...
+# Shows: accessibility-check bundle-analyze check...
 ```
 
 ### Full Example
@@ -78,10 +78,10 @@ claude-craft sy<TAB>
 claude-craft symfony
 
 # Then type:
-claude-craft symfony check-<TAB>
+claude-craft symfony ch<TAB>
 
 # Shows:
-check-architecture  check-code-quality  check-compliance  check-security  check-testing
+check
 ```
 
 ## Supported Namespaces

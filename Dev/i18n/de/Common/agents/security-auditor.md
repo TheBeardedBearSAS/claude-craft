@@ -92,7 +92,7 @@ Für jede Schwachstelle:
 - `.claude/rules/11-security.md` — anwendbare Regeln
 - `.claude/skills/security*` — Stack-spezifische Skills
 - `/team:security` — paralleler Multi-Dimensionen-Audit
-- `/{tech}:check-security` — Stack-spezifischer Audit
+- `/{tech}:check security` — Stack-spezifischer Audit
 - `@devops-engineer` — SBOM / Sigstore / Infrastruktur-Hardening-Einrichtung
 
 ## Ressourcen

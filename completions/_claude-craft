@@ -24,11 +24,7 @@ _claude-craft() {
 
     local -a angular_commands
     angular_commands=(
-        'check-architecture:Check Angular architecture compliance'
-        'check-code-quality:Check Angular code quality'
-        'check-compliance:Check Angular compliance'
-        'check-security:Check Angular security'
-        'check-testing:Check Angular testing'
+        'check:Audit by axis (architecture, code-quality, security, testing, all)'
         'generate-component:Generate Angular component'
     )
 
@@ -46,22 +42,14 @@ _claude-craft() {
 
     local -a csharp_commands
     csharp_commands=(
-        'check-architecture:Check C# architecture'
-        'check-code-quality:Check C# code quality'
-        'check-compliance:Check C# compliance'
-        'check-security:Check C# security'
-        'check-testing:Check C# testing'
+        'check:Audit by axis (architecture, code-quality, security, testing, all)'
         'generate-feature:Generate C# feature'
     )
 
     local -a flutter_commands
     flutter_commands=(
         'analyze-performance:Analyze Flutter performance'
-        'check-architecture:Check Flutter architecture'
-        'check-code-quality:Check Flutter code quality'
-        'check-compliance:Check Flutter compliance'
-        'check-security:Check Flutter security'
-        'check-testing:Check Flutter testing'
+        'check:Audit by axis (architecture, code-quality, security, testing, all)'
         'generate-feature:Generate Flutter feature'
         'generate-widget:Generate Flutter widget'
         'golden-update:Update golden tests'
@@ -70,31 +58,19 @@ _claude-craft() {
 
     local -a laravel_commands
     laravel_commands=(
-        'check-architecture:Check Laravel architecture'
-        'check-code-quality:Check Laravel code quality'
-        'check-compliance:Check Laravel compliance'
-        'check-security:Check Laravel security'
-        'check-testing:Check Laravel testing'
+        'check:Audit by axis (architecture, code-quality, security, testing, all)'
         'generate-controller:Generate Laravel controller'
     )
 
     local -a php_commands
     php_commands=(
-        'check-architecture:Check PHP architecture'
-        'check-code-quality:Check PHP code quality'
-        'check-compliance:Check PHP compliance'
-        'check-security:Check PHP security'
-        'check-testing:Check PHP testing'
+        'check:Audit by axis (architecture, code-quality, security, testing, all)'
     )
 
     local -a python_commands
     python_commands=(
         'async-check:Check async/await usage'
-        'check-architecture:Check Python architecture'
-        'check-code-quality:Check Python code quality'
-        'check-compliance:Check Python compliance'
-        'check-security:Check Python security'
-        'check-testing:Check Python testing'
+        'check:Audit by axis (architecture, code-quality, security, testing, all)'
         'dependency-audit:Audit dependencies'
         'generate-endpoint:Generate API endpoint'
         'generate-model:Generate model'
@@ -114,11 +90,7 @@ _claude-craft() {
     react_commands=(
         'accessibility-check:Check accessibility'
         'bundle-analyze:Analyze bundle size'
-        'check-architecture:Check React architecture'
-        'check-code-quality:Check React code quality'
-        'check-compliance:Check React compliance'
-        'check-security:Check React security'
-        'check-testing:Check React testing'
+        'check:Audit by axis (architecture, code-quality, security, testing, all)'
         'generate-component:Generate React component'
         'generate-hook:Generate custom hook'
         'storybook-story:Generate Storybook story'
@@ -127,11 +99,7 @@ _claude-craft() {
     local -a reactnative_commands
     reactnative_commands=(
         'app-size:Analyze app size'
-        'check-architecture:Check RN architecture'
-        'check-code-quality:Check RN code quality'
-        'check-compliance:Check RN compliance'
-        'check-security:Check RN security'
-        'check-testing:Check RN testing'
+        'check:Audit by axis (architecture, code-quality, security, testing, all)'
         'deep-link:Setup deep linking'
         'generate-screen:Generate screen'
         'native-module:Generate native module'
@@ -141,11 +109,7 @@ _claude-craft() {
     local -a symfony_commands
     symfony_commands=(
         'api-endpoint:Generate API endpoint'
-        'check-architecture:Check Symfony architecture'
-        'check-code-quality:Check Symfony code quality'
-        'check-compliance:Check Symfony compliance'
-        'check-security:Check Symfony security'
-        'check-testing:Check Symfony testing'
+        'check:Audit by axis (architecture, code-quality, security, testing, all)'
         'generate-command:Generate console command'
         'generate-crud:Generate CRUD'
         'migration-plan:Create migration plan'
@@ -157,7 +121,6 @@ _claude-craft() {
         'audit:Team audit'
         'delivery:Delivery workflow'
         'security:Security audit'
-        'sprint:Sprint planning'
     )
 
     local -a uiux_commands
@@ -173,11 +136,7 @@ _claude-craft() {
 
     local -a vuejs_commands
     vuejs_commands=(
-        'check-architecture:Check Vue.js architecture'
-        'check-code-quality:Check Vue.js code quality'
-        'check-compliance:Check Vue.js compliance'
-        'check-security:Check Vue.js security'
-        'check-testing:Check Vue.js testing'
+        'check:Audit by axis (architecture, code-quality, security, testing, all)'
         'generate-component:Generate Vue component'
     )
 

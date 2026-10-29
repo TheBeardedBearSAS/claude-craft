@@ -45,54 +45,54 @@ Based on the detected stack, recommend 3 contextualized commands that provide im
 ### Stack to Commands Mapping
 
 **Symfony / PHP:**
-- `/symfony:check-architecture` — Verify Clean Architecture + DDD compliance
-- `/symfony:check-testing` — Analyze test coverage and quality
-- `/symfony:check-security` — OWASP Top 10:2025 security audit
+- `/symfony:check architecture` — Verify Clean Architecture + DDD compliance
+- `/symfony:check testing` — Analyze test coverage and quality
+- `/symfony:check security` — OWASP Top 10:2025 security audit
 
 **React:**
-- `/react:check-code-quality` — TypeScript, ESLint, code standards
+- `/react:check code-quality` — TypeScript, ESLint, code standards
 - `/react:accessibility-check` — WCAG compliance audit
 - `/react:bundle-analyze` — Identify bundle size issues
 
 **Python:**
-- `/python:check-code-quality` — Ruff, type hints, PEP 8
-- `/python:check-security` — Bandit security scan
+- `/python:check code-quality` — Ruff, type hints, PEP 8
+- `/python:check security` — Bandit security scan
 - `/python:type-coverage` — MyPy/Pyright coverage analysis
 
 **Flutter / Dart:**
-- `/flutter:check-testing` — Test coverage and golden tests
+- `/flutter:check testing` — Test coverage and golden tests
 - `/flutter:analyze-performance` — Widget rebuild analysis
 - `/flutter:golden-update` — Update visual regression tests
 
 **Vue.js:**
-- `/vuejs:check-code-quality` — Composition API, TypeScript, ESLint
-- `/vuejs:check-architecture` — Feature structure validation
-- `/vuejs:check-security` — XSS, CSP, OWASP audit
+- `/vuejs:check code-quality` — Composition API, TypeScript, ESLint
+- `/vuejs:check architecture` — Feature structure validation
+- `/vuejs:check security` — XSS, CSP, OWASP audit
 
 **Laravel:**
-- `/laravel:check-code-quality` — PER-CS 3.0, Pest 4/5, coding standards
-- `/laravel:check-testing` — Test coverage with Pest
-- `/laravel:check-security` — OWASP audit, Sanctum config
+- `/laravel:check code-quality` — PER-CS 3.0, Pest 4/5, coding standards
+- `/laravel:check testing` — Test coverage with Pest
+- `/laravel:check security` — OWASP audit, Sanctum config
 
 **Angular:**
-- `/angular:check-code-quality` — Signals, standalone components, ESLint
-- `/angular:check-architecture` — Module structure, dependency graph
-- `/angular:check-security` — XSS protection, security headers
+- `/angular:check code-quality` — Signals, standalone components, ESLint
+- `/angular:check architecture` — Module structure, dependency graph
+- `/angular:check security` — XSS protection, security headers
 
 **React Native:**
-- `/reactnative:check-code-quality` — TypeScript, ESLint, code patterns
-- `/reactnative:check-architecture` — Feature structure, navigation
+- `/reactnative:check code-quality` — TypeScript, ESLint, code patterns
+- `/reactnative:check architecture` — Feature structure, navigation
 - `/reactnative:app-size` — Bundle size analysis
 
 **C# / .NET:**
-- `/csharp:check-architecture` — Clean Architecture + CQRS validation
-- `/csharp:check-testing` — xUnit coverage and quality
-- `/csharp:check-security` — OWASP audit for .NET
+- `/csharp:check architecture` — Clean Architecture + CQRS validation
+- `/csharp:check testing` — xUnit coverage and quality
+- `/csharp:check security` — OWASP audit for .NET
 
 **PHP (standalone):**
-- `/php:check-code-quality` — PSR-12, PHPStan Level 10
-- `/php:check-testing` — Pest 5 test coverage
-- `/php:check-security` — Security best practices
+- `/php:check code-quality` — PSR-12, PHPStan Level 10
+- `/php:check testing` — Pest 5 test coverage
+- `/php:check security` — Security best practices
 
 **Unknown/Multi-stack:**
 - `/gate:check commit` — Quality gates before commits
@@ -209,7 +209,7 @@ Your project uses React 19.x. Claude Craft has 15+ specialized commands for Reac
 
 Based on your stack, these 3 commands will give you immediate insights:
 
-1. ✓ /react:check-code-quality — Analyze TypeScript types, ESLint config, and coding standards
+1. ✓ /react:check code-quality — Analyze TypeScript types, ESLint config, and coding standards
    Why now? Catches common mistakes early and enforces best practices across your team.
 
 2. ✓ /react:accessibility-check — Audit WCAG 2.2 compliance and keyboard navigation
@@ -225,7 +225,7 @@ Choose one to run (type the number 1-3), or skip to explore all 220 commands wit
 
 **Step 3 Output (Before):**
 ```
-▶ Running /react:check-code-quality...
+▶ Running /react:check code-quality...
 
 This command will:
 - Scan your components for TypeScript best practices

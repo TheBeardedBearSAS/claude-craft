@@ -91,7 +91,7 @@ Uma feature em Paperclip tipicamente toca um ou mais **modulos** (`server/src/mo
 ## 10. Revisao
 
 - [ ] Self-review: `git diff main...HEAD`
-- [ ] Execute `/paperclip:check-compliance` localmente
+- [ ] Execute `/paperclip:check all` localmente
 - [ ] Descricao PR: o que, por que, plano migracao, plano rollback
 - [ ] Testes contrato adapter verdes para cada adapter tocado
 

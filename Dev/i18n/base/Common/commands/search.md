@@ -48,8 +48,8 @@ Results are ranked by relevance and display the top 5 matches.
 
 Commands:
   • /qa:tdd - TDD workflow (Red → Green → Refactor)
-  • /symfony:check-testing - Check Symfony testing compliance
-  • /react:check-testing - Check React testing compliance
+  • /symfony:check testing - Check Symfony testing compliance
+  • /react:check testing - Check React testing compliance
 
 Skills:
   • testing - TDD/BDD testing patterns and best practices

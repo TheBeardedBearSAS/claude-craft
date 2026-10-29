@@ -63,8 +63,9 @@ describe('OWASP Top 10:2025 ranking', () => {
 // /symfony:check-security still graded projects against the 2021 list
 // (A03:2021 Injection, "Broken Authentication", "Sensitive Data Exposure").
 const SYMFONY_CHECK_SECURITY = [
-  '.claude/commands/symfony/check-security.md',
-  ...['en', 'fr', 'es', 'de', 'pt'].map((l) => `Dev/i18n/${l}/Symfony/commands/check-security.md`),
+  // 9.0: the checklist moved behind `/symfony:check security`
+  '.claude/references/symfony/checks/security.md',
+  ...['en', 'fr', 'es', 'de', 'pt'].map((l) => `Dev/i18n/${l}/Symfony/checks/security.md`),
 ];
 
 describe('/symfony:check-security uses OWASP Top 10:2025 only', () => {

@@ -19,16 +19,17 @@ const STACKS = {
   vercel: 'Vercel',
 };
 
+// 9.0: the aggregate (ex-check-compliance) is the `all` checklist of /<tech>:check.
 const files = Object.entries(STACKS).flatMap(([ns, dir]) => [
-  [ns, `.claude/commands/${ns}/check-compliance.md`],
-  ...LANGS.map((l) => [ns, `Dev/i18n/${l}/${dir}/commands/check-compliance.md`]),
+  [ns, `.claude/references/${ns}/checks/all.md`],
+  ...LANGS.map((l) => [ns, `Dev/i18n/${l}/${dir}/checks/all.md`]),
 ]);
 
-describe('check-compliance delegates to the 4 check-* commands', () => {
+describe('/<tech>:check all delegates to the 4 axis checklists', () => {
   it.each(files)('%s: %s', (ns, rel) => {
     const raw = fs.readFileSync(path.join(PROJECT_ROOT, rel), 'utf8');
-    const missing = AXES.filter((a) => !raw.includes(`/${ns}:check-${a}`));
-    expect(missing, `${rel} does not delegate to /${ns}:check-<axis>`).toEqual([]);
+    const missing = AXES.filter((a) => !raw.includes(`/${ns}:check ${a}`));
+    expect(missing, `${rel} does not delegate to /${ns}:check <axis>`).toEqual([]);
     // Only the preparation step keeps a checklist; the axes' items live in check-<axis>.
     expect((raw.match(/^\s*- \[ \]/gm) || []).length, `${rel} copies checklists`).toBeLessThanOrEqual(25);
   });

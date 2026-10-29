@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '../..');
-const COMMANDS = ['audit', 'security', 'sprint', 'delivery'];
+const COMMANDS = ['audit', 'security', 'delivery'];
 const LOCATIONS = [
   '.claude/commands/team',
   ...['en', 'fr', 'es', 'de', 'pt'].map((l) => `Dev/i18n/${l}/Team/commands`),
@@ -45,8 +45,8 @@ describe('/team:* execution engine', () => {
       });
     }
 
-    it(`${dir}/sprint.md ties --ralph-mode to --engine=teams`, () => {
-      const content = fs.readFileSync(path.join(PROJECT_ROOT, `${dir}/sprint.md`), 'utf8');
+    it(`${dir}/delivery.md ties --ralph-mode to --engine=teams`, () => {
+      const content = fs.readFileSync(path.join(PROJECT_ROOT, `${dir}/delivery.md`), 'utf8');
       const arg = content.split('\n').find((l) => l.startsWith('- `--ralph-mode`')) ?? '';
       expect(arg).toContain('--engine=teams');
     });

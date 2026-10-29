@@ -248,7 +248,7 @@ Tools/AgentTeams/lib/cost-dashboard.sh --techs 2 --worker-model sonnet
 ### Step 2: Parallel Sprint (60 min)
 
 ```bash
-/team:sprint Sprint-3
+/team:delivery --phase=implementation Sprint-3
 ```
 
 This processes stories in parallel:

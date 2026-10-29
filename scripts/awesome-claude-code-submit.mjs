@@ -51,7 +51,7 @@ const SUBCATEGORY = 'General';
 
 // 1–3 sentences, no emoji (upstream form constraint). Kept under ~250 chars.
 const DESCRIPTION =
-  'Multi-stack framework for Claude Code: 13 technology stacks, 131 commands across 18 namespaces, ' +
+  'Multi-stack framework for Claude Code: 13 technology stacks, 143 commands across 18 namespaces, ' +
   '33 specialized agents, BMAD v6 sprint workflow, browser QA automation, and i18n in 5 languages. Installable via npx.';
 
 // Evidence for the form's "validate_claims" field (required for frameworks).

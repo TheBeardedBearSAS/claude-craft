@@ -2,7 +2,7 @@
 
 **Version:** 9.0.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 13 technology stacks, 33 specialized agents (+39 infra agents on-demand), 131 commands across 18 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 13 technology stacks, 33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -53,7 +53,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (18 namespaces, 131 commands)
+## Available Commands (18 namespaces, 143 commands)
 
 Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.9.0, Coolify v4.4.6, K8s 1.37.1, OpenTofu 1.13.1, Ansible 2.21.5, FrankenPHP 1.13.0, PgBouncer 1.26.0 | Project: `/gate:*`, `/project:*`
 

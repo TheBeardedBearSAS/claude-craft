@@ -319,15 +319,15 @@ make test
 
 ```bash
 # Qualidade do código (por tecnologia)
-/symfony:check-code-quality
-/flutter:check-code-quality
-/python:check-code-quality
+/symfony:check code-quality
+/flutter:check code-quality
+/python:check code-quality
 
 # Segurança (se a correção toca código sensível)
 /common:security-audit
 
 # Conformidade completa
-/symfony:check-compliance
+/symfony:check all
 ```
 
 ### Testes Manuais
@@ -468,7 +468,7 @@ git checkout -b hotfix/issue-123-login-failure
 
 # 4. Verificar
 make test
-/symfony:check-compliance
+/symfony:check all
 
 # 5. Commitar com mensagem clara
 git commit -m "fix(auth): resolver falha crítica de login após redefinição de senha
@@ -622,7 +622,7 @@ public function calculateTotal(): Money
 make test
 
 # Verificação de qualidade
-/symfony:check-compliance
+/symfony:check all
 # Pontuação: 94/100 ✓
 ```
 

@@ -340,7 +340,7 @@ Open your project in Claude Code and try:
 
 ```
 /gate:check commit
-/symfony:check-architecture
+/symfony:check architecture
 ```
 
 ## Updating

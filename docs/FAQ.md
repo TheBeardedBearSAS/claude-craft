@@ -348,7 +348,7 @@ npx @the-bearded-bear/claude-craft ralph "Fix the login bug"
 Yes! Use the team-sprint command with Ralph mode:
 
 ```bash
-/team:sprint --ralph-mode "Sprint 3" --overnight --max-stories 5
+/team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --overnight --max-stories 5
 ```
 
 This will:

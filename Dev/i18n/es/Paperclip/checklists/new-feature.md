@@ -91,7 +91,7 @@ Una funcionalidad en Paperclip típicamente toca uno o más **módulos** (`serve
 ## 10. Revisión
 
 - [ ] Auto-revisión: `git diff main...HEAD`
-- [ ] Ejecutar `/paperclip:check-compliance` localmente
+- [ ] Ejecutar `/paperclip:check all` localmente
 - [ ] Descripción de PR: qué, por qué, plan de migración, plan de rollback
 - [ ] Tests de contrato de adaptador en verde para cada adaptador tocado
 

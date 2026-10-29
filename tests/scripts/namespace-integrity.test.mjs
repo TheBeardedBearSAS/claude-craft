@@ -142,4 +142,45 @@ describe('v7.0.0 namespace integrity', () => {
       expect(files.length, `${dir}: expected ${expectedCount}, got ${files.length}`).toBe(expectedCount);
     }
   });
+
+  // Lot 7 (9.0): one /<tech>:check <axis> per stack, team:sprint folded into team:delivery.
+  const TECH = {
+    angular: 'Angular', csharp: 'CSharp', flutter: 'Flutter', laravel: 'Laravel', paperclip: 'Paperclip',
+    php: 'PHP', python: 'Python', react: 'React', reactnative: 'ReactNative', symfony: 'Symfony',
+    vercel: 'Vercel', vite: 'Vite', vuejs: 'VueJS',
+  };
+
+  it.each(Object.entries(TECH))('%s exposes /<tech>:check in .claude and the 5 languages', (ns, dir) => {
+    const files = ['en', 'fr', 'es', 'de', 'pt'].map((l) => `Dev/i18n/${l}/${dir}/commands/check.md`);
+    if (ns !== 'paperclip') files.push(`.claude/commands/${ns}/check.md`);
+    expect(files.filter((f) => !fs.existsSync(path.join(PROJECT_ROOT, f)))).toEqual([]);
+  });
+
+  it('no reference to the 9.0 tech check-* stubs or /team:sprint outside the stubs and migration notes', () => {
+    const banned = new RegExp(
+      `/(?:${Object.keys(TECH).join('|')}):check-(?:architecture|code-quality|security|testing|compliance)(?![\\w-])|/team:sprint(?![\\w-])`
+    );
+    // Generated index of every command file (stubs included) and historical documents.
+    const SKIP = /MIGRATION-v\d|CHANGELOG|COMMANDS-FULL-REFERENCE|\/internal\/|\/training\/|\/marketing\/|\/docs\/audit\//;
+    // A migration note may name the old command next to its replacement.
+    const NAMES_REPLACEMENT = /:check (?:architecture|code-quality|security|testing|all)\b|:check <|\/team:delivery/;
+    const files = ['Dev', 'Project', 'Infra', 'Tools', 'docs', '.claude']
+      .flatMap((d) => findMdFiles(path.join(PROJECT_ROOT, d)))
+      .filter((f) => !SKIP.test(f));
+    files.push(path.join(PROJECT_ROOT, 'README.md'));
+    const hits = [];
+    for (const f of files) {
+      const raw = fs.readFileSync(f, 'utf8');
+      if (/^deprecated: true$/m.test(raw)) continue;
+      let heading = '';
+      raw.split('\n').forEach((line, i) => {
+        if (line.startsWith('## ')) heading = line;
+        // README release notes of 8.x keep the command names of their time.
+        if (/What's New in v[0-8]\./.test(heading)) return;
+        const m = banned.exec(line);
+        if (m && !NAMES_REPLACEMENT.test(line)) hits.push(`${path.relative(PROJECT_ROOT, f)}:${i + 1} ${m[0]}`);
+      });
+    }
+    expect(hits, `${hits.length} references to retired commands`).toEqual([]);
+  });
 });

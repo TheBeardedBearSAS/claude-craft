@@ -45,54 +45,54 @@ Basé sur la stack détectée, recommander 3 commandes contextualisées qui appo
 ### Mapping Stack vers Commandes
 
 **Symfony / PHP :**
-- `/symfony:check-architecture` — Vérifier conformité Clean Architecture + DDD
-- `/symfony:check-testing` — Analyser couverture et qualité des tests
-- `/symfony:check-security` — Audit de sécurité OWASP Top 10:2025
+- `/symfony:check architecture` — Vérifier conformité Clean Architecture + DDD
+- `/symfony:check testing` — Analyser couverture et qualité des tests
+- `/symfony:check security` — Audit de sécurité OWASP Top 10:2025
 
 **React :**
-- `/react:check-code-quality` — TypeScript, ESLint, standards de code
+- `/react:check code-quality` — TypeScript, ESLint, standards de code
 - `/react:accessibility-check` — Audit de conformité WCAG
 - `/react:bundle-analyze` — Identifier problèmes de taille de bundle
 
 **Python :**
-- `/python:check-code-quality` — Ruff, type hints, PEP 8
-- `/python:check-security` — Scan de sécurité Bandit
+- `/python:check code-quality` — Ruff, type hints, PEP 8
+- `/python:check security` — Scan de sécurité Bandit
 - `/python:type-coverage` — Analyse de couverture MyPy/Pyright
 
 **Flutter / Dart :**
-- `/flutter:check-testing` — Couverture de tests et golden tests
+- `/flutter:check testing` — Couverture de tests et golden tests
 - `/flutter:analyze-performance` — Analyse de reconstruction de widgets
 - `/flutter:golden-update` — Mise à jour des tests de régression visuelle
 
 **Vue.js :**
-- `/vuejs:check-code-quality` — Composition API, TypeScript, ESLint
-- `/vuejs:check-architecture` — Validation structure de fonctionnalités
-- `/vuejs:check-security` — Audit XSS, CSP, OWASP
+- `/vuejs:check code-quality` — Composition API, TypeScript, ESLint
+- `/vuejs:check architecture` — Validation structure de fonctionnalités
+- `/vuejs:check security` — Audit XSS, CSP, OWASP
 
 **Laravel :**
-- `/laravel:check-code-quality` — PER-CS 3.0, Pest 4/5, standards de code
-- `/laravel:check-testing` — Couverture de tests avec Pest
-- `/laravel:check-security` — Audit OWASP, configuration Sanctum
+- `/laravel:check code-quality` — PER-CS 3.0, Pest 4/5, standards de code
+- `/laravel:check testing` — Couverture de tests avec Pest
+- `/laravel:check security` — Audit OWASP, configuration Sanctum
 
 **Angular :**
-- `/angular:check-code-quality` — Signals, composants standalone, ESLint
-- `/angular:check-architecture` — Structure de modules, graphe de dépendances
-- `/angular:check-security` — Protection XSS, en-têtes de sécurité
+- `/angular:check code-quality` — Signals, composants standalone, ESLint
+- `/angular:check architecture` — Structure de modules, graphe de dépendances
+- `/angular:check security` — Protection XSS, en-têtes de sécurité
 
 **React Native :**
-- `/reactnative:check-code-quality` — TypeScript, ESLint, patterns de code
-- `/reactnative:check-architecture` — Structure de fonctionnalités, navigation
+- `/reactnative:check code-quality` — TypeScript, ESLint, patterns de code
+- `/reactnative:check architecture` — Structure de fonctionnalités, navigation
 - `/reactnative:app-size` — Analyse de taille de bundle
 
 **C# / .NET :**
-- `/csharp:check-architecture` — Validation Clean Architecture + CQRS
-- `/csharp:check-testing` — Couverture et qualité xUnit
-- `/csharp:check-security` — Audit OWASP pour .NET
+- `/csharp:check architecture` — Validation Clean Architecture + CQRS
+- `/csharp:check testing` — Couverture et qualité xUnit
+- `/csharp:check security` — Audit OWASP pour .NET
 
 **PHP (standalone) :**
-- `/php:check-code-quality` — PSR-12, PHPStan Niveau 10
-- `/php:check-testing` — Couverture de tests Pest 5
-- `/php:check-security` — Bonnes pratiques de sécurité
+- `/php:check code-quality` — PSR-12, PHPStan Niveau 10
+- `/php:check testing` — Couverture de tests Pest 5
+- `/php:check security` — Bonnes pratiques de sécurité
 
 **Inconnu/Multi-stack :**
 - `/gate:check commit` — Portes qualité avant commits
@@ -209,7 +209,7 @@ Votre projet utilise React 19.x. Claude Craft dispose de plus de 15 commandes sp
 
 Basé sur votre stack, ces 3 commandes vous donneront des insights immédiats :
 
-1. ✓ /react:check-code-quality — Analyser types TypeScript, config ESLint, et standards de code
+1. ✓ /react:check code-quality — Analyser types TypeScript, config ESLint, et standards de code
    Pourquoi maintenant ? Détecte erreurs courantes tôt et impose bonnes pratiques dans votre équipe.
 
 2. ✓ /react:accessibility-check — Auditer conformité WCAG 2.2 et navigation clavier
@@ -225,7 +225,7 @@ Choisissez une commande à exécuter (tapez le numéro 1-3), ou passez pour expl
 
 **Sortie Étape 3 (Avant) :**
 ```
-▶ Exécution de /react:check-code-quality...
+▶ Exécution de /react:check code-quality...
 
 Cette commande va :
 - Scanner vos composants pour bonnes pratiques TypeScript

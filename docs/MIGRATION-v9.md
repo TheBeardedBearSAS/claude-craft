@@ -11,6 +11,7 @@
 - The `/sprint:` namespace no longer exists: use `/workflow:implement`, `/workflow:status` and `/project:backlog`.
 - `.bmad/sprint-status.yaml` is the single source of truth for story and task status (since 8.24.0); markdown files hold content only.
 - `claude-craft update` and both installers delete the retired files listed in `config/removed-commands.yaml`.
+- **Deprecated in 9.0, removed in 10.0:** each stack's 5 `check-*` commands become one `/<tech>:check <axis>`, and `/team:sprint` folds into `/team:delivery --phase=implementation`. The old names stay as redirect stubs until 10.0 (see [Tech checks and team sprint](#tech-checks-and-team-sprint-deprecated-removed-in-100)).
 - Not changed: `/team:delivery` is kept (Agent Teams variant of `/workflow:auto-sprint`).
 
 ## Main path
@@ -105,6 +106,22 @@ See the decision tree: [Which path?](guides/en/11-which-path.md).
 | `/common:research-context7` (deprecated in 8.27.0) | context7 MCP (library docs) or `/deep-research` (web research; outside claude.ai: `@research-assistant` agent) |
 | `/uiux:orchestrator` (deprecated in 8.27.0) | `@uiux-orchestrator` agent |
 
+### Tech checks and team sprint (deprecated, removed in 10.0)
+
+One entry point per stack, `/<tech>:check <architecture|code-quality|security|testing|all>` (`all` runs the 4 axes and scores them out of 100). The per-axis checklists are installed in `.claude/references/<tech>/checks/<axis>.md`. `<tech>` is any of `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `symfony`, `vercel`, `vite`, `vuejs`.
+
+| Before (≤ 8.27) | After (9.0) |
+|---|---|
+| `/<tech>:check-architecture` | `/<tech>:check architecture` |
+| `/<tech>:check-code-quality` | `/<tech>:check code-quality` |
+| `/<tech>:check-security` | `/<tech>:check security` |
+| `/<tech>:check-testing` | `/<tech>:check testing` |
+| `/<tech>:check-compliance` | `/<tech>:check all` |
+| `/team:sprint` | `/team:delivery --phase=implementation` |
+| `/team:sprint --engine=teams --ralph-mode` | `/team:delivery --phase=implementation --engine=teams --ralph-mode` |
+
+Stack-specific checks are unchanged: `/vite:check-library-build`, `/python:async-check`, `/python:type-coverage`, `/react:accessibility-check`, `/flutter:localization-check`…
+
 ### Retired without replacement command
 
 | Before | After |
@@ -116,6 +133,6 @@ See the decision tree: [Which path?](guides/en/11-which-path.md).
 
 ## Upgrade steps
 
-1. `npx @the-bearded-bear/claude-craft update` — refreshes the commands and deletes the retired files.
+1. `npx @the-bearded-bear/claude-craft update` — refreshes the commands, installs the `/<tech>:check` checklists and deletes the retired files.
 2. Replace old invocations in your own scripts, aliases and `CLAUDE.md` using the table above.
 3. Projects with a pre-8.24 backlog: run `/project:migrate --analyze`, then `/project:migrate` to move statuses into `.bmad/sprint-status.yaml`.

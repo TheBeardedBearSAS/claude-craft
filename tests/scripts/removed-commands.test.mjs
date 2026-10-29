@@ -18,11 +18,12 @@ function distributed() {
   return new Set(distributedFiles().keys());
 }
 
-// `<ns>/<name>.md` of the en redirect stubs (`deprecated: true`).
+// `<ns>/<name>.md` of the en (or language-neutral base) redirect stubs (`deprecated: true`).
 function deprecatedStubs() {
   const out = new Set();
   for (const [rel, files] of distributedFiles()) {
-    const en = files.find((f) => f.includes(`${path.sep}en${path.sep}`));
+    const en =
+      files.find((f) => f.includes(`${path.sep}en${path.sep}`)) ?? files.find((f) => f.includes(`${path.sep}base${path.sep}`));
     if (en && /^deprecated: true\s*$/m.test(fs.readFileSync(en, 'utf8'))) out.add(rel);
   }
   return out;
@@ -75,6 +76,18 @@ describe('config/removed-commands.yaml', () => {
 
   it('retires the native-overlap stubs of 8.27.0 in 9.0', () => {
     expect(removed()).toEqual(expect.arrayContaining(['common/research-context7.md', 'uiux/orchestrator.md']));
+  });
+
+  // Lot 7 (9.0): /<tech>:check-<axis> -> /<tech>:check <axis>, /team:sprint -> /team:delivery.
+  it('schedules the tech check-* stubs and team:sprint for removal in 10.0', () => {
+    const stacks = ['angular', 'csharp', 'flutter', 'laravel', 'paperclip', 'php', 'python', 'react', 'reactnative'];
+    stacks.push('symfony', 'vercel', 'vite', 'vuejs');
+    const olds = ['architecture', 'code-quality', 'security', 'testing', 'compliance'];
+    const expected = Object.fromEntries([
+      ...stacks.flatMap((ns) => olds.map((o) => [`${ns}/check-${o}.md`, '10.0'])),
+      ['team/sprint.md', '10.0'],
+    ]);
+    expect(scheduled()).toMatchObject(expected);
   });
 
   it('schedules exactly the deprecated stubs that are still distributed', () => {

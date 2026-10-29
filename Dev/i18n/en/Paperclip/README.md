@@ -35,11 +35,11 @@ Paperclip/
 
 | Command | Purpose |
 |---|---|
-| `/paperclip:check-compliance` | Full audit (Architecture + Quality + Tests + Security + Adapter protocol), score /100 |
-| `/paperclip:check-architecture` | Two-layer split + module boundaries + activity log coverage |
-| `/paperclip:check-code-quality` | TypeScript strictness, lint, complexity, logging hygiene |
-| `/paperclip:check-testing` | Coverage, adapter contract tests, cross-tenant isolation |
-| `/paperclip:check-security` | Tenancy, secrets, approvals, budgets, signed adapter channel |
+| `/paperclip:check all` | Full audit (Architecture + Quality + Tests + Security + Adapter protocol), score /100 |
+| `/paperclip:check architecture` | Two-layer split + module boundaries + activity log coverage |
+| `/paperclip:check code-quality` | TypeScript strictness, lint, complexity, logging hygiene |
+| `/paperclip:check testing` | Coverage, adapter contract tests, cross-tenant isolation |
+| `/paperclip:check security` | Tenancy, secrets, approvals, budgets, signed adapter channel |
 | `/paperclip:generate-adapter` | Scaffold an adapter (local / process / http) |
 | `/paperclip:generate-agent-config` | Generate an `agent.yaml` with budget + approvals |
 | `/paperclip:setup-company` | Bootstrap a new Paperclip company end-to-end |

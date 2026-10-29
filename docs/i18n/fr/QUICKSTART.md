@@ -110,7 +110,7 @@ Dans Claude Code, essayez ces commandes :
 
 ```
 # Vérifier l'architecture de votre projet
-/symfony:check-architecture
+/symfony:check architecture
 
 # Obtenir une revue de code
 @symfony-reviewer Passe en revue mon dossier src/

@@ -9,9 +9,9 @@
 
 <script setup>
 const stats = [
-  { value: '11', label: 'Tech Stacks' },
-  { value: '31', label: 'AI Agents' },
-  { value: '126', label: 'Slash Commands' },
+  { value: '13', label: 'Tech Stacks' },
+  { value: '33', label: 'AI Agents' },
+  { value: '143', label: 'Slash Commands' },
   { value: '55', label: 'Skills' },
   { value: '21', label: 'Templates' },
   { value: '10', label: 'Checklists' },

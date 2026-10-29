@@ -60,8 +60,8 @@ ${c.bold}Next Steps:${c.reset}
      ${c.cyan}/workflow:init${c.reset}
 
   3. Or use technology-specific commands:
-     ${c.cyan}/symfony:check-architecture${c.reset}
-     ${c.cyan}/flutter:check-compliance${c.reset}
+     ${c.cyan}/symfony:check architecture${c.reset}
+     ${c.cyan}/flutter:check all${c.reset}
      ${c.cyan}/react:generate-component${c.reset}
 
 ${c.bold}Documentation:${c.reset}

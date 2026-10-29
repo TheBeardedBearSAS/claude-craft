@@ -53,11 +53,7 @@ HELP_DESCRIPTION="    TCL-optimized installation covering framework-agnostic Vit
     Token reduction: ~95% (from ~70K to ~3.5K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check-compliance\` - Full compliance audit
-- \`/${TECH_NAMESPACE}:check-architecture\` - Architecture validation
-- \`/${TECH_NAMESPACE}:check-code-quality\` - Code quality analysis
-- \`/${TECH_NAMESPACE}:check-testing\` - Test coverage analysis
-- \`/${TECH_NAMESPACE}:check-security\` - Security audit
+AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
 - \`/${TECH_NAMESPACE}:check-library-build\` - Validate build.lib / vite-plugin-dts output
 - \`/${TECH_NAMESPACE}:scaffold-project\` - Wrap \`npm create vite@latest -- --template vanilla-ts|lit-ts\`"
 

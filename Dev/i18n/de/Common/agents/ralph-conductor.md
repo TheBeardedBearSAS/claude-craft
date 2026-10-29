@@ -177,11 +177,11 @@ Zusammenfassung:
 
 ## Agent Teams Koordinationsmodus
 
-Bei der Ausführung im Agent Teams Modus (aktiviert über `--ralph-mode` bei `/team:sprint --engine=teams`) übernimmt der Conductor die Rolle des **Team Leads** und koordiniert einen Dev-Kollegen über die Claude Code Agent Teams API anstelle von Bash-Prozessmanagement.
+Bei der Ausführung im Agent Teams Modus (aktiviert über `--ralph-mode` bei `/team:delivery --phase=implementation --engine=teams`) übernimmt der Conductor die Rolle des **Team Leads** und koordiniert einen Dev-Kollegen über die Claude Code Agent Teams API anstelle von Bash-Prozessmanagement.
 
 ### Voraussetzungen
 
-- Umgebungsvariable `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (nur für `/team:sprint --engine=teams` erforderlich)
+- Umgebungsvariable `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (nur für `/team:delivery --phase=implementation --engine=teams` erforderlich)
 - Claude Code v2.1.32+
 - Adapter-Bibliothek: `Tools/AgentTeams/lib/ralph-teams-adapter.sh`
 
@@ -218,8 +218,8 @@ Der Conductor führt periodische Gesundheitsprüfungen über den `teams_watchdog
 ### Bash-Modus erhalten
 
 Die gesamte bestehende Bash-Modus-Orchestrierung bleibt unverändert. Der Agent Teams Modus wird nur aktiviert, wenn:
-1. Das `--ralph-mode`-Flag an `/team:sprint --engine=teams` übergeben wird
-2. Die Umgebungsvariable `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` gesetzt ist (nur für `/team:sprint --engine=teams` erforderlich)
+1. Das `--ralph-mode`-Flag an `/team:delivery --phase=implementation --engine=teams` übergeben wird
+2. Die Umgebungsvariable `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` gesetzt ist (nur für `/team:delivery --phase=implementation --engine=teams` erforderlich)
 3. Die Adapter-Bibliothek verfügbar ist
 
 Ohne diese Bedingungen arbeitet der Conductor genau wie bisher.
@@ -230,7 +230,7 @@ Ohne diese Bedingungen arbeitet der Conductor genau wie bisher.
 - Integriert mit Claude Code 2.1.23+ Hooks
 - Kompatibel mit dem `/workflow:implement`-Workflow
 - Verwendet `@tdd-coach`-Prinzipien
-- Agent Teams Modus über `/team:sprint --ralph-mode`
+- Agent Teams Modus über `/team:delivery --phase=implementation --engine=teams --ralph-mode`
 
 ## Wann zu stoppen ist
 

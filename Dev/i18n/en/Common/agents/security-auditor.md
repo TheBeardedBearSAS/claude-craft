@@ -92,7 +92,7 @@ For each vulnerability:
 - `.claude/rules/11-security.md` — applicable rules
 - `.claude/skills/security*` — per-stack skills
 - `/team:security` — parallel multi-dimension audit
-- `/{tech}:check-security` — per-stack audit
+- `/{tech}:check security` — per-stack audit
 - `@devops-engineer` — SBOM / Sigstore / infra hardening setup
 
 ## Resources

@@ -233,34 +233,34 @@ Fonctionnalité: Authentification Utilisateur
 
 ```bash
 # Symfony
-/symfony:check-testing
+/symfony:check testing
 
 # Flutter
-/flutter:check-testing
+/flutter:check testing
 
 # Python
-/python:check-testing
+/python:check testing
 
 # React
-/react:check-testing
+/react:check testing
 
 # Angular
-/angular:check-testing
+/angular:check testing
 
 # Vue.js
-/vuejs:check-testing
+/vuejs:check testing
 
 # C# / .NET
-/csharp:check-testing
+/csharp:check testing
 
 # Laravel
-/laravel:check-testing
+/laravel:check testing
 
 # React Native
-/reactnative:check-testing
+/reactnative:check testing
 
 # PHP
-/php:check-testing
+/php:check testing
 ```
 
 ### Checklist d'Écriture de Tests
@@ -404,13 +404,13 @@ Avec les tests qui passent, améliorez la qualité du code.
 
 ```bash
 # Vérifier la qualité du code (disponible pour les 10 stacks dev)
-/{tech}:check-code-quality
+/{tech}:check code-quality
 
 # Vérifier la conformité architecturale
-/{tech}:check-architecture
+/{tech}:check architecture
 
 # Audit de conformité complète (retourne un score /100)
-/{tech}:check-compliance
+/{tech}:check all
 ```
 
 ### Utiliser le Spécialiste du Refactoring
@@ -454,10 +454,10 @@ Vérification qualité finale avant complétion.
 
 ```bash
 # Vérification complète de conformité (retourne un score /100)
-/symfony:check-compliance
-/flutter:check-compliance
-/python:check-compliance
-/react:check-compliance
+/symfony:check all
+/flutter:check all
+/python:check all
+/react:check all
 ```
 
 Cet audit complet vérifie :
@@ -612,7 +612,7 @@ public function register(string $email, string $password): User
 ### Étape 7 : Refactoriser
 
 ```bash
-/symfony:check-code-quality
+/symfony:check code-quality
 ```
 
 Corrigez les problèmes identifiés.
@@ -633,7 +633,7 @@ Implémentation complète incluant :
 ### Étape 9 : Vérification Finale
 
 ```bash
-/symfony:check-compliance
+/symfony:check all
 ```
 
 Objectif : Score 90+/100
@@ -663,10 +663,10 @@ Objectif : Score 90+/100
 |-------|-----------|
 | Analyse | `/common:analyze-feature` |
 | Conception | `/common:architecture-decision` |
-| Tests | `/{tech}:check-testing` |
+| Tests | `/{tech}:check testing` |
 | Génération | `/{tech}:generate-*` |
-| Qualité | `/{tech}:check-code-quality` |
-| Revue | `/{tech}:check-compliance` |
+| Qualité | `/{tech}:check code-quality` |
+| Revue | `/{tech}:check all` |
 | Sécurité | `/common:security-audit` |
 
 ### Emplacement des Templates

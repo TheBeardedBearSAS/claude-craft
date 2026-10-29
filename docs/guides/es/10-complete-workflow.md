@@ -250,7 +250,7 @@ Para cada historia también ejecuta una revisión de código y verifica el **Sto
 ### C.2 Alternativas (opcional)
 
 - `/workflow:implement --auto` — ejecuta todo el sprint de forma más autónoma.
-- `/workflow:implement --parallel 3` (`/team:sprint`) — implementa múltiples historias **en paralelo** usando Agent Teams (avanzado).
+- `/workflow:implement --parallel 3` (`/team:delivery --phase=implementation`) — implementa múltiples historias **en paralelo** usando Agent Teams (avanzado).
 - `@tdd-coach` — invoca al coach a mitad de una tarea para recibir orientación.
 
 Usa `/workflow:implement` en tu primera ejecución.
@@ -414,7 +414,7 @@ Cómo se mapea a este tutorial:
 Dos ajustes para multi-stack:
 
 1. **Empieza con el epic de fundación** (Epic 0): monorepo, tokens de diseño compartidos, el contrato OpenAPI y un estilo de mapa **antes** de cualquier componente de UI — un verdadero *walking skeleton*.
-2. **Ejecuta sprints web y móvil en paralelo** con `/team:sprint` (Agent Teams), cada uno respetando las puertas de su propio stack.
+2. **Ejecuta sprints web y móvil en paralelo** con `/team:delivery --phase=implementation` (Agent Teams), cada uno respetando las puertas de su propio stack.
 
 Todo lo demás — puertas, TDD, el tablero Kanban, la disciplina de `/clear` — es idéntico. El método no cambia con la escala; solo lo hace el número de tracks paralelos.
 

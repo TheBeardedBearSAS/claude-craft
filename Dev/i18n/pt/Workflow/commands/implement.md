@@ -1,6 +1,6 @@
 ---
 name: workflow-implement
-description: "Executar a fase de Implementação - desenvolvimento TDD/BDD de um sprint, de um epic, de uma story ou da fila batch (sequencial, ou paralelo via /team:sprint)"
+description: "Executar a fase de Implementação - desenvolvimento TDD/BDD de um sprint, de um epic, de uma story ou da fila batch (sequencial, ou paralelo via /team:delivery --phase=implementation)"
 argument-hint: "[<N>|--epic <EPIC>|--story <US-ID>|--queue] [--resume] [--parallel N] [--auto] [--dry-run]"
 arguments:
   - name: sprint
@@ -23,7 +23,7 @@ arguments:
 
 Executar a fase de Implementação: desenvolvimento sprint a sprint (ou epic / story / fila) com TDD/BDD, seguindo o design técnico das fases anteriores. É o ponto de entrada único da implementação: substitui `/workflow:implement`, `/workflow:implement`, `/workflow:implement --epic` e `/workflow:implement --queue`.
 
-**Sequencial por padrão.** `--parallel N` delega a execução a `/team:sprint` (Agent Teams).
+**Sequencial por padrão.** `--parallel N` delega a execução a `/team:delivery --phase=implementation` (Agent Teams).
 
 ## Uso
 
@@ -38,7 +38,7 @@ Executar a fase de Implementação: desenvolvimento sprint a sprint (ou epic / s
 | `--story <US-ID>` | Implementa uma única story (laço de tarefas + validação) | (uma story) |
 | `--queue` | Processa a fila batch `.bmad/batch-queue.yaml` | `/workflow:implement --queue` |
 | `--resume` | Retoma a partir do último checkpoint (sprint interrompido ou fila interrompida) | `/workflow:implement --queue --resume` |
-| `--parallel N` | Executa até N stories independentes em paralelo, delegando a `/team:sprint` | `/workflow:implement --queue --parallel N` |
+| `--parallel N` | Executa até N stories independentes em paralelo, delegando a `/team:delivery --phase=implementation` | `/workflow:implement --queue --parallel N` |
 | `--auto` | Começa imediatamente, sem pedir confirmação | `--auto` |
 | `--dry-run` | Pré-visualiza o plano de execução; nada é alterado | `--dry-run` |
 
@@ -122,7 +122,7 @@ Sem `--auto`, pedir confirmação antes de executar.
 ### Etapa 3: Executar
 
 - **Sequencial (padrão):** processar as stories uma a uma com o laço de story abaixo, com um checkpoint após cada story.
-- **`--parallel N`:** entregar as stories independentes (sem dependência pendente) a `/team:sprint`, que lança até N colegas em paralelo. `/team:sprint` escreve suas transições no mesmo `.bmad/sprint-status.yaml`; as stories com dependências aguardam seus pré-requisitos ficarem `done`.
+- **`--parallel N`:** entregar as stories independentes (sem dependência pendente) a `/team:delivery --phase=implementation`, que lança até N colegas em paralelo. `/team:delivery` escreve suas transições no mesmo `.bmad/sprint-status.yaml`; as stories com dependências aguardam seus pré-requisitos ficarem `done`.
 
 ```
 Mode: Parallel (3 workers)
@@ -339,7 +339,7 @@ Para correções de bugs e pequenas funcionalidades, não é necessária estrutu
 
 - `/workflow:design` - Fase anterior; `/workflow:start <N>` - criar o sprint e suas tarefas
 - `/workflow:status` - Progresso, board (`--board`), fila (`--queue`), gates (`--gates`)
-- `/team:sprint` - Motor paralelo usado por `--parallel N`; `/team:delivery` - Redação + implementação em paralelo
+- `/team:delivery --phase=implementation` - Motor paralelo usado por `--parallel N`; `/team:delivery` - Redação + implementação em paralelo
 - `/project:backlog move story <US> <status>` - Transição manual de uma story
 - `/qa:tdd` - Correções rápidas de bugs
 - `/workflow:review` - Cerimônia de sprint review

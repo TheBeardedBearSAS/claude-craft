@@ -129,11 +129,11 @@ For detailed rules and examples: `@.claude/references/<topic>.md`
 
 ## Available Commands
 
-- `/csharp:check-compliance` - Full compliance audit
-- `/csharp:check-architecture` - Architecture validation
-- `/csharp:check-code-quality` - Code quality analysis
-- `/csharp:check-testing` - Test coverage analysis
-- `/csharp:check-security` - Security audit (OWASP)
+- `/csharp:check all` - Full compliance audit
+- `/csharp:check architecture` - Architecture validation
+- `/csharp:check code-quality` - Code quality analysis
+- `/csharp:check testing` - Test coverage analysis
+- `/csharp:check security` - Security audit (OWASP)
 - `/csharp:generate-feature` - Generate CQRS feature
 
 ## Docker Requirement

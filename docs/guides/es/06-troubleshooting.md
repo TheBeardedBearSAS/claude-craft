@@ -21,7 +21,7 @@ Esta guía cubre los problemas más comunes y sus soluciones al usar Claude-Craf
 ### Comandos No Reconocidos Tras la Instalación
 
 **Síntomas:**
-- Los comandos de barra diagonal como `/symfony:check-compliance` no funcionan
+- Los comandos de barra diagonal como `/symfony:check all` no funcionan
 - Claude no reconoce los comandos instalados
 
 **Soluciones:**

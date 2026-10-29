@@ -9,7 +9,7 @@ Actúas como **Product Owner / Scrum Master** y conduces un sprint completo desd
 en un **único comando**. Cada ceremonia se ejecuta dentro de un **sub-agente aislado**: la ventana de
 contexto propia del sub-agente reemplaza el `/clear` manual entre pasos, de modo que el contexto del
 orquestador se mantiene liviano. La fase de implementación la ejecutas **tú como conductor** (misma lógica
-que `/team:sprint`) para evitar el anidamiento de Agent Teams.
+que `/team:delivery --phase=implementation`) para evitar el anidamiento de Agent Teams.
 
 Esto automatiza lo que antes eran seis comandos manuales con un `/clear` de por medio:
 
@@ -31,7 +31,7 @@ $ARGUMENTS
   regla 09, y el principio Karpathy de "no auto-merge sin revisión humana").
 - `--max-fix-attempts=2` : Máximo de reintentos de corrección automática por gate fallido antes de abortar (por defecto: 2).
 - `--max-workers=3` : Máximo de workers de desarrollo en paralelo durante la fase de implementación (por defecto: 2, máximo: 3).
-- `--engine=subagents`: Motor de la fase de implementación (por defecto: `subagents`, delegación mediante la herramienta `Agent`). `teams`: Agent Teams experimental, con repliegue a `subagents` si no está disponible. Ver `/team:sprint`, sección «Motor de ejecución»
+- `--engine=subagents`: Motor de la fase de implementación (por defecto: `subagents`, delegación mediante la herramienta `Agent`). `teams`: Agent Teams experimental, con repliegue a `subagents` si no está disponible. Ver `/team:delivery --phase=implementation`, sección «Motor de ejecución»
 - `--base=main` : Rama base para la PR (por defecto: `main`).
 - `--dry-run` : Muestra las 9 fases planificadas y el contexto de sprint resuelto, luego se detiene. **Sin escrituras.**
 - `--overnight` : Se pasa directamente a la fase de implementación (acotada, se detiene a las 6 a.m.).
@@ -103,11 +103,11 @@ Lanzar un sub-agente aislado:
 
 ### Fase 4 — Implementación (tú = conductor)
 
-> Equivalente a `/workflow:implement --parallel N` (que delega en `/team:sprint`).
+> Equivalente a `/workflow:implement --parallel N` (que delega en `/team:delivery --phase=implementation`).
 
-Asumir directamente el **rol de conductor de `/team:sprint`** (**no** lanzar un Agent Team anidado):
+Asumir directamente el **rol de Lead de la fase de implementación de `/team:delivery --phase=implementation`** (**no** lanzar un Agent Team anidado):
 
-**Motor**: con `--engine=subagents` (por defecto), en el paso 4 lanzar un subagente por story mediante la herramienta `Agent` (`isolation: "worktree"`, todos en un mismo mensaje) en lugar de `TaskCreate`, y en el paso 5 esperar su retorno en lugar de consultar `TaskList` (correspondencia completa en `/team:sprint`, sección «Motor de ejecución»). Con `--engine=teams`, seguir los pasos tal como están escritos.
+**Motor**: con `--engine=subagents` (por defecto), en el paso 4 lanzar un subagente por story mediante la herramienta `Agent` (`isolation: "worktree"`, todos en un mismo mensaje) en lugar de `TaskCreate`, y en el paso 5 esperar su retorno en lugar de consultar `TaskList` (correspondencia completa en `/team:delivery --phase=implementation`, sección «Motor de ejecución»). Con `--engine=teams`, seguir los pasos tal como están escritos.
 
 1. Leer `.bmad/sprint-status.yaml`; filtrar historias en estado `ready-for-dev`.
 2. Analizar la independencia de dominio de archivos (marcar solapamientos de `**/Shared/**`, `**/Common/**`, `**/Utils/**`,

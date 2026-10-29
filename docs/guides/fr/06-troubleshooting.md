@@ -21,7 +21,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 ### Commandes Non Reconnues Après Installation
 
 **Symptômes :**
-- Les commandes slash comme `/symfony:check-compliance` ne fonctionnent pas
+- Les commandes slash comme `/symfony:check all` ne fonctionnent pas
 - Claude ne reconnaît pas les commandes installées
 
 **Solutions :**

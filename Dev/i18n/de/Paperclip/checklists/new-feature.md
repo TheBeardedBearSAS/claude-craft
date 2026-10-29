@@ -91,7 +91,7 @@ Ein Feature in Paperclip berührt typischerweise ein oder mehrere **Module** (`s
 ## 10. Review
 
 - [ ] Self-Review: `git diff main...HEAD`
-- [ ] `/paperclip:check-compliance` lokal ausführen
+- [ ] `/paperclip:check all` lokal ausführen
 - [ ] PR-Beschreibung: was, warum, Migrationsplan, Rollback-Plan
 - [ ] Adapter-Vertragstests grün für jeden berührten Adapter
 

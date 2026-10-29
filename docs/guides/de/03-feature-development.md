@@ -241,16 +241,16 @@ Feature: User Authentication
 
 ```bash
 # Symfony
-/symfony:check-testing
+/symfony:check testing
 
 # Flutter
-/flutter:check-testing
+/flutter:check testing
 
 # Python
-/python:check-testing
+/python:check testing
 
 # React
-/react:check-testing
+/react:check testing
 ```
 
 ### Checkliste für das Schreiben von Tests
@@ -366,14 +366,14 @@ Nachdem die Tests bestehen, verbessern Sie die Codequalität.
 
 ```bash
 # Codequalität prüfen
-/symfony:check-code-quality
-/flutter:check-code-quality
-/python:check-code-quality
-/react:check-code-quality
+/symfony:check code-quality
+/flutter:check code-quality
+/python:check code-quality
+/react:check code-quality
 
 # Architekturkonformität prüfen
-/symfony:check-architecture
-/flutter:check-architecture
+/symfony:check architecture
+/flutter:check architecture
 ```
 
 ### Den Refactoring-Spezialisten verwenden
@@ -417,10 +417,10 @@ Abschließende Qualitätsprüfung vor dem Abschluss.
 
 ```bash
 # Vollständige Compliance-Prüfung (gibt Score /100 zurück)
-/symfony:check-compliance
-/flutter:check-compliance
-/python:check-compliance
-/react:check-compliance
+/symfony:check all
+/flutter:check all
+/python:check all
+/react:check all
 ```
 
 Dieses umfassende Audit prüft:
@@ -575,7 +575,7 @@ public function register(string $email, string $password): User
 ### Schritt 7: Refactoring
 
 ```bash
-/symfony:check-code-quality
+/symfony:check code-quality
 ```
 
 Identifizierte Probleme beheben.
@@ -596,7 +596,7 @@ Complete implementation including:
 ### Schritt 9: Abschließende Prüfung
 
 ```bash
-/symfony:check-compliance
+/symfony:check all
 ```
 
 Ziel: Score 90+/100
@@ -623,10 +623,10 @@ Ziel: Score 90+/100
 |-------|---------|
 | Analyse | `/common:analyze-feature` |
 | Design | `/common:architecture-decision` |
-| Tests | `/{tech}:check-testing` |
+| Tests | `/{tech}:check testing` |
 | Generierung | `/{tech}:generate-*` |
-| Qualität | `/{tech}:check-code-quality` |
-| Review | `/{tech}:check-compliance` |
+| Qualität | `/{tech}:check code-quality` |
+| Review | `/{tech}:check all` |
 | Sicherheit | `/common:security-audit` |
 
 ### Speicherort der Templates

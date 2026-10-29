@@ -368,6 +368,23 @@ copy_commands() {
     fi
 }
 
+# Per-axis checklists read by /<tech>:check <axis> (9.0)
+copy_checks() {
+    local target_dir="$1"
+    local dry_run="$2"
+    local dest="${target_dir}/.claude/references/${TECH_NAMESPACE}/checks"
+
+    if i18n_dir_exists "$TECH_NAME/checks"; then
+        if [ "$dry_run" = "true" ]; then
+            log_dry_run "Copy: references/${TECH_NAMESPACE}/checks/*.md"
+        else
+            mkdir -p "$dest"
+            copy_i18n_files "$TECH_NAME/checks" "$dest" "*.md"
+            log_success "Check checklists copied (/${TECH_NAMESPACE}:check)"
+        fi
+    fi
+}
+
 copy_agents() {
     local target_dir="$1"
     local dry_run="$2"
@@ -484,6 +501,7 @@ install_tcl() {
     copy_templates "$target_dir" "$dry_run"
     copy_checklists "$target_dir" "$dry_run"
     copy_commands "$target_dir" "$dry_run"
+    copy_checks "$target_dir" "$dry_run"
     copy_agents "$target_dir" "$dry_run"
 
     # 7. Generate minimal CLAUDE.md

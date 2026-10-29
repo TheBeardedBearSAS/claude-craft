@@ -102,10 +102,17 @@ describe('9.0: deprecated stubs are gone', () => {
     expect(exists(`Project/i18n/${lang}/Sprint`)).toBe(false);
   });
 
-  it('no command file is still marked deprecated', () => {
+  it('no command file is still marked deprecated, except the stubs scheduled for a later release', () => {
+    const scheduled = yaml.load(read('config/removed-commands.yaml')).scheduled ?? {};
     const files = ['Dev', 'Infra', 'Project', '.claude/commands'].flatMap((d) => walk(path.join(PROJECT_ROOT, d)));
     const deprecated = files.filter((f) => /^---\n[\s\S]*?\ndeprecated: true\n/.test(fs.readFileSync(f, 'utf8')));
-    expect(deprecated.map((f) => path.relative(PROJECT_ROOT, f))).toEqual([]);
+    const unscheduled = deprecated.filter((f) => {
+      // <Ns>/commands/<name>.md (i18n sources) or .claude/commands/<ns>/<name>.md
+      const parts = path.relative(PROJECT_ROOT, f).split(path.sep);
+      const ns = parts.at(-2) === 'commands' ? parts.at(-3) : parts.at(-2);
+      return !(`${ns.toLowerCase()}/${parts.at(-1)}` in scheduled);
+    });
+    expect(unscheduled.map((f) => path.relative(PROJECT_ROOT, f))).toEqual([]);
   });
 
   it('the removal manifest prunes every retired command at upgrade', () => {

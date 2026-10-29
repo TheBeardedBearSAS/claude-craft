@@ -21,7 +21,7 @@ This guide covers common issues and their solutions when using Claude-Craft.
 ### Commands Not Recognized After Installation
 
 **Symptoms:**
-- Slash commands like `/symfony:check-compliance` don't work
+- Slash commands like `/symfony:check all` don't work
 - Claude doesn't recognize installed commands
 
 **Solutions:**

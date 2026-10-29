@@ -58,8 +58,8 @@ dotnet format --verify-no-changes   # Verificar formatacao
 ```
 
 ### Comandos Claude Craft
-- `/csharp:check-compliance` - Auditoria completa
-- `/csharp:check-architecture` - Validacao de arquitetura
+- `/csharp:check all` - Auditoria completa
+- `/csharp:check architecture` - Validacao de arquitetura
 - `/csharp:generate-feature` - Gerar feature CQRS
 
 ### Workflow de desenvolvimento

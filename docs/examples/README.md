@@ -97,7 +97,7 @@ claude
 /symfony:generate-crud Product
 
 # 4. Check quality
-/symfony:check-architecture
+/symfony:check architecture
 
 # 5. Commit
 /gate:check commit

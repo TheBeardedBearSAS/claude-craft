@@ -35,11 +35,11 @@ Paperclip/
 
 | Comando | Propósito |
 |---|---|
-| `/paperclip:check-compliance` | Auditoría completa (Arquitectura + Calidad + Tests + Seguridad + Protocolo de Adapter), puntuación /100 |
-| `/paperclip:check-architecture` | División de dos capas + límites de módulos + cobertura de log de actividad |
-| `/paperclip:check-code-quality` | Estrictez TypeScript, lint, complejidad, higiene de logging |
-| `/paperclip:check-testing` | Cobertura, tests de contrato de adapter, aislamiento entre tenants |
-| `/paperclip:check-security` | Tenancy, secrets, aprobaciones, presupuestos, canal de adapter firmado |
+| `/paperclip:check all` | Auditoría completa (Arquitectura + Calidad + Tests + Seguridad + Protocolo de Adapter), puntuación /100 |
+| `/paperclip:check architecture` | División de dos capas + límites de módulos + cobertura de log de actividad |
+| `/paperclip:check code-quality` | Estrictez TypeScript, lint, complejidad, higiene de logging |
+| `/paperclip:check testing` | Cobertura, tests de contrato de adapter, aislamiento entre tenants |
+| `/paperclip:check security` | Tenancy, secrets, aprobaciones, presupuestos, canal de adapter firmado |
 | `/paperclip:generate-adapter` | Generar scaffold de adapter (local / process / http) |
 | `/paperclip:generate-agent-config` | Generar un `agent.yaml` con presupuesto + aprobaciones |
 | `/paperclip:setup-company` | Inicializar una nueva empresa Paperclip de extremo a extremo |

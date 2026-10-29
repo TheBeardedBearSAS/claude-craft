@@ -110,3 +110,21 @@ describe('command count claims use a canonical figure', () => {
     );
   }
 });
+
+// Lot 7 (9.0): the narrated references document the per-stack /<tech>:check <axis> entry point.
+describe('docs document /<tech>:check', () => {
+  // gate/check.md is /gate:check, not a stack audit
+  const stacks = listNamespaces().filter((ns) => ns !== 'gate' && fs.existsSync(path.join(COMMANDS_DIR, ns, 'check.md')));
+
+  it('every stack in .claude/commands has a check.md', () => {
+    expect(stacks).toHaveLength(12);
+  });
+
+  it.each(['docs/COMMANDS.md', 'docs/CHEAT-SHEET.md', 'Dev/i18n/base/Common/commands/aliases.md'])(
+    '%s mentions /<tech>:check for every stack',
+    (file) => {
+      const doc = fs.readFileSync(path.join(PROJECT_ROOT, file), 'utf8');
+      expect(stacks.filter((ns) => !doc.includes(`/${ns}:check `))).toEqual([]);
+    }
+  );
+});

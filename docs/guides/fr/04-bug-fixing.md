@@ -319,22 +319,22 @@ make test
 
 ```bash
 # Qualité du code (par technologie, parmi les 204+ commandes disponibles)
-/symfony:check-code-quality
-/flutter:check-code-quality
-/python:check-code-quality
-/react:check-code-quality
-/angular:check-code-quality
-/vuejs:check-code-quality
-/csharp:check-code-quality
-/laravel:check-code-quality
-/reactnative:check-code-quality
-/php:check-code-quality
+/symfony:check code-quality
+/flutter:check code-quality
+/python:check code-quality
+/react:check code-quality
+/angular:check code-quality
+/vuejs:check code-quality
+/csharp:check code-quality
+/laravel:check code-quality
+/reactnative:check code-quality
+/php:check code-quality
 
 # Sécurité (si la correction touche du code sensible)
 /common:security-audit
 
 # Conformité complète
-/{tech}:check-compliance
+/{tech}:check all
 ```
 
 ### Tests Manuels
@@ -475,7 +475,7 @@ git checkout -b hotfix/issue-123-echec-connexion
 
 # 4. Vérifier
 make test
-/symfony:check-compliance
+/symfony:check all
 
 # 5. Commiter avec un message clair
 git commit -m "fix(auth): résoudre l'échec critique de connexion après réinitialisation
@@ -629,7 +629,7 @@ public function calculateTotal(): Money
 make test
 
 # Vérification qualité
-/symfony:check-compliance
+/symfony:check all
 # Score : 94/100 ✓
 ```
 

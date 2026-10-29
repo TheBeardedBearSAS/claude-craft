@@ -7,45 +7,46 @@
 
 | Namespace | Count |
 |-----------|-------|
-| `/angular:*` | 6 |
+| `/angular:*` | 7 |
 | `/ansible:*` | 5 |
 | `/common:*` | 13 |
 | `/coolify:*` | 5 |
-| `/csharp:*` | 6 |
+| `/csharp:*` | 7 |
 | `/docker:*` | 5 |
-| `/flutter:*` | 10 |
+| `/flutter:*` | 11 |
 | `/frankenphp:*` | 5 |
 | `/gate:*` | 1 |
 | `/hcloud:*` | 5 |
 | `/kubernetes:*` | 5 |
-| `/laravel:*` | 6 |
+| `/laravel:*` | 7 |
 | `/opentofu:*` | 5 |
-| `/paperclip:*` | 8 |
+| `/paperclip:*` | 9 |
 | `/pgbouncer:*` | 5 |
-| `/php:*` | 5 |
+| `/php:*` | 6 |
 | `/project:*` | 5 |
-| `/python:*` | 10 |
+| `/python:*` | 11 |
 | `/qa:*` | 5 |
-| `/react:*` | 10 |
-| `/reactnative:*` | 10 |
-| `/symfony:*` | 10 |
+| `/react:*` | 11 |
+| `/reactnative:*` | 11 |
+| `/symfony:*` | 11 |
 | `/team:*` | 4 |
 | `/uiux:*` | 7 |
-| `/vercel:*` | 6 |
-| `/vite:*` | 7 |
-| `/vuejs:*` | 6 |
+| `/vercel:*` | 7 |
+| `/vite:*` | 8 |
+| `/vuejs:*` | 7 |
 | `/workflow:*` | 9 |
-| **Total** | **184** |
+| **Total** | **197** |
 
 ## `/angular:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/angular:check-architecture`](../.claude/commands/angular/check-architecture.md) | Angular Architecture Review |
-| [`/angular:check-code-quality`](../.claude/commands/angular/check-code-quality.md) | Angular Code Quality Analysis |
-| [`/angular:check-compliance`](../.claude/commands/angular/check-compliance.md) | Angular Standards Compliance Check |
-| [`/angular:check-security`](../.claude/commands/angular/check-security.md) | Angular Security Audit |
-| [`/angular:check-testing`](../.claude/commands/angular/check-testing.md) | Angular Test Coverage and Quality Analysis |
+| [`/angular:check`](../.claude/commands/angular/check.md) | Audit Angular par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/angular:check-architecture`](../.claude/commands/angular/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /angular:check architecture |
+| [`/angular:check-code-quality`](../.claude/commands/angular/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /angular:check code-quality |
+| [`/angular:check-compliance`](../.claude/commands/angular/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /angular:check all |
+| [`/angular:check-security`](../.claude/commands/angular/check-security.md) | Obsolète (retirée en 10.0) : utilisez /angular:check security |
+| [`/angular:check-testing`](../.claude/commands/angular/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /angular:check testing |
 | [`/angular:generate-component`](../.claude/commands/angular/generate-component.md) | Generate Angular standalone component with tests |
 
 ## `/ansible:*`
@@ -90,11 +91,12 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/csharp:check-architecture`](../.claude/commands/csharp/check-architecture.md) | Validate Clean Architecture implementation in C#/.NET project |
-| [`/csharp:check-code-quality`](../.claude/commands/csharp/check-code-quality.md) | Run comprehensive code quality analysis on C#/.NET project |
-| [`/csharp:check-compliance`](../.claude/commands/csharp/check-compliance.md) | Verify C#/.NET project compliance with Clean Architecture and coding standards |
-| [`/csharp:check-security`](../.claude/commands/csharp/check-security.md) | Security audit for C#/.NET applications following OWASP guidelines |
-| [`/csharp:check-testing`](../.claude/commands/csharp/check-testing.md) | Analyze test coverage and testing practices in C#/.NET project |
+| [`/csharp:check`](../.claude/commands/csharp/check.md) | Audit C#/.NET par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/csharp:check-architecture`](../.claude/commands/csharp/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /csharp:check architecture |
+| [`/csharp:check-code-quality`](../.claude/commands/csharp/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /csharp:check code-quality |
+| [`/csharp:check-compliance`](../.claude/commands/csharp/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /csharp:check all |
+| [`/csharp:check-security`](../.claude/commands/csharp/check-security.md) | Obsolète (retirée en 10.0) : utilisez /csharp:check security |
+| [`/csharp:check-testing`](../.claude/commands/csharp/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /csharp:check testing |
 | [`/csharp:generate-feature`](../.claude/commands/csharp/generate-feature.md) | Generate a complete feature with Clean Architecture structure |
 
 ## `/docker:*`
@@ -112,11 +114,12 @@
 | Command | Description |
 |---------|-------------|
 | [`/flutter:analyze-performance`](../.claude/commands/flutter/analyze-performance.md) | Analyse Performance Flutter |
-| [`/flutter:check-architecture`](../.claude/commands/flutter/check-architecture.md) | Vérification Architecture Flutter |
-| [`/flutter:check-code-quality`](../.claude/commands/flutter/check-code-quality.md) | Vérification Qualité du Code Flutter |
-| [`/flutter:check-compliance`](../.claude/commands/flutter/check-compliance.md) | Audit Complet de Conformité Flutter |
-| [`/flutter:check-security`](../.claude/commands/flutter/check-security.md) | Vérification Sécurité Flutter |
-| [`/flutter:check-testing`](../.claude/commands/flutter/check-testing.md) | Vérification Tests Flutter |
+| [`/flutter:check`](../.claude/commands/flutter/check.md) | Audit Flutter par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/flutter:check-architecture`](../.claude/commands/flutter/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /flutter:check architecture |
+| [`/flutter:check-code-quality`](../.claude/commands/flutter/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /flutter:check code-quality |
+| [`/flutter:check-compliance`](../.claude/commands/flutter/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /flutter:check all |
+| [`/flutter:check-security`](../.claude/commands/flutter/check-security.md) | Obsolète (retirée en 10.0) : utilisez /flutter:check security |
+| [`/flutter:check-testing`](../.claude/commands/flutter/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /flutter:check testing |
 | [`/flutter:generate-feature`](../.claude/commands/flutter/generate-feature.md) | Génération Feature Flutter Complète |
 | [`/flutter:generate-widget`](../.claude/commands/flutter/generate-widget.md) | Génération Widget Flutter avec Tests |
 | [`/flutter:golden-update`](../.claude/commands/flutter/golden-update.md) | Mise à jour Golden Tests |
@@ -162,11 +165,12 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/laravel:check-architecture`](../.claude/commands/laravel/check-architecture.md) | Audit Laravel application architecture and design patterns |
-| [`/laravel:check-code-quality`](../.claude/commands/laravel/check-code-quality.md) | Analyze Laravel code quality using static analysis and metrics |
-| [`/laravel:check-compliance`](../.claude/commands/laravel/check-compliance.md) | Check Laravel project compliance with coding standards |
-| [`/laravel:check-security`](../.claude/commands/laravel/check-security.md) | Security audit for Laravel applications following OWASP guidelines |
-| [`/laravel:check-testing`](../.claude/commands/laravel/check-testing.md) | Audit Laravel test coverage and testing practices |
+| [`/laravel:check`](../.claude/commands/laravel/check.md) | Audit Laravel par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/laravel:check-architecture`](../.claude/commands/laravel/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /laravel:check architecture |
+| [`/laravel:check-code-quality`](../.claude/commands/laravel/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /laravel:check code-quality |
+| [`/laravel:check-compliance`](../.claude/commands/laravel/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /laravel:check all |
+| [`/laravel:check-security`](../.claude/commands/laravel/check-security.md) | Obsolète (retirée en 10.0) : utilisez /laravel:check security |
+| [`/laravel:check-testing`](../.claude/commands/laravel/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /laravel:check testing |
 | [`/laravel:generate-controller`](../.claude/commands/laravel/generate-controller.md) | Generate a Laravel controller following best practices |
 
 ## `/opentofu:*`
@@ -183,11 +187,12 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/paperclip:check-architecture`](../Dev/i18n/en/Paperclip/commands/check-architecture.md) | Audit Paperclip Architecture |
-| [`/paperclip:check-code-quality`](../Dev/i18n/en/Paperclip/commands/check-code-quality.md) | Audit Paperclip Code Quality |
-| [`/paperclip:check-compliance`](../Dev/i18n/en/Paperclip/commands/check-compliance.md) | Check Complete Paperclip Compliance |
-| [`/paperclip:check-security`](../Dev/i18n/en/Paperclip/commands/check-security.md) | Audit Paperclip Security |
-| [`/paperclip:check-testing`](../Dev/i18n/en/Paperclip/commands/check-testing.md) | Audit Paperclip Test Coverage and Quality |
+| [`/paperclip:check`](../Dev/i18n/en/Paperclip/commands/check.md) | Paperclip audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
+| [`/paperclip:check-architecture`](../Dev/i18n/en/Paperclip/commands/check-architecture.md) | Deprecated (removed in 10.0): use /paperclip:check architecture |
+| [`/paperclip:check-code-quality`](../Dev/i18n/en/Paperclip/commands/check-code-quality.md) | Deprecated (removed in 10.0): use /paperclip:check code-quality |
+| [`/paperclip:check-compliance`](../Dev/i18n/en/Paperclip/commands/check-compliance.md) | Deprecated (removed in 10.0): use /paperclip:check all |
+| [`/paperclip:check-security`](../Dev/i18n/en/Paperclip/commands/check-security.md) | Deprecated (removed in 10.0): use /paperclip:check security |
+| [`/paperclip:check-testing`](../Dev/i18n/en/Paperclip/commands/check-testing.md) | Deprecated (removed in 10.0): use /paperclip:check testing |
 | [`/paperclip:generate-adapter`](../Dev/i18n/en/Paperclip/commands/generate-adapter.md) | Scaffold a Paperclip extension (plugin via create-paperclip-plugin, or built-in adapter) |
 | [`/paperclip:generate-agent-config`](../Dev/i18n/en/Paperclip/commands/generate-agent-config.md) | Draft a Paperclip agent-hire payload (for the API or the dashboard) |
 | [`/paperclip:setup-company`](../Dev/i18n/en/Paperclip/commands/setup-company.md) | Bootstrap a new Paperclip company (onboarding + first agent) |
@@ -206,11 +211,12 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/php:check-architecture`](../.claude/commands/php/check-architecture.md) | Architecture Validation |
-| [`/php:check-code-quality`](../.claude/commands/php/check-code-quality.md) | Code Quality Analysis |
-| [`/php:check-compliance`](../.claude/commands/php/check-compliance.md) | Standards Compliance Check |
-| [`/php:check-security`](../.claude/commands/php/check-security.md) | Security Audit |
-| [`/php:check-testing`](../.claude/commands/php/check-testing.md) | Test Coverage Analysis |
+| [`/php:check`](../.claude/commands/php/check.md) | Audit PHP par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/php:check-architecture`](../.claude/commands/php/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /php:check architecture |
+| [`/php:check-code-quality`](../.claude/commands/php/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /php:check code-quality |
+| [`/php:check-compliance`](../.claude/commands/php/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /php:check all |
+| [`/php:check-security`](../.claude/commands/php/check-security.md) | Obsolète (retirée en 10.0) : utilisez /php:check security |
+| [`/php:check-testing`](../.claude/commands/php/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /php:check testing |
 
 ## `/project:*`
 
@@ -227,11 +233,12 @@
 | Command | Description |
 |---------|-------------|
 | [`/python:async-check`](../.claude/commands/python/async-check.md) | Vérification Patterns Async Python |
-| [`/python:check-architecture`](../.claude/commands/python/check-architecture.md) | Vérification Architecture Python |
-| [`/python:check-code-quality`](../.claude/commands/python/check-code-quality.md) | Vérification Qualité du Code Python |
-| [`/python:check-compliance`](../.claude/commands/python/check-compliance.md) | Vérification Compliance Complète Python |
-| [`/python:check-security`](../.claude/commands/python/check-security.md) | Vérification Sécurité Python |
-| [`/python:check-testing`](../.claude/commands/python/check-testing.md) | Vérification Tests Python |
+| [`/python:check`](../.claude/commands/python/check.md) | Audit Python par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/python:check-architecture`](../.claude/commands/python/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /python:check architecture |
+| [`/python:check-code-quality`](../.claude/commands/python/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /python:check code-quality |
+| [`/python:check-compliance`](../.claude/commands/python/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /python:check all |
+| [`/python:check-security`](../.claude/commands/python/check-security.md) | Obsolète (retirée en 10.0) : utilisez /python:check security |
+| [`/python:check-testing`](../.claude/commands/python/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /python:check testing |
 | [`/python:dependency-audit`](../.claude/commands/python/dependency-audit.md) | Audit des Dépendances Python |
 | [`/python:generate-endpoint`](../.claude/commands/python/generate-endpoint.md) | Génération Endpoint FastAPI |
 | [`/python:generate-model`](../.claude/commands/python/generate-model.md) | Génération Model SQLAlchemy |
@@ -253,11 +260,12 @@
 |---------|-------------|
 | [`/react:accessibility-check`](../.claude/commands/react/accessibility-check.md) | Audit Accessibilité React |
 | [`/react:bundle-analyze`](../.claude/commands/react/bundle-analyze.md) | Analyse du Bundle React |
-| [`/react:check-architecture`](../.claude/commands/react/check-architecture.md) | Vérification de lArchitecture React |
-| [`/react:check-code-quality`](../.claude/commands/react/check-code-quality.md) | Vérification de la Qualité du Code React |
-| [`/react:check-compliance`](../.claude/commands/react/check-compliance.md) | Audit Complet de Conformité React |
-| [`/react:check-security`](../.claude/commands/react/check-security.md) | Vérification de la Sécurité React |
-| [`/react:check-testing`](../.claude/commands/react/check-testing.md) | Vérification des Tests React |
+| [`/react:check`](../.claude/commands/react/check.md) | Audit React par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/react:check-architecture`](../.claude/commands/react/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /react:check architecture |
+| [`/react:check-code-quality`](../.claude/commands/react/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /react:check code-quality |
+| [`/react:check-compliance`](../.claude/commands/react/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /react:check all |
+| [`/react:check-security`](../.claude/commands/react/check-security.md) | Obsolète (retirée en 10.0) : utilisez /react:check security |
+| [`/react:check-testing`](../.claude/commands/react/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /react:check testing |
 | [`/react:generate-component`](../.claude/commands/react/generate-component.md) | Génération Composant React |
 | [`/react:generate-hook`](../.claude/commands/react/generate-hook.md) | Génération Custom Hook React |
 | [`/react:storybook-story`](../.claude/commands/react/storybook-story.md) | Génération Story Storybook |
@@ -267,11 +275,12 @@
 | Command | Description |
 |---------|-------------|
 | [`/reactnative:app-size`](../.claude/commands/reactnative/app-size.md) | Analyse Taille Application React Native |
-| [`/reactnative:check-architecture`](../.claude/commands/reactnative/check-architecture.md) | Check Architecture React Native |
-| [`/reactnative:check-code-quality`](../.claude/commands/reactnative/check-code-quality.md) | Check Code Quality React Native |
-| [`/reactnative:check-compliance`](../.claude/commands/reactnative/check-compliance.md) | Check Compliance React Native |
-| [`/reactnative:check-security`](../.claude/commands/reactnative/check-security.md) | Check Security React Native |
-| [`/reactnative:check-testing`](../.claude/commands/reactnative/check-testing.md) | Check Testing React Native |
+| [`/reactnative:check`](../.claude/commands/reactnative/check.md) | Audit React Native par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/reactnative:check-architecture`](../.claude/commands/reactnative/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /reactnative:check architecture |
+| [`/reactnative:check-code-quality`](../.claude/commands/reactnative/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /reactnative:check code-quality |
+| [`/reactnative:check-compliance`](../.claude/commands/reactnative/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /reactnative:check all |
+| [`/reactnative:check-security`](../.claude/commands/reactnative/check-security.md) | Obsolète (retirée en 10.0) : utilisez /reactnative:check security |
+| [`/reactnative:check-testing`](../.claude/commands/reactnative/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /reactnative:check testing |
 | [`/reactnative:deep-link`](../.claude/commands/reactnative/deep-link.md) | Configuration Deep Linking React Native |
 | [`/reactnative:generate-screen`](../.claude/commands/reactnative/generate-screen.md) | Génération Screen React Native |
 | [`/reactnative:native-module`](../.claude/commands/reactnative/native-module.md) | Guide Création Module Natif React Native |
@@ -282,11 +291,12 @@
 | Command | Description |
 |---------|-------------|
 | [`/symfony:api-endpoint`](../.claude/commands/symfony/api-endpoint.md) | Création Endpoint API Platform |
-| [`/symfony:check-architecture`](../.claude/commands/symfony/check-architecture.md) | Audit Architecture Symfony |
-| [`/symfony:check-code-quality`](../.claude/commands/symfony/check-code-quality.md) | Audit Qualité du Code Symfony |
-| [`/symfony:check-compliance`](../.claude/commands/symfony/check-compliance.md) | Audit Complet de Conformité Symfony |
-| [`/symfony:check-security`](../.claude/commands/symfony/check-security.md) | Audit Sécurité Symfony |
-| [`/symfony:check-testing`](../.claude/commands/symfony/check-testing.md) | Audit Testing Symfony |
+| [`/symfony:check`](../.claude/commands/symfony/check.md) | Audit Symfony par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/symfony:check-architecture`](../.claude/commands/symfony/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /symfony:check architecture |
+| [`/symfony:check-code-quality`](../.claude/commands/symfony/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /symfony:check code-quality |
+| [`/symfony:check-compliance`](../.claude/commands/symfony/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /symfony:check all |
+| [`/symfony:check-security`](../.claude/commands/symfony/check-security.md) | Obsolète (retirée en 10.0) : utilisez /symfony:check security |
+| [`/symfony:check-testing`](../.claude/commands/symfony/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /symfony:check testing |
 | [`/symfony:generate-command`](../.claude/commands/symfony/generate-command.md) | Génération Commande Symfony |
 | [`/symfony:generate-crud`](../.claude/commands/symfony/generate-crud.md) | Génération CRUD Complet |
 | [`/symfony:migration-plan`](../.claude/commands/symfony/migration-plan.md) | Planification Migration Base de Données |
@@ -299,7 +309,7 @@
 | [`/team:audit`](../.claude/commands/team/audit.md) | Équipe d'Audit Complet - Audit multi-technologie parallèle par sous-agents (Agent Teams en option) |
 | [`/team:delivery`](../.claude/commands/team/delivery.md) | Équipe de Livraison - Cycle de vie complet du sprint (rédaction + implémentation) par sous-agents (Agent Teams en option) |
 | [`/team:security`](../.claude/commands/team/security.md) | Équipe de Revue de Sécurité - Audit de sécurité multi-dimension parallèle par sous-agents (Agent Teams en option) |
-| [`/team:sprint`](../.claude/commands/team/sprint.md) | Équipe de Développement Sprint - Implémentation parallèle de stories par sous-agents (Agent Teams en option) |
+| [`/team:sprint`](../.claude/commands/team/sprint.md) | Obsolète (retirée en 10.0) : utilisez /team:delivery --phase=implementation |
 
 ## `/uiux:*`
 
@@ -317,34 +327,37 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/vercel:check-architecture`](../.claude/commands/vercel/check-architecture.md) | Audit Vercel deployment configuration structure and project shape classification |
-| [`/vercel:check-code-quality`](../.claude/commands/vercel/check-code-quality.md) | Analyze Vercel Serverless Functions code quality with ESLint, TypeScript, and bundle-size checks |
-| [`/vercel:check-compliance`](../.claude/commands/vercel/check-compliance.md) | Check Complete Vercel Compliance |
-| [`/vercel:check-security`](../.claude/commands/vercel/check-security.md) | Security audit for Vercel deployment configuration (env vars, Cron auth, headers, Marketplace credentials) |
-| [`/vercel:check-testing`](../.claude/commands/vercel/check-testing.md) | Audit test coverage for Vercel Function handlers, middleware, and Cron secret-guards |
+| [`/vercel:check`](../.claude/commands/vercel/check.md) | Audit Vercel par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/vercel:check-architecture`](../.claude/commands/vercel/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /vercel:check architecture |
+| [`/vercel:check-code-quality`](../.claude/commands/vercel/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /vercel:check code-quality |
+| [`/vercel:check-compliance`](../.claude/commands/vercel/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /vercel:check all |
+| [`/vercel:check-security`](../.claude/commands/vercel/check-security.md) | Obsolète (retirée en 10.0) : utilisez /vercel:check security |
+| [`/vercel:check-testing`](../.claude/commands/vercel/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /vercel:check testing |
 | [`/vercel:deploy-config`](../.claude/commands/vercel/deploy-config.md) | Detect the project's Vercel deployment shape and generate or validate a tailored vercel.json |
 
 ## `/vite:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/vite:check-architecture`](../.claude/commands/vite/check-architecture.md) | Audit Vite project architecture and build configuration organization |
-| [`/vite:check-code-quality`](../.claude/commands/vite/check-code-quality.md) | Analyze Vite project code quality with ESLint, TypeScript, and build diagnostics |
-| [`/vite:check-compliance`](../.claude/commands/vite/check-compliance.md) | Audit Vite project compliance with framework-agnostic best practices |
+| [`/vite:check`](../.claude/commands/vite/check.md) | Audit Vite par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/vite:check-architecture`](../.claude/commands/vite/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /vite:check architecture |
+| [`/vite:check-code-quality`](../.claude/commands/vite/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /vite:check code-quality |
+| [`/vite:check-compliance`](../.claude/commands/vite/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /vite:check all |
 | [`/vite:check-library-build`](../.claude/commands/vite/check-library-build.md) | Validate build.lib output and vite-plugin-dts .d.ts generation for a Vite library |
-| [`/vite:check-security`](../.claude/commands/vite/check-security.md) | Security audit for Vite build configuration (env leakage, CSP, WASM sandboxing) |
-| [`/vite:check-testing`](../.claude/commands/vite/check-testing.md) | Audit Vite project test coverage and quality with Vitest |
+| [`/vite:check-security`](../.claude/commands/vite/check-security.md) | Obsolète (retirée en 10.0) : utilisez /vite:check security |
+| [`/vite:check-testing`](../.claude/commands/vite/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /vite:check testing |
 | [`/vite:scaffold-project`](../.claude/commands/vite/scaffold-project.md) | Scaffold a new Vite project (vanilla-ts or lit-ts template) or a library skeleton |
 
 ## `/vuejs:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/vuejs:check-architecture`](../.claude/commands/vuejs/check-architecture.md) | Audit Vue.js project architecture and module organization |
-| [`/vuejs:check-code-quality`](../.claude/commands/vuejs/check-code-quality.md) | Analyze Vue.js code quality with ESLint, TypeScript, and Prettier checks |
-| [`/vuejs:check-compliance`](../.claude/commands/vuejs/check-compliance.md) | Audit Vue.js project compliance with coding standards and best practices |
-| [`/vuejs:check-security`](../.claude/commands/vuejs/check-security.md) | Security audit for Vue.js applications (OWASP, XSS, CSRF) |
-| [`/vuejs:check-testing`](../.claude/commands/vuejs/check-testing.md) | Audit Vue.js test coverage and quality with Vitest |
+| [`/vuejs:check`](../.claude/commands/vuejs/check.md) | Audit Vue.js par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/vuejs:check-architecture`](../.claude/commands/vuejs/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check architecture |
+| [`/vuejs:check-code-quality`](../.claude/commands/vuejs/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check code-quality |
+| [`/vuejs:check-compliance`](../.claude/commands/vuejs/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check all |
+| [`/vuejs:check-security`](../.claude/commands/vuejs/check-security.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check security |
+| [`/vuejs:check-testing`](../.claude/commands/vuejs/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check testing |
 | [`/vuejs:generate-component`](../.claude/commands/vuejs/generate-component.md) | Generate a Vue.js component with TypeScript, tests, and Storybook |
 
 ## `/workflow:*`
@@ -353,7 +366,7 @@
 |---------|-------------|
 | [`/workflow:auto-sprint`](../.claude/commands/workflow/auto-sprint.md) | Orchestrateur de sprint de bout en bout (démarrage -> décomposition -> validation -> implémentation -> PR -> CI -> revue -> rétro -> merge) |
 | [`/workflow:design`](../.claude/commands/workflow/design.md) | Exécuter la phase de Conception (Solutioning) - générer la spécification technique (défaut) ou la constitution du projet (--constitution) |
-| [`/workflow:implement`](../.claude/commands/workflow/implement.md) | Exécuter la phase d'Implémentation - développement TDD/BDD d'un sprint, d'un epic, d'une story ou de la file batch (séquentiel, ou parallèle via /team:sprint) |
+| [`/workflow:implement`](../.claude/commands/workflow/implement.md) | Exécuter la phase d'Implémentation - développement TDD/BDD d'un sprint, d'un epic, d'une story ou de la file batch (séquentiel, ou parallèle via /team:delivery --phase=implementation) |
 | [`/workflow:init`](../.claude/commands/workflow/init.md) | Analyser le contexte du projet et recommander le track de workflow optimal |
 | [`/workflow:plan`](../.claude/commands/workflow/plan.md) | Exécuter la phase de Planification - recherche (--research), PRD (--only=prd) et backlog SCRUM (--only=backlog) |
 | [`/workflow:retro`](../.claude/commands/workflow/retro.md) | Facilitation Rétrospective |

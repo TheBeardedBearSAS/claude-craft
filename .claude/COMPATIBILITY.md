@@ -333,7 +333,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
 | **`/goal` command** | Définir condition de completion — Claude travaille jusqu'à ce qu'elle soit atteinte | **NOT INTEGRATED** — P1 : intégrer dans `ralph-run.md` comme alternative native aux DoD validators |
-| **`claude agents` command** | Agent View : liste unique de toutes les sessions actives | **NOT DOCUMENTED** — P1 : pertinent pour `/team:*` et `/team:sprint` |
+| **`claude agents` command** | Agent View : liste unique de toutes les sessions actives | **NOT DOCUMENTED** — P1 : pertinent pour `/team:*` et `/team:delivery` |
 | `/scroll-speed` | Tuning vitesse scroll souris | **N/A** |
 | `claude plugin details <name>` | Inventaire composants + coût token | **N/A** |
 | Hook `args: string[]` field | Exec form sans shell | **Not documented** |
@@ -398,7 +398,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 > **Note Opus 4.8 :** L'ID de modèle est `claude-opus-4-8`. Pour les agents critiques (audits sécurité, migrations, décisions schéma, boucles autonomes), `model: opus` + `effort: xhigh` routait alors vers Opus 4.8 — **depuis 2.1.280, l'alias `opus` route vers Opus 5.5** (`claude-opus-5-5`, Opus 4.8 devenu *legacy*). Le `model: sonnet` des reviewers tech reste optimal pour le ratio coût/qualité (routing économe).
 
-> **Note Dynamic Workflows vs `/team:*` :** Les commandes `/team:audit`, `/team:sprint`, `/team:security` restent valides (orchestration documentée déclarative). Dynamic Workflows offre en plus une orchestration **programmatique** (boucles, fan-out conditionnel, pipelines, vérification adversariale) pour les tâches dépassant un seul contexte. À évaluer pour v8.8.
+> **Note Dynamic Workflows vs `/team:*` :** Les commandes `/team:audit`, `/team:delivery`, `/team:security` restent valides (orchestration documentée déclarative). Dynamic Workflows offre en plus une orchestration **programmatique** (boucles, fan-out conditionnel, pipelines, vérification adversariale) pour les tâches dépassant un seul contexte. À évaluer pour v8.8.
 
 ---
 

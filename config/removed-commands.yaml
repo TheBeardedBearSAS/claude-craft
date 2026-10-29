@@ -4,7 +4,8 @@
 # and `claude-craft update` delete these paths from <target>/.claude/commands/ so an
 # upgrade does not leave stale commands behind. Paths are <namespace>/<command>.md.
 # Deprecated commands stay distributed as redirect stubs (frontmatter
-# `deprecated: true` + `replaced-by:`) and are only listed here once retired.
+# `deprecated: true` + `replaced-by:`) and are only listed under `removed:` once
+# retired; until then they are listed under `scheduled:` below.
 removed:
   # 8.24.0 — maintainer-only commands, kept in the claude-craft repository (.claude/commands/common/)
   - common/add-technology.md
@@ -68,3 +69,75 @@ removed:
   # 9.0.0 — redirect stubs of native Claude Code overlaps (8.27.0)
   - common/research-context7.md
   - uiux/orchestrator.md
+
+# Deprecated commands still distributed as redirect stubs, with the release that
+# retires them (they move to `removed:` then). A mapping, not a list, so
+# prune-removed-commands.sh never deletes them before that release.
+scheduled:
+  # 9.0.0 — /<tech>:check-<axis> → /<tech>:check <axis>, /team:sprint → /team:delivery --phase=implementation
+  angular/check-architecture.md: '10.0'
+  angular/check-code-quality.md: '10.0'
+  angular/check-compliance.md: '10.0'
+  angular/check-security.md: '10.0'
+  angular/check-testing.md: '10.0'
+  csharp/check-architecture.md: '10.0'
+  csharp/check-code-quality.md: '10.0'
+  csharp/check-compliance.md: '10.0'
+  csharp/check-security.md: '10.0'
+  csharp/check-testing.md: '10.0'
+  flutter/check-architecture.md: '10.0'
+  flutter/check-code-quality.md: '10.0'
+  flutter/check-compliance.md: '10.0'
+  flutter/check-security.md: '10.0'
+  flutter/check-testing.md: '10.0'
+  laravel/check-architecture.md: '10.0'
+  laravel/check-code-quality.md: '10.0'
+  laravel/check-compliance.md: '10.0'
+  laravel/check-security.md: '10.0'
+  laravel/check-testing.md: '10.0'
+  paperclip/check-architecture.md: '10.0'
+  paperclip/check-code-quality.md: '10.0'
+  paperclip/check-compliance.md: '10.0'
+  paperclip/check-security.md: '10.0'
+  paperclip/check-testing.md: '10.0'
+  php/check-architecture.md: '10.0'
+  php/check-code-quality.md: '10.0'
+  php/check-compliance.md: '10.0'
+  php/check-security.md: '10.0'
+  php/check-testing.md: '10.0'
+  python/check-architecture.md: '10.0'
+  python/check-code-quality.md: '10.0'
+  python/check-compliance.md: '10.0'
+  python/check-security.md: '10.0'
+  python/check-testing.md: '10.0'
+  react/check-architecture.md: '10.0'
+  react/check-code-quality.md: '10.0'
+  react/check-compliance.md: '10.0'
+  react/check-security.md: '10.0'
+  react/check-testing.md: '10.0'
+  reactnative/check-architecture.md: '10.0'
+  reactnative/check-code-quality.md: '10.0'
+  reactnative/check-compliance.md: '10.0'
+  reactnative/check-security.md: '10.0'
+  reactnative/check-testing.md: '10.0'
+  symfony/check-architecture.md: '10.0'
+  symfony/check-code-quality.md: '10.0'
+  symfony/check-compliance.md: '10.0'
+  symfony/check-security.md: '10.0'
+  symfony/check-testing.md: '10.0'
+  vercel/check-architecture.md: '10.0'
+  vercel/check-code-quality.md: '10.0'
+  vercel/check-compliance.md: '10.0'
+  vercel/check-security.md: '10.0'
+  vercel/check-testing.md: '10.0'
+  vite/check-architecture.md: '10.0'
+  vite/check-code-quality.md: '10.0'
+  vite/check-compliance.md: '10.0'
+  vite/check-security.md: '10.0'
+  vite/check-testing.md: '10.0'
+  vuejs/check-architecture.md: '10.0'
+  vuejs/check-code-quality.md: '10.0'
+  vuejs/check-compliance.md: '10.0'
+  vuejs/check-security.md: '10.0'
+  vuejs/check-testing.md: '10.0'
+  team/sprint.md: '10.0'
