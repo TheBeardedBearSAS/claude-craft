@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [9.0.0] - 2026-10-26
+## [9.0.0] - 2026-10-29
 
 Phase 4 de la feuille de route de simplification des commandes de gestion de projet : retrait des stubs de redirection. Guide : [MIGRATION-v9](docs/MIGRATION-v9.md).
 

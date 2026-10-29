@@ -30,7 +30,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ## What's New in v9.0.0
 
-**BREAKING — retrait des commandes dépréciées (2026-10-26, v9.0.0) :** les 54 stubs de redirection (PM, `/common:research-context7`, `/uiux:orchestrator`) et le namespace `/sprint:` sont supprimés ; `claude-craft update` les efface des projets. Table de correspondance : [MIGRATION-v9](docs/MIGRATION-v9.md). Détails : [CHANGELOG](CHANGELOG.md#900---2026-10-26).
+**BREAKING — retrait des commandes dépréciées (2026-10-29, v9.0.0) :** les 54 stubs de redirection (PM, `/common:research-context7`, `/uiux:orchestrator`) et le namespace `/sprint:` sont supprimés ; `claude-craft update` les efface des projets. Table de correspondance : [MIGRATION-v9](docs/MIGRATION-v9.md). Détails : [CHANGELOG](CHANGELOG.md#900---2026-10-29).
 
 **Un seul `/<tech>:check <axe>` par stack (v9.0.0) :** `/react:check architecture|code-quality|security|testing|all` remplace les 5 `check-*` de chaque stack (`all` = audit noté sur 100) ; `/team:sprint` devient `/team:delivery --phase=implementation`. Les anciens noms restent des stubs de redirection jusqu'en 10.0. Table : [MIGRATION-v9](docs/MIGRATION-v9.md).
 
