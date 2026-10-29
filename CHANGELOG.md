@@ -32,6 +32,10 @@ Phase 4 de la feuille de route de simplification des commandes de gestion de pro
 - `docs/MIGRATION-v9.md` (table ancien → nouveau, étapes d'upgrade) ; test `tests/content/pm-v9-removal.test.mjs` (aucun stub PM restant, seuls les stubs programmés pour 10.0 tolérés, manifeste complet, aucune référence à une commande retirée hors documents historiques).
 - Tests `tests/scripts/check-compliance-delegation.test.mjs` ; `/<tech>:check` exposé partout (`namespace-integrity`), stubs non valides comme cible de référence (`command-refs`), docs documentant `/<tech>:check` (`doc-counts`), stubs programmés pour 10.0 (`removed-commands`).
 
+### Security
+
+- **`@hono/node-server` 2.0.11 → 2.1.5** (dépendance du serveur Kanban) : corrige GHSA-rmxm-3fg6-px4f (`serveStatic` décode deux fois le chemin, contournement de middleware sur les chemins statiques).
+
 ## [8.27.0] - 2026-10-28
 
 Dernière version 8.x avant la consolidation 9.0 : les commandes `/team:*` fonctionnent sans Agent Teams, deux commandes redondantes avec des capacités natives sont dépréciées, et le moteur Ralph est fiabilisé (mode parallèle, `set -e`, sessions). Claude Code recommandé : 2.1.312.
