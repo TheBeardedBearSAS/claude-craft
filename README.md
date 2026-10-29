@@ -26,11 +26,15 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
 
-A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 132 commands across 17 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 131 commands across 18 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
 ## What's New in v9.0.0
 
-**BREAKING — retrait des commandes dépréciées (2026-10-26, v9.0.0) :** les 52 stubs de redirection et le namespace `/sprint:` sont supprimés ; `claude-craft update` les efface des projets. Table de correspondance : [MIGRATION-v9](docs/MIGRATION-v9.md). Détails : [CHANGELOG](CHANGELOG.md#900---2026-10-26).
+**BREAKING — retrait des commandes dépréciées (2026-10-26, v9.0.0) :** les 54 stubs de redirection (PM, `/common:research-context7`, `/uiux:orchestrator`) et le namespace `/sprint:` sont supprimés ; `claude-craft update` les efface des projets. Table de correspondance : [MIGRATION-v9](docs/MIGRATION-v9.md). Détails : [CHANGELOG](CHANGELOG.md#900---2026-10-26).
+
+## What's New in v8.27.0
+
+**Les commandes `/team:*` sans Agent Teams (2026-10-28, v8.27.0) :** `/team:audit`, `/team:security`, `/team:sprint` et `/team:delivery` délèguent par défaut à des sous-agents (`--engine=subagents`, compatible `claude -p` et CI) ; Agent Teams devient optionnel (`--engine=teams`, repli automatique si `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` est absent). `/common:research-context7` et `/uiux:orchestrator` sont dépréciées au profit du MCP context7 / `/deep-research` et de l'agent `@uiux-orchestrator`. Ralph est fiabilisé en mode parallèle (sessions et worktrees isolés). Claude Code recommandé : 2.1.312. Dernière version 8.x avant la 9.0. Détails : [CHANGELOG](CHANGELOG.md#8270---2026-10-28).
 
 ## What's New in v8.26.0
 
@@ -73,7 +77,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 - **Sécurité** : classement OWASP Top 10:2025 officiel (A01–A10) dans la règle 11 et ses miroirs, avec test de régression ; FrankenPHP 1.13.0 et PgBouncer 1.26.0 (versions précédentes vulnérables) ; types de serveurs Hetzner et `datacenter` retirés corrigés.
 - **Versions vérifiées sur registres** : React 19.3, Flutter 3.47, React Native 0.87 / Expo 57, Pinia 4, Vite 8.3 (`rolldownOptions`), Vercel CLI 63, Python 3.15, Paperclip 2026.1012.0, Docker 29.9, Kubernetes 1.37 (Gateway API), Vitest 5, Pest 5, pytest 9, PER-CS 3.0.
-- **Claude Code** : minimum 2.1.260, recommandé 2.1.296, modèles 5.5. Détails : [CHANGELOG](CHANGELOG.md#8230---2026-10-13).
+- **Claude Code** : minimum 2.1.260, recommandé 2.1.312, modèles 5.5. Détails : [CHANGELOG](CHANGELOG.md#8230---2026-10-13).
 
 ## What's New in v8.18.0
 
@@ -151,8 +155,8 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **MIT-only strict (v8.8.0)** -- Claude Craft est 100 % open-source MIT, aucune licence commerciale ou enterprise. Stratégie open-core abandonnée.
 - **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
 - **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
-- **126 commandes sur 15 namespaces** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
-- **Claude Code 2.1.296** -- version recommandée (minimum sécurité 2.1.260 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
+- **126 commandes sur 15 namespaces (v8.10.x)** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
+- **Claude Code 2.1.312** -- version recommandée (minimum sécurité 2.1.260 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
 
 > ← Versions antérieures (v8.0 → v8.7) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
 
@@ -191,7 +195,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
 - **33 default agents + 39 infra agents on-demand** -- reviewers, architects, coaches that know your stack deeply (72 total potentially installable)
-- **139 slash commands across 17 namespaces** -- repeatable workflows for audits, code generation, sprint management
+- **131 slash commands across 18 namespaces** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -229,7 +233,7 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 126 across 15 namespaces (220 total with infra/project) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Commands** | 131 across 18 namespaces (184 total with infra/project) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
 | **Skills** | 55 | Architecture, testing, security, DDD best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -271,7 +275,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 126 commands across 15 core namespaces (220 total including infra and project management).
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 131 commands across 18 namespaces (184 total including infra and project management).
 
 ## Installation
 
@@ -354,7 +358,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 126 commands |
+| [Commands](docs/COMMANDS.md) | All 131 commands |
 | [Agents](docs/AGENTS.md) | All 31 default agents (+ 39 infra on-demand) |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |

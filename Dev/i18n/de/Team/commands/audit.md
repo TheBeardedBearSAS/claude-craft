@@ -1,6 +1,6 @@
 ---
-description: "Full-Audit-Team - Paralleles Multi-Technologie-Audit mit Agent Teams"
-argument-hint: "[--techs=auto|tech1,tech2] [--max-workers=4]"
+description: "Full-Audit-Team - Paralleles Multi-Technologie-Audit mit Sub-Agenten (Agent Teams optional)"
+argument-hint: "[--techs=auto|tech1,tech2] [--max-workers=4] [--engine=subagents|teams]"
 ---
 
 # Full-Audit-Team - Paralleles Multi-Technologie-Audit
@@ -13,16 +13,41 @@ $ARGUMENTS
 
 - `--techs=auto`: Technologien automatisch erkennen (Standard). Oder kommagetrennt angeben: `--techs=symfony,react`
 - `--max-workers=4`: Maximale parallele Auditor-Worker (Standard: 4, max: 4)
+- `--engine=subagents`: Ausführungs-Engine (Standard: `subagents`). Optionen: `subagents` (Delegation an Sub-Agenten über das `Agent`-Tool, keine Voraussetzung), `teams` (experimentelle Agent Teams). Siehe „Ausführungs-Engine“
 - `--output-dir=<path>`: Benutzerdefiniertes Ausgabeverzeichnis für Audit-Ergebnisse
 - `--max-cost=<dollars>`: Maximales Budget in Dollar. Wenn die geschaetzten Parallelkosten diesen Schwellenwert ueberschreiten, wird die Ausfuehrung mit einer OVER BUDGET Meldung blockiert
 - `--dry-run`: Team-Zusammensetzung und geschätzte Kosten anzeigen, ohne auszuführen
 - `--skip-aggregation`: Ergebnisse pro Stack ohne Zusammenführung ausgeben
 - `--sequential`: Audits sequenziell statt parallel ausführen (kein Agent-Teams-Overhead). Nützlich für Einzeltechnologie-Projekte oder wenn Agent Teams nicht verfügbar ist.
 
+## Ausführungs-Engine (`--engine`)
+
+Die Standard-Engine hängt von keiner experimentellen Funktion ab: Der Befehl funktioniert auch, wenn `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` nicht gesetzt ist.
+
+| Engine | Aktivierung | Voraussetzungen | Verhalten |
+|--------|-------------|-----------------|-----------|
+| `subagents` (Standard) | kein Flag oder `--engine=subagents` | Keine (natives `Agent`-Tool) | Die aktuelle Sitzung übernimmt die Lead-Rolle und delegiert jede Worker-Aufgabe über das `Agent`-Tool an einen Sub-Agenten (Worker-Modell über den Parameter `model`). Unabhängige Sub-Agenten werden in einer einzigen Nachricht gestartet, damit sie parallel laufen; jeder schreibt sein Ergebnis in sein isoliertes Verzeichnis und gibt nur eine kurze Zusammenfassung zurück. Die Worker kommunizieren nicht miteinander: Der Lead leitet weiter. Funktioniert interaktiv, mit `claude -p` und in der CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Agent-Teams-Team: persistente Worker, koordiniert über `TaskCreate` / `TaskList` / `SendMessage`, direkte Nachrichten zwischen Teammitgliedern, Hooks `TeammateIdle` / `TaskCompleted`. |
+
+**Fallback**: Wird `--engine=teams` angefordert, obwohl `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` fehlt, nicht abbrechen — `ℹ️ Agent Teams nicht verfügbar: Fallback auf --engine=subagents` ausgeben und mit der Engine `subagents` fortfahren.
+
+**Grenzen der Engine `teams`**: kein nicht-interaktiver Modus (`claude -p`) und keine Ausführung in der CI; ein Team pro Sitzung (laufendes Team beenden, bevor ein neues gestartet wird); API im Research Preview, Änderungen vorbehalten.
+
+Der folgende Ablauf ist mit den Agent-Teams-Primitiven beschrieben. Mit `--engine=subagents` gilt diese Zuordnung:
+
+| Agent Teams (`teams`) | Sub-Agenten (`subagents`) |
+|------------------------|----------------------------|
+| `TaskCreate` + Worker-Spawn | Ein Aufruf des `Agent`-Tools, dessen Prompt die Aufgabenbeschreibung übernimmt |
+| `TaskList`-Polling / Synchronisationsbarriere | Auf die Rückkehr aller `Agent`-Aufrufe des Stapels warten |
+| `SendMessage` an einen Worker | Sub-Agenten fortsetzen (`SendMessage` an seine ID) oder neuer `Agent`-Aufruf mit dem nötigen Kontext |
+| `shutdown_request` | Nicht nötig: Ein Sub-Agent endet mit seiner Rückgabe |
+
+**Audit-spezifisch**: ein Sub-Agent pro Stack, mit dem Prompt der Spawn-Vorlage aus Schritt 4. `--sequential` bleibt verfügbar, um alles ohne Delegation in der aktuellen Sitzung zu verarbeiten.
+
 ## Voraussetzungen
 
-- Claude Code v2.1.32+ mit Agent-Teams-Unterstützung
-- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` Umgebungsvariable gesetzt
+- Claude Code v2.1.32+ mit Agent-Teams-Unterstützung — nur mit `--engine=teams`
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` Umgebungsvariable gesetzt — nur mit `--engine=teams`
 - Projekt mit 2+ erkannten Technologie-Stacks (Einzelstack-Projekte sollten das `--sequential`-Flag verwenden)
 - `Tools/AgentTeams/lib/compatibility-check.sh` verfügbar
 - `Tools/AgentTeams/lib/result-aggregator.sh` verfügbar

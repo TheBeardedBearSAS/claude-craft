@@ -35,7 +35,7 @@ function loadClaudeCodeVersion(key, fallback) {
 // Security floor: plugin SHA-pin bypass (CVE-2026-86063, fixed 2.1.179), symlink
 // TOCTOU write (CVE-2026-103435, 2.1.129), managed settings bypass (CVE-2026-103012, 2.1.260).
 const MIN_CLAUDE_CODE = loadClaudeCodeVersion('minimum', '2.1.260');
-const RECOMMENDED_CLAUDE_CODE = loadClaudeCodeVersion('recommended', '2.1.296');
+const RECOMMENDED_CLAUDE_CODE = loadClaudeCodeVersion('recommended', '2.1.312');
 
 /**
  * Compare two semver-ish version strings (`major.minor.patch`).

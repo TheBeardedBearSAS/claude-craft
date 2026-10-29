@@ -65,3 +65,6 @@ removed:
   - common/release-checklist.md
   - common/daily-standup.md
   - common/setup-project-context.md
+  # 9.0.0 — redirect stubs of native Claude Code overlaps (8.27.0)
+  - common/research-context7.md
+  - uiux/orchestrator.md

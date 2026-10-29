@@ -1,8 +1,8 @@
 ---
 name: api-gateway
-description: API Gateway patterns (Kong, Traefik, AWS API Gateway) — rate limiting, auth, routing, versioning. Use when implementing API gateway, reverse proxy, or API management.
+description: "API Gateway patterns (Kong, Traefik, AWS API Gateway) — rate limiting, auth, routing, versioning. Use when implementing API gateway, reverse proxy, or API management."
 context: fork
-  files: ["**/kong*", "**/traefik*", "**/gateway*", "**/nginx*"]
+files: ["**/kong*", "**/traefik*", "**/gateway*", "**/nginx*"]
 ---
 
 # API Gateway — Kong, Traefik, Patterns

@@ -48,10 +48,10 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     const langs = ['en', 'fr', 'es', 'de', 'pt'];
 
     for (const lang of langs) {
-      const output = execSync(
-        `bash "${SCRIPT}" --dry-run --lang=${lang} "${tmpDir}"`,
-        { encoding: 'utf8', timeout: 30000 },
-      );
+      const output = execSync(`bash "${SCRIPT}" --dry-run --lang=${lang} "${tmpDir}"`, {
+        encoding: 'utf8',
+        timeout: 30000,
+      });
       // Dry-run should succeed for each language
       expect(output).toBeTruthy();
     }
@@ -111,6 +111,20 @@ describe('install-common-rules.sh', { timeout: 60000 }, () => {
     expect(fs.existsSync(path.join(commonDir, 'getting-started.md'))).toBe(true);
     // 9.0: absorbed by /gate:check commit
     expect(fs.existsSync(path.join(commonDir, 'pre-commit-check.md'))).toBe(false);
+  });
+
+  // 8.27.0 shipped /gate:check with the Dev package so the common:* gate stubs resolved;
+  // the stubs are gone in 9.0 but /gate:check stays the code-gate entry point.
+  it.each(['commit', 'merge', 'release'])('ships /gate:check with its %s gate', (gate) => {
+    const tmpDir = makeTmpDir();
+    execSync(`bash "${SCRIPT}" --lang=fr "${tmpDir}"`, {
+      encoding: 'utf8',
+      timeout: 30000,
+    });
+
+    const target = path.join(tmpDir, '.claude', 'commands', 'gate', 'check.md');
+    expect(fs.existsSync(target)).toBe(true);
+    expect(fs.readFileSync(target, 'utf8')).toMatch(new RegExp(`^## ${gate}$`, 'm'));
   });
 
   it('lists only the selected stack reviewers in AGENTS.md', () => {

@@ -1,6 +1,6 @@
 ---
-description: Delivery Team - Full sprint lifecycle (writing + implementation) using Agent Teams
-argument-hint: <sprint-name|prd-path> [--phase=all|writing|implementation] [--max-workers=3]
+description: Delivery Team - Full sprint lifecycle (writing + implementation) using sub-agents (Agent Teams optional)
+argument-hint: <sprint-name|prd-path> [--phase=all|writing|implementation] [--max-workers=3] [--engine=subagents|teams]
 ---
 
 # Delivery Team - Full Sprint Lifecycle (Writing + Implementation)
@@ -14,6 +14,7 @@ $ARGUMENTS
 - `<sprint-name|prd-path>`: Sprint name/ID or path to the PRD document
 - `--phase=all`: Phase to execute (default: `all`). Options: `all`, `writing`, `implementation`
 - `--max-workers=3`: Maximum parallel workers per phase (default: 3, max: 3)
+- `--engine=subagents`: Execution engine (default: `subagents`). Options: `subagents` (delegation to sub-agents via the `Agent` tool, no prerequisite), `teams` (experimental Agent Teams). See "Execution engine"
 - `--overnight`: Run in overnight mode (bounded, stops at 6am)
 - `--supervised`: Pause before each story for human confirmation
 - `--max-stories=10`: Maximum stories to process (default: 10)
@@ -23,10 +24,34 @@ $ARGUMENTS
 - `--max-rewrites=2`: Maximum rewrite loops per artefact in Phase 1 (default: 2)
 - `--max-cost=<dollars>`: Maximum budget in dollars. If the estimated parallel cost exceeds this threshold, execution is blocked with an OVER BUDGET message
 
+## Execution engine (`--engine`)
+
+The default engine relies on no experimental feature: the command works even when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is not set.
+
+| Engine | Activation | Prerequisites | Behavior |
+|--------|------------|---------------|----------|
+| `subagents` (default) | no flag or `--engine=subagents` | None (native `Agent` tool) | The current session acts as the lead and delegates each worker task to a sub-agent via the `Agent` tool (worker model passed through the `model` parameter). Independent sub-agents are launched in a single message so they run in parallel; each one writes its result to its isolated directory and returns only a short summary. Workers do not talk to each other: the lead relays. Works interactively, with `claude -p` and in CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Agent Teams team: persistent workers coordinated through `TaskCreate` / `TaskList` / `SendMessage`, direct teammate messaging, `TeammateIdle` / `TaskCompleted` hooks. |
+
+**Fallback**: if `--engine=teams` is requested while `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is missing, do not fail — print `ℹ️ Agent Teams unavailable: falling back to --engine=subagents` and continue with the `subagents` engine.
+
+**`teams` engine limits**: no non-interactive mode (`claude -p`) and no CI runs; one team per session (finish the current team before starting another); research preview API, subject to change.
+
+The process below is written with Agent Teams primitives. With `--engine=subagents`, apply this mapping:
+
+| Agent Teams (`teams`) | Sub-agents (`subagents`) |
+|------------------------|---------------------------|
+| `TaskCreate` + worker spawn | One `Agent` tool call whose prompt carries the task description |
+| `TaskList` polling / synchronization barrier | Wait for every `Agent` call of the batch to return |
+| `SendMessage` to a worker | Resume the sub-agent (`SendMessage` to its ID) or a new `Agent` call with the needed context |
+| `shutdown_request` | Not needed: a sub-agent ends when it returns |
+
+**Delivery specifics**: in Phase 1, cross-review goes through the lead, which hands the drafted artifact to a reviewer sub-agent and sends its feedback back to the writer. In Phase 2, launch each developer worker with `isolation: "worktree"`.
+
 ## Prerequisites
 
-- Claude Code v2.1.32+ with Agent Teams support
-- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable set
+- Claude Code v2.1.32+ with Agent Teams support — only with `--engine=teams`
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable set — only with `--engine=teams`
 - PRD or tech spec available (for Phase 1) or BMAD sprint backlog with `ready-for-dev` stories (for Phase 2 only)
 - Sprint metadata in `.bmad/sprint-status.yaml`
 - `Tools/AgentTeams/lib/compatibility-check.sh` available

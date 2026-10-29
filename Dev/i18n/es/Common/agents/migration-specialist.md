@@ -6,22 +6,13 @@ maxTurns: 6
 effort: xhigh
 memory: user
 tools: [Read, Glob, Grep, Bash, WebFetch, WebSearch]
-# Audit 2026-05-18 QW-15 — migrations touch shared/prod databases. Block
-# destructive shell verbs and database drop/truncate. Investigate-then-output
-# is fine; actual destructive execution must require an explicit user opt-in.
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(:(){:|:&};:*)"
-  - "Bash(DROP DATABASE:*)"
-  - "Bash(DROP TABLE:*)"
-  - "Bash(TRUNCATE:*)"
-  - "Bash(pg_dump:*)"
-  - "Bash(mysqldump:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
 permissionMode: default
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "grep -qiE '(^|[^A-Za-z_])(DROP[[:space:]]+(DATABASE|SCHEMA|TABLE)|TRUNCATE)([^A-Za-z_]|$)' && { echo \"BLOQUEADO: SQL destructivo (DROP DATABASE/SCHEMA/TABLE, TRUNCATE). Proponer el comando al usuario para que lo ejecute él mismo.\" >&2; exit 2; } || exit 0"
 ---
 
 # Agente Migration Specialist
@@ -140,3 +131,7 @@ Eres un **Migration Specialist Senior** con más de 12 años de experiencia en m
 - [Stripe - Online migrations at scale](https://stripe.com/blog/online-migrations)
 - [Shopify - Sharding playbook](https://shopify.engineering/learnings-from-shopifys-largest-database-sharding-project)
 - [Strangler Fig - Martin Fowler](https://martinfowler.com/bliki/StranglerFigApplication.html)
+
+## Protección contra SQL destructivo
+
+Un hook `PreToolUse` declarado en el frontmatter bloquea, mientras este agente se ejecuta, todo comando Bash que contenga `DROP DATABASE`, `DROP SCHEMA`, `DROP TABLE` o `TRUNCATE` (por ejemplo `psql -c "DROP TABLE …"`): proponer entonces el comando al usuario. Los archivos de migración escritos con Edit/Write no se ven afectados. Límites: el hook solo se ejecuta tras aceptar la confianza de la carpeta (workspace trust) y se ignora cuando el agente se carga desde un plugin.

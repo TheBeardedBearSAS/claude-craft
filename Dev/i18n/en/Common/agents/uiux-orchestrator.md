@@ -14,15 +14,6 @@ tools:
   - WebFetch
   - WebSearch
 permissionMode: default
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(:(){:|:&};:*)"
-  - "Bash(sudo:*)"
-  - "Bash(chmod 777:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
 ---
 
 # UIUX Orchestrator Agent

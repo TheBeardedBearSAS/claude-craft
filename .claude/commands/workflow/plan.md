@@ -69,7 +69,7 @@ Ancien `/workflow:plan --research`. Recherche, exploration et contraintes avant 
 | Marché | Solutions existantes ? Concurrents ? Bonnes pratiques du secteur ? Tendances émergentes ? |
 | Technique | Technologies candidates ? Intégrations ? Scalabilité ? Sécurité / conformité ? |
 
-Si le MCP Context7 est configuré, l'utiliser pour la documentation technique à jour (`/common:research-context7` pour une recherche approfondie).
+Si le MCP Context7 est configuré, l'utiliser pour la documentation technique à jour (`/deep-research` pour une recherche web approfondie ; hors claude.ai, l'agent `@research-assistant`).
 
 **Contraintes** : documenter les contraintes techniques (backend existant, base de données), business (budget, délais, rétrocompatibilité), réglementaires (RGPD, PCI DSS) et de ressources (taille d'équipe, pas de DevOps).
 
@@ -213,4 +213,3 @@ En cas d'interruption, `/workflow:plan --continue` détecte ce qui existe (PRD t
 - `/workflow:status` - Vérifier la progression
 - `/project:backlog` - Ajouter, lister, modifier et déplacer des stories ensuite
 - `/gate:check` - Valider le backlog
-- `/common:research-context7` - Recherche approfondie avec Context7 MCP

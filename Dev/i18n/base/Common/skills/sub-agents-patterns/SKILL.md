@@ -1,6 +1,7 @@
 ---
 name: sub-agents-patterns
 description: Sub-agent patterns for parallel and complex tasks. Use when splitting work across Explore/Plan/general-purpose sub-agents or running independent investigations in parallel.
+context: fork
 allowed-tools:
   - Read
   - Glob

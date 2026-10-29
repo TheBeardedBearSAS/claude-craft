@@ -9,7 +9,7 @@
 |-----------|-------|
 | `/angular:*` | 6 |
 | `/ansible:*` | 5 |
-| `/common:*` | 14 |
+| `/common:*` | 13 |
 | `/coolify:*` | 5 |
 | `/csharp:*` | 6 |
 | `/docker:*` | 5 |
@@ -30,12 +30,12 @@
 | `/reactnative:*` | 10 |
 | `/symfony:*` | 10 |
 | `/team:*` | 4 |
-| `/uiux:*` | 8 |
+| `/uiux:*` | 7 |
 | `/vercel:*` | 6 |
 | `/vite:*` | 7 |
 | `/vuejs:*` | 6 |
 | `/workflow:*` | 9 |
-| **Total** | **186** |
+| **Total** | **184** |
 
 ## `/angular:*`
 
@@ -72,7 +72,6 @@
 | [`/common:init`](../.claude/commands/common/init.md) | Bootstrap the Claude-Craft structure for a new project, or analyze the codebase and configure the project context (--context) |
 | [`/common:pack-repo`](../.claude/commands/common/pack-repo.md) | Pack la codebase en un fichier AI-friendly (Repomix wrapper + fallback shell). Token counting inclus. |
 | [`/common:ralph-run`](../.claude/commands/common/ralph-run.md) | Executer Claude en boucle continue jusqu'a completion de la tache (Ralph Wiggum v2.0) |
-| [`/common:research-context7`](../.claude/commands/common/research-context7.md) | Recherche avec Context7 et Web |
 | [`/common:search`](../.claude/commands/common/search.md) | Search commands, skills and agents by keyword |
 | [`/common:setup-ci`](../.claude/commands/common/setup-ci.md) | Configuration CI/CD |
 | [`/common:setup-rtk`](../.claude/commands/common/setup-rtk.md) | Configure RTK and token optimization for Claude Code |
@@ -137,7 +136,7 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/gate:check`](../Project/i18n/en/Gate/commands/check.md) | Run any quality gate: document gates (PRD, tech spec, backlog, sprint, story, alignment), code gates (commit, merge, release), the full report or a phase checkpoint |
+| [`/gate:check`](../.claude/commands/gate/check.md) | Exécuter n'importe quelle porte qualité : portes documentaires (PRD, spec technique, backlog, sprint, story, alignement), portes de code (commit, merge, release), le rapport complet ou un checkpoint de phase |
 
 ## `/hcloud:*`
 
@@ -297,10 +296,10 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/team:audit`](../.claude/commands/team/audit.md) | Équipe d'Audit Complet - Audit multi-technologie parallèle utilisant les Agent Teams |
-| [`/team:delivery`](../.claude/commands/team/delivery.md) | Équipe de Livraison - Cycle de vie complet du sprint (rédaction + implémentation) utilisant les Agent Teams |
-| [`/team:security`](../.claude/commands/team/security.md) | Équipe de Revue de Sécurité - Audit de sécurité multi-dimension parallèle utilisant les Agent Teams |
-| [`/team:sprint`](../.claude/commands/team/sprint.md) | Équipe de Développement Sprint - Implémentation parallèle de stories utilisant les Agent Teams |
+| [`/team:audit`](../.claude/commands/team/audit.md) | Équipe d'Audit Complet - Audit multi-technologie parallèle par sous-agents (Agent Teams en option) |
+| [`/team:delivery`](../.claude/commands/team/delivery.md) | Équipe de Livraison - Cycle de vie complet du sprint (rédaction + implémentation) par sous-agents (Agent Teams en option) |
+| [`/team:security`](../.claude/commands/team/security.md) | Équipe de Revue de Sécurité - Audit de sécurité multi-dimension parallèle par sous-agents (Agent Teams en option) |
+| [`/team:sprint`](../.claude/commands/team/sprint.md) | Équipe de Développement Sprint - Implémentation parallèle de stories par sous-agents (Agent Teams en option) |
 
 ## `/uiux:*`
 
@@ -312,7 +311,6 @@
 | [`/uiux:component-spec`](../.claude/commands/uiux/component-spec.md) | Spécification Complète Composant UI/UX/A11y |
 | [`/uiux:design-tokens`](../.claude/commands/uiux/design-tokens.md) | Définition Design Tokens |
 | [`/uiux:generate-design-md`](../.claude/commands/uiux/generate-design-md.md) | Génère un DESIGN.md à la racine du projet à partir du template Claude Craft + analyse des sources UI existantes (Tailwind, tokens, CSS). |
-| [`/uiux:orchestrator`](../.claude/commands/uiux/orchestrator.md) | Orchestrateur UI/UX |
 | [`/uiux:user-flow`](../.claude/commands/uiux/user-flow.md) | Conception Parcours Utilisateur |
 
 ## `/vercel:*`

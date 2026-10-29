@@ -25,6 +25,10 @@
     ],
     "deny": [
       "Bash(rm -rf:*)",
+      "Bash(dd:*)",
+      "Bash(mkfs:*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
       "Bash(sudo:*)",
       "Bash(chmod 777:*)",
       "Bash(curl | sh:*)",

@@ -1,6 +1,6 @@
 ---
-description: Équipe de Livraison - Cycle de vie complet du sprint (rédaction + implémentation) utilisant les Agent Teams
-argument-hint: "<sprint-name|prd-path> [--phase=all|writing|implementation] [--max-workers=3]"
+description: Équipe de Livraison - Cycle de vie complet du sprint (rédaction + implémentation) par sous-agents (Agent Teams en option)
+argument-hint: "<sprint-name|prd-path> [--phase=all|writing|implementation] [--max-workers=3] [--engine=subagents|teams]"
 ---
 
 # Équipe de Livraison - Cycle de Vie Complet du Sprint (Rédaction + Implémentation)
@@ -14,6 +14,7 @@ $ARGUMENTS
 - `<sprint-name|prd-path>` : Nom/ID du sprint ou chemin vers le document PRD
 - `--phase=all` : Phase à exécuter (par défaut : `all`). Options : `all`, `writing`, `implementation`
 - `--max-workers=3` : Nombre maximum de workers parallèles par phase (par défaut : 3, max : 3)
+- `--engine=subagents` : Moteur d'exécution (par défaut : `subagents`). Options : `subagents` (délégation à des sous-agents via l'outil `Agent`, aucun prérequis), `teams` (Agent Teams expérimental). Voir « Moteur d'exécution »
 - `--overnight` : Exécuter en mode nuit (borné, s'arrête à 6h)
 - `--supervised` : Pause avant chaque story pour confirmation humaine
 - `--max-stories=10` : Nombre maximum de stories à traiter (par défaut : 10)
@@ -23,10 +24,34 @@ $ARGUMENTS
 - `--max-rewrites=2` : Nombre maximum de boucles de réécriture par artefact en Phase 1 (par défaut : 2)
 - `--max-cost=<dollars>` : Budget maximum en dollars. Si le coût parallèle estimé dépasse ce seuil, l'exécution est bloquée avec un message OVER BUDGET
 
+## Moteur d'exécution (`--engine`)
+
+Le moteur par défaut ne dépend d'aucune fonctionnalité expérimentale : la commande fonctionne même si `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` n'est pas défini.
+
+| Moteur | Activation | Prérequis | Comportement |
+|--------|------------|-----------|--------------|
+| `subagents` (défaut) | aucun flag ou `--engine=subagents` | Aucun (outil `Agent` natif) | La session courante joue le rôle de leader et délègue chaque tâche de worker à un sous-agent via l'outil `Agent` (modèle du worker passé par le paramètre `model`). Les sous-agents indépendants sont lancés dans un même message pour s'exécuter en parallèle ; chacun écrit son résultat dans son répertoire isolé et ne renvoie qu'un résumé court. Les workers ne communiquent pas entre eux : le leader relaie. Fonctionne en interactif, avec `claude -p` et en CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Équipe Agent Teams : workers persistants coordonnés par `TaskCreate` / `TaskList` / `SendMessage`, messagerie directe entre coéquipiers, hooks `TeammateIdle` / `TaskCompleted`. |
+
+**Repli** : si `--engine=teams` est demandé alors que `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` est absent, ne pas échouer — afficher `ℹ️ Agent Teams indisponible : repli sur --engine=subagents` et poursuivre avec le moteur `subagents`.
+
+**Limites du moteur `teams`** : pas de mode non interactif (`claude -p`) ni d'exécution en CI ; une seule équipe par session (terminer l'équipe en cours avant d'en lancer une autre) ; API en research preview, susceptible de changer.
+
+Le processus ci-dessous est décrit avec les primitives Agent Teams. Avec `--engine=subagents`, appliquer cette correspondance :
+
+| Agent Teams (`teams`) | Sous-agents (`subagents`) |
+|------------------------|----------------------------|
+| `TaskCreate` + spawn d'un worker | Un appel à l'outil `Agent` dont le prompt reprend la description de la tâche |
+| Polling `TaskList` / barrière de synchronisation | Attendre le retour de tous les appels `Agent` du lot |
+| `SendMessage` vers un worker | Relancer le sous-agent (`SendMessage` vers son ID) ou nouvel appel `Agent` avec le contexte nécessaire |
+| `shutdown_request` | Inutile : un sous-agent se termine à son retour |
+
+**Spécifique livraison** : en Phase 1, la revue croisée passe par le leader, qui transmet l'artefact rédigé à un sous-agent relecteur puis renvoie ses retours au rédacteur. En Phase 2, lancer chaque worker développeur avec `isolation: "worktree"`.
+
 ## Prérequis
 
-- Claude Code v2.1.32+ avec support Agent Teams
-- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` définie
+- Claude Code v2.1.32+ avec support Agent Teams — uniquement avec `--engine=teams`
+- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` définie — uniquement avec `--engine=teams`
 - PRD ou spécification technique disponible (pour la Phase 1) ou backlog sprint BMAD avec des stories `ready-for-dev` (pour la Phase 2 uniquement)
 - Métadonnées du sprint dans `.bmad/sprint-status.yaml`
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponible

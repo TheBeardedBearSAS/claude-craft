@@ -1,7 +1,7 @@
 ---
 name: security
-description: Security guidelines and OWASP Top 10. Use when reviewing security, implementing authentication or authorization, hardening code, or discussing vulnerabilities.
-  files: ["**/auth/**", "**/identity/**", "**/security/**", "**/middleware/**", "*.security.*", "*Auth*.*", "*Security*.*"]
+description: "Security guidelines and OWASP Top 10. Use when reviewing security, implementing authentication or authorization, hardening code, or discussing vulnerabilities."
+files: ["**/auth/**", "**/identity/**", "**/security/**", "**/middleware/**", "*.security.*", "*Auth*.*", "*Security*.*"]
 ---
 
 # Security

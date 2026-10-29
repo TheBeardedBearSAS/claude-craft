@@ -1,6 +1,6 @@
 ---
 description: End-to-End-Sprint-Orchestrator (Start -> Zerlegung -> Validierung -> Implementierung -> PR -> CI -> Review -> Retro -> Merge)
-argument-hint: "<N> [--from-prd] [--auto-merge] [--max-fix-attempts=2] [--max-workers=3] [--base=main] [--dry-run] [--overnight]"
+argument-hint: "<N> [--from-prd] [--auto-merge] [--max-fix-attempts=2] [--max-workers=3] [--base=main] [--dry-run] [--overnight] [--engine=subagents|teams]"
 ---
 
 # Auto Sprint — End-to-End-Sprint-Orchestrator
@@ -31,14 +31,15 @@ $ARGUMENTS
   Regel 09, und das Karpathy-Prinzip „kein Auto-Merge ohne menschliche Review").
 - `--max-fix-attempts=2` : Maximale automatische Korrekturversuche pro fehlgeschlagenem Gate vor dem Abbruch (Standard: 2).
 - `--max-workers=3` : Maximale parallele Entwickler-Worker in der Implementierungsphase (Standard: 2, Maximum: 3).
+- `--engine=subagents`: Engine der Implementierungsphase (Standard: `subagents`, Delegation über das `Agent`-Tool). `teams`: experimentelle Agent Teams, mit Fallback auf `subagents`, wenn nicht verfügbar. Siehe `/team:sprint`, Abschnitt „Ausführungs-Engine“
 - `--base=main` : Basis-Branch für den PR (Standard: `main`).
 - `--dry-run` : Gibt die geplanten 9 Phasen und den aufgelösten Sprint-Kontext aus und hält dann an. **Keine Schreibvorgänge.**
 - `--overnight` : Wird an die Implementierungsphase weitergegeben (begrenzt, stoppt um 6 Uhr morgens).
 
 ## Voraussetzungen
 
-- Claude Code v2.1.32+ mit Agent Teams Unterstützung
-- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` gesetzt
+- Claude Code v2.1.32+ mit Agent Teams Unterstützung — nur mit `--engine=teams`
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` gesetzt — nur mit `--engine=teams`
 - `gh` CLI authentifiziert (PR erstellen / Prüfungen / Merge)
 - Docker verfügbar (alle Tests laufen über Docker — siehe Projekt-CLAUDE.md)
 - BMAD v6-Projekt: `.bmad/sprint-status.yaml` wird bei Bedarf von `/workflow:start` (Phase 1) angelegt
@@ -105,6 +106,8 @@ Einen isolierten Unter-Agenten starten:
 > Entspricht `/workflow:implement --parallel N` (das an `/team:sprint` delegiert).
 
 Direkt die **`/team:sprint`-Dirigenten-Rolle übernehmen** (kein verschachteltes Agent Team starten):
+
+**Engine**: Mit `--engine=subagents` (Standard) in Schritt 4 pro Story einen Sub-Agenten über das `Agent`-Tool starten (`isolation: "worktree"`, alle in einer Nachricht) statt `TaskCreate`, und in Schritt 5 auf ihre Rückkehr warten statt `TaskList` abzufragen (vollständige Zuordnung in `/team:sprint`, Abschnitt „Ausführungs-Engine“). Mit `--engine=teams` die Schritte wie beschrieben befolgen.
 
 1. `.bmad/sprint-status.yaml` lesen; Stories mit Status `ready-for-dev` filtern.
 2. Datei-Domain-Unabhängigkeit analysieren (`**/Shared/**`, `**/Common/**`, `**/Utils/**`,
@@ -195,7 +198,7 @@ Phase                  | Status  | Anmerkungen
 | Story-DoD-Verfehlung nach Wiederholungen | Als `blocked` markieren, fortfahren, am Ende berichten |
 | CI rot nach Wiederholungen | Abbruch mit Bericht über fehlgeschlagene Prüfungen |
 | Merge blockiert (Schutz / Scope) | Fehler melden + vorgeschlagenes Flag, nicht erzwingen |
-| Agent Teams nicht verfügbar | Abbruch von Phase 4 mit Setup-Hinweis (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) |
+| Agent Teams mit `--engine=teams` nicht verfügbar | Fallback auf `--engine=subagents` (kein Abbruch); `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` setzen, um `--engine=teams` zu nutzen |
 
 ## Hinweise
 

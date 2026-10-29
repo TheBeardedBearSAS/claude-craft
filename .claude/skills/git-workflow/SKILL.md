@@ -1,7 +1,7 @@
 ---
 name: git-workflow
-description: Git workflow and conventional commits. Use when working with git, branches, commits, pull requests, code review, or version control strategy.
-  files: [".git/**", ".gitignore", ".commitlintrc*", ".husky/**", "CHANGELOG.md"]
+description: "Git workflow and conventional commits. Use when working with git, branches, commits, pull requests, code review, or version control strategy."
+files: [".git/**", ".gitignore", ".commitlintrc*", ".husky/**", "CHANGELOG.md"]
 ---
 
 # Git Workflow

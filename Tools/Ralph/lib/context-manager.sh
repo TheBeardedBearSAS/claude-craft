@@ -32,6 +32,9 @@ IFS=' ' read -r -a CLAUDE_CMD <<< "$CLAUDE_COMMAND"
 CONTEXT_COMPACT_COUNT=0
 CONTEXT_CONTINUATION_COUNT=0
 CONTEXT_CONTINUATION_PROMPT=""
+# Set by run_auto_compact (return 3) / handle_max_compacts_reached: call them
+# in this shell, never in `$(...)`, or the counters above are lost.
+CONTEXT_NEW_SESSION_ID=""
 
 # =============================================================================
 # Context Limit Detection
@@ -106,6 +109,17 @@ init_context_manager() {
     print_verbose "  - Smart reconstruction: $CONTEXT_SMART_RECONSTRUCTION"
 }
 
+# Print the first lines of `/context` for a Claude session UUID.
+# Best effort: prints nothing on failure, always succeeds (set -e safe).
+probe_context_usage() {
+    local claude_uuid="$1"
+    if command -v timeout &> /dev/null; then
+        timeout 10s "${CLAUDE_CMD[@]}" --resume "$claude_uuid" -p "/context" 2>/dev/null | head -5 || true
+    else
+        "${CLAUDE_CMD[@]}" --resume "$claude_uuid" -p "/context" 2>/dev/null | head -5 || true
+    fi
+}
+
 # =============================================================================
 # Auto-Compact
 # =============================================================================
@@ -120,20 +134,27 @@ run_auto_compact() {
         return 1
     fi
 
+    # /context and /compact must target this Ralph session's Claude session,
+    # never "the most recent conversation in this directory" (--continue).
+    local claude_uuid
+    claude_uuid=$(get_claude_session_uuid "$session_id")
+    if [[ -z "$claude_uuid" ]]; then
+        log_session "$session_id" "WARN" "No Claude session yet, nothing to compact"
+        return 1
+    fi
+
     # Check if context is above minimum threshold before compacting
     if [[ "$CONTEXT_MIN_THRESHOLD" -gt 0 ]]; then
         local context_info
-        if command -v timeout &> /dev/null; then
-            context_info=$(timeout 10s "${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
-        else
-            context_info=$("${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
-        fi
+        context_info=$(probe_context_usage "$claude_uuid")
         local current_usage
-        current_usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1)
+        current_usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1 || true)
 
         if [[ -n "$current_usage" && "$current_usage" -lt "$CONTEXT_MIN_THRESHOLD" ]]; then
             log_session "$session_id" "INFO" "Context at ${current_usage}% - below minimum threshold (${CONTEXT_MIN_THRESHOLD}%), skipping compact"
-            print_verbose "Context at ${current_usage}% - below min threshold (${CONTEXT_MIN_THRESHOLD}%), skipping compact"
+            local msg="${MSG_CONTEXT_BELOW_MIN:-"Context at {0}% - below minimum threshold ({1}%), skipping compact"}"
+            msg="${msg//\{0\}/"$current_usage"}"
+            print_verbose "${msg//\{1\}/"$CONTEXT_MIN_THRESHOLD"}"
             return 1
         fi
     fi
@@ -144,13 +165,12 @@ run_auto_compact() {
         print_warning "${MSG_CONTEXT_MAX_REACHED:-Maximum compacts reached} ($CONTEXT_MAX_COMPACTS)"
 
         # Handle overflow strategy
-        local overflow_result
-        overflow_result=$(handle_max_compacts_reached "$session_id")
-        local overflow_status=$?
+        local overflow_status=0
+        CONTEXT_NEW_SESSION_ID=""
+        handle_max_compacts_reached "$session_id" || overflow_status=$?
 
-        if [[ $overflow_status -eq 0 && -n "$overflow_result" ]]; then
-            # New session ID returned - signal continuation
-            echo "$overflow_result"
+        if [[ $overflow_status -eq 0 && -n "$CONTEXT_NEW_SESSION_ID" ]]; then
+            # New session ID in CONTEXT_NEW_SESSION_ID - signal continuation
             return 3  # Special return code for session continuation
         fi
 
@@ -185,11 +205,10 @@ run_auto_compact() {
 
     # Execute /compact via Claude CLI
     local compact_output
-    local compact_status
+    local compact_status=0
 
     if command -v timeout &> /dev/null; then
-        compact_output=$(timeout 60s "${CLAUDE_CMD[@]}" --continue -p "/compact" 2>&1)
-        compact_status=$?
+        compact_output=$(timeout 60s "${CLAUDE_CMD[@]}" --resume "$claude_uuid" -p "/compact" 2>&1) || compact_status=$?
 
         # Handle timeout specifically (exit code 124)
         if [[ $compact_status -eq 124 ]]; then
@@ -198,8 +217,7 @@ run_auto_compact() {
             return 1
         fi
     else
-        compact_output=$("${CLAUDE_CMD[@]}" --continue -p "/compact" 2>&1)
-        compact_status=$?
+        compact_output=$("${CLAUDE_CMD[@]}" --resume "$claude_uuid" -p "/compact" 2>&1) || compact_status=$?
     fi
 
     if [[ $compact_status -eq 0 ]]; then
@@ -313,10 +331,12 @@ handle_max_compacts_reached() {
             new_session_id=$(create_continuation_session "$session_id")
 
             if [[ -n "$new_session_id" ]]; then
+                # Reset here: create_continuation_session ran in a subshell
+                CONTEXT_COMPACT_COUNT=0
                 CONTEXT_CONTINUATION_COUNT=$((CONTEXT_CONTINUATION_COUNT + 1))
                 print_success "${MSG_CONTEXT_CONTINUATION_CREATED:-Continuation session created}: $new_session_id"
                 log_session "$session_id" "INFO" "Created continuation session: $new_session_id"
-                echo "$new_session_id"
+                CONTEXT_NEW_SESSION_ID="$new_session_id"
                 return 0
             else
                 print_error "Failed to create continuation session"
@@ -349,30 +369,11 @@ handle_max_compacts_reached() {
 create_continuation_session() {
     local previous_session="$1"
 
-    # Generate new session ID with portable random suffix generation
-    local timestamp=$(date +%Y%m%d_%H%M%S)
-    local random_suffix
-
-    # Use utils function if available, otherwise fallback
-    if type generate_random_suffix &>/dev/null; then
-        random_suffix=$(generate_random_suffix 4)
-    elif command -v xxd &>/dev/null; then
-        random_suffix=$(head -c 4 /dev/urandom | xxd -p)
-    elif command -v od &>/dev/null; then
-        random_suffix=$(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n')
-    else
-        # Fallback: use $RANDOM (less entropy but portable)
-        random_suffix=$(printf '%04x%04x' $RANDOM $RANDOM | head -c 8)
-    fi
-
-    local new_session_id="ralph-cont-${timestamp}-${random_suffix}"
-
-    # Create session directory if create_session is available
-    if type create_session &>/dev/null; then
-        if ! create_session "$new_session_id" 2>/dev/null; then
-            print_warning "Failed to create session directory for $new_session_id"
-        fi
-    fi
+    # create_session takes a prompt and prints the id it created (with its
+    # state.json and session.log): the id must come from it, or the session
+    # directory is an orphan and the continuation id has no state.
+    local new_session_id
+    new_session_id=$(create_session "Continuation of $previous_session") || return 1
 
     # Link sessions in state files (with error handling)
     if type update_session_state &>/dev/null; then
@@ -384,10 +385,6 @@ create_continuation_session() {
     if type link_session_to_progress &>/dev/null; then
         link_session_to_progress "$new_session_id" || print_verbose "Failed to link session to progress"
     fi
-
-    # Reset context manager for new session
-    CONTEXT_COMPACT_COUNT=0
-    CONTEXT_CONTINUATION_COUNT=$((CONTEXT_CONTINUATION_COUNT))  # Keep continuation count
 
     echo "$new_session_id"
 }
@@ -404,26 +401,28 @@ check_preventive_compact() {
         return 1
     fi
 
+    # Nothing to measure before the first Claude call of this session.
+    local claude_uuid
+    claude_uuid=$(get_claude_session_uuid "$session_id")
+    [[ -z "$claude_uuid" ]] && return 1
+
     # Try to get context usage from Claude CLI
     # Note: This is a best-effort check, Claude may not always report usage
     local context_info
-    if command -v timeout &> /dev/null; then
-        context_info=$(timeout 10s "${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
-    else
-        context_info=$("${CLAUDE_CMD[@]}" -p "/context" 2>/dev/null | head -5)
-    fi
+    context_info=$(probe_context_usage "$claude_uuid")
 
     # Try to extract percentage from output
     local usage
-    usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1)
+    usage=$(echo "$context_info" | grep -oP '\d+(?=%)' | head -1 || true)
 
     if [[ -n "$usage" && "$usage" -ge "$CONTEXT_PREVENTIVE_THRESHOLD" ]]; then
-        print_warning "${MSG_CONTEXT_PREVENTIVE:-Context at ${usage}% - running preventive compact}"
+        local msg="${MSG_CONTEXT_PREVENTIVE:-Context at ${usage}% - running preventive compact}"
+        print_warning "${msg//\{0\}/$usage}"
         log_session "$session_id" "INFO" "Preventive compact triggered at ${usage}%"
 
         # Save progress before preventive compact
         if type save_sprint_progress &>/dev/null; then
-            save_sprint_progress "$session_id"
+            save_sprint_progress "$session_id" || print_verbose "No sprint progress file to save"
         fi
 
         run_auto_compact "$session_id"
@@ -437,21 +436,13 @@ check_preventive_compact() {
 # Context Continuation Prompt
 # =============================================================================
 
+# Print the continuation prompt stored by a real compaction, if any.
+# Callers using `$(...)` must reset CONTEXT_CONTINUATION_PROMPT themselves.
 get_context_continuation_prompt() {
-    # Return the stored continuation prompt if available
     if [[ -n "$CONTEXT_CONTINUATION_PROMPT" ]]; then
         echo "$CONTEXT_CONTINUATION_PROMPT"
-        # Clear after use
         CONTEXT_CONTINUATION_PROMPT=""
         return 0
-    fi
-
-    # Generate fresh if smart reconstruction is enabled
-    if [[ "$CONTEXT_SMART_RECONSTRUCTION" == "true" ]]; then
-        if type generate_continuation_prompt &>/dev/null; then
-            generate_continuation_prompt
-            return 0
-        fi
     fi
 
     return 1

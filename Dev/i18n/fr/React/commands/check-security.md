@@ -20,8 +20,8 @@ Tu es un expert en sécurité React chargé d'auditer la sécurité d'un projet 
 ### Étape 1 : Analyse du contexte
 - Identifier le répertoire du projet à auditer ($ARGUMENTS ou répertoire courant)
 - Lire les règles de sécurité depuis :
-  - `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/11-security.md`
-  - `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/03-coding-standards.md` (section sécurité)
+  - `.claude/rules/11-security-react.md`
+  - `.claude/rules/03-coding-standards.md` (section sécurité)
 
 ### Étape 2 : Vérification des vulnérabilités XSS
 

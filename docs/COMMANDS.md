@@ -1,6 +1,6 @@
 # Commands Reference
 
-> **This is the narrated, namespace-grouped reference (active commands only; the commands removed in 9.0 are listed in [MIGRATION-v9.md](MIGRATION-v9.md)).** For the complete auto-generated table of all 186 commands (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
+> **This is the narrated, namespace-grouped reference (active commands only; the commands removed in 9.0 are listed in [MIGRATION-v9.md](MIGRATION-v9.md)).** For the complete auto-generated table of all 184 commands (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
 
 Claude Code commands are slash commands that automate workflows and provide structured assistance.
 
@@ -27,7 +27,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 |-------|-------------|-----------------|
 | **MANDATORY** | Plan mode activates automatically before execution. Claude analyzes impacted code and proposes a plan for your validation. | `/workflow:implement`, `/qa:tdd`, `/qa:recette`, `generate-*` commands |
 | **RECOMMENDED** | Plan mode is recommended for complex scenarios. Activates when scope spans multiple modules. | `/workflow:plan`, `/workflow:design`, `/common:architecture-decision` |
-| **CONDITIONAL** | Plan mode activates automatically when scope is broad (multiple modules, cross-cutting analysis). | `check-*` commands, `/workflow:plan --research`, `/common:research-context7` |
+| **CONDITIONAL** | Plan mode activates automatically when scope is broad (multiple modules, cross-cutting analysis). | `check-*` commands, `/workflow:plan --research` |
 
 > **Tip:** Commands without a Plan Mode section (e.g., `/workflow:status`, `/workflow:status --standup`) are lightweight and never require plan mode.
 
@@ -35,15 +35,15 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
-> The generated reference lists **186 commands** across all namespaces; no deprecated stubs remain since 9.0. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> The generated reference lists **184 commands** across all namespaces; no deprecated stubs remain since 9.0. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
-| `/common:` | Transversal | 14 (11 distributed + 3 maintainer-only) |
+| `/common:` | Transversal | 13 (10 distributed + 3 maintainer-only) |
 | `/workflow:` | Workflow (BMAD) — main path | 9 |
 | `/team:` | Agent Teams | 4 |
 | `/qa:` | QA & Testing | 5 |
-| `/uiux:` | UI/UX & Accessibility | 8 |
+| `/uiux:` | UI/UX & Accessibility | 7 |
 | `/symfony:` | PHP/Symfony | 10 |
 | `/flutter:` | Dart/Flutter | 10 |
 | `/python:` | Python | 10 |
@@ -132,13 +132,11 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 | Command | Description |
 |---------|-------------|
 | `/qa:tdd` | Fix bug using TDD methodology (see [QA Recette Commands](#qa-recette-commands-qa)) |
-| `/common:research-context7` | Deep technical research |
 
 ### UI/UX Commands
 
 | Command | Description |
 |---------|-------------|
-| `/uiux:orchestrator` | Orchestrate UI, UX, and A11y experts for a task |
 | `/uiux:audit` | Complete UI/UX/Accessibility audit |
 | `/uiux:component-spec` | Full component specification (UI + UX + A11y) |
 | `/uiux:design-tokens` | Define design system tokens |

@@ -18,7 +18,7 @@ get_dod_template() {
 
     # Normalize project type (remove version suffixes)
     local base_type
-    base_type=$(echo "$project_type" | sed 's/-[0-9.]*$//' | sed 's/-typescript$//')
+    base_type=$(echo "$project_type" | sed 's/-[0-9.]*$//' | sed 's/-typescript$//') || true
 
     # Map to template file
     local template_file=""
@@ -69,7 +69,7 @@ get_dod_template_path() {
     local templates_dir="${2:-$DOD_TEMPLATES_DIR}"
 
     local base_type
-    base_type=$(echo "$project_type" | sed 's/-[0-9.]*$//' | sed 's/-typescript$//')
+    base_type=$(echo "$project_type" | sed 's/-[0-9.]*$//' | sed 's/-typescript$//') || true
 
     case "$base_type" in
         symfony|laravel|php)

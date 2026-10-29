@@ -1,6 +1,6 @@
 ---
-description: Équipe de Revue de Sécurité - Audit de sécurité multi-dimension parallèle utilisant les Agent Teams
-argument-hint: "[--scope=full|code|deps|infra] [--max-workers=3]"
+description: Équipe de Revue de Sécurité - Audit de sécurité multi-dimension parallèle par sous-agents (Agent Teams en option)
+argument-hint: "[--scope=full|code|deps|infra] [--max-workers=3] [--engine=subagents|teams]"
 ---
 
 # Équipe de Revue de Sécurité - Audit de Sécurité Multi-Dimension Parallèle
@@ -13,16 +13,43 @@ $ARGUMENTS
 
 - `--scope=full` : Périmètre de l'audit (par défaut : `full`). Options : `full`, `code`, `deps`, `infra`
 - `--max-workers=3` : Nombre maximum de reviewers parallèles (par défaut : 3, max : 3)
+- `--engine=subagents` : Moteur d'exécution (par défaut : `subagents`). Options : `subagents` (délégation à des sous-agents via l'outil `Agent`, aucun prérequis), `teams` (Agent Teams expérimental). Voir « Moteur d'exécution »
 - `--severity=medium` : Sévérité minimum à rapporter : `low`, `medium`, `high`, `critical`
 - `--output-dir=<path>` : Répertoire de sortie personnalisé pour les résultats de sécurité
 - `--dry-run` : Afficher la composition de l'équipe et le plan de scan sans exécuter
 - `--sarif` : Sortir les résultats au format SARIF (pour intégration CI/CD)
 - `--max-cost=<dollars>` : Budget maximum en dollars. Si le coût parallèle estimé dépasse ce seuil, l'exécution est bloquée avec un message OVER BUDGET
 
+## Moteur d'exécution (`--engine`)
+
+Le moteur par défaut ne dépend d'aucune fonctionnalité expérimentale : la commande fonctionne même si `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` n'est pas défini.
+
+| Moteur | Activation | Prérequis | Comportement |
+|--------|------------|-----------|--------------|
+| `subagents` (défaut) | aucun flag ou `--engine=subagents` | Aucun (outil `Agent` natif) | La session courante joue le rôle de leader et délègue chaque tâche de worker à un sous-agent via l'outil `Agent` (modèle du worker passé par le paramètre `model`). Les sous-agents indépendants sont lancés dans un même message pour s'exécuter en parallèle ; chacun écrit son résultat dans son répertoire isolé et ne renvoie qu'un résumé court. Les workers ne communiquent pas entre eux : le leader relaie. Fonctionne en interactif, avec `claude -p` et en CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Équipe Agent Teams : workers persistants coordonnés par `TaskCreate` / `TaskList` / `SendMessage`, messagerie directe entre coéquipiers, hooks `TeammateIdle` / `TaskCompleted`. |
+
+**Repli** : si `--engine=teams` est demandé alors que `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` est absent, ne pas échouer — afficher `ℹ️ Agent Teams indisponible : repli sur --engine=subagents` et poursuivre avec le moteur `subagents`.
+
+**Limites du moteur `teams`** : pas de mode non interactif (`claude -p`) ni d'exécution en CI ; une seule équipe par session (terminer l'équipe en cours avant d'en lancer une autre) ; API en research preview, susceptible de changer.
+
+Le processus ci-dessous est décrit avec les primitives Agent Teams. Avec `--engine=subagents`, appliquer cette correspondance :
+
+| Agent Teams (`teams`) | Sous-agents (`subagents`) |
+|------------------------|----------------------------|
+| `TaskCreate` + spawn d'un worker | Un appel à l'outil `Agent` dont le prompt reprend la description de la tâche |
+| Polling `TaskList` / barrière de synchronisation | Attendre le retour de tous les appels `Agent` du lot |
+| `SendMessage` vers un worker | Relancer le sous-agent (`SendMessage` vers son ID) ou nouvel appel `Agent` avec le contexte nécessaire |
+| `shutdown_request` | Inutile : un sous-agent se termine à son retour |
+
+**Périmètre** : `--scope=full|code|deps|infra` s'applique aux deux moteurs (`full` = 3 reviewers en parallèle, un périmètre unique = un seul reviewer).
+
+**Différence avec `/security-review` natif** : la commande intégrée `/security-review` de Claude Code n'analyse que le diff (changements en attente de la branche courante). `/team:security` audite l'ensemble du dépôt selon le périmètre choisi (code, dépendances, infrastructure). Utiliser `/security-review` avant un commit ou une PR, `/team:security` pour un audit complet.
+
 ## Prérequis
 
-- Claude Code v2.1.32+ avec support Agent Teams
-- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` définie
+- Claude Code v2.1.32+ avec support Agent Teams — uniquement avec `--engine=teams`
+- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` définie — uniquement avec `--engine=teams`
 - Docker disponible pour exécuter les scanners de sécurité
 - `Tools/AgentTeams/lib/compatibility-check.sh` disponible
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible

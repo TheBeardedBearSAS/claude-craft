@@ -4,7 +4,7 @@
 # Ref: P1-01 SEC-001 (pipe curl|sh replaced by checksum verification)
 
 setup() {
-    INSTALL_RTK="$BATS_TEST_DIRNAME/../../../Tools/install-rtk.sh"
+    INSTALL_RTK="$BATS_TEST_DIRNAME/../../../Tools/RTK/install-rtk.sh"
     export INSTALL_RTK
 }
 
@@ -13,7 +13,10 @@ setup() {
 }
 
 @test "install-rtk.sh: no 'curl | sh' pipe (SEC-001)" {
-    run grep -E 'curl[^|]*\|[^|]*sh' "$INSTALL_RTK"
+    # Code lines only, and only a pipe INTO a shell: `curl ... | sha256sum`
+    # (documented in a comment to compute the pinned checksum) is legit.
+    run bash -c "grep -vE '^[[:space:]]*#' \"\$INSTALL_RTK\" \
+        | grep -E 'curl[^|]*\|[[:space:]]*(sudo[[:space:]]+)?(ba|z)?sh([[:space:]]|$)'"
     [ "$status" -ne 0 ]  # grep should find nothing
 }
 

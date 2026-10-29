@@ -917,7 +917,7 @@ projects:
 | `CLAUDE_CRAFT_LANG` | Default language | `en` |
 | `CLAUDE_CRAFT_TARGET` | Default target directory | `.` |
 | `CLAUDE_CRAFT_CONFIG` | Config file path | `claude-projects.yaml` |
-| `CLAUDE_CODE_FORK_SUBAGENT` | Fork each subagent in isolated context (v2.1.117+) | _unset_ |
+| `CLAUDE_CODE_FORK_SUBAGENT` | Fork each subagent in isolated context (v2.1.117+); on by default in `-p`, the SDK, desktop and VS Code since 2.1.302, `0` to turn it off | _unset_ (on in `-p`/SDK since 2.1.302) |
 | `ENABLE_PROMPT_CACHING_1H` | Use 1-hour prompt cache tier (v2.1.108+) | _unset_ |
 | `FORCE_PROMPT_CACHING_5M` | Force 5-minute cache tier (v2.1.108+) | _unset_ |
 | `CLAUDE_CODE_SUBAGENT_MODEL` | Model for subagents (e.g. `claude-sonnet-5-5`) | _unset_ |

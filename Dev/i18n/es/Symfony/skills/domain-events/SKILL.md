@@ -1,6 +1,6 @@
 ---
 name: domain-events
-description: Regla 06: Domain Events. Use when implementing DDD patterns.
+description: "Regla 06: Domain Events. Use when implementing DDD patterns."
 ---
 
 # Regla 06: Domain Events

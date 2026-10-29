@@ -69,7 +69,7 @@ Antiguo `/workflow:plan --research`. Investigación, exploración y restriccione
 | Mercado | ¿Soluciones existentes? ¿Competidores? ¿Buenas prácticas del sector? ¿Tendencias emergentes? |
 | Técnica | ¿Tecnologías candidatas? ¿Integraciones? ¿Escalabilidad? ¿Seguridad / cumplimiento? |
 
-Si el MCP Context7 está configurado, usarlo para documentación técnica actualizada (`/common:research-context7` para una investigación profunda).
+Si el MCP Context7 está configurado, usarlo para documentación técnica actualizada (`/deep-research` para una investigación web profunda; fuera de claude.ai, el agente `@research-assistant`).
 
 **Restricciones**: documentar las restricciones técnicas (backend existente, base de datos), de negocio (presupuesto, plazos, retrocompatibilidad), regulatorias (RGPD, PCI DSS) y de recursos (tamaño del equipo, sin DevOps).
 
@@ -213,4 +213,3 @@ Si se interrumpe, `/workflow:plan --continue` detecta lo que existe (PRD complet
 - `/workflow:status` - Comprobar el progreso
 - `/project:backlog` - Añadir, listar, editar y mover stories después
 - `/gate:check` - Validar el backlog
-- `/common:research-context7` - Investigación profunda con Context7 MCP

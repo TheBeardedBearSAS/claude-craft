@@ -20,12 +20,12 @@ vi.mock('../../cli/lib/colors.js', () => ({
 import { runDoctor } from '../../cli/lib/doctor.js';
 
 /** Helper: exec mock with all tools present (including yq).
- *  Uses Claude Code 2.1.296 (recommended baseline since the 2026-10-13 alignment audit)
+ *  Uses Claude Code 2.1.312 (recommended baseline since release 8.27.0)
  *  so the version check does not emit [WARN]/[FAIL] in tests that don't expect one.
  */
 function allToolsExec(cmd) {
   if (cmd.includes('npm')) return '10.0.0';
-  if (cmd.includes('claude')) return '2.1.296';
+  if (cmd.includes('claude')) return '2.1.312';
   if (cmd.includes('git')) return 'git version 2.45.0';
   if (cmd.includes('yq')) return 'yq (https://github.com/mikefarah/yq/) version v4.44.1';
   return null;
@@ -129,8 +129,8 @@ describe('runDoctor', () => {
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('[WARN]');
     expect(output).toContain('2.1.270');
-    // RECOMMENDED_CLAUDE_CODE is loaded from config/versions.yaml (2.1.296)
-    expect(output).toContain('recommended 2.1.296');
+    // RECOMMENDED_CLAUDE_CODE is loaded from config/versions.yaml (2.1.312)
+    expect(output).toContain('recommended 2.1.312');
   });
 
   it('reports unparseable Claude Code version output as OK without crashing', () => {
@@ -160,7 +160,7 @@ describe('runDoctor', () => {
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return '10.0.0';
-      if (cmd.includes('claude')) return '2.1.296';
+      if (cmd.includes('claude')) return '2.1.312';
       if (cmd.includes('git')) return null;
       if (cmd.includes('yq')) return 'yq v4.44.1';
       return null;
@@ -179,7 +179,7 @@ describe('runDoctor', () => {
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return null;
-      if (cmd.includes('claude')) return '2.1.296';
+      if (cmd.includes('claude')) return '2.1.312';
       if (cmd.includes('git')) return 'git version 2.45.0';
       if (cmd.includes('yq')) return 'yq v4.44.1';
       return null;
@@ -253,7 +253,7 @@ describe('runDoctor', () => {
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return '10.0.0';
-      if (cmd.includes('claude')) return '2.1.296';
+      if (cmd.includes('claude')) return '2.1.312';
       if (cmd.includes('git')) return 'git version 2.45.0';
       if (cmd.includes('yq')) return null;
       return null;

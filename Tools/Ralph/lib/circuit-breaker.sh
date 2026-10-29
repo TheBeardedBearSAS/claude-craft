@@ -30,35 +30,35 @@ CB_LEARNING_MIN_SAMPLES=5
 # =============================================================================
 # Each profile defines thresholds optimized for different task types
 
-declare -A CB_PROFILE_QUICK_FIX=(
+declare -gA CB_PROFILE_QUICK_FIX=(
     ["no_changes"]=2
     ["errors"]=3
     ["max_iterations"]=10
     ["keywords"]="fix bug typo hotfix patch"
 )
 
-declare -A CB_PROFILE_SMALL_FEATURE=(
+declare -gA CB_PROFILE_SMALL_FEATURE=(
     ["no_changes"]=3
     ["errors"]=4
     ["max_iterations"]=15
     ["keywords"]="add implement small simple"
 )
 
-declare -A CB_PROFILE_MEDIUM_FEATURE=(
+declare -gA CB_PROFILE_MEDIUM_FEATURE=(
     ["no_changes"]=4
     ["errors"]=6
     ["max_iterations"]=25
     ["keywords"]="feature create with tests"
 )
 
-declare -A CB_PROFILE_LARGE_FEATURE=(
+declare -gA CB_PROFILE_LARGE_FEATURE=(
     ["no_changes"]=5
     ["errors"]=8
     ["max_iterations"]=50
     ["keywords"]="refactor migrate complex large"
 )
 
-declare -A CB_PROFILE_EXPLORATION=(
+declare -gA CB_PROFILE_EXPLORATION=(
     ["no_changes"]=10
     ["errors"]=15
     ["max_iterations"]=100
@@ -66,7 +66,7 @@ declare -A CB_PROFILE_EXPLORATION=(
 )
 
 # Autonomous profile for overnight/unattended runs
-declare -A CB_PROFILE_AUTONOMOUS=(
+declare -gA CB_PROFILE_AUTONOMOUS=(
     ["no_changes"]=5
     ["errors"]=8
     ["max_iterations"]=50
@@ -162,7 +162,7 @@ init_circuit_breaker() {
 detect_task_profile() {
     local prompt="$1"
     local prompt_lower
-    prompt_lower=$(echo "$prompt" | tr '[:upper:]' '[:lower:]')
+    prompt_lower=$(echo "$prompt" | tr '[:upper:]' '[:lower:]') || true
 
     # Check each profile's keywords
     local profiles=("quick_fix" "small_feature" "medium_feature" "large_feature" "exploration" "autonomous")
@@ -265,7 +265,7 @@ apply_learned_adjustments() {
     ' "$history_file" 2>/dev/null)
 
     local samples
-    samples=$(echo "$profile_data" | jq -r '.samples // 0')
+    samples=$(echo "$profile_data" | jq -r '.samples // 0') || samples=0
 
     if [[ $samples -lt $CB_LEARNING_MIN_SAMPLES ]]; then
         print_verbose "Not enough samples for learning ($samples < $CB_LEARNING_MIN_SAMPLES)"
@@ -274,10 +274,10 @@ apply_learned_adjustments() {
 
     # Apply adjustments based on historical success rate
     local success_rate
-    success_rate=$(echo "$profile_data" | jq -r '.success_rate // 0')
+    success_rate=$(echo "$profile_data" | jq -r '.success_rate // 0') || success_rate=0
 
     local avg_iterations
-    avg_iterations=$(echo "$profile_data" | jq -r '.avg_iterations // 0')
+    avg_iterations=$(echo "$profile_data" | jq -r '.avg_iterations // 0') || avg_iterations=0
 
     # If success rate is low, increase thresholds
     if [[ $success_rate -lt 50 ]]; then

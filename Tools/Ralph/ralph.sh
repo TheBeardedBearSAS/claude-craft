@@ -46,9 +46,14 @@ SESSION_ID=""
 MAX_ITERATIONS=$DEFAULT_MAX_ITERATIONS
 TIMEOUT=$DEFAULT_TIMEOUT
 DELAY=$DEFAULT_DELAY
+# Values given on the command line: they win over ralph.yml (CLI > ralph.yml > defaults).
+CLI_MAX_ITERATIONS=""
+CLI_TIMEOUT=""
+CLI_DELAY=""
 VERBOSE=false
 DRY_RUN=false
 CONTINUE_SESSION=""
+HANDOFF_PROMPT=""
 
 # v2.0 New flags
 AUTO_DETECT=false
@@ -101,8 +106,10 @@ print_header() {
     echo -e "${C_CYAN}╚════════════════════════════════════════════════════════════╝${C_RESET}\n"
 }
 
+# Diagnostics go to stderr: many helpers return data on stdout through
+# `$(...)` (prompts, session ids, story lists) and must not capture them.
 print_success() {
-    echo -e "${C_GREEN}✓${C_RESET} $1"
+    echo -e "${C_GREEN}✓${C_RESET} $1" >&2
 }
 
 print_error() {
@@ -110,16 +117,16 @@ print_error() {
 }
 
 print_info() {
-    echo -e "${C_BLUE}ℹ${C_RESET} $1"
+    echo -e "${C_BLUE}ℹ${C_RESET} $1" >&2
 }
 
 print_warning() {
-    echo -e "${C_YELLOW}⚠${C_RESET} $1"
+    echo -e "${C_YELLOW}⚠${C_RESET} $1" >&2
 }
 
 print_verbose() {
     if [[ "$VERBOSE" == "true" ]]; then
-        echo -e "${C_DIM}  $1${C_RESET}"
+        echo -e "${C_DIM}  $1${C_RESET}" >&2
     fi
 }
 
@@ -226,7 +233,7 @@ load_config() {
                 # Session settings with validation
                 local max_iter
                 max_iter=$(yq e '.session.max_iterations // ""' "$path" 2>/dev/null)
-                if [[ -n "$max_iter" ]]; then
+                if [[ -n "$max_iter" && -z "$CLI_MAX_ITERATIONS" ]]; then
                     if [[ "$max_iter" =~ ^[1-9][0-9]*$ ]]; then
                         MAX_ITERATIONS=$max_iter
                     else
@@ -236,7 +243,7 @@ load_config() {
 
                 local timeout
                 timeout=$(yq e '.session.timeout // ""' "$path" 2>/dev/null)
-                if [[ -n "$timeout" ]]; then
+                if [[ -n "$timeout" && -z "$CLI_TIMEOUT" ]]; then
                     if [[ "$timeout" =~ ^[0-9]+$ ]]; then
                         TIMEOUT=$timeout
                     else
@@ -246,7 +253,7 @@ load_config() {
 
                 local delay
                 delay=$(yq e '.session.delay_between_iterations // ""' "$path" 2>/dev/null)
-                if [[ -n "$delay" ]]; then
+                if [[ -n "$delay" && -z "$CLI_DELAY" ]]; then
                     if [[ "$delay" =~ ^[0-9]+$ ]]; then
                         DELAY=$delay
                     else
@@ -355,6 +362,7 @@ parse_args() {
                     exit 1
                 fi
                 MAX_ITERATIONS="$value"
+                CLI_MAX_ITERATIONS="$value"
                 ;;
             --timeout=*)
                 local value="${1#--timeout=}"
@@ -363,6 +371,7 @@ parse_args() {
                     exit 1
                 fi
                 TIMEOUT="$value"
+                CLI_TIMEOUT="$value"
                 ;;
             --delay=*)
                 local value="${1#--delay=}"
@@ -371,6 +380,7 @@ parse_args() {
                     exit 1
                 fi
                 DELAY="$value"
+                CLI_DELAY="$value"
                 ;;
             --verbose)
                 VERBOSE=true
@@ -430,6 +440,20 @@ parse_args() {
 # =============================================================================
 # Main Ralph loop
 # =============================================================================
+
+# Switch SESSION_ID to the continuation session created by run_auto_compact
+# (return 3) and store its handoff prompt in HANDOFF_PROMPT. Not in `$(...)`.
+switch_to_continuation_session() {
+    local previous_session="$SESSION_ID"
+    SESSION_ID="$CONTEXT_NEW_SESSION_ID"
+    print_info "Switching to continuation session: $SESSION_ID"
+
+    if type get_session_handoff_prompt &>/dev/null; then
+        HANDOFF_PROMPT=$(get_session_handoff_prompt "$previous_session")
+    else
+        HANDOFF_PROMPT="Continue the implementation from where the previous session left off."
+    fi
+}
 
 run_ralph() {
     local iteration=0
@@ -497,16 +521,29 @@ run_ralph() {
             continue
         fi
 
-        # Check for preventive compact (before hitting the limit)
+        # Check for preventive compact (before hitting the limit). Return 3:
+        # max_compacts reached, switch session as the reactive path does.
+        local preventive_status=0
+        HANDOFF_PROMPT=""
         if type check_preventive_compact &>/dev/null; then
-            check_preventive_compact "$SESSION_ID"
+            check_preventive_compact "$SESSION_ID" || preventive_status=$?
+            if [[ $preventive_status -eq 3 ]]; then
+                switch_to_continuation_session
+            fi
         fi
 
         # Check if we have a continuation prompt (after compact/session handoff)
         local effective_prompt="$PROMPT"
-        if type get_context_continuation_prompt &>/dev/null; then
+        if [[ -n "$HANDOFF_PROMPT" ]]; then
+            effective_prompt="$HANDOFF_PROMPT
+
+$PROMPT"
+        elif type get_context_continuation_prompt &>/dev/null; then
             local continuation_prompt
-            continuation_prompt=$(get_context_continuation_prompt)
+            # Returns 1 when there is no continuation context (nominal).
+            continuation_prompt=$(get_context_continuation_prompt) || true
+            # Consumed: the subshell above cannot clear it.
+            CONTEXT_CONTINUATION_PROMPT=""
             if [[ -n "$continuation_prompt" ]]; then
                 # Prepend continuation context to the prompt
                 effective_prompt="$continuation_prompt
@@ -520,9 +557,11 @@ $PROMPT"
 
         # Invoke Claude
         print_info "${MSG_INVOKING_CLAUDE}"
+        # `|| invoke_status=$?`: a failed call must reach the circuit breaker,
+        # not kill the loop through errexit.
         local response
-        response=$(invoke_claude "$SESSION_ID" "$effective_prompt" "$TIMEOUT")
-        local invoke_status=$?
+        local invoke_status=0
+        response=$(invoke_claude "$SESSION_ID" "$effective_prompt" "$TIMEOUT") || invoke_status=$?
 
         if [[ $invoke_status -ne 0 ]]; then
             print_error "${MSG_ERROR}: Claude invocation failed"
@@ -535,31 +574,29 @@ $PROMPT"
             print_warning "${MSG_CONTEXT_LIMIT_DETECTED:-Context limit detected}"
 
             if type run_auto_compact &>/dev/null; then
-                local compact_result
-                compact_result=$(run_auto_compact "$SESSION_ID")
-                local compact_status=$?
+                # Not in `$(...)`: run_auto_compact updates the compact counter
+                # (max_compacts) and returns the new session id in a global.
+                local compact_status=0
+                run_auto_compact "$SESSION_ID" || compact_status=$?
 
                 case $compact_status in
                     0)
                         # Compact successful - retry with continuation prompt
                         print_info "${MSG_CONTEXT_RETRYING:-Retrying after compact}..."
 
-                        # Get reconstructed context
+                        # Consume the reconstructed context stored by the compact
                         local retry_prompt="$PROMPT"
-                        if type get_context_continuation_prompt &>/dev/null; then
-                            local cont_prompt
-                            cont_prompt=$(get_context_continuation_prompt)
-                            if [[ -n "$cont_prompt" ]]; then
-                                retry_prompt="$cont_prompt
+                        if [[ -n "$CONTEXT_CONTINUATION_PROMPT" ]]; then
+                            retry_prompt="$CONTEXT_CONTINUATION_PROMPT
 
 ---
 
 $PROMPT"
-                            fi
+                            CONTEXT_CONTINUATION_PROMPT=""
                         fi
 
-                        response=$(invoke_claude "$SESSION_ID" "$retry_prompt" "$TIMEOUT")
-                        invoke_status=$?
+                        invoke_status=0
+                        response=$(invoke_claude "$SESSION_ID" "$retry_prompt" "$TIMEOUT") || invoke_status=$?
 
                         if [[ $invoke_status -ne 0 ]]; then
                             print_error "${MSG_ERROR}: Claude invocation failed after compact"
@@ -569,22 +606,13 @@ $PROMPT"
                         ;;
                     3)
                         # Session continuation - new session created
-                        SESSION_ID="$compact_result"
-                        print_info "Switching to continuation session: $SESSION_ID"
-
-                        # Get handoff prompt for new session
-                        local handoff_prompt
-                        if type get_session_handoff_prompt &>/dev/null; then
-                            handoff_prompt=$(get_session_handoff_prompt "$compact_result")
-                        else
-                            handoff_prompt="Continue the implementation from where the previous session left off."
-                        fi
+                        switch_to_continuation_session
 
                         # Retry with new session and handoff context
-                        response=$(invoke_claude "$SESSION_ID" "$handoff_prompt
+                        invoke_status=0
+                        response=$(invoke_claude "$SESSION_ID" "$HANDOFF_PROMPT
 
-$PROMPT" "$TIMEOUT")
-                        invoke_status=$?
+$PROMPT" "$TIMEOUT") || invoke_status=$?
 
                         if [[ $invoke_status -ne 0 ]]; then
                             print_error "${MSG_ERROR}: Claude invocation failed in continuation session"

@@ -20,36 +20,7 @@ Exemple : `/uiux:audit src/pages/Dashboard.tsx AAA`
 
 ### Étape 1 : Audit Accessibilité (Expert A11y)
 
-#### 1.1 Audit automatisé
-```bash
-# Exécuter si disponible
-npx axe-cli {URL}
-npx pa11y {URL}
-# Ou vérifier Lighthouse
-```
-
-#### 1.2 Vérification manuelle WCAG 2.2 AAA
-
-**Perceptible**
-- [ ] Images avec alt text
-- [ ] Structure sémantique (h1-h6, landmarks)
-- [ ] Contraste ≥ 7:1 (AAA)
-- [ ] Reflow à 320px
-
-**Utilisable**
-- [ ] Navigation clavier complète
-- [ ] Pas de piège clavier
-- [ ] Focus visible (≥ 2px)
-- [ ] Touch targets ≥ 44px
-
-**Compréhensible**
-- [ ] lang sur html
-- [ ] Labels sur inputs
-- [ ] Messages d'erreur clairs
-
-**Robuste**
-- [ ] ARIA correct
-- [ ] aria-live pour dynamique
+Exécuter `/uiux:a11y-audit {URL ou chemin} {niveau}` et reprendre son rapport (score, critères WCAG non conformes, remédiations) dans la synthèse. Ne pas refaire ici l'audit automatisé ni la checklist WCAG : `/uiux:a11y-audit` en est la source unique.
 
 ### Étape 2 : Audit UX/Ergonomie (Expert UX)
 

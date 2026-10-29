@@ -1,14 +1,14 @@
 {
   "_comment": "État incrémental de /common:audit-claude-alignment. Écrit par la commande à la fin d'un run validé, lu par scripts/collect-claude-signals.mjs pour ne réveiller que les lentilles dont la source a bougé. Ne pas éditer à la main hors amorçage.",
   "schema_version": 1,
-  "last_run": "2026-10-13",
-  "cli_version_seen": "2.1.296",
+  "last_run": "2026-10-28",
+  "cli_version_seen": "2.1.312",
   "page_hashes": {
-    "models-pricing": "17be4c15161349cd",
-    "prompt-context": "d4eaafa83bb20ed0",
-    "cc-features": "640b3c0a8e713550"
+    "models-pricing": "34b61d1753bc86e1",
+    "prompt-context": "24e3e94376865449",
+    "cc-features": "edca99ec6ed90a7d"
   },
-  "community_csv_hash": "4061bb1dc8fe7f33",
+  "community_csv_hash": "9a51388b189931d9",
   "advisories_seen": [
     "GHSA-v234-4jrq-mgg6",
     "GHSA-gfvf-j8jh-jxxw",
@@ -39,6 +39,8 @@
     "GHSA-4fgq-fpq9-mr3g",
     "GHSA-j4h9-wv2m-wrf7",
     "GHSA-qxfv-fcpc-w36x",
-    "GHSA-ph6w-f82w-28w6"
+    "GHSA-ph6w-f82w-28w6",
+    "GHSA-5xjx-9qx6-jcrv",
+    "GHSA-4p2j-qj3c-6x84"
   ]
 }

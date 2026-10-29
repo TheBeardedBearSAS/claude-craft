@@ -2,7 +2,7 @@
 
 **Version:** 9.0.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 13 technology stacks, 33 specialized agents (+39 infra agents on-demand), 132 commands across 17 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 13 technology stacks, 33 specialized agents (+39 infra agents on-demand), 131 commands across 18 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -53,9 +53,9 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (15 namespaces, 126 commands)
+## Available Commands (18 namespaces, 131 commands)
 
-Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.9.0, Coolify v4.4.6, K8s 1.37.1, OpenTofu 1.13.1, Ansible 2.21.5, FrankenPHP 1.13.0, PgBouncer 1.26.0 | Project: `/sprint:*`, `/gate:*`, `/project:*`
+Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.9.0, Coolify v4.4.6, K8s 1.37.1, OpenTofu 1.13.1, Ansible 2.21.5, FrankenPHP 1.13.0, PgBouncer 1.26.0 | Project: `/gate:*`, `/project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 
@@ -170,7 +170,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version:** 2.1.260 (CVE-2026-86063 / CVE-2026-103435 / CVE-2026-103012 patched) | **Recommended:** 2.1.296 (Opus 5.5, Sonnet 5.5, Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
+**Minimum Version:** 2.1.260 (CVE-2026-86063 / CVE-2026-103435 / CVE-2026-103012 patched) | **Recommended:** 2.1.312 (Opus 5.5, Sonnet 5.5, Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
 
 ---
 

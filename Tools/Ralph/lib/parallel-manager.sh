@@ -17,11 +17,19 @@ PARALLEL_RESOURCE_LIMIT_CPU="${PARALLEL_RESOURCE_LIMIT_CPU:-80}"
 PARALLEL_RESOURCE_LIMIT_MEM="${PARALLEL_RESOURCE_LIMIT_MEM:-80}"
 
 # Session tracking
-declare -A PARALLEL_SESSIONS
-declare -A PARALLEL_PIDS
+# `=()`: a declared-but-unassigned array is "unbound" for `${#arr[@]}` under set -u
+declare -gA PARALLEL_SESSIONS=()
+declare -gA PARALLEL_PIDS=()
 PARALLEL_SESSION_COUNT=0
 PARALLEL_COMPLETED_COUNT=0
 PARALLEL_FAILED_COUNT=0
+# Results returned through globals: spawn_session and collect_completed_sessions
+# must run in the leader shell, never in `$(...)` (the worker would hold the
+# substitution pipe open, and the tracking arrays would be lost).
+PARALLEL_SPAWNED_SESSION_ID=""
+# One story id per line (ids may contain spaces).
+PARALLEL_COLLECTED_STORIES=""
+PARALLEL_FAILED_STORIES=""
 
 # Paths
 PARALLEL_BASE_DIR=""
@@ -36,6 +44,8 @@ PARALLEL_WORKER_DIR=""
 init_parallel_manager() {
     PARALLEL_BASE_DIR="${RALPH_SESSION_BASE:-.ralph}/parallel"
     mkdir -p "$PARALLEL_BASE_DIR"
+    # Absolute: workers cd into their own worktree
+    PARALLEL_BASE_DIR="$(cd "$PARALLEL_BASE_DIR" && pwd)"
 
     PARALLEL_STATE_FILE="$PARALLEL_BASE_DIR/state.yaml"
     PARALLEL_DEPENDENCY_GRAPH="$PARALLEL_BASE_DIR/dependencies.json"
@@ -98,32 +108,41 @@ EOF
 
 # Build dependency graph from stories
 build_dependency_graph() {
-    local stories="$1"  # Space-separated list of story IDs
+    local stories="$1"  # Story IDs, one per line
     local bmad_dir="${BMAD_DIR:-.bmad}"
     local status_file="$bmad_dir/sprint-status.yaml"
 
+    # Without a status file (or yq), all stories are independent nodes: the
+    # graph must still list them, get_ready_stories reads it.
+    local with_deps=true
     if [[ ! -f "$status_file" ]] || ! command -v yq &>/dev/null; then
-        # No dependencies, all stories are independent
-        echo '{"nodes":{},"edges":[]}'
-        return
+        with_deps=false
     fi
 
     local nodes="{}"
     local edges="[]"
 
-    for story_id in $stories; do
+    local -a story_list=()
+    mapfile -t story_list <<< "$stories"
+    for story_id in "${story_list[@]}"; do
+        [[ -z "$story_id" ]] && continue
         # Get story dependencies
-        local deps
-        deps=$(yq ".stories.${story_id}.blocked_by // []" "$status_file" 2>/dev/null)
+        local deps="[]"
+        if [[ "$with_deps" == "true" ]]; then
+            deps=$(STORY_ID="$story_id" yq '.stories[strenv(STORY_ID)].blocked_by // []' "$status_file" 2>/dev/null) || deps="[]"
+        fi
 
-        # Add node
-        nodes=$(echo "$nodes" | jq --arg id "$story_id" '. + {($id): {"status": "pending", "deps": []}}')
+        # Add node (on jq failure, keep the previous value: `next` buffers it)
+        local next
+        next=$(echo "$nodes" | jq --arg id "$story_id" '. + {($id): {"status": "pending", "deps": []}}') && nodes="$next"
 
         # Add edges for dependencies
         if [[ "$deps" != "[]" && "$deps" != "null" ]]; then
-            for dep in $(echo "$deps" | jq -r '.[]' 2>/dev/null); do
-                edges=$(echo "$edges" | jq --arg from "$dep" --arg to "$story_id" '. + [{"from": $from, "to": $to}]')
-                nodes=$(echo "$nodes" | jq --arg id "$story_id" --arg dep "$dep" '.[$id].deps += [$dep]')
+            local -a dep_list=()
+            mapfile -t dep_list < <(echo "$deps" | jq -r '.[]' 2>/dev/null || true)
+            for dep in "${dep_list[@]}"; do
+                next=$(echo "$edges" | jq --arg from "$dep" --arg to "$story_id" '. + [{"from": $from, "to": $to}]') && edges="$next"
+                next=$(echo "$nodes" | jq --arg id "$story_id" --arg dep "$dep" '.[$id].deps += [$dep]') && nodes="$next"
             done
         fi
     done
@@ -144,18 +163,20 @@ get_ready_stories() {
     fi
 
     # Find nodes with status=pending and all deps completed
+    # ($root: jq has no `$.` root accessor — that syntax failed to compile)
     jq -r '
+        . as $root |
         .nodes | to_entries[] |
         select(.value.status == "pending") |
         select(
             (.value.deps | length) == 0 or
             (
                 .value.deps as $deps |
-                ($deps | map(. as $d | $.nodes[$d].status == "completed") | all)
+                ($deps | map(. as $d | $root.nodes[$d].status == "completed") | all)
             )
         ) |
         .key
-    ' "$PARALLEL_DEPENDENCY_GRAPH" 2>/dev/null
+    ' "$PARALLEL_DEPENDENCY_GRAPH" 2>/dev/null || true
 }
 
 # Mark story as completed in dependency graph
@@ -168,6 +189,19 @@ mark_story_completed() {
 
     local updated
     updated=$(jq --arg id "$story_id" '.nodes[$id].status = "completed"' "$PARALLEL_DEPENDENCY_GRAPH")
+    echo "$updated" > "$PARALLEL_DEPENDENCY_GRAPH"
+}
+
+# Mark story as running in dependency graph (leader only, at spawn time)
+mark_story_running() {
+    local story_id="$1"
+
+    if [[ ! -f "$PARALLEL_DEPENDENCY_GRAPH" ]] || ! command -v jq &>/dev/null; then
+        return 0
+    fi
+
+    local updated
+    updated=$(jq --arg id "$story_id" '.nodes[$id].status = "running"' "$PARALLEL_DEPENDENCY_GRAPH")
     echo "$updated" > "$PARALLEL_DEPENDENCY_GRAPH"
 }
 
@@ -211,11 +245,11 @@ check_resource_availability() {
         mem_usage=$(free | grep Mem | awk '{print int($3/$2 * 100)}' 2>/dev/null || echo "0")
     elif [[ "$(uname)" == "Darwin" ]]; then
         local pages_free pages_active pages_inactive pages_speculative pages_wired
-        pages_free=$(vm_stat | grep "Pages free" | awk '{print $3}' | tr -d '.')
-        pages_active=$(vm_stat | grep "Pages active" | awk '{print $3}' | tr -d '.')
-        pages_inactive=$(vm_stat | grep "Pages inactive" | awk '{print $3}' | tr -d '.')
-        pages_speculative=$(vm_stat | grep "Pages speculative" | awk '{print $3}' | tr -d '.')
-        pages_wired=$(vm_stat | grep "Pages wired" | awk '{print $4}' | tr -d '.')
+        pages_free=$(vm_stat | grep "Pages free" | awk '{print $3}' | tr -d '.') || pages_free=0
+        pages_active=$(vm_stat | grep "Pages active" | awk '{print $3}' | tr -d '.') || pages_active=0
+        pages_inactive=$(vm_stat | grep "Pages inactive" | awk '{print $3}' | tr -d '.') || pages_inactive=0
+        pages_speculative=$(vm_stat | grep "Pages speculative" | awk '{print $3}' | tr -d '.') || pages_speculative=0
+        pages_wired=$(vm_stat | grep "Pages wired" | awk '{print $4}' | tr -d '.') || pages_wired=0
         local total=$((pages_free + pages_active + pages_inactive + pages_speculative + pages_wired))
         local used=$((pages_active + pages_wired))
         mem_usage=$((used * 100 / total))
@@ -232,9 +266,7 @@ check_resource_availability() {
 # Get number of available slots
 get_available_slots() {
     local active_count=0
-    if [[ -v PARALLEL_PIDS ]]; then
-        active_count=${#PARALLEL_PIDS[@]}
-    fi
+    active_count=${#PARALLEL_PIDS[@]}
     local available=$((PARALLEL_MAX_CONCURRENT - active_count))
 
     # Further limit if resources are constrained
@@ -250,14 +282,18 @@ get_available_slots() {
 # Session Spawning
 # =============================================================================
 
-# Spawn a new Ralph session for a story
+# Spawn a new Ralph session for a story (id in PARALLEL_SPAWNED_SESSION_ID)
 spawn_session() {
     local story_id="$1"
     local prompt="$2"
     local config="${3:-}"
 
-    # Generate session ID
-    local session_id="PAR-${story_id}-$(date +%s)"
+    # Generate session ID. It names a directory and a git branch: the story id
+    # is reduced to [A-Za-z0-9_-] (no `/`, `..` nor space), and the spawn
+    # counter keeps ids that sanitize alike ("US 1", "US/1") apart.
+    local session_id
+    session_id="PAR-${story_id//[^A-Za-z0-9_-]/-}-$(date +%s)-${PARALLEL_SESSION_COUNT}"
+    PARALLEL_SPAWNED_SESSION_ID=""
 
     print_info "Spawning parallel session: $session_id for $story_id"
 
@@ -265,21 +301,22 @@ spawn_session() {
     local session_dir="$PARALLEL_BASE_DIR/sessions/$session_id"
     mkdir -p "$session_dir"
 
-    # Write session info
-    cat > "$session_dir/info.yaml" << EOF
-session_id: "$session_id"
-story_id: "$story_id"
-status: "running"
-started_at: "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-pid: ""
-exit_code: ""
-EOF
+    # Write session info (ids through strenv(): a `"` must not break the YAML)
+    if command -v yq &>/dev/null; then
+        SESSION_ID_ARG="$session_id" STORY_ID="$story_id" TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" yq -n '
+            .session_id = strenv(SESSION_ID_ARG) |
+            .story_id = strenv(STORY_ID) |
+            .status = "running" |
+            .started_at = strenv(TS) |
+            .pid = "" |
+            .exit_code = ""' > "$session_dir/info.yaml"
+    fi
 
     # Find Ralph script
     local ralph_script=""
     for path in "${SCRIPT_DIR}/ralph.sh" "Tools/Ralph/ralph.sh" "$(dirname "${BASH_SOURCE[0]}")/../ralph.sh"; do
         if [[ -f "$path" ]]; then
-            ralph_script="$path"
+            ralph_script="$(cd "$(dirname "$path")" && pwd)/$(basename "$path")"
             break
         fi
     done
@@ -290,19 +327,37 @@ EOF
     fi
 
     # Build command
-    local cmd="$ralph_script"
-    [[ -n "$config" ]] && cmd="$cmd --config=$config"
+    local -a cmd=("$ralph_script")
+    [[ -n "${LANG_ARG:-}" ]] && cmd+=("--lang=$LANG_ARG")
+    [[ -n "$config" ]] && cmd+=("--config=$config")
+
+    # Isolate the worker's working tree (one git worktree per session)
+    local worktree_dir=""
+    if ! worktree_dir=$(create_worker_worktree "$session_id"); then
+        worktree_dir=""
+        print_warning "No git worktree for $session_id: worker shares the current directory"
+    fi
 
     # Spawn in background
     # Workers write to individual temp files (single-writer pattern).
     # The leader merges results after all workers complete.
-    local worker_id="${story_id}-$$-$(date +%s)"
+    # Derived from the (sanitized) session id: it names the report file
+    local worker_id="${session_id}-$$"
     (
-        cd "$(pwd)" || exit 1
+        if [[ -n "$worktree_dir" ]]; then
+            cd "$worktree_dir" || exit 1
+        fi
+        # Per-worker Ralph state (incl. the Claude session UUID) under the
+        # leader's .ralph/, so it survives the worktree removal.
+        export RALPH_SESSION_BASE="$session_dir/ralph"
 
         local output
-        output=$($cmd "$prompt" 2>&1)
-        local status=$?
+        local status=0
+        output=$("${cmd[@]}" "$prompt" 2>&1) || status=$?
+
+        if [[ -n "$worktree_dir" ]] && ! cleanup_worker_worktree "$worktree_dir" "$story_id"; then
+            output+=$'\n'"[WARN] Worktree kept: $worktree_dir"
+        fi
 
         # Save output (per-session dir, no conflict)
         echo "$output" > "$session_dir/output.log"
@@ -337,7 +392,31 @@ EOF
     # Update state file
     update_parallel_state "spawn" "$session_id" "$story_id"
 
-    echo "$session_id"
+    PARALLEL_SPAWNED_SESSION_ID="$session_id"
+}
+
+# Create a dedicated git worktree on branch ralph/<session_id> so parallel
+# workers never share a working tree. Prints its path; fails outside git.
+create_worker_worktree() {
+    local session_id="$1"
+    local worktree_dir="$PARALLEL_BASE_DIR/worktrees/$session_id"
+
+    git rev-parse --is-inside-work-tree &> /dev/null || return 1
+    git worktree add -q -b "ralph/$session_id" "$worktree_dir" HEAD &> /dev/null || return 1
+    echo "$worktree_dir"
+}
+
+# Commit leftover changes as WIP on the worker branch, then remove the
+# worktree. If the commit fails, the dirty worktree is kept (no data loss).
+cleanup_worker_worktree() {
+    local worktree_dir="$1"
+    local story_id="$2"
+
+    if [[ -n "$(git -C "$worktree_dir" status --porcelain)" ]]; then
+        git -C "$worktree_dir" add -A
+        git -C "$worktree_dir" commit -q -m "wip(ralph): $story_id" || return 1
+    fi
+    git -C "$worktree_dir" worktree remove "$worktree_dir"
 }
 
 # =============================================================================
@@ -347,6 +426,8 @@ EOF
 # Check and collect completed sessions.
 # In the single-writer pattern, this function collects finished PIDs
 # and then merges worker reports written by the background processes.
+# Completed (failed) stories are also appended, one per line, to
+# PARALLEL_COLLECTED_STORIES (PARALLEL_FAILED_STORIES).
 collect_completed_sessions() {
     local completed=()
     local failed=()
@@ -359,16 +440,18 @@ collect_completed_sessions() {
             local session_id="${PARALLEL_PIDS[$pid]}"
             local story_id="${PARALLEL_SESSIONS[$session_id]}"
 
-            # Check exit status
-            wait "$pid" 2>/dev/null
-            local exit_code=$?
+            # Check exit status (a failed worker must not kill the leader)
+            local exit_code=0
+            wait "$pid" 2>/dev/null || exit_code=$?
 
             if [[ $exit_code -eq 0 ]]; then
                 completed+=("$story_id")
+                PARALLEL_COLLECTED_STORIES+="$story_id"$'\n'
                 PARALLEL_COMPLETED_COUNT=$((PARALLEL_COMPLETED_COUNT + 1))
                 print_success "Session completed: $session_id ($story_id)"
             else
                 failed+=("$story_id")
+                PARALLEL_FAILED_STORIES+="$story_id"$'\n'
                 PARALLEL_FAILED_COUNT=$((PARALLEL_FAILED_COUNT + 1))
                 print_error "Session failed: $session_id ($story_id)"
             fi
@@ -395,9 +478,7 @@ wait_all_sessions() {
     start_time=$(date +%s)
 
     local active_count=0
-    if [[ -v PARALLEL_PIDS ]]; then
-        active_count=${#PARALLEL_PIDS[@]}
-    fi
+    active_count=${#PARALLEL_PIDS[@]}
 
     while [[ $active_count -gt 0 ]]; do
         collect_completed_sessions > /dev/null
@@ -415,9 +496,7 @@ wait_all_sessions() {
 
         # Update active count
         active_count=0
-        if [[ -v PARALLEL_PIDS ]]; then
-            active_count=${#PARALLEL_PIDS[@]}
-        fi
+        active_count=${#PARALLEL_PIDS[@]}
     done
 
     return 0
@@ -426,9 +505,7 @@ wait_all_sessions() {
 # Get active session count
 get_active_count() {
     local count=0
-    if [[ -v PARALLEL_PIDS ]]; then
-        count=${#PARALLEL_PIDS[@]}
-    fi
+    count=${#PARALLEL_PIDS[@]}
     echo "$count"
 }
 
@@ -450,12 +527,12 @@ process_stories_parallel() {
     print_info "Stories: $(echo "$stories" | wc -w | tr -d ' ')"
     print_info "Max concurrent: $PARALLEL_MAX_CONCURRENT"
 
-    # Build dependency graph
-    build_dependency_graph "$stories" > /dev/null
+    # Build dependency graph (it reads one id per line)
+    build_dependency_graph "$(tr -s ' ' '\n' <<< "$stories")" > /dev/null
 
     local processed=0
     local total
-    total=$(echo "$stories" | wc -w | tr -d ' ')
+    total=$(echo "$stories" | wc -w | tr -d ' ') || total=0
 
     while [[ $processed -lt $total ]]; do
         # Collect completed sessions
@@ -473,9 +550,6 @@ process_stories_parallel() {
             for story_id in $ready; do
                 [[ $slots -le 0 ]] && break
 
-                # Skip if already processed
-                [[ -n "${PARALLEL_SESSIONS[$story_id]:-}" ]] && continue
-
                 # Build prompt
                 local prompt="$prompt_template $story_id"
 
@@ -484,14 +558,19 @@ process_stories_parallel() {
                 local status_file="$bmad_dir/sprint-status.yaml"
                 if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
                     local title
-                    title=$(yq ".stories.${story_id}.title" "$status_file" 2>/dev/null)
+                    title=$(STORY_ID="$story_id" yq '.stories[strenv(STORY_ID)].title' "$status_file" 2>/dev/null)
                     prompt="Implement user story $story_id: $title. Follow TDD approach."
                 fi
 
-                # Spawn session
-                spawn_session "$story_id" "$prompt"
-                ((slots--))
-                ((processed++))
+                # Spawn session. "running" keeps get_ready_stories (pending
+                # only) from re-spawning it before its report is merged.
+                if spawn_session "$story_id" "$prompt"; then
+                    mark_story_running "$story_id"
+                else
+                    mark_story_failed "$story_id"
+                fi
+                slots=$((slots - 1))
+                processed=$((processed + 1))
             done
         fi
 
@@ -502,6 +581,9 @@ process_stories_parallel() {
     # Wait for remaining sessions
     print_info "Waiting for remaining sessions to complete..."
     wait_all_sessions
+
+    # Drop stale worktree metadata (e.g. a worker killed before its cleanup)
+    git worktree prune &> /dev/null || true
 
     # Print summary
     print_parallel_summary
@@ -520,16 +602,14 @@ write_worker_report() {
     local status="$4"  # "completed" or "failed"
 
     local report_file="${PARALLEL_WORKER_DIR}/worker-${worker_id}.yaml"
-    local ts
-    ts="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-
-    cat > "$report_file" << EOF
-worker_id: "${worker_id}"
-session_id: "${session_id}"
-story_id: "${story_id}"
-status: "${status}"
-reported_at: "${ts}"
-EOF
+    # Values through strenv(): a `"` in an id must not break the YAML
+    WORKER_ID="$worker_id" SESSION_ID_ARG="$session_id" STORY_ID="$story_id" \
+        STATUS="$status" TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" yq -n '
+        .worker_id = strenv(WORKER_ID) |
+        .session_id = strenv(SESSION_ID_ARG) |
+        .story_id = strenv(STORY_ID) |
+        .status = strenv(STATUS) |
+        .reported_at = strenv(TS)' > "$report_file"
 }
 
 # Merge all worker reports into the shared state file (leader only).
@@ -567,18 +647,18 @@ merge_worker_reports() {
         if [[ "$dry_run" == "true" ]]; then
             print_info "DRY RUN - Would merge: session=$session_id story=$story_id status=$status" 2>/dev/null \
                 || echo "[INFO] DRY RUN - Would merge: session=$session_id story=$story_id status=$status"
-            ((merged_count++))
+            merged_count=$((merged_count + 1))
             continue
         fi
 
         # Update state file (single writer - no race condition)
         if [[ -f "$PARALLEL_STATE_FILE" ]]; then
-            yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+            SESSION_ID_ARG="$session_id" yq -i '.sessions.active -= [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
             if [[ "$status" == "completed" ]]; then
-                yq -i ".sessions.completed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.completed += [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
                 yq -i ".metrics.total_completed += 1" "$PARALLEL_STATE_FILE"
             else
-                yq -i ".sessions.failed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.failed += [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
                 yq -i ".metrics.total_failed += 1" "$PARALLEL_STATE_FILE"
             fi
         fi
@@ -591,7 +671,7 @@ merge_worker_reports() {
         fi
 
         rm -f "$report_file"
-        ((merged_count++))
+        merged_count=$((merged_count + 1))
     done
 
     # Update efficiency after merge
@@ -640,19 +720,19 @@ update_parallel_state() {
     case "$action" in
         spawn)
             # Spawn is always called from the leader, safe to write directly
-            yq -i ".sessions.active += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+            SESSION_ID_ARG="$session_id" yq -i '.sessions.active += [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
             yq -i ".metrics.total_spawned += 1" "$PARALLEL_STATE_FILE"
             ;;
         complete|fail)
             # DEPRECATED for parallel mode: use write_worker_report() + merge_worker_reports()
             # Kept for backward compatibility with sequential mode
             if [[ "$action" == "complete" ]]; then
-                yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
-                yq -i ".sessions.completed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.active -= [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.completed += [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
                 yq -i ".metrics.total_completed += 1" "$PARALLEL_STATE_FILE"
             else
-                yq -i ".sessions.active -= [\"$session_id\"]" "$PARALLEL_STATE_FILE"
-                yq -i ".sessions.failed += [\"$session_id\"]" "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.active -= [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
+                SESSION_ID_ARG="$session_id" yq -i '.sessions.failed += [strenv(SESSION_ID_ARG)]' "$PARALLEL_STATE_FILE"
                 yq -i ".metrics.total_failed += 1" "$PARALLEL_STATE_FILE"
             fi
             ;;
@@ -746,7 +826,7 @@ cmd_parallel_manager() {
                 echo "Usage: parallel-manager.sh spawn <story-id> [prompt]"
                 return 1
             fi
-            spawn_session "$story_id" "$prompt"
+            spawn_session "$story_id" "$prompt" && echo "$PARALLEL_SPAWNED_SESSION_ID"
             ;;
         wait)
             wait_all_sessions "${1:-0}"
@@ -781,6 +861,11 @@ cmd_parallel_manager() {
             echo "Single-Writer Pattern:"
             echo "  Background workers write to .ralph/parallel/workers/worker-{id}.yaml"
             echo "  Only the leader merges results into shared state files"
+            echo ""
+            echo "Isolation:"
+            echo "  Each worker runs in its own git worktree (branch ralph/<session>),"
+            echo "  removed at the end of the run (leftover changes committed as WIP)."
+            echo "  Each Ralph session pins its own Claude session (--session-id, then --resume)."
             ;;
         *)
             echo "Usage: parallel-manager.sh <command> [args]"

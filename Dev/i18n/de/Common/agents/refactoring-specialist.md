@@ -17,15 +17,6 @@ skills:
   - solid-principles
   - kiss-dry-yagni
   - testing
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(:(){:|:&};:*)"
-  - "Bash(sudo:*)"
-  - "Bash(chmod 777:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
 ---
 
 # Refactoring-Spezialist-Agent

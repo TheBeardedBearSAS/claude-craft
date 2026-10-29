@@ -17,9 +17,8 @@ setup() {
 }
 
 @test "ralph.sh: passes shellcheck -S error" {
-    if ! command -v shellcheck >/dev/null 2>&1; then
-        skip "shellcheck not available in container"
-    fi
+    # shellcheck is pinned in the e2e image: never skip.
+    command -v shellcheck
     run shellcheck -S error "$RALPH"
     [ "$status" -eq 0 ]
 }

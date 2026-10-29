@@ -1,6 +1,6 @@
 ---
 name: i18n
-description: Règle 09 : Internationalisation (i18n). Use when implementing internationalization.
+description: "Règle 09 : Internationalisation (i18n). Use when implementing internationalization."
 ---
 
 # Règle 09 : Internationalisation (i18n)

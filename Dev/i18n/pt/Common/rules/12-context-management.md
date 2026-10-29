@@ -352,13 +352,15 @@ O comando `/context` fornece sugestoes acionaveis para otimizar o uso do context
 
 Ajustar o nível de esforço do modelo de acordo com a complexidade da tarefa:
 
-| Comando | Modelo | Uso |
+| Comando | Efeito | Uso |
 |---------|--------|-----|
-| `/effort low` | Haiku 5.5 | Tarefas simples, lookups, classificação |
-| `/effort medium` | Sonnet 5.5 | Implementação padrão |
-| `/effort high` | Opus 5.5 | Raciocínio complexo, arquitetura |
-| `/effort xhigh` | Opus 5.5 (extended thinking) | Decisões críticas, migrações complexas, ADR |
-| `/effort ultracode` | Opus 5.5 (toggle separado desde v2.1.284, Dynamic Workflows) | Modo de máximo débito de código — pipelines automatizados, geração massiva |
+| `/effort low` | Raciocínio mínimo, respostas rápidas | Tarefas simples, lookups, classificação |
+| `/effort medium` | Profundidade padrão | Implementação padrão |
+| `/effort high` | Raciocínio aprofundado | Raciocínio complexo, arquitetura |
+| `/effort xhigh` | Adaptive thinking no máximo | Decisões críticas, migrações complexas, ADR |
+| `/effort ultracode` | Toggle separado (v2.1.284+), Dynamic Workflows | Máximo débito de código — pipelines automatizados, geração massiva |
+
+> **O esforço não troca de modelo:** ajusta a profundidade de raciocínio do modelo atual; o modelo é escolhido com `/model`. Pares recomendados: `low` com Haiku 5.5, `medium` com Sonnet 5.5, `high`/`xhigh` com Opus 5.5.
 
 > **Esforço padrão por modelo:** medium no Opus 5.5 e Haiku 5.5; high no Sonnet 5.5, Fable 5.1 e modelos legacy.
 > **Fable 5.1** (`claude-fable-5-1`, $10/$50 por Mtok) é um modelo atual, adequado para agentes criativos/narrativos. **Mythos** tem disponibilidade limitada (apenas Cyber Verification Program).
@@ -493,7 +495,7 @@ Durante a compactacao, sempre preservar:
 | Variável | Descrição |
 |----------|-----------|
 | `CLAUDE_CODE_SUBAGENT_MODEL` | Modelo **padrão** para sub-agentes sem tipo (ex: `sonnet`). **Desde o Claude Code 2.1.251**, o frontmatter `model:` de um agente tem prioridade: os 11 revisores com `model: haiku` permanecem no Haiku. **Antes de 2.1.251 era o contrário** — esta variável sobrescrevia o frontmatter. |
-| `CLAUDE_CODE_FORK_SUBAGENT` | `1` para isolar o contexto dos sub-agentes (forked subagents, v2.1.117+) |
+| `CLAUDE_CODE_FORK_SUBAGENT` | `1` para isolar o contexto dos sub-agentes (forked subagents, v2.1.117+); ativo por padrão em `-p`, no SDK, desktop e VS Code desde 2.1.302, `0` para desativar |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Ampliar/forçar o prompt caching (−40 % em sessões repetitivas) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Definir como `1` para desativar a memória automática |
 

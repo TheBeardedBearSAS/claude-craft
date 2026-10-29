@@ -56,71 +56,75 @@ reconstruct_context() {
 # Section Builders
 # =============================================================================
 
+# Headings and sentences come from Tools/i18n/ralph/<lang>.sh (MSG_SECTION_*):
+# these sections are sent to Claude and must follow --lang.
+
 build_progress_section() {
-    echo "## Sprint Progress"
+    echo "${MSG_SECTION_PROGRESS:-## Sprint Progress}"
     echo ""
 
     if [[ -f "$SPRINT_PROGRESS_FILE" ]]; then
         # Extract key sections only (not the entire file)
-        echo "### Current State"
-        grep -A4 "^## Current State" "$SPRINT_PROGRESS_FILE" 2>/dev/null | tail -n +2 || echo "- Unknown"
+        echo "${MSG_SECTION_CURRENT_STATE:-### Current State}"
+        grep -A4 "^## Current State" "$SPRINT_PROGRESS_FILE" 2>/dev/null | tail -n +2 || echo "- ${MSG_SECTION_UNKNOWN:-Unknown}"
 
         echo ""
-        echo "### Completed Tasks"
+        echo "${MSG_SECTION_COMPLETED_TASKS:-### Completed Tasks}"
         # Show last 5 completed tasks
-        grep '^\- \[x\]' "$SPRINT_PROGRESS_FILE" 2>/dev/null | tail -5 || echo "- None yet"
+        grep '^\- \[x\]' "$SPRINT_PROGRESS_FILE" 2>/dev/null | tail -5 || echo "- ${MSG_SECTION_NONE_YET:-None yet}"
 
         echo ""
-        echo "### Key Decisions"
-        grep -A10 "^## Key Decisions" "$SPRINT_PROGRESS_FILE" 2>/dev/null | grep '^-' | head -5 || echo "- None recorded"
+        echo "${MSG_SECTION_KEY_DECISIONS:-### Key Decisions}"
+        grep -A10 "^## Key Decisions" "$SPRINT_PROGRESS_FILE" 2>/dev/null | grep '^-' | head -5 || echo "- ${MSG_SECTION_NONE_RECORDED:-None recorded}"
     else
-        echo "No sprint progress file found."
+        echo "${MSG_SECTION_NO_PROGRESS_FILE:-No sprint progress file found.}"
     fi
 }
 
 build_git_section() {
-    echo "## Recent Changes"
+    echo "${MSG_SECTION_GIT:-## Recent Changes}"
     echo ""
 
     # Check if we're in a git repository
     if ! git rev-parse --git-dir > /dev/null 2>&1; then
-        echo "Not in a git repository."
+        echo "${MSG_SECTION_NOT_GIT:-Not in a git repository.}"
         return
     fi
 
     # Get summary of changes - check commit count first
-    echo "### Modified Files (recent commits)"
+    echo "${MSG_SECTION_MODIFIED_FILES:-### Modified Files (recent commits)}"
     local commit_count
     commit_count=$(git rev-list --count HEAD 2>/dev/null || echo "0")
 
+    local no_changes="${MSG_SECTION_NO_RECENT_CHANGES:-No recent changes}"
     if [[ "$commit_count" -ge 5 ]]; then
-        git diff --stat HEAD~5 2>/dev/null | tail -15 || echo "No recent changes"
+        git diff --stat HEAD~5 2>/dev/null | tail -15 || echo "$no_changes"
     elif [[ "$commit_count" -gt 0 ]]; then
         # Show diff from initial commit if less than 5 commits
-        git diff --stat "$(git rev-list --max-parents=0 HEAD 2>/dev/null)" 2>/dev/null | tail -15 || echo "No recent changes"
+        git diff --stat "$(git rev-list --max-parents=0 HEAD 2>/dev/null)" 2>/dev/null | tail -15 || echo "$no_changes"
     else
-        echo "No commits yet"
+        echo "${MSG_SECTION_NO_COMMITS:-No commits yet}"
     fi
 
     echo ""
-    echo "### Recent Commits"
-    git log --oneline -5 2>/dev/null || echo "No commits found"
+    echo "${MSG_SECTION_RECENT_COMMITS:-### Recent Commits}"
+    git log --oneline -5 2>/dev/null || echo "${MSG_SECTION_NO_COMMITS:-No commits yet}"
 
     echo ""
-    echo "### Uncommitted Changes"
+    echo "${MSG_SECTION_UNCOMMITTED:-### Uncommitted Changes}"
     local status
-    status=$(git status --porcelain 2>/dev/null | head -10)
+    status=$(git status --porcelain 2>/dev/null | head -10) || true
     if [[ -n "$status" ]]; then
         echo "\`\`\`"
         echo "$status"
         echo "\`\`\`"
     else
-        echo "No uncommitted changes."
+        echo "${MSG_SECTION_NO_UNCOMMITTED:-No uncommitted changes.}"
     fi
 }
 
 build_test_section() {
-    echo "## Test Status"
+    echo "${MSG_SECTION_TESTS:-## Test Status}"
     echo ""
 
     # Try to detect test framework
@@ -149,7 +153,7 @@ build_test_section() {
     fi
 
     if [[ "$framework_detected" == "false" ]]; then
-        echo "- Framework: Unknown"
+        echo "- Framework: ${MSG_SECTION_UNKNOWN:-Unknown}"
     fi
 
     # Check sprint progress for recorded test status
@@ -158,13 +162,13 @@ build_test_section() {
         unit_status=$(grep -oP 'Unit: \K.*' "$SPRINT_PROGRESS_FILE" 2>/dev/null || echo "unknown")
         local integration_status
         integration_status=$(grep -oP 'Integration: \K.*' "$SPRINT_PROGRESS_FILE" 2>/dev/null || echo "unknown")
-        echo "- Unit Tests: $unit_status"
-        echo "- Integration Tests: $integration_status"
+        echo "- ${MSG_SECTION_UNIT_TESTS:-Unit Tests}: $unit_status"
+        echo "- ${MSG_SECTION_INTEGRATION_TESTS:-Integration Tests}: $integration_status"
     fi
 }
 
 build_current_task_section() {
-    echo "## Current Task"
+    echo "${MSG_SECTION_TASK:-## Current Task}"
     echo ""
 
     # Check for current task file
@@ -179,15 +183,16 @@ build_current_task_section() {
         local phase=$(grep -oP '\*\*Phase\*\*: \K.*' "$SPRINT_PROGRESS_FILE" 2>/dev/null)
 
         if [[ -n "$current_task" && "$current_task" != "none" ]]; then
-            echo "**Task**: $current_task"
-            echo "**Phase**: ${phase:-unknown}"
+            echo "**${MSG_SECTION_TASK_LABEL:-Task}**: $current_task"
+            echo "**${MSG_SPRINT_PHASE:-Phase}**: ${phase:-unknown}"
             echo ""
-            echo "Continue from where you left off in the $phase phase."
+            local msg="${MSG_SECTION_CONTINUE_PHASE:-"Continue from where you left off in the {0} phase."}"
+            echo "${msg//\{0\}/"$phase"}"
         else
-            echo "No current task in progress."
+            echo "${MSG_SECTION_NO_TASK:-No current task in progress.}"
         fi
     else
-        echo "No current task information available."
+        echo "${MSG_SECTION_NO_TASK_INFO:-No current task information available.}"
     fi
 }
 
@@ -195,34 +200,16 @@ build_current_task_section() {
 # Continuation Prompt Generation
 # =============================================================================
 
+# Templates come from Tools/i18n/ralph/<lang>.sh (MSG_PROMPT_*), so the
+# prompt sent to Claude follows --lang. Replacements are quoted: bash 5.2
+# would otherwise expand `&` in the context to the matched placeholder.
 generate_continuation_prompt() {
     local session_id="${SESSION_ID:-unknown}"
-    local context=$(reconstruct_context "$session_id")
+    local context
+    context=$(reconstruct_context "$session_id")
 
-    cat << EOF
-# Continuation du Sprint
-
-Vous reprenez le travail sur ce sprint apres une compaction de contexte.
-Le fichier sprint-progress.md contient l'etat complet du travail effectue.
-
-$context
-
-## Instructions
-
-1. **Lisez** le progres ci-dessus pour comprendre l'etat actuel
-2. **Verifiez** les fichiers modifies si necessaire
-3. **Reprenez** la tache en cours la ou elle s'est arretee
-4. **Continuez** le workflow TDD (RED -> GREEN -> REFACTOR)
-5. **Mettez a jour** sprint-progress.md apres chaque tache terminee
-
-## Commandes Importantes
-
-- Apres chaque tache: mettre a jour sprint-progress.md
-- Si blocker: noter dans la section Blockers
-- Si decision importante: ajouter dans Key Decisions
-
-Continuez l'implementation.
-EOF
+    local prompt="${MSG_PROMPT_CONTINUATION:-"{0}"}"
+    echo "${prompt//\{0\}/"$context"}"
 }
 
 # =============================================================================
@@ -231,32 +218,12 @@ EOF
 
 generate_session_handoff_prompt() {
     local previous_session="$1"
-    local context=$(reconstruct_context "$previous_session")
+    local context
+    context=$(reconstruct_context "$previous_session")
 
-    cat << EOF
-# Nouvelle Session de Continuation
-
-Cette session continue le travail de la session precedente ($previous_session).
-Le contexte a ete reinitialise mais le fichier sprint-progress.md contient tout le progres.
-
-$context
-
-## Contexte de la Transition
-
-- Session precedente: $previous_session
-- Raison: Limite de contexte atteinte (max compacts)
-- Le travail a ete sauvegarde dans sprint-progress.md
-- Les fichiers sont dans l'etat du dernier checkpoint git
-
-## Instructions
-
-1. **Verifiez** l'etat actuel via git status
-2. **Lisez** sprint-progress.md pour le contexte complet
-3. **Identifiez** la tache en cours et son etat
-4. **Continuez** exactement ou la session precedente s'est arretee
-
-Reprenez le travail.
-EOF
+    local prompt="${MSG_PROMPT_HANDOFF:-"{1}"}"
+    prompt="${prompt//\{0\}/"$previous_session"}"
+    echo "${prompt//\{1\}/"$context"}"
 }
 
 # =============================================================================

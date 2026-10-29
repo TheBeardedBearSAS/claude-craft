@@ -225,3 +225,135 @@ MSG_CONFIG_GENERATED="Configuration generated"
 MSG_CONFIG_WIZARD_TITLE="Configuration Wizard"
 MSG_CONFIG_DETECTING="Detecting project settings..."
 MSG_CONFIG_CONFIRM="Is this correct?"
+
+# Prompts sent to Claude ({0} = reconstructed context)
+MSG_PROMPT_CONTINUATION="# Sprint Continuation
+
+You are resuming work on this sprint after a context compaction.
+The sprint-progress.md file holds the full state of the work done so far.
+
+{0}
+
+## Instructions
+
+1. **Read** the progress above to understand the current state
+2. **Check** the modified files if needed
+3. **Resume** the current task where it stopped
+4. **Continue** the TDD workflow (RED -> GREEN -> REFACTOR)
+5. **Update** sprint-progress.md after each completed task
+
+## Important Commands
+
+- After each task: update sprint-progress.md
+- If blocked: note it in the Blockers section
+- If an important decision is made: add it to Key Decisions
+
+Continue the implementation."
+
+# {0} = previous session id, {1} = reconstructed context
+MSG_PROMPT_HANDOFF="# New Continuation Session
+
+This session continues the work of the previous session ({0}).
+The context was reset but the sprint-progress.md file holds all the progress.
+
+{1}
+
+## Transition Context
+
+- Previous session: {0}
+- Reason: context limit reached (max compacts)
+- The work was saved in sprint-progress.md
+- Files are in the state of the last git checkpoint
+
+## Instructions
+
+1. **Check** the current state with git status
+2. **Read** sprint-progress.md for the full context
+3. **Identify** the current task and its state
+4. **Continue** exactly where the previous session stopped
+
+Resume the work."
+
+# Reconstructed context sections sent to Claude ({0} = phase)
+MSG_SECTION_PROGRESS="## Sprint Progress"
+MSG_SECTION_CURRENT_STATE="### Current State"
+MSG_SECTION_UNKNOWN="Unknown"
+MSG_SECTION_COMPLETED_TASKS="### Completed Tasks"
+MSG_SECTION_NONE_YET="None yet"
+MSG_SECTION_KEY_DECISIONS="### Key Decisions"
+MSG_SECTION_NONE_RECORDED="None recorded"
+MSG_SECTION_NO_PROGRESS_FILE="No sprint progress file found."
+MSG_SECTION_GIT="## Recent Changes"
+MSG_SECTION_NOT_GIT="Not in a git repository."
+MSG_SECTION_MODIFIED_FILES="### Modified Files (recent commits)"
+MSG_SECTION_NO_RECENT_CHANGES="No recent changes"
+MSG_SECTION_NO_COMMITS="No commits yet"
+MSG_SECTION_RECENT_COMMITS="### Recent Commits"
+MSG_SECTION_UNCOMMITTED="### Uncommitted Changes"
+MSG_SECTION_NO_UNCOMMITTED="No uncommitted changes."
+MSG_SECTION_TESTS="## Test Status"
+MSG_SECTION_UNIT_TESTS="Unit Tests"
+MSG_SECTION_INTEGRATION_TESTS="Integration Tests"
+MSG_SECTION_TASK="## Current Task"
+MSG_SECTION_TASK_LABEL="Task"
+MSG_SECTION_CONTINUE_PHASE="Continue from where you left off in the {0} phase."
+MSG_SECTION_NO_TASK="No current task in progress."
+MSG_SECTION_NO_TASK_INFO="No current task information available."
+
+# Sprint Conductor (ASC leader)
+MSG_ASC_HEADER="Autonomous Sprint Conductor (ASC)"
+MSG_ASC_NO_PARALLEL_MANAGER="Parallel manager not available, falling back to sequential"
+MSG_ASC_INITIALIZED="Initialized Sprint Conductor"
+MSG_ASC_INIT_SESSION="  Session: {0}"
+MSG_ASC_INIT_MODE="  Mode: {0}"
+MSG_ASC_INIT_MAX_STORIES="  Max stories: {0}"
+MSG_ASC_INIT_MAX_RUNTIME="  Max runtime: {0}h"
+MSG_ASC_INIT_PARALLEL="  Parallel: {0} (max {1})"
+MSG_ASC_INITIALIZED_ID="Sprint Conductor initialized: {0}"
+MSG_ASC_STARTING="Starting sprint conductor for: {0} (mode: {1})"
+MSG_ASC_PARALLEL_MODE="Running in PARALLEL mode (max {0} concurrent)"
+MSG_ASC_SEQUENTIAL_MODE="Running in SEQUENTIAL mode"
+MSG_ASC_NO_PARALLEL_STORIES="No stories available for parallel processing"
+MSG_ASC_FOUND_STORIES="Found {0} stories for parallel processing"
+MSG_ASC_STOP_PARALLEL="Stop condition met, halting parallel processing"
+MSG_ASC_WAVE="=== Wave {0} ==="
+MSG_ASC_WAITING_ACTIVE="Waiting for {0} active sessions to complete..."
+MSG_ASC_WAITING_ESCALATIONS="Waiting for {0} pending escalations..."
+MSG_ASC_WAITING_ALL="Waiting for all parallel sessions to complete..."
+MSG_ASC_SPAWNED="Spawned parallel session {0} for story {1}"
+MSG_ASC_SPAWN_FAILED="Failed to spawn session for {0}"
+MSG_ASC_PAR_COMPLETED="Story completed in parallel: {0}"
+MSG_ASC_PAR_FAILED="Story failed in parallel: {0}"
+MSG_ASC_NO_MORE_STORIES="No more stories available"
+MSG_ASC_PROCESSING="Processing story: {0}"
+MSG_ASC_CLAIMED="Claimed story: {0}"
+MSG_ASC_UNCLAIMED="Unclaimed story: {0}"
+MSG_ASC_CLAIM_FAILED="Failed to claim story: {0}"
+MSG_ASC_CLAIM_FAILED_OTHER="Failed to claim story: {0} (may be claimed by another process)"
+MSG_ASC_SPAWNING_RALPH="Spawning Ralph for story: {0}"
+MSG_ASC_RALPH_NOT_FOUND="Ralph script not found: {0}"
+MSG_ASC_COMPLETED="Story completed: {0}"
+MSG_ASC_FAILED="Story failed: {0}"
+MSG_ASC_ESCALATED="Story escalated: {0}"
+MSG_ASC_SKIPPED="Story skipped: {0}"
+MSG_ASC_SKIPPED_BY_USER="Story skipped by user: {0}"
+MSG_ASC_TRANSITIONED="Transitioned {0} to {1}"
+MSG_ASC_MAX_STORIES="Max stories reached: {0}"
+MSG_ASC_MAX_FAILURES="Max consecutive failures reached: {0}"
+MSG_ASC_MAX_RUNTIME="Max runtime reached: {0}h"
+MSG_ASC_STOP_WINDOW="Stop window reached: {0} (window: {1})"
+MSG_ASC_CRITICAL_ESCALATION="Critical escalation pending - pausing"
+MSG_ASC_SUPERVISED_TITLE="Supervised Mode: Story Ready"
+MSG_ASC_SUPERVISED_STORY="Story: {0}"
+MSG_ASC_SUPERVISED_TITLE_LINE="Title: {0}"
+MSG_ASC_SUPERVISED_PROMPT="Start this story? (y/n/s for skip all): "
+MSG_ASC_SUMMARY="Sprint Conductor Summary"
+MSG_ASC_SUMMARY_SESSION="Session: {0}"
+MSG_ASC_SUMMARY_DURATION="Duration: {0}h {1}m"
+MSG_ASC_SUMMARY_STORIES="Stories:"
+MSG_ASC_SUMMARY_COMPLETED="  Completed: {0}"
+MSG_ASC_SUMMARY_FAILED="  Failed:    {0}"
+MSG_ASC_SUMMARY_SKIPPED="  Skipped:   {0}"
+MSG_ASC_SUMMARY_ESCALATIONS="Escalations:"
+MSG_ASC_SUMMARY_RECOVERY="Recovery attempts:"
+MSG_ASC_DONE="Sprint Conductor completed"

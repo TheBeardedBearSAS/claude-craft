@@ -21,7 +21,7 @@ ESCALATION_RESOLVED_DIR=""
 ESCALATION_AUDIT_FILE=""
 
 # Escalation priorities
-declare -A ESCALATION_PRIORITIES=(
+declare -gA ESCALATION_PRIORITIES=(
     ["critical"]=1
     ["high"]=2
     ["medium"]=3
@@ -188,7 +188,7 @@ list_escalations() {
             priority=$(yq e '.priority' "$file")
 
             printf "[%s] %s: %s - %s (%s)\n" "$priority" "$id" "$level" "$error_type" "$created"
-            ((count++))
+            count=$((count + 1))
         fi
     done
 
@@ -295,7 +295,9 @@ check_escalation_timeouts() {
 get_pending_count() {
     local count=0
     for file in "$ESCALATION_QUEUE_DIR"/*.yaml; do
-        [[ -f "$file" ]] && ((count++))
+        if [[ -f "$file" ]]; then
+            count=$((count + 1))
+        fi
     done
     echo "$count"
 }
@@ -421,7 +423,7 @@ build_slack_payload() {
 
     local title="Ralph Escalation: $event"
     local truncated_details
-    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ')
+    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ') || true
 
     jq -n \
         --arg color "$color" \
@@ -441,7 +443,7 @@ build_teams_payload() {
     [[ "$event" == "resolved" ]] && color="good"
 
     local truncated_details
-    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ')
+    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ') || true
 
     jq -n \
         --arg type "MessageCard" \
@@ -462,7 +464,7 @@ build_discord_payload() {
     [[ "$event" == "resolved" ]] && color=65280  # Green
 
     local truncated_details
-    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ')
+    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ') || true
 
     jq -n \
         --arg title "Ralph Escalation: $event" \
@@ -479,7 +481,7 @@ build_generic_payload() {
     local id="$1" event="$2" level="$3" error="$4" details="$5" session="$6"
 
     local truncated_details
-    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ')
+    truncated_details=$(echo "$details" | head -c 500 | tr '\n' ' ') || true
 
     jq -n \
         --arg event "$event" \

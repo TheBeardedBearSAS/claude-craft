@@ -1,6 +1,6 @@
 ---
-description: Equipe de Desenvolvimento de Sprint - Implementacao paralela de stories usando Agent Teams
-argument-hint: <sprint-name> [--max-workers=3] [--overnight]
+description: Equipe de Desenvolvimento de Sprint - Implementacao paralela de stories com subagentes (Agent Teams opcional)
+argument-hint: <sprint-name> [--max-workers=3] [--overnight] [--engine=subagents|teams]
 ---
 
 # Equipe de Desenvolvimento de Sprint - Implementacao Paralela de Stories
@@ -13,22 +13,47 @@ $ARGUMENTS
 
 - `<sprint-name>`: Nome ou ID do sprint a processar
 - `--max-workers=3`: Maximo de dev workers paralelos (padrao: 2, max: 3)
+- `--engine=subagents`: Motor de execução (padrão: `subagents`). Opções: `subagents` (delegação a subagentes pela ferramenta `Agent`, sem pré-requisito), `teams` (Agent Teams experimental). Ver "Motor de execução"
 - `--overnight`: Executar em modo noturno (limitado, para as 6h)
 - `--supervised`: Pausar antes de cada story para confirmacao humana
 - `--max-stories=10`: Maximo de stories a processar (padrao: 10)
 - `--timeout=12`: Tempo maximo de execucao em horas (padrao: 12)
 - `--dry-run`: Mostrar composicao da equipe e atribuicoes de stories sem executar
 - `--max-cost=<dollars>`: Orcamento maximo em dolares. Se o custo paralelo estimado ultrapassar este limiar, a execucao e bloqueada com uma mensagem OVER BUDGET
-- `--ralph-mode`: Ativar motor de recuperacao Ralph (classificacao de erros, auto-retry, servico de escalacao) junto com paralelismo Agent Teams.
+- `--ralph-mode`: Ativar motor de recuperacao Ralph (classificacao de erros, auto-retry, servico de escalacao) junto com paralelismo Agent Teams. Requer `--engine=teams`: o adaptador Ralph Teams se apoia em `TaskCreate` / `SendMessage`.
 
 ## Modo Plano
 
 > O modo plano é ativado automaticamente quando o escopo abrange vários módulos ou requer investigação transversal.
 
+## Motor de execução (`--engine`)
+
+O motor padrão não depende de nenhuma funcionalidade experimental: o comando funciona mesmo que `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` não esteja definida.
+
+| Motor | Ativação | Pré-requisitos | Comportamento |
+|-------|----------|----------------|---------------|
+| `subagents` (padrão) | sem flag ou `--engine=subagents` | Nenhum (ferramenta `Agent` nativa) | A sessão atual assume o papel de líder e delega cada tarefa de worker a um subagente pela ferramenta `Agent` (modelo do worker passado pelo parâmetro `model`). Os subagentes independentes são lançados numa mesma mensagem para executar em paralelo; cada um escreve seu resultado no seu diretório isolado e devolve apenas um resumo curto. Os workers não se comunicam entre si: o líder faz a ponte. Funciona em modo interativo, com `claude -p` e em CI. |
+| `teams` | `--engine=teams` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, Claude Code v2.1.32+ | Equipe Agent Teams: workers persistentes coordenados por `TaskCreate` / `TaskList` / `SendMessage`, mensagens diretas entre colegas, hooks `TeammateIdle` / `TaskCompleted`. |
+
+**Fallback**: se `--engine=teams` for pedido sem que `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` esteja definida, não falhar — exibir `ℹ️ Agent Teams indisponível: fallback para --engine=subagents` e continuar com o motor `subagents`.
+
+**Limites do motor `teams`**: sem modo não interativo (`claude -p`) nem execução em CI; uma única equipe por sessão (encerrar a equipe atual antes de lançar outra); API em research preview, sujeita a mudanças.
+
+O processo abaixo é descrito com as primitivas do Agent Teams. Com `--engine=subagents`, aplicar esta correspondência:
+
+| Agent Teams (`teams`) | Subagentes (`subagents`) |
+|------------------------|---------------------------|
+| `TaskCreate` + lançamento de um worker | Uma chamada à ferramenta `Agent` cujo prompt retoma a descrição da tarefa |
+| Polling de `TaskList` / barreira de sincronização | Aguardar o retorno de todas as chamadas `Agent` do lote |
+| `SendMessage` para um worker | Retomar o subagente (`SendMessage` para seu ID) ou nova chamada `Agent` com o contexto necessário |
+| `shutdown_request` | Desnecessário: um subagente termina ao devolver seu resultado |
+
+**Específico do sprint**: com `subagents`, lançar cada worker desenvolvedor com `isolation: "worktree"` para que as stories paralelas não alterem a mesma árvore de trabalho.
+
 ## Pre-requisitos
 
-- Claude Code v2.1.32+ com suporte a Agent Teams
-- Variavel de ambiente `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` definida
+- Claude Code v2.1.32+ com suporte a Agent Teams — apenas com `--engine=teams`
+- Variavel de ambiente `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` definida — apenas com `--engine=teams`
 - Backlog de sprint BMAD com stories em status `ready-for-dev`
 - Metadados do sprint em `.bmad/sprint-status.yaml`
 - Ao menos 2 stories independentes (sprints de story unica usam Ralph sequencial)

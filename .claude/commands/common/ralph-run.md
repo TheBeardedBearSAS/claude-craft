@@ -47,6 +47,12 @@ Execute Claude en boucle continue jusqu'a ce que la tache soit terminee ou que l
    - Definir iterations max, timeouts, criteres DoD
    - Initialiser hooks si actives
 
+#### Isolation des sessions et des workers parallèles
+
+- **Session Claude explicite** : chaque session Ralph fixe son propre identifiant de conversation Claude — `claude --session-id <uuid>` à la première itération, puis `claude --resume <uuid>`. L'UUID est stocké dans `.ralph/sessions/<session>/claude_session_id`, ce qui permet à `--continue=<session>` de reprendre la bonne conversation. Ralph n'utilise plus `claude --continue`, qui reprenait « la conversation la plus récente du répertoire » (partagée entre workers, voire avec une session interactive de l'utilisateur).
+- **Worktree git par worker** (mode parallèle, `lib/parallel-manager.sh`) : chaque story s'exécute dans un worktree dédié `.ralph/parallel/worktrees/<session>` sur la branche `ralph/<session>`, avec son état Ralph sous `.ralph/parallel/sessions/<session>/ralph/`. En fin de run, les modifications restantes sont commitées en `wip(ralph): <story>` sur cette branche, puis le worktree est retiré (`git worktree remove`). Si ce commit échoue, le worktree est conservé (aucune perte) et signalé dans `output.log`. Le travail se récupère en fusionnant les branches `ralph/*`.
+- **Hors dépôt git** : pas de worktree ; le worker s'exécute dans le répertoire courant (avertissement affiché), l'isolation des sessions Claude restant assurée.
+
 ### 2. Boucle principale avec Dashboard
 
 ```
@@ -72,57 +78,34 @@ Le systeme DoD valide la completion via plusieurs criteres:
 | `hook` | Executer hook Claude existant |
 | `human` | Validation humaine interactive |
 
-### 3bis. Integration `/goal` (Claude Code 2.1.139+) — Alternative native aux DoD
+#### Limite du validateur `command` → utiliser `type: hook`
 
-Depuis Claude Code v2.1.139, la commande native `/goal` offre une alternative aux DoD validators manuels. Au lieu de definir des criteres via `ralph.yml` et de les valider apres chaque iteration, vous pouvez exprimer le critere de completion directement comme un objectif Claude Code, et la session s'arrete automatiquement quand l'objectif est atteint.
+`type: command` n'exécute que les commandes qui passent la liste blanche de `Tools/Ralph/lib/dod-validator.sh` : lettres, chiffres, espace et `_ . / " ' -`. Toute commande contenant `=`, `|`, `&` ou `:` (ainsi que `;`, `>`, `$`, etc.) est rejetée avec `ERROR: Invalid command` : le critère n'est alors **jamais** validé et la boucle tourne jusqu'au circuit breaker.
 
-**Quand utiliser `/goal` plutot que les DoD validators ?**
+| Commande rejetée | Caractère en cause |
+|------------------|--------------------|
+| `dotnet build /p:TreatWarningsAsErrors=true` | `:` et `=` |
+| `npm test && npm run lint` | `&` |
+| `pytest \| tee out.log` | `\|` |
 
-| Critere | DoD validator | `/goal` natif |
-|---------|---------------|---------------|
-| Test command verifiable | `command: pytest` | `/goal "tous les tests passent"` |
-| Pattern textuel attendu | `output_contains: "✓"` | `/goal "le build affiche 0 erreur"` |
-| Modification de fichier | `file_changed: src/auth.py` | `/goal "src/auth.py implements login"` |
-| Hook Claude | `hook: custom-validator.sh` | Garder DoD validator (plus expressif) |
-| Validation humaine | `human` | Garder DoD validator (interactif) |
-
-> **⚠️ `/goal` est une commande IN-SESSION, pas un flag CLI.** On la tape dans le prompt d'une session Claude Code interactive (ou via `claude -p '/goal "..."'` en mode headless). Il n'existe **pas** d'argument `ralph.sh --goal`. Un Stop hook (exit code 2) bloque l'arret tant que l'objectif n'est pas atteint et s'auto-efface une fois la condition remplie.
-
-**Pattern recommande :**
-
-```text
-# Dans une session Claude Code interactive — taper directement :
-/goal all tests pass and code coverage >= 80%
-
-# Equivalent headless (non-interactif) :
-claude -p '/goal "all tests pass and code coverage >= 80%"'
-```
-
-Pour les criteres complexes (hooks, validation humaine), garder les DoD validators de `ralph.yml` : `/goal` (verification semantique) et DoD validators (criteres deterministes) sont complementaires, pas exclusifs.
-
-**Avantages de `/goal` :**
-- Verification semantique par Claude (pas juste pattern matching)
-- Pas de configuration `ralph.yml` necessaire pour les cas simples
-- Integration native avec le circuit breaker (le `/goal` non atteint est traite comme un signal d'arret)
-- Compatible avec `--auto-detect` (Ralph genere automatiquement un `/goal` adapte au type de projet)
-
-**Migration depuis DoD purs :**
+Pour ces cas, placer la commande dans un script et la déclarer en `type: hook` :
 
 ```yaml
-# Avant (ralph.yml) : 12 lignes
-dod:
-  validators:
-    - type: command
-      cmd: "pytest tests/"
-      success: "passed"
-    - type: file_changed
-      path: "src/auth.py"
-    - type: output_contains
-      pattern: "Coverage: 8[0-9]%|9[0-9]%"
-
-# Apres (commande simple)
-ralph.sh --goal "tests pass, src/auth.py implements login, coverage >= 80%"
+definition_of_done:
+  checklist:
+    - id: build
+      type: hook
+      script: ".ralph/dod/build.sh"
+      required: true
 ```
+
+```bash
+#!/usr/bin/env bash
+# .ralph/dod/build.sh — reçoit {"cwd": ..., "output": ...} en JSON sur stdin
+dotnet build /p:TreatWarningsAsErrors=true || exit 2
+```
+
+Le script retourne `0` (critère validé) ou `2` (critère échoué). Clés lues par type : `command` → `command:`, `output_contains` et `file_changed` → `pattern:`, `hook` → `script:`, `human` → `prompt:`.
 
 ### 4. Circuit Breaker Adaptatif (v2.0)
 
@@ -147,6 +130,23 @@ Claude travaille...
      ↓
 Stop → stop-dod-gate.sh → Bloquer si DoD non satisfait (exit 2)
 ```
+
+## /goal (interactif) ou Ralph (autonome/CI) ?
+
+`/goal` est une commande native de Claude Code, tapée dans une session : ce n'est pas une option de `ralph.sh`, qui n'en propose aucune et ne génère jamais de `/goal`. Les deux outils sont complémentaires :
+
+| Critère | `/goal` (natif) | Ralph (`ralph.sh`) |
+|---------|-----------------|--------------------|
+| Critère de fin | Jugement LLM : un petit modèle rapide évalue, après chaque tour, ce qui est visible dans la conversation — il ne lance aucune commande et ne lit aucun fichier | Déterministe : commandes, patterns et hooks exécutés par `dod-validator.sh` |
+| Plafond d'itérations | Aucun plafond fixe : fin quand la condition est atteinte ou jugée impossible, sur `/goal clear`, ou si Claude enchaîne plusieurs tours sans outil ; une borne peut être écrite dans la condition | `max_iterations` + circuit breaker adaptatif |
+| Headless / CI | `claude -p "/goal ..."` boucle jusqu'au bout en une seule invocation ; usage en CI non documenté | Conçu pour : exécution autonome (`--autonomous`, `--overnight`), dashboard `headless` |
+| `disableAllHooks: true` | Indisponible : `/goal` enveloppe un Stop hook de session (idem avec `allowManagedHooksOnly`) | La boucle et la DoD tournent dans `ralph.sh` ; seule l'intégration hooks (`stop-dod-gate.sh`) est désactivée |
+| Configuration | Aucune ; un seul goal par session, effacé par `/clear` | `ralph.yml` |
+
+- **Choisir `/goal`** pour une tâche interactive dont la fin se constate dans la conversation (afficher la sortie des tests : l'évaluateur ne les lance pas).
+- **Choisir Ralph** quand la fin doit être prouvée par des commandes, avec un plafond d'itérations, en autonomie ou en CI.
+
+Référence : [documentation `/goal`](https://code.claude.com/docs/en/goal).
 
 ## Exemples rapides
 
@@ -245,4 +245,4 @@ definition_of_done:
 
 - `@ralph-conductor` - Agent pour orchestration Ralph
 - `/qa:tdd` - Correction de bug en TDD
-- `/sprint:dev` - Developpement sprint avec TDD
+- `/workflow:implement` - Developpement sprint avec TDD

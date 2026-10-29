@@ -33,8 +33,8 @@ BLOCK_RATIO="${I18N_BLOCK_RATIO:-0.40}"
 I18N_PARITY_STRICT="${I18N_PARITY_STRICT:-1}"
 SIZE_WARNINGS=0
 BLOCK_FAILURES=()
-# CSV output file for gap report
-GAP_CSV="$ROOT_DIR/audit/phases/i18n-gap.csv"
+# CSV output file for gap report (I18N_GAP_CSV overrides it, e.g. read-only checkout)
+GAP_CSV="${I18N_GAP_CSV:-$ROOT_DIR/audit/phases/i18n-gap.csv}"
 
 C_RESET='\033[0m'
 C_RED='\033[0;31m'
@@ -133,10 +133,12 @@ check_parity "docs/guides" "Documentation guides"
 echo -e "\n${C_BOLD}Size parity check (threshold: ${SIZE_THRESHOLD}, strict: ${STRICT_SIZE}, block_ratio: ${BLOCK_RATIO})${C_RESET}"
 [[ "$I18N_PARITY_STRICT" == "0" ]] && print_warn "I18N_PARITY_STRICT=0 — hard blocking disabled (transitional mode)"
 
-# Ensure CSV output directory exists
-mkdir -p "$(dirname "$GAP_CSV")"
-# Write CSV header
-echo "file,locale,size_en,size_locale,ratio" > "$GAP_CSV"
+# Write CSV header. An unwritable path (read-only checkout) must not abort the
+# parity check: the gap report is then skipped.
+if ! { mkdir -p "$(dirname "$GAP_CSV")" && echo "file,locale,size_en,size_locale,ratio" > "$GAP_CSV"; } 2>/dev/null; then
+    print_warn "Gap report not writable: $GAP_CSV (set I18N_GAP_CSV) — skipped"
+    GAP_CSV=/dev/null
+fi
 
 check_size_parity() {
     local base="$ROOT_DIR/$1"

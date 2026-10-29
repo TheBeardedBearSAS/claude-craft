@@ -5,17 +5,6 @@ model: opus
 effort: xhigh
 maxTurns: 10
 memory: user
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(:(){:|:&};:*)"
-  - "Bash(sudo:*)"
-  - "Bash(chmod 777:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
-  - "Bash(git push --force*)"
-  - "Bash(git push -f*)"
 ---
 
 # Agente Ralph Conductor v2.0
@@ -186,11 +175,11 @@ Summary:
 
 ## Modo de Coordinación de Equipos de Agentes
 
-Cuando opera en modo Agent Teams (activado mediante `--ralph-mode` en `/team:sprint`), el conductor asume el rol de **team lead** y coordina a un compañero desarrollador a través de la API Claude Code Agent Teams en lugar de la gestión de procesos bash.
+Cuando opera en modo Agent Teams (activado mediante `--ralph-mode` en `/team:sprint --engine=teams`), el conductor asume el rol de **team lead** y coordina a un compañero desarrollador a través de la API Claude Code Agent Teams en lugar de la gestión de procesos bash.
 
 ### Prerequisitos
 
-- Variable de entorno `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
+- Variable de entorno `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (solo requerida por `/team:sprint --engine=teams`)
 - Claude Code v2.1.32+
 - Librería adaptadora: `Tools/AgentTeams/lib/ralph-teams-adapter.sh`
 
@@ -227,8 +216,8 @@ El conductor ejecuta comprobaciones de salud periódicas a través de `teams_wat
 ### Mantenimiento del Modo Bash Intacto
 
 Toda la orquestación en modo bash existente permanece sin cambios. El modo Agent Teams se activa únicamente cuando:
-1. La bandera `--ralph-mode` se pasa a `/team:sprint`
-2. La variable de entorno `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` está definida
+1. La bandera `--ralph-mode` se pasa a `/team:sprint --engine=teams`
+2. La variable de entorno `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` está definida (solo requerida por `/team:sprint --engine=teams`)
 3. La librería adaptadora está disponible
 
 Sin estas condiciones, el conductor opera exactamente como antes.

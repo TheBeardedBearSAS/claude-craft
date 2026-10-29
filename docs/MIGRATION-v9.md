@@ -7,7 +7,7 @@
 
 ## Breaking Changes Summary
 
-- 52 deprecated commands are removed (they printed a warning and redirected since 8.25.0 / 8.26.0).
+- 54 deprecated commands are removed (they printed a warning and redirected since 8.25.0 / 8.26.0 / 8.27.0).
 - The `/sprint:` namespace no longer exists: use `/workflow:implement`, `/workflow:status` and `/project:backlog`.
 - `.bmad/sprint-status.yaml` is the single source of truth for story and task status (since 8.24.0); markdown files hold content only.
 - `claude-craft update` and both installers delete the retired files listed in `config/removed-commands.yaml`.
@@ -102,6 +102,8 @@ See the decision tree: [Which path?](guides/en/11-which-path.md).
 |---|---|
 | `/qa:report` | `/qa:status --report` |
 | `/common:setup-project-context` | `/common:init --context` |
+| `/common:research-context7` (deprecated in 8.27.0) | context7 MCP (library docs) or `/deep-research` (web research; outside claude.ai: `@research-assistant` agent) |
+| `/uiux:orchestrator` (deprecated in 8.27.0) | `@uiux-orchestrator` agent |
 
 ### Retired without replacement command
 

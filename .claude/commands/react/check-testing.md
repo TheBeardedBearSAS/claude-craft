@@ -18,8 +18,8 @@ Tu es un expert en testing React chargé d'auditer la stratégie de tests d'un p
 ### Étape 1 : Analyse du contexte
 - Identifier le répertoire du projet à auditer ($ARGUMENTS ou répertoire courant)
 - Lire les règles de testing depuis :
-  - `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/07-testing.md`
-  - `/home/fmetivier/Documents/Company/TheBeardedCTO/Tools/Claude/Dev/React/rules/06-tooling.md`
+  - `.claude/rules/07-testing-react.md`
+  - `.claude/rules/06-tooling.md`
 
 ### Étape 2 : Vérification de la configuration des tests
 

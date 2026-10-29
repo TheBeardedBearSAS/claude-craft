@@ -7,17 +7,6 @@ maxTurns: 10
 memory: user
 tools: [Read, Glob, Grep, Edit, Write, Bash, Agent, WebFetch, WebSearch]
 permissionMode: default
-disallowedTools:
-  - "Bash(rm -rf:*)"
-  - "Bash(dd:*)"
-  - "Bash(mkfs:*)"
-  - "Bash(:(){:|:&};:*)"
-  - "Bash(sudo:*)"
-  - "Bash(chmod 777:*)"
-  - "Bash(curl * | sh*)"
-  - "Bash(wget * | sh*)"
-  - "Bash(git push --force*)"
-  - "Bash(git push -f*)"
 ---
 
 # Agent Ralph Conductor v2.0
@@ -188,11 +177,11 @@ Summary:
 
 ## Mode de coordination Agent Teams
 
-Lors d'une opération en mode Agent Teams (activé via `--ralph-mode` sur `/team:sprint`), le conductor endosse le rôle de **chef d'équipe** et coordonne un coéquipier dev via l'API Agent Teams de Claude Code au lieu de la gestion de processus bash.
+Lors d'une opération en mode Agent Teams (activé via `--ralph-mode` sur `/team:sprint --engine=teams`), le conductor endosse le rôle de **chef d'équipe** et coordonne un coéquipier dev via l'API Agent Teams de Claude Code au lieu de la gestion de processus bash.
 
 ### Prérequis
 
-- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
+- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (requis uniquement par `/team:sprint --engine=teams`)
 - Claude Code v2.1.32+
 - Bibliothèque d'adaptation : `Tools/AgentTeams/lib/ralph-teams-adapter.sh`
 
@@ -229,8 +218,8 @@ Le conductor exécute des vérifications de santé périodiques via `teams_watch
 ### Maintien du mode Bash intact
 
 Toute l'orchestration en mode bash existante reste inchangée. Le mode Agent Teams n'est activé que lorsque :
-1. Le drapeau `--ralph-mode` est passé à `/team:sprint`
-2. La variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` est définie
+1. Le drapeau `--ralph-mode` est passé à `/team:sprint --engine=teams`
+2. La variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` est définie (requis uniquement par `/team:sprint --engine=teams`)
 3. La bibliothèque d'adaptation est disponible
 
 Sans ces conditions, le conductor opère exactement comme avant.

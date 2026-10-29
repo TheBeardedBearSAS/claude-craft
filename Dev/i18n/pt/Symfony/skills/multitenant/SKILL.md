@@ -1,6 +1,6 @@
 ---
 name: multitenant
-description: Règle 08 : Multitenant - Isolation et Sécurité. Use when working with multitenant.
+description: "Règle 08 : Multitenant - Isolation et Sécurité. Use when working with multitenant."
 ---
 
 # Règle 08 : Multitenant - Isolation et Sécurité

@@ -51,6 +51,12 @@ Executa o Claude em loop contínuo até que a tarefa seja concluída ou os crit�
    - Definir máximo de iterações, timeouts e critérios de DoD
    - Inicializar hooks se habilitados
 
+#### Isolamento de sessões e workers paralelos
+
+- **Sessão Claude explícita**: cada sessão Ralph fixa seu próprio identificador de conversa Claude — `claude --session-id <uuid>` na primeira iteração e depois `claude --resume <uuid>`. O UUID é armazenado em `.ralph/sessions/<session>/claude_session_id`, para que `--continue=<session>` retome a conversa correta. O Ralph não usa mais `claude --continue`, que retomava "a conversa mais recente do diretório" (compartilhada entre workers, ou até com a sessão interativa do usuário).
+- **Um worktree git por worker** (modo paralelo, `lib/parallel-manager.sh`): cada história é executada em um worktree dedicado `.ralph/parallel/worktrees/<session>` na branch `ralph/<session>`, com seu estado Ralph em `.ralph/parallel/sessions/<session>/ralph/`. No fim da execução, as alterações restantes são commitadas como `wip(ralph): <story>` nessa branch e o worktree é removido (`git worktree remove`). Se esse commit falhar, o worktree é mantido (sem perda de dados) e sinalizado em `output.log`. O trabalho é recuperado fazendo merge das branches `ralph/*`.
+- **Fora de um repositório git**: sem worktree; o worker é executado no diretório atual (um aviso é exibido) e o isolamento das sessões Claude continua garantido.
+
 ### 2. Loop Principal com Painel
 
 ```
@@ -76,6 +82,35 @@ O sistema de DoD valida a conclusão por meio de múltiplos critérios:
 | `hook` | Executar hook existente do Claude |
 | `human` | Validação humana interativa |
 
+#### Limite do validador `command` → usar `type: hook`
+
+`type: command` só executa comandos que passam na lista de permissões de `Tools/Ralph/lib/dod-validator.sh`: letras, dígitos, espaço e `_ . / " ' -`. Qualquer comando contendo `=`, `|`, `&` ou `:` (assim como `;`, `>`, `$` etc.) é rejeitado com `ERROR: Invalid command`: o critério **nunca** é validado e o loop roda até o circuit breaker disparar.
+
+| Comando rejeitado | Caractere culpado |
+|-------------------|-------------------|
+| `dotnet build /p:TreatWarningsAsErrors=true` | `:` e `=` |
+| `npm test && npm run lint` | `&` |
+| `pytest \| tee out.log` | `\|` |
+
+Nesses casos, colocar o comando em um script e declará-lo como `type: hook`:
+
+```yaml
+definition_of_done:
+  checklist:
+    - id: build
+      type: hook
+      script: ".ralph/dod/build.sh"
+      required: true
+```
+
+```bash
+#!/usr/bin/env bash
+# .ralph/dod/build.sh — recebe {"cwd": ..., "output": ...} em JSON via stdin
+dotnet build /p:TreatWarningsAsErrors=true || exit 2
+```
+
+O script retorna `0` (critério atendido) ou `2` (critério falhou). Chaves lidas por tipo: `command` → `command:`, `output_contains` e `file_changed` → `pattern:`, `hook` → `script:`, `human` → `prompt:`.
+
 ### 4. Circuit Breaker Adaptativo (v2.0)
 
 Seleciona automaticamente o perfil com base nas palavras-chave da tarefa:
@@ -99,6 +134,23 @@ Claude trabalha...
      ↓
 Stop → stop-dod-gate.sh → Bloquear se DoD não satisfeito (exit 2)
 ```
+
+## /goal (interativo) ou Ralph (autônomo/CI)?
+
+`/goal` é um comando nativo do Claude Code digitado dentro de uma sessão: não é uma opção de `ralph.sh`, que não oferece nenhuma para isso e nunca gera um `/goal`. As duas ferramentas são complementares:
+
+| Critério | `/goal` (nativo) | Ralph (`ralph.sh`) |
+|----------|------------------|--------------------|
+| Critério de conclusão | Julgamento LLM: um modelo pequeno e rápido avalia, após cada turno, o que está visível na conversa — não executa nenhum comando nem lê nenhum arquivo | Determinístico: comandos, padrões e hooks executados por `dod-validator.sh` |
+| Limite de iterações | Sem limite fixo: termina quando a condição é atendida ou julgada impossível, com `/goal clear`, ou se Claude encadeia vários turnos sem ferramentas; um limite pode ser escrito na condição | `max_iterations` + circuit breaker adaptativo |
+| Headless / CI | `claude -p "/goal ..."` itera até o fim em uma única invocação; uso em CI não documentado | Feito para isso: execução autônoma (`--autonomous`, `--overnight`), dashboard `headless` |
+| `disableAllHooks: true` | Indisponível: `/goal` envolve um Stop hook de sessão (idem com `allowManagedHooksOnly`) | O loop e a DoD rodam dentro de `ralph.sh`; só a integração de hooks (`stop-dod-gate.sh`) é desativada |
+| Configuração | Nenhuma; um único goal por sessão, apagado por `/clear` | `ralph.yml` |
+
+- **Escolher `/goal`** para uma tarefa interativa cuja conclusão aparece na conversa (exibir a saída dos testes: o avaliador não os executa).
+- **Escolher Ralph** quando a conclusão deve ser comprovada por comandos, com limite de iterações, sem supervisão ou em CI.
+
+Referência: [documentação do `/goal`](https://code.claude.com/docs/en/goal).
 
 ## Exemplos de Início Rápido
 

@@ -51,6 +51,12 @@ Execute Claude in a continuous loop until the task is complete or the Definition
    - Set max iterations, timeouts, DoD criteria
    - Initialize hooks if enabled
 
+#### Session and parallel worker isolation
+
+- **Explicit Claude session**: each Ralph session pins its own Claude conversation ID — `claude --session-id <uuid>` on the first iteration, then `claude --resume <uuid>`. The UUID is stored in `.ralph/sessions/<session>/claude_session_id`, so `--continue=<session>` resumes the right conversation. Ralph no longer uses `claude --continue`, which resumed "the most recent conversation in the directory" (shared between workers, or even with the user's interactive session).
+- **One git worktree per worker** (parallel mode, `lib/parallel-manager.sh`): each story runs in a dedicated worktree `.ralph/parallel/worktrees/<session>` on branch `ralph/<session>`, with its Ralph state under `.ralph/parallel/sessions/<session>/ralph/`. At the end of the run, leftover changes are committed as `wip(ralph): <story>` on that branch, then the worktree is removed (`git worktree remove`). If that commit fails, the worktree is kept (no data loss) and reported in `output.log`. Collect the work by merging the `ralph/*` branches.
+- **Outside a git repository**: no worktree; the worker runs in the current directory (a warning is printed), Claude session isolation still applies.
+
 ### 2. Main Loop with Dashboard
 
 ```
@@ -76,6 +82,35 @@ The DoD system validates completion through multiple criteria:
 | `hook` | Run existing Claude hook |
 | `human` | Interactive human validation |
 
+#### `command` validator limit → use `type: hook`
+
+`type: command` only runs commands that pass the allowlist in `Tools/Ralph/lib/dod-validator.sh`: letters, digits, space and `_ . / " ' -`. Any command containing `=`, `|`, `&` or `:` (as well as `;`, `>`, `$`, etc.) is rejected with `ERROR: Invalid command`: the criterion is then **never** met and the loop runs until the circuit breaker trips.
+
+| Rejected command | Offending character |
+|------------------|---------------------|
+| `dotnet build /p:TreatWarningsAsErrors=true` | `:` and `=` |
+| `npm test && npm run lint` | `&` |
+| `pytest \| tee out.log` | `\|` |
+
+For these cases, put the command in a script and declare it as `type: hook`:
+
+```yaml
+definition_of_done:
+  checklist:
+    - id: build
+      type: hook
+      script: ".ralph/dod/build.sh"
+      required: true
+```
+
+```bash
+#!/usr/bin/env bash
+# .ralph/dod/build.sh — receives {"cwd": ..., "output": ...} as JSON on stdin
+dotnet build /p:TreatWarningsAsErrors=true || exit 2
+```
+
+The script returns `0` (criterion met) or `2` (criterion failed). Keys read per type: `command` → `command:`, `output_contains` and `file_changed` → `pattern:`, `hook` → `script:`, `human` → `prompt:`.
+
 ### 4. Adaptive Circuit Breaker (v2.0)
 
 Automatically selects profile based on task keywords:
@@ -99,6 +134,23 @@ Claude works...
      ↓
 Stop → stop-dod-gate.sh → Block if DoD not satisfied (exit 2)
 ```
+
+## /goal (interactive) or Ralph (autonomous/CI)?
+
+`/goal` is a native Claude Code command typed inside a session: it is not a `ralph.sh` option — `ralph.sh` has none for it and never generates a `/goal`. The two tools are complementary:
+
+| Criterion | `/goal` (native) | Ralph (`ralph.sh`) |
+|-----------|------------------|--------------------|
+| Completion check | LLM judgment: a small fast model evaluates, after each turn, what is visible in the conversation — it runs no command and reads no file | Deterministic: commands, patterns and hooks run by `dod-validator.sh` |
+| Iteration cap | No fixed cap: ends when the condition is met or judged impossible, on `/goal clear`, or if Claude answers several turns in a row without tools; a bound can be written into the condition | `max_iterations` + adaptive circuit breaker |
+| Headless / CI | `claude -p "/goal ..."` loops to completion in a single invocation; CI usage not documented | Built for it: autonomous runs (`--autonomous`, `--overnight`), `headless` dashboard |
+| `disableAllHooks: true` | Unavailable: `/goal` wraps a session-scoped Stop hook (same with `allowManagedHooksOnly`) | The loop and the DoD run inside `ralph.sh`; only the hooks integration (`stop-dod-gate.sh`) is disabled |
+| Configuration | None; one goal per session, cleared by `/clear` | `ralph.yml` |
+
+- **Choose `/goal`** for an interactive task whose completion shows up in the conversation (print the test output: the evaluator does not run it).
+- **Choose Ralph** when completion must be proven by commands, with an iteration cap, unattended or in CI.
+
+Reference: [`/goal` documentation](https://code.claude.com/docs/en/goal).
 
 ## Quick Start Examples
 

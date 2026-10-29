@@ -5,9 +5,9 @@
 | Version | Supported          |
 |---------|--------------------|
 | 9.0.x   | :white_check_mark: |
+| 8.27.x  | :white_check_mark: |
 | 8.26.x  | :white_check_mark: |
-| 8.25.x  | :white_check_mark: |
-| < 8.25  | :x:                |
+| < 8.26  | :x:                |
 
 
 ## Reporting a Vulnerability

@@ -17,7 +17,7 @@ RECOVERY_AUTO_FIX_TESTS="${RECOVERY_AUTO_FIX_TESTS:-retry_tdd}"
 RECOVERY_AUTO_RETRY_TRANSIENT="${RECOVERY_AUTO_RETRY_TRANSIENT:-true}"
 
 # Error classification levels
-declare -A RECOVERY_LEVELS=(
+declare -gA RECOVERY_LEVELS=(
     [0]="transient"      # Auto-retry immediately
     [1]="recoverable"    # Auto-fix possible
     [2]="degraded"       # Continue with warning
@@ -25,14 +25,14 @@ declare -A RECOVERY_LEVELS=(
 )
 
 # Error patterns for classification
-declare -A ERROR_PATTERNS_TRANSIENT=(
+declare -gA ERROR_PATTERNS_TRANSIENT=(
     ["timeout"]="timeout|timed out|ETIMEDOUT"
     ["rate_limit"]="rate limit|429|too many requests"
     ["network"]="ECONNRESET|ECONNREFUSED|network error"
     ["temporary"]="temporary failure|try again|service unavailable|503"
 )
 
-declare -A ERROR_PATTERNS_RECOVERABLE=(
+declare -gA ERROR_PATTERNS_RECOVERABLE=(
     ["lint"]="lint error|eslint|phpcs|flake8|prettier|stylelint"
     ["test_fail"]="test failed|assertion failed|tests? (failed|failing)"
     ["deps"]="dependency|package not found|module not found|could not resolve"
@@ -40,14 +40,14 @@ declare -A ERROR_PATTERNS_RECOVERABLE=(
     ["type_error"]="type error|typescript error|type mismatch"
 )
 
-declare -A ERROR_PATTERNS_DEGRADED=(
+declare -gA ERROR_PATTERNS_DEGRADED=(
     ["docs"]="documentation|readme|changelog"
     ["optional_gate"]="optional.*gate|non-blocking"
     ["coverage"]="coverage below|coverage threshold"
     ["warning"]="warning:|deprecated"
 )
 
-declare -A ERROR_PATTERNS_BLOCKED=(
+declare -gA ERROR_PATTERNS_BLOCKED=(
     ["security"]="security vulnerability|CVE-|critical security|injection"
     ["architecture"]="architecture violation|circular dependency|breaking change"
     ["auth"]="authentication failed|unauthorized|permission denied"
@@ -55,7 +55,7 @@ declare -A ERROR_PATTERNS_BLOCKED=(
 )
 
 # Recovery strategies
-declare -A RECOVERY_STRATEGIES=(
+declare -gA RECOVERY_STRATEGIES=(
     ["lint"]="run_auto_lint_fix"
     ["test_fail"]="run_tdd_retry"
     ["deps"]="run_deps_install"
@@ -124,7 +124,7 @@ init_recovery_engine() {
 classify_error() {
     local error_output="$1"
     local error_lower
-    error_lower=$(echo "$error_output" | tr '[:upper:]' '[:lower:]')
+    error_lower=$(echo "$error_output" | tr '[:upper:]' '[:lower:]') || true
 
     # Check Level 3 - Blocked (security, architecture)
     for pattern_name in "${!ERROR_PATTERNS_BLOCKED[@]}"; do
@@ -415,7 +415,7 @@ run_tdd_retry() {
 
     # Try to parse test output
     if echo "$error_output" | grep -qE "FAIL|FAILED|Error:"; then
-        failing_tests=$(echo "$error_output" | grep -E "FAIL|FAILED|Error:" | head -5)
+        failing_tests=$(echo "$error_output" | grep -E "FAIL|FAILED|Error:" | head -5) || true
     fi
 
     # Update sprint progress with TDD phase

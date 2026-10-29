@@ -1,6 +1,6 @@
 ---
 name: tooling
-description: Rule 06: Tooling. Use when working with tooling.
+description: "Rule 06: Tooling. Use when working with tooling."
 ---
 
 # Rule 06: Tooling

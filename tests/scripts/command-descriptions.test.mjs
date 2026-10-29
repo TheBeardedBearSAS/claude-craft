@@ -103,9 +103,10 @@ describe('command descriptions', () => {
 
 /**
  * Deprecation stubs (roadmap PM 86 → 34): an old command kept until 9.0 as a
- * redirect. Contract: `deprecated: true`, `replaced-by: /ns:cmd` pointing to a
- * live (non-deprecated) command of the same language, and a body small enough
- * (< 500 bytes) to be exempt from the i18n size-parity check.
+ * redirect. Contract: `deprecated: true`, `replaced-by:` pointing to a live
+ * replacement of the same language — a non-deprecated command (`/ns:cmd`), an
+ * agent (`@name`) or a distributed MCP server template (`mcp:name`) — and a
+ * body small enough (< 500 bytes) to be exempt from the i18n size-parity check.
  */
 const STUB_MAX_BYTES = 500;
 
@@ -119,23 +120,43 @@ function frontmatterOf(raw) {
   }
 }
 
-// `/ns:cmd` -> candidate files next to the stub (same i18n language, or base).
-function resolveCommand(stubFile, ref) {
-  const m = /^\/([a-z][a-z0-9]*):([a-z0-9][a-z0-9-]*)$/.exec(ref ?? '');
-  if (!m) return null;
-  const [, ns, name] = m;
-  const rel = path.relative(PROJECT_ROOT, stubFile).split(path.sep);
-  if (rel[0] === '.claude') return [path.join(PROJECT_ROOT, '.claude/commands', ns, `${name}.md`)];
-  const lang = rel[2];
+const MCP_TEMPLATES = path.join(PROJECT_ROOT, 'Dev/i18n/base/Common/mcp/templates');
+
+// `<root>/i18n/<lang|base>` directories visible to the stub's language.
+function langDirs(lang) {
   const out = [];
   for (const root of ['Dev', 'Infra', 'Project']) {
     for (const l of [lang, 'base']) {
       const langDir = path.join(PROJECT_ROOT, root, 'i18n', l);
-      if (!fs.existsSync(langDir)) continue;
-      if (ns === root.toLowerCase()) out.push(path.join(langDir, 'commands', `${name}.md`));
-      for (const d of fs.readdirSync(langDir)) {
-        if (d.toLowerCase() === ns) out.push(path.join(langDir, d, 'commands', `${name}.md`));
-      }
+      if (fs.existsSync(langDir)) out.push({ root, langDir });
+    }
+  }
+  return out;
+}
+
+// `/ns:cmd`, `@agent` or `mcp:server` -> candidate files next to the stub
+// (same i18n language, or base); null when the reference is malformed.
+function resolveReplacement(stubFile, ref) {
+  const rel = path.relative(PROJECT_ROOT, stubFile).split(path.sep);
+  const inClaude = rel[0] === '.claude';
+  const mcp = /^mcp:([a-z0-9][a-z0-9-]*)$/.exec(ref ?? '');
+  if (mcp) return [path.join(MCP_TEMPLATES, `${mcp[1]}.mcp.json`)];
+  const agent = /^@([a-z0-9][a-z0-9-]*)$/.exec(ref ?? '');
+  if (agent) {
+    if (inClaude) return [path.join(PROJECT_ROOT, '.claude/agents', `${agent[1]}.md`)];
+    return langDirs(rel[2]).flatMap(({ langDir }) =>
+      fs.readdirSync(langDir).map((d) => path.join(langDir, d, 'agents', `${agent[1]}.md`))
+    );
+  }
+  const m = /^\/([a-z][a-z0-9]*):([a-z0-9][a-z0-9-]*)$/.exec(ref ?? '');
+  if (!m) return null;
+  const [, ns, name] = m;
+  if (inClaude) return [path.join(PROJECT_ROOT, '.claude/commands', ns, `${name}.md`)];
+  const out = [];
+  for (const { root, langDir } of langDirs(rel[2])) {
+    if (ns === root.toLowerCase()) out.push(path.join(langDir, 'commands', `${name}.md`));
+    for (const d of fs.readdirSync(langDir)) {
+      if (d.toLowerCase() === ns) out.push(path.join(langDir, d, 'commands', `${name}.md`));
     }
   }
   return out;
@@ -146,12 +167,18 @@ function stubViolations(file, raw) {
   if (!data || data.deprecated !== true) return [];
   const where = path.relative(PROJECT_ROOT, file);
   const out = [];
-  if (Buffer.byteLength(raw) >= STUB_MAX_BYTES) out.push(`${where}: stub is ${Buffer.byteLength(raw)} bytes (max ${STUB_MAX_BYTES - 1})`);
-  const candidates = resolveCommand(file, data['replaced-by']);
-  if (!candidates) return [...out, `${where}: replaced-by must be "/ns:cmd", got ${JSON.stringify(data['replaced-by'])}`];
+  if (Buffer.byteLength(raw) >= STUB_MAX_BYTES)
+    out.push(`${where}: stub is ${Buffer.byteLength(raw)} bytes (max ${STUB_MAX_BYTES - 1})`);
+  const candidates = resolveReplacement(file, data['replaced-by']);
+  if (!candidates)
+    return [
+      ...out,
+      `${where}: replaced-by must be "/ns:cmd", "@agent" or "mcp:server", got ${JSON.stringify(data['replaced-by'])}`,
+    ];
   const target = candidates.find((f) => fs.existsSync(f));
   if (!target) out.push(`${where}: replaced-by ${data['replaced-by']} does not resolve`);
-  else if (frontmatterOf(fs.readFileSync(target, 'utf8'))?.deprecated === true) out.push(`${where}: replaced-by ${data['replaced-by']} is itself deprecated`);
+  else if (frontmatterOf(fs.readFileSync(target, 'utf8'))?.deprecated === true)
+    out.push(`${where}: replaced-by ${data['replaced-by']} is itself deprecated`);
   return out;
 }
 
@@ -159,7 +186,8 @@ describe('deprecation stubs', () => {
   const sample = path.join(PROJECT_ROOT, 'Project/i18n/en/commands/sample-stub.md');
 
   it('accepts a small stub redirecting to a live command', () => {
-    const raw = '---\ndescription: "Deprecated: use /project:backlog add story"\ndeprecated: true\nreplaced-by: /project:backlog\n---\n\nRun /project:backlog add story $ARGUMENTS.\n';
+    const raw =
+      '---\ndescription: "Deprecated: use /project:backlog add story"\ndeprecated: true\nreplaced-by: /project:backlog\n---\n\nRun /project:backlog add story $ARGUMENTS.\n';
     expect(stubViolations(sample, raw)).toEqual([]);
   });
 
@@ -168,6 +196,31 @@ describe('deprecation stubs', () => {
     expect(stubViolations(sample, fm('replaced-by: /project:nope\n'))).toHaveLength(1);
     expect(stubViolations(sample, fm(''))).toHaveLength(1);
     expect(stubViolations(sample, fm('replaced-by: /project:backlog\n') + 'x'.repeat(600))).toHaveLength(1);
+  });
+
+  it('accepts a stub redirecting to an agent or to a distributed MCP server', () => {
+    const fr = path.join(PROJECT_ROOT, 'Dev/i18n/fr/UIUX/commands/sample-stub.md');
+    const fm = (by) => `---\ndescription: d\ndeprecated: true\nreplaced-by: ${by}\n---\n`;
+    expect(stubViolations(fr, fm('"@uiux-orchestrator"'))).toEqual([]);
+    expect(stubViolations(fr, fm('mcp:context7'))).toEqual([]);
+    expect(
+      stubViolations(path.join(PROJECT_ROOT, '.claude/commands/uiux/sample-stub.md'), fm('"@uiux-orchestrator"'))
+    ).toEqual([]);
+    expect(stubViolations(fr, fm('"@nope"'))).toHaveLength(1);
+    expect(stubViolations(fr, fm('mcp:nope'))).toHaveLength(1);
+  });
+
+  // Lot 5 (8.27.0) stubs of native Claude Code overlaps, removed in 9.0.
+  it.each([
+    ['common/research-context7.md', 'Common'],
+    ['uiux/orchestrator.md', 'UIUX'],
+  ])('%s is removed from .claude and the 5 languages', (rel, dir) => {
+    const [, name] = rel.split('/');
+    const files = [
+      path.join(PROJECT_ROOT, '.claude/commands', rel),
+      ...['en', 'fr', 'es', 'de', 'pt'].map((l) => path.join(PROJECT_ROOT, 'Dev/i18n', l, dir, 'commands', name)),
+    ];
+    expect(files.filter((f) => fs.existsSync(f)).map((f) => path.relative(PROJECT_ROOT, f))).toEqual([]);
   });
 
   it('every deprecated command honours the stub contract', () => {
