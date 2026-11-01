@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Ruby / Rails stack** (Tier 2, `--tech=ruby`) : Ruby 4.0 + Rails 8.1 — rules (architecture Rails Way + service/form/query objects, coding standards, tooling, testing RSpec/Minitest, quality RuboCop/Brakeman, security) dans les 5 langues, agent `@ruby-reviewer`, commande `/ruby:check <axe>`, checklists et templates, script `Dev/scripts/install-ruby-rules.sh`.
+
 ## [9.0.0] - 2026-10-29
 
 Phase 4 de la feuille de route de simplification des commandes de gestion de projet : retrait des stubs de redirection. Guide : [MIGRATION-v9](docs/MIGRATION-v9.md).

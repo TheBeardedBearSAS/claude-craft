@@ -1,0 +1,92 @@
+# {{PROJECT_NAME}} - Ruby on Rails
+
+> Generiert: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## Was (Stack & Struktur)
+
+**Stack**: Ruby {{RUBY_VERSION}}, Rails {{RAILS_VERSION}}, Active Record, Hotwire
+
+### Projektstruktur
+```
+app/
+├── models/           # Active-Record-Modelle (Domänenregeln, Validierungen)
+│   └── concerns/     # Gemeinsames Modellverhalten
+├── controllers/      # Dünne HTTP-Schicht (Strong Params, Auth, Rendering)
+│   └── concerns/
+├── services/         # Service Objects (ein Anwendungsfall = ein `call`)
+├── forms/            # Form Objects (Eingaben über mehrere Modelle)
+├── queries/          # Query Objects (komplexe Lesezugriffe)
+├── jobs/             # Active Job (Solid Queue)
+├── views/            # ERB-Templates + Turbo Frames/Streams
+└── javascript/       # Stimulus-Controller (importmap)
+config/               # Routen, Credentials, Initializer
+db/                   # Migrationen, schema.rb, Seeds
+spec/ or test/        # RSpec oder Minitest (Systemtests mit Capybara)
+```
+
+## Warum (Zweck & Organisation)
+
+### Architektur: zuerst der Rails Way, pragmatisch Clean
+- **Models**: Persistenz, Validierungen, Assoziationen, Domänenregeln
+- **Controller**: dünn, nur Orchestrierung (Strong Params, Autorisierung, Antwort)
+- **Service / Form / Query Objects**: nur extrahiert, wenn Models oder Controller wachsen
+- Keine verpflichtende hexagonale Schichtung: Konventionen befolgen, bei echtem Schmerz extrahieren
+
+Siehe `rules/02-architecture-ruby.md` für vollständige Muster.
+
+### Kritische Regeln
+| Regel | Grund |
+|-------|-------|
+| `# frozen_string_literal: true` | Unveränderlichkeit, weniger Allokationen |
+| RuboCop (rubocop-rails-omakase) | Codequalität und einheitlicher Stil |
+| Strong Parameters (`params.expect`) | Schutz vor Mass Assignment |
+| Brakeman + bundler-audit | Sicherheits-Gates in der CI |
+| 80 %+ Abdeckung (SimpleCov) | Qualitätssicherung |
+
+## Wie (Befehle & Workflows)
+
+### Entwicklungsbefehle
+```bash
+docker compose exec app bundle install       # Abhängigkeiten installieren
+{{CACHE_CLEAR_COMMAND}}                      # Cache leeren
+docker compose exec app bin/rails test       # Tests ausführen (Minitest)
+docker compose exec app bundle exec rspec    # Tests ausführen (RSpec)
+docker compose exec app bin/rubocop          # Code-Stil
+docker compose exec app bin/brakeman         # Sicherheitsanalyse
+```
+
+### Qualitäts-Pipeline
+```bash
+docker compose exec app bin/rubocop                 # Stilprüfung
+docker compose exec app bin/brakeman --no-pager     # Sicherheitsscan
+docker compose exec app bin/bundler-audit           # CVEs der Abhängigkeiten
+docker compose exec app bin/ci                      # Vollständige lokale CI (Rails 8.1)
+```
+
+### Entwicklungsworkflow
+1. **Analysieren** - Code lesen, Domäne verstehen (`rules/01-workflow-analysis.md`)
+2. **TDD** - Test schreiben -> Implementieren -> Refactoring
+3. **Qualität** - `bin/ci` im Container ausführen
+4. **Commit** - Format Conventional Commits
+
+## Referenzen
+
+| Thema | Regeldatei |
+|-------|------------|
+| Analyse | `rules/01-workflow-analysis.md` |
+| Architektur | `rules/02-architecture-ruby.md` |
+| Ruby-Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tooling | `rules/06-tooling.md` |
+| Tests | `rules/07-testing-ruby.md` |
+| Qualität | `rules/08-quality-tools.md` |
+| Sicherheit | `rules/11-security-ruby.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Projektspezifisches
+
+{{TECH_STACK}}
+
+<!-- Projektspezifische Konfiguration unten ergänzen -->
+
+<!-- PROJECT-SPECIFIC-END -->

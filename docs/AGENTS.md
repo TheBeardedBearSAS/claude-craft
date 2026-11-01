@@ -635,6 +635,24 @@ Focuses on:
 
 ---
 
+### ruby-reviewer
+
+**Expertise**: Ruby 4.0 / Rails 8.1 code review (installed with `--tech=ruby`)
+
+Focuses on:
+- Rails Way compliance, thin controllers, service/form/query objects
+- Active Record usage (N+1, scopes, migrations)
+- Hotwire (Turbo/Stimulus) and Solid Queue jobs
+- Security (strong params, SQL injection, XSS, Brakeman findings)
+- Testing with RSpec or Minitest, FactoryBot, system tests
+
+```
+@ruby-reviewer Review this controller for Rails conventions
+@ruby-reviewer Check this model for N+1 queries and SQL injection
+```
+
+---
+
 ### vercel-reviewer
 
 **Expertise**: Vercel platform code review (framework-agnostic — not Next.js-specific)

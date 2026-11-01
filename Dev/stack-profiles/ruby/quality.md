@@ -1,0 +1,3 @@
+- RuboCop (rubocop-rails-omakase)
+- Brakeman + bundler-audit
+- RSpec / Minitest + SimpleCov (>= 80 %)

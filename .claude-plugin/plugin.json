@@ -35,6 +35,8 @@
     "csharp",
     "python",
     "php",
+    "ruby",
+    "rails",
     "paperclip"
   ]
 }

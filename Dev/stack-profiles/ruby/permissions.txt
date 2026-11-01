@@ -1,0 +1,4 @@
+Bash(bundle:*)
+Bash(bin/rails:*)
+Bash(bin/rubocop:*)
+Bash(bin/brakeman:*)

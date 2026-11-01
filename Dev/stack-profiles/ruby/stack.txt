@@ -1,0 +1,2 @@
+Ruby / Rails
+Ruby 4.0, Rails 8.1, Hotwire, Solid Queue, RSpec / Minitest

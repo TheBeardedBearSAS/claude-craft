@@ -444,6 +444,9 @@ get_install_script() {
         php)
             script="${SCRIPT_DIR}/install-php-rules.sh"
             ;;
+        ruby)
+            script="${SCRIPT_DIR}/install-ruby-rules.sh"
+            ;;
         common)
             script="${SCRIPT_DIR}/install-common-rules.sh"
             ;;
