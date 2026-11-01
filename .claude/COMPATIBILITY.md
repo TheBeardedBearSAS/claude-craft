@@ -1,9 +1,9 @@
-# Claude Code Compatibility — Claude Craft v9.0.0
+# Claude Code Compatibility — Claude Craft v9.1.0
 
 **Minimum Version:** 2.1.260 (elevated from 2.1.97 — see [security advisories 2026](#security-advisories-2026--why-the-minimum-is-21260))
-**Recommended Version:** 2.1.296 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, permission fixes 2.1.288–2.1.296)
-**Tested up to:** 2.1.296 (October 2026)
-**Last Updated:** 2026-10-26
+**Recommended Version:** 2.1.316 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`)
+**Tested up to:** 2.1.316 (November 2026)
+**Last Updated:** 2026-11-01
 
 ---
 
@@ -17,7 +17,7 @@
 6. [Feature Adoption Status](#feature-adoption-status)
 7. [Features 2.1.105–2.1.117 Available](#features-21105-21117-available)
 8. [Features 2.1.119 → 2.1.145 (May 2026)](#features-21119--21145-may-2026)
-9. [Features 2.1.194 → 2.1.296 (July–October 2026)](#features-21194--21296-julyoctober-2026)
+9. [Features 2.1.194 → 2.1.316 (July–November 2026)](#features-21194--21316-julynovember-2026)
 10. [Migration from < 2.1.260](#migration-from--21260)
 11. [Version History Summary](#version-history-summary)
 
@@ -28,7 +28,7 @@
 | Requirement | Version | Notes |
 |-------------|---------|-------|
 | **Minimum** | 2.1.260 | Security baseline — CVE-2026-86063 (2.1.179), CVE-2026-103435 (2.1.129), CVE-2026-55607 (2.1.163), CVE-2026-103012 (2.1.260) patched |
-| **Recommended** | 2.1.296 | Génération 5.5 (Opus/Sonnet/Haiku), Fable 5.1, MCP 2026-07-28, hooks `onFailure: "block"`, `effort` sur l'outil Agent, `autoCompactWindow` sous-agents, correctifs permissions 2.1.288–2.1.296 |
+| **Recommended** | 2.1.316 | Génération 5.5 (Opus/Sonnet/Haiku), Fable 5.1, MCP 2026-07-28, hooks `onFailure: "block"`, `effort` sur l'outil Agent, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, correctifs permissions 2.1.309 |
 | **Hooks `onFailure: "block"`** | 2.1.295+ | Un hook command/HTTP qui ne démarre pas, timeout ou sort avec un code inattendu bloque l'action |
 | **MCP protocole 2026-07-28** | 2.1.292+ | Négocié par défaut pour les serveurs stdio locaux ; retour arrière `MCP_PROTOCOL_NEGOTIATION=legacy` |
 | **`claude mcp login` / `logout`** | 2.1.185+ | Authenticate/clear an MCP server's credentials from the shell instead of `/mcp` |
@@ -422,9 +422,9 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ---
 
-## Features 2.1.194 → 2.1.296 (July–October 2026)
+## Features 2.1.194 → 2.1.316 (July–November 2026)
 
-Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) (lu le 2026-10-13).
+Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) (lu le 2026-10-13, complété le 2026-11-01 pour 2.1.297–2.1.316).
 
 | Version | Feature | Description | Adoption Claude Craft |
 |---------|---------|-------------|----------------------|
@@ -443,6 +443,10 @@ Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claud
 | 2.1.293 | Haiku 5.5 par défaut | `claude-haiku-5-5` | **Adopted** — `fallbackModel` |
 | 2.1.295 | Hooks `onFailure: "block"` ; connecteurs claude.ai en 2026-07-28 | Fail-closed hooks | **Not Adopted** (voir Feature Adoption Status) |
 | 2.1.296 | Description d'outil MCP plafonnée à 4 096 caractères (au lieu de 2 048) ; `autoCompactWindow` sous-agents ; Esc pendant `UserPromptSubmit` ne laisse plus passer le prompt | | **Documented** |
+| 2.1.302 | Forked subagents par défaut | `CLAUDE_CODE_FORK_SUBAGENT` actif par défaut en `-p`, SDK, desktop et VS Code (`0` pour désactiver) | **Documented** — règle 12 |
+| 2.1.309 | Correctifs permissions | | **Adopted** — recommandé en 8.27.0 (2.1.312) |
+| 2.1.314 | `permissions.blockWritesOutsideWorkingDirectories` ; compaction à l'inactivité (VS Code, onglet Code du Desktop) | Bloque Write/Edit/NotebookEdit hors des répertoires de travail | **Documented** — garde-fou recommandé |
+| 2.1.316 | `CLAUDE_CODE_SUBAGENT_EFFORT` ; `CLAUDE_CODE_DISABLE_ULTRATHINK` ; fast mode Opus 4.8 déprécié (retrait le 2026-11-30) | Effort des sous-agents ; désactiver le mot-clé `ultrathink` | **Documented** — règle 12 |
 
 ---
 
@@ -564,7 +568,11 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | 2.1.292 | 2026-10 | MCP stdio 2026-07-28, `effort` outil Agent, UNC |
 | 2.1.293 | 2026-10 | Haiku 5.5 par défaut |
 | 2.1.295 | 2026-10 | Hooks `onFailure: "block"` |
-| **2.1.296** | **2026-10** | **Description MCP 4 096 car., `autoCompactWindow` sous-agents — version RECOMMANDÉE** |
+| 2.1.296 | 2026-10 | Description MCP 4 096 car., `autoCompactWindow` sous-agents |
+| 2.1.302 | 2026-10 | Forked subagents par défaut (`-p`, SDK, desktop, VS Code) |
+| 2.1.312 | 2026-10 | Correctifs permissions 2.1.309 (recommandée en 8.27.0) |
+| 2.1.314 | 2026-10 | `permissions.blockWritesOutsideWorkingDirectories`, compaction à l'inactivité |
+| **2.1.316** | **2026-11** | **`CLAUDE_CODE_SUBAGENT_EFFORT`, `CLAUDE_CODE_DISABLE_ULTRATHINK` — version RECOMMANDÉE** |
 
 ---
 
