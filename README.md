@@ -217,6 +217,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **C# / .NET** | 10 LTS / C# 14 | `--tech=csharp` |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | `--tech=laravel` |
 | **PHP** | 8.5 | `--tech=php` |
+| **Ruby / Rails** | Rails 8.1 / Ruby 4.0 | `--tech=ruby` |
 | **Paperclip** | 2026.1012.0 | `--tech=paperclip` |
 
 | **Docker** | 29.9.0 | `--tech=docker` |
@@ -235,7 +236,7 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 143 across 18 namespaces (197 total with infra/project, including 66 redirect stubs kept until 10.0) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Commands** | 143 across 18 namespaces (198 total with infra/project, including 66 redirect stubs kept until 10.0) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
 | **Skills** | 55 | Architecture, testing, security, DDD best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -277,7 +278,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 143 commands across 18 namespaces (197 total including infra, project management and the redirect stubs kept until 10.0).
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 143 commands across 18 namespaces (198 total including infra, project management and the redirect stubs kept until 10.0).
 
 ## Installation
 

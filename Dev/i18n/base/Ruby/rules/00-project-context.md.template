@@ -1,0 +1,277 @@
+# Project Context - {{PROJECT_NAME}}
+
+## General Information
+
+**Project name** : {{PROJECT_NAME}}
+
+**Tech stack** : {{TECH_STACK}}
+
+**Ruby version** : {{RUBY_VERSION}}
+
+**Framework** : Ruby on Rails {{RAILS_VERSION}}
+
+## Project Description
+
+{{PROJECT_DESCRIPTION}}
+
+## Project Goals
+
+{{PROJECT_GOALS}}
+
+## Technical Architecture
+
+### Backend
+- **Language** : Ruby {{RUBY_VERSION}}
+- **Framework** : Ruby on Rails {{RAILS_VERSION}}
+- **ORM** : Active Record
+- **Database** : {{DATABASE_TYPE}}
+- **Cache** : {{CACHE_SYSTEM}}
+- **Queue** : {{QUEUE_SYSTEM}}
+- **Realtime** : {{CABLE_SYSTEM}}
+
+### Frontend
+- **Rendering** : {{FRONTEND_APPROACH}}
+- **JavaScript** : {{JS_STRATEGY}}
+- **Assets** : {{ASSET_PIPELINE}}
+
+### API
+- **API Type** : {{API_TYPE}}
+- **Base URL** : {{API_BASE_URL}}
+- **Authentication** : {{AUTH_METHOD}}
+
+### Infrastructure
+- **Hosting** : {{HOSTING_PLATFORM}}
+- **CI/CD** : {{CICD_PLATFORM}}
+- **Containerization** : {{CONTAINERIZATION}}
+- **Deployment** : {{DEPLOY_TOOL}}
+
+## Project Structure
+
+Rails Way first: follow the conventional layout and extract objects only when a model or controller grows.
+
+```
+{{PROJECT_NAME}}/
+├── app/
+│   ├── controllers/              # Thin, RESTful controllers
+│   │   └── concerns/
+│   ├── models/                   # Active Record models, validations, scopes
+│   │   └── concerns/
+│   ├── views/                    # ERB templates, Turbo Streams
+│   ├── helpers/
+│   ├── javascript/               # Stimulus controllers (importmap or bundler)
+│   │   └── controllers/
+│   ├── jobs/                     # Active Job classes (Solid Queue)
+│   ├── mailers/
+│   ├── channels/                 # Action Cable (Solid Cable)
+│   ├── services/                 # Service objects (extracted on demand)
+│   ├── queries/                  # Query objects (extracted on demand)
+│   ├── forms/                    # Form objects (extracted on demand)
+│   └── policies/                 # Authorization (Pundit, if used)
+│
+├── config/
+│   ├── routes.rb
+│   ├── database.yml
+│   ├── credentials.yml.enc       # Encrypted credentials
+│   ├── deploy.yml                # Kamal configuration
+│   ├── ci.rb                     # bin/ci steps (Rails 8.1)
+│   ├── initializers/
+│   └── environments/
+│
+├── db/
+│   ├── migrate/
+│   ├── schema.rb
+│   └── seeds.rb
+│
+├── lib/                          # Framework-independent code, rake tasks
+├── spec/ or test/                # RSpec or Minitest
+│   ├── models/
+│   ├── requests/                 # (test/integration for Minitest)
+│   ├── system/                   # Capybara system tests
+│   ├── services/
+│   ├── jobs/
+│   ├── factories/                # FactoryBot (or test/fixtures)
+│   └── support/
+│
+├── bin/                          # rails, setup, ci, rubocop, brakeman, dev
+├── docker/                       # Docker configuration
+├── docs/                         # Documentation and ADRs
+├── Gemfile
+├── Gemfile.lock
+├── .ruby-version
+└── .rubocop.yml
+```
+
+## Team and Responsibilities
+
+### Developers
+{{TEAM_MEMBERS}}
+
+### Code Owners
+{{CODE_OWNERS}}
+
+## Development Workflow
+
+### Branches
+- `main` : Production
+- `feature/*` : New features
+- `fix/*` : Bug fixes
+- `refactor/*` : Refactoring
+- `hotfix/*` : Urgent fixes
+
+### Review Process
+{{REVIEW_PROCESS}}
+
+## Environments
+
+### Local Development
+- **URL** : {{DEV_URL}}
+- **API** : {{DEV_API_URL}}
+- **Database** : {{DEV_DATABASE}}
+
+### Staging
+- **URL** : {{STAGING_URL}}
+- **API** : {{STAGING_API_URL}}
+- **Database** : {{STAGING_DATABASE}}
+
+### Production
+- **URL** : {{PRODUCTION_URL}}
+- **API** : {{PRODUCTION_API_URL}}
+- **Database** : {{PRODUCTION_DATABASE}}
+
+## Main Commands
+
+All commands run through Docker.
+
+### Installation
+```bash
+docker compose up -d
+docker compose exec app bin/setup --skip-server
+```
+
+### Development
+```bash
+docker compose exec app bin/dev
+docker compose exec app bin/rails console
+docker compose exec app bin/rails routes
+```
+
+### Database
+```bash
+# Migrations
+docker compose exec app {{MIGRATION_RUN_COMMAND}}
+
+# Create migration
+docker compose exec app {{MIGRATION_CREATE_COMMAND}}
+```
+
+### Tests
+```bash
+# All tests
+docker compose exec app {{TEST_COMMAND}}
+
+# System tests
+docker compose exec app {{SYSTEM_TEST_COMMAND}}
+
+# With coverage (SimpleCov)
+docker compose exec app env COVERAGE=true {{TEST_COMMAND}}
+```
+
+### Quality
+```bash
+# Lint
+docker compose exec app bin/rubocop
+
+# Security
+docker compose exec app bin/brakeman --no-pager -q
+docker compose exec app bundle exec bundler-audit check --update
+
+# Full local CI (Rails 8.1)
+docker compose exec app bin/ci
+```
+
+## Environment Variables
+
+```env
+# Application
+RAILS_ENV={{RAILS_ENV}}
+RAILS_MASTER_KEY={{RAILS_MASTER_KEY}}
+RAILS_LOG_LEVEL={{RAILS_LOG_LEVEL}}
+
+# Database
+DATABASE_URL={{DATABASE_URL}}
+
+# Cache / Queue
+REDIS_URL={{REDIS_URL}}
+
+# External APIs
+{{EXTERNAL_API_VARS}}
+```
+
+Secrets live in encrypted credentials (`bin/rails credentials:edit`) or the deployment secret store, never in the repository.
+
+## Naming Conventions
+
+### Files
+- **Models** : singular snake_case (ex: `order.rb`)
+- **Controllers** : plural snake_case + `_controller` (ex: `orders_controller.rb`)
+- **Services** : verb phrase (ex: `orders/place.rb`, class `Orders::Place`)
+- **Jobs** : snake_case + `_job` (ex: `send_invoice_job.rb`)
+- **Specs/Tests** : mirror the source path + `_spec.rb` / `_test.rb`
+
+### Code
+- **Classes / Modules** : CamelCase
+- **Methods / variables** : snake_case
+- **Constants** : SCREAMING_SNAKE_CASE
+- **Predicates** : end with `?`
+- **Tables** : plural snake_case; foreign keys `<model>_id`
+
+## Project-Specific Rules
+
+{{PROJECT_SPECIFIC_RULES}}
+
+## Main Dependencies
+
+### Production
+```ruby
+ruby "{{RUBY_VERSION}}"
+
+gem "rails", "~> {{RAILS_VERSION}}"
+{{DEPENDENCIES}}
+```
+
+### Development and Test
+```ruby
+group :development, :test do
+  gem "rubocop-rails-omakase", require: false
+  gem "brakeman", require: false
+  gem "bundler-audit", require: false
+  gem "debug"
+  {{DEV_DEPENDENCIES}}
+end
+```
+
+## Resources and Documentation
+
+### Internal Documentation
+- **Architecture** : `docs/architecture.md`
+- **API Reference** : `docs/api-reference.md`
+- **Database Schema** : `db/schema.rb`
+
+### External Documentation
+- **Ruby** : https://www.ruby-lang.org/en/documentation/
+- **Rails Guides** : https://guides.rubyonrails.org/
+- **Framework** : {{FRAMEWORK_DOCS_URL}}
+- {{EXTERNAL_DOCS}}
+
+## Important Notes
+
+{{IMPORTANT_NOTES}}
+
+## Major Changes History
+
+{{CHANGELOG_HIGHLIGHTS}}
+
+---
+
+**Last update** : {{LAST_UPDATE_DATE}}
+**Maintainer** : {{MAINTAINER_NAME}}

@@ -278,6 +278,14 @@ Main path: `init → plan → design → start → implement → review → retr
 /php:check all                    # All 4 axes, scored /100
 ```
 
+### `/ruby:` - Ruby / Rails
+
+```
+/ruby:check security              # Check security (Brakeman, strong params)
+/ruby:check testing               # Check tests
+/ruby:check all                   # All 4 axes, scored /100
+```
+
 ### `/vite:` - Vite (framework-agnostic)
 
 ```

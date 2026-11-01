@@ -18,6 +18,7 @@ const TECH_SCRIPTS = [
   'install-vuejs-rules.sh',
   'install-php-rules.sh',
   'install-python-rules.sh',
+  'install-ruby-rules.sh',
 ];
 
 const tmpDirs = [];
@@ -54,7 +55,7 @@ describe('tech install scripts', { timeout: 30000 }, () => {
     }
   });
 
-  it.each(['symfony', 'react', 'python'])(
+  it.each(['symfony', 'react', 'python', 'ruby'])(
     'install-%s-rules.sh shows help',
     (tech) => {
       const scriptPath = path.join(SCRIPTS_DIR, `install-${tech}-rules.sh`);
@@ -69,7 +70,7 @@ describe('tech install scripts', { timeout: 30000 }, () => {
     },
   );
 
-  it.each(['symfony', 'react', 'python'])(
+  it.each(['symfony', 'react', 'python', 'ruby'])(
     'install-%s-rules.sh runs in dry-run mode',
     (tech) => {
       const tmpDir = makeTmpDir();

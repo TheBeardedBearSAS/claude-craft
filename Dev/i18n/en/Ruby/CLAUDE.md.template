@@ -1,0 +1,92 @@
+# {{PROJECT_NAME}} - Ruby on Rails
+
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## What (Stack & Structure)
+
+**Stack**: Ruby {{RUBY_VERSION}}, Rails {{RAILS_VERSION}}, Active Record, Hotwire
+
+### Project Structure
+```
+app/
+├── models/           # Active Record models (domain rules, validations)
+│   └── concerns/     # Shared model behaviour
+├── controllers/      # Thin HTTP layer (strong params, auth, rendering)
+│   └── concerns/
+├── services/         # Service objects (one use case = one `call`)
+├── forms/            # Form objects (multi-model input)
+├── queries/          # Query objects (complex reads)
+├── jobs/             # Active Job (Solid Queue)
+├── views/            # ERB templates + Turbo Frames/Streams
+└── javascript/       # Stimulus controllers (importmap)
+config/               # Routes, credentials, initializers
+db/                   # Migrations, schema.rb, seeds
+spec/ or test/        # RSpec or Minitest (system tests with Capybara)
+```
+
+## Why (Purpose & Organization)
+
+### Architecture: Rails Way first, pragmatic Clean
+- **Models**: persistence, validations, associations, domain rules
+- **Controllers**: thin, orchestration only (strong params, authorization, response)
+- **Service / Form / Query objects**: extracted only when models or controllers grow
+- No mandatory hexagonal layering: follow conventions, extract on real pain
+
+See `rules/02-architecture-ruby.md` for complete patterns.
+
+### Critical Rules
+| Rule | Reason |
+|------|--------|
+| `# frozen_string_literal: true` | Immutability, fewer allocations |
+| RuboCop (rubocop-rails-omakase) | Code quality and consistent style |
+| Strong parameters (`params.expect`) | Mass-assignment protection |
+| Brakeman + bundler-audit | Security gates in CI |
+| 80%+ coverage (SimpleCov) | Quality assurance |
+
+## How (Commands & Workflows)
+
+### Development Commands
+```bash
+docker compose exec app bundle install       # Install dependencies
+{{CACHE_CLEAR_COMMAND}}                      # Clear cache
+docker compose exec app bin/rails test       # Run tests (Minitest)
+docker compose exec app bundle exec rspec    # Run tests (RSpec)
+docker compose exec app bin/rubocop          # Code style
+docker compose exec app bin/brakeman         # Security analysis
+```
+
+### Quality Pipeline
+```bash
+docker compose exec app bin/rubocop                 # Style check
+docker compose exec app bin/brakeman --no-pager     # Security scan
+docker compose exec app bin/bundler-audit           # Dependency CVEs
+docker compose exec app bin/ci                      # Full local CI (Rails 8.1)
+```
+
+### Development Workflow
+1. **Analyze** - Read code, understand domain (`rules/01-workflow-analysis.md`)
+2. **TDD** - Write test -> Implement -> Refactor
+3. **Quality** - Run `bin/ci` inside the container
+4. **Commit** - Conventional Commits format
+
+## References
+
+| Topic | Rule File |
+|-------|-----------|
+| Analysis | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture-ruby.md` |
+| Ruby Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tooling | `rules/06-tooling.md` |
+| Testing | `rules/07-testing-ruby.md` |
+| Quality | `rules/08-quality-tools.md` |
+| Security | `rules/11-security-ruby.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
+
+{{TECH_STACK}}
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

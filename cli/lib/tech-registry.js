@@ -148,6 +148,16 @@ const TECH_REGISTRY = {
     version: '3.15 / 3.14+',
     tier: 1,
   },
+  ruby: {
+    name: 'ruby',
+    displayName: 'Ruby / Rails',
+    desc: 'Backend Ruby 4.0 with Rails 8.1, Hotwire, Solid Queue, RSpec/Minitest',
+    namespace: 'ruby',
+    i18nDir: 'Ruby',
+    installScript: 'install-ruby-rules.sh',
+    version: '8.1 / Ruby 4.0',
+    tier: 2,
+  },
   paperclip: {
     name: 'paperclip',
     displayName: 'Paperclip',

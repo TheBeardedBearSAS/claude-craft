@@ -2,7 +2,7 @@
 
 **Version:** 9.0.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 13 technology stacks, 33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 14 technology stacks, 33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -22,6 +22,7 @@ A comprehensive AI-assisted development framework for Claude Code with 13 techno
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | Clean Architecture | Actions, Pest 4/5 (Pest 5 : PHP 8.4+), Sanctum, AI SDK, Passkey |
 | **Python** | 3.15 / 3.14+ | Clean Architecture / Hexagonal | FastAPI, async/await, Pydantic, free-threading, JIT |
 | **PHP** | 8.5 (Property Hooks 8.4+) | Clean Architecture | PER-CS 3.0 (ex-PSR-12), PHPStan Level 10, Pest 5 |
+| **Ruby / Rails** | 8.1 / Ruby 4.0 | Rails Way (pragmatic Clean) | Service/Form/Query objects, Hotwire, Solid Queue, RSpec/Minitest, Brakeman |
 | **Paperclip** | 2026.1012.0 | Two-layer (control plane + adapters) | Node.js 24.11+, TypeScript, Vitest, PostgreSQL, governance-first |
 
 ### Technology Quick Links

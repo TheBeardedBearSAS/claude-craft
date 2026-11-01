@@ -28,6 +28,7 @@
 | `/qa:*` | 5 |
 | `/react:*` | 11 |
 | `/reactnative:*` | 11 |
+| `/ruby:*` | 1 |
 | `/symfony:*` | 11 |
 | `/team:*` | 4 |
 | `/uiux:*` | 7 |
@@ -35,7 +36,7 @@
 | `/vite:*` | 8 |
 | `/vuejs:*` | 7 |
 | `/workflow:*` | 9 |
-| **Total** | **197** |
+| **Total** | **198** |
 
 ## `/angular:*`
 
@@ -285,6 +286,12 @@
 | [`/reactnative:generate-screen`](../.claude/commands/reactnative/generate-screen.md) | Génération Screen React Native |
 | [`/reactnative:native-module`](../.claude/commands/reactnative/native-module.md) | Guide Création Module Natif React Native |
 | [`/reactnative:store-prepare`](../.claude/commands/reactnative/store-prepare.md) | Checklist Publication Store React Native |
+
+## `/ruby:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/ruby:check`](../Dev/i18n/en/Ruby/commands/check.md) | Ruby/Rails audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
 
 ## `/symfony:*`
 
