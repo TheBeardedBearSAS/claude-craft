@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.1.0] - 2026-11-01
+
+Nouveau stack **Ruby / Rails** (14e stack) et Claude Code recommandé 2.1.316.
+
 ### Added
 
 - **Ruby / Rails stack** (Tier 2, `--tech=ruby`) : Ruby 4.0 + Rails 8.1 — rules (architecture Rails Way + service/form/query objects, coding standards, tooling, testing RSpec/Minitest, quality RuboCop/Brakeman, security) dans les 5 langues, agent `@ruby-reviewer`, commande `/ruby:check <axe>`, checklists et templates, script `Dev/scripts/install-ruby-rules.sh`.
+
+### Changed
+
+- **Claude Code recommandé/testé 2.1.312 → 2.1.316** (changelog 2.1.313–2.1.316 relu) : `config/versions.yaml`, `claude-craft doctor`, `.claude/COMPATIBILITY.md` (rattrapage 2.1.297–2.1.316 : forked subagents par défaut, `permissions.blockWritesOutsideWorkingDirectories`, `CLAUDE_CODE_SUBAGENT_EFFORT`, `CLAUDE_CODE_DISABLE_ULTRATHINK`, fast mode Opus 4.8 déprécié), guides et prérequis des 5 langues.
+- Règle 12 (gestion du contexte, 5 langues) : variable `CLAUDE_CODE_SUBAGENT_EFFORT`.
 
 ## [9.0.0] - 2026-10-29
 
