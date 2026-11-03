@@ -497,6 +497,7 @@ Lors de la compaction, toujours preserver:
 | `CLAUDE_CODE_SUBAGENT_MODEL` | Modèle **par défaut** des sous-agents non typés (ex : `sonnet`). **Depuis Claude Code 2.1.251**, le frontmatter `model:` d'un agent prévaut : les 11 reviewers `model: haiku` restent sur Haiku. **Avant 2.1.251, c'était l'inverse** — cette variable écrasait le frontmatter. |
 | `CLAUDE_CODE_FORK_SUBAGENT` | `1` pour isoler le contexte des sous-agents (forked subagents, v2.1.117+) ; actif par défaut en `-p`, SDK, desktop et VS Code depuis 2.1.302, `0` pour le désactiver |
 | `CLAUDE_CODE_SUBAGENT_EFFORT` | Niveau d'effort auquel tournent les sous-agents (v2.1.316+) |
+| `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` | `1` sur un runner self-hosted : `claude -p` lancé dans une session réutilise l'ID et le transcript de cette session (comportement d'avant v2.1.317) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Étendre/forcer le prompt caching (−40 % sur les sessions répétitives) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre à `1` pour désactiver la mémoire automatique |
 
