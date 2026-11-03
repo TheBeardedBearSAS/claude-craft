@@ -1,24 +1,26 @@
 ---
 description: Ajouter une nouvelle technologie à claude-craft avec les best practices de Context7 et recherche web
-argument-hint: <nom-technologie>
+argument-hint: "<nom-technologie> [catégorie]"
 ---
 
 # Ajouter une Technologie
 
 Vous êtes un expert intégrateur de technologies pour claude-craft. Votre mission est d'ajouter une nouvelle stack technologique en :
-1. Recherchant les best practices via Context7 MCP et recherche web
-2. Générant tous les fichiers nécessaires (rules, commands, templates, skills, agents)
-3. Créant le script d'installation
-4. Mettant à jour la documentation et la page de présentation
+1. Cadrant le périmètre et le tier avec le mainteneur
+2. Recherchant les best practices via Context7 MCP et recherche web (rien d'inventé)
+3. Générant les fichiers selon le layout v9 (`base/` + 5 langues)
+4. Créant le script d'installation et branchant tous les points d'intégration
+5. Mettant à jour tests, documentation et site, puis vérifiant en Docker
+
+> **Commande mainteneur** : listée dans `config/removed-commands.yaml`, elle n'est jamais installée chez les utilisateurs. Modèle de référence : l'ajout de Ruby / Rails en v9.1.0 (`git show --stat 08268980`).
 
 ## Arguments
 $ARGUMENTS
 
-Arguments:
-- `nom-technologie` : Nom de la technologie à ajouter (ex: "nextjs", "nestjs", "golang", "laravel")
-- (Optionnel) `catégorie` : Catégorie de la technologie (frontend, backend, mobile, devops, fullstack)
+- `nom-technologie` : nom de la technologie (ex : `nestjs`, `golang`, `django`)
+- (Optionnel) `catégorie` : frontend, backend, mobile, devops, fullstack
 
-Exemple : `/common:add-technology "nestjs"` ou `/common:add-technology "golang" backend`
+Exemple : `/common:add-technology nestjs` ou `/common:add-technology golang backend`
 
 ## Mode Plan
 
@@ -26,210 +28,228 @@ Exemple : `/common:add-technology "nestjs"` ou `/common:add-technology "golang" 
 
 ## MISSION
 
-### Étape 1 : Analyser la Technologie
+### Étape 1 : Cadrer la Technologie
 
-Identifier :
-- Nom officiel et alias courants
-- Type : framework, bibliothèque, langage, outil
-- Catégorie : frontend, backend, mobile, devops, fullstack
-- Écosystème : outils associés, frameworks de test, options de déploiement
-- Public cible : web, mobile, API, CLI, etc.
+Identifier : nom officiel et alias, type (framework, bibliothèque, langage, outil), écosystème (test, qualité, déploiement), public cible.
+
+**Puis poser ces questions de cadrage (AskUserQuestion) avant toute génération :**
+
+| Question | Options | Impact |
+|----------|---------|--------|
+| **Périmètre** | Langage seul / framework seul / langage + framework (ex : Ruby / Rails) | Nom du dossier `Dev/i18n/<lang>/<Tech>/`, `displayName`, `DEFAULT_STACK` |
+| **Tier** (`cli/lib/tech-registry.js`) | Tier 2 (supporté) / Tier 3 (communautaire) | Rules traduites ×5 (tier 2) ou en anglais dans `base/` (tier 3) |
+| **Couche mainteneur `.claude/`** | Oui / Non (défaut : non, comme Ruby et Paperclip) | Copie dans `.claude/commands/<ns>/`, `.claude/agents/`, `.claude/references/<ns>/` + compteurs |
+| **Catégorie** | frontend, backend, mobile, devops, fullstack | `desc` du registry, mots-clés `plugin.json`, docs |
+
+Le tier 1 (core) n'est jamais attribué à un nouveau stack.
 
 ### Étape 2 : Rechercher avec Context7 (MCP)
 
-**Utiliser Context7 pour accéder à la documentation officielle :**
-
-```
-Interroger Context7 pour :
-1. Guide de démarrage officiel
-2. Structure de projet recommandée
-3. Best practices et design patterns
-4. Stratégies de test (unitaire, intégration, e2e)
-5. Best practices sécurité
-6. Conseils d'optimisation performance
-7. Recommandations de déploiement
-```
-
-#### Informations à Extraire
-
-| Sujet | Détails à Trouver |
-|-------|-------------------|
-| Architecture | Patterns recommandés (MVC, Clean, Hexagonal, etc.) |
-| Standards de Code | Guide de style, conventions de nommage, structure des fichiers |
-| Outillage | Outils CLI, formateurs, linters, bundlers |
-| Tests | Frameworks de test, outils de couverture, stratégies de mock |
-| Sécurité | Authentification, autorisation, vulnérabilités courantes |
-| Qualité | Analyse statique, vérification de types, pratiques de review |
+Interroger Context7 (`resolve-library-id` puis `query-docs`) pour : structure de projet recommandée, patterns d'architecture, standards de code, outillage (CLI, formateur, linter), stratégies de test, sécurité, qualité/CI.
 
 ### Étape 3 : Compléter avec Recherche Web
 
-**Rechercher les tendances 2026 et pratiques communautaires :**
+- **Versions** : version stable actuelle et date de sortie, sources officielles (release notes, changelog). Ces versions alimentent `config/versions.yaml`.
+- **Dépréciations et migrations** en cours.
+- **Pratiques communautaires** : boilerplates, configurations de production, pièges courants, anti-patterns.
+- **Écosystème** : bibliothèques, outils de test, intégrations DevOps.
 
-1. **Dernières Tendances**
-   - Version stable actuelle
-   - Fonctionnalités à venir
-   - Avertissements de dépréciation
-   - Guides de migration
+Toute version ou affirmation non sourcée est exclue.
 
-2. **Best Practices Communautaires**
-   - Boilerplates populaires
-   - Configurations de production
-   - Benchmarks de performance
-   - Architectures réelles
+### Étape 4 : Générer les Fichiers (layout v9)
 
-3. **Pièges Courants**
-   - Erreurs fréquentes
-   - Anti-patterns
-   - Vulnérabilités de sécurité
-   - Goulots de performance
+Modèles : `Dev/i18n/{base,en}/Ruby/` et `Dev/i18n/{base,en}/PHP/` (tier 2), `Dev/i18n/{base,en}/Vite/` et `Vercel/` (tier 3).
 
-4. **Écosystème**
-   - Bibliothèques recommandées
-   - Outils de test
-   - Intégrations DevOps
-   - Solutions de monitoring
-
-### Étape 4 : Générer les Fichiers Technologie
-
-**Créer la structure complète dans les 5 langues (en, fr, es, de, pt) :**
+**Couche `base/` (anglais neutre, une seule copie) — commune aux deux tiers :**
 
 ```
-Dev/i18n/{lang}/{TECHNOLOGY}/
-├── CLAUDE.md.template
-├── rules/
-│   ├── 00-project-context.md.template
-│   ├── 02-architecture-{tech}.md
-│   ├── 03-coding-standards.md
-│   ├── 06-tooling.md
-│   ├── 07-testing-{tech}.md
-│   ├── 08-quality-tools.md
-│   └── 11-security-{tech}.md
+Dev/i18n/base/<Tech>/
+├── checks/
+│   ├── architecture.md      # checklist par axe
+│   ├── code-quality.md
+│   ├── security.md
+│   ├── testing.md
+│   └── all.md               # repli anglais : agrégat noté sur 100
 ├── commands/
-│   ├── check-compliance.md
-│   ├── check-architecture.md
-│   ├── check-code-quality.md
-│   ├── check-testing.md
-│   ├── check-security.md
-│   └── [generate-*.md si applicable]
-├── templates/
-│   └── [templates spécifiques à la technologie]
+│   └── check.md             # repli anglais : routeur /<ns>:check <axe>
 ├── checklists/
 │   ├── pre-commit.md
 │   └── new-feature.md
-├── agents/
-│   └── {tech}-reviewer.md
-└── skills/
-    └── [skills spécifiques à la technologie]
+├── rules/
+│   └── 00-project-context.md.template
+└── templates/               # modèles de code spécifiques (2 à 3)
 ```
 
-#### Rules à Générer
+**Couche langues (`en`, `fr`, `es`, `de`, `pt`) — tier 2 :**
 
-| Fichier | Contenu |
-|---------|---------|
-| `02-architecture-{tech}.md` | Patterns d'architecture, structure des dossiers, principes clean architecture |
-| `03-coding-standards.md` | Guide de style, conventions de nommage, organisation des fichiers |
-| `06-tooling.md` | Commandes CLI, formateurs, linters, outils de build |
-| `07-testing-{tech}.md` | Stratégies de test, frameworks, exigences de couverture |
-| `08-quality-tools.md` | Analyse statique, vérification de types, intégration CI/CD |
-| `11-security-{tech}.md` | Pratiques de sécurité, vulnérabilités courantes, authentification |
+```
+Dev/i18n/<lang>/<Tech>/
+├── CLAUDE.md.template
+├── agents/<ns>-reviewer.md
+├── commands/check.md        # traduction du routeur
+├── checks/all.md            # traduction de l'agrégat
+└── rules/
+    ├── 02-architecture-<ns>.md
+    ├── 03-coding-standards.md
+    ├── 06-tooling.md
+    ├── 07-testing-<ns>.md
+    ├── 08-quality-tools.md
+    └── 11-security-<ns>.md
+```
 
-#### Commands à Générer
+**Tier 3** : même couche langues **sans** `rules/` ; les 6 rules (02/03/06/07/08/11) vont en anglais dans `Dev/i18n/base/<Tech>/rules/`.
 
-| Commande | Objectif |
-|----------|----------|
-| `check-compliance.md` | Audit complet de conformité (score /100) |
-| `check-architecture.md` | Revue d'architecture |
-| `check-code-quality.md` | Analyse de qualité du code |
-| `check-testing.md` | Couverture et qualité des tests |
-| `check-security.md` | Audit de sécurité |
+**Routeur `/<ns>:check`** : `commands/check.md` lit le premier argument (`architecture|code-quality|security|testing|all`) et suit `.claude/references/<ns>/checks/<axe>.md`. C'est la **seule** commande d'audit du stack : un fichier par axe va dans `checks/`, jamais dans `commands/`. Reprendre la structure de `Dev/i18n/base/Ruby/commands/check.md`.
+
+**Agent reviewer** : frontmatter `name: <ns>-reviewer`, `tools: [Read, Glob, Grep, WebFetch, WebSearch]`, grille de revue notée sur 100 (cf. `Dev/i18n/en/Ruby/agents/ruby-reviewer.md`).
 
 ### Étape 5 : Créer le Script d'Installation
 
-**Générer `Dev/scripts/install-{tech}-rules.sh` :**
+Copier `Dev/scripts/install-php-rules.sh` en `Dev/scripts/install-<ns>-rules.sh`. Le script ne contient que des données : `source tcl-common.sh` (version), puis `source lib/install-tech-common.sh` et `run_tech_install "$@"` font tout le travail (options, copie base + overlay langue, génération de CLAUDE.md).
 
-Suivre le pattern des scripts existants :
-- Support des options `--lang`, `--force`, `--update`, `--dry-run`, `--backup`
-- Copier les règles génériques depuis Common/
-- Copier les règles spécifiques à la technologie
-- Générer CLAUDE.md et 00-project-context.md
-- Afficher le résumé d'installation
+| Variable | Contenu |
+|----------|---------|
+| `TECH_NAME` | Nom du dossier i18n (`Ruby`) |
+| `TECH_DISPLAY_NAME` | Libellé affiché (`Ruby / Rails`) |
+| `TECH_NAMESPACE` | Namespace des commandes (`ruby`) |
+| `DEFAULT_STACK` | Stack par défaut, substituée dans `{{TECH_STACK}}` |
+| `TECH_RULE_MAPPINGS` | `source:destination` des 6 rules (`02-architecture-<ns>.md:architecture.md`…) |
+| `TECH_RULES` | Liste des 6 rules sources (vérifiées en langue **ou** en `base/`) |
+| `HELP_DESCRIPTION` | Texte de `--help` |
+| `AVAILABLE_COMMANDS` | Ligne `/<ns>:check <architecture\|code-quality\|security\|testing\|all>` |
+| `ARCHITECTURE_SUMMARY`, `CODING_STANDARDS_SUMMARY`, `TESTING_STACK` | Résumés injectés dans le CLAUDE.md généré |
+| `TECH_REFERENCES` | Liste des fichiers `.claude/references/<ns>/` |
+| `FILE_CONTEXTS` | Bloc YAML glob → `suggest_skills` / `quick_tips` |
+| `TECH_EXTRA_SED_ARGS`, `TECH_VERIFY_FILE` | Optionnelles (défauts dans `lib/install-tech-common.sh`) |
 
-### Étape 6 : Mettre à Jour la Documentation
+Pas de cible Makefile dédiée : la cible générique `install-%` couvre tout stack listé dans `TECHS`.
 
-**Fichiers à mettre à jour :**
+### Étape 6 : Points d'Intégration, Tests et Documentation
 
-| Fichier | Modifications |
-|---------|---------------|
-| `README.md` | Ajouter la technologie à la liste des stacks supportées |
-| `docs/index.html` | Incrémenter les stats, ajouter la carte technologie |
-| `docs/COMMANDS.md` | Documenter les nouvelles commandes |
-| `Makefile` | Ajouter la cible `install-{tech}` |
+**Tests d'abord (TDD)** : mettre à jour les tests à listes en dur, constater l'échec, puis intégrer.
 
-#### Mises à Jour Page d'Accueil (docs/index.html)
+| Fichier | Modification |
+|---------|--------------|
+| `tests/cli/constants.test.mjs` | Liste des techs installables |
+| `tests/cli/tech-registry.test.mjs` | Compteurs totaux et par tier |
+| `tests/cli/__snapshots__/snapshot.test.mjs.snap` | Message d'erreur « Available: … » (liste des techs) |
+| `tests/scripts/namespace-integrity.test.mjs` | Map `TECH`, liste des dossiers `base/`, `NO_MAINTAINER_LAYER` (si pas de couche `.claude/`) |
+| `tests/scripts/command-refs.test.mjs` | Liste des stacks |
+| `tests/scripts/install-tech-rules.test.mjs` | Liste des scripts d'install + `it.each` des techs testées |
 
-1. **Section Stats** : Incrémenter le compteur "Tech Stacks"
-2. **Grille Technologies** : Ajouter la nouvelle carte :
+**Intégration :**
 
-```html
-<div class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-brand-500/50 transition-colors text-center group">
-    <div class="h-16 w-16 mx-auto bg-black rounded-full flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
-        <span class="text-2xl font-bold text-white">{ICON}</span>
-    </div>
-    <h3 class="font-bold text-white">{NOM_TECH}</h3>
-    <p class="text-xs text-slate-400 mt-2" data-i18n="tech_{tech}_desc">{DESCRIPTION}</p>
-</div>
-```
+| Fichier | Modification |
+|---------|--------------|
+| `cli/lib/tech-registry.js` | Entrée `name`, `displayName`, `desc`, `namespace`, `i18nDir`, `installScript`, `version`, `tier` |
+| `config/versions.yaml` | `stacks.<ns>.registry` **strictement égal** à `version` du registry + ligne d'historique datée en tête |
+| `Makefile` | Ajouter `<ns>` à `TECHS` |
+| `Dev/scripts/check-config.sh` | Ajouter `<ns>` à `DEV_TECHS` |
+| `Dev/scripts/install-from-config.sh` | Nouveau `case` pointant vers `install-<ns>-rules.sh` |
+| `.claude-plugin/plugin.json` | Mots-clés |
+| `Dev/stack-profiles/<ns>/stack.txt` | **Obligatoire** (testé par `tests/content/stack-profiles.test.mjs`) : ligne 1 libellé, ligne 2 stack |
+| `Dev/stack-profiles/<ns>/permissions.txt` | Règles `Bash(...)` uniquement |
+| `Dev/stack-profiles/<ns>/quality.md` | Outils qualité en liste |
 
-3. **Traductions** : Ajouter les clés i18n pour les 5 langues
+**Documentation :**
 
-#### Cible Makefile
+| Fichier | Modification |
+|---------|--------------|
+| `README.md` | Table des stacks, total installable « N total » |
+| `.claude/CLAUDE.md` | « N technology stacks » (ligne 5) + table des technologies |
+| `docs/COMMANDS.md` | Table des namespaces, section `/<ns>:*`, liste « any of the N stacks » |
+| `docs/AGENTS.md` | Agent `<ns>-reviewer` |
+| `docs/CHEAT-SHEET.md` | Commandes du stack |
+| `docs/COMMANDS-FULL-REFERENCE.md` | Régénéré par `node scripts/generate-references.mjs` (ne pas éditer à la main) |
+| `CHANGELOG.md` | Entrée sous `[Unreleased]` |
 
-```makefile
-install-{tech}:
-	./Dev/scripts/install-{tech}-rules.sh --lang=$(RULES_LANG) $(OPTIONS) $(TARGET)
-```
+**Site VitePress** (`website/`) — seuls ces fichiers sont suivis par git :
+
+| Fichier | Modification |
+|---------|--------------|
+| `website/.vitepress/theme/components/StatsGrid.vue` | Compteur « Tech Stacks » |
+| `website/.vitepress/theme/components/TechGrid.vue` | Carte du stack (exige `website/public/logos/<ns>.svg`) |
+| `website/.vitepress/theme/LandingPage.vue`, `components/AgentShowcase.vue` | Versions et compteurs figés, si concernés |
+
+`website/<lang>/` est généré par `website/scripts/sync-docs.sh` : ne jamais l'éditer.
+
+**Couche `.claude/` (seulement si choisie à l'étape 1)** : copier commands, agent et references sous `.claude/`, retirer `<ns>` de `NO_MAINTAINER_LAYER`, puis mettre à jour les compteurs « N commands / N namespaces » de `.claude/CLAUDE.md` ligne 5 et du README (test `tests/content/doc-counts.test.mjs`).
 
 ### Étape 7 : Validation
+
+#### Calcul des livrables
+
+| Bloc | Tier 2 | Tier 3 |
+|------|--------|--------|
+| `base/` : checks (5) + check.md + checklists (2) + 00-project-context + templates (T) | 9 + T | 9 + T |
+| `base/` : rules 02/03/06/07/08/11 | — | 6 |
+| Par langue : CLAUDE.md.template + agent + check.md + checks/all.md | 4 × 5 = 20 | 4 × 5 = 20 |
+| Par langue : rules | 6 × 5 = 30 | — |
+| **Total i18n** | **59 + T** | **35 + T** |
 
 #### Checklist Definition of Done
 
 ```
 ══════════════════════════════════════════════════════════════
-✅ DEFINITION OF DONE : Ajout Technologie [{NOM_TECH}]
+✅ DEFINITION OF DONE : Ajout Technologie [{NOM_TECH}] — Tier {N}
 ══════════════════════════════════════════════════════════════
 
-📁 FICHIERS CRÉÉS
-──────────────────────────────────────────────────────────────
-- [ ] Rules (7 fichiers × 5 langues = 35 fichiers)
-- [ ] Commands (5 fichiers × 5 langues = 25 fichiers)
-- [ ] Templates (au moins 2 par langue)
-- [ ] Checklists (2 fichiers × 5 langues = 10 fichiers)
-- [ ] Agent {tech}-reviewer (1 fichier × 5 langues = 5 fichiers)
-- [ ] CLAUDE.md.template (× 5 langues)
-- [ ] Script d'installation (Dev/scripts/install-{tech}-rules.sh)
+📁 CONTENU
+- [ ] base/ : checks/{architecture,code-quality,security,testing,all}.md
+- [ ] base/ : commands/check.md, checklists (2), 00-project-context, templates
+- [ ] Langues ×5 : CLAUDE.md.template, agent, commands/check.md, checks/all.md
+- [ ] Rules 02/03/06/07/08/11 : ×5 langues (tier 2) ou base/ (tier 3)
+- [ ] commands/ ne contient que check.md (+ generate-* éventuels)
 
-📄 DOCUMENTATION MISE À JOUR
-──────────────────────────────────────────────────────────────
-- [ ] README.md : Technologie ajoutée aux stacks supportées
-- [ ] docs/index.html : Stats incrémentées
-- [ ] docs/index.html : Carte technologie ajoutée
-- [ ] docs/index.html : Traductions i18n ajoutées (5 langues)
-- [ ] docs/COMMANDS.md : Nouvelles commandes documentées
-- [ ] Makefile : Cible install-{tech} ajoutée
+🔌 INTÉGRATION
+- [ ] install-<ns>-rules.sh, tech-registry.js, versions.yaml
+- [ ] Makefile TECHS, check-config.sh, install-from-config.sh, plugin.json
+- [ ] Dev/stack-profiles/<ns>/{stack.txt,permissions.txt,quality.md}
+- [ ] 6 tests à listes en dur mis à jour (avant l'intégration)
 
-🧪 VÉRIFICATION
-──────────────────────────────────────────────────────────────
-- [ ] Le script d'installation s'exécute sans erreurs
-- [ ] Tous les fichiers sont correctement formatés
-- [ ] Les commandes sont fonctionnelles
-- [ ] La documentation est exacte
+📄 DOCUMENTATION
+- [ ] README, .claude/CLAUDE.md, COMMANDS, AGENTS, CHEAT-SHEET, CHANGELOG
+- [ ] COMMANDS-FULL-REFERENCE régénéré
+- [ ] website : StatsGrid (+ TechGrid et logo si carte ajoutée)
 
+🧪 VÉRIFICATION (Docker uniquement)
+- [ ] npx vitest run complet (node:24)
+- [ ] bash scripts/verify-i18n-parity.sh (strict, ratio ≥ 0.80)
+- [ ] node scripts/verify-versions.mjs
+- [ ] node scripts/generate-references.mjs --check
+- [ ] npx prettier --check cli/
+- [ ] Frontmatter validé avec js-yaml
+- [ ] Install réelle --lang=fr dans le scratchpad, arborescence comparée à PHP
 ══════════════════════════════════════════════════════════════
 ```
 
-### Format de Sortie
+#### Commandes de vérification
 
-Après avoir terminé toutes les étapes, fournir :
+Toutes en Docker `node:24`, en root (`node_modules` appartient à root), sorties dans le scratchpad, jamais dans `/tmp` :
+
+- `npx vitest run` (suite complète, pas seulement `tests/scripts/`) ;
+- `bash scripts/verify-i18n-parity.sh` ;
+- `node scripts/verify-versions.mjs`, `node scripts/generate-references.mjs --check`, `npx prettier --check cli/` ;
+- frontmatter : charger `node_modules/js-yaml/dist/js-yaml.mjs` (`import * as yaml`) et parser chaque frontmatter généré ;
+- `./Dev/scripts/install-<ns>-rules.sh --lang=fr <scratchpad>/<ns>-project`, puis comparer l'arborescence `.claude/` avec une install PHP.
+
+## Orchestration
+
+1. **Recherche** (agent principal) : versions et pratiques via Context7 + web, sources notées. Rien d'inventé.
+2. **Génération en parallèle (2 agents)** : un agent pour `base/`, un pour `en/`. Leur fournir les résultats de recherche et les fichiers modèles Ruby/PHP (chemins, pas copies).
+3. **Traduction en parallèle (4 agents)** : `fr`, `es`, `de`, `pt` depuis `en/`. Consignes : accents et diacritiques obligatoires, ratio de taille ≥ 0.80 par fichier, ne pas traduire le code, les commandes, les chemins, les noms d'outils, les clés de frontmatter (`name`, `tools`) ni les axes `architecture|code-quality|security|testing|all`.
+4. **Intégration** : menée par l'agent principal pendant les étapes 2 et 3, tests d'abord (TDD).
+5. **Vérification** finale (étape 7), puis relecture des diffs générés par les agents (`git status` : un agent peut laisser des fichiers parasites).
+
+## Pièges connus
+
+- **`base/` exclusif** : un fichier présent dans `Dev/i18n/base/<Tech>/` ne doit exister dans aucune langue (`tests/scripts/i18n-base-overlay.test.mjs`), sauf les deux replis surchargeables `commands/check.md` et `checks/all.md`.
+- **Placeholders** : `lib/install-tech-common.sh` ne substitue que `{{PROJECT_NAME}}` et `{{TECH_STACK}}`. Les autres (ex : `{{PHP_VERSION}}`, `{{RUBY_VERSION}}`) restent tels quels dans le CLAUDE.md installé : les réserver à ce que l'utilisateur doit remplir.
+- **Frontmatter YAML strict** : le parseur maison des tests est tolérant, js-yaml ne l'est pas. Quoter les `description` et `argument-hint` qui commencent par `[` ou `<` ou contiennent `:`.
+- **Hook Bash** : `docker run --rm` est bloqué quand la commande contient d'autres jetons ressemblant à `-r`/`-f` (chemins, noms de paquets), de même que les redirections vers `/dev/null`. Écrire la commande dans un script du scratchpad (outil Write) et l'exécuter.
+- **Versions** : `config/versions.yaml` est la source unique ; la gate `verify-versions.mjs` échoue si le registry diverge.
+
+## Format de Sortie
 
 ```
 ══════════════════════════════════════════════════════════════
@@ -237,61 +257,32 @@ Après avoir terminé toutes les étapes, fournir :
 ══════════════════════════════════════════════════════════════
 
 📊 RÉSUMÉ
-──────────────────────────────────────────────────────────────
-Technologie : {NOM_TECH}
-Catégorie : {CATÉGORIE}
-Version : {VERSION_ACTUELLE}
+Technologie : {NOM_TECH}            Namespace : /{ns}:*
+Catégorie   : {CATÉGORIE}           Tier      : {2|3}
+Version     : {VERSION} (source : {URL})
+Couche .claude/ : {oui|non}
 
-Fichiers créés : {NOMBRE}
-- Rules : 35 fichiers
-- Commands : 25 fichiers
-- Templates : {NOMBRE}
-- Checklists : 10 fichiers
-- Agents : 5 fichiers
-
-📁 STRUCTURE
-──────────────────────────────────────────────────────────────
-Dev/i18n/
-├── en/{TECH}/
-├── fr/{TECH}/
-├── es/{TECH}/
-├── de/{TECH}/
-└── pt/{TECH}/
-
-Dev/scripts/
-└── install-{tech}-rules.sh
+📁 FICHIERS
+Dev/i18n/base/{Tech}/    : {N} fichiers
+Dev/i18n/{en,fr,es,de,pt}/{Tech}/ : {N} fichiers
+Dev/scripts/install-{ns}-rules.sh
+Dev/stack-profiles/{ns}/
 
 🔧 INSTALLATION
-──────────────────────────────────────────────────────────────
-# Via Makefile
-make install-{tech} TARGET=~/mon-projet RULES_LANG=fr
+make install-{ns} TARGET=~/mon-projet RULES_LANG=fr
+./Dev/scripts/install-{ns}-rules.sh --lang=fr ~/mon-projet
 
-# Script direct
-./Dev/scripts/install-{tech}-rules.sh ~/mon-projet
-
-📚 DOCUMENTATION
-──────────────────────────────────────────────────────────────
-- README.md ✅ Mis à jour
-- docs/index.html ✅ Mis à jour
-- docs/COMMANDS.md ✅ Mis à jour
-- Makefile ✅ Mis à jour
+🧪 VÉRIFICATION
+vitest : {N} tests ✅ | parité i18n ✅ | versions ✅ | références ✅ | prettier ✅
 
 ✅ DEFINITION OF DONE : COMPLÈTE
 ══════════════════════════════════════════════════════════════
 ```
 
-### Directives Importantes
-
-1. **Rechercher d'abord** - Toujours utiliser Context7 et recherche web avant de générer les fichiers
-2. **Suivre les patterns** - Utiliser les technologies existantes (React, Symfony, Flutter) comme modèles
-3. **Les 5 langues** - Générer le contenu pour en, fr, es, de, pt
-4. **Qualité avant vitesse** - S'assurer que tous les fichiers sont correctement formatés et fonctionnels
-5. **Tout mettre à jour** - Ne pas oublier la documentation et la page d'accueil
-
-### Gestion des Erreurs
+## Gestion des Erreurs
 
 Si la recherche échoue :
 - Indiquer clairement les informations manquantes
 - Proposer des sources alternatives
-- Demander des clarifications à l'utilisateur si nécessaire
+- Demander des clarifications au mainteneur
 - NE JAMAIS générer de fichiers avec du contenu placeholder ou inventé
