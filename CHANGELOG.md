@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.1.1] - 2026-11-03
+
+Commande mainteneur `/common:add-technology` alignée sur le layout v9, cartes Ruby / Vite / Vercel sur le site et Claude Code recommandé 2.1.317.
+
+### Changed
+
+- **`/common:add-technology`** (commande mainteneur, non installée chez les utilisateurs) réécrite d'après l'ajout de Ruby : questions de cadrage (périmètre, tier 2/3, couche `.claude/`), layout v9 `base/` + langues, routeur `/<tech>:check` + `checks/<axe>.md`, script d'install dérivé de `install-php-rules.sh`, points d'intégration réels (registry, `versions.yaml`, stack-profiles, tests à listes en dur, site VitePress), DoD calculée selon le tier, sections Orchestration et Pièges connus.
+- **Claude Code recommandé/testé 2.1.316 → 2.1.317** (changelog 2.1.317 relu) : `config/versions.yaml`, `claude-craft doctor`, `.claude/COMPATIBILITY.md`, guides et prérequis des 5 langues.
+- Règle 12 (gestion du contexte, 5 langues) : variable `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`.
+
+### Fixed
+
+- Site : cartes **Ruby / Rails**, **Vite** et **Vercel** ajoutées à la grille des technologies (logos Simple Icons, CC0-1.0).
+
 ## [9.1.0] - 2026-11-01
 
 Nouveau stack **Ruby / Rails** (14e stack) et Claude Code recommandé 2.1.316.
