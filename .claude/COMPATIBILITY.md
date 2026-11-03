@@ -1,9 +1,9 @@
-# Claude Code Compatibility — Claude Craft v9.1.0
+# Claude Code Compatibility — Claude Craft v9.1.1
 
 **Minimum Version:** 2.1.260 (elevated from 2.1.97 — see [security advisories 2026](#security-advisories-2026--why-the-minimum-is-21260))
-**Recommended Version:** 2.1.316 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`)
-**Tested up to:** 2.1.316 (November 2026)
-**Last Updated:** 2026-11-01
+**Recommended Version:** 2.1.317 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`)
+**Tested up to:** 2.1.317 (November 2026)
+**Last Updated:** 2026-11-03
 
 ---
 
@@ -17,7 +17,7 @@
 6. [Feature Adoption Status](#feature-adoption-status)
 7. [Features 2.1.105–2.1.117 Available](#features-21105-21117-available)
 8. [Features 2.1.119 → 2.1.145 (May 2026)](#features-21119--21145-may-2026)
-9. [Features 2.1.194 → 2.1.316 (July–November 2026)](#features-21194--21316-julynovember-2026)
+9. [Features 2.1.194 → 2.1.317 (July–November 2026)](#features-21194--21317-julynovember-2026)
 10. [Migration from < 2.1.260](#migration-from--21260)
 11. [Version History Summary](#version-history-summary)
 
@@ -28,7 +28,7 @@
 | Requirement | Version | Notes |
 |-------------|---------|-------|
 | **Minimum** | 2.1.260 | Security baseline — CVE-2026-86063 (2.1.179), CVE-2026-103435 (2.1.129), CVE-2026-55607 (2.1.163), CVE-2026-103012 (2.1.260) patched |
-| **Recommended** | 2.1.316 | Génération 5.5 (Opus/Sonnet/Haiku), Fable 5.1, MCP 2026-07-28, hooks `onFailure: "block"`, `effort` sur l'outil Agent, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, correctifs permissions 2.1.309 |
+| **Recommended** | 2.1.317 | Génération 5.5 (Opus/Sonnet/Haiku), Fable 5.1, MCP 2026-07-28, hooks `onFailure: "block"`, `effort` sur l'outil Agent, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, correctifs permissions 2.1.309, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` |
 | **Hooks `onFailure: "block"`** | 2.1.295+ | Un hook command/HTTP qui ne démarre pas, timeout ou sort avec un code inattendu bloque l'action |
 | **MCP protocole 2026-07-28** | 2.1.292+ | Négocié par défaut pour les serveurs stdio locaux ; retour arrière `MCP_PROTOCOL_NEGOTIATION=legacy` |
 | **`claude mcp login` / `logout`** | 2.1.185+ | Authenticate/clear an MCP server's credentials from the shell instead of `/mcp` |
@@ -422,9 +422,9 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ---
 
-## Features 2.1.194 → 2.1.316 (July–November 2026)
+## Features 2.1.194 → 2.1.317 (July–November 2026)
 
-Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) (lu le 2026-10-13, complété le 2026-11-01 pour 2.1.297–2.1.316).
+Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) (lu le 2026-10-13, complété le 2026-11-01 pour 2.1.297–2.1.316 et le 2026-11-03 pour 2.1.317).
 
 | Version | Feature | Description | Adoption Claude Craft |
 |---------|---------|-------------|----------------------|
@@ -447,6 +447,7 @@ Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claud
 | 2.1.309 | Correctifs permissions | | **Adopted** — recommandé en 8.27.0 (2.1.312) |
 | 2.1.314 | `permissions.blockWritesOutsideWorkingDirectories` ; compaction à l'inactivité (VS Code, onglet Code du Desktop) | Bloque Write/Edit/NotebookEdit hors des répertoires de travail | **Documented** — garde-fou recommandé |
 | 2.1.316 | `CLAUDE_CODE_SUBAGENT_EFFORT` ; `CLAUDE_CODE_DISABLE_ULTRATHINK` ; fast mode Opus 4.8 déprécié (retrait le 2026-11-30) | Effort des sous-agents ; désactiver le mot-clé `ultrathink` | **Documented** — règle 12 |
+| 2.1.317 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` ; `onFailure: "block"` pour les callbacks de hooks de l'Agent SDK ; demande de confirmation avant qu'un outil web/shell envoie l'e-mail du compte | `claude -p` lancé dans une session cloud/self-hosted a désormais son propre ID ; `1` restaure l'ancien comportement | **Documented** — règle 12 |
 
 ---
 
@@ -572,7 +573,8 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | 2.1.302 | 2026-10 | Forked subagents par défaut (`-p`, SDK, desktop, VS Code) |
 | 2.1.312 | 2026-10 | Correctifs permissions 2.1.309 (recommandée en 8.27.0) |
 | 2.1.314 | 2026-10 | `permissions.blockWritesOutsideWorkingDirectories`, compaction à l'inactivité |
-| **2.1.316** | **2026-11** | **`CLAUDE_CODE_SUBAGENT_EFFORT`, `CLAUDE_CODE_DISABLE_ULTRATHINK` — version RECOMMANDÉE** |
+| 2.1.316 | 2026-11 | `CLAUDE_CODE_SUBAGENT_EFFORT`, `CLAUDE_CODE_DISABLE_ULTRATHINK` (recommandée en 9.1.0) |
+| **2.1.317** | **2026-11** | **`CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `onFailure: "block"` Agent SDK — version RECOMMANDÉE** |
 
 ---
 
