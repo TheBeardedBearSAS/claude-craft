@@ -21,6 +21,8 @@ const appTechs = [
   { name: 'Vue.js', logo: `${base}logos/vuejs.svg`, desc: 'Composition API, Pinia, Vitest' },
   { name: 'PHP', logo: `${base}logos/php.svg`, desc: 'Clean Arch, PSR-12, PHPStan' },
   { name: 'Ruby / Rails', logo: `${base}logos/ruby.svg`, desc: 'Rails Way, Hotwire, RSpec' },
+  { name: 'Vite', logo: `${base}logos/vite.svg`, desc: 'Vanilla, Library mode, Multi-page' },
+  { name: 'Vercel', logo: `${base}logos/vercel.svg`, desc: 'Functions, ISR, Cron Jobs' },
   { name: 'Paperclip', logo: `${base}logos/paperclip.svg`, desc: 'Control plane + adapters, governance-first' },
 ]
 
