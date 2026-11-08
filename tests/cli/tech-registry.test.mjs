@@ -31,6 +31,7 @@ describe('tech-registry', () => {
       'paperclip',
       'ruby',
       'rust',
+      'tauri',
       'docker',
     ];
     for (const key of expectedKeys) {
@@ -53,7 +54,7 @@ describe('tech-registry', () => {
   it('INSTALLABLE_TECHS excludes docker and base-layer techs (php)', () => {
     expect(INSTALLABLE_TECHS).not.toContain('docker');
     expect(INSTALLABLE_TECHS).not.toContain('php');
-    expect(INSTALLABLE_TECHS.length).toBe(14);
+    expect(INSTALLABLE_TECHS.length).toBe(15);
   });
 
   it('getDisplayName returns correct value', () => {
@@ -63,7 +64,7 @@ describe('tech-registry', () => {
 
   it('getAllTechKeys returns all keys including docker', () => {
     const keys = getAllTechKeys();
-    expect(keys.length).toBe(17);
+    expect(keys.length).toBe(18);
     expect(keys).toContain('docker');
   });
 });
@@ -93,7 +94,7 @@ describe('tech-registry tiers', () => {
 
   it('getTechsByTier(3) returns community techs', () => {
     const tier3 = getTechsByTier(3);
-    expect(tier3.sort()).toEqual(['angular', 'csharp', 'laravel', 'vercel', 'vite', 'vuejs']);
+    expect(tier3.sort()).toEqual(['angular', 'csharp', 'laravel', 'tauri', 'vercel', 'vite', 'vuejs']);
   });
 });
 

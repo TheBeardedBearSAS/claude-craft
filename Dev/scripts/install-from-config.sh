@@ -450,6 +450,9 @@ get_install_script() {
         rust)
             script="${SCRIPT_DIR}/install-rust-rules.sh"
             ;;
+        tauri)
+            script="${SCRIPT_DIR}/install-tauri-rules.sh"
+            ;;
         common)
             script="${SCRIPT_DIR}/install-common-rules.sh"
             ;;

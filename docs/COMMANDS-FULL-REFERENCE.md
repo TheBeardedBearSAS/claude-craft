@@ -31,13 +31,14 @@
 | `/ruby:*` | 1 |
 | `/rust:*` | 1 |
 | `/symfony:*` | 11 |
+| `/tauri:*` | 1 |
 | `/team:*` | 4 |
 | `/uiux:*` | 7 |
 | `/vercel:*` | 7 |
 | `/vite:*` | 8 |
 | `/vuejs:*` | 7 |
 | `/workflow:*` | 9 |
-| **Total** | **199** |
+| **Total** | **200** |
 
 ## `/angular:*`
 
@@ -315,6 +316,12 @@
 | [`/symfony:generate-crud`](../.claude/commands/symfony/generate-crud.md) | Génération CRUD Complet |
 | [`/symfony:migration-plan`](../.claude/commands/symfony/migration-plan.md) | Planification Migration Base de Données |
 | [`/symfony:optimize-doctrine`](../.claude/commands/symfony/optimize-doctrine.md) | Optimisation Requêtes Doctrine |
+
+## `/tauri:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/tauri:check`](../Dev/i18n/en/Tauri/commands/check.md) | Tauri v2 audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
 
 ## `/team:*`
 

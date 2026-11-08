@@ -671,6 +671,24 @@ Focuses on:
 
 ---
 
+### tauri-reviewer
+
+**Expertise**: Tauri v2 (2.12) desktop and mobile app review (installed with `--tech=tauri`)
+
+Focuses on:
+- `src-tauri/` layout, `run()` entry with `mobile_entry_point`, commands grouped by feature
+- Commands and IPC (`#[tauri::command]`, serializable errors, `State`, events, channels)
+- Security (least-privilege capabilities, scoped permissions, CSP, Isolation pattern, signed updater)
+- Plugins and desktop vs mobile `cfg` gating
+- Testing with `tauri::test` mock runtime, `mockIPC` (Vitest) and WebdriverIO E2E
+
+```
+@tauri-reviewer Review these capabilities for least privilege
+@tauri-reviewer Check this command for input validation and error serialization
+```
+
+---
+
 ### vercel-reviewer
 
 **Expertise**: Vercel platform code review (framework-agnostic — not Next.js-specific)

@@ -295,6 +295,15 @@ Main path: `init → plan → design → start → implement → review → retr
 /rust:check all                   # All 4 axes, scored /100
 ```
 
+### `/tauri:` - Tauri
+
+```
+/tauri:check architecture         # Check src-tauri layout, commands, state, plugins
+/tauri:check security             # Check capabilities, CSP, Isolation, updater signing
+/tauri:check testing              # Check tests (mock runtime, mockIPC, E2E)
+/tauri:check all                  # All 4 axes, scored /100
+```
+
 ### `/vite:` - Vite (framework-agnostic)
 
 ```

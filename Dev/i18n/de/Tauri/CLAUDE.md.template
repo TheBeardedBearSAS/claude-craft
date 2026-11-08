@@ -1,0 +1,99 @@
+# {{PROJECT_NAME}} - Tauri v2
+
+> Generiert: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## Was (Stack & Struktur)
+
+**Stack**: Tauri {{TAURI_VERSION}} (Rust-Kern, `rust-version` >= 1.90), Web-Frontend gebündelt mit Vite (Framework nach Wahl), `@tauri-apps/api` {{TAURI_VERSION}}
+
+### Projektstruktur
+```
+package.json            # Frontend-Abhängigkeiten und `tauri`-Skript (@tauri-apps/cli)
+src/                    # Frontend (beliebiges Framework, gebündelt mit Vite)
+src-tauri/
+├── Cargo.toml          # Rust-Crate (tauri, tauri-build, Plugins)
+├── build.rs            # tauri-build
+├── tauri.conf.json     # App-Konfiguration: Fenster, Bundle, Sicherheit (CSP, Capabilities)
+├── capabilities/*.json # Pro Fenster / Rolle gewährte Berechtigungen
+├── icons/              # App-Icons
+├── gen/schemas/        # Generierte Schemas (nicht bearbeiten)
+└── src/
+    ├── main.rs         # Schlanker Einstiegspunkt, der `app_lib::run()` aufruft
+    └── lib.rs          # `run()` mit `#[cfg_attr(mobile, tauri::mobile_entry_point)]`
+```
+
+## Warum (Zweck & Organisation)
+
+### Architektur: Rust-Kern + Web-Frontend, verbunden durch explizites IPC
+- **Rust-Kern**: Geschäftslogik, Betriebssystemzugriff, Zustand; ausschließlich über `#[tauri::command]` bereitgestellt
+- **Frontend**: nur UI; kommuniziert mit dem Kern über `invoke()`, Events und `Channel`
+- **Capabilities**: das Frontend kann nur aufrufen, was eine Capability gewährt (Prinzip der minimalen Rechte)
+- Commands schlank halten und die Logik in reine Rust-Module auslagern, die ohne Fenster testbar sind
+- UI-Code: siehe die Stacks React / Vue / Svelte / Vite; allgemeines Rust: siehe den Stack `rust`
+
+Siehe `rules/02-architecture-tauri.md` für vollständige Muster.
+
+### Kritische Regeln
+| Regel | Begründung |
+|-------|------------|
+| Eine Capability pro Fenster / Rolle, minimale Berechtigungen | Begrenzt, was ein kompromittiertes Webview tun kann |
+| Strikte CSP in `app.security.csp`, Isolation-Pattern wo sinnvoll | XSS darf nicht zu Zugriff auf nativen Code werden |
+| Typisierte Command-Fehler (`thiserror` + `Serialize`) | Keine String-Fehler über die IPC-Grenze hinweg |
+| `fs`- / `http`-Berechtigungen mit Scope, `deny` vor `allow` | Verhindert Missbrauch von Pfaden und URLs |
+| Signaturschlüssel des Updaters geheim halten, nie committen | Geht er verloren, sind keine Updates mehr möglich |
+| `cargo clippy -- -D warnings` + `cargo fmt --check` | Codequalität und einheitlicher Stil |
+| 80 %+ Abdeckung, IPC in Frontend-Tests gemockt | Qualitätssicherung |
+
+## Wie (Befehle & Workflows)
+
+### Entwicklungsbefehle
+```bash
+docker compose exec app npm run tauri dev            # Dev-Modus (Vite + Rust)
+docker compose exec app npm run tauri build          # Release-Build und Bundles
+docker compose exec app cargo test --manifest-path src-tauri/Cargo.toml
+docker compose exec app npx tauri add <plugin>       # Offizielles Plugin hinzufügen
+docker compose exec app npx tauri signer generate -w ~/.tauri/myapp.key
+```
+
+### Qualitäts-Pipeline
+```bash
+docker compose exec app cargo fmt --manifest-path src-tauri/Cargo.toml --check
+docker compose exec app cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
+docker compose exec app cargo test --manifest-path src-tauri/Cargo.toml
+docker compose exec app cargo deny check             # oder: cargo audit
+docker compose exec app npx tsc --noEmit             # Frontend-Typen
+docker compose exec app npx vitest run               # Frontend-Tests (mockIPC)
+```
+
+> Desktop-GUI-Builds benötigen System-WebView-Bibliotheken; kann der Container sie nicht ausführen, in der CI bauen und die Unit-Tests container-tauglich halten.
+
+### Verfügbare Befehle
+- `/tauri:check <architecture|code-quality|security|testing|all>` - Audit nach Achse oder bewerteter Gesamtbericht
+
+### Entwicklungs-Workflow
+1. **Analysieren** - Code lesen, Domäne verstehen (`rules/01-workflow-analysis.md`)
+2. **TDD** - Test schreiben -> Implementieren -> Refactoring
+3. **Qualität** - Qualitäts-Pipeline ausführen
+4. **Commit** - Format Conventional Commits
+
+## Referenzen
+
+| Thema | Regeldatei |
+|-------|------------|
+| Analyse | `rules/01-workflow-analysis.md` |
+| Architektur | `rules/02-architecture-tauri.md` |
+| Coding-Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tooling | `rules/06-tooling.md` |
+| Tests | `rules/07-testing-tauri.md` |
+| Qualität | `rules/08-quality-tools.md` |
+| Sicherheit | `rules/11-security-tauri.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Projektspezifika
+
+{{TECH_STACK}}
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

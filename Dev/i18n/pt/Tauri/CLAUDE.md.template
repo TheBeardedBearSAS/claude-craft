@@ -1,0 +1,99 @@
+# {{PROJECT_NAME}} - Tauri v2
+
+> Gerado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## O Quê (Stack e Estrutura)
+
+**Stack**: Tauri {{TAURI_VERSION}} (núcleo Rust, `rust-version` >= 1.90), frontend web empacotado pelo Vite (framework à sua escolha), `@tauri-apps/api` {{TAURI_VERSION}}
+
+### Estrutura do projeto
+```
+package.json            # Dependências do frontend e script `tauri` (@tauri-apps/cli)
+src/                    # Frontend (qualquer framework, empacotado pelo Vite)
+src-tauri/
+├── Cargo.toml          # Crate Rust (tauri, tauri-build, plugins)
+├── build.rs            # tauri-build
+├── tauri.conf.json     # Configuração do app: janelas, bundle, segurança (CSP, capabilities)
+├── capabilities/*.json # Permissões concedidas por janela / papel
+├── icons/              # Ícones do app
+├── gen/schemas/        # Schemas gerados (não editar)
+└── src/
+    ├── main.rs         # Ponto de entrada enxuto que chama `app_lib::run()`
+    └── lib.rs          # `run()` com `#[cfg_attr(mobile, tauri::mobile_entry_point)]`
+```
+
+## Por Quê (Propósito e Organização)
+
+### Arquitetura: núcleo Rust + frontend web, conectados por um IPC explícito
+- **Núcleo Rust**: lógica de negócio, acesso ao SO, estado; exposto apenas por meio de `#[tauri::command]`
+- **Frontend**: somente a UI; conversa com o núcleo via `invoke()`, eventos e `Channel`
+- **Capabilities**: o frontend só pode chamar o que uma capability concede (privilégio mínimo)
+- Mantenha os commands enxutos e mova a lógica para módulos Rust simples, testáveis sem uma janela
+- Código de UI: consulte as stacks React / Vue / Svelte / Vite; Rust em geral: consulte a stack `rust`
+
+Consulte `rules/02-architecture-tauri.md` para os padrões completos.
+
+### Regras Críticas
+| Regra | Motivo |
+|-------|--------|
+| Uma capability por janela / papel, permissões mínimas | Limita o que uma webview comprometida pode fazer |
+| CSP estrita em `app.security.csp`, padrão Isolation quando pertinente | Um XSS não deve se transformar em acesso a código nativo |
+| Erros de command tipados (`thiserror` + `Serialize`) | Sem erros baseados em strings na fronteira do IPC |
+| Permissões `fs` / `http` com escopo, `deny` em vez de `allow` | Evita abuso de caminhos e URLs |
+| Chave de assinatura do updater mantida em segredo, nunca versionada | Perdê-la significa que não é mais possível publicar atualizações |
+| `cargo clippy -- -D warnings` + `cargo fmt --check` | Qualidade de código e estilo consistente |
+| 80%+ de cobertura, IPC simulado (mock) nos testes do frontend | Garantia de qualidade |
+
+## Como (Comandos e Fluxos de Trabalho)
+
+### Comandos de Desenvolvimento
+```bash
+docker compose exec app npm run tauri dev            # Modo dev (Vite + Rust)
+docker compose exec app npm run tauri build          # Build de release e bundles
+docker compose exec app cargo test --manifest-path src-tauri/Cargo.toml
+docker compose exec app npx tauri add <plugin>       # Adicionar um plugin oficial
+docker compose exec app npx tauri signer generate -w ~/.tauri/myapp.key
+```
+
+### Pipeline de Qualidade
+```bash
+docker compose exec app cargo fmt --manifest-path src-tauri/Cargo.toml --check
+docker compose exec app cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
+docker compose exec app cargo test --manifest-path src-tauri/Cargo.toml
+docker compose exec app cargo deny check             # ou: cargo audit
+docker compose exec app npx tsc --noEmit             # Tipos do frontend
+docker compose exec app npx vitest run               # Testes do frontend (mockIPC)
+```
+
+> Os builds de GUI desktop exigem as bibliotecas de sistema da WebView; se o container não puder executá-las, faça o build na CI e mantenha os testes unitários compatíveis com o container.
+
+### Comandos Disponíveis
+- `/tauri:check <architecture|code-quality|security|testing|all>` - Auditoria por eixo, ou agregado com pontuação
+
+### Fluxo de Desenvolvimento
+1. **Analisar** - Ler o código, entender o domínio (`rules/01-workflow-analysis.md`)
+2. **TDD** - Escrever o teste -> Implementar -> Refatorar
+3. **Qualidade** - Executar o pipeline de qualidade
+4. **Commit** - Formato Conventional Commits
+
+## Referências
+
+| Tópico | Arquivo de Regra |
+|--------|------------------|
+| Análise | `rules/01-workflow-analysis.md` |
+| Arquitetura | `rules/02-architecture-tauri.md` |
+| Padrões de Código | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tooling | `rules/06-tooling.md` |
+| Testes | `rules/07-testing-tauri.md` |
+| Qualidade | `rules/08-quality-tools.md` |
+| Segurança | `rules/11-security-tauri.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Específico do Projeto
+
+{{TECH_STACK}}
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

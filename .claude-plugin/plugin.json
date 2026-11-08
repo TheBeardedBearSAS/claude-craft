@@ -39,6 +39,8 @@
     "rails",
     "rust",
     "axum",
+    "tauri",
+    "desktop",
     "paperclip"
   ]
 }

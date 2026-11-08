@@ -1,0 +1,2 @@
+Tauri
+Tauri 2.12 (Rust core), Vite frontend, desktop + iOS/Android

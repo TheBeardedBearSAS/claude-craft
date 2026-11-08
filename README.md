@@ -34,6 +34,8 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ## Unreleased
 
+**Nouveau stack Tauri v2 (2026-11-09) :** `--tech=tauri` (communautaire) installe Tauri 2.12 pour applications desktop et mobile (cœur Rust, front web agnostique) : 6 règles en anglais (architecture `src-tauri/`, commands/IPC, capabilities et permissions, CSP, pattern Isolation, updater signé, tests mock runtime / `mockIPC` / WebdriverIO), l'agent `@tauri-reviewer` et `/tauri:check <axe>` dans les 5 langues. Détails : [CHANGELOG](CHANGELOG.md#unreleased).
+
 **Nouveau stack Rust / Axum (2026-11-08) :** `--tech=rust` installe Rust 1.99 (édition 2024) + Axum 0.8 (workspace en couches, Tokio, Tower, SQLx, thiserror + RFC 9457, cargo-nextest, Clippy, cargo-deny) dans les 5 langues : 6 règles, l'agent `@rust-reviewer` et `/rust:check <axe>`. Détails : [CHANGELOG](CHANGELOG.md#unreleased).
 
 ## What's New in v9.1.0
@@ -225,6 +227,7 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **Vue.js** | 3.5+ (3.6 RC Vapor) | `--tech=vuejs` |
 | **Vite** _(community)_ | 8.3 | `--tech=vite` |
 | **Vercel** _(community)_ | 63.1.2 | `--tech=vercel` |
+| **Tauri** _(community)_ | 2.12 (desktop + mobile) | `--tech=tauri` |
 | **React Native** | 0.87 (New Architecture) | `--tech=reactnative` |
 | **C# / .NET** | 10 LTS / C# 14 | `--tech=csharp` |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | `--tech=laravel` |
@@ -249,7 +252,7 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 143 across 18 namespaces (199 total with infra/project, including 66 redirect stubs kept until 10.0) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Commands** | 143 across 18 namespaces (200 total with infra/project, including 66 redirect stubs kept until 10.0) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
 | **Skills** | 55 | Architecture, testing, security, DDD best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -291,7 +294,7 @@ These are the commands you'll use most:
 | `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 143 commands across 18 namespaces (199 total including infra, project management and the redirect stubs kept until 10.0).
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 143 commands across 18 namespaces (200 total including infra, project management and the redirect stubs kept until 10.0).
 
 ## Installation
 

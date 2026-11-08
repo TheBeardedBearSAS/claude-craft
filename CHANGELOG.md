@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nouveau stack **Rust / Axum** (15e stack).
+Nouveaux stacks **Rust / Axum** (15e stack) et **Tauri** (16e stack).
 
 ### Added
 
 - **Rust / Axum stack** (Tier 2, `--tech=rust`) : Rust 1.99 (édition 2024) + Axum 0.8 — rules (architecture workspace en couches, coding standards, tooling, testing cargo-nextest/`#[sqlx::test]`, quality Clippy/cargo-deny/cargo-audit, sécurité OWASP), agent `@rust-reviewer`, routeur `/rust:check <axe>` et checklists par axe dans `Dev/i18n/base/Rust/`, dans les 5 langues. Versions sourcées dans `config/versions.yaml` (Rust 1.99.1, Axum 0.8.9, Tokio 1.54.1, SQLx 0.9.0).
 - Site : carte **Rust / Axum** dans la grille des technologies (logo Simple Icons, CC0-1.0).
+- **Tauri stack** (Tier 3 communautaire, `--tech=tauri`, catégorie desktop) : Tauri v2 (2.12, MSRV 1.90) pour applications desktop et mobile, front web agnostique — 6 rules en anglais dans `Dev/i18n/base/Tauri/` (architecture `src-tauri/`, coding standards commands/IPC, tooling CLI 2.12 et cibles iOS/Android, testing `tauri::test` + `mockIPC` + WebdriverIO, quality Clippy/cargo-deny/tsc, sécurité capabilities/CSP/Isolation/updater signé), agent `@tauri-reviewer`, routeur `/tauri:check <axe>` et agrégat noté /100 dans les 5 langues, script `install-tauri-rules.sh`, profil `Dev/stack-profiles/tauri/`. Tauri 3 (alpha) hors périmètre.
+- Site : carte **Tauri** dans la grille des technologies (logo Simple Icons, CC0-1.0).
 
 ## [9.1.1] - 2026-11-03
 
