@@ -29,6 +29,7 @@
 | `/react:*` | 11 |
 | `/reactnative:*` | 11 |
 | `/ruby:*` | 1 |
+| `/rust:*` | 1 |
 | `/symfony:*` | 11 |
 | `/team:*` | 4 |
 | `/uiux:*` | 7 |
@@ -36,7 +37,7 @@
 | `/vite:*` | 8 |
 | `/vuejs:*` | 7 |
 | `/workflow:*` | 9 |
-| **Total** | **198** |
+| **Total** | **199** |
 
 ## `/angular:*`
 
@@ -292,6 +293,12 @@
 | Command | Description |
 |---------|-------------|
 | [`/ruby:check`](../Dev/i18n/en/Ruby/commands/check.md) | Ruby/Rails audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
+
+## `/rust:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/rust:check`](../Dev/i18n/en/Rust/commands/check.md) | Rust/Axum audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
 
 ## `/symfony:*`
 

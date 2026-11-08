@@ -1,0 +1,4 @@
+Bash(cargo:*)
+Bash(rustup:*)
+Bash(rustc:*)
+Bash(sqlx:*)

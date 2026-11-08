@@ -1,0 +1,94 @@
+# {{PROJECT_NAME}} - Rust / Axum
+
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## What (Stack & Structure)
+
+**Stack**: Rust {{RUST_VERSION}} (edition 2024), Axum {{AXUM_VERSION}}, Tokio, SQLx, Tower
+
+### Project Structure
+```
+Cargo.toml              # Workspace manifest (shared dependencies and lints)
+rust-toolchain.toml     # Pinned toolchain, rustfmt and clippy components
+crates/
+├── domain/             # Entities, value objects, ports (traits) - no axum, no sqlx
+├── application/        # Use cases (one use case = one type with an `execute`)
+├── infrastructure/     # Adapters: SQLx repositories, HTTP clients, clock, mail
+└── api/                # Binary: Router, handlers, extractors, middleware, AppError
+migrations/             # SQLx migrations (versioned SQL)
+.sqlx/                  # Offline query metadata (committed)
+tests/                  # Integration tests (Router + oneshot, #[sqlx::test])
+deny.toml               # cargo-deny policy (advisories, licenses, bans, sources)
+```
+
+## Why (Purpose & Organization)
+
+### Architecture: layered / hexagonal, enforced by crate boundaries
+- **domain**: business rules, no framework dependency (checked by `Cargo.toml`)
+- **application**: use cases orchestrating domain objects through ports
+- **infrastructure**: adapters implementing the ports (SQLx, HTTP clients)
+- **api**: translates HTTP to use cases and back (extractors, `AppError`, middleware)
+- A small service may start as a single crate with modules; split when boundaries hurt
+
+See `rules/02-architecture-rust.md` for complete patterns.
+
+### Critical Rules
+| Rule | Reason |
+|------|--------|
+| `#![forbid(unsafe_code)]` | Memory safety guaranteed by the compiler |
+| `cargo clippy -- -D warnings` + `cargo fmt --check` | Code quality and consistent style |
+| No `unwrap()` / `expect()` on request paths | A panic must never be a response |
+| SQLx bind parameters only | SQL injection prevention |
+| `cargo deny check` + `cargo audit` | Supply-chain and RustSec advisories gate |
+| 80%+ coverage (cargo-llvm-cov) | Quality assurance |
+
+## How (Commands & Workflows)
+
+### Development Commands
+```bash
+docker compose exec app cargo build                  # Build
+docker compose exec app cargo run -p api             # Run the server
+{{CACHE_CLEAR_COMMAND}}                              # Clear build cache
+docker compose exec app cargo nextest run            # Run tests
+docker compose exec app cargo fmt --check            # Formatting
+docker compose exec app cargo clippy --all-targets --all-features -- -D warnings
+```
+
+### Quality Pipeline
+```bash
+docker compose exec app cargo fmt --check                                    # Style
+docker compose exec app cargo clippy --all-targets -- -D warnings            # Lints
+docker compose exec app cargo nextest run                                    # Tests
+docker compose exec app cargo llvm-cov nextest --fail-under-lines 80         # Coverage
+docker compose exec app cargo deny check                                     # Policy
+docker compose exec app cargo audit                                          # RustSec
+docker compose exec app cargo sqlx prepare --check --workspace               # Offline metadata
+```
+
+### Development Workflow
+1. **Analyze** - Read code, understand domain (`rules/01-workflow-analysis.md`)
+2. **TDD** - Write test -> Implement -> Refactor
+3. **Quality** - Run the quality pipeline inside the container
+4. **Commit** - Conventional Commits format
+
+## References
+
+| Topic | Rule File |
+|-------|-----------|
+| Analysis | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture-rust.md` |
+| Rust Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tooling | `rules/06-tooling.md` |
+| Testing | `rules/07-testing-rust.md` |
+| Quality | `rules/08-quality-tools.md` |
+| Security | `rules/11-security-rust.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
+
+{{TECH_STACK}}
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

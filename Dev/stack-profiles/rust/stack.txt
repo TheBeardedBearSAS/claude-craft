@@ -1,0 +1,2 @@
+Rust / Axum
+Rust 1.99 (edition 2024), Axum 0.8, Tokio, SQLx, cargo-nextest

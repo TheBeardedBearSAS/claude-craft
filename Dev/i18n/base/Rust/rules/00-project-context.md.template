@@ -1,0 +1,253 @@
+# Project Context - {{PROJECT_NAME}}
+
+## General Information
+
+**Project name** : {{PROJECT_NAME}}
+
+**Tech stack** : {{TECH_STACK}}
+
+**Rust toolchain** : {{RUST_VERSION}}
+
+**Edition** : {{RUST_EDITION}}
+
+**Framework** : axum {{AXUM_VERSION}}
+
+## Project Description
+
+{{PROJECT_DESCRIPTION}}
+
+## Project Goals
+
+{{PROJECT_GOALS}}
+
+## Technical Architecture
+
+### Backend
+- **Language** : Rust {{RUST_VERSION}} (edition {{RUST_EDITION}}, MSRV {{MSRV}})
+- **Web framework** : axum {{AXUM_VERSION}} on tokio {{TOKIO_VERSION}}
+- **Middleware** : tower / tower-http ({{TOWER_HTTP_VERSION}})
+- **Data access** : sqlx {{SQLX_VERSION}} (compile-time checked queries, offline cache `.sqlx/`)
+- **Database** : {{DATABASE_TYPE}}
+- **Cache** : {{CACHE_SYSTEM}}
+- **Queue / background jobs** : {{QUEUE_SYSTEM}}
+- **Observability** : tracing + {{OBSERVABILITY_STACK}}
+
+### API
+- **API Type** : {{API_TYPE}}
+- **Base URL** : {{API_BASE_URL}}
+- **Error format** : RFC 9457 `application/problem+json`
+- **Authentication** : {{AUTH_METHOD}}
+
+### Infrastructure
+- **Hosting** : {{HOSTING_PLATFORM}}
+- **CI/CD** : {{CICD_PLATFORM}}
+- **Containerization** : {{CONTAINERIZATION}}
+- **Deployment** : {{DEPLOY_TOOL}}
+
+## Project Structure
+
+Layered or hexagonal, enforced by the crate graph. A single crate with the same top-level modules is acceptable for small services.
+
+```
+{{PROJECT_NAME}}/
+├── Cargo.toml                    # [workspace], [workspace.dependencies], [workspace.lints]
+├── Cargo.lock                    # Committed (binary)
+├── rust-toolchain.toml           # Pinned channel + clippy + rustfmt
+├── deny.toml                     # cargo-deny policy
+├── crates/
+│   ├── domain/                   # Entities, value objects, errors, ports (no axum/sqlx/tokio)
+│   ├── application/              # Use cases, orchestration
+│   ├── infrastructure/           # sqlx repositories, external clients, config
+│   ├── http/                     # axum routers, handlers, extractors, AppError, middleware
+│   └── app/                      # Binary: config, pool, router, server, graceful shutdown
+│
+├── migrations/                   # sqlx migrations (forward-only)
+├── .sqlx/                        # Offline query cache (cargo sqlx prepare)
+├── tests/                        # Cross-crate integration tests (oneshot, sqlx::test)
+├── docker/                       # Docker configuration
+├── docs/                         # Documentation and ADRs
+└── scripts/ci.sh                 # fmt, clippy, sqlx check, nextest, deny, audit
+```
+
+## Team and Responsibilities
+
+### Developers
+{{TEAM_MEMBERS}}
+
+### Code Owners
+{{CODE_OWNERS}}
+
+## Development Workflow
+
+### Branches
+- `main` : Production
+- `feature/*` : New features
+- `fix/*` : Bug fixes
+- `refactor/*` : Refactoring
+- `hotfix/*` : Urgent fixes
+
+### Review Process
+{{REVIEW_PROCESS}}
+
+## Environments
+
+### Local Development
+- **URL** : {{DEV_URL}}
+- **API** : {{DEV_API_URL}}
+- **Database** : {{DEV_DATABASE}}
+
+### Staging
+- **URL** : {{STAGING_URL}}
+- **API** : {{STAGING_API_URL}}
+- **Database** : {{STAGING_DATABASE}}
+
+### Production
+- **URL** : {{PRODUCTION_URL}}
+- **API** : {{PRODUCTION_API_URL}}
+- **Database** : {{PRODUCTION_DATABASE}}
+
+## Main Commands
+
+All commands run through Docker.
+
+### Installation
+```bash
+docker compose up -d
+docker compose exec app cargo build --workspace
+```
+
+### Development
+```bash
+docker compose exec app cargo run -p {{BINARY_CRATE}}
+docker compose exec app cargo watch -x "run -p {{BINARY_CRATE}}"
+docker compose exec app cargo check --workspace
+```
+
+### Database
+```bash
+# Run migrations
+docker compose exec app sqlx migrate run
+
+# Create migration
+docker compose exec app sqlx migrate add {{MIGRATION_NAME}}
+
+# Refresh the offline query cache (commit .sqlx/)
+docker compose exec app cargo sqlx prepare --workspace
+```
+
+### Tests
+```bash
+# All tests
+docker compose exec app cargo nextest run --workspace --all-features
+
+# Doc tests
+docker compose exec app cargo test --workspace --doc
+
+# With coverage (cargo-llvm-cov)
+docker compose exec app cargo llvm-cov nextest --workspace --fail-under-lines 80
+```
+
+### Quality
+```bash
+# Format and lint
+docker compose exec app cargo fmt --all -- --check
+docker compose exec app cargo clippy --workspace --all-targets --all-features -- -D warnings
+
+# Security
+docker compose exec app cargo audit
+docker compose exec app cargo deny check
+
+# Full local CI
+docker compose exec app ./scripts/ci.sh
+```
+
+## Environment Variables
+
+```env
+# Application
+APP_ENV={{APP_ENV}}
+APP_BIND_ADDR={{APP_BIND_ADDR}}
+RUST_LOG={{RUST_LOG}}
+
+# Database
+DATABASE_URL={{DATABASE_URL}}
+
+# Auth
+JWT_PUBLIC_KEY_PATH={{JWT_PUBLIC_KEY_PATH}}
+
+# External APIs
+{{EXTERNAL_API_VARS}}
+```
+
+Secrets come from the environment or a secret store, are parsed once into a typed config at startup, and are wrapped in `secrecy::SecretString`. Never commit them.
+
+## Naming Conventions
+
+### Files
+- **Modules / files** : snake_case (ex: `order_repository.rs`)
+- **Crates** : kebab-case or snake_case, consistent across the workspace (ex: `shop-domain`)
+- **Migrations** : timestamped by sqlx (`<timestamp>_add_orders.sql`)
+- **Integration tests** : `tests/<resource>.rs`
+
+### Code
+- **Types / traits / enums** : UpperCamelCase
+- **Functions / variables / modules** : snake_case
+- **Constants / statics** : SCREAMING_SNAKE_CASE
+- **Getters** : no `get_` prefix (RFC 430)
+- **Errors** : `<Domain>Error` enums with `thiserror`
+- **Tables** : plural snake_case; foreign keys `<table>_id`
+
+## Project-Specific Rules
+
+{{PROJECT_SPECIFIC_RULES}}
+
+## Main Dependencies
+
+### Production
+```toml
+[workspace.dependencies]
+axum = "{{AXUM_VERSION}}"
+tokio = { version = "{{TOKIO_VERSION}}", features = ["rt-multi-thread", "macros", "net", "signal"] }
+tower-http = { version = "{{TOWER_HTTP_VERSION}}", features = ["trace", "timeout", "cors", "limit"] }
+sqlx = { version = "{{SQLX_VERSION}}", default-features = false, features = ["postgres", "migrate", "macros"] }
+thiserror = "{{THISERROR_VERSION}}"
+tracing = "{{TRACING_VERSION}}"
+{{DEPENDENCIES}}
+```
+
+Adjust the sqlx runtime, TLS and type features to the project (see the sqlx documentation for the exact feature names of the pinned version).
+
+### Development and Test
+```toml
+[workspace.dependencies]
+{{DEV_DEPENDENCIES}}
+```
+
+Tools installed in the image: cargo-nextest, cargo-llvm-cov, cargo-deny, cargo-audit, sqlx-cli.
+
+## Resources and Documentation
+
+### Internal Documentation
+- **Architecture** : `docs/architecture.md`
+- **API Reference** : `docs/api-reference.md`
+- **Database Schema** : `migrations/`
+
+### External Documentation
+- **Rust** : https://doc.rust-lang.org/
+- **axum** : https://docs.rs/axum
+- **sqlx** : https://docs.rs/sqlx
+- **Framework** : {{FRAMEWORK_DOCS_URL}}
+- {{EXTERNAL_DOCS}}
+
+## Important Notes
+
+{{IMPORTANT_NOTES}}
+
+## Major Changes History
+
+{{CHANGELOG_HIGHLIGHTS}}
+
+---
+
+**Last update** : {{LAST_UPDATE_DATE}}
+**Maintainer** : {{MAINTAINER_NAME}}

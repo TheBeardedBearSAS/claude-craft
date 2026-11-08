@@ -1,0 +1,3 @@
+- Clippy (-D warnings) + rustfmt
+- cargo-deny + cargo-audit (RustSec)
+- cargo-nextest + cargo-llvm-cov (>= 80 %)

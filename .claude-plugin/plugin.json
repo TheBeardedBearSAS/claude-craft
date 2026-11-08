@@ -37,6 +37,8 @@
     "php",
     "ruby",
     "rails",
+    "rust",
+    "axum",
     "paperclip"
   ]
 }
