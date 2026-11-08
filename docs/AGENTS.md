@@ -653,6 +653,24 @@ Focuses on:
 
 ---
 
+### rust-reviewer
+
+**Expertise**: Rust 1.99 / Axum 0.8 code review (installed with `--tech=rust`)
+
+Focuses on:
+- Layered Cargo workspace (domain free of axum/sqlx), thin handlers
+- Axum Router, State, extractors and Tower middleware
+- Error handling (thiserror, `IntoResponse`, RFC 9457), no `unwrap()` on request paths
+- Security (SQLx bound parameters, input validation, `unsafe` policy, cargo-deny/cargo-audit)
+- Testing with cargo-nextest, `tower::ServiceExt::oneshot`, `#[sqlx::test]`, coverage
+
+```
+@rust-reviewer Review this handler for Axum idioms and error handling
+@rust-reviewer Check this repository for SQL injection and blocking calls in async code
+```
+
+---
+
 ### vercel-reviewer
 
 **Expertise**: Vercel platform code review (framework-agnostic — not Next.js-specific)

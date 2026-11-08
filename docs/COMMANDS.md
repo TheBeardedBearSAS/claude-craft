@@ -57,6 +57,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/vercel:` | Vercel | 2 |
 | `/php:` | PHP | 1 |
 | `/ruby:` | Ruby / Rails | 1 |
+| `/rust:` | Rust / Axum | 1 |
 | `/docker:` | Docker/Infrastructure | 5 |
 | `/coolify:` | Coolify/PaaS | 5 |
 | `/kubernetes:` | Kubernetes/Infrastructure | 5 |
@@ -483,6 +484,18 @@ Ruby 4.0 + Rails 8.1: Rails Way first, service/form/query objects when code grow
 
 ---
 
+## Rust / Axum Commands (`/rust:`)
+
+Rust 1.99 (edition 2024) + Axum 0.8: layered Cargo workspace, Tokio, Tower middleware, SQLx compile-time checked queries, thiserror errors mapped to RFC 9457, cargo-nextest, Clippy and cargo-deny.
+
+### Analysis Commands
+
+| Command | Description |
+|---------|-------------|
+| `/rust:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
+
+---
+
 ## PHP Commands (`/php:`)
 
 Standalone PHP development with PSR-12 and PHPStan.
@@ -849,7 +862,7 @@ These redirect stubs print a warning and run their replacement until 10.0.
 | `/<tech>:check-compliance` | `/<tech>:check all` |
 | `/team:sprint` | `/team:delivery --phase=implementation` |
 
-`<tech>` is any of the 14 stacks: `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `ruby`, `symfony`, `vercel`, `vite`, `vuejs`. The per-axis checklists are installed in `.claude/references/<tech>/checks/`.
+`<tech>` is any of the 15 stacks: `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `ruby`, `rust`, `symfony`, `vercel`, `vite`, `vuejs`. The per-axis checklists are installed in `.claude/references/<tech>/checks/`.
 
 ---
 

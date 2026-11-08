@@ -1,0 +1,94 @@
+# {{PROJECT_NAME}} - Rust / Axum
+
+> Generiert: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## Was (Stack & Struktur)
+
+**Stack**: Rust {{RUST_VERSION}} (Edition 2024), Axum {{AXUM_VERSION}}, Tokio, SQLx, Tower
+
+### Projektstruktur
+```
+Cargo.toml              # Workspace-Manifest (gemeinsame Abhängigkeiten und Lints)
+rust-toolchain.toml     # Fixierte Toolchain, Komponenten rustfmt und clippy
+crates/
+├── domain/             # Entitäten, Value Objects, Ports (Traits) - kein axum, kein sqlx
+├── application/        # Anwendungsfälle (ein Anwendungsfall = ein Typ mit einem `execute`)
+├── infrastructure/     # Adapter: SQLx-Repositories, HTTP-Clients, Uhr, Mail
+└── api/                # Binary: Router, Handler, Extractors, Middleware, AppError
+migrations/             # SQLx-Migrationen (versioniertes SQL)
+.sqlx/                  # Offline-Query-Metadaten (eingecheckt)
+tests/                  # Integrationstests (Router + oneshot, #[sqlx::test])
+deny.toml               # cargo-deny-Richtlinie (Advisories, Lizenzen, Bans, Quellen)
+```
+
+## Warum (Zweck & Organisation)
+
+### Architektur: geschichtet / hexagonal, durch Crate-Grenzen erzwungen
+- **domain**: Geschäftsregeln, keine Framework-Abhängigkeit (durch `Cargo.toml` geprüft)
+- **application**: Anwendungsfälle, die Domänenobjekte über Ports orchestrieren
+- **infrastructure**: Adapter, die die Ports implementieren (SQLx, HTTP-Clients)
+- **api**: übersetzt HTTP in Anwendungsfälle und zurück (Extractors, `AppError`, Middleware)
+- Ein kleiner Service kann als einzelnes Crate mit Modulen beginnen; aufteilen, wenn die Grenzen schmerzen
+
+Siehe `rules/02-architecture-rust.md` für die vollständigen Muster.
+
+### Kritische Regeln
+| Regel | Begründung |
+|-------|------------|
+| `#![forbid(unsafe_code)]` | Speichersicherheit vom Compiler garantiert |
+| `cargo clippy -- -D warnings` + `cargo fmt --check` | Codequalität und einheitlicher Stil |
+| Kein `unwrap()` / `expect()` auf Request-Pfaden | Ein Panic darf niemals eine Antwort sein |
+| Ausschließlich SQLx-Bind-Parameter | Schutz vor SQL-Injection |
+| `cargo deny check` + `cargo audit` | Gate für Lieferkette und RustSec-Advisories |
+| 80 %+ Abdeckung (cargo-llvm-cov) | Qualitätssicherung |
+
+## Wie (Befehle & Workflows)
+
+### Entwicklungsbefehle
+```bash
+docker compose exec app cargo build                  # Build
+docker compose exec app cargo run -p api             # Server starten
+{{CACHE_CLEAR_COMMAND}}                              # Build-Cache leeren
+docker compose exec app cargo nextest run            # Tests ausführen
+docker compose exec app cargo fmt --check            # Formatierung
+docker compose exec app cargo clippy --all-targets --all-features -- -D warnings
+```
+
+### Qualitäts-Pipeline
+```bash
+docker compose exec app cargo fmt --check                                    # Stil
+docker compose exec app cargo clippy --all-targets -- -D warnings            # Lints
+docker compose exec app cargo nextest run                                    # Tests
+docker compose exec app cargo llvm-cov nextest --fail-under-lines 80         # Abdeckung
+docker compose exec app cargo deny check                                     # Richtlinie
+docker compose exec app cargo audit                                          # RustSec
+docker compose exec app cargo sqlx prepare --check --workspace               # Offline-Metadaten
+```
+
+### Entwicklungs-Workflow
+1. **Analysieren** - Code lesen, Domäne verstehen (`rules/01-workflow-analysis.md`)
+2. **TDD** - Test schreiben -> Implementieren -> Refactoring
+3. **Qualität** - Die Qualitäts-Pipeline im Container ausführen
+4. **Commit** - Format der Conventional Commits
+
+## Referenzen
+
+| Thema | Regeldatei |
+|-------|------------|
+| Analyse | `rules/01-workflow-analysis.md` |
+| Architektur | `rules/02-architecture-rust.md` |
+| Rust-Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tooling | `rules/06-tooling.md` |
+| Tests | `rules/07-testing-rust.md` |
+| Qualität | `rules/08-quality-tools.md` |
+| Sicherheit | `rules/11-security-rust.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Projektspezifika
+
+{{TECH_STACK}}
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

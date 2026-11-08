@@ -447,6 +447,9 @@ get_install_script() {
         ruby)
             script="${SCRIPT_DIR}/install-ruby-rules.sh"
             ;;
+        rust)
+            script="${SCRIPT_DIR}/install-rust-rules.sh"
+            ;;
         common)
             script="${SCRIPT_DIR}/install-common-rules.sh"
             ;;

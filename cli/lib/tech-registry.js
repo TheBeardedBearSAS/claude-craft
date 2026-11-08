@@ -158,6 +158,16 @@ const TECH_REGISTRY = {
     version: '8.1 / Ruby 4.0',
     tier: 2,
   },
+  rust: {
+    name: 'rust',
+    displayName: 'Rust / Axum',
+    desc: 'Backend Rust 1.99 (edition 2024) with Axum 0.8, Tokio, SQLx, cargo-nextest',
+    namespace: 'rust',
+    i18nDir: 'Rust',
+    installScript: 'install-rust-rules.sh',
+    version: '0.8 / Rust 1.99',
+    tier: 2,
+  },
   paperclip: {
     name: 'paperclip',
     displayName: 'Paperclip',

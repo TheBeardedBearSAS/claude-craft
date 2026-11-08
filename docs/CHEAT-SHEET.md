@@ -286,6 +286,15 @@ Main path: `init → plan → design → start → implement → review → retr
 /ruby:check all                   # All 4 axes, scored /100
 ```
 
+### `/rust:` - Rust / Axum
+
+```
+/rust:check architecture          # Check workspace layering, Axum Router/State
+/rust:check security              # Check security (SQLx, unsafe, cargo-deny)
+/rust:check testing               # Check tests
+/rust:check all                   # All 4 axes, scored /100
+```
+
 ### `/vite:` - Vite (framework-agnostic)
 
 ```

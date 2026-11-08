@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nouveau stack **Rust / Axum** (15e stack).
+
+### Added
+
+- **Rust / Axum stack** (Tier 2, `--tech=rust`) : Rust 1.99 (édition 2024) + Axum 0.8 — rules (architecture workspace en couches, coding standards, tooling, testing cargo-nextest/`#[sqlx::test]`, quality Clippy/cargo-deny/cargo-audit, sécurité OWASP), agent `@rust-reviewer`, routeur `/rust:check <axe>` et checklists par axe dans `Dev/i18n/base/Rust/`, dans les 5 langues. Versions sourcées dans `config/versions.yaml` (Rust 1.99.1, Axum 0.8.9, Tokio 1.54.1, SQLx 0.9.0).
+- Site : carte **Rust / Axum** dans la grille des technologies (logo Simple Icons, CC0-1.0).
+
 ## [9.1.1] - 2026-11-03
 
 Commande mainteneur `/common:add-technology` alignée sur le layout v9, cartes Ruby / Vite / Vercel sur le site et Claude Code recommandé 2.1.317.
