@@ -124,6 +124,16 @@ const TECH_REGISTRY = {
     version: '63.1.2',
     tier: 3,
   },
+  tauri: {
+    name: 'tauri',
+    displayName: 'Tauri',
+    desc: 'Desktop & mobile apps: Rust core + web frontend, capabilities/permissions, plugins, signed updater',
+    namespace: 'tauri',
+    i18nDir: 'Tauri',
+    installScript: 'install-tauri-rules.sh',
+    version: '2.12',
+    tier: 3,
+  },
   php: {
     name: 'php',
     displayName: 'PHP',

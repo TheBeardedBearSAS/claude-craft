@@ -1,0 +1,99 @@
+# {{PROJECT_NAME}} - Tauri v2
+
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## What (Stack & Structure)
+
+**Stack**: Tauri {{TAURI_VERSION}} (Rust core, `rust-version` >= 1.90), web frontend bundled by Vite (framework of your choice), `@tauri-apps/api` {{TAURI_VERSION}}
+
+### Project Structure
+```
+package.json            # Frontend deps and `tauri` script (@tauri-apps/cli)
+src/                    # Frontend (any framework, bundled by Vite)
+src-tauri/
+├── Cargo.toml          # Rust crate (tauri, tauri-build, plugins)
+├── build.rs            # tauri-build
+├── tauri.conf.json     # App config: windows, bundle, security (CSP, capabilities)
+├── capabilities/*.json # Permissions granted per window / role
+├── icons/              # App icons
+├── gen/schemas/        # Generated schemas (do not edit)
+└── src/
+    ├── main.rs         # Thin entry point calling `app_lib::run()`
+    └── lib.rs          # `run()` with `#[cfg_attr(mobile, tauri::mobile_entry_point)]`
+```
+
+## Why (Purpose & Organization)
+
+### Architecture: Rust core + web frontend, bridged by explicit IPC
+- **Rust core**: business logic, OS access, state; exposed only through `#[tauri::command]`
+- **Frontend**: UI only; talks to the core via `invoke()`, events and `Channel`
+- **Capabilities**: the frontend can call only what a capability grants (least privilege)
+- Keep commands thin and move logic into plain Rust modules testable without a window
+- UI code: see the React / Vue / Svelte / Vite stacks; general Rust: see the `rust` stack
+
+See `rules/02-architecture-tauri.md` for complete patterns.
+
+### Critical Rules
+| Rule | Reason |
+|------|--------|
+| One capability per window / role, minimal permissions | Limits what a compromised webview can do |
+| Strict CSP in `app.security.csp`, Isolation pattern when relevant | XSS must not become native code access |
+| Typed command errors (`thiserror` + `Serialize`) | No stringly-typed errors across the IPC boundary |
+| Scoped `fs` / `http` permissions, `deny` over `allow` | Prevents path and URL abuse |
+| Updater signing key kept secret, never committed | Losing it means no more updates are possible |
+| `cargo clippy -- -D warnings` + `cargo fmt --check` | Code quality and consistent style |
+| 80%+ coverage, IPC mocked in frontend tests | Quality assurance |
+
+## How (Commands & Workflows)
+
+### Development Commands
+```bash
+docker compose exec app npm run tauri dev            # Dev mode (Vite + Rust)
+docker compose exec app npm run tauri build          # Release build and bundles
+docker compose exec app cargo test --manifest-path src-tauri/Cargo.toml
+docker compose exec app npx tauri add <plugin>       # Add an official plugin
+docker compose exec app npx tauri signer generate -w ~/.tauri/myapp.key
+```
+
+### Quality Pipeline
+```bash
+docker compose exec app cargo fmt --manifest-path src-tauri/Cargo.toml --check
+docker compose exec app cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
+docker compose exec app cargo test --manifest-path src-tauri/Cargo.toml
+docker compose exec app cargo deny check             # or: cargo audit
+docker compose exec app npx tsc --noEmit             # Frontend types
+docker compose exec app npx vitest run               # Frontend tests (mockIPC)
+```
+
+> Desktop GUI builds need system WebView libraries; if the container cannot run them, build in CI and keep unit tests container-friendly.
+
+### Available Commands
+- `/tauri:check <architecture|code-quality|security|testing|all>` - Audit by axis, or scored aggregate
+
+### Development Workflow
+1. **Analyze** - Read code, understand domain (`rules/01-workflow-analysis.md`)
+2. **TDD** - Write test -> Implement -> Refactor
+3. **Quality** - Run the quality pipeline
+4. **Commit** - Conventional Commits format
+
+## References
+
+| Topic | Rule File |
+|-------|-----------|
+| Analysis | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture-tauri.md` |
+| Coding Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tooling | `rules/06-tooling.md` |
+| Testing | `rules/07-testing-tauri.md` |
+| Quality | `rules/08-quality-tools.md` |
+| Security | `rules/11-security-tauri.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
+
+{{TECH_STACK}}
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

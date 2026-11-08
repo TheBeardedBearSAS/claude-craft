@@ -24,6 +24,7 @@ const appTechs = [
   { name: 'Rust / Axum', logo: `${base}logos/rust.svg`, desc: 'Axum, Tokio, SQLx' },
   { name: 'Vite', logo: `${base}logos/vite.svg`, desc: 'Vanilla, Library mode, Multi-page' },
   { name: 'Vercel', logo: `${base}logos/vercel.svg`, desc: 'Functions, ISR, Cron Jobs' },
+  { name: 'Tauri', logo: `${base}logos/tauri.svg`, desc: 'Desktop & mobile, Rust core, Capabilities' },
   { name: 'Paperclip', logo: `${base}logos/paperclip.svg`, desc: 'Control plane + adapters, governance-first' },
 ]
 

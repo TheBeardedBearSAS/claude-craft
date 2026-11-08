@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { TECHNOLOGIES, LANGUAGES, TRACKS } from '../../cli/lib/constants.js';
 
 describe('TECHNOLOGIES', () => {
-  it('contains all 13 selectable technologies (php, docker, coolify excluded)', () => {
+  it('contains all 15 selectable technologies (php, docker, coolify excluded)', () => {
     const keys = Object.keys(TECHNOLOGIES);
-    expect(keys).toHaveLength(14);
+    expect(keys).toHaveLength(15);
     expect(keys).toContain('symfony');
     expect(keys).toContain('flutter');
     expect(keys).toContain('react');
@@ -19,6 +19,7 @@ describe('TECHNOLOGIES', () => {
     expect(keys).toContain('paperclip');
     expect(keys).toContain('ruby');
     expect(keys).toContain('rust');
+    expect(keys).toContain('tauri');
     // php is auto-included with symfony/laravel — not a standalone menu option (audit DA-PM-03)
     expect(keys).not.toContain('php');
     // docker and coolify are infra techs — not in the installation menu (audit CLI-02)

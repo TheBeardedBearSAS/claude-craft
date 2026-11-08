@@ -1,0 +1,161 @@
+# Project Context - {{PROJECT_NAME}}
+
+## General Information
+
+**Project name** : {{PROJECT_NAME}}
+
+**Tech stack** : {{TECH_STACK}}
+
+**Tauri** : v2 (stable line 2.12). Tauri 3 (alpha) is out of scope for this project.
+
+**Rust toolchain** : {{RUST_VERSION}} (edition {{RUST_EDITION}}, MSRV {{MSRV}}; Tauri 2.12 requires Rust 1.90)
+
+**Frontend** : {{FRONTEND_FRAMEWORK}} bundled with {{BUNDLER}}
+
+**Target platforms** : {{TARGET_PLATFORMS}} <!-- desktop: Windows/macOS/Linux; mobile: Android/iOS -->
+
+> This stack is frontend-agnostic. UI concerns follow the React / Vue / Svelte / Vite rules; general Rust concerns follow the `rust` stack. This document covers the Tauri-specific parts.
+
+## Project Description
+
+{{PROJECT_DESCRIPTION}}
+
+## Project Goals
+
+{{PROJECT_GOALS}}
+
+## Technical Architecture
+
+### Rust Core (`src-tauri/`)
+- **Tauri crate** : tauri {{TAURI_VERSION}}, tauri-build {{TAURI_BUILD_VERSION}}
+- **CLI** : @tauri-apps/cli {{TAURI_CLI_VERSION}}
+- **Entry point** : `src/main.rs` calls `run()` in `src/lib.rs` (`#[cfg_attr(mobile, tauri::mobile_entry_point)]`)
+- **Plugins** : {{TAURI_PLUGINS}}
+- **Persistence** : {{PERSISTENCE_LAYER}}
+- **Error handling** : `thiserror` enums implementing `serde::Serialize`
+
+### Frontend (`src/`)
+- **Framework** : {{FRONTEND_FRAMEWORK}}
+- **Language** : TypeScript {{TS_VERSION}} (strict)
+- **IPC layer** : typed `invoke` wrappers in `{{IPC_MODULE_PATH}}`, `@tauri-apps/api` {{TAURI_API_VERSION}}
+- **Bindings** : {{BINDINGS_STRATEGY}} <!-- hand-written wrappers | tauri-specta -->
+- **Package manager** : {{PACKAGE_MANAGER}}
+
+### Security Model
+- **Capabilities** : one file per window/role in `src-tauri/capabilities/`, least privilege
+- **CSP** : defined in `app.security.csp`
+- **Isolation pattern** : {{ISOLATION_ENABLED}}
+- **Updater** : {{UPDATER_ENABLED}} (signed artifacts, private key in CI secrets only)
+- **Code signing** : {{CODE_SIGNING_SETUP}}
+
+### Build and Release
+- **CI/CD** : {{CICD_PLATFORM}} with `tauri-apps/tauri-action`
+- **Bundle targets** : {{BUNDLE_TARGETS}}
+- **Distribution** : {{DISTRIBUTION_CHANNEL}}
+
+## Project Structure
+
+```
+{{PROJECT_NAME}}/
+├── package.json
+├── tsconfig.json
+├── vite.config.ts                # Or the bundler config in use
+├── src/                          # Frontend
+│   ├── lib/
+│   │   └── ipc.ts                # Typed invoke wrappers (only place that knows command names)
+│   └── ...
+└── src-tauri/
+    ├── Cargo.toml                # [lib] + tauri, tauri-build, plugins
+    ├── build.rs                  # tauri_build::build()
+    ├── tauri.conf.json           # App, build, bundle, security config
+    ├── capabilities/             # One JSON file per window/role
+    ├── icons/
+    ├── gen/schemas/              # Generated, do not edit
+    └── src/
+        ├── main.rs               # Stub: calls run()
+        ├── lib.rs                # run(): Builder, plugins, state, handlers
+        ├── commands/             # #[tauri::command] adapters, grouped by feature
+        ├── state.rs              # Managed state types
+        └── error.rs              # thiserror + Serialize error enum
+```
+
+## Coding Standards
+
+### Rust (see the `rust` stack for general rules)
+- Commands are thin adapters; core logic lives in modules that do not import `tauri`
+- Fallible commands return `Result<T, E>` with a serializable `thiserror` enum
+- No `unwrap()` / `expect()` in command, event or setup paths
+- `cargo fmt` and `cargo clippy -- -D warnings` clean
+
+### TypeScript
+- `strict` mode, no `any` at the IPC boundary
+- Components never call `invoke` directly; they use the wrappers
+- Event names are constants; listeners are cleaned up
+
+### Security
+- Least privilege capabilities, scoped permissions, restrictive CSP
+- Never commit signing keys, certificates or `.env` files
+
+## Key Modules
+
+### {{MODULE_1}}
+{{MODULE_1_DESCRIPTION}}
+
+### {{MODULE_2}}
+{{MODULE_2_DESCRIPTION}}
+
+## External Integrations
+
+| Service | Purpose | Documentation |
+|---------|---------|---------------|
+| {{SERVICE_1}} | {{PURPOSE_1}} | {{DOC_URL_1}} |
+| {{SERVICE_2}} | {{PURPOSE_2}} | {{DOC_URL_2}} |
+
+## Development Workflow
+
+### Git Flow
+- **Main**: Production-ready code
+- **Develop**: Integration branch
+- **Feature**: `feature/{ticket}-{description}`
+- **Hotfix**: `hotfix/{ticket}-{description}`
+
+### Pull Request Requirements
+- [ ] All Rust and frontend tests pass
+- [ ] `cargo clippy -- -D warnings`, `cargo fmt --check`, `tsc --noEmit` and lint pass
+- [ ] Capability and `tauri.conf.json` changes reviewed
+- [ ] Coverage >= 80%
+- [ ] `cargo deny check` / `cargo audit` and `npm audit` pass
+- [ ] Code reviewed
+
+## Commands Reference
+
+Commands run in Docker where possible; GUI launches run on the host OS.
+
+### Development
+```bash
+npm run tauri dev                 # Run the app with the frontend dev server
+npm run tauri build               # Production build and bundles
+npm run tauri android dev         # Android (after `tauri android init`)
+npm run tauri ios dev             # iOS (after `tauri ios init`)
+```
+
+### Testing
+```bash
+cargo test --manifest-path src-tauri/Cargo.toml     # Rust unit and mock-runtime tests
+npx vitest run                                      # Frontend tests (mockIPC)
+npx wdio run wdio.conf.ts                           # E2E (WebdriverIO + @wdio/tauri-service)
+```
+
+### Quality
+```bash
+cargo fmt --manifest-path src-tauri/Cargo.toml --all -- --check
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
+npx tsc --noEmit
+cargo deny --manifest-path src-tauri/Cargo.toml check
+```
+
+### Plugins and Signing
+```bash
+npm run tauri add <plugin>                # Add an official plugin
+npm run tauri signer generate -- -w ~/.tauri/{{PROJECT_NAME}}.key   # Updater signing key (keep private)
+```

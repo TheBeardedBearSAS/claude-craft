@@ -55,6 +55,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/vuejs:` | Vue.js | 2 |
 | `/vite:` | Vite | 3 |
 | `/vercel:` | Vercel | 2 |
+| `/tauri:` | Tauri | 1 |
 | `/php:` | PHP | 1 |
 | `/ruby:` | Ruby / Rails | 1 |
 | `/rust:` | Rust / Axum | 1 |
@@ -496,6 +497,18 @@ Rust 1.99 (edition 2024) + Axum 0.8: layered Cargo workspace, Tokio, Tower middl
 
 ---
 
+## Tauri Commands (`/tauri:`)
+
+Tauri v2 (2.12, community): desktop and mobile apps with a Rust core and a framework-agnostic web frontend — commands and IPC, capabilities and scoped permissions, CSP and the Isolation pattern, plugins, signed updater, `tauri::test` mock runtime, `mockIPC` and WebdriverIO E2E.
+
+### Analysis Commands
+
+| Command | Description |
+|---------|-------------|
+| `/tauri:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
+
+---
+
 ## PHP Commands (`/php:`)
 
 Standalone PHP development with PSR-12 and PHPStan.
@@ -862,7 +875,7 @@ These redirect stubs print a warning and run their replacement until 10.0.
 | `/<tech>:check-compliance` | `/<tech>:check all` |
 | `/team:sprint` | `/team:delivery --phase=implementation` |
 
-`<tech>` is any of the 15 stacks: `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `ruby`, `rust`, `symfony`, `vercel`, `vite`, `vuejs`. The per-axis checklists are installed in `.claude/references/<tech>/checks/`.
+`<tech>` is any of the 16 stacks: `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `ruby`, `rust`, `symfony`, `tauri`, `vercel`, `vite`, `vuejs`. The per-axis checklists are installed in `.claude/references/<tech>/checks/`.
 
 ---
 

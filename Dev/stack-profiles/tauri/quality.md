@@ -1,0 +1,4 @@
+- Clippy (-D warnings) + rustfmt
+- cargo-deny + cargo-audit (RustSec)
+- ESLint or Biome + tsc --noEmit
+- cargo test (tauri::test) + Vitest (mockIPC)

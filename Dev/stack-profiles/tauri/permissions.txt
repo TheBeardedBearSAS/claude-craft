@@ -1,0 +1,7 @@
+Bash(cargo:*)
+Bash(rustup:*)
+Bash(npm run:*)
+Bash(npm test:*)
+Bash(npx tauri:*)
+Bash(pnpm:*)
+Bash(yarn:*)
