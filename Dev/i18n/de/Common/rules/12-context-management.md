@@ -498,6 +498,9 @@ Bei der Kompaktierung immer erhalten:
 | `CLAUDE_CODE_FORK_SUBAGENT` | `1`, um den Kontext von Sub-Agents zu isolieren (Forked Subagents, v2.1.117+); seit 2.1.302 standardmäßig aktiv in `-p`, im SDK, Desktop und VS Code, `0` zum Deaktivieren |
 | `CLAUDE_CODE_SUBAGENT_EFFORT` | Effort-Stufe, mit der Sub-Agents laufen (v2.1.316+) |
 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` | `1` auf einem Self-hosted-Runner: `claude -p` innerhalb einer Session nutzt deren ID und Transkript (Verhalten vor v2.1.317) |
+| `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` | `1` beendet das Abrufen von Feature-Flags, ohne die Telemetrie abzuschalten; jedes Flag nutzt seinen eingebauten Standardwert (v2.1.319+) |
+| `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` | `1` lässt Claude Code auf eine MCP-Task innerhalb ihres Tool-Aufrufs warten, statt sie in den Hintergrund zu verschieben (v2.1.319+) |
+| `permissions.denyInsteadOfPrompting` (Setting) | `true`: Ein Tool-Aufruf, der auf einen Berechtigungs-Prompt warten würde, wird abgelehnt und der Turn läuft weiter — Terminal, Sub-Agents, Teammates (v2.1.319+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Prompt-Caching verlängern/erzwingen (−40 % bei wiederholenden Sitzungen) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Auf `1` setzen, um automatischen Speicher zu deaktivieren |
 
