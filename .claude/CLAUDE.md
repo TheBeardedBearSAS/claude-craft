@@ -1,6 +1,6 @@
 # Claude-Craft - Multi-Technology Framework
 
-**Version:** 9.1.1 | **Languages:** en, fr, es, de, pt
+**Version:** 9.2.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 16 technology stacks, 33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, and BMAD v6 project management.
 
@@ -173,7 +173,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version:** 2.1.260 (CVE-2026-86063 / CVE-2026-103435 / CVE-2026-103012 patched) | **Recommended:** 2.1.317 (Opus 5.5, Sonnet 5.5, Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
+**Minimum Version:** 2.1.260 (CVE-2026-86063 / CVE-2026-103435 / CVE-2026-103012 patched) | **Recommended:** 2.1.319 (Opus 5.5, Sonnet 5.5, Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
 
 ---
 

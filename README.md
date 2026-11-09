@@ -28,15 +28,13 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
-## What's New in v9.1.1
+## What's New in v9.2.0
 
-**Correctif (2026-11-03, v9.1.1) :** cartes Ruby / Rails, Vite et Vercel sur le site, commande mainteneur `/common:add-technology` alignée sur le layout v9, Claude Code recommandé : 2.1.317. Détails : [CHANGELOG](CHANGELOG.md#911---2026-11-03).
+**Deux nouveaux stacks (2026-11-09, v9.2.0) :** Rust / Axum (15e) et Tauri (16e), Claude Code recommandé : 2.1.319. Détails : [CHANGELOG](CHANGELOG.md#920---2026-11-09).
 
-## Unreleased
+**Nouveau stack Tauri v2 (2026-11-09) :** `--tech=tauri` (communautaire) installe Tauri 2.12 pour applications desktop et mobile (cœur Rust, front web agnostique) : 6 règles en anglais (architecture `src-tauri/`, commands/IPC, capabilities et permissions, CSP, pattern Isolation, updater signé, tests mock runtime / `mockIPC` / WebdriverIO), l'agent `@tauri-reviewer` et `/tauri:check <axe>` dans les 5 langues. Détails : [CHANGELOG](CHANGELOG.md#920---2026-11-09).
 
-**Nouveau stack Tauri v2 (2026-11-09) :** `--tech=tauri` (communautaire) installe Tauri 2.12 pour applications desktop et mobile (cœur Rust, front web agnostique) : 6 règles en anglais (architecture `src-tauri/`, commands/IPC, capabilities et permissions, CSP, pattern Isolation, updater signé, tests mock runtime / `mockIPC` / WebdriverIO), l'agent `@tauri-reviewer` et `/tauri:check <axe>` dans les 5 langues. Détails : [CHANGELOG](CHANGELOG.md#unreleased).
-
-**Nouveau stack Rust / Axum (2026-11-08) :** `--tech=rust` installe Rust 1.99 (édition 2024) + Axum 0.8 (workspace en couches, Tokio, Tower, SQLx, thiserror + RFC 9457, cargo-nextest, Clippy, cargo-deny) dans les 5 langues : 6 règles, l'agent `@rust-reviewer` et `/rust:check <axe>`. Détails : [CHANGELOG](CHANGELOG.md#unreleased).
+**Nouveau stack Rust / Axum (2026-11-08) :** `--tech=rust` installe Rust 1.99 (édition 2024) + Axum 0.8 (workspace en couches, Tokio, Tower, SQLx, thiserror + RFC 9457, cargo-nextest, Clippy, cargo-deny) dans les 5 langues : 6 règles, l'agent `@rust-reviewer` et `/rust:check <axe>`. Détails : [CHANGELOG](CHANGELOG.md#920---2026-11-09).
 
 ## What's New in v9.1.0
 
@@ -172,7 +170,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
 - **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
 - **126 commandes sur 15 namespaces (v8.10.x)** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
-- **Claude Code 2.1.317** -- version recommandée (minimum sécurité 2.1.260 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
+- **Claude Code 2.1.319** -- version recommandée (minimum sécurité 2.1.260 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
 
 > ← Versions antérieures (v8.0 → v8.7) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
 

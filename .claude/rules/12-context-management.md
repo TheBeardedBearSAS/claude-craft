@@ -207,6 +207,9 @@ La status line affiche le pourcentage de contexte utilise.
 | `CLAUDE_CODE_FORK_SUBAGENT` | `1` pour isoler le contexte des sous-agents (forked subagents, v2.1.117+) ; actif par défaut en `-p`, SDK, desktop et VS Code depuis 2.1.302, `0` pour le désactiver |
 | `CLAUDE_CODE_SUBAGENT_EFFORT` | Niveau d'effort auquel tournent les sous-agents (v2.1.316+) |
 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` | `1` sur un runner self-hosted : `claude -p` lancé dans une session réutilise l'ID et le transcript de cette session (comportement d'avant v2.1.317) |
+| `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` | `1` coupe la récupération des feature flags sans désactiver la télémétrie ; chaque flag prend sa valeur par défaut (v2.1.319+) |
+| `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` | `1` fait attendre une tâche MCP dans son appel d'outil au lieu de la passer en arrière-plan (v2.1.319+) |
+| `permissions.denyInsteadOfPrompting` (setting) | `true` : un appel qui attendrait un prompt de permission est refusé et le tour continue — terminal, sous-agents, teammates (v2.1.319+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Etendre/forcer le prompt caching (−40 % sur sessions repetitives) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre a `1` pour desactiver la memoire automatique |
 

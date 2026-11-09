@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nouveaux stacks **Rust / Axum** (15e stack) et **Tauri** (16e stack).
+## [9.2.0] - 2026-11-09
+
+Deux nouveaux stacks, **Rust / Axum** (15e) et **Tauri** (16e), et Claude Code recommandé 2.1.319.
 
 ### Added
 
@@ -15,6 +17,11 @@ Nouveaux stacks **Rust / Axum** (15e stack) et **Tauri** (16e stack).
 - Site : carte **Rust / Axum** dans la grille des technologies (logo Simple Icons, CC0-1.0).
 - **Tauri stack** (Tier 3 communautaire, `--tech=tauri`, catégorie desktop) : Tauri v2 (2.12, MSRV 1.90) pour applications desktop et mobile, front web agnostique — 6 rules en anglais dans `Dev/i18n/base/Tauri/` (architecture `src-tauri/`, coding standards commands/IPC, tooling CLI 2.12 et cibles iOS/Android, testing `tauri::test` + `mockIPC` + WebdriverIO, quality Clippy/cargo-deny/tsc, sécurité capabilities/CSP/Isolation/updater signé), agent `@tauri-reviewer`, routeur `/tauri:check <axe>` et agrégat noté /100 dans les 5 langues, script `install-tauri-rules.sh`, profil `Dev/stack-profiles/tauri/`. Tauri 3 (alpha) hors périmètre.
 - Site : carte **Tauri** dans la grille des technologies (logo Simple Icons, CC0-1.0).
+
+### Changed
+
+- **Claude Code recommandé/testé 2.1.317 → 2.1.319** (changelog 2.1.318–2.1.319 relu, aucun correctif de sécurité : minimum inchangé à 2.1.260) : `config/versions.yaml`, `claude-craft doctor`, `.claude/COMPATIBILITY.md`, guides et prérequis des 5 langues.
+- Règle 12 (gestion du contexte, 5 langues) : setting `permissions.denyInsteadOfPrompting`, variables `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` et `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND`.
 
 ## [9.1.1] - 2026-11-03
 
