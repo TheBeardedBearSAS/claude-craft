@@ -1,9 +1,9 @@
 # Claude Craft - Contexte Essentiel
 
 ## Projet
-- **Version:** 9.1.1
+- **Version:** 9.2.0
 - **Type:** Framework multi-technologie pour Claude Code
-- **Stacks:** 21 (Symfony, React, Flutter, Python, Angular, Vue.js, Vite, Vercel, Laravel, React Native, C#/.NET, PHP, Paperclip, Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP)
+- **Stacks:** 24 (Symfony, React, Flutter, Python, Angular, Vue.js, Vite, Vercel, Tauri, Laravel, React Native, C#/.NET, PHP, Ruby / Rails, Rust / Axum, Paperclip, Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP)
 - **Agents:** 74 | **Commandes:** 224 | **Namespaces:** 28
 
 ## Structure du Repo
