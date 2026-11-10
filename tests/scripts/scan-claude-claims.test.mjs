@@ -132,10 +132,12 @@ describe('scan-claude-claims', () => {
     });
 
     it('accepte la version recommandée courante et le minimum', () => {
-      const occ = scanText('a.md', 'Minimum 2.1.260, recommandé 2.1.322', truth()).filter(
-        (x) => x.category === 'cli-version'
-      );
-      expect(occ.map((o) => o.status)).toEqual(['current', 'current']);
+      const occ = scanText(
+        'a.md',
+        'Minimum 2.1.260, recommandé 2.1.322 ; 2.1.260+ (2.1.322 recommended)',
+        truth()
+      ).filter((x) => x.category === 'cli-version');
+      expect(occ.map((o) => o.status)).toEqual(['inventory', 'current', 'inventory', 'current']);
     });
 
     it('ne flagge que la version qualifiée par le mot-clé', () => {
@@ -158,6 +160,20 @@ describe('scan-claude-claims', () => {
         (x) => x.category === 'cli-version'
       );
       expect(o.status).toBe('history');
+    });
+
+    it('classe une note de version datée en history', () => {
+      const o = scanText('a.md', '**Stacks (2026-11-09, v9.2.0) :** Claude Code recommandé : 2.1.319.', truth()).find(
+        (x) => x.category === 'cli-version'
+      );
+      expect(o.status).toBe('history');
+    });
+
+    it('lit « version recommandée » placé après la version', () => {
+      const o = scanText('a.md', '- **Claude Code 2.1.319** -- version recommandée', truth()).find(
+        (x) => x.category === 'cli-version'
+      );
+      expect(o.status).toBe('stale');
     });
 
     it('classe une mention sans contexte recommandé en inventory', () => {

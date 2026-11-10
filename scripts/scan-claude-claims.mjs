@@ -99,7 +99,8 @@ function classifyModel(id, line, index, truth) {
   if (truth.legacy.has(norm)) {
     const seg = segmentAt(line, index);
     const current = CURRENT_KW.test(seg) || (CURRENT_KW.test(line) && !LEGACY_KW.test(line));
-    return current && !LEGACY_KW.test(seg) && !isHistoryRow(line) ? 'stale' : 'legacy';
+    const history = isHistoryRow(line) || isReleaseNote(line);
+    return current && !LEGACY_KW.test(seg) && !history ? 'stale' : 'legacy';
   }
   return truth.current.has(norm) ? 'current' : 'unknown';
 }
@@ -108,6 +109,9 @@ function classifyModel(id, line, index, truth) {
  * Ligne de table dont la 1re cellule est une version et la 2e n'en fait pas
  * une recommandation : table d'historique (changelog, features par version).
  */
+/** Note de version datée (« (2026-11-01, v9.1.0) ») ou renvoi au CHANGELOG : vraie à sa date. */
+const isReleaseNote = (line) => /\(\d{4}-\d{2}-\d{2}, v\d+\.\d+\.\d+\)|CHANGELOG\.md#/.test(line);
+
 function isHistoryRow(line) {
   const cells = line.split('|').map((c) => c.replace(/\*/g, '').trim());
   if (!line.trimStart().startsWith('|') || cells.length < 3) return false;
@@ -127,14 +131,14 @@ function qualifies(kwSource, line, index, length) {
     const before = line.slice(k.index + k[0].length, index);
     if (k.index < index && before.length <= 30 && !/\d/.test(before.replace(/^[^\s:*|]*/, ''))) return true;
     const after = line.slice(index + length, k.index);
-    if (k.index >= index + length && after.length <= 6 && !/\d/.test(after)) return true;
+    if (k.index >= index + length && after.length <= 20 && !/[\d()—;,]/.test(after)) return true;
   }
   return false;
 }
 
 function classifyCli(m, line, truth) {
   const version = m[0];
-  if (isHistoryRow(line)) return 'history';
+  if (isHistoryRow(line) || isReleaseNote(line)) return 'history';
   if (qualifies(TESTED_KW.source, line, m.index, version.length)) {
     return version === truth.testedUpTo || version === truth.minimum ? 'current' : 'stale';
   }
