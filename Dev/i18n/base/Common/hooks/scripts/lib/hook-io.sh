@@ -109,17 +109,19 @@ hook_strip_heredocs() {
 # Une chaîne citée est une donnée : ses blancs et séparateurs deviennent \037 et ne
 # découpent rien (`grep 'rm -rf' f`, `git commit -m "a; sudo b"`). Elle redevient du
 # code après `sh|bash|… -c` ou `eval`, et dans $(…) / `…` même entre guillemets doubles.
+# `hook_shell_segments flat` : une seule ligne, non découpée, où le texte cité-donnée est
+# masqué (\037) et le texte cité-code conservé (motifs multi-segments : fork bomb).
 hook_shell_segments() {
-  awk '
+  awk -v flat_mode="${1:-}" '
     function shell(w) { sub(/.*\//, "", w); return w ~ /^(sh|bash|zsh|dash|ksh)$/ }
     function code_quote(   w, k) {
       k = split(seg, w)
       return (k >= 1 && w[k] == "eval") || (k >= 2 && w[k] ~ /^-[a-z]*c$/ && shell(w[k - 1]))
     }
-    function emit(next_sep) { print sep "\t" seg; seg = ""; sep = next_sep }
+    function emit(next_sep) { if (flat_mode != "flat") print sep "\t" seg; seg = ""; sep = next_sep }
     function push(s) { st[++sp] = s }
     function pop() { if (sp > 0) sp-- }
-    function data(ch) { seg = seg (ch ~ /[ \t\n;&|(){}<>`]/ ? "\037" : ch) }
+    function data(ch) { seg = seg (ch ~ /[ \t\n;&|(){}<>`]/ ? "\037" : ch); flat = flat "\037" }
     function open_sub(kind) { seg = seg " __SUB__ "; emit("("); push(kind) }
     { src = src $0 "\n" }
     END {
@@ -136,6 +138,7 @@ hook_shell_segments() {
           continue
         }
         # Contextes de code : top, sub (…), bt `…`, csq / cdq (quotes après -c / eval).
+        if (c != "\047" && c != "\"") flat = flat c
         if (c == "\\") { seg = seg nx; i++; continue }
         if (c == "\047") { if (ctx == "csq") pop(); else push(code_quote() ? "csq" : "sq"); continue }
         if (c == "\"") { if (ctx == "cdq") pop(); else push(code_quote() ? "cdq" : "dq"); continue }
@@ -152,6 +155,7 @@ hook_shell_segments() {
         seg = seg c; prev = c
       }
       emit(";")
+      if (flat_mode == "flat") print flat
     }'
 }
 

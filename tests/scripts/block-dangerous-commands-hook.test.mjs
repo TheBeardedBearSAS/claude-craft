@@ -12,6 +12,11 @@ const run = (command, mode = 'dangerous', opts = {}) =>
 const BLOCKED_ALWAYS = [
   // Le texte cité redevient du code après sh -c / eval, dans $(…) et `…`.
   'eval "rm -rf /"',
+  // Fork bomb passée en code à un shell : le texte cité est du code ici.
+  "sh -c ':(){ :|:& };:'",
+  'bash -c ":(){ :|:& };:"',
+  "eval ':(){ :|:& };:'",
+  "cd /tmp && bash -lc 'bomb(){ bomb|bomb& };bomb'",
   'bash -c "echo hi; rm -rf /"',
   "sh -c 'cd /tmp && sudo ls'",
   'echo "$(sudo ls)"',

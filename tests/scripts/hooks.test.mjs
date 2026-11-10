@@ -78,6 +78,10 @@ const PORTABILITY_RULES = [
   ['sha1sum (absent de macOS)', /\bsha1sum\b/],
   ['xargs -r (GNU seulement)', /\bxargs\s+(?:-\S+\s+)*-r\b/],
   ['\\s ou \\b dans un motif grep -E', /\bgrep\s+(?:-\S*E\S*|-\S+\s+-\S*E\S*)[^|;&\n]*\\[sSbBwWdD]/],
+  [
+    'rétro-référence \\1 dans grep -E (absente sous busybox/musl)',
+    /\bgrep\s+(?:-\S*E\S*|-\S+\s+-\S*E\S*)[^|;&\n]*\\[1-9]/,
+  ],
   ['additionalContext hors hookSpecificOutput', /^(?!.*hookSpecificOutput).*additionalContext/],
   ['$TOOL_INPUT / $TOOL_OUTPUT (non définies)', /\$\{?TOOL_(INPUT|OUTPUT)\b/],
 ];
@@ -98,6 +102,7 @@ describe('portabilité des scripts de hooks', () => {
       'echo x | sha1sum',
       'ls | xargs -r rm',
       "grep -qE '\\bfoo' f",
+      "grep -qE '(a)\\1' f",
       'echo \'{"additionalContext": "x"}\'',
       'echo $TOOL_INPUT',
     ];
