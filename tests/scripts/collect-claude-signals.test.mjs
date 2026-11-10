@@ -62,11 +62,24 @@ function makeFetchMock({
     if (url.includes('THE_RESOURCES_TABLE')) {
       return Promise.resolve({ ok: true, text: () => Promise.resolve(csv) });
     }
-    if (url.includes('docs.claude.com') || url.includes('anthropic.com')) {
+    if (url.includes('claude.com/docs') || url.includes('anthropic.com')) {
       return Promise.resolve({ ok: true, text: () => Promise.resolve(pageBody) });
     }
     return Promise.reject(new Error(`Unexpected URL: ${url}`));
   });
+}
+
+/**
+ * `config/versions.yaml` de test : `testedUpTo` volontairement bas pour que la
+ * baseline reste la référence, sauf dans les tests qui la surchargent.
+ */
+function writeVersions(testedUpTo = '2.1.0') {
+  const file = path.join(TEST_TMP_DIR, `versions-${testedUpTo}.yaml`);
+  writeFileSync(
+    file,
+    `claudeCode:\n  minimum: '2.1.0'\n  recommended: '${testedUpTo}'\n  testedUpTo: '${testedUpTo}'\n`
+  );
+  return file;
 }
 
 function writeBaseline(overrides = {}) {
@@ -83,7 +96,8 @@ describe('collect-claude-signals', () => {
   beforeEach(async () => {
     mkdirSync(TEST_TMP_DIR, { recursive: true });
     const mod = await import(`${SCRIPT}?t=${Date.now()}`);
-    collectSignals = mod.collectSignals;
+    const versionsPath = writeVersions();
+    collectSignals = (opts) => mod.collectSignals({ versionsPath, ...opts });
     compareVersions = mod.compareVersions;
     hashOf = mod.hashOf;
   });
@@ -136,10 +150,10 @@ describe('collect-claude-signals', () => {
       expect(result.lenses['security-cve'].changed).toBe(false);
       expect(result.lenses.community.changed).toBe(false);
 
-      // La conformité interne est un scan local : toujours lancée, elle ne
-      // dépend d'aucun signal réseau.
-      expect(result.lenses['internal-conformance'].changed).toBe(true);
-      expect(result.agents_to_launch).toEqual(['internal-conformance']);
+      // La conformité interne est couverte par des tests vitest déterministes
+      // (tests/content/) : plus aucun agent n'est réveillé une semaine calme.
+      expect(result.lenses['internal-conformance']).toBeUndefined();
+      expect(result.agents_to_launch).toEqual([]);
     });
   });
 
@@ -166,6 +180,23 @@ describe('collect-claude-signals', () => {
       expect(result.lenses['cli-release'].declared).toBe('2.1.193');
       expect(result.lenses['cli-release'].observed).toBe('2.1.210');
       expect(result.agents_to_launch).toContain('cli-release');
+    });
+
+    it('prend config/versions.yaml comme version déclarée quand il est en avance sur la baseline', async () => {
+      // Cas réel 2026-11-10 : versions.yaml bumpé à 2.1.319 par une release,
+      // baseline restée à 2.1.312 → l'agent cli-release se réveillait pour rien.
+      globalThis.fetch = makeFetchMock({ cliVersion: '2.1.319' });
+      const baselinePath = writeBaseline({ cli_version_seen: '2.1.312' });
+
+      const result = await collectSignals({
+        baselinePath,
+        versionsPath: writeVersions('2.1.319'),
+        outDir: TEST_TMP_DIR,
+        now: new Date('2026-11-10T09:00:00Z'),
+      });
+
+      expect(result.lenses['cli-release'].declared).toBe('2.1.319');
+      expect(result.lenses['cli-release'].changed).toBe(false);
     });
 
     it('ne signale rien quand npm renvoie la version déjà connue', async () => {
@@ -245,6 +276,18 @@ describe('collect-claude-signals', () => {
       expect(result.lenses['security-cve'].changed).toBe(true);
       expect(result.lenses['security-cve'].new_advisories).toEqual(['GHSA-new-0002']);
       expect(result.agents_to_launch).toContain('security-cve');
+    });
+  });
+
+  describe('sécurité — pagination', () => {
+    it('demande 100 advisories par page (le défaut GitHub de 30 tronquait la liste)', async () => {
+      globalThis.fetch = makeFetchMock();
+      const baselinePath = writeBaseline();
+
+      await collectSignals({ baselinePath, outDir: TEST_TMP_DIR, now: new Date('2026-08-11T09:00:00Z'), write: false });
+
+      const advisoryCall = globalThis.fetch.mock.calls.find(([url]) => url.includes('/security-advisories'));
+      expect(advisoryCall[0]).toMatch(/[?&]per_page=100\b/);
     });
   });
 

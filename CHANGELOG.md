@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **`/common:audit-claude-alignment` optimisé** : la lentille agent `internal-conformance` (haiku) est remplacée par des tests vitest déterministes (`tests/content/skill-context-fork.test.mjs`, `tests/content/hooks-stdin.test.mjs`, plus les tests existants YAML strict / model-effort), lancés en gate : 6 lentilles au lieu de 7 et plus aucun agent une semaine calme. Gates exécutés sous Docker avec la suite vitest complète. Le pré-vol tolère les fichiers non suivis, mais compare un instantané pris avant et après les agents pour détecter une pollution. Branche créée depuis `origin/main` après un fetch explicite de `refs/heads/main`.
+- **Baseline de l'audit** : elle avance désormais même quand le patch-plan est vide (PR qui ne contient que la baseline) et en `--no-pr` (écrite sans commit). Une lentille dont l'agent a échoué garde sa valeur précédente.
+
+### Fixed
+
+- **`scripts/collect-claude-signals.mjs`** : les advisories GitHub sont paginées en `per_page=100` (le défaut de 30 tronquait la liste : 30 avis vus sur 36). La version déclarée est la plus récente entre `config/versions.yaml` (`claudeCode.testedUpTo`) et la baseline : une release qui bumpait versions.yaml réveillait `cli-release` pour rien. Les pages suivies pointent vers leurs URLs canoniques `platform.claude.com` / `code.claude.com` au lieu des redirections `docs.claude.com`.
+
 ### Added
 
 - **WordPress stack** (Tier 3 communautaire, `--tech=wordpress`, catégorie fullstack) : WordPress 7.1 (PHP 7.4+ minimum, 8.3+ recommandé) pour plugins et thèmes blocs — 6 rules en anglais dans `Dev/i18n/base/WordPress/` (architecture plugin/thème et hooks, coding standards WPCS, tooling wp-env / `@wordpress/scripts` / WP-CLI, testing `WP_UnitTestCase` / Playwright, quality tools PHPCS / PHPStan / Plugin Check, sécurité capabilities / nonces / échappement / `$wpdb->prepare`), checks par axe, templates (bloc, bootstrap de plugin, endpoint REST), agent `@wordpress-reviewer` et `/wordpress:check <axe>` dans les 5 langues.

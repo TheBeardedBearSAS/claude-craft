@@ -17,42 +17,48 @@ Complémentaire de `/common:audit-freshness`, qui couvre les stacks applicatifs 
 $ARGUMENTS
 
 - `--quick` (défaut) : n'audite que les lentilles dont la source externe a bougé depuis la baseline
-- `--full` : force les 7 lentilles, effort `high` sur sécurité et modèles — cadence mensuelle
-- `--lens=<nom>` : une seule lentille (`cli-release`, `models-pricing`, `prompt-context`, `cc-features`, `security-cve`, `community`, `internal-conformance`)
+- `--full` : force les 6 lentilles, effort `high` sur sécurité et modèles — cadence mensuelle
+- `--lens=<nom>` : une seule lentille (`cli-release`, `models-pricing`, `prompt-context`, `cc-features`, `security-cve`, `community`)
 - `--since=YYYY-MM-DD` : force la date de baseline — rattrapage après un trou de cadence
 - `--dry-run` : pré-collecte + liste des agents qui seraient lancés. **Aucun agent, aucune écriture**
-- `--no-pr` : rapport seul, ni branche ni PR
+- `--no-pr` : rapport seul, ni branche ni PR ; `next_baseline` est écrite sur disque sans commit
+
+La conformité interne (frontmatters YAML, `context: fork`, cohérence `model`/`effort`, hooks lisant stdin, denylist) n'est **pas** une lentille : elle est couverte par les tests de `tests/content/` lancés en gate à l'étape 1. Un contrôle mécanique confié à un agent haiku ratait des cas (22 YAML invalides vus sur 71 réels au run du 2026-10-28).
 
 ## MISSION
 
 ### Étape 0 — Pré-vol et pré-collecte
 
-1. **Worktree propre obligatoire.** `git status --porcelain` ; si la sortie n'est pas vide, **arrêter** et le signaler. Des agents d'audit ont déjà pollué le worktree par le passé — on ne construit pas une PR par-dessus des modifications non validées.
-2. Lancer la pré-collecte déterministe (coût LLM nul) :
+1. **Aucune modification suivie.** `git status --porcelain --untracked-files=no` doit être vide ; sinon, **arrêter** et le signaler. On ne construit pas une PR par-dessus des modifications non validées.
+2. **Instantané des fichiers non suivis** : `git ls-files --others --exclude-standard > <scratchpad>/untracked-before.txt`. Les fichiers non suivis préexistants (notes, brouillons) sont tolérés, mais des agents d'audit ont déjà pollué le worktree : l'instantané est comparé après l'étape 2.
+3. Lancer la pré-collecte déterministe (coût LLM nul) :
    ```bash
-   node scripts/collect-claude-signals.mjs [--since=<date>] [--dry-run]
+   docker run --rm -v "$PWD:/app" -w /app node:24 node scripts/collect-claude-signals.mjs [--since=<date>] [--dry-run]
    ```
-   Elle lit `config/claude-alignment-baseline.json`, interroge le registry npm, les avis de sécurité GitHub, le catalogue communautaire et les pages de doc suivies par empreinte, puis écrit `docs/audit/claude-alignment/signals-<date>.json`.
-3. Lire ce fichier. Le champ **`agents_to_launch`** est la liste exacte des lentilles à réveiller. Une lentille absente n'est **pas** auditée : écrire `✅ aucun changement depuis <baseline.last_run>` dans le rapport, sans lancer d'agent. C'est le principal levier de coût de cette commande.
-4. Calculer l'âge du dernier run (`baseline.last_run` → aujourd'hui). Au-delà de **10 jours**, ouvrir le rapport par un avertissement de cadence.
-5. En `--full`, ignorer `agents_to_launch` et retenir les 7 lentilles. En `--lens=<nom>`, ne retenir que celle-là. En `--dry-run`, s'arrêter ici en affichant la liste retenue et le coût estimé.
+   Elle lit `config/claude-alignment-baseline.json` et `config/versions.yaml` (la version déclarée est la plus récente entre `claudeCode.testedUpTo` et la baseline), interroge le registry npm, les avis de sécurité GitHub, le catalogue communautaire et les pages de doc suivies par empreinte, puis écrit `docs/audit/claude-alignment/signals-<date>.json`.
+4. Lire ce fichier. Le champ **`agents_to_launch`** est la liste exacte des lentilles à réveiller. Une lentille absente n'est **pas** auditée : écrire `✅ aucun changement depuis <baseline.last_run>` dans le rapport, sans lancer d'agent. C'est le principal levier de coût de cette commande.
+5. Calculer l'âge du dernier run (`baseline.last_run` → aujourd'hui). Au-delà de **10 jours**, ouvrir le rapport par un avertissement de cadence.
+6. En `--full`, ignorer `agents_to_launch` et retenir les 6 lentilles. En `--lens=<nom>`, ne retenir que celle-là. En `--dry-run`, s'arrêter ici en affichant les lentilles retenues avec leur routing (`subagent_type` / `model` / `effort`) et le nombre d'agents qui seraient lancés.
 
 ### Étape 1 — Gates locaux (0 token)
 
-Lancer, et consigner le résultat de chacun dans le rapport :
+Lancer dans un conteneur (`D='docker run --rm -v "$PWD:/app" -w /app node:24'`), et consigner le résultat de chacun dans le rapport :
 
 ```bash
-npm run lint:versions   # cohérence tech-registry ↔ versions.yaml + denylist dans les fichiers vitrine
-npm run lint:includes   # liens @<path> fantômes
-npm run docs:check      # dérive des références générées
-npm run lint:i18n       # parité i18n (comptage + taille)
+$D npm run lint:versions   # cohérence tech-registry ↔ versions.yaml + denylist dans les fichiers vitrine
+$D npm run lint:includes   # liens @<path> fantômes
+$D npm run docs:check      # dérive des références générées
+$D npm run lint:i18n       # parité i18n (comptage + taille)
+$D npx vitest run          # suite complète : conformité interne (tests/content/), doc-counts, collecteur
 ```
+
+Les tests de conformité interne remplacent l'ancienne lentille agent : `skill-frontmatter-yaml` (YAML strict, `description` non vide), `skill-context-fork` (> 60 lignes ⇒ `context: fork`), `agents-optimization` (cohérence `model`/`effort`), `hooks-stdin` (aucun `$TOOL_INPUT` dans les `command`), `agent-bash-deny`.
 
 Un gate rouge est un finding **P1** au minimum. Ne pas le corriger ici : il alimente le patch-plan de l'étape 3.
 
-### Étape 2 — Équipe d'agents (un seul message, N appels Task en parallèle)
+### Étape 2 — Équipe d'agents (un seul message, N appels Agent en parallèle)
 
-Lancer **en un seul message** un agent par lentille retenue. Le routing modèle n'est pas négociable : il est ce qui rend l'audit hebdomadaire soutenable.
+Si aucune lentille n'est retenue, sauter cette étape. Sinon, lancer **en un seul message** un agent par lentille retenue. Le routing modèle n'est pas négociable : il est ce qui rend l'audit hebdomadaire soutenable. Cette commande demande explicitement les paramètres `model` et `effort` de l'outil Agent ci-dessous.
 
 | Lentille | `subagent_type` | `model` | `effort` |
 |---|---|---|---|
@@ -62,9 +68,8 @@ Lancer **en un seul message** un agent par lentille retenue. Le routing modèle 
 | `prompt-context` | `general-purpose` | `sonnet` | `medium` |
 | `security-cve` | `general-purpose` | `sonnet` | `medium` (`high` en `--full`) |
 | `community` | `general-purpose` | `sonnet` | `medium` |
-| `internal-conformance` | `general-purpose` | `haiku` | `low` |
 
-`internal-conformance` est un scan mécanique 100 % local : son prompt lui **interdit explicitement** WebSearch et WebFetch. Les six autres reçoivent les URLs exactes issues de `signals-<date>.json` — ils font du WebFetch ciblé, pas de la découverte par WebSearch (non déterministe et multi-requêtes).
+Les six lentilles reçoivent les URLs exactes issues de `signals-<date>.json` — ils font du WebFetch ciblé, pas de la découverte par WebSearch (non déterministe et multi-requêtes).
 
 **Socle commun à injecter dans chaque prompt d'agent :**
 
@@ -111,10 +116,10 @@ CONTRAINTES :
 | `prompt-context` | `.claude/rules/12-context-management.md`, `.claude/rules/23-karpathy-principles.md`, `.claude/CLAUDE.md` |
 | `security-cve` | `.claude/rules/11-security.md`, `.claude/settings.json` (permissions), `.claude/COMPATIBILITY.md` (section CVE) |
 | `community` | `.claude/skills/ecosystem-tools/SKILL.md`, `docs/ECOSYSTEM.md` |
-| `internal-conformance` | Les 3 inventaires : `.claude/agents/*.md`, `.claude/skills/*/SKILL.md`, `.claude/commands/**/*.md`. Vérifier : frontmatter YAML parsable et `description` non vide ; `context: fork` présent sur tout skill de plus de 60 lignes ; cohérence `model:`/`effort:` (un agent `haiku` ne doit pas être en `effort: xhigh`) ; hooks lisant leur payload sur **stdin via `jq`** et jamais via `$TOOL_INPUT` ; aucun token de `denylist` hors fichiers vitrine |
 
 ### Étape 3 — Synthèse, rapport, patch-plan
 
+0. **Contrôle de pollution** : refaire `git ls-files --others --exclude-standard` et le comparer à l'instantané de l'étape 0, et vérifier que `git status --porcelain --untracked-files=no` est toujours vide. Tout écart ⇒ un agent a écrit malgré sa consigne : l'arrêter et le signaler, ne rien nettoyer automatiquement.
 1. Agréger les retours. Un agent qui a échoué laisse `⚠️ audit incomplet : <raison>` — ne jamais inventer sa section.
 2. Écrire `docs/audit/claude-alignment/<date>.md` :
 
@@ -124,7 +129,7 @@ CONTRAINTES :
 **Version claude-craft** : <package.json>
 **Mode** : quick | full
 **Baseline** : <date> (<N> jours) <⚠️ si > 10 jours>
-**Lentilles auditées** : <n>/7 — <liste> (les autres inchangées depuis la baseline)
+**Lentilles auditées** : <n>/6 — <liste> (les autres inchangées depuis la baseline)
 
 ## Résumé exécutif
 
@@ -143,6 +148,7 @@ CONTRAINTES :
 | lint:includes | … |
 | docs:check | … |
 | lint:i18n | … |
+| vitest (conformité interne incluse) | … |
 
 ## Findings par lentille
 <coller chaque rapport d'agent>
@@ -156,17 +162,22 @@ CONTRAINTES :
 
 ## Méthodologie
 - Pré-collecte : `scripts/collect-claude-signals.mjs` (npm registry, GitHub advisories, empreintes de pages, catalogue communautaire)
-- Agents : <n> (routing sonnet/haiku documenté dans la commande)
+- Agents : <n> (routing documenté dans la commande)
 - Sources : toutes citées dans les sections ci-dessus
 ```
 
 3. Écrire le jumeau structuré `docs/audit/claude-alignment/<date>.json` : `{ audit_date, mode, baseline, lenses{}, summary{P0..P3}, patch_plan[], human_decisions_required[], gates{} }`.
 
-### Étape 4 — Branche et PR
+### Étape 4 — Baseline, branche et PR
 
-Sauter entièrement cette étape si `--no-pr`, `--dry-run`, ou si le patch-plan est vide.
+**Baseline.** `next_baseline` (fichier de signaux) ne fait avancer que les lentilles effectivement auditées : pour une lentille dont l'agent a échoué, garder la valeur de l'ancienne baseline (hash, version ou advisories), sinon la semaine suivante la croirait vérifiée.
 
-1. `git checkout -b chore/claude-alignment-<date>` depuis `main` à jour.
+- `--dry-run` : rien n'est écrit, fin.
+- `--no-pr` : écrire la baseline dans `config/claude-alignment-baseline.json` **sans commit** et le signaler dans le rapport, fin.
+- **Patch-plan vide** : ouvrir quand même une PR `chore(alignment): baseline <date>` qui ne contient que `config/claude-alignment-baseline.json`, avec le résumé exécutif et la checklist « jugement humain requis » en corps (étapes 1, 5, 6, 7 ci-dessous). Sans elle, les mêmes lentilles se réveilleraient chaque semaine pour rien.
+- Sinon, suivre toutes les étapes :
+
+1. `git fetch origin refs/heads/main:refs/remotes/origin/main` puis `git checkout -b chore/claude-alignment-<date> origin/main` (toujours la ref de branche explicite : un tag `main` homonyme a déjà existé).
 2. Appliquer **uniquement** les entrées du patch-plan, et **uniquement** dans l'allowlist :
    - `config/versions.yaml` — `claudeCode.recommended|testedUpTo|models.*`, `meta.lastUpdated`, ajouts en `denylist`
    - `.claude/COMPATIBILITY.md` — bandeau d'en-tête et ajout de lignes dans la table `Version Requirements`
@@ -174,20 +185,20 @@ Sauter entièrement cette étape si `--no-pr`, `--dry-run`, ou si le patch-plan 
    - `Dev/i18n/<lang>/Common/templates/settings.json.template` et `Dev/i18n/<lang>/Common/rules/12-context-management.md` (les 5 langues, en une seule passe cohérente)
    - `config/claude-alignment-baseline.json` — remplacer par `next_baseline` du fichier de signaux
 3. **Interdit, sans exception** : `.github/workflows/` (le token `gh` n'a pas le scope `workflow`, la PR deviendrait non mergeable), tout fichier hors allowlist, toute reformulation de prose, tout fichier `.md` de documentation générée (`docs/*-FULL-REFERENCE.md` : passer par `npm run docs:generate`).
-4. Rejouer les 4 gates. **Un seul rouge ⇒ pas de PR** : laisser la branche en place et l'expliquer dans le rapport.
-5. `git add` limité aux fichiers de l'allowlist effectivement modifiés, puis commit en Conventional Commits :
+4. Rejouer les 5 gates de l'étape 1. **Un seul rouge ⇒ pas de PR** : laisser la branche en place et l'expliquer dans le rapport.
+5. `git add` par chemins explicites, limité aux fichiers de l'allowlist effectivement modifiés, puis commit en Conventional Commits :
    `chore(alignment): sync Claude Code <ancienne> → <nouvelle> + modèles`
 6. `gh pr create` avec, dans le corps : le résumé exécutif, le tableau du patch-plan, et la checklist « jugement humain requis ». **Jamais de merge automatique.**
 7. Revenir sur `main` et confirmer à l'utilisateur l'URL de la PR.
 
 ## Règles strictes
 
-- **Worktree propre** en préalable absolu ; sinon, arrêt immédiat.
-- **Aucune édition hors allowlist**, et aucune édition du tout tant que les gates ne sont pas verts.
+- **Aucune modification suivie** en préalable absolu ; sinon, arrêt immédiat. Fichiers non suivis tolérés, mais comparés avant/après les agents.
+- **Aucune édition hors allowlist**, et aucune édition du tout tant que les gates ne sont pas verts. Seule exception sans patch-plan : la baseline.
 - **Toute affirmation de version cite une source** (URL ou `path:ligne`).
 - **Fail-open assumé** : une source injoignable rend la lentille « à auditer », jamais « rien à signaler ».
 - **Un agent en échec** laisse `⚠️ audit incomplet : <raison>` — pas de section inventée.
-- **Parallélisme obligatoire** : un seul message contenant tous les appels Task de l'étape 2.
+- **Parallélisme obligatoire** : un seul message contenant tous les appels Agent de l'étape 2.
 - **Langue du rapport** : français, avec accents.
 
 ## Exemples
