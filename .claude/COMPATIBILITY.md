@@ -1,9 +1,9 @@
 # Claude Code Compatibility — Claude Craft v9.2.0
 
 **Minimum Version:** 2.1.260 (elevated from 2.1.97 — see [security advisories 2026](#security-advisories-2026--why-the-minimum-is-21260))
-**Recommended Version:** 2.1.319 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `permissions.denyInsteadOfPrompting`)
-**Tested up to:** 2.1.319 (November 2026)
-**Last Updated:** 2026-11-09
+**Recommended Version:** 2.1.322 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `permissions.denyInsteadOfPrompting`, Fable 5.2, correctifs permissions/OAuth MCP 2.1.321)
+**Tested up to:** 2.1.322 (November 2026)
+**Last Updated:** 2026-11-10
 
 ---
 
@@ -17,7 +17,7 @@
 6. [Feature Adoption Status](#feature-adoption-status)
 7. [Features 2.1.105–2.1.117 Available](#features-21105-21117-available)
 8. [Features 2.1.119 → 2.1.145 (May 2026)](#features-21119--21145-may-2026)
-9. [Features 2.1.194 → 2.1.319 (July–November 2026)](#features-21194--21319-julynovember-2026)
+9. [Features 2.1.194 → 2.1.322 (July–November 2026)](#features-21194--21322-julynovember-2026)
 10. [Migration from < 2.1.260](#migration-from--21260)
 11. [Version History Summary](#version-history-summary)
 
@@ -28,7 +28,7 @@
 | Requirement | Version | Notes |
 |-------------|---------|-------|
 | **Minimum** | 2.1.260 | Security baseline — CVE-2026-86063 (2.1.179), CVE-2026-103435 (2.1.129), CVE-2026-55607 (2.1.163), CVE-2026-103012 (2.1.260) patched |
-| **Recommended** | 2.1.319 | Génération 5.5 (Opus/Sonnet/Haiku), Fable 5.1, MCP 2026-07-28, hooks `onFailure: "block"`, `effort` sur l'outil Agent, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, correctifs permissions 2.1.309, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `permissions.denyInsteadOfPrompting` |
+| **Recommended** | 2.1.322 | Génération 5.5 (Opus/Sonnet/Haiku), Fable 5.2, MCP 2026-07-28, hooks `onFailure: "block"`, `effort` sur l'outil Agent, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, correctifs permissions 2.1.309, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `permissions.denyInsteadOfPrompting` |
 | **Hooks `onFailure: "block"`** | 2.1.295+ | Un hook command/HTTP qui ne démarre pas, timeout ou sort avec un code inattendu bloque l'action |
 | **MCP protocole 2026-07-28** | 2.1.292+ | Négocié par défaut pour les serveurs stdio locaux ; retour arrière `MCP_PROTOCOL_NEGOTIATION=legacy` |
 | **`claude mcp login` / `logout`** | 2.1.185+ | Authenticate/clear an MCP server's credentials from the shell instead of `/mcp` |
@@ -44,7 +44,7 @@
 | **Opus 4.7** | 2.1.111+ | xhigh effort, adaptive thinking |
 | **Opus 4.8** | 2.1.154+ | *Legacy* (toujours disponible) — remplacé par Opus 5.5 |
 | **Sonnet 5** | 2.1.197+ | *Legacy* (toujours disponible) — `claude-sonnet-5`, $2/$10 devenu tarif standard (la hausse à $3/$15 prévue au 2026-09-01 n'a pas eu lieu) |
-| **Fable 5.1** | 2.1.257+ | `claude-fable-5-1` — $10/$50 par M tokens, effort `high` par défaut. Fable 5 reste disponible (*legacy*) |
+| **Fable 5.2** | 2.1.321+ | `claude-fable-5-2` — $8/$40 par M tokens, effort `high` par défaut, réflexion toujours active (adaptive seul). Fable 5.1 et Fable 5 restent disponibles (*legacy*) |
 | **Opus 5.5** | 2.1.280+ | `claude-opus-5-5` — flagship courant, $4/$20, effort `medium` par défaut |
 | **Sonnet 5.5** | 2.1.284+ | `claude-sonnet-5-5` — Sonnet courant, $2/$10, effort `high` par défaut |
 | **Haiku 5.5** | 2.1.293+ | `claude-haiku-5-5` — Haiku par défaut, $0.10/$0.50 (≤ 100K tokens de prompt), effort `medium` par défaut |
@@ -92,7 +92,7 @@ Source : [GitHub Security Advisories — anthropics/claude-code](https://github.
 
 **Pertinence Claude Craft :** le framework distribue des plugins, hooks et agents. CVE-2026-86063 (pin SHA plugins) et CVE-2026-103435 (symlink TOCTOU) touchent directement ce modèle de distribution ; 2.1.260 couvre en plus l'application des managed settings en entreprise.
 
-**Correctifs permissions postérieurs (non CVE, inclus dans le recommandé 2.1.296) :** contournement Bash masquant une partie de la commande (2.1.223), `$PSDefaultParameterValues` PowerShell (2.1.232), chemins NT `\??\` rejetés (2.1.234), `CLAUDE_CODE_DISABLE_ATTACHMENTS` et activation de Claude in Chrome ignorés dans les settings projet (2.1.290), lectures de chemins UNC réseau soumises au prompt même après approbation PreToolUse/auto mode (2.1.292).
+**Correctifs permissions postérieurs (non CVE, corrigés au plus tard en 2.1.296, donc inclus dans la version recommandée) :** contournement Bash masquant une partie de la commande (2.1.223), `$PSDefaultParameterValues` PowerShell (2.1.232), chemins NT `\??\` rejetés (2.1.234), `CLAUDE_CODE_DISABLE_ATTACHMENTS` et activation de Claude in Chrome ignorés dans les settings projet (2.1.290), lectures de chemins UNC réseau soumises au prompt même après approbation PreToolUse/auto mode (2.1.292).
 
 ---
 
@@ -255,7 +255,7 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 | Variable / Feature | Description | Usage Claude Craft |
 |---------|-------------|-------------------|
 | `CLAUDE_CODE_FORK_SUBAGENT=1` | Active les sous-agents avec contextes isolés (forked) | Recommandé via `/common:setup-rtk` |
-| `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` | Bascule les sous-agents vers Sonnet 4.6 (cost saving) | Recommandé via `/common:setup-rtk` |
+| `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` | Bascule les sous-agents vers Sonnet 5.5 (cost saving) | Recommandé via `/common:setup-rtk` |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` | Désactive la mémoire automatique inter-sessions | Utile si `/memory` est géré manuellement |
 | `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | Charge CLAUDE.md depuis `--add-dir` | Monorepos |
 | `MAX_THINKING_TOKENS=8000` | Limite tokens de reflexion adaptive | Tâches simples → coût réduit |
@@ -390,7 +390,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
-| **Claude Opus 4.8** (`claude-opus-4-8`) | Nouveau modèle flagship, même prix qu'Opus 4.7, **défaut effort `high`** + `/effort xhigh` pour les tâches les plus dures. Disponible API/Bedrock/Vertex/Foundry | **Recommandé** — modèle cible pour agents `effort: xhigh`/`max` (security-auditor, migration-specialist, database-architect, ralph-conductor) |
+| **Claude Opus 4.8** (`claude-opus-4-8`) | Nouveau modèle flagship, même prix qu'Opus 4.7, **défaut effort `high`** + `/effort xhigh` pour les tâches les plus dures. Disponible API/Bedrock/Vertex/Foundry | **Adopté en 2.1.154** (remplacé depuis par Opus 5.5) — modèle cible pour agents `effort: xhigh`/`max` (security-auditor, migration-specialist, database-architect, ralph-conductor) |
 | **Dynamic Workflows** | Demander à Claude de créer un workflow qui orchestre **des dizaines à des centaines d'agents** en arrière-plan (cap 1000 subagents). Visible via `/workflows` | **Adopté** (v8.19.1) — skill [`dynamic-workflows`](../skills/dynamic-workflows/SKILL.md) : 3 paliers d'orchestration, patterns (fan-out, vérification adversariale, pipeline, loop-until-dry), monitoring `/workflows` |
 | Fast mode moins cher sur Opus 4.8 | 2× le tarif standard pour 2,5× la vitesse | **N/A** (user pricing) |
 | `effort: max` | 5ᵉ niveau d'effort (au-dessus de `xhigh`), disponible sur Opus 4.8 | **Documented** — voir docs/AGENTS.md tableau effort |
@@ -422,9 +422,9 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ---
 
-## Features 2.1.194 → 2.1.319 (July–November 2026)
+## Features 2.1.194 → 2.1.322 (July–November 2026)
 
-Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) (lu le 2026-10-13, complété le 2026-11-01 pour 2.1.297–2.1.316 , le 2026-11-03 pour 2.1.317 et le 2026-11-09 pour 2.1.318–2.1.319).
+Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) (lu le 2026-10-13, complété le 2026-11-01 pour 2.1.297–2.1.316 , le 2026-11-03 pour 2.1.317 le 2026-11-09 pour 2.1.318–2.1.319 et le 2026-11-10 pour 2.1.320–2.1.322 ; pas d'entrée 2.1.320 publiée).
 
 | Version | Feature | Description | Adoption Claude Craft |
 |---------|---------|-------------|----------------------|
@@ -450,6 +450,8 @@ Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claud
 | 2.1.317 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` ; `onFailure: "block"` pour les callbacks de hooks de l'Agent SDK ; demande de confirmation avant qu'un outil web/shell envoie l'e-mail du compte | `claude -p` lancé dans une session cloud/self-hosted a désormais son propre ID ; `1` restaure l'ancien comportement | **Documented** — règle 12 |
 | 2.1.318 | Date d'expiration du login claude.ai (`claude auth status` → `loginExpiresAt`, JSON `-p` → `credential_expires_at`) ; avertissement stderr 10 jours avant ; `effort` sur `$.model.fork` des mods ; fiabilité de `~/.claude.json` sur homes réseau | Les sous-agents background passent une commande shell en arrière-plan après 3 min (cache de prompt préservé) | **Documented** |
 | 2.1.319 | `permissions.denyInsteadOfPrompting` ; `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` ; tâches MCP en arrière-plan (`CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND`) ; `/claude-api latency-optimize` ; règles Bash deny/ask avec mots entre guillemets corrigées | Un appel qui attendrait un prompt de permission est refusé et le tour continue (terminal, sous-agents, teammates) | **Documented** — règle 12 |
+| 2.1.321 | Fable 5.2 (`claude-fable-5-2`) par défaut ; `claude remote-control --settings <file>` ; `CLAUDE_CODE_PLUGIN_DIR_WATCH=0` ; 4 correctifs de sécurité : commande Bash en lecture seule exécutée hors sandbox sans prompt, écriture évaluée depuis le mauvais dossier, règles deny et fichiers protégés contournés par `cp`/`mv` vers un dossier, refresh token OAuth MCP envoyé à un autre hôte après redirection | **Breaking** : appels d'outils des mods sans prompt de permission ; `AskUserQuestion` en `-p`/SDK refuse une réponse portant `afkTimeoutMs` ; nom de marketplace managé (`extraKnownMarketplaces`) non ré-ajoutable depuis une autre source ; upstreams gateway Bedrock/Vertex/Foundry ignorent `ANTHROPIC_*_BASE_URL` ; `policy_mode: layered` cumule les serveurs MCP managés | **Documented** — version de base de la recommandation (correctifs sécurité) |
+| 2.1.322 | Mode rapide sur Vertex | — | **N/A** — version RECOMMANDÉE |
 
 ---
 
@@ -578,7 +580,8 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | 2.1.316 | 2026-11 | `CLAUDE_CODE_SUBAGENT_EFFORT`, `CLAUDE_CODE_DISABLE_ULTRATHINK` (recommandée en 9.1.0) |
 | 2.1.317 | 2026-11 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `onFailure: "block"` Agent SDK (recommandée en 9.1.1) |
 | 2.1.318 | 2026-11 | `loginExpiresAt` / `credential_expires_at`, fiabilité `~/.claude.json` |
-| **2.1.319** | **2026-11** | **`permissions.denyInsteadOfPrompting`, `CLAUDE_CODE_DISABLE_FEATURE_FLAGS`, tâches MCP en arrière-plan — version RECOMMANDÉE** |
+| 2.1.319 | 2026-11 | `permissions.denyInsteadOfPrompting`, `CLAUDE_CODE_DISABLE_FEATURE_FLAGS`, tâches MCP en arrière-plan (recommandée en 9.2.0) |
+| **2.1.322** | **2026-11** | **Fable 5.2 par défaut, 4 correctifs permissions/OAuth MCP (2.1.321) — version RECOMMANDÉE** |
 
 ---
 

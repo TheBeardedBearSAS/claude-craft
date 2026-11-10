@@ -14,6 +14,8 @@
 # OpenTofu 1.13.1, Ansible 2.21.5, hcloud 1.70.1, FrankenPHP 1.13.0 et PgBouncer 1.26.0 (correctifs CVE)).
 # CORRECTIF : la note du 2026-07-03 (« RN 0.86 inexistant », 0.86→0.85) était FAUSSE — dist-tags npm vérifiés
 # le 2026-10-13 : 0.86-stable=0.86.3, latest=0.87.1. Précédente : audit d'alignement Claude du 2026-10-13 (CLI 2.1.260/2.1.296).
+# 2026-11-10 (audit d'alignement Claude --full) : Claude Code recommandé/testé 2.1.319 → 2.1.322 (2.1.321 : 4 correctifs
+# permissions Bash / OAuth MCP, Fable 5.2 par défaut ; changelog 2.1.320–2.1.322 relu) ; Fable 5.1 → 5.2 ($8/$40).
 # 2026-11-09 (release 9.2.0) : Claude Code recommandé/testé 2.1.317 → 2.1.319 (changelog 2.1.318–2.1.319 relu).
 # 2026-11-10 : ajout du stack WordPress (tier 3, plugins + thèmes blocs) — WordPress 7.1.4 (api.wordpress.org version-check), PHP min 7.4 / recommandé 8.3+, WooCommerce 11.2.2 du 2026-11-04 (module optionnel = skill woocommerce), @wordpress/scripts 37.1.0, @wordpress/env 12.1.0, WPCS 3.4.1.
 # 2026-11-09 : ajout du stack Tauri v2 (tier 3, desktop) — tauri 2.12.5 du 2026-10-21, tauri-cli / @tauri-apps/cli 2.12.4 du 2026-10-21, MSRV 1.90 ; Tauri 3.0.0-alpha.6 (2026-11-06) hors périmètre.
@@ -30,8 +32,8 @@ claudeCode:
   # minimum : plancher sécurité — couvre GHSA-5j29 (2.1.129), GHSA-7835 (2.1.163),
   # GHSA-pq7j (2.1.179) et GHSA-gfvf (2.1.260). Audit d'alignement du 2026-10-13.
   minimum: '2.1.260'
-  recommended: '2.1.319'
-  testedUpTo: '2.1.319'
+  recommended: '2.1.322'
+  testedUpTo: '2.1.322'
   # Génération courante (2026-11) : Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.2 (audit d'alignement 2026-11-10).
   # Opus 4.8, Sonnet 5, Haiku 4.5, Fable 5 et Fable 5.1 restent disponibles mais sont legacy.
   models:

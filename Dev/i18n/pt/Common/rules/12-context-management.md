@@ -362,8 +362,8 @@ Ajustar o nível de esforço do modelo de acordo com a complexidade da tarefa:
 
 > **O esforço não troca de modelo:** ajusta a profundidade de raciocínio do modelo atual; o modelo é escolhido com `/model`. Pares recomendados: `low` com Haiku 5.5, `medium` com Sonnet 5.5, `high`/`xhigh` com Opus 5.5.
 
-> **Esforço padrão por modelo:** medium no Opus 5.5 e Haiku 5.5; high no Sonnet 5.5, Fable 5.1 e modelos legacy.
-> **Fable 5.1** (`claude-fable-5-1`, $10/$50 por Mtok) é um modelo atual, adequado para agentes criativos/narrativos. **Mythos** tem disponibilidade limitada (apenas Cyber Verification Program).
+> **Esforço padrão por modelo:** medium no Opus 5.5 e Haiku 5.5; high no Sonnet 5.5, Fable 5.2 e modelos legacy.
+> **Fable 5.2** (`claude-fable-5-2`, $8/$40 por Mtok) é o modelo Fable atual, adequado para agentes criativos/narrativos; Fable 5.1 e Fable 5 continuam disponíveis (legacy). No Fable 5.2 (como no Mythos 5.2) o raciocínio está sempre ativo (apenas modo adaptive): para reduzi-lo, baixe o esforço — uma instrução «responda diretamente» não basta a partir de `medium`. **Mythos** tem disponibilidade limitada (apenas Cyber Verification Program).
 
 ### Alerta de inatividade (v2.1.84+)
 
@@ -500,7 +500,7 @@ Durante a compactacao, sempre preservar:
 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` | `1` num runner self-hosted: `claude -p` executado dentro de uma sessão reutiliza o ID e a transcrição dessa sessão (comportamento anterior à v2.1.317) |
 | `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` | `1` interrompe a obtenção de feature flags sem desativar a telemetria; cada flag usa seu valor padrão embutido (v2.1.319+) |
 | `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` | `1` faz o Claude Code aguardar uma tarefa MCP dentro da chamada de ferramenta em vez de movê-la para segundo plano (v2.1.319+) |
-| `permissions.denyInsteadOfPrompting` (setting) | `true`: uma chamada que aguardaria um prompt de permissão é negada e o turno continua — terminal, sub-agentes, teammates (v2.1.319+) |
+| `permissions.denyInsteadOfPrompting` (setting) | `true`: uma chamada que aguardaria um prompt de permissão é negada e o turno continua — terminal, sub-agentes, teammates; respeitado apenas a partir de `~/.claude/settings.json` ou `--settings`, não de um arquivo de projeto (v2.1.319+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Ampliar/forçar o prompt caching (−40 % em sessões repetitivas) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Definir como `1` para desativar a memória automática |
 

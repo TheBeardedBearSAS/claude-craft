@@ -833,7 +833,7 @@ Alias for `/rewind` (v2.1.108+). Reverts the last change in the session.
 
 ### /effort
 
-Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `medium`, `high`, `xhigh` (Opus 5.5, extended thinking), `ultracode` (v2.1.154+, Dynamic Workflows ; separate toggle since v2.1.284).
+Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `medium`, `high`, `xhigh` (Opus 5.5, adaptive thinking), `ultracode` (v2.1.154+, Dynamic Workflows ; separate toggle since v2.1.284).
 
 #### Usage
 
@@ -843,17 +843,17 @@ Interactive effort level slider (v2.1.111+). Pick the thinking depth: `low`, `me
 /effort ultracode     # Dynamic Workflows — max code throughput (trigger keyword: ultracode)
 ```
 
-Default effort: `medium` on Opus 5.5 and Haiku 5.5, `high` on Sonnet 5.5, Fable 5.1 and legacy models. Since v2.1.284 Ultracode is a separate toggle in `/effort` and no longer forces `xhigh`.
+Default effort: `medium` on Opus 5.5 and Haiku 5.5, `high` on Sonnet 5.5, Fable 5.2 and legacy models. Since v2.1.284 Ultracode is a separate toggle in `/effort` and no longer forces `xhigh`.
 
 | Niveau | Modèle | Usage |
 |--------|--------|-------|
 | `low` | Haiku 5.5 (`claude-haiku-5-5`) | Tâches simples, lookups, classification |
 | `medium` | Sonnet 5.5 (`claude-sonnet-5-5`) | Implémentation standard |
 | `high` | Opus 5.5 (`claude-opus-5-5`) | Raisonnement complexe, architecture |
-| `xhigh` | Opus 5.5 (extended thinking) | Décisions critiques, migrations complexes, ADR |
+| `xhigh` | Opus 5.5 (adaptive thinking) | Décisions critiques, migrations complexes, ADR |
 | `ultracode` | Opus 5.5 (toggle séparé depuis v2.1.284, Dynamic Workflows) | Mode débit code maximal — pipelines automatisés, génération massive |
 
-> **Note Fable 5.1 / Mythos :** **Fable 5.1** (`claude-fable-5-1`, $10/$50) est un modèle courant, adapté aux agents créatifs/narratifs ; Fable 5 reste disponible (*legacy*). **Mythos 5 / 5.1** sont en disponibilité limitée (Cyber Verification Program) — ne pas les configurer par défaut.
+> **Note Fable 5.2 / Mythos :** **Fable 5.2** (`claude-fable-5-2`, $8/$40) est le modèle Fable courant, adapté aux agents créatifs/narratifs ; Fable 5.1 et Fable 5 restent disponibles (*legacy*). Réflexion toujours active sur Fable 5.2 : pour la réduire, baisser l'effort. **Mythos 5 / 5.1 / 5.2** sont en disponibilité limitée (Cyber Verification Program) — ne pas les configurer par défaut.
 
 ---
 

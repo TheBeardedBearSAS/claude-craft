@@ -174,7 +174,7 @@ make install-symfony TARGET=. RULES_LANG=en
 
 ## Claude Code Compatibility
 
-**Minimum Version:** 2.1.260 (CVE-2026-86063 / CVE-2026-103435 / CVE-2026-103012 patched) | **Recommended:** 2.1.319 (Opus 5.5, Sonnet 5.5, Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
+**Minimum Version:** 2.1.260 (CVE-2026-86063 / CVE-2026-103435 / CVE-2026-103012 patched) | **Recommended:** 2.1.322 (Opus 5.5, Sonnet 5.5, Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`) — See `@.claude/COMPATIBILITY.md` for full changelog (v2.1.20+).
 
 ---
 

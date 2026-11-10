@@ -362,8 +362,8 @@ Ajuster le niveau d'effort du modele selon la complexite de la tache:
 
 > **L'effort ne change pas de modèle :** il règle la profondeur de raisonnement du modèle courant ; le modèle se choisit avec `/model`. Couples conseillés : `low` sur Haiku 5.5, `medium` sur Sonnet 5.5, `high`/`xhigh` sur Opus 5.5.
 
-> **Effort par défaut selon le modèle :** medium sur Opus 5.5 et Haiku 5.5 ; high sur Sonnet 5.5, Fable 5.1 et les modèles legacy.
-> **Fable 5.1** (`claude-fable-5-1`, 10 $/50 $ par Mtok) est un modèle actuel, adapté aux agents créatifs/narratifs. **Mythos** est en disponibilité limitée (Cyber Verification Program uniquement).
+> **Effort par défaut selon le modèle :** medium sur Opus 5.5 et Haiku 5.5 ; high sur Sonnet 5.5, Fable 5.2 et les modèles legacy.
+> **Fable 5.2** (`claude-fable-5-2`, 8 $/40 $ par Mtok) est le modèle Fable actuel, adapté aux agents créatifs/narratifs ; Fable 5.1 et Fable 5 restent disponibles (legacy). Sur Fable 5.2 (comme sur Mythos 5.2), la réflexion est toujours active (mode adaptive seul) : pour la réduire, baisser l'effort — une consigne « réponds directement » ne suffit pas à `medium` et au-delà. **Mythos** est en disponibilité limitée (Cyber Verification Program uniquement).
 
 ### Alerte d'inactivite (v2.1.84+)
 
@@ -500,7 +500,7 @@ Lors de la compaction, toujours preserver:
 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` | `1` sur un runner self-hosted : `claude -p` lancé dans une session réutilise l'ID et le transcript de cette session (comportement d'avant v2.1.317) |
 | `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` | `1` coupe la récupération des feature flags sans désactiver la télémétrie ; chaque flag prend sa valeur par défaut (v2.1.319+) |
 | `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` | `1` fait attendre une tâche MCP dans son appel d'outil au lieu de la passer en arrière-plan (v2.1.319+) |
-| `permissions.denyInsteadOfPrompting` (setting) | `true` : un appel qui attendrait un prompt de permission est refusé et le tour continue — terminal, sous-agents, teammates (v2.1.319+) |
+| `permissions.denyInsteadOfPrompting` (setting) | `true` : un appel qui attendrait un prompt de permission est refusé et le tour continue — terminal, sous-agents, teammates ; honoré uniquement depuis `~/.claude/settings.json` ou `--settings`, pas depuis un fichier projet (v2.1.319+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Étendre/forcer le prompt caching (−40 % sur les sessions répétitives) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre à `1` pour désactiver la mémoire automatique |
 

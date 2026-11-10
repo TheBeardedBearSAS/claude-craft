@@ -362,8 +362,8 @@ Das Aufwandsniveau des Modells je nach Aufgabenkomplexität anpassen:
 
 > **Effort wechselt nicht das Modell:** Es steuert die Reasoning-Tiefe des aktuellen Modells; das Modell wählt man mit `/model`. Empfohlene Paare: `low` mit Haiku 5.5, `medium` mit Sonnet 5.5, `high`/`xhigh` mit Opus 5.5.
 
-> **Standard-Effort je Modell:** medium bei Opus 5.5 und Haiku 5.5; high bei Sonnet 5.5, Fable 5.1 und Legacy-Modellen.
-> **Fable 5.1** (`claude-fable-5-1`, $10/$50 pro Mtok) ist ein aktuelles Modell, geeignet für kreative/narrative Agents. **Mythos** hat eingeschränkte Verfügbarkeit (nur Cyber Verification Program).
+> **Standard-Effort je Modell:** medium bei Opus 5.5 und Haiku 5.5; high bei Sonnet 5.5, Fable 5.2 und Legacy-Modellen.
+> **Fable 5.2** (`claude-fable-5-2`, $8/$40 pro Mtok) ist das aktuelle Fable-Modell, geeignet für kreative/narrative Agents; Fable 5.1 und Fable 5 bleiben verfügbar (Legacy). Bei Fable 5.2 (wie bei Mythos 5.2) ist das Denken immer aktiv (nur adaptive): Um es zu reduzieren, den Effort senken — eine Anweisung „antworte direkt“ reicht ab `medium` nicht aus. **Mythos** hat eingeschränkte Verfügbarkeit (nur Cyber Verification Program).
 
 ### Inaktivitaetswarnung (v2.1.84+)
 
@@ -500,7 +500,7 @@ Bei der Kompaktierung immer erhalten:
 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` | `1` auf einem Self-hosted-Runner: `claude -p` innerhalb einer Session nutzt deren ID und Transkript (Verhalten vor v2.1.317) |
 | `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` | `1` beendet das Abrufen von Feature-Flags, ohne die Telemetrie abzuschalten; jedes Flag nutzt seinen eingebauten Standardwert (v2.1.319+) |
 | `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` | `1` lässt Claude Code auf eine MCP-Task innerhalb ihres Tool-Aufrufs warten, statt sie in den Hintergrund zu verschieben (v2.1.319+) |
-| `permissions.denyInsteadOfPrompting` (Setting) | `true`: Ein Tool-Aufruf, der auf einen Berechtigungs-Prompt warten würde, wird abgelehnt und der Turn läuft weiter — Terminal, Sub-Agents, Teammates (v2.1.319+) |
+| `permissions.denyInsteadOfPrompting` (Setting) | `true`: Ein Tool-Aufruf, der auf einen Berechtigungs-Prompt warten würde, wird abgelehnt und der Turn läuft weiter — Terminal, Sub-Agents, Teammates; wird nur aus `~/.claude/settings.json` oder `--settings` berücksichtigt, nicht aus einer Projektdatei (v2.1.319+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Prompt-Caching verlängern/erzwingen (−40 % bei wiederholenden Sitzungen) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Auf `1` setzen, um automatischen Speicher zu deaktivieren |
 

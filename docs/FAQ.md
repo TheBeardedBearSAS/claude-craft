@@ -12,7 +12,7 @@ Requirements depend on the install method:
 
 **NPX (recommended) — only 2 requirements:**
 - **Node.js 22+** (Node 24 recommended — Active LTS)
-- **Claude Code** v2.1.260+ (2.1.319 recommended)
+- **Claude Code** v2.1.260+ (2.1.322 recommended)
 
 **Makefile / shell scripts — additional requirements:**
 - **yq v4+** (Mike Farah's version, not the Python yq) — for YAML processing
@@ -434,8 +434,8 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 | **Haiku 5.5** | `claude-haiku-5-5` | $0.10 / $0.50 (≤ 100K tokens de prompt ; $0.50 / $2.50 au-delà) | `/effort low` — lookups, classification, reviewers, sous-agents simples |
 | **Sonnet 5.5** | `claude-sonnet-5-5` | $2 / $10 | `/effort medium` — implémentation standard, tâches agentiques, exécution sprint, modèle sous-agent par défaut |
 | **Opus 5.5** | `claude-opus-5-5` | $4 / $20 | `/effort high`/`xhigh` — architecture, ADR, migrations, raisonnement complexe |
-| **Fable 5.1** | `claude-fable-5-1` | $10 / $50 | Agents créatifs/narratifs |
-| _Legacy_ (toujours disponibles) | `claude-sonnet-5`, `claude-opus-4-8`, `claude-haiku-4-5-20251001`, `claude-fable-5` | $2/$10, $5/$25, $1/$5, $10/$50 | À migrer vers la génération 5.5 |
+| **Fable 5.2** | `claude-fable-5-2` | $8 / $40 | Agents créatifs/narratifs |
+| _Legacy_ (toujours disponibles) | `claude-sonnet-5`, `claude-opus-4-8`, `claude-haiku-4-5-20251001`, `claude-fable-5-1`, `claude-fable-5` | $2/$10, $5/$25, $1/$5, $10/$50, $10/$50 | À migrer vers la génération 5.5 |
 
 > **Leviers de coût (cumulables) :** prompt caching **−90 %** sur l'input mis en cache (`ENABLE_PROMPT_CACHING_1H`, actif par défaut), **Batch API −50 %** in/out pour les traitements asynchrones de masse, RTK **55-90 %** sur les outputs CLI, `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` pour les sous-agents non typés.
 >

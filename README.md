@@ -172,7 +172,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
 - **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
 - **126 commandes sur 15 namespaces (v8.10.x)** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
-- **Claude Code 2.1.319** -- version recommandée (minimum sécurité 2.1.260 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
+- **Claude Code 2.1.322** -- version recommandée (minimum sécurité 2.1.260 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
 
 > ← Versions antérieures (v8.0 → v8.7) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
 
