@@ -5,7 +5,7 @@
 # `rm` n'est reconnu qu'en position de commande (début de segment, après sudo/xargs/…
 # ou find -exec) et ses drapeaux ne sont lus que dans SES arguments : `docker run --rm`,
 # `ai-craft`, `remove --force` ou `2>/dev/null` ne déclenchent plus rien.
-set -u
+set -euo pipefail
 
 CMD=$(jq -r '.tool_input.command // empty')
 
