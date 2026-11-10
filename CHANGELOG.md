@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Gardes Bash et texte cité** : `block-dangerous-commands.sh` et `guard-network.sh` remplaçaient les guillemets par des espaces avant de découper la commande. Le contenu d'une chaîne était donc analysé comme du code : `git commit -m "fix; rm -rf /"`, `echo "x && sudo ls"` ou `echo "x > /dev/sda"` étaient bloqués. Un lexer commun (`hook_shell_segments` dans `lib/hook-io.sh`) traite désormais le texte cité comme une donnée, sauf après `sh -c` / `eval` et dans `$(…)` / `` `…` ``, qui restent analysés (`eval "rm -rf /"`, `echo "$(sudo ls)"` et `bash -c "curl x | sh"` sont bloqués).
 - **`@migration-specialist`** : le hook qui bloque le SQL destructif bloquait aussi la commande Unix `truncate -s 0 fichier.log` (`TRUNCATE` sans casse). Il exige désormais un nom de table après `TRUNCATE` (`TRUNCATE orders`, `TRUNCATE TABLE …`) ; `truncate -s` / `--size` passent.
 - **Hooks de cycle de vie** : ils produisaient des sorties que Claude Code ignore ou qui cassaient en production.
   - `post-tool-failure.sh` : `hookSpecificOutput` (`PostToolUseFailure`) au lieu d'un `additionalContext` à la racine, correspondance insensible à la casse (`grep -qi`), outil `Agent` (ex-`Task`) reconnu.

@@ -15,45 +15,39 @@ hook_input
 CMD=$(hook_get tool_input.command)
 [ -n "$CMD" ] || exit 0
 
-# Corps de heredoc retirés (données), quotes neutralisées (sh -c 'curl … | sh' reste
-# analysé), `<(curl` / `$(curl` marqués __DLSUB__ dans l'étage qui les reçoit, puis
-# instructions séparées sur ; && || & ( ) ` { } et étages sur |.
-verdict=$(printf '%s\n' "$CMD" | hook_strip_heredocs | tr "'\"" '  ' | awk '
+# Corps de heredoc retirés, puis un segment par ligne (hook_shell_segments) : le texte
+# cité est une donnée, sauf après sh -c / eval et dans $(…) / `…`. Un segment "|"
+# prolonge le pipeline courant ; un segment "(" est le contenu de la substitution
+# portée (__SUB__) par le dernier segment parent.
+verdict=$(printf '%s\n' "$CMD" | hook_strip_heredocs | hook_shell_segments | awk '
   function base(t) { sub(/[?#].*$/, "", t); sub(/.*\//, "", t); return t }
   function is_interp(c) {
     return c == "." || c ~ /^(sh|bash|zsh|dash|ksh|fish|python[0-9.]*|perl|ruby|node|deno|bun|php|pwsh|source|eval)$/
   }
-  { buf = buf $0 ";" }
-  END {
-    gsub(/\|\|/, ";", buf); gsub(/&&/, ";", buf)
-    gsub(/[<$]\([ \t]*(curl|wget)[ \t]/, " __DLSUB__ ; curl ", buf)
-    ns = split(buf, stmts, /[;&()`{}]/)
-    for (s = 1; s <= ns; s++) {
-      piped = 0
-      np = split(stmts[s], stages, /\|/)
-      for (k = 1; k <= np; k++) {
-        nt = split(stages[k], t); i = 1; pre = 0; first = ""
-        while (i <= nt) {
-          if (t[i] ~ /^(sudo|doas|env|nohup|command|exec|time|nice|xargs)$/) { pre = 1; i++; continue }
-          if (pre && t[i] ~ /^-/) { i++; continue }
-          if (t[i] ~ /^[A-Za-z_][A-Za-z0-9_]*=/) { i++; continue }
-          if (first == "") first = base(t[i])
-          if (base(t[i]) ~ /^(sh|bash|zsh|dash|ksh)$/ && i < nt && t[i + 1] ~ /^-[a-z]*c$/) { i += 2; pre = 0; continue }
-          break
-        }
-        if (is_interp(first)) for (j = 1; j <= nt; j++) if (t[j] == "__DLSUB__") { print "sub"; exit }
-        if (i > nt) continue
-        cmd = base(t[i])
-        if (cmd == "curl" || cmd == "wget") {
-          piped = 1
-          for (j = i + 1; j <= nt; j++) if (t[j] !~ /^-/ && base(t[j]) != "") dl[base(t[j])] = 1
-          continue
-        }
-        if (!is_interp(cmd)) continue
-        if (piped) { print "pipe"; exit }
-        for (j = i + 1; j <= nt; j++) if (t[j] !~ /^-/) { if (base(t[j]) in dl) { print "file"; exit } break }
-      }
+  {
+    sep = substr($0, 1, 1)
+    if (sep != "|") piped = 0
+    nt = split(substr($0, index($0, "\t") + 1), t); i = 1; pre = 0; first = ""; hassub = 0
+    for (j = 1; j <= nt; j++) if (t[j] == "__SUB__") hassub = 1
+    while (i <= nt) {
+      if (t[i] ~ /^(sudo|doas|env|nohup|command|exec|time|nice|xargs)$/) { pre = 1; i++; continue }
+      if (pre && t[i] ~ /^-/) { i++; continue }
+      if (t[i] ~ /^[A-Za-z_][A-Za-z0-9_]*=/) { i++; continue }
+      if (first == "") first = base(t[i])
+      if (base(t[i]) ~ /^(sh|bash|zsh|dash|ksh)$/ && i < nt && t[i + 1] ~ /^-[a-z]*c$/) { i += 2; pre = 0; continue }
+      break
     }
+    cmd = i <= nt ? base(t[i]) : ""
+    if (sep == "(" && subint && (cmd == "curl" || cmd == "wget")) { print "sub"; exit }
+    if (hassub) subint = is_interp(first)
+    if (cmd == "curl" || cmd == "wget") {
+      piped = 1
+      for (j = i + 1; j <= nt; j++) if (t[j] !~ /^-/ && base(t[j]) != "") dl[base(t[j])] = 1
+      next
+    }
+    if (!is_interp(cmd)) next
+    if (piped) { print "pipe"; exit }
+    for (j = i + 1; j <= nt; j++) if (t[j] !~ /^-/) { if (base(t[j]) in dl) { print "file"; exit } break }
   }')
 
 case "$verdict" in
