@@ -1150,7 +1150,7 @@ Keep your main CLAUDE.md under 200 lines. Each additional instruction dilutes at
 | Rules (`.claude/rules/`) | Strong suggestion | Detailed best practices |
 | Hooks | Enforcement | Security constraints, formatting |
 
-See `.claude/templates/hooks/` for ready-to-use hook templates.
+See `Dev/i18n/base/Common/hooks/templates/examples/` for ready-to-use hook templates.
 
 ### Context Thresholds
 

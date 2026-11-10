@@ -178,26 +178,24 @@ un fichier `MEMORY.md` rattaché au profil de projet et rechargés à chaque ses
 d'entrée recommandé pour les décisions non urgentes (style, conventions, contexte métier).
 
 Pour les décisions critiques qui ne doivent pas disparaître lors d'une compaction automatique, Claude
-Craft distribue deux hooks complémentaires (dossier [`.claude/templates/hooks/`](../.claude/templates/hooks/)) :
+Craft distribue deux hooks complémentaires (dossier [`Dev/i18n/base/Common/hooks/templates/examples/`](../Dev/i18n/base/Common/hooks/templates/examples/)) :
 
 | Hook | Fichier template | Rôle |
 |------|-----------------|------|
-| **PreCompact** | `pre-compact.json` | Injecte `.claude/context-essentials.md` comme `systemMessage` juste _avant_ la compaction (peut bloquer via exit code 2 depuis v2.1.105). |
-| **PostCompact** | `post-compact.json` | Ré-injecte le même fichier immédiatement _après_ la compaction (v2.1.76+). |
-| **SessionStart** (matcher `compact`) | `context-reinject.json` | Repli pour les éditeurs qui ne déclenchent pas PostCompact : ré-injecte à chaque démarrage post-compaction. |
+| **PreCompact** | `pre-compact.json` | Fournit `.claude/context-essentials.md` en texte brut : le stdout de PreCompact sert de consignes au résumé de compaction (peut bloquer via exit code 2 depuis v2.1.105). |
+| **SessionStart** (matcher `compact`) | `context-reinject.json` | Ré-injecte le fichier dans le contexte juste après la compaction : c'est le seul canal qui atteint le modèle (PostCompact n'en a aucun). |
 
 **Pattern recommandé pour BMAD / ADR :**
 
 1. Créer `.claude/context-essentials.md` à la racine du projet (gitignored ou commité selon l'équipe).
 2. Y consigner les sections : Architecture, Conventions, Sprint actif, Contraintes critiques, ADR.
-3. Copier `post-compact.json` dans `.claude/settings.json` (hooks projet) ou `~/.claude/settings.json`
-   (hooks globaux).
-4. Optionnel : ajouter également `pre-compact.json` pour couvrir la fenêtre _pendant_ la compaction.
+3. Installer les hooks avec `--hooks=default` (profil par défaut de l'installeur, qui fusionne `context-reinject` et
+   `pre-compact` dans `.claude/settings.json` sans écraser vos hooks), ou fusionner les exemples à la main.
 
 Le fichier `context-essentials.md` devient le canal canonique de persistance : il est lu par les hooks,
 re-injecté automatiquement, et peut être édité manuellement ou par `/memory` (les deux coexistent).
 
-> **Compatibilité :** `/memory` ≥ v2.1.59 · PostCompact ≥ v2.1.76 · PreCompact exit-code-2 ≥ v2.1.105.
+> **Compatibilité :** `/memory` ≥ v2.1.59 · PreCompact exit-code-2 ≥ v2.1.105.
 > Vérifier avec `claude --version` avant d'activer PostCompact.
 
 ### Tiers : claude-mem

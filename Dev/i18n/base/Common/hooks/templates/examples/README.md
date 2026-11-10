@@ -1,135 +1,59 @@
-# Hook Templates
+# Hook Examples
 
-Claude Code hooks allow you to enforce rules programmatically, going beyond CLAUDE.md suggestions to actual enforcement.
+Claude Code hooks enforce rules programmatically, beyond what CLAUDE.md can suggest.
 
 > **Key insight:** CLAUDE.md = suggestions. Hooks = requirements.
 
-## Available Templates
+These examples are copied into `.claude/templates/hooks/` by the claude-craft installer
+(`install-common-rules.sh --hooks=default|full|none`, `--hooks=none` copies nothing).
+The scripts they call are installed in `.claude/hooks/`. In the repository itself they
+live in `Dev/i18n/base/Common/hooks/templates/examples/`.
 
-| Template | Hook Event | Purpose |
-|----------|-----------|---------|
-| `auto-format.json` | PostToolUse(Edit) | Auto-format code after each edit |
-| `protect-files.json` | PreToolUse(Edit/Write) | Block edits on sensitive files |
-| `context-reinject.json` | SessionStart(compact) | Re-inject context after compaction |
-| `security-block.json` | PreToolUse(Bash) | Block suspicious network commands |
-| `pre-compact.json` | PreCompact | Sauvegarde le contexte critique avant compaction (token optim) |
-| `post-compact.json` | PostCompact (2.1.76+) | Re-injecte le contexte essentiel immédiatement après compaction |
-| `output-filter.json` | PostToolUse(Bash) | Filtre les outputs >10KB (RTK ultra-compact, -60-90% tokens CLI) |
-| `block-dangerous-commands.json` | PreToolUse(Bash) | Bloque les commandes destructives (rm -rf /, dd, mkfs) |
-| `quality-gate.json` | PreToolUse(Edit) | Bloque les edits qui violent les SOLID/KISS principes |
-| `memory-lifecycle.json` | SessionStart/SessionEnd | Gestion du fichier MEMORY.md |
-| `stop-hook.json` | Stop | Logue chaque fin de session Claude Code (debug, audit, retrospectives). |
-| `user-prompt-submit.json` | UserPromptSubmit | Logue la taille de chaque prompt utilisateur (analyse de patterns, optimisation contexte). |
+## Available examples
 
-## How to Use
+| Example | Hook event | Purpose |
+|---------|-----------|---------|
+| `auto-format.json` | PostToolUse (Edit\|Write) | Format the edited file |
+| `protect-files.json` | PreToolUse (Edit\|Write\|NotebookEdit) | Block edits of sensitive files (`protect-sensitive-files.sh`) |
+| `security-block.json` | PreToolUse (Bash) | Block download-then-execute (`guard-network.sh`) |
+| `block-dangerous-commands.json` | PreToolUse (Bash) | Block destructive commands (`block-dangerous-commands.sh`) |
+| `context-reinject.json` | SessionStart (compact) | Re-inject `context-essentials.md` after compaction |
+| `pre-compact.json` | PreCompact | Give the compaction summary the critical context (plain text) |
+| `output-filter.json` | PostToolUse (Bash) | Replace outputs above 50 KB by an extract (`output-filter.sh`) |
+| `stop-hook.json` | Stop | Log each end of turn |
+| `user-prompt-submit.json` | UserPromptSubmit | Log the size of each prompt |
 
-1. Choose a template from this directory
-2. Copy the `hooks` section into your `.claude/settings.json`
-3. Adapt the commands to your project
+The default profile (`--hooks=default`) already wires `protect-files`, `security-block`,
+`block-dangerous-commands`, `context-reinject` and `pre-compact`; `--hooks=full` adds the
+Stop quality gate, lint and the session hooks. The persistent memory add-on is installed
+with `--hooks=default,memory` (SQLite database `.claude/memory.db`, not `MEMORY.md`).
 
-### Token Optimization Stack (recommended)
+## How to use
 
-For maximum token savings (55-65% reduction global), apply this combo :
-
-```bash
-# 1. Output filter (PostToolUse Bash) - guides Claude to summarize >10KB outputs
-cp .claude/templates/hooks/output-filter.json .claude/settings.local.json
-
-# 2. PreCompact hook - preserves critical context before compaction
-cp .claude/templates/hooks/pre-compact.json .claude/settings.local.json
-
-# 3. SessionStart compact reinject - restores context-essentials.md after compaction
-cp .claude/templates/hooks/context-reinject.json .claude/settings.local.json
-```
-
-Combined with `context: fork` on heavy skills (already enabled by Claude Craft) and `CLAUDE_CODE_SUBAGENT_MODEL=sonnet`, you reach the 55-65% global token reduction documented in `.claude/rules/12-context-management.md` §15.
-
-### Example: Adding auto-format
-
-```json
-// .claude/settings.json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); [ -n \"$FILEPATH\" ] && npx prettier --write \"$FILEPATH\" || true"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-## Hook Events Reference
-
-| Event | When | Common Use |
-|-------|------|------------|
-| `PreToolUse` | Before a tool executes | Block dangerous operations |
-| `PostToolUse` | After a tool executes | Format code, run linters |
-| `SessionStart` | When session starts | Load context, check environment |
-| `SessionStart(compact)` | After context compaction | Re-inject essential context |
-| `TeammateIdle` | When a teammate goes idle | Assign next task |
-| `TaskCompleted` | When a task is completed | Trigger next workflow step |
-
-## Combining Templates
-
-You can combine multiple hooks in the same `settings.json`:
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "command": "# security-block check"
-      },
-      {
-        "matcher": "Edit",
-        "command": "# protect-files check"
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit",
-        "command": "# auto-format"
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "compact",
-        "command": "# context-reinject"
-      }
-    ]
-  }
-}
-```
-
-## Creating Custom Hooks
-
-Hooks are shell commands that receive the event payload as **JSON on stdin** (there are no
-`$TOOL_INPUT` / `$TOOL_OUTPUT` / `$FILEPATH` environment variables). Read fields with `jq`:
-
-- `.tool_name` — the tool being called
-- `.tool_input` — the tool's input (e.g. `.tool_input.file_path`, `.tool_input.command`)
-- `.tool_response` — the tool's result (PostToolUse only)
+Never copy an example over `.claude/settings.json` or `.claude/settings.local.json`: that
+would erase your existing hooks and settings. Merge instead:
 
 ```bash
-FILEPATH=$(jq -r '.tool_input.file_path // empty')
+node <claude-craft>/Dev/scripts/lib/merge-hooks.mjs add \
+  --settings .claude/settings.json \
+  --fragment .claude/templates/hooks/output-filter.json
 ```
 
-`timeout` is expressed in **seconds** (default 600 for command hooks).
+`merge-hooks.mjs` is idempotent and never removes or rewrites a hook it does not own
+(`<claude-craft>` is the installed npm package or your clone of the repository).
+You can also paste the `hooks` section by hand.
 
-Exit codes:
-- `0` — Allow the operation
-- Non-zero — Block the operation (PreToolUse) or report error (PostToolUse)
+## Hook contract (summary)
+
+- Handlers use the nested schema `{ "matcher": ..., "hooks": [ { "type": "command", "command": ..., "timeout": <seconds> } ] }`.
+- The payload is **JSON on stdin** (no `$TOOL_INPUT` / `$FILEPATH` variables). Read it with `jq` or `node`.
+- **Only exit code 2 blocks** (PreToolUse, UserPromptSubmit, Stop...); stderr is shown to Claude.
+  Any other non-zero code is a non-blocking error: the action goes ahead.
+- Only `hookSpecificOutput.additionalContext` reaches the model; `systemMessage` is UI-only.
+- `timeout` is in seconds. A matcher containing `(` is read as a regex and will not match a tool name.
+
+Official reference (events, fields, exit codes): <https://code.claude.com/docs/en/hooks>
 
 ## Resources
 
-- [Claude Code Hooks Documentation](https://code.claude.com/docs/en/hooks)
-- Rule: `.claude/rules/11-security.md` — MCP & Plugins Security section
-- Rule: `.claude/rules/12-context-management.md` — Context Compaction section
+- Rule `11-security.md` (MCP and plugins security), rule `12-context-management.md` (compaction)

@@ -196,4 +196,4 @@ See `.claude/rules/12-context-management.md` for detailed guidance.
 | **Token optimization** | Use `/common:setup-rtk` for 55-65% token savings |
 | **Sub-agent model** | Set `CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-5-5` for cost savings |
 
-See `.claude/templates/hooks/` for ready-to-use hook templates.
+See `Dev/i18n/base/Common/hooks/templates/examples/` for ready-to-use hook templates.

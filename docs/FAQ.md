@@ -470,7 +470,7 @@ Auto Mode (v2.1.94+, Team plans) is an AI permission classifier that replaces ma
 
 ### Where are hook templates?
 
-Ready-to-use templates in `.claude/templates/hooks/`:
+Ready-to-use templates in `Dev/i18n/base/Common/hooks/templates/examples/`:
 - `output-filter.json` — PostToolUse for compressing large CLI outputs
 - `pre-compact.json` — PreCompact for preserving context before compaction
 - `context-reinject.json` — SessionStart for re-injecting context after compaction

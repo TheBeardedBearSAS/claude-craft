@@ -1,10 +1,16 @@
 {
-  "description": "Re-inject essential context after context compaction",
+  "description": "Re-inject essential context after context compaction (SessionStart, matcher compact: stdout is added to the context)",
   "hooks": {
     "SessionStart": [
       {
         "matcher": "compact",
-        "command": "if [ -f .claude/context-essentials.md ]; then cat .claude/context-essentials.md; else echo 'No context-essentials.md found. Create .claude/context-essentials.md with key architectural decisions, conventions, and current tasks.'; fi"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$CLAUDE_PROJECT_DIR/.claude/context-essentials.md\"; if [ -f \"$f\" ]; then cat \"$f\"; else echo 'No .claude/context-essentials.md found. Create it with key architectural decisions, conventions and current tasks.'; fi; exit 0",
+            "timeout": 5
+          }
+        ]
       }
     ]
   },
@@ -18,5 +24,5 @@
       "## Critical Constraints: Must-know limitations"
     ]
   },
-  "usage": "Copy the SessionStart hook to .claude/settings.json. Create .claude/context-essentials.md with your project's critical context that must survive compaction."
+  "usage": "Part of the default profile. Create .claude/context-essentials.md with the project's critical context that must survive compaction."
 }

@@ -1,5 +1,5 @@
 {
-  "description": "Preserve critical project context before automatic compaction",
+  "description": "Give the compaction summary the critical project context (PreCompact: plain-text stdout is read as compaction instructions, max 10k chars)",
   "hooks": {
     "PreCompact": [
       {
@@ -7,12 +7,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PROJECT_DIR=\"${CLAUDE_PROJECT_DIR:-$(pwd)}\"; OUTPUT=''; if [ -f \"$PROJECT_DIR/.claude/context-essentials.md\" ]; then ESSENTIALS=$(head -100 \"$PROJECT_DIR/.claude/context-essentials.md\"); OUTPUT=\"CRITICAL CONTEXT TO PRESERVE:\\n\\n$ESSENTIALS\"; fi; if [ -n \"$OUTPUT\" ]; then jq -n --arg msg \"$OUTPUT\" '{\"systemMessage\": $msg}'; else echo '{}'; fi; exit 0",
+            "command": "f=\"$CLAUDE_PROJECT_DIR/.claude/context-essentials.md\"; if [ -f \"$f\" ]; then printf 'CRITICAL CONTEXT TO PRESERVE:\\n\\n'; head -c 9000 \"$f\"; fi; exit 0",
             "timeout": 10
           }
         ]
       }
     ]
   },
-  "usage": "Copy the PreCompact hook to .claude/settings.json or your profile settings.json. Create .claude/context-essentials.md with your project's critical context (architecture decisions, conventions, current tasks). This content will be re-injected before compaction to prevent loss of critical information. Requires jq."
+  "usage": "Part of the default profile. Plain text, not JSON: a JSON object on stdout would be parsed as hook output instead of instructions."
 }

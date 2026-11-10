@@ -21,6 +21,7 @@ const HOOK_SCRIPTS = [
   'guard-network.sh',
   'protect-sensitive-files.sh',
   'output-size-hint.sh',
+  'output-filter.sh',
 ].map((s) => [s, path.join(BASE_HOOKS_DIR, s)]);
 
 const walk = (dir) =>

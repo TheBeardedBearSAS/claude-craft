@@ -12,16 +12,17 @@ const PROJECT_ROOT = path.resolve(__dirname, '../..');
 // `description` citent l'ancien pattern à titre historique.
 const FORBIDDEN = /\$\{?TOOL_(INPUT|OUTPUT)\b/;
 
-const HOOK_DIR = path.join(PROJECT_ROOT, '.claude/templates/hooks');
+const HOOK_DIR = path.join(PROJECT_ROOT, 'Dev/i18n/base/Common/hooks/templates/examples');
 const FILES = [
   '.claude/settings.json',
   ...fs
     .readdirSync(HOOK_DIR)
     .filter((f) => f.endsWith('.json'))
-    .map((f) => `.claude/templates/hooks/${f}`),
+    .map((f) => `Dev/i18n/base/Common/hooks/templates/examples/${f}`),
   'Dev/i18n/base/Common/templates/settings.json.template',
   'Dev/i18n/base/Common/hooks/templates/hooks.default.json',
   'Dev/i18n/base/Common/hooks/templates/hooks.full.json',
+  'Dev/i18n/base/Common/hooks/templates/hooks.memory.json',
 ];
 
 function collectCommands(node, out = []) {

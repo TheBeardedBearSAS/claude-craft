@@ -8,12 +8,19 @@ import path from 'path';
 // vers le modèle) sont des erreurs silencieuses : on les interdit dans ce qu'on distribue.
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '../..');
 const BASE_HOOKS = 'Dev/i18n/base/Common/hooks';
-const FILES = [
-  '.claude/settings.json',
-  `${BASE_HOOKS}/templates/hooks.default.json`,
-  `${BASE_HOOKS}/templates/hooks.full.json`,
-];
+const FRAGMENTS = ['default', 'full', 'memory'].map((p) => `${BASE_HOOKS}/templates/hooks.${p}.json`);
+const EXAMPLES_DIR = `${BASE_HOOKS}/templates/examples`;
+const EXAMPLES = fs
+  .readdirSync(path.join(PROJECT_ROOT, EXAMPLES_DIR))
+  .filter((f) => f.endsWith('.json'))
+  .map((f) => `${EXAMPLES_DIR}/${f}`);
+const FILES = ['.claude/settings.json', ...FRAGMENTS, ...EXAMPLES];
 const SCRIPTS_DIR = path.join(PROJECT_ROOT, BASE_HOOKS, 'scripts');
+// Les scripts memory-lifecycle sont installés dans .claude/hooks/memory-lifecycle/.
+const scriptSource = (rel) =>
+  rel.startsWith('memory-lifecycle/')
+    ? path.join(PROJECT_ROOT, 'Dev/scripts', rel)
+    : path.join(SCRIPTS_DIR, rel);
 
 const load = (rel) => JSON.parse(fs.readFileSync(path.join(PROJECT_ROOT, rel), 'utf8'));
 const handlers = (settings) =>
@@ -55,26 +62,49 @@ describe.each(FILES)('%s', (rel) => {
   });
 });
 
-describe('fragments distribués', () => {
-  it.each(FILES.slice(1))('%s ne référence que des scripts de la source unique', (rel) => {
-    const scripts = handlers(load(rel)).flatMap(({ h }) =>
-      [...h.command.matchAll(/\.claude\/hooks\/([\w.-]+\.sh)/g)].map((m) => m[1])
+describe('fragments et exemples distribués', () => {
+  const refs = (rel) =>
+    handlers(load(rel)).flatMap(({ h }) =>
+      [...h.command.matchAll(/\.claude\/hooks\/([\w./-]+\.sh)/g)].map((m) => m[1])
     );
-    expect(scripts.length).toBeGreaterThan(0);
-    for (const s of scripts) expect(fs.existsSync(path.join(SCRIPTS_DIR, s)), s).toBe(true);
+
+  it.each(FRAGMENTS)('%s référence des scripts qui existent', (rel) => {
+    expect(refs(rel).length).toBeGreaterThan(0);
+    for (const s of refs(rel)) expect(fs.existsSync(scriptSource(s)), s).toBe(true);
+  });
+
+  it.each(EXAMPLES)('%s : les scripts cités existent', (rel) => {
+    for (const s of refs(rel)) expect(fs.existsSync(scriptSource(s)), s).toBe(true);
   });
 
   it('chaque commande invoque bash explicitement avec $CLAUDE_PROJECT_DIR', () => {
-    for (const rel of FILES.slice(1)) {
+    for (const rel of [...FRAGMENTS, ...EXAMPLES]) {
       for (const { h } of handlers(load(rel)).filter(({ h }) => h.command.includes('.claude/hooks/'))) {
-        expect(h.command).toMatch(/^bash "\$CLAUDE_PROJECT_DIR\/\.claude\/hooks\/[\w.-]+\.sh"$/);
+        expect(h.command).toMatch(/^bash "\$CLAUDE_PROJECT_DIR\/\.claude\/hooks\/[\w./-]+\.sh"$/);
       }
     }
   });
 
-  it('default et full ne se recouvrent pas (full = extras seulement)', () => {
+  it('les exemples ne reproduisent plus les regex inline des anciens gardes', () => {
+    for (const rel of EXAMPLES) {
+      for (const { h } of handlers(load(rel))) expect(h.command, rel).not.toMatch(/grep -qE '\(/);
+    }
+  });
+
+  it('PreCompact émet du texte brut (aucun JSON / systemMessage)', () => {
+    for (const rel of [...FRAGMENTS, ...EXAMPLES]) {
+      for (const { event, h } of handlers(load(rel)).filter(({ event }) => event === 'PreCompact')) {
+        expect(h.command, `${rel} ${event}`).not.toMatch(/systemMessage|jq -n|additionalContext/);
+      }
+    }
+  });
+
+  it('default, full et memory ne se recouvrent pas (extras seulement)', () => {
     const cmds = (rel) => handlers(load(rel)).map(({ h }) => h.command);
-    const def = new Set(cmds(FILES[1]));
-    expect(cmds(FILES[2]).filter((c) => def.has(c))).toEqual([]);
+    const seen = new Set(cmds(FRAGMENTS[0]));
+    for (const rel of FRAGMENTS.slice(1)) {
+      expect(cmds(rel).filter((c) => seen.has(c))).toEqual([]);
+      cmds(rel).forEach((c) => seen.add(c));
+    }
   });
 });

@@ -735,7 +735,7 @@ Les sub-agents (Explore, Plan, general-purpose) utilisent Sonnet au lieu d'Opus:
 | **PreCompact** | `~/.claude/hooks/pre-compact.sh` | Preserve le contexte critique avant compaction |
 | **SessionStart** (compact) | Template `context-reinject.json` | Re-injecte `context-essentials.md` apres compaction |
 
-Templates disponibles dans `.claude/templates/hooks/`:
+Templates disponibles dans `Dev/i18n/base/Common/hooks/templates/examples/`:
 - `output-filter.json` — PostToolUse pour filtrer les gros outputs
 - `pre-compact.json` — PreCompact pour preserver le contexte
 - `context-reinject.json` — SessionStart pour la re-injection

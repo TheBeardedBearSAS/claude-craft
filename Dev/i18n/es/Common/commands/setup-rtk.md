@@ -112,17 +112,10 @@ Para hooks ausentes, referenciar los templates en `.claude/templates/hooks/`:
 - `output-filter.json` — PostToolUse para filtrado de salidas grandes
 - `pre-compact.json` — PreCompact para preservación del contexto
 - `context-reinject.json` — SessionStart para reinyección post-compactación
-- `post-compact.json` — PostCompact para restauración del contexto tras compactación
 
-#### Hook PostCompact — Restauración del contexto
+#### Restauración del contexto tras la compactación
 
-El hook **PostCompact** (Claude Code v2.1.76+) reinyecta el contexto crítico después de un evento de compactación automática. Sin él, Claude puede perder el hilo de las tareas activas, rutas de archivos y decisiones tomadas antes en la sesión.
-
-Template: `.claude/templates/hooks/post-compact.json`
-
-El hook lee `context-essentials.md` (un archivo que mantienes con el estado de la sesión actual) y lo inyecta como mensaje del sistema después de la compactación. Combinarlo con el hook **PreCompact** (`pre-compact.json`) que guarda los elementos esenciales antes de que ocurra la compactación.
-
-Ahorro estimado: evita 5-15 turnos de re-explicación por sesión larga (~3-8K tokens).
+No existe un hook PostCompact útil: su salida nunca llega al modelo. Restaure lo esencial con `SessionStart` (matcher `compact`, template `context-reinject.json`), cuyo stdout se añade al contexto, y guíe el resumen con `PreCompact` (`pre-compact.json`, salida en texto plano).
 
 ### 5. Resumen
 

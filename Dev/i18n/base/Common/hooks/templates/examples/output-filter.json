@@ -1,5 +1,5 @@
 {
-  "description": "Filter large tool outputs to save context window tokens. >50KB outputs are hard-truncated (the model never sees the full blob); 10-50KB outputs get a summarize hint.",
+  "description": "Replace Bash outputs larger than 50 KB by their first 8 KB (updatedToolOutput with the full Bash output shape) so the model never ingests the whole blob.",
   "hooks": {
     "PostToolUse": [
       {
@@ -7,12 +7,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(cat); TOOL_RESULT=$(echo \"$INPUT\" | jq -r '.tool_response.stdout? // .tool_response? // .tool_result? // empty'); RESULT_LEN=${#TOOL_RESULT}; if [ \"$RESULT_LEN\" -gt 50000 ]; then HEAD=$(printf '%s' \"$TOOL_RESULT\" | head -c 8000); NEW=\"[output hard-truncated by output-filter hook — ${RESULT_LEN} chars total, first 8000 shown]\\n${HEAD}\\n[... truncated; re-run with a narrower command (grep/head/tail) to see more]\"; jq -n --arg o \"$NEW\" '{\"hookSpecificOutput\": {\"hookEventName\": \"PostToolUse\", \"updatedToolOutput\": $o}}'; exit 0; fi; if [ \"$RESULT_LEN\" -gt 10240 ]; then LINES=$(printf '%s' \"$TOOL_RESULT\" | wc -l); jq -n --arg msg \"Output: ${LINES} lines / ${RESULT_LEN} chars. Extract only relevant information; do not repeat the full output.\" '{\"systemMessage\": $msg}'; exit 0; fi; echo '{}'; exit 0",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/output-filter.sh\"",
             "timeout": 5
           }
         ]
       }
     ]
   },
-  "usage": "Copy the PostToolUse hook to .claude/settings.json or your profile settings.json. Two-tier behaviour: outputs >50KB are HARD-REPLACED via hookSpecificOutput.updatedToolOutput (v2.1.121+) so the model only ever ingests the first 8KB plus a truncation notice — this actually saves context, unlike an advisory message. Outputs 10-50KB get a non-binding systemMessage hint to summarize. Requires jq. Note: the hook reads .tool_response (current schema) with fallbacks for older payloads."
+  "usage": "Opt-in (not in the default profile). Merge into .claude/settings.json. The script is installed in .claude/hooks/ by install-common-rules.sh and needs jq or node. For a softer, advisory variant see output-size-hint.sh (default profile)."
 }
