@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Hooks du dépôt (`.claude/settings.json`)** : les gardes inline sont remplacées par des scripts testés dans `Dev/i18n/base/Common/hooks/scripts/`, qui partagent `lib/hook-io.sh` (jq, ou node en repli ; une garde sans parseur bloque au lieu de tout laisser passer).
+  - `rm -rf` (`.claude/hooks/block-destructive-bash.sh`) : `rm` n'est reconnu qu'en position de commande et ses drapeaux ne sont lus que dans ses propres arguments. `docker run --rm … chown -R`, `ai-craft --force` et `2>/dev/null` ne sont plus bloqués.
+  - `guard-network.sh` remplace la garde `curl`/`wget` : elle bloquait `2>/dev/null`, `grep -o`, les domaines `.pl` et les messages de commit, mais laissait passer `| sudo bash`, `bash <(curl …)` et `| tee x | sh`. Elle bloque désormais un téléchargement suivi d'un interpréteur dans le même pipeline, un interpréteur alimenté par `<(curl …)` / `$(curl …)`, et l'exécution d'un script qui vient d'être téléchargé.
+  - `protect-sensitive-files.sh` (Edit, Write et NotebookEdit) : basename comparé sans casse ; `.env.example`, `docs/secrets.md` et `credentials.test.mjs` sont autorisés, `.ENV` et `server.PEM` bloqués.
+  - `output-size-hint.sh` : les alertes de sortie volumineuse passent par `additionalContext`. Les `echo 'NOTICE'` en sortie 0 n'atteignaient jamais le modèle.
+  - PostCompact est retiré : Claude Code ignore son `systemMessage`. La réinjection passe par SessionStart `compact`, et PreCompact donne `context-essentials.md` en texte brut comme instructions de compaction. Les chemins utilisent `$CLAUDE_PROJECT_DIR`, et le dépôt ne dépend plus de `~/.claude/hooks/*`.
+  - Prettier couvre aussi Write (`npx --no-install`, timeout 30 s), et chaque hook déclare un timeout.
 - **`scripts/collect-claude-signals.mjs`** : les advisories GitHub sont paginées en `per_page=100` (le défaut de 30 tronquait la liste : 30 avis vus sur 36). La version déclarée est la plus récente entre `config/versions.yaml` (`claudeCode.testedUpTo`) et la baseline : une release qui bumpait versions.yaml réveillait `cli-release` pour rien. Les pages suivies pointent vers leurs URLs canoniques `platform.claude.com` / `code.claude.com` au lieu des redirections `docs.claude.com`.
 
 ### Added
