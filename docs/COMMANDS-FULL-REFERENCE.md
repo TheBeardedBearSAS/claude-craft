@@ -71,7 +71,7 @@
 | [`/common:aliases`](../.claude/commands/common/aliases.md) | CLI aliases for frequently used commands |
 | [`/common:architecture-decision`](../.claude/commands/common/architecture-decision.md) | Architecture Decision Record (ADR) |
 | [`/common:audit-claude-alignment`](../.claude/commands/common/audit-claude-alignment.md) | Audit hebdomadaire d'alignement sur l'écosystème Claude (CLI, modèles, best practices Anthropic, communauté) via équipe d'agents + PR de correction |
-| [`/common:audit-freshness`](../.claude/commands/common/audit-freshness.md) | Audit de fraîcheur multi-stack (versions + best practices) via équipe d'agents parallèles Context7 + Web |
+| [`/common:audit-freshness`](../.claude/commands/common/audit-freshness.md) | Audit de fraîcheur multi-stack (versions + best practices) : pré-collecte déterministe des registres officiels, agents uniquement sur les stacks en écart |
 | [`/common:generate-changelog`](../.claude/commands/common/generate-changelog.md) | Génération Automatique du Changelog |
 | [`/common:getting-started`](../.claude/commands/common/getting-started.md) | Interactive 10-minute guided tour for new Claude Craft users |
 | [`/common:init`](../.claude/commands/common/init.md) | Bootstrap the Claude-Craft structure for a new project, or analyze the codebase and configure the project context (--context) |
