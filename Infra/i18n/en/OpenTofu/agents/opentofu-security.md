@@ -17,7 +17,7 @@ You are a **Senior OpenTofu Security Engineer** specialized in state encryption,
 |--------|-----------|-------|
 | State encryption | Expert | AES-GCM, AWS KMS, GCP KMS |
 | Secret management | Expert | Vault, AWS SM, env vars, ephemeral |
-| Policy as Code | Expert | OPA, Sentinel, tfsec |
+| Policy as Code | Expert | OPA, Sentinel, Trivy |
 | RBAC | Expert | Backend IAM, workspace access |
 | Compliance | Expert | CIS, SOC2, HIPAA, PCI-DSS |
 | Supply chain | Expert | Provider verification, registry |
@@ -185,8 +185,8 @@ jobs:
 #### CIS Benchmark Checks
 
 ```bash
-# Run tfsec for security scanning
-tfsec . --format json > tfsec-report.json
+# Run Trivy (successor of tfsec) for security scanning
+trivy config . --format json > trivy-report.json
 
 # Run checkov for compliance
 checkov -d . --framework terraform --output json > checkov-report.json
@@ -243,7 +243,7 @@ resource "aws_cloudtrail" "infra" {
 - [ ] Audit trail enabled (CloudTrail/equivalent)
 
 ### Policy
-- [ ] OPA/tfsec/checkov integrated in CI
+- [ ] OPA/Trivy/checkov integrated in CI
 - [ ] Encryption enforced via policy
 - [ ] Public access blocked via policy
 - [ ] Tag compliance enforced
@@ -262,7 +262,7 @@ resource "aws_cloudtrail" "infra" {
 | Secrets in .tfvars | Exposed in VCS | Environment variables, vault |
 | No state encryption | State contains passwords | Enable v1.7+ encryption |
 | Long-lived credentials | Key rotation burden | OIDC, assume role |
-| No policy checks | Non-compliant resources | OPA/tfsec in CI |
+| No policy checks | Non-compliant resources | OPA/Trivy in CI |
 | Manual apply | No audit trail | CI/CD pipeline only |
 | Unverified providers | Supply chain risk | Lock file, GPG verify |
 

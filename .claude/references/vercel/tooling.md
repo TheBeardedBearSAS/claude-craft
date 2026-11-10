@@ -114,13 +114,15 @@ npx ajv-cli validate -s https://openapi.vercel.sh/vercel.json -d vercel.json
 
 ---
 
-## Platform Updates (CLI 63.x, October 2026)
+## Platform Updates (CLI 65.x, November 2026)
 
-Verified against the official Vercel docs (October 2026):
+Verified against the official Vercel docs (November 2026; CLI 65.14.0 on the npm registry; no breaking CLI change found for 64 and 65 in the public docs, but the release notes were not retrievable, so check https://vercel.com/docs/cli/release-notes before upgrading CI):
 
-- **Node.js runtimes**: `24.x` (default) and `22.x` are available; Node.js 20 is deprecated since 2026-10-01. Pin with `package.json` `engines.node` (e.g. `"24.x"`) or the project setting.
-- **Function duration**: with Fluid Compute (default), the default max duration is 300 s on all plans; the configurable maximum is 300 s on Hobby and 800 s on Pro/Enterprise (up to 1800 s in beta, set per function: `maxDuration` in code or `vercel.json` `functions`).
-- **Edge Runtime**: Vercel recommends migrating from Edge to Node.js (both run on Fluid Compute), see https://vercel.com/docs/functions/runtimes/edge.
+- **Node.js runtimes**: `26.x` (`nodejs26.x`), `24.x` (default) and `22.x` are available; Node.js 20 is deprecated since 2026-10-01. Pin with `package.json` `engines.node` (e.g. `"24.x"`) or the project setting.
+- **Function duration**: with Fluid Compute (default), the default max duration is 300 s on all plans; the configurable maximum is 300 s on Hobby and 800 s on Pro/Enterprise (extended maximum of 1800 s on Pro/Enterprise, beta, for `nodejs22.x`, `nodejs24.x`, `nodejs26.x`, Bun and Python 3.12-3.14 only; set per function with `maxDuration` in code or `vercel.json` `functions`, project-level defaults above 800 s are not supported). For unbounded executions use Vercel Workflows. Python framework apps (FastAPI/Flask/Django) key the `functions` entry on their entrypoint file (e.g. `app/main.py`).
+- **Edge Runtime**: Vercel *recommends migrating* from Edge to Node.js (both run on Fluid Compute); the docs do not call it formally deprecated. Starting in Next.js 16.3, `runtime = 'edge'` is no longer supported (routes run on Node.js). See https://vercel.com/docs/functions/runtimes/edge.
+- **Cron Jobs → Schedules**: Cron Jobs are a legacy feature slated for migration to Schedules (timezones, private function and queue targets, runtime creation); `vercel schedules` (beta) lists, creates and invokes them.
+- **WebSockets**: Vercel Functions serve WebSocket connections natively (public beta, all plans).
 - **`vercel.ts`**: programmatic alternative to `vercel.json` (`npm i @vercel/config`; `import { routes, type VercelConfig } from '@vercel/config/v1'`; `export const config: VercelConfig = { ... }`). Use only one of `vercel.ts` or `vercel.json`.
 - **Bun runtime (Beta)**: opt in with `"bunVersion": "1.x"` (or `"1.4.x"`) in `vercel.json`; Node.js remains the default.
 - **`vercel upgrade`**: upgrades the CLI via the package manager that installed it (`--dry-run` previews the command, `--enable-auto`/`--disable-auto` toggle automatic updates).

@@ -120,9 +120,11 @@ Extraire et clarifier :
    - `max_requests = 500` pour prevenir l'accumulation memoire
    - Benchmark avec `wrk` ou `k6`, ajuster a la hausse/baisse
    - Surveiller : memoire RSS par worker, temps de reponse p99
-   - Utiliser FrankenPHP 1.13.0+ : la 1.12.4 est vulnérable (correctifs de sécurité en 1.12.5 : phpinfo dans l'image par défaut, fuite d'ID de session en worker mode, timeout du body ; 5 advisories dont 2 high en 1.13.0)
+   - Utiliser FrankenPHP 1.13.5+ : la 1.12.4 est vulnérable (correctifs de sécurité en 1.12.5 : phpinfo dans l'image par défaut, fuite d'ID de session en worker mode, timeout du body ; 5 advisories dont 2 high en 1.13.0)
+   - Plancher de sécurité 1.13.5 : PHP2Shell (CVE-2026-109618, CVE-2026-109619, RCE sans authentification) est corrigé en 1.13.2 ; la 1.13.4 corrige un crash du mode worker, des fuites d'environnement et un use-after-free sur `putenv()` (Brotli CVE-2026-111497 corrigé dans les images) ; la 1.13.5 corrige une faille de `php_server` exécutant un fichier téléversé non PHP comme du PHP (High) et 16 autres problèmes. Tirer régulièrement les images ou épingler `1.13.5` ou plus
+   - Mode worker (1.13.5) : FrankenPHP ne réinitialise entre deux requêtes que l'état issu de la requête ; l'état de `strtok()`, `http_get_last_response_headers()`, `error_get_last()` et les erreurs libxml persistent de nouveau. Pour un état propre, appeler `error_clear_last()`, `libxml_clear_errors()` ou `http_clear_last_response_headers()` à la fin de chaque requête
    - FrankenPHP 1.13+ : `num_threads` ne compte que les threads pour les requêtes qu'aucun worker ne sert ; les threads de worker s'ajoutent, et le démarrage échoue si `max_threads` < `num_threads` + threads de worker
-   - Le hot reload en développement passe par Mercure 1.0 : `$_SERVER['FRANKENPHP_HOT_RELOAD']` annonce désormais `/.well-known/mercure?match=<topic>` (ne pas coder `?topic=` en dur)
+   - Le hot reload en développement passe par Mercure 1.1.6 (Caddy 2.11.9) : `$_SERVER['FRANKENPHP_HOT_RELOAD']` annonce désormais `/.well-known/mercure?match=<topic>` (ne pas coder `?topic=` en dur)
 
 ### Phase 3 -- Plan d'implementation
 

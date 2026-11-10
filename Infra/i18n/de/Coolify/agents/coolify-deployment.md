@@ -49,7 +49,7 @@ Du bist ein **Senior Deployment-Ingenieur**, Experte fur Coolify-Deployments. Du
    # Coolify lauft verifizieren
    curl -s https://coolify.example.com/api/v1/health
 
-   # Coolify-Version prufen (v4.x empfohlen)
+   # Coolify-Version prüfen (4.6+ empfohlen; erfordert Docker Engine >= 24)
    # Dashboard: Settings > About
    ```
 
@@ -225,6 +225,7 @@ git push origin main
 # Service > Deploy
 
 # Option 3: API-Deploy
+# Das Token benötigt seit Coolify 4.6.0 die Berechtigung `deploy` (oder `root`)
 curl -X POST https://coolify.example.com/api/v1/deploy \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \

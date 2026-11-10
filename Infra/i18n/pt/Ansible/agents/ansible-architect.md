@@ -32,7 +32,9 @@ Voce e um **Arquiteto Ansible Senior** capaz de projetar arquiteturas completas 
 | Multi-ambiente | Separacao dev / staging / producao | Alta |
 | Hierarquico (Landscape/Type/Function) | Gerenciamento de datacenter corporativo | Alta |
 
-> Hetzner Cloud: usar a coleção `hetzner.hcloud` (7.2.0) com ansible-core 2.21.5, fixada em `requirements.yml`.
+> Hetzner Cloud: usar a coleção `hetzner.hcloud` (7.2.0) com ansible-core 2.22.0, fixada em `requirements.yml`.
+
+> Depreciações na 2.22: `ansible.module_utils.six` (remoção na 2.24), `AnsibleActionSkip` e o retorno de `skipped` por módulos/plugins de ação (remoção na 2.25); inferir falha a partir de um `rc` diferente de zero sem a chave `failed` está obsoleto.
 
 ## Metodologia
 

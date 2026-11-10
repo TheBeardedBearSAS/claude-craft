@@ -50,7 +50,7 @@ export default defineConfig({
 })
 ```
 
-> **Vite 8 / Rolldown (default):** The object form of `manualChunks` is **removed** (not supported). Use `build.rolldownOptions.output.codeSplitting.groups`.
+> **Vite 8 / Rolldown (default):** The object form of `manualChunks` is **removed** (not supported); the function form is deprecated. Use `build.rolldownOptions.output.codeSplitting.groups`.
 > **Vite 7 / Rolldown disabled (legacy):** use `build.rollupOptions.output.manualChunks` — `// Only if Rolldown is explicitly disabled`.
 
 ### Environment Variables
@@ -355,13 +355,13 @@ const router = createRouter({ history: createWebHistory() });
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@vitejs/plugin-vue": "^6.0.0",
-    "@vue/test-utils": "^2.4.0",
+    "@vue/test-utils": "^2.5.1",
     "eslint": "^10.0.0",
     "eslint-plugin-vue": "^10.0.0",
     "prettier": "^3.0.0",
     "typescript": "~5.4.0",
     "vite": "^8.0.0",
-    "vitest": "^4.0.0",
+    "vitest": "^5.1.0",
     "vue-tsc": "^2.0.0"
   }
 }

@@ -534,6 +534,18 @@ end
 - Escaneie os arquivos em busca de malware ao aceitar uploads de usuários não confiáveis
 - Mantenha atualizado o processamento de variantes do Active Storage (libvips)
 
+### Nível de patch de segurança do Rails (8.1.4.1, 04/11/2026)
+
+Exigir Rails 8.1.4.1 ou superior (`gem "rails", "~> 8.1.4", ">= 8.1.4.1"`): corrige diversos avisos GHSA em Active Support, Action View, Action Pack, Active Storage e Action Mailbox. Mudanças de comportamento a verificar ao atualizar:
+- `cookies_same_site_protection` agora se aplica a todos os session stores, não apenas ao `CookieStore`
+- rails-html-sanitizer 1.7.2 ou superior é obrigatório; `strip_tags` e `highlight` agora produzem `&quot;` e `&#39;` para aspas
+- Endereços de cliente `Forwarded` e `X-Forwarded-For` conflitantes lançam `IpSpoofAttackError` quando a verificação de spoofing está ativa: revisar a cadeia de proxies
+- O Active Storage inclui uma política do ImageMagick (mini_magick 5.1 ou superior); apps que renderizam PostScript ou PDF devem reautorizar o delegate `gs` e os coders necessários no próprio `policy.xml`
+- ffmpeg e ffprobe ficam limitados aos formatos de áudio e vídeo comuns (extensível via `config.active_storage.ffmpeg_allowed_formats`); uploads diretos para o GCS exigem `x-goog-content-length-range` no `responseHeader` do CORS do bucket
+- Um `SafeBuffer` inseguro serializado com MessagePack não pode mais ser lido por versões antigas do Rails: atualizar todas as instâncias que compartilham um cache antes do rollout
+
+Fonte: https://github.com/rails/rails/releases/tag/v8.1.4.1
+
 ---
 
 ## Ferramentas de Segurança no CI

@@ -189,6 +189,7 @@ ansible-vault view inventories/production/group_vars/all/vault.yml
 
 # Check vault-id configuration
 ansible-config dump | grep -i vault
+# ansible-core 2.22+: ansible-config verwendet standardmäßig `-t all` (Plugin-Abschnitte werden validiert); `-t base` für das bisherige Verhalten
 
 # Re-encrypt with correct vault-id
 ansible-vault rekey --vault-id old@prompt --new-vault-id production@prompt \

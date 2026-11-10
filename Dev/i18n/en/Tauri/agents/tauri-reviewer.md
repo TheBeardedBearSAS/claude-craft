@@ -327,6 +327,9 @@ Does the app target iOS/Android?
 - `tauri.conf.json` bundle identifier, version and icons set; `gen/schemas/` not hand-edited
 - Tauri crate, `tauri-build`, `@tauri-apps/api` and `@tauri-apps/cli` kept on matching minor versions
 - Rust toolchain compatible with the Tauri MSRV (1.90 for 2.12.x)
+- Multi-webview apps on Tauri 2.11.6 or later (2.12.x recommended): GHSA-w28w-mhc8-qvjv (Tauri 2.0.0 to 2.11.5) let a webview read another webview's queued `Channel` payloads and large invoke responses; the fix binds the queue to the owning webview
+- 2.12 notes: Android Gradle 8.13 minimum (template on Gradle 9.6.1, Kotlin 2.2: rename `proguard-rules.pro` to `consumer-rules.pro` in plugins); `windows` 0.62 / `webview2-com` 0.39 drop Windows 7 support; `InvokeMessage::state` and `state_ref` are deprecated; runtime ACL deny rules are scoped to the capability's local or remote context; new `limitNavigationsToAppBoundDomains` webview option
+- Source: https://github.com/tauri-apps/tauri/security/advisories/GHSA-w28w-mhc8-qvjv and the tauri crate CHANGELOG (2.12.0)
 - Mobile commands (`tauri android init|dev|build`, `tauri ios init|dev|build`) used only when mobile is a declared target
 - Releases publish updater artifacts together with their signatures
 

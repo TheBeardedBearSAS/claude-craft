@@ -646,6 +646,8 @@ de type hints sans recourir à `from __future__ import annotations`.
 > - **PEP 814 — `frozendict`** : dictionnaire immuable natif (hashable si clés et valeurs le sont).
 > - **PEP 661 — `sentinel`** : type natif pour des valeurs sentinelles uniques (remplace les `_MISSING = object()` artisanaux).
 > - **PEP 686** : UTF-8 par défaut pour `open()` sans `encoding` ; **PEP 798** : `*` / `**` dans les compréhensions.
+> - **PEP 799 — package `profiling`** : `profiling.tracing` (ex-`cProfile`, qui reste un alias) et `profiling.sampling` (profileur statistique Tachyon) ; le module `profile` est déprécié (retrait en 3.17).
+> - **`re.prefixmatch()`** : nom explicite de `re.match()` (désormais *soft deprecated*).
 >
 > Source : docs.python.org/3.15/whatsnew/3.15.html
 

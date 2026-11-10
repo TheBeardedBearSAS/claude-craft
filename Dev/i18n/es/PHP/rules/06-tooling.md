@@ -1,5 +1,7 @@
 # PHP Development Tools
 
+> **Nivel de parche:** apuntar a PHP ≥ 8.5.12 (22 oct. 2026), que incluye correcciones de seguridad (Core GHSA-w8hw-w9fx-j79w y GHSA-6wmf-4rv5-p3rp, Lexbor, Opcache, SOAP, etc.). Fuente: https://www.php.net/ChangeLog-8.php#8.5.12
+
 ## Composer - Dependency Management
 
 ### Essential Commands

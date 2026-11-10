@@ -107,7 +107,7 @@ test('user can login', function () {
 
 ### Vitest Projects — Monorepos
 
-`workspace` est déprécié depuis Vitest 3.2 au profit de `projects`.
+`workspace` est renommé `projects` depuis Vitest 3.2 ; un fichier `vitest.workspace` séparé n'est plus supporté en 4.x (déclarer `projects` dans `vitest.config`).
 
 ```typescript
 // vitest.config.ts

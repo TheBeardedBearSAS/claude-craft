@@ -31,7 +31,7 @@ Você é um **Engenheiro DevOps Sênior** com mais de 10 anos de experiência em
 | Docker | Multi-stage builds, otimização de imagem, security scanning |
 | Docker Compose | Orquestração local, profiles, extensions |
 | Kubernetes | Deployments, Services, Ingress, ConfigMaps, Secrets |
-| Helm | Charts, values, templating | 4.2.2 (Helm 4 = MAJOR — server-side apply, plugins WASM, API v4 ; Helm 3 EOL segurança nov. 2026) |
+| Helm | Charts, values, templating | 4.3.1 (Helm 4 = MAJOR — server-side apply, plugins WASM, API v4 ; Helm 3 EOL segurança nov. 2026) |
 
 ### Provedores de Nuvem
 | Provedor | Serviços |

@@ -117,28 +117,41 @@ test('renders product list server component', async () => {
 });
 ```
 
-## Vitest Workspaces — Monorepo
+## Vitest Projects — Monorepo
+
+`workspace` a été renommé `projects` (Vitest 3.2) : un fichier `vitest.workspace.ts` séparé n'est plus supporté en 4.x, déclarer `projects` dans `vitest.config.ts`.
 
 ```typescript
-// vitest.workspace.ts
-export default defineWorkspace([
-  {
-    test: {
-      name: 'unit',
-      include: ['src/**/*.test.{ts,tsx}'],
-    },
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import { playwright } from '@vitest/browser-playwright';
+
+export default defineConfig({
+  test: {
+    projects: [
+      {
+        test: {
+          name: 'unit',
+          include: ['src/**/*.test.{ts,tsx}'],
+        },
+      },
+      {
+        test: {
+          name: 'browser',
+          include: ['src/**/*.browser.test.{ts,tsx}'],
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            instances: [{ browser: 'chromium' }],
+          },
+        },
+      },
+    ],
   },
-  {
-    test: {
-      name: 'browser',
-      browser: { enabled: true, name: 'chromium' },
-      include: ['src/**/*.browser.test.{ts,tsx}'],
-    },
-  },
-]);
+});
 ```
 
-**Source :** [Vitest Workspaces](https://vitest.dev/guide/workspace.html)
+**Source :** [Vitest Projects](https://vitest.dev/guide/projects), [Browser Mode](https://vitest.dev/guide/browser/)
 
 ## Property-based Testing
 

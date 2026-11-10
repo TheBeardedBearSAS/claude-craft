@@ -186,6 +186,7 @@ Opcion B: Manual (Dashboard Coolify)
   Dashboard > Service > Deploy
 
 Opcion C: API
+  # El token necesita el permiso `deploy` (o `root`) desde Coolify 4.6.0
   curl -X POST https://coolify.example.com/api/v1/deploy \
     -H "Authorization: Bearer {api-token}" \
     -H "Content-Type: application/json" \

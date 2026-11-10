@@ -1,6 +1,6 @@
 # React 19 — Nouvelles Fonctionnalités
 
-**Version :** React 19.3.x (latest: 19.3.0, 9 sept. 2026) | React Compiler 1.0 (octobre 2025)
+**Version :** React 19.3.x (latest: 19.3.1 ; 19.3.0 le 9 sept. 2026) | React Compiler 1.0 (octobre 2025)
 
 ## Vue d'ensemble
 
@@ -801,6 +801,7 @@ Aucun breaking change annoncé. Source : [React 19.3](https://react.dev/blog/202
 | Context en Server Components | Un Server Component peut rendre `<UserContext value={…}>` (Context importé d'un module `'use client'`) sans Provider intermédiaire |
 | Strict Mode | Les Effects sont invoqués deux fois aussi à l'**hydratation** (comme sur les racines rendues côté client) |
 | Transitions indépendantes | Une Transition lente ne bloque plus les Transitions sans rapport |
+| `onFullscreenChange` / `onFullscreenError` | Nouveaux événements `react-dom` (entrée du changelog 19.3 ; signatures non détaillées dans le billet, se référer à la PR react#34621) |
 
 ---
 
@@ -808,7 +809,7 @@ Aucun breaking change annoncé. Source : [React 19.3](https://react.dev/blog/202
 
 | Bibliothèque | Version | Usage |
 |--------------|---------|-------|
-| **React** | 19.3.x (latest: 19.3.0) | Core |
+| **React** | 19.3.x (latest: 19.3.1) | Core |
 | **React Compiler** | 1.0+ | Auto-memoization |
 | **Zustand** | 5.0.15 | State management |
 | **TanStack Query** | 5.104.2 | Server state (cache, revalidation) |

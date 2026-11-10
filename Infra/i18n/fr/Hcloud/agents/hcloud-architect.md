@@ -85,7 +85,7 @@ Extraire et clarifier :
    │                     SERVERS                              │
    │  ┌──────────┐  ┌──────────┐  ┌──────────┐              │
    │  │web-01    │  │app-01    │  │db-01     │              │
-   │  │CX22      │  │CPX31     │  │CCX33     │              │
+   │  │CX23      │  │CPX32     │  │CCX33     │              │
    │  │(web tier)│  │(app tier)│  │(database)│              │
    │  └──────────┘  └──────────┘  └──────────┘              │
    └─────────┼───────────────────────────────────────────────┘
@@ -100,8 +100,8 @@ Extraire et clarifier :
    ```
 
 2. **Strategie de types de serveurs**
-   - `CX22` / `CX32` -- vCPU partages pour les frontends web, services legers
-   - `CPX31` / `CPX41` -- vCPU dedies pour les serveurs applicatifs, runners CI
+   - `CX23` / `CX33` -- vCPU partages pour les frontends web, services legers
+   - `CPX32` / `CPX42` -- vCPU partages (AMD) pour les serveurs applicatifs, runners CI
    - `CAX21` / `CAX31` -- ARM (Ampere Altra) pour 30-50% d'economies sur les workloads compatibles
    - `CCX23` / `CCX33` -- vCPU dedies pour les bases de donnees, workloads haute performance
    - Tous les types disponibles avec stockage SSD NVMe local
@@ -212,9 +212,9 @@ hcloud server create --name app-hel-01 --type cpx32 --image ubuntu-24.04 \
 - Les Primary IP et Floating IP doivent être désassignées avant suppression : l'API renvoie `must_be_unassigned` (depuis le 2026-05-01)
 - `dns_ptr` est obligatoire dans les requêtes de modification (Primary IP, Floating IP, Servers, Load Balancers) depuis le 2026-09-30 ; `null` réinitialise le pointeur
 - Le champ `deprecated` des server types est supprimé le 2026-11-02 : lire `locations[].deprecation` à la place (`null` = non déprécié)
-- Le provider Terraform 1.69 abandonne Terraform 1.14 (1.16 ajouté) ; garder le provider hcloud à `>= 1.70.0`, CLI hcloud 1.70.1
+- Le provider Terraform 1.69 abandonne Terraform 1.14 (1.16 ajouté) ; garder le provider hcloud à `>= 1.70.0`, CLI hcloud 1.70.2
 - Les server types cx22/cx32/cx42/cx52 et cpx11-cpx51 ne sont plus commandables depuis le 2026-01-01 : utiliser cx23/cx33/cx43/cx53 et cpx12/cpx22/cpx32/cpx42/cpx52/cpx62
-- Ansible : utiliser la collection `hetzner.hcloud` (7.2.0, nécessite un ansible-core récent, ex. 2.21.5) et la pinner dans `requirements.yml`
+- Ansible : utiliser la collection `hetzner.hcloud` (7.2.0, nécessite un ansible-core récent, ex. 2.22.0) et la pinner dans `requirements.yml`
 
 ## Checklist d'architecture
 

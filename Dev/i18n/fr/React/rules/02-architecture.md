@@ -272,33 +272,30 @@ export const Button: FC<ButtonProps> = ({
 
 ```typescript
 // components/atoms/Input/Input.tsx
-import { FC, InputHTMLAttributes, forwardRef } from 'react';
+import { InputHTMLAttributes, Ref } from 'react';
 import { cn } from '@/utils/classnames';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
   fullWidth?: boolean;
+  ref?: Ref<HTMLInputElement>; // React 19: ref is a regular prop
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ error, fullWidth, className, ...props }, ref) => {
-    return (
-      <input
-        ref={ref}
-        className={cn(
-          'px-3 py-2 border rounded-md outline-none transition-colors',
-          'focus:ring-2 focus:ring-blue-500',
-          error && 'border-red-500 focus:ring-red-500',
-          fullWidth && 'w-full',
-          className
-        )}
-        {...props}
-      />
-    );
-  }
-);
-
-Input.displayName = 'Input';
+export const Input = ({ error, fullWidth, className, ref, ...props }: InputProps) => {
+  return (
+    <input
+      ref={ref}
+      className={cn(
+        'px-3 py-2 border rounded-md outline-none transition-colors',
+        'focus:ring-2 focus:ring-blue-500',
+        error && 'border-red-500 focus:ring-red-500',
+        fullWidth && 'w-full',
+        className
+      )}
+      {...props}
+    />
+  );
+};
 ```
 
 #### 2. Molecules (Molécules)

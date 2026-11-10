@@ -250,18 +250,19 @@ return RectorConfig::configure()
         "fakerphp/faker": "^1.23",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
-        "larastan/larastan": "^2.9",
+        "larastan/larastan": "^3.14",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
-        "pestphp/pest": "^4.0",
-        "pestphp/pest-plugin-laravel": "^4.0",
-        "pestphp/pest-plugin-mutate": "^4.0",
+        "pestphp/pest": "^5.0",
+        "pestphp/pest-plugin-laravel": "^5.0",
         "phpstan/phpstan": "^2.2",
         "rector/rector": "^2.4",
         "spatie/laravel-ignition": "^2.4"
     }
 }
 ```
+
+> **Pest 5 vs 4 :** Pest 5 exige PHP ^8.4 et PHPUnit 13 (`pest-plugin-laravel` 5.x requiert Laravel ^13.23). Sur PHP 8.3, rester sur `pestphp/pest ^4.0` + `pest-plugin-laravel ^4.0` (valeurs du skeleton Laravel 13, PHPUnit ^12.0) — ne jamais mélanger les majeures. Larastan 3.x (`^3.14`) supporte Laravel 11/12/13 et PHPStan ^2.3 ; Larastan 2.x ne convient plus. Sources : https://laravel.com/docs/13.x/upgrade, https://packagist.org/packages/pestphp/pest
 
 ### Production
 
@@ -288,9 +289,9 @@ return RectorConfig::configure()
 
 | Composant | Version | Usage Laravel |
 |-----------|---------|---------------|
-| Docker Engine | 29.9.0 | BuildKit par défaut, SBOM natif |
-| FrankenPHP | 1.13.0 | Alternative moderne à PHP-FPM (Worker mode Octane) |
-| PgBouncer | 1.26.0 | Transaction pooling + prepared statements natifs (CVE-2026-6664/6667 patchées) |
+| Docker Engine | 29.9.3 | BuildKit par défaut, SBOM natif |
+| FrankenPHP | 1.13.5 | Alternative moderne à PHP-FPM (Worker mode Octane) |
+| PgBouncer | 1.26.1 | Transaction pooling + prepared statements natifs (CVE-2026-107350 patchée en 1.26.1) |
 
 **FrankenPHP + Laravel Octane** : 2-3× gains performance (Worker mode, HTTP/3, max_requests anti-leak).  
 **Sources** : https://frankenphp.dev/docs/laravel/ | https://laravel.com/docs/octane

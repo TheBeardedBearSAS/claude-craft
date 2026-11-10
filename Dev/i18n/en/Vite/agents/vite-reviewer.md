@@ -66,7 +66,7 @@ Does the project have several distinct HTML pages (not just client-side routes)?
     NO --> MAJOR: secondary pages are not built or depend on a
             manual, unoptimized loading path
     YES --> Do the pages share heavy dependencies?
-      YES --> Is manualChunks configured for a shared vendor chunk?
+      YES --> Is codeSplitting configured for a shared vendor chunk?
         NO --> MINOR: code duplication across pages
 ```
 
@@ -162,8 +162,8 @@ export default defineConfig({
         admin: resolve(__dirname, 'pages/admin/index.html'),
       },
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) return 'vendor';
+        codeSplitting: {
+          groups: [{ name: 'vendor', test: /node_modules/ }],
         },
       },
     },
@@ -444,7 +444,7 @@ Does package.json declare "sideEffects": false?
 
 ```
 Does the app have several pages (rolldownOptions.input)?
-  YES --> Does manualChunks isolate a shared vendor chunk?
+  YES --> Does codeSplitting isolate a shared vendor chunk?
     NO --> MAJOR: each page duplicates the same heavy dependencies
     YES --> Does the largest lazy chunk exceed 80KB gzip?
       YES --> MAJOR: split further or lazy-load heavy sections
@@ -505,14 +505,14 @@ export default defineConfig({
 **Multi-page code-splitting:**
 ```typescript
 // BAD: each multi-page entry bundles its own copy of lodash-es
-// (no manualChunks)
+// (no codeSplitting)
 
 // GOOD: shared vendor chunk across all pages
 build: {
   rolldownOptions: {
     output: {
-      manualChunks(id) {
-        if (id.includes('node_modules')) return 'vendor';
+      codeSplitting: {
+        groups: [{ name: 'vendor', test: /node_modules/ }],
       },
     },
   },
@@ -548,7 +548,7 @@ build: {
 |-----------|--------|
 | Effective tree-shaking (sideEffects: false, named exports, coherent exports map) | 6 |
 | Dependencies externalized for libraries (peer deps not bundled) | 6 |
-| Code-splitting for multi-page apps (manualChunks, shared vendor) | 5 |
+| Code-splitting for multi-page apps (codeSplitting, shared vendor) | 5 |
 | Bundle under thresholds, assetsInlineLimit controlled | 4 |
 | Asset hashing, appropriate build.target, sourcemaps handled correctly in prod | 4 |
 
@@ -567,7 +567,7 @@ build: {
 ### Phase 2: Vite-specific Configuration (15 min)
 
 1. If library: verify build.lib, formats, rolldownOptions.external, vite-plugin-dts
-2. If multi-page: verify rolldownOptions.input, manualChunks
+2. If multi-page: verify rolldownOptions.input, codeSplitting
 3. If Workers/WASM: verify new URL(...import.meta.url), ?init/?url suffixes
 4. Verify custom plugin naming convention (vite-plugin-*, name property)
 5. Verify environment variables (VITE_ prefix, no secrets exposed client-side)
@@ -590,7 +590,7 @@ build: {
 
 1. Analyze tree-shaking (sideEffects, named exports, exports map)
 2. Verify peer dep externalization for libraries
-3. Verify code-splitting / manualChunks for multi-page apps
+3. Verify code-splitting / codeSplitting for multi-page apps
 4. Verify assetsInlineLimit, build.target, asset hashing, sourcemaps
 5. Run a bundle analyzer if available (rollup-plugin-visualizer)
 
@@ -711,7 +711,7 @@ build: {
 - **index.html is source code**: never inside public/, always transformed by Vite's pipeline
 - **public/ is reserved for static assets**: no source HTML/JS should ever pass through it
 - **Libraries: externalize, never bundle peer deps**
-- **Multi-page: name every entry explicitly, share heavy dependencies via manualChunks**
+- **Multi-page: name every entry explicitly, share heavy dependencies via codeSplitting**
 - **Type safety end-to-end**: strict tsconfig through to published types via vite-plugin-dts
 - **Plugin naming convention**: vite-plugin-* with an explicit `name` property
 - **Verify the build, not just the source code**: test the actually published dist/

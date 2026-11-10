@@ -57,6 +57,8 @@ You are a **Senior Ansible Deployment Engineer** specialized in CI/CD pipeline i
    - Approval gates (manual, automated)
    - Compliance and audit trail
 
+> ansible-core 2.22 drops Python 3.12 on the controller (Python 3.15 is added): pin a supported interpreter (e.g. `actions/setup-python`) in CI before `pip install ansible-core`.
+
 ### Phase 2 -- Design Pipeline
 
 1. **Pipeline Stages**

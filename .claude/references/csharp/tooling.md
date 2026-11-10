@@ -268,7 +268,7 @@ trim_trailing_whitespace = false
     <PackageVersion Include="Bogus" Version="35.4.0" />
     <!-- Testcontainers 4.x (4.12.0 latest stable). 4.0 drops default image versions: always specify .WithImage(). -->
     <PackageVersion Include="Testcontainers" Version="4.12.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.1" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
 
     <!-- Observability -->
@@ -546,7 +546,7 @@ dotnet tool install -g csharp-ls
 
 - [ ] .NET 10 SDK installed (10.0.4xx feature band; 10.0.401 on 2026-10-13)
 - [ ] Not on .NET 8 / .NET 9: both reach end of support on 2026-11-10 (.NET 10 LTS is supported until 2028-11-14)
-- [ ] .NET 11 / C# 15: go-live RC today, GA expected in November 2026 (STS) — stay on .NET 10 LTS for production until then
+- [ ] .NET 11 / C# 15: GA on 2026-11-10 but STS (supported until 2028-11-14, same date as .NET 10 LTS) — stay on .NET 10 LTS (C# 14) for production; .NET 11 removes the Newtonsoft.Json dependency from VSTest and its test templates default to xUnit v3 on Microsoft.Testing.Platform
 - [ ] EditorConfig configured
 - [ ] Directory.Build.props set up
 - [ ] Central package management enabled

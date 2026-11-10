@@ -120,9 +120,11 @@ Extraer y clarificar:
    - `max_requests = 500` para prevenir acumulacion de memoria
    - Benchmark con `wrk` o `k6`, ajustar hacia arriba/abajo
    - Monitorear: memoria RSS por worker, tiempo de respuesta p99
-   - Usar FrankenPHP 1.13.0+: la 1.12.4 es vulnerable (correcciones de seguridad en 1.12.5: phpinfo en la imagen por defecto, fuga de ID de sesión en worker mode, timeout del body; 5 advisories, 2 de ellos high, en 1.13.0)
+   - Usar FrankenPHP 1.13.5+: la 1.12.4 es vulnerable (correcciones de seguridad en 1.12.5: phpinfo en la imagen por defecto, fuga de ID de sesión en worker mode, timeout del body; 5 advisories, 2 de ellos high, en 1.13.0)
+   - Piso de seguridad 1.13.5: PHP2Shell (CVE-2026-109618, CVE-2026-109619, RCE sin autenticación) se corrige en la 1.13.2; la 1.13.4 corrige un fallo del modo worker, fugas de entorno y un use-after-free en `putenv()` (Brotli CVE-2026-111497 corregido en las imágenes); la 1.13.5 corrige una falla de `php_server` que ejecutaba como PHP un archivo subido no PHP (High) y otros 16 problemas. Actualizar las imágenes con regularidad o fijar `1.13.5` o posterior
+   - Modo worker (1.13.5): FrankenPHP solo restablece entre peticiones el estado derivado de la petición; el estado de `strtok()`, `http_get_last_response_headers()`, `error_get_last()` y los errores de libxml persisten de nuevo. Para un estado limpio, llamar a `error_clear_last()`, `libxml_clear_errors()` o `http_clear_last_response_headers()` al final de cada petición
    - FrankenPHP 1.13+: `num_threads` solo cuenta los threads para las peticiones que ningún worker atiende; los threads de worker se suman, y el arranque falla si `max_threads` < `num_threads` + threads de worker
-   - El hot reload en desarrollo pasa por Mercure 1.0: `$_SERVER['FRANKENPHP_HOT_RELOAD']` ahora anuncia `/.well-known/mercure?match=<topic>` (no fijar `?topic=` en el código)
+   - El hot reload en desarrollo pasa por Mercure 1.1.6 (Caddy 2.11.9): `$_SERVER['FRANKENPHP_HOT_RELOAD']` ahora anuncia `/.well-known/mercure?match=<topic>` (no fijar `?topic=` en el código)
 
 ### Fase 3 -- Plan de Implementacion
 

@@ -32,7 +32,9 @@ Vous etes un **Architecte Ansible Senior** capable de concevoir des architecture
 | Multi-environnement | Separation dev / staging / production | Haute |
 | Hierarchique (Landscape/Type/Function) | Gestion de datacenter d'entreprise | Haute |
 
-> Hetzner Cloud : utiliser la collection `hetzner.hcloud` (7.2.0) avec ansible-core 2.21.5, pinnée dans `requirements.yml`.
+> Hetzner Cloud : utiliser la collection `hetzner.hcloud` (7.2.0) avec ansible-core 2.22.0, pinnée dans `requirements.yml`.
+
+> Dépréciations en 2.22 : `ansible.module_utils.six` (retrait en 2.24), `AnsibleActionSkip` et le retour de `skipped` par les modules/plugins d'action (retrait en 2.25) ; l'échec déduit d'un `rc` non nul sans clé `failed` est déprécié.
 
 ## Methodologie
 

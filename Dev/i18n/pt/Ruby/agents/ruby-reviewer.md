@@ -230,7 +230,7 @@ A versão do Ruby está fixada (.ruby-version) e suportada (4.0.x, ou 3.4 enquan
 
 | Tema | Orientação |
 |------|------------|
-| Versão do Ruby | 4.0 (4.0.0 lançado em 25/12/2025). Fixar em `.ruby-version` e no `Dockerfile` |
+| Versão do Ruby | 4.0 (4.0.9 patch atual, lançado em 23/10/2026; 4.0.0 lançado em 25/12/2025). Fixar em `.ruby-version` e no `Dockerfile` |
 | JIT | YJIT continua disponível e habilitado nas imagens de produção; ZJIT é o novo compilador, avaliar antes de depender dele |
 | `Ruby::Box` | Experimental: NÃO usar em código de produção |
 | `Data.define` | Preferido para value objects imutáveis e resultados de services |

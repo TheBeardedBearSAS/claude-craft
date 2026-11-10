@@ -14,6 +14,6 @@ See @REFERENCE.md for detailed documentation.
 
 - **Validation**: Always server-side, never trust client input
 - **Queries**: Parameterized only (no SQL concatenation)
-- **Passwords**: Hash with bcrypt/Argon2 (never MD5/SHA1)
+- **Passwords**: Hash with Argon2id (bcrypt = legacy fallback only; never MD5/SHA1)
 - **Secrets**: Environment variables or vault (never in code)
 - **Headers**: CSP, X-Frame-Options, HSTS, nosniff

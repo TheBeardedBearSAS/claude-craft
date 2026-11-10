@@ -8,9 +8,9 @@ Dieses Dokument behandelt die wesentlichen Werkzeuge für die React Native Entwi
 
 ## Systemvoraussetzungen
 
-### Node.js >= 22 LTS (erforderlich für RN 0.87)
+### Node.js >= 22 LTS (erforderlich für RN 0.88)
 
-React Native 0.87 erfordert **Node.js 22.x LTS** als Minimum (RN 0.85 benötigte Node 20). Die empfohlene Version ist **Node.js 22.x active LTS**.
+React Native 0.88 erfordert **Node.js 22.x LTS** als Minimum (RN 0.85 benötigte Node 20). Die empfohlene Version ist **Node.js 22.x active LTS**.
 
 ```bash
 # Version prüfen
@@ -22,7 +22,7 @@ nvm use 22
 nvm alias default 22
 ```
 
-> Node-Versionen < 22 werden mit RN 0.87 nicht mehr unterstützt. Vor der Migration aktualisieren.
+> Node-Versionen < 22 werden mit RN 0.88 nicht mehr unterstützt. Vor der Migration aktualisieren.
 
 ### React Native Gesture Handler 3.0.0 — Breaking Changes
 
@@ -399,22 +399,23 @@ npx expo install expo-camera@latest
 - [ ] Einheitlicher Package Manager (npm)
 - [ ] npm-Skripte konfiguriert
 
-## React Native 0.86 / 0.87 und Expo SDK 57
+## React Native 0.88 und Expo SDK 58
 
-**Expo SDK 57 liefert RN 0.86** (0.86.3); **Bare RN = 0.87** (0.87.1 `latest`, 0.88 im RC). Ein Expo-Projekt folgt der RN-Version seines SDK.
+**Expo SDK 58 liefert RN 0.88** (0.88.1 `latest`, stabil). Ein Expo-Projekt folgt der RN-Version seines SDK.
 
-- `expo@57.0.17+`: Speicher-Regression Hermes V1 / Reanimated behoben (ab 57.0.9) und Startzeit im Dev-Modus behoben
-- Reanimated 4.7.x unterstützt RN 0.86-0.88 (4.5 ist in SDK 57 gebündelt)
+- Expo Router (SDK 58): Der Navigationskern wurde überarbeitet (deterministischer Navigationszustand, der größte Teil der geforkten React-Navigation-API entfernt). Bei einem eigenen Navigator oder Imports aus `expo-router/react-navigation` wurden einige APIs verschoben oder entfernt: dem Migrationsleitfaden SDK 57 auf 58 folgen. `withLayoutContext` ist zugunsten von `integrateWithRouter` veraltet
+- Expo Router Web: `web.output` ist standardmäßig `"server"`, wenn nicht gesetzt (`"static"` setzen und die Option `apiRoutes` des Config-Plugins aktivieren, um das Verhalten von SDK 57 beizubehalten); asynchrone Routen sind im Web standardmäßig aktiviert (`asyncRoutes: { web: false }` zum Deaktivieren); Web-Safe-Areas verwenden jetzt das CSS `env(safe-area-inset-*)` statt `react-native-safe-area-context`
+- iOS: `npx expo prebuild` erzeugt jetzt `SceneDelegate.swift` und einen `UIApplicationSceneManifest`-Eintrag in `Info.plist`; das `UIWindow` wird vom Scene Delegate statt in `didFinishLaunchingWithOptions` erstellt. Ein angepasstes `AppDelegate.swift`, das das Fenster erstellt, muss migriert werden (Leitfaden: https://expo.fyi/ios-scene-lifecycle)
+- Android: R8 ist in Release-Builds standardmäßig aktiviert (`android.enableMinifyInReleaseBuilds=true`); Bibliotheken, die auf Reflection beruhen, benötigen ggf. ProGuard-Keep-Regeln; Deaktivierung über `android.enableMinifyInReleaseBuilds=false` mit `expo-build-properties`
+- Node.js: 22.13+ (Linie 22), 24.3+ (Linie 24) oder 26+; ungerade Versionen (23, 25) werden nicht unterstützt
+- Highlights von RN 0.88: webbasiertes Event-Dispatching standardmäßig; `fontVariationSettings` (variable Schriften) für `Text` und `TextInput`; SceneDelegate-Lifecycle-Unterstützung unter iOS; `ArrayBuffer`-Unterstützung in Java-TurboModules; experimentelle Swift-Package-Manager-Unterstützung; React 19.3.0 und Metro 0.87. Keine Breaking Changes für Nutzer
+- Die strikte TypeScript-API ist in SDK 58 der Standard: Das Opt-out in `tsconfig.json` wird nach RN 0.89 entfernt
+- Reanimated 4.7.x unterstützt RN 0.86-0.88
 - Der Worklets-Bundle-Modus ist experimentell und nicht unterstützt: **nicht in Produktion verwenden**
 - **Development Builds** gegenüber Expo Go bevorzugen, wenn die Stores angepeilt werden
 - `expo prebuild` bereinigt und regeneriert `android/` und `ios/` standardmäßig (`--no-clean`, um sie zu behalten)
-- iOS 27: `ios.enableSceneSupport` (`expo-build-properties`, `expo@57.0.23+`, Opt-in; Standard in SDK 58)
 - React Navigation 8 ist in Alpha: beobachten, in Produktion bei 7.x bleiben
 
-**Breaking Changes RN 0.87:** strikte TypeScript-API standardmäßig (Deep Imports von `react-native/Libraries/*` verboten, Opt-out bis 0.88); `InteractionManager` entfernt (`requestIdleCallback` verwenden); `ImageBackground` veraltet (absolutes `Image` in einer `View`); Props `Modal.animated` und `StatusBar` `backgroundColor`/`translucent` entfernt; Node 22.13+, Kotlin 2.0+; AGP 9 unterstützt (`android.builtInKotlin=false` und `android.newDsl=false` behalten das alte Verhalten); experimenteller Swift Package Manager unter iOS als Opt-in (CocoaPods bleibt Standard).
+**Breaking Changes RN 0.87 (weiterhin gültig):** strikte TypeScript-API standardmäßig (Deep Imports von `react-native/Libraries/*` verboten, Opt-out wird nach 0.89 entfernt); `InteractionManager` entfernt (`requestIdleCallback` verwenden); `ImageBackground` veraltet (absolutes `Image` in einer `View`); Props `Modal.animated` und `StatusBar` `backgroundColor`/`translucent` entfernt; Node 22.13+, Kotlin 2.0+; AGP 9 unterstützt (`android.builtInKotlin=false` und `android.newDsl=false` behalten das alte Verhalten); experimenteller Swift Package Manager unter iOS als Opt-in (CocoaPods bleibt Standard).
 
-**Quellen:** [RN 0.87](https://reactnative.dev/blog/2026/08/11/react-native-0.87), [Expo SDK 57](https://expo.dev/changelog/sdk-57)
-
----
-
-**Gute Werkzeuge machen die Entwicklung effizienter und angenehmer.**
+**Quellen:** [RN 0.88](https://reactnative.dev/blog/2026/10/19/react-native-0.88), [Expo SDK 58](https://expo.dev/changelog/sdk-58), [RN 0.87](https://reactnative.dev/blog/2026/08/11/react-native-0.87)

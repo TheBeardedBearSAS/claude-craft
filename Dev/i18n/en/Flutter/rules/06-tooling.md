@@ -570,17 +570,19 @@ Flutter 3.44 requires **AGP 9.0+**. Update `android/build.gradle`:
 // android/build.gradle
 buildscript {
   dependencies {
-    classpath 'com.android.tools.build:gradle:9.0.0'  // AGP 9
+    classpath 'com.android.tools.build:gradle:9.1.0'  // AGP 9.1 (KGP 2.4.0, Java 17+)
   }
 }
 ```
 
 ```properties
 # android/gradle/wrapper/gradle-wrapper.properties
-distributionUrl=https\://services.gradle.org/distributions/gradle-9.0-bin.zip
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-bin.zip
 ```
 
 **Breaking AGP 9:** `android.enableR8.fullMode=true` is on by default (more aggressive proguard); check keep rules for reflection.
+
+**Verified Android matrix (Flutter 3.47):** Java 17 minimum, KGP 2.4.0, AGP 9.1.0, Gradle 9.3.1; default `flutter.compileSdkVersion` / `flutter.targetSdkVersion` = API 36, `flutter.minSdkVersion` = API 24. Minimum iOS 15 and macOS 12; Xcode 27 mandates the `UIScene` lifecycle (an app without UIScene fails to launch). **Security:** use Flutter ≥ 3.47.8, which blocks compromised eMudhra CA keys (GHSA-frr6-h895-5pxp). Sources: https://blog.flutter.dev (what's new in Flutter 3.47), https://docs.flutter.dev/release/release-notes.
 
 ### Material / Cupertino Deprecations (Flutter 3.44)
 

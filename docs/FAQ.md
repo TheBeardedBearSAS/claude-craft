@@ -11,7 +11,7 @@ Common questions and answers about Claude Craft.
 Requirements depend on the install method:
 
 **NPX (recommended) — only 2 requirements:**
-- **Node.js 22+** (Node 24 recommended — Active LTS)
+- **Node.js 22+** (Node 26 recommended — Active LTS; Node 24 and 22 are in Maintenance)
 - **Claude Code** v2.1.321+ (2.1.322 recommended)
 
 **Makefile / shell scripts — additional requirements:**

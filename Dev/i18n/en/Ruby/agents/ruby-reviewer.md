@@ -230,7 +230,7 @@ Is the Ruby version pinned (.ruby-version) and supported (4.0.x, or 3.4 while su
 
 | Topic | Guidance |
 |-------|----------|
-| Ruby version | 4.0 (4.0.0 released 2025-12-25). Pin in `.ruby-version` and the `Dockerfile` |
+| Ruby version | 4.0 (4.0.9 current patch, released 2026-10-23; 4.0.0 released 2025-12-25). Pin in `.ruby-version` and the `Dockerfile` |
 | JIT | YJIT remains available and enabled in production images; ZJIT is the new compiler, evaluate before relying on it |
 | `Ruby::Box` | Experimental: do NOT use in production code |
 | `Data.define` | Preferred for immutable value objects and service results |

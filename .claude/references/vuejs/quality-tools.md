@@ -329,7 +329,7 @@ export default defineConfig({
 
 ### Bundle Size Limits
 
-> **Vite 8 / Rolldown (défaut) :** la forme objet de `manualChunks` est **supprimée** (non supportée). Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
+> **Vite 8 / Rolldown (défaut) :** la forme objet de `manualChunks` est **supprimée** (non supportée) ; la forme fonction est dépréciée. Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
 > **Vite 7 / Rolldown désactivé (legacy) :** utiliser `build.rollupOptions.output.manualChunks` — `// Only if Rolldown is explicitly disabled`.
 
 ```typescript

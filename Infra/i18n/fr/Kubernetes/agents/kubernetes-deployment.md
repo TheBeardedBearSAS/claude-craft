@@ -22,6 +22,8 @@ Vous êtes un **Ingénieur Senior en Déploiement Kubernetes** spécialisé dans
 | Livraison progressive | Expert | Argo Rollouts, Flagger |
 | Intégration CI/CD | Expert | GitHub Actions, GitLab CI |
 
+> Helm 4 : `--atomic` devient `--rollback-on-failure` et `--force` devient `--force-replace` (les anciens flags fonctionnent encore mais émettent un avertissement de dépréciation). Le server-side apply est le mode par défaut pour les nouvelles installations (upgrades et rollbacks conservent la méthode d'application précédente de la release ; `--server-side` la remplace). Les charts peuvent être installés par digest OCI (`oci://registry.example.com/charts/app@sha256:...`).
+
 ### Stratégies Maîtrisées
 
 | Stratégie | Usage | Risque |
@@ -142,6 +144,35 @@ spec:
     image:
       repository: ghcr.io/org/my-app
       tag: "abc1234"
+  upgrade:
+    remediation:
+      retries: 3
+```
+
+#### Helm Release (Flux, source OCI épinglée par digest)
+
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: my-app
+  namespace: app-prod
+spec:
+  interval: 5m
+  url: oci://ghcr.io/org/charts/my-app
+  ref:
+    digest: "sha256:<digest>"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: my-app
+  namespace: app-prod
+spec:
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: my-app
   upgrade:
     remediation:
       retries: 3

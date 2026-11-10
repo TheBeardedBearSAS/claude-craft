@@ -230,7 +230,7 @@ Ist die Ruby-Version festgelegt (.ruby-version) und unterstützt (4.0.x, oder 3.
 
 | Thema | Leitlinie |
 |-------|-----------|
-| Ruby-Version | 4.0 (4.0.0 veröffentlicht am 25.12.2025). In `.ruby-version` und im `Dockerfile` festlegen |
+| Ruby-Version | 4.0 (4.0.9 aktueller Patch, veröffentlicht am 23.10.2026; 4.0.0 veröffentlicht am 25.12.2025). In `.ruby-version` und im `Dockerfile` festlegen |
 | JIT | YJIT bleibt verfügbar und ist in Produktions-Images aktiviert; ZJIT ist der neue Compiler, vor dem Einsatz evaluieren |
 | `Ruby::Box` | Experimentell: NICHT in Produktionscode verwenden |
 | `Data.define` | Bevorzugt für unveränderliche Value Objects und Service-Ergebnisse |

@@ -752,8 +752,9 @@ $items = [3 => 'a', 7 => 'b', 1 => 'c'];
 $first = array_first($items); // 'a' — clé 3
 $last  = array_last($items);  // 'c' — clé 1
 
-// Avec prédicat (optionnel)
-$firstEven = array_first($items, fn(string $v, int $k) => $k % 2 === 0); // 'a' (clé 3+... non pair)
+// Signature officielle : array_first(array $array): mixed — aucun callback ;
+// retourne null si le tableau est vide. Pour filtrer, composer avec array_filter().
+$firstOdd = array_first(array_filter($items, fn(string $v, int $k) => $k % 2 === 1, ARRAY_FILTER_USE_BOTH)); // 'a' (clé 3)
 ```
 
 #### Attribut `#[\NoDiscard]`

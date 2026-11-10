@@ -63,4 +63,4 @@ CQRS (Command Query Responsibility Segregation) sépare les opérations d'**écr
 
 ## Pour aller plus loin
 
-> Implémentations Symfony / Laravel / .NET, Event Sourcing (Prooph, EventStoreDB), saga patterns, outbox, exemples concrets, migration progressive d'un CRUD vers CQRS, checklists par phase : voir `@.claude/skills/cqrs/REFERENCE.md`.
+> Implémentations Symfony / Laravel / .NET, Event Sourcing (Prooph, KurrentDB 26.2.3, ex-EventStoreDB), saga patterns, outbox, exemples concrets, migration progressive d'un CRUD vers CQRS, checklists par phase : voir `@.claude/skills/cqrs/REFERENCE.md`.

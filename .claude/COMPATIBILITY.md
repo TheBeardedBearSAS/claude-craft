@@ -71,9 +71,10 @@
 | Version | Status | Notes |
 |---------|--------|-------|
 | **Node.js 18.x** | Not supported | EOL depuis avril 2025 |
-| **Node.js 20.x LTS** | Supported | Version minimale (`engines.node: >=20.0.0`) |
-| **Node.js 22.x LTS** | Recommended | CI/CD cible principale depuis claude-craft v8.2.1 |
-| **Node.js 24.x** | Cutting-edge | Compatible, non testé en CI — peut présenter des breaking changes |
+| **Node.js 20.x** | Not supported | EOL depuis le 30 avril 2026 |
+| **Node.js 22.x** (Maintenance LTS) | Supported | Version minimale (`engines.node: >=22.0.0`) — EOL le 2027-04-30 |
+| **Node.js 24.x** (Maintenance LTS depuis le 2026-10-20) | Supported | Version testée en CI et utilisée pour la publication npm |
+| **Node.js 26.x** (Active LTS depuis le 2026-10-28) | Recommended | Non encore testée en CI — ruptures connues : `http.Server.writeHeader`, modules `_stream_*` et `--experimental-transform-types` supprimés, `NODE_MODULE_VERSION` 147, `module.register()` déprécié |
 
 ---
 

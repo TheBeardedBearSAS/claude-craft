@@ -1,5 +1,7 @@
 # PHP Development Tools
 
+> **Patch-Stand:** PHP ≥ 8.5.12 (22. Okt. 2026) anstreben; enthält Sicherheitskorrekturen (Core GHSA-w8hw-w9fx-j79w und GHSA-6wmf-4rv5-p3rp, Lexbor, Opcache, SOAP usw.). Quelle: https://www.php.net/ChangeLog-8.php#8.5.12
+
 ## Composer - Dependency Management
 
 ### Essential Commands

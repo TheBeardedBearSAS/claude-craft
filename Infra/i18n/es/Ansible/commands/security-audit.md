@@ -115,7 +115,7 @@ GESTION DE SECRETS
 | Rotacion de secrets | {automatizada/manual/ninguna} | {politica} |
 ```
 
-Encontrar tareas que puedan filtrar secrets sin `no_log` y verificar secrets hardcodeados fuera de archivos vault.
+Encontrar tareas que puedan filtrar secrets sin `no_log` y verificar secrets hardcodeados fuera de archivos vault. Con ansible-core 2.22+, los secretos conocidos se enmascaran como `$REDACTED$` en la salida y las opciones `no_log` ya no muestran `VALUE_SPECIFIED_IN_NO_LOG_PARAMETER`: adaptar cualquier verificación basada en ese placeholder.
 
 ### Paso 6: Auditoria de Lint de Seguridad
 

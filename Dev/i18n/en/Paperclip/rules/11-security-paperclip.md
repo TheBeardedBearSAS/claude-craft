@@ -141,7 +141,7 @@ Adjust CSP script/style sources if the UI requires specific CDNs; otherwise keep
 - [ ] Activity log append-only, DB-enforced where possible
 - [ ] Kill switch + plugin disable tested
 
-## Upgrade Notes: Breaking Changes (2026.916.0 to 2026.1012.0)
+## Upgrade Notes: Breaking Changes (2026.916.0 to 2026.1106.0)
 
 Verified against the official GitHub release notes (paperclipai/paperclip).
 
@@ -149,6 +149,8 @@ Verified against the official GitHub release notes (paperclipai/paperclip).
 - **2026.1001.0**: the legacy Composio broker is retired (no automated migration; replacement: Composio Connect behind the `enableMcpAggregators` flag). Execution harnesses now default to **full auto**: ACPX/Claude `approve-all`, OpenCode `allow`, Codex `never` (no approval pauses). To keep provider-side approval gates, set an explicit restrictive mode per agent: `acpxPermissionMode` (`approve-paperclip`, `approve-reads` or `deny-all`) or `opencodePermissionMode` (`ask` or `deny`). Paperclip's own governed approvals still apply.
 - **2026.1005.0**: `PAPERCLIP_CLOUD_UI_SNIPPET` / `PAPERCLIP_CLOUD_UI_SNIPPET_B64` no longer inject HTML (move the integration to a plugin UI contribution); an @-mention in a task comment is context only and no longer starts a run (only explicit assignment or review requests do).
 - **2026.1012.0**: workspace restore locks are now SQLite file locks under `<instance root>/locks/directory-merge/`: stop all old server and worker processes before upgrading or rolling back; tool grants with unknown selectors or malformed restrictions now deny access (review custom grants).
+- **2026.1023.0**: the Operator role preset grows from one grant (`tasks:assign`) to fourteen (existing Operators receive them at startup: review who holds the role); inviting an Admin now requires join approval and inviting an Owner also requires member-permission management; GitHub review bots move behind the experimental `enableGitHubReviewBots` setting (off by default); budgets now hold on unpriced usage by default (the unpriced-usage setting defaults to `block`; `allow` keeps runs going); owners and admins no longer see private tasks by default (audited break-glass read with `?breakGlass=true`) and a direct read of a private task by a non-member returns `404`.
+- **2026.1106.0**: the Pipelines experiment is removed (`pipelines` CLI commands, `pipelines:write` permission; a stored `enablePipelines` value is ignored); run failures no longer reach Sentry by default (set `PAPERCLIP_SENTRY_RUN_FAILURES` to `unexpected` or `all` to keep reporting); the run history endpoint returns 200 rows by default and at most 1,000 (pass an explicit `limit`); `paperclipai agent instructions-file:delete` requires `--yes`; new agents default to the Paperclip Runner on qualified hosts, which needs GNU libc 2.39 or later on Linux (otherwise use the "Legacy runner" override under Advanced).
 
 ---
 

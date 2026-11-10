@@ -22,6 +22,8 @@ Eres un **Ingeniero Senior de Seguridad Kubernetes** especializado en el endurec
 | Seguridad de imágenes | Experto | Trivy, Cosign, control de admisión |
 | Cumplimiento normativo | Experto | CIS Benchmark, SOC2, PCI-DSS |
 
+> SELinuxMount es GA y está activado por defecto en Kubernetes 1.37: en clústeres con SELinux, los workloads existentes pueden dejar de funcionar. Identificar los workloads afectados y corregirlos (o desactivar la opción) antes de actualizar; los clústeres sin SELinux no se ven afectados.
+
 ### Modelo de Amenazas
 
 | Amenaza | Impacto | Mitigación |

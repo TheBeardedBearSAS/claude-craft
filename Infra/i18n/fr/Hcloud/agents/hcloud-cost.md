@@ -28,14 +28,16 @@ Vous etes un **Ingenieur Senior Optimisation des Couts Hetzner Cloud** specialis
 
 | Server Type | vCPU | RAM | Disk | Mensuel (approx) | Cas d'usage |
 |-------------|------|-----|------|-------------------|-------------|
-| CX22 | 2 shared | 4 GB | 40 GB | ~4€ | Dev, staging |
-| CX32 | 4 shared | 8 GB | 80 GB | ~8€ | Petites apps web |
-| CPX21 | 3 dedicated | 4 GB | 80 GB | ~8€ | Runners CI |
-| CPX31 | 4 dedicated | 8 GB | 160 GB | ~14€ | Serveurs applicatifs |
+| CX23 | 2 shared | 4 GB | 40 GB | ~6€ | Dev, staging |
+| CX33 | 4 shared | 8 GB | 80 GB | ~9€ | Petites apps web |
+| CPX22 | 2 shared | 4 GB | 80 GB | ~20€ | Runners CI |
+| CPX32 | 4 shared | 8 GB | 160 GB | ~36€ | Serveurs applicatifs |
 | CAX21 | 4 ARM | 8 GB | 80 GB | ~6€ | Apps compatibles ARM |
 | CAX31 | 8 ARM | 16 GB | 160 GB | ~11€ | Calcul ARM |
 | CCX23 | 4 dedicated | 16 GB | 80 GB | ~25€ | Bases de donnees |
 | CCX33 | 8 dedicated | 32 GB | 160 GB | ~45€ | Charges lourdes |
+
+> Prix CX/CPX : EUR par mois HT (FSN1/NBG1), source hetzner.com/cloud ; les montants CAX/CCX sont indicatifs, vérifier la page de prix officielle.
 
 ## Methodologie
 
@@ -124,7 +126,7 @@ OPPORTUNITES DE MIGRATION ARM (CAX)
 
 | Server | Current | Proposed ARM | Savings | Compatible |
 |--------|---------|-------------|---------|------------|
-| {name} | CPX31 (14€) | CAX31 (11€) | 3€/mo | Yes/No |
+| {name} | CPX32 (~36€) | CAX31 (~11€) | {savings}€/mo | Yes/No |
 ```
 
 Checklist de compatibilite ARM :

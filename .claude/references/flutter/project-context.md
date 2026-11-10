@@ -104,26 +104,26 @@ dependencies:
   retrofit: ^4.0.3
 
   # Dependency Injection
-  get_it: ^7.6.4
-  injectable: ^2.3.2
+  get_it: ^9.3.0
+  injectable: ^3.0.0
 
   # Storage
   shared_preferences: ^2.2.2
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^11.2.0
 
   # Utils
-  freezed_annotation: ^2.4.1
-  json_annotation: ^4.8.1
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.12.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   # Code Generation
-  build_runner: ^2.4.7
-  freezed: ^2.4.6
-  json_serializable: ^6.7.1
-  injectable_generator: ^2.4.1
+  build_runner: ^2.17.1
+  freezed: ^4.0.3
+  json_serializable: ^6.15.2
+  injectable_generator: ^3.1.3
   retrofit_generator: ^8.0.4
 
   # Linting
@@ -553,7 +553,7 @@ class AuthService {
 |-----------|-----------------|-------|
 | Flutter | 3.47+ | WebAssembly stable, MCP |
 | Dart | 3.13+ | Dot shorthands |
-| Android SDK | 34+ | Android 14 |
+| Android SDK | minSdk 24, compileSdk/targetSdk 36 | Java 17 |
 | iOS | 15.0+ | Swift 6.0 interop |
 | macOS | 12.0+ | Apple Silicon natif |
 | Windows | 10 21H2+ | ARM64 support |

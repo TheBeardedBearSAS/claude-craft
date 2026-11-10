@@ -372,7 +372,7 @@ Es mejor tener varias interfaces especificas que una interfaz general.
 - [ ] Sin excepciones nuevas no documentadas
 
 #### ISP
-- [ ] Las interfaces son pequenas y focalizadas (< 5 metodos)
+- [ ] Las interfaces son pequenas y focalizadas (heuristica interna: < 5 metodos)
 - [ ] Los clientes solo dependen de los metodos que utilizan
 - [ ] Sin metodos `throw NotImplementedException()`
 

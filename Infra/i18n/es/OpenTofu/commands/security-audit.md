@@ -92,7 +92,7 @@ APLICACIÓN DE POLÍTICAS
 
 | Verificación | Estado | Detalles |
 |--------------|--------|----------|
-| tfsec/checkov | {integrado/no} | {hallazgos} |
+| Trivy/checkov | {integrado/no} | {hallazgos} |
 | Políticas OPA | {sí/no} | {cantidad} |
 | Archivo lock del proveedor | {committed/faltante} | {detalles} |
 | Cumplimiento de etiquetas | {obligatorio/no} | {detalles} |

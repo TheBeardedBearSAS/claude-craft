@@ -241,7 +241,7 @@ export default defineConfig({
 
 ### Bundle Size Limits (Vite 8 / Rolldown)
 
-> **Vite 8 / Rolldown (default)**: the object form of `manualChunks` is **removed**. Use `build.rolldownOptions.output.codeSplitting.groups` instead — see `rolldown.md`.
+> **Vite 8 / Rolldown (default)**: the object form of `manualChunks` is **removed**; the function form is deprecated. Use `build.rolldownOptions.output.codeSplitting.groups` instead — see `rolldown.md`.
 
 ```typescript
 // vite.config.ts — Vite 8 / Rolldown (default)

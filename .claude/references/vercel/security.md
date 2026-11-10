@@ -48,7 +48,7 @@ export default async function handler(req: Request): Promise<Response> {
 ```
 
 ```json
-// vercel.json — register the schedule; the handler above still MUST check the secret
+// vercel.json — register the schedule (legacy Cron Jobs `crons[]`; Schedules supersede it); the handler above still MUST check the secret
 {
   "crons": [
     { "path": "/api/cron/cleanup", "schedule": "0 3 * * *" }

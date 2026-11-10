@@ -55,9 +55,9 @@ Is the state synchronous and used for rendering?
 - Import from `@angular/forms/signals`
 - Interoperability with existing Reactive Forms via `SignalFormControl` bridge
 
-**OnPush by default :**
-- All new components generated with `ChangeDetectionStrategy.OnPush` by default
-- Angular CLI scaffolding applies OnPush automatically
+**OnPush by default (22.0.0, breaking change) :**
+- Components with an undefined `changeDetection` are now `OnPush`; there is no need to declare it anymore
+- To keep the previous behavior, declare `changeDetection: ChangeDetectionStrategy.Eager`; the `ng update` migration adds `Eager` to existing components where applicable
 
 **HttpClient Fetch by default :**
 - XHR deprecated — Fetch API is the default transport
@@ -65,6 +65,20 @@ Is the state synchronous and used for rendering?
 
 **TypeScript 6 required :**
 - TypeScript 5.x no longer supported — upgrade required before migrating to Angular 22
+
+**Other 22.0.0 breaking changes** (https://github.com/angular/angular/blob/main/CHANGELOG.md) **:**
+- Router: `paramsInheritanceStrategy` now defaults to `'always'` (set `'emptyOnly'` to restore the old behavior); `provideRoutes()` removed (use `provideRouter()` or `ROUTES`); `currentSnapshot` is now required in `CanMatchFn` / `CanMatch.canMatch` (migration provided)
+- Forms: `min` and `max` validation rules no longer accept strings (numbers or null only)
+- HttpClient: upload progress reports require `provideHttpClient(withXhr())` (schematic provided); `withFetch` deprecated; `reportProgress` deprecated in favor of `reportUploadProgress` / `reportDownloadProgress`
+- Core: `ComponentFactoryResolver`, `ComponentFactory`, `createNgModuleRef` and `ChangeDetectorRef.checkNoChanges` removed
+- Platform: Hammer.js integration removed; incremental hydration is now the default behavior
+- Compiler: `nullishCoalescingNotNullable` and `optionalChainNotNullable` diagnostics now fire on existing projects; `data-` prefixed attributes no longer bind inputs/outputs; duplicate input/output bindings throw
+
+**Angular 22.2 additions :**
+- Core: `ErrorBoundary` programmatic APIs (`@boundary` blocks supported by the language service)
+- Router: `containsTree` public API; throwing a `RedirectCommand` triggers a redirect; router resources exposed
+- Signal Forms: permanent hidden fields allowed
+- Compiler: templates can access private members; `strictUnclaimedEventNames` option catches misspelled output bindings
 
 **Resource API stable (v20+) :**
 - `httpResource()`: declarative loading with automatic states (loading, error)
@@ -143,7 +157,6 @@ export class CounterComponent {
 // CORRECT: standalone + @if/@for control flow
 @Component({
   selector: 'app-user-list',
-  standalone: true,
   template: `
     @if (loading()) {
       <spinner />
@@ -179,7 +192,8 @@ private readonly destroyRef = inject(DestroyRef);
 |---------|----------|-------------|
 | Signals for local state | signal(), computed(), effect() | BehaviorSubject for synchronous state |
 | RxJS for complex streams | debounce, switchMap, websockets | RxJS for a simple boolean |
-| Standalone components | standalone: true, local imports | NgModule for new components |
+| Standalone components | Standalone (default since v19, no `standalone: true` needed), local imports | NgModule for new components |
+| Signal inputs/outputs | `input()`, `output()`, `model()` | `@Input()`, `@Output()`, `EventEmitter` |
 | Smart/Dumb pattern | Container handles logic, Presentational displays | Business logic in templates |
 | inject() | Class-level injection | Overloaded constructor |
 
@@ -364,6 +378,8 @@ Does the component use OnPush?
       NO --> Is there a documented justification?
         NO --> MAJOR: document the reason
 ```
+
+Since 22.0.0 OnPush is the default: flag components that declare `ChangeDetectionStrategy.Eager` without justification.
 
 ### Decision Tree: @defer
 
@@ -625,7 +641,7 @@ import { signal, computed } from '@angular/core';
 - **Standalone by default**: all new components must be standalone
 - **New control flow**: @if/@for/@switch replace *ngIf/*ngFor/*ngSwitch
 - **inject() preferred**: functional injection instead of overloaded constructor
-- **OnPush mandatory**: optimized change detection on all presentational components
+- **OnPush by default (22.0.0+)**: do not opt out with `ChangeDetectionStrategy.Eager` without a documented reason
 - **Strategic @defer**: granular lazy loading for secondary content
 
 ---

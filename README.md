@@ -226,25 +226,25 @@ Claude Code is powerful on its own. Claude Craft makes it **consistent and team-
 | **Angular** | 22 | `--tech=angular` |
 | **Vue.js** | 3.5+ (3.6 RC Vapor) | `--tech=vuejs` |
 | **Vite** _(community)_ | 8.3 | `--tech=vite` |
-| **Vercel** _(community)_ | 63.1.2 | `--tech=vercel` |
+| **Vercel** _(community)_ | 65.14.0 | `--tech=vercel` |
 | **Tauri** _(community)_ | 2.12 (desktop + mobile) | `--tech=tauri` |
 | **WordPress** _(community)_ | 7.1 (plugins + block themes, WooCommerce opt-in) | `--tech=wordpress` |
-| **React Native** | 0.87 (New Architecture) | `--tech=reactnative` |
+| **React Native** | 0.88 (New Architecture) | `--tech=reactnative` |
 | **C# / .NET** | 10 LTS / C# 14 | `--tech=csharp` |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | `--tech=laravel` |
 | **PHP** | 8.5 | `--tech=php` |
 | **Ruby / Rails** | Rails 8.1 / Ruby 4.0 | `--tech=ruby` |
 | **Rust / Axum** | Axum 0.8 / Rust 1.99 | `--tech=rust` |
-| **Paperclip** | 2026.1012.0 | `--tech=paperclip` |
+| **Paperclip** | 2026.1106.0 | `--tech=paperclip` |
 
-| **Docker** | 29.9.0 | `--tech=docker` |
-| **Coolify** | v4.4.6 | `--tech=coolify` |
-| **Kubernetes** | 1.37.1 | `--tech=kubernetes` |
-| **OpenTofu** | 1.13.1 | `--tech=opentofu` |
-| **Ansible** | 2.21.5 | `--tech=ansible` |
-| **Hcloud** | provider 1.70+ / CLI 1.70.1 | `--tech=hcloud` |
-| **PgBouncer** | 1.26.0 (security fixes over 1.25.x) | `--tech=pgbouncer` |
-| **FrankenPHP** | 1.13.0 (security fixes over 1.12.4) | `--tech=frankenphp` |
+| **Docker** | 29.9.3 | `--tech=docker` |
+| **Coolify** | v4.7.5 | `--tech=coolify` |
+| **Kubernetes** | 1.37.2 | `--tech=kubernetes` |
+| **OpenTofu** | 1.13.9 | `--tech=opentofu` |
+| **Ansible** | 2.22.0 | `--tech=ansible` |
+| **Hcloud** | provider 1.70+ / CLI 1.70.2 | `--tech=hcloud` |
+| **PgBouncer** | 1.26.1 (security fixes over 1.26.0) | `--tech=pgbouncer` |
+| **FrankenPHP** | 1.13.5 (PHP2Shell and later security fixes) | `--tech=frankenphp` |
 
 See [Technologies](docs/TECHNOLOGIES.md) for full details.
 

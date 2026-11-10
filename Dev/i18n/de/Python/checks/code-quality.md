@@ -22,7 +22,7 @@ Führen Sie ein vollständiges Codequalitäts-Audit des Python-Projekts durch, i
 - [ ] Leerzeichen: um Operatoren, nach Kommas
 - [ ] Docstrings: vorhanden für Module, Klassen, öffentliche Funktionen
 
-**Befehl**: `docker run --rm -v $(pwd):/app python:3.11 python -m flake8 /app --max-line-length=88`
+**Befehl**: `docker run --rm -v $(pwd):/app python:3.15 python -m flake8 /app --max-line-length=88`
 
 **Referenz**: `rules/03-coding-standards.md` Abschnitt "PEP 8 Compliance"
 
@@ -35,7 +35,7 @@ Prüfen Sie die Verwendung statischer Typisierung:
 - [ ] Verwendung von `typing` für komplexe Typen (Optional, Union, List, Dict)
 - [ ] Keine MyPy-Fehler im Strict-Modus
 
-**Befehl**: `docker run --rm -v $(pwd):/app python:3.11 python -m mypy /app --strict`
+**Befehl**: `docker run --rm -v $(pwd):/app python:3.15 python -m mypy /app --strict`
 
 **Referenz**: `rules/03-coding-standards.md` Abschnitt "Type Hints"
 
@@ -48,7 +48,7 @@ Code mit Ruff analysieren (ersetzt Flake8, isort, pydocstyle):
 - [ ] Akzeptable zyklomatische Komplexität (<10)
 - [ ] Sicherheitsregeln eingehalten (S-Regeln)
 
-**Befehl**: `docker run --rm -v $(pwd):/app python:3.11 pip install ruff && ruff check /app`
+**Befehl**: `docker run --rm -v $(pwd):/app python:3.15 pip install ruff && ruff check /app`
 
 **Referenz**: `rules/06-tooling.md` Abschnitt "Linting and Formatting"
 
@@ -60,7 +60,7 @@ Formatierungskonsistenz überprüfen:
 - [ ] Keine Unterschiede nach `black --check`
 - [ ] Konsistente Zeilenlänge (88 Zeichen)
 
-**Befehl**: `docker run --rm -v $(pwd):/app python:3.11 pip install black && black --check /app`
+**Befehl**: `docker run --rm -v $(pwd):/app python:3.15 pip install black && black --check /app`
 
 **Referenz**: `rules/06-tooling.md` Abschnitt "Code Formatting"
 

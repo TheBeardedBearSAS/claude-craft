@@ -34,7 +34,7 @@ src/app/
 ## Points clés Angular 22
 
 ### Standalone Components (défaut)
-Toujours utiliser `standalone: true` — NgModules réservés aux libs legacy.
+Les composants, directives et pipes sont standalone par défaut (depuis Angular 19) : ne pas écrire `standalone: true`. NgModules réservés aux libs legacy.
 
 ### Signals — gestion d'état par défaut
 `signal()`, `computed()`, `effect()` — alternative moderne aux BehaviorSubject.
@@ -62,7 +62,7 @@ Remplace FormGroup/FormControl par une API signal-based. Import depuis `@angular
 import { signal } from '@angular/core';
 import { form, FormField, required, email as emailValidator } from '@angular/forms/signals';
 
-@Component({ standalone: true, imports: [FormField], template: `...` })
+@Component({ imports: [FormField], template: `...` })
 export class LoginComponent {
   model = signal({ email: '', password: '' });
 
@@ -108,23 +108,28 @@ export class UsersComponent {
 })
 ```
 
-### ChangeDetection.OnPush par défaut
+### ChangeDetection.OnPush par défaut (depuis 22.0.0)
+Un composant sans `changeDetection` est `OnPush` : ne rien déclarer. Pour l'ancien comportement, `changeDetection: ChangeDetectionStrategy.Eager` (la migration `ng update` l'ajoute aux composants existants).
 ```typescript
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush // ← obligatoire
+  changeDetection: ChangeDetectionStrategy.Eager // ← opt-out uniquement, avec justification
 })
 ```
+
+### Inputs / outputs en signals
+`input()`, `input.required()`, `output()`, `model()` remplacent `@Input`, `@Output` et `EventEmitter` (migrations : `ng generate @angular/core:signal-input-migration`, `ng generate @angular/core:output-migration`).
 
 ## Checklist Rapide
 
 - [ ] Angular 22, TypeScript 6, Node 22/24
-- [ ] Standalone components (`standalone: true`)
+- [ ] Standalone components (défaut — pas de `standalone: true`)
 - [ ] Zoneless par défaut (depuis v21, donc en v22) — aucun provider requis ; `provideZonelessChangeDetection()` seulement en v20
 - [ ] Signals pour l'état réactif (`signal`, `computed`, `effect`)
 - [ ] Signal Forms pour les formulaires (pas FormGroup classique)
 - [ ] `httpResource()` pour les chargements HTTP déclaratifs
 - [ ] `@defer` pour le lazy loading des sous-arbres
-- [ ] `ChangeDetectionStrategy.OnPush` sur tous les composants
+- [ ] OnPush (défaut en 22.0.0+) : pas de `ChangeDetectionStrategy.Eager` sans justification
+- [ ] `input()` / `output()` / `model()` plutôt que `@Input` / `@Output` / `EventEmitter`
 - [ ] `inject()` au lieu du constructeur injection
 - [ ] Tests >= 80% coverage
 

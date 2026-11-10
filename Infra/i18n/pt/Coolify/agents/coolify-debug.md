@@ -330,6 +330,7 @@ curl -s http://localhost:8080/api/rawdata/services | jq .
 
 ```bash
 # Refazer deploy do servico (via API Coolify)
+# O token precisa da permissão `deploy` (ou `root`) desde o Coolify 4.6.0
 curl -X POST https://coolify.example.com/api/v1/deploy \
   -H "Authorization: Bearer <token>" \
   -d '{"uuid": "<service-uuid>"}'

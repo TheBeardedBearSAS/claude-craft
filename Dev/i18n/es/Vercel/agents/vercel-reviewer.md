@@ -807,7 +807,7 @@ describe('api/cron/daily', () => {
 | Tema | Qué Verificar |
 |-------|---------------|
 | **Fluid Compute** | Confirmar que las Functions usan Fluid Compute por defecto (pricing por Active CPU), no el billing legacy de concurrencia fija de las Serverless Functions |
-| **Deprecación del Edge Runtime** | Cualquier `runtime: 'edge'` encontrado debe llevar una referencia de ticket de migración, nunca presentarse como el patrón recomendado para código nuevo |
+| **Migración del Edge Runtime (recomendada por Vercel)** | Cualquier `runtime: 'edge'` encontrado debe llevar una referencia de ticket de migración, nunca presentarse como el patrón recomendado para código nuevo |
 | **Paquetes de Storage deprecados** | Los imports de `@vercel/kv`/`@vercel/postgres` son un hallazgo MAYOR sin importar cuándo se añadieron — marcar para migración a Marketplace (Neon/Upstash) |
 | **Primitiva de caché ISR vs headers de vercel.json** | La revalidación nativa del framework y los `headers` de vercel.json nunca deben apuntar a la misma ruta para `Cache-Control` |
 | **Límites del plan de Cron** | El plan Hobby limita los Cron Jobs a 1/día — verificar que la programación declarada coincide con el nivel de plan realmente en uso |

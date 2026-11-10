@@ -244,7 +244,7 @@ trim_trailing_whitespace = false
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="Bogus" Version="35.4.0" />
     <PackageVersion Include="Testcontainers" Version="3.7.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.1" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
 
     <!-- Observability -->

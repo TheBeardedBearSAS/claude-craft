@@ -7,9 +7,10 @@
 | Flutter | 3.47+ |
 | Dart | 3.13+ |
 | DevTools | 2.42+ |
-| Android SDK | 35+ |
-| iOS | 15.0+ |
-| Xcode | 16.0+ |
+| Android (compileSdk/targetSdk) | 36 (minSdk 24, Java 17) |
+| iOS / macOS | 15.0+ / 12.0+ |
+| Xcode | 27 supporté (UIScene obligatoire) |
+| Patch sécurité | Flutter ≥ 3.47.8 (CA eMudhra, GHSA-frr6-h895-5pxp) |
 
 **Sources :** [Flutter 3.44 Blog](https://blog.flutter.dev/whats-new-in-flutter-3-44-b0cc1ad3c527), [Dart 3.12 Blog](https://dart.dev/blog/announcing-dart-3-12)
 

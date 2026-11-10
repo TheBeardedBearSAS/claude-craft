@@ -7,7 +7,7 @@
 ```dart
 // pubspec.yaml
 dependencies:
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^11.2.0
 
 // Uso
 class SecureStorageService {

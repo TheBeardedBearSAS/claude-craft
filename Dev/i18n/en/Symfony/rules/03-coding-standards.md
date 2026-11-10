@@ -402,3 +402,18 @@ Voir `.claude/checklists/pre-commit.md` pour checklist complete.
 - **Symfony Coding Standards** : https://symfony.com/doc/current/contributing/code/standards.html
 - **PHP-CS-Fixer** : https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 - **PHPStan** : https://phpstan.org/
+
+## Symfony 8.1 Deprecations and BC Breaks
+
+| Component | 8.1 change | Action |
+|-----------|-----------|--------|
+| DependencyInjection | Named autowiring aliases without `#[Target]` are deprecated | Add `#[Target]` to the constructor parameter |
+| Messenger | Serializers return `Envelope<MessageDecodingFailedException>` instead of throwing; receivers no longer delete the message on decode failure | Adapt custom serializers; `$fetchSize` added to `ReceiverInterface::get()` / `QueueReceiverInterface::getFromQueues()`; `forceRetry()` added to `RecoverableExceptionInterface` |
+| Messenger | `StopWorkerOnTimeLimitListener` is deprecated | Use the `time_limit` worker option |
+| HttpKernel | `Bundle::registerCommands()` is deprecated | Use `#[AsCommand]` or the `console.command` tag |
+| SecurityBundle | `security.erase_credentials` is deprecated (`eraseCredentials()` was removed in 8.0) | Remove the option |
+| Validator | `ConstraintValidatorInterface::initialize()`/`validate()` are deprecated | Implement `validateInContext()` (nothing to do if extending `ConstraintValidator`) |
+| HttpFoundation | Setting public properties of `Request`/`Response` directly is deprecated | Use setters or constructor arguments |
+| HttpFoundation | `ParameterBag::getInt()`/`getBoolean()` throw `UnexpectedValueException` when the value cannot be converted (they used to return `0`/`false`) | Validate input or catch the exception |
+
+Source: https://github.com/symfony/symfony/blob/8.1/UPGRADE-8.1.md

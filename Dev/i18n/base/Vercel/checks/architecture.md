@@ -20,7 +20,7 @@ Validate `vercel.json` schema correctness, classify the project's deployment sha
 [ ] Identify shape: static+rewrites | Functions-backed | ISR-enabled | Cron+scheduled (or a combination)
 [ ] api/ directory present and mapped to Serverless Functions — Functions-backed shape
 [ ] revalidate / `Cache-Control: s-maxage` used on responses — ISR-enabled shape
-[ ] crons[] declared in vercel.json — Cron+scheduled shape
+[ ] crons[] declared in vercel.json — Cron+scheduled shape (Cron Jobs are legacy; flag for migration to Schedules)
 [ ] Purely static output with rewrites/redirects only — static+rewrites shape
 ```
 

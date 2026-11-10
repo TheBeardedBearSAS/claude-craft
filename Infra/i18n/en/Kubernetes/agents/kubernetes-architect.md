@@ -32,6 +32,8 @@ You are a **Senior Kubernetes Architect** capable of designing complete cluster 
 | Multi-cluster | Large scale, DR | High |
 | GitOps-driven | Automated delivery | Medium |
 
+> kube-proxy: `ipvs` mode has been deprecated since Kubernetes 1.35 (a `KubeProxyIPVS` feature gate prepares its removal). On recent kernels prefer `nftables` (GA since 1.33) and set `mode` explicitly: kube-proxy warns when it is unset, and its Linux default will move from `iptables` to `nftables` in a future release.
+
 ## Methodology
 
 ### Phase 1 -- Discovery

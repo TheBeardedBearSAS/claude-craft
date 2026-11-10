@@ -544,8 +544,8 @@ flowchart TD
 ## Recursos
 
 - **Keep a Changelog:** [keepachangelog.com](https://keepachangelog.com/)
-- **ADR:** [adr.github.io](https://adr.github.io/)
-- **OpenAPI:** [swagger.io/specification](https://swagger.io/specification/)
+- **ADR:** [adr.github.io](https://adr.github.io/) (MADR 4.0.0)
+- **OpenAPI:** [spec.openapis.org/oas/latest.html](https://spec.openapis.org/oas/latest.html)
 - **Diataxis:** [diataxis.fr](https://diataxis.fr/) (framework de documentacion)
 
 ---

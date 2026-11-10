@@ -22,7 +22,7 @@ Code mit Bandit scannen, um Schwachstellen zu erkennen:
 - [ ] Keine Shell-Befehlsinjektion
 - [ ] Sichere Kryptographie (nicht MD5/SHA1)
 
-**Befehl**: `docker run --rm -v $(pwd):/app python:3.11 sh -c "pip install bandit && bandit -r /app -f json"`
+**Befehl**: `docker run --rm -v $(pwd):/app python:3.15 sh -c "pip install bandit && bandit -r /app -f json"`
 
 **Referenz**: `rules/06-tooling.md` Abschnitt "Security Analysis"
 
@@ -67,7 +67,7 @@ Abhängigkeiten auf bekannte Schwachstellen analysieren:
 - [ ] Verwendung von `pip-audit` oder `safety`
 - [ ] Keine veralteten Abhängigkeiten
 
-**Befehl**: `docker run --rm -v $(pwd):/app python:3.11 sh -c "pip install pip-audit && pip-audit --requirement /app/requirements.txt"`
+**Befehl**: `docker run --rm -v $(pwd):/app python:3.15 sh -c "pip install pip-audit && pip-audit --requirement /app/requirements.txt"`
 
 **Referenz**: `rules/06-tooling.md` Abschnitt "Dependency Management"
 

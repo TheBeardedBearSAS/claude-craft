@@ -22,7 +22,7 @@ Verificar conformidade com convenções Python:
 - [ ] Espaços: ao redor de operadores, após vírgulas
 - [ ] Docstrings: presentes para módulos, classes, funções públicas
 
-**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.11 python -m flake8 /app --max-line-length=88`
+**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.15 python -m flake8 /app --max-line-length=88`
 
 **Referência**: `rules/03-coding-standards.md` seção "PEP 8 Compliance"
 
@@ -35,7 +35,7 @@ Verificar uso de tipagem estática:
 - [ ] Uso de `typing` para tipos complexos (Optional, Union, List, Dict)
 - [ ] Sem erros de MyPy em modo strict
 
-**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.11 python -m mypy /app --strict`
+**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.15 python -m mypy /app --strict`
 
 **Referência**: `rules/03-coding-standards.md` seção "Type Hints"
 
@@ -48,7 +48,7 @@ Analisar código com Ruff (substitui Flake8, isort, pydocstyle):
 - [ ] Complexidade ciclomática aceitável (<10)
 - [ ] Regras de segurança respeitadas (regras S)
 
-**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.11 pip install ruff && ruff check /app`
+**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.15 pip install ruff && ruff check /app`
 
 **Referência**: `rules/06-tooling.md` seção "Linting and Formatting"
 
@@ -60,7 +60,7 @@ Verificar consistência de formatação:
 - [ ] Sem diferenças após `black --check`
 - [ ] Comprimento de linha consistente (88 caracteres)
 
-**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.11 pip install black && black --check /app`
+**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.15 pip install black && black --check /app`
 
 **Referência**: `rules/06-tooling.md` seção "Code Formatting"
 

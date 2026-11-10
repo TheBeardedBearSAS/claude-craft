@@ -27,7 +27,8 @@ src/app/
 ### Arquitetura: Feature-Based + Standalone
 - **Standalone Components**: Sem NgModules, imports explicitos
 - **Signals First**: Estado reativo com Angular Signals
-- **OnPush**: Todas componentes com ChangeDetectionStrategy.OnPush
+- **OnPush**: Padrão desde o Angular 22.0.0 (omitir `changeDetection`; `ChangeDetectionStrategy.Eager` apenas para desativar)
+- **Signal I/O**: `input()`, `output()`, `model()` em vez de `@Input`/`@Output`/`EventEmitter`; sem `standalone: true` (padrão)
 - **Control Flow**: @if, @for, @switch (nao *ngIf, *ngFor)
 
 Ver `rules/02-architecture.md` para padroes.

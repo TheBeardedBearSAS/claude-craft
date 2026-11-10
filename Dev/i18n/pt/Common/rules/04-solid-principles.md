@@ -372,7 +372,7 @@ A logica de negocio e isolada dos detalhes tecnicos
 - [ ] Sem excecoes novas nao documentadas
 
 #### ISP
-- [ ] As interfaces sao pequenas e focadas (< 5 metodos)
+- [ ] As interfaces sao pequenas e focadas (heuristica interna: < 5 metodos)
 - [ ] Os clientes dependem apenas dos metodos que utilizam
 - [ ] Sem metodos `throw NotImplementedException()`
 

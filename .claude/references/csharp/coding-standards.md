@@ -36,7 +36,14 @@ public const int MPS = 100;        // Bad
 
 > **Note 2026**: .NET 10 LTS avec C# 14 apporte Extension Members, Null-Conditional Assignment, et Span<T> enhancements.
 
-> **À venir (C# 15 / .NET 11, preview — GA attendue en novembre 2026) :** union types (mot-clé `union`), extension indexers, `break`/`continue` étiquetés. Source : https://learn.microsoft.com/dotnet/csharp/whats-new/csharp-15. Ne pas les utiliser en production avant la GA ; rester sur C# 14 / .NET 10 LTS.
+> **C# 15 / .NET 11 (GA le 2026-11-10, STS) :** .NET 11 est une version STS (support jusqu'au 2028-11-14, comme .NET 10 LTS, publié le 2025-11-11). Pour la production, rester sur C# 14 / .NET 10 LTS ; C# 15 est le langage par défaut des projets `net11.0`. Nouveautés C# 15 :
+> - **Union types** : mot-clé `union` (`public union Pet(Cat, Dog, Bird);`), `switch` exhaustif sans `default`.
+> - **Closed hierarchies** : modificateur `closed` sur une classe, dérivable uniquement dans son assembly, `switch` exhaustif.
+> - **Extension indexers** : indexeurs déclarés dans un bloc `extension`.
+> - **`break` / `continue` étiquetés** pour sortir d'une boucle externe.
+> - **Arguments de collection expression** : `[with(capacity: 8), ..values]` transmet des arguments au constructeur de la collection.
+>
+> Nouveautés .NET 11 : Runtime Async natif (sans `EnablePreviewFeatures` pour `net11.0`), `AsyncValidationAttribute` / `IAsyncValidatableObject` (`System.ComponentModel.DataAnnotations`), et `IHost.RunAsync` / `StopAsync` qui lèvent désormais une exception si un `BackgroundService` échoue. Sources : https://learn.microsoft.com/dotnet/csharp/whats-new/csharp-15, https://learn.microsoft.com/dotnet/core/whats-new/dotnet-11/overview, https://endoflife.date/api/dotnet.json.
 
 ### Primary Constructors
 

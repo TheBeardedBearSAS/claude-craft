@@ -298,7 +298,7 @@ OrderCreated -> OrderPaid -> OrderShipped -> OrderDelivered
 
 ### Avec Event Sourcing
 
-- [ ] Store d'events (PostgreSQL, EventStore)
+- [ ] Store d'events (PostgreSQL, KurrentDB, ex-EventStoreDB)
 - [ ] Snapshot strategy (éviter replay complet)
 - [ ] Replay mechanism (reconstruire projections)
 

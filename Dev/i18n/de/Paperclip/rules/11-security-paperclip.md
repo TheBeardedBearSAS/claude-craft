@@ -141,7 +141,7 @@ Passen Sie CSP-Script-/Style-Sources an, falls die UI spezifische CDNs benötigt
 - [ ] Activity-Log Append-only, DB-enforced wo möglich
 - [ ] Kill Switch + Plugin-Disable getestet
 
-## Upgrade-Hinweise: Breaking Changes (2026.916.0 bis 2026.1012.0)
+## Upgrade-Hinweise: Breaking Changes (2026.916.0 bis 2026.1106.0)
 
 Geprüft anhand der offiziellen GitHub-Release-Notes (paperclipai/paperclip).
 
@@ -149,6 +149,8 @@ Geprüft anhand der offiziellen GitHub-Release-Notes (paperclipai/paperclip).
 - **2026.1001.0**: der Legacy-Composio-Broker ist abgeschaltet (keine automatische Migration; Ersatz: Composio Connect hinter dem Flag `enableMcpAggregators`). Execution-Harnesses laufen jetzt standardmäßig **vollautomatisch**: ACPX/Claude `approve-all`, OpenCode `allow`, Codex `never` (keine Freigabe-Pausen). Um die Freigabe-Gates des Providers zu behalten, pro Agent explizit einen restriktiven Modus setzen: `acpxPermissionMode` (`approve-paperclip`, `approve-reads` oder `deny-all`) oder `opencodePermissionMode` (`ask` oder `deny`). Die governten Freigaben von Paperclip gelten weiterhin.
 - **2026.1005.0**: `PAPERCLIP_CLOUD_UI_SNIPPET` / `PAPERCLIP_CLOUD_UI_SNIPPET_B64` injizieren kein HTML mehr (Integration in einen Plugin-UI-Beitrag verschieben); eine @-Erwähnung in einem Task-Kommentar ist nur Kontext und startet keinen Run mehr (nur explizite Zuweisung oder Review-Anfragen tun das).
 - **2026.1012.0**: Workspace-Restore-Locks sind jetzt SQLite-Dateisperren unter `<instance root>/locks/directory-merge/`: vor Upgrade oder Rollback alle alten Server- und Worker-Prozesse stoppen; Tool-Grants mit unbekannten Selektoren oder fehlerhaften Einschränkungen verweigern jetzt den Zugriff (eigene Grants prüfen).
+- **2026.1023.0**: Das Operator-Rollenpreset wächst von einer Berechtigung (`tasks:assign`) auf vierzehn (bestehende Operators erhalten sie beim Start: prüfen, wer die Rolle innehat); das Einladen eines Admins erfordert jetzt eine Beitrittsgenehmigung, das Einladen eines Owners zusätzlich die Verwaltung von Mitgliederberechtigungen; GitHub-Review-Bots liegen hinter der experimentellen Einstellung `enableGitHubReviewBots` (standardmäßig aus); Budgets blockieren jetzt standardmäßig bei nicht bepreister Nutzung (die Einstellung für nicht bepreiste Nutzung steht standardmäßig auf `block`; `allow` lässt Runs weiterlaufen); Owner und Admins sehen private Aufgaben standardmäßig nicht mehr (auditierter Break-Glass-Zugriff über `?breakGlass=true`) und ein direkter Lesezugriff eines Nicht-Mitglieds auf eine private Aufgabe liefert `404`.
+- **2026.1106.0**: Das Pipelines-Experiment wurde entfernt (CLI-Befehle `pipelines`, Berechtigung `pipelines:write`; ein gespeicherter Wert `enablePipelines` wird ignoriert); Run-Fehler erreichen Sentry standardmäßig nicht mehr (`PAPERCLIP_SENTRY_RUN_FAILURES` auf `unexpected` oder `all` setzen, um weiter zu melden); der Run-Verlauf-Endpunkt liefert standardmäßig 200 Zeilen und höchstens 1.000 (explizites `limit` übergeben); `paperclipai agent instructions-file:delete` erfordert `--yes`; neue Agents nutzen auf qualifizierten Hosts standardmäßig den Paperclip Runner, der unter Linux GNU libc 2.39 oder neuer benötigt (sonst die Option „Legacy runner“ unter Advanced verwenden).
 
 ---
 

@@ -32,6 +32,8 @@ Você é um **Arquiteto Kubernetes Sênior** capaz de projetar arquiteturas comp
 | Multi-cluster | Grande escala, DR | Alta |
 | GitOps-driven | Entrega automatizada | Média |
 
+> kube-proxy: o modo `ipvs` está obsoleto desde o Kubernetes 1.35 (um feature gate `KubeProxyIPVS` prepara sua remoção). Em kernels recentes, preferir `nftables` (GA desde 1.33) e definir `mode` explicitamente: o kube-proxy emite um aviso se ele não estiver definido, e o padrão no Linux passará de `iptables` para `nftables` em uma versão futura.
+
 ## Metodologia
 
 ### Fase 1 -- Descoberta

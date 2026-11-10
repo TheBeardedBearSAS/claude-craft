@@ -383,24 +383,56 @@ export const appConfig = {
 
 ## Forms
 
-### Reactive Forms Setup
+### Signal Forms (stable, Angular 22)
+
+Aucun provider n'est requis : importer `FormField` (directive `[formField]`) dans le composant. L'API vit dans `@angular/forms/signals` (API publique depuis 22.0.0).
 
 ```typescript
-// app.config.ts
-import { provideFormsModule } from '@angular/forms';
+import { Component, signal } from '@angular/core';
+import { email, form, FormField, required } from '@angular/forms/signals';
 
-export const appConfig = {
-  providers: [
-    // For template-driven forms
-    provideFormsModule()
-  ]
-};
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+@Component({
+  selector: 'app-login',
+  imports: [FormField],
+  template: `
+    <form (submit)="onSubmit($event)">
+      <input type="email" [formField]="loginForm.email" />
+      <input type="password" [formField]="loginForm.password" />
+      <button type="submit">Log in</button>
+    </form>
+  `
+})
+export class LoginComponent {
+  loginModel = signal<LoginData>({ email: '', password: '' });
+
+  loginForm = form(this.loginModel, (schemaPath) => {
+    required(schemaPath.email, { message: 'Email is required' });
+    email(schemaPath.email, { message: 'Enter a valid email address' });
+    required(schemaPath.password, { message: 'Password is required' });
+  });
+
+  onSubmit(event: Event): void {
+    event.preventDefault();
+    console.log(this.loginModel());
+  }
+}
 ```
 
-### Typed Forms
+Source : https://angular.dev/essentials/signal-forms
+
+> `provideFormsModule()` n'existe pas dans l'API Angular. Pour les formulaires template-driven, importer `FormsModule` dans le composant ; pour les Reactive Forms, importer `ReactiveFormsModule`.
+
+### Typed Reactive Forms (applications existantes)
+
+Les Reactive Forms restent supportés (interopérabilité via `SignalFormControl`) ; préférer Signal Forms pour le nouveau code.
 
 ```typescript
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 interface UserForm {
   name: FormControl<string>;
@@ -408,7 +440,10 @@ interface UserForm {
   age: FormControl<number | null>;
 }
 
-@Component({...})
+@Component({
+  imports: [ReactiveFormsModule],
+  // ...
+})
 export class UserFormComponent {
   private fb = inject(FormBuilder);
 

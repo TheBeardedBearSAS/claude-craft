@@ -22,7 +22,7 @@ Escanear código com Bandit para detectar vulnerabilidades:
 - [ ] Sem injeção de comando shell
 - [ ] Criptografia segura (não MD5/SHA1)
 
-**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.11 sh -c "pip install bandit && bandit -r /app -f json"`
+**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.15 sh -c "pip install bandit && bandit -r /app -f json"`
 
 **Referência**: `rules/06-tooling.md` seção "Security Analysis"
 
@@ -67,7 +67,7 @@ Analisar dependências para vulnerabilidades conhecidas:
 - [ ] Uso de `pip-audit` ou `safety`
 - [ ] Sem dependências obsoletas
 
-**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.11 sh -c "pip install pip-audit && pip-audit --requirement /app/requirements.txt"`
+**Comando**: Executar `docker run --rm -v $(pwd):/app python:3.15 sh -c "pip install pip-audit && pip-audit --requirement /app/requirements.txt"`
 
 **Referência**: `rules/06-tooling.md` seção "Dependency Management"
 

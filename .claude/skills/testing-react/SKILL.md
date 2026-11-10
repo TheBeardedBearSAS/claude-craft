@@ -32,7 +32,7 @@ Privilégier un vrai navigateur (Vitest Browser Mode, Playwright CT) plutôt que
 - Tester le comportement (ce que voit l'utilisateur), pas l'implémentation
 - Ne jamais tester les optimisations du React Compiler (memoization)
 - Mutation score >= 80% via Stryker avant merge
-- Vitest `projects` pour monorepos (unit / browser séparés) — `workspace` est déprécié
+- Vitest `projects` pour monorepos (unit / browser séparés) — `workspace` renommé `projects` (3.2), fichier `vitest.workspace` non supporté en 4.x
 - MSW pour mocker les appels API (pas de `fetch` mockée à la main)
 
 ## Checklist par type

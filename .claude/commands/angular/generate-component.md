@@ -39,7 +39,6 @@ src/app/features/{feature}/components/{name}/
 // {name}.component.ts
 import {
   Component,
-  ChangeDetectionStrategy,
   input,
   output,
   computed,
@@ -49,11 +48,9 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-{name}',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './{name}.component.html',
-  styleUrl: './{name}.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './{name}.component.scss'
 })
 export class {PascalName}Component {
   // Inputs
@@ -167,8 +164,6 @@ export { {PascalName}Component } from './{name}.component';
 ```typescript
 @Component({
   selector: 'app-user-card',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="user-card">
       <img [src]="user().avatar" [alt]="user().name" />
@@ -188,7 +183,6 @@ export class UserCardComponent {
 ```typescript
 @Component({
   selector: 'app-user-list-container',
-  standalone: true,
   imports: [UserListComponent],
   template: `
     <app-user-list
@@ -212,8 +206,8 @@ export class UserListContainerComponent {
 
 ## Best Practices
 
-1. **Always use standalone**: `standalone: true`
-2. **Always use OnPush**: `changeDetection: ChangeDetectionStrategy.OnPush`
+1. **Standalone is the default** (since Angular 19): do not write `standalone: true`
+2. **OnPush is the default since Angular 22.0.0**: omit `changeDetection` (use `ChangeDetectionStrategy.Eager` only to opt out, with justification)
 3. **Prefer signal inputs**: `input()` and `input.required()`
 4. **Use computed for derived state**: `computed(() => ...)`
 5. **Small, focused components**: Single responsibility

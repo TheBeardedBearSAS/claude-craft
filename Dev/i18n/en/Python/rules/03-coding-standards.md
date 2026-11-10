@@ -203,6 +203,18 @@ user_repo: Repository[User] = UserRepository()
 product_repo: Repository[Product] = ProductRepository()
 ```
 
+### Python 3.15 highlights
+
+Python 3.15 (stable since October 9, 2026) adds, among others:
+- **PEP 810**: explicit lazy imports (`lazy import json`, module level only).
+- **PEP 814** (`frozendict`): built-in immutable dictionary.
+- **PEP 661** (`sentinel`): built-in type for unique sentinel values (replaces ad hoc `_MISSING = object()`).
+- **PEP 686 / PEP 798**: UTF-8 by default for `open()` without `encoding`; `*` / `**` unpacking in comprehensions.
+- **PEP 799** (`profiling`): `profiling.tracing` (ex-`cProfile`, kept as an alias) and `profiling.sampling` (Tachyon sampling profiler); the `profile` module is deprecated (removal in 3.17).
+- **`re.prefixmatch()`**: explicit name for `re.match()`, now soft deprecated.
+
+Source: docs.python.org/3.15/whatsnew/3.15.html
+
 ## Error Handling
 
 ### Specific Exceptions

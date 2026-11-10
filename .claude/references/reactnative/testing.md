@@ -48,7 +48,7 @@ module.exports = {
 };
 ```
 
-> **Projets Expo (managed workflow) :** utiliser `jest-expo` à la place de `@react-native/jest-preset`. `jest-expo` gère les transforms Expo et reste le preset recommandé pour Expo SDK 56+.
+> **Projets Expo (managed workflow) :** utiliser `jest-expo` à la place de `@react-native/jest-preset`. `jest-expo` gère les transforms Expo et reste le preset recommandé pour Expo SDK 52+.
 >
 > ```javascript
 > // jest.config.js — Expo managed workflow

@@ -327,6 +327,9 @@ Usar `mockIPC(fn, { shouldMockEvents: true })` al testear `emit` / `listen`.
 - Bundle identifier, versión e iconos definidos en `tauri.conf.json`; `gen/schemas/` no se edita a mano
 - Crate de Tauri, `tauri-build`, `@tauri-apps/api` y `@tauri-apps/cli` mantenidos en versiones menores coincidentes
 - Toolchain de Rust compatible con el MSRV de Tauri (1.90 para 2.12.x)
+- Aplicaciones multi-webview con Tauri 2.11.6 o superior (se recomienda 2.12.x): GHSA-w28w-mhc8-qvjv (Tauri 2.0.0 a 2.11.5) permitía que un webview leyera los payloads `Channel` en cola y las respuestas grandes de invoke de otro webview; la corrección vincula la cola al webview propietario
+- Notas 2.12: Android Gradle 8.13 como mínimo (plantilla con Gradle 9.6.1, Kotlin 2.2: renombrar `proguard-rules.pro` a `consumer-rules.pro` en los plugins); `windows` 0.62 / `webview2-com` 0.39 abandonan el soporte de Windows 7; `InvokeMessage::state` y `state_ref` quedan obsoletos; las reglas deny de la ACL de ejecución se limitan al contexto local o remoto de la capability; nueva opción de webview `limitNavigationsToAppBoundDomains`
+- Fuente: https://github.com/tauri-apps/tauri/security/advisories/GHSA-w28w-mhc8-qvjv y el CHANGELOG del crate tauri (2.12.0)
 - Comandos móviles (`tauri android init|dev|build`, `tauri ios init|dev|build`) usados solo cuando el móvil es un destino declarado
 - Las releases publican los artefactos del updater junto con sus firmas
 

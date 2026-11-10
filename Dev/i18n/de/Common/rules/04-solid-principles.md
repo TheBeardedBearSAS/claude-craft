@@ -372,7 +372,7 @@ Die Geschäftslogik ist von technischen Details isoliert
 - [ ] Keine neuen nicht dokumentierten Exceptions
 
 #### ISP
-- [ ] Interfaces sind klein und fokussiert (< 5 Methoden)
+- [ ] Interfaces sind klein und fokussiert (interne Heuristik: < 5 Methoden)
 - [ ] Clients hängen nur von den Methoden ab, die sie verwenden
 - [ ] Keine Methoden `throw NotImplementedException()`
 

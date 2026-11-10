@@ -340,4 +340,4 @@ src/
 |--------|-------------|----------|
 | `*.test.ts` | jsdom (default) | Pure modules, plugin hooks, utils |
 | `*.browser.test.ts` | Vitest Browser Mode | Workers, WASM, real-DOM behavior |
-| `*.integration.test.ts` | jsdom, calls real `vite build`/`vite.transformWithEsbuild` | Plugins touching the filesystem |
+| `*.integration.test.ts` | jsdom, calls real `vite build`/`vite.transformWithOxc` | Plugins touching the filesystem |

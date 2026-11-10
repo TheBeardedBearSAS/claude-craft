@@ -704,7 +704,7 @@ Vue 3.6 introduit le **Vapor Mode** en phase RC (feature-complete depuis 3.6.0-r
 - **Principe** : le compilateur Vue genere des instructions DOM directes (comme du code vanilla JS optimise) au lieu de creer des VNodes.
 - **Impact perf** : reduction de la memoire heap et du temps de patch sur les composants a haute frequence de mise a jour.
 - **Compatibilite** : un composant Vapor est interoperable avec des composants classiques dans le meme arbre.
-- **Statut** : RC dans Vue 3.6 (rc.11), ne pas recommander en production sans validation explicite de l'equipe Vue.
+- **Statut** : RC dans Vue 3.6 (rc.14), ne pas recommander en production sans validation explicite de l'equipe Vue.
 
 **Audit Vapor :** si le projet est sur Vue 3.6+, verifier que les composants `<script vapor>` ne contiennent pas de patterns Virtual-DOM-dependants (VNode, h(), render functions). Depuis rc.2, les listeners DOM Vapor ne sont plus délégués par défaut (`.delegate` pour l'opt-in). Pinia 4 est ESM-only et requiert `@vue/devtools-api` v8 installé explicitement.
 

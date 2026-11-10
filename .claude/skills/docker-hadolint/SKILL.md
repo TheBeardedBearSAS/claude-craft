@@ -8,9 +8,9 @@ context: fork
 
 ## Versions (octobre 2026)
 
-- **Docker Engine** : 29.9.0  
+- **Docker Engine** : 29.9.3 (correctifs CVE-2026-116587, CVE-2026-116591 ; 29.9.2 : chaînes eMudhra révoquées, TLS des registres concernés)  
   Source : https://docs.docker.com/engine/release-notes/29/
-- **Docker Compose** : 5.6.0 (champ `version:` obsolète, à ne plus écrire)  
+- **Docker Compose** : 5.7.0 (champ `version:` obsolète, à ne plus écrire)  
   Source : https://github.com/docker/compose/releases
 - **Hadolint** : v2.15.1 (version stable pinnée)  
   Source : https://github.com/hadolint/hadolint/releases/tag/v2.15.1

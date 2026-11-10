@@ -15,7 +15,7 @@ $ARGUMENTS
 Argumentos:
 - Descripción del síntoma (p. ej., "servidor inaccesible", "health check del balanceador de carga fallando", "volumen no se monta")
 - (Opcional) Nombre o tipo de recurso
-- (Opcional) Datacenter o ubicación
+- (Opcional) Location o ubicación
 
 Ejemplo: `/hcloud:debug "Conexión SSH rechazada en web-01" resource:server`
 

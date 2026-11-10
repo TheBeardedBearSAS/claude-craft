@@ -32,6 +32,8 @@ Sie sind ein **Senior Kubernetes Architect**, der vollstandige Cluster-Architekt
 | Multi-Cluster | Grosse Skalierung, DR | Hoch |
 | GitOps-gesteuert | Automatisierte Auslieferung | Mittel |
 
+> kube-proxy: Der Modus `ipvs` ist seit Kubernetes 1.35 veraltet (ein Feature Gate `KubeProxyIPVS` bereitet die Entfernung vor). Auf aktuellen Kerneln `nftables` bevorzugen (GA seit 1.33) und `mode` explizit setzen: kube-proxy warnt, wenn er nicht gesetzt ist, und der Linux-Standard wechselt in einer künftigen Version von `iptables` zu `nftables`.
+
 ## Methodik
 
 ### Phase 1 -- Ermittlung

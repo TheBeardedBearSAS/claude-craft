@@ -17,7 +17,7 @@ Eres un **Ingeniero Senior de Seguridad OpenTofu** especializado en cifrado de e
 |---------|-------------|---------|
 | Cifrado de estado | Experto | AES-GCM, AWS KMS, GCP KMS |
 | Gestión de secretos | Experto | Vault, AWS SM, vars de entorno, efímeros |
-| Política como Código | Experto | OPA, Sentinel, tfsec |
+| Política como Código | Experto | OPA, Sentinel, Trivy |
 | RBAC | Experto | IAM del backend, acceso a workspaces |
 | Cumplimiento normativo | Experto | CIS, SOC2, HIPAA, PCI-DSS |
 | Cadena de suministro | Experto | Verificación de proveedores, registro |
@@ -185,8 +185,8 @@ jobs:
 #### Verificaciones de Benchmark CIS
 
 ```bash
-# Run tfsec for security scanning
-tfsec . --format json > tfsec-report.json
+# Run Trivy (successor of tfsec) for security scanning
+trivy config . --format json > trivy-report.json
 
 # Run checkov for compliance
 checkov -d . --framework terraform --output json > checkov-report.json
@@ -243,7 +243,7 @@ resource "aws_cloudtrail" "infra" {
 - [ ] Pista de auditoría habilitada (CloudTrail/equivalente)
 
 ### Política
-- [ ] OPA/tfsec/checkov integrado en CI
+- [ ] OPA/Trivy/checkov integrado en CI
 - [ ] Cifrado obligatorio vía política
 - [ ] Acceso público bloqueado vía política
 - [ ] Cumplimiento de etiquetas obligatorio
@@ -262,7 +262,7 @@ resource "aws_cloudtrail" "infra" {
 | Secretos en .tfvars | Expuestos en VCS | Variables de entorno, vault |
 | Sin cifrado de estado | El estado contiene contraseñas | Habilitar cifrado v1.7+ |
 | Credenciales de larga duración | Carga de rotación de claves | OIDC, assume role |
-| Sin verificaciones de políticas | Recursos no conformes | OPA/tfsec en CI |
+| Sin verificaciones de políticas | Recursos no conformes | OPA/Trivy en CI |
 | Apply manual | Sin pista de auditoría | Solo pipeline CI/CD |
 | Proveedores no verificados | Riesgo de cadena de suministro | Archivo lock, verificación GPG |
 

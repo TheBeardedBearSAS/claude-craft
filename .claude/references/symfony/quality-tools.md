@@ -1039,5 +1039,5 @@ make ci
 | Rector | 2.4.x | `composer require --dev rector/rector:^2.4` |
 | Deptrac | 4.x | `composer require --dev qossmic/deptrac-shim:^4.0` |
 | PHP-CS-Fixer | 3.x | `composer require --dev friendsofphp/php-cs-fixer:^3.0` |
-| Infection | 0.29.x | `composer require --dev infection/infection:^0.29` |
+| Infection | 0.35.x | `composer require --dev infection/infection:^0.35` |
 | PHPUnit | 12.x | `composer require --dev phpunit/phpunit:^12.0` |

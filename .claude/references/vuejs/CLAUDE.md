@@ -4,7 +4,7 @@
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Vue.js | 3.5.x (stable) / 3.6.x RC (rc.11) | Vapor Mode : feature-complete, instable (SSR dispo en 3.7) |
+| Vue.js | 3.5.x (stable) / 3.6.x RC (rc.14) | Vapor Mode : feature-complete, instable (hydratation SSR en cours de stabilisation) |
 | Pinia | 4.x | ESM-only ; `@vue/devtools-api` v8 à installer explicitement ; 3+ requis pour Vapor Mode |
 | Vue Router | 5.x | File-based routing via `@vue-router/auto` |
 | Vite | 8.x | Rolldown bundler par défaut (3-5× plus rapide) |
@@ -97,7 +97,7 @@ export default defineConfig({
 });
 ```
 
-> **Vite 8 / Rolldown (défaut) :** la forme objet de `manualChunks` est **supprimée** (non supportée). Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
+> **Vite 8 / Rolldown (défaut) :** la forme objet de `manualChunks` est **supprimée** (non supportée) ; la forme fonction est dépréciée. Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
 > **Vite 7 / Rolldown désactivé (legacy) :**
 > ```ts
 > build: { rollupOptions: { output: { manualChunks: { 'vue-vendor': ['vue', 'vue-router', 'pinia'] } } } }
@@ -122,7 +122,7 @@ Structure `src/pages/` → routes auto-générées avec types précis. Pour un r
 Vue 3.5 migre en interne vers **Alien Signals** pour la réactivité : performances +2× sur les graphes larges. Aucun changement d'API côté utilisateur.
 
 ### Vapor Mode (Vue 3.6 RC — ne pas utiliser en prod sans validation)
-- Feature-complete mais **instable** — SSR prévu en Vue 3.7
+- Feature-complete mais **instable** — hydratation SSR Vapor en cours de stabilisation (rc.14), statut stable non confirmé
 - Nécessite Pinia 3+ (4 recommandé) et `@vue-router/auto`
 - Voir `vapor-mode.md` pour les détails et caveats
 

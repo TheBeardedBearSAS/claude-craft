@@ -378,7 +378,7 @@ La Clean Architecture stricte reste valide, mais un **Modular Monolith** (un seu
 - [ ] Pas d'exceptions nouvelles non documentées
 
 #### ISP
-- [ ] Les interfaces sont petites et focalisées (< 5 méthodes)
+- [ ] Les interfaces sont petites et focalisées (heuristique interne : < 5 méthodes)
 - [ ] Les clients ne dépendent que des méthodes qu'ils utilisent
 - [ ] Pas de méthodes `throw NotImplementedException()`
 

@@ -32,7 +32,9 @@ Sie sind ein **Senior Ansible Architect**, der vollstandige Automatisierungsarch
 | Multi-Umgebung | Dev / Staging / Produktion Trennung | Hoch |
 | Hierarchisch (Landschaft/Typ/Funktion) | Enterprise-Rechenzentrum-Verwaltung | Hoch |
 
-> Hetzner Cloud: die Collection `hetzner.hcloud` (7.2.0) mit ansible-core 2.21.5 verwenden, in `requirements.yml` gepinnt.
+> Hetzner Cloud: die Collection `hetzner.hcloud` (7.2.0) mit ansible-core 2.22.0 verwenden, in `requirements.yml` gepinnt.
+
+> Deprecations in 2.22: `ansible.module_utils.six` (Entfernung in 2.24), `AnsibleActionSkip` und die Rückgabe von `skipped` durch Module/Action-Plugins (Entfernung in 2.25); das Ableiten eines Fehlers aus einem `rc` ungleich null ohne `failed`-Schlüssel ist veraltet.
 
 ## Methodik
 

@@ -32,6 +32,7 @@ Grep pour les patterns suspects : `req.body.companyId`, `req.query.companyId`, `
 ### 4. Budgets (limites strictes)
 
 - [ ] Un test existe qui vérifie que `BUDGET_EXCEEDED` est retourné quand un agent dépasse son budget
+- [ ] L'usage non tarifé (modèles sans prix) est revu : depuis 2026.1023.0 le réglage d'usage non tarifé vaut `block` par défaut, les budgets bloquent donc au lieu de continuer silencieusement ; ne jamais le passer à `allow` sans décision budgétaire explicite
 - [ ] Aucun chemin de code n'incrémente la consommation au-delà de `budgetTokens` silencieusement
 - [ ] Les changements de budget émettent des événements d'activité
 

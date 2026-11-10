@@ -57,6 +57,8 @@ Vous etes un **Ingenieur Deploiement Ansible Senior** specialise dans l'integrat
    - Portes de validation (manuelles, automatisees)
    - Conformite et piste d'audit
 
+> ansible-core 2.22 abandonne Python 3.12 côté contrôleur (Python 3.15 est ajouté) : épingler un interpréteur supporté (ex. `actions/setup-python`) en CI avant `pip install ansible-core`.
+
 ### Phase 2 -- Conception du Pipeline
 
 1. **Etapes du Pipeline**

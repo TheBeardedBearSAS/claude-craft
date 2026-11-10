@@ -217,11 +217,8 @@ Entidades são objetos com uma identidade única.
 
 ```python
 # src/myproject/domain/entities/user.py
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional
 from uuid import UUID, uuid4
 
 from myproject.domain.value_objects.email import Email
@@ -242,7 +239,7 @@ class User:
     name: str = field(default="")
     is_active: bool = field(default=True)
     created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: Optional[datetime] = field(default=None)
+    updated_at: datetime | None = field(default=None)
 
     # Eventos de domínio (padrão Event Sourcing)
     _events: list = field(default_factory=list, init=False, repr=False)
@@ -314,8 +311,6 @@ Value objects são imutáveis e definidos por seus atributos.
 
 ```python
 # src/myproject/domain/value_objects/email.py
-from __future__ import annotations
-
 from dataclasses import dataclass
 from email_validator import validate_email, EmailNotValidError
 
@@ -359,8 +354,6 @@ class Email:
 
 
 # src/myproject/domain/value_objects/money.py
-from __future__ import annotations
-
 from dataclasses import dataclass
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Union

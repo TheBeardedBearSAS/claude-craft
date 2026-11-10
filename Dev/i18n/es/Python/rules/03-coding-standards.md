@@ -203,6 +203,18 @@ user_repo: Repository[User] = UserRepository()
 product_repo: Repository[Product] = ProductRepository()
 ```
 
+### Novedades de Python 3.15
+
+Python 3.15 (estable desde el 9 de octubre de 2026) aporta, entre otras cosas:
+- **PEP 810**: imports perezosos explícitos (`lazy import json`, solo a nivel de módulo).
+- **PEP 814** (`frozendict`): diccionario inmutable nativo.
+- **PEP 661** (`sentinel`): tipo nativo para valores centinela únicos (sustituye los `_MISSING = object()` artesanales).
+- **PEP 686 / PEP 798**: UTF-8 por defecto para `open()` sin `encoding`; desempaquetado `*` / `**` en comprensiones.
+- **PEP 799** (`profiling`): `profiling.tracing` (antes `cProfile`, que se mantiene como alias) y `profiling.sampling` (perfilador estadístico Tachyon); el módulo `profile` está obsoleto (eliminación en 3.17).
+- **`re.prefixmatch()`**: nombre explícito de `re.match()`, ahora "soft deprecated".
+
+Source: docs.python.org/3.15/whatsnew/3.15.html
+
 ## Manejo de Errores
 
 ### Excepciones Específicas

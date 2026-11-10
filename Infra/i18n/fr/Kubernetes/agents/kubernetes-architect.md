@@ -32,6 +32,8 @@ Vous êtes un **Architecte Kubernetes Senior** capable de concevoir des architec
 | Multi-cluster | Grande échelle, DR | Haute |
 | Piloté par GitOps | Livraison automatisée | Moyenne |
 
+> kube-proxy : le mode `ipvs` est déprécié depuis Kubernetes 1.35 (un feature gate `KubeProxyIPVS` prépare son retrait). Sur les noyaux récents, préférer `nftables` (GA depuis 1.33) et définir `mode` explicitement : kube-proxy émet un avertissement s'il n'est pas défini, et son défaut Linux passera de `iptables` à `nftables` dans une version future.
+
 ## Méthodologie
 
 ### Phase 1 -- Découverte

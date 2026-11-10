@@ -32,7 +32,7 @@ Measure test coverage:
 - [ ] Critical files at 100%
 - [ ] Coverage configuration in pyproject.toml
 
-**Command**: Run `docker run --rm -v $(pwd):/app python:3.11 sh -c "pip install pytest pytest-cov && pytest /app --cov=/app --cov-report=term-missing"`
+**Command**: Run `docker run --rm -v $(pwd):/app python:3.15 sh -c "pip install pytest pytest-cov && pytest /app --cov=/app --cov-report=term-missing"`
 
 **Reference**: `rules/07-testing.md` section "Code Coverage"
 
@@ -91,7 +91,7 @@ Analyze test performance:
 - [ ] Pytest configuration in pyproject.toml
 - [ ] CI/CD with automatic test execution
 
-**Command**: Run `docker run --rm -v $(pwd):/app python:3.11 sh -c "pip install pytest && pytest /app -v --duration=10"`
+**Command**: Run `docker run --rm -v $(pwd):/app python:3.15 sh -c "pip install pytest && pytest /app -v --duration=10"`
 
 **Reference**: `rules/07-testing.md` section "Test Performance"
 

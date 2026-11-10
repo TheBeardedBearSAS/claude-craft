@@ -1,8 +1,8 @@
 # Doctrine Extensions (Gedmo)
 
-> Versión: stof/doctrine-extensions-bundle v1.14.0
-> Gedmo: doctrine-extensions v3.21.0
-> Compatibilidad: Symfony ^6.4 || ^7.0, PHP ^8.1
+> Versión: stof/doctrine-extensions-bundle v1.15.3
+> Gedmo: doctrine-extensions v3.22.2
+> Compatibilidad: Symfony ^6.4 || ^7.0 || ^8.0, PHP ^8.1
 
 ## Instalación
 
@@ -11,8 +11,8 @@ make composer CMD="require stof/doctrine-extensions-bundle"
 ```
 
 **Dependencias instaladas:**
-- `stof/doctrine-extensions-bundle` v1.14.0
-- `gedmo/doctrine-extensions` v3.21.0
+- `stof/doctrine-extensions-bundle` v1.15.3
+- `gedmo/doctrine-extensions` v3.22.2
 
 ## Configuración
 

@@ -1,5 +1,7 @@
 # PHP Development Tools
 
+> **Patch level:** target PHP ≥ 8.5.12 (22 Oct 2026), which includes security fixes (Core GHSA-w8hw-w9fx-j79w and GHSA-6wmf-4rv5-p3rp, Lexbor, Opcache, SOAP, etc.). Source: https://www.php.net/ChangeLog-8.php#8.5.12
+
 ## Composer - Dependency Management
 
 ### Essential Commands

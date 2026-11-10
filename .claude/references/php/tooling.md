@@ -2,6 +2,8 @@
 
 > **Version 2026**: PHP 8.5.x avec pipe operator `|>`, extension URI native, `clone with` (property overrides), `array_first()`/`array_last()`, et attribut `#[\NoDiscard]`.
 
+> **Niveau de correctif :** viser PHP ≥ 8.5.12 (22 oct. 2026), qui inclut des correctifs de sécurité (Core GHSA-w8hw-w9fx-j79w et GHSA-6wmf-4rv5-p3rp, Lexbor, Opcache, SOAP, etc.). Source : https://www.php.net/ChangeLog-8.php#8.5.12
+
 ## Composer - Dependency Management
 
 ### Essential Commands

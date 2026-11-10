@@ -432,6 +432,18 @@ def process_order(order: Order) -> None:
 reveal_type(my_variable)  # mypy affichera le type inféré
 ```
 
+### Nouveautés Python 3.15
+
+Python 3.15 (stable depuis le 9 octobre 2026) apporte notamment :
+- **PEP 810**: imports paresseux explicites (`lazy import json`, niveau module uniquement).
+- **PEP 814** (`frozendict`): dictionnaire immuable natif.
+- **PEP 661** (`sentinel`): type natif pour des valeurs sentinelles uniques (remplace les `_MISSING = object()` artisanaux).
+- **PEP 686 / PEP 798**: UTF-8 par défaut pour `open()` sans `encoding` ; dépaquetage `*` / `**` dans les compréhensions.
+- **PEP 799** (`profiling`): `profiling.tracing` (ex-`cProfile`, conservé comme alias) et `profiling.sampling` (profileur statistique Tachyon) ; le module `profile` est déprécié (retrait en 3.17).
+- **`re.prefixmatch()`**: nom explicite de `re.match()`, désormais "soft deprecated".
+
+Source: docs.python.org/3.15/whatsnew/3.15.html
+
 ## Docstrings
 
 ### Style Google (Recommandé)

@@ -108,7 +108,7 @@ source "https://rubygems.org"
 
 ruby file: ".ruby-version"
 
-gem "rails", "~> 8.1.0"
+gem "rails", "~> 8.1.4", ">= 8.1.4.1"
 ```
 
 Notas sobre o Ruby 4.0: o YJIT continua disponível (`RUBY_YJIT_ENABLE=1`); o ZJIT é o novo compilador; `Ruby::Box` é experimental e não deve ser usado em produção.
@@ -136,7 +136,7 @@ docker compose exec app bundle lock --add-platform x86_64-linux    # Adicionar p
 source "https://rubygems.org"
 ruby file: ".ruby-version"
 
-gem "rails", "~> 8.1.0"
+gem "rails", "~> 8.1.4", ">= 8.1.4.1"
 gem "pg", "~> 1.5"
 gem "puma", ">= 5.0"
 gem "propshaft"

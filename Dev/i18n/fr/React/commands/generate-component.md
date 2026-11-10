@@ -42,7 +42,7 @@ src/
 
 ```typescript
 // src/components/{ComponentName}/{ComponentName}.types.ts
-import { ReactNode, HTMLAttributes } from 'react';
+import { ReactNode, HTMLAttributes, Ref } from 'react';
 
 export type {ComponentName}Variant = 'primary' | 'secondary' | 'outline';
 export type {ComponentName}Size = 'sm' | 'md' | 'lg';
@@ -91,6 +91,11 @@ export interface {ComponentName}Props extends HTMLAttributes<HTMLDivElement> {
    * ID pour les tests
    */
   testId?: string;
+
+  /**
+   * Ref vers l'élément racine (prop ordinaire en React 19, sans forwardRef)
+   */
+  ref?: Ref<HTMLDivElement>;
 }
 ```
 
@@ -98,7 +103,7 @@ export interface {ComponentName}Props extends HTMLAttributes<HTMLDivElement> {
 
 ```tsx
 // src/components/{ComponentName}/{ComponentName}.tsx
-import { forwardRef, memo } from 'react';
+import { memo } from 'react';
 import { clsx } from 'clsx';
 
 import type { {ComponentName}Props } from './{ComponentName}.types';
@@ -115,55 +120,51 @@ import styles from './{ComponentName}.module.css';
  * ```
  */
 export const {ComponentName} = memo(
-  forwardRef<HTMLDivElement, {ComponentName}Props>(
-    (
-      {
-        children,
-        variant = 'primary',
-        size = 'md',
-        isLoading = false,
-        isDisabled = false,
-        onClick,
-        className,
-        testId,
-        ...rest
-      },
-      ref
-    ) => {
-      const handleClick = () => {
-        if (!isDisabled && !isLoading && onClick) {
-          onClick();
-        }
-      };
+  ({
+    children,
+    variant = 'primary',
+    size = 'md',
+    isLoading = false,
+    isDisabled = false,
+    onClick,
+    className,
+    testId,
+    ref,
+    ...rest
+  }: {ComponentName}Props) => {
+    const handleClick = () => {
+      if (!isDisabled && !isLoading && onClick) {
+        onClick();
+      }
+    };
 
-      return (
-        <div
-          ref={ref}
-          className={clsx(
-            styles.root,
-            styles[variant],
-            styles[size],
-            {
-              [styles.loading]: isLoading,
-              [styles.disabled]: isDisabled,
-            },
-            className
-          )}
-          onClick={handleClick}
-          data-testid={testId}
-          aria-disabled={isDisabled}
-          aria-busy={isLoading}
-          {...rest}
-        >
-          {isLoading ? (
-            <span className={styles.loader} aria-hidden="true" />
-          ) : (
-            children
-          )}
-        </div>
-      );
-    }
-  )
+    return (
+      <div
+        ref={ref}
+        className={clsx(
+          styles.root,
+          styles[variant],
+          styles[size],
+          {
+            [styles.loading]: isLoading,
+            [styles.disabled]: isDisabled,
+          },
+          className
+        )}
+        onClick={handleClick}
+        data-testid={testId}
+        aria-disabled={isDisabled}
+        aria-busy={isLoading}
+        {...rest}
+      >
+        {isLoading ? (
+          <span className={styles.loader} aria-hidden="true" />
+        ) : (
+          children
+        )}
+      </div>
+    );
+  }
 );
 
 {ComponentName}.displayName = '{ComponentName}';

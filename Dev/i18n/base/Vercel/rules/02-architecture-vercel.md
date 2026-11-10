@@ -112,7 +112,9 @@ project-root/
 }
 ```
 
-**Rule**: cron schedules run in UTC and have a per-plan minimum interval and per-project cap on the number of crons — check the current plan's limits before adding a high-frequency schedule; do not assume sub-hourly crons are available on every plan.
+**Rule**: `crons[]` Cron Jobs run in UTC. Limits (vercel.com/docs/cron-jobs/usage-and-pricing, verified November 2026): 100 cron jobs per project on every plan; Hobby is limited to **once per day** with ±59 min precision (a more frequent expression fails the deployment); Pro and Enterprise allow once per minute with per-minute precision. Do not assume sub-daily crons on Hobby.
+
+**Cron Jobs are a legacy feature**: Vercel documents that they will be migrated to **Schedules** (timezones, private function and queue targets, schedules created at runtime). For new work, evaluate Schedules (`vercel schedules`, beta CLI command; https://vercel.com/docs/schedules) before adding `crons[]`; keep `crons[]` for existing projects until migrated.
 
 ---
 
@@ -125,7 +127,7 @@ project-root/
 | `headers` | Attach response headers by path pattern | Array of `{ source, headers: [{ key, value }] }` — security headers (rule 11) belong here for static routes |
 | `regions` | Pin Serverless Function execution region(s) | Array of region codes (e.g. `["iad1"]`); co-locate with the primary database |
 | `functions` | Per-function runtime config | Keyed by glob path; `memory`, `maxDuration`, `runtime` |
-| `crons` | Scheduled invocations | Array of `{ path, schedule }`; standard 5-field cron syntax, UTC |
+| `crons` | Scheduled invocations (legacy Cron Jobs, superseded by Schedules) | Array of `{ path, schedule }`; standard 5-field cron syntax, UTC; max 100 per project |
 
 Example combining several sections:
 ```json

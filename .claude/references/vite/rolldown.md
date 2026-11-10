@@ -2,7 +2,7 @@
 
 > Scope framework-agnostic uniquement. Pour Vite en tant que dev-server React/Vue/Angular/Svelte, voir le tooling.md de ce stack.
 
-> **Status :** Rolldown est le bundler de **production par défaut** depuis Vite 8.0 (précédemment opt-in via `rolldown-vite` sur Vite 7). esbuild reste utilisé pour la transformation TypeScript/JSX à la volée en dev (pré-bundling des dépendances), Rolldown remplace Rollup uniquement pour le **build de production**.
+> **Status :** Rolldown est le bundler de **production par défaut** depuis Vite 8.0 (précédemment opt-in via `rolldown-vite` sur Vite 7). **Oxc** remplace esbuild pour la transformation JavaScript/TypeScript/JSX (option `esbuild` dépréciée → `oxc` ; `transformWithEsbuild` déprécié → `transformWithOxc`) et **Lightning CSS** minifie le CSS par défaut ; Rolldown remplace Rollup pour le **build de production** (source : vite.dev/guide/migration).
 
 ## Pourquoi Rolldown ?
 
@@ -83,10 +83,10 @@ export default defineConfig({
 })
 ```
 
-**Forme fonction** de `manualChunks` (`(id) => string | void`) : toujours supportée telle quelle sous `rolldownOptions.output.manualChunks`, seule la forme objet a disparu.
+**Forme fonction** de `manualChunks` (`(id) => string | void`) : **dépréciée** (la forme objet n'est plus supportée) au profit de l'option `codeSplitting`, plus flexible (source : vite.dev/guide/migration). Migrer vers `codeSplitting.groups`.
 
 ```typescript
-// ✅ Forme fonction — inchangée, fonctionne sous Rolldown
+// ⚠️ Forme fonction — dépréciée, à migrer vers codeSplitting.groups
 export default defineConfig({
   build: {
     rolldownOptions: {
@@ -136,7 +136,10 @@ Le bundling des entrées `?worker` et `?init` (WASM) traverse le même pipeline 
 
 ## Checklist Migration Vite 7 → 8 (Rolldown)
 
-- [ ] Remplacer toute forme objet de `manualChunks` par `rolldownOptions.output.codeSplitting.groups`
+- [ ] Remplacer toute forme objet **ou fonction** de `manualChunks` par `rolldownOptions.output.codeSplitting.groups`
+- [ ] Migrer l'option `esbuild` vers `oxc` et `transformWithEsbuild` vers `transformWithOxc` (Oxc ne transforme pas encore les décorateurs natifs)
+- [ ] Si des `require` d'externes doivent redevenir des `import` : plugin `esmExternalRequirePlugin` (réexporté par `vite`) ; `legacy.inconsistentCjsInterop: true` (déprécié) restaure temporairement l'ancien interop CJS
+- [ ] Vérifier le nouveau `build.target` par défaut (Chrome/Edge 111, Firefox 114, Safari 16.4) ; `watch.watcher` → `build.rolldownOptions.watch.watcher` ; `build()` lève désormais une `BundleError`
 - [ ] Renommer `build.rollupOptions` en `build.rolldownOptions` (`rollupOptions` est déprécié : si les deux clés sont présentes, `rolldownOptions` est prioritaire) ; idem pour `worker.rollupOptions` et `optimizeDeps.esbuildOptions`
 - [ ] Vérifier que chaque plugin Rollup tiers custom fonctionne sans avertissement (`vite-plugin-inspect` pour visualiser les transforms)
 - [ ] Mesurer le temps de build avant/après (`time npm run build`) — un gain nul ou négatif signale une régression à investiguer

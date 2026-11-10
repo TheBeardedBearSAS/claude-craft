@@ -182,9 +182,9 @@ ListView.builder(
   ),
 )
 
-// ✅ BON - Avec cacheExtent pour prefetch
+// ✅ BON - Avec scrollCacheExtent (cacheExtent déprécié depuis 3.44) pour prefetch
 ListView.builder(
-  cacheExtent: 500,  // Prefetch 500px en avance
+  scrollCacheExtent: const ScrollCacheExtent.pixels(500),  // Prefetch 500px en avance
   itemCount: items.length,
   itemBuilder: (context, index) => ItemTile(item: items[index]),
 )

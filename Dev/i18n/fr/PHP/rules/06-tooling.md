@@ -1,5 +1,7 @@
 # Outils de Développement PHP
 
+> **Niveau de correctif :** viser PHP ≥ 8.5.12 (22 oct. 2026), qui inclut des correctifs de sécurité (Core GHSA-w8hw-w9fx-j79w et GHSA-6wmf-4rv5-p3rp, Lexbor, Opcache, SOAP, etc.). Source : https://www.php.net/ChangeLog-8.php#8.5.12
+
 ## Composer - Gestion des Dépendances
 
 ### Commandes Essentielles

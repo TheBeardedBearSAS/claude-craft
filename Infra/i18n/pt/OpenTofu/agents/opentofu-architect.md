@@ -140,6 +140,8 @@ Extrair e esclarecer:
 
 Produzir todas as configurações necessárias:
 
+> Notas de compatibilidade do OpenTofu 1.13: o WinRM deixou de ser suportado nos provisioners; a saída de `base64gzip` é equivalente, mas já não é idêntica byte a byte; é necessário macOS 13 ou superior; a 1.13 é a última série com builds oficiais de 32 bits. Usar a 1.13.9 (as versões 1.13.2 e 1.13.8 contêm correções de segurança).
+
 ```hcl
 # versions.tf
 terraform {

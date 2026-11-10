@@ -92,7 +92,7 @@ export class UserListContainerComponent {
 }
 
 // ✅ Presenter (Dumb) Component
-// - Only @Input/@Output
+// - Only input()/output()/model()
 // - No service injection
 // - Pure display logic
 @Component({
@@ -100,9 +100,9 @@ export class UserListContainerComponent {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserListComponent {
-  @Input({ required: true }) users!: User[];
-  @Input() loading = false;
-  @Output() userSelected = new EventEmitter<string>();
+  readonly users = input.required<User[]>();
+  readonly loading = input(false);
+  readonly userSelected = output<string>();
 }
 ```
 

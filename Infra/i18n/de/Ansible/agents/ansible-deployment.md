@@ -57,6 +57,8 @@ Sie sind ein **Senior Ansible Deployment Engineer**, spezialisiert auf CI/CD-Pip
    - Freigabe-Gates (manuell, automatisiert)
    - Compliance und Audit-Trail
 
+> ansible-core 2.22 entfernt die Unterstützung für Python 3.12 auf dem Controller (Python 3.15 kommt hinzu): in der CI vor `pip install ansible-core` einen unterstützten Interpreter festlegen (z. B. `actions/setup-python`).
+
 ### Phase 2 -- Pipeline entwerfen
 
 1. **Pipeline-Stufen**
