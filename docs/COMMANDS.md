@@ -56,6 +56,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/vite:` | Vite | 3 |
 | `/vercel:` | Vercel | 2 |
 | `/tauri:` | Tauri | 1 |
+| `/wordpress:` | WordPress | 1 |
 | `/php:` | PHP | 1 |
 | `/ruby:` | Ruby / Rails | 1 |
 | `/rust:` | Rust / Axum | 1 |
@@ -509,6 +510,18 @@ Tauri v2 (2.12, community): desktop and mobile apps with a Rust core and a frame
 
 ---
 
+## WordPress Commands (`/wordpress:`)
+
+WordPress 7.1 (community): plugins and block themes — plugin header and bootstrap, hooks, blocks (`block.json` apiVersion 3, `render.php`, blocks manifest), `theme.json`, REST API with mandatory `permission_callback`, WP-CLI, WPCS + PHPStan, wp-env, `WP_UnitTestCase` and Playwright E2E. WooCommerce (HPOS, Store API, Cart/Checkout blocks) ships as the on-demand `woocommerce` skill and is audited only when the project depends on it.
+
+### Analysis Commands
+
+| Command | Description |
+|---------|-------------|
+| `/wordpress:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
+
+---
+
 ## PHP Commands (`/php:`)
 
 Standalone PHP development with PSR-12 and PHPStan.
@@ -875,7 +888,7 @@ These redirect stubs print a warning and run their replacement until 10.0.
 | `/<tech>:check-compliance` | `/<tech>:check all` |
 | `/team:sprint` | `/team:delivery --phase=implementation` |
 
-`<tech>` is any of the 16 stacks: `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `ruby`, `rust`, `symfony`, `tauri`, `vercel`, `vite`, `vuejs`. The per-axis checklists are installed in `.claude/references/<tech>/checks/`.
+`<tech>` is any of the 17 stacks: `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `ruby`, `rust`, `symfony`, `tauri`, `vercel`, `vite`, `vuejs`, `wordpress`. The per-axis checklists are installed in `.claude/references/<tech>/checks/`.
 
 ---
 

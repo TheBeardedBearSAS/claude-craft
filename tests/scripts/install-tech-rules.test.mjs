@@ -21,6 +21,7 @@ const TECH_SCRIPTS = [
   'install-ruby-rules.sh',
   'install-rust-rules.sh',
   'install-tauri-rules.sh',
+  'install-wordpress-rules.sh',
 ];
 
 const tmpDirs = [];
@@ -57,7 +58,7 @@ describe('tech install scripts', { timeout: 30000 }, () => {
     }
   });
 
-  it.each(['symfony', 'react', 'python', 'ruby', 'rust', 'tauri'])(
+  it.each(['symfony', 'react', 'python', 'ruby', 'rust', 'tauri', 'wordpress'])(
     'install-%s-rules.sh shows help',
     (tech) => {
       const scriptPath = path.join(SCRIPTS_DIR, `install-${tech}-rules.sh`);
@@ -72,7 +73,7 @@ describe('tech install scripts', { timeout: 30000 }, () => {
     },
   );
 
-  it.each(['symfony', 'react', 'python', 'ruby', 'rust', 'tauri'])(
+  it.each(['symfony', 'react', 'python', 'ruby', 'rust', 'tauri', 'wordpress'])(
     'install-%s-rules.sh runs in dry-run mode',
     (tech) => {
       const tmpDir = makeTmpDir();
@@ -116,6 +117,26 @@ describe('tech install scripts', { timeout: 30000 }, () => {
       true,
     );
     expect(fs.existsSync(path.join(tmpDir, '.claude', 'INDEX.md'))).toBe(true);
+  });
+
+  // WooCommerce is an opt-in module: shipped as an on-demand skill, never as a
+  // reference that a plain WordPress project would load.
+  it('wordpress install ships WooCommerce as an on-demand skill only', () => {
+    const tmpDir = makeTmpDir();
+    const scriptPath = path.join(SCRIPTS_DIR, 'install-wordpress-rules.sh');
+    execSync(`bash "${scriptPath}" --install --lang=en "${tmpDir}"`, {
+      encoding: 'utf8',
+      timeout: 30000,
+    });
+
+    const claude = path.join(tmpDir, '.claude');
+    const wooSkill = path.join(claude, 'skills', 'woocommerce');
+    for (const f of ['SKILL.md', 'REFERENCE.md', 'checklist.md']) {
+      expect(fs.existsSync(path.join(wooSkill, f)), f).toBe(true);
+    }
+    const refs = fs.readdirSync(path.join(claude, 'references', 'wordpress'));
+    expect(refs).toContain('security.md');
+    expect(refs.filter((f) => /woocommerce/i.test(f))).toEqual([]);
   });
 
   // Régression : un dossier cible inexistant faisait retomber l'install sur $(pwd),

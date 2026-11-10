@@ -2,7 +2,7 @@
 
 **Version:** 9.2.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 16 technology stacks, 33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 17 technology stacks, 33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -20,6 +20,7 @@ A comprehensive AI-assisted development framework for Claude Code with 16 techno
 | **Vite** _(community, framework-agnostic)_ | 8.3 | Vanilla / Library / Multi-page | `build.lib`, `vite-plugin-dts`, `input` multi-page, Workers/WASM |
 | **Vercel** _(community, deployment platform)_ | 63.1.2 | Platform config (framework-agnostic) | `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage |
 | **Tauri** _(community, desktop & mobile)_ | 2.12 | Rust core + web frontend (framework-agnostic) | Commands/IPC, capabilities & permissions, CSP, Isolation, plugins, signed updater, iOS/Android |
+| **WordPress** _(community, plugins & block themes)_ | 7.1 / PHP 7.4+ (8.3+ recommandé) | Plugin/theme + hooks | block.json, theme.json, REST API, WP-CLI, WPCS, PHPStan, wp-env ; WooCommerce 11.2 via skill optionnel |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | Clean Architecture | Actions, Pest 4/5 (Pest 5 : PHP 8.4+), Sanctum, AI SDK, Passkey |
 | **Python** | 3.15 / 3.14+ | Clean Architecture / Hexagonal | FastAPI, async/await, Pydantic, free-threading, JIT |
 | **PHP** | 8.5 (Property Hooks 8.4+) | Clean Architecture | PER-CS 3.0 (ex-PSR-12), PHPStan Level 10, Pest 5 |

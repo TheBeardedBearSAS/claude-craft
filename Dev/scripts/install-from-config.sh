@@ -453,6 +453,9 @@ get_install_script() {
         tauri)
             script="${SCRIPT_DIR}/install-tauri-rules.sh"
             ;;
+        wordpress)
+            script="${SCRIPT_DIR}/install-wordpress-rules.sh"
+            ;;
         common)
             script="${SCRIPT_DIR}/install-common-rules.sh"
             ;;

@@ -689,6 +689,25 @@ Focuses on:
 
 ---
 
+### wordpress-reviewer
+
+**Expertise**: WordPress 7.1 plugin and block theme review (installed with `--tech=wordpress`)
+
+Focuses on:
+- Plugin header, bootstrap and hook registration; block theme structure (`theme.json`, templates, patterns)
+- Blocks (`block.json` apiVersion 3, `render.php`, blocks manifest registration)
+- Security (capabilities, nonces, sanitize input / escape output, `$wpdb->prepare`, REST `permission_callback`)
+- Performance (`WP_Query`, transients and object cache, autoloaded options, asset enqueue)
+- Testing with `WP_UnitTestCase` (wp-env), Jest via `@wordpress/scripts` and Playwright E2E
+- WooCommerce only when the project depends on it (HPOS compatibility, CRUD, Cart/Checkout blocks) via the `woocommerce` skill
+
+```
+@wordpress-reviewer Review this REST endpoint for permission checks and escaping
+@wordpress-reviewer Check this plugin for HPOS compatibility
+```
+
+---
+
 ### vercel-reviewer
 
 **Expertise**: Vercel platform code review (framework-agnostic — not Next.js-specific)

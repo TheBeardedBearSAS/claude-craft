@@ -134,6 +134,16 @@ const TECH_REGISTRY = {
     version: '2.12',
     tier: 3,
   },
+  wordpress: {
+    name: 'wordpress',
+    displayName: 'WordPress',
+    desc: 'Plugins & block themes: blocks (block.json), REST API, WP-CLI, WPCS/PHPStan, wp-env; WooCommerce as opt-in skill',
+    namespace: 'wordpress',
+    i18nDir: 'WordPress',
+    installScript: 'install-wordpress-rules.sh',
+    version: '7.1',
+    tier: 3,
+  },
   php: {
     name: 'php',
     displayName: 'PHP',

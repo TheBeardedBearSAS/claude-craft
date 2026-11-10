@@ -1,0 +1,2 @@
+WordPress
+WordPress 7.1 (PHP 7.4+, 8.3+ recommended), plugins + block themes, @wordpress/scripts, wp-env; WooCommerce opt-in

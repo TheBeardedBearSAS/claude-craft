@@ -41,6 +41,9 @@
     "axum",
     "tauri",
     "desktop",
+    "wordpress",
+    "woocommerce",
+    "gutenberg",
     "paperclip"
   ]
 }

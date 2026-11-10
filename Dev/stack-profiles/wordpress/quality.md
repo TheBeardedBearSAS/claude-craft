@@ -1,0 +1,4 @@
+- PHP_CodeSniffer + WordPress Coding Standards (WPCS)
+- PHPStan + szepeviktor/phpstan-wordpress
+- Plugin Check (PCP) before release
+- @wordpress/scripts lint-js / lint-style + PHPUnit (WP_UnitTestCase) + Playwright

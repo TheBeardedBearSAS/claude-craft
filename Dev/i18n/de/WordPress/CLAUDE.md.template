@@ -1,0 +1,100 @@
+# {{PROJECT_NAME}} - WordPress
+
+> Generiert: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## Was (Stack & Struktur)
+
+**Stack**: WordPress {{WP_VERSION}}, PHP {{PHP_VERSION}} (WordPress unterstützt 7.4+, empfohlen wird 8.3+), Composer, `@wordpress/scripts` für Block-/JS-Builds, `@wordpress/env` (wp-env) für lokale Umgebungen
+
+### Projektstruktur
+```
+my-plugin/
+├── my-plugin.php       # Plugin-Header (Requires at least / Requires PHP), Bootstrap
+├── uninstall.php       # Aufräumen bei der Deinstallation
+├── composer.json       # Autoload (PSR-4), WPCS, PHPStan, PHPUnit-Polyfills
+├── package.json        # @wordpress/scripts, @wordpress/env
+├── .wp-env.json        # Lokale WordPress-Umgebung
+├── includes/ (src/)    # PHP-Klassen mit Namespaces (Hooks, REST, Services)
+├── src/blocks/<name>/  # block.json (apiVersion 3), edit.js, render.php
+├── languages/          # .pot / Übersetzungen (Text Domain = Plugin-Slug)
+└── tests/              # PHPUnit (WP_UnitTestCase), Jest, Playwright-E2E
+```
+Block-Themes folgen demselben Geist: `theme.json`, `templates/`, `parts/`, `patterns/`.
+
+## Warum (Zweck & Organisation)
+
+### Architektur: Hook-getriebenes Plugin/Theme mit Services in Namespaces
+- **Hooks**: Verhalten wird über Actions und Filter angebunden, die an einer zentralen Stelle registriert werden
+- **Namespaces und Präfixe**: jede Funktion, Klasse, Option, jeder Hook und jedes Handle liegt in einem Namespace oder trägt ein Präfix
+- **Blocks first**: die UI wird aus Blocks aufgebaut (`block.json` apiVersion 3), serverseitiges Rendering über `render.php`
+- **REST**: eigene Endpunkte über `register_rest_route()` mit obligatorischem `permission_callback`
+- Logik in einfachen Klassen halten, die ohne vollständigen Request testbar sind; Hook-Callbacks schlank halten
+- Allgemeines PHP: siehe den Stack `php`
+
+Siehe `rules/02-architecture-wordpress.md` für vollständige Muster.
+
+### Kritische Regeln
+| Regel | Grund |
+|-------|-------|
+| Capability-Prüfung + Nonce bei jeder Zustandsänderung | Verhindert Rechteausweitung und CSRF |
+| Eingaben bereinigen (Sanitize), Ausgaben escapen (`esc_html`, `esc_attr`, `esc_url`, `wp_kses_post`) | Verhindert XSS |
+| `$wpdb->prepare()` für jede Abfrage mit variablen Daten | Verhindert SQL-Injection |
+| `permission_callback` bei jeder REST-Route | Routen ohne ihn sind öffentlich zugänglich |
+| `defined( 'ABSPATH' ) \|\| exit;` in jeder PHP-Datei | Blockiert den direkten Dateizugriff |
+| Alles mit Präfix/Namespace versehen, Text Domain bei jedem String | Vermeidet Kollisionen, ermöglicht Übersetzung |
+| WPCS (PHPCS) + PHPStan ohne Beanstandungen | Codequalität und einheitlicher Stil |
+| 80 %+ Abdeckung, Tests über wp-env ausgeführt | Qualitätssicherung |
+
+> Hinweise zu WooCommerce stehen im optionalen Skill `.claude/skills/woocommerce/`, der nur geladen wird, wenn das Projekt WooCommerce erweitert.
+
+## Wie (Befehle & Workflows)
+
+### Entwicklungsbefehle
+```bash
+docker compose exec app npx wp-env start             # Local WordPress
+docker compose exec app npx wp-scripts build         # Build blocks / JS
+docker compose exec app npx wp-scripts start         # Watch mode
+docker compose exec app npx wp-env run cli wp plugin list   # WP-CLI inside wp-env
+docker compose exec app npx @wordpress/create-block my-block  # Scaffold a block
+```
+
+### Qualitäts-Pipeline
+```bash
+docker compose exec app composer exec phpcs          # WPCS
+docker compose exec app composer exec phpstan analyse  # PHPStan + phpstan-wordpress
+docker compose exec app npx wp-env run tests-cli --env-cwd=wp-content/plugins/my-plugin composer exec phpunit
+docker compose exec app npx wp-scripts test-unit-js  # Jest
+docker compose exec app npx wp-scripts lint-js       # ESLint (@wordpress/eslint-plugin)
+docker compose exec app npx playwright test          # E2E
+```
+
+### Verfügbare Befehle
+- `/wordpress:check <architecture|code-quality|security|testing|all>` - Audit nach Achse oder bewerteter Gesamtbericht
+
+### Entwicklungs-Workflow
+1. **Analysieren** - Code lesen, Domäne verstehen (`rules/01-workflow-analysis.md`)
+2. **TDD** - Test schreiben -> Implementieren -> Refactoring
+3. **Qualität** - Qualitäts-Pipeline ausführen
+4. **Commit** - Format Conventional Commits
+
+## Referenzen
+
+| Thema | Regeldatei |
+|-------|------------|
+| Analyse | `rules/01-workflow-analysis.md` |
+| Architektur | `rules/02-architecture-wordpress.md` |
+| Coding-Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tooling | `rules/06-tooling.md` |
+| Tests | `rules/07-testing-wordpress.md` |
+| Qualität | `rules/08-quality-tools.md` |
+| Sicherheit | `rules/11-security-wordpress.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Projektspezifika
+
+{{TECH_STACK}}
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->
