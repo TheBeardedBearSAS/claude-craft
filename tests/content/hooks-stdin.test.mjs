@@ -19,7 +19,9 @@ const FILES = [
     .readdirSync(HOOK_DIR)
     .filter((f) => f.endsWith('.json'))
     .map((f) => `.claude/templates/hooks/${f}`),
-  ...['de', 'en', 'es', 'fr', 'pt'].map((lang) => `Dev/i18n/${lang}/Common/templates/settings.json.template`),
+  'Dev/i18n/base/Common/templates/settings.json.template',
+  'Dev/i18n/base/Common/hooks/templates/hooks.default.json',
+  'Dev/i18n/base/Common/hooks/templates/hooks.full.json',
 ];
 
 function collectCommands(node, out = []) {

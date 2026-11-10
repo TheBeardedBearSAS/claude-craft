@@ -277,7 +277,7 @@ export async function runInstallation(cli, { CLI_ROOT }) {
     console.log(`${c.cyan}[1/${totalSteps}]${c.reset} Installing common rules...`);
     runScript(
       path.join(scriptsDir, 'install-common-rules.sh'),
-      [langArg, ...stackArgs, cli.config.targetPath],
+      [langArg, ...stackArgs, ...(cli.config.hooks ? [`--hooks=${cli.config.hooks}`] : []), cli.config.targetPath],
       CLI_ROOT
     );
 

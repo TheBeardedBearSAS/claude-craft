@@ -48,12 +48,8 @@ const SHOWCASE_FILES = [
   'docs/AGENT-TEAMS-GUIDE.md',
   // Tableau des versions par stack (dérive détectée par l'audit fraîcheur 2026-10-13)
   'docs/TECHNOLOGIES.md',
-  // Settings templates distribués dans les 5 langues (TOKEN-001)
-  'Dev/i18n/en/Common/templates/settings.json.template',
-  'Dev/i18n/fr/Common/templates/settings.json.template',
-  'Dev/i18n/es/Common/templates/settings.json.template',
-  'Dev/i18n/de/Common/templates/settings.json.template',
-  'Dev/i18n/pt/Common/templates/settings.json.template',
+  // Settings template distribué (TOKEN-001)
+  'Dev/i18n/base/Common/templates/settings.json.template',
   // Fichiers à versions infra/modèles explicites (audit d'alignement 2026-10-13)
   '.claude/agents/devops-engineer.md',
   '.claude/references/symfony/docker.md',

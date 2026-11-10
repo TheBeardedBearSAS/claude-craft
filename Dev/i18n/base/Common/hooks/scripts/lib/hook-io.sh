@@ -39,6 +39,15 @@ hook_context() {
   fi
 }
 
+# hook_stop_block <raison> : Stop/SubagentStop — empêche l'arrêt (JSON sur stdout, exit 0).
+hook_stop_block() {
+  if hook_has_jq; then
+    jq -cn --arg r "$1" '{decision: "block", reason: $r}'
+  else
+    node -e 'process.stdout.write(JSON.stringify({decision: "block", reason: process.argv[1]}) + "\n")' "$1"
+  fi
+}
+
 hook_block() {
   printf 'BLOCKED: %s\n' "$1" >&2
   exit 2

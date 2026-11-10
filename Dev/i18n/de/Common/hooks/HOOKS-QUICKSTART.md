@@ -11,7 +11,7 @@ This directory contains Claude Code hooks for automated quality control and work
    ```
 
 2. **Enable hooks in settings.json:**
-   Copy the configuration from `hooks/templates/settings-hooks.json` to your `.claude/settings.json`.
+   The installer does it for you (`--hooks=default|full|none`, default: `default`). To merge by hand, use the fragments `hooks/templates/hooks.default.json` and `hooks.full.json`.
 
 3. **Customize as needed** - Edit the scripts to match your project's tooling.
 

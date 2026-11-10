@@ -52,7 +52,7 @@ describe('install_config() in install-common-rules.sh', { timeout: 60000 }, () =
     expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toBe('claude-sonnet-5-5');
   });
 
-  it('settings.json contains PostCompact hook', () => {
+  it('settings.json has no PostCompact hook (no channel to the model)', () => {
     const tmpDir = makeTmpDir();
     execSync(`bash "${SCRIPT}" --lang=en "${tmpDir}"`, {
       encoding: 'utf8',
@@ -60,9 +60,7 @@ describe('install_config() in install-common-rules.sh', { timeout: 60000 }, () =
     });
 
     const settings = JSON.parse(fs.readFileSync(path.join(tmpDir, '.claude', 'settings.json'), 'utf8'));
-    expect(settings.hooks.PostCompact).toBeDefined();
-    expect(settings.hooks.PostCompact.length).toBeGreaterThan(0);
-    expect(settings.hooks.PostCompact[0].matcher).toBe('auto');
+    expect(settings.hooks.PostCompact).toBeUndefined();
   });
 
   it('settings.json contains SessionStart compact hook', () => {
@@ -90,11 +88,9 @@ describe('install_config() in install-common-rules.sh', { timeout: 60000 }, () =
     const preToolUse = settings.hooks.PreToolUse;
     expect(preToolUse).toBeDefined();
 
-    const editHook = preToolUse.find((h) => h.matcher === 'Edit');
-    expect(editHook).toBeDefined();
-
-    const writeHook = preToolUse.find((h) => h.matcher === 'Write');
-    expect(writeHook).toBeDefined();
+    const editWrite = preToolUse.find((h) => h.matcher === 'Edit|Write|NotebookEdit');
+    expect(editWrite).toBeDefined();
+    expect(editWrite.hooks[0].command).toContain('protect-sensitive-files.sh');
   });
 
   it('scopes settings.json permissions to --tech stacks', () => {

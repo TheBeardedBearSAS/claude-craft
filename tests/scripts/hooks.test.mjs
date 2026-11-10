@@ -63,8 +63,13 @@ describe('hook scripts', { timeout: 30000 }, () => {
     const scriptPath = resolveHookPath(script);
     if (!scriptPath) return;
     const content = fs.readFileSync(scriptPath, 'utf8');
+    // Les hooks qui sourcent lib/hook-io.sh utilisent `set -u` sans `set -e` : un
+    // jq défaillant ne doit pas les faire mourir (les gardes échouent fermé via
+    // hook_require_parser, les hooks informatifs laissent passer).
     const usesStrict =
-      content.includes('set -euo pipefail') || content.includes('set -e');
+      content.includes('set -euo pipefail') ||
+      content.includes('set -e') ||
+      (content.includes('set -u') && content.includes('lib/hook-io.sh'));
     expect(usesStrict, `${script} does not use strict mode`).toBe(true);
   });
 });

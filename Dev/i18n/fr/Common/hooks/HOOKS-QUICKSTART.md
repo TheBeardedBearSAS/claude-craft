@@ -11,7 +11,7 @@ Ce repertoire contient les hooks Claude Code pour le controle qualite automatise
    ```
 
 2. **Activer les hooks dans settings.json:**
-   Copiez la configuration de `hooks/templates/settings-hooks.json` vers `.claude/settings.json`.
+   L'installeur le fait pour vous (`--hooks=default|full|none`, défaut : `default`). Pour fusionner à la main, utilisez les fragments `hooks/templates/hooks.default.json` et `hooks.full.json`.
 
 3. **Personnaliser selon vos besoins** - Editez les scripts selon les outils de votre projet.
 

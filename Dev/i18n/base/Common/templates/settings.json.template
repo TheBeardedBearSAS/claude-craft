@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-5-5",
+    "CLAUDE_CODE_FORK_SUBAGENT": "1"
+  },
+
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": ["Thinking", "Processing", "Analyzing", "Working", "Editing", "Writing", "Reading", "Running", "Delegating"]
+  },
+
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "__STACK_PERMISSIONS__",
+      "Bash(git:*)",
+      "Bash(make:*)",
+      "Bash(docker compose:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(dd:*)",
+      "Bash(mkfs:*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(sudo:*)",
+      "Bash(chmod 777:*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/secrets/*)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)",
+      "Read(**/*credentials*)"
+    ]
+  },
+
+  "model": "claude-opus-5-5",
+
+  "plansDirectory": ".claude/plans"
+}

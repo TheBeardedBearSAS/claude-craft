@@ -119,6 +119,17 @@ describe('parseArgs input validation (SEC-12)', () => {
     });
   });
 
+  describe('--hooks', () => {
+    it.each(['default', 'full', 'none'])('accepts --hooks=%s', (mode) => {
+      expect(parseArgs(['install', '--hooks=' + mode]).options.hooks).toBe(mode);
+    });
+
+    it('rejects an unknown mode and a bare --hooks', () => {
+      expect(() => parseArgs(['install', '--hooks=bogus'])).toThrow('--hooks');
+      expect(() => parseArgs(['install', '--hooks'])).toThrow('--hooks');
+    });
+  });
+
   describe('validateOption', () => {
     it('allows boolean values without validation', () => {
       expect(() => validateOption('force', true)).not.toThrow();

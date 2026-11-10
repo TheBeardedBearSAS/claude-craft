@@ -23,7 +23,7 @@ function listAgents(dir, out = []) {
 }
 
 const AGENTS = ['.claude/agents', 'Dev/i18n', 'Infra'].flatMap((d) => listAgents(path.join(PROJECT_ROOT, d)));
-const TEMPLATES = ['en', 'fr', 'es', 'de', 'pt'].map((l) => `Dev/i18n/${l}/Common/templates/settings.json.template`);
+const TEMPLATES = ['Dev/i18n/base/Common/templates/settings.json.template'];
 const REQUIRED_DENY = ['Bash(dd:*)', 'Bash(mkfs:*)', 'Bash(git push --force*)', 'Bash(git push -f*)'];
 
 describe('agents do not lose Bash through disallowedTools specifiers', () => {

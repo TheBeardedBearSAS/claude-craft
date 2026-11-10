@@ -31,6 +31,13 @@ describe('printHelp', () => {
     }
   });
 
+  it('documents the --hooks option', () => {
+    printHelp();
+    const output = logSpy.mock.calls[0][0];
+    expect(output).toContain('--hooks=');
+    expect(output).toContain('default');
+  });
+
   it('lists all supported languages', () => {
     printHelp();
     const output = logSpy.mock.calls[0][0];
