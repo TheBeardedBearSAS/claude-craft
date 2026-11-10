@@ -2,13 +2,22 @@
 set -euo pipefail
 # =============================================================================
 # Ralph Wiggum - Hooks Generator Module
-# Generate Claude Code 2.1.23+ hooks configuration
+# Installe les scripts de hooks Ralph dans le projet et fusionne leur configuration
+# dans .claude/settings.json sans jamais toucher aux hooks de l'utilisateur
+# (fusion via Dev/scripts/lib/merge-hooks.mjs, entrées Ralph repérées par `/.ralph/hooks/`).
 # =============================================================================
 
 # Hooks configuration
 HOOKS_ENABLED="${HOOKS_ENABLED:-true}"
 HOOKS_MODE="${HOOKS_MODE:-advanced}"
-HOOKS_DIR="${HOOKS_DIR:-.ralph/hooks}"
+# Répertoire des scripts dans le projet : ${HOOKS_DIR:-$PWD/.ralph/hooks} (résolu à l'appel)
+
+# Sources fournies avec le paquet (Tools/Ralph/hooks et Dev/ voisins de Tools/).
+_RALPH_HOOKS_SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")/../hooks" && pwd)"
+_RALPH_SHARED_SRC="$_RALPH_HOOKS_SRC/../../../Dev/i18n/base/Common/hooks/scripts"
+
+# Marqueur identifiant les entrées Ralph dans settings.json
+RALPH_HOOKS_MATCH="/.ralph/hooks/"
 
 # =============================================================================
 # Initialize Hooks
@@ -21,7 +30,7 @@ init_hooks() {
     fi
 
     # Load settings from config
-    if [[ -n "$CONFIG_FILE" && -f "$CONFIG_FILE" ]] && command -v yq &> /dev/null; then
+    if [[ -n "${CONFIG_FILE:-}" && -f "$CONFIG_FILE" ]] && command -v yq &> /dev/null; then
         local enabled
         enabled=$(yq e '.hooks.enabled // "true"' "$CONFIG_FILE" 2>/dev/null)
         HOOKS_ENABLED="$enabled"
@@ -31,33 +40,63 @@ init_hooks() {
         HOOKS_MODE="$mode"
     fi
 
-    # Create hooks directory if needed
-    mkdir -p "$HOOKS_DIR"
-
-    # Ensure hook scripts exist and are executable
+    # Copy scripts into the project if absent and make them executable
     ensure_hook_scripts
 
     print_verbose "Hooks initialized (mode: $HOOKS_MODE)"
 }
 
 # =============================================================================
-# Ensure Hook Scripts Exist
+# Ensure Hook Scripts Exist (copied from the package when absent)
 # =============================================================================
 
-ensure_hook_scripts() {
-    local scripts=(
-        "stop-dod-gate.sh"
-        "session-restore.sh"
-        "status-injector.sh"
-        "pre-tool-context.sh"
-    )
+_copy_hook_script() {
+    local src="$1" dest="$2"
+    if [[ ! -f "$src" ]]; then
+        print_warning "Hook script source not found: $src"
+        return 0
+    fi
+    if [[ ! -f "$dest" ]]; then
+        mkdir -p "$(dirname "$dest")"
+        cp "$src" "$dest"
+    fi
+    if head -1 "$dest" | grep -q "^#!"; then
+        chmod +x "$dest"
+    fi
+}
 
-    for script in "${scripts[@]}"; do
-        local script_path="$HOOKS_DIR/$script"
-        if [[ -f "$script_path" ]] && head -1 "$script_path" | grep -q "^#!"; then
-            chmod +x "$script_path"
-        fi
+ensure_hook_scripts() {
+    local dest="${HOOKS_DIR:-$PWD/.ralph/hooks}"
+    local script
+
+    mkdir -p "$dest/lib"
+
+    for script in stop-dod-gate.sh session-restore.sh pre-tool-context.sh lib/ralph-common.sh; do
+        _copy_hook_script "$_RALPH_HOOKS_SRC/$script" "$dest/$script"
     done
+
+    # Gardes partagées : la DoD ne lance une commande qu'après leur verdict
+    for script in block-dangerous-commands.sh guard-network.sh lib/hook-io.sh; do
+        _copy_hook_script "$_RALPH_SHARED_SRC/$script" "$dest/$script"
+    done
+}
+
+# =============================================================================
+# merge-hooks.mjs resolution
+# =============================================================================
+
+# Affiche le chemin de merge-hooks.mjs ; échoue (avec avertissement) si node ou le script manque.
+_ralph_merge_hooks_js() {
+    local js="${RALPH_MERGE_HOOKS_JS:-$_RALPH_HOOKS_SRC/../../../Dev/scripts/lib/merge-hooks.mjs}"
+    if ! command -v node &>/dev/null; then
+        print_warning "node not found: .claude/settings.json left untouched"
+        return 1
+    fi
+    if [[ ! -f "$js" ]]; then
+        print_warning "merge-hooks.mjs not found ($js): .claude/settings.json left untouched"
+        return 1
+    fi
+    printf '%s' "$js"
 }
 
 # =============================================================================
@@ -66,46 +105,39 @@ ensure_hook_scripts() {
 
 generate_hooks_config() {
     local output_file="${1:-.claude/settings.json}"
-    local project_dir="${2:-.}"
 
-    # Ensure .claude directory exists
-    mkdir -p "$(dirname "$output_file")"
+    local merge_js
+    merge_js=$(_ralph_merge_hooks_js) || return 0
 
-    # Read existing settings if present
-    local existing_settings="{}"
-    if [[ -f "$output_file" ]]; then
-        existing_settings=$(cat "$output_file" 2>/dev/null || echo "{}")
-    fi
+    ensure_hook_scripts
 
-    # Generate hooks configuration based on mode
-    local hooks_config
+    local fragment_body
     case "$HOOKS_MODE" in
         simple)
-            hooks_config=$(generate_simple_hooks_config)
+            fragment_body=$(generate_simple_hooks_config)
             ;;
         advanced)
-            hooks_config=$(generate_advanced_hooks_config)
+            fragment_body=$(generate_advanced_hooks_config)
             ;;
         *)
             print_warning "Unknown hooks mode: $HOOKS_MODE, using simple"
-            hooks_config=$(generate_simple_hooks_config)
+            fragment_body=$(generate_simple_hooks_config)
             ;;
     esac
 
-    # Merge with existing settings
-    local merged
-    if command -v jq &>/dev/null; then
-        merged=$(echo "$existing_settings" | jq --argjson hooks "$hooks_config" '. + {hooks: $hooks}') \
-            || merged="{\"hooks\": $hooks_config}"
+    mkdir -p "$(dirname "$output_file")"
+    local fragment="${output_file}.ralph-fragment.$$"
+    printf '{"hooks": %s}\n' "$fragment_body" > "$fragment"
+
+    # Retire d'abord les anciennes entrées Ralph (chemins absolus d'avant, `once`, ...),
+    # puis ajoute les courantes : les hooks de l'utilisateur ne sont jamais touchés.
+    if node "$merge_js" remove --settings "$output_file" --match "$RALPH_HOOKS_MATCH" >/dev/null \
+        && node "$merge_js" add --settings "$output_file" --fragment "$fragment" >/dev/null; then
+        print_success "${MSG_HOOKS_CONFIG_GENERATED:-Hooks configuration generated}: $output_file"
     else
-        # Fallback: just write hooks config
-        merged="{\"hooks\": $hooks_config}"
+        print_warning "Hooks configuration could not be merged into $output_file"
     fi
-
-    # Write to file
-    echo "$merged" > "$output_file"
-
-    print_success "${MSG_HOOKS_CONFIG_GENERATED:-Hooks configuration generated}: $output_file"
+    rm -f "$fragment"
 }
 
 # =============================================================================
@@ -113,18 +145,15 @@ generate_hooks_config() {
 # =============================================================================
 
 generate_simple_hooks_config() {
-    local hooks_dir_abs
-    hooks_dir_abs=$(cd "$HOOKS_DIR" 2>/dev/null && pwd || echo "$PWD/$HOOKS_DIR")
-
-    cat <<EOF
+    cat <<'EOF'
 {
     "Stop": [
         {
-            "matcher": ".*",
             "hooks": [
                 {
                     "type": "command",
-                    "command": "$hooks_dir_abs/stop-dod-gate.sh"
+                    "command": "bash \"$CLAUDE_PROJECT_DIR/.ralph/hooks/stop-dod-gate.sh\"",
+                    "timeout": 300
                 }
             ]
         }
@@ -138,41 +167,38 @@ EOF
 # =============================================================================
 
 generate_advanced_hooks_config() {
-    local hooks_dir_abs
-    hooks_dir_abs=$(cd "$HOOKS_DIR" 2>/dev/null && pwd || echo "$PWD/$HOOKS_DIR")
-
-    cat <<EOF
+    cat <<'EOF'
 {
     "SessionStart": [
         {
-            "matcher": ".*",
             "hooks": [
                 {
                     "type": "command",
-                    "command": "$hooks_dir_abs/session-restore.sh"
+                    "command": "bash \"$CLAUDE_PROJECT_DIR/.ralph/hooks/session-restore.sh\"",
+                    "timeout": 10
                 }
             ]
         }
     ],
     "PreToolUse": [
         {
-            "matcher": ".*",
+            "matcher": "Agent|Task",
             "hooks": [
                 {
                     "type": "command",
-                    "command": "$hooks_dir_abs/status-injector.sh",
-                    "once": true
+                    "command": "bash \"$CLAUDE_PROJECT_DIR/.ralph/hooks/pre-tool-context.sh\"",
+                    "timeout": 5
                 }
             ]
         }
     ],
     "Stop": [
         {
-            "matcher": ".*",
             "hooks": [
                 {
                     "type": "command",
-                    "command": "$hooks_dir_abs/stop-dod-gate.sh"
+                    "command": "bash \"$CLAUDE_PROJECT_DIR/.ralph/hooks/stop-dod-gate.sh\"",
+                    "timeout": 300
                 }
             ]
         }
@@ -247,7 +273,7 @@ EOF
 }
 
 # =============================================================================
-# Remove Hooks Configuration
+# Remove Hooks Configuration (uniquement les entrées Ralph)
 # =============================================================================
 
 remove_hooks_config() {
@@ -257,13 +283,11 @@ remove_hooks_config() {
         return 0
     fi
 
-    if command -v jq &>/dev/null; then
-        local updated
-        updated=$(jq 'del(.hooks)' "$settings_file" 2>/dev/null)
-        if [[ -n "$updated" ]]; then
-            echo "$updated" > "$settings_file"
-            print_info "Hooks configuration removed from $settings_file"
-        fi
+    local merge_js
+    merge_js=$(_ralph_merge_hooks_js) || return 0
+
+    if node "$merge_js" remove --settings "$settings_file" --match "$RALPH_HOOKS_MATCH" >/dev/null; then
+        print_info "Ralph hooks removed from $settings_file"
     fi
 }
 
@@ -273,27 +297,29 @@ remove_hooks_config() {
 
 validate_hooks_setup() {
     local errors=0
+    local hooks_dir="${HOOKS_DIR:-$PWD/.ralph/hooks}"
 
     # Check hooks directory
-    if [[ ! -d "$HOOKS_DIR" ]]; then
-        print_warning "Hooks directory not found: $HOOKS_DIR"
+    if [[ ! -d "$hooks_dir" ]]; then
+        print_warning "Hooks directory not found: $hooks_dir"
         errors=$((errors + 1))
     fi
 
     # Check required scripts
     local required_scripts=("stop-dod-gate.sh")
     if [[ "$HOOKS_MODE" == "advanced" ]]; then
-        required_scripts+=("session-restore.sh" "status-injector.sh")
+        required_scripts+=("session-restore.sh" "pre-tool-context.sh")
     fi
 
+    local script
     for script in "${required_scripts[@]}"; do
-        local script_path="$HOOKS_DIR/$script"
+        local script_path="$hooks_dir/$script"
         if [[ ! -f "$script_path" ]]; then
             print_warning "Hook script not found: $script_path"
             errors=$((errors + 1))
         elif [[ ! -x "$script_path" ]]; then
             print_warning "Hook script not executable: $script_path"
-            if [[ -f "$script_path" ]] && head -1 "$script_path" | grep -q "^#!"; then
+            if head -1 "$script_path" | grep -q "^#!"; then
                 chmod +x "$script_path" 2>/dev/null && print_info "Made executable: $script_path"
             else
                 print_warning "Skipped chmod: no shebang in $script_path"
@@ -303,13 +329,9 @@ validate_hooks_setup() {
 
     # Check Claude settings
     if [[ -f ".claude/settings.json" ]]; then
-        if command -v jq &>/dev/null; then
-            local has_hooks
-            has_hooks=$(jq -e '.hooks' ".claude/settings.json" 2>/dev/null)
-            if [[ -z "$has_hooks" ]]; then
-                print_warning "No hooks configured in .claude/settings.json"
-                errors=$((errors + 1))
-            fi
+        if ! grep -q "$RALPH_HOOKS_MATCH" ".claude/settings.json"; then
+            print_warning "No Ralph hooks configured in .claude/settings.json"
+            errors=$((errors + 1))
         fi
     else
         print_warning ".claude/settings.json not found"
@@ -326,18 +348,12 @@ validate_hooks_setup() {
 }
 
 # =============================================================================
-# Hook Exit Codes Reference
+# Hook Contract Reference (Claude Code)
 # =============================================================================
 #
-# Exit codes for hook scripts (Claude Code 2.1.23+):
-#   0 - Continue (success)
-#   1 - Error (abort with error message)
-#   2 - Block (reject the operation)
-#
-# Hook output format:
-#   JSON object with optional fields:
-#   - message: string to display
-#   - additionalContext: string to inject into Claude's context
-#   - error: error message (for exit code 1)
+# Payload JSON on stdin. Exit codes: 0 = ok, 2 = block (stderr shown to the model).
+# Output reaching the model: hookSpecificOutput.{hookEventName, additionalContext}.
+# Stop: print {"decision":"block","reason":"..."} with exit 0 ; `stop_hook_active`
+# is true when the hook already forced a continuation (must then allow the stop).
 #
 # =============================================================================
