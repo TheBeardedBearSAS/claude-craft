@@ -17,6 +17,7 @@
 #   --backup        Create backup before changes
 #   --interactive   Interactive mode to choose components
 #   --lang=XX       Language (en, fr, es, de, pt) - default: en
+#   --hooks=MODE    Hooks to install: default, full or none - default: default
 #   --agents-only   Install agents only
 #   --commands-only Install commands only
 #   --templates-only Install templates only
@@ -63,6 +64,7 @@ checklists_only=false
 target_dir=""
 lang="en"
 tech_arg=""
+hooks_mode="default"
 
 #-------------------------------------------------------------------------------
 # Load i18n messages
@@ -168,6 +170,7 @@ ${MSG_HELP_OPTIONS}
     --interactive       ${MSG_HELP_INTERACTIVE}
     --lang=XX           ${MSG_HELP_LANG}
     --tech=a,b          Project stack: scopes AGENTS.md reviewers and settings.json permissions
+    --hooks=MODE        Hooks for .claude/hooks + settings.json: default, full (adds test gate, lint, Slack) or none
     --agents-only       Install agents only
     --commands-only     Install commands only
     --templates-only    Install templates only
@@ -223,6 +226,18 @@ parse_args() {
                 ;;
             --tech=*)
                 tech_arg="${1#--tech=}"
+                shift
+                ;;
+            --hooks=*)
+                hooks_mode="${1#--hooks=}"
+                case "$hooks_mode" in
+                    default|full|none) ;;
+                    *)
+                        load_messages
+                        log_error "Invalid --hooks value: $hooks_mode (expected default, full or none)"
+                        exit 1
+                        ;;
+                esac
                 shift
                 ;;
             --agents-only)
@@ -676,6 +691,33 @@ install_config() {
     fi
 }
 
+# Copie les scripts de hooks dans .claude/hooks puis fusionne le(s) fragment(s) dans
+# .claude/settings.json, sans jamais retirer ni réécrire les hooks de l'utilisateur.
+install_hooks() {
+    [[ "$hooks_mode" == "none" ]] && return 0
+    log_info "Installing hooks (--hooks=$hooks_mode)..."
+
+    local hooks_src="$I18N_DIR/base/Common/hooks"
+    local settings_dest="$target_dir/.claude/settings.json"
+    local fragments=("$hooks_src/templates/hooks.default.json")
+    [[ "$hooks_mode" == "full" ]] && fragments+=("$hooks_src/templates/hooks.full.json")
+
+    copy_directory "$hooks_src/scripts" "$target_dir/.claude/hooks" "*.sh"
+
+    if ! command -v node >/dev/null 2>&1; then
+        log_warning "node not found: merge the hooks into .claude/settings.json manually (${fragments[*]})"
+        return 0
+    fi
+
+    ! $backup || create_backup "$settings_dest"
+    local merge_args=() fragment
+    ! $dry_run || merge_args+=(--dry-run)
+    for fragment in "${fragments[@]}"; do
+        node "$SCRIPT_DIR/lib/merge-hooks.mjs" add --settings "$settings_dest" --fragment "$fragment" ${merge_args[@]+"${merge_args[@]}"} \
+            || log_warning "Could not merge ${fragment##*/} into .claude/settings.json"
+    done
+}
+
 install_claude_md() {
     log_info "${MSG_INSTALLING_CLAUDE_MD:-Installing CLAUDE.md...}"
 
@@ -917,6 +959,7 @@ main() {
     # Always install config and CLAUDE.md template (if rules are installed)
     if $rules_only; then
         install_config
+        install_hooks
         install_claude_md
     fi
 

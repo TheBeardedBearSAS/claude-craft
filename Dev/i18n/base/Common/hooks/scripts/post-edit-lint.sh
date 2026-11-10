@@ -1,58 +1,34 @@
-#!/bin/bash
-# Post-edit hook: Auto-lint modified files
-# This hook runs after Write or Edit operations
-set -e
+#!/usr/bin/env bash
+# PostToolUse (Edit|Write) : formate/lint le fichier modifié selon son extension.
+# Payload JSON lu sur stdin ; informatif, ne bloque jamais.
+set -u
+# shellcheck source=lib/hook-io.sh
+. "$(dirname "${BASH_SOURCE[0]}")/lib/hook-io.sh"
 
-# Read JSON input from stdin
-INPUT=$(cat)
+hook_has_parser || exit 0
+hook_input
+FILE_PATH=$(hook_get tool_input.file_path)
+[ -n "$FILE_PATH" ] || exit 0
 
-# Extract the file path that was modified
-FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+have() { command -v "$1" >/dev/null 2>&1; }
 
-if [ -z "$FILE_PATH" ]; then
-    exit 0
-fi
-
-# Get file extension
-EXT="${FILE_PATH##*.}"
-
-# Run appropriate linter based on file type
-case "$EXT" in
-    js|jsx|ts|tsx)
-        if command -v npx &> /dev/null && [ -f "package.json" ]; then
-            npx eslint --fix "$FILE_PATH" 2>/dev/null || true
-        fi
-        ;;
-    php)
-        if command -v php-cs-fixer &> /dev/null; then
-            php-cs-fixer fix "$FILE_PATH" --quiet 2>/dev/null || true
-        elif command -v vendor/bin/php-cs-fixer &> /dev/null; then
-            vendor/bin/php-cs-fixer fix "$FILE_PATH" --quiet 2>/dev/null || true
-        fi
-        ;;
-    py)
-        if command -v black &> /dev/null; then
-            black --quiet "$FILE_PATH" 2>/dev/null || true
-        fi
-        if command -v isort &> /dev/null; then
-            isort --quiet "$FILE_PATH" 2>/dev/null || true
-        fi
-        ;;
-    dart)
-        if command -v dart &> /dev/null; then
-            dart format "$FILE_PATH" 2>/dev/null || true
-        fi
-        ;;
-    go)
-        if command -v gofmt &> /dev/null; then
-            gofmt -w "$FILE_PATH" 2>/dev/null || true
-        fi
-        ;;
-    rs)
-        if command -v rustfmt &> /dev/null; then
-            rustfmt "$FILE_PATH" 2>/dev/null || true
-        fi
-        ;;
+case "${FILE_PATH##*.}" in
+  js | jsx | ts | tsx)
+    if have npx && [ -f package.json ]; then npx --no-install eslint --fix "$FILE_PATH" >/dev/null 2>&1 || true; fi
+    ;;
+  php)
+    if have php-cs-fixer; then
+      php-cs-fixer fix "$FILE_PATH" --quiet >/dev/null 2>&1 || true
+    elif [ -x vendor/bin/php-cs-fixer ]; then
+      vendor/bin/php-cs-fixer fix "$FILE_PATH" --quiet >/dev/null 2>&1 || true
+    fi
+    ;;
+  py)
+    if have black; then black --quiet "$FILE_PATH" >/dev/null 2>&1 || true; fi
+    if have isort; then isort --quiet "$FILE_PATH" >/dev/null 2>&1 || true; fi
+    ;;
+  dart) if have dart; then dart format "$FILE_PATH" >/dev/null 2>&1 || true; fi ;;
+  go) if have gofmt; then gofmt -w "$FILE_PATH" >/dev/null 2>&1 || true; fi ;;
+  rs) if have rustfmt; then rustfmt "$FILE_PATH" >/dev/null 2>&1 || true; fi ;;
 esac
-
 exit 0

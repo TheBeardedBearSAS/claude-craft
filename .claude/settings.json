@@ -20,7 +20,7 @@
           },
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/block-destructive-bash.sh\"",
+            "command": "BLOCK_RM_RF=all bash \"$CLAUDE_PROJECT_DIR/Dev/i18n/base/Common/hooks/scripts/block-dangerous-commands.sh\"",
             "timeout": 5
           }
         ]

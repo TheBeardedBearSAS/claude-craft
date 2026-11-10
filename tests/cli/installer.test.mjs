@@ -60,6 +60,15 @@ describe('runInstallation', () => {
     expect(firstCall[1][0]).toContain('install-common-rules.sh');
   });
 
+  it('passes --hooks to the common rules script only when set', async () => {
+    await runInstallation(makeCli(), { CLI_ROOT: '/fake/root' });
+    expect(spawnSyncMock.mock.calls[0][1].some((a) => a.startsWith('--hooks'))).toBe(false);
+
+    spawnSyncMock.mockClear();
+    await runInstallation(makeCli({ hooks: 'full' }), { CLI_ROOT: '/fake/root' });
+    expect(spawnSyncMock.mock.calls[0][1]).toContain('--hooks=full');
+  });
+
   it('skips docker tech (handled by infra)', async () => {
     const cli = makeCli({ technologies: ['docker', 'react'] });
     await runInstallation(cli, { CLI_ROOT: '/fake/root' });

@@ -82,7 +82,7 @@ describe('project settings.json optimization', () => {
       .hooks.map((h) => h.command)
       .join('\n');
     expect(cmds).toContain('guard-network.sh');
-    expect(cmds).toContain('block-destructive-bash.sh');
+    expect(cmds).toContain('block-dangerous-commands.sh');
   });
 
   it('has PostToolUse output size hints for Bash, Grep and Glob', () => {
@@ -169,7 +169,6 @@ describe('.claudeignore', () => {
 // Values like 5000 were written as milliseconds and meant an 83-minute timeout.
 describe('hook timeouts are expressed in seconds', () => {
   const MAX_TIMEOUT_SECONDS = 600;
-  const LANGS = ['en', 'fr', 'es', 'de', 'pt'];
   const HOOK_TEMPLATES_DIR = path.join(PROJECT_ROOT, '.claude', 'templates', 'hooks');
   const files = [
     SETTINGS_PATH,
@@ -178,9 +177,9 @@ describe('hook timeouts are expressed in seconds', () => {
       .readdirSync(HOOK_TEMPLATES_DIR)
       .filter((f) => f.endsWith('.json'))
       .map((f) => path.join(HOOK_TEMPLATES_DIR, f)),
-    ...LANGS.map((lang) =>
-      path.join(PROJECT_ROOT, 'Dev', 'i18n', lang, 'Common', 'templates', 'settings.json.template')
-    ),
+    path.join(PROJECT_ROOT, 'Dev', 'i18n', 'base', 'Common', 'templates', 'settings.json.template'),
+    path.join(PROJECT_ROOT, 'Dev', 'i18n', 'base', 'Common', 'hooks', 'templates', 'hooks.default.json'),
+    path.join(PROJECT_ROOT, 'Dev', 'i18n', 'base', 'Common', 'hooks', 'templates', 'hooks.full.json'),
   ];
 
   for (const file of files) {

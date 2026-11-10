@@ -4,11 +4,11 @@ import path from 'path';
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '../..');
 const TEMPLATES_BASE = path.join(PROJECT_ROOT, 'Dev/i18n/base/Common/templates');
-const TEMPLATES_EN = path.join(PROJECT_ROOT, 'Dev/i18n/en/Common/templates');
+const HOOKS_TEMPLATES = path.join(PROJECT_ROOT, 'Dev/i18n/base/Common/hooks/templates');
 
 describe('template content validation', () => {
   describe('settings.json.template', () => {
-    const templatePath = path.join(TEMPLATES_EN, 'settings.json.template');
+    const templatePath = path.join(TEMPLATES_BASE, 'settings.json.template');
 
     it('exists', () => {
       expect(fs.existsSync(templatePath)).toBe(true);
@@ -25,38 +25,10 @@ describe('template content validation', () => {
       expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toBe('claude-sonnet-5-5');
     });
 
-    it('contains PostCompact hook', () => {
+    // Les hooks sont installés par --hooks (fragments hooks.default/full.json), pas par le template.
+    it('ne porte aucun hook (fournis par les fragments)', () => {
       const settings = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
-      expect(settings.hooks.PostCompact).toBeDefined();
-      expect(settings.hooks.PostCompact).toBeInstanceOf(Array);
-      expect(settings.hooks.PostCompact.length).toBeGreaterThan(0);
-    });
-
-    it('contains SessionStart compact hook', () => {
-      const settings = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
-      const sessionStart = settings.hooks.SessionStart;
-      expect(sessionStart).toBeDefined();
-      const compactHook = sessionStart.find((h) => h.matcher === 'compact');
-      expect(compactHook).toBeDefined();
-    });
-
-    it('contains PreCompact hook', () => {
-      const settings = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
-      expect(settings.hooks.PreCompact).toBeDefined();
-    });
-
-    it('contains PreToolUse security hooks for Edit and Write', () => {
-      const settings = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
-      const preToolUse = settings.hooks.PreToolUse;
-      expect(preToolUse.find((h) => h.matcher === 'Edit')).toBeDefined();
-      expect(preToolUse.find((h) => h.matcher === 'Write')).toBeDefined();
-    });
-
-    it('contains PostToolUse output filter for Bash', () => {
-      const settings = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
-      const postToolUse = settings.hooks.PostToolUse;
-      const bashHook = postToolUse.find((h) => h.matcher === 'Bash');
-      expect(bashHook).toBeDefined();
+      expect(settings.hooks).toBeUndefined();
     });
 
     it('has permissions with allow and deny arrays', () => {
@@ -80,12 +52,13 @@ describe('template content validation', () => {
   // (written as if milliseconds) mean ~83 minutes — regression from the
   // 2026-10-13 alignment audit.
   describe('hook timeouts are expressed in seconds', () => {
-    const LANGS = ['en', 'fr', 'es', 'de', 'pt'];
     const HOOK_TEMPLATES_DIR = path.join(PROJECT_ROOT, '.claude/templates/hooks');
     const files = [
       path.join(PROJECT_ROOT, '.claude/settings.json'),
       path.join(PROJECT_ROOT, '.bmad/hooks-config.example.json'),
-      ...LANGS.map((l) => path.join(PROJECT_ROOT, `Dev/i18n/${l}/Common/templates/settings.json.template`)),
+      path.join(TEMPLATES_BASE, 'settings.json.template'),
+      path.join(HOOKS_TEMPLATES, 'hooks.default.json'),
+      path.join(HOOKS_TEMPLATES, 'hooks.full.json'),
       ...fs
         .readdirSync(HOOK_TEMPLATES_DIR)
         .filter((f) => f.endsWith('.json'))

@@ -1,56 +1,90 @@
-#!/bin/bash
-# PreToolUse hook: Block dangerous shell commands
-# Exit code 2 = block the command
-set -e
+#!/usr/bin/env bash
+# PreToolUse(Bash) : bloque les commandes système destructrices.
+#   - rm récursif + forcé : BLOCK_RM_RF=dangerous (défaut) ne bloque que les cibles
+#     critiques (/, ~, $HOME, ., .., *, dossiers système) ; BLOCK_RM_RF=all bloque tout
+#     rm -rf (utilisé par le dépôt claude-craft lui-même)
+#   - mkfs, dd of=/dev/<disque>, redirection vers un disque, fork bomb
+#   - sudo / su / doas, chmod 777, chown -R /
+#   - lecture de secrets (cat/less/head/… sur .env, clés, credentials)
+# Les commandes ne sont reconnues qu'en position de commande (début de segment, après
+# sudo/xargs/env/VAR=…, ou find -exec) et les corps de heredoc sont ignorés : `docker run
+# --rm … chown -R`, `grep -r mkfs`, un message de commit ou `2>/dev/null` ne déclenchent rien.
+set -u
+# shellcheck source=lib/hook-io.sh
+. "$(dirname "${BASH_SOURCE[0]}")/lib/hook-io.sh"
 
-# Read JSON input from stdin
-INPUT=$(cat)
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+hook_require_parser
+hook_input
+CMD=$(hook_get tool_input.command)
+[ -n "$CMD" ] || exit 0
 
-# Dangerous patterns to block (regex)
-DANGEROUS_PATTERNS=(
-    # rm with -r and -f combined in one flag (rm -rf, rm -fr, rm -rfi, etc.)
-    "rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|-[a-zA-Z]*f[a-zA-Z]*r)\s+/"
-    "rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|-[a-zA-Z]*f[a-zA-Z]*r)\s+~"
-    # rm with -r and -f as separate flags in any order (rm -r -f /, rm -f -r /)
-    "rm\s+-[a-zA-Z]*r[a-zA-Z]*\s+.*-[a-zA-Z]*f[a-zA-Z]*\s+/"
-    "rm\s+-[a-zA-Z]*f[a-zA-Z]*\s+.*-[a-zA-Z]*r[a-zA-Z]*\s+/"
-    "rm\s+-[a-zA-Z]*r[a-zA-Z]*\s+.*-[a-zA-Z]*f[a-zA-Z]*\s+~"
-    "rm\s+-[a-zA-Z]*f[a-zA-Z]*\s+.*-[a-zA-Z]*r[a-zA-Z]*\s+~"
-    "rm\s+-rf\s+/\*"
-    "dd\s+if=/dev/zero"
-    "mkfs"
-    "chmod\s+-R\s+777\s+/"
-    "chown\s+-R"
-    ">\s*/dev/sda"
-    "mv\s+/\*\s+/dev/null"
-)
+MODE=${BLOCK_RM_RF:-dangerous}
+TEXT=$(printf '%s\n' "$CMD" | hook_strip_heredocs | tr "'\"" '  ')
 
-# Check for fork bomb (fixed string, contains regex special chars)
-if echo "$COMMAND" | grep -qF ':(){:|:&};:'; then
-    echo "BLOCKED: Dangerous command detected: fork bomb" >&2
-    exit 2
+if printf '%s' "$TEXT" | grep -qE ':[[:space:]]*\([[:space:]]*\)[[:space:]]*\{[[:space:]]*:'; then
+  hook_block "Fork bomb detected"
+fi
+if printf '%s' "$TEXT" | grep -qE '>[[:space:]]*/dev/(sd|hd|nvme|mmcblk|disk|xvd|vd)'; then
+  hook_block "Writing to a block device is not allowed"
 fi
 
-# Check for dangerous patterns (regex)
-for pattern in "${DANGEROUS_PATTERNS[@]}"; do
-    if echo "$COMMAND" | grep -qE "$pattern"; then
-        echo "BLOCKED: Dangerous command detected: $pattern" >&2
-        exit 2
-    fi
-done
+# Segments sur ; & | ( ) ` { ; chaque segment est analysé à partir de son premier mot.
+verdicts=$(printf '%s\n' "$TEXT" | awk -v mode="$MODE" '
+  function base(t) { sub(/.*\//, "", t); return t }
+  function dangerous(a) {
+    while (length(a) > 1 && substr(a, length(a)) == "/") a = substr(a, 1, length(a) - 1)
+    return a ~ /^(\/|\/\*|~|\$HOME|\.|\.\.|\*)$/ || a ~ /^\/(etc|usr|var|bin|boot|home|lib|opt|root|srv|sbin)$/
+  }
+  function check_rm(from,   j, a, r, f, hit, eod) {
+    for (j = from; j <= nt; j++) {
+      a = t[j]
+      if (!eod && a == "--") { eod = 1; continue }
+      if (!eod && a ~ /^-/) {
+        if (a == "--recursive" || a ~ /^-[a-zA-Z]*[rR]/) r = 1
+        if (a == "--force" || a ~ /^-[a-zA-Z]*f/) f = 1
+        continue
+      }
+      if (dangerous(a)) hit = 1
+    }
+    if (r && f && (mode == "all" || hit)) { print "BLOCK Destructive rm command detected (recursive+force)"; exit }
+  }
+  { buf = buf $0 ";" }
+  END {
+    gsub(/\$\{/, "$", buf); gsub(/\}/, " ", buf)
+    ns = split(buf, stmts, /[;&|()`{]/)
+    for (s = 1; s <= ns; s++) {
+      nt = split(stmts[s], t); i = 1; pre = 0
+      while (i <= nt) {
+        if (t[i] ~ /^(env|nohup|command|exec|time|nice|xargs)$/) { pre = 1; i++; continue }
+        if (pre && t[i] ~ /^-/) { i++; continue }
+        if (t[i] ~ /^[A-Za-z_][A-Za-z0-9_]*=/) { i++; continue }
+        if (base(t[i]) ~ /^(sh|bash|zsh|dash|ksh)$/ && i < nt && t[i + 1] ~ /^-[a-z]*c$/) { i += 2; pre = 0; continue }
+        break
+      }
+      for (j = 1; j < nt; j++) if (t[j] ~ /^-exec(dir)?$/ && base(t[j + 1]) == "rm") check_rm(j + 2)
+      if (i > nt) continue
+      cmd = base(t[i])
+      if (cmd ~ /^(sudo|su|doas)$/) { print "BLOCK Elevated privilege commands are not allowed"; exit }
+      if (cmd ~ /^mkfs/) { print "BLOCK mkfs is not allowed"; exit }
+      if (cmd == "rm") check_rm(i + 1)
+      if (cmd == "dd") for (j = i + 1; j <= nt; j++) if (t[j] ~ /^of=\/dev\/(sd|hd|nvme|mmcblk|disk|xvd|vd)/) { print "BLOCK dd to a block device is not allowed"; exit }
+      if (cmd == "chmod") for (j = i + 1; j <= nt; j++) if (t[j] ~ /^0?777$/) { print "BLOCK chmod 777 is not allowed"; exit }
+      if (cmd == "chown") {
+        rec = 0; root = 0
+        for (j = i + 1; j <= nt; j++) { if (t[j] ~ /^-[a-zA-Z]*R/ || t[j] == "--recursive") rec = 1; if (t[j] == "/") root = 1 }
+        if (rec && root) { print "BLOCK chown -R / is not allowed"; exit }
+      }
+      if (cmd ~ /^(cat|less|more|head|tail|strings|bat)$/)
+        for (j = i + 1; j <= nt; j++) if (t[j] !~ /^-/) print "READ " t[j]
+    }
+  }')
 
-# Check for commands that modify system files
-if echo "$COMMAND" | grep -qE "^(sudo|su)\s"; then
-    echo "BLOCKED: Elevated privilege commands not allowed" >&2
-    exit 2
-fi
-
-# Check for commands that could expose secrets
-if echo "$COMMAND" | grep -qE "(cat|less|head|tail|more|strings)\s.*\.(env|credentials|secret|pem|key)\b"; then
-    echo "BLOCKED: Command might expose secrets" >&2
-    exit 2
-fi
-
-# All checks passed
+while IFS= read -r line; do
+  case "$line" in
+    "BLOCK "*) hook_block "${line#BLOCK }" ;;
+    "READ "*) is_sensitive_path "${line#READ }" && hook_block "Command might expose secrets (${line#READ })" ;;
+  esac
+done <<EOF
+$verdicts
+EOF
 exit 0

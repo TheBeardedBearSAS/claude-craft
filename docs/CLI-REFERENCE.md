@@ -59,6 +59,7 @@ npx @the-bearded-bear/claude-craft install <target-directory> [options]
 |--------|-------|-------------|
 | `--tech=<technology>` | `-t` | Technology stack to install |
 | `--lang=<language>` | `-l` | Documentation language |
+| `--hooks=<mode>` | | Hooks installed into `.claude/hooks/` and merged into `.claude/settings.json`: `default` (network guard, dangerous commands, pre-commit secrets check, sensitive files, output hints, context re-injection after compaction), `full` (adds the Stop test gate, post-edit lint and Slack notification) or `none`. Default: `default`. Existing hooks are never removed or overwritten |
 | `--force` | `-f` | Overwrite existing files |
 | `--backup` | `-b` | Create backup before install |
 | `--dry-run` | `-d` | Simulate without making changes |

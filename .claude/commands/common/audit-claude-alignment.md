@@ -182,7 +182,7 @@ CONTRAINTES :
    - `config/versions.yaml` — `claudeCode.recommended|testedUpTo|models.*`, `meta.lastUpdated`, ajouts en `denylist`
    - `.claude/COMPATIBILITY.md` — bandeau d'en-tête et ajout de lignes dans la table `Version Requirements`
    - Substitutions de version littérales dans les fichiers de `SHOWCASE_FILES` (`scripts/verify-versions.mjs`)
-   - `Dev/i18n/<lang>/Common/templates/settings.json.template` et `Dev/i18n/<lang>/Common/rules/12-context-management.md` (les 5 langues, en une seule passe cohérente)
+   - `Dev/i18n/base/Common/templates/settings.json.template` (copie unique) et `Dev/i18n/<lang>/Common/rules/12-context-management.md` (les 5 langues, en une seule passe cohérente)
    - `config/claude-alignment-baseline.json` — remplacer par `next_baseline` du fichier de signaux
 3. **Interdit, sans exception** : `.github/workflows/` (le token `gh` n'a pas le scope `workflow`, la PR deviendrait non mergeable), tout fichier hors allowlist, toute reformulation de prose, tout fichier `.md` de documentation générée (`docs/*-FULL-REFERENCE.md` : passer par `npm run docs:generate`).
 4. Rejouer les 5 gates de l'étape 1. **Un seul rouge ⇒ pas de PR** : laisser la branche en place et l'expliquer dans le rapport.

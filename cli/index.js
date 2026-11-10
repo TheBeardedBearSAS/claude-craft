@@ -157,6 +157,7 @@ class ClaudeCraftCLI {
       }
       this.config.technologies = [options.tech];
     }
+    if (options.hooks) this.config.hooks = options.hooks;
     this.config.targetPath = path.resolve(targetPath || this.config.targetPath);
 
     const ctx = { CLI_ROOT, VERSION };

@@ -30,6 +30,12 @@ function validateOption(key, value) {
       }
       break;
     }
+    case 'hooks': {
+      if (!['default', 'full', 'none'].includes(value)) {
+        throw new Error(`Invalid value for --hooks: must be default, full or none, got "${value}"`);
+      }
+      break;
+    }
     case 'output': {
       if (typeof value === 'string') {
         if (value.split('/').includes('..') || value.split('\\').includes('..')) {
