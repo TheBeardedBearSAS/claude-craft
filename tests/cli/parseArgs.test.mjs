@@ -63,27 +63,19 @@ describe('parseArgs input validation (SEC-12)', () => {
     });
 
     it('rejects non-numeric value', () => {
-      expect(() => parseArgs(['ralph', '--max-iterations=abc'])).toThrow(
-        'must be a positive integer',
-      );
+      expect(() => parseArgs(['ralph', '--max-iterations=abc'])).toThrow('must be a positive integer');
     });
 
     it('rejects zero', () => {
-      expect(() => parseArgs(['ralph', '--max-iterations=0'])).toThrow(
-        'must be a positive integer',
-      );
+      expect(() => parseArgs(['ralph', '--max-iterations=0'])).toThrow('must be a positive integer');
     });
 
     it('rejects negative numbers', () => {
-      expect(() => parseArgs(['ralph', '--max-iterations=-3'])).toThrow(
-        'must be a positive integer',
-      );
+      expect(() => parseArgs(['ralph', '--max-iterations=-3'])).toThrow('must be a positive integer');
     });
 
     it('rejects floating-point numbers', () => {
-      expect(() => parseArgs(['ralph', '--max-iterations=2.5'])).toThrow(
-        'must be a positive integer',
-      );
+      expect(() => parseArgs(['ralph', '--max-iterations=2.5'])).toThrow('must be a positive integer');
     });
   });
 
@@ -94,15 +86,11 @@ describe('parseArgs input validation (SEC-12)', () => {
     });
 
     it('rejects path traversal with ..', () => {
-      expect(() => parseArgs(['flatten', '--output=../../etc/passwd'])).toThrow(
-        'path traversal',
-      );
+      expect(() => parseArgs(['flatten', '--output=../../etc/passwd'])).toThrow('path traversal');
     });
 
     it('rejects path traversal in the middle of path', () => {
-      expect(() =>
-        parseArgs(['flatten', '--output=/home/user/../../../etc/shadow']),
-      ).toThrow('path traversal');
+      expect(() => parseArgs(['flatten', '--output=/home/user/../../../etc/shadow'])).toThrow('path traversal');
     });
 
     it('allows filenames containing dots (not traversal)', () => {
@@ -113,9 +101,7 @@ describe('parseArgs input validation (SEC-12)', () => {
 
   describe('null bytes', () => {
     it('rejects null bytes in option values', () => {
-      expect(() => parseArgs(['install', '--tech=sym\0fony'])).toThrow(
-        'null bytes not allowed',
-      );
+      expect(() => parseArgs(['install', '--tech=sym\0fony'])).toThrow('null bytes not allowed');
     });
   });
 
@@ -123,6 +109,20 @@ describe('parseArgs input validation (SEC-12)', () => {
     it.each(['default', 'full', 'none'])('accepts --hooks=%s', (mode) => {
       expect(parseArgs(['install', '--hooks=' + mode]).options.hooks).toBe(mode);
     });
+
+    it.each(['default,memory', 'full,memory', 'none,memory', 'memory,full'])(
+      'accepts the memory add-on: --hooks=%s',
+      (v) => {
+        expect(parseArgs(['install', '--hooks=' + v]).options.hooks).toBe(v);
+      }
+    );
+
+    it.each(['memory', 'default,full', 'default,default', 'default,bogus', 'default,', ',memory', 'memory,memory'])(
+      'rejects --hooks=%s',
+      (v) => {
+        expect(() => parseArgs(['install', '--hooks=' + v])).toThrow('--hooks');
+      }
+    );
 
     it('rejects an unknown mode and a bare --hooks', () => {
       expect(() => parseArgs(['install', '--hooks=bogus'])).toThrow('--hooks');

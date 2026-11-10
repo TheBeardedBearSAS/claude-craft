@@ -14,7 +14,7 @@ fi
 init_memory_db
 
 SESSION_ID=$(current_session_id)
-NOW=$(date -u -Iseconds)
+NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 PROMPT_COUNT=$(sqlite3 "$MEMORY_DB" "SELECT COUNT(*) FROM prompts WHERE session_id='$SESSION_ID';" 2>/dev/null || echo 0)
 TOOL_COUNT=$(sqlite3 "$MEMORY_DB" "SELECT COUNT(*) FROM tool_events WHERE session_id='$SESSION_ID';" 2>/dev/null || echo 0)

@@ -14,7 +14,7 @@ fi
 init_memory_db
 
 SESSION_ID=$(current_session_id)
-NOW=$(date -u -Iseconds)
+NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 # Read prompt from stdin (Claude Code passes it as JSON)
 INPUT=$(cat 2>/dev/null || echo "")

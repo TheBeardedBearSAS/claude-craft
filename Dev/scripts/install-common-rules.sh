@@ -17,7 +17,7 @@
 #   --backup        Create backup before changes
 #   --interactive   Interactive mode to choose components
 #   --lang=XX       Language (en, fr, es, de, pt) - default: en
-#   --hooks=MODE    Hooks to install: default, full or none - default: default
+#   --hooks=MODE    Hooks: default, full or none, + ",memory" for SQLite memory - default: default
 #   --agents-only   Install agents only
 #   --commands-only Install commands only
 #   --templates-only Install templates only
@@ -65,6 +65,22 @@ target_dir=""
 lang="en"
 tech_arg=""
 hooks_mode="default"
+hooks_memory=false
+
+# --hooks=PROFILE[,memory] : un profil (default|full|none) + l'add-on optionnel memory.
+parse_hooks_arg() {
+    local part profiles=0 memories=0
+    [[ "$1" != ,* && "$1" != *, && "$1" != *,,* ]] || return 1
+    local IFS=,
+    for part in $1; do
+        case "$part" in
+            default|full|none) hooks_mode="$part"; profiles=$((profiles + 1)) ;;
+            memory) hooks_memory=true; memories=$((memories + 1)) ;;
+            *) return 1 ;;
+        esac
+    done
+    [[ $profiles -eq 1 && $memories -le 1 ]]
+}
 
 #-------------------------------------------------------------------------------
 # Load i18n messages
@@ -170,7 +186,7 @@ ${MSG_HELP_OPTIONS}
     --interactive       ${MSG_HELP_INTERACTIVE}
     --lang=XX           ${MSG_HELP_LANG}
     --tech=a,b          Project stack: scopes AGENTS.md reviewers and settings.json permissions
-    --hooks=MODE        Hooks for .claude/hooks + settings.json: default, full (adds test gate, lint, Slack) or none
+    --hooks=MODE        Hooks for .claude/hooks + settings.json: default, full (adds test gate, lint, Slack) or none; append ,memory (e.g. default,memory) for the SQLite memory add-on
     --agents-only       Install agents only
     --commands-only     Install commands only
     --templates-only    Install templates only
@@ -229,15 +245,11 @@ parse_args() {
                 shift
                 ;;
             --hooks=*)
-                hooks_mode="${1#--hooks=}"
-                case "$hooks_mode" in
-                    default|full|none) ;;
-                    *)
-                        load_messages
-                        log_error "Invalid --hooks value: $hooks_mode (expected default, full or none)"
-                        exit 1
-                        ;;
-                esac
+                if ! parse_hooks_arg "${1#--hooks=}"; then
+                    load_messages
+                    log_error "Invalid --hooks value: ${1#--hooks=} (expected default, full or none, optionally followed by ,memory)"
+                    exit 1
+                fi
                 shift
                 ;;
             --agents-only)
@@ -694,15 +706,25 @@ install_config() {
 # Copie les scripts de hooks dans .claude/hooks puis fusionne le(s) fragment(s) dans
 # .claude/settings.json, sans jamais retirer ni réécrire les hooks de l'utilisateur.
 install_hooks() {
-    [[ "$hooks_mode" == "none" ]] && return 0
-    log_info "Installing hooks (--hooks=$hooks_mode)..."
+    [[ "$hooks_mode" == "none" ]] && ! $hooks_memory && return 0
+    log_info "Installing hooks (--hooks=$hooks_mode$($hooks_memory && echo ',memory'))..."
 
     local hooks_src="$I18N_DIR/base/Common/hooks"
     local settings_dest="$target_dir/.claude/settings.json"
-    local fragments=("$hooks_src/templates/hooks.default.json")
-    [[ "$hooks_mode" == "full" ]] && fragments+=("$hooks_src/templates/hooks.full.json")
-
-    copy_directory "$hooks_src/scripts" "$target_dir/.claude/hooks" "*.sh"
+    local fragments=()
+    if [[ "$hooks_mode" != "none" ]]; then
+        fragments+=("$hooks_src/templates/hooks.default.json")
+        [[ "$hooks_mode" == "full" ]] && fragments+=("$hooks_src/templates/hooks.full.json")
+        copy_directory "$hooks_src/scripts" "$target_dir/.claude/hooks" "*.sh"
+        # Exemples de hooks : la doc distribuée les cite sous .claude/templates/hooks/
+        copy_directory "$hooks_src/templates/examples" "$target_dir/.claude/templates/hooks" "*"
+    fi
+    if $hooks_memory; then
+        fragments+=("$hooks_src/templates/hooks.memory.json")
+        copy_directory "$SCRIPT_DIR/memory-lifecycle" "$target_dir/.claude/hooks/memory-lifecycle" "*.sh"
+        command -v sqlite3 >/dev/null 2>&1 || log_warning "sqlite3 not found: the memory hooks do nothing until it is installed (apt install sqlite3 / brew install sqlite3)"
+        command -v jq >/dev/null 2>&1 || log_warning "jq not found: the memory session recall needs it (apt install jq / brew install jq)"
+    fi
 
     if ! command -v node >/dev/null 2>&1; then
         log_warning "node not found: merge the hooks into .claude/settings.json manually (${fragments[*]})"

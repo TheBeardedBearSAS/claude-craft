@@ -59,7 +59,7 @@ current_session_id() {
   local today
   today=$(date -u +%Y%m%d)
   local project_hash
-  project_hash=$(echo -n "${CLAUDE_PROJECT_DIR:-$(pwd)}" | sha1sum | cut -c1-8)
+  project_hash=$(printf "%s" "${CLAUDE_PROJECT_DIR:-$(pwd)}" | cksum | cut -d" " -f1)
   echo "${today}-${project_hash}"
 }
 

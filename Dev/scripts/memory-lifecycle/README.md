@@ -11,7 +11,7 @@ Session lifecycle
   ├─ SessionStart      → init DB + recall previous session summary
   ├─ UserPromptSubmit  → log prompt preview (200 chars max)
   ├─ PostToolUse       → log Edit/Write/Bash events (target + summary)
-  ├─ PreCompact        → preserve context + re-inject before compaction
+  ├─ PreCompact        → preserve context (texte brut = consignes de compaction)
   └─ SessionEnd        → compute session summary
 ```
 
@@ -32,16 +32,17 @@ compactions  (id, session_id, compacted_at, preserved_context)
 - `jq` (package système : `apt install jq` / `brew install jq`)
 - `bash` 4+
 
-### 2. Activer les hooks
+### 2. Installer
 
-Copier le contenu de `.claude/templates/hooks/memory-lifecycle.json` dans votre `.claude/settings.json` :
+Avec l'installeur de Claude Craft : les scripts sont copiés dans `.claude/hooks/memory-lifecycle/` et les hooks fusionnés dans `.claude/settings.json` (sans écraser les vôtres) :
 
 ```bash
-# Fusion manuelle dans .claude/settings.json
-cat .claude/templates/hooks/memory-lifecycle.json
+bash Dev/scripts/install-common-rules.sh --hooks=default,memory /chemin/du/projet
+# ou --hooks=full,memory ; --hooks=none,memory pour l'add-on seul
+# via le CLI : npx @the-bearded-bear/claude-craft install . --hooks=default,memory
 ```
 
-Ou via la commande Claude Craft (à venir) : `/common:setup-memory-lifecycle`.
+L'installeur avertit si `sqlite3` ou `jq` manquent. Le fragment de configuration est `Dev/i18n/base/Common/hooks/templates/hooks.memory.json`.
 
 ### 3. Vérifier
 
@@ -77,7 +78,7 @@ SQL
 
 ### Recall depuis une autre session
 
-Automatique via `SessionStart` — le résumé de la dernière session est injecté en `systemMessage`.
+Automatique via `SessionStart` — le résumé de la dernière session est injecté via `hookSpecificOutput.additionalContext` (seul canal lu par le modèle).
 
 ## Confidentialité
 
@@ -85,7 +86,7 @@ Automatique via `SessionStart` — le résumé de la dernière session est injec
 - **Zéro télémétrie** — pas de network call
 - **Gitignored** — jamais commité (`.claude/memory.db` dans `.gitignore`)
 - **Previews only** — prompts tronqués à 200 chars, tool output à 300 chars
-- **Hash projet** — session ID contient un hash SHA1 du path, pas le path complet
+- **Hash projet** — session ID contient un hash (cksum) du path, pas le path complet
 
 ## Nettoyage
 
@@ -113,5 +114,5 @@ Retirer les hooks de `.claude/settings.json`. La base `.claude/memory.db` peut �
 ## Ressources
 
 - [claude-mem](https://github.com/thedotmack/claude-mem) — implémentation originale
-- `.claude/templates/hooks/memory-lifecycle.json` — template hook
+- `Dev/i18n/base/Common/hooks/templates/hooks.memory.json` — fragment de hooks
 - `.claude/rules/12-context-management.md` — stratégie contexte

@@ -65,7 +65,7 @@ ${c.bold}Options:${c.reset}
   ${c.yellow}--version, -v${c.reset}        Show version
   ${c.yellow}--lang=XX${c.reset}            Language (en, fr, es, de, pt)
   ${c.yellow}--tech=NAME${c.reset}          Technology (${Object.keys(TECHNOLOGIES).join(', ')})
-  ${c.yellow}--hooks=MODE${c.reset}         Hooks to install: default, full, none (default: default)
+  ${c.yellow}--hooks=MODE${c.reset}         Hooks: default, full, none; add ",memory" for SQLite memory (default: default)
   ${c.yellow}--auto${c.reset}               Zero-prompt install (auto-detect stack + locale)
   ${c.yellow}--from=URL${c.reset}           Install from a remote team config JSON URL
   ${c.yellow}--target=PATH${c.reset}        Target directory (for skill subcommands)

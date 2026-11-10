@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SessionStart hook — open or reuse today's session row.
-# Output: JSON with systemMessage recalling last session summary (if any).
+# Output: JSON hookSpecificOutput.additionalContext recalling the last session summary (if any).
 
 set -euo pipefail
 
@@ -15,7 +15,7 @@ fi
 init_memory_db
 
 SESSION_ID=$(current_session_id)
-NOW=$(date -u -Iseconds)
+NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 
 GIT_BRANCH=$(git -C "$PROJECT_DIR" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
@@ -30,8 +30,9 @@ SQL
 LAST_SUMMARY=$(sqlite3 "$MEMORY_DB" "SELECT summary FROM sessions WHERE id != '$SESSION_ID' AND summary IS NOT NULL ORDER BY started_at DESC LIMIT 1;" 2>/dev/null || echo "")
 
 if [[ -n "$LAST_SUMMARY" ]] && command -v jq &>/dev/null; then
-  MSG="📚 Recall from last session:\n\n$LAST_SUMMARY"
-  jq -n --arg msg "$MSG" '{"systemMessage": $msg}'
+  MSG="Recall from last session:"$'\n\n'"$LAST_SUMMARY"
+  # additionalContext (seul canal lu par le modèle) ; systemMessage ne s'affiche que dans l'UI.
+  jq -cn --arg msg "$MSG" '{hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $msg}}'
 else
   echo '{}'
 fi
