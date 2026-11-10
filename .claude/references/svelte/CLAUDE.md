@@ -261,20 +261,21 @@ export const auth = new AuthState();
 
 ## Testing 2026
 
-### Vitest 4 Browser Mode (recommandé)
+### Vitest 5 Browser Mode (recommandé)
 
 ```ts
 // vitest.config.ts
 import { defineConfig } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { playwright } from '@vitest/browser-playwright';
 
 export default defineConfig({
     plugins: [svelte()],
     test: {
         browser: {
             enabled: true,
-            name: 'chromium', // ou 'firefox', 'webkit'
-            provider: 'playwright',
+            provider: playwright(),
+            instances: [{ browser: 'chromium' }], // ou 'firefox', 'webkit'
         },
         coverage: {
             provider: 'v8',
@@ -480,7 +481,7 @@ const currentUrl = page.url.pathname;
 - [ ] Runes (`$state`, `$derived`, `$effect`, `$props`)
 - [ ] State classes pour global state
 - [ ] TypeScript first-class
-- [ ] Vitest 4 Browser Mode
+- [ ] Vitest 5 Browser Mode
 - [ ] Playwright E2E
 - [ ] Coverage ≥ 80%
 - [ ] Form actions pour mutations

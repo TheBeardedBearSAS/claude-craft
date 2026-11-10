@@ -21,7 +21,7 @@ Depuis Vitest 4 (Vitest 5 actuel), le **Browser Mode** est stable et recommandé
 ### Installation
 
 ```bash
-npm install -D @vitest/browser playwright
+npm install -D @vitest/browser-playwright playwright
 npx playwright install chromium
 ```
 

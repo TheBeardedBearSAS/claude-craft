@@ -53,20 +53,21 @@ export default defineConfig({
 ### Installation
 
 ```bash
-npm install -D @vitest/browser playwright
+npm install -D @vitest/browser-playwright playwright
 npx playwright install chromium
 ```
 
-### Workspace Configuration (jsdom for modules, browser for workers/WASM)
+### Projects Configuration (jsdom for modules, browser for workers/WASM)
 
 ```typescript
-// vitest.config.ts — workspace split
+// vitest.config.ts — `projects` split (`workspace` was renamed in Vitest 3.2)
 import { defineConfig } from 'vitest/config'
+import { playwright } from '@vitest/browser-playwright'
 import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
   test: {
-    workspace: [
+    projects: [
       {
         // Pure modules, plugins, utils — fast, no browser needed
         extends: true,
@@ -85,9 +86,9 @@ export default defineConfig({
           include: ['src/**/*.browser.{test,spec}.ts'],
           browser: {
             enabled: true,
-            name: 'chromium',
-            provider: 'playwright',
+            provider: playwright(),
             headless: true,
+            instances: [{ browser: 'chromium' }],
           },
         },
       },

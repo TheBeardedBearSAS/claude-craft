@@ -27,7 +27,7 @@
 # 2026-11-08 : ajout du stack Rust / Axum (Rust 1.99.1, édition 2024, Axum 0.8.9 du 2026-04-14, Tokio 1.54.1 du 2026-10-21, SQLx 0.9.0 du 2026-05-21).
 # 2026-11-03 (release 9.1.1) : Claude Code recommandé/testé 2.1.316 → 2.1.317 (changelog 2.1.317 relu).
 # 2026-11-01 (release 9.1.0) : Claude Code recommandé/testé 2.1.312 → 2.1.316 (changelog 2.1.313–2.1.316 relu).
-# 2026-11-01 : ajout du stack Ruby / Rails (Rails 8.1.4 du 2026-09-24, Ruby 4.0.9 du 2026-10-23).
+# 2026-11-01 : ajout du stack Ruby / Rails (Rails 8.1.4 du 2026-09-24, Ruby 4.0.9 du 2026-10-23) — plancher relevé à Rails 8.1.4.1 (sécurité, 2026-11-04) par l'audit du 2026-11-11.
 # 2026-10-28 (release 8.27.0) : Claude Code recommandé/testé 2.1.296 → 2.1.312 (changelog 2.1.297–2.1.312 relu).
 
 meta:
