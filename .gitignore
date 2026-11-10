@@ -34,6 +34,7 @@ styles/Google/
 styles/write-good/
 
 # Build & test artifacts
+tests/e2e/tools/artifacts/
 coverage/
 .coverage-new/
 .coverage-tmp/
