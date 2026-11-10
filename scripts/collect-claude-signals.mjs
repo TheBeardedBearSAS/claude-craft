@@ -24,13 +24,16 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import * as yaml from 'js-yaml';
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DEFAULT_BASELINE = path.join(PROJECT_ROOT, 'config', 'claude-alignment-baseline.json');
+const DEFAULT_VERSIONS = path.join(PROJECT_ROOT, 'config', 'versions.yaml');
 const DEFAULT_OUT_DIR = path.join(PROJECT_ROOT, 'docs', 'audit', 'claude-alignment');
 
 const NPM_REGISTRY = 'https://registry.npmjs.org/@anthropic-ai/claude-code';
-const ADVISORIES = 'https://api.github.com/repos/anthropics/claude-code/security-advisories';
+/** `per_page=100` : le défaut GitHub (30) tronquait la liste (36 avis au 2026-11-10). */
+const ADVISORIES = 'https://api.github.com/repos/anthropics/claude-code/security-advisories?per_page=100';
 /**
  * Catalogue communautaire. Le nom du fichier a déjà bougé upstream
  * (`THE_RESOURCES_TABLE.csv` → `..._NEW.csv`) : on essaie les candidats dans
@@ -52,23 +55,24 @@ const COMMUNITY_CSV_CANDIDATES = [
  * différentes, ce qui ferait croire à un changement toutes les semaines et
  * réveillerait un agent pour rien. Le markdown est stable, et 30× plus léger
  * (27 Ko contre 873 Ko) — les agents le récupèrent aussi à moindre coût.
+ *
+ * URLs canoniques (cibles finales des redirections `docs.claude.com`, vérifiées
+ * le 2026-11-10) : les agents citent ainsi la même URL que le collecteur.
  */
 const WATCHED_PAGES = {
-  'models-pricing': 'https://docs.claude.com/en/docs/about-claude/models/overview.md',
-  'prompt-context': 'https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/claude-prompting-best-practices.md',
-  'cc-features': 'https://docs.claude.com/en/docs/claude-code/settings.md',
+  'models-pricing': 'https://platform.claude.com/docs/en/models/overview.md',
+  'prompt-context':
+    'https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices.md',
+  'cc-features': 'https://code.claude.com/docs/en/settings.md',
 };
 
-/** Ordre canonique des lentilles — dicte l'ordre de `agents_to_launch`. */
-const LENSES = [
-  'cli-release',
-  'models-pricing',
-  'prompt-context',
-  'cc-features',
-  'security-cve',
-  'community',
-  'internal-conformance',
-];
+/**
+ * Ordre canonique des lentilles — dicte l'ordre de `agents_to_launch`.
+ * La conformité interne (frontmatters, `context: fork`, model/effort, hooks)
+ * n'est plus une lentille : elle est couverte par les tests de `tests/content/`,
+ * exécutés comme gate local par la commande.
+ */
+const LENSES = ['cli-release', 'models-pricing', 'prompt-context', 'cc-features', 'security-cve', 'community'];
 
 const UA = { 'User-Agent': 'claude-craft-alignment/1.0' };
 
@@ -134,9 +138,19 @@ function readBaseline(baselinePath) {
   return JSON.parse(readFileSync(baselinePath, 'utf8'));
 }
 
-/** Version de Claude Code actuellement déclarée par la source de vérité du repo. */
-function declaredCliVersion(baseline) {
-  return baseline?.cli_version_seen ?? null;
+/**
+ * Version de Claude Code déclarée par le repo : la plus récente entre
+ * `claudeCode.testedUpTo` (source de vérité, bumpée par les releases) et la
+ * dernière version vue par l'audit. Sans cela, une release qui bumpe
+ * versions.yaml hors audit réveillait `cli-release` pour rien.
+ */
+function declaredCliVersion(baseline, versionsPath) {
+  const seen = baseline?.cli_version_seen ?? null;
+  if (!existsSync(versionsPath)) return seen;
+  const tested = yaml.load(readFileSync(versionsPath, 'utf8'))?.claudeCode?.testedUpTo ?? null;
+  if (!tested) return seen;
+  if (!seen) return String(tested);
+  return compareVersions(tested, seen) > 0 ? String(tested) : seen;
 }
 
 /**
@@ -144,6 +158,7 @@ function declaredCliVersion(baseline) {
  *
  * @param {object} opts
  * @param {string} [opts.baselinePath] chemin de la baseline versionnée
+ * @param {string} [opts.versionsPath] chemin de config/versions.yaml (tests)
  * @param {string} [opts.outDir] répertoire du fichier de signaux daté
  * @param {Date}   [opts.now] horloge injectable (tests)
  * @param {string} [opts.since] force la date de baseline (rattrapage de cadence)
@@ -186,7 +201,7 @@ export async function collectSignals(opts = {}) {
   ]);
 
   // --- Lentille 1 : version du CLI Claude Code ---------------------------------
-  const declared = declaredCliVersion(baseline);
+  const declared = declaredCliVersion(baseline, opts.versionsPath ?? DEFAULT_VERSIONS);
   if (npmRes.status === 'fulfilled') {
     const observed = npmRes.value?.['dist-tags']?.latest ?? null;
     const changed = baselineMissing || !declared || !observed || compareVersions(observed, declared) > 0;
@@ -251,15 +266,6 @@ export async function collectSignals(opts = {}) {
     failOpen('community', csvRes.reason);
     lenses.community.sources = COMMUNITY_CSV_CANDIDATES;
   }
-
-  // --- Lentille 7 : conformité interne -----------------------------------------
-  // Scan local pur (frontmatters, context: fork, cohérence model/effort). Aucune
-  // source réseau, coût quasi nul en haiku : toujours lancée.
-  lenses['internal-conformance'] = {
-    changed: true,
-    reason: 'scan local systématique — indépendant de toute source externe',
-    sources: [],
-  };
 
   const agentsToLaunch = LENSES.filter((lens) => lenses[lens]?.changed);
 

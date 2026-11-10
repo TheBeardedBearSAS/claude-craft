@@ -98,7 +98,7 @@ Les sous-agents (Task tool) ont leur propre fenetre de contexte, evitant de poll
 
 **Agent frontmatter (v2.1.78+):** Les agents personnalises supportent `effort`, `maxTurns`, `disallowedTools` pour optimiser les couts et le scope. `disallowedTools` retire des outils entiers : une entrée `Bash(git push *)` retire tout Bash à l'agent — bloquer une commande via `permissions.deny` (s'applique aussi aux sous-agents).
 
-**Skill `context: fork` (v2.1.105+):** Tout skill de Claude Craft de plus de 60 lignes utilise `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 2 000-5 000 tokens/session pour les skills moyens (60-100 lignes), 8 000-15 000 tokens/session pour les skills lourds (>100 lignes). Règle vérifiée par la lentille `internal-conformance` de `/common:audit-claude-alignment`.
+**Skill `context: fork` (v2.1.105+):** Tout skill de Claude Craft de plus de 60 lignes utilise `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 2 000-5 000 tokens/session pour les skills moyens (60-100 lignes), 8 000-15 000 tokens/session pour les skills lourds (>100 lignes). Règle vérifiée par `tests/content/skill-context-fork.test.mjs`.
 
 ---
 
