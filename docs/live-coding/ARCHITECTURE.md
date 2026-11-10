@@ -171,7 +171,7 @@ Tous les events suivent le format JSON :
 
 #### 3. `agent.thinking` (optionnel)
 
-Nécessite Claude extended thinking (disponible si modèle supporte).
+Nécessite le thinking adaptatif de Claude (disponible si le modèle le supporte).
 
 ```json
 {

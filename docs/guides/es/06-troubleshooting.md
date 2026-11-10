@@ -546,7 +546,7 @@ cat .claude/settings.json | jq '.hooks.PreCompact'
 
 ### Fallos de Hooks Relacionados con Seguridad
 
-Si se usan servidores MCP con hooks, asegurarse de tener Claude Code v2.1.260+ para evitar CVEs conocidas:
+Si se usan servidores MCP con hooks, asegurarse de tener Claude Code v2.1.321+ para evitar CVEs conocidas:
 - CVE-2025-59536: Ejecución de comandos antes del diálogo de confianza al inicio
 - CVE-2026-86063: Bypass del pin SHA de plugins (corregido en 2.1.179)
 - CVE-2026-103435: Escritura arbitraria de archivos vía symlink, TOCTOU (corregido en 2.1.129)

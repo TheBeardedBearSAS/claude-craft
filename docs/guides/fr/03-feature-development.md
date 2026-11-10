@@ -60,7 +60,7 @@ Cette commande va :
 
 **Régler l'effort :** `/effort high` pour les phases d'analyse exigeant un raisonnement profond ; `/effort low` pour les recherches simples, `/effort medium` pour l'implémentation standard.
 
-> **Modèles courants (octobre 2026) :** `low` → Haiku 5.5, `medium` → **Sonnet 5.5** (`claude-sonnet-5-5`, $2/$10 par M tokens), `high`/`xhigh` → Opus 5.5 (`claude-opus-5-5`, $4/$20). L'alias `model:` se résout automatiquement vers la dernière version, donc `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` pointe désormais vers Sonnet 5.5. Fable 5.1 (`claude-fable-5-1`) est disponible pour les agents créatifs. Grille complète prix/routage : [FAQ](../../FAQ.md).
+> **Modèles courants (novembre 2026) :** `low` → Haiku 5.5, `medium` → **Sonnet 5.5** (`claude-sonnet-5-5`, $2/$10 par M tokens), `high`/`xhigh` → Opus 5.5 (`claude-opus-5-5`, $4/$20). L'alias `model:` se résout automatiquement vers la dernière version, donc `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` pointe désormais vers Sonnet 5.5. Fable 5.2 (`claude-fable-5-2`) est disponible pour les agents créatifs. Grille complète prix/routage : [FAQ](../../FAQ.md).
 
 ### Utiliser l'Agent de Recherche
 

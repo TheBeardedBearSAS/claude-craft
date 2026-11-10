@@ -176,6 +176,8 @@ Estos campos permiten optimizar los costos y el alcance de los sub-agentes.
 
 Claude Code compacta automaticamente el contexto cuando se acerca a los limites de la ventana. Los mensajes antiguos se resumen para liberar espacio.
 
+> **Historial append-only (Opus 5.5, Fable 5.x, Mythos 5.x):** modificar un mensaje anterior, reconstruir `system` o `tools`, o resumir turnos antiguos en su lugar invalida los bloques de thinking siguientes. Añadir al final del historial en lugar de reescribirlo. Fuente: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+
 ### Compactacion proactiva
 
 A partir del 70% de contexto usado, ejecutar `/compact` proactivamente para evitar una compactacion automatica no controlada.
@@ -362,8 +364,8 @@ Ajustar el nivel de esfuerzo del modelo según la complejidad de la tarea:
 
 > **El esfuerzo no cambia de modelo:** ajusta la profundidad de razonamiento del modelo actual; el modelo se elige con `/model`. Combinaciones recomendadas: `low` con Haiku 5.5, `medium` con Sonnet 5.5, `high`/`xhigh` con Opus 5.5.
 
-> **Esfuerzo por defecto según el modelo:** medium en Opus 5.5 y Haiku 5.5; high en Sonnet 5.5, Fable 5.1 y los modelos legacy.
-> **Fable 5.1** (`claude-fable-5-1`, $10/$50 por Mtok) es un modelo actual, adecuado para agentes creativos/narrativos. **Mythos** tiene disponibilidad limitada (solo Cyber Verification Program).
+> **Esfuerzo por defecto según el modelo:** medium en Opus 5.5 y Haiku 5.5; high en Sonnet 5.5, Fable 5.2 y los modelos legacy.
+> **Fable 5.2** (`claude-fable-5-2`, $8/$40 por Mtok) es el modelo Fable actual, adecuado para agentes creativos/narrativos; Fable 5.1 y Fable 5 siguen disponibles (legacy). En Fable 5.2 (como en Mythos 5.2) el razonamiento está siempre activo (solo modo adaptive): para reducirlo, baja el esfuerzo — una instrucción «responde directamente» no basta a partir de `medium`. **Mythos** tiene disponibilidad limitada (solo Cyber Verification Program). La lectura de caché cuesta el 5 % del precio de entrada en Opus/Sonnet 5.5 y el 2,5 % en Fable 5.x y Mythos 5.x.
 
 ### Alerta de inactividad (v2.1.84+)
 
@@ -500,7 +502,7 @@ Durante la compactacion, siempre preservar:
 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` | `1` en un runner self-hosted: `claude -p` ejecutado dentro de una sesión reutiliza el ID y la transcripción de esa sesión (comportamiento anterior a v2.1.317) |
 | `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` | `1` detiene la obtención de feature flags sin desactivar la telemetría; cada flag usa su valor por defecto (v2.1.319+) |
 | `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` | `1` hace que Claude Code espere una tarea MCP dentro de su llamada de herramienta en lugar de pasarla a segundo plano (v2.1.319+) |
-| `permissions.denyInsteadOfPrompting` (setting) | `true`: una llamada que esperaría un prompt de permiso se rechaza y el turno continúa — terminal, sub-agentes, teammates (v2.1.319+) |
+| `permissions.denyInsteadOfPrompting` (setting) | `true`: una llamada que esperaría un prompt de permiso se rechaza y el turno continúa — terminal, sub-agentes, teammates; solo se respeta desde `~/.claude/settings.json` o `--settings`, no desde un archivo de proyecto (v2.1.319+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Ampliar/forzar el prompt caching (−40 % en sesiones repetitivas) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Poner a `1` para desactivar la memoria automática |
 

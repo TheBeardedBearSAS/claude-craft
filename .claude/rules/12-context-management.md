@@ -109,6 +109,8 @@ Claude Code compacte automatiquement le contexte quand il approche les limites. 
 - A partir de **70% de contexte**, lancer `/compact` proactivement
 - `/memory` (v2.1.59+) sauvegarde des apprentissages persistants qui survivent aux compactions
 
+> **Historique append-only (Opus 5.5, Fable 5.x, Mythos 5.x) :** modifier un message antérieur, reconstruire `system` ou `tools`, ou résumer d'anciens tours sur place invalide les blocs de thinking suivants. Ajouter en fin d'historique plutôt que réécrire. Source : [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+
 **Hooks disponibles** pour gerer la compaction:
 - **PreCompact** — Sauvegarder le contexte critique avant compaction (peut bloquer via exit code 2 depuis v2.1.105)
 - **PostCompact** (v2.1.76+) — Re-injecter le contexte critique apres compaction
@@ -163,9 +165,9 @@ La status line affiche le pourcentage de contexte utilise.
 
 > **L'effort ne change pas de modèle :** il règle la profondeur de raisonnement du modèle courant ; le modèle se choisit avec `/model` (table plus bas). Couples conseillés : `low` sur Haiku 5.5 (`claude-haiku-5-5`), `medium` sur Sonnet 5.5 (`claude-sonnet-5-5`), `high`/`xhigh` sur Opus 5.5 (`claude-opus-5-5`).
 
-> **Effort par défaut (doc Anthropic, octobre 2026) :** `medium` sur Opus 5.5 et Haiku 5.5 ; `high` sur Sonnet 5.5, Fable 5.1 et les modèles *legacy* (Sonnet 5, Opus 4.8). Monter explicitement à `high`/`xhigh` sur Opus 5.5 pour les tâches critiques.
+> **Effort par défaut (doc Anthropic, novembre 2026) :** `medium` sur Opus 5.5 et Haiku 5.5 ; `high` sur Sonnet 5.5, Fable 5.2 et les modèles *legacy* (Sonnet 5, Opus 4.8, Fable 5.1). Monter explicitement à `high`/`xhigh` sur Opus 5.5 pour les tâches critiques.
 
-> **Fable 5.1 / Mythos :** **Fable 5.1** (`claude-fable-5-1`, $10/$50 par M tokens) est un modèle courant — pertinent pour les agents créatifs/narratifs ; Fable 5 reste disponible (*legacy*). **Mythos 5 / 5.1** sont en disponibilité limitée (organisations vérifiées via le Cyber Verification Program) — ne pas les recommander par défaut.
+> **Fable 5.2 / Mythos :** **Fable 5.2** (`claude-fable-5-2`, $8/$40 par M tokens) est le modèle Fable courant — pertinent pour les agents créatifs/narratifs ; Fable 5.1 et Fable 5 restent disponibles (*legacy*). Sur Fable 5.2 (comme sur Mythos 5.2), la réflexion est toujours active (mode adaptive seul) : pour la réduire, baisser l'effort — une consigne « réponds directement » ne suffit pas à `medium` et au-delà. **Mythos 5 / 5.1 / 5.2** sont en disponibilité limitée (organisations vérifiées via le Cyber Verification Program) — ne pas les recommander par défaut.
 
 **Alerte d'inactivite** (v2.1.84+): Apres 75+ minutes, Claude suggere `/clear`.
 
@@ -209,7 +211,7 @@ La status line affiche le pourcentage de contexte utilise.
 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` | `1` sur un runner self-hosted : `claude -p` lancé dans une session réutilise l'ID et le transcript de cette session (comportement d'avant v2.1.317) |
 | `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` | `1` coupe la récupération des feature flags sans désactiver la télémétrie ; chaque flag prend sa valeur par défaut (v2.1.319+) |
 | `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` | `1` fait attendre une tâche MCP dans son appel d'outil au lieu de la passer en arrière-plan (v2.1.319+) |
-| `permissions.denyInsteadOfPrompting` (setting) | `true` : un appel qui attendrait un prompt de permission est refusé et le tour continue — terminal, sous-agents, teammates (v2.1.319+) |
+| `permissions.denyInsteadOfPrompting` (setting) | `true` : un appel qui attendrait un prompt de permission est refusé et le tour continue — terminal, sous-agents, teammates ; honoré uniquement depuis `~/.claude/settings.json` ou `--settings`, pas depuis un fichier projet (v2.1.319+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Etendre/forcer le prompt caching (−40 % sur sessions repetitives) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Mettre a `1` pour desactiver la memoire automatique |
 
@@ -394,7 +396,7 @@ Reglage **fiabilite + cout** : jusqu'a 3 modeles de repli essayes dans l'ordre q
 
 Pour les 4 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor), ce repli `opus → sonnet → haiku` evite les interruptions en pic de charge Opus sans degrader le travail courant. Exemple pret a l'emploi dans `.claude/settings.local.json.example`.
 
-**IDs canoniques (octobre 2026) :** `claude-opus-5-5` ($4/$20) | `claude-sonnet-5-5` ($2/$10) | `claude-haiku-5-5` ($0.10/$0.50) | `claude-fable-5-1` ($10/$50). *Legacy* toujours disponibles : `claude-opus-4-8`, `claude-sonnet-5` ($2/$10, tarif devenu standard), `claude-haiku-4-5-20251001`, `claude-fable-5`. Source : [models overview](https://platform.claude.com/docs/en/about-claude/models/overview).
+**IDs canoniques (novembre 2026) :** `claude-opus-5-5` ($4/$20) | `claude-sonnet-5-5` ($2/$10) | `claude-haiku-5-5` ($0.10/$0.50) | `claude-fable-5-2` ($8/$40). *Legacy* toujours disponibles : `claude-opus-4-8`, `claude-sonnet-5` ($2/$10, tarif devenu standard), `claude-haiku-4-5-20251001`, `claude-fable-5-1`, `claude-fable-5`. Lecture de cache : 5 % du prix d'entrée sur Opus/Sonnet 5.5, 2,5 % sur Fable 5.x et Mythos 5.x. Source : [models overview](https://platform.claude.com/docs/en/about-claude/models/overview).
 
 ---
 

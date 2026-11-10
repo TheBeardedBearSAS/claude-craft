@@ -14,6 +14,8 @@
 # OpenTofu 1.13.1, Ansible 2.21.5, hcloud 1.70.1, FrankenPHP 1.13.0 et PgBouncer 1.26.0 (correctifs CVE)).
 # CORRECTIF : la note du 2026-07-03 (« RN 0.86 inexistant », 0.86→0.85) était FAUSSE — dist-tags npm vérifiés
 # le 2026-10-13 : 0.86-stable=0.86.3, latest=0.87.1. Précédente : audit d'alignement Claude du 2026-10-13 (CLI 2.1.260/2.1.296).
+# 2026-11-10 (audit d'alignement Claude --full) : Claude Code recommandé/testé 2.1.319 → 2.1.322 (2.1.321 : 4 correctifs
+# permissions Bash / OAuth MCP, Fable 5.2 par défaut ; changelog 2.1.320–2.1.322 relu) ; Fable 5.1 → 5.2 ($8/$40).
 # 2026-11-09 (release 9.2.0) : Claude Code recommandé/testé 2.1.317 → 2.1.319 (changelog 2.1.318–2.1.319 relu).
 # 2026-11-10 : ajout du stack WordPress (tier 3, plugins + thèmes blocs) — WordPress 7.1.4 (api.wordpress.org version-check), PHP min 7.4 / recommandé 8.3+, WooCommerce 11.2.2 du 2026-11-04 (module optionnel = skill woocommerce), @wordpress/scripts 37.1.0, @wordpress/env 12.1.0, WPCS 3.4.1.
 # 2026-11-09 : ajout du stack Tauri v2 (tier 3, desktop) — tauri 2.12.5 du 2026-10-21, tauri-cli / @tauri-apps/cli 2.12.4 du 2026-10-21, MSRV 1.90 ; Tauri 3.0.0-alpha.6 (2026-11-06) hors périmètre.
@@ -24,22 +26,67 @@
 # 2026-10-28 (release 8.27.0) : Claude Code recommandé/testé 2.1.296 → 2.1.312 (changelog 2.1.297–2.1.312 relu).
 
 meta:
-  lastUpdated: '2026-11-09'
+  lastUpdated: '2026-11-10'
 
 claudeCode:
   # minimum : plancher sécurité — couvre GHSA-5j29 (2.1.129), GHSA-7835 (2.1.163),
-  # GHSA-pq7j (2.1.179) et GHSA-gfvf (2.1.260). Audit d'alignement du 2026-10-13.
-  minimum: '2.1.260'
-  recommended: '2.1.319'
-  testedUpTo: '2.1.319'
-  # Génération courante (2026-10) : Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.1.
-  # Opus 4.8, Sonnet 5, Haiku 4.5 et Fable 5 restent disponibles mais sont legacy.
+  # GHSA-pq7j (2.1.179), GHSA-gfvf (2.1.260) et les 4 correctifs permissions Bash / OAuth MCP
+  # de 2.1.321 (sans GHSA publié). Relevé 2.1.260 → 2.1.321 à l'audit d'alignement du 2026-11-10.
+  minimum: '2.1.321'
+  recommended: '2.1.322'
+  testedUpTo: '2.1.322'
+  # Génération courante (2026-11) : Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.2 (audit d'alignement 2026-11-10).
+  # Opus 4.8, Sonnet 5, Haiku 4.5, Fable 5 et Fable 5.1 restent disponibles mais sont legacy.
   models:
     opus: 'claude-opus-5-5'
     sonnet: 'claude-sonnet-5-5'
     sonnetPrev: 'claude-sonnet-5'
     haiku: 'claude-haiku-5-5'
-    fable: 'claude-fable-5-1'
+    fable: 'claude-fable-5-2'
+  # Modèles à disponibilité limitée (Cyber Verification Program) : ni courants par défaut, ni legacy.
+  limitedModels:
+    - 'claude-mythos-5-2'
+    - 'claude-mythos-5-1'
+    - 'claude-mythos-5'
+  # Legacy officiels encore disponibles (models overview, 2026-11-10). Prime sur `models`
+  # (ex. sonnetPrev) pour scripts/scan-claude-claims.mjs.
+  legacyModels:
+    - 'claude-fable-5-1'
+    - 'claude-fable-5'
+    - 'claude-opus-5'
+    - 'claude-opus-4-8'
+    - 'claude-opus-4-7'
+    - 'claude-opus-4-6'
+    - 'claude-opus-4-5'
+    - 'claude-sonnet-5'
+    - 'claude-sonnet-4-6'
+    - 'claude-haiku-4-5-20251001'
+  # Prix par MTok entrée/sortie des modèles courants (models overview, 2026-11-10).
+  pricing:
+    claude-opus-5-5: '$4/$20'
+    claude-sonnet-5-5: '$2/$10'
+    claude-haiku-5-5: '$0.10/$0.50'
+    claude-fable-5-2: '$8/$40'
+
+# Périmètre de scripts/scan-claude-claims.mjs (inventaire des affirmations Claude, audit d'alignement).
+# exclude : préfixes (finissant par /) ou chemins exacts hors scan — historique, rapports, tests et
+# fichiers de vérité qui citent légitimement d'anciennes versions.
+# historyFiles : fichiers d'historique — leurs occurrences périmées sont classées `history`.
+claimScan:
+  exclude:
+    - 'docs/audit/'
+    - 'docs/internal/'
+    - 'CHANGELOG.md'
+    - 'tests/'
+    - 'config/'
+    - 'scripts/'
+    - 'package-lock.json'
+    - 'docs/CHANGELOG-archive.md'
+    - 'docs/marketing/'
+    - 'Tools/StatusLine/tests/'
+    - 'Tools/MultiAccount/tests/'
+  historyFiles:
+    - 'docs/MIGRATION*'
 
 # stacks.<key>.registry DOIT être strictement égal à TECH_REGISTRY[<key>].version
 stacks:
@@ -118,6 +165,8 @@ denylist:
   # IDs de modèles legacy à ne plus recommander dans les fichiers vitrine
   - 'claude-sonnet-4-6'
   - 'claude-haiku-4-5'
+  # Fable 5.1 passé legacy (Fable 5.2 courant) — audit d'alignement 2026-11-10
+  - 'claude-fable-5-1'
   # Badge hero périmé du site (LandingPage.vue) — chaîne spécifique pour ne pas heurter les notes historiques du README
   - 'v8.13.0 - Claude Code'
   - 'v8.20.0'

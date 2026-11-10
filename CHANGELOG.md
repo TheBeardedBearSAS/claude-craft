@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`scripts/scan-claude-claims.mjs`** (`npm run audit:claude-claims`) : inventaire déterministe des affirmations Claude sur tout `git ls-files` (IDs et noms de modèles, versions du CLI, prix, `CLAUDE_CODE_*`, termes dépréciés), classées contre `config/versions.yaml` (nouvelles clés `claudeCode.limitedModels`, `legacyModels`, `pricing` et `claimScan`). `--fail-on-stale` sort en 1 sur toute affirmation périmée. Le run `--full` du 2026-11-10 de `/common:audit-claude-alignment` n'avait confronté qu'une quinzaine de fichiers pivots sur plus de 150 porteurs d'affirmations : la commande lance désormais le scanner à chaque run, nourrit les agents avec ses occurrences, re-scanne après mise à jour de la vérité et en fait son 6ᵉ gate.
+
 ### Changed
+
+- **Fable 5.2 (`claude-fable-5-2`, $8/$40) devient le modèle Fable courant** ; Fable 5.1 passe en *legacy*. Règle 12 (6 copies), `COMPATIBILITY.md`, `CLI-REFERENCE.md`, `FAQ.md`, guides 03 (5 langues). La règle 12 note que la réflexion est toujours active sur Fable 5.2 / Mythos 5.2 : pour la réduire, il faut baisser l'effort.
+- **Claude Code recommandé/testé 2.1.319 → 2.1.322** : la 2.1.321 corrige 4 failles de permissions (Bash en lecture seule hors sandbox, mauvais dossier pour les écritures, deny contourné par `cp`/`mv`) et d'OAuth MCP (refresh token envoyé à un autre hôte). Mis à jour dans `doctor`, le README, la page d'accueil du site, les prérequis et les guides (5 langues) ; table Features de `COMPATIBILITY.md` complétée (2.1.321 avec ses *breaking changes*, 2.1.322).
+- **`permissions.denyInsteadOfPrompting`** : la règle 12 (6 copies) précise que le réglage n'est honoré que depuis `~/.claude/settings.json` ou `--settings`.
 
 - **`/common:audit-claude-alignment` optimisé** : la lentille agent `internal-conformance` (haiku) est remplacée par des tests vitest déterministes (`tests/content/skill-context-fork.test.mjs`, `tests/content/hooks-stdin.test.mjs`, plus les tests existants YAML strict / model-effort), lancés en gate : 6 lentilles au lieu de 7 et plus aucun agent une semaine calme. Gates exécutés sous Docker avec la suite vitest complète. Le pré-vol tolère les fichiers non suivis, mais compare un instantané pris avant et après les agents pour détecter une pollution. Branche créée depuis `origin/main` après un fetch explicite de `refs/heads/main`.
 - **`/common:audit-freshness` optimisé** : une pré-collecte déterministe (`scripts/collect-freshness-signals.mjs`) lit la version stable de chaque stack et outil infra sur son registre officiel (npm, PyPI, Packagist, crates.io, RubyGems, endoflife.date, GitHub releases, Flutter, api.wordpress.org) et la compare à `config/versions.yaml`. Seuls les éléments en écart reçoivent un agent (`general-purpose` / `sonnet` / `medium`, lots de 10) : 7 agents au lieu de 20 sur les données du 2026-11-10. Le périmètre découle désormais de `config/versions.yaml` et du nouveau `config/freshness-sources.yaml` : 27 entrées au lieu de 10 stacks codés en dur. Ruby, Rust, Tauri, WordPress, Vite, Vercel et Paperclip étaient absents, et l'infra pointait vers des namespaces `/docker:*` inexistants. Un test échoue si une clé de `versions.yaml` n'a pas de source. La commande ajoute aussi un pré-vol git, un contrôle de pollution, `--full` / `--dry-run`, et une section « Delta vs audit précédent ». La version est lue dans `package.json` (« 8.0.0 » était codé en dur) et les versions cibles en dur ne sont plus injectées dans les prompts.
@@ -21,6 +29,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Exemples de hooks publiés** : `.claude/templates/hooks/` (non publié dans le paquet npm, alors que la doc distribuée le cite) passe sous `Dev/i18n/base/Common/hooks/templates/examples/`. L'installeur les copie dans `.claude/templates/hooks/` du projet (sauf `--hooks=none`). Le dépôt lui-même pointe vers le nouvel emplacement.
 - **Hooks de cycle de vie dans la source unique** : `post-tool-failure.sh`, `pre-compact.sh` et `session-end.sh` quittent les 5 dossiers de langue (15 copies) pour `Dev/i18n/base/Common/hooks/scripts/` ; `session-init.sh`, `session-end.sh` et `post-tool-failure.sh` rejoignent le profil `full`.
 - **Export plugin** : `Tools/PluginExport/export-plugin.sh` génère `hooks/hooks.json` depuis `hooks.default.json` (commandes `${CLAUDE_PLUGIN_ROOT}/hooks/scripts/…`) et copie les scripts et `lib/`.
+
+### Security
+
+- **Minimum de sécurité Claude Code relevé de 2.1.260 à 2.1.321.** La 2.1.321 corrige 4 failles sans GHSA publié : commande Bash en lecture seule exécutée hors sandbox sans prompt, écriture évaluée depuis le mauvais dossier, règles deny et fichiers protégés contournés par `cp`/`mv` vers un dossier, refresh token OAuth MCP envoyé à un autre hôte après redirection. Les règles deny et les hooks Bash distribués par Claude Craft sont directement concernés. `claude-craft doctor` signale désormais toute version inférieure à 2.1.321 comme `[FAIL]`. Mis à jour : `config/versions.yaml`, `COMPATIBILITY.md` (justification, guide de migration), règle 11, `SECURITY.md`, README (badge), prérequis, guides et `docs/i18n` (5 langues).
 
 ### Fixed
 

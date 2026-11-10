@@ -56,7 +56,7 @@ Für Analysephasen, die tiefes Nachdenken erfordern, wählen Sie einen hohen Auf
 
 Verwenden Sie `/effort low` für einfache Nachschläge und `/effort medium` für Standard-Implementierungsarbeiten.
 
-> **Aktuelle Modelle (Oktober 2026):** `low` → Haiku 5.5, `medium` → **Sonnet 5.5** (`claude-sonnet-5-5`, $2/$10 pro Mio. Tokens), `high`/`xhigh` → Opus 5.5 (`claude-opus-5-5`, $4/$20). Der `model:`-Alias löst automatisch zur neuesten Version auf, daher verweist `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` jetzt auf Sonnet 5.5. Fable 5.1 (`claude-fable-5-1`) steht für kreative Agenten zur Verfügung. Vollständige Preis-/Routing-Tabelle: [FAQ](../../FAQ.md).
+> **Aktuelle Modelle (November 2026):** `low` → Haiku 5.5, `medium` → **Sonnet 5.5** (`claude-sonnet-5-5`, $2/$10 pro Mio. Tokens), `high`/`xhigh` → Opus 5.5 (`claude-opus-5-5`, $4/$20). Der `model:`-Alias löst automatisch zur neuesten Version auf, daher verweist `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` jetzt auf Sonnet 5.5. Fable 5.2 (`claude-fable-5-2`) steht für kreative Agenten zur Verfügung. Vollständige Preis-/Routing-Tabelle: [FAQ](../../FAQ.md).
 
 ### Den Analysebefehl verwenden
 

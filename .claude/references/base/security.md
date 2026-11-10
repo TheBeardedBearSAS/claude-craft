@@ -661,7 +661,7 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 | CVE-2026-86063 | High | v2.1.179 | Contournement du pin SHA des plugins → installation de code attaquant (GHSA-pq7j-f95f-qfcv) |
 | CVE-2026-103012 | Low | v2.1.260 | Managed settings non appliques avec une cle API stockee (GHSA-gfvf-j8jh-jxxw) |
 
-> **Recommandation:** Toujours utiliser Claude Code v2.1.260+ (plancher securite, voir `.claude/COMPATIBILITY.md`) lorsque des serveurs MCP ou plugins sont utilises avec des hooks.
+> **Recommandation:** Toujours utiliser Claude Code v2.1.321+ (plancher securite, voir `.claude/COMPATIBILITY.md`) lorsque des serveurs MCP ou plugins sont utilises avec des hooks.
 
 ### CLAUDE.md vs Hooks
 

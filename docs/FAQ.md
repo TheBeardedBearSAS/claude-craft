@@ -12,7 +12,7 @@ Requirements depend on the install method:
 
 **NPX (recommended) — only 2 requirements:**
 - **Node.js 22+** (Node 24 recommended — Active LTS)
-- **Claude Code** v2.1.260+ (2.1.319 recommended)
+- **Claude Code** v2.1.321+ (2.1.322 recommended)
 
 **Makefile / shell scripts — additional requirements:**
 - **yq v4+** (Mike Farah's version, not the Python yq) — for YAML processing
@@ -411,21 +411,21 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 
 ### Combien de tokens consomme un workflow BMAD ?
 
-> **Disclaimer :** Les estimations ci-dessous sont indicatives. La consommation réelle dépend de la taille du projet, du nombre d'agents invoqués, du modèle (Opus vs Sonnet vs Haiku), et des options RTK activées. Relevé basé sur des sessions réelles en juin 2026.
+> **Disclaimer :** Les estimations ci-dessous sont indicatives. La consommation réelle dépend de la taille du projet, du nombre d'agents invoqués, du modèle (Opus vs Sonnet vs Haiku), et des options RTK activées. Volumes relevés sur des sessions réelles en juin 2026. Coûts recalculés le 2026-11-10 sur **Sonnet 5.5** ($2/$10 par M tokens) appliqué à la colonne « avec RTK », en supposant ~40 % de tokens d'entrée et ~60 % de sortie, soit ~$6.8 par M tokens. Ce mix est le même que celui des chiffres précédents, calculés sur Sonnet 4.6 ($3/$15).
 
-| Track BMAD | Tokens estimés (sans RTK) | Tokens estimés (avec RTK) | Coût indicatif Sonnet 4-6 |
+| Track BMAD | Tokens estimés (sans RTK) | Tokens estimés (avec RTK) | Coût indicatif Sonnet 5.5 (avec RTK) |
 |-----------|--------------------------|--------------------------|--------------------------|
-| **Quick Flow** (hotfix, bug) | ~5 000 | ~2 000 | ~$0.02 |
-| **Standard** (nouvelle feature) | ~15 000–25 000 | ~6 000–10 000 | ~$0.05–$0.10 |
-| **Enterprise** (plateforme) | ~40 000–60 000 | ~16 000–24 000 | ~$0.15–$0.25 |
-| `/team:audit --sequential` | ~20 000–35 000 | ~8 000–14 000 | ~$0.08–$0.14 |
-| `/qa:recette` (story unique) | ~8 000–15 000 | ~3 000–6 000 | ~$0.03–$0.06 |
+| **Quick Flow** (hotfix, bug) | ~5 000 | ~2 000 | ~$0.01 |
+| **Standard** (nouvelle feature) | ~15 000–25 000 | ~6 000–10 000 | ~$0.04–$0.07 |
+| **Enterprise** (plateforme) | ~40 000–60 000 | ~16 000–24 000 | ~$0.11–$0.16 |
+| `/team:audit --sequential` | ~20 000–35 000 | ~8 000–14 000 | ~$0.05–$0.10 |
+| `/qa:recette` (story unique) | ~8 000–15 000 | ~3 000–6 000 | ~$0.02–$0.04 |
 
 **RTK** = `/common:setup-rtk` (55-65% de réduction). Voir `docs/RTK-ANALYSIS.md`.
 
 **Avec Opus 5.5** (recommandé pour les phases de planification et review), multiplier par ~2 le coût par token par rapport à Sonnet 5.5. Utiliser `/model opusplan` pour le tiering dynamique Opus (planning) / Sonnet (exécution).
 
-**Usage mensuel typique pour une équipe de 3 développeurs :** 5-10 sprints Standard + 2 audits = ~200 000–400 000 tokens = **$1–2/mois avec RTK + Sonnet comme modèle de base**.
+**Usage mensuel typique pour une équipe de 3 développeurs :** 5-10 sprints Standard + 2 audits = ~200 000–400 000 tokens = **~$1.4–2.7/mois avec RTK + Sonnet 5.5 comme modèle de base**.
 
 ### Grille de prix & routage modèle par tâche (octobre 2026)
 
@@ -434,8 +434,8 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 | **Haiku 5.5** | `claude-haiku-5-5` | $0.10 / $0.50 (≤ 100K tokens de prompt ; $0.50 / $2.50 au-delà) | `/effort low` — lookups, classification, reviewers, sous-agents simples |
 | **Sonnet 5.5** | `claude-sonnet-5-5` | $2 / $10 | `/effort medium` — implémentation standard, tâches agentiques, exécution sprint, modèle sous-agent par défaut |
 | **Opus 5.5** | `claude-opus-5-5` | $4 / $20 | `/effort high`/`xhigh` — architecture, ADR, migrations, raisonnement complexe |
-| **Fable 5.1** | `claude-fable-5-1` | $10 / $50 | Agents créatifs/narratifs |
-| _Legacy_ (toujours disponibles) | `claude-sonnet-5`, `claude-opus-4-8`, `claude-haiku-4-5-20251001`, `claude-fable-5` | $2/$10, $5/$25, $1/$5, $10/$50 | À migrer vers la génération 5.5 |
+| **Fable 5.2** | `claude-fable-5-2` | $8 / $40 | Agents créatifs/narratifs |
+| _Legacy_ (toujours disponibles) | `claude-sonnet-5`, `claude-opus-4-8`, `claude-haiku-4-5-20251001`, `claude-fable-5-1`, `claude-fable-5` | $2/$10, $5/$25, $1/$5, $10/$50, $10/$50 | À migrer vers la génération 5.5 |
 
 > **Leviers de coût (cumulables) :** prompt caching **−90 %** sur l'input mis en cache (`ENABLE_PROMPT_CACHING_1H`, actif par défaut), **Batch API −50 %** in/out pour les traitements asynchrones de masse, RTK **55-90 %** sur les outputs CLI, `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` pour les sous-agents non typés.
 >

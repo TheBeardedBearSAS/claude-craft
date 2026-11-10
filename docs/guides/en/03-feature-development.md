@@ -56,7 +56,7 @@ For analysis phases that require deep reasoning, set high effort:
 
 Use `/effort low` for simple lookups and `/effort medium` for standard implementation work.
 
-> **Current models (October 2026):** `low` → Haiku 5.5, `medium` → **Sonnet 5.5** (`claude-sonnet-5-5`, $2/$10 per M tokens), `high`/`xhigh` → Opus 5.5 (`claude-opus-5-5`, $4/$20). The `model:` alias auto-resolves to the latest, so `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` now maps to Sonnet 5.5. Fable 5.1 (`claude-fable-5-1`) is available for creative agents. Full pricing/routing grid: [FAQ](../../FAQ.md#grille-de-prix--routage-modèle-par-tâche-octobre-2026).
+> **Current models (November 2026):** `low` → Haiku 5.5, `medium` → **Sonnet 5.5** (`claude-sonnet-5-5`, $2/$10 per M tokens), `high`/`xhigh` → Opus 5.5 (`claude-opus-5-5`, $4/$20). The `model:` alias auto-resolves to the latest, so `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` now maps to Sonnet 5.5. Fable 5.2 (`claude-fable-5-2`) is available for creative agents. Full pricing/routing grid: [FAQ](../../FAQ.md#grille-de-prix--routage-modèle-par-tâche-octobre-2026).
 
 ### Using the Analysis Command
 

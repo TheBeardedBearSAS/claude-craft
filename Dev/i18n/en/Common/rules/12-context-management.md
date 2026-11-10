@@ -176,6 +176,8 @@ These fields allow optimizing costs and scope of sub-agents.
 
 Claude Code automatically compacts context when approaching window limits. Older messages are summarized to free space.
 
+> **Append-only history (Opus 5.5, Fable 5.x, Mythos 5.x):** editing an earlier message, rebuilding `system` or `tools`, or summarizing old turns in place invalidates the thinking blocks that follow. Append to the end of the history instead of rewriting it. Source: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+
 ### Proactive Compaction
 
 At 70% context usage, proactively run `/compact` to avoid uncontrolled automatic compaction.
@@ -362,8 +364,8 @@ Adjust the model's effort level based on task complexity:
 
 > **Effort does not switch models:** it sets the reasoning depth of the current model; pick the model with `/model`. Recommended pairs: `low` on Haiku 5.5, `medium` on Sonnet 5.5, `high`/`xhigh` on Opus 5.5.
 
-> **Default effort per model:** medium on Opus 5.5 and Haiku 5.5; high on Sonnet 5.5, Fable 5.1 and legacy models.
-> **Fable 5.1** (`claude-fable-5-1`, $10/$50 per Mtok) is a current model, suitable for creative/narrative agents. **Mythos** is limited availability (Cyber Verification Program only).
+> **Default effort per model:** medium on Opus 5.5 and Haiku 5.5; high on Sonnet 5.5, Fable 5.2 and legacy models.
+> **Fable 5.2** (`claude-fable-5-2`, $8/$40 per Mtok) is the current Fable model, suitable for creative/narrative agents; Fable 5.1 and Fable 5 remain available (legacy). On Fable 5.2 (as on Mythos 5.2) thinking is always on (adaptive only): to reduce it, lower the effort — an "answer directly" instruction is not enough at `medium` and above. **Mythos** is limited availability (Cyber Verification Program only). Cache reads cost 5% of the input price on Opus/Sonnet 5.5 and 2.5% on Fable 5.x and Mythos 5.x.
 
 ### Inactivity Alert (v2.1.84+)
 
@@ -500,7 +502,7 @@ During compaction, always preserve:
 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` | `1` on a self-hosted runner: `claude -p` run inside a session reuses that session's ID and transcript (pre-v2.1.317 behavior) |
 | `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` | `1` stops feature-flag fetching without turning off telemetry; every flag uses its built-in default (v2.1.319+) |
 | `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` | `1` makes Claude Code wait for an MCP task inside its tool call instead of moving it to the background (v2.1.319+) |
-| `permissions.denyInsteadOfPrompting` (setting) | `true`: a tool call that would wait on a permission prompt is denied and the turn continues — terminal, sub-agents, teammates (v2.1.319+) |
+| `permissions.denyInsteadOfPrompting` (setting) | `true`: a tool call that would wait on a permission prompt is denied and the turn continues — terminal, sub-agents, teammates; honored only from `~/.claude/settings.json` or `--settings`, not from a project file (v2.1.319+) |
 | `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Extend/force prompt caching (−40% on repetitive sessions) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Set to `1` to disable automatic memory |
 
