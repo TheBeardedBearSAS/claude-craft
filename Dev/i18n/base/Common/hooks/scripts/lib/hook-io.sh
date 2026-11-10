@@ -103,6 +103,58 @@ hook_strip_heredocs() {
     }'
 }
 
+# stdin (commande shell, heredocs déjà retirés) -> une ligne par segment :
+#   "<sep>\t<segment>"  avec sep = ";" (nouvelle instruction), "|" (étage de pipe),
+#   "(" (contenu d'une substitution $(…), <(…), `…` ; le segment parent porte __SUB__).
+# Une chaîne citée est une donnée : ses blancs et séparateurs deviennent \037 et ne
+# découpent rien (`grep 'rm -rf' f`, `git commit -m "a; sudo b"`). Elle redevient du
+# code après `sh|bash|… -c` ou `eval`, et dans $(…) / `…` même entre guillemets doubles.
+hook_shell_segments() {
+  awk '
+    function shell(w) { sub(/.*\//, "", w); return w ~ /^(sh|bash|zsh|dash|ksh)$/ }
+    function code_quote(   w, k) {
+      k = split(seg, w)
+      return (k >= 1 && w[k] == "eval") || (k >= 2 && w[k] ~ /^-[a-z]*c$/ && shell(w[k - 1]))
+    }
+    function emit(next_sep) { print sep "\t" seg; seg = ""; sep = next_sep }
+    function push(s) { st[++sp] = s }
+    function pop() { if (sp > 0) sp-- }
+    function data(ch) { seg = seg (ch ~ /[ \t\n;&|(){}<>`]/ ? "\037" : ch) }
+    function open_sub(kind) { seg = seg " __SUB__ "; emit("("); push(kind) }
+    { src = src $0 "\n" }
+    END {
+      sep = ";"; seg = ""; sp = 0; n = length(src); prev = ""; invar = 0
+      for (i = 1; i <= n; i++) {
+        c = substr(src, i, 1); nx = substr(src, i + 1, 1); ctx = sp ? st[sp] : "top"
+        if (ctx == "sq") { if (c == "\047") pop(); else data(c); continue }
+        if (ctx == "dq") {
+          if (c == "\\") { data(nx); i++ }
+          else if (c == "\"") pop()
+          else if (c == "$" && nx == "(") { open_sub("sub"); i++ }
+          else if (c == "`") open_sub("bt")
+          else data(c)
+          continue
+        }
+        # Contextes de code : top, sub (…), bt `…`, csq / cdq (quotes après -c / eval).
+        if (c == "\\") { seg = seg nx; i++; continue }
+        if (c == "\047") { if (ctx == "csq") pop(); else push(code_quote() ? "csq" : "sq"); continue }
+        if (c == "\"") { if (ctx == "cdq") pop(); else push(code_quote() ? "cdq" : "dq"); continue }
+        if (c == "`") { if (ctx == "bt") { pop(); emit(";") } else open_sub("bt"); continue }
+        if ((c == "$" || c == "<" || c == ">") && nx == "(") { open_sub("sub"); i++; continue }
+        if (c == "$" && nx == "{") { seg = seg "$"; invar = 1; i++; continue }
+        if (c == "}" && invar) { invar = 0; continue }
+        if (c == "(") { emit(";"); push("sub"); continue }
+        if (c == ")") { if (ctx == "sub") pop(); emit(";"); continue }
+        if (c == "|") { if (nx == "|") { i++; emit(";") } else emit("|"); continue }
+        if (c == "&" && (prev == ">" || prev == "<" || nx == ">")) { seg = seg c; prev = c; continue }
+        if (c == "&") { if (nx == "&") i++; emit(";"); continue }
+        if (c == ";" || c == "\n" || c == "{" || c == "}") { emit(";"); continue }
+        seg = seg c; prev = c
+      }
+      emit(";")
+    }'
+}
+
 # Chemin sensible (secrets) ? Basename en minuscules + quelques dossiers connus.
 # Les variantes d'exemple (.example, .sample, .template, .dist, .pub) sont sûres.
 is_sensitive_path() {

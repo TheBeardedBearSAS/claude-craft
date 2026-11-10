@@ -10,6 +10,13 @@ const run = (command, mode = 'dangerous', opts = {}) =>
 
 // Bloqué quel que soit le mode.
 const BLOCKED_ALWAYS = [
+  // Le texte cité redevient du code après sh -c / eval, dans $(…) et `…`.
+  'eval "rm -rf /"',
+  'bash -c "echo hi; rm -rf /"',
+  "sh -c 'cd /tmp && sudo ls'",
+  'echo "$(sudo ls)"',
+  'echo "`sudo ls`"',
+  'x=$(rm -rf /)',
   'mkfs.ext4 /dev/sda1',
   'sudo mkfs /dev/sdb',
   'dd if=/dev/zero of=/dev/sda bs=1M',
@@ -66,6 +73,17 @@ const BLOCKED_ALL_ONLY = [
 ];
 
 const ALLOWED = [
+  // Chaînes citées = données, même si elles contiennent des séparateurs.
+  "grep 'rm -rf' fichier",
+  'grep -rn "rm -rf /" docs/',
+  'git commit -m "fix; rm -rf / no longer allowed"',
+  'git commit -m "docs: never run && sudo rm -rf /"',
+  'echo "x && sudo ls"',
+  "printf '%s\\n' 'a | mkfs /dev/sda'",
+  'echo "dd if=/dev/zero of=/dev/sda; done"',
+  'echo "x > /dev/sda"',
+  "echo ':(){ :|:& };:'",
+  "grep -c 'chmod 777' README.md",
   'docker run --rm -v "$P":/w alpine chown -R 1000:1000 /w',
   'docker run --rm -v x:/w alpine chown -R 1000:1000 /w',
   'docker run --rm img git branch -D refactor/ai-craft',

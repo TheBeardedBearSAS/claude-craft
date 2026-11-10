@@ -19,16 +19,18 @@ CMD=$(hook_get tool_input.command)
 [ -n "$CMD" ] || exit 0
 
 MODE=${BLOCK_RM_RF:-dangerous}
-TEXT=$(printf '%s\n' "$CMD" | hook_strip_heredocs | tr "'\"" '  ')
+TEXT=$(printf '%s\n' "$CMD" | hook_strip_heredocs | hook_shell_segments)
 
-if printf '%s' "$TEXT" | grep -qE ':[[:space:]]*\([[:space:]]*\)[[:space:]]*\{[[:space:]]*:'; then
+# Fork bomb : motif `f(){ f|f& }` sur le texte non découpé, chaînes citées retirées.
+UNQUOTED=$(printf '%s\n' "$CMD" | hook_strip_heredocs | sed -E "s/'[^']*'//g"' ; s/"([^"\\]|\\.)*"//g')
+if printf '%s' "$UNQUOTED" | grep -qE ':[[:space:]]*\([[:space:]]*\)[[:space:]]*\{[[:space:]]*:'; then
   hook_block "Fork bomb detected"
 fi
 if printf '%s' "$TEXT" | grep -qE '>[[:space:]]*/dev/(sd|hd|nvme|mmcblk|disk|xvd|vd)'; then
   hook_block "Writing to a block device is not allowed"
 fi
 
-# Segments sur ; & | ( ) ` { ; chaque segment est analysé à partir de son premier mot.
+# Un segment par ligne (hook_shell_segments) ; chacun est analysé à partir de son premier mot.
 verdicts=$(printf '%s\n' "$TEXT" | awk -v mode="$MODE" '
   function base(t) { sub(/.*\//, "", t); return t }
   function dangerous(a) {
@@ -48,21 +50,17 @@ verdicts=$(printf '%s\n' "$TEXT" | awk -v mode="$MODE" '
     }
     if (r && f && (mode == "all" || hit)) { print "BLOCK Destructive rm command detected (recursive+force)"; exit }
   }
-  { buf = buf $0 ";" }
-  END {
-    gsub(/\$\{/, "$", buf); gsub(/\}/, " ", buf)
-    ns = split(buf, stmts, /[;&|()`{]/)
-    for (s = 1; s <= ns; s++) {
-      nt = split(stmts[s], t); i = 1; pre = 0
+  {
+      nt = split(substr($0, index($0, "\t") + 1), t); i = 1; pre = 0
       while (i <= nt) {
-        if (t[i] ~ /^(env|nohup|command|exec|time|nice|xargs)$/) { pre = 1; i++; continue }
+        if (t[i] ~ /^(env|nohup|command|exec|eval|time|nice|xargs)$/) { pre = 1; i++; continue }
         if (pre && t[i] ~ /^-/) { i++; continue }
         if (t[i] ~ /^[A-Za-z_][A-Za-z0-9_]*=/) { i++; continue }
         if (base(t[i]) ~ /^(sh|bash|zsh|dash|ksh)$/ && i < nt && t[i + 1] ~ /^-[a-z]*c$/) { i += 2; pre = 0; continue }
         break
       }
       for (j = 1; j < nt; j++) if (t[j] ~ /^-exec(dir)?$/ && base(t[j + 1]) == "rm") check_rm(j + 2)
-      if (i > nt) continue
+      if (i > nt) next
       cmd = base(t[i])
       if (cmd ~ /^(sudo|su|doas)$/) { print "BLOCK Elevated privilege commands are not allowed"; exit }
       if (cmd ~ /^mkfs/) { print "BLOCK mkfs is not allowed"; exit }
@@ -76,13 +74,15 @@ verdicts=$(printf '%s\n' "$TEXT" | awk -v mode="$MODE" '
       }
       if (cmd ~ /^(cat|less|more|head|tail|strings|bat)$/)
         for (j = i + 1; j <= nt; j++) if (t[j] !~ /^-/) print "READ " t[j]
-    }
   }')
 
 while IFS= read -r line; do
   case "$line" in
     "BLOCK "*) hook_block "${line#BLOCK }" ;;
-    "READ "*) is_sensitive_path "${line#READ }" && hook_block "Command might expose secrets (${line#READ })" ;;
+    "READ "*)
+      # \037 = blanc à l'intérieur d'un nom cité (`cat "my .env"`)
+      f=$(printf '%s' "${line#READ }" | tr '\037' ' ')
+      is_sensitive_path "$f" && hook_block "Command might expose secrets ($f)" ;;
   esac
 done <<EOF
 $verdicts
