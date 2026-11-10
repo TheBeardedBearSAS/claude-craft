@@ -1,58 +1,46 @@
-# Hooks Quick Start Guide
+# Hooks-Schnellstart
 
-This directory contains Claude Code hooks for automated quality control and workflow enhancement.
+Claude-Code-Hooks für automatisierte Qualitätskontrolle und Sicherheit, die claude-craft in Ihrem Projekt installiert.
 
-## Setup
+## Installation
 
-1. **Copy hooks to your project:**
+1. **Mit dem Installer installieren** (kopiert die Skripte nach `.claude/hooks/` und führt die Hooks in `.claude/settings.json` zusammen, ohne Ihre eigenen zu überschreiben):
    ```bash
-   cp -r .claude/hooks/scripts/* .claude/hooks/
-   chmod +x .claude/hooks/*.sh
+   bash Dev/scripts/install-common-rules.sh --hooks=default /pfad/zum/projekt
+   # oder über die CLI: npx @the-bearded-bear/claude-craft install . --hooks=default
    ```
+   - `--hooks=default` (Standard): Sicherheitswächter, Secrets-Prüfung, Hinweise bei großen Ausgaben, Wiedereinspeisung des Kontexts nach der Compaction.
+   - `--hooks=full`: `default` plus Stop-Testschranke, Lint nach Änderungen, Slack-Benachrichtigung, Sitzungsmetriken und Wiederherstellungshinweise nach Tool-Fehlern.
+   - `--hooks=none`: keine Hooks. Mit `,memory` (z. B. `--hooks=default,memory`) kommt das SQLite-Gedächtnis über Sitzungen hinweg hinzu (benötigt `sqlite3` und `jq`).
 
-2. **Enable hooks in settings.json:**
-   The installer does it for you (`--hooks=default|full|none`, default: `default`). To merge by hand, use the fragments `hooks/templates/hooks.default.json` and `hooks.full.json`.
+2. **Anpassen**: Bearbeiten Sie die Skripte in `.claude/hooks/` passend zu Ihren Werkzeugen. Ein erneuter Installer-Lauf entfernt oder überschreibt Ihre eigenen Hooks nie.
 
-3. **Customize as needed** - Edit the scripts to match your project's tooling.
+3. **Manuell zusammenführen**, falls gewünscht: Die Fragmente heißen `hooks.default.json`, `hooks.full.json` und `hooks.memory.json` (`node <claude-craft>/Dev/scripts/lib/merge-hooks.mjs add --settings .claude/settings.json --fragment <Fragment>`). Anpassbare Beispiele werden nach `.claude/templates/hooks/` kopiert.
 
-## Available Hooks
+## Verfügbare Hooks
 
-| Hook | Purpose | Event |
-|------|---------|-------|
-| `pre-commit-check.sh` | Block secrets in commits | PreToolUse |
-| `post-edit-lint.sh` | Auto-lint on file save | PostToolUse |
-| `quality-gate.sh` | Run tests before completion | Stop |
-| `session-init.sh` | Load project context | SessionStart |
-| `notify-slack.sh` | Slack notifications | Notification |
-| `block-dangerous-commands.sh` | Block rm -rf, sudo, etc. | PreToolUse |
-| `setup-init.sh` | Initialize project on first run | Setup |
+| Hook | Zweck | Event | Profil |
+|------|-------|-------|--------|
+| `guard-network.sh` | Blockiert Herunterladen und Ausführen (`curl \| sh`) | PreToolUse | default |
+| `block-dangerous-commands.sh` | Blockiert `rm -rf /`, `sudo`, `chmod 777`... | PreToolUse | default |
+| `pre-commit-check.sh` | Blockiert Secrets in Commits | PreToolUse | default |
+| `protect-sensitive-files.sh` | Blockiert Änderungen an `.env`, Schlüsseln... | PreToolUse | default |
+| `output-size-hint.sh` | Rät, große Ausgaben zusammenzufassen | PostToolUse | default |
+| `post-edit-lint.sh` | Automatisches Lint nach Änderungen | PostToolUse | full |
+| `quality-gate.sh` | Führt Tests vor dem Abschluss aus | Stop | full |
+| `notify-slack.sh` | Slack-Benachrichtigungen | Notification | full |
+| `session-init.sh` | Erkennt den Stack, exportiert sichere `.env.local`-Variablen | SessionStart | full |
+| `session-end.sh` | Sitzungsprotokoll und Metriken | SessionEnd | full |
+| `post-tool-failure.sh` | Wiederherstellungshinweise nach Tool-Fehlern | PostToolUseFailure | full |
+| `pre-compact.sh` | Sichert den BMAD-Zustand vor der Compaction | PreCompact | optional (nicht eingebunden) |
+| `output-filter.sh` | Kürzt Ausgaben über 50 KB | PostToolUse | optional (Beispiel) |
 
-## Hook Events (11 total)
+## Gut zu wissen
 
-- **PreToolUse / PostToolUse** - Before/after tool execution
-- **Stop / SubagentStop** - When agent finishes
-- **SessionStart / SessionEnd** - Session lifecycle
-- **Setup** - On `--init`, `--init-only`, `--maintenance` (v2.1.20+)
-- **PermissionRequest** - Permission dialogs
-- **UserPromptSubmit** - User input
-- **Notification** - Notifications
-- **PreCompact** - Before context compaction
+- Die Nutzdaten kommen als **JSON über stdin**; nur der **Exit-Code 2** blockiert (jeder andere Wert ungleich null ist ein nicht blockierender Fehler).
+- Nur `hookSpecificOutput.additionalContext` erreicht das Modell; der Klartext-stdout von PreCompact wird als Compaction-Anweisung gelesen.
+- Die Skripte brauchen `jq` oder `node`, um die Nutzdaten zu lesen: Die Sicherheitswächter blockieren, wenn keines verfügbar ist, die informativen Hooks tun nichts.
 
-## Quick Enable
+## Weitere Informationen
 
-Add to your `.claude/settings.json`:
-
-```json
-{
-  "hooks": {
-    "Stop": [{
-      "matcher": "",
-      "hooks": [{"type": "command", "command": ".claude/hooks/quality-gate.sh"}]
-    }]
-  }
-}
-```
-
-## More Information
-
-See the full documentation: [docs/HOOKS.md](/docs/HOOKS.md)
+Vollständige Dokumentation: [docs/HOOKS.md](/docs/HOOKS.md) und die offizielle Referenz <https://code.claude.com/docs/en/hooks>.

@@ -59,7 +59,7 @@ npx @the-bearded-bear/claude-craft install <target-directory> [options]
 |--------|-------|-------------|
 | `--tech=<technology>` | `-t` | Technology stack to install |
 | `--lang=<language>` | `-l` | Documentation language |
-| `--hooks=<mode>` | | Hooks installed into `.claude/hooks/` and merged into `.claude/settings.json`: `default` (network guard, dangerous commands, pre-commit secrets check, sensitive files, output hints, context re-injection after compaction), `full` (adds the Stop test gate, post-edit lint and Slack notification) or `none`. Default: `default`. Existing hooks are never removed or overwritten |
+| `--hooks=<mode>` | | Hooks installed into `.claude/hooks/` and merged into `.claude/settings.json`: `default` (network guard, dangerous commands, pre-commit secrets check, sensitive files, output hints, context re-injection after compaction), `full` (adds the Stop test gate, post-edit lint and Slack notification) or `none`; append `,memory` (e.g. `--hooks=default,memory`, `--hooks=full,memory`) to also install the SQLite cross-session memory add-on into `.claude/hooks/memory-lifecycle/` (needs `sqlite3` and `jq`; the installer warns if they are missing). One profile is required, `memory` alone is rejected. Hook examples are copied to `.claude/templates/hooks/` (not with `none`). Default: `default`. Existing hooks are never removed or overwritten |
 | `--force` | `-f` | Overwrite existing files |
 | `--backup` | `-b` | Create backup before install |
 | `--dry-run` | `-d` | Simulate without making changes |

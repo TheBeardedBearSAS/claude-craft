@@ -207,23 +207,21 @@ export_tech() {
         log_success "Copied checklists"
     fi
 
-    # Copy hooks (for common only)
-    if [[ "$tech" == "common" ]] && [[ -d "$src_base/hooks" ]]; then
-        mkdir -p "$plugin_dir/hooks"
-
-        # Create hooks.json from the hook scripts
-        cat > "$plugin_dir/hooks/hooks.json" << 'EOF'
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [{"type": "command", "command": ".claude/hooks/post-edit-lint.sh", "timeout": 60}]
-      }
-    ]
-  }
-}
-EOF
+    # Copy hooks (for common only): scripts + lib from the single source (base/), and a
+    # hooks.json derived from the default profile fragment with plugin-relative paths.
+    local hooks_base="$CLAUDE_CRAFT_ROOT/Dev/i18n/base/Common/hooks"
+    if [[ "$tech" == "common" ]] && [[ -d "$hooks_base/scripts" ]]; then
+        mkdir -p "$plugin_dir/hooks/scripts"
+        cp -r "$hooks_base/scripts/." "$plugin_dir/hooks/scripts/"
+        node -e '
+const fs = require("fs");
+const prefix = "$CLAUDE_PROJECT_DIR/.claude/hooks/";
+const frag = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+for (const groups of Object.values(frag.hooks))
+  for (const g of groups)
+    for (const h of g.hooks) h.command = h.command.split(prefix).join("${CLAUDE_PLUGIN_ROOT}/hooks/scripts/");
+fs.writeFileSync(process.argv[2], JSON.stringify(frag, null, 2) + "\n");
+' "$hooks_base/templates/hooks.default.json" "$plugin_dir/hooks/hooks.json"
         log_success "Created hooks configuration"
     fi
 

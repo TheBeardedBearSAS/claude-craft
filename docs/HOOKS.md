@@ -236,6 +236,24 @@ exit 0
 
 ---
 
+## Installing the distributed hooks
+
+claude-craft ships tested hook scripts (single source: `Dev/i18n/base/Common/hooks/scripts/`, shared helpers in `lib/hook-io.sh`). The installer copies them into the project's `.claude/hooks/` and merges the matching fragment into `.claude/settings.json` without removing or rewriting any hook of yours:
+
+```bash
+bash Dev/scripts/install-common-rules.sh --hooks=default|full|none[,memory] <project>
+```
+
+| Profile | Adds |
+|---------|------|
+| `default` | `guard-network`, `block-dangerous-commands`, `pre-commit-check`, `protect-sensitive-files`, `output-size-hint`, context re-injection (PreCompact + SessionStart `compact`) |
+| `full` | `default` + Stop `quality-gate`, `post-edit-lint`, `notify-slack`, `session-init` (SessionStart), `session-end` (SessionEnd, timeout 5 s), `post-tool-failure` (PostToolUseFailure) |
+| `,memory` | SQLite cross-session memory (`.claude/hooks/memory-lifecycle/`, database `.claude/memory.db`); needs `sqlite3` and `jq` |
+
+Hook examples (`auto-format`, `output-filter`, ...) are copied to `.claude/templates/hooks/`; see the README next to them. `pre-compact.sh` (BMAD state backup) is shipped but not wired by any profile. Output contract: only exit code 2 blocks; only `hookSpecificOutput.additionalContext` reaches the model; PreCompact plain-text stdout is read as compaction instructions. For a plugin, `Tools/PluginExport/export-plugin.sh --tech=common` generates a `hooks.json` pointing to `${CLAUDE_PLUGIN_ROOT}/hooks/scripts/`.
+
+---
+
 ## Configuration
 
 ### Settings File Locations
