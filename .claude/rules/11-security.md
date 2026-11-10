@@ -65,7 +65,7 @@ INPUT=$(jq -r '.tool_input.command // empty')
 FILEPATH=$(echo '$TOOL_INPUT' | jq ...)
 ```
 
-Voir les templates corrects dans `.claude/templates/hooks/block-dangerous-commands.json`.
+Voir les templates corrects dans `Dev/i18n/base/Common/hooks/templates/examples/block-dangerous-commands.json`.
 
 ## MCP & Plugins
 

@@ -7,14 +7,14 @@ SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 # shellcheck source=./_db.sh
 source "$SCRIPT_DIR/_db.sh"
 
-if ! command -v sqlite3 &>/dev/null || ! command -v jq &>/dev/null; then
-  echo '{}' ; exit 0
+if ! command -v sqlite3 &>/dev/null; then
+  exit 0
 fi
 
 init_memory_db
 
 SESSION_ID=$(current_session_id)
-NOW=$(date -u -Iseconds)
+NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 
 # Build preserved context: essentials + recent tool events + recent prompts
@@ -38,5 +38,5 @@ INSERT INTO compactions(session_id, compacted_at, preserved_context)
 VALUES ('$(sql_escape "$SESSION_ID")', '$NOW', '$(sql_escape "$CONTEXT")');
 SQL
 
-# Re-inject
-jq -n --arg msg "$CONTEXT" '{"systemMessage": $msg}'
+# Plain-text stdout of PreCompact = compaction instructions (JSON would be parsed as hook output)
+printf 'When compacting, preserve this context:\n%s\n' "$CONTEXT" | head -c 9000 || true

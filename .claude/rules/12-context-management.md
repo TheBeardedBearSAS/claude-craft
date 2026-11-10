@@ -322,7 +322,7 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 | **PreCompact** | `~/.claude/hooks/pre-compact.sh` | Preserve le contexte critique avant compaction |
 | **SessionStart** (compact) | Template `context-reinject.json` | Re-injecte `context-essentials.md` apres compaction |
 
-Templates disponibles dans `.claude/templates/hooks/`: `output-filter.json`, `pre-compact.json`, `context-reinject.json`.
+Templates disponibles dans `Dev/i18n/base/Common/hooks/templates/examples/`: `output-filter.json`, `pre-compact.json`, `context-reinject.json`.
 
 | Optimisation | Economie |
 |---|---|

@@ -1,0 +1,16 @@
+{
+  "description": "Log the end of each Claude Code turn (debug, audit, retrospectives)",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p \"$HOME/.claude/logs\" && printf '[Stop] %s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> \"$HOME/.claude/logs/sessions.log\"; exit 0",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

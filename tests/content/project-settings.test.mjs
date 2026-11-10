@@ -169,7 +169,7 @@ describe('.claudeignore', () => {
 // Values like 5000 were written as milliseconds and meant an 83-minute timeout.
 describe('hook timeouts are expressed in seconds', () => {
   const MAX_TIMEOUT_SECONDS = 600;
-  const HOOK_TEMPLATES_DIR = path.join(PROJECT_ROOT, '.claude', 'templates', 'hooks');
+  const HOOK_TEMPLATES_DIR = path.join(PROJECT_ROOT, 'Dev', 'i18n', 'base', 'Common', 'hooks', 'templates', 'examples');
   const files = [
     SETTINGS_PATH,
     path.join(PROJECT_ROOT, '.bmad', 'hooks-config.example.json'),

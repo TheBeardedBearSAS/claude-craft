@@ -1,0 +1,18 @@
+{
+  "description": "Block destructive shell commands (rm -rf on dangerous targets, sudo, chmod 777, dd/mkfs on disks, fork bombs) via the tested script installed by claude-craft.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/block-dangerous-commands.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "usage": "Part of the default profile (install-common-rules.sh --hooks=default). The script reads the payload on stdin and exits 2 (stderr shown to Claude) to block. BLOCK_RM_RF=all blocks every recursive+forced rm; the default only blocks dangerous targets."
+}

@@ -1,0 +1,16 @@
+{
+  "description": "Log the size of each user prompt (pattern analysis, context optimisation); requires jq",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p \"$HOME/.claude/logs\" && jq -r '.prompt | length' >> \"$HOME/.claude/logs/prompt-sizes.log\" 2>/dev/null; exit 0",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

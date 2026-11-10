@@ -31,8 +31,14 @@ function validateOption(key, value) {
       break;
     }
     case 'hooks': {
-      if (!['default', 'full', 'none'].includes(value)) {
-        throw new Error(`Invalid value for --hooks: must be default, full or none, got "${value}"`);
+      // Un profil (default|full|none) + l'add-on optionnel `memory`, séparés par des virgules.
+      const parts = typeof value === 'string' ? value.split(',') : [];
+      const profiles = parts.filter((p) => ['default', 'full', 'none'].includes(p));
+      const addons = parts.filter((p) => p === 'memory');
+      if (profiles.length !== 1 || addons.length > 1 || profiles.length + addons.length !== parts.length) {
+        throw new Error(
+          `Invalid value for --hooks: must be default, full or none, optionally followed by ",memory" (e.g. default,memory), got "${value}"`
+        );
       }
       break;
     }

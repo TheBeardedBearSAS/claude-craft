@@ -1,0 +1,18 @@
+{
+  "description": "Block downloads piped into an interpreter (curl|sh, wget|python, <(curl ...)) via the tested script installed by claude-craft.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-network.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "usage": "Part of the default profile (install-common-rules.sh --hooks=default). Plain downloads (curl -o, wget file) are allowed; only download-then-execute patterns are blocked (exit 2)."
+}

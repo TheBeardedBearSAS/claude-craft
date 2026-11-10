@@ -112,17 +112,10 @@ Für fehlende Hooks die Templates in `.claude/templates/hooks/` referenzieren:
 - `output-filter.json` — PostToolUse für große Output-Filterung
 - `pre-compact.json` — PreCompact für Kontext-Erhaltung
 - `context-reinject.json` — SessionStart für Post-Compaction-Wiederherstellung
-- `post-compact.json` — PostCompact für Kontext-Wiederherstellung nach Compaction
 
-#### PostCompact Hook — Kontext-Wiederherstellung
+#### Kontext-Wiederherstellung nach der Compaction
 
-Der **PostCompact**-Hook (Claude Code v2.1.76+) stellt kritischen Kontext nach einem automatischen Compaction-Ereignis wieder her. Ohne ihn kann Claude laufende Aufgaben, Dateipfade und frühere Entscheidungen verlieren.
-
-Template: `.claude/templates/hooks/post-compact.json`
-
-Der Hook liest `context-essentials.md` (eine Datei mit aktuellem Sitzungszustand) und injiziert sie als System-Nachricht nach der Compaction. Mit dem **PreCompact**-Hook (`pre-compact.json`) kombinieren, der die Essentials vor der Compaction speichert.
-
-Geschätzte Einsparung: vermeidet 5-15 Erklärungsrunden pro langer Sitzung (~3-8K Token).
+Einen nützlichen PostCompact-Hook gibt es nicht: Seine Ausgabe erreicht das Modell nie. Stellen Sie das Wesentliche mit `SessionStart` (Matcher `compact`, Template `context-reinject.json`) wieder her, dessen stdout dem Kontext hinzugefügt wird, und steuern Sie die Zusammenfassung mit `PreCompact` (`pre-compact.json`, Klartext-Ausgabe).
 
 ### 5. Zusammenfassung
 

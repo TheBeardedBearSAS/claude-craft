@@ -14,7 +14,7 @@ fi
 init_memory_db
 
 SESSION_ID=$(current_session_id)
-NOW=$(date -u -Iseconds)
+NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 INPUT=$(cat 2>/dev/null || echo "")
 TOOL_NAME=""

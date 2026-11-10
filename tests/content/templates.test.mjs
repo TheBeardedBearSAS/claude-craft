@@ -52,7 +52,7 @@ describe('template content validation', () => {
   // (written as if milliseconds) mean ~83 minutes — regression from the
   // 2026-10-13 alignment audit.
   describe('hook timeouts are expressed in seconds', () => {
-    const HOOK_TEMPLATES_DIR = path.join(PROJECT_ROOT, '.claude/templates/hooks');
+    const HOOK_TEMPLATES_DIR = path.join(HOOKS_TEMPLATES, 'examples');
     const files = [
       path.join(PROJECT_ROOT, '.claude/settings.json'),
       path.join(PROJECT_ROOT, '.bmad/hooks-config.example.json'),
@@ -65,12 +65,15 @@ describe('template content validation', () => {
         .map((f) => path.join(HOOK_TEMPLATES_DIR, f)),
     ];
 
-    // Supports both the matcher-group schema ({ matcher, hooks: [...] }) and
-    // flat entries ({ command, timeout }) used by older examples.
+    // Schéma imbriqué uniquement ({ matcher, hooks: [...] }) : les entrées plates
+    // ({ command, timeout } directement dans l'événement) sont ignorées par Claude Code.
     const collectTimeouts = (hooks) =>
       Object.values(hooks ?? {})
         .flat()
-        .flatMap((group) => [group, ...(group.hooks ?? [])])
+        .flatMap((group) => {
+          expect(Array.isArray(group.hooks), 'entrée plate interdite (schéma imbriqué requis)').toBe(true);
+          return group.hooks;
+        })
         .map((h) => h.timeout)
         .filter((t) => t !== undefined);
 

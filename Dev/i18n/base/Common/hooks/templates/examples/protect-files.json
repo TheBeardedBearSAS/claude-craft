@@ -1,0 +1,18 @@
+{
+  "description": "Block edits of sensitive files (.env, keys, credentials, kubeconfig...) via the tested script installed by claude-craft. .example/.sample/.template variants stay editable.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-sensitive-files.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "usage": "Part of the default profile (install-common-rules.sh --hooks=default). Exit 2 blocks the tool call and shows the reason to Claude."
+}

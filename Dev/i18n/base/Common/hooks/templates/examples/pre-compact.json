@@ -1,0 +1,18 @@
+{
+  "description": "Give the compaction summary the critical project context (PreCompact: plain-text stdout is read as compaction instructions, max 10k chars)",
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$CLAUDE_PROJECT_DIR/.claude/context-essentials.md\"; if [ -f \"$f\" ]; then printf 'CRITICAL CONTEXT TO PRESERVE:\\n\\n'; head -c 9000 \"$f\"; fi; exit 0",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "usage": "Part of the default profile. Plain text, not JSON: a JSON object on stdout would be parsed as hook output instead of instructions."
+}

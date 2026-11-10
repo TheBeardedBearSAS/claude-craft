@@ -1,0 +1,18 @@
+{
+  "description": "Auto-format the edited file after each Edit/Write (payload is JSON on stdin; requires jq)",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILEPATH=$(jq -r '.tool_input.file_path // empty'); [ -n \"$FILEPATH\" ] && npx --no-install prettier --write \"$FILEPATH\" >/dev/null 2>&1; exit 0",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "usage": "Merge into .claude/settings.json (see README). Replace the prettier call with your formatter: black \"$FILEPATH\", php-cs-fixer fix \"$FILEPATH\", gofmt -w \"$FILEPATH\", rustfmt \"$FILEPATH\"."
+}

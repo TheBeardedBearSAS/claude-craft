@@ -641,7 +641,7 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 }
 ```
 
-> **Anti-pattern à éviter :** `echo '$TOOL_INPUT' | jq ...` — `$TOOL_INPUT` n'est PAS une variable d'environnement shell. Claude Code passe le payload du hook sur **stdin** en JSON. Lire avec `jq` depuis stdin (sans argument de fichier). Voir `.claude/templates/hooks/` pour des exemples corrects.
+> **Anti-pattern à éviter :** `echo '$TOOL_INPUT' | jq ...` — `$TOOL_INPUT` n'est PAS une variable d'environnement shell. Claude Code passe le payload du hook sur **stdin** en JSON. Lire avec `jq` depuis stdin (sans argument de fichier). Voir `Dev/i18n/base/Common/hooks/templates/examples/` pour des exemples corrects.
 
 ### Vulnerabilites connues (CVE)
 

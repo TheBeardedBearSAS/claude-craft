@@ -298,7 +298,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | Feature | Description | Adoption Claude Craft |
 |---------|-------------|----------------------|
 | `alwaysLoad` MCP server config | Servers non-différés (chargement immédiat) | **Not documented** |
-| PostToolUse replace tool output | Hooks peuvent remplacer l'output de **tous** les outils | **Adopté** (v8.19.1) — `templates/hooks/output-filter.json` tronque réellement les outputs >50KB via `hookSpecificOutput.updatedToolOutput` |
+| PostToolUse replace tool output | Hooks peuvent remplacer l'output de **tous** les outils | **Adopté** (v8.19.1) — `Dev/i18n/base/Common/hooks/templates/examples/output-filter.json` tronque réellement les outputs >50KB via `hookSpecificOutput.updatedToolOutput` |
 | `claude plugin prune` | Nettoyer les dépendances orphelines | **N/A** (user CLI) |
 | Type-to-filter dans `/skills` | Recherche dans le picker de skills | **N/A** (user feature) |
 

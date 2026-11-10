@@ -39,12 +39,38 @@ hook_context() {
   fi
 }
 
+# hook_replace_bash_output <stdout> <stderr> <interrupted:true|false> : PostToolUse(Bash),
+# remplace ce que voit le modèle. updatedToolOutput doit avoir la forme de la sortie de
+# l'outil : pour Bash {stdout, stderr, interrupted, isImage}.
+hook_replace_bash_output() {
+  if hook_has_jq; then
+    jq -cn --arg o "$1" --arg e "$2" --argjson i "$3" \
+      '{hookSpecificOutput: {hookEventName: "PostToolUse", updatedToolOutput: {stdout: $o, stderr: $e, interrupted: $i, isImage: false}}}'
+  else
+    node -e 'process.stdout.write(JSON.stringify({hookSpecificOutput: {hookEventName: "PostToolUse", updatedToolOutput: {stdout: process.argv[1], stderr: process.argv[2], interrupted: process.argv[3] === "true", isImage: false}}}) + "\n")' "$1" "$2" "$3"
+  fi
+}
+
 # hook_stop_block <raison> : Stop/SubagentStop — empêche l'arrêt (JSON sur stdout, exit 0).
 hook_stop_block() {
   if hook_has_jq; then
     jq -cn --arg r "$1" '{decision: "block", reason: $r}'
   else
     node -e 'process.stdout.write(JSON.stringify({decision: "block", reason: process.argv[1]}) + "\n")' "$1"
+  fi
+}
+
+# hook_object <clé> <valeur> [<clé> <valeur>…] : objet JSON compact sur une ligne.
+# Une valeur entière (^-?[0-9]+$) devient un nombre, le reste une chaîne échappée.
+hook_object() {
+  if hook_has_jq; then
+    jq -cn '$ARGS.positional as $a | reduce range(0; $a | length; 2) as $i ({};
+      .[$a[$i]] = ($a[$i + 1] | if test("^-?[0-9]+$") then tonumber else . end))' --args "$@"
+  else
+    node -e '
+      const a = process.argv.slice(1), o = {};
+      for (let i = 0; i < a.length; i += 2) o[a[i]] = /^-?[0-9]+$/.test(a[i + 1]) ? Number(a[i + 1]) : a[i + 1];
+      process.stdout.write(JSON.stringify(o) + "\n");' "$@"
   fi
 }
 

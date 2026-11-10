@@ -12,7 +12,7 @@ hooks:
     - matcher: "Bash"
       hooks:
         - type: command
-          command: "grep -qiE '(^|[^A-Za-z_])(DROP[[:space:]]+(DATABASE|SCHEMA|TABLE)|TRUNCATE)([^A-Za-z_]|$)' && { echo \"BLOQUEADO: SQL destructivo (DROP DATABASE/SCHEMA/TABLE, TRUNCATE). Proponer el comando al usuario para que lo ejecute él mismo.\" >&2; exit 2; } || exit 0"
+          command: "grep -qiE '(^|[^A-Za-z_])(DROP[[:space:]]+(DATABASE|SCHEMA|TABLE)([^A-Za-z_]|$)|TRUNCATE[[:space:]]+[^[:space:]-])' && { echo \"BLOQUEADO: SQL destructivo (DROP DATABASE/SCHEMA/TABLE, TRUNCATE). Proponer el comando al usuario para que lo ejecute él mismo.\" >&2; exit 2; } || exit 0"
 ---
 
 # Agente Migration Specialist

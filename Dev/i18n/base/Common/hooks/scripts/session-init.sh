@@ -1,77 +1,53 @@
-#!/bin/bash
-# Session initialization hook: Load project context at startup
-# This runs on SessionStart event
-set -e
+#!/usr/bin/env bash
+# SessionStart (matcher startup) : détecte la stack du projet et la transmet au modèle
+# (hookSpecificOutput.additionalContext) ; exporte quelques variables d'environnement
+# non sensibles de .env.local dans CLAUDE_ENV_FILE.
+set -u
+# shellcheck source=lib/hook-io.sh
+. "$(dirname "${BASH_SOURCE[0]}")/lib/hook-io.sh"
 
-# Read JSON input from stdin
-INPUT=$(cat)
-CWD=$(echo "$INPUT" | jq -r '.cwd // "."')
+hook_has_parser || exit 0
+hook_input
+CWD=$(hook_get cwd)
+[ -z "$CWD" ] || cd "$CWD" 2>/dev/null || true
 
-cd "$CWD" 2>/dev/null || true
-
-# Set environment variables if CLAUDE_ENV_FILE is provided
-if [ -n "$CLAUDE_ENV_FILE" ]; then
-    # Detect and set appropriate environment
-
-    # Node.js
-    if [ -f "package.json" ]; then
-        echo 'export NODE_ENV=development' >> "$CLAUDE_ENV_FILE"
-    fi
-
-    # Load .env.local or .env.development if exists (without secrets)
-    if [ -f ".env.local" ]; then
-        # Only export non-sensitive variables (DATABASE_URL excluded — may contain credentials)
-        grep -E "^(NODE_ENV|APP_ENV|APP_DEBUG|DATABASE_HOST|DATABASE_PORT|LOG_LEVEL|PORT|HOST)=" .env.local >> "$CLAUDE_ENV_FILE" 2>/dev/null || true
-    fi
+# Variables sûres de .env.local, au format `export NAME=valeur`. Valeurs limitées à
+# [A-Za-z0-9_.:/-] : CLAUDE_ENV_FILE est sourcé par le shell, pas de métacaractères.
+# DATABASE_URL est exclue (identifiants possibles) ; commentaires et lignes vides ignorés.
+if [ -n "${CLAUDE_ENV_FILE:-}" ] && [ -f .env.local ]; then
+  sed -n -E 's#^(NODE_ENV|APP_ENV|APP_DEBUG|DATABASE_HOST|DATABASE_PORT|LOG_LEVEL|PORT|HOST)=([A-Za-z0-9_.:/-]*)$#export \1=\2#p' \
+    .env.local >>"$CLAUDE_ENV_FILE" 2>/dev/null
 fi
 
-# Build context information for Claude
-build_context() {
-    local context=""
-
-    # Detect framework/stack
-    if [ -f "composer.json" ]; then
-        local symfony_version=$(jq -r '.require["symfony/framework-bundle"] // empty' composer.json 2>/dev/null)
-        local php_version=$(jq -r '.require.php // empty' composer.json 2>/dev/null)
-        [ -n "$symfony_version" ] && context+="Symfony $symfony_version, "
-        [ -n "$php_version" ] && context+="PHP $php_version, "
-    fi
-
-    if [ -f "package.json" ]; then
-        local node_version=$(jq -r '.engines.node // empty' package.json 2>/dev/null)
-        local react_version=$(jq -r '.dependencies.react // empty' package.json 2>/dev/null)
-        local next_version=$(jq -r '.dependencies.next // empty' package.json 2>/dev/null)
-        [ -n "$react_version" ] && context+="React $react_version, "
-        [ -n "$next_version" ] && context+="Next.js $next_version, "
-    fi
-
-    if [ -f "pubspec.yaml" ]; then
-        context+="Flutter/Dart, "
-    fi
-
-    if [ -f "pyproject.toml" ]; then
-        context+="Python, "
-    fi
-
-    # Database detection
-    if [ -f "docker-compose.yml" ] || [ -f "docker-compose.yaml" ]; then
-        grep -q "postgres" docker-compose.yml 2>/dev/null && context+="PostgreSQL, "
-        grep -q "mysql" docker-compose.yml 2>/dev/null && context+="MySQL, "
-        grep -q "redis" docker-compose.yml 2>/dev/null && context+="Redis, "
-    fi
-
-    # Remove trailing comma
-    context="${context%, }"
-
-    echo "$context"
+# json_field <fichier> <chemin.pointé> : valeur d'un champ d'un fichier JSON.
+json_field() {
+  local saved=$HOOK_INPUT value
+  HOOK_INPUT=$(cat "$1" 2>/dev/null)
+  value=$(hook_get "$2" 2>/dev/null)
+  HOOK_INPUT=$saved
+  printf '%s' "$value"
 }
 
-CONTEXT=$(build_context)
+CONTEXT=""
+add() { [ -z "$2" ] || CONTEXT="$CONTEXT$1 $2, "; }
 
-if [ -n "$CONTEXT" ]; then
-    echo "{\"hookSpecificOutput\": {\"hookEventName\": \"SessionStart\", \"additionalContext\": \"Project stack: $CONTEXT\"}}"
-else
-    echo '{"continue": true}'
+if [ -f composer.json ]; then
+  add Symfony "$(json_field composer.json 'require.symfony/framework-bundle')"
+  add PHP "$(json_field composer.json require.php)"
 fi
+if [ -f package.json ]; then
+  add React "$(json_field package.json dependencies.react)"
+  add Next.js "$(json_field package.json dependencies.next)"
+fi
+[ ! -f pubspec.yaml ] || CONTEXT="${CONTEXT}Flutter/Dart, "
+[ ! -f pyproject.toml ] || CONTEXT="${CONTEXT}Python, "
 
+# Services déclarés dans les fichiers Compose (noms canoniques et historiques).
+COMPOSE=$(cat compose.yaml compose.yml docker-compose.yaml docker-compose.yml 2>/dev/null)
+for svc in postgres:PostgreSQL mysql:MySQL redis:Redis; do
+  ! printf '%s' "$COMPOSE" | grep -qi "${svc%%:*}" || CONTEXT="${CONTEXT}${svc##*:}, "
+done
+
+CONTEXT=${CONTEXT%, }
+[ -z "$CONTEXT" ] || hook_context SessionStart "Project stack: $CONTEXT"
 exit 0
