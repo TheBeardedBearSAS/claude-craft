@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **WordPress stack** (Tier 3 communautaire, `--tech=wordpress`, catégorie fullstack) : WordPress 7.1 (PHP 7.4+ minimum, 8.3+ recommandé) pour plugins et thèmes blocs — 6 rules en anglais dans `Dev/i18n/base/WordPress/` (architecture plugin/thème et hooks, coding standards WPCS, tooling wp-env / `@wordpress/scripts` / WP-CLI, testing `WP_UnitTestCase` / Playwright, quality tools PHPCS / PHPStan / Plugin Check, sécurité capabilities / nonces / échappement / `$wpdb->prepare`), checks par axe, templates (bloc, bootstrap de plugin, endpoint REST), agent `@wordpress-reviewer` et `/wordpress:check <axe>` dans les 5 langues.
+- **Module WooCommerce optionnel** : WooCommerce 11.2 (HPOS, CRUD, Store API, blocs Cart/Checkout) livré comme skill de stack `woocommerce` (`Dev/i18n/base/WordPress/skills/woocommerce/`), chargé à la demande — un projet WordPress simple ne l'a jamais en contexte. Premier stack à utiliser `copy_tech_skills`.
+- Site : carte **WordPress** dans la grille des technologies (logo Simple Icons, CC0-1.0).
+
 ## [9.2.0] - 2026-11-09
 
 Deux nouveaux stacks, **Rust / Axum** (15e) et **Tauri** (16e), et Claude Code recommandé 2.1.319.

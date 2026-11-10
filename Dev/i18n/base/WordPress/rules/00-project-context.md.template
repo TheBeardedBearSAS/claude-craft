@@ -1,0 +1,169 @@
+# Project Context - {{PROJECT_NAME}}
+
+## General Information
+
+**Project name** : {{PROJECT_NAME}}
+
+**Tech stack** : {{TECH_STACK}}
+
+**WordPress** : {{WP_VERSION}} (reference line: 7.1; set `Requires at least` to the oldest version you actually test)
+
+**PHP** : {{PHP_VERSION}} (WordPress minimum 7.4, 8.3+ recommended; set `Requires PHP` to the oldest version in your CI matrix)
+
+**Project type** : {{PROJECT_TYPE}} <!-- plugin | block theme | plugin + block theme -->
+
+**WooCommerce dependency** : {{WOOCOMMERCE_DEPENDENCY}} <!-- none | required (Requires Plugins: woocommerce); when required, load .claude/skills/woocommerce/ -->
+
+> This stack covers plugins and block themes: hooks, blocks, REST API, WP-CLI, i18n, security and tests. Bedrock, hosting and multi-environment deployment are out of scope; generic PHP concerns follow the `php` stack; WooCommerce specifics live in the optional `woocommerce` skill.
+
+## Project Description
+
+{{PROJECT_DESCRIPTION}}
+
+## Project Goals
+
+{{PROJECT_GOALS}}
+
+## Technical Architecture
+
+### PHP Side
+- **Main file** : `{{PLUGIN_SLUG}}.php` (header + bootstrap only)
+- **Prefix / namespace** : `{{PHP_NAMESPACE}}` / `{{FUNCTION_PREFIX}}_`
+- **Text domain** : `{{PLUGIN_SLUG}}` (equals the slug, literal in every call)
+- **Autoload** : Composer PSR-4 (`src/`)
+- **Data** : {{DATA_LAYER}} <!-- options, post meta, custom post types, custom tables via dbDelta -->
+- **Extension points** : prefixed actions and filters documented in docblocks
+
+### Blocks and Theme (if any)
+- **Blocks** : `src/<block>/block.json` (apiVersion 3), built to `build/`, registered through `blocks-manifest.php`
+- **Dynamic rendering** : `render.php` with late escaping
+- **Front-end interactivity** : Interactivity API (`viewScriptModule`)
+- **Theme** : `theme.json` (version 3), `templates/`, `parts/`, `patterns/`, `styles/`
+
+### Tooling
+- **Environment** : `@wordpress/env` (`.wp-env.json`)
+- **JS build** : `@wordpress/scripts`
+- **PHP quality** : PHPCS with WordPress Coding Standards, PHPStan with `szepeviktor/phpstan-wordpress`
+- **Release check** : Plugin Check
+- **Package manager** : {{PACKAGE_MANAGER}}
+
+### Security Model
+- **Authorization** : `current_user_can()` on every state change, per-object capabilities
+- **CSRF** : nonces on every form, action link and cookie-authenticated REST call
+- **Input / output** : sanitize on input, escape late on output
+- **SQL** : `$wpdb->prepare()` only
+- **Secrets** : constants in `wp-config.php` or environment, never in the repository
+
+### Build and Release
+- **CI/CD** : {{CICD_PLATFORM}}
+- **Distribution** : {{DISTRIBUTION_CHANNEL}} <!-- WordPress.org | private ZIP | Composer package -->
+- **Distribution ZIP** : `.distignore` excludes `node_modules/`, `tests/`, dev configs
+
+## Project Structure
+
+```
+{{PROJECT_NAME}}/
+├── {{PLUGIN_SLUG}}.php           # Header + bootstrap
+├── uninstall.php                 # Cleanup on delete
+├── readme.txt                    # WordPress.org readme
+├── composer.json                 # PSR-4, dev tools
+├── package.json                  # @wordpress/scripts
+├── .wp-env.json                  # Local environment and test site
+├── .phpcs.xml.dist               # WordPress Coding Standards
+├── phpstan.neon.dist
+├── phpunit.xml.dist
+├── .distignore
+├── src/                          # PHP classes (PSR-4) and block sources
+│   └── <block>/                  # block.json, edit.js, render.php, view.js, style.scss
+├── build/                        # Generated (blocks-manifest.php, *.asset.php)
+├── theme.json                    # Block themes only
+├── templates/ parts/ patterns/   # Block themes only
+├── languages/                    # .pot and translations
+└── tests/
+    ├── bootstrap.php
+    ├── php/                      # WP_UnitTestCase
+    └── e2e/                      # Playwright
+```
+
+## Coding Standards
+
+### PHP
+- WordPress Coding Standards via PHPCS, zero errors
+- PHPStan level {{PHPSTAN_LEVEL}} with WordPress stubs
+- `defined( 'ABSPATH' ) || exit;` in every directly reachable file
+- Late escaping, early sanitizing, `$wpdb->prepare()`
+
+### JavaScript
+- `@wordpress/eslint-plugin` through `wp-scripts lint-js`
+- `@wordpress/*` packages as externals
+- Strings through `@wordpress/i18n`
+
+### Security
+- Capability check and nonce on every state change
+- `permission_callback` on every REST route, never `__return_true` for writes
+- No `unserialize()` on user data
+
+## Key Modules
+
+### {{MODULE_1}}
+{{MODULE_1_DESCRIPTION}}
+
+### {{MODULE_2}}
+{{MODULE_2_DESCRIPTION}}
+
+## External Integrations
+
+| Service | Purpose | Documentation |
+|---------|---------|---------------|
+| {{SERVICE_1}} | {{PURPOSE_1}} | {{DOC_URL_1}} |
+| {{SERVICE_2}} | {{PURPOSE_2}} | {{DOC_URL_2}} |
+
+## Development Workflow
+
+### Git Flow
+- **Main**: Production-ready code
+- **Develop**: Integration branch
+- **Feature**: `feature/{ticket}-{description}`
+- **Hotfix**: `hotfix/{ticket}-{description}`
+
+### Pull Request Requirements
+- [ ] PHPUnit, Jest and E2E tests pass
+- [ ] `phpcs`, `phpstan` and `wp-scripts lint-js` pass
+- [ ] Plugin Check reports no errors
+- [ ] Capability, nonce and escaping reviewed for every new handler or template
+- [ ] Coverage >= 80%
+- [ ] `composer audit` and `npm audit --omit=dev --audit-level=moderate` pass
+- [ ] Code reviewed
+
+## Commands Reference
+
+Commands run in Docker; WordPress-dependent commands run in the `wp-env` containers.
+
+### Development
+```bash
+npx wp-env start                          # Start the dev site (8888) and test site (8889)
+npx wp-scripts start                      # Watch and build blocks/assets
+npx wp-scripts build                      # Production build
+npx wp-env run cli wp plugin list         # Run WP-CLI in the environment
+```
+
+### Testing
+```bash
+npx wp-env run tests-cli --env-cwd=wp-content/plugins/{{PLUGIN_SLUG}} vendor/bin/phpunit
+npx wp-scripts test-unit-js               # Jest unit tests
+npx playwright test                       # E2E with @wordpress/e2e-test-utils-playwright
+```
+
+### Quality
+```bash
+vendor/bin/phpcs                          # WordPress Coding Standards
+vendor/bin/phpcbf                         # Auto-fix
+vendor/bin/phpstan analyse
+npx wp-scripts lint-js
+npx wp-env run cli wp plugin check {{PLUGIN_SLUG}}
+```
+
+### Internationalization
+```bash
+npx wp-env run cli wp i18n make-pot wp-content/plugins/{{PLUGIN_SLUG}} wp-content/plugins/{{PLUGIN_SLUG}}/languages/{{PLUGIN_SLUG}}.pot
+```

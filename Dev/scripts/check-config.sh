@@ -237,7 +237,7 @@ check_common_installation() {
 # ─────────────────────────────────────────────────────────────────────────────
 # Techs connues (namespace de commandes = clé de la techno)
 # ─────────────────────────────────────────────────────────────────────────────
-DEV_TECHS=" symfony flutter react reactnative angular csharp laravel vuejs php python vite vercel paperclip ruby rust tauri "
+DEV_TECHS=" symfony flutter react reactnative angular csharp laravel vuejs php python vite vercel paperclip ruby rust tauri wordpress "
 INFRA_TECHS=" docker coolify kubernetes opentofu ansible hcloud pgbouncer frankenphp "
 
 # Vérifie la présence d'agents d'un préfixe donné (agents infra : <tech>-*.md)

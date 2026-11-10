@@ -9,7 +9,7 @@
 
 <script setup>
 const stats = [
-  { value: '16', label: 'Tech Stacks' },
+  { value: '17', label: 'Tech Stacks' },
   { value: '33', label: 'AI Agents' },
   { value: '143', label: 'Slash Commands' },
   { value: '55', label: 'Skills' },

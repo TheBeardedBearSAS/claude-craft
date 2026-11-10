@@ -1,0 +1,86 @@
+1..85
+ok 1 statusline.sh: file exists and is executable
+ok 2 statusline.sh: has strict bash mode
+ok 3 statusline.sh: passes shellcheck -S error
+ok 4 statusline.sh: produces output with minimal stdin
+ok 5 ralph.sh: file exists and is executable
+ok 6 ralph.sh: has strict bash mode
+ok 7 ralph.sh: passes shellcheck -S error
+ok 8 ralph.sh: --help flag exits 0 or prints usage
+ok 9 ralph.sh: syntax valid (bash -n)
+ok 10 parse_args: --max-iterations=10 assigns MAX_ITERATIONS=10
+ok 11 parse_args: --timeout=30000 assigns TIMEOUT=30000
+ok 12 parse_args: --delay=500 assigns DELAY=500
+ok 13 parse_args: --dry-run sets DRY_RUN=true
+ok 14 parse_args: --max-iterations=abc fails non-zero
+ok 15 parse_args: --timeout=-5 fails non-zero
+ok 16 parse_args: unknown --foo flag fails non-zero
+ok 17 load_messages: en locale defines MSG_HEADER, MSG_ERROR, MSG_GOODBYE
+ok 18 load_messages: invalid LANG_ARG falls back to en
+ok 19 ralph --dry-run --max-iterations=1 exits cleanly without invoking claude
+ok 20 ralph --help: status 0 and Usage banner on stdout
+ok 21 parallel: two workers use distinct explicit Claude sessions in dedicated worktrees
+ok 22 sequential: first call uses --session-id, next calls --resume the same UUID
+ok 23 loop: ralph.sh --max-iterations=2 ends with exit_reason=max_iterations
+ok 24 loop: completion marker without ralph.yml ends with exit_reason=dod_complete
+ok 25 loop: every claude call (incl. /context) uses --session-id/--resume of the session
+ok 26 context: preventive compact probes /context and runs /compact with --resume
+ok 27 parallel: process_stories_parallel 'US-1 US-2' reaches the summary under set -e
+ok 28 yq: merge_worker_reports merges a completed report into state and graph
+ok 29 yq: ralph.yml session.max_iterations is loaded
+ok 30 prompt: iteration 1 without compaction is exactly the user prompt
+ok 31 prompt: no ANSI code nor print_info/print_verbose output in any prompt
+ok 32 prompt: reactive compaction retry carries the continuation prompt
+ok 33 context: preventive compact shows the real percentage in en fr es de pt
+ok 34 config: --max-iterations=2 wins over session.max_iterations: 5 in ralph.yml
+ok 35 conductor: parallel run processes 2 stories up to its summary
+ok 36 conductor: sequential run processes 2 failing stories up to its summary
+ok 37 escalation: counters start from 0 without killing the shell
+ok 38 conductor: --parallel 2 runs 2 workers concurrently and counts them
+ok 39 conductor: --parallel 1 frees the slot and spawns the second wave
+ok 40 conductor: dashed ids and a yq-expression id are claimed, prompted and transitioned
+ok 41 prompt: reactive compaction continuation prompt is in the --lang language
+ok 42 prompt: session handoff prompt is in the --lang language
+ok 43 context: below-minimum message substitutes {0} and {1}
+ok 44 context: max_compacts 1 switches to a continuation session with a new Claude id
+ok 45 context: preventive max_compacts 1 switches to a continuation session with a handoff prompt
+ok 46 session: continuation session has its own state.json and session.log, no orphan dir
+ok 47 conductor: --parallel 2 passes --lang=fr (flag or LANG_ARG) to every worker
+ok 48 context: reconstruct_context sections are in the chosen language (en fr es de pt)
+ok 49 conductor: failed parallel workers are counted in Failed and stories go to blocked
+ok 50 conductor: parallel ids with a quote or a space keep worker reports and the loop intact
+ok 51 conductor: a story id with ../ never loads a config outside .ralph/stories/
+ok 52 conductor: is_story_in_progress is true while a parallel worker runs the story
+ok 53 parallel: story ids with / or ../ create nothing outside sessions/ and worktrees/
+ok 54 parallel: a story id with a space runs in a dedicated worktree on a sanitized branch
+ok 55 conductor: --lang=fr prints the leader output (log lines, summary) in French
+ok 56 conductor: without --lang the leader output stays in English
+ok 57 i18n parity: succeeds on a read-only repository
+ok 58 i18n parity: I18N_GAP_CSV writes the gap report outside the repository
+ok 59 install-rtk.sh: file exists
+ok 60 install-rtk.sh: no 'curl | sh' pipe (SEC-001)
+ok 61 install-rtk.sh: has SHA256 verification OR explicit safe alternative
+ok 62 install-rtk.sh: syntax valid (bash -n)
+ok 63 install-rtk.sh: passes shellcheck -S error
+ok 64 install-rtk.sh: --help or --dry-run available
+ok 65 all install-*-rules.sh have strict bash mode
+ok 66 all install-*-rules.sh have valid bash syntax
+ok 67 all install-*-rules.sh start with shebang
+ok 68 install-common-rules.sh exists and is non-empty
+ok 69 install-symfony-rules.sh: --help exits cleanly
+ok 70 install-react-rules.sh: --help exits cleanly
+ok 71 install-flutter-rules.sh: --help exits cleanly
+ok 72 install-python-rules.sh: --help exits cleanly
+ok 73 install-php-rules.sh: --help exits cleanly
+ok 74 install-paperclip-rules.sh: --help exits cleanly
+ok 75 install-symfony-rules.sh: rejects invalid --lang values
+ok 76 install-symfony-rules.sh: refuses to write to /etc directly
+ok 77 cli: refuses --target=/ # skip node not available in this bats environment — run via npm test:e2e:tools or in a node-enabled bats image
+ok 78 cli: refuses --target=/etc # skip node not available in this bats environment — run via npm test:e2e:tools or in a node-enabled bats image
+ok 79 cli: refuses --target=/usr # skip node not available in this bats environment — run via npm test:e2e:tools or in a node-enabled bats image
+ok 80 cli: refuses relative path resolving to /etc via ../../ # skip node not available in this bats environment — run via npm test:e2e:tools or in a node-enabled bats image
+ok 81 cli: refuses --lang=AB (uppercase) # skip node not available in this bats environment — run via npm test:e2e:tools or in a node-enabled bats image
+ok 82 cli: refuses --lang=fr_FR (with underscore) # skip node not available in this bats environment — run via npm test:e2e:tools or in a node-enabled bats image
+ok 83 cli: refuses --lang containing shell metacharacters # skip node not available in this bats environment — run via npm test:e2e:tools or in a node-enabled bats image
+ok 84 cli: refuses --lang containing newline # skip node not available in this bats environment — run via npm test:e2e:tools or in a node-enabled bats image
+ok 85 cli: accepts --lang=fr (canonical case) # skip node not available in this bats environment — run via npm test:e2e:tools or in a node-enabled bats image

@@ -97,7 +97,7 @@ describe('command references resolve to existing commands', () => {
   it.each(LANGS)('every stack exposes /<tech>:check in %s', (lang) => {
     const valid = validCommands(lang);
     const stacks = ['angular', 'csharp', 'flutter', 'laravel', 'paperclip', 'php', 'python', 'react'];
-    stacks.push('reactnative', 'ruby', 'rust', 'symfony', 'tauri', 'vercel', 'vite', 'vuejs');
+    stacks.push('reactnative', 'ruby', 'rust', 'symfony', 'tauri', 'vercel', 'vite', 'vuejs', 'wordpress');
     expect(stacks.filter((ns) => !valid.has(`${ns}:check`))).toEqual([]);
   });
 

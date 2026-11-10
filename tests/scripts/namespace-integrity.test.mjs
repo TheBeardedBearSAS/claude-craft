@@ -148,9 +148,10 @@ describe('v7.0.0 namespace integrity', () => {
     angular: 'Angular', csharp: 'CSharp', flutter: 'Flutter', laravel: 'Laravel', paperclip: 'Paperclip',
     php: 'PHP', python: 'Python', react: 'React', reactnative: 'ReactNative', symfony: 'Symfony',
     ruby: 'Ruby', rust: 'Rust', tauri: 'Tauri', vercel: 'Vercel', vite: 'Vite', vuejs: 'VueJS',
+    wordpress: 'WordPress',
   };
   // Stacks shipped to users only (no maintainer copy under .claude/commands/).
-  const NO_MAINTAINER_LAYER = new Set(['paperclip', 'ruby', 'rust', 'tauri']);
+  const NO_MAINTAINER_LAYER = new Set(['paperclip', 'ruby', 'rust', 'tauri', 'wordpress']);
 
   it.each(Object.entries(TECH))('%s exposes /<tech>:check in .claude and the 5 languages', (ns, dir) => {
     const files = ['en', 'fr', 'es', 'de', 'pt'].map((l) => `Dev/i18n/${l}/${dir}/commands/check.md`);
@@ -160,7 +161,7 @@ describe('v7.0.0 namespace integrity', () => {
 
   // Stacks whose axis checklists live in the language-neutral base/ layer also ship an
   // English /<tech>:check router and aggregate there; the 5 languages override them.
-  it.each(['Angular', 'CSharp', 'Laravel', 'PHP', 'Ruby', 'Rust', 'Tauri', 'Vercel', 'Vite', 'VueJS'])(
+  it.each(['Angular', 'CSharp', 'Laravel', 'PHP', 'Ruby', 'Rust', 'Tauri', 'Vercel', 'Vite', 'VueJS', 'WordPress'])(
     '%s exposes /<tech>:check in Dev/i18n/base',
     (dir) => {
       const files = [`commands/check.md`, 'checks/all.md', 'checks/architecture.md'].map(

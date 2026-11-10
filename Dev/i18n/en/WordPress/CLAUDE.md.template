@@ -1,0 +1,100 @@
+# {{PROJECT_NAME}} - WordPress
+
+> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+
+## What (Stack & Structure)
+
+**Stack**: WordPress {{WP_VERSION}}, PHP {{PHP_VERSION}} (WordPress supports 7.4+, 8.3+ recommended), Composer, `@wordpress/scripts` for block/JS builds, `@wordpress/env` (wp-env) for local environments
+
+### Project Structure
+```
+my-plugin/
+├── my-plugin.php       # Plugin header (Requires at least / Requires PHP), bootstrap
+├── uninstall.php       # Cleanup on uninstall
+├── composer.json       # Autoload (PSR-4), WPCS, PHPStan, PHPUnit polyfills
+├── package.json        # @wordpress/scripts, @wordpress/env
+├── .wp-env.json        # Local WordPress environment
+├── includes/ (src/)    # Namespaced PHP classes (hooks, REST, services)
+├── src/blocks/<name>/  # block.json (apiVersion 3), edit.js, render.php
+├── languages/          # .pot / translations (text domain = plugin slug)
+└── tests/              # PHPUnit (WP_UnitTestCase), Jest, Playwright e2e
+```
+Block themes follow the same spirit: `theme.json`, `templates/`, `parts/`, `patterns/`.
+
+## Why (Purpose & Organization)
+
+### Architecture: hooks-driven plugin/theme with namespaced services
+- **Hooks**: behaviour attaches through actions and filters registered in one place
+- **Namespaces and prefixes**: every function, class, option, hook and handle is namespaced or prefixed
+- **Blocks first**: UI built as blocks (`block.json` apiVersion 3), server rendering via `render.php`
+- **REST**: custom endpoints through `register_rest_route()` with a mandatory `permission_callback`
+- Keep logic in plain classes testable without a full request; thin hook callbacks
+- General PHP: see the `php` stack
+
+See `rules/02-architecture-wordpress.md` for complete patterns.
+
+### Critical Rules
+| Rule | Reason |
+|------|--------|
+| Capability check + nonce on every state change | Prevents privilege escalation and CSRF |
+| Sanitize on input, escape on output (`esc_html`, `esc_attr`, `esc_url`, `wp_kses_post`) | Prevents XSS |
+| `$wpdb->prepare()` for every query with variable data | Prevents SQL injection |
+| `permission_callback` on every REST route | Routes without it are publicly accessible |
+| `defined( 'ABSPATH' ) \|\| exit;` in every PHP file | Blocks direct file access |
+| Prefix/namespace everything, text domain on every string | Avoids collisions, enables translation |
+| WPCS (PHPCS) + PHPStan clean | Code quality and consistent style |
+| 80%+ coverage, tests run through wp-env | Quality assurance |
+
+> WooCommerce guidance lives in the optional skill `.claude/skills/woocommerce/`, loaded only when the project extends WooCommerce.
+
+## How (Commands & Workflows)
+
+### Development Commands
+```bash
+docker compose exec app npx wp-env start             # Local WordPress
+docker compose exec app npx wp-scripts build         # Build blocks / JS
+docker compose exec app npx wp-scripts start         # Watch mode
+docker compose exec app npx wp-env run cli wp plugin list   # WP-CLI inside wp-env
+docker compose exec app npx @wordpress/create-block my-block  # Scaffold a block
+```
+
+### Quality Pipeline
+```bash
+docker compose exec app composer exec phpcs          # WPCS
+docker compose exec app composer exec phpstan analyse  # PHPStan + phpstan-wordpress
+docker compose exec app npx wp-env run tests-cli --env-cwd=wp-content/plugins/my-plugin composer exec phpunit
+docker compose exec app npx wp-scripts test-unit-js  # Jest
+docker compose exec app npx wp-scripts lint-js       # ESLint (@wordpress/eslint-plugin)
+docker compose exec app npx playwright test          # E2E
+```
+
+### Available Commands
+- `/wordpress:check <architecture|code-quality|security|testing|all>` - Audit by axis, or scored aggregate
+
+### Development Workflow
+1. **Analyze** - Read code, understand domain (`rules/01-workflow-analysis.md`)
+2. **TDD** - Write test -> Implement -> Refactor
+3. **Quality** - Run the quality pipeline
+4. **Commit** - Conventional Commits format
+
+## References
+
+| Topic | Rule File |
+|-------|-----------|
+| Analysis | `rules/01-workflow-analysis.md` |
+| Architecture | `rules/02-architecture-wordpress.md` |
+| Coding Standards | `rules/03-coding-standards.md` |
+| SOLID | `rules/04-solid-principles.md` |
+| Tooling | `rules/06-tooling.md` |
+| Testing | `rules/07-testing-wordpress.md` |
+| Quality | `rules/08-quality-tools.md` |
+| Security | `rules/11-security-wordpress.md` |
+
+<!-- PROJECT-SPECIFIC-START -->
+## Project Specifics
+
+{{TECH_STACK}}
+
+<!-- Add project-specific configuration below -->
+
+<!-- PROJECT-SPECIFIC-END -->

@@ -304,6 +304,15 @@ Main path: `init → plan → design → start → implement → review → retr
 /tauri:check all                  # All 4 axes, scored /100
 ```
 
+### `/wordpress:` - WordPress
+
+```
+/wordpress:check architecture     # Check plugin/theme layout, hooks, blocks, REST
+/wordpress:check security         # Check capabilities, nonces, escaping, $wpdb->prepare
+/wordpress:check testing          # Check tests (WP_UnitTestCase, wp-scripts, Playwright)
+/wordpress:check all              # All 4 axes, scored /100 (+ WooCommerce if used)
+```
+
 ### `/vite:` - Vite (framework-agnostic)
 
 ```

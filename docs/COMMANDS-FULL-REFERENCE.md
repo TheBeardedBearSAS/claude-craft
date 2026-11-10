@@ -37,8 +37,9 @@
 | `/vercel:*` | 7 |
 | `/vite:*` | 8 |
 | `/vuejs:*` | 7 |
+| `/wordpress:*` | 1 |
 | `/workflow:*` | 9 |
-| **Total** | **200** |
+| **Total** | **201** |
 
 ## `/angular:*`
 
@@ -380,6 +381,12 @@
 | [`/vuejs:check-security`](../.claude/commands/vuejs/check-security.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check security |
 | [`/vuejs:check-testing`](../.claude/commands/vuejs/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check testing |
 | [`/vuejs:generate-component`](../.claude/commands/vuejs/generate-component.md) | Generate a Vue.js component with TypeScript, tests, and Storybook |
+
+## `/wordpress:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/wordpress:check`](../Dev/i18n/en/WordPress/commands/check.md) | WordPress audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
 
 ## `/workflow:*`
 
