@@ -18,7 +18,7 @@ These aliases reduce typing and improve productivity by providing short mnemonic
 
 | Alias | Full Command | Description |
 |-------|-------------|-------------|
-| `/ca` | `/common:audit-freshness` | Audit documentation freshness |
+| `/ca` | `/common:audit-freshness` | Stack freshness audit (maintainer) |
 | `/caa` | `/common:audit-claude-alignment` | Weekly Claude ecosystem alignment audit |
 | `/ci` | `/common:init` | Initialize Claude Craft |
 | `/cr` | `/gate:check release` | Pre-release verification checklist |

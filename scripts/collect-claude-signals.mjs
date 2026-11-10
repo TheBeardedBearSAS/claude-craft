@@ -25,6 +25,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as yaml from 'js-yaml';
+import { compareVersions, fetchJson as fetchJsonRaw, fetchText as fetchTextRaw } from './lib/http.mjs';
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DEFAULT_BASELINE = path.join(PROJECT_ROOT, 'config', 'claude-alignment-baseline.json');
@@ -86,39 +87,10 @@ export function hashOf(text) {
   return createHash('sha256').update(normalized).digest('hex').slice(0, 16);
 }
 
-/**
- * Compare deux versions segment par segment, numériquement.
- * Indispensable : en comparaison de chaînes, '2.1.9' passerait pour plus récent
- * que '2.1.193'.
- *
- * @returns {number} > 0 si `a` est plus récente, < 0 si plus ancienne, 0 si égales
- */
-export function compareVersions(a, b) {
-  const parse = (v) =>
-    String(v)
-      .split('.')
-      .map((seg) => parseInt(seg, 10) || 0);
-  const left = parse(a);
-  const right = parse(b);
-  const len = Math.max(left.length, right.length);
-  for (let i = 0; i < len; i += 1) {
-    const diff = (left[i] ?? 0) - (right[i] ?? 0);
-    if (diff !== 0) return diff;
-  }
-  return 0;
-}
+export { compareVersions };
 
-async function fetchJson(url) {
-  const res = await fetch(url, { headers: { ...UA, Accept: 'application/vnd.github+json' } });
-  if (!res.ok) throw new Error(`${url} → ${res.status} ${res.statusText}`);
-  return res.json();
-}
-
-async function fetchText(url) {
-  const res = await fetch(url, { headers: UA });
-  if (!res.ok) throw new Error(`${url} → ${res.status} ${res.statusText}`);
-  return res.text();
-}
+const fetchJson = (url) => fetchJsonRaw(url, { ...UA, Accept: 'application/vnd.github+json' });
+const fetchText = (url) => fetchTextRaw(url, UA);
 
 /** Premier candidat qui répond. Échoue avec l'erreur du dernier essai. */
 async function fetchFirstOk(urls) {

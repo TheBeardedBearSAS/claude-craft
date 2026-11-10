@@ -1,0 +1,177 @@
+# Sources de fraîcheur — `/common:audit-freshness`
+# --------------------------------------------------
+# Pour chaque clé `stacks:` / `infra:` de config/versions.yaml : où lire la dernière
+# version STABLE publiée (lue par scripts/collect-freshness-signals.mjs) et quels
+# fichiers du dépôt l'agent d'audit doit confronter.
+#
+# Kinds : npm | pypi | packagist | crates | rubygems | endoflife | github | flutter | wordpress | text
+#   pkg   : nom du paquet (npm, pypi, packagist, crates, rubygems, endoflife)
+#   repo  : owner/name (github → releases/latest, pré-releases exclues par GitHub)
+#   url   : URL brute (text)
+#   lts   : true pour endoflife → ne retenir que les cycles LTS
+#
+# Un test (tests/scripts/collect-freshness-signals.test.mjs) échoue si une clé de
+# versions.yaml n'a pas de source, ou si un chemin listé n'existe pas.
+# La vague d'un stack découle de la section : stacks → vague 1, infra → vague 3.
+
+stacks:
+  csharp:
+    kind: endoflife
+    pkg: dotnet
+    paths: [Dev/i18n/en/CSharp, .claude/references/csharp, .claude/agents/csharp-reviewer.md, .claude/commands/csharp]
+  symfony:
+    kind: packagist
+    pkg: symfony/framework-bundle
+    paths: [Dev/i18n/en/Symfony, .claude/references/symfony, .claude/agents/symfony-reviewer.md, .claude/commands/symfony]
+  flutter:
+    kind: flutter
+    paths: [Dev/i18n/en/Flutter, .claude/references/flutter, .claude/agents/flutter-reviewer.md, .claude/commands/flutter]
+  react:
+    kind: npm
+    pkg: react
+    paths: [Dev/i18n/en/React, .claude/references/react, .claude/agents/react-reviewer.md, .claude/commands/react]
+  reactnative:
+    kind: npm
+    pkg: react-native
+    paths:
+      [
+        Dev/i18n/en/ReactNative,
+        .claude/references/reactnative,
+        .claude/agents/reactnative-reviewer.md,
+        .claude/commands/reactnative,
+      ]
+  angular:
+    kind: npm
+    pkg: '@angular/core'
+    paths: [Dev/i18n/en/Angular, .claude/references/angular, .claude/agents/angular-reviewer.md, .claude/commands/angular]
+  laravel:
+    kind: packagist
+    pkg: laravel/framework
+    paths: [Dev/i18n/en/Laravel, .claude/references/laravel, .claude/agents/laravel-reviewer.md, .claude/commands/laravel]
+  vuejs:
+    kind: npm
+    pkg: vue
+    paths: [Dev/i18n/en/VueJS, .claude/references/vuejs, .claude/agents/vuejs-reviewer.md, .claude/commands/vuejs]
+  vite:
+    kind: npm
+    pkg: vite
+    paths: [Dev/i18n/en/Vite, .claude/references/vite, .claude/agents/vite-reviewer.md, .claude/commands/vite]
+  vercel:
+    kind: npm
+    pkg: vercel
+    paths: [Dev/i18n/en/Vercel, .claude/references/vercel, .claude/agents/vercel-reviewer.md, .claude/commands/vercel]
+  tauri:
+    kind: crates
+    pkg: tauri
+    paths: [Dev/i18n/en/Tauri]
+  wordpress:
+    kind: wordpress
+    paths: [Dev/i18n/en/WordPress]
+  php:
+    kind: endoflife
+    pkg: php
+    paths: [Dev/i18n/en/PHP, .claude/references/php, .claude/agents/php-reviewer.md, .claude/commands/php]
+  python:
+    kind: endoflife
+    pkg: python
+    paths: [Dev/i18n/en/Python, .claude/references/python, .claude/agents/python-reviewer.md, .claude/commands/python]
+  ruby:
+    # Version déclarée « 8.1 / Ruby 4.0 » : le premier token est Rails.
+    kind: rubygems
+    pkg: rails
+    paths: [Dev/i18n/en/Ruby]
+  rust:
+    # Version déclarée « 0.8 / Rust 1.99 » : le premier token est Axum.
+    kind: crates
+    pkg: axum
+    paths: [Dev/i18n/en/Rust]
+  paperclip:
+    kind: github
+    repo: paperclipai/paperclip
+    paths: [Dev/i18n/en/Paperclip, .claude/references/paperclip, .claude/agents/paperclip-reviewer.md]
+
+infra:
+  docker:
+    kind: github
+    repo: moby/moby
+    paths: [Infra/i18n/en/Docker, .claude/skills/docker-hadolint]
+  coolify:
+    kind: github
+    repo: coollabsio/coolify
+    paths: [Infra/i18n/en/Coolify]
+  kubernetes:
+    kind: text
+    url: https://dl.k8s.io/release/stable.txt
+    paths: [Infra/i18n/en/Kubernetes]
+  opentofu:
+    kind: github
+    repo: opentofu/opentofu
+    paths: [Infra/i18n/en/OpenTofu]
+  ansible:
+    kind: pypi
+    pkg: ansible-core
+    paths: [Infra/i18n/en/Ansible]
+  hcloud:
+    kind: github
+    repo: hetznercloud/cli
+    paths: [Infra/i18n/en/Hcloud]
+  frankenphp:
+    kind: github
+    repo: php/frankenphp
+    paths: [Infra/i18n/en/FrankenPHP]
+  pgbouncer:
+    kind: github
+    repo: pgbouncer/pgbouncer
+    paths: [Infra/i18n/en/PgBouncer]
+  helm:
+    kind: github
+    repo: helm/helm
+    paths: [Infra/i18n/en/Kubernetes]
+  node:
+    kind: endoflife
+    pkg: nodejs
+    lts: true
+    paths: [.claude/agents/devops-engineer.md, docs/PREREQUISITES.md]
+
+# Vague 2 — familles transverses : pas de version mesurable, auditées en --full ou --wave=2.
+families:
+  principes:
+    paths:
+      - .claude/rules/01-workflow-analysis.md
+      - .claude/rules/04-solid-principles.md
+      - .claude/rules/05-kiss-dry-yagni.md
+      - .claude/skills/solid-principles
+      - .claude/skills/kiss-dry-yagni
+      - .claude/skills/workflow-analysis
+  testing:
+    paths:
+      - .claude/rules/07-testing.md
+      - .claude/skills/testing
+      - .claude/skills/testing-react
+      - .claude/skills/testing-reactnative
+      - .claude/skills/testing-python
+      - .claude/skills/testing-symfony
+      - .claude/skills/testing-flutter
+  security:
+    paths:
+      - .claude/rules/11-security.md
+      - .claude/references/base/security.md
+      - .claude/skills/security
+      - .claude/skills/security-react
+      - .claude/skills/security-reactnative
+      - .claude/skills/security-flutter
+      - .claude/skills/security-symfony
+  git-docs-ddd:
+    paths:
+      - .claude/rules/09-git-workflow.md
+      - .claude/rules/10-documentation.md
+      - .claude/skills/git-workflow
+      - .claude/skills/documentation
+      - .claude/skills/ddd-patterns
+      - .claude/skills/value-objects
+      - .claude/skills/aggregates
+      - .claude/skills/domain-events
+      - .claude/skills/cqrs
+      - .claude/skills/multitenant
+      - .claude/skills/i18n
+      - .claude/skills/async
