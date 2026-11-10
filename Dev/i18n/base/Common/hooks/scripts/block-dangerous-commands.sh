@@ -21,9 +21,20 @@ CMD=$(hook_get tool_input.command)
 MODE=${BLOCK_RM_RF:-dangerous}
 TEXT=$(printf '%s\n' "$CMD" | hook_strip_heredocs | hook_shell_segments)
 
-# Fork bomb : motif `f(){ f|f& }` sur le texte non découpé, chaînes citées retirées.
-UNQUOTED=$(printf '%s\n' "$CMD" | hook_strip_heredocs | sed -E "s/'[^']*'//g"' ; s/"([^"\\]|\\.)*"//g')
-if printf '%s' "$UNQUOTED" | grep -qE ':[[:space:]]*\([[:space:]]*\)[[:space:]]*\{[[:space:]]*:'; then
+# Fork bomb `f(){ f|f& }` (f = `:` ou un nom) sur le texte non découpé : texte cité-donnée
+# masqué, texte cité-code (sh -c '…', eval "…") conservé.
+FLAT=$(printf '%s\n' "$CMD" | hook_strip_heredocs | hook_shell_segments flat)
+# (awk plutôt qu'une rétro-référence ERE, absente de grep -E sous busybox/musl)
+if printf '%s\n' "$FLAT" | awk '
+  {
+    s = $0
+    while (match(s, /[A-Za-z_:][A-Za-z0-9_:]*[[:space:]]*\([[:space:]]*\)[[:space:]]*\{/)) {
+      name = substr(s, RSTART, RLENGTH); sub(/[[:space:]]*\(.*/, "", name)
+      s = substr(s, RSTART + RLENGTH); body = s; sub(/\}.*/, "", body); gsub(/[[:space:]]/, "", body)
+      if (index(body, name "|" name)) found = 1
+    }
+  }
+  END { exit !found }'; then
   hook_block "Fork bomb detected"
 fi
 if printf '%s' "$TEXT" | grep -qE '>[[:space:]]*/dev/(sd|hd|nvme|mmcblk|disk|xvd|vd)'; then
