@@ -22,7 +22,11 @@ function guardCommand(rel) {
 }
 
 function run(command, bashCommand) {
-  const input = JSON.stringify({ hook_event_name: 'PreToolUse', tool_name: 'Bash', tool_input: { command: bashCommand } });
+  const input = JSON.stringify({
+    hook_event_name: 'PreToolUse',
+    tool_name: 'Bash',
+    tool_input: { command: bashCommand },
+  });
   return spawnSync('bash', ['-c', command], { input, encoding: 'utf8' });
 }
 
@@ -31,12 +35,17 @@ const BLOCKED = [
   "mysql -e 'drop database app'",
   'psql -c "TRUNCATE orders"',
   'psql -c "DROP SCHEMA billing CASCADE"',
+  'psql -c "TRUNCATE TABLE orders RESTART IDENTITY"',
+  "mysql -e 'truncate table sessions'",
 ];
 const ALLOWED = [
   'psql -c "SELECT count(*) FROM users"',
   'php bin/console doctrine:migrations:migrate --no-interaction',
   'grep -rn truncated src/',
   'psql -c "DROP INDEX idx_users_email"',
+  // Unix `truncate` always takes an option (-s/-r/--size): not SQL.
+  'truncate -s 0 var/log/dev.log',
+  'truncate --size=0 storage/logs/laravel.log',
 ];
 
 describe('migration-specialist destructive SQL guard', () => {
