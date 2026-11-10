@@ -12,7 +12,7 @@ const LOCAL_SETTINGS_PATH = path.join(
   'base',
   'Common',
   'templates',
-  'settings.local.json.template',
+  'settings.local.json.template'
 );
 const CLAUDEIGNORE_PATH = path.join(PROJECT_ROOT, '.claudeignore');
 
@@ -29,17 +29,33 @@ describe('project settings.json optimization', () => {
     expect(settings.env.CLAUDE_CODE_SUBAGENT_MODEL).toMatch(/sonnet/);
   });
 
-  it('has PostCompact hook', () => {
-    expect(settings.hooks.PostCompact).toBeDefined();
-    expect(settings.hooks.PostCompact).toBeInstanceOf(Array);
-    expect(settings.hooks.PostCompact.length).toBeGreaterThan(0);
+  // Matchers multi-outils (`Edit|Write`) : un groupe couvre plusieurs outils.
+  const groupFor = (event, tool) =>
+    (settings.hooks[event] || []).find((h) => (h.matcher || '').split('|').includes(tool));
+  const allCommands = Object.values(settings.hooks)
+    .flat()
+    .flatMap((g) => g.hooks.map((h) => h.command));
 
-    const hook = settings.hooks.PostCompact[0];
-    expect(hook.hooks[0].command).toContain('context-essentials.md');
+  // PostCompact ignore systemMessage et n'a aucun canal vers le modèle : la
+  // réinjection passe par SessionStart(compact).
+  it('has no PostCompact hook (no channel to the model)', () => {
+    expect(settings.hooks.PostCompact).toBeUndefined();
   });
 
-  it('has PreCompact hook', () => {
-    expect(settings.hooks.PreCompact).toBeDefined();
+  it('has PreCompact hook feeding context-essentials as plain text', () => {
+    const cmd = settings.hooks.PreCompact[0].hooks[0].command;
+    expect(cmd).toContain('context-essentials.md');
+    expect(cmd).not.toContain('systemMessage');
+  });
+
+  it('does not depend on per-user hook scripts (~/.claude)', () => {
+    for (const cmd of allCommands) expect(cmd).not.toMatch(/~\/\.claude\//);
+  });
+
+  it('uses $CLAUDE_PROJECT_DIR for context-essentials paths', () => {
+    for (const cmd of allCommands.filter((c) => c.includes('context-essentials'))) {
+      expect(cmd).toContain('$CLAUDE_PROJECT_DIR');
+    }
   });
 
   it('has SessionStart compact hook for context reinjection', () => {
@@ -54,24 +70,36 @@ describe('project settings.json optimization', () => {
     const preToolUse = settings.hooks.PreToolUse;
     expect(preToolUse).toBeDefined();
 
-    const editHook = preToolUse.find((h) => h.matcher === 'Edit');
-    expect(editHook).toBeDefined();
-    expect(editHook.hooks[0].command).toContain('.env');
-
-    const writeHook = preToolUse.find((h) => h.matcher === 'Write');
-    expect(writeHook).toBeDefined();
-    expect(writeHook.hooks[0].command).toContain('.env');
+    for (const tool of ['Edit', 'Write', 'NotebookEdit']) {
+      const group = groupFor('PreToolUse', tool);
+      expect(group, tool).toBeDefined();
+      expect(group.hooks.map((h) => h.command).join('\n')).toContain('protect-sensitive-files.sh');
+    }
   });
 
-  it('has PostToolUse output filter hooks', () => {
-    const postToolUse = settings.hooks.PostToolUse;
-    expect(postToolUse).toBeDefined();
+  it('has PreToolUse Bash guards (network + destructive)', () => {
+    const cmds = groupFor('PreToolUse', 'Bash')
+      .hooks.map((h) => h.command)
+      .join('\n');
+    expect(cmds).toContain('guard-network.sh');
+    expect(cmds).toContain('block-destructive-bash.sh');
+  });
 
-    const grepHook = postToolUse.find((h) => h.matcher === 'Grep');
-    expect(grepHook).toBeDefined();
+  it('has PostToolUse output size hints for Bash, Grep and Glob', () => {
+    for (const tool of ['Bash', 'Grep', 'Glob']) {
+      const group = groupFor('PostToolUse', tool);
+      expect(group, tool).toBeDefined();
+      expect(group.hooks[0].command).toContain('output-size-hint.sh');
+    }
+  });
 
-    const globHook = postToolUse.find((h) => h.matcher === 'Glob');
-    expect(globHook).toBeDefined();
+  it('every hook declares a timeout in seconds (1-600)', () => {
+    for (const g of Object.values(settings.hooks).flat()) {
+      for (const h of g.hooks) {
+        expect(h.timeout, h.command).toBeGreaterThanOrEqual(1);
+        expect(h.timeout, h.command).toBeLessThanOrEqual(600);
+      }
+    }
   });
 });
 
@@ -104,10 +132,7 @@ describe('settings.local.json.template optimization', () => {
     const allow = settings.permissions?.allow || [];
     for (const perm of allow) {
       if (perm.startsWith('Bash(')) {
-        expect(
-          perm,
-          `Permission "${perm}" should use wildcard pattern (Bash(cmd:*))`,
-        ).toMatch(/:\*\)$/);
+        expect(perm, `Permission "${perm}" should use wildcard pattern (Bash(cmd:*))`).toMatch(/:\*\)$/);
       }
     }
   });
@@ -154,7 +179,7 @@ describe('hook timeouts are expressed in seconds', () => {
       .filter((f) => f.endsWith('.json'))
       .map((f) => path.join(HOOK_TEMPLATES_DIR, f)),
     ...LANGS.map((lang) =>
-      path.join(PROJECT_ROOT, 'Dev', 'i18n', lang, 'Common', 'templates', 'settings.json.template'),
+      path.join(PROJECT_ROOT, 'Dev', 'i18n', lang, 'Common', 'templates', 'settings.json.template')
     ),
   ];
 
