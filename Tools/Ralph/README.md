@@ -297,26 +297,36 @@ Ralph integrates with Claude Code 2.1.23+ hooks for bidirectional communication:
 
 | Hook | Trigger | Purpose |
 |------|---------|---------|
-| `SessionStart` | Session begins | Inject Ralph context |
-| `PreToolUse` (once) | Before first tool | Inject DoD status |
-| `Stop` | Session end | Gate on DoD satisfaction |
+| `SessionStart` | Session begins | Inject Ralph context and list the DoD (never runs it) |
+| `PreToolUse` (`Agent\|Task`, advanced mode) | Before a sub-agent starts | Remind the current sprint task |
+| `Stop` | Claude is about to stop | Gate on DoD satisfaction |
 
 ### Exit Codes
 
 | Code | Meaning | Behavior |
 |------|---------|----------|
 | 0 | Allow | Proceed normally |
-| 2 | Block | Prevent action (Stop only) |
+| 2 | Block | Prevent action (`stderr` is shown to the model) |
+
+The `Stop` hook blocks with `{"decision":"block","reason":"..."}` on stdout and exit 0, and lets
+Claude stop when `stop_hook_active` is true. Each DoD `command` is first checked by
+`block-dangerous-commands.sh` and `guard-network.sh`: a refused command is not run and is reported
+in the reason (`ralph.yml` of a cloned repository is untrusted).
 
 ### Hook Files
 
 ```
 .ralph/hooks/
 ├── session-restore.sh     # SessionStart - injects Ralph context
-├── status-injector.sh     # PreToolUse - injects DoD status
-├── pre-tool-context.sh    # PreToolUse - tool-specific context
-└── stop-dod-gate.sh       # Stop - blocks if DoD not satisfied
+├── pre-tool-context.sh    # PreToolUse (Agent|Task) - current sprint task
+├── stop-dod-gate.sh       # Stop - blocks if DoD not satisfied
+└── lib/ralph-common.sh    # shared helpers (+ copied guards and hook-io.sh)
 ```
+
+The scripts ship in `Tools/Ralph/hooks/` and are copied into `.ralph/hooks/` of the project when
+absent. `ralph --init` merges the hooks into `.claude/settings.json` with `merge-hooks.mjs`
+(commands `bash "$CLAUDE_PROJECT_DIR/.ralph/hooks/<script>.sh"`): your own hooks are never
+modified, and only entries containing `/.ralph/hooks/` are replaced or removed.
 
 Configuration:
 

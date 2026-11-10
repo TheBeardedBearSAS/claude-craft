@@ -122,13 +122,13 @@ Selection automatique du profil selon mots-cles:
 ### 5. Integration Hooks (Claude Code 2.1.23+)
 
 ```
-SessionStart → session-restore.sh → Injecter contexte Ralph
+SessionStart → session-restore.sh → Injecter contexte Ralph + lister la DoD (sans l’exécuter)
      ↓
-PreToolUse (once) → status-injector.sh → Injecter statut DoD
+PreToolUse (Agent|Task) → pre-tool-context.sh → Rappeler la tâche de sprint courante
      ↓
 Claude travaille...
      ↓
-Stop → stop-dod-gate.sh → Bloquer si DoD non satisfait (exit 2)
+Stop → stop-dod-gate.sh → Bloquer si DoD non satisfait (decision: block)
 ```
 
 ## /goal (interactif) ou Ralph (autonome/CI) ?
