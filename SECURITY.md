@@ -46,14 +46,14 @@ If you discover a security vulnerability in Claude Craft, please report it respo
 
 When using Claude Craft:
 
-- Keep Claude Code at or above the security minimum (2.1.260+; 2.1.322 recommended).
+- Keep Claude Code at or above the security minimum (2.1.321+; 2.1.322 recommended).
 - Review agent permissions in `.claude/settings.json` before granting access.
 - Never commit sensitive data (API keys, tokens) in BMAD configuration files.
 - Use the sandbox mode to restrict skill directory writes.
 
 ### Known CVE Fixes (Claude Code)
 
-Claude Code v2.1.260+ (claude-craft security minimum) includes critical security fixes:
+Claude Code v2.1.321+ (claude-craft security minimum) includes critical security fixes:
 
 | CVE | Severity | Fixed In | Description |
 |-----|----------|----------|-------------|
@@ -68,6 +68,7 @@ Claude Code v2.1.260+ (claude-craft security minimum) includes critical security
 | CVE-2026-55607 | High | v2.1.163 | Sandbox escape via git worktree path confusion (GHSA-7835-87q9-rgvv) |
 | CVE-2026-86063 | High | v2.1.179 | Plugin commit SHA pin bypass installs attacker code (GHSA-pq7j-f95f-qfcv) |
 | CVE-2026-103012 | Low | v2.1.260 | Managed settings not applied with a stored API key (GHSA-gfvf-j8jh-jxxw) |
+| — (no GHSA) | — | v2.1.321 | Bash read-only command outside the sandbox without a prompt, writes evaluated from the wrong directory, deny rules bypassed by `cp`/`mv` into a directory, MCP OAuth refresh token sent to another host after a redirect |
 
 **Incident**: Claude Code v2.1.88 exposed source code via `.map` file (59.8 MB). Fixed in v2.1.89.
 

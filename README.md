@@ -21,7 +21,7 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 [![npm version](https://img.shields.io/npm/v/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
 [![npm downloads](https://img.shields.io/npm/dm/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
-[![Claude Code 2.1.260+](https://img.shields.io/badge/Claude%20Code-2.1.260%2B-blue)](https://code.claude.com)
+[![Claude Code 2.1.321+](https://img.shields.io/badge/Claude%20Code-2.1.321%2B-blue)](https://code.claude.com)
 [![CI](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
@@ -172,7 +172,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 - **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
 - **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
 - **126 commandes sur 15 namespaces (v8.10.x)** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
-- **Claude Code 2.1.322** -- version recommandée (minimum sécurité 2.1.260 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
+- **Claude Code 2.1.322** -- version recommandée (minimum sécurité 2.1.321 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
 
 > ← Versions antérieures (v8.0 → v8.7) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
 

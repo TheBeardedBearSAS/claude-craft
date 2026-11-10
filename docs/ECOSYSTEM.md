@@ -274,7 +274,7 @@ apply [`.claude/rules/11-security.md`](../.claude/rules/11-security.md):
 
 - **Audit the source** and pin an exact version (no floating `latest`).
 - **Minimal permissions** — grant only the tools/paths the server needs.
-- Prefer Claude Code **v2.1.260+** when combining MCP servers, plugins and hooks.
+- Prefer Claude Code **v2.1.321+** when combining MCP servers, plugins and hooks.
 - See [`docs/MCP.md#security`](MCP.md#security) for the full MCP hardening checklist.
 
 > **Non-affiliation.** Claude Craft is not affiliated with any of the projects listed here. Stars,

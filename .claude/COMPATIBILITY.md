@@ -1,6 +1,6 @@
 # Claude Code Compatibility — Claude Craft v9.2.0
 
-**Minimum Version:** 2.1.260 (elevated from 2.1.97 — see [security advisories 2026](#security-advisories-2026--why-the-minimum-is-21260))
+**Minimum Version:** 2.1.321 (elevated from 2.1.97 — see [security advisories 2026](#security-advisories-2026--why-the-minimum-is-21321))
 **Recommended Version:** 2.1.322 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `permissions.denyInsteadOfPrompting`, Fable 5.2, correctifs permissions/OAuth MCP 2.1.321)
 **Tested up to:** 2.1.322 (November 2026)
 **Last Updated:** 2026-11-10
@@ -12,13 +12,13 @@
 1. [Version Requirements](#version-requirements)
 2. [OS Support](#os-support)
 3. [Node.js Support](#nodejs-support)
-4. [Security Advisories 2026 — why the minimum is 2.1.260](#security-advisories-2026--why-the-minimum-is-21260)
+4. [Security Advisories 2026 — why the minimum is 2.1.321](#security-advisories-2026--why-the-minimum-is-21321)
 5. [Why We Elevated Minimum from 2.1.47 to 2.1.97 (historique)](#why-we-elevated-minimum-from-2147-to-2197-historique)
 6. [Feature Adoption Status](#feature-adoption-status)
 7. [Features 2.1.105–2.1.117 Available](#features-21105-21117-available)
 8. [Features 2.1.119 → 2.1.145 (May 2026)](#features-21119--21145-may-2026)
 9. [Features 2.1.194 → 2.1.322 (July–November 2026)](#features-21194--21322-julynovember-2026)
-10. [Migration from < 2.1.260](#migration-from--21260)
+10. [Migration from < 2.1.321](#migration-from--21321)
 11. [Version History Summary](#version-history-summary)
 
 ---
@@ -27,7 +27,7 @@
 
 | Requirement | Version | Notes |
 |-------------|---------|-------|
-| **Minimum** | 2.1.260 | Security baseline — CVE-2026-86063 (2.1.179), CVE-2026-103435 (2.1.129), CVE-2026-55607 (2.1.163), CVE-2026-103012 (2.1.260) patched |
+| **Minimum** | 2.1.321 | Security baseline — CVE-2026-86063 (2.1.179), CVE-2026-103435 (2.1.129), CVE-2026-55607 (2.1.163), CVE-2026-103012 (2.1.260) patched + correctifs permissions Bash / OAuth MCP (2.1.321) |
 | **Recommended** | 2.1.322 | Génération 5.5 (Opus/Sonnet/Haiku), Fable 5.2, MCP 2026-07-28, hooks `onFailure: "block"`, `effort` sur l'outil Agent, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, correctifs permissions 2.1.309, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `permissions.denyInsteadOfPrompting` |
 | **Hooks `onFailure: "block"`** | 2.1.295+ | Un hook command/HTTP qui ne démarre pas, timeout ou sort avec un code inattendu bloque l'action |
 | **MCP protocole 2026-07-28** | 2.1.292+ | Négocié par défaut pour les serveurs stdio locaux ; retour arrière `MCP_PROTOCOL_NEGOTIATION=legacy` |
@@ -38,7 +38,7 @@
 | **`fallbackModel`** | 2.1.166+ | Up to 3 fallback models when primary overloaded/unavailable |
 | **`ultracode` trigger** | 2.1.160+ | ⚠️ BREAKING — renamed from `workflow` (Dynamic Workflows) |
 | **Managed `requiredMinimum/MaximumVersion`** | 2.1.163+ | Enterprise version enforcement |
-| **MCP + Hooks + plugins production** | 2.1.260+ | Mandatory for secure MCP/plugin usage |
+| **MCP + Hooks + plugins production** | 2.1.321+ | Mandatory for secure MCP/plugin usage |
 | **Agent Teams** | 2.1.32+ (experimental) | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
 | **Auto Mode** | 2.1.94+ | Team plan required |
 | **Opus 4.7** | 2.1.111+ | xhigh effort, adaptive thinking |
@@ -77,7 +77,7 @@
 
 ---
 
-## Security Advisories 2026 — why the minimum is 2.1.260
+## Security Advisories 2026 — why the minimum is 2.1.321
 
 Source : [GitHub Security Advisories — anthropics/claude-code](https://github.com/anthropics/claude-code/security/advisories) (relevé du 2026-10-13).
 
@@ -90,6 +90,8 @@ Source : [GitHub Security Advisories — anthropics/claude-code](https://github.
 | GHSA-gfvf-j8jh-jxxw | CVE-2026-103012 | Low | 2026-09-29 | Managed settings non appliqués quand une clé API stockée est préférée à la connexion entreprise | 2.1.260 |
 | GHSA-v234-4jrq-mgg6 | — | High | 2026-09-25 | Claude Desktop (macOS) : fichier malveillant d'un dossier Cowork → commandes sur l'hôte. **Hors périmètre CLI** (corrigé Desktop 1.15962.0) | — |
 
+**Relèvement 2.1.260 → 2.1.321 (audit d'alignement 2026-11-10) :** la 2.1.321 corrige 4 failles sans GHSA publié à ce jour : une commande Bash en lecture seule pouvait s'exécuter hors sandbox sans prompt ; les permissions Bash évaluaient une écriture depuis le mauvais dossier ; les règles deny et les fichiers protégés ne s'appliquaient pas à `cp`/`mv` vers un dossier ; l'OAuth MCP pouvait envoyer un refresh token à un autre hôte après redirection. Claude Craft distribue des règles deny et des hooks Bash : ces contournements les touchent directement. Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md).
+
 **Pertinence Claude Craft :** le framework distribue des plugins, hooks et agents. CVE-2026-86063 (pin SHA plugins) et CVE-2026-103435 (symlink TOCTOU) touchent directement ce modèle de distribution ; 2.1.260 couvre en plus l'application des managed settings en entreprise.
 
 **Correctifs permissions postérieurs (non CVE, corrigés au plus tard en 2.1.296, donc inclus dans la version recommandée) :** contournement Bash masquant une partie de la commande (2.1.223), `$PSDefaultParameterValues` PowerShell (2.1.232), chemins NT `\??\` rejetés (2.1.234), `CLAUDE_CODE_DISABLE_ATTACHMENTS` et activation de Claude in Chrome ignorés dans les settings projet (2.1.290), lectures de chemins UNC réseau soumises au prompt même après approbation PreToolUse/auto mode (2.1.292).
@@ -100,7 +102,7 @@ Source : [GitHub Security Advisories — anthropics/claude-code](https://github.
 
 ### Advisories 2025 couverts par le minimum (relevé du 2026-11-10)
 
-Publiés en 2025, ajoutés à la liste GitHub après le relevé du 2026-10-13. Tous sont corrigés bien en dessous du minimum 2.1.260 : ils ne le font pas monter.
+Publiés en 2025, ajoutés à la liste GitHub après le relevé du 2026-10-13. Tous sont corrigés bien en dessous du minimum 2.1.321 : ils ne le font pas monter.
 
 | GHSA | CVE | Sévérité (CVSS) | Publié | Description | Corrigé dans |
 |------|-----|-----------------|--------|-------------|--------------|
@@ -154,7 +156,7 @@ Le fix initial (v2.1.51) était incomplet : les versions v2.1.52–v2.1.96 prés
 
 #### Recommandation
 
-**Historique :** v2.1.97 était le plancher jusqu'en octobre 2026. **Le minimum actuel est 2.1.260** (voir section précédente).
+**Historique :** v2.1.97 était le plancher jusqu'en octobre 2026. **Le minimum actuel est 2.1.321** (voir section précédente).
 
 ---
 
@@ -183,7 +185,7 @@ Statut d'adoption des principales features Claude Code 2.1.x dans Claude Craft :
 | `/reload-skills` + `reloadSkills:true` | 2.1.157+ | **Not Adopted** | Distinct de `/reload-plugins` ; documenter (rule 12, templates hooks) |
 | Hook `MessageDisplay` | 2.1.157+ | **Documented** (officiel) | Filtrage/transformation output assistant (cas RTK-style) — voir https://code.claude.com/docs/en/hooks |
 | Trigger `ultracode` (ex-`workflow`) | 2.1.160+ | **Action** | ⚠️ BREAKING — renommage du déclencheur Dynamic Workflows |
-| `requiredMinimum/MaximumVersion` | 2.1.163+ | **Documented** | Enforcement de version via managed settings — ex. `"requiredMinimumVersion": "2.1.260"` aligne l'équipe sur le plancher sécurité Claude Craft |
+| `requiredMinimum/MaximumVersion` | 2.1.163+ | **Documented** | Enforcement de version via managed settings — ex. `"requiredMinimumVersion": "2.1.321"` aligne l'équipe sur le plancher sécurité Claude Craft |
 | Hooks `onFailure: "block"` | 2.1.295+ | **Not Adopted** | Fail-closed pour hooks de sécurité ; à évaluer pour les hooks PreToolUse du template (risque : blocage si `jq` absent) |
 | `effort` sur l'outil Agent | 2.1.292+ | **Not Adopted** | Effort par appel de sous-agent ; le frontmatter `effort:` des agents reste la voie principale |
 | `autoCompactWindow` (frontmatter sous-agent) | 2.1.296+ | **Not Adopted** | Fenêtre d'auto-compaction par agent — à évaluer pour `ralph-conductor` (sessions longues) |
@@ -462,12 +464,12 @@ Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claud
 | 2.1.317 | `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` ; `onFailure: "block"` pour les callbacks de hooks de l'Agent SDK ; demande de confirmation avant qu'un outil web/shell envoie l'e-mail du compte | `claude -p` lancé dans une session cloud/self-hosted a désormais son propre ID ; `1` restaure l'ancien comportement | **Documented** — règle 12 |
 | 2.1.318 | Date d'expiration du login claude.ai (`claude auth status` → `loginExpiresAt`, JSON `-p` → `credential_expires_at`) ; avertissement stderr 10 jours avant ; `effort` sur `$.model.fork` des mods ; fiabilité de `~/.claude.json` sur homes réseau | Les sous-agents background passent une commande shell en arrière-plan après 3 min (cache de prompt préservé) | **Documented** |
 | 2.1.319 | `permissions.denyInsteadOfPrompting` ; `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` ; tâches MCP en arrière-plan (`CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND`) ; `/claude-api latency-optimize` ; règles Bash deny/ask avec mots entre guillemets corrigées | Un appel qui attendrait un prompt de permission est refusé et le tour continue (terminal, sous-agents, teammates) | **Documented** — règle 12 |
-| 2.1.321 | Fable 5.2 (`claude-fable-5-2`) par défaut ; `claude remote-control --settings <file>` ; `CLAUDE_CODE_PLUGIN_DIR_WATCH=0` ; 4 correctifs de sécurité : commande Bash en lecture seule exécutée hors sandbox sans prompt, écriture évaluée depuis le mauvais dossier, règles deny et fichiers protégés contournés par `cp`/`mv` vers un dossier, refresh token OAuth MCP envoyé à un autre hôte après redirection | **Breaking** : appels d'outils des mods sans prompt de permission ; `AskUserQuestion` en `-p`/SDK refuse une réponse portant `afkTimeoutMs` ; nom de marketplace managé (`extraKnownMarketplaces`) non ré-ajoutable depuis une autre source ; upstreams gateway Bedrock/Vertex/Foundry ignorent `ANTHROPIC_*_BASE_URL` ; `policy_mode: layered` cumule les serveurs MCP managés | **Documented** — version de base de la recommandation (correctifs sécurité) |
+| 2.1.321 | **MINIMUM REQUIS** — Fable 5.2 (`claude-fable-5-2`) par défaut ; `claude remote-control --settings <file>` ; `CLAUDE_CODE_PLUGIN_DIR_WATCH=0` ; 4 correctifs de sécurité : commande Bash en lecture seule exécutée hors sandbox sans prompt, écriture évaluée depuis le mauvais dossier, règles deny et fichiers protégés contournés par `cp`/`mv` vers un dossier, refresh token OAuth MCP envoyé à un autre hôte après redirection | **Breaking** : appels d'outils des mods sans prompt de permission ; `AskUserQuestion` en `-p`/SDK refuse une réponse portant `afkTimeoutMs` ; nom de marketplace managé (`extraKnownMarketplaces`) non ré-ajoutable depuis une autre source ; upstreams gateway Bedrock/Vertex/Foundry ignorent `ANTHROPIC_*_BASE_URL` ; `policy_mode: layered` cumule les serveurs MCP managés | **Documented** — version de base de la recommandation (correctifs sécurité) |
 | 2.1.322 | Mode rapide sur Vertex | — | **N/A** — version RECOMMANDÉE |
 
 ---
 
-## Migration from < 2.1.260
+## Migration from < 2.1.321
 
 ### Checklist de migration
 
@@ -475,9 +477,9 @@ Avant de mettre à jour, vérifiez chaque point :
 
 #### Sécurité (critique)
 
-- [ ] Mettre à jour Claude Code vers 2.1.260 minimum : `npm install -g @anthropic-ai/claude-code@latest`
-- [ ] Vérifier la version : `claude --version` → doit afficher `2.1.260` ou supérieur
-- [ ] Équipes : imposer le plancher via managed settings `"requiredMinimumVersion": "2.1.260"`
+- [ ] Mettre à jour Claude Code vers 2.1.321 minimum : `npm install -g @anthropic-ai/claude-code@latest`
+- [ ] Vérifier la version : `claude --version` → doit afficher `2.1.321` ou supérieur
+- [ ] Équipes : imposer le plancher via managed settings `"requiredMinimumVersion": "2.1.321"`
 - [ ] Hooks : `timeout` est en **secondes** (défaut 600 pour `command`) — corriger toute valeur écrite en millisecondes (ex. `5000` = 83 min)
 - [ ] Si vous utilisez des MCP servers : auditer les serveurs installés (privilégier les sources officielles)
 - [ ] Si vous avez des hooks personnalisés : tester que leur comportement n'a pas changé après la mise à jour
@@ -491,9 +493,9 @@ Avant de mettre à jour, vérifiez chaque point :
 
 #### Compatibilité agents
 
-- [ ] Agents avec `effort` frontmatter : disponible depuis v2.1.78 — compatible 2.1.260+
+- [ ] Agents avec `effort` frontmatter : disponible depuis v2.1.78 — compatible 2.1.321+
 - [ ] Agents avec `context: fork` : disponible depuis v2.1.105 — compatible 2.1.105+
-- [ ] Agents avec `maxTurns` : disponible depuis v2.1.78 — compatible 2.1.260+
+- [ ] Agents avec `maxTurns` : disponible depuis v2.1.78 — compatible 2.1.321+
 
 #### Modèles
 
@@ -503,8 +505,8 @@ Avant de mettre à jour, vérifiez chaque point :
 
 #### Commandes
 
-- [ ] `/memory` : disponible depuis v2.1.59 — compatible 2.1.260+
-- [ ] `/effort` : disponible depuis v2.1.70 — compatible 2.1.260+
+- [ ] `/memory` : disponible depuis v2.1.59 — compatible 2.1.321+
+- [ ] `/effort` : disponible depuis v2.1.70 — compatible 2.1.321+
 - [ ] `/btw`, `/hooks`, `/reload-plugins`, `/proactive` : disponibles depuis v2.1.105+ — nécessite mise à jour
 
 #### Node.js
@@ -577,7 +579,7 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | 2.1.193 | 2026-06-26 | `claude mcp login/logout`, `/rewind` post-`/clear`, background subagents → prompts de permission, shell mode répond à l'output |
 | 2.1.197 | 2026-07 | Sonnet 5 par défaut (1M) |
 | 2.1.257 | 2026-09 | Fable 5.1 |
-| **2.1.260** | **2026-09** | **Managed settings appliqués avec clé API stockée (CVE-2026-103012) — MINIMUM REQUIS** |
+| 2.1.260 | 2026-09 | Managed settings appliqués avec clé API stockée (CVE-2026-103012) — minimum requis jusqu'au 2026-11-10 |
 | 2.1.280 | 2026-09 | Opus 5.5 |
 | 2.1.284 | 2026-10 | Sonnet 5.5, Ultracode toggle |
 | 2.1.288 | 2026-10 | `claude purge` |
@@ -634,7 +636,7 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | **Stop** | ✅ | ⚠️ | ? | ✅ | ❌ |
 
 **Notes :**
-- **CLI** : surface principale — tous les hooks sont pleinement supportés (v2.1.260+ minimum Claude Craft).
+- **CLI** : surface principale — tous les hooks sont pleinement supportés (v2.1.321+ minimum Claude Craft).
 - **VS Code Extension** : les hooks `SessionEnd`, `UserPromptSubmit` et `Stop` sont partiellement supportés selon la version de l'extension ; comportement identique à la CLI depuis les versions récentes.
 - **JetBrains** : plugin Claude Code en beta — support des hooks à confirmer sur la documentation officielle.
 - **Desktop App** : support identique à la CLI pour les hooks core ; hooks expérimentaux peuvent varier.

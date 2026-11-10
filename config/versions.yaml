@@ -30,8 +30,9 @@ meta:
 
 claudeCode:
   # minimum : plancher sécurité — couvre GHSA-5j29 (2.1.129), GHSA-7835 (2.1.163),
-  # GHSA-pq7j (2.1.179) et GHSA-gfvf (2.1.260). Audit d'alignement du 2026-10-13.
-  minimum: '2.1.260'
+  # GHSA-pq7j (2.1.179), GHSA-gfvf (2.1.260) et les 4 correctifs permissions Bash / OAuth MCP
+  # de 2.1.321 (sans GHSA publié). Relevé 2.1.260 → 2.1.321 à l'audit d'alignement du 2026-11-10.
+  minimum: '2.1.321'
   recommended: '2.1.322'
   testedUpTo: '2.1.322'
   # Génération courante (2026-11) : Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.2 (audit d'alignement 2026-11-10).

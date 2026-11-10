@@ -86,38 +86,14 @@ describe('runDoctor', () => {
     expect(output).toContain('Claude Code not found');
   });
 
-  // Version-check branches (security minimum 2.1.260 since the 2026-10-13 audit).
+  // Version-check branches (security minimum 2.1.321 since the 2026-11-10 audit).
 
-  it('reports outdated Claude Code (< 2.1.260 minimum) as failure with upgrade hint', () => {
+  it('reports outdated Claude Code (< 2.1.321 minimum) as failure with upgrade hint', () => {
     mkdirSync(join(tempDir, '.claude'));
 
     const execFn = (cmd) => {
       if (cmd.includes('npm')) return '10.0.0';
-      // 2.1.200 passed the old 2.1.97 floor but is below 2.1.260 ; must produce [FAIL].
-      if (cmd.includes('claude')) return '2.1.200';
-      if (cmd.includes('git')) return 'git version 2.45.0';
-      if (cmd.includes('yq')) return 'yq v4.44.1';
-      return null;
-    };
-
-    runDoctor(tempDir, { execFn });
-
-    const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toContain('[FAIL]');
-    expect(output).toContain('2.1.200');
-    // MIN_CLAUDE_CODE is loaded from config/versions.yaml (claudeCode.minimum)
-    expect(output).toContain('requires >= 2.1.260');
-    expect(output).toContain('CVE-2026-86063');
-    // Upgrade hint must mention the npm install command.
-    expect(output).toContain('npm install -g @anthropic-ai/claude-code@latest');
-  });
-
-  it('reports Claude Code between min (2.1.260) and recommended as warning with correct recommended version', () => {
-    mkdirSync(join(tempDir, '.claude'));
-
-    const execFn = (cmd) => {
-      if (cmd.includes('npm')) return '10.0.0';
-      // 2.1.270 is >= min (2.1.260) but below the recommended version ; must produce [WARN].
+      // 2.1.270 passed the old 2.1.260 floor but is below 2.1.321 ; must produce [FAIL].
       if (cmd.includes('claude')) return '2.1.270';
       if (cmd.includes('git')) return 'git version 2.45.0';
       if (cmd.includes('yq')) return 'yq v4.44.1';
@@ -127,8 +103,32 @@ describe('runDoctor', () => {
     runDoctor(tempDir, { execFn });
 
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toContain('[WARN]');
+    expect(output).toContain('[FAIL]');
     expect(output).toContain('2.1.270');
+    // MIN_CLAUDE_CODE is loaded from config/versions.yaml (claudeCode.minimum)
+    expect(output).toContain('requires >= 2.1.321');
+    expect(output).toContain('CVE-2026-86063');
+    // Upgrade hint must mention the npm install command.
+    expect(output).toContain('npm install -g @anthropic-ai/claude-code@latest');
+  });
+
+  it('reports Claude Code between min (2.1.321) and recommended as warning with correct recommended version', () => {
+    mkdirSync(join(tempDir, '.claude'));
+
+    const execFn = (cmd) => {
+      if (cmd.includes('npm')) return '10.0.0';
+      // 2.1.321 is the minimum itself, below the recommended version ; must produce [WARN].
+      if (cmd.includes('claude')) return '2.1.321';
+      if (cmd.includes('git')) return 'git version 2.45.0';
+      if (cmd.includes('yq')) return 'yq v4.44.1';
+      return null;
+    };
+
+    runDoctor(tempDir, { execFn });
+
+    const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(output).toContain('[WARN]');
+    expect(output).toContain('2.1.321');
     // RECOMMENDED_CLAUDE_CODE is loaded from config/versions.yaml (2.1.322)
     expect(output).toContain('recommended 2.1.322');
   });

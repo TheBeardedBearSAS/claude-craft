@@ -33,7 +33,7 @@ Before starting, make sure you have the following installed:
 - [ ] **Terminal/Command Line** - Any terminal application
 - [ ] **Node.js 22+** - Required for NPX installation
 - [ ] **Git** - For version control
-- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.322, minimum: v2.1.260 — security baseline)
+- [ ] **Claude Code** - The AI coding assistant (recommended: v2.1.322, minimum: v2.1.321 — security baseline)
 
 ### Verify Your Prerequisites
 
