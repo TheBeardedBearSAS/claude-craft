@@ -24,7 +24,7 @@
 # 2026-10-28 (release 8.27.0) : Claude Code recommandé/testé 2.1.296 → 2.1.312 (changelog 2.1.297–2.1.312 relu).
 
 meta:
-  lastUpdated: '2026-11-09'
+  lastUpdated: '2026-11-10'
 
 claudeCode:
   # minimum : plancher sécurité — couvre GHSA-5j29 (2.1.129), GHSA-7835 (2.1.163),
@@ -32,14 +32,14 @@ claudeCode:
   minimum: '2.1.260'
   recommended: '2.1.319'
   testedUpTo: '2.1.319'
-  # Génération courante (2026-10) : Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.1.
-  # Opus 4.8, Sonnet 5, Haiku 4.5 et Fable 5 restent disponibles mais sont legacy.
+  # Génération courante (2026-11) : Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.2 (audit d'alignement 2026-11-10).
+  # Opus 4.8, Sonnet 5, Haiku 4.5, Fable 5 et Fable 5.1 restent disponibles mais sont legacy.
   models:
     opus: 'claude-opus-5-5'
     sonnet: 'claude-sonnet-5-5'
     sonnetPrev: 'claude-sonnet-5'
     haiku: 'claude-haiku-5-5'
-    fable: 'claude-fable-5-1'
+    fable: 'claude-fable-5-2'
 
 # stacks.<key>.registry DOIT être strictement égal à TECH_REGISTRY[<key>].version
 stacks:
