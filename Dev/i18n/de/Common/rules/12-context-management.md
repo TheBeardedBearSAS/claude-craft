@@ -176,6 +176,8 @@ Diese Felder ermoeglichen die Optimierung von Kosten und Umfang der Sub-Agents.
 
 Claude Code kompaktiert den Kontext automatisch, wenn er sich den Fenstergrenzen naehert. Aeltere Nachrichten werden zusammengefasst, um Platz freizugeben.
 
+> **Append-only-Verlauf (Opus 5.5, Fable 5.x, Mythos 5.x):** Eine frühere Nachricht zu ändern, `system` oder `tools` neu aufzubauen oder alte Turns an Ort und Stelle zusammenzufassen, macht die nachfolgenden Thinking-Blöcke ungültig. Am Ende des Verlaufs anhängen statt ihn umzuschreiben. Quelle: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+
 ### Proaktive Kompaktierung
 
 Ab 70% Kontextnutzung `/compact` proaktiv ausfuehren, um eine unkontrollierte automatische Kompaktierung zu vermeiden.
@@ -363,7 +365,7 @@ Das Aufwandsniveau des Modells je nach Aufgabenkomplexität anpassen:
 > **Effort wechselt nicht das Modell:** Es steuert die Reasoning-Tiefe des aktuellen Modells; das Modell wählt man mit `/model`. Empfohlene Paare: `low` mit Haiku 5.5, `medium` mit Sonnet 5.5, `high`/`xhigh` mit Opus 5.5.
 
 > **Standard-Effort je Modell:** medium bei Opus 5.5 und Haiku 5.5; high bei Sonnet 5.5, Fable 5.2 und Legacy-Modellen.
-> **Fable 5.2** (`claude-fable-5-2`, $8/$40 pro Mtok) ist das aktuelle Fable-Modell, geeignet für kreative/narrative Agents; Fable 5.1 und Fable 5 bleiben verfügbar (Legacy). Bei Fable 5.2 (wie bei Mythos 5.2) ist das Denken immer aktiv (nur adaptive): Um es zu reduzieren, den Effort senken — eine Anweisung „antworte direkt“ reicht ab `medium` nicht aus. **Mythos** hat eingeschränkte Verfügbarkeit (nur Cyber Verification Program).
+> **Fable 5.2** (`claude-fable-5-2`, $8/$40 pro Mtok) ist das aktuelle Fable-Modell, geeignet für kreative/narrative Agents; Fable 5.1 und Fable 5 bleiben verfügbar (Legacy). Bei Fable 5.2 (wie bei Mythos 5.2) ist das Denken immer aktiv (nur adaptive): Um es zu reduzieren, den Effort senken — eine Anweisung „antworte direkt“ reicht ab `medium` nicht aus. **Mythos** hat eingeschränkte Verfügbarkeit (nur Cyber Verification Program). Cache-Lesezugriffe kosten 5 % des Input-Preises bei Opus/Sonnet 5.5 und 2,5 % bei Fable 5.x und Mythos 5.x.
 
 ### Inaktivitaetswarnung (v2.1.84+)
 

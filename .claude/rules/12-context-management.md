@@ -109,6 +109,8 @@ Claude Code compacte automatiquement le contexte quand il approche les limites. 
 - A partir de **70% de contexte**, lancer `/compact` proactivement
 - `/memory` (v2.1.59+) sauvegarde des apprentissages persistants qui survivent aux compactions
 
+> **Historique append-only (Opus 5.5, Fable 5.x, Mythos 5.x) :** modifier un message antérieur, reconstruire `system` ou `tools`, ou résumer d'anciens tours sur place invalide les blocs de thinking suivants. Ajouter en fin d'historique plutôt que réécrire. Source : [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+
 **Hooks disponibles** pour gerer la compaction:
 - **PreCompact** — Sauvegarder le contexte critique avant compaction (peut bloquer via exit code 2 depuis v2.1.105)
 - **PostCompact** (v2.1.76+) — Re-injecter le contexte critique apres compaction
@@ -394,7 +396,7 @@ Reglage **fiabilite + cout** : jusqu'a 3 modeles de repli essayes dans l'ordre q
 
 Pour les 4 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor), ce repli `opus → sonnet → haiku` evite les interruptions en pic de charge Opus sans degrader le travail courant. Exemple pret a l'emploi dans `.claude/settings.local.json.example`.
 
-**IDs canoniques (novembre 2026) :** `claude-opus-5-5` ($4/$20) | `claude-sonnet-5-5` ($2/$10) | `claude-haiku-5-5` ($0.10/$0.50) | `claude-fable-5-2` ($8/$40). *Legacy* toujours disponibles : `claude-opus-4-8`, `claude-sonnet-5` ($2/$10, tarif devenu standard), `claude-haiku-4-5-20251001`, `claude-fable-5-1`, `claude-fable-5`. Source : [models overview](https://platform.claude.com/docs/en/about-claude/models/overview).
+**IDs canoniques (novembre 2026) :** `claude-opus-5-5` ($4/$20) | `claude-sonnet-5-5` ($2/$10) | `claude-haiku-5-5` ($0.10/$0.50) | `claude-fable-5-2` ($8/$40). *Legacy* toujours disponibles : `claude-opus-4-8`, `claude-sonnet-5` ($2/$10, tarif devenu standard), `claude-haiku-4-5-20251001`, `claude-fable-5-1`, `claude-fable-5`. Lecture de cache : 5 % du prix d'entrée sur Opus/Sonnet 5.5, 2,5 % sur Fable 5.x et Mythos 5.x. Source : [models overview](https://platform.claude.com/docs/en/about-claude/models/overview).
 
 ---
 

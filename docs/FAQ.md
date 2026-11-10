@@ -411,21 +411,21 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 
 ### Combien de tokens consomme un workflow BMAD ?
 
-> **Disclaimer :** Les estimations ci-dessous sont indicatives. La consommation réelle dépend de la taille du projet, du nombre d'agents invoqués, du modèle (Opus vs Sonnet vs Haiku), et des options RTK activées. Relevé basé sur des sessions réelles en juin 2026.
+> **Disclaimer :** Les estimations ci-dessous sont indicatives. La consommation réelle dépend de la taille du projet, du nombre d'agents invoqués, du modèle (Opus vs Sonnet vs Haiku), et des options RTK activées. Volumes relevés sur des sessions réelles en juin 2026. Coûts recalculés le 2026-11-10 sur **Sonnet 5.5** ($2/$10 par M tokens) appliqué à la colonne « avec RTK », en supposant ~40 % de tokens d'entrée et ~60 % de sortie, soit ~$6.8 par M tokens. Ce mix est le même que celui des chiffres précédents, calculés sur Sonnet 4.6 ($3/$15).
 
-| Track BMAD | Tokens estimés (sans RTK) | Tokens estimés (avec RTK) | Coût indicatif Sonnet 4-6 |
+| Track BMAD | Tokens estimés (sans RTK) | Tokens estimés (avec RTK) | Coût indicatif Sonnet 5.5 (avec RTK) |
 |-----------|--------------------------|--------------------------|--------------------------|
-| **Quick Flow** (hotfix, bug) | ~5 000 | ~2 000 | ~$0.02 |
-| **Standard** (nouvelle feature) | ~15 000–25 000 | ~6 000–10 000 | ~$0.05–$0.10 |
-| **Enterprise** (plateforme) | ~40 000–60 000 | ~16 000–24 000 | ~$0.15–$0.25 |
-| `/team:audit --sequential` | ~20 000–35 000 | ~8 000–14 000 | ~$0.08–$0.14 |
-| `/qa:recette` (story unique) | ~8 000–15 000 | ~3 000–6 000 | ~$0.03–$0.06 |
+| **Quick Flow** (hotfix, bug) | ~5 000 | ~2 000 | ~$0.01 |
+| **Standard** (nouvelle feature) | ~15 000–25 000 | ~6 000–10 000 | ~$0.04–$0.07 |
+| **Enterprise** (plateforme) | ~40 000–60 000 | ~16 000–24 000 | ~$0.11–$0.16 |
+| `/team:audit --sequential` | ~20 000–35 000 | ~8 000–14 000 | ~$0.05–$0.10 |
+| `/qa:recette` (story unique) | ~8 000–15 000 | ~3 000–6 000 | ~$0.02–$0.04 |
 
 **RTK** = `/common:setup-rtk` (55-65% de réduction). Voir `docs/RTK-ANALYSIS.md`.
 
 **Avec Opus 5.5** (recommandé pour les phases de planification et review), multiplier par ~2 le coût par token par rapport à Sonnet 5.5. Utiliser `/model opusplan` pour le tiering dynamique Opus (planning) / Sonnet (exécution).
 
-**Usage mensuel typique pour une équipe de 3 développeurs :** 5-10 sprints Standard + 2 audits = ~200 000–400 000 tokens = **$1–2/mois avec RTK + Sonnet comme modèle de base**.
+**Usage mensuel typique pour une équipe de 3 développeurs :** 5-10 sprints Standard + 2 audits = ~200 000–400 000 tokens = **~$1.4–2.7/mois avec RTK + Sonnet 5.5 comme modèle de base**.
 
 ### Grille de prix & routage modèle par tâche (octobre 2026)
 

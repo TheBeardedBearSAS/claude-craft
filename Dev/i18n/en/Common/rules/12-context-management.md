@@ -176,6 +176,8 @@ These fields allow optimizing costs and scope of sub-agents.
 
 Claude Code automatically compacts context when approaching window limits. Older messages are summarized to free space.
 
+> **Append-only history (Opus 5.5, Fable 5.x, Mythos 5.x):** editing an earlier message, rebuilding `system` or `tools`, or summarizing old turns in place invalidates the thinking blocks that follow. Append to the end of the history instead of rewriting it. Source: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+
 ### Proactive Compaction
 
 At 70% context usage, proactively run `/compact` to avoid uncontrolled automatic compaction.
@@ -363,7 +365,7 @@ Adjust the model's effort level based on task complexity:
 > **Effort does not switch models:** it sets the reasoning depth of the current model; pick the model with `/model`. Recommended pairs: `low` on Haiku 5.5, `medium` on Sonnet 5.5, `high`/`xhigh` on Opus 5.5.
 
 > **Default effort per model:** medium on Opus 5.5 and Haiku 5.5; high on Sonnet 5.5, Fable 5.2 and legacy models.
-> **Fable 5.2** (`claude-fable-5-2`, $8/$40 per Mtok) is the current Fable model, suitable for creative/narrative agents; Fable 5.1 and Fable 5 remain available (legacy). On Fable 5.2 (as on Mythos 5.2) thinking is always on (adaptive only): to reduce it, lower the effort — an "answer directly" instruction is not enough at `medium` and above. **Mythos** is limited availability (Cyber Verification Program only).
+> **Fable 5.2** (`claude-fable-5-2`, $8/$40 per Mtok) is the current Fable model, suitable for creative/narrative agents; Fable 5.1 and Fable 5 remain available (legacy). On Fable 5.2 (as on Mythos 5.2) thinking is always on (adaptive only): to reduce it, lower the effort — an "answer directly" instruction is not enough at `medium` and above. **Mythos** is limited availability (Cyber Verification Program only). Cache reads cost 5% of the input price on Opus/Sonnet 5.5 and 2.5% on Fable 5.x and Mythos 5.x.
 
 ### Inactivity Alert (v2.1.84+)
 

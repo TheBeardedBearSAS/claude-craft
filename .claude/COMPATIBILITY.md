@@ -98,6 +98,18 @@ Source : [GitHub Security Advisories — anthropics/claude-code](https://github.
 
 ## Why We Elevated Minimum from 2.1.47 to 2.1.97 (historique)
 
+### Advisories 2025 couverts par le minimum (relevé du 2026-11-10)
+
+Publiés en 2025, ajoutés à la liste GitHub après le relevé du 2026-10-13. Tous sont corrigés bien en dessous du minimum 2.1.260 : ils ne le font pas monter.
+
+| GHSA | CVE | Sévérité (CVSS) | Publié | Description | Corrigé dans |
+|------|-----|-----------------|--------|-------------|--------------|
+| [GHSA-9f65-56v6-gxw7](https://github.com/anthropics/claude-code/security/advisories/GHSA-9f65-56v6-gxw7) | CVE-2025-52882 | High (8.8) | 2025-06-23 | Extensions IDE : connexions WebSocket acceptées depuis une origine arbitraire | 1.0.24 |
+| [GHSA-pmw4-pwvc-3hx2](https://github.com/anthropics/claude-code/security/advisories/GHSA-pmw4-pwvc-3hx2) | CVE-2025-54794 | High (7.7) | 2025-08-01 | Contournement de restriction de chemin quand deux préfixes se recouvrent | 0.2.111 |
+| [GHSA-x56v-x2h6-7j34](https://github.com/anthropics/claude-code/security/advisories/GHSA-x56v-x2h6-7j34) | CVE-2025-54795 | High (8.7) | 2025-08-01 | Injection de commande via `echo` contournant l'approbation utilisateur | 1.0.20 |
+| [GHSA-x5gv-jw7f-j6xj](https://github.com/anthropics/claude-code/security/advisories/GHSA-x5gv-jw7f-j6xj) | CVE-2025-55284 | High (7.1) | 2025-08-15 | Allowlist par défaut trop permissive : lecture de fichier et exfiltration réseau | 1.0.4 |
+
+
 > **Correction (audit 2026-10-13) :** selon l'avis officiel [GHSA-4fgq-fpq9-mr3g](https://github.com/anthropics/claude-code/security/advisories/GHSA-4fgq-fpq9-mr3g), CVE-2025-59536 est une **exécution de commandes avant le dialogue de confiance au démarrage**, corrigée en **v1.0.111** (sévérité high). CVE-2026-21852 ([GHSA-jh7p-qr78-84p7](https://github.com/anthropics/claude-code/security/advisories/GHSA-jh7p-qr78-84p7)) est une **fuite de données via la configuration d'environnement du dépôt lue avant confirmation de confiance**, corrigée en **v2.0.65**. La description ci-dessous reprend l'analyse Check Point de l'époque et la chronologie de durcissement 2.1.51 → 2.1.97 ; elle est conservée à titre historique.
 
 ### CVE-2025-59536 — RCE via Claude Code Project Files

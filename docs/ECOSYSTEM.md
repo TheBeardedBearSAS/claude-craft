@@ -15,7 +15,7 @@ replace — that stack.
 [Top Skills/Plugins Claude Code 2026 (camilleroux.com)](https://www.camilleroux.com/top-skills-plugins-claude-code-2026-v3/)
 roundup.
 
-> **Maintenance cadence:** This document is reviewed quarterly (March, June, September, December). Star counts, license statuses, and activity signals reflect the last evaluation date above. Low-activity tools (token-savior ~1.2k, claude-token-optimizer ~0.5k) are re-evaluated each quarter and may be demoted to ⚪ Skip if abandoned.
+> **Maintenance cadence:** This document is reviewed quarterly (March, June, September, December). Star counts, license statuses, and activity signals reflect the last evaluation date above. Low-activity tools (token-savior ~1.2k, claude-token-optimizer ~0.5k) are re-evaluated each quarter and may be demoted to ⚪ Skip if abandoned. claude-token-efficient has had no push since 2026-06-16 (checked 2026-11-10). It stays ✅ Integrate: it is a static `CLAUDE.md` of prompt rules, not code with dependencies, so inactivity does not make it stale. It would be demoted if the repository were archived or its rules contradicted current Anthropic guidance.
 
 ---
 
@@ -26,7 +26,7 @@ roundup.
 | [caveman](https://github.com/juliusbrussee/caveman) | ~119k | **Apache-2.0** | Skill (+ optional MCP) | ✅ **Integrate** | Compresses agent **output** ~65% (telegraphic style, 4 levels). Covers the output side RTK doesn't. |
 | [code-review-graph](https://github.com/tirth8205/code-review-graph) | ~32.1k | MIT | MCP + CLI | ✅ **Integrate** | Tree-sitter/AST code graph → reads only the blast radius on review. 38×–528× token reduction on large repos. |
 | [token-savior](https://github.com/mibayy/token-savior) | ~1.2k | MIT | MCP + hooks | ✅ **Integrate** | Symbol-index + Bash output compaction (−80%). RTK alternative without a Rust binary. |
-| [claude-token-efficient](https://github.com/drona23/claude-token-efficient) | ~6.1k | MIT | CLAUDE.md drop-in | ✅ **Integrate** | Prompt rules cutting Claude verbosity ~63% output / 17–41% cost. Zero code. |
+| [claude-token-efficient](https://github.com/drona23/claude-token-efficient) | ~6.2k | MIT | CLAUDE.md drop-in | ✅ **Integrate** | Prompt rules cutting Claude verbosity ~63% output / 17–41% cost. Zero code. |
 | [claude-hud](https://github.com/jarrodwatts/claude-hud) | ~28.5k | MIT | Status line / monitor | ✅ **Integrate** | Real-time context, agent and todo monitor. Graduated from "Also worth watching" (2026-10-13). Complements `rtk gain`. |
 | [context-mode](https://github.com/mksglu/context-mode) | ~33.8k | **ELv2** (GitHub: `NOASSERTION`, text re-read 2026-10-13) | MCP + hooks | 🔶 **Reference** | Sandboxes tool outputs (315 KB → 5.4 KB), SQLite session continuity. License blocks commercial redistribution. |
 | [token-optimizer](https://github.com/alexgreensh/token-optimizer) (alexgreensh) | ~2.5k | **PolyForm NC** | Plugin | 🔶 **Reference** | Real-time dashboard + quality scoring. Noncommercial license. |
