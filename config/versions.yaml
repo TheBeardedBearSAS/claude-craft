@@ -40,6 +40,50 @@ claudeCode:
     sonnetPrev: 'claude-sonnet-5'
     haiku: 'claude-haiku-5-5'
     fable: 'claude-fable-5-2'
+  # Modèles à disponibilité limitée (Cyber Verification Program) : ni courants par défaut, ni legacy.
+  limitedModels:
+    - 'claude-mythos-5-2'
+    - 'claude-mythos-5-1'
+    - 'claude-mythos-5'
+  # Legacy officiels encore disponibles (models overview, 2026-11-10). Prime sur `models`
+  # (ex. sonnetPrev) pour scripts/scan-claude-claims.mjs.
+  legacyModels:
+    - 'claude-fable-5-1'
+    - 'claude-fable-5'
+    - 'claude-opus-5'
+    - 'claude-opus-4-8'
+    - 'claude-opus-4-7'
+    - 'claude-opus-4-6'
+    - 'claude-opus-4-5'
+    - 'claude-sonnet-5'
+    - 'claude-sonnet-4-6'
+    - 'claude-haiku-4-5-20251001'
+  # Prix par MTok entrée/sortie des modèles courants (models overview, 2026-11-10).
+  pricing:
+    claude-opus-5-5: '$4/$20'
+    claude-sonnet-5-5: '$2/$10'
+    claude-haiku-5-5: '$0.10/$0.50'
+    claude-fable-5-2: '$8/$40'
+
+# Périmètre de scripts/scan-claude-claims.mjs (inventaire des affirmations Claude, audit d'alignement).
+# exclude : préfixes (finissant par /) ou chemins exacts hors scan — historique, rapports, tests et
+# fichiers de vérité qui citent légitimement d'anciennes versions.
+# historyFiles : fichiers d'historique — leurs occurrences périmées sont classées `history`.
+claimScan:
+  exclude:
+    - 'docs/audit/'
+    - 'docs/internal/'
+    - 'CHANGELOG.md'
+    - 'tests/'
+    - 'config/'
+    - 'scripts/'
+    - 'package-lock.json'
+    - 'docs/CHANGELOG-archive.md'
+    - 'docs/marketing/'
+    - 'Tools/StatusLine/tests/'
+    - 'Tools/MultiAccount/tests/'
+  historyFiles:
+    - 'docs/MIGRATION*'
 
 # stacks.<key>.registry DOIT être strictement égal à TECH_REGISTRY[<key>].version
 stacks:
