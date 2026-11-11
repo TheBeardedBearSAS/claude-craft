@@ -178,6 +178,25 @@ export function idempotencyKey(source = globalThis.crypto) {
  * control while the server answered keeps it (WCAG 2.4.3). Pure: the caller passes the DOM nodes.
  */
 export function focusLost(active, body, dialog) {
-  if (!active || active === body || !active.isConnected || active.disabled === true) return true;
+  if (restsOnContainer(active, body) || !active.isConnected || active.disabled === true) return true;
   return Boolean(dialog?.contains(active));
+}
+
+/**
+ * The focus is on no control: nothing, the page body, a dialog or <main> (focusable by script). Safari on macOS puts
+ * it there when a button is clicked: it gives the focus to the nearest focusable ancestor of the button, not to the
+ * button. Not every `tabindex="-1"`: a menu item out of the Tab order is a control.
+ */
+export function restsOnContainer(active, body) {
+  return !active || active === body || active.matches?.('dialog, main') === true;
+}
+
+/**
+ * The control that opened a dialog, where the focus goes back when it closes. Safari on macOS gives no focus to a
+ * button on click (see restsOnContainer): the control just clicked is then the opener. Pure: the caller passes the
+ * DOM nodes.
+ */
+export function openerOf(active, body, clicked) {
+  if (!restsOnContainer(active, body)) return active;
+  return clicked?.isConnected ? clicked : active;
 }

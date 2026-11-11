@@ -55,3 +55,32 @@ export function createRefreshQueue({
 
   return { request, flush, cancel };
 }
+
+/**
+ * When the live connection is open: only while the page is visible. A browser allows six connections per server
+ * over HTTP/1.1 and every open board would keep one; boards left in background tabs would use them all up and a
+ * seventh tab would wait for its document for ever. Pure: the caller wires the DOM events and the EventSource.
+ * @param {{ open: () => void, close: () => void, isHidden: () => boolean }} deps
+ */
+export function createLiveLink({ open, close, isHidden }) {
+  let wanted = false;
+  let connected = false;
+  const sync = () => {
+    const should = wanted && !isHidden();
+    if (should === connected) return;
+    connected = should;
+    if (should) open();
+    else close();
+  };
+  return {
+    start() {
+      wanted = true;
+      sync();
+    },
+    stop() {
+      wanted = false;
+      sync();
+    },
+    visibilityChanged: sync,
+  };
+}

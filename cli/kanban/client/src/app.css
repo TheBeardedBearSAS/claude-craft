@@ -113,6 +113,41 @@ button {
   background: none;
   border: none;
 }
+/* Listes déroulantes, une seule apparence pour toute l'application. Sous macOS, WebKit (Safari) dessine le <select>
+   natif à la hauteur du système, 22 px, sans tenir compte de padding ni de min-height (cible < 24 px, WCAG 2.5.8) :
+   l'apparence native est remplacée, la flèche est deux dégradés en currentColor. La liste ouverte reste native.
+   Les composants ne règlent que la mise en page (largeur, taille du texte) : un `background` raccourci y effacerait
+   la flèche. */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 32px;
+  padding: 5px 30px 5px 10px;
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-inset);
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    right 16px center,
+    right 11px center;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  color: var(--fg);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+select:disabled {
+  cursor: not-allowed;
+}
+/* Contrastes forcés : les dégradés sont supprimés, la flèche avec eux ; le contrôle natif du système la redessine. */
+@media (forced-colors: active) {
+  select {
+    -webkit-appearance: auto;
+    appearance: auto;
+  }
+}
 ul,
 ol {
   list-style: none;

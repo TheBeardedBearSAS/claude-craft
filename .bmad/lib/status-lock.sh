@@ -25,6 +25,7 @@ _STATUS_LOCK_PATH=""
 _STATUS_LOCK_TOKEN=""
 _STATUS_LOCK_DEPTH=0
 _STATUS_LOCK_SAVED_TRAPS=""
+_STATUS_LOCK_SEEN=""
 _STATUS_LOCK_JSON_RE='^[[:space:]]*\{[[:space:]]*"pid"[[:space:]]*:[[:space:]]*([0-9]+)[[:space:]]*,[[:space:]]*"ts"[[:space:]]*:[[:space:]]*([0-9]+)(\.[0-9]+)?[[:space:]]*\}[[:space:]]*$'
 
 # Epoch milliseconds. EPOCHREALTIME (bash 5) first: GNU date has %N but BSD
@@ -51,10 +52,12 @@ _status_lock_pid_alive() {
     [[ "$err" != *"No such process"* ]]
 }
 
+# Sets _STATUS_LOCK_SEEN to the content it judged, for _status_lock_remove_stale.
 _status_lock_is_stale() {
     local lock="$1" now content mtime
     now="$(_status_lock_now_ms)"
     content="$(cat "$lock" 2>/dev/null)" || content=""
+    _STATUS_LOCK_SEEN="$content"
     if [[ "$content" =~ $_STATUS_LOCK_JSON_RE ]]; then
         local pid=$((10#${BASH_REMATCH[1]})) ts=$((10#${BASH_REMATCH[2]}))
         if ((now - ts > STATUS_LOCK_TTL_MS)); then
@@ -64,8 +67,20 @@ _status_lock_is_stale() {
         return
     fi
     # Half-written or foreign content: judge on mtime (GNU/busybox, then BSD stat).
-    mtime="$(stat -c %Y "$lock" 2>/dev/null || stat -f %m "$lock" 2>/dev/null)" || return 0 # vanished: retry
+    # Vanished meanwhile: not stale. Its holder released it and another writer may already hold a new one, which a
+    # removal would destroy; the caller waits and retries.
+    mtime="$(stat -c %Y "$lock" 2>/dev/null || stat -f %m "$lock" 2>/dev/null)" || return 1
     ((now - mtime * 1000 > STATUS_LOCK_TTL_MS))
+}
+
+# Remove a lock judged stale only if it still holds what was judged: its holder may have released it meanwhile (a
+# gone pid is also a writer that just finished) and another writer may hold a new one.
+_status_lock_remove_stale() {
+    local current
+    current="$(cat "$1" 2>/dev/null)" || return 0 # vanished: nothing to remove
+    if [[ "$current" == "$_STATUS_LOCK_SEEN" ]]; then
+        rm -f "$1"
+    fi
 }
 
 # Release unconditionally (also run by the traps), never removing a lock that
@@ -115,7 +130,7 @@ status_lock_acquire() {
             return 0
         fi
         if _status_lock_is_stale "$lock"; then
-            rm -f "$lock"
+            _status_lock_remove_stale "$lock"
             continue
         fi
         if ((attempt < STATUS_LOCK_RETRIES)); then

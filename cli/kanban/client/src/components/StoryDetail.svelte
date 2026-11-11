@@ -18,7 +18,7 @@
   import { errorKey } from '../lib/api.js';
   import { formatHash } from '../lib/query.js';
   import { linkifyStoryIds, demoteHeadings, renderMarkdown } from '../lib/markdown.js';
-  import { draftFromStory, diffPatch, describeFailure, idempotencyKey } from '../lib/story-form.js';
+  import { draftFromStory, diffPatch, describeFailure, idempotencyKey, restsOnContainer } from '../lib/story-form.js';
   import {
     updateStory,
     saveBody,
@@ -71,7 +71,7 @@
     tick().then(() => {
       // `close` comes with the next rendered frame: a control the user has reached meanwhile keeps the focus.
       const active = document.activeElement;
-      if (active && active !== document.body && active.isConnected) return;
+      if (!restsOnContainer(active, document.body) && active.isConnected) return;
       const fallback = document.querySelector('[data-new-story]') ?? document.querySelector('main');
       // <body> is no trigger: the detail of a story just created opens after its creation dialog is gone.
       const usable = trigger?.isConnected && trigger !== document.body;
@@ -148,11 +148,12 @@
   // removed or disabled): the user may already have moved on while the server answered (WCAG 2.4.3).
   function focusIfLost(el) {
     const active = document.activeElement;
-    const lost = !active || active === document.body || !active.isConnected || active.disabled;
     // Another modal dialog (a prompt already asking the next question) holds the focus: leave it there. WebKit, unlike
     // Chromium and Firefox, lets focus() reach an element that a modal dialog makes inert.
-    const inOtherModal = !lost && active.closest('dialog')?.matches(':modal') && !dialogEl?.contains(active);
+    const inOtherModal = active?.isConnected && active.closest('dialog')?.matches(':modal') && !dialogEl?.contains(active);
     if (inOtherModal) return;
+    // Lost also when it rests on this dialog itself: where Safari on macOS leaves it after a click on a button.
+    const lost = restsOnContainer(active, document.body) || !active.isConnected || active.disabled;
     if (lost || dialogEl?.contains(active) === false) el?.focus();
   }
 

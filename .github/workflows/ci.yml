@@ -18,6 +18,7 @@ on:
       - 'Infra/i18n/**'
       - 'Project/i18n/**'
       - 'Tools/**'
+      - '.bmad/**'
       - 'website/tests/kanban/**'
       - 'docs/**'
       - 'README.md'
@@ -263,6 +264,68 @@ jobs:
             website/tests/kanban/results/
           if-no-files-found: ignore
           retention-days: 7
+
+  # The same browser suite under WebKit on a macOS runner: closer to Safari than Playwright's WebKit on Linux
+  # (macOS text rendering, scrollbars, fonts, focus rules). It is still not Safari itself.
+  kanban-e2e-macos:
+    name: Kanban browser tests (WebKit on macOS)
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # pinned: v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # pinned: v7.1.0
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Kanban client
+        run: npm run kanban:build
+
+      - name: Install website (Playwright) dependencies
+        run: cd website && npm ci
+
+      - name: Install WebKit
+        run: cd website && npx playwright install webkit
+
+      # KANBAN_SCREENSHOTS=1: screenshots.spec.ts captures every view, form and native control as macOS draws them.
+      - name: Run Kanban browser tests
+        run: cd website && npm run test:kanban -- --project=webkit --project=mobile-safari
+        env:
+          KANBAN_SCREENSHOTS: '1'
+
+      # Always: the captures are only seen on macOS; the report and traces of a failure too.
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # pinned: v7.0.2
+        with:
+          name: kanban-e2e-report-macos
+          path: |
+            website/tests/kanban/report/
+            website/tests/kanban/results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # The lock shared between the shell scripts and the Kanban server, under the macOS userland (BSD date and stat,
+  # no GNU coreutils). The scripts need bash 4+, which macOS does not ship: Homebrew's bash, as a user would install.
+  bmad-shell-macos:
+    name: BMAD shell lock (macOS)
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # pinned: v7.0.1
+
+      - name: Install bash and bats
+        run: brew install bash bats-core
+
+      - name: Run the shell lock tests
+        run: bats .bmad/tests/status-lock.bats .bmad/tests/no-bare-arith-increment.bats
 
   trivy:
     name: Trivy CVE Scan

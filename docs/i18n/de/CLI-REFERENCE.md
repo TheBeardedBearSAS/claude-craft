@@ -345,12 +345,12 @@ Der `Pfad` ist standardmäßig das aktuelle Verzeichnis. Das Ziel muss ein Unter
 
 Sechs Ansichten, aufgelistet in der Navigationsleiste.
 
-- **Board** — 6 Spalten (backlog, ready-for-dev, in-progress, review, done, blocked). Eine Karte wird per Drag-and-drop oder über das Menü „Verschieben“ der Karte bewegt, das nur die erlaubten Zielspalten anbietet (Alternative für Tastatur und einzelnen Zeiger). Die Gates (INVEST oder Punkte, abgeschlossene Aufgaben, TDD-Phase) werden serverseitig geprüft. Der Spaltenkopf zeigt die Anzahl der Karten oder `Anzahl/Limit`, wenn ein WIP-Limit gesetzt ist.
-- **Backlog** — Epic-Baum mit dem Fortschritt je Epic. Eine oder mehrere Stories werden ausgewählt, um sie einem Sprint hinzuzufügen oder ins Backlog zurückzulegen; eine Kapazitätsleiste vergleicht die zugesagten Punkte mit der Kapazität des Ziel-Sprints.
+- **Board** — 6 Spalten (backlog, ready-for-dev, in-progress, review, done, blocked). Eine Karte wird per Drag-and-Drop oder über das Menü „Verschieben“ der Karte verschoben, das nur die erlaubten Zielspalten anbietet (Alternative für Tastatur und einzelnen Zeiger). Die Gates (INVEST oder Punkte, abgeschlossene Aufgaben, TDD-Phase) werden serverseitig geprüft. Der Spaltenkopf zeigt die Anzahl der Karten oder `Anzahl/Limit`, wenn ein WIP-Limit gesetzt ist.
+- **Backlog** — Epic-Baum mit dem Fortschritt je Epic. Eine oder mehrere Stories werden ausgewählt, um sie einem Sprint hinzuzufügen oder ins Backlog zurückzulegen; eine Kapazitätsleiste vergleicht die eingeplanten Punkte mit der Kapazität des Ziel-Sprints.
 - **Sprints** — alle Sprints (geplant, aktiv, abgeschlossen) mit Ziel, Datum, Punkten, Stories und aufklappbaren Aufgaben sowie ihren Review- und Retro-Notizen. Hier werden Sprints erstellt, gestartet und abgeschlossen.
-- **Burndown** — ideale und tatsächliche Kurve des aktiven Sprints, Anzeige on-track / at-risk / behind. Das Velocity-Diagramm (zugesagte und gelieferte Punkte der abgeschlossenen Sprints, Durchschnitt der letzten drei, Prognose der verbleibenden Sprints) kommt mit einer gleichwertigen Tabelle.
-- **Dependencies** — gerichteter Graph der Abhängigkeiten zwischen Stories mit hervorgehobenen Zyklen und eine gleichwertige Tabelle (Story, hängt ab von, blockiert, Status, Zyklus).
-- **Docs** — Markdown-Viewer für `prd.md`, `tech-spec.md`, `personas.md`, `architecture/*.md` und die Epic-, Story- und Sprint-Dokumente. `US-XXX`-Kennungen im Text verlinken auf die Story.
+- **Burndown** — ideale und tatsächliche Kurve des aktiven Sprints, Anzeige „im Plan“, „gefährdet“ oder „im Verzug“. Das Velocity-Diagramm (zugesagte und gelieferte Punkte der abgeschlossenen Sprints, Durchschnitt der letzten drei, Prognose der verbleibenden Sprints) kommt mit einer gleichwertigen Tabelle.
+- **Abhängigkeiten** — gerichteter Graph der Abhängigkeiten zwischen Stories mit hervorgehobenen Zyklen und eine gleichwertige Tabelle (Story, hängt ab von, blockiert, Status, Zyklus).
+- **Dokumente** — Markdown-Viewer für `prd.md`, `tech-spec.md`, `personas.md`, `architecture/*.md` und die Epic-, Story- und Sprint-Dokumente. `US-XXX`-Kennungen im Text verlinken auf die Story.
 
 ### Was sich am Board erledigen lässt
 

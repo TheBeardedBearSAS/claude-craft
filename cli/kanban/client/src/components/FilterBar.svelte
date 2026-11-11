@@ -133,8 +133,7 @@
     min-width: 0;
   }
   .fb-chip,
-  .fb-btn,
-  select {
+  .fb-btn {
     min-height: 32px;
     padding: 4px 12px;
     border: 1px solid var(--border-control);
@@ -143,9 +142,10 @@
     color: var(--fg);
     font-size: 0.8125rem;
   }
+  /* Apparence commune dans app.css ; ici, le fond des puces voisines. */
   select {
-    padding-right: 6px;
     max-width: 100%;
+    background-color: var(--bg-elev);
   }
   .fb-chip[aria-pressed='true'] {
     background: var(--accent-soft);
@@ -164,5 +164,16 @@
     align-self: center;
     font-size: 0.8125rem;
     color: var(--fg-dim);
+  }
+  /* Contrastes forcés : le fond du filtre actif et le gris du bouton indisponible disparaissent. */
+  @media (forced-colors: active) {
+    .fb-chip[aria-pressed='true'] {
+      border: 3px solid CanvasText;
+      padding: 2px 10px;
+    }
+    .fb-btn[aria-disabled='true'] {
+      color: GrayText;
+      border-color: GrayText;
+    }
   }
 </style>

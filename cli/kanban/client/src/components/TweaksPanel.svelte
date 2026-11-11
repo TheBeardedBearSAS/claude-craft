@@ -1,4 +1,6 @@
 <script>
+  import { opener } from '../lib/opener.js';
+  import { focusLost } from '../lib/story-form.js';
   import { tweaks, setTweak, DENSITIES } from '../lib/tweaks.svelte.js';
   import { ACCENTS } from '../lib/config.js';
   import { SUPPORTED_LOCALES } from '../lib/i18n/translate.js';
@@ -11,7 +13,7 @@
 
   /** Ouvre le panneau (appelé par le parent via bind:this). */
   export function open() {
-    triggerEl = document.activeElement;
+    triggerEl = opener();
     dialog?.showModal();
   }
 
@@ -21,8 +23,7 @@
 
   // `close` comes with the next rendered frame: a control the user has reached meanwhile keeps the focus.
   function onClose() {
-    const active = document.activeElement;
-    if (!active || active === document.body || dialog.contains(active)) triggerEl?.focus();
+    if (focusLost(document.activeElement, document.body, dialog)) triggerEl?.focus();
     triggerEl = null;
   }
 
@@ -154,10 +155,7 @@
   }
   .tweak-opt:hover { border-color: var(--border-strong); color: var(--fg); }
   .tweak-opt.selected { border-color: var(--accent-ring); background: var(--accent-soft); color: var(--fg); }
-  .tweaks-select {
-    width: 100%; min-height: 36px; padding: 6px 10px; font-size: 0.8125rem;
-    border: 1px solid var(--border-control); border-radius: 9px; background: var(--bg-inset); color: var(--fg);
-  }
+  .tweaks-select { width: 100%; min-height: 36px; border-radius: 9px; }
   .tweaks-keys { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: center; font-size: 0.8125rem; }
   .tweaks-keys dt kbd {
     font-size: 0.75rem; padding: 2px 7px; background: var(--bg-inset);
@@ -173,4 +171,11 @@
   }
   .swatch-btn:hover { transform: scale(1.08); }
   .swatch-btn.selected { border-color: var(--bg-elev); box-shadow: 0 0 0 2px var(--sw); }
+  /* Forced colours: the selected option loses its fill; the accent swatches keep their hue (it is the choice). */
+  @media (forced-colors: active) {
+    .tweak-opt.selected { border: 3px solid CanvasText; padding: 7px 8px; }
+    .swatch-btn { forced-color-adjust: none; border-color: CanvasText; box-shadow: none; }
+    .swatch-btn.selected { border-color: CanvasText; box-shadow: 0 0 0 2px Canvas, 0 0 0 5px CanvasText; }
+    .swatch-btn:focus-visible { outline-color: CanvasText; outline-offset: 6px; }
+  }
 </style>

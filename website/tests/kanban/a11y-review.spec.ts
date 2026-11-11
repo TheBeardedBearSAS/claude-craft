@@ -1,7 +1,19 @@
 import { test, expect, type Page } from '@playwright/test';
 import en from '../../../cli/kanban/client/src/lib/i18n/locales/en.js';
 import fr from '../../../cli/kanban/client/src/lib/i18n/locales/fr.js';
-import { VIEWS, DESKTOP, ZOOM400, READONLY_ORIGIN, openView, setTweaks, settingsButton, openMoveMenu, SMALL_TARGETS, settled } from './helpers';
+import {
+  VIEWS,
+  DESKTOP,
+  ZOOM400,
+  READONLY_ORIGIN,
+  openView,
+  pressTab,
+  setTweaks,
+  settingsButton,
+  openMoveMenu,
+  SMALL_TARGETS,
+  settled,
+} from './helpers';
 
 // What axe does not see (audit K-16, K-17, K-24..K-32, K-34): motion, target size, focus after an action,
 // duplicated or late live regions, headings, landmarks, language of the UI, text spacing, menu keyboard pattern.
@@ -105,7 +117,7 @@ test('focus: every focused control shows a visible indicator (keyboard walk on e
   for (const v of VIEWS) {
     await openView(page, v.name);
     for (let i = 0; i < 40; i++) {
-      await page.keyboard.press('Tab');
+      await pressTab(page);
       const bad = await page.evaluate(() => {
         const el = document.activeElement as HTMLElement | null;
         if (!el || el === document.body) return null;
@@ -424,7 +436,7 @@ test('move menu: arrows, Home and End move focus and wrap; Tab closes it; Enter 
   await expect(items.first()).toBeFocused();
   await page.keyboard.press('ArrowUp');
   await expect(items.last()).toBeFocused();
-  await page.keyboard.press('Tab');
+  await pressTab(page);
   await expect(page.getByRole('menu')).toHaveCount(0);
   await expect(button).toHaveAttribute('aria-expanded', 'false');
   expect(await activeIsBody(page)).toBe(false);
@@ -482,7 +494,9 @@ test('focus: a move answered late never takes the focus away from where the user
   await expect(search).toBeFocused();
 });
 
-test('focus: closing the detail of a story just created goes to "New story", never to the page body', async ({ page }) => {
+test('focus: closing the detail of a story just created goes to "New story", never to the page body', async ({
+  page,
+}) => {
   await openView(page, 'kanban');
   await page.locator('[data-new-story]').focus();
   await page.keyboard.press('Enter');
@@ -515,7 +529,9 @@ test('forms: a required field says so after its label, with a space ("Title (req
   await expect(page.locator('label[for="sf-name"]')).toHaveText(/^Name \(required\)$/);
 });
 
-test('ids: every id of the page is unique with the detail, its dialogs and the creation form mounted', async ({ page }) => {
+test('ids: every id of the page is unique with the detail, its dialogs and the creation form mounted', async ({
+  page,
+}) => {
   await page.goto(`/#/kanban?story=${US}`);
   await expect(page.locator('dialog.modal[open]')).toBeVisible();
   const dupes = await page.evaluate(() => {
@@ -591,7 +607,7 @@ const LOT4: Array<[string, (p: Page) => Promise<void>]> = [
   ['close-dialog', async (p) => {
     await p.goto('/#/sprints/sprint-9-auth-premium');
     await p.locator('.sd-title').waitFor();
-    await p.getByRole('button', { name: /^(Close sprint|Sprint schließen)$/ }).first().click();
+    await p.getByRole('button', { name: /^(Close sprint|Sprint abschließen)$/ }).first().click();
     await expect(p.locator('dialog.close-sprint[open]')).toBeVisible();
   }],
   ['backlog-planning', async (p) => {
@@ -626,10 +642,13 @@ for (const lang of ['en', 'de']) {
         await open(page);
         await page.addStyleTag({ content: SPACING });
         // 1.4.10 is about 320 CSS px; at 1280 px the page behind a modal is not scrollable (body overflow: hidden).
-        const sideways = vp.width > 320 ? [] : await page.evaluate(() => {
-          const boxes = [document.documentElement, ...document.querySelectorAll('dialog[open]')];
-          return boxes.filter((b) => b.scrollWidth - b.clientWidth > 1).map((b) => b.className || b.tagName);
-        });
+        const sideways =
+          vp.width > 320
+            ? []
+            : await page.evaluate(() => {
+                const boxes = [document.documentElement, ...document.querySelectorAll('dialog[open]')];
+                return boxes.filter((b) => b.scrollWidth - b.clientWidth > 1).map((b) => b.className || b.tagName);
+              });
         problems.push(...sideways.map((b) => `${name}: scrolls sideways (${b})`));
         problems.push(...(await page.evaluate(SMALL_TARGETS)).map((s) => `${name}: small ${s}`));
         const squeezed = await page.evaluate(() =>

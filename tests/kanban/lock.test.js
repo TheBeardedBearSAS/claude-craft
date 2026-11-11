@@ -4,6 +4,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdtemp, rm, writeFile, readFile, stat, utimes } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import fsSync from 'node:fs';
 import { acquireLock, LockedError } from '../../cli/kanban/server/services/lock.js';
 
 const FAST = { retries: 1, retryDelayMs: 1 };
@@ -110,5 +111,22 @@ describe('lock', () => {
     const release = await acquireLock(lockPath);
     await rm(lockPath);
     await expect(release()).resolves.toBeUndefined();
+  });
+
+  // Seen on macOS with the shell twin of this lock (one update lost out of eight writers): a writer judges the lock
+  // stale, the holder releases it and a third writer takes it, then the first one deletes that fresh lock.
+  it('does not remove a lock that changed hands while it was being judged stale', async () => {
+    await writeFile(lockPath, JSON.stringify({ pid: process.pid, ts: 1 })); // stale: far older than the TTL
+    const fresh = JSON.stringify({ pid: process.pid, ts: Date.now() });
+    let calls = 0;
+    // The clock is read while the lock is judged: at that moment a third writer replaces it with its own.
+    const now = () => {
+      calls += 1;
+      if (calls === 2) fsSync.writeFileSync(lockPath, fresh);
+      return Date.now();
+    };
+
+    await expect(acquireLock(lockPath, { retries: 0, now })).rejects.toBeInstanceOf(LockedError);
+    expect(await readFile(lockPath, 'utf8')).toBe(fresh);
   });
 });

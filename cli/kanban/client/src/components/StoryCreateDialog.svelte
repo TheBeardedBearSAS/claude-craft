@@ -5,6 +5,7 @@
    * se ferme et le détail de la nouvelle story s'ouvre (`?story=<id>`).
    */
   import { tick } from 'svelte';
+  import { opener as currentOpener } from '../lib/opener.js';
   import Icon from './Icon.svelte';
   import StoryForm from './StoryForm.svelte';
   import ConfirmDialog from './ConfirmDialog.svelte';
@@ -29,7 +30,7 @@
   // Réinitialise le brouillon à chaque ouverture (les valeurs par défaut viennent de l'appelant).
   $effect(() => {
     if (!createDialog.open || !dialogEl || dialogEl.open) return;
-    opener = document.activeElement;
+    opener = currentOpener();
     submitKey = idempotencyKey();
     draft = emptyDraft(createDialog.defaults);
     initial = JSON.stringify($state.snapshot(draft));

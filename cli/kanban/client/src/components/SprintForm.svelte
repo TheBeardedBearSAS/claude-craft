@@ -1,4 +1,5 @@
 <script>
+  import { opener } from '../lib/opener.js';
   /**
    * "New sprint" dialog. Mount once, open from a button:
    *   <SprintForm bind:this={form} onsaved={(sprint) => …} />   form.open()
@@ -33,7 +34,7 @@
   const failing = $derived(FIELDS.filter((f) => errors[f]));
 
   export function open() {
-    triggerEl = document.activeElement;
+    triggerEl = opener();
     submitKey = idempotencyKey();
     draft = empty();
     errors = {};
@@ -183,4 +184,6 @@
   .sf-summary ul { margin: 0; padding-left: 18px; font-size: 0.8125rem; }
   .link-btn { background: none; border: none; padding: 2px 0; min-height: 24px; color: var(--fg); font: inherit; text-align: left; text-decoration: underline; cursor: pointer; }
   .sf-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+  /* Forced colours: a field in error is told by its border width, not only by its colour. */
+  @media (forced-colors: active) { input[aria-invalid='true'] { border-width: 2px; } }
 </style>

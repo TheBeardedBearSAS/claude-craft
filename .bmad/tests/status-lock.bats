@@ -155,6 +155,31 @@ write_live_foreign_lock() {
     [ "$(cat "$LOCK")" = '{"pid":1,"ts":1}' ]
 }
 
+# Seen on macOS (lost update in the test below): the holder released between our failed create and the staleness
+# check, and a third writer took the lock right after. "Vanished, so stale" made us remove that fresh lock.
+@test "a lock that vanished during the staleness check is not judged stale (nothing to remove)" {
+    rm -f "$LOCK"
+    run in_lib "_status_lock_is_stale '$LOCK'"
+    [ "$status" -ne 0 ]
+}
+
+# Seen on macOS (lost update in the test below, again): a writer judged the lock of a holder that had just released
+# and exited ("pid gone"), and removed the lock a third writer had taken meanwhile. Here the lock is replaced right
+# after the staleness verdict, as that third writer would.
+@test "a lock replaced after the staleness verdict is not removed" {
+    bash -c 'exit 0' &
+    dead=$!
+    wait "$dead"
+    printf '{"pid":%d,"ts":%d}' "$dead" "$(now_ms)" > "$LOCK"
+    live="$(printf '{"pid":%d,"ts":%d}' "$$" "$(now_ms)")"
+    run in_lib "eval \"original\$(declare -f _status_lock_is_stale)\"
+        _status_lock_is_stale() { original_status_lock_is_stale \"\$@\" && { printf '%s' '$live' > '$LOCK'; return 0; }; }
+        with_status_lock '$YAML' sh -c 'echo written > \"\$1\"' _ '$YAML'"
+    [ "$status" -ne 0 ]
+    [ "$(cat "$LOCK")" = "$live" ]
+    [ "$(cat "$YAML")" = "original" ]
+}
+
 @test "concurrent read-modify-write writers in background lose no update" {
     : > "$YAML"
     pids=()

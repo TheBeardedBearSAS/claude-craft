@@ -84,6 +84,23 @@
   });
 
   // ---- focus ------------------------------------------------------------------------------------------
+  // A reload can reorder a column (the server's order of the stories changes with its writes): the keyed list then
+  // moves the card's element and the browser drops the focus it held. The same element gets it back (WCAG 2.4.3);
+  // an element that was removed (card moved to another column) is left to moveCard.
+  let focusedBefore = null;
+  $effect.pre(() => {
+    storiesByStatus;
+    const active = document.activeElement;
+    focusedBefore = active?.closest?.('.board') ? active : null;
+  });
+  $effect(() => {
+    storiesByStatus;
+    const el = focusedBefore;
+    focusedBefore = null;
+    const active = document.activeElement;
+    if (el?.isConnected && (!active || active === document.body)) el.focus({ preventScroll: true });
+  });
+
   const focusCard = (id) => document.querySelector(`[data-card-id="${CSS.escape(id)}"]`)?.focus();
   const focusMoveButton = (id) => document.querySelector(`[data-move-id="${CSS.escape(id)}"]`)?.focus();
 

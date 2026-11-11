@@ -12,13 +12,16 @@
 
 /** CSS Color 4 functions cytoscape's parser rejects. */
 const CSS_COLOR4 = /\b(?:lab|lch|oklab|oklch|color)\(/i;
+/** CSS system colours: the graph tokens take these values in forced-colours mode (views.css). */
+const SYSTEM_COLOR =
+  /^(?:canvas|canvastext|linktext|visitedtext|activetext|buttonface|buttontext|buttonborder|field|fieldtext|highlight|highlighttext|selecteditem|selecteditemtext|mark|marktext|graytext|accentcolor|accentcolortext)$/i;
 
 /**
  * @param {unknown} color
- * @returns {boolean} true when `color` is a CSS Color 4 value cytoscape can't parse.
+ * @returns {boolean} true when `color` is a CSS Color 4 value or a system colour cytoscape can't parse.
  */
 export function needsColorNormalization(color) {
-  return typeof color === 'string' && CSS_COLOR4.test(color);
+  return typeof color === 'string' && (CSS_COLOR4.test(color) || SYSTEM_COLOR.test(color.trim()));
 }
 
 /**

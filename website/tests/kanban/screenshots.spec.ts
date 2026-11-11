@@ -38,6 +38,39 @@ const states: Array<[string, (p: Page) => Promise<void>]> = [
       await expect(p.locator('dialog.tweaks-dialog[open]')).toBeVisible();
     },
   ],
+  // Native controls drawn by the system (macOS draws them its own way): lists, dates, numbers, text areas.
+  [
+    'story-create-de',
+    async (p) => {
+      await setTweaks(p, { lang: 'de' });
+      await openView(p, 'kanban');
+      await p.locator('[data-new-story]').click();
+      await expect(p.locator('dialog[open] #create-title')).toBeFocused();
+    },
+  ],
+  [
+    'story-edit',
+    async (p) => {
+      await p.goto('/#/kanban?story=US-200');
+      await p.locator('dialog.modal[open]').getByRole('button', { name: 'Edit', exact: true }).click();
+      await expect(p.locator('dialog.modal[open] #edit-title')).toBeFocused();
+    },
+  ],
+  [
+    'sprint-form',
+    async (p) => {
+      await openView(p, 'sprints');
+      await p.getByRole('button', { name: 'New sprint' }).click();
+      await expect(p.locator('dialog.sprint-form[open]')).toBeVisible();
+    },
+  ],
+  [
+    'list-focused',
+    async (p) => {
+      await openView(p, 'backlog');
+      await p.locator('#plan-target').focus();
+    },
+  ],
   [
     'not-found',
     async (p) => {

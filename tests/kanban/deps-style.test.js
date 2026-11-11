@@ -28,6 +28,13 @@ describe('needsColorNormalization', () => {
     }
   });
 
+  // Forced-colours mode: the graph tokens become system colours (CanvasText, GrayText...), which cytoscape rejects too.
+  it('flags CSS system colours (forced-colours tokens)', () => {
+    for (const c of ['CanvasText', 'Canvas', 'GrayText', 'Highlight', 'highlighttext', 'LinkText', 'ButtonText']) {
+      expect(needsColorNormalization(c), c).toBe(true);
+    }
+  });
+
   it('leaves sRGB values cytoscape already understands untouched', () => {
     for (const c of ['#111', '#c5f72b', 'rgb(20, 20, 20)', 'rgba(0,0,0,.5)', 'red', 'monospace']) {
       expect(needsColorNormalization(c), c).toBe(false);

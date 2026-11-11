@@ -192,4 +192,10 @@
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
+  /* Contrastes forcés : un champ en erreur se lit à l'épaisseur de sa bordure, pas seulement à sa couleur. */
+  @media (forced-colors: active) {
+    .dialog-input[aria-invalid='true'] {
+      border-width: 2px;
+    }
+  }
 </style>

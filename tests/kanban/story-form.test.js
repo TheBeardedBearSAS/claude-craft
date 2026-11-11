@@ -11,6 +11,7 @@ import {
   describeFailure,
   idempotencyKey,
   focusLost,
+  openerOf,
 } from '../../cli/kanban/client/src/lib/story-form.js';
 
 const story = (extra = {}) => ({
@@ -243,9 +244,52 @@ describe('focusLost', () => {
     expect(focusLost(inside, body, dialog)).toBe(true);
   });
 
+  // Safari on macOS: a click on a button leaves the focus on the nearest focusable ancestor (<main>, a dialog).
+  it('is true when the focus rests on a container rather than a control', () => {
+    const dialog = { contains: () => false };
+    const container = (selector) => el({ matches: (s) => s.split(', ').includes(selector) });
+    expect(focusLost(container('dialog'), body, dialog)).toBe(true);
+    expect(focusLost(container('main'), body, dialog)).toBe(true);
+  });
+
+  // Seen in the journey: closing the settings stole the focus from the Move menu opened meanwhile.
+  it('is false on a control taken out of the Tab order (a menu item, tabindex -1)', () => {
+    const dialog = { contains: () => false };
+    const item = el({ matches: (s) => s.split(', ').includes('[tabindex="-1"]') });
+    expect(focusLost(item, body, dialog)).toBe(false);
+  });
+
   it('is false when the user already reached another control', () => {
     const dialog = { contains: () => false };
     expect(focusLost(el(), body, dialog)).toBe(false);
     expect(focusLost(el(), body, null)).toBe(false);
+  });
+});
+
+// Safari on macOS gives no focus to a button on click: the focus is still on <body> when the dialog opens.
+describe('openerOf', () => {
+  const body = { isConnected: true };
+  const button = (extra = {}) => ({ isConnected: true, ...extra });
+
+  it('is the focused control when there is one', () => {
+    const focused = button();
+    expect(openerOf(focused, body, button())).toBe(focused);
+  });
+
+  it('is the control just clicked when the focus stayed on the body', () => {
+    const clicked = button();
+    expect(openerOf(body, body, clicked)).toBe(clicked);
+    expect(openerOf(null, body, clicked)).toBe(clicked);
+  });
+
+  it('is the control just clicked when the focus went to a container (<main>, a dialog)', () => {
+    const clicked = button();
+    const main = button({ matches: (s) => s.split(', ').includes('main') });
+    expect(openerOf(main, body, clicked)).toBe(clicked);
+  });
+
+  it('is the body when the control clicked is gone or there was none', () => {
+    expect(openerOf(body, body, button({ isConnected: false }))).toBe(body);
+    expect(openerOf(body, body, null)).toBe(body);
   });
 });

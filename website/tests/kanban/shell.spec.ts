@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { VIEWS, openView } from './helpers';
+import { VIEWS, openView, pressTab } from './helpers';
 
 // App shell: landmarks, title, focus management, search, settings, toasts (audit K-14, K-17, K-26, K-29).
 
@@ -30,7 +30,7 @@ test('shell: focus moves to <main> on a view change but not on the first load', 
 
 test('shell: the skip link focuses <main> without breaking the hash route', async ({ page }) => {
   await openView(page, 'kanban');
-  await page.keyboard.press('Tab');
+  await pressTab(page);
   await expect(page.locator('.skip-link')).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('main#main')).toBeFocused();

@@ -125,4 +125,6 @@
   .wip-summary ul { margin: 0; padding-left: 18px; }
   .wip-link { background: none; border: none; padding: 2px 0; min-height: 24px; color: var(--fg); font: inherit; text-decoration: underline; text-align: left; cursor: pointer; }
   .wip-status { min-height: 1.2em; margin: 8px 0 0; font-size: 0.8125rem; color: var(--success); }
+  /* Forced colours: a field in error is told by its border width, not only by its colour. */
+  @media (forced-colors: active) { .wip-field input[aria-invalid='true'] { border-width: 2px; } }
 </style>
