@@ -206,23 +206,26 @@ jobs:
   kanban-e2e:
     name: Kanban client build + browser tests (${{ matrix.engine }})
     runs-on: ubuntu-latest
-    # One job per engine (parallel) rather than one job three times longer. `browser` is what Playwright installs,
-    # `projects` what runs (website/tests/kanban/playwright.config.ts); the touch projects only run touch.spec.ts.
+    timeout-minutes: 25
+    # The official Playwright image ships the three browsers and their system libraries: nothing is installed with
+    # apt during the run (that step hung for more than an hour when the runners could not resolve the Ubuntu
+    # mirrors). The tag must match the @playwright/test version of website/package-lock.json (checked below).
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d
+      options: --user 1001
+    # One job per engine (parallel) rather than one job three times longer. `projects` is what runs
+    # (website/tests/kanban/playwright.config.ts); the touch projects only run touch.spec.ts.
     strategy:
       fail-fast: false
       matrix:
         include:
           - engine: chromium
-            browser: chromium
             projects: --project=chromium
           - engine: firefox
-            browser: firefox
             projects: --project=firefox
           - engine: webkit
-            browser: webkit
             projects: --project=webkit
           - engine: touch
-            browser: chromium webkit
             projects: --project=mobile-chrome --project=mobile-safari
     steps:
       - name: Checkout
@@ -243,8 +246,8 @@ jobs:
       - name: Install website (Playwright) dependencies
         run: cd website && npm ci
 
-      - name: Install Playwright browsers (${{ matrix.browser }})
-        run: cd website && npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Check the image matches the installed Playwright
+        run: test "$(node -p "require('./website/node_modules/@playwright/test/package.json').version")" = "1.65.0"
 
       - name: Run Kanban browser tests
         run: cd website && npm run test:kanban -- ${{ matrix.projects }}
