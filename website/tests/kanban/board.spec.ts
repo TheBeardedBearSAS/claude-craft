@@ -106,8 +106,9 @@ test('board: changing the language in Settings translates the board without relo
   await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
 });
 
-// Two quick moves: the answer to the first one arrives after the second move is already shown (seen in CI as a
-// focus taken from "Move" to "Open" and a card going back a column). Answers are held here to fix that order.
+// Two quick moves: the second one is shown at once but sent only when the first is answered. Sent together, the
+// server could handle them out of order and refuse the second ("not allowed" from the status it still had), and
+// the first answer sent the card back a column (seen in CI as a focus taken from "Move" to "Open").
 test('board: a second move shown before the first is answered never sends the card back nor moves the focus', async ({
   page,
 }) => {
@@ -118,9 +119,11 @@ test('board: a second move shown before the first is answered never sends the ca
   });
   const id = (await created.json()).story.id as string;
   try {
-    // Each answer reaches the page only when the test lets it through, in the order the server gave them.
+    // Each answer reaches the page only when the test lets it through.
     const gates: Array<() => void> = [];
+    const sent: string[] = [];
     await page.route(`**/api/stories/${id}/status`, async (route) => {
+      sent.push(route.request().postDataJSON().status);
       const response = await route.fetch();
       await new Promise<void>((resolve) => gates.push(resolve));
       await route.fulfill({ response });
@@ -138,13 +141,16 @@ test('board: a second move shown before the first is answered never sends the ca
     await page.keyboard.press('Enter');
     await page.getByRole('menuitem', { name: 'In progress' }).press('Enter');
     await expect(inColumn('in-progress')).toBeVisible();
-    await expect.poll(() => gates.length).toBe(2);
-    await move.focus(); // the user goes on with the card while both answers are on their way
+    await move.focus(); // the user goes on with the card while the first answer is on its way
+    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 300))); // time for a parallel send to show
+    expect(sent).toEqual(['ready-for-dev']); // the second move waits for the first answer
 
     gates[0](); // first answer: "ready-for-dev"
     await expect(page.locator('.toast.success', { hasText: `${id} moved to Ready for dev` })).toBeVisible();
     await expect(inColumn('in-progress')).toBeVisible();
     await expect(move).toBeFocused();
+    await expect.poll(() => gates.length).toBe(2);
+    expect(sent).toEqual(['ready-for-dev', 'in-progress']);
 
     gates[1](); // second answer: "in-progress"
     await expect(page.locator('.toast.success', { hasText: `${id} moved to In progress` })).toBeVisible();
