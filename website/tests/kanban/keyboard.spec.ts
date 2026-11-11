@@ -80,7 +80,7 @@ test('keyboard: cancelling the blocked-reason prompt moves nothing', async ({ pa
   await page.keyboard.press('6');
   await expect(page.getByRole('dialog', { name: 'Why is US-200 blocked?' })).toBeVisible();
   await page.keyboard.press('Enter'); // empty answer: refused with an inline error
-  await expect(page.locator('#prompt-dialog-error')).toContainText('Enter a reason');
+  await expect(page.locator('dialog.prompt-dialog .dialog-error')).toContainText('Enter a reason');
   await page.keyboard.press('Escape');
   const inProgress = page.locator('section.column', { has: page.locator('#col-in-progress') });
   await expect(inProgress.locator('[data-card-id="US-200"]')).toBeVisible();

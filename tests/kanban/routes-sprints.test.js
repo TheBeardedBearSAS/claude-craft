@@ -189,6 +189,30 @@ describe('POST /api/sprints', () => {
     ]);
   });
 
+  it('GET /api/sprints and /api/sprints/:id give the dates and capacity of a planned sprint', async () => {
+    await boot();
+    await req('POST', '/api/sprints', { body: NEW });
+    const expected = { start_date: '2026-11-16', end_date: '2026-11-27', capacity_points: 13 };
+
+    const list = await (await req('GET', '/api/sprints')).json();
+    expect(list.sprints.find((s) => s.id === 'sprint-1-hardening')).toMatchObject(expected);
+    const one = await (await req('GET', '/api/sprints/sprint-1-hardening')).json();
+    expect(one.sprint).toMatchObject(expected);
+  });
+
+  it('GET /api/sprints gives the capacity and dates of the active sprint from the status file', async () => {
+    await writeFile(yamlPath(), ACTIVE_YAML.replace('  epic: "E1"\n', '  epic: "E1"\n  capacity_points: 21\n'));
+    await sprintDir('sprint-1-alpha');
+    await sprintDir('sprint-0-boot');
+    await boot();
+    const list = await (await req('GET', '/api/sprints')).json();
+    const active = list.sprints.find((s) => s.id === 'sprint-1-alpha');
+    expect(active).toMatchObject({ start_date: '2026-11-02', end_date: '2026-11-13', capacity_points: 21 });
+    expect((await (await req('GET', '/api/sprints/sprint-1-alpha')).json()).sprint.capacity_points).toBe(21);
+    // A closed sprint has no capacity to plan against: the key is absent.
+    expect(list.sprints.find((s) => s.id === 'sprint-0-boot')).not.toHaveProperty('capacity_points');
+  });
+
   it('keeps a hostile name inside project-management/sprints/', async () => {
     await boot();
     const res = await req('POST', '/api/sprints', { body: { ...NEW, name: '../../../../etc/cron.d/x' } });

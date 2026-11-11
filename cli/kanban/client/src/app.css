@@ -70,20 +70,10 @@
   --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.4);
   --shadow: 0 6px 22px oklch(0 0 0 / 0.45);
   --shadow-lg: 0 24px 64px oklch(0 0 0 / 0.6);
-  --shadow-pop: 0 18px 50px oklch(0 0 0 / 0.55);
 
   /* --- Type --- */
   --sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-
-  --z-modal: 100;
-
-  /* --- Shim de compatibilité : noms legacy encore consommés par les vues --- */
-  --font: var(--sans);
-  --ok: var(--success);
-  --warn: var(--warning);
-  --info: var(--st-ready);
-  --badge-fg: oklch(0.18 0.02 264);
 
   color-scheme: dark;
 }

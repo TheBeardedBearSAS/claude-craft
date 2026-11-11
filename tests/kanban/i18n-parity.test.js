@@ -131,6 +131,30 @@ describe('keys used in source exist', () => {
   });
 });
 
+describe('every en key is used', () => {
+  // Keys built at run time from a prefix (`t(\`status.${s}\`)`, errorKey → `error.<code>`, …): every key under one of
+  // these prefixes counts as used. Any other key must appear quoted somewhere in src/ (t('…'), tn('…'), or a map of
+  // keys such as LABELS / WARNING_TOASTS).
+  const DYNAMIC_PREFIXES = [
+    'error.', 'status.', 'priority.', 'tdd.', 'toast.gate.', 'board.empty.', 'board.legend.', 'board.wip.',
+    'burndown.status.', 'common.sort.key.', 'settings.accent.', 'settings.density.', 'settings.language.',
+    'settings.scheme.', 'sprint.state.',
+  ]; // prettier-ignore
+  const source = walk(SRC, ['.svelte', '.js'])
+    .filter((f) => !f.startsWith(LOCALES_DIR))
+    .map((f) => fs.readFileSync(f, 'utf8'))
+    .join('\n');
+  const quoted = new Set([...source.matchAll(/['"`]([A-Za-z][\w.-]*)['"`]/g)].map((m) => m[1]));
+
+  it('has no key that nothing in src/ references (dead keys are removed from the 5 catalogues)', () => {
+    const base = (k) => k.replace(/\.(one|other)$/, '');
+    const unused = [...new Set(Object.keys(en).map(base))].filter(
+      (k) => !quoted.has(k) && !DYNAMIC_PREFIXES.some((p) => k.startsWith(p))
+    );
+    expect(unused).toEqual([]);
+  });
+});
+
 describe('no hard-coded attribute strings', () => {
   const files = walk(SRC, ['.svelte']);
   const ATTRS = 'aria-label|placeholder|title|alt|aria-description';

@@ -268,6 +268,34 @@
   color: var(--fg-faint);
 }
 
+/* Limite WIP : le compteur devient n/limite ; « à la limite » et « au-delà » portent une icône et un texte. */
+.col-count.wip-at,
+.col-count.wip-over {
+  font-weight: 700;
+  color: var(--fg);
+}
+.col-count.wip-at {
+  box-shadow: inset 0 0 0 1px var(--warning);
+}
+.col-count.wip-over {
+  box-shadow: inset 0 0 0 2px var(--danger);
+}
+.col-wip-note {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 15px 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--warning);
+}
+.col-wip-note.wip-over {
+  color: var(--danger);
+}
+.new-story {
+  min-height: 32px;
+}
+
 .col-body {
   flex: 1;
   padding: 11px 11px 14px;
@@ -828,6 +856,202 @@ table.tasks th.num {
   color: var(--accent);
 }
 
+/* Édition, contenu, tâches, déplacement et suppression dans le détail d'une story */
+dialog.modal-form {
+  width: min(560px, calc(100vw - 16px));
+}
+.modal-form .modal-title {
+  font-size: 1.125rem;
+}
+.sd-toolbar {
+  margin: 0 0 16px;
+  justify-content: flex-start;
+}
+.sd-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.sd-actions .btn {
+  min-height: 32px;
+  justify-content: center;
+}
+.btn-danger {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+.btn-danger:hover {
+  background: var(--danger-soft);
+  border-color: var(--danger);
+}
+.sd-form-title {
+  margin: 0 0 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.sd-conflict {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 2px solid var(--warning);
+  border-radius: var(--radius);
+  background: var(--bg-inset);
+}
+.sd-conflict p {
+  margin: 0 0 10px;
+}
+.sd-conflict-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+.sd-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin: 10px 0 0;
+  font-size: 0.8125rem;
+  color: var(--danger);
+}
+.sd-dependents {
+  margin: 6px 0 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+.sd-dependents a {
+  display: inline-block;
+  min-height: 24px;
+  text-decoration: underline;
+}
+.sd-hint {
+  margin: 8px 0 0;
+  font-size: 0.8125rem;
+  color: var(--fg-dim);
+}
+.sd-move {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+}
+.sd-move label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.sd-move select,
+.sd-checklist select,
+.sd-field textarea {
+  min-height: 32px;
+  padding: 6px 10px;
+  background: var(--bg-inset);
+  color: var(--fg);
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+}
+.sd-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+}
+.sd-checklist li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-faint);
+}
+.sd-task-name {
+  flex: 1 1 220px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.sd-task-status {
+  font-size: 0.8125rem;
+  color: var(--fg-dim);
+}
+.sd-task-add {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 12px 0 0;
+}
+.sd-task-add label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.sd-task-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.sd-task-add input {
+  flex: 1 1 200px;
+  min-width: 0;
+  min-height: 32px;
+  padding: 6px 10px;
+  background: var(--bg-inset);
+  color: var(--fg);
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+}
+.sd-task-add input[aria-invalid='true'] {
+  border-color: var(--danger);
+  border-width: 2px;
+}
+.sd-task-error:empty {
+  display: block;
+  margin: 0;
+}
+.sd-body-edit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 14px;
+  margin-bottom: 10px;
+}
+.sd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.sd-field label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.sd-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--mono);
+  resize: vertical;
+}
+.sd-field textarea[aria-invalid='true'] {
+  border-color: var(--danger);
+  border-width: 2px;
+}
+.sd-preview {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border-faint);
+  border-radius: var(--radius);
+}
+.sd-preview h4 {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+.section-h .btn {
+  min-height: 28px;
+  padding: 4px 10px;
+}
+
 .md-body {
   color: var(--fg-dim);
   font-size: 0.85rem;
@@ -1043,6 +1267,120 @@ table.tasks th.num {
   height: 8px;
   border-radius: 50%;
   flex: none;
+}
+
+/* ---- Planification (Backlog) ---- */
+.story-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-top: 1px solid var(--border-faint);
+}
+.story-item.is-selected {
+  background: var(--accent-soft);
+}
+.story-item .story-row {
+  width: auto;
+  flex: 1 1 14rem;
+  min-width: 0;
+  border-top: none;
+}
+.row-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 36px;
+  min-height: 44px;
+  padding-left: 10px;
+  cursor: pointer;
+}
+.row-select input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+.row-select input:focus-visible,
+.plan-field select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.row-plan {
+  flex: 0 1 auto;
+  max-width: calc(100% - 48px);
+  margin: 0 12px 6px 36px;
+  min-height: 28px;
+  padding: 4px 10px;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.story-row .s-sprint {
+  font-size: 0.75rem;
+  color: var(--fg-dim);
+  padding: 1px 7px;
+  border: 1px solid var(--border-control);
+  border-radius: 5px;
+  overflow-wrap: anywhere;
+}
+.plan-bar {
+  max-width: 1040px;
+  margin: 0 auto 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-faint);
+  border-radius: var(--radius-lg);
+}
+.plan-controls,
+.plan-selection,
+.plan-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 16px;
+}
+.plan-selection {
+  align-items: center;
+}
+.plan-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.plan-field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--fg-dim);
+}
+.plan-field select {
+  min-height: 32px;
+  max-width: 100%;
+  padding: 5px 10px;
+  font-size: 0.8125rem;
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-sm);
+  background: var(--bg-inset);
+  color: var(--fg);
+}
+.plan-new {
+  margin-left: auto;
+}
+.plan-none {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--fg-dim);
+}
+.plan-status {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--fg-dim);
+  min-height: 1.2em;
 }
 
 /* ================= SPRINTS ================= */
@@ -1390,6 +1728,73 @@ table.tasks th.num {
   }
 }
 
+/* ---- Cycle de vie des sprints ---- */
+.sd-head {
+  flex-wrap: wrap;
+}
+.sprint-list-actions {
+  margin-bottom: 10px;
+}
+.sd-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: none;
+}
+.sd-alert,
+.sd-result {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-control);
+  background: var(--bg-elev);
+}
+.sd-alert {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+/* The detail's alert region stays in the page (a message inserted later is announced) but takes no room while it
+   holds no message: Svelte leaves whitespace in it, so :empty never matches. */
+.sd-alert:not(:has(*)) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.sd-alert p {
+  margin: 0 0 8px;
+  font-size: 0.875rem;
+}
+.sd-alert a {
+  margin-left: 6px;
+  color: var(--fg);
+  text-decoration: underline;
+}
+.sd-result {
+  border-color: var(--success);
+}
+.sd-result h3 {
+  margin: 0 0 2px;
+  font-size: 1rem;
+}
+.sd-result-name {
+  margin: 0 0 8px;
+  color: var(--fg-dim);
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+.sd-result ul {
+  margin: 0 0 10px;
+  padding-left: 18px;
+  font-size: 0.875rem;
+}
+.sd-alert:focus-visible,
+.sd-result:focus-visible,
+.sd-title h3:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 /* ================= BURNDOWN (full) ================= */
 .burn-wrap {
   max-width: 1000px;
@@ -1506,6 +1911,81 @@ table.tasks th.num {
 }
 .burn-data[open] > summary {
   margin-bottom: 8px;
+}
+
+/* ---- Vélocité ---- */
+.velocity {
+  margin-top: 22px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-faint);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+}
+.velocity h3 {
+  margin: 0 0 14px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.velocity .empty-note {
+  margin: 0;
+  color: var(--fg-dim);
+}
+.vel-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+}
+.vel-summary p {
+  margin: 0;
+}
+.vel-average,
+.vel-forecast {
+  font-weight: 600;
+}
+.swatch-committed,
+.swatch-delivered {
+  display: inline-block;
+  width: 22px;
+  height: 12px;
+  border-radius: 2px;
+}
+.swatch-committed {
+  border: 2px solid var(--fg-dim);
+}
+.swatch-delivered {
+  background: var(--accent);
+  border: 2px solid var(--accent);
+}
+.vel-chart {
+  min-height: 260px;
+  margin-bottom: 16px;
+}
+.vel-data table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.vel-data :is(th, td) {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-faint);
+}
+.vel-data thead th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.vel-data tbody th {
+  font-weight: 500;
+}
+.vel-data .num {
+  text-align: right;
 }
 
 /* ================= DEPS GRAPH ================= */

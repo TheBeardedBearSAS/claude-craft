@@ -17,12 +17,14 @@ import {
   writeTextAtomic,
 } from '../services/story-files.js';
 import { readWipLimits, wipWarnings } from '../services/kanban-config.js';
+import { loadSprintStatus } from '../services/sprint-cache.js';
 import { allowedTargets } from '../../shared/transitions.js';
 import { EPIC_ID_RE, STORY_ID_RE, nextStoryId, storyIdFromFilename } from '../../shared/ids.js';
 import {
   StoryBodySchema,
   StoryCreateSchema,
   StoryPatchSchema,
+  TaskCreateSchema,
   TaskStatusPatchSchema,
   TransitionRequestSchema,
 } from '../../shared/schemas.js';
@@ -66,6 +68,17 @@ async function publish(ctx, id, extra = {}) {
 }
 
 const withWarnings = (body, warnings) => (warnings.length ? { ...body, warnings } : body);
+
+/**
+ * Write failure of a story route. A 409 `conflict` also carries the story as the API gives it (`_rev` included,
+ * `null` once removed), read again from disk: the client can compare and retry without another request.
+ */
+async function storyWriteError(ctx, c, id, err) {
+  if (!(err instanceof ConflictError)) return writeError(c, err);
+  await ctx.repository.refresh();
+  const story = ctx.repository.getStory(id) ?? null;
+  return c.json({ error: 'conflict', reason: err.reason, current: err.current, story }, 409);
+}
 
 function entryOf(tx, id) {
   const current = tx.data.stories?.[id];
@@ -120,6 +133,13 @@ async function moveTracked(ctx, c, story, patch, { status: target, blocked_reaso
   return version;
 }
 
+/** WIP warning of the destination column, counted as the board shows it (stories of the active sprint). */
+async function moveWarnings(ctx, moved) {
+  const limits = await readWipLimits(ctx.projectRoot);
+  const status = await loadSprintStatus(ctx.projectRoot).catch(() => null); // unreadable: count every story
+  return wipWarnings(ctx.repository.listStories(), limits, moved.status, status?.metadata?.sprint_id ?? null);
+}
+
 async function moveStory(ctx, c) {
   const { story, response } = findStory(ctx, c);
   if (response) return response;
@@ -138,12 +158,9 @@ async function moveStory(ctx, c) {
     if (isTracked(story)) version = await moveTracked(ctx, c, story, patch, parsed.data);
     else await updateFrontmatter(ctx.repository.getStoryFile(story.id), patch, { expectedMtime: story._mtime });
     const moved = await publish(ctx, story.id);
-    const limits = await readWipLimits(ctx.projectRoot);
-    return c.json(
-      withWarnings({ story: moved, version }, wipWarnings(ctx.repository.listStories(), limits, moved.status))
-    );
+    return c.json(withWarnings({ story: moved, version }, await moveWarnings(ctx, moved)));
   } catch (err) {
-    return writeError(c, err);
+    return storyWriteError(ctx, c, story.id, err);
   }
 }
 
@@ -245,7 +262,7 @@ async function editStory(ctx, c) {
     const warnings = isTracked(story) ? await syncMetadata(ctx, story, parsed.data) : [];
     return c.json(withWarnings({ story: await publish(ctx, story.id), version }, warnings));
   } catch (err) {
-    return writeError(c, err);
+    return storyWriteError(ctx, c, story.id, err);
   }
 }
 
@@ -276,6 +293,8 @@ async function putBody(ctx, c) {
 // --- POST /api/stories ---------------------------------------------------------
 
 async function idsOnDisk(dir) {
+  // A missing directory (no `.trash/` yet) has no id. An unreadable one can at worst propose an id already taken on
+  // disk, which the exclusive create refuses (409 id_collision): nothing is overwritten.
   const names = await Promise.all([dir, path.join(dir, '.trash')].map((d) => readdir(d).catch(() => [])));
   return names.flat().map(storyIdFromFilename).filter(Boolean);
 }
@@ -398,39 +417,83 @@ async function deleteStory(ctx, c) {
   }
 }
 
-// --- PATCH /api/stories/:id/tasks/:taskId ---------------------------------------
+// --- PATCH /api/stories/:id/tasks/:taskId, POST /api/stories/:id/tasks ------------
+
+/**
+ * Per-task statuses. A list known only by its counter (`completed` without `status`) is seeded from it: the first
+ * `completed` tasks are done. Without this, the first change would recount `completed` from a single status and the
+ * "all tasks done" gate could never be reached from the board.
+ */
+function taskStatuses(tasks) {
+  if (tasks?.status) return { ...tasks.status };
+  const done = Number(tasks?.completed ?? 0);
+  return Object.fromEntries((tasks?.list ?? []).map((task, i) => [task, i < done ? 'done' : 'to-do']));
+}
+
+const countDone = (list, statuses) => list.filter((task) => statuses[task] === 'done').length;
 
 /** `tasks` with the new status of `taskId` and `completed` recounted from the per-task statuses. */
 export function withTaskStatus(tasks, taskId, status) {
   const list = tasks?.list ?? [];
   if (!list.includes(taskId)) throw new HttpError(404, 'task_not_found');
-  const statuses = { ...tasks.status, [taskId]: status };
-  return { ...tasks, status: statuses, completed: list.filter((t) => statuses[t] === 'done').length };
+  const statuses = { ...taskStatuses(tasks), [taskId]: status };
+  return { ...tasks, status: statuses, completed: countDone(list, statuses) };
 }
 
-async function setTaskStatus(ctx, c) {
-  const { story, response } = findStory(ctx, c);
-  if (response) return response;
-  if (story._source === 'archived') return c.json(readOnlyError(story), 409);
-  if (!isTracked(story)) {
-    return c.json({ error: 'read_only_source', reason: 'task statuses are tracked in .bmad/sprint-status.yaml' }, 409);
+/** `tasks` with one more to-do task; `total` becomes the length of the list. */
+export function withNewTask(tasks, title) {
+  const list = tasks?.list ?? [];
+  if (list.includes(title)) throw new HttpError(409, 'task_exists');
+  const next = [...list, title];
+  const statuses = { ...taskStatuses(tasks), [title]: 'to-do' };
+  return { ...tasks, total: next.length, completed: countDone(next, statuses), list: next, status: statuses };
+}
+
+/** Story whose tasks the board may write (tracked by the YAML, not archived), or the refusal. */
+function taskTarget(ctx, c) {
+  const found = findStory(ctx, c);
+  if (found.response) return found;
+  if (found.story._source === 'archived') return { response: c.json(readOnlyError(found.story), 409) };
+  if (!isTracked(found.story)) {
+    const reason = 'task statuses are tracked in .bmad/sprint-status.yaml';
+    return { response: c.json({ error: 'read_only_source', reason }, 409) };
   }
-  const parsed = await readJson(c, TaskStatusPatchSchema);
-  if (parsed.response) return parsed.response;
+  return found;
+}
+
+/** Rewrites `tasks` of the story under the lock; `change(currentTasks)` returns the new value. */
+async function writeTasks(ctx, c, story, change, status = 200) {
   try {
     const { version } = await mutateSprintStatus(
       ctx.projectRoot,
       (tx) => {
         const current = entryOf(tx, story.id);
         checkRev(current, c.req.header('If-Match'));
-        tx.setStory(story.id, { tasks: withTaskStatus(current.tasks, c.req.param('taskId'), parsed.data.status) });
+        tx.setStory(story.id, { tasks: change(current.tasks) });
       },
       { now: ctx.now }
     );
-    return c.json({ story: await publish(ctx, story.id), version });
+    return c.json({ story: await publish(ctx, story.id), version }, status);
   } catch (err) {
-    return writeError(c, err);
+    return storyWriteError(ctx, c, story.id, err);
   }
+}
+
+async function addTask(ctx, c) {
+  const { story, response } = taskTarget(ctx, c);
+  if (response) return response;
+  const parsed = await readJson(c, TaskCreateSchema);
+  if (parsed.response) return parsed.response;
+  return writeTasks(ctx, c, story, (tasks) => withNewTask(tasks, parsed.data.title), 201);
+}
+
+async function setTaskStatus(ctx, c) {
+  const { story, response } = taskTarget(ctx, c);
+  if (response) return response;
+  const parsed = await readJson(c, TaskStatusPatchSchema);
+  if (parsed.response) return parsed.response;
+  const taskId = c.req.param('taskId');
+  return writeTasks(ctx, c, story, (tasks) => withTaskStatus(tasks, taskId, parsed.data.status));
 }
 
 // --- registration ----------------------------------------------------------------
@@ -447,6 +510,7 @@ export function register(app, { repository, projectRoot, user = 'kanban', eventB
   });
   app.patch('/api/stories/:id/status', (c) => moveStory(ctx, c));
   app.patch('/api/stories/:id/tasks/:taskId', (c) => setTaskStatus(ctx, c));
+  app.post('/api/stories/:id/tasks', (c) => addTask(ctx, c));
   app.patch('/api/stories/:id', (c) => editStory(ctx, c));
   app.put('/api/stories/:id/body', bigBody, (c) => putBody(ctx, c));
   app.post('/api/stories', (c) => createStory(ctx, c));

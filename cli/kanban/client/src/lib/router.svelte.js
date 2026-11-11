@@ -7,13 +7,38 @@
 // `query` is an object (see query.js); `?story=<id>` opens the detail from any view.
 
 import { parseHash, formatHash, mergeQuery } from './query.js';
+import { createLeaveGuard } from './leave-guard.js';
 
 const current = () => parseHash(window.location.hash);
 
 export const route = $state(current());
 
-window.addEventListener('hashchange', () => {
+// A form with unsaved input registers here (see leave-guard.js): a URL change is held back — the previous URL is
+// put back at once — until the user chooses to discard the input; "keep editing" leaves everything as it was.
+// Every entry the app has shown is stamped in history.state: reaching a stamped entry is a Back/Forward (it is held
+// back with pushState so the user can press Back again), a new entry (link, hash assignment) is simply replaced.
+const leaveGuard = createLeaveGuard();
+export const guardLeave = leaveGuard.add;
+
+const history = window.history;
+const stamp = () => history.replaceState({ ...(history.state ?? {}), kanban: 1 }, '');
+stamp();
+
+function apply() {
+  stamp();
   Object.assign(route, current());
+}
+
+window.addEventListener('hashchange', async (event) => {
+  if (!leaveGuard.busy && !leaveGuard.isDirty()) return apply();
+  const revisit = Boolean(history.state?.kanban);
+  if (revisit) history.pushState(history.state, '', event.oldURL);
+  else history.replaceState(history.state, '', event.oldURL);
+  if (leaveGuard.busy || !(await leaveGuard.mayLeave())) return;
+  // Nothing is at stake any more: replay the navigation.
+  if (revisit) return history.back();
+  history.replaceState(history.state, '', event.newURL);
+  apply();
 });
 
 export function navigate(path) {
@@ -26,6 +51,6 @@ export function navigate(path) {
  */
 export function setQuery(patch) {
   const query = mergeQuery(route.query, patch);
-  window.history.replaceState(window.history.state, '', formatHash(route.name, route.params, query));
+  history.replaceState(history.state, '', formatHash(route.name, route.params, query));
   Object.assign(route, current());
 }

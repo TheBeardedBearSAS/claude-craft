@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { request, ApiError, storyUrl, errorKey, latestOnly, isAbort } from '../../cli/kanban/client/src/lib/api.js';
 
-const reply = (status, body, { json = true } = {}) => ({
+const reply = (status, body, { json = true, text = '' } = {}) => ({
   ok: status >= 200 && status < 300,
   status,
   statusText: 'x',
   json: json ? async () => body : async () => Promise.reject(new SyntaxError('no json')),
+  text: async () => text,
 });
 
 afterEach(() => vi.unstubAllGlobals());
@@ -41,6 +42,28 @@ describe('request', () => {
     const err = await request('/x').catch((e) => e);
     expect(isAbort(err)).toBe(true);
     expect(err).not.toBeInstanceOf(ApiError);
+  });
+});
+
+describe('request as text', () => {
+  it('returns the raw body and does not announce a JSON body it does not send', async () => {
+    const f = vi.fn().mockResolvedValue(reply(200, null, { json: false, text: '# Doc' }));
+    vi.stubGlobal('fetch', f);
+    expect(await request('/api/docs/a.md', { as: 'text' })).toBe('# Doc');
+    expect(f.mock.calls[0][1].as).toBeUndefined();
+    expect(f.mock.calls[0][1].headers?.['Content-Type']).toBeUndefined();
+  });
+
+  it('still reads the JSON error of a failed text request', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(reply(404, { error: 'not_found' })));
+    const err = await request('/x', { as: 'text' }).catch((e) => e);
+    expect(err).toBeInstanceOf(ApiError);
+    expect(err).toMatchObject({ status: 404, code: 'not_found' });
+  });
+
+  it('maps a network failure to ApiError', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('offline')));
+    expect(await request('/x', { as: 'text' }).catch((e) => e)).toMatchObject({ status: 0, code: 'network' });
   });
 });
 

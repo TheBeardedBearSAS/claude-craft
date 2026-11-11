@@ -201,13 +201,16 @@ function sprintMeta(ss, id, goalText = null) {
   const base = { name: id, start_date: '', end_date: '', epic: '', points_delivered: null };
   if (!ss || ss._invalid) return planned(base, id, goalText);
   if (ss.metadata?.sprint_id === id) {
-    return {
-      name: ss.metadata.name ?? id,
-      start_date: ss.metadata.start_date ?? '',
-      end_date: ss.metadata.end_date ?? '',
-      epic: ss.metadata.epic ?? '',
-      points_delivered: null,
-    };
+    return withCapacity(
+      {
+        name: ss.metadata.name ?? id,
+        start_date: ss.metadata.start_date ?? '',
+        end_date: ss.metadata.end_date ?? '',
+        epic: ss.metadata.epic ?? '',
+        points_delivered: null,
+      },
+      ss.metadata.capacity_points
+    );
   }
   const a = ss.archived_sprints?.[id];
   if (!a) return planned(base, id, goalText);
@@ -222,9 +225,13 @@ function sprintMeta(ss, id, goalText = null) {
 
 function planned(base, id, goalText) {
   if (goalText === null) return base;
-  const { name, start_date, end_date } = parseSprintGoal(goalText, id);
-  return { ...base, name, start_date, end_date };
+  const { name, start_date, end_date, capacity_points } = parseSprintGoal(goalText, id);
+  return withCapacity({ ...base, name, start_date, end_date }, capacity_points);
 }
+
+/** `capacity_points` only when the sprint has one (a closed sprint has nothing left to plan against). */
+const withCapacity = (meta, capacity) => (Number.isInteger(capacity) ? { ...meta, capacity_points: capacity } : meta);
+const capacityOf = (meta) => (meta.capacity_points === undefined ? {} : { capacity_points: meta.capacity_points });
 
 const knownToStatus = (ss, id) => ss?.metadata?.sprint_id === id || !!ss?.archived_sprints?.[id];
 
@@ -278,8 +285,11 @@ function registerReads(app, { repository, projectRoot, loadStatusSafe }) {
       return {
         ...s,
         name: meta.name,
+        start_date: meta.start_date,
+        end_date: meta.end_date,
         epic: meta.epic,
         points_delivered: meta.points_delivered,
+        ...capacityOf(meta),
         state: sprintState(s.id, ss, ids),
         story_count: stories.length,
         total_points: sumPoints(stories),
@@ -315,6 +325,7 @@ function registerReads(app, { repository, projectRoot, loadStatusSafe }) {
         end_date: meta.end_date,
         epic: meta.epic,
         points_delivered: meta.points_delivered,
+        ...capacityOf(meta),
         has_goal: !!sprint.goalPath,
         has_review: !!fileOf('sprint-review'),
         has_retro: !!fileOf('sprint-retro'),

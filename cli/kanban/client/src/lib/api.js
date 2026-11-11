@@ -21,21 +21,27 @@ async function readJson(res) {
   }
 }
 
-/** JSON request. Throws ApiError (status, code, body) on network failure or non-2xx. */
-export async function request(url, init = {}) {
-  let res;
+async function send(url, init) {
   try {
-    res = await fetch(url, { ...init, headers: { 'Content-Type': 'application/json', ...(init.headers ?? {}) } });
+    return await fetch(url, init);
   } catch (err) {
     if (isAbort(err)) throw err;
     throw new ApiError({ status: 0, code: 'network', body: null, message: err?.message });
   }
+}
+
+/**
+ * JSON request (`{ as: 'text' }` reads a text body instead, e.g. markdown documents).
+ * Throws ApiError (status, code, body) on network failure or non-2xx.
+ */
+export async function request(url, { as = 'json', ...init } = {}) {
+  const text = as === 'text';
+  const headers = text ? (init.headers ?? {}) : { 'Content-Type': 'application/json', ...(init.headers ?? {}) };
+  const res = await send(url, { ...init, headers });
+  if (res.ok) return text ? res.text() : readJson(res);
   const body = await readJson(res);
-  if (!res.ok) {
-    const code = typeof body?.error === 'string' && body.error ? body.error : `http_${res.status}`;
-    throw new ApiError({ status: res.status, code, body, message: body?.error || `HTTP ${res.status}` });
-  }
-  return body;
+  const code = typeof body?.error === 'string' && body.error ? body.error : `http_${res.status}`;
+  throw new ApiError({ status: res.status, code, body, message: body?.error || `HTTP ${res.status}` });
 }
 
 /** '/api/stories/<encoded id><suffix>' — ids end up in the path, always encode (K-19). */

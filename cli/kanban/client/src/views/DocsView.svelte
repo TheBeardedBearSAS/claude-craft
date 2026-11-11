@@ -4,7 +4,7 @@
   import { route } from '../lib/router.svelte.js';
   import { formatHash } from '../lib/query.js';
   import { t } from '../lib/i18n/index.svelte.js';
-  import { request, ApiError, latestOnly, isAbort, errorKey } from '../lib/api.js';
+  import { request, latestOnly, isAbort, errorKey } from '../lib/api.js';
   import { renderMarkdown } from '../lib/markdown.js';
   import { buildDocsTree, groupOpenFor } from '../lib/docs-tree.js';
   import { scrollable } from '../lib/actions.js';
@@ -34,21 +34,6 @@
   const tree = $derived(buildDocsTree(docs));
   const href = (rel) => formatHash('docs', { rel }, {});
 
-  /** The document endpoint answers text/markdown, which `request` (JSON only) cannot read. */
-  async function fetchText(url, signal) {
-    let res;
-    try {
-      res = await fetch(url, { signal });
-    } catch (err) {
-      if (isAbort(err)) throw err;
-      throw new ApiError({ status: 0, code: 'network', body: null, message: err?.message });
-    }
-    if (res.ok) return res.text();
-    const body = await res.json().catch(() => null);
-    const code = typeof body?.error === 'string' && body.error ? body.error : `http_${res.status}`;
-    throw new ApiError({ status: res.status, code, body });
-  }
-
   async function loadDocs() {
     const ticket = runList();
     try {
@@ -75,7 +60,7 @@
     docLoading = loadedRel !== rel; // a live reload of the open document keeps it on screen
     docError = null;
     try {
-      const text = await fetchText(`/api/docs/${rel.split('/').map(encodeURIComponent).join('/')}`, ticket.signal);
+      const text = await request(`/api/docs/${rel.split('/').map(encodeURIComponent).join('/')}`, { as: 'text', signal: ticket.signal });
       if (!ticket.current) return;
       content = text;
       loadedRel = rel;
@@ -107,8 +92,13 @@
   }
 
   // Narrow screens: the tree sits above the document, so fold it once a document is chosen.
+  // The element is closed at once too: bind:open learns of an opening through the asynchronous `toggle` event,
+  // and a `toggle` still pending from opening the tree would otherwise write `open` back to true.
+  let navEl = $state(null);
   const onPick = () => {
-    if (!mq.matches) navOpen = false;
+    if (mq.matches) return;
+    navOpen = false;
+    if (navEl) navEl.open = false;
   };
 
   $effect(() => {
@@ -155,7 +145,7 @@
 <div class="view-pad">
   <h2 class="sr-only">{t('docs.title')}</h2>
   <div class="docs-layout">
-    <details class="docs-nav" bind:open={navOpen}>
+    <details class="docs-nav" bind:this={navEl} bind:open={navOpen}>
       <summary>{t('docs.title')}</summary>
       <nav aria-label={t('docs.tree.label')} aria-busy={!listLoaded}>
         {#if !listLoaded}

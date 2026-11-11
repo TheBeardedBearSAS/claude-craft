@@ -10,6 +10,8 @@
    */
   import { t } from '../lib/i18n/index.svelte.js';
 
+  const uid = $props.id(); // unique ids: the dialog may be mounted more than once
+
   let dialog = $state(null);
   let inputEl = $state(null);
   let message = $state('');
@@ -58,21 +60,21 @@
   }
 </script>
 
-<dialog bind:this={dialog} aria-labelledby="prompt-dialog-label" onclose={handleClose}>
+<dialog bind:this={dialog} class="prompt-dialog" aria-labelledby="{uid}-label" onclose={handleClose}>
   <form onsubmit={handleSubmit}>
-    <label id="prompt-dialog-label" for="prompt-dialog-input" class="dialog-title">{message}</label>
+    <label id="{uid}-label" for="{uid}-input" class="dialog-title">{message}</label>
     <input
-      id="prompt-dialog-input"
+      id="{uid}-input"
       bind:this={inputEl}
       bind:value={inputValue}
       type="text"
       class="dialog-input"
       aria-invalid={showError ? 'true' : undefined}
-      aria-describedby={showError ? 'prompt-dialog-error' : undefined}
+      aria-describedby={showError ? `${uid}-error` : undefined}
       oninput={() => (showError = false)}
     />
     <!-- Toujours présente (vide) : un message inséré dans une région déjà là est annoncé de façon fiable. -->
-    <p id="prompt-dialog-error" class="dialog-error" role="alert">{showError ? requiredMessage : ''}</p>
+    <p id="{uid}-error" class="dialog-error" role="alert">{showError ? requiredMessage : ''}</p>
     <div class="dialog-actions">
       <button type="button" class="btn-cancel" onclick={() => dialog.close()}>{t('common.cancel')}</button>
       <button type="submit" class="btn-confirm">{t('common.ok')}</button>

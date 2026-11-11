@@ -40,6 +40,7 @@ export class Repository {
    */
   refresh() {
     const run = this.#refreshChain.then(() => this.#rebuild());
+    // The caller receives `run` and its rejection; only the chain's tail ignores it, so that the next refresh runs.
     this.#refreshChain = run.catch(() => {});
     return run;
   }

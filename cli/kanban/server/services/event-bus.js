@@ -17,8 +17,9 @@ export class EventBus {
     for (const fn of [...this.subscribers]) {
       try {
         fn(msg);
-      } catch {
-        /* isolate subscriber failures */
+      } catch (err) {
+        // One failing subscriber must not starve the others: isolated, but logged (audit K-11).
+        console.error(`[kanban] event subscriber failed on "${event}":`, err);
       }
     }
   }

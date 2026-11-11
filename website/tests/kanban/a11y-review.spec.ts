@@ -42,6 +42,9 @@ const SMALL_TARGETS = () =>
       if (!r.width || !r.height || getComputedStyle(el).visibility === 'hidden') return false;
       if (el.closest('.sr-only, .md-body, .doc-paper, [inert]')) return false; // links inside prose (inline exception)
       if (el.closest('dialog:not([open])')) return false;
+      // A checkbox or radio inside its <label>: the label is the target (it activates the control).
+      const label = el.matches('input') ? el.closest('label')?.getBoundingClientRect() : null;
+      if (label && label.width >= 24 && label.height >= 24) return false;
       return r.width < 24 || r.height < 24;
     })
     .map((el) => {
@@ -79,7 +82,7 @@ test('focus: cancelling the blocked-reason prompt returns focus to the Move butt
   await page.locator(`[data-move-id="${US}"]`).focus();
   await page.keyboard.press('Enter');
   await page.getByRole('menu').locator('[aria-keyshortcuts="6"]').press('Enter');
-  await expect(page.locator('dialog[open] #prompt-dialog-input')).toBeFocused();
+  await expect(page.locator('dialog.prompt-dialog[open] .dialog-input')).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(page.locator(`[data-move-id="${US}"]`)).toBeFocused();
 });
@@ -147,7 +150,7 @@ test('live regions: a move is announced once (toast), not twice', async ({ page 
   await openView(page, 'kanban');
   await openMoveMenu(page, US);
   await page.getByRole('menu').locator('[aria-keyshortcuts="6"]').click();
-  await page.locator('dialog[open] #prompt-dialog-input').fill('waiting');
+  await page.locator('dialog.prompt-dialog[open] .dialog-input').fill('waiting');
   await page.keyboard.press('Enter');
   await expect(page.locator('.toast.success')).toBeVisible();
   const regions = await page.evaluate(
@@ -191,7 +194,7 @@ test('live regions: inside a mounted view, no status/alert region is inserted to
   await openMoveMenu(page, US);
   await page.getByRole('menu').locator('[aria-keyshortcuts="6"]').click();
   await page.keyboard.press('Enter');
-  await expect(page.locator('#prompt-dialog-error')).not.toBeEmpty();
+  await expect(page.locator('dialog.prompt-dialog .dialog-error')).not.toBeEmpty();
   await page.keyboard.press('Escape');
   // Detail dialog: tasks loading.
   await page.locator(`[data-card-id="${US}"]`).click();
@@ -473,3 +476,198 @@ for (const vp of [DESKTOP, { width: 320, height: 640 }]) {
     expect(off).toEqual([]);
   });
 }
+
+// ---- Lot 4 review: forms, dialogs, focus after asynchronous actions --------------------------------------
+
+test('focus: a move answered late never takes the focus away from where the user went meanwhile', async ({ page }) => {
+  await page.route('**/api/stories/*/status', async (route) => {
+    await new Promise((r) => setTimeout(r, 800)); // a slow server
+    await route.continue();
+  });
+  await openView(page, 'kanban');
+  await page.locator(`[data-move-id="${US}"]`).focus();
+  await page.keyboard.press('Enter');
+  await page.getByRole('menu').getByRole('menuitem', { name: 'Review' }).focus();
+  await page.keyboard.press('Enter');
+  const search = page.getByRole('textbox', { name: 'Search stories' });
+  await search.focus(); // the user moves on before the answer
+  await expect(page.locator('.toast').first()).toBeVisible({ timeout: 5000 });
+  await expect(search).toBeFocused();
+});
+
+test('focus: closing the detail of a story just created goes to "New story", never to the page body', async ({ page }) => {
+  await openView(page, 'kanban');
+  await page.locator('[data-new-story]').focus();
+  await page.keyboard.press('Enter');
+  await page.keyboard.type('A11y focus after creation');
+  await page.getByRole('button', { name: 'Create story' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('dialog.modal[open] #detail-title')).toHaveText('A11y focus after creation');
+  const id = /story=([^&]+)/.exec(page.url())![1];
+  await page.keyboard.press('Escape');
+  await expect(page.locator('[data-new-story]')).toBeFocused();
+  const origin = new URL(test.info().project.use.baseURL!).origin;
+  await page.request.delete(`/api/stories/${id}?force=1`, { headers: { Origin: origin } });
+});
+
+test('detail: the alert region is in the page but draws nothing while it has no message', async ({ page }) => {
+  await page.goto(`/#/kanban?story=${US}`);
+  const region = page.locator('dialog.modal[open] .sd-alert');
+  await expect(region).toBeAttached();
+  const box = await region.boundingBox();
+  expect(box?.height ?? 0).toBeLessThan(1);
+});
+
+test('forms: a required field says so after its label, with a space ("Title (required)")', async ({ page }) => {
+  await openView(page, 'kanban');
+  await page.locator('[data-new-story]').click();
+  await expect(page.locator('label[for="create-title"]')).toHaveText('Title (required)');
+  await page.keyboard.press('Escape');
+  await openView(page, 'sprints');
+  await page.getByRole('button', { name: 'New sprint' }).click();
+  await expect(page.locator('label[for="sf-name"]')).toHaveText(/^Name \(required\)$/);
+});
+
+test('ids: every id of the page is unique with the detail, its dialogs and the creation form mounted', async ({ page }) => {
+  await page.goto(`/#/kanban?story=${US}`);
+  await expect(page.locator('dialog.modal[open]')).toBeVisible();
+  const dupes = await page.evaluate(() => {
+    const ids = [...document.querySelectorAll('[id]')].map((e) => e.id);
+    return [...new Set(ids.filter((id, i) => ids.indexOf(id) !== i))];
+  });
+  expect(dupes).toEqual([]);
+});
+
+test('search: the placeholder is never cut, in any language, at 1280px and 320px', async ({ page }) => {
+  const cut: string[] = [];
+  for (const lang of ['en', 'fr', 'es', 'de', 'pt']) {
+    for (const size of [DESKTOP, { width: 320, height: 640 }]) {
+      await page.setViewportSize(size);
+      await page.goto('/#/kanban');
+      await page.evaluate((l) => localStorage.setItem('cc-kanban-tweaks', JSON.stringify({ lang: l })), lang);
+      await page.reload();
+      await expect(page.locator('html')).toHaveAttribute('lang', lang);
+      const fits = await page.locator('.search input').evaluate((input: HTMLInputElement) => {
+        const style = getComputedStyle(input);
+        const ctx = document.createElement('canvas').getContext('2d')!;
+        ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        const room = input.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+        return ctx.measureText(input.placeholder).width <= room + 1;
+      });
+      if (!fits) cut.push(`${lang}@${size.width}`);
+    }
+  }
+  expect(cut).toEqual([]);
+});
+
+// Every screen of lot 4 (forms and their dialogs), in English and German, at 1280 and 320 px, with the text
+// spacing of 1.4.12: targets >= 24 px (2.5.8), visible label in the name (2.5.3), nothing clipped (1.4.12 / 1.4.4),
+// no sideways scroll of the page or of a dialog (1.4.10).
+const LOT4: Array<[string, (p: Page) => Promise<void>]> = [
+  ['create-form', async (p) => {
+    await openView(p, 'kanban');
+    await p.locator('[data-new-story]').click();
+    await expect(p.locator('#create-title')).toBeFocused();
+  }],
+  ['create-errors', async (p) => {
+    await openView(p, 'kanban');
+    await p.locator('[data-new-story]').click();
+    await p.locator('dialog[open] button[type="submit"]').click();
+    await expect(p.locator('#create-title')).toHaveAttribute('aria-invalid', 'true');
+  }],
+  ['edit-form', async (p) => {
+    await p.goto(`/#/kanban?story=US-E4-03`);
+    await p.locator('dialog.modal[open] .sd-toolbar .btn').first().click();
+    await expect(p.locator('#edit-title')).toBeFocused();
+  }],
+  ['tasks-and-move', async (p) => {
+    await p.goto(`/#/kanban?story=US-E4-03`);
+    await expect(p.locator('#detail-task-new')).toBeVisible();
+  }],
+  ['delete-confirm', async (p) => {
+    await p.goto(`/#/kanban?story=US-E4-03`);
+    await p.locator('dialog.modal[open] .btn-danger').click();
+    await expect(p.locator('dialog[open] .btn-confirm')).toBeVisible();
+  }],
+  ['sprint-form-errors', async (p) => {
+    await openView(p, 'sprints');
+    await p.locator('.sprints-list .btn-primary, .sprint-list-head .btn-primary, button.btn-primary').first().click();
+    await p.locator('dialog.sprint-form[open] button[type="submit"]').click();
+    await expect(p.locator('#sf-name')).toHaveAttribute('aria-invalid', 'true');
+  }],
+  ['close-dialog', async (p) => {
+    await p.goto('/#/sprints/sprint-9-auth-premium');
+    await p.locator('.sd-title').waitFor();
+    await p.getByRole('button', { name: /^(Close sprint|Sprint schließen)$/ }).first().click();
+    await expect(p.locator('dialog.close-sprint[open]')).toBeVisible();
+  }],
+  ['backlog-planning', async (p) => {
+    await openView(p, 'backlog');
+    await p.locator('#plan-scope').selectOption('backlog');
+    await p.locator('.row-select input').first().check();
+    await expect(p.locator('.plan-status')).not.toBeEmpty();
+  }],
+  ['settings-wip', async (p) => {
+    await openView(p, 'kanban');
+    await settingsButton(p).click();
+    await p.locator('#wip-in-progress').fill('0');
+    await p.locator('#wip-in-progress').press('Enter');
+    await expect(p.locator('#wip-in-progress')).toHaveAttribute('aria-invalid', 'true');
+  }],
+  ['velocity', async (p) => {
+    await openView(p, 'burndown');
+    await expect(p.locator('section.velocity table')).toBeVisible();
+  }],
+]; // prettier-ignore
+
+for (const lang of ['en', 'de']) {
+  for (const vp of [DESKTOP, { width: 320, height: 640 }]) {
+    test(`lot 4 screens (${lang}, ${vp.width}px, text spacing): targets, label in name, no clipping, no sideways scroll`, async ({
+      page,
+    }) => {
+      test.setTimeout(90_000);
+      await setTweaks(page, { lang });
+      await page.setViewportSize(vp);
+      const problems: string[] = [];
+      for (const [name, open] of LOT4) {
+        await open(page);
+        await page.addStyleTag({ content: SPACING });
+        // 1.4.10 is about 320 CSS px; at 1280 px the page behind a modal is not scrollable (body overflow: hidden).
+        const sideways = vp.width > 320 ? [] : await page.evaluate(() => {
+          const boxes = [document.documentElement, ...document.querySelectorAll('dialog[open]')];
+          return boxes.filter((b) => b.scrollWidth - b.clientWidth > 1).map((b) => b.className || b.tagName);
+        });
+        problems.push(...sideways.map((b) => `${name}: scrolls sideways (${b})`));
+        problems.push(...(await page.evaluate(SMALL_TARGETS)).map((s) => `${name}: small ${s}`));
+        const squeezed = await page.evaluate(() =>
+          [...document.querySelectorAll('input[type="radio"], input[type="checkbox"]')]
+            .map((el) => el.getBoundingClientRect())
+            .filter((r) => r.width && r.height && Math.abs(r.width - r.height) > 1)
+            .map((r) => `${Math.round(r.width)}x${Math.round(r.height)}`)
+        );
+        problems.push(...squeezed.map((s) => `${name}: squeezed radio/checkbox ${s}`));
+        problems.push(...(await page.evaluate(LABEL_NOT_IN_NAME)).map((s) => `${name}: name ${s}`));
+        problems.push(...(await page.evaluate(CLIPPED)).map((s) => `${name}: clipped ${s}`));
+        await page.goto('about:blank');
+      }
+      expect(problems).toEqual([]);
+    });
+  }
+}
+
+test('focus: in the detail, a move answered late leaves the focus where the user went meanwhile', async ({ page }) => {
+  await page.route('**/api/stories/*/status', async (route) => {
+    await new Promise((r) => setTimeout(r, 800)); // a slow server
+    await route.continue();
+  });
+  await page.goto(`/#/kanban?story=${US}`);
+  const dialog = page.locator('dialog.modal[open]');
+  await dialog.locator('#detail-move').selectOption('review');
+  await dialog.getByRole('button', { name: 'Move', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  const edit = dialog.getByRole('button', { name: 'Edit', exact: true });
+  await edit.focus(); // the user moves on before the answer
+  await expect(page.locator('.toast').first()).toBeVisible({ timeout: 5000 });
+  await page.waitForTimeout(200);
+  await expect(edit).toBeFocused();
+});

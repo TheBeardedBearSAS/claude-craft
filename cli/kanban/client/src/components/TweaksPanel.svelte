@@ -4,6 +4,7 @@
   import { SUPPORTED_LOCALES } from '../lib/i18n/translate.js';
   import { t, setLocale } from '../lib/i18n/index.svelte.js';
   import Icon from './Icon.svelte';
+  import WipSettings from './WipSettings.svelte';
 
   let dialog = $state(null);
   let triggerEl = $state(null);
@@ -109,6 +110,10 @@
         {/each}
       </select>
       <p class="tweaks-hint">{t('settings.language.hint')}</p>
+    </section>
+
+    <section class="tweaks-section" aria-labelledby="tw-wip">
+      <WipSettings />
     </section>
 
     <section class="tweaks-section" aria-labelledby="tw-keys">

@@ -131,6 +131,18 @@ describe('wipWarnings', () => {
     expect(wipWarnings(stories, { 'in-progress': 2 }, 'in-progress')).toEqual(['wip_exceeded']);
   });
 
+  it('counts the column as the board shows it: the stories of the active sprint only', () => {
+    const mixed = [
+      { status: 'in-progress', sprint_id: 'S1' },
+      { status: 'in-progress', sprint_id: 'S1' },
+      { status: 'in-progress', sprint_id: null },
+      { status: 'in-progress', sprint_id: 'S2' },
+    ];
+    expect(wipWarnings(mixed, { 'in-progress': 2 }, 'in-progress', 'S1')).toEqual([]);
+    expect(wipWarnings(mixed, { 'in-progress': 1 }, 'in-progress', 'S1')).toEqual(['wip_exceeded']);
+    expect(wipWarnings(mixed, { 'in-progress': 3 }, 'in-progress', null)).toEqual(['wip_exceeded']);
+  });
+
   it('does not warn at the limit', () => {
     expect(wipWarnings(stories, { 'in-progress': 3 }, 'in-progress')).toEqual([]);
   });

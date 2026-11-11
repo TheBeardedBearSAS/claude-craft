@@ -194,6 +194,19 @@ describe('PATCH /api/stories/:id', () => {
     expect(await rawYaml()).toBe(before);
   });
 
+  it('409 conflict also gives the story in the API format (with _rev), read again from disk', async () => {
+    const rev = revOf((await ssy()).stories['US-E1-01']);
+    // Another tool changed the entry; the board has not refreshed yet.
+    await writeFile(yamlFile(), (await rawYaml()).replace(/(\n {2}US-E1-01:\n {4}title: )[^\n]*/, '$1"Changed elsewhere"'));
+
+    const res = await patch('US-E1-01', { story_points: 5 }, { 'If-Match': rev });
+
+    expect(res.status).toBe(409);
+    expect(res.body.story).toMatchObject({ id: 'US-E1-01', title: 'Changed elsewhere' });
+    expect(res.body.story._rev).toBe(revOf((await ssy()).stories['US-E1-01']));
+    expect(res.body.story._rev).not.toBe(rev);
+  });
+
   it('409 conflict when the entry disappeared from the YAML meanwhile', async () => {
     const text = await rawYaml();
     await writeFile(yamlFile(), text.replace(/\n {2}US-E1-02:[\s\S]*$/, '\n'));
@@ -202,7 +215,7 @@ describe('PATCH /api/stories/:id', () => {
     const res = await patch('US-E1-01', { story_points: 1 });
 
     expect(res.status).toBe(409);
-    expect(res.body).toMatchObject({ error: 'conflict', reason: 'removed' });
+    expect(res.body).toMatchObject({ error: 'conflict', reason: 'removed', story: null });
   });
 
   it('404 for an unknown story and for an id that cannot be a story id', async () => {
@@ -797,31 +810,44 @@ describe('PATCH /api/stories/:id/tasks/:taskId', () => {
   describe('on the anonymized Wrandly project', () => {
     beforeEach(() => setup('wrandly-anon'));
 
-    it('sets the status of one task and recounts completed from the per-task statuses', async () => {
-      const res = await task('US-E4-03', FIRST, { status: 'done' });
+    // US-E4-03 only has a counter (3 of 5 done, no per-task status): the first change seeds the statuses from it,
+    // in the same mutation, so the counter is never reset and the "all tasks done" gate stays reachable.
+    it('seeds per-task statuses from the counter on the first change, then recounts', async () => {
+      const LAST = 'Tests backend (FAIT) + mobile + web flux réel post Phase 0';
+      const res = await task('US-E4-03', LAST, { status: 'done' });
 
       expect(res.status).toBe(200);
       expect(res.body.version).toMatch(/^[0-9a-f]{12}$/);
       const tasks = (await ssy()).stories['US-E4-03'].tasks;
-      expect(tasks.status).toEqual({ [FIRST]: 'done' });
-      expect(tasks.completed).toBe(1);
+      expect(Object.values(tasks.status)).toEqual(['done', 'done', 'done', 'to-do', 'done']);
+      expect(tasks.status[LAST]).toBe('done');
+      expect(tasks.completed).toBe(4);
       expect(tasks.total).toBe(5);
       expect(tasks.list).toHaveLength(5);
-      expect(res.body.story.tasks).toMatchObject({ completed: 1, total: 5 });
+      expect(res.body.story.tasks).toMatchObject({ completed: 4, total: 5 });
       expect(res.body.story._rev).toBe(revOf((await ssy()).stories['US-E4-03']));
       expect(events.at(-1)).toMatchObject({ event: 'story:updated', payload: { id: 'US-E4-03' } });
     });
 
     it('counts several done tasks and takes one back', async () => {
       const second = 'Backend : liaison compte si email existe déjà - FAIT S8';
-      await task('US-E4-03', FIRST, { status: 'done' });
-      await task('US-E4-03', second, { status: 'done' });
+      await task('US-E4-03', FIRST, { status: 'in-progress' });
       expect((await ssy()).stories['US-E4-03'].tasks.completed).toBe(2);
 
-      await task('US-E4-03', FIRST, { status: 'in-progress' });
+      await task('US-E4-03', second, { status: 'blocked' });
+      await task('US-E4-03', FIRST, { status: 'done' });
       const tasks = (await ssy()).stories['US-E4-03'].tasks;
-      expect(tasks.completed).toBe(1);
-      expect(tasks.status).toEqual({ [FIRST]: 'in-progress', [second]: 'done' });
+      expect(tasks.completed).toBe(2);
+      expect(tasks.status[FIRST]).toBe('done');
+      expect(tasks.status[second]).toBe('blocked');
+    });
+
+    it('every task of a counter-only story can be completed: in-progress -> review is then allowed', async () => {
+      const list = (await ssy()).stories['US-E4-03'].tasks.list;
+      for (const name of list.slice(3)) expect((await task('US-E4-03', name, { status: 'done' })).status).toBe(200);
+      expect((await ssy()).stories['US-E4-03'].tasks).toMatchObject({ completed: 5, total: 5 });
+      const moved = await call('PATCH', '/api/stories/US-E4-03/status', { body: { status: 'review' } });
+      expect(moved.status).toBe(200);
     });
 
     it('keeps the other fields of the entry and the YAML comments', async () => {
@@ -878,6 +904,66 @@ describe('PATCH /api/stories/:id/tasks/:taskId', () => {
   });
 });
 
+describe('POST /api/stories/:id/tasks', () => {
+  const add = (id, body, headers) => call('POST', `/api/stories/${id}/tasks`, { body, headers });
+
+  beforeEach(() => setup('wrandly-anon'));
+
+  it('adds a to-do task to a story without tasks: list, status and counters written', async () => {
+    const res = await add('US-E4-08', { title: '  Write the store listing  ' });
+    expect(res.status).toBe(201);
+    expect(res.body.version).toMatch(/^[0-9a-f]{12}$/);
+    const tasks = (await ssy()).stories['US-E4-08'].tasks;
+    expect(tasks).toEqual({ total: 1, completed: 0, list: ['Write the store listing'], status: { 'Write the store listing': 'to-do' } });
+    expect(res.body.story.tasks).toMatchObject({ total: 1, completed: 0 });
+    expect(res.body.story._rev).toBe(revOf((await ssy()).stories['US-E4-08']));
+    expect(events.at(-1)).toMatchObject({ event: 'story:updated', payload: { id: 'US-E4-08' } });
+    expect(await rawYaml()).toContain('# Sprints clôturés.');
+  });
+
+  it('adds a task to a counter-only story without losing the done count', async () => {
+    await add('US-E4-03', { title: 'Docs' });
+    const tasks = (await ssy()).stories['US-E4-03'].tasks;
+    expect(tasks).toMatchObject({ total: 6, completed: 3 });
+    expect(tasks.status.Docs).toBe('to-do');
+    expect(Object.values(tasks.status).filter((s) => s === 'done')).toHaveLength(3);
+  });
+
+  it('a story created on the board can reach review once its tasks are done', async () => {
+    const created = await call('POST', '/api/stories', { body: { title: 'Gate path', story_points: 3 } });
+    const id = created.body.story.id;
+    await add(id, { title: 'Only task' });
+    await call('PATCH', `/api/stories/${id}/tasks/${encodeURIComponent('Only task')}`, { body: { status: 'done' } });
+    for (const status of ['ready-for-dev', 'in-progress', 'review']) {
+      expect((await call('PATCH', `/api/stories/${id}/status`, { body: { status } })).status).toBe(200);
+    }
+  });
+
+  it('409 task_exists for a duplicate name, 400 for an empty or unknown field; nothing written', async () => {
+    await add('US-E4-08', { title: 'Same' });
+    const before = await rawYaml();
+    expect((await add('US-E4-08', { title: 'Same' })).body.error).toBe('task_exists');
+    expect((await add('US-E4-08', { title: '   ' })).body.error).toBe('invalid_payload');
+    expect((await add('US-E4-08', { title: 'x', status: 'done' })).body.error).toBe('invalid_payload');
+    expect(await rawYaml()).toBe(before);
+  });
+
+  it('409 archived / read_only_source, 404 unknown story, 409 conflict on a stale If-Match', async () => {
+    expect((await add('US-E0-01', { title: 'x' })).body.error).toBe('archived');
+    expect((await add('US-200', { title: 'x' })).body.error).toBe('read_only_source');
+    expect((await add('US-999', { title: 'x' })).status).toBe(404);
+    const stale = await add('US-E4-08', { title: 'x' }, { 'If-Match': 'deadbeef0000' });
+    expect(stale.status).toBe(409);
+    expect(stale.body.error).toBe('conflict');
+  });
+
+  it('403 readonly on a read-only server', async () => {
+    await rm(dir, { recursive: true, force: true });
+    await setup('wrandly-anon', { readonly: true });
+    expect((await add('US-E4-08', { title: 'x' })).status).toBe(403);
+  });
+});
+
 describe('PATCH /api/stories/:id/status — unchanged behavior', () => {
   beforeEach(() => setup('bmad-sprint-status'));
 
@@ -905,6 +991,17 @@ describe('PATCH /api/stories/:id/status — WIP limits', () => {
     expect(res.body.warnings).toEqual(['wip_exceeded']);
     expect(res.body.story.status).toBe('in-progress');
     expect((await ssy()).stories['US-E1-02'].status).toBe('in-progress');
+  });
+
+  it('counts only the stories shown on the board (active sprint), like the column header', async () => {
+    await limit(1);
+    const created = await call('POST', '/api/stories', { body: { title: 'Outside the sprint', story_points: 2 } });
+    const outside = created.body.story.id;
+    await move(outside, 'ready-for-dev');
+    expect((await move(outside, 'in-progress')).status).toBe(200);
+
+    const res = await move('US-E1-01', 'in-progress');
+    expect(res.body.warnings).toBeUndefined();
   });
 
   it('no warning within the limit, without a limit file, or for another column', async () => {

@@ -1,6 +1,6 @@
 <script>
   import { onDestroy, tick, untrack } from 'svelte';
-  import { store, patchStatus } from '../lib/store.svelte.js';
+  import { store } from '../lib/store.svelte.js';
   import { route, setQuery } from '../lib/router.svelte.js';
   import { health } from '../lib/health.svelte.js';
   import { tweaks } from '../lib/tweaks.svelte.js';
@@ -11,9 +11,10 @@
   import { filtersFromQuery } from '../lib/query.js';
   import { matchStory, sortStories } from '../lib/filter.js';
   import { sumPoints } from '../lib/points.js';
+  import { wipState } from '../lib/wip.js';
+  import { moveStory, openCreate, askBlockedReason } from '../lib/story-actions.svelte.js';
   import { STATUSES } from '../../../shared/transitions.js';
   import { STATUS, PRIORITY, TDD, codeColor, epicHue } from '../lib/config.js';
-  import PromptDialog from '../components/PromptDialog.svelte';
   import MoveMenu from '../components/MoveMenu.svelte';
   import KeyboardShortcuts from '../components/KeyboardShortcuts.svelte';
   import FilterBar from '../components/FilterBar.svelte';
@@ -27,7 +28,6 @@
   // La modale de détail (<StoryDetail>, montée dans App) s'ouvre via `?story=<id>` : ici on pose le paramètre.
   const COLUMNS = STATUSES.map((key) => ({ key, label: key })); // l'ordre des colonnes = l'ordre des statuts
 
-  let promptDialog = $state(null);
   let promptOpen = false;
   let nav = $state({ focusedColumnIndex: 0, focusedCardIndex: -1, showMoveMenu: false });
   let openMenuId = $state(null);
@@ -122,7 +122,7 @@
   async function askReason(id) {
     promptOpen = true;
     try {
-      return await promptDialog.prompt(t('board.blockedPrompt', { id }), { required: t('board.blockedRequired') });
+      return await askBlockedReason(id);
     } finally {
       promptOpen = false;
     }
@@ -130,24 +130,18 @@
 
   async function moveCard(story, target) {
     await closeMenu({ focusButton: false });
-    const body = { status: target };
-    if (target === 'blocked') {
-      const reason = await askReason(story.id);
-      if (!reason) {
-        await tick();
-        return focusMoveButton(story.id);
-      }
-      body.blocked_reason = reason;
-    }
     // The outcome is announced once, by the toast regions (success: status, failure: alert).
-    try {
-      await patchStatus(story.id, body);
-      snapshot = $state.snapshot(store.stories);
-    } catch {
-      /* failure toast already shown by the store */
+    const res = await moveStory(story, target, askReason);
+    if (res.cancelled) {
+      await tick();
+      return focusMoveButton(story.id);
     }
+    if (res.ok) snapshot = $state.snapshot(store.stories);
     await tick();
-    focusCard(story.id);
+    // The menu item that had the focus is gone: bring the focus back to the card, unless the user has already
+    // moved it elsewhere while the server answered (never take the focus away from where it now is, WCAG 2.4.3).
+    const lost = !document.activeElement || document.activeElement === document.body;
+    if (lost) focusCard(story.id);
   }
 
   const openCard = (story) => setQuery({ story: story.id });
@@ -276,6 +270,11 @@
 
 <div class="board-toolbar">
   <FilterBar stories={sprintStories} />
+  {#if !readonly}
+    <button type="button" class="btn btn-primary new-story" data-new-story onclick={() => openCreate()}>
+      <Icon name="plus" size={14} />{t('board.newStory')}
+    </button>
+  {/if}
   <details class="kbd-help">
     <summary>{t('board.keyboard.summary')}</summary>
     <KeyboardShortcuts />
@@ -308,6 +307,8 @@
       {@const list = storiesByStatus[col.key]}
       {@const total = totals[col.key].length}
       {@const drop = dropState(col.key)}
+      {@const limit = health.wipLimits?.[col.key]}
+      {@const wip = wipState(total, limit)}
       <section
         class="column"
         class:drop-target={dragOverCol === col.key}
@@ -319,12 +320,20 @@
         <header class="col-head">
           <i class="col-dot" style="background: {cv}; color: {cv}" aria-hidden="true"></i>
           <h2 class="col-title" id="col-{col.key}">{t(`status.${col.key}`)}</h2>
-          <span class="col-count mono">
-            <span aria-hidden="true">{hasFilters ? `${list.length}/${total}` : list.length}</span>
-            <span class="sr-only">{hasFilters ? t('board.column.filtered', { n: list.length, total }) : tn('board.column.count', list.length)}</span>
+          <span class="col-count mono" class:wip-at={wip === 'at'} class:wip-over={wip === 'over'}>
+            {#if wip === 'none'}
+              <span aria-hidden="true">{hasFilters ? `${list.length}/${total}` : list.length}</span>
+              <span class="sr-only">{hasFilters ? t('board.column.filtered', { n: list.length, total }) : tn('board.column.count', list.length)}</span>
+            {:else}
+              <span aria-hidden="true">{t('board.wip.count', { count: total, limit })}</span>
+              <span class="sr-only">{t('board.wip.summary', { count: total, limit })}{wip === 'ok' ? '' : `. ${t(`board.wip.${wip}`)}`}{hasFilters ? `. ${t('board.column.filtered', { n: list.length, total })}` : ''}</span>
+            {/if}
           </span>
           <span class="col-pts mono">{t('board.column.points', { n: sumPoints(list) })}</span>
         </header>
+        {#if wip === 'at' || wip === 'over'}
+          <p class="col-wip-note" class:wip-over={wip === 'over'} aria-hidden="true"><Icon name="warn" size={12} /> {t(`board.wip.${wip}`)}</p>
+        {/if}
         {#if drop}
           <p class="col-drop-note" aria-hidden="true">{drop === 'allowed' ? t('board.drop.here') : t('board.drop.denied')}</p>
         {/if}
@@ -401,8 +410,6 @@
     {/each}
   </div>
 {/if}
-
-<PromptDialog bind:this={promptDialog} />
 
 <!-- Région live du board : changements reçus en temps réel (les déplacements locaux passent par les toasts) -->
 <div role="status" aria-live="polite" aria-atomic="true" class="sr-only">{liveMessage}</div>

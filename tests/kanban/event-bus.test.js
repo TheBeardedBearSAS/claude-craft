@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { EventBus } from '../../cli/kanban/server/services/event-bus.js';
 
 describe('EventBus', () => {
@@ -29,8 +29,12 @@ describe('EventBus', () => {
     const ok = [];
     bus.subscribe(() => { throw new Error('boom'); });
     bus.subscribe((m) => ok.push(m));
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => bus.publish('x', {})).not.toThrow();
     expect(ok).toHaveLength(1);
+    // Isolated, not hidden (audit K-11): the failure is logged with the event name.
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('"x"'), expect.any(Error));
+    log.mockRestore();
   });
 
   it('clears all subscribers', () => {

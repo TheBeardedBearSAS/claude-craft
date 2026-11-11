@@ -189,6 +189,9 @@ export const StoryBodySchema = z
 /** PATCH /api/stories/:id/tasks/:taskId */
 export const TaskStatusPatchSchema = z.object({ status: z.enum(TASK_STATUSES) }).strict();
 
+/** POST /api/stories/:id/tasks : the task's name is its identifier in `tasks.list`. */
+export const TaskCreateSchema = z.object({ title: z.string().trim().min(1).max(200) }).strict();
+
 // --- sprints and settings ---------------------------------------------------
 
 /** One path segment: the id names a directory under project-management/sprints/. */

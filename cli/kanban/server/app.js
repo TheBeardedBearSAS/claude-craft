@@ -114,7 +114,7 @@ export function createApp({
             data: JSON.stringify(msg),
           })
           .catch(() => {
-            /* client disconnected */
+            // Rejected only once this client is gone; onAbort unsubscribes it. Nothing to report.
           });
       });
       stream.onAbort(() => unsubscribe());
