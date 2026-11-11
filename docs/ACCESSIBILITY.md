@@ -86,6 +86,8 @@ console.log(info('Analyzing project...'));
 
 The shortcuts are accelerators: every action is available through `Tab` and the native buttons. The same list is shown in the Settings panel.
 
+**Safari on macOS:** by default, `Tab` stops only on text fields and lists, not on buttons, links or checkboxes. Use `Option+Tab` (`Option+Shift+Tab` backwards), or turn on **Safari > Settings > Advanced > "Press Tab to highlight each item on a webpage"**, described by Apple as "Move around a webpage to highlight links and buttons without using the mouse" ([Advanced settings in Safari on Mac](https://support.apple.com/guide/safari/advanced-ibrw1075/mac)). The separate system setting **System Settings > Keyboard > Keyboard navigation** makes `Tab` reach every control of macOS's own windows ([Apple: Use your keyboard like a mouse](https://support.apple.com/guide/mac-help/use-your-keyboard-like-a-mouse-mchlp1399/mac)). This is how Safari works, not a limit of the board: the keyboard tests walk the interface with `Option+Tab` under WebKit on macOS and with `Tab` elsewhere.
+
 **Verification:**
 
 ```bash
@@ -95,7 +97,7 @@ bash website/tests/kanban/run.sh --project=mobile-safari  # phone + touch: mobil
 bash website/tests/kanban/run.sh a11y.spec.ts --project=webkit   # one spec under one engine
 ```
 
-The harness runs axe-core on every view and on the transient states (dialogs, menus, forms, settings), each at 1280×800 and at 320×256, plus keyboard, reflow and journey tests. The local Docker image installs the browsers of the Playwright version pinned in `website/package-lock.json`. In CI the job `kanban-e2e` runs one job per engine (chromium, firefox, webkit, touch) when Kanban files change, inside the official Playwright image of the same version, so no browser or system library is downloaded during the run. The previous `CC_A11Y_KANBAN` feature flag never had any effect and was removed.
+The harness runs axe-core on every view and on the transient states (dialogs, menus, forms, settings), each at 1280×800 and at 320×256, plus keyboard, reflow and journey tests. The local Docker image installs the browsers of the Playwright version pinned in `website/package-lock.json`. In CI the job `kanban-e2e` runs one job per engine (chromium, firefox, webkit, touch) when Kanban files change, inside the official Playwright image of the same version, so no browser or system library is downloaded during the run. A second job, `kanban-e2e-macos`, runs the `webkit` and `mobile-safari` projects on a macOS runner (Playwright's WebKit build for macOS, the closest engine to Safari that a CI can drive) and keeps the screenshots of `screenshots.spec.ts` as an artifact. The previous `CC_A11Y_KANBAN` feature flag never had any effect and was removed.
 
 **Browsers actually run (Playwright 1.65.0):**
 
@@ -106,6 +108,7 @@ The harness runs axe-core on every view and on the transient states (dialogs, me
 | `webkit` | WebKit, Playwright build r2388 (Linux) | every spec except `touch.spec.ts` |
 | `mobile-chrome` | Chromium, Pixel 7 emulation (412 px, touch, `isMobile`) | `touch.spec.ts` |
 | `mobile-safari` | WebKit, iPhone 15 emulation (393 px, touch, `isMobile`) | `touch.spec.ts` |
+| `webkit`, `mobile-safari` on macOS | Playwright's WebKit build for macOS (user agent of Safari 27.2), CI job `kanban-e2e-macos` | the same specs as on Linux |
 
 Firefox has no `isMobile` mode in Playwright, so there is no mobile Firefox project.
 
@@ -121,6 +124,14 @@ Firefox has no `isMobile` mode in Playwright, so there is no mobile Firefox proj
 - Every engine (rare timing, found by replaying the French journey 60 times): the server's order of the stories changes with its writes, so a real-time reload could reorder a column; the card's element was moved and the browser dropped the focus it held, so the next `Enter` went to the page. The focused element now gets the focus back after such a reorder.
 - Test assumptions corrected, not product defects: Firefox paints an input's text over its padding (the placeholder check measured the content box), and WebKit keeps `:hover` on an element under a newly opened modal while the pointer stays still, so contrast and size checks now wait for animations and transitions to end.
 
+**Found under WebKit on macOS** (the native controls and the focus are drawn and handled by the system there, unlike under Linux):
+
+- Every drop-down list (`<select>`: filters, target sprint and scope of the backlog, "Move to" and task statuses of the detail, story form, language) was 22 or 23 px high: WebKit on macOS draws the native control at the system height and ignores `padding` and `min-height` (WCAG 2.5.8). One rule in `app.css` now draws every list (no native appearance, arrow in CSS, 32 px); under forced colours the native control comes back, since the drawn arrow would be removed with the other background images.
+- A click on a button does not focus it: the focus goes to its nearest focusable ancestor (`<main>` or the open dialog). The dialogs recorded that container as the control that opened them, and the focus did not come back to the button after closing the story creation, sprint, settings or detail dialog, after saving a story edit, or after cancelling a task deletion (WCAG 2.4.3). The control just clicked is now taken as the opener, and a focus that rests on a container counts as lost. `safari-clicks.spec.ts` reproduces this click under every engine.
+- The touch tests (`mobile-safari`, iPhone emulation) failed only on the list height and pass on macOS since.
+- Not a defect: `Tab` skips buttons and links in Safari's default settings (see **Safari on macOS** above); the keyboard tests use `Option+Tab` there.
+- Checked on the captures, nothing to fix: the drawn arrow of the lists, the date fields (native, with Safari's greyed date segments when empty), the number field, the text areas, the dialogs (centred, backdrop, initial focus), the fonts (self-hosted), and no content hidden under a scroll bar. `-webkit-backdrop-filter` is added by the build. Not specific to macOS (same under Linux): at 1280 px the settings button of the top bar wraps to a second line on the Backlog and Dependencies views.
+
 **Found in forced colours** (fixed in one commented `@media (forced-colors: active)` block of `views.css`, plus a few lines in the components whose styles are scoped; the normal rendering is unchanged): the current page, document and sprint, the pressed filters, the selected settings and the four accent swatches looked like the others (only a background marked them); "Clear filters" looked available when it was not; a field in error in the WIP, sprint and blocked-reason forms looked valid (only its border colour changed); the WIP counter lost its frame and the drop target its highlight; every progress bar looked empty and the epic rings were pink on white; the colour legend of the board lost its swatches and the cards their colour bar; the charts were drawn with the dark theme's colours, so on the light palette their labels and lines fell to about 2:1 and the actual series to about 1.2:1, and on the dark palette the graph edges to 2.5:1; the legend no longer told the actual and delivered series from the others; two icons kept their author colour (Chromium keeps it on SVG). A chart drawn before high contrast was switched on kept its colours: the charts and the graph are now redrawn when the system palette changes. Focus outlines, control borders, disabled native buttons, the refused drop, the blocked card, the Live status and the toasts already held.
 
 **Conformance status (Kanban):** the target is WCAG 2.2 Level AA and RGAA 4.1. The checks above were run with axe-core, keyboard, touch and accessibility-tree tests and code review, under the three engines listed. This is not a statement of full conformance.
@@ -128,9 +139,9 @@ Firefox has no `isMobile` mode in Playwright, so there is no mobile Firefox proj
 **Not verified:**
 
 - Real screen readers (NVDA, JAWS, VoiceOver, TalkBack). The accessibility-tree tests read the tree Playwright computes from the page (same algorithm in every engine), not the platform accessibility API, and not what a screen reader says.
-- Real Safari: Playwright's WebKit on Linux is not Safari on macOS or iOS (different text rendering, no system settings such as "Press Tab to highlight each item", no VoiceOver).
+- Real Safari: the CI runs Playwright's WebKit on macOS, which shares Safari's engine and macOS's native controls but is not the Safari application (no Safari settings or extensions, no VoiceOver, no real user profile). Safari on iOS and iPadOS is not run at all: `mobile-safari` is an iPhone viewport emulated in desktop WebKit.
 - Real touch devices: the phone projects are emulations (viewport, touch events, `isMobile`); there is no real on-screen keyboard, pinch gesture, or iOS/Android text scaling.
-- Firefox and Safari on Windows or macOS (the engines run on Linux only), and Edge.
+- Firefox and Chromium on Windows or macOS (they run on Linux only), and Edge.
 - Windows forced-colors (high contrast) mode on a real Windows machine and in Edge: it is checked by Playwright's emulation only (Chromium and Firefox, see above), not with real Windows contrast themes.
 
 **Known limitations:**
@@ -145,7 +156,7 @@ Firefox has no `isMobile` mode in Playwright, so there is no mobile Firefox proj
 
 ### Kanban web interface
 
-See [Kanban Web Interface](#kanban-web-interface): no real screen reader test, Playwright's Chromium, Firefox and WebKit builds on Linux plus phone emulation only (no real Safari, no real touch device), forced-colors mode checked by emulation only (no real Windows), graph node panel opened with a pointer only.
+See [Kanban Web Interface](#kanban-web-interface): no real screen reader test, Playwright's Chromium, Firefox and WebKit builds on Linux, WebKit on macOS, plus phone emulation only (no Safari application, no iOS, no real touch device), forced-colors mode checked by emulation only (no real Windows), graph node panel opened with a pointer only.
 
 ### Other tools
 

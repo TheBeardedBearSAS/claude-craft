@@ -26,7 +26,7 @@ export async function openView(page: Page, name: string) {
 
 /**
  * The key that moves the focus to the next control, as a user of the engine presses it. Safari on macOS stops Tab
- * on text fields and pop-up menus only, unless its setting "Press Tab to highlight each item on a webpage" is on;
+ * on text fields and lists only, unless its setting "Press Tab to highlight each item on a webpage" is on;
  * Option+Tab reaches every control (buttons, links, checkboxes). Playwright's WebKit on macOS keeps that default.
  * Every keyboard walk of the specs goes through this key, so a control out of Option+Tab's reach still fails.
  */
