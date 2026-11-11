@@ -295,7 +295,7 @@ jobs:
 
       # KANBAN_SCREENSHOTS=1: screenshots.spec.ts captures every view, form and native control as macOS draws them.
       - name: Run Kanban browser tests
-        run: cd website && npm run test:kanban -- --project=webkit zz-mac-probe crud.spec.ts unsaved.spec.ts a11y-tree.spec.ts a11y-review.spec.ts
+        run: cd website && npm run test:kanban -- --project=webkit --project=mobile-safari
         env:
           KANBAN_SCREENSHOTS: '1'
 
