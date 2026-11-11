@@ -22,7 +22,7 @@ Verify Python conventions compliance:
 - [ ] Spaces: around operators, after commas
 - [ ] Docstrings: present for modules, classes, public functions
 
-**Command**: Run `docker run --rm -v $(pwd):/app python:3.11 python -m flake8 /app --max-line-length=88`
+**Command**: Run `docker run --rm -v $(pwd):/app python:3.15 python -m flake8 /app --max-line-length=88`
 
 **Reference**: `rules/03-coding-standards.md` section "PEP 8 Compliance"
 
@@ -35,7 +35,7 @@ Check static typing usage:
 - [ ] Use of `typing` for complex types (Optional, Union, List, Dict)
 - [ ] No MyPy errors in strict mode
 
-**Command**: Run `docker run --rm -v $(pwd):/app python:3.11 python -m mypy /app --strict`
+**Command**: Run `docker run --rm -v $(pwd):/app python:3.15 python -m mypy /app --strict`
 
 **Reference**: `rules/03-coding-standards.md` section "Type Hints"
 
@@ -48,7 +48,7 @@ Analyze code with Ruff (replaces Flake8, isort, pydocstyle):
 - [ ] Acceptable cyclomatic complexity (<10)
 - [ ] Security rules respected (S-rules)
 
-**Command**: Run `docker run --rm -v $(pwd):/app python:3.11 pip install ruff && ruff check /app`
+**Command**: Run `docker run --rm -v $(pwd):/app python:3.15 pip install ruff && ruff check /app`
 
 **Reference**: `rules/06-tooling.md` section "Linting and Formatting"
 
@@ -60,7 +60,7 @@ Verify formatting consistency:
 - [ ] No differences after `black --check`
 - [ ] Consistent line length (88 characters)
 
-**Command**: Run `docker run --rm -v $(pwd):/app python:3.11 pip install black && black --check /app`
+**Command**: Run `docker run --rm -v $(pwd):/app python:3.15 pip install black && black --check /app`
 
 **Reference**: `rules/06-tooling.md` section "Code Formatting"
 

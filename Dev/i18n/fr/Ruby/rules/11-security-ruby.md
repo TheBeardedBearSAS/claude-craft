@@ -243,7 +243,7 @@ digest = hasher.create(password)
 Argon2::Password.verify_password(password, digest)
 ```
 
-Suivre NIST SP 800-63B-4 : 12 caractères minimum, aucune règle de complexité obligatoire, aucune rotation périodique, autoriser tous les caractères imprimables, vérifier par rapport aux listes de mots de passe compromis.
+Suivre NIST SP 800-63B-4 : 15 caractères minimum (facteur unique ; 8 avec MFA), aucune règle de complexité obligatoire, aucune rotation périodique, autoriser tous les caractères imprimables, vérifier par rapport aux listes de mots de passe compromis.
 
 Utiliser `User.authenticate_by(email_address:, password:)` (résistant aux attaques temporelles) plutôt que `find_by` suivi de `authenticate`.
 
@@ -533,6 +533,18 @@ end
 - Ne jamais utiliser les noms de fichiers fournis par l'utilisateur pour les chemins de stockage
 - Scanner les fichiers à la recherche de malwares lorsque des téléversements viennent d'utilisateurs non fiables
 - Garder à jour le traitement des variantes d'Active Storage (libvips)
+
+### Niveau de correctif de sécurité Rails (8.1.4.1, 2026-11-04)
+
+Exiger Rails 8.1.4.1 ou supérieur (`gem "rails", "~> 8.1.4", ">= 8.1.4.1"`) : cette version corrige de nombreux avis GHSA dans Active Support, Action View, Action Pack, Active Storage et Action Mailbox. Changements de comportement à vérifier lors de la mise à jour :
+- `cookies_same_site_protection` s'applique désormais à tous les session stores, pas seulement à `CookieStore`
+- rails-html-sanitizer 1.7.2 ou supérieur est requis ; `strip_tags` et `highlight` produisent désormais `&quot;` et `&#39;` pour les guillemets
+- Des adresses client `Forwarded` et `X-Forwarded-For` contradictoires lèvent `IpSpoofAttackError` quand la détection d'usurpation est active : revoir la chaîne de proxys
+- Active Storage fournit une politique ImageMagick (mini_magick 5.1 ou supérieur) ; les applications qui rendent du PostScript ou du PDF doivent réautoriser le delegate `gs` et les coders nécessaires dans leur propre `policy.xml`
+- ffmpeg et ffprobe sont limités aux formats audio et vidéo courants (extensible via `config.active_storage.ffmpeg_allowed_formats`) ; les uploads directs GCS exigent `x-goog-content-length-range` dans le `responseHeader` CORS du bucket
+- Un `SafeBuffer` non sûr sérialisé en MessagePack n'est plus lisible par les anciennes versions de Rails : mettre à jour toutes les instances partageant un cache avant le déploiement
+
+Source : https://github.com/rails/rails/releases/tag/v8.1.4.1
 
 ---
 

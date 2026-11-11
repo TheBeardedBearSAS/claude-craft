@@ -1,6 +1,6 @@
 # Vue.js 3.6 — Vapor Mode (beta)
 
-> **Status :** **Vue 3.6.0-rc.11** (10 octobre 2026) — Vapor Mode est **feature-complete** depuis 3.6.0-rc.1 (phase RC) mais reste marqué **unstable** pour la production. Stable 3.6.0 pas encore publiée. Production-grade Vue 3 reste sur 3.5+ Virtual DOM. **Breaking (rc.2) :** les listeners DOM Vapor sont attachés directement aux éléments par défaut (option `compilerOptions.eventDelegation` supprimée ; ajouter `.delegate` sur un listener pour conserver la délégation). Suivre la progression : [github.com/vuejs/core/releases](https://github.com/vuejs/core/releases).
+> **Status :** **Vue 3.6.0-rc.14** (30 octobre 2026) — Vapor Mode est **feature-complete** depuis 3.6.0-rc.1 (phase RC) mais reste marqué **unstable** pour la production. Stable 3.6.0 pas encore publiée. Production-grade Vue 3 reste sur 3.5+ Virtual DOM. **Breaking (rc.2) :** les listeners DOM Vapor sont attachés directement aux éléments par défaut (option `compilerOptions.eventDelegation` supprimée ; ajouter `.delegate` sur un listener pour conserver la délégation). Suivre la progression : [github.com/vuejs/core/releases](https://github.com/vuejs/core/releases).
 
 ## Pourquoi Vapor Mode ?
 
@@ -63,12 +63,14 @@ const items = ref<Item[]>([]);
 const total = computed(() => items.value.reduce((n, i) => n + i.qty, 0));
 ```
 
-## Limitations signalées en beta (à revérifier en RC, 3.6.0-rc.11)
+## Limitations historiques (beta) — à revérifier sur votre version de RC (3.6.0-rc.14)
 
-- **Pas de transitions** Vue (`<Transition>`, `<TransitionGroup>`) dans un composant Vapor → utiliser CSS pur ou GSAP.
-- **Pas de `<KeepAlive>`** : le runtime Vapor ne sait pas mettre en cache un sous-tree (suivi WG-1432).
-- **DevTools** : support partiel — l'inspecteur de composants fonctionne, l'inspecteur de réactivité (timeline) pas encore.
-- **SSR** : pas encore stable. Vue 3.6 Vapor ciblé SPA d'abord, SSR prévu Vue 3.7.
+> Source officielle : la note de version 3.6.0-beta.1 (github.com/vuejs/core/releases/tag/v3.6.0-beta.1) déclare Vapor « feature-complete » avec parité avec toutes les fonctionnalités stables du mode Virtual DOM, mais « toujours considéré comme instable » ; seule exception documentée : `Suspense` n'est pas supporté en mode Vapor seul (utilisable via un `Suspense` VDOM). Aucune annonce officielle de stabilité n'existe pour Transition, KeepAlive ou SSR : seuls les correctifs du CHANGELOG de la branche `minor` l'attestent. Le CHANGELOG des RC 12-14 montre que `<Transition>`, `<TransitionGroup>`, `<KeepAlive>`, l'hydratation SSR Vapor et des hooks devtools reçoivent des correctifs et ajouts (source : github.com/vuejs/core, branche `minor`, CHANGELOG.md). Les limitations ci-dessous, issues de la beta, ne sont donc plus garanties : les tester avant d'écarter ou d'adopter Vapor.
+
+- **Transitions** (`<Transition>`, `<TransitionGroup>`) : support Vapor en cours de stabilisation (correctifs jusqu'à rc.14) ; si le comportement diverge, utiliser CSS pur ou GSAP.
+- **`<KeepAlive>`** : support Vapor en cours de stabilisation (correctifs jusqu'à rc.14) ; tester la désactivation/réactivation avant usage.
+- **DevTools** : support partiel à l'origine ; des hooks devtools pour composants Vapor sont ajoutés en rc.14.
+- **SSR** : l'hydratation Vapor est en cours de correction (rc.11-14) ; statut stable non confirmé par une source officielle. L'ancienne mention « SSR prévu en 3.7 » n'est pas vérifiée.
 - **Bibliothèques tierces** : Pinia 3+ (4 actuel) et Vue Router 5 supportent Vapor. **Pinia 2 et Vue Router 4 ne supportent pas Vapor** → migration préalable obligatoire.
 
 ## Quand utiliser Vapor
@@ -76,28 +78,28 @@ const total = computed(() => items.value.reduce((n, i) => n + i.qty, 0));
 | Cas d'usage | Vapor pertinent ? |
 |------------|-------------------|
 | SPA performance-critique (dashboards temps réel, éditeurs) | ✅ Mesurer en POC |
-| App SSR / SEO | ❌ Attendre 3.7 |
-| Composants animés lourds (transitions Vue) | ❌ Limitations |
+| App SSR / SEO | ⚠️ Attendre la stabilisation de l'hydratation Vapor |
+| Composants animés lourds (transitions Vue) | ⚠️ Tester Transition/KeepAlive en POC |
 | Mobile WebView (poids JS critique) | ✅ Si bibliothèques compatibles |
-| App enterprise existante 3.5 | ❌ Ne pas migrer en bloc, attendre Vapor 1.0 stable (Vue 3.7) |
+| App enterprise existante 3.5 | ❌ Ne pas migrer en bloc, attendre la 3.6 stable |
 
 ## Migration progressive (recommandée)
 
 1. **Upgrade Vue 3.5 → 3.6** : pas de breaking change si vous n'activez pas Vapor.
 2. **Identifier les composants "hot"** via Vue DevTools > Performance. Cibler ceux avec re-renders fréquents.
 3. **Activer `<script setup vapor>`** un composant à la fois.
-4. **Tests de non-régression** : Vitest 4 + Vue Test Utils 3 supportent Vapor.
+4. **Tests de non-régression** : Vitest 5 + Vue Test Utils 2.x (2.5.1) : aucune source officielle (releases `vuejs/test-utils` jusqu'à 2.5.1, documentation) ne mentionne le support de Vapor, et la 2.5.1 est développée et testée contre Vue 3.5 (`devDependencies` : `vue 3.5.44`) : considérer Vapor comme non supporté officiellement par Vue Test Utils et tester sur votre version avant adoption. Vitest 5.1.0 déclare `vite` `^6.4.0 || ^7.0.0 || ^8.0.0` en `peerDependencies` (registry.npmjs.org/vitest/latest), donc compatible Vite 8.
 5. **Mesurer** : Lighthouse + Memory profiler avant/après. Sans gain mesurable, repasser en VDOM.
 
 ## Checklist Vapor production-ready
 
 - [ ] Vue 3.6+ installé, Pinia 4 (3+ minimum), Vue Router 5+
 - [ ] Composant cible identifié via profiling (pas par "bonne pratique")
-- [ ] Pas de `<Transition>` / `<KeepAlive>` dans l'arbre Vapor
-- [ ] Tests Vitest 4 verts avec Vapor compiler
+- [ ] `<Transition>` / `<KeepAlive>` testés dans l'arbre Vapor (support en cours de stabilisation)
+- [ ] Tests Vitest 5 verts avec Vapor compiler
 - [ ] Lighthouse / Memory profiler mesurés avant/après
 - [ ] Pas de mode mixte permanent (`<VaporInterop>` uniquement transitoire)
-- [ ] Veille suivie sur RFC Vue 3.7 SSR Vapor (avant migration SSR)
+- [ ] Veille suivie sur la stabilisation de l'hydratation SSR Vapor (avant migration SSR)
 
 ## Ressources
 

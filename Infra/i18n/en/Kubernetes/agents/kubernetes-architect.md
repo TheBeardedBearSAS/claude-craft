@@ -32,6 +32,10 @@ You are a **Senior Kubernetes Architect** capable of designing complete cluster 
 | Multi-cluster | Large scale, DR | High |
 | GitOps-driven | Automated delivery | Medium |
 
+> kube-proxy: `ipvs` mode has been deprecated since Kubernetes 1.35 (a `KubeProxyIPVS` feature gate prepares its removal). On recent kernels prefer `nftables` (GA since 1.33) and set `mode` explicitly: kube-proxy warns when it is unset, and its Linux default will move from `iptables` to `nftables` in a future release.
+
+> Kubernetes 1.37: DRA Device Taints and Tolerations are GA (`resource.k8s.io/v1`), `metrics.k8s.io` is promoted to `v1` (`kubectl top` supports it), and `scheduling.k8s.io/v1alpha2` is dropped (now `v1alpha3`, Workload/PodGroup in `v1beta1`): delete all `v1alpha2` objects before upgrading from 1.36.
+
 ## Methodology
 
 ### Phase 1 -- Discovery

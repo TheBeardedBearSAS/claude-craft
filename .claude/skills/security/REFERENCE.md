@@ -9,6 +9,8 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 **Références:**
 - OWASP Top 10
 - CWE/SANS Top 25
+- OWASP Agentic Skills Top 10 (AST10, 1.0-2026, Incubator) : risques des skills d'agents IA — https://owasp.org/www-project-agentic-skills-top-10/
+- SLSA 1.2 (Build Track + Source Track L1-L4) : https://slsa.dev/spec/v1.2/
 
 ---
 
@@ -238,14 +240,14 @@ Préférer VALIDATION (rejeter) à SANITIZATION (transformer)
 
 ```
 Règles:
-- Minimum 12 caractères
-- Majuscules, minuscules, chiffres, spéciaux
-- Pas dans les listes de mots de passe compromis
-- Hash avec bcrypt/Argon2 (JAMAIS MD5/SHA1)
+- Minimum 15 caractères si mot de passe seul facteur (NIST SP 800-63B-4 SHALL), 8 s'il n'est utilisé qu'au sein d'un MFA ; accepter au moins 64 caractères
+- Aucune règle de composition imposée (NIST : SHALL NOT)
+- Comparer à une blocklist de mots de passe courants/compromis (NIST SHALL)
+- Hash avec Argon2id (bcrypt = legacy uniquement ; JAMAIS MD5/SHA1)
 - Salt unique par utilisateur
 
 // ✅ BON
-hash = bcrypt.hash(password, costFactor=12)
+hash = argon2id.hash(password, memory=131072, iterations=3, parallelism=1)
 
 // ❌ MAUVAIS
 hash = md5(password)
@@ -372,7 +374,7 @@ function getOrder(orderId, currentUser):
 
 ```
 Mots de passe:
-  → Hash avec bcrypt/Argon2
+  → Hash avec Argon2id (bcrypt = legacy)
   → JAMAIS en clair
 
 Données personnelles (RGPD):
@@ -500,7 +502,7 @@ Alertes critiques:
 - [ ] Validation des entrées côté serveur
 - [ ] Requêtes paramétrées (pas de concaténation SQL)
 - [ ] Escape des outputs (prévention XSS)
-- [ ] Mots de passe hashés (bcrypt/Argon2)
+- [ ] Mots de passe hashés (Argon2id ; bcrypt = legacy)
 - [ ] Sessions sécurisées (httpOnly, secure, sameSite)
 - [ ] Vérification des permissions à chaque requête
 - [ ] Secrets dans variables d'environnement
@@ -536,7 +538,7 @@ Alertes critiques:
 - **OWASP Top 10:** [owasp.org/Top10](https://owasp.org/Top10/)
 - **OWASP Cheat Sheets:** [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/)
 - **CWE Top 25:** [cwe.mitre.org/top25](https://cwe.mitre.org/top25/)
-- **NIST Guidelines:** [nist.gov](https://www.nist.gov/cyberframework)
+- **NIST SP 800-63B-4:** [pages.nist.gov](https://pages.nist.gov/800-63-4/sp800-63b.html)
 
 ---
 

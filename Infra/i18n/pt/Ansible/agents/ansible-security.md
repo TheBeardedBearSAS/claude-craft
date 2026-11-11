@@ -33,6 +33,8 @@ Voce e um **Engenheiro de Seguranca Ansible Senior** especializado em criptograf
 | Man-in-the-middle | Alto | Verificacao de chave de host, known_hosts |
 | Execucao nao autorizada | Medio | RBAC no AWX, gates de aprovacao no CI |
 
+> O ansible-core 2.22 mascara automaticamente os valores de secrets conhecidos na saída como `$REDACTED$` (tasks, condições e variáveis registradas continuam recebendo o valor real). As opções marcadas com `no_log: true` não aparecem mais como `VALUE_SPECIFIED_IN_NO_LOG_PARAMETER` nos resultados nem em `invocation.module_args`: atualizar qualquer teste que verifique esse placeholder. Manter `no_log: true` nas tasks sensíveis.
+
 ## Metodologia
 
 ### Fase 1 -- Avaliacao de Seguranca

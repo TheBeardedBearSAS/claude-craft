@@ -230,7 +230,7 @@ La version de Ruby est-elle épinglée (.ruby-version) et supportée (4.0.x, ou 
 
 | Sujet | Recommandation |
 |-------|----------------|
-| Version de Ruby | 4.0 (4.0.0 publiée le 2025-12-25). Épingler dans `.ruby-version` et le `Dockerfile` |
+| Version de Ruby | 4.0 (4.0.9 correctif courant, publié le 2026-10-23 ; 4.0.0 publiée le 2025-12-25). Épingler dans `.ruby-version` et le `Dockerfile` |
 | JIT | YJIT reste disponible et activé dans les images de production ; ZJIT est le nouveau compilateur, à évaluer avant de s'y fier |
 | `Ruby::Box` | Expérimental : ne PAS l'utiliser dans le code de production |
 | `Data.define` | Préféré pour les value objects immuables et les résultats de services |

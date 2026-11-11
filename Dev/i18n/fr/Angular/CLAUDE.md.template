@@ -37,7 +37,8 @@ Voir `rules/02-architecture.md` pour les patterns.
 |-------|-------------|
 | Standalone | Tous composants standalone (pas NgModules) |
 | Signals | Utiliser Signals pour state reactif |
-| OnPush | `ChangeDetectionStrategy.OnPush` partout |
+| OnPush | Défaut depuis Angular 22.0.0 (omettre `changeDetection` ; `ChangeDetectionStrategy.Eager` uniquement pour désactiver) |
+| Inputs/outputs | `input()`, `output()`, `model()` au lieu de `@Input`/`@Output`/`EventEmitter` ; pas de `standalone: true` (défaut) |
 | Modern flow | @if, @for, @switch (pas *ngIf, *ngFor) |
 | Coverage 80%+ | Tests obligatoires |
 
@@ -60,7 +61,7 @@ ng e2e                 # Tests E2E
 
 ### Generation de code
 ```bash
-ng generate component features/{{feature}}/components/{{name}} --standalone
+ng generate component features/{{feature}}/components/{{name}}
 ng generate service features/{{feature}}/services/{{name}}
 ```
 

@@ -1,11 +1,11 @@
 ---
 name: security-reactnative
-description: Security - React Native 0.87 Best Practices. Use when reviewing security, implementing auth, or hardening code.
+description: Security - React Native 0.88 Best Practices. Use when reviewing security, implementing auth, or hardening code.
 ---
 
-# Security - React Native 0.87 Best Practices
+# Security - React Native 0.88 Best Practices
 
-Ce skill fournit les bonnes pratiques de sécurité pour React Native 0.87 avec la New Architecture.
+Ce skill fournit les bonnes pratiques de sécurité pour React Native 0.88 avec la New Architecture.
 
 ## Principes clés
 

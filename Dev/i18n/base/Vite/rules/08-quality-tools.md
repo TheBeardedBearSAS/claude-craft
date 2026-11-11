@@ -208,7 +208,7 @@ export default defineConfig({
 })
 ```
 
-> **Vite 8 / Rolldown (default):** the object form of `manualChunks` is **removed**. Use `build.rolldownOptions.output.codeSplitting.groups`.
+> **Vite 8 / Rolldown (default):** the object form of `manualChunks` is **removed**; the function form is deprecated. Use `build.rolldownOptions.output.codeSplitting.groups`.
 > **Legacy Rollup mode (Rolldown explicitly disabled):** use `build.rollupOptions.output.manualChunks` instead — `// Only if Rolldown is explicitly disabled`.
 
 ## Dependency Audit

@@ -1,5 +1,9 @@
 # Outils de Développement PHP
 
+> **Niveau de correctif :** viser PHP ≥ 8.5.12 (22 oct. 2026), qui inclut des correctifs de sécurité (Core GHSA-w8hw-w9fx-j79w et GHSA-6wmf-4rv5-p3rp, Lexbor, Opcache, SOAP, etc.). Source : https://www.php.net/ChangeLog-8.php#8.5.12
+
+> **PHP 8.6 (à surveiller) :** 8.6.0 est en RC5 (non stable, absente des versions supportées) ; continuer à viser 8.5.x. Source : https://www.php.net/supported-versions.php
+
 ## Composer - Gestion des Dépendances
 
 ### Commandes Essentielles
@@ -51,9 +55,9 @@ composer validate
         "psr/container": "^2.0"
     },
     "require-dev": {
-        "phpstan/phpstan": "^2.0",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "rector/rector": "^2.4",
+        "phpstan/phpstan": "^2.3",
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "rector/rector": "^2.8",
         "pestphp/pest": "^5.3"
     },
     "autoload": {

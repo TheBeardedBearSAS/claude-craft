@@ -61,7 +61,7 @@ const TECH_REGISTRY = {
     namespace: 'reactnative',
     i18nDir: 'ReactNative',
     installScript: 'install-reactnative-rules.sh',
-    version: '0.87',
+    version: '0.88',
     tier: 2,
   },
   angular: {
@@ -121,7 +121,7 @@ const TECH_REGISTRY = {
     namespace: 'vercel',
     i18nDir: 'Vercel',
     installScript: 'install-vercel-rules.sh',
-    version: '63.1.2',
+    version: '65.14.0',
     tier: 3,
   },
   tauri: {
@@ -195,7 +195,7 @@ const TECH_REGISTRY = {
     namespace: 'paperclip',
     i18nDir: 'Paperclip',
     installScript: 'install-paperclip-rules.sh',
-    version: '2026.1012.0',
+    version: '2026.1106.0',
     tier: 2,
   },
   docker: {
@@ -205,7 +205,7 @@ const TECH_REGISTRY = {
     namespace: 'docker',
     i18nDir: 'Docker',
     installScript: 'install-docker-rules.sh',
-    version: '29.9.0',
+    version: '29.9.3',
     tier: null,
   },
   coolify: {
@@ -215,7 +215,7 @@ const TECH_REGISTRY = {
     namespace: 'coolify',
     i18nDir: 'Coolify',
     installScript: 'install-coolify-rules.sh',
-    version: '4.4.6',
+    version: '4.7.5',
     tier: null,
   },
 };

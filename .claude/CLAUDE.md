@@ -14,11 +14,11 @@ A comprehensive AI-assisted development framework for Claude Code with 17 techno
 | **Symfony / PHP** | 8.1 / PHP 8.4+ | Clean Architecture | DDD, Hexagonal, API Platform, HTTP-less apps, JsonStreamer |
 | **Flutter / Dart** | 3.47 / Dart 3.13 | Clean Architecture | BLoC v9, Riverpod 3, Material 3, Impeller |
 | **React** | 19.3 + Compiler 1.0 | Feature-based | Hooks, Zustand, React Query, Server Components |
-| **React Native** | 0.87 (New Architecture) — Expo SDK 57 | Feature-based | Navigation 7, Reanimated 4, TurboModules |
+| **React Native** | 0.88 (New Architecture) — Expo SDK 58 | Feature-based | Navigation 7, Reanimated 4, TurboModules |
 | **Angular** | 22 | Domain-driven | Signals, Signal Forms (stable), Zoneless par défaut, OnPush défaut, httpResource (TS 6) |
 | **Vue.js** | 3.5+ (3.6 RC Vapor) | Composition API | Pinia 4, Vue Router 5, Vite 8, Vitest, Alien Signals |
 | **Vite** _(community, framework-agnostic)_ | 8.3 | Vanilla / Library / Multi-page | `build.lib`, `vite-plugin-dts`, `input` multi-page, Workers/WASM |
-| **Vercel** _(community, deployment platform)_ | 63.1.2 | Platform config (framework-agnostic) | `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage |
+| **Vercel** _(community, deployment platform)_ | 65.14.0 | Platform config (framework-agnostic) | `vercel.json`, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage |
 | **Tauri** _(community, desktop & mobile)_ | 2.12 | Rust core + web frontend (framework-agnostic) | Commands/IPC, capabilities & permissions, CSP, Isolation, plugins, signed updater, iOS/Android |
 | **WordPress** _(community, plugins & block themes)_ | 7.1 / PHP 7.4+ (8.3+ recommandé) | Plugin/theme + hooks | block.json, theme.json, REST API, WP-CLI, WPCS, PHPStan, wp-env ; WooCommerce 11.2 via skill optionnel |
 | **Laravel** | 13.x / PHP 8.3+ (8.5 recommandé) | Clean Architecture | Actions, Pest 4/5 (Pest 5 : PHP 8.4+), Sanctum, AI SDK, Passkey |
@@ -26,7 +26,7 @@ A comprehensive AI-assisted development framework for Claude Code with 17 techno
 | **PHP** | 8.5 (Property Hooks 8.4+) | Clean Architecture | PER-CS 3.0 (ex-PSR-12), PHPStan Level 10, Pest 5 |
 | **Ruby / Rails** | 8.1 / Ruby 4.0 | Rails Way (pragmatic Clean) | Service/Form/Query objects, Hotwire, Solid Queue, RSpec/Minitest, Brakeman |
 | **Rust / Axum** | 0.8 / Rust 1.99 (edition 2024) | Layered workspace (Hexagonal) | Tokio, Tower, SQLx, thiserror + RFC 9457, cargo-nextest, Clippy, cargo-deny |
-| **Paperclip** | 2026.1012.0 | Two-layer (control plane + adapters) | Node.js 24.11+, TypeScript, Vitest, PostgreSQL, governance-first |
+| **Paperclip** | 2026.1106.0 | Two-layer (control plane + adapters) | Node.js 24.11+, TypeScript, Vitest, PostgreSQL, governance-first |
 
 ### Technology Quick Links
 
@@ -59,7 +59,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Commands (18 namespaces, 143 commands)
 
-Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.9.0, Coolify v4.4.6, K8s 1.37.1, OpenTofu 1.13.1, Ansible 2.21.5, FrankenPHP 1.13.0, PgBouncer 1.26.0 | Project: `/gate:*`, `/project:*`
+Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.9.3, Coolify v4.7.5, K8s 1.37.2, OpenTofu 1.13.9, Ansible 2.22.0, FrankenPHP 1.13.5, PgBouncer 1.26.1 | Project: `/gate:*`, `/project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 

@@ -170,7 +170,7 @@ parameters:
         - app
         - database
 
-    level: 8
+    level: 10
 
     ignoreErrors:
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
@@ -248,17 +248,19 @@ return RectorConfig::configure()
         "fakerphp/faker": "^1.23",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
-        "larastan/larastan": "^2.9",
+        "larastan/larastan": "^3.14",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
-        "pestphp/pest": "^4.7",
-        "pestphp/pest-plugin-laravel": "^4.0",
-        "phpstan/phpstan": "^2.2",
-        "rector/rector": "^2.4",
+        "pestphp/pest": "^5.0",
+        "pestphp/pest-plugin-laravel": "^5.0",
+        "phpstan/phpstan": "^2.3",
+        "rector/rector": "^2.8",
         "spatie/laravel-ignition": "^2.4"
     }
 }
 ```
+
+> **Pest 5 vs 4:** Pest 5 requires PHP ^8.4 and PHPUnit 13 (`pest-plugin-laravel` 5.x requires Laravel ^13.23). On PHP 8.3, stay on `pestphp/pest ^4.0` + `pest-plugin-laravel ^4.0` (the Laravel 13 skeleton values, PHPUnit ^12.0) — never mix majors. Larastan 3.x (`^3.14`) supports Laravel 11/12/13 and PHPStan ^2.3; Larastan 2.x is no longer suitable. Sources: https://laravel.com/docs/13.x/upgrade, https://packagist.org/packages/pestphp/pest
 
 ### Production
 
@@ -266,7 +268,7 @@ return RectorConfig::configure()
 {
     "require": {
         "php": "^8.3",
-        "laravel/framework": "^12.0",
+        "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
         "laravel/horizon": "^5.24",
         "laravel/telescope": "^5.0",
@@ -568,7 +570,7 @@ protected function gate(): void
 ## Tooling Checklist
 
 - [ ] Laravel Pint configured
-- [ ] PHPStan/Larastan at level 8
+- [ ] PHPStan/Larastan at level 10
 - [ ] IDE Helper generated
 - [ ] Docker/Sail configured
 - [ ] CI/CD pipeline set up

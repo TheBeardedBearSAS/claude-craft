@@ -372,7 +372,7 @@ Business logic is isolated from technical details
 - [ ] No new undocumented exceptions
 
 #### ISP
-- [ ] Interfaces are small and focused (< 5 methods)
+- [ ] Interfaces are small and focused (internal heuristic: < 5 methods)
 - [ ] Clients depend only on the methods they use
 - [ ] No `throw NotImplementedException()` methods
 
@@ -387,7 +387,7 @@ Business logic is isolated from technical details
 
 - **Book:** *Clean Architecture* - Robert C. Martin
 - **Book:** *SOLID Principles* - Uncle Bob
-- **Video:** [SOLID Principles Explained](https://www.youtube.com/watch?v=pTB30aXS77U)
+- **Article:** [The Relevance of SOLID — Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html)
 
 ---
 

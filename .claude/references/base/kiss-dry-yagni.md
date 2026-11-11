@@ -401,7 +401,7 @@ class ConcreteRepository         // Infrastructure
 | Couverture tests | > 80% | > 70% |
 | Dépendances par classe | < 5 | < 7 |
 
-> Les seuils de Cognitive Complexity (SonarQube S3776) < 7 / < 10 sont un choix interne, volontairement plus strict que le défaut de Sonar (15 par fonction) ; à relâcher si le contexte de l'équipe l'exige.
+> Les seuils de Cognitive Complexity (SonarQube S3776) < 7 / < 10 sont un choix interne, volontairement plus strict que le défaut de Sonar (15 par fonction) ; à relâcher si le contexte de l'équipe l'exige. Précision : le défaut de 15 vaut pour la plupart des langages (ex. `DEFAULT_MAX = 15` dans sonar-java, `DEFAULT_THRESHOLD = 15` dans sonar-python) ; pour C, C++ et Objective-C, Sonar a retenu 25 (Ann Campbell, Sonar, https://community.sonarsource.com/t/s3776-reason-for-the-current-default-value-of-15/127103, 2024-10-02 ; les métadonnées RSPEC ne sont pas publiques).
 
 ---
 

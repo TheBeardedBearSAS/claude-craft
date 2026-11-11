@@ -120,9 +120,11 @@ Ermitteln und klaeren:
    - `max_requests = 500` um Speicheransammlung zu verhindern
    - Benchmark mit `wrk` oder `k6`, nach oben/unten anpassen
    - Ueberwachen: RSS-Speicher pro Worker, Antwortzeit p99
-   - FrankenPHP 1.13.0+ verwenden: 1.12.4 ist verwundbar (Sicherheitskorrekturen in 1.12.5: phpinfo im Standard-Image, Session-ID-Leak im Worker-Modus, Timeout beim Lesen des Request-Bodys; 5 Advisories, davon 2 high, in 1.13.0)
+   - FrankenPHP 1.13.5+ verwenden: 1.12.4 ist verwundbar (Sicherheitskorrekturen in 1.12.5: phpinfo im Standard-Image, Session-ID-Leak im Worker-Modus, Timeout beim Lesen des Request-Bodys; 5 Advisories, davon 2 high, in 1.13.0)
+   - Sicherheits-Untergrenze 1.13.5: PHP2Shell (CVE-2026-109618, CVE-2026-109619, unauthentifizierte RCE) ist in 1.13.2 behoben; 1.13.4 behebt einen Worker-Modus-Absturz, Env-Leaks und einen Use-after-free bei `putenv()` (Brotli CVE-2026-111497 in den Images gepatcht); 1.13.5 behebt eine `php_server`-Schwachstelle, die einen Nicht-PHP-Upload als PHP ausführte (High), und 16 weitere Probleme. Images regelmäßig neu ziehen oder `1.13.5` oder neuer pinnen
+   - Worker-Modus (1.13.5): FrankenPHP setzt zwischen Requests nur den requestabhängigen Zustand zurück; `strtok()`-Zustand, `http_get_last_response_headers()`, `error_get_last()` und libxml-Fehler bleiben wieder erhalten. Für einen sauberen Zustand am Ende jedes Requests `error_clear_last()`, `libxml_clear_errors()` oder `http_clear_last_response_headers()` aufrufen
    - FrankenPHP 1.13+: `num_threads` zählt nur Threads für Requests, die kein Worker bedient; Worker-Threads kommen hinzu, und der Start schlägt fehl, wenn `max_threads` < `num_threads` + Worker-Threads
-   - Hot Reload in der Entwicklung läuft über Mercure 1.0: `$_SERVER['FRANKENPHP_HOT_RELOAD']` liefert jetzt `/.well-known/mercure?match=<topic>` (`?topic=` nicht fest codieren)
+   - Hot Reload in der Entwicklung läuft über Mercure 1.1.6 (Caddy 2.11.9): `$_SERVER['FRANKENPHP_HOT_RELOAD']` liefert jetzt `/.well-known/mercure?match=<topic>` (`?topic=` nicht fest codieren)
 
 ### Phase 3 -- Implementierungsblaupause
 

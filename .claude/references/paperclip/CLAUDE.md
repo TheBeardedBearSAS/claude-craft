@@ -1,4 +1,4 @@
-# Paperclip 2026.1012.0 — Quick Reference
+# Paperclip 2026.1106.0 — Quick Reference
 
 > **Paperclip** is a self-hosted AI agent orchestration platform (MIT). You **run** it — you do not build a control plane or write adapter integrations. The server, dashboard, CLI, and built-in adapters are all part of the Paperclip product.
 > Docs: https://docs.paperclip.ing/ | Repo: https://github.com/paperclipai/paperclip
@@ -7,7 +7,7 @@
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Paperclip | 2026.1012.0+ | Self-hosted orchestration platform (MIT) |
+| Paperclip | 2026.1106.0+ | Self-hosted orchestration platform (MIT) |
 | Node.js | 24.11+ LTS | Required by Paperclip server and CLI (`paperclipai` `engines`: `>=24.11.0`) |
 | TypeScript | 5.7+ | Strict mode — for plugin/adapter development |
 | Vitest | 4.1+ | Tests plugins and adapters |
@@ -140,7 +140,7 @@ export default definePlugin({
 - `Dev/i18n/en/Paperclip/commands/generate-agent-config.md` — Builder de payload hire
 - https://docs.paperclip.ing/ — Documentation officielle
 
-## Notes de mise à jour : changements cassants (2026.916.0 à 2026.1012.0)
+## Notes de mise à jour : changements cassants (2026.916.0 à 2026.1106.0)
 
 Vérifié sur les notes de version GitHub officielles (paperclipai/paperclip).
 
@@ -148,4 +148,6 @@ Vérifié sur les notes de version GitHub officielles (paperclipai/paperclip).
 - **2026.1001.0** : le broker Composio legacy est retiré (pas de migration automatique ; remplacement : Composio Connect derrière le flag `enableMcpAggregators`). Les harnesses d'exécution passent **en full auto par défaut** : ACPX/Claude `approve-all`, OpenCode `allow`, Codex `never` (aucune pause d'approbation). Pour conserver les garde-fous d'approbation côté fournisseur, définir explicitement un mode restrictif par agent : `acpxPermissionMode` (`approve-paperclip`, `approve-reads` ou `deny-all`) ou `opencodePermissionMode` (`ask` ou `deny`). Les approbations gouvernées de Paperclip restent appliquées.
 - **2026.1005.0** : `PAPERCLIP_CLOUD_UI_SNIPPET` / `PAPERCLIP_CLOUD_UI_SNIPPET_B64` n'injectent plus de HTML (migrer l'intégration vers une contribution UI de plugin) ; une @-mention dans un commentaire de tâche ne sert que de contexte et ne lance plus de run (seules l'assignation explicite ou les demandes de revue le font).
 - **2026.1012.0** : les verrous de restauration de workspace sont désormais des verrous de fichier SQLite sous `<instance root>/locks/directory-merge/` : arrêter tous les anciens processus serveur et worker avant de mettre à jour ou de revenir en arrière ; les tool grants à sélecteurs inconnus ou à restrictions mal formées refusent désormais l'accès (revoir les grants personnalisés).
+- **2026.1023.0** : le préréglage du rôle Operator passe d'un seul droit (`tasks:assign`) à quatorze (les Operators existants les reçoivent au démarrage : revoir qui détient ce rôle) ; inviter un Admin exige désormais une approbation d'adhésion et inviter un Owner exige aussi la gestion des permissions des membres ; les bots de revue GitHub passent derrière le réglage expérimental `enableGitHubReviewBots` (désactivé par défaut) ; les budgets bloquent désormais par défaut l'usage non tarifé (le réglage `unpricedUsagePolicy` de la politique de budget (usage non tarifé) vaut `block` par défaut ; `allow` laisse les runs continuer) ; les propriétaires et admins ne voient plus les tâches privées par défaut (lecture « break-glass » auditée via `?breakGlass=true`) et la lecture directe d'une tâche privée par un non-membre renvoie `404`; tâches et projets privés (partagés avec des personnes et agents nommés ; invisibles dans les listes, la recherche, les transcriptions et les plugins pour les autres) ; chaque agent reçoit une paire de clés Ed25519 persistante chiffrée au repos (`PAPERCLIP_AGENT_KEY_ID`, `PAPERCLIP_AGENT_PUBLIC_KEY`, `PAPERCLIP_AGENT_PRIVATE_KEY` pour les processus gérés : ne jamais journaliser la clé privée) ; passerelles de modèles BYO via Connectors (OpenRouter, Amazon Bedrock, Google Gemini, endpoints Responses/Messages/Chat Completions).
+- **2026.1106.0** : l'expérimentation Pipelines est retirée (commandes CLI `pipelines`, permission `pipelines:write` ; une valeur `enablePipelines` stockée est ignorée) ; les échecs de run n'atteignent plus Sentry par défaut (définir `PAPERCLIP_SENTRY_RUN_FAILURES` à `unexpected` ou `all` pour continuer à les remonter) ; le point d'accès de l'historique des runs renvoie 200 lignes par défaut et 1 000 au maximum (passer un `limit` explicite) ; `paperclipai agent instructions-file:delete` exige `--yes` ; les nouveaux agents utilisent par défaut le Paperclip Runner sur les hôtes qualifiés, qui exige GNU libc 2.39 ou supérieure sous Linux (sinon utiliser l'option « Legacy runner » dans Advanced); GitHub Copilot devient un harness natif (CLI 1.0.88, jeton GitHub enregistré) ; l'observabilité des agents peut être exportée vers Braintrust ou un endpoint OTLP HTTP personnalisé (Company Settings → General → Agent observability, désactivée par défaut).
 

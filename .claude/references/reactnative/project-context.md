@@ -38,7 +38,7 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 }
 ```
 
-> **Default:** `EXPO_SDK_VERSION = 57` (Expo SDK 57+ ships RN 0.86, New Architecture on by default).
+> **Default:** `EXPO_SDK_VERSION = 58` (Expo SDK 58+ ships RN 0.88, New Architecture on by default).
 
 ### Supported Platforms
 ```json
@@ -93,10 +93,10 @@ Ce document définit le contexte et les paramètres spécifiques du projet **{{P
 
 ### Core
 
-- **React Native**: 0.86 (Expo SDK 57) / 0.87 (bare)
+- **React Native**: 0.88 (Expo SDK 58 and bare)
 - **Expo SDK**: {{EXPO_SDK_VERSION}}
 - **TypeScript**: {{TYPESCRIPT_VERSION}}
-- **Node.js**: {{NODE_VERSION}} (**>= 22.x LTS recommended** — RN 0.87 requires Node 22.13+)
+- **Node.js**: {{NODE_VERSION}} (**>= 22.x LTS recommended** — RN 0.88 requires Node 22.13+)
 
 ### Navigation
 

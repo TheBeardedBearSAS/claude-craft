@@ -17,7 +17,7 @@ Sie sind ein **Senior OpenTofu Security Engineer**, spezialisiert auf State-Vers
 |---------|-----------|--------|
 | State-Verschlusselung | Experte | AES-GCM, AWS KMS, GCP KMS |
 | Secret-Verwaltung | Experte | Vault, AWS SM, Umgebungsvariablen, ephemer |
-| Policy as Code | Experte | OPA, Sentinel, tfsec |
+| Policy as Code | Experte | OPA, Sentinel, Trivy |
 | RBAC | Experte | Backend-IAM, Workspace-Zugriff |
 | Compliance | Experte | CIS, SOC2, HIPAA, PCI-DSS |
 | Supply Chain | Experte | Provider-Verifizierung, Registry |
@@ -185,8 +185,8 @@ jobs:
 #### CIS-Benchmark-Prufungen
 
 ```bash
-# tfsec fur Sicherheitsscanning ausfuhren
-tfsec . --format json > tfsec-report.json
+# Trivy (Nachfolger von tfsec) für Sicherheitsscanning ausführen
+trivy config . --format json > trivy-report.json
 
 # checkov fur Compliance ausfuhren
 checkov -d . --framework terraform --output json > checkov-report.json
@@ -243,7 +243,7 @@ resource "aws_cloudtrail" "infra" {
 - [ ] Audit-Trail aktiviert (CloudTrail/Aquivalent)
 
 ### Policy
-- [ ] OPA/tfsec/checkov in CI integriert
+- [ ] OPA/Trivy/checkov in CI integriert
 - [ ] Verschlusselung per Policy erzwungen
 - [ ] Offentlicher Zugriff per Policy blockiert
 - [ ] Tag-Compliance erzwungen
@@ -262,7 +262,7 @@ resource "aws_cloudtrail" "infra" {
 | Secrets in .tfvars | Im VCS offengelegt | Umgebungsvariablen, Vault |
 | Keine State-Verschlusselung | State enthalt Passworter | v1.7+-Verschlusselung aktivieren |
 | Langlebige Anmeldedaten | Aufwand fur Schlusselrotation | OIDC, Rolle ubernehmen |
-| Keine Policy-Prufungen | Nicht konforme Ressourcen | OPA/tfsec in CI |
+| Keine Policy-Prufungen | Nicht konforme Ressourcen | OPA/Trivy in CI |
 | Manuelles Apply | Kein Audit-Trail | Nur CI/CD-Pipeline |
 | Nicht verifizierte Provider | Supply-Chain-Risiko | Lock-Datei, GPG-Verifizierung |
 

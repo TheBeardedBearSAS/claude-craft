@@ -55,16 +55,30 @@ L'état est-il synchrone et utilisé pour le rendu ?
 - Import depuis `@angular/forms/signals`
 - Interopérabilité avec les Reactive Forms existantes via pont `SignalFormControl`
 
-**OnPush par défaut :**
-- Tous les nouveaux composants générés avec `ChangeDetectionStrategy.OnPush` par défaut
-- L'Angular CLI applique OnPush automatiquement lors du scaffolding
+**OnPush par défaut (22.0.0, breaking change) :**
+- Les composants dont `changeDetection` est indéfini sont désormais `OnPush` ; il n'est plus nécessaire de le déclarer
+- Pour conserver l'ancien comportement, déclarer `changeDetection: ChangeDetectionStrategy.Eager` ; la migration `ng update` `change-detection-eager` ajoute `Eager` à tous les composants existants le cas échéant
 
 **HttpClient Fetch par défaut :**
-- XHR déprécié — l'API Fetch est le transport par défaut
+- l'API Fetch est le transport par défaut (XHR n'est plus le défaut ; seul `ServerXhr` de `platform-server` est déprécié)
 - Meilleure compatibilité SSR et support du streaming
 
 **TypeScript 6 requis :**
 - TypeScript 5.x n'est plus supporté — mise à jour obligatoire avant migration Angular 22
+
+**Autres breaking changes 22.0.0** (https://github.com/angular/angular/blob/main/CHANGELOG.md) **:**
+- Router : `paramsInheritanceStrategy` vaut désormais `'always'` par défaut (positionner `'emptyOnly'` pour restaurer l'ancien comportement) ; `provideRoutes()` supprimé (utiliser `provideRouter()` ou `ROUTES`) ; `currentSnapshot` est désormais requis dans `CanMatchFn` / `CanMatch.canMatch` (migration fournie)
+- Forms : les règles de validation `min` et `max` n'acceptent plus de chaînes (nombres ou null uniquement)
+- HttpClient : le suivi de progression d'upload exige `provideHttpClient(withXhr())` (schematic fourni) ; `withFetch` déprécié ; `reportProgress` déprécié au profit de `reportUploadProgress` / `reportDownloadProgress`
+- Core : `ComponentFactoryResolver`, `ComponentFactory`, `createNgModuleRef` et `ChangeDetectorRef.checkNoChanges` supprimés
+- Plateforme : intégration Hammer.js supprimée ; l'hydratation incrémentale est désormais le comportement par défaut
+- Compilateur : les diagnostics `nullishCoalescingNotNullable` et `optionalChainNotNullable` se déclenchent désormais sur les projets existants ; les attributs préfixés `data-` ne lient plus d'inputs/outputs ; les liaisons input/output dupliquées lèvent une erreur
+
+**Nouveautés Angular 22.2 :**
+- Core : API programmatiques `ErrorBoundary` (blocs `@boundary` pris en charge par le language service)
+- Router : `containsTree` en API publique ; lancer un `RedirectCommand` déclenche une redirection ; ressources du router exposées
+- Signal Forms : champs cachés permanents autorisés
+- Compilateur : les templates peuvent accéder aux membres privés ; l'option `strictUnclaimedEventNames` détecte les outputs mal orthographiés
 
 **Resource API stable (v20+) :**
 - `httpResource()` : chargement déclaratif avec états automatiques (loading, error)
@@ -143,7 +157,6 @@ export class CounterComponent {
 // CORRECT : standalone + @if/@for control flow
 @Component({
   selector: 'app-user-list',
-  standalone: true,
   template: `
     @if (loading()) {
       <spinner />
@@ -179,7 +192,8 @@ private readonly destroyRef = inject(DestroyRef);
 |---------|---------|-------------|
 | Signals pour état local | signal(), computed(), effect() | BehaviorSubject pour état synchrone |
 | RxJS pour flux complexes | debounce, switchMap, websockets | RxJS pour un simple boolean |
-| Standalone components | standalone: true, imports locaux | NgModule pour nouveaux composants |
+| Standalone components | Standalone (défaut depuis v19, `standalone: true` inutile), imports locaux | NgModule pour nouveaux composants |
+| Inputs/outputs signal | `input()`, `output()`, `model()` | `@Input()`, `@Output()`, `EventEmitter` |
 | Smart/Dumb pattern | Container gère la logique, Presentational affiche | Logique métier dans les templates |
 | inject() | Injection au niveau de la classe | Constructeur surchargé |
 
@@ -364,6 +378,8 @@ Le composant utilise-t-il OnPush ?
       NON --> Justification documentée ?
         NON --> MAJEUR : documenter la raison
 ```
+
+Depuis la 22.0.0, OnPush est le défaut : signaler les composants qui déclarent `ChangeDetectionStrategy.Eager` sans justification.
 
 ### Arbre de décision : @defer
 
@@ -625,7 +641,7 @@ import { signal, computed } from '@angular/core';
 - **Standalone par défaut** : tous les nouveaux composants doivent être standalone
 - **Nouveau control flow** : @if/@for/@switch remplacent *ngIf/*ngFor/*ngSwitch
 - **inject() préféré** : injection fonctionnelle au lieu du constructeur surchargé
-- **OnPush obligatoire** : change detection optimisée sur tous les composants présentationnels
+- **OnPush par défaut (22.0.0+)** : ne pas le désactiver avec `ChangeDetectionStrategy.Eager` sans raison documentée
 - **@defer stratégique** : lazy loading granulaire pour le contenu secondaire
 
 ---

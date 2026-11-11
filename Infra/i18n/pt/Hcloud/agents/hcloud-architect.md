@@ -85,7 +85,7 @@ Extrair e esclarecer:
    │                     SERVERS                              │
    │  ┌──────────┐  ┌──────────┐  ┌──────────┐              │
    │  │web-01    │  │app-01    │  │db-01     │              │
-   │  │CX22      │  │CPX31     │  │CCX33     │              │
+   │  │CX23      │  │CPX32     │  │CCX33     │              │
    │  │(web tier)│  │(app tier)│  │(database)│              │
    │  └──────────┘  └──────────┘  └──────────┘              │
    └─────────┼───────────────────────────────────────────────┘
@@ -100,8 +100,8 @@ Extrair e esclarecer:
    ```
 
 2. **Estrategia de Tipos de Servidor**
-   - `CX22` / `CX32` -- vCPU compartilhada para frontends web, servicos leves
-   - `CPX31` / `CPX41` -- vCPU dedicada para servidores de aplicacao, CI runners
+   - `CX23` / `CX33` -- vCPU compartilhada para frontends web, servicos leves
+   - `CPX32` / `CPX42` -- vCPU compartilhada (AMD) para servidores de aplicacao, CI runners
    - `CAX21` / `CAX31` -- ARM (Ampere Altra) para 30-50% de economia em workloads compativeis
    - `CCX23` / `CCX33` -- vCPU dedicada para bancos de dados, workloads de alto desempenho
    - Todos os tipos disponiveis com armazenamento NVMe SSD local
@@ -187,7 +187,7 @@ hcloud load-balancer create --name lb-web --type lb11 --location fsn1
 hcloud load-balancer add-target lb-web --label-selector role=web
 ```
 
-### Configuracao Multi-Datacenter
+### Configuracao Multi-Location
 
 ```bash
 # Primary location (Falkenstein)
@@ -212,9 +212,11 @@ hcloud server create --name app-hel-01 --type cpx32 --image ubuntu-24.04 \
 - Primary IPs e Floating IPs devem ser desatribuídos antes de serem excluídos: a API retorna `must_be_unassigned` (desde 2026-05-01)
 - `dns_ptr` é obrigatório nos pedidos de alteração (Primary IPs, Floating IPs, Servers, Load Balancers) desde 2026-09-30; `null` redefine o ponteiro
 - O campo `deprecated` dos server types é removido em 2026-11-02: ler `locations[].deprecation` em vez disso (`null` = não obsoleto)
-- O provider Terraform 1.69 abandona o Terraform 1.14 (1.16 adicionado); manter o provider hcloud em `>= 1.70.0`, CLI hcloud 1.70.1
+- O provider Terraform 1.69 abandona o Terraform 1.14 (1.16 adicionado); manter o provider hcloud em `>= 1.70.0`, CLI hcloud 1.70.2
 - Os server types cx22/cx32/cx42/cx52 e cpx11-cpx51 não podem mais ser pedidos desde 2026-01-01: usar cx23/cx33/cx43/cx53 e cpx12/cpx22/cpx32/cpx42/cpx52/cpx62
-- Ansible: usar a coleção `hetzner.hcloud` (7.2.0, requer um ansible-core recente, ex. 2.21.5) e fixar a versão em `requirements.yml`
+- Ansible: usar a coleção `hetzner.hcloud` (7.2.0, requer um ansible-core recente, ex. 2.22.0) e fixar a versão em `requirements.yml`
+- hcloud CLI >= 1.70.0: `hcloud load-balancer create --primary-ipv4 <primary-ip> --primary-ipv6 <primary-ip>` atribui Primary IPs existentes (se omitido, uma nova é alocada). Os endpoints de Volumes expõem uma propriedade generalizada `assignee` ao lado de `server` (changelog 2026-10-27)
+- Imagens: `ubuntu-26.04` está disponível (x86 e arm); `debian-11` está obsoleto e não permite criar novos servidores após 2026-11-30: preferir `ubuntu-26.04`
 
 ## Checklist de Arquitetura
 
@@ -222,7 +224,7 @@ hcloud server create --name app-hel-01 --type cpx32 --image ubuntu-24.04 \
 - [ ] Tipos de servidor adequados ao workload (CX para web, CPX/CCX para computacao, CAX para economia)
 - [ ] Rede privada com isolamento de sub-rede por camada
 - [ ] Grupos de posicionamento para servicos criticos (spread policy)
-- [ ] Datacenter selecionado para latencia e conformidade (UE para GDPR)
+- [ ] Location selecionada para latencia e conformidade (UE para GDPR)
 - [ ] Labels aplicados de forma consistente (env, role, team, service)
 
 ### Rede

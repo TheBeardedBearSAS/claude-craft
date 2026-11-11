@@ -252,7 +252,7 @@ trim_trailing_whitespace = false
 
     <!-- Application Layer -->
     <!-- MediatR 13+ = commercial (RPL-1.5). Community Edition free <$5M revenue. -->
-    <PackageVersion Include="MediatR" Version="14.2.0" />
+    <PackageVersion Include="MediatR" Version="14.3.0" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <!-- AutoMapper 15+ = commercial (RPL-1.5). v13.0.1 = last MIT release. Prefer Riok.Mapperly for new projects. -->
@@ -261,14 +261,14 @@ trim_trailing_whitespace = false
     <PackageVersion Include="Ardalis.GuardClauses" Version="4.5.0" />
 
     <!-- Testing (xUnit v3 3.2.2 stable; FluentAssertions 8.x = commercial license — see note above) -->
-    <PackageVersion Include="xunit.v3" Version="3.2.2" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.2.2" />
+    <PackageVersion Include="xunit.v3" Version="4.0.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="FluentAssertions" Version="8.10.0" />
     <PackageVersion Include="Bogus" Version="35.4.0" />
-    <!-- Testcontainers 4.x (4.12.0 latest stable). 4.0 drops default image versions: always specify .WithImage(). -->
-    <PackageVersion Include="Testcontainers" Version="4.12.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <!-- Testcontainers 4.x (4.16.0 latest stable). 4.0 drops default image versions: always specify .WithImage(). -->
+    <PackageVersion Include="Testcontainers" Version="4.16.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.1" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
 
     <!-- Observability -->
@@ -546,7 +546,8 @@ dotnet tool install -g csharp-ls
 
 - [ ] .NET 10 SDK installed (10.0.4xx feature band; 10.0.401 on 2026-10-13)
 - [ ] Not on .NET 8 / .NET 9: both reach end of support on 2026-11-10 (.NET 10 LTS is supported until 2028-11-14)
-- [ ] .NET 11 / C# 15: go-live RC today, GA expected in November 2026 (STS) — stay on .NET 10 LTS for production until then
+- [ ] .NET 11 / C# 15: GA on 2026-11-10 but STS (supported until 2028-11-14, same date as .NET 10 LTS) — stay on .NET 10 LTS (C# 14) for production; .NET 11 removes the Newtonsoft.Json dependency from VSTest and its test templates default to xUnit v3 on Microsoft.Testing.Platform
+- [ ] EF Core 11 / ASP.NET Core 11 upgrade: review breaking changes first — EF: Cosmos unmapped properties no longer preserved (High), `Microsoft.Data.SqlClient` 7.0 (Entra ID auth needs `Microsoft.Data.SqlClient.Extensions.Azure`), SQL Server compat level defaults to 160, `Migrate()` throws when no migrations, split queries throw `DbQueryConcurrencyException`; ASP.NET: `ConcurrencyLimiter` removed, Microsoft.OpenApi 3.x, `OpenApiVersion` defaults to 3.2, Kestrel stricter HTTP compliance, passkey sign-in enforces confirmation/lockout. Sources: https://learn.microsoft.com/ef/core/what-is-new/ef-core-11.0/breaking-changes, https://learn.microsoft.com/aspnet/core/breaking-changes/11/overview
 - [ ] EditorConfig configured
 - [ ] Directory.Build.props set up
 - [ ] Central package management enabled

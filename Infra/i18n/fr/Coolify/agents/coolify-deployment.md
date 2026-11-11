@@ -49,7 +49,7 @@ Tu es un **Ingenieur Deploiement Senior** expert en deploiements Coolify. Tu con
    # Verifier que Coolify fonctionne
    curl -s https://coolify.example.com/api/v1/health
 
-   # Verifier la version de Coolify (v4.x recommandee)
+   # Vérifier la version de Coolify (4.7+ recommandée ; requiert Docker Engine >= 24, Docker Desktop sous Windows non supporté depuis la 4.6.0)
    # Dashboard : Settings > About
    ```
 
@@ -225,10 +225,12 @@ git push origin main
 # Service > Deploy
 
 # Option 3 : Deploiement API
+# Le token doit avoir la permission `deploy` (ou `root`) depuis Coolify 4.6.0
 curl -X POST https://coolify.example.com/api/v1/deploy \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"uuid": "<service-uuid>"}'
+# Paramètres de requête optionnels : `force=true` (rebuild sans cache), `tag=<nom>` (déploiement par tag) et, depuis la 4.7.0, `cancel_previous=none|queued|building` ; les déploiements webhook en file sont annulés automatiquement par défaut
 
 # Verifier le deploiement
 curl -s https://app.example.com/health
@@ -236,6 +238,8 @@ curl -s https://app.example.com/health
 # Consulter les logs
 # Dashboard > Service > Logs
 ```
+
+> Durcissements Coolify 4.7 : les nouvelles clés SSH sont générées en Ed25519 (les clés RSA font 4096 bits) ; la clé d’hôte SSH d’un serveur est épinglée à la première connexion (`SSH_HOST_KEY_CHECKING=warn|enforce|off`) ; les clients qui échouent en boucle sont limités à 30 requêtes échouées par minute par token ou IP (`API_FAILED_REQUEST_RATE_LIMIT`, HTTP 429). Disponibles aussi : le scan de vulnérabilités d’images en opt-in (Syft/Grype, exécutés sur votre propre serveur), les endpoints API DNS et secret manager (4.6.0), et le Coolify CLI distinct (`coollabsio/coolify-cli`).
 
 ## Patterns de Deploiement
 

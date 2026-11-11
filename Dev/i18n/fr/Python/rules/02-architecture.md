@@ -217,11 +217,8 @@ Les entités sont des objets avec une identité unique.
 
 ```python
 # src/myproject/domain/entities/user.py
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Optional
 from uuid import UUID, uuid4
 
 from myproject.domain.value_objects.email import Email
@@ -242,7 +239,7 @@ class User:
     name: str = field(default="")
     is_active: bool = field(default=True)
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: Optional[datetime] = field(default=None)
+    updated_at: datetime | None = field(default=None)
 
     # Domain events (pattern Event Sourcing)
     _events: list = field(default_factory=list, init=False, repr=False)
@@ -314,8 +311,6 @@ Les value objects sont immuables et définis par leurs attributs.
 
 ```python
 # src/myproject/domain/value_objects/email.py
-from __future__ import annotations
-
 from dataclasses import dataclass
 from email_validator import validate_email, EmailNotValidError
 
@@ -359,8 +354,6 @@ class Email:
 
 
 # src/myproject/domain/value_objects/money.py
-from __future__ import annotations
-
 from dataclasses import dataclass
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Union
@@ -528,7 +521,7 @@ Interfaces définissant comment accéder aux entités, sans implémentation.
 ```python
 # src/myproject/domain/repositories/user_repository.py
 from abc import ABC, abstractmethod
-from typing import Optional, Protocol
+from typing import Protocol
 from uuid import UUID
 
 from myproject.domain.entities.user import User
@@ -558,7 +551,7 @@ class UserRepository(Protocol):
         """
         ...
 
-    def find_by_id(self, user_id: UUID) -> Optional[User]:
+    def find_by_id(self, user_id: UUID) -> User | None:
         """
         Trouve un utilisateur par son ID.
 
@@ -570,7 +563,7 @@ class UserRepository(Protocol):
         """
         ...
 
-    def find_by_email(self, email: Email) -> Optional[User]:
+    def find_by_email(self, email: Email) -> User | None:
         """
         Trouve un utilisateur par son email.
 
@@ -618,7 +611,7 @@ class UserRepositoryABC(ABC):
         pass
 
     @abstractmethod
-    def find_by_id(self, user_id: UUID) -> Optional[User]:
+    def find_by_id(self, user_id: UUID) -> User | None:
         """Trouve un utilisateur par ID."""
         pass
 ```
@@ -630,7 +623,6 @@ class UserRepositoryABC(ABC):
 ```python
 # src/myproject/application/use_cases/user/create_user.py
 from dataclasses import dataclass
-from typing import Optional
 from uuid import UUID
 
 from myproject.domain.entities.user import User
@@ -722,11 +714,8 @@ class CreateUserUseCase:
 
 ```python
 # src/myproject/application/dtos/user_dto.py
-from __future__ import annotations
-
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
 from uuid import UUID
 
 from myproject.domain.entities.user import User
@@ -746,7 +735,7 @@ class UserDTO:
     name: str
     is_active: bool
     created_at: datetime
-    updated_at: Optional[datetime]
+    updated_at: datetime | None
 
     @classmethod
     def from_entity(cls, user: User) -> UserDTO:
@@ -778,7 +767,6 @@ class UserDTO:
 
 ```python
 # src/myproject/infrastructure/database/repositories/user_repository_impl.py
-from typing import Optional
 from uuid import UUID
 
 from sqlalchemy.orm import Session
@@ -820,7 +808,7 @@ class UserRepositoryImpl:
             self._session.rollback()
             raise RepositoryError(f"Failed to save user: {e}") from e
 
-    def find_by_id(self, user_id: UUID) -> Optional[User]:
+    def find_by_id(self, user_id: UUID) -> User | None:
         """Trouve un utilisateur par ID."""
         user_model = self._session.query(UserModel).filter(
             UserModel.id == user_id
@@ -828,7 +816,7 @@ class UserRepositoryImpl:
 
         return self._to_entity(user_model) if user_model else None
 
-    def find_by_email(self, email: Email) -> Optional[User]:
+    def find_by_email(self, email: Email) -> User | None:
         """Trouve un utilisateur par email."""
         user_model = self._session.query(UserModel).filter(
             UserModel.email == str(email)
@@ -1014,10 +1002,7 @@ async def get_user(
 
 ```python
 # src/myproject/infrastructure/api/schemas/user_schema.py
-from __future__ import annotations
-
 from datetime import datetime
-from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
@@ -1051,7 +1036,7 @@ class UserResponseSchema(BaseModel):
     name: str
     is_active: bool
     created_at: datetime
-    updated_at: Optional[datetime] = None
+    updated_at: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)
 

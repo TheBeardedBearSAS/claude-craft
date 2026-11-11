@@ -39,7 +39,6 @@
 ```typescript
 @Component({
   selector: 'app-{{component-name}}',
-  standalone: true,
   imports: [...],
   templateUrl: './{{component-name}}.component.html',
   styleUrl: './{{component-name}}.component.scss',
@@ -72,7 +71,7 @@ npm run test
 ng lint
 
 # Generate component
-ng generate component features/{{feature}}/components/{{name}} --standalone
+ng generate component features/{{feature}}/components/{{name}}
 ```
 
 ## Project-Specific Rules

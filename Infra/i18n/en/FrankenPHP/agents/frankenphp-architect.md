@@ -120,9 +120,11 @@ Extract and clarify:
    - `max_requests = 500` to prevent memory accumulation
    - Benchmark with `wrk` or `k6`, adjust up/down
    - Monitor: RSS memory per worker, response time p99
-   - Run FrankenPHP 1.13.0+: 1.12.4 is vulnerable (security fixes in 1.12.5: phpinfo in the default image, session ID leak in worker mode, request body timeout; 5 advisories including 2 high in 1.13.0)
+   - Run FrankenPHP 1.13.5+: 1.12.4 is vulnerable (security fixes in 1.12.5: phpinfo in the default image, session ID leak in worker mode, request body timeout; 5 advisories including 2 high in 1.13.0)
+   - Security floor 1.13.5: PHP2Shell (CVE-2026-109618, CVE-2026-109619, unauthenticated RCE) is fixed in 1.13.2; 1.13.4 fixes a worker-mode crash, env leaks and a `putenv()` use-after-free (Brotli CVE-2026-111497 patched in images); 1.13.5 fixes a `php_server` flaw running a non-PHP upload as PHP (High) plus 16 other issues. Pull images regularly or pin `1.13.5` or later
+   - Worker mode (1.13.5): FrankenPHP resets only request-derived state between requests; `strtok()` state, `http_get_last_response_headers()`, `error_get_last()` and libxml errors persist again. For a clean state call `error_clear_last()`, `libxml_clear_errors()` or `http_clear_last_response_headers()` at the end of each request
    - FrankenPHP 1.13+: `num_threads` only counts threads for requests no worker serves; worker threads come on top, and startup fails if `max_threads` < `num_threads` + worker threads
-   - Development hot reload goes through Mercure 1.0: `$_SERVER['FRANKENPHP_HOT_RELOAD']` now advertises `/.well-known/mercure?match=<topic>` (do not hardcode `?topic=`)
+   - Development hot reload goes through Mercure 1.1.6 (Caddy 2.11.9): `$_SERVER['FRANKENPHP_HOT_RELOAD']` now advertises `/.well-known/mercure?match=<topic>` (do not hardcode `?topic=`)
 
 ### Phase 3 -- Implementation Blueprint
 

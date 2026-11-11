@@ -9,7 +9,7 @@
 import os
 import sys
 from datetime import datetime
-from typing import Optional, Protocol
+from typing import Protocol
 from uuid import UUID, uuid4
 
 # 2. Related third party imports
@@ -32,7 +32,7 @@ from myproject.application.use_cases.create_user import CreateUserUseCase
 
 ```python
 # ✅ BON: Imports explicites
-from typing import Optional, List, Dict
+from typing import List, Dict
 
 # ❌ MAUVAIS: Import wildcard
 from typing import *
@@ -220,7 +220,7 @@ class MyClass:
 ### Types de Base
 
 ```python
-from typing import Optional, Union, List, Dict, Set, Tuple, Any
+from typing import Union, List, Dict, Set, Tuple, Any
 
 # ✅ BON: Type hints sur tout
 def greet(name: str) -> str:
@@ -245,7 +245,7 @@ numbers: List[int] = [1, 2, 3]
 scores: Dict[str, float] = {"math": 95.5}
 
 # Optional (peut être None)
-def find_user(user_id: int) -> Optional[User]:
+def find_user(user_id: int) -> User | None:
     """Retourne un User ou None."""
     return user or None
 
@@ -277,7 +277,7 @@ from collections.abc import Sequence, Iterable, Mapping
 # Generic Types
 T = TypeVar('T')
 
-def first(items: list[T]) -> Optional[T]:
+def first(items: list[T]) -> T | None:
     """Retourne le premier élément ou None."""
     return items[0] if items else None
 
@@ -403,7 +403,7 @@ class User:
 
 # Forward reference (pour références circulaires)
 class Node:
-    def __init__(self, value: int, parent: Optional[Node] = None):
+    def __init__(self, value: int, parent: Node | None = None):
         self.value = value
         self.parent = parent
 ```
@@ -432,6 +432,18 @@ def process_order(order: Order) -> None:
 reveal_type(my_variable)  # mypy affichera le type inféré
 ```
 
+### Nouveautés Python 3.15
+
+Python 3.15 (stable depuis le 9 octobre 2026) apporte notamment :
+- **PEP 810**: imports paresseux explicites (`lazy import json`, niveau module uniquement).
+- **PEP 814** (`frozendict`): dictionnaire immuable natif.
+- **PEP 661** (`sentinel`): type natif pour des valeurs sentinelles uniques (remplace les `_MISSING = object()` artisanaux).
+- **PEP 686 / PEP 798**: UTF-8 par défaut pour `open()` sans `encoding` ; dépaquetage `*` / `**` dans les compréhensions.
+- **PEP 799** (`profiling`): `profiling.tracing` (ex-`cProfile`, conservé comme alias) et `profiling.sampling` (profileur statistique Tachyon) ; le module `profile` est déprécié (retrait en 3.17).
+- **`re.prefixmatch()`**: nom explicite de `re.match()`, désormais "soft deprecated".
+
+Source: docs.python.org/3.15/whatsnew/3.15.html
+
 ## Docstrings
 
 ### Style Google (Recommandé)
@@ -440,7 +452,7 @@ reveal_type(my_variable)  # mypy affichera le type inféré
 def calculate_order_total(
     order_id: int,
     apply_discount: bool = True,
-    discount_code: Optional[str] = None
+    discount_code: str | None = None
 ) -> float:
     """
     Calcule le total d'une commande avec discounts optionnels.

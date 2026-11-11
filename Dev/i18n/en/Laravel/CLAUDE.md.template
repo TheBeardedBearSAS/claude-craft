@@ -32,7 +32,7 @@ See `rules/02-architecture.md` for complete patterns.
 |------|--------|
 | PHP 8.3+ strict types | Type safety |
 | Laravel Pint (PSR-12) | Code consistency |
-| PHPStan level 8 | Static analysis |
+| PHPStan level 10 | Static analysis |
 | 80%+ coverage | Quality assurance |
 
 ## How (Commands & Workflows)

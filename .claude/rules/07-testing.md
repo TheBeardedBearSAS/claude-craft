@@ -40,7 +40,7 @@ Format Gherkin pour les user stories. Documentation vivante, langage commun dev 
 ## Stratégies 2026
 
 - **Vitest Browser Mode** (Chromium/Firefox/WebKit) — abandonner JSDOM lourd
-- **Vitest `projects`** pour monorepos (unit/browser séparés) — `workspace` est déprécié depuis Vitest 3.2
+- **Vitest `projects`** pour monorepos (unit/browser séparés) — `workspace` renommé `projects` depuis Vitest 3.2 (fichier `vitest.workspace` séparé non supporté en 4.x : mettre `projects` dans `vitest.config`)
 - **Playwright component testing** ou **vitest-browser-react** (navigateur réel) pour les composants ; React Testing Library 16 / RNTL 14 restent maintenus et valides (JSDOM, React Native)
 - **E2E mobile** : **Maestro** (YAML, React Native/Flutter/natif), Detox (RN), Patrol (Flutter)
 - **BDD (Gherkin)** : **Cucumber.js** (JS/TS), **Behat** (PHP), **pytest-bdd** (Python)

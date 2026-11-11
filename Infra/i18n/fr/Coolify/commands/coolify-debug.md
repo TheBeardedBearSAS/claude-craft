@@ -166,6 +166,7 @@ STATUT GIT & WEBHOOK
 | Auto-deploy active | {oui/non} |
 
 ### Test de Declenchement Manuel
+# Le token doit avoir la permission `deploy` (ou `root`) depuis Coolify 4.6.0
 curl -X POST https://coolify.example.com/api/v1/deploy \
   -H "Authorization: Bearer {token}" \
   -d '{"uuid": "{service-uuid}"}'

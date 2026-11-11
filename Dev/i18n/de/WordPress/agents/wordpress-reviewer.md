@@ -203,6 +203,8 @@ register_rest_route( 'acme/v1', '/items/(?P<id>\d+)', array(
 
 **Weitere Prüfpunkte:** kein `eval`/`extract` auf Request-Daten; `unserialize` niemals auf nicht vertrauenswürdige Daten; keine Secrets in JS-Bundles; Abhängigkeiten werden auditiert (`composer audit`, `npm audit`); Überlegungen nach OWASP Top 10:2025.
 
+**WordPress-7.1-Kompatibilität:** Der Beitragseditor läuft jetzt vollständig in einem iframe, auch bei Sites mit Legacy-Meta-Boxen: Plugins, die über die Dokumentgrenze des Editors hinausgreifen, müssen ihr JavaScript und CSS prüfen; das mitgelieferte jQuery UI ist 1.14.2 (davon abhängige Plugins testen); die Abilities API (seit 6.9) erhält Filterung in `wp_get_abilities()`. Quellen: https://make.wordpress.org/core/tag/7-1+field-guide/
+
 ### Bewertung
 
 | Kriterium | Punkte |

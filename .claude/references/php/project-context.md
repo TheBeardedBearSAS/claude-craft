@@ -233,9 +233,9 @@ MESSENGER_TRANSPORT_DSN={{MESSENGER_DSN}}
 ### Development
 ```json
 {
-  "phpstan/phpstan": "^2.0",
+  "phpstan/phpstan": "^2.3",
   "phpunit/phpunit": "^12.0",
-  "friendsofphp/php-cs-fixer": "^3.0",
+  "friendsofphp/php-cs-fixer": "^3.95",
   {{DEV_DEPENDENCIES}}
 }
 ```

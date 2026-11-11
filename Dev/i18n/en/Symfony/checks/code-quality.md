@@ -265,11 +265,11 @@ Exemples :
 
 Outils à installer :
 ```bash
-composer require --dev phpstan/phpstan ^1.10
+composer require --dev phpstan/phpstan ^2.3
 composer require --dev phpstan/phpstan-symfony
 composer require --dev phpstan/phpstan-doctrine
 composer require --dev squizlabs/php_codesniffer ^3.7
-composer require --dev friendsofphp/php-cs-fixer ^3.0
+composer require --dev friendsofphp/php-cs-fixer ^3.95
 ```
 
 Configuration PHP CS Fixer (.php-cs-fixer.php) :

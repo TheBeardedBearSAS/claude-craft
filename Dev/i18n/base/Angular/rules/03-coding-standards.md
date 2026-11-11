@@ -647,40 +647,41 @@ export class UserService {
 
 ### injectAsync() (v22)
 
-`injectAsync()` allows injecting asynchronous dependencies (lazy-loaded, promise-based) directly in the constructor:
+`injectAsync()` (`@angular/core`, public API since 22.0) returns a function that resolves the service on demand: `injectAsync<T>(loader: () => Promise<ProviderToken<T>>, options?: { prefetch?: PrefetchTrigger }): () => Promise<T>`. Call it in an injection context; the loaded service must be auto-provided (`@Injectable({providedIn: 'root'})` or `@Service()`):
 
 ```typescript
-import { Component, inject, injectAsync } from '@angular/core';
+import { Component, injectAsync, onIdle } from '@angular/core';
 
 @Component({ /* ... */ })
 export class DashboardComponent {
-  // injectAsync: lazy resolution of a service or async token
-  private analytics = injectAsync(() =>
-    import('./analytics.service').then(m => inject(m.AnalyticsService))
-  );
+  private analytics = injectAsync(() => import('./analytics.service'), { prefetch: onIdle });
+
+  async onClick() {
+    (await this.analytics()).track('click');
+  }
 }
 ```
 
-**Use case:** sharing singletons from micro-frontends or dynamically loaded modules without circular dependency.
+**Use case:** lazily load a heavy service (separate chunk) without paying for it at startup. Source: https://angular.dev/guide/di/lazy-loading-services
 
 ### Angular Aria (v22)
 
-The `@angular/cdk` package (stable in v22) provides accessible primitives: `cdkAriaLive`, `cdkTrapFocus`, `cdkVisuallyHidden`, and new directives `cdkCombobox`, `cdkListbox`:
+The `@angular/aria` package exists on npm (latest 22.2.6); its developer-preview tag was removed in 22.0.0 (`angular/components` CHANGELOG). It ships headless accessible directives per entry point (`@angular/aria/listbox`, `/combobox`, `/menu`, `/tabs`, `/tree`, `/toolbar`, `/accordion`, `/grid`) with selectors such as `ngListbox` and `ngOption` (source: https://angular.dev/guide/aria/listbox). `cdkTrapFocus`, `cdkAriaLive` and `cdkVisuallyHidden` remain in `@angular/cdk/a11y`.
 
 ```typescript
-import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
+import { Listbox, Option } from '@angular/aria/listbox';
 
 @Component({
-  standalone: true,
-  imports: [CdkListbox, CdkOption],
+  imports: [Listbox, Option],
   template: `
-    <ul cdkListbox>
-      <li cdkOption="option1">Option 1</li>
-      <li cdkOption="option2">Option 2</li>
-    </ul>
+    <div ngListbox aria-label="Options">
+      @for (o of options; track o) { <div ngOption [value]="o">{{ o }}</div> }
+    </div>
   `
 })
-export class AccessibleListComponent {}
+export class AccessibleListComponent {
+  options = ['Option 1', 'Option 2'];
+}
 ```
 
 ## Conclusion

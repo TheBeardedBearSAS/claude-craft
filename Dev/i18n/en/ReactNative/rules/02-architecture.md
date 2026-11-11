@@ -1254,11 +1254,11 @@ export default function ArticlesScreen() {
 
 ---
 
-## New Architecture Activation (Expo SDK 56+)
+## New Architecture Activation (Expo SDK 52+)
 
 | Project type | Activation |
 |--------------|-----------|
-| **New project (Expo SDK 56+)** | New Architecture **on** by default. |
-| **Existing project (bare RN 0.87)** | Set `newArchEnabled=true` in `android/gradle.properties` AND `RCT_NEW_ARCH_ENABLED=1` on iOS pod install. |
+| **New project (Expo SDK 52+)** | New Architecture **on** by default. |
+| **Existing project (bare RN 0.88)** | Set `newArchEnabled=true` in `android/gradle.properties` AND `RCT_NEW_ARCH_ENABLED=1` on iOS pod install. |
 
-> Expo SDK 56+ ships with New Architecture enabled by default. `npx create-expo-app` generates projects with JSI, TurboModules, and Fabric active out of the box.
+> Expo SDK 52+ ships with New Architecture enabled by default. `npx create-expo-app` generates projects with JSI, TurboModules, and Fabric active out of the box.

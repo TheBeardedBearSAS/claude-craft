@@ -372,7 +372,7 @@ Die Geschäftslogik ist von technischen Details isoliert
 - [ ] Keine neuen nicht dokumentierten Exceptions
 
 #### ISP
-- [ ] Interfaces sind klein und fokussiert (< 5 Methoden)
+- [ ] Interfaces sind klein und fokussiert (interne Heuristik: < 5 Methoden)
 - [ ] Clients hängen nur von den Methoden ab, die sie verwenden
 - [ ] Keine Methoden `throw NotImplementedException()`
 
@@ -387,7 +387,7 @@ Die Geschäftslogik ist von technischen Details isoliert
 
 - **Buch:** *Clean Architecture* - Robert C. Martin
 - **Buch:** *SOLID Principles* - Uncle Bob
-- **Video:** [SOLID Principles Explained](https://www.youtube.com/watch?v=pTB30aXS77U)
+- **Article:** [The Relevance of SOLID — Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html)
 
 ---
 

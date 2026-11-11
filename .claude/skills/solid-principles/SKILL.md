@@ -15,5 +15,5 @@ See @REFERENCE.md for detailed documentation.
 - **S**RP: One reason to change per class
 - **O**CP: Extend via interfaces, don't modify existing
 - **L**SP: Subtypes substitutable for base types
-- **I**SP: Small interfaces (< 5 methods)
+- **I**SP: Small interfaces (internal heuristic: < 5 methods)
 - **D**IP: Depend on abstractions, not implementations

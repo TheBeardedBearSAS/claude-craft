@@ -20,7 +20,7 @@ Le pattern Repository:
 # src/myproject/domain/repositories/[entity]_repository.py
 """Interface du repository pour [Entity]."""
 
-from typing import Optional, Protocol
+from typing import Protocol
 from uuid import UUID
 
 from myproject.domain.entities.[entity] import [Entity]
@@ -54,7 +54,7 @@ class [Entity]Repository(Protocol):
         """
         ...
 
-    def find_by_id(self, entity_id: UUID) -> Optional[[Entity]]:
+    def find_by_id(self, entity_id: UUID) -> [Entity] | None:
         """
         Trouve une [entity] par son ID.
 
@@ -89,7 +89,7 @@ class [Entity]Repository(Protocol):
         ...
 
     # Méthodes de recherche spécifiques
-    def find_by_[attribute](self, [attribute]: Type) -> Optional[[Entity]]:
+    def find_by_[attribute](self, [attribute]: Type) -> [Entity] | None:
         """
         Trouve une [entity] par [attribute].
 
@@ -141,7 +141,6 @@ class [Entity]Repository(Protocol):
 # src/myproject/infrastructure/database/repositories/[entity]_repository_impl.py
 """Implémentation du repository [Entity] avec SQLAlchemy."""
 
-from typing import Optional
 from uuid import UUID
 
 from sqlalchemy.orm import Session
@@ -207,7 +206,7 @@ class [Entity]RepositoryImpl:
             self._session.rollback()
             raise RepositoryError(f"Failed to save [entity]: {e}") from e
 
-    def find_by_id(self, entity_id: UUID) -> Optional[[Entity]]:
+    def find_by_id(self, entity_id: UUID) -> [Entity] | None:
         """
         Trouve une [entity] par ID.
 
@@ -263,7 +262,7 @@ class [Entity]RepositoryImpl:
             self._session.rollback()
             raise RepositoryError(f"Failed to delete [entity]: {e}") from e
 
-    def find_by_[attribute](self, [attribute]: Type) -> Optional[[Entity]]:
+    def find_by_[attribute](self, [attribute]: Type) -> [Entity] | None:
         """Trouve par [attribute]."""
         model = (
             self._session.query([Entity]Model)
@@ -396,7 +395,7 @@ class [Entity]Model(Base):
 
 ```python
 # domain/repositories/user_repository.py
-from typing import Optional, Protocol
+from typing import Protocol
 from uuid import UUID
 
 from myproject.domain.entities.user import User
@@ -407,8 +406,8 @@ class UserRepository(Protocol):
     """Repository pour User."""
 
     def save(self, user: User) -> User: ...
-    def find_by_id(self, user_id: UUID) -> Optional[User]: ...
-    def find_by_email(self, email: Email) -> Optional[User]: ...
+    def find_by_id(self, user_id: UUID) -> User | None: ...
+    def find_by_email(self, email: Email) -> User | None: ...
     def exists_with_email(self, email: Email) -> bool: ...
     def find_active_users(self) -> list[User]: ...
     def delete(self, user_id: UUID) -> None: ...
@@ -435,7 +434,7 @@ class UserRepositoryImpl:
         self._session.refresh(model)
         return self._to_entity(model)
 
-    def find_by_email(self, email: Email) -> Optional[User]:
+    def find_by_email(self, email: Email) -> User | None:
         model = (
             self._session.query(UserModel)
             .filter(UserModel.email == str(email))

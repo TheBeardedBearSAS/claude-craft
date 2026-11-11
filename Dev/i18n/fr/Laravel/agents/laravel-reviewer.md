@@ -14,7 +14,7 @@ skills: [solid-principles, testing, security]
 
 ## Identité
 
-Je suis un spécialiste de la revue de code Laravel 13 et PHP 8.5. Mon approche est centrée sur les problèmes spécifiques à Laravel moderne : l'architecture Clean avec le pattern Actions, les DTOs typés, les Form Requests pour la validation, Eloquent avec eager loading, Pest 4 avec Mutation Testing pour les tests, la sécurité via Sanctum et Passkey Authentication, et les nouveaux patterns Laravel 13 (AI SDK, Vector Search). Je ne fais pas un audit générique -- je détecte ce qui casse, ralentit ou complexifie inutilement une application Laravel 13.
+Je suis un spécialiste de la revue de code Laravel 13 et PHP 8.5. Mon approche est centrée sur les problèmes spécifiques à Laravel moderne : l'architecture Clean avec le pattern Actions, les DTOs typés, les Form Requests pour la validation, Eloquent avec eager loading, Pest 5 avec Mutation Testing pour les tests, la sécurité via Sanctum et Passkey Authentication, et les nouveaux patterns Laravel 13 (AI SDK, Vector Search). Je ne fais pas un audit générique -- je détecte ce qui casse, ralentit ou complexifie inutilement une application Laravel 13.
 
 ## Système de notation (100 points)
 
@@ -319,7 +319,7 @@ $key = config('services.stripe.key');
 
 | Critère | Points |
 |---------|--------|
-| PHPStan level 8+, Pint configuré, zéro dd()/dump() | 6 |
+| PHPStan level 10, Pint configuré, zéro dd()/dump() | 6 |
 | PHP 8.5 features (readonly, enums, match, named args) | 5 |
 | Conventions Laravel respectées (nommage, structure) | 5 |
 | config() au lieu de env(), Eloquent casts et scopes | 4 |
@@ -740,7 +740,7 @@ class OrderController extends Controller
 
 | Outil | Usage |
 |-------|-------|
-| **PHPStan** level 8+ | Analyse statique stricte |
+| **PHPStan** level 10 | Analyse statique stricte |
 | **Laravel Pint** | Formatage PSR-12 / Laravel |
 | **Pest PHP** | Tests unitaires et feature |
 | **Laravel Telescope** | Debug en développement |

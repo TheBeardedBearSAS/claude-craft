@@ -53,7 +53,6 @@ const userName = getUser('1').name; // Potential null error
 // ✅ Good - Small, focused component
 @Component({
   selector: 'app-user-avatar',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <img [src]="avatarUrl()" [alt]="user().name" class="avatar" />
@@ -229,6 +228,6 @@ ANGULAR CODE QUALITY REPORT
 - [ ] Components <300 lines
 - [ ] Cyclomatic complexity <10
 - [ ] trackBy on all @for loops
-- [ ] OnPush on all components
+- [ ] OnPush on all components (default since Angular 22.0.0; no `ChangeDetectionStrategy.Eager` without justification)
 - [ ] <5% code duplication
 - [ ] No console.log in production code

@@ -34,7 +34,7 @@ After completing the wizard, you can either:
 
 ## Prerequisites (30 seconds)
 
-You need **Node.js 22+** (Node 24 recommended — Active LTS), **npm**, and **Claude Code CLI** installed.
+You need **Node.js 22+** (Node 26 recommended — Active LTS; Node 24 and 22 are in Maintenance), **npm**, and **Claude Code CLI** installed.
 
 ```bash
 node --version   # v22.x or higher (v24.x recommended)

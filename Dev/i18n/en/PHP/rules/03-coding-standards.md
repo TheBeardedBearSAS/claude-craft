@@ -319,6 +319,16 @@ class User
 
 ## Type Declarations
 
+### PHP 8.5 — Additions and deprecations
+
+- `(void)` cast: marks a return value as intentionally ignored and silences the `#[\NoDiscard]` warning.
+- `#[\Override]` can now be applied to properties.
+- `Closure::getCurrent()` returns the running closure (recursion without `use (&$fn)`).
+- `curl_share_init_persistent(array $share_options)`: share handle persisting across requests (DNS/connection reuse); `CURL_LOCK_DATA_COOKIE` is forbidden (`ValueError`).
+- `__sleep()` / `__wakeup()` are soft-deprecated: implement `__serialize()` / `__unserialize()`. Also deprecated: backtick operator, `(boolean)`/`(integer)`/`(double)`/`(binary)` casts, `case X;`, `null` as array offset.
+
+Source: https://www.php.net/manual/en/migration85.php
+
 ### Strict Types
 
 ```php

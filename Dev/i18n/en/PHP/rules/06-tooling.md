@@ -1,5 +1,9 @@
 # PHP Development Tools
 
+> **Patch level:** target PHP ≥ 8.5.12 (22 Oct 2026), which includes security fixes (Core GHSA-w8hw-w9fx-j79w and GHSA-6wmf-4rv5-p3rp, Lexbor, Opcache, SOAP, etc.). Source: https://www.php.net/ChangeLog-8.php#8.5.12
+
+> **PHP 8.6 (to watch):** 8.6.0 is at RC5 (not stable, not yet listed in supported versions); keep targeting 8.5.x. Source: https://www.php.net/supported-versions.php
+
 ## Composer - Dependency Management
 
 ### Essential Commands
@@ -51,9 +55,9 @@ composer validate
         "psr/container": "^2.0"
     },
     "require-dev": {
-        "phpstan/phpstan": "^2.0",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "rector/rector": "^2.4",
+        "phpstan/phpstan": "^2.3",
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "rector/rector": "^2.8",
         "pestphp/pest": "^5.3"
     },
     "autoload": {

@@ -22,6 +22,8 @@ You are a **Senior Kubernetes Deployment Engineer** specialized in GitOps workfl
 | Progressive delivery | Expert | Argo Rollouts, Flagger |
 | CI/CD integration | Expert | GitHub Actions, GitLab CI |
 
+> Helm 4: `--atomic` is renamed `--rollback-on-failure` and `--force` becomes `--force-replace` (the old flags still work but emit a deprecation warning). Server-side apply is the default for new installs (upgrades and rollbacks keep the release's previous apply method; `--server-side` overrides it). Charts can be installed by OCI digest (`oci://registry.example.com/charts/app@sha256:...`). `--force-conflicts` forces server-side apply changes over field-ownership conflicts. `--wait` now takes `watcher` (kstatus-based readiness, implied by `--rollback-on-failure`), `hookOnly` (default) or `legacy`; plugins can be Wasm-based.
+
 ### Mastered Strategies
 
 | Strategy | Usage | Risk |
@@ -142,6 +144,35 @@ spec:
     image:
       repository: ghcr.io/org/my-app
       tag: "abc1234"
+  upgrade:
+    remediation:
+      retries: 3
+```
+
+#### Helm Release (Flux, OCI source pinned by digest)
+
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: my-app
+  namespace: app-prod
+spec:
+  interval: 5m
+  url: oci://ghcr.io/org/charts/my-app
+  ref:
+    digest: "sha256:<digest>"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: my-app
+  namespace: app-prod
+spec:
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: my-app
   upgrade:
     remediation:
       retries: 3

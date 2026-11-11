@@ -67,7 +67,7 @@ Use Google style docstrings for all public modules, classes, and functions.
 def calculate_order_total(
     items: list[OrderItem],
     tax_rate: Decimal,
-    discount: Optional[Decimal] = None
+    discount: Decimal | None = None
 ) -> Money:
     """
     Calculate the total amount of an order.
@@ -103,7 +103,7 @@ Type all function parameters and return values.
 ### Basic Types
 
 ```python
-from typing import Optional, Union
+from typing import Union
 from decimal import Decimal
 from datetime import datetime
 
@@ -118,7 +118,7 @@ def process_user(
     pass
 
 # Optional (nullable)
-def find_user(user_id: str) -> Optional[User]:
+def find_user(user_id: str) -> User | None:
     """Returns User or None if not found."""
     pass
 
@@ -192,7 +192,7 @@ T = TypeVar('T')
 class Repository(Generic[T]):
     """Generic repository."""
 
-    def find_by_id(self, entity_id: str) -> Optional[T]:
+    def find_by_id(self, entity_id: str) -> T | None:
         pass
 
     def save(self, entity: T) -> T:
@@ -202,6 +202,18 @@ class Repository(Generic[T]):
 user_repo: Repository[User] = UserRepository()
 product_repo: Repository[Product] = ProductRepository()
 ```
+
+### Python 3.15 highlights
+
+Python 3.15 (stable since October 9, 2026) adds, among others:
+- **PEP 810**: explicit lazy imports (`lazy import json`, module level only).
+- **PEP 814** (`frozendict`): built-in immutable dictionary.
+- **PEP 661** (`sentinel`): built-in type for unique sentinel values (replaces ad hoc `_MISSING = object()`).
+- **PEP 686 / PEP 798**: UTF-8 by default for `open()` without `encoding`; `*` / `**` unpacking in comprehensions.
+- **PEP 799** (`profiling`): `profiling.tracing` (ex-`cProfile`, kept as an alias) and `profiling.sampling` (Tachyon sampling profiler); the `profile` module is deprecated (removal in 3.17).
+- **`re.prefixmatch()`**: explicit name for `re.match()`, now soft deprecated.
+
+Source: docs.python.org/3.15/whatsnew/3.15.html
 
 ## Error Handling
 
@@ -382,7 +394,6 @@ src/myproject/
 import os
 import sys
 from datetime import datetime
-from typing import Optional
 
 # 2. Third-party
 from fastapi import FastAPI

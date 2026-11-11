@@ -67,7 +67,7 @@ Usar docstrings estilo Google para todos los módulos, clases y funciones públi
 def calculate_order_total(
     items: list[OrderItem],
     tax_rate: Decimal,
-    discount: Optional[Decimal] = None
+    discount: Decimal | None = None
 ) -> Money:
     """
     Calcula el monto total de una orden.
@@ -103,7 +103,7 @@ Tipar todos los parámetros de función y valores de retorno.
 ### Tipos Básicos
 
 ```python
-from typing import Optional, Union
+from typing import Union
 from decimal import Decimal
 from datetime import datetime
 
@@ -118,7 +118,7 @@ def process_user(
     pass
 
 # Optional (nullable)
-def find_user(user_id: str) -> Optional[User]:
+def find_user(user_id: str) -> User | None:
     """Devuelve User o None si no se encuentra."""
     pass
 
@@ -192,7 +192,7 @@ T = TypeVar('T')
 class Repository(Generic[T]):
     """Repositorio genérico."""
 
-    def find_by_id(self, entity_id: str) -> Optional[T]:
+    def find_by_id(self, entity_id: str) -> T | None:
         pass
 
     def save(self, entity: T) -> T:
@@ -202,6 +202,18 @@ class Repository(Generic[T]):
 user_repo: Repository[User] = UserRepository()
 product_repo: Repository[Product] = ProductRepository()
 ```
+
+### Novedades de Python 3.15
+
+Python 3.15 (estable desde el 9 de octubre de 2026) aporta, entre otras cosas:
+- **PEP 810**: imports perezosos explícitos (`lazy import json`, solo a nivel de módulo).
+- **PEP 814** (`frozendict`): diccionario inmutable nativo.
+- **PEP 661** (`sentinel`): tipo nativo para valores centinela únicos (sustituye los `_MISSING = object()` artesanales).
+- **PEP 686 / PEP 798**: UTF-8 por defecto para `open()` sin `encoding`; desempaquetado `*` / `**` en comprensiones.
+- **PEP 799** (`profiling`): `profiling.tracing` (antes `cProfile`, que se mantiene como alias) y `profiling.sampling` (perfilador estadístico Tachyon); el módulo `profile` está obsoleto (eliminación en 3.17).
+- **`re.prefixmatch()`**: nombre explícito de `re.match()`, ahora "soft deprecated".
+
+Source: docs.python.org/3.15/whatsnew/3.15.html
 
 ## Manejo de Errores
 
@@ -382,7 +394,6 @@ src/myproject/
 import os
 import sys
 from datetime import datetime
-from typing import Optional
 
 # 2. Terceros
 from fastapi import FastAPI

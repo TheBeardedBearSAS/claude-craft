@@ -327,6 +327,9 @@ O app tem como alvo iOS/Android?
 - Bundle identifier, versão e ícones definidos em `tauri.conf.json`; `gen/schemas/` não editado à mão
 - Crate Tauri, `tauri-build`, `@tauri-apps/api` e `@tauri-apps/cli` mantidos em versões minor coincidentes
 - Toolchain Rust compatível com o MSRV do Tauri (1.90 para 2.12.x)
+- Aplicações multi-webview com Tauri 2.11.6 ou superior (2.12.x recomendado): GHSA-w28w-mhc8-qvjv (Tauri 2.0.0 a 2.11.5) permitia que uma webview lesse os payloads `Channel` enfileirados e as respostas grandes de invoke de outra webview; a correção vincula a fila à webview proprietária
+- Notas 2.12: Android Gradle 8.13 no mínimo (template com Gradle 9.6.1, Kotlin 2.2: renomear `proguard-rules.pro` para `consumer-rules.pro` nos plugins); `windows` 0.62 / `webview2-com` 0.39 encerram o suporte ao Windows 7; `InvokeMessage::state` e `state_ref` estão obsoletos; as regras deny da ACL de runtime ficam restritas ao contexto local ou remoto da capability; nova opção de webview `limitNavigationsToAppBoundDomains`
+- Fonte: https://github.com/tauri-apps/tauri/security/advisories/GHSA-w28w-mhc8-qvjv e CHANGELOG do crate tauri (2.12.0)
 - Commands mobile (`tauri android init|dev|build`, `tauri ios init|dev|build`) usados apenas quando o mobile é um alvo declarado
 - Os releases publicam os artefatos do updater junto com suas assinaturas
 

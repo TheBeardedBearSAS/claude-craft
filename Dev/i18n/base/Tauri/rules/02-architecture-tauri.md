@@ -177,6 +177,7 @@ tauri::Builder::default()
 - Every plugin with a JS API needs its npm package at a matching 2.x version, and its permissions in a capability file
 - Desktop-only plugins are registered under `#[cfg(desktop)]`; mobile-only code under `#[cfg(mobile)]`
 - Write a custom plugin only when code must be reused across apps or ships its own permissions; otherwise keep it in the app (YAGNI)
+- Tauri 2.12: `exit()` from `@tauri-apps/api/app` quits the app without `@tauri-apps/plugin-process` (grant `core:app:allow-exit`); `app > appDirectoriesOverride` in `tauri.conf.json` redirects the `app_*_dir` path APIs (single root or per directory, e.g. portable apps keeping data next to the executable). Source: https://github.com/tauri-apps/tauri/blob/dev/crates/tauri/CHANGELOG.md
 
 ## Windows and Multi-Window
 

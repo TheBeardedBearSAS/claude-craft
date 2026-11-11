@@ -92,7 +92,7 @@ POLICY-DURCHSETZUNG
 
 | Prufung | Status | Details |
 |---------|--------|---------|
-| tfsec/checkov | {integriert/nein} | {Ergebnisse} |
+| Trivy/checkov | {integriert/nein} | {Ergebnisse} |
 | OPA-Policies | {ja/nein} | {Anzahl} |
 | Provider-Lock-Datei | {committet/fehlt} | {Details} |
 | Tag-Compliance | {erzwungen/nein} | {Details} |

@@ -203,6 +203,8 @@ register_rest_route( 'acme/v1', '/items/(?P<id>\d+)', array(
 
 **Otras verificaciones:** nada de `eval`/`extract` sobre datos de la petición; `unserialize` nunca sobre datos no confiables; sin secretos en los bundles de JS; dependencias auditadas (`composer audit`, `npm audit`); consideraciones de OWASP Top 10:2025.
 
+**Compatibilidad con WordPress 7.1:** el editor de entradas pasa a estar completamente en un iframe, incluso en sitios con meta boxes heredadas: los plugins que cruzan el límite del documento del editor deben revisar su JavaScript y CSS; el jQuery UI incluido pasa a 1.14.2 (probar los plugins que dependen de él); la Abilities API (introducida en 6.9) incorpora filtrado en `wp_get_abilities()`. Fuentes: https://make.wordpress.org/core/tag/7-1+field-guide/
+
 ### Puntuación
 
 | Criterio | Puntos |

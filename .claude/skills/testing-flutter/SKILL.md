@@ -62,7 +62,7 @@ test('Mutation updates state correctly', () async {
 });
 ```
 
-**Source :** [Riverpod 3.0 Testing](https://medium.com/@lee645521797/flutter-riverpod-3-0-released-a-major-redesign-of-the-state-management-framework-f7e31f19b179)
+**Source :** [Riverpod — What's new](https://riverpod.dev/docs/whats_new)
 
 ---
 

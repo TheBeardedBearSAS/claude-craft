@@ -40,7 +40,7 @@ Ce stack ne documente **aucun modèle de composant** (pas de JSX, pas de SFC, pa
 
 ### Vite 8 — Rolldown par défaut
 
-Depuis Vite 8, **Rolldown** (port Rust de Rollup, par l'équipe Vite/VoidZero) remplace esbuild comme bundler de production par défaut. Build 3-5× plus rapide, API de configuration largement compatible avec `rollupOptions` historique (déprécié depuis Vite 8 au profit de `rolldownOptions`) — voir `rolldown.md` pour les différences (ex : `manualChunks` objet supprimé au profit de `codeSplitting.groups`).
+Depuis Vite 8, **Rolldown** (port Rust de Rollup, par l'équipe Vite/VoidZero) remplace Rollup comme bundler de production par défaut (Oxc remplace esbuild pour la transformation, Lightning CSS minifie le CSS). Build 3-5× plus rapide, API de configuration largement compatible avec `rollupOptions` historique (déprécié depuis Vite 8 au profit de `rolldownOptions`) — voir `rolldown.md` pour les différences (ex : `manualChunks` objet supprimé au profit de `codeSplitting.groups`).
 
 ### Vanilla SPA — point d'entrée `index.html`
 
@@ -128,5 +128,5 @@ console.log(compute(42));
 - `quality-tools.md` — CI/CD, bundle analysis, pre-commit hooks
 - `testing.md` — Vitest framework-agnostic (modules, plugins, workers/WASM)
 - `security.md` — `envPrefix`, `define()`, CSP multi-page, sandboxing WASM
-- `rolldown.md` — Migration esbuild → Rolldown (Vite 8)
+- `rolldown.md` — Migration Rollup/esbuild → Rolldown/Oxc (Vite 8)
 - `project-context.md` — Template de contexte projet

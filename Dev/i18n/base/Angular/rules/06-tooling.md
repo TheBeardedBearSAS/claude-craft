@@ -17,7 +17,7 @@ ng serve --open
 ng build --configuration=production
 
 # Generate
-ng generate component features/users/components/user-list --standalone
+ng generate component features/users/components/user-list
 ng generate service core/services/auth
 ng generate guard core/guards/auth --functional
 ng generate interceptor core/interceptors/auth --functional
@@ -25,7 +25,7 @@ ng generate pipe shared/pipes/date-format --standalone
 ng generate directive shared/directives/highlight --standalone
 
 # Shortcuts
-ng g c features/users/components/user-list --standalone
+ng g c features/users/components/user-list
 ng g s core/services/auth
 ng g guard core/guards/auth --functional
 

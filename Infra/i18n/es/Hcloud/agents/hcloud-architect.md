@@ -85,7 +85,7 @@ Extraer y clarificar:
    │                     SERVERS                              │
    │  ┌──────────┐  ┌──────────┐  ┌──────────┐              │
    │  │web-01    │  │app-01    │  │db-01     │              │
-   │  │CX22      │  │CPX31     │  │CCX33     │              │
+   │  │CX23      │  │CPX32     │  │CCX33     │              │
    │  │(web tier)│  │(app tier)│  │(database)│              │
    │  └──────────┘  └──────────┘  └──────────┘              │
    └─────────┼───────────────────────────────────────────────┘
@@ -100,8 +100,8 @@ Extraer y clarificar:
    ```
 
 2. **Estrategia de Tipos de Servidor**
-   - `CX22` / `CX32` -- vCPU compartido para frontends web, servicios ligeros
-   - `CPX31` / `CPX41` -- vCPU dedicado para servidores de aplicación, runners de CI
+   - `CX23` / `CX33` -- vCPU compartido para frontends web, servicios ligeros
+   - `CPX32` / `CPX42` -- vCPU compartido (AMD) para servidores de aplicación, runners de CI
    - `CAX21` / `CAX31` -- ARM (Ampere Altra) para 30-50% de ahorro en cargas compatibles
    - `CCX23` / `CCX33` -- vCPU dedicado para bases de datos, cargas de alto rendimiento
    - Todos los tipos disponibles con almacenamiento SSD NVMe local
@@ -187,14 +187,14 @@ hcloud load-balancer create --name lb-web --type lb11 --location fsn1
 hcloud load-balancer add-target lb-web --label-selector role=web
 ```
 
-### Configuración Multi-Datacenter
+### Configuración Multi-Location
 
 ```bash
-# Datacenter primario (Falkenstein)
+# Location primaria (Falkenstein)
 hcloud network create --name primary-net --ip-range 10.0.0.0/8
 hcloud network add-subnet primary-net --type cloud --network-zone eu-central --ip-range 10.0.1.0/24
 
-# Datacenter secundario (Helsinki)
+# Location secundaria (Helsinki)
 hcloud network add-subnet primary-net --type cloud --network-zone eu-central --ip-range 10.0.2.0/24
 
 # Servidores en diferentes ubicaciones con grupos de ubicación
@@ -212,9 +212,11 @@ hcloud server create --name app-hel-01 --type cpx32 --image ubuntu-24.04 \
 - Las Primary IP y Floating IP deben desasignarse antes de eliminarse: la API devuelve `must_be_unassigned` (desde 2026-05-01)
 - `dns_ptr` es obligatorio en las peticiones de modificación (Primary IPs, Floating IPs, Servers, Load Balancers) desde 2026-09-30; `null` restablece el puntero
 - El campo `deprecated` de los server types se elimina el 2026-11-02: leer `locations[].deprecation` en su lugar (`null` = no obsoleto)
-- El provider Terraform 1.69 abandona Terraform 1.14 (se añade 1.16); mantener el provider hcloud en `>= 1.70.0`, CLI hcloud 1.70.1
+- El provider Terraform 1.69 abandona Terraform 1.14 (se añade 1.16); mantener el provider hcloud en `>= 1.70.0`, CLI hcloud 1.70.2
 - Los server types cx22/cx32/cx42/cx52 y cpx11-cpx51 ya no se pueden pedir desde 2026-01-01: usar cx23/cx33/cx43/cx53 y cpx12/cpx22/cpx32/cpx42/cpx52/cpx62
-- Ansible: usar la colección `hetzner.hcloud` (7.2.0, requiere un ansible-core reciente, p. ej. 2.21.5) y fijar su versión en `requirements.yml`
+- Ansible: usar la colección `hetzner.hcloud` (7.2.0, requiere un ansible-core reciente, p. ej. 2.22.0) y fijar su versión en `requirements.yml`
+- hcloud CLI >= 1.70.0: `hcloud load-balancer create --primary-ipv4 <primary-ip> --primary-ipv6 <primary-ip>` asigna Primary IPs existentes (si se omite, se asigna una nueva). Los endpoints de Volumes exponen una propiedad generalizada `assignee` junto a `server` (changelog 2026-10-27)
+- Imágenes: `ubuntu-26.04` está disponible (x86 y arm); `debian-11` está obsoleta y no permitirá crear nuevos servidores después del 2026-11-30: preferir `ubuntu-26.04`
 
 ## Lista de Verificación de Arquitectura
 
@@ -222,7 +224,7 @@ hcloud server create --name app-hel-01 --type cpx32 --image ubuntu-24.04 \
 - [ ] Tipos de servidor ajustados a la carga de trabajo (CX para web, CPX/CCX para cómputo, CAX para ahorro de costos)
 - [ ] Red privada con aislamiento de subred por tier
 - [ ] Grupos de ubicación para servicios críticos (política spread)
-- [ ] Datacenter seleccionado por latencia y cumplimiento (UE para GDPR)
+- [ ] Location seleccionada por latencia y cumplimiento (UE para GDPR)
 - [ ] Etiquetas aplicadas consistentemente (env, role, team, service)
 
 ### Redes

@@ -115,7 +115,7 @@ SECRETS MANAGEMENT
 | Secret rotation | {automated/manual/none} | {policy} |
 ```
 
-Find tasks that may leak secrets without `no_log` and check for hardcoded secrets outside vault files.
+Find tasks that may leak secrets without `no_log` and check for hardcoded secrets outside vault files. On ansible-core 2.22+, known secrets are masked as `$REDACTED$` in output and `no_log` options no longer show `VALUE_SPECIFIED_IN_NO_LOG_PARAMETER`: adapt any check relying on that placeholder.
 
 ### Step 6: Lint Security Audit
 

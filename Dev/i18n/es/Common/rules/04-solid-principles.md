@@ -372,7 +372,7 @@ Es mejor tener varias interfaces especificas que una interfaz general.
 - [ ] Sin excepciones nuevas no documentadas
 
 #### ISP
-- [ ] Las interfaces son pequenas y focalizadas (< 5 metodos)
+- [ ] Las interfaces son pequenas y focalizadas (heuristica interna: < 5 metodos)
 - [ ] Los clientes solo dependen de los metodos que utilizan
 - [ ] Sin metodos `throw NotImplementedException()`
 
@@ -387,7 +387,7 @@ Es mejor tener varias interfaces especificas que una interfaz general.
 
 - **Libro:** *Clean Architecture* - Robert C. Martin
 - **Libro:** *SOLID Principles* - Uncle Bob
-- **Video:** [SOLID Principles Explained](https://www.youtube.com/watch?v=pTB30aXS77U)
+- **Article:** [The Relevance of SOLID — Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html)
 
 ---
 

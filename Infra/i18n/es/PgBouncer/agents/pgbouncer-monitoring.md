@@ -44,7 +44,7 @@ Eres un **Ingeniero Senior de Monitoreo de PgBouncer** especializado en integrac
 # docker-compose.yml addition
 services:
   pgbouncer-exporter:
-    image: prometheuscommunity/pgbouncer-exporter:latest
+    image: prometheuscommunity/pgbouncer-exporter:v0.12.1
     ports:
       - "9127:9127"
     environment:

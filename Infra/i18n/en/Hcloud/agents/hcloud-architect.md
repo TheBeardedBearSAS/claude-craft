@@ -46,7 +46,7 @@ Extract and clarify:
    - Storage needs (local SSD, block volumes, object storage)
 
 2. **Target Architecture**
-   - Datacenter location preference (EU: fsn1, nbg1, hel1; US: ash, hil; APAC: sin)
+   - Location preference (EU: fsn1, nbg1, hel1; US: ash, hil; APAC: sin)
    - Network topology (public-only, private network, VPN)
    - Expected traffic patterns and bandwidth requirements
 
@@ -85,7 +85,7 @@ Extract and clarify:
    │                     SERVERS                              │
    │  ┌──────────┐  ┌──────────┐  ┌──────────┐              │
    │  │web-01    │  │app-01    │  │db-01     │              │
-   │  │CX22      │  │CPX31     │  │CCX33     │              │
+   │  │CX23      │  │CPX32     │  │CCX33     │              │
    │  │(web tier)│  │(app tier)│  │(database)│              │
    │  └──────────┘  └──────────┘  └──────────┘              │
    └─────────┼───────────────────────────────────────────────┘
@@ -100,8 +100,8 @@ Extract and clarify:
    ```
 
 2. **Server Type Strategy**
-   - `CX22` / `CX32` -- Shared vCPU for web frontends, lightweight services
-   - `CPX31` / `CPX41` -- Dedicated vCPU for application servers, CI runners
+   - `CX23` / `CX33` -- Shared vCPU for web frontends, lightweight services
+   - `CPX32` / `CPX42` -- Shared vCPU (AMD) for application servers, CI runners
    - `CAX21` / `CAX31` -- ARM (Ampere Altra) for 30-50% cost savings on compatible workloads
    - `CCX23` / `CCX33` -- Dedicated vCPU for databases, high-performance workloads
    - All types available with local NVMe SSD storage
@@ -187,7 +187,7 @@ hcloud load-balancer create --name lb-web --type lb11 --location fsn1
 hcloud load-balancer add-target lb-web --label-selector role=web
 ```
 
-### Multi-Datacenter Setup
+### Multi-Location Setup
 
 ```bash
 # Primary location (Falkenstein)
@@ -212,9 +212,11 @@ hcloud server create --name app-hel-01 --type cpx32 --image ubuntu-24.04 \
 - Primary and Floating IPs must be unassigned before deletion: the API returns `must_be_unassigned` (since 2026-05-01)
 - `dns_ptr` is required on change requests (Primary IPs, Floating IPs, Servers, Load Balancers) since 2026-09-30; `null` resets the pointer
 - The server type `deprecated` field is removed on 2026-11-02: read `locations[].deprecation` instead (`null` = not deprecated)
-- Terraform provider 1.69 drops Terraform 1.14 (1.16 added); keep `required_providers` hcloud at `>= 1.70.0`, hcloud CLI 1.70.1
+- Terraform provider 1.69 drops Terraform 1.14 (1.16 added); keep `required_providers` hcloud at `>= 1.70.0`, hcloud CLI 1.70.2
 - Server types cx22/cx32/cx42/cx52 and cpx11-cpx51 are no longer orderable since 2026-01-01: use cx23/cx33/cx43/cx53 and cpx12/cpx22/cpx32/cpx42/cpx52/cpx62
-- Ansible: use the `hetzner.hcloud` collection (7.2.0, requires a recent ansible-core, e.g. 2.21.5) and pin it in `requirements.yml`
+- Ansible: use the `hetzner.hcloud` collection (7.2.0, requires a recent ansible-core, e.g. 2.22.0) and pin it in `requirements.yml`
+- hcloud CLI >= 1.70.0: `hcloud load-balancer create --primary-ipv4 <primary-ip> --primary-ipv6 <primary-ip>` assigns existing Primary IPs (omitted: a new one is allocated). Volume endpoints expose a generalised `assignee` property next to `server` (changelog 2026-10-27)
+- Images: `ubuntu-26.04` is available (x86 and arm); `debian-11` is deprecated and cannot be used to create new servers after 2026-11-30: prefer `ubuntu-26.04`
 
 ## Architecture Checklist
 
@@ -222,7 +224,7 @@ hcloud server create --name app-hel-01 --type cpx32 --image ubuntu-24.04 \
 - [ ] Server types matched to workload (CX for web, CPX/CCX for compute, CAX for cost savings)
 - [ ] Private network with subnet-per-tier isolation
 - [ ] Placement groups for critical services (spread policy)
-- [ ] Datacenter selected for latency and compliance (EU for GDPR)
+- [ ] Location selected for latency and compliance (EU for GDPR)
 - [ ] Labels applied consistently (env, role, team, service)
 
 ### Networking

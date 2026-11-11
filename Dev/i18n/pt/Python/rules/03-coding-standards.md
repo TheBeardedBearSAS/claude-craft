@@ -67,7 +67,7 @@ Use docstrings estilo Google para todos os módulos, classes e funções públic
 def calculate_order_total(
     items: list[OrderItem],
     tax_rate: Decimal,
-    discount: Optional[Decimal] = None
+    discount: Decimal | None = None
 ) -> Money:
     """
     Calcula o valor total de um pedido.
@@ -103,7 +103,7 @@ Tipifique todos os parâmetros de função e valores de retorno.
 ### Tipos Básicos
 
 ```python
-from typing import Optional, Union
+from typing import Union
 from decimal import Decimal
 from datetime import datetime
 
@@ -118,7 +118,7 @@ def process_user(
     pass
 
 # Optional (nullable)
-def find_user(user_id: str) -> Optional[User]:
+def find_user(user_id: str) -> User | None:
     """Retorna User ou None se não encontrado."""
     pass
 
@@ -192,7 +192,7 @@ T = TypeVar('T')
 class Repository(Generic[T]):
     """Repositório genérico."""
 
-    def find_by_id(self, entity_id: str) -> Optional[T]:
+    def find_by_id(self, entity_id: str) -> T | None:
         pass
 
     def save(self, entity: T) -> T:
@@ -202,6 +202,18 @@ class Repository(Generic[T]):
 user_repo: Repository[User] = UserRepository()
 product_repo: Repository[Product] = ProductRepository()
 ```
+
+### Novidades do Python 3.15
+
+O Python 3.15 (estável desde 9 de outubro de 2026) traz, entre outras coisas:
+- **PEP 810**: imports preguiçosos explícitos (`lazy import json`, apenas no nível do módulo).
+- **PEP 814** (`frozendict`): dicionário imutável nativo.
+- **PEP 661** (`sentinel`): tipo nativo para valores sentinela únicos (substitui os `_MISSING = object()` artesanais).
+- **PEP 686 / PEP 798**: UTF-8 por padrão em `open()` sem `encoding`; desempacotamento `*` / `**` em compreensões.
+- **PEP 799** (`profiling`): `profiling.tracing` (antes `cProfile`, mantido como alias) e `profiling.sampling` (profiler estatístico Tachyon); o módulo `profile` está obsoleto (remoção no 3.17).
+- **`re.prefixmatch()`**: nome explícito de `re.match()`, agora "soft deprecated".
+
+Source: docs.python.org/3.15/whatsnew/3.15.html
 
 ## Tratamento de Erros
 
@@ -382,7 +394,6 @@ src/myproject/
 import os
 import sys
 from datetime import datetime
-from typing import Optional
 
 # 2. Terceiros
 from fastapi import FastAPI

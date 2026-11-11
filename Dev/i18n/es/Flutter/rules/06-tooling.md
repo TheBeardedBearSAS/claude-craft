@@ -570,17 +570,21 @@ Flutter 3.47 requiere **AGP 9.0+**. Actualizar `android/build.gradle`:
 // android/build.gradle
 buildscript {
   dependencies {
-    classpath 'com.android.tools.build:gradle:9.0.0'  // AGP 9
+    classpath 'com.android.tools.build:gradle:9.1.0'  // AGP 9.1 (KGP 2.4.0, Java 17+)
   }
 }
 ```
 
 ```properties
 # android/gradle/wrapper/gradle-wrapper.properties
-distributionUrl=https\://services.gradle.org/distributions/gradle-9.0-bin.zip
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-bin.zip
 ```
 
 **Breaking AGP 9:** `android.enableR8.fullMode=true` por defecto (proguard más agresivo); verificar las reglas de keep para la reflexión.
+
+**Matriz Android verificada (Flutter 3.47):** Java 17 como mínimo, KGP 2.4.0, AGP 9.1.0, Gradle 9.3.1; valores por defecto `flutter.compileSdkVersion` / `flutter.targetSdkVersion` = API 36, `flutter.minSdkVersion` = API 24. iOS mínimo 15 y macOS mínimo 12; Xcode 27 exige el ciclo de vida `UIScene` (una app sin UIScene no arranca). **Seguridad:** usar Flutter ≥ 3.47.8, que bloquea las claves de CA eMudhra comprometidas (GHSA-frr6-h895-5pxp). Fuentes: https://blog.flutter.dev (what's new in Flutter 3.47), https://docs.flutter.dev/release/release-notes.
+
+**Xcode (Flutter 3.47):** `flutter doctor` exige Xcode 15 como mínimo y recomienda Xcode 16 (`packages/flutter_tools/lib/src/macos/xcode.dart`, tag 3.47.0); la documentación oficial pide «la última versión» y menciona Xcode 27 (simulador renombrado Device Hub). **Compatibilidad `freezed` 4.0.3 / `json_serializable` 6.15.2:** compatibles (pub.dev), `analyzer` común 14.x (`>=14.0.0 <15.0.0` en freezed, `>=10.0.0 <15.0.0` en json_serializable), `source_gen` 4.x, `build` 4-5 y `json_annotation` 4.12.x.
 
 ### Deprecaciones Material / Cupertino (Flutter 3.47)
 

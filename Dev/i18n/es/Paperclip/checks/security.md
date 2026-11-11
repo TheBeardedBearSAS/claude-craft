@@ -32,6 +32,7 @@ Grep para patrones sospechosos: `req.body.companyId`, `req.query.companyId`, `WH
 ### 4. Presupuestos (límites duros)
 
 - [ ] Existe un test que verifica que `BUDGET_EXCEEDED` es devuelto cuando un agente excede su presupuesto
+- [ ] Se revisa el uso sin tarifa (modelos sin precio): desde 2026.1023.0 el ajuste `unpricedUsagePolicy` de la política de presupuesto (uso sin tarifa) vale `block` por defecto, de modo que los presupuestos bloquean en lugar de continuar en silencio; nunca cambiarlo a `allow` sin una decisión presupuestaria explícita
 - [ ] Ningún path de código incrementa consumo pasado `budgetTokens` silenciosamente
 - [ ] Cambios de presupuesto emiten eventos de actividad
 

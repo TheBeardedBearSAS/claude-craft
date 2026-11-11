@@ -33,7 +33,7 @@ Vollständige Architekturprüfung durchführen:
 - Gültigkeit des vercel.json-Schemas (`$schema`, `version`, gültige Schlüssel der obersten Ebene) (6 Pkt.)
 - Korrektheit von rewrites / redirects / headers (6 Pkt.)
 - Block regions und functions (keine mehrdeutige Glob-Überlappung, memory/maxDuration begründet) (5 Pkt.)
-- Konfiguration der Cron Jobs (gültige Pfade und Zeitpläne in `crons[]`) (4 Pkt.)
+- Konfiguration der Cron Jobs (gültige Pfade und Zeitpläne in `crons[]`; Cron Jobs sind Legacy und werden zu Schedules migriert: `crons[]` als Migrationshinweis melden, nicht als Fehler) (4 Pkt.)
 - Passung zur Projektform und Konflikte mit dem Framework-Adapter (4 Pkt.)
 
 **Referenz**: `.claude/references/vercel/checks/architecture.md`

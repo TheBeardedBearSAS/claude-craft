@@ -44,7 +44,7 @@ Du bist ein **Senior PgBouncer Monitoring-Ingenieur**, spezialisiert auf pgbounc
 # docker-compose.yml-Ergaenzung
 services:
   pgbouncer-exporter:
-    image: prometheuscommunity/pgbouncer-exporter:latest
+    image: prometheuscommunity/pgbouncer-exporter:v0.12.1
     ports:
       - "9127:9127"
     environment:

@@ -66,7 +66,7 @@ O projeto tem várias páginas HTML distintas (não apenas rotas client-side)?
     NÃO --> MAIOR: páginas secundárias não são construídas ou dependem de um
             caminho de carregamento manual e não otimizado
     SIM --> As páginas compartilham dependências pesadas?
-      SIM --> O manualChunks está configurado para um chunk de vendor compartilhado?
+      SIM --> O codeSplitting está configurado para um chunk de vendor compartilhado?
         NÃO --> MENOR: duplicação de código entre páginas
 ```
 
@@ -162,8 +162,8 @@ export default defineConfig({
         admin: resolve(__dirname, 'pages/admin/index.html'),
       },
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) return 'vendor';
+        codeSplitting: {
+          groups: [{ name: 'vendor', test: /node_modules/ }],
         },
       },
     },
@@ -444,7 +444,7 @@ O package.json declara "sideEffects": false?
 
 ```
 A aplicação tem várias páginas (rolldownOptions.input)?
-  SIM --> O manualChunks isola um chunk de vendor compartilhado?
+  SIM --> O codeSplitting isola um chunk de vendor compartilhado?
     NÃO --> MAIOR: cada página duplica as mesmas dependências pesadas
     SIM --> O maior chunk lazy excede 80KB gzip?
       SIM --> MAIOR: dividir mais ou fazer lazy-load das seções pesadas
@@ -505,14 +505,14 @@ export default defineConfig({
 **Code-splitting multi-página:**
 ```typescript
 // RUIM: cada entrada multi-página empacota sua própria cópia do lodash-es
-// (sem manualChunks)
+// (sem codeSplitting)
 
 // BOM: chunk de vendor compartilhado entre todas as páginas
 build: {
   rolldownOptions: {
     output: {
-      manualChunks(id) {
-        if (id.includes('node_modules')) return 'vendor';
+      codeSplitting: {
+        groups: [{ name: 'vendor', test: /node_modules/ }],
       },
     },
   },
@@ -548,7 +548,7 @@ build: {
 |-----------|--------|
 | Tree-shaking efetivo (sideEffects: false, named exports, exports map coerente) | 6 |
 | Dependências externalizadas para bibliotecas (peer deps não empacotadas) | 6 |
-| Code-splitting para aplicações multi-página (manualChunks, vendor compartilhado) | 5 |
+| Code-splitting para aplicações multi-página (codeSplitting, vendor compartilhado) | 5 |
 | Bundle dentro dos limiares, assetsInlineLimit controlado | 4 |
 | Hashing de assets, build.target apropriado, sourcemaps tratados corretamente em prod | 4 |
 
@@ -567,7 +567,7 @@ build: {
 ### Fase 2: Configuração Específica do Vite (15 min)
 
 1. Se biblioteca: verificar build.lib, formats, rolldownOptions.external, vite-plugin-dts
-2. Se multi-página: verificar rolldownOptions.input, manualChunks
+2. Se multi-página: verificar rolldownOptions.input, codeSplitting
 3. Se Workers/WASM: verificar new URL(...import.meta.url), sufixos ?init/?url
 4. Verificar a convenção de nomeação de plugins customizados (vite-plugin-*, propriedade name)
 5. Verificar variáveis de ambiente (prefixo VITE_, nenhum segredo exposto no lado cliente)
@@ -590,7 +590,7 @@ build: {
 
 1. Analisar o tree-shaking (sideEffects, named exports, exports map)
 2. Verificar a externalização de peer deps para bibliotecas
-3. Verificar o code-splitting / manualChunks para aplicações multi-página
+3. Verificar o code-splitting / codeSplitting para aplicações multi-página
 4. Verificar assetsInlineLimit, build.target, hashing de assets, sourcemaps
 5. Executar um analisador de bundle se disponível (rollup-plugin-visualizer)
 
@@ -711,7 +711,7 @@ build: {
 - **index.html é código-fonte**: nunca dentro de public/, sempre transformado pelo pipeline do Vite
 - **public/ é reservado para assets estáticos**: nenhum HTML/JS de origem deve jamais passar por ele
 - **Bibliotecas: externalizar, nunca empacotar peer deps**
-- **Multi-página: nomear cada entrada explicitamente, compartilhar dependências pesadas via manualChunks**
+- **Multi-página: nomear cada entrada explicitamente, compartilhar dependências pesadas via codeSplitting**
 - **Segurança de tipos ponta a ponta**: tsconfig strict até os tipos publicados via vite-plugin-dts
 - **Convenção de nomeação de plugins**: vite-plugin-* com uma propriedade `name` explícita
 - **Verificar o build, não apenas o código-fonte**: testar o dist/ realmente publicado

@@ -92,7 +92,7 @@ APPLICATION DES POLITIQUES
 
 | Verification | Statut | Details |
 |-------------|--------|---------|
-| tfsec/checkov | {integre/non} | {constats} |
+| Trivy/checkov | {integre/non} | {constats} |
 | Politiques OPA | {oui/non} | {nombre} |
 | Fichier de verrouillage des providers | {commite/manquant} | {details} |
 | Conformite des tags | {imposee/non} | {details} |

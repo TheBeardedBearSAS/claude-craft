@@ -235,7 +235,7 @@ pub fn total(&self) -> Result<Money, DomainError> { /* ... */ }
 
 - Rust API Guidelines: https://rust-lang.github.io/api-guidelines/
 - Lints do Clippy: https://rust-lang.github.io/rust-clippy/master/
-- Release do Rust 1.99.0: https://blog.rust-lang.org/2026/10/01/Rust-1.99.0/ (edition 2024)
+- Release do Rust 1.99.1: https://blog.rust-lang.org/2026/10/01/Rust-1.99.1/ (edition 2024)
 
 ## Checklist
 

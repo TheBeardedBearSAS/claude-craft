@@ -35,7 +35,7 @@ Identifier :
 # app/models/{model}.py
 from datetime import datetime
 from decimal import Decimal
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
@@ -102,7 +102,7 @@ class {Model}(Base):
         unique=True,
         index=True,
     )
-    description: Mapped[Optional[str]] = mapped_column(
+    description: Mapped[str | None] = mapped_column(
         Text,
         nullable=True,
     )
@@ -121,7 +121,7 @@ class {Model}(Base):
     )
 
     # Foreign Keys
-    category_id: Mapped[Optional[UUID]] = mapped_column(
+    category_id: Mapped[UUID | None] = mapped_column(
         PGUUID(as_uuid=True),
         ForeignKey("categories.id", ondelete="SET NULL"),
         nullable=True,
@@ -140,7 +140,7 @@ class {Model}(Base):
     )
 
     # Relations
-    category: Mapped[Optional["Category"]] = relationship(
+    category: Mapped["Category | None"] = relationship(
         "Category",
         back_populates="{model}s",
         lazy="selectin",
@@ -258,13 +258,13 @@ class Product(Base):
     __tablename__ = "products"
 
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True)
-    category_id: Mapped[Optional[UUID]] = mapped_column(
+    category_id: Mapped[UUID | None] = mapped_column(
         PGUUID(as_uuid=True),
         ForeignKey("categories.id", ondelete="SET NULL"),
     )
 
     # Relation vers le parent
-    category: Mapped[Optional["Category"]] = relationship(
+    category: Mapped["Category | None"] = relationship(
         "Category",
         back_populates="products",
     )

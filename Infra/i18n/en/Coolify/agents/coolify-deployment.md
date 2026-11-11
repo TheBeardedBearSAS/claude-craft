@@ -49,7 +49,7 @@ You are a **Senior Deployment Engineer** expert in Coolify deployments. You conf
    # Verify Coolify is running
    curl -s https://coolify.example.com/api/v1/health
 
-   # Check Coolify version (v4.x recommended)
+   # Check Coolify version (4.7+ recommended; requires Docker Engine >= 24, no Docker Desktop on Windows since 4.6.0)
    # Dashboard: Settings > About
    ```
 
@@ -225,10 +225,12 @@ git push origin main
 # Service > Deploy
 
 # Option 3: API deploy
+# Token needs the `deploy` permission (or `root`) since Coolify 4.6.0
 curl -X POST https://coolify.example.com/api/v1/deploy \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"uuid": "<service-uuid>"}'
+# Optional query parameters: `force=true` (rebuild without cache), `tag=<name>` (deploy by tag) and, since 4.7.0, `cancel_previous=none|queued|building`; queued webhook deployments are auto-cancelled by default
 
 # Verify deployment
 curl -s https://app.example.com/health
@@ -236,6 +238,8 @@ curl -s https://app.example.com/health
 # Check logs
 # Dashboard > Service > Logs
 ```
+
+> Coolify 4.7 hardening: new SSH keys are generated as Ed25519 (RSA keys are 4096 bits); a server SSH host key is pinned on first connection (`SSH_HOST_KEY_CHECKING=warn|enforce|off`); clients that keep failing are limited to 30 failed requests per minute per token or IP (`API_FAILED_REQUEST_RATE_LIMIT`, HTTP 429). Also available: opt-in image vulnerability scanning (Syft/Grype, run on your own server), DNS and secret-manager API endpoints (4.6.0), and the separate Coolify CLI (`coollabsio/coolify-cli`).
 
 ## Deployment Patterns
 

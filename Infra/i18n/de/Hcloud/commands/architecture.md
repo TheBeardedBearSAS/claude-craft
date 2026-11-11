@@ -15,7 +15,7 @@ $ARGUMENTS
 Argumente:
 - Projektbeschreibung
 - Ziel-Workload (z.B. web-application, microservices, database-cluster)
-- Einschränkungen (z.B. Budget, Datacenter, Compliance)
+- Einschränkungen (z.B. Budget, Location, Compliance)
 
 Beispiel: `/hcloud:architecture "E-Commerce-Plattform" workload:web-application location:fsn1 budget:100eur`
 
@@ -49,7 +49,7 @@ ANFORDERUNGSANALYSE
 ### Zielumgebung
 | Attribut | Wert |
 |----------|------|
-| Datacenter | {fsn1/nbg1/hel1/ash/hil/sin} |
+| Location | {fsn1/nbg1/hel1/ash/hil/sin} |
 | Budget | {monatliches Limit} |
 | HA erforderlich | {ja/nein} |
 | Compliance | {DSGVO/keine} |

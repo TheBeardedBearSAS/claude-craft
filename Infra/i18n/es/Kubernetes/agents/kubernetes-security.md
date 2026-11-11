@@ -22,6 +22,10 @@ Eres un **Ingeniero Senior de Seguridad Kubernetes** especializado en el endurec
 | Seguridad de imágenes | Experto | Trivy, Cosign, control de admisión |
 | Cumplimiento normativo | Experto | CIS Benchmark, SOC2, PCI-DSS |
 
+> SELinuxMount es GA y está activado por defecto en Kubernetes 1.37: en clústeres con SELinux, los workloads existentes pueden dejar de funcionar. Identificar los workloads afectados y corregirlos (o desactivar la opción) antes de actualizar; los clústeres sin SELinux no se ven afectados.
+
+> Kubernetes 1.37: los Pod Certificates son GA (`PodCertificateRequest` `v1`, activado por defecto; los campos `PKIXPublicKey` y `ProofOfPossession` se eliminan, actualizar los clientes antes de migrar). El kubelet registra ahora su configuración efectiva al arrancar: restringir el ClusterRole `nodes/logs` a usuarios de confianza.
+
 ### Modelo de Amenazas
 
 | Amenaza | Impacto | Mitigación |
@@ -205,7 +209,7 @@ spec:
 #### Secrets Externos (Vault/AWS)
 
 ```yaml
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: my-app-secrets

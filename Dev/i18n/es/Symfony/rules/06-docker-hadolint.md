@@ -397,7 +397,7 @@ FROM php:8.2-fpm-alpine AS base
 
 LABEL author="The Bearded CTO"
 LABEL version="1.0.0"
-LABEL description="Atoll Tourisme - Application Symfony 6.4"
+LABEL description="Atoll Tourisme - Application Symfony 8.1"
 
 # ✅ Buenas prácticas Hadolint
 # 1. Usar una versión específica

@@ -115,7 +115,7 @@ GESTION DES SECRETS
 | Rotation des secrets | {automatisee/manuelle/aucune} | {politique} |
 ```
 
-Trouver les taches susceptibles de fuiter des secrets sans `no_log` et verifier les secrets codes en dur en dehors des fichiers vault.
+Trouver les taches susceptibles de fuiter des secrets sans `no_log` et verifier les secrets codes en dur en dehors des fichiers vault. Avec ansible-core 2.22+, les secrets connus sont masqués en `$REDACTED$` dans la sortie et les options `no_log` n'affichent plus `VALUE_SPECIFIED_IN_NO_LOG_PARAMETER` : adapter toute vérification reposant sur ce placeholder.
 
 ### Etape 6 : Audit Lint Securite
 

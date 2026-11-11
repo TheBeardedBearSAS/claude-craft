@@ -53,7 +53,7 @@ Référence : https://router.vuejs.org/guide/migration/ | https://uvr.esm.is/
 ### Vite 5 → 8
 
 - **Vite 6 (Environment API)** : nouvelle API multi-environment (`createEnvironment`) pour orchestrer client, SSR et edge dans un seul `vite.config`. Optionnel et rétrocompatible.
-- **Vite 8 (Rolldown bundler par défaut)** : Rolldown (port Rust de Rollup) remplace esbuild en bundler prod. Build 3-5× plus rapide, sortie identique. `build.rollupOptions` est **déprécié** depuis Vite 8 : utiliser `build.rolldownOptions`.
+- **Vite 8 (Rolldown bundler par défaut)** : Rolldown (port Rust de Rollup) remplace Rollup en bundler prod ; Oxc remplace esbuild pour la transformation. Build 3-5× plus rapide, sortie identique. `build.rollupOptions` est **déprécié** depuis Vite 8 : utiliser `build.rolldownOptions`.
 
 Référence : https://vite.dev/blog/
 
@@ -103,7 +103,7 @@ export default defineConfig({
 })
 ```
 
-> **Vite 8 / Rolldown (défaut) :** la forme objet de `manualChunks` est **supprimée** (non supportée). Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
+> **Vite 8 / Rolldown (défaut) :** la forme objet de `manualChunks` est **supprimée** (non supportée) ; la forme fonction est dépréciée. Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
 > **Vite 7 / Rolldown désactivé (legacy) :** utiliser `build.rollupOptions.output.manualChunks` — `// Only if Rolldown is explicitly disabled`.
 
 ### Environment Variables
@@ -381,13 +381,13 @@ pnpm test
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@vitejs/plugin-vue": "^6.0.0",
-    "@vue/test-utils": "^2.4.0",
+    "@vue/test-utils": "^2.5.1",
     "eslint": "^9.0.0",
     "eslint-plugin-vue": "^10.0.0",
     "prettier": "^3.0.0",
     "typescript": "~5.4.0",
     "vite": "^8.0.0",
-    "vitest": "^4.0.0",
+    "vitest": "^5.1.0",
     "vue-tsc": "^2.2.0"
   }
 }

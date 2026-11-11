@@ -170,11 +170,11 @@ export const authGuard: CanActivateFn = () => {};
 export const authInterceptor: HttpInterceptorFn = (req, next) => {};
 
 // ✅ Pipes: PascalCase + Pipe suffix
-@Pipe({ name: 'dateFormat', standalone: true })
+@Pipe({ name: 'dateFormat' })
 export class DateFormatPipe implements PipeTransform {}
 
 // ✅ Directives: PascalCase + Directive suffix
-@Directive({ selector: '[appHighlight]', standalone: true })
+@Directive({ selector: '[appHighlight]' })
 export class HighlightDirective {}
 ```
 
@@ -231,7 +231,7 @@ onFormSubmit(event: SubmitEvent) {}
 
 ```typescript
 // user-profile.component.ts
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -242,7 +242,6 @@ import type { User } from '@core/models/user.model';
 
 @Component({
   selector: 'app-user-profile',
-  standalone: true,
   imports: [CommonModule, RouterModule, ButtonComponent],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',
@@ -252,19 +251,19 @@ export class UserProfileComponent {
   // 1. Dependency injection
   private readonly userService = inject(UserService);
 
-  // 2. Inputs (signals preferred)
-  @Input({ required: true }) user!: User;
-  @Input() showActions = true;
+  // 2. Inputs (signal inputs)
+  readonly user = input.required<User>();
+  readonly showActions = input(true);
 
   // 3. Outputs
-  @Output() userUpdated = new EventEmitter<User>();
+  readonly userUpdated = output<User>();
 
   // 4. Internal state (signals)
   protected readonly isEditing = signal(false);
 
   // 5. Computed values
   protected readonly fullName = computed(() =>
-    `${this.user.firstName} ${this.user.lastName}`
+    `${this.user().firstName} ${this.user().lastName}`
   );
 
   // 6. Lifecycle hooks
@@ -278,7 +277,7 @@ export class UserProfileComponent {
   }
 
   onSave(): void {
-    this.userService.updateUser(this.user).subscribe({
+    this.userService.updateUser(this.user()).subscribe({
       next: (updated) => {
         this.userUpdated.emit(updated);
         this.isEditing.set(false);
@@ -291,11 +290,10 @@ export class UserProfileComponent {
 ### 2. Signal Inputs (Angular 17.1+)
 
 ```typescript
-import { Component, input, output } from '@angular/core';
+import { Component, input, model, output } from '@angular/core';
 
 @Component({
   selector: 'app-user-card',
-  standalone: true,
   template: `
     <div class="card">
       <h3>{{ user().name }}</h3>
@@ -317,6 +315,21 @@ export class UserCardComponent {
   selected = output<string>();
 }
 ```
+
+Two-way binding uses `model()` (a writable signal input that also emits `<name>Change`):
+
+```typescript
+@Component({
+  selector: 'app-rating',
+  template: `<button (click)="value.set(value() + 1)">{{ value() }}</button>`
+})
+export class RatingComponent {
+  value = model(0);
+}
+// Parent: <app-rating [(value)]="score" />
+```
+
+> Standalone is the default (since Angular 19): do not add `standalone: true`. OnPush is the default since Angular 22.0.0 (opt out with `ChangeDetectionStrategy.Eager`). Migrations: `ng generate @angular/core:signal-input-migration`, `ng generate @angular/core:output-migration`.
 
 ### 3. Inject Function Pattern
 

@@ -1,6 +1,6 @@
 # Laravel 13 — Framework Reference
 
-**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière version vérifiée : 13.36.0 au 2026-10-13)
+**Version :** Laravel 13.x (série 13 lancée le 17 mars 2026 — dernière version vérifiée : 13.42.0 au 2026-11-11)
 **PHP :** 8.3+ (8.5 recommandé)
 **Sources :** https://laravel.com/docs/13.x/releases
 
@@ -24,7 +24,7 @@
 ## Nouveautés Laravel 13
 
 ### AI SDK Stable
-- API unifiée OpenAI, Anthropic, Gemini, Ollama
+- Package `laravel/ai` (`composer require laravel/ai`) : API unifiée OpenAI, Anthropic, Gemini + driver `openai-compatible`
 - Outils (Tools), Agents, Embeddings, Streaming
 - https://laravel.com/docs/13.x/ai-sdk
 
@@ -135,16 +135,21 @@ interface UserRepositoryInterface
 ### 4. AI SDK Pattern (Laravel 13)
 
 ```php
-$response = AI::driver('anthropic')
-    ->chat()
-    ->messages([['role' => 'user', 'content' => 'Hello']])
-    ->generate();
+use function Laravel\Ai\{agent};
+
+$response = agent(instructions: 'You are a helpful assistant.')
+    ->prompt('Hello');
+
+echo (string) $response;
 ```
 
 ### 5. Vector Search Pattern (Laravel 13)
 
 ```php
-$relevantDocs = Document::similarTo($question, limit: 3)->get();
+$relevantDocs = Document::query()
+    ->whereVectorSimilarTo('embedding', $question, minSimilarity: 0.4)
+    ->limit(3)
+    ->get();
 ```
 
 ---

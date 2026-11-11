@@ -169,7 +169,7 @@ pub async fn register(Json(body): Json<CreateUserRequest>) -> Result<StatusCode,
 - `#[serde(deny_unknown_fields)]` for strict DTOs; separate DTOs per use case to prevent mass assignment
 - Limit sizes: `RequestBodyLimitLayer`, `DefaultBodyLimit`, string `max` lengths, pagination caps (`limit <= 100`)
 - Wrap `Json` in an extractor that maps malformed-body rejections to the problem+json format without echoing internals
-- Passwords: minimum 12 characters, allow any printable character, no composition rules, no periodic rotation (NIST SP 800-63B-4)
+- Passwords: minimum 15 characters (single-factor; 8 with MFA), allow any printable character, no composition rules, no periodic rotation (NIST SP 800-63B-4)
 
 ---
 

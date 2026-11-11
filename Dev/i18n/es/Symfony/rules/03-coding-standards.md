@@ -402,3 +402,18 @@ Ver `.claude/checklists/pre-commit.md` para checklist completa.
 - **Symfony Coding Standards**: https://symfony.com/doc/current/contributing/code/standards.html
 - **PHP-CS-Fixer**: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 - **PHPStan**: https://phpstan.org/
+
+## Deprecaciones y rupturas de Symfony 8.1
+
+| Componente | Cambio en 8.1 | Acción |
+|------------|---------------|--------|
+| DependencyInjection | Alias de autowiring con nombre sin `#[Target]` obsoletos | Añadir `#[Target]` al parámetro del constructor |
+| Messenger | Los serializers devuelven `Envelope<MessageDecodingFailedException>` en lugar de lanzar una excepción; los receivers ya no eliminan el mensaje si falla la decodificación | Adaptar los serializers personalizados; `$fetchSize` añadido a `ReceiverInterface::get()` / `QueueReceiverInterface::getFromQueues()`; `forceRetry()` añadido a `RecoverableExceptionInterface` |
+| Messenger | `StopWorkerOnTimeLimitListener` obsoleto | Usar la opción de worker `time_limit` |
+| HttpKernel | `Bundle::registerCommands()` obsoleto | Usar `#[AsCommand]` o la etiqueta `console.command` |
+| SecurityBundle | `security.erase_credentials` obsoleto (`eraseCredentials()` eliminado en 8.0) | Eliminar la opción |
+| Validator | `ConstraintValidatorInterface::initialize()`/`validate()` obsoletos | Implementar `validateInContext()` (nada que hacer si se extiende `ConstraintValidator`) |
+| HttpFoundation | Asignar directamente las propiedades públicas de `Request`/`Response` está obsoleto | Usar setters o argumentos del constructor |
+| HttpFoundation | `ParameterBag::getInt()`/`getBoolean()` lanzan `UnexpectedValueException` si el valor no es convertible (antes devolvían `0`/`false`) | Validar la entrada o capturar la excepción |
+
+Fuente: https://github.com/symfony/symfony/blob/8.1/UPGRADE-8.1.md

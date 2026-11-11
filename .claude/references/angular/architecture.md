@@ -6,13 +6,12 @@
 
 ### 1. Standalone Components (Angular 14+, par défaut Angular 17+)
 
-Angular utilise par défaut les **standalone components**, éliminant le besoin de NgModules dans la plupart des cas.
+Angular utilise par défaut les **standalone components** (défaut depuis Angular 19 : `standalone: true` est redondant et ne doit plus être écrit), éliminant le besoin de NgModules dans la plupart des cas.
 
 ```typescript
 // ✅ Modern - Standalone Component
 @Component({
   selector: 'app-user-profile',
-  standalone: true,
   imports: [CommonModule, RouterModule, UserAvatarComponent],
   template: `...`
 })
@@ -35,7 +34,6 @@ import { signal, computed, effect } from '@angular/core';
 
 @Component({
   selector: 'app-counter',
-  standalone: true,
   template: `
     <p>Count: {{ count() }}</p>
     <p>Double: {{ doubleCount() }}</p>
@@ -186,7 +184,6 @@ Handle logic, services, and state management:
 // features/users/components/user-list/user-list.container.ts
 @Component({
   selector: 'app-user-list-container',
-  standalone: true,
   imports: [UserListComponent, AsyncPipe],
   template: `
     <app-user-list
@@ -221,14 +218,13 @@ Pure display components, receive data via inputs:
 // features/users/components/user-list/user-list.component.ts
 @Component({
   selector: 'app-user-list',
-  standalone: true,
   imports: [CommonModule, UserCardComponent],
   template: `
-    @if (loading) {
+    @if (loading()) {
       <app-skeleton />
     } @else {
       <div class="user-grid">
-        @for (user of users; track user.id) {
+        @for (user of users(); track user.id) {
           <app-user-card
             [user]="user"
             (click)="userSelected.emit(user.id)"
@@ -240,11 +236,11 @@ Pure display components, receive data via inputs:
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserListComponent {
-  @Input({ required: true }) users!: User[];
-  @Input() loading = false;
+  readonly users = input.required<User[]>();
+  readonly loading = input(false);
 
-  @Output() userSelected = new EventEmitter<string>();
-  @Output() pageChange = new EventEmitter<number>();
+  readonly userSelected = output<string>();
+  readonly pageChange = output<number>();
 }
 ```
 
@@ -411,30 +407,33 @@ export const routes: Routes = [
 
 ## Architecture Best Practices
 
-### 1. Change Detection Strategy (OnPush par défaut depuis Angular 22)
+### 1. Change Detection Strategy (OnPush par défaut depuis Angular 22.0.0)
 
-Depuis Angular 22, **OnPush est la stratégie par défaut** pour tout composant généré via le CLI. Les composants qui ne déclarent pas explicitement `changeDetection` utilisent désormais OnPush au lieu d'Eager. Specifier `ChangeDetectionStrategy.Default` pour revenir à l'ancien comportement si nécessaire.
+Depuis Angular 22.0.0 (breaking change), **les composants dont `changeDetection` est indéfini sont `OnPush` par défaut**. Déclarer `changeDetection: ChangeDetectionStrategy.Eager` pour conserver l'ancien comportement ; la migration `ng update` `change-detection-eager` (22.0.0) ajoute `Eager` à tous les composants existants.
 
 ```typescript
-// Angular 22 — OnPush implicite (le CLI ne génère plus la ligne)
+// Angular 22 — OnPush implicite (ne pas déclarer changeDetection)
 @Component({
   selector: 'app-my-component',
-  standalone: true,
   template: `...`
   // changeDetection omis → OnPush par défaut
 })
 export class MyComponent {}
 
-// Fallback explicite si Eager requis (rare)
+// Opt-out explicite si l'ancien comportement est requis (rare)
 @Component({
-  changeDetection: ChangeDetectionStrategy.Default
+  selector: 'app-legacy',
+  template: `...`,
+  changeDetection: ChangeDetectionStrategy.Eager
 })
 export class LegacyComponent {}
 ```
 
-**Impact migration :** les composants existants sans `changeDetection` conservent leur comportement actuel jusqu'à Angular 22 ; seuls les nouveaux composants CLI héritent du défaut OnPush.
+**Impact migration :** les composants existants sans `changeDetection` passent à OnPush lors de la montée en 22.0.0 ; la migration `change-detection-eager` insère `ChangeDetectionStrategy.Eager` pour préserver leur comportement, à retirer progressivement.
 
-### 2. Typed Forms
+Source : https://github.com/angular/angular/blob/main/CHANGELOG.md (22.0.0, core)
+
+### 2. Typed Reactive Forms (applications existantes — préférer Signal Forms pour le nouveau code)
 
 ```typescript
 interface UserForm {
@@ -537,7 +536,6 @@ interface LoginData {
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [FormField],
   template: `
     <form novalidate (submit)="onSubmit($event)">
@@ -564,7 +562,9 @@ export class LoginComponent {
 }
 ```
 
-**API Signal Forms v22 :** `form(model, schemaFn)` + directive `FormField` + validators (`required`, `email`, `debounce`, etc.) depuis `@angular/forms/signals`. Interopérabilité avec les Reactive Forms existantes via `SignalFormControl` bridge.
+**API Signal Forms v22 :** `form(model, schemaFn)` + directive `FormField` (`[formField]`) + validators (`required`, `email`, `debounce`, etc.) depuis `@angular/forms/signals`. Interopérabilité avec les Reactive Forms existantes via `SignalFormControl` bridge. Les API Signal Forms sont passées en API publique en 22.0.0.
+
+**Soumission :** la directive `FormRoot` (`<form [formRoot]="loginForm">`, depuis `@angular/forms/signals`) pose `novalidate`, empêche la navigation native et appelle `submit()` ; l'action se configure via l'option `submission` de `form()` (`action`, `onInvalid`, `ignoreValidators`) ou via `await submit(form, async (field) => ...)` (retourne `Promise<boolean>`). Source : https://angular.dev/guide/forms/signals/form-submission
 
 Source : https://angular.dev/essentials/signal-forms
 
@@ -611,7 +611,7 @@ Angular architecture priorities for 2026 (v22 stable) :
 2. **Signals**: Primitive réactive principale (état synchrone)
 3. **Zoneless (par défaut depuis v21)**: aucun provider requis en v22 (`provideZonelessChangeDetection()` seulement en v20) — gains de performance à mesurer
 4. **httpResource()**: Chargement déclaratif avec états automatiques (stable v20+)
-5. **OnPush par défaut (v22)**: Stratégie de change detection par défaut pour les composants CLI — plus besoin de le spécifier
+5. **OnPush par défaut (22.0.0)**: Stratégie de change detection par défaut de tout composant sans `changeDetection` — opt-out via `ChangeDetectionStrategy.Eager`
 6. **HttpClient Fetch par défaut (v22)**: `HttpClient` utilise désormais l'API `fetch` native au lieu de `XMLHttpRequest` — meilleure intégration SSR et streaming
 7. **Signal Forms (stable v22)**: `form(model, schemaFn)` depuis `@angular/forms/signals`
 7. **Domain-Driven Structure**: Organisation par feature
@@ -619,7 +619,34 @@ Angular architecture priorities for 2026 (v22 stable) :
 9. **Lazy Loading**: Routes et composants
 10. **Modern Control Flow**: @if, @for, @switch
 
-**Angular 22 nouveautés clés :** Signal Forms stables (`@angular/forms/signals`), **OnPush par défaut** (composants CLI), **HttpClient utilise Fetch par défaut** (plus XHR), TypeScript 6 requis, Resource API stable, Node.js 22.x ou 24.x requis (Node 20 supprimé).
+**Angular 22 nouveautés clés :** Signal Forms stables (`@angular/forms/signals`), **OnPush par défaut** (`Eager` pour l'opt-out), **HttpClient utilise Fetch par défaut** (plus XHR), TypeScript 6 requis, Resource API stable, Node.js 22.x ou 24.x requis (Node 20 supprimé).
+
+### Breaking changes Angular 22.0.0
+
+Source : https://github.com/angular/angular/blob/main/CHANGELOG.md (section 22.0.0).
+
+| Domaine | Changement | Action |
+|---------|------------|--------|
+| core | `changeDetection` indéfini = `OnPush` | `ChangeDetectionStrategy.Eager` pour l'ancien comportement (migration `ng update`) |
+| core | Retrait de `ComponentFactoryResolver`, `ComponentFactory`, `createNgModuleRef`, `ChangeDetectorRef.checkNoChanges` | Passer la classe du composant à `ViewContainerRef.createComponent` / `createComponent` ; `createNgModule` ; `fixture.detectChanges()` en test |
+| core | TypeScript < 6.0 non supporté | Monter TypeScript en 6.x |
+| router | `paramsInheritanceStrategy` vaut `'always'` | Définir `'emptyOnly'` pour restaurer l'ancien comportement |
+| router | `provideRoutes()` supprimé | `provideRouter()` ou token multi `ROUTES` |
+| router | `currentSnapshot` requis dans `CanMatchFn` / `CanMatch.canMatch` | Migration fournie ; ajouter le 3e argument aux classes |
+| forms | `min` / `max` refusent les chaînes | Lier des nombres ou `null` |
+| http | `FetchBackend` par défaut ; progression d'upload | `provideHttpClient(withXhr())` pour conserver les rapports de progression d'upload (schematic fourni) ; `withFetch` déprécié ; `reportProgress` déprécié (`reportUploadProgress` / `reportDownloadProgress`) |
+| platform-browser | Hammer.js supprimé ; hydratation incrémentale par défaut | Implémentation maison pour les gestes |
+| compiler | Diagnostics `nullishCoalescingNotNullable` / `optionalChainNotNullable` actifs sur les projets existants ; attributs `data-*` ne lient plus d'inputs/outputs ; liaisons input/output dupliquées = erreur ; `in` interdit dans les expressions | Désactiver temporairement les diagnostics dans `tsconfig` si besoin |
+| compiler-cli | Éléments avec plusieurs sélecteurs correspondants = erreur de compilation (NG8023) | Désambiguïser les sélecteurs |
+
+### Nouveautés Angular 22.2
+
+- `ErrorBoundary` : API programmatiques dans core (blocs `@boundary` pris en charge par le language service).
+- Router : `containsTree` en API publique, `throw new RedirectCommand(...)` déclenche une redirection, ressources du router exposées.
+- Signal Forms : champs cachés permanents autorisés.
+- Compilateur : accès des templates aux membres privés ; option `strictUnclaimedEventNames` pour détecter les outputs mal orthographiés.
+
+Source : https://github.com/angular/angular/blob/main/CHANGELOG.md (section 22.2.0)
 
 ### @Service decorator (v22)
 
@@ -639,43 +666,44 @@ export class UserService {
 
 ### injectAsync() (v22)
 
-`injectAsync()` permet d'injecter des dépendances asynchrones (lazy-loaded, promise-based) directement dans le constructeur :
+`injectAsync()` (`@angular/core`, API publique depuis 22.0) retourne une fonction qui résout le service à la demande : `injectAsync<T>(loader: () => Promise<ProviderToken<T>>, options?: { prefetch?: PrefetchTrigger }): () => Promise<T>`. Il doit être appelé dans un contexte d'injection, et le service chargé doit être auto-fourni (`@Injectable({providedIn: 'root'})` ou `@Service()`) :
 
 ```typescript
-import { Component, injectAsync } from '@angular/core';
+import { Component, injectAsync, onIdle } from '@angular/core';
 
 @Component({ ... })
 export class DashboardComponent {
-  // injectAsync : résolution lazy d'un service ou d'un token asynchrone
-  private analytics = injectAsync(() =>
-    import('./analytics.service').then(m => inject(m.AnalyticsService))
-  );
+  private analytics = injectAsync(() => import('./analytics.service'), { prefetch: onIdle });
+
+  async onClick() {
+    (await this.analytics()).track('click');
+  }
 }
 ```
 
-**Usage :** partage de singletons issus de micro-frontends ou de modules chargés dynamiquement sans circular dependency.
+**Usage :** charger paresseusement un service lourd (chunk séparé) sans le payer au démarrage. Source : https://angular.dev/guide/di/lazy-loading-services
 
 ### Angular Aria (v22)
 
-Le package `@angular/aria` (stable v22) fournit des primitives accessibles prêtes à l'emploi : `cdkAriaLive`, `cdkTrapFocus`, `cdkVisuallyHidden`, et les nouvelles directives `cdkCombobox`, `cdkListbox` :
+Le package `@angular/aria` existe sur npm (latest 22.2.6) ; le tag « developer preview » a été retiré dans 22.0.0 (CHANGELOG d'`angular/components`). Il fournit des directives headless accessibles par sous-entrée (`@angular/aria/listbox`, `/combobox`, `/menu`, `/tabs`, `/tree`, `/toolbar`, `/accordion`, `/grid`) ; sélecteurs `ngListbox`, `ngOption`, etc. (source : https://angular.dev/guide/aria/listbox). `cdkTrapFocus`, `cdkAriaLive` et `cdkVisuallyHidden` restent dans `@angular/cdk/a11y`.
 
 ```typescript
-import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
+import { Listbox, Option } from '@angular/aria/listbox';
 
 @Component({
-  standalone: true,
-  imports: [CdkListbox, CdkOption],
+  imports: [Listbox, Option],
   template: `
-    <ul cdkListbox>
-      <li cdkOption="option1">Option 1</li>
-      <li cdkOption="option2">Option 2</li>
-    </ul>
+    <div ngListbox aria-label="Options">
+      @for (o of options; track o) { <div ngOption [value]="o">{{ o }}</div> }
+    </div>
   `
 })
-export class AccessibleListComponent {}
+export class AccessibleListComponent {
+  options = ['Option 1', 'Option 2'];
+}
 ```
 
-**SSRF/SSR (v22) :** Angular 22 corrige plusieurs vecteurs SSRF liés au SSR (Server-Side Rendering) : les requêtes HTTP faites côté serveur n'incluent plus les cookies client par défaut (`withClientHydration()` ne forwarde plus les credentials).
+**SSRF (v22) :** le CHANGELOG 22.0.0 liste des correctifs SSRF dans `platform-server` (« prevent SSRF bypasses via backslash URLs in HttpClient », « secure location and document initialization against SSRF and path hijack ») ; la mention précédente d'un non-forward des cookies par `withClientHydration()` n'est confirmée par aucune source officielle et a été retirée. `ServerXhr` (`@angular/platform-server`) est déprécié ; JSONP est déprécié depuis 22.1.
 
 **Source :** https://blog.ninja-squad.com/2026/06/03/what-is-new-angular-22.0
 

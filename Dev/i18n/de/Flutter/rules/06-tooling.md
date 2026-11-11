@@ -570,17 +570,21 @@ Flutter 3.47 erfordert **AGP 9.0+**. `android/build.gradle` aktualisieren:
 // android/build.gradle
 buildscript {
   dependencies {
-    classpath 'com.android.tools.build:gradle:9.0.0'  // AGP 9
+    classpath 'com.android.tools.build:gradle:9.1.0'  // AGP 9.1 (KGP 2.4.0, Java 17+)
   }
 }
 ```
 
 ```properties
 # android/gradle/wrapper/gradle-wrapper.properties
-distributionUrl=https\://services.gradle.org/distributions/gradle-9.0-bin.zip
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-bin.zip
 ```
 
 **Breaking AGP 9:** `android.enableR8.fullMode=true` ist standardmäßig aktiviert (aggressiveres Proguard); Keep-Regeln für Reflection überprüfen.
+
+**Verifizierte Android-Matrix (Flutter 3.47):** Java 17 mindestens, KGP 2.4.0, AGP 9.1.0, Gradle 9.3.1; Standardwerte `flutter.compileSdkVersion` / `flutter.targetSdkVersion` = API 36, `flutter.minSdkVersion` = API 24. Mindestens iOS 15 und macOS 12; Xcode 27 erzwingt den `UIScene`-Lebenszyklus (eine App ohne UIScene startet nicht). **Sicherheit:** Flutter ≥ 3.47.8 verwenden, das kompromittierte eMudhra-CA-Schlüssel blockiert (GHSA-frr6-h895-5pxp). Quellen: https://blog.flutter.dev (what's new in Flutter 3.47), https://docs.flutter.dev/release/release-notes.
+
+**Xcode (Flutter 3.47):** `flutter doctor` verlangt mindestens Xcode 15 und empfiehlt Xcode 16 (`packages/flutter_tools/lib/src/macos/xcode.dart`, Tag 3.47.0); die offizielle Dokumentation verlangt „die neueste Version“ und erwähnt Xcode 27 (Simulator in Device Hub umbenannt). **Kompatibilität `freezed` 4.0.3 / `json_serializable` 6.15.2:** kompatibel (pub.dev), gemeinsames `analyzer` 14.x (`>=14.0.0 <15.0.0` bei freezed, `>=10.0.0 <15.0.0` bei json_serializable), `source_gen` 4.x, `build` 4-5 und `json_annotation` 4.12.x.
 
 ### Material / Cupertino Deprecations (Flutter 3.44)
 

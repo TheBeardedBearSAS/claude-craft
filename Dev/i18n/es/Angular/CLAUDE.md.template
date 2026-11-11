@@ -27,7 +27,8 @@ src/app/
 ### Arquitectura: Feature-Based con Standalone Components
 - **Standalone Components**: Todos los componentes sin NgModules
 - **Signals First**: Estado reactivo con Angular Signals
-- **OnPush Strategy**: Todos los componentes con OnPush
+- **OnPush Strategy**: Por defecto desde Angular 22.0.0 (omitir `changeDetection`; `ChangeDetectionStrategy.Eager` solo para desactivarlo)
+- **Signal I/O**: `input()`, `output()`, `model()` en lugar de `@Input`/`@Output`/`EventEmitter`; sin `standalone: true` (por defecto)
 - **Modern Control Flow**: @if, @for, @switch (no *ngIf, *ngFor)
 
 Ver `rules/02-architecture.md` para patrones detallados.
@@ -47,7 +48,7 @@ Ver `rules/02-architecture.md` para patrones detallados.
 ```bash
 ng serve                     # Servidor desarrollo
 ng build                     # Build produccion
-ng generate component [name] --standalone  # Generar componente
+ng generate component [name]  # Generar componente
 ```
 
 ### Pipeline de calidad

@@ -33,6 +33,8 @@ You are a **Senior Ansible Security Engineer** specialized in Ansible Vault encr
 | Man-in-the-middle | High | Host key checking, known_hosts |
 | Unauthorized execution | Medium | AWX RBAC, CI approval gates |
 
+> ansible-core 2.22 automatically masks known secret values in output as `$REDACTED$` (tasks, conditionals and registered variables still receive the real value). Options marked `no_log: true` no longer appear as `VALUE_SPECIFIED_IN_NO_LOG_PARAMETER` in results or `invocation.module_args`: update any test that checks that placeholder. Keep `no_log: true` on sensitive tasks.
+
 ## Methodology
 
 ### Phase 1 -- Security Assessment

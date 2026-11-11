@@ -21,7 +21,8 @@ src/app/
 ### Architecture: Standalone + Feature-First
 - **Standalone Components**: No NgModules, tree-shakeable
 - **Signals**: Reactive state management
-- **OnPush**: All components use ChangeDetectionStrategy.OnPush
+- **OnPush**: Default since Angular 22.0.0 (omit `changeDetection`; `ChangeDetectionStrategy.Eager` only to opt out)
+- **Signal I/O**: `input()`, `output()`, `model()` instead of `@Input`/`@Output`/`EventEmitter`; no `standalone: true` (default)
 - **Modern Control Flow**: @if, @for, @switch syntax
 
 See `rules/02-architecture.md` for complete patterns.
@@ -46,7 +47,7 @@ ng lint               # ESLint check
 
 ### Code Generation
 ```bash
-ng generate component features/{{feature}}/components/{{name}} --standalone
+ng generate component features/{{feature}}/components/{{name}}
 ng generate service core/services/{{name}}
 ```
 

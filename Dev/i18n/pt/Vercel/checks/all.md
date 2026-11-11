@@ -33,7 +33,7 @@ Executar a verificação completa de arquitetura:
 - Validade do schema do vercel.json (`$schema`, `version`, chaves de nível superior válidas) (6 pts)
 - Correção de rewrites / redirects / headers (6 pts)
 - Bloco regions e functions (sem sobreposição ambígua de globs, memory/maxDuration justificados) (5 pts)
-- Configuração dos Cron Jobs (caminhos e agendamentos válidos em `crons[]`) (4 pts)
+- Configuração dos Cron Jobs (caminhos e agendamentos válidos em `crons[]`; os Cron Jobs são legacy e migram para Schedules: sinalizar `crons[]` como nota de migração, não como erro) (4 pts)
 - Adequação ao formato do projeto e conflitos com o adaptador de framework (4 pts)
 
 **Referência**: `.claude/references/vercel/checks/architecture.md`

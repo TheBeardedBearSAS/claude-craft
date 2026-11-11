@@ -4,6 +4,8 @@
 
 Expo Router es el sistema de navegación recomendado para Expo, basado en el enrutamiento por archivos (como Next.js).
 
+> **Expo SDK 58:** se rediseñó el núcleo de Expo Router. Si tienes navegadores personalizados o importas desde `expo-router/react-navigation`, algunas API se movieron o eliminaron (guía de migración del SDK 57 al 58); `withLayoutContext` está obsoleto en favor de `integrateWithRouter`. Fuente: [Expo SDK 58](https://expo.dev/changelog/sdk-58).
+
 ---
 
 ## Instalación y Configuración

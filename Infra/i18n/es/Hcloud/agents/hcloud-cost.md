@@ -28,14 +28,16 @@ Eres un **Ingeniero Senior de Optimización de Costos en Hetzner Cloud** especia
 
 | Tipo de Servidor | vCPU | RAM | Disco | Mensual (aprox) | Caso de Uso |
 |-----------------|------|-----|-------|-----------------|-------------|
-| CX22 | 2 compartido | 4 GB | 40 GB | ~4€ | Dev, staging |
-| CX32 | 4 compartido | 8 GB | 80 GB | ~8€ | Apps web pequeñas |
-| CPX21 | 3 dedicado | 4 GB | 80 GB | ~8€ | Runners de CI |
-| CPX31 | 4 dedicado | 8 GB | 160 GB | ~14€ | Servidores de app |
-| CAX21 | 4 ARM | 8 GB | 80 GB | ~6€ | Apps compatibles con ARM |
-| CAX31 | 8 ARM | 16 GB | 160 GB | ~11€ | Cómputo ARM |
-| CCX23 | 4 dedicado | 16 GB | 80 GB | ~25€ | Bases de datos |
-| CCX33 | 8 dedicado | 32 GB | 160 GB | ~45€ | Cargas pesadas |
+| CX23 | 2 compartido | 4 GB | 40 GB | ~6€ | Dev, staging |
+| CX33 | 4 compartido | 8 GB | 80 GB | ~9€ | Apps web pequeñas |
+| CPX22 | 2 compartido | 4 GB | 80 GB | ~20€ | Runners de CI |
+| CPX32 | 4 compartido | 8 GB | 160 GB | ~36€ | Servidores de app |
+| CAX21 | 4 ARM | 8 GB | 80 GB | ~11€ | Apps compatibles con ARM |
+| CAX31 | 8 ARM | 16 GB | 160 GB | ~21€ | Cómputo ARM |
+| CCX23 | 4 dedicado | 16 GB | 160 GB | ~73€ | Bases de datos |
+| CCX33 | 8 dedicado | 32 GB | 240 GB | ~118€ | Cargas pesadas |
+
+> Precios: EUR al mes sin IVA (FSN1/NBG1), consultados en hetzner.com/cloud el 2026-11-11; las tarifas varían según la location, consultar la página de precios oficial.
 
 ## Metodología
 
@@ -124,7 +126,7 @@ OPORTUNIDADES DE MIGRACIÓN A ARM (CAX)
 
 | Servidor | Actual | ARM Propuesto | Ahorro | Compatible |
 |----------|--------|---------------|--------|------------|
-| {name} | CPX31 (14€) | CAX31 (11€) | 3€/mes | Sí/No |
+| {name} | CPX32 (~36€) | CAX31 (~21€) | {savings}€/mes | Sí/No |
 ```
 
 Lista de verificación de compatibilidad ARM:

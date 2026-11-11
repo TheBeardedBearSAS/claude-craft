@@ -105,7 +105,7 @@ ListView.builder(
   itemCount: items.length,
   itemBuilder: (context, index) => ItemWidget(item: items[index]),
   // Optimisations supplémentaires
-  cacheExtent: 500, // Pré-render
+  scrollCacheExtent: const ScrollCacheExtent.pixels(500), // Pré-render
   addAutomaticKeepAlives: false, // Si pas besoin de garder l'état
 )
 

@@ -19,8 +19,8 @@ L'utilisation de **Docker est OBLIGATOIRE** pour tout le projet Atoll Tourisme. 
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Docker Engine | 29.9.0 | BuildKit par défaut, SBOM natif |
-| Docker Compose | 5.6.0 | Champ `version:` obsolète |
+| Docker Engine | 29.9.3 | BuildKit par défaut, SBOM natif |
+| Docker Compose | 5.7.0 | Champ `version:` obsolète |
 | FrankenPHP | 1.12.4 | PHP 8.5, Caddy 2.11.2, Worker mode (2-3× gains) |
 | PgBouncer | 1.25.2 | Prepared statements natifs (1.21+ requis ; CVE-2026-6664/6667 patchées) |
 
@@ -407,7 +407,7 @@ docker run --rm -i hadolint/hadolint:v2.15.1 < Dockerfile
 ```dockerfile
 # Dockerfile - Production - Atoll Tourisme
 # Validé par Hadolint v2.15.1
-# Docker Engine 29.9.0
+# Docker Engine 29.9.3
 # Source: https://www.docker.com/blog/docker-engine-version-29/
 
 # Métadonnées obligatoires
@@ -416,7 +416,7 @@ FROM php:8.5-fpm-alpine AS base
 
 LABEL author="The Bearded CTO"
 LABEL version="1.0.0"
-LABEL description="Atoll Tourisme - Application Symfony 6.4"
+LABEL description="Atoll Tourisme - Application Symfony 8.1"
 
 # ✅ Bonnes pratiques 2026
 # 1. Utiliser une version spécifique
@@ -585,7 +585,7 @@ CMD ["php-fpm"]
 
 ### docker-compose.yml (Production-ready)
 
-**Note** : Depuis Docker Compose v2.40+ (décembre 2024), le champ `version:` est obsolète et non requis. Compose 5.6.0 ignore ce champ et affiche un avertissement s'il est présent.  
+**Note** : Depuis Docker Compose v2.40+ (décembre 2024), le champ `version:` est obsolète et non requis. Compose 5.7.0 ignore ce champ et affiche un avertissement s'il est présent.  
 **Source** : https://www.compose-spec.io/
 
 ```yaml
@@ -809,8 +809,8 @@ make shell  # puis psql
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| Docker Engine | 29.9.0 | BuildKit par défaut, SBOM natif |
-| Docker Compose | 5.6.0 | Champ `version:` obsolète depuis v2.40+ |
+| Docker Engine | 29.9.3 | BuildKit par défaut, SBOM natif |
+| Docker Compose | 5.7.0 | Champ `version:` obsolète depuis v2.40+ |
 | Hadolint | v2.15.1 | Version stable pinnée |
 | Kubernetes | 1.36.1 | Gateway API v1.4+, sidecar-less architectures |
 

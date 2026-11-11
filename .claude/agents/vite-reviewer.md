@@ -67,7 +67,7 @@ Le projet a-t-il plusieurs pages HTML distinctes (pas seulement des routes cote 
     NON --> MAJEUR : les pages secondaires ne sont pas buildees ou dependent
             d'un chargement manuel non optimise
     OUI --> Les pages partagent-elles des dependances lourdes ?
-      OUI --> manualChunks configure pour un vendor chunk partage ?
+      OUI --> codeSplitting configure pour un vendor chunk partage ?
         NON --> MINEUR : duplication de code entre les pages
 ```
 
@@ -163,8 +163,8 @@ export default defineConfig({
         admin: resolve(__dirname, 'pages/admin/index.html'),
       },
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) return 'vendor';
+        codeSplitting: {
+          groups: [{ name: 'vendor', test: /node_modules/ }],
         },
       },
     },
@@ -445,7 +445,7 @@ Le package.json declare-t-il "sideEffects": false ?
 
 ```
 L'app a-t-elle plusieurs pages (rolldownOptions.input) ?
-  OUI --> manualChunks isole-t-il un vendor chunk partage ?
+  OUI --> codeSplitting isole-t-il un vendor chunk partage ?
     NON --> MAJEUR : chaque page duplique les memes dependances lourdes
     OUI --> Le plus gros chunk lazy depasse-t-il 80KB gzip ?
       OUI --> MAJEUR : decouper davantage ou lazy-loader les sections lourdes
@@ -506,14 +506,14 @@ export default defineConfig({
 **Code-splitting multi-page :**
 ```typescript
 // MAUVAIS : chaque page multi-page embarque sa propre copie de lodash-es
-// (pas de manualChunks)
+// (pas de codeSplitting)
 
 // BON : vendor chunk partage entre toutes les pages
 build: {
   rolldownOptions: {
     output: {
-      manualChunks(id) {
-        if (id.includes('node_modules')) return 'vendor';
+      codeSplitting: {
+        groups: [{ name: 'vendor', test: /node_modules/ }],
       },
     },
   },
@@ -549,7 +549,7 @@ build: {
 |---------|--------|
 | Tree-shaking effectif (sideEffects: false, exports nommes, exports map coherente) | 6 |
 | Dependances externalisees pour les librairies (peer deps non bundlees) | 6 |
-| Code-splitting pour apps multi-pages (manualChunks, vendor partage) | 5 |
+| Code-splitting pour apps multi-pages (codeSplitting, vendor partage) | 5 |
 | Bundle sous les seuils, assetsInlineLimit maitrise | 4 |
 | Hashing des assets, build.target adapte, sourcemaps geres correctement en prod | 4 |
 
@@ -568,7 +568,7 @@ build: {
 ### Phase 2 : Configuration Vite specifique (15 min)
 
 1. Si librairie : verifier build.lib, formats, rolldownOptions.external, vite-plugin-dts
-2. Si multi-page : verifier rolldownOptions.input, manualChunks
+2. Si multi-page : verifier rolldownOptions.input, codeSplitting
 3. Si Workers/WASM : verifier new URL(...import.meta.url), suffixes ?init/?url
 4. Verifier la convention de nommage des plugins custom (vite-plugin-*, propriete name)
 5. Verifier les variables d'environnement (prefixe VITE_, pas de secrets exposes cote client)
@@ -591,7 +591,7 @@ build: {
 
 1. Analyser le tree-shaking (sideEffects, exports nommes, exports map)
 2. Verifier l'externalisation des peer deps pour les librairies
-3. Verifier le code-splitting / manualChunks pour les apps multi-pages
+3. Verifier le code-splitting / codeSplitting pour les apps multi-pages
 4. Verifier assetsInlineLimit, build.target, hashing des assets, sourcemaps
 5. Lancer un bundle analyzer si disponible (rollup-plugin-visualizer)
 
@@ -712,7 +712,7 @@ build: {
 - **index.html est du code source** : jamais dans public/, toujours transforme par le pipeline Vite
 - **public/ est reserve aux assets statiques** : aucun HTML/JS source ne doit y transiter
 - **Librairies : externaliser, ne jamais bundler les peer deps**
-- **Multi-page : nommer explicitement chaque entree, partager les dependances lourdes via manualChunks**
+- **Multi-page : nommer explicitement chaque entree, partager les dependances lourdes via codeSplitting**
 - **Type safety end-to-end** : tsconfig strict jusqu'aux types publies via vite-plugin-dts
 - **Convention de nommage des plugins** : vite-plugin-* avec propriete `name` explicite
 - **Build verifie, pas seulement le code source** : tester le dist/ reellement publie

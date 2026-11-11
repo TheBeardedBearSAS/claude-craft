@@ -120,9 +120,11 @@ Extrair e esclarecer:
    - `max_requests = 500` para prevenir acumulo de memoria
    - Benchmark com `wrk` ou `k6`, ajustar para cima/baixo
    - Monitorar: memoria RSS por worker, tempo de resposta p99
-   - Usar FrankenPHP 1.13.0+: a 1.12.4 é vulnerável (correções de segurança na 1.12.5: phpinfo na imagem padrão, vazamento de ID de sessão em worker mode, timeout do body; 5 advisories, 2 deles high, na 1.13.0)
+   - Usar FrankenPHP 1.13.5+: a 1.12.4 é vulnerável (correções de segurança na 1.12.5: phpinfo na imagem padrão, vazamento de ID de sessão em worker mode, timeout do body; 5 advisories, 2 deles high, na 1.13.0)
+   - Piso de segurança 1.13.5: o PHP2Shell (CVE-2026-109618, CVE-2026-109619, RCE sem autenticação) é corrigido na 1.13.2; a 1.13.4 corrige uma falha do modo worker, vazamentos de ambiente e um use-after-free em `putenv()` (Brotli CVE-2026-111497 corrigido nas imagens); a 1.13.5 corrige uma falha do `php_server` que executava como PHP um arquivo enviado não PHP (High) e outros 16 problemas. Atualizar as imagens regularmente ou fixar `1.13.5` ou posterior
+   - Modo worker (1.13.5): o FrankenPHP redefine entre requisições apenas o estado derivado da requisição; o estado de `strtok()`, `http_get_last_response_headers()`, `error_get_last()` e os erros do libxml persistem novamente. Para um estado limpo, chamar `error_clear_last()`, `libxml_clear_errors()` ou `http_clear_last_response_headers()` no fim de cada requisição
    - FrankenPHP 1.13+: `num_threads` conta apenas os threads para requisições que nenhum worker atende; os threads de worker são somados, e a inicialização falha se `max_threads` < `num_threads` + threads de worker
-   - O hot reload em desenvolvimento passa pelo Mercure 1.0: `$_SERVER['FRANKENPHP_HOT_RELOAD']` agora anuncia `/.well-known/mercure?match=<topic>` (não fixar `?topic=` no código)
+   - O hot reload em desenvolvimento passa pelo Mercure 1.1.6 (Caddy 2.11.9): `$_SERVER['FRANKENPHP_HOT_RELOAD']` agora anuncia `/.well-known/mercure?match=<topic>` (não fixar `?topic=` no código)
 
 ### Fase 3 -- Blueprint de Implementacao
 

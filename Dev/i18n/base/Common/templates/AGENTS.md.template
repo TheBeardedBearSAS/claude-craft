@@ -27,7 +27,7 @@
 - `@vuejs-reviewer` — Vue 3.5+, Composition API, Pinia 4, Vitest 5
 - `@angular-reviewer` — Angular 22, Signals, Standalone, Zoneless par défaut
 - `@flutter-reviewer` — Flutter 3.47 / Dart 3.13, BLoC v9, Riverpod 3
-- `@reactnative-reviewer` — React Native 0.87 New Architecture (JSI, TurboModules)
+- `@reactnative-reviewer` — React Native 0.88 New Architecture (JSI, TurboModules)
 - `@python-reviewer` — Python 3.15 / 3.14+, FastAPI, Pydantic v2, async correctness
 - `@csharp-reviewer` — C# 14 / .NET 10, Clean Architecture, CQRS, EF Core
 - `@php-reviewer` — PHP 8.5, Property Hooks, PER-CS 3.0, PHPStan level max, Pest 5

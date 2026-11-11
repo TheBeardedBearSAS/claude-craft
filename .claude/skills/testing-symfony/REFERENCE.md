@@ -116,7 +116,7 @@ pest()->arch('no debug helpers')
 # composer.json
 {
   "require-dev": {
-    "infection/infection": "^0.29"
+    "infection/infection": "^0.35"
   }
 }
 

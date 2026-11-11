@@ -33,7 +33,7 @@ Execute complete architecture check:
 - vercel.json schema validity (`$schema`, `version`, valid top-level keys) (6 pts)
 - rewrites / redirects / headers correctness (6 pts)
 - regions and functions block (no ambiguous glob overlap, memory/maxDuration justified) (5 pts)
-- Cron Jobs configuration (`crons[]` valid paths and schedules) (4 pts)
+- Cron Jobs configuration (`crons[]` valid paths and schedules; Cron Jobs are legacy and being migrated to Schedules, so flag `crons[]` as a migration note, not an error) (4 pts)
 - Project-shape fit and framework adapter conflicts (4 pts)
 
 **Reference**: `.claude/references/vercel/checks/architecture.md`

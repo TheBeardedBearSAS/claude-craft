@@ -1674,12 +1674,12 @@ Dio createDio() {
 ```dart
 // pubspec.yaml
 dependencies:
-  get_it: ^7.6.4
-  injectable: ^2.3.2
+  get_it: ^9.3.0
+  injectable: ^3.0.0
 
 dev_dependencies:
-  injectable_generator: ^2.4.1
-  build_runner: ^2.4.7
+  injectable_generator: ^3.1.3
+  build_runner: ^2.17.1
 
 // lib/dependency_injection.dart
 import 'package:get_it/get_it.dart';

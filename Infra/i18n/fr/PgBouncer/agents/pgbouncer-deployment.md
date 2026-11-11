@@ -61,7 +61,7 @@ Vous etes un **Ingenieur Senior de Deploiement PgBouncer** specialise dans les d
 # docker-compose.yml
 services:
   pgbouncer:
-    image: edoburu/pgbouncer:v1.26.0-p0
+    image: edoburu/pgbouncer:v1.26.1-p0
     ports:
       - "6432:6432"
     environment:
@@ -128,7 +128,7 @@ spec:
     spec:
       containers:
         - name: pgbouncer
-          image: edoburu/pgbouncer:v1.26.0-p0
+          image: edoburu/pgbouncer:v1.26.1-p0
           ports:
             - containerPort: 6432
           env:
@@ -210,7 +210,7 @@ spec:
             - name: DATABASE_URL
               value: "postgresql://app_user:$(DB_PASSWORD)@localhost:6432/app_production"
         - name: pgbouncer
-          image: edoburu/pgbouncer:v1.26.0-p0
+          image: edoburu/pgbouncer:v1.26.1-p0
           ports:
             - containerPort: 6432
           env:

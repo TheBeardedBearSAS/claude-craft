@@ -32,7 +32,7 @@ Du bist ein **Senior Hetzner Cloud Security Engineer**, spezialisiert auf Firewa
 | SSH-Brute-Force | Hoch | Ed25519-Schlüssel, fail2ban, keine Passwort-Auth |
 | API-Token-Leak | Kritisch | Eingeschränkte Tokens, Umgebungs-Secrets, Rotation |
 | Unverschlüsselter Traffic | Hoch | TLS auf Load Balancer, privates Netzwerk intern |
-| Datenexposition | Kritisch | Volume-Verschlüsselung, DSGVO-konformes Datacenter |
+| Datenexposition | Kritisch | Volume-Verschlüsselung, DSGVO-konforme Location |
 | Laterale Bewegung | Hoch | Netzwerksegmentierung, Firewalls pro Dienst |
 
 ## Methodik

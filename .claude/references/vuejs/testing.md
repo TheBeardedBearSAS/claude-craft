@@ -12,7 +12,7 @@
 
 ## Vitest Browser Mode (recommandé 2026)
 
-Depuis Vitest 4, le **Browser Mode** est stable et recommandé pour les tests de composants Vue — il exécute les tests dans un vrai navigateur (Chromium/Firefox/WebKit via Playwright) au lieu de simuler le DOM avec jsdom. Résultat : comportement réel du navigateur, pas de faux positifs jsdom.
+Depuis Vitest 4 (Vitest 5 actuel), le **Browser Mode** est stable et recommandé pour les tests de composants Vue — il exécute les tests dans un vrai navigateur (Chromium/Firefox/WebKit via Playwright) au lieu de simuler le DOM avec jsdom. Résultat : comportement réel du navigateur, pas de faux positifs jsdom.
 
 **Stratégie 2026 :**
 - Tests de **composants Vue** → Browser Mode (vrai DOM)
@@ -21,22 +21,23 @@ Depuis Vitest 4, le **Browser Mode** est stable et recommandé pour les tests de
 ### Installation
 
 ```bash
-npm install -D @vitest/browser playwright
+npm install -D @vitest/browser-playwright playwright
 npx playwright install chromium
 ```
 
-### Configuration avec workspaces
+### Configuration avec `projects`
 
 ```typescript
-// vitest.config.ts — workspace séparant browser et node
+// vitest.config.ts — `projects` séparant browser et node
 import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
+import { playwright } from '@vitest/browser-playwright'
 import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
   plugins: [vue()],
   test: {
-    workspace: [
+    projects: [
       {
         // Tests de composants Vue — vrai navigateur
         extends: true,
@@ -45,9 +46,9 @@ export default defineConfig({
           include: ['src/**/*.component.{test,spec}.ts'],
           browser: {
             enabled: true,
-            name: 'chromium',
-            provider: 'playwright',
+            provider: playwright(),
             headless: true,
+            instances: [{ browser: 'chromium' }],
           },
         },
       },

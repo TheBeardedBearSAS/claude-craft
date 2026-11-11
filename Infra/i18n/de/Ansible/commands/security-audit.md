@@ -115,7 +115,7 @@ SECRETS-VERWALTUNG
 | Secret-Rotation | {automatisiert/manuell/keine} | {Richtlinie} |
 ```
 
-Tasks finden, die Secrets ohne `no_log` offenlegen konnten, und nach hartcodierten Secrets ausserhalb von Vault-Dateien suchen.
+Tasks finden, die Secrets ohne `no_log` offenlegen konnten, und nach hartcodierten Secrets ausserhalb von Vault-Dateien suchen. Ab ansible-core 2.22 werden bekannte Secrets in der Ausgabe als `$REDACTED$` maskiert und `no_log`-Optionen zeigen `VALUE_SPECIFIED_IN_NO_LOG_PARAMETER` nicht mehr an: Prüfungen, die auf diesem Platzhalter beruhen, anpassen.
 
 ### Schritt 6: Lint-Sicherheitsaudit
 

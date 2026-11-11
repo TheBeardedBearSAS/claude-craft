@@ -319,6 +319,16 @@ class User
 
 ## Déclarations de Types
 
+### PHP 8.5 — Ajouts et dépréciations
+
+- Cast `(void)` : marque une valeur de retour comme volontairement ignorée et supprime l'avertissement de `#[\NoDiscard]`.
+- `#[\Override]` s'applique désormais aux propriétés.
+- `Closure::getCurrent()` retourne la closure en cours d'exécution (récursion sans `use (&$fn)`).
+- `curl_share_init_persistent(array $share_options)` : handle de partage persistant entre requêtes (réutilisation DNS/connexions) ; `CURL_LOCK_DATA_COOKIE` est interdit (`ValueError`).
+- `__sleep()` / `__wakeup()` sont dépréciées en douceur (soft-deprecated) : implémenter `__serialize()` / `__unserialize()`. Également dépréciés : l'opérateur backtick, les casts `(boolean)`/`(integer)`/`(double)`/`(binary)`, `case X;`, `null` comme offset de tableau.
+
+Source : https://www.php.net/manual/en/migration85.php
+
 ### Types Stricts
 
 ```php

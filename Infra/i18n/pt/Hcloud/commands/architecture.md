@@ -49,7 +49,7 @@ REQUIREMENTS ANALYSIS
 ### Ambiente Alvo
 | Attribute | Value |
 |-----------|-------|
-| Datacenter | {fsn1/nbg1/hel1/ash/hil/sin} |
+| Location | {fsn1/nbg1/hel1/ash/hil/sin} |
 | Budget | {monthly limit} |
 | HA Required | {yes/no} |
 | Compliance | {GDPR/none} |

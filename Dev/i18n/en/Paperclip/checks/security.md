@@ -32,6 +32,7 @@ Grep for suspicious patterns: `req.body.companyId`, `req.query.companyId`, `WHER
 ### 4. Budgets (hard limits)
 
 - [ ] A test exists that verifies `BUDGET_EXCEEDED` is returned when an agent exceeds its budget
+- [ ] Unpriced usage (models without a price) is reviewed: since 2026.1023.0 the `unpricedUsagePolicy` budget-policy setting defaults to `block`, so budgets hold instead of silently continuing; never switch it to `allow` without an explicit budget decision
 - [ ] No code path increments consumption past `budgetTokens` silently
 - [ ] Budget changes emit activity events
 

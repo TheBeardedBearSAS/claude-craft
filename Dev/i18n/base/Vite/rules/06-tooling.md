@@ -105,7 +105,8 @@ if (import.meta.hot) {
 
 As of Vite 8, the **Rolldown**-powered bundler is the default build engine (previously an opt-in `rolldown-vite` package in Vite 6/7). Practical consequences for framework-agnostic projects:
 
-- `build.rollupOptions` is **deprecated** since Vite 8 (alias of `build.rolldownOptions`; same for `worker.rollupOptions` and `optimizeDeps.esbuildOptions` → `optimizeDeps.rolldownOptions`) — migrate to `rolldownOptions` (e.g. `input`, `external`), but some Rollup-specific output options changed shape — notably `output.manualChunks` as an **object** is removed; use `build.rolldownOptions.output.codeSplitting.groups` instead (see `08-quality-tools.md` for a full example).
+- `build.rollupOptions` is **deprecated** since Vite 8 (alias of `build.rolldownOptions`; same for `worker.rollupOptions` and `optimizeDeps.esbuildOptions` → `optimizeDeps.rolldownOptions`) — migrate to `rolldownOptions` (e.g. `input`, `external`), but some Rollup-specific output options changed shape — notably `output.manualChunks` as an **object** is removed and the **function** form is deprecated; use `build.rolldownOptions.output.codeSplitting.groups` instead (see `08-quality-tools.md` for a full example).
+- **Oxc** replaces esbuild for JS/TS/JSX transforms: the `esbuild` option is deprecated in favor of `oxc`, and `transformWithEsbuild` in favor of `transformWithOxc` (Oxc does not lower native decorators yet). **Lightning CSS** minifies CSS by default (source: vite.dev/guide/migration).
 - Library builds (`build.lib`) and `vite-plugin-dts` both work unchanged under Rolldown.
 - If a project depends on a Rollup-only plugin that hasn't been ported, Rolldown can be disabled per-project (consult the current Vite release notes for the opt-out flag, since this is expected to be phased out over time) — treat this as a temporary escape hatch, not a long-term config.
 

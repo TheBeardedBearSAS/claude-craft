@@ -97,7 +97,7 @@ For Interactivity API blocks, `viewScriptModule` builds need `--experimental-mod
   "require-dev": {
     "wp-coding-standards/wpcs": "^3.4",
     "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-    "phpstan/phpstan": "^2.0",
+    "phpstan/phpstan": "^2.3",
     "szepeviktor/phpstan-wordpress": "^2.0",
     "php-stubs/wordpress-stubs": "^7.1",
     "yoast/phpunit-polyfills": "^4.0"

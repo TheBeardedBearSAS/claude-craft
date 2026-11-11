@@ -1,12 +1,12 @@
-# React Native 0.87 - Quick Reference
+# React Native 0.88 - Quick Reference
 
 ## Versions Requises (2026)
 
 | Composant | Version | Notes |
 |-----------|---------|-------|
-| React Native | 0.87 (bare) / 0.86 (Expo SDK 57) | New Architecture activée par défaut |
-| Expo SDK | 57+ (embarque RN 0.86) | New Architecture on by default |
-| Node.js | **22.x LTS** | RN 0.87 requiert Node 22.13+ minimum |
+| React Native | 0.88 (bare et Expo SDK 58) | New Architecture activée par défaut |
+| Expo SDK | 58+ (embarque RN 0.88) | New Architecture on by default |
+| Node.js | **22.x LTS** | RN 0.88 requiert Node 22.13+ (ou 24.3+, 26+) minimum |
 | TypeScript | 5.x+ | Strict mode obligatoire |
 | React Navigation | 7.x (7.5 courant ; v8 en alpha, à surveiller) | Via Expo Router ou standalone |
 | Reanimated | 4 (`^4.0.0`) | Worklets 2 + JSI backend partagé |
@@ -54,7 +54,7 @@ echo 'newArchEnabled=true' >> android/gradle.properties
 cd ios && RCT_NEW_ARCH_ENABLED=1 pod install
 ```
 
-> Expo SDK 56+ active la New Architecture par défaut — aucune config requise.
+> Expo SDK 52+ active la New Architecture par défaut — aucune config requise.
 
 ## Gesture Handler 3.0 — Breaking Changes
 
@@ -88,7 +88,7 @@ const tap = Gesture.Tap().onEnd(() => console.log('tapped'));
 |----------|----------|
 | Projet Expo (recommandé) | **Expo Router** — file-based, type-safe, deep linking auto |
 | Projet bare sans Expo | **React Navigation 7** standalone (`@react-navigation/native`) |
-| Migration Expo → Expo Router | Expo Router 57.x (versionné avec le SDK Expo) |
+| Migration Expo → Expo Router | Expo Router 58.x (versionné avec le SDK Expo) |
 
 ```typescript
 // React Navigation 7 — setup bare (non-Expo)
@@ -125,45 +125,25 @@ const animatedStyle = useAnimatedStyle(() => {
 bridgelessEnabled=true
 ```
 
-## RN 0.86 / 0.87 et Expo SDK 57
+## RN 0.88 et Expo SDK 58
 
-> **Expo SDK 57 embarque RN 0.86** (0.86.3) ; **RN bare = 0.87** (0.87.1 `latest`, 0.88 en RC). Ne pas mélanger : un projet Expo suit la version RN de son SDK.
+> **Expo SDK 58 embarque RN 0.88** (0.88.1 `latest`, stable). Ne pas mélanger : un projet Expo suit la version RN de son SDK.
 
 | Sujet | Bonne pratique |
 |-------|----------------|
-| Expo 57 | `expo@57.0.17+` : régression mémoire Hermes V1 / Reanimated corrigée (dès 57.0.9) et temps de démarrage dev corrigé |
-| Reanimated | 4.7.x supporte RN 0.86-0.88 (4.5 embarqué dans SDK 57) |
-| Worklets bundle mode | Expérimental, non supporté : **ne pas l'utiliser en production** |
-| Builds | **Development builds** plutôt qu'Expo Go dès que l'on vise les stores |
-| `expo prebuild` | Nettoie et régénère `android/` et `ios/` par défaut (`--no-clean` pour conserver) |
-| iOS 27 | `ios.enableSceneSupport` (`expo-build-properties`, `expo@57.0.23+`, opt-in ; défaut en SDK 58) |
+| Expo Router | le cœur de navigation a été refondu (état de navigation déterministe, l'essentiel de l'API React Navigation forkée supprimé). Si vous avez un navigateur custom ou des imports depuis `expo-router/react-navigation`, certaines API ont été déplacées ou retirées : suivre le guide de migration SDK 57 vers 58. `withLayoutContext` est déprécié au profit de `integrateWithRouter` |
+| Expo Router web | `web.output` vaut `"server"` par défaut s'il n'est pas défini (définir `"static"` et activer l'option `apiRoutes` du config plugin pour conserver le comportement du SDK 57) ; les routes asynchrones sont activées par défaut sur le web (`asyncRoutes: { web: false }` pour les désactiver) ; les safe areas web utilisent désormais le CSS `env(safe-area-inset-*)` à la place de `react-native-safe-area-context` |
+| iOS (prebuild) | `npx expo prebuild` génère désormais `SceneDelegate.swift` et une entrée `UIApplicationSceneManifest` dans `Info.plist` ; la `UIWindow` est créée par le scene delegate et non plus dans `didFinishLaunchingWithOptions`. Un `AppDelegate.swift` personnalisé qui crée la fenêtre doit être migré (guide : https://expo.fyi/ios-scene-lifecycle) |
+| Android (R8) | R8 est activé par défaut en build release (`android.enableMinifyInReleaseBuilds=true`) ; les bibliothèques qui s'appuient sur la réflexion peuvent nécessiter des règles keep ProGuard ; désactivation via `android.enableMinifyInReleaseBuilds=false` avec `expo-build-properties` |
+| Node.js | 22.13+ (branche 22), 24.3+ (branche 24) ou 26+ ; les versions impaires (23, 25) ne sont pas supportées |
+| Nouveautés RN 0.88 | dispatch d'événements web par défaut ; `fontVariationSettings` (polices variables) sur `Text` et `TextInput` ; support du cycle de vie SceneDelegate sur iOS ; support d'`ArrayBuffer` dans les TurboModules Java ; support expérimental de Swift Package Manager ; React 19.3.0 et Metro 0.87. Aucun breaking change côté utilisateur |
+| TypeScript strict | l'opt-out via `tsconfig.json` sera retiré après RN 0.89 |
+| Reanimated | Reanimated 4.7.x supporte RN 0.86-0.88 (avec `react-native-worklets` 0.13.x ; matrice : docs.swmansion.com/react-native-reanimated/docs/guides/compatibility). Expo SDK 58 embarque Reanimated 4.7.1 et `expo-router` ~58.0.30 (`bundledNativeModules.json` d'`expo@58.0.23`) |
+| Worklets bundle mode | Le bundle mode de Worklets est expérimental et non supporté : **ne pas l'utiliser en production** |
+| Builds | Préférer les **development builds** à Expo Go dès que l'on vise les stores |
+| `expo prebuild` | `expo prebuild` nettoie et régénère `android/` et `ios/` par défaut (`--no-clean` pour les conserver) |
 | Navigation | React Navigation 8 est en alpha : à surveiller, rester sur 7.x en production |
 
-**Breaking changes RN 0.87 :** API TypeScript stricte par défaut (imports profonds `react-native/Libraries/*` interdits, opt-out jusqu'à 0.88) ; `InteractionManager` retiré (utiliser `requestIdleCallback`) ; `ImageBackground` déprécié (`View` + `Image` absolu) ; props `Modal.animated` et `StatusBar` `backgroundColor`/`translucent` retirées ; Node 22.13+, Kotlin 2.0+ ; AGP 9 supporté (`android.builtInKotlin=false` et `android.newDsl=false` pour garder l'ancien comportement) ; Swift Package Manager iOS expérimental (opt-in, CocoaPods reste le défaut).
+**Breaking changes RN 0.87 (toujours applicables) :** API TypeScript stricte par défaut (imports profonds `react-native/Libraries/*` interdits, opt-out retiré après 0.89) ; `InteractionManager` retiré (utiliser `requestIdleCallback`) ; `ImageBackground` déprécié (`View` + `Image` absolu) ; props `Modal.animated` et `StatusBar` `backgroundColor`/`translucent` retirées ; Node 22.13+, Kotlin 2.0+ ; AGP 9 supporté (`android.builtInKotlin=false` et `android.newDsl=false` pour garder l'ancien comportement) ; Swift Package Manager iOS expérimental (opt-in, CocoaPods reste le défaut).
 
-**Sources :** [RN 0.87](https://reactnative.dev/blog/2026/08/11/react-native-0.87), [Expo SDK 57](https://expo.dev/changelog/sdk-57)
-
-## Checklist Rapide
-
-- [ ] RN 0.87 (bare) ou 0.86 (Expo SDK 57+), Node 22.13+
-- [ ] New Architecture activée (Fabric + TurboModules)
-- [ ] Gesture Handler 3.0+ (`@^3.0.0`, pas 2.x)
-- [ ] Reanimated 4 (`^4.0.0`) + Worklets 2
-- [ ] TanStack Query v5 (`gcTime` pas `cacheTime`)
-- [ ] Zustand v5 (API `useShallow`, `createStore`)
-- [ ] TypeScript strict + Codegen spec pour modules natifs
-- [ ] Tests >= 80% coverage (Jest + Detox E2E)
-
-## Documentation Complète
-
-- `architecture.md` — Patterns feature-based, Clean Architecture
-- `coding-standards.md` — TypeScript, conventions, hooks patterns
-- `tooling.md` — Expo CLI, EAS, RNGH 3.0, Reanimated 4
-- `new-architecture.md` — JSI, TurboModules, Fabric, Bridgeless
-- `navigation.md` — Expo Router, React Navigation 7
-- `state-management.md` — TanStack Query v5, Zustand v5
-- `performance.md` — Optimisations, profiling, Hermes
-- `testing.md` — Jest, Detox, stratégies TDD
-- `security.md` — Stockage sécurisé, auth, deeplinks
-- `quality-tools.md` — ESLint, TypeScript, audit
-- `project-context.md` — Template de contexte projet
+**Sources :** [RN 0.88](https://reactnative.dev/blog/2026/10/19/react-native-0.88), [Expo SDK 58](https://expo.dev/changelog/sdk-58), [RN 0.87](https://reactnative.dev/blog/2026/08/11/react-native-0.87)

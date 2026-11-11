@@ -372,7 +372,7 @@ A logica de negocio e isolada dos detalhes tecnicos
 - [ ] Sem excecoes novas nao documentadas
 
 #### ISP
-- [ ] As interfaces sao pequenas e focadas (< 5 metodos)
+- [ ] As interfaces sao pequenas e focadas (heuristica interna: < 5 metodos)
 - [ ] Os clientes dependem apenas dos metodos que utilizam
 - [ ] Sem metodos `throw NotImplementedException()`
 
@@ -387,7 +387,7 @@ A logica de negocio e isolada dos detalhes tecnicos
 
 - **Livro:** *Clean Architecture* - Robert C. Martin
 - **Livro:** *SOLID Principles* - Uncle Bob
-- **Video:** [SOLID Principles Explained](https://www.youtube.com/watch?v=pTB30aXS77U)
+- **Article:** [The Relevance of SOLID — Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html)
 
 ---
 

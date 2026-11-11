@@ -512,30 +512,29 @@ export const UserCardCustom: FC<UserCardProps> = memo(
 );
 ```
 
-### 3. forwardRef für Refs
+### 3. `ref` als Prop (React 19+; `forwardRef` ist Legacy)
+
+In React 19 ist `ref` eine gewöhnliche Prop und `forwardRef` nicht mehr nötig (Legacy, nur noch für die Kompatibilität mit React 17/18). Quelle: [react.dev/reference/react/forwardRef](https://react.dev/reference/react/forwardRef).
 
 ```typescript
-import { forwardRef, InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, Ref } from 'react';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
+  ref?: Ref<HTMLInputElement>;
 }
 
-// Komponente mit forwardRef
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, ...props }, ref) => {
-    return (
-      <div>
-        {label && <label>{label}</label>}
-        <input ref={ref} {...props} />
-        {error && <span>{error}</span>}
-      </div>
-    );
-  }
-);
-
-Input.displayName = 'Input';
+// Komponente mit `ref` als Prop (React 19)
+export const Input = ({ label, error, ref, ...props }: InputProps) => {
+  return (
+    <div>
+      {label && <label>{label}</label>}
+      <input ref={ref} {...props} />
+      {error && <span>{error}</span>}
+    </div>
+  );
+};
 
 // Verwendung
 const MyForm = () => {

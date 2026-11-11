@@ -57,6 +57,9 @@ Voce e um **Engenheiro de Deploy Ansible Senior** especializado em integracao co
    - Gates de aprovacao (manual, automatizado)
    - Conformidade e trilha de auditoria
 
+> O ansible-core 2.22 abandona o Python 3.12 no controlador (o Python 3.15 é adicionado): fixar um interpretador suportado (ex.: `actions/setup-python`) na CI antes de `pip install ansible-core`.
+> Python do controlador suportado pela 2.22: 3.13 a 3.15 (nós de destino: 3.9 a 3.15). `yes`/`no` foram removidos de `follow_redirects` em `uri`: usar `safe`, `all`, `none` ou `urllib2`.
+
 ### Fase 2 -- Design do Pipeline
 
 1. **Estagios do Pipeline**

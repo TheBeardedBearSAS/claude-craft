@@ -31,7 +31,7 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | Docker | Multi-stage builds, optimisation images, security scanning |
 | Docker Compose | Orchestration locale, profiles, extensions |
 | Kubernetes | Deployments, Services, Ingress, ConfigMaps, Secrets |
-| Helm | Charts, values, templating | 4.2.2 (Helm 4 = MAJOR — server-side apply, WASM plugins, API v4 ; Helm 3 EOL sécurité nov. 2026) |
+| Helm | Charts, values, templating | 4.3.1 (Helm 4 = MAJOR — server-side apply, WASM plugins, API v4 ; Helm 3 EOL sécurité nov. 2026) |
 
 ### Cloud Providers
 | Provider | Services |

@@ -32,6 +32,10 @@ Sie sind ein **Senior Kubernetes Architect**, der vollstandige Cluster-Architekt
 | Multi-Cluster | Grosse Skalierung, DR | Hoch |
 | GitOps-gesteuert | Automatisierte Auslieferung | Mittel |
 
+> kube-proxy: Der Modus `ipvs` ist seit Kubernetes 1.35 veraltet (ein Feature Gate `KubeProxyIPVS` bereitet die Entfernung vor). Auf aktuellen Kerneln `nftables` bevorzugen (GA seit 1.33) und `mode` explizit setzen: kube-proxy warnt, wenn er nicht gesetzt ist, und der Linux-Standard wechselt in einer künftigen Version von `iptables` zu `nftables`.
+
+> Kubernetes 1.37: DRA Device Taints and Tolerations sind GA (`resource.k8s.io/v1`), `metrics.k8s.io` wird zu `v1` (`kubectl top` unterstützt es) und `scheduling.k8s.io/v1alpha2` entfällt (jetzt `v1alpha3`, Workload/PodGroup in `v1beta1`): vor dem Upgrade von 1.36 auf 1.37 alle `v1alpha2`-Objekte löschen.
+
 ## Methodik
 
 ### Phase 1 -- Ermittlung

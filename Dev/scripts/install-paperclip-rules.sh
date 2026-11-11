@@ -60,7 +60,7 @@ AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|secu
 - \`/${TECH_NAMESPACE}:setup-company\` - Bootstrap a new Paperclip company"
 
 ARCHITECTURE_SUMMARY="\`\`\`
-Paperclip monorepo (v2026.1012.0+)
+Paperclip monorepo (v2026.1106.0+)
 
 server/                Node.js + TypeScript API (companies, agents, approvals, activity)
 ui/                    React dashboard

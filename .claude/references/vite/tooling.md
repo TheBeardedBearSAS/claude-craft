@@ -7,8 +7,8 @@
 ### Vite 6 → 8
 
 - **Vite 6 (Environment API)** : nouvelle API multi-environment (`createEnvironment`) pour orchestrer plusieurs cibles de build (client, edge, custom runtimes) dans un seul `vite.config`. Optionnelle, rétrocompatible pour les shapes framework-agnostic couverts ici.
-- **Vite 7** : dernière version majeure avec esbuild comme bundler de production par défaut ; Rolldown disponible en opt-in (`rolldown-vite`).
-- **Vite 8 (Rolldown bundler par défaut)** : **Rolldown** (port Rust de Rollup, par l'équipe Vite/VoidZero) remplace esbuild par défaut. Build 3-5× plus rapide, sortie fonctionnellement équivalente. Voir `rolldown.md` pour le détail des breaking changes (ex : `manualChunks` objet supprimé).
+- **Vite 7** : dernière version majeure avec Rollup comme bundler de production par défaut (esbuild pour la transformation) ; Rolldown disponible en opt-in (`rolldown-vite`).
+- **Vite 8 (Rolldown bundler par défaut)** : **Rolldown** (port Rust de Rollup, par l'équipe Vite/VoidZero) remplace Rollup par défaut ; **Oxc** remplace esbuild pour la transformation et **Lightning CSS** minifie le CSS par défaut. Build 3-5× plus rapide, sortie fonctionnellement équivalente. Voir `rolldown.md` pour le détail des breaking changes (ex : `manualChunks` objet supprimé, forme fonction dépréciée).
 
 Référence : https://vite.dev/blog/
 
@@ -53,7 +53,7 @@ export default defineConfig({
 })
 ```
 
-> **Vite 8 / Rolldown (défaut)** : la forme objet de `manualChunks` est **supprimée** (non supportée). Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
+> **Vite 8 / Rolldown (défaut)** : la forme objet de `manualChunks` est **supprimée** (non supportée) ; la forme fonction est dépréciée. Utiliser `build.rolldownOptions.output.codeSplitting.groups`.
 > **Vite 7 / Rolldown désactivé (legacy)** : utiliser `build.rollupOptions.output.manualChunks` — uniquement si Rolldown est explicitement désactivé.
 
 ### Environment Variables
@@ -306,7 +306,7 @@ npm run test
     "prettier": "^3.0.0",
     "typescript": "^5.6.0",
     "vite": "^8.3.0",
-    "vitest": "^4.1.0"
+    "vitest": "^5.1.0"
   }
 }
 ```
@@ -338,7 +338,7 @@ npm run test
   "devDependencies": {
     "vite": "^8.3.0",
     "vite-plugin-dts": "^5.1.0",
-    "vitest": "^4.1.0"
+    "vitest": "^5.1.0"
   }
 }
 ```

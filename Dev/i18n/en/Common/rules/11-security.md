@@ -33,7 +33,7 @@ Security is an **absolute priority**. This document presents the general securit
 > **Source:** [OWASP Top 10:2025](https://owasp.org/Top10/2025/) — published November 2025.
 > Key changes vs 2021: SSRF consolidated into A01, Security Misconfiguration moves up to A02, Software Supply Chain Failures new at A03 (absorbs the former "Vulnerable and Outdated Components"), Software or Data Integrity Failures at A08, Mishandling of Exceptional Conditions new at A10.
 
-> **Related lists:** OWASP Top 10 for Agentic Applications 2026 (published 2025-12-09) and OWASP Top 10 for LLM Applications 2025 ([genai.owasp.org](https://genai.owasp.org/)) for AI-agent/LLM code; OWASP ASVS 5.0.0 for verification requirements.
+> **Related lists:** OWASP Top 10 for Agentic Applications 2026 (published 2025-12-09) and OWASP Top 10 for LLM Applications 2026 ([genai.owasp.org](https://genai.owasp.org/home/resources/owasp-genai-llm-top-10-2026/)) for AI-agent/LLM code; OWASP ASVS 5.0.0 for verification requirements.
 
 ### A01. Broken Access Control (includes consolidated SSRF)
 
@@ -143,7 +143,7 @@ RISK
 - Credential stuffing possible
 
 PROTECTION
-- Strong password policy (min 12 characters)
+- Strong password policy (NIST 800-63B-4: ≥ 15 characters alone, ≥ 8 with MFA)
 - MFA for sensitive access
 - Session expiration
 - Rate limiting on login
@@ -251,9 +251,9 @@ Prefer VALIDATION (reject) over SANITIZATION (transform)
 
 ```
 OWASP 2026 Rules:
-- Minimum 12 characters
-- Uppercase, lowercase, digits, special characters
-- Not in compromised password lists
+- Minimum 15 characters if the password is the only factor (NIST SP 800-63B-4 SHALL), 8 if used only within MFA; accept at least 64 characters
+- No composition rules (NIST: SHALL NOT) — no forced uppercase/digits/special characters
+- Check against a blocklist of common or compromised passwords (NIST SHALL)
 - Hash with Argon2id (OWASP minimum 19 MiB RAM, t=2, p=1; internal recommendation 128 MiB RAM, t≥3, p=1)
 - NEVER MD5/SHA1 ; bcrypt only as a legacy fallback if Argon2id/scrypt are unavailable (OWASP work factor ≥ 10; ≥ 12 here)
 - Unique salt per user (managed by Argon2id)
@@ -267,7 +267,7 @@ hash = sha1(password + "static_salt")
 hash = bcrypt.hash(password, costFactor=12)  // Do not use in new code
 ```
 
-Sources: [Argon2id OWASP 2026](https://guptadeepak.com/the-complete-guide-to-password-hashing-argon2-vs-bcrypt-vs-scrypt-vs-pbkdf2-2026/)
+Sources: [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html), [NIST SP 800-63B-4](https://pages.nist.gov/800-63-4/sp800-63b.html)
 
 ### Sessions
 
@@ -308,7 +308,7 @@ jwt.sign(payload, ed25519PrivateKey, {
 })
 ```
 
-Sources: [JWT Best Practices 2026](https://duendesoftware.com/learn/best-practices-using-jwts-with-web-and-mobile-apps), [RFC 9449 DPoP](https://datatracker.ietf.org/doc/html/rfc9449)
+Sources: [RFC 8725 JWT BCP](https://www.rfc-editor.org/rfc/rfc8725), [RFC 9449 DPoP](https://datatracker.ietf.org/doc/html/rfc9449)
 
 ### Multi-Factor Authentication (MFA)
 
@@ -484,7 +484,7 @@ Content-Security-Policy:
 
 ## Supply Chain
 
-> **Reference:** [Supply Chain Security 2026](https://kawaldeepsingh.medium.com/practical-software-supply-chain-security-2026-sboms-signing-slsa-reproducible-builds-a-0416cfac32dc)
+> **Reference:** [SLSA 1.2](https://slsa.dev/spec/v1.2/), [CycloneDX](https://cyclonedx.org/specification/overview/)
 
 ### SLSA 1.2 (Supply-chain Levels for Software Artifacts)
 
@@ -703,12 +703,12 @@ Use Claude Code hooks to block dangerous patterns.
 - **OWASP Top 10:2025:** [owasp.org/Top10/2025/](https://owasp.org/Top10/2025/)
 - **OWASP Cheat Sheets:** [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/)
 - **CWE Top 25:** [cwe.mitre.org/top25](https://cwe.mitre.org/top25/)
-- **NIST Guidelines:** [nist.gov](https://www.nist.gov/cyberframework)
-- **Argon2id 2026:** [Complete guide](https://guptadeepak.com/the-complete-guide-to-password-hashing-argon2-vs-bcrypt-vs-scrypt-vs-pbkdf2-2026/)
+- **NIST SP 800-63B-4:** [pages.nist.gov](https://pages.nist.gov/800-63-4/sp800-63b.html)
+- **OWASP Password Storage Cheat Sheet:** [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)
 - **RFC 9449 DPoP:** [datatracker.ietf.org](https://datatracker.ietf.org/doc/html/rfc9449)
-- **JWT Best Practices 2026:** [duendesoftware.com](https://duendesoftware.com/learn/best-practices-using-jwts-with-web-and-mobile-apps)
+- **RFC 8725 JWT BCP:** [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc8725)
 - **HTTP Security Headers 2026:** [thibautprobst.fr](https://thibautprobst.fr/en/posts/http-security-headers/)
-- **Supply Chain 2026:** [kawaldeepsingh.medium.com](https://kawaldeepsingh.medium.com/practical-software-supply-chain-security-2026-sboms-signing-slsa-reproducible-builds-a-0416cfac32dc)
+- **SLSA 1.2 / CycloneDX:** [slsa.dev](https://slsa.dev/spec/v1.2/), [cyclonedx.org](https://cyclonedx.org/specification/overview/)
 
 ---
 

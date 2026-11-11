@@ -11,7 +11,7 @@ Ein **Architecture Decision Record** (ADR) ist ein Dokument, das eine wichtige A
 - Der **positiven UND negativen Konsequenzen**
 - Der **Implementierungsdetails**
 
-**Verwendetes Format:** MADR v2.2 (Markdown Any Decision Records) auf Deutsch
+**Verwendetes Format:** MADR 4.0.0 (Markdown Any Decision Records) auf Deutsch
 
 ---
 

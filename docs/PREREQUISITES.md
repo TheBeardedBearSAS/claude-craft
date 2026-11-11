@@ -8,7 +8,7 @@ Complete guide to all dependencies required for Claude Craft.
 
 ### 1. Node.js (22+)
 
-Required for NPX installation and CLI tools. Node 20 reached EOL on April 30, 2026 — use Node 22 LTS or Node 24 LTS.
+Required for NPX installation and CLI tools. Node 20 reached EOL on April 30, 2026 — use Node 26 (Active LTS since 2026-10-28), Node 24 or Node 22 (both Maintenance LTS; Node 22 reaches EOL on 2027-04-30).
 
 | OS | Installation Command |
 |----|----------------------|

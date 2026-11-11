@@ -119,33 +119,35 @@ export const ComponentName: FC<ComponentNameProps> = ({
 };
 ```
 
-## Com forwardRef
+## Com `ref` como prop (React 19)
 
 ```typescript
-import { forwardRef, ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, Ref } from 'react';
 import { cn } from '@/utils/classnames';
 
 interface ComponentNameProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary';
+  ref?: Ref<HTMLButtonElement>;
 }
 
-export const ComponentName = forwardRef<
-  HTMLButtonElement,
-  ComponentNameProps
->(({ variant = 'primary', className, children, ...props }, ref) => {
+export const ComponentName = ({
+  variant = 'primary',
+  className,
+  children,
+  ref,
+  ...props
+}: ComponentNameProps) => {
   return (
     <button
       ref={ref}
-      className={cn('classes-base', `variant-${variant}`, className)}
+      className={cn('base-classes', `variant-${variant}`, className)}
       {...props}
     >
       {children}
     </button>
   );
-});
-
-ComponentName.displayName = 'ComponentName';
+};
 ```
 
 ## Padrao Container/Presenter

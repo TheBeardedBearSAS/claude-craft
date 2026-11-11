@@ -506,8 +506,8 @@ app.UseExceptionHandler();
 
 ### Passwords
 
-- Minimum 12 characters
-- Uppercase, lowercase, digits, special chars
+- Minimum 15 characters when the password is the only factor, 8 with MFA (NIST SP 800-63B-4 §3.1.1.2, https://pages.nist.gov/800-63-4/sp800-63b/authenticators/)
+- No mandatory composition rules (uppercase/digits/symbols); allow any printable character
 - Not in compromised password lists
 - Hash with **Argon2id** (OWASP 2026 primary — `Konscious.Security.Cryptography.Argon2`, m=19456 KiB, t=2, p=1 minimum)
 - bcrypt (cost ≥ 12) acceptable as secondary/legacy option

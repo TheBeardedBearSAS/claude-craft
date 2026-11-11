@@ -119,21 +119,25 @@ export const ComponentName: FC<ComponentNameProps> = ({
 };
 ```
 
-## Avec forwardRef
+## Avec `ref` comme prop (React 19)
 
 ```typescript
-import { forwardRef, ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, Ref } from 'react';
 import { cn } from '@/utils/classnames';
 
 interface ComponentNameProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary';
+  ref?: Ref<HTMLButtonElement>;
 }
 
-export const ComponentName = forwardRef<
-  HTMLButtonElement,
-  ComponentNameProps
->(({ variant = 'primary', className, children, ...props }, ref) => {
+export const ComponentName = ({
+  variant = 'primary',
+  className,
+  children,
+  ref,
+  ...props
+}: ComponentNameProps) => {
   return (
     <button
       ref={ref}
@@ -143,9 +147,7 @@ export const ComponentName = forwardRef<
       {children}
     </button>
   );
-});
-
-ComponentName.displayName = 'ComponentName';
+};
 ```
 
 ## Pattern Container/Presenter

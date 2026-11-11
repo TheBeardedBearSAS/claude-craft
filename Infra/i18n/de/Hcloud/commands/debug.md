@@ -15,7 +15,7 @@ $ARGUMENTS
 Argumente:
 - Symptombeschreibung (z.B. "Server nicht erreichbar", "Load-Balancer-Health-Check schlägt fehl", "Volume wird nicht gemountet")
 - (Optional) Ressourcenname oder -typ
-- (Optional) Datacenter oder Standort
+- (Optional) Location oder Standort
 
 Beispiel: `/hcloud:debug "SSH-Verbindung auf web-01 abgelehnt" resource:server`
 
@@ -34,7 +34,7 @@ HCLOUD DEBUG
 
 Symptom: {Beschreibung}
 Ressource: {Ressource}
-Standort: {Datacenter}
+Standort: {Location}
 
 ──────────────────────────────────────────────────────────────
 UMGEBUNGSSTATUS
@@ -95,7 +95,7 @@ Symptom: {Symptom}
   ├── Volume-Problem?
   │   ├── Nicht angehängt → hcloud volume attach
   │   ├── Mount-Fehler → Dateisystem prüfen, /dev/disk/by-id/
-  │   └── Falscher Standort → Volume muss im selben Datacenter sein
+  │   └── Falscher Standort → Volume muss in derselben Location sein
   └── Load-Balancer-Problem?
       ├── Health-Check fehlgeschlagen → Port, Pfad, Statuscodes prüfen
       ├── Keine Targets → Label-Selektor verifizieren

@@ -807,7 +807,7 @@ describe('api/cron/daily', () => {
 | Tema | Qué Verificar |
 |-------|---------------|
 | **Fluid Compute** | Confirmar que las Functions usan Fluid Compute por defecto (pricing por Active CPU), no el billing legacy de concurrencia fija de las Serverless Functions |
-| **Deprecación del Edge Runtime** | Cualquier `runtime: 'edge'` encontrado debe llevar una referencia de ticket de migración, nunca presentarse como el patrón recomendado para código nuevo |
+| **Migración del Edge Runtime (recomendada por Vercel)** | Cualquier `runtime: 'edge'` encontrado debe llevar una referencia de ticket de migración, nunca presentarse como el patrón recomendado para código nuevo |
 | **Paquetes de Storage deprecados** | Los imports de `@vercel/kv`/`@vercel/postgres` son un hallazgo MAYOR sin importar cuándo se añadieron — marcar para migración a Marketplace (Neon/Upstash) |
 | **Primitiva de caché ISR vs headers de vercel.json** | La revalidación nativa del framework y los `headers` de vercel.json nunca deben apuntar a la misma ruta para `Cache-Control` |
 | **Límites del plan de Cron** | El plan Hobby limita los Cron Jobs a 1/día — verificar que la programación declarada coincide con el nivel de plan realmente en uso |
@@ -820,6 +820,7 @@ describe('api/cron/daily', () => {
 
 - **vercel.json es un contrato en tiempo de build**: validarlo contra el schema, nunca dejar que diverja silenciosamente de la forma desplegada
 - **Las Functions usan Node.js/Fluid Compute por defecto**: el Edge Runtime es una preocupación de reconocimiento de migración, no un objetivo para código nuevo
+- **Los Cron Jobs son legacy → Schedules**: `crons[]` aún funciona, pero Vercel lo migra a Schedules (`schedules` en vercel.json, indexado por nombre, zona horaria IANA, `requestMethod` es `POST` por defecto); señalar el nuevo uso de `crons[]` como nota de migración, nunca como defecto
 - **Los endpoints de Cron son URLs públicas hasta que se demuestre lo contrario**: siempre verificar un secreto compartido antes de ejecutar cualquier efecto secundario
 - **Cache-Control tiene exactamente un propietario por ruta**: los headers de vercel.json o la propia primitiva ISR del framework, nunca ambos
 - **Storage**: los nativos `@vercel/kv`/`@vercel/postgres` son callejones sin salida — Marketplace (Neon/Upstash) es el único camino soportado hacia adelante

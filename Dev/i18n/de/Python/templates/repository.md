@@ -20,7 +20,7 @@ Das Repository-Pattern:
 # src/myproject/domain/repositories/[entity]_repository.py
 """Interface für [Entity]-Repository."""
 
-from typing import Optional, Protocol
+from typing import Protocol
 from uuid import UUID
 
 from myproject.domain.entities.[entity] import [Entity]
@@ -54,7 +54,7 @@ class [Entity]Repository(Protocol):
         """
         ...
 
-    def find_by_id(self, entity_id: UUID) -> Optional[[Entity]]:
+    def find_by_id(self, entity_id: UUID) -> [Entity] | None:
         """
         Findet [Entity] nach ID.
 

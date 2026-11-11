@@ -44,8 +44,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # REL-002: Node 20 reached EOL 2026-04-30; replaced with Node 24 (Current LTS).
-        node: ['22', '24']
+        # REL-002: Node 20 reached EOL 2026-04-30. Node 26 is the Active LTS since 2026-10-28;
+        # Node 24 and 22 are Maintenance LTS (22 reaches EOL on 2027-04-30).
+        node: ['22', '24', '26']
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # pinned: v7.0.1

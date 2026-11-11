@@ -32,6 +32,7 @@ Grep para padrões suspeitos: `req.body.companyId`, `req.query.companyId`, `WHER
 ### 4. Orçamentos (limites rígidos)
 
 - [ ] Existe um teste que verifica que `BUDGET_EXCEEDED` é retornado quando um agente excede seu orçamento
+- [ ] O uso sem tarifa (modelos sem preço) é revisado: desde 2026.1023.0 a configuração `unpricedUsagePolicy` da política de orçamento (uso sem tarifa) vale `block` por padrão, então os orçamentos bloqueiam em vez de continuar silenciosamente; nunca mudá-la para `allow` sem uma decisão orçamentária explícita
 - [ ] Nenhum caminho de código incrementa consumo além de `budgetTokens` silenciosamente
 - [ ] Mudanças de orçamento emitem eventos de atividade
 

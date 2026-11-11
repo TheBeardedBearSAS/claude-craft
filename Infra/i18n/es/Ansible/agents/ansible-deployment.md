@@ -57,6 +57,9 @@ Eres un **Ingeniero Senior de Despliegue Ansible** especializado en integracion 
    - Puertas de aprobacion (manual, automatizada)
    - Cumplimiento normativo y registro de auditoria
 
+> ansible-core 2.22 abandona Python 3.12 en el controlador (se añade Python 3.15): fijar un intérprete compatible (p. ej. `actions/setup-python`) en CI antes de `pip install ansible-core`.
+> Python del controlador compatible con la 2.22: 3.13 a 3.15 (nodos de destino: 3.9 a 3.15). `yes`/`no` se eliminan de `follow_redirects` en `uri`: usar `safe`, `all`, `none` o `urllib2`.
+
 ### Fase 2 -- Disenar Pipeline
 
 1. **Etapas del Pipeline**

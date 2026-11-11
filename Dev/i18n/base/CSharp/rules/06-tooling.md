@@ -231,20 +231,21 @@ trim_trailing_whitespace = false
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.9" />
 
     <!-- Application Layer -->
-    <PackageVersion Include="MediatR" Version="12.4.0" />
+    <!-- MediatR 13+ = commercial (RPL-1.5). Community Edition free <$5M revenue. -->
+    <PackageVersion Include="MediatR" Version="14.3.0" />
     <PackageVersion Include="FluentValidation" Version="11.9.0" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
     <PackageVersion Include="AutoMapper" Version="13.0.1" />
     <PackageVersion Include="Ardalis.GuardClauses" Version="4.5.0" />
 
     <!-- Testing -->
-    <PackageVersion Include="xunit" Version="2.7.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.7" />
+    <PackageVersion Include="xunit.v3" Version="4.0.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="Bogus" Version="35.4.0" />
-    <PackageVersion Include="Testcontainers" Version="3.7.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageVersion Include="Testcontainers" Version="4.16.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.1" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
 
     <!-- Observability -->
@@ -484,7 +485,8 @@ jobs:
 
 ## Tooling Checklist
 
-- [ ] .NET 9 SDK installed
+- [ ] .NET 10 SDK installed (LTS; .NET 9 reached end of support on 2026-11-10)
+- [ ] EF Core 11 / ASP.NET Core 11 upgrade: review breaking changes first (EF Core: Cosmos unmapped properties no longer preserved, `Microsoft.Data.SqlClient` 7.0 needs `Microsoft.Data.SqlClient.Extensions.Azure` for Entra ID, SQL Server compat level 160 by default, `Migrate()` throws without migrations; ASP.NET Core: `ConcurrencyLimiter` removed, Microsoft.OpenApi 3.x, Kestrel stricter HTTP compliance). Sources: https://learn.microsoft.com/ef/core/what-is-new/ef-core-11.0/breaking-changes, https://learn.microsoft.com/aspnet/core/breaking-changes/11/overview
 - [ ] EditorConfig configured
 - [ ] Directory.Build.props set up
 - [ ] Central package management enabled

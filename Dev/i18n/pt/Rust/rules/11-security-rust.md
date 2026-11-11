@@ -169,7 +169,7 @@ pub async fn register(Json(body): Json<CreateUserRequest>) -> Result<StatusCode,
 - `#[serde(deny_unknown_fields)]` para DTOs estritos; DTOs separados por caso de uso para evitar mass assignment
 - Limite os tamanhos: `RequestBodyLimitLayer`, `DefaultBodyLimit`, comprimentos máximos de strings, tetos de paginação (`limit <= 100`)
 - Envolva o `Json` em um extractor que mapeie as rejeições de corpo malformado para o formato problem+json sem expor detalhes internos
-- Senhas: mínimo de 12 caracteres, permita qualquer caractere imprimível, sem regras de composição, sem rotação periódica (NIST SP 800-63B-4)
+- Senhas: mínimo de 15 caracteres (fator único; 8 com MFA), permita qualquer caractere imprimível, sem regras de composição, sem rotação periódica (NIST SP 800-63B-4)
 
 ---
 

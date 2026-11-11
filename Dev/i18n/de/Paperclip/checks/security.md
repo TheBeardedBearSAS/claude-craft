@@ -32,6 +32,7 @@ Greppen nach verdächtigen Patterns: `req.body.companyId`, `req.query.companyId`
 ### 4. Budgets (harte Grenzen)
 
 - [ ] Ein Test existiert, der verifiziert, dass `BUDGET_EXCEEDED` zurückgegeben wird, wenn ein Agent sein Budget überschreitet
+- [ ] Nicht bepreiste Nutzung (Modelle ohne Preis) wird geprüft: seit 2026.1023.0 steht die Budget-Richtlinien-Einstellung `unpricedUsagePolicy` (nicht bepreiste Nutzung) standardmäßig auf `block`, Budgets greifen also, statt stillschweigend weiterzulaufen; niemals ohne ausdrückliche Budgetentscheidung auf `allow` stellen
 - [ ] Kein Code-Pfad erhöht den Verbrauch über `budgetTokens` hinaus stillschweigend
 - [ ] Budget-Änderungen emittieren Activity-Events
 

@@ -65,7 +65,9 @@ main (production-ready)
 [optional footer(s)]
 ```
 
-### Types obligatoires
+### Types
+
+La spec Conventional Commits 1.0.0 n'impose que `feat` et `fix` ; les autres types sont une convention d'équipe (`@commitlint/config-conventional`).
 
 | Type | Description | Exemple |
 |------|-------------|---------|
@@ -79,6 +81,10 @@ main (production-ready)
 | `build` | Build system, deps externes | `build: upgrade framework to v2.0` |
 | `ci` | CI/CD configuration | `ci: add lint step to pipeline` |
 | `chore` | Autres (pas de code prod) | `chore: update .gitignore` |
+
+### Breaking changes
+
+Ajouter `!` avant les deux-points (`feat(api)!: remove v1 endpoints`) et/ou un footer `BREAKING CHANGE: <description>` (majuscules, deux-points). Correspond à un bump MAJOR SemVer.
 
 ### Scopes recommandés
 

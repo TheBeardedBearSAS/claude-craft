@@ -2,7 +2,7 @@
 
 ## Vue d'ensemble
 
-Le testing Svelte 5 privilégie Vitest 4 Browser Mode pour les composants et Playwright pour E2E.
+Le testing Svelte 5 privilégie Vitest 5 Browser Mode pour les composants et Playwright pour E2E.
 
 **Principes** :
 - ✅ Pyramide : 70% unit, 20% integration, 10% E2E
@@ -13,21 +13,22 @@ Le testing Svelte 5 privilégie Vitest 4 Browser Mode pour les composants et Pla
 
 ---
 
-## Configuration Vitest 4
+## Configuration Vitest 5
 
 ### vitest.config.ts
 
 ```ts
 import { defineConfig } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { playwright } from '@vitest/browser-playwright';
 
 export default defineConfig({
     plugins: [svelte()],
     test: {
         browser: {
             enabled: true,
-            name: 'chromium', // ou 'firefox', 'webkit'
-            provider: 'playwright',
+            provider: playwright(),
+            instances: [{ browser: 'chromium' }], // ou 'firefox', 'webkit'
             headless: true,
         },
         coverage: {
@@ -508,7 +509,7 @@ test('component has no accessibility violations', async () => {
 
 ## Checklist Testing
 
-- [ ] Vitest 4 Browser Mode configuré
+- [ ] Vitest 5 Browser Mode configuré
 - [ ] @testing-library/svelte pour composants
 - [ ] Tests unitaires pour logique métier
 - [ ] Tests load functions

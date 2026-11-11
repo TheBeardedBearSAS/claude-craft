@@ -9,7 +9,12 @@
 # PROCÉDURE DE BUMP : modifier ICI, puis propager dans les fichiers listés, puis
 # `npm run lint:versions` pour garantir l'absence de dérive.
 #
-# Dernière mise à jour : 2026-10-13 (audit fraîcheur docs/audit/freshness-2026-10-13.md — React 19.3, Flutter 3.47/Dart 3.13,
+# Dernière mise à jour : 2026-11-11 (audit fraîcheur docs/audit/freshness-2026-11-11.md — correctifs de sécurité :
+# PgBouncer 1.26.1 (CVE-2026-107350/107349/107348), FrankenPHP 1.13.5 (PHP2Shell CVE-2026-109618/109619), Docker 29.9.3,
+# OpenTofu 1.13.9, hcloud CLI 1.70.2 ; bumps : RN 0.88 / Expo SDK 58, Vercel CLI 65.14.0, Paperclip 2026.1106.0,
+# Coolify 4.7.5, K8s 1.37.2, ansible-core 2.22.0, Helm 4.3.1, Rails 8.1.4.1 (sécurité) ; Node 26 Active LTS depuis le
+# 2026-10-28, Node 24 en Maintenance depuis le 2026-10-20 — source endoflife.date/api/nodejs.json).
+# Précédente : 2026-10-13 (audit fraîcheur docs/audit/freshness-2026-10-13.md — React 19.3, Flutter 3.47/Dart 3.13,
 # RN 0.87, Vite 8.3, Vercel CLI 63.1.2, Python 3.15, Paperclip 2026.1012.0, Docker 29.9.0, Coolify 4.4.6, K8s 1.37.1,
 # OpenTofu 1.13.1, Ansible 2.21.5, hcloud 1.70.1, FrankenPHP 1.13.0 et PgBouncer 1.26.0 (correctifs CVE)).
 # CORRECTIF : la note du 2026-07-03 (« RN 0.86 inexistant », 0.86→0.85) était FAUSSE — dist-tags npm vérifiés
@@ -22,11 +27,11 @@
 # 2026-11-08 : ajout du stack Rust / Axum (Rust 1.99.1, édition 2024, Axum 0.8.9 du 2026-04-14, Tokio 1.54.1 du 2026-10-21, SQLx 0.9.0 du 2026-05-21).
 # 2026-11-03 (release 9.1.1) : Claude Code recommandé/testé 2.1.316 → 2.1.317 (changelog 2.1.317 relu).
 # 2026-11-01 (release 9.1.0) : Claude Code recommandé/testé 2.1.312 → 2.1.316 (changelog 2.1.313–2.1.316 relu).
-# 2026-11-01 : ajout du stack Ruby / Rails (Rails 8.1.4 du 2026-09-24, Ruby 4.0.9 du 2026-10-23).
+# 2026-11-01 : ajout du stack Ruby / Rails (Rails 8.1.4 du 2026-09-24, Ruby 4.0.9 du 2026-10-23) — plancher relevé à Rails 8.1.4.1 (sécurité, 2026-11-04) par l'audit du 2026-11-11.
 # 2026-10-28 (release 8.27.0) : Claude Code recommandé/testé 2.1.296 → 2.1.312 (changelog 2.1.297–2.1.312 relu).
 
 meta:
-  lastUpdated: '2026-11-10'
+  lastUpdated: '2026-11-11'
 
 claudeCode:
   # minimum : plancher sécurité — couvre GHSA-5j29 (2.1.129), GHSA-7835 (2.1.163),
@@ -94,32 +99,32 @@ stacks:
   symfony: { registry: '8.1 / PHP 8.4+' }
   flutter: { registry: '3.47 / Dart 3.13' }
   react: { registry: '19.3 + Compiler 1.0' }
-  reactnative: { registry: '0.87' }
+  reactnative: { registry: '0.88' }
   angular: { registry: '22' }
   laravel: { registry: '13.x / PHP 8.3+' }
   vuejs: { registry: '3.5+' }
   vite: { registry: '8.3' }
-  vercel: { registry: '63.1.2' }
+  vercel: { registry: '65.14.0' }
   tauri: { registry: '2.12' }
   wordpress: { registry: '7.1' }
   php: { registry: '8.5' }
   python: { registry: '3.15 / 3.14+' }
   ruby: { registry: '8.1 / Ruby 4.0' }
   rust: { registry: '0.8 / Rust 1.99' }
-  paperclip: { registry: '2026.1012.0' }
-  docker: { registry: '29.9.0' }
-  coolify: { registry: '4.4.6' }
+  paperclip: { registry: '2026.1106.0' }
+  docker: { registry: '29.9.3' }
+  coolify: { registry: '4.7.5' }
 
 # Versions infra non portées par tech-registry (documentées dans devops-engineer.md / CLAUDE.md)
 infra:
-  kubernetes: '1.37.1'
-  opentofu: '1.13.1'
-  ansible: '2.21.5'
-  hcloud: '1.70.1'
-  frankenphp: '1.13.0'
-  pgbouncer: '1.26.0'
-  helm: '4.2.2'
-  node: '24.x (Active LTS) — 22.x Maintenance LTS'
+  kubernetes: '1.37.2'
+  opentofu: '1.13.9'
+  ansible: '2.22.0'
+  hcloud: '1.70.2'
+  frankenphp: '1.13.5'
+  pgbouncer: '1.26.1'
+  helm: '4.3.1'
+  node: '26.x (Active LTS) — 24.x et 22.x Maintenance LTS'
 
 # Tokens OBSOLÈTES qui ne doivent plus apparaître dans les fichiers vitrine.
 # (catch des dérives publiques les plus fréquentes — volontairement spécifiques pour éviter les faux positifs)
@@ -188,6 +193,30 @@ denylist:
   - '0.85 (New Arch'
   - 'React Native 0.85'
   - 'Pinia 3'
+  # Versions périmées — audit fraîcheur 2026-11-11 (tokens spécifiques : le README cite ces versions dans son historique)
+  - '| 29.9.0'
+  - 'Engine 29.9.0'
+  - 'Docker 29.9.0, Coolify'
+  - 'v4.4.6'
+  - 'K8s 1.37.1'
+  - '| 1.37.1'
+  - '1.37.1 stable'
+  - '| 1.13.1 |'
+  - '(1.13.1)'
+  - '| 2.21.5'
+  - 'ansible-core 2.21.5'
+  - 'CLI 1.70.1'
+  - 'FrankenPHP 1.13.0,'
+  - '1.13.0 (security'
+  - '| 1.13.0 |'
+  - 'PgBouncer 1.26.0,'
+  - '1.26.0 (security'
+  - '| 1.26.0 |'
+  - 'Helm 4.2.2 (Helm 4'
+  - '| 63.1.2'
+  - '| 2026.1012.0'
+  - '0.87 (New Arch'
+  - 'Expo SDK 57'
   # Catégorie OWASP 2021 absente du Top 10:2025
   - 'Vulnerable and Outdated Components'
 
@@ -241,3 +270,13 @@ claimDenylist:
       - 'Dev/i18n/de/Common/rules/12-context-management.md'
       - 'Dev/i18n/pt/Common/rules/12-context-management.md'
       - 'docs/FAQ.md'
+  - reason: 'Node 26 est Active LTS depuis le 2026-10-28, Node 24 est en Maintenance (source: endoflife.date/api/nodejs.json)'
+    tokens:
+      - 'Node 24 recommended — Active LTS'
+      - '24.x Active LTS'
+      - 'Node.js 20.x LTS** | Supported'
+    files:
+      - 'docs/FAQ.md'
+      - 'docs/QUICKSTART.md'
+      - 'docs/PREREQUISITES.md'
+      - '.claude/COMPATIBILITY.md'

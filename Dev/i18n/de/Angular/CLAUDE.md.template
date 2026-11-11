@@ -26,7 +26,8 @@ src/app/
 ### Architektur: Feature-Based + Standalone
 - **Standalone Components**: Keine NgModules
 - **Signals**: Reaktives State Management
-- **OnPush**: Performance-optimierte Change Detection
+- **OnPush**: Standard seit Angular 22.0.0 (`changeDetection` weglassen; `ChangeDetectionStrategy.Eager` nur zum Abwählen)
+- **Signal I/O**: `input()`, `output()`, `model()` statt `@Input`/`@Output`/`EventEmitter`; kein `standalone: true` (Standard)
 - **Modern Control Flow**: @if, @for, @switch
 
 Siehe `rules/02-architecture.md` fuer Muster.

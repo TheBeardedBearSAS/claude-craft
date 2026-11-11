@@ -92,7 +92,7 @@ POLICY ENFORCEMENT
 
 | Check | Status | Details |
 |-------|--------|---------|
-| tfsec/checkov | {integrated/no} | {findings} |
+| Trivy/checkov | {integrated/no} | {findings} |
 | OPA policies | {yes/no} | {count} |
 | Provider lock file | {committed/missing} | {details} |
 | Tag compliance | {enforced/no} | {details} |

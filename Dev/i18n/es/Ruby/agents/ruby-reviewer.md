@@ -230,7 +230,7 @@ Verifica que toda validación de unicidad o de presencia de una clave foránea t
 
 | Tema | Guía |
 |------|------|
-| Versión de Ruby | 4.0 (4.0.0 publicada el 2025-12-25). Fijarla en `.ruby-version` y en el `Dockerfile` |
+| Versión de Ruby | 4.0 (4.0.9 parche actual, publicado el 2026-10-23; 4.0.0 publicada el 2025-12-25). Fijarla en `.ruby-version` y en el `Dockerfile` |
 | JIT | YJIT sigue disponible y activado en las imágenes de producción; ZJIT es el nuevo compilador, evaluarlo antes de depender de él |
 | `Ruby::Box` | Experimental: NO usar en código de producción |
 | `Data.define` | Preferido para value objects inmutables y resultados de servicios |
