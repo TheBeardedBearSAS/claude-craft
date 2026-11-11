@@ -14,6 +14,9 @@
 # Re-entrant within one process: a locked function may call another one.
 # No `declare` here: this file may be sourced from inside a function.
 
+# Every caller already runs in strict mode; stated here so the file is also safe on its own.
+set -euo pipefail
+
 STATUS_LOCK_TTL_MS=10000
 STATUS_LOCK_RETRIES="${STATUS_LOCK_RETRIES:-25}"   # x 0.1 s; the scripts hold it longer than the server
 STATUS_LOCK_DELAY=0.1

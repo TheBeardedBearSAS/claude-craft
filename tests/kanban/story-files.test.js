@@ -287,3 +287,12 @@ describe('file helpers', () => {
     expect(await readFile(f, 'utf8')).toBe('first');
   });
 });
+
+describe('renderStoryMarkdown — comment end variants', () => {
+  it('drops the `--!>` comment end as well as `-->` from user text', () => {
+    const md = renderStoryMarkdown({ id: 'US-001', title: 'a <!-- b --!> c --> d', date: '2026-11-11' });
+
+    expect(md).not.toMatch(/<!--|--!?>/);
+    expect(md).toContain('a b c d');
+  });
+});

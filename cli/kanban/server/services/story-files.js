@@ -36,7 +36,7 @@ export function slugify(title) {
 /** One line, no comment markers or control characters: user text cannot add or end structure. */
 function oneLine(value) {
   return String(value ?? '')
-    .replace(/<!--|-->/g, ' ')
+    .replace(/<!--|--!?>/g, ' ')
     .replace(/[\p{Cc}\p{Zl}\p{Zp}]/gu, ' ')
     .replace(/\s+/g, ' ')
     .trim();

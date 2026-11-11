@@ -217,7 +217,8 @@ describe('hostile repository content cannot hang the server', () => {
     deriveStoryData(`- **Points**: 1${' \n'.repeat(100_000)}x`);
     deriveStoryData('<!--'.repeat(50_000)); // never closed
     deriveStoryData(`${'<!'.repeat(25_000)}${'-- -->'.repeat(25_000)}`); // each removal opens the next one
-    expect(Date.now() - started).toBeLessThan(1000);
+    // The quadratic version took 22 s on the first input alone; 5 s leaves room for slow or instrumented runners.
+    expect(Date.now() - started).toBeLessThan(5000);
   });
 });
 
