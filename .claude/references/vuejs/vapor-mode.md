@@ -88,7 +88,7 @@ const total = computed(() => items.value.reduce((n, i) => n + i.qty, 0));
 1. **Upgrade Vue 3.5 → 3.6** : pas de breaking change si vous n'activez pas Vapor.
 2. **Identifier les composants "hot"** via Vue DevTools > Performance. Cibler ceux avec re-renders fréquents.
 3. **Activer `<script setup vapor>`** un composant à la fois.
-4. **Tests de non-régression** : Vitest 5 + Vue Test Utils 2.x (2.5.1) : aucune source officielle (releases `vuejs/test-utils` jusqu'à 2.5.1, documentation) ne mentionne le support de Vapor : tester sur votre version avant adoption. Vitest 5.1.0 déclare `vite` `^6.4.0 || ^7.0.0 || ^8.0.0` en `peerDependencies` (registry.npmjs.org/vitest/latest), donc compatible Vite 8.
+4. **Tests de non-régression** : Vitest 5 + Vue Test Utils 2.x (2.5.1) : aucune source officielle (releases `vuejs/test-utils` jusqu'à 2.5.1, documentation) ne mentionne le support de Vapor, et la 2.5.1 est développée et testée contre Vue 3.5 (`devDependencies` : `vue 3.5.44`) : considérer Vapor comme non supporté officiellement par Vue Test Utils et tester sur votre version avant adoption. Vitest 5.1.0 déclare `vite` `^6.4.0 || ^7.0.0 || ^8.0.0` en `peerDependencies` (registry.npmjs.org/vitest/latest), donc compatible Vite 8.
 5. **Mesurer** : Lighthouse + Memory profiler avant/après. Sans gain mesurable, repasser en VDOM.
 
 ## Checklist Vapor production-ready
