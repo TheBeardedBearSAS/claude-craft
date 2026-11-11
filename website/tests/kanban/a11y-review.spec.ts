@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import en from '../../../cli/kanban/client/src/lib/i18n/locales/en.js';
 import fr from '../../../cli/kanban/client/src/lib/i18n/locales/fr.js';
-import { VIEWS, DESKTOP, ZOOM400, READONLY_ORIGIN, openView, setTweaks, settingsButton, openMoveMenu } from './helpers';
+import { VIEWS, DESKTOP, ZOOM400, READONLY_ORIGIN, openView, setTweaks, settingsButton, openMoveMenu, SMALL_TARGETS, settled } from './helpers';
 
 // What axe does not see (audit K-16, K-17, K-24..K-32, K-34): motion, target size, focus after an action,
 // duplicated or late live regions, headings, landmarks, language of the UI, text spacing, menu keyboard pattern.
@@ -35,23 +35,6 @@ test('motion: with prefers-reduced-motion, nothing animates forever (pseudo-elem
 });
 
 // ---- K-31 / WCAG 2.5.8: target size --------------------------------------------------------------------
-const SMALL_TARGETS = () =>
-  [...document.querySelectorAll('button, a[href], input, select, summary, [role="menuitem"]')]
-    .filter((el) => {
-      const r = el.getBoundingClientRect();
-      if (!r.width || !r.height || getComputedStyle(el).visibility === 'hidden') return false;
-      if (el.closest('.sr-only, .md-body, .doc-paper, [inert]')) return false; // links inside prose (inline exception)
-      if (el.closest('dialog:not([open])')) return false;
-      // A checkbox or radio inside its <label>: the label is the target (it activates the control).
-      const label = el.matches('input') ? el.closest('label')?.getBoundingClientRect() : null;
-      if (label && label.width >= 24 && label.height >= 24) return false;
-      return r.width < 24 || r.height < 24;
-    })
-    .map((el) => {
-      const r = el.getBoundingClientRect();
-      return `${el.tagName.toLowerCase()}.${(el as HTMLElement).className.split(' ')[0]} "${(el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 24)}" ${Math.round(r.width)}x${Math.round(r.height)}`;
-    });
-
 for (const vp of [DESKTOP, ZOOM400]) {
   test(`targets: every control is at least 24x24 px on each view at ${vp.width}px`, async ({ page }) => {
     await page.setViewportSize(vp);
@@ -60,17 +43,21 @@ for (const vp of [DESKTOP, ZOOM400]) {
       await openView(page, v.name);
       if (v.name === 'docs')
         await page.locator('details.docs-nav').evaluate((d) => ((d as HTMLDetailsElement).open = true));
+      await settled(page);
       small.push(...(await page.evaluate(SMALL_TARGETS)).map((s) => `${v.name}: ${s}`));
     }
     await openView(page, 'kanban');
     await openMoveMenu(page, US);
+    await settled(page);
     small.push(...(await page.evaluate(SMALL_TARGETS)).map((s) => `move-menu: ${s}`));
     await page.keyboard.press('Escape');
     await page.goto(`/#/kanban?story=${US}`);
     await expect(page.locator('dialog.modal[open]')).toBeVisible();
+    await settled(page);
     small.push(...(await page.evaluate(SMALL_TARGETS)).map((s) => `detail: ${s}`));
     await page.keyboard.press('Escape');
     await settingsButton(page).click();
+    await settled(page);
     small.push(...(await page.evaluate(SMALL_TARGETS)).map((s) => `settings: ${s}`));
     expect(small).toEqual([]);
   });
@@ -538,7 +525,7 @@ test('ids: every id of the page is unique with the detail, its dialogs and the c
   expect(dupes).toEqual([]);
 });
 
-test('search: the placeholder is never cut, in any language, at 1280px and 320px', async ({ page }) => {
+test('search: the placeholder is never cut, in any language, at 1280px and 320px', async ({ page, browserName }) => {
   const cut: string[] = [];
   for (const lang of ['en', 'fr', 'es', 'de', 'pt']) {
     for (const size of [DESKTOP, { width: 320, height: 640 }]) {
@@ -547,13 +534,19 @@ test('search: the placeholder is never cut, in any language, at 1280px and 320px
       await page.evaluate((l) => localStorage.setItem('cc-kanban-tweaks', JSON.stringify({ lang: l })), lang);
       await page.reload();
       await expect(page.locator('html')).toHaveAttribute('lang', lang);
-      const fits = await page.locator('.search input').evaluate((input: HTMLInputElement) => {
+      // Measured with the self-hosted font in place (before, the canvas would measure a fallback font).
+      // Chromium and WebKit clip the text of an input at its content box; Firefox paints it over its padding
+      // (checked on a 4x capture: "Buscar historias…", 118 px, is drawn whole in a 116 px content box + 2 x 2 px
+      // padding). The room is therefore the padding box under Firefox.
+      const paintsOverPadding = browserName === 'firefox';
+      const fits = await page.locator('.search input').evaluate(async (input: HTMLInputElement, overPadding) => {
+        await document.fonts.ready;
         const style = getComputedStyle(input);
         const ctx = document.createElement('canvas').getContext('2d')!;
         ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
-        const room = input.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
-        return ctx.measureText(input.placeholder).width <= room + 1;
-      });
+        const padding = overPadding ? 0 : parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+        return ctx.measureText(input.placeholder).width <= input.clientWidth - padding + 1;
+      }, paintsOverPadding);
       if (!fits) cut.push(`${lang}@${size.width}`);
     }
   }

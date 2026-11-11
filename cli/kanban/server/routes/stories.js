@@ -25,9 +25,10 @@ import {
   StoryCreateSchema,
   StoryPatchSchema,
   TaskCreateSchema,
-  TaskStatusPatchSchema,
+  TaskPatchSchema,
   TransitionRequestSchema,
 } from '../../shared/schemas.js';
+import { createIdempotencyStore, idempotent } from '../services/idempotency.js';
 import { HttpError, parseIfMatch, readJson, writeError } from './http-errors.js';
 
 /** The markdown body route accepts more than the global 64 KB limit. */
@@ -417,7 +418,7 @@ async function deleteStory(ctx, c) {
   }
 }
 
-// --- PATCH /api/stories/:id/tasks/:taskId, POST /api/stories/:id/tasks ------------
+// --- PATCH and DELETE /api/stories/:id/tasks/:taskId, POST /api/stories/:id/tasks ------------
 
 /**
  * Per-task statuses. A list known only by its counter (`completed` without `status`) is seeded from it: the first
@@ -438,6 +439,30 @@ export function withTaskStatus(tasks, taskId, status) {
   if (!list.includes(taskId)) throw new HttpError(404, 'task_not_found');
   const statuses = { ...taskStatuses(tasks), [taskId]: status };
   return { ...tasks, status: statuses, completed: countDone(list, statuses) };
+}
+
+/**
+ * `tasks` with `taskId` renamed in place (position and status follow). Renaming to its own name is a no-op; to the
+ * name of another task is a 409. Statuses are seeded first so a counter-only list keeps its done count.
+ */
+export function withRenamedTask(tasks, taskId, title) {
+  const list = tasks?.list ?? [];
+  if (!list.includes(taskId)) throw new HttpError(404, 'task_not_found');
+  if (title === taskId) return tasks;
+  if (list.includes(title)) throw new HttpError(409, 'task_exists');
+  const statuses = taskStatuses(tasks);
+  const { [taskId]: status, ...rest } = statuses;
+  return { ...tasks, list: list.map((t) => (t === taskId ? title : t)), status: { ...rest, [title]: status } };
+}
+
+/** `tasks` without `taskId`; `total` and `completed` are recounted. */
+export function withoutTask(tasks, taskId) {
+  const list = tasks?.list ?? [];
+  if (!list.includes(taskId)) throw new HttpError(404, 'task_not_found');
+  const next = list.filter((t) => t !== taskId);
+  const statuses = taskStatuses(tasks);
+  delete statuses[taskId];
+  return { ...tasks, total: next.length, completed: countDone(next, statuses), list: next, status: statuses };
 }
 
 /** `tasks` with one more to-do task; `total` becomes the length of the list. */
@@ -487,13 +512,26 @@ async function addTask(ctx, c) {
   return writeTasks(ctx, c, story, (tasks) => withNewTask(tasks, parsed.data.title), 201);
 }
 
-async function setTaskStatus(ctx, c) {
+/** Applies the requested rename, then the requested status (to the new name). */
+function patchTask(tasks, taskId, { title, status }) {
+  const renamed = title === undefined ? tasks : withRenamedTask(tasks, taskId, title);
+  return status === undefined ? renamed : withTaskStatus(renamed, title ?? taskId, status);
+}
+
+async function setTask(ctx, c) {
   const { story, response } = taskTarget(ctx, c);
   if (response) return response;
-  const parsed = await readJson(c, TaskStatusPatchSchema);
+  const parsed = await readJson(c, TaskPatchSchema);
   if (parsed.response) return parsed.response;
   const taskId = c.req.param('taskId');
-  return writeTasks(ctx, c, story, (tasks) => withTaskStatus(tasks, taskId, parsed.data.status));
+  return writeTasks(ctx, c, story, (tasks) => patchTask(tasks, taskId, parsed.data));
+}
+
+async function deleteTask(ctx, c) {
+  const { story, response } = taskTarget(ctx, c);
+  if (response) return response;
+  const taskId = c.req.param('taskId');
+  return writeTasks(ctx, c, story, (tasks) => withoutTask(tasks, taskId));
 }
 
 // --- registration ----------------------------------------------------------------
@@ -508,11 +546,20 @@ export function register(app, { repository, projectRoot, user = 'kanban', eventB
     maxSize: BODY_ROUTE_LIMIT,
     onError: (c) => c.json({ error: 'payload_too_large' }, 413),
   });
+  // A POST creates something new each time: an `Idempotency-Key` makes a double submit harmless.
+  const once = (handler) => idempotent(createIdempotencyStore(), handler);
   app.patch('/api/stories/:id/status', (c) => moveStory(ctx, c));
-  app.patch('/api/stories/:id/tasks/:taskId', (c) => setTaskStatus(ctx, c));
-  app.post('/api/stories/:id/tasks', (c) => addTask(ctx, c));
+  app.patch('/api/stories/:id/tasks/:taskId', (c) => setTask(ctx, c));
+  app.delete('/api/stories/:id/tasks/:taskId', (c) => deleteTask(ctx, c));
+  app.post(
+    '/api/stories/:id/tasks',
+    once((c) => addTask(ctx, c))
+  );
   app.patch('/api/stories/:id', (c) => editStory(ctx, c));
   app.put('/api/stories/:id/body', bigBody, (c) => putBody(ctx, c));
-  app.post('/api/stories', (c) => createStory(ctx, c));
+  app.post(
+    '/api/stories',
+    once((c) => createStory(ctx, c))
+  );
   app.delete('/api/stories/:id', (c) => deleteStory(ctx, c));
 }

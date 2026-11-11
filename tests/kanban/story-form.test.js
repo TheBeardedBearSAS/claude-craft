@@ -9,6 +9,8 @@ import {
   toCreatePayload,
   fieldErrorsFromIssues,
   describeFailure,
+  idempotencyKey,
+  focusLost,
 } from '../../cli/kanban/client/src/lib/story-form.js';
 
 const story = (extra = {}) => ({
@@ -203,5 +205,47 @@ describe('describeFailure', () => {
 
   it('falls back to error.unknown', () => {
     expect(describeFailure(undefined)).toEqual({ key: 'error.unknown', fields: {}, retry: false });
+  });
+});
+
+describe('idempotencyKey', () => {
+  it('is an opaque 8..128 character token, different at every call', () => {
+    const a = idempotencyKey();
+    expect(a).toMatch(/^[\x21-\x7e]{8,128}$/);
+    expect(idempotencyKey()).not.toBe(a);
+  });
+
+  it('falls back to a random token without crypto.randomUUID (insecure context)', () => {
+    const key = idempotencyKey({});
+    expect(key).toMatch(/^[\x21-\x7e]{8,128}$/);
+    expect(idempotencyKey({})).not.toBe(key);
+  });
+
+  it('uses crypto.randomUUID when present', () => {
+    expect(idempotencyKey({ randomUUID: () => 'fixed-uuid-1234' })).toBe('fixed-uuid-1234');
+  });
+});
+
+describe('focusLost', () => {
+  const body = { isConnected: true };
+  const el = (extra = {}) => ({ isConnected: true, disabled: false, ...extra });
+
+  it('is true when nothing, the body, a detached or a disabled element has the focus', () => {
+    expect(focusLost(null, body, null)).toBe(true);
+    expect(focusLost(body, body, null)).toBe(true);
+    expect(focusLost(el({ isConnected: false }), body, null)).toBe(true);
+    expect(focusLost(el({ disabled: true }), body, null)).toBe(true);
+  });
+
+  it('is true when the focus is still inside the dialog that closed', () => {
+    const dialog = { contains: (node) => node === inside };
+    const inside = el();
+    expect(focusLost(inside, body, dialog)).toBe(true);
+  });
+
+  it('is false when the user already reached another control', () => {
+    const dialog = { contains: () => false };
+    expect(focusLost(el(), body, dialog)).toBe(false);
+    expect(focusLost(el(), body, null)).toBe(false);
   });
 });

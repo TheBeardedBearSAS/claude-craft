@@ -9,6 +9,7 @@
   import { t, tn } from '../lib/i18n/index.svelte.js';
   import { errorKey } from '../lib/api.js';
   import { validateSprintDraft } from '../lib/sprint-plan.js';
+  import { idempotencyKey, focusLost } from '../lib/story-form.js';
   import { createSprint } from '../lib/sprint-actions.svelte.js';
   import { confirmDiscard } from '../lib/story-actions.svelte.js';
   import { guardLeave } from '../lib/router.svelte.js';
@@ -23,6 +24,7 @@
   let dialog = $state(null);
   let summaryEl = $state(null);
   let triggerEl = null;
+  let submitKey = ''; // one per opening: a repeated POST gets the first answer from the server
   let draft = $state(empty());
   let errors = $state({});
   let formError = $state(null);
@@ -32,6 +34,7 @@
 
   export function open() {
     triggerEl = document.activeElement;
+    submitKey = idempotencyKey();
     draft = empty();
     errors = {};
     formError = null;
@@ -56,8 +59,10 @@
   }
   $effect(() => guardLeave({ dirty, confirm: confirmLeave }));
 
+  // `close` comes with the next rendered frame: a control the user has reached meanwhile keeps the focus.
   function onClose() {
-    triggerEl?.focus();
+    if (dialog.open) return; // closed, then opened again before this event came: the new opening owns the focus
+    if (focusLost(document.activeElement, document.body, dialog)) triggerEl?.focus();
     triggerEl = null;
   }
 
@@ -81,7 +86,7 @@
     if (!payload) return showErrors();
     saving = true;
     try {
-      const sprint = await createSprint(payload);
+      const sprint = await createSprint(payload, submitKey);
       close();
       onsaved(sprint);
     } catch (err) {
@@ -148,8 +153,9 @@
 
     <div class="sf-actions">
       <button type="button" class="btn" onclick={tryClose}>{t('common.cancel')}</button>
-      <button type="submit" class="btn btn-primary" aria-disabled={saving ? 'true' : undefined}>{saving ? t('form.saving') : t('sprint.create.submit')}</button>
+      <button type="submit" class="btn btn-primary" aria-disabled={saving ? 'true' : undefined}>{saving ? t('form.creating') : t('sprint.create.submit')}</button>
     </div>
+    <p class="sr-only" role="status">{saving ? t('form.creating') : ''}</p>
   </form>
 </dialog>
 

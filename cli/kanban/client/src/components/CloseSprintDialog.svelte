@@ -6,6 +6,7 @@
    */
   import { t, tn } from '../lib/i18n/index.svelte.js';
   import { closeSummary } from '../lib/sprint-plan.js';
+  import { focusLost } from '../lib/story-form.js';
 
   /** @type {{ stories: object[], planned: Array<{ id: string, name?: string }> }} */
   let { stories, planned } = $props();
@@ -22,19 +23,31 @@
     triggerEl = document.activeElement;
     sprint = target;
     carry = 'backlog';
+    settle(null); // a question still pending is over
     dialog?.showModal();
     return new Promise((resolve) => (resolver = resolve));
   }
 
-  function answer(value) {
-    dialog.returnValue = value;
-    dialog.close();
+  // The answer is taken when it is given, not on `close`: that event comes with the next rendered frame, when the
+  // dialog may already be asking a new question (it would receive the first one's answer).
+  function settle(value) {
+    const resolve = resolver;
+    resolver = null;
+    resolve?.(value);
   }
 
+  function answer(value) {
+    const choice = value === 'confirm' ? carry : null;
+    dialog.close();
+    settle(choice);
+  }
+
+  // Escape (or any close that did not come from a button) is a cancel. The focus goes back to the button that asked
+  // only if it was lost: the user may have reached another control while the frame was being rendered.
   function onClose() {
-    resolver?.(dialog.returnValue === 'confirm' ? carry : null);
-    resolver = null;
-    triggerEl?.focus();
+    if (dialog.open) return; // closed, then opened again before this event came: the new question owns the dialog
+    settle(null);
+    if (triggerEl && focusLost(document.activeElement, document.body, dialog)) triggerEl.focus();
     triggerEl = null;
   }
 </script>

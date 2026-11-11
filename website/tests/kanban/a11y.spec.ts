@@ -11,6 +11,7 @@ import {
   settingsButton,
   openMoveMenu,
   openDepsNode,
+  settled,
 } from './helpers';
 
 // axe-core on every view and on every transient state of the UI, at 1280x800 and 320x256 (WCAG 1.4.10 at 400 %).
@@ -47,6 +48,7 @@ async function showToasts(p: Page) {
   await p.getByRole('menu').getByRole('menuitem').first().click();
   await expect(p.locator('.toast.success')).toBeVisible();
 }
+
 
 const scenes: Scene[] = [
   ...VIEWS.map((v) => ({ name: v.name, open: (p: Page) => openView(p, v.name) })),
@@ -200,6 +202,7 @@ for (const vp of [DESKTOP, ZOOM400]) {
     test(`axe: ${key}`, async ({ page }) => {
       await page.setViewportSize(vp);
       await scene.open(page);
+      await settled(page);
       const { violations } = await axe(page).analyze();
       const summary = violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`);
       expect(summary, `axe violations in ${key}`).toEqual([]);
@@ -298,6 +301,7 @@ for (const vp of [DESKTOP, ZOOM400]) {
     test(`axe: ${key}`, async ({ page }) => {
       await page.setViewportSize(vp);
       await scene.open(page);
+      await settled(page);
       const { violations } = await axe(page).analyze();
       const summary = violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`);
       expect(summary, `axe violations in ${key}`).toEqual([]);

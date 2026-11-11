@@ -974,6 +974,43 @@ dialog.modal-form {
   font-size: 0.8125rem;
   color: var(--fg-dim);
 }
+.sd-task-btn {
+  min-height: 28px;
+  min-width: 28px;
+  padding: 2px 10px;
+  font-size: 0.8125rem;
+}
+.sd-task-rename {
+  display: flex;
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  min-width: 0;
+}
+.sd-task-rename input {
+  flex: 1 1 160px;
+  min-width: 0;
+  min-height: 32px;
+  padding: 6px 10px;
+  background: var(--bg-inset);
+  color: var(--fg);
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+}
+.sd-task-rename input[aria-invalid='true'] {
+  border-color: var(--danger);
+  border-width: 2px;
+}
+.sd-task-rename .sd-task-error {
+  flex: 1 1 100%;
+  margin: 0;
+}
+.btn[aria-disabled='true'] {
+  opacity: 0.7;
+  cursor: progress;
+}
 .sd-task-add {
   display: flex;
   flex-direction: column;

@@ -139,13 +139,20 @@ export function patchStatus(id, body) {
   return trackWrite(id, sendStatus(id, body));
 }
 
+// Latest status write sent for each story. When the user moves a card again before the first move is answered, the
+// first answer must not be applied: the board already shows the second move, and putting the card back a column
+// would re-create it (the focus the user had put on it is lost). The second answer brings the newer story.
+const lastStatusWrite = new Map();
+
 async function sendStatus(id, body) {
   const { stories, before } = applyPatch(store.stories, id, { status: body.status });
   if (!before) throw new Error('story not found');
   store.stories = stories;
+  const write = (lastStatusWrite.get(id) ?? 0) + 1;
+  lastStatusWrite.set(id, write);
   try {
     const data = await request(storyUrl(id, '/status'), { method: 'PATCH', body: JSON.stringify(body) });
-    store.stories = replaceStory(store.stories, data.story);
+    if (lastStatusWrite.get(id) === write) store.stories = replaceStory(store.stories, data.story);
     noteWrite();
     toast({
       kind: 'success',

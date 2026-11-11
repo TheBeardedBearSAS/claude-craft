@@ -18,13 +18,15 @@
   import { errorKey } from '../lib/api.js';
   import { formatHash } from '../lib/query.js';
   import { linkifyStoryIds, demoteHeadings, renderMarkdown } from '../lib/markdown.js';
-  import { draftFromStory, diffPatch, describeFailure } from '../lib/story-form.js';
+  import { draftFromStory, diffPatch, describeFailure, idempotencyKey } from '../lib/story-form.js';
   import {
     updateStory,
     saveBody,
     deleteStory,
     setTaskStatus,
     addTask,
+    renameTask,
+    deleteTask,
     moveStory,
     loadStoryRaw,
     registerPrompter,
@@ -147,6 +149,10 @@
   function focusIfLost(el) {
     const active = document.activeElement;
     const lost = !active || active === document.body || !active.isConnected || active.disabled;
+    // Another modal dialog (a prompt already asking the next question) holds the focus: leave it there. WebKit, unlike
+    // Chromium and Firefox, lets focus() reach an element that a modal dialog makes inert.
+    const inOtherModal = !lost && active.closest('dialog')?.matches(':modal') && !dialogEl?.contains(active);
+    if (inOtherModal) return;
     if (lost || dialogEl?.contains(active) === false) el?.focus();
   }
 
@@ -209,6 +215,8 @@
     liveMessage = '';
     newTask = '';
     taskError = '';
+    taskKey = idempotencyKey();
+    renaming = null;
   }
 
   // L'édition se réinitialise quand une autre story s'ouvre.
@@ -368,22 +376,98 @@
   let newTaskEl = $state(null);
   let taskError = $state('');
   let addingTask = $state(false);
+  let taskKey = idempotencyKey(); // renewed after each added task: a repeated POST gets the first answer
 
   async function submitTask(event) {
     event.preventDefault();
+    if (addingTask) return; // the guard is here, not only on the button: two Enter in one frame both reach this function
     const name = newTask.trim();
     taskError = name ? '' : t('story.tasks.error.required');
     if (!name) return newTaskEl?.focus();
     addingTask = true;
-    const res = await addTask(card.id, name);
+    const res = await addTask(card.id, name, taskKey);
     addingTask = false;
     if (!res.ok) {
       taskError = t(errorKey(res.error));
       return focusIfLost(newTaskEl);
     }
     newTask = '';
+    taskKey = idempotencyKey();
     liveMessage = t('story.tasks.added', { name });
     focusIfLost(newTaskEl);
+  }
+
+  // Rename: an inline field in place of the name. Enter saves, Escape cancels, the focus goes back to the button.
+  let renaming = $state(null); // { task, value, error, busy }
+  let renameEl = $state(null);
+  let taskBusy = false;
+  const taskControl = (i, attr) => dialogEl?.querySelector(`.sd-checklist [data-task="${i}"] [${attr}]`);
+
+  async function startRename(task) {
+    renaming = { task, value: task, error: '', busy: false };
+    await tick();
+    renameEl?.focus();
+    renameEl?.select();
+  }
+
+  async function endRename(i) {
+    renaming = null;
+    await tick();
+    taskControl(i, 'data-task-rename')?.focus();
+  }
+
+  async function submitRename(event, task, i) {
+    event.preventDefault();
+    if (!renaming || renaming.busy) return;
+    const name = renaming.value.trim();
+    if (!name) return refuseRename(t('story.tasks.error.required'));
+    if (name === task) return endRename(i);
+    renaming.busy = true;
+    const res = await renameTask(card.id, task, name);
+    if (!res.ok) return refuseRename(t(errorKey(res.error)));
+    liveMessage = t('story.tasks.renamed', { from: task, to: name });
+    await endRename(i);
+  }
+
+  function refuseRename(message) {
+    if (!renaming) return;
+    renaming.busy = false;
+    renaming.error = message;
+    renameEl?.focus();
+  }
+
+  function onRenameKey(event, i) {
+    if (event.key !== 'Escape') return;
+    // Taken in the capture phase (Svelte delegates the other handlers to the document, after the dialog's own keydown
+    // listener): the detail dialog must not take this Escape for its own close request.
+    event.preventDefault();
+    event.stopPropagation();
+    endRename(i);
+  }
+
+  // Delete: one confirmation, then the focus goes to the task that took its place, or to "New task" when none is left.
+  async function removeTask(task, i) {
+    if (taskBusy) return;
+    const button = taskControl(i, 'data-task-delete');
+    if (!(await confirmDialog.confirm(t('story.tasks.delete.confirm', { name: task }), dangerous(t('story.tasks.delete.submit'))))) {
+      return focusIfLost(button);
+    }
+    taskBusy = true;
+    const res = await deleteTask(card.id, task);
+    taskBusy = false;
+    if (!res.ok) {
+      toast({ kind: 'error', key: errorKey(res.error), message: res.error.message });
+      return focusIfLost(button);
+    }
+    liveMessage = t('story.tasks.deleted', { name: task });
+    await tick();
+    focusAfterDelete(i);
+  }
+
+  function focusAfterDelete(i) {
+    const rows = dialogEl?.querySelectorAll('.sd-checklist li') ?? [];
+    const next = rows[Math.min(i, rows.length - 1)];
+    (next?.querySelector('select, button') ?? newTaskEl)?.focus();
   }
 
   async function changeTask(event, task, status) {
@@ -525,14 +609,26 @@
   <ul class="sd-checklist">
     {#each taskList as task, i (i)}
       {@const status = taskMap?.[task] ?? (i < counterDone ? 'done' : 'to-do')}
-      <li>
-        <span class="sd-task-name">{task}</span>
-        {#if taskEditable}
-          <select value={status} aria-label={t('story.tasks.statusOf', { id: task })} onchange={(e) => changeTask(e, task, e.currentTarget.value)}>
-            {#each ['to-do', 'in-progress', 'done', 'blocked'] as s (s)}<option value={s}>{taskStatus(s)}</option>{/each}
-          </select>
+      <li data-task={i}>
+        {#if renaming?.task === task}
+          <form class="sd-task-rename" novalidate onsubmit={(e) => submitRename(e, task, i)}>
+            <label class="sr-only" for="detail-task-rename">{t('story.tasks.renameField', { name: task })}</label>
+            <input id="detail-task-rename" type="text" maxlength="200" autocomplete="off" bind:this={renameEl} bind:value={renaming.value} aria-invalid={renaming.error ? 'true' : undefined} aria-describedby={renaming.error ? 'detail-task-rename-error' : undefined} oninput={() => (renaming.error = '')} onkeydowncapture={(e) => onRenameKey(e, i)} />
+            <button type="submit" class="btn sd-task-btn" aria-disabled={renaming.busy ? 'true' : undefined}>{t('story.tasks.renameSave')}</button>
+            <button type="button" class="btn sd-task-btn" onclick={() => endRename(i)}>{t('common.cancel')}</button>
+            <p class="sd-error sd-task-error" id="detail-task-rename-error" role="alert">{#if renaming.error}<Icon name="warn" size={13} /> {renaming.error}{/if}</p>
+          </form>
         {:else}
-          <span class="sd-task-status">{taskStatus(status)}</span>
+          <span class="sd-task-name">{task}</span>
+          {#if taskEditable}
+            <select value={status} aria-label={t('story.tasks.statusOf', { id: task })} onchange={(e) => changeTask(e, task, e.currentTarget.value)}>
+              {#each ['to-do', 'in-progress', 'done', 'blocked'] as s (s)}<option value={s}>{taskStatus(s)}</option>{/each}
+            </select>
+            <button type="button" class="btn sd-task-btn" data-task-rename aria-label={t('story.tasks.renameOf', { name: task })} onclick={() => startRename(task)}>{t('story.tasks.rename')}</button>
+            <button type="button" class="btn sd-task-btn" data-task-delete aria-label={t('story.tasks.deleteOf', { name: task })} onclick={() => removeTask(task, i)}>{t('story.tasks.delete')}</button>
+          {:else}
+            <span class="sd-task-status">{taskStatus(status)}</span>
+          {/if}
         {/if}
       </li>
     {/each}
@@ -542,7 +638,7 @@
       <label for="detail-task-new">{t('story.tasks.new')}</label>
       <div class="sd-task-add-row">
         <input id="detail-task-new" type="text" maxlength="200" autocomplete="off" bind:this={newTaskEl} bind:value={newTask} aria-invalid={taskError ? 'true' : undefined} aria-describedby={taskError ? 'detail-task-new-error' : undefined} oninput={() => (taskError = '')} />
-        <button type="submit" class="btn" disabled={addingTask}>{t('story.tasks.add')}</button>
+        <button type="submit" class="btn" aria-disabled={addingTask ? 'true' : undefined}>{addingTask ? t('story.tasks.adding') : t('story.tasks.add')}</button>
       </div>
       <!-- Toujours présente : une erreur insérée dans une région déjà là est annoncée de façon fiable. -->
       <p class="sd-error sd-task-error" id="detail-task-new-error" role="alert">{#if taskError}<Icon name="warn" size={13} /> {taskError}{/if}</p>

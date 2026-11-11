@@ -10,7 +10,7 @@
   import ConfirmDialog from './ConfirmDialog.svelte';
   import { asksBeforeClosing } from '../lib/actions.js';
   import { createDialog, closeCreate, createStory, confirmDiscard } from '../lib/story-actions.svelte.js';
-  import { emptyDraft, describeFailure } from '../lib/story-form.js';
+  import { emptyDraft, describeFailure, idempotencyKey, focusLost } from '../lib/story-form.js';
   import { setQuery, guardLeave } from '../lib/router.svelte.js';
   import { t } from '../lib/i18n/index.svelte.js';
 
@@ -24,11 +24,13 @@
   let canRetry = $state(false);
   let opener = null;
   let initial = '';
+  let submitKey = ''; // one per opening: a repeated POST gets the first answer from the server
 
   // Réinitialise le brouillon à chaque ouverture (les valeurs par défaut viennent de l'appelant).
   $effect(() => {
     if (!createDialog.open || !dialogEl || dialogEl.open) return;
     opener = document.activeElement;
+    submitKey = idempotencyKey();
     draft = emptyDraft(createDialog.defaults);
     initial = JSON.stringify($state.snapshot(draft));
     formError = '';
@@ -54,20 +56,24 @@
   }
   $effect(() => guardLeave({ dirty: () => createDialog.open && dirty, confirm: confirmLeave }));
 
-  // Fermeture native (Échap compris) : le focus revient au déclencheur s'il existe encore.
+  // Fermeture native (Échap compris) : le focus revient au déclencheur s'il existe encore, sauf si l'utilisateur est
+  // déjà allé ailleurs (`close` arrive à l'image suivante).
   function onClose() {
+    const trigger = opener;
+    opener = null;
     closeCreate();
     tick().then(() => {
-      if (opener?.isConnected) opener.focus();
+      if (trigger?.isConnected && focusLost(document.activeElement, document.body, dialogEl)) trigger.focus();
     });
   }
 
   async function submit(values) {
+    if (busy) return; // the guard is here, not only on the button: two Enter in one frame both reach this function
     busy = true;
     formError = '';
     serverErrors = {};
     canRetry = false;
-    const res = await createStory(values);
+    const res = await createStory(values, submitKey);
     busy = false;
     if (res.ok) return created(res.story.id);
     const failure = describeFailure(res.error);
@@ -113,6 +119,7 @@
           {formError}
           {serverErrors}
           submitLabel={t('form.create')}
+          busyLabel={t('form.creating')}
           onsubmit={submit}
           oncancel={tryClose}
           onretry={canRetry ? () => submit($state.snapshot(draft)) : null}

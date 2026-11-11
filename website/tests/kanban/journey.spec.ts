@@ -351,8 +351,52 @@ test('a project manager plans a sprint and drives a story to done', async ({ pag
   });
 });
 
-test('the essentials in French, the language being changed in Settings', async ({ page }) => {
+// Failure diagnostics for the French journey (it failed twice in ~40 runs, at different steps, under Chromium and
+// WebKit, without a known cause): on failure, what the page looked like is attached to the report.
+const FRENCH = 'the essentials in French, the language being changed in Settings';
+const frenchDiag = { chunk: 'not requested', console: [] as string[] };
+test.afterEach(async ({ page }, info) => {
+  if (info.title !== FRENCH || info.status === info.expectedStatus) return;
+  const state = await page
+    .evaluate(() => {
+      const describe = (el: Element | null) =>
+        el ? `<${el.tagName.toLowerCase()} ${[...el.attributes].map((a) => `${a.name}="${a.value}"`).join(' ')}>` : 'none';
+      return {
+        lang: document.documentElement.lang,
+        focused: describe(document.activeElement),
+        focusHistory: (window as unknown as { __focusHistory?: string[] }).__focusHistory ?? [],
+        openDialogs: [...document.querySelectorAll('dialog[open]')].map(describe),
+        menus: [...document.querySelectorAll('[role="menu"]')].map((m) => m.getAttribute('aria-label')),
+        toasts: [...document.querySelectorAll('.toast')].map((t) => t.textContent?.trim()),
+      };
+    })
+    .catch((e: Error) => ({ error: e.message }));
+  await info.attach('french-journey-state.json', {
+    body: JSON.stringify({ ...state, localeChunk: frenchDiag.chunk, console: frenchDiag.console.slice(-30) }, null, 2),
+    contentType: 'application/json',
+  });
+});
+
+test(FRENCH, async ({ page }) => {
   test.setTimeout(120_000);
+  page.on('console', (m) => frenchDiag.console.push(`${m.type()}: ${m.text()}`));
+  const chunk = (r: { url: () => string }) => /\/assets\/fr-[\w-]+\.js$/.test(r.url());
+  page.on('request', (r) => chunk(r) && (frenchDiag.chunk = 'requested'));
+  page.on('requestfinished', (r) => chunk(r) && (frenchDiag.chunk = 'loaded'));
+  page.on('requestfailed', (r) => chunk(r) && (frenchDiag.chunk = `failed: ${r.failure()?.errorText}`));
+  await page.addInitScript(() => {
+    const history: string[] = [];
+    (window as unknown as { __focusHistory: string[] }).__focusHistory = history;
+    document.addEventListener(
+      'focusin',
+      (e) => {
+        const el = e.target as HTMLElement;
+        history.push(`${Math.round(performance.now())} ${el.tagName.toLowerCase()}.${el.className} ${el.getAttribute('aria-label') ?? el.textContent?.trim().slice(0, 30)}`);
+        if (history.length > 20) history.shift();
+      },
+      true
+    );
+  });
   await page.goto('/#/kanban');
   await expect(page.locator('[data-card-id]').first()).toBeAttached();
   await press(page, settingsButton(page));

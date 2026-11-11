@@ -149,9 +149,47 @@ test('starting a second sprint is refused while one is active', async ({ page })
   await expect(page.locator('.sd-title .si-state')).toHaveText('planned');
 });
 
+test('the new sprint form does not take the focus back from a control the user reached', async ({ page }) => {
+  await page.goto('/#/sprints');
+  await expect(page.locator('.sprint-item').first()).toBeAttached();
+  await press(page, page.getByRole('button', { name: 'New sprint' }));
+  await expect(page.locator('dialog.sprint-form[open]')).toBeVisible();
+  await page.evaluate(() => {
+    document.querySelector<HTMLButtonElement>('dialog.sprint-form[open] .sf-actions .btn:not(.btn-primary)')!.click();
+    document.querySelector<HTMLButtonElement>('header.topbar button.icon-btn')!.focus();
+  });
+  await page.waitForTimeout(150); // `close` comes with the next rendered frame
+  await expect(settingsButton(page)).toBeFocused();
+});
+
+test('the close-sprint dialog does not take the focus back from a control the user reached', async ({ page }) => {
+  await page.goto(`/#/sprints/${ACTIVE}`);
+  await press(page, page.getByRole('button', { name: 'Close sprint' }));
+  await expect(page.locator('dialog.close-sprint[open]')).toBeVisible();
+  await page.evaluate(() => {
+    document.querySelector<HTMLButtonElement>('dialog.close-sprint[open] .cs-actions .btn:not(.btn-primary)')!.click();
+    document.querySelector<HTMLButtonElement>('header.topbar button.icon-btn')!.focus();
+  });
+  await page.waitForTimeout(150);
+  await expect(settingsButton(page)).toBeFocused();
+
+  // Cancelled with nothing else focused: the button that asked gets the focus back.
+  await press(page, page.getByRole('button', { name: 'Close sprint' }));
+  await page.locator('dialog.close-sprint[open]').getByRole('button', { name: 'Cancel' }).click();
+  await expect(page.getByRole('button', { name: 'Close sprint' })).toBeFocused();
+});
+
+// The second question must get ITS answer: the first dialog's `close` event comes a frame after it was cancelled,
+// when the second one is already open (it used to answer it with the first one's "cancel" and leave it dead).
 test('close the active sprint carrying the unfinished stories over, then start the new one', async ({ page }) => {
   await page.goto(`/#/sprints/${ACTIVE}`);
   await press(page, page.getByRole('button', { name: 'Close sprint' }));
+  await expect(page.locator('dialog.close-sprint[open]')).toBeVisible();
+  await page.evaluate(() => {
+    const ask = [...document.querySelectorAll<HTMLButtonElement>('button')].find((b) => b.textContent?.trim() === 'Close sprint' && !b.closest('dialog'))!;
+    document.querySelector<HTMLButtonElement>('dialog.close-sprint[open] .cs-actions .btn:not(.btn-primary)')!.click();
+    ask.click();
+  });
   const dialog = page.locator('dialog.close-sprint[open]');
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole('radio', { name: 'Move them back to the backlog' })).toBeChecked();
@@ -213,6 +251,66 @@ test('a WIP limit is saved and shows in /api/health; a wrong value is explained'
   await field.fill('');
   await page.keyboard.press('Enter');
   await expect.poll(async () => (await call('get', '/api/health')).wip_limits['in-progress']).toBeUndefined();
+});
+
+test('creating a sprint: two activations in the same frame create one sprint', async ({ page }) => {
+  const posts: (string | undefined)[] = [];
+  await page.route('**/api/sprints', async (route) => {
+    if (route.request().method() !== 'POST') return route.fallback();
+    posts.push(route.request().headers()['idempotency-key']);
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    await route.fallback();
+  });
+  const sprintDirs = () => fs.readdirSync(path.join(projectDir, 'project-management/sprints')).filter((d) => d.endsWith('double-submit-e2e'));
+  await page.goto('/#/sprints');
+  await expect(page.locator('.sprint-item').first()).toBeAttached();
+  await press(page, page.getByRole('button', { name: 'New sprint' }));
+  const form = page.locator('dialog.sprint-form[open]');
+  await form.locator('#sf-name').fill('Double submit E2E');
+  await form.locator('#sf-start_date').fill('2027-03-01');
+  await form.locator('#sf-end_date').fill('2027-03-12');
+  await page.evaluate(() => {
+    const button = document.querySelector<HTMLButtonElement>('dialog.sprint-form[open] button[type="submit"]')!;
+    button.click();
+    button.click();
+    document.querySelector<HTMLFormElement>('dialog.sprint-form[open] form')!.requestSubmit();
+  });
+  await expect(form).toBeHidden();
+  expect(posts).toHaveLength(1);
+  expect(posts[0]).toMatch(/^[\x21-\x7e]{8,128}$/);
+  expect(sprintDirs()).toHaveLength(1);
+});
+
+test('creating a sprint: the busy state is aria-disabled and says "Creating…"', async ({ page }) => {
+  await page.route('**/api/sprints', async (route) => {
+    if (route.request().method() === 'POST') await new Promise((resolve) => setTimeout(resolve, 1200));
+    await route.fallback();
+  });
+  await page.goto('/#/sprints');
+  await expect(page.locator('.sprint-item').first()).toBeAttached();
+  await press(page, page.getByRole('button', { name: 'New sprint' }));
+  const form = page.locator('dialog.sprint-form[open]');
+  await form.locator('#sf-name').fill('Busy state E2E');
+  await form.locator('#sf-start_date').fill('2027-05-03');
+  await form.locator('#sf-end_date').fill('2027-05-14');
+  await form.locator('button[type="submit"]').click();
+  await expect(form.getByRole('button', { name: 'Creating…' })).toHaveAttribute('aria-disabled', 'true');
+  await expect(form).toBeHidden();
+});
+
+test('the server replays a sprint created twice with the same Idempotency-Key', async () => {
+  const key = `e2e-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const send = () =>
+    api.post(`${ORIGIN}/api/sprints`, {
+      headers: { Origin: ORIGIN, 'Idempotency-Key': key },
+      data: { name: 'Replay E2E', start_date: '2027-04-01', end_date: '2027-04-09' },
+    });
+  const [first, second] = [await send(), await send()];
+  expect(first.status()).toBe(201);
+  expect(second.status()).toBe(201);
+  expect(await second.json()).toEqual(await first.json());
+  const dirs = fs.readdirSync(path.join(projectDir, 'project-management/sprints')).filter((d) => d.endsWith('replay-e2e'));
+  expect(dirs).toHaveLength(1);
 });
 
 test('read-only server: no planning, sprint or limit control', async ({ page }) => {

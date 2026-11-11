@@ -7,7 +7,7 @@
 //   planStory(id, sprint)          moveToSprint + toast; `sprint` = { id, name } or null; resolves true/false
 //   planStories(ids, sprint)       one after the other, stops at the first error; toast says how many went through;
 //                                  resolves { done, total, failedId, error }
-//   createSprint(payload)          POST /api/sprints → sprint; throws ApiError
+//   createSprint(payload, key)     POST /api/sprints (Idempotency-Key: key) → sprint; throws ApiError
 //   startSprint(id)                POST /api/sprints/:id/start → sprint; 409 sprint_already_active has body.active
 //   closeSprint(id, carryOver)     POST /api/sprints/:id/close → { sprint, archived, carried_over, version }
 //   saveWipLimits(limits)          PUT /api/settings/wip → wip_limits (also stored in `health.wipLimits`)
@@ -37,7 +37,11 @@ function busy(task) {
   return run;
 }
 
-const json = (method, body) => ({ method, body: body === undefined ? undefined : JSON.stringify(body) });
+const json = (method, body, headers) => ({
+  method,
+  body: body === undefined ? undefined : JSON.stringify(body),
+  ...(headers ? { headers } : {}),
+});
 
 /** Reload everything a sprint or planning change touches, and tell the views that observe `store.revision`. */
 export async function refreshPlanning() {
@@ -103,9 +107,13 @@ export function planStories(ids, sprint) {
   });
 }
 
-export function createSprint(payload) {
+/** @param {string} [key] one `idempotencyKey()` per opening of the form: a repeated POST gets the first answer */
+export function createSprint(payload, key) {
   return busy(async () => {
-    const { sprint } = await request('/api/sprints', json('POST', payload));
+    const { sprint } = await request(
+      '/api/sprints',
+      json('POST', payload, key ? { 'Idempotency-Key': key } : undefined)
+    );
     toast({ kind: 'success', message: sprint.name, key: 'toast.sprintCreated', params: { sprint: sprint.name } });
     await refreshPlanning();
     return sprint;

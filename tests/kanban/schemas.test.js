@@ -7,7 +7,7 @@ import {
   StoryPatchSchema,
   StoryCreateSchema,
   StoryBodySchema,
-  TaskStatusPatchSchema,
+  TaskPatchSchema,
   SprintStatusSchema,
   SprintCreateSchema,
   SprintStartSchema,
@@ -264,14 +264,19 @@ describe('StoryBodySchema', () => {
   });
 });
 
-describe('TaskStatusPatchSchema', () => {
+describe('TaskPatchSchema', () => {
   it('accepts the four task statuses only', () => {
     for (const status of ['to-do', 'in-progress', 'done', 'blocked']) {
-      expect(TaskStatusPatchSchema.parse({ status })).toEqual({ status });
+      expect(TaskPatchSchema.parse({ status })).toEqual({ status });
     }
-    expect(() => TaskStatusPatchSchema.parse({ status: 'review' })).toThrow();
-    expect(() => TaskStatusPatchSchema.parse({ status: 'done', extra: 1 })).toThrow();
-    expect(() => TaskStatusPatchSchema.parse({})).toThrow();
+    expect(() => TaskPatchSchema.parse({ status: 'review' })).toThrow();
+    expect(() => TaskPatchSchema.parse({ status: 'done', extra: 1 })).toThrow();
+    expect(() => TaskPatchSchema.parse({})).toThrow();
+    expect(TaskPatchSchema.parse({ title: '  Renamed ' })).toEqual({ title: 'Renamed' });
+    expect(TaskPatchSchema.parse({ status: 'done', title: 'x' })).toEqual({ status: 'done', title: 'x' });
+    expect(() => TaskPatchSchema.parse({ title: '   ' })).toThrow();
+    expect(() => TaskPatchSchema.parse({ title: 'x'.repeat(201) })).toThrow();
+    expect(() => TaskPatchSchema.parse({ title: 3 })).toThrow();
   });
 });
 

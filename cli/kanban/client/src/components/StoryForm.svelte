@@ -18,7 +18,7 @@
   import { TDD } from '../lib/config.js';
 
   /** @type {{ draft: object, mode?: 'create'|'edit', original?: object|null, idBase?: string, busy?: boolean,
-   *   formError?: string, serverErrors?: Record<string,string>, submitLabel: string,
+   *   busyLabel?: string, formError?: string, serverErrors?: Record<string,string>, submitLabel: string,
    *   onsubmit: (draft: object)=>void, oncancel: ()=>void, onretry?: (()=>void)|null }} */
   let {
     draft = $bindable(),
@@ -26,6 +26,7 @@
     original = null,
     idBase = 'sf',
     busy = false,
+    busyLabel = '',
     formError = '',
     serverErrors = {},
     submitLabel,
@@ -50,6 +51,7 @@
     edit: ['title', 'story_points', 'priority', 'assigned_to', 'tdd_phase', 'epic_id', 'sprint_id', 'dependencies'],
   };
   const fields = $derived(SHOWN[mode]);
+  const busyText = $derived(busyLabel || t('form.saving'));
 
   const initial = untrack(() => ({ ...draft }));
   let errors = $state({});
@@ -91,6 +93,7 @@
 
   async function submit(e) {
     e.preventDefault();
+    if (busy) return; // aria-disabled does not stop a second activation: the guard lives here
     const keep = original?.story_points == null ? undefined : String(original.story_points);
     const result = validateDraft(draft, { keep, selfId: original?.id });
     errors = result.errors;
@@ -227,9 +230,9 @@
 
   <div class="sf-actions">
     <button type="button" class="btn" onclick={() => oncancel?.()}>{t('form.cancel')}</button>
-    <button type="submit" class="btn btn-primary" disabled={busy}>{busy ? t('form.saving') : submitLabel}</button>
+    <button type="submit" class="btn btn-primary" aria-disabled={busy ? 'true' : undefined}>{busy ? busyText : submitLabel}</button>
   </div>
-  <p class="sr-only" role="status">{busy ? t('form.saving') : ''}</p>
+  <p class="sr-only" role="status">{busy ? busyText : ''}</p>
 </form>
 
 <style>

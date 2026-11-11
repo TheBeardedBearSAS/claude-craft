@@ -16,6 +16,7 @@ import {
   velocity,
 } from '../services/sprint-ops.js';
 import { SPRINT_ID_RE, SprintCloseSchema, SprintCreateSchema, SprintStartSchema } from '../../shared/schemas.js';
+import { createIdempotencyStore, idempotent } from '../services/idempotency.js';
 import { HttpError, readJson, safeError, writeError } from './http-errors.js';
 
 /**
@@ -74,14 +75,18 @@ export function register(app, { repository, projectRoot, eventBus = null, now = 
     return c.json(payload, status);
   };
 
-  app.post('/api/sprints', async (c) => {
-    const read = await readJson(c, SprintCreateSchema);
-    if (read.response) return read.response;
-    return guarded(c, async () => {
-      const sprint = await createSprintDir(read.data);
-      return done(c, 201, sprint.id, 'planned', { sprint: { ...sprint, state: 'planned' } });
-    });
-  });
+  // `Idempotency-Key`: a double submit of the creation form must not create two sprints.
+  app.post(
+    '/api/sprints',
+    idempotent(createIdempotencyStore(), async (c) => {
+      const read = await readJson(c, SprintCreateSchema);
+      if (read.response) return read.response;
+      return guarded(c, async () => {
+        const sprint = await createSprintDir(read.data);
+        return done(c, 201, sprint.id, 'planned', { sprint: { ...sprint, state: 'planned' } });
+      });
+    })
+  );
 
   async function createSprintDir(input) {
     const ids = await listSprintDirs();

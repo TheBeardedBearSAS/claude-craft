@@ -105,3 +105,52 @@ test('board: changing the language in Settings translates the board without relo
   await expect(heading).not.toHaveText('In progress');
   await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
 });
+
+// Two quick moves: the answer to the first one arrives after the second move is already shown (seen in CI as a
+// focus taken from "Move" to "Open" and a card going back a column). Answers are held here to fix that order.
+test('board: a second move shown before the first is answered never sends the card back nor moves the focus', async ({
+  page,
+}) => {
+  const origin = new URL(test.info().project.use.baseURL!).origin;
+  const created = await page.request.post('/api/stories', {
+    data: { title: 'E2E two quick moves', story_points: 3, sprint_id: 'sprint-9-auth-premium' },
+    headers: { Origin: origin },
+  });
+  const id = (await created.json()).story.id as string;
+  try {
+    // Each answer reaches the page only when the test lets it through, in the order the server gave them.
+    const gates: Array<() => void> = [];
+    await page.route(`**/api/stories/${id}/status`, async (route) => {
+      const response = await route.fetch();
+      await new Promise<void>((resolve) => gates.push(resolve));
+      await route.fulfill({ response });
+    });
+    await openView(page, 'kanban');
+    const move = page.getByRole('button', { name: `Move ${id}` });
+    const inColumn = (status: string) => column(page, status).locator(`[data-card-id="${id}"]`);
+
+    await move.focus();
+    await page.keyboard.press('Enter');
+    await page.getByRole('menuitem', { name: 'Ready for dev' }).press('Enter');
+    await expect(inColumn('ready-for-dev')).toBeVisible();
+    await expect.poll(() => gates.length).toBe(1);
+    await move.focus();
+    await page.keyboard.press('Enter');
+    await page.getByRole('menuitem', { name: 'In progress' }).press('Enter');
+    await expect(inColumn('in-progress')).toBeVisible();
+    await expect.poll(() => gates.length).toBe(2);
+    await move.focus(); // the user goes on with the card while both answers are on their way
+
+    gates[0](); // first answer: "ready-for-dev"
+    await expect(page.locator('.toast.success', { hasText: `${id} moved to Ready for dev` })).toBeVisible();
+    await expect(inColumn('in-progress')).toBeVisible();
+    await expect(move).toBeFocused();
+
+    gates[1](); // second answer: "in-progress"
+    await expect(page.locator('.toast.success', { hasText: `${id} moved to In progress` })).toBeVisible();
+    await expect(inColumn('in-progress')).toBeVisible();
+    await expect(move).toBeFocused();
+  } finally {
+    await page.request.delete(`/api/stories/${id}?force=1`, { headers: { Origin: origin } });
+  }
+});

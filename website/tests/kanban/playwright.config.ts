@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -27,12 +27,17 @@ export default defineConfig({
     baseURL: `http://127.0.0.1:${PORT}/`,
     headless: true,
     trace: 'retain-on-failure',
-    // CI installs Playwright Chromium; the Docker harness uses system Chromium (CHROME_PATH).
-    launchOptions: process.env.CHROME_PATH
-      ? { executablePath: process.env.CHROME_PATH, args: ['--no-sandbox', '--disable-dev-shm-usage'] }
-      : {},
   },
-  projects: [{ name: 'chromium', use: { browserName: 'chromium' } }],
+  // Desktop engines run every spec except touch.spec.ts; the two touch projects (phone viewport,
+  // hasTouch, isMobile — Firefox has no isMobile in Playwright, hence no mobile Firefox) run only it.
+  // One engine: `--project=firefox` (run.sh) or `npm run test:kanban -- --project=webkit` (CI).
+  projects: [
+    { name: 'chromium', use: { browserName: 'chromium' }, testIgnore: 'touch.spec.ts' },
+    { name: 'firefox', use: { browserName: 'firefox' }, testIgnore: 'touch.spec.ts' },
+    { name: 'webkit', use: { browserName: 'webkit' }, testIgnore: 'touch.spec.ts' },
+    { name: 'mobile-chrome', use: { ...devices['Pixel 7'] }, testMatch: 'touch.spec.ts' },
+    { name: 'mobile-safari', use: { ...devices['iPhone 15'] }, testMatch: 'touch.spec.ts' },
+  ],
   webServer: [
     {
       command: `rm -rf "${workDir}" && cp -r "${fixture}" "${workDir}" && node cli/index.js kanban "${workDir}" --port=${PORT}`,

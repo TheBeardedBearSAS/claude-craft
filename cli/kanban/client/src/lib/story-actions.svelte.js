@@ -120,10 +120,15 @@ export async function moveStory(story, target, askReason = askBlockedReason) {
 
 // ---- mutations ---------------------------------------------------------------------------------------
 
-/** @param {object} draft StoryForm draft */
-export function createStory(draft) {
+const idempotent = (key) => (key ? { 'Idempotency-Key': key } : undefined);
+
+/**
+ * @param {object} draft StoryForm draft
+ * @param {string} [key] one `idempotencyKey()` per opening of the form: the server answers a repeated POST with the first answer
+ */
+export function createStory(draft, key) {
   return attempt(async () => {
-    const data = await request('/api/stories', json('POST', toCreatePayload(draft)));
+    const data = await request('/api/stories', json('POST', toCreatePayload(draft), idempotent(key)));
     upsert(data.story);
     toast({ kind: 'success', key: 'toast.created', params: { id: data.story.id } });
     notifyWarnings(data.warnings, data.story);
@@ -175,8 +180,7 @@ export function setTaskStatus(id, taskId, status) {
   return trackWrite(
     id,
     attempt(async () => {
-      const url = storyUrl(id, `/tasks/${encodeURIComponent(taskId)}`);
-      const data = await request(url, json('PATCH', { status }));
+      const data = await request(taskUrl(id, taskId), json('PATCH', { status }));
       upsert(data.story);
       return { story: data.story };
     })
@@ -184,11 +188,37 @@ export function setTaskStatus(id, taskId, status) {
 }
 
 /** Adds a to-do task (its name is its identifier). 409 `task_exists` for a name the story already has. */
-export function addTask(id, title) {
+export function addTask(id, title, key) {
   return trackWrite(
     id,
     attempt(async () => {
-      const data = await request(storyUrl(id, '/tasks'), json('POST', { title }));
+      const data = await request(storyUrl(id, '/tasks'), json('POST', { title }, idempotent(key)));
+      upsert(data.story);
+      return { story: data.story };
+    })
+  );
+}
+
+const taskUrl = (id, taskId) => storyUrl(id, `/tasks/${encodeURIComponent(taskId)}`);
+
+/** Renames a task (its name is its identifier). 409 `task_exists` for the name of another task. */
+export function renameTask(id, taskId, title) {
+  return trackWrite(
+    id,
+    attempt(async () => {
+      const data = await request(taskUrl(id, taskId), json('PATCH', { title }));
+      upsert(data.story);
+      return { story: data.story };
+    })
+  );
+}
+
+/** Removes a task; `total` and `completed` follow. */
+export function deleteTask(id, taskId) {
+  return trackWrite(
+    id,
+    attempt(async () => {
+      const data = await request(taskUrl(id, taskId), { method: 'DELETE' });
       upsert(data.story);
       return { story: data.story };
     })

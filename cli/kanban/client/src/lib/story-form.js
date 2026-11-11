@@ -165,3 +165,19 @@ export function describeFailure(err) {
     retry: err?.code === 'locked' || err?.code === 'network',
   };
 }
+
+/** One opaque token per opening of a creation form: the server answers a repeated POST with the first answer. */
+export function idempotencyKey(source = globalThis.crypto) {
+  if (typeof source?.randomUUID === 'function') return source.randomUUID();
+  return Array.from({ length: 4 }, () => Math.random().toString(36).slice(2, 10).padEnd(8, '0')).join('-');
+}
+
+/**
+ * Whether a dialog that just closed should give the focus back to its trigger: only when the focus was lost (nothing,
+ * the page body, a removed or disabled element) or is still inside the dialog. A user who already reached another
+ * control while the server answered keeps it (WCAG 2.4.3). Pure: the caller passes the DOM nodes.
+ */
+export function focusLost(active, body, dialog) {
+  if (!active || active === body || !active.isConnected || active.disabled === true) return true;
+  return Boolean(dialog?.contains(active));
+}

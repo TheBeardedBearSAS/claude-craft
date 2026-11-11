@@ -964,6 +964,223 @@ describe('POST /api/stories/:id/tasks', () => {
   });
 });
 
+describe('Idempotency-Key on the creation routes', () => {
+  const KEY = 'c1d2e3f4-aaaa-4bbb-8ccc-0123456789ab';
+  const post = (url, body, key = KEY) => call('POST', url, { body, headers: { 'Idempotency-Key': key } });
+  const storyIds = async () => Object.keys((await ssy()).stories);
+
+  beforeEach(() => setup('wrandly-anon'));
+
+  it('POST /api/stories: the same key replays the first answer, one story and one file', async () => {
+    const before = await storyIds();
+    const files = (await readdir(inRoot(STORIES))).length;
+    const first = await post('/api/stories', { title: 'Once' });
+    const second = await post('/api/stories', { title: 'Once' });
+
+    expect(first.status).toBe(201);
+    expect(second).toEqual(first);
+    expect((await storyIds()).length).toBe(before.length + 1);
+    expect((await readdir(inRoot(STORIES))).length).toBe(files + 1);
+  });
+
+  it('POST /api/stories: two requests in the same tick create one story', async () => {
+    const before = await storyIds();
+    const [a, b] = await Promise.all([post('/api/stories', { title: 'Twice' }), post('/api/stories', { title: 'Twice' })]);
+    expect(a.body.story.id).toBe(b.body.story.id);
+    expect((await storyIds()).length).toBe(before.length + 1);
+  });
+
+  it('POST /api/stories: a different key creates another story', async () => {
+    const a = await post('/api/stories', { title: 'A' });
+    const b = await post('/api/stories', { title: 'A' }, 'a-different-key-1');
+    expect(b.body.story.id).not.toBe(a.body.story.id);
+  });
+
+  it('POST /api/stories: a malformed key is a 400 and nothing is created', async () => {
+    const before = await storyIds();
+    const res = await post('/api/stories', { title: 'x' }, 'tiny');
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('invalid_idempotency_key');
+    expect(await storyIds()).toEqual(before);
+  });
+
+  it('POST /api/stories/:id/tasks: the same key adds the task once; the key is bound to the story', async () => {
+    const add = (id, key = KEY) => post(`/api/stories/${id}/tasks`, { title: 'Write docs' }, key);
+    const first = await add('US-E4-08');
+    const second = await add('US-E4-08');
+    expect(second).toEqual(first);
+    expect((await ssy()).stories['US-E4-08'].tasks.list).toEqual(['Write docs']);
+
+    // Same key on another story is another request.
+    expect((await add('US-E4-06')).status).toBe(201);
+    expect((await ssy()).stories['US-E4-06'].tasks.list.filter((t) => t === 'Write docs')).toHaveLength(1);
+  });
+
+  it('POST /api/stories/:id/tasks: without the key a duplicate is still a 409', async () => {
+    await call('POST', '/api/stories/US-E4-08/tasks', { body: { title: 'Dup' } });
+    const again = await call('POST', '/api/stories/US-E4-08/tasks', { body: { title: 'Dup' } });
+    expect(again.body.error).toBe('task_exists');
+  });
+});
+
+describe('rename and delete a task', () => {
+  const FIRST = 'Backend : POST /api/v1/auth/oauth/{provider} - FAIT S8';
+  const SECOND = 'Backend : liaison compte si email existe déjà - FAIT S8';
+  const url = (id, taskId) => `/api/stories/${id}/tasks/${encodeURIComponent(taskId)}`;
+  const rename = (id, taskId, title, headers) => call('PATCH', url(id, taskId), { body: { title }, headers });
+  const remove = (id, taskId, headers) => call('DELETE', url(id, taskId), { headers });
+  const add = (id, title) => call('POST', `/api/stories/${id}/tasks`, { body: { title } });
+
+  beforeEach(() => setup('wrandly-anon'));
+
+  describe('PATCH with a title', () => {
+    it('renames in place: list, per-task status and counters follow, other fields kept', async () => {
+      await call('PATCH', url('US-E4-03', SECOND), { body: { status: 'blocked' } });
+      const before = (await ssy()).stories['US-E4-03'];
+      const res = await rename('US-E4-03', SECOND, '  Liaison de compte  ');
+
+      expect(res.status).toBe(200);
+      expect(res.body.version).toMatch(/^[0-9a-f]{12}$/);
+      const tasks = (await ssy()).stories['US-E4-03'].tasks;
+      expect(tasks.list.indexOf('Liaison de compte')).toBe(before.tasks.list.indexOf(SECOND));
+      expect(tasks.list).not.toContain(SECOND);
+      expect(tasks.status['Liaison de compte']).toBe('blocked');
+      expect(tasks.status[SECOND]).toBeUndefined();
+      expect(tasks).toMatchObject({ total: before.tasks.total, completed: before.tasks.completed });
+      expect(res.body.story.tasks.list).toContain('Liaison de compte');
+      expect(res.body.story._rev).toBe(revOf((await ssy()).stories['US-E4-03']));
+      expect(events.at(-1)).toMatchObject({ event: 'story:updated', payload: { id: 'US-E4-03' } });
+      expect(await rawYaml()).toContain('# Sprints clôturés.');
+    });
+
+    it('renames a task of a counter-only story: the done count is kept', async () => {
+      const res = await rename('US-E4-03', FIRST, 'Renamed');
+      expect(res.status).toBe(200);
+      const tasks = (await ssy()).stories['US-E4-03'].tasks;
+      expect(tasks.status.Renamed).toBe('done');
+      expect(tasks.completed).toBe(3);
+    });
+
+    it('accepts a status and a title together', async () => {
+      const res = await call('PATCH', url('US-E4-03', FIRST), { body: { status: 'blocked', title: 'Both' } });
+      expect(res.status).toBe(200);
+      const tasks = (await ssy()).stories['US-E4-03'].tasks;
+      expect(tasks.status.Both).toBe('blocked');
+      expect(tasks.completed).toBe(2);
+    });
+
+    it('renaming to its own name is accepted and changes nothing', async () => {
+      expect((await rename('US-E4-03', FIRST, FIRST)).status).toBe(200);
+      expect((await ssy()).stories['US-E4-03'].tasks.list).toContain(FIRST);
+    });
+
+    it.each([
+      ['a slash and braces', 'Sync /api/v1/{x}'],
+      ['a percent sign', '100% done %2F %zz'],
+      ['a hash and a question mark', 'Fix #42? now'],
+      ['spaces and non-ASCII', "  Ünïcode — 日本語  ✓ l'été  "],
+    ])('round-trips a label with %s (rename then delete)', async (_name, title) => {
+      const clean = title.trim();
+      await add('US-E4-08', 'Seed');
+      expect((await rename('US-E4-08', 'Seed', title)).status).toBe(200);
+      expect((await ssy()).stories['US-E4-08'].tasks.list).toEqual([clean]);
+      expect((await remove('US-E4-08', clean)).status).toBe(200);
+      expect((await ssy()).stories['US-E4-08'].tasks).toMatchObject({ total: 0, completed: 0, list: [] });
+    });
+
+    it('409 task_exists for the name of another task; nothing written', async () => {
+      const before = await rawYaml();
+      const res = await rename('US-E4-03', FIRST, SECOND);
+      expect(res.status).toBe(409);
+      expect(res.body.error).toBe('task_exists');
+      expect(await rawYaml()).toBe(before);
+    });
+
+    it('400 for an empty, blank, over-long (> 200) or non-string title, and for an empty body', async () => {
+      const before = await rawYaml();
+      expect((await rename('US-E4-03', FIRST, '')).body.error).toBe('invalid_payload');
+      expect((await rename('US-E4-03', FIRST, '   ')).body.error).toBe('invalid_payload');
+      expect((await rename('US-E4-03', FIRST, 'x'.repeat(201))).body.error).toBe('invalid_payload');
+      expect((await call('PATCH', url('US-E4-03', FIRST), { body: { title: 4 } })).status).toBe(400);
+      expect((await call('PATCH', url('US-E4-03', FIRST), { body: {} })).body.error).toBe('invalid_payload');
+      expect((await rename('US-E4-03', FIRST, 'x'.repeat(200))).status).toBe(200);
+      expect(await rawYaml()).not.toBe(before);
+    });
+
+    it('404 task_not_found, 404 for an unknown story, 409 archived / read_only_source', async () => {
+      expect((await rename('US-E4-03', 'Nope', 'x')).body.error).toBe('task_not_found');
+      expect((await rename('US-999', FIRST, 'x')).status).toBe(404);
+      expect((await rename('US-E0-01', 'x', 'y')).body.error).toBe('archived');
+      expect((await rename('US-200', 'x', 'y')).body.error).toBe('read_only_source');
+    });
+
+    it('409 conflict on a stale If-Match', async () => {
+      const before = await rawYaml();
+      const res = await rename('US-E4-03', FIRST, 'x', { 'If-Match': 'deadbeef0000' });
+      expect(res.status).toBe(409);
+      expect(res.body.error).toBe('conflict');
+      expect(await rawYaml()).toBe(before);
+    });
+  });
+
+  describe('DELETE /api/stories/:id/tasks/:taskId', () => {
+    it('removes the task and recounts total and completed (a done task leaves the done count)', async () => {
+      const res = await remove('US-E4-03', FIRST);
+      expect(res.status).toBe(200);
+      expect(res.body.version).toMatch(/^[0-9a-f]{12}$/);
+      const tasks = (await ssy()).stories['US-E4-03'].tasks;
+      expect(tasks.list).not.toContain(FIRST);
+      expect(tasks.status[FIRST]).toBeUndefined();
+      expect(tasks).toMatchObject({ total: 4, completed: 2 });
+      expect(res.body.story.tasks).toMatchObject({ total: 4, completed: 2 });
+      expect(res.body.story._rev).toBe(revOf((await ssy()).stories['US-E4-03']));
+      expect(events.at(-1)).toMatchObject({ event: 'story:updated', payload: { id: 'US-E4-03' } });
+      expect(await rawYaml()).toContain('# Sprints clôturés.');
+    });
+
+    it('removing a to-do task keeps the done count', async () => {
+      const list = (await ssy()).stories['US-E4-03'].tasks.list;
+      expect((await remove('US-E4-03', list[4])).status).toBe(200);
+      expect((await ssy()).stories['US-E4-03'].tasks).toMatchObject({ total: 4, completed: 3 });
+    });
+
+    it('removing the last remaining task leaves an empty list', async () => {
+      await add('US-E4-08', 'Only');
+      expect((await remove('US-E4-08', 'Only')).status).toBe(200);
+      expect((await ssy()).stories['US-E4-08'].tasks).toMatchObject({ total: 0, completed: 0, list: [] });
+    });
+
+    it('works with a label holding a slash (the fixture task)', async () => {
+      expect((await remove('US-E4-03', FIRST)).status).toBe(200);
+    });
+
+    it('404 task_not_found (nothing written), 404 unknown story, 409 archived / read_only_source', async () => {
+      const before = await rawYaml();
+      expect((await remove('US-E4-03', 'Nope')).body.error).toBe('task_not_found');
+      expect((await remove('US-E4-08', 'Nope')).body.error).toBe('task_not_found');
+      expect((await remove('US-999', FIRST)).status).toBe(404);
+      expect((await remove('US-E0-01', 'x')).body.error).toBe('archived');
+      expect((await remove('US-200', 'x')).body.error).toBe('read_only_source');
+      expect(await rawYaml()).toBe(before);
+    });
+
+    it('409 conflict on a stale If-Match', async () => {
+      const before = await rawYaml();
+      const res = await remove('US-E4-03', FIRST, { 'If-Match': 'deadbeef0000' });
+      expect(res.status).toBe(409);
+      expect(res.body.error).toBe('conflict');
+      expect(await rawYaml()).toBe(before);
+    });
+
+    it('403 readonly on a read-only server', async () => {
+      await rm(dir, { recursive: true, force: true });
+      await setup('wrandly-anon', { readonly: true });
+      expect((await remove('US-E4-03', FIRST)).status).toBe(403);
+      expect((await rename('US-E4-03', FIRST, 'x')).status).toBe(403);
+    });
+  });
+});
+
 describe('PATCH /api/stories/:id/status — unchanged behavior', () => {
   beforeEach(() => setup('bmad-sprint-status'));
 

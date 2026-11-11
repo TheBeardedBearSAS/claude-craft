@@ -186,11 +186,17 @@ export const StoryBodySchema = z
   })
   .strict();
 
-/** PATCH /api/stories/:id/tasks/:taskId */
-export const TaskStatusPatchSchema = z.object({ status: z.enum(TASK_STATUSES) }).strict();
+/** A task's name is its identifier in `tasks.list`. */
+const taskTitle = z.string().trim().min(1).max(200);
 
-/** POST /api/stories/:id/tasks : the task's name is its identifier in `tasks.list`. */
-export const TaskCreateSchema = z.object({ title: z.string().trim().min(1).max(200) }).strict();
+/** PATCH /api/stories/:id/tasks/:taskId : a new status, a new name, or both. */
+export const TaskPatchSchema = z
+  .object({ status: z.enum(TASK_STATUSES).optional(), title: taskTitle.optional() })
+  .strict()
+  .refine((patch) => patch.status !== undefined || patch.title !== undefined, 'Expected status or title');
+
+/** POST /api/stories/:id/tasks */
+export const TaskCreateSchema = z.object({ title: taskTitle }).strict();
 
 // --- sprints and settings ---------------------------------------------------
 

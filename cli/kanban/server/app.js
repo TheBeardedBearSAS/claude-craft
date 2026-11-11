@@ -118,8 +118,10 @@ export function createApp({
           });
       });
       stream.onAbort(() => unsubscribe());
-      // heartbeat toutes les 30s
       try {
+        // A comment line right away: some browsers report the stream as open only once data has arrived.
+        await stream.write(': connected\n\n');
+        // heartbeat toutes les 30s
         while (!stream.aborted) {
           await stream.sleep(30_000);
           await stream.writeSSE({ event: 'heartbeat', data: String(Date.now()) });

@@ -283,6 +283,57 @@ describe('POST /api/sprints', () => {
   });
 });
 
+describe('POST /api/sprints with an Idempotency-Key', () => {
+  const KEY = 'b7a1c2d3-0000-4000-8000-123456789abc';
+  const send = (body, key = KEY) =>
+    app.request('/api/sprints', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Origin: ORIGIN, 'Idempotency-Key': key },
+      body: JSON.stringify(body),
+    });
+  const dirs = () => readdir(path.join(dir, 'project-management', 'sprints'));
+
+  beforeEach(boot);
+
+  it('a second request with the same key replays the first answer and creates nothing', async () => {
+    const first = await send(NEW);
+    const second = await send(NEW);
+    expect(first.status).toBe(201);
+    expect(second.status).toBe(201);
+    expect(await second.json()).toEqual(await first.json());
+    expect(await dirs()).toEqual(['sprint-1-hardening']);
+  });
+
+  it('two requests in the same tick create a single sprint', async () => {
+    const [a, b] = await Promise.all([send(NEW), send(NEW)]);
+    expect([a.status, b.status]).toEqual([201, 201]);
+    expect((await a.json()).sprint.id).toBe((await b.json()).sprint.id);
+    expect(await dirs()).toHaveLength(1);
+  });
+
+  it('another key is another request: the duplicate name is refused', async () => {
+    await send(NEW);
+    const other = await send(NEW, 'another-key-0001');
+    expect(other.status).toBe(409);
+  });
+
+  it('a refused first request is not remembered: the retry with the same key is evaluated again', async () => {
+    expect((await send({ ...NEW, name: '' })).status).toBe(400);
+    expect((await send(NEW)).status).toBe(201);
+  });
+
+  it('refuses a malformed key with 400 invalid_idempotency_key', async () => {
+    const res = await send(NEW, 'short');
+    expect(res.status).toBe(400);
+    expect((await res.json()).error).toBe('invalid_idempotency_key');
+    expect(await dirs()).toEqual([]);
+  });
+
+  it('still behaves without the header', async () => {
+    expect((await req('POST', '/api/sprints', { body: NEW })).status).toBe(201);
+  });
+});
+
 describe('POST /api/sprints/:id/start', () => {
   const GOAL = renderGoal();
   function renderGoal() {
