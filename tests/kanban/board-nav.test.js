@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { locateCard, reduceKey, buildCardDetails } from '../../cli/kanban/client/src/lib/kanban-nav.js';
+import { locateCard, reduceKey, buildCardDetails } from '../../cli/kanban/client/src/lib/board-nav.js';
 
 const COLUMNS = [
   { key: 'backlog', label: 'Backlog' },
@@ -84,21 +84,21 @@ describe('reduceKey — horizontal navigation', () => {
 describe('reduceKey — move menu', () => {
   it('Alt+M opens the menu when a card is focused', () => {
     const state = { focusedColumnIndex: 3, focusedCardIndex: 0, showMoveMenu: false };
-    const r = reduceKey(state, { key: 'm', altKey: true }, ctx());
+    const r = reduceKey(state, { key: 'm', code: 'KeyM', altKey: true }, ctx());
     expect(r.state.showMoveMenu).toBe(true);
     expect(r.action).toEqual({ type: 'open-menu' });
   });
 
   it('Alt+M does nothing when no card is focused', () => {
     const state = { focusedColumnIndex: 0, focusedCardIndex: -1, showMoveMenu: false };
-    const r = reduceKey(state, { key: 'm', altKey: true }, ctx());
+    const r = reduceKey(state, { key: 'm', code: 'KeyM', altKey: true }, ctx());
     expect(r.state.showMoveMenu).toBe(false);
     expect(r.action).toBeNull();
   });
 
   it('Alt+M closes the menu when already open', () => {
     const state = { focusedColumnIndex: 3, focusedCardIndex: 0, showMoveMenu: true };
-    const r = reduceKey(state, { key: 'm', altKey: true }, ctx());
+    const r = reduceKey(state, { key: 'm', code: 'KeyM', altKey: true }, ctx());
     expect(r.state.showMoveMenu).toBe(false);
     expect(r.action).toEqual({ type: 'close-menu' });
   });
@@ -131,10 +131,10 @@ describe('reduceKey — details', () => {
     expect(r.action.card.id).toBe('R-2');
   });
 
-  it('Enter while the menu is open does not open details', () => {
+  it('Enter while the menu is open is not intercepted (native button handles it)', () => {
     const state = { focusedColumnIndex: 3, focusedCardIndex: 1, showMoveMenu: true };
     const r = reduceKey(state, { key: 'Enter' }, ctx());
-    expect(r.action).not.toMatchObject({ type: 'details' });
+    expect(r).toEqual({ state, action: null });
   });
 
   it('unhandled keys return the state unchanged and a null action', () => {
@@ -180,5 +180,43 @@ describe('buildCardDetails', () => {
     expect(d.readOnly).toBe(false);
     expect(d.tasks).toEqual({ total: 0, completed: 0 });
     expect(d.blockedReason).toBe('');
+  });
+});
+
+describe('reduceKey — K-16 rules', () => {
+  const open = { focusedColumnIndex: 3, focusedCardIndex: 0, showMoveMenu: true };
+
+  it('arrows are inert while the move menu is open', () => {
+    for (const key of ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight']) {
+      expect(reduceKey(open, { key }, ctx()), key).toEqual({ state: open, action: null });
+    }
+  });
+
+  it('Space is never intercepted', () => {
+    expect(reduceKey(open, { key: ' ', code: 'Space' }, ctx())).toEqual({ state: open, action: null });
+    expect(reduceKey({ ...open, showMoveMenu: false }, { key: ' ' }, ctx()).action).toBeNull();
+  });
+
+  it('digits are ignored while a prompt is open, as is everything else', () => {
+    const c = { ...ctx(), promptOpen: true };
+    expect(reduceKey(open, { key: '5' }, c)).toEqual({ state: open, action: null });
+    expect(reduceKey(open, { key: 'Escape' }, c).action).toBeNull();
+    expect(reduceKey({ ...open, showMoveMenu: false }, { key: 'm', code: 'KeyM', altKey: true }, c).action).toBeNull();
+  });
+
+  it('Alt+M is recognised by code, so macOS (key "µ") works', () => {
+    const closed = { ...open, showMoveMenu: false };
+    expect(reduceKey(closed, { key: 'µ', code: 'KeyM', altKey: true }, ctx()).action).toEqual({ type: 'open-menu' });
+  });
+
+  it('a bare "m" key, or Alt+M without a code, does nothing', () => {
+    const closed = { ...open, showMoveMenu: false };
+    expect(reduceKey(closed, { key: 'm', code: 'KeyM' }, ctx()).action).toBeNull();
+    expect(reduceKey(closed, { key: 'm', altKey: true }, ctx()).action).toBeNull();
+  });
+
+  it('non-digit keys do nothing in the open menu', () => {
+    expect(reduceKey(open, { key: '7' }, ctx()).action).toBeNull();
+    expect(reduceKey(open, { key: 'x' }, ctx()).action).toBeNull();
   });
 });

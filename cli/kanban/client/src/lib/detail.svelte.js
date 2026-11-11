@@ -3,32 +3,44 @@
 // were not clickable and had no way to reach a story's details. The <StoryDetail>
 // component (mounted once in App) renders whatever `detail.card` points to.
 
+import { request, storyUrl, latestOnly, isAbort, errorKey } from './api.js';
+import { renderMarkdown } from './markdown.js';
+
 export const detail = $state({
   card: null,
   tasks: [],
   body: '',
   loading: false,
+  // { code, status, key, message } when the extras could not be loaded (K-18); null otherwise.
+  error: null,
 });
 
 // Element to refocus when the modal closes (WCAG 2.4.3 focus return).
 let triggerEl = null;
+const latest = latestOnly();
+
+function reset() {
+  detail.tasks = [];
+  detail.body = '';
+  detail.error = null;
+}
 
 export async function openDetail(card) {
   if (!card) return;
   triggerEl = typeof document !== 'undefined' ? document.activeElement : null;
   detail.card = card;
-  detail.tasks = [];
-  detail.body = '';
-  await loadDetailExtras(card.id);
+  reset();
+  await loadDetail(card.id);
 }
 
 // Reset state only. Focus return is handled by <StoryDetail> AFTER the <dialog>
 // is unmounted (tick), via consumeTrigger() — focusing while the modal dialog is
 // still in the DOM is unreliable (focus falls back to <body> on some AT/Safari).
 export function closeDetail() {
+  latest(); // invalidate any in-flight load
   detail.card = null;
-  detail.tasks = [];
-  detail.body = '';
+  detail.loading = false;
+  reset();
 }
 
 /** Hand the trigger element to the caller and forget it (single-use). */
@@ -38,26 +50,21 @@ export function consumeTrigger() {
   return el;
 }
 
-/**
- * Load tasks + markdown body for the open story and render the markdown.
- * marked/DOMPurify are imported lazily so the board bundle stays light.
- */
-async function loadDetailExtras(id) {
+/** Load tasks + markdown body for a story; a newer call (or closeDetail) invalidates this one. */
+export async function loadDetail(id) {
+  const ticket = latest();
   detail.loading = true;
   try {
-    const res = await fetch(`/api/stories/${encodeURIComponent(id)}`);
-    if (!res.ok) return;
-    const data = await res.json();
-    if (detail.card?.id !== id) return; // a newer card was opened meanwhile
+    const data = await request(storyUrl(id), { signal: ticket.signal });
+    if (!ticket.current) return;
     detail.tasks = data.tasks ?? [];
-    if (data.body) {
-      const [{ marked }, dompurify] = await Promise.all([import('marked'), import('dompurify')]);
-      const DOMPurify = dompurify.default ?? dompurify;
-      if (detail.card?.id === id) detail.body = DOMPurify.sanitize(marked.parse(data.body));
-    }
-  } catch {
-    /* keep the base details derived from the frontmatter */
+    detail.error = null;
+    const html = data.body ? await renderMarkdown(data.body) : '';
+    if (ticket.current) detail.body = html;
+  } catch (err) {
+    if (isAbort(err) || !ticket.current) return;
+    detail.error = { code: err.code ?? 'unknown', status: err.status ?? 0, key: errorKey(err), message: err.message };
   } finally {
-    detail.loading = false;
+    if (ticket.current) detail.loading = false;
   }
 }

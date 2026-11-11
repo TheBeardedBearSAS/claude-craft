@@ -1,415 +1,408 @@
 <script>
-  import { store, patchStatus, toast } from '../lib/store.svelte.js';
-  import { onMount, tick } from 'svelte';
+  import { onDestroy, tick, untrack } from 'svelte';
+  import { store, patchStatus } from '../lib/store.svelte.js';
+  import { route, setQuery } from '../lib/router.svelte.js';
+  import { health } from '../lib/health.svelte.js';
+  import { tweaks } from '../lib/tweaks.svelte.js';
+  import { t, tn } from '../lib/i18n/index.svelte.js';
+  import { createAnnouncer } from '../lib/announce.js';
+  import { locateCard, reduceKey } from '../lib/board-nav.js';
+  import { moveTargets, describeCard, countChanged } from '../lib/board-card.js';
+  import { filtersFromQuery } from '../lib/query.js';
+  import { matchStory, sortStories } from '../lib/filter.js';
+  import { sumPoints } from '../lib/points.js';
+  import { STATUSES } from '../../../shared/transitions.js';
+  import { STATUS, PRIORITY, TDD, codeColor, epicHue } from '../lib/config.js';
   import PromptDialog from '../components/PromptDialog.svelte';
+  import MoveMenu from '../components/MoveMenu.svelte';
+  import KeyboardShortcuts from '../components/KeyboardShortcuts.svelte';
+  import FilterBar from '../components/FilterBar.svelte';
   import Icon from '../components/Icon.svelte';
   import Avatar from '../components/Avatar.svelte';
   import PriorityChip from '../components/PriorityChip.svelte';
   import TddPip from '../components/TddPip.svelte';
   import Points from '../components/Points.svelte';
   import TaskProgress from '../components/TaskProgress.svelte';
-  import { locateCard, reduceKey } from '../lib/kanban-nav.js';
-  import { STATUS, PRIORITY, codeColor, epicHue } from '../lib/config.js';
-  import { tweaks } from '../lib/tweaks.svelte.js';
-  import { openDetail as openDetailStore } from '../lib/detail.svelte.js';
+
+  // La modale de détail (<StoryDetail>, montée dans App) s'ouvre via `?story=<id>` : ici on pose le paramètre.
+  const COLUMNS = STATUSES.map((key) => ({ key, label: key })); // l'ordre des colonnes = l'ordre des statuts
 
   let promptDialog = $state(null);
-  /** Référence au <dialog> natif du menu de déplacement */
-  let moveMenuDialog = $state(null);
-  /** Élément de carte ayant déclenché l'ouverture du menu (pour retour de focus) */
-  let moveMenuTriggerEl = $state(null);
-  // La modale de détail est désormais un composant partagé (<StoryDetail>, monté
-  // dans App) piloté par le store lib/detail.svelte.js — réutilisée par le Backlog.
-
-  const COLUMNS = [
-    { key: 'backlog', label: 'Backlog', emptyHint: 'No stories — run /workflow:plan' },
-    { key: 'ready-for-dev', label: 'Ready for Dev', emptyHint: 'No stories ready — run /workflow:start' },
-    { key: 'in-progress', label: 'In Progress', emptyHint: 'Nothing in progress' },
-    { key: 'review', label: 'Review', emptyHint: 'Nothing to review' },
-    { key: 'done', label: 'Done', emptyHint: 'Nothing done yet' },
-    { key: 'blocked', label: 'Blocked', emptyHint: '' },
-  ];
-
-  // Accessibility: keyboard navigation state
-  let focusedCardIndex = $state(-1);
-  let focusedColumnIndex = $state(0);
-  let showMoveMenu = $state(false);
-  let liveRegion = $state('');
-
-  // Board UI state
+  let promptOpen = false;
+  let nav = $state({ focusedColumnIndex: 0, focusedCardIndex: -1, showMoveMenu: false });
+  let openMenuId = $state(null);
   let dragId = $state(null);
+  let dragTargets = $state([]);
   let dragOverCol = $state(null);
-  /** Filtre de priorité (vide = tout afficher). */
-  let priFilter = $state([]);
+  let liveMessage = $state('');
+  let snapshot = null; // stories connues, pour annoncer les changements arrivés en temps réel
 
-  function togglePri(p) {
-    priFilter = priFilter.includes(p) ? priFilter.filter((x) => x !== p) : [...priFilter, p];
-  }
-  const visible = (s) => priFilter.length === 0 || priFilter.includes(s.priority);
+  const announcer = createAnnouncer({ onChange: (message) => (liveMessage = message) });
+  onDestroy(() => announcer.clear());
 
-  // The board shows the ACTIVE sprint only. store.stories now also carries the
-  // history of closed sprints (read-only) ; without this scope the Done column
-  // would be flooded with dozens of archived stories and the metrics would be
-  // incoherent with the Burndown/topbar (sprint-scoped).
+  const readonly = $derived(health.readonly);
+  const filters = $derived(filtersFromQuery(route.query));
+  const hasFilters = $derived(Boolean(filters.q || filters.prio.length || filters.who || filters.epic));
+
+  // The board shows the ACTIVE sprint only (store.stories also carries the history of closed sprints).
   const activeSprintId = $derived(store.sprint?.sprint_id ?? null);
-  const boardStories = $derived(
-    activeSprintId ? store.stories.filter((s) => s.sprint_id === activeSprintId) : store.stories,
+  const sprintStories = $derived(
+    activeSprintId ? store.stories.filter((s) => s.sprint_id === activeSprintId) : store.stories
   );
+  const shown = $derived(sortStories(sprintStories.filter((s) => matchStory(s, filters)), filters.sort, filters.dir));
+  const noResults = $derived(!store.loading && hasFilters && sprintStories.length > 0 && shown.length === 0);
 
-  const storiesByStatus = $derived.by(() => {
+  const group = (list) => {
     const map = Object.fromEntries(COLUMNS.map((c) => [c.key, []]));
-    for (const s of boardStories) {
-      if (!visible(s)) continue;
-      (map[s.status] ??= []).push(s);
-    }
+    for (const s of list) (map[s.status] ??= []).push(s);
     return map;
-  });
+  };
+  const storiesByStatus = $derived(group(shown));
+  const totals = $derived(group(sprintStories));
 
-  const colPoints = (key) => storiesByStatus[key].reduce((a, s) => a + (s.story_points || 0), 0);
-
-  /** Légende du code couleur selon le schéma actif. */
   const schemeLegend = $derived.by(() => {
-    const sc = tweaks.codingScheme;
-    if (sc === 'priority') return Object.values(PRIORITY).map((v) => [v.label, `var(${v.cssVar})`]);
-    if (sc === 'tdd') return [['Red', 'var(--tdd-red)'], ['Green', 'var(--tdd-green)'], ['Refactor', 'var(--tdd-refactor)']];
-    if (sc === 'epic') {
-      const seen = new Map();
-      for (const s of boardStories) if (s.epic_id && !seen.has(s.epic_id)) seen.set(s.epic_id, epicHue(s.epic_id));
-      return [...seen.entries()];
+    const scheme = tweaks.codingScheme;
+    if (scheme === 'priority') return Object.entries(PRIORITY).map(([k, v]) => [t(`priority.${k}`), `var(${v.cssVar})`]);
+    if (scheme === 'tdd') return ['red', 'green', 'refactor'].map((k) => [t(`tdd.${k}`), `var(${TDD[k].cssVar})`]);
+    if (scheme === 'epic') {
+      const epics = new Set(sprintStories.map((s) => s.epic_id).filter(Boolean));
+      return [...epics].map((id) => [id, epicHue(id)]);
     }
-    return COLUMNS.map((c) => [c.label, `var(${STATUS[c.key].cssVar})`]);
+    return COLUMNS.map((c) => [t(`status.${c.key}`), `var(${STATUS[c.key].cssVar})`]);
   });
 
-  function onDragStart(e, id) {
-    dragId = id;
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', id);
-  }
-
-  function onDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
-
-  async function onDrop(e, targetStatus) {
-    e.preventDefault();
-    dragOverCol = null;
-    const id = e.dataTransfer.getData('text/plain') || dragId;
-    dragId = null;
-    if (!id) return;
-    const story = store.stories.find((s) => s.id === id);
-    if (!story || story.status === targetStatus) return;
-    if (story._writable === false) { announceReadOnly(story.id); return; }
-    const body = { status: targetStatus };
-    if (targetStatus === 'blocked') {
-      const reason = await promptDialog.prompt('Blocked reason?');
-      if (!reason) return;
-      body.blocked_reason = reason;
-    }
-    try {
-      await patchStatus(id, body);
-      announceMove(story.id, targetStatus);
-    } catch { /* toast already shown */ }
-  }
-
-  // Accessibility: keyboard navigation
-  onMount(() => {
-    const enabled = import.meta.env.CC_A11Y_KANBAN !== '0';
-    if (!enabled) return;
-
-    const HANDLED = new Set(['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Escape', 'Enter']);
-
-    function handleKeyboard(e) {
-      // Guard : n'agir que si le focus est dans le board ou le menu ouvert
-      const inBoard = document.activeElement?.closest('.board');
-      if (!inBoard && !showMoveMenu) return;
-
-      const ctx = { columns: COLUMNS, storiesByStatus };
-      const { state, action } = reduceKey(
-        { focusedColumnIndex, focusedCardIndex, showMoveMenu },
-        { key: e.key, altKey: e.altKey },
-        ctx,
-      );
-
-      // Empêche le scroll/typeahead du navigateur uniquement pour les touches gérées.
-      if (HANDLED.has(e.key) || (e.altKey && e.key === 'm') || (showMoveMenu && /^[1-6]$/.test(e.key))) {
-        e.preventDefault();
-      }
-
-      // Applique le nouvel état de navigation
-      focusedColumnIndex = state.focusedColumnIndex;
-      focusedCardIndex = state.focusedCardIndex;
-      showMoveMenu = state.showMoveMenu;
-
-      if (!action) return;
-      switch (action.type) {
-        case 'focus':
-          focusCard(action.cardId);
-          break;
-        case 'open-menu':
-          openMoveMenu();
-          break;
-        case 'close-menu':
-          closeMoveMenu();
-          break;
-        case 'move': {
-          const card = store.stories.find((s) => s.id === action.cardId);
-          if (card) moveCard(card, action.targetStatus);
-          break;
-        }
-        case 'readonly':
-          announceReadOnly(action.cardId);
-          closeMoveMenu();
-          break;
-        case 'details':
-          openDetail(action.card);
-          break;
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyboard);
-    return () => document.removeEventListener('keydown', handleKeyboard);
+  // ---- annonces ---------------------------------------------------------------------------------------
+  // Changements arrivés par le temps réel : un seul message regroupé, jamais un par carte.
+  $effect(() => {
+    store.revision;
+    if (store.loading) return;
+    untrack(() => {
+      const changed = countChanged(snapshot, store.stories);
+      snapshot = $state.snapshot(store.stories);
+      if (changed > 0) announcer.say(tn('a11y.updated', changed));
+    });
   });
 
-  function focusCard(cardId) {
-    if (!cardId) return;
-    const el = document.querySelector(`[data-card-id="${cardId}"]`);
-    if (el) el.focus();
-  }
+  // ---- focus ------------------------------------------------------------------------------------------
+  const focusCard = (id) => document.querySelector(`[data-card-id="${CSS.escape(id)}"]`)?.focus();
+  const focusMoveButton = (id) => document.querySelector(`[data-move-id="${CSS.escape(id)}"]`)?.focus();
 
-  /** Synchronise l'état de navigation clavier avec la carte réellement focus (souris/Tab). */
+  /** Garde l'état de navigation clavier aligné sur la carte réellement focalisée (souris, Tab). */
   function syncFocus(cardId) {
     const pos = locateCard(storiesByStatus, COLUMNS, cardId);
-    if (pos) {
-      focusedColumnIndex = pos.columnIndex;
-      focusedCardIndex = pos.cardIndex;
+    if (pos) nav = { ...nav, focusedColumnIndex: pos.columnIndex, focusedCardIndex: pos.cardIndex };
+  }
+
+  // ---- menu « Déplacer » ------------------------------------------------------------------------------
+  const targetsOf = (story) => moveTargets(story, { readonly });
+
+  function openMenu(story) {
+    if (targetsOf(story).length === 0) {
+      announcer.say(story._writable === false || readonly ? t('a11y.readonlyCard', { id: story.id }) : t('board.move.noTarget'));
+      return;
+    }
+    openMenuId = story.id;
+  }
+
+  async function closeMenu({ focusButton = true } = {}) {
+    const id = openMenuId;
+    openMenuId = null;
+    if (!id || !focusButton) return;
+    await tick();
+    focusMoveButton(id);
+  }
+
+  const toggleMenu = (story) => (openMenuId === story.id ? closeMenu() : openMenu(story));
+
+  function onPointerDown(e) {
+    if (openMenuId && !e.target.closest?.('.move-wrap')) closeMenu({ focusButton: false });
+  }
+
+  // ---- déplacement ------------------------------------------------------------------------------------
+  async function askReason(id) {
+    promptOpen = true;
+    try {
+      return await promptDialog.prompt(t('board.blockedPrompt', { id }), { required: t('board.blockedRequired') });
+    } finally {
+      promptOpen = false;
     }
   }
 
-  async function moveCard(card, targetStatus) {
-    if (card._writable === false) {
-      announceReadOnly(card.id);
-      closeMoveMenu();
-      return;
-    }
-    const body = { status: targetStatus };
-    if (targetStatus === 'blocked') {
-      const reason = await promptDialog.prompt('Blocked reason?');
+  async function moveCard(story, target) {
+    await closeMenu({ focusButton: false });
+    const body = { status: target };
+    if (target === 'blocked') {
+      const reason = await askReason(story.id);
       if (!reason) {
-        closeMoveMenu();
-        return;
+        await tick();
+        return focusMoveButton(story.id);
       }
       body.blocked_reason = reason;
     }
+    // The outcome is announced once, by the toast regions (success: status, failure: alert).
     try {
-      await patchStatus(card.id, body);
-      closeMoveMenu();
-      announceMove(card.id, targetStatus);
+      await patchStatus(story.id, body);
+      snapshot = $state.snapshot(store.stories);
     } catch {
-      closeMoveMenu();
+      /* failure toast already shown by the store */
     }
-  }
-
-  function announceMove(cardId, targetStatus) {
-    const targetCol = COLUMNS.find((c) => c.key === targetStatus);
-    liveRegion = `Card ${cardId} moved to ${targetCol?.label || targetStatus}`;
-    setTimeout(() => (liveRegion = ''), 2000);
-  }
-
-  /** Story issue de .bmad/sprint-status.yaml : statut non modifiable depuis le board. */
-  function announceReadOnly(cardId) {
-    liveRegion = `Card ${cardId} is read-only (managed by .bmad/sprint-status.yaml — use team:/qa: commands)`;
-    setTimeout(() => (liveRegion = ''), 3000);
-    // Feedback VISIBLE pour les utilisateurs voyants (au-delà de l'annonce sr-only).
-    toast({
-      kind: 'info',
-      message: `${cardId} en lecture seule — gérée par .bmad/sprint-status.yaml (commandes team:/qa:)`,
-      ttl: 5000,
-    });
-  }
-
-  function announceCardDetails(card) {
-    liveRegion = `Card ${card.id}: ${card.title}. Status: ${card.status}. Priority: ${card.priority}. ${card.story_points} story points.`;
-    setTimeout(() => (liveRegion = ''), 3000);
-  }
-
-  /** Ouvre le menu de déplacement via l'élément <dialog> natif. */
-  async function openMoveMenu() {
-    moveMenuTriggerEl = document.activeElement;
-    showMoveMenu = true;
     await tick();
-    moveMenuDialog?.showModal();
+    focusCard(story.id);
   }
 
-  /** Ferme le menu de déplacement et retourne le focus à la carte source. */
-  function closeMoveMenu() {
-    showMoveMenu = false;
-    moveMenuDialog?.close();
-    if (moveMenuTriggerEl) {
-      moveMenuTriggerEl.focus();
-      moveMenuTriggerEl = null;
+  const openCard = (story) => setQuery({ story: story.id });
+
+  // ---- clavier (board-nav.js) -------------------------------------------------------------------------
+  const currentCard = () => storiesByStatus[COLUMNS[nav.focusedColumnIndex]?.key]?.[nav.focusedCardIndex];
+
+  function runAction(action) {
+    if (action.type === 'focus') focusCard(action.cardId);
+    else if (action.type === 'open-menu') {
+      const story = currentCard();
+      if (story) openMenu(story);
+    } else if (action.type === 'close-menu') closeMenu();
+    else if (action.type === 'move') {
+      const story = store.stories.find((s) => s.id === action.cardId);
+      if (story && targetsOf(story).includes(action.targetStatus)) moveCard(story, action.targetStatus);
+    } else if (action.type === 'readonly') announcer.say(t('a11y.readonlyCard', { id: action.cardId }));
+  }
+
+  function onKeydown(e) {
+    if (e.ctrlKey || e.metaKey || (e.altKey && e.code !== 'KeyM')) return;
+    if (!document.activeElement?.closest?.('.board')) return;
+    const state = { ...nav, showMoveMenu: openMenuId !== null };
+    const ctx = { columns: COLUMNS, storiesByStatus, promptOpen };
+    const { state: next, action } = reduceKey(state, { key: e.key, code: e.code, altKey: e.altKey }, ctx);
+    nav = { focusedColumnIndex: next.focusedColumnIndex, focusedCardIndex: next.focusedCardIndex, showMoveMenu: false };
+    // Entrée (détails) et Espace sont laissés aux boutons natifs.
+    if (!action || action.type === 'details') return;
+    e.preventDefault();
+    runAction(action);
+  }
+
+  // ---- glisser-déposer (alternative souris ; le menu « Déplacer » reste l'alternative sans glisser) -----
+  function clearDrag() {
+    dragId = null;
+    dragTargets = [];
+    dragOverCol = null;
+  }
+
+  function startDrag(e, story) {
+    dragId = story.id;
+    dragTargets = targetsOf(story);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', story.id);
+  }
+
+  function dragOver(e, status) {
+    if (!dragId) return;
+    if (!dragTargets.includes(status)) {
+      e.dataTransfer.dropEffect = 'none';
+      return; // pas de preventDefault : la colonne refuse le dépôt
     }
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    dragOverCol = status;
   }
 
-  /** Ouvre la modale de détail partagée (clic ou Entrée) + annonce sr-only. */
-  function openDetail(card) {
-    announceCardDetails(card);
-    openDetailStore(card);
+  function drop(e, status) {
+    e.preventDefault();
+    const story = store.stories.find((s) => s.id === dragId);
+    const allowed = story && targetsOf(story).includes(status);
+    clearDrag();
+    if (allowed) moveCard(story, status);
+  }
+
+  // Les écouteurs souris sont posés par des actions : le clavier dispose du menu « Déplacer », donc la
+  // carte et la colonne n'ont pas à être des éléments interactifs (pattern §3.1).
+  function cardPointer(node, params) {
+    let p = params;
+    const onDragStart = (e) => (p.draggable ? startDrag(e, p.story) : e.preventDefault());
+    const onClick = (e) => {
+      if (e.target.closest('button, a')) return;
+      node.querySelector('.card-open')?.focus(); // le focus revient ici à la fermeture de la modale
+      openCard(p.story);
+    };
+    node.draggable = p.draggable;
+    node.addEventListener('dragstart', onDragStart);
+    node.addEventListener('dragend', clearDrag);
+    node.addEventListener('click', onClick);
+    return {
+      update(next) {
+        p = next;
+        node.draggable = p.draggable;
+      },
+      destroy() {
+        node.removeEventListener('dragstart', onDragStart);
+        node.removeEventListener('dragend', clearDrag);
+        node.removeEventListener('click', onClick);
+      },
+    };
+  }
+
+  function dropZone(node, status) {
+    const onOver = (e) => dragOver(e, status);
+    const onLeave = (e) => {
+      if (!node.contains(e.relatedTarget)) dragOverCol = null;
+    };
+    const onDrop = (e) => drop(e, status);
+    node.addEventListener('dragover', onOver);
+    node.addEventListener('dragleave', onLeave);
+    node.addEventListener('drop', onDrop);
+    return {
+      destroy() {
+        node.removeEventListener('dragover', onOver);
+        node.removeEventListener('dragleave', onLeave);
+        node.removeEventListener('drop', onDrop);
+      },
+    };
+  }
+
+  const dropState = (status) => {
+    if (!dragId) return null;
+    if (dragTargets.includes(status)) return 'allowed';
+    return store.stories.find((s) => s.id === dragId)?.status === status ? null : 'denied';
+  };
+
+  // The button disappears with the empty state: focus goes to the first card shown again.
+  async function resetFilters() {
+    setQuery({ q: null, prio: null, who: null, epic: null, sort: null, dir: null });
+    await tick();
+    document.querySelector('.board [data-card-id]')?.focus();
   }
 </script>
 
-<div class="board-toolbar">
-  <div class="filters">
-    {#each Object.entries(PRIORITY) as [key, v]}
-      <button class="filter-chip" aria-pressed={priFilter.includes(key)} onclick={() => togglePri(key)}>
-        <i class="dot" style="background: var({v.cssVar})"></i>{v.label}
-      </button>
-    {/each}
-    {#if priFilter.length > 0}
-      <button class="filter-chip" style="border:none" onclick={() => (priFilter = [])}>Clear</button>
-    {/if}
-  </div>
-  <span class="topbar-spacer"></span>
-  <div class="coding-legend" aria-label={`Cartes colorées par ${tweaks.codingScheme}`}>
-    <span class="lbl">Codé par {tweaks.codingScheme} :</span>
-    {#each schemeLegend as [label, color]}
-      <span class="key"><i style="background: {color}"></i>{label}</span>
-    {/each}
-  </div>
-</div>
+<svelte:document onkeydown={onKeydown} onpointerdown={onPointerDown} />
 
-<div class="board">
-  {#each COLUMNS as col}
-    {@const cv = `var(${STATUS[col.key].cssVar})`}
-    <section
-      class="column"
-      class:drop-target={dragOverCol === col.key}
-      aria-labelledby="col-{col.key}"
-      ondragover={(e) => { onDragOver(e); if (dragId) dragOverCol = col.key; }}
-      ondragleave={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) dragOverCol = null; }}
-      ondrop={(e) => onDrop(e, col.key)}
-    >
-      <header class="col-head">
-        <i class="col-dot" style="background: {cv}; color: {cv}"></i>
-        <h2 class="col-title" id="col-{col.key}">{col.label}</h2>
-        <span class="col-count mono" aria-label="{storiesByStatus[col.key].length} cartes">{storiesByStatus[col.key].length}</span>
-        <span class="col-pts mono" title="story points dans la colonne">{colPoints(col.key)} pts</span>
-      </header>
-      <ul class="col-body" role="list">
-        {#each storiesByStatus[col.key] as s (s.id)}
-          <!-- Enter (détails) est géré par le handler clavier global du board ; onclick couvre la souris. -->
-          <!-- svelte-ignore a11y_click_events_have_key_events -->
-          <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-          <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-          <li
-            class="card"
-            class:read-only={s._writable === false}
-            class:dragging={dragId === s.id}
-            style="--code-color: {codeColor(s, tweaks.codingScheme)}"
-            draggable={s._writable !== false}
-            ondragstart={(e) => onDragStart(e, s.id)}
-            onfocus={() => syncFocus(s.id)}
-            onclick={() => openDetail(s)}
-            aria-label="{s.id} {s.title}{s._writable === false ? ' (lecture seule)' : ''}"
-            data-card-id={s.id}
-            tabindex="0"
-            role="listitem"
-            aria-describedby="keyboard-help"
-          >
-            <div class="card-top">
-              {#if s.epic_id}<i class="card-epic-dot" style="background: {epicHue(s.epic_id)}" title={s.epic_id}></i>{/if}
-              <span class="card-id mono">{s.id}</span>
-              {#if s._writable === false}
-                <span class="card-lock" aria-label="Lecture seule — gérée par .bmad/sprint-status.yaml" role="img">🔒</span>
-              {/if}
-              <span class="spacer"></span>
-              <TddPip phase={s.tdd_phase} />
-              <PriorityChip priority={s.priority} />
-            </div>
-            <h3 class="card-title">{s.title}</h3>
-            <div class="card-meta">
-              <Points value={s.story_points} />
-              {#if s.persona}<span class="persona"><Icon name="person" cls="ico" size={13} />{s.persona}</span>{/if}
-              <span class="spacer"></span>
-              {#if s.status === 'blocked' && s.blocked_reason}
-                <span class="card-blocked" title={s.blocked_reason}>⚠ blocked</span>
-              {/if}
-              <TaskProgress tasks={s.tasks} status={s.status} />
-              <Avatar id={s.assigned_to} size={24} />
-            </div>
-          </li>
-        {:else}
-          {#if col.emptyHint}
-            <li class="col-empty" role="listitem">{col.emptyHint}</li>
-          {/if}
-        {/each}
-      </ul>
-    </section>
-  {/each}
+<div class="board-toolbar">
+  <FilterBar stories={sprintStories} />
+  <details class="kbd-help">
+    <summary>{t('board.keyboard.summary')}</summary>
+    <KeyboardShortcuts />
+  </details>
+  <div class="coding-legend">
+    <span class="lbl" id="coding-legend-label">{t(`board.legend.${tweaks.codingScheme}`)}</span>
+    <ul aria-labelledby="coding-legend-label">
+      {#each schemeLegend as [label, color]}
+        <li class="key"><i style="background: {color}" aria-hidden="true"></i>{label}</li>
+      {/each}
+    </ul>
+  </div>
 </div>
+{#if readonly || hasFilters}
+  <div class="board-notes">
+    {#if readonly}<p><Icon name="lock" size={12} /> {t('board.readonlyNote')}</p>{/if}
+    {#if hasFilters}<p>{t('board.filtersNote')}</p>{/if}
+  </div>
+{/if}
+
+{#if noResults}
+  <div class="board-empty">
+    <p>{t('common.filter.noResults')}</p>
+    <button type="button" class="btn" onclick={resetFilters}>{t('common.filter.clear')}</button>
+  </div>
+{:else}
+  <div class="board">
+    {#each COLUMNS as col}
+      {@const cv = `var(${STATUS[col.key].cssVar})`}
+      {@const list = storiesByStatus[col.key]}
+      {@const total = totals[col.key].length}
+      {@const drop = dropState(col.key)}
+      <section
+        class="column"
+        class:drop-target={dragOverCol === col.key}
+        class:drop-denied={drop === 'denied'}
+        aria-labelledby="col-{col.key}"
+        aria-busy={store.loading}
+        use:dropZone={col.key}
+      >
+        <header class="col-head">
+          <i class="col-dot" style="background: {cv}; color: {cv}" aria-hidden="true"></i>
+          <h2 class="col-title" id="col-{col.key}">{t(`status.${col.key}`)}</h2>
+          <span class="col-count mono">
+            <span aria-hidden="true">{hasFilters ? `${list.length}/${total}` : list.length}</span>
+            <span class="sr-only">{hasFilters ? t('board.column.filtered', { n: list.length, total }) : tn('board.column.count', list.length)}</span>
+          </span>
+          <span class="col-pts mono">{t('board.column.points', { n: sumPoints(list) })}</span>
+        </header>
+        {#if drop}
+          <p class="col-drop-note" aria-hidden="true">{drop === 'allowed' ? t('board.drop.here') : t('board.drop.denied')}</p>
+        {/if}
+        <ul class="col-body">
+          {#if store.loading}
+            {#each [1, 2] as n (n)}<li class="card-skel" aria-hidden="true"><span></span><span></span><span></span></li>{/each}
+            <li class="sr-only">{t('a11y.loading')}</li>
+          {:else}
+            {#each list as s (s.id)}
+              {@const targets = targetsOf(s)}
+              {@const locked = readonly || s._writable === false}
+              <li
+                class="card"
+                class:read-only={locked}
+                class:dragging={dragId === s.id}
+                class:menu-open={openMenuId === s.id}
+                style="--code-color: {codeColor(s, tweaks.codingScheme)}"
+                use:cardPointer={{ story: s, draggable: targets.length > 0 }}
+              >
+                <div class="card-top">
+                  {#if s.epic_id}<i class="card-epic-dot" style="background: {epicHue(s.epic_id)}" title={s.epic_id}></i>{/if}
+                  <span class="card-id mono">{s.id}</span>
+                  {#if locked}<span class="card-lock" title={t('board.card.readonlyTitle')}><Icon name="lock" size={12} /></span>{/if}
+                  <span class="spacer"></span>
+                  <TddPip phase={s.tdd_phase} />
+                  <PriorityChip priority={s.priority} />
+                </div>
+                <h3 class="card-title">
+                  <button
+                    type="button"
+                    class="card-open"
+                    data-card-id={s.id}
+                    aria-label={t('a11y.openCard', { id: s.id, title: s.title })}
+                    aria-describedby="card-desc-{s.id}"
+                    onclick={() => openCard(s)}
+                    onfocus={() => syncFocus(s.id)}
+                  >{s.title}</button>
+                </h3>
+                <p id="card-desc-{s.id}" class="sr-only">{describeCard(s, { t, tn, readonly })}</p>
+                <div class="card-meta">
+                  <Points value={s.story_points} />
+                  {#if s.persona}<span class="persona"><Icon name="person" cls="ico" size={13} />{s.persona}</span>{/if}
+                  <span class="spacer"></span>
+                  {#if s.status === 'blocked'}
+                    <span class="card-blocked" title={s.blocked_reason}><Icon name="warn" size={12} /> {t('board.card.blocked')}</span>
+                  {/if}
+                  <TaskProgress tasks={s.tasks} status={s.status} />
+                  <Avatar id={s.assigned_to} size={24} />
+                </div>
+                {#if targets.length > 0}
+                  <div class="move-wrap">
+                    <button
+                      type="button"
+                      class="card-move"
+                      data-move-id={s.id}
+                      aria-haspopup="menu"
+                      aria-expanded={openMenuId === s.id}
+                      aria-label={t('a11y.moveCard', { id: s.id })}
+                      onclick={() => toggleMenu(s)}
+                      onfocus={() => syncFocus(s.id)}
+                    ><Icon name="arrowR" size={12} />{t('board.card.move')}</button>
+                    {#if openMenuId === s.id}
+                      <MoveMenu storyId={s.id} targets={targets} onmove={(status) => moveCard(s, status)} onclose={() => closeMenu()} />
+                    {/if}
+                  </div>
+                {/if}
+              </li>
+            {:else}
+              <li class="col-empty">{hasFilters && total > 0 ? t('common.filter.noResults') : t(`board.empty.${col.key}`)}</li>
+            {/each}
+          {/if}
+        </ul>
+      </section>
+    {/each}
+  </div>
+{/if}
 
 <PromptDialog bind:this={promptDialog} />
 
-<!-- Aide clavier : sr-only pour les lecteurs d'écran -->
-<div id="keyboard-help" class="sr-only">
-  Flèches pour naviguer. Alt+M pour ouvrir le menu de déplacement. Chiffres 1 à 6 pour déplacer dans une colonne. Échap pour fermer. Entrée pour les détails.
-</div>
-
-<!-- Région live pour les annonces d'accessibilité -->
-<div aria-live="polite" aria-atomic="true" class="sr-only">{liveRegion}</div>
-
-<!-- Aide clavier visible pour les utilisateurs voyants au clavier (WCAG SC 3.3.2) -->
-<details class="keyboard-help-visible">
-  <summary aria-label="Raccourcis clavier du tableau Kanban">⌨ Raccourcis</summary>
-  <div class="keyboard-help-content">
-    <kbd>↑↓</kbd> Naviguer &ensp;<kbd>←→</kbd> Colonne &ensp;<kbd>Alt+M</kbd> Déplacer &ensp;<kbd>1–6</kbd> Vers colonne &ensp;<kbd>Échap</kbd> Fermer &ensp;<kbd>Entrée</kbd> Détails
-  </div>
-</details>
-
-<!-- Menu de déplacement : <dialog> natif (piège de focus + aria-modal natifs) -->
-{#if showMoveMenu}
-  <dialog
-    bind:this={moveMenuDialog}
-    class="move-menu-dialog"
-    aria-labelledby="move-menu-title"
-    onclose={() => { if (showMoveMenu) closeMoveMenu(); }}
-  >
-    <div class="move-menu-content">
-      <h3 id="move-menu-title">Déplacer la carte vers :</h3>
-      {#each COLUMNS as col, idx}
-        <button onclick={() => {
-          const currentColumn = COLUMNS[focusedColumnIndex];
-          const cards = storiesByStatus[currentColumn.key];
-          const card = cards[focusedCardIndex];
-          if (card) moveCard(card, col.key);
-        }}>
-          {idx + 1}. {col.label}
-        </button>
-      {/each}
-      <button onclick={() => closeMoveMenu()}>Annuler (Échap)</button>
-    </div>
-  </dialog>
-{/if}
-
-
-<style>
-  /* Menu de déplacement — spécifique au board (hors design system global) */
-  .move-menu-dialog {
-    /* margin:auto : recentre le <dialog> que le reset global `* { margin:0 }`
-       décalerait en haut-gauche (cf. bug #2). */
-    margin: auto;
-    background: var(--bg-elev); border: 1px solid var(--border-strong);
-    border-radius: var(--radius-lg); padding: 0; min-width: 300px;
-    box-shadow: var(--shadow-lg); color: var(--fg);
-  }
-  .move-menu-dialog::backdrop { background: oklch(0.1 0.01 264 / 0.6); backdrop-filter: blur(3px); }
-  .move-menu-content { padding: 20px; }
-  .move-menu-content h3 { margin: 0 0 12px; font-size: 15px; font-weight: 600; }
-  .move-menu-content button {
-    display: block; width: 100%; padding: 10px 12px; margin: 4px 0;
-    background: var(--bg-inset); border: 1px solid var(--border-faint);
-    border-radius: var(--radius-sm); color: var(--fg); cursor: pointer;
-    text-align: left; font-size: 13px;
-  }
-  .move-menu-content button:hover,
-  .move-menu-content button:focus-visible {
-    background: var(--accent-soft); border-color: var(--accent-ring);
-  }
-</style>
+<!-- Région live du board : changements reçus en temps réel (les déplacements locaux passent par les toasts) -->
+<div role="status" aria-live="polite" aria-atomic="true" class="sr-only">{liveMessage}</div>

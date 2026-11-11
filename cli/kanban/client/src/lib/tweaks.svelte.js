@@ -3,22 +3,18 @@
    - codingScheme : couleur de la barre des cartes (board)
    - accent       : surcharge les variables --accent* (runtime)
    - density      : compact | comfortable (attribut sur .app-shell)
+   - lang         : code de langue, null = automatique (navigateur)
    ============================================================ */
-import { CODING_SCHEMES } from './config.js';
+import { CODING_SCHEMES, ACCENTS } from './config.js';
+import { SUPPORTED_LOCALES } from './i18n/translate.js';
 
 const STORAGE_KEY = 'cc-kanban-tweaks';
 
-/** Palettes d'accent proposées (a = accent, d = dim, f = foreground). */
-export const ACCENTS = {
-  lime: { a: 'oklch(0.88 0.21 126)', d: 'oklch(0.72 0.16 126)', f: 'oklch(0.22 0.05 126)', hex: '#bdf03d' },
-  cyan: { a: 'oklch(0.83 0.13 200)', d: 'oklch(0.68 0.11 200)', f: 'oklch(0.18 0.04 215)', hex: '#3fd0e0' },
-  violet: { a: 'oklch(0.74 0.17 295)', d: 'oklch(0.62 0.16 295)', f: 'oklch(0.98 0.01 295)', hex: '#a78bfa' },
-  amber: { a: 'oklch(0.84 0.15 75)', d: 'oklch(0.73 0.13 70)', f: 'oklch(0.24 0.05 70)', hex: '#f5c44e' },
-};
+export { ACCENTS };
 
 export const DENSITIES = ['comfortable', 'compact'];
 
-const DEFAULTS = { codingScheme: 'status', accent: 'lime', density: 'comfortable' };
+const DEFAULTS = { codingScheme: 'status', accent: 'lime', density: 'comfortable', lang: null };
 
 /** État réactif partagé. */
 export const tweaks = $state({ ...DEFAULTS });
@@ -32,6 +28,7 @@ function load() {
     if (CODING_SCHEMES.includes(saved.codingScheme)) tweaks.codingScheme = saved.codingScheme;
     if (ACCENTS[saved.accent]) tweaks.accent = saved.accent;
     if (DENSITIES.includes(saved.density)) tweaks.density = saved.density;
+    if (SUPPORTED_LOCALES.includes(saved.lang)) tweaks.lang = saved.lang;
   } catch {
     /* localStorage corrompu → on garde les défauts */
   }

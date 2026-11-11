@@ -1,114 +1,93 @@
 <script>
-  import { store } from '../lib/store.svelte.js';
-  import { openDetail } from '../lib/detail.svelte.js';
-  import { groupStoriesByEpic } from '../lib/backlog.js';
-  import { STATUS, epicHue } from '../lib/config.js';
+  import { store, loadStories } from '../lib/store.svelte.js';
+  import { route } from '../lib/router.svelte.js';
+  import { t, tn } from '../lib/i18n/index.svelte.js';
+  import { filtersFromQuery } from '../lib/query.js';
+  import { buildBacklog, epicProgress } from '../lib/backlog.js';
+  import { epicHue } from '../lib/config.js';
   import Icon from '../components/Icon.svelte';
-  import Avatar from '../components/Avatar.svelte';
-  import PriorityChip from '../components/PriorityChip.svelte';
-  import Points from '../components/Points.svelte';
   import ProgressRing from '../components/ProgressRing.svelte';
+  import FilterBar from '../components/FilterBar.svelte';
+  import StoryRow from '../components/StoryRow.svelte';
+
+  const ORPHANS = '__orphans__';
 
   // Stories with an unknown epic_id (e.g. BMAD v6 sprint-status.yaml) are kept in a
   // synthesized group instead of being dropped — see backlog.js.
-  const epicGroups = $derived(groupStoriesByEpic(store.stories, store.epics));
+  const filters = $derived(filtersFromQuery(route.query));
+  const backlog = $derived(buildBacklog(store.stories, store.epics, filters));
+  const isEmpty = $derived(store.stories.length === 0 && store.epics.length === 0);
 
-  let expanded = $state(new Set());
+  // Epics are collapsed by default and expanded while filtering, so matches are visible.
+  // `flipped` holds the epics the user toggled away from that default.
+  let flipped = $state(new Set());
+  const isOpen = (id) => backlog.filtered !== flipped.has(id);
 
-  function toggleEpic(epicId) {
-    const next = new Set(expanded);
-    if (next.has(epicId)) next.delete(epicId);
-    else next.add(epicId);
-    expanded = next;
+  function toggleEpic(id) {
+    const next = new Set(flipped);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    flipped = next;
   }
-
-  function epicProgress(stories) {
-    const done = stories.filter((s) => s.status === 'done').length;
-    const total = stories.length;
-    return { done, total, percent: total > 0 ? Math.round((done / total) * 100) : 0 };
-  }
-
-  const epicTotalPoints = (stories) => stories.reduce((sum, s) => sum + (s.story_points || 0), 0);
 </script>
 
-<div class="view-pad">
+{#snippet epicHead(id, name, meta, count, points, ring)}
+  <h3 class="epic-heading">
+    <button class="epic-head" aria-expanded={isOpen(id)} aria-controls="epic-{id}" onclick={() => toggleEpic(id)}>
+      <Icon name="chevron" cls="epic-chevron" size={16} />
+      <span class="epic-bar"></span>
+      <span class="epic-main">
+        <span class="epic-line">
+          {#if id !== ORPHANS}<span class="epic-id mono">{id}</span>{/if}
+          <span class="epic-title">{name}</span>
+        </span>
+        <span class="epic-meta">{meta}</span>
+      </span>
+      <span class="epic-prog">
+        <span class="epic-meta">{tn('common.stories', count)} · {t('common.points', { n: points })}</span>
+        {#if ring}<span class="ring"><ProgressRing pct={ring.percent} size={42} color={epicHue(id)} label={t('backlog.epic.progress', { pct: ring.percent })} /></span>{/if}
+      </span>
+    </button>
+  </h3>
+{/snippet}
+
+<div class="view-pad" aria-busy={store.loading}>
+  <h2 class="sr-only">{t('backlog.title')}</h2>
+  <FilterBar stories={store.stories} />
   <div class="backlog">
-    {#if store.epics.length === 0 && store.stories.length === 0}
-      <div class="empty">No epics or stories yet</div>
+    {#if store.loading}
+      <div class="empty" role="status">{t('common.loading')}</div>
+    {:else if store.error && isEmpty}
+      <div class="empty" role="alert">
+        <p>{t('toast.load_failed', { reason: store.error })}</p>
+        <button class="btn" onclick={loadStories}>{t('common.retry')}</button>
+      </div>
+    {:else if isEmpty}
+      <div class="empty">{t('backlog.empty')}</div>
+    {:else if backlog.filtered && backlog.count === 0}
+      <div class="empty">{t('backlog.noResults')}</div>
     {:else}
-      {#each epicGroups.groups as { epic, stories } (epic.id)}
+      {#each backlog.groups as { epic, stories } (epic.id)}
         {@const progress = epicProgress(stories)}
-        {@const isOpen = expanded.has(epic.id)}
-        {@const color = epicHue(epic.id)}
-        <div class="epic" data-open={isOpen}>
-          <button class="epic-head" aria-expanded={isOpen} onclick={() => toggleEpic(epic.id)}>
-            <Icon name="chevron" cls="epic-chevron" size={16} />
-            <span class="epic-bar" style="background: {color}"></span>
-            <div>
-              <div style="display:flex; align-items:center; gap:9px">
-                <span class="epic-id mono">{epic.id}</span>
-                <span class="epic-title">{epic.title}</span>
-              </div>
-              <div class="epic-meta" style="margin-top:3px">{epic.business_value ? epic.business_value + ' value · ' : ''}{epic.status}</div>
-            </div>
-            <div class="epic-prog">
-              <span class="epic-meta">{stories.length} stories · {epicTotalPoints(stories)} pts</span>
-              <span class="ring"><ProgressRing pct={progress.percent} size={42} color={color} /></span>
-            </div>
-          </button>
-          <div class="epic-stories">
-            <div>
-              {#each stories as story (story.id)}
-                <button type="button" class="story-row" onclick={() => openDetail(story)}>
-                  <span class="s-id mono">{story.id}</span>
-                  <span class="s-title">{story.title}</span>
-                  {#if story._writable === false}<span class="ro-lock"><Icon name="lock" size={12} /></span>{/if}
-                  <PriorityChip priority={story.priority} />
-                  <Points value={story.story_points} />
-                  <span class="s-status">
-                    <i style="background: var({STATUS[story.status]?.cssVar || '--fg-faint'})"></i>{STATUS[story.status]?.label || story.status}
-                  </span>
-                  <Avatar id={story.assigned_to} size={24} />
-                </button>
-              {/each}
-            </div>
-          </div>
+        {@const meta = [epic.business_value ? t('backlog.epic.value', { value: epic.business_value }) : '', epic.status].filter(Boolean).join(' · ')}
+        <div class="epic" data-open={isOpen(epic.id)} style:--epic-color={epicHue(epic.id)}>
+          {@render epicHead(epic.id, epic.title, meta, stories.length, progress.points, progress)}
+          {#if isOpen(epic.id)}
+            <ul class="epic-stories" id="epic-{epic.id}">
+              {#each stories as story (story.id)}<StoryRow {story} />{/each}
+            </ul>
+          {/if}
         </div>
       {/each}
 
-      {#if epicGroups.orphans.length > 0}
-        {@const isOpen = expanded.has('__orphans__')}
-        <div class="epic" data-open={isOpen}>
-          <button class="epic-head" aria-expanded={isOpen} onclick={() => toggleEpic('__orphans__')}>
-            <Icon name="chevron" cls="epic-chevron" size={16} />
-            <span class="epic-bar" style="background: var(--warning)"></span>
-            <div>
-              <div style="display:flex; align-items:center; gap:9px">
-                <span class="epic-title">No Epic</span>
-              </div>
-              <div class="epic-meta" style="margin-top:3px">Stories sans epic</div>
-            </div>
-            <div class="epic-prog">
-              <span class="epic-meta">{epicGroups.orphans.length} stories · {epicTotalPoints(epicGroups.orphans)} pts</span>
-            </div>
-          </button>
-          <div class="epic-stories">
-            <div>
-              {#each epicGroups.orphans as story (story.id)}
-                <button type="button" class="story-row" onclick={() => openDetail(story)}>
-                  <span class="s-id mono">{story.id}</span>
-                  <span class="s-title">{story.title}</span>
-                  {#if story._writable === false}<span class="ro-lock"><Icon name="lock" size={12} /></span>{/if}
-                  <PriorityChip priority={story.priority} />
-                  <Points value={story.story_points} />
-                  <span class="s-status">
-                    <i style="background: var({STATUS[story.status]?.cssVar || '--fg-faint'})"></i>{STATUS[story.status]?.label || story.status}
-                  </span>
-                  <Avatar id={story.assigned_to} size={24} />
-                </button>
-              {/each}
-            </div>
-          </div>
+      {#if backlog.orphans.length > 0}
+        <div class="epic" data-open={isOpen(ORPHANS)} style:--epic-color="var(--warning)">
+          {@render epicHead(ORPHANS, t('backlog.noEpic'), t('backlog.noEpicMeta'), backlog.orphans.length, epicProgress(backlog.orphans).points, null)}
+          {#if isOpen(ORPHANS)}
+            <ul class="epic-stories" id="epic-{ORPHANS}">
+              {#each backlog.orphans as story (story.id)}<StoryRow {story} />{/each}
+            </ul>
+          {/if}
         </div>
       {/if}
     {/if}

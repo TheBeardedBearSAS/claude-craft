@@ -15,15 +15,17 @@
 
   /* --- Foreground --- */
   --fg: oklch(0.965 0.004 264);
-  --fg-dim: oklch(0.72 0.012 264);
+  --fg-dim: oklch(0.76 0.012 264);
   /* WCAG AA: 0.64 yields ≥4.8:1 on the lightest surface (--bg-elev-2). The
      prior 0.55 scored 3.7:1 and failed Lighthouse color-contrast. */
-  --fg-faint: oklch(0.64 0.012 264);
+  --fg-faint: oklch(0.69 0.012 264);
 
   /* --- Lines --- */
   --border: oklch(0.3 0.012 264);
   --border-strong: oklch(0.42 0.014 264);
   --border-faint: oklch(0.24 0.011 264);
+  /* Champs, boutons et bascules : >= 3:1 sur chaque fond (WCAG 1.4.11), verrouillé par contrast.test.js */
+  --border-control: oklch(0.58 0.014 264);
 
   /* --- Brand accent: acid lime (surchargeable par le panneau Tweaks) --- */
   --accent: oklch(0.88 0.21 126);
@@ -48,13 +50,13 @@
   --st-blocked: oklch(0.67 0.21 18);
 
   /* --- Priority (MoSCoW) --- */
-  --pri-must: oklch(0.67 0.21 18);
+  --pri-must: oklch(0.73 0.19 18);
   --pri-should: oklch(0.82 0.15 82);
   --pri-could: oklch(0.74 0.13 236);
-  --pri-wont: oklch(0.62 0.02 264);
+  --pri-wont: oklch(0.73 0.02 264);
 
   /* --- TDD (red / green / refactor) --- */
-  --tdd-red: oklch(0.67 0.21 18);
+  --tdd-red: oklch(0.73 0.19 18);
   --tdd-green: oklch(0.76 0.16 156);
   --tdd-refactor: oklch(0.74 0.15 236);
 
@@ -106,9 +108,8 @@ body {
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
-  overflow: hidden;
 }
 button,
 input,
@@ -176,6 +177,10 @@ a {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
+/* Cible d'un changement de vue : focus programmatique, sans anneau. */
+.view:focus {
+  outline: none;
+}
 
 ::selection {
   background: var(--accent-soft);
@@ -202,9 +207,15 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+  .live.live-on .dot::after {
+    animation: none !important;
   }
 }
 
@@ -216,8 +227,8 @@ a {
   height: 100%;
 }
 
-/* ---------- Sidebar ---------- */
-.sidebar {
+/* ---------- Sidebar (marque + navigation + progression) ---------- */
+.side {
   background: var(--bg-sidebar);
   border-right: 1px solid var(--border-faint);
   display: flex;
@@ -247,10 +258,10 @@ a {
 .brand-name {
   font-weight: 600;
   letter-spacing: -0.01em;
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 .brand-sub {
-  font-size: 11px;
+  font-size: 0.75rem;
   color: var(--fg-faint);
   font-family: var(--mono);
   letter-spacing: 0.02em;
@@ -264,7 +275,7 @@ a {
 }
 .nav-label {
   padding: 14px 10px 6px;
-  font-size: 10.5px;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -274,11 +285,12 @@ a {
   display: flex;
   align-items: center;
   gap: 11px;
+  min-height: 36px;
   padding: 9px 11px;
   border-radius: var(--radius-sm);
   color: var(--fg-dim);
   font-weight: 500;
-  font-size: 13.5px;
+  font-size: 0.84375rem;
   position: relative;
   transition:
     background 0.12s,
@@ -299,7 +311,7 @@ a {
 .nav-item .nav-count {
   margin-left: auto;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 0.75rem;
   color: var(--fg-faint);
   background: var(--bg-elev);
   padding: 1px 7px;
@@ -347,10 +359,10 @@ a {
 }
 .proj-card .pname {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 .proj-card .pmeta {
-  font-size: 11px;
+  font-size: 0.75rem;
   color: var(--fg-faint);
   font-family: var(--mono);
   margin-top: 2px;
@@ -377,24 +389,25 @@ a {
   min-height: 0;
 }
 .topbar {
-  height: 60px;
+  min-height: 60px;
   flex: none;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
-  padding: 0 22px;
+  gap: 8px 16px;
+  padding: 8px 22px;
   background: var(--bg-topbar);
   border-bottom: 1px solid var(--border-faint);
 }
 .topbar h1 {
-  font-size: 17px;
+  font-size: 1.0625rem;
   font-weight: 600;
   letter-spacing: -0.015em;
 }
 .topbar .crumb {
   color: var(--fg-faint);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 .topbar-spacer {
   flex: 1;
@@ -405,37 +418,56 @@ a {
   align-items: center;
   gap: 8px;
   background: var(--bg-inset);
-  border: 1px solid var(--border-faint);
+  border: 1px solid var(--border-control);
   border-radius: var(--radius-pill);
-  padding: 7px 14px;
+  padding: 4px 8px 4px 14px;
+  min-height: 36px;
   width: 230px;
   color: var(--fg-faint);
-  transition:
-    border-color 0.12s,
-    width 0.15s;
+  transition: width 0.15s;
 }
+/* L'anneau est porté par le conteneur : le champ nu n'a pas d'outline propre. */
 .search:focus-within {
-  border-color: var(--border-strong);
   width: 280px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 .search input {
   background: none;
   border: none;
-  outline: none;
+  min-height: 24px;
   width: 100%;
+  min-width: 0;
   color: var(--fg);
+}
+.search input:focus-visible {
+  outline: none;
 }
 .search input::placeholder {
   color: var(--fg-faint);
 }
 .search kbd {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 0.75rem;
   padding: 1px 6px;
   background: var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: 5px;
   color: var(--fg-faint);
+  white-space: nowrap;
+}
+.search-clear {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--fg-dim);
+}
+.search-clear:hover {
+  background: var(--bg-elev-2);
+  color: var(--fg);
 }
 
 .sprint-pill {
@@ -445,8 +477,8 @@ a {
   background: var(--bg-elev);
   border: 1px solid var(--border-faint);
   border-radius: var(--radius-pill);
-  padding: 6px 8px 6px 13px;
-  font-size: 12.5px;
+  padding: 6px 13px;
+  font-size: 0.78125rem;
 }
 .sprint-pill .lbl {
   color: var(--fg-faint);
@@ -454,20 +486,12 @@ a {
 .sprint-pill .val {
   font-weight: 600;
 }
-.sprint-pill .days {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--accent);
-  background: var(--accent-soft);
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-}
 
 .live {
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--fg-dim);
   padding: 6px 12px;
   border-radius: var(--radius-pill);
@@ -528,10 +552,71 @@ a {
   flex: none;
   display: grid;
   place-items: center;
-  font-size: 11px;
+  font-size: 0.75rem;
   font-weight: 600;
   color: oklch(0.18 0.02 264);
   letter-spacing: 0.02em;
+}
+
+/* ---------- Bandeaux (lecture seule, diagnostics) et chargement ---------- */
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 22px;
+  font-size: 0.8125rem;
+  border-bottom: 1px solid var(--border-faint);
+}
+.banner > svg {
+  flex: none;
+  margin-top: 2px;
+}
+.banner-info {
+  background: var(--accent-soft);
+}
+.banner-warn {
+  background: color-mix(in oklch, var(--warning) 14%, var(--bg));
+}
+.banner-warn > svg {
+  color: var(--warning);
+}
+.banner details {
+  margin-top: 6px;
+}
+.banner summary {
+  cursor: pointer;
+  color: var(--fg-dim);
+}
+.banner ul {
+  margin-top: 6px;
+  max-height: 160px;
+  overflow: auto;
+}
+.banner li {
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+  padding: 2px 0;
+}
+
+.loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 300;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  background-size: 40% 100%;
+  background-repeat: no-repeat;
+  animation: loading-slide 1.1s linear infinite;
+}
+@keyframes loading-slide {
+  from {
+    background-position: -40% 0;
+  }
+  to {
+    background-position: 140% 0;
+  }
 }
 
 /* ---------- View frame ---------- */
@@ -553,17 +638,26 @@ a {
   padding: 80px 20px;
   color: var(--fg-faint);
 }
+.not-found h2 {
+  color: var(--fg);
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+.not-found p {
+  margin-bottom: 18px;
+}
 
 /* ---------- Boutons partagés ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-height: 32px;
   padding: 8px 14px;
   border-radius: var(--radius-sm);
   font-weight: 600;
-  font-size: 13px;
-  border: 1px solid var(--border);
+  font-size: 0.8125rem;
+  border: 1px solid var(--border-control);
   background: var(--bg-elev);
   color: var(--fg);
   transition:
@@ -572,7 +666,7 @@ a {
 }
 .btn:hover {
   background: var(--bg-elev-2);
-  border-color: var(--border-strong);
+  border-color: var(--fg-faint);
 }
 .btn-primary {
   background: var(--accent);
@@ -581,6 +675,7 @@ a {
 }
 .btn-primary:hover {
   background: var(--accent-dim);
+  border-color: transparent;
 }
 .btn-ghost {
   background: transparent;
@@ -597,21 +692,73 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 10.5px;
+  font-size: 0.75rem;
   color: var(--fg-faint);
   font-family: var(--mono);
 }
 
 /* ---------- Responsive shell ---------- */
+/* Bureau : l'application occupe la hauteur de la fenêtre, chaque vue défile à l'intérieur. */
+@media (min-width: 981px) {
+  body {
+    overflow: hidden;
+  }
+}
+
+/* < 980 px : une seule colonne, la page défile ; la navigation devient une barre à retour à la ligne
+   (toujours visible, sans JS) et la recherche prend sa propre ligne. */
 @media (max-width: 980px) {
   .app-shell {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    height: auto;
+    min-height: 100%;
   }
-  .sidebar {
+  .side {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    border-right: none;
+    border-bottom: 1px solid var(--border-faint);
+  }
+  .brand {
+    padding: 10px 16px;
+  }
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1 1 280px;
+    padding: 4px 12px;
+  }
+  .nav-label,
+  .sidebar-foot {
     display: none;
   }
-  .search {
-    display: none;
+  .nav-item {
+    width: auto;
+  }
+  .nav-item[aria-current='page']::before {
+    left: 50%;
+    top: auto;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+  }
+  .main {
+    min-height: 0;
+  }
+  .topbar {
+    padding: 8px 16px;
+  }
+  .search,
+  .search:focus-within {
+    order: 10;
+    flex: 1 1 100%;
+    width: auto;
+  }
+  .banner {
+    padding: 10px 16px;
   }
 }

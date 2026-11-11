@@ -1,4 +1,6 @@
 <script>
+  import { t } from '../lib/i18n/index.svelte.js';
+
   /**
    * Tâches au format Svelte : { total, completed }.
    * `status` réconcilie le compteur : une story `done` dont le compteur de
@@ -16,11 +18,11 @@
   <span
     class="task-prog"
     role="progressbar"
-    aria-label={`Tâches : ${done} sur ${total} complétées`}
+    aria-label={t('a11y.tasksProgress', { done, total })}
     aria-valuenow={done}
     aria-valuemin={0}
     aria-valuemax={total}
   >
-    <span class="bar"><span style="width: {pct}%"></span></span>{done}/{total}
+    <span class="bar" aria-hidden="true"><span style="width: {pct}%"></span></span><span aria-hidden="true">{done}/{total}</span>
   </span>
 {/if}

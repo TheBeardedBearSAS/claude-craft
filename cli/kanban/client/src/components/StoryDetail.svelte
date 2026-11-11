@@ -1,13 +1,17 @@
 <script>
-  import { tick } from 'svelte';
+  import { tick, untrack } from 'svelte';
   import Icon from './Icon.svelte';
   import Avatar from './Avatar.svelte';
   import PriorityChip from './PriorityChip.svelte';
   import TddPip from './TddPip.svelte';
   import { STATUS, TDD, TASK_TYPE, epicHue } from '../lib/config.js';
-  import { buildCardDetails } from '../lib/kanban-nav.js';
-  import { detail, closeDetail, consumeTrigger } from '../lib/detail.svelte.js';
-  import { route } from '../lib/router.svelte.js';
+  import { buildCardDetails } from '../lib/board-nav.js';
+  import { detail, openDetail, closeDetail, consumeTrigger, loadDetail } from '../lib/detail.svelte.js';
+  import { route, setQuery } from '../lib/router.svelte.js';
+  import { store, toast } from '../lib/store.svelte.js';
+  import { health } from '../lib/health.svelte.js';
+  import { linkifyStoryIds, demoteHeadings } from '../lib/markdown.js';
+  import { t } from '../lib/i18n/index.svelte.js';
 
   let dialogEl = $state(null);
 
@@ -18,42 +22,127 @@
     dialogEl?.close();
   }
 
-  // Déclenché par la fermeture native du <dialog>. Réinitialise l'état puis rend
-  // le focus à l'élément déclencheur APRÈS le démontage du dialog (tick).
+  // Déclenché par la fermeture native du <dialog>. Retire `?story=`, réinitialise l'état puis rend
+  // le focus au déclencheur APRÈS le démontage du dialog (tick), s'il existe encore.
   function onDialogClose() {
     const trigger = consumeTrigger();
+    syncedId = null;
+    setQuery({ story: null });
     closeDetail();
-    tick().then(() => trigger?.focus?.());
+    tick().then(() => {
+      if (trigger?.isConnected) trigger.focus();
+    });
   }
 
-  // Fermer la modale si l'utilisateur change de vue (sécurité : la modale est
-  // partagée/globale et ne doit pas « suivre » entre les routes).
-  let lastView = route.parts[0];
+  // ---- URL <-> modale -------------------------------------------------------------------------------
+  // `?story=<id>` ouvre le détail depuis n'importe quelle vue ; l'URL gagne quand elle change. Un
+  // openDetail() direct (ex. une ligne du Backlog) est répercuté dans l'URL.
+  let syncedId = null;
+
+  function openFromQuery(id) {
+    const card = store.stories.find((s) => s.id === id);
+    if (card) {
+      syncedId = id;
+      openDetail(card);
+    } else if (!store.loading) {
+      syncedId = id;
+      toast({ kind: 'error', message: id, key: 'error.not_found' });
+      setQuery({ story: null });
+    }
+  }
+
   $effect(() => {
-    const view = route.parts[0];
-    if (view !== lastView) {
-      lastView = view;
-      if (detail.card) requestClose();
+    const id = route.query.story || null;
+    const cardId = detail.card?.id ?? null;
+    if (id !== syncedId) {
+      if (!id) {
+        syncedId = null;
+        if (cardId) untrack(requestClose);
+      } else if (id === cardId) syncedId = id;
+      else openFromQuery(id);
+    } else if (cardId && cardId !== id) {
+      syncedId = cardId;
+      setQuery({ story: cardId });
     }
   });
 
-  const fields = $derived(detail.card ? buildCardDetails(detail.card) : null);
-  const estTotal = $derived(detail.tasks.reduce((a, t) => a + (t.estimation_hours || 0), 0));
-  const actTotal = $derived(detail.tasks.reduce((a, t) => a + (t.actual_hours || 0), 0));
+  // La carte vient du store (statut à jour après un déplacement) ; repli sur l'instantané du détail.
+  const card = $derived(detail.card ? (store.stories.find((s) => s.id === detail.card.id) ?? detail.card) : null);
+  const fields = $derived(card ? buildCardDetails(card) : null);
+  const estTotal = $derived(detail.tasks.reduce((a, task) => a + (task.estimation_hours || 0), 0));
+  const actTotal = $derived(detail.tasks.reduce((a, task) => a + (task.actual_hours || 0), 0));
+  // detail.svelte.js rend le markdown sans options : on rétrograde les titres et on lie les ids ici.
+  const bodyHtml = $derived(linkifyStoryIds(demoteHeadings(detail.body, 3), route));
 
-  // Open the native <dialog> as soon as a card is selected (focus trap + aria-modal
-  // are handled natively). Closing is driven by closeDetail() which nulls the card,
-  // unmounting the dialog.
+  const taskStatus = (status) => {
+    const key = 'status.task.' + status;
+    const text = t(key);
+    return text === key ? status : text;
+  };
+
+  // Open the native <dialog> as soon as a card is selected (focus trap + modality are native).
   $effect(() => {
     if (fields && dialogEl && !dialogEl.open) dialogEl.showModal();
   });
 </script>
 
+{#snippet hours(value, over)}
+  {#if over}
+    <span class="t-over"><Icon name="warn" size={12} />{value}<span class="sr-only"> — {t('story.tasks.over')}</span></span>
+  {:else}{value}{/if}
+{/snippet}
+
+{#snippet facts()}
+  <div class="fm-grid">
+    <div class="fm-cell"><div class="k">{t('story.field.points')}</div><div class="v"><span class="points mono">{fields.storyPoints}</span></div></div>
+    <div class="fm-cell"><div class="k">{t('story.field.assignee')}</div><div class="v">{#if fields.assignedTo}<Avatar id={fields.assignedTo} size={22} />{fields.assignedTo}{:else}<span class="faint">{t('common.unassigned')}</span>{/if}</div></div>
+    <div class="fm-cell"><div class="k">{t('story.field.persona')}</div><div class="v">{fields.persona || '—'}</div></div>
+    <div class="fm-cell"><div class="k">{t('story.field.tddPhase')}</div><div class="v"><TddPip phase={fields.tddPhase} />{#if !fields.tddPhase || !TDD[fields.tddPhase]}<span class="faint">—</span>{/if}</div></div>
+    <div class="fm-cell"><div class="k">{t('story.field.tasks')}</div><div class="v mono">{fields.tasks.completed}/{fields.tasks.total}</div></div>
+    {#if estTotal > 0}
+      <div class="fm-cell"><div class="k">{t('story.field.hours')}</div><div class="v mono">{estTotal} / {@render hours(actTotal, actTotal > estTotal)}</div></div>
+    {/if}
+  </div>
+
+  {#if fields.blockedReason}
+    <div class="modal-readonly-note modal-blocked"><Icon name="warn" size={14} /> {t('story.blocked', { reason: fields.blockedReason })}</div>
+  {/if}
+{/snippet}
+
+{#snippet tasksSection()}
+  {#if detail.tasks.length > 0}
+    <div class="section-h"><h3>{t('story.tasks.title')}</h3><span class="n mono">{fields.tasks.completed}/{fields.tasks.total}</span><span class="line"></span></div>
+    <table class="tasks">
+      <thead><tr><th>{t('story.tasks.type')}</th><th>{t('story.tasks.task')}</th><th>{t('story.tasks.status')}</th><th class="num">{t('story.tasks.estimate')}</th><th class="num">{t('story.tasks.actual')}</th></tr></thead>
+        <tbody>
+          {#each detail.tasks as task}
+            {@const overrun = (task.actual_hours || 0) > (task.estimation_hours || 0)}
+            <tr>
+              <td><span class="t-type" style="background: color-mix(in oklch, {TASK_TYPE[task.type] || 'var(--fg-faint)'} 16%, transparent); color: {TASK_TYPE[task.type] || 'var(--fg-dim)'}">{task.type}</span></td>
+              <td class="t-name">{task.id}</td>
+              <td>{taskStatus(task.status)}</td>
+              <td class="t-hrs">{task.estimation_hours ?? '—'}</td>
+              <td class="t-hrs">{@render hours(task.actual_hours ?? '—', overrun)}</td>
+            </tr>
+          {/each}
+        </tbody>
+    </table>
+  {:else if detail.loading}
+    <p class="detail-loading">{t('story.tasks.loading')}</p>
+  {/if}
+{/snippet}
+
+{#snippet description()}
+  {#if bodyHtml}
+    <div class="section-h"><h3>{t('story.description')}</h3><span class="line"></span></div>
+    <div class="md-body">{@html bodyHtml}</div>
+  {/if}
+{/snippet}
+
 {#if fields}
   <dialog
     bind:this={dialogEl}
     class="modal"
-    aria-modal="true"
     aria-labelledby="detail-title"
     onclose={onDialogClose}
     onclick={(e) => {
@@ -61,75 +150,43 @@
     }}
   >
     <div class="modal-inner">
-      <header class="modal-head">
+      <div class="modal-head">
         <div class="row1">
           <span class="m-id mono">{fields.id}</span>
           {#if fields.epicId}
-            <span style="color: var(--fg-faint)">·</span>
-            <span style="display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color: var(--fg-dim)">
-              <i aria-hidden="true" style="width:8px; height:8px; border-radius:50%; background: {epicHue(fields.epicId)}; display:inline-block"></i>
-              {fields.epicId}
-            </span>
+            <span class="faint" aria-hidden="true">·</span>
+            <span class="m-epic"><i aria-hidden="true" style="background: {epicHue(fields.epicId)}"></i>{fields.epicId}</span>
           {/if}
           {#if fields.readOnly}
-            <span class="ro-lock" style="margin-left:8px"><Icon name="lock" size={13} /> read-only</span>
+            <span class="ro-lock"><Icon name="lock" size={13} /> {t('story.readonlyBadge')}</span>
           {/if}
-          <button class="icon-btn m-close" onclick={() => requestClose()} aria-label="Fermer"><Icon name="close" size={18} /></button>
+          <button class="icon-btn m-close" onclick={() => requestClose()} aria-label={t('story.close')}><Icon name="close" size={18} /></button>
         </div>
         <h2 class="modal-title" id="detail-title">{fields.title}</h2>
         <div class="modal-frontmatter">
-          <span class="chip chip-soft"><i class="swatch" style="background: var({STATUS[fields.status]?.cssVar || '--border'})"></i>{STATUS[fields.status]?.label || fields.status}</span>
+          <span class="chip chip-soft"><i class="swatch" style="background: var({STATUS[fields.status]?.cssVar || '--border'})"></i>{STATUS[fields.status] ? t(`status.${fields.status}`) : fields.status}</span>
           <PriorityChip priority={fields.priority} />
           <TddPip phase={fields.tddPhase} />
         </div>
-      </header>
+      </div>
 
-      <div class="modal-body">
-        <div class="fm-grid">
-          <div class="fm-cell"><div class="k">Points</div><div class="v"><span class="points mono">{fields.storyPoints}</span></div></div>
-          <div class="fm-cell"><div class="k">Assigné</div><div class="v">{#if fields.assignedTo}<Avatar id={fields.assignedTo} size={22} />{fields.assignedTo}{:else}<span style="color: var(--fg-faint)">—</span>{/if}</div></div>
-          <div class="fm-cell"><div class="k">Persona</div><div class="v">{fields.persona || '—'}</div></div>
-          <div class="fm-cell"><div class="k">Phase TDD</div><div class="v"><TddPip phase={fields.tddPhase} />{#if !fields.tddPhase || !TDD[fields.tddPhase]}<span style="color: var(--fg-faint)">—</span>{/if}</div></div>
-          <div class="fm-cell"><div class="k">Tâches</div><div class="v mono">{fields.tasks.completed}/{fields.tasks.total}</div></div>
-          {#if estTotal > 0}
-            <div class="fm-cell"><div class="k">Heures est / réel</div><div class="v mono">{estTotal} / <span class={actTotal > estTotal ? 't-over' : ''}>{actTotal}</span></div></div>
-          {/if}
-        </div>
+      <div class="modal-body" aria-busy={detail.loading}>
+        {@render facts()}
 
-        {#if fields.blockedReason}
-          <div class="modal-readonly-note" style="border-color: var(--danger); color: var(--danger)">⚠ Bloqué : {fields.blockedReason}</div>
+        {#if detail.error}
+          <div class="modal-error" role="alert">
+            <p><Icon name="warn" size={14} /> {t('story.loadError')} {t(detail.error.key)}</p>
+            <button type="button" class="btn" onclick={() => loadDetail(fields.id)}>{t('common.retry')}</button>
+          </div>
         {/if}
 
-        {#if detail.tasks.length > 0}
-          <div class="section-h"><h3>Tâches</h3><span class="n mono">{fields.tasks.completed}/{fields.tasks.total}</span><span class="line"></span></div>
-          <table class="tasks">
-            <thead><tr><th style="width:54px">Type</th><th>Tâche</th><th>Statut</th><th style="text-align:right">Est</th><th style="text-align:right">Réel</th></tr></thead>
-            <tbody>
-              {#each detail.tasks as t}
-                <tr>
-                  <td><span class="t-type" style="background: color-mix(in oklch, {TASK_TYPE[t.type] || 'var(--fg-faint)'} 16%, transparent); color: {TASK_TYPE[t.type] || 'var(--fg-dim)'}">{t.type}</span></td>
-                  <td class="t-name">{t.id}</td>
-                  <td>{t.status}</td>
-                  <td class="t-hrs">{t.estimation_hours ?? '—'}</td>
-                  <td class="t-hrs {(t.actual_hours || 0) > (t.estimation_hours || 0) ? 't-over' : ''}">{t.actual_hours ?? '—'}</td>
-                </tr>
-              {/each}
-            </tbody>
-          </table>
-        {:else if detail.loading}
-          <p aria-live="polite" style="color: var(--fg-faint); font-size:12px; margin-top:12px">Chargement des tâches…</p>
-        {/if}
-
-        {#if detail.body}
-          <div class="section-h"><h3>Description</h3><span class="line"></span></div>
-          <div class="md-body">{@html detail.body}</div>
-        {/if}
+        {@render tasksSection()}
+        {@render description()}
 
         {#if fields.readOnly}
-          <p class="modal-readonly-note">
-            Carte en lecture seule — gérée par <code>.bmad/sprint-status.yaml</code> (BMAD v6 single-writer).
-            Changez son statut via les commandes <code>team:</code> / <code>qa:</code>.
-          </p>
+          <p class="modal-readonly-note">{t('story.readonly.note')}</p>
+        {:else if health.readonly}
+          <p class="modal-readonly-note">{t('app.banner.readonly')}</p>
         {/if}
       </div>
     </div>

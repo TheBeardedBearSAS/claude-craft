@@ -37,7 +37,7 @@ Définitions : *bloquant* = perte de données, board inutilisable ou fonction es
 - Aucune exécution dans un navigateur : pas de mesure axe, pas de test à 320 px réels, pas de vérification visuelle du focus masqué ni de l'effet du `<details>` fixe (K-31). Le harnais navigateur + axe est créé au lot L1.
 - Contrastes calculés, non mesurés à l'écran : conversion oklch vers sRGB (matrices d'Ottosson), alpha composité en sRGB encodé ; la correspondance de gamut du navigateur n'est pas simulée (vérifié hors gamut uniquement pour `--pri-must` et `--danger` : dans le gamut).
 - Aucune exécution des commandes LLM concurrentes ni des scripts `.bmad/lib/*.sh` : le risque de course de K-03 est établi par lecture, pas reproduit.
-- Les numéros RGAA sont attribués de mémoire du référentiel 4.1 ; ceux dont la correspondance est incertaine portent la mention « à confirmer ». RGAA 4.1 repose sur WCAG 2.1 : les critères WCAG 2.2 (2.4.11, 2.5.7, 2.5.8) n'ont pas d'équivalent RGAA.
+- Les numéros RGAA ont été vérifiés sur le référentiel officiel 4.1 (accessibilite.numerique.gouv.fr, « Critères et tests »). RGAA 4.1 repose sur WCAG 2.1 : les critères WCAG 2.2 (2.4.11, 2.5.7, 2.5.8) n'ont pas d'équivalent RGAA.
 - Pas d'audit des dépendances ni du bundle.
 
 ## 3. Tableau de synthèse
@@ -241,7 +241,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Preuve.** `client/src/lib/kanban-nav.js:40, 50-69, 72-85` ; `client/src/views/KanbanView.svelte:114, 117-134, 194-203, 377-382` ; `client/vite.config.js` (aucun `envPrefix`).
 - **Impact.** Déplacement d'une mauvaise carte, menu non utilisable au clavier, saisie de raison impossible avec des chiffres, raccourci inaccessible aux utilisateurs de macOS.
 - **Correctif prévu.** `board-nav.js` (remplace `kanban-nav.js`) : menu modal isolé du reste de la navigation, cible figée à l'ouverture, `event.code === 'KeyM'`, suppression du drapeau mort et des `svelte-ignore`.
-- **Critères liés.** WCAG 2.1.1 Clavier (A), 2.1.4 Raccourcis clavier avec caractères (A) pour le point 3 ; RGAA 7.3 ; 12.10 (à confirmer).
+- **Critères liés.** WCAG 2.1.1 Clavier (A), 2.1.4 Raccourcis clavier avec caractères (A) pour le point 3 ; RGAA 7.3 ; 12.10.
 - **Vérification.** Confirmé ; points 3 et 5 précisés (portée du handler, absence de préfixe Vite).
 
 #### K-17 — Déblocage et `--readonly` côté UI
@@ -315,7 +315,7 @@ Bloquant · Lot L2 · Statut : à corriger
 - **Preuve.** `client/src/app.css:111, 606-617` ; `client/src/views.css:1382-1384` ; `client/src/components/PromptDialog.svelte:87-88` (`min-width: 320px` plus `padding: 24px`).
 - **Impact.** Sur mobile, fenêtre étroite ou zoom, on ne peut plus changer de vue ni choisir un document : perte de fonction pour les personnes qui zooment.
 - **Correctif prévu.** Sous 980 px, navigation horizontale visible ; arbre des docs en `<details>` ; `overflow: hidden` seulement au-dessus de 980 px ; colonnes empilées sous 640 px ; modales sans largeur minimale.
-- **WCAG.** 1.4.10 Redimensionnement/Reflow (AA). **RGAA 4.1.** 10.11. La perte de navigation n'a pas de critère RGAA dédié identifié (à confirmer).
+- **WCAG.** 1.4.10 Redimensionnement/Reflow (AA). **RGAA 4.1.** 10.11. La perte de navigation n'a pas de critère RGAA dédié : elle relève de 10.11.
 - **Vérification.** Confirmé.
 
 #### K-25 — Cartes du board
@@ -335,7 +335,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Preuve.** `client/src/App.svelte:180-191` ; `client/src/lib/store.svelte.js:20-27`.
 - **Impact.** Une erreur (« Transition failed… ») peut disparaître avant d'être lue ; fermeture impossible au clavier.
 - **Correctif prévu.** Une région `status` et une région `alert`, bouton de fermeture, pause au survol et au focus, erreurs persistantes.
-- **WCAG.** 4.1.3 Messages d'état (AA) ; 2.2.1 Délai réglable (A) ; 2.1.1 Clavier (A). **RGAA 4.1.** 7.5 ; 13.1 ; 7.3 (13.1 à confirmer).
+- **WCAG.** 4.1.3 Messages d'état (AA) ; 2.2.1 Délai réglable (A) ; 2.1.1 Clavier (A). **RGAA 4.1.** 7.5 ; 13.1 (correspondant de 2.2.1, dont les tests visent rafraîchissements, redirections et sessions) ; 7.3.
 - **Vérification.** Confirmé.
 
 #### K-27 — ARIA et structure invalides
@@ -345,7 +345,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Preuve.** `client/src/views/BacklogView.svelte:44-58` ; `client/src/views.css:759-769`.
 - **Impact.** Annonces ignorées ou erronées ; focus « perdu » dans un contenu invisible.
 - **Correctif prévu.** Rôles ou texte visible à la place de `aria-label` ; structure sans `div` dans `button` ; contenu replié `inert`/`visibility: hidden`.
-- **WCAG.** 1.3.1 (A) ; 4.1.2 (A) ; 2.4.7 Focus visible (AA) pour (c). **RGAA 4.1.** 7.1 ; 8.2 ; 10.7 ; 10.8 (10.8 à confirmer).
+- **WCAG.** 1.3.1 (A) ; 4.1.2 (A) ; 2.4.7 Focus visible (AA) pour (c). **RGAA 4.1.** 7.1 ; 8.2 ; 10.7 ; 10.8.
 - **Vérification.** Confirmé ; sévérité relevée à majeur (focus sur contenu masqué = non-conformité AA nette).
 
 #### K-28 — Graphe de dépendances et information par la couleur seule
@@ -355,7 +355,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Preuve.** `client/src/views/DepsView.svelte:126-165` (couleur de fond par statut), `:172-175` (tap seul), `:216-221`, `:248-254` ; `client/src/components/StoryDetail.svelte:95, 114`.
 - **Impact.** Les utilisateurs de lecteurs d'écran et de clavier n'accèdent pas au statut ni aux cycles ; les personnes daltoniennes ne perçoivent pas le dépassement.
 - **Correctif prévu.** Équivalent liste/tableau avec statut en texte et liens `?story=` ; mention textuelle du dépassement.
-- **WCAG.** 1.1.1 Contenu non textuel (A) ; 2.1.1 Clavier (A) ; 1.4.1 Utilisation de la couleur (A). **RGAA 4.1.** 1.1 et 1.6 (à confirmer) ; 7.3 ; 3.1.
+- **WCAG.** 1.1.1 Contenu non textuel (A) ; 2.1.1 Clavier (A) ; 1.4.1 Utilisation de la couleur (A). **RGAA 4.1.** 1.1 ; 1.6 ; 7.3 ; 3.1.
 - **Vérification.** Corrigé : une alternative textuelle partielle existe (liste des arêtes, compteur de cycles dans `aria-label` et en-tête).
 
 #### K-29 — Titre, langue, titres, focus de vue
@@ -365,7 +365,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Preuve.** `client/index.html:2, 6` ; `client/src/App.svelte:69-78, 107, 137` ; `client/src/views/BacklogView.svelte` (aucun titre) ; `client/src/views/DocsView.svelte:150` (`{@html renderedContent}`).
 - **Impact.** Navigation par titres et annonce de la langue erronées ; changement de vue silencieux pour un lecteur d'écran.
 - **Correctif prévu.** `<title>` dynamique par vue, `lang` synchronisé avec la langue choisie, `h1` unique, `h2` dans Backlog et Docs (titres Markdown décalés), `main[tabindex=-1]` focalisé au changement de vue.
-- **WCAG.** 2.4.2 Titre de page (A) ; 3.1.1 Langue de la page (A) ; 3.1.2 Langue d'un passage (AA) ; 1.3.1 (A) ; 2.4.6 En-têtes et étiquettes (AA) ; 2.4.3 Ordre du focus (A). **RGAA 4.1.** 8.5 ; 8.6 ; 8.3 ; 8.4 ; 8.7 ; 9.1 ; 12.6 pour `nav` dans `aside` (à confirmer).
+- **WCAG.** 2.4.2 Titre de page (A) ; 3.1.1 Langue de la page (A) ; 3.1.2 Langue d'un passage (AA) ; 1.3.1 (A) ; 2.4.6 En-têtes et étiquettes (AA) ; 2.4.3 Ordre du focus (A). **RGAA 4.1.** 8.5 ; 8.6 ; 8.3 ; 8.4 ; 8.7 ; 9.1 ; 12.6 pour `nav` dans `aside`.
 - **Vérification.** Confirmé ; sévérité relevée à majeur (critères de niveau A en échec).
 
 #### K-30 — Contrastes
@@ -409,7 +409,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Preuve.** `client/src/views/KanbanView.svelte:83-110, 306-307, 285-287` ; aucun bouton « Déplacer » dans le gabarit de carte (`:301-337`).
 - **Impact.** Les personnes qui ne peuvent pas maintenir un clic enfoncé et glisser (tremblements, commande vocale, pointeur de substitution) ne peuvent pas changer le statut d'une story.
 - **Correctif prévu.** Bouton natif « Déplacer » `aria-haspopup="menu"` dans chaque carte, menu limité aux cibles autorisées (alternative au glisser-déposer).
-- **WCAG.** 2.5.7 Mouvements de glissement (AA, WCAG 2.2). **RGAA 4.1.** pas d'équivalent direct ; 13.10 (à confirmer).
+- **WCAG.** 2.5.7 Mouvements de glissement (AA, WCAG 2.2). **RGAA 4.1.** pas d'équivalent (13.10 ne vise que les gestes multipoints ou à tracé, pas le glisser-déposer).
 - **Vérification.** Ajouté à la vérification du code ; non listé dans la liste brute (le plan d'implémentation le prévoit déjà au point « Board »).
 
 ### 4.4 Documentation
@@ -484,6 +484,6 @@ Méthode : tokens de `client/src/app.css:7-60` et `client/src/lib/tweaks.svelte.
 
 ## 6. Limites et suites
 
-- **Limites.** Voir le § 2 : revue statique, pas d'exécution navigateur ni de lecteur d'écran, contrastes calculés, correspondances RGAA signalées « à confirmer ». Les constats d'exécution (K-03 course, K-31 point 4, K-24 rendu à 320 px) sont déduits du code.
+- **Limites.** Voir le § 2 : revue statique, pas d'exécution navigateur ni de lecteur d'écran, contrastes calculés. Les constats d'exécution (K-03 course, K-31 point 4, K-24 rendu à 320 px) sont déduits du code.
 - **Suites.** L1 : durcissement serveur (K-01, K-02 partie markdown, K-04 à K-12), harnais navigateur et axe, présent rapport. L2 : i18n, accessibilité et corrections client (K-14 à K-21, K-23 à K-32, K-34). L3 : API d'écriture sûre (K-02 partie YAML, K-03, K-13). L4 : UI d'édition, planification, limites WIP, vélocité (K-22). L5 : documentation (K-33), nettoyage du code mort, et mise à jour de la colonne « Statut » de chaque fiche (actuellement « à corriger » partout).
-- **À confirmer avant publication du rapport final.** Les numéros RGAA marqués « à confirmer » (7.x, 12.6, 13.1, 13.10, 1.1/1.6, 10.8, 12.10) ; la mesure axe à 1280 px et 320 px pour valider l'annexe A.
+- **À confirmer avant publication du rapport final.** La mesure axe à 1280 px et 320 px pour valider l'annexe A.

@@ -27,9 +27,28 @@
 </script>
 
 <script>
+  import { untrack } from 'svelte';
+  import { store } from '../lib/store.svelte.js';
+  import { route } from '../lib/router.svelte.js';
+  import { formatHash } from '../lib/query.js';
+  import { t, tn } from '../lib/i18n/index.svelte.js';
+  import { request, latestOnly, isAbort, errorKey } from '../lib/api.js';
   import { STATUS } from '../lib/config.js';
   import { buildDepsElements } from '../lib/deps-graph.js';
+  import { buildDepsTable, sortDepsRows } from '../lib/deps-table.js';
   import { normalizeColor, estimateNodeWidth, NODE_HEIGHT } from '../lib/deps-style.js';
+  import { focusable } from '../lib/actions.js';
+  import Icon from '../components/Icon.svelte';
+
+  const COLUMNS = [
+    { key: 'id', label: 'deps.table.story' },
+    { key: 'status', label: 'deps.table.status' },
+    { key: 'dependsOn', label: 'deps.table.dependsOn' },
+    { key: 'blocks', label: 'deps.table.blocks' },
+    { key: 'cycle', label: 'deps.table.cycle' },
+  ];
+
+  const run = latestOnly();
 
   let graphContainer = $state(null);
   // Non-réactif volontairement : l'instance cytoscape est mutée en async depuis
@@ -40,42 +59,66 @@
   let nodes = $state([]);
   let edges = $state([]);
   let cycles = $state([]);
-  let selectedNode = $state(null);
-  let loading = $state(true);
-  let error = $state(null);
+  let signature = '';
+  let loaded = $state(false);
+  let errorKeyName = $state(null);
+  let selectedId = $state(null);
+  let panelEl = $state(null);
+  let sortKey = $state('id');
+  let sortDir = $state('asc');
 
   const stats = $derived({ nodes: nodes.length, edges: edges.length, cycles: cycles.length });
-  // Nœuds sans aucune dépendance : exclus du graphe (sinon dagre les empile en
-  // colonne illisible) mais comptés pour informer l'utilisateur.
-  const isolatedCount = $derived(buildDepsElements(nodes, edges, cycles).hiddenCount);
+  // Nœuds sans aucune dépendance : exclus du graphe (sinon dagre les empile en colonne illisible)
+  // mais comptés pour informer l'utilisateur.
+  const table = $derived(buildDepsTable(nodes, edges, cycles));
+  const rows = $derived(sortDepsRows(table.rows, sortKey, sortDir));
+  const selected = $derived(table.rows.find((r) => r.id === selectedId) ?? null);
 
-  /** Couleur de statut côté DOM (badge) — var() résolu par le navigateur. */
-  const domStatusColor = (status) => `var(${STATUS[status]?.cssVar || '--fg-faint'})`;
+  const statusText = (s) => (STATUS[s] ? t(`status.${s}`) : s);
+  const statusVar = (s) => `var(${STATUS[s]?.cssVar || '--fg-faint'})`;
+  const storyHref = (id) => formatHash(route.name, route.params, { ...route.query, story: id });
+  const ariaSort = (key) => (sortKey === key ? (sortDir === 'asc' ? 'ascending' : 'descending') : undefined);
 
-  async function loadDependencies() {
-    loading = true;
-    error = null;
-    try {
-      const res = await fetch('/api/dependencies');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      nodes = data.nodes || [];
-      edges = data.edges || [];
-      cycles = data.cycles || [];
-    } catch (err) {
-      error = err.message;
-    } finally {
-      loading = false;
-    }
+  function sortBy(key) {
+    sortDir = sortKey === key && sortDir === 'asc' ? 'desc' : 'asc';
+    sortKey = key;
   }
 
-  function isInCycle(nodeId) {
-    return cycles.some((cycle) => cycle.includes(nodeId));
+  async function load() {
+    const ticket = run();
+    try {
+      const data = await request('/api/dependencies', { signal: ticket.signal });
+      if (!ticket.current) return;
+      errorKeyName = null;
+      // A reload with identical data must not rebuild the graph (it would reset the zoom).
+      const next = JSON.stringify(data);
+      if (next !== signature) {
+        signature = next;
+        nodes = data.nodes || [];
+        edges = data.edges || [];
+        cycles = data.cycles || [];
+      }
+    } catch (err) {
+      if (isAbort(err) || !ticket.current) return;
+      errorKeyName = errorKey(err);
+    }
+    if (ticket.current) loaded = true;
   }
 
   $effect(() => {
-    loadDependencies();
+    store.revision;
+    untrack(load);
   });
+
+  // Le panneau du nœud reçoit le focus à l'ouverture.
+  $effect(() => {
+    if (selectedId && panelEl) panelEl.focus();
+  });
+
+  function closePanel() {
+    selectedId = null;
+    graphContainer?.focus();
+  }
 
   // Diffère le chargement du bundle cytoscape (435 KB) jusqu'APRÈS l'événement
   // `load`. Pendant la fenêtre de mesure du LCP (rendu du shell), le réseau reste
@@ -83,10 +126,10 @@
   // du texte du shell (élément LCP réel). Le graphe est progressif — il apparaît
   // juste après le premier rendu, ce qui améliore aussi l'UX réelle.
   function afterLoad(fn) {
-    const run = () =>
+    const schedule = () =>
       typeof requestIdleCallback === 'function' ? requestIdleCallback(fn, { timeout: 1000 }) : setTimeout(fn, 1);
-    if (document.readyState === 'complete') run();
-    else window.addEventListener('load', run, { once: true });
+    if (document.readyState === 'complete') schedule();
+    else window.addEventListener('load', schedule, { once: true });
   }
 
   $effect(() => {
@@ -130,7 +173,8 @@
         {
           selector: 'node',
           style: {
-            label: 'data(label)',
+            // Un cycle se lit aussi sur le libellé (⚠) et le tracé en pointillé, pas seulement sur la couleur.
+            label: (ele) => (ele.hasClass('in-cycle') ? `⚠ ${ele.data('label')}` : ele.data('label')),
             shape: 'round-rectangle',
             'background-color': (ele) => {
               const node = nodes.find((n) => n.id === ele.id());
@@ -139,19 +183,19 @@
             color: cBg,
             'text-valign': 'center',
             'text-halign': 'center',
-            'font-size': '11px',
+            'font-size': '12px',
             'font-weight': '600',
             'font-family': cMono,
             // Dimensions déterministes (cf. estimateNodeWidth) : remplacent
             // l'auto-sizing « label » des dimensions, déprécié par cytoscape 3.34.
-            width: (ele) => estimateNodeWidth(ele.data('label')),
+            width: (ele) => estimateNodeWidth(ele.data('label') + (ele.hasClass('in-cycle') ? '⚠ ' : '')),
             height: NODE_HEIGHT,
             'text-max-width': '200px',
             'border-width': 1,
             'border-color': cBorder,
           },
         },
-        { selector: 'node.in-cycle', style: { 'border-width': 3, 'border-color': cDanger } },
+        { selector: 'node.in-cycle', style: { 'border-width': 3, 'border-color': cDanger, 'border-style': 'dashed' } },
         {
           selector: 'edge',
           style: {
@@ -170,8 +214,7 @@
       cy.ready(() => cy.fit(undefined, 40));
 
       cy.on('tap', 'node', (evt) => {
-        const nodeData = nodes.find((n) => n.id === evt.target.id());
-        if (nodeData) selectedNode = nodeData;
+        selectedId = evt.target.id();
       });
 
       cyInstance = cy;
@@ -188,82 +231,112 @@
   });
 </script>
 
-<div class="deps-pad">
-  {#if loading}
-    <div class="empty">Loading dependencies…</div>
-  {:else if error}
-    <div class="empty" style="color: var(--danger)">Error: {error}</div>
+{#snippet idLinks(ids)}
+  {#if ids.length}
+    <ul class="dep-list">
+      {#each ids as id (id)}<li><a href={storyHref(id)}>{id}</a></li>{/each}
+    </ul>
+  {:else}
+    <span class="dep-none">{t('deps.table.none')}</span>
+  {/if}
+{/snippet}
+
+<div class="view-pad" aria-busy={!loaded}>
+  <h2 class="sr-only">{t('nav.deps')}</h2>
+  {#if !loaded}
+    <div class="empty" role="status">{t('deps.loading')}</div>
+  {:else if errorKeyName}
+    <div class="empty" role="alert">
+      <p>{t(errorKeyName)}</p>
+      <button class="btn" onclick={load}>{t('common.retry')}</button>
+    </div>
   {:else if nodes.length === 0}
-    <div class="empty">No dependencies found</div>
+    <div class="empty">{t('deps.empty')}</div>
   {:else}
     <div class="deps-wrap">
-      <header class="deps-header">
-        <span class="stat">Nodes: {stats.nodes}</span>
-        <span class="stat">Edges: {stats.edges}</span>
-        <span class="stat" class:danger={stats.cycles > 0}>Cycles: {stats.cycles}</span>
-        {#if isolatedCount > 0}
-          <span class="stat muted" title="Stories sans dépendance — masquées pour garder le graphe lisible">
-            {isolatedCount} isolée{isolatedCount > 1 ? 's' : ''} masquée{isolatedCount > 1 ? 's' : ''}
-          </span>
+      <ul class="deps-header">
+        <li class="stat">{t('deps.stat.nodes', { n: stats.nodes })}</li>
+        <li class="stat">{t('deps.stat.edges', { n: stats.edges })}</li>
+        <li class="stat" class:danger={stats.cycles > 0}>
+          {#if stats.cycles > 0}<Icon name="warn" size={13} />{/if}{t('deps.stat.cycles', { n: stats.cycles })}
+        </li>
+        {#if table.isolated > 0}
+          <li class="stat muted" title={t('deps.isolated.title')}>{tn('deps.isolated', table.isolated)}</li>
         {/if}
-      </header>
+      </ul>
 
       {#if stats.edges === 0}
-        <div class="empty">Aucune dépendance entre stories — rien à afficher dans le graphe.</div>
+        <div class="empty">{t('deps.noEdges')}</div>
       {:else}
+        <p class="deps-hint">{t('deps.graph.hint')}</p>
+        <div class="deps-content">
+          <div class="deps-canvas" bind:this={graphContainer} tabindex="-1" role="img" aria-label={t('deps.graph.label', { nodes: stats.nodes, edges: stats.edges, cycles: stats.cycles })}></div>
 
-      <div class="deps-content">
-        <div
-          class="deps-canvas"
-          bind:this={graphContainer}
-          role="img"
-          aria-label="Dependency graph with {stats.nodes} nodes, {stats.edges} edges, and {stats.cycles} cycles"
-        ></div>
+          {#if selected}
+            <aside class="node-details" bind:this={panelEl} tabindex="-1" aria-labelledby="node-details-title">
+              <header class="details-header">
+                <h3 id="node-details-title"><span class="sr-only">{t('deps.details.heading')}: </span><span class="mono">{selected.id}</span></h3>
+                <button class="close-btn" onclick={closePanel} aria-label={t('deps.details.close')}><Icon name="close" size={16} /></button>
+              </header>
+              <dl>
+                <dt>{t('deps.details.title')}</dt>
+                <dd>{selected.title || '—'}</dd>
+                <dt>{t('deps.details.status')}</dt>
+                <dd><span class="chip"><i class="swatch" style:background={statusVar(selected.status)}></i>{statusText(selected.status)}</span></dd>
+                {#if selected.epic_id}
+                  <dt>{t('deps.details.epic')}</dt>
+                  <dd class="mono">{selected.epic_id}</dd>
+                {/if}
+                <dt>{t('deps.table.dependsOn')}</dt>
+                <dd>{@render idLinks(selected.dependsOn)}</dd>
+                <dt>{t('deps.table.blocks')}</dt>
+                <dd>{@render idLinks(selected.blocks)}</dd>
+                {#if selected.inCycle}
+                  <dt><Icon name="warn" size={14} /><span class="sr-only">{t('deps.table.cycle')}</span></dt>
+                  <dd class="cycle-flag">{t('deps.details.inCycle')}</dd>
+                {/if}
+              </dl>
+            </aside>
+          {/if}
+        </div>
 
-        {#if selectedNode}
-          <aside class="node-details">
-            <header class="details-header">
-              <strong class="mono">{selectedNode.id}</strong>
-              <button class="close-btn" onclick={() => (selectedNode = null)} aria-label="Fermer">×</button>
-            </header>
-            <dl>
-              <dt>Titre</dt>
-              <dd>{selectedNode.title || '—'}</dd>
-              <dt>Statut</dt>
-              <dd><span class="chip"><i class="swatch" style="background: {domStatusColor(selectedNode.status)}"></i>{STATUS[selectedNode.status]?.label || selectedNode.status}</span></dd>
-              {#if selectedNode.epic_id}
-                <dt>Epic</dt>
-                <dd class="mono">{selectedNode.epic_id}</dd>
-              {/if}
-              {#if isInCycle(selectedNode.id)}
-                <dt>⚠</dt>
-                <dd style="color: var(--danger)">Fait partie d'un cycle de dépendances</dd>
-              {/if}
-            </dl>
-          </aside>
-        {/if}
-      </div>
+        <div class="deps-table-wrap table-scroll" role="region" use:focusable aria-label={t('deps.table.caption')}>
+          <table class="deps-table">
+            <caption>{t('deps.table.caption')}</caption>
+            <thead>
+              <tr>
+                {#each COLUMNS as col (col.key)}
+                  <th scope="col" aria-sort={ariaSort(col.key)}>
+                    <button class="th-sort" onclick={() => sortBy(col.key)} aria-label={t('deps.table.sortBy', { column: t(col.label) })}>
+                      {t(col.label)}<span class="sort-mark" aria-hidden="true">{sortKey === col.key ? (sortDir === 'asc' ? '▲' : '▼') : ''}</span>
+                    </button>
+                  </th>
+                {/each}
+              </tr>
+            </thead>
+            <tbody>
+              {#each rows as row (row.id)}
+                <tr class:in-cycle={row.inCycle}>
+                  <th scope="row">
+                    <a class="mono" href={storyHref(row.id)}>{row.id}</a>
+                    {#if row.title}<span class="dep-title">{row.title}</span>{/if}
+                  </th>
+                  <td><span class="cell-status"><i style:background={statusVar(row.status)}></i>{statusText(row.status)}</span></td>
+                  <td>{@render idLinks(row.dependsOn)}</td>
+                  <td>{@render idLinks(row.blocks)}</td>
+                  <td>
+                    {#if row.inCycle}
+                      <span class="cycle-flag"><Icon name="warn" size={14} />{t('deps.table.inCycle')}</span>
+                    {:else}
+                      {t('deps.table.noCycle')}
+                    {/if}
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
       {/if}
-
-      <div class="sr-only">
-        <h2>Dependency edges (text fallback)</h2>
-        <ul>
-          <!-- edge = { from: prerequisite, to: dependent } : "to depends on from". -->
-          {#each edges as edge}<li>{edge.to} depends on {edge.from}</li>{/each}
-        </ul>
-      </div>
     </div>
   {/if}
 </div>
-
-<style>
-  .deps-pad { padding: 22px; height: 100%; min-height: 0; display: flex; flex-direction: column; }
-  .deps-pad .deps-wrap { flex: 1; min-height: 0; }
-  .close-btn {
-    background: none; border: none; font-size: 22px; line-height: 1; cursor: pointer;
-    color: var(--fg-faint); width: 28px; height: 28px; display: grid; place-items: center; border-radius: var(--radius-sm);
-  }
-  .close-btn:hover { color: var(--fg); background: var(--bg-elev-2); }
-  .node-details dl { margin-top: 4px; }
-  .node-details dd { margin: 0; }
-</style>
