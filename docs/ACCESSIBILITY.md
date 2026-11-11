@@ -7,8 +7,8 @@
 **Current Status:** In Progress
 
 - ✅ CLI symbols with NO_COLOR support
-- ✅ Kanban web interface reviewed against WCAG 2.2 AA (axe-core, keyboard tests, code review, Chromium) — see [Kanban Web Interface](#kanban-web-interface) for what was not verified
-- ⏳ Manual testing with real screen readers and other browsers
+- ✅ Kanban web interface reviewed against WCAG 2.2 AA (axe-core, keyboard tests, code review) under the Chromium, Firefox and WebKit builds of Playwright, plus phone emulation with touch — see [Kanban Web Interface](#kanban-web-interface) for what was not verified
+- ⏳ Manual testing with real screen readers, real Safari (macOS, iOS) and real touch devices
 
 ---
 
@@ -89,18 +89,44 @@ The shortcuts are accelerators: every action is available through `Tab` and the 
 **Verification:**
 
 ```bash
-bash website/tests/kanban/run.sh              # Playwright + axe-core in Docker (builds the client first)
-bash website/tests/kanban/run.sh a11y.spec.ts # axe only
+bash website/tests/kanban/run.sh                          # every project, in Docker (builds the client first)
+bash website/tests/kanban/run.sh --project=firefox        # one engine: chromium | firefox | webkit
+bash website/tests/kanban/run.sh --project=mobile-safari  # phone + touch: mobile-chrome | mobile-safari
+bash website/tests/kanban/run.sh a11y.spec.ts --project=webkit   # one spec under one engine
 ```
 
-The harness runs axe-core on every view and on the transient states (dialogs, menus, forms, settings), each at 1280×800 and at 320×256, plus keyboard and reflow tests. The CI workflow runs it when Kanban files change. The previous `CC_A11Y_KANBAN` feature flag never had any effect and was removed.
+The harness runs axe-core on every view and on the transient states (dialogs, menus, forms, settings), each at 1280×800 and at 320×256, plus keyboard, reflow and journey tests. The Docker image installs the browsers of the Playwright version pinned in `website/package-lock.json`, with the same command as CI (`playwright install --with-deps`). In CI the job `kanban-e2e` runs one job per engine (chromium, firefox, webkit, touch) when Kanban files change. The previous `CC_A11Y_KANBAN` feature flag never had any effect and was removed.
 
-**Conformance status (Kanban):** the target is WCAG 2.2 Level AA and RGAA 4.1. The checks above were run with axe-core, keyboard tests and code review, under Chromium only. This is not a statement of full conformance.
+**Browsers actually run (Playwright 1.65.0):**
+
+| Project | Engine | What runs |
+|---------|--------|-----------|
+| `chromium` | Chrome for Testing 158.0.8127.18 | every spec except `touch.spec.ts` |
+| `firefox` | Firefox 159.0 (Playwright build) | every spec except `touch.spec.ts` |
+| `webkit` | WebKit, Playwright build r2388 (Linux) | every spec except `touch.spec.ts` |
+| `mobile-chrome` | Chromium, Pixel 7 emulation (412 px, touch, `isMobile`) | `touch.spec.ts` |
+| `mobile-safari` | WebKit, iPhone 15 emulation (393 px, touch, `isMobile`) | `touch.spec.ts` |
+
+Firefox has no `isMobile` mode in Playwright, so there is no mobile Firefox project.
+
+- **Touch** (`touch.spec.ts`): moving a card, planning a story and closing a sprint are done with taps only (no drag); every control is at least 24 × 24 px on every view, the Move menu, the detail and the settings; no view scrolls sideways; no control is revealed only on hover; a form dialog fits the phone screen, and with the screen shortened by about 40 % (an approximation of an on-screen keyboard) the focused field and the dialog's actions stay reachable; the viewport meta does not block pinch zoom.
+- **Accessibility tree** (`a11y-tree.spec.ts`, under each desktop engine): on the essential journeys (open a card, move it with the menu, a refused move, create a story with a validation error, plan a story, close a sprint), roles, names, states (`expanded`, `invalid`, `disabled`, `checked`, `selected`), the error description of a field, where the focus lands, and the text each live region holds when it is announced (said once, in the right region).
+
+**Found by running the other engines:**
+
+- Firefox: the "Live" indicator stayed "Offline" for up to 30 s, because Firefox reports an `EventSource` as open only once the first bytes arrive; the server now sends a comment as soon as a client connects.
+- WebKit: a programmatic `focus()` can reach an element that an open modal dialog makes inert (Chromium and Firefox ignore it). After a cancelled "blocked" question, the story detail moved the focus from the next question's field to the control behind it; it now leaves the focus in another open modal.
+- Every engine (rare timing, seen under Chromium and WebKit): when a card was moved a second time before the first move was answered, the first answer put the card back a column for a moment; the card was re-created and the focus left the "Move" button for the card's "Open" button. An answer is now applied only if no later move of that story was sent since.
+- Test assumptions corrected, not product defects: Firefox paints an input's text over its padding (the placeholder check measured the content box), and WebKit keeps `:hover` on an element under a newly opened modal while the pointer stays still, so contrast and size checks now wait for animations and transitions to end.
+
+**Conformance status (Kanban):** the target is WCAG 2.2 Level AA and RGAA 4.1. The checks above were run with axe-core, keyboard, touch and accessibility-tree tests and code review, under the three engines listed. This is not a statement of full conformance.
 
 **Not verified:**
 
-- Real screen readers (NVDA, JAWS, VoiceOver, TalkBack): ARIA behaviour is inferred from the code and the ARIA 1.2 rules.
-- Firefox, Safari and touch devices.
+- Real screen readers (NVDA, JAWS, VoiceOver, TalkBack). The accessibility-tree tests read the tree Playwright computes from the page (same algorithm in every engine), not the platform accessibility API, and not what a screen reader says.
+- Real Safari: Playwright's WebKit on Linux is not Safari on macOS or iOS (different text rendering, no system settings such as "Press Tab to highlight each item", no VoiceOver).
+- Real touch devices: the phone projects are emulations (viewport, touch events, `isMobile`); there is no real on-screen keyboard, pinch gesture, or iOS/Android text scaling.
+- Firefox and Safari on Windows or macOS (the engines run on Linux only), and Edge.
 - Windows forced-colors (high contrast) mode.
 
 **Known limitations:**
@@ -114,7 +140,7 @@ The harness runs axe-core on every view and on the transient states (dialogs, me
 
 ### Kanban web interface
 
-See [Kanban Web Interface](#kanban-web-interface): no real screen reader test, Chromium only, forced-colors mode not checked, graph node panel opened with a pointer only.
+See [Kanban Web Interface](#kanban-web-interface): no real screen reader test, Playwright's Chromium, Firefox and WebKit builds on Linux plus phone emulation only (no real Safari, no real touch device), forced-colors mode not checked, graph node panel opened with a pointer only.
 
 ### Other tools
 
@@ -123,7 +149,7 @@ See [Kanban Web Interface](#kanban-web-interface): no real screen reader test, C
 ### Roadmap items still open
 
 - Manual testing with NVDA, JAWS, VoiceOver and TalkBack
-- Firefox, Safari and touch testing
+- Real Safari (macOS, iOS) and real touch devices
 - Windows forced-colors (high contrast) mode
 
 ---

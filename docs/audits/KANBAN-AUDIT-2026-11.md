@@ -552,20 +552,31 @@ Les tests navigateur du lot 4 passaient en local et échouaient sur GitHub Actio
 4. **Planification.** Un clic sur une ligne du backlog pendant une requête de planification était ignoré sans retour ; un rechargement temps réel reçu pendant une écriture annulait visuellement le déplacement. Les appels sont mis en file et le rechargement est reporté.
 5. **Focus repris.** La fermeture des Réglages ou du détail d'une story reprenait le focus même si l'utilisateur était déjà allé ailleurs.
 
-Le harnais local utilise maintenant par défaut le même Chromium que la CI (`KANBAN_BROWSER=system` conserve l'ancien). Motif encore présent, sans défaillance observée : `PromptDialog` et `CloseSprintDialog` résolvent toujours leur réponse à l'événement `close`.
+Le harnais local utilise maintenant par défaut le même Chromium que la CI (`KANBAN_BROWSER=system` conserve l'ancien). Le motif a été corrigé ensuite : `PromptDialog` et `CloseSprintDialog` prennent leur réponse au clic (comme `ConfirmDialog`) au lieu de l'événement `close`, et `SprintForm`, `CloseSprintDialog` et `StoryCreateDialog` ne rendent le focus que s'il a été perdu (`focusLost`, `lib/story-form.js`). Preuves : specs `crud.spec.ts` (invite « bloquée » posée deux fois dans la même tâche, focus de la modale de création) et `planning.spec.ts` (formulaire de sprint, clôture de sprint).
+
+### 7.7 Défauts révélés par Firefox, WebKit et le tactile
+
+Le harnais navigateur a été étendu à Firefox, à WebKit et à deux émulations de téléphone tactile (779 tests, quatre jobs parallèles en CI). Trois défauts du produit en sont sortis, tous corrigés dans la PR 4 avec un test qui échouait d'abord.
+
+1. **Firefox : indicateur « Live » éteint pendant 30 s.** Firefox ne signale un flux d'événements comme ouvert qu'à la réception des premiers octets, et le serveur n'écrivait rien avant son premier battement. Le temps réel ne se resynchronisait donc pas. Le serveur écrit désormais une ligne de commentaire dès la connexion (`server/app.js`, `tests/kanban/app.test.js`).
+2. **WebKit : focus retiré du champ de la question « bloquée ».** Après l'annulation d'une première question, la suite de l'action précédente appelait `focus()` sur un élément rendu inerte par la nouvelle modale ; WebKit applique cet appel, les autres moteurs l'ignorent. Le focus reste désormais dans la modale ouverte (`StoryDetail.svelte`, `crud.spec.ts`).
+3. **Tous moteurs : carte qui recule après deux déplacements rapides.** La réponse du premier déplacement était appliquée alors qu'un second, plus récent, était déjà affiché : la carte revenait une colonne en arrière puis repartait, et le focus posé dessus était perdu. Une réponse n'est plus appliquée si un déplacement plus récent de la même story a été envoyé (`lib/store.svelte.js`, `board.spec.ts`). Ce défaut se manifestait par un échec d'environ un passage sur vingt du parcours en français.
+
+Deux écarts relevaient des tests : WebKit conserve le survol sur l'élément situé sous le pointeur quand une modale s'ouvre, et la transition de survol était mesurée à mi-course (contraste et taille de cible faux) ; Firefox peint le texte indicatif d'un champ par-dessus sa marge intérieure. Les tests attendent désormais la fin des transitions et mesurent la bonne zone, sans assertion affaiblie.
+
+Ajouts de la même passe : tâches renommables et supprimables depuis le détail d'une story, protection contre le double envoi des formulaires de création (garde côté client et en-tête `Idempotency-Key` côté serveur), réponses de `PromptDialog` et de `CloseSprintDialog` prises au clic.
 
 ## 8. Non vérifié / limites
 
 **Non vérifié.**
 
-- Lecteurs d'écran réels (NVDA, JAWS, VoiceOver, TalkBack) : le comportement ARIA est déduit du code et des règles ARIA 1.2.
-- Firefox, Safari et appareils tactiles : les contrôles automatiques (axe, tests clavier) ne tournent que sous Chromium.
+- Lecteurs d'écran réels (NVDA, JAWS, VoiceOver, TalkBack) : aucun n'a été lancé. Le comportement ARIA est déduit du code, des règles ARIA 1.2 et de l'arbre d'accessibilité calculé par chaque moteur sur les parcours essentiels (`a11y-tree.spec.ts`).
+- Safari réel (macOS, iOS) et appareils tactiles réels : la suite tourne sous Chromium, Firefox et le WebKit de Playwright (Linux), plus deux émulations de téléphone tactile (§ 7.7). WebKit sous Linux n'est pas Safari, et une émulation n'a ni vrai clavier virtuel ni vrai pincement.
 - Mode contrastes forcés de Windows.
-- Score de mutation (Stryker) : non mesuré en local ; il est calculé par la CI.
+- Score de mutation (Stryker) : non mesuré en local ; calculé par la CI (75,8 % sur le lot 4, seuil bloquant 55 %).
 
 **Limites connues de l'interface.**
 
-- Une tâche ajoutée ne peut être ni renommée ni supprimée depuis l'interface (seul son statut change) ; une tâche saisie par erreur doit être passée à « terminée » ou retirée du YAML.
 - Le bundle principal (`index-*.js`) est passé de 87,4 kB à 110,7 kB (35,5 kB gzip) avec les formulaires du lot 4 ; leur chargement différé n'a pas été fait (composants liés par `bind:this` et `bind:draft`, gain modeste pour un outil local).
 
 - Le panneau d'un nœud du graphe de dépendances ne s'ouvre qu'au pointeur ; le tableau équivalent est l'alternative au clavier et au lecteur d'écran.
@@ -574,6 +585,6 @@ Le harnais local utilise maintenant par défaut le même Chromium que la CI (`KA
 **Risques résiduels de l'écriture.**
 
 - Un dossier remplacé par un lien symbolique dans une branche hostile n'est pas détecté sur tout le chemin d'écriture : la protection porte sur le fichier, pas sur chaque dossier parent.
-- `POST` n'est pas idempotent : un envoi répété (double clic, nouvelle tentative réseau) crée deux stories ou deux sprints ; seule une collision de nom de sprint est refusée (`sprint_exists`).
+- Idempotence de `POST` : `POST /api/stories`, `POST /api/stories/:id/tasks` et `POST /api/sprints` acceptent `Idempotency-Key` (8 à 128 caractères ; réponse rejouée pendant 5 minutes, 500 clés au plus, mémoire du processus). Une clé n'est liée qu'à la route : la même clé avec un autre corps reçoit la réponse de la première requête. Les autres `POST` (démarrage et clôture de sprint) ne sont pas concernés ; ils sont protégés par `expected_version` et par leurs états (409 `not_active`, `sprint_already_active`). Le client envoie une clé par ouverture de formulaire et refuse une seconde soumission pendant l'envoi (bouton `aria-disabled`, « Création… »).
 - Le YAML et le markdown peuvent diverger (par exemple une ligne `Points` du markdown différente de la YAML) ; la divergence est signalée par un avertissement (`metadata_sync_failed`), pas réparée.
 - La reprise d'un verrou périmé (plus de 10 s) n'est pas atomique : deux processus qui reprennent le même verrou au même instant peuvent s'écrire dessus ; la revalidation du schéma et la détection de conflit par story limitent les dégâts.

@@ -356,7 +356,7 @@ Sechs Ansichten, aufgelistet in der Navigationsleiste.
 
 - **Eine Story verschieben** zwischen Spalten. Die erlaubten Übergänge stehen unter [Zustandsautomat](#zustandsautomat); beim Blockieren einer Story wird ein Grund verlangt.
 - **Eine Story erstellen, bearbeiten und löschen** („Neue Story“ in den Ansichten Board und Backlog; das Formular befindet sich im Story-Detail). Bearbeitbare Felder: Titel, Epic, Punkte, Priorität, Zuständige/r, Sprint, TDD-Phase und Abhängigkeiten; Persona beim Erstellen. Das Löschen verlangt eine Bestätigung und verschiebt die Datei nach `project-management/backlog/user-stories/.trash/` (wiederherstellbar, indem man sie zurückschiebt). Eine Story in Arbeit oder im Review erfordert eine ausdrückliche Bestätigung, und eine Story, von der andere abhängen, kann nicht gelöscht werden (409 `has_dependents`).
-- **Aufgaben hinzufügen und ihren Status ändern** (`to-do`, `in-progress`, `done`, `blocked`) im Story-Detail; die Zahl der abgeschlossenen Aufgaben wird neu berechnet. Eine Story geht erst ins Review, wenn sie Aufgaben hat und alle erledigt sind. Bei einer Story, die nur einen Aufgabenzähler hatte, speichert die erste Änderung einen Status je Aufgabe (die ersten Aufgaben, so viele wie der Zähler angab, gelten als erledigt).
+- **Aufgaben hinzufügen, umbenennen, löschen und ihren Status ändern** (`to-do`, `in-progress`, `done`, `blocked`) im Story-Detail; die Zahl der abgeschlossenen Aufgaben wird neu berechnet. Eine Story geht erst ins Review, wenn sie Aufgaben hat und alle erledigt sind. Bei einer Story, die nur einen Aufgabenzähler hatte, speichert die erste Änderung einen Status je Aufgabe (die ersten Aufgaben, so viele wie der Zähler angab, gelten als erledigt).
 - **Einen Sprint planen**: Stories in der Backlog-Ansicht auswählen und einem geplanten oder aktiven Sprint hinzufügen.
 - **Einen Sprint erstellen, starten und abschließen.** Beim Erstellen (Name, Start- und Enddatum, Ziel, Kapazität) wird `sprints/sprint-<N>-<slug>/sprint-goal.md` geschrieben; der Sprint ist „geplant“. Das Starten macht ihn zum aktiven Sprint (abgelehnt, solange ein anderer Sprint aktiv ist). Beim Abschluss werden die `done`-Stories unter `archived_sprints` archiviert, und man wählt, wohin die unfertigen Stories gehen: zurück ins Backlog oder in einen geplanten Sprint.
 - **WIP-Limits** je Spalte im Einstellungsfenster festlegen. Sie sind unverbindlich: Eine Überschreitung zeigt eine Warnung und blockiert eine Verschiebung nie. Eine Spalte zählt die Stories des aktiven Sprints, so wie das Board sie zeigt.
@@ -426,12 +426,17 @@ Schreibzugriffe:
 | `PUT /api/stories/:id/body` | Markdown-Körper ersetzen (`markdown`, `expected_mtime`) | 409 `no_backing_file`, `conflict`; 422 `status_line_forbidden` |
 | `POST /api/stories` | Eine Story erstellen (`title`, `epic_id?`, `story_points?`, `priority?`, `persona?`, `sprint_id?`) | 409 `sprint_status_missing`, `sprint_status_invalid`, `sprint_not_found` |
 | `DELETE /api/stories/:id[?force=1]` | Eine Story nach `.trash/` verschieben | 409 `story_active`, `has_dependents`, `archived` |
-| `PATCH /api/stories/:id/tasks/:taskId` | Den Status einer Aufgabe setzen | 404 `task_not_found` |
+| `PATCH /api/stories/:id/tasks/:taskId` | Status einer Aufgabe setzen und/oder sie umbenennen (`status?`, `title?`, mindestens eines; 1 bis 200 Zeichen) | 400 `invalid_payload`; 404 `task_not_found`; 409 `task_exists` (Name einer anderen Aufgabe), `conflict` |
+| `DELETE /api/stories/:id/tasks/:taskId` | Eine Aufgabe entfernen (`total` und `completed` werden neu berechnet) | 404 `task_not_found`; 409 `conflict` |
 | `POST /api/stories/:id/tasks` | Eine offene Aufgabe hinzufügen (`title`) | 409 `task_exists` |
 | `POST /api/sprints` | Einen geplanten Sprint erstellen | 409 `sprint_exists` |
 | `POST /api/sprints/:id/start` | Einen Sprint starten | 409 `sprint_already_active`, `sprint_closed`, `conflict` |
 | `POST /api/sprints/:id/close` | Einen Sprint abschließen (`carry_over`: `backlog` oder eine Sprint-ID) | 409 `not_active`, `sprint_not_found`, `conflict` |
 | `PUT /api/settings/wip` | WIP-Limits setzen (Status → 1..99 oder `null`) | 400 `invalid_payload` |
+
+`:taskId` ist der aktuelle Name der Aufgabe, URL-kodiert (`encodeURIComponent`): Namen mit `/`, `%`, `#`, Leerzeichen oder Nicht-ASCII-Zeichen werden unterstützt.
+
+`POST /api/stories`, `POST /api/stories/:id/tasks` und `POST /api/sprints` akzeptieren einen Header `Idempotency-Key` (opake Zeichenkette aus 8 bis 128 sichtbaren ASCII-Zeichen; das Board sendet bei jedem Öffnen eines Formulars eine neue `crypto.randomUUID()`). Eine zweite Anfrage an dieselbe Route mit demselben Schlüssel innerhalb von 5 Minuten erhält die Antwort der ersten (gleicher Status und Body, dazu `Idempotent-Replayed: true`) und legt nichts an; abgelehnte Anfragen (Status 400 und höher) werden nicht gemerkt, ein erneuter Versuch wird also neu bewertet. Der Speicher gehört zum Serverprozess und ist auf 500 Schlüssel begrenzt. Ein fehlerhafter Schlüssel ergibt 400 `invalid_idempotency_key`.
 
 Allen Schreibzugriffen gemeinsame Fehler: 400 `invalid_json` / `invalid_payload`, 403 `forbidden` / `readonly`, 404 `not_found`, 413 `payload_too_large`, 423 `locked`, 500 `write_failed`. Änderungen werden über `/api/events` an geöffnete Browser gesendet.
 

@@ -356,7 +356,7 @@ Seis vistas, listadas en la barra de navegación.
 
 - **Mover una story** entre columnas. Las transiciones permitidas figuran en [Máquina de estados](#máquina-de-estados); bloquear una story pide un motivo.
 - **Crear, editar y eliminar una story** («Nueva story» en las vistas Board y Backlog; el formulario está en el detalle de la story). Campos editables: título, epic, puntos, prioridad, asignado, sprint, fase TDD y dependencias; persona al crear. Eliminar pide confirmación y mueve el archivo a `project-management/backlog/user-stories/.trash/` (se recupera devolviéndolo a su sitio). Una story en curso o en revisión exige una confirmación explícita, y una story de la que dependen otras no puede eliminarse (409 `has_dependents`).
-- **Añadir tareas y cambiar su estado** (`to-do`, `in-progress`, `done`, `blocked`) desde el detalle de la story; el número de tareas terminadas se recalcula. Una story pasa a revisión solo cuando tiene tareas y todas están terminadas. En una story que solo tenía un contador de tareas, el primer cambio registra un estado por tarea (las primeras tareas, tantas como indicaba el contador, cuentan como terminadas).
+- **Añadir, renombrar y eliminar tareas y cambiar su estado** (`to-do`, `in-progress`, `done`, `blocked`) desde el detalle de la story; el número de tareas terminadas se recalcula. Una story pasa a revisión solo cuando tiene tareas y todas están terminadas. En una story que solo tenía un contador de tareas, el primer cambio registra un estado por tarea (las primeras tareas, tantas como indicaba el contador, cuentan como terminadas).
 - **Planificar un sprint**: seleccionar stories en la vista Backlog y añadirlas a un sprint planificado o activo.
 - **Crear, iniciar y cerrar un sprint.** Al crearlo (nombre, fechas de inicio y fin, objetivo, capacidad) se escribe `sprints/sprint-<N>-<slug>/sprint-goal.md`; el sprint queda «planificado». Iniciarlo lo convierte en el sprint activo (se rechaza mientras otro sprint esté activo). Cerrarlo archiva las stories `done` en `archived_sprints` y permite elegir el destino de las no terminadas: volver al backlog o pasar a un sprint planificado.
 - **Definir límites WIP** por columna en el panel de Ajustes. Son orientativos: superarlos muestra una advertencia y nunca bloquea un movimiento. Una columna cuenta las stories del sprint activo, tal como las muestra el tablero.
@@ -426,12 +426,17 @@ Escrituras:
 | `PUT /api/stories/:id/body` | Reemplazar el cuerpo markdown (`markdown`, `expected_mtime`) | 409 `no_backing_file`, `conflict`; 422 `status_line_forbidden` |
 | `POST /api/stories` | Crear una story (`title`, `epic_id?`, `story_points?`, `priority?`, `persona?`, `sprint_id?`) | 409 `sprint_status_missing`, `sprint_status_invalid`, `sprint_not_found` |
 | `DELETE /api/stories/:id[?force=1]` | Mover una story a `.trash/` | 409 `story_active`, `has_dependents`, `archived` |
-| `PATCH /api/stories/:id/tasks/:taskId` | Cambiar el estado de una tarea | 404 `task_not_found` |
+| `PATCH /api/stories/:id/tasks/:taskId` | Cambiar el estado de una tarea y/o renombrarla (`status?`, `title?`, al menos uno; de 1 a 200 caracteres) | 400 `invalid_payload`; 404 `task_not_found`; 409 `task_exists` (nombre de otra tarea), `conflict` |
+| `DELETE /api/stories/:id/tasks/:taskId` | Quitar una tarea (`total` y `completed` se recalculan) | 404 `task_not_found`; 409 `conflict` |
 | `POST /api/stories/:id/tasks` | Añadir una tarea pendiente (`title`) | 409 `task_exists` |
 | `POST /api/sprints` | Crear un sprint planificado | 409 `sprint_exists` |
 | `POST /api/sprints/:id/start` | Iniciar un sprint | 409 `sprint_already_active`, `sprint_closed`, `conflict` |
 | `POST /api/sprints/:id/close` | Cerrar un sprint (`carry_over`: `backlog` o un identificador de sprint) | 409 `not_active`, `sprint_not_found`, `conflict` |
 | `PUT /api/settings/wip` | Definir los límites WIP (estado → 1..99 o `null`) | 400 `invalid_payload` |
+
+`:taskId` es el nombre actual de la tarea, codificado para la URL (`encodeURIComponent`): se admiten nombres con `/`, `%`, `#`, espacios o caracteres no ASCII.
+
+`POST /api/stories`, `POST /api/stories/:id/tasks` y `POST /api/sprints` aceptan una cabecera `Idempotency-Key` (cadena opaca de 8 a 128 caracteres ASCII visibles; el board envía un `crypto.randomUUID()` nuevo en cada apertura de formulario). Una segunda petición a la misma ruta con la misma clave en 5 minutos recibe la respuesta de la primera (mismo estado y cuerpo, más `Idempotent-Replayed: true`) y no crea nada; las peticiones rechazadas (estado 400 o superior) no se recuerdan, así que un reintento se evalúa de nuevo. La memoria es la del proceso del servidor, limitada a 500 claves. Una clave mal formada da 400 `invalid_idempotency_key`.
 
 Errores comunes a todas las escrituras: 400 `invalid_json` / `invalid_payload`, 403 `forbidden` / `readonly`, 404 `not_found`, 413 `payload_too_large`, 423 `locked`, 500 `write_failed`. Los cambios se envían a los navegadores abiertos por `/api/events`.
 

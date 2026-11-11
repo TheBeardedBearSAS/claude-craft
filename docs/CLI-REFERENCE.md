@@ -490,7 +490,7 @@ Six views, listed in the navigation bar.
 
 - **Move a story** between columns. Allowed transitions are listed in [State machine](#state-machine); blocking a story asks for a reason.
 - **Create, edit and delete a story** ("New story" on the Board and Backlog views; the form is in the story detail). Editable fields: title, epic, story points, priority, assignee, sprint, TDD phase and dependencies; persona at creation. Deleting asks for confirmation and moves the file to `project-management/backlog/user-stories/.trash/` (it can be restored by moving it back). A story in progress or in review needs an explicit confirmation, and a story that other stories depend on cannot be deleted (409 `has_dependents`).
-- **Add tasks and set their status** (`to-do`, `in-progress`, `done`, `blocked`) from the story detail; the completed-task count is recomputed. A story goes to review only once it has tasks, all done. For a story that only had a task counter, the first change records a status per task (the first tasks, as many as the counter said, count as done).
+- **Add, rename, delete tasks and set their status** (`to-do`, `in-progress`, `done`, `blocked`) from the story detail (a task is renamed in place: Enter saves, Escape cancels; deleting asks once); the completed-task count is recomputed. A story goes to review only once it has tasks, all done. For a story that only had a task counter, the first change records a status per task (the first tasks, as many as the counter said, count as done).
 - **Plan a sprint**: select stories in the Backlog view and add them to a planned or active sprint.
 - **Create, start and close a sprint.** Creating a sprint (name, start and end dates, goal, capacity) writes `sprints/sprint-<N>-<slug>/sprint-goal.md`; the sprint is "planned". Starting it makes it the active sprint (refused while another sprint is active). Closing it archives the `done` stories under `archived_sprints` and lets you choose where the unfinished stories go: back to the backlog or into a planned sprint.
 - **Set WIP limits** per column in the Settings panel. They are indicative: exceeding one shows a warning and never blocks a move. A column counts the stories of the active sprint, as the board shows them.
@@ -561,12 +561,17 @@ Writes:
 | `PUT /api/stories/:id/body` | Replace the markdown body (`markdown`, `expected_mtime`) | 409 `no_backing_file`, `conflict`; 422 `status_line_forbidden` |
 | `POST /api/stories` | Create a story (`title`, `epic_id?`, `story_points?`, `priority?`, `persona?`, `sprint_id?`) | 409 `sprint_status_missing`, `sprint_status_invalid`, `sprint_not_found` |
 | `DELETE /api/stories/:id[?force=1]` | Move a story to `.trash/` | 409 `story_active`, `has_dependents`, `archived` |
-| `PATCH /api/stories/:id/tasks/:taskId` | Set a task status | 404 `task_not_found` |
+| `PATCH /api/stories/:id/tasks/:taskId` | Set a task status and/or rename it (`status?`, `title?`, at least one; 1..200 characters) | 400 `invalid_payload`; 404 `task_not_found`; 409 `task_exists` (name of another task), `conflict` |
+| `DELETE /api/stories/:id/tasks/:taskId` | Remove a task (`total` and `completed` are recounted) | 404 `task_not_found`; 409 `conflict` |
 | `POST /api/stories/:id/tasks` | Add a to-do task (`title`) | 409 `task_exists` |
 | `POST /api/sprints` | Create a planned sprint | 409 `sprint_exists` |
 | `POST /api/sprints/:id/start` | Start a sprint | 409 `sprint_already_active`, `sprint_closed`, `conflict` |
 | `POST /api/sprints/:id/close` | Close a sprint (`carry_over`: `backlog` or a sprint id) | 409 `not_active`, `sprint_not_found`, `conflict` |
 | `PUT /api/settings/wip` | Set WIP limits (status → 1..99 or `null`) | 400 `invalid_payload` |
+
+`:taskId` is the current name of the task, URL-encoded (`encodeURIComponent`): names with `/`, `%`, `#`, spaces or non-ASCII characters are supported.
+
+`POST /api/stories`, `POST /api/stories/:id/tasks` and `POST /api/sprints` accept an `Idempotency-Key` header (an opaque string of 8 to 128 visible ASCII characters; the board sends a fresh `crypto.randomUUID()` for each opening of a form). A second request on the same route with the same key within 5 minutes gets the answer of the first (same status and body, plus `Idempotent-Replayed: true`) and creates nothing; refused requests (status 400 and above) are not remembered, so a retry is evaluated again. The memory is the server process's, bounded to 500 keys. A malformed key is a 400 `invalid_idempotency_key`.
 
 Errors common to all writes: 400 `invalid_json` / `invalid_payload`, 403 `forbidden` / `readonly`, 404 `not_found`, 413 `payload_too_large`, 423 `locked`, 500 `write_failed`. Changes are pushed to open browsers over `/api/events`.
 
