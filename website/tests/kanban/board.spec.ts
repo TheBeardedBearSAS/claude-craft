@@ -154,3 +154,20 @@ test('board: a second move shown before the first is answered never sends the ca
     await page.request.delete(`/api/stories/${id}?force=1`, { headers: { Origin: origin } });
   }
 });
+
+// Closing the detail drops `?story=` from the URL when the dialog's `close` event arrives, one frame later. A
+// navigation issued in between (Escape then a click on a nav link) used to be undone: the late handler rebuilt the
+// URL from the route it still had in memory and sent the user back to the board.
+test('router: a navigation issued right after the detail closes is not undone by the late close', async ({ page }) => {
+  await page.goto('/#/kanban?story=US-200');
+  await expect(page.locator('dialog.modal[open]')).toBeVisible();
+
+  await page.evaluate(() => {
+    (document.querySelector('dialog.modal[open]') as HTMLDialogElement).close();
+    window.location.hash = '#/backlog';
+  });
+
+  await expect(page).toHaveURL(/#\/backlog$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Backlog');
+  await expect(page.locator('dialog.modal[open]')).toHaveCount(0);
+});

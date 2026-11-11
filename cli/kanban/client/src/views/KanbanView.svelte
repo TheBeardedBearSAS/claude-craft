@@ -138,9 +138,13 @@
     }
     if (res.ok) snapshot = $state.snapshot(store.stories);
     await tick();
+    // A dialog that has just closed (the "blocked" reason) gives the focus back one frame later, to a menu item
+    // that no longer exists: decide once that has happened, or the focus put on the card is taken away again.
+    await new Promise(requestAnimationFrame);
     // The menu item that had the focus is gone: bring the focus back to the card, unless the user has already
     // moved it elsewhere while the server answered (never take the focus away from where it now is, WCAG 2.4.3).
-    const lost = !document.activeElement || document.activeElement === document.body;
+    const active = document.activeElement;
+    const lost = !active || active === document.body || !active.isConnected || active.closest('dialog:not([open])');
     if (lost) focusCard(story.id);
   }
 

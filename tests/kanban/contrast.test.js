@@ -102,6 +102,17 @@ describe('contrast — text on surfaces (>= 4.5:1)', () => {
       }
     });
   }
+
+  // A status colour used as text on its own "soft" background (hover of the destructive button, error summaries):
+  // the hovered state must keep 4.5:1 too. WebKit keeps :hover on the button behind a modal, which is how axe saw it.
+  for (const name of ['danger', 'success']) {
+    it(`${name} text on --${name}-soft over bg and bg-elev`, () => {
+      for (const surface of ['bg', 'bg-elev']) {
+        const soft = over(tok(name), opaque(surface), tok(`${name}-soft`).a);
+        expect(ratio(opaque(name), soft), surface).toBeGreaterThanOrEqual(AA_TEXT);
+      }
+    });
+  }
 });
 
 describe('contrast — accents (>= 4.5:1)', () => {

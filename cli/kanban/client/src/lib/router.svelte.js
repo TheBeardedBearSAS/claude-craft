@@ -70,7 +70,9 @@ export function navigate(path) {
  * Empty values (null, '', []) remove the key.
  */
 export function setQuery(patch) {
-  const query = mergeQuery(route.query, patch);
-  history.replaceState(history.state, '', formatHash(route.name, route.params, query));
-  Object.assign(route, current());
+  // From the URL as it is now, not from `route`: when a navigation has just happened and its hashchange is still
+  // to come, `route` describes the page being left and rebuilding the URL from it would undo the navigation.
+  const now = current();
+  history.replaceState(history.state, '', formatHash(now.name, now.params, mergeQuery(now.query, patch)));
+  if (now.name === route.name) Object.assign(route, current());
 }
