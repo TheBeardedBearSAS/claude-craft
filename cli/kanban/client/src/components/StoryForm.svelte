@@ -264,16 +264,19 @@
     font-weight: 400;
     color: var(--fg-dim);
   }
-  .sf input,
-  .sf select {
+  .sf input {
     min-height: 32px;
-    width: 100%;
-    box-sizing: border-box;
     padding: 6px 10px;
     background: var(--bg-inset);
     color: var(--fg);
     border: 1px solid var(--border-control);
     border-radius: var(--radius-sm);
+  }
+  /* Apparence des listes : app.css. */
+  .sf input,
+  .sf select {
+    width: 100%;
+    box-sizing: border-box;
     font-size: 0.875rem;
   }
   .sf input[aria-invalid='true'],

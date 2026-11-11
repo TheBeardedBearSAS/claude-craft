@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { VIEWS, openView, settingsButton, openMoveMenu, openDepsNode, privateServer } from './helpers';
+import { VIEWS, openView, pressTab, settingsButton, openMoveMenu, openDepsNode, privateServer } from './helpers';
 
 // Windows high-contrast mode (`forced-colors: active`), emulated by Playwright: the browser replaces author colours
 // with the system palette, drops backgrounds images, gradients and box-shadows, and keeps author system colours
@@ -42,6 +42,7 @@ declare global {
       contrastToCanvas: (colour: string) => number;
       token: (selector: string, name: string) => string;
       visibleFill: (selector: string) => string | null;
+      arrowless: () => string[];
       describe: (el: Element) => string;
     };
   }
@@ -178,6 +179,15 @@ function installHelpers() {
   window.__fc = {
     describe,
     contrastToCanvas,
+    /** Drop-down lists without an arrow: neither the native control nor a drawn one (a background image). */
+    arrowless: () =>
+      [...document.querySelectorAll('select')]
+        .filter((el) => shown(el))
+        .filter((el) => {
+          const cs = getComputedStyle(el);
+          return cs.appearance === 'none' && !cs.backgroundImage.includes('('); // "none, none": two empty layers
+        })
+        .map(describe),
     /** Normal mode: indices of the controls and containers drawn as a box (four borders, or a fill of their own). */
     boxed: () =>
       [...document.querySelectorAll(BOX)].flatMap((el, i) => {
@@ -401,7 +411,7 @@ async function tabAround(page: Page, max = 90) {
   const failures: string[] = [];
   const keys = new Set<string>();
   for (let i = 0; i < max; i++) {
-    await page.keyboard.press('Tab');
+    await pressTab(page);
     const key = await page.evaluate(() => window.__fc.activeKey());
     if (keys.has(key)) break;
     keys.add(key);
@@ -420,10 +430,12 @@ for (const scheme of ['light', 'dark'] as const) {
         await page.mouse.move(1, 799); // a hovered control would count as boxed by its hover fill
         await settled(page);
         const boxes = await page.evaluate(() => window.__fc.boxed());
+        expect.soft(await page.evaluate(() => window.__fc.arrowless()), 'lists without an arrow').toEqual([]);
         await forced(page, scheme);
         await settled(page);
         if (SHOTS) await page.screenshot({ path: test.info().outputPath(`${scene.name}-${scheme}.png`) });
 
+        expect.soft(await page.evaluate(() => window.__fc.arrowless()), 'lists without an arrow (forced)').toEqual([]);
         expect
           .soft(await page.evaluate((b) => window.__fc.boundaryFailures(b), boxes), 'boxes without a frame')
           .toEqual([]);

@@ -939,8 +939,6 @@ dialog.modal-form {
   font-size: 0.8125rem;
   font-weight: 600;
 }
-.sd-move select,
-.sd-checklist select,
 .sd-field textarea {
   min-height: 32px;
   padding: 6px 10px;
@@ -1339,8 +1337,7 @@ dialog.modal-form {
   cursor: pointer;
   accent-color: var(--accent);
 }
-.row-select input:focus-visible,
-.plan-field select:focus-visible {
+.row-select input:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -1396,14 +1393,7 @@ dialog.modal-form {
   color: var(--fg-dim);
 }
 .plan-field select {
-  min-height: 32px;
   max-width: 100%;
-  padding: 5px 10px;
-  font-size: 0.8125rem;
-  border: 1px solid var(--border-control);
-  border-radius: var(--radius-sm);
-  background: var(--bg-inset);
-  color: var(--fg);
 }
 .plan-new {
   margin-left: auto;

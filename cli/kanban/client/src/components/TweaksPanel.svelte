@@ -154,10 +154,7 @@
   }
   .tweak-opt:hover { border-color: var(--border-strong); color: var(--fg); }
   .tweak-opt.selected { border-color: var(--accent-ring); background: var(--accent-soft); color: var(--fg); }
-  .tweaks-select {
-    width: 100%; min-height: 36px; padding: 6px 10px; font-size: 0.8125rem;
-    border: 1px solid var(--border-control); border-radius: 9px; background: var(--bg-inset); color: var(--fg);
-  }
+  .tweaks-select { width: 100%; min-height: 36px; border-radius: 9px; }
   .tweaks-keys { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: center; font-size: 0.8125rem; }
   .tweaks-keys dt kbd {
     font-size: 0.75rem; padding: 2px 7px; background: var(--bg-inset);

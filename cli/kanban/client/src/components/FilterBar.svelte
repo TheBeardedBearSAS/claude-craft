@@ -133,8 +133,7 @@
     min-width: 0;
   }
   .fb-chip,
-  .fb-btn,
-  select {
+  .fb-btn {
     min-height: 32px;
     padding: 4px 12px;
     border: 1px solid var(--border-control);
@@ -143,9 +142,10 @@
     color: var(--fg);
     font-size: 0.8125rem;
   }
+  /* Apparence commune dans app.css ; ici, le fond des puces voisines. */
   select {
-    padding-right: 6px;
     max-width: 100%;
+    background-color: var(--bg-elev);
   }
   .fb-chip[aria-pressed='true'] {
     background: var(--accent-soft);
