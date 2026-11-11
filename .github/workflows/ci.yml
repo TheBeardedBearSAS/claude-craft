@@ -212,7 +212,8 @@ jobs:
     # mirrors). The tag must match the @playwright/test version of website/package-lock.json (checked below).
     container:
       image: mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d
-      options: --user 1001
+      # --ipc=host: the default 64 MB of shared memory of a container makes a browser page crash now and then.
+      options: --user 1001 --ipc=host
     # One job per engine (parallel) rather than one job three times longer. `projects` is what runs
     # (website/tests/kanban/playwright.config.ts); the touch projects only run touch.spec.ts.
     strategy:
