@@ -293,11 +293,15 @@ jobs:
       - name: Install WebKit
         run: cd website && npx playwright install webkit
 
+      # KANBAN_SCREENSHOTS=1: screenshots.spec.ts captures every view, form and native control as macOS draws them.
       - name: Run Kanban browser tests
         run: cd website && npm run test:kanban -- --project=webkit --project=mobile-safari
+        env:
+          KANBAN_SCREENSHOTS: '1'
 
+      # Always: the captures are only seen on macOS; the report and traces of a failure too.
       - name: Upload test report
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # pinned: v7.0.2
         with:
           name: kanban-e2e-report-macos
