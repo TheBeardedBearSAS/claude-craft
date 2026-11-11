@@ -248,7 +248,7 @@ Punkte |
 2. `metadata`: `sprint_id` (`sprint-{N}`), `name`, `start_date`, `end_date`, `goal`, `capacity_points`, aus `sprint-goal.md` übernommen.
 3. `stories`: ein Eintrag pro ausgewählter US: `title`, `status: ready-for-dev`, `story_points`, `epic_id`, `priority` (MoSCoW), `dependencies`, `tasks`, `history: []`.
 4. Datei für **dieselbe** `sprint_id` bereits vorhanden: bestehende Status beibehalten (eine Story nie zurücksetzen) und nur neue US ergänzen.
-5. Datei für einen **anderen** Sprint vorhanden: zuerst deren Stories nach `archived_sprints.<alte sprint_id>` (`status`, `points`) verschieben, dann den neuen Sprint schreiben.
+5. Datei für einen **anderen** Sprint vorhanden: zuerst nur die **abgeschlossenen (`done`) Stories dieses vorherigen Sprints** nach `archived_sprints.<alte sprint_id>` (`status`, `points`) verschieben — nie die von `/workflow:plan` erfassten Backlog-Stories —, dann den neuen Sprint schreiben. Nicht abgeschlossene Stories bleiben in `stories` (mit aktualisierter `sprint_id`, falls dieser Schlüssel verwendet wird).
 
 ```yaml
 # .bmad/sprint-status.yaml

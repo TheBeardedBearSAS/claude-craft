@@ -883,7 +883,13 @@ Voir `.claude/rules/12-context-management.md` pour le guide complet.
 
 ## Kanban Board Empty {#kanban-board-empty}
 
-### "Board is empty" malgré une installation valide
+### "Board is empty" ou story absente malgré une installation valide
+
+**D'abord : le bandeau de diagnostics.** Quand un fichier du projet ne peut pas être lu (frontmatter malformé, YAML invalide, fichier refusé par le schéma), le Kanban l'écarte et affiche un bandeau « Some project files could not be read » avec le fichier et la cause. La même liste est renvoyée par :
+
+```bash
+curl -s http://127.0.0.1:3737/api/diagnostics
+```
 
 **Cause 1 : sprint-status.yaml absent**
 ```bash
@@ -895,26 +901,44 @@ make install-project TARGET=.
 
 **Cause 2 : format de sprint-status.yaml incorrect**
 
-Le Kanban attend un fichier valide avec la structure BMAD v6 :
+Le Kanban attend la structure du template (`Project/templates/sprint-status.yaml.template`) : `metadata` (avec `sprint_id`, `name`, `start_date`, `end_date`) et `stories` indexé par identifiant. Les dates sont entre guillemets ; `assigned_to: null` est autorisé (ne pas mettre `""`) :
 ```yaml
-version: 2
-current_sprint: 1
-sprints:
-  - number: 1
-    goal: "Sprint goal"
-    stories:
-      - id: "US-001"
-        title: "Feature"
-        status: "in-progress"
-        assigned_to: null   # null autorisé (ne pas mettre "")
+version: "1.0"
+metadata:
+  sprint_id: "sprint-1"
+  name: "Sprint 1"
+  start_date: "2026-11-02"
+  end_date: "2026-11-13"
+  goal: "Sprint goal"
+stories:
+  US-001:
+    title: "Feature"
+    status: "in-progress"
+    previous_status: "ready-for-dev"
+    assigned_to: null
+    story_points: 3
+    epic_id: "EPIC-001"
 ```
+Les identifiants de la forme `US-E4-02` sont acceptés. Une liste `sprints:` avec `number` et `stories:` en tableau (ancien exemple de ce guide) est refusée.
 
-**Cause 3 : stories créées avec la convention workflow/ (US-*.md)**
+**Cause 3 : fichiers `US-*.md` et YAML**
 
-Depuis v8.11.0, le Kanban ingère `.bmad/sprint-status.yaml` (convention BMAD v6). Les fichiers `workflow/US-*.md` (convention `/workflow:start`) sont une piste séparée. Les deux coexistent — le board n'affiche que les stories de la YAML.
+Les fichiers `project-management/backlog/user-stories/US-*.md` portent le contenu des stories ; `.bmad/sprint-status.yaml` porte leur statut. Le Kanban lit les deux et les fusionne : une story qui n'existe que dans l'un des deux apparaît quand même. Un `US-*.md` dont le frontmatter est malformé est signalé par le bandeau de diagnostics au lieu de vider le tableau.
 
 **Cause 4 : port déjà utilisé**
 ```bash
-# Changer le port
+# Changer le port (forme avec « = » obligatoire)
 npx @the-bearded-bear/claude-craft kanban --port=3142
 ```
+`--port 4000` (avec une espace) est refusé avec un message d'usage : écrire `--port=4000`.
+
+### Erreurs lors d'une modification depuis le tableau
+
+| Réponse | Signification | Que faire |
+|---------|---------------|-----------|
+| 423 `locked` | Un script (`.bmad/lib/`) ou une autre session tient le verrou de `.bmad/sprint-status.yaml` | Réessayer. Un verrou laissé par un processus interrompu est repris au bout de 10 secondes |
+| 409 `conflict` | La story a été modifiée ailleurs depuis son chargement | Recharger la story (l'interface le propose), puis refaire la modification |
+| 409 `sprint_status_invalid` | `.bmad/sprint-status.yaml` ne passe pas la validation ; rien n'a été écrit | Corriger le fichier (voir la cause 2 et le bandeau de diagnostics) |
+| 409 `sprint_status_missing` | Création d'une story sans `.bmad/sprint-status.yaml` | Créer le fichier (cause 1) |
+| 409 `invalid_transition` | Transition ou gate refusé | Choisir une colonne proposée par le menu « Déplacer » ; voir la [machine d'états](CLI-REFERENCE.md#state-machine) |
+| 403 `readonly` | Le serveur tourne avec `--readonly` | Relancer sans `--readonly` |

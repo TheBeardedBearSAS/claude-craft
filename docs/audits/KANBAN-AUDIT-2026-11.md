@@ -42,51 +42,51 @@ Définitions : *bloquant* = perte de données, board inutilisable ou fonction es
 
 ## 3. Tableau de synthèse
 
-| ID | Domaine | Sévérité | Constat | Lot |
-|---|---|---|---|---|
-| K-01 | Serveur | Majeur | `.bmad/sprint-status.yaml` non surveillé : changements externes non poussés au client | L1 |
-| K-02 | Serveur | Majeur | Verrous `.lock` orphelins après crash : 423 permanent, sans TTL | L1 (md) / L3 (YAML) |
-| K-03 | Serveur | Bloquant | Écriture YAML sans détection de conflit ni revalidation, `.tmp` à nom fixe, commentaires perdus | L3 |
-| K-04 | Serveur | Bloquant | `#rebuild` vide les Maps avant de reparser : frontmatter malformé = démarrage planté ou board vidé | L1 |
-| K-05 | Serveur | Mineur | YAML invalide avalé en silence hors `/api/sprints/current` | L1 |
-| K-06 | Serveur | Mineur | Burndown : division par zéro et exception sur dates invalides | L1 |
-| K-07 | Serveur | Majeur | Pas de contrôle `Host`, pas de limite de corps, chemins absolus dans erreurs et SSE | L1 |
-| K-08 | Serveur | Mineur | `--port 4000` (espace) : `Number(true)` = 1, liaison au port 1 | L1 |
-| K-09 | Serveur | Majeur | Identifiants `US-E4-02` rejetés par schéma, scanner et repository | L1 |
-| K-10 | Serveur | Majeur | Stories YAML-only sans `invest_score` : gate backlog vers ready-for-dev toujours refusée | L1 |
-| K-11 | Serveur | Mineur | Dette diverse : doublons, champ `reason` mort, `by` figé, 409 trompeur, `catch` vides | L1 |
-| K-12 | CI | Mineur | Build client jamais vérifié sur PR ; aucun test navigateur ni axe | L1 |
-| K-13 | Serveur | Bloquant | Une seule mutation exposée ; `StoryPatchSchema` non branché ; `rebuildSprintStatus` non atomique | L3 |
-| K-14 | Client | Majeur | Champ de recherche et raccourci ⌘K inertes | L2 |
-| K-15 | Client | Mineur | Filtre priorité seul et non persisté, pas de tri, `route.query` jamais lu, pas de lien profond, route inconnue = page vide | L2 |
-| K-16 | Client | Majeur | Clavier du menu « Déplacer » : mauvaise carte ciblée, Entrée neutralisée, chiffres captés pendant le prompt, Alt+M inopérant sur macOS, drapeau mort | L2 |
-| K-17 | Client | Majeur | Déblocage : six colonnes proposées pour un seul choix valide ; `--readonly` ignoré par l'UI | L2 |
-| K-18 | Client | Mineur | États de chargement et d'erreur absents ou silencieux | L2 |
-| K-19 | Client | Mineur | Réseau : pas d'encodage, courses, pas d'annulation, SSE sans resynchronisation ni debounce, vues non rafraîchies | L2 |
-| K-20 | Client | Mineur | Sprint « actif » déduit de `done_points > 0` ; liens `US-xxx` inopérants ; accent non répercuté sur le burndown | L2 |
-| K-21 | Client | Mineur | Code et CSS morts, duplications | L2 |
-| K-22 | Client | Majeur | Fonctions de gestion de projet absentes de l'UI | L4 |
-| K-23 | Client | Mineur | Chaînes mêlant français et anglais, pas d'i18n, dates sans `Intl` | L2 |
-| K-24 | A11y | Bloquant | Sous 980 px : sidebar, recherche et arbre des docs masqués sans remplacement | L2 |
-| K-25 | A11y | Majeur | Carte = `li[role=listitem][tabindex][onclick]`, `aria-label` écrase le contenu | L2 |
-| K-26 | A11y | Majeur | Toasts : `div` cliquable sans clavier, régions live imbriquées, disparition sans pause | L2 |
-| K-27 | A11y | Majeur | `aria-label` sur éléments génériques, `div` dans `button`, lignes d'épic repliées focalisables | L2 |
-| K-28 | A11y | Majeur | Graphe de dépendances inaccessible au clavier ; statut et cycle par la couleur seule ; dépassement d'heures par la couleur seule | L2 |
-| K-29 | A11y | Majeur | `<title>` statique, `lang="en"` sur contenu mixte, titres manquants, double `h1`, pas de gestion du focus | L2 |
-| K-30 | A11y | Majeur | Contrastes : texte sur accent violet 2,34 ; chip Won't 4,00 ; bordures 1,09 à 2,28 ; recherche sans `outline` | L2 |
-| K-31 | A11y | Mineur | Cibles de 16 px, polices de 9,5 à 10,5 px, animation `ping` infinie malgré `prefers-reduced-motion`, aide fixe | L2 |
-| K-32 | A11y | Mineur | Mises à jour temps réel non annoncées ; minuteries sans `clearTimeout` | L2 |
-| K-33 | Docs | Mineur | FAQ, TROUBLESHOOTING, ACCESSIBILITY, CHEAT-SHEET inexacts ; vue Sprints non documentée | L5 |
-| K-34 | A11y | Majeur | Aucune alternative à un seul pointeur au glisser-déposer (nouveau) | L2 |
+| ID | Domaine | Sévérité | Constat | Lot | Statut |
+|---|---|---|---|---|---|
+| K-01 | Serveur | Majeur | `.bmad/sprint-status.yaml` non surveillé : changements externes non poussés au client | L1 | corrigé (PR 1) |
+| K-02 | Serveur | Majeur | Verrous `.lock` orphelins après crash : 423 permanent, sans TTL | L1 (md) / L3 (YAML) | corrigé (PR 1 et 3) |
+| K-03 | Serveur | Bloquant | Écriture YAML sans détection de conflit ni revalidation, `.tmp` à nom fixe, commentaires perdus | L3 | corrigé (PR 3) |
+| K-04 | Serveur | Bloquant | `#rebuild` vide les Maps avant de reparser : frontmatter malformé = démarrage planté ou board vidé | L1 | corrigé (PR 1) |
+| K-05 | Serveur | Mineur | YAML invalide avalé en silence hors `/api/sprints/current` | L1 | corrigé (PR 1) |
+| K-06 | Serveur | Mineur | Burndown : division par zéro et exception sur dates invalides | L1 | corrigé (PR 1) |
+| K-07 | Serveur | Majeur | Pas de contrôle `Host`, pas de limite de corps, chemins absolus dans erreurs et SSE | L1 | corrigé (PR 1) |
+| K-08 | Serveur | Mineur | `--port 4000` (espace) : `Number(true)` = 1, liaison au port 1 | L1 | corrigé (PR 1) |
+| K-09 | Serveur | Majeur | Identifiants `US-E4-02` rejetés par schéma, scanner et repository | L1 | corrigé (PR 1) |
+| K-10 | Serveur | Majeur | Stories YAML-only sans `invest_score` : gate backlog vers ready-for-dev toujours refusée | L1 | corrigé (PR 1) |
+| K-11 | Serveur | Mineur | Dette diverse : doublons, champ `reason` mort, `by` figé, 409 trompeur, `catch` vides | L1 | corrigé (PR 1 et 5) |
+| K-12 | CI | Mineur | Build client jamais vérifié sur PR ; aucun test navigateur ni axe | L1 | corrigé (PR 1) |
+| K-13 | Serveur | Bloquant | Une seule mutation exposée ; `StoryPatchSchema` non branché ; `rebuildSprintStatus` non atomique | L3 | corrigé (PR 3 et 4) |
+| K-14 | Client | Majeur | Champ de recherche et raccourci ⌘K inertes | L2 | corrigé (PR 2) |
+| K-15 | Client | Mineur | Filtre priorité seul et non persisté, pas de tri, `route.query` jamais lu, pas de lien profond, route inconnue = page vide | L2 | corrigé (PR 2) |
+| K-16 | Client | Majeur | Clavier du menu « Déplacer » : mauvaise carte ciblée, Entrée neutralisée, chiffres captés pendant le prompt, Alt+M inopérant sur macOS, drapeau mort | L2 | corrigé (PR 2) |
+| K-17 | Client | Majeur | Déblocage : six colonnes proposées pour un seul choix valide ; `--readonly` ignoré par l'UI | L2 | corrigé (PR 2) |
+| K-18 | Client | Mineur | États de chargement et d'erreur absents ou silencieux | L2 | corrigé (PR 2) |
+| K-19 | Client | Mineur | Réseau : pas d'encodage, courses, pas d'annulation, SSE sans resynchronisation ni debounce, vues non rafraîchies | L2 | corrigé (PR 2) |
+| K-20 | Client | Mineur | Sprint « actif » déduit de `done_points > 0` ; liens `US-xxx` inopérants ; accent non répercuté sur le burndown | L2 | corrigé (PR 2) |
+| K-21 | Client | Mineur | Code et CSS morts, duplications | L2 | corrigé (PR 2 et 5) |
+| K-22 | Client | Majeur | Fonctions de gestion de projet absentes de l'UI | L4 | corrigé (PR 4) |
+| K-23 | Client | Mineur | Chaînes mêlant français et anglais, pas d'i18n, dates sans `Intl` | L2 | corrigé (PR 2) |
+| K-24 | A11y | Bloquant | Sous 980 px : sidebar, recherche et arbre des docs masqués sans remplacement | L2 | corrigé (PR 2) |
+| K-25 | A11y | Majeur | Carte = `li[role=listitem][tabindex][onclick]`, `aria-label` écrase le contenu | L2 | corrigé (PR 2) |
+| K-26 | A11y | Majeur | Toasts : `div` cliquable sans clavier, régions live imbriquées, disparition sans pause | L2 | corrigé (PR 2) |
+| K-27 | A11y | Majeur | `aria-label` sur éléments génériques, `div` dans `button`, lignes d'épic repliées focalisables | L2 | corrigé (PR 2) |
+| K-28 | A11y | Majeur | Graphe de dépendances inaccessible au clavier ; statut et cycle par la couleur seule ; dépassement d'heures par la couleur seule | L2 | corrigé (PR 2) |
+| K-29 | A11y | Majeur | `<title>` statique, `lang="en"` sur contenu mixte, titres manquants, double `h1`, pas de gestion du focus | L2 | corrigé (PR 2) |
+| K-30 | A11y | Majeur | Contrastes : texte sur accent violet 2,34 ; chip Won't 4,00 ; bordures 1,09 à 2,28 ; recherche sans `outline` | L2 | corrigé (PR 2) |
+| K-31 | A11y | Mineur | Cibles de 16 px, polices de 9,5 à 10,5 px, animation `ping` infinie malgré `prefers-reduced-motion`, aide fixe | L2 | corrigé (PR 2) |
+| K-32 | A11y | Mineur | Mises à jour temps réel non annoncées ; minuteries sans `clearTimeout` | L2 | corrigé (PR 2) |
+| K-33 | Docs | Mineur | FAQ, TROUBLESHOOTING, ACCESSIBILITY, CHEAT-SHEET inexacts ; vue Sprints non documentée | L5 | corrigé (PR 5) |
+| K-34 | A11y | Majeur | Aucune alternative à un seul pointeur au glisser-déposer (nouveau) | L2 | corrigé (PR 2) |
 
 ## 4. Détail des constats
 
-Statut de tous les constats : **à corriger** (colonne mise à jour à la fin du chantier). Les chemins sont relatifs à `cli/kanban/` sauf mention contraire.
+Statut de chaque constat : voir le champ « Statut » de sa fiche et la dernière colonne du tableau de synthèse (état à la fin du chantier : 34 corrigés ; les fiches conservent le texte d'origine). Les chemins sont relatifs à `cli/kanban/` sauf mention contraire.
 
 ### 4.1 Serveur et sécurité
 
 #### K-01 — `.bmad/sprint-status.yaml` non surveillé
-Majeur · Lot L1 · Statut : à corriger
+Majeur · Lot L1 · Statut : corrigé (PR 1)
 
 - **Constat.** Le watcher est lancé sur `project-management/` (`rootDir: pmDir`), alors que `.bmad/` est un dossier frère à la racine du projet. Même surveillé, le fichier serait écarté : `classify` renvoie `other` pour un `.yaml` hors des chemins connus et `onEvent` ignore cette catégorie.
 - **Preuve.** `cli/lib/kanban.js:74` ; `server/services/file-watcher.js:20-21, 42-43` ; `server/services/file-scanner.js:45, 76`.
@@ -95,7 +95,7 @@ Majeur · Lot L1 · Statut : à corriger
 - **Vérification.** Corrigé : la liste brute attribuait le défaut aux dotdirs ignorés (`file-watcher.js:43`) ; la cause première est le périmètre `pmDir` et la classification.
 
 #### K-02 — Verrous `.lock` orphelins
-Majeur · Lot L1 (verrou markdown) puis L3 (verrou YAML partagé) · Statut : à corriger
+Majeur · Lot L1 (verrou markdown) puis L3 (verrou YAML partagé) · Statut : corrigé (PR 1 : verrou markdown, reprise des verrous périmés ; PR 3 : verrou YAML partagé avec les scripts)
 
 - **Constat.** Le verrou est un fichier créé en `wx` et sans contenu. Après un crash entre la création et le `unlink`, le fichier subsiste et toute écriture suivante renvoie 423, indéfiniment.
 - **Preuve.** `server/services/file-writer.js:30-40` (création), `:42-48` (libération) ; `server/services/sprint-cache.js:43-48` ; mappage 423 : `server/app.js:160`.
@@ -104,7 +104,7 @@ Majeur · Lot L1 (verrou markdown) puis L3 (verrou YAML partagé) · Statut : à
 - **Vérification.** Confirmé.
 
 #### K-03 — Écriture YAML sans conflit ni revalidation
-Bloquant · Lot L3 · Statut : à corriger
+Bloquant · Lot L3 · Statut : corrigé (PR 3)
 
 - **Constat.** `updateSprintStatusStory` lit le fichier, applique le patch, le réécrit en entier avec `yaml.dump` et le renomme, sans comparer avec l'état vu par le client, sans revalider `SprintStatusSchema` et sans verrou côté scripts shell. Le fichier temporaire a un nom fixe (`<yaml>.tmp`). Les commentaires et la mise en forme sont perdus.
 - **Preuve.** `server/services/sprint-cache.js:50` (lecture), `:54-64` (mutation), `:65-67` (écriture `.tmp` fixe puis rename). Aucun appel à `SprintStatusSchema` dans ce chemin.
@@ -113,7 +113,7 @@ Bloquant · Lot L3 · Statut : à corriger
 - **Vérification.** Confirmé ; la course est établie par lecture, non reproduite.
 
 #### K-04 — `#rebuild` non résilient
-Bloquant · Lot L1 · Statut : à corriger
+Bloquant · Lot L1 · Statut : corrigé (PR 1)
 
 - **Constat.** `#rebuild` vide toutes les Maps (`:41-46`) puis reparse chaque fichier. Un frontmatter YAML syntaxiquement invalide fait lever `yaml.load` dans `parseFile`, donc `parseAndValidate`, donc `#rebuild`, alors que les Maps sont déjà vides ou à moitié remplies. Au démarrage, `await repository.refresh()` n'est pas protégé (`cli/lib/kanban.js:67`) : le processus plante. Sous le watcher, l'erreur est seulement écrite sur la console (`file-watcher.js:34-36`) et le board reste partiel.
 - **Preuve.** `server/services/repository.js:39-46`, `:52` ; `server/services/frontmatter.js:30` (levée), `:57-58` ; `:145-157` (une story invalide en markdown mais présente dans le YAML est enregistrée avec `ok:false`, puis ignorée par `continue`) ; `:231` (`listStories` écarte `!entry.ok`). Les erreurs de validation (`errors`) sont stockées mais jamais exposées par l'API (`getStory` renvoie `null`, `:247`).
@@ -122,7 +122,7 @@ Bloquant · Lot L1 · Statut : à corriger
 - **Vérification.** Confirmé, avec un ajout : la lecture concurrente d'un état vidé pendant le rebuild.
 
 #### K-05 — YAML invalide avalé en silence
-Mineur · Lot L1 · Statut : à corriger
+Mineur · Lot L1 · Statut : corrigé (PR 1)
 
 - **Constat.** `loadSprintStatus` lève sur un YAML syntaxiquement invalide ; `#loadStatusOnce` et `loadStatusSafe` transforment l'exception en `null`. Seule `/api/sprints/current` répond 503.
 - **Preuve.** `server/services/repository.js:124-126` ; `server/app.js:255-261` (silencieux), `:197-199` (503 avec `err.message`).
@@ -131,7 +131,7 @@ Mineur · Lot L1 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-06 — Burndown : dates dégénérées
-Mineur · Lot L1 · Statut : à corriger
+Mineur · Lot L1 · Statut : corrigé (PR 1)
 
 - **Constat.** Avec `start_date == end_date`, `totalDays` vaut 0 et `totalPoints / totalDays` produit `Infinity`/`NaN`. Avec une date invalide, `startDate.toISOString()` lève `RangeError`, et l'appel n'est pas protégé : `/api/sprints/current` répond 500.
 - **Preuve.** `server/services/sprint-cache.js:145` (`totalDays`), `:151` (division), `:243` (`toISOString` hors boucle) ; appel non gardé : `server/app.js:211`.
@@ -140,7 +140,7 @@ Mineur · Lot L1 · Statut : à corriger
 - **Vérification.** Corrigé : lignes `:145/:151/:243` au lieu de `:151-153`.
 
 #### K-07 — Hôte, taille du corps, fuite de chemins
-Majeur · Lot L1 · Statut : à corriger
+Majeur · Lot L1 · Statut : corrigé (PR 1)
 
 - **Constat.** (a) Aucun contrôle de l'en-tête `Host` : `csrfGuard` ne s'applique qu'aux méthodes mutantes, donc un rebinding DNS permet de lire les GET (stories, docs, flux SSE) depuis une page tierce. (b) Aucune limite de taille du corps : `c.req.json()` lit tout. (c) `err.message` est renvoyé au client : erreurs d'écriture (chemins absolus des messages `fs`, `story X not found in <yamlPath>`) et erreur de lecture du YAML. (d) Le SSE publie le chemin absolu du fichier modifié.
 - **Preuve.** `server/middleware/security.js:10-12` ; `server/app.js:106` (`await c.req.json()`), `:162` (`message: err.message`), `:199` (`reason: err.message`) ; `server/services/file-watcher.js:33` ; `server/services/sprint-cache.js:52`.
@@ -149,7 +149,7 @@ Majeur · Lot L1 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-08 — Analyse de `--port`
-Mineur · Lot L1 · Statut : à corriger
+Mineur · Lot L1 · Statut : corrigé (PR 1)
 
 - **Constat.** `parseArgs` n'accepte que `--clé=valeur` ; `--port` seul vaut `true` et `Number(true)` vaut 1, entier valide dans la plage. Avec `kanban . --port 4000`, la valeur `4000` est ignorée (chemin déjà renseigné) et le serveur tente de se lier au port 1. Avec `kanban --port 4000`, `4000` devient le chemin cible et l'erreur affichée est « no project-management/ directory » sous `<cwd>/4000`.
 - **Preuve.** `cli/lib/parse-args.js:68-79` ; `cli/lib/kanban.js:51-52`.
@@ -158,7 +158,7 @@ Mineur · Lot L1 · Statut : à corriger
 - **Vérification.** Corrigé : deux comportements distincts selon la place de la valeur.
 
 #### K-09 — Identifiants BMAD réels rejetés
-Majeur · Lot L1 · Statut : à corriger
+Majeur · Lot L1 · Statut : corrigé (PR 1)
 
 - **Constat.** Le schéma exige `^US-\d{3,}$` ; le scanner exige `US-\d+` (non ancré, donc `US-E4-02.md` ne correspond pas) ; `repository.js` utilise `/US-\d+/` pour enregistrer une story invalide. Or `shared/deps.js` accepte déjà `US-E4-02`.
 - **Preuve.** `shared/schemas.js:9` (`idPattern`), `:25` ; `server/services/file-scanner.js:47-48` ; `server/services/repository.js:57` ; `shared/deps.js:9`.
@@ -167,7 +167,7 @@ Majeur · Lot L1 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-10 — Gate INVEST toujours refusée pour les stories YAML-only
-Majeur · Lot L1 · Statut : à corriger
+Majeur · Lot L1 · Statut : corrigé (PR 1)
 
 - **Constat.** Les stories issues uniquement du YAML n'ont pas de champ `invest_score` ; la gate calcule `Number(undefined ?? 0)`, soit 0 < 6, et refuse toujours backlog vers ready-for-dev.
 - **Preuve.** `server/services/state-machine.js:33-38` ; `server/services/repository.js:165-182` (aucun `invest_score`).
@@ -176,7 +176,7 @@ Majeur · Lot L1 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-11 — Dette diverse
-Mineur · Lot L1 · Statut : à corriger
+Mineur · Lot L1 · Statut : corrigé (PR 1, puis PR 5 pour les blocs `catch`, voir § 7.5) : corrigés `STATUSES` unique, champ `reason` dans l'historique, identité `kanban:<nom>`, message `archived`, journalisation des échecs d'écriture ; reste 8 blocs `catch` réduits à un commentaire et l'historique du chemin markdown seul, non constaté
 
 - **Constat et preuves.**
   - `STATUSES` dupliqué : `server/services/state-machine.js:19` et `shared/schemas.js:3`.
@@ -192,7 +192,7 @@ Mineur · Lot L1 · Statut : à corriger
 - **Vérification.** Corrigé / sous-point non confirmé : la liste brute disait « `reason` jamais utilisé ». Dans l'historique, la raison est bien renseignée (`sprint-cache.js:62` utilise `blocked_reason`) ; seul le champ `reason` de la requête est mort.
 
 #### K-12 — Build client et navigateur jamais vérifiés sur PR
-Mineur · Lot L1 · Statut : à corriger
+Mineur · Lot L1 · Statut : corrigé (PR 1)
 
 - **Constat.** `npm run kanban:build` n'est exécuté que dans le workflow de publication ; `ci.yml` ne mentionne pas le Kanban. Aucun test navigateur ni axe ne couvre le Kanban (`tests/kanban/*` est exécuté par Vitest, côté serveur et logique pure).
 - **Preuve.** `.github/workflows/npm-publish.yml:255-257` ; absence de « kanban » dans `.github/workflows/ci.yml` ; `website/tests/` ne contient que `e2e/` et `lighthouse/` pour le site.
@@ -201,7 +201,7 @@ Mineur · Lot L1 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-13 — Une seule mutation exposée
-Bloquant · Lot L3 (API), L4 (UI) · Statut : à corriger
+Bloquant · Lot L3 (API), L4 (UI) · Statut : corrigé (PR 3 : API ; PR 4 : interface)
 
 - **Constat.** La seule route d'écriture est `PATCH /api/stories/:id/status`. `StoryPatchSchema` n'est branché sur aucune route (utilisé seulement dans ses tests). `rebuildSprintStatus` n'est utilisé que par ses tests, n'est pas atomique (`writeFile` direct) et reconstruit le fichier sans `archived_sprints`.
 - **Preuve.** Routes : `server/app.js:43-347` (un seul `patch`, `:84`) ; `shared/schemas.js:140-147` ; `server/services/sprint-cache.js:80-123` (`:120` écriture directe, `:106-116` objet sans les clés inconnues).
@@ -212,7 +212,7 @@ Bloquant · Lot L3 (API), L4 (UI) · Statut : à corriger
 ### 4.2 Fonctionnel client
 
 #### K-14 — Recherche inerte
-Majeur · Lot L2 · Statut : à corriger
+Majeur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Le champ « Rechercher des stories… » et le badge ⌘K n'ont aucun gestionnaire ; aucune valeur n'est lue.
 - **Preuve.** `client/src/App.svelte:111-115`.
@@ -221,7 +221,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-15 — Filtres, tri, liens profonds
-Mineur · Lot L2 · Statut : à corriger
+Mineur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Le board n'a qu'un filtre de priorité, non persisté, et aucun tri. `route.query` est calculé mais jamais lu. Aucun lien profond vers une story ni `#/docs/<chemin>`. Une route inconnue affiche une page vide (aucun `{:else}`, titre « Board » par défaut).
 - **Preuve.** `client/src/views/KanbanView.svelte:43-48` ; `client/src/lib/router.svelte.js:6-8` (aucune lecture ailleurs, vérifié par `git grep`) ; `client/src/App.svelte:46-47, 143-175`.
@@ -230,7 +230,7 @@ Mineur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-16 — Clavier du menu « Déplacer »
-Majeur · Lot L2 · Statut : à corriger
+Majeur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.**
   1. Menu ouvert, les flèches modifient la carte ciblée : le traitement des flèches précède celui du menu, et les boutons du menu agissent sur `focusedCardIndex`. On peut déplacer une carte autre que celle du menu.
@@ -245,7 +245,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé ; points 3 et 5 précisés (portée du handler, absence de préfixe Vite).
 
 #### K-17 — Déblocage et `--readonly` côté UI
-Majeur · Lot L2 · Statut : à corriger
+Majeur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Le menu propose les six colonnes pour une story bloquée alors que le serveur n'accepte que `previous_status` (409 sinon). L'UI n'appelle jamais `/api/health` : en `--readonly`, tous les contrôles d'écriture restent affichés et échouent en 403.
 - **Preuve.** `client/src/views/KanbanView.svelte:376-385` ; `server/app.js:117-131` (restriction), `:43` (`health` expose `readonly`) ; `git grep` : aucune occurrence de `health` ni de `readonly` configuré dans `client/src`.
@@ -254,7 +254,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-18 — États de chargement et erreurs
-Mineur · Lot L2 · Statut : à corriger
+Mineur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** `store.loading` est écrit mais jamais lu : les colonnes affichent « No stories » avant la réponse. Le burndown affiche « No burndown data » tant que `store.burndown` est `null`. Le détail d'une story ignore silencieusement une réponse en erreur ou une exception.
 - **Preuve.** `client/src/lib/store.svelte.js:12, 55, 65` (aucune lecture) ; `client/src/views/KanbanView.svelte:339-341` ; `client/src/views/BurndownView.svelte:100-101` ; `client/src/lib/detail.svelte.js:49, 58-60`.
@@ -263,7 +263,7 @@ Mineur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-19 — Réseau et temps réel
-Mineur · Lot L2 · Statut : à corriger
+Mineur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** `patchStatus` n'encode pas l'identifiant et mémorise un index de tableau (`idx`) qui peut devenir faux si le store est rechargé pendant la requête. `selectDoc`, `loadDetail` et `loadList` n'annulent ni ne désordonnent leurs réponses (aucun `AbortController`). Le SSE ne resynchronise pas à la reconnexion et déclenche un rechargement par événement, sans debounce. Les vues Sprints, Dépendances et Docs ne chargent qu'à l'ouverture (`$effect` unique).
 - **Preuve.** `client/src/lib/store.svelte.js:85-97` (index), `:89` (pas d'`encodeURIComponent`), `:104-131` (SSE) ; `client/src/views/DocsView.svelte:45-57, 78` ; `client/src/views/SprintsView.svelte:41-58, 91-92` ; `client/src/views/DepsView.svelte:55-78`.
@@ -272,7 +272,7 @@ Mineur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-20 — Sprint actif, liens, accent
-Mineur · Lot L2 · Statut : à corriger
+Mineur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Un sprint est « actif » dès que `done_points > 0` ; un sprint démarré sans story terminée est « planned ». Les liens `US-xxx` des documents pointent vers `#/kanban` sans ouvrir la story (et ne reconnaissent pas `US-E4-02`). Changer l'accent ne redessine pas le burndown, dont les couleurs sont lues une fois.
 - **Preuve.** `client/src/views/SprintsView.svelte:19-23` ; `client/src/views/DocsView.svelte:86-92` ; `client/src/views/BurndownView.svelte:27-41` (l'effet ne dépend pas de `tweaks`).
@@ -281,7 +281,7 @@ Mineur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-21 — Code mort et duplications
-Mineur · Lot L2 (nettoyage final L5) · Statut : à corriger
+Mineur · Lot L2 (nettoyage final L5) · Statut : corrigé (PR 2 et PR 5) : CSS mort retiré, `markdown.js`, `points.js` et `StoryRow.svelte` en place ; icônes inutilisées, variables CSS héritées et clés i18n mortes supprimées (§ 7.5)
 
 - **Constat.** `.kbd-hint` (`views.css:381`) et `.btn-primary` (`app.css:577`) n'ont aucun usage dans le client. Duplications : ligne de story du Backlog écrite deux fois (`BacklogView.svelte:62-72` et `:98-108`) ; rendu `marked` + DOMPurify trois fois (`detail.svelte.js:54-56`, `DocsView.svelte:62`, `SprintsView.svelte:63`) ; sommes de points répétées (`KanbanView.svelte:68`, `BacklogView.svelte:31`, `SprintsView.svelte:79-80`, au moins).
 - **Impact.** Dette de maintenance.
@@ -289,7 +289,7 @@ Mineur · Lot L2 (nettoyage final L5) · Statut : à corriger
 - **Vérification.** Confirmé en partie : les icônes inutilisées, les variables legacy (`app.css:79-84`) et le total « ×5 » des sommes n'ont pas été recomptés.
 
 #### K-22 — Fonctions de gestion de projet absentes de l'UI
-Majeur · Lot L4 · Statut : à corriger
+Majeur · Lot L4 · Statut : corrigé (PR 4) : `StoryForm.svelte`, `SprintForm.svelte`, `CloseSprintDialog.svelte` et `WipSettings.svelte` existent et sont branchés
 
 - **Constat.** Aucun écran ne permet de créer, éditer, supprimer ou assigner une story, de planifier un sprint, de fixer des limites de WIP, de suivre la vélocité ni de trier (conséquence de K-13 ; vues existantes en lecture seule hors déplacement).
 - **Preuve.** Absence de formulaire et d'appel d'écriture dans `client/src/` hormis `patchStatus` (`store.svelte.js:81-102`).
@@ -298,7 +298,7 @@ Majeur · Lot L4 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-23 — Langues mêlées, pas d'i18n
-Mineur · Lot L2 · Statut : à corriger
+Mineur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Les chaînes mélangent français et anglais (« Workspace », « Rechercher des stories… », « Blocked reason? », « Aide clavier »), sans mécanisme d'internationalisation ; les dates sont affichées brutes, sans `Intl`.
 - **Preuve.** `client/src/App.svelte:79, 113, 132, 149` ; `client/src/views/KanbanView.svelte:25-31, 102, 352, 375` ; `client/src/views/SprintsView.svelte:150-151`.
@@ -309,7 +309,7 @@ Mineur · Lot L2 · Statut : à corriger
 ### 4.3 Accessibilité (WCAG 2.2 AA, RGAA 4.1)
 
 #### K-24 — Navigation supprimée sous 980 px
-Bloquant · Lot L2 · Statut : à corriger
+Bloquant · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Sous 980 px, `.sidebar` (seule navigation entre vues), `.search` et `.docs-tree` passent en `display: none` sans remplacement. `body { overflow: hidden }`. À 400 % de zoom sur un écran de 1280 px, la largeur utile est de 320 px.
 - **Preuve.** `client/src/app.css:111, 606-617` ; `client/src/views.css:1382-1384` ; `client/src/components/PromptDialog.svelte:87-88` (`min-width: 320px` plus `padding: 24px`).
@@ -319,7 +319,7 @@ Bloquant · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-25 — Cartes du board
-Majeur · Lot L2 · Statut : à corriger
+Majeur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Chaque carte est un `<li role="listitem" tabindex="0" onclick>` (avertissements Svelte masqués par trois `svelte-ignore`). Aucun rôle interactif. Espace n'est pas géré (Entrée passe par un gestionnaire global). Chaque carte est un arrêt de tabulation. `aria-label` remplace le contenu accessible : priorité, points, assigné et avancement des tâches ne sont pas annoncés.
 - **Preuve.** `client/src/views/KanbanView.svelte:297-315` ; `client/src/lib/kanban-nav.js:88-92`.
@@ -329,7 +329,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-26 — Toasts
-Majeur · Lot L2 · Statut : à corriger
+Majeur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Chaque toast est un `div` cliquable sans équivalent clavier (`svelte-ignore`) ; une région `aria-live="polite"` englobe des éléments `role="status"` (annonces doublées possibles) ; les toasts disparaissent après 3,5 s (5 s pour certains messages d'erreur) sans pause au survol ni au focus.
 - **Preuve.** `client/src/App.svelte:180-191` ; `client/src/lib/store.svelte.js:20-27`.
@@ -339,7 +339,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-27 — ARIA et structure invalides
-Majeur · Lot L2 · Statut : à corriger
+Majeur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** (a) `aria-label` sur des éléments sans rôle : `div.coding-legend` (`KanbanView.svelte:270`), `span.col-count` (`:292`), `span.tdd-pip` (`TddPip.svelte:13`). (b) Des `<div>` sont placés dans `<button class="epic-head">` (contenu non phrasé, HTML invalide). (c) Les lignes d'un épic replié restent dans l'arbre d'accessibilité et focalisables : le repli est un `grid-template-rows: 0fr` avec `overflow: hidden`, sans `visibility` ni `inert`, donc le focus peut aller sur des éléments invisibles.
 - **Preuve.** `client/src/views/BacklogView.svelte:44-58` ; `client/src/views.css:759-769`.
@@ -349,7 +349,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé ; sévérité relevée à majeur (focus sur contenu masqué = non-conformité AA nette).
 
 #### K-28 — Graphe de dépendances et information par la couleur seule
-Majeur · Lot L2 · Statut : à corriger
+Majeur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Le graphe est un canvas (`role="img"`) : les nœuds ne sont accessibles qu'au pointeur (`cy.on('tap', 'node')`) ; il n'existe aucune navigation clavier. Le statut d'un nœud n'est porté que par sa couleur et son libellé n'est donné qu'au clic. Une liste `sr-only` des arêtes existe (« X depends on Y »), mais elle n'indique ni statut ni appartenance à un cycle. Dans la modale, un dépassement d'heures (`t-over`) n'est signalé que par la couleur.
 - **Preuve.** `client/src/views/DepsView.svelte:126-165` (couleur de fond par statut), `:172-175` (tap seul), `:216-221`, `:248-254` ; `client/src/components/StoryDetail.svelte:95, 114`.
@@ -359,7 +359,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Vérification.** Corrigé : une alternative textuelle partielle existe (liste des arêtes, compteur de cycles dans `aria-label` et en-tête).
 
 #### K-29 — Titre, langue, titres, focus de vue
-Majeur · Lot L2 · Statut : à corriger
+Majeur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** `<title>` statique ; `lang="en"` alors que l'interface mêle français et anglais ; aucun titre propre dans Backlog et Docs ; Docs peut afficher un second `h1` (le Markdown rendu) ; `nav` imbriqué dans `aside` ; `main` sans `tabindex="-1"` ; le focus n'est pas déplacé au changement de vue.
 - **Preuve.** `client/index.html:2, 6` ; `client/src/App.svelte:69-78, 107, 137` ; `client/src/views/BacklogView.svelte` (aucun titre) ; `client/src/views/DocsView.svelte:150` (`{@html renderedContent}`).
@@ -369,7 +369,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé ; sévérité relevée à majeur (critères de niveau A en échec).
 
 #### K-30 — Contrastes
-Majeur · Lot L2 · Statut : à corriger
+Majeur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Voir l'annexe A. En échec : `--accent-fg` sur `--accent` violet (2,34:1, bouton de confirmation du prompt) ; chip priorité Won't (4,00:1) ; bordures de composants (cartes, boutons, filtres, champs : 1,09 à 2,28:1, seuil de 3:1 pour une bordure qui identifie le composant) ; champ de recherche : `outline: none` et bordure qui passe de 1,19:1 à 2,28:1 au focus. En limite : chip Must (4,498:1) et `--fg-faint` sur le sprint sélectionné (4,36 à 4,75 selon l'accent).
 - **Preuve.** `client/src/app.css:7-60` (tokens), `:403-427` (recherche, `outline: none` en `:424`) ; `client/src/lib/tweaks.svelte.js:12-17, 57` ; `client/src/components/PriorityChip.svelte:13` ; `client/src/views.css:847-850`.
@@ -379,7 +379,7 @@ Majeur · Lot L2 · Statut : à corriger
 - **Vérification.** Corrigé : voir annexe A ; Must 4,498 (et non 4,36), `fg-faint` sur sprint sélectionné 4,36 pour lime (et non 3,92), bordures de 1,09 à 2,28 (et non 1,17 à 2,28).
 
 #### K-31 — Cibles, tailles, animation, aide fixe
-Mineur · Lot L2 · Statut : à corriger
+Mineur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.**
   1. Le bouton `.toggle` des tâches fait 16 px de large.
@@ -393,7 +393,7 @@ Mineur · Lot L2 · Statut : à corriger
 - **Vérification.** Corrigé, deux sous-points non confirmés : (i) « focus non restitué au déclencheur du PromptDialog » : `<dialog>.close()` restitue nativement le focus à l'élément précédent, et le menu « Déplacer » le restitue lui-même (`KanbanView.svelte:241-249`) ; (ii) « `:focus` au lieu de `:focus-visible` » (`PromptDialog.svelte:116, 142, 155`) n'est pas un défaut de conformité (le focus est visible, parfois aussi à la souris).
 
 #### K-32 — Mises à jour temps réel non annoncées
-Mineur · Lot L2 · Statut : à corriger
+Mineur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Un déplacement fait par un tiers (SSE) recharge le store mais ne produit aucune annonce : la région live n'est alimentée que par les actions locales. Les `setTimeout` qui vident cette région ne sont jamais annulés, et un nouveau message peut être effacé par la minuterie du précédent.
 - **Preuve.** `client/src/lib/store.svelte.js:113-130` ; `client/src/views/KanbanView.svelte:210-231, 356`.
@@ -403,7 +403,7 @@ Mineur · Lot L2 · Statut : à corriger
 - **Vérification.** Confirmé.
 
 #### K-34 — Pas d'alternative à un seul pointeur au glisser-déposer (nouveau)
-Majeur · Lot L2 · Statut : à corriger
+Majeur · Lot L2 · Statut : corrigé (PR 2)
 
 - **Constat.** Pour déplacer une carte avec la souris ou au toucher, la seule voie est le glisser-déposer HTML5 (`draggable`, `ondragstart`, `ondrop`). La seule alternative est clavier (`Alt+M`, menu). Il n'existe aucun bouton ou menu cliquable par carte ; sur écran tactile, le glisser-déposer HTML5 est peu fiable.
 - **Preuve.** `client/src/views/KanbanView.svelte:83-110, 306-307, 285-287` ; aucun bouton « Déplacer » dans le gabarit de carte (`:301-337`).
@@ -415,7 +415,7 @@ Majeur · Lot L2 · Statut : à corriger
 ### 4.4 Documentation
 
 #### K-33 — Documentation inexacte
-Mineur · Lot L5 · Statut : à corriger
+Mineur · Lot L5 · Statut : corrigé (PR 5)
 
 - **Constat.**
   - `docs/FAQ.md:301` : « lecture seule — pas de modification de données » ; le Kanban écrit les transitions (`README.md:74`).
@@ -487,3 +487,81 @@ Méthode : tokens de `client/src/app.css:7-60` et `client/src/lib/tweaks.svelte.
 - **Limites.** Voir le § 2 : revue statique, pas d'exécution navigateur ni de lecteur d'écran, contrastes calculés. Les constats d'exécution (K-03 course, K-31 point 4, K-24 rendu à 320 px) sont déduits du code.
 - **Suites.** L1 : durcissement serveur (K-01, K-02 partie markdown, K-04 à K-12), harnais navigateur et axe, présent rapport. L2 : i18n, accessibilité et corrections client (K-14 à K-21, K-23 à K-32, K-34). L3 : API d'écriture sûre (K-02 partie YAML, K-03, K-13). L4 : UI d'édition, planification, limites WIP, vélocité (K-22). L5 : documentation (K-33), nettoyage du code mort, et mise à jour de la colonne « Statut » de chaque fiche (actuellement « à corriger » partout).
 - **À confirmer avant publication du rapport final.** La mesure axe à 1280 px et 320 px pour valider l'annexe A.
+
+## 7. Constats ajoutés pendant l'implémentation
+
+Ces points n'étaient pas dans la liste initiale ; ils ont été trouvés en écrivant ou en relisant les correctifs.
+
+### 7.1 Revue de sécurité du lot 3 (API d'écriture)
+
+Statut : **corrigé (PR 3)** pour les neuf points.
+
+- **Fichier `.bak` (faille préexistante).** Lors de l'écriture d'un frontmatter, la copie de sauvegarde `<story>.md.bak` suivait un lien symbolique posé à cet emplacement (branche hostile) : l'écriture pouvait sortir du fichier de la story. Test : `tests/kanban/security-write-api.test.js`.
+- **Expressions régulières quadratiques** sur le markdown : l'analyse de la liste de métadonnées reste linéaire sur les longues lignes, les suites de lignes vides et les marqueurs de commentaire.
+- **Bombe d'alias YAML** : un `sprint-status.yaml` ou un frontmatter de story à alias imbriqués est déclaré invalide au lieu d'être développé (la story concernée devient invalide, le tableau reste réactif).
+- **FIFO à la place du YAML ou du verrou** : un `sprint-status.yaml` qui pointe vers un tube nommé est signalé invalide au lieu de bloquer le rafraîchissement ; un fichier `.lock` qui pointe vers un tube nommé est jugé périmé et remplacé.
+- **Corps contenant un frontmatter** : `PUT /api/stories/:id/body` refuse un corps qui deviendrait un frontmatter dans un fichier qui n'en a pas.
+- **Ligne `Status` masquée par un commentaire** : une ligne de statut coupée par un commentaire HTML est refusée (`status_line_forbidden`), le lecteur retirant les commentaires avant d'analyser.
+- **`.bmad/` absent** : le déplacement ou l'édition d'une story suivie par le YAML renvoyait un 500 ; la réponse est 409 `sprint_status_missing`.
+- **Épic invalide** : `PATCH /api/stories/:id` refuse un identifiant d'épic `E<n>` que le schéma du frontmatter rejetterait (la story aurait disparu du tableau).
+- **Markdown supprimé à tort** : à la création d'une story, le fichier markdown est conservé quand seul le rafraîchissement du tableau échoue après l'écriture du YAML ; le retour arrière ne concerne que l'échec de cette écriture.
+
+### 7.2 Relecture accessibilité du lot 2
+
+Statut : **corrigé (PR 2)** pour les huit points.
+
+1. Focus perdu après la fermeture d'une notification.
+2. Focus perdu après l'effacement des filtres.
+3. Déplacement d'une carte annoncé deux fois.
+4. Animation `ping` encore active sous `prefers-reduced-motion` (pseudo-élément `::after` du témoin « Live »).
+5. Cible de 23 px, sous le minimum de 24 px (WCAG 2.5.8).
+6. Zone de recherche sans nom accessible.
+7. Régions live créées avec leur message déjà dedans, donc non annoncées.
+8. Fenêtre Réglages non centrée.
+
+### 7.3 Minuteries non liées (« Illegal invocation »)
+
+Statut : **corrigé (PR 2)**. Les modèles de minuterie (`toasts.js`, `announce.js`) recevaient `setTimeout` et `clearTimeout` sans leur objet global ; appelés comme méthodes d'un autre objet, ils lèvent `TypeError: Illegal invocation` dans un navigateur, ce que les tests sous Node ne voient pas.
+
+### 7.4 Test instable du watcher
+
+Statut : **corrigé (commit `20c75d1e`)**. Le test du watcher attendait par une pause fixe ; il attend maintenant que le watcher soit prêt.
+
+### 7.5 Revue finale du lot 4 (parcours de bout en bout)
+
+Statut : **corrigé** pour les points ci-dessous. Le parcours complet d'un chef de projet est joué par `website/tests/kanban/journey.spec.ts` (création, estimation, priorisation, assignation, création et planification d'un sprint, clôture avec report, démarrage, passage des gates jusqu'à « done », blocage et déblocage, limite WIP, burndown et vélocité, filtre, recherche, lien profond, rechargement, contrôle des fichiers sur disque), puis en français et à 320 px.
+
+1. **Gate « tâches terminées » infranchissable depuis l'interface (bloquant).** Une story créée sur le tableau n'avait aucune tâche et aucun moyen d'en ajouter : elle restait en « in-progress ». Ajout de `POST /api/stories/:id/tasks` et d'un champ « Nouvelle tâche » dans le détail. Une story qui n'avait qu'un compteur de tâches reçoit, à la première modification et dans la même mutation, un statut par tâche (les premières tâches, autant que le compteur, comptent comme terminées) : le compteur n'est plus remis à 1. Tests : `routes-stories.test.js`, `journey.spec.ts`.
+2. **Saisie perdue au changement d'URL ou par Échap.** Retour arrière, lien vers une autre story, nouveau `?story=` fermaient le formulaire d'édition sans confirmation ; Échap et le fond fermaient le formulaire de sprint sans confirmation. Le routeur retient désormais la navigation tant qu'un formulaire modifié n'a pas été abandonné (`lib/leave-guard.js`). Tests : `leave-guard.test.js`, `unsaved.spec.ts`.
+3. **Faux conflit 409 après un déplacement.** Un rechargement du tableau lancé avant une écriture et reçu après remettait l'ancienne version de la story (et son ancien `_rev`) : la modification suivante affichait « modifiée entre-temps ». Ces rechargements sont maintenant ignorés et relancés. Test : `crud.spec.ts`.
+4. **Focus volé après un déplacement** : la réponse du serveur ramenait le focus sur la carte même si l'utilisateur était passé à un autre contrôle (WCAG 2.4.3). **Focus perdu sur `<body>`** à la fermeture du détail d'une story qui vient d'être créée. Tests : `a11y-review.spec.ts`.
+5. **Explication des gates en anglais technique** (`missing`) dans un toast non traduit : le refus nomme maintenant ce qu'il faut faire, dans la langue de l'interface. Les toasts sont traduits à l'affichage (pluriels compris) et suivent un changement de langue ; trois confirmations au plus à l'écran pour ne plus masquer le tableau. Tests : `toasts.test.js`, `journey.spec.ts`.
+6. **WIP compté différemment par le serveur et la colonne** (toutes les stories contre celles du sprint actif) : le serveur compte comme la colonne et le client affiche son avertissement. Tests : `kanban-config.test.js`, `routes-stories.test.js`.
+7. **API** : `GET /api/sprints` et `/api/sprints/:id` donnent les dates et la capacité (le client ne relit plus le markdown) ; un 409 `conflict` porte la story au format de l'API (avec `_rev`). Tests : `routes-sprints.test.js`, `routes-stories.test.js`.
+8. **Formulaires** : boîte d'alerte vide dessinée sous le formulaire d'édition ; « Titre(obligatoire) » sans espace ; boutons radio de la clôture écrasés à 13 px à 320 px ; texte indicatif du champ de recherche tronqué en français et en portugais ; suppression d'une story en cours confirmée en deux questions au lieu d'une ; ids en dur de `PromptDialog`. Tests : `a11y-review.spec.ts`, `crud.spec.ts`.
+9. **Test instable du lot 2 (arbre des Docs à 320 px)** : une fois sur quatre passages complets, l'arbre restait ouvert après le choix d'un document. Cause probable : `bind:open` apprend l'ouverture par l'événement asynchrone `toggle`, qui pouvait réécrire `open` après la fermeture ; l'élément est maintenant fermé directement. Non reproduit de façon déterministe (25 répétitions ciblées vertes avant et après la correction).
+10. **Dette K-11 et K-21** : `catch` silencieux justifiés ou journalisés (abonné SSE en échec) ; icônes, variables CSS et 40 clés i18n mortes supprimées, garde-fou `every en key is used` dans `i18n-parity.test.js`.
+
+## 8. Non vérifié / limites
+
+**Non vérifié.**
+
+- Lecteurs d'écran réels (NVDA, JAWS, VoiceOver, TalkBack) : le comportement ARIA est déduit du code et des règles ARIA 1.2.
+- Firefox, Safari et appareils tactiles : les contrôles automatiques (axe, tests clavier) ne tournent que sous Chromium.
+- Mode contrastes forcés de Windows.
+- Score de mutation (Stryker) : non mesuré en local ; il est calculé par la CI.
+
+**Limites connues de l'interface.**
+
+- Une tâche ajoutée ne peut être ni renommée ni supprimée depuis l'interface (seul son statut change) ; une tâche saisie par erreur doit être passée à « terminée » ou retirée du YAML.
+- Le bundle principal (`index-*.js`) est passé de 87,4 kB à 110,7 kB (35,5 kB gzip) avec les formulaires du lot 4 ; leur chargement différé n'a pas été fait (composants liés par `bind:this` et `bind:draft`, gain modeste pour un outil local).
+
+- Le panneau d'un nœud du graphe de dépendances ne s'ouvre qu'au pointeur ; le tableau équivalent est l'alternative au clavier et au lecteur d'écran.
+- Le contenu des stories (titres, markdown) n'a pas d'attribut `lang`, même s'il est rédigé dans une autre langue que l'interface.
+
+**Risques résiduels de l'écriture.**
+
+- Un dossier remplacé par un lien symbolique dans une branche hostile n'est pas détecté sur tout le chemin d'écriture : la protection porte sur le fichier, pas sur chaque dossier parent.
+- `POST` n'est pas idempotent : un envoi répété (double clic, nouvelle tentative réseau) crée deux stories ou deux sprints ; seule une collision de nom de sprint est refusée (`sprint_exists`).
+- Le YAML et le markdown peuvent diverger (par exemple une ligne `Points` du markdown différente de la YAML) ; la divergence est signalée par un avertissement (`metadata_sync_failed`), pas réparée.
+- La reprise d'un verrou périmé (plus de 10 s) n'est pas atomique : deux processus qui reprennent le même verrou au même instant peuvent s'écrire dessus ; la revalidation du schéma et la détection de conflit par story limitent les dégâts.

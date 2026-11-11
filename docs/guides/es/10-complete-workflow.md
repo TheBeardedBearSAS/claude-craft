@@ -283,6 +283,8 @@ backlog → ready-for-dev → in-progress → review → done   (any → blocked
 
 Vistas complementarias: `/project:report burndown` (burndown del sprint), `/project:report deps`, `/project:report deps --critical`, `/project:report metrics`.
 
+El tablero también es una herramienta de gestión: desde ese mismo Kanban (`npx @the-bearded-bear/claude-craft kanban`) se pueden crear y editar historias, planificar el backlog en un sprint, y crear, iniciar y cerrar sprints. Los comandos `/workflow:*` y `/project:*` siguen siendo válidos y escriben el mismo archivo, `.bmad/sprint-status.yaml`. Consulta la [referencia de la CLI](../../i18n/es/CLI-REFERENCE.md#comando-kanban).
+
 ### D.2 Por qué una tarjeta puede negarse a moverse
 
 El tablero aplica las mismas puertas. Una historia no entrará en **done** hasta que su DoD pase — el método te protege, no es un bug.

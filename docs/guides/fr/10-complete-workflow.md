@@ -284,6 +284,8 @@ backlog → ready-for-dev → in-progress → review → done   (any → blocked
 
 Vues complémentaires : `/project:report burndown` (burndown du sprint), `/project:report deps`, `/project:report deps --critical`, `/project:report metrics`.
 
+Le tableau est aussi un outil de gestion : depuis ce même Kanban (`npx @the-bearded-bear/claude-craft kanban`), on peut créer et modifier des stories, planifier le backlog dans un sprint, puis créer, démarrer et clôturer des sprints. Les commandes `/workflow:*` et `/project:*` restent valables et écrivent le même fichier, `.bmad/sprint-status.yaml`. Voir la [référence CLI](../../i18n/fr/CLI-REFERENCE.md#commande-kanban).
+
 ### D.2 Pourquoi une carte peut refuser de bouger
 
 Le tableau impose les mêmes gates. Une story n'entrera pas dans **done** tant que son DoD n'est pas validé — c'est la méthode qui vous protège, pas un bug.

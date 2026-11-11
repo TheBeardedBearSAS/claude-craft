@@ -284,6 +284,8 @@ backlog → ready-for-dev → in-progress → review → done   (any → blocked
 
 Visões complementares: `/project:report burndown` (burndown do sprint), `/project:report deps`, `/project:report deps --critical`, `/project:report metrics`.
 
+O quadro também é uma ferramenta de gestão: a partir desse mesmo Kanban (`npx @the-bearded-bear/claude-craft kanban`) é possível criar e editar histórias, planejar o backlog em um sprint, e criar, iniciar e encerrar sprints. Os comandos `/workflow:*` e `/project:*` continuam válidos e escrevem o mesmo arquivo, `.bmad/sprint-status.yaml`. Veja a [referência da CLI](../../i18n/pt/CLI-REFERENCE.md#comando-kanban).
+
 ### D.2 Por que um cartão pode se recusar a avançar
 
 O board aplica os mesmos gates. Uma história não entrará em **done** enquanto o DoD não passar — isso é o método te protegendo, não um bug.
