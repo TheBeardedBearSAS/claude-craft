@@ -1,7 +1,19 @@
 import { test, expect, type Page } from '@playwright/test';
 import en from '../../../cli/kanban/client/src/lib/i18n/locales/en.js';
 import fr from '../../../cli/kanban/client/src/lib/i18n/locales/fr.js';
-import { VIEWS, DESKTOP, ZOOM400, READONLY_ORIGIN, openView, pressTab, setTweaks, settingsButton, openMoveMenu, SMALL_TARGETS, settled } from './helpers';
+import {
+  VIEWS,
+  DESKTOP,
+  ZOOM400,
+  READONLY_ORIGIN,
+  openView,
+  pressTab,
+  setTweaks,
+  settingsButton,
+  openMoveMenu,
+  SMALL_TARGETS,
+  settled,
+} from './helpers';
 
 // What axe does not see (audit K-16, K-17, K-24..K-32, K-34): motion, target size, focus after an action,
 // duplicated or late live regions, headings, landmarks, language of the UI, text spacing, menu keyboard pattern.
@@ -64,6 +76,30 @@ for (const vp of [DESKTOP, ZOOM400]) {
 }
 
 // ---- focus is never lost after an action ---------------------------------------------------------------
+// Safari on macOS gives no focus to a button on click (seen under Playwright's WebKit on macOS): the focus stays on
+// the page when the dialog opens. Reproduced under every engine by cancelling the default action of mousedown.
+const dialogsOpenedByClick: Array<[string, string, (p: Page) => ReturnType<Page['locator']>, string]> = [
+  ['new sprint', 'sprints', (p) => p.getByRole('button', { name: 'New sprint' }), 'dialog.sprint-form[open]'],
+  ['new story', 'kanban', (p) => p.locator('[data-new-story]'), 'dialog[open]:has(#create-title)'],
+  ['settings', 'kanban', (p) => settingsButton(p), 'dialog.tweaks-dialog[open]'],
+  ['story detail', 'kanban', (p) => p.locator(`[data-card-id="${US}"]`), 'dialog.modal[open]'],
+];
+for (const [name, view, button, dialog] of dialogsOpenedByClick) {
+  test(`focus: the ${name} dialog opened by a click that gave no focus gives it back to its button`, async ({
+    page,
+  }) => {
+    await page.addInitScript(() =>
+      document.addEventListener('mousedown', (e) => (e.target as Element).closest('button') && e.preventDefault(), true)
+    );
+    await openView(page, view);
+    await button(page).click();
+    await expect(page.locator(dialog)).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator(dialog)).toHaveCount(0);
+    await expect(button(page)).toBeFocused();
+  });
+}
+
 test('focus: cancelling the blocked-reason prompt returns focus to the Move button', async ({ page }) => {
   await openView(page, 'kanban');
   await page.locator(`[data-move-id="${US}"]`).focus();
@@ -482,7 +518,9 @@ test('focus: a move answered late never takes the focus away from where the user
   await expect(search).toBeFocused();
 });
 
-test('focus: closing the detail of a story just created goes to "New story", never to the page body', async ({ page }) => {
+test('focus: closing the detail of a story just created goes to "New story", never to the page body', async ({
+  page,
+}) => {
   await openView(page, 'kanban');
   await page.locator('[data-new-story]').focus();
   await page.keyboard.press('Enter');
@@ -515,7 +553,9 @@ test('forms: a required field says so after its label, with a space ("Title (req
   await expect(page.locator('label[for="sf-name"]')).toHaveText(/^Name \(required\)$/);
 });
 
-test('ids: every id of the page is unique with the detail, its dialogs and the creation form mounted', async ({ page }) => {
+test('ids: every id of the page is unique with the detail, its dialogs and the creation form mounted', async ({
+  page,
+}) => {
   await page.goto(`/#/kanban?story=${US}`);
   await expect(page.locator('dialog.modal[open]')).toBeVisible();
   const dupes = await page.evaluate(() => {
@@ -626,10 +666,13 @@ for (const lang of ['en', 'de']) {
         await open(page);
         await page.addStyleTag({ content: SPACING });
         // 1.4.10 is about 320 CSS px; at 1280 px the page behind a modal is not scrollable (body overflow: hidden).
-        const sideways = vp.width > 320 ? [] : await page.evaluate(() => {
-          const boxes = [document.documentElement, ...document.querySelectorAll('dialog[open]')];
-          return boxes.filter((b) => b.scrollWidth - b.clientWidth > 1).map((b) => b.className || b.tagName);
-        });
+        const sideways =
+          vp.width > 320
+            ? []
+            : await page.evaluate(() => {
+                const boxes = [document.documentElement, ...document.querySelectorAll('dialog[open]')];
+                return boxes.filter((b) => b.scrollWidth - b.clientWidth > 1).map((b) => b.className || b.tagName);
+              });
         problems.push(...sideways.map((b) => `${name}: scrolls sideways (${b})`));
         problems.push(...(await page.evaluate(SMALL_TARGETS)).map((s) => `${name}: small ${s}`));
         const squeezed = await page.evaluate(() =>

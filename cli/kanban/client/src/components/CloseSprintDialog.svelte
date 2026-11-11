@@ -1,4 +1,5 @@
 <script>
+  import { opener } from '../lib/opener.js';
   /**
    * "Close sprint" dialog: says what closing does (done stories are archived, the others are carried over) and asks
    * where the unfinished ones go. Mount once; `const carryOver = await dialog.open({ id, name })` resolves to
@@ -20,7 +21,7 @@
   const summary = $derived(closeSummary(stories, sprint.id));
 
   export function open(target) {
-    triggerEl = document.activeElement;
+    triggerEl = opener();
     sprint = target;
     carry = 'backlog';
     settle(null); // a question still pending is over

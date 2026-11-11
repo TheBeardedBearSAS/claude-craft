@@ -1,4 +1,5 @@
 <script>
+  import { opener } from '../lib/opener.js';
   /**
    * "New sprint" dialog. Mount once, open from a button:
    *   <SprintForm bind:this={form} onsaved={(sprint) => …} />   form.open()
@@ -33,7 +34,7 @@
   const failing = $derived(FIELDS.filter((f) => errors[f]));
 
   export function open() {
-    triggerEl = document.activeElement;
+    triggerEl = opener();
     submitKey = idempotencyKey();
     draft = empty();
     errors = {};

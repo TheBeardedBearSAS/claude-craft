@@ -11,6 +11,7 @@ import {
   describeFailure,
   idempotencyKey,
   focusLost,
+  openerOf,
 } from '../../cli/kanban/client/src/lib/story-form.js';
 
 const story = (extra = {}) => ({
@@ -247,5 +248,27 @@ describe('focusLost', () => {
     const dialog = { contains: () => false };
     expect(focusLost(el(), body, dialog)).toBe(false);
     expect(focusLost(el(), body, null)).toBe(false);
+  });
+});
+
+// Safari on macOS gives no focus to a button on click: the focus is still on <body> when the dialog opens.
+describe('openerOf', () => {
+  const body = { isConnected: true };
+  const button = (extra = {}) => ({ isConnected: true, ...extra });
+
+  it('is the focused control when there is one', () => {
+    const focused = button();
+    expect(openerOf(focused, body, button())).toBe(focused);
+  });
+
+  it('is the control just clicked when the focus stayed on the body', () => {
+    const clicked = button();
+    expect(openerOf(body, body, clicked)).toBe(clicked);
+    expect(openerOf(null, body, clicked)).toBe(clicked);
+  });
+
+  it('is the body when the control clicked is gone or there was none', () => {
+    expect(openerOf(body, body, button({ isConnected: false }))).toBe(body);
+    expect(openerOf(body, body, null)).toBe(body);
   });
 });

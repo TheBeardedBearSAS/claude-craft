@@ -1,4 +1,5 @@
 <script>
+  import { opener as currentOpener } from '../lib/opener.js';
   /**
    * Modale de création de story. Montée une fois (dans StoryDetail, donc dans App) ; ouverte par
    * `openCreate(defaults)` de story-actions.svelte.js depuis n'importe quelle vue. Après la création, la modale
@@ -29,7 +30,7 @@
   // Réinitialise le brouillon à chaque ouverture (les valeurs par défaut viennent de l'appelant).
   $effect(() => {
     if (!createDialog.open || !dialogEl || dialogEl.open) return;
-    opener = document.activeElement;
+    opener = currentOpener();
     submitKey = idempotencyKey();
     draft = emptyDraft(createDialog.defaults);
     initial = JSON.stringify($state.snapshot(draft));

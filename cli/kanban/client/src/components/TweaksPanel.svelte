@@ -1,4 +1,5 @@
 <script>
+  import { opener } from '../lib/opener.js';
   import { tweaks, setTweak, DENSITIES } from '../lib/tweaks.svelte.js';
   import { ACCENTS } from '../lib/config.js';
   import { SUPPORTED_LOCALES } from '../lib/i18n/translate.js';
@@ -11,7 +12,7 @@
 
   /** Ouvre le panneau (appelé par le parent via bind:this). */
   export function open() {
-    triggerEl = document.activeElement;
+    triggerEl = opener();
     dialog?.showModal();
   }
 

@@ -181,3 +181,13 @@ export function focusLost(active, body, dialog) {
   if (!active || active === body || !active.isConnected || active.disabled === true) return true;
   return Boolean(dialog?.contains(active));
 }
+
+/**
+ * The control that opened a dialog, where the focus goes back when it closes. Safari on macOS gives no focus to a
+ * button on click: the focus is still on the page body when the dialog opens, so the control just clicked is the
+ * opener. Pure: the caller passes the DOM nodes.
+ */
+export function openerOf(active, body, clicked) {
+  if (active && active !== body) return active;
+  return clicked?.isConnected ? clicked : active;
+}

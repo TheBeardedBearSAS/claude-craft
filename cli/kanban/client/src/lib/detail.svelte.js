@@ -5,6 +5,7 @@
 
 import { request, storyUrl, latestOnly, isAbort, errorKey } from './api.js';
 import { renderMarkdown } from './markdown.js';
+import { opener } from './opener.js';
 
 export const detail = $state({
   card: null,
@@ -27,7 +28,7 @@ function reset() {
 
 export async function openDetail(card) {
   if (!card) return;
-  triggerEl = typeof document !== 'undefined' ? document.activeElement : null;
+  triggerEl = typeof document !== 'undefined' ? opener() : null;
   detail.card = card;
   reset();
   await loadDetail(card.id);
