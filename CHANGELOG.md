@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.2.1] - 2026-11-11
+
 ### Added
 
 - **`scripts/scan-claude-claims.mjs`** (`npm run audit:claude-claims`) : inventaire déterministe des affirmations Claude sur tout `git ls-files` (IDs et noms de modèles, versions du CLI, prix, `CLAUDE_CODE_*`, termes dépréciés), classées contre `config/versions.yaml` (nouvelles clés `claudeCode.limitedModels`, `legacyModels`, `pricing` et `claimScan`). `--fail-on-stale` sort en 1 sur toute affirmation périmée. Le run `--full` du 2026-11-10 de `/common:audit-claude-alignment` n'avait confronté qu'une quinzaine de fichiers pivots sur plus de 150 porteurs d'affirmations : la commande lance désormais le scanner à chaque run, nourrit les agents avec ses occurrences, re-scanne après mise à jour de la vérité et en fait son 6ᵉ gate.

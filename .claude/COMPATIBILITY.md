@@ -1,4 +1,4 @@
-# Claude Code Compatibility — Claude Craft v9.2.0
+# Claude Code Compatibility — Claude Craft v9.2.1
 
 **Minimum Version:** 2.1.321 (elevated from 2.1.97 — see [security advisories 2026](#security-advisories-2026--why-the-minimum-is-21321))
 **Recommended Version:** 2.1.322 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `permissions.denyInsteadOfPrompting`, Fable 5.2, correctifs permissions/OAuth MCP 2.1.321)
