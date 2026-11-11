@@ -64,6 +64,8 @@ describe('FileScanner.classify', () => {
 
   it.each([
     ['backlog/user-stories/US-001-login.md', 'story'],
+    ['backlog/user-stories/US-E4-09-extra.md', 'story'],
+    ['backlog/user-stories/TT-012-chore.md', 'story'],
     ['backlog/epics/EPIC-001-auth.md', 'epic'],
     ['sprints/sprint-001/tasks/TASK-005.md', 'task'],
     ['sprints/sprint-001/sprint-goal.md', 'sprint-goal'],

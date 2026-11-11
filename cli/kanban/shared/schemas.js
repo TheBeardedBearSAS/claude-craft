@@ -1,12 +1,16 @@
 import { z } from 'zod';
+import { STATUSES } from './transitions.js';
+import { STORY_ID_RE, EPIC_ID_RE, TASK_ID_RE } from './ids.js';
 
-export const STATUSES = ['backlog', 'ready-for-dev', 'in-progress', 'review', 'done', 'blocked'];
+export { STATUSES };
 export const PRIORITIES = ['must', 'should', 'could', 'wont'];
 export const TDD_PHASES = ['', 'red', 'green', 'refactor', 'done'];
 export const TASK_TYPES = ['DB', 'BE', 'FE-WEB', 'FE-MOB', 'TEST', 'DOC', 'OPS', 'REV'];
 export const TASK_STATUSES = ['to-do', 'in-progress', 'done', 'blocked'];
 
-const idPattern = (prefix) => z.string().regex(new RegExp(`^${prefix}-\\d{3,}$`), `Expected ${prefix}-XXX`);
+const storyId = z.string().regex(STORY_ID_RE, 'Expected US-XXX, US-E<n>-NN or TT-XXX');
+const epicId = z.string().regex(EPIC_ID_RE, 'Expected EPIC-XXX');
+const taskId = z.string().regex(TASK_ID_RE, 'Expected TASK-XXX');
 
 export const StoryStatusSchema = z.enum(STATUSES);
 export const PrioritySchema = z.enum(PRIORITIES);
@@ -22,9 +26,9 @@ export const HistoryEntrySchema = z.object({
 
 export const StoryFrontmatterSchema = z
   .object({
-    id: idPattern('US'),
+    id: storyId,
     title: z.string().min(1),
-    epic_id: idPattern('EPIC').nullable().optional(),
+    epic_id: epicId.nullable().optional(),
     persona: z.string().optional().default(''),
     status: StoryStatusSchema.default('backlog'),
     previous_status: z.string().optional().default(''),
@@ -33,7 +37,7 @@ export const StoryFrontmatterSchema = z
     sprint_id: z.string().nullable().optional(),
     assigned_to: z.string().optional().default(''),
     tdd_phase: TddPhaseSchema.optional().default(''),
-    invest_score: z.number().int().min(0).max(6).optional().default(0),
+    invest_score: z.number().int().min(0).max(6).optional(),
     blocked_reason: z.string().optional().default(''),
     blocked_at: z.string().optional().default(''),
     traceability: z
@@ -47,17 +51,17 @@ export const StoryFrontmatterSchema = z
       .object({
         total: z.number().int().min(0).default(0),
         completed: z.number().int().min(0).default(0),
-        list: z.array(idPattern('TASK')).default([]),
+        list: z.array(taskId).default([]),
       })
       .optional()
       .default({ total: 0, completed: 0, list: [] }),
-    dependencies: z.array(idPattern('US')).optional().default([]),
+    dependencies: z.array(storyId).optional().default([]),
   })
   .passthrough();
 
 export const EpicFrontmatterSchema = z
   .object({
-    id: idPattern('EPIC'),
+    id: epicId,
     title: z.string().min(1),
     status: z.enum(['draft', 'ready', 'in-progress', 'done']).default('draft'),
     business_value: z.enum(['high', 'medium', 'low']).optional().default('medium'),
@@ -67,8 +71,8 @@ export const EpicFrontmatterSchema = z
 
 export const TaskFrontmatterSchema = z
   .object({
-    id: idPattern('TASK'),
-    us_id: idPattern('US'),
+    id: taskId,
+    us_id: storyId,
     type: z.enum(TASK_TYPES),
     status: z.enum(TASK_STATUSES).default('to-do'),
     estimation_hours: z.number().min(0).default(0),

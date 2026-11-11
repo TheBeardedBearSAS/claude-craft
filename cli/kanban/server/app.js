@@ -1,15 +1,18 @@
 import { Hono } from 'hono';
 import { streamSSE } from 'hono/streaming';
 import { secureHeaders } from 'hono/secure-headers';
+import { bodyLimit } from 'hono/body-limit';
 import { serveStatic } from '@hono/node-server/serve-static';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
-import { csrfGuard, readonlyGuard, resolveSafe } from './middleware/security.js';
+import { csrfGuard, hostGuard, readonlyGuard, resolveSafe } from './middleware/security.js';
 import { validateTransition, validateUnblock, computeTransitionPatch } from './services/state-machine.js';
 import { updateFrontmatter, LockedError, MtimeMismatchError } from './services/file-writer.js';
 import { loadSprintStatus, computeBurndown, updateSprintStatusStory } from './services/sprint-cache.js';
 import { TransitionRequestSchema } from '../shared/schemas.js';
+
+const BODY_LIMIT = 64 * 1024;
 
 /**
  * Build the Hono app. Kept separate from the HTTP server boot so tests can
@@ -20,11 +23,21 @@ import { TransitionRequestSchema } from '../shared/schemas.js';
  * @param {number} opts.port
  * @param {boolean} [opts.readonly=false]
  * @param {string} [opts.projectRoot] - Parent of project-management/, defaults to parent of repository.rootDir
+ * @param {string} [opts.user='kanban'] - Name reported by /api/health
  * @returns {Hono}
  */
-export function createApp({ repository, port, readonly = false, eventBus = null, projectRoot = null }) {
+export function createApp({
+  repository,
+  port,
+  readonly = false,
+  eventBus = null,
+  projectRoot = null,
+  user = 'kanban',
+}) {
   const resolvedProjectRoot = projectRoot ?? path.dirname(repository.rootDir);
   const app = new Hono();
+
+  app.use('*', hostGuard(port));
 
   // Baseline response hardening.
   // crossOriginEmbedderPolicy: require-corp isole le processus renderer (SEC-003).
@@ -39,8 +52,11 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
   );
   app.use('*', csrfGuard(port));
   app.use('*', readonlyGuard(readonly));
+  app.use('*', bodyLimit({ maxSize: BODY_LIMIT, onError: (c) => c.json({ error: 'payload_too_large' }, 413) }));
 
-  app.get('/api/health', (c) => c.json({ ok: true, readonly }));
+  app.get('/api/health', (c) => c.json({ ok: true, readonly, user }));
+
+  app.get('/api/diagnostics', (c) => c.json(repository.diagnostics()));
 
   app.get('/api/stories', (c) => {
     const sprintId = c.req.query('sprint_id') || undefined;
@@ -74,6 +90,7 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     try {
       resolveSafe(repository.rootDir, rel);
     } catch {
+      // resolveSafe only throws on traversal: the 400 is the whole handling.
       return c.json({ error: 'invalid_path' }, 400);
     }
     const content = await repository.readDoc(rel);
@@ -86,25 +103,14 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     const filepath = repository.getStoryFile(id);
     const story = repository.getStory(id);
     if (!story) return c.json({ error: 'not_found' }, 404);
-    // Metadata-list markdown (no frontmatter) not tracked in sprint-status.yaml:
-    // no frontmatter to rewrite safely.
-    if (!story._writable) {
-      return c.json(
-        {
-          error: 'read_only_source',
-          reason:
-            story._source === 'markdown-metadata'
-              ? 'story sans frontmatter YAML (métadonnées en liste Markdown) ; modifiez le statut dans le fichier'
-              : 'story gérée par .bmad/sprint-status.yaml (BMAD v6) ; utilisez les commandes team:/qa: pour changer le statut',
-        },
-        409
-      );
-    }
+    // Archived history or metadata-list markdown (no frontmatter): nothing to rewrite safely.
+    if (!story._writable) return c.json(readOnlyError(story), 409);
 
     let body;
     try {
       body = await c.req.json();
     } catch {
+      // Unparseable body is a client error, fully reported by the 400.
       return c.json({ error: 'invalid_json' }, 400);
     }
 
@@ -148,7 +154,9 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     try {
       // sprint-status.yaml is the source of truth for status whenever it tracks the story.
       if (story._statusSource === 'sprint-status') {
-        await updateSprintStatusStory(resolvedProjectRoot, id, patch);
+        await updateSprintStatusStory(resolvedProjectRoot, id, patch, {
+          by: user === 'kanban' ? user : `kanban:${user}`,
+        });
       } else {
         await updateFrontmatter(filepath, patch, { expectedMtime: story._mtime });
       }
@@ -159,7 +167,7 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     } catch (err) {
       if (err instanceof LockedError) return c.json({ error: 'locked' }, 423);
       if (err instanceof MtimeMismatchError) return c.json({ error: 'conflict', reason: 'file changed on disk' }, 409);
-      return c.json({ error: 'write_failed', message: err.message }, 500);
+      return safeError(c, 500, 'write_failed', err);
     }
   });
 
@@ -184,7 +192,7 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
           await stream.writeSSE({ event: 'heartbeat', data: String(Date.now()) });
         }
       } catch {
-        /* aborted */
+        // sleep/write reject once the client disconnects: end of stream, nothing to report.
       }
       unsubscribe();
     });
@@ -195,8 +203,8 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
     try {
       sprintStatus = await loadSprintStatus(resolvedProjectRoot);
     } catch (err) {
-      // YAML syntaxiquement invalide ou erreur I/O inattendue → 503 contrôlé (REL-001)
-      return c.json({ error: 'sprint_data_unavailable', reason: err.message }, 503);
+      // Invalid YAML syntax or unexpected I/O error -> controlled 503 (REL-001)
+      return safeError(c, 503, 'sprint_data_unavailable', err);
     }
     if (!sprintStatus || sprintStatus._invalid) {
       return c.json({ error: 'not_found' }, 404);
@@ -255,7 +263,9 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
   const loadStatusSafe = async () => {
     try {
       return await loadSprintStatus(resolvedProjectRoot);
-    } catch {
+    } catch (err) {
+      // Sprint metadata is optional here: degrade to ids only, but never silently.
+      console.error('[kanban] sprint-status.yaml unreadable:', err);
       return null;
     }
   };
@@ -297,7 +307,8 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
         const rel = path.relative(repository.rootDir, absPath).split(path.sep).join('/');
         resolveSafe(repository.rootDir, rel);
         return await fs.promises.readFile(absPath, 'utf8');
-      } catch {
+      } catch (err) {
+        if (err.code !== 'ENOENT') console.error(`[kanban] cannot read ${absPath}:`, err);
         return null;
       }
     };
@@ -344,7 +355,8 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
   const clientDist = path.resolve(__dirname, '../client/dist');
   if (fs.existsSync(clientDist)) {
     app.use('/assets/*', serveStatic({ root: path.relative(process.cwd(), clientDist) }));
-    app.get('/', (c) => c.html(fs.readFileSync(path.join(clientDist, 'index.html'), 'utf8')));
+    const indexHtml = fs.readFileSync(path.join(clientDist, 'index.html'), 'utf8');
+    app.get('/', (c) => c.html(indexHtml));
   } else {
     app.get('/', (c) =>
       c.text('claude-craft kanban : client not built.\n' + 'Run "npm run kanban:build" to build the UI.\n')
@@ -352,4 +364,21 @@ export function createApp({ repository, port, readonly = false, eventBus = null,
   }
 
   return app;
+}
+
+/** Log the internal detail server-side; answer with a stable code only (no paths, no err.message). */
+function safeError(c, status, code, err) {
+  console.error(`[kanban] ${code}:`, err);
+  return c.json({ error: code }, status);
+}
+
+function readOnlyError(story) {
+  if (story._source === 'archived') {
+    return { error: 'archived', reason: 'story belongs to a closed sprint (archived_sprints): history is read-only' };
+  }
+  const reason =
+    story._source === 'markdown-metadata'
+      ? 'story has no YAML frontmatter (Markdown metadata list): edit the status in the file'
+      : 'story is not writable from the board: change its status with the team:/qa: commands';
+  return { error: 'read_only_source', reason };
 }

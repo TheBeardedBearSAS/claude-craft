@@ -3,7 +3,7 @@
 // chart and topbar progress went stale after a card moved. This decides what to
 // refresh for a given event.
 
-const STORY_RELEVANT_CATEGORIES = new Set(['story', 'task', 'epic']);
+const STORY_RELEVANT_CATEGORIES = new Set(['story', 'task', 'epic', 'sprint-status']);
 
 /**
  * @param {{event?:string, payload?:{category?:string}}} msg
