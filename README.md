@@ -28,6 +28,15 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v9.2.1
+
+**Audit de fraîcheur du 2026-11-11 (v9.2.1) :**
+
+- **Sécurité** : PgBouncer 1.26.1 (CVE-2026-107350, usurpation d'un utilisateur SCRAM), FrankenPHP 1.13.5 (PHP2Shell), Docker Engine 29.9.3, OpenTofu 1.13.9 ; règle 11 alignée sur NIST SP 800-63B-4 (15 caractères pour un mot de passe seul facteur, blocklist) ; types de serveurs Hetzner retirés remplacés.
+- **Exemples corrigés** : `array_first()` PHP 8.5, Laravel AI SDK (`laravel/ai`), Signal Forms Angular, configuration Vitest `projects`.
+- **Versions vérifiées sur registres** : React Native 0.88 / Expo SDK 58, Vercel CLI 65, Paperclip 2026.1106.0, Coolify 4.7.5, Kubernetes 1.37.2, ansible-core 2.22, Helm 4.3.1 ; Node 26 Active LTS, testé en CI (22 / 24 / 26).
+- **Aussi dans cette version** : stack WordPress 7.1 (`--tech=wordpress`), hooks installés par défaut (`--hooks=default|full|none`), Fable 5.2 et Claude Code 2.1.322 recommandé. Détails : [CHANGELOG](CHANGELOG.md#921---2026-11-11).
+
 ## What's New in v9.2.0
 
 **Deux nouveaux stacks (2026-11-09, v9.2.0) :** Rust / Axum (15e) et Tauri (16e), Claude Code recommandé : 2.1.319. Détails : [CHANGELOG](CHANGELOG.md#920---2026-11-09).

@@ -9,6 +9,7 @@
 # PROCÉDURE DE BUMP : modifier ICI, puis propager dans les fichiers listés, puis
 # `npm run lint:versions` pour garantir l'absence de dérive.
 #
+# 2026-11-11 (release 9.2.1) : audit de fraîcheur du 2026-11-11 livré (PR #233) ; Claude Code recommandé/testé inchangé (2.1.322).
 # Dernière mise à jour : 2026-11-11 (audit fraîcheur docs/audit/freshness-2026-11-11.md — correctifs de sécurité :
 # PgBouncer 1.26.1 (CVE-2026-107350/107349/107348), FrankenPHP 1.13.5 (PHP2Shell CVE-2026-109618/109619), Docker 29.9.3,
 # OpenTofu 1.13.9, hcloud CLI 1.70.2 ; bumps : RN 0.88 / Expo SDK 58, Vercel CLI 65.14.0, Paperclip 2026.1106.0,
@@ -178,6 +179,7 @@ denylist:
   - 'v8.21.0'
   - 'v8.22.0'
   - 'v8.26.0 - Claude Code'
+  - 'v9.2.0 - Claude Code'
   # Versions périmées — audit fraîcheur 2026-10-13
   - '19.2 + Compiler'
   - '3.44 / Dart 3.12'
