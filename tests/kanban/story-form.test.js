@@ -244,6 +244,14 @@ describe('focusLost', () => {
     expect(focusLost(inside, body, dialog)).toBe(true);
   });
 
+  // Safari on macOS: a click on a button leaves the focus on the nearest focusable ancestor (<main>, a dialog).
+  it('is true when the focus rests on a container rather than a control', () => {
+    const dialog = { contains: () => false };
+    const container = (selector) => el({ matches: (s) => s.split(', ').includes(selector) });
+    expect(focusLost(container('dialog'), body, dialog)).toBe(true);
+    expect(focusLost(container('[tabindex="-1"]'), body, dialog)).toBe(true);
+  });
+
   it('is false when the user already reached another control', () => {
     const dialog = { contains: () => false };
     expect(focusLost(el(), body, dialog)).toBe(false);
@@ -265,6 +273,12 @@ describe('openerOf', () => {
     const clicked = button();
     expect(openerOf(body, body, clicked)).toBe(clicked);
     expect(openerOf(null, body, clicked)).toBe(clicked);
+  });
+
+  it('is the control just clicked when the focus went to a container (<main>, a dialog)', () => {
+    const clicked = button();
+    const main = button({ matches: (s) => s.split(', ').includes('[tabindex="-1"]') });
+    expect(openerOf(main, body, clicked)).toBe(clicked);
   });
 
   it('is the body when the control clicked is gone or there was none', () => {

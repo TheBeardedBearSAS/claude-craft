@@ -6,6 +6,7 @@ let clicked = null;
 
 if (typeof document !== 'undefined') {
   document.addEventListener('click', (event) => (clicked = event.target?.closest?.(CONTROL) ?? null), true);
+  document.addEventListener('keydown', () => (clicked = null), true); // a later keyboard action owns the focus
 }
 
 export const opener = () => openerOf(document.activeElement, document.body, clicked);

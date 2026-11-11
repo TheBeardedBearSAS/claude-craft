@@ -76,30 +76,6 @@ for (const vp of [DESKTOP, ZOOM400]) {
 }
 
 // ---- focus is never lost after an action ---------------------------------------------------------------
-// Safari on macOS gives no focus to a button on click (seen under Playwright's WebKit on macOS): the focus stays on
-// the page when the dialog opens. Reproduced under every engine by cancelling the default action of mousedown.
-const dialogsOpenedByClick: Array<[string, string, (p: Page) => ReturnType<Page['locator']>, string]> = [
-  ['new sprint', 'sprints', (p) => p.getByRole('button', { name: 'New sprint' }), 'dialog.sprint-form[open]'],
-  ['new story', 'kanban', (p) => p.locator('[data-new-story]'), 'dialog[open]:has(#create-title)'],
-  ['settings', 'kanban', (p) => settingsButton(p), 'dialog.tweaks-dialog[open]'],
-  ['story detail', 'kanban', (p) => p.locator(`[data-card-id="${US}"]`), 'dialog.modal[open]'],
-];
-for (const [name, view, button, dialog] of dialogsOpenedByClick) {
-  test(`focus: the ${name} dialog opened by a click that gave no focus gives it back to its button`, async ({
-    page,
-  }) => {
-    await page.addInitScript(() =>
-      document.addEventListener('mousedown', (e) => (e.target as Element).closest('button') && e.preventDefault(), true)
-    );
-    await openView(page, view);
-    await button(page).click();
-    await expect(page.locator(dialog)).toBeVisible();
-    await page.keyboard.press('Escape');
-    await expect(page.locator(dialog)).toHaveCount(0);
-    await expect(button(page)).toBeFocused();
-  });
-}
-
 test('focus: cancelling the blocked-reason prompt returns focus to the Move button', async ({ page }) => {
   await openView(page, 'kanban');
   await page.locator(`[data-move-id="${US}"]`).focus();

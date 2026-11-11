@@ -1,5 +1,6 @@
 <script>
   import { opener } from '../lib/opener.js';
+  import { focusLost } from '../lib/story-form.js';
   import { tweaks, setTweak, DENSITIES } from '../lib/tweaks.svelte.js';
   import { ACCENTS } from '../lib/config.js';
   import { SUPPORTED_LOCALES } from '../lib/i18n/translate.js';
@@ -22,8 +23,7 @@
 
   // `close` comes with the next rendered frame: a control the user has reached meanwhile keeps the focus.
   function onClose() {
-    const active = document.activeElement;
-    if (!active || active === document.body || dialog.contains(active)) triggerEl?.focus();
+    if (focusLost(document.activeElement, document.body, dialog)) triggerEl?.focus();
     triggerEl = null;
   }
 
