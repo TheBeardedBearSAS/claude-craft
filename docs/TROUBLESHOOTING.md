@@ -942,3 +942,7 @@ npx @the-bearded-bear/claude-craft kanban --port=3142
 | 409 `sprint_status_missing` | Création d'une story sans `.bmad/sprint-status.yaml` | Créer le fichier (cause 1) |
 | 409 `invalid_transition` | Transition ou gate refusé | Choisir une colonne proposée par le menu « Déplacer » ; voir la [machine d'états](CLI-REFERENCE.md#state-machine) |
 | 403 `readonly` | Le serveur tourne avec `--readonly` | Relancer sans `--readonly` |
+
+### Un onglet du tableau ne se charge pas
+
+Un navigateur n'ouvre que six connexions simultanées vers un même serveur, et chaque tableau visible en garde une pour le temps réel. Un tableau en arrière-plan rend la sienne et la reprend quand on y revient. Avec plus de six tableaux **visibles en même temps** dans le même navigateur (fenêtres côte à côte), le suivant attend : fermer une fenêtre ou la passer en arrière-plan.
