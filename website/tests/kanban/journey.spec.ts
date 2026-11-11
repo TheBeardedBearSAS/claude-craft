@@ -244,7 +244,8 @@ test('a project manager plans a sprint and drives a story to done', async ({ pag
     await shot(page, '14-story-done');
     await page.keyboard.press('Escape');
     await expect(column(page, 'done').locator(`[data-card-id="${ids.story}"]`)).toBeVisible();
-    expect((await storyOf(ids.story)).status).toBe('done');
+    // The board shows the move before the server has written it: wait for the file, not for the card.
+    await expect.poll(async () => (await storyOf(ids.story)).status).toBe('done');
   });
 
   await test.step('block, then unblock another story', async () => {
@@ -257,6 +258,7 @@ test('a project manager plans a sprint and drives a story to done', async ({ pag
     await expect(column(page, 'blocked').locator(`[data-card-id="${ids.other}"]`)).toBeVisible();
     await expect(card(page, ids.other)).toContainText('Blocked');
     await shot(page, '16-blocked');
+    await expect.poll(async () => (await storyOf(ids.other)).status).toBe('blocked'); // written, not only shown
     const before = (await storyOf(ids.other)).previous_status;
     await press(page, page.locator(`[data-move-id="${ids.other}"]`));
     const items = page.getByRole('menu').getByRole('menuitem');

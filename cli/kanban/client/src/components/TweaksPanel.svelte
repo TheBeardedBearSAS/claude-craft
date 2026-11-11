@@ -19,11 +19,11 @@
     dialog?.close();
   }
 
+  // `close` comes with the next rendered frame: a control the user has reached meanwhile keeps the focus.
   function onClose() {
-    if (triggerEl) {
-      triggerEl.focus();
-      triggerEl = null;
-    }
+    const active = document.activeElement;
+    if (!active || active === document.body || dialog.contains(active)) triggerEl?.focus();
+    triggerEl = null;
   }
 
   const SCHEMES = ['status', 'priority', 'tdd', 'epic'];

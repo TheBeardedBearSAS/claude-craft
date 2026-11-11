@@ -8,6 +8,7 @@
   import Icon from './Icon.svelte';
   import StoryForm from './StoryForm.svelte';
   import ConfirmDialog from './ConfirmDialog.svelte';
+  import { asksBeforeClosing } from '../lib/actions.js';
   import { createDialog, closeCreate, createStory, confirmDiscard } from '../lib/story-actions.svelte.js';
   import { emptyDraft, describeFailure } from '../lib/story-form.js';
   import { setQuery, guardLeave } from '../lib/router.svelte.js';
@@ -90,10 +91,7 @@
     class="modal modal-form"
     aria-labelledby="create-dialog-title"
     onclose={onClose}
-    oncancel={(e) => {
-      e.preventDefault();
-      tryClose();
-    }}
+    use:asksBeforeClosing={tryClose}
     onclick={(e) => {
       if (e.target === dialogEl) tryClose();
     }}

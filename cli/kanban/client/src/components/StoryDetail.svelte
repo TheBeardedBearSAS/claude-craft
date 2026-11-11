@@ -13,7 +13,7 @@
   import { moveTargets } from '../lib/board-card.js';
   import { detail, openDetail, closeDetail, consumeTrigger, loadDetail } from '../lib/detail.svelte.js';
   import { route, setQuery, guardLeave } from '../lib/router.svelte.js';
-  import { store, toast } from '../lib/store.svelte.js';
+  import { store, toast, writesSettled } from '../lib/store.svelte.js';
   import { health } from '../lib/health.svelte.js';
   import { errorKey } from '../lib/api.js';
   import { formatHash } from '../lib/query.js';
@@ -31,6 +31,7 @@
     confirmDiscard,
   } from '../lib/story-actions.svelte.js';
   import { t } from '../lib/i18n/index.svelte.js';
+  import { asksBeforeClosing } from '../lib/actions.js';
 
   let dialogEl = $state(null);
   let confirmDialog = $state(null);
@@ -66,6 +67,9 @@
     setQuery({ story: null });
     closeDetail();
     tick().then(() => {
+      // `close` comes with the next rendered frame: a control the user has reached meanwhile keeps the focus.
+      const active = document.activeElement;
+      if (active && active !== document.body && active.isConnected) return;
       const fallback = document.querySelector('[data-new-story]') ?? document.querySelector('main');
       // <body> is no trigger: the detail of a story just created opens after its creation dialog is gone.
       const usable = trigger?.isConnected && trigger !== document.body;
@@ -176,6 +180,7 @@
   async function startEdit() {
     clearAlerts();
     clearFormErrors();
+    await writesSettled(card.id); // a move just made shows before its answer: start from the version it brings back
     base = $state.snapshot(card);
     draft = draftFromStory(base);
     editing = true;
@@ -302,6 +307,7 @@
     clearAlerts();
     bodyError = '';
     bodyConflict = false;
+    await writesSettled(card.id);
     const res = await loadStoryRaw(card.id);
     if (!res.ok) {
       bodyError = t(errorKey(res.error));
@@ -625,10 +631,7 @@
     class="modal"
     aria-labelledby="detail-title"
     onclose={onDialogClose}
-    oncancel={(e) => {
-      e.preventDefault();
-      tryClose();
-    }}
+    use:asksBeforeClosing={tryClose}
     onclick={(e) => {
       if (e.target === dialogEl) tryClose();
     }}

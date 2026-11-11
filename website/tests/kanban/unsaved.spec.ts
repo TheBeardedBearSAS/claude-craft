@@ -120,6 +120,53 @@ test('sprint form: Escape and Back ask before discarding a filled form', async (
   await expect(page.getByRole('button', { name: 'New sprint' })).toBeFocused();
 });
 
+// Keyboard only, so no user activation between the presses: Chrome/Edge honour preventDefault() on a dialog's
+// `cancel` only once per activation (close-watcher rule) and would then close the form with its input.
+test('sprint form: Escape keeps asking, however many times the user presses it', async ({ page }) => {
+  await openView(page, 'sprints');
+  await page.getByRole('button', { name: 'New sprint' }).click();
+  await page.locator('#sf-name').pressSequentially('Half typed');
+  const form = page.locator('dialog.sprint-form[open]');
+  for (let round = 0; round < 3; round++) {
+    await page.keyboard.press('Escape');
+    await expect(confirmBox(page)).toBeVisible();
+    await page.keyboard.press('Escape'); // Escape on the question = keep editing
+    await expect(confirmBox(page)).toHaveCount(0);
+    await expect(form.locator('#sf-name')).toHaveValue('Half typed');
+  }
+});
+
+test('story edit: Escape keeps asking, however many times the user presses it', async ({ page }) => {
+  const id = await makeStory(page, 'E2E unsaved escape');
+  await editTitle(page, id, 'Typed but not saved');
+  for (let round = 0; round < 3; round++) {
+    await page.keyboard.press('Escape');
+    await expect(confirmBox(page)).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(confirmBox(page)).toHaveCount(0);
+    await expect(page.locator('#edit-title')).toHaveValue('Typed but not saved');
+  }
+});
+
+// The answer is taken when it is given, not when the dialog's `close` event comes (with the next rendered frame):
+// both actions run in one task here, so the second question is asked before that event, as on a busy machine.
+test('a question asked right after "Keep editing" waits for its own answer', async ({ page }) => {
+  await openView(page, 'sprints');
+  await page.getByRole('button', { name: 'New sprint' }).click();
+  const form = page.locator('dialog.sprint-form[open]');
+  await form.locator('#sf-name').fill('Half typed');
+  await page.keyboard.press('Escape');
+  await expect(confirmBox(page)).toBeVisible();
+  await page.evaluate(() => {
+    const buttons = [...document.querySelectorAll('button')];
+    buttons.find((b) => b.textContent?.trim() === 'Keep editing' && b.closest('dialog[open]'))!.click();
+    document.querySelector<HTMLButtonElement>('dialog.sprint-form .sf-actions .btn:not(.btn-primary)')!.click();
+  });
+  await expect(confirmBox(page)).toBeVisible();
+  await confirmBox(page).getByRole('button', { name: 'Discard changes' }).click();
+  await expect(page.locator('dialog.sprint-form[open]')).toHaveCount(0);
+});
+
 test('sprint form: an untouched form closes on Escape without a question', async ({ page }) => {
   await openView(page, 'sprints');
   await page.getByRole('button', { name: 'New sprint' }).click();

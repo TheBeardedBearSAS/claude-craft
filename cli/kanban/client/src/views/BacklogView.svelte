@@ -12,7 +12,7 @@
     selectionPoints,
     firstCapacity,
   } from '../lib/sprint-plan.js';
-  import { planStory, planStories, planning } from '../lib/sprint-actions.svelte.js';
+  import { planStory, planStories } from '../lib/sprint-actions.svelte.js';
   import { openCreate } from '../lib/story-actions.svelte.js';
   import { filtersFromQuery } from '../lib/query.js';
   import { buildBacklog, epicProgress } from '../lib/backlog.js';
@@ -90,13 +90,11 @@
   }
 
   async function rowAction(story) {
-    if (planning.busy) return;
     await planStory(story.id, target && story.sprint_id === target.id ? null : target);
     await settleFocus();
   }
 
   async function runBulk(stories, sprint) {
-    if (planning.busy) return;
     const ids = stories.map((s) => s.id);
     const result = await planStories(ids, sprint);
     const left = new Set(selected);

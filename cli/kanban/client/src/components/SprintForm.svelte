@@ -13,6 +13,7 @@
   import { confirmDiscard } from '../lib/story-actions.svelte.js';
   import { guardLeave } from '../lib/router.svelte.js';
   import ConfirmDialog from './ConfirmDialog.svelte';
+  import { asksBeforeClosing } from '../lib/actions.js';
 
   let { onsaved = () => {} } = $props();
 
@@ -98,7 +99,7 @@
   {#if errors[field]}<p class="field-error" id="sf-{field}-error">{t(errors[field])}</p>{/if}
 {/snippet}
 
-<dialog bind:this={dialog} class="sprint-form" aria-labelledby="sf-title" onclose={onClose} oncancel={(e) => { e.preventDefault(); tryClose(); }} onclick={(e) => { if (e.target === dialog) tryClose(); }}>
+<dialog bind:this={dialog} class="sprint-form" aria-labelledby="sf-title" onclose={onClose} use:asksBeforeClosing={tryClose} onclick={(e) => { if (e.target === dialog) tryClose(); }}>
   <form novalidate onsubmit={submit}>
     <h2 id="sf-title">{t('sprint.create.title')}</h2>
 

@@ -37,18 +37,23 @@
     });
   }
 
-  function handleClose() {
-    resolvePromise?.(dialog.returnValue === 'confirm');
+  // The answer is taken when it is given (button, Escape), not on `close`: that event comes with the next rendered
+  // frame, when the dialog may already be asking a new question (it would answer it) and the leave guard of the
+  // router would still be waiting.
+  function settle(value) {
+    const resolve = resolvePromise;
     resolvePromise = null;
+    resolve?.(value);
   }
 
   function answer(value) {
     dialog.returnValue = value;
     dialog.close();
+    settle(value === 'confirm');
   }
 </script>
 
-<dialog bind:this={dialog} aria-labelledby="{uid}-message" onclose={handleClose}>
+<dialog bind:this={dialog} aria-labelledby="{uid}-message" oncancel={() => settle(false)} onclose={() => { if (!dialog.open) settle(false); }}>
   <p id="{uid}-message" class="dialog-message">{message}</p>
   <div class="dialog-actions">
     <button type="button" class="btn-cancel" bind:this={cancelEl} onclick={() => answer('cancel')}>{cancelLabel ?? t('common.cancel')}</button>

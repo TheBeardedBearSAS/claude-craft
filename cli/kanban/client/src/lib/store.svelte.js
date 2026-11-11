@@ -10,7 +10,7 @@
 
 import { classifyKanbanEvent, createRefreshQueue } from './events.js';
 import { request, storyUrl, errorKey } from './api.js';
-import { applyPatch, restore, replaceStory } from './optimistic.js';
+import { applyPatch, restore, replaceStory, createWriteTracker } from './optimistic.js';
 import { createToasts } from './toasts.js';
 import { loadHealth } from './health.svelte.js';
 
@@ -41,9 +41,15 @@ export const pauseToast = toasts.pause;
 export const resumeToast = toasts.resume;
 
 // A reload that started before a write of this tab answered would bring back the older stories (and their older
-// `_rev`: the next edit would end in a false 409 conflict). Writes are counted; such a reload is dropped and asked
-// for again.
+// `_rev`: the next edit would end in a false 409 conflict), and one answered while a write is still on its way would
+// undo the change the board already shows. Writes are counted and tracked; such a reload is dropped and asked for
+// again.
 let writes = 0;
+const inFlight = createWriteTracker();
+/** Hand every write of a story to this (it returns the same promise); see createWriteTracker in optimistic.js. */
+export const trackWrite = inFlight.track;
+/** Resolves once the writes of that story already sent have been answered. */
+export const writesSettled = inFlight.settled;
 
 /** Call when a write answer has been put into `store.stories`. */
 export function noteWrite() {
@@ -54,7 +60,7 @@ export async function loadStories() {
   const seen = writes;
   try {
     const data = await request('/api/stories');
-    if (seen !== writes) {
+    if (seen !== writes || inFlight.pending()) {
       refreshQueue.request({ reloadStories: true });
       return false;
     }
@@ -129,7 +135,11 @@ function failureToast(err) {
 }
 
 /** @returns {Promise<{ story: object, warnings: string[] }>} the moved story and the server's warnings */
-export async function patchStatus(id, body) {
+export function patchStatus(id, body) {
+  return trackWrite(id, sendStatus(id, body));
+}
+
+async function sendStatus(id, body) {
   const { stories, before } = applyPatch(store.stories, id, { status: body.status });
   if (!before) throw new Error('story not found');
   store.stories = stories;

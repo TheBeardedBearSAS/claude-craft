@@ -1,5 +1,7 @@
 // Unsaved-input guard for URL changes (browser Back, links, `?story=`). Pure: the router owns the history calls.
 // A form registers { dirty(), confirm() } while it is open; the router asks mayLeave() before applying a new URL.
+// confirm() must resolve as soon as the user answers (ConfirmDialog does not wait for the dialog's `close` event):
+// while it is pending (`busy`), every other URL change is held back without a second question.
 
 export function createLeaveGuard() {
   const guards = new Set();

@@ -12,7 +12,7 @@
 
 import { ApiError, request, storyUrl } from './api.js';
 import { replaceStory } from './optimistic.js';
-import { store, toast, patchStatus, noteWrite } from './store.svelte.js';
+import { store, toast, patchStatus, noteWrite, trackWrite } from './store.svelte.js';
 import { health } from './health.svelte.js';
 import { toCreatePayload } from './story-form.js';
 import { columnCount } from './wip.js';
@@ -133,24 +133,30 @@ export function createStory(draft) {
 
 /** @param {string|undefined} rev the story's `_rev` when it was read: sent as If-Match (409 `conflict` if stale) */
 export function updateStory(id, patch, rev) {
-  return attempt(async () => {
-    const headers = rev ? { 'If-Match': rev } : undefined;
-    const data = await request(storyUrl(id), json('PATCH', patch, headers));
-    upsert(data.story);
-    toast({ kind: 'success', key: 'toast.saved', params: { id } });
-    notifyWarnings(data.warnings, data.story);
-    return { story: data.story };
-  });
+  return trackWrite(
+    id,
+    attempt(async () => {
+      const headers = rev ? { 'If-Match': rev } : undefined;
+      const data = await request(storyUrl(id), json('PATCH', patch, headers));
+      upsert(data.story);
+      toast({ kind: 'success', key: 'toast.saved', params: { id } });
+      notifyWarnings(data.warnings, data.story);
+      return { story: data.story };
+    })
+  );
 }
 
 /** @param {number} mtime the story's `_mtime` when its body was read */
 export function saveBody(id, markdown, mtime) {
-  return attempt(async () => {
-    const data = await request(storyUrl(id, '/body'), json('PUT', { markdown, expected_mtime: mtime }));
-    upsert(data.story);
-    toast({ kind: 'success', key: 'toast.saved', params: { id } });
-    return { story: data.story };
-  });
+  return trackWrite(
+    id,
+    attempt(async () => {
+      const data = await request(storyUrl(id, '/body'), json('PUT', { markdown, expected_mtime: mtime }));
+      upsert(data.story);
+      toast({ kind: 'success', key: 'toast.saved', params: { id } });
+      return { story: data.story };
+    })
+  );
 }
 
 export function deleteStory(id, { force = false } = {}) {
@@ -166,21 +172,27 @@ export function deleteStory(id, { force = false } = {}) {
 
 /** @param {string} taskId the entry of `story.tasks.list` (it is the task's identifier in the YAML) */
 export function setTaskStatus(id, taskId, status) {
-  return attempt(async () => {
-    const url = storyUrl(id, `/tasks/${encodeURIComponent(taskId)}`);
-    const data = await request(url, json('PATCH', { status }));
-    upsert(data.story);
-    return { story: data.story };
-  });
+  return trackWrite(
+    id,
+    attempt(async () => {
+      const url = storyUrl(id, `/tasks/${encodeURIComponent(taskId)}`);
+      const data = await request(url, json('PATCH', { status }));
+      upsert(data.story);
+      return { story: data.story };
+    })
+  );
 }
 
 /** Adds a to-do task (its name is its identifier). 409 `task_exists` for a name the story already has. */
 export function addTask(id, title) {
-  return attempt(async () => {
-    const data = await request(storyUrl(id, '/tasks'), json('POST', { title }));
-    upsert(data.story);
-    return { story: data.story };
-  });
+  return trackWrite(
+    id,
+    attempt(async () => {
+      const data = await request(storyUrl(id, '/tasks'), json('POST', { title }));
+      upsert(data.story);
+      return { story: data.story };
+    })
+  );
 }
 
 // ---- read the form needs -----------------------------------------------------------------------------

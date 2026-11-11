@@ -114,13 +114,26 @@ test('plan two backlog stories by multiple selection, then one by one', async ({
   await expect.poll(async () => (await storyOf(ids.a)).sprint_id).toBe(newSprint);
   await expect.poll(async () => (await storyOf(ids.b)).sprint_id).toBe(newSprint);
 
-  // One more story with the row button: over capacity, then back to the backlog.
+  // One more story with the row button: over capacity, then back to the backlog — asked before the server has
+  // answered the first move (its answer is held here, as on a slow machine): the second click is not dropped.
+  let release!: () => void;
+  const answered = new Promise<void>((resolve) => (release = resolve));
+  await page.route(`**/api/stories/${ids.c}`, async (route) => {
+    await answered;
+    await route.continue();
+  });
   const rowC = page.locator('li.story-item', { hasText: ids.c });
   await press(page, rowC.getByRole('button', { name: /^Add to/ }));
   await expect(capacity).toHaveAttribute('data-state', 'over');
   await expect(capacity).toContainText('Over capacity');
+  // A change made elsewhere meanwhile reloads the stories: the move shown, still unanswered, is not undone.
+  const reloaded = page.waitForResponse((r) => r.url().endsWith('/api/stories') && r.request().method() === 'GET');
+  await makeStory('E2E plan elsewhere', 1);
+  await reloaded;
+  await expect(capacity).toHaveAttribute('data-state', 'over');
   await page.locator('#plan-scope').selectOption('sprint');
   await press(page, rowC.getByRole('button', { name: /^Move back to the backlog/ }));
+  release();
   await expect(capacity).toHaveAttribute('data-state', 'at');
   await expect.poll(async () => (await storyOf(ids.c)).sprint_id ?? null).toBeNull();
 });

@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { openView } from './helpers';
+import { openView, settingsButton } from './helpers';
 
 /** Tab until a board card button has focus (keyboard only). */
 async function tabToCard(page: Page, id?: string) {
@@ -84,4 +84,42 @@ test('keyboard: cancelling the blocked-reason prompt moves nothing', async ({ pa
   await page.keyboard.press('Escape');
   const inProgress = page.locator('section.column', { has: page.locator('#col-in-progress') });
   await expect(inProgress.locator('[data-card-id="US-200"]')).toBeVisible();
+});
+
+// The settings panel gives the focus back to its button on `close`, an event that comes with the next rendered
+// frame: a control reached meanwhile keeps the focus (here both happen in one task, as on a busy machine).
+test('keyboard: closing the settings never takes the focus from a control reached meanwhile', async ({ page }) => {
+  await openView(page, 'kanban');
+  await settingsButton(page).click();
+  await expect(page.locator('dialog.tweaks-dialog[open]')).toBeVisible();
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        const panel = document.querySelector('dialog.tweaks-dialog') as HTMLDialogElement;
+        panel.addEventListener('close', () => resolve(), { once: true });
+        panel.close();
+        document.querySelector<HTMLButtonElement>('[data-new-story]')!.focus();
+      })
+  );
+  await expect(page.locator('[data-new-story]')).toBeFocused();
+});
+
+// Same for the story detail: its `close` handler gives the focus back to the card unless the user has moved on.
+test('keyboard: closing a story detail never takes the focus from a control reached meanwhile', async ({ page }) => {
+  await openView(page, 'kanban');
+  const id = await tabToCard(page);
+  await page.keyboard.press('Enter');
+  await expect(page.locator('dialog.modal[open]')).toBeVisible();
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        const detail = document.querySelector('dialog.modal[open]') as HTMLDialogElement;
+        detail.addEventListener('close', () => requestAnimationFrame(() => resolve()), { once: true });
+        detail.close();
+        document.querySelector<HTMLButtonElement>('[data-new-story]')!.focus();
+      })
+  );
+  await expect(page.locator('dialog.modal[open]')).toHaveCount(0);
+  await expect(page.locator('[data-new-story]')).toBeFocused();
+  expect(id).toBeTruthy();
 });

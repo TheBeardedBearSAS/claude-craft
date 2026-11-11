@@ -155,6 +155,31 @@ test('conflict: another change in between offers to reload or to keep my changes
   await expect(panel).toHaveCount(0);
 });
 
+// The board shows a move at once, before the server answers (slow disk, busy machine): an edit opened in that
+// moment must start from the version the move brings back, or its save is refused as a conflict with myself.
+test('an edit opened while my own move is still on its way saves without a false conflict', async ({ page }) => {
+  const id = await makeStory(page, 'E2E edit during move');
+  let release!: () => void;
+  const answered = new Promise<void>((resolve) => (release = resolve));
+  await page.route(`**/api/stories/${id}/status`, async (route) => {
+    await answered; // the server's answer is held until the user has asked to edit
+    await route.continue();
+  });
+  await openStory(page, id);
+  await detail(page).locator('#detail-move').selectOption('ready-for-dev');
+  await detail(page).getByRole('button', { name: 'Move', exact: true }).click();
+  await expect(detail(page).locator('.modal-frontmatter')).toContainText('Ready for dev');
+  await detail(page).getByRole('button', { name: 'Edit', exact: true }).click();
+  release();
+
+  await detail(page).getByLabel('Title').fill('E2E edited after a move');
+  await detail(page).getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.locator('.toast.success', { hasText: `${id} saved` })).toBeVisible();
+  await expect(detail(page).getByRole('group', { name: 'This story was changed elsewhere' })).toHaveCount(0);
+  const { body } = await api(page, 'GET', `/api/stories/${id}`);
+  expect(body.story).toMatchObject({ title: 'E2E edited after a move', status: 'ready-for-dev' });
+});
+
 test('conflict: keeping my changes retries on top of the newer version', async ({ page }) => {
   const id = await makeStory(page, 'E2E keep mine');
   await openStory(page, id);
@@ -219,7 +244,9 @@ test('delete: confirmation, forced deletion of an active story, focus lands on N
   await detail(page).getByRole('button', { name: 'Delete', exact: true }).click();
 
   // One question only (WCAG 3.3.4): it says the story is in progress and that the file goes to the trash.
-  const confirm = page.getByRole('dialog', { name: /is In progress\. Delete it anyway\? Its file is moved to the trash/ });
+  const confirm = page.getByRole('dialog', {
+    name: /is In progress\. Delete it anyway\? Its file is moved to the trash/,
+  });
   await expect(confirm).toBeVisible();
   await expect(confirm.getByRole('button', { name: 'Cancel' })).toBeFocused();
   await confirm.getByRole('button', { name: 'Delete story' }).click();

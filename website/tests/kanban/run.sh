@@ -9,6 +9,9 @@
 # never touch the host tree (host root node_modules is root-owned). Report -> website/tests/kanban/report/,
 # test outputs (traces, screenshots) -> website/tests/kanban/results/ (both git-ignored).
 # KANBAN_SCREENSHOTS=1 also captures every view for a visual check (screenshots.spec.ts).
+# Browser: the Chromium that Playwright ships, as in CI (downloaded once into the npm cache volume).
+# KANBAN_BROWSER=system uses the distribution Chromium of the image instead (older: it has hidden a
+# history-handling defect that CI caught).
 set -euo pipefail
 
 if [ ! -d /src/website ]; then
@@ -21,6 +24,7 @@ if [ ! -d /src/website ]; then
   mkdir -p "$HARNESS/report" "$HARNESS/results"
   exec docker run --rm --user "$(id -u):$(id -g)" \
     -e KANBAN_SCREENSHOTS="${KANBAN_SCREENSHOTS:-0}" \
+    -e KANBAN_BROWSER="${KANBAN_BROWSER:-playwright}" \
     -v "$ROOT":/src:ro \
     -v "$HARNESS/report":/out \
     -v "$HARNESS/results":/out-results \
@@ -41,6 +45,12 @@ mkdir -p "$HOME"
 npm ci --no-audit --no-fund
 npm run kanban:build
 ( cd website && npm ci --no-audit --no-fund )
+
+if [ "${KANBAN_BROWSER:-playwright}" != "system" ]; then
+  unset CHROME_PATH
+  export PLAYWRIGHT_BROWSERS_PATH=/npm-cache/ms-playwright
+  ( cd website && PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0 npx playwright install chromium )
+fi
 
 # Largest JS chunk (informational budget)
 find cli/kanban/client/dist/assets -name '*.js' -printf '%s %p\n' | sort -rn | head -1

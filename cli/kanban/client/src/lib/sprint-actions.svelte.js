@@ -1,7 +1,7 @@
 // Planning and sprint-lifecycle actions (K-22): every function calls the write API and updates the store without
 // waiting for the SSE event. Pure rules live in sprint-plan.js.
 //
-//   planning                       { busy } — true while a call is in flight (disables the planning controls)
+//   planning                       { busy } — true while a call is in flight or waiting for the previous one
 //   moveToSprint(id, sprintId)     PATCH /api/stories/:id { sprint_id } (null = backlog) with If-Match; optimistic,
 //                                  restored on failure; returns the story; throws ApiError
 //   planStory(id, sprint)          moveToSprint + toast; `sprint` = { id, name } or null; resolves true/false
@@ -14,20 +14,27 @@
 //   refreshPlanning()              reloads stories, current sprint, sprint list and health
 
 import { request, storyUrl, errorKey } from './api.js';
-import { store, toast, loadStories, loadSprint, noteWrite } from './store.svelte.js';
+import { store, toast, loadStories, loadSprint, noteWrite, trackWrite } from './store.svelte.js';
 import { health, loadHealth } from './health.svelte.js';
 import { applyPatch, restore, replaceStory } from './optimistic.js';
 import { runBatch } from './sprint-plan.js';
 
 export const planning = $state({ busy: false });
 
-async function busy(task) {
+// Planning calls run one after the other: a click made while one is on its way (the board already shows it) waits
+// for its answer, and the next If-Match starts from the version that answer brings back, instead of being dropped.
+let queue = Promise.resolve();
+let running = 0;
+
+function busy(task) {
+  running += 1;
   planning.busy = true;
-  try {
-    return await task();
-  } finally {
-    planning.busy = false;
-  }
+  const run = queue.then(task).finally(() => {
+    running -= 1;
+    planning.busy = running > 0;
+  });
+  queue = run.catch(() => {});
+  return run;
 }
 
 const json = (method, body) => ({ method, body: body === undefined ? undefined : JSON.stringify(body) });
@@ -38,7 +45,11 @@ export async function refreshPlanning() {
   store.revision += 1;
 }
 
-export async function moveToSprint(id, sprintId) {
+export function moveToSprint(id, sprintId) {
+  return trackWrite(id, sendSprint(id, sprintId));
+}
+
+async function sendSprint(id, sprintId) {
   const current = store.stories.find((s) => s.id === id);
   if (!current) throw new Error(`story ${id} not found`);
   const { stories, before } = applyPatch(store.stories, id, { sprint_id: sprintId });
