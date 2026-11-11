@@ -8,9 +8,11 @@ import { parseDependencyRefs } from '../../shared/deps.js';
  * (localized heading/labels). Derives the same fields the frontmatter schemas expect.
  */
 
-const H1_RE = /^#\s+((?:US|EPIC)-\d+)\s*:\s*(.+?)\s*$/m;
+// One line each, greedy tail trimmed in code: `\s` (which spans newlines) or a lazy tail before `\s*$`
+// backtracks quadratically on long blank runs or long lines (a hostile file would hang the refresh).
+const H1_RE = /^#[ \t]+((?:US|TT|EPIC)-[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)[ \t]*:(.+)$/m;
 // "- **Label**: value" and the French typography "- **Label** : value".
-const ITEM_RE = /^\s*[-*]\s+\*\*([^*]+?)\*\*\s*:\s*(.*?)\s*$/gm;
+const ITEM_RE = /^[ \t]*[-*][ \t]+\*\*([^*\n]+)\*\*[ \t]*:(.*)$/gm;
 
 // Normalized (lowercase, no accents) label -> field.
 const LABELS = {
@@ -79,14 +81,25 @@ function isPlaceholder(value) {
   return value === '' || /^\{.*\}$/.test(value) || /^[—–-]+$/.test(value);
 }
 
-// Repeat until stable: a single pass leaves "<!--" behind for nested input like "<!<!-- -->-- -->".
-function stripComments(text) {
-  let previous;
-  do {
-    previous = text;
-    text = text.replace(/<!--[\s\S]*?-->/g, '');
-  } while (text !== previous);
-  return text;
+const tailIs = (buf, marker) => buf.length >= marker.length && buf.slice(-marker.length).join('') === marker;
+
+/**
+ * Removes `<!-- ... -->` comments, including the ones that a removal joins together ("<!<!-- -->-- -->").
+ * One linear pass: the regex-until-stable form was quadratic on unclosed or deeply nested markers.
+ */
+export function stripComments(text) {
+  const buf = [];
+  let open = -1; // index in buf of the oldest "<!--" not closed yet
+  for (const ch of text) {
+    buf.push(ch);
+    if (open < 0) {
+      if (tailIs(buf, '<!--')) open = buf.length - 4;
+    } else if (buf.length - 3 >= open + 4 && tailIs(buf, '-->')) {
+      buf.length = open;
+      open = -1;
+    }
+  }
+  return buf.join('');
 }
 
 /** Raw field -> value map from the H1 and the metadata bullets (first occurrence wins). */
@@ -94,12 +107,13 @@ function parseMetadataList(body) {
   const text = stripComments(body);
   const raw = {};
   const h1 = text.match(H1_RE);
-  if (h1) {
+  if (h1 && h1[2].trim()) {
     raw.id = h1[1];
-    raw.title = h1[2];
+    raw.title = h1[2].trim();
   }
-  for (const [, label, value] of text.matchAll(ITEM_RE)) {
+  for (const [, label, tail] of text.matchAll(ITEM_RE)) {
     const field = LABELS[normalize(label)];
+    const value = tail.trim();
     if (!field || isPlaceholder(value)) continue;
     raw[field] ??= value;
   }

@@ -21,6 +21,7 @@ TARGET_FILES=(
     ".bmad/lib/gate-validator.sh"
     ".bmad/lib/routing-engine.sh"
     ".bmad/lib/batch-executor.sh"
+    ".bmad/lib/status-lock.sh"
     ".bmad/hooks/quality-gate.sh"
     "Dev/scripts/install-from-config.sh"
     "Dev/scripts/check-prerequisites.sh"

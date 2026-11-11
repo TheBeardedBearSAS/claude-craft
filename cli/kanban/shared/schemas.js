@@ -97,6 +97,8 @@ export const SprintStatusSchema = z
         epic: z.string().optional().default(''),
         capacity_points: z.number().int().min(0).optional(),
         capacity_note: z.string().optional().default(''),
+        // Set when the sprint is closed; the sprint then lives on in archived_sprints.
+        closed_date: z.string().optional(),
       })
       .passthrough(),
     stories: z
@@ -106,6 +108,8 @@ export const SprintStatusSchema = z
             title: z.string(),
             status: StoryStatusSchema,
             previous_status: z.string().optional().default(''),
+            // Own sprint: null = backlog; an absent key keeps the historical "active sprint" reading.
+            sprint_id: z.string().nullable().optional(),
             // Real BMAD v6 yaml uses assigned_to: null for unassigned stories.
             // Rejecting null here flagged the WHOLE file invalid → empty board.
             assigned_to: z.string().nullable().optional().default(''),
@@ -141,11 +145,88 @@ export const TransitionRequestSchema = z.object({
   reason: z.string().max(500).optional(),
 });
 
+// Epics are written `EPIC-004` (markdown) or `E4` (sprint-status.yaml).
+const storyEpicId = z.string().regex(/^(?:EPIC-\d{3,}|E\d+)$/, 'Expected EPIC-XXX or E<n>');
+const storyTitle = z.string().trim().min(1).max(200);
+const storyPoints = z.number().int().min(0).max(21);
+const sprintRef = z.string().min(1).max(100);
+
+/** PATCH /api/stories/:id : any subset of the editable fields, at least one. */
 export const StoryPatchSchema = z
   .object({
-    story_points: z.number().int().min(0).max(21).optional(),
-    assigned_to: z.string().max(100).optional(),
+    title: storyTitle.optional(),
+    story_points: storyPoints.optional(),
+    assigned_to: z.string().max(100).nullable().optional(),
     priority: PrioritySchema.optional(),
     tdd_phase: TddPhaseSchema.optional(),
+    epic_id: storyEpicId.nullable().optional(),
+    sprint_id: sprintRef.nullable().optional(),
+    dependencies: z.array(storyId).max(50).optional(),
   })
+  .strict()
+  .refine((patch) => Object.keys(patch).length > 0, { message: 'At least one field is required' });
+
+/** POST /api/stories */
+export const StoryCreateSchema = z
+  .object({
+    title: storyTitle,
+    epic_id: storyEpicId.nullable().optional(),
+    story_points: storyPoints.optional(),
+    priority: PrioritySchema.optional(),
+    persona: z.string().trim().max(200).optional(),
+    sprint_id: sprintRef.nullable().optional(),
+  })
+  .strict();
+
+/** PUT /api/stories/:id/body : `markdown` is what follows the frontmatter (the whole file without one). */
+export const StoryBodySchema = z
+  .object({
+    markdown: z.string().max(500_000),
+    expected_mtime: z.number().finite(),
+  })
+  .strict();
+
+/** PATCH /api/stories/:id/tasks/:taskId */
+export const TaskStatusPatchSchema = z.object({ status: z.enum(TASK_STATUSES) }).strict();
+
+// --- sprints and settings ---------------------------------------------------
+
+/** One path segment: the id names a directory under project-management/sprints/. */
+export const SPRINT_ID_RE = /^[A-Za-z0-9][A-Za-z0-9_-]{0,99}$/;
+
+const isoDate = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected YYYY-MM-DD')
+  .refine((d) => new Date(`${d}T00:00:00Z`).toJSON()?.slice(0, 10) === d, 'Not a calendar date');
+const sprintId = z.string().regex(SPRINT_ID_RE, 'Invalid sprint id');
+const expectedVersion = z.string().min(1).max(64).optional();
+
+export const SprintCreateSchema = z
+  .object({
+    name: z
+      .string()
+      .trim()
+      .min(1)
+      .max(120)
+      .regex(/^\P{Cc}+$/u, 'No control characters'),
+    start_date: isoDate,
+    end_date: isoDate,
+    goal: z.string().trim().max(1000).optional(),
+    capacity_points: z.number().int().min(0).max(999).optional(),
+  })
+  .strict()
+  .refine((s) => s.end_date >= s.start_date, { path: ['end_date'], message: 'end_date precedes start_date' });
+
+export const SprintStartSchema = z.object({ expected_version: expectedVersion }).strict();
+
+export const SprintCloseSchema = z
+  .object({
+    carry_over: z.union([z.literal('backlog'), sprintId]).default('backlog'),
+    expected_version: expectedVersion,
+  })
+  .strict();
+
+/** Partial update: a number sets the limit of a status, null removes it. */
+export const WipLimitsSchema = z
+  .object(Object.fromEntries(STATUSES.map((s) => [s, z.number().int().min(1).max(99).nullable().optional()])))
   .strict();

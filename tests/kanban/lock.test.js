@@ -88,4 +88,27 @@ describe('lock', () => {
     const next = await acquireLock(lockPath, { retries: 20, retryDelayMs: 20 });
     await next();
   });
+
+  it('release leaves a lock that another process took over after expiry', async () => {
+    const release = await acquireLock(lockPath);
+    const theirs = JSON.stringify({ pid: process.pid, ts: Date.now() + 1 });
+    await writeFile(lockPath, theirs);
+    await release();
+    expect(await readFile(lockPath, 'utf8')).toBe(theirs);
+  });
+
+  it('release leaves a lock taken over by another pid with the same ts', async () => {
+    const release = await acquireLock(lockPath);
+    const { ts } = JSON.parse(await readFile(lockPath, 'utf8'));
+    const theirs = JSON.stringify({ pid: process.pid + 1, ts });
+    await writeFile(lockPath, theirs);
+    await release();
+    expect(await readFile(lockPath, 'utf8')).toBe(theirs);
+  });
+
+  it('release does not fail when the lock file already vanished', async () => {
+    const release = await acquireLock(lockPath);
+    await rm(lockPath);
+    await expect(release()).resolves.toBeUndefined();
+  });
 });

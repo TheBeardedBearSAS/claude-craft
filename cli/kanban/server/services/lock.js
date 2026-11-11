@@ -1,4 +1,4 @@
-import { open, readFile, stat, unlink } from 'node:fs/promises';
+import { lstat, open, readFile, unlink } from 'node:fs/promises';
 
 /**
  * Advisory lock file (O_CREAT|O_EXCL) holding { pid, ts }.
@@ -24,30 +24,47 @@ function pidAlive(pid) {
   }
 }
 
-async function isStale(lockPath, ttlMs, now) {
-  let owner = null;
+const MAX_LOCK_BYTES = 1024;
+
+// Only a small regular file is a lock: a planted symlink to a FIFO or /dev/zero would block or fill memory.
+async function regularLockStat(lockPath) {
+  const st = await lstat(lockPath);
+  return st.isFile() && st.size <= MAX_LOCK_BYTES ? st : null;
+}
+
+async function readOwner(lockPath) {
   try {
-    owner = JSON.parse(await readFile(lockPath, 'utf8'));
+    if (!(await regularLockStat(lockPath))) return null;
+    return JSON.parse(await readFile(lockPath, 'utf8'));
   } catch {
-    // Old-format (empty) or half-written lock: fall back to the file mtime below.
-  }
-  if (owner && Number.isInteger(owner.pid) && typeof owner.ts === 'number') {
-    return now() - owner.ts > ttlMs || !pidAlive(owner.pid);
-  }
-  try {
-    return now() - (await stat(lockPath)).mtimeMs > ttlMs;
-  } catch {
-    return true; // vanished meanwhile: just retry
+    return null; // vanished or unreadable
   }
 }
 
+async function isStale(lockPath, ttlMs, now) {
+  let st;
+  try {
+    st = await regularLockStat(lockPath);
+  } catch {
+    return true; // vanished meanwhile: just retry
+  }
+  if (!st) return true; // not a lock any writer of this protocol creates: remove it
+  const owner = await readOwner(lockPath); // null for an old-format (empty) or half-written lock: mtime below
+  if (owner && Number.isInteger(owner.pid) && typeof owner.ts === 'number') {
+    return now() - owner.ts > ttlMs || !pidAlive(owner.pid);
+  }
+  return now() - st.mtimeMs > ttlMs;
+}
+
 async function tryCreate(lockPath, now) {
+  const owner = { pid: process.pid, ts: now() };
   const fd = await open(lockPath, 'wx');
   try {
-    await fd.writeFile(JSON.stringify({ pid: process.pid, ts: now() }));
+    await fd.writeFile(JSON.stringify(owner));
   } finally {
     await fd.close();
   }
+  return owner;
 }
 
 async function removeQuietly(lockPath) {
@@ -56,6 +73,12 @@ async function removeQuietly(lockPath) {
   } catch (err) {
     if (err.code !== 'ENOENT') throw err;
   }
+}
+
+/** Removes the lock only while it is still ours: after a stale takeover it belongs to someone else. */
+async function removeIfOwned(lockPath, owner) {
+  const current = await readOwner(lockPath);
+  if (current?.pid === owner.pid && current?.ts === owner.ts) await removeQuietly(lockPath);
 }
 
 /**
@@ -67,12 +90,12 @@ async function removeQuietly(lockPath) {
 export async function acquireLock(lockPath, { ttlMs = 10_000, retries = 5, retryDelayMs = 40, now = Date.now } = {}) {
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      await tryCreate(lockPath, now);
+      const owner = await tryCreate(lockPath, now);
       let released = false;
       return async () => {
         if (released) return;
         released = true;
-        await removeQuietly(lockPath);
+        await removeIfOwned(lockPath, owner);
       };
     } catch (err) {
       if (err.code !== 'EEXIST') throw err;

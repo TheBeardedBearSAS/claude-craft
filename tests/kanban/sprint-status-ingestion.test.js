@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
-import { mkdtemp, cp, rm, readFile } from 'node:fs/promises';
+import { mkdtemp, cp, rm, readFile, writeFile, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import * as yaml from 'js-yaml';
@@ -7,6 +7,7 @@ import { parseString } from '../../cli/kanban/server/services/frontmatter.js';
 import { fileURLToPath } from 'node:url';
 import { Repository } from '../../cli/kanban/server/services/repository.js';
 import { createApp } from '../../cli/kanban/server/app.js';
+import { revOf } from '../../cli/kanban/server/services/status-store.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Project initialized BMAD-v6 style: stories live in ../.bmad/sprint-status.yaml.
@@ -107,12 +108,14 @@ describe('PATCH /api/stories/:id/status — writes the status to sprint-status.y
   });
 
   const ssy = async () => yaml.load(await readFile(path.join(root, '.bmad', 'sprint-status.yaml'), 'utf8'));
-  const send = (id, body) =>
+  const send = (id, body, headers = {}) =>
     tmpApp.request(`/api/stories/${id}/status`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', Origin: origin },
+      headers: { 'Content-Type': 'application/json', Origin: origin, ...headers },
       body: JSON.stringify(body),
     });
+  const yamlFile = () => path.join(root, '.bmad', 'sprint-status.yaml');
+  const raw = () => readFile(yamlFile(), 'utf8');
 
   it('moves a YAML-only story and records the transition in history', async () => {
     const r = await send('US-E1-01', { status: 'in-progress' });
@@ -139,11 +142,211 @@ describe('PATCH /api/stories/:id/status — writes the status to sprint-status.y
     expect(parseString(before).data.status).toBe('in-progress');
   });
 
+  it('returns the 12-hex version of the written file and keeps the YAML comments', async () => {
+    const r = await send('US-E1-01', { status: 'in-progress' });
+
+    expect(r.status).toBe(200);
+    expect((await r.json()).version).toMatch(/^[0-9a-f]{12}$/);
+    expect(await raw()).toContain('# BMAD v6 - Sprint Status (test fixture)\n');
+  });
+
+  it('accepts a matching If-Match (plain or quoted ETag form)', async () => {
+    const rev = revOf((await ssy()).stories['US-E1-01']);
+
+    expect((await send('US-E1-01', { status: 'in-progress' }, { 'If-Match': `"${rev}"` })).status).toBe(200);
+  });
+
+  it('409 conflict with the current YAML story when If-Match is stale, file unchanged', async () => {
+    const before = await raw();
+
+    const r = await send('US-E1-01', { status: 'in-progress' }, { 'If-Match': 'deadbeef0000' });
+
+    expect(r.status).toBe(409);
+    const body = await r.json();
+    expect(body.error).toBe('conflict');
+    expect(body.current).toMatchObject({ title: 'YAML-only story one', status: 'ready-for-dev' });
+    expect(await raw()).toBe(before);
+  });
+
+  it('409 conflict when the YAML status moved since the board was loaded (no If-Match)', async () => {
+    await writeFile(yamlFile(), (await raw()).replace('status: "ready-for-dev"', 'status: "in-progress"'));
+
+    const r = await send('US-E1-01', { status: 'in-progress' });
+
+    expect(r.status).toBe(409);
+    expect((await r.json()).current.status).toBe('in-progress');
+  });
+
+  it('409 sprint_status_invalid with issues when the YAML no longer satisfies the schema', async () => {
+    await writeFile(yamlFile(), (await raw()).replace('status: "backlog"', 'status: "shipped"'));
+    const before = await raw();
+
+    const r = await send('US-E1-01', { status: 'in-progress' });
+
+    expect(r.status).toBe(409);
+    const body = await r.json();
+    expect(body.error).toBe('sprint_status_invalid');
+    expect(body.issues.length).toBeGreaterThan(0);
+    expect(await raw()).toBe(before);
+  });
+
+  it('409 sprint_status_missing when the YAML was removed meanwhile', async () => {
+    await rm(yamlFile());
+
+    const r = await send('US-E1-01', { status: 'in-progress' });
+
+    expect(r.status).toBe(409);
+    expect((await r.json()).error).toBe('sprint_status_missing');
+  });
+
+  it('records the request reason in history, else blocked_reason, else an empty string', async () => {
+    await send('US-E1-01', { status: 'in-progress', reason: 'picked up' });
+    await send('US-E1-02', { status: 'blocked', blocked_reason: 'waiting' });
+    await send('US-E1-02', { status: 'ready-for-dev' });
+
+    const { stories } = await ssy();
+    expect(stories['US-E1-01'].history.at(-1).reason).toBe('picked up');
+    expect(stories['US-E1-02'].history.map((h) => h.reason)).toEqual(['waiting', '']);
+  });
+
+  it('invalid_transition lists the allowed targets', async () => {
+    const r = await send('US-E1-01', { status: 'done' });
+
+    expect(r.status).toBe(409);
+    expect(await r.json()).toMatchObject({
+      error: 'invalid_transition',
+      allowed: ['in-progress', 'blocked', 'backlog'],
+    });
+  });
+
   it('still returns 404 for a genuinely unknown story id', async () => {
     const r = await req('PATCH', '/api/stories/US-999/status', {
       origin,
       body: { status: 'in-progress' },
     });
     expect(r.status).toBe(404);
+  });
+});
+
+describe('Repository — precedence between a markdown file and its YAML entry', () => {
+  let dir;
+
+  const MD = `---
+id: US-400
+title: Title from markdown
+story_points: 8
+priority: should
+sprint_id: sprint-md
+assigned_to: alice
+epic_id: EPIC-001
+dependencies: [US-001]
+tasks:
+  total: 1
+  completed: 0
+  list: [TASK-400]
+---
+Body.
+`;
+
+  async function project(storyYaml, md = MD) {
+    dir = await mkdtemp(path.join(tmpdir(), 'kb-prec-'));
+    await mkdir(path.join(dir, '.bmad'), { recursive: true });
+    await mkdir(path.join(dir, 'project-management/backlog/user-stories'), { recursive: true });
+    await writeFile(path.join(dir, 'project-management/backlog/user-stories/US-400-x.md'), md);
+    await writeFile(
+      path.join(dir, '.bmad/sprint-status.yaml'),
+      `version: "1.0"\nmetadata:\n  sprint_id: "sprint-yaml"\n  name: "S"\n  start_date: "2026-01-01"\n  end_date: "2026-01-14"\n  epic: "E9"\nstories:\n  US-400:\n    title: "Title from YAML"\n    status: "ready-for-dev"\n${storyYaml}`
+    );
+    const repository = new Repository(path.join(dir, 'project-management'));
+    await repository.refresh();
+    return repository;
+  }
+
+  afterEach(async () => {
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  it('the YAML wins on every field it carries', async () => {
+    const r = await project(
+      [
+        '    story_points: 3',
+        '    priority: "must"',
+        '    assigned_to: "bob"',
+        '    epic_id: "EPIC-002"',
+        '    sprint_id: "sprint-yaml"',
+        '    dependencies: ["US-002 (note)"]',
+        '    tasks: { total: 2, completed: 1, list: ["A", "B"] }',
+        '',
+      ].join('\n')
+    );
+
+    expect(r.getStory('US-400')).toMatchObject({
+      title: 'Title from YAML',
+      story_points: 3,
+      priority: 'must',
+      assigned_to: 'bob',
+      epic_id: 'EPIC-002',
+      sprint_id: 'sprint-yaml',
+      dependencies: ['US-002'],
+      tasks: { total: 2, completed: 1, list: ['A', 'B'] },
+    });
+  });
+
+  it('the markdown keeps the fields the YAML entry does not carry', async () => {
+    const r = await project('');
+
+    expect(r.getStory('US-400')).toMatchObject({
+      title: 'Title from YAML',
+      story_points: 8,
+      priority: 'should',
+      assigned_to: 'alice',
+      epic_id: 'EPIC-001',
+      sprint_id: 'sprint-md',
+      dependencies: ['US-001'],
+      tasks: { total: 1, list: ['TASK-400'] },
+    });
+  });
+
+  it('sprint_id: null in the YAML is the backlog, even when the markdown names a sprint', async () => {
+    const r = await project('    sprint_id: null\n');
+    expect(r.getStory('US-400').sprint_id).toBeNull();
+    expect(r.listStories({ sprintId: 'sprint-md' })).toEqual([]);
+  });
+
+  it('assigned_to: null and epic_id: "" in the YAML clear the markdown values', async () => {
+    const r = await project('    assigned_to: null\n    epic_id: ""\n');
+    expect(r.getStory('US-400')).toMatchObject({ assigned_to: '', epic_id: null });
+  });
+
+  it('a YAML-only story keeps the active sprint and epic unless its own keys say otherwise', async () => {
+    const r = await project('', 'not a story file');
+    expect(r.getStory('US-400')).toMatchObject({ sprint_id: 'sprint-yaml', epic_id: 'E9' });
+
+    const r2 = await project('    sprint_id: null\n    epic_id: ""\n', 'not a story file');
+    expect(r2.getStory('US-400')).toMatchObject({ sprint_id: null, epic_id: null });
+  });
+
+  it('priority_raw survives only while the YAML holds a P0..P3 value', async () => {
+    const p = await project('    priority: "P0"\n');
+    expect(p.getStory('US-400')).toMatchObject({ priority: 'must', priority_raw: 'P0' });
+    const m = await project('    priority: "could"\n');
+    expect(m.getStory('US-400')).toMatchObject({ priority: 'could', priority_raw: null });
+  });
+
+  it('_rev is the revision of the raw YAML entry, for markdown-backed and YAML-only stories', async () => {
+    const r = await project('    story_points: 3\n');
+    const entry = yaml.load(await readFile(path.join(dir, '.bmad/sprint-status.yaml'), 'utf8')).stories['US-400'];
+    expect(r.getStory('US-400')._rev).toBe(revOf(entry));
+    expect(r.listStories()[0]._rev).toBe(revOf(entry));
+
+    const y = await project('    story_points: 3\n', 'not a story file');
+    expect(y.getStory('US-400')._rev).toBe(revOf(entry));
+  });
+
+  it('_rev changes with any change of the entry and is absent without a YAML entry', async () => {
+    const a = (await project('    story_points: 3\n')).getStory('US-400')._rev;
+    const b = (await project('    story_points: 4\n')).getStory('US-400')._rev;
+    expect(a).not.toBe(b);
+    expect((await project('', MD)).getStory('US-400')._rev).toMatch(/^[0-9a-f]{12}$/);
   });
 });

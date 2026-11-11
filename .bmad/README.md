@@ -30,6 +30,7 @@ BMAD v6 is a project management enhancement framework for claude-craft that prov
 └── lib/                     # Core library scripts
     ├── routing-engine.sh    # State machine transitions
     ├── gate-validator.sh    # Quality gate validation
+    ├── status-lock.sh       # Advisory lock around sprint-status.yaml writes
     └── batch-executor.sh    # Batch processing engine
 ```
 

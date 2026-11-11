@@ -67,6 +67,14 @@ describe('deriveStoryData', () => {
     expect(d.dependencies).toEqual([]);
   });
 
+  it('reads the title of epic-style and technical ids from the H1', () => {
+    expect(deriveStoryData('# US-E4-03: Auth flow\n\n- **ID**: US-E4-03\n')).toMatchObject({
+      id: 'US-E4-03',
+      title: 'Auth flow',
+    });
+    expect(deriveStoryData('# TT-20 : Lock\n')).toMatchObject({ id: 'TT-20', title: 'Lock' });
+  });
+
   it('returns {} for a body without any metadata', () => {
     expect(deriveStoryData('Just prose.')).toEqual({});
   });

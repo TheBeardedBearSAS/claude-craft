@@ -1,10 +1,11 @@
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { scan, groupByCategory } from './file-scanner.js';
-import { parseAndValidate } from './frontmatter.js';
+import { loadYaml, parseAndValidate } from './frontmatter.js';
 import { storyIdFromFilename } from '../../shared/ids.js';
 import { deriveStoryData, deriveEpicData } from './markdown-metadata.js';
-import { loadSprintStatus } from './sprint-cache.js';
+import { revOf } from './status-store.js';
+import { readStatusText } from './sprint-cache.js';
 import {
   StoryFrontmatterSchema,
   EpicFrontmatterSchema,
@@ -67,8 +68,8 @@ export class Repository {
     // BMAD v6 single-writer track stores stories only in .bmad/sprint-status.yaml
     // (no individual markdown files). Surface them so the board isn't empty, then
     // closed sprints (archived_sprints.*) as read-only history.
-    const { ss, diag } = await readSprintStatus(path.dirname(this.rootDir));
-    ingestSprintStatusStories(next.stories, ss);
+    const { ss, raw, diag } = await readSprintStatus(path.dirname(this.rootDir));
+    ingestSprintStatusStories(next.stories, ss, raw);
     ingestArchivedSprints(next.stories, ss);
 
     Object.assign(this, {
@@ -270,16 +271,21 @@ function aggregateSprints(sprints, files) {
   }
 }
 
+/**
+ * One read of .bmad/sprint-status.yaml: `ss` is the schema-parsed view (defaults applied), `raw` the
+ * stories exactly as written (key presence and `_rev` depend on it).
+ */
 async function readSprintStatus(projectRoot) {
   try {
-    const ss = await loadSprintStatus(projectRoot);
-    if (ss === null) return { ss, diag: { state: 'missing', issues: [] } };
-    if (!ss._invalid) return { ss, diag: { state: 'ok', issues: [] } };
-    const parsed = SprintStatusSchema.safeParse(ss);
-    const issues = parsed.success ? ['invalid sprint-status.yaml'] : parsed.error.issues.map(formatIssue);
-    return { ss, diag: { state: 'invalid', issues } };
+    const text = await readStatusText(path.join(projectRoot, '.bmad', 'sprint-status.yaml'));
+    const parsed = text.trim() === '' ? null : loadYaml(text);
+    const result = SprintStatusSchema.safeParse(parsed);
+    if (result.success) return { ss: result.data, raw: parsed.stories ?? {}, diag: { state: 'ok', issues: [] } };
+    const issues = result.error.issues.map(formatIssue);
+    return { ss: { ...parsed, _invalid: true }, raw: {}, diag: { state: 'invalid', issues } };
   } catch (err) {
-    return { ss: null, diag: { state: 'invalid', issues: [err.message] } };
+    if (err.code === 'ENOENT') return { ss: null, raw: {}, diag: { state: 'missing', issues: [] } };
+    return { ss: null, raw: {}, diag: { state: 'invalid', issues: [err.message] } };
   }
 }
 
@@ -290,11 +296,13 @@ async function readSprintStatus(projectRoot) {
  * only present in the YAML (or whose markdown file is invalid) become synthetic
  * stories built from the YAML. Either way the status is written back to the YAML.
  */
-function ingestSprintStatusStories(stories, ss) {
+function ingestSprintStatusStories(stories, ss, raw = {}) {
   if (!ss || ss._invalid || !ss.stories) return;
 
   for (const [id, s] of Object.entries(ss.stories)) {
     const existing = stories.get(id);
+    const entry = raw[id] ?? {};
+    const rev = revOf(raw[id] ?? s);
     if (existing?.ok) {
       existing.data = {
         ...existing.data,
@@ -302,17 +310,44 @@ function ingestSprintStatusStories(stories, ss) {
         previous_status: s.previous_status ?? '',
         tdd_phase: s.tdd_phase ?? existing.data.tdd_phase ?? '',
         blocked_reason: s.blocked_reason ?? '',
+        ...yamlOverrides(s, entry),
       };
       existing.statusSource = 'sprint-status';
+      existing.rev = rev;
       continue;
     }
-    const synthetic = yamlStory(id, s, ss.metadata);
+    const synthetic = yamlStory(id, s, ss.metadata, entry);
+    synthetic.rev = rev;
     if (existing) synthetic.body = existing.body;
     stories.set(id, synthetic);
   }
 }
 
-function yamlStory(id, s, metadata) {
+/**
+ * Fields the YAML entry owns when it carries the key (null included: `sprint_id: null` is the
+ * backlog, `assigned_to: null` is nobody); a markdown file keeps persona, traceability and body.
+ */
+function yamlOverrides(s, raw) {
+  const has = (key) => Object.hasOwn(raw, key);
+  const out = {};
+  if (has('title')) out.title = s.title;
+  if (has('story_points')) out.story_points = s.story_points;
+  if (has('priority')) Object.assign(out, priorityFields(s.priority));
+  if (has('assigned_to')) out.assigned_to = s.assigned_to ?? '';
+  if (has('epic_id')) out.epic_id = s.epic_id || null;
+  if (has('tasks')) out.tasks = s.tasks;
+  if (has('sprint_id')) out.sprint_id = s.sprint_id ?? null;
+  if (has('dependencies')) out.dependencies = parseDependencyRefs(s.dependencies);
+  return out;
+}
+
+// P0..P3 are shown as MoSCoW; priority_raw only survives while the YAML still holds the P-form.
+function priorityFields(value) {
+  const raw = typeof value === 'string' && /^P\d$/i.test(value.trim()) ? value : null;
+  return { priority: mapBmadPriority(value), priority_raw: raw };
+}
+
+function yamlStory(id, s, metadata, raw) {
   return {
     path: null, // no backing file: content is the YAML entry only
     mtime: 0,
@@ -329,13 +364,13 @@ function yamlStory(id, s, metadata) {
       story_points: s.story_points ?? 0,
       epic_id: s.epic_id || metadata?.epic || null,
       // Map BMAD P0..P3 onto MoSCoW so PriorityChip/filter aren't all "Should".
-      priority: mapBmadPriority(s.priority),
-      priority_raw: s.priority ?? null,
+      ...priorityFields(s.priority),
       sprint_id: metadata?.sprint_id ?? null,
       blocked_reason: s.blocked_reason ?? '',
       tasks: s.tasks ?? { total: 0, completed: 0, list: [] },
       // Freeform yaml deps -> resolved id references for the graph.
       dependencies: parseDependencyRefs(s.dependencies),
+      ...yamlOverrides(s, raw),
     },
   };
 }
@@ -401,6 +436,7 @@ function view(entry) {
     _source: source,
     _statusSource: entry.statusSource ?? source,
     _writable: isWritable(entry),
+    ...(entry.rev ? { _rev: entry.rev } : {}),
   };
 }
 
