@@ -360,6 +360,7 @@ const queues = new Map();
 
 function enqueue(key, task) {
   const run = (queues.get(key) ?? Promise.resolve()).then(task);
+  // `run` (returned) carries the failure to its caller; the tail only keeps the queue going for the next task.
   const tail = run.catch(() => {});
   queues.set(key, tail);
   tail.then(() => queues.get(key) === tail && queues.delete(key));

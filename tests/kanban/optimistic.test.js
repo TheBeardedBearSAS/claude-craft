@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { applyPatch, restore, replaceStory } from '../../cli/kanban/client/src/lib/optimistic.js';
+import { applyPatch, restore, replaceStory, createWriteTracker } from '../../cli/kanban/client/src/lib/optimistic.js';
 
 const list = () => [
   { id: 'a', status: 'backlog' },
@@ -36,5 +36,43 @@ describe('optimistic updates', () => {
 
   it('replaceStory swaps in the server version', () => {
     expect(replaceStory(list(), { id: 'a', status: 'ready-for-dev' })[0].status).toBe('ready-for-dev');
+  });
+});
+
+describe('writes still on their way', () => {
+  const later = () => {
+    let settle;
+    const promise = new Promise((resolve, reject) => (settle = { resolve, reject }));
+    return { promise, ...settle };
+  };
+  const state = async (promise) => {
+    let done = false;
+    promise.then(() => (done = true));
+    await new Promise((r) => setTimeout(r, 0));
+    return done;
+  };
+
+  it('nothing pending: settled at once', async () => {
+    expect(await state(createWriteTracker().settled('a'))).toBe(true);
+  });
+
+  it('waits for every write of that story, failed ones included, and only for that story', async () => {
+    const writes = createWriteTracker();
+    const first = later();
+    const second = later();
+    const other = later();
+    expect(writes.track('a', first.promise)).toBe(first.promise);
+    writes.track('a', second.promise).catch(() => {});
+    writes.track('b', other.promise);
+    const settled = writes.settled('a');
+    expect(writes.pending()).toBe(true);
+    first.resolve();
+    expect(await state(settled)).toBe(false);
+    second.reject(new Error('409'));
+    expect(await state(settled)).toBe(true);
+    expect(writes.pending()).toBe(true); // story b
+    other.resolve();
+    await state(writes.settled('b'));
+    expect(writes.pending()).toBe(false);
   });
 });

@@ -4,11 +4,16 @@
 # From the repo root:
 #   bash website/tests/kanban/run.sh            # build image + run specs
 #   bash website/tests/kanban/run.sh a11y.spec.ts   # extra args go to `playwright test`
+#   bash website/tests/kanban/run.sh --project=firefox   # one engine: chromium | firefox | webkit |
+#                                                        # mobile-chrome | mobile-safari (touch.spec.ts only)
 #
 # The repo is mounted read-only at /src and copied to /work, so node_modules/dist/reports
 # never touch the host tree (host root node_modules is root-owned). Report -> website/tests/kanban/report/,
 # test outputs (traces, screenshots) -> website/tests/kanban/results/ (both git-ignored).
 # KANBAN_SCREENSHOTS=1 also captures every view for a visual check (screenshots.spec.ts).
+# Browsers: the Chromium, Firefox and WebKit builds of the Playwright version pinned in
+# website/package-lock.json, baked into the image (same `install --with-deps` as CI). There is no
+# "system browser" mode any more: a distribution Chromium older than CI's once hid a real defect.
 set -euo pipefail
 
 if [ ! -d /src/website ]; then
@@ -16,7 +21,10 @@ if [ ! -d /src/website ]; then
   ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
   HARNESS="$ROOT/website/tests/kanban"
   IMAGE=cc-kanban-e2e
-  docker build -q -t "$IMAGE" "$HARNESS" >/dev/null
+  # Playwright version of the lockfile (no node on the host): image browsers == installed @playwright/test.
+  PW_VERSION="$(sed -n '/"node_modules\/@playwright\/test": {/,/"version"/s/.*"version": "\([^"]*\)".*/\1/p' "$ROOT/website/package-lock.json")"
+  [ -n "$PW_VERSION" ] || { echo "cannot read the @playwright/test version from website/package-lock.json" >&2; exit 1; }
+  docker build -q --build-arg PLAYWRIGHT_VERSION="$PW_VERSION" -t "$IMAGE:$PW_VERSION" "$HARNESS" >/dev/null
   rm -rf "$HARNESS/results"
   mkdir -p "$HARNESS/report" "$HARNESS/results"
   exec docker run --rm --user "$(id -u):$(id -g)" \
@@ -25,7 +33,7 @@ if [ ! -d /src/website ]; then
     -v "$HARNESS/report":/out \
     -v "$HARNESS/results":/out-results \
     -v cc-kanban-npm-cache:/npm-cache \
-    "$IMAGE" "$@"
+    "$IMAGE:$PW_VERSION" "$@"
 fi
 
 # ---- container side ----
@@ -41,6 +49,9 @@ mkdir -p "$HOME"
 npm ci --no-audit --no-fund
 npm run kanban:build
 ( cd website && npm ci --no-audit --no-fund )
+
+# Logged for the report; a mismatch with the image fails at launch ("Executable doesn't exist").
+( cd website && npx playwright --version )
 
 # Largest JS chunk (informational budget)
 find cli/kanban/client/dist/assets -name '*.js' -printf '%s %p\n' | sort -rn | head -1

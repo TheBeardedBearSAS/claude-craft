@@ -189,6 +189,30 @@ describe('POST /api/sprints', () => {
     ]);
   });
 
+  it('GET /api/sprints and /api/sprints/:id give the dates and capacity of a planned sprint', async () => {
+    await boot();
+    await req('POST', '/api/sprints', { body: NEW });
+    const expected = { start_date: '2026-11-16', end_date: '2026-11-27', capacity_points: 13 };
+
+    const list = await (await req('GET', '/api/sprints')).json();
+    expect(list.sprints.find((s) => s.id === 'sprint-1-hardening')).toMatchObject(expected);
+    const one = await (await req('GET', '/api/sprints/sprint-1-hardening')).json();
+    expect(one.sprint).toMatchObject(expected);
+  });
+
+  it('GET /api/sprints gives the capacity and dates of the active sprint from the status file', async () => {
+    await writeFile(yamlPath(), ACTIVE_YAML.replace('  epic: "E1"\n', '  epic: "E1"\n  capacity_points: 21\n'));
+    await sprintDir('sprint-1-alpha');
+    await sprintDir('sprint-0-boot');
+    await boot();
+    const list = await (await req('GET', '/api/sprints')).json();
+    const active = list.sprints.find((s) => s.id === 'sprint-1-alpha');
+    expect(active).toMatchObject({ start_date: '2026-11-02', end_date: '2026-11-13', capacity_points: 21 });
+    expect((await (await req('GET', '/api/sprints/sprint-1-alpha')).json()).sprint.capacity_points).toBe(21);
+    // A closed sprint has no capacity to plan against: the key is absent.
+    expect(list.sprints.find((s) => s.id === 'sprint-0-boot')).not.toHaveProperty('capacity_points');
+  });
+
   it('keeps a hostile name inside project-management/sprints/', async () => {
     await boot();
     const res = await req('POST', '/api/sprints', { body: { ...NEW, name: '../../../../etc/cron.d/x' } });
@@ -256,6 +280,57 @@ describe('POST /api/sprints', () => {
     expect(res.status).toBe(403);
     expect((await res.json()).error).toBe('readonly');
     expect(await readdir(path.join(dir, 'project-management/sprints'))).toEqual([]);
+  });
+});
+
+describe('POST /api/sprints with an Idempotency-Key', () => {
+  const KEY = 'b7a1c2d3-0000-4000-8000-123456789abc';
+  const send = (body, key = KEY) =>
+    app.request('/api/sprints', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Origin: ORIGIN, 'Idempotency-Key': key },
+      body: JSON.stringify(body),
+    });
+  const dirs = () => readdir(path.join(dir, 'project-management', 'sprints'));
+
+  beforeEach(boot);
+
+  it('a second request with the same key replays the first answer and creates nothing', async () => {
+    const first = await send(NEW);
+    const second = await send(NEW);
+    expect(first.status).toBe(201);
+    expect(second.status).toBe(201);
+    expect(await second.json()).toEqual(await first.json());
+    expect(await dirs()).toEqual(['sprint-1-hardening']);
+  });
+
+  it('two requests in the same tick create a single sprint', async () => {
+    const [a, b] = await Promise.all([send(NEW), send(NEW)]);
+    expect([a.status, b.status]).toEqual([201, 201]);
+    expect((await a.json()).sprint.id).toBe((await b.json()).sprint.id);
+    expect(await dirs()).toHaveLength(1);
+  });
+
+  it('another key is another request: the duplicate name is refused', async () => {
+    await send(NEW);
+    const other = await send(NEW, 'another-key-0001');
+    expect(other.status).toBe(409);
+  });
+
+  it('a refused first request is not remembered: the retry with the same key is evaluated again', async () => {
+    expect((await send({ ...NEW, name: '' })).status).toBe(400);
+    expect((await send(NEW)).status).toBe(201);
+  });
+
+  it('refuses a malformed key with 400 invalid_idempotency_key', async () => {
+    const res = await send(NEW, 'short');
+    expect(res.status).toBe(400);
+    expect((await res.json()).error).toBe('invalid_idempotency_key');
+    expect(await dirs()).toEqual([]);
+  });
+
+  it('still behaves without the header', async () => {
+    expect((await req('POST', '/api/sprints', { body: NEW })).status).toBe(201);
   });
 });
 

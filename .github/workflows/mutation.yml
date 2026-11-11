@@ -22,7 +22,9 @@ jobs:
     # informational only — if the weekly run fails on transient network /
     # CI flakiness we don't want to wake anyone up.
     continue-on-error: ${{ github.event_name == 'schedule' }}
-    timeout-minutes: 45
+    # 90 min: a run without incremental cache (first run of a pull request touching many files) needs more than the
+    # former 45 min; it was cancelled at 98 % and then at 49 % on the Kanban pull requests, with no verdict.
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # pinned: v7.0.1
 

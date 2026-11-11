@@ -109,11 +109,14 @@ export async function updateWipLimits(projectRoot, patch, { lockWait = LOCK_WAIT
 }
 
 /**
- * @param {Array<{status: string}>} stories - the board AFTER the move
+ * Counted like the board's column: the stories of the active sprint, or every story when there is none.
+ * @param {Array<{status: string, sprint_id?: string|null}>} stories - the board AFTER the move
+ * @param {string|null} [activeSprintId]
  * @returns {string[]} ['wip_exceeded'] when `status` holds more stories than its limit, else []
  */
-export function wipWarnings(stories, limits, status) {
+export function wipWarnings(stories, limits, status, activeSprintId = null) {
   const max = limits?.[status];
   if (max === undefined || max === null) return [];
-  return stories.filter((s) => s.status === status).length > max ? ['wip_exceeded'] : [];
+  const shown = stories.filter((s) => s.status === status && (!activeSprintId || s.sprint_id === activeSprintId));
+  return shown.length > max ? ['wip_exceeded'] : [];
 }

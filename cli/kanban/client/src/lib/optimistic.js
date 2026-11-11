@@ -21,3 +21,23 @@ export function restore(stories, before) {
 export function replaceStory(stories, story) {
   return stories.some((s) => s.id === story.id) ? replaceById(stories, story) : stories;
 }
+
+/**
+ * Writes of this tab still waiting for their answer, by story id. A move shows at once, before the server answers
+ * with the new `_rev`: an edit opened meanwhile waits for settled(id), or it would start from the older version and
+ * its save would be refused as a conflict with the user's own change. A failed write counts as settled.
+ * pending(): some write is on its way (a reload answered meanwhile would undo the change the board already shows).
+ */
+export function createWriteTracker() {
+  const pending = new Map();
+  return {
+    track(id, write) {
+      const all = Promise.allSettled([pending.get(id), write]);
+      pending.set(id, all);
+      all.then(() => pending.get(id) === all && pending.delete(id));
+      return write;
+    },
+    settled: (id) => pending.get(id) ?? Promise.resolve(),
+    pending: () => pending.size > 0,
+  };
+}

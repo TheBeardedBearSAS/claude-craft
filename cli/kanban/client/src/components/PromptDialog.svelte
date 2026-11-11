@@ -10,6 +10,8 @@
    */
   import { t } from '../lib/i18n/index.svelte.js';
 
+  const uid = $props.id(); // unique ids: the dialog may be mounted more than once
+
   let dialog = $state(null);
   let inputEl = $state(null);
   let message = $state('');
@@ -28,7 +30,6 @@
     requiredMessage = required;
     inputValue = '';
     showError = false;
-    dialog.returnValue = '';
     dialog.showModal();
     Promise.resolve().then(() => inputEl?.focus());
     return new Promise((resolve) => {
@@ -36,10 +37,24 @@
     });
   }
 
-  function handleClose() {
-    const value = dialog.returnValue === 'confirm' ? inputValue.trim() : '';
-    resolvePromise?.(value || null);
+  // The answer is taken when it is given (OK, Cancel, Escape), not on `close`: that event comes with the next rendered
+  // frame, when the dialog may already be asking a second question (it would receive the first one's answer).
+  function settle(value) {
+    const resolve = resolvePromise;
     resolvePromise = null;
+    resolve?.(value);
+  }
+
+  // Closed here, before the caller goes on (Escape included): a caller that puts the focus back at once must find the
+  // page usable, not still blocked by the dialog that is closing.
+  function cancel() {
+    dialog.close();
+    settle(null);
+  }
+
+  // Any other way of closing (the browser's own) while the question is still open counts as a cancel.
+  function handleClose() {
+    if (!dialog.open) settle(null);
   }
 
   function confirm() {
@@ -48,8 +63,9 @@
       inputEl?.focus();
       return;
     }
-    dialog.returnValue = 'confirm';
+    const value = inputValue.trim();
     dialog.close();
+    settle(value || null);
   }
 
   function handleSubmit(e) {
@@ -58,23 +74,23 @@
   }
 </script>
 
-<dialog bind:this={dialog} aria-labelledby="prompt-dialog-label" onclose={handleClose}>
+<dialog bind:this={dialog} class="prompt-dialog" aria-labelledby="{uid}-label" oncancel={cancel} onclose={handleClose}>
   <form onsubmit={handleSubmit}>
-    <label id="prompt-dialog-label" for="prompt-dialog-input" class="dialog-title">{message}</label>
+    <label id="{uid}-label" for="{uid}-input" class="dialog-title">{message}</label>
     <input
-      id="prompt-dialog-input"
+      id="{uid}-input"
       bind:this={inputEl}
       bind:value={inputValue}
       type="text"
       class="dialog-input"
       aria-invalid={showError ? 'true' : undefined}
-      aria-describedby={showError ? 'prompt-dialog-error' : undefined}
+      aria-describedby={showError ? `${uid}-error` : undefined}
       oninput={() => (showError = false)}
     />
     <!-- Toujours présente (vide) : un message inséré dans une région déjà là est annoncé de façon fiable. -->
-    <p id="prompt-dialog-error" class="dialog-error" role="alert">{showError ? requiredMessage : ''}</p>
+    <p id="{uid}-error" class="dialog-error" role="alert">{showError ? requiredMessage : ''}</p>
     <div class="dialog-actions">
-      <button type="button" class="btn-cancel" onclick={() => dialog.close()}>{t('common.cancel')}</button>
+      <button type="button" class="btn-cancel" onclick={cancel}>{t('common.cancel')}</button>
       <button type="submit" class="btn-confirm">{t('common.ok')}</button>
     </div>
   </form>

@@ -113,11 +113,27 @@ describe('GET /api/events (SSE)', () => {
     await vi.waitFor(() => expect(bus.size).toBeGreaterThan(0), { timeout: 2000, interval: 20 });
     bus.publish('story.updated', { id: 'US-001' });
 
-    const { value } = await firstChunk;
-    const text = decoder.decode(value);
-    expect(text).toContain('story.updated');
+    let text = decoder.decode((await firstChunk).value);
+    while (!text.includes('story.updated')) text += decoder.decode((await reader.read()).value);
     expect(text).toContain('US-001');
 
+    await reader.cancel();
+  });
+
+  // Firefox reports an EventSource as open only once it has received data: with nothing written before the
+  // first heartbeat (30 s), the "Live" indicator stayed off and the client never resynchronised.
+  it('writes to the stream at once, before any event is published', async () => {
+    const appWithBus = createApp({ repository: repo, port: PORT + 1, eventBus: new EventBus() });
+    const r = await appWithBus.request('/api/events');
+    const reader = r.body.getReader();
+
+    const first = await Promise.race([
+      reader.read(),
+      new Promise((resolve) => setTimeout(() => resolve({ timedOut: true }), 1000)),
+    ]);
+
+    expect(first.timedOut).toBeUndefined();
+    expect(new TextDecoder().decode(first.value)).toMatch(/^:/); // an SSE comment: no event for the client to handle
     await reader.cancel();
   });
 });

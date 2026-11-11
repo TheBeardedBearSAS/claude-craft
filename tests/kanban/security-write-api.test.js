@@ -362,6 +362,8 @@ describe('every mutation route sits behind the origin and readonly guards', () =
     ['PATCH', '/api/stories/US-001/status', { status: 'ready-for-dev' }],
     ['PATCH', '/api/stories/US-001', { title: 'x' }],
     ['PATCH', '/api/stories/US-001/tasks/TASK-001', { status: 'done' }],
+    ['PATCH', '/api/stories/US-001/tasks/TASK-001', { title: 'y' }],
+    ['DELETE', '/api/stories/US-001/tasks/TASK-001', undefined],
     ['PUT', '/api/stories/US-001/body', { markdown: 'x', expected_mtime: 0 }],
     ['POST', '/api/stories', { title: 'x' }],
     ['DELETE', '/api/stories/US-001', undefined],

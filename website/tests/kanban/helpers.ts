@@ -1,4 +1,9 @@
-import { expect, type Page } from '@playwright/test';
+import { expect, request as pwRequest, type APIRequestContext, type Page } from '@playwright/test';
+import { spawn, type ChildProcess } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 /** Each view with a selector that proves fixture content is rendered. */
 export const VIEWS = [
@@ -58,3 +63,71 @@ export async function openDepsNode(page: Page) {
     )
     .toBeGreaterThan(0);
 }
+
+/**
+ * A private kanban server on its own copy of the fixture, for a spec that changes shared state for good (closes
+ * the active sprint). Same recipe as planning.spec.ts. Call start() in beforeAll and stop() in afterAll.
+ */
+export function privateServer(port: number, name: string) {
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+  const dir = path.join(os.tmpdir(), `cc-kanban-e2e-${name}`);
+  const origin = `http://127.0.0.1:${port}`;
+  let server: ChildProcess | undefined;
+  let api: APIRequestContext | undefined;
+  const call = async (method: 'get' | 'post', url: string, data?: object) =>
+    (await api![method](`${origin}${url}`, { headers: { Origin: origin }, data })).json();
+  return {
+    origin,
+    call,
+    async start() {
+      fs.rmSync(dir, { recursive: true, force: true });
+      fs.cpSync(path.join(root, 'tests/fixtures/wrandly-anon'), dir, { recursive: true });
+      server = spawn('node', ['cli/index.js', 'kanban', dir, `--port=${port}`], { cwd: root, stdio: 'ignore' });
+      api = await pwRequest.newContext();
+      await expect
+        .poll(async () => (await api!.get(`${origin}/api/health`).catch(() => null))?.ok() ?? false, { timeout: 30_000 })
+        .toBe(true);
+    },
+    async stop() {
+      await api?.dispose();
+      server?.kill();
+    },
+  };
+}
+
+/**
+ * WCAG 2.5.8: the controls of the page smaller than 24 x 24 CSS px (runs in the page). Shared by a11y-review.spec.ts
+ * (desktop engines) and touch.spec.ts (phone emulation).
+ */
+export const SMALL_TARGETS = () =>
+  [...document.querySelectorAll('button, a[href], input, select, summary, [role="menuitem"]')]
+    .filter((el) => {
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height || getComputedStyle(el).visibility === 'hidden') return false;
+      if (el.closest('.sr-only, .md-body, .doc-paper, [inert]')) return false; // links inside prose (inline exception)
+      if (el.closest('dialog:not([open])')) return false;
+      // A checkbox or radio inside its <label>: the label is the target (it activates the control).
+      const label = el.matches('input') ? el.closest('label')?.getBoundingClientRect() : null;
+      if (label && label.width >= 24 && label.height >= 24) return false;
+      return r.width < 24 || r.height < 24;
+    })
+    .map((el) => {
+      const r = el.getBoundingClientRect();
+      return `${el.tagName.toLowerCase()}.${(el as HTMLElement).className.split(' ')[0]} "${(el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 24)}" ${Math.round(r.width)}x${Math.round(r.height)}`;
+    });
+
+/**
+ * Wait for the UI at rest: every finite animation and transition has ended (a cancelled one counts as ended); endless
+ * ones (the live dot) are left running. Contrast and sizes are measured on the UI at rest. Under WebKit, axe caught a
+ * toast half-way through its fade-in, and both contrast and size checks caught elements behind a newly opened modal
+ * half-way through a hover transition (WebKit keeps :hover on them while the pointer stays still).
+ */
+export const settled = (p: Page) =>
+  p.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+        .map((a) => a.finished.catch(() => undefined))
+    )
+  );

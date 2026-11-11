@@ -204,8 +204,30 @@ jobs:
   # Audit K-12: builds the Kanban client on every PR and runs the browser harness
   # (smoke, axe, reflow, keyboard) against a copy of tests/fixtures/wrandly-anon.
   kanban-e2e:
-    name: Kanban client build + browser tests
+    name: Kanban client build + browser tests (${{ matrix.engine }})
     runs-on: ubuntu-latest
+    timeout-minutes: 25
+    # The official Playwright image ships the three browsers and their system libraries: nothing is installed with
+    # apt during the run (that step hung for more than an hour when the runners could not resolve the Ubuntu
+    # mirrors). The tag must match the @playwright/test version of website/package-lock.json (checked below).
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d
+      # --ipc=host: the default 64 MB of shared memory of a container makes a browser page crash now and then.
+      options: --user 1001 --ipc=host
+    # One job per engine (parallel) rather than one job three times longer. `projects` is what runs
+    # (website/tests/kanban/playwright.config.ts); the touch projects only run touch.spec.ts.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - engine: chromium
+            projects: --project=chromium
+          - engine: firefox
+            projects: --project=firefox
+          - engine: webkit
+            projects: --project=webkit
+          - engine: touch
+            projects: --project=mobile-chrome --project=mobile-safari
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # pinned: v7.0.1
@@ -225,17 +247,17 @@ jobs:
       - name: Install website (Playwright) dependencies
         run: cd website && npm ci
 
-      - name: Install Playwright Chromium
-        run: cd website && npx playwright install --with-deps chromium
+      - name: Check the image matches the installed Playwright
+        run: test "$(node -p "require('./website/node_modules/@playwright/test/package.json').version")" = "1.65.0"
 
       - name: Run Kanban browser tests
-        run: cd website && npm run test:kanban
+        run: cd website && npm run test:kanban -- ${{ matrix.projects }}
 
       - name: Upload test report
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # pinned: v7.0.2
         with:
-          name: kanban-e2e-report
+          name: kanban-e2e-report-${{ matrix.engine }}
           path: |
             website/tests/kanban/report/
             website/tests/kanban/results/

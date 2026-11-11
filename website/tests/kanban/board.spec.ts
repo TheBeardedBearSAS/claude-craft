@@ -105,3 +105,75 @@ test('board: changing the language in Settings translates the board without relo
   await expect(heading).not.toHaveText('In progress');
   await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
 });
+
+// Two quick moves: the second one is shown at once but sent only when the first is answered. Sent together, the
+// server could handle them out of order and refuse the second ("not allowed" from the status it still had), and
+// the first answer sent the card back a column (seen in CI as a focus taken from "Move" to "Open").
+test('board: a second move shown before the first is answered never sends the card back nor moves the focus', async ({
+  page,
+}) => {
+  const origin = new URL(test.info().project.use.baseURL!).origin;
+  const created = await page.request.post('/api/stories', {
+    data: { title: 'E2E two quick moves', story_points: 3, sprint_id: 'sprint-9-auth-premium' },
+    headers: { Origin: origin },
+  });
+  const id = (await created.json()).story.id as string;
+  try {
+    // Each answer reaches the page only when the test lets it through.
+    const gates: Array<() => void> = [];
+    const sent: string[] = [];
+    await page.route(`**/api/stories/${id}/status`, async (route) => {
+      sent.push(route.request().postDataJSON().status);
+      const response = await route.fetch();
+      await new Promise<void>((resolve) => gates.push(resolve));
+      await route.fulfill({ response });
+    });
+    await openView(page, 'kanban');
+    const move = page.getByRole('button', { name: `Move ${id}` });
+    const inColumn = (status: string) => column(page, status).locator(`[data-card-id="${id}"]`);
+
+    await move.focus();
+    await page.keyboard.press('Enter');
+    await page.getByRole('menuitem', { name: 'Ready for dev' }).press('Enter');
+    await expect(inColumn('ready-for-dev')).toBeVisible();
+    await expect.poll(() => gates.length).toBe(1);
+    await move.focus();
+    await page.keyboard.press('Enter');
+    await page.getByRole('menuitem', { name: 'In progress' }).press('Enter');
+    await expect(inColumn('in-progress')).toBeVisible();
+    await move.focus(); // the user goes on with the card while the first answer is on its way
+    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 300))); // time for a parallel send to show
+    expect(sent).toEqual(['ready-for-dev']); // the second move waits for the first answer
+
+    gates[0](); // first answer: "ready-for-dev"
+    await expect(page.locator('.toast.success', { hasText: `${id} moved to Ready for dev` })).toBeVisible();
+    await expect(inColumn('in-progress')).toBeVisible();
+    await expect(move).toBeFocused();
+    await expect.poll(() => gates.length).toBe(2);
+    expect(sent).toEqual(['ready-for-dev', 'in-progress']);
+
+    gates[1](); // second answer: "in-progress"
+    await expect(page.locator('.toast.success', { hasText: `${id} moved to In progress` })).toBeVisible();
+    await expect(inColumn('in-progress')).toBeVisible();
+    await expect(move).toBeFocused();
+  } finally {
+    await page.request.delete(`/api/stories/${id}?force=1`, { headers: { Origin: origin } });
+  }
+});
+
+// Closing the detail drops `?story=` from the URL when the dialog's `close` event arrives, one frame later. A
+// navigation issued in between (Escape then a click on a nav link) used to be undone: the late handler rebuilt the
+// URL from the route it still had in memory and sent the user back to the board.
+test('router: a navigation issued right after the detail closes is not undone by the late close', async ({ page }) => {
+  await page.goto('/#/kanban?story=US-200');
+  await expect(page.locator('dialog.modal[open]')).toBeVisible();
+
+  await page.evaluate(() => {
+    (document.querySelector('dialog.modal[open]') as HTMLDialogElement).close();
+    window.location.hash = '#/backlog';
+  });
+
+  await expect(page).toHaveURL(/#\/backlog$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Backlog');
+  await expect(page.locator('dialog.modal[open]')).toHaveCount(0);
+});

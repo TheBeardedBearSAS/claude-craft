@@ -4,6 +4,7 @@
   import { SUPPORTED_LOCALES } from '../lib/i18n/translate.js';
   import { t, setLocale } from '../lib/i18n/index.svelte.js';
   import Icon from './Icon.svelte';
+  import WipSettings from './WipSettings.svelte';
 
   let dialog = $state(null);
   let triggerEl = $state(null);
@@ -18,11 +19,11 @@
     dialog?.close();
   }
 
+  // `close` comes with the next rendered frame: a control the user has reached meanwhile keeps the focus.
   function onClose() {
-    if (triggerEl) {
-      triggerEl.focus();
-      triggerEl = null;
-    }
+    const active = document.activeElement;
+    if (!active || active === document.body || dialog.contains(active)) triggerEl?.focus();
+    triggerEl = null;
   }
 
   const SCHEMES = ['status', 'priority', 'tdd', 'epic'];
@@ -109,6 +110,10 @@
         {/each}
       </select>
       <p class="tweaks-hint">{t('settings.language.hint')}</p>
+    </section>
+
+    <section class="tweaks-section" aria-labelledby="tw-wip">
+      <WipSettings />
     </section>
 
     <section class="tweaks-section" aria-labelledby="tw-keys">

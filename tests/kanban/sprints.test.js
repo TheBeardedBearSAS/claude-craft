@@ -91,6 +91,11 @@ describe('sprintState', () => {
     expect(sprintState(sp('sprint-2', 5, 5, { state: 'planned' }), null)).toBe('planned');
   });
 
+  it('prefers the API state over every local guess (older and fully delivered, yet planned)', () => {
+    expect(sprintState(sp('sprint-1', 8, 8, { state: 'planned' }), 'sprint-3')).toBe('planned');
+    expect(sprintState(sp('sprint-9', 0, 0, { state: 'closed' }), 'sprint-3')).toBe('closed');
+  });
+
   it('ignores an unknown explicit state', () => {
     expect(sprintState(sp('sprint-2', 0, 5, { state: 'weird' }), 'sprint-2')).toBe('active');
   });
