@@ -111,13 +111,17 @@ Firefox has no `isMobile` mode in Playwright, so there is no mobile Firefox proj
 
 - **Touch** (`touch.spec.ts`): moving a card, planning a story and closing a sprint are done with taps only (no drag); every control is at least 24 × 24 px on every view, the Move menu, the detail and the settings; no view scrolls sideways; no control is revealed only on hover; a form dialog fits the phone screen, and with the screen shortened by about 40 % (an approximation of an on-screen keyboard) the focused field and the dialog's actions stay reachable; the viewport meta does not block pinch zoom.
 - **Accessibility tree** (`a11y-tree.spec.ts`, under each desktop engine): on the essential journeys (open a card, move it with the menu, a refused move, create a story with a validation error, plan a story, close a sprint), roles, names, states (`expanded`, `invalid`, `disabled`, `checked`, `selected`), the error description of a field, where the focus lands, and the text each live region holds when it is announced (said once, in the right region).
+- **Forced colours** (`forced-colors.spec.ts`, Windows high contrast emulated by Playwright): on the six views, the story detail (read and edit), the Move menu, the story and sprint forms with their errors, the dialogs, the settings, the toasts and the filters, in the light and dark system palettes: every control reached with `Tab` shows an outline; every control or container drawn as a box in normal mode keeps a visible border or outline; text and icons use system colours only; the states stay distinct without author colours (current page, document and sprint, pressed filter, selected option and accent, unavailable and disabled buttons, field in error, WIP limit reached or exceeded, drop target and refused drop); progress fills stand out from their track; the colour coding of the cards keeps its hues (legend and card bars match); burndown, velocity and the dependency graph are drawn in system colours, with their legends and tables. Chromium emulates the whole mode (light and dark palettes); Firefox forces the colours with its light palette only; WebKit only flips the media query without replacing the colours, so the spec is skipped there. This is an emulation on Linux, not Windows: no real Windows theme (such as "Aquatic" or "Desert"), no Edge.
 
 **Found by running the other engines:**
 
 - Firefox: the "Live" indicator stayed "Offline" for up to 30 s, because Firefox reports an `EventSource` as open only once the first bytes arrive; the server now sends a comment as soon as a client connects.
 - WebKit: a programmatic `focus()` can reach an element that an open modal dialog makes inert (Chromium and Firefox ignore it). After a cancelled "blocked" question, the story detail moved the focus from the next question's field to the control behind it; it now leaves the focus in another open modal.
 - Every engine (rare timing, seen under Chromium and WebKit): when a card was moved a second time before the first move was answered, the first answer put the card back a column for a moment; the card was re-created and the focus left the "Move" button for the card's "Open" button. An answer is now applied only if no later move of that story was sent since.
+- Every engine (rare timing, found by replaying the French journey 60 times): the server's order of the stories changes with its writes, so a real-time reload could reorder a column; the card's element was moved and the browser dropped the focus it held, so the next `Enter` went to the page. The focused element now gets the focus back after such a reorder.
 - Test assumptions corrected, not product defects: Firefox paints an input's text over its padding (the placeholder check measured the content box), and WebKit keeps `:hover` on an element under a newly opened modal while the pointer stays still, so contrast and size checks now wait for animations and transitions to end.
+
+**Found in forced colours** (fixed in one commented `@media (forced-colors: active)` block of `views.css`, plus a few lines in the components whose styles are scoped; the normal rendering is unchanged): the current page, document and sprint, the pressed filters, the selected settings and the four accent swatches looked like the others (only a background marked them); "Clear filters" looked available when it was not; a field in error in the WIP, sprint and blocked-reason forms looked valid (only its border colour changed); the WIP counter lost its frame and the drop target its highlight; every progress bar looked empty and the epic rings were pink on white; the colour legend of the board lost its swatches and the cards their colour bar; the charts were drawn with the dark theme's colours, so on the light palette their labels and lines fell to about 2:1 and the actual series to about 1.2:1, and on the dark palette the graph edges to 2.5:1; the legend no longer told the actual and delivered series from the others; two icons kept their author colour (Chromium keeps it on SVG). A chart drawn before high contrast was switched on kept its colours: the charts and the graph are now redrawn when the system palette changes. Focus outlines, control borders, disabled native buttons, the refused drop, the blocked card, the Live status and the toasts already held.
 
 **Conformance status (Kanban):** the target is WCAG 2.2 Level AA and RGAA 4.1. The checks above were run with axe-core, keyboard, touch and accessibility-tree tests and code review, under the three engines listed. This is not a statement of full conformance.
 
@@ -127,10 +131,11 @@ Firefox has no `isMobile` mode in Playwright, so there is no mobile Firefox proj
 - Real Safari: Playwright's WebKit on Linux is not Safari on macOS or iOS (different text rendering, no system settings such as "Press Tab to highlight each item", no VoiceOver).
 - Real touch devices: the phone projects are emulations (viewport, touch events, `isMobile`); there is no real on-screen keyboard, pinch gesture, or iOS/Android text scaling.
 - Firefox and Safari on Windows or macOS (the engines run on Linux only), and Edge.
-- Windows forced-colors (high contrast) mode.
+- Windows forced-colors (high contrast) mode on a real Windows machine and in Edge: it is checked by Playwright's emulation only (Chromium and Firefox, see above), not with real Windows contrast themes.
 
 **Known limitations:**
 
+- Firefox: a Move menu opened with the pointer and left with `Tab` gives the focus back to its button without a ring (Firefox's `:focus-visible` heuristic for a focus set by script after a click). With the keyboard only, the ring is there.
 - The side panel of a node of the dependency graph opens with a pointer only; the table is the keyboard and screen reader alternative.
 - The content of the stories (titles, markdown) has no `lang` attribute, even when it is written in another language than the interface.
 
@@ -140,7 +145,7 @@ Firefox has no `isMobile` mode in Playwright, so there is no mobile Firefox proj
 
 ### Kanban web interface
 
-See [Kanban Web Interface](#kanban-web-interface): no real screen reader test, Playwright's Chromium, Firefox and WebKit builds on Linux plus phone emulation only (no real Safari, no real touch device), forced-colors mode not checked, graph node panel opened with a pointer only.
+See [Kanban Web Interface](#kanban-web-interface): no real screen reader test, Playwright's Chromium, Firefox and WebKit builds on Linux plus phone emulation only (no real Safari, no real touch device), forced-colors mode checked by emulation only (no real Windows), graph node panel opened with a pointer only.
 
 ### Other tools
 
@@ -150,7 +155,7 @@ See [Kanban Web Interface](#kanban-web-interface): no real screen reader test, P
 
 - Manual testing with NVDA, JAWS, VoiceOver and TalkBack
 - Real Safari (macOS, iOS) and real touch devices
-- Windows forced-colors (high contrast) mode
+- Windows forced-colors (high contrast) mode on a real Windows machine (emulated only so far)
 
 ---
 

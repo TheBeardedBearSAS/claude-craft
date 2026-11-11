@@ -46,7 +46,8 @@ test.beforeAll(async () => {
 
 test.afterAll(async () => {
   await api?.dispose();
-  server?.kill();
+  // Wait for the exit: with --repeat-each the next beforeAll binds the same port and recopies the project.
+  if (server && server.exitCode === null) await new Promise((done) => (server.once('exit', done), server.kill()));
 });
 
 const storyOf = async (id: string) =>
@@ -410,7 +411,8 @@ test(FRENCH, async ({ page }) => {
   const form = page.getByRole('dialog', { name: 'Nouvelle story' });
   await page.keyboard.type('Story en français');
   await form.locator('#create-story_points').selectOption('3');
-  await form.locator('#create-sprint_id').selectOption(ids.sprint);
+  // The active sprint: the one the first test started, or the fixture's when this test runs alone (-g, --repeat-each).
+  await form.locator('#create-sprint_id').selectOption(ids.sprint || ACTIVE);
   await shot(page, 'fr-02-create');
   await press(page, form.getByRole('button', { name: 'Créer la story' }));
   await expect(detail(page).locator('#detail-title')).toHaveText('Story en français');

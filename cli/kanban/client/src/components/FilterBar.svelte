@@ -165,4 +165,15 @@
     font-size: 0.8125rem;
     color: var(--fg-dim);
   }
+  /* Contrastes forcés : le fond du filtre actif et le gris du bouton indisponible disparaissent. */
+  @media (forced-colors: active) {
+    .fb-chip[aria-pressed='true'] {
+      border: 3px solid CanvasText;
+      padding: 2px 10px;
+    }
+    .fb-btn[aria-disabled='true'] {
+      color: GrayText;
+      border-color: GrayText;
+    }
+  }
 </style>

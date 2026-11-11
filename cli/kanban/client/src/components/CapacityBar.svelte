@@ -52,4 +52,6 @@
   .capacity[data-state='at'] .cap-track span { background: var(--warning); }
   .cap-state { margin: 0; display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--fg-dim); }
   .capacity[data-state='over'] .cap-state { color: var(--danger); font-weight: 600; }
+  /* Forced colours: the coloured fill is dropped; the filled part is painted in CanvasText (the state is in text). */
+  @media (forced-colors: active) { .cap-track span, .capacity[data-state] .cap-track span { background: CanvasText; } }
 </style>

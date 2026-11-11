@@ -28,6 +28,7 @@
 
 <script>
   import { untrack } from 'svelte';
+  import { palette } from '../lib/palette.svelte.js';
   import { store } from '../lib/store.svelte.js';
   import { route } from '../lib/router.svelte.js';
   import { formatHash } from '../lib/query.js';
@@ -133,6 +134,7 @@
   }
 
   $effect(() => {
+    palette.version; // rebuilt in the system colours when the palette changes (lib/palette.svelte.js)
     if (!graphContainer || nodes.length === 0 || !edges || graphBuilt) return;
     graphBuilt = true;
     let cancelled = false;
@@ -145,7 +147,8 @@
     // valeur en sRGB (cf. normalizeColor / deps-style.js).
     const nctx = document.createElement('canvas').getContext('2d');
     const norm = (col) => normalizeColor(col, nctx);
-    const root = getComputedStyle(document.documentElement);
+    // Lus sur le conteneur : en contrastes forcés, views.css y redéfinit les tokens en couleurs système.
+    const root = getComputedStyle(container);
     const tok = (n, fb) => norm(root.getPropertyValue(n).trim() || fb);
     const statusColor = (status) => tok(STATUS[status]?.cssVar || '--fg-faint', '#888');
     const cBg = tok('--bg-inset', '#111');

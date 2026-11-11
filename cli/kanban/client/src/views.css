@@ -2528,3 +2528,87 @@ dialog.modal-form {
     width: 100%;
   }
 }
+
+/* ================= CONTRASTES FORCÉS (Windows high contrast) =================
+   En `forced-colors: active`, le navigateur repeint texte, bordures et outlines avec la palette système et
+   supprime fonds, dégradés et ombres. Ce bloc ne rend que ce qui n'était porté que par un fond, une ombre ou
+   une teinte : états marqués par une bordure plus épaisse en CanvasText (padding réduit d'autant ; Highlight
+   ne tient pas 3:1 sur la palette claire de Firefox), remplissage des progressions en CanvasText, teintes du codage conservées (la couleur est le
+   contenu), graphiques et graphe lus en couleurs système via leurs tokens. Le rendu normal ne change pas.
+   Vérifié par website/tests/kanban/forced-colors.spec.ts. */
+@media (forced-colors: active) {
+  /* Page, document et sprint courants : seul un fond teinté les distinguait. */
+  .nav-item[aria-current='page'] {
+    border: 2px solid CanvasText;
+    padding: 7px 9px;
+  }
+  .tree-item[aria-current='page'] {
+    border: 2px solid CanvasText;
+    padding: 2px 7px;
+  }
+  .sprint-item[aria-current='page'] {
+    border: 3px solid CanvasText;
+    padding: 12px;
+  }
+  /* Icônes à couleur d'auteur explicite (Chromium la conserve sur un SVG) : elles suivent le texte. */
+  .nav-item[aria-current='page'] .ico,
+  .epic-chevron {
+    color: inherit;
+  }
+  /* Limite WIP : l'ombre intérieure disparaît, un outline la remplace (1 px à la limite, 2 px au-delà). */
+  .col-count.wip-at {
+    outline: 1px solid CanvasText;
+  }
+  .col-count.wip-over {
+    outline: 2px solid CanvasText;
+  }
+  /* Colonne survolée par une carte glissée. */
+  .column.drop-target {
+    outline: 3px solid CanvasText;
+    outline-offset: 2px;
+  }
+  /* Progressions : piste encadrée, partie remplie en CanvasText (fond et dégradé supprimés). */
+  .proj-bar,
+  .task-prog .bar {
+    outline: 1px solid CanvasText;
+  }
+  .proj-bar > span,
+  .task-prog .bar > span {
+    background: CanvasText;
+  }
+  .ring-wrap circle {
+    stroke: GrayText;
+  }
+  .ring-wrap circle + circle {
+    stroke: CanvasText;
+  }
+  /* Codage couleur des cartes (Réglages) : la teinte est l'information, elle est conservée. */
+  .card::before,
+  .coding-legend .key i,
+  .card-epic-dot {
+    forced-color-adjust: none;
+  }
+  .coding-legend .key i,
+  .card-epic-dot {
+    outline: 1px solid CanvasText;
+  }
+  /* Légendes des graphiques : série réelle et livré sont pleins, idéal et engagé restent des traits. */
+  .swatch-actual,
+  .swatch-actual::after,
+  .swatch-delivered {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+  .swatch-delivered {
+    border-color: CanvasText;
+  }
+  /* Un canvas n'est pas repeint : BurndownView et DepsView lisent ces tokens sur le conteneur. Les séries
+     restent distinguées par le tracé (tirets / plein avec repères, contour / plein). */
+  .chart-wrapper,
+  .deps-canvas {
+    --fg-dim: CanvasText;
+    --accent: CanvasText;
+    --border-faint: GrayText;
+    --border-strong: CanvasText;
+  }
+}

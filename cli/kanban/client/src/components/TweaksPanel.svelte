@@ -173,4 +173,11 @@
   }
   .swatch-btn:hover { transform: scale(1.08); }
   .swatch-btn.selected { border-color: var(--bg-elev); box-shadow: 0 0 0 2px var(--sw); }
+  /* Forced colours: the selected option loses its fill; the accent swatches keep their hue (it is the choice). */
+  @media (forced-colors: active) {
+    .tweak-opt.selected { border: 3px solid CanvasText; padding: 7px 8px; }
+    .swatch-btn { forced-color-adjust: none; border-color: CanvasText; box-shadow: none; }
+    .swatch-btn.selected { border-color: CanvasText; box-shadow: 0 0 0 2px Canvas, 0 0 0 5px CanvasText; }
+    .swatch-btn:focus-visible { outline-color: CanvasText; outline-offset: 6px; }
+  }
 </style>

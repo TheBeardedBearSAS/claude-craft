@@ -90,7 +90,9 @@ export function privateServer(port: number, name: string) {
     },
     async stop() {
       await api?.dispose();
-      server?.kill();
+      // Wait for the exit: a restarted worker (or --repeat-each) binds the same port right after.
+      const s = server;
+      if (s && s.exitCode === null) await new Promise((done) => (s.once('exit', done), s.kill()));
     },
   };
 }

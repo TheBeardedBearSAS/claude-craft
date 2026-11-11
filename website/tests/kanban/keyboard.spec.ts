@@ -123,3 +123,25 @@ test('keyboard: closing a story detail never takes the focus from a control reac
   await expect(page.locator('[data-new-story]')).toBeFocused();
   expect(id).toBeTruthy();
 });
+
+// Seen as a rare failure of the French journey: the server's order of the stories changes with its writes, so a
+// real-time reload can reorder a column; the keyed list then moves the card's element and the browser drops the focus
+// it held (a keyboard user's next Enter went to the page).
+test('keyboard: a real-time reload that reorders a column keeps the focus where it was', async ({ page }) => {
+  const origin = new URL(test.info().project.use.baseURL!).origin;
+  await openView(page, 'kanban');
+  const column = page.locator('section.column:has(#col-in-progress)');
+  const ids = await column.locator('[data-card-id]').evaluateAll((all) => all.map((b) => b.getAttribute('data-card-id')!));
+  expect(ids.length).toBeGreaterThanOrEqual(2);
+  await page.route('**/api/stories', async (route) => {
+    const response = await route.fetch();
+    const body = await response.json();
+    await route.fulfill({ response, json: { ...body, stories: [...body.stories].reverse() } });
+  });
+  const move = page.locator(`[data-move-id="${ids[0]}"]`);
+  await move.focus();
+  // Any write makes the server announce a change: the page reloads the stories (here in reverse order).
+  await page.request.put('/api/settings/wip', { data: { 'in-progress': null }, headers: { Origin: origin } });
+  await expect(column.locator('[data-card-id]').first()).toHaveAttribute('data-card-id', ids[ids.length - 1]);
+  await expect(move).toBeFocused();
+});

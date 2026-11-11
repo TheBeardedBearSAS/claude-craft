@@ -2,6 +2,7 @@
   import { untrack } from 'svelte';
   import { store } from '../lib/store.svelte.js';
   import { tweaks } from '../lib/tweaks.svelte.js';
+  import { palette } from '../lib/palette.svelte.js';
   import { t, tn, fmtDate, fmtNumber } from '../lib/i18n/index.svelte.js';
   import { request, latestOnly, isAbort, errorKey } from '../lib/api.js';
   import { velocityRows, averageVelocity, forecastSprints, remainingPoints } from '../lib/velocity.js';
@@ -59,6 +60,7 @@
   // Committed bars are outlines, delivered bars are filled: told apart by shape, not by colour alone.
   $effect(() => {
     tweaks.accent;
+    palette.version;
     if (!velocityContainer || rows.length === 0) return;
 
     const cs = getComputedStyle(velocityContainer);
@@ -98,6 +100,7 @@
   // effect (never $state: reading and writing it here made the effect depend on its own write).
   $effect(() => {
     tweaks.accent;
+    palette.version;
     if (!chartContainer || !hasData) return;
 
     const cs = getComputedStyle(chartContainer);

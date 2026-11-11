@@ -571,19 +571,46 @@ Deux écarts relevaient des tests : WebKit conserve le survol sur l'élément si
 
 Ajouts de la même passe : tâches renommables et supprimables depuis le détail d'une story, protection contre le double envoi des formulaires de création (garde côté client et en-tête `Idempotency-Key` côté serveur), réponses de `PromptDialog` et de `CloseSprintDialog` prises au clic.
 
+### 7.8 Mode contrastes forcés (émulé)
+
+Le mode contrastes forcés de Windows a été vérifié par émulation Playwright (`forced-colors: active`), palettes claire et sombre, sur les six vues, le détail d'une story (lecture et édition), le menu « Déplacer », les formulaires de story et de sprint avec leurs erreurs, les dialogues, les réglages, les toasts et les filtres (`website/tests/kanban/forced-colors.spec.ts`, assertions sur les styles calculés, captures regardées). Chromium émule tout le mode ; Firefox force les couleurs avec sa seule palette claire ; WebKit ne fait que basculer la media query sans remplacer les couleurs : la spec n'y tourne pas. Les anneaux de focus (outlines), les bordures des contrôles, les boutons natifs désactivés, le dépôt refusé, la carte bloquée, le statut « Live » et les toasts tenaient déjà. Onze défauts, tous corrigés avec un test qui échouait d'abord, dans un bloc `@media (forced-colors: active)` commenté de `views.css` et quelques lignes dans les composants à styles scopés ; le rendu normal ne change pas.
+
+1. **États portés par un fond.** Page, document et sprint courants, filtre de priorité actif, option et accent choisis dans les Réglages ressemblaient aux autres ; les quatre pastilles d'accent devenaient des cercles vides identiques. Bordure plus épaisse en `CanvasText` (la couleur `Highlight` ne tient pas 3:1 sur la palette claire de Firefox), teinte des pastilles conservée.
+2. **« Effacer les filtres » indisponible** paraissait actif (`aria-disabled` porté par un gris d'auteur) : `GrayText`.
+3. **Champ en erreur** des formulaires WIP, sprint et motif de blocage : seule la couleur de la bordure changeait. Bordure de 2 px.
+4. **Compteur WIP** à la limite ou au-delà : le cadre (ombre intérieure) disparaissait ; le texte restait. Outline de 1 ou 2 px.
+5. **Colonne cible d'un glisser** : plus aucun surlignage. Outline de 3 px.
+6. **Progressions** : barres du sprint, des tâches et de capacité vides à l'écran (fond et dégradé supprimés), anneaux d'épic roses sur blanc. Piste encadrée, partie remplie en `CanvasText`, anneaux en `GrayText` / `CanvasText`.
+7. **Codage couleur des cartes** : la légende du board perdait ses pastilles et les cartes leur liseré. Teintes conservées (`forced-color-adjust: none`), la couleur étant l'information.
+8. **Graphiques** (burndown, vélocité, dépendances) : un canvas n'est pas repeint et les couleurs étaient celles du thème sombre ; sur la palette claire, libellés et ligne idéale tombaient vers 2:1 et la série réelle vers 1,2:1 ; sur la palette sombre, les arêtes du graphe à 2,5:1. Les tokens lus par les graphiques prennent des couleurs système sur leur conteneur, et `normalizeColor` (`lib/deps-style.js`, test unitaire) convertit ces couleurs pour cytoscape.
+9. **Légendes des graphiques** : la pastille « réel » disparaissait et « livré » ressemblait à « engagé ». Pastilles pleines en `CanvasText`.
+10. **Icônes à couleur d'auteur** (page courante, chevrons d'épic) : Chromium conserve la couleur d'auteur d'un SVG ; elles suivent maintenant le texte.
+11. **Graphiques non redessinés** quand le contraste élevé est activé page ouverte : un canvas garde les couleurs de son tracé. Les graphiques et le graphe sont reconstruits à chaque changement de palette système (`lib/palette.svelte.js`).
+
+Ajouts de test, sans changement du produit : le harnais attend la fin des transitions sur les seuls éléments rendus (Firefox laisse en attente celles du contenu d'un `<details>` fermé), et le parcours en français est rejouable seul (§ 7.9).
+
+### 7.9 Stabilité du parcours de bout en bout
+
+Les trois courses du § 7.7 (points 3, 4 et 7) n'avaient été vérifiées que dans des passages complets. Le parcours en français dépendait du sprint créé par le premier test : il choisit maintenant le sprint actif de la fixture quand il tourne seul, sans changer ce qu'il vérifie ; chaque répétition repart d'une copie neuve de la fixture, le serveur précédent étant attendu jusqu'à son arrêt avant de libérer le port (`journey.spec.ts`, `helpers.ts`).
+
+Rejoué seul 60 fois sous Chromium, il a échoué 2 fois (puis 1 fois sur 60 avec instrumentation) : **quatrième course**, tous moteurs. L'ordre des stories renvoyé par le serveur change avec ses écritures ; un rechargement temps réel pouvait réordonner une colonne, la liste à clés déplaçait alors l'élément de la carte et le navigateur retirait le focus qu'il portait (bouton « Déplacer » ou entrée du menu) : l'Entrée suivante allait à la page. L'élément focalisé reçoit de nouveau le focus après un tel réordonnancement (`views/KanbanView.svelte`, test `keyboard.spec.ts` rouge sous les trois moteurs avant correction).
+
+Après correction, chaque test rejoué seul avec `--repeat-each=60` : parcours en français 60/60 sous Chromium, 60/60 sous WebKit, 60/60 sous Firefox ; parcours principal 60/60 sous Chromium, 60/60 sous WebKit, 60/60 sous Firefox. Soixante passages sans échec bornent la fréquence d'une course restante (de l'ordre de 5 % au plus, à 95 % de confiance), ils ne prouvent pas son absence.
+
 ## 8. Non vérifié / limites
 
 **Non vérifié.**
 
 - Lecteurs d'écran réels (NVDA, JAWS, VoiceOver, TalkBack) : aucun n'a été lancé. Le comportement ARIA est déduit du code, des règles ARIA 1.2 et de l'arbre d'accessibilité calculé par chaque moteur sur les parcours essentiels (`a11y-tree.spec.ts`).
 - Safari réel (macOS, iOS) et appareils tactiles réels : la suite tourne sous Chromium, Firefox et le WebKit de Playwright (Linux), plus deux émulations de téléphone tactile (§ 7.7). WebKit sous Linux n'est pas Safari, et une émulation n'a ni vrai clavier virtuel ni vrai pincement.
-- Mode contrastes forcés de Windows.
+- Mode contrastes forcés sur un vrai Windows (thèmes de contraste réels, Edge) : vérifié par émulation seulement (Chromium et Firefox sous Linux, § 7.8).
 - Score de mutation (Stryker) : non mesuré en local ; calculé par la CI (74,4 % sur le lot 4 complet, seuil bloquant 55 %).
 
 **Limites connues de l'interface.**
 
 - Le bundle principal (`index-*.js`) est passé de 87,4 kB à 110,7 kB (35,5 kB gzip) avec les formulaires du lot 4 ; leur chargement différé n'a pas été fait (composants liés par `bind:this` et `bind:draft`, gain modeste pour un outil local).
 
+- Firefox : un menu « Déplacer » ouvert au pointeur puis quitté avec Tab rend le focus à son bouton sans anneau (heuristique `:focus-visible` de Firefox pour un focus posé par script après un clic). Au clavier seul, l'anneau est présent ; non corrigé.
 - Le panneau d'un nœud du graphe de dépendances ne s'ouvre qu'au pointeur ; le tableau équivalent est l'alternative au clavier et au lecteur d'écran.
 - Le contenu des stories (titres, markdown) n'a pas d'attribut `lang`, même s'il est rédigé dans une autre langue que l'interface.
 
