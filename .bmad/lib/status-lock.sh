@@ -64,7 +64,9 @@ _status_lock_is_stale() {
         return
     fi
     # Half-written or foreign content: judge on mtime (GNU/busybox, then BSD stat).
-    mtime="$(stat -c %Y "$lock" 2>/dev/null || stat -f %m "$lock" 2>/dev/null)" || return 0 # vanished: retry
+    # Vanished meanwhile: not stale. Its holder released it and another writer may already hold a new one, which a
+    # removal would destroy; the caller waits and retries.
+    mtime="$(stat -c %Y "$lock" 2>/dev/null || stat -f %m "$lock" 2>/dev/null)" || return 1
     ((now - mtime * 1000 > STATUS_LOCK_TTL_MS))
 }
 
