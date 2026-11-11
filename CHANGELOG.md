@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **Kanban — écriture à travers un lien symbolique `.bak`** (`cli/kanban/server/services/file-writer.js`) : avant d'écrire le frontmatter d'une story, le serveur la copiait vers `<story>.md.bak` sans vérifier ce nom. Un dépôt contenant un lien symbolique `US-xxx.md.bak` (branche d'un tiers) faisait écrire le contenu de la story dans la cible du lien, par exemple `.git/hooks/pre-commit`, lors d'un déplacement de cette story sur le board. La copie de sauvegarde est supprimée (l'écriture par fichier temporaire puis renommage laissait déjà l'original intact en cas d'échec) et le fichier temporaire est créé en exclusif sous un nom aléatoire. Versions concernées : celles qui embarquent le Kanban, jusqu'à 9.2.1 incluse.
+
 ## [9.2.1] - 2026-11-11
 
 ### Added
