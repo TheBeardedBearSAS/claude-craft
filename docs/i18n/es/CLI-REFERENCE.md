@@ -321,7 +321,7 @@ npx @the-bearded-bear/claude-craft ralph --max-iterations=20 "Refactorizar el m�
 
 ## Comando Kanban
 
-Lanza una interfaz web local que visualiza el directorio BMAD v6 `project-management/` como un tablero Scrum / Kanban. El servidor escucha exclusivamente en `127.0.0.1` y nunca solicita Internet.
+Inicia una interfaz web local para visualizar y gestionar el backlog y los sprints BMAD v6 como un tablero Scrum / Kanban. El servidor escucha únicamente en `127.0.0.1` y nunca accede a Internet.
 
 ### Uso
 
@@ -329,38 +329,140 @@ Lanza una interfaz web local que visualiza el directorio BMAD v6 `project-manage
 npx @the-bearded-bear/claude-craft kanban [ruta] [opciones]
 ```
 
-La `ruta` es por defecto el directorio actual. El destino debe contener una subcarpeta `project-management/` (generada por `/workflow:plan` o `/workflow:start`).
+La `ruta` es por defecto el directorio actual. El destino debe contener un subdirectorio `project-management/` (generado por `/workflow:plan` o `/workflow:start`).
 
 ### Opciones
 
 | Opción | Descripción |
 |--------|-------------|
-| `--port=<n>` | Puerto HTTP (predeterminado: 3737) |
+| `--port=<n>` | Puerto HTTP, de 1024 a 65535 (por defecto: 3737). La forma con `=` es obligatoria: `--port 4000` (con un espacio) se rechaza con un mensaje de uso |
 | `--open` | Abre automáticamente el navegador |
-| `--readonly` | Desactiva todas las mutaciones (403 en cada PATCH) |
-| `--no-watch` | Desactiva el watcher de archivos |
+| `--readonly` | Desactiva toda escritura: el servidor responde 403 `readonly` a cada PATCH, PUT, POST y DELETE, y el tablero no ofrece ningún control de movimiento |
+| `--no-watch` | Desactiva el watcher de archivos (sin recarga ante cambios externos) |
+| `--user=<nombre>` | Autor registrado en el `history` de los cambios hechos desde el tablero (`kanban:<nombre>`). Por defecto: `CLAUDE_CRAFT_USER`, luego `git config user.name`, luego el usuario del sistema y, por último, `kanban` |
 
 ### Vistas
 
-- **Kanban** — 6 columnas. Arrastrar y soltar para transicionar. Los gates (INVEST 6/6, DoD, tareas completas) se validan del lado del servidor.
-- **Backlog** — árbol Epic (solo lectura) con progreso por epic.
-- **Burndown** — curvas ideal vs real del sprint activo, indicador on-track / at-risk / behind.
-- **Dependencies** — grafo dirigido de las dependencias inter-stories, ciclos en rojo.
-- **Docs** — visualizador markdown. Los enlaces `[US-XXX]` abren la tarjeta correspondiente.
+Seis vistas, listadas en la barra de navegación.
+
+- **Board** — 6 columnas (backlog, ready-for-dev, in-progress, review, done, blocked). Una tarjeta se mueve arrastrándola o con el menú «Mover» de la tarjeta, que solo ofrece las columnas permitidas (alternativa para teclado y para un único puntero). Los gates (INVEST o puntos, tareas completas, fase TDD) se validan en el servidor. La cabecera de columna muestra el número de tarjetas, o `número/límite` cuando hay un límite WIP definido.
+- **Backlog** — árbol de epics con el progreso de cada uno. Se seleccionan una o varias stories para añadirlas a un sprint o devolverlas al backlog; una barra de capacidad compara los puntos comprometidos con la capacidad del sprint de destino.
+- **Sprints** — todos los sprints (planificados, activo, cerrados) con objetivo, fechas, puntos, stories y tareas desplegables, además de sus notas de revisión y retrospectiva. Aquí se crean, inician y cierran los sprints.
+- **Burndown** — curvas ideal y real del sprint activo, indicador on-track / at-risk / behind. El gráfico de velocidad (puntos comprometidos y entregados de los sprints cerrados, media de los tres últimos, previsión de sprints restantes) incluye una tabla equivalente.
+- **Dependencies** — grafo dirigido de dependencias entre stories con los ciclos resaltados, y una tabla equivalente (story, depende de, bloquea, estado, ciclo).
+- **Docs** — visor markdown de `prd.md`, `tech-spec.md`, `personas.md`, `architecture/*.md` y de los documentos de epics, stories y sprints. Los identificadores `US-XXX` del texto enlazan con la story.
+
+### Qué se puede hacer desde el tablero
+
+- **Mover una story** entre columnas. Las transiciones permitidas figuran en [Máquina de estados](#máquina-de-estados); bloquear una story pide un motivo.
+- **Crear, editar y eliminar una story** («Nueva story» en las vistas Board y Backlog; el formulario está en el detalle de la story). Campos editables: título, epic, puntos, prioridad, asignado, sprint, fase TDD y dependencias; persona al crear. Eliminar pide confirmación y mueve el archivo a `project-management/backlog/user-stories/.trash/` (se recupera devolviéndolo a su sitio). Una story en curso o en revisión exige una confirmación explícita, y una story de la que dependen otras no puede eliminarse (409 `has_dependents`).
+- **Añadir, renombrar y eliminar tareas y cambiar su estado** (`to-do`, `in-progress`, `done`, `blocked`) desde el detalle de la story; el número de tareas terminadas se recalcula. Una story pasa a revisión solo cuando tiene tareas y todas están terminadas. En una story que solo tenía un contador de tareas, el primer cambio registra un estado por tarea (las primeras tareas, tantas como indicaba el contador, cuentan como terminadas).
+- **Planificar un sprint**: seleccionar stories en la vista Backlog y añadirlas a un sprint planificado o activo.
+- **Crear, iniciar y cerrar un sprint.** Al crearlo (nombre, fechas de inicio y fin, objetivo, capacidad) se escribe `sprints/sprint-<N>-<slug>/sprint-goal.md`; el sprint queda «planificado». Iniciarlo lo convierte en el sprint activo (se rechaza mientras otro sprint esté activo). Cerrarlo archiva las stories `done` en `archived_sprints` y permite elegir el destino de las no terminadas: volver al backlog o pasar a un sprint planificado.
+- **Definir límites WIP** por columna en el panel de Ajustes. Son orientativos: superarlos muestra una advertencia y nunca bloquea un movimiento. Una columna cuenta las stories del sprint activo, tal como las muestra el tablero.
+- **Los datos no guardados están protegidos**: cerrar un formulario (Escape, Cancelar, el fondo) o cambiar de URL (Atrás del navegador, un enlace a una story) cuando un formulario de story o de sprint tiene cambios pide confirmación antes de descartarlos.
+- **Buscar, filtrar y ordenar**: el cuadro de búsqueda (`Ctrl+K` o `/`) filtra las vistas Board y Backlog; los filtros de prioridad, asignado y epic y el orden se conservan en la URL, por ejemplo `#/kanban?q=auth&prio=must,should&who=alice&epic=E4&sort=priority&dir=desc`. `?story=US-E4-03` abre una story desde cualquier vista y `#/docs/<ruta>` abre un documento.
+- **Idioma de la interfaz**: inglés, francés, español, alemán o portugués, elegido automáticamente según el navegador o en el panel de Ajustes. Los títulos de las stories y los documentos se muestran tal como están escritos.
+
+Los comandos `/workflow:*` y `/project:*` siguen siendo válidos y escriben los mismos archivos.
+
+### Dónde se escriben los datos
+
+| Dato | Archivo |
+|------|---------|
+| Estado, pertenencia a un sprint, tareas, puntos, asignado, prioridad, historial | `.bmad/sprint-status.yaml` |
+| Contenido de una story (descripción, criterios de aceptación, persona) | `project-management/backlog/user-stories/US-*.md` |
+| Objetivo de un sprint nuevo | `project-management/sprints/sprint-<N>-<slug>/sprint-goal.md` |
+| Límites WIP | `.bmad/kanban.yaml` |
+| Stories eliminadas | `project-management/backlog/user-stories/.trash/` |
+
+Los archivos markdown nunca reciben una línea de estado. Las claves opcionales `stories.<id>.sprint_id` y `metadata.closed_date` se describen en `Project/i18n/es/templates/sprint-status.md`.
+
+### Concurrencia
+
+- Las escrituras en `.bmad/sprint-status.yaml` toman el mismo bloqueo que los scripts de `.bmad/lib/` (`status-lock.sh`). Mientras un script lo mantiene, el tablero responde 423 `locked`; un bloqueo dejado por un proceso interrumpido se recupera pasados 10 segundos.
+- Los conflictos se detectan story por story: cada story lleva una revisión, devuelta en `If-Match`. Una story modificada en otro lugar entretanto se rechaza con 409 `conflict` y la interfaz propone recargarla.
+- El archivo se reescribe tras revalidarlo, con los comentarios, el orden de las claves y el formato preservados. Un archivo que no valida nunca se sobrescribe (409 `sprint_status_invalid`).
+
+### Seguridad
+
+- Escucha únicamente en `127.0.0.1`, nunca en `0.0.0.0` ni en la red local.
+- La cabecera `Host` debe ser la dirección de bucle local y el puerto servido (protección contra DNS rebinding); el `Origin` se comprueba en cada escritura y las escrituras entre orígenes se rechazan (403).
+- Cuerpos de petición limitados a 64 KB (512 KB para el cuerpo de una story).
+- `--readonly` bloquea toda escritura.
+- Recorrido de rutas bloqueado en el punto de acceso a los documentos; las respuestas de error no contienen rutas del sistema de archivos.
+- Escrituras atómicas (bloqueo, archivo temporal, renombrado).
+- CSP estricta (`script-src 'self'`, `connect-src 'self'`), sin `eval`, sin ejecución de shell y sin llamadas salientes.
+
+### Máquina de estados
+
+Transiciones permitidas (todas las demás se rechazan con 409 `invalid_transition` y la lista de destinos permitidos):
+
+```
+backlog       -> ready-for-dev (invest_score >= 6 si existe, si no story_points > 0) | blocked
+ready-for-dev -> in-progress | backlog | blocked
+in-progress   -> review (todas las tareas terminadas) | blocked
+review        -> done (todas las tareas + tdd_phase entre green|refactor|done) | in-progress | blocked
+blocked       -> previous_status (solo desbloqueo)
+done          -> (terminal)
+```
+
+### Fuente sprint-status de BMAD v6
+
+Las stories proceden de `.bmad/sprint-status.yaml` (escrito por `/workflow:*` y `/project:backlog`) y de los archivos markdown de `project-management/`. Cuando una story se sigue en la YAML, la YAML prevalece para el estado, el título, los puntos, la prioridad, el asignado, el epic, las tareas y el sprint; el markdown conserva el contenido. El tablero se actualiza en directo cuando cambia cualquiera de las fuentes. Las stories de un sprint cerrado (`archived_sprints`) son de solo lectura.
+
+Si el tablero está vacío o falta una story, el aviso de diagnóstico lista los archivos ilegibles; `GET /api/diagnostics` devuelve la misma lista. Véase la [resolución de problemas](../../TROUBLESHOOTING.md#kanban-board-empty).
+
+### Rutas HTTP
+
+Lecturas (`GET`): `/api/health` (`ok`, `readonly`, `user`, `wip_limits`), `/api/diagnostics`, `/api/stories`, `/api/stories/:id`, `/api/dependencies`, `/api/docs`, `/api/docs/<ruta>`, `/api/sprints`, `/api/sprints/:id`, `/api/sprints/current`, `/api/velocity`, `/api/events` (eventos del servidor).
+
+Escrituras:
+
+| Ruta | Función | Errores propios |
+|------|---------|-----------------|
+| `PATCH /api/stories/:id/status` | Mover una story (`status`, `blocked_reason?`, `reason?`) | 409 `invalid_transition`, `archived`, `read_only_source`, `conflict` |
+| `PATCH /api/stories/:id` | Editar título, puntos, asignado, prioridad, fase TDD, epic, sprint (`null` = backlog), dependencias | 400 `invalid_payload`; 409 `archived`, `sprint_not_found`, `conflict` |
+| `PUT /api/stories/:id/body` | Reemplazar el cuerpo markdown (`markdown`, `expected_mtime`) | 409 `no_backing_file`, `conflict`; 422 `status_line_forbidden` |
+| `POST /api/stories` | Crear una story (`title`, `epic_id?`, `story_points?`, `priority?`, `persona?`, `sprint_id?`) | 409 `sprint_status_missing`, `sprint_status_invalid`, `sprint_not_found` |
+| `DELETE /api/stories/:id[?force=1]` | Mover una story a `.trash/` | 409 `story_active`, `has_dependents`, `archived` |
+| `PATCH /api/stories/:id/tasks/:taskId` | Cambiar el estado de una tarea y/o renombrarla (`status?`, `title?`, al menos uno; de 1 a 200 caracteres) | 400 `invalid_payload`; 404 `task_not_found`; 409 `task_exists` (nombre de otra tarea), `conflict` |
+| `DELETE /api/stories/:id/tasks/:taskId` | Quitar una tarea (`total` y `completed` se recalculan) | 404 `task_not_found`; 409 `conflict` |
+| `POST /api/stories/:id/tasks` | Añadir una tarea pendiente (`title`) | 409 `task_exists` |
+| `POST /api/sprints` | Crear un sprint planificado | 409 `sprint_exists` |
+| `POST /api/sprints/:id/start` | Iniciar un sprint | 409 `sprint_already_active`, `sprint_closed`, `conflict` |
+| `POST /api/sprints/:id/close` | Cerrar un sprint (`carry_over`: `backlog` o un identificador de sprint) | 409 `not_active`, `sprint_not_found`, `conflict` |
+| `PUT /api/settings/wip` | Definir los límites WIP (estado → 1..99 o `null`) | 400 `invalid_payload` |
+
+`:taskId` es el nombre actual de la tarea, codificado para la URL (`encodeURIComponent`): se admiten nombres con `/`, `%`, `#`, espacios o caracteres no ASCII.
+
+`POST /api/stories`, `POST /api/stories/:id/tasks` y `POST /api/sprints` aceptan una cabecera `Idempotency-Key` (cadena opaca de 8 a 128 caracteres ASCII visibles; el board envía un `crypto.randomUUID()` nuevo en cada apertura de formulario). Una segunda petición a la misma ruta con la misma clave en 5 minutos recibe la respuesta de la primera (mismo estado y cuerpo, más `Idempotent-Replayed: true`) y no crea nada; las peticiones rechazadas (estado 400 o superior) no se recuerdan, así que un reintento se evalúa de nuevo. La memoria es la del proceso del servidor, limitada a 500 claves. Una clave mal formada da 400 `invalid_idempotency_key`.
+
+Errores comunes a todas las escrituras: 400 `invalid_json` / `invalid_payload`, 403 `forbidden` / `readonly`, 404 `not_found`, 413 `payload_too_large`, 423 `locked`, 500 `write_failed`. Los cambios se envían a los navegadores abiertos por `/api/events`.
+
+### Atajos de teclado (Board)
+
+| Tecla | Acción |
+|-------|--------|
+| `↑` `↓` | Navegar entre tarjetas |
+| `←` `→` | Cambiar de columna |
+| `Alt+M` | Abrir el menú de movimiento de la tarjeta activa |
+| `1`-`6` | Mover la tarjeta a esa columna (menú abierto) |
+| `Intro` | Abrir el detalle de la story |
+| `Esc` | Cerrar el menú o el diálogo |
+| `Ctrl+K` (`⌘+K`) o `/` | Buscar stories |
+
+Los atajos son opcionales: todas las acciones siguen disponibles con `Tab` y los botones nativos.
 
 ### Ejemplos
 
 ```bash
-# Lanza en el proyecto actual y abre el navegador
+# Lanzar sobre el proyecto actual y abrir el navegador
 npx @the-bearded-bear/claude-craft kanban --open
 
-# Modo solo lectura
+# Modo de solo lectura
 npx @the-bearded-bear/claude-craft kanban --readonly --port=4040
 ```
-
-### Seguridad
-
-Bind `127.0.0.1` exclusivo, CSRF same-origin, path traversal bloqueado, escritura atómica (lock + backup + rollback + mtime check), CSP estricta, cero llamadas salientes.
 
 ---
 

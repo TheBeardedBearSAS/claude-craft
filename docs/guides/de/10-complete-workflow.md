@@ -283,6 +283,8 @@ backlog → ready-for-dev → in-progress → review → done   (any → blocked
 
 Begleitansichten: `/project:report burndown` (Sprint-Burndown), `/project:report deps`, `/project:report deps --critical`, `/project:report metrics`.
 
+Das Board ist auch ein Verwaltungswerkzeug: Im selben Kanban (`npx @the-bearded-bear/claude-craft kanban`) lassen sich Stories erstellen und bearbeiten, das Backlog in einen Sprint einplanen sowie Sprints erstellen, starten und abschließen. Die Befehle `/workflow:*` und `/project:*` bleiben gültig und schreiben dieselbe Datei, `.bmad/sprint-status.yaml`. Siehe die [CLI-Referenz](../../i18n/de/CLI-REFERENCE.md#kanban-befehl).
+
 ### D.2 Warum eine Karte sich weigern kann, sich zu bewegen
 
 Das Board setzt dieselben Gates durch. Eine Story wird **done** nicht betreten, bis ihre DoD besteht — das ist die Methode, die dich schützt, kein Fehler.

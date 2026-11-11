@@ -173,7 +173,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Kanban BMAD v6 integration (v8.11.0):**
 
-- **Kanban ingère `.bmad/sprint-status.yaml`** -- le board Kanban lit les sprints directement depuis le fichier YAML BMAD v6 en lecture seule (icône verrou), sans dépendance SaaS. Les projets BMAD v6 n'ont plus le board vide.
+- **Kanban ingère `.bmad/sprint-status.yaml`** -- le board Kanban lit les sprints directement depuis le fichier YAML BMAD v6 en lecture seule (icône verrou), sans dépendance SaaS. Les projets BMAD v6 n'ont plus le board vide. *Depuis, le Kanban n'est plus en lecture seule : il permet de créer, modifier et déplacer des stories, de planifier, démarrer et clôturer un sprint et de régler des limites WIP, en écrivant dans `.bmad/sprint-status.yaml` (voir [CLI-REFERENCE](docs/CLI-REFERENCE.md#kanban-command)) ; `--readonly` désactive toute écriture.*
 
 **Releases 8.8.x → 8.10.x :**
 

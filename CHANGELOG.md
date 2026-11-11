@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Kanban : outil de gestion de projet** (`claude-craft kanban`, rapport `docs/audits/KANBAN-AUDIT-2026-11.md`). Écriture sûre dans `.bmad/sprint-status.yaml` (verrou partagé avec les scripts `.bmad/lib/`, détection de conflit par story, commentaires YAML préservés) ; création, édition et suppression (corbeille) de stories, statut des tâches, planification du backlog dans un sprint, création, démarrage et clôture de sprint avec report, limites WIP indicatives (`.bmad/kanban.yaml`), vélocité, recherche, filtres et tri dans l'URL, liens profonds `?story=`, option `--user=<nom>`, `GET /api/diagnostics` et bandeau de diagnostics.
+- **Kanban : interface en anglais, français, espagnol, allemand et portugais**, menu « Déplacer » (alternative au glisser-déposer), tableau équivalent du graphe de dépendances, navigation conservée à 320 px, contrastes AA verrouillés par test, harnais navigateur + axe (`bash website/tests/kanban/run.sh`).
+- **`sprint-status.yaml`** : clés optionnelles `stories.<id>.sprint_id` et `metadata.closed_date`, forme enrichie de `archived_sprints` à la clôture (`Project/templates/sprint-status.yaml.template`, `Project/i18n/*/templates/sprint-status.md`).
+
+### Changed
+
+- **Kanban** : port par défaut documenté à 3737 (et non 3141) ; `--port=<n>` exige la forme avec « = » ; identifiants `US-E4-02` acceptés ; le serveur contrôle `Host` et `Origin` et limite la taille des corps.
+- **`/workflow:start`** (5 langues) : l'archivage sous `archived_sprints` ne concerne que les stories terminées du sprint précédent, pas les stories de backlog.
+- **Documentation Kanban** : `CLI-REFERENCE.md` (5 langues), `FAQ.md`, `CHEAT-SHEET.md`, `TROUBLESHOOTING.md`, `ACCESSIBILITY.md` (état de conformité vérifié et limites), guides 07 et 10 (5 langues).
+
 ### Security
 
 - **Kanban — écriture à travers un lien symbolique `.bak`** (`cli/kanban/server/services/file-writer.js`) : avant d'écrire le frontmatter d'une story, le serveur la copiait vers `<story>.md.bak` sans vérifier ce nom. Un dépôt contenant un lien symbolique `US-xxx.md.bak` (branche d'un tiers) faisait écrire le contenu de la story dans la cible du lien, par exemple `.git/hooks/pre-commit`, lors d'un déplacement de cette story sur le board. La copie de sauvegarde est supprimée (l'écriture par fichier temporaire puis renommage laissait déjà l'original intact en cas d'échec) et le fichier temporaire est créé en exclusif sous un nom aléatoire. Versions concernées : celles qui embarquent le Kanban, jusqu'à 9.2.1 incluse.

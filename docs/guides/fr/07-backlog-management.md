@@ -225,6 +225,8 @@ Cela génère `scrum-validation-report.md` avec :
 Affiche le tableau Kanban avec les colonnes :
 - To Do | In Progress | In Review | Done | Blocked
 
+> On peut aussi gérer le backlog depuis l'interface web Kanban (`npx @the-bearded-bear/claude-craft kanban`) : créer, modifier et supprimer des stories, les planifier dans un sprint, créer, démarrer et clôturer des sprints. Elle complète les commandes `/workflow:*` et `/project:*`, qui restent valables et écrivent le même fichier (`.bmad/sprint-status.yaml`).
+
 ### Étape 4 : Décomposer en Tâches
 
 ```bash

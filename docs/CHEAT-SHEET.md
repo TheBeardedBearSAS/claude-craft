@@ -460,10 +460,10 @@ See `~/.claude/keybindings.json` for the full configuration.
 
 ```bash
 npx @the-bearded-bear/claude-craft kanban --open   # Open in the browser
-npx @the-bearded-bear/claude-craft kanban          # Start the local server (port 3141)
+npx @the-bearded-bear/claude-craft kanban          # Start the local server (port 3737; --port=<n> to change it)
 ```
 
-The Kanban board ingests `.bmad/sprint-status.yaml` read-only. No SaaS dependency.
+The Kanban board reads `.bmad/sprint-status.yaml` and lets you move, create, edit and delete stories and plan, start and close sprints (`--readonly` disables all writes). No SaaS dependency.
 Requires `make install-project TARGET=.` for BMAD v6 story generation.
 
 ---

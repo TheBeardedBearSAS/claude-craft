@@ -224,6 +224,8 @@ Dies generiert `scrum-validation-report.md` mit:
 Zeigt Kanban-Board mit Spalten:
 - To Do | In Progress | In Review | Done | Blocked
 
+> Das Backlog lässt sich auch in der Kanban-Weboberfläche (`npx @the-bearded-bear/claude-craft kanban`) verwalten: Stories erstellen, bearbeiten und löschen, in einen Sprint einplanen sowie Sprints erstellen, starten und abschließen. Sie ergänzt die Befehle `/workflow:*` und `/project:*`, die gültig bleiben und dieselbe Datei schreiben (`.bmad/sprint-status.yaml`).
+
 ### Schritt 4: In Aufgaben zerlegen
 
 ```bash

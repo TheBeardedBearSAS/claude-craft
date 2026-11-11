@@ -58,3 +58,7 @@ routing:
 - Chaque transition de story met à jour `status` et `previous_status` et ajoute une entrée `history` (`timestamp`, `from`, `to`, `by`, `reason`).
 - Le statut d'un EPIC est calculé depuis ses stories (toutes `backlog` = non démarré, toute autre situation non `done` = en cours, toutes `done` = terminé) ; il n'est écrit nulle part.
 - Si le fichier est absent, le créer à partir du squelette de `/workflow:init` avant d'écrire.
+- `stories.<id>.sprint_id` (optionnel) : absente = comportement historique (la story appartient au sprint actif) ; `null` = backlog ; sinon l'identifiant du sprint propriétaire.
+- `metadata.closed_date` (optionnel, `AAAA-MM-JJ`) : posée à la clôture d'un sprint ; un sprint qui a une `closed_date` n'est plus le sprint actif.
+- À la clôture d'un sprint, ses stories `done` sont retirées de `stories` et enregistrées sous `archived_sprints.<sprint_id>` avec `name`, `epic` (le cas échéant), `closed_date`, `points_committed`, `points_delivered` et `stories` (`<id>: { status: "done", points }`). Les stories non terminées restent dans `stories`, avec `sprint_id` à `null` (backlog) ou égal au sprint cible. L'ancienne forme, avec `stories` seul, reste valide.
+- Les limites WIP ne sont pas stockées ici : elles sont dans `.bmad/kanban.yaml`.

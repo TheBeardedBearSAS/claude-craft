@@ -294,11 +294,11 @@ BMAD (Build, Measure, Analyze, Deliver) is Claude Craft's project management fra
 # Ouvrir dans le navigateur
 npx @the-bearded-bear/claude-craft kanban --open
 
-# Démarrer le serveur local (port 3141)
+# Démarrer le serveur local (port 3737 par défaut ; changer avec --port=4000, forme avec « = » obligatoire)
 npx @the-bearded-bear/claude-craft kanban
 ```
 
-Le Kanban ingère `.bmad/sprint-status.yaml` en lecture seule — pas de modification de données. Le tableau est vide si le fichier `sprint-status.yaml` n'existe pas (nécessite `make install-project TARGET=.` pour le cycle BMAD v6 complet).
+Le Kanban lit `.bmad/sprint-status.yaml` et `project-management/`, et permet de gérer le backlog et les sprints : déplacer, créer, modifier et supprimer des stories, changer le statut des tâches, planifier, démarrer et clôturer un sprint, régler des limites WIP indicatives. Les changements sont écrits dans `.bmad/sprint-status.yaml` (statut, sprint, tâches, points, assignation) et dans `project-management/backlog/user-stories/US-*.md` (contenu) ; `--readonly` désactive toute écriture. Voir [CLI-REFERENCE.md](CLI-REFERENCE.md#kanban-command). Le tableau est vide si le fichier `sprint-status.yaml` n'existe pas (nécessite `make install-project TARGET=.` pour le cycle BMAD v6 complet).
 
 **Tableau vide malgré l'installation ?** Vérifier le format du fichier — voir [TROUBLESHOOTING.md](TROUBLESHOOTING.md#kanban-board-empty).
 
