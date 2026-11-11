@@ -5,7 +5,15 @@ import {
   TaskFrontmatterSchema,
   TransitionRequestSchema,
   StoryPatchSchema,
+  StoryCreateSchema,
+  StoryBodySchema,
+  TaskStatusPatchSchema,
   SprintStatusSchema,
+  SprintCreateSchema,
+  SprintStartSchema,
+  SprintCloseSchema,
+  WipLimitsSchema,
+  SPRINT_ID_RE,
   STATUSES,
 } from '../../cli/kanban/shared/schemas.js';
 
@@ -176,13 +184,94 @@ describe('StoryPatchSchema', () => {
     expect(() => StoryPatchSchema.parse({ assigned_to: 'bob' })).not.toThrow();
   });
 
-  it('rejects unknown fields (strict)', () => {
+  it('rejects unknown fields (strict): status goes through the transition route', () => {
     expect(() => StoryPatchSchema.parse({ status: 'done' })).toThrow();
-    expect(() => StoryPatchSchema.parse({ title: 'hack' })).toThrow();
+    expect(() => StoryPatchSchema.parse({ id: 'US-009' })).toThrow();
+    expect(() => StoryPatchSchema.parse({ history: [] })).toThrow();
+  });
+
+  it('accepts every editable field, nullable ones included', () => {
+    const patch = {
+      title: 'New title',
+      story_points: 21,
+      assigned_to: null,
+      priority: 'wont',
+      tdd_phase: 'red',
+      epic_id: null,
+      sprint_id: null,
+      dependencies: ['US-001', 'US-E4-02'],
+    };
+    expect(StoryPatchSchema.parse(patch)).toEqual(patch);
+  });
+
+  it('rejects an empty patch, a blank title and out-of-range values', () => {
+    expect(() => StoryPatchSchema.parse({})).toThrow();
+    expect(() => StoryPatchSchema.parse({ title: '   ' })).toThrow();
+    expect(() => StoryPatchSchema.parse({ title: 'x'.repeat(201) })).toThrow();
+    expect(() => StoryPatchSchema.parse({ story_points: 22 })).toThrow();
+    expect(() => StoryPatchSchema.parse({ story_points: 1.5 })).toThrow();
+    expect(() => StoryPatchSchema.parse({ priority: 'P0' })).toThrow();
+    expect(() => StoryPatchSchema.parse({ sprint_id: '' })).toThrow();
+  });
+
+  it('accepts EPIC-001 and E4 but not other epic references', () => {
+    expect(() => StoryPatchSchema.parse({ epic_id: 'EPIC-001' })).not.toThrow();
+    expect(() => StoryPatchSchema.parse({ epic_id: 'E4' })).not.toThrow();
+    expect(() => StoryPatchSchema.parse({ epic_id: '../x' })).toThrow();
+    expect(() => StoryPatchSchema.parse({ epic_id: 'EPIC-1' })).toThrow();
+  });
+
+  it('rejects dependencies that are not story ids', () => {
+    expect(() => StoryPatchSchema.parse({ dependencies: ['US-001/../x'] })).toThrow();
+    expect(() => StoryPatchSchema.parse({ dependencies: Array(51).fill('US-001') })).toThrow();
   });
 
   it('rejects assigned_to over 100 chars', () => {
     expect(() => StoryPatchSchema.parse({ assigned_to: 'x'.repeat(101) })).toThrow();
+  });
+});
+
+describe('StoryCreateSchema', () => {
+  it('needs a title only and trims it', () => {
+    expect(StoryCreateSchema.parse({ title: '  Pay  ' })).toEqual({ title: 'Pay' });
+    expect(() => StoryCreateSchema.parse({})).toThrow();
+    expect(() => StoryCreateSchema.parse({ title: ' ' })).toThrow();
+  });
+
+  it('accepts the optional fields and rejects unknown ones (no status, no id)', () => {
+    const full = { title: 'T', epic_id: 'E4', story_points: 3, priority: 'must', persona: 'P-001', sprint_id: null };
+    expect(StoryCreateSchema.parse(full)).toEqual(full);
+    expect(() => StoryCreateSchema.parse({ title: 'T', status: 'done' })).toThrow();
+    expect(() => StoryCreateSchema.parse({ title: 'T', id: 'US-001' })).toThrow();
+  });
+});
+
+describe('StoryBodySchema', () => {
+  it('needs the markdown and the mtime it was read at', () => {
+    expect(StoryBodySchema.parse({ markdown: '', expected_mtime: 12.5 })).toEqual({
+      markdown: '',
+      expected_mtime: 12.5,
+    });
+    expect(() => StoryBodySchema.parse({ markdown: 'x' })).toThrow();
+    expect(() => StoryBodySchema.parse({ expected_mtime: 1 })).toThrow();
+    expect(() => StoryBodySchema.parse({ markdown: 'x', expected_mtime: 'now' })).toThrow();
+    expect(() => StoryBodySchema.parse({ markdown: 'x', expected_mtime: 1, path: '/etc' })).toThrow();
+  });
+
+  it('caps the markdown at 500 000 characters', () => {
+    expect(() => StoryBodySchema.parse({ markdown: 'x'.repeat(500_000), expected_mtime: 1 })).not.toThrow();
+    expect(() => StoryBodySchema.parse({ markdown: 'x'.repeat(500_001), expected_mtime: 1 })).toThrow();
+  });
+});
+
+describe('TaskStatusPatchSchema', () => {
+  it('accepts the four task statuses only', () => {
+    for (const status of ['to-do', 'in-progress', 'done', 'blocked']) {
+      expect(TaskStatusPatchSchema.parse({ status })).toEqual({ status });
+    }
+    expect(() => TaskStatusPatchSchema.parse({ status: 'review' })).toThrow();
+    expect(() => TaskStatusPatchSchema.parse({ status: 'done', extra: 1 })).toThrow();
+    expect(() => TaskStatusPatchSchema.parse({})).toThrow();
   });
 });
 
@@ -234,5 +323,108 @@ describe('SprintStatusSchema', () => {
     expect(SprintStatusSchema.safeParse(withTasks({ list: ['TASK-001'], status: { 'TASK-001': 'wip' } })).success).toBe(
       false
     );
+  });
+});
+
+describe('SprintStatusSchema: sprint_id and closed_date', () => {
+  const base = (story, meta = {}) => ({
+    metadata: { sprint_id: 's1', name: 'S1', start_date: '', end_date: '', ...meta },
+    stories: { 'US-001': { title: 'A', status: 'backlog', ...story } },
+  });
+
+  it('keeps sprint_id null (backlog) and distinguishes it from an absent key', () => {
+    const withNull = SprintStatusSchema.parse(base({ sprint_id: null })).stories['US-001'];
+    const absent = SprintStatusSchema.parse(base({})).stories['US-001'];
+    expect(withNull.sprint_id).toBeNull();
+    expect(Object.hasOwn(absent, 'sprint_id')).toBe(false);
+  });
+
+  it('keeps a string sprint_id and rejects a number', () => {
+    expect(SprintStatusSchema.parse(base({ sprint_id: 's2' })).stories['US-001'].sprint_id).toBe('s2');
+    expect(SprintStatusSchema.safeParse(base({ sprint_id: 3 })).success).toBe(false);
+  });
+
+  it('accepts metadata.closed_date as a string only', () => {
+    expect(SprintStatusSchema.parse(base({}, { closed_date: '2026-11-13' })).metadata.closed_date).toBe('2026-11-13');
+    expect(SprintStatusSchema.safeParse(base({}, { closed_date: 5 })).success).toBe(false);
+  });
+});
+
+describe('SprintCreateSchema', () => {
+  const ok = { name: 'Auth', start_date: '2026-11-02', end_date: '2026-11-13' };
+
+  it('accepts the minimal and the full body', () => {
+    expect(SprintCreateSchema.safeParse(ok).success).toBe(true);
+    expect(SprintCreateSchema.safeParse({ ...ok, goal: 'G', capacity_points: 0 }).success).toBe(true);
+    expect(SprintCreateSchema.safeParse({ ...ok, end_date: ok.start_date }).success).toBe(true);
+  });
+
+  it.each([
+    ['unknown key', { ...ok, extra: 1 }],
+    ['empty name', { ...ok, name: '   ' }],
+    ['name too long', { ...ok, name: 'x'.repeat(121) }],
+    ['newline in name', { ...ok, name: 'a\nb' }],
+    ['bad date shape', { ...ok, start_date: '02/11/2026' }],
+    ['impossible date', { ...ok, start_date: '2026-02-30' }],
+    ['end before start', { ...ok, end_date: '2026-11-01' }],
+    ['negative capacity', { ...ok, capacity_points: -1 }],
+    ['fractional capacity', { ...ok, capacity_points: 2.5 }],
+    ['capacity too large', { ...ok, capacity_points: 1000 }],
+    ['goal too long', { ...ok, goal: 'x'.repeat(1001) }],
+    ['missing end', { name: 'A', start_date: '2026-01-01' }],
+  ])('rejects %s', (_, body) => {
+    expect(SprintCreateSchema.safeParse(body).success).toBe(false);
+  });
+
+  it('trims the name', () => {
+    expect(SprintCreateSchema.parse({ ...ok, name: '  Auth ' }).name).toBe('Auth');
+  });
+});
+
+describe('SprintStartSchema and SprintCloseSchema', () => {
+  it('start: optional expected_version, nothing else', () => {
+    expect(SprintStartSchema.safeParse({}).success).toBe(true);
+    expect(SprintStartSchema.safeParse({ expected_version: 'abc123def456' }).success).toBe(true);
+    expect(SprintStartSchema.safeParse({ expected_version: '' }).success).toBe(false);
+    expect(SprintStartSchema.safeParse({ other: 1 }).success).toBe(false);
+  });
+
+  it('close: carry_over defaults to backlog and accepts a sprint id', () => {
+    expect(SprintCloseSchema.parse({}).carry_over).toBe('backlog');
+    expect(SprintCloseSchema.parse({ carry_over: 'sprint-3-next' }).carry_over).toBe('sprint-3-next');
+  });
+
+  it.each(['../x', 'a/b', '', 'sprint 3', '.hidden', 'x'.repeat(101)])('close rejects carry_over %j', (carry_over) => {
+    expect(SprintCloseSchema.safeParse({ carry_over }).success).toBe(false);
+  });
+
+  it('close rejects unknown keys', () => {
+    expect(SprintCloseSchema.safeParse({ carry: 'backlog' }).success).toBe(false);
+  });
+
+  it('SPRINT_ID_RE is a single safe path segment', () => {
+    expect(SPRINT_ID_RE.test('sprint-9-auth_premium')).toBe(true);
+    expect(['..', '.', 'a/b', 'a\\b', 'a..b', '-x'].filter((id) => SPRINT_ID_RE.test(id))).toEqual([]);
+  });
+});
+
+describe('WipLimitsSchema', () => {
+  it('accepts limits and null for known statuses', () => {
+    expect(WipLimitsSchema.safeParse({ 'in-progress': 3, review: null }).success).toBe(true);
+    expect(WipLimitsSchema.safeParse({}).success).toBe(true);
+  });
+
+  it.each([
+    ['unknown status', { doing: 3 }],
+    ['zero', { review: 0 }],
+    ['too large', { review: 100 }],
+    ['fractional', { review: 1.5 }],
+    ['string', { review: '3' }],
+  ])('rejects %s', (_, body) => {
+    expect(WipLimitsSchema.safeParse(body).success).toBe(false);
+  });
+
+  it('knows every status', () => {
+    expect(WipLimitsSchema.safeParse(Object.fromEntries(STATUSES.map((s) => [s, 5]))).success).toBe(true);
   });
 });

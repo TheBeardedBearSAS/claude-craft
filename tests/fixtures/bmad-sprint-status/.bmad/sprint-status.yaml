@@ -1,6 +1,6 @@
 # BMAD v6 - Sprint Status (test fixture)
 # Reproduces the Wrandly case: stories tracked only in this YAML, no individual
-# markdown story files. US-100 also exists as markdown -> markdown gives the content, this YAML the status.
+# markdown story files. US-100 also exists as markdown -> markdown gives persona/body, this YAML the status and the fields it carries.
 
 version: "1.0"
 
@@ -14,11 +14,11 @@ metadata:
 
 stories:
   US-100:
-    title: "From YAML (title overridden by markdown)"
+    title: "Markdown-backed story (content from markdown)"
     status: "backlog"
     previous_status: "backlog"
-    story_points: 1
-    priority: "P0"
+    story_points: 8
+    priority: "must"
 
   US-E1-01:
     title: "YAML-only story one"

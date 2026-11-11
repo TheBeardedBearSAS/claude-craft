@@ -11,6 +11,12 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BMAD_DIR="$(dirname "$SCRIPT_DIR")"
 SPRINT_STATUS_FILE="${BMAD_DIR}/sprint-status.yaml"
+
+# Lock shared with the Kanban server around writes of sprint-status.yaml.
+# (Guarded: unit tests source this file through a pipe, without its directory.)
+# shellcheck source=status-lock.sh
+if [[ -f "$SCRIPT_DIR/status-lock.sh" ]]; then source "$SCRIPT_DIR/status-lock.sh"; fi
+
 BATCH_QUEUE_FILE="${BMAD_DIR}/batch-queue.yaml"
 WORKER_TMP_DIR="${BMAD_DIR}/.tmp"
 
@@ -113,6 +119,9 @@ merge_worker_reports() {
             continue
         fi
 
+        # Taken before any write so a busy lock leaves this report untouched
+        status_lock_acquire "$SPRINT_STATUS_FILE" || return 1
+
         # Update batch queue (single writer - no race condition)
         if [[ -f "$BATCH_QUEUE_FILE" ]]; then
             yq -i "(.queue[] | select(.story_id == \"$story_id\")).status = \"$status\"" "$BATCH_QUEUE_FILE"
@@ -129,6 +138,7 @@ merge_worker_reports() {
                 yq -i ".stories.${story_id}.failed_at = \"$reported_at\"" "$SPRINT_STATUS_FILE"
             fi
         fi
+        status_lock_release
 
         # Update checkpoint
         if [[ -f "$BATCH_QUEUE_FILE" ]]; then
@@ -441,7 +451,8 @@ enable_autonomous_mode() {
 }
 
 # Auto-claim a story for processing
-auto_claim_story() {
+auto_claim_story() { with_status_lock "$SPRINT_STATUS_FILE" _auto_claim_story "$@"; }
+_auto_claim_story() {
     local story_id="$1"
     local session_id="${2:-}"
 
@@ -552,8 +563,10 @@ wait_and_transition() {
             if [[ "$queue_status" == "completed" ]]; then
                 # Transition in sprint status
                 if [[ -f "$SPRINT_STATUS_FILE" ]]; then
+                    status_lock_acquire "$SPRINT_STATUS_FILE" || return 1
                     yq -i ".stories.${story_id}.status = \"$target_status\"" "$SPRINT_STATUS_FILE"
                     yq -i ".stories.${story_id}.completed_at = \"$(timestamp)\"" "$SPRINT_STATUS_FILE"
+                    status_lock_release
                 fi
                 log_success "Story $story_id transitioned to $target_status"
                 return 0

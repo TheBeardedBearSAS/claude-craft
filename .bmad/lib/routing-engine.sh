@@ -8,6 +8,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BMAD_DIR="$(dirname "$SCRIPT_DIR")"
 SPRINT_STATUS_FILE="${BMAD_DIR}/sprint-status.yaml"
 
+# Lock shared with the Kanban server around writes of sprint-status.yaml.
+# (Guarded: unit tests source this file through a pipe, without its directory.)
+# shellcheck source=status-lock.sh
+if [[ -f "$SCRIPT_DIR/status-lock.sh" ]]; then source "$SCRIPT_DIR/status-lock.sh"; fi
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -148,7 +153,8 @@ cmd_status() {
 }
 
 # Transition a story to a new state
-cmd_transition() {
+cmd_transition() { with_status_lock "$SPRINT_STATUS_FILE" _cmd_transition "$@"; }
+_cmd_transition() {
     local story_id="$1"
     local target_state="$2"
 
@@ -319,7 +325,8 @@ cmd_disable_autonomous() {
 }
 
 # Auto-claim next available story
-cmd_auto_claim() {
+cmd_auto_claim() { with_status_lock "$SPRINT_STATUS_FILE" _cmd_auto_claim "$@"; }
+_cmd_auto_claim() {
     local claimed_by="${1:-autonomous}"
 
     check_sprint_status
@@ -355,7 +362,8 @@ cmd_auto_claim() {
 }
 
 # Auto-transition based on story completion state
-cmd_auto_transition_check() {
+cmd_auto_transition_check() { with_status_lock "$SPRINT_STATUS_FILE" _cmd_auto_transition_check "$@"; }
+_cmd_auto_transition_check() {
     local story_id="$1"
 
     check_sprint_status
@@ -402,7 +410,8 @@ cmd_auto_transition_check() {
 }
 
 # Update TDD phase for a story
-cmd_update_tdd_phase() {
+cmd_update_tdd_phase() { with_status_lock "$SPRINT_STATUS_FILE" _cmd_update_tdd_phase "$@"; }
+_cmd_update_tdd_phase() {
     local story_id="$1"
     local phase="$2"  # red, green, refactor/blue, complete
 
@@ -427,7 +436,8 @@ cmd_update_tdd_phase() {
 }
 
 # Mark tests as passing/failing
-cmd_update_tests_status() {
+cmd_update_tests_status() { with_status_lock "$SPRINT_STATUS_FILE" _cmd_update_tests_status "$@"; }
+_cmd_update_tests_status() {
     local story_id="$1"
     local passing="${2:-true}"
 

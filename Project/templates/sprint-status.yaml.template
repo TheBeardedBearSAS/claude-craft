@@ -9,12 +9,16 @@ metadata:
   start_date: "{START_DATE}"
   end_date: "{END_DATE}"
   goal: "{SPRINT_GOAL}"
+  # Optional keys:
+  #   capacity_points: 21
+  #   closed_date: "YYYY-MM-DD"   # set when the sprint is closed (its done stories move to archived_sprints)
 
 stories:
   {STORY_ID}:
     title: "{STORY_TITLE}"
     status: "backlog"
     previous_status: ""
+    # sprint_id: "sprint-2-api"   # optional: owning sprint; null = backlog, absent = the active sprint
     assigned_to: ""
     tdd_phase: ""
     current_task: ""

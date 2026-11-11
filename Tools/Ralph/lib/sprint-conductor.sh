@@ -697,19 +697,32 @@ transition_story() {
     # Direct update
     local status_file="$bmad_dir/sprint-status.yaml"
     if [[ -f "$status_file" ]] && command -v yq &>/dev/null; then
-        local timestamp
-        timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-
-        STORY_ID="$story_id" NEW_STATUS="$new_status" TS="$timestamp" yq -i '
-            .stories[strenv(STORY_ID)].previous_status = .stories[strenv(STORY_ID)].status |
-            .stories[strenv(STORY_ID)].status = strenv(NEW_STATUS) |
-            .stories[strenv(STORY_ID)].updated_at = strenv(TS)' "$status_file"
+        # Same advisory lock as the Kanban server and routing-engine.sh, when available.
+        if [[ -f "$bmad_dir/lib/status-lock.sh" ]]; then
+            # shellcheck source=/dev/null
+            source "$bmad_dir/lib/status-lock.sh"
+            with_status_lock "$status_file" _transition_story_yq "$status_file" "$story_id" "$new_status" || return 1
+        else
+            _transition_story_yq "$status_file" "$story_id" "$new_status"
+        fi
 
         log_conductor "$(asc_msg MSG_ASC_TRANSITIONED "Transitioned {0} to {1}" "$story_id" "$new_status")"
         return 0
     fi
 
     return 1
+}
+
+# Unlocked yq write of a status transition: callers hold the status lock when it exists.
+_transition_story_yq() {
+    local status_file="$1" story_id="$2" new_status="$3"
+    local timestamp
+    timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+    STORY_ID="$story_id" NEW_STATUS="$new_status" TS="$timestamp" yq -i '
+        .stories[strenv(STORY_ID)].previous_status = .stories[strenv(STORY_ID)].status |
+        .stories[strenv(STORY_ID)].status = strenv(NEW_STATUS) |
+        .stories[strenv(STORY_ID)].updated_at = strenv(TS)' "$status_file"
 }
 
 # =============================================================================

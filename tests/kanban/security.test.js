@@ -169,12 +169,22 @@ describe('GET /api/diagnostics', () => {
 describe('GET /api/health', () => {
   it('exposes readonly and the default user', async () => {
     const app = createApp({ repository: fakeRepo(), port: PORT });
-    expect(await (await app.request('/api/health')).json()).toEqual({ ok: true, readonly: false, user: 'kanban' });
+    expect(await (await app.request('/api/health')).json()).toEqual({
+      ok: true,
+      readonly: false,
+      user: 'kanban',
+      wip_limits: {},
+    });
   });
 
   it('exposes the configured user', async () => {
     const app = createApp({ repository: fakeRepo(), port: PORT, readonly: true, user: 'alice' });
-    expect(await (await app.request('/api/health')).json()).toEqual({ ok: true, readonly: true, user: 'alice' });
+    expect(await (await app.request('/api/health')).json()).toEqual({
+      ok: true,
+      readonly: true,
+      user: 'alice',
+      wip_limits: {},
+    });
   });
 });
 

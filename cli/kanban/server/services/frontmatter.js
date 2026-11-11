@@ -5,6 +5,29 @@ import * as yaml from 'js-yaml';
 // closing delimiter (matches the prior gray-matter behavior the tests assert).
 const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n)?([\s\S]*)$/;
 
+// A real sprint-status.yaml is a few thousand nodes; an alias bomb ("billion laughs") is billions.
+const MAX_YAML_NODES = 1_000_000;
+
+function assertBounded(value) {
+  let budget = MAX_YAML_NODES;
+  const walk = (v) => {
+    if (--budget < 0) throw new Error(`YAML expands to more than ${MAX_YAML_NODES} nodes (alias bomb?)`);
+    if (v && typeof v === 'object') Object.values(v).forEach(walk);
+  };
+  walk(value);
+}
+
+/**
+ * js-yaml `load` that refuses documents whose aliases expand past MAX_YAML_NODES: js-yaml shares
+ * aliased nodes, but every consumer (zod, revOf, JSON responses) expands them, so a few hundred
+ * bytes from a hostile branch would hang or crash the server.
+ */
+export function loadYaml(text) {
+  const data = yaml.load(text);
+  assertBounded(data);
+  return data;
+}
+
 /**
  * Parse a Markdown file with YAML frontmatter.
  * Returns { data, body, raw } where `data` is the parsed frontmatter,
@@ -27,7 +50,7 @@ export function parseString(raw) {
   const match = FRONTMATTER_RE.exec(raw);
   if (!match) return { data: {}, body: raw, raw };
   // js-yaml 5 throws on empty input; an empty frontmatter block (---\n---) parses to {}.
-  const parsed = match[1].trim() === '' ? {} : yaml.load(match[1]);
+  const parsed = match[1].trim() === '' ? {} : loadYaml(match[1]);
   const data = parsed && typeof parsed === 'object' ? parsed : {};
   return { data, body: match[2] ?? '', raw };
 }

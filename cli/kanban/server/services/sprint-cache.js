@@ -1,8 +1,22 @@
 import path from 'node:path';
-import { readFile, writeFile, mkdir, rename } from 'node:fs/promises';
-import * as yaml from 'js-yaml';
+import { readFile, stat } from 'node:fs/promises';
+import { loadYaml } from './frontmatter.js';
 import { SprintStatusSchema } from '../../shared/schemas.js';
-import { acquireLock } from './lock.js';
+
+const MAX_STATUS_BYTES = 5 * 1024 * 1024;
+
+/**
+ * Text of .bmad/sprint-status.yaml. Anything but a regular file of at most 5 MB is refused: a committed
+ * symlink to /dev/zero or to a FIFO would otherwise fill memory or block the read forever.
+ * @throws ENOENT when absent (callers treat that as "no status file")
+ */
+export async function readStatusText(yamlPath) {
+  const st = await stat(yamlPath);
+  if (!st.isFile() || st.size > MAX_STATUS_BYTES) {
+    throw new Error('.bmad/sprint-status.yaml is not a regular file of at most 5 MB');
+  }
+  return readFile(yamlPath, 'utf8');
+}
 
 /**
  * Load sprint status from .bmad/sprint-status.yaml
@@ -12,11 +26,11 @@ import { acquireLock } from './lock.js';
 export async function loadSprintStatus(projectRoot) {
   const yamlPath = path.join(projectRoot, '.bmad', 'sprint-status.yaml');
   try {
-    const content = await readFile(yamlPath, 'utf8');
+    const content = await readStatusText(yamlPath);
     // js-yaml 5 throws YAMLException on empty input (v4 returned undefined). Treat an
     // empty/whitespace-only file as null so it flows to the _invalid path instead of throwing —
     // while genuinely malformed YAML still throws.
-    const parsed = content.trim() === '' ? null : yaml.load(content);
+    const parsed = content.trim() === '' ? null : loadYaml(content);
     const result = SprintStatusSchema.safeParse(parsed);
     if (!result.success) {
       return { ...parsed, _invalid: true };
@@ -26,95 +40,6 @@ export async function loadSprintStatus(projectRoot) {
     if (err.code === 'ENOENT') return null;
     throw err;
   }
-}
-
-/**
- * Apply a status transition to one story of .bmad/sprint-status.yaml (the
- * single source of truth for status) and append it to the story history.
- * Other keys of the file are preserved; YAML comments are not.
- * @param {string} projectRoot - Parent of project-management/ directory
- * @param {string} id - Story id (key of `stories`)
- * @param {object} patch - Fields from computeTransitionPatch()
- * @param {{ by?: string, now?: string }} [opts]
- * @returns {Promise<object>} The updated story entry
- */
-export async function updateSprintStatusStory(projectRoot, id, patch, opts = {}) {
-  const yamlPath = path.join(projectRoot, '.bmad', 'sprint-status.yaml');
-  const release = await acquireLock(`${yamlPath}.lock`);
-  try {
-    const doc = yaml.load(await readFile(yamlPath, 'utf8'));
-    const story = doc?.stories?.[id];
-    if (!story) throw new Error(`story ${id} not found in ${yamlPath}`);
-    const from = story.status;
-    Object.assign(story, patch);
-    story.history = [
-      ...(story.history ?? []),
-      {
-        timestamp: opts.now ?? new Date().toISOString(),
-        from,
-        to: patch.status,
-        by: opts.by ?? 'kanban',
-        reason: patch.blocked_reason ?? '',
-      },
-    ];
-    const tmp = `${yamlPath}.tmp`;
-    await writeFile(tmp, yaml.dump(doc, { lineWidth: -1 }), 'utf8');
-    await rename(tmp, yamlPath);
-    return story;
-  } finally {
-    await release();
-  }
-}
-
-/**
- * Rebuild sprint-status.yaml from current repository state
- * @param {string} projectRoot - Parent of project-management/ directory
- * @param {import('./repository.js').Repository} repository
- * @returns {Promise<object|null>} Built sprint status object or null if no active sprint
- */
-export async function rebuildSprintStatus(projectRoot, repository) {
-  const currentStatus = await loadSprintStatus(projectRoot);
-  const existingHistory = currentStatus?._invalid ? {} : (currentStatus?.stories ?? {});
-
-  const activeSprint = findActiveSprint(repository);
-  if (!activeSprint) return null;
-
-  const sprintGoal = await readSprintGoal(repository, activeSprint);
-  const stories = repository.listStories({ sprintId: activeSprint });
-
-  const storyMap = {};
-  for (const story of stories) {
-    const historyFromYaml = existingHistory[story.id]?.history ?? [];
-    storyMap[story.id] = {
-      title: story.title,
-      status: story.status,
-      previous_status: story.previous_status ?? '',
-      assigned_to: story.assigned_to ?? '',
-      tdd_phase: story.tdd_phase ?? '',
-      story_points: story.story_points,
-      epic_id: story.epic_id ?? '',
-      tasks: story.tasks ?? { total: 0, completed: 0, list: [] },
-      history: historyFromYaml,
-    };
-  }
-
-  const sprintStatus = {
-    version: '1.0',
-    metadata: {
-      sprint_id: activeSprint,
-      name: activeSprint,
-      start_date: '',
-      end_date: '',
-      goal: sprintGoal,
-    },
-    stories: storyMap,
-  };
-
-  const yamlPath = path.join(projectRoot, '.bmad', 'sprint-status.yaml');
-  await mkdir(path.dirname(yamlPath), { recursive: true });
-  await writeFile(yamlPath, yaml.dump(sprintStatus, { lineWidth: -1 }), 'utf8');
-
-  return sprintStatus;
 }
 
 /**
@@ -174,41 +99,6 @@ export function computeBurndown(sprintStatus, storiesBySprint, now = new Date())
     total_points: totalPoints,
     on_track: onTrack,
   };
-}
-
-function findActiveSprint(repository) {
-  const allStories = repository.listStories();
-  const sprintCounts = {};
-
-  for (const story of allStories) {
-    if (!story.sprint_id) continue;
-    if (!sprintCounts[story.sprint_id]) {
-      sprintCounts[story.sprint_id] = { active: 0, all: 0 };
-    }
-    sprintCounts[story.sprint_id].all++;
-    if (['in-progress', 'review', 'ready-for-dev'].includes(story.status)) {
-      sprintCounts[story.sprint_id].active++;
-    }
-  }
-
-  const sprints = Object.entries(sprintCounts).sort((a, b) => {
-    if (a[1].active !== b[1].active) return b[1].active - a[1].active;
-    return b[0].localeCompare(a[0]);
-  });
-
-  return sprints.length > 0 ? sprints[0][0] : null;
-}
-
-async function readSprintGoal(repository, sprintId) {
-  const sprint = repository.sprints.get(sprintId);
-  if (!sprint?.goalPath) return '';
-  try {
-    const content = await readFile(sprint.goalPath, 'utf8');
-    const firstLine = content.split('\n').find((l) => l.trim() && !l.startsWith('#'));
-    return firstLine?.trim() ?? '';
-  } catch {
-    return '';
-  }
 }
 
 function buildActualBurndown(sprintStatus, storiesBySprint, startDate, endDate, now = new Date()) {
