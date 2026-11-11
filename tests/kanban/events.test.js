@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { classifyKanbanEvent, createRefreshQueue } from '../../cli/kanban/client/src/lib/events.js';
+import { classifyKanbanEvent, createRefreshQueue, createLiveLink } from '../../cli/kanban/client/src/lib/events.js';
 import { fakeTimers } from './fake-timers.js';
 
 describe('classifyKanbanEvent (additions)', () => {
@@ -55,5 +55,63 @@ describe('createRefreshQueue', () => {
     q.cancel();
     timers.advance(1000);
     expect(run).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('createLiveLink', () => {
+  const setup = (hidden = false) => {
+    const state = { hidden, opened: 0, closed: 0 };
+    const link = createLiveLink({
+      open: () => (state.opened += 1),
+      close: () => (state.closed += 1),
+      isHidden: () => state.hidden,
+    });
+    return { state, link };
+  };
+
+  it('opens the connection when the page is visible', () => {
+    const { state, link } = setup();
+    link.start();
+    expect(state).toMatchObject({ opened: 1, closed: 0 });
+  });
+
+  it('does not open it for a page loaded in the background, then opens it when the page is shown', () => {
+    const { state, link } = setup(true);
+    link.start();
+    expect(state.opened).toBe(0);
+    state.hidden = false;
+    link.visibilityChanged();
+    expect(state.opened).toBe(1);
+  });
+
+  it('gives the connection back when the page is hidden and takes one again when it is shown', () => {
+    const { state, link } = setup();
+    link.start();
+    state.hidden = true;
+    link.visibilityChanged();
+    expect(state).toMatchObject({ opened: 1, closed: 1 });
+    link.visibilityChanged(); // still hidden: nothing more to close
+    expect(state.closed).toBe(1);
+    state.hidden = false;
+    link.visibilityChanged();
+    expect(state).toMatchObject({ opened: 2, closed: 1 });
+  });
+
+  it('never opens a second connection while one is open', () => {
+    const { state, link } = setup();
+    link.start();
+    link.start();
+    link.visibilityChanged();
+    expect(state.opened).toBe(1);
+  });
+
+  it('stays closed after stop(), whatever the visibility does', () => {
+    const { state, link } = setup();
+    link.start();
+    link.stop();
+    expect(state.closed).toBe(1);
+    link.visibilityChanged();
+    link.stop();
+    expect(state).toMatchObject({ opened: 1, closed: 1 });
   });
 });

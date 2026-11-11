@@ -611,6 +611,12 @@ Hors navigateur, le job `bmad-shell-macos` (verrou partagé entre les scripts et
 
 Vu sur les captures prises sous macOS (`screenshots.spec.ts`, formulaires et contrôles natifs compris), sans correction nécessaire : flèche des listes, champs de date (natifs, segments grisés de Safari quand ils sont vides), champ numérique, zones de texte, dialogues (centrage, fond, focus initial), polices. Les préfixes `-webkit-` utiles (`backdrop-filter`) sont ajoutés par le build. Non lié à macOS, vu aussi sous Linux et non corrigé : à 1280 px, le bouton des réglages passe à la ligne dans la barre du haut du Backlog et des Dépendances.
 
+### 7.11 Septième onglet qui ne se charge plus
+
+Un job de CI est resté bloqué 90 s sur le chargement d'une page. La trace montre que la requête du document n'a jamais reçu de réponse alors que le serveur répondait à d'autres clients. Cause : un navigateur n'ouvre que six connexions simultanées vers un même serveur en HTTP/1.1, et chaque board en gardait une ouverte en permanence pour le temps réel, y compris dans un onglet d'arrière-plan. Avec six boards ouverts, le septième attendait indéfiniment son document. Reproduit de façon déterministe sous Chromium, Firefox et WebKit (`tabs.spec.ts`, rouge avant correction).
+
+Correctif : un board en arrière-plan rend sa connexion et la reprend quand il revient au premier plan, en rechargeant alors les stories, le sprint et les réglages ; la connexion est aussi fermée dès que la page est quittée (`lib/events.js`, `lib/store.svelte.js`, `tests/kanban/events.test.js`). Limite restante : plus de six boards **visibles en même temps** dans le même navigateur (fenêtres côte à côte) atteignent toujours la limite du navigateur.
+
 ## 8. Non vérifié / limites
 
 **Non vérifié.**

@@ -8,7 +8,7 @@
 //                   reloaded with the current sprint (every story / sprint / settings event and every resync).
 //   store.toasts    [{ id, kind, message, key, params }] — `key`/`params` let the UI translate at display time.
 
-import { classifyKanbanEvent, createRefreshQueue } from './events.js';
+import { classifyKanbanEvent, createRefreshQueue, createLiveLink } from './events.js';
 import { request, storyUrl, errorKey } from './api.js';
 import { applyPatch, restore, replaceStory, createWriteTracker } from './optimistic.js';
 import { createToasts } from './toasts.js';
@@ -205,8 +205,7 @@ function onFileChanged(e) {
   refreshQueue.request(classifyKanbanEvent({ event: 'file:changed', payload }));
 }
 
-export function connectEvents() {
-  if (es) return;
+function openStream() {
   es = new EventSource('/api/events');
   es.addEventListener('open', () => {
     store.connected = true;
@@ -226,12 +225,32 @@ export function connectEvents() {
   es.addEventListener('file:changed', onFileChanged);
 }
 
-export function disconnectEvents() {
-  if (es) {
-    es.close();
-    es = null;
-    store.connected = false;
-    dropped = false;
-    refreshQueue.cancel();
+// The page went to the background: the connection is given back (see createLiveLink) and what happens meanwhile is
+// caught up when the page is shown again. `store.connected` is left as it is: nothing was lost that the user could
+// act on, so nothing is announced.
+function closeStream() {
+  es?.close();
+  es = null;
+  dropped = true;
+}
+
+const liveLink = createLiveLink({ open: openStream, close: closeStream, isHidden: () => document.hidden });
+let watching = false;
+
+export function connectEvents() {
+  if (!watching) {
+    watching = true;
+    document.addEventListener('visibilitychange', liveLink.visibilityChanged);
+    // Leaving the page: close at once rather than when the browser gets round to it.
+    window.addEventListener('pagehide', liveLink.stop);
+    window.addEventListener('pageshow', liveLink.start);
   }
+  liveLink.start();
+}
+
+export function disconnectEvents() {
+  liveLink.stop();
+  store.connected = false;
+  dropped = false;
+  refreshQueue.cancel();
 }
