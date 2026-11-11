@@ -542,6 +542,18 @@ Statut : **corrigé** pour les points ci-dessous. Le parcours complet d'un chef 
 9. **Test instable du lot 2 (arbre des Docs à 320 px)** : une fois sur quatre passages complets, l'arbre restait ouvert après le choix d'un document. Cause probable : `bind:open` apprend l'ouverture par l'événement asynchrone `toggle`, qui pouvait réécrire `open` après la fermeture ; l'élément est maintenant fermé directement. Non reproduit de façon déterministe (25 répétitions ciblées vertes avant et après la correction).
 10. **Dette K-11 et K-21** : `catch` silencieux justifiés ou journalisés (abonné SSE en échec) ; icônes, variables CSS et 40 clés i18n mortes supprimées, garde-fou `every en key is used` dans `i18n-parity.test.js`.
 
+### 7.6 Courses révélées par le navigateur de la CI
+
+Les tests navigateur du lot 4 passaient en local et échouaient sur GitHub Actions. Le harnais local utilisait le Chromium de l'image Docker, plus ancien que celui livré par Playwright et utilisé en CI. Les minutages différents ont mis en évidence des défauts du produit, pas des tests. Tous sont corrigés dans la PR 4, chacun avec un test qui échouait d'abord (`unsaved.spec.ts`, `crud.spec.ts`, `keyboard.spec.ts`, `planning.spec.ts`, `tests/kanban/optimistic.test.js`).
+
+1. **Confirmation résolue trop tard.** `ConfirmDialog` ne prenait sa réponse qu'à l'événement `close` du dialogue, émis une image plus tard. Pendant cet intervalle, un retour arrière ou un lien était annulé sans question, et l'événement tardif répondait « continuer la saisie » à la question suivante : « abandonner » ne faisait alors plus rien. La réponse est désormais prise au clic.
+2. **Échap répété.** Le navigateur n'honore l'annulation de la fermeture d'un dialogue qu'une fois par geste utilisateur : après plusieurs appuis sur Échap, un formulaire rempli se fermait sans question. Les formulaires traitent maintenant Échap à l'appui de touche.
+3. **Faux conflit après un déplacement.** Ouvrir le formulaire d'édition pendant qu'un déplacement était encore en cours figeait l'ancienne révision ; l'enregistrement suivant annonçait « modifiée ailleurs » alors que l'auteur était l'utilisateur lui-même. L'édition attend désormais la fin des écritures en cours sur la story.
+4. **Planification.** Un clic sur une ligne du backlog pendant une requête de planification était ignoré sans retour ; un rechargement temps réel reçu pendant une écriture annulait visuellement le déplacement. Les appels sont mis en file et le rechargement est reporté.
+5. **Focus repris.** La fermeture des Réglages ou du détail d'une story reprenait le focus même si l'utilisateur était déjà allé ailleurs.
+
+Le harnais local utilise maintenant par défaut le même Chromium que la CI (`KANBAN_BROWSER=system` conserve l'ancien). Motif encore présent, sans défaillance observée : `PromptDialog` et `CloseSprintDialog` résolvent toujours leur réponse à l'événement `close`.
+
 ## 8. Non vérifié / limites
 
 **Non vérifié.**
