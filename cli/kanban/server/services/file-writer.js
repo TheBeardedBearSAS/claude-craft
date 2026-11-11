@@ -1,4 +1,5 @@
-import { open, rename, copyFile, unlink, stat, writeFile } from 'node:fs/promises';
+import { open, rename, unlink, stat } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { parseFile, stringify } from './frontmatter.js';
 
@@ -8,9 +9,10 @@ import { parseFile, stringify } from './frontmatter.js';
  * Safety :
  *   1. Exclusive lock file (<path>.lock, O_CREAT|O_EXCL) — refuses concurrent writes.
  *   2. Optional mtime check (ETag-like) — rejects writes if file changed on disk.
- *   3. Backup (<path>.bak) — restored if the write fails.
- *   4. Write to a temp file then rename — atomic on POSIX.
- *   5. Body of the markdown file is preserved byte-for-byte.
+ *   3. Write to a temp file then rename — atomic on POSIX: the original stays intact if the write fails.
+ *      The temp file has a random name and is created exclusively, and no predictable side file (the former
+ *      <path>.bak) is written: a symlink planted under such a name would redirect the write outside the project.
+ *   4. Body of the markdown file is preserved byte-for-byte.
  */
 
 class LockedError extends Error {
@@ -57,7 +59,6 @@ async function releaseLock(lockPath) {
 export async function updateFrontmatter(filepath, patch, opts = {}) {
   const abs = path.resolve(filepath);
   const lockPath = await acquireLock(abs);
-  const backup = `${abs}.bak`;
   try {
     if (typeof opts.expectedMtime === 'number') {
       const st = await stat(abs);
@@ -67,40 +68,26 @@ export async function updateFrontmatter(filepath, patch, opts = {}) {
     }
 
     const { data, body } = await parseFile(abs);
-    await copyFile(abs, backup);
-
     const merged = { ...data, ...patch };
-    const next = stringify(merged, body);
-    const tmp = `${abs}.tmp-${process.pid}-${Date.now()}`;
-    try {
-      await writeFile(tmp, next, 'utf8');
-      await rename(tmp, abs);
-    } catch (err) {
-      // Rollback from backup
-      try {
-        await copyFile(backup, abs);
-      } catch {
-        /* best effort */
-      }
-      try {
-        await unlink(tmp);
-      } catch {
-        /* ignore */
-      }
-      throw err;
-    }
-    await unlink(backup);
+    await replaceFile(abs, stringify(merged, body));
     const st = await stat(abs);
     return { data: merged, body, mtime: st.mtimeMs };
-  } catch (err) {
-    try {
-      await unlink(backup);
-    } catch {
-      /* backup may not exist yet */
-    }
-    throw err;
   } finally {
     await releaseLock(lockPath);
+  }
+}
+
+async function replaceFile(abs, content) {
+  const tmp = `${abs}.tmp-${process.pid}-${randomUUID()}`;
+  const fd = await open(tmp, 'wx'); // exclusive: never follows or reuses an existing name
+  try {
+    await fd.writeFile(content, 'utf8');
+    await fd.close();
+    await rename(tmp, abs);
+  } catch (err) {
+    await fd.close().catch(() => {}); // already closed when rename failed
+    await unlink(tmp).catch(() => {}); // best effort: the original file is untouched
+    throw err;
   }
 }
 

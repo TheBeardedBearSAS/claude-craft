@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mkdtemp, writeFile, readFile, rm, stat, open, access } from 'node:fs/promises';
+import { mkdtemp, writeFile, readFile, rm, stat, open, access, symlink, readlink, readdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { updateFrontmatter, LockedError, MtimeMismatchError } from '../../cli/kanban/server/services/file-writer.js';
@@ -100,6 +100,33 @@ describe('updateFrontmatter', () => {
       await expect(updateFrontmatter(fp, { status: 'done' })).rejects.toThrow();
       await expect(access(`${fp}.lock`)).rejects.toBeDefined();
       await expect(access(`${fp}.bak`)).rejects.toBeDefined();
+    } finally { await rm(dir, { recursive: true, force: true }); }
+  });
+
+  // A repository can ship a `<story>.md.bak` symlink (hostile branch). The writer used to copy the story
+  // through it before writing, overwriting whatever it pointed to (a git hook, for instance).
+  it('never writes through a `.bak` symlink planted next to the story', async () => {
+    const dir = await tmp();
+    try {
+      const fp = await makeStory(dir);
+      const victim = path.join(dir, 'pre-commit');
+      await writeFile(victim, 'untouched\n');
+      await symlink(victim, `${fp}.bak`);
+
+      await updateFrontmatter(fp, { status: 'ready-for-dev' });
+
+      expect(await readFile(victim, 'utf8')).toBe('untouched\n');
+      expect(await readlink(`${fp}.bak`)).toBe(victim);
+      expect(parseString(await readFile(fp, 'utf8')).data.status).toBe('ready-for-dev');
+    } finally { await rm(dir, { recursive: true, force: true }); }
+  });
+
+  it('leaves no temporary file behind', async () => {
+    const dir = await tmp();
+    try {
+      const fp = await makeStory(dir);
+      await updateFrontmatter(fp, { status: 'ready-for-dev' });
+      expect(await readdir(dir)).toEqual(['US-001.md']);
     } finally { await rm(dir, { recursive: true, force: true }); }
   });
 });
