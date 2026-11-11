@@ -1,14 +1,14 @@
 import { test, expect, type Page } from '@playwright/test';
-import { openView, settingsButton } from './helpers';
+import { openView, pressTab, settingsButton } from './helpers';
 
 /** Tab until a board card button has focus (keyboard only). */
 async function tabToCard(page: Page, id?: string) {
   for (let i = 0; i < 150; i++) {
-    await page.keyboard.press('Tab');
+    await pressTab(page);
     const cardId = await page.evaluate(() => document.activeElement?.getAttribute('data-card-id') ?? null);
     if (cardId && (!id || cardId === id)) return cardId;
   }
-  throw new Error('no board card reachable with Tab');
+  throw new Error('no board card reachable with Tab (Option+Tab under WebKit on macOS)');
 }
 
 /** The shared fixture server keeps state between specs: put US-200 back where it started. */

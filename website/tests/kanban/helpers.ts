@@ -24,6 +24,20 @@ export async function openView(page: Page, name: string) {
   await expect(page.locator(view.ready).first()).toBeAttached(); // may be off-screen/collapsed at 320px
 }
 
+/**
+ * The key that moves the focus to the next control, as a user of the engine presses it. Safari on macOS stops Tab
+ * on text fields and pop-up menus only, unless its setting "Press Tab to highlight each item on a webpage" is on;
+ * Option+Tab reaches every control (buttons, links, checkboxes). Playwright's WebKit on macOS keeps that default.
+ * Every keyboard walk of the specs goes through this key, so a control out of Option+Tab's reach still fails.
+ */
+export const tabKey = (page: Page, shift = false) => {
+  const optionTab = process.platform === 'darwin' && page.context().browser()?.browserType().name() === 'webkit';
+  return `${shift ? 'Shift+' : ''}${optionTab ? 'Alt+' : ''}Tab`;
+};
+
+/** Press Tab (Option+Tab under WebKit on macOS, see tabKey). */
+export const pressTab = (page: Page, shift = false) => page.keyboard.press(tabKey(page, shift));
+
 /** Second server of the harness, started with --readonly (see playwright.config.ts). */
 export const READONLY_ORIGIN = 'http://127.0.0.1:3798';
 

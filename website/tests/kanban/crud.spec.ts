@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
-import { READONLY_ORIGIN, ZOOM400, openView, settingsButton } from './helpers';
+import { READONLY_ORIGIN, ZOOM400, openView, pressTab, settingsButton } from './helpers';
 
 // Story editing end to end: create, edit (conflicts included), body, task statuses, delete, WIP limits.
 // The server is a throw-away copy of the fixture shared by every spec (see playwright.config.ts): each test
@@ -48,21 +48,21 @@ test('create a story with the keyboard only, then find it on the board and on di
   const form = dialog(page, 'New story');
   await expect(form.getByLabel('Title')).toBeFocused();
   await page.keyboard.type('E2E keyboard story');
-  await page.keyboard.press('Tab');
+  await pressTab(page);
   await expect(form.getByLabel('Story points')).toBeFocused();
   await page.keyboard.type('5');
-  await page.keyboard.press('Tab');
+  await pressTab(page);
   await expect(form.getByLabel('Priority')).toBeFocused();
-  await page.keyboard.press('Tab');
+  await pressTab(page);
   await expect(form.getByLabel('Persona')).toBeFocused();
   await page.keyboard.type('tester');
-  await page.keyboard.press('Tab');
+  await pressTab(page);
   await expect(form.getByLabel('Epic')).toBeFocused();
-  await page.keyboard.press('Tab');
+  await pressTab(page);
   await expect(form.getByLabel('Sprint')).toBeFocused();
   await page.keyboard.type('Auth'); // type-ahead: the active sprint
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
+  await pressTab(page);
+  await pressTab(page);
   await expect(form.getByRole('button', { name: 'Create story' })).toBeFocused();
   await page.keyboard.press('Enter');
 

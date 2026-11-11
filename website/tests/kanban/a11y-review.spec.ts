@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import en from '../../../cli/kanban/client/src/lib/i18n/locales/en.js';
 import fr from '../../../cli/kanban/client/src/lib/i18n/locales/fr.js';
-import { VIEWS, DESKTOP, ZOOM400, READONLY_ORIGIN, openView, setTweaks, settingsButton, openMoveMenu, SMALL_TARGETS, settled } from './helpers';
+import { VIEWS, DESKTOP, ZOOM400, READONLY_ORIGIN, openView, pressTab, setTweaks, settingsButton, openMoveMenu, SMALL_TARGETS, settled } from './helpers';
 
 // What axe does not see (audit K-16, K-17, K-24..K-32, K-34): motion, target size, focus after an action,
 // duplicated or late live regions, headings, landmarks, language of the UI, text spacing, menu keyboard pattern.
@@ -105,7 +105,7 @@ test('focus: every focused control shows a visible indicator (keyboard walk on e
   for (const v of VIEWS) {
     await openView(page, v.name);
     for (let i = 0; i < 40; i++) {
-      await page.keyboard.press('Tab');
+      await pressTab(page);
       const bad = await page.evaluate(() => {
         const el = document.activeElement as HTMLElement | null;
         if (!el || el === document.body) return null;
@@ -424,7 +424,7 @@ test('move menu: arrows, Home and End move focus and wrap; Tab closes it; Enter 
   await expect(items.first()).toBeFocused();
   await page.keyboard.press('ArrowUp');
   await expect(items.last()).toBeFocused();
-  await page.keyboard.press('Tab');
+  await pressTab(page);
   await expect(page.getByRole('menu')).toHaveCount(0);
   await expect(button).toHaveAttribute('aria-expanded', 'false');
   expect(await activeIsBody(page)).toBe(false);

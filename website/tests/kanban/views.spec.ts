@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { ZOOM400, openView } from './helpers';
+import { ZOOM400, openView, pressTab } from './helpers';
 
 // Backlog, Sprints, Burndown, Deps and Docs views (audit K-15, K-18..K-21, K-23, K-24, K-27..K-29, K-31).
 
@@ -128,7 +128,7 @@ test.describe('at 320px', () => {
     await summary.focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('.docs-nav')).toHaveAttribute('open', '');
-    await page.keyboard.press('Tab');
+    await pressTab(page);
     const first = page.locator('.docs-nav a.tree-item').first();
     await expect(first).toBeFocused();
     await page.keyboard.press('Enter');
