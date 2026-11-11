@@ -95,7 +95,7 @@ bash website/tests/kanban/run.sh --project=mobile-safari  # phone + touch: mobil
 bash website/tests/kanban/run.sh a11y.spec.ts --project=webkit   # one spec under one engine
 ```
 
-The harness runs axe-core on every view and on the transient states (dialogs, menus, forms, settings), each at 1280×800 and at 320×256, plus keyboard, reflow and journey tests. The Docker image installs the browsers of the Playwright version pinned in `website/package-lock.json`, with the same command as CI (`playwright install --with-deps`). In CI the job `kanban-e2e` runs one job per engine (chromium, firefox, webkit, touch) when Kanban files change. The previous `CC_A11Y_KANBAN` feature flag never had any effect and was removed.
+The harness runs axe-core on every view and on the transient states (dialogs, menus, forms, settings), each at 1280×800 and at 320×256, plus keyboard, reflow and journey tests. The local Docker image installs the browsers of the Playwright version pinned in `website/package-lock.json`. In CI the job `kanban-e2e` runs one job per engine (chromium, firefox, webkit, touch) when Kanban files change, inside the official Playwright image of the same version, so no browser or system library is downloaded during the run. The previous `CC_A11Y_KANBAN` feature flag never had any effect and was removed.
 
 **Browsers actually run (Playwright 1.65.0):**
 

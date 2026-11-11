@@ -556,11 +556,16 @@ Le harnais local utilise maintenant par défaut le même Chromium que la CI (`KA
 
 ### 7.7 Défauts révélés par Firefox, WebKit et le tactile
 
-Le harnais navigateur a été étendu à Firefox, à WebKit et à deux émulations de téléphone tactile (779 tests, quatre jobs parallèles en CI). Trois défauts du produit en sont sortis, tous corrigés dans la PR 4 avec un test qui échouait d'abord.
+Le harnais navigateur a été étendu à Firefox, à WebKit et à deux émulations de téléphone tactile (779 tests, quatre jobs parallèles en CI). Sept défauts du produit en sont sortis, tous corrigés dans la PR 4 avec un test qui échouait d'abord. En CI, ces jobs tournent dans l'image officielle Playwright (épinglée par empreinte) : l'installation des navigateurs par `apt` à chaque exécution restait bloquée quand les runners ne résolvaient plus les miroirs Ubuntu.
 
 1. **Firefox : indicateur « Live » éteint pendant 30 s.** Firefox ne signale un flux d'événements comme ouvert qu'à la réception des premiers octets, et le serveur n'écrivait rien avant son premier battement. Le temps réel ne se resynchronisait donc pas. Le serveur écrit désormais une ligne de commentaire dès la connexion (`server/app.js`, `tests/kanban/app.test.js`).
 2. **WebKit : focus retiré du champ de la question « bloquée ».** Après l'annulation d'une première question, la suite de l'action précédente appelait `focus()` sur un élément rendu inerte par la nouvelle modale ; WebKit applique cet appel, les autres moteurs l'ignorent. Le focus reste désormais dans la modale ouverte (`StoryDetail.svelte`, `crud.spec.ts`).
 3. **Tous moteurs : carte qui recule après deux déplacements rapides.** La réponse du premier déplacement était appliquée alors qu'un second, plus récent, était déjà affiché : la carte revenait une colonne en arrière puis repartait, et le focus posé dessus était perdu. Une réponse n'est plus appliquée si un déplacement plus récent de la même story a été envoyé (`lib/store.svelte.js`, `board.spec.ts`). Ce défaut se manifestait par un échec d'environ un passage sur vingt du parcours en français.
+
+4. **Tous moteurs : deux déplacements rapides envoyés en parallèle.** Le serveur pouvait traiter le second avant le premier et le refuser depuis le statut qu'il avait encore (« changement de statut non autorisé »). Le board affiche toujours chaque déplacement aussitôt, mais les écritures de statut d'une story partent une par une, dans l'ordre (`lib/store.svelte.js`, `board.spec.ts`).
+5. **Firefox et WebKit : navigation annulée juste après la fermeture du détail.** Le paramètre `?story=` est retiré de l'URL quand l'événement `close` du dialogue arrive, une image plus tard ; une navigation faite entre-temps était défaite, l'URL étant reconstruite depuis la route encore en mémoire, et l'utilisateur revenait sur le board. L'URL est désormais modifiée à partir de l'URL réelle (`lib/router.svelte.js`, `board.spec.ts`).
+6. **Tous moteurs : contraste du bouton « Supprimer » survolé à 4,47:1.** Le texte de couleur danger reposait sur son propre fond atténué. Le fond est allégé et le test de contraste couvre maintenant les couleurs de statut sur leur fond atténué (`app.css`, `tests/kanban/contrast.test.js`). WebKit l'a révélé parce qu'il conserve le survol sur le bouton situé derrière une modale.
+7. **WebKit : focus retiré de la carte après un déplacement avec motif de blocage.** La décision de rendre le focus était prise avant la fermeture effective du dialogue de saisie (`views/KanbanView.svelte`, `keyboard.spec.ts`).
 
 Deux écarts relevaient des tests : WebKit conserve le survol sur l'élément situé sous le pointeur quand une modale s'ouvre, et la transition de survol était mesurée à mi-course (contraste et taille de cible faux) ; Firefox peint le texte indicatif d'un champ par-dessus sa marge intérieure. Les tests attendent désormais la fin des transitions et mesurent la bonne zone, sans assertion affaiblie.
 
@@ -573,7 +578,7 @@ Ajouts de la même passe : tâches renommables et supprimables depuis le détail
 - Lecteurs d'écran réels (NVDA, JAWS, VoiceOver, TalkBack) : aucun n'a été lancé. Le comportement ARIA est déduit du code, des règles ARIA 1.2 et de l'arbre d'accessibilité calculé par chaque moteur sur les parcours essentiels (`a11y-tree.spec.ts`).
 - Safari réel (macOS, iOS) et appareils tactiles réels : la suite tourne sous Chromium, Firefox et le WebKit de Playwright (Linux), plus deux émulations de téléphone tactile (§ 7.7). WebKit sous Linux n'est pas Safari, et une émulation n'a ni vrai clavier virtuel ni vrai pincement.
 - Mode contrastes forcés de Windows.
-- Score de mutation (Stryker) : non mesuré en local ; calculé par la CI (75,8 % sur le lot 4, seuil bloquant 55 %).
+- Score de mutation (Stryker) : non mesuré en local ; calculé par la CI (74,4 % sur le lot 4 complet, seuil bloquant 55 %).
 
 **Limites connues de l'interface.**
 
